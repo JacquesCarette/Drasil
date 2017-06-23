@@ -86,7 +86,7 @@ glaTyFac_eq :: Expr
 glaTyFac_eq = FCall (C glaTyFac) [C glass_type]
 
 glaTyFac :: QDefinition --FIXME: make into cases
-glaTyFac = fromEqn' (glassTypeFac_ ^. id) (nounPhraseSP $ 
+glaTyFac = fromEqn' (gTF ^. id) (nounPhraseSP $ 
   "function that maps from " ++ "the glass type (g) to a real " ++
   "number, as follows: GTF(g) = (g = AN => 1.0|g = FT => 4.0|" ++ 
   "g = HS => 2.0). AN is annealed glass. " ++ 

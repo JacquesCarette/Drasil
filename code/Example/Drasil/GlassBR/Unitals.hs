@@ -137,10 +137,10 @@ eqTNTWeight = unitary "eqTNTWeight" (nounPhraseSP "explosive mass in equivalent 
 
 glassBRUnitless :: [VarChunk]
 glassBRUnitless = [ar_max, risk_fun, is_safe1, is_safe2, stressDistFac, sdf_tol,
-  dimlessLoad, tolLoad, lRe, loadSF, gTF, lDurFac]
+  dimlessLoad, tolLoad, lRe, loadSF, gTF, lDurFac, nonFactorL]
 
 ar_max, risk_fun, is_safe1, is_safe2, stressDistFac, sdf_tol,
-  dimlessLoad, tolLoad, lRe, loadSF, gTF, lDurFac :: VarChunk
+  dimlessLoad, tolLoad, lRe, loadSF, gTF, lDurFac, nonFactorL :: VarChunk
 
 ar_max      = vc "ar_max"        (nounPhraseSP "maximum aspect ratio")
   (sub (Atomic "AR") (Atomic "max")) Rational
@@ -159,8 +159,10 @@ tolLoad     = makeVC "tolLoad"       (nounPhraseSP "tolerable load")
   (sub (dimlessLoad ^. symbol) (Atomic "tol"))
 lRe         = makeVC "lRe"           (lResistance ^. term) (Atomic "LR")
 loadSF      = vc "loadSF"        (lShareFac ^. term) (Atomic "LSF") Integer
-gTF         = vc "gTF"           (glassTypeFac_ ^. term) (Atomic "GTF") Integer
+gTF         = vc "gTF"           (glassTypeFac ^. term) (Atomic "GTF") Integer
 lDurFac     = makeVC "lDurFac" (loadDurFactor ^. term) (Atomic "LDF")
+nonFactorL   = makeVC "nonFactorL" (nonFactoredL ^. term) (Atomic "NFL")
+
 
 terms :: [ConceptChunk]
 terms = [aspectRatio, glBreakage, lite, glassTy,
@@ -219,7 +221,7 @@ loadResis     = dcc "loadResis"          (lResistance ^. term)
     "[4 (pg. 1, 53)], following A2 and A1 respectively.")
 longDurLoad   = dcc "longDurLoad"        (nounPhraseSP "long duration load")
   ("Any load lasting approximately 30 days.")
-nonFactoredL  = dccWDS "nonFactoredL"    (nounPhraseSP "non-factored load")
+nonFactoredL  = dccWDS "nonFactoredL"    (nFL ^. term)
   (foldlSent [S "Three second duration uniform load associated with a probability of",
     S "breakage less than or equal to 8", (plural lite), S "per 1000 for monolithic",
     (getAcc annealedGlass), S "glass"])
@@ -272,23 +274,12 @@ bomb          = dcc "bomb"        (nounPhraseSP "bomb") ("a container filled wit
 explosion     = dcc "explosion"   (nounPhraseSP "explosion") 
   "a destructive shattering of something"
 
--- hack; needs to be removed eventually
-temporary :: [ConVar]
-temporary = [nonFactorL, glassTypeFac_]
-
-nonFactorL, glassTypeFac_ :: ConVar
-nonFactorL     = cvR (nonFactoredL) (Atomic "NFL")
-glassTypeFac_  = cvR (glTyFac) (Atomic "GTF")
-
 this_symbols :: [QSWrapper]
 this_symbols = ((map qs glassBRSymbolsWithDefns) ++ (map qs glassBRSymbols)
   ++ (map qs glassBRUnitless) ++ (map qs gbInputs))
 
-temporaryLOSymbols :: [QSWrapper]
-temporaryLOSymbols = this_symbols ++ map qs (temporary)
-
 gbSymbMap :: SymbolMap
-gbSymbMap = symbolMap temporaryLOSymbols
+gbSymbMap = symbolMap this_symbols
 
 gbSymbMapD :: QDefinition -> Contents
 gbSymbMapD term_ = (symbolMapFun gbSymbMap Data) term_

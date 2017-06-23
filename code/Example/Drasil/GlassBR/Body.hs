@@ -506,7 +506,7 @@ s7_1_req6 = [(Enumeration $ Simple $ [(acroR "6", Nested (titleize output_ +:+
     [Flat $ (titleize loadDF) +:+ sParen (getS loadDF) +:+ sParen (makeRef (gbSymbMapD loadDF))] ++
     [Flat $ (at_start strDisFac) +:+ sParen (getS strDisFac) +:+ sParen (makeRef (gbSymbMapD strDisFac))] ++
     [Flat $ (titleize nonFL) +:+ sParen (getS nonFL) +:+ sParen (makeRef (gbSymbMapD nonFL))] ++
-    [Flat $ (titleize glassTypeFac_) +:+ sParen (getS glassTypeFac_) +:+ sParen (makeRef (gbSymbMapD glaTyFac))] ++
+    [Flat $ (titleize gTF) +:+ sParen (getS gTF) +:+ sParen (makeRef (gbSymbMapD glaTyFac))] ++
     map (\c -> Flat $ (at_start c) +:+ sParen (getS c) +:+ sParen (makeRef (gbSymbMapD c))) [dimLL, tolPre, tolStrDisFac] ++
     [Flat $ (titleize aspectR) +:+ sParen (short aspectR {-getS aspectR -}) {-+:+ E ((C aspectR) := (C plate_len):/(C plate_width))-}]
     ))])]

@@ -244,13 +244,10 @@ s6_1_1_bullets = Enumeration $ (Number $
   ++
   s6_1_1_bullets_loadSubSec
   ++
-  [Flat $ ((at_start standOffDist) :+: sParenDash (getS standOffDist) :+: (sD ^. defn))]
-  ++
-  map (\(d, a) -> Flat $ ((at_start d) :+: sParenDash (short a)) :+: (d ^. defn))
-  [(loadShareFac, lShareFac), (glTyFac, glassTypeFac), (aspectRatio, aspectR)]
-  ++ 
-  map (\c -> Flat c)
-  [(((at_start probBreak) :+: sParenDash (getS prob_br)) :+: (probBreak ^. defn))])
+  map (\(d, a) -> Flat $ ((at_start d) :+: sParenDash a) :+: (d ^. defn))
+  [(sD, (short stdOffDist)), (loadShareFac, (short lShareFac)),
+   (glTyFac, (short glassTypeFac)), (aspectRatio, (short aspectR)), 
+   (probBreak, (getS prob_br))])
 
 -- Terminology and Definition Subsection Helpers --
 
@@ -258,13 +255,12 @@ s6_1_1_bullets_glTySubSec, s6_1_1_bullets_loadSubSec :: [ItemType]
 
 s6_1_1_bullets_glTySubSec = [Nested (((titleize glassTy) :+: S ":"))
   (Bullet $ 
-  map (\(d, a) -> Flat $ ((at_start d) :+: sParenDash (short a)) :+: (d ^. defn)) 
+  map tAndDWAcc 
   [(annealedGl, annealedGlass), (fTemperedGl, fullyTGlass), (hStrengthGl, heatSGlass)])]
 
 s6_1_1_bullets_loadSubSec = [Nested (((at_start load) :+: S ":"))
-  (Bullet $ map (\c -> Flat c)
-  [(((at_start loadResis) :+: sParenDash (short lResistance)) :+: (loadResis ^. defn)),
-  (((at_start nonFL) +:+ sParenDash (getS nonFL)) :+: (nonFactoredL ^. defn))]
+  (Bullet $ map (\(d, a) -> Flat $ ((at_start d) :+: sParenDash (short a)) :+: (d ^. defn))
+  [(loadResis, lResistance), (nonFactoredL, nFl)]
   ++ 
   map (\c -> Flat $ ((at_start c) +:+ S "- ") :+: (c ^. defn))
     [glassWL, shortDurLoad, specDeLoad, longDurLoad])]

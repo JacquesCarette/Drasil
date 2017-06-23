@@ -6,6 +6,7 @@ module Data.Drasil.SentenceStructures
   , toThe, tableShows, figureLabel
   , showingCxnBw, refineChain, foldlSP, foldlSP_, foldlSPCol
   , maybeChanged, maybeExpanded, maybeWOVerb
+  , tAndDWAcc
   ) where
 
 import Language.Drasil
@@ -125,4 +126,7 @@ likelyFrame a verb x = foldlSent [S "The", a, S "may be", verb, x]
 maybeWOVerb, maybeChanged, maybeExpanded :: Sentence -> Sentence -> Sentence
 maybeWOVerb a b = likelyFrame a EmptyS b
 maybeChanged a b = likelyFrame a (S "changed") b
-maybeExpanded a b = likelyFrame a (S "expanded") b 
+maybeExpanded a b = likelyFrame a (S "expanded") b
+
+tAndDWAcc :: Sentence
+tAndDWAcc tD acc = ((at_start tD) :+: sParenDash (short acc)) :+: (tD ^. defn)

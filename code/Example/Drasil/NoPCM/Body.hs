@@ -89,7 +89,7 @@ mkSRS = RefSec (RefProg intro
 pcm_si :: SystemInformation
 pcm_si = SI srs_swhs srs [thulasi] this_si pcmSymbols (pcmSymbols) 
   acronyms ([] :: [QDefinition]) ([] :: [QSWrapper]) ([] :: [QSWrapper])
-  ([] :: [Block QDefinition]) -- Place Holder until Data Definitions can be created
+  ([] :: [Block QDefinition]) ([] :: [ConstrainedChunk])-- Place Holder until Data Definitions can be created
   
 pcm_srs :: Document
 pcm_srs = mkDoc mkSRS pcm_si

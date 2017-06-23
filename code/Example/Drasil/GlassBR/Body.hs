@@ -83,6 +83,7 @@ glassSystInfo = SI glassBRProg srs authors this_si this_symbols
   (map qs gbInputs)
   (map qs gbOutputs) 
   (gbQDefns :: [Block QDefinition]) 
+  gbConstrained
   --FIXME: All named ideas, not just acronyms.
   
 glassBR_code :: CodeSpec

@@ -1,11 +1,13 @@
 {-# LANGUAGE GADTs, Rank2Types #-}
 module Language.Drasil.Chunk.Code (
     CodeIdea(..), CodeEntity(..), CodeName(..), CodeChunk(..), CodeDefinition(..),
-    codevar, qtoc, codeEquat
+    codevar, qtoc, codeEquat, 
+    ConstraintMap, constraintMap, physLookup, sfwrLookup, constraintLookup
   ) where
 
 import Control.Lens
 
+import Language.Drasil.Chunk.Constrained
 import Language.Drasil.Chunk.Quantity
 import Language.Drasil.Chunk.SymbolForm
 import Language.Drasil.Chunk.NamedIdea
@@ -22,6 +24,7 @@ import Language.Drasil.Symbol
 import Language.Drasil.NounPhrase
 
 import Data.String.Utils (replace)
+import qualified Data.Map as Map
 import Prelude hiding (id)
 
 -- not using lenses for now
@@ -259,3 +262,40 @@ spaceToCodeType (S.Obj n) = G.Object (toCodeName n)
 -- codeExpr (UnaryOp u)  = codeExpr (unpack u) m
 -- codeExpr (Grouping e) = Grouping (codeExpr e)
 -- codeExpr (BinaryOp b) = nub (concat $ map (\x -> codeExpr x m) (binop b))
+
+
+type ConstraintMap = Map.Map String [Constraint]
+
+constraintMap :: (Constrained c) => [c] -> ConstraintMap
+constraintMap cs = Map.fromList (map (\x -> ((x ^. id), (x ^. constraints))) cs)
+
+getPhys :: [Constraint] -> [(Expr -> Relation)]
+getPhys []            = []
+getPhys ((Phys c):cs) = [c] ++ getPhys cs
+getPhys (_:cs)        = getPhys cs
+
+getSfwr :: [Constraint] -> [(Expr -> Relation)]
+getSfwr []            = []
+getSfwr ((Sfwr c):cs) = [c] ++ getSfwr cs
+getSfwr (_:cs)        = getSfwr cs
+
+getConstraint :: Constraint -> (Expr -> Relation)
+getConstraint (Sfwr c) = c
+getConstraint (Phys c) = c
+
+physLookup :: (Quantity q) => q -> ConstraintMap -> [Expr]
+physLookup q m = constraintLookup' q m getPhys
+
+sfwrLookup :: (Quantity q) => q -> ConstraintMap -> [Expr]
+sfwrLookup q m = constraintLookup' q m getSfwr
+
+constraintLookup :: (Quantity q) => q -> ConstraintMap -> [Expr]
+constraintLookup q m = constraintLookup' q m (map getConstraint)
+
+constraintLookup' :: (Quantity q) => q -> ConstraintMap 
+                      -> ([Constraint] -> [(Expr -> Relation)]) -> [Expr]
+constraintLookup' q m f = lookC (Map.lookup (q ^. id) m) (getSymb q)
+  where lookC :: Maybe [Constraint] -> Maybe SF -> [Expr]
+        lookC _ Nothing = error "constrained quantities must have symbol"
+        lookC (Just cs) (Just s) = map (\x -> x (C s)) (f cs)
+        lookC Nothing _ = []

@@ -887,11 +887,11 @@ s4_2_6_table1 = Table [S "Var", titleize' physicalConstraint, titleize software 
   s4_2_6_conList) (titleize input_ +:+ titleize' variable) True
 
 s4_2_6_conList ::[[Sentence]]
-s4_2_6_conList = [con1, con2, con3, con4, con5, con6, con7, con10, con11, con12, 
-  con13, con14, con15, con16, con17]
+s4_2_6_conList = [con1, con2, con3, con4, con5, con6, con7, con8,
+  con9, con10, con11, con12, con13, con14, con15, con16, con17]
 
-con1, con2, con3, con4, con5, con6, con7, con10, con11, con12, con13, con14, 
-  con15, con16, con17 :: [Sentence]
+con1, con2, con3, con4, con5, con6, con7, con8, con9, con10,
+  con11, con12, con13, con14, con15, con16, con17 :: [Sentence]
 
 con1 = [getS tank_length, E $ C tank_length :> Int 0,
   E $ C tank_length_min :<= C tank_length :<= C tank_length_max,
@@ -916,7 +916,7 @@ con4 = [getS pcm_SA,
 
 con5 = [getS pcm_density, E $ C pcm_SA :> Int 0,
   E $ C pcm_density_min :< C pcm_density :< C pcm_density_max,
-  E (Dbl 1007) +:+ (unwrap $ getUnit pcm_density), S "10%"]
+  E (Int 1007) +:+ (unwrap $ getUnit pcm_density), S "10%"]
 
 con6 = [getS temp_melt_P,
   E (Int 0 :< C temp_melt_P :< C temp_C) +:+ sParen (S "+"), EmptyS,
@@ -924,11 +924,19 @@ con6 = [getS temp_melt_P,
 
 con7 = [getS htCap_S_P, E $ C htCap_S_P :> Int 0,
   E $ C htCap_S_P_min :< C htCap_S_P :< C htCap_S_P_max,
-  E (Dbl 44.2) +:+ (unwrap $ getUnit htCap_S_P), S "10%"]
+  E (Int 1760) +:+ (unwrap $ getUnit htCap_S_P), S "10%"]
+
+con8 = [getS htCap_L_P, E $ C htCap_L_P :> Int 0,
+  E $ C htCap_L_P_min :< C htCap_L_P :< C htCap_L_P_max,
+  E (Int 2270) +:+ (unwrap $ getUnit htCap_L_P), S "10%"]
+
+con9 = [getS htFusion, E $ C htFusion :> Int 0,
+  E $ C htFusion_min :< C htFusion :< C htFusion_max,
+  E (Int 211600) +:+ (unwrap $ getUnit htFusion), S "10%"]
 
 con10 = [getS coil_SA, E (C coil_SA :> Int 0) +:+ sParen (S "*"),
   E $ C coil_SA :<= C coil_SA_max,
-  E (Int 1760) +:+ (unwrap $ getUnit coil_SA), S "10%"]
+  E (Dbl 0.12) +:+ (unwrap $ getUnit coil_SA), S "10%"]
 
 con11 = [getS temp_C, E (Int 0 :< C temp_C :< Int 100) +:+ sParen (S "+"),
   EmptyS, E (Int 50) +:+ (unwrap $ getUnit temp_C), S "10%"]
@@ -949,20 +957,19 @@ con15 = [getS pcm_HTC, E $ C pcm_HTC :> Int 0,
   E $ C pcm_HTC_min :<= C pcm_HTC :<= C pcm_HTC_max,
   E (Int 1000) +:+ (unwrap $ getUnit pcm_HTC), S "10%"]
   
-con16 = [getS temp_init, E $ Int 0 :< C temp_init :< C melt_pt,
+con16 = [getS temp_init, E (Int 0 :< C temp_init :< C melt_pt) +:+ sParen (S "+"),
   EmptyS, E (Int 40) +:+ (unwrap $ getUnit temp_init), S "10%"]
   
 con17 = [getS time_final, E $ C time_final :> Int 0,
-  E $ C time_final :<= C time_final_max,
+  E (C time_final :< C time_final_max) +:+ sParen (S "**"),
   E (Int 50000) +:+ (unwrap $ getUnit time_final), S "10%"]
 
 
 
 inputVar :: [QSWrapper]
-inputVar = map qs [htCap_L_P] ++ [qs htFusion] ++
-  map qs [pcm_HTC, temp_init, time_final, coil_HTC, tank_length, 
-  diam, pcm_vol, pcm_SA, pcm_density, temp_melt_P,
-  htCap_S_P, coil_SA, temp_C, htCap_W, w_density]
+inputVar = map qs [tank_length, diam, pcm_vol, pcm_SA, pcm_density,
+  temp_melt_P, htCap_S_P, htCap_L_P, htFusion, coil_SA, temp_C,
+  w_density, htCap_W, coil_HTC, pcm_HTC, temp_init, time_final]
 
 
 -- FIXME: Temporary dummy table

@@ -21,7 +21,7 @@ module Data.Drasil.Utils
   , fmtBF
   , symbolMapFun
   , fterms , fterm
-  , {-mkDataDef,-} mkDataDef'
+  , mkDataDef
   ) where
 
 import Prelude hiding (id)
@@ -179,16 +179,13 @@ unwrap Nothing  = EmptyS
 symbolMapFun :: SymbolMap -> (d -> DType) -> (d -> Contents)
 symbolMapFun progSymbMap fun = (Definition (progSymbMap) . fun)
 
-{-- Used to help make data definitions when id, term, and symbol come from the same sourse
---mkDataDef :: UnitalChunk -> Expr -> QDefinition
-mkDataDef concept equation = fromEqn (concept ^. id) (concept ^. term) (concept ^. symbol) 
-  (((ucw concept) {-^. unit-}) ^. usymb) equation-}
-  
--- Same as unprimed but for when unit isn't needed
-mkDataDef' :: (Chunk c, SymbolForm c, NamedIdea c) => c -> Expr -> QDefinition
-mkDataDef' concept equation = fromEqn' (concept ^. id) (concept ^. term) (concept ^. symbol) 
-  equation
-
+-- Used to help make data definitions when id, term, and symbol come from the same sourse
+--mkDataDef :: (Chunk c, SymbolForm c, NamedIdea c, Quantity c) => c -> Expr -> QDefinition
+mkDataDef concept equation = datadef $ getUnit concept
+  where datadef (Just a) = fromEqn  (concept ^. id) (concept ^. term)
+                           (concept ^. symbol) a equation
+        datadef Nothing  = fromEqn' (concept ^. id) (concept ^. term)
+                           (concept ^. symbol) equation
 
 makeConstraint :: (Constrained s, Quantity s, SymbolForm s) => s -> Sentence -> [Sentence]
 makeConstraint s num = [getS s, fmtContr s (s ^. constraints), fmtU num s]

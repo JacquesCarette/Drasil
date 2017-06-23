@@ -37,24 +37,28 @@ plate_len = cuc "plate_len" (nounPhraseSP "plate length (long dimension)")
   lA millimetre Rational 
   [ physc $ \c -> c :> (Dbl 0),
     physc $ \c -> (c :/ (C plate_width)) :> (Dbl 1),
-    sfwrc $ \c -> (C dim_min) :<= c :<= (C dim_max),
+    sfwrc $ \c -> (C dim_min) :<= c,
+    sfwrc $ \c -> c :<= (C dim_max),
     sfwrc $ \c -> (c :/ (C plate_width)) :< (C ar_max) ]
 
 plate_width = cuc "plate_width" (nounPhraseSP "plate width (short dimension)")
   lB millimetre Rational
   [ physc $ \c -> c :> (Dbl 0),
     physc $ \c -> c :< (C plate_len),
-    sfwrc $ \c -> (C dim_min) :<= c :<= (C dim_max),
+    sfwrc $ \c -> (C dim_min) :<= c,
+    sfwrc $ \c -> c :<= (C dim_max),
     sfwrc $ \c -> ((C plate_len) :/ c) :< (C ar_max) ]
 
 pb_tol = cvc "pb_tol" (nounPhraseSP "tolerable probability of breakage") 
   (sub cP (Atomic "btol")) Rational
-  [ physc $ \c -> (Dbl 0) :< c :< (Dbl 1) ]
+  [ physc $ \c -> (Dbl 0) :< c ,
+    physc $ \c -> c :< (Dbl 1) ]
 
 char_weight = cuc "char_weight" (nounPhraseSP "charge weight") 
   lW kilogram Rational
   [ physc $ \c -> c :>= (Dbl 0),
-    sfwrc $ \c -> (C cWeightMax) :<= c :<= (C cWeightMin) ]
+    sfwrc $ \c -> (C cWeightMax) :<= c,
+    sfwrc $ \c -> c :<= (C cWeightMin) ]
 
 tNT = cvc "tNT" (nounPhraseSP "TNT equivalent factor")
   (Atomic "TNT") Rational
@@ -63,7 +67,8 @@ tNT = cvc "tNT" (nounPhraseSP "TNT equivalent factor")
 standOffDist = cuc "standOffDist" (nounPhraseSP "stand off distance") 
   (Atomic "SD") metre Rational
   [ physc $ \c -> c :> (Dbl 0),
-    sfwrc $ \c -> (C sd_min) :< c :< (C sd_max) ]
+    sfwrc $ \c -> (C sd_min) :< c,
+    sfwrc $ \c -> c :< (C sd_max) ]
 
 nom_thick = cuc "nom_thick" (nounPhraseSP $ "nominal thickness t in" ++
   " {2.5, 2.7, 3.0, 4.0, 5.0, 6.0, 8.0, 10.0, 12.0, 16.0, 19.0, 22.0}")
@@ -84,7 +89,8 @@ gbOutputs = map qs [is_safe1, is_safe2] ++ map qs [prob_br]
 
 prob_br = cvc "prob_br" (nounPhraseSP "probability of breakage")
   (sub cP lB) Rational
-  [ physc $ \c -> (Dbl 0) :< c :< (Dbl 1) ]
+  [ physc $ \c -> (Dbl 0) :< c,
+    physc $ \c -> c :< (Dbl 1) ]
 
 {--}
 

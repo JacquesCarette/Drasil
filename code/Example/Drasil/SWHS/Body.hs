@@ -707,7 +707,7 @@ s4_2_5_d1sent_list = map foldlSPCol [
   phrase w_vol, getS w_vol `sC` S "which has", phrase w_mass,
   getS w_mass, S "and" +:+. (phrase htCap_W `sC` getS htCap_W),
   getS ht_flux_C, S "represents the", phrase ht_flux_C, S "and",
-  getS ht_flux_P, S "represents", S "the", phrase ht_flux_P `sC`
+  getS ht_flux_P, S "represents the", phrase ht_flux_P `sC`
   S "over", phrase coil_SA, S "and", phrase pcm_SA, S "of",
   getS coil_SA, S "and", getS pcm_SA `sC` S "respectively. No",
   phrase CT.heat_trans, S "occurs to", (S "outside" `ofThe`
@@ -863,7 +863,7 @@ s4_2_5_d2endPara = map foldlSP [
   [S "This derivation does not consider",
   (phrase CT.boiling `ofThe` short phsChgMtrl) `sC`
   S "as the", short phsChgMtrl,
-  S "is assumed to either be in", S "a", (solid ^. defn),
+  S "is assumed to either be in a", (solid ^. defn),
   S "or a", (liquid ^. defn), sParen (acroA "18")]
 
   ]

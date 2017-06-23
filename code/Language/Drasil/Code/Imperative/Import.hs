@@ -21,7 +21,12 @@ generateCode spec = let modules = genModules spec
         (toAbsCode (codeName $ program spec) modules)
 
 genModules :: CodeSpec -> [Module]
-genModules (CodeSpec _ i _ d cm) = genInputMod i cm ++ genCalcMod d
+genModules (CodeSpec _ i o d cm) = genInputMod i cm
+                                   ++ genCalcMod d
+                                   ++ genOutputMod o
+
+
+------- INPUT ----------  
 
 genInputMod :: (CodeEntity c) => [c] -> ConstraintMap -> [Module]
 genInputMod ins cm = [buildModule "InputParameters" [] [] [] [(genInputClass ins cm)]]
@@ -72,6 +77,9 @@ genInputConstraints vars cm =
       map (\x -> ifCond [((?!) (convExpr x), oneLiner $ throw "InputError")] noElse) cs
     ]
 
+    
+------- CALC ----------    
+    
 genCalcMod :: [CodeDefinition] -> [Module]
 genCalcMod defs = [buildModule "Calculations" [] [] (genCalcFuncs defs) []]   
         
@@ -100,6 +108,40 @@ genCaseBlock cs = oneLiner $ ifCond (genIf cs) noElse
         genIf = map 
           (\(e,r) -> (convExpr r, oneLiner $ return (convExpr e)))
 
+
+----- OUTPUT -------
+          
+genOutputMod :: (CodeEntity c) => [c] -> [Module]
+genOutputMod outs = [buildModule "OutputFormat" [] [] [genOutputFormat outs] []]  
+    
+genOutputFormat :: (CodeEntity c) => [c] -> Method
+genOutputFormat outs = let l_outfile = "outfile"
+                           v_outfile = var l_outfile
+                           l_filename = "filename"
+                           p_filename = param l_filename string
+                           v_filename = var l_filename
+                       in
+  pubMethod methodTypeVoid "write_output" 
+    (p_filename:getParams outs)
+    [ block $
+        [
+          varDec l_outfile outfile,
+          openFileW v_outfile v_filename
+        ] 
+        ++
+        concatMap 
+          (\x -> [ printFileStr v_outfile ((codeName x) ++ " = "), 
+                   printFileLn v_outfile (convType $ codeType x) 
+                     (var $ codeName x)
+                 ] ) outs
+        ++ 
+        [ closeFile v_outfile ]
+    ]         
+    
+
+
+-- helpers
+    
 getParams :: (CodeEntity c) => [c] -> [Parameter]
 getParams = map (\y -> param (codeName y) (convType $ codeType y))
           

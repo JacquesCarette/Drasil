@@ -14,7 +14,8 @@ import Data.Drasil.Concepts.Thermodynamics (heat)
 import Prelude hiding (id)
 import Data.Drasil.Utils
 import Data.Drasil.SentenceStructures (foldlSent, foldlList, ofThe, isThe, 
-  showingCxnBw, figureLabel, foldlSP, sAnd, foldlsC, tAndDWAcc)
+  showingCxnBw, figureLabel, foldlSP, sAnd, foldlsC, tAndDWAcc, tAndDWSym,
+  tAndDOnly)
 
 import Drasil.Template.MG
 import Drasil.Template.DD
@@ -237,17 +238,18 @@ s6_1_1 = termDefnF (S "All of the terms are extracted from" +:+
   sSqBr (S "4") +:+ S "in" +:+ (makeRef s10)) [s6_1_1_bullets]
 
 s6_1_1_bullets = Enumeration $ (Number $
-  map (\b -> Flat $ ((at_start b) +:+ S "- ") :+: (b ^. defn)) 
+  map tAndDOnly 
   [glBreakage, lateral, lite, specA, blastResisGla, eqTNTChar]
   ++
   s6_1_1_bullets_glTySubSec
   ++
   s6_1_1_bullets_loadSubSec
   ++
-  map (\(d, a) -> Flat $ ((at_start d) :+: sParenDash a) :+: (d ^. defn))
-  [(sD, (short stdOffDist)), (loadShareFac, (short lShareFac)),
-   (glTyFac, (short glassTypeFac)), (aspectRatio, (short aspectR)), 
-   (probBreak, (getS prob_br))])
+  zipWith tAndDWAcc
+  [sD, loadShareFac, glTyFac, aspectRatio]
+  [stdOffDist, lShareFac, glassTypeFac, aspectR]
+  ++
+  [tAndDWSym (probBreak) (prob_br)])
 
 -- Terminology and Definition Subsection Helpers --
 
@@ -256,14 +258,14 @@ s6_1_1_bullets_glTySubSec, s6_1_1_bullets_loadSubSec :: [ItemType]
 s6_1_1_bullets_glTySubSec = [Nested (((titleize glassTy) :+: S ":"))
   (Bullet $
   zipWith tAndDWAcc
-  [annealedGl, fTemperedGl, hStrengthGl] [annealedGlass, fullyTGlass, heatSGlass])]
+  [annealedGl, fTemperedGl, hStrengthGl]
+  [annealedGlass, fullyTGlass, heatSGlass])]
 
 s6_1_1_bullets_loadSubSec = [Nested (((at_start load) :+: S ":"))
-  (Bullet $ map (\(d, a) -> Flat $ ((at_start d) :+: sParenDash (short a)) :+: (d ^. defn))
-  [(loadResis, lResistance), (nonFactoredL, nFL)]
+  (Bullet $ zipWith tAndDWAcc
+    [loadResis, nonFactoredL] [lResistance, nFL]
   ++ 
-  map (\c -> Flat $ ((at_start c) +:+ S "- ") :+: (c ^. defn))
-    [glassWL, shortDurLoad, specDeLoad, longDurLoad])]
+  map tAndDOnly [glassWL, shortDurLoad, specDeLoad, longDurLoad])]
 
 s6_1_2 = physSystDesc (short gLassBR) (fig_glassbr) [s6_1_2_list, fig_glassbr]
 

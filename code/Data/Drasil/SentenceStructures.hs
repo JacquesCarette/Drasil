@@ -6,11 +6,11 @@ module Data.Drasil.SentenceStructures
   , toThe, tableShows, figureLabel
   , showingCxnBw, refineChain, foldlSP, foldlSP_, foldlSPCol
   , maybeChanged, maybeExpanded, maybeWOVerb
-  , tAndDWAcc
+  , tAndDWAcc, tAndDWSym, tAndDOnly
   ) where
 
 import Language.Drasil
-import Data.Drasil.Utils (foldle, foldle1)
+import Data.Drasil.Utils (foldle, foldle1, getS)
 import Data.Drasil.Concepts.Documentation
 import Control.Lens ((^.))
 
@@ -131,3 +131,5 @@ maybeExpanded a b = likelyFrame a (S "expanded") b
 
 --tAndDWAcc :: (NamedIdea s, Concept s, Concept c) => s -> c -> Sentence
 tAndDWAcc tD acc = Flat $ ((at_start tD) :+: sParenDash (short acc)) :+: (tD ^. defn)
+tAndDWSym tD sym = Flat $ ((at_start tD) :+: sParenDash (getS sym)) :+: (tD ^. defn)
+tAndDOnly chunk  = Flat $ ((at_start chunk) +:+ S "- ") :+: (chunk ^. defn)

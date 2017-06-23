@@ -7,6 +7,7 @@ import Language.Drasil.Chunk.Quantity
 import Language.Drasil.Chunk.Concept
 import Language.Drasil.Chunk.Eq
 import Language.Drasil.Chunk.SymbolForm
+import Language.Drasil.Chunk.Constrained
 import Language.Drasil.People
 import Language.Drasil.Unit
 
@@ -21,7 +22,8 @@ data SystemInformation where
 -- NP is built into NamedIdea.
  SI :: (NamedIdea a, NamedIdea b, HasName c, Unit d,
   Quantity e, Ord e, Ord f, Quantity f, Concept f, NamedIdea g, 
-  SymbolForm h, Quantity h, SymbolForm i, Quantity i) => {
+  SymbolForm h, Quantity h, SymbolForm i, Quantity i,
+  Constrained j) => {
   _sys :: a,
   _kind :: b,
   _authors :: [c],
@@ -32,7 +34,8 @@ data SystemInformation where
   _definitions :: [QDefinition],
   _inputs :: [h],
   _outputs :: [i],
-  _defSequence :: [Block QDefinition]
+  _defSequence :: [Block QDefinition],
+  _constraints :: [j]
   } -> SystemInformation
   
   

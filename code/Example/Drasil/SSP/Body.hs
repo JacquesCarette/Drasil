@@ -484,8 +484,18 @@ nrmShrDerivation = [foldlSP [S "The last static equation of T2 the moment equili
   ]
 
 intrSlcDerivation = [foldlSP [S "Taking the perpendicular force equilibrium of GD1 with the effective stress definition from T4",
-  S "that", E ((C totNrmForce) := (C nrmFSubWat) - (C baseHydroForce)) `sC` S "and the assumption of GD5 the equilibrium equation can be rewritten as",
+  S "that", E (C totNrmForce := C nrmFSubWat - C baseHydroForce) `sC` S "and the assumption of GD5 the equilibrium equation can be rewritten as",
   S "equation (16)"],
+  
+  EqnBlock $
+  C nrmFSubWat := ((C slcWght :- C normToShear :* C scalFunc :* C intNormForce :+ 
+  C normToShear :* C scalFunc :* C intNormForce :+ 
+  C baseHydroForce :* cos (C surfAngle) :+ C surfLoad :* 
+  cos (C impLoadAngle)) :* cos (C baseAngle)
+  :+ (Neg (C earthqkLoadFctr) :* C slcWght :- 
+  C intNormForce :+ C intNormForce :- C watrForce :+ 
+  C watrForce :+ C surfHydroForce :* sin (C surfAngle) :+ 
+  C surfLoad :* cos (C impLoadAngle)) :* sin (C baseAngle)),
   
   foldlSP [S "Taking the parallel force equilibrium of GD2 with the definition of mobile shear from GD4 and",
   S "the assumption of GD5, the equilibrium equation can be rewritten as equation (17)"],

@@ -13,9 +13,9 @@ import qualified Data.Drasil.Quantities.Physics as QP (restitutionCoef, time,
   position, linearAccel, linearDisplacement, linearVelocity, impulseS)
 import qualified Data.Drasil.Quantities.Math as QM (orientation)
 import Data.Drasil.Units.Physics
+import Data.Drasil.Utils (mkDataDef)
 
 import Prelude hiding (id)
-import Control.Lens ((^.))
 
 ----- Data Definitions -----
 
@@ -28,8 +28,7 @@ cpQDefs = map (\x -> Parallel x []) cpDDefs
 -- DD1 : Centre of mass --
 
 dd1CtrOfMass :: QDefinition
-dd1CtrOfMass = fromEqn (pos_CM ^. id) (pos_CM ^. term) (pos_CM ^. symbol)
-  metre ctrOfMassEqn
+dd1CtrOfMass = mkDataDef pos_CM ctrOfMassEqn
 
 ctrOfMassEqn :: Expr
 ctrOfMassEqn = (UnaryOp (Summation Nothing
@@ -53,8 +52,7 @@ linDispQDef = foldl (+:+) (EmptyS) def
               phrase $ QP.time ^. term, P $ QP.time ^. symbol]
 -}
 dd2linDisp :: QDefinition
-dd2linDisp = fromEqn (QP.linearDisplacement ^. id) fixme 
-  (QP.linearDisplacement ^. symbol) metre dispEqn
+dd2linDisp = mkDataDef QP.linearDisplacement dispEqn
 
 dispEqn :: Expr
 dispEqn = Deriv Total (FCall (C QP.position) [C QP.time]) (C QP.time)
@@ -80,8 +78,7 @@ linVelQDef = foldl (+:+) (EmptyS) def
 -}
 
 dd3linVel :: QDefinition
-dd3linVel = fromEqn (QP.linearVelocity ^. id) fixme 
-  (QP.linearVelocity ^. symbol) velU velEqn
+dd3linVel = mkDataDef QP.linearVelocity velEqn
 
 velEqn :: Expr
 velEqn = Deriv Total (FCall (C QP.displacement) [C QP.time]) (C QP.time)
@@ -96,8 +93,7 @@ dd3descr = S "linear" +:+ (QP.velocity ^. term) +:+ S "of a" +:+
 -- DD4 : Linear acceleration --
 
 dd4linAcc :: QDefinition
-dd4linAcc = fromEqn (QP.linearAccel ^. id) fixme (QP.linearAccel ^. symbol) accelU
-  accelEqn
+dd4linAcc = mkDataDef QP.linearAccel accelEqn
 
 accelEqn :: Expr
 accelEqn = Deriv Total (FCall (C QP.velocity) [C QP.time]) (C QP.time)
@@ -112,9 +108,7 @@ dd4descr = S "linear" +:+ (accel ^. term) +:+ S "of a" +:+
 -- DD5 : Angular displacement --
 
 dd5angDisp :: QDefinition
-dd5angDisp = fromEqn (QP.angularDisplacement ^. id) fixme
-  (Concat [(QP.angularDisplacement ^. symbol), Atomic "(", (QP.time ^. symbol), Atomic ")"])
-  radian angDispEqn
+dd5angDisp = mkDataDef QP.angularDisplacement angDispEqn
 
 angDispEqn :: Expr
 angDispEqn = Deriv Total (FCall (C QM.orientation) [C QP.time]) (C QP.time)
@@ -129,9 +123,7 @@ dd5descr = (QP.angularDisplacement ^. term) +:+ S "of a" +:+
 -- DD6 : Angular velocity --
 
 dd6angVel :: QDefinition
-dd6angVel = fromEqn (QP.angularVelocity ^. id) fixme --dd6descr 
-  (Concat [(QP.angularVelocity ^. symbol), Atomic "(", (QP.time ^. symbol), Atomic ")"]) 
-  angVelU angVelEqn
+dd6angVel = mkDataDef QP.angularVelocity angVelEqn
 
 angVelEqn :: Expr
 angVelEqn = Deriv Total (FCall (C QP.angularDisplacement) [C QP.time]) (C QP.time)
@@ -146,9 +138,7 @@ dd6descr = ((QP.angularVelocity ^. term)) +:+ S "of a" +:+
 -- DD7 : Angular acceleration --
 
 dd7angAccel :: QDefinition
-dd7angAccel = fromEqn (QP.angularAccel ^. id) fixme --dd7descr 
-  (Concat [(QP.angularAccel ^. symbol), Atomic "(", (QP.time ^. symbol), Atomic ")"])
-  angAccelU angAccelEqn
+dd7angAccel = mkDataDef QP.angularAccel angAccelEqn
 
 angAccelEqn :: Expr
 angAccelEqn = Deriv Total (FCall (C QP.angularVelocity) [C QP.time]) (C QP.time)
@@ -166,8 +156,7 @@ dd7descr = (QP.angularAccel ^. term) +:+ S "of a" +:+
 -- need norms and cross products
 
 dd8impulse :: QDefinition
-dd8impulse = fromEqn (QP.impulseS ^. id) fixme --dd8descr 
-  lJ impulseU impulseEqn
+dd8impulse = mkDataDef QP.impulseS impulseEqn
 
 -- The last two terms in the denominator should be cross products.
 impulseEqn :: Expr

@@ -110,7 +110,7 @@ void test_push_size_check() {
  * Pop empty array should throw exception
  * this test will fail, can't catch an abort?
  */
-void test_pop() {
+void test_pop() { // need way to test exceptions
   TEST_FAIL();
   Array * test_array = arrayNew(0);
   arrayPop(test_array);

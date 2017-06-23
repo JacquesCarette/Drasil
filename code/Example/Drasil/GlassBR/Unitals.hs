@@ -137,10 +137,10 @@ eqTNTWeight = unitary "eqTNTWeight" (nounPhraseSP "explosive mass in equivalent 
 
 glassBRUnitless :: [VarChunk]
 glassBRUnitless = [ar_max, risk_fun, is_safe1, is_safe2, stressDistFac, sdf_tol,
-  dimlessLoad, tolLoad, lRe, loadSF, gTF]
+  dimlessLoad, tolLoad, lRe, loadSF, gTF, lDurFac]
 
 ar_max, risk_fun, is_safe1, is_safe2, stressDistFac, sdf_tol,
-  dimlessLoad, tolLoad, lRe, loadSF, gTF :: VarChunk
+  dimlessLoad, tolLoad, lRe, loadSF, gTF, lDurFac :: VarChunk
 
 ar_max      = vc "ar_max"        (nounPhraseSP "maximum aspect ratio")
   (sub (Atomic "AR") (Atomic "max")) Rational
@@ -160,6 +160,7 @@ tolLoad     = makeVC "tolLoad"       (nounPhraseSP "tolerable load")
 lRe         = makeVC "lRe"           (lResistance ^. term) (Atomic "LR")
 loadSF      = vc "loadSF"        (lShareFac ^. term) (Atomic "LSF") Integer
 gTF         = vc "gTF"           (glassTypeFac_ ^. term) (Atomic "GTF") Integer
+lDurFac     = makeVC "lDurFac" (loadDurFactor ^. term) (Atomic "LDF")
 
 terms :: [ConceptChunk]
 terms = [aspectRatio, glBreakage, lite, glassTy,
@@ -272,14 +273,11 @@ explosion     = dcc "explosion"   (nounPhraseSP "explosion")
   "a destructive shattering of something"
 
 -- hack; needs to be removed eventually
-lDurFac :: VarChunk
-lDurFac = makeVC "lDurFac" (nounPhraseSP "load duration factor") (Atomic "LDF")
-
 temporary :: [ConVar]
 temporary = [nonFactorL, glassTypeFac_]
 
 nonFactorL, glassTypeFac_ :: ConVar
-nonFactorL    = cvR (nonFactoredL) (Atomic "NFL")
+nonFactorL     = cvR (nonFactoredL) (Atomic "NFL")
 glassTypeFac_  = cvR (glTyFac) (Atomic "GTF")
 
 this_symbols :: [QSWrapper]
@@ -287,7 +285,7 @@ this_symbols = ((map qs glassBRSymbolsWithDefns) ++ (map qs glassBRSymbols)
   ++ (map qs glassBRUnitless) ++ (map qs gbInputs))
 
 temporaryLOSymbols :: [QSWrapper]
-temporaryLOSymbols = this_symbols ++ map qs (temporary) ++ map qs [lDurFac]
+temporaryLOSymbols = this_symbols ++ map qs (temporary)
 
 gbSymbMap :: SymbolMap
 gbSymbMap = symbolMap temporaryLOSymbols

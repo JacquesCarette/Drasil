@@ -15,10 +15,10 @@ glassBRProg = dcc' "glassBRProg" (nounPhraseSP "GlassBR program")
 acronyms :: [CI]
 acronyms = [assumption, annealedGlass, aspectR, dataDefn, fullyTGlass,
   goalStmt, glassTypeFac, heatSGlass, iGlass, inModel, likelyChg, 
-  lGlass, lResistance, lShareFac, physSyst, requirement, srs,
-  thModel, eqTNT, stdOffDist]
+  loadDurFactor, lGlass, lResistance, lShareFac, physSyst, requirement,
+  srs, thModel, eqTNT, stdOffDist]
 
-annealedGlass, aspectR, fullyTGlass, glassTypeFac, heatSGlass,
+annealedGlass, aspectR, fullyTGlass, glassTypeFac, heatSGlass, loadDurFactor,
   iGlass, lGlass, lResistance, lShareFac, eqTNT, gLassBR, stdOffDist :: CI
 
 --FIXME: So many of these are duplicates of other named chunks/concepts
@@ -37,6 +37,7 @@ lShareFac     = commonIdea "lShareFac"     (nounPhraseSP "load share factor")   
 eqTNT         = commonIdea "eqTNT"         (nounPhraseSP "TNT (Trinitrotoluene) Equivalent Factor") "TNT"
 gLassBR       = commonIdea "gLassBR"       (pn "GlassBR")                           "GlassBR"
 stdOffDist    = commonIdea "stdOffDist"    (nounPhraseSP "stand off distance")      "SD"
+loadDurFactor = commonIdea "loadDurFactor" (nounPhraseSP "load duration factor")    "LDF"
 
 {-Terminology-}
 -- TODO: See if we can make some of these terms less specific and/or parameterized.

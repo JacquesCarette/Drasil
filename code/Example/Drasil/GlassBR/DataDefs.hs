@@ -61,7 +61,7 @@ loadDF_eq = (Grouping ((C load_dur):/(Int 60))):^((C sflawParamM):/(Int 16))
 -- more depth shortly.
 -- Definitely should not have the id being printed (which it currently is)
 loadDF :: QDefinition
-loadDF = fromEqn' ("lDurFac") (nounPhraseSP "load duration factor") (Atomic "LDF") loadDF_eq
+loadDF = mkDataDef lDurFac loadDF_eq
 
 --DD4--
 

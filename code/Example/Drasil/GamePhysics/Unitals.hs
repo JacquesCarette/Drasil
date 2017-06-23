@@ -208,6 +208,7 @@ contDisp_B = ucFromCV (contParam "B" cB) metre
 contParam :: String -> Symbol -> ConVar
 contParam n w = cvR (dccWDS ("r_" ++ n ++ "P") (contdispN n) (phrase $ QP.displacement))
                   (sub (QP.displacement ^. symbol) (Concat $ [w, cP]))
+
 contdispN :: String -> NP
 contdispN n = cn $ "displacement vector between the centre of mass of rigid body " 
   ++ n ++ " and contact point P"
@@ -220,7 +221,7 @@ perpParam n w = cvR (dccWDS ("|| r_A" ++ n ++ " x n ||")
                 (cn' "length of the") (QM.perpVect ^. term))
                 (cn $ "to the contact displacement vector of rigid body" ++ n))
                 (phrase $ QM.perpVect)) 
-                (Concat [Atomic "||", w, Atomic "*", 
+                (Concat [Atomic "||", w, Atomic "*", --should be x for cross
                 (QM.perpVect ^. symbol), Atomic "||"])
 
 perpLen_A = ucFromCV (perpParam "A" (contDisp_A ^. symbol)) metre

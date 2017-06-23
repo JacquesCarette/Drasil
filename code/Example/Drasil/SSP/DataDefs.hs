@@ -1,11 +1,9 @@
 module Drasil.SSP.DataDefs where
 
-import Control.Lens ((^.))
 import Prelude hiding (id, cos, sin, tan)
 
 import Language.Drasil
 import Drasil.SSP.Unitals
-import Data.Drasil.SI_Units
 import Data.Drasil.Utils
 import qualified Data.Drasil.Quantities.SolidMechanics as SM
 
@@ -24,7 +22,7 @@ fixmeS = S "FIXME: add description"
 --DD1
 
 sliceWght :: QDefinition
-sliceWght = fromEqn (slcWght ^. id) (slcWght ^. term) (slcWght ^. symbol) newton slcWgtEqn
+sliceWght = mkDataDef slcWght slcWgtEqn
 
 slcWgtEqn :: Expr
 slcWgtEqn = (C baseWthX) * (Case [case1,case2,case3])
@@ -36,7 +34,7 @@ slcWgtEqn = (C baseWthX) * (Case [case1,case2,case3])
 --DD2
 
 baseWtrF :: QDefinition
-baseWtrF = mkDataDef' baseHydroForce bsWtrFEqn 
+baseWtrF = mkDataDef baseHydroForce bsWtrFEqn 
 
 bsWtrFEqn :: Expr
 bsWtrFEqn = (C baseLngth)*(Case [case1,case2])
@@ -46,7 +44,7 @@ bsWtrFEqn = (C baseLngth)*(Case [case1,case2])
 --DD3
 
 surfWtrF :: QDefinition
-surfWtrF = mkDataDef' surfHydroForce surfWtrFEqn
+surfWtrF = mkDataDef surfHydroForce surfWtrFEqn
 
 surfWtrFEqn :: Expr
 surfWtrFEqn = (C surfLngth)*(Case [case1,case2])
@@ -56,7 +54,7 @@ surfWtrFEqn = (C surfLngth)*(Case [case1,case2])
 --DD4
 
 intersliceWtrF :: QDefinition
-intersliceWtrF = fromEqn' (watrForce ^. id) (watrForce ^. term) (watrForce ^. symbol) intersliceWtrFEqn
+intersliceWtrF = mkDataDef watrForce intersliceWtrFEqn
 
 intersliceWtrFEqn :: Expr
 intersliceWtrFEqn = Case [case1,case2,case3]
@@ -70,7 +68,7 @@ intersliceWtrFEqn = Case [case1,case2,case3]
 --DD5
 
 angles :: QDefinition
-angles = fromEqn' (baseAngle ^. id) (baseAngle ^. term) (baseAngle ^. symbol) anglesEqn --, surfAngle?
+angles = mkDataDef baseAngle anglesEqn --, surfAngle?
 
 anglesEqn :: Expr
 anglesEqn = ((C slipHght) :- (C slipHght)) :/ ((C slipHght) :- (C slipHght))
@@ -80,7 +78,7 @@ anglesEqn = ((C slipHght) :- (C slipHght)) :/ ((C slipHght) :- (C slipHght))
 --DD6
 
 lengths :: QDefinition
-lengths = fromEqn' (baseWthX ^. id) (baseWthX ^. term) (baseWthX ^. symbol) lengthsEqn --, baseLngth, surfLngth?
+lengths = mkDataDef baseWthX lengthsEqn --, baseLngth, surfLngth?
 
 lengthsEqn :: Expr
 lengthsEqn = (C slipHght) :- (C slipHght)
@@ -90,7 +88,7 @@ lengthsEqn = (C slipHght) :- (C slipHght)
 --DD7
 
 seismicLoadF :: QDefinition
-seismicLoadF = fromEqn' (earthqkLoadFctr ^. id) (earthqkLoadFctr ^. term) (earthqkLoadFctr ^. symbol) ssmcLFEqn --correct chunk referenced for definition?
+seismicLoadF = mkDataDef earthqkLoadFctr ssmcLFEqn --correct chunk referenced for definition?
 
 ssmcLFEqn :: Expr
 ssmcLFEqn = ((C earthqkLoadFctr) :* (C slcWght)) 
@@ -99,7 +97,7 @@ ssmcLFEqn = ((C earthqkLoadFctr) :* (C slcWght))
 --DD8
 
 surfLoads :: QDefinition
-surfLoads = fromEqn' (surfLoad ^. id) (surfLoad ^. term) (surfLoad ^. symbol) surfLEqn --, slcWght?
+surfLoads = mkDataDef surfLoad surfLEqn --, slcWght?
 
 surfLEqn :: Expr
 surfLEqn = (C surfLoad) :* (C impLoadAngle) --FIXME: Should actually just be seperated with ','
@@ -107,7 +105,7 @@ surfLEqn = (C surfLoad) :* (C impLoadAngle) --FIXME: Should actually just be sep
 --DD9
 
 intrsliceF :: QDefinition
-intrsliceF = fromEqn' (intShrForce ^. id) (intShrForce ^. term) (intShrForce ^. symbol) intrsliceFEqn
+intrsliceF = mkDataDef intShrForce intrsliceFEqn
 
 intrsliceFEqn :: Expr
 intrsliceFEqn = (C normToShear) :* (C scalFunc) :* (C intNormForce)
@@ -115,7 +113,7 @@ intrsliceFEqn = (C normToShear) :* (C scalFunc) :* (C intNormForce)
 --DD10
 
 resShearWO :: QDefinition
-resShearWO = fromEqn' (shearRNoIntsl ^. id) (shearRNoIntsl ^. term) (shearRNoIntsl ^. symbol) resShearWOEqn
+resShearWO = mkDataDef shearRNoIntsl resShearWOEqn
 
 resShearWOEqn :: Expr
 resShearWOEqn = (((C slcWght) :+ (C surfHydroForce) :* (cos (C surfAngle)) :+ 
@@ -127,7 +125,7 @@ resShearWOEqn = (((C slcWght) :+ (C surfHydroForce) :* (cos (C surfAngle)) :+
 --DD11
 
 mobShearWO :: QDefinition
-mobShearWO = fromEqn' (shearFNoIntsl ^. id) (shearFNoIntsl ^. term) (shearFNoIntsl ^. symbol) mobShearWOEqn
+mobShearWO = mkDataDef shearFNoIntsl mobShearWOEqn
 
 mobShearWOEqn :: Expr 
 mobShearWOEqn = ((C slcWght) :+ (C surfHydroForce) :* (cos (C surfAngle)) :+ 
@@ -138,7 +136,7 @@ mobShearWOEqn = ((C slcWght) :+ (C surfHydroForce) :* (cos (C surfAngle)) :+
 --DD12
 
 displcmntRxnF :: QDefinition
-displcmntRxnF = fromEqn' (shrStiffIntsl ^. id) (shrStiffIntsl ^. term) (shrStiffIntsl ^. symbol) displcmntRxnFEqn --, shrStiffBase (correct chunk used?)
+displcmntRxnF = mkDataDef shrStiffIntsl displcmntRxnFEqn --, shrStiffBase (correct chunk used?)
 
 displcmntRxnFEqn :: Expr
 displcmntRxnFEqn = (Int 0)
@@ -146,7 +144,7 @@ displcmntRxnFEqn = (Int 0)
 --DD13 FIXME: id for "Net Force-Displacement Equilibrium"
 
 netFDsplcmntEqbm :: QDefinition
-netFDsplcmntEqbm = fromEqn' (genForce ^. id) (genForce ^. term) (genForce ^. symbol) netFDsplcmntEqbmEqn
+netFDsplcmntEqbm = mkDataDef genForce netFDsplcmntEqbmEqn
 
 netFDsplcmntEqbmEqn :: Expr
 netFDsplcmntEqbmEqn = Neg (C surfLngth) * (C nrmStiffIntsl) * (C genDisplace) +
@@ -156,7 +154,7 @@ netFDsplcmntEqbmEqn = Neg (C surfLngth) * (C nrmStiffIntsl) * (C genDisplace) +
 --DD14
 
 soilStiffness :: QDefinition
-soilStiffness = fromEqn' (nrmStiffRes ^. id) (nrmStiffRes ^. term) (nrmStiffRes ^. symbol) --FIXME: No equation section? Instead, there are "Input" and "Output" sections
+soilStiffness = mkDataDef nrmStiffRes --FIXME: No equation section? Instead, there are "Input" and "Output" sections
   soilStiffnessEqn
 
 soilStiffnessEqn :: Expr

@@ -21,17 +21,17 @@ swhsSymbols = (map cqs swhsUnits) ++ (map cqs swhsUnitless) ++ (map cqs swhsCons
 -- Symbols with Units --
 
 swhsUnits :: [UCWrapper]
-swhsUnits = map ucw [in_SA, out_SA, heat_cap_spec, htCap_L, htCap_L_P,
+swhsUnits = map ucw [in_SA, out_SA, heat_cap_spec, htCap_L,
   htCap_S, htCap_V, sens_heat, pcm_initMltE, pcm_E, w_E,
   vol_ht_gen, htTransCoeff, pcm_mass, w_mass, ht_flux, latent_heat,
   thFluxVect, ht_flux_C, ht_flux_in, ht_flux_out, ht_flux_P, latentE_P, temp,
   boil_pt, temp_env, melt_pt, t_init_melt,
   t_final_melt, temp_diff, temp_PCM, temp_W, vol, tank_vol, w_vol, deltaT,
   density, tau, tau_L_P, tau_S_P, tau_W] ++
-  map ucw [htFusion, mass, time] -- ++ [tank_length, diam, coil_SA]
+  map ucw [mass, time] -- ++ [tank_length, diam, coil_SA]
 
-in_SA, out_SA, htCap_L, htCap_L_P, htCap_S, htCap_V,
-  htFusion, pcm_initMltE, pcm_E, w_E, vol_ht_gen, htTransCoeff,
+in_SA, out_SA, htCap_L, htCap_S, htCap_V,
+  pcm_initMltE, pcm_E, w_E, vol_ht_gen, htTransCoeff,
   pcm_mass, w_mass,
   thFluxVect, ht_flux_C, ht_flux_in, ht_flux_out, ht_flux_P, latentE_P,
   temp_env, t_init_melt,
@@ -58,11 +58,6 @@ out_SA       = uc' "out_SA" (nounPhraseSP
 htCap_L      = uc' "htCap_L" (nounPhraseSP "specific heat capacity of a liquid")
   ("The amount of energy required to raise the temperature of a given unit mass of " ++
   "a given liquid by a given amount") (sup (heat_cap_spec ^. symbol) cL) UT.heat_cap_spec
-
-htCap_L_P    = uc' "htCap_L_P" (nounPhraseSP
-  "specific heat capacity of PCM as a liquid")
-  ("The amount of energy required to raise the temperature of a given unit mass of liquid " ++
-  "phase change material by a given amount") (sup (sub (heat_cap_spec ^. symbol) cP) cL) UT.heat_cap_spec
 
 htCap_S      = uc' "htCap_S"
   (nounPhraseSP "specific heat capacity of a solid")
@@ -95,12 +90,6 @@ htTransCoeff = uc' "htTransCoeff"
   ("The proportionality constant between the heat flux and the " ++
   "thermodynamic driving force for the flow of thermal energy")
   lH UT.heat_transfer_coef
-
-htFusion     = makeUCWDS "htFusion" (nounPhraseSP
-  "specific latent heat of fusion")
-  (S "amount of " +:+ phrase thermal_energy +:+ S "required to" +:+
-  S "completely melt a unit " +:+ phrase mass +:+. S "of a substance")
-  (sub cH lF) specificE
 
 pcm_mass     = uc' "pcm_mass" (nounPhraseSP "mass of phase change material")
   "The quantity of matter within the phase change material"
@@ -209,12 +198,12 @@ melt_frac    = cvR (dcc "melt_frac" (nounPhraseSP "melt fraction")
 
 swhsConstrained ::[ConstrConcept]
 swhsConstrained = [tank_length, diam, pcm_vol, pcm_SA, pcm_density,
-  temp_melt_P, htCap_S_P, coil_SA, temp_C, w_density, htCap_W, coil_HTC, pcm_HTC,
-  temp_init, time_final]
+  temp_melt_P, htCap_S_P, htCap_L_P, htFusion, coil_SA, temp_C,
+  w_density, htCap_W, coil_HTC, pcm_HTC, temp_init, time_final]
 
 tank_length, diam, pcm_vol, pcm_SA, pcm_density, temp_melt_P,
-  htCap_S_P, coil_SA, temp_C, w_density, htCap_W, coil_HTC, pcm_HTC, temp_init, 
-  time_final :: ConstrConcept
+  htCap_S_P, htCap_L_P, htFusion, coil_SA, temp_C, w_density,
+  htCap_W, coil_HTC, pcm_HTC, temp_init, time_final :: ConstrConcept
 
 -- Constraint 1
 tank_length  = cuc' "tank_length" (nounPhraseSP "length of tank")
@@ -266,6 +255,20 @@ htCap_S_P    = cuc' "htCap_S_P" (nounPhraseSP "specific heat capacity of PCM as 
   [physc $ \c -> c :> Int 0,
   sfwrc $ \c -> C htCap_S_P_min :< c :< C htCap_S_P_max]
 
+-- Constraint 8
+htCap_L_P    = cuc' "htCap_L_P" (nounPhraseSP "specific heat capacity of PCM as a liquid")
+  ("The amount of energy required to raise the temperature of a " ++
+  "given unit mass of liquid phase change material by a given amount")
+  (sup (sub (heat_cap_spec ^. symbol) cP) cL) UT.heat_cap_spec Rational
+  [physc $ \c -> c :> Int 0,
+  sfwrc $ \c -> C htCap_L_P_min :< c :< C htCap_L_P_max]
+
+--Constraint 9
+htFusion     = cuc' "htFusion" (nounPhraseSP "specific latent heat of fusion")
+  ("amount of thermal energy required to completely melt a unit mass of a substance")
+  (sub cH lF) specificE Rational
+  [physc $ \c -> c :> Int 0,
+  sfwrc $ \c -> C htFusion_min :< c :< C htFusion_max]
 
 -- Constraint 10
 coil_SA      = cuc' "coil_SA"
@@ -332,7 +335,8 @@ time_final   = cuc' "time_final" (nounPhraseSP "final time")
 
 tank_length_min, tank_length_max, htTransCoeff_min, pcm_density_min, 
   pcm_density_max, coil_SA_max, w_density_min, w_density_max, htCap_S_P_min, 
-  htCap_S_P_max, htCap_W_min, htCap_W_max, coil_HTC_min, coil_HTC_max, pcm_HTC_min,
+  htCap_S_P_max, htCap_L_P_min, htCap_L_P_max, htFusion_min, htFusion_max,
+  htCap_W_min, htCap_W_max, coil_HTC_min, coil_HTC_max, pcm_HTC_min,
   pcm_HTC_max, time_final_max :: UnitaryChunk
 
 -- Used in Constraint 1
@@ -349,10 +353,10 @@ htTransCoeff_min = unitary "htTransCoeff_min"
 
 -- Used in Constraint 5
 pcm_density_min = unitary "pcm_density_min" (nounPhraseSP "minimum density of PCM")
-  (sub (pcm_density ^. symbol) (Atomic "min")) densityU Rational
+  (sup (pcm_density ^. symbol) (Atomic "min")) densityU Rational
 
 pcm_density_max = unitary "pcm_density_max" (nounPhraseSP "maximum density of PCM")
-  (sub (pcm_density ^. symbol) (Atomic "max")) densityU Rational
+  (sup (pcm_density ^. symbol) (Atomic "max")) densityU Rational
 
 -- Used in Constraint 7
 htCap_S_P_min = unitary "htCap_S_P_min"
@@ -363,38 +367,56 @@ htCap_S_P_max = unitary "htCap_S_P_max"
   (nounPhraseSP "maximum specific heat capacity of PCM as a solid")
   (sub (htCap_S_P ^. symbol) (Atomic "max")) UT.heat_cap_spec Rational
 
+-- Used in Constraint 8
+htCap_L_P_min = unitary "htCap_L_P_min"
+  (nounPhraseSP "minimum specific heat capacity of PCM as a liquid")
+  (sub (htCap_L_P ^. symbol) (Atomic "min")) UT.heat_cap_spec Rational
+
+htCap_L_P_max = unitary "htCap_L_P_max"
+  (nounPhraseSP "maximum specific heat capacity of PCM as a liquid")
+  (sub (htCap_L_P ^. symbol) (Atomic "max")) UT.heat_cap_spec Rational
+
+-- Used in Constraint 9
+htFusion_min = unitary "htFusion_min"
+  (nounPhraseSP "minimum specific latent heat of fusion")
+  (sub (htFusion ^. symbol) (Atomic "min")) UT.heat_cap_spec Rational
+
+htFusion_max = unitary "htFusion_max"
+  (nounPhraseSP "maximum specific latent heat of fusion")
+  (sub (htFusion ^. symbol) (Atomic "max")) UT.heat_cap_spec Rational
+
 -- Used in Constraint 10
 coil_SA_max = unitary "coil_SA_max" (nounPhraseSP "maximum surface area of coil")
-  (sub (coil_SA ^. symbol) (Atomic "max")) m_2 Rational
+  (sup (coil_SA ^. symbol) (Atomic "max")) m_2 Rational
 
 -- Used in Constraint 12
 w_density_min = unitary "w_density_min" (nounPhraseSP "minimum density of water")
-  (sub (w_density ^. symbol) (Atomic "min")) densityU Rational
+  (sup (w_density ^. symbol) (Atomic "min")) densityU Rational
 
 w_density_max = unitary "w_density_max" (nounPhraseSP "maximum density of water")
-  (sub (w_density ^. symbol) (Atomic "max")) densityU Rational
+  (sup (w_density ^. symbol) (Atomic "max")) densityU Rational
   
 -- Used in Constraint 13
 htCap_W_min = unitary "htCap_W_min" (nounPhraseSP "minimum specific heat capacity of water")
-  (sub (htCap_W ^. symbol) (Atomic "min")) UT.heat_cap_spec Rational
+  (sup (htCap_W ^. symbol) (Atomic "min")) UT.heat_cap_spec Rational
 
 htCap_W_max = unitary "htCap_W_max" (nounPhraseSP "maximum specific heat capacity of water")
-  (sub (htCap_W ^. symbol) (Atomic "max")) UT.heat_cap_spec Rational
+  (sup (htCap_W ^. symbol) (Atomic "max")) UT.heat_cap_spec Rational
 
 -- Used in Constraint 14
 coil_HTC_min = unitary "coil_HTC_min" (nounPhraseSP "minimum convective heat transfer coefficient between coil and water")
-  (sub (coil_HTC ^. symbol) (Atomic "min")) UT.heat_transfer_coef Rational
+  (sup (coil_HTC ^. symbol) (Atomic "min")) UT.heat_transfer_coef Rational
 
 coil_HTC_max = unitary "coil_HTC_max" (nounPhraseSP "maximum convective heat transfer coefficient between coil and water")
-  (sub (coil_HTC ^. symbol) (Atomic "max")) UT.heat_transfer_coef Rational
+  (sup (coil_HTC ^. symbol) (Atomic "max")) UT.heat_transfer_coef Rational
   
 -- Used in Constraint 15
 pcm_HTC_min = unitary "pcm_HTC_min" (nounPhraseSP "minimum convective heat transfer coefficient between PCM and water")
-  (sub (pcm_HTC ^. symbol) (Atomic "min")) UT.heat_transfer_coef Rational
+  (sup (pcm_HTC ^. symbol) (Atomic "min")) UT.heat_transfer_coef Rational
 
 pcm_HTC_max = unitary "pcm_HTC_max" (nounPhraseSP "maximum convective heat transfer coefficient between PCM and water")
-  (sub (pcm_HTC ^. symbol) (Atomic "max")) UT.heat_transfer_coef Rational
+  (sup (pcm_HTC ^. symbol) (Atomic "max")) UT.heat_transfer_coef Rational
   
 -- Used in Constraint 17
 time_final_max = unitary "time_final_max" (nounPhraseSP "maximum final time")
-  (sub (time_final ^. symbol) (Atomic "max")) second Rational
+  (sup (time_final ^. symbol) (Atomic "max")) second Rational

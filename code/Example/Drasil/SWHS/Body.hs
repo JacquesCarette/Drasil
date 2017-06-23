@@ -63,7 +63,7 @@ authors = manyNames [thulasi, brooks, spencerSmith]
 swhs_si :: SystemInformation
 swhs_si = SI swhs_pcm srs [thulasi, brooks, spencerSmith]
   this_si swhsSymbols (swhsSymbols) acronyms ([] :: [QDefinition]) ([] :: [QSWrapper]) ([] :: [QSWrapper])
-  ([] :: [Block QDefinition])
+  ([] :: [Block QDefinition]) ([] :: [ConstrainedChunk])
   --Note: The second swhsSymbols here is
     -- Redundant b/c the unitals are not really concepts (yet). There
     -- Will still likely be a better way to do this.
@@ -447,7 +447,7 @@ s4_2 = solChSpecF progName (s4_1, s6) True s4_2_4_intro_end
   S "show"), mid, True, end) ([s4_2_1_list],
   s4_2_2_T1 ++ s4_2_2_T2 ++ s4_2_2_T3, s4_2_3_genDefs ++ s4_2_3_deriv,
   s4_2_4_DD1 ++ s4_2_4_DD2 ++ s4_2_4_DD3 ++ s4_2_4_DD4,
-  (s4_2_5_subpar ++ s4_2_5_deriv1 ++ s4_2_5_deriv2),
+  (s4_2_5_IMods),
   [s4_2_6_table1, s4_2_6_table2]) [s4_2_7]
 
   where mid = foldlSent [S "The", phrase column, S "for", phrase software,
@@ -461,6 +461,10 @@ s4_2 = solChSpecF progName (s4_1, s6) True s4_2_4_intro_end
 -------------------------
 -- 4.2.1 : Assumptions --
 -------------------------
+
+s4_2_1 :: Section
+--s4_2_1 = assumpF (s4_2_2 {-thModF-}) (s4_2_3 {-genDefnF-}) (s4_2_4 {-dataDefnF-}) (s4_2_5_deriv1 {-inModelF-}) (s6) (s4_2_1_list)
+s4_2_1 = assumpF (s4_1 {-FIXME-}) (s4_1 {-FIXME-}) (s4_1 {-FIXME-}) (s4_2_5) (s6) [s4_2_1_list]
 
 s4_2_1_list :: Contents
 s4_2_1_list = enumSimple 1 (short assumption) $ map foldlSent s4_2_1_assump_list
@@ -669,33 +673,19 @@ s4_2_5_subpar = [foldlSP_ [S "The goals",  acroGS "1", S "to",
   S "depend on one another", acroIM "3", S "can be solved once",
   acroIM "1", S "has been solved. The", phrase solution, S "of",
   acroIM "2", S "and", acroIM "4", S "are also coupled, since the",
-  phrase temp_PCM, S "and", phrase pcm_E, S "depend on the" +:+.
-  phrase CT.phase_change, sParen (at_start' inModel +:+.
-  S "are left out because they are not currently implemented in Drasil")]]
+  phrase temp_PCM, S "and", phrase pcm_E, S "depend on the",
+  phrase CT.phase_change]]
 
 s4_2_5 :: Section
 --s4_2_5 = inModelF s4_1 s4_2_4 s4_2_2 s4_2_3 (s4_2_5_IMods)
 s4_2_5 = inModelF s4_1 s4_1 s4_1 s4_1 (s4_2_5_IMods)
 
 s4_2_5_IMods :: [Contents]
-s4_2_5_IMods = map swhsSymbMapT iModels
+s4_2_5_IMods = concat $ weave [s4_2_5_derivations , map (\x -> [swhsSymbMapT x]) iModels]
 
-{-
-s4_2_5_intro = [Paragraph (S "This" +:+ phrase section_ +:+ S "transforms" +:+
-  S "the" +:+ phrase problem +:+ S "defined in" +:+ (makeRef s4_1) +:+
-  S "into one which is expressed in mathematical terms. It uses concrete" +:+
-  plural symbol_ +:+ S "defined in" +:+ (makeRef s4_2_4) +:+
-  S "to replace the abstract" +:+ plural symbol_ +:+ S "in the" +:+
-  plural model +:+ S "identified in" +:+ (makeRef s4_2_2) +:+ S "and" +:+.
-  (makeRef s4_2_3))]
--}
-
--- The first paragraph is completely general and repeated in other examples.
--- The second paragraph is very specific, and the other examples don't even
--- include a paragraph analogous to this one.
-
--- Instance Models aren't implemented yet
-
+s4_2_5_derivations :: [[Contents]]
+s4_2_5_derivations = [s4_2_5_subpar, s4_2_5_deriv1, s4_2_5_deriv2]
+  
 s4_2_5_deriv1 :: [Contents]
 s4_2_5_deriv1 = s4_2_5_d1startPara ++
   (weave [s4_2_5_d1sent_list, s4_2_5_d1eqn_list])
@@ -717,7 +707,7 @@ s4_2_5_d1sent_list = map foldlSPCol [
   phrase w_vol, getS w_vol `sC` S "which has", phrase w_mass,
   getS w_mass, S "and" +:+. (phrase htCap_W `sC` getS htCap_W),
   getS ht_flux_C, S "represents the", phrase ht_flux_C, S "and",
-  getS ht_flux_P, S "represents", S "the", phrase ht_flux_P `sC`
+  getS ht_flux_P, S "represents the", phrase ht_flux_P `sC`
   S "over", phrase coil_SA, S "and", phrase pcm_SA, S "of",
   getS coil_SA, S "and", getS pcm_SA `sC` S "respectively. No",
   phrase CT.heat_trans, S "occurs to", (S "outside" `ofThe`
@@ -873,7 +863,7 @@ s4_2_5_d2endPara = map foldlSP [
   [S "This derivation does not consider",
   (phrase CT.boiling `ofThe` short phsChgMtrl) `sC`
   S "as the", short phsChgMtrl,
-  S "is assumed to either be in", S "a", (solid ^. defn),
+  S "is assumed to either be in a", (solid ^. defn),
   S "or a", (liquid ^. defn), sParen (acroA "18")]
 
   ]
@@ -897,11 +887,11 @@ s4_2_6_table1 = Table [S "Var", titleize' physicalConstraint, titleize software 
   s4_2_6_conList) (titleize input_ +:+ titleize' variable) True
 
 s4_2_6_conList ::[[Sentence]]
-s4_2_6_conList = [con1, con2, con3, con4, con5, con6, con7, con10, con11, con12, 
-  con13, con14, con15, con16, con17]
+s4_2_6_conList = [con1, con2, con3, con4, con5, con6, con7, con8,
+  con9, con10, con11, con12, con13, con14, con15, con16, con17]
 
-con1, con2, con3, con4, con5, con6, con7, con10, con11, con12, con13, con14, 
-  con15, con16, con17 :: [Sentence]
+con1, con2, con3, con4, con5, con6, con7, con8, con9, con10,
+  con11, con12, con13, con14, con15, con16, con17 :: [Sentence]
 
 con1 = [getS tank_length, E $ C tank_length :> Int 0,
   E $ C tank_length_min :<= C tank_length :<= C tank_length_max,
@@ -926,7 +916,7 @@ con4 = [getS pcm_SA,
 
 con5 = [getS pcm_density, E $ C pcm_SA :> Int 0,
   E $ C pcm_density_min :< C pcm_density :< C pcm_density_max,
-  E (Dbl 1007) +:+ (unwrap $ getUnit pcm_density), S "10%"]
+  E (Int 1007) +:+ (unwrap $ getUnit pcm_density), S "10%"]
 
 con6 = [getS temp_melt_P,
   E (Int 0 :< C temp_melt_P :< C temp_C) +:+ sParen (S "+"), EmptyS,
@@ -934,11 +924,19 @@ con6 = [getS temp_melt_P,
 
 con7 = [getS htCap_S_P, E $ C htCap_S_P :> Int 0,
   E $ C htCap_S_P_min :< C htCap_S_P :< C htCap_S_P_max,
-  E (Dbl 44.2) +:+ (unwrap $ getUnit htCap_S_P), S "10%"]
+  E (Int 1760) +:+ (unwrap $ getUnit htCap_S_P), S "10%"]
+
+con8 = [getS htCap_L_P, E $ C htCap_L_P :> Int 0,
+  E $ C htCap_L_P_min :< C htCap_L_P :< C htCap_L_P_max,
+  E (Int 2270) +:+ (unwrap $ getUnit htCap_L_P), S "10%"]
+
+con9 = [getS htFusion, E $ C htFusion :> Int 0,
+  E $ C htFusion_min :< C htFusion :< C htFusion_max,
+  E (Int 211600) +:+ (unwrap $ getUnit htFusion), S "10%"]
 
 con10 = [getS coil_SA, E (C coil_SA :> Int 0) +:+ sParen (S "*"),
   E $ C coil_SA :<= C coil_SA_max,
-  E (Int 1760) +:+ (unwrap $ getUnit coil_SA), S "10%"]
+  E (Dbl 0.12) +:+ (unwrap $ getUnit coil_SA), S "10%"]
 
 con11 = [getS temp_C, E (Int 0 :< C temp_C :< Int 100) +:+ sParen (S "+"),
   EmptyS, E (Int 50) +:+ (unwrap $ getUnit temp_C), S "10%"]
@@ -959,20 +957,19 @@ con15 = [getS pcm_HTC, E $ C pcm_HTC :> Int 0,
   E $ C pcm_HTC_min :<= C pcm_HTC :<= C pcm_HTC_max,
   E (Int 1000) +:+ (unwrap $ getUnit pcm_HTC), S "10%"]
   
-con16 = [getS temp_init, E $ Int 0 :< C temp_init :< C melt_pt,
+con16 = [getS temp_init, E (Int 0 :< C temp_init :< C melt_pt) +:+ sParen (S "+"),
   EmptyS, E (Int 40) +:+ (unwrap $ getUnit temp_init), S "10%"]
   
 con17 = [getS time_final, E $ C time_final :> Int 0,
-  E $ C time_final :<= C time_final_max,
+  E (C time_final :< C time_final_max) +:+ sParen (S "**"),
   E (Int 50000) +:+ (unwrap $ getUnit time_final), S "10%"]
 
 
 
 inputVar :: [QSWrapper]
-inputVar = map qs [htCap_L_P] ++ [qs htFusion] ++
-  map qs [pcm_HTC, temp_init, time_final, coil_HTC, tank_length, 
-  diam, pcm_vol, pcm_SA, pcm_density, temp_melt_P,
-  htCap_S_P, coil_SA, temp_C, htCap_W, w_density]
+inputVar = map qs [tank_length, diam, pcm_vol, pcm_SA, pcm_density,
+  temp_melt_P, htCap_S_P, htCap_L_P, htFusion, coil_SA, temp_C,
+  w_density, htCap_W, coil_HTC, pcm_HTC, temp_init, time_final]
 
 
 -- FIXME: Temporary dummy table
@@ -1265,8 +1262,7 @@ s7_dataRef = [makeRef s4_2_6_table1] --FIXME: Reference section?
 
 s7_assump = ["A1", "A2", "A3", "A4", "A5", "A6", "A7", "A8", "A9", "A10",
   "A11", "A12", "A13", "A14", "A15", "A16", "A17", "A18", "A19"]
-s7_assumpRef = makeListRef s7_assump s5_1 --s4_2_1_list
---FIXME: 's5_1' needs to be replaced by the appropriate Section for assumptions once built
+s7_assumpRef = makeListRef s7_assump s4_2_1
 
 s7_theories = ["T1", "T2", "T3"]
 s7_theoriesRef = map (refFromType Theory swhsSymMap) tModels

@@ -5,7 +5,7 @@ import Data.Drasil.SI_Units
 import Prelude hiding (log, id, exp)
 import Control.Lens ((^.))
 import Drasil.GlassBR.Unitals
-import Drasil.DocumentLanguage
+import Data.Drasil.Utils
 
 --FIXME: having id "" and term "" is completely bogus, and should not
 --  be allowed.  This implicitly says that something here does not make sense.
@@ -26,8 +26,7 @@ gbQDefns = [Parallel hFromt {-DD2-} [loadDF {-DD3-}, glaTyFac {-DD6-}]] ++ --can
 --DD1--
 
 risk :: QDefinition
-risk = fromEqn' (risk_fun ^. id) (nounPhraseSP "risk of failure") 
-  (risk_fun ^. symbol) risk_eq
+risk = mkDataDef risk_fun risk_eq
 
 risk_eq :: Expr
 risk_eq = ((C sflawParamK) :/ (Grouping (((C plate_len) :/ (Int 1000)) :*
@@ -62,7 +61,7 @@ loadDF_eq = (Grouping ((C load_dur):/(Int 60))):^((C sflawParamM):/(Int 16))
 -- more depth shortly.
 -- Definitely should not have the id being printed (which it currently is)
 loadDF :: QDefinition
-loadDF = fromEqn' ("lDurFac") (nounPhraseSP "load duration factor") (Atomic "LDF") loadDF_eq
+loadDF = mkDataDef lDurFac loadDF_eq
 
 --DD4--
 
@@ -70,8 +69,7 @@ strDisFac_eq :: Expr
 strDisFac_eq = FCall (C stressDistFac) [C dimlessLoad, (C plate_len):/(C plate_width)]
 
 strDisFac :: QDefinition
-strDisFac = fromEqn' (stressDistFac ^. id) (stressDistFac ^. term) (stressDistFac ^. symbol) 
-  strDisFac_eq
+strDisFac = mkDataDef stressDistFac strDisFac_eq
 
 --DD5--
 
@@ -88,7 +86,7 @@ glaTyFac_eq :: Expr
 glaTyFac_eq = FCall (C glaTyFac) [C glass_type]
 
 glaTyFac :: QDefinition --FIXME: make into cases
-glaTyFac = fromEqn' (glassTypeFac_ ^. id) (nounPhraseSP $ 
+glaTyFac = fromEqn' (gTF ^. id) (nounPhraseSP $ 
   "function that maps from " ++ "the glass type (g) to a real " ++
   "number, as follows: GTF(g) = (g = AN => 1.0|g = FT => 4.0|" ++ 
   "g = HS => 2.0). AN is annealed glass. " ++ 
@@ -102,8 +100,7 @@ dimLL_eq = ((C demand):*((Grouping ((C plate_len):*(C plate_width))):^(Int 2)))
   :/((C mod_elas):*((C act_thick):^(Int 4)):*(C gTF))
 
 dimLL :: QDefinition
-dimLL = fromEqn' (dimlessLoad ^. id) (dimlessLoad ^. term) 
-  (dimlessLoad ^. symbol) dimLL_eq
+dimLL = mkDataDef dimlessLoad dimLL_eq
 
 --DD8--
 
@@ -111,8 +108,7 @@ tolPre_eq :: Expr
 tolPre_eq = FCall (C tolLoad) [C sdf_tol, (C plate_len):/(C plate_width)]
 
 tolPre :: QDefinition
-tolPre = fromEqn' (tolLoad ^. id) (tolLoad ^. term) (tolLoad ^. symbol) 
-  tolPre_eq
+tolPre = mkDataDef tolLoad tolPre_eq
 
 --DD9--
 
@@ -125,5 +121,4 @@ tolStrDisFac_eq = log (log ((Int 1):/((Int 1):-(C pb_tol)))
   (Int 2))):^(C sflawParamM):*(C loadDF))))
 
 tolStrDisFac :: QDefinition
-tolStrDisFac = fromEqn' (sdf_tol ^. id) (sdf_tol ^. term) (sdf_tol ^. symbol) 
-  tolStrDisFac_eq
+tolStrDisFac = mkDataDef sdf_tol tolStrDisFac_eq

@@ -12,8 +12,7 @@ import Data.Drasil.Concepts.Math (graph, calculation, equation,
                                   surface, probability, parameter)
 import Data.Drasil.Concepts.Thermodynamics (heat)
 import Prelude hiding (id)
-import Data.Drasil.Utils (itemRefToSent, getS, unwrap, fmtU,
-  makeTMatrix, makeListRef, mkRefsList, refFromType, enumSimple, enumBullet)
+import Data.Drasil.Utils
 import Data.Drasil.SentenceStructures (foldlSent, foldlList, ofThe, isThe, 
   showingCxnBw, figureLabel, foldlSP, sAnd, foldlsC)
 
@@ -83,6 +82,7 @@ glassSystInfo = SI glassBRProg srs authors this_si this_symbols
   (map qs gbInputs)
   (map qs gbOutputs) 
   (gbQDefns :: [Block QDefinition]) 
+  gbConstrained
   --FIXME: All named ideas, not just acronyms.
   
 glassBR_code :: CodeSpec
@@ -394,32 +394,12 @@ dataConstList = [inputVarA, inputVarB, inputVarPbTol, inputVarW, inputVarTNT, in
 
 inputVarA, inputVarB, inputVarPbTol, inputVarW, inputVarTNT, inputVarSD :: [Sentence]
 
-inputVarA     = displayConstr plate_len    (1500 :: Int)     "10%"
-inputVarB     = displayConstr plate_width  (1200 :: Int)     "10%"
-inputVarPbTol = displayConstr pb_tol       (0.008 :: Double) "0.1%"
-inputVarW     = displayConstr char_weight  (42 :: Int)       "10%"
-inputVarTNT   = displayConstr tNT          (1 :: Int)        "10%"
-inputVarSD    = displayConstr standOffDist (45 :: Int)        "10%"
-
-displayConstr :: (Constrained s, Quantity s, SymbolForm s, Show a) => s -> a -> String -> [Sentence]
-displayConstr s num uncrty = [getS s, fmtConstrP s (s ^. constraints), fmtConstrS s (s ^. constraints),
-  fmtU (S (show num)) (qs s), S uncrty]
-
-fmtConstrP :: (Constrained s, SymbolForm s) => s -> [Constraint]-> Sentence
-fmtConstrP _ [] = EmptyS
-fmtConstrP _ [Sfwr _] = EmptyS
-fmtConstrP s [Phys f] = E $ f (C s)
-fmtConstrP s ((Phys f):(Sfwr _):_) = E $ f (C s)
-fmtConstrP s ((Phys f):(Phys g):xs) = (E $ f (C s)) +:+ S "and" +:+ fmtConstrP s ((Phys g):xs)
-fmtConstrP s ((Sfwr f):xs) = fmtConstrP s (tail ((Sfwr f):xs))
---FIXME:Can messy pattern matching of `fmtConstrP` be improved?
---FIXME:Should messy pattern matching of `fmtConstrP` be implemnented in `fmtConstrS` defintion?
-fmtConstrS :: (Constrained s, SymbolForm s) => s -> [Constraint]-> Sentence
-fmtConstrS _ [] = EmptyS
-fmtConstrS s [Sfwr f] = E $ f (C s)
-fmtConstrS _ [Phys _] = EmptyS
-fmtConstrS s ((Sfwr f):xs) = (E $ f (C s)) +:+ S "and" +:+ fmtConstrS s xs 
-fmtConstrS s ((Phys f):xs) = fmtConstrS s (tail ((Phys f):xs))
+inputVarA     = displayConstr plate_len    (1500 :: Int)     (S "10" :+: (P (Special Percent)))
+inputVarB     = displayConstr plate_width  (1200 :: Int)     (S "10" :+: (P (Special Percent)))
+inputVarPbTol = displayConstr pb_tol       (0.008 :: Double) (S "0.1" :+: (P (Special Percent)))
+inputVarW     = displayConstr char_weight  (42 :: Int)       (S "10" :+: (P (Special Percent)))
+inputVarTNT   = displayConstr tNT          (1 :: Int)        (S "10" :+: (P (Special Percent)))
+inputVarSD    = displayConstr standOffDist (45 :: Int)        (S "10" :+: (P (Special Percent)))
 
 s6_2_5_table2 = Table [S "Var", titleize value] (mkTable 
   [(\x -> fst x), (\x -> snd x)]
@@ -505,7 +485,7 @@ s7_1_req6 = [(Enumeration $ Simple $ [(acroR "6", Nested (titleize output_ +:+
     [Flat $ (titleize loadDF) +:+ sParen (getS loadDF) +:+ sParen (makeRef (gbSymbMapD loadDF))] ++
     [Flat $ (at_start strDisFac) +:+ sParen (getS strDisFac) +:+ sParen (makeRef (gbSymbMapD strDisFac))] ++
     [Flat $ (titleize nonFL) +:+ sParen (getS nonFL) +:+ sParen (makeRef (gbSymbMapD nonFL))] ++
-    [Flat $ (titleize glassTypeFac_) +:+ sParen (getS glassTypeFac_) +:+ sParen (makeRef (gbSymbMapD glaTyFac))] ++
+    [Flat $ (titleize gTF) +:+ sParen (getS gTF) +:+ sParen (makeRef (gbSymbMapD glaTyFac))] ++
     map (\c -> Flat $ (at_start c) +:+ sParen (getS c) +:+ sParen (makeRef (gbSymbMapD c))) [dimLL, tolPre, tolStrDisFac] ++
     [Flat $ (titleize aspectR) +:+ sParen (short aspectR {-getS aspectR -}) {-+:+ E ((C aspectR) := (C plate_len):/(C plate_width))-}]
     ))])]

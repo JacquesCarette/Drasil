@@ -31,7 +31,7 @@ nmFEq_rel :: Relation
 nmFEq_rel = C totNrmForce := ((C slcWght :- C intShrForce :+ C intShrForce :+ 
                           C baseHydroForce :* cos (C surfAngle) :+ C surfLoad :* 
                           cos (C impLoadAngle)) :* cos (C baseAngle)
-                          :- (Neg (C earthqkLoadFctr) :* C slcWght :- 
+                          :+ (Neg (C earthqkLoadFctr) :* C slcWght :- 
                           C intNormForce :+ C intNormForce :- C watrForce :+ 
                           C watrForce :+ C surfHydroForce :* sin (C surfAngle) :+ 
                           C surfLoad :* cos (C impLoadAngle)) :* sin (C baseAngle)) -- FIXME: add the proper index for intShrForce and intNormForce

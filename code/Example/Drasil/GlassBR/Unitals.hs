@@ -37,24 +37,28 @@ plate_len = cuc "plate_len" (nounPhraseSP "plate length (long dimension)")
   lA millimetre Rational 
   [ physc $ \c -> c :> (Dbl 0),
     physc $ \c -> (c :/ (C plate_width)) :> (Dbl 1),
-    sfwrc $ \c -> (C dim_min) :<= c :<= (C dim_max),
+    sfwrc $ \c -> (C dim_min) :<= c,
+    sfwrc $ \c -> c :<= (C dim_max),
     sfwrc $ \c -> (c :/ (C plate_width)) :< (C ar_max) ]
 
 plate_width = cuc "plate_width" (nounPhraseSP "plate width (short dimension)")
   lB millimetre Rational
   [ physc $ \c -> c :> (Dbl 0),
     physc $ \c -> c :< (C plate_len),
-    sfwrc $ \c -> (C dim_min) :<= c :<= (C dim_max),
+    sfwrc $ \c -> (C dim_min) :<= c,
+    sfwrc $ \c -> c :<= (C dim_max),
     sfwrc $ \c -> ((C plate_len) :/ c) :< (C ar_max) ]
 
 pb_tol = cvc "pb_tol" (nounPhraseSP "tolerable probability of breakage") 
   (sub cP (Atomic "btol")) Rational
-  [ physc $ \c -> (Dbl 0) :< c :< (Dbl 1) ]
+  [ physc $ \c -> (Dbl 0) :< c ,
+    physc $ \c -> c :< (Dbl 1) ]
 
 char_weight = cuc "char_weight" (nounPhraseSP "charge weight") 
   lW kilogram Rational
   [ physc $ \c -> c :>= (Dbl 0),
-    sfwrc $ \c -> (C cWeightMax) :<= c :<= (C cWeightMin) ]
+    sfwrc $ \c -> (C cWeightMax) :<= c,
+    sfwrc $ \c -> c :<= (C cWeightMin) ]
 
 tNT = cvc "tNT" (nounPhraseSP "TNT equivalent factor")
   (Atomic "TNT") Rational
@@ -63,7 +67,8 @@ tNT = cvc "tNT" (nounPhraseSP "TNT equivalent factor")
 standOffDist = cuc "standOffDist" (nounPhraseSP "stand off distance") 
   (Atomic "SD") metre Rational
   [ physc $ \c -> c :> (Dbl 0),
-    sfwrc $ \c -> (C sd_min) :< c :< (C sd_max) ]
+    sfwrc $ \c -> (C sd_min) :< c,
+    sfwrc $ \c -> c :< (C sd_max) ]
 
 nom_thick = cuc "nom_thick" (nounPhraseSP $ "nominal thickness t in" ++
   " {2.5, 2.7, 3.0, 4.0, 5.0, 6.0, 8.0, 10.0, 12.0, 16.0, 19.0, 22.0}")
@@ -84,7 +89,8 @@ gbOutputs = map qs [is_safe1, is_safe2] ++ map qs [prob_br]
 
 prob_br = cvc "prob_br" (nounPhraseSP "probability of breakage")
   (sub cP lB) Rational
-  [ physc $ \c -> (Dbl 0) :< c :< (Dbl 1) ]
+  [ physc $ \c -> (Dbl 0) :< c,
+    physc $ \c -> c :< (Dbl 1) ]
 
 {--}
 
@@ -131,10 +137,10 @@ eqTNTWeight = unitary "eqTNTWeight" (nounPhraseSP "explosive mass in equivalent 
 
 glassBRUnitless :: [VarChunk]
 glassBRUnitless = [ar_max, risk_fun, is_safe1, is_safe2, stressDistFac, sdf_tol,
-  dimlessLoad, tolLoad, lRe, loadSF, gTF]
+  dimlessLoad, tolLoad, lRe, loadSF, gTF, lDurFac, nonFactorL]
 
 ar_max, risk_fun, is_safe1, is_safe2, stressDistFac, sdf_tol,
-  dimlessLoad, tolLoad, lRe, loadSF, gTF :: VarChunk
+  dimlessLoad, tolLoad, lRe, loadSF, gTF, lDurFac, nonFactorL :: VarChunk
 
 ar_max      = vc "ar_max"        (nounPhraseSP "maximum aspect ratio")
   (sub (Atomic "AR") (Atomic "max")) Rational
@@ -153,7 +159,10 @@ tolLoad     = makeVC "tolLoad"       (nounPhraseSP "tolerable load")
   (sub (dimlessLoad ^. symbol) (Atomic "tol"))
 lRe         = makeVC "lRe"           (lResistance ^. term) (Atomic "LR")
 loadSF      = vc "loadSF"        (lShareFac ^. term) (Atomic "LSF") Integer
-gTF         = vc "gTF"           (glassTypeFac_ ^. term) (Atomic "GTF") Integer
+gTF         = vc "gTF"           (glassTypeFac ^. term) (Atomic "GTF") Integer
+lDurFac     = makeVC "lDurFac" (loadDurFactor ^. term) (Atomic "LDF")
+nonFactorL   = makeVC "nonFactorL" (nonFactoredL ^. term) (Atomic "NFL")
+
 
 terms :: [ConceptChunk]
 terms = [aspectRatio, glBreakage, lite, glassTy,
@@ -212,7 +221,7 @@ loadResis     = dcc "loadResis"          (lResistance ^. term)
     "[4 (pg. 1, 53)], following A2 and A1 respectively.")
 longDurLoad   = dcc "longDurLoad"        (nounPhraseSP "long duration load")
   ("Any load lasting approximately 30 days.")
-nonFactoredL  = dccWDS "nonFactoredL"    (nounPhraseSP "non-factored load")
+nonFactoredL  = dccWDS "nonFactoredL"    (nFL ^. term)
   (foldlSent [S "Three second duration uniform load associated with a probability of",
     S "breakage less than or equal to 8", (plural lite), S "per 1000 for monolithic",
     (getAcc annealedGlass), S "glass"])
@@ -265,26 +274,12 @@ bomb          = dcc "bomb"        (nounPhraseSP "bomb") ("a container filled wit
 explosion     = dcc "explosion"   (nounPhraseSP "explosion") 
   "a destructive shattering of something"
 
--- hack; needs to be removed eventually
-lDurFac :: VarChunk
-lDurFac = makeVC "lDurFac" (nounPhraseSP "load duration factor") (Atomic "LDF")
-
-temporary :: [ConVar]
-temporary = [nonFactorL, glassTypeFac_]
-
-nonFactorL, glassTypeFac_ :: ConVar
-nonFactorL    = cvR (nonFactoredL) (Atomic "NFL")
-glassTypeFac_  = cvR (glTyFac) (Atomic "GTF")
-
 this_symbols :: [QSWrapper]
 this_symbols = ((map qs glassBRSymbolsWithDefns) ++ (map qs glassBRSymbols)
   ++ (map qs glassBRUnitless) ++ (map qs gbInputs))
 
-temporaryLOSymbols :: [QSWrapper]
-temporaryLOSymbols = this_symbols ++ map qs (temporary) ++ map qs [lDurFac]
-
 gbSymbMap :: SymbolMap
-gbSymbMap = symbolMap temporaryLOSymbols
+gbSymbMap = symbolMap this_symbols
 
 gbSymbMapD :: QDefinition -> Contents
 gbSymbMapD term_ = (symbolMapFun gbSymbMap Data) term_

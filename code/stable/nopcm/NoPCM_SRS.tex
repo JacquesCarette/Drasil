@@ -47,21 +47,21 @@ The table that follows summarizes the symbols used in this document along with t
 Symbol & Description & Units
 \\
 \midrule
-$A_{C}$ & Coil surface area & $\text{m}^{2}$
+$A_{C}$ & Heating coil surface area & $\text{m}^{2}$
 \\
 $A_{in}$ & Surface area over which heat is transferred in & $\text{m}^{2}$
 \\
 $A_{out}$ & Surface area over which heat is transferred out & $\text{m}^{2}$
 \\
-$C$ & Specific heat capacity & $\frac{\text{J}}{(\text{kg}{}^{\circ}C)}$
-\\
 $C^{L}$ & Specific heat capacity of a liquid & $\frac{\text{J}}{(\text{kg}{}^{\circ}C)}$
+\\
+$C$ & Specific heat capacity & $\frac{\text{J}}{(\text{kg}{}^{\circ}C)}$
 \\
 $C_{W}$ & Specific heat capacity of water & $\frac{\text{J}}{(\text{kg}{}^{\circ}C)}$
 \\
 $D$ & Diameter of tank & m
 \\
-$g$ & Volumetric heat generation per unit volume & $\frac{\text{W}}{\text{m}^{2}}$
+$g$ & Volumetric heat generation per unit volume & $\frac{\text{W}}{\text{m}^{3}}$
 \\
 $h$ & Convective heat transfer coefficient & $\frac{\text{W}}{(\text{m}^{2}{}^{\circ}C)}$
 \\
@@ -75,23 +75,23 @@ $m_{W}$ & Mass of water & kg
 \\
 $q$ & Heat flux & $\frac{\text{W}}{\text{m}^{2}}$
 \\
-$q_{C}$ & Heat flux from coil & $\frac{\text{W}}{\text{m}^{2}}$
+$q_{in}$ & Heat flux input & $\frac{\text{W}}{\text{m}^{2}}$
 \\
-$q_{in}$ & Heat flux in & $\frac{\text{W}}{\text{m}^{2}}$
+$q_{C}$ & Heat flux into the water from the coil & $\frac{\text{W}}{\text{m}^{2}}$
 \\
-$q_{out}$ & Heat flux out & $\frac{\text{W}}{\text{m}^{2}}$
+$q_{out}$ & Heat flux output & $\frac{\text{W}}{\text{m}^{2}}$
 \\
 $\mathbf{q}$ & Thermal flux vector & $\frac{\text{W}}{\text{m}^{2}}$
 \\
 $T$ & Temperature & ${}^{\circ}C$
 \\
-$T_{C}$ & Temperature of coil & ${}^{\circ}C$
+$T_{C}$ & Temperature of the heating coil & ${}^{\circ}C$
 \\
-$T_{env}$ & Temperature of environment & ${}^{\circ}C$
+$T_{env}$ & Temperature of the environment & ${}^{\circ}C$
 \\
 $T_{init}$ & Initial temperature & ${}^{\circ}C$
 \\
-$T_{W}$ & Temperature of water & ${}^{\circ}C$
+$T_{W}$ & Temperature of the water & ${}^{\circ}C$
 \\
 $t$ & Time & s
 \\
@@ -156,10 +156,10 @@ The following section provides an overview of the Software Requirements Specific
 This document will be used as a starting point for subsequent development phases, including writing the design specification and the software verification and validation plan. The design document will show how the requirements are to be realized, including decisions on the numerical algorithms and programming environment. The verification and validation plan will show the steps that will be used to increase confidence in the software documentation and the implementation. Although the SRS fits in a series of documents that follow the so-called waterfall model, the actual development process is not constrained in any way. Even when the waterfall model is not followed, as Parnas and Clements point out, the most logical way to present the documentation is still to ``fake" a rational design process.
 \subsection{Scope of Requirements}
 \label{Sec:ScopofRequ}
-The scope of the requirements includes. Given the appropriate inputs, the code for Solar Water Heating Systems is intended to.
+The scope of the requirements includes thermal analysis of a single solar water heating tank. Given the appropriate inputs, the code for Solar Water Heating Systems is intended to predict the temperature and thermal energy histories for the water.
 \subsection{Characteristics of Intended Reader}
 \label{Sec:CharofInteRead}
-Reviewers of this documentation should have a strong knowledge in heat transfer theory. The reviewers should also have an understanding of differential equations, as typically covered in first and second year Calculus courses. The users of Solar Water Heating Systems can have a lower level of expertise, as explained in Section~\ref{Sec:UserChar}.
+Reviewers of this documentation should have a strong knowledge in heat transfer theory. A third or fourth year Mechanical Engineering course on this topic is recommended. The reviewers should also have an understanding of differential equations, as typically covered in first and second year Calculus courses. The users of Solar Water Heating Systems can have a lower level of expertise, as explained in Section~\ref{Sec:UserChar}.
 \subsection{Organization of Document}
 \label{Sec:OrgaofDocu}
 The presentation follows the standard pattern of presenting goals, theories, definitions, and assumptions. For readers that would like a more bottom up approach, they can start reading the instance models in Section~\ref{Sec:InstMode} and trace back to find any additional information they require.
@@ -176,6 +176,20 @@ Figure~\ref{Figure::SystCont} shows the system context. A circle represents an e
 \caption{Figure~\ref{Figure::SystCont}: System Context}
 \label{Figure::SystCont}
 \end{center}
+SWHS is mostly self-contained. The only external interaction is through the user interface. The responsibilities of the user and the system are as follows:
+\begin{enumerate}
+\item{User Responsibilities:}
+\begin{enumerate}
+\item{Provide the input data to the system, ensuring no errors in the data entry}
+\item{Take care that consistent units are used for input variables}
+\end{enumerate}
+\item{SWHS Responsibilities:}
+\begin{enumerate}
+\item{Detect data type mismatch, such as a string of characters instead of a floating point number}
+\item{Determine if the inputs satisfy the required physical and software constraints}
+\item{Calculate the required outputs}
+\end{enumerate}
+\end{enumerate}
 \end{figure}
 \subsection{User Characteristics}
 \label{Sec:UserChar}
@@ -184,7 +198,7 @@ Figure~\ref{Figure::SystCont} shows the system context. A circle represents an e
 There are no system constraints.
 \section{Specific System Description}
 \label{Sec:SpecSystDesc}
-This section first presents the problem description, which gives a high-level view of the problem to be solved. This is followed by the solution characteristics specification, which presents the assumptions, theories, definitions and finally the instance model (ODE) that models the solar water heating tank.
+This section first presents the problem description, which gives a high-level view of the problem to be solved. This is followed by the solution characteristics specifications, which presents the assumptions, theories, definitions and finally the instance model (ODE) that models the solar water heating tank.
 \subsection{Problem Description}
 \label{Sec:ProbDesc}
 SWHS is a computer program developed to investigate the heating of water in a solar water heating tank.
@@ -200,36 +214,50 @@ This subsection provides a list of terms that are used in the subsequent section
 The physical system of SWHS, as shown in Figure~\ref{Figure:Solawateheattankwithheatfluxfromcoilof}, includes the following elements:
 \begin{itemize}
 \item[PS1:]Tank containing water
-\item[PS2:]Heating coil at bottom of tank. ($q_{C}$ represents the heat flux from coil into the water.)
+\item[PS2:]Heating coil at bottom of tank. ($q_{C}$ represents the heat flux into the water from the coil.)
 \end{itemize}
 \begin{figure}
 \begin{center}
 \includegraphics{TankWaterOnly.png}
-\caption{Solar water heating tank, with heat flux from coil of $q_{C}$}
+\caption{Solar water heating tank, with heat flux from heating coil of $q_{C}$}
 \label{Figure:Solawateheattankwithheatfluxfromcoilof}
 \end{center}
 \end{figure}
 \subsubsection{Goal Statements}
 \label{Sec:GoalStat}
-Given the temperature of the coil, initial temperature of the water, and material properties, the goal statement is
+Given the temperature of the heating coil, initial temperature of the water, and material properties, the goal statement is
 \begin{itemize}
-\item[GS1:]predict the temperature of water over time
+\item[GS1:]predict the temperature of the water over time
 \end{itemize}
-\subsection{Solution Characteristics Specification}
+\subsection{Solution Characteristics Specifications}
 \label{Sec:SoluCharSpec}
 The instance models that govern SWHS are presented in Section~\ref{Sec:InstMode}. The information to understand the meaning of the instance models and their derivation is also presented, so that the instance models can be verified.
 \subsubsection{Assumptions}
 \label{Sec:Assu}
 This section simplifies the original problem and helps in developing the theoretical model by filling in the missing information for the physical system. The numbers given in the square brackets refer to the Theoretical Models [Section~\ref{Sec:TheoMode}], General Definitions [Section~\ref{Sec:GeneDefi}], Data Definitions [Section~\ref{Sec:DataDefi}], Instance Models [Section~\ref{Sec:InstMode}], or Likely Changes [Section~\ref{Sec:LikeChan}], in which the respective assumption is used.
+\begin{itemize}
+\item[A1:]The only form of energy that is relevant for this problem is thermal energy. All other forms of energy, such as mechanical energy, are assumed to be negligible [\hyperref[T:t1ConsThermE]{Definition~T:t1ConsThermE}].
+\item[A2:]All heat transfer coefficients are constant over time [GD1].
+\item[A3:]The water in the tank is fully mixed, so the temperature of the water is the same throughout the entire tank [GD2].
+\item[A4:]The density of water has no spatial variation; that is, it is constant over their entire volume [GD2].
+\item[A5:]The specific heat capacity of water has no spatial variation; that is, it is constant over its entire volume [GD2].
+\item[A6:]Newton's law of convective cooling applies between the heating coil and the water [\hyperref[DD:ht.flux.C]{Definition~DD:ht.flux.C}].
+\item[A7:]The temperature of the heating coil is constant over time [\hyperref[DD:ht.flux.C]{Definition~DD:ht.flux.C}, LC1].
+\item[A8:]The temperature of the heating coil does not vary along its length [\hyperref[DD:ht.flux.C]{Definition~DD:ht.flux.C}, LC2].
+\item[A9:]The model only accounts for charging of the tank, not discharging. The temperature of the water can only increase, or remain constant; it cannot decrease. This implies that the initial temperature (A12) is less than (or equal) to the temperature of the heating coil [IM1, LC3].
+\item[A10:]The operating temperature range of the system is such that the water is always in liquid form. That is, the temperature will not drop below the melting point temperature of water, or rise above its boiling point temperature [IM1].
+\item[A11:]The tank is perfectly insulated so that there is no heat loss from the tank [IM1, LC4].
+\item[A12:]No internal heat is generated by the water; therefore, the volumetric heat generation per unit volume is zero [IM1].
+\end{itemize}
 \subsubsection{Theoretical Models}
 \label{Sec:TheoMode}
 This section focuses on the general equations and laws that SWHS is based on.
 ~\newline
 \noindent \begin{minipage}{\textwidth}
 \begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
-\toprule \textbf{Refname} & \textbf{T:t1consThermE}
+\toprule \textbf{Refname} & \textbf{T:t1ConsThermE}
 \phantomsection 
-\label{T:t1consThermE}
+\label{T:t1ConsThermE}
 \\ \midrule \\
 Label & Conservation of thermal energy
 \\ \midrule \\
@@ -241,9 +269,46 @@ Description & This equation gives the conservation of energy for time varying he
 \subsubsection{General Definitions}
 \label{Sec:GeneDefi}
 This section collects the laws and equations that will be used in deriving the data definitions, which in turn are used to build the instance models.
+Detailed derivation of simplified rate of change of temperature:
+Integrating \hyperref[T:t1ConsThermE]{Definition~T:t1ConsThermE} over a volume ($V$), we have:
+\begin{equation}
+\left(-\int_{V}{\nabla{}\cdot{}\mathbf{q}dV}\right)+\int_{V}{gdV}=\int_{V}{\rho{}C\frac{\partial{}T}{\partial{}t}dV}
+\end{equation}
+Applying Gauss's Divergence Theorem to the first term over the surface $S$ of the volume, with $\mathbf{q}$ as the thermal flux vector for the surface and $\mathbf{\hat{n}}$ as a unit outward normal vector for a surface:
+\begin{equation}
+\left(-\int_{S}{\mathbf{q}\cdot{}\mathbf{\hat{n}}dS}\right)+\int_{V}{gdV}=\int_{V}{\rho{}C\frac{\partial{}T}{\partial{}t}dV}
+\end{equation}
+We consider an arbitrary volume. The volumetric heat generation per unit volume is assumed constant. Then (1) can be written as:
+\begin{equation}
+q_{in}A_{in}-q_{out}A_{out}+gV=\int_{V}{\rho{}C\frac{\partial{}T}{\partial{}t}dV}
+\end{equation}
+Where $q_{in}$, $q_{out}$, $A_{in}$, and $A_{out}$ are explained in GD2. Assuming $\rho{}$, $C$ and $T$ are constant over the volume, which is true in our case by Assumptions (A3), (A4), and (A5), we have:
+\begin{equation}
+\rho{}CV\frac{dT}{dt}=q_{in}A_{in}-q_{out}A_{out}+gV
+\end{equation}
+Using the fact that $\rho{}$=$m$/$V$, (2) can be written as:
+\begin{equation}
+mC\frac{dT}{dt}=q_{in}A_{in}-q_{out}A_{out}+gV
+\end{equation}
 \subsubsection{Data Definitions}
 \label{Sec:DataDefi}
-This section collects and defines all the data needed to build the instance models.
+This section collects and defines all the data needed to build the instance models. The dimension of each quantity is also given.
+~newline
+\noindent \begin{minipage}{\textwidth}
+\begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
+\toprule \textbf{Refname} & \textbf{DD:ht.flux.C}
+\phantomsection 
+\label{DD:ht.flux.C}
+\\ \midrule \\
+Label & $q_{C}$
+\\ \midrule \\
+Units & $\frac{\text{W}}{\text{m}^{2}}$
+\\ \midrule \\
+Equation & $q_{C}$ = $h_{C}\left(T_{C}-T_{W}\left(t\right)\right)$
+\\ \midrule \\
+Description & $q_{C}$ is the heat flux into the water from the coil\newline$h_{C}$ is the convective heat transfer coefficient between coil and water\newline$T_{C}$ is the temperature of the heating coil\newline$T_{W}$ is the temperature of the water\newline$t$ is the time
+\\ \bottomrule \end{tabular}
+\end{minipage}\\
 \subsubsection{Instance Models}
 \label{Sec:InstMode}
 This section transforms the problem defined in Section~\ref{Sec:ProbDesc} into one which is expressed in mathematical terms. It uses concrete symbols defined in Section~\ref{Sec:DataDefi} to replace the abstract symbols in the models identified in Section~\ref{Sec:TheoMode} and Section~\ref{Sec:GeneDefi}.
@@ -252,16 +317,34 @@ This section transforms the problem defined in Section~\ref{Sec:ProbDesc} into o
 Table~\ref{Table:Tabl1:InpuVari} and Table~\ref{Table:Tabl2:OutpVari} show the data constraints on the input and output variables, respectively. The column for physical constraints gives the physical limitations on the range of values that can be taken by the variable. The constraints are conservative, to give the user of the model the flexibility to experiment with unusual situations. The column of typical values is intended to provide a feel for a common scenario.
 \begin{longtable}{l l l}
 \toprule
-Var & Physical Constraints & Typical Value
+Var & Physical Constraints & Software Constraints & Typical Value & Uncertainty
 \\
 \midrule
+$L$ & $L>0$ & $L_{min}\leq{}L\leq{}L_{max}$ & $1.5$ m & 10%
+\\
+$D$ & $D>0$ & $\frac{D}{L_{max}}\leq{}\frac{D}{L}\leq{}\frac{D}{L_{min}}$ & $0.412$ m & 10%
+\\
+$A_{C}$ & $A_{C}>0$ (*) & $A_{C}\leq{}A_{C}^{max}$ & $0.12$ $\text{m}^{2}$ & 10%
+\\
+$T_{C}$ & $0<T_{C}<100$ (+) &  & $50$ ${}^{\circ}C$ & 10%
+\\
+$\rho{}_{W}$ & $\rho{}_{W}>0$ & $\rho{}_{W}^{min}<\rho{}_{W}\leq{}\rho{}_{W}^{max}$ & $1000$ $\frac{\text{kg}}{\text{m}^{3}}$ & 10%
+\\
+$C_{W}$ & $C_{W}>0$ & $C_{W}^{min}<C_{W}<C_{W}^{max}$ & $4186$ $\frac{\text{J}}{(\text{kg}{}^{\circ}C)}$ & 10%
+\\
+$h_{C}$ & $h_{C}>0$ & $h_{C}^{min}\leq{}h_{C}\leq{}h_{C}^{max}$ & $1000$ $\frac{\text{W}}{(\text{m}^{2}{}^{\circ}C)}$ & 10%
+\\
+$T_{init}$ & $0<T_{init}<T_{melt}$ (+) &  & $40$ ${}^{\circ}C$ & 10%
+\\
+$t_{final}$ & $t_{final}>0$ & $t_{final}<t_{final}^{max}$ (**) & $50000$ s & 10%
+\\
 \bottomrule
 \caption{Table 1: Input Variables}
 \label{Table:Tabl1:InpuVari}
 \end{longtable}
 \begin{longtable}{l l l}
 \toprule
-Var & Physical Constraints & Typical Value
+Var & Physical Constraints & Software Constraints & Typical Value & Uncertainty
 \\
 \midrule
 \bottomrule
@@ -273,11 +356,67 @@ Var & Physical Constraints & Typical Value
 This section provides the functional requirements, the business tasks that the software is expected to complete, and the non-functional requirements, the qualities that the software is expected to exhibit.
 \subsection{Functional Requirements}
 \label{Sec:FuncRequ}
+\begin{itemize}
+\item[R1:]Input the following quantities, which define the tank parameters, material properties and initial conditions:
+\end{itemize}
+\begin{longtable*}{l l l}
+\toprule
+Symbol & Unit & Description
+\\
+\midrule
+$L$ & m & length of tank
+\\
+$D$ & m & diameter of tank
+\\
+$A_{C}$ & $\text{m}^{2}$ & heating coil surface area
+\\
+$T_{C}$ & ${}^{\circ}C$ & temperature of the heating coil
+\\
+$\rho{}_{W}$ & $\frac{\text{kg}}{\text{m}^{3}}$ & density of water
+\\
+$C_{W}$ & $\frac{\text{J}}{(\text{kg}{}^{\circ}C)}$ & specific heat capacity of water
+\\
+$H_{f}$ & $\frac{\text{J}}{\text{kg}}$ & specific latent heat of fusion
+\\
+$T_{init}$ & ${}^{\circ}C$ & initial temperature
+\\
+$t_{final}$ & s & final time
+\\
+\bottomrule
+\label{Table:InpuVariRequ}
+\end{longtable*}
+\begin{itemize}
+\item[R2:]Use the inputs in R1 to find the mass needed for IM1 to IM4, as follows, where $V_{W}$ is the volume of water and $V_{tank}$ is the volume of the cylindrical tank.
+\end{itemize}
+\begin{equation}
+m_{W}=V_{W}\rho{}_{W}=\frac{D}{2}L\rho{}_{W}
+\end{equation}
+\begin{itemize}
+\item[R3:]Verify that the inputs satisfy the required physical constraint shown in Table~\ref{Table:Tabl1:InpuVari}.
+\end{itemize}
+\begin{itemize}
+\item[R4:]Outputs and inputs quantities and derived quantities in the following list: the quantities from R1, the mass from R2 and $\tau{}_{W}$ (from IM1).
+\end{itemize}
+\begin{itemize}
+\item[R5:]Calculate and output the temperature of the water ($T_{W}$($t$)) over the simulation time.
+\end{itemize}
 \subsection{Non-Functional Requirements}
 \label{Sec:Non-Requ}
 This problem is small in size and relatively simple, so performance is not a priority. Any reasonable implementation will be very quick and use minimal storage. Rather than performance, the non-functional requirement priorities are correctness, verifiability, understandability, reusability, and maintainability.
 \section{Likely Changes}
 \label{Sec:LikeChan}
+\begin{itemize}
+\item[LC1:]A7 - The temperature of the heating coil will change over the course of the day, depending on the energy received from the sun.
+\item[LC2:]A8 - The temperature of the heating coil will actually change along its length as the water within it cools.
+\item[LC3:]A9 - The model currently only accounts for charging of the tank. A more complete model would also account for discharging of the tank.
+\item[LC4:]A11 - Any real tank cannot be perfectly insulated and will lose heat.
 \section{References}
 \label{Sec:Refe}
+\begin{itemize}
+\item[[1]:]F. P. Incropera, D. P. Dewitt, T. L. Bergman, and A. S. Lavine. Fundamentals of Heat and Mass Transfer. John Wiley and Sons, United States, sixth edition edition, 2007.
+\item[[2]:]Nirmitha Koothoor. A document drive approach to certifying scientific computing software. Master's thesis, McMaster University, Hamilton, Ontario, Canada, 2013.
+\item[[3]:]Marilyn Lightstone. Derivation of tank/pcm model. Personal Notes, 2012.
+\item[[4]:]David L. Parnas and P.C. Clements. A rational design process: How and why to fake it. IEEE Transactions on Software Engineering, 12``2":251-257, February 1986.
+\item[[5]:]W. Spencer Smith and Lei Lai. A new requirements template for scientific computing. In J. Ralyt\'{e}, P. Agerfalk, and N. Kraiem, editors, Proceedings of the First International Workshop on Situational Requirements Engineering Processes - Methods, Techniques and Tools to Support Situation-Specific Requirements Engineering Processes, SREP'05, pages 107-121, Paris, France, 2005. In conjunction with 13th IEEE International Requirements Engineering Conference.
+\end{itemize}
 \end{document}

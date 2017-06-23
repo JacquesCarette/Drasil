@@ -21,7 +21,9 @@ module Data.Drasil.Utils
   , fmtBF
   , symbolMapFun
   , fterms , fterm
-  , {-mkDataDef,-} mkDataDef'
+  , mkDataDef
+  , displayConstr
+  , fmtConstrP, fmtConstrS
   ) where
 
 import Prelude hiding (id)
@@ -179,24 +181,34 @@ unwrap Nothing  = EmptyS
 symbolMapFun :: SymbolMap -> (d -> DType) -> (d -> Contents)
 symbolMapFun progSymbMap fun = (Definition (progSymbMap) . fun)
 
-{-- Used to help make data definitions when id, term, and symbol come from the same sourse
---mkDataDef :: UnitalChunk -> Expr -> QDefinition
-mkDataDef concept equation = fromEqn (concept ^. id) (concept ^. term) (concept ^. symbol) 
-  (((ucw concept) {-^. unit-}) ^. usymb) equation-}
-  
--- Same as unprimed but for when unit isn't needed
-mkDataDef' :: (Chunk c, SymbolForm c, NamedIdea c) => c -> Expr -> QDefinition
-mkDataDef' concept equation = fromEqn' (concept ^. id) (concept ^. term) (concept ^. symbol) 
-  equation
+-- Used to help make data definitions when id, term, and symbol come from the same sourse
+mkDataDef :: (SymbolForm c, Quantity c) => c -> Expr -> QDefinition
+mkDataDef concept equation = datadef $ getUnit concept
+  where datadef (Just a) = fromEqn  (concept ^. id) (concept ^. term)
+                           (concept ^. symbol) a equation
+        datadef Nothing  = fromEqn' (concept ^. id) (concept ^. term)
+                           (concept ^. symbol) equation
 
-
+--FIXME:Reduce duplication?
 makeConstraint :: (Constrained s, Quantity s, SymbolForm s) => s -> Sentence -> [Sentence]
-makeConstraint s num = [getS s, fmtContr s (s ^. constraints), fmtU num s]
+makeConstraint s num = [getS s, fmtConstrP s (s ^. constraints), fmtU num s]
 
-fmtContr :: (Constrained s, SymbolForm s) => s -> [Constraint]-> Sentence
-fmtContr _ [] = S "None"
-fmtContr s [Phys f] = E $ f (C s)
-fmtContr s [Sfwr f] = E $ f (C s)
-fmtContr s ((Phys f):xs) = (E $ f (C s)) +:+ S "and" +:+ fmtContr s xs
-fmtContr s ((Sfwr f):xs) = (E $ f (C s)) +:+ S "and" +:+ fmtContr s xs
+displayConstr :: (Constrained s, Quantity s, SymbolForm s, Show a) => s -> a -> Sentence -> [Sentence]
+displayConstr s num uncrty = [getS s, fmtConstrP s (s ^. constraints), fmtConstrS s (s ^. constraints),
+  fmtU (S (show num)) (qs s), uncrty]
 
+fmtConstrP :: (Constrained s, SymbolForm s) => s -> [Constraint]-> Sentence
+fmtConstrP _ [] = EmptyS
+fmtConstrP _ [Sfwr _] = EmptyS
+fmtConstrP s [Phys f] = E $ f (C s)
+fmtConstrP s ((Phys f):(Sfwr _):_) = E $ f (C s)
+fmtConstrP s ((Phys f):(Phys g):xs) = (E $ f (C s)) +:+ S "and" +:+ fmtConstrP s ((Phys g):xs)
+fmtConstrP s ((Sfwr f):xs) = fmtConstrP s (tail ((Sfwr f):xs))
+--FIXME:Can messy pattern matching of `fmtConstrP` be improved?
+--FIXME:Should messy pattern matching of `fmtConstrP` be implemented in `fmtConstrS` defintion?
+fmtConstrS :: (Constrained s, SymbolForm s) => s -> [Constraint]-> Sentence
+fmtConstrS _ [] = EmptyS
+fmtConstrS s [Sfwr f] = E $ f (C s)
+fmtConstrS _ [Phys _] = EmptyS
+fmtConstrS s ((Sfwr f):xs) = (E $ f (C s)) +:+ S "and" +:+ fmtConstrS s xs 
+fmtConstrS s ((Phys f):xs) = fmtConstrS s (tail ((Phys f):xs))

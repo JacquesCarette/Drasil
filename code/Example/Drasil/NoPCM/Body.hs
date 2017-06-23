@@ -14,8 +14,10 @@ import Drasil.SWHS.Unitals (w_vol, tank_length, tank_vol, tau_W, temp_W, w_mass,
   diam, coil_SA, temp_C, w_density, htCap_W, htFusion, temp_init, time_final,
   in_SA, out_SA, vol_ht_gen, thFluxVect, ht_flux_in, ht_flux_out, tau, htCap_L,
   htTransCoeff, temp_env, diam, tank_length, w_vol, ht_flux_C, coil_HTC, temp_diff)
-import Drasil.SWHS.DataDefs(swhsSymbMapDRef, swhsSymbMapTRef, dd1HtFluxC, s4_2_4_DD1)
+import Drasil.SWHS.DataDefs(swhsSymbMapDRef, swhsSymbMapTRef, dd1HtFluxC, s4_2_4_DD1, 
+  swhsSymbMapT)
 import Drasil.SWHS.TMods (s4_2_2_T1, t1ConsThermE)
+import Drasil.SWHS.GenDefs (swhsGenDefs)
 
 import Language.Drasil
 
@@ -88,8 +90,8 @@ mkSRS = RefSec (RefProg intro
         
 pcm_si :: SystemInformation
 pcm_si = SI srs_swhs srs [thulasi] this_si pcmSymbols (pcmSymbols) 
-  acronyms ([] :: [QDefinition]) ([] :: [QSWrapper]) ([] :: [QSWrapper])
-  ([] :: [Block QDefinition]) -- Place Holder until Data Definitions can be created
+  acronyms ([dd1HtFluxC] :: [QDefinition]) (map qs pcmConstraints) ([] :: [QSWrapper])
+  ([] :: [Block QDefinition]) ([] :: [ConstrainedChunk])-- Place Holder until Data Definitions can be created
   
 pcm_srs :: Document
 pcm_srs = mkDoc mkSRS pcm_si
@@ -360,7 +362,7 @@ assump12 = [S "No internal", phrase heat,
 s4_2_2_TMods = map (Definition nopcmSymbMap . Theory) [t1consThermE]-}
 
 s4_2_3_eq :: [Contents]
-s4_2_3_eq = [
+s4_2_3_eq = (map swhsSymbMapT swhsGenDefs) ++ [
 
   foldlSPCol [S "Detailed derivation of simplified",
   phrase rOfChng, S "of", phrase temp],

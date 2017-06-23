@@ -71,7 +71,7 @@ mkSRS = RefSec (RefProg RM.intro [TUnits, tsymb tableOfSymbols, TAandA]) :
 chipmunkSysInfo :: SystemInformation
 chipmunkSysInfo = SI chipmunk srs authors chipUnits cpSymbols ([] :: [CQSWrapper])
   cpAcronyms (cpDDefs) (inputSymbols) (outputSymbols) 
-  (cpQDefs) --FIXME: All named ideas, not just acronyms.
+  (cpQDefs) chipmunkConstraints--FIXME: All named ideas, not just acronyms.
 
 chipUnits :: [UnitDefn]
 chipUnits = map UU [metre, kilogram, second] ++ map UU [newton, radian]

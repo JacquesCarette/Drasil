@@ -6,7 +6,7 @@ module Language.Drasil.Chunk.Constrained (
   ) where
 
 import Control.Lens (Simple, Lens, (^.), set)
-import Language.Drasil.Expr (Expr, Relation)
+import Language.Drasil.Expr (Expr(..), Relation)
 import Language.Drasil.Chunk.Quantity
 import Language.Drasil.Chunk.SymbolForm
 import Language.Drasil.Chunk.NamedIdea
@@ -138,3 +138,4 @@ cuc' :: (Unit u) => String -> NP -> String -> Symbol -> u
                   -> Space -> [Constraint] -> ConstrConcept
 cuc' nam trm desc sym un space cs = 
   ConstrConcept (ucs nam trm desc sym un space) cs
+  

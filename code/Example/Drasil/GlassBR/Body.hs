@@ -12,8 +12,7 @@ import Data.Drasil.Concepts.Math (graph, calculation, equation,
                                   surface, probability, parameter)
 import Data.Drasil.Concepts.Thermodynamics (heat)
 import Prelude hiding (id)
-import Data.Drasil.Utils (itemRefToSent, getS, unwrap, fmtU,
-  makeTMatrix, makeListRef, mkRefsList, refFromType, enumSimple, enumBullet)
+import Data.Drasil.Utils
 import Data.Drasil.SentenceStructures (foldlSent, foldlList, ofThe, isThe, 
   showingCxnBw, figureLabel, foldlSP, sAnd, foldlsC)
 
@@ -401,26 +400,6 @@ inputVarPbTol = displayConstr pb_tol       (0.008 :: Double) (S "0.1" :+: (P (Sp
 inputVarW     = displayConstr char_weight  (42 :: Int)       (S "10" :+: (P (Special Percent)))
 inputVarTNT   = displayConstr tNT          (1 :: Int)        (S "10" :+: (P (Special Percent)))
 inputVarSD    = displayConstr standOffDist (45 :: Int)        (S "10" :+: (P (Special Percent)))
-
-displayConstr :: (Constrained s, Quantity s, SymbolForm s, Show a) => s -> a -> Sentence -> [Sentence]
-displayConstr s num uncrty = [getS s, fmtConstrP s (s ^. constraints), fmtConstrS s (s ^. constraints),
-  fmtU (S (show num)) (qs s), uncrty]
-
-fmtConstrP :: (Constrained s, SymbolForm s) => s -> [Constraint]-> Sentence
-fmtConstrP _ [] = EmptyS
-fmtConstrP _ [Sfwr _] = EmptyS
-fmtConstrP s [Phys f] = E $ f (C s)
-fmtConstrP s ((Phys f):(Sfwr _):_) = E $ f (C s)
-fmtConstrP s ((Phys f):(Phys g):xs) = (E $ f (C s)) +:+ S "and" +:+ fmtConstrP s ((Phys g):xs)
-fmtConstrP s ((Sfwr f):xs) = fmtConstrP s (tail ((Sfwr f):xs))
---FIXME:Can messy pattern matching of `fmtConstrP` be improved?
---FIXME:Should messy pattern matching of `fmtConstrP` be implemnented in `fmtConstrS` defintion?
-fmtConstrS :: (Constrained s, SymbolForm s) => s -> [Constraint]-> Sentence
-fmtConstrS _ [] = EmptyS
-fmtConstrS s [Sfwr f] = E $ f (C s)
-fmtConstrS _ [Phys _] = EmptyS
-fmtConstrS s ((Sfwr f):xs) = (E $ f (C s)) +:+ S "and" +:+ fmtConstrS s xs 
-fmtConstrS s ((Phys f):xs) = fmtConstrS s (tail ((Phys f):xs))
 
 s6_2_5_table2 = Table [S "Var", titleize value] (mkTable 
   [(\x -> fst x), (\x -> snd x)]

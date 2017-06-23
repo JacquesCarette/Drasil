@@ -35,21 +35,42 @@ genInputClass ins cm = pubClass
     [ constructor 
         "InputParameters" 
         []
-        [zipBlockWith (&=) vars vals]
+        [zipBlockWith (&=) vars vals],
+      genInputFormat ins,
+      genInputConstraints ins cm
     ]
-    ++ [(genInputConstraints ins cm)]
   )  
   where vars         = map (\x -> var $ codeName x) ins
         vals         = map (\x -> defaultValue' $ convType $ codeType x) ins        
         genInputVars = 
           map (\x -> pubMVar 4 (convType $ codeType x) (codeName x)) ins
-        
+
+genInputFormat :: (CodeEntity c) => [c] -> Method
+genInputFormat ins = let l_infile = "infile"
+                         v_infile = var l_infile
+                         l_filename = "filename"
+                         p_filename = param l_filename string
+                         v_filename = var l_filename
+                     in
+  pubMethod methodTypeVoid "get_inputs" 
+    [ p_filename ]
+    [ block $
+        [
+          varDec l_infile infile,
+          openFileR v_infile v_filename
+        ] 
+        ++
+        map (\x -> getFileInput v_infile (convType $ codeType x) (var $ codeName x)) ins
+        ++ 
+        [ closeFile v_infile ]
+    ]
+          
 genInputConstraints :: (CodeEntity c) => [c] -> ConstraintMap -> Method
 genInputConstraints vars cm = 
   let cs = concatMap (\x -> constraintLookup x cm) vars in
     pubMethod methodTypeVoid "input_constraints" [] [ block $
-      map (\x -> ifCond [(convExpr x, oneLiner $ throw "InputError")] noElse) cs
-      ]
+      map (\x -> ifCond [((?!) (convExpr x), oneLiner $ throw "InputError")] noElse) cs
+    ]
 
 genCalcMod :: [CodeDefinition] -> [Module]
 genCalcMod defs = [buildModule "Calculations" [] [] (genCalcFuncs defs) []]   
@@ -59,9 +80,7 @@ genCalcFuncs = map
   ( \x -> pubMethod 
             (methodType $ convType (codeType x)) 
             ("calc_" ++ codeName x) 
-            (map 
-              (\y -> param (codeName y) (convType $ codeType y)) 
-              (codevars $ codeEquat x)) 
+            (getParams (codevars $ codeEquat x)) 
             (genCalcBlock x)
   )
 
@@ -80,7 +99,10 @@ genCaseBlock cs = oneLiner $ ifCond (genIf cs) noElse
   where genIf :: [(Expr,Relation)] -> [(Value,Body)]
         genIf = map 
           (\(e,r) -> (convExpr r, oneLiner $ return (convExpr e)))
-        
+
+getParams :: (CodeEntity c) => [c] -> [Parameter]
+getParams = map (\y -> param (codeName y) (convType $ codeType y))
+          
 convType :: C.CodeType -> I.StateType
 convType C.Boolean = bool
 convType C.Integer = int

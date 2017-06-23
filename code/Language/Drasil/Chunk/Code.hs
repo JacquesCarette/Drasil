@@ -144,6 +144,7 @@ specialToCodeName Circle   = "circ"
 specialToCodeName LEQ      = "leq"
 specialToCodeName Partial  = "partial"
 specialToCodeName UScore   = "_"
+specialToCodeName Percent  = "%"
 
 toCodeName :: String -> String
 toCodeName s =

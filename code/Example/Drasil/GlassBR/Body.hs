@@ -394,16 +394,16 @@ dataConstList = [inputVarA, inputVarB, inputVarPbTol, inputVarW, inputVarTNT, in
 
 inputVarA, inputVarB, inputVarPbTol, inputVarW, inputVarTNT, inputVarSD :: [Sentence]
 
-inputVarA     = displayConstr plate_len    (1500 :: Int)     "10%"
-inputVarB     = displayConstr plate_width  (1200 :: Int)     "10%"
-inputVarPbTol = displayConstr pb_tol       (0.008 :: Double) "0.1%"
-inputVarW     = displayConstr char_weight  (42 :: Int)       "10%"
-inputVarTNT   = displayConstr tNT          (1 :: Int)        "10%"
-inputVarSD    = displayConstr standOffDist (45 :: Int)        "10%"
+inputVarA     = displayConstr plate_len    (1500 :: Int)     (S "10" :+: (P (Special Percent)))
+inputVarB     = displayConstr plate_width  (1200 :: Int)     (S "10" :+: (P (Special Percent)))
+inputVarPbTol = displayConstr pb_tol       (0.008 :: Double) (S "0.1" :+: (P (Special Percent)))
+inputVarW     = displayConstr char_weight  (42 :: Int)       (S "10" :+: (P (Special Percent)))
+inputVarTNT   = displayConstr tNT          (1 :: Int)        (S "10" :+: (P (Special Percent)))
+inputVarSD    = displayConstr standOffDist (45 :: Int)        (S "10" :+: (P (Special Percent)))
 
-displayConstr :: (Constrained s, Quantity s, SymbolForm s, Show a) => s -> a -> String -> [Sentence]
+displayConstr :: (Constrained s, Quantity s, SymbolForm s, Show a) => s -> a -> Sentence -> [Sentence]
 displayConstr s num uncrty = [getS s, fmtConstrP s (s ^. constraints), fmtConstrS s (s ^. constraints),
-  fmtU (S (show num)) (qs s), S uncrty]
+  fmtU (S (show num)) (qs s), uncrty]
 
 fmtConstrP :: (Constrained s, SymbolForm s) => s -> [Constraint]-> Sentence
 fmtConstrP _ [] = EmptyS

@@ -388,7 +388,7 @@ stfMtrxDerivation = [foldlSP [S "Using the force-displacement relationship of GD
   S "angle alpha (DD5). To analyze the effect of force-displacement relationships occurring on both basal",
   S "and interslice surfaces of an element i they must reference the same coordinate system. The basal",
   S "stiffness matrix must be rotated counter clockwise to align with the angle of the basal surface.",
-  S "The base stiffness counter clockwise rotation is applied in equation (7) to the new matrix K*_i"],
+  S "The base stiffness counter clockwise rotation is applied in equation (7) to the new matrix K*i"],
   
   foldlSP [S "The Hooke's law force displacement relationship of GD8 applied to the base also references a",
   S "displacement vector epsilon i of GD9 rotated for the base angle of the slice alpha i. The basal displacement",
@@ -398,7 +398,7 @@ stfMtrxDerivation = [foldlSP [S "Using the force-displacement relationship of GD
   S "derived as done in equation (8)"],
   
   foldlSP [S "The new effective base stiffness matrix K0i ,as derived in equation (7) is defined in equation (9). This",
-  S "is seen as matrix ¯Kb,i in GD12. Kbt,i is the shear element in the matrix, and Kbn,i is the normal",
+  S "is seen as matrix Kb,i in GD12. Kbt,i is the shear element in the matrix, and Kbn,i is the normal",
   S "element in the matrix, calculated as in DD14. The notation is simplified by the introduction of",
   S "the constants KbA,i and KbB,i, defined in equations (10) and (11) respectively"],
   

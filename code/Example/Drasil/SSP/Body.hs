@@ -561,6 +561,7 @@ rigFoSDerivation = [foldlSP [S "RFEM analysis can also be used to calculate the 
 
 -- SECTION 4.2.6 --
 -- Data Constraints is automatically generated in solChSpecF using the tables below
+{-input data-}
 noTypicalVal, vertConvention :: Sentence
 noTypicalVal   = short notApp
 vertConvention = S "Consecutive vertexes have increasing x" +:+. plural value +:+
@@ -572,47 +573,32 @@ vertVar vertexType = getS coords +:+ S "of" +:+ vertexType +:+ S "vertices'"
 verticesConst :: Sentence -> [Sentence]
 verticesConst vertexType = [vertVar vertexType, vertConvention, noTypicalVal]
 
-waterVert, slipVert, slopeVert, elasticModu, effectCohe, poissnRatio,
-  fricAng, dryUWght, satUWght, waterUWght :: [Sentence]
+waterVert, slipVert, slopeVert :: [Sentence]
 waterVert = verticesConst $ S "water" +:+ phrase table_
 slipVert  = verticesConst $ phrase slip
 slopeVert = verticesConst $ phrase slope
 
-elasticModu = displayContr elasticMod   (15000 :: Integer)
-effectCohe  = displayContr cohesion     (10    :: Integer)
-poissnRatio = displayContr poissnsRatio (0.4   :: Double )
-fricAng     = displayContr fricAngle    (25    :: Integer)
-dryUWght    = displayContr dryWeight    (20    :: Integer)
-satUWght    = displayContr satWeight    (20    :: Integer)
-waterUWght  = displayContr waterWeight  (9.8   :: Double )
+dataConstIn :: [[Sentence]]
+dataConstIn = [waterVert, slipVert, slopeVert] ++ --List of typical values below
+  zipWith makeConstraint sspInputs (map S ["15000","10","0.4","25","20","20","9.8"])
 
-fcOfSa, slipVert2, deltax, deltay :: [Sentence]
-fcOfSa = displayContr' fs
-slipVert2 = [vertVar $ phrase slip, S "Vertices's monotonic"]
-deltax = displayContr' dx_i
-deltay = displayContr' dy_i
+{-output data-}
+slipVert2 :: [[Sentence]]
+slipVert2 = [[vertVar $ phrase slip, S "Vertices's monotonic"]]
 
-displayContr :: (Constrained s, Quantity s, SymbolForm s, Show a) => s -> a -> [Sentence]
-displayContr  s num = [getS s, fmtContr s (s ^. constraints), fmtU (S (show num)) s]
 displayContr' :: (Constrained s, SymbolForm s) => s -> [Sentence]
-displayContr' s = [getS s, fmtContr s (s ^. constraints)]
+displayContr' s = init $ makeConstraint s EmptyS
 
-fmtContr :: (Constrained s, SymbolForm s) => s -> [Constraint]-> Sentence
-fmtContr _ [] = S "None"
-fmtContr s [Phys f] = E $ f (C s)
-fmtContr s [Sfwr f] = E $ f (C s)
-fmtContr s ((Phys f):xs) = (E $ f (C s)) +:+ S "and" +:+ fmtContr s xs
-fmtContr s ((Sfwr f):xs) = (E $ f (C s)) +:+ S "and" +:+ fmtContr s xs
+dataConstOut :: [[Sentence]]
+dataConstOut = [(displayContr' . head) sspOutputs] ++ slipVert2 ++
+  map displayContr' (tail sspOutputs)
 
-dataConstList :: [[Sentence]]
-dataConstList = [waterVert, slipVert, slopeVert, elasticModu, effectCohe, poissnRatio,
-  fricAng, dryUWght, satUWght, waterUWght]
-
+{-input and output tables-}
 s4_2_6Table2, s4_2_6Table3 :: Contents
 s4_2_6Table2 = Table [S "Var", titleize' physicalConstraint, S "Typical" +:+ titleize value]
-                      dataConstList (titleize input_ +:+ titleize' variable) True
+                      dataConstIn (titleize input_ +:+ titleize' variable) True
 s4_2_6Table3 = Table [S "Var", titleize' physicalConstraint]
-                      [fcOfSa, slipVert2, deltax, deltay] (titleize output_ +:+ titleize' variable) True
+                      dataConstOut (titleize output_ +:+ titleize' variable) True
 
 -- SECTION 5 --
 s5 = reqF [s5_1, s5_2]

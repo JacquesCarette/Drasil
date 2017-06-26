@@ -189,7 +189,7 @@ mkDataDef concept equation = datadef $ getUnit concept
         datadef Nothing  = fromEqn' (concept ^. id) (concept ^. term)
                            (concept ^. symbol) equation
 
---FIXME:Reduce duplication?
+--FIXME:Reduce duplication. Idealy only use displayConstr. Gamephysics uses pi/2 which is not a "number" yet
 makeConstraint :: (Constrained s, Quantity s, SymbolForm s) => s -> Sentence -> [Sentence]
 makeConstraint s num = [getS s, fmtConstrP s (s ^. constraints), fmtU num s]
 
@@ -197,18 +197,17 @@ displayConstr :: (Constrained s, Quantity s, SymbolForm s, Show a) => s -> a -> 
 displayConstr s num uncrty = [getS s, fmtConstrP s (s ^. constraints), fmtConstrS s (s ^. constraints),
   fmtU (S (show num)) (qs s), uncrty]
 
+-- | used to help display the physical constraints. FIXME: return "None" or "N/A" if there are Sfwr but no Phys
 fmtConstrP :: (Constrained s, SymbolForm s) => s -> [Constraint]-> Sentence
-fmtConstrP _ [] = EmptyS
+fmtConstrP _ [] = S "None"
 fmtConstrP _ [Sfwr _] = EmptyS
 fmtConstrP s [Phys f] = E $ f (C s)
-fmtConstrP s ((Phys f):(Sfwr _):_) = E $ f (C s)
-fmtConstrP s ((Phys f):(Phys g):xs) = (E $ f (C s)) +:+ S "and" +:+ fmtConstrP s ((Phys g):xs)
-fmtConstrP s ((Sfwr f):xs) = fmtConstrP s (tail ((Sfwr f):xs))
---FIXME:Can messy pattern matching of `fmtConstrP` be improved?
---FIXME:Should messy pattern matching of `fmtConstrP` be implemented in `fmtConstrS` defintion?
+fmtConstrP s (c@(Phys _):xs) = fmtConstrP s [c] +:+ S "and" +:+ fmtConstrP s xs
+fmtConstrP s ((Sfwr _):xs) = fmtConstrP s xs
+-- | used to help display the software constraints. FIXME: return "None" or "N/A" if there are Phys but no Sfwr
 fmtConstrS :: (Constrained s, SymbolForm s) => s -> [Constraint]-> Sentence
-fmtConstrS _ [] = EmptyS
-fmtConstrS s [Sfwr f] = E $ f (C s)
+fmtConstrS _ [] = S "None"
 fmtConstrS _ [Phys _] = EmptyS
-fmtConstrS s ((Sfwr f):xs) = (E $ f (C s)) +:+ S "and" +:+ fmtConstrS s xs 
-fmtConstrS s ((Phys f):xs) = fmtConstrS s (tail ((Phys f):xs))
+fmtConstrS s [Sfwr f] = E $ f (C s)
+fmtConstrS s (c@(Sfwr _):xs) = fmtConstrP s [c] +:+ S "and" +:+ fmtConstrS s xs 
+fmtConstrS s ((Phys _):xs) = fmtConstrS s xs

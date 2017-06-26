@@ -123,9 +123,9 @@ p_expr (Var v)    = v
 p_expr (Dbl d)    = showFFloat Nothing d ""
 p_expr (Int i)    = show i
 p_expr (Bln b)    = show b
+p_expr (Mul a b)  = mul a b
 p_expr (Add a b)  = p_expr a ++ "+" ++ p_expr b
 p_expr (Sub a b)  = p_expr a ++ "-" ++ p_expr b
-p_expr (Mul a b)  = mul a b
 p_expr (Frac a b) = fraction (p_expr a) (p_expr b) --Found in HTMLHelpers
 p_expr (Div a b)  = divide a b
 p_expr (Pow a b)  = pow a b
@@ -148,20 +148,21 @@ p_expr (Grouping e) = paren (p_expr e)
 
 -- | Helper for properly rendering multiplication of expressions
 mul :: Expr -> Expr -> String
-mul a b@(Dbl _) = p_expr a ++ "*" ++ p_expr b
-mul a b@(Int _) = p_expr a ++ "*" ++ p_expr b
-mul x@(Sym (Concat _)) y = p_expr x ++ "*" ++ p_expr y
-mul x y@(Sym (Concat _)) = p_expr x ++ "*" ++ p_expr y
-mul x@(Sym (Atomic s)) y = if length s > 1 then p_expr x ++ "*" ++ p_expr y else
-                            p_expr x ++ p_expr y
-mul x y@(Sym (Atomic s)) = if length s > 1 then p_expr x ++ "*" ++ p_expr y else
-                            p_expr x ++ p_expr y
+mul a b@(Dbl _) = mulParen a ++ "*" ++ p_expr b
+mul a b@(Int _) = mulParen a ++ "*" ++ p_expr b
+mul x@(Sym (Concat _)) y = p_expr x ++ "*" ++ mulParen y
+mul x y@(Sym (Concat _)) = mulParen x ++ "*" ++ p_expr y
+mul x@(Sym (Atomic s)) y = if length s > 1 then p_expr x ++ "*" ++ mulParen y else
+                            p_expr x ++ mulParen y
+mul x y@(Sym (Atomic s)) = if length s > 1 then mulParen x ++ "*" ++ p_expr y else
+                            mulParen x ++ p_expr y
 mul a b         = mulParen a ++ mulParen b
 
 -- | Helper for properly rendering parentheses around multiplication
 mulParen :: Expr -> String
 mulParen a@(Add _ _) = paren $ p_expr a
 mulParen a@(Sub _ _) = paren $ p_expr a
+--mulParen (Mul n m) = mulParen n ++ mulParen m
 mulParen a = p_expr a
 
 -- | Helper for properly rendering division of expressions

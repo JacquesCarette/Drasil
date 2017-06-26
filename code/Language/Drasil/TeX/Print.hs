@@ -138,14 +138,14 @@ p_expr (Op f es)  = p_op f es
 p_expr (Grouping x) = paren (p_expr x)
 
 mul :: Expr -> Expr -> String
-mul x y@(Dbl _)   = p_expr x ++ "*" ++ p_expr y
-mul x y@(Int _)   = p_expr x ++ "*" ++ p_expr y
-mul x@(Sym (Concat _)) y = p_expr x ++ "*" ++ p_expr y
-mul x y@(Sym (Concat _)) = p_expr x ++ "*" ++ p_expr y
-mul x@(Sym (Atomic s)) y = if length s > 1 then p_expr x ++ "*" ++ p_expr y else
-                            p_expr x ++ p_expr y
-mul x y@(Sym (Atomic s)) = if length s > 1 then p_expr x ++ "*" ++ p_expr y else
-                            p_expr x ++ p_expr y
+mul x y@(Dbl _)   = mulParen x ++ "*" ++ p_expr y
+mul x y@(Int _)   = mulParen x ++ "*" ++ p_expr y
+mul x@(Sym (Concat _)) y = p_expr x ++ "*" ++ mulParen y
+mul x y@(Sym (Concat _)) = mulParen x ++ "*" ++ p_expr y
+mul x@(Sym (Atomic s)) y = if length s > 1 then p_expr x ++ "*" ++ mulParen y else
+                            p_expr x ++ mulParen y
+mul x y@(Sym (Atomic s)) = if length s > 1 then mulParen x ++ "*" ++ p_expr y else
+                            mulParen x ++ p_expr y
 mul x y           = mulParen x ++ mulParen y
 
 mulParen :: Expr -> String

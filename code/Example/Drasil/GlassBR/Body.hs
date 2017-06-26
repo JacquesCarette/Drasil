@@ -275,14 +275,20 @@ s6_1_2 = physSystDesc (short gLassBR) (fig_glassbr) [s6_1_2_list, fig_glassbr]
 
 fig_glassbr = Figure (at_start $ the physicalSystem) "physicalsystimage.png"
   
-s6_1_2_list = enumSimple 1 (short physSyst) s6_1_2_list_physys1
+s6_1_2_list = enumSimple 1 (short physSyst) s6_1_2_list_physys
 
-s6_1_2_list_physys1 :: [Sentence]
-s6_1_2_list_physys1 = [at_start glaSlab, (foldlSent [S "The point of"
+s6_1_2_list_physys :: [Sentence]
+s6_1_2_list_physys1, s6_1_2_list_physys2 :: Sentence
+
+s6_1_2_list_physys = [s6_1_2_list_physys1, s6_1_2_list_physys2]
+
+s6_1_2_list_physys1 = at_start glaSlab
+
+s6_1_2_list_physys2 = foldlSent [S "The point of"
   +:+. phrase explosion, S "Where the", phrase bomb `sC` 
   S "or", (blast ^. defn) `sC` S "is located. The", phrase sD
   `isThe` S "distance between the point of", phrase explosion,
-  S "and the glass"])]
+  S "and the glass"]
 
 s6_1_3 = goalStmtF [foldlList [S "dimensions" `ofThe`S "glass plane", 
   phrase glassTy, plural characteristic `ofThe` phrase explosion, 

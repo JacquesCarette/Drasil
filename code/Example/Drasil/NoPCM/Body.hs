@@ -7,7 +7,7 @@ import Drasil.NoPCM.Definitions (ht_trans, srs_swhs)
 
 import Drasil.SWHS.Body (s2_3_knowlegde, s2_3_understanding, s2_4_intro, 
   s3, physSyst1, physSyst2, s4_2_4_intro_end, assump1, assump2, assump7,
-  con1, con2, con10, con11, con12, con13, con14, con16, con17, s6_start, 
+  con1, con2, con10, con11, con12, con13, con14, con16, con17, con18, s6_start, 
   ref2, ref3, ref4, ref5, ref6)
 import Drasil.SWHS.Concepts (progName, water, gauss_div, sWHT, tank, coil)
 import Drasil.SWHS.Unitals (w_vol, tank_length, tank_vol, tau_W, temp_W, w_mass, 
@@ -23,9 +23,9 @@ import Language.Drasil
 
 import Data.Drasil.SI_Units 
 import Data.Drasil.Authors
-import Data.Drasil.Utils(enumSimple, listConstS, getS, mkRefsList)
+import Data.Drasil.Utils(enumSimple, getS, mkRefsList)
 import Data.Drasil.Concepts.Documentation
-import Data.Drasil.Concepts.Math (ode, unit_, rOfChng)
+import Data.Drasil.Concepts.Math (ode, unit_, rOfChng, parameter)
 import Data.Drasil.Concepts.Software
 import Data.Drasil.Concepts.PhysicalProperties (liquid)
 import Data.Drasil.Concepts.Physics (energy)
@@ -71,7 +71,7 @@ s4, s4_1, s4_1_1, s4_1_2, s4_1_3, s4_2, {-s3, s3_1, -}
 
 s4_1_intro, s4_1_1_bullets, {-s3_1_intro, sys_context_fig, s3_2_intro, s3_3_intro, -}
   s4_1_2_list, s4_1_3_intro, s4_1_3_list, fig_tank, --s4_2_4_intro,
-  s4_2_5_intro, s4_2_6_table1, s4_2_6_table2, s6_list, s7_refs:: Contents
+  s4_2_5_intro, s4_2_6_table1, s4_2_6_table2, s4_2_6_table3, s6_list, s7_refs:: Contents
 
 -------------------------------
 --Section 1 : REFERENCE MATERIAL
@@ -282,7 +282,7 @@ s4_1_3_list = Enumeration $ Simple $ map (\(a, b) -> (a, Flat b)) [
 s4_2 = solChSpecF progName (s4_1, s6) True s4_2_4_intro_end ((makeRef s4_2_6_table1 +:+
   S "and" +:+ makeRef s4_2_6_table2 +:+ S "show"), mid, True, end) ([s4_2_1_list], 
   s4_2_2_T1, s4_2_3_eq, s4_2_4_DD1, [s4_2_5_intro],
-  [s4_2_6_table1, s4_2_6_table2]) []
+  [s4_2_6_table1, s4_2_6_table2, s4_2_6_table3]) []
   
   where mid = foldlSent [S "The", phrase column, S "for", phrase software,
           plural constraint, S "restricts the range of",
@@ -428,16 +428,27 @@ s4_2_5_intro = Paragraph $ EmptyS --TODO: Placeholder values until content can b
 
 s4_2_6_table1 = Table [S "Var", titleize' physicalConstraint, titleize software +:+ titleize' constraint, S "Typical" +:+
   titleize value, titleize uncertainty] (mkTable [(\x -> x!!0), (\x -> x!!1), (\x -> x!!2), (\x -> x!!3), (\x -> x!!4)] 
-  s4_2_6_conList) (titleize table_ +: S "1" +:+ titleize input_ +:+
+  s4_2_6_conListIn) (titleize table_ +: S "1" +:+ titleize input_ +:+
   titleize' variable) True
   
-s4_2_6_conList :: [[Sentence]]
-s4_2_6_conList = [con1, con2, con10, con11, con12, con13, con14, con16, con17]
+s4_2_6_conListIn :: [[Sentence]]
+s4_2_6_conListIn = [con1, con2, con10, con11, con12, con13, con14, con16, con17]
 
-s4_2_6_table2 = Table [S "Var", titleize' physicalConstraint, S "Typical" +:+
-  titleize value] (mkTable [(\x -> x!!0), (\x -> x!!1), (\x -> x!!2), (\x -> x!!3), (\x -> x!!4)] $ map
-  (listConstS) []) (titleize table_ +: S "2" +:+ titleize output_ +:+
+s4_2_6_table2 = Table [S "Var", titleize value] 
+  (mkTable [(\x -> x!!0), (\x -> x!!1)] s4_2_6_specParVal)
+  (titleize table_ +: S "2" +:+ titleize specification +:+
+  titleize parameter +:+ titleize' value) True
+  
+s4_2_6_specParVal :: [[Sentence]]
+s4_2_6_specParVal = [[EmptyS, EmptyS]]
+
+s4_2_6_table3 = Table [S "Var", titleize' physicalConstraint] 
+  (mkTable [(\x -> x!!0), (\x -> x!!1)] s4_2_6_conListOut)
+  (titleize table_ +: S "3" +:+ titleize output_ +:+
   titleize' variable) True
+  
+s4_2_6_conListOut :: [[Sentence]]
+s4_2_6_conListOut = [con18]
   
 inputVar :: [QSWrapper]
 inputVar = [qs tank_length, qs diam, qs coil_SA, qs temp_C,  

@@ -104,3 +104,6 @@ a `semiCol` b = a :+: S ";" +:+ b
 
 sParenDash :: Sentence -> Sentence
 sParenDash = \x -> S " (" :+: x :+: S ") - "
+
+sDash :: Sentence -> Sentence -> Sentence
+y `sDash` z = y +:+ S "-" +:+ z

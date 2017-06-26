@@ -129,7 +129,13 @@ maybeWOVerb a b = likelyFrame a EmptyS b
 maybeChanged a b = likelyFrame a (S "changed") b
 maybeExpanded a b = likelyFrame a (S "expanded") b
 
---tAndDWAcc :: (NamedIdea s, Concept s, Concept c) => s -> c -> Sentence
+-- | helpful combinators for making Sentences for Terminologies with Definitions
+-- term (acc) - definition
+tAndDWAcc :: (Concept s, NamedIdea c) => s -> c -> ItemType
 tAndDWAcc tD acc = Flat $ ((at_start tD) :+: sParenDash (short acc)) :+: (tD ^. defn)
+-- term (symbol) - definition
+tAndDWSym :: (Concept s, SymbolForm a) => s -> a -> ItemType
 tAndDWSym tD sym = Flat $ ((at_start tD) :+: sParenDash (getS sym)) :+: (tD ^. defn)
+-- term - definition
+tAndDOnly :: Concept s => s -> ItemType
 tAndDOnly chunk  = Flat $ ((at_start chunk) +:+ S "- ") :+: (chunk ^. defn)

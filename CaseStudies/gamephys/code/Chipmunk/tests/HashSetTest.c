@@ -39,29 +39,47 @@ static int primes[] = {
 	0,
 };
 
-
+// test default size 
 void test_default_size() {
   HashSet * test_set = hashSetNew(0, (HashSetEqlFunc) strcmp);
   TEST_ASSERT_TRUE(test_set->size==primes[0]);
 }
 
+
+// test next size after default
 void test_default_nextSize() {
   HashSet * test_set = hashSetNew(6, (HashSetEqlFunc) strcmp);
   TEST_ASSERT_TRUE(test_set->size==primes[1]);
 }
 
+
+// test last valid size
 void test_default_lastSize() {
   HashSet * test_set = hashSetNew(805306458, (HashSetEqlFunc) strcmp);
   TEST_ASSERT_TRUE(test_set->size==primes[28]);
 }
 
+// test failure after overflow
 void test_default_overflow() { // need way to test exceptions
   TEST_FAIL();
   HashSet * test_set = hashSetNew(1610612742, (HashSetEqlFunc) strcmp);
   TEST_ASSERT_TRUE(test_set->size==primes[29]);
 }
 
+// test count of empty hashset
+void test_count_empty() {
+  HashSet * test_set = hashSetNew(0, (HashSetEqlFunc) strcmp);
+  TEST_ASSERT_TRUE(hashSetCount(test_set)==0);
+}
 
+// test count with a single item
+void test_count_single() {
+  HashSet * test_set = hashSetNew(0, (HashSetEqlFunc) strcmp);
+  //hashSetInsert(test_set, )
+  TEST_ASSERT_TRUE(hashSetCount(test_set)==1);
+}
+
+// test setting default value
 void test_default_value() {
   HashSet * test_set = hashSetNew(0, (HashSetEqlFunc) strcmp);
   char greeting[5] = {'t', 'e', 's', 't', '\0'};
@@ -75,7 +93,7 @@ int main() {
     RUN_TEST(test_default_size);
     RUN_TEST(test_default_nextSize);
     RUN_TEST(test_default_lastSize);
+    RUN_TEST(test_count_empty);
     RUN_TEST(test_default_overflow);
-    RUN_TEST(test_setIsFull);
     return UNITY_END();
 }

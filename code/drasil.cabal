@@ -260,6 +260,7 @@ executable glassbr
     , Drasil.Sections.GeneralSystDesc
     , Drasil.Sections.TraceabilityMandGs
     , Drasil.Sections.Stakeholders
+    , Drasil.Sections.ScopeOfTheProject
     , Drasil.Sections.ReferenceMaterial
     , Drasil.SRS
     , Drasil.Sections.TableOfAbbAndAcronyms

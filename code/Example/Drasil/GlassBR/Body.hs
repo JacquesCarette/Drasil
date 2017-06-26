@@ -36,6 +36,7 @@ import Drasil.GlassBR.DataDefs
 import Drasil.DocumentLanguage
 import Drasil.Sections.TraceabilityMandGs
 import Drasil.Sections.Stakeholders
+import Drasil.Sections.ScopeOfTheProject
 import Drasil.Sections.Requirements
 import Drasil.Sections.GeneralSystDesc
 import Drasil.Sections.SpecificSystemDescription
@@ -44,10 +45,10 @@ this_si :: [UnitDefn]
 this_si = map UU [metre, second] ++ map UU [pascal, newton]
 
 s3, s4, s5,
-  s5_1, s5_2, s6, s6_1, s6_1_1, s6_1_2, s6_1_3, s6_2, s6_2_1, 
+  s6, s6_1, s6_1_1, s6_1_2, s6_1_3, s6_2, s6_2_1, 
   s6_2_2, s6_2_3, s6_2_4, s6_2_5, s7, s7_1, s7_2, s8, s9, s10, s11 :: Section 
 
-s4_1_bullets, s5_intro, s5_1_table, s5_2_bullets, 
+s4_1_bullets, s5_1_table, s5_2_bullets, 
   s6_1_1_bullets, s6_1_2_list, s6_1_3_list, 
   s6_2_intro, s6_2_5_table1, s6_2_5_table2, 
   s6_2_5_intro2, s6_2_5_table3, s7_2_intro, s8_list, s9_table1, 
@@ -161,18 +162,8 @@ s4_1_bullets = enumBullet [(S "The" +:+ phrase endUser +:+ S "of" +:+
   S "is expected to have basic" +:+ phrase computer +:+
   S "literacy to handle the" +:+. phrase software)]
 
-s5 = SRS.scpOfTheProj [s5_intro] [s5_1, s5_2]
 
-s5_intro = foldlSP [S "This", phrase section_, 
-  S "presents the" +:+. phrase (scpOfTheProj phrase), 
-  S "It describes the expected use of", short gLassBR,
-  S "as well as the", plural input_ `sAnd` plural output_, 
-  S "of each action. The", plural useCase, S "are", 
-  phrase input_ `sAnd` phrase output_ `sC` 
-  S "which defines the action of getting the", 
-  phrase input_, S "and displaying the", phrase output_]
-
-s5_1 = SRS.prodUCTable [s5_1_table] []
+s5 = scopeOfTheProjF (short gLassBR) (s5_1_table) (s5_2_bullets)
 
 s5_1_table = prodUCTbl [s5_1_table_UC1, s5_1_table_UC2] "1"
 
@@ -180,13 +171,11 @@ s5_1_table_UC1, s5_1_table_UC2 :: [Sentence]
 
 s5_1_table_UC1 = [S "1", titleize' input_, titleize user, titleize' characteristic +:+
   S "of the" +:+ phrase glaSlab +:+ S "and of the" +:+.
-  phrase blast +:+ S "Details in" +:+ (makeRef s5_2)]
+  phrase blast +:+ S "Details in this section"] -- +:+ (makeRef s5_2)] --FIXME
 
 s5_1_table_UC2 = [S "2", titleize output_, short gLassBR, S "Whether or not the" +:+
   phrase glaSlab +:+ S "is safe for the calculated" +:+ phrase load +:+
   S "and supporting calculated" +:+ plural value]
-
-s5_2 = SRS.indPRCase [s5_2_bullets] []
 
 s5_2_bullets = enumBullet [s5_2_bt_sent1, s5_2_bt_sent2]
 

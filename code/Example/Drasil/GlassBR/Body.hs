@@ -300,9 +300,14 @@ s6_2_intro = foldlSP [S "This", phrase section_,
 s6_2_1 = assumpF' (s6_2_2) (s6_2_4) (s6_2_3) (s8) (s6_2_1_list)
 
 s6_2_1_list = 
-  [(enumSimple 1 (short assumption) s6_2_1_list_part1), 
-  assump4_M, assump4_K, assump4_ModElas, assump4_LoadDur,
-  (enumSimple 5 (short assumption) s6_2_1_list_part2)]
+  [(enumSimple 1 (short assumption) s6_2_1_listOfAssumptions)]
+
+s6_2_1_listOfAssumptions :: [Sentence]
+s6_2_1_listOfAssumptions = [assumption1, assumption2, assumption3, assumption4, 
+  assumption5, assumption6, assumption7, assumption8]
+
+assumption4_constants :: [Contents]
+assumption4_constants = [assump4_M, assump4_K, assump4_ModElas, assump4_LoadDur]
 
 assump4_M, assump4_K, assump4_ModElas, assump4_LoadDur :: Contents
 assump4_M = EqnBlock $ (C sflawParamM) := (Int 7)
@@ -310,41 +315,52 @@ assump4_K = EqnBlock $ (C sflawParamK) := (Grouping (Dbl 2.86)):*(Int 10):^(Neg 
 assump4_ModElas = EqnBlock $ (C mod_elas) := (Grouping (Dbl 7.17)):*(Int 10):^(Int 7)
 assump4_LoadDur = EqnBlock $ (C load_dur) := (Int 3)
 
-s6_2_1_list_part1 :: [Sentence]
-s6_2_1_list_part1 = [foldlSent [S "The standard E1300-09a for", 
-  phrase calculation, 
-  S "applies only to monolithic, laminated, or insulating", 
+assumption1 :: Sentence
+assumption1 = foldlSent [S "The standard E1300-09a for", 
+  phrase calculation, S "applies only to monolithic, laminated, or insulating", 
   S "glass constructions of rectangular shape with continuous", 
-  phrase lateral,
-  S "support along one, two, three, or four edges. This practice assumes", 
-  S "that (1) the supported glass edges for two, three and four-sided", 
-  S "support", plural condition, S "are simply supported and free to slip in", 
-  S "plane; (2) glass supported on two sides acts as a simply supported", 
-  S "beam and (3) glass supported on one side acts as a cantilever"], 
-  foldlSent [S "Following", (sSqBr (S "4 (pg. 1)")) `sC`
+  phrase lateral +:+. S "support along one, two, three, or four edges", 
+  S "This practice assumes that (1) the supported glass edges for two, three" 
+  `sAnd` S "four-sided support", plural condition,
+  S "are simply supported and free to slip in plane; (2) glass supported on",
+  S "two sides acts as a simply supported beam and (3) glass supported on", 
+  S "one side acts as a cantilever"]
+
+assumption2 :: Sentence
+assumption2 = foldlSent [S "Following", (sSqBr (S "4 (pg. 1)")) `sC`
   S "this practice does not apply to any form of wired, patterned" `sC`
   S "etched, sandblasted, drilled, notched, or grooved glass with", 
-  phrase surface, S "and edge treatments that alter the glass strength"], 
-  foldlSent [S "This", phrase system, S "only considers the external", 
-  phrase explosion, S "scenario for its", plural calculation], 
-  (S "Standard" +:+ plural value +:+ S "used for" +:+
-  phrase calculation +:+ S "in" +:+ short gLassBR +: S "are")]
+  phrase surface, S "and edge treatments that alter the glass strength"]
 
-s6_2_1_list_part2 :: [Sentence]
-s6_2_1_list_part2 = [(foldlSent [S "Glass under consideration", 
+assumption3 :: Sentence
+assumption3 = foldlSent [S "This", phrase system, S "only considers the external", 
+  phrase explosion, S "scenario for its", plural calculation]
+
+assumption4 :: Sentence
+assumption4 = S "Standard" +:+ plural value +:+ S "used for" +:+
+  phrase calculation +:+ S "in" +:+ short gLassBR +: S "are"
+
+assumption5 :: Sentence
+assumption5 = foldlSent [S "Glass under consideration", 
   S "is assumed to be a single" +:+. phrase lite, S "Hence the", 
   phrase value, S "of", short lShareFac, S "is equal to 1 for all", 
-  plural calculation, S "in", short gLassBR]), 
-  (foldlSent [S "Boundary", plural condition, S "for the", 
+  plural calculation, S "in", short gLassBR]
+
+assumption6 :: Sentence
+assumption6 = foldlSent [S "Boundary", plural condition, S "for the", 
   phrase glaSlab, S "is assumed to be 4-sided support for",
-  plural calculation]), 
-  (foldlSent [S "The response type considered in", short gLassBR,
-  S "is flexural"]), 
-  (foldlSent [S "With", phrase reference, S "to A4 the", phrase value, 
+  plural calculation]
+
+assumption7 :: Sentence
+assumption7 = foldlSent [S "The response type considered in", short gLassBR,
+  S "is flexural"]
+
+assumption8 :: Sentence
+assumption8 = foldlSent [S "With", phrase reference, S "to A4 the", phrase value, 
   S "of", phrase loadDF, sParen (getS loadDF), 
   S "is a constant in" +:+. short gLassBR, S "It is calculated by the" +:
-  phrase equation, E ((C loadDF) := loadDF_eq) :+:
-  S ". Using this" `sC` E ((C loadDF) := (Dbl 0.27))])]
+  phrase equation +:+. E ((C loadDF) := loadDF_eq), S "Using this" `sC`
+  E ((C loadDF) := (Dbl 0.27))]
 
 s6_2_2 = thModF (gLassBR) (s6_2_2_TMods) 
   

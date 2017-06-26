@@ -24,7 +24,6 @@ nwtnCooling = makeRC "nwtnCooling" (nounPhraseSP "Newton's law of cooling")
 nwtnCooling_rel :: Relation
 nwtnCooling_rel = ((FCall (C thFluxVect) [C QP.time]) := (C htTransCoeff) :* 
   (FCall (C temp_diff) [C QP.time]))
---FIMXE:^ function of t?
 
 nwtnCooling_desc :: Sentence
 nwtnCooling_desc = foldlSent [S "Newton's law of cooling describes convective", 

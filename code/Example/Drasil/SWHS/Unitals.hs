@@ -5,7 +5,6 @@ import Drasil.SWHS.Concepts
 import Language.Drasil
 import Data.Drasil.SI_Units
 import qualified Data.Drasil.Units.Thermodynamics as UT
-import Data.Drasil.Concepts.Thermodynamics (thermal_energy)
 import Data.Drasil.Quantities.Thermodynamics
 import Data.Drasil.Quantities.Physics (time)
 import Data.Drasil.Quantities.Math (surface, uNormalVect, surArea)

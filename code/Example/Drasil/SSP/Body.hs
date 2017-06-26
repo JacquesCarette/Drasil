@@ -564,9 +564,9 @@ rigFoSDerivation = [foldlSP [S "RFEM analysis can also be used to calculate the 
   S "(24) and normal to the base of the slice delta v in equation (25)"],
   
   EqnBlock $
-  C shrDispl := cos(baseAngle) * dx_i + sin(baseAngle) * dy_i,
+  C shrDispl := cos(C baseAngle) * C dx_i + sin(C baseAngle) * C dy_i,
   EqnBlock $
-  C nrmDispl := Neg (sin(baseAngle)) * dx_i + sin(baseAngle) * dy_i,
+  C nrmDispl := Neg (sin(C baseAngle)) * C dx_i + sin(C baseAngle) * C dy_i,
   
   foldlSP [S "With the definition of normal stiffness from DD14 to find the normal stiffness of the base Kbn,i,",
   S "and the now known base displacement perpendicular to the surface delta vi from equation (25), the",

@@ -15,7 +15,7 @@ import Prelude hiding (id)
 import Data.Drasil.Utils
 import Data.Drasil.SentenceStructures (foldlSent, foldlList, ofThe, isThe, 
   showingCxnBw, figureLabel, foldlSP, sAnd, foldlsC, tAndDWAcc, tAndDWSym,
-  tAndDOnly)
+  tAndDOnly, sVersus)
 
 import Drasil.Template.MG
 import Drasil.Template.DD
@@ -779,11 +779,11 @@ s11_intro = foldlSP [
   S "used for interpolating", plural value, S "needed in the", plural model]
 
 fig_5 = Figure (titleize figure +: S "5" +:+ (demandq ^. defn) +:+ 
-  sParen (getS demand) +:+ S "versus" +:+ at_start sD +:+ S "versus" +:+ 
+  sParen (getS demand) `sVersus` at_start sD `sVersus` 
   at_start char_weight +:+ sParen (getS sflawParamM)) "ASTM_F2248-09.png"
 
 fig_6 = Figure (titleize figure +:+ S "6: Non dimensional" +:+ 
   phrase lateral +:+ phrase load +:+ sParen (getS dimlessLoad)
-  +:+ S "versus" +:+ titleize aspectR +:+ sParen (short aspectR) {-(P (aspectR))-}
-  +:+ S "versus" +:+ at_start stressDistFac +:+ sParen (getS stressDistFac))
+  `sVersus` titleize aspectR +:+ sParen (short aspectR) {-(P (aspectR))-}
+  `sVersus` at_start stressDistFac +:+ sParen (getS stressDistFac))
   "ASTM_F2248-09_BeasonEtAl.png"

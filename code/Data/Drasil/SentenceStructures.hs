@@ -1,6 +1,6 @@
 module Data.Drasil.SentenceStructures
   ( foldlSent, foldlSent_, foldlSentCol, foldlsC, foldlList
-  , sAnd, andIts, andThe, sAre, sIn
+  , sAnd, andIts, andThe, sAre, sIn, sVersus
   , sIs, isThe, sOf, sOr, ofThe, ofThe'
   , ofGiv, ofGiv'
   , toThe, tableShows, figureLabel
@@ -77,6 +77,9 @@ sOf p1 p2 = p1 +:+ S "of" +:+ p2
 
 sOr :: Sentence -> Sentence -> Sentence
 sOr p1 p2 = p1 +:+ S "or" +:+ p2
+
+sVersus :: Sentence -> Sentence -> Sentence
+sVersus p1 p2 = p1 +:+ S "versus" +:+ p2
 
 ofThe, ofThe' :: Sentence -> Sentence -> Sentence
 ofThe  p1 p2 = S "the" +:+ p1 +:+ S "of the" +:+ p2

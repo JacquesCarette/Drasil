@@ -514,10 +514,29 @@ intrSlcDerivation = [foldlSP [S "Taking the perpendicular force equilibrium of G
   foldlSP [S "Substituting the equation for N0 i from equation (16) into equation (17) and rearranging results in",
   S "equation (18)"],
 
+  EqnBlock $
+  (C intNormForce) * (((C normToShear)*(C scalFunc) * cos (C baseAngle) - sin (C baseAngle)) * tan (C fricAngle) -
+  ((C normToShear)*(C scalFunc) * sin (C baseAngle) - cos (C baseAngle)) * (C fs)) := 
+  (C intNormForce) * (((C normToShear)*(C scalFunc) * cos (C baseAngle) - sin (C baseAngle)) * tan (C fricAngle) -
+  ((C normToShear)*(C scalFunc) * sin (C baseAngle) - cos (C baseAngle)) * (C fs)) +
+  (C fs) * (C shearFNoIntsl) - (C shearRNoIntsl),
+  
   foldlSP [S "Where Ri and Ti are the resistive and mobile shear of the slice, without the influence of interslice",
   S "forces E and X, as defined in DD10 and DD11. Making use of the constants, and with full",
   S "equations found below in equations (19) and (20) respectively, then equation (18) can be simplified",
   S "to equation (21), also seen in IM3"],
+  
+  EqnBlock $
+  (C shrResC) := ((C normToShear)*(C scalFunc) * cos (C baseAngle) - sin (C baseAngle)) * tan (C fricAngle) -
+  ((C normToShear)*(C scalFunc) * sin (C baseAngle) - cos (C baseAngle)) * (C fs),
+  --FIXME: index everything here and add "Where i is the local slice of mass for 1 :<= i :<= n-1"
+  EqnBlock $
+  (C mobShrC) := ((C normToShear)*(C scalFunc) * cos (C baseAngle) - sin (C baseAngle)) * tan (C fricAngle) -
+  ((C normToShear)*(C scalFunc) * sin (C baseAngle) - cos (C baseAngle)) * (C fs),
+  
+  EqnBlock $
+  (C intNormForce) := ((C mobShrC)*(C intNormForce) + (C fs)*(C shearFNoIntsl)
+  - (C shearRNoIntsl)) / (C shrResC),
   
   foldlSP [S "The constants Psi and Phi in equation (21) for Ei is a function of the unknown values, the interslice",
   S "normal/shear force ratio", getS normToShear, S "(IM2), and the Factor of Safety FS (IM1)"]
@@ -528,6 +547,10 @@ rigDisDerivation = [foldlSP [S "Using the net force-displacement equilibrium equ
   S "equilibrium equation can be derived. Equation (22) gives the broken down equation",
   S "in the x direction, and equation (23) gives the broken down equation in the y direction."],
 
+  EqnBlock $
+  Neg (C watrForceDif) -- ()*() - ()*sin() + (C )*sin(C )+ (C )*sin(C ) :=
+  ,
+  
   foldlSP [S "Using the known input assumption of A2, the force variable definitions of DD1 to DD8 on the left",
   S "side of the equations can be solved for. The only unknown in the variables to solve for the stiffness",
   S "values from DD14 is the displacements. Therefore taking the equation from each slice a set of", E $ (Int 2) * (C numbSlices),

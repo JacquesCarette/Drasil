@@ -1,6 +1,6 @@
 module Drasil.SSP.IMods where
 
-import Prelude hiding (tan, product)
+import Prelude hiding (tan, product, sin, cos)
 
 import Language.Drasil
 import Drasil.SSP.Unitals
@@ -83,9 +83,9 @@ forDisEqlb :: RelationConcept
 forDisEqlb = makeRC "forDisEqlb" (nounPhraseSP "force displacement equilibrium") fDisEq_desc fDisEq_rel
 
 fDisEq_rel :: Relation
-fDisEq_rel = ((C surfLoad)*(Language.Drasil.sin(C impLoadAngle)):-(C watrForceDif):-
-  (C earthqkLoadFctr)*(C slcWght):-(C baseHydroForce)*(Language.Drasil.sin(C baseAngle)):+
-  (C surfHydroForce)*(Language.Drasil.sin(C surfAngle))) := (Int 1) 
+fDisEq_rel = Neg (C watrForceDif) - (C earthqkLoadFctr)*(C slcWght) -
+  (C baseHydroForce)*(sin(C baseAngle)) +
+  (C surfHydroForce)*sin(C surfAngle) + (C surfLoad)*sin(C impLoadAngle) := (Int 1) 
   --FIXME: add the other long equation (i.e. Y Equilibrium)
   --FIXME: add the second part of X Equilibrium equation
 

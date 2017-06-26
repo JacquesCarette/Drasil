@@ -90,8 +90,13 @@ fDisEq_rel = Neg (C watrForceDif) - (C earthqkLoadFctr)*(C slcWght) -
   C dx_i * (Neg (C surfLngth) * C nrmStiffIntsl + C surfLngth * C nrmStiffIntsl + C baseLngth * C nrmStiffIntsl) +
   C dx_i * (Neg (C surfLngth) * C nrmStiffIntsl) +
   C dy_i * (Neg (C baseLngth) * C nrmStiffIntsl)
-  
-  --FIXME: add the other long equation (i.e. Y Equilibrium)
+  :=
+  Neg (C slcWght) - (C baseHydroForce)*(cos(C baseAngle)) +
+  (C surfHydroForce)*cos(C surfAngle) + (C surfLoad)*cos(C impLoadAngle) :=
+  C dy_i * (Neg (C surfLngth) * C nrmStiffIntsl) +
+  C dy_i * (Neg (C surfLngth) * C nrmStiffIntsl + C surfLngth * C nrmStiffIntsl + C baseLngth * C nrmStiffIntsl) +
+  C dy_i * (Neg (C surfLngth) * C nrmStiffIntsl) +
+  C dx_i * (Neg (C baseLngth) * C nrmStiffIntsl)
   --FIXME: index fixes
 
 fDisEq_desc :: Sentence

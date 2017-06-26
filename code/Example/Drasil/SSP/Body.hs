@@ -547,9 +547,7 @@ rigDisDerivation = [foldlSP [S "Using the net force-displacement equilibrium equ
   S "equilibrium equation can be derived. Equation (22) gives the broken down equation",
   S "in the x direction, and equation (23) gives the broken down equation in the y direction."],
 
-  EqnBlock $
-  Neg (C watrForceDif) -- ()*() - ()*sin() + (C )*sin(C )+ (C )*sin(C ) :=
-  ,
+  EqnBlock fDisEq_rel, --FIXME: Original equations need indexing
   
   foldlSP [S "Using the known input assumption of A2, the force variable definitions of DD1 to DD8 on the left",
   S "side of the equations can be solved for. The only unknown in the variables to solve for the stiffness",
@@ -564,6 +562,11 @@ rigFoSDerivation = [foldlSP [S "RFEM analysis can also be used to calculate the 
   S "i the displacements", getS dx_i, S "and", getS dy_i `sC` S "are solved from the system of equations in IM4. The definition of",
   S "epsilon i as the rotation of the displacement vector delta i is seen in GD9. This is used to find the displacements of the slice parallel to the base of the slice delta u in equation",
   S "(24) and normal to the base of the slice delta v in equation (25)"],
+  
+  EqnBlock $
+  C shrDispl := cos(baseAngle) * dx_i + sin(baseAngle) * dy_i,
+  EqnBlock $
+  C nrmDispl := Neg (sin(baseAngle)) * dx_i + sin(baseAngle) * dy_i,
   
   foldlSP [S "With the definition of normal stiffness from DD14 to find the normal stiffness of the base Kbn,i,",
   S "and the now known base displacement perpendicular to the surface delta vi from equation (25), the",

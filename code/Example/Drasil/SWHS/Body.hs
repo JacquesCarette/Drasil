@@ -450,8 +450,8 @@ s4_2 = solChSpecF progName (s4_1, s6) True s4_2_4_intro_end
   ((makeRef s4_2_6_table1 +:+ S "and" +:+ makeRef s4_2_6_table2 +:+
   S "show"), mid, True, end) ([s4_2_1_list], s4_2_2_T1 ++
   s4_2_2_T2 ++ s4_2_2_T3, s4_2_3_genDefs ++ s4_2_3_deriv,
-  s4_2_4_DD1 ++ s4_2_4_DD2 ++ s4_2_4_DD3 ++ s4_2_4_DD4,
-  (s4_2_5_IMods), s4_2_6_table1:s4_2_6_table2:s4_2_6_T1footer) [s4_2_7]
+  s4_2_4_DD1 ++ s4_2_4_DD2 ++ s4_2_4_DD3 ++ s4_2_4_DD4, (s4_2_5_IMods),
+  s4_2_6_DataConTables) [s4_2_7]
 
   where mid = foldlSent [S "The", phrase column, S "for", phrase software,
           plural constraint, S "restricts the range of",
@@ -883,11 +883,19 @@ s4_2_5_d2endPara = map foldlSP [
 -- I do not think Table 2 will end up being necessary for the Drasil version
 ---- The info from table 2 will likely end up in table 1.
 
+------------------------------
+-- Data Constraint: Table 1 --
+------------------------------
+
+s4_2_6_DataConTables :: [Contents]
+s4_2_6_DataConTables = [s4_2_6_table1] ++ s4_2_6_T1footer ++ [s4_2_6_table2, s4_2_6_table3]
+
 s4_2_6_table1 :: Contents
 s4_2_6_table1 = Table [S "Var", titleize' physicalConstraint, titleize software +:+
   titleize' constraint, S "Typical" +:+ titleize value, S "Uncertainty"]
   (mkTable [(\x -> x!!0), (\x -> x!!1), (\x -> x!!2), (\x -> x!!3), (\x -> x!!4)]
-  s4_2_6_conListIn) (titleize input_ +:+ titleize' variable) True
+  s4_2_6_conListIn) (titleize table_ +: S "1" +:+
+  titleize input_ +:+ titleize' variable) True
 
 s4_2_6_conListIn ::[[Sentence]]
 s4_2_6_conListIn = [con1, con2, con3, con4, con5, con6, con7, con8,
@@ -975,7 +983,6 @@ inputVar = map qs [tank_length, diam, pcm_vol, pcm_SA, pcm_density,
 s4_2_6_T1footer :: [Contents]
 s4_2_6_T1footer = map foldlSP [
 
-
   [sParen (S "*"), S "These", plural quantity, S "cannot be equal to zero" `sC`
   S "or there will be a divide by zero in the" +:+. phrase model],
 
@@ -995,6 +1002,9 @@ s4_2_6_T1footer = map foldlSP [
   
   ]
 
+------------------------------
+-- Data Constraint: Table 2 --
+------------------------------
 
 s4_2_6_table2 :: Contents
 s4_2_6_table2 = Table [S "Var", titleize value]
@@ -1005,12 +1015,56 @@ s4_2_6_table2 = Table [S "Var", titleize value]
 s4_2_6_specVals :: [[Sentence]]
 s4_2_6_specVals = [
 
-  [getS tank_length_min, E (Dbl 0.1) +:+ (unwrap $ getUnit tank_length_min)],
-  [getS tank_length_max, E (Int 50) +:+ (unwrap $ getUnit tank_length_max)],
+  [getS tank_length_min, E (Dbl 0.1) +:+ (unwrap $ getUnit tank_length)],
+
+  [getS tank_length_max, E (Int 50) +:+ (unwrap $ getUnit tank_length)],
+
   [E $ C diam :/ C tank_length_min, E (Dbl 0.002)],
+
   [E $ C diam :/ C tank_length_max, E (Int 200)],
-  [S "minfrac", E $ Int 200 :^ (Int (-6))]
+
+  [S "minfrac", E $ Int 10 :^ (Int (-6))],
+
+  [getS htFusion_min, E (Dbl 0.001) +:+ (unwrap $ getUnit pcm_HTC)],
+
+  [getS pcm_density_min, E (Int 500) +:+ (unwrap $ getUnit pcm_density)],
+
+  [getS pcm_density_max, E (Int 20000) +:+ (unwrap $ getUnit pcm_density)],
+
+  [getS htCap_S_P_min, E (Int 100) +:+ (unwrap $ getUnit htCap_S_P)],
+
+  [getS htCap_S_P_max, E (Int 4000) +:+ (unwrap $ getUnit htCap_S_P)],
+
+  [getS htCap_L_P_min, E (Int 100) +:+ (unwrap $ getUnit htCap_L_P)],
+
+  [getS htCap_L_P_max, E (Int 5000) +:+ (unwrap $ getUnit htCap_L_P)],
+
+  [getS coil_SA_max, P (Greek Pi_L) +:+
+  sParen (E ((C diam :/ Int 2) :^ (Int 2))) +:+ (unwrap $ getUnit coil_SA)],
+
+  [getS w_density_min, E (Int 950) +:+ (unwrap $ getUnit w_density)],
+  
+  [getS w_density_max, E (Int 1000) +:+ (unwrap $ getUnit w_density)],
+  
+  [getS htCap_W_min, E (Int 4170) +:+ (unwrap $ getUnit htCap_W)],
+  
+  [getS htCap_W_max, E (Int 4210) +:+ (unwrap $ getUnit htCap_W)],
+  
+  [getS coil_HTC_min, E (Int 10) +:+ (unwrap $ getUnit coil_HTC)],
+  
+  [getS coil_HTC_max, E (Int 10000) +:+ (unwrap $ getUnit coil_HTC)],
+  
+  [getS pcm_HTC_min, E (Int 10) +:+ (unwrap $ getUnit pcm_HTC)],
+  
+  [getS pcm_HTC_max, E (Int 10000) +:+ (unwrap $ getUnit pcm_HTC)],
+  
+  [getS time_final_max, E (Int 86400) +:+ (unwrap $ getUnit time_final)]
+
   ]
+
+------------------------------
+-- Data Constraint: Table 3 --
+------------------------------
 
 s4_2_6_table3 :: Contents
 s4_2_6_table3 = Table [S "Var", titleize' physicalConstraint]
@@ -1022,25 +1076,18 @@ s4_2_6_conListOut = [con18, con19, con20, con21]
   
 con18, con19, con20, con21 :: [Sentence]
 
-con18 = [getS temp_W, E $ C temp_init :<= C temp_W :<= C temp_C]
+con18 = [getS temp_W, E (C temp_init :<= C temp_W :<= C temp_C) +:+
+  sParen (S "by" +:+ acroA "11")]
 
-con19 = [getS temp_PCM, E $ C temp_init :<= C temp_PCM :<= C temp_C]
+con19 = [getS temp_PCM, E (C temp_init :<= C temp_PCM :<= C temp_C) +:+
+  sParen (S "by" +:+ acroA "11")]
 
-con20 = [getS w_E, E $ C w_E :> Int 0]
+con20 = [getS w_E, E $ C w_E :>= Int 0]
 
-con21 = [getS pcm_E, E $ C pcm_E :> Int 0]
+con21 = [getS pcm_E, E $ C pcm_E :>= Int 0]
 
 -- Typical values and constraints must be added to UC definitions for mkTable
 -- to work here.
-
--- table1 = Table [S "Var", S "Physical Constraints", S "Software Constraints",
-  -- S "Typical Value", S "Uncertainty"] (mkTable
-  -- [\ch -> P (ch ^. symbol),
-  -- \ch -> Sy (ch ^. unit),
-  -- \ch -> Sy (ch ^. unit),
-  -- \ch -> Sy (ch ^. unit),
-  -- \ch -> Sy (ch ^. unit)] inputVar)
-  -- (S "Input Variables") True
 
 -- Add constraints (and typical values) to the knowledge capture of each
 -- variable, so that lambdas can be used to extract constraints?

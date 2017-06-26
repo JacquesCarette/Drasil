@@ -290,7 +290,8 @@ htCap_W      = cuc' "htCap_W" (heat_cap_spec `of_` water)
 coil_HTC     = cuc' "coil_HTC" (nounPhraseSP
   "convective heat transfer coefficient between coil and water")
   ("The convective heat transfer coefficient that models " ++
-  "the thermal flux from the coil to the surrounding water") (sub (htTransCoeff ^. symbol) cC)
+  "the thermal flux from the coil to the surrounding water")
+  (sub (htTransCoeff ^. symbol) cC)
   UT.heat_transfer_coef Rational
   [physc $ \c -> c :> Int 0,
   sfwrc $ \c -> C coil_HTC_min :<= c :<= C coil_HTC_max]

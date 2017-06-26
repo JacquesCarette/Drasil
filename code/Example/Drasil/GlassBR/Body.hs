@@ -15,7 +15,7 @@ import Prelude hiding (id)
 import Data.Drasil.Utils
 import Data.Drasil.SentenceStructures (foldlSent, foldlList, ofThe, isThe, 
   showingCxnBw, figureLabel, foldlSP, sAnd, foldlsC, tAndDWAcc, tAndDWSym,
-  tAndDOnly, sVersus)
+  tAndDOnly, sVersus, displayConstr)
 
 import Drasil.Template.MG
 import Drasil.Template.DD

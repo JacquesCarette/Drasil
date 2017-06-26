@@ -25,6 +25,7 @@ module Data.Drasil.Utils
   , displayConstr
   , fmtConstrP, fmtConstrS
   , inDataConstTbl, outDataConstTbl
+  , prodUCTbl
   ) where
 
 import Prelude hiding (id)
@@ -36,11 +37,9 @@ import Language.Drasil {-(Sentence(Sy, P, EmptyS, S, (:+:), E), (+:+),
   symbol, SymbolForm, SymbolMap, symbolMap, UnitDefn, usymb, Chunk, Expr(..),
   phrase, titleize, titleize', mkTable, Contents(Table), fromEqn, fromEqn', 
   UnitalChunk, QDefinition, term, id, unit, ucw)-}
-import Data.Drasil.Concepts.Documentation (description, input_, datum, 
-                                            symbol_, fterms, fterm)
+import Data.Drasil.Concepts.Documentation
 import Data.Drasil.Concepts.Math (unit_)
 import Data.Drasil.Concepts.Documentation (value, physicalConstraint, variable)
-
   
 -- | fold helper functions applies f to all but the last element, applies g to
 -- last element and the accumulator
@@ -223,3 +222,9 @@ inDataConstTbl inputs tableNumb = Table [S "Var", titleize' physicalConstraint, 
 outDataConstTbl :: [[Sentence]] -> String -> Contents
 outDataConstTbl outputs tableNumb = Table [S "Var", titleize' physicalConstraint]
   outputs (S "Table" +: S tableNumb +:+ titleize input_ +:+ titleize' variable) True
+
+prodUCTbl :: [[Sentence]] -> String -> Contents
+prodUCTbl cases tableNum = Table [titleize useCase +:+. S "NO", titleize useCase +:+
+  titleize name_, S "Actor", titleize input_ +:+ S "and" +:+ titleize output_]
+  cases
+  (titleize table_ +: S tableNum +:+ titleize useCaseTable) True

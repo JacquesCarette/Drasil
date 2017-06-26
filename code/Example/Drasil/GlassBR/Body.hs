@@ -176,12 +176,7 @@ s5_intro = foldlSP [S "This", phrase section_,
 
 s5_1 = SRS.prodUCTable [s5_1_table] []
 
-s5_1_table = Table [titleize useCase +:+. S "NO", titleize useCase +:+
-  titleize name_, S "Actor", titleize input_ `sAnd` titleize output_]
-  (mkTable
-  [(\x -> (x!!0)), (\x -> (x!!1)), (\x -> (x!!2)), (\x -> (x!!3))]
-  [s5_1_table_UC1, s5_1_table_UC2])
-  (titleize table_ +: S "1" +:+ titleize useCaseTable) True
+s5_1_table = prodUCTbl [s5_1_table_UC1, s5_1_table_UC2] "1"
 
 s5_1_table_UC1, s5_1_table_UC2 :: [Sentence]
 

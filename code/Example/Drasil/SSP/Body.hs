@@ -495,10 +495,21 @@ intrSlcDerivation = [foldlSP [S "Taking the perpendicular force equilibrium of G
   :+ (Neg (C earthqkLoadFctr) :* C slcWght :- 
   C intNormForce :+ C intNormForce :- C watrForce :+ 
   C watrForce :+ C surfHydroForce :* sin (C surfAngle) :+ 
-  C surfLoad :* cos (C impLoadAngle)) :* sin (C baseAngle)),
+  C surfLoad :* sin (C impLoadAngle)) :* sin (C baseAngle)) - (C baseHydroForce),
   
   foldlSP [S "Taking the parallel force equilibrium of GD2 with the definition of mobile shear from GD4 and",
   S "the assumption of GD5, the equilibrium equation can be rewritten as equation (17)"],
+  
+  EqnBlock $
+  ((C totNrmForce) * tan (C fricAngle) + (C cohesion) * (C baseWthX) * sec (C baseAngle)) / (C fs) :=
+  (C slcWght :- C normToShear :* C scalFunc :* C intNormForce :+ 
+  C normToShear :* C scalFunc :* C intNormForce :+ 
+  C baseHydroForce :* cos (C surfAngle) :+ C surfLoad :* 
+  cos (C impLoadAngle)) :* sin (C baseAngle)
+  :+ (Neg (C earthqkLoadFctr) :* C slcWght :- 
+  C intNormForce :+ C intNormForce :- C watrForce :+ 
+  C watrForce :+ C surfHydroForce :* sin (C surfAngle) :+ 
+  C surfLoad :* sin (C impLoadAngle)) :* cos (C baseAngle),
   
   foldlSP [S "Substituting the equation for N0 i from equation (16) into equation (17) and rearranging results in",
   S "equation (18)"],

@@ -137,14 +137,14 @@ constant_K = mkDataDef sflawParamK sfpKVal
 sfpKVal :: Relation
 sfpKVal = (C sflawParamK) := (Grouping (Dbl 2.86)):*(Int 10):^(Neg (-53))
 
-constant_E :: QDefinition
-constant_E = mkDataDef mod_elas modElasVal
+constant_ModElas :: QDefinition
+constant_ModElas = mkDataDef mod_elas modElasVal
 
 modElasVal :: Relation
 modElasVal = (C mod_elas) := (Grouping (Dbl 7.17)):*(Int 10):^(Int 7)
 
-constant_Td :: QDefinition
-constant_Td = mkDataDef load_dur durOfLoadVal
+constant_LoadDur :: QDefinition
+constant_LoadDur = mkDataDef load_dur durOfLoadVal
 
 durOfLoadVal :: Relation
 durOfLoadVal = (C load_dur) := (Int 3)

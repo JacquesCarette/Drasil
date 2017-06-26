@@ -33,7 +33,7 @@ module Language.Drasil (
   , Constrained(..), ConstrainedChunk(..), Constraint(..), ConstrConcept(..)
   , physc, sfwrc, constrained, cuc, cvc, constrained', cuc'
   -- Chunk.Eq
-  , QDefinition(..), fromEqn, fromEqn', getVC
+  , QDefinition(..), fromEqn, fromEqn', getVC, equat
   -- Chunk.Unital
   , UnitalChunk(..), makeUCWDS, ucFromCV
   , uc, uc', ucs, ucs', ucsWS
@@ -113,7 +113,7 @@ import Language.Drasil.Chunk.CommonIdea
 import Language.Drasil.Chunk.VarChunk
 import Language.Drasil.Chunk.Quantity
 import Language.Drasil.Chunk.ConVar
-import Language.Drasil.Chunk.Eq (QDefinition(..), fromEqn, fromEqn', getVC)
+import Language.Drasil.Chunk.Eq (QDefinition(..), fromEqn, fromEqn', getVC, equat)
 import Language.Drasil.Chunk.Constrained (Constrained(..), ConstrainedChunk(..)
                                   , Constraint(..), ConstrConcept(..)
                                   , physc, sfwrc, constrained

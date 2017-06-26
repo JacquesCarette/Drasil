@@ -43,8 +43,8 @@ import Drasil.Sections.SpecificSystemDescription
 this_si :: [UnitDefn]
 this_si = map UU [metre, second] ++ map UU [pascal, newton]
 
-s3, s4, s4_2, 
-  s5, s5_1, s5_2, s6, s6_1, s6_1_1, s6_1_2, s6_1_3, s6_2, s6_2_1, 
+s3, s4, s5,
+  s5_1, s5_2, s6, s6_1, s6_1_1, s6_1_2, s6_1_3, s6_2, s6_2_1, 
   s6_2_2, s6_2_3, s6_2_4, s6_2_5, s7, s7_1, s7_2, s8, s9, s10, s11 :: Section 
 
 s4_1_bullets, s5_intro, s5_1_table, s5_2_bullets, 
@@ -160,8 +160,6 @@ s4_1_bullets = enumBullet [(S "The" +:+ phrase endUser +:+ S "of" +:+
   phrase blastRisk)), (S "The" +:+ phrase endUser +:+
   S "is expected to have basic" +:+ phrase computer +:+
   S "literacy to handle the" +:+. phrase software)]
-
-s4_2 = systCon [] []
 
 s5 = SRS.scpOfTheProj [s5_intro] [s5_1, s5_2]
 

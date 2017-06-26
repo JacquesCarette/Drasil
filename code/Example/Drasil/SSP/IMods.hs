@@ -85,9 +85,14 @@ forDisEqlb = makeRC "forDisEqlb" (nounPhraseSP "force displacement equilibrium")
 fDisEq_rel :: Relation
 fDisEq_rel = Neg (C watrForceDif) - (C earthqkLoadFctr)*(C slcWght) -
   (C baseHydroForce)*(sin(C baseAngle)) +
-  (C surfHydroForce)*sin(C surfAngle) + (C surfLoad)*sin(C impLoadAngle) := (Int 1) 
+  (C surfHydroForce)*sin(C surfAngle) + (C surfLoad)*sin(C impLoadAngle) :=
+  C dx_i * (Neg (C surfLngth) * C nrmStiffIntsl) +
+  C dx_i * (Neg (C surfLngth) * C nrmStiffIntsl + C surfLngth * C nrmStiffIntsl + C baseLngth * C nrmStiffIntsl) +
+  C dx_i * (Neg (C surfLngth) * C nrmStiffIntsl) +
+  C dy_i * (Neg (C baseLngth) * C nrmStiffIntsl)
+  
   --FIXME: add the other long equation (i.e. Y Equilibrium)
-  --FIXME: add the second part of X Equilibrium equation
+  --FIXME: index fixes
 
 fDisEq_desc :: Sentence
 fDisEq_desc = foldlSent [S "There is one set of force displacement equilibrium",

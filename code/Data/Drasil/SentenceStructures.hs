@@ -7,10 +7,11 @@ module Data.Drasil.SentenceStructures
   , showingCxnBw, refineChain, foldlSP, foldlSP_, foldlSPCol
   , maybeChanged, maybeExpanded, maybeWOVerb
   , tAndDWAcc, tAndDWSym, tAndDOnly
+  , makeConstraint, displayConstr
   ) where
 
 import Language.Drasil
-import Data.Drasil.Utils (foldle, foldle1, getS)
+import Data.Drasil.Utils (foldle, foldle1, getS, fmtU)
 import Data.Drasil.Concepts.Documentation
 import Control.Lens ((^.))
 
@@ -142,3 +143,20 @@ tAndDWSym tD sym = Flat $ ((at_start tD) :+: sParenDash (getS sym)) :+: (tD ^. d
 -- term - definition
 tAndDOnly :: Concept s => s -> ItemType
 tAndDOnly chunk  = Flat $ ((at_start chunk) +:+ S "- ") :+: (chunk ^. defn)
+
+--FIXME:Reduce duplication. Idealy only use displayConstr. Gamephysics uses pi/2 which is not a "number" yet
+makeConstraint :: (Constrained s, Quantity s, SymbolForm s) => s -> Sentence -> [Sentence]
+makeConstraint s num = [getS s, foldlList $ fmtCP (filter filterP (s ^. constraints)), fmtU num s]
+  where filterP (Phys _) = True
+        filterP (Sfwr _) = False
+        fmtCP = map (\(Phys f) -> E $ f (C s))
+
+displayConstr :: (Constrained s, Quantity s, SymbolForm s, Show a) => s -> a -> Sentence -> [Sentence]
+displayConstr s num uncrty = [getS s, foldlList $ fmtCP (filter filterP (s ^. constraints)),
+  foldlList $ fmtCS (filter filterS (s ^. constraints)), fmtU (S (show num)) (qs s), uncrty]
+  where filterP (Phys _) = True
+        filterP (Sfwr _) = False
+        filterS (Phys _) = False
+        filterS (Sfwr _) = True
+        fmtCP = map (\(Phys f) -> E $ f (C s))
+        fmtCS = map (\(Sfwr f) -> E $ f (C s))

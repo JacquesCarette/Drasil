@@ -12,7 +12,6 @@ module Data.Drasil.Utils
   , enumSimple
   , enumBullet
   , mkRefsList
-  , makeConstraint
   , mkInputDatTb
   , getS
   , weave
@@ -22,8 +21,6 @@ module Data.Drasil.Utils
   , symbolMapFun
   , fterms , fterm
   , mkDataDef
-  , displayConstr
-  , fmtConstrP, fmtConstrS
   , inDataConstTbl, outDataConstTbl
   , prodUCTbl
   ) where
@@ -189,29 +186,6 @@ mkDataDef concept equation = datadef $ getUnit concept
                            (concept ^. symbol) a equation
         datadef Nothing  = fromEqn' (concept ^. id) (concept ^. term)
                            (concept ^. symbol) equation
-
---FIXME:Reduce duplication. Idealy only use displayConstr. Gamephysics uses pi/2 which is not a "number" yet
-makeConstraint :: (Constrained s, Quantity s, SymbolForm s) => s -> Sentence -> [Sentence]
-makeConstraint s num = [getS s, fmtConstrP s (s ^. constraints), fmtU num s]
-
-displayConstr :: (Constrained s, Quantity s, SymbolForm s, Show a) => s -> a -> Sentence -> [Sentence]
-displayConstr s num uncrty = [getS s, fmtConstrP s (s ^. constraints), fmtConstrS s (s ^. constraints),
-  fmtU (S (show num)) (qs s), uncrty]
-
--- | used to help display the physical constraints. FIXME: return "None" or "N/A" if there are Sfwr but no Phys
-fmtConstrP :: (Constrained s, SymbolForm s) => s -> [Constraint]-> Sentence
-fmtConstrP _ [] = S "None"
-fmtConstrP _ [Sfwr _] = EmptyS
-fmtConstrP s [Phys f] = E $ f (C s)
-fmtConstrP s (c@(Phys _):xs) = fmtConstrP s [c] +:+ S "and" +:+ fmtConstrP s xs
-fmtConstrP s ((Sfwr _):xs) = fmtConstrP s xs
--- | used to help display the software constraints. FIXME: return "None" or "N/A" if there are Phys but no Sfwr
-fmtConstrS :: (Constrained s, SymbolForm s) => s -> [Constraint]-> Sentence
-fmtConstrS _ [] = S "None"
-fmtConstrS _ [Phys _] = EmptyS
-fmtConstrS s [Sfwr f] = E $ f (C s)
-fmtConstrS s (c@(Sfwr _):xs) = fmtConstrP s [c] +:+ S "and" +:+ fmtConstrS s xs 
-fmtConstrS s ((Phys _):xs) = fmtConstrS s xs
 
 -- Creates the input Data Constraints Table with physical constraints only
 inDataConstTbl :: [[Sentence]] -> String -> Contents

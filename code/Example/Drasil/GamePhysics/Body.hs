@@ -102,6 +102,37 @@ cpSymMapD = symbolMapFun cpSymbMap Data
 -- =================================== --
 
 ------------------------------
+--        KNOWLEDGE         --
+------------------------------
+
+lengthConstraint, massConstraint, mmntOfInConstraint, gravAccelConstraint, 
+  posConstraint, veloConstraint, orientConstraint, angVeloConstraint, 
+  forceConstraint, torqueConstraint, restCoefConstraint :: [Sentence]
+
+-- make into a type
+lengthConstraint = makeConstraint lengthCons (S "44.2")
+massConstraint = makeConstraint massCons (S "56.2")
+mmntOfInConstraint = makeConstraint mmntOfInCons (S "74.5")
+gravAccelConstraint = makeConstraint gravAccelCons (S "9.8")
+posConstraint = makeConstraint posCons (S "(0.412, 0.502)")
+veloConstraint = makeConstraint veloCons (S "2.51")
+orientConstraint = makeConstraint orientCons (S "pi/2")
+angVeloConstraint = makeConstraint angVeloCons (S "2.1")
+forceConstraint = makeConstraint forceCons (S "98.1")
+torqueConstraint = makeConstraint torqueCons (S "200")
+restCoefConstraint = makeConstraint restCoefCons (S "0.8")
+
+-- these should be maps from the type of above
+physicalConstraint_inputs, physicalConstraint_outputs :: [[Sentence]]
+physicalConstraint_inputs = [lengthConstraint, massConstraint, 
+  mmntOfInConstraint, gravAccelConstraint, posConstraint, veloConstraint, 
+  orientConstraint, angVeloConstraint, forceConstraint, torqueConstraint,
+  restCoefConstraint]
+
+physicalConstraint_outputs = [posConstraint, veloConstraint, 
+  orientConstraint, angVeloConstraint]
+
+------------------------------
 -- Section : INTRODUCTION --
 ------------------------------
 
@@ -427,44 +458,15 @@ s4_2_6 = datConF ((makeRef s4_2_6_table1) +:+ S "and" +:+
 -- will do for now.
 -- How do I write 2pi in constraints?
 
-lengthConstraint, massConstraint, mmntOfInConstraint, gravAccelConstraint, 
-  posConstraint, veloConstraint, orientConstraint, angVeloConstraint, 
-  forceConstraint, 
-  torqueConstraint :: [Sentence]
-
-lengthConstraint = makeConstraint lengthCons (S "44.2")
-massConstraint = makeConstraint massCons (S "56.2")
-mmntOfInConstraint = makeConstraint mmntOfInCons (S "74.5")
-gravAccelConstraint = makeConstraint gravAccelCons (S "9.8")
-posConstraint = makeConstraint posCons (S "(0.412, 0.502)")
-veloConstraint = makeConstraint veloCons (S "2.51")
-orientConstraint = makeConstraint orientCons (S "pi/2")
-angVeloConstraint = makeConstraint angVeloCons (S "2.1")
-forceConstraint = makeConstraint forceCons (S "98.1")
-torqueConstraint = makeConstraint torqueCons (S "200")
-
-
-
-restCoefConstraint :: [Sentence]
-restCoefConstraint = makeConstraint restCoefCons (S "0.8")
-
-
-s4_2_6_t1_list, s4_2_6_t2_list :: [[Sentence]]
-s4_2_6_t1_list = [lengthConstraint, massConstraint, 
-  mmntOfInConstraint, gravAccelConstraint, posConstraint, veloConstraint, 
-  orientConstraint, angVeloConstraint, forceConstraint, torqueConstraint,
-  restCoefConstraint]
 
 s4_2_6_table1 = Table [S "Var", titleize' physicalConstraint, S "Typical Value"]
-  (s4_2_6_t1_list) (S "Table 1:" +:+ (titleize input_) +:+ S "Variables") True
+  (physicalConstraint_inputs) (S "Table 1:" +:+ (titleize input_) +:+ S "Variables") True
 
 
 s4_2_6_table2 = Table [S "Var", titleize' physicalConstraint]
-  (mkTable [(\x -> x!!0), (\x -> x!!1)] s4_2_6_t2_list) 
+  (map (take 2) physicalConstraint_outputs)
   (S "Table 2:" +:+ (titleize output_) +:+ S "Variables") True
 
-s4_2_6_t2_list = [posConstraint, veloConstraint, 
-  orientConstraint, angVeloConstraint]
 
 ------------------------------
 -- SECTION 5 : REQUIREMENTS --

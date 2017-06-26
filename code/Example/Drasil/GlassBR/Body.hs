@@ -57,8 +57,7 @@ s4_1_bullets, s5_1_table, s5_2_bullets,
 
 s6_2_1_list, s7_1_list, s9_intro2 :: [Contents]
 
-srs_authors, mg_authors, s2_3_intro_end, s2_3_intro :: Sentence
-srs_authors = manyNames [nikitha, spencerSmith]
+mg_authors, s2_3_intro_end, s2_3_intro :: Sentence
 mg_authors = manyNames [spencerSmith, thulasi]
 
 authors :: People

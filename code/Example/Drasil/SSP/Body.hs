@@ -595,10 +595,8 @@ dataConstOut = [(displayContr' . head) sspOutputs] ++ slipVert2 ++
 
 {-input and output tables-}
 s4_2_6Table2, s4_2_6Table3 :: Contents
-s4_2_6Table2 = Table [S "Var", titleize' physicalConstraint, S "Typical" +:+ titleize value]
-                      dataConstIn (titleize input_ +:+ titleize' variable) True
-s4_2_6Table3 = Table [S "Var", titleize' physicalConstraint]
-                      dataConstOut (titleize output_ +:+ titleize' variable) True
+s4_2_6Table2 = inDataConstTbl dataConstIn "2"
+s4_2_6Table3 = outDataConstTbl dataConstOut "3"
 
 -- SECTION 5 --
 s5 = reqF [s5_1, s5_2]

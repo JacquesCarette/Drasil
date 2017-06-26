@@ -24,6 +24,7 @@ module Data.Drasil.Utils
   , mkDataDef
   , displayConstr
   , fmtConstrP, fmtConstrS
+  , inDataConstTbl, outDataConstTbl
   ) where
 
 import Prelude hiding (id)
@@ -38,6 +39,7 @@ import Language.Drasil {-(Sentence(Sy, P, EmptyS, S, (:+:), E), (+:+),
 import Data.Drasil.Concepts.Documentation (description, input_, datum, 
                                             symbol_, fterms, fterm)
 import Data.Drasil.Concepts.Math (unit_)
+import Data.Drasil.Concepts.Documentation (value, physicalConstraint, variable)
 
   
 -- | fold helper functions applies f to all but the last element, applies g to
@@ -211,3 +213,13 @@ fmtConstrS _ [Phys _] = EmptyS
 fmtConstrS s [Sfwr f] = E $ f (C s)
 fmtConstrS s (c@(Sfwr _):xs) = fmtConstrP s [c] +:+ S "and" +:+ fmtConstrS s xs 
 fmtConstrS s ((Phys _):xs) = fmtConstrS s xs
+
+-- Creates the input Data Constraints Table with physical constraints only
+inDataConstTbl :: [[Sentence]] -> String -> Contents
+inDataConstTbl inputs tableNumb = Table [S "Var", titleize' physicalConstraint, S "Typical" +:+ titleize value]
+  inputs (S "Table" +: S tableNumb +:+ titleize input_ +:+ titleize' variable) True
+  
+  -- Creates the output Data Constraints Table with physical constraints only
+outDataConstTbl :: [[Sentence]] -> String -> Contents
+outDataConstTbl outputs tableNumb = Table [S "Var", titleize' physicalConstraint]
+  outputs (S "Table" +: S tableNumb +:+ titleize input_ +:+ titleize' variable) True

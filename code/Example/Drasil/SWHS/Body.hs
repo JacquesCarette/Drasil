@@ -11,7 +11,7 @@ import Data.Drasil.Concepts.Documentation
 import Data.Drasil.Concepts.PhysicalProperties hiding (density, mass, vol)
 import qualified Data.Drasil.Concepts.Thermodynamics as CT
 import Data.Drasil.Concepts.Physics (mech_energy)
-import Data.Drasil.Concepts.Math (ode, unit_, rOfChng, equation, change)
+import Data.Drasil.Concepts.Math (ode, unit_, rOfChng, equation, change, parameter)
 
 import Data.Drasil.Concepts.Software (program, performance)
 import Data.Drasil.Software.Products
@@ -19,7 +19,7 @@ import Data.Drasil.Utils (enumSimple, weave, getS, itemRefToSent, makeListRef,
   makeTMatrix, mkRefsList, unwrap, refFromType)
 
 import Data.Drasil.Quantities.Physics (time, energy)
-import Data.Drasil.Quantities.Math (gradient, surface, uNormalVect)
+import Data.Drasil.Quantities.Math (gradient, surface, uNormalVect, surArea)
 import Data.Drasil.Quantities.Thermodynamics
 import Data.Drasil.Quantities.PhysicalProperties (density, mass, vol)
 
@@ -62,8 +62,12 @@ authors = manyNames [thulasi, brooks, spencerSmith]
 
 swhs_si :: SystemInformation
 swhs_si = SI swhs_pcm srs [thulasi, brooks, spencerSmith]
-  this_si swhsSymbols (swhsSymbols) acronyms ([] :: [QDefinition]) ([] :: [QSWrapper]) ([] :: [QSWrapper])
-  ([] :: [Block QDefinition]) ([] :: [ConstrainedChunk])
+  this_si swhsSymbols (swhsSymbols) acronyms
+  (swhsDataDefs :: [QDefinition])
+  ((map qs swhsInputs) :: [QSWrapper])
+  ((map qs swhsOutputs) :: [QSWrapper])
+  ([] :: [Block QDefinition])
+  (swhsConstrained)
   --Note: The second swhsSymbols here is
     -- Redundant b/c the unitals are not really concepts (yet). There
     -- Will still likely be a better way to do this.
@@ -444,11 +448,10 @@ goalState varTerm = foldlSent [S "Predict the", phrase varTerm,
 s4_2 :: Section
 s4_2 = solChSpecF progName (s4_1, s6) True s4_2_4_intro_end
   ((makeRef s4_2_6_table1 +:+ S "and" +:+ makeRef s4_2_6_table2 +:+
-  S "show"), mid, True, end) ([s4_2_1_list],
-  s4_2_2_T1 ++ s4_2_2_T2 ++ s4_2_2_T3, s4_2_3_genDefs ++ s4_2_3_deriv,
+  S "show"), mid, True, end) ([s4_2_1_list], s4_2_2_T1 ++
+  s4_2_2_T2 ++ s4_2_2_T3, s4_2_3_genDefs ++ s4_2_3_deriv,
   s4_2_4_DD1 ++ s4_2_4_DD2 ++ s4_2_4_DD3 ++ s4_2_4_DD4,
-  (s4_2_5_IMods),
-  [s4_2_6_table1, s4_2_6_table2]) [s4_2_7]
+  (s4_2_5_IMods), s4_2_6_table1:s4_2_6_table2:s4_2_6_T1footer) [s4_2_7]
 
   where mid = foldlSent [S "The", phrase column, S "for", phrase software,
           plural constraint, S "restricts the range of",
@@ -872,10 +875,10 @@ s4_2_5_d2endPara = map foldlSP [
 -- Replace Derivs with regular derivative when available
 -- Derivative notation in paragraph?
 
+
 ----------------------------
 -- 4.2.6 Data Constraints --
 ----------------------------
-
 
 -- I do not think Table 2 will end up being necessary for the Drasil version
 ---- The info from table 2 will likely end up in table 1.
@@ -964,13 +967,55 @@ con17 = [getS time_final, E $ C time_final :> Int 0,
   E (C time_final :< C time_final_max) +:+ sParen (S "**"),
   E (Int 50000) +:+ (unwrap $ getUnit time_final), S "10%"]
 
-
-
 inputVar :: [QSWrapper]
 inputVar = map qs [tank_length, diam, pcm_vol, pcm_SA, pcm_density,
   temp_melt_P, htCap_S_P, htCap_L_P, htFusion, coil_SA, temp_C,
   w_density, htCap_W, coil_HTC, pcm_HTC, temp_init, time_final]
 
+s4_2_6_T1footer :: [Contents]
+s4_2_6_T1footer = map foldlSP [
+
+
+  [sParen (S "*"), S "These", plural quantity, S "cannot be equal to zero" `sC`
+  S "or there will be a divide by zero in the" +:+. phrase model],
+
+  [sParen (S "+"), S "These", plural quantity, S "cannot be zero" `sC`
+  S "or there would be freezing" +:+. sParen (acroA "13")],
+
+  [sParen (S "#"), S "The", plural constraint, S "on the", phrase surArea,
+  S "are calculated by considering the", phrase surArea, S "to", phrase vol +:+.
+  S "ratio", S "The", phrase assumption, S "is that the lowest ratio is 1 and",
+  S "the highest possible is", E (Int 2 :/ C htTransCoeff_min) `sC` S "where",
+  E $ C htTransCoeff_min, S "is the thickness of a", Quote (S "sheet"), S "of" +:+.
+  short phsChgMtrl, S "A thin sheet has the greatest", phrase surArea, S "to",
+  phrase vol +:+. S "ratio"],
+
+  [sParen (S "**"), S "The", phrase constraint, S "on the maximum", phrase time,
+  S "at the end of the simulation is the total number of secondsin one day."]
+  
+  ]
+
+
+s4_2_6_table2 :: Contents
+s4_2_6_table2 = Table [S "Var", titleize value]
+  (mkTable [(\x -> x!!0), (\x -> x!!1)] s4_2_6_specVals) 
+  (titleize table_ +: S "2" +:+ titleize specification +:+
+  titleize parameter +:+ titleize' value) True
+
+s4_2_6_specVals :: [[Sentence]]
+s4_2_6_specVals = [
+
+  [getS tank_length_min, E (Dbl 0.1) +:+ (unwrap $ getUnit tank_length_min)],
+  [getS tank_length_max, E (Int 50) +:+ (unwrap $ getUnit tank_length_max)],
+  [E $ C diam :/ C tank_length_min, E (Dbl 0.002)],
+  [E $ C diam :/ C tank_length_max, E (Int 200)],
+  [S "minfrac", E $ Int 200 :^ (Int (-6))]
+  ]
+
+s4_2_6_table3 :: Contents
+s4_2_6_table3 = Table [S "Var", titleize' physicalConstraint]
+  (mkTable [(\x -> x!!0), (\x -> x!!1)] s4_2_6_conListOut) 
+  (titleize table_ +: S "3" +:+ titleize output_ +:+ titleize' variable) True
 
 s4_2_6_conListOut ::[[Sentence]]
 s4_2_6_conListOut = [con18, con19, con20, con21]
@@ -984,11 +1029,6 @@ con19 = [getS temp_PCM, E $ C temp_init :<= C temp_PCM :<= C temp_C]
 con20 = [getS w_E, E $ C w_E :> Int 0]
 
 con21 = [getS pcm_E, E $ C pcm_E :> Int 0]
-  
-s4_2_6_table2 :: Contents
-s4_2_6_table2 = Table [S "Var", titleize' physicalConstraint]
-  (mkTable [(\x -> x!!0), (\x -> x!!1)] s4_2_6_conListOut) 
-  (titleize table_ +: S "2" +:+ titleize output_ +:+ titleize' variable) True
 
 -- Typical values and constraints must be added to UC definitions for mkTable
 -- to work here.
@@ -1080,7 +1120,7 @@ s5_1 = SRS.funcReq s5_1_list []
 s5_1_list :: [Contents]
 s5_1_list = [Enumeration (Simple [(acroR "1", Flat (foldlSentCol
   [titleize input_, S "the following", plural quantity `sC`
-  S "which define the", phrase tank, S "parameters, material",
+  S "which define the", phrase tank, plural parameter `sC` S "material",
   plural property, S "and initial", plural condition]))]),
 
   (Table [titleize symbol_, titleize unit_, titleize description]
@@ -1121,7 +1161,7 @@ req4 = [titleize output_, S "the", phrase input_, plural quantity,
   plural mass, S "from", acroR "2" `sC` getS tau_W,
   sParen (S "from" +:+ acroIM "1") `sC` getS eta,
   sParen (S "from" +:+ acroIM "1") `sC` getS tau_S_P,
-  sParen (S "from" +:+ acroIM "2"), S "and" +:+ getS tau_L_P,
+  sParen (S "from" +:+ acroIM "2") `sAnd` getS tau_L_P,
   sParen (S "from" +:+ acroIM "2")]
 --
 req5 = [S "Calculate and", phrase output_, S "the", phrase temp_W,
@@ -1284,7 +1324,7 @@ s7_genDefs = ["GD1", "GD2"]
 s7_genDefRef = map (refFromType Theory swhsSymMap) swhsGenDefs
 
 s7_dataDefs = ["DD1", "DD2", "DD3", "DD4"]
-s7_dataDefRef = map (refFromType Data swhsSymMap) dataDefns
+s7_dataDefRef = map (refFromType Data swhsSymMap) swhsDataDefs
 
 s7_likelyChg = ["LC1", "LC2", "LC3", "LC4", "LC5", "LC6"]
 s7_likelyChgRef = makeListRef s7_likelyChg s6

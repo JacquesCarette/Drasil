@@ -181,10 +181,7 @@ melt_frac    = cvR (dcc "melt_frac" (nounPhraseSP "melt fraction")
 -----------------
 
 swhsConstrained ::[ConstrConcept]
-swhsConstrained = [tank_length, diam, pcm_vol, pcm_SA, pcm_density,
-  temp_melt_P, htCap_S_P, htCap_L_P, htFusion, coil_SA, temp_C,
-  w_density, htCap_W, coil_HTC, pcm_HTC, temp_init, time_final, 
-  temp_PCM, temp_W, w_E, pcm_E]
+swhsConstrained = swhsInputs ++ swhsOutputs
 
 tank_length, diam, pcm_vol, pcm_SA, pcm_density, temp_melt_P,
   htCap_S_P, htCap_L_P, htFusion, coil_SA, temp_C, w_density,
@@ -192,7 +189,11 @@ tank_length, diam, pcm_vol, pcm_SA, pcm_density, temp_melt_P,
   temp_W, w_E, pcm_E :: ConstrConcept
 
 -- Input Constraints
-  
+swhsInputs :: [ConstrConcept]
+swhsInputs = [tank_length, diam, pcm_vol, pcm_SA, pcm_density,
+  temp_melt_P, htCap_S_P, htCap_L_P, htFusion, coil_SA, temp_C,
+  w_density, htCap_W, coil_HTC, pcm_HTC, temp_init, time_final]
+
 -- Constraint 1
 tank_length  = cuc' "tank_length" (nounPhraseSP "length of tank")
   "The length of the tank" cL metre Rational
@@ -319,6 +320,8 @@ time_final   = cuc' "time_final" (nounPhraseSP "final time")
   
   
 -- Output Constraints
+swhsOutputs :: [ConstrConcept]
+swhsOutputs = [temp_W, temp_PCM, w_E, pcm_E]
 
 -- Constraint 18
 temp_W       = cuc' "temp_W"

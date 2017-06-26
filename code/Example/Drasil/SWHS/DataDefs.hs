@@ -11,8 +11,8 @@ import Prelude hiding (id)
 
 import Control.Lens ((^.))
 
-dataDefns :: [QDefinition]
-dataDefns = [dd1HtFluxC] ++ [dd2HtFluxP] ++ [dd3HtFusion] ++ [dd4MeltFrac]
+swhsDataDefs :: [QDefinition]
+swhsDataDefs = [dd1HtFluxC] ++ [dd2HtFluxP] ++ [dd3HtFusion] ++ [dd4MeltFrac]
 
 -- SYMBOL MAP HELPERS --
 swhsSymMap :: SymbolMap

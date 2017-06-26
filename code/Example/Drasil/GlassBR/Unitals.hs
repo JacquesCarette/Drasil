@@ -21,6 +21,8 @@ mod_elas :: UnitalChunk
 mod_elas    = uc' "mod_elas"      (nounPhraseSP "modulus of elasticity of glass")
   "The ratio of tensile stress to tensile strain of glass." cE kilopascal
 
+
+
 {--}
 
 gbConstrained :: [ConstrainedChunk]

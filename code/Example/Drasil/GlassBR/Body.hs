@@ -180,14 +180,18 @@ s5_1_table = Table [titleize useCase +:+. S "NO", titleize useCase +:+
   titleize name_, S "Actor", titleize input_ `sAnd` titleize output_]
   (mkTable
   [(\x -> (x!!0)), (\x -> (x!!1)), (\x -> (x!!2)), (\x -> (x!!3))]
-  [[S "1", titleize' input_, titleize user, titleize' characteristic +:+
-  S "of the" +:+ phrase glaSlab +:+ S "and of the" +:+.
-  phrase blast +:+ S "Details in" +:+ (makeRef s5_2)], 
-  [S "2", titleize output_, short gLassBR, S "Whether or not the" +:+
-  phrase glaSlab +:+ S "is safe for the calculated" +:+
-  phrase load +:+ S "and supporting calculated" +:+ 
-  plural value]]) 
+  [s5_1_table_UC1, s5_1_table_UC2])
   (titleize table_ +: S "1" +:+ titleize useCaseTable) True
+
+s5_1_table_UC1, s5_1_table_UC2 :: [Sentence]
+
+s5_1_table_UC1 = [S "1", titleize' input_, titleize user, titleize' characteristic +:+
+  S "of the" +:+ phrase glaSlab +:+ S "and of the" +:+.
+  phrase blast +:+ S "Details in" +:+ (makeRef s5_2)]
+
+s5_1_table_UC2 = [S "2", titleize output_, short gLassBR, S "Whether or not the" +:+
+  phrase glaSlab +:+ S "is safe for the calculated" +:+ phrase load +:+
+  S "and supporting calculated" +:+ plural value]
 
 s5_2 = SRS.indPRCase [s5_2_bullets] []
 
@@ -397,7 +401,7 @@ inputVarB     = displayConstr plate_width  (1200 :: Int)     (S "10" :+: (P (Spe
 inputVarPbTol = displayConstr pb_tol       (0.008 :: Double) (S "0.1" :+: (P (Special Percent)))
 inputVarW     = displayConstr char_weight  (42 :: Int)       (S "10" :+: (P (Special Percent)))
 inputVarTNT   = displayConstr tNT          (1 :: Int)        (S "10" :+: (P (Special Percent)))
-inputVarSD    = displayConstr standOffDist (45 :: Int)        (S "10" :+: (P (Special Percent)))
+inputVarSD    = displayConstr standOffDist (45 :: Int)       (S "10" :+: (P (Special Percent)))
 
 s6_2_5_table2 = Table [S "Var", titleize value] (mkTable 
   [(\x -> fst x), (\x -> snd x)]
@@ -477,16 +481,21 @@ s7_1_req6 = [(Enumeration $ Simple $ [(acroR "6", Nested (titleize output_ +:+
   S "the following" +: plural quantity)
   (Bullet $ 
     [Flat $ (at_start prob_br) +:+ sParen (getS prob_br) +:+ sParen (makeRef (gbSymbMapT probOfBr))] ++
-    [Flat $ (titleize lResistance) +:+ sParen (short lResistance) +:+ sParen (makeRef (gbSymbMapT calOfCap))] ++
-    [Flat $ (at_start demand) +:+ sParen (getS demand) +:+ sParen (makeRef (gbSymbMapT calOfDe))] ++
-    [Flat $ (at_start act_thick) +:+ sParen (getS act_thick) +:+ sParen (makeRef (gbSymbMapD hFromt))] ++
-    [Flat $ (titleize loadDF) +:+ sParen (getS loadDF) +:+ sParen (makeRef (gbSymbMapD loadDF))] ++
-    [Flat $ (at_start strDisFac) +:+ sParen (getS strDisFac) +:+ sParen (makeRef (gbSymbMapD strDisFac))] ++
-    [Flat $ (titleize nonFL) +:+ sParen (getS nonFL) +:+ sParen (makeRef (gbSymbMapD nonFL))] ++
-    [Flat $ (titleize gTF) +:+ sParen (getS gTF) +:+ sParen (makeRef (gbSymbMapD glaTyFac))] ++
-    map (\c -> Flat $ (at_start c) +:+ sParen (getS c) +:+ sParen (makeRef (gbSymbMapD c))) [dimLL, tolPre, tolStrDisFac] ++
-    [Flat $ (titleize aspectR) +:+ sParen (short aspectR {-getS aspectR -}) {-+:+ E ((C aspectR) := (C plate_len):/(C plate_width))-}]
+    [Flat $ (at_start demand) +:+ sParen (getS demand) +:+ sParen (makeRef (gbSymbMapT calOfDe))]++
+    map (\(c, d) -> Flat $ (titleize c) +:+ sParen (short c) +:+ sParen (makeRef (gbSymbMapD d)))
+    [(loadDurFactor, loadDF),
+     (nFL,           nonFL), 
+     (glassTypeFac,  glaTyFac)] ++ 
+    map (\c -> Flat $ (at_start c) +:+ sParen (getS c) +:+ sParen (makeRef (gbSymbMapD c)))
+    [dimLL,
+     tolPre,
+     tolStrDisFac,
+     strDisFac] ++
+    [Flat $ (titleize lResistance +:+ sParen (short lResistance) +:+ sParen (makeRef (gbSymbMapT calOfCap)))] ++
+    [Flat (at_start act_thick +:+ sParen (getS act_thick) +:+ sParen (makeRef (gbSymbMapD hFromt)))]++
+    [Flat $ (titleize aspectR) +:+ sParen (short aspectR) {-+:+ E ((C aspectR) := (C plate_len):/(C plate_width))-}] --short is technically a symbol here (see Concepts.hs)
     ))])]
+--FIXME:The implementation above is quite repetitive in nature.
 
 s7_2 = SRS.nonfuncReq [s7_2_intro] []
 

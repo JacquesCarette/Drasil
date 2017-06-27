@@ -450,7 +450,7 @@ goalState varTerm = foldlSent [S "Predict the", phrase varTerm,
 
 s4_2 :: Section
 s4_2 = solChSpecF progName (s4_1, s6) s4_2_4_intro_end
-  (mid, True, s4_2_6_T1footer) ([s4_2_1_list], s4_2_2_T1 ++
+  (mid, dataConstraintUncertainty, s4_2_6_T1footer) ([s4_2_1_list], s4_2_2_T1 ++
   s4_2_2_T2 ++ s4_2_2_T3, s4_2_3_genDefs ++ s4_2_3_deriv,
   s4_2_4_DD1 ++ s4_2_4_DD2 ++ s4_2_4_DD3 ++ s4_2_4_DD4, (s4_2_5_IMods),
   s4_2_6_DataConTables) [s4_2_7]

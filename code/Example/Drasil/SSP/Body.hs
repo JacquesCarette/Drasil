@@ -255,7 +255,7 @@ s4_1_3_list = enumSimple 1 (short goalStmt) [
   ]
 
 -- SECTION 4.2 --
-s4_2 = solChSpecF ssa (s4_1, s6) ddEnding (EmptyS, True, EmptyS)
+s4_2 = solChSpecF ssa (s4_1, s6) ddEnding (EmptyS, dataConstraintUncertainty, EmptyS)
   ([s4_2_1_list], s4_2_2_tmods, s4_2_3_genDefs, s4_2_4_dataDefs, 
   s4_2_5_p2:s4_2_5_p3:s4_2_5_IMods, [s4_2_6Table2, s4_2_6Table3]) []
   where ddEnding = foldlSent [at_start' definition, acroDD 1, S "to", acroDD 8, S "are the",

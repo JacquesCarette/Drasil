@@ -111,7 +111,7 @@ s2s = foldlSent [S "Due to increasing cost, diminishing",
   S "availability, and negative environmental impact of",
   S "fossil fuels, there is a higher demand for renewable",
   phrase energy, plural source, S "and",
-  phrase energy +:+. S "storage technology", (plural progName),
+  phrase energy +:+. S "storage technology", at_start' progName,
   S "provide a novel way of storing", phrase energy]
 
 s2e = foldlSent_ [EmptyS +:+. plural progName, S "The developed",

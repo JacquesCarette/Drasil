@@ -47,7 +47,8 @@ this_si = map UU [metre, second] ++ map UU [pascal, newton]
 
 s3, s4, s5,
   s6, s6_1, s6_1_1, s6_1_2, s6_1_3, s6_2, s6_2_1, 
-  s6_2_2, s6_2_3, s6_2_4, s6_2_5, s7, s7_1, s7_2, s8, s9, s10, s11, s12 :: Section
+  s6_2_2, s6_2_3, s6_2_4, s6_2_5, s7, s7_1, s7_2,
+  s8, s9, s10, s11, s12 :: Section
 
 s4_1_bullets, s5_1_table, s5_2_bullets, 
   s6_1_1_bullets, s6_1_2_list, s6_1_3_list, 
@@ -97,14 +98,16 @@ mgBod :: [Section]
 glassBR_mg :: Document
 glassBR_mg = mgDoc'' glassBRProg (for'' titleize phrase) mg_authors mgBod
 
-----------------------------------------------------------------------------------
+--------------------------------------------------------------------------------
 --Used in "Terms And Definitions" Section--
 termsWithDefsOnly, termsWithAccDefn, glassTypes, loadTypes :: [ConceptChunk]
 
-termsWithDefsOnly = [glBreakage, lateral, lite, specA, blastResisGla, eqTNTChar]
+termsWithDefsOnly = [glBreakage, lateral, lite, specA, blastResisGla,
+  eqTNTChar]
 termsWithAccDefn  = [sD, loadShareFac, glTyFac, aspectRatio]
 glassTypes = [annealedGl, fTemperedGl, hStrengthGl]
-loadTypes = [loadResis, nonFactoredL,glassWL, shortDurLoad, specDeLoad, longDurLoad] 
+loadTypes = [loadResis, nonFactoredL,glassWL, shortDurLoad,
+  specDeLoad, longDurLoad] 
 
 --Used in "Traceability Matrices and Graphs" Section--
 traceyMatrices, traceyGraphs :: [Contents]
@@ -114,8 +117,9 @@ traceyGraphs = [fig_2, fig_3, fig_4]
 
 --Used in "Values of Auxiliary Constants" Section--
 assumption4_constants :: [QDefinition]
-assumption4_constants = [constant_M, constant_K, constant_ModElas, constant_LoadDur]
-----------------------------------------------------------------------------------
+assumption4_constants = [constant_M, constant_K, constant_ModElas,
+  constant_LoadDur]
+--------------------------------------------------------------------------------
 
 {--INTRODUCTION--}
 
@@ -137,8 +141,9 @@ appStanddIR = (S "In addition, reviewers should be familiar with the" +:+
 incScoR = foldl (+:+) EmptyS [S "getting all", plural inParam, 
   S "related to the", phrase glaSlab, S "and also the", plural parameter, 
   S "related to", phrase blastTy]
-endScoR = foldl (+:+) EmptyS [S "use the", plural datum, S "and predict whether the", 
-  phrase glaSlab, S "is safe to use or not"]
+endScoR = foldl (+:+) EmptyS [S "use the", plural datum, 
+  S "and predict whether the", phrase glaSlab, 
+  S "is safe to use or not"]
 
 {--Purpose of Document--}
 
@@ -162,7 +167,8 @@ s2_1_intro_p1 = foldlSent [S "The main", phrase purpose, S "of this",
 
 s2_3_intro = foldlSent [S "The", phrase organization, S "of this",
   phrase document, S "follows the", phrase template, S "for an", short srs,
-  S "for", phrase sciCompS, S "proposed by" +:+ sSqBr (S "1") `sAnd` sSqBr (S "2"),
+  S "for", phrase sciCompS, S "proposed by" +:+ sSqBr (S "1") 
+  `sAnd` sSqBr (S "2"),
   sParen (S "in" +:+ (makeRef s10)) `sC`
   S "with some aspects taken from Volere", phrase template, S "16", 
   sSqBr (S "3")]
@@ -207,12 +213,12 @@ s5_1_table = prodUCTbl [s5_1_table_UC1, s5_1_table_UC2] "1"
 
 s5_1_table_UC1, s5_1_table_UC2 :: [Sentence]
 
-s5_1_table_UC1 = [S "1", titleize' input_, titleize user, titleize' characteristic +:+
-  S "of the" +:+ phrase glaSlab +:+ S "and of the" +:+.
-  phrase blast +:+ S "Details in this section"] -- +:+ (makeRef s5_2)] --FIXME
+s5_1_table_UC1 = [S "1", titleize' input_, titleize user,
+  titleize' characteristic +:+ S "of the" +:+ phrase glaSlab +:+ S "and of the"
+  +:+. phrase blast +:+ S "Details in this section"] -- +:+ (makeRef s5_2)] --FIXME
 
-s5_1_table_UC2 = [S "2", titleize output_, short gLassBR, S "Whether or not the" +:+
-  phrase glaSlab +:+ S "is safe for the calculated" +:+ phrase load +:+
+s5_1_table_UC2 = [S "2", titleize output_, short gLassBR, S "Whether or not the" 
+  +:+ phrase glaSlab +:+ S "is safe for the calculated" +:+ phrase load +:+
   S "and supporting calculated" +:+ plural value]
 
 {--Individual Product Use Cases--}
@@ -338,7 +344,8 @@ s6_2 = solChSpecF gLassBR (s6_1, s8) (EmptyS) (tbRef, True, end)
         end = foldlSent [(makeRef s6_2_5_table2), S "gives", 
              (plural value `ofThe` S "specification"), plural parameter, 
               S "used in" +:+. (makeRef s6_2_5_table1), getS ar_max, --FIXME: Issue #167
-              S "refers to the", phrase ar_max, S "for the plate of glass"] +:+ s6_2_5_intro2
+              S "refers to the", phrase ar_max, 
+              S "for the plate of glass"] +:+ s6_2_5_intro2
 
 s6_2_intro = foldlSP [S "This", phrase section_, 
   S "explains all the", plural assumption, S "considered and the", 
@@ -352,8 +359,8 @@ s6_2_1_list =
   [(enumSimple 1 (short assumption) s6_2_1_listOfAssumptions)]
 
 s6_2_1_listOfAssumptions :: [Sentence]
-s6_2_1_listOfAssumptions = assumption1 ++ assumption2 ++ assumption3 ++ assumption4 ++
-  assumption5 ++ assumption6 ++ assumption7 ++ assumption8
+s6_2_1_listOfAssumptions = assumption1 ++ assumption2 ++ assumption3 ++ 
+  assumption4 ++ assumption5 ++ assumption6 ++ assumption7 ++ assumption8
 
 assumption1 :: [Sentence]
 assumption1 = [foldlSent [S "The standard E1300-09a for", 
@@ -379,7 +386,8 @@ assumption3 = [foldlSent [S "This", phrase system, S "only considers the externa
 assumption4 :: [Sentence]
 assumption4 = [foldlSent [S "The", plural value, S "provided in", makeRef s10,
   S "are assumed for the", phrase load_dur, sParen (getS load_dur) `sC` 
-  S "and the material properties of", foldlList (map getS (take 3 assumption4_constants))]]
+  S "and the material properties of", 
+  foldlList (map getS (take 3 assumption4_constants))]]
 
 assumption5 :: [Sentence]
 assumption5 = [foldlSent [S "Glass under consideration", 
@@ -397,8 +405,8 @@ assumption7 = [foldlSent [S "The response type considered in", short gLassBR,
   S "is flexural"]]
 
 assumption8 :: [Sentence]
-assumption8 = [foldlSent [S "With", phrase reference, S "to A4 the", phrase value, 
-  S "of", phrase loadDF, sParen (getS loadDF), 
+assumption8 = [foldlSent [S "With", phrase reference, S "to A4 the",
+  phrase value, S "of", phrase loadDF, sParen (getS loadDF), 
   S "is a constant in" +:+. short gLassBR, S "It is calculated by the" +:
   phrase equation +:+. E ((C loadDF) := loadDF_eq), S "Using this" `sC`
   E ((C loadDF) := (Dbl 0.27))]]
@@ -430,7 +438,8 @@ s6_2_5 = datConF ((makeRef s6_2_5_table1) +:+ S "shows") True end
                  [s6_2_5_table1, s6_2_5_table2] --issue #213: discrepancy?
   where end = foldlSent [(makeRef s6_2_5_table3), S "gives the", 
               (plural value `ofThe` S "specification"), plural parameter,
-              S "used in" +:+. (makeRef s6_2_5_table1), getS ar_max, --FIXME: Issue #167
+              S "used in" +:+. (makeRef s6_2_5_table1), 
+              getS ar_max, --FIXME: Issue #167
               S "refers to the", phrase ar_max, S "for the plate of glass"]
 
 s6_2_5_table1 = Table [S "Var", S "Physical Constraints", S "Software Constraints",
@@ -440,7 +449,8 @@ s6_2_5_table1 = Table [S "Var", S "Physical Constraints", S "Software Constraint
   True
 
 dataConstList :: [[Sentence]]
-dataConstList = [inputVarA, inputVarB, inputVarPbTol, inputVarW, inputVarTNT, inputVarSD]
+dataConstList = [inputVarA, inputVarB, inputVarPbTol, inputVarW,
+  inputVarTNT, inputVarSD]
 
 inputVarA, inputVarB, inputVarPbTol, inputVarW, inputVarTNT, inputVarSD :: [Sentence]
 
@@ -464,7 +474,8 @@ s6_2_5_table2 = Table [S "Var", titleize value] (mkTable
   (titleize parameter) +:+ titleize' value) True
 
 s6_2_5_table2_formatF2 :: UnitaryChunk -> Double -> (Sentence, Sentence)
-s6_2_5_table2_formatF2 varName val = (getS varName, E (Dbl val) +:+ Sy (unit_symb varName))
+s6_2_5_table2_formatF2 varName val = (getS varName, E (Dbl val) +:+
+  Sy (unit_symb varName))
 
 s6_2_5_intro2 = foldlSent [(makeRef s6_2_5_table3), S "shows the", 
   plural constraint, S "that must be satisfied by the", phrase output_]
@@ -485,7 +496,8 @@ s7_1 = SRS.funcReq (s7_1_list) []
 s7_1_req1, s7_1_req2, s7_1_req6 :: [Contents]
 s7_1_req3, s7_1_req4, s7_1_req5 :: Sentence
 
-s7_1_list = s7_1_req1++s7_1_req2++[enumSimple 3 (getAcc requirement) (s7_1_listOfReqs)]++s7_1_req6
+s7_1_list = s7_1_req1++s7_1_req2++[enumSimple 3 (getAcc requirement) 
+  (s7_1_listOfReqs)]++s7_1_req6
 
 s7_1_listOfReqs :: [Sentence]
 s7_1_listOfReqs = [s7_1_req3, s7_1_req4, s7_1_req5]
@@ -498,15 +510,15 @@ s7_1_req1 = [(Enumeration $ Simple $ map (\(a, b) -> (a, Flat b))
   s7_1_req1Table]
 
 s7_1_req1Table :: Contents
-s7_1_req1Table = (table ((map qs [plate_len, plate_width, char_weight, pb_tol, tNT, nom_thick]) ++ 
-  (map qs [sdx, sdy, sdz]) ++ (map qs [glass_type])) (at_start))
+s7_1_req1Table = (table ((map qs [plate_len, plate_width, char_weight,
+  pb_tol, tNT, nom_thick]) ++ (map qs [sdx, sdy, sdz]) ++
+  (map qs [glass_type])) (at_start))
 
 s7_1_req2 = [(Enumeration $ Simple $
    [(acroR 2, Nested (S "The" +:+ phrase system +:+
    S "shall set the known" +:+ plural value +: S "as follows")
     (Bullet $ map Flat
-     [(getS sflawParamM) `sC` (getS sflawParamK) `sC` 
-     (getS mod_elas) `sC` (getS load_dur) +:+ 
+     [foldlsC (map getS assumption4_constants) +:+ 
      S "following" +:+ acroA 4, 
      (getS loadDF) +:+ S "following" +:+ acroA 8, 
      short lShareFac +:+ S "following" +:+ acroA 5]))])]
@@ -610,10 +622,10 @@ s8_likelychg5 = foldlSent [acroA 7 `sDash` S "The", phrase software,
 s9 = traceMGF traceyMatrices
   [(plural thModel `sC` (plural dataDefn) `sAnd` plural inModel +:+.
   S "with each other"), (plural requirement +:+ S "on" +:+ plural thModel `sC`
-  (plural inModel) `sC` (plural dataDefn) +:+ S "and" +:+. plural datumConstraint), 
-  (plural thModel `sC` (plural dataDefn) `sC` plural inModel
-  `sC` plural likelyChg `sAnd` plural requirement +:+ S "on the" +:+ 
-  plural assumption)]
+  (plural inModel) `sC` (plural dataDefn) +:+ S "and" +:+. 
+  plural datumConstraint), (plural thModel `sC` (plural dataDefn) `sC` 
+  plural inModel `sC` plural likelyChg `sAnd` plural requirement +:+ 
+  S "on the" +:+ plural assumption)]
   (traceyMatrices ++ (s9_intro2) ++ traceyGraphs)
   []
 
@@ -806,8 +818,9 @@ references :: [[Sentence]]
 references = [s11_ref1, s11_ref2, s11_ref3, s11_ref4, s11_ref5, s11_ref6]
 
 s11_ref1 = [S "N. Koothoor",
-  Quote (S "A" +:+ phrase document +:+ S "drive approach to certifying" +:+ phrase sciCompS :+: S ",") +:+
-  S "Master's thesis", S "McMaster University, Hamilton, Ontario, Canada", S "2013."]
+  Quote (S "A" +:+ phrase document +:+ S "drive approach to certifying" 
+  +:+ phrase sciCompS :+: S ",") +:+ S "Master's thesis", 
+  S "McMaster University, Hamilton, Ontario, Canada", S "2013."]
 
 s11_ref2 = [S "W. S. Smith and L. Lai", 
   Quote (S "A new requirements template for scientific computing,")

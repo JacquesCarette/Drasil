@@ -163,7 +163,7 @@ lRe         = makeVC "lRe"           (lResistance ^. term) (Atomic "LR")
 loadSF      = vc "loadSF"        (lShareFac ^. term) (Atomic "LSF") Integer
 gTF         = vc "gTF"           (glassTypeFac ^. term) (Atomic "GTF") Integer
 lDurFac     = makeVC "lDurFac" (loadDurFactor ^. term) (Atomic "LDF")
-nonFactorL   = makeVC "nonFactorL" (nonFactoredL ^. term) (Atomic "NFL")
+nonFactorL  = makeVC "nonFactorL" (nonFactoredL ^. term) (Atomic "NFL")
 
 
 terms :: [ConceptChunk]

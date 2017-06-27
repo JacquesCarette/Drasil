@@ -1184,7 +1184,7 @@ req11 = [S "Calculate and", phrase output_, S "the", phrase time,
 ---------------------------------------
 
 s5_2 :: Section
-s5_2 = s5_2 = nonFuncReqF [performance] [correctness, verifiability,
+s5_2 = nonFuncReqF [performance] [correctness, verifiability,
   understandability, reusability, maintainability]
   (S "This problem is small in size and relatively simple")
   (S "Any reasonable implementation will be very quick and use minimal storage.")

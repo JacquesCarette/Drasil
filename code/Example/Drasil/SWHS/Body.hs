@@ -447,8 +447,7 @@ goalState varTerm = foldlSent [S "Predict the", phrase varTerm,
 
 s4_2 :: Section
 s4_2 = solChSpecF progName (s4_1, s6) s4_2_4_intro_end
-  ((makeRef s4_2_6_table1 +:+ S "and" +:+ makeRef s4_2_6_table2 +:+
-  S "show"), mid, True, s4_2_6_T1footer) ([s4_2_1_list], s4_2_2_T1 ++
+  (mid, True, s4_2_6_T1footer) ([s4_2_1_list], s4_2_2_T1 ++
   s4_2_2_T2 ++ s4_2_2_T3, s4_2_3_genDefs ++ s4_2_3_deriv,
   s4_2_4_DD1 ++ s4_2_4_DD2 ++ s4_2_4_DD3 ++ s4_2_4_DD4, (s4_2_5_IMods),
   s4_2_6_DataConTables) [s4_2_7]
@@ -740,7 +739,7 @@ s4_2_5_d1sent_list = map foldlSPCol [
   `sC` titleize equation, S "(5) can be written as"],
 
   [S "Finally, factoring out 1/" :+: getS tau_W `sC` S "we are" +:+
-  D "left with the governing", short ode, S "for", acroIM 1]
+  S "left with the governing", short ode, S "for", acroIM 1]
 
   ]
 

@@ -279,7 +279,7 @@ s4_1_3_list = Enumeration $ Simple $ map (\(a, b) -> (a, Flat b)) [
 --Section 4.2 : SOLUTION CHARACTERISTICS SPECIFICATION
 ------------------------------------------------------
   
-s4_2 = solChSpecF progName (s4_1, s6) s4_2_4_intro_end (mid, True, end) 
+s4_2 = solChSpecF progName (s4_1, s6) s4_2_4_intro_end (mid, dataConstraintUncertainty, end) 
   ([s4_2_1_list], s4_2_2_T1, s4_2_3_eq, s4_2_4_DD1, [s4_2_5_intro],
   [s4_2_6_table1, s4_2_6_table2, s4_2_6_table3]) []
   

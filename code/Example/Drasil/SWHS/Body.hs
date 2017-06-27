@@ -114,8 +114,8 @@ s2_intro :: Sentence
 s2_intro = foldlSent [S "Due to increasing cost, diminishing",
   S "availability, and negative environmental impact of",
   S "fossil fuels, there is a higher demand for renewable",
-  phrase energy, plural source, S "and",
-  phrase energy +:+. S "storage technology", (swhs_pcm ^. defn),
+  phrase energy, plural source `sAnd` phrase energy +:+.
+  S "storage technology", (swhs_pcm ^. defn),
   sParen (short phsChgMtrl), S "use a renewable",
   phrase energy, phrase source, S "and provide a novel way of",
   S "storing" +:+. phrase energy,
@@ -150,7 +150,7 @@ s2_kSent = foldlSent_ [EmptyS +:+. phrase swhs_pcm, S "The developed",
 s2_1_par1 :: Sentence
 s2_1_par1 = foldlSent [S "The main", phrase purpose, S "of this",
   phrase document, S "is to describe the modelling of" +:+.
-  phrase swhs_pcm, S "The", plural goalStmt, S "and", plural thModel,
+  phrase swhs_pcm, S "The", plural goalStmt `sAnd` plural thModel,
   S "used in the", short progName, S "code are provided, with an emphasis",
   S "on explicitly identifying", plural assumption, S "and unambiguous" +:+.
   plural definition, S "This", phrase document,
@@ -176,11 +176,11 @@ s2_2_contents = foldlSent_ [phrase CT.thermal_analysis, S "of a single",
   phrase tank_pcm] --FIXME: Caps issue
 
 s2_2_end = foldlSent_ [S "predict the",
-  phrase temp, S "and", phrase CT.thermal_energy,
-  S "histories for the", phrase water, S "and the" +:+.
+  phrase temp `sAnd` phrase CT.thermal_energy,
+  S "histories for the", phrase water `sAnd` S "the" +:+.
   short phsChgMtrl, S "This entire", phrase document,
   S "is written assuming that the substances inside the",
-  phrase sWHT, S "are", phrase water, S "and", short phsChgMtrl]
+  phrase sWHT, S "are", phrase water `sAnd` short phsChgMtrl]
 
 -- There is a similar paragraph in each example, but there's a lot of specific
 -- info here. Would need to abstract out the object of analysis (i.e. solar
@@ -217,8 +217,8 @@ s2_4_trail = foldlSent_ [S "The", plural inModel,
   sParen (makeRef (SRS.inModel SRS.missingP [])),
   S "to be solved are referred to as", acroIM 1,
   S "to" +:+. acroIM 4, S "The", plural inModel,
-  S "provide the", phrase ode, sParen (short ode :+: S "s"),
-  S "and algebraic", plural equation, S "that",
+  S "provide the", phrase ode, sParen (short ode :+: S "s")
+  `sAnd` S "algebraic", plural equation, S "that",
   phrase model, S "the" +:+. phrase swhs_pcm,
   short progName, S "solves these", short ode :+: S "s"]
 
@@ -260,8 +260,8 @@ s3_1_contents = foldlSP [makeRef sys_context_fig, S "shows the" +:+.
   phrase software `sC` S "the", phrase user, S "in this case. A",
   S "rectangle represents the", phrase softwareSys, S "itself" +:+.
   sParen (short progName), S "Arrows are used to show the",
-  plural datum, S "flow between the", phrase system,
-  S "and its", phrase environment]
+  plural datum, S "flow between the", phrase system `sAnd`
+  S "its", phrase environment]
 
 sys_context_fig :: Contents
 sys_context_fig = Figure (foldlSent_
@@ -272,8 +272,8 @@ s3_1_2_intro :: Contents
 s3_1_2_intro = foldlSPCol [short progName +:+.
   S "is mostly self-contained",
   S "The only external interaction is through the", phrase user +:+.
-  S "interface", S "responsibilities" `ofThe'` phrase user,
-  S "and the", phrase system, S "are as follows"]
+  S "interface", S "responsibilities" `ofThe'` phrase user `sAnd`
+  S "the", phrase system, S "are as follows"]
   
 s3_1_2_userResp, s3_1_2_swhsResp :: ItemType
 
@@ -300,7 +300,7 @@ s3_1_2_swhsResp = Nested (short progName +: S "Responsibilities")
   S "characters instead of a floating point number"],
 
   foldlSent_ [S "Determine if the", plural input_, S "satisfy the required",
-  phrase physical, S "and", phrase software, plural constraint],
+  phrase physical `sAnd` phrase software, plural constraint],
 
   foldlSent_ [S "Calculate the required", plural output_]
 
@@ -411,7 +411,7 @@ physSyst3 = [short phsChgMtrl, S "suspended in" +:+. phrase tank,
 fig_tank :: Contents
 fig_tank = Figure (
   foldlSent_ [at_start sWHT `sC` S "with", phrase ht_flux_C, S "of",
-  getS ht_flux_C, S "and", phrase ht_flux_P, S "of", getS ht_flux_P])
+  getS ht_flux_C `sAnd` phrase ht_flux_P, S "of", getS ht_flux_P])
   "Tank.png"
 
 -----------------------------
@@ -423,8 +423,8 @@ s4_1_3 = SRS.goalStmt [s4_1_3_intro, s4_1_3_list] []
 
 s4_1_3_intro :: Contents
 s4_1_3_intro = foldlSPCol [S "Given the", phrase temp_C `sC`
-  S "initial", plural condition, S "for the", phrase temp_W,
-  S "and the", phrase temp_PCM `sC` S "and material",
+  S "initial", plural condition, S "for the", phrase temp_W
+  `sAnd` S "the", phrase temp_PCM `sC` S "and material",
   plural property `sC` S "the", plural goalStmt, S "are"]
 
 -- 2 examples include this paragraph, 2 don't. The "givens" would need to be
@@ -499,8 +499,8 @@ assump4 = [S "The", phrase temp_PCM `isThe` S "same throughout the",
   phrase pcm_vol, sSqBr (acroGD 2 `sC` swhsSymbMapDRef dd2HtFluxP `sC`
   acroLC 1)]
 --
-assump5 = [S "The", phrase w_density, S "and",
-  phrase pcm_density, S "have no spatial variation; that is" `sC`
+assump5 = [S "The", phrase w_density `sAnd` phrase pcm_density,
+  S "have no spatial variation; that is" `sC`
   S "they are each constant over their entire", phrase vol,
   sSqBr (acroGD 2)]
 --
@@ -510,7 +510,7 @@ assump6 = [S "The", phrase htCap_W `sC` phrase htCap_S_P `sC` S "and",
   phrase vol, sSqBr (acroGD 2)]
 --
 assump7 = [(CT.law_conv_cooling ^. defn),
-  S "applies between the", phrase coil, S "and the",
+  S "applies between the", phrase coil `sAnd` S "the",
   phrase water, sSqBr (swhsSymbMapDRef dd1HtFluxC)]
 --
 assump8 = [S "The", phrase temp_C, S "is constant over",
@@ -520,19 +520,19 @@ assump9 = [S "The", phrase temp_C, S "does not vary along its length",
   sSqBr (swhsSymbMapDRef dd1HtFluxC `sC` acroLC 3)]
 --
 assump10 = [(CT.law_conv_cooling ^. defn), S "applies between the",
-  phrase water, S "and the", short phsChgMtrl,
+  phrase water `sAnd` S "the", short phsChgMtrl,
   sSqBr (swhsSymbMapDRef dd2HtFluxP)]
 --
 assump11 = [S "The", phrase model,
   S "only accounts for", (charging ^. defn) `sC` S "not" +:+.
-  phrase discharging, S "The", phrase temp_W, S "and",
+  phrase discharging, S "The", phrase temp_W `sAnd`
   phrase temp_PCM, S "can only increase, or remain",
   S "constant; they do not decrease. This implies that the",
   phrase temp_init, sParen (acroA 12), S "is less than (or equal)",
   S "to the", phrase temp_C, sSqBr ((acroIM 1) `sC` (acroLC 4))]
 --
-assump12 = [phrase temp_init `ofThe'` phrase water,
-  S "and the", short phsChgMtrl `isThe` S "same",
+assump12 = [phrase temp_init `ofThe'` phrase water
+  `sAnd` S "the", short phsChgMtrl `isThe` S "same",
   sSqBr ((acroIM 1) `sC` (acroIM 2) `sC` (acroLC 5))]
 --
 assump13 = [S "The", phrase simulation, S "will start with the",
@@ -1339,8 +1339,8 @@ s7_t1_IM4 = ["T2", "T3", "DD2", "DD3", "DD4", "IM2"]
 s7_table1 :: Contents
 s7_table1 = Table (EmptyS:s7_row_header_t1)
   (makeTMatrix (s7_row_header_t1) (s7_columns_t1) (s7_row_t1))
-  (showingCxnBw traceyMatrix (titleize' requirement +:+ S "and" +:+
-  titleize' inModel)) True
+  (showingCxnBw traceyMatrix
+  (titleize' requirement `sAnd` titleize' inModel)) True
 
 {-Traceability Matrix 2-}
 
@@ -1386,8 +1386,8 @@ s7_t2_R11 = ["IM2"]
 s7_table2 :: Contents
 s7_table2 = Table (EmptyS:s7_row_header_t2)
   (makeTMatrix (s7_col_header_t2) (s7_columns_t2) (s7_row_t2))
-  (showingCxnBw traceyMatrix (titleize' requirement +:+ S "and" +:+
-  titleize' inModel)) True
+  (showingCxnBw traceyMatrix
+  (titleize' requirement `sAnd` titleize' inModel)) True
 
 {-Traceability Matrix 3-}
 
@@ -1433,7 +1433,7 @@ s7_t3_LC6 = ["A15"]
 s7_table3 :: Contents
 s7_table3 = Table (EmptyS:s7_row_header_t3)
   (makeTMatrix s7_col_header_t3 s7_columns_t3 s7_row_t3)
-  (showingCxnBw traceyMatrix (titleize' assumption +:+ S "and Other" +:+
+  (showingCxnBw traceyMatrix (titleize' assumption `sAnd` S "Other" +:+
   titleize' item)) True
 
 -- These matrices can probably be generated automatically when enough info is

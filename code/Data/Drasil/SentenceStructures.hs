@@ -6,7 +6,7 @@ module Data.Drasil.SentenceStructures
   , toThe, tableShows, figureLabel
   , showingCxnBw, refineChain, foldlSP, foldlSP_, foldlSPCol
   , maybeChanged, maybeExpanded, maybeWOVerb
-  , tAndDWAcc, tAndDWAcc_, tAndDWSym, tAndDOnly
+  , tAndDWAcc, tAndDWSym, tAndDOnly
   , makeConstraint, displayConstr
   ) where
 
@@ -135,9 +135,8 @@ maybeExpanded a b = likelyFrame a (S "expanded") b
 
 -- | helpful combinators for making Sentences for Terminologies with Definitions
 -- term (acc) - definition
-tAndDWAcc :: (Concept s, NamedIdea c) => s -> c -> ItemType
-tAndDWAcc tD acc = Flat $ ((at_start tD) :+: sParenDash (short acc)) :+: (tD ^. defn)
-tAndDWAcc_ temp = Flat $ ((at_start temp) :+: sParenDash (short temp) :+: (temp ^. defn)) 
+tAndDWAcc :: Concept s => s -> ItemType
+tAndDWAcc temp = Flat $ ((at_start temp) :+: sParenDash (short temp) :+: (temp ^. defn)) 
 
 -- term (symbol) - definition
 tAndDWSym :: (Concept s, SymbolForm a) => s -> a -> ItemType

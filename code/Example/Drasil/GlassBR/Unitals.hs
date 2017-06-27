@@ -179,7 +179,7 @@ aspectRatio, glBreakage, lite, glassTy, annealedGl, fTemperedGl, hStrengthGl,
   explosion :: ConceptChunk
 
 --FIXME: Why are there multiple copies of aspect ratio, glass type factor, etc.?
-aspectRatio   = dcc "aspectRatio" (aspectR ^. term)
+aspectRatio   = cc aspectR
   ("The ratio of the long dimension of the glass to the short dimension of " ++
     "the glass. For glass supported on four sides, the aspect ratio is " ++
     "always equal to or greater than 1.0. For glass supported on three " ++
@@ -206,7 +206,7 @@ hStrengthGl   = cc heatSGlass
     "subjected to a special heat treatment process where the residual " ++
     "surface compression is not less than 24 MPa (3500psi) or greater " ++
     "than 52 MPa (7500 psi), as defined in [6].")
-glTyFac       = dccWDS "glTyFac"      (nounPhraseSP "glass type factor") 
+glTyFac       = cc' glassTypeFac
   (foldlSent [S "A multiplying factor for adjusting the", (getAcc lResistance), 
   S "of different glass type, that is,", (getAcc annealedGlass) `sC` 
   (getAcc heatSGlass) `sC` S "or", (getAcc fullyTGlass), S "in monolithic glass" `sC`
@@ -231,7 +231,7 @@ glassWL       = dcc "glassWL"     (nounPhraseSP "glass weight load")
   ("The dead load component of the glass weight.")
 shortDurLoad  = dcc "shortDurLoad"       (nounPhraseSP "short duration load")
   "Any load lasting 3s or less."
-loadShareFac  = dccWDS "loadShareFac"  (lShareFac ^. term)
+loadShareFac  = cc' lShareFac
   (foldlSent [S "A multiplying factor derived from the load sharing between the double",
   S "glazing, of equal or different thickness's and types (including the",
   S "layered behaviour of", (getAcc lGlass), S "under long duration",
@@ -252,7 +252,7 @@ blastResisGla = dcc "blastResisGla"    (nounPhraseSP "blast resistant glazing")
 eqTNTChar     = dcc "eqTNTChar"   (nounPhraseSP "equivalent TNT charge mass")
   ("Mass of TNT placed on the ground in a hemisphere that represents the " ++
     "design explosive threat.")
-sD            = dccWDS "sD"       (standOffDist ^. term) 
+sD            = cc' stdOffDist
   (S "The distance from the glazing surface to the centroid of a hemispherical" +:+
    S "high explosive charge. It is represented by the coordinates (SDx, SDy, SDz)")
 blast         = dcc "blast"       (nounPhraseSP "blast") 

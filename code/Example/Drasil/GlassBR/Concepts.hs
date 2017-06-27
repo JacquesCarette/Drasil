@@ -28,7 +28,7 @@ annealedGlass, aspectR, fullyTGlass, glassTypeFac, heatSGlass, loadDurFactor,
 annealedGlass = commonIdea "annealedGlass" (nounPhraseSP "annealed glass")          "AN"
 aspectR       = commonIdea' "aspectR"      (nounPhraseSP "aspect ratio")            (Atomic "AR")
 fullyTGlass   = commonIdea "fullyTGlass"   (nounPhraseSP "fully tempered glass")    "FT"
-glassTypeFac  = commonIdea "glassTypeFac"  (nounPhraseSP "glass type factor")      "GTF"
+glassTypeFac  = commonIdea "glassTypeFac"  (nounPhraseSP "glass type factor")       "GTF"
 heatSGlass    = commonIdea "heatSGlass"    (nounPhraseSP "heat strengthened glass") "HS"
 iGlass        = commonIdea "iGlass"        (nounPhraseSP "insulating glass")        "IG"
 lGlass        = commonIdea "lGlass"        (nounPhraseSP "laminated glass")         "LG"

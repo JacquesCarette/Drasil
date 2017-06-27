@@ -14,8 +14,8 @@ import Data.Drasil.Concepts.Thermodynamics (heat)
 import Prelude hiding (id)
 import Data.Drasil.Utils
 import Data.Drasil.SentenceStructures (foldlSent, foldlList, ofThe, isThe, 
-  showingCxnBw, figureLabel, foldlSP, sAnd, foldlsC, tAndDWAcc, tAndDWAcc_,
-  tAndDWSym, tAndDOnly, sVersus, displayConstr)
+  showingCxnBw, figureLabel, foldlSP, sAnd, foldlsC, tAndDWAcc, tAndDWSym,
+  tAndDOnly, sVersus, displayConstr)
 
 import Drasil.Template.MG
 import Drasil.Template.DD
@@ -230,9 +230,7 @@ s6_1_1_bullets = Enumeration $ (Number $
   ++
   s6_1_1_bullets_loadSubSec
   ++
-  zipWith tAndDWAcc
-  [sD, loadShareFac, glTyFac, aspectRatio]
-  [stdOffDist, lShareFac, glassTypeFac, aspectR]
+  map tAndDWAcc [sD, loadShareFac, glTyFac, aspectRatio]
   ++
   [tAndDWSym (probBreak) (prob_br)])
 
@@ -241,10 +239,10 @@ s6_1_1_bullets = Enumeration $ (Number $
 s6_1_1_bullets_glTySubSec, s6_1_1_bullets_loadSubSec :: [ItemType]
 
 s6_1_1_bullets_glTySubSec = [Nested (((titleize glassTy) :+: S ":"))
-  (Bullet $ map tAndDWAcc_ [annealedGl, fTemperedGl, hStrengthGl])]
+  (Bullet $ map tAndDWAcc [annealedGl, fTemperedGl, hStrengthGl])]
 
 s6_1_1_bullets_loadSubSec = [Nested (((at_start load) :+: S ":"))
-  (Bullet $ map tAndDWAcc_ [loadResis, nonFactoredL]
+  (Bullet $ map tAndDWAcc [loadResis, nonFactoredL]
   ++ 
   map tAndDOnly [glassWL, shortDurLoad, specDeLoad, longDurLoad])]
 

@@ -96,7 +96,7 @@ sspUnits = map ucw [normStress,
   momntOfBdy, genDisplace, SM.stffness, shrStiffIntsl, shrStiffBase,
   nrmStiffIntsl, nrmStiffBase, shrStiffRes, nrmStiffRes, shrDispl,
   nrmDispl, porePressure, elmNrmDispl, elmPrllDispl, 
-  mobShrC, shrResC, rotatedDispl, intNormForce]
+  mobShrC, shrResC, rotatedDispl, intNormForce, shrStress]
 
 normStress,
   coords, waterHght, slopeHght, slipHght, xi, critCoords, mobShrI,
@@ -106,7 +106,7 @@ normStress,
   baseLngth, surfLngth, midpntHght, genForce, momntOfBdy, genDisplace,
   shrStiffIntsl, shrStiffBase, nrmStiffIntsl, nrmStiffBase, shrStiffRes,
   nrmStiffRes, shrDispl, nrmDispl, porePressure, elmNrmDispl,
-  elmPrllDispl, mobShrC, shrResC, rotatedDispl, intNormForce :: UnitalChunk
+  elmPrllDispl, mobShrC, shrResC, rotatedDispl, intNormForce, shrStress :: UnitalChunk
   
 {-FIXME: Many of these need to be split into term, defn pairs as
          their defns are mixed into the terms.-}
@@ -286,6 +286,9 @@ porePressure = uc' "mu" (cn "pore pressure") ("from water within the soil")
 
 rotatedDispl = uc' "varepsilon_i" (cn "displacement") ("in rotated coordinate system")
   (sub (Greek Epsilon_V) lI) metre
+  
+shrStress    = uc' "tau_i" (cn "shear stress") ("acting on the base of a slice")
+  (sub (Greek Tau_L) lI) newton
 
 ----------------------
 -- Unitless Symbols --

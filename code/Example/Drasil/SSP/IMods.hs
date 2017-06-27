@@ -126,7 +126,7 @@ rfemFoS = makeRC "rfemFoS" (nounPhraseSP "RFEM factor of safety") rfemFoS_desc r
 rfemFoS_rel :: Relation
 rfemFoS_rel = (C fsloc) := ((C cohesion):-(C nrmStiffBase)*(C nrmDispl)*(tan (C fricAngle))):/
   ((C shrStiffBase)*(C shrDispl)) 
-  --FIXME: add the other long equation
+  --FIXME: add the other long equation, see derivation equation 31
 
 rfemFoS_desc :: Sentence
 rfemFoS_desc = foldlSent [(getS fsloc) `isThe` S "factor of safety for slice i.",

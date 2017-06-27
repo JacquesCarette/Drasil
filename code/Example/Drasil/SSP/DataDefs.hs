@@ -158,7 +158,7 @@ soilStiffness = mkDataDef nrmStiffRes --FIXME: No equation section? Instead, the
   soilStiffnessEqn
 
 soilStiffnessEqn :: Expr
-soilStiffnessEqn = (Case [case1,case2])
+soilStiffnessEqn = (Case [case1,case2]) --FIXME: see equation 28 in derivation for RFEM Factor of Safety (IM5)
   where case1 = (block, (C SM.poissnsR) :< (Int 0))
         case2 = ((Dbl 0.01) * block + (V "k") / ((C nrmDispl)+(V "A")),
                 (C SM.poissnsR) :>= (Int 0))

@@ -506,7 +506,7 @@ intrSlcDerivation = [foldlSP [S "Taking the perpendicular force equilibrium of G
   S "the assumption of GD5, the equilibrium equation can be rewritten as equation (17)"],
   
   EqnBlock $
-  ((C totNrmForce) * tan (C fricAngle) + (C cohesion) * (C baseWthX) * sec (C baseAngle)) / (C fs) :=
+  ((C totNrmForce) * tan (C fricAngle) + (C cohesion) * (C baseWthX) * sec (C baseAngle)) / (C fs) := --FIXME: pull the left side of this from GD4
   (C slcWght :- C normToShear :* C scalFunc :* C intNormForce :+ 
   C normToShear :* C scalFunc :* C intNormForce :+ 
   C baseHydroForce :* cos (C surfAngle) :+ C surfLoad :* 
@@ -565,7 +565,8 @@ rigDisDerivation = [foldlSP [S "Using the net force-displacement equilibrium equ
 
 rigFoSDerivation = [foldlSP [S "RFEM analysis can also be used to calculate the Factor of safety for the slope. For a slice element",
   S "i the displacements", getS dx_i, S "and", getS dy_i `sC` S "are solved from the system of equations in IM4. The definition of",
-  S "epsilon i as the rotation of the displacement vector delta i is seen in GD9. This is used to find the displacements of the slice parallel to the base of the slice delta u in equation",
+  getS rotatedDispl, S "as the rotation of the displacement vector", getS genDisplace{-FIXME: index i-}, S "is seen in GD9. This is",
+  S "used to find the displacements of the slice parallel to the base of the slice delta u in equation",
   S "(24) and normal to the base of the slice delta v in equation (25)"],
   
   EqnBlock $
@@ -593,18 +594,40 @@ rigFoSDerivation = [foldlSP [S "RFEM analysis can also be used to calculate the 
   S "the normal stress sigma i was unknown. With the definition of sigma i from equation (26) and the definition",
   S "of displacement shear to the base delta ui from equation (25), the value of Kbt,i becomes solvable"],
   
+  EqnBlock $
+  C shrStiffBase := C intNormForce / (Int 2 * (Int 1 + C poissnsRatio)) * (Dbl 0.1 / C baseWthX) +
+  (C cohesion - C normStress * tan(C fricAngle)) / (abs (C shrDispl) + V "a"),
+  
   foldlSP [S "With shear stiffness Kbt,i calculated in equation (28) and shear displacement delta ui calculated in",
   S "equation (24) values now known the shear stress acting on the base of a slice tau can be calculated",
   S "using T5, as done in equation (29). Again stress tau is used in place of force F as the stiffness hasn't",
   S "been normalized for the length of the base"],
   
+  EqnBlock $
+  C shrStress := C shrStiffBase * C shrDispl,
+  
   foldlSP [S "The shear stress on the base tau acts as the mobile shear acting on the base. Using the definition",
   S "Factor of Safety equation from T1, with the definitions of resistive shear strength of a slice Si",
-  S "from equation (27) and mobile shear on a slice tau from equation (29) the factor of safety for a slice",
+  S "from equation (27) and shear stress on a slice tau from equation (29) the factor of safety for a slice",
   S "FSLoc,i can be found from as seen in equation (30), and IM5"],
   
+  EqnBlock $
+  C fsloc := C mobShrI / C shrStress :=
+  (C cohesion - C nrmStiffBase * C nrmDispl * tan(C fricAngle)) /
+  (C shrStiffBase * C shrDispl), --FIXME: pull parts of this equation from other equations such as IM5
+  
   foldlSP [S "The global Factor of Safety is then the ratio of the summation of the resistive and mobile shears",
-  S "for each slice, with a weighting for the length of the slices base. Shown in equation (31), and IM5"]
+  S "for each slice, with a weighting for the length of the slices base. Shown in equation (31), and IM5"],
+  
+  EqnBlock $ --FIXME: pull from other equations in derivation
+  (C fs) := summation (Just (lI, Low $ Int 1, High $ C numbSlices))
+  (C baseLngth * C mobShrI) /
+  summation (Just (lI, Low $ Int 1, High $ C numbSlices))
+  (C baseLngth * C shrStress) :=
+  summation (Just (lI, Low $ Int 1, High $ C numbSlices))
+  (C baseLngth * (C cohesion - C nrmStiffBase * C nrmDispl * tan(C fricAngle))) /
+  summation (Just (lI, Low $ Int 1, High $ C numbSlices))
+  (C baseLngth * (C shrStiffBase * C shrDispl)) --FIXME: Grouping with brackets
   ]
 
 -- SECTION 4.2.6 --

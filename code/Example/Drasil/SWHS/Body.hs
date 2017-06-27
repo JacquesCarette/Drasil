@@ -472,11 +472,11 @@ s4_2_1_list = enumSimple 1 (short assumption) $ map foldlSent s4_2_1_assump_list
 s4_2_1_assump_list :: [[Sentence]]
 s4_2_1_assump_list = [assump1, assump2, assump3, assump4, assump5, assump6,
   assump7, assump8, assump9, assump10, assump11, assump12, assump13, assump14,
-  assump15, assump16, assump17, assump18, assump19]
+  assump15, assump16, assump17, assump18, assump19, assump20]
 
 assump1, assump2, assump3, assump4, assump5, assump6,
   assump7, assump8, assump9, assump10, assump11, assump12, assump13, assump14,
-  assump15, assump16, assump17, assump18, assump19 :: [Sentence]
+  assump15, assump16, assump17, assump18, assump19, assump20 :: [Sentence]
 
 assump1 = [S "The only form of", phrase energy, S "that is",
   S "relevant for this", phrase problem, S "is" +:+.
@@ -565,6 +565,10 @@ assump19 = [S "The pressure in the", phrase tank,
   phrase boil_pt, S "are 0" :+: Sy (unit_symb temp),
   S "and 100" :+: Sy (unit_symb temp) `sC` S "respectively",
   sSqBr ((acroIM 1) `sC` (acroIM 3))]
+
+assump20 = [S "When considering the", phrase w_vol, S "in the",
+  phrase tank `sC` (phrase vol `ofThe` phrase coil),
+  S "is assumed to be negligible", sSqBr (acroR 2)]
 
 -- Again, list structure is same between all examples.
 

@@ -263,7 +263,7 @@ s4_2 = solChSpecF ssa (s4_1, s6) ddEnding (EmptyS, True, EmptyS)
           S "analysis of given" +:+. plural input_, S "The", phrase intrslce, 
           S "forces", acroDD 9, S "are", phrase force, plural variable, 
           S "that must be written in terms of", acroDD 1, S "to", acroDD 8 +:+. S "to solve"]
-        tbRef = makeRef s4_2_6Table2 +:+ S "and" +:+ makeRef s4_2_6Table3 +:+ S "show"
+ --       tbRef = makeRef s4_2_6Table2 +:+ S "and" +:+ makeRef s4_2_6Table3 +:+ S "show"
 
 -- SECTION 4.2.1 --
 -- Assumptions is automatically generated in solChSpecF using the list below
@@ -643,8 +643,8 @@ dataConstOut = [(displayContr' . head) sspOutputs] ++ slipVert2 ++
 
 {-input and output tables-}
 s4_2_6Table2, s4_2_6Table3 :: Contents
-s4_2_6Table2 = inDataConstTbl dataConstIn "2"
-s4_2_6Table3 = outDataConstTbl dataConstOut "3"
+s4_2_6Table2 = inDataConstTbl dataConstIn 2
+s4_2_6Table3 = outDataConstTbl dataConstOut 3
 
 -- SECTION 5 --
 s5 = reqF [s5_1, s5_2]

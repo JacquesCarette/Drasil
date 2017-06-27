@@ -3,7 +3,7 @@ module Drasil.SRS
   genSysDes, sysCont, userChar, sysCon, scpOfTheProj, prodUCTable, indPRCase, specSysDes,
   probDesc, termAndDefn, termogy, physSyst, goalStmt, solCharSpec, assump, thModel,
   genDefn, inModel, dataDefn, datCon, require, nonfuncReq, funcReq, likeChg, traceyMandG,
-  appendix, reference, propCorSol, offShelfSol, missingP) where
+  appendix, reference, propCorSol, offShelfSol, missingP, valsOfAuxCons) where
 --Temporary file for keeping the "srs" document constructor until I figure out
 -- a better place for it. Maybe Data.Drasil or Language.Drasil.Template?
 
@@ -32,7 +32,7 @@ intro, prpsOfDoc, scpOfReq, charOfIR, orgOfDoc, stakeholder, theCustomer, theCli
   genSysDes, sysCont, userChar, sysCon, scpOfTheProj, prodUCTable, indPRCase, specSysDes,
   probDesc, termAndDefn, termogy, physSyst, goalStmt, solCharSpec, assump, thModel,
   genDefn, inModel, dataDefn, datCon, propCorSol, require, nonfuncReq, funcReq, likeChg, traceyMandG,
-  appendix, reference, offShelfSol :: [Contents] -> [Section] -> Section
+  appendix, reference, offShelfSol, valsOfAuxCons :: [Contents] -> [Section] -> Section
 
 intro       = section (titleize Doc.introduction)
 prpsOfDoc   = section (titleize Doc.prpsOfDoc)
@@ -76,6 +76,8 @@ funcReq     = section (titleize' Doc.functionalRequirement)
 likeChg     = section (titleize' Doc.likelyChg)
 
 traceyMandG = section (titleize' Doc.traceyMandG)
+
+valsOfAuxCons = section (titleize Doc.consVals)
 
 appendix    = section (titleize Doc.appendix)
 

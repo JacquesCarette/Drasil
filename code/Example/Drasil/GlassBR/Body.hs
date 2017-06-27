@@ -40,20 +40,21 @@ import Drasil.Sections.ScopeOfTheProject
 import Drasil.Sections.Requirements
 import Drasil.Sections.GeneralSystDesc
 import Drasil.Sections.SpecificSystemDescription
+import Drasil.Sections.AuxiliaryConstants
 
 this_si :: [UnitDefn]
 this_si = map UU [metre, second] ++ map UU [pascal, newton]
 
 s3, s4, s5,
   s6, s6_1, s6_1_1, s6_1_2, s6_1_3, s6_2, s6_2_1, 
-  s6_2_2, s6_2_3, s6_2_4, s6_2_5, s7, s7_1, s7_2, s8, s9, s10, s11 :: Section
+  s6_2_2, s6_2_3, s6_2_4, s6_2_5, s7, s7_1, s7_2, s8, s9, s10, s11, s12 :: Section
 
 s4_1_bullets, s5_1_table, s5_2_bullets, 
   s6_1_1_bullets, s6_1_2_list, s6_1_3_list, 
   s6_2_intro, s6_2_5_table1, s6_2_5_table2, 
   s6_2_5_table3, s7_2_intro,
   s9_table1, s9_table2, s9_table3,
-  s10_list, s11_intro, fig_glassbr, fig_2, 
+  s11_list, s12_intro, fig_glassbr, fig_2, 
   fig_3, fig_4, fig_5, fig_6 :: Contents
 
 s6_2_1_list, s7_1_list, s9_intro2 :: [Contents]
@@ -74,7 +75,7 @@ mkSRS = RefSec (RefProg intro [TUnits, tsymb [TSPurpose, SymbOrder], TAandA]):
   IScope incScoR endScoR, 
   IChar knowIR undIR appStanddIR, 
   IOrgSec s2_3_intro dataDefn s6_2_4 s2_3_intro_end]) :
-  map Verbatim [s3, s4, s5, s6, s7, s8, s9, s10, s11]
+  map Verbatim [s3, s4, s5, s6, s7, s8, s9, s10, s11, s12]
   
 glassSystInfo :: SystemInformation
 glassSystInfo = SI glassBRProg srs authors this_si this_symbols 
@@ -350,9 +351,6 @@ s6_2_1_listOfAssumptions :: [Sentence]
 s6_2_1_listOfAssumptions = assumption1 ++ assumption2 ++ assumption3 ++ assumption4 ++
   assumption5 ++ assumption6 ++ assumption7 ++ assumption8
 
-assumption4_constants :: [QDefinition]
-assumption4_constants = [constant_M, constant_K, constant_ModElas, constant_LoadDur]
-
 assumption1 :: [Sentence]
 assumption1 = [foldlSent [S "The standard E1300-09a for", 
   phrase calculation, S "applies only to monolithic, laminated, or insulating", 
@@ -376,8 +374,7 @@ assumption3 = [foldlSent [S "This", phrase system, S "only considers the externa
 
 assumption4 :: [Sentence]
 assumption4 = [S "Standard" +:+ plural value +:+ S "used for" +:+
-  phrase calculation +:+ S "in" +:+ short gLassBR +: S "are"] ++
-  map (\c -> E $ equat c) assumption4_constants
+  phrase calculation +:+ S "in" +:+ short gLassBR +: S "are"]
 
 assumption5 :: [Sentence]
 assumption5 = [foldlSent [S "Glass under consideration", 
@@ -788,22 +785,29 @@ fig_4 = figureLabel "4" (traceyMatrix)
   (titleize' assumption +:+ S "and Other" +:+ titleize' item)
   ("ATrace.png")
 
+{--VALUES OF AUXILIARY CONSTANTS--}
+
+assumption4_constants :: [QDefinition]
+assumption4_constants = [constant_M, constant_K, constant_ModElas, constant_LoadDur]
+
+s10 = valsOfAuxConstantsF assumption4_constants
+
 {--REFERENCES--}
 
-s10 = SRS.reference [s10_list] []
+s11 = SRS.reference [s11_list] []
 
-s10_list = mkRefsList 1 (map (foldlsC) references)
+s11_list = mkRefsList 1 (map (foldlsC) references)
 
-s10_ref1, s10_ref2, s10_ref3, s10_ref4, s10_ref5, s10_ref6 :: [Sentence]
+s11_ref1, s11_ref2, s11_ref3, s11_ref4, s11_ref5, s11_ref6 :: [Sentence]
 
 references :: [[Sentence]]
-references = [s10_ref1, s10_ref2, s10_ref3, s10_ref4, s10_ref5, s10_ref6]
+references = [s11_ref1, s11_ref2, s11_ref3, s11_ref4, s11_ref5, s11_ref6]
 
-s10_ref1 = [S "N. Koothoor",
+s11_ref1 = [S "N. Koothoor",
   Quote (S "A" +:+ phrase document +:+ S "drive approach to certifying" +:+ phrase sciCompS :+: S ",") +:+
   S "Master's thesis", S "McMaster University, Hamilton, Ontario, Canada", S "2013."]
 
-s10_ref2 = [S "W. S. Smith and L. Lai", 
+s11_ref2 = [S "W. S. Smith and L. Lai", 
   Quote (S "A new requirements template for scientific computing,")
   +:+ S "in Proceedings of the First International Workshop on Situational Requirements" +:+ 
   S "Engineering Processes - Methods, Techniques and Tools to Support Situation-Specific Requirements" +:+
@@ -814,29 +818,29 @@ s10_ref2 = [S "W. S. Smith and L. Lai",
   S "2005."]
   --FIXME:Make a compoundNC "requirement template"?
 
-s10_ref3 = [S "J. Robertson and S. Robertson", 
+s11_ref3 = [S "J. Robertson and S. Robertson", 
   Quote (S "Volere requirements specification template edition 16.") +:+
   Quote (S "www.cs.uic.edu/ i442/VolereMaterials/templateArchive16/c" +:+ S "Volere template16.pdf"),
   S "2012."]
   --FIXME:Make a compoundNC "requirement specification template"?
 
-s10_ref4 = [S "ASTM Standards Committee",
+s11_ref4 = [S "ASTM Standards Committee",
   Quote (S "Standard practice for determining load resistance of glass in buildings,")
   +:+ S "Standard E1300-09a", S "American Society for Testing and Material (ASTM)",
   S "2009."]
 
-s10_ref5 = [S "ASTM", S "developed by subcommittee C1408", S "Book of standards 15.02",
+s11_ref5 = [S "ASTM", S "developed by subcommittee C1408", S "Book of standards 15.02",
   Quote (S "Standard" +:+ phrase specification +:+. S "for flat glass, C1036")]
 
-s10_ref6 = [S "ASTM", S "developed by subcommittee C14.08", S "Book of standards 15.02",
+s11_ref6 = [S "ASTM", S "developed by subcommittee C14.08", S "Book of standards 15.02",
   Quote (at_start specification +:+ S "for" +:+ plural heat +:+.
   S "treated flat glass-Kind HS, kind FT coated and uncoated glass, C1048")]
 
 {--APPENDIX--}
 
-s11 = SRS.appendix [s11_intro, fig_5, fig_6] []
+s12 = SRS.appendix [s12_intro, fig_5, fig_6] []
 
-s11_intro = foldlSP [
+s12_intro = foldlSP [
   S "This", phrase appendix, S "holds the", plural graph, 
   sParen ((makeRef fig_5) `sAnd` (makeRef fig_6)), 
   S "used for interpolating", plural value, S "needed in the", plural model]

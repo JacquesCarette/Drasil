@@ -149,7 +149,7 @@ verification    = npnc "verification"   (cn' "verification")
 video           = npnc "video"          (cn' "video")
 
 
-orgOfDoc, prpsOfDoc, refmat, scpOfReq,
+orgOfDoc, prpsOfDoc, refmat, scpOfReq, consVals,
   termAndDef, tOfSymb, traceyMandG, corSol, charOfIR, propOfCorSol, vav :: NamedChunk
 
 corSol       = npnc "corSol"       (cn' "correct solution")
@@ -163,6 +163,7 @@ termAndDef   = npnc "termAndDef"   (terminology `and_'` definition)
 tOfSymb      = npnc "tOfSymb"      (table_ `of_'` symbol_)
 traceyMandG  = npnc "traceyMandG"  (andRT titleize' titleize' traceyMatrix graph)
 vav          = npnc "vav"          (verification `and_` validation)
+consVals     = npnc "consVals"     (cn "values of auxiliary constants")
 
 scpOfTheProj :: (NamedChunk -> Sentence) -> NamedChunk
 scpOfTheProj oper = npnc "scpOfTheProj" (scope `of_` theCustom oper project) -- reasonable hack?

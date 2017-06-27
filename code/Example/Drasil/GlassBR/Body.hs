@@ -14,8 +14,8 @@ import Data.Drasil.Concepts.Thermodynamics (heat)
 import Prelude hiding (id)
 import Data.Drasil.Utils
 import Data.Drasil.SentenceStructures (foldlSent, foldlList, ofThe, isThe, 
-  showingCxnBw, figureLabel, foldlSP, sAnd, foldlsC, tAndDWAcc, tAndDWSym,
-  tAndDOnly, sVersus, displayConstr)
+  showingCxnBw, figureLabel, foldlSP, sAnd, foldlsC, tAndDWAcc, tAndDWAcc_,
+  tAndDWSym, tAndDOnly, sVersus, displayConstr)
 
 import Drasil.Template.MG
 import Drasil.Template.DD
@@ -241,10 +241,10 @@ s6_1_1_bullets = Enumeration $ (Number $
 s6_1_1_bullets_glTySubSec, s6_1_1_bullets_loadSubSec :: [ItemType]
 
 s6_1_1_bullets_glTySubSec = [Nested (((titleize glassTy) :+: S ":"))
-  (Bullet $
-  zipWith tAndDWAcc
-  [annealedGl, fTemperedGl, hStrengthGl]
-  [annealedGlass, fullyTGlass, heatSGlass])]
+  (Bullet $ [tAndDWAcc_ annealedGl])
+  --zipWith tAndDWAcc
+  --[annealedGl, fTemperedGl, hStrengthGl]
+  {-[annealedGlass, fullyTGlass, heatSGlass])-}]
 
 s6_1_1_bullets_loadSubSec = [Nested (((at_start load) :+: S ":"))
   (Bullet $ zipWith tAndDWAcc

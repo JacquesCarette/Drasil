@@ -193,7 +193,7 @@ lite          = dcc "lite"        (cn' "lite") --is used in the plural form
   ("Pieces of glass that are cut, prepared, and used to create the window " ++
     "or door.")
 glassTy       = dcc "glassTy"     (cn' "glass types") "type of glass"
-annealedGl    = dcc "annealedGl"  (annealedGlass ^. term)
+annealedGl    = cc annealedGlass
   ("A flat, monolithic, glass lite which has uniform thickness where the " ++
     "residual surface stresses are almost zero, as defined in [5].")
 fTemperedGl   = dcc "fTemperedGl"          (fullyTGlass ^. term)

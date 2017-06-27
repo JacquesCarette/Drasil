@@ -30,10 +30,8 @@ import Data.Drasil.Concepts.Math (ode, unit_, rOfChng, parameter)
 import Data.Drasil.Concepts.Software
 import Data.Drasil.Concepts.PhysicalProperties (liquid)
 import Data.Drasil.Concepts.Physics (energy)
-import Data.Drasil.Concepts.Thermodynamics (heat, thermal_analysis, thermal_energy, 
-  melt_pt, boil_pt)
-import qualified Data.Drasil.Units.Thermodynamics as UT 
-import Data.Drasil.Quantities.Thermodynamics (temp, ht_flux, heat_cap_spec)
+import Data.Drasil.Concepts.Thermodynamics
+import qualified Data.Drasil.Quantities.Thermodynamics as QT
 import Data.Drasil.Quantities.Physics (time)
 import Data.Drasil.Quantities.PhysicalProperties (vol, mass, density)
 import Data.Drasil.Quantities.Math (uNormalVect, surface, gradient)
@@ -58,8 +56,8 @@ pcmSymbols = (map cqs pcmUnits) ++ (map cqs pcmConstraints)
 
 pcmUnits :: [UCWrapper]
 pcmUnits = map ucw [density, tau, in_SA, out_SA, 
-  htCap_L, ht_flux, ht_flux_in, ht_flux_out, vol_ht_gen, 
-  htTransCoeff, mass, tank_vol, temp, heat_cap_spec,
+  htCap_L, QT.ht_flux, ht_flux_in, ht_flux_out, vol_ht_gen, 
+  htTransCoeff, mass, tank_vol, QT.temp, QT.heat_cap_spec,
   temp_diff, temp_env, thFluxVect, time, ht_flux_C,
   vol, w_mass, w_vol]
   
@@ -256,7 +254,7 @@ s4_1_1 = termDefnF EmptyS [s4_1_1_bullets]
   
 s4_1_1_bullets = Enumeration $ (Bullet $ map (\x -> Flat $ 
   (at_start x) :+: S ":" +:+ (x ^. defn)) 
-  [UT.thermal_flux, UT.heat_cap_spec, thermal_conduction, transient])
+  [ht_flux, heat_cap_spec, thermal_conduction, transient])
   
 s4_1_2 = physSystDesc (getAcc progName) fig_tank [s4_1_2_list, fig_tank]
 
@@ -377,7 +375,7 @@ s4_2_3_eq = (map swhsSymbMapT swhsGenDefs) ++ [
   UnaryOp (Integral (Just (Low (C vol)), Nothing)
   (C vol_ht_gen) vol) :=
   UnaryOp (Integral (Just (Low (C vol)), Nothing) ((C density)
-  * (C heat_cap_spec) * Deriv Part (C temp) (C time)) vol)),
+  * (C QT.heat_cap_spec) * Deriv Part (C QT.temp) (C time)) vol)),
 
   foldlSPCol [S "Applying", titleize gauss_div, S "to the first term over",
   (phrase surface +:+ getS surface `ofThe` phrase vol) `sC` S "with",
@@ -390,7 +388,7 @@ s4_2_3_eq = (map swhsSymbMapT swhsGenDefs) ++ [
   Nothing) ((C thFluxVect) :. (C uNormalVect)) surface))) +
   (UnaryOp (Integral (Just (Low (C vol)), Nothing) (C vol_ht_gen)
   vol)) := UnaryOp (Integral (Just (Low (C vol)), Nothing)
-  ((C density) * (C heat_cap_spec) * Deriv Part (C temp) (C time)) vol)),
+  ((C density) * (C QT.heat_cap_spec) * Deriv Part (C QT.temp) (C time)) vol)),
 
   foldlSPCol [S "We consider an arbitrary" +:+. phrase vol, S "The",
   phrase vol_ht_gen, S "is assumed constant. Then (1) can be written as"],
@@ -398,19 +396,19 @@ s4_2_3_eq = (map swhsSymbMapT swhsGenDefs) ++ [
   EqnBlock
   ((C ht_flux_in) * (C in_SA) - (C ht_flux_out) *
   (C out_SA) + (C vol_ht_gen) * (C vol) := UnaryOp (Integral
-  (Just (Low (C vol)), Nothing) ((C density) * (C heat_cap_spec) *
-  Deriv Part (C temp) (C time)) vol)),
+  (Just (Low (C vol)), Nothing) ((C density) * (C QT.heat_cap_spec) *
+  Deriv Part (C QT.temp) (C time)) vol)),
 
   foldlSPCol [S "Where", getS ht_flux_in `sC` getS ht_flux_out `sC`
   getS in_SA `sC` S "and", getS out_SA, S "are explained in" +:+.
-  acroGD 2, S "Assuming", getS density `sC` getS heat_cap_spec,
-  S "and", getS temp, S "are constant over the", phrase vol `sC`
+  acroGD 2, S "Assuming", getS density `sC` getS QT.heat_cap_spec,
+  S "and", getS QT.temp, S "are constant over the", phrase vol `sC`
   S "which is true in our case by", titleize' assumption,
   sParen (acroA 3) `sC` sParen (acroA 4) `sC`
   S "and", sParen (acroA 5) `sC` S "we have"],
 
   EqnBlock
-  ((C density) * (C heat_cap_spec) * (C vol) * Deriv Total (C temp)
+  ((C density) * (C QT.heat_cap_spec) * (C vol) * Deriv Total (C QT.temp)
   (C time) := (C ht_flux_in) * (C in_SA) - (C ht_flux_out) *
   (C out_SA) + (C vol_ht_gen) * (C vol)),
 
@@ -418,7 +416,7 @@ s4_2_3_eq = (map swhsSymbMapT swhsGenDefs) ++ [
   getS mass :+: S "/" :+: getS vol `sC` S "(2) can be written as"],
 
   EqnBlock
-  ((C mass) * (C heat_cap_spec) * Deriv Total (C temp)
+  ((C mass) * (C QT.heat_cap_spec) * Deriv Total (C QT.temp)
   (C time) := (C ht_flux_in) * (C in_SA) - (C ht_flux_out)
   * (C out_SA) + (C vol_ht_gen) * (C vol))
   ]

@@ -428,24 +428,21 @@ s4_2_5_intro = Paragraph $ EmptyS --TODO: Placeholder values until content can b
 
 s4_2_6_table1 = Table [S "Var", titleize' physicalConstraint, titleize software +:+ titleize' constraint, S "Typical" +:+
   titleize value, titleize uncertainty] (mkTable [(\x -> x!!0), (\x -> x!!1), (\x -> x!!2), (\x -> x!!3), (\x -> x!!4)] 
-  s4_2_6_conListIn) (titleize table_ +: S "1" +:+ titleize input_ +:+
-  titleize' variable) True
+  s4_2_6_conListIn) (titleize input_ +:+ titleize' variable) True
   
 s4_2_6_conListIn :: [[Sentence]]
 s4_2_6_conListIn = [con1, con2, con10, con11, con12, con13, con14, con16, con17]
 
 s4_2_6_table2 = Table [S "Var", titleize value] 
   (mkTable [(\x -> x!!0), (\x -> x!!1)] s4_2_6_specParVal)
-  (titleize table_ +: S "2" +:+ titleize specification +:+
-  titleize parameter +:+ titleize' value) True
+  (titleize specification +:+ titleize parameter +:+ titleize' value) True
   
 s4_2_6_specParVal :: [[Sentence]]
 s4_2_6_specParVal = [[EmptyS, EmptyS]]
 
 s4_2_6_table3 = Table [S "Var", titleize' physicalConstraint] 
   (mkTable [(\x -> x!!0), (\x -> x!!1)] s4_2_6_conListOut)
-  (titleize table_ +: S "3" +:+ titleize output_ +:+
-  titleize' variable) True
+  (titleize output_ +:+ titleize' variable) True
   
 s4_2_6_conListOut :: [[Sentence]]
 s4_2_6_conListOut = [con18]

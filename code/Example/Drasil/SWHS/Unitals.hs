@@ -182,16 +182,16 @@ melt_frac    = cvR (dcc "melt_frac" (nounPhraseSP "melt fraction")
 swhsConstrained ::[ConstrConcept]
 swhsConstrained = swhsInputs ++ swhsOutputs
 
-tank_length, diam, pcm_vol, pcm_SA, pcm_density, temp_melt_P,
-  htCap_S_P, htCap_L_P, htFusion, coil_SA, temp_C, w_density,
-  htCap_W, coil_HTC, pcm_HTC, temp_init, time_final, temp_PCM, 
-  temp_W, w_E, pcm_E :: ConstrConcept
-
 -- Input Constraints
 swhsInputs :: [ConstrConcept]
 swhsInputs = [tank_length, diam, pcm_vol, pcm_SA, pcm_density,
   temp_melt_P, htCap_S_P, htCap_L_P, htFusion, coil_SA, temp_C,
   w_density, htCap_W, coil_HTC, pcm_HTC, temp_init, time_final]
+
+tank_length, diam, pcm_vol, pcm_SA, pcm_density, temp_melt_P,
+  htCap_S_P, htCap_L_P, htFusion, coil_SA, temp_C, w_density,
+  htCap_W, coil_HTC, pcm_HTC, temp_init, time_final, temp_PCM, 
+  temp_W, w_E, pcm_E :: ConstrConcept
 
 -- Constraint 1
 tank_length  = cuc' "tank_length" (nounPhraseSP "length of tank")
@@ -211,7 +211,9 @@ pcm_vol      = cuc' "pcm_vol" (nounPhraseSP "volume of PCM")
   "The amount of space occupied by a given quantity of phase change material"
   (sub (vol ^. symbol) cP) m_3 Rational
   [physc $ \c -> c :> Int 0,
-  physc $ \c -> c :< C tank_vol]
+  physc $ \c -> c :< C tank_vol,
+  sfwrc $ \c -> c :>= C tank_vol]
+  -- needs to add (D,L)*minfract to end of last constraint
 
 -- Constraint 4
 pcm_SA       = cuc' "pcm_SA"

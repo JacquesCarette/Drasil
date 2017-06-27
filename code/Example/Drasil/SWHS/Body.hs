@@ -46,7 +46,7 @@ import Drasil.Sections.GeneralSystDesc
 
 import Data.Drasil.SentenceStructures (showingCxnBw, foldlSent, foldlSent_,
   foldlSentCol, foldlSP, foldlSP_, foldlSPCol, foldlsC, isThe, ofThe, ofThe',
-  sAnd)
+  sAnd, displayConstr)
 
 acronyms :: [CI]
 acronyms = [assumption, dataDefn, genDefn, goalStmt, inModel, likelyChg, ode,
@@ -466,8 +466,10 @@ s4_2 = solChSpecF progName (s4_1, s6) True s4_2_4_intro_end
 -------------------------
 
 s4_2_1 :: Section
---s4_2_1 = assumpF (s4_2_2 {-thModF-}) (s4_2_3 {-genDefnF-}) (s4_2_4 {-dataDefnF-}) (s4_2_5_deriv1 {-inModelF-}) (s6) (s4_2_1_list)
-s4_2_1 = assumpF (s4_1 {-FIXME-}) (s4_1 {-FIXME-}) (s4_1 {-FIXME-}) (s4_2_5) (s6) [s4_2_1_list]
+s4_2_1 = assumpF (s4_1 {-FIXME-}) (s4_1 {-FIXME-}) (s4_1 {-FIXME-})
+  (s4_2_5) (s6) [s4_2_1_list]
+-- s4_2_1 = assumpF (s4_2_2 {-thModF-}) (s4_2_3 {-genDefnF-})
+-- (s4_2_4 {-dataDefnF-}) (s4_2_5_deriv1 {-inModelF-}) (s6) (s4_2_1_list)
 
 s4_2_1_list :: Contents
 s4_2_1_list = enumSimple 1 (short assumption) $ map foldlSent s4_2_1_assump_list
@@ -716,8 +718,8 @@ s4_2_5_d1sent_list = map foldlSPCol [
   phrase CT.heat_trans, S "occurs to", (S "outside" `ofThe`
   phrase tank) `sC` S "since it has been assumed to be",
   phrase perfect_insul +:+. sParen (acroA "15"), S "Assuming no",
-  phrase vol_ht_gen +:+. (sParen (acroA "16") `sC` getS vol_ht_gen
-  :+: S "=0"), S "Therefore, the", phrase equation, S "for",
+  phrase vol_ht_gen +:+. (sParen (acroA "16") `sC`
+  E (C vol_ht_gen := Int 0)), S "Therefore, the", phrase equation, S "for",
   acroGD "2", S "can be written as"],
 
   [S "Using", swhsSymbMapDRef dd1HtFluxC, S "and",
@@ -888,14 +890,14 @@ s4_2_5_d2endPara = map foldlSP [
 ------------------------------
 
 s4_2_6_DataConTables :: [Contents]
-s4_2_6_DataConTables = [s4_2_6_table1] ++ s4_2_6_T1footer ++ [s4_2_6_table2, s4_2_6_table3]
+s4_2_6_DataConTables = [s4_2_6_table1] ++ s4_2_6_T1footer ++
+  [s4_2_6_table2, s4_2_6_table3]
 
 s4_2_6_table1 :: Contents
 s4_2_6_table1 = Table [S "Var", titleize' physicalConstraint, titleize software +:+
   titleize' constraint, S "Typical" +:+ titleize value, S "Uncertainty"]
   (mkTable [(\x -> x!!0), (\x -> x!!1), (\x -> x!!2), (\x -> x!!3), (\x -> x!!4)]
-  s4_2_6_conListIn) (titleize table_ +: S "1" +:+
-  titleize input_ +:+ titleize' variable) True
+  s4_2_6_conListIn) (titleize input_ +:+ titleize' variable) True
 
 s4_2_6_conListIn ::[[Sentence]]
 s4_2_6_conListIn = [con1, con2, con3, con4, con5, con6, con7, con8,
@@ -904,76 +906,23 @@ s4_2_6_conListIn = [con1, con2, con3, con4, con5, con6, con7, con8,
 con1, con2, con3, con4, con5, con6, con7, con8, con9, con10,
   con11, con12, con13, con14, con15, con16, con17 :: [Sentence]
 
-con1 = [getS tank_length, E $ C tank_length :> Int 0,
-  E $ C tank_length_min :<= C tank_length :<= C tank_length_max,
-  E (Dbl 1.5) +:+ (unwrap $ getUnit tank_length), S "10%"]
-
-con2 = [getS diam, E $ C diam :> Int 0,
-  E $ (C diam :/ C tank_length_max) :<=
-  (C diam :/ C tank_length) :<= (C diam :/ C tank_length_min),
-  E (Dbl 0.412) +:+ (unwrap $ getUnit diam), S "10%"]
--- hack to do proper min and max ratio
-
-con3 = [getS pcm_vol,
-  E (C pcm_vol :> Int 0) +:+ sParen (S "*") `sAnd`
-  E (C pcm_vol :< C tank_vol) +:+ sParen (S "D" `sC` S "L"),
-  E (C pcm_vol :>= C tank_vol) +:+ sParen (S "D" `sC` S "L") +:+ S "* minfract",
-  E (Dbl 0.05) +:+ (unwrap $ getUnit pcm_vol), S "10%"]
-
-con4 = [getS pcm_SA,
-  E (C pcm_SA :> Int 0) +:+ sParen (S "*"),
-  E (C pcm_vol :<= C pcm_SA :<= ((Int 2 :/ C htTransCoeff_min) :* C tank_vol)) +:+
-  sParen (S "#"), E (Dbl 1.2) +:+ (unwrap $ getUnit pcm_SA), S "10%"]
-
-con5 = [getS pcm_density, E $ C pcm_SA :> Int 0,
-  E $ C pcm_density_min :< C pcm_density :< C pcm_density_max,
-  E (Int 1007) +:+ (unwrap $ getUnit pcm_density), S "10%"]
-
-con6 = [getS temp_melt_P,
-  E (Int 0 :< C temp_melt_P :< C temp_C) +:+ sParen (S "+"), EmptyS,
-  E (Dbl 44.2) +:+ (unwrap $ getUnit temp_melt_P), S "10%"]
-
-con7 = [getS htCap_S_P, E $ C htCap_S_P :> Int 0,
-  E $ C htCap_S_P_min :< C htCap_S_P :< C htCap_S_P_max,
-  E (Int 1760) +:+ (unwrap $ getUnit htCap_S_P), S "10%"]
-
-con8 = [getS htCap_L_P, E $ C htCap_L_P :> Int 0,
-  E $ C htCap_L_P_min :< C htCap_L_P :< C htCap_L_P_max,
-  E (Int 2270) +:+ (unwrap $ getUnit htCap_L_P), S "10%"]
-
-con9 = [getS htFusion, E $ C htFusion :> Int 0,
-  E $ C htFusion_min :< C htFusion :< C htFusion_max,
-  E (Int 211600) +:+ (unwrap $ getUnit htFusion), S "10%"]
-
-con10 = [getS coil_SA, E (C coil_SA :> Int 0) +:+ sParen (S "*"),
-  E $ C coil_SA :<= C coil_SA_max,
-  E (Dbl 0.12) +:+ (unwrap $ getUnit coil_SA), S "10%"]
-
-con11 = [getS temp_C, E (Int 0 :< C temp_C :< Int 100) +:+ sParen (S "+"),
-  EmptyS, E (Int 50) +:+ (unwrap $ getUnit temp_C), S "10%"]
-
-con12 = [getS w_density, E $ C w_density :> Int 0,
-  E $ C w_density_min :< C w_density :<= C w_density_max,
-  E (Int 1000) +:+ (unwrap $ getUnit w_density), S "10%"]
-  
-con13 = [getS htCap_W, E $ C htCap_W :> Int 0,
-  E $ C htCap_W_min :< C htCap_W :< C htCap_W_max,
-  E (Int 4186) +:+ (unwrap $ getUnit htCap_W), S "10%"]
-  
-con14 = [getS coil_HTC, E $ C coil_HTC :> Int 0,
-  E $ C coil_HTC_min :<= C coil_HTC :<= C coil_HTC_max,
-  E (Int 1000) +:+ (unwrap $ getUnit coil_HTC), S "10%"]
-  
-con15 = [getS pcm_HTC, E $ C pcm_HTC :> Int 0,
-  E $ C pcm_HTC_min :<= C pcm_HTC :<= C pcm_HTC_max,
-  E (Int 1000) +:+ (unwrap $ getUnit pcm_HTC), S "10%"]
-  
-con16 = [getS temp_init, E (Int 0 :< C temp_init :< C melt_pt) +:+ sParen (S "+"),
-  EmptyS, E (Int 40) +:+ (unwrap $ getUnit temp_init), S "10%"]
-  
-con17 = [getS time_final, E $ C time_final :> Int 0,
-  E (C time_final :< C time_final_max) +:+ sParen (S "**"),
-  E (Int 50000) +:+ (unwrap $ getUnit time_final), S "10%"]
+con1 = displayConstr tank_length (1.5 :: Double) (S "10" :+: (P (Special Percent)))
+con2 = displayConstr diam (0.412 :: Double) (S "10" :+: (P (Special Percent)))
+con3 = displayConstr pcm_vol (0.05 :: Double) (S "10" :+: (P (Special Percent)))
+con4 = displayConstr pcm_SA (1.2 :: Double) (S "10" :+: (P (Special Percent)))
+con5 = displayConstr pcm_density (1007 :: Int) (S "10" :+: (P (Special Percent)))
+con6 = displayConstr temp_melt_P (44.2 :: Double) (S "10" :+: (P (Special Percent)))
+con7 = displayConstr htCap_S_P (1760 :: Int) (S "10" :+: (P (Special Percent)))
+con8 = displayConstr htCap_L_P (2270 :: Int) (S "10" :+: (P (Special Percent)))
+con9 = displayConstr htFusion (211600 :: Int) (S "10" :+: (P (Special Percent)))
+con10 = displayConstr coil_SA (0.12 :: Double) (S "10" :+: (P (Special Percent)))
+con11 = displayConstr temp_C (50 :: Int) (S "10" :+: (P (Special Percent)))
+con12 = displayConstr w_density (1000 :: Int) (S "10" :+: (P (Special Percent)))
+con13 = displayConstr htCap_W (4186 :: Int) (S "10" :+: (P (Special Percent)))
+con14 = displayConstr coil_HTC (1000 :: Int) (S "10" :+: (P (Special Percent)))
+con15 = displayConstr pcm_HTC (1000 :: Int) (S "10" :+: (P (Special Percent)))
+con16 = displayConstr temp_init (40 :: Int) (S "10" :+: (P (Special Percent)))
+con17 = displayConstr time_final (50000 :: Int) (S "10" :+: (P (Special Percent)))
 
 inputVar :: [QSWrapper]
 inputVar = map qs [tank_length, diam, pcm_vol, pcm_SA, pcm_density,
@@ -1008,59 +957,45 @@ s4_2_6_T1footer = map foldlSP [
 
 s4_2_6_table2 :: Contents
 s4_2_6_table2 = Table [S "Var", titleize value]
-  (mkTable [(\x -> x!!0), (\x -> x!!1)] s4_2_6_specVals) 
-  (titleize table_ +: S "2" +:+ titleize specification +:+
-  titleize parameter +:+ titleize' value) True
+  (mkTable [(\x -> x!!0), (\x -> x!!1)] s4_2_6_specParamVals) 
+  (titleize specification +:+ titleize parameter +:+ titleize' value) True
 
-s4_2_6_specVals :: [[Sentence]]
-s4_2_6_specVals = [
+s4_2_6_specParamVals :: [[Sentence]]
+s4_2_6_specParamVals = [specParamVal1, specParamVal2, specParamVal3, specParamVal4,
+  specParamVal5, specParamVal6, specParamVal7, specParamVal8, specParamVal9,
+  specParamVal10, specParamVal11, specParamVal12, specParamVal13, specParamVal14,
+  specParamVal15, specParamVal16, specParamVal17, specParamVal18, specParamVal19,
+  specParamVal20, specParamVal21, specParamVal22]
 
-  [getS tank_length_min, E (Dbl 0.1) +:+ (unwrap $ getUnit tank_length)],
+specParamVal1, specParamVal2, specParamVal3, specParamVal4,
+  specParamVal5, specParamVal6, specParamVal7, specParamVal8, specParamVal9,
+  specParamVal10, specParamVal11, specParamVal12, specParamVal13, specParamVal14,
+  specParamVal15, specParamVal16, specParamVal17, specParamVal18, specParamVal19,
+  specParamVal20, specParamVal21, specParamVal22 :: [Sentence]
 
-  [getS tank_length_max, E (Int 50) +:+ (unwrap $ getUnit tank_length)],
-
-  [E $ C diam :/ C tank_length_min, E (Dbl 0.002)],
-
-  [E $ C diam :/ C tank_length_max, E (Int 200)],
-
-  [S "minfrac", E $ Int 10 :^ (Int (-6))],
-
-  [getS htFusion_min, E (Dbl 0.001) +:+ (unwrap $ getUnit pcm_HTC)],
-
-  [getS pcm_density_min, E (Int 500) +:+ (unwrap $ getUnit pcm_density)],
-
-  [getS pcm_density_max, E (Int 20000) +:+ (unwrap $ getUnit pcm_density)],
-
-  [getS htCap_S_P_min, E (Int 100) +:+ (unwrap $ getUnit htCap_S_P)],
-
-  [getS htCap_S_P_max, E (Int 4000) +:+ (unwrap $ getUnit htCap_S_P)],
-
-  [getS htCap_L_P_min, E (Int 100) +:+ (unwrap $ getUnit htCap_L_P)],
-
-  [getS htCap_L_P_max, E (Int 5000) +:+ (unwrap $ getUnit htCap_L_P)],
-
-  [getS coil_SA_max, P (Greek Pi_L) +:+
-  sParen (E ((C diam :/ Int 2) :^ (Int 2))) +:+ (unwrap $ getUnit coil_SA)],
-
-  [getS w_density_min, E (Int 950) +:+ (unwrap $ getUnit w_density)],
-  
-  [getS w_density_max, E (Int 1000) +:+ (unwrap $ getUnit w_density)],
-  
-  [getS htCap_W_min, E (Int 4170) +:+ (unwrap $ getUnit htCap_W)],
-  
-  [getS htCap_W_max, E (Int 4210) +:+ (unwrap $ getUnit htCap_W)],
-  
-  [getS coil_HTC_min, E (Int 10) +:+ (unwrap $ getUnit coil_HTC)],
-  
-  [getS coil_HTC_max, E (Int 10000) +:+ (unwrap $ getUnit coil_HTC)],
-  
-  [getS pcm_HTC_min, E (Int 10) +:+ (unwrap $ getUnit pcm_HTC)],
-  
-  [getS pcm_HTC_max, E (Int 10000) +:+ (unwrap $ getUnit pcm_HTC)],
-  
-  [getS time_final_max, E (Int 86400) +:+ (unwrap $ getUnit time_final)]
-
-  ]
+specParamVal1 = [getS tank_length_min, E (Dbl 0.1) +:+ (unwrap $ getUnit tank_length)]
+specParamVal2 = [getS tank_length_max, E (Int 50) +:+ (unwrap $ getUnit tank_length)]
+specParamVal3 = [E $ C diam :/ C tank_length_min, E (Dbl 0.002)]
+specParamVal4 = [E $ C diam :/ C tank_length_max, E (Int 200)]
+specParamVal5 = [S "minfrac", E $ Int 10 :^ (Int (-6))]
+specParamVal6 = [getS htFusion_min, E (Dbl 0.001) +:+ (unwrap $ getUnit pcm_HTC)]
+specParamVal7 = [getS pcm_density_min, E (Int 500) +:+ (unwrap $ getUnit pcm_density)]
+specParamVal8 = [getS pcm_density_max, E (Int 20000) +:+ (unwrap $ getUnit pcm_density)]
+specParamVal9 = [getS htCap_S_P_min, E (Int 100) +:+ (unwrap $ getUnit htCap_S_P)]
+specParamVal10 = [getS htCap_S_P_max, E (Int 4000) +:+ (unwrap $ getUnit htCap_S_P)]
+specParamVal11 = [getS htCap_L_P_min, E (Int 100) +:+ (unwrap $ getUnit htCap_L_P)]
+specParamVal12 = [getS htCap_L_P_max, E (Int 5000) +:+ (unwrap $ getUnit htCap_L_P)]
+specParamVal13 = [getS coil_SA_max, P (Greek Pi_L) +:+
+  sParen (E ((C diam :/ Int 2) :^ (Int 2))) +:+ (unwrap $ getUnit coil_SA)]
+specParamVal14 = [getS w_density_min, E (Int 950) +:+ (unwrap $ getUnit w_density)]
+specParamVal15 = [getS w_density_max, E (Int 1000) +:+ (unwrap $ getUnit w_density)]
+specParamVal16 = [getS htCap_W_min, E (Int 4170) +:+ (unwrap $ getUnit htCap_W)]
+specParamVal17 = [getS htCap_W_max, E (Int 4210) +:+ (unwrap $ getUnit htCap_W)]
+specParamVal18 = [getS coil_HTC_min, E (Int 10) +:+ (unwrap $ getUnit coil_HTC)]
+specParamVal19 = [getS coil_HTC_max, E (Int 10000) +:+ (unwrap $ getUnit coil_HTC)]
+specParamVal20 = [getS pcm_HTC_min, E (Int 10) +:+ (unwrap $ getUnit pcm_HTC)]
+specParamVal21 = [getS pcm_HTC_max, E (Int 10000) +:+ (unwrap $ getUnit pcm_HTC)]
+specParamVal22 = [getS time_final_max, E (Int 86400) +:+ (unwrap $ getUnit time_final)]
 
 ------------------------------
 -- Data Constraint: Table 3 --
@@ -1069,7 +1004,7 @@ s4_2_6_specVals = [
 s4_2_6_table3 :: Contents
 s4_2_6_table3 = Table [S "Var", titleize' physicalConstraint]
   (mkTable [(\x -> x!!0), (\x -> x!!1)] s4_2_6_conListOut) 
-  (titleize table_ +: S "3" +:+ titleize output_ +:+ titleize' variable) True
+  (titleize output_ +:+ titleize' variable) True
 
 s4_2_6_conListOut ::[[Sentence]]
 s4_2_6_conListOut = [con18, con19, con20, con21]
@@ -1543,9 +1478,12 @@ s8_refs :: Contents
 s8_refs = mkRefsList 1 $ map foldlsC s8_refList
 
 s8_refList :: [[Sentence]]
-s8_refList = [ref2, ref3, ref4, ref5, ref6]
+s8_refList = [ref1, ref2, ref3, ref4, ref5, ref6]
 
-ref2, ref3, ref4, ref5, ref6 :: [Sentence]
+ref1, ref2, ref3, ref4, ref5, ref6 :: [Sentence]
+
+ref1 = [S "J. Frederick Bueche. Introduction to Physics for Scientists. McGraw Hill",
+  S "United States", S "fourth edition edition", S "1986."]
 
 ref2 = [S "F. P. Incropera", S "D. P. Dewitt", S "T. L. Bergman",
   S "and A. S. Lavine. Fundamentals of Heat and Mass Transfer. John Wiley" +:+

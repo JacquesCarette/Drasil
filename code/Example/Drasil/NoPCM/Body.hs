@@ -7,7 +7,7 @@ import Drasil.NoPCM.Definitions (ht_trans, srs_swhs)
 
 import Drasil.SWHS.Body (s2_3_knowlegde, s2_3_understanding, s2_4_intro, 
   s3, physSyst1, physSyst2, s4_2_4_intro_end, assump1, assump2, assump7,
-  con1, con2, con10, con11, con12, con13, con14, con16, con17, con18, s6_start, 
+  con1, con2, con10, con11, con12, con13, con14, con16, con17, con18, s5_2, s6_start, 
   ref2, ref3, ref4, ref5, ref6)
 import Drasil.SWHS.Concepts (progName, water, gauss_div, sWHT, tank, coil)
 import Drasil.SWHS.Unitals (w_vol, tank_length, tank_vol, tau_W, temp_W, w_mass, 
@@ -67,7 +67,7 @@ pcmConstraints =  [coil_SA, htCap_W, coil_HTC, temp_init,
   time_final, tank_length, temp_C, w_density, diam, temp_W]
 
 s4, s4_1, s4_1_1, s4_1_2, s4_1_3, s4_2, {-s3, s3_1, -}
-  s5, s5_1, s5_2, s6, s7 :: Section
+  s5, s5_1, s6, s7 :: Section -- s5_2,
 
 s4_1_intro, s4_1_1_bullets, {-s3_1_intro, sys_context_fig, s3_2_intro, s3_3_intro, -}
   s4_1_2_list, s4_1_3_intro, s4_1_3_list, fig_tank, --s4_2_4_intro,
@@ -509,10 +509,10 @@ s5_1_list = [Enumeration (Simple [(acroR "1", Flat (foldlSentCol
 --Section 5.2 : NON-FUNCTIONAL REQUIREMENTS
 -------------------------------------------
 
-s5_2 = nonFuncReqF [performance] [correctness, verifiability,
+{-s5_2 = nonFuncReqF [performance] [correctness, verifiability,
   understandability, reusability, maintainability]
   (S "This problem is small in size and relatively simple")
-  (S "Any reasonable implementation will be very quick and use minimal storage.")
+  (S "Any reasonable implementation will be very quick and use minimal storage.")-}
 
         
         

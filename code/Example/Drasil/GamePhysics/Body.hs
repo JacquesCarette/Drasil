@@ -318,9 +318,26 @@ s4_1_2_list = enumSimple 1 (getAcc goalStmt) s4_1_2_list'
 
 s4_2 :: Section
 
-s4_2 = SRS.solCharSpec []
- [s4_2_1, s4_2_2, s4_2_3, s4_2_4, s4_2_5, dataConstraints]
+--s4_2 = SRS.solCharSpec []
+-- [s4_2_1, s4_2_2, s4_2_3, s4_2_4, s4_2_5, dataConstraints]
 
+
+s4_2 = solutionCharactersticCon chipmunk solutionContainer []
+
+
+
+solutionContainer :: SOLsec
+solutionContainer = mkSOLsec assumptionSub theoreticalModelSub generalDefSub
+  dataDefinitionSub instanceModelSub dataConstraintSub
+
+assumptionSub, theoreticalModelSub, dataDefinitionSub, instanceModelSub :: SOLsub
+assumptionSub = mkSOLsub EmptyS EmptyS EmptyS s6 [s4_2_1_intro, s4_2_1_list]
+theoreticalModelSub = mkSOLsub EmptyS EmptyS EmptyS s4_2 s4_2_2_TMods
+dataDefinitionSub = mkSOLsub EmptyS EmptyS s4_2_4_intro s4_2 s4_2_4_DDefs
+instanceModelSub = mkSOLsub EmptyS EmptyS EmptyS s4_1 s4_2_5_IMods
+generalDefSub = mkSOLsub EmptyS EmptyS EmptyS s4_2 []
+dataConstraintSub = mkSOLsub EmptyS dataConstraintUncertainty EmptyS s4_2
+  [dataConstraintInputTable, dataConstraintOutputTable]
 -------------------------
 -- 4.2.1 : Assumptions --
 -------------------------
@@ -452,7 +469,7 @@ secCollisionDiagram = Paragraph $ foldlSent [ S "This section presents an image"
 dataConstraints :: Section
 dataConstraintInputTable, dataConstraintOutputTable :: Contents
 
-dataConstraints = datConF EmptyS True EmptyS [dataConstraintInputTable, dataConstraintOutputTable]
+dataConstraints = datConF EmptyS dataConstraintUncertainty EmptyS [dataConstraintInputTable, dataConstraintOutputTable]
 
 dataConstraintInputTable = Table [S "Var", titleize' physicalConstraint, S "Typical Value"]
   (physicalConstraint_inputs) 

@@ -5,12 +5,18 @@ module Drasil.Sections.SpecificSystemDescription
   , physSystDesc
   , goalStmtF
   , solChSpecF
-  , assumpF, assumpF'
+  , assumpF
   , thModF
   , genDefnF
   , dataDefnF
-  , inModelF, inModelF'
+  , inModelF
   , datConF
+  , dataConstraintUncertainty
+  , mkSOLsec
+  , mkSOLsub
+  , solutionCharactersticCon
+  , SOLsec
+  , SOLsub
   ) where
 
 import qualified Data.Drasil.Concepts.Documentation as D
@@ -21,6 +27,16 @@ import Data.Drasil.Concepts.Software (program)
 import Data.Drasil.Utils (foldle)
 import Data.Drasil.SentenceStructures
 import qualified Drasil.SRS as SRS
+
+data SOLsec = Sect SOLsub SOLsub SOLsub SOLsub SOLsub SOLsub
+data SOLsub = Subs Sentence Sentence Sentence Section [Contents]
+
+mkSOLsec :: SOLsub -> SOLsub -> SOLsub -> SOLsub -> SOLsub -> SOLsub -> SOLsec
+mkSOLsec as tm gd dd im dc = Sect as tm gd dd im dc
+
+mkSOLsub :: Sentence -> Sentence -> Sentence -> Section -> [Contents] -> SOLsub
+mkSOLsub start middle end refSection ys = Subs start middle end refSection ys
+
 
 -- | Specific System description section builder. Takes the system and subsections.
 specSysDescr :: (NamedIdea a) => a -> [Section] -> Section
@@ -92,10 +108,10 @@ goalStmtF givenInputs otherContents = SRS.goalStmt (intro:otherContents) []
 --  ddEndSent is the ending sentence for Data Definitions, this is a 4-tuple of inputs for Data Constraints, 
 --  the last input is a tupple of lists of Sections for each Subsection in order.
 solChSpecF :: (NamedIdea a) => a -> (Section, Section) -> Sentence -> 
-  (Sentence, Bool, Sentence) -> 
+  (Sentence, Sentence, Sentence) -> 
   ([Contents], [Contents], [Contents], [Contents], [Contents], [Contents]) -> 
   [Section] -> Section
-solChSpecF progName (probDes, likeChg) ddEndSent (mid, end, trail) (a, t, g, dd, i, dc) adSubSec = 
+solChSpecF progName (probDes, likeChg) ddEndSent (mid, hasUncertainty, trail) (a, t, g, dd, i, dc) adSubSec = 
   SRS.solCharSpec [solutionCharSpecIntro progName instModels] (subSec)
   where subSec = [assumption_, theModels, generDefn, 
                         dataDefin, instModels, dataConstr] ++ adSubSec
@@ -104,7 +120,44 @@ solChSpecF progName (probDes, likeChg) ddEndSent (mid, end, trail) (a, t, g, dd,
         generDefn    = genDefnF g
         dataDefin    = dataDefnF ddEndSent dd
         instModels   = inModelF  probDes dataDefin theModels generDefn i
-        dataConstr   = datConF mid end trail dc
+        dataConstr   = datConF mid hasUncertainty trail dc
+
+
+solutionCharactersticCon :: (NamedIdea a) => a -> SOLsec -> [Section] -> Section
+solutionCharactersticCon progName (Sect as tm gd dd im dc) xs = SRS.solCharSpec
+  [solutionCharSpecIntro progName instanceModels] (subsections)
+  where assumptions        = assumptionSub        as
+          theoreticalModels generalDefinitions dataDefinitions instanceModels 
+        theoreticalModels  = theoreticalModelSub  tm progName
+        generalDefinitions = generalDefinitionSub gd
+        dataDefinitions    = dataDefinitionSub    dd
+        instanceModels     = instanceModelSub     im 
+          dataDefinitions theoreticalModels generalDefinitions
+        dataConstraints    = dataConstraintSub    dc
+        subsections = [assumptions, theoreticalModels, generalDefinitions,
+                       dataDefinitions, instanceModels, dataConstraints] ++ xs
+
+assumptionSub :: SOLsub -> Section -> Section -> Section -> Section -> Section
+assumptionSub (Subs _ _ _ sectionRef ys) ref1 ref2 ref3 ref4 = SRS.assump
+  ((assumpIntro ref1 ref2 ref3 ref4 sectionRef):ys) []
+
+theoreticalModelSub :: (NamedIdea a) => SOLsub -> a -> Section
+theoreticalModelSub (Subs _ _ _ _ ys) progName = SRS.thModel ((thModIntro progName):ys) []
+
+generalDefinitionSub :: SOLsub -> Section
+generalDefinitionSub (Subs _ _ _ _ ys) = SRS.genDefn (generalDefinitionIntro ys:ys) []
+
+dataDefinitionSub :: SOLsub -> Section
+dataDefinitionSub (Subs _ _ ending _ ys) = SRS.dataDefn ((dataDefinitionIntro ending):ys) []
+
+instanceModelSub :: SOLsub -> Section -> Section -> Section -> Section
+instanceModelSub (Subs _ _ _ sectionRef ys) ref1 ref2 ref3 = SRS.inModel ((introContent):ys) []
+  where introContent = inModelIntro sectionRef ref1 ref2 ref3
+
+dataConstraintSub :: SOLsub -> Section
+dataConstraintSub (Subs uncertain mid trail _ ys) = SRS.datCon ((dataContent):ys) []
+  where dataContent = dataConstraintParagraph uncertain (listofTablesToRefs ys) mid trail
+
 
 solutionCharSpecIntro :: (NamedIdea a) => a -> Section -> Contents
 solutionCharSpecIntro progName instModelSection = foldlSP [S "The", plural inModel, 
@@ -114,43 +167,26 @@ solutionCharSpecIntro progName instModelSection = foldlSP [S "The", plural inMod
   S "and their derivation is also presented, so that the", plural inModel, 
   S "can be verified"]
 
---subSec additionalSection = [assumption_', theModels, dataDefin, instModels', 
---  dataConstr] ++ additionalSection
-
-{--
-assumption_ True  = assumpF  theModels generDefn dataDefin (instModels True ) likeChg a
---assumption_ False = assumpF' theModels           dataDefin (instModels False) likeChg a
-theModels  = thModF progName t
-generDefn  = genDefnF g
-dataDefin  = dataDefnF ddEndSent dd
-instModels True  = inModelF  probDes dataDefin theModels generDefn i
---instModels False = inModelF' probDes dataDefin theModels           i
-dataConstr = datConF tbRef mid end trail dc
---}
 
 -- wrappers for assumpIntro. Use assumpF' if genDefs is not needed
 assumpF :: Section -> Section -> Section -> Section -> Section -> [Contents] -> Section
 assumpF theMod genDef dataDef inMod likeChg otherContents = 
-      SRS.assump ((assumpIntro theMod (Just genDef) dataDef inMod likeChg):otherContents) []
+      SRS.assump ((assumpIntro theMod genDef dataDef inMod likeChg):otherContents) []
 
-assumpF' :: Section -> Section -> Section -> Section -> [Contents] -> Section
-assumpF' theMod dataDef inMod likeChg otherContents = 
-      SRS.assump ((assumpIntro theMod Nothing dataDef inMod likeChg):otherContents) []
 
 -- takes a bunch of references to things discribed in the wrapper
-assumpIntro :: Section -> Maybe Section -> Section -> Section -> Section -> Contents
+assumpIntro :: Section -> Section -> Section -> Section -> Section -> Contents
 assumpIntro r1 r2 r3 r4 r5 = Paragraph $ foldlSent 
           [S "This", (phrase section_), S "simplifies the original", (phrase problem), 
           S "and helps in developing the", (phrase thModel), S "by filling in the", 
           S "missing", (phrase information), S "for the" +:+. (phrase physicalSystem), 
           S "The numbers given in the square brackets refer to the", 
-          foldr1 sC (map (refs) (itemsAndRefs r2)) `sC` S "or", 
+          foldr1 sC (map (refs) (itemsAndRefs)) `sC` S "or", 
           refs (likelyChg, r5) `sC` S "in which the respective", 
           (phrase assumption), S "is used"] --FIXME: use some clever "zipWith"
           where refs (chunk, ref) = (titleize' chunk) +:+ sSqBr (makeRef ref) 
-                itemsAndRefs Nothing = [(thModel, r1), (dataDefn, r3), (inModel, r4)]
-                itemsAndRefs (Just genDef) = [(thModel, r1), (genDefn, genDef), (dataDefn, r3), 
-                                              (inModel, r4)]
+                itemsAndRefs = [(thModel, r1), (genDefn, r2), (dataDefn, r3), 
+                                (inModel, r4)]
 
 --wrapper for thModelIntro
 thModF :: (NamedIdea a) => a -> [Contents] -> Section
@@ -189,35 +225,29 @@ dataDefinitionIntro closingSent = Paragraph $ (foldlSent [S "This", phrase secti
 
 -- wrappers for inModelIntro. Use inModelF' if genDef are not needed
 inModelF :: Section -> Section -> Section -> Section -> [Contents] -> Section
-inModelF probDes datDef theMod genDef otherContents = SRS.inModel ((inModelIntro probDes datDef theMod (Just genDef)):otherContents) []
-
-inModelF' :: Section -> Section -> Section -> [Contents] -> Section
-inModelF' probDes datDef theMod otherContents = SRS.inModel ((inModelIntro probDes datDef theMod Nothing):otherContents) []
+inModelF probDes datDef theMod genDef otherContents = SRS.inModel ((inModelIntro probDes datDef theMod genDef):otherContents) []
 
 -- just need to provide the four references in order to this function. Nothing can be input into r4 if only three tables are present
-inModelIntro :: Section -> Section -> Section -> Maybe Section -> Contents
+inModelIntro :: Section -> Section -> Section -> Section -> Contents
 inModelIntro r1 r2 r3 r4 = foldlSP [S "This", phrase section_, 
   S "transforms the", phrase problem, S "defined in", (makeRef r1), 
   S "into one which is expressed in mathematical terms. It uses concrete", 
   plural symbol_, S "defined in", (makeRef r2), 
   S "to replace the abstract", plural symbol_, S "in the", 
-  plural model, S "identified in", (makeRef r3) :+: end r4]
-    where end (Just genDef) = S " and" +:+ (makeRef genDef)
-          end Nothing       = EmptyS
+  plural model, S "identified in", (makeRef r3) :+: end]
+    where end = S " and" +:+ (makeRef r4)
 
 -- wrapper for datConPar
-datConF :: Sentence -> Bool -> Sentence -> [Contents] -> Section
-datConF mid end trailing tables = SRS.datCon 
-  ((dataConstraintParagraph end (listofTablesToRefs tables) mid trailing):tables) []
+datConF :: Sentence -> Sentence -> Sentence -> [Contents] -> Section
+datConF hasUncertainty mid trailing tables = SRS.datCon 
+  ((dataConstraintParagraph hasUncertainty (listofTablesToRefs tables) mid trailing):tables) []
   
 -- reference to the input/ ouput tables -> optional middle sentence(s) (use EmptyS if not wanted) -> 
 -- True if standard ending sentence wanted -> optional trailing sentence(s) -> Contents
-dataConstraintParagraph :: Bool -> Sentence -> Sentence -> Sentence -> Contents
-dataConstraintParagraph uncertnty tableRef middleSent trailingSent = Paragraph $
+dataConstraintParagraph :: Sentence -> Sentence -> Sentence -> Sentence -> Contents
+dataConstraintParagraph hasUncertainty tableRef middleSent trailingSent = Paragraph $
   (dataConstraintIntroSent tableRef) +:+ middleSent +:+ 
-  (dataConstraintClosingSent (hasUncertainty uncertnty) trailingSent)
-    where hasUncertainty False = EmptyS
-          hasUncertainty True  = dataConstraintUncertainty
+  (dataConstraintClosingSent hasUncertainty trailingSent)
 
 
 -- makes a list of references to tables takes

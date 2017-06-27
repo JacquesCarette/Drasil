@@ -137,7 +137,6 @@ maybeExpanded a b = likelyFrame a (S "expanded") b
 -- term (acc) - definition
 tAndDWAcc :: Concept s => s -> ItemType
 tAndDWAcc temp = Flat $ ((at_start temp) :+: sParenDash (short temp) :+: (temp ^. defn)) 
-
 -- term (symbol) - definition
 tAndDWSym :: (Concept s, SymbolForm a) => s -> a -> ItemType
 tAndDWSym tD sym = Flat $ ((at_start tD) :+: sParenDash (getS sym)) :+: (tD ^. defn)

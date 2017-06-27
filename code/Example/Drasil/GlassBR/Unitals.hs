@@ -236,7 +236,7 @@ loadShareFac  = cc' lShareFac
   S "glazing, of equal or different thickness's and types (including the",
   S "layered behaviour of", (getAcc lGlass), S "under long duration",
   S "loads), in a sealed", (getAcc iGlass), S "unit"])
-probBreak     = dcc "probBreak"       (prob_br ^. term)
+probBreak     = cc prob_br
   ("The fraction of glass lites or plies that would break at the first " ++
     "occurrence of a specified load and duration, typically expressed " ++
     "in lites per 1000.")

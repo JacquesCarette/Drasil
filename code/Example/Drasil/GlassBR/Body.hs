@@ -95,6 +95,14 @@ mgBod :: [Section]
 glassBR_mg :: Document
 glassBR_mg = mgDoc'' glassBRProg (for'' titleize phrase) mg_authors mgBod
 
+----------------------------------------------------------------------------------
+termsWithDefsOnly, termsWithAccDefn, glassTypes, loadTypes :: [ConceptChunk]
+termsWithDefsOnly = [glBreakage, lateral, lite, specA, blastResisGla, eqTNTChar]
+termsWithAccDefn  = [sD, loadShareFac, glTyFac, aspectRatio]
+glassTypes = [annealedGl, fTemperedGl, hStrengthGl]
+loadTypes = [loadResis, nonFactoredL,glassWL, shortDurLoad, specDeLoad, longDurLoad] 
+----------------------------------------------------------------------------------
+
 -----------------------
 -- S2: Intro helpers --
 -----------------------
@@ -223,14 +231,13 @@ s6_1_1 = termDefnF (S "All of the terms are extracted from" +:+
   sSqBr (S "4") +:+ S "in" +:+ (makeRef s10)) [s6_1_1_bullets]
 
 s6_1_1_bullets = Enumeration $ (Number $
-  map tAndDOnly 
-  [glBreakage, lateral, lite, specA, blastResisGla, eqTNTChar]
+  map tAndDOnly termsWithDefsOnly
   ++
   s6_1_1_bullets_glTySubSec
   ++
   s6_1_1_bullets_loadSubSec
   ++
-  map tAndDWAcc [sD, loadShareFac, glTyFac, aspectRatio]
+  map tAndDWAcc termsWithAccDefn
   ++
   [tAndDWSym (probBreak) (prob_br)])
 
@@ -239,12 +246,12 @@ s6_1_1_bullets = Enumeration $ (Number $
 s6_1_1_bullets_glTySubSec, s6_1_1_bullets_loadSubSec :: [ItemType]
 
 s6_1_1_bullets_glTySubSec = [Nested (((titleize glassTy) :+: S ":"))
-  (Bullet $ map tAndDWAcc [annealedGl, fTemperedGl, hStrengthGl])]
+  (Bullet $ map tAndDWAcc glassTypes)]
 
 s6_1_1_bullets_loadSubSec = [Nested (((at_start load) :+: S ":"))
-  (Bullet $ map tAndDWAcc [loadResis, nonFactoredL]
+  (Bullet $ map tAndDWAcc (take 2 loadTypes)
   ++ 
-  map tAndDOnly [glassWL, shortDurLoad, specDeLoad, longDurLoad])]
+  map tAndDOnly (drop 2 loadTypes))]
 
 s6_1_2 = physSystDesc (short gLassBR) (fig_glassbr) [s6_1_2_list, fig_glassbr]
 

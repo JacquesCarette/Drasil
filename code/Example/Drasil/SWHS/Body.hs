@@ -1184,17 +1184,10 @@ req11 = [S "Calculate and", phrase output_, S "the", phrase time,
 ---------------------------------------
 
 s5_2 :: Section
-s5_2 = SRS.nonfuncReq [s5_2_contents] []
-
-s5_2_contents :: Contents
-s5_2_contents = foldlSP [S "Given the small size, and relative simplicity"
-  `sC` S "of this", phrase problem `sC` phrase performance,
-  S "is not a" +:+. phrase priority,
-  S "Any reasonable implementation will be very quick and use",
-  S "minimal storage. Rather than", phrase performance `sC` S "the",
-  phrase priority, plural nonfunctionalRequirement,
-  S "are correctness" `sC` S "verifiability" `sC`
-  S "understandability" `sC` S "reusability" `sC` S "and maintainability"]
+s5_2 = s5_2 = nonFuncReqF [performance] [correctness, verifiability,
+  understandability, reusability, maintainability]
+  (S "This problem is small in size and relatively simple")
+  (S "Any reasonable implementation will be very quick and use minimal storage.")
 
 -- The second sentence of the above paragraph is repeated in all examples (not
 -- exactly, but the general idea is). The first sentence is not always

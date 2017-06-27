@@ -44,6 +44,9 @@ import Drasil.Sections.TraceabilityMandGs
 import Drasil.Sections.Requirements
 import Drasil.Sections.GeneralSystDesc
 
+import Data.Drasil.Concepts.Software(performance, correctness, verifiability,
+  understandability, reusability, maintainability)
+
 import Data.Drasil.SentenceStructures (showingCxnBw, foldlSent, foldlSent_,
   foldlSentCol, foldlSP, foldlSP_, foldlSPCol, foldlsC, isThe, ofThe, ofThe',
   sAnd, displayConstr)

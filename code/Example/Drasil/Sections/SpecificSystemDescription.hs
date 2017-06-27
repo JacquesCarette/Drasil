@@ -213,9 +213,9 @@ datConF mid end trailing tables = SRS.datCon
 -- reference to the input/ ouput tables -> optional middle sentence(s) (use EmptyS if not wanted) -> 
 -- True if standard ending sentence wanted -> optional trailing sentence(s) -> Contents
 dataConstraintParagraph :: Bool -> Sentence -> Sentence -> Sentence -> Contents
-dataConstraintParagraph uncertainty tableRef middleSent trailingSent = Paragraph $
+dataConstraintParagraph uncertnty tableRef middleSent trailingSent = Paragraph $
   (dataConstraintIntroSent tableRef) +:+ middleSent +:+ 
-  (dataConstraintClosingSent (hasUncertainty uncertainty) trailingSent)
+  (dataConstraintClosingSent (hasUncertainty uncertnty) trailingSent)
     where hasUncertainty False = EmptyS
           hasUncertainty True  = dataConstraintUncertainty
 

@@ -219,7 +219,7 @@ s4_1_2_bullets = enumBullet [
   (at_start' itslPrpty +:+ S "convention is noted by j. The end" +:+
     plural itslPrpty +:+ S "are usually not of" +:+ phrase interest `sC`
     S "therefore use the" +:+ plural itslPrpty +:+ S "from" +:+
-    S "1" +:+ P (Special LEQ) +:+ (E . V) "i" +:+ P (Special LEQ) +:+.
+    S 1 +:+ P (Special LEQ) +:+ (E . V) "i" +:+ P (Special LEQ) +:+.
     (E $ (C numbSlices) :- Int 1)),--FIXME: this whole thing should be one expr
   (at_start slice +:+ plural property +:+. S "convention is noted by i")
   ]
@@ -258,11 +258,11 @@ s4_1_3_list = enumSimple 1 (short goalStmt) [
 s4_2 = solChSpecF ssa (s4_1, s6) ddEnding (EmptyS, True, EmptyS)
   ([s4_2_1_list], s4_2_2_tmods, s4_2_3_genDefs, s4_2_4_dataDefs, 
   s4_2_5_p2:s4_2_5_p3:s4_2_5_IMods, [s4_2_6Table2, s4_2_6Table3]) []
-  where ddEnding = foldlSent [at_start' definition, acroDD "1", S "to", acroDD "8", S "are the",
+  where ddEnding = foldlSent [at_start' definition, acroDD 1, S "to", acroDD 8, S "are the",
           phrase force, plural variable, S "that can be solved by direct",
           S "analysis of given" +:+. plural input_, S "The", phrase intrslce, 
-          S "forces", acroDD "9", S "are", phrase force, plural variable, 
-          S "that must be written in terms of", acroDD "1", S "to", acroDD "8" +:+. S "to solve"]
+          S "forces", acroDD 9, S "are", phrase force, plural variable, 
+          S "that must be written in terms of", acroDD 1, S "to", acroDD 8 +:+. S "to solve"]
         tbRef = makeRef s4_2_6Table2 +:+ S "and" +:+ makeRef s4_2_6Table3 +:+ S "show"
 
 -- SECTION 4.2.1 --
@@ -324,9 +324,9 @@ s4_2_4_dataDefs = (map sspSymMapD (take 10 sspDataDefs)) ++ resShrDerivation ++
 
 resShrDerivation :: [Contents]
 resShrDerivation = [foldlSP [S "The resistive shear force of a slice is defined as", 
-  S "Pi in" +:+. acroGD "3", S "The effective normal in the equation for Pi of the", 
+  S "Pi in" +:+. acroGD 3, S "The effective normal in the equation for Pi of the", 
   S "soil is defined in the perpendicular force equilibrium of a slice from", 
-  acroGD "2" `sC` S "using the", S "effective normal N0i of", acroT "4", 
+  acroGD 2 `sC` S "using the", S "effective normal N0i of", acroT 4, 
   S "shown in equation (1)"],
   
   EqnBlock $
@@ -435,20 +435,20 @@ s4_2_5_p2 = foldlSP [S "The", titleize morPrice,
   S "breaking the", S "assumed failure", phrase surface, S "into a series of vertical",
   plural slice, S "of" +:+. phrase mass, S "Static equilibrium",
   S "analysis using two", phrase force, S "equilibrium, and one moment",
-  phrase equation, S "as in" +:+. acroT "2", S "The", phrase problem,
+  phrase equation, S "as in" +:+. acroT 2, S "The", phrase problem,
   S "is statically indeterminate with only these 3", plural equation, S "and one", --FIXME: T2, T3, GD5, DD1, DD9, DD10, DD11 should be references to other things in the body
-  S "constitutive", phrase equation, sParen $ S "the Mohr Coulomb shear strength of" +:+ acroT "3",
-  S "so the", phrase assumption, S "of", acroGD "5", S "is used. Solving for",
+  S "constitutive", phrase equation, sParen $ S "the Mohr Coulomb shear strength of" +:+ acroT 3,
+  S "so the", phrase assumption, S "of", acroGD 5, S "is used. Solving for",
   phrase force, S "equilibrium allows", plural definition, S "of all", plural force,
-  S "in terms of the", plural physicalProperty, S "of", acroDD "1", S "to",
-  acroDD "9" `sC` S "as done in", acroDD "10" `sC` acroDD "11"]
+  S "in terms of the", plural physicalProperty, S "of", acroDD 1, S "to",
+  acroDD 9 `sC` S "as done in", acroDD 10 `sC` acroDD 11]
 
 s4_2_5_p3 = foldlSP [plural value `ofThe'` (phrase intrslce +:+ phrase normForce),
   S "E the interslice normal/shear", phrase force, S "magnitude ratio", getS normToShear `sC` --FIXME: 'E' should be the symbol captital E, same with lambda
   S "and the", titleize fs_rc, (sParen $ getS fs) `sC` S "are unknown.",  --FIXME: get the relation concept symbol 'FS' from factor of safety in Defs.hs
   at_start' equation, S "for the unknowns are written in terms of only the",
-  plural value, S "in", acroDD "1", S "to", acroDD "9" `sC` S "the", plural value, S "of", getS shearRNoIntsl `sC`
-  S "and", getS shearFNoIntsl, S "in", acroDD "10", S "and", acroDD "11" `sC`
+  plural value, S "in", acroDD 1, S "to", acroDD 9 `sC` S "the", plural value, S "of", getS shearRNoIntsl `sC`
+  S "and", getS shearFNoIntsl, S "in", acroDD 10, S "and", acroDD 11 `sC`
   S "and each", --FIXME: DD10, DD11 should be references to other things in the body
   S "other. The relationships between the unknowns are non linear" `sC`
   S "and therefore explicit", plural equation, S "cannot be derived and an",
@@ -628,7 +628,7 @@ slopeVert = verticesConst $ phrase slope
 
 dataConstIn :: [[Sentence]]
 dataConstIn = [waterVert, slipVert, slopeVert] ++ --List of typical values below
-  zipWith makeConstraint sspInputs (map S ["15000","10","0.4","25","20","20","9.8"])
+  zipWith makeConstraint sspInputs (map S ["15000",10,"0.4","25","20","20","9.8"])
 
 {-output data-}
 slipVert2 :: [[Sentence]]
@@ -643,8 +643,8 @@ dataConstOut = [(displayContr' . head) sspOutputs] ++ slipVert2 ++
 
 {-input and output tables-}
 s4_2_6Table2, s4_2_6Table3 :: Contents
-s4_2_6Table2 = inDataConstTbl dataConstIn "2"
-s4_2_6Table3 = outDataConstTbl dataConstOut "3"
+s4_2_6Table2 = inDataConstTbl dataConstIn 2
+s4_2_6Table3 = outDataConstTbl dataConstOut 3
 
 -- SECTION 5 --
 s5 = reqF [s5_1, s5_2]
@@ -672,8 +672,8 @@ s5_1_list = enumSimple 1 (short requirement) [
   (S "Generate new potential" +:+ plural crtSlpSrf +:+
     S "based on previously analysed" +:+ plural slpSrf +:+
     S "with low" +:+. plural fs_rc),
-  (S "Repeat" +:+ plural requirement +:+ acroR "3" +:+ S "to" +:+
-    acroR "7" +:+ S "until the" +:+
+  (S "Repeat" +:+ plural requirement +:+ acroR 3 +:+ S "to" +:+
+    acroR 7 +:+ S "until the" +:+
     S "minimum" +:+ phrase fs_rc +:+ S "remains approximately" +:+
     S "the same over a predetermined number of" +:+
     S "repetitions. Identify the" +:+ (phrase slpSrf) +:+

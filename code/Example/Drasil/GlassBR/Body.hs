@@ -51,8 +51,9 @@ s3, s4, s5,
 s4_1_bullets, s5_1_table, s5_2_bullets, 
   s6_1_1_bullets, s6_1_2_list, s6_1_3_list, 
   s6_2_intro, s6_2_5_table1, s6_2_5_table2, 
-  s6_2_5_intro2, s6_2_5_table3, s7_2_intro, s9_table1, 
-  s9_table2, s9_table3, s10_list, s11_intro, fig_glassbr, fig_2, 
+  s6_2_5_intro2, s6_2_5_table3, s7_2_intro,
+  s9_table1, s9_table2, s9_table3,
+  s10_list, s11_intro, fig_glassbr, fig_2, 
   fig_3, fig_4, fig_5, fig_6 :: Contents
 
 s6_2_1_list, s7_1_list, s9_intro2 :: [Contents]
@@ -103,6 +104,12 @@ termsWithDefsOnly = [glBreakage, lateral, lite, specA, blastResisGla, eqTNTChar]
 termsWithAccDefn  = [sD, loadShareFac, glTyFac, aspectRatio]
 glassTypes = [annealedGl, fTemperedGl, hStrengthGl]
 loadTypes = [loadResis, nonFactoredL,glassWL, shortDurLoad, specDeLoad, longDurLoad] 
+
+--Used in "Traceability Matrices and Graphs" Section--
+traceyMatrices, traceyGraphs :: [Contents]
+
+traceyMatrices = [s9_table1, s9_table2, s9_table3]
+traceyGraphs = [fig_2, fig_3, fig_4]
 ----------------------------------------------------------------------------------
 
 {--INTRODUCTION--}
@@ -443,8 +450,8 @@ inputVarSD    = displayConstr standOffDist (45 :: Int)       (addPercent 10)
 
 s6_2_5_table2 = Table [S "Var", titleize value] (mkTable 
   [(\x -> fst x), (\x -> snd x)]
-  ([(getS dim_min, E (Dbl 0.1)  +:+ (unwrap $ getUnit standOffDist)), 
-  (getS dim_max, E (Dbl 0.1) +:+ (unwrap $ getUnit standOffDist)), 
+  ([(getS dim_min, fmtU (E (Dbl 0.1)) standOffDist), 
+  (getS dim_max, fmtU (E (Dbl 0.1)) standOffDist), 
   ((getS ar_max), E (Dbl 5))]
   ++
   zipWith s6_2_5_table2_formatF2
@@ -597,14 +604,14 @@ s8_likelychg5 = foldlSent [acroA "7" `sDash` S "The", phrase software,
 
 {--TRACEABLITY MATRICES AND GRAPHS--}
 
-s9 = traceMGF [s9_table1, s9_table2, s9_table3]
+s9 = traceMGF traceyMatrices
   [(plural thModel `sC` (plural dataDefn) `sAnd` plural inModel +:+.
   S "with each other"), (plural requirement +:+ S "on" +:+ plural thModel `sC`
   (plural inModel) `sC` (plural dataDefn) +:+ S "and" +:+. plural datumConstraint), 
   (plural thModel `sC` (plural dataDefn) `sC` plural inModel
   `sC` plural likelyChg `sAnd` plural requirement +:+ S "on the" +:+ 
   plural assumption)]
-  ([s9_table1, s9_table2, s9_table3] ++ (s9_intro2) ++ [fig_2, fig_3, fig_4])
+  (traceyMatrices ++ (s9_intro2) ++ traceyGraphs)
   []
 
 s9_theorys, s9_instaModel, s9_dataDef, s9_data, s9_funcReq, s9_assump, 
@@ -759,7 +766,7 @@ s9_table3 = Table (EmptyS:s9_row_header_t3)
 
 --
 
-s9_intro2 = traceGIntro [fig_2, fig_3, fig_4]
+s9_intro2 = traceGIntro traceyGraphs
   [(plural requirement +:+ S "on" +:+ plural thModel `sC` plural inModel
   `sC` plural dataDefn +:+ S "and" +:+. plural datumConstraint), 
   (plural requirement +:+ S "on" +:+ plural thModel `sC` plural inModel
@@ -784,10 +791,12 @@ fig_4 = figureLabel "4" (traceyMatrix)
 
 s10 = SRS.reference [s10_list] []
 
-s10_list = mkRefsList 1 (map (foldlsC) [s10_ref1, s10_ref2, 
-  s10_ref3, s10_ref4, s10_ref5, s10_ref6])
+s10_list = mkRefsList 1 (map (foldlsC) references)
 
 s10_ref1, s10_ref2, s10_ref3, s10_ref4, s10_ref5, s10_ref6 :: [Sentence]
+
+references :: [[Sentence]]
+references = [s10_ref1, s10_ref2, s10_ref3, s10_ref4, s10_ref5, s10_ref6]
 
 s10_ref1 = [S "N. Koothoor",
   Quote (S "A" +:+ phrase document +:+ S "drive approach to certifying" +:+ phrase sciCompS :+: S ",") +:+
@@ -802,13 +811,13 @@ s10_ref2 = [S "W. S. Smith and L. Lai",
   sParen (S "Paris, France"), S "pp. 107-121", 
   S "In conjunction with 13th IEEE International Requirements Engineering Conference",
   S "2005."]
-  --FIXME:Make a compundNC "requirement template"?
+  --FIXME:Make a compoundNC "requirement template"?
 
 s10_ref3 = [S "J. Robertson and S. Robertson", 
   Quote (S "Volere requirements specification template edition 16.") +:+
   Quote (S "www.cs.uic.edu/ i442/VolereMaterials/templateArchive16/c" +:+ S "Volere template16.pdf"),
   S "2012."]
-  --FIXME:Make a compundNC "requirement specification template"?
+  --FIXME:Make a compoundNC "requirement specification template"?
 
 s10_ref4 = [S "ASTM Standards Committee",
   Quote (S "Standard practice for determining load resistance of glass in buildings,")

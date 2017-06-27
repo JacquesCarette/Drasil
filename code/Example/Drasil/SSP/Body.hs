@@ -256,12 +256,13 @@ s4_1_3_list = enumSimple 1 (short goalStmt) [
 
 -- SECTION 4.2 --
 s4_2 = solChSpecF ssa (s4_1, s6) True ddEnding (tbRef, EmptyS, True, EmptyS)
-  ([s4_2_1_list], s4_2_2_tmods, s4_2_3_genDefs, s4_2_4_dataDefs, s4_2_5_p2:s4_2_5_p3:s4_2_5_IMods, [s4_2_6Table2, s4_2_6Table3]) []
-  where ddEnding = (at_start' definition) +:+ S "DD1 to DD8 are the" +:+
-          phrase force +:+ plural variable +:+ S "that can be solved by direct" +:+
-          S "analysis of given" +:+. plural input_ +:+ S "The" +:+
-          phrase intrslce +:+ S "forces DD9 are" +:+ phrase force +:+
-          plural variable +:+. S "that must be written in terms of DD1 to DD8 to solve"
+  ([s4_2_1_list], s4_2_2_tmods, s4_2_3_genDefs, s4_2_4_dataDefs, 
+  s4_2_5_p2:s4_2_5_p3:s4_2_5_IMods, [s4_2_6Table2, s4_2_6Table3]) []
+  where ddEnding = foldlSent [at_start' definition, acroDD "1", S "to", acroDD "8", S "are the",
+          phrase force, plural variable, S "that can be solved by direct",
+          S "analysis of given" +:+. plural input_, S "The", phrase intrslce, 
+          S "forces", acroDD "9", S "are", phrase force, plural variable, 
+          S "that must be written in terms of", acroDD "1", S "to", acroDD "8" +:+. S "to solve"]
         tbRef = makeRef s4_2_6Table2 +:+ S "and" +:+ makeRef s4_2_6Table3 +:+ S "show"
 
 -- SECTION 4.2.1 --
@@ -322,15 +323,19 @@ s4_2_4_dataDefs = (map sspSymMapD (take 10 sspDataDefs)) ++ resShrDerivation ++
   stfMtrxDerivation ++ (map sspSymMapD (drop 12 sspDataDefs)) --FIXME: is there a better way of shoving these derivations in the middle of the Data Defs?
 
 resShrDerivation :: [Contents]
-resShrDerivation = [foldlSP [S "The resistive shear force of a slice is defined as Pi in GD3. The effective normal in the equation",
-  S "for Pi of the soil is defined in the perpendicular force equilibrium of a slice from GD2, Using the",
-  S "effective normal N0i of T4 shown in equation (1)"],
+resShrDerivation = [foldlSP [S "The resistive shear force of a slice is defined as", 
+  S "Pi in" +:+. acroGD "3", S "The effective normal in the equation for Pi of the", 
+  S "soil is defined in the perpendicular force equilibrium of a slice from", 
+  acroGD "2" `sC` S "using the", S "effective normal N0i of", acroT "4", 
+  S "shown in equation (1)"],
   
   EqnBlock $
-  (C nrmFSubWat) := (((C slcWght) - (C intShrForce) + (C intShrForce) :+ (C surfHydroForce) :* (cos (C surfAngle)) :+ --FIXME: add indexing
+  (C nrmFSubWat) := (((C slcWght) - (C intShrForce) + (C intShrForce) :+ 
+  (C surfHydroForce) :* (cos (C surfAngle)) :+ --FIXME: add indexing
   (C surfLoad) :* (cos (C impLoadAngle))) :* (cos (C baseAngle)) :+
-  (Neg (C earthqkLoadFctr) :* (C slcWght) - (C intNormForce) + (C intNormForce) - (C watrForce) + (C watrForce) :+ (C surfHydroForce)
-  :* sin (C surfAngle) :+ (C surfLoad) :* (sin (C impLoadAngle))) :* (sin (C baseAngle)) :- (C baseHydroForce)),
+  (Neg (C earthqkLoadFctr) :* (C slcWght) :- (C intNormForce) :+ (C intNormForce) :- 
+  (C watrForce) :+ (C watrForce) :+ (C surfHydroForce) :* sin (C surfAngle) :+ 
+  (C surfLoad) :* (sin (C impLoadAngle))) :* (sin (C baseAngle)) :- (C baseHydroForce)),
   
   foldlSP [S "The values of the interslice forces E and X in the equation are unknown, while the other values",
   S "are found from the physical force definitions of DD1 to DD9. Consider a force equilibrium without",

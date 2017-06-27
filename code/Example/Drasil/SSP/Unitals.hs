@@ -46,13 +46,13 @@ elasticMod, cohesion, poissnsRatio, fricAngle, dryWeight, satWeight,
 {-Intput Variables-}
 --FIXME: add (x,y) when we can index or make related unitals
 
-elasticMod = ConstrConcept SM.elastMod gtZeroConstr
+elasticMod = constrained' SM.elastMod gtZeroConstr
 
 cohesion     = cuc' "c'" (cn $ "effective cohesion")
   "internal pressure that sticks particles of soil together"
   (Atomic "c'") pascal Real gtZeroConstr
 
-poissnsRatio = ConstrConcept SM.poissnsR
+poissnsRatio = constrained' SM.poissnsR
   [physc $ \c -> (Int 0) :< c :< (Int 1)]
 
 fricAngle    = cuc' "varphi'" (cn $ "effective angle of friction")
@@ -73,7 +73,7 @@ waterWeight = cuc' "gamma_w" (cn $ "unit weight of water")
   (sub (Greek Gamma_L) lW) specific_weight Real gtZeroConstr
 
 {-Output Variables-}
-fs          = ConstrConcept (cvR (dcc "FS" (nounPhraseSP $ "global factor of safety")
+fs          = constrained' (cvR (dcc "FS" (nounPhraseSP $ "global factor of safety")
   "the stability of a surface in a slope") (Atomic "FS")) gtZeroConstr
 
 dx_i        = cuc' "dx_i" (cn $ "displacement") ("in the x-ordinate direction " ++ fsi)

@@ -579,9 +579,15 @@ rigFoSDerivation = [foldlSP [S "RFEM analysis can also be used to calculate the 
   S "used in place of force F as the stiffness hasn't been normalized for the length of the base. Results",
   S "in equation (26)"],
 
+  EqnBlock $
+  C normStress := C nrmStiffBase * C nrmDispl, --FIXME: index
+  
   foldlSP [S "The resistive shear to calculate the factor of safety FS in is found from the Mohr Coulomb resistive",
   S "strength of soil in T3. Using the normal stress sigma from equation (26) as the stress the resistive",
   S "shear of the slice can be calculated from calculated in equation (27)"],
+  
+  EqnBlock $
+  C mobShrI := C cohesion - C normStress * tan(C fricAngle), --FIXME: index and prime
   
   foldlSP [S "Previously the value of the base shear stiffness Kbt,i as seen in equation (28) was unsolvable because",
   S "the normal stress sigma i was unknown. With the definition of sigma i from equation (26) and the definition",

@@ -481,9 +481,20 @@ nrmShrDerivation = [foldlSP [S "The last static equation of T2 the moment equili
   
   foldlSP [S "The equation in terms of", getS normToShear, S "leads to equation (14)"],
   
+  EqnBlock $
+  C normToShear := momEql_rel / ((C baseWthX / Int 2) * (C intNormForce * C scalFunc + C intNormForce * C scalFunc)), --FIXME: remove Int 0 from momEql_rel
+  
   foldlSP [S "Taking a summation of each slice, and considering the boundary conditions that E0 and En are",
   S "equal to zero, a general equation for the constant", getS normToShear, S "is developed in equation (15), also found in",
   S "IM2"],
+  
+  EqnBlock $
+  C normToShear := summation (Just (lI, Low $ Int 1, High $ C numbSlices))
+  (C baseWthX * (C intNormForce + C intNormForce + C watrForce + C watrForce) * tan(C baseAngle) +
+  C midpntHght * (C earthqkLoadFctr * C slcWght - Int 2 * C surfHydroForce * sin(C surfAngle) -
+  Int 2 * C surfLoad * sin(C impLoadAngle))) / 
+  summation (Just (lI, Low $ Int 1, High $ C numbSlices))
+  (C baseWthX * (C intNormForce * C scalFunc + C intNormForce * C scalFunc)),
   
   foldlSP [S "Equation (15) for", getS normToShear `sC` S "is a function of the unknown interslice normal force E (IM3)"]
   ]

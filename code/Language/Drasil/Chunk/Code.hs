@@ -87,6 +87,7 @@ symbToCodeName (Concat sy) = concatMap symbToCodeName sy
 decorate :: String -> Decoration -> String
 decorate s Hat = s ++ "_hat"
 decorate s Vector = s ++ "_vect"
+decorate s Prime = s ++ "'"
 
 greekToCodeName :: Greek -> String
 greekToCodeName Alpha_L   = "alpha"

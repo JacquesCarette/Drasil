@@ -104,6 +104,7 @@ symbol (Atop f s) = sFormat f s
 sFormat :: Decoration -> Symbol -> String
 sFormat Hat    s = "\\hat{" ++ symbol s ++ "}"
 sFormat Vector s = "\\mathbf{" ++ symbol s ++ "}"
+sFormat Prime  s = symbol s ++ "'"
 
 -----------------------------------------------------------------
 ------------------ EXPRESSION PRINTING----------------------

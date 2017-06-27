@@ -106,6 +106,7 @@ symbol (Corners [] [_] [] [] _) = error "rendering of ll prescript"
 symbol (Corners _ _ _ _ _)      = error "rendering of Corners (general)"
 symbol (Atop Vector s)       = "<b>" ++ symbol s ++ "</b>"
 symbol (Atop Hat s)          = symbol s ++ "&#770;"
+symbol (Atop Prime s)        = symbol s ++ "'"
 
 uSymb :: USymb -> String
 uSymb (UName s)           = symbol s

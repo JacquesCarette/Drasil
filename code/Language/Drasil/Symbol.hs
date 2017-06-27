@@ -11,7 +11,7 @@ import Data.Char (toLower)
 
 -- | Decorations on symbols/characters such as hats or Vector representations
 -- (bolding/etc)
-data Decoration = Hat | Vector deriving (Eq, Ord)
+data Decoration = Hat | Vector | Prime deriving (Eq, Ord)
 
 -- | Symbols can be:
 -- - atomic (strings such as "A" or "max" that represent a single idea)
@@ -91,3 +91,7 @@ hat = Atop Hat
 -- | Helper for creating a Vector symbol.
 vec :: Symbol -> Symbol
 vec = Atop Vector
+
+-- | Helper for creating a Vector symbol.
+prime :: Symbol -> Symbol
+prime = Atop Prime

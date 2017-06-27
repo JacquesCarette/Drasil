@@ -137,6 +137,7 @@ spec (E e)     = T.E $ expr e
 decorate :: Decoration -> Sentence -> Sentence
 decorate Hat    s = S "\\hat{" :+: s :+: S "}"
 decorate Vector s = S "\\bf{" :+: s :+: S "}"
+decorate Prime  s = s :+: S "'"
 
 accent :: Accent -> Char -> Sentence
 accent Grave  s = S $ "\\`{" ++ (s : "}")

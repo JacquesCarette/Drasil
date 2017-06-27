@@ -219,7 +219,7 @@ s4_1_2_bullets = enumBullet [
   (at_start' itslPrpty +:+ S "convention is noted by j. The end" +:+
     plural itslPrpty +:+ S "are usually not of" +:+ phrase interest `sC`
     S "therefore use the" +:+ plural itslPrpty +:+ S "from" +:+
-    S 1 +:+ P (Special LEQ) +:+ (E . V) "i" +:+ P (Special LEQ) +:+.
+    S "1" +:+ P (Special LEQ) +:+ (E . V) "i" +:+ P (Special LEQ) +:+.
     (E $ (C numbSlices) :- Int 1)),--FIXME: this whole thing should be one expr
   (at_start slice +:+ plural property +:+. S "convention is noted by i")
   ]
@@ -628,7 +628,7 @@ slopeVert = verticesConst $ phrase slope
 
 dataConstIn :: [[Sentence]]
 dataConstIn = [waterVert, slipVert, slopeVert] ++ --List of typical values below
-  zipWith makeConstraint sspInputs (map S ["15000",10,"0.4","25","20","20","9.8"])
+  zipWith makeConstraint sspInputs (map S ["15000","10","0.4","25","20","20","9.8"])
 
 {-output data-}
 slipVert2 :: [[Sentence]]
@@ -643,8 +643,8 @@ dataConstOut = [(displayContr' . head) sspOutputs] ++ slipVert2 ++
 
 {-input and output tables-}
 s4_2_6Table2, s4_2_6Table3 :: Contents
-s4_2_6Table2 = inDataConstTbl dataConstIn 2
-s4_2_6Table3 = outDataConstTbl dataConstOut 3
+s4_2_6Table2 = inDataConstTbl dataConstIn "2"
+s4_2_6Table3 = outDataConstTbl dataConstOut "3"
 
 -- SECTION 5 --
 s5 = reqF [s5_1, s5_2]

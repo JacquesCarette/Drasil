@@ -96,16 +96,16 @@ glassBR_mg :: Document
 glassBR_mg = mgDoc'' glassBRProg (for'' titleize phrase) mg_authors mgBod
 
 ----------------------------------------------------------------------------------
+--Used in "Terms And Definitions" Section--
 termsWithDefsOnly, termsWithAccDefn, glassTypes, loadTypes :: [ConceptChunk]
+
 termsWithDefsOnly = [glBreakage, lateral, lite, specA, blastResisGla, eqTNTChar]
 termsWithAccDefn  = [sD, loadShareFac, glTyFac, aspectRatio]
 glassTypes = [annealedGl, fTemperedGl, hStrengthGl]
 loadTypes = [loadResis, nonFactoredL,glassWL, shortDurLoad, specDeLoad, longDurLoad] 
 ----------------------------------------------------------------------------------
 
------------------------
--- S2: Intro helpers --
------------------------
+{--INTRODUCTION--}
 
 startIntro, knowIR, undIR, appStanddIR, incScoR, endScoR :: Sentence
 startIntro = foldlSent [at_start software, 
@@ -127,7 +127,9 @@ incScoR = foldl (+:+) EmptyS [S "getting all", plural inParam,
   S "related to", phrase blastTy]
 endScoR = foldl (+:+) EmptyS [S "use the", plural datum, S "and predict whether the", 
   phrase glaSlab, S "is safe to use or not"]
---for Purpose of Document Section
+
+{--Purpose of Document--}
+
 s2_1_intro_p1 :: Sentence
 s2_1_intro_p1 = foldlSent [S "The main", phrase purpose, S "of this",
   phrase document, S "is to predict whether a given", phrase glaSlab,
@@ -142,7 +144,10 @@ s2_1_intro_p1 = foldlSent [S "The main", phrase purpose, S "of this",
   plural content, S "say what", phrase problem, 
   S "is being solved, but not how to solve it"]
 
---for Organization of Document Section
+{--Scope of Requirements--}
+
+{--Organization of Document--}
+
 s2_3_intro = foldlSent [S "The", phrase organization, S "of this",
   phrase document, S "follows the", phrase template, S "for an", short srs,
   S "for", phrase sciCompS, S "proposed by" +:+ sSqBr (S "1") `sAnd` sSqBr (S "2"),
@@ -153,11 +158,20 @@ s2_3_intro = foldlSent [S "The", phrase organization, S "of this",
 s2_3_intro_end = foldl (+:+) EmptyS [(at_start' $ the dataDefn), 
   S "are used to support", (plural definition `ofThe` S "different"), 
   plural model]
-  
+
+{--STAKEHOLDERS--}
+
 s3 = stakehldrGeneral (gLassBR) 
   (S "Entuitive. It is developed by Dr. Manuel Campidelli")
 
+{--The Client--}
+{--The Customer--}
+
+{--GENERAL SYSTEM DESCRIPTION--}
+
 s4 = genSysF [] s4_1_bullets [] []
+
+{--User Characteristics--}
 
 s4_1_bullets = enumBullet [(S "The" +:+ phrase endUser +:+ S "of" +:+ 
   short gLassBR +:+ S "is expected to have completed at least" +:+.
@@ -169,8 +183,13 @@ s4_1_bullets = enumBullet [(S "The" +:+ phrase endUser +:+ S "of" +:+
   S "is expected to have basic" +:+ phrase computer +:+
   S "literacy to handle the" +:+. phrase software)]
 
+{--System Constraints--}
+
+{--SCOPE OF THE PROJECT-}
 
 s5 = scopeOfTheProjF (short gLassBR) (s5_1_table) (s5_2_bullets)
+
+{--Product Use Case Table--}
 
 s5_1_table = prodUCTbl [s5_1_table_UC1, s5_1_table_UC2] "1"
 
@@ -183,6 +202,8 @@ s5_1_table_UC1 = [S "1", titleize' input_, titleize user, titleize' characterist
 s5_1_table_UC2 = [S "2", titleize output_, short gLassBR, S "Whether or not the" +:+
   phrase glaSlab +:+ S "is safe for the calculated" +:+ phrase load +:+
   S "and supporting calculated" +:+ plural value]
+
+{--Individual Product Use Cases--}
 
 s5_2_bullets = enumBullet [s5_2_bt_sent1, s5_2_bt_sent2]
 
@@ -215,7 +236,11 @@ s5_2_bt_sent2 = foldlSent [S " Use Case 2", short gLassBR,
   S "All the supporting calculated", plural value, S "are also displayed as", 
   phrase output_]
 
+{--SPECIFIC SYSTEM DESCRIPTION--}
+
 s6 = specSysDesF (S "and" +:+ plural definition) [s6_1, s6_2]
+
+{--PROBLEM DESCRIPTION--}
 
 s6_1 = probDescF start gLassBR ending [s6_1_1, s6_1_2, s6_1_3]
   where start = foldlSent [S "A", phrase system, 
@@ -226,6 +251,8 @@ s6_1 = probDescF start gLassBR ending [s6_1_1, s6_1_2, s6_1_3]
                 S "which predicts whether the", phrase glaSlab,
                 S "can withstand the", phrase blast, S "under the", 
                 plural condition]
+
+{--Terminology and Definitions--}
 
 s6_1_1 = termDefnF (S "All of the terms are extracted from" +:+ 
   sSqBr (S "4") +:+ S "in" +:+ (makeRef s10)) [s6_1_1_bullets]
@@ -253,6 +280,8 @@ s6_1_1_bullets_loadSubSec = [Nested (((at_start load) :+: S ":"))
   ++ 
   map tAndDOnly (drop 2 loadTypes))]
 
+{--Physical System Description--}
+
 s6_1_2 = physSystDesc (short gLassBR) (fig_glassbr) [s6_1_2_list, fig_glassbr]
 
 fig_glassbr = Figure (at_start $ the physicalSystem) "physicalsystimage.png"
@@ -272,6 +301,8 @@ s6_1_2_list_physys2 = foldlSent [S "The point of"
   `isThe` S "distance between the point of", phrase explosion,
   S "and the glass"]
 
+{--Goal Statements--}
+
 s6_1_3 = goalStmtF [foldlList [S "dimensions" `ofThe`S "glass plane", 
   phrase glassTy, plural characteristic `ofThe` phrase explosion, 
   S "the" +:+ phrase pb_tol]] [s6_1_3_list]
@@ -285,6 +316,8 @@ s6_1_3_list_goalStmt1 = [foldlSent [S "Analyze and predict whether the",
   S "of a certain degree which is calculated based on", phrase user, 
   phrase input_]]
 
+{--SOLUTION CHARACTERISTICS SPECIFICATION--}
+
 s6_2 = solChSpecF gLassBR (s6_1, s8) False (EmptyS) (tbRef, EmptyS, True, end)
  (s6_2_1_list, s6_2_2_TMods, [], s6_2_4_DDefns, s6_2_3_IMods, 
   [s6_2_5_table1, s6_2_5_table2, s6_2_5_intro2, s6_2_5_table3]) []
@@ -297,7 +330,9 @@ s6_2 = solChSpecF gLassBR (s6_1, s8) False (EmptyS) (tbRef, EmptyS, True, end)
 s6_2_intro = foldlSP [S "This", phrase section_, 
   S "explains all the", plural assumption, S "considered and the", 
   plural thModel, S "which are supported by the", plural dataDefn]
-  
+
+{--Assumptions--}
+
 s6_2_1 = assumpF' (s6_2_2) (s6_2_4) (s6_2_3) (s8) (s6_2_1_list)
 
 s6_2_1_list = 
@@ -358,24 +393,28 @@ assumption8 = [foldlSent [S "With", phrase reference, S "to A4 the", phrase valu
   phrase equation +:+. E ((C loadDF) := loadDF_eq), S "Using this" `sC`
   E ((C loadDF) := (Dbl 0.27))]]
 
+{--Theoretical Models--}
+
 s6_2_2 = thModF (gLassBR) (s6_2_2_TMods) 
   
 s6_2_2_TMods :: [Contents]
 s6_2_2_TMods = map gbSymbMapT tModels
+
+{--Instance Models--}
 
 s6_2_3 = inModelF' s6_1 s6_2_4 s6_2_2 (s6_2_3_IMods)
 
 s6_2_3_IMods :: [Contents]
 s6_2_3_IMods = map gbSymbMapT iModels
 
+{--Data Defiitions--}
+
 s6_2_4 = dataDefnF EmptyS (s6_2_4_DDefns)
 
 s6_2_4_DDefns ::[Contents] 
 s6_2_4_DDefns = map gbSymbMapD dataDefns
 
---------------------
---Data Constraints--
---------------------
+{--Data Constraints--}
 
 s6_2_5 = datConF ((makeRef s6_2_5_table1) +:+ S "shows") EmptyS True end 
                  [s6_2_5_table1, s6_2_5_table2, s6_2_5_intro2] --issue #213: discrepancy?
@@ -425,7 +464,11 @@ s6_2_5_table3 = Table [S "Var", S "Physical Constraints"] (mkTable
   [(prob_br ^. symbol, E (Int 0 :< C prob_br :< Int 1))])
   (titleize table_ +: S "4" +:+ titleize output_ +:+ titleize' variable) True
 
+{--REQUIREMENTS--}
+
 s7 = reqF [s7_1, s7_2]
+
+{--Functional Requirements--}
 
 s7_1 = SRS.funcReq (s7_1_list) []
 
@@ -496,6 +539,8 @@ s7_1_req6 = [(Enumeration $ Simple $ [(acroR "6", Nested (titleize output_ +:+
     ))])]
 --FIXME:The implementation above is quite repetitive in nature.
 
+{--Nonfunctional Requirements--}
+
 s7_2 = SRS.nonfuncReq [s7_2_intro] []
 
 s7_2_intro = foldlSP [
@@ -507,6 +552,8 @@ s7_2_intro = foldlSP [
   phrase nonfunctional, short requirement :+:
   S "s are correctness, verifiability, understandability, reusability,", 
   S "maintainability and portability"]
+
+{--LIKELY CHANGES--}
 
 s8 = SRS.likeChg [s8_list] []
 
@@ -540,6 +587,8 @@ s8_likelychg_list = [s8_likelychg1, s8_likelychg2, s8_likelychg3, s8_likelychg4,
   s8_likelychg5]
 
 s8_list = enumSimple 1 (short likelyChg) s8_likelychg_list
+
+{--TRACEABLITY MATRICES AND GRAPHS--}
 
 s9 = traceMGF [s9_table1, s9_table2, s9_table3]
   [(plural thModel `sC` (plural dataDefn) `sAnd` plural inModel +:+.
@@ -724,6 +773,8 @@ fig_4 = figureLabel "4" (traceyMatrix)
   (titleize' assumption +:+ S "and Other" +:+ titleize' item)
   ("ATrace.png")
 
+{--REFERENCES--}
+
 s10 = SRS.reference [s10_list] []
 
 s10_list = mkRefsList 1 (map (foldlsC) [s10_ref1, s10_ref2, 
@@ -763,6 +814,8 @@ s10_ref5 = [S "ASTM", S "developed by subcommittee C1408", S "Book of standards 
 s10_ref6 = [S "ASTM", S "developed by subcommittee C14.08", S "Book of standards 15.02",
   Quote (at_start specification +:+ S "for" +:+ plural heat +:+.
   S "treated flat glass-Kind HS, kind FT coated and uncoated glass, C1048")]
+
+{--APPENDIX--}
 
 s11 = SRS.appendix [s11_intro, fig_5, fig_6] []
 

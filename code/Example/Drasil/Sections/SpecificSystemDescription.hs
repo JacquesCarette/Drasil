@@ -96,11 +96,11 @@ solChSpecF :: (NamedIdea a) => a -> (Section, Section) -> Bool -> Sentence ->
   ([Contents], [Contents], [Contents], [Contents], [Contents], [Contents]) -> 
   [Section] -> Section
 solChSpecF kWord (probDes, likeChg) gendef ddEndSent (tbRef, mid, end, trail) (a, t, g, dd, i, dc) adSubSec = 
-  SRS.solCharSpec [solutionCharSpecIntro kWord (instModels gendef)] (subSec gendef)
+  SRS.solCharSpec [solutionCharSpecIntro kWord {--(instModels gendef)--}] (subSec gendef)
   where subSec True  = [assumption_ True, theModels, generDefn, 
-                        dataDefin, instModels True, dataConstr] ++ adSubSec
+                        dataDefin, instModels True{--, dataConstr--}] ++ adSubSec
         subSec False = [assumption_ False, theModels, 
-                        dataDefin, instModels False, dataConstr] ++ adSubSec
+                        dataDefin, instModels False{--, dataConstr--}] ++ adSubSec
         assumption_ True  = assumpF  theModels generDefn dataDefin (instModels True ) likeChg a
         assumption_ False = assumpF' theModels           dataDefin (instModels False) likeChg a
         theModels  = thModF kWord t
@@ -108,12 +108,12 @@ solChSpecF kWord (probDes, likeChg) gendef ddEndSent (tbRef, mid, end, trail) (a
         dataDefin  = dataDefnF ddEndSent dd
         instModels True  = inModelF  probDes dataDefin theModels generDefn i
         instModels False = inModelF' probDes dataDefin theModels           i
-        dataConstr = datConF tbRef mid end trail dc
+        dataConstr = datConF mid end trail dc
 
-solutionCharSpecIntro :: (NamedIdea a) => a -> Section -> Contents
-solutionCharSpecIntro progName instModelSection = foldlSP [S "The", plural inModel, 
+solutionCharSpecIntro :: (NamedIdea a) => a {---> Section--} -> Contents
+solutionCharSpecIntro progName {--instModelSection--} = foldlSP [S "The", plural inModel, 
   S "that govern", short progName, S "are presented in" +:+. 
-  makeRef (instModelSection), S "The", phrase information, S "to understand", 
+  {--makeRef (instModelSection),--} S "FIXME",  S "The", phrase information, S "to understand", 
   (S "meaning" `ofThe` plural inModel), 
   S "and their derivation is also presented, so that the", plural inModel, 
   S "can be verified"]
@@ -201,10 +201,13 @@ inModelIntro r1 r2 r3 r4 = foldlSP [S "This", phrase section_,
           plural model, S "identified in", (makeRef r3) :+: end r4]
           where end (Just genDef) = S " and" +:+ (makeRef genDef)
                 end Nothing       = EmptyS
+
+
+
         
 -- wrapper for datConPar
-datConF :: Sentence -> Sentence -> Bool -> Sentence -> [Contents] -> Section
-datConF tr mid end t otherContents = SRS.datCon ((datConPar tr mid end t):otherContents) []
+datConF :: Sentence -> Bool -> Sentence -> [Contents] -> Section
+datConF mid end trailing tables = SRS.datCon ((datConPar (tbRef tables) mid end trailing):tables) []
   
 -- reference to the input/ ouput tables -> optional middle sentence(s) (use EmptyS if not wanted) -> 
 -- True if standard ending sentence wanted -> optional trailing sentence(s) -> Contents
@@ -215,7 +218,11 @@ datConPar tableRef middleSent endingSent trailingSent = foldlSP
     where endS False = EmptyS
           endS True  = dataConstraintUncertainty
 
-
+tbRef []     = EmptyS
+tbRef [x]    = (makeRef x) +:+ S "shows"
+tbRef [x,y]  = (makeRef x) `sC` S "and" +:+ tbRef [y]
+tbRef (x:xs) = (makeRef x) `sC` tbRef (xs)
+ 
 dataConstraintIntroSent :: Sentence -> Sentence
 dataConstraintIntroSent tableRef = foldlSent [tableRef, S "the", plural datumConstraint, S "on the", phrase input_, 
   S "and", phrase output_ +:+. (plural variable `sC` S "respectively"), S "The", 

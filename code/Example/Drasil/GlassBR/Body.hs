@@ -586,7 +586,7 @@ s8_likelychg1 = foldlSent [acroA 3 `sDash` S "The", phrase system,
   S "In the future", plural calculation,
   S "can be added for the internal", phrase blastRisk]
 
-s8_likelychg2 = foldlSent [acroA 4 `sC` (acroA "8" `sDash`
+s8_likelychg2 = foldlSent [acroA 4 `sC` (acroA 8 `sDash`
   S "Currently the"), plural value, S "for",
   (getS sflawParamM) `sC` (getS sflawParamK) `sC`
   S "and", (getS mod_elas), S "are assumed to be the", 

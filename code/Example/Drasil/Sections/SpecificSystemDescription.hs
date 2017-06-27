@@ -109,7 +109,7 @@ solChSpecF progName (probDes, likeChg) ddEndSent (mid, end, trail) (a, t, g, dd,
 solutionCharSpecIntro :: (NamedIdea a) => a -> Section -> Contents
 solutionCharSpecIntro progName instModelSection = foldlSP [S "The", plural inModel, 
   S "that govern", short progName, S "are presented in" +:+. 
-  makeRef (instModelSection), S "FIXME",  S "The", phrase information, S "to understand", 
+  makeRef (instModelSection), S "The", phrase information, S "to understand", 
   (S "meaning" `ofThe` plural inModel), 
   S "and their derivation is also presented, so that the", plural inModel, 
   S "can be verified"]

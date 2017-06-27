@@ -446,9 +446,9 @@ goalState varTerm = foldlSent [S "Predict the", phrase varTerm,
 --------------------------------------------------
 
 s4_2 :: Section
-s4_2 = solChSpecF progName (s4_1, s6) True s4_2_4_intro_end
+s4_2 = solChSpecF progName (s4_1, s6) s4_2_4_intro_end
   ((makeRef s4_2_6_table1 +:+ S "and" +:+ makeRef s4_2_6_table2 +:+
-  S "show"), mid, True, end) ([s4_2_1_list], s4_2_2_T1 ++
+  S "show"), mid, True, s4_2_6_T1footer) ([s4_2_1_list], s4_2_2_T1 ++
   s4_2_2_T2 ++ s4_2_2_T3, s4_2_3_genDefs ++ s4_2_3_deriv,
   s4_2_4_DD1 ++ s4_2_4_DD2 ++ s4_2_4_DD3 ++ s4_2_4_DD4, (s4_2_5_IMods),
   s4_2_6_DataConTables) [s4_2_7]
@@ -456,10 +456,6 @@ s4_2 = solChSpecF progName (s4_1, s6) True s4_2_4_intro_end
   where mid = foldlSent [S "The", phrase column, S "for", phrase software,
           plural constraint, S "restricts the range of",
           plural input_, S "to reasonable", plural value]
-          
-        end = sParen (foldlSent [S "The", plural table_, S "are left out",
-          S "because features they should use are not yet implemented",
-          S "in Drasil"])
 
 -------------------------
 -- 4.2.1 : Assumptions --
@@ -890,8 +886,7 @@ s4_2_5_d2endPara = map foldlSP [
 ------------------------------
 
 s4_2_6_DataConTables :: [Contents]
-s4_2_6_DataConTables = [s4_2_6_table1] ++ s4_2_6_T1footer ++
-  [s4_2_6_table2, s4_2_6_table3]
+s4_2_6_DataConTables = [s4_2_6_table1, s4_2_6_table2, s4_2_6_table3]
 
 s4_2_6_table1 :: Contents
 s4_2_6_table1 = Table [S "Var", titleize' physicalConstraint, titleize software +:+
@@ -929,14 +924,14 @@ inputVar = map qs [tank_length, diam, pcm_vol, pcm_SA, pcm_density,
   temp_melt_P, htCap_S_P, htCap_L_P, htFusion, coil_SA, temp_C,
   w_density, htCap_W, coil_HTC, pcm_HTC, temp_init, time_final]
 
-s4_2_6_T1footer :: [Contents]
-s4_2_6_T1footer = map foldlSP [
+s4_2_6_T1footer :: Sentence
+s4_2_6_T1footer = foldlSent_ $ map foldlSent [
 
   [sParen (S "*"), S "These", plural quantity, S "cannot be equal to zero" `sC`
-  S "or there will be a divide by zero in the" +:+. phrase model],
+  S "or there will be a divide by zero in the", phrase model],
 
   [sParen (S "+"), S "These", plural quantity, S "cannot be zero" `sC`
-  S "or there would be freezing" +:+. sParen (acroA "13")],
+  S "or there would be freezing", sParen (acroA "13")],
 
   [sParen (S "#"), S "The", plural constraint, S "on the", phrase surArea,
   S "are calculated by considering the", phrase surArea, S "to", phrase vol +:+.
@@ -944,10 +939,10 @@ s4_2_6_T1footer = map foldlSP [
   S "the highest possible is", E (Int 2 :/ C htTransCoeff_min) `sC` S "where",
   E $ C htTransCoeff_min, S "is the thickness of a", Quote (S "sheet"), S "of" +:+.
   short phsChgMtrl, S "A thin sheet has the greatest", phrase surArea, S "to",
-  phrase vol +:+. S "ratio"],
+  phrase vol, S "ratio"],
 
   [sParen (S "**"), S "The", phrase constraint, S "on the maximum", phrase time,
-  S "at the end of the simulation is the total number of secondsin one day."]
+  S "at the end of the simulation is the total number of secondsin one day"]
   
   ]
 

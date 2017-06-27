@@ -337,7 +337,8 @@ s6_1_3_list_goalStmt1 = [foldlSent [S "Analyze and predict whether the",
 {--SOLUTION CHARACTERISTICS SPECIFICATION--}
 s6_2_5_intro2 :: Sentence
 
-s6_2 = solChSpecF gLassBR (s6_1, s8) (EmptyS) (tbRef, True, end)
+s6_2 = solChSpecF gLassBR (s6_1, s8) (EmptyS) 
+ (tbRef, dataConstraintUncertainty, end)
  (s6_2_1_list, s6_2_2_TMods, [], s6_2_4_DDefns, s6_2_3_IMods, 
   [s6_2_5_table1, s6_2_5_table2, s6_2_5_table3]) []
   where tbRef = (makeRef s6_2_5_table1) +:+ S "shows"
@@ -353,8 +354,8 @@ s6_2_intro = foldlSP [S "This", phrase section_,
 
 {--Assumptions--}
 
-s6_2_1 = assumpF' (s6_2_2) (s6_2_4) (s6_2_3) (s8) (s6_2_1_list)
-
+s6_2_1 = assumpF (s6_2_2) (s6_2_4) (s6_2_4) (s6_2_3) (s8) (s6_2_1_list)
+--FIXME:remove duplicatie s6_2_4
 s6_2_1_list = 
   [(enumSimple 1 (short assumption) s6_2_1_listOfAssumptions)]
 
@@ -420,12 +421,13 @@ s6_2_2_TMods = map gbSymbMapT tModels
 
 {--Instance Models--}
 
-s6_2_3 = inModelF' s6_1 s6_2_4 s6_2_2 (s6_2_3_IMods)
+s6_2_3 = inModelF s6_1 s6_2_4 s6_2_2 s6_2_2 (s6_2_3_IMods) 
+  --FIXME:remove duplicate s6_2_2 section
 
 s6_2_3_IMods :: [Contents]
 s6_2_3_IMods = map gbSymbMapT iModels
 
-{--Data Defiitions--}
+{--Data Definitions--}
 
 s6_2_4 = dataDefnF EmptyS (s6_2_4_DDefns)
 
@@ -434,7 +436,7 @@ s6_2_4_DDefns = map gbSymbMapD dataDefns
 
 {--Data Constraints--}
 
-s6_2_5 = datConF ((makeRef s6_2_5_table1) +:+ S "shows") True end 
+s6_2_5 = datConF ((makeRef s6_2_5_table1) +:+ S "shows") dataConstraintUncertainty end 
                  [s6_2_5_table1, s6_2_5_table2] --issue #213: discrepancy?
   where end = foldlSent [(makeRef s6_2_5_table3), S "gives the", 
               (plural value `ofThe` S "specification"), plural parameter,

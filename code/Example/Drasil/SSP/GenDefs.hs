@@ -39,7 +39,7 @@ nmFEq_rel = C totNrmForce := ((C slcWght :- C intShrForce :+ C intShrForce :+
 nmFEq_desc :: Sentence
 nmFEq_desc = foldlSent [S "For a", phrase slice, S "of", phrase mass,
   S "in the", phrase slope, S "the", phrase force,
-  S "equilibrium to satisfy", acroT "2", S "in the direction",
+  S "equilibrium to satisfy", acroT 2, S "in the direction",
   phrase perp, S "to" +:+. (S "base" +:+ phrase surface `ofThe`
   phrase slice), S "Rearranged to solve for", (phrase normForce `ofThe`
   phrase surface) +:+. getS totNrmForce, at_start force, S "equilibrium is",
@@ -48,8 +48,8 @@ nmFEq_desc = foldlSent [S "For a", phrase slice, S "of", phrase mass,
   S "refers to", (plural value `ofThe` plural property), S "for",
   phrase slice :+: S "/" :+: plural intrslce, S "following convention in" +:+.
   makeRef (SRS.physSyst SRS.missingP []), at_start force, phrase variable,
-  plural definition, S "can be found in", acroDD "1", S "to",
-  acroDD "9"]
+  plural definition, S "can be found in", acroDD 1, S "to",
+  acroDD 9]
 
 --
 bsShrFEq :: RelationConcept
@@ -67,7 +67,7 @@ bShFEq_rel = C mobShrI := ((C slcWght :- C intShrForce :+ C intShrForce :+
 bShFEq_desc :: Sentence
 bShFEq_desc = foldlSent [S "For a", phrase slice, S "of", phrase mass,
   S "in the", phrase slope, S "the", phrase force,
-  S "equilibrium to satisfy", acroT "2", S "in the direction",
+  S "equilibrium to satisfy", acroT 2, S "in the direction",
   S "parallel to" +:+. (S "base" +:+ phrase surface `ofThe`
   phrase slice), S "Rearranged to solve for the", phrase shearForce,
   S "on the base" +:+. getS mobShrI, at_start force, S "equilibrium is",
@@ -76,8 +76,8 @@ bShFEq_desc = foldlSent [S "For a", phrase slice, S "of", phrase mass,
   S "refers to", (plural value `ofThe` plural property), S "for",
   phrase slice :+: S "/" :+: plural intrslce, S "following convention in" +:+.
   makeRef (SRS.physSyst SRS.missingP []), at_start force, phrase variable,
-  plural definition, S "can be found in", acroDD "1", S "to",
-  acroDD "9"]
+  plural definition, S "can be found in", acroDD 1, S "to",
+  acroDD 9]
 
 --
 resShr :: RelationConcept
@@ -91,7 +91,7 @@ resShr_desc = foldlSent [S "The Mohr-Coulomb resistive shear strength of a",
   phrase slice, getS shrResI, S "is adjusted to account for the",
   S "effective", phrase normal,
   (E $ (C nrmStrss) := (C nrmFSubWat) := (C totNrmForce) :- (C baseHydroForce)),
-  S "of a soil from" +:+. acroT "4", -- FIXME: add prime to nrmStrss aboves
+  S "of a soil from" +:+. acroT 4, -- FIXME: add prime to nrmStrss aboves
   S "Also and the cohesion is adjusted to account for the", phrase len,
   S "l of the plane where the", phrase normal, S "occurs, where",
   (E $ (C baseLngth) := (C baseWthX) :* sec (C baseAngle))`sC` S "and", getS baseWthX,
@@ -109,11 +109,11 @@ mobShr_rel = C mobShrI := C shrResI :/ C fs :=
 
 mobShr_desc :: Sentence
 mobShr_desc = foldlSent [
-  S "From", phrase definition `ofThe` ((phrase factor) `sOf` (phrase safety)), S "in", acroT "1" `sC` --FIXME: factor of saftey hacked in to avoid cyclical imports
+  S "From", phrase definition `ofThe` ((phrase factor) `sOf` (phrase safety)), S "in", acroT 1 `sC` --FIXME: factor of saftey hacked in to avoid cyclical imports
   S "and the new", phrase definition, S "of", getS shrResI `sC` S "a new",
   S "relation for", (S "net mobile" +:+ phrase shearForce `ofThe` phrase slice),
   getS shearFNoIntsl, S "is found as the resistive shear" , getS shrResI,
-  sParen (acroGD "3"), S "divided by the factor of safety", getS fs]
+  sParen (acroGD 3), S "divided by the factor of safety", getS fs]
 
 --
 normShrR :: RelationConcept
@@ -124,7 +124,7 @@ nmShrR_rel = C intShrForce := C normToShear :* C scalFunc :* C intNormForce
 
 nmShrR_desc :: Sentence
 nmShrR_desc = foldlSent [S "The", phrase assumption, S "for the Morgenstern Price",
-  phrase method_, sParen (acroA "5"), S "that the", phrase intrslce,
+  phrase method_, sParen (acroA 5), S "that the", phrase intrslce,
   phrase shearForce, getS xi, S "is proportional to the", phrase intrslce, 
   phrase normForce, getS intNormForce, S "by a proportionality constant",
   getS normToShear, S "and a predetermined scaling function", --FIXME: indexing on normToShear
@@ -151,7 +151,7 @@ momEql_rel = (Int 0) := Neg (C intNormForce) :* (Int 1 :- C baseWthX :/ Int 2 :*
 
 momEql_desc :: Sentence
 momEql_desc = foldlSent [S "For a", phrase slice, S "of", phrase mass,
-  S "in the", phrase slope, S "the moment equilibrium to satisfy", acroT "2",
+  S "in the", phrase slope, S "the moment equilibrium to satisfy", acroT 2,
   S "in the direction", phrase perp,
   S "to" +:+. (S "base" +:+ phrase surface `ofThe` phrase slice),
   S "Moment equilibrium is derived from the free body diagram of" +:+.
@@ -159,7 +159,7 @@ momEql_desc = foldlSent [S "For a", phrase slice, S "of", phrase mass,
   plural value `ofThe` plural property, S "for", phrase slice :+: S "/" :+:
   plural intrslce, S "following convention in" +:+.
   makeRef (SRS.physSyst SRS.missingP []), at_start variable, plural definition,
-  S "can be found in", acroDD "1", S "to", acroDD "9"]
+  S "can be found in", acroDD 1, S "to", acroDD 9]
 
 --
 netForce :: RelationConcept
@@ -193,7 +193,7 @@ fNet_desc = foldlSent [S "The net sum of", plural force, S "acting on a",
   phrase slice :+: S "/" :+: plural intrslce, S "following", 
   S "convention in" +:+. makeRef (SRS.physSyst SRS.missingP []), 
   at_start force, phrase variable, plural definition, S "can be found in",
-  acroDD "1", S "to", acroDD "8"]
+  acroDD 1, S "to", acroDD 8]
   --FIXME:Finish pulling out symbols
 
 --
@@ -205,7 +205,7 @@ hooke2d_rel = (Int 0) := (Int 0) --FIXME: cannot yet generate matrices
 
 hooke2d_desc :: Sentence
 hooke2d_desc = foldlSent [S "A 2D component implementation of Hooke's law as seen in" +:+.
-  acroT "5", getS elmPrllDispl, S "is", phrase displacement `ofThe` phrase element,
+  acroT 5, getS elmPrllDispl, S "is", phrase displacement `ofThe` phrase element,
   S "normal to the", phrase surface, S "and", getS elmNrmDispl, S "is",
   phrase displacement `ofThe` phrase element, S "parallel to the" +:+. phrase surface,
   S "Pn,i is the net pressure acting normal to the", phrase surface `sC`
@@ -214,7 +214,7 @@ hooke2d_desc = foldlSent [S "A 2D component implementation of Hooke's law as see
   S "has not been normalized for it's" +:+. phrase len, S "The stiffness", plural value,
   S "Kn,i and Kt,i are then the resistance to", phrase displacement,
   -- FIXME: Pn,i ~ Pt,i ~ Kn,i ~ Kt,i need symbols 
-  S "in the respective directions defined as in" +:+. acroDD "14", S "The pressure",
+  S "in the respective directions defined as in" +:+. acroDD 14, S "The pressure",
   plural force, S "would be the result of applied loads on the", phrase mass `sC`
   S "the product of the stiffness", plural element, S "with the", phrase displacement,
   S "would be the", phrase mass, S "'s reactive", phrase force,

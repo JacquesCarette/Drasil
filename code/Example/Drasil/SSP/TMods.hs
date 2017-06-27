@@ -49,7 +49,7 @@ eq_rel = UnaryOp (Summation Nothing (C genForce)) := (Int 0) --FIXME: add net x 
 eq_desc :: Sentence
 eq_desc = foldlSent [S "For a body in static equilibrium, the net", plural force,
   S "and net moments acting on the body will cancel out. Assuming a 2D problem",
-  sParen (acroA "8"), S "the net x-ordinate (Fx)",
+  sParen (acroA 8), S "the net x-ordinate (Fx)",
   S "and y-ordinate (Fy) scalar components will be equal to 0. All", plural force,
   S "and their", phrase distance, S "from the chosen point of rotation will create a",
   S "net moment equal to 0, also able to be analyzed as a scalar in a 2D problem"]
@@ -74,7 +74,7 @@ mcSS_desc = foldlSent [S "For a", phrase soil, S "under", phrase stress,
   S "The", getS shrResI, S "versus", getS normStress, S "relationship is not truly",
   phrase linear `sC` S "but assuming the effective", phrase normForce,
   S "is strong enough it can be approximated with a", phrase linear,
-  S "fit", sParen (acroA "9"), S "where the cohesion", getS cohesion,
+  S "fit", sParen (acroA 9), S "where the cohesion", getS cohesion,
   S "represents the", getS shrResI, S "intercept of the fitted line"]
 
 --

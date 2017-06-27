@@ -23,6 +23,7 @@ module Language.Drasil (
   , Quantity(..), ConVar(..), cvR, cvRs
   , Concept(..)
   , CommonIdea(..)
+  , UncertainQuantity(..), UncertQ, uq
   --, commonidea, CI
   , commonIdea, CI, commonIdea', commonIdea''
   -- Chunk.NamedIdea
@@ -112,6 +113,7 @@ import Language.Drasil.Chunk.SymbolForm
 import Language.Drasil.Chunk.CommonIdea
 import Language.Drasil.Chunk.VarChunk
 import Language.Drasil.Chunk.Quantity
+import Language.Drasil.Chunk.UncertainQuantity
 import Language.Drasil.Chunk.ConVar
 import Language.Drasil.Chunk.Eq (QDefinition(..), fromEqn, fromEqn', getVC, equat)
 import Language.Drasil.Chunk.Constrained (Constrained(..), ConstrainedChunk(..)

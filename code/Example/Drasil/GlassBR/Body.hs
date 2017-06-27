@@ -241,14 +241,10 @@ s6_1_1_bullets = Enumeration $ (Number $
 s6_1_1_bullets_glTySubSec, s6_1_1_bullets_loadSubSec :: [ItemType]
 
 s6_1_1_bullets_glTySubSec = [Nested (((titleize glassTy) :+: S ":"))
-  (Bullet $ [tAndDWAcc_ annealedGl])
-  --zipWith tAndDWAcc
-  --[annealedGl, fTemperedGl, hStrengthGl]
-  {-[annealedGlass, fullyTGlass, heatSGlass])-}]
+  (Bullet $ map tAndDWAcc_ [annealedGl, fTemperedGl, hStrengthGl])]
 
 s6_1_1_bullets_loadSubSec = [Nested (((at_start load) :+: S ":"))
-  (Bullet $ zipWith tAndDWAcc
-    [loadResis, nonFactoredL] [lResistance, nFL]
+  (Bullet $ map tAndDWAcc_ [loadResis, nonFactoredL]
   ++ 
   map tAndDOnly [glassWL, shortDurLoad, specDeLoad, longDurLoad])]
 

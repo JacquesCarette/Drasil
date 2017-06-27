@@ -196,12 +196,12 @@ glassTy       = dcc "glassTy"     (cn' "glass types") "type of glass"
 annealedGl    = cc annealedGlass
   ("A flat, monolithic, glass lite which has uniform thickness where the " ++
     "residual surface stresses are almost zero, as defined in [5].")
-fTemperedGl   = dcc "fTemperedGl"          (fullyTGlass ^. term)
+fTemperedGl   = cc fullyTGlass
   ("A flat and monolithic, glass lite of uniform thickness that has been " ++
     "subjected to a special heat treatment process where the residual " ++
     "surface compression is not less than 69 MPa (10 000 psi) or the edge " ++
     "compression not less than 67 MPa (9700 psi), as defined in [6].")
-hStrengthGl   = dcc "hStrengthGl"          (heatSGlass ^. term)
+hStrengthGl   = cc heatSGlass
   ("A flat, monolithic, glass lite of uniform thickness that has been " ++
     "subjected to a special heat treatment process where the residual " ++
     "surface compression is not less than 24 MPa (3500psi) or greater " ++
@@ -217,13 +217,13 @@ load          = dcc "load"        (nounPhraseSP "load") "A uniformly distributed
 specDeLoad    = dcc "specDeLoad"  (nounPhraseSP "specified design load")
   ("The magnitude in kPa (psf), type (for example, wind or snow) and " ++
     "duration of the load given by the specifying authority.")
-loadResis     = dcc "loadResis"          (lResistance ^. term)
+loadResis     = cc lResistance
   ("The uniform lateral load that a glass construction can sustain based " ++
     "upon a given probability of breakage and load duration as defined in " ++
     "[4 (pg. 1, 53)], following A2 and A1 respectively.")
 longDurLoad   = dcc "longDurLoad"        (nounPhraseSP "long duration load")
   ("Any load lasting approximately 30 days.")
-nonFactoredL  = dccWDS "nonFactoredL"    (nFL ^. term)
+nonFactoredL  = cc' nFL
   (foldlSent [S "Three second duration uniform load associated with a probability of",
     S "breakage less than or equal to 8", (plural lite), S "per 1000 for monolithic",
     (getAcc annealedGlass), S "glass"])

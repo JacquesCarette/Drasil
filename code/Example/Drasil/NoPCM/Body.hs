@@ -9,11 +9,12 @@ import Drasil.SWHS.Body (s2_3_knowlegde, s2_3_understanding, s2_4_intro,
   s3, physSyst1, physSyst2, s4_2_4_intro_end, assump1, assump2, assump7,
   con1, con2, con10, con11, con12, con13, con14, con16, con17, con18, s5_2, s6_start, 
   ref2, ref3, ref4, ref5, ref6)
-import Drasil.SWHS.Concepts (progName, water, gauss_div, sWHT, tank, coil)
+import Drasil.SWHS.Concepts (progName, water, gauss_div, sWHT, tank, coil, transient)
 import Drasil.SWHS.Unitals (w_vol, tank_length, tank_vol, tau_W, temp_W, w_mass, 
   diam, coil_SA, temp_C, w_density, htCap_W, htFusion, temp_init, time_final,
   in_SA, out_SA, vol_ht_gen, thFluxVect, ht_flux_in, ht_flux_out, tau, htCap_L,
-  htTransCoeff, temp_env, diam, tank_length, w_vol, ht_flux_C, coil_HTC, temp_diff)
+  htTransCoeff, temp_env, diam, tank_length, w_vol, ht_flux_C, coil_HTC, temp_diff,
+  w_E)
 import Drasil.SWHS.DataDefs(swhsSymbMapDRef, swhsSymbMapTRef, dd1HtFluxC, s4_2_4_DD1, 
   swhsSymbMapT)
 import Drasil.SWHS.TMods (s4_2_2_T1, t1ConsThermE)
@@ -255,7 +256,7 @@ s4_1_1 = termDefnF EmptyS [s4_1_1_bullets]
   
 s4_1_1_bullets = Enumeration $ (Bullet $ map (\x -> Flat $ 
   (at_start x) :+: S ":" +:+ (x ^. defn)) 
-  [UT.thermal_flux, UT.heat_cap_spec])
+  [UT.thermal_flux, UT.heat_cap_spec, thermal_conduction, transient])
   
 s4_1_2 = physSystDesc (getAcc progName) fig_tank [s4_1_2_list, fig_tank]
 
@@ -273,7 +274,8 @@ s4_1_3_intro = Paragraph $ foldl (+:+) (EmptyS) [S "Given the", phrase temp,
   S "the", phrase goalStmt, S "is"]
 
 s4_1_3_list = Enumeration $ Simple $ map (\(a, b) -> (a, Flat b)) [
-  (acroGS 1, S "predict the" +:+ phrase temp_W +:+ S "over time")]
+  (acroGS 1, S "predict the" +:+ phrase temp_W +:+ S "over time"),
+  (acroGS 2, S "predict the" +:+ phrase w_E +:+ S "over time")]
 
 ------------------------------------------------------
 --Section 4.2 : SOLUTION CHARACTERISTICS SPECIFICATION
@@ -425,8 +427,9 @@ s4_2_3_eq = (map swhsSymbMapT swhsGenDefs) ++ [
 
 s4_2_5_intro = Paragraph $ EmptyS --TODO: Placeholder values until content can be added
 
-s4_2_6_table1 = Table [S "Var", titleize' physicalConstraint, titleize software +:+ titleize' constraint, S "Typical" +:+
-  titleize value, titleize uncertainty] (mkTable [(\x -> x!!0), (\x -> x!!1), (\x -> x!!2), (\x -> x!!3), (\x -> x!!4)] 
+s4_2_6_table1 = Table [S "Var", titleize' physicalConstraint, titleize software +:+ 
+  titleize' constraint, S "Typical" +:+ titleize value, titleize uncertainty] 
+  (mkTable [(\x -> x!!0), (\x -> x!!1), (\x -> x!!2), (\x -> x!!3), (\x -> x!!4)] 
   s4_2_6_conListIn) (titleize input_ +:+ titleize' variable) True
   
 s4_2_6_conListIn :: [[Sentence]]
@@ -541,6 +544,7 @@ likeChg3 = [s6_start 9, S "The", phrase model +:+.
 likeChg4 = [s6_start 11, S "Any real", phrase tank,
   S "cannot be perfectly insulated and will lose",
   phrase heat]
+
 
 
 

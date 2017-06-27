@@ -14,6 +14,7 @@ module Data.Drasil.Utils
   , mkRefsList
   , mkInputDatTb
   , getS
+  , addPercent
   , weave
   , fmtU
   , unwrap
@@ -104,6 +105,10 @@ fmtBF symb ((f,num):xs) = (E ((C symb) `f` num)) +:+ S "and" +:+ (fmtBF symb xs)
 -- | gets symbol from chunk
 getS :: (SymbolForm a) => a -> Sentence
 getS s  = P $ s ^. symbol
+
+-- | outputs sentence with % attached to it
+addPercent :: Float ->  Sentence
+addPercent num = (S (show num) :+: (P (Special Percent)))
 
 -- | makes a list of sentence from sentences
 listConstS :: (Sentence, Sentence, Sentence, Sentence, Sentence) -> [Sentence]

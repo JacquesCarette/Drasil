@@ -394,12 +394,12 @@ dataConstList = [inputVarA, inputVarB, inputVarPbTol, inputVarW, inputVarTNT, in
 
 inputVarA, inputVarB, inputVarPbTol, inputVarW, inputVarTNT, inputVarSD :: [Sentence]
 
-inputVarA     = displayConstr plate_len    (1500 :: Int)     (S "10" :+: (P (Special Percent)))
-inputVarB     = displayConstr plate_width  (1200 :: Int)     (S "10" :+: (P (Special Percent)))
-inputVarPbTol = displayConstr pb_tol       (0.008 :: Double) (S "0.1" :+: (P (Special Percent)))
-inputVarW     = displayConstr char_weight  (42 :: Int)       (S "10" :+: (P (Special Percent)))
-inputVarTNT   = displayConstr tNT          (1 :: Int)        (S "10" :+: (P (Special Percent)))
-inputVarSD    = displayConstr standOffDist (45 :: Int)       (S "10" :+: (P (Special Percent)))
+inputVarA     = displayConstr plate_len    (1500 :: Int)     (addPercent 10)
+inputVarB     = displayConstr plate_width  (1200 :: Int)     (addPercent 10)
+inputVarPbTol = displayConstr pb_tol       (0.008 :: Double) (addPercent 0.1)
+inputVarW     = displayConstr char_weight  (42 :: Int)       (addPercent 10)
+inputVarTNT   = displayConstr tNT          (1 :: Int)        (addPercent 10)
+inputVarSD    = displayConstr standOffDist (45 :: Int)       (addPercent 10)
 
 s6_2_5_table2 = Table [S "Var", titleize value] (mkTable 
   [(\x -> fst x), (\x -> snd x)]

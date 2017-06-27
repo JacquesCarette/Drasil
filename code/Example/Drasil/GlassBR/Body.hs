@@ -9,7 +9,7 @@ import Data.Drasil.Software.Products
 import Data.Drasil.Concepts.Computation
 import Data.Drasil.Concepts.Software (performance)
 import Data.Drasil.Concepts.Math (graph, calculation, equation, 
-                                  surface, probability, parameter)
+  surface, probability, parameter)
 import Data.Drasil.Concepts.Thermodynamics (heat)
 import Prelude hiding (id)
 import Data.Drasil.Utils
@@ -51,7 +51,7 @@ s3, s4, s5,
 s4_1_bullets, s5_1_table, s5_2_bullets, 
   s6_1_1_bullets, s6_1_2_list, s6_1_3_list, 
   s6_2_intro, s6_2_5_table1, s6_2_5_table2, 
-  s6_2_5_intro2, s6_2_5_table3, s7_2_intro,
+  s6_2_5_table3, s7_2_intro,
   s9_table1, s9_table2, s9_table3,
   s10_list, s11_intro, fig_glassbr, fig_2, 
   fig_3, fig_4, fig_5, fig_6 :: Contents
@@ -324,15 +324,16 @@ s6_1_3_list_goalStmt1 = [foldlSent [S "Analyze and predict whether the",
   phrase input_]]
 
 {--SOLUTION CHARACTERISTICS SPECIFICATION--}
+s6_2_5_intro2 :: Sentence
 
-s6_2 = solChSpecF gLassBR (s6_1, s8) False (EmptyS) (tbRef, EmptyS, True, end)
+s6_2 = solChSpecF gLassBR (s6_1, s8) (EmptyS) (tbRef, True, end)
  (s6_2_1_list, s6_2_2_TMods, [], s6_2_4_DDefns, s6_2_3_IMods, 
-  [s6_2_5_table1, s6_2_5_table2, s6_2_5_intro2, s6_2_5_table3]) []
+  [s6_2_5_table1, s6_2_5_table2, s6_2_5_table3]) []
   where tbRef = (makeRef s6_2_5_table1) +:+ S "shows"
         end = foldlSent [(makeRef s6_2_5_table2), S "gives", 
              (plural value `ofThe` S "specification"), plural parameter, 
               S "used in" +:+. (makeRef s6_2_5_table1), getS ar_max, --FIXME: Issue #167
-              S "refers to the", phrase ar_max, S "for the plate of glass"]
+              S "refers to the", phrase ar_max, S "for the plate of glass"] +:+ s6_2_5_intro2
 
 s6_2_intro = foldlSP [S "This", phrase section_, 
   S "explains all the", plural assumption, S "considered and the", 
@@ -423,8 +424,8 @@ s6_2_4_DDefns = map gbSymbMapD dataDefns
 
 {--Data Constraints--}
 
-s6_2_5 = datConF ((makeRef s6_2_5_table1) +:+ S "shows") EmptyS True end 
-                 [s6_2_5_table1, s6_2_5_table2, s6_2_5_intro2] --issue #213: discrepancy?
+s6_2_5 = datConF ((makeRef s6_2_5_table1) +:+ S "shows") True end 
+                 [s6_2_5_table1, s6_2_5_table2] --issue #213: discrepancy?
   where end = foldlSent [(makeRef s6_2_5_table3), S "gives the", 
               (plural value `ofThe` S "specification"), plural parameter,
               S "used in" +:+. (makeRef s6_2_5_table1), getS ar_max, --FIXME: Issue #167
@@ -463,7 +464,7 @@ s6_2_5_table2 = Table [S "Var", titleize value] (mkTable
 s6_2_5_table2_formatF2 :: UnitaryChunk -> Double -> (Sentence, Sentence)
 s6_2_5_table2_formatF2 varName val = (getS varName, E (Dbl val) +:+ Sy (unit_symb varName))
 
-s6_2_5_intro2 = foldlSP [(makeRef s6_2_5_table3), S "shows the", 
+s6_2_5_intro2 = foldlSent [(makeRef s6_2_5_table3), S "shows the", 
   plural constraint, S "that must be satisfied by the", phrase output_]
 
 s6_2_5_table3 = Table [S "Var", S "Physical Constraints"] (mkTable 

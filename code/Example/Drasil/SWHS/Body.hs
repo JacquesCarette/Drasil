@@ -1213,7 +1213,7 @@ s6_likeChg_list :: [[Sentence]]
 likeChg1, likeChg2, likeChg3, likeChg4, likeChg5, likeChg6 :: [Sentence]
 s6_likeChg_list = [likeChg1, likeChg2, likeChg3, likeChg4, likeChg5, likeChg6]
 
-s6_start :: String -> Sentence
+s6_start :: Int -> Sentence
 s6_start numVar = acroA numVar +:+ S "-"
 
 likeChg1 = [s6_start 4, short phsChgMtrl,

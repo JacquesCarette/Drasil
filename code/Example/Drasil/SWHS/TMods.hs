@@ -64,7 +64,7 @@ t1descr = foldlSent [
   S "to apply" `sC` S "other forms of", phrase energy `sC` S "such as",
   phrase mech_energy `sC`
   S "are assumed to be negligible in the", phrase system,
-  sParen (acroA "1")]
+  sParen (acroA 1)]
 
 --referencing within a simple list is not yet implemented.
 --Forgot many "S" and ":+:" typing out above description

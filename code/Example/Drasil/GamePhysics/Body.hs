@@ -69,8 +69,8 @@ mkSRS = RefSec (RefProg RM.intro [TUnits, tsymb tableOfSymbols, TAandA]) :
     --FIXME: Need to be able to print defn for gravitational constant.
 
 chipmunkSysInfo :: SystemInformation
-chipmunkSysInfo = SI chipmunk srs authors chipUnits cpSymbols ([] :: [CQSWrapper])
-  cpAcronyms (cpDDefs) (inputSymbols) (outputSymbols) 
+chipmunkSysInfo = SI chipmunk srs authors chipUnits cpSymbols 
+  ([] :: [CQSWrapper]) cpAcronyms (cpDDefs) (inputSymbols) (outputSymbols) 
   (cpQDefs) chipmunkConstraints--FIXME: All named ideas, not just acronyms.
 
 chipUnits :: [UnitDefn]
@@ -261,9 +261,11 @@ s4_1_1_bullets :: Contents
 s4_1_1 = termDefnF EmptyS [s4_1_1_bullets]
 
 s4_1_1_terms :: [ConceptChunk]
-s4_1_1_terms = [CP.rigidBody, CP.elasticity, CPP.ctrOfMass, CP.cartesian, CP.rightHand]
+s4_1_1_terms = [CP.rigidBody, CP.elasticity, CPP.ctrOfMass, 
+  CP.cartesian, CP.rightHand]
 
-s4_1_1_bullets = enumBullet (map (\x -> (at_start x) :+: S ":" +:+ (x ^. defn)) s4_1_1_terms)
+s4_1_1_bullets = enumBullet 
+  (map (\x -> (at_start x) :+: S ":" +:+ (x ^. defn)) s4_1_1_terms)
 
 
 -----------------------------
@@ -305,7 +307,8 @@ s4_1_2_stmt4 = [S "Given the", (plural physicalProperty) :+: S ",",
   (phrase CP.collision)]
 
 s4_1_2_list' :: [Sentence]
-s4_1_2_list' = map (foldlSent) [s4_1_2_stmt1, s4_1_2_stmt2, s4_1_2_stmt3, s4_1_2_stmt4]
+s4_1_2_list' = map (foldlSent) [s4_1_2_stmt1, s4_1_2_stmt2, s4_1_2_stmt3, 
+  s4_1_2_stmt4]
 
 s4_1_2_list = enumSimple 1 (getAcc goalStmt) s4_1_2_list'
 
@@ -360,8 +363,8 @@ s4_2_1_assum7 = [S "There are no", (plural CM.constraint),
   (phrase simulation)]
 
 s4_2_1_list' :: [Sentence]
-s4_2_1_list' = map (foldlSent) [s4_2_1_assum1, s4_2_1_assum2, s4_2_1_assum3, s4_2_1_assum4,
-               s4_2_1_assum5, s4_2_1_assum6, s4_2_1_assum7]
+s4_2_1_list' = map (foldlSent) [s4_2_1_assum1, s4_2_1_assum2, s4_2_1_assum3, 
+  s4_2_1_assum4, s4_2_1_assum5, s4_2_1_assum6, s4_2_1_assum7]
 
 s4_2_1_list = enumSimple 1 (getAcc assumption) s4_2_1_list'
 
@@ -449,9 +452,7 @@ secCollisionDiagram = Paragraph $ foldlSent [ S "This section presents an image"
 s4_2_6 :: Section
 s4_2_6_table1, s4_2_6_table2 :: Contents
 
-s4_2_6 = datConF ((makeRef s4_2_6_table1) +:+ S "and" +:+ 
-  (makeRef s4_2_6_table2) +:+ S "show") EmptyS True EmptyS 
-  [s4_2_6_table1, s4_2_6_table2]
+s4_2_6 = datConF EmptyS True EmptyS [s4_2_6_table1, s4_2_6_table2]
 
 
 -- Currently unable to write relations in sentences, so verbal explanations
@@ -460,7 +461,8 @@ s4_2_6 = datConF ((makeRef s4_2_6_table1) +:+ S "and" +:+
 
 
 s4_2_6_table1 = Table [S "Var", titleize' physicalConstraint, S "Typical Value"]
-  (physicalConstraint_inputs) (S "Table 1:" +:+ (titleize input_) +:+ S "Variables") True
+  (physicalConstraint_inputs) 
+  (S "Table 1:" +:+ (titleize input_) +:+ S "Variables") True
 
 
 s4_2_6_table2 = Table [S "Var", titleize' physicalConstraint]
@@ -488,11 +490,12 @@ s5_1_req1, s5_1_req2, s5_1_req3, s5_1_req4, s5_1_req5, s5_1_req6,
   s5_1_req7, s5_1_req8 :: Sentence
 
 reqFrame :: Sentence -> Sentence -> Sentence -> Sentence -> Sentence
-reqFrame a b x z = foldlSent [S "Determine the", a, S "and", b, S "over a period of", 
-  (phrase QP.time), S "of the", x, z]
+reqFrame a b x z = foldlSent [S "Determine the", a, S "and", b, 
+  S "over a period of", (phrase QP.time), S "of the", x, z]
 
 reqS :: (NamedIdea a, NamedIdea b) => a -> b -> Sentence -> Sentence
-reqS a b d = reqFrame (plural a) (plural b) ((getAcc twoD) +:+ (plural CP.rigidBody)) d
+reqS a b d = reqFrame (plural a) (plural b) ((getAcc twoD)
+  +:+ (plural CP.rigidBody)) d
 reqS' :: (NamedIdea a, NamedIdea b) => a -> b -> Sentence
 reqS' a b = reqS a b EmptyS 
 
@@ -512,7 +515,8 @@ s5_1_req3 = foldlSent [S "Input the", (phrase CM.surface),
   S "or", (phrase CP.elasticity)]
 
 s5_1_req4 = foldlSent [S "Verify that the inputs", 
-  S "satisfy the required", plural physicalConstraint, S "from", (makeRef s4_2_6_table1)]
+  S "satisfy the required", plural physicalConstraint, S "from", 
+  (makeRef s4_2_6_table1)]
 
 s5_1_req5 = reqS (QP.position) (QP.velocity) 
   (S "acted upon by a" +:+ (phrase QP.force))
@@ -576,7 +580,8 @@ s6_likelyChg_stmt1 = (S "internal" +:+ (getAcc CM.ode) :+:
 s6_likelyChg_stmt2 = (phrase library) `maybeExpanded`
   (S "to deal with edge-to-edge and vertex-to-vertex" +:+ (plural CP.collision))
 
-s6_likelyChg_stmt3 = (phrase library) `maybeExpanded` S "to include motion with damping"
+s6_likelyChg_stmt3 = (phrase library) `maybeExpanded` 
+  S "to include motion with damping"
 
 s6_likelyChg_stmt4 = (phrase library) `maybeExpanded` (S "to include" +:+ 
   (plural CP.joint) +:+ S "and" +:+ (plural CM.constraint))

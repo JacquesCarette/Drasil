@@ -27,14 +27,15 @@ im1NP :: NP
 im1NP =  nounPhraseSP "Force on the translational motion of a set of 2d rigid bodies"
 
 im1Rel :: Relation -- FIXME: add proper equation
-im1Rel = (C acc_i) := (Deriv Total (FCall (C vel_i) [C QP.time]) (C QP.time)) := (C QP.gravitationalAccel) + ((FCall (C force_i) [C QP.time]) / (C mass_i))
+im1Rel = (C acc_i) := (Deriv Total (FCall (C vel_i) [C QP.time]) (C QP.time))
+  := (C QP.gravitationalAccel) + ((FCall (C force_i) [C QP.time]) / (C mass_i))
 
 im1descr, im1leg :: Sentence
 im1descr = foldlSent [S "The above equation expresses the total", 
-  (phrase $ QP.acceleration), S "of the", (phrase $ CP.rigidBody), 
-  S "(A1, A2) i as the sum of", (phrase $ QP.gravitationalAccel), 
-  S "(GD3) and", (phrase $ QP.acceleration), S "due to applied", 
-  (phrase $ QP.force), S "Fi(t) (T1). The resultant outputs are", 
+  (phrase QP.acceleration), S "of the", (phrase CP.rigidBody), 
+  S "(A1, A2) i as the sum of", (phrase QP.gravitationalAccel), 
+  S "(GD3) and", (phrase QP.acceleration), S "due to applied", 
+  (phrase QP.force), S "Fi(t) (T1). The resultant outputs are", 
   S "then obtained from this equation using DD2, DD3 and DD4. It is currently", 
   S "assumed that there is no damping (A6) or constraints (A7) involved"]
 
@@ -57,7 +58,9 @@ im2NP :: NP
 im2NP =  nounPhraseSP "Force on the rotational motion of a set of 2D rigid body"
 
 im2Rel :: Relation
-im2Rel = (C QP.angularAccel) := Deriv Total (FCall (C QP.angularVelocity) [C QP.time]) (C QP.time) := ((FCall (C torque_i) [C QP.time]) / (C QP.momentOfInertia))
+im2Rel = (C QP.angularAccel) := Deriv Total
+  (FCall (C QP.angularVelocity) [C QP.time])
+  (C QP.time) := ((FCall (C torque_i) [C QP.time]) / (C QP.momentOfInertia))
 
 im2descr, im2leg :: Sentence
 im2descr = foldlSent [S "The above equation for the total angular acceleration", 

@@ -6,22 +6,16 @@ import qualified Drasil.SRS as SRS
 import Data.Drasil.SentenceStructures (foldlSP)
 import Data.Drasil.Concepts.Documentation
 
-valsOfAuxConstantsF :: [QDefinition] -> Section
-valsOfAuxConstantsF listOfConstants = (SRS.valsOfAuxCons) [intro, tableOfConstants (listOfConstants)] []
+valsOfAuxConstantsF :: (NamedIdea a) => a ->[QDefinition] -> Integer -> Section
+valsOfAuxConstantsF kWord listOfConstants tblNum = (SRS.valsOfAuxCons) [intro (kWord), tableOfConstants (listOfConstants) (tblNum)] []
 
 --FIXME: general introduction?
-intro :: Contents
-intro = foldlSP [S "Insert introduction here"]
+intro :: (NamedIdea a) => a -> Contents
+intro kWord = foldlSP [S "This section contains the standard values that are used for calculations in" +:+ short kWord]
 
-tableOfConstants :: [QDefinition] -> Contents
-tableOfConstants f = Table
-  [S "Constants"]
+tableOfConstants :: [QDefinition] -> Integer -> Contents
+tableOfConstants f num = Table
+  [S "Constant Relation"]
   (mkTable [(\c -> E $ equat c)] f)
-  (S "Table of Auxiliary Constants")
+  (titleize table_ +: S (show num) +:+ S "Auxiliary Constants")
   True
-
-{-
-s6_2_5_table3 = Table [S "Var", S "Physical Constraints"] 
-  (mkTable [(\x -> P $ fst(x)), (\x -> snd(x))] [(prob_br ^. symbol, E (Int 0 :< C prob_br :< Int 1))])
-  (titleize table_ +: S "4" +:+ titleize output_ +:+ titleize' variable) True
--}

@@ -111,6 +111,10 @@ traceyMatrices, traceyGraphs :: [Contents]
 
 traceyMatrices = [s9_table1, s9_table2, s9_table3]
 traceyGraphs = [fig_2, fig_3, fig_4]
+
+--Used in "Values of Auxiliary Constants" Section--
+assumption4_constants :: [QDefinition]
+assumption4_constants = [constant_M, constant_K, constant_ModElas, constant_LoadDur]
 ----------------------------------------------------------------------------------
 
 {--INTRODUCTION--}
@@ -373,8 +377,9 @@ assumption3 = [foldlSent [S "This", phrase system, S "only considers the externa
   phrase explosion, S "scenario for its", plural calculation]]
 
 assumption4 :: [Sentence]
-assumption4 = [S "Standard" +:+ plural value +:+ S "used for" +:+
-  phrase calculation +:+ S "in" +:+ short gLassBR +: S "are"]
+assumption4 = [foldlSent [S "The", plural value, S "provided in", makeRef s10,
+  S "are assumed for the", phrase load_dur, sParen (getS load_dur) `sC` 
+  S "and the material properties of", foldlList (map getS (take 3 assumption4_constants))]]
 
 assumption5 :: [Sentence]
 assumption5 = [foldlSent [S "Glass under consideration", 
@@ -787,10 +792,7 @@ fig_4 = figureLabel "4" (traceyMatrix)
 
 {--VALUES OF AUXILIARY CONSTANTS--}
 
-assumption4_constants :: [QDefinition]
-assumption4_constants = [constant_M, constant_K, constant_ModElas, constant_LoadDur]
-
-s10 = valsOfAuxConstantsF assumption4_constants
+s10 = valsOfAuxConstantsF gLassBR assumption4_constants 5
 
 {--REFERENCES--}
 

@@ -148,6 +148,8 @@ specialToCodeName LEQ      = "leq"
 specialToCodeName Partial  = "partial"
 specialToCodeName UScore   = "_"
 specialToCodeName Percent  = "%"
+specialToCodeName Hash     = "#" -- TODO: Double check that this is valid for 
+                                 -- all of the output langs.
 
 toCodeName :: String -> String
 toCodeName s =

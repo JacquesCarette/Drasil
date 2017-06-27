@@ -489,7 +489,7 @@ s7_1_listOfReqs :: [Sentence]
 s7_1_listOfReqs = [s7_1_req3, s7_1_req4, s7_1_req5]
 
 s7_1_req1 = [(Enumeration $ Simple $ map (\(a, b) -> (a, Flat b))
-  [(acroR "1", at_start input_ +:+ S "the following" +:+
+  [(acroR 1, at_start input_ +:+ S "the following" +:+
   plural quantity `sC` S "which define the glass dimensions" `sC` 
   (glassTy ^. defn) `sC` S "tolerable" +:+ phrase probability +:+
   S "of failure and" +: (plural characteristic `ofThe` phrase blast))]),
@@ -500,14 +500,14 @@ s7_1_req1Table = (table ((map qs [plate_len, plate_width, char_weight, pb_tol, t
   (map qs [sdx, sdy, sdz]) ++ (map qs [glass_type])) (at_start))
 
 s7_1_req2 = [(Enumeration $ Simple $
-   [(acroR "2", Nested (S "The" +:+ phrase system +:+
+   [(acroR 2, Nested (S "The" +:+ phrase system +:+
    S "shall set the known" +:+ plural value +: S "as follows")
     (Bullet $ map Flat
      [(getS sflawParamM) `sC` (getS sflawParamK) `sC` 
      (getS mod_elas) `sC` (getS load_dur) +:+ 
-     S "following" +:+ acroA "4", 
-     (getS loadDF) +:+ S "following" +:+ acroA "8", 
-     short lShareFac +:+ S "following" +:+ acroA "5"]))])]
+     S "following" +:+ acroA 4, 
+     (getS loadDF) +:+ S "following" +:+ acroA 8, 
+     short lShareFac +:+ S "following" +:+ acroA 5]))])]
 
 s7_1_req3 = foldlSent [S "The", phrase system, S "shall check the entered",
   plural inValue, S "to ensure that they do not exceed the",
@@ -517,8 +517,8 @@ s7_1_req3 = foldlSent [S "The", phrase system, S "shall check the entered",
   plural calculation, S "stop"]
 
 s7_1_req4 = foldlSent [titleize output_, S "the", plural inQty,
-  S "from", acroR "1", S "and the known", plural quantity,
-  S "from", acroR "2"]
+  S "from", acroR 1, S "and the known", plural quantity,
+  S "from", acroR 2]
 
 s7_1_req5 = S "If" +:+ (getS is_safe1) `sAnd` (getS is_safe2) +:+
   sParen (S "from" +:+ (makeRef (gbSymbMapT t1SafetyReq))
@@ -527,7 +527,7 @@ s7_1_req5 = S "If" +:+ (getS is_safe1) `sAnd` (getS is_safe2) +:+
   S "If the" +:+ phrase condition +:+ S "is false, then" +:+ phrase output_ +:+
   S "the message" +:+ Quote (notSafe ^. defn)
 
-s7_1_req6 = [(Enumeration $ Simple $ [(acroR "6", Nested (titleize output_ +:+
+s7_1_req6 = [(Enumeration $ Simple $ [(acroR 6, Nested (titleize output_ +:+
   S "the following" +: plural quantity)
   (Bullet $ 
     [Flat $ (at_start prob_br) +:+ sParen (getS prob_br) +:+ sParen (makeRef (gbSymbMapT probOfBr))] ++
@@ -581,26 +581,26 @@ s8_likelychg_list = [s8_likelychg1, s8_likelychg2, s8_likelychg3, s8_likelychg4,
 s8_likelychg1, s8_likelychg2, s8_likelychg3, s8_likelychg4, 
   s8_likelychg5 :: Sentence
 
-s8_likelychg1 = foldlSent [acroA "3" `sDash` S "The", phrase system, 
+s8_likelychg1 = foldlSent [acroA 3 `sDash` S "The", phrase system, 
   S "currently only calculates for external" +:+. phrase blastRisk, 
   S "In the future", plural calculation,
   S "can be added for the internal", phrase blastRisk]
 
-s8_likelychg2 = foldlSent [acroA "4" `sC` (acroA "8" `sDash`
+s8_likelychg2 = foldlSent [acroA 4 `sC` (acroA "8" `sDash`
   S "Currently the"), plural value, S "for",
   (getS sflawParamM) `sC` (getS sflawParamK) `sC`
   S "and", (getS mod_elas), S "are assumed to be the", 
   S "same for all glass. In the future these", plural value, 
   S "can be changed to", phrase variable, plural input_]
 
-s8_likelychg3 = foldlSent [acroA "5" `sDash` S "The", phrase software, 
+s8_likelychg3 = foldlSent [acroA 5 `sDash` S "The", phrase software, 
   S "may be changed to accommodate more than a single", phrase lite]
 
-s8_likelychg4 = foldlSent [acroA "6" `sDash` S "The", phrase software, 
+s8_likelychg4 = foldlSent [acroA 6 `sDash` S "The", phrase software, 
   S "may be changed to accommodate more boundary", plural condition, 
   S "than 4-sided support"]
 
-s8_likelychg5 = foldlSent [acroA "7" `sDash` S "The", phrase software, 
+s8_likelychg5 = foldlSent [acroA 7 `sDash` S "The", phrase software, 
   S "may be changed to consider more than just flexure of the glass"]
 
 {--TRACEABLITY MATRICES AND GRAPHS--}

@@ -50,7 +50,7 @@ elasticMod = constrained' SM.elastMod gtZeroConstr
 
 cohesion     = cuc' "c'" (cn $ "effective cohesion")
   "internal pressure that sticks particles of soil together"
-  (Atomic "c'") pascal Real gtZeroConstr
+  (prime $ Atomic "c") pascal Real gtZeroConstr
 
 poissnsRatio = constrained' SM.poissnsR
   [physc $ \c -> (Int 0) :< c :< (Int 1)]
@@ -58,7 +58,7 @@ poissnsRatio = constrained' SM.poissnsR
 fricAngle    = cuc' "varphi'" (cn $ "effective angle of friction")
   ("The angle of inclination with respect to the horizontal axis of " ++
   "the Mohr-Coulomb shear resistance line") --http://www.geotechdata.info
-  (Concat [Greek Phi_V, Atomic "'"]) degree Real [physc $ \c -> (Int 0) :< c :< (Int 90)]
+  (prime $ Greek Phi_V) degree Real [physc $ \c -> (Int 0) :< c :< (Int 90)]
 
 dryWeight   = cuc' "gamma" (cn $ "dry unit weight")
   "The weight of a dry soil/ground layer divided by the volume of the layer."
@@ -200,7 +200,7 @@ totNrmForce = uc' "N_i" (cn $ "normal force") ("total reactive force " ++
 
 nrmFSubWat = uc' "N'_i" (cn $ "effective normal force") ("for a soil surface, " ++
   "subtracting pore water reactive force from total reactive force")
-  (sub (Atomic "N'") lI) newton
+  (sub (prime $ Atomic "N") lI) newton
 
 nrmFNoIntsl = uc' "N*_i" (cn $ "effective normal force") ("for a soil surface, " ++
   "neglecting the influence of interslice forces")

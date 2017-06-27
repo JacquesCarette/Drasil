@@ -51,7 +51,7 @@ s3, s4, s5,
 s4_1_bullets, s5_1_table, s5_2_bullets, 
   s6_1_1_bullets, s6_1_2_list, s6_1_3_list, 
   s6_2_intro, s6_2_5_table1, s6_2_5_table2, 
-  s6_2_5_intro2, s6_2_5_table3, s7_2_intro, s8_list, s9_table1, 
+  s6_2_5_intro2, s6_2_5_table3, s7_2_intro, s9_table1, 
   s9_table2, s9_table3, s10_list, s11_intro, fig_glassbr, fig_2, 
   fig_3, fig_4, fig_5, fig_6 :: Contents
 
@@ -489,12 +489,12 @@ s7_1_req1 = [(Enumeration $ Simple $ map (\(a, b) -> (a, Flat b))
 
 s7_1_req1Table :: Contents
 s7_1_req1Table = (table ((map qs [plate_len, plate_width, char_weight, pb_tol, tNT, nom_thick]) ++ 
-  (map qs [sdx, sdy, sdz]) ++ (map qs [glass_type])) (\x -> at_start x))
+  (map qs [sdx, sdy, sdz]) ++ (map qs [glass_type])) (at_start))
 
 s7_1_req2 = [(Enumeration $ Simple $
    [(acroR "2", Nested (S "The" +:+ phrase system +:+
    S "shall set the known" +:+ plural value +: S "as follows")
-    (Bullet $ map (\c -> Flat c) 
+    (Bullet $ map Flat
      [(getS sflawParamM) `sC` (getS sflawParamK) `sC` 
      (getS mod_elas) `sC` (getS load_dur) +:+ 
      S "following" +:+ acroA "4", 
@@ -537,6 +537,12 @@ s7_1_req6 = [(Enumeration $ Simple $ [(acroR "6", Nested (titleize output_ +:+
     [Flat (at_start act_thick +:+ sParen (getS act_thick) +:+ sParen (makeRef (gbSymbMapD hFromt)))]++
     [Flat $ (titleize aspectR) +:+ sParen (short aspectR) {-+:+ E ((C aspectR) := (C plate_len):/(C plate_width))-}] --short is technically a symbol here (see Concepts.hs)
     ))])]
+  {-
+  (Bullet $ 
+    []
+  )
+  -}
+
 --FIXME:The implementation above is quite repetitive in nature.
 
 {--Nonfunctional Requirements--}
@@ -557,10 +563,17 @@ s7_2_intro = foldlSP [
 
 s8 = SRS.likeChg [s8_list] []
 
+s8_list :: Contents
+s8_list = enumSimple 1 (short likelyChg) s8_likelychg_list
+
+s8_likelychg_list :: [Sentence]
+s8_likelychg_list = [s8_likelychg1, s8_likelychg2, s8_likelychg3, s8_likelychg4, 
+  s8_likelychg5]
+
 s8_likelychg1, s8_likelychg2, s8_likelychg3, s8_likelychg4, 
   s8_likelychg5 :: Sentence
 
-s8_likelychg1 = foldlSent [(acroA "3") `sDash` S "The", phrase system, 
+s8_likelychg1 = foldlSent [acroA "3" `sDash` S "The", phrase system, 
   S "currently only calculates for external" +:+. phrase blastRisk, 
   S "In the future", plural calculation,
   S "can be added for the internal", phrase blastRisk]
@@ -581,12 +594,6 @@ s8_likelychg4 = foldlSent [acroA "6" `sDash` S "The", phrase software,
 
 s8_likelychg5 = foldlSent [acroA "7" `sDash` S "The", phrase software, 
   S "may be changed to consider more than just flexure of the glass"]
-
-s8_likelychg_list :: [Sentence]
-s8_likelychg_list = [s8_likelychg1, s8_likelychg2, s8_likelychg3, s8_likelychg4, 
-  s8_likelychg5]
-
-s8_list = enumSimple 1 (short likelyChg) s8_likelychg_list
 
 {--TRACEABLITY MATRICES AND GRAPHS--}
 

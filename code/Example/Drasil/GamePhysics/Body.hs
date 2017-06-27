@@ -319,7 +319,7 @@ s4_1_2_list = enumSimple 1 (getAcc goalStmt) s4_1_2_list'
 s4_2 :: Section
 
 s4_2 = SRS.solCharSpec []
- [s4_2_1, s4_2_2, s4_2_3, s4_2_4, s4_2_5, s4_2_6]
+ [s4_2_1, s4_2_2, s4_2_3, s4_2_4, s4_2_5, dataConstraints]
 
 -------------------------
 -- 4.2.1 : Assumptions --
@@ -449,25 +449,18 @@ secCollisionDiagram = Paragraph $ foldlSent [ S "This section presents an image"
 -- 4.2.6 : Data Constraints --
 ------------------------------
 
-s4_2_6 :: Section
-s4_2_6_table1, s4_2_6_table2 :: Contents
+dataConstraints :: Section
+dataConstraintInputTable, dataConstraintOutputTable :: Contents
 
-s4_2_6 = datConF EmptyS True EmptyS [s4_2_6_table1, s4_2_6_table2]
+dataConstraints = datConF EmptyS True EmptyS [dataConstraintInputTable, dataConstraintOutputTable]
 
-
--- Currently unable to write relations in sentences, so verbal explanations
--- will do for now.
--- How do I write 2pi in constraints?
-
-
-s4_2_6_table1 = Table [S "Var", titleize' physicalConstraint, S "Typical Value"]
+dataConstraintInputTable = Table [S "Var", titleize' physicalConstraint, S "Typical Value"]
   (physicalConstraint_inputs) 
-  (S "Table 1:" +:+ (titleize input_) +:+ S "Variables") True
+  ((titleize input_) +:+ S "Variables") True
 
-
-s4_2_6_table2 = Table [S "Var", titleize' physicalConstraint]
+dataConstraintOutputTable = Table [S "Var", titleize' physicalConstraint]
   (map (take 2) physicalConstraint_outputs)
-  (S "Table 2:" +:+ (titleize output_) +:+ S "Variables") True
+  ((titleize output_) +:+ S "Variables") True
 
 
 ------------------------------
@@ -516,7 +509,7 @@ s5_1_req3 = foldlSent [S "Input the", (phrase CM.surface),
 
 s5_1_req4 = foldlSent [S "Verify that the inputs", 
   S "satisfy the required", plural physicalConstraint, S "from", 
-  (makeRef s4_2_6_table1)]
+  (makeRef dataConstraintInputTable)]
 
 s5_1_req5 = reqS (QP.position) (QP.velocity) 
   (S "acted upon by a" +:+ (phrase QP.force))
@@ -664,7 +657,7 @@ s8_funcReq =  ["R1","R2","R3", "R4", "R5", "R6", "R7", "R8"]
 s8_funcReqRef = makeListRef s5_1_list' s5_1
 
 s8_data = ["Data Constraints"]
-s8_dataRef = [makeRef s4_2_6]
+s8_dataRef = [makeRef dataConstraints]
 
 s8_goalstmt = ["GS1", "GS2", "GS3", "GS4"]
 s8_goalstmtRef = makeListRef s4_1_2_list' s4_1_2

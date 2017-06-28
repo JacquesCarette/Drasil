@@ -119,6 +119,11 @@ traceyGraphs = [fig_2, fig_3, fig_4]
 assumption4_constants :: [QDefinition]
 assumption4_constants = [constant_M, constant_K, constant_ModElas,
   constant_LoadDur]
+
+--Used in "Functional Requirements" Section--
+requiredInputs :: [QSWrapper]
+requiredInputs = (map qs [plate_len, plate_width, char_weight,
+  pb_tol, tNT, nom_thick]) ++ (map qs [sdx, sdy, sdz]) ++ (map qs [glass_type])
 --------------------------------------------------------------------------------
 
 {--INTRODUCTION--}
@@ -495,13 +500,13 @@ s7 = reqF [s7_1, s7_2]
 
 s7_1 = SRS.funcReq (s7_1_list) []
 
-s7_1_req2, s7_1_req6 :: ItemType
-s7_1_req1, s7_1_req3, s7_1_req4, s7_1_req5 :: Sentence
+s7_1_req6 :: ItemType
+s7_1_req1, s7_1_req2, s7_1_req3, s7_1_req4, s7_1_req5 :: Sentence
 
 s7_1_list = [enumSimple 1 (getAcc requirement) (s7_1_listOfReqs)] ++ [s7_1_req1Table]
 
 s7_1_listOfReqs :: [Sentence]
-s7_1_listOfReqs = [s7_1_req1, s7_1_req3, s7_1_req4, s7_1_req5]
+s7_1_listOfReqs = [s7_1_req1, s7_1_req2, s7_1_req3, s7_1_req4, s7_1_req5]
 
 s7_1_req1 = foldlSent [at_start input_, S "the", plural quantity, S "from",
   makeRef s7_1_req1Table `sC` S "which define the glass dimensions" `sC` 
@@ -509,18 +514,34 @@ s7_1_req1 = foldlSent [at_start input_, S "the", plural quantity, S "from",
   S "of failure and", (plural characteristic `ofThe` phrase blast)]
 
 s7_1_req1Table :: Contents
-s7_1_req1Table = (table ((map qs [plate_len, plate_width, char_weight,
-  pb_tol, tNT, nom_thick]) ++ (map qs [sdx, sdy, sdz]) ++
-  (map qs [glass_type])) (at_start))
+s7_1_req1Table = Table 
+  [at_start symbol_, at_start description, S "Units"]
+  (mkTable
+  [(\ch -> (\(Just t) -> (getS t)) (getSymb ch)),
+   (at_start), 
+  unit'2Contents]
+  requiredInputs)
+  (S "Required Inputs") False
+
+s7_1_req2 = foldlSent [S "The", phrase system,
+   S "shall set the known", plural value +: S "as follows",
+   foldlsC [(foldlsC (map getS assumption4_constants) `followA` 4),
+     ((getS loadDF) `followA` 8), 
+     (short lShareFac `followA` 5)]]
 
 --ItemType
-s7_1_req2 = (Nested (S "The" +:+ phrase system +:+
+{-s7_1_req2 = (Nested (S "The" +:+ phrase system +:+
    S "shall set the known" +:+ plural value +: S "as follows")
     (Bullet $ map Flat
-     [foldlsC (map getS assumption4_constants) +:+ 
-     S "following" +:+ acroA 4, 
-     (getS loadDF) +:+ S "following" +:+ acroA 8, 
-     short lShareFac +:+ S "following" +:+ acroA 5]))
+     [foldlsC (map getS assumption4_constants) `followA` 4, 
+     (getS loadDF) `followA` 8, 
+     short lShareFac `followA` 5]))
+-}
+--FIXME:should constants, LDF, and LSF have some sort of field that holds
+-- the assumption(s) that're being followed?
+
+followA :: Sentence -> Int -> Sentence
+preceding `followA` num = preceding +:+ S "following" +:+ acroA num
 
 s7_1_req3 = foldlSent [S "The", phrase system, S "shall check the entered",
   plural inValue, S "to ensure that they do not exceed the",

@@ -1481,7 +1481,7 @@ s7_fig2 = Figure (showingCxnBw traceyGraph (titleize' requirement `sC`
 -- Section 8 :  Specification Parameter Values --
 -------------------------------------------------
 
-s8 = valsOfAuxConstantsF progName specParamValList 2
+s8 = valsOfAuxConstantsF progName specParamValList
 
 ----------------------------
 -- Section 9 : References --

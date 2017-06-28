@@ -43,6 +43,7 @@ import Drasil.Sections.SpecificSystemDescription
 import Drasil.Sections.TraceabilityMandGs
 import Drasil.Sections.Requirements
 import Drasil.Sections.GeneralSystDesc
+import Drasil.Sections.AuxiliaryConstants (valsOfAuxConstantsF)
 
 import Data.Drasil.Concepts.Software(correctness, verifiability,
   understandability, reusability, maintainability)
@@ -87,7 +88,7 @@ mkSRS = RefSec (RefProg intro
   IScope (s2_2_contents) (s2_2_end),
   IChar (s2_3_knowlegde) (s2_3_understanding) (EmptyS),
   IOrgSec (s2_4_intro) (inModel) (SRS.inModel SRS.missingP []) (s2_4_trail)]) :
-  map Verbatim [s3, s4, s5, s6, s7, s8]
+  map Verbatim [s3, s4, s5, s6, s7, s8, s9]
 
 tsymb_intro :: [TSIntro]
 tsymb_intro = [TSPurpose, SymbConvention
@@ -901,7 +902,7 @@ s4_2_6_mid = foldlSent [S "The", phrase column, S "for", phrase software,
 ------------------------------
 
 s4_2_6_DataConTables :: [Contents]
-s4_2_6_DataConTables = [s4_2_6_table1, s4_2_6_table2, s4_2_6_table3]
+s4_2_6_DataConTables = [s4_2_6_table1, s4_2_6_table3]
 
 s4_2_6_table1 :: Contents
 s4_2_6_table1 = Table [S "Var", titleize' physicalConstraint, titleize software +:+
@@ -965,11 +966,16 @@ s4_2_6_T1footer = foldlSent_ $ map foldlSent [
 -- Data Constraint: Table 2 --
 ------------------------------
 
+-- See Section 8 - Specification Parameter Values
+
+{--
 s4_2_6_table2 :: Contents
 s4_2_6_table2 = Table [S "Var", titleize value]
   (mkTable [(\x -> x!!0), (\x -> x!!1)] s4_2_6_specParamVals) 
   (titleize specification +:+ titleize parameter +:+ titleize' value) True
+--}
 
+{--
 s4_2_6_specParamVals :: [[Sentence]]
 s4_2_6_specParamVals = [specParamVal1, specParamVal2, specParamVal3, specParamVal4,
   specParamVal5, specParamVal6, specParamVal7, specParamVal8, specParamVal9,
@@ -1006,6 +1012,7 @@ specParamVal19 = [getS coil_HTC_max, E (Int 10000) +:+ (unwrap $ getUnit coil_HT
 specParamVal20 = [getS pcm_HTC_min, E (Int 10) +:+ (unwrap $ getUnit pcm_HTC)]
 specParamVal21 = [getS pcm_HTC_max, E (Int 10000) +:+ (unwrap $ getUnit pcm_HTC)]
 specParamVal22 = [getS time_final_max, E (Int 86400) +:+ (unwrap $ getUnit time_final)]
+--}
 
 ------------------------------
 -- Data Constraint: Table 3 --
@@ -1470,18 +1477,24 @@ s7_fig2 :: Contents
 s7_fig2 = Figure (showingCxnBw traceyGraph (titleize' requirement `sC`
   titleize' inModel `sC` S "and" +:+ titleize' datumConstraint)) "RTrace.png"
 
+-------------------------------------------------
+-- Section 8 :  Specification Parameter Values --
+-------------------------------------------------
+
+s8 = valsOfAuxConstantsF progName specParamValList 2
+
 ----------------------------
--- Section 8 : References --
+-- Section 9 : References --
 ----------------------------
 
-s8 :: Section
-s8 = SRS.reference [s8_refs] []
+s9 :: Section
+s9 = SRS.reference [s9_refs] []
 
-s8_refs :: Contents
-s8_refs = mkRefsList 1 $ map foldlsC s8_refList
+s9_refs :: Contents
+s9_refs = mkRefsList 1 $ map foldlsC s9_refList
 
-s8_refList :: [[Sentence]]
-s8_refList = [ref1, ref2, ref3, ref4, ref5, ref6]
+s9_refList :: [[Sentence]]
+s9_refList = [ref1, ref2, ref3, ref4, ref5, ref6]
 
 ref1, ref2, ref3, ref4, ref5, ref6 :: [Sentence]
 

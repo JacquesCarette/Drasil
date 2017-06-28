@@ -10,6 +10,7 @@ import Data.Drasil.Quantities.Physics (time)
 import Data.Drasil.Quantities.Math (surface, uNormalVect, surArea)
 import Data.Drasil.Quantities.PhysicalProperties (mass, density, vol)
 import Data.Drasil.Units.PhysicalProperties
+import Data.Drasil.Utils(mkDataDef)
 
 import Control.Lens ((^.))
 import Prelude hiding (id)
@@ -357,15 +358,20 @@ pcm_E        = cuc' "pcm_E" (nounPhraseSP "change in heat energy in the PCM")
 -- Max / Min Variables --
 -------------------------
 
-tank_length_min, tank_length_max, htTransCoeff_min, pcm_density_min, 
+tank_length_max, htTransCoeff_min, pcm_density_min, 
   pcm_density_max, coil_SA_max, w_density_min, w_density_max, htCap_S_P_min, 
   htCap_S_P_max, htCap_L_P_min, htCap_L_P_max, htFusion_min, htFusion_max,
   htCap_W_min, htCap_W_max, coil_HTC_min, coil_HTC_max, pcm_HTC_min,
   pcm_HTC_max, time_final_max :: UnitaryChunk
 
+specParamValList :: [QDefinition]
+specParamValList = [tank_length_min]
+
+tank_length_min :: QDefinition
+
 -- Used in Constraint 1
-tank_length_min = unitary "tank_length_min" (nounPhraseSP "minimum length of tank")
-  (sub (tank_length ^. symbol) (Atomic "min")) metre Rational
+tank_length_min = mkDataDef (unitary "tank_length_min" (nounPhraseSP "minimum length of tank")
+  (sub (tank_length ^. symbol) (Atomic "min")) metre Rational) (Dbl 0.1)
 
 tank_length_max = unitary "tank_length_max" (nounPhraseSP "maximum length of tank")
   (sub (tank_length ^. symbol) (Atomic "max")) metre Rational

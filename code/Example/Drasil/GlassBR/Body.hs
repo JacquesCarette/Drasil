@@ -824,7 +824,7 @@ fig_4 = figureLabel "4" (traceyMatrix)
 
 {--VALUES OF AUXILIARY CONSTANTS--}
 
-s10 = valsOfAuxConstantsF gLassBR assumption4_constants 5
+s10 = valsOfAuxConstantsF gLassBR assumption4_constants
 
 {--REFERENCES--}
 

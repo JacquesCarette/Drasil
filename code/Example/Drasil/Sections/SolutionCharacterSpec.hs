@@ -55,13 +55,14 @@ siSent xs = Sent xs
 siTitl :: (CI -> Sentence) -> SecItem
 siTitl f = TitleFunc f
 
-{--renderSec item@(SectionModel name xs) | name == Doc.assumption      = 0 --assumptionSect item
-                                      | name == Doc.thModel         = 0 --theoreticalModelSect item
-                                      | name == Doc.genDefn         = 0 --generalDefinitionSect item
-                                      | name == Doc.inModel         = 0 --instanceModelSect item
-                                      | name == Doc.dataDefn        = 0 --dataDefinitionSect item
-                                      | name == Doc.datumConstraint = 0 --dataConstraintSect item
-                                      | otherwise                   = 0 --genericSect item
+{--renderSec item@(SectionModel name xs) 
+    | name == Doc.assumption      = assumptionSect item
+    | name == Doc.thModel         = theoreticalModelSect item
+    | name == Doc.genDefn         = generalDefinitionSect item
+    | name == Doc.inModel         = instanceModelSect item
+    | name == Doc.dataDefn        = dataDefinitionSect item
+    | name == Doc.dataConst       = dataConstraintSect item
+    | otherwise                   = genericSect item
 --}
 ----------------------
 --  HELPER FUNCTION --
@@ -109,11 +110,17 @@ pullSections xs = pullFunc xs getSections hasSect
 pullContents :: [SecItem] -> [Contents]
 pullContents xs = pullFunc xs getSecContents hasCont
 
+------------------------------
+-- Section Render Functions --
+------------------------------
+
+
 genericSect :: SolSubSec -> Section
 genericSect (SectionModel name xs) = section ((pullTitle xs) name) (pullContents xs)
   (pullSections xs)
 
-
+--assumptionSect :: SolSubSec -> Section
+--assumptionSect (SectionModel name xs) = section (titleize name) 
 
 --solutionCharacterSpecificationAssembler :: (NamedIdea a) => a -> [SolSubSec] -> Section
 

@@ -51,9 +51,8 @@ s3, s4, s5,
 
 s4_1_bullets, s5_1_table, s5_2_bullets, 
   s6_1_1_bullets, s6_1_2_list, s6_1_3_list, 
-  s6_2_intro, s6_2_5_table1, s6_2_5_table2, 
-  s6_2_5_table3, s7_2_intro,
-  s9_table1, s9_table2, s9_table3,
+  s6_2_intro, s6_2_5_table1, s6_2_5_table3,
+  s7_2_intro, s9_table1, s9_table2, s9_table3,
   s11_list, s12_intro, fig_glassbr, fig_2, 
   fig_3, fig_4, fig_5, fig_6 :: Contents
 
@@ -119,18 +118,8 @@ assumption4_constants :: [QDefinition]
 assumption4_constants = [constant_M, constant_K, constant_ModElas,
   constant_LoadDur]
 
-specParamValsNoUnits :: [VarChunk]
-specParamValsNoUnits = [ar_max]
-
-specParamValsWUnits :: [UnitaryChunk]
-specParamValsWUnits = [cWeightMin, cWeightMax, sd_min, sd_max]
-
-specParamValsWUnits_ :: [QDefinition]
-specParamValsWUnits_ = [dim_min, dim_max]
-
-auxiliaryConstants :: [QSWrapper]
-auxiliaryConstants = (map qs assumption4_constants) ++ (map qs specParamValsWUnits) ++
-  (map qs specParamValsNoUnits)
+auxiliaryConstants :: [QDefinition]
+auxiliaryConstants = assumption4_constants ++ gBRSpecParamVals
 
 --Used in "Functional Requirements" Section--
 requiredInputs :: [QSWrapper]
@@ -357,9 +346,9 @@ s6_2_5_intro2 :: Sentence
 s6_2 = solChSpecF gLassBR (s6_1, s8) (EmptyS) 
  (tbRef, dataConstraintUncertainty, end)
  (s6_2_1_list, s6_2_2_TMods, [], s6_2_4_DDefns, s6_2_3_IMods, 
-  [s6_2_5_table1, s6_2_5_table2, s6_2_5_table3]) []
+  [s6_2_5_table1, s6_2_5_table3]) []
   where tbRef = (makeRef s6_2_5_table1) +:+ S "shows"
-        end = foldlSent [(makeRef s6_2_5_table2), S "gives", 
+        end = foldlSent [(makeRef s10), S "gives", 
              (plural value `ofThe` S "specification"), plural parameter, 
               S "used in" +:+. (makeRef s6_2_5_table1), getS ar_max, --FIXME: Issue #167
               S "refers to the", phrase ar_max, 
@@ -454,7 +443,7 @@ s6_2_4_DDefns = map gbSymbMapD dataDefns
 {--Data Constraints--}
 
 s6_2_5 = datConF ((makeRef s6_2_5_table1) +:+ S "shows") dataConstraintUncertainty end 
-                 [s6_2_5_table1, s6_2_5_table2] --issue #213: discrepancy?
+                 [s6_2_5_table1] --issue #213: discrepancy? --reference removed table? June 28
   where end = foldlSent [(makeRef s6_2_5_table3), S "gives the", 
               (plural value `ofThe` S "specification"), plural parameter,
               S "used in" +:+. (makeRef s6_2_5_table1), 
@@ -479,18 +468,6 @@ inputVarPbTol = displayConstr pb_tol       (0.008 :: Double) (addPercent 0.1)
 inputVarW     = displayConstr char_weight  (42 :: Int)       (addPercent 10)
 inputVarTNT   = displayConstr tNT          (1 :: Int)        (addPercent 10)
 inputVarSD    = displayConstr standOffDist (45 :: Int)       (addPercent 10)
-
-s6_2_5_table2 = Table [S "Var", titleize value] (mkTable 
-  [(\x -> fst x), (\x -> snd x)]
-  ([(getS dim_min, fmtU (E (Dbl 0.1)) standOffDist), 
-  (getS dim_max, fmtU (E (Dbl 5)) standOffDist), 
-  ((getS ar_max), E (Dbl 5))]
-  ++
-  zipWith s6_2_5_table2_formatF2
-  [cWeightMin, cWeightMax, sd_min, sd_max]
-  [4.5, 910, 6, 130]))
-  (titleize specification +:+ (titleize parameter) +:+ titleize' value)
-  True
 
 s6_2_5_table2_formatF2 :: UnitaryChunk -> Double -> (Sentence, Sentence)
 s6_2_5_table2_formatF2 varName val = (getS varName, E (Dbl val) +:+
@@ -837,7 +814,7 @@ fig_4 = figureLabel "4" (traceyMatrix)
 
 {--VALUES OF AUXILIARY CONSTANTS--}
 
-s10 = valsOfAuxConstantsF gLassBR assumption4_constants
+s10 = valsOfAuxConstantsF gLassBR auxiliaryConstants
 
 {--REFERENCES--}
 

@@ -96,25 +96,35 @@ prob_br = cvc "prob_br" (nounPhraseSP "probability of breakage")
 
 {--}
 
-glassBRConstants :: [QDefinition]
-glassBRConstants = [dim_max, dim_min]
+gBRSpecParamVals :: [QDefinition]
+gBRSpecParamVals = [dim_max, dim_min, ar_max, cWeightMax, sd_min, sd_max]
 
-dim_max, dim_min :: QDefinition
+dim_max, dim_min, ar_max, cWeightMax, cWeightMin, sd_min, sd_max :: QDefinition
 
 dim_max     = mkDataDef (unitary "dim_max"     (nounPhraseSP "maximum value for one of the dimensions of the glass plate") 
   (sub lD (Atomic "max")) millimetre Real) (Dbl 0.1)
 dim_min     = mkDataDef (unitary "dim_min"     (nounPhraseSP "minimum value for one of the dimensions of the glass plate") 
   (sub lD (Atomic "min")) millimetre Real) (Dbl 5)
+ar_max     = mkDataDef (vc "ar_max"        (nounPhraseSP "maximum aspect ratio")
+  (sub (Atomic "AR") (Atomic "max")) Rational) (Dbl 5)
+--restraining from completely removing chunks as unitarychunks
+cWeightMax = mkDataDef (unitary "cWeightMax"  (nounPhraseSP "maximum permissible input charge weight")
+  (sub (char_weight ^. symbol) (Atomic "max")) kilogram Rational) (Dbl 910)
+cWeightMin = mkDataDef (unitary "cWeightMin"  (nounPhraseSP "minimum permissible input charge weight")
+  (sub (char_weight ^. symbol) (Atomic "min")) kilogram Rational) (Dbl 4.5)
+sd_min     = mkDataDef (unitary "sd_min"      (nounPhraseSP "minimum stand off distance permissible for input") 
+  (sub (standOffDist ^. symbol) (Atomic "min")) metre Real) (Dbl 6)
+sd_max     = mkDataDef (unitary "sd_max"      (nounPhraseSP "maximum stand off distance permissible for input") 
+  (sub (standOffDist ^. symbol) (Atomic "max")) metre Real) (Dbl 130)
 
 {--}
 
 glassBRSymbols :: [UnitaryChunk]
 glassBRSymbols = [act_thick, sflawParamK, sflawParamM,
-  demand, sdx, sdy, sdz, sd_max, sd_min, load_dur, cWeightMax, cWeightMin,
-  eqTNTWeight]
+  demand, sdx, sdy, sdz, load_dur, eqTNTWeight]
 
 act_thick, sflawParamK, sflawParamM, demand, sdx, sdy,
-  sdz, sd_max, sd_min, load_dur, cWeightMax, cWeightMin, eqTNTWeight :: UnitaryChunk
+  sdz, load_dur, eqTNTWeight :: UnitaryChunk
 
 act_thick   = unitary "act_thick"   (nounPhraseSP "actual thickness")
   lH millimetre Rational
@@ -130,30 +140,20 @@ sdy = unitary "sdy" (nounPhraseSP "stand off distance (y-component)")
   (sub (standOffDist ^. symbol) lY) metre Rational
 sdz = unitary "sdz" (nounPhraseSP "stand off distance (z-component)")
   (sub (standOffDist ^. symbol) lZ) metre Rational
-sd_max      = unitary "sd_max"      (nounPhraseSP "maximum stand off distance permissible for input") 
-  (sub (standOffDist ^. symbol) (Atomic "max")) metre Real
-sd_min      = unitary "sd_min"      (nounPhraseSP "minimum stand off distance permissible for input") 
-  (sub (standOffDist ^. symbol) (Atomic "min")) metre Real
 load_dur    = unitary "load_dur"    (nounPhraseSP "duration of load")
   (sub lT lD) second Integer
-cWeightMax  = unitary "cWeightMax"  (nounPhraseSP "maximum permissible input charge weight")
-  (sub (char_weight ^. symbol) (Atomic "max")) kilogram Rational
-cWeightMin  = unitary "cWeightMin"  (nounPhraseSP "minimum permissible input charge weight")
-  (sub (char_weight ^. symbol) (Atomic "min")) kilogram Rational
 eqTNTWeight = unitary "eqTNTWeight" (nounPhraseSP "explosive mass in equivalent weight of TNT") --replace with short TNT?
   (sub (char_weight ^. symbol) (tNT ^. symbol)) kilogram Rational
 
 {-Quantities-}
 
 glassBRUnitless :: [VarChunk]
-glassBRUnitless = [ar_max, risk_fun, is_safe1, is_safe2, stressDistFac, sdf_tol,
+glassBRUnitless = [risk_fun, is_safe1, is_safe2, stressDistFac, sdf_tol,
   dimlessLoad, tolLoad, lRe, loadSF, gTF, lDurFac, nonFactorL]
 
-ar_max, risk_fun, is_safe1, is_safe2, stressDistFac, sdf_tol,
+risk_fun, is_safe1, is_safe2, stressDistFac, sdf_tol,
   dimlessLoad, tolLoad, lRe, loadSF, gTF, lDurFac, nonFactorL :: VarChunk
 
-ar_max      = vc "ar_max"        (nounPhraseSP "maximum aspect ratio")
-  (sub (Atomic "AR") (Atomic "max")) Rational
 risk_fun    = makeVC "risk_fun"      (nounPhraseSP "risk of failure") cB
 is_safe1    = vc "is_safe1"      (nounPhraseSP $ "true when calculated probability is " ++
   "less than tolerable probability") (Concat [Atomic "is", Special UScore, 
@@ -285,7 +285,7 @@ explosion     = dcc "explosion"   (nounPhraseSP "explosion")
   "a destructive shattering of something"
 
 this_symbols :: [QSWrapper]
-this_symbols = ((map qs glassBRConstants) ++ (map qs glassBRSymbolsWithDefns)
+this_symbols = ((map qs gBRSpecParamVals) ++ (map qs glassBRSymbolsWithDefns)
   ++ (map qs glassBRSymbols) ++ (map qs glassBRUnitless) ++ (map qs gbInputs))
 
 gbSymbMap :: SymbolMap

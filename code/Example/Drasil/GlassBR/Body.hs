@@ -123,7 +123,10 @@ specParamValsNoUnits :: [VarChunk]
 specParamValsNoUnits = [ar_max]
 
 specParamValsWUnits :: [UnitaryChunk]
-specParamValsWUnits = [dim_min, dim_max, cWeightMin, cWeightMax, sd_min, sd_max]
+specParamValsWUnits = [cWeightMin, cWeightMax, sd_min, sd_max]
+
+specParamValsWUnits_ :: [QDefinition]
+specParamValsWUnits_ = [dim_min, dim_max]
 
 auxiliaryConstants :: [QSWrapper]
 auxiliaryConstants = (map qs assumption4_constants) ++ (map qs specParamValsWUnits) ++

@@ -5,7 +5,7 @@ import Drasil.GlassBR.Concepts
 
 import Language.Drasil
 import Data.Drasil.SI_Units
-import Data.Drasil.Utils(symbolMapFun)
+import Data.Drasil.Utils(symbolMapFun, mkDataDef)
 import Control.Lens((^.))
 import Prelude hiding (log, id)
 import Data.Drasil.SentenceStructures (foldlSent)
@@ -96,18 +96,26 @@ prob_br = cvc "prob_br" (nounPhraseSP "probability of breakage")
 
 {--}
 
+glassBRConstants :: [QDefinition]
+glassBRConstants = [dim_max, dim_min]
+
+dim_max, dim_min :: QDefinition
+
+dim_max     = mkDataDef (unitary "dim_max"     (nounPhraseSP "maximum value for one of the dimensions of the glass plate") 
+  (sub lD (Atomic "max")) millimetre Real) (Dbl 0.1)
+dim_min     = mkDataDef (unitary "dim_min"     (nounPhraseSP "minimum value for one of the dimensions of the glass plate") 
+  (sub lD (Atomic "min")) millimetre Real) (Dbl 5)
+
+{--}
+
 glassBRSymbols :: [UnitaryChunk]
-glassBRSymbols = [dim_max, dim_min, act_thick, sflawParamK, sflawParamM,
+glassBRSymbols = [act_thick, sflawParamK, sflawParamM,
   demand, sdx, sdy, sdz, sd_max, sd_min, load_dur, cWeightMax, cWeightMin,
   eqTNTWeight]
 
-dim_max, dim_min, act_thick, sflawParamK, sflawParamM, demand, sdx, sdy,
+act_thick, sflawParamK, sflawParamM, demand, sdx, sdy,
   sdz, sd_max, sd_min, load_dur, cWeightMax, cWeightMin, eqTNTWeight :: UnitaryChunk
 
-dim_max     = unitary "dim_max"     (nounPhraseSP "maximum value for one of the dimensions of the glass plate") 
-  (sub lD (Atomic "max")) millimetre Real
-dim_min     = unitary "dim_min"     (nounPhraseSP "minimum value for one of the dimensions of the glass plate") 
-  (sub lD (Atomic "min")) millimetre Real
 act_thick   = unitary "act_thick"   (nounPhraseSP "actual thickness")
   lH millimetre Rational
 sflawParamK = unitary "sflawParamK" (nounPhraseSP "surface flaw parameter") --parameterize?
@@ -175,7 +183,7 @@ terms = [aspectRatio, glBreakage, lite, glassTy,
 aspectRatio, glBreakage, lite, glassTy, annealedGl, fTemperedGl, hStrengthGl,
   glTyFac, lateral, load, specDeLoad, loadResis, longDurLoad, nonFactoredL,
   glassWL, shortDurLoad, loadShareFac, probBreak, specA, blastResisGla, eqTNTChar,
-  sD, blast, blastTy, glassGeo, capacity, demandq, safeMessage,   notSafe, bomb,
+  sD, blast, blastTy, glassGeo, capacity, demandq, safeMessage, notSafe, bomb,
   explosion :: ConceptChunk
 
 --FIXME: Why are there multiple copies of aspect ratio, glass type factor, etc.?
@@ -277,8 +285,8 @@ explosion     = dcc "explosion"   (nounPhraseSP "explosion")
   "a destructive shattering of something"
 
 this_symbols :: [QSWrapper]
-this_symbols = ((map qs glassBRSymbolsWithDefns) ++ (map qs glassBRSymbols)
-  ++ (map qs glassBRUnitless) ++ (map qs gbInputs))
+this_symbols = ((map qs glassBRConstants) ++ (map qs glassBRSymbolsWithDefns)
+  ++ (map qs glassBRSymbols) ++ (map qs glassBRUnitless) ++ (map qs gbInputs))
 
 gbSymbMap :: SymbolMap
 gbSymbMap = symbolMap this_symbols

@@ -139,7 +139,7 @@ mkInputDatTb :: (SymbolForm a, Quantity a) => [a] -> Contents
 mkInputDatTb inputVar = Table [titleize symbol_, titleize unit_, 
   titleize description]
   (mkTable [getS, fmtU EmptyS, phrase] inputVar) 
-  (titleize input_ +:+ titleize' datum) True
+  (S "Required" +:+ titleize' input_) True
 
 -- | makes sentences from an item and its reference 
 -- a - String title of reference
@@ -196,12 +196,12 @@ mkDataDef concept equation = datadef $ getUnit concept
 inDataConstTbl :: [[Sentence]] -> Integer -> Contents
 inDataConstTbl inputs tableNumb = Table [S "Var", titleize' physicalConstraint, titleize' softwareConstraint,
   S "Typical" +:+ titleize value, S "Typical Uncertainty"]
-  inputs (S "Table" +: S (show tableNumb) +:+ titleize input_ +:+ titleize' variable) True
+  inputs (S "Table" +: S (show tableNumb) +:+ S "Input Data Constraints") True
   
   -- Creates the output Data Constraints Table with physical constraints only
 outDataConstTbl :: [[Sentence]] -> Integer -> Contents
-outDataConstTbl outputs tableNumb = Table [S "Var", titleize' physicalConstraint]
-  outputs (S "Table" +: S (show tableNumb) +:+ titleize input_ +:+ titleize' variable) True
+outDataConstTbl outputs tableNumb = Table [S "Var", titleize' physicalConstraint, titleize' softwareConstraint]
+  outputs (S "Table" +: S (show tableNumb) +:+ S "Output Data Constraints") True
 
 prodUCTbl :: [[Sentence]] -> Contents
 prodUCTbl cases = Table [titleize useCase +:+. S "NO", titleize useCase +:+

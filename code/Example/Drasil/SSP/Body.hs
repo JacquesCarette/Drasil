@@ -661,14 +661,14 @@ slipVert  = verticesConst $ phrase slip
 slopeVert = verticesConst $ phrase slope
 
 dataConstIn :: [[Sentence]]
-dataConstIn = [waterVert, slipVert, slopeVert] ++ map fmtConstr sspInputs
+dataConstIn = [waterVert, slipVert, slopeVert] ++ map fmtInConstr sspInputs
 
 {-output data-}
 slipVert2 :: [[Sentence]]
-slipVert2 = [[vertVar $ phrase slip, S "Vertices's monotonic"]]
+slipVert2 = [[vertVar $ phrase slip, S "Vertices's monotonic", S "None"]]
 
 displayContr' :: (Constrained s, SymbolForm s) => s -> [Sentence]
-displayContr' s = init $ makeConstraint s EmptyS
+displayContr' s = (init $ makeConstraint s EmptyS) ++ [S "None"]
 
 dataConstOut :: [[Sentence]]
 dataConstOut = [(displayContr' . head) sspOutputs] ++ slipVert2 ++

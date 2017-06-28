@@ -8,7 +8,7 @@ module Data.Drasil.SentenceStructures
   , maybeChanged, maybeExpanded, maybeWOVerb
   , tAndDWAcc, tAndDWSym, tAndDOnly
   , makeConstraint, displayConstr
-  , fmtConstr
+  , fmtInConstr
   ) where
 
 import Language.Drasil
@@ -165,5 +165,5 @@ fmtSfwr s = foldlList $ fmtCS $ filter filterS (s ^. constraints)
         filterS (Sfwr _) = True
         fmtCS = map (\(Sfwr f) -> E $ f (C s))
        
-fmtConstr :: UncertQ -> [Sentence]
-fmtConstr q = [getS q, fmtPhys q, fmtSfwr q, fmtU (S $ show $ typVal q) q, S $ show (q ^. uncert)]
+fmtInConstr :: UncertQ -> [Sentence]
+fmtInConstr q = [getS q, fmtPhys q, fmtSfwr q, fmtU (S $ show $ typVal q) q, S $ show (q ^. uncert)]

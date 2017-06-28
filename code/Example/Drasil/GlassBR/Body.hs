@@ -466,7 +466,7 @@ inputVarSD    = displayConstr standOffDist (45 :: Int)       (addPercent 10)
 s6_2_5_table2 = Table [S "Var", titleize value] (mkTable 
   [(\x -> fst x), (\x -> snd x)]
   ([(getS dim_min, fmtU (E (Dbl 0.1)) standOffDist), 
-  (getS dim_max, fmtU (E (Dbl 0.1)) standOffDist), 
+  (getS dim_max, fmtU (E (Dbl 5)) standOffDist), 
   ((getS ar_max), E (Dbl 5))]
   ++
   zipWith s6_2_5_table2_formatF2
@@ -495,35 +495,32 @@ s7 = reqF [s7_1, s7_2]
 
 s7_1 = SRS.funcReq (s7_1_list) []
 
-s7_1_req1, s7_1_req2, s7_1_req6 :: [Contents]
-s7_1_req3, s7_1_req4, s7_1_req5 :: Sentence
+s7_1_req2, s7_1_req6 :: ItemType
+s7_1_req1, s7_1_req3, s7_1_req4, s7_1_req5 :: Sentence
 
-s7_1_list = s7_1_req1++s7_1_req2++[enumSimple 3 (getAcc requirement) 
-  (s7_1_listOfReqs)]++s7_1_req6
+s7_1_list = [enumSimple 1 (getAcc requirement) (s7_1_listOfReqs)] ++ [s7_1_req1Table]
 
 s7_1_listOfReqs :: [Sentence]
-s7_1_listOfReqs = [s7_1_req3, s7_1_req4, s7_1_req5]
+s7_1_listOfReqs = [s7_1_req1, s7_1_req3, s7_1_req4, s7_1_req5]
 
-s7_1_req1 = [(Enumeration $ Simple $ map (\(a, b) -> (a, Flat b))
-  [(acroR 1, at_start input_ +:+ S "the following" +:+
-  plural quantity `sC` S "which define the glass dimensions" `sC` 
-  (glassTy ^. defn) `sC` S "tolerable" +:+ phrase probability +:+
-  S "of failure and" +: (plural characteristic `ofThe` phrase blast))]),
-  s7_1_req1Table]
+s7_1_req1 = foldlSent [at_start input_, S "the", plural quantity, S "from",
+  makeRef s7_1_req1Table `sC` S "which define the glass dimensions" `sC` 
+  (glassTy ^. defn) `sC` S "tolerable", phrase probability,
+  S "of failure and", (plural characteristic `ofThe` phrase blast)]
 
 s7_1_req1Table :: Contents
 s7_1_req1Table = (table ((map qs [plate_len, plate_width, char_weight,
   pb_tol, tNT, nom_thick]) ++ (map qs [sdx, sdy, sdz]) ++
   (map qs [glass_type])) (at_start))
 
-s7_1_req2 = [(Enumeration $ Simple $
-   [(acroR 2, Nested (S "The" +:+ phrase system +:+
+--ItemType
+s7_1_req2 = (Nested (S "The" +:+ phrase system +:+
    S "shall set the known" +:+ plural value +: S "as follows")
     (Bullet $ map Flat
      [foldlsC (map getS assumption4_constants) +:+ 
      S "following" +:+ acroA 4, 
      (getS loadDF) +:+ S "following" +:+ acroA 8, 
-     short lShareFac +:+ S "following" +:+ acroA 5]))])]
+     short lShareFac +:+ S "following" +:+ acroA 5]))
 
 s7_1_req3 = foldlSent [S "The", phrase system, S "shall check the entered",
   plural inValue, S "to ensure that they do not exceed the",
@@ -543,7 +540,8 @@ s7_1_req5 = S "If" +:+ (getS is_safe1) `sAnd` (getS is_safe2) +:+
   S "If the" +:+ phrase condition +:+ S "is false, then" +:+ phrase output_ +:+
   S "the message" +:+ Quote (notSafe ^. defn)
 
-s7_1_req6 = [(Enumeration $ Simple $ [(acroR 6, Nested (titleize output_ +:+
+--ItemType
+s7_1_req6 = (Nested (titleize output_ +:+
   S "the following" +: plural quantity)
   (Bullet $ 
     [Flat $ (at_start prob_br) +:+ sParen (getS prob_br) +:+ sParen (makeRef (gbSymbMapT probOfBr))] ++
@@ -560,7 +558,7 @@ s7_1_req6 = [(Enumeration $ Simple $ [(acroR 6, Nested (titleize output_ +:+
     [Flat $ (titleize lResistance +:+ sParen (short lResistance) +:+ sParen (makeRef (gbSymbMapT calOfCap)))] ++
     [Flat (at_start act_thick +:+ sParen (getS act_thick) +:+ sParen (makeRef (gbSymbMapD hFromt)))]++
     [Flat $ (titleize aspectR) +:+ sParen (short aspectR) {-+:+ E ((C aspectR) := (C plate_len):/(C plate_width))-}] --short is technically a symbol here (see Concepts.hs)
-    ))])]
+    ))
   {-
   (Bullet $ 
     []

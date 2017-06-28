@@ -107,7 +107,6 @@ dim_min     = mkDataDef (unitary "dim_min"     (nounPhraseSP "minimum value for 
   (sub lD (Atomic "min")) millimetre Real) (Dbl 5)
 ar_max     = mkDataDef (vc "ar_max"        (nounPhraseSP "maximum aspect ratio")
   (sub (Atomic "AR") (Atomic "max")) Rational) (Dbl 5)
---restraining from completely removing chunks as unitarychunks
 cWeightMax = mkDataDef (unitary "cWeightMax"  (nounPhraseSP "maximum permissible input charge weight")
   (sub (char_weight ^. symbol) (Atomic "max")) kilogram Rational) (Dbl 910)
 cWeightMin = mkDataDef (unitary "cWeightMin"  (nounPhraseSP "minimum permissible input charge weight")

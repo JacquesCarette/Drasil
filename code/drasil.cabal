@@ -175,6 +175,7 @@ executable nopcm
     , Drasil.SWHS.Unitals
     , Drasil.Sections.TraceabilityMandGs
     , Drasil.Sections.ReferenceMaterial
+    , Drasil.Sections.AuxiliaryConstants
     , Drasil.SRS
     , Drasil.Sections.TableOfAbbAndAcronyms
     , Drasil.DocumentLanguage
@@ -350,6 +351,7 @@ executable swhs
     , Drasil.Sections.TableOfAbbAndAcronyms
     , Drasil.Sections.TableOfSymbols
     , Drasil.Sections.TableOfUnits
+    , Drasil.Sections.AuxiliaryConstants
     , Drasil.Template.DD
     , Drasil.Template.Helpers
     , Drasil.Template.MG

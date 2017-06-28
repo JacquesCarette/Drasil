@@ -514,7 +514,7 @@ s7_1_req1Table = Table
 
 s7_1_req2 = foldlSent [S "The", phrase system,
    S "shall set the known", plural value +: S "as follows",
-   foldlsC [(foldlsC (map getS assumption4_constants) `followA` 4),
+   foldlList [(foldlsC (map getS assumption4_constants) `followA` 4),
      ((getS loadDF) `followA` 8), 
      (short lShareFac `followA` 5)]]
 

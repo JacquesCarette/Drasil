@@ -23,7 +23,7 @@ module Language.Drasil (
   , Quantity(..), ConVar(..), cvR, cvRs
   , Concept(..)
   , CommonIdea(..)
-  , UncertainQuantity(..), UncertQ, uq
+  , UncertainQuantity(..), UncertQ, uq, uqc, typVal
   --, commonidea, CI
   , commonIdea, CI, commonIdea', commonIdea''
   -- Chunk.NamedIdea

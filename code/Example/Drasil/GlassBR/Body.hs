@@ -119,6 +119,16 @@ assumption4_constants :: [QDefinition]
 assumption4_constants = [constant_M, constant_K, constant_ModElas,
   constant_LoadDur]
 
+specParamValsNoUnits :: [VarChunk]
+specParamValsNoUnits = [ar_max]
+
+specParamValsWUnits :: [UnitaryChunk]
+specParamValsWUnits = [dim_min, dim_max, cWeightMin, cWeightMax, sd_min, sd_max]
+
+auxiliaryConstants :: [QSWrapper]
+auxiliaryConstants = (map qs assumption4_constants) ++ (map qs specParamValsWUnits) ++
+  (map qs specParamValsNoUnits)
+
 --Used in "Functional Requirements" Section--
 requiredInputs :: [QSWrapper]
 requiredInputs = (map qs [plate_len, plate_width, char_weight,

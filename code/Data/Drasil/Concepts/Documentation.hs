@@ -174,7 +174,7 @@ designDoc, generalSystemDescription, indPRCase,
   physicalConstraint, physicalSystem, problemDescription, prodUCTable,
   specificsystemdescription, systemdescription, systemConstraint, sysCont,
   userCharacteristic, datumConstraint, functionalRequirement,
-  nonfunctionalRequirement, softwareDoc, softwareReq, softwareSys, softwareVerif,
+  nonfunctionalRequirement, softwareConstraint, softwareDoc, softwareReq, softwareSys, softwareVerif,
   softwareVAV, solutionCharSpec, solutionCharacteristic, offShelfSolution, physicalSim,
   productUC, useCaseTable, physicalProperty, vavPlan :: NamedChunk
  
@@ -192,6 +192,7 @@ physicalSystem               = compoundNC physical system
 problemDescription           = compoundNC problem description
 prodUCTable                  = compoundNC productUC table_
 productUC                    = compoundNC product_ useCase
+softwareConstraint           = compoundNC software constraint
 softwareDoc                  = compoundNC software documentation
 softwareReq                  = compoundNC' software requirement_
 softwareSys                  = compoundNC software system

@@ -31,8 +31,9 @@ fisi  = "for interslice index i"
 -- START OF CONSTRAINEDCHUNKS --
 --------------------------------
 
-sspConstrained, sspInputs, sspOutputs :: [ConstrConcept]
-sspConstrained = sspInputs ++ sspOutputs
+sspConstrained, sspOutputs :: [ConstrConcept]
+sspInputs :: [UncertQ]
+sspConstrained = map ctrCnpt sspInputs ++ sspOutputs
 sspInputs  = [elasticMod, cohesion, poissnsRatio, fricAngle, dryWeight,
               satWeight, waterWeight]
 sspOutputs = [fs, dx_i, dy_i]
@@ -40,37 +41,49 @@ sspOutputs = [fs, dx_i, dy_i]
 gtZeroConstr :: [Constraint] --FIXME: move this somewhere in Data?
 gtZeroConstr = [physc $ (:<) (Int 0)]
 
+defultUncrt :: Double
+defultUncrt = 0.1
+  
+ctrCnpt :: UncertQ -> ConstrConcept
+ctrCnpt (UQ c _ _) = c
+
 elasticMod, cohesion, poissnsRatio, fricAngle, dryWeight, satWeight,
-  waterWeight, fs, dx_i, dy_i :: ConstrConcept
+  waterWeight :: UncertQ
+  
+fs, dx_i, dy_i :: ConstrConcept
 
 {-Intput Variables-}
 --FIXME: add (x,y) when we can index or make related unitals
 
-elasticMod = constrained' SM.elastMod gtZeroConstr
+elasticMod = uq (constrained' SM.elastMod gtZeroConstr) defultUncrt 15000
 
-cohesion     = cuc' "c'" (cn $ "effective cohesion")
+cohesion     = uqc "c'" (cn $ "effective cohesion")
   "internal pressure that sticks particles of soil together"
-  (prime $ Atomic "c") pascal Real gtZeroConstr
+  (prime $ Atomic "c") pascal Real gtZeroConstr defultUncrt 10
 
-poissnsRatio = constrained' SM.poissnsR
-  [physc $ \c -> (Int 0) :< c :< (Int 1)]
+poissnsRatio = uq (constrained' SM.poissnsR
+  [physc $ \c -> (Int 0) :< c :< (Int 1)]) defultUncrt 0.4
 
-fricAngle    = cuc' "varphi'" (cn $ "effective angle of friction")
+fricAngle    = uqc "varphi'" (cn $ "effective angle of friction")
   ("The angle of inclination with respect to the horizontal axis of " ++
   "the Mohr-Coulomb shear resistance line") --http://www.geotechdata.info
   (prime $ Greek Phi_V) degree Real [physc $ \c -> (Int 0) :< c :< (Int 90)]
+  defultUncrt 25
 
-dryWeight   = cuc' "gamma" (cn $ "dry unit weight")
+dryWeight   = uqc "gamma" (cn $ "dry unit weight")
   "The weight of a dry soil/ground layer divided by the volume of the layer."
   (Greek Gamma_L) specific_weight Real gtZeroConstr
+  defultUncrt 20
 
-satWeight   = cuc' "gamma_sat" (cn $ "saturated unit weight")
+satWeight   = uqc "gamma_sat" (cn $ "saturated unit weight")
   "The weight of saturated soil/ground layer divided by the volume of the layer."
   (sub (Greek Gamma_L) (Atomic "Sat")) specific_weight Real gtZeroConstr
+  defultUncrt 20
 
-waterWeight = cuc' "gamma_w" (cn $ "unit weight of water")
+waterWeight = uqc "gamma_w" (cn $ "unit weight of water")
   "The weight of one cubic meter of water."
   (sub (Greek Gamma_L) lW) specific_weight Real gtZeroConstr
+  defultUncrt 9.8
 
 {-Output Variables-}
 fs          = constrained' (cvR (dcc "FS" (nounPhraseSP $ "global factor of safety")

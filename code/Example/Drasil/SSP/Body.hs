@@ -653,7 +653,7 @@ vertVar :: Sentence -> Sentence
 vertVar vertexType = getS coords +:+ S "of" +:+ vertexType +:+ S "vertices'"
 
 verticesConst :: Sentence -> [Sentence]
-verticesConst vertexType = [vertVar vertexType, vertConvention, noTypicalVal]
+verticesConst vertexType = [vertVar vertexType, vertConvention, noTypicalVal, noTypicalVal, noTypicalVal]
 
 waterVert, slipVert, slopeVert :: [Sentence]
 waterVert = verticesConst $ S "water" +:+ phrase table_
@@ -661,8 +661,7 @@ slipVert  = verticesConst $ phrase slip
 slopeVert = verticesConst $ phrase slope
 
 dataConstIn :: [[Sentence]]
-dataConstIn = [waterVert, slipVert, slopeVert] ++ --List of typical values below
-  zipWith makeConstraint sspInputs (map S ["15000","10","0.4","25","20","20","9.8"])
+dataConstIn = [waterVert, slipVert, slopeVert] ++ map fmtConstr sspInputs
 
 {-output data-}
 slipVert2 :: [[Sentence]]

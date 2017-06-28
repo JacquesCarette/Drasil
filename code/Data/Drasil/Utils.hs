@@ -194,7 +194,8 @@ mkDataDef concept equation = datadef $ getUnit concept
 
 -- Creates the input Data Constraints Table with physical constraints only
 inDataConstTbl :: [[Sentence]] -> Integer -> Contents
-inDataConstTbl inputs tableNumb = Table [S "Var", titleize' physicalConstraint, S "Typical" +:+ titleize value]
+inDataConstTbl inputs tableNumb = Table [S "Var", titleize' physicalConstraint, titleize' softwareConstraint,
+  S "Typical" +:+ titleize value, S "Typical Uncertainty"]
   inputs (S "Table" +: S (show tableNumb) +:+ titleize input_ +:+ titleize' variable) True
   
   -- Creates the output Data Constraints Table with physical constraints only

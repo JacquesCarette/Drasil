@@ -8,6 +8,7 @@ module Data.Drasil.SentenceStructures
   , maybeChanged, maybeExpanded, maybeWOVerb
   , tAndDWAcc, tAndDWSym, tAndDOnly
   , makeConstraint, displayConstr
+  , fmtConstr
   ) where
 
 import Language.Drasil
@@ -146,17 +147,23 @@ tAndDOnly chunk  = Flat $ ((at_start chunk) +:+ S "- ") :+: (chunk ^. defn)
 
 --FIXME:Reduce duplication. Idealy only use displayConstr. Gamephysics uses pi/2 which is not a "number" yet
 makeConstraint :: (Constrained s, Quantity s, SymbolForm s) => s -> Sentence -> [Sentence]
-makeConstraint s num = [getS s, foldlList $ fmtCP (filter filterP (s ^. constraints)), fmtU num s]
+makeConstraint s num = [getS s, fmtPhys s, fmtU num s]
+
+displayConstr :: (Constrained s, Quantity s, SymbolForm s, Show a) => s -> a -> Sentence -> [Sentence]
+displayConstr s num uncrty = [getS s, fmtPhys s,
+  fmtSfwr s, fmtU (S (show num)) (qs s), uncrty]
+
+fmtPhys :: (Constrained s, SymbolForm s) => s -> Sentence
+fmtPhys s = foldlList $ fmtCP $ filter filterP (s ^. constraints)
   where filterP (Phys _) = True
         filterP (Sfwr _) = False
         fmtCP = map (\(Phys f) -> E $ f (C s))
 
-displayConstr :: (Constrained s, Quantity s, SymbolForm s, Show a) => s -> a -> Sentence -> [Sentence]
-displayConstr s num uncrty = [getS s, foldlList $ fmtCP (filter filterP (s ^. constraints)),
-  foldlList $ fmtCS (filter filterS (s ^. constraints)), fmtU (S (show num)) (qs s), uncrty]
-  where filterP (Phys _) = True
-        filterP (Sfwr _) = False
-        filterS (Phys _) = False
+fmtSfwr :: (Constrained s, SymbolForm s) => s -> Sentence
+fmtSfwr s = foldlList $ fmtCS $ filter filterS (s ^. constraints)
+  where filterS (Phys _) = False
         filterS (Sfwr _) = True
-        fmtCP = map (\(Phys f) -> E $ f (C s))
         fmtCS = map (\(Sfwr f) -> E $ f (C s))
+       
+fmtConstr :: UncertQ -> [Sentence]
+fmtConstr q = [getS q, fmtPhys q, fmtSfwr q, fmtU (S $ show $ typVal q) q, S $ show (q ^. uncert)]

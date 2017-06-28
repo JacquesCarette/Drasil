@@ -137,7 +137,7 @@ makeTMatrix colName col row = zipSentList [] colName [zipFTable [] x row | x <- 
 -- | takes a list of wrapped variables and creates an Input Data Table for uses in Functional Requirments
 mkInputDatTb :: (SymbolForm a, Quantity a) => [a] -> Contents
 mkInputDatTb inputVar = Table [titleize symbol_, titleize unit_, 
-  titleize description]
+  S "Name"]
   (mkTable [getS, fmtU EmptyS, phrase] inputVar) 
   (S "Required" +:+ titleize' input_) True
 

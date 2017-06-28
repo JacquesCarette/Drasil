@@ -1124,14 +1124,14 @@ s5_1 :: Section
 s5_1 = SRS.funcReq s5_1_list []
 
 s5_1_list :: [Contents]
-s5_1_list = [s5_1_1_Sent, s5_1_1_Table, s5_1_2_Sent, s5_1_2_Table, s5_1_Reqs]
+s5_1_list = [s5_1_1_Sent, s5_1_1_Table, s5_1_2_Sent, s5_1_2_Eqn1, s5_1_2_Eqn2, s5_1_Reqs]
 
-s5_1_1_Sent, s5_1_1_Table, s5_1_2_Sent, s5_1_2_Table, s5_1_Reqs :: Contents
+s5_1_1_Sent, s5_1_1_Table, s5_1_2_Sent, s5_1_2_Eqn1, s5_1_2_Eqn2, s5_1_Reqs :: Contents
 
 s5_1_1_Sent = Enumeration (Simple [(acroR 1, Flat (foldlSentCol
   [titleize input_, S "the following", plural quantity `sC`
   S "which define the", phrase tank, plural parameter `sC` S "material",
-  plural property `sAnd` S "initial", plural condition]))]),
+  plural property `sAnd` S "initial", plural condition]))])
 
 s5_1_1_Table = (Table [titleize symbol_, titleize unit_, titleize description]
   (mkTable
@@ -1139,18 +1139,19 @@ s5_1_1_Table = (Table [titleize symbol_, titleize unit_, titleize description]
   --(\ch -> Sy (unit_symb ch)),
   unit'2Contents,
   phrase] inputVar)
-  (titleize input_ +:+ titleize variable +:+ titleize requirement) False),
+  (titleize input_ +:+ titleize variable +:+ titleize requirement) False)
 
 s5_1_2_Sent = Enumeration (Simple [(acroR 2, Flat (foldlSent
   [S "Use the", plural input_, S "in", acroR 1, S "to find the",
   phrase mass, S "needed for", acroIM 1, S "to", acroIM 4 `sC`
   S "as follows, where", getS w_vol `isThe` phrase w_vol `sAnd`
-  getS tank_vol `isThe` phrase tank_vol]))]),
+  getS tank_vol `isThe` phrase tank_vol]))])
 
-s5_1_2_Table = EqnBlock ((C w_mass) := (C w_vol) * (C w_density) := ((C tank_vol) -
+s5_1_2_Eqn1 = EqnBlock ((C w_mass) := (C w_vol) * (C w_density) := ((C tank_vol) -
   (C pcm_vol)) * (C w_density) := (((C diam) / 2) * (C tank_length) -
-  (C pcm_vol)) * (C w_density)),
-  EqnBlock ((C pcm_mass) := (C pcm_vol) * (C pcm_density)),
+  (C pcm_vol)) * (C w_density))
+
+s5_1_2_Eqn2 = EqnBlock ((C pcm_mass) := (C pcm_vol) * (C pcm_density))
 
 s5_1_Reqs = enumSimple 3 (short requirement) $ map foldlSent reqList
 -- Want to add req1 and req2 but they include a table and another enumeration
@@ -1291,10 +1292,10 @@ s7_trailing = [s7_trailing_1, s7_trailing_2, s7_trailing_3]
 s7_trailing_1, s7_trailing_2, s7_trailing_3 :: Sentence
 
 s7_trailing_1 = foldlSent [plural thModel `sC` plural genDefn `sC` plural dataDefn `sC`
-  S "and", plural inModel, S "with each other"],
+  S "and", plural inModel, S "with each other"]
 
 s7_trailing_2 = foldlSent [plural inModel `sC` plural requirement `sC` S "and",
-  plural datum, plural constraint, S "on each other"],
+  plural datum, plural constraint, S "on each other"]
 
 s7_trailing_3 = foldlSent_ [plural thModel `sC` plural genDefn `sC` plural dataDefn `sC`
   plural inModel `sC` S "and", plural likelyChg, S "on the",

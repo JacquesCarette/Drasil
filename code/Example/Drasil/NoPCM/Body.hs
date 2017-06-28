@@ -6,19 +6,21 @@ import Drasil.NoPCM.Definitions (ht_trans, srs_swhs)
 --import Drasil.NoPCM.Unitals hiding (coil_SA, htCap_W, temp_init, time_final)
 
 import Drasil.SWHS.Body (s2_3_knowlegde, s2_3_understanding, s2_4_intro, 
-  s3, physSyst1, physSyst2, s4_2_4_intro_end, assump1, assump2, assump7,
+  s3, physSyst1, physSyst2, s4_2_4_intro_end, s4_2_5_d1startPara, assump1, assump2, assump7,
   con1, con2, con10, con11, con12, con13, con14, con16, con17, con18, s5_2, s6_start, 
   ref2, ref3, ref4, ref5, ref6)
-import Drasil.SWHS.Concepts (progName, water, gauss_div, sWHT, tank, coil, transient)
+import Drasil.SWHS.Concepts (progName, water, gauss_div, sWHT, tank, coil, transient,
+  perfect_insul)
 import Drasil.SWHS.Unitals (w_vol, tank_length, tank_vol, tau_W, temp_W, w_mass, 
   diam, coil_SA, temp_C, w_density, htCap_W, htFusion, temp_init, time_final,
   in_SA, out_SA, vol_ht_gen, thFluxVect, ht_flux_in, ht_flux_out, tau, htCap_L,
   htTransCoeff, temp_env, diam, tank_length, w_vol, ht_flux_C, coil_HTC, temp_diff,
   w_E)
-import Drasil.SWHS.DataDefs(swhsSymbMapDRef, swhsSymbMapTRef, dd1HtFluxC, s4_2_4_DD1, 
-  swhsSymbMapT)
+import Drasil.SWHS.DataDefs(swhsSymbMapDRef, swhsSymbMapTRef, dd1HtFluxC, 
+  s4_2_4_DD1, swhsSymbMapT)
 import Drasil.SWHS.TMods (s4_2_2_T1, t1ConsThermE)
 import Drasil.SWHS.GenDefs (swhsGenDefs)
+import Drasil.SWHS.IMods (eBalanceOnWtr, heatEInWtr)
 
 import Language.Drasil
 
@@ -26,7 +28,7 @@ import Data.Drasil.SI_Units
 import Data.Drasil.Authors
 import Data.Drasil.Utils(enumSimple, getS, mkRefsList)
 import Data.Drasil.Concepts.Documentation
-import Data.Drasil.Concepts.Math (ode, unit_, rOfChng, parameter)
+import Data.Drasil.Concepts.Math (ode, unit_, rOfChng, parameter, equation)
 import Data.Drasil.Concepts.Software
 import Data.Drasil.Concepts.PhysicalProperties (liquid)
 import Data.Drasil.Concepts.Physics (energy)
@@ -69,8 +71,8 @@ s4, s4_1, s4_1_1, s4_1_2, s4_1_3, s4_2, {-s3, s3_1, -}
   s5, s5_1, s6, s7 :: Section -- s5_2,
 
 s4_1_intro, s4_1_1_bullets, {-s3_1_intro, sys_context_fig, s3_2_intro, s3_3_intro, -}
-  s4_1_2_list, s4_1_3_intro, s4_1_3_list, fig_tank, --s4_2_4_intro,
-  s4_2_5_intro, s4_2_6_table1, s4_2_6_table2, s4_2_6_table3, s6_list, s7_refs:: Contents
+  s4_1_2_list, s4_1_3_intro, s4_1_3_list, fig_tank, 
+  s4_2_6_table1, s4_2_6_table2, s4_2_6_table3, s6_list, s7_refs:: Contents
 
 -------------------------------
 --Section 1 : REFERENCE MATERIAL
@@ -280,7 +282,8 @@ s4_1_3_list = Enumeration $ Simple $ map (\(a, b) -> (a, Flat b)) [
 ------------------------------------------------------
   
 s4_2 = solChSpecF progName (s4_1, s6) s4_2_4_intro_end (mid, dataConstraintUncertainty, end) 
-  ([s4_2_1_list], s4_2_2_T1, s4_2_3_eq, s4_2_4_DD1, [s4_2_5_intro],
+  ([s4_2_1_list], s4_2_2_T1, s4_2_3_eq, s4_2_4_DD1, 
+  [swhsSymbMapT eBalanceOnWtr] ++ s4_2_5_d1startPara ++ s4_2_5_eq ++ [swhsSymbMapT heatEInWtr],
   [s4_2_6_table1, s4_2_6_table2, s4_2_6_table3]) []
   
   where mid = foldlSent [S "The", phrase column, S "for", phrase software,
@@ -394,9 +397,9 @@ s4_2_3_eq = (map swhsSymbMapT swhsGenDefs) ++ [
   phrase vol_ht_gen, S "is assumed constant. Then (1) can be written as"],
 
   EqnBlock
-  ((C ht_flux_in) * (C in_SA) - (C ht_flux_out) *
-  (C out_SA) + (C vol_ht_gen) * (C vol) := UnaryOp (Integral
-  (Just (Low (C vol)), Nothing) ((C density) * (C QT.heat_cap_spec) *
+  ((C ht_flux_in) :* (C in_SA) :- (C ht_flux_out) :*
+  (C out_SA) :+ (C vol_ht_gen) :* (C vol) := UnaryOp (Integral
+  (Just (Low (C vol)), Nothing) ((C density) :* (C QT.heat_cap_spec) :*
   Deriv Part (C QT.temp) (C time)) vol)),
 
   foldlSPCol [S "Where", getS ht_flux_in `sC` getS ht_flux_out `sC`
@@ -408,22 +411,62 @@ s4_2_3_eq = (map swhsSymbMapT swhsGenDefs) ++ [
   S "and", sParen (acroA 5) `sC` S "we have"],
 
   EqnBlock
-  ((C density) * (C QT.heat_cap_spec) * (C vol) * Deriv Total (C QT.temp)
-  (C time) := (C ht_flux_in) * (C in_SA) - (C ht_flux_out) *
-  (C out_SA) + (C vol_ht_gen) * (C vol)),
+  ((C density) :* (C QT.heat_cap_spec) :* (C vol) :* Deriv Total (C QT.temp)
+  (C time) := (C ht_flux_in) :* (C in_SA) :- (C ht_flux_out) :*
+  (C out_SA) :+ (C vol_ht_gen) :* (C vol)),
 
   foldlSPCol [S "Using the fact that", getS density :+: S "=" :+:
   getS mass :+: S "/" :+: getS vol `sC` S "(2) can be written as"],
 
   EqnBlock
-  ((C mass) * (C QT.heat_cap_spec) * Deriv Total (C QT.temp)
-  (C time) := (C ht_flux_in) * (C in_SA) - (C ht_flux_out)
-  * (C out_SA) + (C vol_ht_gen) * (C vol))
+  ((C mass) :* (C QT.heat_cap_spec) :* Deriv Total (C QT.temp)
+  (C time) := (C ht_flux_in) :* (C in_SA) :- (C ht_flux_out)
+  :* (C out_SA) :+ (C vol_ht_gen) :* (C vol))
   ]
-
---s4_2_4_intro = Paragraph $ EmptyS --TODO: Placeholder values until content can be added
-
-s4_2_5_intro = Paragraph $ EmptyS --TODO: Placeholder values until content can be added
+  
+s4_2_5_eq :: [Contents]
+s4_2_5_eq = [
+  
+  foldlSPCol [S "To find the", phrase rOfChng, S "of", getS temp_W `sC`
+  S "we look at the", phrase energy, S "balance on" +:+.
+  phrase water, S "The", phrase vol, S "being considered" `isThe`
+  phrase w_vol, getS w_vol `sC` S "which has", phrase mass,
+  getS w_mass, S "and" +:+. (phrase htCap_W `sC` getS htCap_W),
+  at_start heat_trans, S "occurs in the water from the coil as", (getS ht_flux_C 
+  `sC` S "over area") +:+. getS coil_SA, S "No",
+  phrase heat_trans, S "occurs to", (S "outside" `ofThe`
+  phrase tank) `sC` S "since it has been assumed to be",
+  phrase perfect_insul +:+. sParen (acroA 11), S "Assuming no",
+  phrase vol_ht_gen +:+. (sParen (acroA 12) `sC`
+  E (C vol_ht_gen := Int 0)), S "Therefore, the", phrase equation, S "for",
+  acroGD 2, S "can be written as"],
+  
+  EqnBlock
+  ((C w_mass) :* (C htCap_W) :* Deriv Total (C temp_W) (C time) :=
+  (C ht_flux_C) :* (C coil_SA)),
+  
+  foldlSPCol [S "Using", swhsSymbMapDRef dd1HtFluxC `sC`
+  S "this can be written as"],
+  
+  EqnBlock
+  ((C w_mass) :* (C htCap_W) :* Deriv Total (C temp_W) (C time) :=
+  (C coil_HTC) :* (C coil_SA) :* ((C temp_C) :- (C temp_W))),
+  
+  foldlSPCol [S "Dividing (3) by", getS w_mass :+: getS htCap_W `sC` S "we obtain"],
+  
+  EqnBlock
+  (Deriv Total (C temp_W) (C time) := ((C coil_HTC) :*
+  (C coil_SA)) :/ ((C w_mass) :* (C htCap_W)) :* ((C temp_C) :-
+  (C temp_W))),
+  
+  foldlSPCol [S "Setting", (getS tau_W :+: S "=" :+: getS w_mass :+:
+  getS htCap_W :+: S "/" :+: getS coil_HTC :+: getS coil_SA)
+  `sC` titleize equation, S "(4) can be written in its final form as"],
+  
+  EqnBlock
+  (Deriv Total (C temp_W) (C time) := (1 / (C tau_W)) :*
+  ((C temp_C) :- (C temp_W)))
+  ]
 
 s4_2_6_table1 = Table [S "Var", titleize' physicalConstraint, titleize software +:+ 
   titleize' constraint, S "Typical" +:+ titleize value, titleize uncertainty] 
@@ -438,7 +481,7 @@ s4_2_6_table2 = Table [S "Var", titleize value]
   (titleize specification +:+ titleize parameter +:+ titleize' value) True
   
 s4_2_6_specParVal :: [[Sentence]]
-s4_2_6_specParVal = [[EmptyS, EmptyS]]
+s4_2_6_specParVal = [[EmptyS], [EmptyS]]
 
 s4_2_6_table3 = Table [S "Var", titleize' physicalConstraint] 
   (mkTable [(\x -> x!!0), (\x -> x!!1)] s4_2_6_conListOut)

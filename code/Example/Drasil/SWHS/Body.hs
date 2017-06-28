@@ -61,10 +61,10 @@ this_si = map UU [metre, kilogram, second] ++ map UU [centigrade, joule, watt]
 --Will there be a table of contents?
 
 authors :: Sentence
-authors = manyNames [thulasi, brooks, spencerSmith]
+authors = manyNames swhsPeople
 
 swhs_si :: SystemInformation
-swhs_si = SI swhs_pcm srs [thulasi, brooks, spencerSmith]
+swhs_si = SI swhs_pcm srs swhsPeople
   this_si swhsSymbols (swhsSymbols) acronyms
   (swhsDataDefs :: [QDefinition])
   ((map qs swhsInputs) :: [QSWrapper])
@@ -75,6 +75,9 @@ swhs_si = SI swhs_pcm srs [thulasi, brooks, spencerSmith]
     -- Redundant b/c the unitals are not really concepts (yet). There
     -- Will still likely be a better way to do this.
   --FIXME: Should be all Named, not just acronyms at the end.
+
+swhsPeople :: [Person]
+swhsPeople = [thulasi, brooks, spencerSmith]
 
 mkSRS :: DocDesc
 mkSRS = RefSec (RefProg intro
@@ -117,7 +120,7 @@ s2_intro = foldlSent [S "Due to increasing cost, diminishing",
   phrase energy, plural source `sAnd` phrase energy +:+.
   S "storage technology", (swhs_pcm ^. defn),
   sParen (short phsChgMtrl), S "use a renewable",
-  phrase energy, phrase source, S "and provide a novel way of",
+  phrase energy, phrase source `sAnd` S "provide a novel way of",
   S "storing" +:+. phrase energy,
   at_start swhs_pcm, S "improve over the traditional",
   plural progName, S "because of their smaller size. The",
@@ -152,7 +155,7 @@ s2_1_par1 = foldlSent [S "The main", phrase purpose, S "of this",
   phrase document, S "is to describe the modelling of" +:+.
   phrase swhs_pcm, S "The", plural goalStmt `sAnd` plural thModel,
   S "used in the", short progName, S "code are provided, with an emphasis",
-  S "on explicitly identifying", plural assumption, S "and unambiguous" +:+.
+  S "on explicitly identifying", plural assumption `sAnd` S "unambiguous" +:+.
   plural definition, S "This", phrase document,
   S "is intended to be used as a", phrase reference,
   S "to provide ad hoc access to all", phrase information,
@@ -172,8 +175,8 @@ s2_1_par1 = foldlSent [S "The main", phrase purpose, S "of this",
 ---------------------------------
 
 s2_2_contents, s2_2_end :: Sentence
-s2_2_contents = foldlSent_ [phrase CT.thermal_analysis, S "of a single",
-  phrase tank_pcm] --FIXME: Caps issue
+s2_2_contents = foldlSent_ [phrase CT.thermal_analysis,
+  S "of a single", phrase tank_pcm]
 
 s2_2_end = foldlSent_ [S "predict the",
   phrase temp `sAnd` phrase CT.thermal_energy,
@@ -195,11 +198,12 @@ s2_2_end = foldlSent_ [S "predict the",
 -- 2.3 : Characteristics of Intended Reader --
 ----------------------------------------------
 
-s2_3_knowlegde, s2_3_understanding :: Sentence
+s2_3_knowlegde :: Sentence
 s2_3_knowlegde = foldlSent_ [phrase CT.heat, S "transfer" +:+. phrase theory,
   S "A third or fourth year Mechanical Engineering course on this topic",
   S "is recommended"]
 
+s2_3_understanding :: Sentence
 s2_3_understanding = foldlSent_ [S "differential", plural equation `sC`
   S "as typically covered in first and second year Calculus courses"]
 
@@ -207,12 +211,13 @@ s2_3_understanding = foldlSent_ [S "differential", plural equation `sC`
 -- 2.4 : Organization of Document --
 ------------------------------------
 
-s2_4_intro, s2_4_trail :: Sentence
+s2_4_intro :: Sentence
 s2_4_intro = foldlSent [S "The", phrase organization, S "of this",
   phrase document, S "follows the template for an", short srs,
   S "for", phrase sciCompS, S "proposed by [citation] and",
   sSqBr (S "citation")]
 
+s2_4_trail :: Sentence
 s2_4_trail = foldlSent_ [S "The", plural inModel,
   sParen (makeRef (SRS.inModel SRS.missingP [])),
   S "to be solved are referred to as", acroIM 1,
@@ -274,13 +279,12 @@ s3_1_2_intro = foldlSPCol [short progName +:+.
   S "The only external interaction is through the", phrase user +:+.
   S "interface", S "responsibilities" `ofThe'` phrase user `sAnd`
   S "the", phrase system, S "are as follows"]
-  
-s3_1_2_userResp, s3_1_2_swhsResp :: ItemType
 
 s3_1_2_respBullets :: Contents
 s3_1_2_respBullets = Enumeration $ Bullet $ [s3_1_2_userResp, s3_1_2_swhsResp]
 
 -- User Responsibilities --
+s3_1_2_userResp :: ItemType
 s3_1_2_userResp = Nested (titleize user +: S "Responsibilities")
   $ Bullet $ map (\c -> Flat c) [
 
@@ -293,6 +297,7 @@ s3_1_2_userResp = Nested (titleize user +: S "Responsibilities")
   ]
 
 -- SWHS Responsibilities --
+s3_1_2_swhsResp :: ItemType
 s3_1_2_swhsResp = Nested (short progName +: S "Responsibilities")
   $ Bullet $ map (\c -> Flat c) [
 
@@ -450,24 +455,21 @@ goalState varTerm = foldlSent [S "Predict the", phrase varTerm,
 
 s4_2 :: Section
 s4_2 = solChSpecF progName (s4_1, s6) s4_2_4_intro_end
-  (mid, dataConstraintUncertainty, s4_2_6_T1footer) ([s4_2_1_list], s4_2_2_T1 ++
+  (s4_2_6_mid, dataConstraintUncertainty, s4_2_6_T1footer) ([s4_2_1_list], s4_2_2_T1 ++
   s4_2_2_T2 ++ s4_2_2_T3, s4_2_3_genDefs ++ s4_2_3_deriv,
   s4_2_4_DD1 ++ s4_2_4_DD2 ++ s4_2_4_DD3 ++ s4_2_4_DD4, (s4_2_5_IMods),
   s4_2_6_DataConTables) [s4_2_7]
-
-  where mid = foldlSent [S "The", phrase column, S "for", phrase software,
-          plural constraint, S "restricts the range of",
-          plural input_, S "to reasonable", plural value]
 
 -------------------------
 -- 4.2.1 : Assumptions --
 -------------------------
 
 s4_2_1 :: Section
-s4_2_1 = assumpF (s4_1 {-FIXME-}) (s4_1 {-FIXME-}) (s4_1 {-FIXME-})
-  (s4_2_5) (s6) [s4_2_1_list]
--- s4_2_1 = assumpF (s4_2_2 {-thModF-}) (s4_2_3 {-genDefnF-})
--- (s4_2_4 {-dataDefnF-}) (s4_2_5_deriv1 {-inModelF-}) (s6) (s4_2_1_list)
+s4_2_1 = assumpF
+  (SRS.thModel SRS.missingP [])
+  (SRS.genDefn SRS.missingP [])
+  (SRS.dataDefn SRS.missingP [])
+  s4_2_5 s6 [s4_2_1_list]
 
 s4_2_1_list :: Contents
 s4_2_1_list = enumSimple 1 (short assumption) $ map foldlSent s4_2_1_assump_list
@@ -564,9 +566,9 @@ assump18 = [S "The",
   sSqBr ((acroIM 2) `sC` (acroIM 4))]
 --
 assump19 = [S "The pressure in the", phrase tank,
-  S "is atmospheric, so the", phrase melt_pt, S "and",
-  phrase boil_pt, S "are 0" :+: Sy (unit_symb temp),
-  S "and 100" :+: Sy (unit_symb temp) `sC` S "respectively",
+  S "is atmospheric, so the", phrase melt_pt `sAnd`
+  phrase boil_pt, S "are", S (show 0) :+: Sy (unit_symb temp) `sAnd`
+  S (show 100) :+: Sy (unit_symb temp) `sC` S "respectively",
   sSqBr ((acroIM 1) `sC` (acroIM 3))]
 
 assump20 = [S "When considering the", phrase w_vol, S "in the",
@@ -588,6 +590,7 @@ assump20 = [S "When considering the", phrase w_vol, S "in the",
 ---------------------------------
 -- 4.2.3 : General Definitions --
 ---------------------------------
+
 -- SECTION 4.2.3 --
 -- General Definitions is automatically generated in solChSpecF
 s4_2_3_genDefs :: [Contents]
@@ -613,7 +616,7 @@ s4_2_3_deriv = [
   foldlSPCol [S "Applying", titleize gauss_div, S "to the first term over",
   (phrase surface +:+ getS surface `ofThe` phrase vol) `sC` S "with",
   getS thFluxVect, S "as the", phrase thFluxVect, S "for the",
-  phrase surface, S "and", getS uNormalVect, S "as a", phrase unit_,
+  phrase surface `sAnd` getS uNormalVect, S "as a", phrase unit_,
   S "outward", phrase uNormalVect, S "for a", phrase surface],
 
   EqnBlock
@@ -634,8 +637,8 @@ s4_2_3_deriv = [
 
   foldlSPCol [S "Where", getS ht_flux_in `sC` getS ht_flux_out `sC`
   getS in_SA `sC` S "and", getS out_SA, S "are explained in" +:+.
-  acroGD 2, S "Assuming", getS density `sC` getS heat_cap_spec,
-  S "and", getS temp, S "are constant over the", phrase vol `sC`
+  acroGD 2, S "Assuming", getS density `sC` getS heat_cap_spec `sAnd`
+  getS temp, S "are constant over the", phrase vol `sC`
   S "which is true in our case by", titleize' assumption,
   sParen (acroA 3) `sC` sParen (acroA 4) `sC`
   sParen (acroA 5) `sC` S "and", sParen (acroA 6) `sC` S "we have"],
@@ -671,21 +674,24 @@ s4_2_4_intro_end = foldlSent [S "The dimension of each",
 -- 4.2.5 : Instance Models --
 -----------------------------
 
+s4_2_5 :: Section
+s4_2_5 = inModelF s4_1
+  (SRS.dataDefn SRS.missingP [])
+  (SRS.thModel SRS.missingP [])
+  (SRS.genDefn SRS.missingP [])
+  s4_2_5_IMods
+
 s4_2_5_subpar :: [Contents]
 s4_2_5_subpar = [foldlSP_ [S "The goals",  acroGS 1, S "to",
   acroGS 4, S "are solved by", acroIM 1, S "to" +:+.
-  acroIM 4, S "The", plural solution, S "for", acroIM 1,
-  S "and", acroIM 2, S "are coupled since the", phrase solution,
-  S "for", getS temp_W, S "and", getS temp_PCM +:+.
+  acroIM 4, S "The", plural solution, S "for", acroIM 1 `sAnd` acroIM 2,
+  S "are coupled since the", phrase solution,
+  S "for", getS temp_W `sAnd` getS temp_PCM +:+.
   S "depend on one another", acroIM 3, S "can be solved once",
   acroIM 1, S "has been solved. The", phrase solution, S "of",
-  acroIM 2, S "and", acroIM 4, S "are also coupled, since the",
-  phrase temp_PCM, S "and", phrase pcm_E, S "depend on the",
+  acroIM 2 `sAnd` acroIM 4, S "are also coupled, since the",
+  phrase temp_PCM `sAnd` phrase pcm_E, S "depend on the",
   phrase CT.phase_change]]
-
-s4_2_5 :: Section
---s4_2_5 = inModelF s4_1 s4_2_4 s4_2_2 s4_2_3 (s4_2_5_IMods)
-s4_2_5 = inModelF s4_1 s4_1 s4_1 s4_1 (s4_2_5_IMods)
 
 s4_2_5_IMods :: [Contents]
 s4_2_5_IMods = concat $ weave [s4_2_5_derivations , map (\x -> [swhsSymbMapT x]) iModels]
@@ -711,21 +717,21 @@ s4_2_5_d1sent_list = map foldlSPCol [
   [S "To find the", phrase rOfChng, S "of", getS temp_W `sC`
   S "we look at the", phrase energy, S "balance on" +:+.
   phrase water, S "The", phrase vol, S "being considered" `isThe`
-  phrase w_vol, getS w_vol `sC` S "which has", phrase w_mass,
-  getS w_mass, S "and" +:+. (phrase htCap_W `sC` getS htCap_W),
-  getS ht_flux_C, S "represents the", phrase ht_flux_C, S "and",
+  phrase w_vol, getS w_vol `sC` S "which has", phrase w_mass +:+.
+  (getS w_mass `sAnd` phrase htCap_W `sC` getS htCap_W),
+  getS ht_flux_C, S "represents the", phrase ht_flux_C `sAnd`
   getS ht_flux_P, S "represents the", phrase ht_flux_P `sC`
-  S "over", phrase coil_SA, S "and", phrase pcm_SA, S "of",
-  getS coil_SA, S "and", getS pcm_SA `sC` S "respectively. No",
+  S "over", phrase coil_SA `sAnd` phrase pcm_SA, S "of",
+  getS coil_SA `sAnd` getS pcm_SA `sC` S "respectively. No",
   phrase CT.heat_trans, S "occurs to", (S "outside" `ofThe`
   phrase tank) `sC` S "since it has been assumed to be",
   phrase perfect_insul +:+. sParen (acroA 15), S "Assuming no",
   phrase vol_ht_gen +:+. (sParen (acroA 16) `sC`
-  E (C vol_ht_gen := Int 0)), S "Therefore, the", phrase equation, S "for",
+  (E $ C vol_ht_gen := Int 0)), S "Therefore, the", phrase equation, S "for",
   acroGD 2, S "can be written as"],
 
-  [S "Using", swhsSymbMapDRef dd1HtFluxC, S "and",
-  swhsSymbMapDRef dd2HtFluxP, S "for", getS ht_flux_C, S "and",
+  [S "Using", swhsSymbMapDRef dd1HtFluxC `sAnd`
+  swhsSymbMapDRef dd2HtFluxP, S "for", getS ht_flux_C `sAnd`
   getS ht_flux_P, S "respectively, this can be written as"],
 
   [S "Dividing (3) by", getS w_mass :+: getS htCap_W `sC` S "we obtain"],
@@ -739,13 +745,12 @@ s4_2_5_d1sent_list = map foldlSPCol [
 
   [S "Which simplifies to"],
 
-  [S "Setting", getS tau_W :+: S "=" :+: getS w_mass :+:
-  getS htCap_W :+: S "/" :+: getS coil_HTC :+: getS coil_SA,
-  S "and", getS eta :+: S "=" :+: getS pcm_HTC :+:
-  getS pcm_SA :+: S "/" :+: getS coil_HTC :+: getS coil_SA
-  `sC` titleize equation, S "(5) can be written as"],
+  [S "Setting",
+  (E $ C tau_W := (C w_mass :* C htCap_W) :/ (C coil_HTC :* C coil_SA)) `sAnd`
+  (E $ C eta := (C pcm_HTC :* C pcm_SA) :/ (C coil_HTC :* C coil_SA)) `sC`
+  titleize equation, S "(5) can be written as"],
 
-  [S "Finally, factoring out 1/" :+: getS tau_W `sC` S "we are" +:+
+  [S "Finally, factoring out", (E $ Int 1 :/ C tau_W) `sC` S "we are" +:+
   S "left with the governing", short ode, S "for", acroIM 1]
 
   ]
@@ -837,7 +842,7 @@ s4_2_5_d2startPara = map foldlSPCol [
   S "being considered is the" +:+. (phrase pcm_vol `sC` getS pcm_vol),
   S "The derivation that follows is initially for the",
   phrase solid +:+. short phsChgMtrl, S "The", phrase pcm_mass, S "is",
-  getS pcm_mass, S "and the", phrase htCap_S_P, S "is" +:+. getS htCap_S_P,
+  getS pcm_mass `sAnd` S "the", phrase htCap_S_P, S "is" +:+. getS htCap_S_P,
   S "The", phrase ht_flux_P, S "is", getS ht_flux_P, S "over",
   phrase pcm_SA +:+. getS pcm_SA, S "There is no" +:+. phrase ht_flux_out,
   S "Assuming no", phrase vol_ht_gen, sParen (acroA 16) `sC`
@@ -862,7 +867,7 @@ s4_2_5_d2endPara = map foldlSP [
   S "is assumed to be negligible", sParen (acroA 17)],
 
   [S "In the case where", getS temp_PCM :+: S "=" :+:
-  getS temp_melt_P, S "and not all of the", short phsChgMtrl,
+  getS temp_melt_P `sAnd` S "not all of the", short phsChgMtrl,
   S "is melted, the", phrase temp_PCM +:+. S "does not change",
   S "Therefore, in this case d" :+: getS temp_PCM :+: S "/d" :+:
   getS time :+: S "=0"],
@@ -886,6 +891,10 @@ s4_2_5_d2endPara = map foldlSP [
 
 -- I do not think Table 2 will end up being necessary for the Drasil version
 ---- The info from table 2 will likely end up in table 1.
+
+s4_2_6_mid = foldlSent [S "The", phrase column, S "for", phrase software,
+  plural constraint, S "restricts the range of",
+  plural input_, S "to reasonable", plural value]
 
 ------------------------------
 -- Data Constraint: Table 1 --
@@ -1047,10 +1056,10 @@ s4_2_7_deriv = [
   foldlSPCol [S "A", phrase corSol, S "must exhibit the" +:+.
   phrase CT.law_cons_energy, S "This means that the", phrase w_E,
   S "should equal the difference between the total", phrase energy,
-  phrase input_, S "from the", phrase coil, S "and the",
+  phrase input_, S "from the", phrase coil `sAnd` S "the",
   phrase energy, phrase output_, S "to the" +:+. short phsChgMtrl,
   S "This can be shown as an", phrase equation, S "by taking",
-  swhsSymbMapDRef dd1HtFluxC, S "and", swhsSymbMapDRef dd2HtFluxP `sC`
+  swhsSymbMapDRef dd1HtFluxC `sAnd` swhsSymbMapDRef dd2HtFluxP `sC`
   S "multiplying each by their respective", phrase surface,
   S "area of", phrase CT.heat_trans `sC` S "and integrating each",
   S "over the", phrase simulation, phrase time `sC` S "as follows"],
@@ -1075,8 +1084,8 @@ s4_2_7_deriv = [
   S "(reference) can be used as", Quote (S "sanity") :+:
   S "checks to gain confidence in any", phrase solution,
   S "computed by" +:+. short progName, S "The relative",
-  S "error between the results computed by", short progName,
-  S "and the results calculated from the", short rightSide, S "of these",
+  S "error between the results computed by", short progName `sAnd`
+  S "the results calculated from the", short rightSide, S "of these",
   plural equation, S "should be less than 0.001%", sParen (acroR 9)]
 
   ]
@@ -1104,7 +1113,7 @@ s5_1_list :: [Contents]
 s5_1_list = [Enumeration (Simple [(acroR 1, Flat (foldlSentCol
   [titleize input_, S "the following", plural quantity `sC`
   S "which define the", phrase tank, plural parameter `sC` S "material",
-  plural property, S "and initial", plural condition]))]),
+  plural property `sAnd` S "initial", plural condition]))]),
 
   (Table [titleize symbol_, titleize unit_, titleize description]
   (mkTable
@@ -1117,8 +1126,8 @@ s5_1_list = [Enumeration (Simple [(acroR 1, Flat (foldlSentCol
   Enumeration (Simple [(acroR 2, Flat (foldlSent
   [S "Use the", plural input_, S "in", acroR 1, S "to find the",
   phrase mass, S "needed for", acroIM 1, S "to", acroIM 4 `sC`
-  S "as follows, where", getS w_vol `isThe` phrase w_vol,
-  S "and", getS tank_vol `isThe` phrase tank_vol]))]),
+  S "as follows, where", getS w_vol `isThe` phrase w_vol `sAnd`
+  getS tank_vol `isThe` phrase tank_vol]))]),
 
   EqnBlock ((C w_mass) := (C w_vol) * (C w_density) := ((C tank_vol) -
   (C pcm_vol)) * (C w_density) := (((C diam) / 2) * (C tank_length) -
@@ -1138,8 +1147,8 @@ req3, req4, req5, req6, req7, req8, req9, req10, req11 :: [Sentence]
 req3 = [S "Verify that the", plural input_, S "satisfy the required" +:+
   phrase physical, plural constraint, S "shown in", makeRef s7_table1]
 --
-req4 = [titleize output_, S "the", phrase input_, plural quantity,
-  S "and derived", plural quantity +: S "in the following list",
+req4 = [titleize output_, S "the", phrase input_, plural quantity `sAnd`
+  S "derived", plural quantity +: S "in the following list",
   S "the", plural quantity, S "from", acroR 1 `sC` S "the",
   plural mass, S "from", acroR 2 `sC` getS tau_W,
   sParen (S "from" +:+ acroIM 1) `sC` getS eta,
@@ -1164,7 +1173,7 @@ req8 = [S "Calculate and", phrase output_, S "the", phrase pcm_E,
   phrase simulation, phrase time, sParen (S "from" +:+ acroIM 4)]
 --
 req9 = [S "Verify that the", phrase energy, plural output_,
-  sParen (getS w_E :+: sParen (getS time) +:+ S "and" +:+ getS pcm_E :+:
+  sParen (getS w_E :+: sParen (getS time) `sAnd` getS pcm_E :+:
   sParen (getS time)), S "follow the", phrase CT.law_cons_energy `sC`
   S "as outlined in", makeRef s4_2_7 `sC` S "with relative error",
   S "no greater than 0.001%"]
@@ -1235,12 +1244,12 @@ likeChg4 = [s6_start 11, S "The", phrase model,
 --
 likeChg5 = [s6_start 12, S "To add more",
   S "flexibility to the", phrase simulation `sC`
-  (phrase temp_init `ofThe` phrase water),
-  S "and the", short phsChgMtrl, S "could be",
+  (phrase temp_init `ofThe` phrase water) `sAnd`
+  S "the", short phsChgMtrl, S "could be",
   S "allowed to have different", plural value]
 --
 likeChg6 = [s6_start 15, S "Any real", phrase tank,
-  S "cannot be", phrase perfect_insul, S "and will lose",
+  S "cannot be", phrase perfect_insul `sAnd` S "will lose",
   phrase CT.heat]
 
 -- List structure same in all examples.

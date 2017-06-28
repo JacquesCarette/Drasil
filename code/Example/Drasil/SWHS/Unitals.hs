@@ -358,53 +358,57 @@ pcm_E        = cuc' "pcm_E" (nounPhraseSP "change in heat energy in the PCM")
 -- Max / Min Variables --
 -------------------------
 
-tank_length_max, htTransCoeff_min, pcm_density_min, 
-  pcm_density_max, coil_SA_max, w_density_min, w_density_max, htCap_S_P_min, 
-  htCap_S_P_max, htCap_L_P_min, htCap_L_P_max, htFusion_min, htFusion_max,
-  htCap_W_min, htCap_W_max, coil_HTC_min, coil_HTC_max, pcm_HTC_min,
-  pcm_HTC_max, time_final_max :: UnitaryChunk
-
 specParamValList :: [QDefinition]
-specParamValList = [tank_length_min]
+specParamValList = [tank_length_min, tank_length_max, htTransCoeff_min,
+  pcm_density_min, pcm_density_max, w_density_min, w_density_max,
+  htCap_S_P_min, htCap_S_P_max, htCap_L_P_min, htCap_L_P_max,
+  htCap_W_min, htCap_W_max, coil_HTC_min, coil_HTC_max,
+  pcm_HTC_min, pcm_HTC_max, time_final_max]
 
-tank_length_min :: QDefinition
+tank_length_min, tank_length_max, htTransCoeff_min, pcm_density_min, 
+  pcm_density_max, w_density_min, w_density_max, htCap_S_P_min, 
+  htCap_S_P_max, htCap_L_P_min, htCap_L_P_max,
+  htCap_W_min, htCap_W_max, coil_HTC_min, coil_HTC_max, pcm_HTC_min,
+  pcm_HTC_max, time_final_max :: QDefinition
+
+htFusion_min, htFusion_max, coil_SA_max :: UnitaryChunk
 
 -- Used in Constraint 1
 tank_length_min = mkDataDef (unitary "tank_length_min" (nounPhraseSP "minimum length of tank")
   (sub (tank_length ^. symbol) (Atomic "min")) metre Rational) (Dbl 0.1)
 
-tank_length_max = unitary "tank_length_max" (nounPhraseSP "maximum length of tank")
-  (sub (tank_length ^. symbol) (Atomic "max")) metre Rational
+tank_length_max = mkDataDef (unitary "tank_length_max" (nounPhraseSP "maximum length of tank")
+  (sub (tank_length ^. symbol) (Atomic "max")) metre Rational) (Int 50)
 
 -- Used in Constraint 4
-htTransCoeff_min = unitary "htTransCoeff_min"
+htTransCoeff_min = mkDataDef (unitary "htTransCoeff_min"
   (nounPhraseSP "minimum convective heat transfer coefficient")
-  (sub (htTransCoeff ^. symbol) (Atomic "min")) UT.heat_transfer_coef Rational
+  (sub (htTransCoeff ^. symbol) (Atomic "min")) UT.heat_transfer_coef Rational) (Dbl 0.001)
 
 -- Used in Constraint 5
-pcm_density_min = unitary "pcm_density_min" (nounPhraseSP "minimum density of PCM")
-  (sup (pcm_density ^. symbol) (Atomic "min")) densityU Rational
+pcm_density_min = mkDataDef (unitary "pcm_density_min" (nounPhraseSP "minimum density of PCM")
+  (sup (pcm_density ^. symbol) (Atomic "min")) densityU Rational) (Int 500)
 
-pcm_density_max = unitary "pcm_density_max" (nounPhraseSP "maximum density of PCM")
-  (sup (pcm_density ^. symbol) (Atomic "max")) densityU Rational
+pcm_density_max = mkDataDef (unitary "pcm_density_max" (nounPhraseSP "maximum density of PCM")
+  (sup (pcm_density ^. symbol) (Atomic "max")) densityU Rational) (Int 20000)
 
 -- Used in Constraint 7
-htCap_S_P_min = unitary "htCap_S_P_min"
+htCap_S_P_min = mkDataDef (unitary "htCap_S_P_min"
   (nounPhraseSP "minimum specific heat capacity of PCM as a solid")
-  (sub (htCap_S_P ^. symbol) (Atomic "min")) UT.heat_cap_spec Rational
+  (sub (htCap_S_P ^. symbol) (Atomic "min")) UT.heat_cap_spec Rational) (Int 100)
 
-htCap_S_P_max = unitary "htCap_S_P_max"
+htCap_S_P_max = mkDataDef (unitary "htCap_S_P_max"
   (nounPhraseSP "maximum specific heat capacity of PCM as a solid")
-  (sub (htCap_S_P ^. symbol) (Atomic "max")) UT.heat_cap_spec Rational
+  (sub (htCap_S_P ^. symbol) (Atomic "max")) UT.heat_cap_spec Rational) (Int 4000)
 
 -- Used in Constraint 8
-htCap_L_P_min = unitary "htCap_L_P_min"
+htCap_L_P_min = mkDataDef (unitary "htCap_L_P_min"
   (nounPhraseSP "minimum specific heat capacity of PCM as a liquid")
-  (sub (htCap_L_P ^. symbol) (Atomic "min")) UT.heat_cap_spec Rational
+  (sub (htCap_L_P ^. symbol) (Atomic "min")) UT.heat_cap_spec Rational) (Int 100)
 
-htCap_L_P_max = unitary "htCap_L_P_max"
+htCap_L_P_max = mkDataDef (unitary "htCap_L_P_max"
   (nounPhraseSP "maximum specific heat capacity of PCM as a liquid")
-  (sub (htCap_L_P ^. symbol) (Atomic "max")) UT.heat_cap_spec Rational
+  (sub (htCap_L_P ^. symbol) (Atomic "max")) UT.heat_cap_spec Rational) (Int 5000)
 
 -- Used in Constraint 9
 htFusion_min = unitary "htFusion_min"
@@ -420,33 +424,33 @@ coil_SA_max = unitary "coil_SA_max" (nounPhraseSP "maximum surface area of coil"
   (sup (coil_SA ^. symbol) (Atomic "max")) m_2 Rational
 
 -- Used in Constraint 12
-w_density_min = unitary "w_density_min" (nounPhraseSP "minimum density of water")
-  (sup (w_density ^. symbol) (Atomic "min")) densityU Rational
+w_density_min = mkDataDef (unitary "w_density_min" (nounPhraseSP "minimum density of water")
+  (sup (w_density ^. symbol) (Atomic "min")) densityU Rational) (Int 950)
 
-w_density_max = unitary "w_density_max" (nounPhraseSP "maximum density of water")
-  (sup (w_density ^. symbol) (Atomic "max")) densityU Rational
+w_density_max = mkDataDef (unitary "w_density_max" (nounPhraseSP "maximum density of water")
+  (sup (w_density ^. symbol) (Atomic "max")) densityU Rational) (Int 1000)
   
 -- Used in Constraint 13
-htCap_W_min = unitary "htCap_W_min" (nounPhraseSP "minimum specific heat capacity of water")
-  (sup (htCap_W ^. symbol) (Atomic "min")) UT.heat_cap_spec Rational
+htCap_W_min = mkDataDef (unitary "htCap_W_min" (nounPhraseSP "minimum specific heat capacity of water")
+  (sup (htCap_W ^. symbol) (Atomic "min")) UT.heat_cap_spec Rational) (Int 4170)
 
-htCap_W_max = unitary "htCap_W_max" (nounPhraseSP "maximum specific heat capacity of water")
-  (sup (htCap_W ^. symbol) (Atomic "max")) UT.heat_cap_spec Rational
+htCap_W_max = mkDataDef (unitary "htCap_W_max" (nounPhraseSP "maximum specific heat capacity of water")
+  (sup (htCap_W ^. symbol) (Atomic "max")) UT.heat_cap_spec Rational) (Int 4210)
 
 -- Used in Constraint 14
-coil_HTC_min = unitary "coil_HTC_min" (nounPhraseSP "minimum convective heat transfer coefficient between coil and water")
-  (sup (coil_HTC ^. symbol) (Atomic "min")) UT.heat_transfer_coef Rational
+coil_HTC_min = mkDataDef (unitary "coil_HTC_min" (nounPhraseSP "minimum convective heat transfer coefficient between coil and water")
+  (sup (coil_HTC ^. symbol) (Atomic "min")) UT.heat_transfer_coef Rational) (Int 10)
 
-coil_HTC_max = unitary "coil_HTC_max" (nounPhraseSP "maximum convective heat transfer coefficient between coil and water")
-  (sup (coil_HTC ^. symbol) (Atomic "max")) UT.heat_transfer_coef Rational
+coil_HTC_max = mkDataDef (unitary "coil_HTC_max" (nounPhraseSP "maximum convective heat transfer coefficient between coil and water")
+  (sup (coil_HTC ^. symbol) (Atomic "max")) UT.heat_transfer_coef Rational) (Int 10000)
   
 -- Used in Constraint 15
-pcm_HTC_min = unitary "pcm_HTC_min" (nounPhraseSP "minimum convective heat transfer coefficient between PCM and water")
-  (sup (pcm_HTC ^. symbol) (Atomic "min")) UT.heat_transfer_coef Rational
+pcm_HTC_min = mkDataDef (unitary "pcm_HTC_min" (nounPhraseSP "minimum convective heat transfer coefficient between PCM and water")
+  (sup (pcm_HTC ^. symbol) (Atomic "min")) UT.heat_transfer_coef Rational) (Int 10)
 
-pcm_HTC_max = unitary "pcm_HTC_max" (nounPhraseSP "maximum convective heat transfer coefficient between PCM and water")
-  (sup (pcm_HTC ^. symbol) (Atomic "max")) UT.heat_transfer_coef Rational
+pcm_HTC_max = mkDataDef (unitary "pcm_HTC_max" (nounPhraseSP "maximum convective heat transfer coefficient between PCM and water")
+  (sup (pcm_HTC ^. symbol) (Atomic "max")) UT.heat_transfer_coef Rational) (Int 10000)
   
 -- Used in Constraint 17
-time_final_max = unitary "time_final_max" (nounPhraseSP "maximum final time")
-  (sup (time_final ^. symbol) (Atomic "max")) second Rational
+time_final_max = mkDataDef (unitary "time_final_max" (nounPhraseSP "maximum final time")
+  (sup (time_final ^. symbol) (Atomic "max")) second Rational) (Int 86400)

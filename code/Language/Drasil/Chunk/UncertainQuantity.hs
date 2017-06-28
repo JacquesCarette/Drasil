@@ -6,6 +6,7 @@ module Language.Drasil.Chunk.UncertainQuantity
   , uq
   , typVal
   , uqc
+  , cCnptfromUQ
   ) where
   
 import Language.Drasil.Chunk
@@ -59,6 +60,9 @@ instance Concept UncertQ where
 
 typVal :: UncertQ -> Double
 typVal (UQ _ _ v) = v
+
+cCnptfromUQ :: UncertQ -> ConstrConcept
+cCnptfromUQ (UQ c _ _) = c
 
 uqc :: (Unit u) => String -> NP -> String -> Symbol -> u 
                   -> Space -> [Constraint]

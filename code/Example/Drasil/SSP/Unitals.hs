@@ -33,7 +33,7 @@ fisi  = "for interslice index i"
 
 sspConstrained, sspOutputs :: [ConstrConcept]
 sspInputs :: [UncertQ]
-sspConstrained = map ctrCnpt sspInputs ++ sspOutputs
+sspConstrained = map cCnptfromUQ sspInputs ++ sspOutputs
 sspInputs  = [elasticMod, cohesion, poissnsRatio, fricAngle, dryWeight,
               satWeight, waterWeight]
 sspOutputs = [fs, dx_i, dy_i]
@@ -43,9 +43,6 @@ gtZeroConstr = [physc $ (:<) (Int 0)]
 
 defultUncrt :: Double
 defultUncrt = 0.1
-  
-ctrCnpt :: UncertQ -> ConstrConcept
-ctrCnpt (UQ c _ _) = c
 
 elasticMod, cohesion, poissnsRatio, fricAngle, dryWeight, satWeight,
   waterWeight :: UncertQ

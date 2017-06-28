@@ -167,3 +167,16 @@ fmtSfwr s = foldlList $ fmtCS $ filter filterS (s ^. constraints)
        
 fmtInConstr :: UncertQ -> [Sentence]
 fmtInConstr q = [getS q, fmtPhys q, fmtSfwr q, fmtU (S $ show $ typVal q) q, S $ show (q ^. uncert)]
+
+-- Start of attempt at intelligent format-er for input constraints
+--take one input and all inputs
+{-
+fmtInputConstr :: UncertQ -> [UncertQ] -> [Sentence]
+fmtInputConstr q qs = [getS q] ++ physC q qs ++ sfwrC q ++ [fmtU (S $ show $ typVal q) q] ++ typUnc q
+
+physC :: [UncertQ] -> [Sentence]
+physC q qs
+  | isPhysC (fmtPhys qs) = [fmtPhys q]
+  | otherwise = []
+  where isPhysC fmtPhys q
+-}

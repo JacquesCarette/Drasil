@@ -128,23 +128,23 @@ tolStrDisFac = mkDataDef sdf_tol tolStrDisFac_eq
 constant_M :: QDefinition
 constant_M = mkDataDef sflawParamM sfpMVal
 
-sfpMVal :: Relation
-sfpMVal = (C sflawParamM) := (Int 7)
+sfpMVal :: Expr
+sfpMVal = (Int 7)
 
 constant_K :: QDefinition
 constant_K = mkDataDef sflawParamK sfpKVal
 
-sfpKVal :: Relation
-sfpKVal = (C sflawParamK) := (Grouping (Dbl 2.86)):*(Int 10):^(Neg (-53))
+sfpKVal :: Expr
+sfpKVal = (Grouping (Dbl 2.86)):*(Int 10):^(Neg (Int 53))
 
 constant_ModElas :: QDefinition
 constant_ModElas = mkDataDef mod_elas modElasVal
 
-modElasVal :: Relation
-modElasVal = (C mod_elas) := (Grouping (Dbl 7.17)):*(Int 10):^(Int 7)
+modElasVal :: Expr
+modElasVal = (Grouping (Dbl 7.17)):*(Int 10):^(Int 7)
 
 constant_LoadDur :: QDefinition
 constant_LoadDur = mkDataDef load_dur durOfLoadVal
 
-durOfLoadVal :: Relation
-durOfLoadVal = (C load_dur) := (Int 3)
+durOfLoadVal :: Expr
+durOfLoadVal = (Int 3)

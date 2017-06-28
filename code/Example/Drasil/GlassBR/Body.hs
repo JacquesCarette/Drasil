@@ -213,7 +213,7 @@ s5 = scopeOfTheProjF (short gLassBR) (s5_1_table) (s5_2_bullets)
 
 {--Product Use Case Table--}
 
-s5_1_table = prodUCTbl [s5_1_table_UC1, s5_1_table_UC2] "1"
+s5_1_table = prodUCTbl [s5_1_table_UC1, s5_1_table_UC2]
 
 s5_1_table_UC1, s5_1_table_UC2 :: [Sentence]
 
@@ -451,7 +451,7 @@ s6_2_5 = datConF ((makeRef s6_2_5_table1) +:+ S "shows") dataConstraintUncertain
 s6_2_5_table1 = Table [S "Var", S "Physical Constraints", S "Software Constraints",
   S "Typical Value", S "Typical Uncertainty"]
   dataConstList
-  (titleize table_ +: S "2" +:+ titleize' inVar) 
+  (titleize' inVar) 
   True
 
 dataConstList :: [[Sentence]]
@@ -476,8 +476,8 @@ s6_2_5_table2 = Table [S "Var", titleize value] (mkTable
   zipWith s6_2_5_table2_formatF2
   [cWeightMin, cWeightMax, sd_min, sd_max]
   [4.5, 910, 6, 130]))
-  (titleize table_ +: E (Int 3) +:+ titleize specification +:+
-  (titleize parameter) +:+ titleize' value) True
+  (titleize specification +:+ (titleize parameter) +:+ titleize' value)
+  True
 
 s6_2_5_table2_formatF2 :: UnitaryChunk -> Double -> (Sentence, Sentence)
 s6_2_5_table2_formatF2 varName val = (getS varName, E (Dbl val) +:+
@@ -489,7 +489,7 @@ s6_2_5_intro2 = foldlSent [(makeRef s6_2_5_table3), S "shows the",
 s6_2_5_table3 = Table [S "Var", S "Physical Constraints"] (mkTable 
   [(\x -> P $ fst(x)), (\x -> snd(x))] 
   [(prob_br ^. symbol, E (Int 0 :< C prob_br :< Int 1))])
-  (titleize table_ +: S "4" +:+ titleize output_ +:+ titleize' variable) True
+  (titleize output_ +:+ titleize' variable) True
 
 {--REQUIREMENTS--}
 

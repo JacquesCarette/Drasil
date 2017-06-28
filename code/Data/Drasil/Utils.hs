@@ -202,8 +202,8 @@ outDataConstTbl :: [[Sentence]] -> Integer -> Contents
 outDataConstTbl outputs tableNumb = Table [S "Var", titleize' physicalConstraint]
   outputs (S "Table" +: S (show tableNumb) +:+ titleize input_ +:+ titleize' variable) True
 
-prodUCTbl :: [[Sentence]] -> String -> Contents
-prodUCTbl cases tableNum = Table [titleize useCase +:+. S "NO", titleize useCase +:+
+prodUCTbl :: [[Sentence]] -> Contents
+prodUCTbl cases = Table [titleize useCase +:+. S "NO", titleize useCase +:+
   titleize name_, S "Actor", titleize input_ +:+ S "and" +:+ titleize output_]
   cases
-  (titleize table_ +: S tableNum +:+ titleize useCaseTable) True
+  (titleize useCaseTable) True

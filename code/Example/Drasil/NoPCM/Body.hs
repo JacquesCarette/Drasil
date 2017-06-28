@@ -8,7 +8,7 @@ import Drasil.NoPCM.Definitions (ht_trans, srs_swhs)
 import Drasil.SWHS.Body (s2_3_knowlegde, s2_3_understanding, s2_4_intro, 
   s3, physSyst1, physSyst2, s4_2_4_intro_end, s4_2_5_d1startPara, assump1, assump2, assump7,
   con1, con2, con10, con11, con12, con13, con14, con16, con17, con18, s5_2, s6_start, 
-  ref2, ref3, ref4, ref5, ref6)
+  s7_trailing, ref2, ref3, ref4, ref5, ref6)
 import Drasil.SWHS.Concepts (progName, water, gauss_div, sWHT, tank, coil, transient,
   perfect_insul)
 import Drasil.SWHS.Unitals (w_vol, tank_length, tank_vol, tau_W, temp_W, w_mass, 
@@ -26,7 +26,8 @@ import Language.Drasil
 
 import Data.Drasil.SI_Units 
 import Data.Drasil.Authors
-import Data.Drasil.Utils(enumSimple, getS, mkRefsList)
+import Data.Drasil.Utils(enumSimple, getS, mkRefsList, makeListRef, refFromType, 
+  itemRefToSent, makeTMatrix, itemRefToSent)
 import Data.Drasil.Concepts.Documentation
 import Data.Drasil.Concepts.Math (ode, unit_, rOfChng, parameter, equation)
 import Data.Drasil.Concepts.Software
@@ -43,6 +44,7 @@ import qualified Drasil.SRS as SRS
 import Drasil.DocumentLanguage
 import Drasil.Sections.SpecificSystemDescription
 import Drasil.Sections.Requirements
+import Drasil.Sections.TraceabilityMandGs
 
 import Data.Drasil.SentenceStructures
 
@@ -68,11 +70,11 @@ pcmConstraints =  [coil_SA, htCap_W, coil_HTC, temp_init,
   time_final, tank_length, temp_C, w_density, diam, temp_W]
 
 s4, s4_1, s4_1_1, s4_1_2, s4_1_3, s4_2, {-s3, s3_1, -}
-  s5, s5_1, s6, s7 :: Section -- s5_2,
+  s5, s5_1, s6, s7, s8 :: Section -- s5_2,
 
 s4_1_intro, s4_1_1_bullets, {-s3_1_intro, sys_context_fig, s3_2_intro, s3_3_intro, -}
   s4_1_2_list, s4_1_3_intro, s4_1_3_list, fig_tank, 
-  s4_2_6_table1, s4_2_6_table2, s4_2_6_table3, s6_list, s7_refs:: Contents
+  s4_2_6_table1, s4_2_6_table2, s4_2_6_table3, s6_list, s8_refs:: Contents
 
 -------------------------------
 --Section 1 : REFERENCE MATERIAL
@@ -87,7 +89,7 @@ mkSRS = RefSec (RefProg intro
   IScope s2_2s s2_2e,
   IChar s2_3_knowlegde s2_3_understanding EmptyS,
   IOrgSec s2_4_intro inModel (SRS.inModel SRS.missingP []) s2_4e]) :
-  map Verbatim [s3, s4, s5, s6, s7]  
+  map Verbatim [s3, s4, s5, s6, s7, s8]  
         
 pcm_si :: SystemInformation
 pcm_si = SI srs_swhs srs [thulasi] this_si pcmSymbols (pcmSymbols) 
@@ -481,7 +483,7 @@ s4_2_6_table2 = Table [S "Var", titleize value]
   (titleize specification +:+ titleize parameter +:+ titleize' value) True
   
 s4_2_6_specParVal :: [[Sentence]]
-s4_2_6_specParVal = [[EmptyS], [EmptyS]]
+s4_2_6_specParVal = [[EmptyS, EmptyS]]
 
 s4_2_6_table3 = Table [S "Var", titleize' physicalConstraint] 
   (mkTable [(\x -> x!!0), (\x -> x!!1)] s4_2_6_conListOut)
@@ -586,6 +588,176 @@ likeChg4 = [s6_start 11, S "Any real", phrase tank,
   S "cannot be perfectly insulated and will lose",
   phrase heat]
 
+  
+  
+----------------------------------------------
+--Section 7:  TRACEABILITY MATRICES AND GRAPHS
+----------------------------------------------
+
+s7 = traceMGF s7_refList s7_trailing
+  ([s7_table1, s7_table2, s7_table3] ++
+  (s7_intro2) ++ [s7_fig1, s7_fig2]) []
+
+s7_refList :: [Contents]
+s7_refList = [s7_table1, s7_table2, s7_table3]
+
+s7_instaModel, s7_data, s7_funcReq, s7_likelyChg, s7_dataDefs, s7_genDefs,
+  s7_assump, s7_theories :: [String]
+s7_dataRef, s7_funcReqRef, s7_instaModelRef, s7_assumpRef, s7_theoriesRef,
+  s7_dataDefRef, s7_likelyChgRef, s7_genDefRef :: [Sentence]
+
+s7_instaModel = ["IM1", "IM2"]
+s7_instaModelRef = map (refFromType Theory nopcmSymbMap) [eBalanceOnWtr, heatEInWtr]
+
+s7_funcReq = ["R1", "R2", "R3", "R4", "R5", "R6"]
+s7_funcReqRef = makeListRef s7_funcReq s5_1
+
+s7_data = ["Data Constraints"]
+s7_dataRef = [makeRef s4_2_6_table1] --FIXME: Reference section?
+
+s7_assump = ["A1", "A2", "A3", "A4", "A5", "A6", "A7", "A8", "A9", "A10",
+  "A11", "A12", "A13", "A14"]
+s7_assumpRef = makeListRef s7_assump (SRS.inModel SRS.missingP [])
+
+s7_theories = ["T1"]
+s7_theoriesRef = map (refFromType Theory nopcmSymbMap) [t1ConsThermE]
+
+s7_genDefs = ["GD1", "GD2"]
+s7_genDefRef = map (refFromType Theory nopcmSymbMap) swhsGenDefs
+
+s7_dataDefs = ["DD1"]
+s7_dataDefRef = map (refFromType Data nopcmSymbMap) [dd1HtFluxC]
+
+s7_likelyChg = ["LC1", "LC2", "LC3", "LC4"]
+s7_likelyChgRef = makeListRef s7_likelyChg s6
+
+{-Traceability Matrix 1-}
+
+s7_row_t1 :: [String]
+s7_row_t1 = s7_theories ++ s7_genDefs ++ s7_dataDefs ++ s7_instaModel
+
+s7_row_header_t1 :: [Sentence]
+s7_row_header_t1 = zipWith itemRefToSent s7_row_t1 
+  (s7_theoriesRef ++ s7_genDefRef ++ s7_dataDefRef ++ s7_instaModelRef)
+
+s7_columns_t1 :: [[String]]
+s7_columns_t1 = [s7_t1_T1, s7_t1_GD1, s7_t1_GD2, s7_t1_DD1, s7_t1_IM1, s7_t1_IM2]
+
+s7_t1_T1, s7_t1_GD1, s7_t1_GD2, s7_t1_DD1, s7_t1_IM1, s7_t1_IM2 :: [String]
+
+--list of each item that "X" item requires for traceability matrix
+s7_t1_T1 = []
+s7_t1_GD1 = []
+s7_t1_GD2 = []
+s7_t1_DD1 = []
+s7_t1_IM1 = []
+s7_t1_IM2 = []
+
+s7_table1 :: Contents
+s7_table1 = Table (EmptyS:s7_row_header_t1)
+  (makeTMatrix (s7_row_header_t1) (s7_columns_t1) (s7_row_t1))
+  (showingCxnBw traceyMatrix
+  (titleize' requirement `sAnd` titleize' inModel)) True
+
+{-Traceability Matrix 2-}
+
+s7_row_t2 :: [String]
+s7_row_t2 = s7_instaModel ++ s7_data ++ s7_funcReq
+
+--column header
+s7_row_header_t2 :: [Sentence]
+s7_row_header_t2 = zipWith itemRefToSent s7_row_t2 
+  (s7_instaModelRef ++ s7_dataRef ++ s7_funcReqRef)
+
+--row header
+s7_col_header_t2 :: [Sentence]
+s7_col_header_t2 = zipWith itemRefToSent (s7_instaModel ++ s7_funcReq)
+  (s7_instaModelRef ++ s7_funcReqRef)
+
+s7_columns_t2 :: [[String]]
+s7_columns_t2 = [s7_t2_IM1, s7_t2_IM2, s7_t2_R1, 
+  s7_t2_R2, s7_t2_R3, s7_t2_R4, s7_t2_R5, s7_t2_R6]
+
+s7_t2_IM1, s7_t2_IM2, s7_t2_R1, s7_t2_R2,
+  s7_t2_R3, s7_t2_R4, s7_t2_R5, s7_t2_R6 :: [String]
+
+--list of each item that "X" item requires for traceability matrix
+s7_t2_IM1 = []
+s7_t2_IM2 = []
+s7_t2_R1 = []
+s7_t2_R2 = []
+s7_t2_R3 = []
+s7_t2_R4 = []
+s7_t2_R5 = []
+s7_t2_R6 = []
+
+s7_table2 :: Contents
+s7_table2 = Table (EmptyS:s7_row_header_t2)
+  (makeTMatrix (s7_col_header_t2) (s7_columns_t2) (s7_row_t2))
+  (showingCxnBw traceyMatrix
+  (titleize' requirement `sAnd` titleize' inModel)) True
+
+{-Traceability Matrix 3-}
+
+s7_row_t3 :: [String]
+s7_row_t3 = s7_assump
+
+s7_row_header_t3, s7_col_header_t3 :: [Sentence]
+s7_row_header_t3 = zipWith itemRefToSent s7_assump s7_assumpRef
+
+s7_col_header_t3 = zipWith itemRefToSent
+  (s7_theories ++ s7_genDefs ++ s7_dataDefs ++ s7_instaModel ++ s7_likelyChg)
+  (s7_theoriesRef ++ s7_genDefRef ++ s7_dataDefRef ++ s7_instaModelRef ++ s7_likelyChgRef)
+
+s7_columns_t3 :: [[String]]
+s7_columns_t3 = [s7_t3_T1, s7_t3_GD1, s7_t3_GD2, s7_t3_DD1, 
+  s7_t3_IM1, s7_t3_LC1, s7_t3_LC2, s7_t3_LC3, s7_t3_LC4]
+
+s7_t3_T1, s7_t3_GD1, s7_t3_GD2, s7_t3_DD1,
+  s7_t3_IM1, s7_t3_LC1, s7_t3_LC2, s7_t3_LC3, s7_t3_LC4 :: [String]
+
+s7_t3_T1  = ["A1"]
+s7_t3_GD1 = []
+s7_t3_GD2 = []
+s7_t3_DD1 = []
+s7_t3_IM1 = []
+s7_t3_LC1 = []
+s7_t3_LC2 = []
+s7_t3_LC3 = []
+s7_t3_LC4 = []
+
+s7_table3 :: Contents
+s7_table3 = Table (EmptyS:s7_row_header_t3)
+  (makeTMatrix s7_col_header_t3 s7_columns_t3 s7_row_t3)
+  (showingCxnBw traceyMatrix (titleize' assumption `sAnd` S "Other" +:+
+  titleize' item)) True
+
+-- These matrices can probably be generated automatically when enough info is
+-- abstracted out.
+
+------------------------
+-- Traceabilty Graphs --
+------------------------
+
+s7_intro2 :: [Contents]
+s7_intro2 = traceGIntro [s7_fig1, s7_fig2]
+
+  [foldlSent [plural thModel `sC` plural genDefn `sC` plural dataDefn
+  `sC` plural inModel `sC` plural likelyChg `sC` S "and",
+  plural assumption, S "on each other"],
+
+  foldlSent_ [plural inModel `sC` plural requirement `sC`
+  S "and", plural datumConstraint, S "on each other"]]
+
+s7_fig1 :: Contents
+s7_fig1 = Figure (showingCxnBw traceyGraph (titleize' item +:+
+  S "of Different" +:+ titleize' section_)) "ATrace.png"
+
+s7_fig2 :: Contents
+s7_fig2 = Figure (showingCxnBw traceyGraph (titleize' requirement `sC`
+  titleize' inModel `sC` S "and" +:+ titleize' datumConstraint)) "RTrace.png"
+  
+  -- Using the SWHS graphs as place holders until ones can be generated for PCM 
 
 
 
@@ -593,9 +765,9 @@ likeChg4 = [s6_start 11, S "Any real", phrase tank,
 --REFERENCES
 ------------
 
-s7 = SRS.reference [s7_refs] []
+s8 = SRS.reference [s8_refs] []
 
-s7_refs = mkRefsList 1 $ map foldlsC s7_refList
+s8_refs = mkRefsList 1 $ map foldlsC s8_refList
 
-s7_refList :: [[Sentence]]
-s7_refList = [ref2, ref3, ref4, ref5, ref6]
+s8_refList :: [[Sentence]]
+s8_refList = [ref2, ref3, ref4, ref5, ref6]

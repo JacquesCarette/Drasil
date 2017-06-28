@@ -337,7 +337,7 @@ resShrDerivation = [foldlSP [S "The resistive shear force of a slice is defined 
   (C watrForce) :+ (C watrForce) :+ (C surfHydroForce) :* sin (C surfAngle) :+ 
   (C surfLoad) :* (sin (C impLoadAngle))) :* (sin (C baseAngle)) :- (C baseHydroForce)),
   
-  foldlSP [S "The values of the interslice forces E and X in the equation are unknown, while the other values",
+  foldlSP [S "The values of the interslice forces", getS intNormForce, S "and", getS intShrForce, S "in the equation are unknown, while the other values",
   S "are found from the physical force definitions of DD1 to DD9. Consider a force equilibrium without",
   S "the affect of interslice forces, to obtain a solvable value as done for N*i in equation (2)"],
 
@@ -372,7 +372,7 @@ mobShrDerivation = [foldlSP [S "The mobile shear force acting on a slice is defi
   (Neg (C earthqkLoadFctr) :* (C slcWght) - (C intNormForce) + (C intNormForce) - (C watrForce) + (C watrForce) :+ (C surfHydroForce)
   :* sin (C surfAngle) :+ (C surfLoad) :* (sin (C impLoadAngle))) :* (cos (C baseAngle))),
   
-  foldlSP [S "The equation is unsolvable, containing the unknown interslice normal force E and shear force X.",
+  foldlSP [S "The equation is unsolvable, containing the unknown interslice normal force", getS intNormForce, S "and shear force X.",
   S "Consider a force equilibrium without the affect of interslice forces, to obtain the mobile shear force",
   S "without the influence of interslice forces T, as done in equation (5)"],
   
@@ -382,7 +382,7 @@ mobShrDerivation = [foldlSP [S "The mobile shear force acting on a slice is defi
   (Neg (C earthqkLoadFctr) :* (C slcWght) :- (C watrForceDif) :+ (C surfHydroForce)
   :* sin (C surfAngle) :+ (C surfLoad) :* (sin (C impLoadAngle))) :* (cos (C baseAngle)),
   
-  foldlSP [S "The values of Ri and Ti are now defined completely in terms of the known force property values",
+  foldlSP [S "The values of", getS shearRNoIntsl, S "and", getS shearFNoIntsl, S "are now defined completely in terms of the known force property values",
   S "of DD1 to DD9"]
   ]
 
@@ -391,25 +391,25 @@ stfMtrxDerivation = [foldlSP [S "Using the force-displacement relationship of GD
   S "to define stiffness matrix Ki, as seen in equation (6)"],
 
   foldlSP [S "For interslice surfaces the stiffness constants and displacements refer to an unrotated coordinate",
-  S "system,", S "delta" , S "i of GD9. The interslice elements are left in their standard coordinate system, and",
-  S "therefore are described by the same equation from GD8. Seen as Ks,i in DD12. Kst,i is the shear",
-  S "element in the matrix, and Ksn,i is the normal element in the matrix, calculated as in DD14"],
+  S "system,", getS genDisplace, S "of GD9. The interslice elements are left in their standard coordinate system, and",
+  S "therefore are described by the same equation from GD8. Seen as Ks,i in DD12.", getS shrStiffIntsl, S "is the shear",
+  S "element in the matrix, and", getS nrmStiffIntsl, S "is the normal element in the matrix, calculated as in DD14"],
   
   foldlSP [S "For basal surfaces the stiffness constants and displacements refer to a system rotated for the base",
   S "angle alpha (DD5). To analyze the effect of force-displacement relationships occurring on both basal",
   S "and interslice surfaces of an element i they must reference the same coordinate system. The basal",
   S "stiffness matrix must be rotated counter clockwise to align with the angle of the basal surface.",
-  S "The base stiffness counter clockwise rotation is applied in equation (7) to the new matrix K*i"],
+  S "The base stiffness counter clockwise rotation is applied in equation (7) to the new matrix", getS nrmFNoIntsl],
   
   foldlSP [S "The Hooke's law force displacement relationship of GD8 applied to the base also references a",
-  S "displacement vector epsilon i of GD9 rotated for the base angle of the slice alpha i. The basal displacement",
-  S "vector delta i is rotated clockwise to align with the interslice displacement vector delta i, applying the",
-  S "definition of epsilon i in terms of delta i as seen in GD9. Using this with base stiffness matrix K*i, a basal",
+  S "displacement vector", getS rotatedDispl, S "of GD9 rotated for the base angle of the slice", getS baseAngle, S ". The basal displacement",
+  S "vector", getS genDisplace, S "is rotated clockwise to align with the interslice displacement vector", getS genDisplace, S ", applying the",
+  S "definition of", getS rotatedDispl, S "in terms of", getS genDisplace, S "as seen in GD9. Using this with base stiffness matrix K*i, a basal",
   S "force displacement relationship in the same coordinate system as the interslice relationship can be",
   S "derived as done in equation (8)"],
   
   foldlSP [S "The new effective base stiffness matrix K0i ,as derived in equation (7) is defined in equation (9). This",
-  S "is seen as matrix Kb,i in GD12. Kbt,i is the shear element in the matrix, and Kbn,i is the normal",
+  S "is seen as matrix Kb,i in GD12.", getS shrStiffBase, S "is the shear element in the matrix, and", getS nrmStiffBase, S "is the normal",
   S "element in the matrix, calculated as in DD14. The notation is simplified by the introduction of",
   S "the constants KbA,i and KbB,i, defined in equations (10) and (11) respectively"],
   
@@ -422,7 +422,7 @@ stfMtrxDerivation = [foldlSP [S "Using the force-displacement relationship of GD
   (sin (C baseAngle)) * (cos (C baseAngle)),
   
   foldlSP [S "A force-displacement relationship for an element i can be written in terms of displacements occurring",
-  S "in the unrotated coordinate system delta i of GD9 using the matrix Ks,i, and Kb,i as seen in",
+  S "in the unrotated coordinate system", getS genDisplace, S "of GD9 using the matrix Ks,i, and Kb,i as seen in",
   S "DD12"]
   ]
 
@@ -469,8 +469,8 @@ fctSftyDerivation = [foldlSP [S "Using equation (21) from section 4.2.5, rearran
   
   EqnBlock fcSfty_rel,
   
-  foldlSP [S "The constants Psi and Phi described in equations 20 and 19 are functions of the unknowns: the",
-  S "interslice normal/shear force ratio", getS normToShear, S "(IM2) and the Factor of Safety itself FS (IM1)"]
+  foldlSP [S "The constants", getS mobShrC, S "and", getS shrResC, S "described in equations 20 and 19 are functions of the unknowns: the",
+  S "interslice normal/shear force ratio", getS normToShear, S "(IM2) and the Factor of Safety itself", getS fs, S "(IM1)"]
   ]
 
 nrmShrDerivation = [foldlSP [S "The last static equation of T2 the moment equilibrium of GD6 about the midpoint of the base is",
@@ -496,7 +496,7 @@ nrmShrDerivation = [foldlSP [S "The last static equation of T2 the moment equili
   summation (Just (lI, Low $ Int 1, High $ C numbSlices))
   (C baseWthX * (C intNormForce * C scalFunc + C intNormForce * C scalFunc)),
   
-  foldlSP [S "Equation (15) for", getS normToShear `sC` S "is a function of the unknown interslice normal force E (IM3)"]
+  foldlSP [S "Equation (15) for", getS normToShear `sC` S "is a function of the unknown interslice normal force", getS intNormForce, S "(IM3)"]
   ]
 
 intrSlcDerivation = [foldlSP [S "Taking the perpendicular force equilibrium of GD1 with the effective stress definition from T4",
@@ -537,8 +537,8 @@ intrSlcDerivation = [foldlSP [S "Taking the perpendicular force equilibrium of G
   ((C normToShear)*(C scalFunc) * sin (C baseAngle) - cos (C baseAngle)) * (C fs)) +
   (C fs) * (C shearFNoIntsl) - (C shearRNoIntsl),
   
-  foldlSP [S "Where Ri and Ti are the resistive and mobile shear of the slice, without the influence of interslice",
-  S "forces E and X, as defined in DD10 and DD11. Making use of the constants, and with full",
+  foldlSP [S "Where", getS shearRNoIntsl, S "and", getS shearFNoIntsl, S "are the resistive and mobile shear of the slice, without the influence of interslice",
+  S "forces", getS intNormForce, S "and X, as defined in DD10 and DD11. Making use of the constants, and with full",
   S "equations found below in equations (19) and (20) respectively, then equation (18) can be simplified",
   S "to equation (21), also seen in IM3"],
   
@@ -554,8 +554,8 @@ intrSlcDerivation = [foldlSP [S "Taking the perpendicular force equilibrium of G
   (C intNormForce) := ((C mobShrC)*(C intNormForce) + (C fs)*(C shearFNoIntsl)
   - (C shearRNoIntsl)) / (C shrResC),
   
-  foldlSP [S "The constants Psi and Phi in equation (21) for Ei is a function of the unknown values, the interslice",
-  S "normal/shear force ratio", getS normToShear, S "(IM2), and the Factor of Safety FS (IM1)"]
+  foldlSP [S "The constants", getS mobShrC, S "and", getS shrResC, S "in equation (21) for", getS intNormForce, S "is a function of the unknown values, the interslice",
+  S "normal/shear force ratio", getS normToShear, S "(IM2), and the Factor of Safety", getS fs, S "(IM1)"]
   ]
 
 rigDisDerivation = [foldlSP [S "Using the net force-displacement equilibrium equation of a slice from DD13, with the definitions",
@@ -577,50 +577,50 @@ rigDisDerivation = [foldlSP [S "Using the net force-displacement equilibrium equ
 rigFoSDerivation = [foldlSP [S "RFEM analysis can also be used to calculate the Factor of safety for the slope. For a slice element",
   S "i the displacements", getS dx_i, S "and", getS dy_i `sC` S "are solved from the system of equations in IM4. The definition of",
   getS rotatedDispl, S "as the rotation of the displacement vector", getS genDisplace{-FIXME: index i-}, S "is seen in GD9. This is",
-  S "used to find the displacements of the slice parallel to the base of the slice delta u in equation",
-  S "(24) and normal to the base of the slice delta v in equation (25)"],
+  S "used to find the displacements of the slice parallel to the base of the slice", getS shrDispl, S "in equation",
+  S "(24) and normal to the base of the slice", getS nrmDispl, S "in equation (25)"],
   
   EqnBlock $
   C shrDispl := cos(C baseAngle) * C dx_i + sin(C baseAngle) * C dy_i,
   EqnBlock $
   C nrmDispl := Neg (sin(C baseAngle)) * C dx_i + sin(C baseAngle) * C dy_i,
   
-  foldlSP [S "With the definition of normal stiffness from DD14 to find the normal stiffness of the base Kbn,i,",
-  S "and the now known base displacement perpendicular to the surface delta vi from equation (25), the",
-  S "normal base stress can be calculated from the force-displacement relationship of T5. Stress sigma is",
-  S "used in place of force F as the stiffness hasn't been normalized for the length of the base. Results",
+  foldlSP [S "With the definition of normal stiffness from DD14 to find the normal stiffness of the base", getS nrmStiffBase,
+  S "and the now known base displacement perpendicular to the surface", getS nrmDispl, S "from equation (25), the",
+  S "normal base stress can be calculated from the force-displacement relationship of T5. Stress", getS normStress, S "is",
+  S "used in place of force", getS genForce, S "as the stiffness hasn't been normalized for the length of the base. Results",
   S "in equation (26)"],
 
   EqnBlock $
   C normStress := C nrmStiffBase * C nrmDispl, --FIXME: index
   
-  foldlSP [S "The resistive shear to calculate the factor of safety FS in is found from the Mohr Coulomb resistive",
-  S "strength of soil in T3. Using the normal stress sigma from equation (26) as the stress the resistive",
+  foldlSP [S "The resistive shear to calculate the factor of safety", getS fs, S "in is found from the Mohr Coulomb resistive",
+  S "strength of soil in T3. Using the normal stress", getS normStress, S "from equation (26) as the stress the resistive",
   S "shear of the slice can be calculated from calculated in equation (27)"],
   
   EqnBlock $
   C mobShrI := C cohesion - C normStress * tan(C fricAngle), --FIXME: index and prime
   
-  foldlSP [S "Previously the value of the base shear stiffness Kbt,i as seen in equation (28) was unsolvable because",
-  S "the normal stress sigma i was unknown. With the definition of sigma i from equation (26) and the definition",
-  S "of displacement shear to the base delta ui from equation (25), the value of Kbt,i becomes solvable"],
+  foldlSP [S "Previously the value of the base shear stiffness", getS shrStiffBase, S "as seen in equation (28) was unsolvable because",
+  S "the normal stress", getS normStress, S "was unknown. With the definition of", getS normStress, S "from equation (26) and the definition",
+  S "of displacement shear to the base", getS shrDispl, S "from equation (25), the value of", getS shrStiffBase, S "becomes solvable"],
   
   EqnBlock $
   C shrStiffBase := C intNormForce / (Int 2 * (Int 1 + C poissnsRatio)) * (Dbl 0.1 / C baseWthX) +
   (C cohesion - C normStress * tan(C fricAngle)) / (abs (C shrDispl) + V "a"),
   
-  foldlSP [S "With shear stiffness Kbt,i calculated in equation (28) and shear displacement delta ui calculated in",
-  S "equation (24) values now known the shear stress acting on the base of a slice tau can be calculated",
-  S "using T5, as done in equation (29). Again stress tau is used in place of force F as the stiffness hasn't",
+  foldlSP [S "With shear stiffness", getS shrStiffBase, S "calculated in equation (28) and shear displacement", getS shrDispl, S "calculated in",
+  S "equation (24) values now known the shear stress acting on the base of a slice", getS shrStress, S "can be calculated",
+  S "using T5, as done in equation (29). Again stress", getS shrStress, S "is used in place of force", getS genForce, S "as the stiffness hasn't",
   S "been normalized for the length of the base"],
   
   EqnBlock $
   C shrStress := C shrStiffBase * C shrDispl,
   
-  foldlSP [S "The shear stress on the base tau acts as the mobile shear acting on the base. Using the definition",
-  S "Factor of Safety equation from T1, with the definitions of resistive shear strength of a slice Si",
-  S "from equation (27) and shear stress on a slice tau from equation (29) the factor of safety for a slice",
-  S "FSLoc,i can be found from as seen in equation (30), and IM5"],
+  foldlSP [S "The shear stress on the base", getS shrStress, S "acts as the mobile shear acting on the base. Using the definition",
+  S "Factor of Safety equation from T1, with the definitions of resistive shear strength of a slice", getS mobShrI,
+  S "from equation (27) and shear stress on a slice", getS shrStress, S "from equation (29) the factor of safety for a slice",
+  getS fsloc, S "can be found from as seen in equation (30), and IM5"],
   
   EqnBlock $
   C fsloc := C mobShrI / C shrStress :=

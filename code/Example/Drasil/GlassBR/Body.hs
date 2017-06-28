@@ -20,7 +20,6 @@ import Data.Drasil.SentenceStructures (foldlSent, foldlList, ofThe, isThe,
 import Drasil.Template.MG
 import Drasil.Template.DD
 
-import           Drasil.Sections.TableOfSymbols
 import qualified Drasil.SRS as SRS
 import           Drasil.Sections.ReferenceMaterial
 

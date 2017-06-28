@@ -141,6 +141,7 @@ executable tiny
     , Drasil.Template.MG
     , Drasil.Template.MIS
     , Drasil.Sections.SpecificSystemDescription
+    , Drasil.Sections.SolutionCharacterSpec
     , Drasil.SRS
     , Drasil.Sections.Introduction
   Build-Depends:
@@ -300,6 +301,7 @@ executable chipmunkdocs
     , Drasil.GamePhysics.Unitals
     , Drasil.GamePhysics.IMods
     , Drasil.Sections.SpecificSystemDescription
+    , Drasil.Sections.SolutionCharacterSpec
     , Drasil.Sections.GeneralSystDesc
     , Drasil.Sections.Introduction
     , Drasil.Sections.Requirements

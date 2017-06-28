@@ -7,7 +7,6 @@ import Prelude hiding (id)
 import Language.Drasil
 import Data.Drasil.SI_Units
 
-
 import Data.Drasil.Authors
 import Data.Drasil.Concepts.Documentation
 import Data.Drasil.Concepts.Software
@@ -43,6 +42,7 @@ import Drasil.GamePhysics.Reqs
 
 import Drasil.DocumentLanguage
 import Drasil.Sections.SpecificSystemDescription
+import Drasil.Sections.SolutionCharacterSpec
 import Drasil.Sections.Requirements
 import Drasil.Sections.GeneralSystDesc
 
@@ -62,7 +62,7 @@ mkSRS = RefSec (RefProg RM.intro [TUnits, tsymb tableOfSymbols, TAandA]) :
   IScope s2_2_intro_p1 s2_2_intro_p2, 
   IChar (S "rigid body dynamics") (S "high school calculus") (EmptyS), 
   IOrgSec s2_4_intro inModel s4_2_5 EmptyS]) :
-  map Verbatim [s3, s4, s5, s6, s7, s8, s9]
+  map Verbatim [genSec, s3, s4, s5, s6, s7, s8, s9]
     where tableOfSymbols = [TSPurpose, TypogConvention[Vector Bold], SymbOrder]
 
 
@@ -101,6 +101,9 @@ cpSymMapD = symbolMapFun cpSymbMap Data
 -- SOFTWARE REQUIREMENTS SPECIFICATION --
 -- =================================== --
 
+-- testing refactoring
+--testSec = sSubSec assumption []
+--genSec = genericSect testSec
 ------------------------------
 --        KNOWLEDGE         --
 ------------------------------

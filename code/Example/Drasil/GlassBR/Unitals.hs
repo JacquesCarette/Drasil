@@ -97,6 +97,8 @@ glass_type  = cvc "glass_type" (nounPhraseSP "glass type g in {AN, HS, FT}")
 gbOutputs :: [QSWrapper]
 gbOutputs = map qs [is_safe1, is_safe2] ++ map qs [prob_br]
 
+prob_br :: ConstrainedChunk
+
 prob_br = cvc "prob_br" (nounPhraseSP "probability of breakage")
   (sub cP lB) Rational
   [ physc $ \c -> (Dbl 0) :< c,

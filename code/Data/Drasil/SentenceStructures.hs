@@ -222,13 +222,13 @@ fmtSfwr s = foldlList $ fmtCS $ filter filterS (s ^. constraints)
         filterS (Sfwr _) = True
         fmtCS = map (\(Sfwr f) -> E $ f (C s))
 
--- Creates the input Data Constraints Table with physical constraints only
-inDataConstTbl :: (UncertainQuantity c, SymbolForm c, Constrained c) => [c] -> Integer -> Contents
-inDataConstTbl qlst tableNumb = Table ([S "Var"] ++ (isPhys $ physC (head qlst) qlst) ++
+-- Creates the input Data Constraints Table
+inDataConstTbl :: (UncertainQuantity c, SymbolForm c, Constrained c) => [c] -> Contents
+inDataConstTbl qlst = Table ([S "Var"] ++ (isPhys $ physC (head qlst) qlst) ++
   (isSfwr $ sfwrC (head qlst) qlst) ++ [S "Typical" +:+ titleize value] ++
   (isUnc $ typUnc (head qlst) qlst))
   (map (\x -> fmtInputConstr x qlst) qlst)
-  (S "Table" +: S (show tableNumb) +:+ S "Input Data Constraints") True
+  (S "Input Data Constraints") True
   where isPhys [] = []
         isPhys _  = [titleize' physicalConstraint]
         isSfwr [] = []
@@ -236,12 +236,12 @@ inDataConstTbl qlst tableNumb = Table ([S "Var"] ++ (isPhys $ physC (head qlst) 
         isUnc  [] = []
         isUnc  _  = [S "Typical Uncertainty"]
 
--- Creates the output Data Constraints Table with physical constraints only
-outDataConstTbl :: (SymbolForm c, Constrained c) => [c] -> Integer -> Contents
-outDataConstTbl qlst tableNumb = Table ([S "Var"] ++ (isPhys $ physC (head qlst) qlst) ++
+-- Creates the output Data Constraints Table
+outDataConstTbl :: (SymbolForm c, Constrained c) => [c] -> Contents
+outDataConstTbl qlst = Table ([S "Var"] ++ (isPhys $ physC (head qlst) qlst) ++
   (isSfwr $ sfwrC (head qlst) qlst) ++ (isTypVal $ rval (head qlst) qlst))
   (map (\x -> fmtOutputConstr x qlst) qlst)
-  (S "Table" +: S (show tableNumb) +:+ S "Output Data Constraints") True
+  (S "Output Data Constraints") True
   where isPhys [] = []
         isPhys _  = [titleize' physicalConstraint]
         isSfwr [] = []

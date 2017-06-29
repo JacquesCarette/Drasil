@@ -83,15 +83,14 @@ nonFL = fromEqn' (nonFactorL ^. id) (nonFactorL ^. term) (Atomic "NFL") nonFL_eq
 --DD6--
 
 glaTyFac_eq :: Expr
-glaTyFac_eq = FCall (C glaTyFac) [C glass_type]
+glaTyFac_eq = (Case (zipWith glaTyFac_helper
+  [1, 4, 2] ["AN", "FT", "HS"]))
 
-glaTyFac :: QDefinition --FIXME: make into cases
-glaTyFac = fromEqn' (gTF ^. id) (nounPhraseSP $ 
-  "function that maps from " ++ "the glass type (g) to a real " ++
-  "number, as follows: GTF(g) = (g = AN => 1.0|g = FT => 4.0|" ++ 
-  "g = HS => 2.0). AN is annealed glass. " ++ 
-  "FT is fully tempered glass. HS is heat strengthened glass.") (Atomic "GTF") 
-  glaTyFac_eq
+glaTyFac_helper :: Double -> String -> (Expr, Relation)
+glaTyFac_helper result condition = (Dbl result, (C glass_type) := V condition)
+
+glaTyFac :: QDefinition
+glaTyFac = mkDataDef gTF glaTyFac_eq
 
 --DD7--
 

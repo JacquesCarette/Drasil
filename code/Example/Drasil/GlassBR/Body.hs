@@ -549,7 +549,7 @@ s7_1_req5 = S "If" +:+ (getS is_safe1) `sAnd` (getS is_safe2) +:+
   phrase output_ +:+ S "the message" +:+ Quote (safeMessage ^. defn) +:+
   S "If the" +:+ phrase condition +:+ S "is false, then" +:+ phrase output_ +:+
   S "the message" +:+ Quote (notSafe ^. defn)
-
+{-
 s7_1_req6 = [(Enumeration $ Simple $ [(acroR 6, Nested (titleize output_ +:+
   S "the following" +: plural quantity)
   (Bullet $ 
@@ -564,33 +564,32 @@ s7_1_req6 = [(Enumeration $ Simple $ [(acroR 6, Nested (titleize output_ +:+
     map (\c -> Flat $ (at_start c) +:+ sParen (getS c) +:+ sParen (makeRef (gbSymbMapD c))) [dimLL, tolPre, tolStrDisFac] ++
     [Flat $ (titleize aspectR) +:+ sParen (short aspectR {-getS aspectR -}) {-+:+ E ((C aspectR) := (C plate_len):/(C plate_width))-}]
     ))])]
+-}
 
-{-
 --ItemType
-s7_1_req6 = (Nested (titleize output_ +:+
+s7_1_req6 = [(Enumeration $ Simple $ [(acroR 6, Nested (titleize output_ +:+
   S "the following" +: plural quantity)
   (Bullet $ 
     [Flat $ (at_start prob_br) +:+ sParen (getS prob_br) +:+ sParen (makeRef (gbSymbMapT probOfBr))] ++
     [Flat $ (at_start demand) +:+ sParen (getS demand) +:+ sParen (makeRef (gbSymbMapT calOfDe))]++
-    map (\(c, d) -> Flat $ (titleize c) +:+ sParen (short c) +:+ sParen (makeRef (gbSymbMapD d)))
-    [(loadDurFactor, loadDF),
-     (nFL,           nonFL), 
-     (glassTypeFac,  glaTyFac)] ++ 
     map (\c -> Flat $ (at_start c) +:+ sParen (getS c) +:+ sParen (makeRef (gbSymbMapD c)))
-    [dimLL,
+    [loadDF,
+     nonFL,
+     glaTyFac,
+     dimLL,
      tolPre,
      tolStrDisFac,
      strDisFac] ++
     [Flat $ (titleize lResistance +:+ sParen (short lResistance) +:+ sParen (makeRef (gbSymbMapT calOfCap)))] ++
     [Flat (at_start act_thick +:+ sParen (getS act_thick) +:+ sParen (makeRef (gbSymbMapD hFromt)))]++
     [Flat $ (titleize aspectR) +:+ sParen (short aspectR) {-+:+ E ((C aspectR) := (C plate_len):/(C plate_width))-}] --short is technically a symbol here (see Concepts.hs)
-    ))
+    ))])]
   {-
   (Bullet $ 
     []
   )
   -}
--}
+
 --FIXME:The implementation above is quite repetitive in nature.
 
 {--Nonfunctional Requirements--}

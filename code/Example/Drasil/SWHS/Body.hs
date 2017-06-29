@@ -568,8 +568,8 @@ assump18 = [S "The",
 --
 assump19 = [S "The pressure in the", phrase tank,
   S "is atmospheric, so the", phrase melt_pt `sAnd`
-  phrase boil_pt, S "are", S (show $ 0 :: Integer) :+: Sy (unit_symb temp) `sAnd`
-  S (show $ 100 :: Integer) :+: Sy (unit_symb temp) `sC` S "respectively",
+  phrase boil_pt, S "are", S (show (0 :: Integer)) :+: Sy (unit_symb temp) `sAnd`
+  S (show (100 :: Integer)) :+: Sy (unit_symb temp) `sC` S "respectively",
   sSqBr ((acroIM 1) `sC` (acroIM 3))]
 
 assump20 = [S "When considering the", phrase w_vol, S "in the",

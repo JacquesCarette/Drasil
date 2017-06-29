@@ -462,12 +462,12 @@ dataConstList = [inputVarA, inputVarB, inputVarPbTol, inputVarW,
 
 inputVarA, inputVarB, inputVarPbTol, inputVarW, inputVarTNT, inputVarSD :: [Sentence]
 
-inputVarA     = displayConstr plate_len    (1500 :: Int)     (addPercent 10)
-inputVarB     = displayConstr plate_width  (1200 :: Int)     (addPercent 10)
+inputVarA     = displayConstr plate_len    (1500 :: Double)     (addPercent 10)
+inputVarB     = displayConstr plate_width  (1200 :: Double)     (addPercent 10)
 inputVarPbTol = displayConstr pb_tol       (0.008 :: Double) (addPercent 0.1)
-inputVarW     = displayConstr char_weight  (42 :: Int)       (addPercent 10)
+inputVarW     = displayConstr char_weight  (42 :: Double)       (addPercent 10)
 inputVarTNT   = displayConstr tNT          (1 :: Int)        (addPercent 10)
-inputVarSD    = displayConstr standOffDist (45 :: Int)       (addPercent 10)
+inputVarSD    = displayConstr standOffDist (45 :: Double)       (addPercent 10)
 
 s6_2_5_table2_formatF2 :: UnitaryChunk -> Double -> (Sentence, Sentence)
 s6_2_5_table2_formatF2 varName val = (getS varName, E (Dbl val) +:+

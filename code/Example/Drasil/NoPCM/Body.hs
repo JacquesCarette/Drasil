@@ -15,7 +15,8 @@ import Drasil.SWHS.Unitals (w_vol, tank_length, tank_vol, tau_W, temp_W, w_mass,
   diam, coil_SA, temp_C, w_density, htCap_W, htFusion, temp_init, time_final,
   in_SA, out_SA, vol_ht_gen, thFluxVect, ht_flux_in, ht_flux_out, tau, htCap_L,
   htTransCoeff, temp_env, diam, tank_length, w_vol, ht_flux_C, coil_HTC, temp_diff,
-  w_E)
+  w_E, tank_length_min, tank_length_max, htTransCoeff_min, w_density_min, 
+  w_density_max, htCap_W_min, htCap_W_max, coil_HTC_min, coil_HTC_max, time_final_max)
 import Drasil.SWHS.DataDefs(swhsSymbMapDRef, swhsSymbMapTRef, dd1HtFluxC, 
   s4_2_4_DD1, swhsSymbMapT)
 import Drasil.SWHS.TMods (s4_2_2_T1, t1ConsThermE)
@@ -29,7 +30,7 @@ import Data.Drasil.Authors
 import Data.Drasil.Utils(enumSimple, getS, mkRefsList, makeListRef, refFromType, 
   itemRefToSent, makeTMatrix, itemRefToSent)
 import Data.Drasil.Concepts.Documentation
-import Data.Drasil.Concepts.Math (ode, unit_, rOfChng, parameter, equation)
+import Data.Drasil.Concepts.Math (ode, unit_, rOfChng, equation)
 import Data.Drasil.Concepts.Software
 import Data.Drasil.Concepts.PhysicalProperties (liquid)
 import Data.Drasil.Concepts.Physics (energy)
@@ -45,6 +46,7 @@ import Drasil.DocumentLanguage
 import Drasil.Sections.SpecificSystemDescription
 import Drasil.Sections.Requirements
 import Drasil.Sections.TraceabilityMandGs
+import Drasil.Sections.AuxiliaryConstants
 
 import Data.Drasil.SentenceStructures
 
@@ -70,11 +72,11 @@ pcmConstraints =  [coil_SA, htCap_W, coil_HTC, temp_init,
   time_final, tank_length, temp_C, w_density, diam, temp_W]
 
 s4, s4_1, s4_1_1, s4_1_2, s4_1_3, s4_2, {-s3, s3_1, -}
-  s5, s5_1, s6, s7, s8 :: Section -- s5_2,
+  s5, s5_1, s6, s7, s8, s9 :: Section -- s5_2,
 
 s4_1_intro, s4_1_1_bullets, {-s3_1_intro, sys_context_fig, s3_2_intro, s3_3_intro, -}
   s4_1_2_list, s4_1_3_intro, s4_1_3_list, fig_tank, 
-  s4_2_6_table1, s4_2_6_table2, s4_2_6_table3, s6_list, s8_refs:: Contents
+  s4_2_6_table1, s4_2_6_table2, s6_list, s9_refs:: Contents
 
 -------------------------------
 --Section 1 : REFERENCE MATERIAL
@@ -286,7 +288,7 @@ s4_1_3_list = Enumeration $ Simple $ map (\(a, b) -> (a, Flat b)) [
 s4_2 = solChSpecF progName (s4_1, s6) s4_2_4_intro_end (mid, dataConstraintUncertainty, end) 
   ([s4_2_1_list], s4_2_2_T1, s4_2_3_eq, s4_2_4_DD1, 
   [swhsSymbMapT eBalanceOnWtr] ++ s4_2_5_d1startPara ++ s4_2_5_eq ++ [swhsSymbMapT heatEInWtr],
-  [s4_2_6_table1, s4_2_6_table2, s4_2_6_table3]) []
+  [s4_2_6_table1, s4_2_6_table2]) []
   
   where mid = foldlSent [S "The", phrase column, S "for", phrase software,
           plural constraint, S "restricts the range of",
@@ -478,14 +480,7 @@ s4_2_6_table1 = Table [S "Var", titleize' physicalConstraint, titleize software 
 s4_2_6_conListIn :: [[Sentence]]
 s4_2_6_conListIn = [con1, con2, con10, con11, con12, con13, con14, con16, con17]
 
-s4_2_6_table2 = Table [S "Var", titleize value] 
-  (mkTable [(\x -> x!!0), (\x -> x!!1)] s4_2_6_specParVal)
-  (titleize specification +:+ titleize parameter +:+ titleize' value) True
-  
-s4_2_6_specParVal :: [[Sentence]]
-s4_2_6_specParVal = [[EmptyS, EmptyS]]
-
-s4_2_6_table3 = Table [S "Var", titleize' physicalConstraint] 
+s4_2_6_table2 = Table [S "Var", titleize' physicalConstraint] 
   (mkTable [(\x -> x!!0), (\x -> x!!1)] s4_2_6_conListOut)
   (titleize output_ +:+ titleize' variable) True
   
@@ -648,9 +643,9 @@ s7_t1_T1, s7_t1_GD1, s7_t1_GD2, s7_t1_DD1, s7_t1_IM1, s7_t1_IM2 :: [String]
 --list of each item that "X" item requires for traceability matrix
 s7_t1_T1 = []
 s7_t1_GD1 = []
-s7_t1_GD2 = []
-s7_t1_DD1 = []
-s7_t1_IM1 = []
+s7_t1_GD2 = ["T1"]
+s7_t1_DD1 = ["GD1"]
+s7_t1_IM1 = ["GD2", "DD1"]
 s7_t1_IM2 = []
 
 s7_table1 :: Contents
@@ -685,11 +680,11 @@ s7_t2_IM1, s7_t2_IM2, s7_t2_R1, s7_t2_R2,
 s7_t2_IM1 = []
 s7_t2_IM2 = []
 s7_t2_R1 = []
-s7_t2_R2 = []
-s7_t2_R3 = []
-s7_t2_R4 = []
-s7_t2_R5 = []
-s7_t2_R6 = []
+s7_t2_R2 = ["R1","IM1"]
+s7_t2_R3 = ["Data Constraints"]
+s7_t2_R4 = ["R1", "R2", "IM1"]
+s7_t2_R5 = ["IM1"]
+s7_t2_R6 = ["IM2"]
 
 s7_table2 :: Contents
 s7_table2 = Table (EmptyS:s7_row_header_t2)
@@ -711,20 +706,21 @@ s7_col_header_t3 = zipWith itemRefToSent
 
 s7_columns_t3 :: [[String]]
 s7_columns_t3 = [s7_t3_T1, s7_t3_GD1, s7_t3_GD2, s7_t3_DD1, 
-  s7_t3_IM1, s7_t3_LC1, s7_t3_LC2, s7_t3_LC3, s7_t3_LC4]
+  s7_t3_IM1, s7_t3_IM2, s7_t3_LC1, s7_t3_LC2, s7_t3_LC3, s7_t3_LC4]
 
 s7_t3_T1, s7_t3_GD1, s7_t3_GD2, s7_t3_DD1,
-  s7_t3_IM1, s7_t3_LC1, s7_t3_LC2, s7_t3_LC3, s7_t3_LC4 :: [String]
+  s7_t3_IM1, s7_t3_IM2, s7_t3_LC1, s7_t3_LC2, s7_t3_LC3, s7_t3_LC4 :: [String]
 
 s7_t3_T1  = ["A1"]
-s7_t3_GD1 = []
-s7_t3_GD2 = []
-s7_t3_DD1 = []
-s7_t3_IM1 = []
-s7_t3_LC1 = []
-s7_t3_LC2 = []
-s7_t3_LC3 = []
-s7_t3_LC4 = []
+s7_t3_GD1 = ["A2"]
+s7_t3_GD2 = ["A3", "A4", "A5"]
+s7_t3_DD1 = ["A6", "A7", "A8"]
+s7_t3_IM1 = ["A9", "A10"]
+s7_t3_IM2 = ["A10"]
+s7_t3_LC1 = ["A7"]
+s7_t3_LC2 = ["A8"]
+s7_t3_LC3 = ["A9"]
+s7_t3_LC4 = ["A11"]
 
 s7_table3 :: Contents
 s7_table3 = Table (EmptyS:s7_row_header_t3)
@@ -759,15 +755,28 @@ s7_fig2 = Figure (showingCxnBw traceyGraph (titleize' requirement `sC`
   
   -- Using the SWHS graphs as place holders until ones can be generated for PCM 
 
+  
+  
+------------------------------------------
+--Section 8: SPECIFICATION PARAMETER VALUE
+------------------------------------------
+
+specParamValList :: [QDefinition]
+specParamValList = [tank_length_min, tank_length_max, htTransCoeff_min,
+  w_density_min, w_density_max, htCap_W_min, htCap_W_max, coil_HTC_min, 
+  coil_HTC_max, time_final_max]
+
+s8 = valsOfAuxConstantsF progName specParamValList
+
 
 
 ------------
 --REFERENCES
 ------------
 
-s8 = SRS.reference [s8_refs] []
+s9 = SRS.reference [s9_refs] []
 
-s8_refs = mkRefsList 1 $ map foldlsC s8_refList
+s9_refs = mkRefsList 1 $ map foldlsC s9_refList
 
-s8_refList :: [[Sentence]]
-s8_refList = [ref2, ref3, ref4, ref5, ref6]
+s9_refList :: [[Sentence]]
+s9_refList = [ref2, ref3, ref4, ref5, ref6]

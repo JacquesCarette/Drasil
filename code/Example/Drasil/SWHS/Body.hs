@@ -1368,7 +1368,7 @@ s7_table1 :: Contents
 s7_table1 = Table (EmptyS:s7_row_header_t1)
   (makeTMatrix (s7_row_header_t1) (s7_columns_t1) (s7_row_t1))
   (showingCxnBw traceyMatrix
-  (titleize' requirement `sAnd` titleize' inModel)) True
+  (titleize' item +:+ S "of Different" +:+ titleize' section_)) True
 
 {-Traceability Matrix 2-}
 

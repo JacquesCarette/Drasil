@@ -90,8 +90,8 @@ hasSent :: SecItem -> Bool
 hasSent (Sent _) = True
 hasSent _        = False
 
-getSecItem :: (a->Bool) -> [a] -> Maybe a
-getSecItem func ls = find (func) ls
+getItem :: (a->Bool) -> [a] -> Maybe a
+getItem func ls = find (func) ls
 
 getTitleize :: (Maybe SecItem) -> Bool
 getTitleize (Just (SingularTitle)) = True
@@ -114,7 +114,7 @@ getSent (Just _)         = []
 getSent Nothing          = []
 
 pullFunc :: [SecItem] -> (Maybe SecItem -> t) -> (SecItem -> Bool) -> t
-pullFunc xs f g = f (getSecItem g xs)
+pullFunc xs f g = f (getItem g xs)
 
 pullTitle :: NamedIdea a => [SecItem] -> a -> Sentence
 pullTitle xs = boolTitle $ pullFunc xs getTitleize hasTitle
@@ -132,6 +132,12 @@ pullContents xs = pullFunc xs getSecContents hasCont
 pullSents :: [SecItem] -> [Sentence]
 pullSents xs = pullFunc xs getSent hasSent
 
+
+getID :: SubSec -> String
+getID (SectionModel niname _) = niname ^. id
+
+pullSubSec :: (NamedIdea a) => a -> [SubSec] -> Maybe SubSec
+pullSubSec nameid ls = getItem (\x -> (getID x) == (nameid ^. id)) ls
 -----------------------
 -- Section Assembler --
 -----------------------
@@ -140,7 +146,17 @@ scsAssembler :: NamedIdea c => c -> [SubSec] -> Section
 scsAssembler progName subsecs = section (titleize' Doc.solutionCharSpec) 
   [scsIntro progName] subsections
   where subsections = map (renderSCS progName) subsecs 
+  --FIXME put in correct order, if out of order for subsections
 
+--pdAssembler :: NamedIdea c => c -> [SubSec] -> Section
+--pdAssembler progName subsecs = section (titleize Doc.problemDescription) 
+--  [problemDescIntro subsecs progName] subsections
+--  where subsections = map (renderPD progName) subsecs
+
+--problemDescIntro subsecs progName = foldlSent [start, (short progName), 
+--  S "is a computer", (phrase program), S "developed to", end]
+--  where start = 
+--        end   =
 
 --------------------
 -- Section Render --
@@ -156,9 +172,10 @@ renderSCS progName item@(SectionModel niname _)
     | compareID niname (Doc.dataConst ^. id)      = dataConstraintSect item
     | otherwise                                   = genericSect item
 
-renderSSD :: NamedIdea a => a -> SubSec -> Section
-renderSSD progName item@(SectionModel niname _)
+renderPD :: NamedIdea a => a -> SubSec -> Section
+renderPD progName item@(SectionModel niname _)
     | compareID niname (Doc.termAndDef ^. id)     = termDefinitionSect item
+    | compareID niname (Doc.goalStmt ^. id)       = goalStatementSect item
     | otherwise                                   = genericSect item
 
 
@@ -175,25 +192,21 @@ genericSect (SectionModel niname xs) = section ((pullTitle xs) niname) (pullCont
 -- Specific System Description --
 ---------------------------------
 
-
 termDefinitionSect :: SubSec -> Section
 termDefinitionSect (SectionModel niname xs) = section (titleize' niname)
   ((termDefinitionIntro (pullSents xs)):(pullContents xs)) (pullSections xs)
 
+goalStatementSect :: SubSec -> Section
+goalStatementSect (SectionModel niname xs) = section (titleize' niname)
+  ((goalStatementIntro (pullSents xs)):(pullContents xs)) (pullSections xs)
+
+goalStatementIntro :: [Sentence] -> Contents
+goalStatementIntro inputs = foldlSP [S "Given", 
+  ((foldlList inputs) `sC` S "the"), plural Doc.goalStmt +: S "are"]
+
 -------------------------------------------
 -- Solution Characteristic Specification --
 -------------------------------------------
-
-  --FIXME put in correct order, if out of order for subsections
-
-scsIntro :: (NamedIdea c) => c -> Contents
-scsIntro progName = foldlSP [S "The", plural Doc.inModel, 
-  S "that govern", short progName, S "are presented in" +:+. 
-  S "FIXME REF to IModSection", S "The", phrase Doc.information, S "to understand", 
-  (S "meaning" `ofThe` plural Doc.inModel), 
-  S "and their derivation is also presented, so that the", plural Doc.inModel, 
-  S "can be verified"]
-
 
 assumptionSect :: SubSec -> Section
 assumptionSect (SectionModel niname xs) = section (titleize' niname)
@@ -233,6 +246,13 @@ dataConstraintSect (SectionModel niname xs) = section (titleize' niname)
 --FIXME generate tables here
 --
 
+scsIntro :: (NamedIdea c) => c -> Contents
+scsIntro progName = foldlSP [S "The", plural Doc.inModel, 
+  S "that govern", short progName, S "are presented in" +:+. 
+  S "FIXME REF to IModSection", S "The", phrase Doc.information, S "to understand", 
+  (S "meaning" `ofThe` plural Doc.inModel), 
+  S "and their derivation is also presented, so that the", plural Doc.inModel, 
+  S "can be verified"]
 
 
 termDefinitionIntro :: [Sentence] -> Contents

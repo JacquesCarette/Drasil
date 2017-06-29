@@ -256,7 +256,8 @@ s4_1_intro = foldlSP
 s4_1_1 :: Section
 s4_1_1_bullets :: Contents
 
-termDefSec = sSubSec termAndDef [(siSTitl), (siCC s4_1_1_terms)]
+termAndDefSect :: SubSec
+termAndDefSect = sSubSec termAndDef [(siSTitl), (siCC s4_1_1_terms)]
 
 s4_1_1 = termDefnF EmptyS [s4_1_1_bullets]
 
@@ -274,6 +275,9 @@ s4_1_1_bullets = enumBullet
 
 s4_1_2 :: Section
 s4_1_2_list :: Contents
+
+goalStatementSec :: SubSec
+goalStatementSec = sSubSec goalStmt [(siCon [s4_1_2_list])]
 
 s4_1_2 = SRS.goalStmt [s4_1_2_list] []
 

@@ -62,7 +62,7 @@ mkSRS = RefSec (RefProg RM.intro [TUnits, tsymb tableOfSymbols, TAandA]) :
   IScope s2_2_intro_p1 s2_2_intro_p2, 
   IChar (S "rigid body dynamics") (S "high school calculus") (EmptyS), 
   IOrgSec s2_4_intro inModel s4_2_5 EmptyS]) :
-  map Verbatim [genSec, s3, s4, s5, s6, s7, s8, s9]
+  map Verbatim [{--genSec,--} s3, s4, s5, s6, s7, s8, s9]
     where tableOfSymbols = [TSPurpose, TypogConvention[Vector Bold], SymbOrder]
 
 

@@ -566,24 +566,22 @@ s7_1_req6 = [(Enumeration $ Simple $ [(acroR 6, Nested (titleize output_ +:+
     ))])]
 -}
 
---ItemType
 s7_1_req6 = [(Enumeration $ Simple $ [(acroR 6, Nested (titleize output_ +:+
   S "the following" +: plural quantity)
   (Bullet $ 
+    --FIXME:The implementation below is quite repetitive in nature.
+    --map (\(c, d) -> Flat $ (at_start c) +:+ sParen (getS c) +:+ sParen (makeRef (gbSymbMapT d)))
+    --[(prob_br, probOfBr), (demand, calOfDe), (lResistance, calOfCap)]
+    --FIXME:The above doesn't work becuase prob_br = ConstrainedChunk, demand = UnitaryChunk, lResistance = CI
     [Flat $ (at_start prob_br) +:+ sParen (getS prob_br) +:+ sParen (makeRef (gbSymbMapT probOfBr))] ++
-    [Flat $ (at_start demand) +:+ sParen (getS demand) +:+ sParen (makeRef (gbSymbMapT calOfDe))]++
-    [Flat $ (titleize lResistance +:+ sParen (short lResistance) +:+ sParen (makeRef (gbSymbMapT calOfCap)))] ++
+    [Flat $ (titleize lResistance) +:+ sParen (short lResistance) +:+ sParen (makeRef (gbSymbMapT calOfCap))] ++
+    [Flat $ (at_start demand) +:+ sParen (getS demand) +:+ sParen (makeRef (gbSymbMapT calOfDe))]
+    ++
     map (\c -> Flat $ (at_start c) +:+ sParen (getS c) +:+ sParen (makeRef (gbSymbMapD c)))
-    [loadDF, nonFL, glaTyFac, dimLL, tolPre, tolStrDisFac, strDisFac, hFromt] ++
+    [loadDF, nonFL, glaTyFac, dimLL, tolPre, tolStrDisFac, strDisFac, hFromt] 
+    ++
     [Flat $ (titleize aspectR) +:+ sParen (short aspectR) {-+:+ E ((C aspectR) := (C plate_len):/(C plate_width))-}] --short is technically a symbol here (see Concepts.hs)
     ))])]
-  {-
-  (Bullet $ 
-    []
-  )
-  -}
-
---FIXME:The implementation above is quite repetitive in nature.
 
 {--Nonfunctional Requirements--}
 

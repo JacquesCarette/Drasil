@@ -92,15 +92,15 @@ constrained q cs ex = ConstrainedChunk q cs (Just ex)
   
 -- | Creates a constrained unitary  
 cuc :: (Unit u) => String -> NP -> Symbol -> u 
-                -> Space -> [Constraint] -> Maybe Expr -> ConstrainedChunk
+                -> Space -> [Constraint] -> Expr -> ConstrainedChunk
 cuc i t s u space cs rv = 
-  ConstrainedChunk (unitary i t s u space) cs rv
+  ConstrainedChunk (unitary i t s u space) cs (Just rv)
 
 -- | Creates a constrained varchunk
 cvc :: String -> NP -> Symbol -> Space 
-       -> [Constraint] -> Maybe Expr -> ConstrainedChunk
+       -> [Constraint] -> Expr -> ConstrainedChunk
 cvc i des sym space cs rv = 
-  ConstrainedChunk (vc i des sym space) cs rv
+  ConstrainedChunk (vc i des sym space) cs (Just rv)
   
   
   

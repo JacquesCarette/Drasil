@@ -36,7 +36,6 @@ import Language.Drasil {-(Sentence(Sy, P, EmptyS, S, (:+:), E), (+:+),
   UnitalChunk, QDefinition, term, id, unit, ucw)-}
 import Data.Drasil.Concepts.Documentation
 import Data.Drasil.Concepts.Math (unit_)
-import Data.Drasil.Concepts.Documentation (value, physicalConstraint, variable)
   
 -- | fold helper functions applies f to all but the last element, applies g to
 -- last element and the accumulator

@@ -36,52 +36,52 @@ gbInputs :: [ConstrainedChunk]
 gbInputs = [plate_len, plate_width, char_weight, pb_tol, tNT, standOffDist, nom_thick, glass_type]
 
 plate_len = cuc "plate_len" (nounPhraseSP "plate length (long dimension)")
-  lA millimetre Rational 
+  lA millimetre Real 
   [ physc $ \c -> c :> (Dbl 0),
     physc $ \c -> (c :/ (C plate_width)) :> (Dbl 1),
     sfwrc $ \c -> (C dim_min) :<= c,
     sfwrc $ \c -> c :<= (C dim_max),
-    sfwrc $ \c -> (c :/ (C plate_width)) :< (C ar_max) ]
+    sfwrc $ \c -> (c :/ (C plate_width)) :< (C ar_max) ] (Dbl 1500)
 
 plate_width = cuc "plate_width" (nounPhraseSP "plate width (short dimension)")
-  lB millimetre Rational
+  lB millimetre Real
   [ physc $ \c -> c :> (Dbl 0),
     physc $ \c -> c :< (C plate_len),
     sfwrc $ \c -> (C dim_min) :<= c,
     sfwrc $ \c -> c :<= (C dim_max),
-    sfwrc $ \c -> ((C plate_len) :/ c) :< (C ar_max) ]
+    sfwrc $ \c -> ((C plate_len) :/ c) :< (C ar_max) ] (Dbl 1200)
 
 pb_tol = cvc "pb_tol" (nounPhraseSP "tolerable probability of breakage") 
-  (sub cP (Atomic "btol")) Rational
+  (sub cP (Atomic "btol")) Real
   [ physc $ \c -> (Dbl 0) :< c ,
-    physc $ \c -> c :< (Dbl 1) ]
+    physc $ \c -> c :< (Dbl 1) ] (Dbl 0.008)
 
 char_weight = cuc "char_weight" (nounPhraseSP "charge weight") 
-  lW kilogram Rational
+  lW kilogram Real
   [ physc $ \c -> c :>= (Dbl 0),
     sfwrc $ \c -> (C cWeightMax) :<= c,
-    sfwrc $ \c -> c :<= (C cWeightMin) ]
+    sfwrc $ \c -> c :<= (C cWeightMin) ] (Dbl 42)
 
 tNT = cvc "tNT" (nounPhraseSP "TNT equivalent factor")
-  (Atomic "TNT") Rational
-  [ physc $ \c -> c :> (Dbl 0) ]
+  (Atomic "TNT") Integer
+  [ physc $ \c -> c :> (Dbl 0) ] (Int 1)
 
 standOffDist = cuc "standOffDist" (nounPhraseSP "stand off distance") 
-  (Atomic "SD") metre Rational
+  (Atomic "SD") metre Real
   [ physc $ \c -> c :> (Dbl 0),
     sfwrc $ \c -> (C sd_min) :< c,
-    sfwrc $ \c -> c :< (C sd_max) ]
+    sfwrc $ \c -> c :< (C sd_max) ] (Dbl 45)
 
 nom_thick = cuc "nom_thick" (nounPhraseSP $ "nominal thickness t in" ++
   " {2.5, 2.7, 3.0, 4.0, 5.0, 6.0, 8.0, 10.0, 12.0, 16.0, 19.0, 22.0}")
   lT millimetre Rational
   [ physc $ \c -> (c := (V "2.5")) :|| (c := (V "2.7")) :|| (c := (V "3.0")) :|| (c := (V "4.0"))
                   :|| (c := (V "5.0")) :|| (c := (V "6.0")) :|| (c := (V "8.0")) :|| (c := (V "10.0"))
-                  :|| (c := (V "12.0")) :|| (c := (V "16.0")) :|| (c := (V "19.0")) :|| (c := (V "22.0")) ]
+                  :|| (c := (V "12.0")) :|| (c := (V "16.0")) :|| (c := (V "19.0")) :|| (c := (V "22.0")) ] (V "8.0")
 
 glass_type  = cvc "glass_type"    (nounPhraseSP "glass type, g in {AN, HS, FT}")
   lG String
-  [ physc $ \c -> (c := (V "AN")) :|| (c := (V "HS")) :|| (c := (V "FT")) ]
+  [ physc $ \c -> (c := (V "AN")) :|| (c := (V "HS")) :|| (c := (V "FT")) ] (V "HS")
 --FIXME:Creating variables increases duplication; find a way to incorporate preexisting chunks in constraints
 
 {--}
@@ -92,7 +92,7 @@ gbOutputs = map qs [is_safe1, is_safe2] ++ map qs [prob_br]
 prob_br = cvc "prob_br" (nounPhraseSP "probability of breakage")
   (sub cP lB) Rational
   [ physc $ \c -> (Dbl 0) :< c,
-    physc $ \c -> c :< (Dbl 1) ]
+    physc $ \c -> c :< (Dbl 1) ] (Dbl 0.4)
 
 {--}
 

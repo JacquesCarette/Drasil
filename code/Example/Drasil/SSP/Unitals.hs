@@ -86,15 +86,15 @@ waterWeight = uqc "gamma_w" (cn $ "unit weight of water")
   (sub (Greek Gamma_L) lW) specific_weight Real gtZeroConstr
   (Dbl 9.8) defultUncrt
 
-{-Output Variables-}
+{-Output Variables-} --FIXME: See if there should be typical values
 fs          = constrained' (cvR (dcc "FS" (nounPhraseSP $ "global factor of safety")
-  "the stability of a surface in a slope") (Atomic "FS")) gtZeroConstr
+  "the stability of a surface in a slope") (Atomic "FS")) gtZeroConstr (Dbl 1)
 
 dx_i        = cuc' "dx_i" (cn $ "displacement") ("in the x-ordinate direction " ++ fsi)
-  (sub (Concat [Greek Delta_L, Atomic "x"]) lI) metre Real []
+  (sub (Concat [Greek Delta_L, Atomic "x"]) lI) metre Real [] (Dbl 1)
 
 dy_i        = cuc' "dy_i" (cn $ "displacement") ("in the y-ordinate direction " ++ fsi)
-  (sub (Concat [Greek Delta_L, Atomic "y"]) lI) metre Real []
+  (sub (Concat [Greek Delta_L, Atomic "y"]) lI) metre Real [] (Dbl 1)
 
 ---------------------------
 -- START OF UNITALCHUNKS --

@@ -650,9 +650,6 @@ noTypicalVal   = short notApp
 vertConvention = S "Consecutive vertexes have increasing x" +:+. plural value +:+
   S "The start and end vertices of all layers go to the same x" +:+. plural value
 
-vertVar :: Sentence -> Sentence
-vertVar vertexType = getS coords +:+ S "of" +:+ vertexType +:+ S "vertices'"
-
 verticesConst :: Sentence -> [Sentence]
 verticesConst vertexType = [vertVar vertexType, vertConvention, noTypicalVal, noTypicalVal, noTypicalVal]
 
@@ -667,6 +664,9 @@ dataConstIn = [waterVert, slipVert, slopeVert] ++ map fmtInConstr sspInputs
 {-output data-}
 slipVert2 :: [[Sentence]]
 slipVert2 = [[vertVar $ phrase slip, S "Vertices's monotonic", S "None"]]
+
+vertVar :: Sentence -> Sentence
+vertVar vertexType = getS coords +:+ S "of" +:+ vertexType +:+ S "vertices'"
 
 displayContr' :: (Constrained s, SymbolForm s) => s -> [Sentence]
 displayContr' s = (init $ makeConstraint s EmptyS) ++ [S "None"]

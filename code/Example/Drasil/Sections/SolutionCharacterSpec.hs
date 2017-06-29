@@ -20,19 +20,19 @@ import qualified Data.Drasil.Concepts.Documentation as Doc
 import Data.List (find)
 
 data SecItem = Cont [Contents]
-             | Sect [Section]
-             | TMods [RelationConcept]
-             | IMods [RelationConcept]
-             | DataDef [QDefinition]
-             | GenDef [RelationConcept]
-             | Sent [Sentence]
-             | TitleFunc (CI -> Sentence)
+            | Sect [Section]
+            | TMods [RelationConcept]
+            | IMods [RelationConcept]
+            | DataDef [QDefinition]
+            | GenDef [RelationConcept]
+            | Sent [Sentence]
+            | TitleFunc (CI -> Sentence)
 
 data SolSubSec = SectionModel CI [SecItem]
 
 
 sSubSec :: CI -> [SecItem] -> SolSubSec
-sSubSec name xs = SectionModel name xs
+sSubSec sectionName xs = SectionModel sectionName xs
 
 siCon :: [Contents] -> SecItem
 siCon xs = Cont xs

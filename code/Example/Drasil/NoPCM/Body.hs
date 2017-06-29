@@ -91,7 +91,7 @@ mkSRS = RefSec (RefProg intro
   IScope s2_2s s2_2e,
   IChar s2_3_knowlegde s2_3_understanding EmptyS,
   IOrgSec s2_4_intro inModel (SRS.inModel SRS.missingP []) s2_4e]) :
-  map Verbatim [s3, s4, s5, s6, s7, s8]  
+  map Verbatim [s3, s4, s5, s6, s7, s8, s9]  
         
 pcm_si :: SystemInformation
 pcm_si = SI srs_swhs srs [thulasi] this_si pcmSymbols (pcmSymbols) 
@@ -539,7 +539,12 @@ s5_1_list = [Enumeration (Simple [(acroR 1, Flat (foldlSentCol
   
   Enumeration (Simple [(acroR 5, Flat (foldlSent
   [S "Calculate and output the", phrase temp, S "of the", phrase water, 
-  sParen (getS temp_W :+: sParen (getS time)), S "over the", phrase simulation, phrase time]))])
+  sParen (getS temp_W :+: sParen (getS time)), S "over the", phrase simulation, phrase time]))]),
+  
+  Enumeration (Simple [(acroR 6, Flat (foldlSent 
+  [S "Calculate and", phrase output_, S "the", phrase w_E,
+  sParen (getS w_E :+: sParen (getS time)), S "over the",
+  phrase simulation, phrase time, sParen (S "from" +:+ acroIM 3)]))])
   ]
 
 -------------------------------------------

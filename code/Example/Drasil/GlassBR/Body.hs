@@ -489,10 +489,10 @@ s7 = reqF [s7_1, s7_2]
 
 s7_1 = SRS.funcReq (s7_1_list) []
 
-s7_1_req6 :: ItemType
+s7_1_req6 :: [Contents] -- :: ItemType
 s7_1_req1, s7_1_req2, s7_1_req3, s7_1_req4, s7_1_req5 :: Sentence
 
-s7_1_list = [enumSimple 1 (getAcc requirement) (s7_1_listOfReqs)] ++ [s7_1_req1Table]
+s7_1_list = [enumSimple 1 (getAcc requirement) (s7_1_listOfReqs)] ++ s7_1_req6 ++ [s7_1_req1Table]
 
 s7_1_listOfReqs :: [Sentence]
 s7_1_listOfReqs = [s7_1_req1, s7_1_req2, s7_1_req3, s7_1_req4, s7_1_req5]
@@ -550,6 +550,22 @@ s7_1_req5 = S "If" +:+ (getS is_safe1) `sAnd` (getS is_safe2) +:+
   S "If the" +:+ phrase condition +:+ S "is false, then" +:+ phrase output_ +:+
   S "the message" +:+ Quote (notSafe ^. defn)
 
+s7_1_req6 = [(Enumeration $ Simple $ [(acroR 6, Nested (titleize output_ +:+
+  S "the following" +: plural quantity)
+  (Bullet $ 
+    [Flat $ (at_start prob_br) +:+ sParen (getS prob_br) +:+ sParen (makeRef (gbSymbMapT probOfBr))] ++
+    [Flat $ (titleize lResistance) +:+ sParen (short lResistance) +:+ sParen (makeRef (gbSymbMapT calOfCap))] ++
+    [Flat $ (at_start demand) +:+ sParen (getS demand) +:+ sParen (makeRef (gbSymbMapT calOfDe))] ++
+    [Flat $ (at_start act_thick) +:+ sParen (getS act_thick) +:+ sParen (makeRef (gbSymbMapD hFromt))] ++
+    [Flat $ (titleize loadDF) +:+ sParen (getS loadDF) +:+ sParen (makeRef (gbSymbMapD loadDF))] ++
+    [Flat $ (at_start strDisFac) +:+ sParen (getS strDisFac) +:+ sParen (makeRef (gbSymbMapD strDisFac))] ++
+    [Flat $ (titleize nonFL) +:+ sParen (getS nonFL) +:+ sParen (makeRef (gbSymbMapD nonFL))] ++
+    [Flat $ (titleize gTF) +:+ sParen (getS gTF) +:+ sParen (makeRef (gbSymbMapD glaTyFac))] ++
+    map (\c -> Flat $ (at_start c) +:+ sParen (getS c) +:+ sParen (makeRef (gbSymbMapD c))) [dimLL, tolPre, tolStrDisFac] ++
+    [Flat $ (titleize aspectR) +:+ sParen (short aspectR {-getS aspectR -}) {-+:+ E ((C aspectR) := (C plate_len):/(C plate_width))-}]
+    ))])]
+
+{-
 --ItemType
 s7_1_req6 = (Nested (titleize output_ +:+
   S "the following" +: plural quantity)
@@ -574,7 +590,7 @@ s7_1_req6 = (Nested (titleize output_ +:+
     []
   )
   -}
-
+-}
 --FIXME:The implementation above is quite repetitive in nature.
 
 {--Nonfunctional Requirements--}

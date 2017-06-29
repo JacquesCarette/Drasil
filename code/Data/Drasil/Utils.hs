@@ -14,6 +14,7 @@ module Data.Drasil.Utils
   , mkRefsList
   , mkInputDatTb
   , getS
+  , getRVal
   , addPercent
   , weave
   , fmtU
@@ -103,6 +104,12 @@ fmtBF symb ((f,num):xs) = (E ((C symb) `f` num)) +:+ S "and" +:+ (fmtBF symb xs)
 -- | gets symbol from chunk
 getS :: (SymbolForm a) => a -> Sentence
 getS s  = P $ s ^. symbol
+
+-- | gets a reasonable or typical value from a Constrained chunk
+getRVal :: (Constrained c) => c -> Expr
+getRVal c = uns (c ^. reasVal)
+  where uns (Just e) = e
+        uns Nothing  = (V "WARNING: getRVal found no Expr")
 
 -- | outputs sentence with % attached to it
 addPercent :: Float ->  Sentence

@@ -14,7 +14,7 @@ module Data.Drasil.SentenceStructures
   ) where
 
 import Language.Drasil
-import Data.Drasil.Utils (foldle, foldle1, getS, fmtU)
+import Data.Drasil.Utils (foldle, foldle1, getS, fmtU, getRVal)
 import Data.Drasil.Concepts.Documentation
 import Control.Lens ((^.))
 
@@ -171,11 +171,6 @@ fmtOutputConstr q qlst = [getS q] ++ physC q qlst ++ sfwrC q qlst ++ rval q qlst
 
 none :: Sentence
 none = S "None"
-
-getRVal :: (Constrained c) => c -> Expr
-getRVal c = uns (c ^. reasVal)
-  where uns (Just e) = e
-        uns Nothing  = (V "WARNING: getRVal found no Expr")
 
 --These check the entire list of UncertainQuantity and if they are all empty in that field,
 -- return empty list, otherwise return the appropriate thing

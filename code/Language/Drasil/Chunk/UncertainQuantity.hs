@@ -79,14 +79,14 @@ uqc :: (Unit u) => String -> NP -> String -> Symbol -> u
 uqc nam trm desc sym un space cs val uncrt = uq
   (cuc' nam trm desc sym un space cs val) uncrt
 
---uncertainty quanity constraint no uncertainty
+--uncertainty quantity constraint with no uncertainty
 uqcNU :: (Unit u) => String -> NP -> String -> Symbol -> u 
                   -> Space -> [Constraint]
                   -> Expr -> UncertQ
 uqcNU nam trm desc sym un space cs val = uqNU $
   cuc' nam trm desc sym un space cs val
 
---uncertainty quanity constraint no discription
+--uncertainty quantity constraint with no description
 uqcND :: (Unit u) => String -> NP -> Symbol -> u 
                   -> Space -> [Constraint]
                   -> Expr -> Double -> UncertQ

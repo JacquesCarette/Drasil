@@ -15,7 +15,7 @@ import Prelude hiding (id)
 import Data.Drasil.Utils
 import Data.Drasil.SentenceStructures (foldlSent, foldlList, ofThe, isThe, 
   showingCxnBw, figureLabel, foldlSP, sAnd, foldlsC, tAndDWAcc, tAndDWSym,
-  tAndDOnly, sVersus, displayConstr)
+  tAndDOnly, sVersus, displayConstr, inDataConstTbl, outDataConstTbl)
 
 import Drasil.Template.MG
 import Drasil.Template.DD
@@ -123,8 +123,9 @@ auxiliaryConstants = assumption4_constants ++ gBRSpecParamVals
 
 --Used in "Functional Requirements" Section--
 requiredInputs :: [QSWrapper]
-requiredInputs = (map qs [plate_len, plate_width, char_weight,
-  pb_tol, tNT, nom_thick]) ++ (map qs [sdx, sdy, sdz]) ++ (map qs [glass_type])
+requiredInputs = (map qs [plate_len, plate_width, char_weight])
+  ++ (map qs [pb_tol, tNT, nom_thick]) ++ (map qs [sdx, sdy, sdz])
+  ++ (map qs [glass_type])
 --------------------------------------------------------------------------------
 
 {--INTRODUCTION--}
@@ -449,7 +450,7 @@ s6_2_5 = datConF ((makeRef s6_2_5_table1) +:+ S "shows") dataConstraintUncertain
               S "used in" +:+. (makeRef s6_2_5_table1), 
               getS ar_max, --FIXME: Issue #167
               S "refers to the", phrase ar_max, S "for the plate of glass"]
-
+{-
 s6_2_5_table1 = Table [S "Var", S "Physical Constraints", S "Software Constraints",
   S "Typical Value", S "Typical Uncertainty"]
   dataConstList
@@ -468,6 +469,11 @@ inputVarPbTol = displayConstr pb_tol       (0.008 :: Double) (addPercent 0.1)
 inputVarW     = displayConstr char_weight  (42 :: Double)       (addPercent 10)
 inputVarTNT   = displayConstr tNT          (1 :: Int)        (addPercent 10)
 inputVarSD    = displayConstr standOffDist (45 :: Double)       (addPercent 10)
+-}
+{-input and output tables-}
+--s6_2_5_table1, s6_2_5_table3 :: Contents
+s6_2_5_table1 = inDataConstTbl gbInputs_ 200
+s6_2_5_table3 = outDataConstTbl [prob_br] 300
 
 s6_2_5_table2_formatF2 :: UnitaryChunk -> Double -> (Sentence, Sentence)
 s6_2_5_table2_formatF2 varName val = (getS varName, E (Dbl val) +:+
@@ -476,11 +482,12 @@ s6_2_5_table2_formatF2 varName val = (getS varName, E (Dbl val) +:+
 s6_2_5_intro2 = foldlSent [(makeRef s6_2_5_table3), S "shows the", 
   plural constraint, S "that must be satisfied by the", phrase output_]
 
+{-
 s6_2_5_table3 = Table [S "Var", S "Physical Constraints"] (mkTable 
   [(\x -> P $ fst(x)), (\x -> snd(x))] 
   [(prob_br ^. symbol, E (Int 0 :< C prob_br :< Int 1))])
   (titleize output_ +:+ titleize' variable) True
-
+-}
 {--REQUIREMENTS--}
 
 s7 = reqF [s7_1, s7_2]

@@ -1,6 +1,6 @@
 module Main where
-import Language.Drasil(DocType(SRS,MG,Website), Recipe(..), gen)
-import Drasil.GlassBR.Body (glassBR_srs', glassBR_mg)
+import Language.Drasil(DocType(SRS,MG,Website), Recipe(..), gen, genCode)
+import Drasil.GlassBR.Body (glassBR_srs', glassBR_mg, glassBR_code)
 
 docs :: [Recipe]
 docs = [Recipe (SRS "GlassBR_SRS")     glassBR_srs',
@@ -10,3 +10,4 @@ docs = [Recipe (SRS "GlassBR_SRS")     glassBR_srs',
 main :: IO()
 main = do
   gen docs
+  genCode glassBR_code

@@ -121,7 +121,7 @@ Units
 A<sub>C</sub>
 </td>
 <td>
-Heating Coil surface area
+Heating coil surface area
 </td>
 <td>
 m<sup>2</sup>
@@ -965,7 +965,7 @@ This document will be used as a starting point for subsequent development phases
 Scope of Requirements
 </h3>
 <p class="paragraph">
-The scope of the requirements includes thermal analysis of a single solar water heating tank incorporating PCM. Given the appropriate inputs, the code for SWHS is intended to predict the temperature and thermal energy histories for the water and the PCM. This entire document is written assuming that the substances inside the solar water heating tank are water and PCM.
+The scope of the requirements includes thermal analysis of a single solar water heating tank incorporating PCM. Given the appropriate inputs, the code for solar water heating systems incorporating PCM is intended to predict the temperature and thermal energy histories for the water and the PCM. This entire document is written assuming that the substances inside the solar water heating tank are water and PCM.
 </p>
 </div>
 </a>
@@ -975,7 +975,7 @@ The scope of the requirements includes thermal analysis of a single solar water 
 Characteristics of Intended Reader
 </h3>
 <p class="paragraph">
-Reviewers of this documentation should have a strong knowledge in heat transfer theory. A third or fourth year Mechanical Engineering course on this topic is recommended. The reviewers should also have an understanding of differential equations, as typically covered in first and second year Calculus courses. The users of SWHS can have a lower level of expertise, as explained in <a href=#Sec:UserChar>this Section</a>.
+Reviewers of this documentation should have a strong knowledge in heat transfer theory. A third or fourth year Mechanical Engineering course on this topic is recommended. The reviewers should also have an understanding of differential equations, as typically covered in first and second year Calculus courses. The users of solar water heating systems incorporating PCM can have a lower level of expertise, as explained in <a href=#Sec:UserChar>this Section</a>.
 </p>
 </div>
 </a>
@@ -1092,7 +1092,7 @@ SWHS is a computer program developed to investigate the effect of employing PCM 
 Terminology and Definitions
 </h4>
 <p class="paragraph">
-This subsection provides a list of terms that are used in the subsequent sections and their meaning, with the purpose of reducing ambiguity and making it easier to correctly understand the requirements:
+This subsection provides a list of terms that are used in the subsequent sections and their meaning, with the purpose of reducing ambiguity and making it easier to correctly understand the requirements.
 </p>
 <ul class="list">
 <li>
@@ -1439,7 +1439,7 @@ Applying Gauss's Divergence Theorem to the first term over the surface S of the 
 </div>
 </a>
 <p class="paragraph">
-We consider an arbitrary volume. The volumetric heat generation per unit volumeis assumed constant. Then (1) can be written as:
+We consider an arbitrary volume. The volumetric heat generation per unit volume is assumed constant. Then (1) can be written as:
 </p>
 <a id="">
 <div class="equation">
@@ -1637,8 +1637,61 @@ H<sub>f</sub> is the specific latent heat of fusion<br />Q is the latent heat<br
 </td>
 </tr>
 </table>
+<a id="DD:melt.frac">
+<table class="ddefn">
+<tr>
+<th>
+Label
+</th>
+<td>
+<p class="paragraph">
+&phi;
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Units
+</th>
+<td>
+<p class="paragraph">
+
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Equation
+</th>
+<td>
+<a id="">
+<div class="equation">
+&phi; = <div class="fraction">
+<span class="fup">
+Q<sub>P</sub>
+</span>
+<span class="fdn">
+H<sub>f</sub>m<sub>P</sub>
+</span>
+</div>
+</div>
+</a>
+</td>
+</tr>
+<tr>
+<th>
+Description
+</th>
+<td>
+<p class="paragraph">
+&phi; is the melt fraction<br />Q<sub>P</sub> is the latent heat energy added to PCM<br />H<sub>f</sub> is the specific latent heat of fusion<br />m<sub>P</sub> is the mass of phase change material
+</p>
+</td>
+</tr>
+</table>
 </a>
 </div>
+</a>
 </a>
 <a id="Sec:InstMode">
 <div class="subsubsection">
@@ -1918,6 +1971,403 @@ Data Constraints
 <p class="paragraph">
 <a href=#Table:Tabl1>this Table</a> and <a href=#Table:Tabl2>this Table</a> show the data constraints on the input and output variables, respectively. The column for physical constraints gives the physical limitations on the range of values that can be taken by the variable. The column for software constraints restricts the range of inputs to reasonable values. The constraints are conservative, to give the user of the model the flexibility to experiment with unusual situations. The column of typical values is intended to provide a feel for a common scenario. The uncertainty column provides an estimate of the confidence with which the physical quantities can be measured. This information would be part of the input if one were performing an uncertainty quantification exercise. (The tables are left out because features they should use are not yet implemented in Drasil.)
 </p>
+<a href=#Table:InpuVari>this Table</a>, and <a href=#Table:OutpVari>this Table</a> shows the data constraints on the input and output variables, respectively. The column for physical constraints gives the physical limitations on the range of values that can be taken by the variable. The uncertainty column provides an estimate of the confidence with which the physical quantities can be measured. This information would be part of the input if one were performing an uncertainty quantification exercise. The constraints are conservative, to give the user of the model the flexibility to experiment with unusual situations. The column of typical values is intended to provide a feel for a common scenario. The column for software constraints restricts the range of inputs to reasonable values. (*) These quantities cannot be equal to zero, or there will be a divide by zero in the model. (+) These quantities cannot be zero, or there would be freezing (A13). (#) The constraints on the surface area are calculated by considering the surface area to volume ratio. The assumption is that the lowest ratio is 1 and the highest possible is <div class="fraction">
+<span class="fup">
+2
+</span>
+<span class="fdn">
+h<sub>min</sub>
+</span>
+</div>, where h<sub>min</sub> is the thickness of a &quot;sheet&quot; of PCM. A thin sheet has the greatest surface area to volume ratio. (**) The constraint on the maximum time at the end of the simulation is the total number of secondsin one day.
+</p>
+<a id="Table:InpuVari">
+<table class="table">
+<tr>
+<th>
+Var
+</th>
+<th>
+Physical Constraints
+</th>
+<th>
+Software Constraints
+</th>
+<th>
+Typical Value
+</th>
+<th>
+Uncertainty
+</th>
+</tr>
+<tr>
+<td>
+L
+</td>
+<td>
+L&gt;0
+</td>
+<td>
+L<sub>min</sub>&le;L&le;L<sub>max</sub>
+</td>
+<td>
+1.5 m
+</td>
+<td>
+10%
+</td>
+</tr>
+<tr>
+<td>
+D
+</td>
+<td>
+D&gt;0
+</td>
+<td>
+<div class="fraction">
+<span class="fup">
+D
+</span>
+<span class="fdn">
+L<sub>max</sub>
+</span>
+</div>&le;<div class="fraction">
+<span class="fup">
+D
+</span>
+<span class="fdn">
+L
+</span>
+</div>&le;<div class="fraction">
+<span class="fup">
+D
+</span>
+<span class="fdn">
+L<sub>min</sub>
+</span>
+</div>
+</td>
+<td>
+0.412 m
+</td>
+<td>
+10%
+</td>
+</tr>
+<tr>
+<td>
+V<sub>P</sub>
+</td>
+<td>
+V<sub>P</sub>&gt;0 and V<sub>P</sub>&lt;V<sub>tank</sub>
+</td>
+<td>
+V<sub>P</sub>&ge;V<sub>tank</sub>
+</td>
+<td>
+5.0e-2 m<sup>3</sup>
+</td>
+<td>
+10%
+</td>
+</tr>
+<tr>
+<td>
+A<sub>P</sub>
+</td>
+<td>
+A<sub>P</sub>&gt;0
+</td>
+<td>
+V<sub>P</sub>&le;A<sub>P</sub>&le;<div class="fraction">
+<span class="fup">
+2
+</span>
+<span class="fdn">
+h<sub>min</sub>
+</span>
+</div>V<sub>tank</sub>
+</td>
+<td>
+1.2 m<sup>2</sup>
+</td>
+<td>
+10%
+</td>
+</tr>
+<tr>
+<td>
+&rho;<sub>P</sub>
+</td>
+<td>
+&rho;<sub>P</sub>&gt;0 and &rho;<sub>P</sub><sup>min</sup>&lt;&rho;<sub>P</sub>&lt;&rho;<sub>P</sub><sup>max</sup>
+</td>
+<td>
+
+</td>
+<td>
+1007 kg/(m<sup>3</sup>)
+</td>
+<td>
+10%
+</td>
+</tr>
+<tr>
+<td>
+T<sub>melt</sub><sup>P</sup>
+</td>
+<td>
+0&lt;T<sub>melt</sub><sup>P</sup>&lt;T<sub>C</sub>
+</td>
+<td>
+
+</td>
+<td>
+44.2 &deg;C
+</td>
+<td>
+10%
+</td>
+</tr>
+<tr>
+<td>
+C<sub>P</sub><sup>S</sup>
+</td>
+<td>
+C<sub>P</sub><sup>S</sup>&gt;0
+</td>
+<td>
+C<sub>P</sub><sup>S</sup><sub>min</sub>&lt;C<sub>P</sub><sup>S</sup>&lt;C<sub>P</sub><sup>S</sup><sub>max</sub>
+</td>
+<td>
+1760 J/(kg&deg;C)
+</td>
+<td>
+10%
+</td>
+</tr>
+<tr>
+<td>
+C<sub>P</sub><sup>L</sup>
+</td>
+<td>
+C<sub>P</sub><sup>L</sup>&gt;0
+</td>
+<td>
+C<sub>P</sub><sup>L</sup><sub>min</sub>&lt;C<sub>P</sub><sup>L</sup>&lt;C<sub>P</sub><sup>L</sup><sub>max</sub>
+</td>
+<td>
+2270 J/(kg&deg;C)
+</td>
+<td>
+10%
+</td>
+</tr>
+<tr>
+<td>
+H<sub>f</sub>
+</td>
+<td>
+H<sub>f</sub>&gt;0
+</td>
+<td>
+H<sub>f</sub><sub>min</sub>&lt;H<sub>f</sub>&lt;H<sub>f</sub><sub>max</sub>
+</td>
+<td>
+211600 J/kg
+</td>
+<td>
+10%
+</td>
+</tr>
+<tr>
+<td>
+A<sub>C</sub>
+</td>
+<td>
+A<sub>C</sub>&gt;0
+</td>
+<td>
+A<sub>C</sub>&le;A<sub>C</sub><sup>max</sup>
+</td>
+<td>
+0.12 m<sup>2</sup>
+</td>
+<td>
+10%
+</td>
+</tr>
+<tr>
+<td>
+T<sub>C</sub>
+</td>
+<td>
+0&lt;T<sub>C</sub>&lt;100
+</td>
+<td>
+
+</td>
+<td>
+50 &deg;C
+</td>
+<td>
+10%
+</td>
+</tr>
+<tr>
+<td>
+&rho;<sub>W</sub>
+</td>
+<td>
+&rho;<sub>W</sub>&gt;0
+</td>
+<td>
+&rho;<sub>W</sub><sup>min</sup>&lt;&rho;<sub>W</sub>&le;&rho;<sub>W</sub><sup>max</sup>
+</td>
+<td>
+1000 kg/(m<sup>3</sup>)
+</td>
+<td>
+10%
+</td>
+</tr>
+<tr>
+<td>
+C<sub>W</sub>
+</td>
+<td>
+C<sub>W</sub>&gt;0
+</td>
+<td>
+C<sub>W</sub><sup>min</sup>&lt;C<sub>W</sub>&lt;C<sub>W</sub><sup>max</sup>
+</td>
+<td>
+4186 J/(kg&deg;C)
+</td>
+<td>
+10%
+</td>
+</tr>
+<tr>
+<td>
+h<sub>C</sub>
+</td>
+<td>
+h<sub>C</sub>&gt;0
+</td>
+<td>
+h<sub>C</sub><sup>min</sup>&le;h<sub>C</sub>&le;h<sub>C</sub><sup>max</sup>
+</td>
+<td>
+1000 W/(m<sup>2</sup>&deg;C)
+</td>
+<td>
+10%
+</td>
+</tr>
+<tr>
+<td>
+h<sub>P</sub>
+</td>
+<td>
+h<sub>P</sub>&gt;0
+</td>
+<td>
+h<sub>P</sub><sup>min</sup>&le;h<sub>P</sub>&le;h<sub>P</sub><sup>max</sup>
+</td>
+<td>
+1000 W/(m<sup>2</sup>&deg;C)
+</td>
+<td>
+10%
+</td>
+</tr>
+<tr>
+<td>
+T<sub>init</sub>
+</td>
+<td>
+0&lt;T<sub>init</sub>&lt;T<sub>melt</sub>
+</td>
+<td>
+
+</td>
+<td>
+40 &deg;C
+</td>
+<td>
+10%
+</td>
+</tr>
+<tr>
+<td>
+t<sub>final</sub>
+</td>
+<td>
+t<sub>final</sub>&gt;0
+</td>
+<td>
+t<sub>final</sub>&lt;t<sub>final</sub><sup>max</sup>
+</td>
+<td>
+50000 s
+</td>
+<td>
+10%
+</td>
+</tr>
+</table>
+<p class="caption">
+Input Variables
+</p>
+</a>
+<a id="Table:OutpVari">
+<table class="table">
+<tr>
+<th>
+Var
+</th>
+<th>
+Physical Constraints
+</th>
+</tr>
+<tr>
+<td>
+T<sub>W</sub>
+</td>
+<td>
+T<sub>init</sub>&le;T<sub>W</sub>&le;T<sub>C</sub> (by A11)
+</td>
+</tr>
+<tr>
+<td>
+T<sub>P</sub>
+</td>
+<td>
+T<sub>init</sub>&le;T<sub>P</sub>&le;T<sub>C</sub> (by A11)
+</td>
+</tr>
+<tr>
+<td>
+E<sub>W</sub>
+</td>
+<td>
+E<sub>W</sub>&ge;0
+</td>
+</tr>
+<tr>
+<td>
+E<sub>P</sub>
+</td>
+<td>
+E<sub>P</sub>&ge;0
+</td>
+</tr>
+</table>
+<p class="caption">
+Output Variables
+</p>
+</a>
 </div>
 </a>
 <a id="Sec:PropofACorrSolu">
@@ -2194,7 +2644,7 @@ m<sub>P</sub>=V<sub>P</sub>&rho;<sub>P</sub>
 </a>
 <div class="list">
 <p>
-R3: Verify that the inputs satisfy the required physical constraints shown in <a href=#Table:TracMatrShowtheConnBetwItemofDiffSect>this Table</a>
+R3: Verify that the inputs satisfy the required physical constraints shown in <a href=#Table:TracMatrShowtheConnBetwItemofDiffSect>this Table</a>.
 </p>
 <p>
 R4: Output the input quantities and derived quantities in the following list: the quantities from R1, the masses from R2, &tau;<sub>W</sub> (from IM1), &eta; (from IM1), &tau;<sub>P</sub><sup>S</sup> (from IM2) and &tau;<sub>P</sub><sup>L</sup> (from IM2).
@@ -2226,10 +2676,10 @@ R11: Calculate and output the time at which the PCM stops melting t<sub>melt</su
 <a id="Sec:Non-Requ">
 <div class="subsection">
 <h3>
-Non-functional Requirements
+Non-Functional Requirements
 </h3>
 <p class="paragraph">
-Given the small size, and relative simplicity, of this problem, performance is not a priority. Any reasonable implementation will be very quick and use minimal storage. Rather than performance, the priority non-functional requirements are correctness, verifiability, understandability, reusability, and maintainability.
+This problem is small in size and relatively simple, so performance is not a priority. Any reasonable implementation will be very quick and use minimal storage. Rather than performance, the non-functional requirement priorities are correctness, verifiability, understandability, reusability, and maintainability.
 </p>
 </div>
 </a>
@@ -2277,48 +2727,48 @@ The purpose of the traceability matrices is to provide easy references on what h
 
 </th>
 <th>
-<a href=#T:t1ConsThermE>this Definition</a>
+T1 (<a href=#T:t1ConsThermE>this Definition</a>)
 </th>
 <th>
-<a href=#T:t2SensHtE>this Definition</a>
+T2 (<a href=#T:t2SensHtE>this Definition</a>)
 </th>
 <th>
-<a href=#T:t3LatHtE>this Definition</a>
+T3 (<a href=#T:t3LatHtE>this Definition</a>)
 </th>
 <th>
-GD1
+GD1 (<a href=#T:nwtnCooling>this Definition</a>)
 </th>
 <th>
-GD2
+GD2 (<a href=#T:rocTempSimp>this Definition</a>)
 </th>
 <th>
-<a href=#DD:ht.flux.C>this Definition</a>
+DD1 (<a href=#DD:ht.flux.C>this Definition</a>)
 </th>
 <th>
-<a href=#DD:ht.flux.P>this Definition</a>
+DD2 (<a href=#DD:ht.flux.P>this Definition</a>)
 </th>
 <th>
-<a href=#DD:htFusion>this Definition</a>
+DD3 (<a href=#DD:htFusion>this Definition</a>)
 </th>
 <th>
-<a href=#DD:htFusion>this Definition</a>
+DD4 (<a href=#DD:melt.frac>this Definition</a>)
 </th>
 <th>
-IM1
+IM1 (<a href=#T:eBalanceOnWtr>this Definition</a>)
 </th>
 <th>
-IM2
+IM2 (<a href=#T:eBalanceOnPCM>this Definition</a>)
 </th>
 <th>
-IM3
+IM3 (<a href=#T:heatEInWtr>this Definition</a>)
 </th>
 <th>
-IM4
+IM4 (<a href=#T:heatEInPCM>this Definition</a>)
 </th>
 </tr>
 <tr>
 <td>
-<a href=#T:t1ConsThermE>this Definition</a>
+T1 (<a href=#T:t1ConsThermE>this Definition</a>)
 </td>
 <td>
 
@@ -2362,7 +2812,7 @@ IM4
 </tr>
 <tr>
 <td>
-<a href=#T:t2SensHtE>this Definition</a>
+T2 (<a href=#T:t2SensHtE>this Definition</a>)
 </td>
 <td>
 
@@ -2406,7 +2856,7 @@ X
 </tr>
 <tr>
 <td>
-<a href=#T:t3LatHtE>this Definition</a>
+T3 (<a href=#T:t3LatHtE>this Definition</a>)
 </td>
 <td>
 
@@ -2450,7 +2900,7 @@ X
 </tr>
 <tr>
 <td>
-GD1
+GD1 (<a href=#T:nwtnCooling>this Definition</a>)
 </td>
 <td>
 
@@ -2494,7 +2944,7 @@ GD1
 </tr>
 <tr>
 <td>
-GD2
+GD2 (<a href=#T:rocTempSimp>this Definition</a>)
 </td>
 <td>
 X
@@ -2538,7 +2988,7 @@ X
 </tr>
 <tr>
 <td>
-<a href=#DD:ht.flux.C>this Definition</a>
+DD1 (<a href=#DD:ht.flux.C>this Definition</a>)
 </td>
 <td>
 
@@ -2582,7 +3032,7 @@ X
 </tr>
 <tr>
 <td>
-<a href=#DD:ht.flux.P>this Definition</a>
+DD2 (<a href=#DD:ht.flux.P>this Definition</a>)
 </td>
 <td>
 
@@ -2626,7 +3076,7 @@ X
 </tr>
 <tr>
 <td>
-<a href=#DD:htFusion>this Definition</a>
+DD3 (<a href=#DD:htFusion>this Definition</a>)
 </td>
 <td>
 
@@ -2670,7 +3120,7 @@ X
 </tr>
 <tr>
 <td>
-<a href=#DD:htFusion>this Definition</a>
+DD4 (<a href=#DD:melt.frac>this Definition</a>)
 </td>
 <td>
 
@@ -2714,7 +3164,7 @@ X
 </tr>
 <tr>
 <td>
-IM1
+IM1 (<a href=#T:eBalanceOnWtr>this Definition</a>)
 </td>
 <td>
 
@@ -2758,7 +3208,7 @@ X
 </tr>
 <tr>
 <td>
-IM2
+IM2 (<a href=#T:eBalanceOnPCM>this Definition</a>)
 </td>
 <td>
 
@@ -2802,7 +3252,7 @@ X
 </tr>
 <tr>
 <td>
-IM3
+IM3 (<a href=#T:heatEInWtr>this Definition</a>)
 </td>
 <td>
 
@@ -2846,7 +3296,7 @@ X
 </tr>
 <tr>
 <td>
-IM4
+IM4 (<a href=#T:heatEInPCM>this Definition</a>)
 </td>
 <td>
 
@@ -2900,30 +3350,57 @@ Traceability Matrix Showing the Connections Between Items of Different Sections
 
 </th>
 <th>
-IM1
+IM1 (<a href=#T:eBalanceOnWtr>this Definition</a>)
 </th>
 <th>
-IM2
+IM2 (<a href=#T:eBalanceOnPCM>this Definition</a>)
 </th>
 <th>
-IM3
+IM3 (<a href=#T:heatEInWtr>this Definition</a>)
 </th>
 <th>
-IM4
+IM4 (<a href=#T:heatEInPCM>this Definition</a>)
 </th>
 <th>
-<a href=#Sec:DataCons>this Section</a>
+Data Constraints (<a href=#Table:InpuVari>this Table</a>)
 </th>
 <th>
-R1
+R1 (<a href=#Sec:FuncRequ>this Section</a>)
 </th>
 <th>
-R2
+R2 (<a href=#Sec:FuncRequ>this Section</a>)
+</th>
+<th>
+R3 (<a href=#Sec:FuncRequ>this Section</a>)
+</th>
+<th>
+R4 (<a href=#Sec:FuncRequ>this Section</a>)
+</th>
+<th>
+R5 (<a href=#Sec:FuncRequ>this Section</a>)
+</th>
+<th>
+R6 (<a href=#Sec:FuncRequ>this Section</a>)
+</th>
+<th>
+R7 (<a href=#Sec:FuncRequ>this Section</a>)
+</th>
+<th>
+R8 (<a href=#Sec:FuncRequ>this Section</a>)
+</th>
+<th>
+R9 (<a href=#Sec:FuncRequ>this Section</a>)
+</th>
+<th>
+R10 (<a href=#Sec:FuncRequ>this Section</a>)
+</th>
+<th>
+R11 (<a href=#Sec:FuncRequ>this Section</a>)
 </th>
 </tr>
 <tr>
 <td>
-IM1
+IM1 (<a href=#T:eBalanceOnWtr>this Definition</a>)
 </td>
 <td>
 
@@ -2946,88 +3423,11 @@ X
 <td>
 X
 </td>
-</tr>
-<tr>
-<td>
-IM2
-</td>
-<td>
-X
-</td>
 <td>
 
 </td>
 <td>
 
-</td>
-<td>
-X
-</td>
-<td>
-
-</td>
-<td>
-X
-</td>
-<td>
-X
-</td>
-</tr>
-<tr>
-<td>
-IM3
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-X
-</td>
-<td>
-X
-</td>
-</tr>
-<tr>
-<td>
-IM4
-</td>
-<td>
-
-</td>
-<td>
-X
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-X
-</td>
-<td>
-X
-</td>
-</tr>
-<tr>
-<td>
-R1
 </td>
 <td>
 
@@ -3053,16 +3453,10 @@ R1
 </tr>
 <tr>
 <td>
-R2
+IM2 (<a href=#T:eBalanceOnPCM>this Definition</a>)
 </td>
 <td>
-
-</td>
-<td>
-
-</td>
-<td>
-
+X
 </td>
 <td>
 
@@ -3075,37 +3469,6 @@ X
 </td>
 <td>
 
-</td>
-</tr>
-<tr>
-<td>
-R3
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-X
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-</tr>
-<tr>
-<td>
-R4
 </td>
 <td>
 X
@@ -3121,20 +3484,6 @@ X
 </td>
 <td>
 
-</td>
-<td>
-X
-</td>
-<td>
-X
-</td>
-</tr>
-<tr>
-<td>
-R5
-</td>
-<td>
-X
 </td>
 <td>
 
@@ -3157,13 +3506,40 @@ X
 </tr>
 <tr>
 <td>
-R6
+IM3 (<a href=#T:heatEInWtr>this Definition</a>)
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
 </td>
 <td>
 
 </td>
 <td>
 X
+</td>
+<td>
+X
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
 </td>
 <td>
 
@@ -3183,39 +3559,7 @@ X
 </tr>
 <tr>
 <td>
-R7
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-X
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-</tr>
-<tr>
-<td>
-R8
-</td>
-<td>
-
-</td>
-<td>
-
+IM4 (<a href=#T:heatEInPCM>this Definition</a>)
 </td>
 <td>
 
@@ -3225,17 +3569,6 @@ X
 </td>
 <td>
 
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-</tr>
-<tr>
-<td>
-R9
 </td>
 <td>
 
@@ -3258,16 +3591,8 @@ X
 <td>
 
 </td>
-</tr>
-<tr>
-<td>
-R10
-</td>
 <td>
 
-</td>
-<td>
-X
 </td>
 <td>
 
@@ -3287,13 +3612,570 @@ X
 </tr>
 <tr>
 <td>
-R11
+R1 (<a href=#Sec:FuncRequ>this Section</a>)
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+</tr>
+<tr>
+<td>
+R2 (<a href=#Sec:FuncRequ>this Section</a>)
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
 </td>
 <td>
 
 </td>
 <td>
 X
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+</tr>
+<tr>
+<td>
+R3 (<a href=#Sec:FuncRequ>this Section</a>)
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+X
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+</tr>
+<tr>
+<td>
+R4 (<a href=#Sec:FuncRequ>this Section</a>)
+</td>
+<td>
+X
+</td>
+<td>
+X
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+X
+</td>
+<td>
+X
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+</tr>
+<tr>
+<td>
+R5 (<a href=#Sec:FuncRequ>this Section</a>)
+</td>
+<td>
+X
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+</tr>
+<tr>
+<td>
+R6 (<a href=#Sec:FuncRequ>this Section</a>)
+</td>
+<td>
+
+</td>
+<td>
+X
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+</tr>
+<tr>
+<td>
+R7 (<a href=#Sec:FuncRequ>this Section</a>)
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+X
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+</tr>
+<tr>
+<td>
+R8 (<a href=#Sec:FuncRequ>this Section</a>)
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+X
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+</tr>
+<tr>
+<td>
+R9 (<a href=#Sec:FuncRequ>this Section</a>)
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+X
+</td>
+<td>
+X
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+</tr>
+<tr>
+<td>
+R10 (<a href=#Sec:FuncRequ>this Section</a>)
+</td>
+<td>
+
+</td>
+<td>
+X
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+</tr>
+<tr>
+<td>
+R11 (<a href=#Sec:FuncRequ>this Section</a>)
+</td>
+<td>
+
+</td>
+<td>
+X
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
 </td>
 <td>
 
@@ -3323,66 +4205,66 @@ Traceability Matrix Showing the Connections Between Requirements and Instance Mo
 
 </th>
 <th>
-A1
+A1 (<a href=#Sec:Assu>this Section</a>)
 </th>
 <th>
-A2
+A2 (<a href=#Sec:Assu>this Section</a>)
 </th>
 <th>
-A3
+A3 (<a href=#Sec:Assu>this Section</a>)
 </th>
 <th>
-A4
+A4 (<a href=#Sec:Assu>this Section</a>)
 </th>
 <th>
-A5
+A5 (<a href=#Sec:Assu>this Section</a>)
 </th>
 <th>
-A6
+A6 (<a href=#Sec:Assu>this Section</a>)
 </th>
 <th>
-A7
+A7 (<a href=#Sec:Assu>this Section</a>)
 </th>
 <th>
-A8
+A8 (<a href=#Sec:Assu>this Section</a>)
 </th>
 <th>
-A9
+A9 (<a href=#Sec:Assu>this Section</a>)
 </th>
 <th>
-A10
+A10 (<a href=#Sec:Assu>this Section</a>)
 </th>
 <th>
-A11
+A11 (<a href=#Sec:Assu>this Section</a>)
 </th>
 <th>
-A12
+A12 (<a href=#Sec:Assu>this Section</a>)
 </th>
 <th>
-A13
+A13 (<a href=#Sec:Assu>this Section</a>)
 </th>
 <th>
-A14
+A14 (<a href=#Sec:Assu>this Section</a>)
 </th>
 <th>
-A15
+A15 (<a href=#Sec:Assu>this Section</a>)
 </th>
 <th>
-A16
+A16 (<a href=#Sec:Assu>this Section</a>)
 </th>
 <th>
-A17
+A17 (<a href=#Sec:Assu>this Section</a>)
 </th>
 <th>
-A18
+A18 (<a href=#Sec:Assu>this Section</a>)
 </th>
 <th>
-A19
+A19 (<a href=#Sec:Assu>this Section</a>)
 </th>
 </tr>
 <tr>
 <td>
-<a href=#T:t1ConsThermE>this Definition</a>
+T1 (<a href=#T:t1ConsThermE>this Definition</a>)
 </td>
 <td>
 X
@@ -3444,7 +4326,7 @@ X
 </tr>
 <tr>
 <td>
-<a href=#T:t2SensHtE>this Definition</a>
+T2 (<a href=#T:t2SensHtE>this Definition</a>)
 </td>
 <td>
 
@@ -3506,7 +4388,7 @@ X
 </tr>
 <tr>
 <td>
-<a href=#T:t3LatHtE>this Definition</a>
+T3 (<a href=#T:t3LatHtE>this Definition</a>)
 </td>
 <td>
 
@@ -3568,7 +4450,7 @@ X
 </tr>
 <tr>
 <td>
-GD1
+GD1 (<a href=#T:nwtnCooling>this Definition</a>)
 </td>
 <td>
 
@@ -3630,7 +4512,7 @@ X
 </tr>
 <tr>
 <td>
-GD2
+GD2 (<a href=#T:rocTempSimp>this Definition</a>)
 </td>
 <td>
 
@@ -3692,7 +4574,7 @@ X
 </tr>
 <tr>
 <td>
-<a href=#DD:ht.flux.C>this Definition</a>
+DD1 (<a href=#DD:ht.flux.C>this Definition</a>)
 </td>
 <td>
 
@@ -3754,7 +4636,7 @@ X
 </tr>
 <tr>
 <td>
-<a href=#DD:ht.flux.P>this Definition</a>
+DD2 (<a href=#DD:ht.flux.P>this Definition</a>)
 </td>
 <td>
 
@@ -3816,7 +4698,7 @@ X
 </tr>
 <tr>
 <td>
-<a href=#DD:htFusion>this Definition</a>
+DD3 (<a href=#DD:htFusion>this Definition</a>)
 </td>
 <td>
 
@@ -3878,7 +4760,7 @@ X
 </tr>
 <tr>
 <td>
-<a href=#DD:htFusion>this Definition</a>
+DD4 (<a href=#DD:melt.frac>this Definition</a>)
 </td>
 <td>
 
@@ -3940,7 +4822,7 @@ X
 </tr>
 <tr>
 <td>
-IM1
+IM1 (<a href=#T:eBalanceOnWtr>this Definition</a>)
 </td>
 <td>
 
@@ -4002,7 +4884,7 @@ X
 </tr>
 <tr>
 <td>
-IM2
+IM2 (<a href=#T:eBalanceOnPCM>this Definition</a>)
 </td>
 <td>
 
@@ -4064,7 +4946,7 @@ X
 </tr>
 <tr>
 <td>
-IM3
+IM3 (<a href=#T:heatEInWtr>this Definition</a>)
 </td>
 <td>
 
@@ -4126,7 +5008,7 @@ X
 </tr>
 <tr>
 <td>
-IM4
+IM4 (<a href=#T:heatEInPCM>this Definition</a>)
 </td>
 <td>
 
@@ -4188,7 +5070,7 @@ X
 </tr>
 <tr>
 <td>
-LC1
+LC1 (<a href=#Sec:LikeChan>this Section</a>)
 </td>
 <td>
 
@@ -4250,7 +5132,7 @@ X
 </tr>
 <tr>
 <td>
-LC2
+LC2 (<a href=#Sec:LikeChan>this Section</a>)
 </td>
 <td>
 
@@ -4312,7 +5194,7 @@ X
 </tr>
 <tr>
 <td>
-LC3
+LC3 (<a href=#Sec:LikeChan>this Section</a>)
 </td>
 <td>
 
@@ -4374,7 +5256,7 @@ X
 </tr>
 <tr>
 <td>
-LC4
+LC4 (<a href=#Sec:LikeChan>this Section</a>)
 </td>
 <td>
 
@@ -4436,7 +5318,7 @@ X
 </tr>
 <tr>
 <td>
-LC5
+LC5 (<a href=#Sec:LikeChan>this Section</a>)
 </td>
 <td>
 
@@ -4498,7 +5380,7 @@ X
 </tr>
 <tr>
 <td>
-LC6
+LC6 (<a href=#Sec:LikeChan>this Section</a>)
 </td>
 <td>
 
@@ -4581,6 +5463,316 @@ Traceability Graph Showing the Connections Between Items of Different Sections
 Traceability Graph Showing the Connections Between Requirements, Instance Models, and Data Constraints
 </p>
 </a>
+</div>
+</a>
+<a id="Sec:ValuOfAuxiCons">
+<div class="section">
+<h2>
+Values Of Auxiliary Constants
+</h2>
+<p class="paragraph">
+This section contains the standard values that are used for calculations in SWHS.
+</p>
+<a id="Table:AuxiCons">
+<table class="table">
+<tr>
+<th>
+Symbol
+</th>
+<th>
+Description
+</th>
+<th>
+Value
+</th>
+<th>
+Unit
+</th>
+</tr>
+<tr>
+<td>
+L<sub>min</sub>
+</td>
+<td>
+minimum length of tank
+</td>
+<td>
+0.1
+</td>
+<td>
+m
+</td>
+</tr>
+<tr>
+<td>
+L<sub>max</sub>
+</td>
+<td>
+maximum length of tank
+</td>
+<td>
+50
+</td>
+<td>
+m
+</td>
+</tr>
+<tr>
+<td>
+h<sub>min</sub>
+</td>
+<td>
+minimum convective heat transfer coefficient
+</td>
+<td>
+0.001
+</td>
+<td>
+W/(m<sup>2</sup>&deg;C)
+</td>
+</tr>
+<tr>
+<td>
+&rho;<sub>P</sub><sup>min</sup>
+</td>
+<td>
+minimum density of PCM
+</td>
+<td>
+500
+</td>
+<td>
+kg/(m<sup>3</sup>)
+</td>
+</tr>
+<tr>
+<td>
+&rho;<sub>P</sub><sup>max</sup>
+</td>
+<td>
+maximum density of PCM
+</td>
+<td>
+20000
+</td>
+<td>
+kg/(m<sup>3</sup>)
+</td>
+</tr>
+<tr>
+<td>
+&rho;<sub>W</sub><sup>min</sup>
+</td>
+<td>
+minimum density of water
+</td>
+<td>
+950
+</td>
+<td>
+kg/(m<sup>3</sup>)
+</td>
+</tr>
+<tr>
+<td>
+&rho;<sub>W</sub><sup>max</sup>
+</td>
+<td>
+maximum density of water
+</td>
+<td>
+1000
+</td>
+<td>
+kg/(m<sup>3</sup>)
+</td>
+</tr>
+<tr>
+<td>
+C<sub>P</sub><sup>S</sup><sub>min</sub>
+</td>
+<td>
+minimum specific heat capacity of PCM as a solid
+</td>
+<td>
+100
+</td>
+<td>
+J/(kg&deg;C)
+</td>
+</tr>
+<tr>
+<td>
+C<sub>P</sub><sup>S</sup><sub>max</sub>
+</td>
+<td>
+maximum specific heat capacity of PCM as a solid
+</td>
+<td>
+4000
+</td>
+<td>
+J/(kg&deg;C)
+</td>
+</tr>
+<tr>
+<td>
+C<sub>P</sub><sup>L</sup><sub>min</sub>
+</td>
+<td>
+minimum specific heat capacity of PCM as a liquid
+</td>
+<td>
+100
+</td>
+<td>
+J/(kg&deg;C)
+</td>
+</tr>
+<tr>
+<td>
+C<sub>P</sub><sup>L</sup><sub>max</sub>
+</td>
+<td>
+maximum specific heat capacity of PCM as a liquid
+</td>
+<td>
+5000
+</td>
+<td>
+J/(kg&deg;C)
+</td>
+</tr>
+<tr>
+<td>
+C<sub>W</sub><sup>min</sup>
+</td>
+<td>
+minimum specific heat capacity of water
+</td>
+<td>
+4170
+</td>
+<td>
+J/(kg&deg;C)
+</td>
+</tr>
+<tr>
+<td>
+C<sub>W</sub><sup>max</sup>
+</td>
+<td>
+maximum specific heat capacity of water
+</td>
+<td>
+4210
+</td>
+<td>
+J/(kg&deg;C)
+</td>
+</tr>
+<tr>
+<td>
+h<sub>C</sub><sup>min</sup>
+</td>
+<td>
+minimum convective heat transfer coefficient between coil and water
+</td>
+<td>
+10
+</td>
+<td>
+W/(m<sup>2</sup>&deg;C)
+</td>
+</tr>
+<tr>
+<td>
+h<sub>C</sub><sup>max</sup>
+</td>
+<td>
+maximum convective heat transfer coefficient between coil and water
+</td>
+<td>
+10000
+</td>
+<td>
+W/(m<sup>2</sup>&deg;C)
+</td>
+</tr>
+<tr>
+<td>
+h<sub>P</sub><sup>min</sup>
+</td>
+<td>
+minimum convective heat transfer coefficient between PCM and water
+</td>
+<td>
+10
+</td>
+<td>
+W/(m<sup>2</sup>&deg;C)
+</td>
+</tr>
+<tr>
+<td>
+h<sub>P</sub><sup>max</sup>
+</td>
+<td>
+maximum convective heat transfer coefficient between PCM and water
+</td>
+<td>
+10000
+</td>
+<td>
+W/(m<sup>2</sup>&deg;C)
+</td>
+</tr>
+<tr>
+<td>
+t<sub>final</sub><sup>max</sup>
+</td>
+<td>
+maximum final time
+</td>
+<td>
+86400
+</td>
+<td>
+s
+</td>
+</tr>
+</table>
+<p class="caption">
+Auxiliary Constants
+</p>
+</a>
+</div>
+</a>
+<a id="Sec:Refe">
+<div class="section">
+<h2>
+References
+</h2>
+<div class="list">
+<p>
+[1]: J. Frederick Bueche. Introduction to Physics for Scientists. McGraw Hill, United States, fourth edition edition, 1986.
+</p>
+<p>
+[2]: F. P. Incropera, D. P. Dewitt, T. L. Bergman, and A. S. Lavine. Fundamentals of Heat and Mass Transfer. John Wiley and Sons, United States, sixth edition edition, 2007.
+</p>
+<p>
+[3]: Nirmitha Koothoor. A document drive approach to certifying scientific computing software. Master's thesis, McMaster University, Hamilton, Ontario, Canada, 2013.
+</p>
+<p>
+[4]: Marilyn Lightstone. Derivation of tank/pcm model. Personal Notes, 2012.
+</p>
+<p>
+[5]: David L. Parnas and P.C. Clements. A rational design process: How and why to fake it. IEEE Transactions on Software Engineering, 12&quot;2&quot;:251-257, February 1986.
+</p>
+<p>
+[6]: W. Spencer Smith and Lei Lai. A new requirements template for scientific computing. In J. Ralyt&eacute;, P. Agerfalk, and N. Kraiem, editors, Proceedings of the First International Workshop on Situational Requirements Engineering Processes - Methods, Techniques and Tools to Support Situation-Specific Requirements Engineering Processes, SREP'05, pages 107-121, Paris, France, 2005. In conjunction with 13th IEEE International Requirements Engineering Conference.
+</p>
+</div>
 </div>
 </a>
 </body>

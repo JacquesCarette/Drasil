@@ -7,8 +7,11 @@ module Language.Drasil.Space where
 data Space where
   Integer :: Space
   Rational :: Space
+  Real :: Space
+  Natural :: Space
   Boolean :: Space
   Char :: Space
   String :: Space
+  Radians :: Space
   Vect :: Space -> Space
   Obj :: String -> Space

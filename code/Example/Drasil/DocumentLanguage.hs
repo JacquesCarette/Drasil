@@ -11,11 +11,11 @@ import Language.Drasil
 
 import Control.Lens ((^.))
 
-import Drasil.TableOfUnits (table_of_units)
-import Drasil.TableOfSymbols (table)
-import Drasil.TableOfAbbAndAcronyms (table_of_abb_and_acronyms)
+import Drasil.Sections.TableOfUnits (table_of_units)
+import Drasil.Sections.TableOfSymbols (table)
+import Drasil.Sections.TableOfAbbAndAcronyms (table_of_abb_and_acronyms)
 import qualified Drasil.SRS as SRS
-import qualified Drasil.Introduction as Intro
+import qualified Drasil.Sections.Introduction as Intro
 
 import Data.Drasil.Concepts.Documentation (refmat, tOfSymb)
 
@@ -25,26 +25,6 @@ import Prelude hiding (id)
 
 type System = Sentence
 type DocKind = Sentence
-
--- | Data structure for holding all of the requisite information about a system
--- to be used in artefact generation
-data SystemInformation where
---FIXME:
---There should be a way to remove redundant "Quantity" constraint.
--- I'm thinking for getting concepts that are also quantities, we could
--- use a lookup of some sort from their internal (Drasil) ids.
--- FIXME: b shouldn't need to be a NounPhrase, this will be fixed after
--- NP is built into NamedIdea.
- SI :: (NamedIdea a, NamedIdea b, HasName c, Unit d,
-  Quantity e, Ord e, Ord f, Quantity f, Concept f, NamedIdea g) => {
-  _sys :: a,
-  _kind :: b,
-  _authors :: [c],
-  _units :: [d],
-  _quants :: [e],
-  _concepts :: [f],
-  _namedIdeas :: [g]
-  } -> SystemInformation
 
 -- anything with 'Verb' in it should eventually go
 -- | Reference subsections
@@ -116,17 +96,18 @@ data LFunc where
   Defn :: LFunc
   TermExcept :: Concept c => [c] -> LFunc
   DefnExcept :: Concept c => [c] -> LFunc
+  TAD :: LFunc --Term and Definition
 
 type DocDesc = [DocSection]
 
 -- | Creates a document from a document description and system information
 mkDoc :: DocDesc -> SystemInformation -> Document
-mkDoc l si@(SI sys kind authors _ _ _ _) = Document 
+mkDoc l si@(SI sys kind authors _ _ _ _ _ _ _ _ _) = Document 
   (kind `for` sys) (manyNames authors) (mkSections si l)
 
 -- | Similar to 'makeDoc', but for when we want to use the short form for titles.  
 mkDoc' :: DocDesc -> (NWrapper -> NWrapper -> Sentence) -> SystemInformation -> Document
-mkDoc' l comb si@(SI sys kind authors _ _ _ _) = Document 
+mkDoc' l comb si@(SI sys kind authors _ _ _ _ _ _ _ _ _) = Document 
   ((nw kind) `comb` (nw sys)) (manyNames authors) (mkSections si l)
 
 -- | Helper for creating the document sections
@@ -144,13 +125,13 @@ mkRefSec _  (RefVerb s) = s
 mkRefSec si (RefProg c l) = section (titleize refmat) [c] (foldr (mkSubRef si) [] l)
   where
     mkSubRef :: SystemInformation -> RefTab -> [Section] -> [Section]
-    mkSubRef (SI _ _ _ u _ _ _)  TUnits   l' = table_of_units u (tuIntro defaultTUI) : l'
-    mkSubRef (SI _ _ _ u _ _ _) (TUnits' con) l' = table_of_units u (tuIntro con) : l'
-    mkSubRef (SI _ _ _ _ v _ _) (TSymb con) l' = 
+    mkSubRef (SI _ _ _ u _ _ _ _ _ _ _ _)  TUnits   l' = table_of_units u (tuIntro defaultTUI) : l'
+    mkSubRef (SI _ _ _ u _ _ _ _ _ _ _ _) (TUnits' con) l' = table_of_units u (tuIntro con) : l'
+    mkSubRef (SI _ _ _ _ v _ _ _ _ _ _ _) (TSymb con) l' = 
       (Section (titleize tOfSymb) 
       (map Con [tsIntro con, (table (sort v) at_start)])) : l'
-    mkSubRef (SI _ _ _ _ _ cccs _) (TSymb' f con) l' = (mkTSymb cccs f con) : l'
-    mkSubRef (SI _ _ _ _ v cccs n) TAandA l' = (table_of_abb_and_acronyms $ 
+    mkSubRef (SI _ _ _ _ _ cccs _ _ _ _ _ _) (TSymb' f con) l' = (mkTSymb cccs f con) : l'
+    mkSubRef (SI _ _ _ _ v cccs n _ _ _ _ _) TAandA l' = (table_of_abb_and_acronyms $ 
       filter (isJust . getA) (map nw v ++ map nw cccs ++ map nw n)) : l'
     mkSubRef _              (TVerb s) l' = s : l'
 
@@ -165,6 +146,7 @@ mkTSymb v f c = Section (titleize tOfSymb) (map Con [tsIntro c, table (sort v) (
           --actually care about the chunks themselves in LFunc.
         lf (DefnExcept cs) = (\x -> if (x ^. id) `elem` (map (^.id) cs) then
           (at_start x) else (x ^. defn))
+        lf TAD = (\tDef -> titleize tDef :+: S ":" +:+ (tDef ^. defn))
 
 -- | table of symbols constructor
 tsymb, tsymb' :: [TSIntro] -> RefTab
@@ -241,9 +223,9 @@ mkIntroSec si (IntroProg probIntro progDefn l) =
     mkSubIntro :: SystemInformation -> IntroSub -> [Section] -> [Section]
     mkSubIntro _ (IVerb s) l' = s : l'
     mkSubIntro _ (IPurpose intro) l' = Intro.purposeOfDoc intro : l'
-    mkSubIntro (SI sys _ _ _ _ _ _) (IScope main intendedPurp) l' = 
+    mkSubIntro (SI sys _ _ _ _ _ _ _ _ _ _ _) (IScope main intendedPurp) l' = 
       Intro.scopeOfRequirements main sys intendedPurp : l'
-    mkSubIntro (SI sys _ _ _ _ _ _) (IChar know understand appStandd) l' =
+    mkSubIntro (SI sys _ _ _ _ _ _ _ _ _ _ _) (IChar know understand appStandd) l' =
       Intro.charIntRdrF know understand sys appStandd (SRS.userChar [] []) : l'
     mkSubIntro _ (IOrgSec i b s t) l' = Intro.orgSec i b s t : l'
     -- FIXME: s should be "looked up" using "b" once we have all sections being generated

@@ -4,7 +4,7 @@ module Language.Drasil.Code.Imperative.AST (
     Label,
     -- ** Statement Structure
     Body, Block(..),
-    Statement(..), IOSt(..), IOType(..),
+    Statement(..), IOSt(..), IOType(..), Complex(..),
     Pattern(..), StatePattern(..), StratPattern(..), Strategies(..), ObserverPattern(..),
     Assignment(..), Declaration(..), Conditional(..),
     Iteration(..), Exception(..), Jump(..), Return(..), Value(..), Comment(..),
@@ -19,7 +19,7 @@ module Language.Drasil.Code.Imperative.AST (
     -- * Convenience functions
     bool,int,float,char,string,infile,outfile,listT,obj,
     methodType,methodTypeVoid,
-    block,defaultValue,
+    block,defaultValue,defaultValue',
     true,false,
     var, arg, self, svToVar,
     pubClass,privClass,privMVar,pubMVar,pubGVar,privMethod,pubMethod,constructor,
@@ -29,19 +29,20 @@ module Language.Drasil.Code.Imperative.AST (
     (&=),(&.=),(&=.),(&+=),(&-=),(&++),(&~-),(&.+=),(&.-=),(&.++),(&.~-),
     ($->),($.),($:),
     log,exp,alwaysDel,neverDel,
-    assign,at,binExpr,break,cast,constDecDef,extends,for,forEach,ifCond,ifExists,listDec,listDecValues,listDec',
+    assign,at,binExpr,break,cast,cast',constDecDef,extends,for,forEach,ifCond,ifExists,listDec,listDecValues,listDec',
     listOf,litBool,litChar,litFloat,litInt,litObj,litObj',litString,noElse,noParent,objDecDef,oneLiner,
     param,params,paramToVar,
     print,printLn,printStr,printStrLn,
     printFile,printFileLn,printFileStr,printFileStrLn,
     print',printLn',printStr',printStrLn',
-    getInput,getFileInput,
+    getInput,getFileInput,getFileInputAll,
     openFileR, openFileW, closeFile,
     return,returnVar,switch,throw,tryCatch,typ,varDec,varDecDef,while,zipBlockWith,zipBlockWith4,
     addComments,comment,commentDelimit,endCommentDelimit,prefixFirstBlock,
     getterName,setterName,convertToClass,convertToMethod,bodyReplace,funcReplace,valListReplace,
     objDecNew,objDecNewVoid,objDecNew',objDecNewVoid',objMethodCall, objMethodCallVoid, 
-    listSize, listAccess, listAppend,valStmt,funcApp,funcApp',continue,
+    listSize, listAccess, listAppend, listSlice, stringSplit,
+    valStmt,funcApp,funcApp',func,continue,
     toAbsCode, getClassName, buildModule, moduleName, libs, classes,
 ) where
 
@@ -65,6 +66,7 @@ data Statement = AssignState Assignment | DeclState Declaration
                | ExceptState Exception
                | PatternState Pattern           --deals with special design patterns
                | IOState IOSt
+               | ComplexState Complex
                   deriving Show
 data IOSt = OpenFile Value Value Mode
           | CloseFile Value
@@ -93,6 +95,9 @@ data Strategies = Strats {strats :: [(Label, Body)], returnVal :: Maybe Value} d
 data ObserverPattern = InitObserverList {observerType :: StateType, observers :: [Value]}   
                      | AddObserver {observerType :: StateType, observer :: Value}
                      | NotifyObservers {observerType :: StateType, receiveFunc :: Label, notifyParams :: [Value]} deriving Show
+                     
+data Complex = ReadAll Value Value  -- ReadAll File String[][]
+                 deriving Show
 data Assignment = Assign Value Value
                 | PlusEquals Value Value
                 | PlusPlus Value deriving Show
@@ -147,10 +152,14 @@ data Function = Func {funcName :: Label, funcParams :: [Value]}
               | ListAdd Value Value     --ListAdd index value
               | ListSet Value Value     --ListSet index value
               | ListPopulate Value StateType --ListPopulate size type : populates the list with a default value for its type. Ignored in languages where it's unnecessary in order to use the ListSet function.
+              | ListSlice (Maybe Value) (Maybe Value) (Maybe Value)   
+                  --ListSlice start stop step
               | ListAppend Value
               | IterBegin | IterEnd
               | Floor | Ceiling
-              | FileOpen String
+              | StringSplit String  --StringSplit delimiter
+              
+             
     deriving (Eq, Show)
 data Comment = Comment Label | CommentDelimit Label Int
     deriving (Eq, Show)
@@ -242,6 +251,10 @@ defaultValue (String) = litString ""
 defaultValue (FileType _) = error $
   "defaultValue undefined for (File _) pattern. See " ++
   "Language.Drasil.Code.Imperative.AST"
+  
+defaultValue' :: StateType -> Value
+defaultValue' (Base b) = defaultValue b
+defaultValue' _ = error "defaultValue' undefined for type"
 
 true :: Value
 true = Lit $ LitBool True
@@ -444,8 +457,11 @@ binExpr v1 op v2 = Expr $ BinaryExpr v1 op v2
 break :: Statement
 break = JumpState Break
 
-cast :: BaseType -> Function
-cast = Cast . Base
+cast :: StateType -> Function
+cast = Cast
+
+cast' :: BaseType -> Function
+cast' = Cast . Base
 
 constDecDef :: Label -> Literal -> Statement
 constDecDef n l = DeclState $ ConstDecDef n l
@@ -529,6 +545,12 @@ listAccess = ListAccess
 listAppend :: Value -> Function
 listAppend = ListAppend
 
+listSlice :: (Maybe Value) -> (Maybe Value) -> (Maybe Value) -> Function
+listSlice = ListSlice
+
+stringSplit :: String -> Function
+stringSplit = StringSplit
+
 oneLiner :: Statement -> Body
 oneLiner s = [Block [s]]
 
@@ -589,6 +611,9 @@ getInput s v = IOState $ In Console s v
 getFileInput :: Value -> StateType -> Value -> Statement
 getFileInput f s v = IOState $ In (File f) s v
 
+getFileInputAll :: Value -> Value -> Statement
+getFileInputAll f v = ComplexState $ ReadAll f v
+
 openFileR :: Value -> Value -> Statement
 openFileR f n = IOState (OpenFile f n Read)
 
@@ -648,6 +673,9 @@ funcApp lib lbl vs = FuncApp (Just lib) lbl vs
 
 funcApp' :: Label -> [Value] -> Value
 funcApp' lbl vs = FuncApp Nothing lbl vs
+
+func :: Label -> [Value] -> Function
+func = Func
 
 continue :: Statement
 continue = JumpState Continue
@@ -772,7 +800,7 @@ valueReplace old new v | v == old  = new
 valueReplace' :: Value -> Value -> Value -> Value
 valueReplace' old new (Expr e) = Expr $ exprReplace old new e
 valueReplace' old new (FuncApp lib lbl vals) = FuncApp lib lbl $ valListReplace old new vals
-valueReplace' old new (ObjAccess val func) = ObjAccess (valueReplace old new val) (funcReplace old new func)
+valueReplace' old new (ObjAccess val f) = ObjAccess (valueReplace old new val) (funcReplace old new f)
 valueReplace' old new (StateObj l st vals) = StateObj l st $ valListReplace old new vals
 valueReplace' old new (ObjVar val lbl) = ObjVar (valueReplace old new val) lbl
 valueReplace' _ _ v = v

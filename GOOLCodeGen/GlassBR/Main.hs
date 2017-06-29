@@ -9,11 +9,12 @@ import Modules.Interpolation
 import Modules.Calculations
 import Modules.OutputFormat
 import Modules.Control
+import Modules.ReadTable
 
 main :: IO()
 main = do
   genCode pythonLabel
-  --genCode goolLabel
+  genCode goolLabel
 
 genCode :: String -> IO()
 genCode lang = createCodeFiles $ makeCode 
@@ -23,5 +24,5 @@ genCode lang = createCodeFiles $ makeCode
   (toAbsCode "GlassBR" classes)
 
 classes :: [Module]
-classes = [inputParameters, derivedValues, inputFormat, inputConstraints, interpolation,   calculations, outputFormat, control]
+classes = [inputParameters, derivedValues, inputFormat, inputConstraints, interpolation,   calculations, outputFormat, control, readTable]
 

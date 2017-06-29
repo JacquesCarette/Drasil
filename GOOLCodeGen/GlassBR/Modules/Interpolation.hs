@@ -35,7 +35,7 @@ matrixCol_func :: FunctionDecl
 matrixCol_func = pubMethod (methodType $ listT float) "matrixCol" [p_mat, p_c] 
     [ 
       block [
-        listDec' l_col float 100,
+        listDec' l_col float 0,
         for (varDecDef l_i int (litInt 0)) (v_i ?< v_mat$.listSize) ((&++) v_i) 
           (oneLiner (valStmt $ v_col$.(listAppend (v_mat$.(listAccess v_i)$.(listAccess v_c))))) ,
         return v_col

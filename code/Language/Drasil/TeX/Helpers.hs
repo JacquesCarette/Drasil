@@ -175,8 +175,6 @@ fraction n d = command0 "frac" <> br n <> br d
 hyperConfig :: D
 hyperConfig = command "hypersetup" hyperSettings
 
-
-
 useTikz :: D
 useTikz = usepackage "luatex85" $+$ (pure $ text "\\def") <>
   command "pgfsysdriver" "pgfsys-pdftex.def" $+$
@@ -184,7 +182,7 @@ useTikz = usepackage "luatex85" $+$ (pure $ text "\\def") <>
   usepackage "tikz" $+$ command "usetikzlibrary" "arrows.meta" $+$
   command "usetikzlibrary" "graphs" $+$ command "usetikzlibrary" "graphdrawing" $+$
   command "usegdlibrary" "layered"
-
+  
 -----------------------------------------------------------------------------
 -- This 'belongs' in Monad, but it would make Monad depend on Helpers, which depends
 -- on Monad...
@@ -192,3 +190,10 @@ useTikz = usepackage "luatex85" $+$ (pure $ text "\\def") <>
 -- toEqn is special; it switches to Math, but inserts an equation environment
 toEqn :: D -> D
 toEqn (PL g) = equation $ PL (\_ -> g Math)
+
+-----------------------------------------------------------------------------
+-- Helper(s) for String-Printing in TeX where it varies from HTML/Plaintext
+
+paren, sqbrac :: String -> String
+paren x = "\\left(" ++ x ++ "\\right)"
+sqbrac x = "\\left[" ++ x ++ "\\right]"

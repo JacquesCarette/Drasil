@@ -2,11 +2,14 @@
 module Language.Drasil (
   -- Output.Formats
     DocType(SRS,MG,MIS,LPM,Website)
+  -- SystemInformation
+  , SystemInformation(..), Block(..)
   -- Recipe
   , Recipe(..)
   -- Expr
   , Expr(..), Relation, UFunc(..), BiFunc(..), Bound(..), DerivType(..)
-  , log, abs, sin, cos, tan, sec, csc, cot, SymbolMap, symbolMap
+  , log, abs, sin, cos, tan, sec, csc, cot, exp, SymbolMap, symbolMap
+  , summation, product, cross
   -- all the stuff from Unicode
   , Greek(..), Special(..)
   -- Unit
@@ -15,11 +18,12 @@ module Language.Drasil (
   , (^:), (/:), (*:), new_unit
   -- Chunk
   , Chunk(..), VarChunk(..), ConceptChunk
-  , makeVC, makeVCObj, vcFromNI, SymbolForm(..)
-  , dcc, dccWDS, cv, ccStSS, dcc', vc', ccs, cc
-  , Quantity(..), ConVar(..), cvR
+  , makeVC, vc, makeVCObj, SymbolForm(..)
+  , dcc, dccWDS, cv, dcc', vc', ccs, cc, cc'
+  , Quantity(..), ConVar(..), cvR, cvRs
   , Concept(..)
   , CommonIdea(..)
+  , UncertainQuantity(..), UncertQ, uq, uqc, typVal, cCnptfromUQ
   --, commonidea, CI
   , commonIdea, CI, commonIdea', commonIdea''
   -- Chunk.NamedIdea
@@ -27,14 +31,15 @@ module Language.Drasil (
   , compoundterm, for, for', for'', of_, of_', of_'', of__, of'', compoundNC, compoundNC'
   , compoundNC'', compoundNC''', npnc', with, with', and_, and_', andRT, aNP, the, a_, theCustom
   -- Chunk.Constrained
-  , Constrained(..)
+  , Constrained(..), ConstrainedChunk(..), Constraint(..), ConstrConcept(..)
+  , physc, sfwrc, constrained, cuc, cvc, constrained', cuc'
   -- Chunk.Eq
-  , QDefinition(..), fromEqn, fromEqn', getVC
+  , QDefinition(..), fromEqn, fromEqn', getVC, equat
   -- Chunk.Unital
   , UnitalChunk(..), makeUCWDS, ucFromCV
-  , uc, uc'
+  , uc, uc', ucs, ucs', ucsWS
   -- Chunk.Unitary
-  , Unitary(..), UnitaryChunk, unitary, unitary'
+  , Unitary(..), UnitaryChunk, unitary
   -- Chunk.Relation
   , NamedRelation, makeNR, RelationConcept, makeRC
   -- Chunk.Method
@@ -55,7 +60,8 @@ module Language.Drasil (
   , UWrapper, uw, ucw, UCWrapper
   -- Spec
   , USymb(..), Sentence(..), Accent(..), sParen, sSqBr
-  , (+:+), (+:+.), (+.), sC, (+:), semiCol
+  , (+:+), (+:+.), (+.), sC, (+:), semiCol, sParenDash
+  , sDash
   -- NounPhrase
   , NounPhrase(..), NP, pn, pn', pn'', pn''', pnIrr, cn, cn', cn'', cn''', cnIP
   , cnIrr, cnIES, cnICES, cnIS, cnUM, nounPhrase, nounPhrase', at_start, at_start'
@@ -71,7 +77,7 @@ module Language.Drasil (
   -- Space
   , Space(..)
   -- Symbol
-  , Symbol(..), sub, sup, vec, hat
+  , Symbol(..), sub, sup, vec, hat, prime
   -- SymbolAlphabet
   , cA, cB, cC, cD, cE, cF, cG, cH, cI, cJ, cK, cL, cM, cN, cO, cP, cQ, cR, cS, cT, cU, cV, cW, cX, cY, cZ
   , lA, lB, lC, lD, lE, lF, lG, lH, lI, lJ, lK, lL, lM, lN, lO, lP, lQ, lR, lS, lT, lU, lV, lW, lX, lY, lZ
@@ -84,11 +90,15 @@ module Language.Drasil (
   -- People
   , People, Person, person, HasName, name, manyNames, person', personWM
   , personWM', mononym
+  -- CodeSpec
+  , CodeSpec, codeSpec
 ) where
 
-import Prelude hiding (log, abs, sin, cos, tan, id, return, print, break)
+import Prelude hiding (log, sin, cos, tan, id, return, print, break, exp, product)
+import Language.Drasil.SystemInformation
 import Language.Drasil.Expr (Expr(..), Relation, UFunc(..), BiFunc(..), 
-               Bound(..),DerivType(..), log, abs, sin, cos, tan, sec, csc, cot)
+          Bound(..),DerivType(..), log, sin, cos, tan, sec, csc, cot, exp,
+          summation, product, cross)
 import Language.Drasil.Expr.Extract (SymbolMap, symbolMap)
 import Language.Drasil.Output.Formats (DocType(SRS,MG,MIS,LPM,Website))
 import Language.Drasil.Document (LayoutObj(..), Document(..), DType(..), 
@@ -103,11 +113,15 @@ import Language.Drasil.Chunk.SymbolForm
 import Language.Drasil.Chunk.CommonIdea
 import Language.Drasil.Chunk.VarChunk
 import Language.Drasil.Chunk.Quantity
+import Language.Drasil.Chunk.UncertainQuantity
 import Language.Drasil.Chunk.ConVar
-import Language.Drasil.Chunk.Eq (QDefinition(..), fromEqn, fromEqn', getVC)
-import Language.Drasil.Chunk.Constrained --INSTANCES TO BE IMPLEMENTED SOON
+import Language.Drasil.Chunk.Eq (QDefinition(..), fromEqn, fromEqn', getVC, equat)
+import Language.Drasil.Chunk.Constrained (Constrained(..), ConstrainedChunk(..)
+                                  , Constraint(..), ConstrConcept(..)
+                                  , physc, sfwrc, constrained
+                                  , cuc, cvc, constrained', cuc' )
 import Language.Drasil.Chunk.Unital(UnitalChunk(..), makeUCWDS, ucFromCV
-                                  , uc, uc')
+                                  , uc, uc', ucs, ucs', ucsWS)
 import Language.Drasil.Chunk.Unitary
 import Language.Drasil.Chunk.Relation(NamedRelation, makeNR, RelationConcept, makeRC)
 import Language.Drasil.Chunk.Req
@@ -122,12 +136,14 @@ import Language.Drasil.NounPhrase hiding (at_start, at_start', titleize
                                           , titleize', phrase, plural)
 import Language.Drasil.Space (Space(..))
 import Language.Drasil.Spec (USymb(..), Sentence(..), Accent(..), 
-                              sParen, sSqBr, sC, (+:+), (+:+.), (+.), (+:), semiCol)
+                              sParen, sSqBr, sC, (+:+), (+:+.), (+.), (+:),
+                              semiCol, sParenDash, sDash)
 import Language.Drasil.Reference (makeRef)
-import Language.Drasil.Symbol (Symbol(..), sub, sup, vec, hat)
+import Language.Drasil.Symbol (Symbol(..), sub, sup, vec, hat, prime)
 import Language.Drasil.SymbolAlphabet
 import Language.Drasil.Misc -- all of it
 import Language.Drasil.Printing.Helpers (capitalize, paren, sqbrac)
 import Language.Drasil.Generate
 import Language.Drasil.People (People, Person, person, HasName(..), manyNames
                                ,person', personWM, personWM', mononym)
+import Language.Drasil.CodeSpec                             

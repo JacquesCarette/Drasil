@@ -5,6 +5,7 @@ import Data.List (intersperse)
 import Text.PrettyPrint (text, (<+>))
 import qualified Text.PrettyPrint as TP
 import Data.Maybe (isNothing, fromJust)
+import Numeric (showFFloat)
 
 import Control.Applicative (pure)
 
@@ -14,7 +15,7 @@ import qualified Language.Drasil.Output.Formats as A
 import Language.Drasil.Spec (USymb(..), RefType(..))
 import Language.Drasil.Config (lpmTeXParams, colAwidth, colBwidth,
               LPMParams(..))
-import Language.Drasil.Printing.Helpers
+import Language.Drasil.Printing.Helpers hiding (paren, sqbrac)
 import Language.Drasil.TeX.Helpers
 import Language.Drasil.TeX.Monad
 import Language.Drasil.TeX.Preamble
@@ -103,6 +104,7 @@ symbol (Atop f s) = sFormat f s
 sFormat :: Decoration -> Symbol -> String
 sFormat Hat    s = "\\hat{" ++ symbol s ++ "}"
 sFormat Vector s = "\\mathbf{" ++ symbol s ++ "}"
+sFormat Prime  s = symbol s ++ "'"
 
 -----------------------------------------------------------------
 ------------------ EXPRESSION PRINTING----------------------
@@ -110,19 +112,26 @@ sFormat Vector s = "\\mathbf{" ++ symbol s ++ "}"
 -- (Since this is all implicitly in Math, leave it as String for now)
 p_expr :: Expr -> String
 p_expr (Var v)    = v
-p_expr (Dbl d)    = show d
+p_expr (Dbl d)    = showFFloat Nothing d ""
 p_expr (Int i)    = show i
+p_expr (Bln b)    = show b
 p_expr (Add x y)  = p_expr x ++ "+" ++ p_expr y
 p_expr (Sub x y)  = p_expr x ++ "-" ++ p_expr y
 p_expr (Mul x y)  = mul x y
 p_expr (Frac n d) = "\\frac{" ++ (p_expr n) ++ "}{" ++ (p_expr d) ++"}"
 p_expr (Div n d)  = divide n d
-p_expr (Pow x y)  = p_expr x ++ "^" ++ brace (p_expr y)
+p_expr (Pow x y)  = pow x y
+p_expr (And x y)  = p_expr x ++ "\\wedge{}" ++ p_expr y
+p_expr (Or x y)   = p_expr x ++ "\\vee{}" ++ p_expr y
 p_expr (Sym s)    = symbol s
 p_expr (Eq x y)   = p_expr x ++ "=" ++ p_expr y
+p_expr (NEq x y)  = p_expr x ++ "\\neq{}" ++ p_expr y
 p_expr (Lt x y)   = p_expr x ++ "<" ++ p_expr y
 p_expr (Gt x y)   = p_expr x ++ ">" ++ p_expr y
+p_expr (GEq x y)  = p_expr x ++ "\\geq{}" ++ p_expr y
+p_expr (LEq x y)  = p_expr x ++ "\\leq{}" ++ p_expr y
 p_expr (Dot x y)  = p_expr x ++ "\\cdot{}" ++ p_expr y
+p_expr (Not x)    = "\\neg{}" ++ p_expr x
 p_expr (Neg x)    = neg x
 p_expr (Call f x) = p_expr f ++ paren (concat $ intersperse "," $ map p_expr x)
 p_expr (Case ps)  = "\\begin{cases}\n" ++ cases ps ++ "\n\\end{cases}"
@@ -130,19 +139,20 @@ p_expr (Op f es)  = p_op f es
 p_expr (Grouping x) = paren (p_expr x)
 
 mul :: Expr -> Expr -> String
-mul x@(Add _ _) y = paren (p_expr x) ++ p_expr y
-mul x@(Sub _ _) y = paren (p_expr x) ++ p_expr y
-mul x y@(Dbl _)   = p_expr x ++ "*" ++ p_expr y
-mul x y@(Int _)   = p_expr x ++ "*" ++ p_expr y
-mul x y@(Add _ _) = p_expr x ++ paren (p_expr y)
-mul x y@(Sub _ _) = p_expr x ++ paren (p_expr y)
-mul x@(Sym (Concat _)) y = p_expr x ++ "*" ++ p_expr y
-mul x y@(Sym (Concat _)) = p_expr x ++ "*" ++ p_expr y
-mul x@(Sym (Atomic s)) y = if length s > 1 then p_expr x ++ "*" ++ p_expr y else
-                            p_expr x ++ p_expr y
-mul x y@(Sym (Atomic s)) = if length s > 1 then p_expr x ++ "*" ++ p_expr y else
-                            p_expr x ++ p_expr y
-mul x y           = p_expr x ++ p_expr y
+mul x y@(Dbl _)   = mulParen x ++ "*" ++ p_expr y
+mul x y@(Int _)   = mulParen x ++ "*" ++ p_expr y
+mul x@(Sym (Concat _)) y = p_expr x ++ "*" ++ mulParen y
+mul x y@(Sym (Concat _)) = mulParen x ++ "*" ++ p_expr y
+mul x@(Sym (Atomic s)) y = if length s > 1 then p_expr x ++ "*" ++ mulParen y else
+                            p_expr x ++ mulParen y
+mul x y@(Sym (Atomic s)) = if length s > 1 then mulParen x ++ "*" ++ p_expr y else
+                            mulParen x ++ p_expr y
+mul x y           = mulParen x ++ mulParen y
+
+mulParen :: Expr -> String
+mulParen a@(Add _ _) = paren $ p_expr a
+mulParen a@(Sub _ _) = paren $ p_expr a
+mulParen a = p_expr a
 
 divide :: Expr -> Expr -> String
 divide n d@(Add _ _) = p_expr n ++ "/" ++ paren (p_expr d)
@@ -158,6 +168,15 @@ neg x@(Int _) = "-" ++ p_expr x
 neg x@(Sym _) = "-" ++ p_expr x
 neg   (Neg n) = p_expr n
 neg x         = paren ("-" ++ p_expr x)
+
+pow :: Expr -> Expr -> String
+pow x@(Add _ _) y = sqbrac (p_expr x) ++ "^" ++ brace (p_expr y)
+pow x@(Sub _ _) y = sqbrac (p_expr x) ++ "^" ++ brace (p_expr y)
+pow x@(Frac _ _) y = sqbrac (p_expr x) ++ "^" ++ brace (p_expr y)
+pow x@(Div _ _) y = paren (p_expr x) ++ "^" ++ brace (p_expr y)
+pow x@(Mul _ _) y = paren (p_expr x) ++ "^" ++ brace (p_expr y)
+pow x@(Pow _ _) y = paren (p_expr x) ++ "^" ++ brace (p_expr y)
+pow x y = p_expr x ++ "^" ++ brace (p_expr y)
 
 cases :: [(Expr,Expr)] -> String
 cases []     = error "Attempt to create case expression without cases"
@@ -335,8 +354,9 @@ makeFigure r c f =
 -----------------------------------------------------------------
 p_op :: Function -> [Expr] -> String
 p_op f@(Cross) xs = binfix_op f xs
-p_op f@(Summation bs) (x:[]) = show f ++ makeBound bs ++ brace (p_expr x)
+p_op f@(Summation bs) (x:[]) = show f ++ makeBound bs ++ brace (sqbrac (p_expr x))
 p_op (Summation _) _ = error "Something went wrong with a summation"
+p_op f@(Product bs) (x:[]) = show f ++ makeBound bs ++ brace (p_expr x)
 p_op f@(Integral bs wrtc) (x:[]) = show f ++ makeIBound bs ++ 
   brace (p_expr x ++ p_expr wrtc)
 p_op (Integral _ _) _  = error "Something went wrong with an integral"
@@ -344,6 +364,7 @@ p_op Abs (x:[]) = "|" ++ p_expr x ++ "|"
 p_op Abs _ = error "Abs should only take one expr."
 p_op Norm (x:[]) = "||" ++ p_expr x ++ "||"
 p_op Norm _ = error "Norm should only take on expression."
+p_op f@(Exp) (x:[]) = show f ++ "^" ++ brace (p_expr x)
 p_op f (x:[]) = show f ++ paren (p_expr x) --Unary ops, this will change once more complicated functions appear.
 p_op _ _ = error "Something went wrong with an operation"
 

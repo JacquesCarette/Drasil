@@ -5,11 +5,11 @@ import Language.Drasil
 import Drasil.GlassBR.Modules
 import Data.Drasil.Changes
 
-lcs :: [LCChunk]
-lcs = [lc1, lc2, lc3, lc4, lc5, lc6, lc7, lc8]
+likelyChanges :: [LCChunk]
+likelyChanges = [lc1, lc2, lc3, lc4, lc5, lc6, lc7, lc8]
 
-ucs :: [UCChunk]
-ucs = [uc1, uc2, uc3, uc4, uc5]
+unlikelyChanges :: [UCChunk]
+unlikelyChanges = [uc1, uc2, uc3, uc4, uc5]
 
 
 {-Likely Changes-}

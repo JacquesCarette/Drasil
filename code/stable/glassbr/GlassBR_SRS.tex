@@ -73,13 +73,13 @@ $J$ & Stress distribution factor (Function) &
 \\
 $J_{tol}$ & Stress distribution factor (Function) based on Pbtol & 
 \\
-$k$ & Surface flaw parameter & $\text{N}^{-7}$$\text{m}^{12}$
+$k$ & Surface flaw parameter & $\frac{\text{m}^{12}}{\text{N}^{7}}$
 \\
 $LR$ & Load resistance & 
 \\
 $LSF$ & Load share factor & 
 \\
-$m$ & Surface flaw parameter & $\text{N}^{-7}$$\text{m}^{12}$
+$m$ & Surface flaw parameter & $\frac{\text{m}^{12}}{\text{N}^{7}}$
 \\
 $P_{b}$ & Probability of breakage & 
 \\
@@ -181,7 +181,7 @@ The following section provides an overview of the Software Requirements Specific
 \subsection{Purpose of Document}
 \label{Sec:PurpofDocu}
 The main purpose of this document is to predict whether a given glass slab is likely to resist a specified blast. The goals and theoretical models used in the GlassBR code are provided, with an emphasis on explicitly identifying assumptions and unambiguous definitions. This document is intended to be used as a reference to provide all information necessary to understand and verify the analysis. The SRS is abstract because the contents say what problem is being solved, but not how to solve it.
-This document will be used as a starting point for subsequent development phases, including writing the design specification and the software verification and validation plan. The design document will show how the requirements are to be realized, including decisions on the numerical algorithms and programming environment. The verification and validation plan will show the steps that will be used to increase confidence in the software documentation and the implementation. Although the SRS fits in a series of documents that follow the so-called waterfall model, the actual development process is not constrained in any way. Even when the waterfall model is not followed, as Parnas and Clements point out, the most logical way to present the documentation is still to "fake" a rational design process.
+This document will be used as a starting point for subsequent development phases, including writing the design specification and the software verification and validation plan. The design document will show how the requirements are to be realized, including decisions on the numerical algorithms and programming environment. The verification and validation plan will show the steps that will be used to increase confidence in the software documentation and the implementation. Although the SRS fits in a series of documents that follow the so-called waterfall model, the actual development process is not constrained in any way. Even when the waterfall model is not followed, as Parnas and Clements point out, the most logical way to present the documentation is still to ``fake" a rational design process.
 \subsection{Scope of Requirements}
 \label{Sec:ScopofRequ}
 The scope of the requirements includes getting all input parameters related to the glass slab and also the parameters related to blast type. Given the appropriate inputs, the code for GlassBR is intended to use the data and predict whether the glass slab is safe to use or not.
@@ -246,34 +246,34 @@ This section first presents the problem description, which gives a high-level vi
 A system is needed to efficiently and correctly predict the blast risk involved with the glass. GlassBR is a computer program developed to interpret the inputs to give out the outputs which predicts whether the glass slab can withstand the blast under the conditions.
 \subsubsection{Terminology and Definitions}
 \label{Sec:TermandDefi}
-This subsection provides a list of terms that are used in the subsequent sections and their meaning, with the purpose of reducing ambiguity and making it easier to correctly understand the requirements. All of the terms are extracted from [4] in Section~\ref{Sec:R}.
+This subsection provides a list of terms that are used in the subsequent sections and their meaning, with the purpose of reducing ambiguity and making it easier to correctly understand the requirements. All of the terms are extracted from [4] in Section~\ref{Sec:Refe}.
 \begin{itemize}
-\item{Aspect ratio (AR) - The ratio of the long dimension of the glass to the short dimension of the glass. For glass supported on four sides, the aspect ratio is always equal to or greater than 1.0. For glass supported on three sides, the ratio of the length of one of the supported edges perpendicular to the free edge, to the length of the free edge, is equal to or greater than 0.5.}
 \item{Glass breakage - The fracture or breakage of any lite or ply in monolithic, laminated, or insulating glass.}
+\item{Lateral - Perpendicular to the glass surface.}
 \item{Lite - Pieces of glass that are cut, prepared, and used to create the window or door.}
+\item{Specifying authority - The design professional responsible for interpreting applicable regulations of authorities having jurisdiction and considering appropriate site specific factors to determine the appropriate values used to calculate the specified design load, and furnishing other information required to perform this practice.}
+\item{Blast resistant glazing - Glazing that provides protection against air blast pressure generated by explosions.}
+\item{Equivalent TNT charge mass - Mass of TNT placed on the ground in a hemisphere that represents the design explosive threat.}
 \item{Glass Types:}
 \begin{enumerate}
 \item{Annealed glass (AN) - A flat, monolithic, glass lite which has uniform thickness where the residual surface stresses are almost zero, as defined in [5].}
 \item{Fully tempered glass (FT) - A flat and monolithic, glass lite of uniform thickness that has been subjected to a special heat treatment process where the residual surface compression is not less than 69 MPa (10 000 psi) or the edge compression not less than 67 MPa (9700 psi), as defined in [6].}
 \item{Heat strengthened glass (HS) - A flat, monolithic, glass lite of uniform thickness that has been subjected to a special heat treatment process where the residual surface compression is not less than 24 MPa (3500psi) or greater than 52 MPa (7500 psi), as defined in [6].}
 \end{enumerate}
-\item{Glass type factor (GTF) - A multiplying factor for adjusting the LR of different glass type, that is, AN, HS, or FT in monolithic glass, LG (Laminated Glass), or IG (Insulating Glass) constructions.}
-\item{Lateral - Perpendicular to the glass surface.}
 \item{Load:}
 \begin{enumerate}
-\item{Specified design load - The magnitude in kPa (psf), type (for example, wind or snow) and duration of the load given by the specifying authority.}
 \item{Load resistance (LR) - The uniform lateral load that a glass construction can sustain based upon a given probability of breakage and load duration as defined in [4 (pg. 1, 53)], following A2 and A1 respectively.}
-\item{Long duration load - Any load lasting approximately 30 days.}
 \item{Non-factored load (NFL) - Three second duration uniform load associated with a probability of breakage less than or equal to 8 lites per 1000 for monolithic AN glass.}
 \item{Glass weight load - The dead load component of the glass weight.}
 \item{Short duration load - Any load lasting 3s or less.}
+\item{Specified design load - The magnitude in kPa (psf), type (for example, wind or snow) and duration of the load given by the specifying authority.}
+\item{Long duration load - Any load lasting approximately 30 days.}
 \end{enumerate}
-\item{Load share factor (LSF) - A multiplying factor derived from the load sharing between the double glazing, of equal or different thickness's and types (including the layered behaviour of LG under long duration loads), in a sealed IG unit.}
-\item{Probability of breakage ($P_{b}$) - The fraction of glass lites or plies that would break at the first occurrence of a specified load and duration, typically expressed in lites per 1000.}
-\item{Specifying authority - The design professional responsible for interpreting applicable regulations of authorities having jurisdiction and considering appropriate site specific factors to determine the appropriate values used to calculate the specified design load, and furnishing other information required to perform this practice.}
-\item{Blast resistant glazing - Glazing that provides protection against air blast pressure generated by explosions.}
-\item{Equivalent TNT charge mass - Mass of TNT placed on the ground in a hemisphere that represents the design explosive threat.}
 \item{Stand off distance ($SD$) - The distance from the glazing surface to the centroid of a hemispherical high explosive charge. It is represented by the coordinates (SDx, SDy, SDz).}
+\item{Load share factor (LSF) - A multiplying factor derived from the load sharing between the double glazing, of equal or different thickness's and types (including the layered behaviour of LG under long duration loads), in a sealed IG unit.}
+\item{Glass type factor (GTF) - A multiplying factor for adjusting the LR of different glass type, that is, AN, HS, or FT in monolithic glass, LG (Laminated Glass), or IG (Insulating Glass) constructions.}
+\item{Probability of breakage ($P_{b}$) - The fraction of glass lites or plies that would break at the first occurrence of a specified load and duration, typically expressed in lites per 1000.}
+\item{Aspect ratio (AR) - The ratio of the long dimension of the glass to the short dimension of the glass. For glass supported on four sides, the aspect ratio is always equal to or greater than 1.0. For glass supported on three sides, the ratio of the length of one of the supported edges perpendicular to the free edge, to the length of the free edge, is equal to or greater than 0.5.}
 \end{itemize}
 \subsubsection{Physical System Description}
 \label{Sec:PhysSystDesc}
@@ -323,7 +323,7 @@ t_{d}=3
 \item[A5:]Glass under consideration is assumed to be a single lite. Hence the value of $LSF$ is equal to 1 for all calculations in GlassBR.
 \item[A6:]Boundary conditions for the glass slab is assumed to be 4-sided support for calculations.
 \item[A7:]The response type considered in GlassBR is flexural.
-\item[A8:]With reference to A4 the value of load duration factor ($LDF$) is a constant in GlassBR. It is calculated by the equation: . Using this, $LDF$ = 0.27.
+\item[A8:]With reference to A4 the value of load duration factor ($LDF$) is a constant in GlassBR. It is calculated by the equation: $LDF=(\frac{t_{d}}{60})^{\frac{m}{16}}$. Using this, $LDF=0.27$.
 \end{itemize}
 \subsubsection{Theoretical Models}
 \label{Sec:TheoMode}
@@ -353,7 +353,7 @@ Label & Safety Requirement-2
 \\ \midrule \\
 Equation & $is\_safe2=LR>q$
 \\ \midrule \\
-Description & If $is\_safe2$ = True, the glass is considered safe. $is\_safe1$ (from \hyperref[T:t1SafetyReq]{Definition~T:t1SafetyReq} and $is\_safe2$ are either both True or both False. LR is the load resistance (also called capacity, as defined in \hyperref[T:calOfCap]{Definition~T:calOfCap}. $q$ (also referred as the Demand) is the 3 second duration equivalent pressure, as defined in \hyperref[T:calOfDe]{Definition~T:calOfDe}.
+Description & If $is\_safe2$ = True, the glass is considered safe. $is\_safe1$ (from \hyperref[T:t1SafetyReq]{Definition~T:t1SafetyReq}) and $is\_safe2$ are either both True or both False. LR is the load resistance (also called capacity), as defined in \hyperref[T:calOfCap]{Definition~T:calOfCap}. $q$ (also referred as the Demand) is the 3 second duration equivalent pressure, as defined in \hyperref[T:calOfDe]{Definition~T:calOfDe}.
 \\ \bottomrule \end{tabular}
 \end{minipage}\\
 \subsubsection{Data Definitions}
@@ -386,9 +386,22 @@ Label & $h$
 \\ \midrule \\
 Units & mm
 \\ \midrule \\
-Equation & $h$ = $h(t)$
+Equation & $h$ = $\begin{cases}
+2.16, & t=2.5\\
+2.59, & t=2.7\\
+2.92, & t=3.0\\
+3.78, & t=4.0\\
+4.57, & t=5.0\\
+5.56, & t=6.0\\
+7.42, & t=8.0\\
+9.02, & t=10.0\\
+11.91, & t=12.0\\
+15.09, & t=16.0\\
+18.26, & t=19.0\\
+21.44, & t=22.0
+\end{cases}$
 \\ \midrule \\
-Description & $h$ is the  function that maps from the nominal thickness ($t$) to the minimum thickness, as follows: h(t) = (t = 2.5 => 2.16 | t = 2.7 => 2.59 | t = 3.0 => 2.92 | t = 4.0 => 3.78 | t = 5.0 => 4.57 | t = 6.0 => 5.56 | t = 8.0 => 7.42 | t = 10.0 => 9.02 | t = 12.0 => 11.91 | t = 16.0 => 15.09 | t = 19.0 => 18.26 | t = 22.0 => 21.44)\newline$h$ is the actual thickness\newline$t$ is the nominal thickness t in {2.5, 2.7, 3.0, 4.0, 5.0, 6.0, 8.0, 10.0, 12.0, 16.0, 19.0, 22.0}
+Description & $h$ is the actual thickness
 \\ \bottomrule \end{tabular}
 \end{minipage}\\
 ~\newline
@@ -553,20 +566,20 @@ Description & $q$ or demand, is the 3 second duration equivalent pressure obtain
 Table~\ref{Table:Tabl2:InpuVari} shows the data constraints on the input variables. The column of physical constraints gives the physical limitations on the range of values that can be taken by the variable. The constraints are conservative, to give the user of the model the flexibility to experiment with unusual situations. The column of typical values is intended to provide a feel for a common scenario. The uncertainty column provides an estimate of the confidence with which the physical quantities can be measured. This information would be part of the input if one were performing an uncertainty quantification exercise. Table 3 (Table~\ref{Table:Tabl3:SpecParaValu}) gives the values of the specification parameters used in Table~\ref{Table:Tabl2:InpuVari}. $AR_{max}$ refers to the maximum aspect ratio for the plate of glass.
 \begin{longtable}{l l l l l}
 \toprule
-Var & Physical Cons & Software Constraints & Typical Value & Uncertainty
+Var & Physical Constraints & Software Constraints & Typical Value & Typical Uncertainty
 \\
 \midrule
-$a$ & $a$ > 0 and $a$/$b$ > 1 & $d_{min}$ <= $a$ <= $d_{max}$ and $a$/$b$ < $AR_{max}$ & 1500 mm & 10%
+$a$ & $a>0.0$ and $\frac{a}{b}>1.0$ & $d_{min}\leq{}a\leq{}d_{max}$ and $\frac{a}{b}<AR_{max}$ & 1500 mm & 10$\%$
 \\
-$b$ & $b$ > 0 and $b$ < $a$ & 1 & $d_{min}$ <= $b$ <= $d_{max}$ and $a$/$b$ < $AR_{max}$ & 1200 mm & 10%
+$b$ & $b>0.0$ and $b<a$ & $d_{min}\leq{}b\leq{}d_{max}$ and $\frac{a}{b}<AR_{max}$ & 1200 mm & 10$\%$
 \\
-$P_{btol}$ & 0 < $P_{btol}$ < 1 & - & 0.008 & 0.1%
+$P_{btol}$ & $0.0<P_{btol}<1.0$ &  & 8.0e-3 & 0.1$\%$
 \\
-$w$ & $w$ >= 0 & $w_{min}$ < $w$ < $w_{max}$ & 42 kg & 10%
+$w$ & $w\geq{}0.0$ & $w_{max}\leq{}w\leq{}w_{min}$ & 42 kg & 10$\%$
 \\
-$TNT$ & $TNT$ > 0 & - & 1 & 10%
+$TNT$ & $TNT>0.0$ &  & 1 & 10$\%$
 \\
-$SD$ & $SD$ > 0 & $SD_{min}$ < $SD$ < $SD_{max}$  & 45m & 10%
+$SD$ & $SD>0.0$ & $SD_{min}<SD<SD_{max}$ & 45 m & 10$\%$
 \\
 \bottomrule
 \caption{Table 2: Input Variables}
@@ -644,7 +657,7 @@ $TNT$ & TNT equivalent factor &
 \label{Table:TablofSymb}
 \end{longtable*}
 \begin{itemize}
-\item[R2:]The system shall set the known values as follows: 
+\item[R2:]The system shall set the known values as follows:
           \begin{enumerate}
           \item{$m$, $k$, $E$, $t_{d}$ following A4}
           \item{$LDF$ following A8}
@@ -669,7 +682,7 @@ $TNT$ & TNT equivalent factor &
           \item{Aspect Ratio ($AR$)}
           \end{enumerate}
 \end{itemize}
-\subsection{Non-functional Requirements}
+\subsection{Non-Functional Requirements}
 \label{Sec:Non-Requ}
 Given the small size, and relative simplicity, of this problem, performance is not a priority. Any reasonable implementation will be very quick and use minimal storage. Rather than performance, the priority non-functional Rs are correctness, verifiability, understandability, reusability, maintainability and portability.
 \section{Likely Changes}
@@ -824,6 +837,38 @@ NOTE: Building a tool to automatically generate the graphical representation of 
 \label{Figure:Figu4:TracMatrShowtheConnBetwAssuandOtheItem}
 \end{center}
 \end{figure}
+\section{Values Of Auxiliary Constants}
+\label{Sec:ValuOfAuxiCons}
+This section contains the standard values that are used for calculations in GlassBR.
+\begin{longtable}{l l l l}
+\toprule
+Symbol & Description & Value & Unit
+\\
+\midrule
+$m$ & surface flaw parameter & $7$ & $\frac{\text{m}^{12}}{\text{N}^{7}}$
+\\
+$k$ & surface flaw parameter & $\left(2.86\right)10^{-53}$ & $\frac{\text{m}^{12}}{\text{N}^{7}}$
+\\
+$E$ & modulus of elasticity of glass & $\left(7.17\right)10^{7}$ & kPa
+\\
+$t_{d}$ & duration of load & $3$ & s
+\\
+$d_{max}$ & maximum value for one of the dimensions of the glass plate & $0.1$ & mm
+\\
+$d_{min}$ & minimum value for one of the dimensions of the glass plate & $5.0$ & mm
+\\
+$AR_{max}$ & maximum aspect ratio & $5.0$ & 
+\\
+$w_{max}$ & maximum permissible input charge weight & $910.0$ & kg
+\\
+$SD_{min}$ & minimum stand off distance permissible for input & $6.0$ & m
+\\
+$SD_{max}$ & maximum stand off distance permissible for input & $130.0$ & m
+\\
+\bottomrule
+\caption{Auxiliary Constants}
+\label{Table:AuxiCons}
+\end{longtable}
 \section{References}
 \label{Sec:Refe}
 \begin{itemize}

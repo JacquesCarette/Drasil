@@ -77,9 +77,9 @@ compoundNC'' f1 f2 t1 t2 = nc
 
 -- hack for Solution Characteristics Specification, calling upon plural will pluralize
 -- Characteristics as it is the end of the first term (solutionCharacteristic)
-compoundNC''' :: (NamedIdea a, NamedIdea b) => a -> b -> NamedChunk
-compoundNC''' t1 t2 = nc 
-  (t1^.id ++ t2^.id) (compoundPhrase'' plural phrase (t1 ^. term) (t2 ^. term))
+compoundNC''' :: (NamedIdea a, NamedIdea b) => (NP -> Sentence) -> a -> b -> NamedChunk
+compoundNC''' f1 t1 t2 = nc 
+  (t1^.id ++ t2^.id) (compoundPhrase''' f1 (t1 ^. term) (t2 ^. term))
 
 -- we might want to eventually restrict the use of these via
 -- some kind of type system, which asserts that:

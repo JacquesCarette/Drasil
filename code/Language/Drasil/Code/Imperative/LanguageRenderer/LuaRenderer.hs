@@ -57,6 +57,7 @@ luaConfig _ c =
         methodListDoc = methodListDocD c, methodTypeDoc = \_ -> empty, unOpDoc = unOpDoc', valueDoc = valueDoc' c,
         functionDoc = functionDocD c, functionListDoc = functionListDocD c, 
         ioDoc = ioDocD c,inputDoc = inputDocD c,
+        complexDoc = complexDocD c,
         getEnv = \_ -> error "getEnv not implemented in Lua (yet)"
     }
 

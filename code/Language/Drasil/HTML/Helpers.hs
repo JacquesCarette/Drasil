@@ -170,8 +170,7 @@ fraction a b =
 -- | Build cases for case expressions
 cases :: [(Expr,Expr)] -> (Expr -> String) -> String
 cases ps p_expr = render $ (span_tag ["casebr"] "{" $$ div_tag ["cases"] 
-                  (makeCases ps p_expr) $$
-                  span_tag ["casebr"] "}")
+                  (makeCases ps p_expr))
 
 -- | Build case expressions
 makeCases :: [(Expr,Expr)] -> (Expr -> String) -> Doc                 

@@ -78,14 +78,14 @@ makeMethod      mc@(MeC { mType = MInput (IOFile _) vc}) _ _ =
         makeAssignments _ = [assign (Var (vc ^. id))
           (InputFile (Var "inFile"))] -}
 
-makeMethod mc@(MeC { mType = MOutput (IOFile f) vcs}) _ _ =
+makeMethod mc@(MeC { mType = MOutput (IOFile _) vcs}) _ _ =
   pubMethod (Void) ((methcc mc) ^. id)
     (map (\x -> param (x ^. id) (makeType $ x ^. Q.typ)) vcs)
-  [ Block [ varDec ("outFile") (outfile),
-            ValState $ ObjAccess (Var "outFile") (FileOpen f)
-          ],
-    Block (map (\x -> printFileLn (Var "outFile") (makeType (x ^. Q.typ)) 
-      (Var (x ^. id))) vcs)
+  [ Block [ --varDec ("outFile") (outfile),
+            --ValState $ ObjAccess (Var "outFile") (FileOpen f)
+          ]--,
+    --Block (map (\x -> printFileLn (Var "outFile") (makeType (x ^. Q.typ)) 
+      --(Var (x ^. id))) vcs)
   ]
 
 makeMethod (MeC { mType = MCustom b}) _ _ =
@@ -96,8 +96,11 @@ makeMethod (MeC _ (MOutput IOStd _) _ _ _) _ _ =
 
 makeType :: Space -> StateType
 makeType S.Rational = float
+makeType S.Radians  = float
+makeType S.Real     = float
 makeType S.Boolean  = bool
 makeType S.Integer  = int
+makeType S.Natural  = int --FIXME: not sure if this is what's wanted? Needs design
 makeType S.Char     = char
 makeType S.String   = string
 makeType (S.Obj s)  = Type (makeClassNameValid s)

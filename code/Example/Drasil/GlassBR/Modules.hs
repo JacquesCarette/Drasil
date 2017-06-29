@@ -34,7 +34,7 @@ mod_ctrl = mod_ctrl_fun (S "The" +:+ (phrase algorithm))
 -- output format module
 mod_outputf_desc :: ConceptChunk
 mod_outputf_desc = mod_outputf_desc_fun (phrase input_ +:+ (plural parameter) 
-  :+: S ", the demand, the capacity," +:+
+  `sC` S "the demand, the capacity," +:+
   S "the probability of breakage, and both safety" +:+. plural requirement)
 
 mod_outputf :: ModuleChunk

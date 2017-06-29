@@ -35,7 +35,8 @@ library
     Data.Drasil.Units.Physics
     Data.Drasil.Units.SolidMechanics
   other-modules:
-      Language.Drasil.Expr
+      Language.Drasil.SystemInformation
+    , Language.Drasil.Expr
     , Language.Drasil.Chunk
     , Language.Drasil.Config
     , Language.Drasil.Document
@@ -53,9 +54,11 @@ library
     , Language.Drasil.SymbolAlphabet
     , Language.Drasil.Unicode
     , Language.Drasil.Unit
+    , Language.Drasil.CodeSpec
     , Language.Drasil.Code.Code
     , Language.Drasil.Code.Import
     , Language.Drasil.Code.Imperative.AST
+    , Language.Drasil.Code.Imperative.Import
     , Language.Drasil.Code.Imperative.Helpers
     , Language.Drasil.Code.Imperative.LanguageRenderer
     , Language.Drasil.Code.Imperative.LanguageRenderer.CppRenderer
@@ -78,6 +81,7 @@ library
     , Language.Drasil.TeX.Print
     , Language.Drasil.TeX.Monad
     , Language.Drasil.TeX.Preamble
+    , Language.Drasil.Chunk.Code
     , Language.Drasil.Chunk.CommonIdea
     , Language.Drasil.Chunk.Concept
     , Language.Drasil.Chunk.ConVar
@@ -92,6 +96,7 @@ library
     , Language.Drasil.Chunk.Relation
     , Language.Drasil.Chunk.Req
     , Language.Drasil.Chunk.SymbolForm
+    , Language.Drasil.Chunk.UncertainQuantity
     , Language.Drasil.Chunk.Unital
     , Language.Drasil.Chunk.Unitary
     , Language.Drasil.Chunk.VarChunk
@@ -126,18 +131,19 @@ executable tiny
       Drasil.HGHC.HGHC
     , Drasil.HGHC.HeatTransfer
     , Drasil.HGHC.Modules
-    , Drasil.TableOfSymbols
-    , Drasil.ReferenceMaterial
-    , Drasil.TableOfAbbAndAcronyms
+    , Drasil.Sections.TableOfSymbols
+    , Drasil.Sections.ReferenceMaterial
+    , Drasil.Sections.TableOfAbbAndAcronyms
     , Drasil.DocumentLanguage
-    , Drasil.TableOfUnits
+    , Drasil.Sections.TableOfUnits
     , Drasil.Template.DD
     , Drasil.Template.Helpers
     , Drasil.Template.MG
     , Drasil.Template.MIS
-    , Drasil.SpecificSystemDescription
+    , Drasil.Sections.SpecificSystemDescription
+    , Drasil.Sections.SolutionCharacterSpec
     , Drasil.SRS
-    , Drasil.Introduction
+    , Drasil.Sections.Introduction
   Build-Depends:
     base >= 4.7,
     lens >= 4.12,
@@ -155,17 +161,31 @@ executable nopcm
   main-is: Drasil/NoPCM/Main.hs
   other-modules:
       Drasil.NoPCM.Body
-    , Drasil.NoPCM.Example
-    , Drasil.ReferenceMaterial
+    , Drasil.NoPCM.TMods
+    , Drasil.NoPCM.Definitions
+    , Drasil.NoPCM.Unitals
+    , Drasil.SWHS.Body
+    , Drasil.SWHS.Concepts
+    , Drasil.SWHS.DataDefs
+    , Drasil.SWHS.GenDefs
+    , Drasil.SWHS.Changes
+    , Drasil.SWHS.Modules
+    , Drasil.SWHS.Reqs
+    , Drasil.SWHS.TMods
+    , Drasil.SWHS.IMods
+    , Drasil.SWHS.Unitals
+    , Drasil.Sections.TraceabilityMandGs
+    , Drasil.Sections.ReferenceMaterial
+    , Drasil.Sections.AuxiliaryConstants
     , Drasil.SRS
-    , Drasil.TableOfAbbAndAcronyms
+    , Drasil.Sections.TableOfAbbAndAcronyms
     , Drasil.DocumentLanguage
-    , Drasil.SpecificSystemDescription
-    , Drasil.Introduction
-    , Drasil.Requirements
-    , Drasil.GeneralSystDesc
-    , Drasil.TableOfSymbols
-    , Drasil.TableOfUnits
+    , Drasil.Sections.SpecificSystemDescription
+    , Drasil.Sections.Introduction
+    , Drasil.Sections.Requirements
+    , Drasil.Sections.GeneralSystDesc
+    , Drasil.Sections.TableOfSymbols
+    , Drasil.Sections.TableOfUnits
     , Drasil.Template.DD
     , Drasil.Template.Helpers
     , Drasil.Template.MG
@@ -186,30 +206,30 @@ executable ssp
   hs-source-dirs: Example
   main-is: Drasil/SSP/Main.hs
   other-modules:
-      Drasil.ReferenceMaterial
+      Drasil.Sections.ReferenceMaterial
     , Drasil.SRS
     , Drasil.SSP.Body
     , Drasil.SSP.Changes
     , Drasil.SSP.Defs
     , Drasil.SSP.Modules
     , Drasil.SSP.Reqs
-    , Drasil.SSP.Units
+    , Drasil.SSP.Unitals
     , Drasil.SSP.TMods
     , Drasil.SSP.GenDefs
     , Drasil.SSP.DataDefs
     , Drasil.SSP.IMods
-    , Drasil.TableOfAbbAndAcronyms
-    , Drasil.TableOfSymbols
+    , Drasil.Sections.TableOfAbbAndAcronyms
+    , Drasil.Sections.TableOfSymbols
     , Drasil.DocumentLanguage
-    , Drasil.TableOfUnits
+    , Drasil.Sections.TableOfUnits
     , Drasil.Template.DD
     , Drasil.Template.Helpers
     , Drasil.Template.MG
     , Drasil.Template.MIS
-    , Drasil.SpecificSystemDescription
-    , Drasil.Introduction
-    , Drasil.Requirements
-    , Drasil.GeneralSystDesc
+    , Drasil.Sections.SpecificSystemDescription
+    , Drasil.Sections.Introduction
+    , Drasil.Sections.Requirements
+    , Drasil.Sections.GeneralSystDesc
   Build-Depends:
     base >= 4.7,
     lens >= 4.12,
@@ -237,17 +257,19 @@ executable glassbr
     , Drasil.GlassBR.IMods
     , Drasil.GlassBR.DataDefs
     , Drasil.GlassBR.Units
-    , Drasil.SpecificSystemDescription
-    , Drasil.Introduction
-    , Drasil.Requirements
-    , Drasil.GeneralSystDesc
-    , Drasil.TraceabilityMandGs
-    , Drasil.Stakeholders
-    , Drasil.ReferenceMaterial
+    , Drasil.Sections.SpecificSystemDescription
+    , Drasil.Sections.Introduction
+    , Drasil.Sections.Requirements
+    , Drasil.Sections.GeneralSystDesc
+    , Drasil.Sections.TraceabilityMandGs
+    , Drasil.Sections.AuxiliaryConstants
+    , Drasil.Sections.Stakeholders
+    , Drasil.Sections.ScopeOfTheProject
+    , Drasil.Sections.ReferenceMaterial
     , Drasil.SRS
-    , Drasil.TableOfAbbAndAcronyms
-    , Drasil.TableOfSymbols
-    , Drasil.TableOfUnits
+    , Drasil.Sections.TableOfAbbAndAcronyms
+    , Drasil.Sections.TableOfSymbols
+    , Drasil.Sections.TableOfUnits
     , Drasil.Template.DD
     , Drasil.Template.Helpers
     , Drasil.Template.MG
@@ -278,16 +300,17 @@ executable chipmunkdocs
     , Drasil.GamePhysics.TMods
     , Drasil.GamePhysics.Unitals
     , Drasil.GamePhysics.IMods
-    , Drasil.SpecificSystemDescription
-    , Drasil.Introduction
-    , Drasil.Requirements
-    , Drasil.TraceabilityMandGs
-    , Drasil.ReferenceMaterial
+    , Drasil.Sections.SpecificSystemDescription
+    , Drasil.Sections.SolutionCharacterSpec
+    , Drasil.Sections.GeneralSystDesc
+    , Drasil.Sections.Introduction
+    , Drasil.Sections.Requirements
+    , Drasil.Sections.TraceabilityMandGs
+    , Drasil.Sections.ReferenceMaterial
     , Drasil.SRS
-    , Drasil.SpecificSystemDescription
-    , Drasil.TableOfAbbAndAcronyms
-    , Drasil.TableOfSymbols
-    , Drasil.TableOfUnits
+    , Drasil.Sections.TableOfAbbAndAcronyms
+    , Drasil.Sections.TableOfSymbols
+    , Drasil.Sections.TableOfUnits
     , Drasil.Template.DD
     , Drasil.Template.Helpers
     , Drasil.Template.MG
@@ -309,27 +332,28 @@ executable swhs
   main-is: Drasil/SWHS/Main.hs
   other-modules:
       Drasil.DocumentLanguage
-    , Drasil.SpecificSystemDescription
-    , Drasil.Introduction
-    , Drasil.Requirements
-    , Drasil.GeneralSystDesc
-    , Drasil.TraceabilityMandGs
-    , Drasil.ReferenceMaterial
+    , Drasil.Sections.SpecificSystemDescription
+    , Drasil.Sections.Introduction
+    , Drasil.Sections.Requirements
+    , Drasil.Sections.GeneralSystDesc
+    , Drasil.Sections.TraceabilityMandGs
+    , Drasil.Sections.ReferenceMaterial
     , Drasil.SRS
     , Drasil.SWHS.Body
     , Drasil.SWHS.Changes
     , Drasil.SWHS.Concepts
     , Drasil.SWHS.DataDefs
+    , Drasil.SWHS.GenDefs
     , Drasil.SWHS.Generate
     , Drasil.SWHS.Modules
     , Drasil.SWHS.Reqs
-    , Drasil.SWHS.TModel1
-    , Drasil.SWHS.TModel2
-    , Drasil.SWHS.TModel3
+    , Drasil.SWHS.TMods
+    , Drasil.SWHS.IMods
     , Drasil.SWHS.Unitals
-    , Drasil.TableOfAbbAndAcronyms
-    , Drasil.TableOfSymbols
-    , Drasil.TableOfUnits
+    , Drasil.Sections.TableOfAbbAndAcronyms
+    , Drasil.Sections.TableOfSymbols
+    , Drasil.Sections.TableOfUnits
+    , Drasil.Sections.AuxiliaryConstants
     , Drasil.Template.DD
     , Drasil.Template.Helpers
     , Drasil.Template.MG

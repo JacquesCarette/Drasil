@@ -18,7 +18,7 @@ module Language.Drasil.Code.Imperative.LanguageRenderer (
     clsDecDocD,clsDecListDocD,classDocD,namespaceD,objAccessDocD,objVarDocD,
     paramDocD,paramListDocD,patternDocD,printDocD,retDocD,scopeDocD,stateDocD,stateListDocD,
     statementDocD,stateTypeD,methodDocD,methodDocD',methodListDocD,methodTypeDocD,unOpDocD,unOpDocD',valueDocD,valueDocD',functionDocD,functionListDocD,ioDocD,
-    inputDocD,
+    inputDocD,complexDocD,
     -- * Helper Functions
     addDefaultCtor, comment, end, fixCtorNames, genNameFromType, jump, litsToValues, clsWithName, typeOfLit
 ) where
@@ -119,7 +119,8 @@ data Config = Config {
     valueDoc :: Value -> Doc,
     getEnv :: String -> Doc, -- careful, this can fail!
     ioDoc :: IOSt -> Doc,
-    inputDoc :: IOType -> StateType -> Value -> Doc
+    inputDoc :: IOType -> StateType -> Value -> Doc,
+    complexDoc :: Complex -> Doc
 }
 
 ----------------------------------
@@ -127,7 +128,7 @@ data Config = Config {
 ----------------------------------
 
 fileCode :: Config -> Package -> [Label] -> FileType -> Label -> (FilePath, Doc)
-fileCode c (Pack p ms) ns f e = (fileName c p ns ++ e, fileDoc c f p ms) -- $ map (clsWithName ms) ns)
+fileCode c (Pack p ms) ns f e = (fileName c p ns ++ e, fileDoc c f p ms) -- -$ map (clsWithName ms) ns)
 
 fileCodeSplit :: Config -> Package -> [Label] -> FileType -> Label -> [(FilePath, Doc)]
 fileCodeSplit c (Pack p ms) ns f e = --let classes = map (clsWithName ms) ns in
@@ -305,19 +306,20 @@ funcDocD c (Get n) = dot <> funcAppDoc c (getterName n) []
 funcDocD c (Set n v) = dot <> funcAppDoc c (setterName n) [v]
 funcDocD c (IndexOf v) = dot <> funcAppDoc c "IndexOf" [v]
 funcDocD _ ListSize = dot <> text "Count"
-funcDocD c (ListAccess v@(EnumVar _)) = funcDoc c $ ListAccess (v $. cast Integer)
-funcDocD c (ListAccess v@(EnumElement _ _)) = funcDoc c $ ListAccess (v $. cast Integer)
-funcDocD c (ListAccess v@(ObjAccess (ListVar _ (EnumType _)) (ListAccess _))) = funcDoc c $ ListAccess (v $. cast Integer)
+funcDocD c (ListAccess v@(EnumVar _)) = funcDoc c $ ListAccess (v $. cast' Integer)
+funcDocD c (ListAccess v@(EnumElement _ _)) = funcDoc c $ ListAccess (v $. cast' Integer)
+funcDocD c (ListAccess v@(ObjAccess (ListVar _ (EnumType _)) (ListAccess _))) = funcDoc c $ ListAccess (v $. cast' Integer)
 funcDocD c (ListAccess i) = brackets $ valueDoc c i
 funcDocD c (ListAdd i v) = dot <> funcAppDoc c "Insert" [i, v]
 funcDocD c (ListAppend v) = dot <> funcAppDoc c "append" [v]
-funcDocD c (ListSet i@(EnumVar _) v) = funcDoc c $ ListSet (i $. cast Integer) v
-funcDocD c (ListSet i@(EnumElement _ _) v) = funcDoc c $ ListSet (i $. cast Integer) v
+funcDocD c (ListSet i@(EnumVar _) v) = funcDoc c $ ListSet (i $. cast' Integer) v
+funcDocD c (ListSet i@(EnumElement _ _) v) = funcDoc c $ ListSet (i $. cast' Integer) v
 funcDocD c (ListSet i v) = brackets (valueDoc c i) <+> equals <+> valueDoc c v
 funcDocD _ (ListPopulate _ _) = empty
+funcDocD _ (ListSlice _ _ _) = error "No default implementation"
+funcDocD _ (StringSplit _) = error "No default implementation"
 funcDocD c (IterBegin) = dot <> funcAppDoc c "begin" []
 funcDocD c (IterEnd) = dot <> funcAppDoc c "end" []
-funcDocD c (FileOpen s) = dot <> funcAppDoc c "open" [litString s]
 funcDocD _ Floor = error $
   "funcDocD undefined for _ Floor pattern. See " ++
   "Language.Drasil.Code.Imperative.LanguageRenderer"
@@ -468,6 +470,7 @@ statementDocD c loc (FreeState v) = text "delete" <+> valueDoc c v <> end c loc
 statementDocD c loc (ExceptState e) = exceptionDoc c e <> end c loc
 statementDocD c loc (PatternState p) = patternDoc c p <> end c loc
 statementDocD c loc (IOState io) = ioDoc c io <> end c loc
+statementDocD c loc (ComplexState cplx) = complexDoc c cplx <> end c loc
 
 ioDocD :: Config -> IOSt -> Doc
 ioDocD c (OpenFile f n m) = statementDoc c NoLoop (valStmt $ objMethodCall f "open" [n, litString (modeStr m)])
@@ -566,6 +569,9 @@ valueDocD c (Global s) = getEnv c s
 valueDocD' :: Config -> Value -> Doc
 valueDocD' c (Arg i) = argsList c <> brackets (litDoc c $ LitInt $ fromIntegral i + 1)
 valueDocD' c v = valueDocD c v
+
+complexDocD :: Config -> Complex -> Doc
+complexDocD _ _ = error "No default implementation for ComplexState"
 
 ----------------------
 -- Helper Functions --

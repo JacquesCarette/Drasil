@@ -3,6 +3,7 @@ module Language.Drasil.HTML.Print where
 import Prelude hiding (print)
 import Data.List (intersperse)
 import Text.PrettyPrint hiding (render)
+import Numeric (showFFloat)
 
 import Language.Drasil.HTML.Import (makeDocument)
 import Language.Drasil.HTML.AST
@@ -27,7 +28,9 @@ genHTML _ _ = error "Cannot generate HTML for non-Website doctype"
 build :: String -> Document -> Doc
 build fn (Document t a c) = 
   text ( "<!DOCTYPE html PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\""++
-          " \"http://www.w3.org/TR/html4/loose.dtd\">") $$ 
+          " \"http://www.w3.org/TR/html4/loose.dtd\">" ++ "\n" ++
+          "<script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/"++
+          "2.7.0/MathJax.js?config=TeX-MML-AM_CHTML'></script>") $$ 
   html (head_tag ((linkCSS fn) $$ (title (text (title_spec t)))) $$
   body (article_title (text (p_spec t)) $$ author (text (p_spec a))
   $$ print c
@@ -103,6 +106,7 @@ symbol (Corners [] [_] [] [] _) = error "rendering of ll prescript"
 symbol (Corners _ _ _ _ _)      = error "rendering of Corners (general)"
 symbol (Atop Vector s)       = "<b>" ++ symbol s ++ "</b>"
 symbol (Atop Hat s)          = symbol s ++ "&#770;"
+symbol (Atop Prime s)        = symbol s ++ "'"
 
 uSymb :: USymb -> String
 uSymb (UName s)           = symbol s
@@ -117,19 +121,26 @@ uSymb (UDiv n d)          = uSymb n ++ "/(" ++ (uSymb d) ++ ")"
 -- | Renders expressions in the HTML (called by multiple functions)
 p_expr :: Expr -> String
 p_expr (Var v)    = v
-p_expr (Dbl d)    = show d
+p_expr (Dbl d)    = showFFloat Nothing d ""
 p_expr (Int i)    = show i
+p_expr (Bln b)    = show b
+p_expr (Mul a b)  = mul a b
 p_expr (Add a b)  = p_expr a ++ "+" ++ p_expr b
 p_expr (Sub a b)  = p_expr a ++ "-" ++ p_expr b
-p_expr (Mul a b)  = mul a b
 p_expr (Frac a b) = fraction (p_expr a) (p_expr b) --Found in HTMLHelpers
 p_expr (Div a b)  = divide a b
-p_expr (Pow a b)  = p_expr a ++ sup (p_expr b)
+p_expr (Pow a b)  = pow a b
+p_expr (And a b)  = p_expr a ++ "&and;" ++ p_expr b
+p_expr (Or a b)   = p_expr a ++ "&or;" ++ p_expr b
 p_expr (Sym s)    = symbol s
 p_expr (Eq a b)   = p_expr a ++ "=" ++ p_expr b
+p_expr (NEq a b)  = p_expr a ++ "&ne;" ++ p_expr b
 p_expr (Lt a b)   = p_expr a ++ "&lt;" ++ p_expr b
 p_expr (Gt a b)   = p_expr a ++ "&gt;" ++ p_expr b
+p_expr (LEq a b)  = p_expr a ++ "&le;" ++ p_expr b
+p_expr (GEq a b)  = p_expr a ++ "&ge;" ++ p_expr b
 p_expr (Dot a b)  = p_expr a ++ "&sdot;" ++ p_expr b
+p_expr (Not a)    = "&not;" ++ p_expr a
 p_expr (Neg a)    = neg a
 p_expr (Call f x) = p_expr f ++ paren (concat $ intersperse "," $ map p_expr x)
 p_expr (Case ps)  = cases ps (p_expr)
@@ -138,26 +149,29 @@ p_expr (Grouping e) = paren (p_expr e)
 
 -- | Helper for properly rendering multiplication of expressions
 mul :: Expr -> Expr -> String
-mul a@(Add _ _) b = paren (p_expr a) ++ p_expr b
-mul a@(Sub _ _) b = paren (p_expr a) ++ p_expr b
-mul a b@(Dbl _) = p_expr a ++ "*" ++ p_expr b
-mul a b@(Int _) = p_expr a ++ "*" ++ p_expr b
-mul a b@(Add _ _) = p_expr a ++ paren (p_expr b)
-mul a b@(Sub _ _) = p_expr a ++ paren (p_expr b)
-mul x@(Sym (Concat _)) y = p_expr x ++ "*" ++ p_expr y
-mul x y@(Sym (Concat _)) = p_expr x ++ "*" ++ p_expr y
-mul x@(Sym (Atomic s)) y = if length s > 1 then p_expr x ++ "*" ++ p_expr y else
-                            p_expr x ++ p_expr y
-mul x y@(Sym (Atomic s)) = if length s > 1 then p_expr x ++ "*" ++ p_expr y else
-                            p_expr x ++ p_expr y
-mul a b         = p_expr a ++ p_expr b
+mul a b@(Dbl _) = mulParen a ++ "*" ++ p_expr b
+mul a b@(Int _) = mulParen a ++ "*" ++ p_expr b
+mul x@(Sym (Concat _)) y = p_expr x ++ "*" ++ mulParen y
+mul x y@(Sym (Concat _)) = mulParen x ++ "*" ++ p_expr y
+mul x@(Sym (Atomic s)) y = if length s > 1 then p_expr x ++ "*" ++ mulParen y else
+                            p_expr x ++ mulParen y
+mul x y@(Sym (Atomic s)) = if length s > 1 then mulParen x ++ "*" ++ p_expr y else
+                            mulParen x ++ p_expr y
+mul a b         = mulParen a ++ mulParen b
+
+-- | Helper for properly rendering parentheses around multiplication
+mulParen :: Expr -> String
+mulParen a@(Add _ _) = paren $ p_expr a
+mulParen a@(Sub _ _) = paren $ p_expr a
+--mulParen (Mul n m) = mulParen n ++ mulParen m
+mulParen a = p_expr a
 
 -- | Helper for properly rendering division of expressions
 divide :: Expr -> Expr -> String
 divide n d@(Add _ _) = p_expr n ++ "/" ++ paren (p_expr d)
 divide n d@(Sub _ _) = p_expr n ++ "/" ++ paren (p_expr d)
-divide n@(Add _ _) d = p_expr n ++ "/" ++ paren (p_expr d)
-divide n@(Sub _ _) d = p_expr n ++ "/" ++ paren (p_expr d)
+divide n@(Add _ _) d = paren (p_expr n) ++ "/" ++ p_expr d
+divide n@(Sub _ _) d = paren (p_expr n) ++ "/" ++ p_expr d
 divide n d = p_expr n ++ "/" ++ p_expr d
 
 -- | Helper for properly rendering negation of expressions
@@ -168,6 +182,16 @@ neg a@(Int _) = "-" ++ p_expr a
 neg a@(Sym _) = "-" ++ p_expr a
 neg   (Neg n) = p_expr n
 neg a         = paren ("-" ++ p_expr a)
+
+-- | Helper for properly rendering exponents
+pow :: Expr -> Expr -> String
+pow a@(Add _ _) b = sqbrac (p_expr a) ++ sup (p_expr b)
+pow a@(Sub _ _) b = sqbrac (p_expr a) ++ sup (p_expr b)
+pow a@(Frac _ _) b = sqbrac (p_expr a) ++ sup (p_expr b) --Found in HTMLHelpers
+pow a@(Div _ _) b = paren (p_expr a) ++ sup (p_expr b)
+pow a@(Mul _ _) b = paren (p_expr a) ++ sup (p_expr b)
+pow a@(Pow _ _) b = paren (p_expr a) ++ sup (p_expr b)
+pow a b = p_expr a ++ sup (p_expr b)
 
 -----------------------------------------------------------------
 ------------------BEGIN TABLE PRINTING---------------------------
@@ -245,6 +269,7 @@ p_op :: Function -> [Expr] -> String
 p_op f@(Cross) xs = binfix_op f xs
 p_op f@(Summation bs) (x:[]) = show f ++ makeBound bs ++ paren (p_expr x)
 p_op (Summation _) _ = error "Something went wrong with a summation"
+p_op f@(Product bs) (x:[]) = show f ++ makeBound bs ++ paren (p_expr x)
 p_op f@(Integral bs wrtc) (x:[]) = 
   show f ++ makeIBound bs ++ paren (p_expr x ++ p_expr wrtc)
 p_op (Integral _ _) _  = error "Something went wrong with an integral" 
@@ -252,6 +277,7 @@ p_op Abs (x:[]) = "|" ++ p_expr x ++ "|"
 p_op Abs _ = error "Abs should only take one expr."
 p_op Norm (x:[]) = "||" ++ p_expr x ++ "||"
 p_op Norm _ = error "Norm should only take on expression."
+p_op f@(Exp) (x:[]) = show f ++ sup (p_expr x)
 p_op f (x:[]) = show f ++ paren (p_expr x) --Unary ops, this will change once more complicated functions appear.
 p_op _ _ = error "Something went wrong with an operation"
 

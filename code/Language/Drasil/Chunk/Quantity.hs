@@ -36,3 +36,4 @@ instance Quantity ConVar where
   typ    f (CV c s t) = fmap (\x -> CV c s x) (f t)
   getSymb   = Just . SF 
   getUnit _ = Nothing
+  

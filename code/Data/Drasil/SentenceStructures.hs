@@ -1,24 +1,43 @@
 module Data.Drasil.SentenceStructures
-  ( foldlSent, foldlsC, foldlList
-  , sAnd, andIts, andThe, sAre, sIn
+  ( foldlSent, foldlSent_, foldlSentCol, foldlsC, foldlList
+  , sAnd, andIts, andThe, sAre, sIn, sVersus
   , sIs, isThe, sOf, sOr, ofThe, ofThe'
   , ofGiv, ofGiv'
   , toThe, tableShows, figureLabel
-  , showingCxnBw, refineChain, foldlSP
+  , showingCxnBw, refineChain, foldlSP, foldlSP_, foldlSPCol
+  , maybeChanged, maybeExpanded, maybeWOVerb
+  , tAndDWAcc, tAndDWSym, tAndDOnly
+  , makeConstraint, displayConstr
+  , fmtInConstr
   ) where
 
 import Language.Drasil
-import Data.Drasil.Utils (foldle, foldle1)
+import Data.Drasil.Utils (foldle, foldle1, getS, fmtU)
 import Data.Drasil.Concepts.Documentation
+import Control.Lens ((^.))
 
 {--** Sentence Folding **--}
 -- | partial function application of foldle for sentences specifically
 foldlSent :: [Sentence] -> Sentence
 foldlSent = foldle (+:+) (+:+.) EmptyS
 
+-- | foldlSent but does not end with period
+foldlSent_ :: [Sentence] -> Sentence
+foldlSent_ = foldle (+:+) (+:+) EmptyS
+
+-- | foldlSent but ends with colon
+foldlSentCol :: [Sentence] -> Sentence
+foldlSentCol = foldle (+:+) (+:) EmptyS
+
 -- | fold sentences then turns into content
 foldlSP :: [Sentence] -> Contents
 foldlSP = (Paragraph . foldlSent)
+
+foldlSP_ :: [Sentence] -> Contents
+foldlSP_ = (Paragraph . foldlSent_)
+
+foldlSPCol :: [Sentence] -> Contents
+foldlSPCol = (Paragraph . foldlSentCol)
 
 -- | creates a list of elements seperated by commas, including the last element
 foldlsC :: [Sentence] -> Sentence
@@ -61,6 +80,9 @@ sOf p1 p2 = p1 +:+ S "of" +:+ p2
 sOr :: Sentence -> Sentence -> Sentence
 sOr p1 p2 = p1 +:+ S "or" +:+ p2
 
+sVersus :: Sentence -> Sentence -> Sentence
+sVersus p1 p2 = p1 +:+ S "versus" +:+ p2
+
 ofThe, ofThe' :: Sentence -> Sentence -> Sentence
 ofThe  p1 p2 = S "the" +:+ p1 +:+ S "of the" +:+ p2
 ofThe' p1 p2 = S "The" +:+ p1 +:+ S "of the" +:+ p2
@@ -102,3 +124,59 @@ rc (x:y:[]) = S "and the" +:+ (plural x) +:+ S "to the" +:+.
   (plural y)
 rc (x:y:xs) = S "the" +:+ plural x +:+ S "to the" +:+ plural y `sC` rc ([y] ++ xs)
 rc _ = error "refineChain helper encountered an unexpected empty list"
+
+
+-- | helper functions for making likely change statements
+likelyFrame :: Sentence -> Sentence -> Sentence -> Sentence
+likelyFrame a verb x = foldlSent [S "The", a, S "may be", verb, x]
+maybeWOVerb, maybeChanged, maybeExpanded :: Sentence -> Sentence -> Sentence
+maybeWOVerb a b = likelyFrame a EmptyS b
+maybeChanged a b = likelyFrame a (S "changed") b
+maybeExpanded a b = likelyFrame a (S "expanded") b
+
+-- | helpful combinators for making Sentences for Terminologies with Definitions
+-- term (acc) - definition
+tAndDWAcc :: Concept s => s -> ItemType
+tAndDWAcc temp = Flat $ ((at_start temp) :+: sParenDash (short temp) :+: (temp ^. defn)) 
+-- term (symbol) - definition
+tAndDWSym :: (Concept s, SymbolForm a) => s -> a -> ItemType
+tAndDWSym tD sym = Flat $ ((at_start tD) :+: sParenDash (getS sym)) :+: (tD ^. defn)
+-- term - definition
+tAndDOnly :: Concept s => s -> ItemType
+tAndDOnly chunk  = Flat $ ((at_start chunk) +:+ S "- ") :+: (chunk ^. defn)
+
+--FIXME:Reduce duplication. Idealy only use displayConstr. Gamephysics uses pi/2 which is not a "number" yet
+makeConstraint :: (Constrained s, Quantity s, SymbolForm s) => s -> Sentence -> [Sentence]
+makeConstraint s num = [getS s, fmtPhys s, fmtU num s]
+
+displayConstr :: (Constrained s, Quantity s, SymbolForm s, Show a) => s -> a -> Sentence -> [Sentence]
+displayConstr s num uncrty = [getS s, fmtPhys s,
+  fmtSfwr s, fmtU (S (show num)) (qs s), uncrty]
+
+fmtPhys :: (Constrained s, SymbolForm s) => s -> Sentence
+fmtPhys s = foldlList $ fmtCP $ filter filterP (s ^. constraints)
+  where filterP (Phys _) = True
+        filterP (Sfwr _) = False
+        fmtCP = map (\(Phys f) -> E $ f (C s))
+
+fmtSfwr :: (Constrained s, SymbolForm s) => s -> Sentence
+fmtSfwr s = foldlList $ fmtCS $ filter filterS (s ^. constraints)
+  where filterS (Phys _) = False
+        filterS (Sfwr _) = True
+        fmtCS = map (\(Sfwr f) -> E $ f (C s))
+       
+fmtInConstr :: UncertQ -> [Sentence]
+fmtInConstr q = [getS q, fmtPhys q, fmtSfwr q, fmtU (S $ show $ typVal q) q, S $ show (q ^. uncert)]
+
+-- Start of attempt at intelligent format-er for input constraints
+--take one input and all inputs
+{-
+fmtInputConstr :: UncertQ -> [UncertQ] -> [Sentence]
+fmtInputConstr q qs = [getS q] ++ physC q qs ++ sfwrC q ++ [fmtU (S $ show $ typVal q) q] ++ typUnc q
+
+physC :: [UncertQ] -> [Sentence]
+physC q qs
+  | isPhysC (fmtPhys qs) = [fmtPhys q]
+  | otherwise = []
+  where isPhysC fmtPhys q
+-}

@@ -72,30 +72,12 @@ next_prime(int n)
 	return primes[i];
 }
 
-struct HashSetBin {
-    void *elt;
-    HashValue hash;
-    struct HashSetBin *next;
-};
-
 // Error value for unit testing.
 #ifdef UNIT_TEST
     static const struct HashSetBin errorBin = {NULL, UINTPTR_MAX, NULL};
     #define BIN_ERR errorBin
 #endif
 
-struct HashSet {
-    unsigned int entries;
-    unsigned int size;
-
-    HashSetEqlFunc eql;
-    void *defaultVal;
-
-    HashSetBin **table;
-    HashSetBin *pooledBins;
-
-    Array *allocatedBuffers;
-};
 
 HashSet *hashSetNew(int size, HashSetEqlFunc eqlFunc) {
     HashSet *set = (HashSet *) calloc(1, sizeof(HashSet));

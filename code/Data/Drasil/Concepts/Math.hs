@@ -3,14 +3,15 @@ module Data.Drasil.Concepts.Math where
 import Language.Drasil
 import Control.Lens ((^.))
 
-area, calculation, diameter, equation, euclidN, euclidSpace, gradient, 
+angle, area, calculation, diameter, equation, euclidN, euclidSpace, gradient, 
   graph, matrix, norm, normal, normalV, number, orient, parameter, perp, perpV, 
   probability, surArea, surface, unit_, unitV, vector, rate, change, rOfChng, 
   constraint :: ConceptChunk
 
 ode :: CI
 
-{--algorithm    = dcc "algorithm"    (cn' "algorithm")               "A series of steps to be followed in calculations and problem-solving operations" --}
+angle        = dcc "angle"        (cn' "area")                    ("The amount of rotation needed to bring one line or plane into" ++
+                                                                  "coincidence with another")
 area         = dcc "area"         (cn' "area")                    "A part of an object or surface"
 calculation  = dcc "calculation"  (cn' "calculation")             "A mathematical determination of the size or number of something"
 change       = dcc "change"       (cn' "change")                  "Difference between relative start and end states of an object"

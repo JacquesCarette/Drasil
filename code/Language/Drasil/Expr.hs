@@ -27,12 +27,16 @@ data Expr where
   V        :: Variable -> Expr
   Dbl      :: Double -> Expr
   Int      :: Integer -> Expr
+  Bln      :: Bool -> Expr
   (:^)     :: Expr -> Expr -> Expr -- Power operator
   (:*)     :: Expr -> Expr -> Expr -- Multiplication
   (:/)     :: Expr -> Expr -> Expr -- Division
   (:+)     :: Expr -> Expr -> Expr -- Addition
   (:-)     :: Expr -> Expr -> Expr -- Subtraction
   (:.)     :: Expr -> Expr -> Expr -- Dot product
+  (:&&)    :: Expr -> Expr -> Expr -- logical and
+  (:||)    :: Expr -> Expr -> Expr -- logical or
+  Not      :: Expr -> Expr -- logical not
   Neg      :: Expr -> Expr -- Negation
   Deriv    :: DerivType -> Expr -> Expr -> Expr -- Derivative, syntax is:
   -- Type (Partial or total) -> principal part of change -> with respect to
@@ -48,9 +52,12 @@ data Expr where
   Grouping :: Expr -> Expr
   BinaryOp :: BiFunc -> Expr
   -- Operator :: Func   -> [Expr] -> Expr
-  (:=) :: Expr -> Expr -> Expr
-  (:<) :: Expr -> Expr -> Expr
-  (:>) :: Expr -> Expr -> Expr
+  (:=)  :: Expr -> Expr -> Expr
+  (:!=) :: Expr -> Expr -> Expr
+  (:<)  :: Expr -> Expr -> Expr
+  (:>)  :: Expr -> Expr -> Expr
+  (:<=) :: Expr -> Expr -> Expr
+  (:>=) :: Expr -> Expr -> Expr
  
 type Variable = String
 
@@ -63,31 +70,37 @@ instance Num Expr where
   a * b = a :* b
   a - b = a :- b
   fromInteger a = Int a
-
-  -- these are Num warts
+  abs = UnaryOp . Abs
+  
+  -- this is a Num wart
   signum _ = error "should not use signum in expressions"
-  abs _    = error "should not use abs in expressions"
 
 
 instance Eq Expr where
   V a == V b                   =  a == b
   Dbl a == Dbl b               =  a == b
   Int a == Int b               =  a == b
+  Bln a == Bln b               =  a == b
   (:^) a b == (:^) c d         =  a == c && b == d
   (:*) a b == (:*) c d         =  a == c && b == d || a == d && b == c
   (:/) a b == (:/) c d         =  a == c && b == d
   (:+) a b == (:+) c d         =  a == c && b == d || a == d && b == c
   (:-) a b == (:-) c d         =  a == c && b == d
   (:.) a b == (:.) c d         =  a == c && b == d || a == d && b == c
+  (:&&) a b == (:&&) c d       =  a == c && b == d || a == d && b == c
+  (:||) a b == (:||) c d       =  a == c && b == d || a == d && b == c
+  Not a == Not b               =  a == b
   Neg a == Neg b               =  a == b
   Deriv t1 a b == Deriv t2 c d =  t1 == t2 && a == c && b == d
   C a == C b                   =  (a ^. id) == (b ^. id)
   FCall a b == FCall c d       =  a == c && b == d
   Case a == Case b             =  a == b
-  (:=) a b == (:=) c d         =  a == c && b == d || a == d && b == c
-  (:<) a b == (:<) c d         =  a == c && b == d
-  (:>) a b == (:>) c d         =  a == c && b == d
-  (:>) a b == (:<) c d         =  a == d && b == c
+  (:=)  a b == (:=)  c d       =  a == c && b == d || a == d && b == c
+  (:!=) a b == (:!=) c d       =  a == c && b == d || a == d && b == c
+  (:<)  a b == (:<)  c d       =  a == c && b == d
+  (:>)  a b == (:>)  c d       =  a == c && b == d
+  (:<=) a b == (:<=) c d       =  a == c && b == d
+  (:>=) a b == (:>=) c d       =  a == c && b == d
   _ == _                       =  False
 
 instance Fractional Expr where
@@ -110,6 +123,7 @@ data UFunc where
     -- where index is used in the sum (i.e. 'i') with a low and high bound
     -- OR Nothing for the first term.
     -- Expr is the expression we are summing over
+  Product :: (Maybe (Symbol, Bound, Bound)) -> Expr -> UFunc
   Abs :: Expr -> UFunc -- Absolute value
   Norm :: Expr -> UFunc -- Norm
   Integral :: (SymbolForm c) => 
@@ -122,38 +136,44 @@ data UFunc where
   Sec :: Expr -> UFunc
   Csc :: Expr -> UFunc
   Cot :: Expr -> UFunc
+  Exp :: Expr -> UFunc
   
 -- | Smart constructor to take the log of an expression
 log :: Expr -> Expr
-log e = UnaryOp (Log e)
-
--- | Smart constructor to take the absolute value of an expression
-abs :: Expr -> Expr 
-abs e = UnaryOp (Abs e)
+log = UnaryOp . Log
 
 -- | Smart constructor to apply sin to an expression
 sin :: Expr -> Expr
-sin e = UnaryOp (Sin e)
+sin = UnaryOp . Sin
 
 -- | Smart constructor to apply cos to an expression
 cos :: Expr -> Expr 
-cos e = UnaryOp (Cos e)
+cos = UnaryOp . Cos
 
 -- | Smart constructor to apply tan to an expression
 tan :: Expr -> Expr
-tan e = UnaryOp (Tan e)
+tan = UnaryOp . Tan
 
 -- | Smart constructor to apply sec to an expression
 sec :: Expr -> Expr 
-sec e = UnaryOp (Sec e)
+sec = UnaryOp . Sec
 
 -- | Smart constructor to apply csc to an expression
 csc :: Expr -> Expr
-csc e = UnaryOp (Csc e)
+csc = UnaryOp . Csc
 
 -- | Smart constructor to apply cot to an expression
 cot :: Expr -> Expr 
-cot e = UnaryOp (Cot e)
+cot = UnaryOp . Cot
+
+-- | Smart constructor for the exponential (base e) function
+exp :: Expr -> Expr
+exp = UnaryOp . Exp
+
+-- | Smart constructor for the summation and product operators
+summation, product :: (Maybe (Symbol, Bound, Bound)) -> Expr -> Expr
+summation bounds expr = UnaryOp $ Summation bounds expr
+product   bounds expr = UnaryOp $ Product   bounds expr
 
 -- | Binary Functions
 data BiFunc where

@@ -15,6 +15,9 @@ This folder contains our working examples (implementations in Drasil of the prev
 **PCM**
   - Contains the current state of the solar water heating system case study implemented in Drasil
   
+**Sections**
+  - Contains the files used to auto-generate the paragraphs of each case study.
+  
 **SSP**
   - Contains the current state of the slope stability analysis case study implemented in Drasil
   
@@ -24,26 +27,8 @@ This folder contains our working examples (implementations in Drasil of the prev
 DocumentLanguage.hs
   - Contains the current implementation of the document *recipe* language
 
-OrganizationOfSRS.hs
-  - Contains functions for creating the "organization of document" section (essentially a template)
-
 README.md
   - This file
 
-ReferenceMaterial.hs
-  - Contains functions for creating the "reference material" section header and introduction (essentially a template).
-
 SRS.hs
   - Contains functions for building a Software Requirements Specification
-
-SpecificSystemDescription.hs
-  - Contains functions for creating the "Specific System Description" section (essentially a template)
-
-TableOfAbbAndAcronyms.hs
-  - Contains functions for generating a table of abbreviations and acronyms (sub)section
-
-TableOfSymbols.hs
-  - Contains functions for generating a table of symbols (sub)section
-
-TableOfUnits.hs
-  - Contains functions for generating a table of units (sub)section

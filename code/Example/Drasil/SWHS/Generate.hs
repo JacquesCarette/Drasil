@@ -10,5 +10,5 @@ docs = [Recipe (SRS "SWHS_SRS") swhs_srs',
         Recipe (MG "SWHS_MG") swhs_mg
        ]
 
-generate :: IO ()       
+generate :: IO ()
 generate = gen docs

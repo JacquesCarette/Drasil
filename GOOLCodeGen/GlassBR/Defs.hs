@@ -11,7 +11,8 @@ l_filename, l_infile, l_a, l_b, l_t, l_gt, l_w, l_tnt, l_sdx, l_sdy,
   l_pb, l_j, l_nfl, l_lr, l_is_safe1, l_is_safe2, l_y1, l_y2, l_x1, l_x2, 
   l_x, l_y, l_arr, l_v, l_i, l_mat, l_c, l_col, l_x_array, l_y_array, 
   l_z_array, l_z, l_x_z1, l_y_z1, l_x_z2, l_y_z2, l_y_upper, l_y_lower,
-  l_outfile  :: Label
+  l_outfile, l_line, l_lines, l_x_array_str, l_y_array_str, l_nextLine, 
+  l_z_array_str  :: Label
 l_filename = "filename"
 l_infile = "infile"
 l_a = "a"
@@ -75,6 +76,12 @@ l_y_z2 = "y_z2"
 l_y_upper = "y_upper"
 l_y_lower = "y_lower"
 l_outfile = "outfile"
+l_line = "line"
+l_lines = "lines"
+l_x_array_str = "x_array_str"
+l_y_array_str = "y_array_str"
+l_nextLine = "nextLine"
+l_z_array_str = "z_array_str"
 
 
 v_filename, v_infile, v_a, v_b, v_t, v_gt, v_w, v_tnt, v_sdx, v_sdy,
@@ -84,7 +91,8 @@ v_filename, v_infile, v_a, v_b, v_t, v_gt, v_w, v_tnt, v_sdx, v_sdy,
   v_q_hat, v_q_hat_tol, v_pb, v_j, v_nfl, v_lr, v_is_safe1, 
   v_is_safe2, v_x1, v_y1, v_x2, v_y2, v_x, v_y, v_arr, v_v, v_i, 
   v_mat, v_c, v_col, v_x_array, v_y_array, v_z_array, v_z, v_x_z1, 
-  v_y_z1, v_x_z2, v_y_z2, v_y_upper, v_y_lower, v_outfile  :: Value
+  v_y_z1, v_x_z2, v_y_z2, v_y_upper, v_y_lower, v_outfile, v_line, 
+  v_lines, v_x_array_str, v_y_array_str, v_nextLine, v_z_array_str  :: Value
 v_filename = var l_filename
 v_infile = var l_infile
 v_a = var l_a
@@ -148,6 +156,13 @@ v_y_z2 = var l_y_z2
 v_y_upper = var l_y_upper
 v_y_lower = var l_y_lower
 v_outfile = var l_outfile
+v_line = var l_line
+v_lines = var l_lines
+v_x_array_str = var l_x_array_str
+v_y_array_str = var l_y_array_str
+v_nextLine = var l_nextLine
+v_z_array_str = var l_z_array_str
+
 
 p_filename, p_w_array, p_data_sd, p_data_q, p_params, p_q, p_j, p_q_hat_tol, 
   p_nfl, p_pb, p_lr, p_x1, p_y1, p_x2, p_y2, p_x, p_arr, p_v, p_mat, 
@@ -185,7 +200,7 @@ s_InputParameters :: StateType
 s_InputParameters = obj "InputParameters"
 
 lib_InputParameters, lib_InputFormat, lib_DerivedValues, lib_InputConstraints,
-  lib_Interpolation, lib_Calculations, lib_OutputFormat :: Library
+  lib_Interpolation, lib_Calculations, lib_OutputFormat, lib_ReadTable :: Library
 lib_InputParameters = "InputParameters"
 lib_InputFormat = "InputFormat"
 lib_DerivedValues = "DerivedValues"
@@ -193,6 +208,7 @@ lib_InputConstraints = "InputConstraints"
 lib_Interpolation = "Interpolation"
 lib_Calculations = "Calculations"
 lib_OutputFormat = "OutputFormat"
+lib_ReadTable = "ReadTable"
 
 
 param_float_fields :: [String]

@@ -7,12 +7,10 @@ import Data.Drasil.Utils (foldle1)
 import Data.Drasil.SentenceStructures (foldlSent)
 import qualified Data.Drasil.Quantities.Math as QM (orientation)
 import qualified Data.Drasil.Concepts.Physics as CP (rigidBody)
-import qualified Data.Drasil.Quantities.PhysicalProperties as QPP (mass)
-import qualified Data.Drasil.Quantities.Physics as QP (torque, acceleration, 
+import qualified Data.Drasil.Quantities.Physics as QP (acceleration, 
   angularAccel, force, gravitationalAccel, velocity, 
-  momentOfInertia, angularVelocity, position)
---import qualified Data.Drasil.Concepts.Math as QM ()
---import Data.Drasil.Quantities.Physics
+  momentOfInertia, angularVelocity, position, time, impulseS)
+import Drasil.GamePhysics.Unitals
 import Prelude hiding (id)
 import Control.Lens ((^.))
 
@@ -29,14 +27,15 @@ im1NP :: NP
 im1NP =  nounPhraseSP "Force on the translational motion of a set of 2d rigid bodies"
 
 im1Rel :: Relation -- FIXME: add proper equation
-im1Rel = (C QP.acceleration) := (C QP.velocity) := (C QP.gravitationalAccel) + ((C QP.force) / (C QPP.mass))
+im1Rel = (C acc_i) := (Deriv Total (FCall (C vel_i) [C QP.time]) (C QP.time))
+  := (C QP.gravitationalAccel) + ((FCall (C force_i) [C QP.time]) / (C mass_i))
 
 im1descr, im1leg :: Sentence
 im1descr = foldlSent [S "The above equation expresses the total", 
-  (phrase $ QP.acceleration), S "of the", (phrase $ CP.rigidBody), 
-  S "(A1, A2) i as the sum of", (phrase $ QP.gravitationalAccel), 
-  S "(GD3) and", (phrase $ QP.acceleration), S "due to applied", 
-  (phrase $ QP.force), S "Fi(t) (T1). The resultant outputs are", 
+  (phrase QP.acceleration), S "of the", (phrase CP.rigidBody), 
+  S "(A1, A2) i as the sum of", (phrase QP.gravitationalAccel), 
+  S "(GD3) and", (phrase QP.acceleration), S "due to applied", 
+  (phrase QP.force), S "Fi(t) (T1). The resultant outputs are", 
   S "then obtained from this equation using DD2, DD3 and DD4. It is currently", 
   S "assumed that there is no damping (A6) or constraints (A7) involved"]
 
@@ -58,8 +57,10 @@ im2 = makeRC "im2" (im2NP) (im2descr +:+ im2leg) im2Rel
 im2NP :: NP
 im2NP =  nounPhraseSP "Force on the rotational motion of a set of 2D rigid body"
 
-im2Rel :: Relation -- FIXME: add proper equation
-im2Rel = (C QP.angularAccel) := (C QP.angularVelocity) := ((C QP.torque) / (C QP.momentOfInertia))
+im2Rel :: Relation
+im2Rel = (C QP.angularAccel) := Deriv Total
+  (FCall (C QP.angularVelocity) [C QP.time])
+  (C QP.time) := ((FCall (C torque_i) [C QP.time]) / (C QP.momentOfInertia))
 
 im2descr, im2leg :: Sentence
 im2descr = foldlSent [S "The above equation for the total angular acceleration", 
@@ -81,13 +82,25 @@ im2leg = foldle1 (+:+.) (+:+.)
 {-- --}
 
 im3 :: RelationConcept
-im3 = makeRC "im3" (im3NP) (im3descr +:+ im3leg) im3Rel 
+im3 = makeRC "im3" (im3NP) (im3descr +:+ im3leg) im3Rel1
 
 im3NP :: NP
 im3NP =  nounPhraseSP "Collisions on 2D rigid bodies"
 
-im3Rel :: Relation -- FIXME: add proper equation
-im3Rel = (C QP.force) := (C QPP.mass)
+im3Rel1, im3Rel2, im3Rel3, im3Rel4 :: Relation -- FIXME: add proper equation
+im3Rel1 = (FCall (C vel_A) [C time_c]) := (FCall (C vel_A) [C QP.time]) +
+  ((C QP.impulseS) / (C mass_A)) * (C normalVect)
+
+im3Rel2 = (FCall (C vel_B) [C time_c]) := (FCall (C vel_B) [C QP.time]) -
+  ((C QP.impulseS) / (C mass_B)) * (C normalVect)
+
+
+--fixme: these two need to use cross product and parametrized dispUnit symbol
+im3Rel3 = (FCall (C angVel_A) [C time_c]) := (FCall (C angVel_A) [C QP.time]) +
+  ((C dispUnit) * ((C QP.impulseS) * (C normalVect))) / (C QP.momentOfInertia)
+
+im3Rel4 = (FCall (C angVel_B) [C time_c]) := (FCall (C angVel_B) [C QP.time]) -
+  ((C dispUnit) * ((C QP.impulseS) * (C normalVect))) / (C QP.momentOfInertia)
 
 im3descr, im3leg :: Sentence
 im3descr = foldlSent [S "This instance model is based on our assumptions",
@@ -103,9 +116,9 @@ im3leg = foldle1 (+:+.) (+:+.)
   (helper1 QP.velocity "k" EmptyS),
   (helper1 QM.orientation "k" EmptyS),
   (helper1 QP.angularVelocity "k" EmptyS), 
-  S "n is the collision normal vector (m)", 
+  S "n is the" +:+ (phrase normalVect) +:+ S "(m)", 
   S "Its signed direction is determined by (A4)",
-  S "j is the collision impulse (DD8) (N s)", 
+  S "j is the" +:+ (phrase QP.impulseS) +:+ S "(DD8) (N s)", 
   S "P is the point of collision (m)",
   S "rkP is the displacement vector between the center of mass" +:+
   S "of the k-th body and point P (m)"]

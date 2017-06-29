@@ -8,16 +8,16 @@ import Data.Drasil.SI_Units
 diameter, gradient, normalVect, unitVect, euclidNorm, perpVect, surface, uNormalVect :: ConVar
 
 diameter = cvR CM.diameter lD
-gradient  = cvR CM.gradient (Greek Nabla)
-normalVect = cvR CM.normalV (vec $ lN)
-uNormalVect = cvR CM.normalV (vec $ hat lN)
-unitVect = cvR CM.unitV (vec $ hat lI)
-perpVect = cvR perpV (vec $ lN)
-surface = cvR CM.surface cS
-euclidNorm = cvR CM.euclidN (Concat [Atomic "||", (vec lR), Atomic "||"])
+gradient  = cvRs CM.gradient (Greek Nabla) Real
+normalVect = cvRs CM.normalV (vec $ lN) Real
+uNormalVect = cvRs CM.normalV (vec $ hat lN) Real
+unitVect = cvRs CM.unitV (vec $ hat lI) Real
+perpVect = cvRs perpV (vec $ lN) Real
+surface = cvRs CM.surface cS Real
+euclidNorm = cvRs CM.euclidN (Concat [Atomic "||", (vec lR), Atomic "||"]) Real
 
 
 surArea, orientation :: UnitalChunk
 
-surArea = uc CM.surArea cA m_2
-orientation = uc CM.orient (Greek Phi_L) radian
+surArea = ucs' CM.surArea cA m_2 Real
+orientation = ucs' CM.orient (Greek Phi_L) radian Radians

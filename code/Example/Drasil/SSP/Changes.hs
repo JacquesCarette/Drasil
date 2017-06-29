@@ -4,12 +4,12 @@ import Language.Drasil
 import Drasil.SSP.Modules
 import Data.Drasil.Changes
 
-lcs :: [LCChunk]
-lcs = [lc1, lc2, lc3, lc4, lc5, lc6, lc7, lc8, 
+likelyChanges :: [LCChunk]
+likelyChanges = [lc1, lc2, lc3, lc4, lc5, lc6, lc7, lc8, 
       lc9, lc10, lc11, lc12, lc13, lc14]
 
-ucs :: [UCChunk]
-ucs = [ucIO, ucInputS, ucOutput]
+unlikelyChanges :: [UCChunk]
+unlikelyChanges = [ucIO, ucInputS, ucOutput]
 
 lc1, lc2, lc3, lc4, lc5, lc6, lc7, lc8,
   lc9, lc10, lc11, lc12, lc13, lc14 :: LCChunk

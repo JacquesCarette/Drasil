@@ -6,11 +6,11 @@ import Drasil.SWHS.Modules
 import Data.Drasil.Concepts.Math (ode)
 import Data.Drasil.Changes
 
-lcs :: [LCChunk]
-lcs = [lc1, lc2, lc3, lc4, lc5, lc6, lc7, lc8, lc9, lc10, lc11, lc12]
+likelyChanges :: [LCChunk]
+likelyChanges = [lc1, lc2, lc3, lc4, lc5, lc6, lc7, lc8, lc9, lc10, lc11, lc12]
 
-ucs :: [UCChunk]
-ucs = [uc1, uc2, uc3, uc4, uc5, uc6]
+unlikelyChanges :: [UCChunk]
+unlikelyChanges = [uc1, uc2, uc3, uc4, uc5, uc6]
 
 lc1, lc2, lc3, lc4, lc5, lc6, lc7, lc8, lc9, lc10, lc11, lc12 :: LCChunk
 
@@ -21,7 +21,7 @@ lc1 = lcHW
 --  [mod_inputf]
 lc2 = lcInputF  mod_inputf
 
-lc3 = LCChunk (nw $ npnc "parameters" (nounPhraseSP 
+lc3 = LCChunk (nw $ npnc "parameters" (nounPhraseSP
   "The format of the input parameters."))
   [mod_inputp]
 
@@ -53,31 +53,31 @@ lc10 = lcArray mod_seq
 
 lc11 = LCChunk (nw $ npnc "ode" lc11np) [mod_ode]
 
-lc12 = LCChunk (nw $ npnc "plot" (nounPhraseSP 
+lc12 = LCChunk (nw $ npnc "plot" (nounPhraseSP
   "The implementation of plotting data.")) [mod_plot]
 
 --FIXME: These shouldn't be duplicated.
 lc7np, lc11np, uc5np :: NP
-lc7np = nounPhrase'' (S "How the governing" +:+ getAcc ode :+: 
-  S "s are defined using the input parameters.") (S "How the governing" +:+ 
-  (getAcc ode) :+: S "s are defined using the input parameters.") 
+lc7np = nounPhrase'' (S "How the governing" +:+ getAcc ode :+:
+  S "s are defined using the input parameters.") (S "How the governing" +:+
+  (getAcc ode) :+: S "s are defined using the input parameters.")
   CapFirst CapWords
-  
+ 
 lc11np = nounPhrase'' (S "The algorithm used for the" +:+ getAcc ode +:+
   S "solver.") (S "The algorithm used for the" +:+ getAcc ode +:+
   S "solver.") CapFirst CapWords
-  
+ 
 uc5np = nounPhrase'' (S "The" +:+ getAcc ode :+: S "s for" +:+
   S "temperature can be defined using parameters defined in the input" +:+
   S "parameters module.") (S "The" +:+ getAcc ode :+: S "s for" +:+
   S "temperature can be defined using parameters defined in the input" +:+
   S "parameters module.") CapFirst CapWords
-  
+ 
 uc1, uc2, uc3, uc4, uc5, uc6 :: UCChunk
 
 uc1 = ucIO
 
-uc2 = nw $ npnc "inputsource" (nounPhraseSP 
+uc2 = nw $ npnc "inputsource" (nounPhraseSP
   "There will always be a source of input data external to the software.")
 
 uc3 = ucOutput

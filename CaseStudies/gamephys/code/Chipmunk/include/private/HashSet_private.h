@@ -31,11 +31,29 @@
 
 // HASH SETS
 
-typedef struct HashSetBin HashSetBin;
-typedef struct HashSet HashSet;
-
+//typedef struct HashSetBin HashSetBin;
+//typedef struct HashSet HashSet;
 typedef bool (*HashSetEqlFunc)(void *ptr, void *elt);
 typedef void *(*HashSetTransFunc)(void *ptr, void *data);
+
+typedef struct HashSetBin {
+    void *elt;
+    HashValue hash;
+    struct HashSetBin *next;
+} HashSetBin;
+
+typedef struct HashSet {
+    unsigned int entries;
+    unsigned int size;
+
+    HashSetEqlFunc eql;
+    void *defaultVal;
+
+    HashSetBin **table;
+    HashSetBin *pooledBins;
+
+    Array *allocatedBuffers;
+} HashSet;
 
 HashSet *hashSetNew(int size, HashSetEqlFunc eqlFunc);
 void hashSetSetDefaultValue(HashSet *set, void *defaultVal);

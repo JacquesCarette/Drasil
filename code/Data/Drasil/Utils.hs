@@ -3,7 +3,6 @@ module Data.Drasil.Utils
   , foldle1
   , mkEnumAbbrevList
   , listConstS
-  , listConstExpr
   , zipFTable
   , zipSentList
   , makeTMatrix
@@ -15,25 +14,30 @@ module Data.Drasil.Utils
   , mkRefsList
   , mkInputDatTb
   , getS
+  , addPercent
   , weave
   , fmtU
   , unwrap
   , fmtBF
   , symbolMapFun
   , fterms , fterm
+  , mkDataDef
+  , inDataConstTbl, outDataConstTbl
+  , prodUCTbl
   ) where
 
+import Prelude hiding (id)
 import Data.List
 import Control.Lens ((^.))
-import Language.Drasil (Sentence(Sy, P, EmptyS, S, (:+:), E), (+:+),
+import Language.Drasil {-(Sentence(Sy, P, EmptyS, S, (:+:), E), (+:+),
   ItemType(Flat), sParen, sSqBr, Contents(Definition, Enumeration), 
   makeRef, DType, Section, ListType(Simple, Bullet), getUnit, Quantity,
   symbol, SymbolForm, SymbolMap, symbolMap, UnitDefn, usymb, Chunk, Expr(..),
-  phrase, titleize, titleize', mkTable, Contents(Table))
-import Data.Drasil.Concepts.Documentation (description, input_, datum, 
-                                            symbol_, fterms, fterm)
+  phrase, titleize, titleize', mkTable, Contents(Table), fromEqn, fromEqn', 
+  UnitalChunk, QDefinition, term, id, unit, ucw)-}
+import Data.Drasil.Concepts.Documentation
 import Data.Drasil.Concepts.Math (unit_)
-
+import Data.Drasil.Concepts.Documentation (value, physicalConstraint, variable)
   
 -- | fold helper functions applies f to all but the last element, applies g to
 -- last element and the accumulator
@@ -61,13 +65,13 @@ enumWithAbbrev start abbrev = [abbrev :+: (S $ show x) | x <- [start..]]
 -- t - the title of the list
 -- l - the list to be enumerated
 mkEnumAbbrevList :: Integer -> Sentence -> [Sentence] -> [(Sentence, ItemType)]
-mkEnumAbbrevList s t l = zip (enumWithAbbrev s t) (map (Flat) l)
+mkEnumAbbrevList s t l = zip (enumWithAbbrev s t) (map Flat l)
 
 -- | creates a list of references from l starting from s
 -- s - start indices
 -- l - list of references
 mkRefsList :: Integer -> [Sentence] -> Contents
-mkRefsList s l = Enumeration $ Simple $ zip (enumWithSquBrk s) (map (Flat) l)
+mkRefsList s l = Enumeration $ Simple $ zip (enumWithSquBrk s) (map Flat l)
 
 -- | creates a list of sentences of the form "[#]"
 -- start - start indices
@@ -98,13 +102,13 @@ fmtBF _ []      = S "None"
 fmtBF symb [(f,num)]  = E ((C symb) `f` num)
 fmtBF symb ((f,num):xs) = (E ((C symb) `f` num)) +:+ S "and" +:+ (fmtBF symb xs)
 
--- | makes a constraint table row entry from symbol expr and sentence
-listConstExpr :: (SymbolForm a, Quantity a) => (a, [(Expr -> Expr -> Expr, Expr)], Sentence) -> [Sentence]
-listConstExpr (s, a, b) = [getS s, fmtBF s a, fmtU b s]
-
 -- | gets symbol from chunk
 getS :: (SymbolForm a) => a -> Sentence
 getS s  = P $ s ^. symbol
+
+-- | outputs sentence with % attached to it
+addPercent :: Float ->  Sentence
+addPercent num = (S (show num) :+: (P (Special Percent)))
 
 -- | makes a list of sentence from sentences
 listConstS :: (Sentence, Sentence, Sentence, Sentence, Sentence) -> [Sentence]
@@ -133,9 +137,9 @@ makeTMatrix colName col row = zipSentList [] colName [zipFTable [] x row | x <- 
 -- | takes a list of wrapped variables and creates an Input Data Table for uses in Functional Requirments
 mkInputDatTb :: (SymbolForm a, Quantity a) => [a] -> Contents
 mkInputDatTb inputVar = Table [titleize symbol_, titleize unit_, 
-  titleize description]
+  S "Name"]
   (mkTable [getS, fmtU EmptyS, phrase] inputVar) 
-  (titleize input_ +:+ titleize' datum) True
+  (S "Required" +:+ titleize' input_) True
 
 -- | makes sentences from an item and its reference 
 -- a - String title of reference
@@ -177,5 +181,30 @@ unwrap Nothing  = EmptyS
 
 -- Using symbolMap from Extract
 --FIXME: Not sure what type d should be
-symbolMapFun :: (SymbolForm c, Quantity c, Chunk d) => [c] -> (d -> DType) -> (d -> Contents)
-symbolMapFun progSymbMap fun = (Definition (symbolMap progSymbMap) . fun)
+symbolMapFun :: SymbolMap -> (d -> DType) -> (d -> Contents)
+symbolMapFun progSymbMap fun = (Definition (progSymbMap) . fun)
+
+-- Used to help make data definitions when id, term, and symbol come from the same sourse
+mkDataDef :: (SymbolForm c, Quantity c) => c -> Expr -> QDefinition
+mkDataDef concept equation = datadef $ getUnit concept
+  where datadef (Just a) = fromEqn  (concept ^. id) (concept ^. term)
+                           (concept ^. symbol) a equation
+        datadef Nothing  = fromEqn' (concept ^. id) (concept ^. term)
+                           (concept ^. symbol) equation
+
+-- Creates the input Data Constraints Table with physical constraints only
+inDataConstTbl :: [[Sentence]] -> Integer -> Contents
+inDataConstTbl inputs tableNumb = Table [S "Var", titleize' physicalConstraint, titleize' softwareConstraint,
+  S "Typical" +:+ titleize value, S "Typical Uncertainty"]
+  inputs (S "Table" +: S (show tableNumb) +:+ S "Input Data Constraints") True
+  
+  -- Creates the output Data Constraints Table with physical constraints only
+outDataConstTbl :: [[Sentence]] -> Integer -> Contents
+outDataConstTbl outputs tableNumb = Table [S "Var", titleize' physicalConstraint, titleize' softwareConstraint]
+  outputs (S "Table" +: S (show tableNumb) +:+ S "Output Data Constraints") True
+
+prodUCTbl :: [[Sentence]] -> Contents
+prodUCTbl cases = Table [titleize useCase +:+. S "NO", titleize useCase +:+
+  titleize name_, S "Actor", titleize input_ +:+ S "and" +:+ titleize output_]
+  cases
+  (titleize useCaseTable) True

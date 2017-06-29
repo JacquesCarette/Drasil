@@ -56,6 +56,7 @@ csharpConfig _ c =
         methodListDoc = methodListDocD c, methodTypeDoc = methodTypeDocD c, unOpDoc = unOpDoc', valueDoc = valueDocD c,
         ioDoc = ioDocD c,inputDoc = inputDocD c,
         functionDoc = functionDocD c, functionListDoc = functionListDocD c,
+        complexDoc = complexDocD c,
         getEnv = \_ -> error "getEnv not implemented in CSharp (yet)"
     }
 

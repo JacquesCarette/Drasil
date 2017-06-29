@@ -28,7 +28,7 @@ def verify_output(time, tempW, eW, params):#tempP, eW, eP, params):
 
     errorWater = abs(eWaterTotal - eW[-1]) / eW[-1] * 100
 #    errorPCM = abs(ePCMTotal - eP[-1]) / eP[-1] * 100
-
+    
     if errorWater > params.ConsTol:
         warnings.warn('There is > ' + str(params.ConsTol) + '% relative error between the energy in the water output' +
                       ' and the expected output based on the law of conservation of energy.\n', UserWarning,

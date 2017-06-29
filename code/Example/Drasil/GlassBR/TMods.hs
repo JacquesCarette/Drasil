@@ -8,6 +8,7 @@ import Language.Drasil
 import Data.Drasil.SentenceStructures (foldlSent, isThe)
 import Prelude hiding (id)
 import Control.Lens ((^.))
+import Data.Drasil.Utils (getS)
 
 tModels :: [RelationConcept]
 tModels = [t1SafetyReq, t2SafetyReq]
@@ -22,14 +23,14 @@ safety_require1_rel = (C is_safe1) := (C prob_br) :< (C pb_tol)
 --relation within relation
 t1descr :: Sentence
 t1descr = 
-  foldlSent [S "If", (P $ is_safe1 ^. symbol), S "= True, the glass is" +:+. 
-  S "considered safe", (P $ is_safe1 ^.symbol), S "and", (P $ is_safe2 ^. symbol),
-  S "(from", (makeRef ((Definition (symbolMap glassBRSymbols) . Theory) t2SafetyReq))
-  :+: S ") are either" +:+. S "both True or both False",
-  ((P $ prob_br ^. symbol) `isThe` (phrase prob_br)) 
+  foldlSent [S "If", (getS is_safe1), S "= True, the glass is" +:+. 
+  S "considered safe", (getS is_safe1), S "and", (getS is_safe2),
+  sParen (S "from" +:+ (makeRef ((Definition (symbolMap glassBRSymbols) . Theory) t2SafetyReq))),
+  S "are either" +:+. S "both True or both False",
+  ((getS prob_br) `isThe` (phrase prob_br)) 
   `sC` S "as calculated in" +:+.
   (makeRef ((Definition (symbolMap glassBRSymbols) . Theory) probOfBr)),
-  (P $ pb_tol ^. symbol) `isThe` (phrase pb_tol),
+  (getS pb_tol) `isThe` (phrase pb_tol),
   S "entered by the user"]
 
 t2SafetyReq :: RelationConcept
@@ -42,12 +43,12 @@ safety_require2_rel = (C is_safe2) := (C lRe) :> (C demand)
 --relation within relation
 t2descr :: Sentence
 t2descr = 
-  foldlSent [S "If", (P $ is_safe2 ^. symbol), S "= True, the glass is" +:+.
-  S "considered safe", (P $ is_safe1 ^. symbol), S "(from", 
-  (makeRef ((Definition (symbolMap glassBRSymbols) . Theory) t1SafetyReq)),
-  S "and", (P $ is_safe2 ^. symbol) +:+. S "are either both True or both False",
+  foldlSent [S "If", (getS is_safe2), S "= True, the glass is" +:+.
+  S "considered safe", (getS is_safe1), sParen (S "from" +:+ 
+  (makeRef ((Definition (symbolMap glassBRSymbols) . Theory) t1SafetyReq))),
+  S "and", (getS is_safe2) +:+. S "are either both True or both False",
   (short lResistance) `isThe` (phrase lResistance), 
-  S "(also called capacity, as defined in" +:+. 
+  sParen (S "also called capacity") `sC` S "as defined in" +:+. 
   (makeRef ((Definition (symbolMap glassBRSymbols) . Theory) calOfCap)), 
-  (P $ demand ^. symbol), S "(also referred as the", (titleize demandq) :+:
-  S ") is the", (demandq ^. defn) `sC` S "as defined in", (makeRef ((Definition (symbolMap glassBRSymbols) . Theory) calOfDe))]
+  (getS demand), sParen (S "also referred as the" +:+ (titleize demandq)),
+  S "is the", (demandq ^. defn) `sC` S "as defined in", (makeRef ((Definition (symbolMap glassBRSymbols) . Theory) calOfDe))]

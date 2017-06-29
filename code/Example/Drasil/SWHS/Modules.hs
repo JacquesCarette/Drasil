@@ -6,7 +6,6 @@ import Data.Drasil.Concepts.Software
 import Data.Drasil.Concepts.Math hiding (constraint)
 import Data.Drasil.Concepts.Computation
 import Data.Drasil.Concepts.Documentation
-import Control.Lens ((^.))
 import Data.Drasil.Modules
 import Data.Drasil.Software.Products
 import Data.Drasil.Quantities.Thermodynamics (temp)
@@ -92,8 +91,8 @@ mod_ener = mod_param_fun swhsProg [mod_inputp, mod_seq]
 -- Control Module
 --mod_ctrl :: ModuleChunk
 --mod_ctrl = makeImpModule modControl (S "The algorithm for coordinating " :+:
---           S "the running of the prograM.") swhsProg [] [] [M.mod_hw, mod_inputp, 
---           mod_inputf, mod_inputv, mod_temp, mod_ener, mod_ode, mod_plot, 
+--           S "the running of the prograM.") swhsProg [] [] [M.mod_hw, mod_inputp,
+--           mod_inputf, mod_inputv, mod_temp, mod_ener, mod_ode, mod_plot,
 --           mod_outputv, mod_outputf, mod_seq] (Just M.mod_behav)
 mod_ctrl :: ModuleChunk
 mod_ctrl = mod_ctrl_fun (S "The" +:+ phrase algorithm)
@@ -120,12 +119,12 @@ mod_seq = mod_seq_fun matlab []
 -- ODE Solver Module
 --mod_ode_desc :: ConceptChunk
 --mod_ode_desc = dccWDS "mod_ode_desc" (nounPhraseSP "ODE solver") (
---  S "Provides solvers that take the governing equation, initial conditions," +:+ 
+--  S "Provides solvers that take the governing equation, initial conditions," +:+
 --  S "and numerical parameters, and solve them.")
 
 --mod_ode :: ModuleChunk
 --mod_ode = makeImpModule mod_ode_desc (S "The algorithm to solve a system of" :+:
---          S " first order " :+: (short ode) :+: S "s.") matlab [] [] 
+--          S " first order " :+: (short ode) :+: S "s.") matlab [] []
 --          [mod_seq] (Just mod_sw)
 
 mod_ode :: ModuleChunk
@@ -138,10 +137,8 @@ mod_ode = mod_ode_fun matlab [mod_seq]
 
 --mod_plot :: ModuleChunk
 --mod_plot = makeImpModule mod_plot_desc (S "The data structures and " :+:
---           S "algorithms for plotting data graphically.") matlab [] [] [mod_seq] 
+--           S "algorithms for plotting data graphically.") matlab [] [] [mod_seq]
 --           (Just mod_sw)
 
 mod_plot :: ModuleChunk
-mod_plot = mod_plot_fun matlab [mod_seq] 
-
-
+mod_plot = mod_plot_fun matlab [mod_seq]

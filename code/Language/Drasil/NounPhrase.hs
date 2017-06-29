@@ -160,10 +160,13 @@ compoundPhrase'' :: (NP -> Sentence) -> (NP -> Sentence) -> NP -> NP -> NP
 compoundPhrase'' f1 f2 t1 t2 = Phrase
   (phrase t1 +:+ phrase t2) (f1 t1 +:+ f2 t2) CapWords CapWords
 
---Definately a hack but it fixes the pluralization problem with software requirements specification.
-compoundPhrase''' :: (NounPhrase a, NounPhrase b) => a -> b -> NP
-compoundPhrase''' t1 t2 = Phrase 
-  (plural t1 +:+ phrase t2) (plural t1 +:+ plural t2) CapFirst CapWords
+--More primes might not be wanted but fixes two issues
+-- pluralization problem with software requirements specification (Documentation.hs)
+-- SWHS program not being about to use a compound to create the NamedChunk
+--Used when you need a special function apllied to the first term (eg. short or plural)
+compoundPhrase''' :: (NP -> Sentence) -> NP -> NP -> NP
+compoundPhrase''' f1 t1 t2 = Phrase 
+  (f1 t1 +:+ phrase t2) (f1 t1 +:+ plural t2) CapFirst CapWords
 
 
 -- === Helpers === 
@@ -211,7 +214,7 @@ sPlur a _ = S "MISSING PLURAL FOR:" +:+ a
 cap :: Sentence -> CapitalizationRule -> Sentence
 cap _ (Replace s) = s
 cap (S (s:ss))   CapFirst = S $ (toUpper s : ss)
-cap (S s)        CapWords = S $ concat (intersperse " " 
+cap (S s)        CapWords = S $ findHyph $ concat (intersperse " " 
   (map (\x -> (toUpper (head x) : (tail x))) (words s)))
 cap ((S s1) :+: (S s2)) r = cap (S (s1++s2)) r
 cap (s1 :+: s2 :+: s3)  CapWords = cap (s1 :+: s2) CapWords +:+ cap s3 CapWords
@@ -219,6 +222,12 @@ cap (s1 :+: s2 :+: s3)  CapWords = cap (s1 :+: s2) CapWords +:+ cap s3 CapWords
 cap (s1 :+: s2)  CapWords = cap s1 CapWords :+: cap s2 CapWords
 cap (s1 :+: s2)  CapFirst = cap s1 CapFirst :+: s2
 cap a _ = a
+
+findHyph :: String -> String
+findHyph "" = ""
+findHyph s
+      | [head s] == "-" = "-" ++ [toUpper (head(tail s))] ++ tail (tail s)
+      | otherwise = [head s] ++ findHyph (tail s)
 
 -- ity, ness, ion :: String -> String
 -- Maybe export these for use in irregular cases?

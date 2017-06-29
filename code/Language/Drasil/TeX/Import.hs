@@ -26,12 +26,16 @@ expr :: Expr -> T.Expr
 expr (V v)             = T.Var  v
 expr (Dbl d)           = T.Dbl  d
 expr (Int i)           = T.Int  i
+expr (Bln b)           = T.Bln  b
 expr (a :* b)          = T.Mul  (expr a) (expr b)
 expr (a :+ b)          = T.Add  (expr a) (expr b)
 expr (a :/ b)          = T.Frac (replace_divs a) (replace_divs b)
 expr (a :^ b)          = T.Pow  (expr a) (expr b)
 expr (a :- b)          = T.Sub  (expr a) (expr b)
 expr (a :. b)          = T.Dot  (expr a) (expr b)
+expr (a :&& b)         = T.And  (expr a) (expr b)
+expr (a :|| b)         = T.Or   (expr a) (expr b)
+expr (Not a)           = T.Not  (expr a)
 expr (Neg a)           = T.Neg  (expr a)
 expr (C c)             = T.Sym  (c ^. symbol)
 expr (Deriv Part a 1)  = T.Mul (T.Sym (Special Partial)) (expr a)
@@ -45,8 +49,11 @@ expr (Case ps)         = if length ps < 2 then
                     error "Attempting to use multi-case expr incorrectly"
                     else T.Case (zip (map (expr . fst) ps) (map (rel . snd) ps))
 expr x@(_ := _)        = rel x
+expr x@(_ :!= _)       = rel x
 expr x@(_ :> _)        = rel x
 expr x@(_ :< _)        = rel x
+expr x@(_ :<= _)       = rel x
+expr x@(_ :>= _)       = rel x
 expr (UnaryOp u)       = (\(x,y) -> T.Op x [y]) (ufunc u)
 expr (Grouping e)      = T.Grouping (expr e)
 expr (BinaryOp b)      = (\(x,y) -> T.Op x y) (bfunc b)
@@ -56,7 +63,7 @@ ufunc (Log e) = (T.Log, expr e)
 ufunc (Summation (Just (s, Low v, High h)) e) = 
   (T.Summation (Just ((s, expr v), expr h)), expr e)
 ufunc (Summation Nothing e) = (T.Summation Nothing, expr e)
-ufunc (Summation _ _) = error "HTML/Import.hs Incorrect use of Summation"
+ufunc (Summation _ _) = error "TeX/Import.hs Incorrect use of Summation"
 ufunc (Abs e) = (T.Abs, expr e)
 ufunc (Norm e) = (T.Norm, expr e)
 ufunc i@(Integral _ _ _) = integral i
@@ -66,14 +73,22 @@ ufunc (Tan e) = (T.Tan, expr e)
 ufunc (Sec e) = (T.Sec, expr e)
 ufunc (Csc e) = (T.Csc, expr e)
 ufunc (Cot e) = (T.Cot, expr e)
+ufunc (Product (Just (s, Low v, High h)) e) = 
+  (T.Product (Just ((s, expr v), expr h)), expr e)
+ufunc (Product Nothing e) = (T.Product Nothing, expr e)
+ufunc (Product _ _) = error "TeX/Import.hs Incorrect use of Product"
+ufunc (Exp e) = (T.Exp, expr e)
 
 bfunc :: BiFunc -> (T.Function, [T.Expr])
 bfunc (Cross e1 e2) = (T.Cross, map expr [e1,e2])
 
 rel :: Relation -> T.Expr
 rel (a := b) = T.Eq (expr a) (expr b)
+rel (a :!= b)= T.NEq (expr a) (expr b)
 rel (a :< b) = T.Lt (expr a) (expr b)
 rel (a :> b) = T.Gt (expr a) (expr b)
+rel (a :<= b) = T.LEq (expr a) (expr b)
+rel (a :>= b) = T.GEq (expr a) (expr b)
 rel _ = error "Attempting to use non-Relation Expr in relation context."
 
 integral :: UFunc -> (T.Function, T.Expr)
@@ -122,6 +137,7 @@ spec (E e)     = T.E $ expr e
 decorate :: Decoration -> Sentence -> Sentence
 decorate Hat    s = S "\\hat{" :+: s :+: S "}"
 decorate Vector s = S "\\bf{" :+: s :+: S "}"
+decorate Prime  s = s :+: S "'"
 
 accent :: Accent -> Char -> Sentence
 accent Grave  s = S $ "\\`{" ++ (s : "}")

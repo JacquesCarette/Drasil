@@ -1,14 +1,14 @@
 module Drasil.SSP.Body where
 
 import Control.Lens ((^.))
-import Prelude hiding (id)
+import Prelude hiding (id, sin, cos, tan)
 
 import Language.Drasil
 import Data.Drasil.SI_Units
 import Data.Drasil.Authors
 
 import Drasil.SSP.Defs
-import Drasil.SSP.Units
+import Drasil.SSP.Unitals
 import Drasil.SSP.Modules
 import Drasil.SSP.Changes
 import Drasil.SSP.Reqs
@@ -18,11 +18,11 @@ import Drasil.SSP.DataDefs
 import Drasil.SSP.IMods
 import qualified Drasil.SRS as SRS
 
-import Drasil.ReferenceMaterial
+import Drasil.Sections.ReferenceMaterial
 import Drasil.DocumentLanguage
-import Drasil.SpecificSystemDescription
-import Drasil.Requirements
-import Drasil.GeneralSystDesc
+import Drasil.Sections.SpecificSystemDescription
+import Drasil.Sections.Requirements
+import Drasil.Sections.GeneralSystDesc
 
 import Data.Drasil.Concepts.Documentation
 import Data.Drasil.Concepts.Physics
@@ -32,8 +32,6 @@ import Data.Drasil.Concepts.Computation
 import Data.Drasil.Concepts.Math hiding (constraint)
 import Data.Drasil.Concepts.SolidMechanics (normForce, shearForce)
 import Data.Drasil.Software.Products
-
-import Data.Drasil.Quantities.SolidMechanics
 
 import Data.Drasil.Utils
 import Data.Drasil.SentenceStructures
@@ -63,11 +61,12 @@ this_si = map UU [metre, degree] ++ map UU [newton, pascal]
 
 ssp_si :: SystemInformation
 ssp_si = SI ssa srs [henryFrankis]
-  this_si sspSymbols (sspSymbols) acronyms
+  this_si sspSymbols (sspSymbols) acronyms sspDataDefs (map qs sspInputs) (map qs sspOutputs)
+  [Parallel (head sspDataDefs) (tail sspDataDefs)] sspConstrained
 
 mkSRS :: DocDesc
 mkSRS = RefSec (RefProg intro
-  [TUnits, tsymb s1_2_intro, TAandA]) :
+  [TUnits, tsymb'' s1_2_intro TAD, TAandA]) :
   IntroSec (IntroProg startIntro kSent
     [IPurpose prpsOfDoc_p1, IScope scpIncl scpEnd
     , IChar (S "solid mechanics") (S "undergraduate level 4" +:+ phrase physics)
@@ -82,13 +81,17 @@ ssp_srs = mkDoc mkSRS ssp_si
 ssp_mg = mgDoc ssa (name henryFrankis) mgBod
 
 mgBod :: [Section]
-(mgBod, _) = makeDD lcs ucs reqs modules
+(mgBod, _) = makeDD likelyChanges unlikelyChanges reqs modules
+
+-- SYMBOL MAP HELPERS --
+sspSymMap :: SymbolMap
+sspSymMap = symbolMap sspSymbols
 
 sspSymMapT :: RelationConcept -> Contents
-sspSymMapT = symbolMapFun sspSymbols Theory
+sspSymMapT = symbolMapFun sspSymMap Theory
 
 sspSymMapD :: QDefinition -> Contents
-sspSymMapD = symbolMapFun sspSymbols Data
+sspSymMapD = symbolMapFun sspSymMap Data
 
 -- SECTION 1 --
 --automatically generated in mkSRS -
@@ -111,24 +114,19 @@ s1_2_intro = [TSPurpose, TypogConvention [Verb $
 -- SECTION 2 --
 startIntro, kSent :: Sentence
 startIntro = foldlSent [S "A", phrase slope, S "of geological",
-          phrase mass `sC` S "composed of", phrase soil,
-          S "and rock, is subject to the influence of gravity on the" +:+.
-          phrase mass, S "For an unstable", phrase slope +:+.
-          S "this can cause instability in the form of soil/rock movement",
-          S "The effects of soil/rock movement can range from inconvenient",
-          S "to seriously hazardous, resulting in signifcant life and",
-          S "economic loses." +:+ at_start slope +:+ S "stability is of",
-          phrase interest, S "both when analyzing natural", plural slope `sC`
-          S "and when designing an excavated" +:+. phrase slope,
-          at_start ssa, S "is",
-          (S "assessment" `ofThe` S "safety of a") +:+ phrase slope `sC`
-          S "identifying the", phrase surface, S "most likely to",
-          S "experience slip and an index of it's relative stability",
-          S "known as the", phrase fs_rc]
-kSent = S "a" +:+ phrase ssa +:+. phrase problem +:+
-          S "The developed" +:+ phrase program +:+
-          S "will be referred to as the" +:+ introduceAbb ssa +:+
-          phrase program
+  phrase mass `sC` S "composed of", phrase soil, S "and rock, is subject", 
+  S "to the influence of gravity on the" +:+. phrase mass, S "For an unstable",
+  phrase slope +:+. S "this can cause instability in the form of soil/rock movement",
+  S "The effects of soil/rock movement can range from inconvenient to seriously",
+  S "hazardous, resulting in signifcant life and economic loses.", at_start slope,
+  S "stability is of", phrase interest, S "both when analyzing natural", plural slope `sC`
+  S "and when designing an excavated" +:+. phrase slope, at_start ssa, S "is",
+  S "assessment" `ofThe` S "safety of a", phrase slope `sC` S "identifying the",
+  phrase surface, S "most likely to", S "experience slip and an index of", 
+  S "it's relative stability known as the", phrase fs_rc]
+kSent = S "a" +:+ phrase ssa +:+. phrase problem +:+ S "The developed"
+  +:+ phrase program +:+ S "will be referred to as the" +:+ introduceAbb ssa +:+
+  phrase program
 
 -- SECTION 2.1 --
 -- Purpose of Document automatically generated in introductionF
@@ -136,7 +134,7 @@ prpsOfDoc_p1 :: Sentence
 prpsOfDoc_p1 = foldlSent [S "The", short ssa, phrase program,
   S "determines the", phrase crtSlpSrf `sC` S "and it's respective",
   phrase fs_rc, S "as a", phrase method_,
-  S "of assessing the stability of a" +:+ phrase slope +:+. phrase design,
+  S "of assessing the stability of a", phrase slope +:+. phrase design,
   S "The", phrase program,
   S "is intended to be used as an educational tool for",
   S "introducing", phrase slope, S "stability issues, and will facilitate the",
@@ -196,7 +194,7 @@ s4_1 = probDescF EmptyS ssa ending [s4_1_1, s4_1_2, s4_1_3]
                  +:+ S "that the" +:+ phrase slope +:+ S "will experience"
 
 -- SECTION 4.1.1 --
-s4_1_1 = termDefnF Nothing [s4_1_1_list]
+s4_1_1 = termDefnF EmptyS [s4_1_1_list]
 
 s4_1_1_list = Enumeration $ Simple $ --FIXME: combine this definition below? But fs_rc already has a definition
   ([(titleize $ fs_rc, Flat $ S "Stability metric. How likely a" +:+
@@ -213,15 +211,16 @@ s4_1_2_p1 = foldlSP [at_start analysis, S "of the", phrase slope,
   phrase slope, S "as a series of", phrase slice +:+. plural element,
   S "Some", plural property, S "are", plural itslPrpty `sC`
   S "and some are", phrase slice, S "or", phrase slice,
-  S "base" +:+. plural property +:+ S "The index convention for referencing which",
+  S "base" +:+. plural property, S "The index convention for referencing which",
   phrase intrslce, S "or", phrase slice, S "is being used is shown in",
   makeRef fig_indexconv]
 
 s4_1_2_bullets = enumBullet [
   (at_start' itslPrpty +:+ S "convention is noted by j. The end" +:+
     plural itslPrpty +:+ S "are usually not of" +:+ phrase interest `sC`
-    S "therefore use the" +:+ plural itslPrpty +:+ S "from 1" +:+
-    P (Special LEQ) +:+ S "i" +:+ P (Special LEQ) +:+. S "n-1"),
+    S "therefore use the" +:+ plural itslPrpty +:+ S "from" +:+
+    S "1" +:+ P (Special LEQ) +:+ (E . V) "i" +:+ P (Special LEQ) +:+.
+    (E $ (C numbSlices) :- Int 1)),--FIXME: this whole thing should be one expr
   (at_start slice +:+ plural property +:+. S "convention is noted by i")
   ]
 
@@ -256,55 +255,56 @@ s4_1_3_list = enumSimple 1 (short goalStmt) [
   ]
 
 -- SECTION 4.2 --
-s4_2 = solChSpecF ssa (s4_1, s6) True ddEnding (tbRef, EmptyS, True, EmptyS)
-  ([s4_2_1_list], s4_2_2_tmods, s4_2_3_genDefs, s4_2_4_dataDefs, s4_2_5_p2:s4_2_5_p3:s4_2_5_IMods, [s4_2_6Table2, s4_2_6Table3]) []
-  where ddEnding = (at_start' definition) +:+ S "DD1 to DD8 are the" +:+
-          phrase force +:+ plural variable +:+ S "that can be solved by direct" +:+
-          S "analysis of given" +:+. plural input_ +:+ S "The" +:+
-          phrase intrslce +:+ S "forces DD9 are" +:+ phrase force +:+
-          plural variable +:+. S "that must be written in terms of DD1 to DD8 to solve"
-        tbRef = makeRef s4_2_6Table2 +:+ S "and" +:+ makeRef s4_2_6Table3 +:+ S "show"
+s4_2 = solChSpecF ssa (s4_1, s6) ddEnding (EmptyS, dataConstraintUncertainty, EmptyS)
+  ([s4_2_1_list], s4_2_2_tmods, s4_2_3_genDefs, s4_2_4_dataDefs, 
+  s4_2_5_p2:s4_2_5_p3:s4_2_5_IMods, [s4_2_6Table2, s4_2_6Table3]) []
+  where ddEnding = foldlSent [at_start' definition, acroDD 1, S "to", acroDD 8, S "are the",
+          phrase force, plural variable, S "that can be solved by direct",
+          S "analysis of given" +:+. plural input_, S "The", phrase intrslce, 
+          S "forces", acroDD 9, S "are", phrase force, plural variable, 
+          S "that must be written in terms of", acroDD 1, S "to", acroDD 8 +:+. S "to solve"]
+ --       tbRef = makeRef s4_2_6Table2 +:+ S "and" +:+ makeRef s4_2_6Table3 +:+ S "show"
 
 -- SECTION 4.2.1 --
 -- Assumptions is automatically generated in solChSpecF using the list below
 
 s4_2_1_list = enumSimple 1 (short assumption) [
   (S "The" +:+ phrase slpSrf +:+ S "is concave with respect to" +:+
-           S "the" +:+. phrase slopeSrf +:+ ((getS coords +:+
-           S "coordinates") `ofThe'` S "failure") +:+ phrase surface
-          +:+. S "follow a monotonic function"),
+    S "the" +:+. phrase slopeSrf +:+ ((getS coords +:+
+    S "coordinates") `ofThe'` S "failure") +:+ phrase surface +:+.
+    S "follow a monotonic function"),
   (S "geometry" `ofThe'` phrase slope `sC` S "and" +:+
-          (plural mtrlPrpty `ofThe` plural soilLyr) +:+.
-           S "are given as inputs"),
+    (plural mtrlPrpty `ofThe` plural soilLyr) +:+.
+    S "are given as inputs"),
   (S "different layers" `ofThe'` phrase soil +:+ S "are homogeneous" `sC`
-           S "with consistent" +:+ plural soilPrpty +:+ S "throughout" `sC`
-           S "and independent of dry or saturated" +:+ plural condition `sC`
-           S "with the exception of" +:+ phrase unit_ +:+. S "weight"),
+    S "with consistent" +:+ plural soilPrpty +:+ S "throughout" `sC`
+    S "and independent of dry or saturated" +:+ plural condition `sC`
+    S "with the exception of" +:+ phrase unit_ +:+. S "weight"),
   (at_start' soilLyr +:+ S "are treated as if they have" +:+.
-           S "isotropic properties"),
+    S "isotropic properties"),
   (at_start intrslce +:+ S "normal and" +:+ plural shearForce +:+ S "have a" +:+
-           S "linear relationship, proportional to a constant" +:+
-           sParen (getS normToShear) +:+ S "and an" +:+
-           phrase intrslce +:+ phrase force +:+ S "function" +:+ sParen (getS scalFunc) +:+.
-           S "depending on x position"),
+    S "linear relationship, proportional to a constant" +:+
+    sParen (getS normToShear) +:+ S "and an" +:+
+    phrase intrslce +:+ phrase force +:+ S "function" +:+ sParen (getS scalFunc) +:+.
+    S "depending on x position"),
   (at_start slice +:+ S "to base normal and" +:+ plural shearForce +:+ S "have" +:+
-           S "a linear relationship, dependent on the" +:+
-           phrase fs_rc +:+ sParen (getS fs) `sC`
-           S "and the Coulomb sliding law."),
-  (S "The" +:+ phrase stress :+: S "-" :+: phrase strain +:+ S "curve for" +:+
-           phrase intrslce +:+
-           S "relationships is linear with a constant" +:+. phrase slope),
+    S "a linear relationship, dependent on the" +:+
+    phrase fs_rc +:+ sParen (getS fs) `sC`
+    S "and the Coulomb sliding law."),
+  (S "The" +:+ phrase stress :+: S "-" :+: phrase strain +:+ S "curve for" +:+ --FIXME: add hypens to drasil language
+    phrase intrslce +:+ S "relationships is linear with a constant" +:+.
+    phrase slope),
   (S "The" +:+ phrase slope +:+ S "and" +:+ phrase slpSrf +:+.
-           S "extends far into and out of the geometry (z coordinate)" +:+
-           S "This implies plane" +:+ phrase strain +:+ plural condition `sC`
-           S "making 2D analysis appropriate."),
+    S "extends far into and out of the geometry (z coordinate)" +:+
+    S "This implies plane" +:+ phrase strain +:+ plural condition `sC`
+    S "making 2D analysis appropriate."),
   (S "The effective normal" +:+ phrase stress +:+ S "is large enough" +:+
-           S "that the resistive shear to effective normal" +:+
-           phrase stress +:+ S "relationship can be approximated as a" +:+.
-           S "linear relationship"),
+    S "that the resistive shear to effective normal" +:+
+    phrase stress +:+ S "relationship can be approximated as a" +:+.
+    S "linear relationship"),
   (S "The" +:+ phrase surface +:+ S "and base of a" +:+
-            phrase slice +:+ S "between" +:+ phrase intrslce +:+.
-            S "nodes are approximated as straight lines")
+    phrase slice +:+ S "between" +:+ phrase intrslce +:+.
+    S "nodes are approximated as straight lines")
   ]
 
 -- SECTION 4.2.2 --
@@ -318,44 +318,334 @@ s4_2_3_genDefs = map sspSymMapT sspGenDefs
 
 -- SECTION 4.2.4 --
 -- Data Definitions is automatically generated in solChSpecF
-s4_2_4_dataDefs = map sspSymMapD sspDataDefs
+s4_2_4_dataDefs = (map sspSymMapD (take 10 sspDataDefs)) ++ resShrDerivation ++
+  [sspSymMapD (sspDataDefs !! 10)] ++ mobShrDerivation ++ [sspSymMapD (sspDataDefs !! 11)] ++
+  stfMtrxDerivation ++ (map sspSymMapD (drop 12 sspDataDefs)) --FIXME: is there a better way of shoving these derivations in the middle of the Data Defs?
+
+resShrDerivation :: [Contents]
+resShrDerivation = [foldlSP [S "The resistive shear force of a slice is defined as", 
+  S "Pi in" +:+. acroGD 3, S "The effective normal in the equation for Pi of the", 
+  S "soil is defined in the perpendicular force equilibrium of a slice from", 
+  acroGD 2 `sC` S "using the", S "effective normal N0i of", acroT 4, 
+  S "shown in equation (1)"],
+  
+  EqnBlock $
+  (C nrmFSubWat) := (((C slcWght) - (C intShrForce) + (C intShrForce) :+ 
+  (C surfHydroForce) :* (cos (C surfAngle)) :+ --FIXME: add indexing
+  (C surfLoad) :* (cos (C impLoadAngle))) :* (cos (C baseAngle)) :+
+  (Neg (C earthqkLoadFctr) :* (C slcWght) :- (C intNormForce) :+ (C intNormForce) :- 
+  (C watrForce) :+ (C watrForce) :+ (C surfHydroForce) :* sin (C surfAngle) :+ 
+  (C surfLoad) :* (sin (C impLoadAngle))) :* (sin (C baseAngle)) :- (C baseHydroForce)),
+  
+  foldlSP [S "The values of the interslice forces", getS intNormForce, S "and", getS intShrForce, S "in the equation are unknown, while the other values",
+  S "are found from the physical force definitions of DD1 to DD9. Consider a force equilibrium without",
+  S "the affect of interslice forces, to obtain a solvable value as done for N*i in equation (2)"],
+
+  EqnBlock $
+  (C nrmFNoIntsl) := (((C slcWght) :+ (C surfHydroForce) :* (cos (C surfAngle)) :+ 
+  (C surfLoad) :* (cos (C impLoadAngle))) :* (cos (C baseAngle)) :+
+  (Neg (C earthqkLoadFctr) :* (C slcWght) - (C watrForce) + (C watrForce) :+ (C surfHydroForce)
+  :* sin (C surfAngle) :+ (C surfLoad) :* (sin (C impLoadAngle))) :* (sin (C baseAngle)) :- (C baseHydroForce)),
+  
+  foldlSP [S "Using N*i, a resistive shear force neglecting the influence of interslice forces can be solved for in",
+  S "terms of all known values as done in equation (3)"],
+  
+  EqnBlock $
+  C shearRNoIntsl := (C nrmFNoIntsl) * tan (C fricAngle) + (C cohesion) * (C baseWthX) * sec (C baseAngle),
+  
+  EqnBlock $
+  C shearRNoIntsl := (((C slcWght) :+ (C surfHydroForce) :* (cos (C surfAngle)) :+ 
+  (C surfLoad) :* (cos (C impLoadAngle))) :* (cos (C baseAngle)) :+
+  (Neg (C earthqkLoadFctr) :* (C slcWght) :- (C watrForceDif) :+ (C surfHydroForce)
+  :* sin (C surfAngle) :+ (C surfLoad) :* (sin (C impLoadAngle))) :* (sin (C baseAngle)) :- (C baseHydroForce)) :*
+  tan (C fricAngle) :+ (C cohesion) :* (C baseWthX) :* sec (C baseAngle)
+  
+  ]
+
+mobShrDerivation :: [Contents]
+mobShrDerivation = [foldlSP [S "The mobile shear force acting on a slice is defined",
+  S "as Si from the force equilibrium in GD2, also shown in equation (4)"],
+  
+  EqnBlock $
+  (C nrmFSubWat) := (((C slcWght) - (C intShrForce) + (C intShrForce) :+ (C surfHydroForce) :* (cos (C surfAngle)) :+ --FIXME: add indexing
+  (C surfLoad) :* (cos (C impLoadAngle))) :* (sin (C baseAngle)) :-
+  (Neg (C earthqkLoadFctr) :* (C slcWght) - (C intNormForce) + (C intNormForce) - (C watrForce) + (C watrForce) :+ (C surfHydroForce)
+  :* sin (C surfAngle) :+ (C surfLoad) :* (sin (C impLoadAngle))) :* (cos (C baseAngle))),
+  
+  foldlSP [S "The equation is unsolvable, containing the unknown interslice normal force", getS intNormForce, S "and shear force X.",
+  S "Consider a force equilibrium without the affect of interslice forces, to obtain the mobile shear force",
+  S "without the influence of interslice forces T, as done in equation (5)"],
+  
+  EqnBlock $
+  C shearFNoIntsl := ((C slcWght) :+ (C surfHydroForce) :* (cos (C surfAngle)) :+ 
+  (C surfLoad) :* (cos (C impLoadAngle))) :* (sin (C baseAngle)) :- 
+  (Neg (C earthqkLoadFctr) :* (C slcWght) :- (C watrForceDif) :+ (C surfHydroForce)
+  :* sin (C surfAngle) :+ (C surfLoad) :* (sin (C impLoadAngle))) :* (cos (C baseAngle)),
+  
+  foldlSP [S "The values of", getS shearRNoIntsl, S "and", getS shearFNoIntsl, S "are now defined completely in terms of the known force property values",
+  S "of DD1 to DD9"]
+  ]
+
+stfMtrxDerivation :: [Contents]
+stfMtrxDerivation = [foldlSP [S "Using the force-displacement relationship of GD8",
+  S "to define stiffness matrix Ki, as seen in equation (6)"],
+
+  foldlSP [S "For interslice surfaces the stiffness constants and displacements refer to an unrotated coordinate",
+  S "system,", getS genDisplace, S "of GD9. The interslice elements are left in their standard coordinate system, and",
+  S "therefore are described by the same equation from GD8. Seen as Ks,i in DD12.", getS shrStiffIntsl, S "is the shear",
+  S "element in the matrix, and", getS nrmStiffIntsl, S "is the normal element in the matrix, calculated as in DD14"],
+  
+  foldlSP [S "For basal surfaces the stiffness constants and displacements refer to a system rotated for the base",
+  S "angle alpha (DD5). To analyze the effect of force-displacement relationships occurring on both basal",
+  S "and interslice surfaces of an element i they must reference the same coordinate system. The basal",
+  S "stiffness matrix must be rotated counter clockwise to align with the angle of the basal surface.",
+  S "The base stiffness counter clockwise rotation is applied in equation (7) to the new matrix", getS nrmFNoIntsl],
+  
+  foldlSP [S "The Hooke's law force displacement relationship of GD8 applied to the base also references a",
+  S "displacement vector", getS rotatedDispl, S "of GD9 rotated for the base angle of the slice", getS baseAngle, S ". The basal displacement",
+  S "vector", getS genDisplace, S "is rotated clockwise to align with the interslice displacement vector", getS genDisplace, S ", applying the",
+  S "definition of", getS rotatedDispl, S "in terms of", getS genDisplace, S "as seen in GD9. Using this with base stiffness matrix K*i, a basal",
+  S "force displacement relationship in the same coordinate system as the interslice relationship can be",
+  S "derived as done in equation (8)"],
+  
+  foldlSP [S "The new effective base stiffness matrix K0i ,as derived in equation (7) is defined in equation (9). This",
+  S "is seen as matrix Kb,i in GD12.", getS shrStiffBase, S "is the shear element in the matrix, and", getS nrmStiffBase, S "is the normal",
+  S "element in the matrix, calculated as in DD14. The notation is simplified by the introduction of",
+  S "the constants KbA,i and KbB,i, defined in equations (10) and (11) respectively"],
+  
+  EqnBlock $
+  (C shrStiffBase) := (C shrStiffBase) * (cos (C baseAngle)) :^ (Int 2) :+ --FIXME: the first symbol should be K_(bA,i), waiting on indexing
+  (C nrmStiffBase) * (sin (C baseAngle)) :^ (Int 2),
+  
+  EqnBlock $
+  (C shrStiffBase) := ((C shrStiffBase)-(C nrmStiffBase)) * --FIXME: the first symbol should be K_(bB,i), waiting on indexing
+  (sin (C baseAngle)) * (cos (C baseAngle)),
+  
+  foldlSP [S "A force-displacement relationship for an element i can be written in terms of displacements occurring",
+  S "in the unrotated coordinate system", getS genDisplace, S "of GD9 using the matrix Ks,i, and Kb,i as seen in",
+  S "DD12"]
+  ]
 
 -- SECTION 4.2.5 --
 -- Instance Models is automatically generated in solChSpecF using the paragraphs below
 
 s4_2_5_p2 = foldlSP [S "The", titleize morPrice,
-  phrase method_, S "is a vertical" +:+ phrase slice `sC` S "limit equilibrium",
-  phrase ssa +:+. phrase method_, at_start analysis, S "is performed by" +:+
+  phrase method_, S "is a vertical", phrase slice `sC` S "limit equilibrium",
+  phrase ssa +:+. phrase method_, at_start analysis, S "is performed by",
   S "breaking the", S "assumed failure", phrase surface, S "into a series of vertical",
-  plural slice +:+ S "of" +:+. phrase mass +:+ S "Static equilibrium" +:+
-  S "analysis using two" +:+ phrase force, S "equilibrium, and one moment" +:+
-  phrase equation +:+ S "as in" +:+ short thModel :+: S "2. The", phrase problem,
-  S "is statically indeterminate with only these 3" +:+ plural equation +:+ S "and one", --FIXME: T2, T3, GD5, DD1, DD9, DD10, DD11 should be references to other things in the body
-  S "constitutive" +:+ phrase equation +:+ S "(the Mohr Coulomb shear strength of" +:+ short thModel :+: S "3)",
-  S "so the" +:+ phrase assumption +:+ S "of" +:+ short genDefn :+: S "5 is used. Solving for" +:+ phrase force,
-  S "equilibrium allows", plural definition,
-  S "of all" +:+ plural force +:+ S "in terms of the" +:+ plural physicalProperty,
-  S "of" +:+ short dataDefn :+: S "1 to" +:+ short dataDefn :+: S "9, as done in" +:+
-  short dataDefn :+: S "10" `sC` short dataDefn :+: S "11"]
+  plural slice, S "of" +:+. phrase mass, S "Static equilibrium",
+  S "analysis using two", phrase force, S "equilibrium, and one moment",
+  phrase equation, S "as in" +:+. acroT 2, S "The", phrase problem,
+  S "is statically indeterminate with only these 3", plural equation, S "and one", --FIXME: T2, T3, GD5, DD1, DD9, DD10, DD11 should be references to other things in the body
+  S "constitutive", phrase equation, sParen $ S "the Mohr Coulomb shear strength of" +:+ acroT 3,
+  S "so the", phrase assumption, S "of", acroGD 5, S "is used. Solving for",
+  phrase force, S "equilibrium allows", plural definition, S "of all", plural force,
+  S "in terms of the", plural physicalProperty, S "of", acroDD 1, S "to",
+  acroDD 9 `sC` S "as done in", acroDD 10 `sC` acroDD 11]
 
 s4_2_5_p3 = foldlSP [plural value `ofThe'` (phrase intrslce +:+ phrase normForce),
-  S "E the interslice normal/shear" +:+ phrase force +:+ S "magnitude ratio" +:+ getS normToShear `sC` --FIXME: 'E' should be the symbol captital E, same with lambda
+  S "E the interslice normal/shear", phrase force, S "magnitude ratio", getS normToShear `sC` --FIXME: 'E' should be the symbol captital E, same with lambda
   S "and the", titleize fs_rc, (sParen $ getS fs) `sC` S "are unknown.",  --FIXME: get the relation concept symbol 'FS' from factor of safety in Defs.hs
-  at_start' equation +:+ S "for the unknowns are written in terms of only the" +:+
-  plural value, S "in" +:+ short dataDefn :+: S "1 to" +:+ short dataDefn :+:
-  S "9, the" +:+ plural value +:+ S "of", getS ri `sC`
-  S "and", getS ti, S "in" +:+ short dataDefn :+: S "10 and" +:+ short dataDefn :+:
-  S "11, and each", --FIXME: DD10, DD11 should be references to other things in the body
+  at_start' equation, S "for the unknowns are written in terms of only the",
+  plural value, S "in", acroDD 1, S "to", acroDD 9 `sC` S "the", plural value, S "of", getS shearRNoIntsl `sC`
+  S "and", getS shearFNoIntsl, S "in", acroDD 10, S "and", acroDD 11 `sC`
+  S "and each", --FIXME: DD10, DD11 should be references to other things in the body
   S "other. The relationships between the unknowns are non linear" `sC`
-  S "and therefore explicit" +:+ plural equation +:+ S "cannot be derived and an",
+  S "and therefore explicit", plural equation, S "cannot be derived and an",
   S "iterative", plural solution, S "method is required"]
 
-s4_2_5_IMods = map sspSymMapT sspIMods
+s4_2_5_IMods = concat $ weave [map (\x -> [sspSymMapT x]) sspIMods, --FIXME: ? is there a better way of doing this?
+  [fctSftyDerivation, nrmShrDerivation, intrSlcDerivation,
+  rigDisDerivation, rigFoSDerivation]]
+
+fctSftyDerivation, nrmShrDerivation, intrSlcDerivation,
+  rigDisDerivation, rigFoSDerivation :: [Contents]
+
+fctSftyDerivation = [foldlSP [S "Using equation (21) from section 4.2.5, rearranging, and applying the boundary condition that E0",
+  S "and En are equal to 0 an equation for the factor of safety is found as equation (12), also seen in",
+  S "IM1. Using equation (21) from section 4.2.5, rearranging, and applying the boundary condition that E0",
+  S "and En are equal to 0 an equation for the factor of safety is found as equation (12), also seen in",
+  S "IM1"],
+  
+  EqnBlock fcSfty_rel,
+  
+  foldlSP [S "The constants", getS mobShrC, S "and", getS shrResC, S "described in equations 20 and 19 are functions of the unknowns: the",
+  S "interslice normal/shear force ratio", getS normToShear, S "(IM2) and the Factor of Safety itself", getS fs, S "(IM1)"]
+  ]
+
+nrmShrDerivation = [foldlSP [S "The last static equation of T2 the moment equilibrium of GD6 about the midpoint of the base is",
+  S "taken, with the assumption of GD5. Results in equation (13)"],
+  
+  EqnBlock momEql_rel, --FIXME: this is not *exactly* the equation but very similar
+  --Need more simbols (z) to finish
+  
+  foldlSP [S "The equation in terms of", getS normToShear, S "leads to equation (14)"],
+  
+  EqnBlock $
+  C normToShear := momEql_rel / ((C baseWthX / Int 2) * (C intNormForce * C scalFunc + C intNormForce * C scalFunc)), --FIXME: remove Int 0 from momEql_rel
+  
+  foldlSP [S "Taking a summation of each slice, and considering the boundary conditions that E0 and En are",
+  S "equal to zero, a general equation for the constant", getS normToShear, S "is developed in equation (15), also found in",
+  S "IM2"],
+  
+  EqnBlock $
+  C normToShear := summation (Just (lI, Low $ Int 1, High $ C numbSlices))
+  (C baseWthX * (C intNormForce + C intNormForce + C watrForce + C watrForce) * tan(C baseAngle) +
+  C midpntHght * (C earthqkLoadFctr * C slcWght - Int 2 * C surfHydroForce * sin(C surfAngle) -
+  Int 2 * C surfLoad * sin(C impLoadAngle))) / 
+  summation (Just (lI, Low $ Int 1, High $ C numbSlices))
+  (C baseWthX * (C intNormForce * C scalFunc + C intNormForce * C scalFunc)),
+  
+  foldlSP [S "Equation (15) for", getS normToShear `sC` S "is a function of the unknown interslice normal force", getS intNormForce, S "(IM3)"]
+  ]
+
+intrSlcDerivation = [foldlSP [S "Taking the perpendicular force equilibrium of GD1 with the effective stress definition from T4",
+  S "that", E (C totNrmForce := C nrmFSubWat - C baseHydroForce) `sC` S "and the assumption of GD5 the equilibrium equation can be rewritten as",
+  S "equation (16)"],
+  
+  EqnBlock $
+  C nrmFSubWat := ((C slcWght :- C normToShear :* C scalFunc :* C intNormForce :+ 
+  C normToShear :* C scalFunc :* C intNormForce :+ 
+  C baseHydroForce :* cos (C surfAngle) :+ C surfLoad :* 
+  cos (C impLoadAngle)) :* cos (C baseAngle)
+  :+ (Neg (C earthqkLoadFctr) :* C slcWght :- 
+  C intNormForce :+ C intNormForce :- C watrForce :+ 
+  C watrForce :+ C surfHydroForce :* sin (C surfAngle) :+ 
+  C surfLoad :* sin (C impLoadAngle)) :* sin (C baseAngle)) - (C baseHydroForce),
+  
+  foldlSP [S "Taking the parallel force equilibrium of GD2 with the definition of mobile shear from GD4 and",
+  S "the assumption of GD5, the equilibrium equation can be rewritten as equation (17)"],
+  
+  EqnBlock $
+  ((C totNrmForce) * tan (C fricAngle) + (C cohesion) * (C baseWthX) * sec (C baseAngle)) / (C fs) := --FIXME: pull the left side of this from GD4
+  (C slcWght :- C normToShear :* C scalFunc :* C intNormForce :+ 
+  C normToShear :* C scalFunc :* C intNormForce :+ 
+  C baseHydroForce :* cos (C surfAngle) :+ C surfLoad :* 
+  cos (C impLoadAngle)) :* sin (C baseAngle)
+  :+ (Neg (C earthqkLoadFctr) :* C slcWght :- 
+  C intNormForce :+ C intNormForce :- C watrForce :+ 
+  C watrForce :+ C surfHydroForce :* sin (C surfAngle) :+ 
+  C surfLoad :* sin (C impLoadAngle)) :* cos (C baseAngle),
+  
+  foldlSP [S "Substituting the equation for N0 i from equation (16) into equation (17) and rearranging results in",
+  S "equation (18)"],
+
+  EqnBlock $
+  (C intNormForce) * (((C normToShear)*(C scalFunc) * cos (C baseAngle) - sin (C baseAngle)) * tan (C fricAngle) -
+  ((C normToShear)*(C scalFunc) * sin (C baseAngle) - cos (C baseAngle)) * (C fs)) := 
+  (C intNormForce) * (((C normToShear)*(C scalFunc) * cos (C baseAngle) - sin (C baseAngle)) * tan (C fricAngle) -
+  ((C normToShear)*(C scalFunc) * sin (C baseAngle) - cos (C baseAngle)) * (C fs)) +
+  (C fs) * (C shearFNoIntsl) - (C shearRNoIntsl),
+  
+  foldlSP [S "Where", getS shearRNoIntsl, S "and", getS shearFNoIntsl, S "are the resistive and mobile shear of the slice, without the influence of interslice",
+  S "forces", getS intNormForce, S "and X, as defined in DD10 and DD11. Making use of the constants, and with full",
+  S "equations found below in equations (19) and (20) respectively, then equation (18) can be simplified",
+  S "to equation (21), also seen in IM3"],
+  
+  EqnBlock $
+  (C shrResC) := ((C normToShear)*(C scalFunc) * cos (C baseAngle) - sin (C baseAngle)) * tan (C fricAngle) -
+  ((C normToShear)*(C scalFunc) * sin (C baseAngle) - cos (C baseAngle)) * (C fs),
+  --FIXME: index everything here and add "Where i is the local slice of mass for 1 :<= i :<= n-1"
+  EqnBlock $
+  (C mobShrC) := ((C normToShear)*(C scalFunc) * cos (C baseAngle) - sin (C baseAngle)) * tan (C fricAngle) -
+  ((C normToShear)*(C scalFunc) * sin (C baseAngle) - cos (C baseAngle)) * (C fs),
+  
+  EqnBlock $
+  (C intNormForce) := ((C mobShrC)*(C intNormForce) + (C fs)*(C shearFNoIntsl)
+  - (C shearRNoIntsl)) / (C shrResC),
+  
+  foldlSP [S "The constants", getS mobShrC, S "and", getS shrResC, S "in equation (21) for", getS intNormForce, S "is a function of the unknown values, the interslice",
+  S "normal/shear force ratio", getS normToShear, S "(IM2), and the Factor of Safety", getS fs, S "(IM1)"]
+  ]
+
+rigDisDerivation = [foldlSP [S "Using the net force-displacement equilibrium equation of a slice from DD13, with the definitions",
+  S "of the stiffness matrices from DD12, and the force definitions from GD7, a broken down forcedisplacement",
+  S "equilibrium equation can be derived. Equation (22) gives the broken down equation",
+  S "in the x direction, and equation (23) gives the broken down equation in the y direction."],
+
+  EqnBlock fDisEq_rel, --FIXME: Original equations need indexing
+  
+  foldlSP [S "Using the known input assumption of A2, the force variable definitions of DD1 to DD8 on the left",
+  S "side of the equations can be solved for. The only unknown in the variables to solve for the stiffness",
+  S "values from DD14 is the displacements. Therefore taking the equation from each slice a set of", E $ (Int 2) * (C numbSlices),
+  S "equations, with", E $ (Int 2) * (C numbSlices), S "unknown displacements in the x and y directions of each slice can be derived.",
+  S "Solutions for the displacements of each slice can then be found. The use of displacement in the",
+  S "definition of the stiffness values makes the equation implicit, which means an iterative solution",
+  S "method, with an initial guess for the displacements in the stiffness values is required"]
+  ]
+
+rigFoSDerivation = [foldlSP [S "RFEM analysis can also be used to calculate the Factor of safety for the slope. For a slice element",
+  S "i the displacements", getS dx_i, S "and", getS dy_i `sC` S "are solved from the system of equations in IM4. The definition of",
+  getS rotatedDispl, S "as the rotation of the displacement vector", getS genDisplace{-FIXME: index i-}, S "is seen in GD9. This is",
+  S "used to find the displacements of the slice parallel to the base of the slice", getS shrDispl, S "in equation",
+  S "(24) and normal to the base of the slice", getS nrmDispl, S "in equation (25)"],
+  
+  EqnBlock $
+  C shrDispl := cos(C baseAngle) * C dx_i + sin(C baseAngle) * C dy_i,
+  EqnBlock $
+  C nrmDispl := Neg (sin(C baseAngle)) * C dx_i + sin(C baseAngle) * C dy_i,
+  
+  foldlSP [S "With the definition of normal stiffness from DD14 to find the normal stiffness of the base", getS nrmStiffBase,
+  S "and the now known base displacement perpendicular to the surface", getS nrmDispl, S "from equation (25), the",
+  S "normal base stress can be calculated from the force-displacement relationship of T5. Stress", getS normStress, S "is",
+  S "used in place of force", getS genForce, S "as the stiffness hasn't been normalized for the length of the base. Results",
+  S "in equation (26)"],
+
+  EqnBlock $
+  C normStress := C nrmStiffBase * C nrmDispl, --FIXME: index
+  
+  foldlSP [S "The resistive shear to calculate the factor of safety", getS fs, S "in is found from the Mohr Coulomb resistive",
+  S "strength of soil in T3. Using the normal stress", getS normStress, S "from equation (26) as the stress the resistive",
+  S "shear of the slice can be calculated from calculated in equation (27)"],
+  
+  EqnBlock $
+  C mobShrI := C cohesion - C normStress * tan(C fricAngle), --FIXME: index and prime
+  
+  foldlSP [S "Previously the value of the base shear stiffness", getS shrStiffBase, S "as seen in equation (28) was unsolvable because",
+  S "the normal stress", getS normStress, S "was unknown. With the definition of", getS normStress, S "from equation (26) and the definition",
+  S "of displacement shear to the base", getS shrDispl, S "from equation (25), the value of", getS shrStiffBase, S "becomes solvable"],
+  
+  EqnBlock $
+  C shrStiffBase := C intNormForce / (Int 2 * (Int 1 + C poissnsRatio)) * (Dbl 0.1 / C baseWthX) +
+  (C cohesion - C normStress * tan(C fricAngle)) / (abs (C shrDispl) + V "a"),
+  
+  foldlSP [S "With shear stiffness", getS shrStiffBase, S "calculated in equation (28) and shear displacement", getS shrDispl, S "calculated in",
+  S "equation (24) values now known the shear stress acting on the base of a slice", getS shrStress, S "can be calculated",
+  S "using T5, as done in equation (29). Again stress", getS shrStress, S "is used in place of force", getS genForce, S "as the stiffness hasn't",
+  S "been normalized for the length of the base"],
+  
+  EqnBlock $
+  C shrStress := C shrStiffBase * C shrDispl,
+  
+  foldlSP [S "The shear stress on the base", getS shrStress, S "acts as the mobile shear acting on the base. Using the definition",
+  S "Factor of Safety equation from T1, with the definitions of resistive shear strength of a slice", getS mobShrI,
+  S "from equation (27) and shear stress on a slice", getS shrStress, S "from equation (29) the factor of safety for a slice",
+  getS fsloc, S "can be found from as seen in equation (30), and IM5"],
+  
+  EqnBlock $
+  C fsloc := C mobShrI / C shrStress :=
+  (C cohesion - C nrmStiffBase * C nrmDispl * tan(C fricAngle)) /
+  (C shrStiffBase * C shrDispl), --FIXME: pull parts of this equation from other equations such as IM5
+  
+  foldlSP [S "The global Factor of Safety is then the ratio of the summation of the resistive and mobile shears",
+  S "for each slice, with a weighting for the length of the slices base. Shown in equation (31), and IM5"],
+  
+  EqnBlock $ --FIXME: pull from other equations in derivation
+  (C fs) := summation (Just (lI, Low $ Int 1, High $ C numbSlices))
+  (C baseLngth * C mobShrI) /
+  summation (Just (lI, Low $ Int 1, High $ C numbSlices))
+  (C baseLngth * C shrStress) :=
+  summation (Just (lI, Low $ Int 1, High $ C numbSlices))
+  (C baseLngth * (C cohesion - C nrmStiffBase * C nrmDispl * tan(C fricAngle))) /
+  summation (Just (lI, Low $ Int 1, High $ C numbSlices))
+  (C baseLngth * (C shrStiffBase * C shrDispl)) --FIXME: Grouping with brackets
+  ]
 
 -- SECTION 4.2.6 --
 -- Data Constraints is automatically generated in solChSpecF using the tables below
+{-input data-}
 noTypicalVal, vertConvention :: Sentence
-noTypicalVal   = S "N/A"
+noTypicalVal   = short notApp
 vertConvention = S "Consecutive vertexes have increasing x" +:+. plural value +:+
   S "The start and end vertices of all layers go to the same x" +:+. plural value
 
@@ -363,71 +653,31 @@ vertVar :: Sentence -> Sentence
 vertVar vertexType = getS coords +:+ S "of" +:+ vertexType +:+ S "vertices'"
 
 verticesConst :: Sentence -> [Sentence]
-verticesConst vertexType = [vertVar vertexType, vertConvention, noTypicalVal]
+verticesConst vertexType = [vertVar vertexType, vertConvention, noTypicalVal, noTypicalVal, noTypicalVal]
 
-waterVert, slipVert, slopeVert, intNormFor, effectCohe, poissnRatio,
-  fricAng, dryUWght, satUWght, waterUWght :: [Sentence]
+waterVert, slipVert, slopeVert :: [Sentence]
 waterVert = verticesConst $ S "water" +:+ phrase table_
 slipVert  = verticesConst $ phrase slip
 slopeVert = verticesConst $ phrase slope
 
-{--- START OF SECTION TO MESS WITH DATA TYPES
-data VariableChunk where
-  VarCh :: (Concept s, Quantity s, SymbolForm s, Show a) => s -> [VarContraint] -> a -> VariableChunk
+dataConstIn :: [[Sentence]]
+dataConstIn = [waterVert, slipVert, slopeVert] ++ map fmtInConstr sspInputs
 
-data VarContraint where
-  VarCon :: (Expr -> Expr -> Expr) -> Expr -> VarContraint
+{-output data-}
+slipVert2 :: [[Sentence]]
+slipVert2 = [[vertVar $ phrase slip, S "Vertices's monotonic", S "None"]]
 
-positiveC :: VarContraint
-positiveC = VarCon (:>) (Int 0)
+displayContr' :: (Constrained s, SymbolForm s) => s -> [Sentence]
+displayContr' s = (init $ makeConstraint s EmptyS) ++ [S "None"]
 
--- "positive variable chunk" built from an existing concept+quanity+symbolform
-posVarCh :: (Concept s, Quantity s, SymbolForm s, Show a) => s -> [VarContraint] -> a -> VariableChunk
-posVarCh s contraints typicalVal = VarCh s (positiveC:contraints) typicalVal
+dataConstOut :: [[Sentence]]
+dataConstOut = [(displayContr' . head) sspOutputs] ++ slipVert2 ++
+  map displayContr' (tail sspOutputs)
 
---"variable chunk with units"
-varChWU :: (Unit u) => String -> NP -> String -> Symbol -> u -> UnitalChunk [VarContraint] -> a -> VariableChunk
-varChWU i t d s u contraints typicalVal = VarCh (uc' i t d s u) contraints typicalVal
-
---example
-intNormFor = sentVarCh $ posVarCh intNormForce [] (15000 :: Integer)
-
---"Sentences from Variable Chunk"
-sentVarCh :: VarCh -> [Sentence]
-sentVarCh (VarCh s contraints typicalVal) = [getS s, fmtBF' s contraints, fmtU (S (show typicalVal)) (cqs s)]
-
-fmtBF' ::(SymbolForm a) => a -> [VarContraint] -> Sentence
-fmtBF' _    []             = S "None"
-fmtBF' symb [VarCon f num] = E $ (C symb) `f` num
-fmtBF' symb (x:xs)         = fmtBF' [x] +:+ S "and" +:+ (fmtBF symb xs)
---- END OF SECTION -}
-
-intNormFor  = mkGtZeroConst intNormForce []           (15000 :: Integer)
-effectCohe  = mkGtZeroConst cohesion     []           (10    :: Integer)
-poissnRatio = mkGtZeroConst poissnsR     [((:<), 1)]  (0.4   :: Double )
-fricAng     = mkGtZeroConst fricAngle    [((:<), 90)] (25    :: Integer)
-dryUWght    = mkGtZeroConst dryWeight    []           (20    :: Integer)
-satUWght    = mkGtZeroConst satWeight    []           (20    :: Integer)
-waterUWght  = mkGtZeroConst waterWeight  []           (9.8   :: Double )
-
-fcOfSa, slipVert2, deltax, deltay :: [Sentence]
-fcOfSa = [S "FS", E $ (V "FS") :> (Int 0)] -- FIXME: Use factor of safety's symbol (currently doesn't have one)
-slipVert2 = [vertVar $ phrase slip, S "Vertices's monotonic"]
-deltax = [getS dx_i, S "None"]
-deltay = [getS dy_i, S "None"]
-
-mkGtZeroConst  :: (Concept s, Quantity s, SymbolForm s, Show a) => s -> [(Expr -> Expr -> Expr, Expr)] -> a -> [Sentence]
-mkGtZeroConst s other num = [getS s, fmtBF s (((:>), Int 0):other), fmtU (S (show num)) (cqs s)]
-
-dataConstList :: [[Sentence]]
-dataConstList = [waterVert, slipVert, slopeVert, intNormFor, effectCohe, poissnRatio,
-  fricAng, dryUWght, satUWght, waterUWght]
-
+{-input and output tables-}
 s4_2_6Table2, s4_2_6Table3 :: Contents
-s4_2_6Table2 = Table [S "Var", titleize' physicalConstraint, S "Typical" +:+ titleize value]
-                      dataConstList (titleize input_ +:+ titleize' variable) True
-s4_2_6Table3 = Table [S "Var", titleize' physicalConstraint]
-                      [fcOfSa, slipVert2, deltax, deltay] (titleize output_ +:+ titleize' variable) True
+s4_2_6Table2 = inDataConstTbl dataConstIn 2
+s4_2_6Table3 = outDataConstTbl dataConstOut 3
 
 -- SECTION 5 --
 s5 = reqF [s5_1, s5_2]
@@ -438,46 +688,43 @@ s5_1 = SRS.funcReq
 
 s5_1_list = enumSimple 1 (short requirement) [
   (S "Read the" +:+ phrase input_ +:+ S "file, and store the" +:+. plural datum +:+
-        S "Necessary" +:+ plural inDatum +:+ S "summarized in" +:+.
-        makeRef table_inputdata),
+    S "Necessary" +:+ plural inDatum +:+ S "summarized in" +:+.
+    makeRef s5_1_table),
   (S "Generate potential" +:+ phrase crtSlpSrf :+:
-        S "'s for the" +:+ phrase input_ +:+. phrase slope),
+    S "'s for the" +:+ phrase input_ +:+. phrase slope),
   (S "Test the" +:+ plural slpSrf +:+ S "to determine" +:+
-        S "if they are physically realizable based" +:+.
-        S "on a set of pass or fail criteria"),
+    S "if they are physically realizable based" +:+.
+    S "on a set of pass or fail criteria"),
   (S "Prepare the" +:+ plural slpSrf +:+ S "for a" +:+ phrase method_ +:+
-        S "of" +:+ plural slice +:+. S "or limit equilibrium analysis"),
+    S "of" +:+ plural slice +:+. S "or limit equilibrium analysis"),
   (S "Calculate" +:+. (plural fs_rc `ofThe` plural slpSrf)),
   (S "Rank and weight the" +:+ plural slope +:+ S "based on their" +:+
-        phrase fs_rc `sC` S "such that a" +:+ phrase slpSrf +:+
-        S "with a smaller" +:+ phrase fs_rc +:+.
-        S "has a larger weighting"),
+    phrase fs_rc `sC` S "such that a" +:+ phrase slpSrf +:+
+    S "with a smaller" +:+ phrase fs_rc +:+.
+    S "has a larger weighting"),
   (S "Generate new potential" +:+ plural crtSlpSrf +:+
-        S "based on previously analysed" +:+ plural slpSrf +:+
-        S "with low" +:+. plural fs_rc),
-  (S "Repeat" +:+ plural requirement +:+ short requirement :+: S "3 to" +:+
-        short requirement :+: S "7 until the" +:+
-        S "minimum" +:+ phrase fs_rc +:+ S "remains approximately" +:+
-        S "the same over a predetermined number of" +:+
-        S "repetitions. Identify the" +:+ (phrase slpSrf) +:+
-        S "that generates the minimum" +:+ phrase fs_rc +:+
-        S "as the" +:+. phrase crtSlpSrf),
+    S "based on previously analysed" +:+ plural slpSrf +:+
+    S "with low" +:+. plural fs_rc),
+  (S "Repeat" +:+ plural requirement +:+ acroR 3 +:+ S "to" +:+
+    acroR 7 +:+ S "until the" +:+
+    S "minimum" +:+ phrase fs_rc +:+ S "remains approximately" +:+
+    S "the same over a predetermined number of" +:+
+    S "repetitions. Identify the" +:+ (phrase slpSrf) +:+
+    S "that generates the minimum" +:+ phrase fs_rc +:+
+    S "as the" +:+. phrase crtSlpSrf),
   (S "Prepare the" +:+ phrase crtSlpSrf +:+ S "for" +:+ phrase method_ +:+
-        S "of" +:+ plural slice +:+. S "or limit equilibrium analysis"),
+    S "of" +:+ plural slice +:+. S "or limit equilibrium analysis"),
   (S "Calculate" +:+ (phrase fs_rc `ofThe` phrase crtSlpSrf) +:+
-        S "using the" +:+ titleize morPrice +:+. phrase method_),
+    S "using the" +:+ titleize morPrice +:+. phrase method_),
   (S "Display the" +:+ phrase crtSlpSrf +:+ S "and the" +:+
-        phrase slice +:+ phrase element +:+.
-        S "displacements graphically" +:+ S "Give" +:+
-        (plural value `ofThe` plural fs_rc) +:+ S "calculated" +:+
-        S "by the" +:+ titleize morPrice +:+. phrase method_)
+    phrase slice +:+ phrase element +:+.
+    S "displacements graphically" +:+ S "Give" +:+
+    (plural value `ofThe` plural fs_rc) +:+ S "calculated" +:+
+    S "by the" +:+ titleize morPrice +:+. phrase method_)
   ]
 
-s5_1_table = table_inputdata
-
-table_inputdata :: Contents
-table_inputdata = mkInputDatTb (map cqs [coords, elastMod, cohesion] ++ --this has to be seperate since poisson is a different type
-  [cqs poissnsR] ++ map cqs [fricAngle, dryWeight, satWeight, waterWeight])
+s5_1_table = mkInputDatTb ([cqs coords] ++ --this has to be seperate since coords is a different type
+  map cqs [elasticMod, cohesion, poissnsRatio, fricAngle, dryWeight, satWeight, waterWeight])
 
 -- SECTION 5.2 --
 s5_2 = nonFuncReqF [accuracy, performanceSpd]

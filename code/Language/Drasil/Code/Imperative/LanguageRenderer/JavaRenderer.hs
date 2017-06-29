@@ -62,6 +62,7 @@ javaConfig options c =
         methodListDoc = methodListDocD c, methodTypeDoc = methodTypeDocD c, unOpDoc = unOpDoc', valueDoc = valueDocD c,
         ioDoc = ioDocD c,inputDoc = inputDocD c,
         functionDoc = functionDocD c, functionListDoc = functionListDocD c,
+        complexDoc = complexDocD c,
         getEnv = \_ -> error "no environment has been set"
     }
 

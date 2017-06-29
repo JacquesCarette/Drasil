@@ -26,12 +26,16 @@ expr :: Expr -> H.Expr
 expr (V v)            = H.Var   v
 expr (Dbl d)          = H.Dbl   d
 expr (Int i)          = H.Int   i
+expr (Bln b)          = H.Bln   b
 expr (a :* b)         = H.Mul   (expr a) (expr b)
 expr (a :+ b)         = H.Add   (expr a) (expr b)
 expr (a :/ b)         = H.Frac  (replace_divs a) (replace_divs b)
 expr (a :^ b)         = H.Pow   (expr a) (expr b)
 expr (a :- b)         = H.Sub   (expr a) (expr b)
 expr (a :. b)         = H.Dot   (expr a) (expr b)
+expr (a :&& b)        = H.And   (expr a) (expr b)
+expr (a :|| b)        = H.Or    (expr a) (expr b)
+expr (Not a)          = H.Not   (expr a)
 expr (Neg a)          = H.Neg   (expr a)
 expr (Deriv Part a 1) = H.Mul (H.Sym (Special Partial)) (expr a)
 expr (Deriv Total a 1)= H.Mul (H.Sym lD) (expr a)
@@ -45,8 +49,11 @@ expr (Case ps)        = if length ps < 2 then
                     error "Attempting to use multi-case expr incorrectly"
                     else H.Case (zip (map (expr . fst) ps) (map (rel . snd) ps))
 expr e@(_ := _)       = rel e
+expr e@(_ :!= _)      = rel e
 expr e@(_ :> _)       = rel e
 expr e@(_ :< _)       = rel e
+expr e@(_ :<= _)      = rel e
+expr e@(_ :>= _)      = rel e
 expr (UnaryOp u)      = (\(x,y) -> H.Op x [y]) (ufunc u)
 expr (Grouping e)     = H.Grouping (expr e)
 expr (BinaryOp b)     = (\(x,y) -> H.Op x y) (bfunc b)
@@ -58,6 +65,10 @@ ufunc (Summation (Just (s, Low v, High h)) e) =
   (H.Summation (Just ((s, expr v), expr h)), (expr e))
 ufunc (Summation Nothing e) = (H.Summation Nothing,(expr e))
 ufunc (Summation _ _) = error "HTML/Import.hs Incorrect use of Summation"
+ufunc (Product (Just (s, Low v, High h)) e) = 
+  (H.Product (Just ((s, expr v), expr h)), expr e)
+ufunc (Product Nothing e) = (H.Product Nothing, (expr e))
+ufunc (Product _ _) = error "HTML/Import.hs Incorrect use of Product"
 ufunc (Abs e) = (H.Abs, expr e)
 ufunc (Norm e) = (H.Norm, expr e)
 ufunc i@(Integral _ _ _) = integral i
@@ -67,6 +78,7 @@ ufunc (Tan e) = (H.Tan, expr e)
 ufunc (Sec e) = (H.Sec, expr e)
 ufunc (Csc e) = (H.Csc, expr e)
 ufunc (Cot e) = (H.Cot, expr e)
+ufunc (Exp e) = (H.Exp, expr e)
 
 -- | Helper function for translating 'BiFunc's
 bfunc :: BiFunc -> (H.Function, [H.Expr])
@@ -75,8 +87,11 @@ bfunc (Cross e1 e2) = (H.Cross, map expr [e1,e2])
 -- | Helper function for translating 'Relation's
 rel :: Relation -> H.Expr
 rel (a := b) = H.Eq (expr a) (expr b)
+rel (a :!= b)= H.NEq (expr a) (expr b)
 rel (a :< b) = H.Lt (expr a) (expr b)
 rel (a :> b) = H.Gt (expr a) (expr b)
+rel (a :<= b) = H.LEq (expr a) (expr b)
+rel (a :>= b) = H.GEq (expr a) (expr b)
 rel _ = error "Attempting to use non-Relation Expr in relation context."
 
 -- | Helper function for translating Integrals (from 'UFunc')
@@ -137,6 +152,7 @@ accent Acute  s = S $ '&' : s : "acute;" --Only works on vowels.
 decorate :: Decoration -> Sentence -> Sentence
 decorate Hat    s = s :+: S "&#770;" 
 decorate Vector s = S "<b>" :+: s :+: S "</b>"
+decorate Prime  s = s :+: S "'"
 
 -- | Translates from Document to the HTML representation of Document
 makeDocument :: Document -> H.Document

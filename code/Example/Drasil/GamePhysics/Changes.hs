@@ -5,13 +5,13 @@ import Drasil.GamePhysics.Modules
 --import Data.Drasil.Modules
 import Data.Drasil.Changes
 
-lcs :: [LCChunk]
-lcs = [hardware, rigidBodyStruct, shapeLC, spaceLC, arbiterLC, control, 
+likelyChanges :: [LCChunk]
+likelyChanges = [hardware, rigidBodyStruct, shapeLC, spaceLC, arbiterLC, control, 
   vectorStruct, boundingBox, transform, spatialIndex, collisionAlgo, sequenceStruct, 
   linkedListStruct, hashtableStruct]
 
-ucs :: [UCChunk]
-ucs = [ucIO, ucInputS, ucOutput, ucGoal, ucCart, ucRigid, uc2D]
+unlikelyChanges :: [UCChunk]
+unlikelyChanges = [ucIO, ucInputS, ucOutput, ucGoal, ucCart, ucRigid, uc2D]
 
 -- Likely Changes --
 

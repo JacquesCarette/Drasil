@@ -62,7 +62,7 @@ mkSRS = RefSec (RefProg RM.intro [TUnits, tsymb tableOfSymbols, TAandA]) :
   IScope s2_2_intro_p1 s2_2_intro_p2, 
   IChar (S "rigid body dynamics") (S "high school calculus") (EmptyS), 
   IOrgSec s2_4_intro inModel s4_2_5 EmptyS]) :
-  map Verbatim [{--genSec,--} s3, s4, s5, s6, s7, s8, s9]
+  map Verbatim [s3, s4, s5, s6, s7, s8, s9]
     where tableOfSymbols = [TSPurpose, TypogConvention[Vector Bold], SymbOrder]
 
 
@@ -101,9 +101,7 @@ cpSymMapD = symbolMapFun cpSymbMap Data
 -- SOFTWARE REQUIREMENTS SPECIFICATION --
 -- =================================== --
 
--- testing refactoring
---testSec = sSubSec assumption []
---genSec = genericSect testSec
+
 ------------------------------
 --        KNOWLEDGE         --
 ------------------------------
@@ -321,26 +319,17 @@ s4_1_2_list = enumSimple 1 (getAcc goalStmt) s4_1_2_list'
 
 s4_2 :: Section
 
---s4_2 = SRS.solCharSpec []
--- [s4_2_1, s4_2_2, s4_2_3, s4_2_4, s4_2_5, dataConstraints]
+-- testing refactoring
+assumSec, tModSec, genDefSec, iModSec, dataDefSec, dataConSec :: SolSubSec
+assumSec = (sSubSec assumption [(siCon [s4_2_1_list])])
+tModSec = (sSubSec thModel [(siCon s4_2_2_TMods), (siTMod cpTMods)])
+genDefSec = (sSubSec genDefn [])
+iModSec = (sSubSec inModel [(siCon s4_2_5_IMods), (siIMod iModels)])
+dataDefSec = (sSubSec dataDefn [(siCon s4_2_4_DDefs), (siSent [s4_2_4_intro]), (siDDef cpDDefs)])
+dataConSec = (sSubSec dataConst [(siCon [dataConstraintInputTable, dataConstraintOutputTable])])
 
+s4_2 = scsAssembler chipmunk [assumSec, tModSec, genDefSec, iModSec, dataDefSec, dataConSec]
 
-s4_2 = solutionCharactersticCon chipmunk solutionContainer []
-
-
-
-solutionContainer :: SOLsec
-solutionContainer = mkSOLsec assumptionSub theoreticalModelSub generalDefSub
-  dataDefinitionSub instanceModelSub dataConstraintSub
-
-assumptionSub, theoreticalModelSub, dataDefinitionSub, instanceModelSub :: SOLsub
-assumptionSub = mkSOLsub EmptyS EmptyS EmptyS s6 [s4_2_1_intro, s4_2_1_list]
-theoreticalModelSub = mkSOLsub EmptyS EmptyS EmptyS s4_2 s4_2_2_TMods
-dataDefinitionSub = mkSOLsub EmptyS EmptyS s4_2_4_intro s4_2 s4_2_4_DDefs
-instanceModelSub = mkSOLsub EmptyS EmptyS EmptyS s4_1 s4_2_5_IMods
-generalDefSub = mkSOLsub EmptyS EmptyS EmptyS s4_2 []
-dataConstraintSub = mkSOLsub EmptyS dataConstraintUncertainty EmptyS s4_2
-  [dataConstraintInputTable, dataConstraintOutputTable]
 -------------------------
 -- 4.2.1 : Assumptions --
 -------------------------

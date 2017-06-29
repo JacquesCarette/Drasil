@@ -1,7 +1,11 @@
+{-# Language GADTs #-}
+
 module Drasil.Sections.SolutionCharacterSpec
   (
+  SecItem,
+  SolSubSec,
   sSubSec,
-  genericSect,
+  scsAssembler,
   siCon,
   siSect,
   siTMod,
@@ -12,23 +16,27 @@ module Drasil.Sections.SolutionCharacterSpec
   ) where
 
 import Language.Drasil
---import Data.Drasil.Concepts.Math (equation)
+import Data.Drasil.Concepts.Math (equation)
 --import Data.Drasil.Concepts.Software (program)
 --import Data.Drasil.Utils (foldle)
---import Data.Drasil.SentenceStructures
+import Data.Drasil.SentenceStructures
 import qualified Data.Drasil.Concepts.Documentation as Doc
 import Data.List (find)
+import Prelude hiding (id)
+import Control.Lens ((^.))
 
-data SecItem = Cont [Contents]
-            | Sect [Section]
-            | TMods [RelationConcept]
-            | IMods [RelationConcept]
-            | DataDef [QDefinition]
-            | GenDef [RelationConcept]
-            | Sent [Sentence]
-            | TitleFunc (CI -> Sentence)
+data SecItem where 
+  Cont      :: [Contents] -> SecItem
+  Sect      :: [Section] -> SecItem
+  TMods     :: [RelationConcept] -> SecItem
+  IMods     :: [RelationConcept] -> SecItem
+  DataDef   :: [QDefinition] -> SecItem
+  GenDef    :: [RelationConcept] -> SecItem
+  Sent      :: [Sentence] -> SecItem
+  TitleFunc :: (CI -> Sentence) -> SecItem
 
-data SolSubSec = SectionModel CI [SecItem]
+data SolSubSec where
+  SectionModel :: CI -> [SecItem] -> SolSubSec
 
 
 sSubSec :: CI -> [SecItem] -> SolSubSec
@@ -55,18 +63,38 @@ siSent xs = Sent xs
 siTitl :: (CI -> Sentence) -> SecItem
 siTitl f = TitleFunc f
 
-{--renderSec item@(SectionModel name xs) 
-    | name == Doc.assumption      = assumptionSect item
-    | name == Doc.thModel         = theoreticalModelSect item
-    | name == Doc.genDefn         = generalDefinitionSect item
-    | name == Doc.inModel         = instanceModelSect item
-    | name == Doc.dataDefn        = dataDefinitionSect item
-    | name == Doc.dataConst       = dataConstraintSect item
-    | otherwise                   = genericSect item
---}
+renderSec :: NamedIdea a => a -> SolSubSec -> Section
+renderSec progName item@(SectionModel niname _) 
+    | compareID niname Doc.assumption     = assumptionSect item
+    | compareID niname Doc.thModel        = theoreticalModelSect item progName
+    | compareID niname Doc.genDefn        = generalDefinitionSect item
+    | compareID niname Doc.inModel        = instanceModelSect item
+    | compareID niname Doc.dataDefn       = dataDefinitionSect item
+    | compareID niname Doc.dataConst      = dataConstraintSect item
+    | otherwise                           = genericSect item
+
+
+scsAssembler :: (NamedIdea a) => a -> [SolSubSec] -> Section
+scsAssembler progName subsecs = section (titleize' Doc.solutionCharSpec) 
+  [scsIntro progName] subsections
+  where subsections = map (renderSec progName) subsecs 
+  --FIXME put in correct order, if out of order for subsections
+
+scsIntro :: (NamedIdea a) => a -> Contents
+scsIntro progName = foldlSP [S "The", plural Doc.inModel, 
+  S "that govern", short progName, S "are presented in" +:+. 
+  S "FIXME REF to IModSection", S "The", phrase Doc.information, S "to understand", 
+  (S "meaning" `ofThe` plural Doc.inModel), 
+  S "and their derivation is also presented, so that the", plural Doc.inModel, 
+  S "can be verified"]
+
+
 ----------------------
 --  HELPER FUNCTION --
 ----------------------
+
+compareID ::  CI -> CI -> Bool
+compareID c1 c2 = (c1 ^. id) == (c2 ^. id)
 
 hasTitle :: SecItem -> Bool
 hasTitle (TitleFunc _) = True
@@ -80,6 +108,10 @@ hasSect :: SecItem -> Bool
 hasSect (Sect _) = True
 hasSect _        = False
 
+hasSent :: SecItem -> Bool
+hasSent (Sent _) = True
+hasSent _        = False
+
 getSecItem :: (a->Bool) -> [a] -> Maybe a
 getSecItem func ls = find (func) ls
 
@@ -88,15 +120,20 @@ getTitleize (Just (TitleFunc a)) = a
 getTitleize (Just _) = titleize
 getTitleize Nothing = titleize
 
-getSections :: (Maybe SecItem) -> [Section]
-getSections (Just (Sect xs)) = xs
-getSections (Just _) = []
-getSections Nothing = []
+getSection :: (Maybe SecItem) -> [Section]
+getSection (Just (Sect xs)) = xs
+getSection (Just _) = []
+getSection Nothing = []
 
 getSecContents :: (Maybe SecItem) -> [Contents]
 getSecContents (Just (Cont xs)) = xs
 getSecContents (Just _) = []
 getSecContents Nothing = []
+
+getSent :: (Maybe SecItem) -> [Sentence]
+getSent (Just (Sent xs)) = xs
+getSent (Just _)         = []
+getSent Nothing          = []
 
 pullFunc :: [SecItem] -> (Maybe SecItem -> t) -> (SecItem -> Bool) -> t
 pullFunc xs f g = f (getSecItem g xs)
@@ -105,128 +142,105 @@ pullTitle :: [SecItem] -> CI -> Sentence
 pullTitle xs = pullFunc xs getTitleize hasTitle
 
 pullSections :: [SecItem] -> [Section]
-pullSections xs = pullFunc xs getSections hasSect
+pullSections xs = pullFunc xs getSection hasSect
 
 pullContents :: [SecItem] -> [Contents]
 pullContents xs = pullFunc xs getSecContents hasCont
+
+pullSents :: [SecItem] -> [Sentence]
+pullSents xs = pullFunc xs getSent hasSent
 
 ------------------------------
 -- Section Render Functions --
 ------------------------------
 
-
 genericSect :: SolSubSec -> Section
-genericSect (SectionModel name xs) = section ((pullTitle xs) name) (pullContents xs)
+genericSect (SectionModel niname xs) = section ((pullTitle xs) niname) (pullContents xs)
   (pullSections xs)
 
---assumptionSect :: SolSubSec -> Section
---assumptionSect (SectionModel name xs) = section (titleize name) 
+assumptionSect :: SolSubSec -> Section
+assumptionSect (SectionModel niname xs) = section (titleize' niname)
+  (assumpIntro:(pullContents xs)) (pullSections xs)
 
---solutionCharacterSpecificationAssembler :: (NamedIdea a) => a -> [SolSubSec] -> Section
+theoreticalModelSect :: (NamedIdea a) => SolSubSec -> a -> Section
+theoreticalModelSect (SectionModel niname xs) progName = section (titleize' niname) 
+  ((tModIntro progName):(pullContents xs)) (pullSections xs)
 
-{--solutionCharactersticCon :: (NamedIdea a) => a -> SOLsec -> [Section] -> Section
-solutionCharactersticCon progName (Sect as tm gd dd im dc) xs = SRS.solCharSpec
-  [solutionCharSpecIntro progName instanceModels] (subsections)
-  where assumptions        = assumptionSub        as
-          theoreticalModels generalDefinitions dataDefinitions instanceModels 
-        theoreticalModels  = theoreticalModelSub  tm progName
-        generalDefinitions = generalDefinitionSub gd
-        dataDefinitions    = dataDefinitionSub    dd
-        instanceModels     = instanceModelSub     im 
-          dataDefinitions theoreticalModels generalDefinitions
-        dataConstraints    = dataConstraintSub    dc
-        subsections = [assumptions, theoreticalModels, generalDefinitions,
-                       dataDefinitions, instanceModels, dataConstraints] ++ xs
+--FIXME geenrate tables here
+--s4_2_2_TMods = map cpSymMapT cpTMods
 
-assumptionSub :: SOLsub -> Section -> Section -> Section -> Section -> Section
-assumptionSub (Subs _ _ _ sectionRef ys) ref1 ref2 ref3 ref4 = SRS.assump
-  ((assumpIntro ref1 ref2 ref3 ref4 sectionRef):ys) []
+generalDefinitionSect :: SolSubSec -> Section
+generalDefinitionSect (SectionModel niname xs) = section (titleize' niname)
+  ((generalDefinitionIntro contents):contents) (pullSections xs)
+  where contents = (pullContents xs)
 
-theoreticalModelSub :: (NamedIdea a) => SOLsub -> a -> Section
-theoreticalModelSub (Subs _ _ _ _ ys) progName = SRS.thModel ((thModIntro progName):ys) []
+instanceModelSect :: SolSubSec -> Section
+instanceModelSect (SectionModel niname xs) = section (titleize' niname)
+  ((iModIntro):(pullContents xs)) (pullSections xs)
 
-generalDefinitionSub :: SOLsub -> Section
-generalDefinitionSub (Subs _ _ _ _ ys) = SRS.genDefn (generalDefinitionIntro ys:ys) []
+--FIXME generate tables here
+--s4_2_5_IMods = map cpSymMapT iModels
 
-dataDefinitionSub :: SOLsub -> Section
-dataDefinitionSub (Subs _ _ ending _ ys) = SRS.dataDefn ((dataDefinitionIntro ending):ys) []
+dataDefinitionSect :: SolSubSec -> Section
+dataDefinitionSect (SectionModel niname xs) = section (titleize' niname)
+  ((dataDefinitionIntro $ pullSents xs):(pullContents xs)) (pullSections xs)
 
-instanceModelSub :: SOLsub -> Section -> Section -> Section -> Section
-instanceModelSub (Subs _ _ _ sectionRef ys) ref1 ref2 ref3 = SRS.inModel ((introContent):ys) []
-  where introContent = inModelIntro sectionRef ref1 ref2 ref3
+--FIXME generate tables here
+--s4_2_4_DDefs = map cpSymMapD cpDDefs
 
-dataConstraintSub :: SOLsub -> Section
-dataConstraintSub (Subs uncertain mid trail _ ys) = SRS.datCon ((dataContent):ys) []
-  where dataContent = dataConstraintParagraph uncertain (listofTablesToRefs ys) mid trail
+dataConstraintSect :: SolSubSec -> Section
+dataConstraintSect (SectionModel niname xs) = section (titleize' niname)
+  ((dataConIntro ):(pullContents xs)) (pullSections xs)
+  where dataConIntro = dataConstraintParagraph (pullContents xs) (pullSents xs)
 
+--FIXME generate tables here
+--
 
-solutionCharSpecIntro :: (NamedIdea a) => a -> Section -> Contents
-solutionCharSpecIntro progName instModelSection = foldlSP [S "The", plural inModel, 
-  S "that govern", short progName, S "are presented in" +:+. 
-  makeRef (instModelSection), S "The", phrase information, S "to understand", 
-  (S "meaning" `ofThe` plural inModel), 
-  S "and their derivation is also presented, so that the", plural inModel, 
-  S "can be verified"]
 
 
 -- takes a bunch of references to things discribed in the wrapper
-assumpIntro :: (LayoutObj t) => t -> t -> t -> t -> t -> [t] -> Contents
-assumpIntro r1 r2 r3 r4 r5 genDef = Paragraph $ foldlSent 
-          [S "This", (phrase section_), S "simplifies the original", (phrase problem), 
-          S "and helps in developing the", (phrase thModel), S "by filling in the", 
-          S "missing", (phrase information), S "for the" +:+. (phrase physicalSystem), 
-          S "The numbers given in the square brackets refer to the", 
-          foldr1 sC (map (refs) (itemsAndRefs)) `sC` S "or", 
-          refs (likelyChg, r5) `sC` S "in which the respective", 
-          (phrase assumption), S "is used"] --FIXME: use some clever "zipWith"
-          where refs (chunk, ref) = (titleize' chunk) +:+ sSqBr (makeRef ref) 
-                itemsAndRefs = [(thModel, r1), (genDefn, r2), (dataDefn, r3), 
-                                (inModel, r4)]
-
-[thModel, genDefn, dataDefn, inModel, likelyChg]
-
-makeReferences r1 r2 r3 r4 r5 [] = 
+assumpIntro :: Contents
+assumpIntro = Paragraph $ foldlSent 
+  [S "This", (phrase Doc.section_), S "simplifies the original", (phrase Doc.problem), 
+  S "and helps in developing the", (phrase Doc.thModel), S "by filling in the", 
+  S "missing", (phrase Doc.information), S "for the" +:+. (phrase Doc.physicalSystem), 
+  S "The numbers given in the square brackets refer to the", 
+  foldr1 sC (map (refs) (itemsAndRefs)) `sC` S "or", 
+  refs (Doc.likelyChg) `sC` S "in which the respective", 
+  (phrase Doc.assumption), S "is used"] --FIXME: use some clever "zipWith"
+  where refs chunk = (titleize' chunk) {--+:+ sSqBr (makeRef ref)--} 
+        itemsAndRefs = [Doc.thModel, Doc.genDefn, Doc.dataDefn, Doc.inModel] --FIXME ADD REFS BACK
 
 
-
-assumptionParagraph ::  Sentence -> Contents
-assumptionParagraph references = foldSP [S "This", (phrase section_), 
-  S "simplifies the original", (phrase problem), S "and helps in developing the",
-  (phrase thModel), S "by filling in the", S "missing", (phrase information), 
-  S "for the" +:+. (phrase physicalSystem), 
-  S "The numbers given in the square brackets refer to the", references `sC` 
-  S "in which the respective", (phrase assumption), S "is used"]
-
--- generalized theoretical model introduction: identifies key word pertaining to topic
 tModIntro :: (NamedIdea a) => a -> Contents
-tModIntro progName = foldlSP [S "This", phrase section_, S "focuses on",
-  S "the", phrase general, (plural equation), S "and", S "laws that",
+tModIntro progName = foldlSP [S "This", phrase Doc.section_, S "focuses on",
+  S "the", phrase Doc.general, (plural equation), S "and", S "laws that",
   short progName, S "is based on"]
 
 
 generalDefinitionIntro :: (LayoutObj t) => [t] -> Contents
 generalDefinitionIntro [] = Paragraph $ S "There are no general definitions."
-generalDefinitionIntro _ = foldlSP [S "This", phrase section_, 
+generalDefinitionIntro _ = foldlSP [S "This", phrase Doc.section_, 
   S "collects the", S "laws and", (plural equation), 
   S "that will be used in", S "deriving the", 
-  plural dataDefn `sC` S "which in turn are used to", S "build the", 
-  plural inModel]
+  plural Doc.dataDefn `sC` S "which in turn are used to", S "build the", 
+  plural Doc.inModel]
 
-dataDefinitionIntro :: Sentence -> Contents
-dataDefinitionIntro closingSent = Paragraph $ (foldlSent [S "This", phrase section_, 
-    S "collects and defines all the", plural datum, 
-    S "needed to build the", plural inModel] +:+ closingSent)
+
+dataDefinitionIntro :: [Sentence] -> Contents
+dataDefinitionIntro xs = Paragraph $ (foldlSent [S "This", phrase Doc.section_, 
+    S "collects and defines all the", plural Doc.datum, 
+    S "needed to build the", plural Doc.inModel] +:+ foldl (+:+) EmptyS xs)
+
 
 -- just need to provide the four references in order to this function. Nothing can be input into r4 if only three tables are present
-iModIntro :: (LayoutObj t) -> t -> t -> t -> t -> [t] -> Contents
-iModIntro r1 r2 r3 r4 genDef = foldlSP [S "This", phrase section_, 
-  S "transforms the", phrase problem, S "defined in", (makeRef r1), 
+iModIntro :: Contents
+iModIntro = foldlSP [S "This", phrase Doc.section_, 
+  S "transforms the", phrase Doc.problem, S "defined in", S "FIXME REF", 
   S "into one which is expressed in mathematical terms. It uses concrete", 
-  plural symbol_, S "defined in", (makeRef r2), 
-  S "to replace the abstract", plural symbol_, S "in the", 
-  plural model, S "identified in", (makeRef r3) :+: end genDef]
-    where end genDef = S " and" +:+ (makeRef r4)
-          end [] = EmptyS
+  plural Doc.symbol_, S "defined in", S "FIXME REF", 
+  S "to replace the abstract", plural Doc.symbol_, S "in the", 
+  plural Doc.model, S "identified in", S "FIXME REF" :+: S " and" +:+ S "FIXME REF"]
 
 
 -- makes a list of references to tables takes
@@ -240,30 +254,33 @@ listofTablesToRefs  (x:xs) = (makeRef x) `sC` listofTablesToRefs (xs)
 
 -- reference to the input/ ouput tables -> optional middle sentence(s) (use EmptyS if not wanted) -> 
 -- True if standard ending sentence wanted -> optional trailing sentence(s) -> Contents
-dataConstraintParagraph :: Sentence -> Sentence -> Sentence -> Sentence -> Contents
-dataConstraintParagraph hasUncertainty tableRef middleSent trailingSent = Paragraph $
-  (dataConstraintIntroSent tableRef) +:+ middleSent +:+ 
-  (dataConstraintClosingSent hasUncertainty trailingSent)
+dataConstraintParagraph :: [Contents] -> [Sentence] -> Contents
+dataConstraintParagraph tableRef [] = Paragraph $ 
+  (dataConstraintIntroSent tableRef) +:+ (dataConstraintClosingSent [EmptyS])
+dataConstraintParagraph tableRef (mid:xs) = Paragraph $
+  (dataConstraintIntroSent tableRef) +:+ mid +:+ 
+  (dataConstraintClosingSent xs)
 
-dataConstraintIntroSent :: Sentence -> Sentence
-dataConstraintIntroSent tableRef = foldlSent [tableRef, S "the", plural datumConstraint, S "on the", phrase input_, 
-  S "and", phrase output_ +:+. (plural variable `sC` S "respectively"), S "The", 
-  phrase column, S "for", phrase physical, plural constraint, S "gives the", 
-  phrase physical, plural limitation, S "on the range of", plural value, 
-  S "that can be taken by the", phrase variable]
+dataConstraintIntroSent :: [Contents] -> Sentence
+dataConstraintIntroSent tableRef = foldlSent [(listofTablesToRefs tableRef), S "the", 
+  plural Doc.datumConstraint, S "on the", phrase Doc.input_, 
+  S "and", phrase Doc.output_ +:+. (plural Doc.variable `sC` S "respectively"), S "The", 
+  phrase Doc.column, S "for", phrase Doc.physical, plural Doc.constraint, S "gives the", 
+  phrase Doc.physical, plural Doc.limitation, S "on the range of", plural Doc.value, 
+  S "that can be taken by the", phrase Doc.variable]
 
-dataConstraintClosingSent :: Sentence -> Sentence -> Sentence
-dataConstraintClosingSent uncertaintySent trailingSent = foldlSent
-  [S "The", plural constraint, S "are conservative, to give", 
-  (phrase user `ofThe` phrase model), S "the flexibility to", 
-  S "experiment with unusual situations. The", phrase column, S "of", S "typical",
-  plural value, S "is intended to provide a feel for a common scenario"]
-  +:+ uncertaintySent +:+ trailingSent
+dataConstraintClosingSent :: [Sentence] -> Sentence
+dataConstraintClosingSent trailing = (foldlSent
+  [S "The", plural Doc.constraint, S "are conservative, to give", 
+  (phrase Doc.user `ofThe` phrase Doc.model), S "the flexibility to", 
+  S "experiment with unusual situations. The", phrase Doc.column, S "of", S "typical",
+  plural Doc.value, S "is intended to provide a feel for a common scenario"])
+  +:+ dataConstraintUncertainty +:+ S "FIXME" +:+ (foldl (+:+) EmptyS trailing) 
+  --FIXME make uncertainty specificiable 
 
 dataConstraintUncertainty :: Sentence
-dataConstraintUncertainty = foldlSent [S "The", phrase uncertainty, phrase column,
-  S "provides an", S "estimate of the confidence with which the", phrase physical,
-  plural quantity +:+. S "can be measured", S "This", phrase information,
-  S "would be part of the", phrase input_, S "if one were performing an",
-  phrase uncertainty, S "quantification exercise"]
---}
+dataConstraintUncertainty = foldlSent [S "The", phrase Doc.uncertainty, phrase Doc.column,
+  S "provides an", S "estimate of the confidence with which the", phrase Doc.physical,
+  plural Doc.quantity +:+. S "can be measured", S "This", phrase Doc.information,
+  S "would be part of the", phrase Doc.input_, S "if one were performing an",
+  phrase Doc.uncertainty, S "quantification exercise"]

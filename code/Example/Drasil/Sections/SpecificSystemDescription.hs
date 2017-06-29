@@ -62,7 +62,7 @@ specSysDesIntro l_end = foldlSP
             [S "This", phrase section_, S "first presents the", 
             phrase problemDescription `sC` S "which gives a high-level view of the", 
             phrase problem, S "to be solved. This is followed by the", 
-            plural solutionCharSpec `sC` S "which presents the", 
+            phrase solutionCharSpec `sC` S "which presents the", 
             plural assumption `sC` plural theory `sC` l_end]
 
 --Up to change, decide on what ending sentence structure we would like to employ

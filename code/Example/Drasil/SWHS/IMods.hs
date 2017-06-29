@@ -9,23 +9,28 @@ import Data.Drasil.SentenceStructures (foldlSent, isThe, sAnd, ofThe)
 import Data.Drasil.Quantities.Physics (time)
 import Control.Lens ((^.))
 
-iModels :: [RelationConcept]
-iModels = [eBalanceOnWtr, eBalanceOnPCM, heatEInWtr, heatEInPCM]
+swhsInModels :: [RelationConcept]
+swhsInModels = [eBalanceOnWtr, eBalanceOnPCM, heatEInWtr, heatEInPCM]
 
-{-IM1-}
-
+---------
+-- IM1 --
+---------
 eBalanceOnWtr :: RelationConcept
-eBalanceOnWtr = makeRC "eBalanceOnWtr" (nounPhraseSP "Energy balance on water to find T_w") --FIXME:title's "T_w"
+eBalanceOnWtr = makeRC "eBalanceOnWtr" (nounPhraseSP "Energy balance on water to find the temperature of the water")
   balWtrDesc balWtr_Rel
+  --FIXME: title uses temp_W title
 
 balWtr_Rel :: Relation
-balWtr_Rel = Int 0 := Int 0
+balWtr_Rel = ((FCall (C temp_W) [C time]) + (V ", ") + (Int 0) :<= (C time) :<= (C time_final) + (V ", such that ") +
+  (Deriv Total (C temp_W) (C time))) := (Int 1) / (C tau_W) *
+  (((C temp_C) - (FCall (C temp_W) [C time])))
 
 balWtrDesc :: Sentence
 balWtrDesc = fixmeS
 
-{-IM2-}
-
+---------
+-- IM2 --
+---------
 eBalanceOnPCM :: RelationConcept
 eBalanceOnPCM = makeRC "eBalanceOnPCM" (nounPhraseSP "Energy balance on PCM to find T_p")
   balPCMDesc balPCM_Rel
@@ -36,8 +41,9 @@ balPCM_Rel = Int 0 := Int 0
 balPCMDesc :: Sentence
 balPCMDesc = fixmeS
 
-{-IM3-}
-
+---------
+-- IM3 --
+---------
 heatEInWtr :: RelationConcept
 heatEInWtr = makeRC "heatEInWtr" (nounPhraseSP "Heat energy in the water")
   htWtrDesc htWtr_Rel
@@ -58,8 +64,9 @@ htWtrDesc = foldlSent [S "The above equation is derived using" +:+. acroT 2,
   S "This equation applies as long as", E ((Int 0) :< (C temp_W) :< (Int 0)) :+: 
   (unwrap $ getUnit temp_W), sParen (acroA 14 `sC` acroA 19)]
 
-{-IM4-}
-
+---------
+-- IM4 --
+---------
 heatEInPCM :: RelationConcept
 heatEInPCM = makeRC "heatEInPCM" (nounPhraseSP "Heat energy in the PCM")
   htPCMDesc htPCM_Rel

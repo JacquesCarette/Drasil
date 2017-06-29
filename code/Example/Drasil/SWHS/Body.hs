@@ -699,7 +699,7 @@ s4_2_5_subpar = [foldlSP [S "The goals",  acroGS 1, S "to",
   phrase CT.phase_change]]
 
 s4_2_5_IMods :: [Contents]
-s4_2_5_IMods = concat $ weave [s4_2_5_derivations , map (\x -> [swhsSymbMapT x]) iModels]
+s4_2_5_IMods = concat $ weave [s4_2_5_derivations , map (\x -> [swhsSymbMapT x]) swhsInModels]
 
 s4_2_5_derivations :: [[Contents]]
 s4_2_5_derivations = [s4_2_5_subpar, s4_2_5_deriv1, s4_2_5_deriv2]
@@ -1308,7 +1308,7 @@ s7_dataRef, s7_funcReqRef, s7_instaModelRef, s7_assumpRef, s7_theoriesRef,
   s7_dataDefRef, s7_likelyChgRef, s7_genDefRef :: [Sentence]
 
 s7_instaModel = ["IM1", "IM2", "IM3", "IM4"]
-s7_instaModelRef = map (refFromType Theory swhsSymMap) iModels
+s7_instaModelRef = map (refFromType Theory swhsSymMap) swhsInModels
 
 s7_funcReq = ["R1", "R2", "R3", "R4", "R5", "R6", "R7", "R8", "R9", "R10",
   "R11"]

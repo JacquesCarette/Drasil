@@ -128,7 +128,7 @@ data Config = Config {
 ----------------------------------
 
 fileCode :: Config -> Package -> [Label] -> FileType -> Label -> (FilePath, Doc)
-fileCode c (Pack p ms) ns f e = (fileName c p ns ++ e, fileDoc c f p ms) -- $ map (clsWithName ms) ns)
+fileCode c (Pack p ms) ns f e = (fileName c p ns ++ e, fileDoc c f p ms) -- -$ map (clsWithName ms) ns)
 
 fileCodeSplit :: Config -> Package -> [Label] -> FileType -> Label -> [(FilePath, Doc)]
 fileCodeSplit c (Pack p ms) ns f e = --let classes = map (clsWithName ms) ns in

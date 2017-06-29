@@ -149,7 +149,7 @@ tAndDOnly chunk  = Flat $ ((at_start chunk) +:+ S "- ") :+: (chunk ^. defn)
 
 {-BELOW IS TO BE MOVED TO EXAMPLE/DRASIL/SECTIONS-}
 
---FIXME:Reduce duplication. Idealy only use displayConstr. Gamephysics uses pi/2 which is not a "number" yet
+--FIXME: the below three functions are to be removed
 makeConstraint :: (Constrained s, Quantity s, SymbolForm s) => s -> Sentence -> [Sentence]
 makeConstraint s num = [getS s, fmtPhys s, fmtU num s]
 
@@ -165,6 +165,9 @@ fmtInConstr q = [getS q, fmtPhys q, fmtSfwr q, fmtU (E $ getRVal q) q, S $ show 
 
 fmtInputConstr :: (UncertainQuantity c, Constrained c, SymbolForm c) => c -> [c] -> [Sentence]
 fmtInputConstr q qlst = [getS q] ++ physC q qlst ++ sfwrC q qlst ++ [fmtU (E $ getRVal q) q] ++ typUnc q qlst
+
+fmtOutputConstr :: (Constrained c, SymbolForm c) => c -> [c] -> [Sentence]
+fmtOutputConstr q qlst = [getS q] ++ physC q qlst ++ sfwrC q qlst ++ rval q qlst
 
 none :: Sentence
 none = S "None"
@@ -191,6 +194,14 @@ sfwrC q qlst
   | otherwise = [fmtSfwr q]
   where noSfwrC EmptyS = True
         noSfwrC _      = False
+
+rval :: (Constrained c) => c -> [c] -> [Sentence]
+rval q qlst
+  | null (filter isRV $ map (^. reasVal) qlst) = []
+  | isRV (q ^. reasVal) = [fmtU (E $ getRVal q) q]
+  | otherwise = [none]
+  where isRV (Just _) = True
+        isRV Nothing  = False
         
 typUnc :: (UncertainQuantity c) => c -> [c] -> [Sentence]
 typUnc q qlst
@@ -231,7 +242,14 @@ inDataConstTbl qlst tableNumb = Table ([S "Var"] ++ (isPhys $ physC (head qlst) 
         isUnc  _  = [S "Typical Uncertainty"]
 
 -- Creates the output Data Constraints Table with physical constraints only
-outDataConstTbl :: [[Sentence]] -> Integer -> Contents
-outDataConstTbl outputs tableNumb = Table [S "Var", titleize' physicalConstraint,
-  titleize' softwareConstraint] outputs
+outDataConstTbl :: (SymbolForm c, Constrained c) => [c] -> Integer -> Contents
+outDataConstTbl qlst tableNumb = Table ([S "Var"] ++ (isPhys $ physC (head qlst) qlst) ++
+  (isSfwr $ sfwrC (head qlst) qlst) ++ (isTypVal $ rval (head qlst) qlst))
+  (map (\x -> fmtOutputConstr x qlst) qlst)
   (S "Table" +: S (show tableNumb) +:+ S "Output Data Constraints") True
+  where isPhys [] = []
+        isPhys _  = [titleize' physicalConstraint]
+        isSfwr [] = []
+        isSfwr _  = [titleize' softwareConstraint]
+        isTypVal  [] = []
+        isTypVal  _  = [S "Typical" +:+ titleize value]

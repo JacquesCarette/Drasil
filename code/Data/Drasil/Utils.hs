@@ -90,7 +90,7 @@ fmtUS num units  = num +:+ units
 -- | takes a amount and adds a unit to it
 -- n - sentenc representing an amount
 -- u - unit we want to attach to amount
-fmtU :: (Quantity a, SymbolForm a) => Sentence -> a -> Sentence
+fmtU :: (Quantity a) => Sentence -> a -> Sentence
 fmtU n u  = n +:+ (unwrap $ getUnit u)
 
 -- | takes a chunk and a list of binary operator contraints to make an expression (Sentence)

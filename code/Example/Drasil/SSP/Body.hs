@@ -678,7 +678,7 @@ dataConstOut = [(displayContr' . head) sspOutputs] ++ slipVert2 ++
 {-input and output tables-}
 s4_2_6Table2, s4_2_6Table3 :: Contents
 s4_2_6Table2 = inDataConstTbl sspInputs 2 --FIXME: needs more inputs but cannot express them yet
-s4_2_6Table3 = outDataConstTbl dataConstOut 3
+s4_2_6Table3 = outDataConstTbl sspOutputs 3 --FIXME: needs more outputs but cannot express them yet
 
 -- SECTION 5 --
 s5 = reqF [s5_1, s5_2]

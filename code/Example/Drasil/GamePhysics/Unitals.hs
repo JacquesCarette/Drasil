@@ -269,15 +269,15 @@ chipmunkConstraints = [lengthCons, massCons, mmntOfInCons, gravAccelCons,
 nonNegativeConstraint :: Constraint -- should be pulled out an put somewhere for generic constraints
 nonNegativeConstraint = physc $ \c -> c :>= (Dbl 0.0)
 
-lengthCons     = constrained QPP.len               [nonNegativeConstraint]
-massCons       = constrained QPP.mass              [nonNegativeConstraint]
-mmntOfInCons   = constrained QP.momentOfInertia    [nonNegativeConstraint]
-gravAccelCons  = constrained QP.gravitationalConst []
-posCons        = constrained QP.position           []
-veloCons       = constrained QP.velocity           [] 
-orientCons     = constrained QM.orientation        [] -- physical constraint not needed space is radians
-angVeloCons    = constrained QP.angularVelocity    []
-forceCons      = constrained QP.force              []
-torqueCons     = constrained QP.torque             [] 
+lengthCons     = constrained QPP.len               [nonNegativeConstraint] (Dbl 44.2)
+massCons       = constrained QPP.mass              [nonNegativeConstraint] (Dbl 56.2)
+mmntOfInCons   = constrained QP.momentOfInertia    [nonNegativeConstraint] (Dbl 74.5)
+gravAccelCons  = constrained QP.gravitationalConst [] (Dbl 9.8)
+posCons        = constrained QP.position           [] (Dbl 0.412) --FIXME: should be (0.412, 0.502) vector
+veloCons       = constrained QP.velocity           [] (Dbl 2.51)
+orientCons     = constrained QM.orientation        [] (V "pi/2") -- physical constraint not needed space is radians
+angVeloCons    = constrained QP.angularVelocity    [] (Dbl 2.1)
+forceCons      = constrained QP.force              [] (Dbl 98.1)
+torqueCons     = constrained QP.torque             [] (Dbl 200)
 restCoefCons   = constrained QP.restitutionCoef    [nonNegativeConstraint,
-                                                    physc $ \c -> c:<= (Dbl 1.0)]
+                                                    physc $ \c -> c:<= (Dbl 1.0)] (Dbl 0.8)

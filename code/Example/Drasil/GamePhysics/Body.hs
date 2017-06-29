@@ -202,7 +202,6 @@ s4_1 = pdAssembler chipmunk problemDescriptionSect [termAndDefSect,
 
 problemDescriptionSect :: SubSec
 problemDescriptionSect = sSubSec problemDescription [(siSent [s4_1_intro])]
---SRS.probDesc [s4_1_intro] [s4_1_1, s4_1_2]
 
 s4_1_intro = foldlSent 
   [S "Creating a gaming", (phrase physLib),
@@ -227,13 +226,10 @@ s4_1_intro = foldlSent
 -- 4.1.1 : Terminology and Definitions --
 -----------------------------------------
 
-s4_1_1 :: Section
 s4_1_1_bullets :: Contents
 
 termAndDefSect :: SubSec
 termAndDefSect = sSubSec termAndDef [(siSTitl), (siCon [s4_1_1_bullets])]
-
-s4_1_1 = termDefnF EmptyS [s4_1_1_bullets]
 
 s4_1_1_terms :: [ConceptChunk]
 s4_1_1_terms = [CP.rigidBody, CP.elasticity, CPP.ctrOfMass, 
@@ -247,13 +243,10 @@ s4_1_1_bullets = enumBullet
 -- 4.1.2 : Goal Statements --
 -----------------------------
 
-s4_1_2 :: Section
 s4_1_2_list :: Contents
 
 goalStatementSect :: SubSec
 goalStatementSect = sSubSec goalStmt [(siCon [s4_1_2_list])]
-
-s4_1_2 = SRS.goalStmt [s4_1_2_list] []
 
 s4_1_2_stmt1, s4_1_2_stmt2, s4_1_2_stmt3, s4_1_2_stmt4 :: [Sentence]
 s4_1_2_stmt1 = [S "Given the", (plural physicalProperty) `sC` S "initial", 
@@ -607,7 +600,7 @@ s8_dataDef = ["DD1","DD2","DD3","DD4","DD5","DD6","DD7","DD8"]
 s8_dataDefRef = map (refFromType Data cpSymbMap) cpDDefs
 
 s8_assump = ["A1", "A2", "A3", "A4", "A5", "A6", "A7"]
-s8_assumpRef = makeListRef s4_2_1_list_a s4_1_1
+s8_assumpRef = makeListRef s4_2_1_list_a s4_1
 
 s8_funcReq =  ["R1","R2","R3", "R4", "R5", "R6", "R7", "R8"]
 s8_funcReqRef = makeListRef s5_1_list' s5_1
@@ -616,7 +609,7 @@ s8_data = ["Data Constraints"]
 s8_dataRef = [makeRef s4_2]
 
 s8_goalstmt = ["GS1", "GS2", "GS3", "GS4"]
-s8_goalstmtRef = makeListRef s4_1_2_list' s4_1_2
+s8_goalstmtRef = makeListRef s4_1_2_list' s4_1
 
 s8_genDef = ["GD1", "GD2", "GD3", "GD4", "GD5", "GD6", "GD7"]
 s8_genDefRef = makeListRef s8_genDef s4_2_3
@@ -659,7 +652,7 @@ s8_table1 :: Contents
 s8_table1 = Table (EmptyS:(s8_row_header_t1))
   (makeTMatrix s8_col_header_t1 s8_columns_t1 s8_row_t1)
   (showingCxnBw (traceyMatrix) (titleize' requirement +:+ sParen (makeRef s5)
-  `sC` (titleize' goalStmt) +:+ sParen (makeRef s4_1_2) +:+ S "and Other" +:+
+  `sC` (titleize' goalStmt) +:+ sParen (makeRef s4_1) +:+ S "and Other" +:+
   titleize' item)) True
 
 s8_columns_t2 :: [[String]]
@@ -714,7 +707,7 @@ s8_col_header_t2 = zipWith itemRefToSent (s8_cols_t2) (s8_cols_ref_t2)
 s8_table2 :: Contents
 s8_table2 = Table (EmptyS:s8_row_header_t2)
   (makeTMatrix s8_col_header_t2 s8_columns_t2 s8_row_t2) 
-  (showingCxnBw (traceyMatrix) (titleize' assumption +:+ sParen (makeRef s4_1_1) 
+  (showingCxnBw (traceyMatrix) (titleize' assumption +:+ sParen (makeRef s4_1) 
   +:+ S "and Other" +:+ titleize' item)) True
 
 

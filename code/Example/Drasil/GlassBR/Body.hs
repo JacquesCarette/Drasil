@@ -143,7 +143,7 @@ undIR = (foldlList [S "second year calculus", S "structural mechanics",
   S "computer applications in civil engineering"])
 appStanddIR = (S "In addition, reviewers should be familiar with the" +:+
   S "applicable standards for constructions using glass from" +:+
-  sSqBr (S "4-6") +:+ S "in" +:+. (makeRef s10))
+  sSqBr (S "4-6") +:+ S "in" +:+. (makeRef s11))
 incScoR = foldl (+:+) EmptyS [S "getting all", plural inParam, 
   S "related to the", phrase glaSlab, S "and also the", plural parameter, 
   S "related to", phrase blastTy]
@@ -175,7 +175,7 @@ s2_3_intro = foldlSent [S "The", phrase organization, S "of this",
   phrase document, S "follows the", phrase template, S "for an", short srs,
   S "for", phrase sciCompS, S "proposed by" +:+ sSqBr (S "1") 
   `sAnd` sSqBr (S "2"),
-  sParen (S "in" +:+ (makeRef s10)) `sC`
+  sParen (S "in" +:+ (makeRef s11)) `sC`
   S "with some aspects taken from Volere", phrase template, S "16", 
   sSqBr (S "3")]
   
@@ -279,7 +279,7 @@ s6_1 = probDescF start gLassBR ending [s6_1_1, s6_1_2, s6_1_3]
 {--Terminology and Definitions--}
 
 s6_1_1 = termDefnF (S "All of the terms are extracted from" +:+ 
-  sSqBr (S "4") +:+ S "in" +:+ (makeRef s10)) [s6_1_1_bullets]
+  sSqBr (S "4") +:+ S "in" +:+ (makeRef s11)) [s6_1_1_bullets]
 
 s6_1_1_bullets = Enumeration $ (Number $
   map tAndDOnly termsWithDefsOnly

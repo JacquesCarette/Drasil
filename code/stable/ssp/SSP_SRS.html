@@ -1,4 +1,5 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML'></script>
 <html>
 <head>
 <link rel="stylesheet" type="text/css" href="SSP_SRS.css">
@@ -333,17 +334,6 @@ N
 </tr>
 <tr>
 <td>
-n
-</td>
-<td>
-Number Of Slices: the slip mass has been divided into
-</td>
-<td>
-
-</td>
-</tr>
-<tr>
-<td>
 N'<sub>i</sub>
 </td>
 <td>
@@ -351,6 +341,17 @@ Effective Normal Force: for a soil surface, subtracting pore water reactive forc
 </td>
 <td>
 N
+</td>
+</tr>
+<tr>
+<td>
+n
+</td>
+<td>
+Number Of Slices: the slip mass has been divided into
+</td>
+<td>
+
 </td>
 </tr>
 <tr>
@@ -714,6 +715,17 @@ Normal Stress: The stress exerted perpendicular to the plain of the object
 </td>
 <td>
 Pa
+</td>
+</tr>
+<tr>
+<td>
+&tau;<sub>i</sub>
+</td>
+<td>
+Shear Stress: acting on the base of a slice
+</td>
+<td>
+N
 </td>
 </tr>
 <tr>
@@ -1380,7 +1392,7 @@ Equation
 <td>
 <a id="">
 <div class="equation">
-N<sub>i</sub>=0
+N<sub>i</sub>=(W<sub>i</sub>-X<sub>i</sub>+X<sub>i</sub>+U<sub>b,i</sub>cos(&beta;<sub>i</sub>)+Q<sub>i</sub>cos(&omega;<sub>i</sub>))cos(&alpha;<sub>i</sub>)+(-K<sub>c</sub>W<sub>i</sub>-E<sub>i</sub>+E<sub>i</sub>-H<sub>i</sub>+H<sub>i</sub>+U<sub>t,i</sub>sin(&beta;<sub>i</sub>)+Q<sub>i</sub>cos(&omega;<sub>i</sub>))sin(&alpha;<sub>i</sub>)
 </div>
 </a>
 </td>
@@ -1416,7 +1428,7 @@ Equation
 <td>
 <a id="">
 <div class="equation">
-S<sub>i</sub>=0
+S<sub>i</sub>=(W<sub>i</sub>-X<sub>i</sub>+X<sub>i</sub>+U<sub>b,i</sub>cos(&beta;<sub>i</sub>)+Q<sub>i</sub>cos(&omega;<sub>i</sub>))sin(&alpha;<sub>i</sub>)-(-K<sub>c</sub>W<sub>i</sub>-E<sub>i</sub>+E<sub>i</sub>-H<sub>i</sub>+H<sub>i</sub>+U<sub>t,i</sub>sin(&beta;<sub>i</sub>)+Q<sub>i</sub>cos(&omega;<sub>i</sub>))cos(&alpha;<sub>i</sub>)
 </div>
 </a>
 </td>
@@ -1452,7 +1464,7 @@ Equation
 <td>
 <a id="">
 <div class="equation">
-P<sub>i</sub>=N'<sub>i</sub>tan(&phiv;')+c'*b<sub>i</sub>sec(&alpha;<sub>i</sub>)
+P<sub>i</sub>=N'<sub>i</sub>tan(&phiv;')+c'b<sub>i</sub>sec(&alpha;<sub>i</sub>)
 </div>
 </a>
 </td>
@@ -1463,7 +1475,7 @@ Description
 </th>
 <td>
 <p class="paragraph">
-The Mohr-Coulomb resistive shear strength of a slice P<sub>i</sub> is adjusted to account for the effective normal &sigma;=N'<sub>i</sub>=N<sub>i</sub>-U<sub>b,i</sub> of a soil from T4. Also and the cohesion is adjusted to account for the length l of the plane where the normal occurs, where &#8467;<sub>b,i</sub>=b<sub>i</sub>sec(&alpha;<sub>i</sub>), and b<sub>i</sub> is the x width of the base. Therefore c'=c'*b<sub>i</sub>sec(&alpha;<sub>i</sub>).
+The Mohr-Coulomb resistive shear strength of a slice P<sub>i</sub> is adjusted to account for the effective normal &sigma;=N'<sub>i</sub>=N<sub>i</sub>-U<sub>b,i</sub> of a soil from T4. Also and the cohesion is adjusted to account for the length l of the plane where the normal occurs, where &#8467;<sub>b,i</sub>=b<sub>i</sub>sec(&alpha;<sub>i</sub>), and b<sub>i</sub> is the x width of the base. Therefore c'=c'b<sub>i</sub>sec(&alpha;<sub>i</sub>).
 </p>
 </td>
 </tr>
@@ -1497,7 +1509,7 @@ FS
 </span>
 </div>=<div class="fraction">
 <span class="fup">
-N'<sub>i</sub>tan(&phiv;')+c'*b<sub>i</sub>sec(&alpha;<sub>i</sub>)
+N'<sub>i</sub>tan(&phiv;')+c'b<sub>i</sub>sec(&alpha;<sub>i</sub>)
 </span>
 <span class="fdn">
 FS
@@ -1574,7 +1586,49 @@ Equation
 <td>
 <a id="">
 <div class="equation">
-0=0
+0=-E<sub>i</sub>(1-<div class="fraction">
+<span class="fup">
+b<sub>i</sub>
+</span>
+<span class="fdn">
+2
+</span>
+</div>tan(&alpha;<sub>i</sub>))+E<sub>i</sub>(1-<div class="fraction">
+<span class="fup">
+b<sub>i</sub>
+</span>
+<span class="fdn">
+2
+</span>
+</div>tan(&alpha;<sub>i</sub>))-H<sub>i</sub>(1-<div class="fraction">
+<span class="fup">
+b<sub>i</sub>
+</span>
+<span class="fdn">
+2
+</span>
+</div>tan(&alpha;<sub>i</sub>))+H<sub>i</sub>(1-<div class="fraction">
+<span class="fup">
+b<sub>i</sub>
+</span>
+<span class="fdn">
+2
+</span>
+</div>tan(&alpha;<sub>i</sub>))-<div class="fraction">
+<span class="fup">
+b<sub>i</sub>
+</span>
+<span class="fdn">
+2
+</span>
+</div>(X<sub>i</sub>+X<sub>i</sub>)+<div class="fraction">
+<span class="fup">
+K<sub>c</sub>W<sub>i</sub>h<sub>i</sub>
+</span>
+<span class="fdn">
+2
+</span>
+</div>-U<sub>t,i</sub>sin(&beta;<sub>i</sub>)h<sub>i</sub>-Q<sub>i</sub>sin(&omega;<sub>i</sub>)h<sub>i</sub>
 </div>
 </a>
 </td>
@@ -1610,7 +1664,7 @@ Equation
 <td>
 <a id="">
 <div class="equation">
-F=-&Delta;H<sub>i</sub>
+F=-&Delta;H<sub>i</sub>-K<sub>c</sub>W<sub>i</sub>-U<sub>b,i</sub>sin(&alpha;<sub>i</sub>)+U<sub>t,i</sub>sin(&beta;<sub>i</sub>)+Q<sub>i</sub>sin(&omega;<sub>i</sub>)
 </div>
 </a>
 </td>
@@ -1707,7 +1761,7 @@ Vectors describing the displacement of slice i. &delta; is the displacement in t
 Data Definitions
 </h4>
 <p class="paragraph">
-This section collects and defines all the data needed to build the instance models. Definitions DD1 to DD8 are the force variables that can be solved by direct analysis of given inputs. The interslice forces DD9 are force variables that must be written in terms of DD1 to DD8 to solve.
+This section collects and defines all the data needed to build the instance models. Definitions DD1 to DD8 are the force variables that can be solved by direct analysis of given inputs. The interslice forces DD9 are force variables that must be written in terms of DD1 to DD8 to solve..
 </p>
 <a id="DD:W.i">
 <table class="ddefn">
@@ -1738,7 +1792,26 @@ Equation
 <td>
 <a id="">
 <div class="equation">
-W<sub>i</sub> = 0
+W<sub>i</sub> = b<sub>i</sub><span class="casebr">
+{
+</span>
+<div class="cases">
+<span>
+(y<sub>us,i</sub>-y<sub>slip,i</sub>)&gamma;<sub>Sat</sub> , <span class="case">
+y<sub>wt,i</sub>&ge;y<sub>us,i</sub>
+</span>
+</span>
+<span>
+(y<sub>us,i</sub>-y<sub>wt,i</sub>)&gamma;+(y<sub>wt,i</sub>-y<sub>slip,i</sub>)&gamma;<sub>Sat</sub> , <span class="case">
+y<sub>us,i</sub>&gt;y<sub>wt,i</sub>&gt;y<sub>slip,i</sub>
+</span>
+</span>
+<span>
+(y<sub>us,i</sub>-y<sub>slip,i</sub>)&gamma; , <span class="case">
+y<sub>wt,i</sub>&le;y<sub>slip,i</sub>
+</span>
+</span>
+</div>
 </div>
 </a>
 </td>
@@ -1749,7 +1822,7 @@ Description
 </th>
 <td>
 <p class="paragraph">
-W<sub>i</sub> is the weight
+W<sub>i</sub> is the weight<br />b<sub>i</sub> is the base width of a slice<br />y<sub>us,i</sub> is the the y ordinate, or height of the top of the slope at i<br />y<sub>slip,i</sub> is the the y ordinate, or height of the slip surface at i<br />&gamma;<sub>Sat</sub> is the saturated unit weight<br />y<sub>wt,i</sub> is the the y ordinate, or height of the water table at i<br />&gamma; is the dry unit weight
 </p>
 </td>
 </tr>
@@ -1773,7 +1846,7 @@ Units
 </th>
 <td>
 <p class="paragraph">
-
+N
 </p>
 </td>
 </tr>
@@ -1784,7 +1857,21 @@ Equation
 <td>
 <a id="">
 <div class="equation">
-U<sub>b,i</sub> = 0
+U<sub>b,i</sub> = &#8467;<sub>b,i</sub><span class="casebr">
+{
+</span>
+<div class="cases">
+<span>
+(y<sub>wt,i</sub>-y<sub>slip,i</sub>)&gamma;<sub>w</sub> , <span class="case">
+y<sub>wt,i</sub>&gt;y<sub>slip,i</sub>
+</span>
+</span>
+<span>
+0 , <span class="case">
+y<sub>wt,i</sub>&le;y<sub>slip,i</sub>
+</span>
+</span>
+</div>
 </div>
 </a>
 </td>
@@ -1795,7 +1882,7 @@ Description
 </th>
 <td>
 <p class="paragraph">
-U<sub>b,i</sub> is the base hydrostatic force
+U<sub>b,i</sub> is the base hydrostatic force<br />&#8467;<sub>b,i</sub> is the total base length of a slice<br />y<sub>wt,i</sub> is the the y ordinate, or height of the water table at i<br />y<sub>slip,i</sub> is the the y ordinate, or height of the slip surface at i<br />&gamma;<sub>w</sub> is the unit weight of water
 </p>
 </td>
 </tr>
@@ -1819,7 +1906,7 @@ Units
 </th>
 <td>
 <p class="paragraph">
-
+N
 </p>
 </td>
 </tr>
@@ -1830,7 +1917,21 @@ Equation
 <td>
 <a id="">
 <div class="equation">
-U<sub>t,i</sub> = 0
+U<sub>t,i</sub> = &#8467;<sub>s,i</sub><span class="casebr">
+{
+</span>
+<div class="cases">
+<span>
+(y<sub>wt,i</sub>-y<sub>us,i</sub>)&gamma;<sub>w</sub> , <span class="case">
+y<sub>wt,i</sub>&gt;y<sub>us,i</sub>
+</span>
+</span>
+<span>
+0 , <span class="case">
+y<sub>wt,i</sub>&le;y<sub>us,i</sub>
+</span>
+</span>
+</div>
 </div>
 </a>
 </td>
@@ -1841,7 +1942,7 @@ Description
 </th>
 <td>
 <p class="paragraph">
-U<sub>t,i</sub> is the surface hydrostatic force
+U<sub>t,i</sub> is the surface hydrostatic force<br />&#8467;<sub>s,i</sub> is the length of an interslice surface<br />y<sub>wt,i</sub> is the the y ordinate, or height of the water table at i<br />y<sub>us,i</sub> is the the y ordinate, or height of the top of the slope at i<br />&gamma;<sub>w</sub> is the unit weight of water
 </p>
 </td>
 </tr>
@@ -1865,7 +1966,7 @@ Units
 </th>
 <td>
 <p class="paragraph">
-
+N
 </p>
 </td>
 </tr>
@@ -1876,7 +1977,40 @@ Equation
 <td>
 <a id="">
 <div class="equation">
-H<sub>i</sub> = 0
+H<sub>i</sub> = <span class="casebr">
+{
+</span>
+<div class="cases">
+<span>
+<div class="fraction">
+<span class="fup">
+[y<sub>us,i</sub>-y<sub>slip,i</sub>]<sup>2</sup>
+</span>
+<span class="fdn">
+2
+</span>
+</div>&gamma;<sub>Sat</sub>+[y<sub>wt,i</sub>-y<sub>us,i</sub>]<sup>2</sup>&gamma;<sub>Sat</sub> , <span class="case">
+y<sub>wt,i</sub>&ge;y<sub>us,i</sub>
+</span>
+</span>
+<span>
+<div class="fraction">
+<span class="fup">
+[y<sub>wt,i</sub>-y<sub>slip,i</sub>]<sup>2</sup>
+</span>
+<span class="fdn">
+2
+</span>
+</div>&gamma;<sub>Sat</sub> , <span class="case">
+y<sub>us,i</sub>&gt;y<sub>wt,i</sub>&gt;y<sub>slip,i</sub>
+</span>
+</span>
+<span>
+0 , <span class="case">
+y<sub>wt,i</sub>&le;y<sub>slip,i</sub>
+</span>
+</span>
+</div>
 </div>
 </a>
 </td>
@@ -1887,7 +2021,7 @@ Description
 </th>
 <td>
 <p class="paragraph">
-H<sub>i</sub> is the interslice water force
+H<sub>i</sub> is the interslice water force<br />y<sub>us,i</sub> is the the y ordinate, or height of the top of the slope at i<br />y<sub>slip,i</sub> is the the y ordinate, or height of the slip surface at i<br />&gamma;<sub>Sat</sub> is the saturated unit weight<br />y<sub>wt,i</sub> is the the y ordinate, or height of the water table at i
 </p>
 </td>
 </tr>
@@ -1911,7 +2045,7 @@ Units
 </th>
 <td>
 <p class="paragraph">
-
+&deg;
 </p>
 </td>
 </tr>
@@ -1922,7 +2056,14 @@ Equation
 <td>
 <a id="">
 <div class="equation">
-&alpha;<sub>i</sub> = 0
+&alpha;<sub>i</sub> = <div class="fraction">
+<span class="fup">
+y<sub>slip,i</sub>-y<sub>slip,i</sub>
+</span>
+<span class="fdn">
+y<sub>slip,i</sub>-y<sub>slip,i</sub>
+</span>
+</div>
 </div>
 </a>
 </td>
@@ -1933,13 +2074,13 @@ Description
 </th>
 <td>
 <p class="paragraph">
-&alpha;<sub>i</sub> is the angle
+&alpha;<sub>i</sub> is the angle<br />y<sub>slip,i</sub> is the the y ordinate, or height of the slip surface at i
 </p>
 </td>
 </tr>
 </table>
 </a>
-<a id="DD:l.b,i">
+<a id="DD:b.i">
 <table class="ddefn">
 <tr>
 <th>
@@ -1947,7 +2088,7 @@ Label
 </th>
 <td>
 <p class="paragraph">
-&#8467;<sub>b,i</sub>
+b<sub>i</sub>
 </p>
 </td>
 </tr>
@@ -1957,7 +2098,7 @@ Units
 </th>
 <td>
 <p class="paragraph">
-
+m
 </p>
 </td>
 </tr>
@@ -1968,7 +2109,7 @@ Equation
 <td>
 <a id="">
 <div class="equation">
-&#8467;<sub>b,i</sub> = 0
+b<sub>i</sub> = y<sub>slip,i</sub>-y<sub>slip,i</sub>
 </div>
 </a>
 </td>
@@ -1979,7 +2120,7 @@ Description
 </th>
 <td>
 <p class="paragraph">
-&#8467;<sub>b,i</sub> is the total base length of a slice
+b<sub>i</sub> is the base width of a slice<br />y<sub>slip,i</sub> is the the y ordinate, or height of the slip surface at i
 </p>
 </td>
 </tr>
@@ -2014,7 +2155,7 @@ Equation
 <td>
 <a id="">
 <div class="equation">
-K<sub>c</sub> = 0
+K<sub>c</sub> = K<sub>c</sub>W<sub>i</sub>
 </div>
 </a>
 </td>
@@ -2025,7 +2166,7 @@ Description
 </th>
 <td>
 <p class="paragraph">
-K<sub>c</sub> is the earthquake load factor
+K<sub>c</sub> is the earthquake load factor<br />K<sub>c</sub> is the earthquake load factor<br />W<sub>i</sub> is the weight
 </p>
 </td>
 </tr>
@@ -2049,7 +2190,7 @@ Units
 </th>
 <td>
 <p class="paragraph">
-
+N
 </p>
 </td>
 </tr>
@@ -2060,7 +2201,7 @@ Equation
 <td>
 <a id="">
 <div class="equation">
-Q<sub>i</sub> = 0
+Q<sub>i</sub> = Q<sub>i</sub>&omega;<sub>i</sub>
 </div>
 </a>
 </td>
@@ -2071,7 +2212,7 @@ Description
 </th>
 <td>
 <p class="paragraph">
-Q<sub>i</sub> is the imposed surface load
+Q<sub>i</sub> is the imposed surface load<br />Q<sub>i</sub> is the imposed surface load<br />&omega;<sub>i</sub> is the angle
 </p>
 </td>
 </tr>
@@ -2095,7 +2236,7 @@ Units
 </th>
 <td>
 <p class="paragraph">
-
+N
 </p>
 </td>
 </tr>
@@ -2106,7 +2247,7 @@ Equation
 <td>
 <a id="">
 <div class="equation">
-X<sub>i</sub> = 0
+X<sub>i</sub> = &lambda;f<sub>i</sub>E<sub>i</sub>
 </div>
 </a>
 </td>
@@ -2117,53 +2258,7 @@ Description
 </th>
 <td>
 <p class="paragraph">
-X<sub>i</sub> is the interslice shear force
-</p>
-</td>
-</tr>
-</table>
-</a>
-<a id="DD:T.i">
-<table class="ddefn">
-<tr>
-<th>
-Label
-</th>
-<td>
-<p class="paragraph">
-T<sub>i</sub>
-</p>
-</td>
-</tr>
-<tr>
-<th>
-Units
-</th>
-<td>
-<p class="paragraph">
-
-</p>
-</td>
-</tr>
-<tr>
-<th>
-Equation
-</th>
-<td>
-<a id="">
-<div class="equation">
-T<sub>i</sub> = 0
-</div>
-</a>
-</td>
-</tr>
-<tr>
-<th>
-Description
-</th>
-<td>
-<p class="paragraph">
-T<sub>i</sub> is the mobilized shear force
+X<sub>i</sub> is the interslice shear force<br />&lambda; is the ratio<br />f<sub>i</sub> is the scaling function<br />E<sub>i</sub> is the interslice normal force
 </p>
 </td>
 </tr>
@@ -2187,7 +2282,7 @@ Units
 </th>
 <td>
 <p class="paragraph">
-
+N
 </p>
 </td>
 </tr>
@@ -2198,7 +2293,7 @@ Equation
 <td>
 <a id="">
 <div class="equation">
-R<sub>i</sub> = 0
+R<sub>i</sub> = ((W<sub>i</sub>+U<sub>t,i</sub>cos(&beta;<sub>i</sub>)+Q<sub>i</sub>cos(&omega;<sub>i</sub>))cos(&alpha;<sub>i</sub>)+(-K<sub>c</sub>W<sub>i</sub>-&Delta;H<sub>i</sub>+U<sub>t,i</sub>sin(&beta;<sub>i</sub>)+Q<sub>i</sub>sin(&omega;<sub>i</sub>))sin(&alpha;<sub>i</sub>)-U<sub>b,i</sub>)tan(&phiv;')+c'b<sub>i</sub>sec(&alpha;<sub>i</sub>)
 </div>
 </a>
 </td>
@@ -2209,11 +2304,40 @@ Description
 </th>
 <td>
 <p class="paragraph">
-R<sub>i</sub> is the shear resistance
+R<sub>i</sub> is the shear resistance<br />W<sub>i</sub> is the weight<br />U<sub>t,i</sub> is the surface hydrostatic force<br />&beta;<sub>i</sub> is the angle<br />Q<sub>i</sub> is the imposed surface load<br />&omega;<sub>i</sub> is the angle<br />&alpha;<sub>i</sub> is the angle<br />K<sub>c</sub> is the earthquake load factor<br />&Delta;H<sub>i</sub> is the difference between interslice forces acting in the x-ordinate direction of the slice on each side<br />U<sub>b,i</sub> is the base hydrostatic force<br />&phiv;' is the effective angle of friction<br />c' is the effective cohesion<br />b<sub>i</sub> is the base width of a slice
 </p>
 </td>
 </tr>
 </table>
+</a>
+<p class="paragraph">
+The resistive shear force of a slice is defined as Pi in GD3. The effective normal in the equation for Pi of the soil is defined in the perpendicular force equilibrium of a slice from GD2, using the effective normal N0i of T4 shown in equation (1).
+</p>
+<a id="">
+<div class="equation">
+N'<sub>i</sub>=(W<sub>i</sub>-X<sub>i</sub>+X<sub>i</sub>+U<sub>t,i</sub>cos(&beta;<sub>i</sub>)+Q<sub>i</sub>cos(&omega;<sub>i</sub>))cos(&alpha;<sub>i</sub>)+(-K<sub>c</sub>W<sub>i</sub>-E<sub>i</sub>+E<sub>i</sub>-H<sub>i</sub>+H<sub>i</sub>+U<sub>t,i</sub>sin(&beta;<sub>i</sub>)+Q<sub>i</sub>sin(&omega;<sub>i</sub>))sin(&alpha;<sub>i</sub>)-U<sub>b,i</sub>
+</div>
+</a>
+<p class="paragraph">
+The values of the interslice forces E<sub>i</sub> and X<sub>i</sub> in the equation are unknown, while the other values are found from the physical force definitions of DD1 to DD9. Consider a force equilibrium without the affect of interslice forces, to obtain a solvable value as done for N*i in equation (2).
+</p>
+<a id="">
+<div class="equation">
+N*<sub>i</sub>=(W<sub>i</sub>+U<sub>t,i</sub>cos(&beta;<sub>i</sub>)+Q<sub>i</sub>cos(&omega;<sub>i</sub>))cos(&alpha;<sub>i</sub>)+(-K<sub>c</sub>W<sub>i</sub>-H<sub>i</sub>+H<sub>i</sub>+U<sub>t,i</sub>sin(&beta;<sub>i</sub>)+Q<sub>i</sub>sin(&omega;<sub>i</sub>))sin(&alpha;<sub>i</sub>)-U<sub>b,i</sub>
+</div>
+</a>
+<p class="paragraph">
+Using N*i, a resistive shear force neglecting the influence of interslice forces can be solved for in terms of all known values as done in equation (3).
+</p>
+<a id="">
+<div class="equation">
+R<sub>i</sub>=N*<sub>i</sub>tan(&phiv;')+c'b<sub>i</sub>sec(&alpha;<sub>i</sub>)
+</div>
+</a>
+<a id="">
+<div class="equation">
+R<sub>i</sub>=((W<sub>i</sub>+U<sub>t,i</sub>cos(&beta;<sub>i</sub>)+Q<sub>i</sub>cos(&omega;<sub>i</sub>))cos(&alpha;<sub>i</sub>)+(-K<sub>c</sub>W<sub>i</sub>-&Delta;H<sub>i</sub>+U<sub>t,i</sub>sin(&beta;<sub>i</sub>)+Q<sub>i</sub>sin(&omega;<sub>i</sub>))sin(&alpha;<sub>i</sub>)-U<sub>b,i</sub>)tan(&phiv;')+c'b<sub>i</sub>sec(&alpha;<sub>i</sub>)
+</div>
 </a>
 <a id="DD:T.i">
 <table class="ddefn">
@@ -2233,7 +2357,7 @@ Units
 </th>
 <td>
 <p class="paragraph">
-
+N
 </p>
 </td>
 </tr>
@@ -2244,7 +2368,7 @@ Equation
 <td>
 <a id="">
 <div class="equation">
-T<sub>i</sub> = 0
+T<sub>i</sub> = (W<sub>i</sub>+U<sub>t,i</sub>cos(&beta;<sub>i</sub>)+Q<sub>i</sub>cos(&omega;<sub>i</sub>))sin(&alpha;<sub>i</sub>)-(-K<sub>c</sub>W<sub>i</sub>-&Delta;H<sub>i</sub>+U<sub>t,i</sub>sin(&beta;<sub>i</sub>)+Q<sub>i</sub>sin(&omega;<sub>i</sub>))cos(&alpha;<sub>i</sub>)
 </div>
 </a>
 </td>
@@ -2255,12 +2379,31 @@ Description
 </th>
 <td>
 <p class="paragraph">
-T<sub>i</sub> is the mobilized shear force
+T<sub>i</sub> is the mobilized shear force<br />W<sub>i</sub> is the weight<br />U<sub>t,i</sub> is the surface hydrostatic force<br />&beta;<sub>i</sub> is the angle<br />Q<sub>i</sub> is the imposed surface load<br />&omega;<sub>i</sub> is the angle<br />&alpha;<sub>i</sub> is the angle<br />K<sub>c</sub> is the earthquake load factor<br />&Delta;H<sub>i</sub> is the difference between interslice forces acting in the x-ordinate direction of the slice on each side
 </p>
 </td>
 </tr>
 </table>
 </a>
+<p class="paragraph">
+The mobile shear force acting on a slice is defined as Si from the force equilibrium in GD2, also shown in equation (4).
+</p>
+<a id="">
+<div class="equation">
+N'<sub>i</sub>=(W<sub>i</sub>-X<sub>i</sub>+X<sub>i</sub>+U<sub>t,i</sub>cos(&beta;<sub>i</sub>)+Q<sub>i</sub>cos(&omega;<sub>i</sub>))sin(&alpha;<sub>i</sub>)-(-K<sub>c</sub>W<sub>i</sub>-E<sub>i</sub>+E<sub>i</sub>-H<sub>i</sub>+H<sub>i</sub>+U<sub>t,i</sub>sin(&beta;<sub>i</sub>)+Q<sub>i</sub>sin(&omega;<sub>i</sub>))cos(&alpha;<sub>i</sub>)
+</div>
+</a>
+<p class="paragraph">
+The equation is unsolvable, containing the unknown interslice normal force E<sub>i</sub> and shear force X. Consider a force equilibrium without the affect of interslice forces, to obtain the mobile shear force without the influence of interslice forces T, as done in equation (5).
+</p>
+<a id="">
+<div class="equation">
+T<sub>i</sub>=(W<sub>i</sub>+U<sub>t,i</sub>cos(&beta;<sub>i</sub>)+Q<sub>i</sub>cos(&omega;<sub>i</sub>))sin(&alpha;<sub>i</sub>)-(-K<sub>c</sub>W<sub>i</sub>-&Delta;H<sub>i</sub>+U<sub>t,i</sub>sin(&beta;<sub>i</sub>)+Q<sub>i</sub>sin(&omega;<sub>i</sub>))cos(&alpha;<sub>i</sub>)
+</div>
+</a>
+<p class="paragraph">
+The values of R<sub>i</sub> and T<sub>i</sub> are now defined completely in terms of the known force property values of DD1 to DD9.
+</p>
 <a id="DD:K.st,i">
 <table class="ddefn">
 <tr>
@@ -2279,7 +2422,7 @@ Units
 </th>
 <td>
 <p class="paragraph">
-
+Pa
 </p>
 </td>
 </tr>
@@ -2307,6 +2450,34 @@ K<sub>st,i</sub> is the shear stiffness
 </tr>
 </table>
 </a>
+<p class="paragraph">
+Using the force-displacement relationship of GD8 to define stiffness matrix Ki, as seen in equation (6).
+</p>
+<p class="paragraph">
+For interslice surfaces the stiffness constants and displacements refer to an unrotated coordinate system, &delta; of GD9. The interslice elements are left in their standard coordinate system, and therefore are described by the same equation from GD8. Seen as Ks,i in DD12. K<sub>st,i</sub> is the shear element in the matrix, and K<sub>sn,i</sub> is the normal element in the matrix, calculated as in DD14.
+</p>
+<p class="paragraph">
+For basal surfaces the stiffness constants and displacements refer to a system rotated for the base angle alpha (DD5). To analyze the effect of force-displacement relationships occurring on both basal and interslice surfaces of an element i they must reference the same coordinate system. The basal stiffness matrix must be rotated counter clockwise to align with the angle of the basal surface. The base stiffness counter clockwise rotation is applied in equation (7) to the new matrix N*<sub>i</sub>.
+</p>
+<p class="paragraph">
+The Hooke's law force displacement relationship of GD8 applied to the base also references a displacement vector &epsilon;<sub>i</sub> of GD9 rotated for the base angle of the slice &alpha;<sub>i</sub> . The basal displacement vector &delta; is rotated clockwise to align with the interslice displacement vector &delta; , applying the definition of &epsilon;<sub>i</sub> in terms of &delta; as seen in GD9. Using this with base stiffness matrix K*i, a basal force displacement relationship in the same coordinate system as the interslice relationship can be derived as done in equation (8).
+</p>
+<p class="paragraph">
+The new effective base stiffness matrix K0i ,as derived in equation (7) is defined in equation (9). This is seen as matrix Kb,i in GD12. K<sub>bt,i</sub> is the shear element in the matrix, and K<sub>bn,i</sub> is the normal element in the matrix, calculated as in DD14. The notation is simplified by the introduction of the constants KbA,i and KbB,i, defined in equations (10) and (11) respectively.
+</p>
+<a id="">
+<div class="equation">
+K<sub>bt,i</sub>=K<sub>bt,i</sub>cos(&alpha;<sub>i</sub>)<sup>2</sup>+K<sub>bn,i</sub>sin(&alpha;<sub>i</sub>)<sup>2</sup>
+</div>
+</a>
+<a id="">
+<div class="equation">
+K<sub>bt,i</sub>=(K<sub>bt,i</sub>-K<sub>bn,i</sub>)sin(&alpha;<sub>i</sub>)cos(&alpha;<sub>i</sub>)
+</div>
+</a>
+<p class="paragraph">
+A force-displacement relationship for an element i can be written in terms of displacements occurring in the unrotated coordinate system &delta; of GD9 using the matrix Ks,i, and Kb,i as seen in DD12.
+</p>
 <a id="DD:force">
 <table class="ddefn">
 <tr>
@@ -2325,7 +2496,7 @@ Units
 </th>
 <td>
 <p class="paragraph">
-
+N
 </p>
 </td>
 </tr>
@@ -2336,7 +2507,7 @@ Equation
 <td>
 <a id="">
 <div class="equation">
-F = 0
+F = -&#8467;<sub>s,i</sub>K<sub>sn,i</sub>&delta;+(&#8467;<sub>s,i</sub>K<sub>sn,i</sub>+&#8467;<sub>b,i</sub>K<sub>bn,i</sub>+&#8467;<sub>s,i</sub>K<sub>sn,i</sub>)&delta;-&#8467;<sub>s,i</sub>K<sub>sn,i</sub>&delta;
 </div>
 </a>
 </td>
@@ -2347,13 +2518,13 @@ Description
 </th>
 <td>
 <p class="paragraph">
-F is the force
+F is the force<br />&#8467;<sub>s,i</sub> is the length of an interslice surface<br />K<sub>sn,i</sub> is the normal stiffness<br />&delta; is the displacement<br />&#8467;<sub>b,i</sub> is the total base length of a slice<br />K<sub>bn,i</sub> is the normal stiffness
 </p>
 </td>
 </tr>
 </table>
 </a>
-<a id="DD:T.i">
+<a id="DD:K.no">
 <table class="ddefn">
 <tr>
 <th>
@@ -2361,7 +2532,7 @@ Label
 </th>
 <td>
 <p class="paragraph">
-T<sub>i</sub>
+K<sub>no</sub>
 </p>
 </td>
 </tr>
@@ -2371,7 +2542,7 @@ Units
 </th>
 <td>
 <p class="paragraph">
-
+Pa
 </p>
 </td>
 </tr>
@@ -2382,7 +2553,42 @@ Equation
 <td>
 <a id="">
 <div class="equation">
-T<sub>i</sub> = 0
+K<sub>no</sub> = <span class="casebr">
+{
+</span>
+<div class="cases">
+<span>
+<div class="fraction">
+<span class="fup">
+E<sub>i</sub>(1-&nu;)
+</span>
+<span class="fdn">
+(1+&nu;)(1-2&nu;+b<sub>i</sub>)
+</span>
+</div> , <span class="case">
+&nu;&lt;0
+</span>
+</span>
+<span>
+0.01<div class="fraction">
+<span class="fup">
+E<sub>i</sub>(1-&nu;)
+</span>
+<span class="fdn">
+(1+&nu;)(1-2&nu;+b<sub>i</sub>)
+</span>
+</div>+<div class="fraction">
+<span class="fup">
+k
+</span>
+<span class="fdn">
+&delta;v<sub>i</sub>+A
+</span>
+</div> , <span class="case">
+&nu;&ge;0
+</span>
+</span>
+</div>
 </div>
 </a>
 </td>
@@ -2393,7 +2599,7 @@ Description
 </th>
 <td>
 <p class="paragraph">
-T<sub>i</sub> is the mobilized shear force
+K<sub>no</sub> is the normal stiffness<br />E<sub>i</sub> is the interslice normal force<br />&nu; is the Poisson's ratio<br />b<sub>i</sub> is the base width of a slice<br />&delta;v<sub>i</sub> is the displacement
 </p>
 </td>
 </tr>
@@ -2472,6 +2678,38 @@ Equation for the Factor of Safety is the ratio between resistive and mobile shea
 </tr>
 </table>
 </a>
+<p class="paragraph">
+Using equation (21) from section 4.2.5, rearranging, and applying the boundary condition that E0 and En are equal to 0 an equation for the factor of safety is found as equation (12), also seen in IM1. Using equation (21) from section 4.2.5, rearranging, and applying the boundary condition that E0 and En are equal to 0 an equation for the factor of safety is found as equation (12), also seen in IM1.
+</p>
+<a id="">
+<div class="equation">
+FS=<div class="fraction">
+<span class="fup">
+&sum;<sub>v=1</sub><sup>n-1</sup>(R<sub>i</sub>&prod;<sub>c=i</sub><sup>n-1</sup>(<div class="fraction">
+<span class="fup">
+&Psi;<sub>c</sub>
+</span>
+<span class="fdn">
+&Phi;<sub>c</sub>
+</span>
+</div>))+R<sub>i</sub>
+</span>
+<span class="fdn">
+&sum;<sub>v=1</sub><sup>n-1</sup>(T<sub>i</sub>&prod;<sub>c=i</sub><sup>n-1</sup>(<div class="fraction">
+<span class="fup">
+&Psi;<sub>c</sub>
+</span>
+<span class="fdn">
+&Phi;<sub>c</sub>
+</span>
+</div>))+T<sub>i</sub>
+</span>
+</div>
+</div>
+</a>
+<p class="paragraph">
+The constants &Psi;<sub>c</sub> and &Phi;<sub>c</sub> described in equations 20 and 19 are functions of the unknowns: the interslice normal/shear force ratio &lambda; (IM2) and the Factor of Safety itself FS (IM1).
+</p>
 <a id="T:nrmShrFor">
 <table class="tdefn">
 <tr>
@@ -2491,7 +2729,26 @@ Equation
 <td>
 <a id="">
 <div class="equation">
-FS=0
+FS=<span class="casebr">
+{
+</span>
+<div class="cases">
+<span>
+b<sub>i</sub>(E<sub>i</sub>+H<sub>i</sub>)tan(&alpha;<sub>i</sub>) , <span class="case">
+i=1
+</span>
+</span>
+<span>
+b<sub>i</sub>(E<sub>i</sub>+E<sub>i</sub>+H<sub>i</sub>+H<sub>i</sub>)tan(&alpha;<sub>i</sub>) , <span class="case">
+2&le;i&le;n-1
+</span>
+</span>
+<span>
+b<sub>i</sub>(E<sub>i</sub>+H<sub>i</sub>)tan(&alpha;<sub>i</sub>) , <span class="case">
+i=n
+</span>
+</span>
+</div>
 </div>
 </a>
 </td>
@@ -2508,6 +2765,131 @@ Description
 </tr>
 </table>
 </a>
+<p class="paragraph">
+The last static equation of T2 the moment equilibrium of GD6 about the midpoint of the base is taken, with the assumption of GD5. Results in equation (13).
+</p>
+<a id="">
+<div class="equation">
+0=-E<sub>i</sub>(1-<div class="fraction">
+<span class="fup">
+b<sub>i</sub>
+</span>
+<span class="fdn">
+2
+</span>
+</div>tan(&alpha;<sub>i</sub>))+E<sub>i</sub>(1-<div class="fraction">
+<span class="fup">
+b<sub>i</sub>
+</span>
+<span class="fdn">
+2
+</span>
+</div>tan(&alpha;<sub>i</sub>))-H<sub>i</sub>(1-<div class="fraction">
+<span class="fup">
+b<sub>i</sub>
+</span>
+<span class="fdn">
+2
+</span>
+</div>tan(&alpha;<sub>i</sub>))+H<sub>i</sub>(1-<div class="fraction">
+<span class="fup">
+b<sub>i</sub>
+</span>
+<span class="fdn">
+2
+</span>
+</div>tan(&alpha;<sub>i</sub>))-<div class="fraction">
+<span class="fup">
+b<sub>i</sub>
+</span>
+<span class="fdn">
+2
+</span>
+</div>(X<sub>i</sub>+X<sub>i</sub>)+<div class="fraction">
+<span class="fup">
+K<sub>c</sub>W<sub>i</sub>h<sub>i</sub>
+</span>
+<span class="fdn">
+2
+</span>
+</div>-U<sub>t,i</sub>sin(&beta;<sub>i</sub>)h<sub>i</sub>-Q<sub>i</sub>sin(&omega;<sub>i</sub>)h<sub>i</sub>
+</div>
+</a>
+<p class="paragraph">
+The equation in terms of &lambda; leads to equation (14).
+</p>
+<a id="">
+<div class="equation">
+&lambda;=<div class="fraction">
+<span class="fup">
+0=-E<sub>i</sub>(1-<div class="fraction">
+<span class="fup">
+b<sub>i</sub>
+</span>
+<span class="fdn">
+2
+</span>
+</div>tan(&alpha;<sub>i</sub>))+E<sub>i</sub>(1-<div class="fraction">
+<span class="fup">
+b<sub>i</sub>
+</span>
+<span class="fdn">
+2
+</span>
+</div>tan(&alpha;<sub>i</sub>))-H<sub>i</sub>(1-<div class="fraction">
+<span class="fup">
+b<sub>i</sub>
+</span>
+<span class="fdn">
+2
+</span>
+</div>tan(&alpha;<sub>i</sub>))+H<sub>i</sub>(1-<div class="fraction">
+<span class="fup">
+b<sub>i</sub>
+</span>
+<span class="fdn">
+2
+</span>
+</div>tan(&alpha;<sub>i</sub>))-<div class="fraction">
+<span class="fup">
+b<sub>i</sub>
+</span>
+<span class="fdn">
+2
+</span>
+</div>(X<sub>i</sub>+X<sub>i</sub>)+<div class="fraction">
+<span class="fup">
+K<sub>c</sub>W<sub>i</sub>h<sub>i</sub>
+</span>
+<span class="fdn">
+2
+</span>
+</div>-U<sub>t,i</sub>sin(&beta;<sub>i</sub>)h<sub>i</sub>-Q<sub>i</sub>sin(&omega;<sub>i</sub>)h<sub>i</sub>
+</span>
+<span class="fdn">
+b<sub>i</sub>/2(E<sub>i</sub>f<sub>i</sub>+E<sub>i</sub>f<sub>i</sub>)
+</span>
+</div>
+</div>
+</a>
+<p class="paragraph">
+Taking a summation of each slice, and considering the boundary conditions that E0 and En are equal to zero, a general equation for the constant &lambda; is developed in equation (15), also found in IM2.
+</p>
+<a id="">
+<div class="equation">
+&lambda;=<div class="fraction">
+<span class="fup">
+&sum;<sub>i=1</sub><sup>n</sup>(b<sub>i</sub>(E<sub>i</sub>+E<sub>i</sub>+H<sub>i</sub>+H<sub>i</sub>)tan(&alpha;<sub>i</sub>)+h<sub>i</sub>(K<sub>c</sub>W<sub>i</sub>-2U<sub>t,i</sub>sin(&beta;<sub>i</sub>)-2Q<sub>i</sub>sin(&omega;<sub>i</sub>)))
+</span>
+<span class="fdn">
+&sum;<sub>i=1</sub><sup>n</sup>(b<sub>i</sub>(E<sub>i</sub>f<sub>i</sub>+E<sub>i</sub>f<sub>i</sub>))
+</span>
+</div>
+</div>
+</a>
+<p class="paragraph">
+Equation (15) for &lambda;, is a function of the unknown interslice normal force E<sub>i</sub> (IM3).
+</p>
 <a id="T:intsliceFs">
 <table class="tdefn">
 <tr>
@@ -2552,7 +2934,7 @@ FS*T<sub>i</sub>-R<sub>i</sub>
 &Phi;<sub>c</sub>
 </span>
 </div> , <span class="case">
-1&lt;1&lt;n-1
+1&le;1&le;n-1
 </span>
 </span>
 <span>
@@ -2561,9 +2943,6 @@ FS*T<sub>i</sub>-R<sub>i</sub>
 </span>
 </span>
 </div>
-<span class="casebr">
-}
-</span>
 </div>
 </a>
 </td>
@@ -2580,6 +2959,65 @@ The value of the interslice normal force E<sub>i</sub> at interface i. The net f
 </tr>
 </table>
 </a>
+<p class="paragraph">
+Taking the perpendicular force equilibrium of GD1 with the effective stress definition from T4 that N<sub>i</sub>=N'<sub>i</sub>-U<sub>b,i</sub>, and the assumption of GD5 the equilibrium equation can be rewritten as equation (16).
+</p>
+<a id="">
+<div class="equation">
+N'<sub>i</sub>=(W<sub>i</sub>-&lambda;f<sub>i</sub>E<sub>i</sub>+&lambda;f<sub>i</sub>E<sub>i</sub>+U<sub>b,i</sub>cos(&beta;<sub>i</sub>)+Q<sub>i</sub>cos(&omega;<sub>i</sub>))cos(&alpha;<sub>i</sub>)+(-K<sub>c</sub>W<sub>i</sub>-E<sub>i</sub>+E<sub>i</sub>-H<sub>i</sub>+H<sub>i</sub>+U<sub>t,i</sub>sin(&beta;<sub>i</sub>)+Q<sub>i</sub>sin(&omega;<sub>i</sub>))sin(&alpha;<sub>i</sub>)-U<sub>b,i</sub>
+</div>
+</a>
+<p class="paragraph">
+Taking the parallel force equilibrium of GD2 with the definition of mobile shear from GD4 and the assumption of GD5, the equilibrium equation can be rewritten as equation (17).
+</p>
+<a id="">
+<div class="equation">
+<div class="fraction">
+<span class="fup">
+N<sub>i</sub>tan(&phiv;')+c'b<sub>i</sub>sec(&alpha;<sub>i</sub>)
+</span>
+<span class="fdn">
+FS
+</span>
+</div>=(W<sub>i</sub>-&lambda;f<sub>i</sub>E<sub>i</sub>+&lambda;f<sub>i</sub>E<sub>i</sub>+U<sub>b,i</sub>cos(&beta;<sub>i</sub>)+Q<sub>i</sub>cos(&omega;<sub>i</sub>))sin(&alpha;<sub>i</sub>)+(-K<sub>c</sub>W<sub>i</sub>-E<sub>i</sub>+E<sub>i</sub>-H<sub>i</sub>+H<sub>i</sub>+U<sub>t,i</sub>sin(&beta;<sub>i</sub>)+Q<sub>i</sub>sin(&omega;<sub>i</sub>))cos(&alpha;<sub>i</sub>)
+</div>
+</a>
+<p class="paragraph">
+Substituting the equation for N0 i from equation (16) into equation (17) and rearranging results in equation (18).
+</p>
+<a id="">
+<div class="equation">
+E<sub>i</sub>((&lambda;f<sub>i</sub>cos(&alpha;<sub>i</sub>)-sin(&alpha;<sub>i</sub>))tan(&phiv;')-(&lambda;f<sub>i</sub>sin(&alpha;<sub>i</sub>)-cos(&alpha;<sub>i</sub>))*FS)=E<sub>i</sub>((&lambda;f<sub>i</sub>cos(&alpha;<sub>i</sub>)-sin(&alpha;<sub>i</sub>))tan(&phiv;')-(&lambda;f<sub>i</sub>sin(&alpha;<sub>i</sub>)-cos(&alpha;<sub>i</sub>))*FS)+FS*T<sub>i</sub>-R<sub>i</sub>
+</div>
+</a>
+<p class="paragraph">
+Where R<sub>i</sub> and T<sub>i</sub> are the resistive and mobile shear of the slice, without the influence of interslice forces E<sub>i</sub> and X, as defined in DD10 and DD11. Making use of the constants, and with full equations found below in equations (19) and (20) respectively, then equation (18) can be simplified to equation (21), also seen in IM3.
+</p>
+<a id="">
+<div class="equation">
+&Phi;<sub>c</sub>=(&lambda;f<sub>i</sub>cos(&alpha;<sub>i</sub>)-sin(&alpha;<sub>i</sub>))tan(&phiv;')-(&lambda;f<sub>i</sub>sin(&alpha;<sub>i</sub>)-cos(&alpha;<sub>i</sub>))*FS
+</div>
+</a>
+<a id="">
+<div class="equation">
+&Psi;<sub>c</sub>=(&lambda;f<sub>i</sub>cos(&alpha;<sub>i</sub>)-sin(&alpha;<sub>i</sub>))tan(&phiv;')-(&lambda;f<sub>i</sub>sin(&alpha;<sub>i</sub>)-cos(&alpha;<sub>i</sub>))*FS
+</div>
+</a>
+<a id="">
+<div class="equation">
+E<sub>i</sub>=<div class="fraction">
+<span class="fup">
+&Psi;<sub>c</sub>E<sub>i</sub>+FS*T<sub>i</sub>-R<sub>i</sub>
+</span>
+<span class="fdn">
+&Phi;<sub>c</sub>
+</span>
+</div>
+</div>
+</a>
+<p class="paragraph">
+The constants &Psi;<sub>c</sub> and &Phi;<sub>c</sub> in equation (21) for E<sub>i</sub> is a function of the unknown values, the interslice normal/shear force ratio &lambda; (IM2), and the Factor of Safety FS (IM1).
+</p>
 <a id="T:forDisEqlb">
 <table class="tdefn">
 <tr>
@@ -2599,7 +3037,7 @@ Equation
 <td>
 <a id="">
 <div class="equation">
-Q<sub>i</sub>sin(&omega;<sub>i</sub>)-&Delta;H<sub>i</sub>-K<sub>c</sub>W<sub>i</sub>-U<sub>b,i</sub>sin(&alpha;<sub>i</sub>)+U<sub>t,i</sub>sin(&beta;<sub>i</sub>)=1
+-&Delta;H<sub>i</sub>-K<sub>c</sub>W<sub>i</sub>-U<sub>b,i</sub>sin(&alpha;<sub>i</sub>)+U<sub>t,i</sub>sin(&beta;<sub>i</sub>)+Q<sub>i</sub>sin(&omega;<sub>i</sub>)=&delta;x<sub>i</sub>-&#8467;<sub>s,i</sub>K<sub>sn,i</sub>+&delta;x<sub>i</sub>(-&#8467;<sub>s,i</sub>K<sub>sn,i</sub>+&#8467;<sub>s,i</sub>K<sub>sn,i</sub>+&#8467;<sub>b,i</sub>K<sub>sn,i</sub>)+&delta;x<sub>i</sub>-&#8467;<sub>s,i</sub>K<sub>sn,i</sub>+&delta;y<sub>i</sub>-&#8467;<sub>b,i</sub>K<sub>sn,i</sub>=-W<sub>i</sub>-U<sub>b,i</sub>cos(&alpha;<sub>i</sub>)+U<sub>t,i</sub>cos(&beta;<sub>i</sub>)+Q<sub>i</sub>cos(&omega;<sub>i</sub>)=&delta;y<sub>i</sub>-&#8467;<sub>s,i</sub>K<sub>sn,i</sub>+&delta;y<sub>i</sub>(-&#8467;<sub>s,i</sub>K<sub>sn,i</sub>+&#8467;<sub>s,i</sub>K<sub>sn,i</sub>+&#8467;<sub>b,i</sub>K<sub>sn,i</sub>)+&delta;y<sub>i</sub>-&#8467;<sub>s,i</sub>K<sub>sn,i</sub>+&delta;x<sub>i</sub>-&#8467;<sub>b,i</sub>K<sub>sn,i</sub>
 </div>
 </a>
 </td>
@@ -2616,6 +3054,17 @@ There is one set of force displacement equilibrium equations in the x and y dire
 </tr>
 </table>
 </a>
+<p class="paragraph">
+Using the net force-displacement equilibrium equation of a slice from DD13, with the definitions of the stiffness matrices from DD12, and the force definitions from GD7, a broken down forcedisplacement equilibrium equation can be derived. Equation (22) gives the broken down equation in the x direction, and equation (23) gives the broken down equation in the y direction..
+</p>
+<a id="">
+<div class="equation">
+-&Delta;H<sub>i</sub>-K<sub>c</sub>W<sub>i</sub>-U<sub>b,i</sub>sin(&alpha;<sub>i</sub>)+U<sub>t,i</sub>sin(&beta;<sub>i</sub>)+Q<sub>i</sub>sin(&omega;<sub>i</sub>)=&delta;x<sub>i</sub>-&#8467;<sub>s,i</sub>K<sub>sn,i</sub>+&delta;x<sub>i</sub>(-&#8467;<sub>s,i</sub>K<sub>sn,i</sub>+&#8467;<sub>s,i</sub>K<sub>sn,i</sub>+&#8467;<sub>b,i</sub>K<sub>sn,i</sub>)+&delta;x<sub>i</sub>-&#8467;<sub>s,i</sub>K<sub>sn,i</sub>+&delta;y<sub>i</sub>-&#8467;<sub>b,i</sub>K<sub>sn,i</sub>=-W<sub>i</sub>-U<sub>b,i</sub>cos(&alpha;<sub>i</sub>)+U<sub>t,i</sub>cos(&beta;<sub>i</sub>)+Q<sub>i</sub>cos(&omega;<sub>i</sub>)=&delta;y<sub>i</sub>-&#8467;<sub>s,i</sub>K<sub>sn,i</sub>+&delta;y<sub>i</sub>(-&#8467;<sub>s,i</sub>K<sub>sn,i</sub>+&#8467;<sub>s,i</sub>K<sub>sn,i</sub>+&#8467;<sub>b,i</sub>K<sub>sn,i</sub>)+&delta;y<sub>i</sub>-&#8467;<sub>s,i</sub>K<sub>sn,i</sub>+&delta;x<sub>i</sub>-&#8467;<sub>b,i</sub>K<sub>sn,i</sub>
+</div>
+</a>
+<p class="paragraph">
+Using the known input assumption of A2, the force variable definitions of DD1 to DD8 on the left side of the equations can be solved for. The only unknown in the variables to solve for the stiffness values from DD14 is the displacements. Therefore taking the equation from each slice a set of 2n equations, with 2n unknown displacements in the x and y directions of each slice can be derived. Solutions for the displacements of each slice can then be found. The use of displacement in the definition of the stiffness values makes the equation implicit, which means an iterative solution method, with an initial guess for the displacements in the stiffness values is required.
+</p>
 <a id="T:rfemFoS">
 <table class="tdefn">
 <tr>
@@ -2658,6 +3107,116 @@ FS<sub>Loc,i</sub> is the factor of safety for slice i. FS is the factor of safe
 </td>
 </tr>
 </table>
+</a>
+<p class="paragraph">
+RFEM analysis can also be used to calculate the Factor of safety for the slope. For a slice element i the displacements &delta;x<sub>i</sub> and &delta;y<sub>i</sub>, are solved from the system of equations in IM4. The definition of &epsilon;<sub>i</sub> as the rotation of the displacement vector &delta; is seen in GD9. This is used to find the displacements of the slice parallel to the base of the slice &delta;u<sub>i</sub> in equation (24) and normal to the base of the slice &delta;v<sub>i</sub> in equation (25).
+</p>
+<a id="">
+<div class="equation">
+&delta;u<sub>i</sub>=cos(&alpha;<sub>i</sub>)&delta;x<sub>i</sub>+sin(&alpha;<sub>i</sub>)&delta;y<sub>i</sub>
+</div>
+</a>
+<a id="">
+<div class="equation">
+&delta;v<sub>i</sub>=(-sin(&alpha;<sub>i</sub>))&delta;x<sub>i</sub>+sin(&alpha;<sub>i</sub>)&delta;y<sub>i</sub>
+</div>
+</a>
+<p class="paragraph">
+With the definition of normal stiffness from DD14 to find the normal stiffness of the base K<sub>bn,i</sub> and the now known base displacement perpendicular to the surface &delta;v<sub>i</sub> from equation (25), the normal base stress can be calculated from the force-displacement relationship of T5. Stress &sigma; is used in place of force F as the stiffness hasn't been normalized for the length of the base. Results in equation (26).
+</p>
+<a id="">
+<div class="equation">
+&sigma;=K<sub>bn,i</sub>&delta;v<sub>i</sub>
+</div>
+</a>
+<p class="paragraph">
+The resistive shear to calculate the factor of safety FS in is found from the Mohr Coulomb resistive strength of soil in T3. Using the normal stress &sigma; from equation (26) as the stress the resistive shear of the slice can be calculated from calculated in equation (27).
+</p>
+<a id="">
+<div class="equation">
+S<sub>i</sub>=c'-&sigma;tan(&phiv;')
+</div>
+</a>
+<p class="paragraph">
+Previously the value of the base shear stiffness K<sub>bt,i</sub> as seen in equation (28) was unsolvable because the normal stress &sigma; was unknown. With the definition of &sigma; from equation (26) and the definition of displacement shear to the base &delta;u<sub>i</sub> from equation (25), the value of K<sub>bt,i</sub> becomes solvable.
+</p>
+<a id="">
+<div class="equation">
+K<sub>bt,i</sub>=<div class="fraction">
+<span class="fup">
+E<sub>i</sub>
+</span>
+<span class="fdn">
+2(1+&nu;)
+</span>
+</div><div class="fraction">
+<span class="fup">
+0.1
+</span>
+<span class="fdn">
+b<sub>i</sub>
+</span>
+</div>+<div class="fraction">
+<span class="fup">
+c'-&sigma;tan(&phiv;')
+</span>
+<span class="fdn">
+|&delta;u<sub>i</sub>|+a
+</span>
+</div>
+</div>
+</a>
+<p class="paragraph">
+With shear stiffness K<sub>bt,i</sub> calculated in equation (28) and shear displacement &delta;u<sub>i</sub> calculated in equation (24) values now known the shear stress acting on the base of a slice &tau;<sub>i</sub> can be calculated using T5, as done in equation (29). Again stress &tau;<sub>i</sub> is used in place of force F as the stiffness hasn't been normalized for the length of the base.
+</p>
+<a id="">
+<div class="equation">
+&tau;<sub>i</sub>=K<sub>bt,i</sub>&delta;u<sub>i</sub>
+</div>
+</a>
+<p class="paragraph">
+The shear stress on the base &tau;<sub>i</sub> acts as the mobile shear acting on the base. Using the definition Factor of Safety equation from T1, with the definitions of resistive shear strength of a slice S<sub>i</sub> from equation (27) and shear stress on a slice &tau;<sub>i</sub> from equation (29) the factor of safety for a slice FS<sub>Loc,i</sub> can be found from as seen in equation (30), and IM5.
+</p>
+<a id="">
+<div class="equation">
+FS<sub>Loc,i</sub>=<div class="fraction">
+<span class="fup">
+S<sub>i</sub>
+</span>
+<span class="fdn">
+&tau;<sub>i</sub>
+</span>
+</div>=<div class="fraction">
+<span class="fup">
+c'-K<sub>bn,i</sub>&delta;v<sub>i</sub>tan(&phiv;')
+</span>
+<span class="fdn">
+K<sub>bt,i</sub>&delta;u<sub>i</sub>
+</span>
+</div>
+</div>
+</a>
+<p class="paragraph">
+The global Factor of Safety is then the ratio of the summation of the resistive and mobile shears for each slice, with a weighting for the length of the slices base. Shown in equation (31), and IM5.
+</p>
+<a id="">
+<div class="equation">
+FS=<div class="fraction">
+<span class="fup">
+&sum;<sub>i=1</sub><sup>n</sup>(&#8467;<sub>b,i</sub>S<sub>i</sub>)
+</span>
+<span class="fdn">
+&sum;<sub>i=1</sub><sup>n</sup>(&#8467;<sub>b,i</sub>&tau;<sub>i</sub>)
+</span>
+</div>=<div class="fraction">
+<span class="fup">
+&sum;<sub>i=1</sub><sup>n</sup>(&#8467;<sub>b,i</sub>(c'-K<sub>bn,i</sub>&delta;v<sub>i</sub>tan(&phiv;')))
+</span>
+<span class="fdn">
+&sum;<sub>i=1</sub><sup>n</sup>(&#8467;<sub>b,i</sub>K<sub>bt,i</sub>&delta;u<sub>i</sub>)
+</span>
+</div>
+</div>
 </a>
 <a id="T:crtSlpId">
 <table class="tdefn">
@@ -2703,9 +3262,128 @@ Given the necessary slope inputs, a minimization algorithm or function &Upsilon;
 Data Constraints
 </h4>
 <p class="paragraph">
-<a href=#Table:InpuVari>this Table</a> and <a href=#Table:OutpVari>this Table</a> show the data constraints on the input and output variables, respectively. The column for physical constraints gives the physical limitations on the range of values that can be taken by the variable. The constraints are conservative, to give the user of the model the flexibility to experiment with unusual situations. The column of typical values is intended to provide a feel for a common scenario. The uncertainty column provides an estimate of the confidence with which the physical quantities can be measured. This information would be part of the input if one were performing an uncertainty quantification exercise.
+<a href=#Table:Tabl2:InpuDataCons>this Table</a>, and <a href=#Table:Tabl3:OutpDataCons>this Table</a> shows the data constraints on the input and output variables, respectively. The column for physical constraints gives the physical limitations on the range of values that can be taken by the variable. The uncertainty column provides an estimate of the confidence with which the physical quantities can be measured. This information would be part of the input if one were performing an uncertainty quantification exercise. The constraints are conservative, to give the user of the model the flexibility to experiment with unusual situations. The column of typical values is intended to provide a feel for a common scenario.
 </p>
-<a id="Table:InpuVari">
+<a id="Table:Tabl2:InpuDataCons">
+<table class="table">
+<tr>
+<th>
+Var
+</th>
+<th>
+Physical Constraints
+</th>
+<th>
+Typical Value
+</th>
+<th>
+Typical Uncertainty
+</th>
+</tr>
+<tr>
+<td>
+E
+</td>
+<td>
+0&lt;E
+</td>
+<td>
+15000.0 Pa
+</td>
+<td>
+0.1
+</td>
+</tr>
+<tr>
+<td>
+c'
+</td>
+<td>
+0&lt;c'
+</td>
+<td>
+10.0 Pa
+</td>
+<td>
+0.1
+</td>
+</tr>
+<tr>
+<td>
+&nu;
+</td>
+<td>
+0&lt;&nu;&lt;1
+</td>
+<td>
+0.4
+</td>
+<td>
+0.1
+</td>
+</tr>
+<tr>
+<td>
+&phiv;'
+</td>
+<td>
+0&lt;&phiv;'&lt;90
+</td>
+<td>
+25.0 &deg;
+</td>
+<td>
+0.1
+</td>
+</tr>
+<tr>
+<td>
+&gamma;
+</td>
+<td>
+0&lt;&gamma;
+</td>
+<td>
+20.0 N/(m<sup>3</sup>)
+</td>
+<td>
+0.1
+</td>
+</tr>
+<tr>
+<td>
+&gamma;<sub>Sat</sub>
+</td>
+<td>
+0&lt;&gamma;<sub>Sat</sub>
+</td>
+<td>
+20.0 N/(m<sup>3</sup>)
+</td>
+<td>
+0.1
+</td>
+</tr>
+<tr>
+<td>
+&gamma;<sub>w</sub>
+</td>
+<td>
+0&lt;&gamma;<sub>w</sub>
+</td>
+<td>
+9.8 N/(m<sup>3</sup>)
+</td>
+<td>
+0.1
+</td>
+</tr>
+</table>
+<p class="caption">
+Table 2: Input Data Constraints
+</p>
+</a>
+<a id="Table:Tabl3:OutpDataCons">
 <table class="table">
 <tr>
 <th>
@@ -2720,143 +3398,13 @@ Typical Value
 </tr>
 <tr>
 <td>
-(x,y) of water table vertices'
-</td>
-<td>
-Consecutive vertexes have increasing x values. The start and end vertices of all layers go to the same x values.
-</td>
-<td>
-N/A
-</td>
-</tr>
-<tr>
-<td>
-(x,y) of slip vertices'
-</td>
-<td>
-Consecutive vertexes have increasing x values. The start and end vertices of all layers go to the same x values.
-</td>
-<td>
-N/A
-</td>
-</tr>
-<tr>
-<td>
-(x,y) of slope vertices'
-</td>
-<td>
-Consecutive vertexes have increasing x values. The start and end vertices of all layers go to the same x values.
-</td>
-<td>
-N/A
-</td>
-</tr>
-<tr>
-<td>
-E<sub>i</sub>
-</td>
-<td>
-E<sub>i</sub>&gt;0
-</td>
-<td>
-15000 N
-</td>
-</tr>
-<tr>
-<td>
-c'
-</td>
-<td>
-c'&gt;0
-</td>
-<td>
-10 Pa
-</td>
-</tr>
-<tr>
-<td>
-&nu;
-</td>
-<td>
-&nu;&gt;0 and &nu;&lt;1
-</td>
-<td>
-0.4
-</td>
-</tr>
-<tr>
-<td>
-&phiv;'
-</td>
-<td>
-&phiv;'&gt;0 and &phiv;'&lt;90
-</td>
-<td>
-25 &deg;
-</td>
-</tr>
-<tr>
-<td>
-&gamma;
-</td>
-<td>
-&gamma;&gt;0
-</td>
-<td>
-20 N/(m<sup>3</sup>)
-</td>
-</tr>
-<tr>
-<td>
-&gamma;<sub>Sat</sub>
-</td>
-<td>
-&gamma;<sub>Sat</sub>&gt;0
-</td>
-<td>
-20 N/(m<sup>3</sup>)
-</td>
-</tr>
-<tr>
-<td>
-&gamma;<sub>w</sub>
-</td>
-<td>
-&gamma;<sub>w</sub>&gt;0
-</td>
-<td>
-9.8 N/(m<sup>3</sup>)
-</td>
-</tr>
-</table>
-<p class="caption">
-Input Variables
-</p>
-</a>
-<a id="Table:OutpVari">
-<table class="table">
-<tr>
-<th>
-Var
-</th>
-<th>
-Physical Constraints
-</th>
-</tr>
-<tr>
-<td>
 FS
 </td>
 <td>
-FS&gt;0
-</td>
-</tr>
-<tr>
-<td>
-(x,y) of slip vertices'
+0&lt;FS
 </td>
 <td>
-Vertices's monotonic
+1.0
 </td>
 </tr>
 <tr>
@@ -2866,6 +3414,9 @@ Vertices's monotonic
 <td>
 None
 </td>
+<td>
+1.0 m
+</td>
 </tr>
 <tr>
 <td>
@@ -2874,10 +3425,13 @@ None
 <td>
 None
 </td>
+<td>
+1.0 m
+</td>
 </tr>
 </table>
 <p class="caption">
-Output Variables
+Table 3: Output Data Constraints
 </p>
 </a>
 </div>
@@ -2901,7 +3455,7 @@ Functional Requirements
 </h3>
 <div class="list">
 <p>
-R1: Read the input file, and store the data. Necessary input data summarized in <a href=#Table:InpuData>this Table</a>.
+R1: Read the input file, and store the data. Necessary input data summarized in <a href=#Table:RequInpu>this Table</a>.
 </p>
 <p>
 R2: Generate potential critical slip surface's for the input slope.
@@ -2934,7 +3488,7 @@ R10: Calculate the factor of safety of the critical slip surface using the Morge
 R11: Display the critical slip surface and the slice element displacements graphically. Give the values of the factors of safety calculated by the Morgenstern Price method.
 </p>
 </div>
-<a id="Table:InpuData">
+<a id="Table:RequInpu">
 <table class="table">
 <tr>
 <th>
@@ -2944,7 +3498,7 @@ Symbol
 Unit
 </th>
 <th>
-Description
+Name
 </th>
 </tr>
 <tr>
@@ -3037,7 +3591,7 @@ unit weight of water
 </tr>
 </table>
 <p class="caption">
-Input Data
+Required Inputs
 </p>
 </a>
 </div>

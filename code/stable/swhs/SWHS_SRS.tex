@@ -454,6 +454,22 @@ Equation & $H_{f}$ = $\frac{Q}{m}$
 Description & $H_{f}$ is the specific latent heat of fusion\newline$Q$ is the latent heat\newline$m$ is the mass
 \\ \bottomrule \end{tabular}
 \end{minipage}\\
+~\newline
+\noindent \begin{minipage}{\textwidth}
+\begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
+\toprule \textbf{Refname} & \textbf{DD:melt.frac}
+\phantomsection 
+\label{DD:melt.frac}
+\\ \midrule \\
+Label & $\phi{}$
+\\ \midrule \\
+Units & 
+\\ \midrule \\
+Equation & $\phi{}$ = $\frac{Q_{P}}{H_{f}m_{P}}$
+\\ \midrule \\
+Description & $\phi{}$ is the melt fraction\newline$Q_{P}$ is the latent heat energy added to PCM\newline$H_{f}$ is the specific latent heat of fusion\newline$m_{P}$ is the mass of phase change material
+\\ \bottomrule \end{tabular}
+\end{minipage}\\
 \subsubsection{Instance Models}
 \label{Sec:InstMode}
 This section transforms the problem defined in Section~\ref{Sec:ProbDesc} into one which is expressed in mathematical terms. It uses concrete symbols defined in Section~\ref{Sec:DataDefi} to replace the abstract symbols in the models identified in Section~\ref{Sec:TheoMode} and Section~\ref{Sec:GeneDefi}.
@@ -509,32 +525,66 @@ In the case where $T_{P}$=$T_{melt}^{P}$ and not all of the PCM is melted, the t
 This derivation does not consider the boiling of the PCM, as the PCM is assumed to either be in a solid state or a liquid state (A18).
 \subsubsection{Data Constraints}
 \label{Sec:DataCons}
-Table~\ref{Table:Tabl1} and Table~\ref{Table:Tabl2} show the data constraints on the input and output variables, respectively. The column for physical constraints gives the physical limitations on the range of values that can be taken by the variable. The column for software constraints restricts the range of inputs to reasonable values. The constraints are conservative, to give the user of the model the flexibility to experiment with unusual situations. The column of typical values is intended to provide a feel for a common scenario. The uncertainty column provides an estimate of the confidence with which the physical quantities can be measured. This information would be part of the input if one were performing an uncertainty quantification exercise. (The tables are left out because features they should use are not yet implemented in Drasil.)
-\begin{longtable}{l l}
+Table~\ref{Table:InpuVari}, and Table~\ref{Table:OutpVari} shows the data constraints on the input and output variables, respectively. The column for physical constraints gives the physical limitations on the range of values that can be taken by the variable. The uncertainty column provides an estimate of the confidence with which the physical quantities can be measured. This information would be part of the input if one were performing an uncertainty quantification exercise. The constraints are conservative, to give the user of the model the flexibility to experiment with unusual situations. The column of typical values is intended to provide a feel for a common scenario. The column for software constraints restricts the range of inputs to reasonable values. (*) These quantities cannot be equal to zero, or there will be a divide by zero in the model. (+) These quantities cannot be zero, or there would be freezing (A13). (#) The constraints on the surface area are calculated by considering the surface area to volume ratio. The assumption is that the lowest ratio is 1 and the highest possible is $\frac{2}{h_{min}}$, where $h_{min}$ is the thickness of a ``sheet" of PCM. A thin sheet has the greatest surface area to volume ratio. (**) The constraint on the maximum time at the end of the simulation is the total number of secondsin one day.
+\begin{longtable}{l l l l l}
 \toprule
-Dummy Table 1 & 
+Var & Physical Constraints & Software Constraints & Typical Value & Uncertainty
 \\
 \midrule
- & 
+$L$ & $L>0$ & $L_{min}\leq{}L\leq{}L_{max}$ & 1.5 m & 10$\%$
 \\
- & 
+$D$ & $D>0$ & $\frac{D}{L_{max}}\leq{}\frac{D}{L}\leq{}\frac{D}{L_{min}}$ & 0.412 m & 10$\%$
+\\
+$V_{P}$ & $V_{P}>0$ and $V_{P}<V_{tank}$ & $V_{P}\geq{}V_{tank}$ & 5.0e-2 $\text{m}^{3}$ & 10$\%$
+\\
+$A_{P}$ & $A_{P}>0$ & $V_{P}\leq{}A_{P}\leq{}\frac{2}{h_{min}}V_{tank}$ & 1.2 $\text{m}^{2}$ & 10$\%$
+\\
+$\rho{}_{P}$ & $\rho{}_{P}>0$ and $\rho{}_{P}^{min}<\rho{}_{P}<\rho{}_{P}^{max}$ &  & 1007 $\frac{\text{kg}}{\text{m}^{3}}$ & 10$\%$
+\\
+$T_{melt}^{P}$ & $0<T_{melt}^{P}<T_{C}$ &  & 44.2 ${}^{\circ}C$ & 10$\%$
+\\
+$C_{P}^{S}$ & $C_{P}^{S}>0$ & $C_{P}^{S}_{min}<C_{P}^{S}<C_{P}^{S}_{max}$ & 1760 $\frac{\text{J}}{(\text{kg}{}^{\circ}C)}$ & 10$\%$
+\\
+$C_{P}^{L}$ & $C_{P}^{L}>0$ & $C_{P}^{L}_{min}<C_{P}^{L}<C_{P}^{L}_{max}$ & 2270 $\frac{\text{J}}{(\text{kg}{}^{\circ}C)}$ & 10$\%$
+\\
+$H_{f}$ & $H_{f}>0$ & $H_{f}_{min}<H_{f}<H_{f}_{max}$ & 211600 $\frac{\text{J}}{\text{kg}}$ & 10$\%$
+\\
+$A_{C}$ & $A_{C}>0$ & $A_{C}\leq{}A_{C}^{max}$ & 0.12 $\text{m}^{2}$ & 10$\%$
+\\
+$T_{C}$ & $0<T_{C}<100$ &  & 50 ${}^{\circ}C$ & 10$\%$
+\\
+$\rho{}_{W}$ & $\rho{}_{W}>0$ & $\rho{}_{W}^{min}<\rho{}_{W}\leq{}\rho{}_{W}^{max}$ & 1000 $\frac{\text{kg}}{\text{m}^{3}}$ & 10$\%$
+\\
+$C_{W}$ & $C_{W}>0$ & $C_{W}^{min}<C_{W}<C_{W}^{max}$ & 4186 $\frac{\text{J}}{(\text{kg}{}^{\circ}C)}$ & 10$\%$
+\\
+$h_{C}$ & $h_{C}>0$ & $h_{C}^{min}\leq{}h_{C}\leq{}h_{C}^{max}$ & 1000 $\frac{\text{W}}{(\text{m}^{2}{}^{\circ}C)}$ & 10$\%$
+\\
+$h_{P}$ & $h_{P}>0$ & $h_{P}^{min}\leq{}h_{P}\leq{}h_{P}^{max}$ & 1000 $\frac{\text{W}}{(\text{m}^{2}{}^{\circ}C)}$ & 10$\%$
+\\
+$T_{init}$ & $0<T_{init}<T_{melt}$ &  & 40 ${}^{\circ}C$ & 10$\%$
+\\
+$t_{final}$ & $t_{final}>0$ & $t_{final}<t_{final}^{max}$ & 50000 s & 10$\%$
 \\
 \bottomrule
-\caption{Table 1}
-\label{Table:Tabl1}
+\caption{Input Variables}
+\label{Table:InpuVari}
 \end{longtable}
 \begin{longtable}{l l}
 \toprule
-Dummy Table 2 & 
+Var & Physical Constraints
 \\
 \midrule
- & 
+$T_{W}$ & $T_{init}\leq{}T_{W}\leq{}T_{C}$ (by A11)
 \\
- & 
+$T_{P}$ & $T_{init}\leq{}T_{P}\leq{}T_{C}$ (by A11)
+\\
+$E_{W}$ & $E_{W}\geq{}0$
+\\
+$E_{P}$ & $E_{P}\geq{}0$
 \\
 \bottomrule
-\caption{Table 2}
-\label{Table:Tabl2}
+\caption{Output Variables}
+\label{Table:OutpVari}
 \end{longtable}
 \subsubsection{Properties of a Correct Solution}
 \label{Sec:PropofACorrSolu}
@@ -619,7 +669,7 @@ m_{P}=V_{P}\rho{}_{P}
 \end{itemize}
 \subsection{Non-Functional Requirements}
 \label{Sec:Non-Requ}
-Given the small size, and relative simplicity, of this problem, performance is not a priority. Any reasonable implementation will be very quick and use minimal storage. Rather than performance, the priority non-functional requirements are correctness, verifiability, understandability, reusability, and maintainability.
+This problem is small in size and relatively simple, so performance is not a priority. Any reasonable implementation will be very quick and use minimal storage. Rather than performance, the non-functional requirement priorities are correctness, verifiability, understandability, reusability, and maintainability.
 \section{Likely Changes}
 \label{Sec:LikeChan}
 \begin{itemize}
@@ -635,73 +685,73 @@ Given the small size, and relative simplicity, of this problem, performance is n
 The purpose of the traceability matrices is to provide easy references on what has to be additionally modified if a certain component is changed. Every time a component is changed, the items in the column of that component that are marked with an ``X" should be modified as well. Table~\ref{Table:TracMatrShowtheConnBetwItemofDiffSect} shows the dependencies of theoretical models, general definitions, data definitions, and instance models with each other. Table~\ref{Table:TracMatrShowtheConnBetwRequandInstMode} shows the dependencies of instance models, requirements, and data constraints on each other. Table~\ref{Table:TracMatrShowtheConnBetwAssuandOtheItem} shows the dependencies of theoretical models, general definitions, data definitions, instance models, and likely changes on the assumptions.
 \begin{longtable}{l l l l l l l l l l l l l l}
 \toprule
- & \hyperref[T:t1ConsThermE]{Definition~T:t1ConsThermE} & \hyperref[T:t2SensHtE]{Definition~T:t2SensHtE} & \hyperref[T:t3LatHtE]{Definition~T:t3LatHtE} & GD1 & GD2 & \hyperref[DD:ht.flux.C]{Definition~DD:ht.flux.C} & \hyperref[DD:ht.flux.P]{Definition~DD:ht.flux.P} & \hyperref[DD:htFusion]{Definition~DD:htFusion} & \hyperref[DD:htFusion]{Definition~DD:htFusion} & IM1 & IM2 & IM3 & IM4
+ & T1 (\hyperref[T:t1ConsThermE]{Definition~T:t1ConsThermE}) & T2 (\hyperref[T:t2SensHtE]{Definition~T:t2SensHtE}) & T3 (\hyperref[T:t3LatHtE]{Definition~T:t3LatHtE}) & GD1 (\hyperref[T:nwtnCooling]{Definition~T:nwtnCooling}) & GD2 (\hyperref[T:rocTempSimp]{Definition~T:rocTempSimp}) & DD1 (\hyperref[DD:ht.flux.C]{Definition~DD:ht.flux.C}) & DD2 (\hyperref[DD:ht.flux.P]{Definition~DD:ht.flux.P}) & DD3 (\hyperref[DD:htFusion]{Definition~DD:htFusion}) & DD4 (\hyperref[DD:melt.frac]{Definition~DD:melt.frac}) & IM1 (\hyperref[T:eBalanceOnWtr]{Definition~T:eBalanceOnWtr}) & IM2 (\hyperref[T:eBalanceOnPCM]{Definition~T:eBalanceOnPCM}) & IM3 (\hyperref[T:heatEInWtr]{Definition~T:heatEInWtr}) & IM4 (\hyperref[T:heatEInPCM]{Definition~T:heatEInPCM})
 \\
 \midrule
-\hyperref[T:t1ConsThermE]{Definition~T:t1ConsThermE} &  &  &  &  &  &  &  &  &  &  &  &  & 
+T1 (\hyperref[T:t1ConsThermE]{Definition~T:t1ConsThermE}) &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[T:t2SensHtE]{Definition~T:t2SensHtE} &  &  & X &  &  &  &  &  &  &  &  &  & 
+T2 (\hyperref[T:t2SensHtE]{Definition~T:t2SensHtE}) &  &  & X &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[T:t3LatHtE]{Definition~T:t3LatHtE} &  &  &  &  &  &  &  &  &  &  &  &  & 
+T3 (\hyperref[T:t3LatHtE]{Definition~T:t3LatHtE}) &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-GD1 &  &  &  &  &  &  &  &  &  &  &  &  & 
+GD1 (\hyperref[T:nwtnCooling]{Definition~T:nwtnCooling}) &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-GD2 & X &  &  &  &  &  &  &  &  &  &  &  & 
+GD2 (\hyperref[T:rocTempSimp]{Definition~T:rocTempSimp}) & X &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[DD:ht.flux.C]{Definition~DD:ht.flux.C} &  &  &  & X &  &  &  &  &  &  &  &  & 
+DD1 (\hyperref[DD:ht.flux.C]{Definition~DD:ht.flux.C}) &  &  &  & X &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[DD:ht.flux.P]{Definition~DD:ht.flux.P} &  &  &  & X &  &  &  &  &  &  &  &  & 
+DD2 (\hyperref[DD:ht.flux.P]{Definition~DD:ht.flux.P}) &  &  &  & X &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[DD:htFusion]{Definition~DD:htFusion} &  &  &  &  &  &  &  &  &  &  &  &  & 
+DD3 (\hyperref[DD:htFusion]{Definition~DD:htFusion}) &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-\hyperref[DD:htFusion]{Definition~DD:htFusion} &  &  &  &  &  &  &  & X &  &  &  &  & 
+DD4 (\hyperref[DD:melt.frac]{Definition~DD:melt.frac}) &  &  &  &  &  &  &  & X &  &  &  &  & 
 \\
-IM1 &  &  &  &  & X & X & X &  &  &  & X &  & 
+IM1 (\hyperref[T:eBalanceOnWtr]{Definition~T:eBalanceOnWtr}) &  &  &  &  & X & X & X &  &  &  & X &  & 
 \\
-IM2 &  &  &  &  & X &  & X &  & X & X &  &  & X
+IM2 (\hyperref[T:eBalanceOnPCM]{Definition~T:eBalanceOnPCM}) &  &  &  &  & X &  & X &  & X & X &  &  & X
 \\
-IM3 &  & X &  &  &  &  &  &  &  &  &  &  & 
+IM3 (\hyperref[T:heatEInWtr]{Definition~T:heatEInWtr}) &  & X &  &  &  &  &  &  &  &  &  &  & 
 \\
-IM4 &  & X & X &  &  &  & X & X & X &  & X &  & 
+IM4 (\hyperref[T:heatEInPCM]{Definition~T:heatEInPCM}) &  & X & X &  &  &  & X & X & X &  & X &  & 
 \\
 \bottomrule
 \caption{Traceability Matrix Showing the Connections Between Items of Different Sections}
 \label{Table:TracMatrShowtheConnBetwItemofDiffSect}
 \end{longtable}
-\begin{longtable}{l l l l l l l l}
+\begin{longtable}{l l l l l l l l l l l l l l l l l}
 \toprule
- & IM1 & IM2 & IM3 & IM4 & Section~\ref{Sec:DataCons} & R1 & R2
+ & IM1 (\hyperref[T:eBalanceOnWtr]{Definition~T:eBalanceOnWtr}) & IM2 (\hyperref[T:eBalanceOnPCM]{Definition~T:eBalanceOnPCM}) & IM3 (\hyperref[T:heatEInWtr]{Definition~T:heatEInWtr}) & IM4 (\hyperref[T:heatEInPCM]{Definition~T:heatEInPCM}) & Data Constraints (Table~\ref{Table:InpuVari}) & R1 (Section~\ref{Sec:FuncRequ}) & R2 (Section~\ref{Sec:FuncRequ}) & R3 (Section~\ref{Sec:FuncRequ}) & R4 (Section~\ref{Sec:FuncRequ}) & R5 (Section~\ref{Sec:FuncRequ}) & R6 (Section~\ref{Sec:FuncRequ}) & R7 (Section~\ref{Sec:FuncRequ}) & R8 (Section~\ref{Sec:FuncRequ}) & R9 (Section~\ref{Sec:FuncRequ}) & R10 (Section~\ref{Sec:FuncRequ}) & R11 (Section~\ref{Sec:FuncRequ})
 \\
 \midrule
-IM1 &  & X &  &  &  & X & X
+IM1 (\hyperref[T:eBalanceOnWtr]{Definition~T:eBalanceOnWtr}) &  & X &  &  &  & X & X &  &  &  &  &  &  &  &  & 
 \\
-IM2 & X &  &  & X &  & X & X
+IM2 (\hyperref[T:eBalanceOnPCM]{Definition~T:eBalanceOnPCM}) & X &  &  & X &  & X & X &  &  &  &  &  &  &  &  & 
 \\
-IM3 &  &  &  &  &  & X & X
+IM3 (\hyperref[T:heatEInWtr]{Definition~T:heatEInWtr}) &  &  &  &  &  & X & X &  &  &  &  &  &  &  &  & 
 \\
-IM4 &  & X &  &  &  & X & X
+IM4 (\hyperref[T:heatEInPCM]{Definition~T:heatEInPCM}) &  & X &  &  &  & X & X &  &  &  &  &  &  &  &  & 
 \\
-R1 &  &  &  &  &  &  & 
+R1 (Section~\ref{Sec:FuncRequ}) &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-R2 &  &  &  &  &  & X & 
+R2 (Section~\ref{Sec:FuncRequ}) &  &  &  &  &  & X &  &  &  &  &  &  &  &  &  & 
 \\
-R3 &  &  &  &  & X &  & 
+R3 (Section~\ref{Sec:FuncRequ}) &  &  &  &  & X &  &  &  &  &  &  &  &  &  &  & 
 \\
-R4 & X & X &  &  &  & X & X
+R4 (Section~\ref{Sec:FuncRequ}) & X & X &  &  &  & X & X &  &  &  &  &  &  &  &  & 
 \\
-R5 & X &  &  &  &  &  & 
+R5 (Section~\ref{Sec:FuncRequ}) & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-R6 &  & X &  &  &  &  & 
+R6 (Section~\ref{Sec:FuncRequ}) &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-R7 &  &  & X &  &  &  & 
+R7 (Section~\ref{Sec:FuncRequ}) &  &  & X &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-R8 &  &  &  & X &  &  & 
+R8 (Section~\ref{Sec:FuncRequ}) &  &  &  & X &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-R9 &  &  & X & X &  &  & 
+R9 (Section~\ref{Sec:FuncRequ}) &  &  & X & X &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-R10 &  & X &  &  &  &  & 
+R10 (Section~\ref{Sec:FuncRequ}) &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-R11 &  & X &  &  &  &  & 
+R11 (Section~\ref{Sec:FuncRequ}) &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
 \bottomrule
 \caption{Traceability Matrix Showing the Connections Between Requirements and Instance Models}

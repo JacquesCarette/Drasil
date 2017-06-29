@@ -897,7 +897,7 @@ s4_2_5_d2endPara = map foldlSP [
 
 -- I do not think Table 2 will end up being necessary for the Drasil version
 ---- The info from table 2 will likely end up in table 1.
-
+s4_2_6_mid :: Sentence
 s4_2_6_mid = foldlSent [S "The", phrase column, S "for", phrase software,
   plural constraint, S "restricts the range of",
   plural input_, S "to reasonable", plural value]
@@ -1492,7 +1492,7 @@ s7_fig2 = Figure (showingCxnBw traceyGraph (titleize' requirement `sC`
 -------------------------------------------------
 -- Section 8 :  Specification Parameter Values --
 -------------------------------------------------
-
+s8 :: Section
 s8 = valsOfAuxConstantsF progName specParamValList
 
 ----------------------------

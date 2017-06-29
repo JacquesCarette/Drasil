@@ -333,6 +333,8 @@ s4_2_1_assum7 = [S "There are no", (plural CM.constraint),
 s4_2_1_list = enumSimple 1 (getAcc assumption) $ map (foldlSent) 
   [s4_2_1_assum1, s4_2_1_assum2, s4_2_1_assum3, s4_2_1_assum4, s4_2_1_assum5, 
   s4_2_1_assum6, s4_2_1_assum7]
+
+s4_2_1_list_a :: [[Sentence]]
 s4_2_1_list_a = [s4_2_1_assum1, s4_2_1_assum2, s4_2_1_assum3, s4_2_1_assum4, s4_2_1_assum5, 
   s4_2_1_assum6, s4_2_1_assum7]
 

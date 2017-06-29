@@ -166,11 +166,11 @@ sdf_tol     = makeVC "sdf_tol" (nounPhraseSP "stress distribution factor (Functi
 dimlessLoad = makeVC "dimlessLoad"   (nounPhraseSP "dimensionless load") (hat lQ)
 tolLoad     = makeVC "tolLoad"       (nounPhraseSP "tolerable load")
   (sub (dimlessLoad ^. symbol) (Atomic "tol"))
-lRe         = makeVC "lRe"           (lResistance ^. term) (Atomic "LR")
+lRe         = vc' lResistance (Atomic "LR") Real
 loadSF      = vc "loadSF"        (lShareFac ^. term) (Atomic "LSF") Integer
 gTF         = vc "gTF"           (glassTypeFac ^. term) (Atomic "GTF") Integer
-lDurFac     = makeVC "lDurFac" (loadDurFactor ^. term) (Atomic "LDF")
-nonFactorL  = makeVC "nonFactorL" (nonFactoredL ^. term) (Atomic "NFL")
+lDurFac     = vc' loadDurFactor (Atomic "LDF") Real
+nonFactorL  = vc' nonFactoredL (Atomic "NFL") Real
 
 
 terms :: [ConceptChunk]
@@ -217,8 +217,8 @@ glTyFac       = cc' glassTypeFac
   (foldlSent [S "A multiplying factor for adjusting the", (getAcc lResistance), 
   S "of different glass type, that is,", (getAcc annealedGlass) `sC` 
   (getAcc heatSGlass) `sC` S "or", (getAcc fullyTGlass), S "in monolithic glass" `sC`
-  (getAcc lGlass), S "(Laminated Glass)" `sC` S "or", (getAcc iGlass), 
-  S "(Insulating Glass) constructions"])
+  (getAcc lGlass), sParen (titleize lGlass) `sC` S "or",
+  (getAcc iGlass), sParen (titleize iGlass), S "constructions"])
 lateral       = dcc "lateral"     (nounPhraseSP "lateral") "Perpendicular to the glass surface."
 load          = dcc "load"        (nounPhraseSP "load") "A uniformly distributed lateral pressure."
 specDeLoad    = dcc "specDeLoad"  (nounPhraseSP "specified design load")

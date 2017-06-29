@@ -7,7 +7,8 @@ import Data.Drasil.Concepts.Physics as CP
 import Data.Drasil.Units.Physics
 
 sspSymbols :: [CQSWrapper]
-sspSymbols = (map cqs sspConstrained) ++ (map cqs sspUnits) ++ (map cqs sspUnitless) 
+sspSymbols = (map cqs sspInputs) ++ (map cqs sspOutputs) ++
+  (map cqs sspUnits) ++ (map cqs sspUnitless) 
 
 ---------------------------
 -- Imported UnitalChunks --
@@ -31,11 +32,14 @@ fisi  = "for interslice index i"
 -- START OF CONSTRAINEDCHUNKS --
 --------------------------------
 
-sspConstrained, sspOutputs :: [ConstrConcept]
+sspConstrained :: [ConstrWrapper]
+sspConstrained = map cnstrw sspInputs ++ map cnstrw sspOutputs
+
 sspInputs :: [UncertQ]
-sspConstrained = map cCnptfromUQ sspInputs ++ sspOutputs
 sspInputs  = [elasticMod, cohesion, poissnsRatio, fricAngle, dryWeight,
               satWeight, waterWeight]
+
+sspOutputs :: [ConstrConcept]
 sspOutputs = [fs, dx_i, dy_i]
 
 gtZeroConstr :: [Constraint] --FIXME: move this somewhere in Data?
@@ -52,35 +56,35 @@ fs, dx_i, dy_i :: ConstrConcept
 {-Intput Variables-}
 --FIXME: add (x,y) when we can index or make related unitals
 
-elasticMod = uq (constrained' SM.elastMod gtZeroConstr) defultUncrt 15000
+elasticMod = uq (constrained' SM.elastMod gtZeroConstr (Dbl 15000)) defultUncrt
 
 cohesion     = uqc "c'" (cn $ "effective cohesion")
   "internal pressure that sticks particles of soil together"
-  (prime $ Atomic "c") pascal Real gtZeroConstr defultUncrt 10
+  (prime $ Atomic "c") pascal Real gtZeroConstr (Dbl 10) defultUncrt
 
 poissnsRatio = uq (constrained' SM.poissnsR
-  [physc $ \c -> (Int 0) :< c :< (Int 1)]) defultUncrt 0.4
+  [physc $ \c -> (Int 0) :< c :< (Int 1)] (Dbl 0.4)) defultUncrt
 
 fricAngle    = uqc "varphi'" (cn $ "effective angle of friction")
   ("The angle of inclination with respect to the horizontal axis of " ++
   "the Mohr-Coulomb shear resistance line") --http://www.geotechdata.info
   (prime $ Greek Phi_V) degree Real [physc $ \c -> (Int 0) :< c :< (Int 90)]
-  defultUncrt 25
+  (Dbl 25) defultUncrt
 
 dryWeight   = uqc "gamma" (cn $ "dry unit weight")
   "The weight of a dry soil/ground layer divided by the volume of the layer."
   (Greek Gamma_L) specific_weight Real gtZeroConstr
-  defultUncrt 20
+  (Dbl 20) defultUncrt
 
 satWeight   = uqc "gamma_sat" (cn $ "saturated unit weight")
   "The weight of saturated soil/ground layer divided by the volume of the layer."
   (sub (Greek Gamma_L) (Atomic "Sat")) specific_weight Real gtZeroConstr
-  defultUncrt 20
+  (Dbl 20) defultUncrt
 
 waterWeight = uqc "gamma_w" (cn $ "unit weight of water")
   "The weight of one cubic meter of water."
   (sub (Greek Gamma_L) lW) specific_weight Real gtZeroConstr
-  defultUncrt 9.8
+  (Dbl 9.8) defultUncrt
 
 {-Output Variables-}
 fs          = constrained' (cvR (dcc "FS" (nounPhraseSP $ "global factor of safety")

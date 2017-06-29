@@ -22,7 +22,6 @@ module Data.Drasil.Utils
   , symbolMapFun
   , fterms , fterm
   , mkDataDef
-  , inDataConstTbl, outDataConstTbl
   , prodUCTbl
   ) where
 
@@ -191,17 +190,6 @@ mkDataDef concept equation = datadef $ getUnit concept
                            (concept ^. symbol) a equation
         datadef Nothing  = fromEqn' (concept ^. id) (concept ^. term)
                            (concept ^. symbol) equation
-
--- Creates the input Data Constraints Table with physical constraints only
-inDataConstTbl :: [[Sentence]] -> Integer -> Contents
-inDataConstTbl inputs tableNumb = Table [S "Var", titleize' physicalConstraint, titleize' softwareConstraint,
-  S "Typical" +:+ titleize value, S "Typical Uncertainty"]
-  inputs (S "Table" +: S (show tableNumb) +:+ S "Input Data Constraints") True
-  
-  -- Creates the output Data Constraints Table with physical constraints only
-outDataConstTbl :: [[Sentence]] -> Integer -> Contents
-outDataConstTbl outputs tableNumb = Table [S "Var", titleize' physicalConstraint, titleize' softwareConstraint]
-  outputs (S "Table" +: S (show tableNumb) +:+ S "Output Data Constraints") True
 
 prodUCTbl :: [[Sentence]] -> Contents
 prodUCTbl cases = Table [titleize useCase +:+. S "NO", titleize useCase +:+

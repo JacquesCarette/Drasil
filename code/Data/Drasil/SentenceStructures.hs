@@ -7,8 +7,10 @@ module Data.Drasil.SentenceStructures
   , showingCxnBw, refineChain, foldlSP, foldlSP_, foldlSPCol
   , maybeChanged, maybeExpanded, maybeWOVerb
   , tAndDWAcc, tAndDWSym, tAndDOnly
+  {-below is to be moved-}
   , makeConstraint, displayConstr
   , fmtInConstr
+  , inDataConstTbl, outDataConstTbl
   ) where
 
 import Language.Drasil
@@ -145,6 +147,8 @@ tAndDWSym tD sym = Flat $ ((at_start tD) :+: sParenDash (getS sym)) :+: (tD ^. d
 tAndDOnly :: Concept s => s -> ItemType
 tAndDOnly chunk  = Flat $ ((at_start chunk) +:+ S "- ") :+: (chunk ^. defn)
 
+{-BELOW IS TO BE MOVED TO EXAMPLE/DRASIL/SECTIONS-}
+
 --FIXME:Reduce duplication. Idealy only use displayConstr. Gamephysics uses pi/2 which is not a "number" yet
 makeConstraint :: (Constrained s, Quantity s, SymbolForm s) => s -> Sentence -> [Sentence]
 makeConstraint s num = [getS s, fmtPhys s, fmtU num s]
@@ -152,7 +156,52 @@ makeConstraint s num = [getS s, fmtPhys s, fmtU num s]
 displayConstr :: (Constrained s, Quantity s, SymbolForm s, Show a) => s -> a -> Sentence -> [Sentence]
 displayConstr s num uncrty = [getS s, fmtPhys s,
   fmtSfwr s, fmtU (S (show num)) (qs s), uncrty]
+       
+fmtInConstr :: UncertQ -> [Sentence]
+fmtInConstr q = [getS q, fmtPhys q, fmtSfwr q, fmtU (E $ getRVal q) q, S $ show (q ^. uncert)]
 
+-- Start of attempt at intelligent format-er for input constraints
+-- these are the helper functions for inDataConstTbl
+
+fmtInputConstr :: (UncertainQuantity c, Constrained c, SymbolForm c) => c -> [c] -> [Sentence]
+fmtInputConstr q qs = [getS q] ++ physC q qs ++ sfwrC q qs ++ [fmtU (E $ getRVal q) q] ++ typUnc q qs
+
+none :: Sentence
+none = S "None"
+
+getRVal :: (Constrained c) => c -> Expr
+getRVal c = uns (c ^. reasVal)
+  where uns (Just e) = e
+        uns Nothing  = (V "WARNING: getRVal found no Expr")
+
+--These check the entire list of UncertainQuantity and if they are all empty in that field,
+-- return empty list, otherwise return the appropriate thing
+physC :: (Constrained c, SymbolForm c) => c -> [c] -> [Sentence]
+physC q qs
+  | noPhysC (foldlSent_ $ map fmtPhys qs) = []
+  | noPhysC (fmtPhys q) = [none]
+  | otherwise = [fmtPhys q]
+  where noPhysC EmptyS = True
+        noPhysC _      = False
+        
+sfwrC :: (Constrained c, SymbolForm c) => c -> [c] -> [Sentence]
+sfwrC q qs
+  | noSfwrC (foldlSent_ $ map fmtSfwr qs) = []
+  | noSfwrC (fmtSfwr q) = [none]
+  | otherwise = [fmtSfwr q]
+  where noSfwrC EmptyS = True
+        noSfwrC _      = False
+        
+typUnc :: (UncertainQuantity c) => c -> [c] -> [Sentence]
+typUnc q qs
+  | null (filter isUn $ map (^. uncert) qs) = []
+  | isUn (q ^. uncert) = [S $ show $ unwU (q ^. uncert)]
+  | otherwise = [none]
+  where unwU (Just u) = u
+        isUn (Just _) = True
+        isUn Nothing  = False
+
+--Formaters for the constraints
 fmtPhys :: (Constrained s, SymbolForm s) => s -> Sentence
 fmtPhys s = foldlList $ fmtCP $ filter filterP (s ^. constraints)
   where filterP (Phys _) = True
@@ -164,19 +213,23 @@ fmtSfwr s = foldlList $ fmtCS $ filter filterS (s ^. constraints)
   where filterS (Phys _) = False
         filterS (Sfwr _) = True
         fmtCS = map (\(Sfwr f) -> E $ f (C s))
-       
-fmtInConstr :: UncertQ -> [Sentence]
-fmtInConstr q = [getS q, fmtPhys q, fmtSfwr q, fmtU (S $ show $ typVal q) q, S $ show (q ^. uncert)]
 
--- Start of attempt at intelligent format-er for input constraints
---take one input and all inputs
-{-
-fmtInputConstr :: UncertQ -> [UncertQ] -> [Sentence]
-fmtInputConstr q qs = [getS q] ++ physC q qs ++ sfwrC q ++ [fmtU (S $ show $ typVal q) q] ++ typUnc q
+-- Creates the input Data Constraints Table with physical constraints only
+inDataConstTbl :: (UncertainQuantity c, SymbolForm c, Constrained c) => [c] -> Integer -> Contents
+inDataConstTbl qs tableNumb = Table ([S "Var"] ++ (isPhys $ physC (head qs) qs) ++
+  (isSfwr $ sfwrC (head qs) qs) ++ [S "Typical" +:+ titleize value] ++
+  (isUnc $ typUnc (head qs) qs))
+  (map (\x -> fmtInputConstr x qs) qs)
+  (S "Table" +: S (show tableNumb) +:+ S "Input Data Constraints") True
+  where isPhys [] = []
+        isPhys _  = [titleize' physicalConstraint]
+        isSfwr [] = []
+        isSfwr _  = [titleize' softwareConstraint]
+        isUnc  [] = []
+        isUnc  _  = [S "Typical Uncertainty"]
 
-physC :: [UncertQ] -> [Sentence]
-physC q qs
-  | isPhysC (fmtPhys qs) = [fmtPhys q]
-  | otherwise = []
-  where isPhysC fmtPhys q
--}
+-- Creates the output Data Constraints Table with physical constraints only
+outDataConstTbl :: [[Sentence]] -> Integer -> Contents
+outDataConstTbl outputs tableNumb = Table [S "Var", titleize' physicalConstraint,
+  titleize' softwareConstraint] outputs
+  (S "Table" +: S (show tableNumb) +:+ S "Output Data Constraints") True

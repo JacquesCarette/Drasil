@@ -23,7 +23,6 @@ module Language.Drasil (
   , Quantity(..), ConVar(..), cvR, cvRs
   , Concept(..)
   , CommonIdea(..)
-  , UncertainQuantity(..), UncertQ, uq, uqc, typVal, cCnptfromUQ
   --, commonidea, CI
   , commonIdea, CI, commonIdea', commonIdea''
   -- Chunk.NamedIdea
@@ -32,9 +31,12 @@ module Language.Drasil (
   , compoundNC'', compoundNC''', npnc', with, with', and_, and_', andRT, aNP, the, a_, theCustom
   -- Chunk.Constrained
   , Constrained(..), ConstrainedChunk(..), Constraint(..), ConstrConcept(..)
-  , physc, sfwrc, constrained, cuc, cvc, constrained', cuc'
+  , physc, sfwrc, constrained, cuc, cvc, constrained', cuc', constrainedNRV'
+  , ConstrWrapper(..), cnstrw
   -- Chunk.Eq
   , QDefinition(..), fromEqn, fromEqn', getVC, equat
+  -- Chunk.UncertainQuantity
+  , UncertainQuantity(..), UncertQ, uq, uqNU, uqc, uqcNU, uqcND
   -- Chunk.Unital
   , UnitalChunk(..), makeUCWDS, ucFromCV
   , uc, uc', ucs, ucs', ucsWS
@@ -116,10 +118,7 @@ import Language.Drasil.Chunk.Quantity
 import Language.Drasil.Chunk.UncertainQuantity
 import Language.Drasil.Chunk.ConVar
 import Language.Drasil.Chunk.Eq (QDefinition(..), fromEqn, fromEqn', getVC, equat)
-import Language.Drasil.Chunk.Constrained (Constrained(..), ConstrainedChunk(..)
-                                  , Constraint(..), ConstrConcept(..)
-                                  , physc, sfwrc, constrained
-                                  , cuc, cvc, constrained', cuc' )
+import Language.Drasil.Chunk.Constrained
 import Language.Drasil.Chunk.Unital(UnitalChunk(..), makeUCWDS, ucFromCV
                                   , uc, uc', ucs, ucs', ucsWS)
 import Language.Drasil.Chunk.Unitary

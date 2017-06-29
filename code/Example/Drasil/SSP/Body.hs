@@ -643,6 +643,7 @@ rigFoSDerivation = [foldlSP [S "RFEM analysis can also be used to calculate the 
 
 -- SECTION 4.2.6 --
 -- Data Constraints is automatically generated in solChSpecF using the tables below
+{-
 {-input data-}
 noTypicalVal, vertConvention :: Sentence
 noTypicalVal   = short notApp
@@ -662,7 +663,7 @@ slopeVert = verticesConst $ phrase slope
 
 dataConstIn :: [[Sentence]]
 dataConstIn = [waterVert, slipVert, slopeVert] ++ map fmtInConstr sspInputs
-
+-}
 {-output data-}
 slipVert2 :: [[Sentence]]
 slipVert2 = [[vertVar $ phrase slip, S "Vertices's monotonic", S "None"]]
@@ -676,7 +677,7 @@ dataConstOut = [(displayContr' . head) sspOutputs] ++ slipVert2 ++
 
 {-input and output tables-}
 s4_2_6Table2, s4_2_6Table3 :: Contents
-s4_2_6Table2 = inDataConstTbl dataConstIn 2
+s4_2_6Table2 = inDataConstTbl sspInputs 2 --FIXME: needs more inputs but cannot express them yet
 s4_2_6Table3 = outDataConstTbl dataConstOut 3
 
 -- SECTION 5 --

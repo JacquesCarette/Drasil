@@ -3,7 +3,7 @@
 module Drasil.Sections.SolutionCharacterSpec
   (
   SecItem,
-  SolSubSec,
+  SubSec,
   sSubSec,
   scsAssembler,
   siCon,
@@ -12,13 +12,14 @@ module Drasil.Sections.SolutionCharacterSpec
   siIMod,
   siDDef,
   siSent,
-  siTitl
+  siSTitl,
+  siCC
   ) where
 
 import Language.Drasil
 import Data.Drasil.Concepts.Math (equation)
 --import Data.Drasil.Concepts.Software (program)
---import Data.Drasil.Utils (foldle)
+import Data.Drasil.Utils (foldle)
 import Data.Drasil.SentenceStructures
 import qualified Data.Drasil.Concepts.Documentation as Doc
 import Data.List (find)
@@ -32,14 +33,14 @@ data SecItem where
   IMods     :: [RelationConcept] -> SecItem
   DataDef   :: [QDefinition] -> SecItem
   GenDef    :: [RelationConcept] -> SecItem
+  ConChunk  :: [ConceptChunk] -> SecItem
   Sent      :: [Sentence] -> SecItem
-  TitleFunc :: (CI -> Sentence) -> SecItem
+  SingularTitle :: SecItem
 
-data SolSubSec where
-  SectionModel :: CI -> [SecItem] -> SolSubSec
+data SubSec where
+  SectionModel :: NamedIdea c => c -> [SecItem] -> SubSec
 
-
-sSubSec :: CI -> [SecItem] -> SolSubSec
+sSubSec :: (NamedIdea c) => c -> [SecItem] -> SubSec
 sSubSec sectionName xs = SectionModel sectionName xs
 
 siCon :: [Contents] -> SecItem
@@ -60,45 +61,22 @@ siDDef xs = DataDef xs
 siSent :: [Sentence] -> SecItem
 siSent xs = Sent xs
 
-siTitl :: (CI -> Sentence) -> SecItem
-siTitl f = TitleFunc f
+siSTitl :: SecItem
+siSTitl = SingularTitle
 
-renderSec :: NamedIdea a => a -> SolSubSec -> Section
-renderSec progName item@(SectionModel niname _) 
-    | compareID niname Doc.assumption     = assumptionSect item
-    | compareID niname Doc.thModel        = theoreticalModelSect item progName
-    | compareID niname Doc.genDefn        = generalDefinitionSect item
-    | compareID niname Doc.inModel        = instanceModelSect item
-    | compareID niname Doc.dataDefn       = dataDefinitionSect item
-    | compareID niname Doc.dataConst      = dataConstraintSect item
-    | otherwise                           = genericSect item
-
-
-scsAssembler :: (NamedIdea a) => a -> [SolSubSec] -> Section
-scsAssembler progName subsecs = section (titleize' Doc.solutionCharSpec) 
-  [scsIntro progName] subsections
-  where subsections = map (renderSec progName) subsecs 
-  --FIXME put in correct order, if out of order for subsections
-
-scsIntro :: (NamedIdea a) => a -> Contents
-scsIntro progName = foldlSP [S "The", plural Doc.inModel, 
-  S "that govern", short progName, S "are presented in" +:+. 
-  S "FIXME REF to IModSection", S "The", phrase Doc.information, S "to understand", 
-  (S "meaning" `ofThe` plural Doc.inModel), 
-  S "and their derivation is also presented, so that the", plural Doc.inModel, 
-  S "can be verified"]
-
+siCC :: [ConceptChunk] -> SecItem
+siCC xs = ConChunk xs
 
 ----------------------
 --  HELPER FUNCTION --
 ----------------------
 
-compareID ::  CI -> CI -> Bool
-compareID c1 c2 = (c1 ^. id) == (c2 ^. id)
+compareID :: (NamedIdea a) => a -> String -> Bool
+compareID c1 c2 = (c1 ^. id) == c2
 
 hasTitle :: SecItem -> Bool
-hasTitle (TitleFunc _) = True
-hasTitle _             = False
+hasTitle (SingularTitle) = True
+hasTitle _               = False
 
 hasCont :: SecItem -> Bool
 hasCont (Cont _) = True
@@ -115,10 +93,10 @@ hasSent _        = False
 getSecItem :: (a->Bool) -> [a] -> Maybe a
 getSecItem func ls = find (func) ls
 
-getTitleize :: (Maybe SecItem) -> (CI -> Sentence)
-getTitleize (Just (TitleFunc a)) = a
-getTitleize (Just _) = titleize
-getTitleize Nothing = titleize
+getTitleize :: (Maybe SecItem) -> Bool
+getTitleize (Just (SingularTitle)) = True
+getTitleize (Just _)               = False
+getTitleize Nothing                = False
 
 getSection :: (Maybe SecItem) -> [Section]
 getSection (Just (Sect xs)) = xs
@@ -138,8 +116,12 @@ getSent Nothing          = []
 pullFunc :: [SecItem] -> (Maybe SecItem -> t) -> (SecItem -> Bool) -> t
 pullFunc xs f g = f (getSecItem g xs)
 
-pullTitle :: [SecItem] -> CI -> Sentence
-pullTitle xs = pullFunc xs getTitleize hasTitle
+pullTitle :: NamedIdea a => [SecItem] -> a -> Sentence
+pullTitle xs = boolTitle $ pullFunc xs getTitleize hasTitle
+
+boolTitle :: NamedIdea a => Bool -> (a -> Sentence)
+boolTitle True  = titleize
+boolTitle False = titleize' 
 
 pullSections :: [SecItem] -> [Section]
 pullSections xs = pullFunc xs getSection hasSect
@@ -150,45 +132,100 @@ pullContents xs = pullFunc xs getSecContents hasCont
 pullSents :: [SecItem] -> [Sentence]
 pullSents xs = pullFunc xs getSent hasSent
 
+-----------------------
+-- Section Assembler --
+-----------------------
+
+scsAssembler :: NamedIdea c => c -> [SubSec] -> Section
+scsAssembler progName subsecs = section (titleize' Doc.solutionCharSpec) 
+  [scsIntro progName] subsections
+  where subsections = map (renderSCS progName) subsecs 
+
+
+--------------------
+-- Section Render --
+--------------------
+
+renderSCS :: (NamedIdea c) => c -> SubSec -> Section
+renderSCS progName item@(SectionModel niname _)
+    | compareID niname (Doc.assumption ^. id)     = assumptionSect item
+    | compareID niname (Doc.thModel ^. id)        = theoreticalModelSect item progName
+    | compareID niname (Doc.genDefn ^. id)        = generalDefinitionSect item
+    | compareID niname (Doc.inModel ^. id)        = instanceModelSect item
+    | compareID niname (Doc.dataDefn ^. id)       = dataDefinitionSect item
+    | compareID niname (Doc.dataConst ^. id)      = dataConstraintSect item
+    | otherwise                                   = genericSect item
+
+renderSSD :: NamedIdea a => a -> SubSec -> Section
+renderSSD progName item@(SectionModel niname _)
+    | compareID niname (Doc.termAndDef ^. id)     = termDefinitionSect item
+    | otherwise                                   = genericSect item
+
+
 ------------------------------
 -- Section Render Functions --
 ------------------------------
 
-genericSect :: SolSubSec -> Section
+genericSect :: SubSec -> Section
 genericSect (SectionModel niname xs) = section ((pullTitle xs) niname) (pullContents xs)
   (pullSections xs)
 
-assumptionSect :: SolSubSec -> Section
+
+---------------------------------
+-- Specific System Description --
+---------------------------------
+
+
+termDefinitionSect :: SubSec -> Section
+termDefinitionSect (SectionModel niname xs) = section (titleize' niname)
+  ((termDefinitionIntro (pullSents xs)):(pullContents xs)) (pullSections xs)
+
+-------------------------------------------
+-- Solution Characteristic Specification --
+-------------------------------------------
+
+  --FIXME put in correct order, if out of order for subsections
+
+scsIntro :: (NamedIdea c) => c -> Contents
+scsIntro progName = foldlSP [S "The", plural Doc.inModel, 
+  S "that govern", short progName, S "are presented in" +:+. 
+  S "FIXME REF to IModSection", S "The", phrase Doc.information, S "to understand", 
+  (S "meaning" `ofThe` plural Doc.inModel), 
+  S "and their derivation is also presented, so that the", plural Doc.inModel, 
+  S "can be verified"]
+
+
+assumptionSect :: SubSec -> Section
 assumptionSect (SectionModel niname xs) = section (titleize' niname)
   (assumpIntro:(pullContents xs)) (pullSections xs)
 
-theoreticalModelSect :: (NamedIdea a) => SolSubSec -> a -> Section
+theoreticalModelSect :: (NamedIdea a) => SubSec -> a -> Section
 theoreticalModelSect (SectionModel niname xs) progName = section (titleize' niname) 
   ((tModIntro progName):(pullContents xs)) (pullSections xs)
 
 --FIXME geenrate tables here
 --s4_2_2_TMods = map cpSymMapT cpTMods
 
-generalDefinitionSect :: SolSubSec -> Section
+generalDefinitionSect :: SubSec -> Section
 generalDefinitionSect (SectionModel niname xs) = section (titleize' niname)
   ((generalDefinitionIntro contents):contents) (pullSections xs)
   where contents = (pullContents xs)
 
-instanceModelSect :: SolSubSec -> Section
+instanceModelSect :: SubSec -> Section
 instanceModelSect (SectionModel niname xs) = section (titleize' niname)
   ((iModIntro):(pullContents xs)) (pullSections xs)
 
 --FIXME generate tables here
 --s4_2_5_IMods = map cpSymMapT iModels
 
-dataDefinitionSect :: SolSubSec -> Section
+dataDefinitionSect :: SubSec -> Section
 dataDefinitionSect (SectionModel niname xs) = section (titleize' niname)
   ((dataDefinitionIntro $ pullSents xs):(pullContents xs)) (pullSections xs)
 
 --FIXME generate tables here
 --s4_2_4_DDefs = map cpSymMapD cpDDefs
 
-dataConstraintSect :: SolSubSec -> Section
+dataConstraintSect :: SubSec -> Section
 dataConstraintSect (SectionModel niname xs) = section (titleize' niname)
   ((dataConIntro ):(pullContents xs)) (pullSections xs)
   where dataConIntro = dataConstraintParagraph (pullContents xs) (pullSents xs)
@@ -197,6 +234,14 @@ dataConstraintSect (SectionModel niname xs) = section (titleize' niname)
 --
 
 
+
+termDefinitionIntro :: [Sentence] -> Contents
+termDefinitionIntro end = Paragraph $ foldle (+:+) (+:+) (EmptyS)
+  [S "This subsection provides a list of terms",
+  S "that are used in the subsequent", plural Doc.section_, S "and their",
+  S "meaning, with the", phrase Doc.purpose, S "of reducing ambiguity",
+  S "and making it easier to correctly understand the", plural Doc.requirement, 
+  foldlSent end]
 
 -- takes a bunch of references to things discribed in the wrapper
 assumpIntro :: Contents

@@ -12,11 +12,6 @@ module Drasil.Sections.SpecificSystemDescription
   , inModelF
   , datConF
   , dataConstraintUncertainty
-  , mkSOLsec
-  , mkSOLsub
-  , solutionCharactersticCon
-  , SOLsec
-  , SOLsub
   ) where
 
 import qualified Data.Drasil.Concepts.Documentation as D
@@ -27,15 +22,6 @@ import Data.Drasil.Concepts.Software (program)
 import Data.Drasil.Utils (foldle)
 import Data.Drasil.SentenceStructures
 import qualified Drasil.SRS as SRS
-
-data SOLsec = Sect SOLsub SOLsub SOLsub SOLsub SOLsub SOLsub
-data SOLsub = Subs Sentence Sentence Sentence Section [Contents]
-
-mkSOLsec :: SOLsub -> SOLsub -> SOLsub -> SOLsub -> SOLsub -> SOLsub -> SOLsec
-mkSOLsec as tm gd dd im dc = Sect as tm gd dd im dc
-
-mkSOLsub :: Sentence -> Sentence -> Sentence -> Section -> [Contents] -> SOLsub
-mkSOLsub start middle end refSection ys = Subs start middle end refSection ys
 
 
 -- | Specific System description section builder. Takes the system and subsections.
@@ -121,42 +107,6 @@ solChSpecF progName (probDes, likeChg) ddEndSent (mid, hasUncertainty, trail) (a
         dataDefin    = dataDefnF ddEndSent dd
         instModels   = inModelF  probDes dataDefin theModels generDefn i
         dataConstr   = datConF mid hasUncertainty trail dc
-
-
-solutionCharactersticCon :: (NamedIdea a) => a -> SOLsec -> [Section] -> Section
-solutionCharactersticCon progName (Sect as tm gd dd im dc) xs = SRS.solCharSpec
-  [solutionCharSpecIntro progName instanceModels] (subsections)
-  where assumptions        = assumptionSub        as
-          theoreticalModels generalDefinitions dataDefinitions instanceModels 
-        theoreticalModels  = theoreticalModelSub  tm progName
-        generalDefinitions = generalDefinitionSub gd
-        dataDefinitions    = dataDefinitionSub    dd
-        instanceModels     = instanceModelSub     im 
-          dataDefinitions theoreticalModels generalDefinitions
-        dataConstraints    = dataConstraintSub    dc
-        subsections = [assumptions, theoreticalModels, generalDefinitions,
-                       dataDefinitions, instanceModels, dataConstraints] ++ xs
-
-assumptionSub :: SOLsub -> Section -> Section -> Section -> Section -> Section
-assumptionSub (Subs _ _ _ sectionRef ys) ref1 ref2 ref3 ref4 = SRS.assump
-  ((assumpIntro ref1 ref2 ref3 ref4 sectionRef):ys) []
-
-theoreticalModelSub :: (NamedIdea a) => SOLsub -> a -> Section
-theoreticalModelSub (Subs _ _ _ _ ys) progName = SRS.thModel ((thModIntro progName):ys) []
-
-generalDefinitionSub :: SOLsub -> Section
-generalDefinitionSub (Subs _ _ _ _ ys) = SRS.genDefn (generalDefinitionIntro ys:ys) []
-
-dataDefinitionSub :: SOLsub -> Section
-dataDefinitionSub (Subs _ _ ending _ ys) = SRS.dataDefn ((dataDefinitionIntro ending):ys) []
-
-instanceModelSub :: SOLsub -> Section -> Section -> Section -> Section
-instanceModelSub (Subs _ _ _ sectionRef ys) ref1 ref2 ref3 = SRS.inModel ((introContent):ys) []
-  where introContent = inModelIntro sectionRef ref1 ref2 ref3
-
-dataConstraintSub :: SOLsub -> Section
-dataConstraintSub (Subs uncertain mid trail _ ys) = SRS.datCon ((dataContent):ys) []
-  where dataContent = dataConstraintParagraph uncertain (listofTablesToRefs ys) mid trail
 
 
 solutionCharSpecIntro :: (NamedIdea a) => a -> Section -> Contents

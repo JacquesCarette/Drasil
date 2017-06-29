@@ -183,9 +183,6 @@ s2_2_intro_p2 = foldle (+:+) (+:+) EmptyS [S "simulate how these",
 
 s2_4_intro :: Sentence
 
--- FIXME: Citations.
--- FIXME: This can probably be completely pulled out is we decide on the 
---  right convention for the intro across examples.
 s2_4_intro = foldlSent 
   [S "The", (phrase organization), S "of this", (phrase document), S "follows the",
   S "template for an", (getAcc srs), S "for scientific",
@@ -259,6 +256,8 @@ s4_1_intro = foldlSP
 s4_1_1 :: Section
 s4_1_1_bullets :: Contents
 
+termDefSec = sSubSec termAndDef [(siSTitl), (siCC s4_1_1_terms)]
+
 s4_1_1 = termDefnF EmptyS [s4_1_1_bullets]
 
 s4_1_1_terms :: [ConceptChunk]
@@ -320,7 +319,7 @@ s4_1_2_list = enumSimple 1 (getAcc goalStmt) s4_1_2_list'
 s4_2 :: Section
 
 -- testing refactoring
-assumSec, tModSec, genDefSec, iModSec, dataDefSec, dataConSec :: SolSubSec
+assumSec, tModSec, genDefSec, iModSec, dataDefSec, dataConSec :: SubSec
 assumSec = (sSubSec assumption [(siCon [s4_2_1_list])])
 tModSec = (sSubSec thModel [(siCon s4_2_2_TMods), (siTMod cpTMods)])
 genDefSec = (sSubSec genDefn [])
@@ -334,25 +333,7 @@ s4_2 = scsAssembler chipmunk [assumSec, tModSec, genDefSec, iModSec, dataDefSec,
 -- 4.2.1 : Assumptions --
 -------------------------
 
-s4_2_1 :: Section
-s4_2_1_intro, s4_2_1_list :: Contents
-
-s4_2_1 = SRS.assump [s4_2_1_intro, s4_2_1_list] []
-
--- TODO: Add assumption references in the original and this SRS. --
-s4_2_1_intro = foldlSP 
-  [S "This", (phrase section_), S "simplifies the original", (phrase problem),
-  S "and helps in developing the", (phrase thModel), S "by filling in the",
-  S "missing", (phrase information), S "for the" +:+. (phrase physicalSystem),
-  S "The numbers given in", S "the square brackets refer to the", 
-  foldr1 sC (map (refs) itemsAndRefs) `sC` S "or", 
-  refs (likelyChg, s6) `sC` S "in which the respective",
-  (phrase assumption), S "is used"]
-  where refs (chunk, ref) = (titleize' chunk) +:+ (sSqBr $ makeRef ref)
-
-itemsAndRefs :: [(CI, Section)]
-itemsAndRefs = [(thModel, s4_2_2), (genDefn, s4_2_3), (dataDefn, s4_2_4), 
-  (inModel, s4_2_5)]
+s4_2_1_list :: Contents
 
 s4_2_1_assum1, s4_2_1_assum2, s4_2_1_assum3, s4_2_1_assum4, s4_2_1_assum5, 
   s4_2_1_assum6, s4_2_1_assum7 :: [Sentence]
@@ -371,11 +352,11 @@ s4_2_1_assum7 = [S "There are no", (plural CM.constraint),
   S "and", (plural CP.joint), S "involved throughout the", 
   (phrase simulation)]
 
-s4_2_1_list' :: [Sentence]
-s4_2_1_list' = map (foldlSent) [s4_2_1_assum1, s4_2_1_assum2, s4_2_1_assum3, 
-  s4_2_1_assum4, s4_2_1_assum5, s4_2_1_assum6, s4_2_1_assum7]
-
-s4_2_1_list = enumSimple 1 (getAcc assumption) s4_2_1_list'
+s4_2_1_list = enumSimple 1 (getAcc assumption) $ map (foldlSent) 
+  [s4_2_1_assum1, s4_2_1_assum2, s4_2_1_assum3, s4_2_1_assum4, s4_2_1_assum5, 
+  s4_2_1_assum6, s4_2_1_assum7]
+s4_2_1_list_a = [s4_2_1_assum1, s4_2_1_assum2, s4_2_1_assum3, s4_2_1_assum4, s4_2_1_assum5, 
+  s4_2_1_assum6, s4_2_1_assum7]
 
 
 --------------------------------
@@ -435,8 +416,6 @@ s4_2_5 :: Section
 s4_2_5_IMods :: [Contents]
 
 s4_2_5 = inModelF s4_1 s4_2_4 s4_2_2 s4_2_3 s4_2_5_IMods
-
--- Instance models not fully yet implemented --
 
 s4_2_5_IMods = map cpSymMapT iModels
 
@@ -660,7 +639,7 @@ s8_dataDef = ["DD1","DD2","DD3","DD4","DD5","DD6","DD7","DD8"]
 s8_dataDefRef = map (refFromType Data cpSymbMap) cpDDefs
 
 s8_assump = ["A1", "A2", "A3", "A4", "A5", "A6", "A7"]
-s8_assumpRef = makeListRef s4_2_1_list' s4_2_1
+s8_assumpRef = makeListRef s4_2_1_list_a s4_1_1
 
 s8_funcReq =  ["R1","R2","R3", "R4", "R5", "R6", "R7", "R8"]
 s8_funcReqRef = makeListRef s5_1_list' s5_1
@@ -767,7 +746,7 @@ s8_col_header_t2 = zipWith itemRefToSent (s8_cols_t2) (s8_cols_ref_t2)
 s8_table2 :: Contents
 s8_table2 = Table (EmptyS:s8_row_header_t2)
   (makeTMatrix s8_col_header_t2 s8_columns_t2 s8_row_t2) 
-  (showingCxnBw (traceyMatrix) (titleize' assumption +:+ sParen (makeRef s4_2_1) 
+  (showingCxnBw (traceyMatrix) (titleize' assumption +:+ sParen (makeRef s4_1_1) 
   +:+ S "and Other" +:+ titleize' item)) True
 
 

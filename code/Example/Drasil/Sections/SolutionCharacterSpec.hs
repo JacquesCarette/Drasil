@@ -6,6 +6,7 @@ module Drasil.Sections.SolutionCharacterSpec
   SubSec,
   sSubSec,
   scsAssembler,
+  pdAssembler,
   siCon,
   siSect,
   siTMod,
@@ -18,7 +19,7 @@ module Drasil.Sections.SolutionCharacterSpec
 
 import Language.Drasil
 import Data.Drasil.Concepts.Math (equation)
---import Data.Drasil.Concepts.Software (program)
+import Data.Drasil.Concepts.Software (program)
 import Data.Drasil.Utils (foldle)
 import Data.Drasil.SentenceStructures
 import qualified Data.Drasil.Concepts.Documentation as Doc
@@ -145,39 +146,40 @@ pullSubSec nameid ls = getItem (\x -> (getID x) == (nameid ^. id)) ls
 scsAssembler :: NamedIdea c => c -> [SubSec] -> Section
 scsAssembler progName subsecs = section (titleize' Doc.solutionCharSpec) 
   [scsIntro progName] subsections
-  where subsections = map (renderSCS progName) subsecs 
+  where subsections = map (render progName) subsecs 
   --FIXME put in correct order, if out of order for subsections
 
---pdAssembler :: NamedIdea c => c -> [SubSec] -> Section
---pdAssembler progName subsecs = section (titleize Doc.problemDescription) 
---  [problemDescIntro subsecs progName] subsections
---  where subsections = map (renderPD progName) subsecs
+pdAssembler :: NamedIdea c => c -> SubSec -> [SubSec] -> Section
+pdAssembler progName (SectionModel niname xs) subsecs = section (titleize niname) 
+  [problemDescriptionIntro progName (pullSents xs)] subsections
+  where subsections = map (render progName) subsecs
 
---problemDescIntro subsecs progName = foldlSent [start, (short progName), 
---  S "is a computer", (phrase program), S "developed to", end]
---  where start = 
---        end   =
+problemDescriptionIntro :: NamedIdea c => c -> [Sentence] -> Contents
+problemDescriptionIntro progName []       = problemDescriptionSent progName EmptyS EmptyS
+problemDescriptionIntro progName [x]      = Paragraph x
+problemDescriptionIntro progName (x:y:xs) = problemDescriptionSent progName x y
+
+problemDescriptionSent :: NamedIdea c => c -> Sentence -> Sentence -> Contents
+problemDescriptionSent progName start end = foldlSP [start, (short progName), 
+  S "is a computer", (phrase program), S "developed to", end]
+
+
 
 --------------------
 -- Section Render --
 --------------------
 
-renderSCS :: (NamedIdea c) => c -> SubSec -> Section
-renderSCS progName item@(SectionModel niname _)
+render :: (NamedIdea c) => c -> SubSec -> Section
+render progName item@(SectionModel niname _)
     | compareID niname (Doc.assumption ^. id)     = assumptionSect item
     | compareID niname (Doc.thModel ^. id)        = theoreticalModelSect item progName
     | compareID niname (Doc.genDefn ^. id)        = generalDefinitionSect item
     | compareID niname (Doc.inModel ^. id)        = instanceModelSect item
     | compareID niname (Doc.dataDefn ^. id)       = dataDefinitionSect item
     | compareID niname (Doc.dataConst ^. id)      = dataConstraintSect item
-    | otherwise                                   = genericSect item
-
-renderPD :: NamedIdea a => a -> SubSec -> Section
-renderPD progName item@(SectionModel niname _)
     | compareID niname (Doc.termAndDef ^. id)     = termDefinitionSect item
     | compareID niname (Doc.goalStmt ^. id)       = goalStatementSect item
     | otherwise                                   = genericSect item
-
 
 ------------------------------
 -- Section Render Functions --

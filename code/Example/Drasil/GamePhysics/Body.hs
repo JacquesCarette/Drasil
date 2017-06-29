@@ -226,11 +226,16 @@ s4 = specSysDescr physLib [s4_1, s4_2]
 -------------------------------
 
 s4_1 :: Section
-s4_1_intro :: Contents
+s4_1_intro :: Sentence
 
-s4_1 = SRS.probDesc [s4_1_intro] [s4_1_1, s4_1_2]
+s4_1 = pdAssembler chipmunk problemDescriptionSect [termAndDefSect, 
+  goalStatementSect]
 
-s4_1_intro = foldlSP 
+problemDescriptionSect :: SubSec
+problemDescriptionSect = sSubSec problemDescription [(siSent [s4_1_intro])]
+--SRS.probDesc [s4_1_intro] [s4_1_1, s4_1_2]
+
+s4_1_intro = foldlSent 
   [S "Creating a gaming", (phrase physLib),
   S "is a difficult task.", (titleize' game), S "need", 
   (plural physLib), S "that simulate", 
@@ -257,7 +262,8 @@ s4_1_1 :: Section
 s4_1_1_bullets :: Contents
 
 termAndDefSect :: SubSec
-termAndDefSect = sSubSec termAndDef [(siSTitl), (siCC s4_1_1_terms)]
+termAndDefSect = sSubSec termAndDef [(siSTitl), (siCC s4_1_1_terms),
+  (siCon [s4_1_1_bullets])]
 
 s4_1_1 = termDefnF EmptyS [s4_1_1_bullets]
 
@@ -276,8 +282,8 @@ s4_1_1_bullets = enumBullet
 s4_1_2 :: Section
 s4_1_2_list :: Contents
 
-goalStatementSec :: SubSec
-goalStatementSec = sSubSec goalStmt [(siCon [s4_1_2_list])]
+goalStatementSect :: SubSec
+goalStatementSect = sSubSec goalStmt [(siCon [s4_1_2_list])]
 
 s4_1_2 = SRS.goalStmt [s4_1_2_list] []
 

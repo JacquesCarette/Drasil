@@ -164,7 +164,7 @@ fmtInConstr q = [getS q, fmtPhys q, fmtSfwr q, fmtU (E $ getRVal q) q, S $ show 
 -- these are the helper functions for inDataConstTbl
 
 fmtInputConstr :: (UncertainQuantity c, Constrained c, SymbolForm c) => c -> [c] -> [Sentence]
-fmtInputConstr q qs = [getS q] ++ physC q qs ++ sfwrC q qs ++ [fmtU (E $ getRVal q) q] ++ typUnc q qs
+fmtInputConstr q qlst = [getS q] ++ physC q qlst ++ sfwrC q qlst ++ [fmtU (E $ getRVal q) q] ++ typUnc q qlst
 
 none :: Sentence
 none = S "None"
@@ -177,27 +177,29 @@ getRVal c = uns (c ^. reasVal)
 --These check the entire list of UncertainQuantity and if they are all empty in that field,
 -- return empty list, otherwise return the appropriate thing
 physC :: (Constrained c, SymbolForm c) => c -> [c] -> [Sentence]
-physC q qs
-  | noPhysC (foldlSent_ $ map fmtPhys qs) = []
+physC q qlst
+  | noPhysC (foldlSent_ $ map fmtPhys qlst) = []
   | noPhysC (fmtPhys q) = [none]
   | otherwise = [fmtPhys q]
   where noPhysC EmptyS = True
         noPhysC _      = False
         
 sfwrC :: (Constrained c, SymbolForm c) => c -> [c] -> [Sentence]
-sfwrC q qs
-  | noSfwrC (foldlSent_ $ map fmtSfwr qs) = []
+sfwrC q qlst
+  | noSfwrC (foldlSent_ $ map fmtSfwr qlst) = []
   | noSfwrC (fmtSfwr q) = [none]
   | otherwise = [fmtSfwr q]
   where noSfwrC EmptyS = True
         noSfwrC _      = False
         
 typUnc :: (UncertainQuantity c) => c -> [c] -> [Sentence]
-typUnc q qs
-  | null (filter isUn $ map (^. uncert) qs) = []
+typUnc q qlst
+  | null (filter isUn $ map (^. uncert) qlst) = []
   | isUn (q ^. uncert) = [S $ show $ unwU (q ^. uncert)]
   | otherwise = [none]
   where unwU (Just u) = u
+        unwU Nothing  = error $ "Something when wrong with 'typUnc'." ++
+                        "'typUnc' was possibly called by fmtInputConstr or inDataConstTbl."
         isUn (Just _) = True
         isUn Nothing  = False
 
@@ -216,10 +218,10 @@ fmtSfwr s = foldlList $ fmtCS $ filter filterS (s ^. constraints)
 
 -- Creates the input Data Constraints Table with physical constraints only
 inDataConstTbl :: (UncertainQuantity c, SymbolForm c, Constrained c) => [c] -> Integer -> Contents
-inDataConstTbl qs tableNumb = Table ([S "Var"] ++ (isPhys $ physC (head qs) qs) ++
-  (isSfwr $ sfwrC (head qs) qs) ++ [S "Typical" +:+ titleize value] ++
-  (isUnc $ typUnc (head qs) qs))
-  (map (\x -> fmtInputConstr x qs) qs)
+inDataConstTbl qlst tableNumb = Table ([S "Var"] ++ (isPhys $ physC (head qlst) qlst) ++
+  (isSfwr $ sfwrC (head qlst) qlst) ++ [S "Typical" +:+ titleize value] ++
+  (isUnc $ typUnc (head qlst) qlst))
+  (map (\x -> fmtInputConstr x qlst) qlst)
   (S "Table" +: S (show tableNumb) +:+ S "Input Data Constraints") True
   where isPhys [] = []
         isPhys _  = [titleize' physicalConstraint]

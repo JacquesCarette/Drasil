@@ -71,7 +71,7 @@ mkSRS = RefSec (RefProg RM.intro [TUnits, tsymb tableOfSymbols, TAandA]) :
 chipmunkSysInfo :: SystemInformation
 chipmunkSysInfo = SI chipmunk srs authors chipUnits cpSymbols 
   ([] :: [CQSWrapper]) cpAcronyms (cpDDefs) (inputSymbols) (outputSymbols) 
-  (cpQDefs) chipmunkConstraints--FIXME: All named ideas, not just acronyms.
+  (cpQDefs) cpInputConstraints--FIXME: All named ideas, not just acronyms.
 
 chipUnits :: [UnitDefn]
 chipUnits = map UU [metre, kilogram, second] ++ map UU [newton, radian]
@@ -101,37 +101,6 @@ cpSymMapD = symbolMapFun cpSymbMap Data
 -- SOFTWARE REQUIREMENTS SPECIFICATION --
 -- =================================== --
 
-
-------------------------------
---        KNOWLEDGE         --
-------------------------------
-
-lengthConstraint, massConstraint, mmntOfInConstraint, gravAccelConstraint, 
-  posConstraint, veloConstraint, orientConstraint, angVeloConstraint, 
-  forceConstraint, torqueConstraint, restCoefConstraint :: [Sentence]
-
--- make into a type
-lengthConstraint = makeConstraint lengthCons (S "44.2")
-massConstraint = makeConstraint massCons (S "56.2")
-mmntOfInConstraint = makeConstraint mmntOfInCons (S "74.5")
-gravAccelConstraint = makeConstraint gravAccelCons (S "9.8")
-posConstraint = makeConstraint posCons (S "(0.412, 0.502)")
-veloConstraint = makeConstraint veloCons (S "2.51")
-orientConstraint = makeConstraint orientCons (S "pi/2")
-angVeloConstraint = makeConstraint angVeloCons (S "2.1")
-forceConstraint = makeConstraint forceCons (S "98.1")
-torqueConstraint = makeConstraint torqueCons (S "200")
-restCoefConstraint = makeConstraint restCoefCons (S "0.8")
-
--- these should be maps from the type of above
-physicalConstraint_inputs, physicalConstraint_outputs :: [[Sentence]]
-physicalConstraint_inputs = [lengthConstraint, massConstraint, 
-  mmntOfInConstraint, gravAccelConstraint, posConstraint, veloConstraint, 
-  orientConstraint, angVeloConstraint, forceConstraint, torqueConstraint,
-  restCoefConstraint]
-
-physicalConstraint_outputs = [posConstraint, veloConstraint, 
-  orientConstraint, angVeloConstraint]
 
 ------------------------------
 -- Section : INTRODUCTION --
@@ -262,8 +231,7 @@ s4_1_1 :: Section
 s4_1_1_bullets :: Contents
 
 termAndDefSect :: SubSec
-termAndDefSect = sSubSec termAndDef [(siSTitl), (siCC s4_1_1_terms),
-  (siCon [s4_1_1_bullets])]
+termAndDefSect = sSubSec termAndDef [(siSTitl), (siCon [s4_1_1_bullets])]
 
 s4_1_1 = termDefnF EmptyS [s4_1_1_bullets]
 
@@ -335,7 +303,7 @@ tModSec = (sSubSec thModel [(siCon s4_2_2_TMods), (siTMod cpTMods)])
 genDefSec = (sSubSec genDefn [])
 iModSec = (sSubSec inModel [(siCon s4_2_5_IMods), (siIMod iModels)])
 dataDefSec = (sSubSec dataDefn [(siCon s4_2_4_DDefs), (siSent [s4_2_4_intro]), (siDDef cpDDefs)])
-dataConSec = (sSubSec dataConst [(siCon [dataConstraintInputTable, dataConstraintOutputTable])])
+dataConSec = (sSubSec dataConst [(siUQI cpInputConstraints), (siUQO cpOutputConstraints)])
 
 s4_2 = scsAssembler chipmunk [assumSec, tModSec, genDefSec, iModSec, dataDefSec, dataConSec]
 
@@ -447,18 +415,6 @@ secCollisionDiagram = Paragraph $ foldlSent [ S "This section presents an image"
 -- 4.2.6 : Data Constraints --
 ------------------------------
 
-dataConstraints :: Section
-dataConstraintInputTable, dataConstraintOutputTable :: Contents
-
-dataConstraints = datConF EmptyS dataConstraintUncertainty EmptyS [dataConstraintInputTable, dataConstraintOutputTable]
-
-dataConstraintInputTable = Table [S "Var", titleize' physicalConstraint, S "Typical Value"]
-  (physicalConstraint_inputs) 
-  ((titleize input_) +:+ S "Variables") True
-
-dataConstraintOutputTable = Table [S "Var", titleize' physicalConstraint]
-  (map (take 2) physicalConstraint_outputs)
-  ((titleize output_) +:+ S "Variables") True
 
 
 ------------------------------
@@ -507,7 +463,7 @@ s5_1_req3 = foldlSent [S "Input the", (phrase CM.surface),
 
 s5_1_req4 = foldlSent [S "Verify that the inputs", 
   S "satisfy the required", plural physicalConstraint, S "from", 
-  (makeRef dataConstraintInputTable)]
+  (makeRef s4_2)]
 
 s5_1_req5 = reqS (QP.position) (QP.velocity) 
   (S "acted upon by a" +:+ (phrase QP.force))
@@ -655,7 +611,7 @@ s8_funcReq =  ["R1","R2","R3", "R4", "R5", "R6", "R7", "R8"]
 s8_funcReqRef = makeListRef s5_1_list' s5_1
 
 s8_data = ["Data Constraints"]
-s8_dataRef = [makeRef dataConstraints]
+s8_dataRef = [makeRef s4_2]
 
 s8_goalstmt = ["GS1", "GS2", "GS3", "GS4"]
 s8_goalstmtRef = makeListRef s4_1_2_list' s4_1_2

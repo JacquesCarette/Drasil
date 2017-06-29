@@ -14,7 +14,9 @@ module Drasil.Sections.SolutionCharacterSpec
   siDDef,
   siSent,
   siSTitl,
-  siCC
+  siCC,
+  siUQI,
+  siUQO
   ) where
 
 import Language.Drasil
@@ -36,7 +38,10 @@ data SecItem where
   GenDef    :: [RelationConcept] -> SecItem
   ConChunk  :: [ConceptChunk] -> SecItem
   Sent      :: [Sentence] -> SecItem
+  UnQuantI  :: [UncertQ] -> SecItem
+  UnQuantO  :: [UncertQ] -> SecItem 
   SingularTitle :: SecItem
+
 
 data SubSec where
   SectionModel :: NamedIdea c => c -> [SecItem] -> SubSec
@@ -68,6 +73,11 @@ siSTitl = SingularTitle
 siCC :: [ConceptChunk] -> SecItem
 siCC xs = ConChunk xs
 
+siUQI :: [UncertQ] -> SecItem
+siUQI xs = UnQuantI xs
+
+siUQO :: [UncertQ] -> SecItem
+siUQO xs = UnQuantO xs
 ----------------------
 --  HELPER FUNCTION --
 ----------------------
@@ -90,6 +100,14 @@ hasSect _        = False
 hasSent :: SecItem -> Bool
 hasSent (Sent _) = True
 hasSent _        = False
+
+hasUQI :: SecItem -> Bool
+hasUQI (UnQuantI _) = True
+hasUQI _                  = False
+
+hasUQO :: SecItem -> Bool
+hasUQO (UnQuantO _) = True
+hasUQO _                  = False
 
 getItem :: (a->Bool) -> [a] -> Maybe a
 getItem func ls = find (func) ls
@@ -114,6 +132,16 @@ getSent (Just (Sent xs)) = xs
 getSent (Just _)         = []
 getSent Nothing          = []
 
+getUQO :: (Maybe SecItem) -> [UncertQ]
+getUQO (Just (UnQuantO xs)) = xs
+getUQO (Just _)            = []
+getUQO Nothing             = []
+
+getUQI :: (Maybe SecItem) -> [UncertQ]
+getUQI (Just (UnQuantI xs)) = xs
+getUQI (Just _)            = []
+getUQI Nothing             = []
+
 pullFunc :: [SecItem] -> (Maybe SecItem -> t) -> (SecItem -> Bool) -> t
 pullFunc xs f g = f (getItem g xs)
 
@@ -133,6 +161,11 @@ pullContents xs = pullFunc xs getSecContents hasCont
 pullSents :: [SecItem] -> [Sentence]
 pullSents xs = pullFunc xs getSent hasSent
 
+pullUQI :: [SecItem] -> [UncertQ]
+pullUQI xs = pullFunc xs getUQI hasUQI
+
+pullUQO :: [SecItem] -> [UncertQ]
+pullUQO xs = pullFunc xs getUQO hasUQO
 
 getID :: SubSec -> String
 getID (SectionModel niname _) = niname ^. id
@@ -242,7 +275,8 @@ dataDefinitionSect (SectionModel niname xs) = section (titleize' niname)
 
 dataConstraintSect :: SubSec -> Section
 dataConstraintSect (SectionModel niname xs) = section (titleize' niname)
-  ((dataConIntro ):(pullContents xs)) (pullSections xs)
+  ((dataConIntro ):[inDataConstTbl $ pullUQI xs, 
+  outDataConstTbl $ pullUQO xs] ++ (pullContents xs)) (pullSections xs)
   where dataConIntro = dataConstraintParagraph (pullContents xs) (pullSents xs)
 
 --FIXME generate tables here

@@ -21,7 +21,7 @@ outputSymbols = map qs [QP.position, QP.velocity, QM.orientation, QP.angularVelo
 
 cpSymbols :: [QSWrapper]
 cpSymbols = (map qs cpUnits) ++ [qs QP.restitutionCoef] ++ 
-  (map qs cpUnitless) ++ (map qs chipmunkConstraints)
+  (map qs cpUnitless) ++ (map qs cpInputConstraints)
 
 
 cpUnits :: [UnitalChunk]
@@ -259,25 +259,30 @@ velTime = ucFromCV velatTime second
                      (sub (QP.time ^. symbol) (Atomic "c"))
 
 
-chipmunkConstraints :: [ConstrainedChunk]
+cpInputConstraints :: [UncertQ]
 lengthCons, massCons, mmntOfInCons, gravAccelCons, posCons, orientCons,
-  angVeloCons, forceCons, torqueCons, veloCons, restCoefCons :: ConstrainedChunk
+  angVeloCons, forceCons, torqueCons, veloCons, restCoefCons :: ConstrConcept
 
-chipmunkConstraints = [lengthCons, massCons, mmntOfInCons, gravAccelCons, 
-  posCons, orientCons, veloCons, angVeloCons, forceCons, torqueCons, restCoefCons]
+cpOutputConstraints :: [UncertQ]
+cpOutputConstraints = map (\x -> uq x (0.1 :: Double)) 
+  [posCons, veloCons, orientCons, angVeloCons]
+
+cpInputConstraints = map (\x -> uq x (0.1 :: Double))
+  [lengthCons, massCons, mmntOfInCons, gravAccelCons, posCons, orientCons,
+  veloCons, angVeloCons, forceCons, torqueCons, restCoefCons]
 
 nonNegativeConstraint :: Constraint -- should be pulled out an put somewhere for generic constraints
 nonNegativeConstraint = physc $ \c -> c :>= (Dbl 0.0)
 
-lengthCons     = constrained QPP.len               [nonNegativeConstraint] (Dbl 44.2)
-massCons       = constrained QPP.mass              [nonNegativeConstraint] (Dbl 56.2)
-mmntOfInCons   = constrained QP.momentOfInertia    [nonNegativeConstraint] (Dbl 74.5)
-gravAccelCons  = constrained QP.gravitationalConst [] (Dbl 9.8)
-posCons        = constrained QP.position           [] (Dbl 0.412) --FIXME: should be (0.412, 0.502) vector
-veloCons       = constrained QP.velocity           [] (Dbl 2.51)
-orientCons     = constrained QM.orientation        [] (V "pi/2") -- physical constraint not needed space is radians
-angVeloCons    = constrained QP.angularVelocity    [] (Dbl 2.1)
-forceCons      = constrained QP.force              [] (Dbl 98.1)
-torqueCons     = constrained QP.torque             [] (Dbl 200)
-restCoefCons   = constrained QP.restitutionCoef    [nonNegativeConstraint,
+lengthCons     = constrained' QPP.len               [nonNegativeConstraint] (Dbl 44.2)
+massCons       = constrained' QPP.mass              [nonNegativeConstraint] (Dbl 56.2)
+mmntOfInCons   = constrained' QP.momentOfInertia    [nonNegativeConstraint] (Dbl 74.5)
+gravAccelCons  = constrained' QP.gravitationalConst [] (Dbl 9.8)
+posCons        = constrained' QP.position           [] (Dbl 0.412) --FIXME: should be (0.412, 0.502) vector
+veloCons       = constrained' QP.velocity           [] (Dbl 2.51)
+orientCons     = constrained' QM.orientation        [] (V "pi/2") -- physical constraint not needed space is radians
+angVeloCons    = constrained' QP.angularVelocity    [] (Dbl 2.1)
+forceCons      = constrained' QP.force              [] (Dbl 98.1)
+torqueCons     = constrained' QP.torque             [] (Dbl 200)
+restCoefCons   = constrained' QP.restitutionCoef    [nonNegativeConstraint,
                                                     physc $ \c -> c:<= (Dbl 1.0)] (Dbl 0.8)

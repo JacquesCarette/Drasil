@@ -572,16 +572,9 @@ s7_1_req6 = [(Enumeration $ Simple $ [(acroR 6, Nested (titleize output_ +:+
   (Bullet $ 
     [Flat $ (at_start prob_br) +:+ sParen (getS prob_br) +:+ sParen (makeRef (gbSymbMapT probOfBr))] ++
     [Flat $ (at_start demand) +:+ sParen (getS demand) +:+ sParen (makeRef (gbSymbMapT calOfDe))]++
-    map (\c -> Flat $ (at_start c) +:+ sParen (getS c) +:+ sParen (makeRef (gbSymbMapD c)))
-    [loadDF,
-     nonFL,
-     glaTyFac,
-     dimLL,
-     tolPre,
-     tolStrDisFac,
-     strDisFac] ++
     [Flat $ (titleize lResistance +:+ sParen (short lResistance) +:+ sParen (makeRef (gbSymbMapT calOfCap)))] ++
-    [Flat (at_start act_thick +:+ sParen (getS act_thick) +:+ sParen (makeRef (gbSymbMapD hFromt)))]++
+    map (\c -> Flat $ (at_start c) +:+ sParen (getS c) +:+ sParen (makeRef (gbSymbMapD c)))
+    [loadDF, nonFL, glaTyFac, dimLL, tolPre, tolStrDisFac, strDisFac, hFromt] ++
     [Flat $ (titleize aspectR) +:+ sParen (short aspectR) {-+:+ E ((C aspectR) := (C plate_len):/(C plate_width))-}] --short is technically a symbol here (see Concepts.hs)
     ))])]
   {-

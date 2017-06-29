@@ -1,9 +1,7 @@
 module Drasil.GlassBR.DataDefs where
 
 import Language.Drasil
-import Data.Drasil.SI_Units
 import Prelude hiding (log, id, exp)
-import Control.Lens ((^.))
 import Drasil.GlassBR.Unitals
 import Data.Drasil.Utils
 
@@ -46,11 +44,7 @@ hFromt_helper :: Double -> Double -> (Expr, Relation)
 hFromt_helper result condition = (Dbl result, (C nom_thick) := Dbl condition)
 
 hFromt :: QDefinition
-hFromt = fromEqn (act_thick ^. id) 
-  (nounPhraseSP $ "h is the function that maps from the nominal thickness (t) to " ++
-  "the minimum thickness. h is the actual thickness. t is the nominal thickness t " ++
-  "in {2.5, 2.7, 3.0, 4.0, 5.0, 6.0, 8.0, 10.0, 12.0, 16.0, 19.0, 22.0}")
-  (act_thick ^.symbol) millimetre hFromt_eq
+hFromt = mkDataDef act_thick hFromt_eq
 
 --DD3--
 
@@ -78,7 +72,7 @@ nonFL_eq = ((C tolLoad):*(C mod_elas):*(C act_thick):^(Int 4)):/
   ((Grouping ((C plate_len):*(C plate_width))):^(Int 2))
 
 nonFL :: QDefinition
-nonFL = fromEqn' (nonFactorL ^. id) (nonFactorL ^. term) (Atomic "NFL") nonFL_eq
+nonFL = mkDataDef nonFactorL nonFL_eq
 
 --DD6--
 

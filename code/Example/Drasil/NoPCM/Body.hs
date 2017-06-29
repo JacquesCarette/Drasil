@@ -6,17 +6,18 @@ import Drasil.NoPCM.Definitions (ht_trans, srs_swhs)
 --import Drasil.NoPCM.Unitals hiding (coil_SA, htCap_W, temp_init, time_final)
 
 import Drasil.SWHS.Body (s2_3_knowlegde, s2_3_understanding, s2_4_intro,
-  s3, physSyst1, physSyst2, s4_2_4_intro_end, s4_2_5_d1startPara, assump1, assump2, assump7,
-  con1, con2, con10, con11, con12, con13, con14, con16, con17, con18, s5_2, s6_start,
-  s7_trailing, ref2, ref3, ref4, ref5, ref6)
-import Drasil.SWHS.Concepts (progName, water, gauss_div, sWHT, tank, coil, transient, 
-  perfect_insul)
+  s3, physSyst1, physSyst2, s4_2_4_intro_end, s4_2_5_d1startPara, assump1,
+  assump2, assump7, con1, con2, con10, con11, con12, con13, con14, con16,
+  con17, con18, s5_2, s6_start, s7_trailing, ref2, ref3, ref4, ref5, ref6)
+import Drasil.SWHS.Concepts (progName, water, gauss_div, sWHT, tank, coil,
+  transient, perfect_insul)
 import Drasil.SWHS.Unitals (w_vol, tank_length, tank_vol, tau_W, temp_W, w_mass,
   diam, coil_SA, temp_C, w_density, htCap_W, htFusion, temp_init, time_final,
   in_SA, out_SA, vol_ht_gen, thFluxVect, ht_flux_in, ht_flux_out, tau, htCap_L,
   htTransCoeff, temp_env, diam, tank_length, w_vol, ht_flux_C, coil_HTC, temp_diff,
   w_E, tank_length_min, tank_length_max, htTransCoeff_min, w_density_min,
-  w_density_max, htCap_W_min, htCap_W_max, coil_HTC_min, coil_HTC_max, time_final_max)
+  w_density_max, htCap_W_min, htCap_W_max, coil_HTC_min, coil_HTC_max,
+  time_final_max)
 import Drasil.SWHS.DataDefs(swhsSymbMapDRef, swhsSymbMapTRef, dd1HtFluxC,
   s4_2_4_DD1, swhsSymbMapT)
 import Drasil.SWHS.TMods (s4_2_2_T1, t1ConsThermE)

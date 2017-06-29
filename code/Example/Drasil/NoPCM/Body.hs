@@ -5,19 +5,19 @@ import Prelude hiding (id)
 import Drasil.NoPCM.Definitions (ht_trans, srs_swhs)
 --import Drasil.NoPCM.Unitals hiding (coil_SA, htCap_W, temp_init, time_final)
 
-import Drasil.SWHS.Body (s2_3_knowlegde, s2_3_understanding, s2_4_intro, 
+import Drasil.SWHS.Body (s2_3_knowlegde, s2_3_understanding, s2_4_intro,
   s3, physSyst1, physSyst2, s4_2_4_intro_end, s4_2_5_d1startPara, assump1, assump2, assump7,
-  con1, con2, con10, con11, con12, con13, con14, con16, con17, con18, s5_2, s6_start, 
+  con1, con2, con10, con11, con12, con13, con14, con16, con17, con18, s5_2, s6_start,
   s7_trailing, ref2, ref3, ref4, ref5, ref6)
-import Drasil.SWHS.Concepts (progName, water, gauss_div, sWHT, tank, coil, transient,
+import Drasil.SWHS.Concepts (progName, water, gauss_div, sWHT, tank, coil, transient, 
   perfect_insul)
-import Drasil.SWHS.Unitals (w_vol, tank_length, tank_vol, tau_W, temp_W, w_mass, 
+import Drasil.SWHS.Unitals (w_vol, tank_length, tank_vol, tau_W, temp_W, w_mass,
   diam, coil_SA, temp_C, w_density, htCap_W, htFusion, temp_init, time_final,
   in_SA, out_SA, vol_ht_gen, thFluxVect, ht_flux_in, ht_flux_out, tau, htCap_L,
   htTransCoeff, temp_env, diam, tank_length, w_vol, ht_flux_C, coil_HTC, temp_diff,
-  w_E, tank_length_min, tank_length_max, htTransCoeff_min, w_density_min, 
+  w_E, tank_length_min, tank_length_max, htTransCoeff_min, w_density_min,
   w_density_max, htCap_W_min, htCap_W_max, coil_HTC_min, coil_HTC_max, time_final_max)
-import Drasil.SWHS.DataDefs(swhsSymbMapDRef, swhsSymbMapTRef, dd1HtFluxC, 
+import Drasil.SWHS.DataDefs(swhsSymbMapDRef, swhsSymbMapTRef, dd1HtFluxC,
   s4_2_4_DD1, swhsSymbMapT)
 import Drasil.SWHS.TMods (s4_2_2_T1, t1ConsThermE)
 import Drasil.SWHS.GenDefs (swhsGenDefs)
@@ -25,9 +25,9 @@ import Drasil.SWHS.IMods (eBalanceOnWtr, heatEInWtr)
 
 import Language.Drasil
 
-import Data.Drasil.SI_Units 
+import Data.Drasil.SI_Units
 import Data.Drasil.Authors
-import Data.Drasil.Utils(enumSimple, getS, mkRefsList, makeListRef, refFromType, 
+import Data.Drasil.Utils(enumSimple, getS, mkRefsList, makeListRef, refFromType,
   itemRefToSent, makeTMatrix, itemRefToSent)
 import Data.Drasil.Concepts.Documentation
 import Data.Drasil.Concepts.Math (ode, unit_, rOfChng, equation)
@@ -54,50 +54,51 @@ this_si :: [UnitDefn]
 this_si = map UU [metre, kilogram, second] ++ map UU [centigrade, joule, watt]
 
 acronyms :: [CI]
-acronyms = [assumption, dataDefn, genDefn, goalStmt, inModel, likelyChg, ode, 
+acronyms = [assumption, dataDefn, genDefn, goalStmt, inModel, likelyChg, ode,
             physSyst, requirement, srs, progName, thModel]
 
 pcmSymbols :: [CQSWrapper]
 pcmSymbols = (map cqs pcmUnits) ++ (map cqs pcmConstraints)
 
 pcmUnits :: [UCWrapper]
-pcmUnits = map ucw [density, tau, in_SA, out_SA, 
-  htCap_L, QT.ht_flux, ht_flux_in, ht_flux_out, vol_ht_gen, 
+pcmUnits = map ucw [density, tau, in_SA, out_SA,
+  htCap_L, QT.ht_flux, ht_flux_in, ht_flux_out, vol_ht_gen,
   htTransCoeff, mass, tank_vol, QT.temp, QT.heat_cap_spec,
   temp_diff, temp_env, thFluxVect, time, ht_flux_C,
   vol, w_mass, w_vol]
-  
+
 pcmConstraints :: [ConstrConcept]
-pcmConstraints =  [coil_SA, htCap_W, coil_HTC, temp_init, 
+pcmConstraints =  [coil_SA, htCap_W, coil_HTC, temp_init,
   time_final, tank_length, temp_C, w_density, diam, temp_W]
 
 s4, s4_1, s4_1_1, s4_1_2, s4_1_3, s4_2, {-s3, s3_1, -}
   s5, s5_1, s6, s7, s8, s9 :: Section -- s5_2,
 
 s4_1_intro, s4_1_1_bullets, {-s3_1_intro, sys_context_fig, s3_2_intro, s3_3_intro, -}
-  s4_1_2_list, s4_1_3_intro, s4_1_3_list, fig_tank, 
-  s4_2_6_table1, s4_2_6_table2, s6_list, s9_refs:: Contents
+  s4_1_2_list, s4_1_3_intro, s4_1_3_list, fig_tank,
+  s4_2_6_table1, s4_2_6_table2, s6_list, s9_refs :: Contents
 
--------------------------------
+--------------------------------
 --Section 1 : REFERENCE MATERIAL
--------------------------------
+--------------------------------
   
 mkSRS :: DocDesc
 mkSRS = RefSec (RefProg intro
-  [TUnits, tsymb [TSPurpose, SymbConvention 
-  [Lit (nw ht_trans), Doc' (nw progName)], SymbOrder], TAandA]) : 
-  IntroSec (IntroProg s2s s2e 
+  [TUnits, tsymb [TSPurpose, SymbConvention
+  [Lit (nw ht_trans), Doc' (nw progName)], SymbOrder], TAandA]) :
+  IntroSec (IntroProg s2s s2e
   [IPurpose s2_1,
   IScope s2_2s s2_2e,
   IChar s2_3_knowlegde s2_3_understanding EmptyS,
   IOrgSec s2_4_intro inModel (SRS.inModel SRS.missingP []) s2_4e]) :
-  map Verbatim [s3, s4, s5, s6, s7, s8, s9]  
-        
+  map Verbatim [s3, s4, s5, s6, s7, s8, s9]
+
 pcm_si :: SystemInformation
-pcm_si = SI srs_swhs srs [thulasi] this_si pcmSymbols (pcmSymbols) 
-  acronyms ([dd1HtFluxC] :: [QDefinition]) (map qs pcmConstraints) ([] :: [QSWrapper])
-  ([] :: [Block QDefinition]) ([] :: [ConstrainedChunk])-- Place Holder until Data Definitions can be created
-  
+pcm_si = SI srs_swhs srs [thulasi] this_si pcmSymbols (pcmSymbols)
+  acronyms ([dd1HtFluxC] :: [QDefinition]) (map qs pcmConstraints) 
+  ([] :: [QSWrapper]) ([] :: [Block QDefinition])
+  ([] :: [ConstrainedChunk])-- Place Holder until Data Definitions can be created
+
 pcm_srs :: Document
 pcm_srs = mkDoc mkSRS pcm_si
 
@@ -185,12 +186,12 @@ s2_3 = charIntRdrF knowledge understanding sWHS EmptyS
 s2_4e = foldlSent_ [S "The", phrase inModel,
   sParen (makeRef (SRS.inModel SRS.missingP [])),
   S "to be solved is referred to as" +:+. acroIM 1,
-  S "The", phrase inModel, S "provides the", 
+  S "The", phrase inModel, S "provides the",
   titleize ode, sParen (short ode), S "that model the" +:+. phrase progName,
   short progName, S "solves this", short ode]
-                        
 
-                        
+
+
 ----------------------------------------
 --Section 3 : GENERAL SYSTEM DESCRIPTION
 ----------------------------------------
@@ -249,7 +250,7 @@ s4 = specSysDesF words_ [s4_1, s4_2]
 -----------------------------------
 --Section 4.1 : PROBLEM DESCRIPTION
 -----------------------------------
-          
+
 s4_1 = SRS.probDesc [s4_1_intro] [s4_1_1, s4_1_2, s4_1_3]
 
 s4_1_intro = foldlSP [getAcc progName, S "is a computer",
@@ -257,9 +258,9 @@ s4_1_intro = foldlSP [getAcc progName, S "is a computer",
   S "the heating of", phrase water, S "in a", phrase sWHT]
 
 s4_1_1 = termDefnF EmptyS [s4_1_1_bullets]
-  
+
 s4_1_1_bullets = Enumeration $ (Bullet $ map (\x -> Flat $ 
-  (at_start x) :+: S ":" +:+ (x ^. defn)) 
+  (at_start x) :+: S ":" +:+ (x ^. defn))
   [ht_flux, heat_cap_spec, thermal_conduction, transient])
   
 s4_1_2 = physSystDesc (getAcc progName) fig_tank [s4_1_2_list, fig_tank]
@@ -267,12 +268,12 @@ s4_1_2 = physSystDesc (getAcc progName) fig_tank [s4_1_2_list, fig_tank]
 fig_tank = Figure (at_start sWHT `sC` S "with" +:+ phrase ht_flux +:+
   S "from" +:+ phrase coil +:+ S "of" +:+ getS ht_flux_C)
   "TankWaterOnly.png"
-  
+
 s4_1_2_list = enumSimple 1 (short physSyst) $ map foldlSent_ [physSyst1, physSyst2]
 
 s4_1_3 = SRS.goalStmt [s4_1_3_intro, s4_1_3_list] []
 
-s4_1_3_intro = Paragraph $ foldl (+:+) (EmptyS) [S "Given the", phrase temp, 
+s4_1_3_intro = Paragraph $ foldl (+:+) (EmptyS) [S "Given the", phrase temp,
   S "of the", phrase coil `sC` S "initial", phrase temp, S "of the",
   phrase water `sC` S "and material", plural property `sC`
   S "the", phrase goalStmt, S "is"]
@@ -285,20 +286,21 @@ s4_1_3_list = Enumeration $ Simple $ map (\(a, b) -> (a, Flat b)) [
 --Section 4.2 : SOLUTION CHARACTERISTICS SPECIFICATION
 ------------------------------------------------------
   
-s4_2 = solChSpecF progName (s4_1, s6) s4_2_4_intro_end (mid, dataConstraintUncertainty, end) 
-  ([s4_2_1_list], s4_2_2_T1, s4_2_3_eq, s4_2_4_DD1, 
-  [swhsSymbMapT eBalanceOnWtr] ++ s4_2_5_d1startPara ++ s4_2_5_eq ++ [swhsSymbMapT heatEInWtr],
-  [s4_2_6_table1, s4_2_6_table2]) []
-  
+s4_2 = solChSpecF progName (s4_1, s6) s4_2_4_intro_end (mid,
+  dataConstraintUncertainty, end) ([s4_2_1_list], s4_2_2_T1, s4_2_3_eq,
+  s4_2_4_DD1, [swhsSymbMapT eBalanceOnWtr] ++ s4_2_5_d1startPara ++
+  s4_2_5_eq ++ [swhsSymbMapT heatEInWtr], [s4_2_6_table1, s4_2_6_table2]) []
+
   where mid = foldlSent [S "The", phrase column, S "for", phrase software,
           plural constraint, S "restricts the range of",
           plural input_, S "to reasonable", plural value]
-          
-        end = foldlSent [S "The", phrase uncertainty, phrase column, S "provides an estimate of",
-          S "the confidence with which the physical quantities can be measured. This", 
-          phrase information, S "would be part of the input if one were performing an", 
+
+        end = foldlSent [S "The", phrase uncertainty, phrase column,
+          S "provides an estimate of the confidence with which the physical",
+          S "quantities can be measured. This", phrase information,
+          S "would be part of the input if one were performing an",
           phrase uncertainty, S "quantification exercise"]
-  
+
 s4_2_1_list :: Contents
 s4_2_1_list = enumSimple 1 (short assumption) $ map foldlSent s4_2_1_assump_list
 
@@ -315,7 +317,7 @@ s4_2_1_assump_list = [assump1, assump2, assump3, assump4, assump5, assump7,
   phrase thermal_energy, S "All other forms of", phrase energy
   `sC` S "such as", phrase mech_energy `sC` S "are assumed to be negligible",
   sSqBr (swhsSymbMapTRef t1consThermE)]-}
-  
+
 {-assump2 = [S "All", phrase heat_trans, S "coefficients are constant over",
   phrase time, sSqBr (acroGD "1")]-}
 
@@ -339,11 +341,11 @@ assump7_npcm = [S "The", phrase temp_C, S "is constant over",
 
 assump8 = [S "The", phrase temp_C, S "does not vary along its length",
   sSqBr (swhsSymbMapDRef dd1HtFluxC `sC` acroLC 2)]
-  
+
 -- TODO: Re-implement above when Data Definitions is created.
 
 assump9 = [S "The", phrase model,
-  S "only accounts for charging of the tank" `sC` 
+  S "only accounts for charging of the tank" `sC`
   S "not discharging. The", phrase temp_W, S "can only increase, or remain",
   S "constant; it cannot decrease. This implies that the",
   phrase temp_init, sParen (acroA 12), S "is less than (or equal)",
@@ -355,15 +357,15 @@ assump10 = [(S "operating" +:+ phrase temp +:+ S "range" `ofThe'`
   S "the", phrase temp, S "will not drop below the",
   phrase melt_pt, S "of", phrase water `sC` S "or rise above its",
   phrase boil_pt, sSqBr (acroIM 1)]
-  
+
 assump11 = [S "The", phrase tank, S "is perfectly insulated",
   S "so that there is no", phrase heat, S "loss from the",
   phrase tank, sSqBr ((acroIM 1) `sC` (acroLC 4))]
-  
+
 assump12 = [S "No internal", phrase heat,
-  S "is generated by the", phrase water `semiCol` S "therefore, the", 
+  S "is generated by the", phrase water `semiCol` S "therefore, the",
   phrase vol_ht_gen, S "is zero", sSqBr (acroIM 1)]
-  
+
 {-s4_2_2_TMods :: [Contents]
 s4_2_2_TMods = map (Definition nopcmSymbMap . Theory) [t1consThermE]-}
 
@@ -427,16 +429,16 @@ s4_2_3_eq = (map swhsSymbMapT swhsGenDefs) ++ [
   (C time) := (C ht_flux_in) :* (C in_SA) :- (C ht_flux_out)
   :* (C out_SA) :+ (C vol_ht_gen) :* (C vol))
   ]
-  
+
 s4_2_5_eq :: [Contents]
 s4_2_5_eq = [
-  
+
   foldlSPCol [S "To find the", phrase rOfChng, S "of", getS temp_W `sC`
   S "we look at the", phrase energy, S "balance on" +:+.
   phrase water, S "The", phrase vol, S "being considered" `isThe`
   phrase w_vol, getS w_vol `sC` S "which has", phrase mass,
   getS w_mass, S "and" +:+. (phrase htCap_W `sC` getS htCap_W),
-  at_start heat_trans, S "occurs in the water from the coil as", (getS ht_flux_C 
+  at_start heat_trans, S "occurs in the water from the coil as", (getS ht_flux_C
   `sC` S "over area") +:+. getS coil_SA, S "No",
   phrase heat_trans, S "occurs to", (S "outside" `ofThe`
   phrase tank) `sC` S "since it has been assumed to be",
@@ -444,55 +446,55 @@ s4_2_5_eq = [
   phrase vol_ht_gen +:+. (sParen (acroA 12) `sC`
   E (C vol_ht_gen := Int 0)), S "Therefore, the", phrase equation, S "for",
   acroGD 2, S "can be written as"],
-  
+
   EqnBlock
   ((C w_mass) :* (C htCap_W) :* Deriv Total (C temp_W) (C time) :=
   (C ht_flux_C) :* (C coil_SA)),
-  
+
   foldlSPCol [S "Using", swhsSymbMapDRef dd1HtFluxC `sC`
   S "this can be written as"],
-  
+
   EqnBlock
   ((C w_mass) :* (C htCap_W) :* Deriv Total (C temp_W) (C time) :=
   (C coil_HTC) :* (C coil_SA) :* ((C temp_C) :- (C temp_W))),
-  
+
   foldlSPCol [S "Dividing (3) by", getS w_mass :+: getS htCap_W `sC` S "we obtain"],
-  
+
   EqnBlock
   (Deriv Total (C temp_W) (C time) := ((C coil_HTC) :*
   (C coil_SA)) :/ ((C w_mass) :* (C htCap_W)) :* ((C temp_C) :-
   (C temp_W))),
-  
+
   foldlSPCol [S "Setting", (getS tau_W :+: S "=" :+: getS w_mass :+:
   getS htCap_W :+: S "/" :+: getS coil_HTC :+: getS coil_SA)
   `sC` titleize equation, S "(4) can be written in its final form as"],
-  
+
   EqnBlock
   (Deriv Total (C temp_W) (C time) := (1 / (C tau_W)) :*
   ((C temp_C) :- (C temp_W)))
   ]
 
-s4_2_6_table1 = Table [S "Var", titleize' physicalConstraint, titleize software +:+ 
-  titleize' constraint, S "Typical" +:+ titleize value, titleize uncertainty] 
-  (mkTable [(\x -> x!!0), (\x -> x!!1), (\x -> x!!2), (\x -> x!!3), (\x -> x!!4)] 
+s4_2_6_table1 = Table [S "Var", titleize' physicalConstraint, titleize software +:+
+  titleize' constraint, S "Typical" +:+ titleize value, titleize uncertainty]
+  (mkTable [(\x -> x!!0), (\x -> x!!1), (\x -> x!!2), (\x -> x!!3), (\x -> x!!4)]
   s4_2_6_conListIn) (titleize input_ +:+ titleize' variable) True
-  
+
 s4_2_6_conListIn :: [[Sentence]]
 s4_2_6_conListIn = [con1, con2, con10, con11, con12, con13, con14, con16, con17]
 
-s4_2_6_table2 = Table [S "Var", titleize' physicalConstraint] 
+s4_2_6_table2 = Table [S "Var", titleize' physicalConstraint]
   (mkTable [(\x -> x!!0), (\x -> x!!1)] s4_2_6_conListOut)
   (titleize output_ +:+ titleize' variable) True
-  
+
 s4_2_6_conListOut :: [[Sentence]]
 s4_2_6_conListOut = [con18]
-  
-inputVar :: [QSWrapper]
-inputVar = [qs tank_length, qs diam, qs coil_SA, qs temp_C,  
-   qs w_density, qs htCap_W, qs htFusion, qs temp_init, qs time_final]
-    
 
-    
+inputVar :: [QSWrapper]
+inputVar = [qs tank_length, qs diam, qs coil_SA, qs temp_C,
+   qs w_density, qs htCap_W, qs htFusion, qs temp_init, qs time_final]
+
+
+
 --------------------------
 --Section 5 : REQUIREMENTS
 --------------------------
@@ -517,31 +519,32 @@ s5_1_list = [Enumeration (Simple [(acroR 1, Flat (foldlSentCol
   unit'2Contents,
   phrase] inputVar)
   (titleize input_ +:+ titleize variable +:+ titleize requirement) False),
-  
+
   Enumeration (Simple [(acroR 2, Flat (foldlSent
   [S "Use the", plural input_, S "in", acroR 1, S "to find the",
   phrase mass, S "needed for", acroIM 1, S "to", acroIM 4 `sC`
   S "as follows, where", getS w_vol `isThe` phrase w_vol,
   S "and", getS tank_vol `isThe` phrase tank_vol]))]),
 
-  EqnBlock ((C w_mass) := (C w_vol) * (C w_density) := 
+  EqnBlock ((C w_mass) := (C w_vol) * (C w_density) :=
   (((C diam) / 2) * (C tank_length) * (C w_density))),
-  
+
   Enumeration (Simple [(acroR 3, Flat (foldlSent
-  [S "Verify that the", plural input_, S "satisfy the required", 
+  [S "Verify that the", plural input_, S "satisfy the required",
   phrase physicalConstraint, S "shown in", makeRef s4_2_6_table1]))]),
-  
+
   Enumeration (Simple [(acroR 4, Flat (foldlSent
-  [titleize' output_, S "and", plural input_, plural quantity, S "and derived", 
+  [titleize' output_, S "and", plural input_, plural quantity, S "and derived",
   plural quantity, S "in the following list: the", plural quantity, S "from",
   (acroR 1) `sC` S "the", phrase mass, S "from", acroR 2, S "and", getS tau_W,
   sParen(S "from" +:+ acroIM 1)]))]),
-  
+
   Enumeration (Simple [(acroR 5, Flat (foldlSent
-  [S "Calculate and output the", phrase temp, S "of the", phrase water, 
-  sParen (getS temp_W :+: sParen (getS time)), S "over the", phrase simulation, phrase time]))]),
-  
-  Enumeration (Simple [(acroR 6, Flat (foldlSent 
+  [S "Calculate and output the", phrase temp, S "of the", phrase water,
+  sParen (getS temp_W :+: sParen (getS time)), S "over the", phrase simulation,
+  phrase time]))]),
+
+  Enumeration (Simple [(acroR 6, Flat (foldlSent
   [S "Calculate and", phrase output_, S "the", phrase w_E,
   sParen (getS w_E :+: sParen (getS time)), S "over the",
   phrase simulation, phrase time, sParen (S "from" +:+ acroIM 3)]))])
@@ -556,8 +559,8 @@ s5_1_list = [Enumeration (Simple [(acroR 1, Flat (foldlSentCol
   (S "This problem is small in size and relatively simple")
   (S "Any reasonable implementation will be very quick and use minimal storage.")-}
 
-        
-        
+
+
 ----------------------------
 --Section 6 : LIKELY CHANGES
 ----------------------------
@@ -588,8 +591,8 @@ likeChg4 = [s6_start 11, S "Any real", phrase tank,
   S "cannot be perfectly insulated and will lose",
   phrase heat]
 
-  
-  
+
+
 ----------------------------------------------
 --Section 7:  TRACEABILITY MATRICES AND GRAPHS
 ----------------------------------------------
@@ -637,7 +640,7 @@ s7_row_t1 :: [String]
 s7_row_t1 = s7_theories ++ s7_genDefs ++ s7_dataDefs ++ s7_instaModel
 
 s7_row_header_t1 :: [Sentence]
-s7_row_header_t1 = zipWith itemRefToSent s7_row_t1 
+s7_row_header_t1 = zipWith itemRefToSent s7_row_t1
   (s7_theoriesRef ++ s7_genDefRef ++ s7_dataDefRef ++ s7_instaModelRef)
 
 s7_columns_t1 :: [[String]]
@@ -666,7 +669,7 @@ s7_row_t2 = s7_instaModel ++ s7_data ++ s7_funcReq
 
 --column header
 s7_row_header_t2 :: [Sentence]
-s7_row_header_t2 = zipWith itemRefToSent s7_row_t2 
+s7_row_header_t2 = zipWith itemRefToSent s7_row_t2
   (s7_instaModelRef ++ s7_dataRef ++ s7_funcReqRef)
 
 --row header
@@ -675,7 +678,7 @@ s7_col_header_t2 = zipWith itemRefToSent (s7_instaModel ++ s7_funcReq)
   (s7_instaModelRef ++ s7_funcReqRef)
 
 s7_columns_t2 :: [[String]]
-s7_columns_t2 = [s7_t2_IM1, s7_t2_IM2, s7_t2_R1, 
+s7_columns_t2 = [s7_t2_IM1, s7_t2_IM2, s7_t2_R1,
   s7_t2_R2, s7_t2_R3, s7_t2_R4, s7_t2_R5, s7_t2_R6]
 
 s7_t2_IM1, s7_t2_IM2, s7_t2_R1, s7_t2_R2,
@@ -707,10 +710,11 @@ s7_row_header_t3 = zipWith itemRefToSent s7_assump s7_assumpRef
 
 s7_col_header_t3 = zipWith itemRefToSent
   (s7_theories ++ s7_genDefs ++ s7_dataDefs ++ s7_instaModel ++ s7_likelyChg)
-  (s7_theoriesRef ++ s7_genDefRef ++ s7_dataDefRef ++ s7_instaModelRef ++ s7_likelyChgRef)
+  (s7_theoriesRef ++ s7_genDefRef ++ s7_dataDefRef ++ s7_instaModelRef ++
+  s7_likelyChgRef)
 
 s7_columns_t3 :: [[String]]
-s7_columns_t3 = [s7_t3_T1, s7_t3_GD1, s7_t3_GD2, s7_t3_DD1, 
+s7_columns_t3 = [s7_t3_T1, s7_t3_GD1, s7_t3_GD2, s7_t3_DD1,
   s7_t3_IM1, s7_t3_IM2, s7_t3_LC1, s7_t3_LC2, s7_t3_LC3, s7_t3_LC4]
 
 s7_t3_T1, s7_t3_GD1, s7_t3_GD2, s7_t3_DD1,
@@ -757,18 +761,18 @@ s7_fig1 = Figure (showingCxnBw traceyGraph (titleize' item +:+
 s7_fig2 :: Contents
 s7_fig2 = Figure (showingCxnBw traceyGraph (titleize' requirement `sC`
   titleize' inModel `sC` S "and" +:+ titleize' datumConstraint)) "RTrace.png"
-  
+
   -- Using the SWHS graphs as place holders until ones can be generated for PCM 
 
-  
-  
+
+
 ------------------------------------------
 --Section 8: SPECIFICATION PARAMETER VALUE
 ------------------------------------------
 
 specParamValList :: [QDefinition]
 specParamValList = [tank_length_min, tank_length_max, htTransCoeff_min,
-  w_density_min, w_density_max, htCap_W_min, htCap_W_max, coil_HTC_min, 
+  w_density_min, w_density_max, htCap_W_min, htCap_W_max, coil_HTC_min,
   coil_HTC_max, time_final_max]
 
 s8 = valsOfAuxConstantsF progName specParamValList

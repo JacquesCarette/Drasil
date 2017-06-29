@@ -16,7 +16,7 @@ import Data.Drasil.Concepts.Math (ode, unit_, rOfChng, equation, change, paramet
 import Data.Drasil.Concepts.Software (program, performance)
 import Data.Drasil.Software.Products
 import Data.Drasil.Utils (enumSimple, weave, getS, itemRefToSent, makeListRef,
-  makeTMatrix, mkRefsList, unwrap, refFromType)
+  makeTMatrix, mkRefsList, refFromType)
 
 import Data.Drasil.Quantities.Physics (time, energy)
 import Data.Drasil.Quantities.Math (gradient, surface, uNormalVect, surArea)
@@ -568,8 +568,8 @@ assump18 = [S "The",
 --
 assump19 = [S "The pressure in the", phrase tank,
   S "is atmospheric, so the", phrase melt_pt `sAnd`
-  phrase boil_pt, S "are", S (show 0) :+: Sy (unit_symb temp) `sAnd`
-  S (show 100) :+: Sy (unit_symb temp) `sC` S "respectively",
+  phrase boil_pt, S "are", S (show $ 0 :: Integer) :+: Sy (unit_symb temp) `sAnd`
+  S (show $ 100 :: Integer) :+: Sy (unit_symb temp) `sC` S "respectively",
   sSqBr ((acroIM 1) `sC` (acroIM 3))]
 
 assump20 = [S "When considering the", phrase w_vol, S "in the",
@@ -687,7 +687,7 @@ s4_2_5 = inModelF s4_1
   s4_2_5_IMods
 
 s4_2_5_subpar :: [Contents]
-s4_2_5_subpar = [foldlSP_ [S "The goals",  acroGS 1, S "to",
+s4_2_5_subpar = [foldlSP [S "The goals",  acroGS 1, S "to",
   acroGS 4, S "are solved by", acroIM 1, S "to" +:+.
   acroIM 4, S "The", plural solution, S "for", acroIM 1 `sAnd` acroIM 2,
   S "are coupled since the", phrase solution,

@@ -37,6 +37,12 @@ tmodel :: Fields -> SymbolMap -> RelationConcept -> Contents
 tmodel fs m t = TMod (foldr (mkRelField t m) [] fs) 
   (S "T:" +:+ EmptyS) t --FIXME: Generate reference names here
 
+-- | Create a data definition using a list of fields, SymbolMap, and a 
+-- QDefinition (called automatically by 'SCSSub' program)
+ddefn :: Fields -> SymbolMap -> QDefinition -> Contents
+ddefn fs m d = DDef (foldr (mkQField d m) [] fs) (S "DD:" +:+ EmptyS) d 
+--FIXME: Generate the reference names here
+
 -- | Synonym for easy reading. Model rows are just 'String',['Contents'] pairs
 type ModRow = [(String,[Contents])]
 
@@ -52,18 +58,37 @@ mkRelField t _ l@DefiningEquation fs = (show l, (EqnBlock $ relat t):[]) : fs
 mkRelField t m l@(Description v u intro) fs =
   (show l, Paragraph intro : buildDescription v u t m) : fs
 
+-- | Create the fields for a definition from a QDefinition (used by ddefn)
+mkQField :: QDefinition -> SymbolMap -> Field -> ModRow -> ModRow
+mkQField d _ l@Label fs = (show l, (Paragraph $ at_start d):[]) : fs
+mkQField d _ l@Symbol fs = (show l, (Paragraph $ (P $ d ^. symbol)):[]) : fs
+mkQField d _ l@Units fs = (show l, (Paragraph $ (unit'2Contents d)):[]) : fs
+mkQField d _ l@DefiningEquation fs = (show l, (EqnBlock $ equat d):[]) : fs
+mkQField d m l@(Description v u intro) fs = 
+  (show l, Paragraph intro : buildDDescription v u d m) : fs
+mkQField _ _ _ _ = undefined
+
 -- | Create the description field (if necessary) using the given verbosity and
--- including or ignoring units
+-- including or ignoring units for a model / general definition
 buildDescription :: Verbosity -> InclUnits -> RelationConcept -> SymbolMap -> 
   [Contents]
 buildDescription Succinct _ _ _ = []
 buildDescription Verbose u t m = [Enumeration (Definitions (descPairs u (vars (relat t) m)))]
 
+-- | Create the description field (if necessary) using the given verbosity and
+-- including or ignoring units for a data definition
+buildDDescription :: Verbosity -> InclUnits -> QDefinition -> SymbolMap -> 
+  [Contents]
+buildDDescription Succinct u d _ = [Enumeration (Definitions $ (firstPair u d):[])]
+buildDDescription Verbose u d m = [Enumeration (Definitions 
+  (firstPair u d : descPairs u (vars (equat d) m)))]
+
+
 -- | Used for definitions. The first pair is the symbol of the quantity we are
 -- defining.
 firstPair :: InclUnits -> QDefinition -> ListPair
-firstPair (IgnoreUnits) t  = (P (t ^. symbol), Flat (phrase t))
-firstPair (IncludeUnits) t = (P (t ^. symbol), Flat (phrase t +:+ sParen (unit'2Contents t)))
+firstPair (IgnoreUnits) d  = (P (d ^. symbol), Flat (phrase d))
+firstPair (IncludeUnits) d = (P (d ^. symbol), Flat (phrase d +:+ sParen (unit'2Contents d)))
 
 -- | Create the descriptions for each symbol in the relation/equation
 descPairs :: InclUnits -> [VarChunk] -> [ListPair]

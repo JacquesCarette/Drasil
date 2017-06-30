@@ -192,7 +192,9 @@ lay (Requirement _)   = H.Paragraph (H.EmptyS)  -- need to implement!
 lay (Assumption _)    = H.Paragraph (H.EmptyS)  -- need to implement!
 lay (LikelyChange _)  = H.Paragraph (H.EmptyS)  -- need to implement!
 lay (UnlikelyChange _)= H.Paragraph (H.EmptyS)  -- need to implement!
-lay (TMod ps rf r)       = H.Definition (Theory r) 
+lay (TMod ps rf r)    = H.Definition (Theory r) 
+  (map (\(x,y) -> (x, map lay y)) ps) (spec rf)
+lay (DDef ps rf d)    = H.Definition (Data d)
   (map (\(x,y) -> (x, map lay y)) ps) (spec rf)
 
 -- | Translates lists
@@ -241,15 +243,3 @@ descLines []       = error "No chunks to describe"
 descLines (vc:[])  = (H.N (vc ^. symbol) H.:+: 
   (H.S " is the " H.:+: (spec (phrase $ vc ^. term))))
 descLines (vc:vcs) = descLines (vc:[]) H.:+: H.HARDNL H.:+: descLines vcs
-
---buildModuleDesc :: ModuleChunk -> [H.LayoutObj]
---buildModuleDesc m = [
---  H.List H.Simple
---    [ H.S (bold "Secrets: ") H.:+: (spec $ secret m),
---      H.S (bold "Services: ") H.:+: (spec $ m ^. term),
---      H.S (bold "Implemented By: ") H.:+: (H.S $ getImp $ imp m)
---    ]
---  ]
---  where bold = \x -> "<b>" ++ x ++ "</b>"
---        getImp (Just x) = x
---        getImp Nothing  = "--"

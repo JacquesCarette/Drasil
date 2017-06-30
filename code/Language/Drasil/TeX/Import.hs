@@ -186,6 +186,8 @@ lay x@(Graph ps w h t)    = T.Graph (map (\(y,z) -> (spec y, spec z)) ps)
                               w h (spec t) (spec $ refName x)
 lay (TMod ps r _)         = T.Definition (map (\(x,y) -> (x, map lay y)) ps)
   (spec r)
+lay (DDef ps r _)         = T.Definition (map (\(x,y) -> (x, map lay y)) ps)
+  (spec r)
 
 makeL :: ListType -> T.ListType  
 makeL (Bullet bs)      = T.Enum        $ (map item bs)

@@ -58,11 +58,14 @@ data Contents = Table [Sentence] [[Sentence]] Title Bool
                -- ^ TODO: Fill this one in.
                ------NEW TMOD/DDEF/IM/GD BEGINS HERE------
                ---- FIXME: The above Definition will need to be removed ----
+               ---- FIXME: The below TMod, GDef, IMod, and DDef will need to be
+               --- consolidated into one type (similar to deprecated Definition)
+               --------------------------------------------
                | TMod [(Identifier,[Contents])] RefName RelationConcept -- Ex. (Label, Paragraph $ phrase thing) and Reference name
                | GDef
                | IMod
-               | DDef
-               
+               | DDef [(Identifier,[Contents])] RefName QDefinition --Similar to TMod
+               -------- END TMOD/DDEF/etc. ----------------
 type Identifier = String
 type RefName = Sentence
 

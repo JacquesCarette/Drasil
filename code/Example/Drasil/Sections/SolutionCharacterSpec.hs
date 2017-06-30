@@ -23,7 +23,7 @@ module Drasil.Sections.SolutionCharacterSpec
 import Language.Drasil
 import Data.Drasil.Concepts.Math (equation)
 import Data.Drasil.Concepts.Software (program)
-import Data.Drasil.Utils (foldle)
+import Data.Drasil.Utils (foldle, symbolMapFun)
 import Data.Drasil.SentenceStructures
 import qualified Data.Drasil.Concepts.Documentation as Doc
 import Data.List (find)
@@ -90,6 +90,10 @@ siUQO xs = UnQuantO xs
 compareID :: (NamedIdea a) => a -> String -> Bool
 compareID c1 c2 = (c1 ^. id) == c2
 
+-----------------------
+-- CHECK FOR SECITEM --
+-----------------------
+
 hasTitle :: SecItem -> Bool
 hasTitle (SingularTitle) = True
 hasTitle _               = False
@@ -108,11 +112,27 @@ hasSent _        = False
 
 hasUQI :: SecItem -> Bool
 hasUQI (UnQuantI _) = True
-hasUQI _                  = False
+hasUQI _            = False
 
 hasUQO :: SecItem -> Bool
 hasUQO (UnQuantO _) = True
-hasUQO _                  = False
+hasUQO _            = False
+
+hasDDef :: SecItem -> Bool
+hasDDef (DataDef _) = True
+hasDDef _           = False
+
+hasIMods :: SecItem -> Bool
+hasIMods (IMods _) = True
+hasIMods _         = False
+
+hasTMods :: SecItem -> Bool
+hasTMods (TMods _) = True
+hasTMods _         = False
+
+-----------------
+-- GET SECITEM --
+-----------------
 
 getItem :: (a->Bool) -> [a] -> Maybe a
 getItem func ls = find (func) ls
@@ -139,13 +159,32 @@ getSent Nothing          = []
 
 getUQO :: (Maybe SecItem) -> [UncertQ]
 getUQO (Just (UnQuantO xs)) = xs
-getUQO (Just _)            = []
-getUQO Nothing             = []
+getUQO (Just _)             = []
+getUQO Nothing              = []
 
 getUQI :: (Maybe SecItem) -> [UncertQ]
 getUQI (Just (UnQuantI xs)) = xs
-getUQI (Just _)            = []
-getUQI Nothing             = []
+getUQI (Just _)             = []
+getUQI Nothing              = []
+
+getDDef :: (Maybe SecItem) -> [QDefinition]
+getDDef (Just (DataDef xs)) = xs
+getDDef (Just _)            = []
+getDDef Nothing             = []
+
+getIMods :: (Maybe SecItem) -> [RelationConcept]
+getIMods (Just (IMods xs))   = xs
+getIMods (Just _)            = []
+getIMods Nothing             = []
+
+getTMods :: (Maybe SecItem) -> [RelationConcept]
+getTMods (Just (TMods xs))   = xs
+getTMods (Just _)            = []
+getTMods Nothing             = []
+
+----------------------------
+-- PULL SECITEM FROM LIST --
+----------------------------
 
 pullFunc :: [SecItem] -> (Maybe SecItem -> t) -> (SecItem -> Bool) -> t
 pullFunc xs f g = f (getItem g xs)
@@ -172,6 +211,15 @@ pullUQI xs = pullFunc xs getUQI hasUQI
 pullUQO :: [SecItem] -> [UncertQ]
 pullUQO xs = pullFunc xs getUQO hasUQO
 
+pullDDefs :: [SecItem] -> [QDefinition]
+pullDDefs xs = pullFunc xs getDDef hasDDef
+
+pullIMods :: [SecItem] -> [RelationConcept]
+pullIMods xs = pullFunc xs getIMods hasIMods
+
+pullTMods :: [SecItem] -> [RelationConcept]
+pullTMods xs = pullFunc xs getTMods hasTMods
+
 getID :: SubSec -> String
 getID (SectionModel niname _) = niname ^. id
 
@@ -181,34 +229,34 @@ pullSubSec nameid ls = getItem (\x -> (getID x) == (nameid ^. id)) ls
 -- Section Assembler --
 -----------------------
 
-scsAssembler :: NamedIdea c => c -> [SubSec] -> Section
-scsAssembler progName subsecs = section (titleize' Doc.solutionCharSpec) 
-  [scsIntro progName] subsections
-  where subsections = map (render progName) subsecs 
+scsAssembler :: NamedIdea c => c -> SymbolMap -> [SubSec] -> Section
+scsAssembler progName symbolMap subsecs = section
+  (titleize' Doc.solutionCharSpec) [scsIntro progName] subsections
+  where subsections = map (render progName symbolMap) subsecs 
   --FIXME put in correct order, if out of order for subsections
 
-pdAssembler :: NamedIdea c => c -> SubSec -> [SubSec] -> Section
-pdAssembler progName (SectionModel niname xs) subsecs = section (titleize niname) 
-  [problemDescriptionIntro progName (pullSents xs)] subsections
-  where subsections = map (render progName) subsecs
+pdAssembler :: NamedIdea c => c -> SymbolMap -> SubSec -> [SubSec] -> Section
+pdAssembler progName symbolMap (SectionModel niname xs) subsecs = section
+  (titleize niname) [problemDescriptionIntro progName (pullSents xs)] subsections
+  where subsections = map (render progName symbolMap) subsecs
 
-gsdAssembler :: NamedIdea c => c -> SubSec -> [SubSec] -> Section
-gsdAssembler progName (SectionModel niname _) subsecs = section (titleize niname)
-  [genenralSystemIntro] subsections
-  where subsections = map (render progName) subsecs
+gsdAssembler :: NamedIdea c => c -> SymbolMap -> SubSec -> [SubSec] -> Section
+gsdAssembler progName symbolMap (SectionModel niname _) subsecs = section
+  (titleize niname) [genenralSystemIntro] subsections
+  where subsections = map (render progName symbolMap) subsecs
 
 --------------------
 -- Section Render --
 --------------------
 
-render :: (NamedIdea c) => c -> SubSec -> Section
-render progName item@(SectionModel niname _)
+render :: (NamedIdea c) => c -> SymbolMap -> SubSec -> Section
+render progName symbolMap item@(SectionModel niname _)
     | compareID niname (Doc.assumption ^. id)       = assumptionSect item
-    | compareID niname (Doc.thModel ^. id)          = theoreticalModelSect item progName
-    | compareID niname (Doc.genDefn ^. id)          = generalDefinitionSect item
-    | compareID niname (Doc.inModel ^. id)          = instanceModelSect item
-    | compareID niname (Doc.dataDefn ^. id)         = dataDefinitionSect item
-    | compareID niname (Doc.dataConst ^. id)        = dataConstraintSect item
+    | compareID niname (Doc.thModel ^. id)          = theoreticalModelSect item progName symbolMap
+    | compareID niname (Doc.genDefn ^. id)          = generalDefinitionSect item symbolMap
+    | compareID niname (Doc.inModel ^. id)          = instanceModelSect item symbolMap
+    | compareID niname (Doc.dataDefn ^. id)         = dataDefinitionSect item symbolMap
+    | compareID niname (Doc.dataConst ^. id)        = dataConstraintSect item 
     | compareID niname (Doc.termAndDef ^. id)       = termDefinitionSect item
     | compareID niname (Doc.goalStmt ^. id)         = goalStatementSect item
     | compareID niname (Doc.systemConstraint ^. id) = systemConstraintSect item
@@ -250,28 +298,34 @@ assumptionSect :: SubSec -> Section
 assumptionSect (SectionModel niname xs) = section (titleize' niname)
   (assumpIntro:(pullContents xs)) (pullSections xs)
 
-theoreticalModelSect :: (NamedIdea a) => SubSec -> a -> Section
-theoreticalModelSect (SectionModel niname xs) progName = section
-  (titleize' niname) ((tModIntro progName):(pullContents xs)) (pullSections xs)
+theoreticalModelSect :: (NamedIdea a) => SubSec -> a -> SymbolMap -> Section
+theoreticalModelSect (SectionModel niname xs) progName symbolMap = section
+  (titleize' niname) ((tModIntro progName):((map symMap $ pullTMods xs) ++ 
+  (pullContents xs))) (pullSections xs)
+  where symMap = symbolMapFun symbolMap Theory
 
 --FIXME geenrate tables here
 --s4_2_2_TMods = map cpSymMapT cpTMods
 
-generalDefinitionSect :: SubSec -> Section
-generalDefinitionSect (SectionModel niname xs) = section (titleize' niname)
+generalDefinitionSect :: SubSec -> SymbolMap -> Section
+generalDefinitionSect (SectionModel niname xs) _ = section (titleize' niname)
   ((generalDefinitionIntro contents):contents) (pullSections xs)
   where contents = (pullContents xs)
 
-instanceModelSect :: SubSec -> Section
-instanceModelSect (SectionModel niname xs) = section (titleize' niname)
-  ((iModIntro):(pullContents xs)) (pullSections xs)
+instanceModelSect :: SubSec -> SymbolMap -> Section
+instanceModelSect (SectionModel niname xs) symbolMap = section (titleize' niname)
+  ((iModIntro):((map symMap $ pullIMods xs) ++ 
+  (pullContents xs))) (pullSections xs)
+  where symMap = symbolMapFun symbolMap Theory
 
 --FIXME generate tables here
 --s4_2_5_IMods = map cpSymMapT iModels
 
-dataDefinitionSect :: SubSec -> Section
-dataDefinitionSect (SectionModel niname xs) = section (titleize' niname)
-  ((dataDefinitionIntro $ pullSents xs):(pullContents xs)) (pullSections xs)
+dataDefinitionSect :: SubSec -> SymbolMap -> Section
+dataDefinitionSect (SectionModel niname xs) symbolMap = section (titleize' niname)
+  ((dataDefinitionIntro $ pullSents xs):((map symMap $ pullDDefs xs) ++ 
+  (pullContents xs))) (pullSections xs)
+  where symMap = (symbolMapFun (symbolMap) Data)
 
 --FIXME generate tables here
 --s4_2_4_DDefs = map cpSymMapD cpDDefs
@@ -328,8 +382,8 @@ systemConstraintIntro l = foldlSP l
 problemDescriptionIntro :: NamedIdea c => c -> [Sentence] -> Contents
 problemDescriptionIntro progName []       = problemDescriptionSent progName
   EmptyS EmptyS
-problemDescriptionIntro progName [x]      = Paragraph x
-problemDescriptionIntro progName (x:y:xs) = problemDescriptionSent progName x y
+problemDescriptionIntro _ [x]      = Paragraph x
+problemDescriptionIntro progName (x:y:_) = problemDescriptionSent progName x y
 
 problemDescriptionSent :: NamedIdea c => c -> Sentence -> Sentence -> Contents
 problemDescriptionSent progName start end = foldlSP [start, (short progName), 

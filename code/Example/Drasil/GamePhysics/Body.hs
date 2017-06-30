@@ -23,7 +23,7 @@ import qualified Data.Drasil.Concepts.Math as CM (equation, surface, ode,
   constraint)
 import Data.Drasil.Utils (foldle, 
   makeTMatrix, itemRefToSent, refFromType, makeListRef, enumSimple, 
-  enumBullet, mkRefsList, symbolMapFun)
+  enumBullet, mkRefsList)
 import Data.Drasil.SentenceStructures
 import Data.Drasil.Software.Products
 
@@ -60,7 +60,7 @@ mkSRS = RefSec (RefProg RM.intro [TUnits, tsymb tableOfSymbols, TAandA]) :
   [IPurpose (para1_s2_1_intro), 
   IScope s2_2_intro_p1 s2_2_intro_p2, 
   IChar (S "rigid body dynamics") (S "high school calculus") (EmptyS), 
-  IOrgSec s2_4_intro inModel s4_2_5 EmptyS]) :
+  IOrgSec s2_4_intro inModel s4_2 EmptyS]) :
   map Verbatim [s3, s4, s5, s6, s7, s8, s9]
     where tableOfSymbols = [TSPurpose, TypogConvention[Vector Bold], SymbOrder]
 
@@ -83,12 +83,6 @@ mgBod :: [Section]
 
 cpSymbMap :: SymbolMap
 cpSymbMap = symbolMap cpSymbols
-
-cpSymMapT :: RelationConcept -> Contents 
-cpSymMapT = symbolMapFun cpSymbMap Theory
-
-cpSymMapD :: QDefinition -> Contents 
-cpSymMapD = symbolMapFun cpSymbMap Data
 
 --FIXME: The SRS has been partly switched over to the new docLang, so some of
 -- the sections below are now redundant. I have not removed them yet, because
@@ -161,7 +155,7 @@ s2_4_intro = foldlSent
 --------------------------------------------
 
 s3 :: Section
-s3 = gsdAssembler chipmunk generalSystemDescriptionSect
+s3 = gsdAssembler chipmunk cpSymbMap generalSystemDescriptionSect
   [userCharacteristicSect, systemConstraintSect]
 
 generalSystemDescriptionSect :: SubSec
@@ -205,7 +199,7 @@ s4 = specSysDescr physLib [s4_1, s4_2]
 s4_1 :: Section
 s4_1_intro :: Sentence
 
-s4_1 = pdAssembler chipmunk problemDescriptionSect [termAndDefSect, 
+s4_1 = pdAssembler chipmunk cpSymbMap problemDescriptionSect [termAndDefSect, 
   goalStatementSect]
 
 problemDescriptionSect :: SubSec
@@ -300,13 +294,14 @@ s4_2 :: Section
 -- testing refactoring
 assumSec, tModSec, genDefSec, iModSec, dataDefSec, dataConSec :: SubSec
 assumSec = (sSubSec assumption [(siCon [s4_2_1_list])])
-tModSec = (sSubSec thModel [(siCon s4_2_2_TMods), (siTMod cpTMods)])
+tModSec = (sSubSec thModel [(siTMod cpTMods)])
 genDefSec = (sSubSec genDefn [])
-iModSec = (sSubSec inModel [(siCon s4_2_5_IMods), (siIMod iModels)])
-dataDefSec = (sSubSec dataDefn [(siCon s4_2_4_DDefs), (siSent [s4_2_4_intro]), (siDDef cpDDefs)])
+iModSec = (sSubSec inModel [(siIMod iModels)])
+dataDefSec = (sSubSec dataDefn [(siSent [s4_2_4_intro]), (siDDef cpDDefs)])
 dataConSec = (sSubSec dataConst [(siUQI cpInputConstraints), (siUQO cpOutputConstraints)])
 
-s4_2 = scsAssembler chipmunk [assumSec, tModSec, genDefSec, iModSec, dataDefSec, dataConSec]
+s4_2 = scsAssembler chipmunk cpSymbMap [assumSec, tModSec, genDefSec, iModSec,
+  dataDefSec, dataConSec]
 
 -------------------------
 -- 4.2.1 : Assumptions --
@@ -344,23 +339,12 @@ s4_2_1_list_a = [s4_2_1_assum1, s4_2_1_assum2, s4_2_1_assum3, s4_2_1_assum4, s4_
 -- 4.2.2 : Theoretical Models --
 --------------------------------
 
-s4_2_2 :: Section
-s4_2_2_TMods :: [Contents]
-
-s4_2_2 = thModF (chipmunk) s4_2_2_TMods
-
-s4_2_2_TMods = map cpSymMapT cpTMods
-
 ---------------------------------
 -- 4.2.3 : General Definitions --
 ---------------------------------
 
-s4_2_3 :: Section
 s4_2_3_intro :: Contents
 -- s4_2_3_GDefs :: [Contents]
-
-s4_2_3 = SRS.genDefn ([s4_2_3_intro] {- ++
-  (map Con s4_2_3_GDefs)-}) []
 
 s4_2_3_intro = foldlSP 
   [S "This", (phrase section_), S "collects the laws and", 
@@ -378,27 +362,13 @@ s4_2_3_GDefs = map (Definition . General) gDefs)
 -- 4.2.4 : Data Definitions --
 ------------------------------
 
-s4_2_4 :: Section
 s4_2_4_intro :: Sentence
-s4_2_4_DDefs :: [Contents]
-
-s4_2_4 = dataDefnF s4_2_4_intro s4_2_4_DDefs
-
 s4_2_4_intro = foldlSent [S "The", (phrase CPP.dimension), 
   S "of each", (phrase quantity), S "is also given"]
-
-s4_2_4_DDefs = map cpSymMapD cpDDefs
 
 -----------------------------
 -- 4.2.5 : Instance Models --
 -----------------------------
-
-s4_2_5 :: Section
-s4_2_5_IMods :: [Contents]
-
-s4_2_5 = inModelF s4_1 s4_2_4 s4_2_2 s4_2_3 s4_2_5_IMods
-
-s4_2_5_IMods = map cpSymMapT iModels
 
 ------------------------------
 -- Collision Diagram        --
@@ -414,10 +384,6 @@ secCollisionDiagram = Paragraph $ foldlSent [ S "This section presents an image"
 
 {--fig_1 = Figure (titleize figure +:+ S "1:" +:+ S "Collision between two rigid bodies")
 "CollisionDiagram.png" --}
-------------------------------
--- 4.2.6 : Data Constraints --
-------------------------------
-
 
 
 ------------------------------
@@ -620,7 +586,7 @@ s8_goalstmt = ["GS1", "GS2", "GS3", "GS4"]
 s8_goalstmtRef = makeListRef s4_1_2_list' s4_1
 
 s8_genDef = ["GD1", "GD2", "GD3", "GD4", "GD5", "GD6", "GD7"]
-s8_genDefRef = makeListRef s8_genDef s4_2_3
+s8_genDefRef = makeListRef s8_genDef s4_2
 
 s8_likelyChg = ["LC1", "LC2", "LC3", "LC4"]
 s8_likelyChgRef = makeListRef s6_list' s6

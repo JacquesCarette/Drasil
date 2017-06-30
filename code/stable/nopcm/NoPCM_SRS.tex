@@ -271,6 +271,34 @@ Description & This equation gives the conservation of energy for time varying he
 \subsubsection{General Definitions}
 \label{Sec:GeneDefi}
 This section collects the laws and equations that will be used in deriving the data definitions, which in turn are used to build the instance models.
+~\newline
+\noindent \begin{minipage}{\textwidth}
+\begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
+\toprule \textbf{Refname} & \textbf{T:nwtnCooling}
+\phantomsection 
+\label{T:nwtnCooling}
+\\ \midrule \\
+Label & Newton's law of cooling
+\\ \midrule \\
+Equation & $\mathbf{q}\left(t\right)=h\Delta{}T\left(t\right)$
+\\ \midrule \\
+Description & Newton's law of cooling describes convective cooling from a surface. The law is stated as: the rate of heat loss from a body is proportional to the difference in temperatures between the body and its surroundings. Add Description.
+\\ \bottomrule \end{tabular}
+\end{minipage}\\
+~\newline
+\noindent \begin{minipage}{\textwidth}
+\begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
+\toprule \textbf{Refname} & \textbf{T:rocTempSimp}
+\phantomsection 
+\label{T:rocTempSimp}
+\\ \midrule \\
+Label & Simplified rate of change of temperature
+\\ \midrule \\
+Equation & $mC\frac{dT}{dt}=q_{in}A_{in}-q_{out}A_{out}+gV$
+\\ \midrule \\
+Description & Add Description
+\\ \bottomrule \end{tabular}
+\end{minipage}\\
 Detailed derivation of simplified rate of change of temperature:
 Integrating \hyperref[T:t1ConsThermE]{Definition~T:t1ConsThermE} over a volume ($V$), we have:
 \begin{equation}
@@ -295,7 +323,7 @@ mC\frac{dT}{dt}=q_{in}A_{in}-q_{out}A_{out}+gV
 \subsubsection{Data Definitions}
 \label{Sec:DataDefi}
 This section collects and defines all the data needed to build the instance models. The dimension of each quantity is also given.
-~newline
+~\newline
 \noindent \begin{minipage}{\textwidth}
 \begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
 \toprule \textbf{Refname} & \textbf{DD:ht.flux.C}
@@ -314,6 +342,51 @@ Description & $q_{C}$ is the heat flux into the water from the coil\newline$h_{C
 \subsubsection{Instance Models}
 \label{Sec:InstMode}
 This section transforms the problem defined in Section~\ref{Sec:ProbDesc} into one which is expressed in mathematical terms. It uses concrete symbols defined in Section~\ref{Sec:DataDefi} to replace the abstract symbols in the models identified in Section~\ref{Sec:TheoMode} and Section~\ref{Sec:GeneDefi}.
+~\newline
+\noindent \begin{minipage}{\textwidth}
+\begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
+\toprule \textbf{Refname} & \textbf{T:eBalanceOnWtr}
+\phantomsection 
+\label{T:eBalanceOnWtr}
+\\ \midrule \\
+Label & Energy balance on water to find the temperature of the water
+\\ \midrule \\
+Equation & $\frac{dT_{W}}{dt}=\frac{1}{\tau{}_{W}}\left(T_{C}-T_{W}\left(t\right)+\eta{}\left(T_{P}\left(t\right)-T_{W}\left(t\right)\right)\right)$
+\\ \midrule \\
+Description & $T_{W}$ is the temperature of the water (${}^{\circ}C$). $T_{P}$ is the temperature of the phase change material (${}^{\circ}C$). $T_{C}$ is the temperature of the heating coil (${}^{\circ}C$). $\tau{}_{W}=\frac{m_{W}C_{W}}{h_{C}A_{C}}$ is a constant (s). $\eta{}=\frac{h_{P}A_{P}}{h_{C}A_{C}}$ is a constant (dimensionless). The above equation applies as long as the water is in liquid form, $0<T_{W}<100$ (${}^{\circ}C$) where 0 (${}^{\circ}C$) and 100 (${}^{\circ}C$) are the melting and boiling point temperatures of water, respectively (A14, A19).
+\\ \bottomrule \end{tabular}
+\end{minipage}\\
+Derivation of the energy balance on water:
+To find the rate of change of $T_{W}$, we look at the energy balance on water. The volume being considered is the volume of water $V_{W}$, which has mass $m_{W}$ and specific heat capacity of water, $C_{W}$. Heat transfer occurs in the water from the coil as $q_{C}$, over area $A_{C}$. No heat transfer occurs to the outside of the tank, since it has been assumed to be perfectly insulated (A11). Assuming no volumetric heat generation per unit volume (A12), $g=0$. Therefore, the equation for GD2 can be written as:
+\begin{equation}
+m_{W}C_{W}\frac{dT_{W}}{dt}=q_{C}A_{C}
+\end{equation}
+Using \hyperref[DD:ht.flux.C]{Definition~DD:ht.flux.C}, this can be written as:
+\begin{equation}
+m_{W}C_{W}\frac{dT_{W}}{dt}=h_{C}A_{C}\left(T_{C}-T_{W}\right)
+\end{equation}
+Dividing (3) by $m_{W}$$C_{W}$, we obtain:
+\begin{equation}
+\frac{dT_{W}}{dt}=\frac{h_{C}A_{C}}{m_{W}C_{W}}\left(T_{C}-T_{W}\right)
+\end{equation}
+Setting $\tau{}_{W}$=$m_{W}$$C_{W}$/$h_{C}$$A_{C}$, Equation (4) can be written in its final form as:
+\begin{equation}
+\frac{dT_{W}}{dt}=\frac{1}{\tau{}_{W}}\left(T_{C}-T_{W}\right)
+\end{equation}
+~\newline
+\noindent \begin{minipage}{\textwidth}
+\begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
+\toprule \textbf{Refname} & \textbf{T:heatEInWtr}
+\phantomsection 
+\label{T:heatEInWtr}
+\\ \midrule \\
+Label & Heat energy in the water
+\\ \midrule \\
+Equation & $0=0$
+\\ \midrule \\
+Description & The above equation is derived using T2. $E_{W}$ is the change in thermal energy of the liquid water relative to the energy at the initial temperature ($T_{init}$) (J). $C_{W}$ is the specific heat capacity of liquid water ($\frac{\text{J}}{(\text{kg}{}^{\circ}C)}$) and $m_{W}$ is the mass of the water (kg). The change in temperature is the difference between the temperature at time $t$ (s), $T_{W}$ and the initial temperature, $T_{init}$ (${}^{\circ}C$). This equation applies as long as $0<T_{W}<0$${}^{\circ}C$ (A14, A19).
+\\ \bottomrule \end{tabular}
+\end{minipage}\\
 \subsubsection{Data Constraints}
 \label{Sec:DataCons}
 Table~\ref{Table:Tabl1:InpuVari} and Table~\ref{Table:Tabl2:OutpVari} show the data constraints on the input and output variables, respectively. The column for physical constraints gives the physical limitations on the range of values that can be taken by the variable. The constraints are conservative, to give the user of the model the flexibility to experiment with unusual situations. The column of typical values is intended to provide a feel for a common scenario.
@@ -412,6 +485,133 @@ This problem is small in size and relatively simple, so performance is not a pri
 \item[LC2:]A8 - The temperature of the heating coil will actually change along its length as the water within it cools.
 \item[LC3:]A9 - The model currently only accounts for charging of the tank. A more complete model would also account for discharging of the tank.
 \item[LC4:]A11 - Any real tank cannot be perfectly insulated and will lose heat.
+\end{itemize}
+\section{Traceability Matrices and Graphs}
+\label{Sec:TracMatrandGrap}
+The purpose of the traceability matrices is to provide easy references on what has to be additionally modified if a certain component is changed. Every time a component is changed, the items in the column of that component that are marked with an ``X" should be modified as well. Table~\ref{Table:TracMatrShowtheConnBetwRequandInstMode} shows the dependencies of theoretical models, general definitions, data definitions, and instance models with each other. Table~\ref{Table:TracMatrShowtheConnBetwRequandInstMode} shows the dependencies of instance models, requirements, and data constraints on each other. Table~\ref{Table:TracMatrShowtheConnBetwAssuandOtheItem} shows the dependencies of theoretical models, general definitions, data definitions, instance models, and likely changes on the assumptions.
+\begin{longtable}{l l l l l l l}
+\toprule
+ & T1 (\hyperref[T:t1ConsThermE]{Definition~T:t1ConsThermE}) & GD1 (\hyperref[T:nwtnCooling]{Definition~T:nwtnCooling}) & GD2 (\hyperref[T:rocTempSimp]{Definition~T:rocTempSimp}) & DD1 (\hyperref[DD:ht.flux.C]{Definition~DD:ht.flux.C}) & IM1 (\hyperref[T:eBalanceOnWtr]{Definition~T:eBalanceOnWtr}) & IM2 (\hyperref[T:heatEInWtr]{Definition~T:heatEInWtr})
+\\
+\midrule
+T1 (\hyperref[T:t1ConsThermE]{Definition~T:t1ConsThermE}) &  &  &  &  &  & 
+\\
+GD1 (\hyperref[T:nwtnCooling]{Definition~T:nwtnCooling}) &  &  &  &  &  & 
+\\
+GD2 (\hyperref[T:rocTempSimp]{Definition~T:rocTempSimp}) & X &  &  &  &  & 
+\\
+DD1 (\hyperref[DD:ht.flux.C]{Definition~DD:ht.flux.C}) &  & X &  &  &  & 
+\\
+IM1 (\hyperref[T:eBalanceOnWtr]{Definition~T:eBalanceOnWtr}) &  &  & X & X &  & 
+\\
+IM2 (\hyperref[T:heatEInWtr]{Definition~T:heatEInWtr}) &  &  &  &  &  & 
+\\
+\bottomrule
+\caption{Traceability Matrix Showing the Connections Between Requirements and Instance Models}
+\label{Table:TracMatrShowtheConnBetwRequandInstMode}
+\end{longtable}
+\begin{longtable}{l l l l l l l l l l}
+\toprule
+ & IM1 (\hyperref[T:eBalanceOnWtr]{Definition~T:eBalanceOnWtr}) & IM2 (\hyperref[T:heatEInWtr]{Definition~T:heatEInWtr}) & Data Constraints (Table~\ref{Table:InpuDataCons}) & R1 (Section~\ref{Sec:FuncRequ}) & R2 (Section~\ref{Sec:FuncRequ}) & R3 (Section~\ref{Sec:FuncRequ}) & R4 (Section~\ref{Sec:FuncRequ}) & R5 (Section~\ref{Sec:FuncRequ}) & R6 (Section~\ref{Sec:FuncRequ})
+\\
+\midrule
+IM1 (\hyperref[T:eBalanceOnWtr]{Definition~T:eBalanceOnWtr}) &  &  &  &  &  &  &  &  & 
+\\
+IM2 (\hyperref[T:heatEInWtr]{Definition~T:heatEInWtr}) &  &  &  &  &  &  &  &  & 
+\\
+R1 (Section~\ref{Sec:FuncRequ}) &  &  &  &  &  &  &  &  & 
+\\
+R2 (Section~\ref{Sec:FuncRequ}) &  &  &  & X &  &  &  &  & 
+\\
+R3 (Section~\ref{Sec:FuncRequ}) &  &  & X &  &  &  &  &  & 
+\\
+R4 (Section~\ref{Sec:FuncRequ}) &  &  &  & X & X &  &  &  & 
+\\
+R5 (Section~\ref{Sec:FuncRequ}) & X &  &  &  &  &  &  &  & 
+\\
+R6 (Section~\ref{Sec:FuncRequ}) &  & X &  &  &  &  &  &  & 
+\\
+\bottomrule
+\caption{Traceability Matrix Showing the Connections Between Requirements and Instance Models}
+\label{Table:TracMatrShowtheConnBetwRequandInstMode}
+\end{longtable}
+\begin{longtable}{l l l l l l l l l l l l l l l}
+\toprule
+ & A1 (Section~\ref{Sec:InstMode}) & A2 (Section~\ref{Sec:InstMode}) & A3 (Section~\ref{Sec:InstMode}) & A4 (Section~\ref{Sec:InstMode}) & A5 (Section~\ref{Sec:InstMode}) & A6 (Section~\ref{Sec:InstMode}) & A7 (Section~\ref{Sec:InstMode}) & A8 (Section~\ref{Sec:InstMode}) & A9 (Section~\ref{Sec:InstMode}) & A10 (Section~\ref{Sec:InstMode}) & A11 (Section~\ref{Sec:InstMode}) & A12 (Section~\ref{Sec:InstMode}) & A13 (Section~\ref{Sec:InstMode}) & A14 (Section~\ref{Sec:InstMode})
+\\
+\midrule
+T1 (\hyperref[T:t1ConsThermE]{Definition~T:t1ConsThermE}) & X &  &  &  &  &  &  &  &  &  &  &  &  & 
+\\
+GD1 (\hyperref[T:nwtnCooling]{Definition~T:nwtnCooling}) &  & X &  &  &  &  &  &  &  &  &  &  &  & 
+\\
+GD2 (\hyperref[T:rocTempSimp]{Definition~T:rocTempSimp}) &  &  & X & X & X &  &  &  &  &  &  &  &  & 
+\\
+DD1 (\hyperref[DD:ht.flux.C]{Definition~DD:ht.flux.C}) &  &  &  &  &  & X & X & X &  &  &  &  &  & 
+\\
+IM1 (\hyperref[T:eBalanceOnWtr]{Definition~T:eBalanceOnWtr}) &  &  &  &  &  &  &  &  & X & X &  &  &  & 
+\\
+IM2 (\hyperref[T:heatEInWtr]{Definition~T:heatEInWtr}) &  &  &  &  &  &  &  &  &  & X &  &  &  & 
+\\
+LC1 (Section~\ref{Sec:LikeChan}) &  &  &  &  &  &  & X &  &  &  &  &  &  & 
+\\
+LC2 (Section~\ref{Sec:LikeChan}) &  &  &  &  &  &  &  & X &  &  &  &  &  & 
+\\
+LC3 (Section~\ref{Sec:LikeChan}) &  &  &  &  &  &  &  &  & X &  &  &  &  & 
+\\
+LC4 (Section~\ref{Sec:LikeChan}) &  &  &  &  &  &  &  &  &  &  & X &  &  & 
+\\
+\bottomrule
+\caption{Traceability Matrix Showing the Connections Between Assumptions and Other Items}
+\label{Table:TracMatrShowtheConnBetwAssuandOtheItem}
+\end{longtable}
+The purpose of the traceability graphs is also to provide easy references on what has to be additionally modified if a certain component is changed. The arrows in the graphs represent dependencies. The component at the tail of an arrow is depended on by the component at the head of that arrow. Therefore, if a component is changed, the components that it points to should also be changed. Figure~\ref{Figure:TracGrapShowtheConnBetwItemofDiffSect} shows the dependencies of theoretical models, general definitions, data definitions, instance models, likely changes, and assumptions on each other. Figure~\ref{Figure:TracGrapShowtheConnBetwRequInstModeandDataCons} shows the dependencies of instance models, requirements, and data constraints on each other.
+NOTE: Building a tool to automatically generate the graphical representation of the matrix by scanning the labels and reference can be future work.
+\begin{figure}
+\begin{center}
+\includegraphics{ATrace.png}
+\caption{Traceability Graph Showing the Connections Between Items of Different Sections}
+\label{Figure:TracGrapShowtheConnBetwItemofDiffSect}
+\end{center}
+\end{figure}
+\begin{figure}
+\begin{center}
+\includegraphics{RTrace.png}
+\caption{Traceability Graph Showing the Connections Between Requirements, Instance Models, and Data Constraints}
+\label{Figure:TracGrapShowtheConnBetwRequInstModeandDataCons}
+\end{center}
+\end{figure}
+\section{Values Of Auxiliary Constants}
+\label{Sec:ValuOfAuxiCons}
+This section contains the standard values that are used for calculations in SWHS.
+\begin{longtable}{l l l l}
+\toprule
+Symbol & Description & Value & Unit
+\\
+\midrule
+$L_{min}$ & minimum length of tank & $\frac{1}{10}$ & m
+\\
+$L_{max}$ & maximum length of tank & $50$ & m
+\\
+$h_{min}$ & minimum convective heat transfer coefficient & $0.001$ & $\frac{\text{W}}{(\text{m}^{2}{}^{\circ}C)}$
+\\
+$\rho{}_{W}^{min}$ & minimum density of water & $950$ & $\frac{\text{kg}}{\text{m}^{3}}$
+\\
+$\rho{}_{W}^{max}$ & maximum density of water & $1000$ & $\frac{\text{kg}}{\text{m}^{3}}$
+\\
+$C_{W}^{min}$ & minimum specific heat capacity of water & $4170$ & $\frac{\text{J}}{(\text{kg}{}^{\circ}C)}$
+\\
+$C_{W}^{max}$ & maximum specific heat capacity of water & $4210$ & $\frac{\text{J}}{(\text{kg}{}^{\circ}C)}$
+\\
+$h_{C}^{min}$ & minimum convective heat transfer coefficient between coil and water & $10$ & $\frac{\text{W}}{(\text{m}^{2}{}^{\circ}C)}$
+\\
+$h_{C}^{max}$ & maximum convective heat transfer coefficient between coil and water & $10000$ & $\frac{\text{W}}{(\text{m}^{2}{}^{\circ}C)}$
+\\
+$t_{final}^{max}$ & maximum final time & $86400$ & s
+\\
+\bottomrule
+\caption{Auxiliary Constants}
+\label{Table:AuxiCons}
+\end{longtable}
 \section{References}
 \label{Sec:Refe}
 \begin{itemize}

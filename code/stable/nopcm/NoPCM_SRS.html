@@ -151,10 +151,10 @@ m<sup>2</sup>
 </tr>
 <tr>
 <td>
-C
+C<sup>L</sup>
 </td>
 <td>
-Specific heat capacity
+Specific heat capacity of a liquid
 </td>
 <td>
 J/(kg&deg;C)
@@ -162,10 +162,10 @@ J/(kg&deg;C)
 </tr>
 <tr>
 <td>
-C<sup>L</sup>
+C
 </td>
 <td>
-Specific heat capacity of a liquid
+Specific heat capacity
 </td>
 <td>
 J/(kg&deg;C)
@@ -283,17 +283,6 @@ W/(m<sup>2</sup>)
 </tr>
 <tr>
 <td>
-q<sub>C</sub>
-</td>
-<td>
-Heat flux into the water from the coil
-</td>
-<td>
-W/(m<sup>2</sup>)
-</td>
-</tr>
-<tr>
-<td>
 q<sub>out</sub>
 </td>
 <td>
@@ -309,6 +298,17 @@ W/(m<sup>2</sup>)
 </td>
 <td>
 Thermal flux vector
+</td>
+<td>
+W/(m<sup>2</sup>)
+</td>
+</tr>
+<tr>
+<td>
+q<sub>C</sub>
+</td>
+<td>
+Heat flux into the water from the coil
 </td>
 <td>
 W/(m<sup>2</sup>)
@@ -349,6 +349,28 @@ Temperature of the environment
 </tr>
 <tr>
 <td>
+t
+</td>
+<td>
+Time
+</td>
+<td>
+s
+</td>
+</tr>
+<tr>
+<td>
+t<sub>final</sub>
+</td>
+<td>
+Final time
+</td>
+<td>
+s
+</td>
+</tr>
+<tr>
+<td>
 T<sub>init</sub>
 </td>
 <td>
@@ -367,28 +389,6 @@ Temperature of the water
 </td>
 <td>
 &deg;C
-</td>
-</tr>
-<tr>
-<td>
-t
-</td>
-<td>
-Time
-</td>
-<td>
-s
-</td>
-</tr>
-<tr>
-<td>
-t<sub>final</sub>
-</td>
-<td>
-Time
-</td>
-<td>
-s
 </td>
 </tr>
 <tr>
@@ -595,10 +595,10 @@ Theoretical Model
 Introduction
 </h2>
 <p class="paragraph">
-
+Due to increasing cost, diminishing availability, and negative environmental impact of fossil fuels, there is a higher demand for renewable energy sources and energy storage technology. Solar water heating systems provide a novel way of storing energy.
 </p>
 <p class="paragraph">
-The following section provides an overview of the Software Requirements Specification (SRS) for. This section explains the purpose of this document, the scope of the system, the organization of the document, and the characteristics of the intended reader.
+The following section provides an overview of the Software Requirements Specification (SRS) for solar water heating systems. The developed program will be referred to as Solar Water Heating System (SWHS). This section explains the purpose of this document, the scope of the system, the organization of the document, and the characteristics of the intended reader.
 </p>
 <a id="Sec:PurpofDocu">
 <div class="subsection">
@@ -606,7 +606,7 @@ The following section provides an overview of the Software Requirements Specific
 Purpose of Document
 </h3>
 <p class="paragraph">
-
+The main purpose of this document is to describe the modelling of solar water heating system. The goals and theoretical models used in the SWHS code are provided, with an emphasis on explicitly identifying assumptions and unambiguous definitions. This document is intended to be used as a reference to provide ad hoc access to all information necessary to understand and verify the model. The SRS is abstract because the contents say what problem is being solved, but do not say how to solve it.
 </p>
 <p class="paragraph">
 This document will be used as a starting point for subsequent development phases, including writing the design specification and the software verification and validation plan. The design document will show how the requirements are to be realized, including decisions on the numerical algorithms and programming environment. The verification and validation plan will show the steps that will be used to increase confidence in the software documentation and the implementation. Although the SRS fits in a series of documents that follow the so-called waterfall model, the actual development process is not constrained in any way. Even when the waterfall model is not followed, as Parnas and Clements point out, the most logical way to present the documentation is still to &quot;fake&quot; a rational design process.
@@ -639,10 +639,10 @@ Reviewers of this documentation should have a strong knowledge in heat transfer 
 Organization of Document
 </h3>
 <p class="paragraph">
-The presentation follows the standard pattern of presenting goals, theories, definitions, and assumptions. For readers that would like a more bottom up approach, they can start reading the instance models in <a href=#Sec:InstMode>this Section</a> and trace back to find any additional information they require.
+The organization of this document follows the template for an SRS for scientific computing software proposed by [citation] and [citation]. The presentation follows the standard pattern of presenting goals, theories, definitions, and assumptions. For readers that would like a more bottom up approach, they can start reading the instance models in <a href=#Sec:InstMode>this Section</a> and trace back to find any additional information they require.
 </p>
 <p class="paragraph">
-The goal statements are refined to the theoretical models, and the theoretical models to the instance models.
+The goal statements are refined to the theoretical models, and the theoretical models to the instance models. The instance model (<a href=#Sec:InstMode>this Section</a>) to be solved is referred to as IM1. The instance model provides the Ordinary Differential Equation (ODE) that model the solar water heating system. SWHS solves this ODE.
 </p>
 </div>
 </a>
@@ -662,13 +662,14 @@ This section provides general information about the system, identifies the inter
 System Context
 </h3>
 <p class="paragraph">
-<a href=#Figure::SystCont>this Figure</a> shows the system context. A circle represents an external entity outside the software, the user in this case. A rectangle represents the software system itself (SWHS). Arrows are used to show the data flow between the section and its environment.
+<a href=#Figure::SystCont>this Figure</a> shows the system context. A circle represents an external entity outside the software, the user in this case. A rectangle represents the software system itself (SWHS). Arrows are used to show the data flow between the system and its environment.
 </p>
 <a id="Figure::SystCont">
 <img class="figure" src="SystemContextFigure.png" alt="<a href=#Figure::SystCont>this Figure</a>: System Context"></img>
 <p class="caption">
 <a href=#Figure::SystCont>this Figure</a>: System Context
 </p>
+</a>
 <p class="paragraph">
 SWHS is mostly self-contained. The only external interaction is through the user interface. The responsibilities of the user and the system are as follows:
 </p>
@@ -699,7 +700,6 @@ Calculate the required outputs
 </ul>
 </li>
 </ul>
-</a>
 </div>
 </a>
 <a id="Sec:UserChar">
@@ -708,7 +708,7 @@ Calculate the required outputs
 User Characteristics
 </h3>
 <p class="paragraph">
-
+The end user of SWHS should have an understanding of undergraduate Level 1 Calculus and Physics.
 </p>
 </div>
 </a>
@@ -750,10 +750,16 @@ This subsection provides a list of terms that are used in the subsequent section
 </p>
 <ul class="list">
 <li>
-Heat flux: the rate of heat energy transfer per unit area
+Heat flux: The rate of thermal energy transfer through a given surface per unit time
 </li>
 <li>
-Specific heat: heat capacity per unit mass
+Specific heat capacity: The amount of energy required to raise the temperature of the unit mass of a given substance by a given amount
+</li>
+<li>
+Thermal conduction: The transfer of heat energy through a substance
+</li>
+<li>
+Transient: Changing with time
 </li>
 </ul>
 </div>
@@ -764,7 +770,7 @@ Specific heat: heat capacity per unit mass
 Physical System Description
 </h4>
 <p class="paragraph">
-The physical system of SWHS, as shown in <a href=#Figure:Solawateheattankwithheatfluxfromcoilof>this Figure</a>, includes the following elements:
+The physical system of SWHS, as shown in <a href=#Figure:Solawateheattankwithheatfluxfromheatcoilof>this Figure</a>, includes the following elements:
 </p>
 <div class="list">
 <p>
@@ -774,7 +780,7 @@ PS1: Tank containing water
 PS2: Heating coil at bottom of tank. (q<sub>C</sub> represents the heat flux into the water from the coil.)
 </p>
 </div>
-<a id="Figure:Solawateheattankwithheatfluxfromcoilof">
+<a id="Figure:Solawateheattankwithheatfluxfromheatcoilof">
 <img class="figure" src="TankWaterOnly.png" alt="Solar water heating tank, with heat flux from heating coil of q<sub>C</sub>"></img>
 <p class="caption">
 Solar water heating tank, with heat flux from heating coil of q<sub>C</sub>
@@ -793,6 +799,9 @@ Given the temperature of the heating coil, initial temperature of the water, and
 <div class="list">
 <p>
 GS1: predict the temperature of the water over time
+</p>
+<p>
+GS2: predict the change in heat energy in the water over time
 </p>
 </div>
 </div>
@@ -853,8 +862,6 @@ A11: The tank is perfectly insulated so that there is no heat loss from the tank
 A12: No internal heat is generated by the water; therefore, the volumetric heat generation per unit volume is zero [IM1].
 </p>
 </div>
-865c904
-< This equation gives the conservation of energy for time varying heat transfer in a material of specific heat capacity C and density &rho;, where <b>q</b> is the thermal flux vector, g is the volumetric heat generation, T is the temperature, t is time, and &nabla; is the gradient operator. For this equation to apply, other forms of energy, such as mechanical energy, are assumed to be negligible in the.
 </div>
 </a>
 <a id="Sec:TheoMode">
@@ -902,10 +909,32 @@ Description
 </th>
 <td>
 <p class="paragraph">
-This equation gives the conservation of energy for time varying heat transfer in a material of specific heat capacity C and density &rho;, where <b>q</b> is the thermal flux vector, g is the volumetric heat generation, T is the temperature, t is time, and &nabla; is the gradient operator. For this equation to apply, other forms of energy, such as mechanical energy, are assumed to be negligible in the.
+The above equation gives the law of conservation of energy for transient heat transfer in a material of specific heat capacity C (J/(kg&deg;C)) and density, &rho; (kg/(m<sup>3</sup>)), where <b>q</b> is the thermal flux vector (W/(m<sup>2</sup>)), g is the volumetric heat generation per unit volume (W/(m<sup>3</sup>)), T is the temperature (&deg;C), t is time (s), and &nabla; is the degree of steepness of a graph at any point. For this equation to apply, other forms of energy, such as mechanical energy, are assumed to be negligible in the system (A1).
 </p>
 </td>
 </tr>
+</table>
+</a>
+</div>
+</a>
+<a id="Sec:GeneDefi">
+<div class="subsubsection">
+<h4>
+General Definitions
+</h4>
+<p class="paragraph">
+This section collects the laws and equations that will be used in deriving the data definitions, which in turn are used to build the instance models.
+</p>
+<a id="T:nwtnCooling">
+<table class="tdefn">
+<tr>
+<th>
+Label
+</th>
+<td>
+<p class="paragraph">
+Newton's law of cooling
+</p>
 </td>
 </tr>
 <tr>
@@ -915,11 +944,67 @@ Equation
 <td>
 <a id="">
 <div class="equation">
-q<sub>C</sub> = h<sub>C</sub>(T<sub>C</sub>-T<sub>W</sub>(t))
+<b>q</b>(t)=h&Delta;T(t)
 </div>
 </a>
 </td>
 </tr>
+<tr>
+<th>
+Description
+</th>
+<td>
+<p class="paragraph">
+Newton's law of cooling describes convective cooling from a surface. The law is stated as: the rate of heat loss from a body is proportional to the difference in temperatures between the body and its surroundings. Add Description.
+</p>
+</td>
+</tr>
+</table>
+</a>
+<a id="T:rocTempSimp">
+<table class="tdefn">
+<tr>
+<th>
+Label
+</th>
+<td>
+<p class="paragraph">
+Simplified rate of change of temperature
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Equation
+</th>
+<td>
+<a id="">
+<div class="equation">
+mC<div class="fraction">
+<span class="fup">
+dT
+</span>
+<span class="fdn">
+dt
+</span>
+</div>=q<sub>in</sub>A<sub>in</sub>-q<sub>out</sub>A<sub>out</sub>+gV
+</div>
+</a>
+</td>
+</tr>
+<tr>
+<th>
+Description
+</th>
+<td>
+<p class="paragraph">
+Add Description
+</p>
+</td>
+</tr>
+</table>
+</a>
+<p class="paragraph">
 Detailed derivation of simplified rate of change of temperature:
 </p>
 <p class="paragraph">
@@ -939,6 +1024,7 @@ Integrating <a href=#T:t1ConsThermE>this Definition</a> over a volume (V), we ha
 </a>
 <p class="paragraph">
 Applying Gauss's Divergence Theorem to the first term over the surface S of the volume, with <b>q</b> as the thermal flux vector for the surface and <b>n&#770;</b> as a unit outward normal vector for a surface:
+</p>
 <a id="">
 <div class="equation">
 (-&int;<sub>S</sub>(<b>q</b>&sdot;<b>n&#770;</b>dS))+&int;<sub>V</sub>(gdV)=&int;<sub>V</sub>(&rho;C<div class="fraction">
@@ -1010,37 +1096,21 @@ This section collects and defines all the data needed to build the instance mode
 <table class="ddefn">
 <tr>
 <th>
-Description
-</th>
-<td>
-<p class="paragraph">
-q<sub>C</sub> is the heat flux into the water from the coil<br />h<sub>C</sub> is the convective heat transfer coefficient between coil and water<br />T<sub>C</sub> is the temperature of the heating coil<br />T<sub>W</sub> is the temperature of the water<br />t is the time
-</p>
-</td>
-</tr>
-<a id="DD:ht.flux.C">
-<table class="ddefn">
-<tr>
-<th>
 Label
 </th>
 <td>
-</table>
-</a>
-</table>
-</a>
-</div>
-</a>
-<a id="Sec:GeneDefi">
-<div class="subsubsection">
-<h4>
-General Definitions
-</h4>
 <p class="paragraph">
-This section collects the laws and equations that will be used in deriving the data definitions, which in turn are used to build the instance models.
+q<sub>C</sub>
 </p>
+</td>
+</tr>
+<tr>
+<th>
+Units
+</th>
+<td>
 <p class="paragraph">
-
+W/(m<sup>2</sup>)
 </p>
 </td>
 </tr>
@@ -1054,14 +1124,13 @@ Equation
 q<sub>C</sub> = h<sub>C</sub>(T<sub>C</sub>-T<sub>W</sub>(t))
 </div>
 </a>
-<a id="Sec:DataDefi">
-<div class="subsubsection">
-<h4>
-Data Definitions
-</h4>
-<p class="paragraph">
-This section collects and defines all the data needed to build the instance models. The dimension of each quantity is also given.
-</p>
+</td>
+</tr>
+<tr>
+<th>
+Description
+</th>
+<td>
 <p class="paragraph">
 q<sub>C</sub> is the heat flux into the water from the coil<br />h<sub>C</sub> is the convective heat transfer coefficient between coil and water<br />T<sub>C</sub> is the temperature of the heating coil<br />T<sub>W</sub> is the temperature of the water<br />t is the time
 </p>
@@ -1079,9 +1148,183 @@ Instance Models
 <p class="paragraph">
 This section transforms the problem defined in <a href=#Sec:ProbDesc>this Section</a> into one which is expressed in mathematical terms. It uses concrete symbols defined in <a href=#Sec:DataDefi>this Section</a> to replace the abstract symbols in the models identified in <a href=#Sec:TheoMode>this Section</a> and <a href=#Sec:GeneDefi>this Section</a>.
 </p>
+<a id="T:eBalanceOnWtr">
+<table class="tdefn">
+<tr>
+<th>
+Label
+</th>
+<td>
 <p class="paragraph">
-
+Energy balance on water to find the temperature of the water
 </p>
+</td>
+</tr>
+<tr>
+<th>
+Equation
+</th>
+<td>
+<a id="">
+<div class="equation">
+<div class="fraction">
+<span class="fup">
+dT<sub>W</sub>
+</span>
+<span class="fdn">
+dt
+</span>
+</div>=<div class="fraction">
+<span class="fup">
+1
+</span>
+<span class="fdn">
+&tau;<sub>W</sub>
+</span>
+</div>(T<sub>C</sub>-T<sub>W</sub>(t)+&eta;(T<sub>P</sub>(t)-T<sub>W</sub>(t)))
+</div>
+</a>
+</td>
+</tr>
+<tr>
+<th>
+Description
+</th>
+<td>
+<p class="paragraph">
+T<sub>W</sub> is the temperature of the water (&deg;C). T<sub>P</sub> is the temperature of the phase change material (&deg;C). T<sub>C</sub> is the temperature of the heating coil (&deg;C). &tau;<sub>W</sub>=<div class="fraction">
+<span class="fup">
+m<sub>W</sub>C<sub>W</sub>
+</span>
+<span class="fdn">
+h<sub>C</sub>A<sub>C</sub>
+</span>
+</div> is a constant (s). &eta;=<div class="fraction">
+<span class="fup">
+h<sub>P</sub>A<sub>P</sub>
+</span>
+<span class="fdn">
+h<sub>C</sub>A<sub>C</sub>
+</span>
+</div> is a constant (dimensionless). The above equation applies as long as the water is in liquid form, 0&lt;T<sub>W</sub>&lt;100 (&deg;C) where 0 (&deg;C) and 100 (&deg;C) are the melting and boiling point temperatures of water, respectively (A14, A19).
+</p>
+</td>
+</tr>
+</table>
+</a>
+<p class="paragraph">
+Derivation of the energy balance on water:
+</p>
+<p class="paragraph">
+To find the rate of change of T<sub>W</sub>, we look at the energy balance on water. The volume being considered is the volume of water V<sub>W</sub>, which has mass m<sub>W</sub> and specific heat capacity of water, C<sub>W</sub>. Heat transfer occurs in the water from the coil as q<sub>C</sub>, over area A<sub>C</sub>. No heat transfer occurs to the outside of the tank, since it has been assumed to be perfectly insulated (A11). Assuming no volumetric heat generation per unit volume (A12), g=0. Therefore, the equation for GD2 can be written as:
+</p>
+<a id="">
+<div class="equation">
+m<sub>W</sub>C<sub>W</sub><div class="fraction">
+<span class="fup">
+dT<sub>W</sub>
+</span>
+<span class="fdn">
+dt
+</span>
+</div>=q<sub>C</sub>A<sub>C</sub>
+</div>
+</a>
+<p class="paragraph">
+Using <a href=#DD:ht.flux.C>this Definition</a>, this can be written as:
+</p>
+<a id="">
+<div class="equation">
+m<sub>W</sub>C<sub>W</sub><div class="fraction">
+<span class="fup">
+dT<sub>W</sub>
+</span>
+<span class="fdn">
+dt
+</span>
+</div>=h<sub>C</sub>A<sub>C</sub>(T<sub>C</sub>-T<sub>W</sub>)
+</div>
+</a>
+<p class="paragraph">
+Dividing (3) by m<sub>W</sub>C<sub>W</sub>, we obtain:
+</p>
+<a id="">
+<div class="equation">
+<div class="fraction">
+<span class="fup">
+dT<sub>W</sub>
+</span>
+<span class="fdn">
+dt
+</span>
+</div>=<div class="fraction">
+<span class="fup">
+h<sub>C</sub>A<sub>C</sub>
+</span>
+<span class="fdn">
+m<sub>W</sub>C<sub>W</sub>
+</span>
+</div>(T<sub>C</sub>-T<sub>W</sub>)
+</div>
+</a>
+<p class="paragraph">
+Setting &tau;<sub>W</sub>=m<sub>W</sub>C<sub>W</sub>/h<sub>C</sub>A<sub>C</sub>, Equation (4) can be written in its final form as:
+</p>
+<a id="">
+<div class="equation">
+<div class="fraction">
+<span class="fup">
+dT<sub>W</sub>
+</span>
+<span class="fdn">
+dt
+</span>
+</div>=<div class="fraction">
+<span class="fup">
+1
+</span>
+<span class="fdn">
+&tau;<sub>W</sub>
+</span>
+</div>(T<sub>C</sub>-T<sub>W</sub>)
+</div>
+</a>
+<a id="T:heatEInWtr">
+<table class="tdefn">
+<tr>
+<th>
+Label
+</th>
+<td>
+<p class="paragraph">
+Heat energy in the water
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Equation
+</th>
+<td>
+<a id="">
+<div class="equation">
+0=0
+</div>
+</a>
+</td>
+</tr>
+<tr>
+<th>
+Description
+</th>
+<td>
+<p class="paragraph">
+The above equation is derived using T2. E<sub>W</sub> is the change in thermal energy of the liquid water relative to the energy at the initial temperature (T<sub>init</sub>) (J). C<sub>W</sub> is the specific heat capacity of liquid water (J/(kg&deg;C)) and m<sub>W</sub> is the mass of the water (kg). The change in temperature is the difference between the temperature at time t (s), T<sub>W</sub> and the initial temperature, T<sub>init</sub> (&deg;C). This equation applies as long as 0&lt;T<sub>W</sub>&lt;0&deg;C (A14, A19).
+</p>
+</td>
+</tr>
+</table>
+</a>
 </div>
 </a>
 <a id="Sec:DataCons">
@@ -1090,9 +1333,9 @@ This section transforms the problem defined in <a href=#Sec:ProbDesc>this Sectio
 Data Constraints
 </h4>
 <p class="paragraph">
-<a href=#Table:Tabl1:InpuVari>this Table</a> and <a href=#Table:Tabl2:OutpVari>this Table</a> show the data constraints on the input and output variables, respectively. The column for physical constraints gives the physical limitations on the range of values that can be taken by the variable. The column for software constraints restricts the range of inputs to reasonable values. The constraints are conservative, to give the user of the model the flexibility to experiment with unusual situations. The column of typical values is intended to provide a feel for a common scenario. The uncertainty column provides an estimate of the confidence with which the physical quantities can be measured. This information would be part of the input if one were performing an uncertainty quantification exercise. The uncertainty column provides an estimate of the confidence with which the physical quantities can be measured. This information would be part of the input if one were performing an uncertainty quantification exercise.
+<a href=#Table:InpuDataCons>this Table</a>, and <a href=#Table:OutpDataCons>this Table</a> shows the data constraints on the input and output variables, respectively. The column for physical constraints gives the physical limitations on the range of values that can be taken by the variable. The uncertainty column provides an estimate of the confidence with which the physical quantities can be measured. This information would be part of the input if one were performing an uncertainty quantification exercise. The constraints are conservative, to give the user of the model the flexibility to experiment with unusual situations. The column of typical values is intended to provide a feel for a common scenario. The column for software constraints restricts the range of inputs to reasonable values. The uncertainty column provides an estimate of the confidence with which the physical quantities can be measured. This information would be part of the input if one were performing an uncertainty quantification exercise.
 </p>
-<a id="Table:Tabl1:InpuVari">
+<a id="Table:InpuDataCons">
 <table class="table">
 <tr>
 <th>
@@ -1108,7 +1351,7 @@ Software Constraints
 Typical Value
 </th>
 <th>
-Uncertainty
+Typical Uncertainty
 </th>
 </tr>
 <tr>
@@ -1191,10 +1434,10 @@ T<sub>C</sub>
 0&lt;T<sub>C</sub>&lt;100 (+)
 </td>
 <td>
-
+None
 </td>
 <td>
-50 &deg;C
+50.0 &deg;C
 </td>
 <td>
 0.1
@@ -1211,7 +1454,7 @@ T<sub>C</sub>
 &rho;<sub>W</sub><sup>min</sup>&lt;&rho;<sub>W</sub>&le;&rho;<sub>W</sub><sup>max</sup>
 </td>
 <td>
-1000 kg/(m<sup>3</sup>)
+1000.0 kg/(m<sup>3</sup>)
 </td>
 <td>
 0.1
@@ -1228,7 +1471,7 @@ C<sub>W</sub>&gt;0
 C<sub>W</sub><sup>min</sup>&lt;C<sub>W</sub>&lt;C<sub>W</sub><sup>max</sup>
 </td>
 <td>
-4186 J/(kg&deg;C)
+4186.0 J/(kg&deg;C)
 </td>
 <td>
 0.1
@@ -1245,7 +1488,7 @@ h<sub>C</sub>&gt;0
 h<sub>C</sub><sup>min</sup>&le;h<sub>C</sub>&le;h<sub>C</sub><sup>max</sup>
 </td>
 <td>
-1000 W/(m<sup>2</sup>&deg;C)
+1000.0 W/(m<sup>2</sup>&deg;C)
 </td>
 <td>
 0.1
@@ -1256,13 +1499,13 @@ h<sub>C</sub><sup>min</sup>&le;h<sub>C</sub>&le;h<sub>C</sub><sup>max</sup>
 T<sub>init</sub>
 </td>
 <td>
-0&lt;T<sub>init</sub>&lt;T<sub>melt</sub> (+)
+0&lt;T<sub>init</sub>&lt;T<sub>melt</sub>
 </td>
 <td>
-
+None
 </td>
 <td>
-40 &deg;C
+40.0 &deg;C
 </td>
 <td>
 0.1
@@ -1276,10 +1519,10 @@ t<sub>final</sub>
 t<sub>final</sub>&gt;0
 </td>
 <td>
-t<sub>final</sub>&lt;t<sub>final</sub><sup>max</sup> (**)
+t<sub>final</sub>&lt;t<sub>final</sub><sup>max</sup>
 </td>
 <td>
-50000 s
+50000.0 s
 </td>
 <td>
 0.1

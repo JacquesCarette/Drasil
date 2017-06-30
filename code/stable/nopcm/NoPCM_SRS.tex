@@ -77,11 +77,11 @@ $q$ & Heat flux & $\frac{\text{W}}{\text{m}^{2}}$
 \\
 $q_{in}$ & Heat flux input & $\frac{\text{W}}{\text{m}^{2}}$
 \\
-$q_{C}$ & Heat flux into the water from the coil & $\frac{\text{W}}{\text{m}^{2}}$
-\\
 $q_{out}$ & Heat flux output & $\frac{\text{W}}{\text{m}^{2}}$
 \\
 $\mathbf{q}$ & Thermal flux vector & $\frac{\text{W}}{\text{m}^{2}}$
+\\
+$q_{C}$ & Heat flux into the water from the coil & $\frac{\text{W}}{\text{m}^{2}}$
 \\
 $T$ & Temperature & ${}^{\circ}C$
 \\
@@ -89,13 +89,13 @@ $T_{C}$ & Temperature of the heating coil & ${}^{\circ}C$
 \\
 $T_{env}$ & Temperature of the environment & ${}^{\circ}C$
 \\
+$t$ & Time & s
+\\
+$t_{final}$ & Final time & s
+\\
 $T_{init}$ & Initial temperature & ${}^{\circ}C$
 \\
 $T_{W}$ & Temperature of the water & ${}^{\circ}C$
-\\
-$t$ & Time & s
-\\
-$t_{final}$ & Time & s
 \\
 $V_{tank}$ & Volume of the cylindrical tank & $\text{m}^{3}$
 \\
@@ -150,9 +150,11 @@ T & Theoretical Model
 \end{longtable*}
 \section{Introduction}
 \label{Sec:Intr}
-The following section provides an overview of the Software Requirements Specification (SRS) for. This section explains the purpose of this document, the scope of the system, the organization of the document, and the characteristics of the intended reader.
+Due to increasing cost, diminishing availability, and negative environmental impact of fossil fuels, there is a higher demand for renewable energy sources and energy storage technology. Solar water heating systems provide a novel way of storing energy.
+The following section provides an overview of the Software Requirements Specification (SRS) for solar water heating systems. The developed program will be referred to as Solar Water Heating System (SWHS). This section explains the purpose of this document, the scope of the system, the organization of the document, and the characteristics of the intended reader.
 \subsection{Purpose of Document}
 \label{Sec:PurpofDocu}
+The main purpose of this document is to describe the modelling of solar water heating system. The goals and theoretical models used in the SWHS code are provided, with an emphasis on explicitly identifying assumptions and unambiguous definitions. This document is intended to be used as a reference to provide ad hoc access to all information necessary to understand and verify the model. The SRS is abstract because the contents say what problem is being solved, but do not say how to solve it.
 This document will be used as a starting point for subsequent development phases, including writing the design specification and the software verification and validation plan. The design document will show how the requirements are to be realized, including decisions on the numerical algorithms and programming environment. The verification and validation plan will show the steps that will be used to increase confidence in the software documentation and the implementation. Although the SRS fits in a series of documents that follow the so-called waterfall model, the actual development process is not constrained in any way. Even when the waterfall model is not followed, as Parnas and Clements point out, the most logical way to present the documentation is still to ``fake" a rational design process.
 \subsection{Scope of Requirements}
 \label{Sec:ScopofRequ}
@@ -320,23 +322,23 @@ Table~\ref{Table:Tabl1:InpuVari} and Table~\ref{Table:Tabl2:OutpVari} show the d
 Var & Physical Constraints & Software Constraints & Typical Value & Uncertainty
 \\
 \midrule
-$L$ & $L>0$ & $L_{min}\leq{}L\leq{}L_{max}$ & $1.5$ m & 10%
+$L$ & $L>0$ & $L_{min}\leq{}L\leq{}L_{max}$ & $1.5$ m & 0.1
 \\
-$D$ & $D>0$ & $\frac{D}{L_{max}}\leq{}\frac{D}{L}\leq{}\frac{D}{L_{min}}$ & $0.412$ m & 10%
+$D$ & $D>0$ & $\frac{D}{L_{max}}\leq{}\frac{D}{L}\leq{}\frac{D}{L_{min}}$ & $0.412$ m & 0.1
 \\
-$A_{C}$ & $A_{C}>0$ (*) & $A_{C}\leq{}A_{C}^{max}$ & $0.12$ $\text{m}^{2}$ & 10%
+$A_{C}$ & $A_{C}>0$ (*) & $A_{C}\leq{}A_{C}^{max}$ & $0.12$ $\text{m}^{2}$ & 0.1
 \\
-$T_{C}$ & $0<T_{C}<100$ (+) &  & $50$ ${}^{\circ}C$ & 10%
+$T_{C}$ & $0<T_{C}<100$ (+) &  & $50$ ${}^{\circ}C$ & 0.1
 \\
-$\rho{}_{W}$ & $\rho{}_{W}>0$ & $\rho{}_{W}^{min}<\rho{}_{W}\leq{}\rho{}_{W}^{max}$ & $1000$ $\frac{\text{kg}}{\text{m}^{3}}$ & 10%
+$\rho{}_{W}$ & $\rho{}_{W}>0$ & $\rho{}_{W}^{min}<\rho{}_{W}\leq{}\rho{}_{W}^{max}$ & $1000$ $\frac{\text{kg}}{\text{m}^{3}}$ & 0.1
 \\
-$C_{W}$ & $C_{W}>0$ & $C_{W}^{min}<C_{W}<C_{W}^{max}$ & $4186$ $\frac{\text{J}}{(\text{kg}{}^{\circ}C)}$ & 10%
+$C_{W}$ & $C_{W}>0$ & $C_{W}^{min}<C_{W}<C_{W}^{max}$ & $4186$ $\frac{\text{J}}{(\text{kg}{}^{\circ}C)}$ & 0.1
 \\
-$h_{C}$ & $h_{C}>0$ & $h_{C}^{min}\leq{}h_{C}\leq{}h_{C}^{max}$ & $1000$ $\frac{\text{W}}{(\text{m}^{2}{}^{\circ}C)}$ & 10%
+$h_{C}$ & $h_{C}>0$ & $h_{C}^{min}\leq{}h_{C}\leq{}h_{C}^{max}$ & $1000$ $\frac{\text{W}}{(\text{m}^{2}{}^{\circ}C)}$ & 0.1
 \\
-$T_{init}$ & $0<T_{init}<T_{melt}$ (+) &  & $40$ ${}^{\circ}C$ & 10%
+$T_{init}$ & $0<T_{init}<T_{melt}$ (+) &  & $40$ ${}^{\circ}C$ & 0.1
 \\
-$t_{final}$ & $t_{final}>0$ & $t_{final}<t_{final}^{max}$ (**) & $50000$ s & 10%
+$t_{final}$ & $t_{final}>0$ & $t_{final}<t_{final}^{max}$ (**) & $50000$ s & 0.1
 \\
 \bottomrule
 \caption{Table 1: Input Variables}

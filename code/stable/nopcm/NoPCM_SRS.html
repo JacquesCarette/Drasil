@@ -1125,7 +1125,7 @@ L<sub>min</sub>&le;L&le;L<sub>max</sub>
 1.5 m
 </td>
 <td>
-10%
+0.1
 </td>
 </tr>
 <tr>
@@ -1163,7 +1163,7 @@ L<sub>min</sub>
 0.412 m
 </td>
 <td>
-10%
+0.1
 </td>
 </tr>
 <tr>
@@ -1180,7 +1180,7 @@ A<sub>C</sub>&le;A<sub>C</sub><sup>max</sup>
 0.12 m<sup>2</sup>
 </td>
 <td>
-10%
+0.1
 </td>
 </tr>
 <tr>
@@ -1197,7 +1197,7 @@ T<sub>C</sub>
 50 &deg;C
 </td>
 <td>
-10%
+0.1
 </td>
 </tr>
 <tr>
@@ -1214,7 +1214,7 @@ T<sub>C</sub>
 1000 kg/(m<sup>3</sup>)
 </td>
 <td>
-10%
+0.1
 </td>
 </tr>
 <tr>
@@ -1231,7 +1231,7 @@ C<sub>W</sub><sup>min</sup>&lt;C<sub>W</sub>&lt;C<sub>W</sub><sup>max</sup>
 4186 J/(kg&deg;C)
 </td>
 <td>
-10%
+0.1
 </td>
 </tr>
 <tr>
@@ -1248,7 +1248,7 @@ h<sub>C</sub><sup>min</sup>&le;h<sub>C</sub>&le;h<sub>C</sub><sup>max</sup>
 1000 W/(m<sup>2</sup>&deg;C)
 </td>
 <td>
-10%
+0.1
 </td>
 </tr>
 <tr>
@@ -1265,7 +1265,7 @@ T<sub>init</sub>
 40 &deg;C
 </td>
 <td>
-10%
+0.1
 </td>
 </tr>
 <tr>
@@ -1282,15 +1282,15 @@ t<sub>final</sub>&lt;t<sub>final</sub><sup>max</sup> (**)
 50000 s
 </td>
 <td>
-10%
+0.1
 </td>
 </tr>
 </table>
 <p class="caption">
-Table 1: Input Variables
+Input Data Constraints
 </p>
 </a>
-<a id="Table:Tabl2:OutpVari">
+<a id="Table:OutpDataCons">
 <table class="table">
 <tr>
 <th>
@@ -1303,9 +1303,31 @@ Physical Constraints
 Typical Value
 </th>
 </tr>
+<tr>
+<td>
+T<sub>W</sub>
+</td>
+<td>
+T<sub>init</sub>&le;T<sub>W</sub>&le;T<sub>C</sub>
+</td>
+<td>
+0.0 &deg;C
+</td>
+</tr>
+<tr>
+<td>
+E<sub>W</sub>
+</td>
+<td>
+E<sub>W</sub>&ge;0
+</td>
+<td>
+0.0 J
+</td>
+</tr>
 </table>
 <p class="caption">
-Table 2: Output Variables
+Output Data Constraints
 </p>
 </a>
 </div>
@@ -1413,13 +1435,13 @@ specific heat capacity of water
 </tr>
 <tr>
 <td>
-H<sub>f</sub>
+h<sub>C</sub>
 </td>
 <td>
-J/kg
+W/(m<sup>2</sup>&deg;C)
 </td>
 <td>
-specific latent heat of fusion
+convective heat transfer coefficient between coil and water
 </td>
 </tr>
 <tr>
@@ -1465,7 +1487,7 @@ D
 </a>
 <div class="list">
 <p>
-R3: Verify that the inputs satisfy the required physical constraint shown in <a href=#Table:Tabl1:InpuVari>this Table</a>.
+R3: Verify that the inputs satisfy the required physical constraint shown in <a href=#Table:InpuDataCons>this Table</a>.
 </p>
 </div>
 <div class="list">
@@ -1476,6 +1498,11 @@ R4: Outputs and inputs quantities and derived quantities in the following list: 
 <div class="list">
 <p>
 R5: Calculate and output the temperature of the water (T<sub>W</sub>(t)) over the simulation time.
+</p>
+</div>
+<div class="list">
+<p>
+R6: Calculate and output the change in heat energy in the water (E<sub>W</sub>(t)) over the simulation time (from IM3).
 </p>
 </div>
 </div>
@@ -1511,6 +1538,1199 @@ LC3: A9 - The model currently only accounts for charging of the tank. A more com
 LC4: A11 - Any real tank cannot be perfectly insulated and will lose heat.
 </p>
 </div>
+</div>
+</a>
+<a id="Sec:TracMatrandGrap">
+<div class="section">
+<h2>
+Traceability Matrices and Graphs
+</h2>
+<p class="paragraph">
+The purpose of the traceability matrices is to provide easy references on what has to be additionally modified if a certain component is changed. Every time a component is changed, the items in the column of that component that are marked with an &quot;X&quot; should be modified as well. <a href=#Table:TracMatrShowtheConnBetwRequandInstMode>this Table</a> shows the dependencies of theoretical models, general definitions, data definitions, and instance models with each other. <a href=#Table:TracMatrShowtheConnBetwRequandInstMode>this Table</a> shows the dependencies of instance models, requirements, and data constraints on each other. <a href=#Table:TracMatrShowtheConnBetwAssuandOtheItem>this Table</a> shows the dependencies of theoretical models, general definitions, data definitions, instance models, and likely changes on the assumptions.
+</p>
+<a id="Table:TracMatrShowtheConnBetwRequandInstMode">
+<table class="table">
+<tr>
+<th>
+
+</th>
+<th>
+T1 (<a href=#T:t1ConsThermE>this Definition</a>)
+</th>
+<th>
+GD1 (<a href=#T:nwtnCooling>this Definition</a>)
+</th>
+<th>
+GD2 (<a href=#T:rocTempSimp>this Definition</a>)
+</th>
+<th>
+DD1 (<a href=#DD:ht.flux.C>this Definition</a>)
+</th>
+<th>
+IM1 (<a href=#T:eBalanceOnWtr>this Definition</a>)
+</th>
+<th>
+IM2 (<a href=#T:heatEInWtr>this Definition</a>)
+</th>
+</tr>
+<tr>
+<td>
+T1 (<a href=#T:t1ConsThermE>this Definition</a>)
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+</tr>
+<tr>
+<td>
+GD1 (<a href=#T:nwtnCooling>this Definition</a>)
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+</tr>
+<tr>
+<td>
+GD2 (<a href=#T:rocTempSimp>this Definition</a>)
+</td>
+<td>
+X
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+</tr>
+<tr>
+<td>
+DD1 (<a href=#DD:ht.flux.C>this Definition</a>)
+</td>
+<td>
+
+</td>
+<td>
+X
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+</tr>
+<tr>
+<td>
+IM1 (<a href=#T:eBalanceOnWtr>this Definition</a>)
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+X
+</td>
+<td>
+X
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+</tr>
+<tr>
+<td>
+IM2 (<a href=#T:heatEInWtr>this Definition</a>)
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+</tr>
+</table>
+<p class="caption">
+Traceability Matrix Showing the Connections Between Requirements and Instance Models
+</p>
+</a>
+<a id="Table:TracMatrShowtheConnBetwRequandInstMode">
+<table class="table">
+<tr>
+<th>
+
+</th>
+<th>
+IM1 (<a href=#T:eBalanceOnWtr>this Definition</a>)
+</th>
+<th>
+IM2 (<a href=#T:heatEInWtr>this Definition</a>)
+</th>
+<th>
+Data Constraints (<a href=#Table:InpuDataCons>this Table</a>)
+</th>
+<th>
+R1 (<a href=#Sec:FuncRequ>this Section</a>)
+</th>
+<th>
+R2 (<a href=#Sec:FuncRequ>this Section</a>)
+</th>
+<th>
+R3 (<a href=#Sec:FuncRequ>this Section</a>)
+</th>
+<th>
+R4 (<a href=#Sec:FuncRequ>this Section</a>)
+</th>
+<th>
+R5 (<a href=#Sec:FuncRequ>this Section</a>)
+</th>
+<th>
+R6 (<a href=#Sec:FuncRequ>this Section</a>)
+</th>
+</tr>
+<tr>
+<td>
+IM1 (<a href=#T:eBalanceOnWtr>this Definition</a>)
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+</tr>
+<tr>
+<td>
+IM2 (<a href=#T:heatEInWtr>this Definition</a>)
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+</tr>
+<tr>
+<td>
+R1 (<a href=#Sec:FuncRequ>this Section</a>)
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+</tr>
+<tr>
+<td>
+R2 (<a href=#Sec:FuncRequ>this Section</a>)
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+X
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+</tr>
+<tr>
+<td>
+R3 (<a href=#Sec:FuncRequ>this Section</a>)
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+X
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+</tr>
+<tr>
+<td>
+R4 (<a href=#Sec:FuncRequ>this Section</a>)
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+X
+</td>
+<td>
+X
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+</tr>
+<tr>
+<td>
+R5 (<a href=#Sec:FuncRequ>this Section</a>)
+</td>
+<td>
+X
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+</tr>
+<tr>
+<td>
+R6 (<a href=#Sec:FuncRequ>this Section</a>)
+</td>
+<td>
+
+</td>
+<td>
+X
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+</tr>
+</table>
+<p class="caption">
+Traceability Matrix Showing the Connections Between Requirements and Instance Models
+</p>
+</a>
+<a id="Table:TracMatrShowtheConnBetwAssuandOtheItem">
+<table class="table">
+<tr>
+<th>
+
+</th>
+<th>
+A1 (<a href=#Sec:InstMode>this Section</a>)
+</th>
+<th>
+A2 (<a href=#Sec:InstMode>this Section</a>)
+</th>
+<th>
+A3 (<a href=#Sec:InstMode>this Section</a>)
+</th>
+<th>
+A4 (<a href=#Sec:InstMode>this Section</a>)
+</th>
+<th>
+A5 (<a href=#Sec:InstMode>this Section</a>)
+</th>
+<th>
+A6 (<a href=#Sec:InstMode>this Section</a>)
+</th>
+<th>
+A7 (<a href=#Sec:InstMode>this Section</a>)
+</th>
+<th>
+A8 (<a href=#Sec:InstMode>this Section</a>)
+</th>
+<th>
+A9 (<a href=#Sec:InstMode>this Section</a>)
+</th>
+<th>
+A10 (<a href=#Sec:InstMode>this Section</a>)
+</th>
+<th>
+A11 (<a href=#Sec:InstMode>this Section</a>)
+</th>
+<th>
+A12 (<a href=#Sec:InstMode>this Section</a>)
+</th>
+<th>
+A13 (<a href=#Sec:InstMode>this Section</a>)
+</th>
+<th>
+A14 (<a href=#Sec:InstMode>this Section</a>)
+</th>
+</tr>
+<tr>
+<td>
+T1 (<a href=#T:t1ConsThermE>this Definition</a>)
+</td>
+<td>
+X
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+</tr>
+<tr>
+<td>
+GD1 (<a href=#T:nwtnCooling>this Definition</a>)
+</td>
+<td>
+
+</td>
+<td>
+X
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+</tr>
+<tr>
+<td>
+GD2 (<a href=#T:rocTempSimp>this Definition</a>)
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+X
+</td>
+<td>
+X
+</td>
+<td>
+X
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+</tr>
+<tr>
+<td>
+DD1 (<a href=#DD:ht.flux.C>this Definition</a>)
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+X
+</td>
+<td>
+X
+</td>
+<td>
+X
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+</tr>
+<tr>
+<td>
+IM1 (<a href=#T:eBalanceOnWtr>this Definition</a>)
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+X
+</td>
+<td>
+X
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+</tr>
+<tr>
+<td>
+IM2 (<a href=#T:heatEInWtr>this Definition</a>)
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+X
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+</tr>
+<tr>
+<td>
+LC1 (<a href=#Sec:LikeChan>this Section</a>)
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+X
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+</tr>
+<tr>
+<td>
+LC2 (<a href=#Sec:LikeChan>this Section</a>)
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+X
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+</tr>
+<tr>
+<td>
+LC3 (<a href=#Sec:LikeChan>this Section</a>)
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+X
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+</tr>
+<tr>
+<td>
+LC4 (<a href=#Sec:LikeChan>this Section</a>)
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+X
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+</tr>
+</table>
+<p class="caption">
+Traceability Matrix Showing the Connections Between Assumptions and Other Items
+</p>
+</a>
+<p class="paragraph">
+The purpose of the traceability graphs is also to provide easy references on what has to be additionally modified if a certain component is changed. The arrows in the graphs represent dependencies. The component at the tail of an arrow is depended on by the component at the head of that arrow. Therefore, if a component is changed, the components that it points to should also be changed. <a href=#Figure:TracGrapShowtheConnBetwItemofDiffSect>this Figure</a> shows the dependencies of theoretical models, general definitions, data definitions, instance models, likely changes, and assumptions on each other. <a href=#Figure:TracGrapShowtheConnBetwRequInstModeandDataCons>this Figure</a> shows the dependencies of instance models, requirements, and data constraints on each other.
+</p>
+<p class="paragraph">
+NOTE: Building a tool to automatically generate the graphical representation of the matrix by scanning the labels and reference can be future work.
+</p>
+<a id="Figure:TracGrapShowtheConnBetwItemofDiffSect">
+<img class="figure" src="ATrace.png" alt="Traceability Graph Showing the Connections Between Items of Different Sections"></img>
+<p class="caption">
+Traceability Graph Showing the Connections Between Items of Different Sections
+</p>
+</a>
+<a id="Figure:TracGrapShowtheConnBetwRequInstModeandDataCons">
+<img class="figure" src="RTrace.png" alt="Traceability Graph Showing the Connections Between Requirements, Instance Models, and Data Constraints"></img>
+<p class="caption">
+Traceability Graph Showing the Connections Between Requirements, Instance Models, and Data Constraints
+</p>
+</a>
+</div>
+</a>
+<a id="Sec:ValuOfAuxiCons">
+<div class="section">
+<h2>
+Values Of Auxiliary Constants
+</h2>
+<p class="paragraph">
+This section contains the standard values that are used for calculations in SWHS.
+</p>
+<a id="Table:AuxiCons">
+<table class="table">
+<tr>
+<th>
+Symbol
+</th>
+<th>
+Description
+</th>
+<th>
+Value
+</th>
+<th>
+Unit
+</th>
+</tr>
+<tr>
+<td>
+L<sub>min</sub>
+</td>
+<td>
+minimum length of tank
+</td>
+<td>
+<div class="fraction">
+<span class="fup">
+1
+</span>
+<span class="fdn">
+10
+</span>
+</div>
+</td>
+<td>
+m
+</td>
+</tr>
+<tr>
+<td>
+L<sub>max</sub>
+</td>
+<td>
+maximum length of tank
+</td>
+<td>
+50
+</td>
+<td>
+m
+</td>
+</tr>
+<tr>
+<td>
+h<sub>min</sub>
+</td>
+<td>
+minimum convective heat transfer coefficient
+</td>
+<td>
+0.001
+</td>
+<td>
+W/(m<sup>2</sup>&deg;C)
+</td>
+</tr>
+<tr>
+<td>
+&rho;<sub>W</sub><sup>min</sup>
+</td>
+<td>
+minimum density of water
+</td>
+<td>
+950
+</td>
+<td>
+kg/(m<sup>3</sup>)
+</td>
+</tr>
+<tr>
+<td>
+&rho;<sub>W</sub><sup>max</sup>
+</td>
+<td>
+maximum density of water
+</td>
+<td>
+1000
+</td>
+<td>
+kg/(m<sup>3</sup>)
+</td>
+</tr>
+<tr>
+<td>
+C<sub>W</sub><sup>min</sup>
+</td>
+<td>
+minimum specific heat capacity of water
+</td>
+<td>
+4170
+</td>
+<td>
+J/(kg&deg;C)
+</td>
+</tr>
+<tr>
+<td>
+C<sub>W</sub><sup>max</sup>
+</td>
+<td>
+maximum specific heat capacity of water
+</td>
+<td>
+4210
+</td>
+<td>
+J/(kg&deg;C)
+</td>
+</tr>
+<tr>
+<td>
+h<sub>C</sub><sup>min</sup>
+</td>
+<td>
+minimum convective heat transfer coefficient between coil and water
+</td>
+<td>
+10
+</td>
+<td>
+W/(m<sup>2</sup>&deg;C)
+</td>
+</tr>
+<tr>
+<td>
+h<sub>C</sub><sup>max</sup>
+</td>
+<td>
+maximum convective heat transfer coefficient between coil and water
+</td>
+<td>
+10000
+</td>
+<td>
+W/(m<sup>2</sup>&deg;C)
+</td>
+</tr>
+<tr>
+<td>
+t<sub>final</sub><sup>max</sup>
+</td>
+<td>
+maximum final time
+</td>
+<td>
+86400
+</td>
+<td>
+s
+</td>
+</tr>
+</table>
+<p class="caption">
+Auxiliary Constants
+</p>
+</a>
 </div>
 </a>
 <a id="Sec:Refe">

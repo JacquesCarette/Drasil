@@ -7,12 +7,11 @@ import Drasil.NoPCM.Definitions (ht_trans, srs_swhs)
 
 import Drasil.SWHS.Body (s2_3_knowlegde, s2_3_understanding, s2_4_intro,
   s3, physSyst1, physSyst2, s4_2_4_intro_end, s4_2_5_d1startPara, assump1,
-  assump2, assump7, con1, con2, con10, con11, con12, con13, con14, con16,
-  con17, con18, con20, s5_2, s6_start, s7_trailing, ref2, ref3, ref4, ref5, ref6)
+  assump2, assump7, s5_2, s6_start, s7_trailing, ref2, ref3, ref4, ref5, ref6)
 import Drasil.SWHS.Concepts (progName, water, gauss_div, sWHT, tank, coil,
   transient, perfect_insul)
 import Drasil.SWHS.Unitals (w_vol, tank_length, tank_vol, tau_W, temp_W, w_mass,
-  diam, coil_SA, temp_C, w_density, htCap_W, htFusion, temp_init, time_final,
+  diam, coil_SA, temp_C, w_density, htCap_W, temp_init, time_final,
   in_SA, out_SA, vol_ht_gen, thFluxVect, ht_flux_in, ht_flux_out, tau, htCap_L,
   htTransCoeff, temp_env, diam, tank_length, w_vol, ht_flux_C, coil_HTC, temp_diff,
   w_E, tank_length_min, tank_length_max, htTransCoeff_min, w_density_min,
@@ -475,24 +474,26 @@ s4_2_5_eq4 = Deriv Total (C temp_W) (C time) := (1 / (C tau_W)) :*
 
 s4_2_5_equation = map EqnBlock [s4_2_5_eq1, s4_2_5_eq2, s4_2_5_eq3, s4_2_5_eq4]
 
-s4_2_6_table1 = Table [S "Var", titleize' physicalConstraint, titleize software +:+
-  titleize' constraint, S "Typical" +:+ titleize value, titleize uncertainty]
-  (mkTable [(\x -> x!!0), (\x -> x!!1), (\x -> x!!2), (\x -> x!!3), (\x -> x!!4)]
-  s4_2_6_conListIn) (titleize input_ +:+ titleize' variable) True
+s4_2_6_table1 = inDataConstTbl s4_2_6_conListIn
+-- s4_2_6_table1 = Table [S "Var", titleize' physicalConstraint, titleize software +:+
+  -- titleize' constraint, S "Typical" +:+ titleize value, titleize uncertainty]
+  -- (mkTable [(\x -> x!!0), (\x -> x!!1), (\x -> x!!2), (\x -> x!!3), (\x -> x!!4)]
+  -- s4_2_6_conListIn) (titleize input_ +:+ titleize' variable) True
 
-s4_2_6_conListIn :: [[Sentence]]
-s4_2_6_conListIn = [con1, con2, con10, con11, con12, con13, con14, con16, con17]
+s4_2_6_conListIn :: [UncertQ]
+s4_2_6_conListIn = [tank_length, diam, coil_SA, temp_C, w_density, htCap_W,
+  coil_HTC, temp_init, time_final]
 
-s4_2_6_table2 = Table [S "Var", titleize' physicalConstraint]
-  (mkTable [(\x -> x!!0), (\x -> x!!1)] s4_2_6_conListOut)
-  (titleize output_ +:+ titleize' variable) True
+s4_2_6_table2 = outDataConstTbl s4_2_6_conListOut
+-- s4_2_6_table2 = Table [S "Var", titleize' physicalConstraint]
+  -- (mkTable [(\x -> x!!0), (\x -> x!!1)] s4_2_6_conListOut)
+  -- (titleize output_ +:+ titleize' variable) True
 
-s4_2_6_conListOut :: [[Sentence]]
-s4_2_6_conListOut = [con18, con20]
+s4_2_6_conListOut :: [UncertQ]
+s4_2_6_conListOut = [temp_W, w_E]
 
 inputVar :: [QSWrapper]
-inputVar = [qs tank_length, qs diam, qs coil_SA, qs temp_C,
-   qs w_density, qs htCap_W, qs htFusion, qs temp_init, qs time_final]
+inputVar = map qs s4_2_6_conListIn
 
 
 

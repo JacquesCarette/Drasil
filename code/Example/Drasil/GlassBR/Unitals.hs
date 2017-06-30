@@ -21,15 +21,14 @@ mod_elas :: UnitalChunk
 mod_elas    = uc' "mod_elas"      (nounPhraseSP "modulus of elasticity of glass")
   "The ratio of tensile stress to tensile strain of glass." cE kilopascal
 
-
-
 {--}
 
 gbConstrained :: [ConstrWrapper]
 gbConstrained = map cnstrw gbInputs ++ map cnstrw [prob_br]
 
 plate_len, plate_width, char_weight, standOffDist:: UncertQ
-pb_tol, tNT, glass_type, nom_thick :: ConstrainedChunk
+pb_tol, tNT :: UncertainChunk
+glass_type, nom_thick:: ConstrainedChunk
 
 {--}
 
@@ -39,8 +38,11 @@ defaultUncrt = 0.1
 gbInputs_ :: [UncertQ]
 gbInputs_ = [plate_len, plate_width, char_weight, standOffDist]
 
-gbInputs :: [ConstrainedChunk]
-gbInputs = [pb_tol, tNT, nom_thick, glass_type]
+gbInputs :: [UncertainChunk]
+gbInputs = [pb_tol, tNT]
+
+gbInputs_' :: [ConstrainedChunk]
+gbInputs_' = [glass_type, nom_thick]
 
 plate_len = uqcND "plate_len" (nounPhraseSP "plate length (long dimension)")
   lA millimetre Real 
@@ -58,10 +60,10 @@ plate_width = uqcND "plate_width" (nounPhraseSP "plate width (short dimension)")
     sfwrc $ \c -> c :<= (C dim_max),
     sfwrc $ \c -> ((C plate_len) :/ c) :< (C ar_max) ] (Dbl 1200) defaultUncrt
 
-pb_tol = cvc "pb_tol" (nounPhraseSP "tolerable probability of breakage") 
+pb_tol = uvc "pb_tol" (nounPhraseSP "tolerable probability of breakage") 
   (sub cP (Atomic "btol")) Real
   [ physc $ \c -> (Dbl 0) :< c ,
-    physc $ \c -> c :< (Dbl 1) ] (Dbl 0.008)
+    physc $ \c -> c :< (Dbl 1) ] (Dbl 0.008) defaultUncrt
 
 char_weight = uqcND "char_weight" (nounPhraseSP "charge weight") 
   lW kilogram Real
@@ -69,9 +71,9 @@ char_weight = uqcND "char_weight" (nounPhraseSP "charge weight")
     sfwrc $ \c -> (C cWeightMax) :<= c,
     sfwrc $ \c -> c :<= (C cWeightMin) ] (Dbl 42) defaultUncrt
 
-tNT = cvc "tNT" (nounPhraseSP "TNT equivalent factor")
+tNT = uvc "tNT" (nounPhraseSP "TNT equivalent factor")
   (Atomic "TNT") Integer
-  [ physc $ \c -> c :> (Dbl 0) ] (Int 1)
+  [ physc $ \c -> c :> (Dbl 0) ] (Int 1) defaultUncrt
 
 standOffDist = uqcND "standOffDist" (nounPhraseSP "stand off distance") 
   (Atomic "SD") metre Real

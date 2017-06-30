@@ -156,12 +156,12 @@ s2_4_intro = foldlSent
 --------------------------------------------
 
 s3 :: Section
-s3 = gsdAssembler chipmunk cpSymbMap generalSystemDescriptionSect
-  [userCharacteristicSect, systemConstraintSect]
+s3 = specSysDescr physLib [s4_1, s4_2]
+--s3 = gsdAssembler chipmunk cpSymbMap generalSystemDescriptionSect
+--  [userCharacteristicSect, systemConstraintSect]
 
-generalSystemDescriptionSect :: SubSec
-generalSystemDescriptionSect = sSubSec generalSystemDescription []
-
+--generalSystemDescriptionSect :: SubSec
+--generalSystemDescriptionSect = sSubSec generalSystemDescription []
 
 
 --------------------------------

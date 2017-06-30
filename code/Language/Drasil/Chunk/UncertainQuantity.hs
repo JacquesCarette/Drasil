@@ -3,9 +3,11 @@
 module Language.Drasil.Chunk.UncertainQuantity 
   ( UncertQ
   , UncertainQuantity(..)
+  , UncertainChunk(..)
   , uq, uqNU
   , uqc, uqcNU
   , uqcND
+  , uncrtnChunk, uvc
   ) where
   
 import Language.Drasil.Chunk
@@ -96,22 +98,22 @@ uqcND nam trm sym un space cs val uncrt = uq
 {--}
 
 data UncertainChunk where 
-  UC :: (Quantity c, Constrained c, SymbolForm c) => c
+  UCh :: (Quantity c, Constrained c, SymbolForm c) => c
         -> Maybe Double -> UncertainChunk
 
 instance Eq UncertainChunk where
-  (UC c1 _) == (UC c2 _) = (c1 ^. id) == (c2 ^. id)
+  (UCh c1 _) == (UCh c2 _) = (c1 ^. id) == (c2 ^. id)
 instance Chunk UncertainChunk where
   id = cLens id
 instance NamedIdea UncertainChunk where
   term = cLens term
-  getA (UC n _) = getA n
+  getA (UCh n _) = getA n
 instance Quantity UncertainChunk where
   typ = cLens typ
-  getSymb (UC c _) = getSymb c
-  getUnit (UC c _) = getUnit c
+  getSymb (UCh c _) = getSymb c
+  getUnit (UCh c _) = getUnit c
 instance UncertainQuantity UncertainChunk where --makes sense?
-  uncert f (UC a b) = fmap (\x -> UC a x) (f b)
+  uncert f (UCh a b) = fmap (\x -> UCh a x) (f b)
 instance Constrained UncertainChunk where
   constraints = cLens constraints
   reasVal = cLens reasVal
@@ -121,17 +123,17 @@ instance SymbolForm UncertainChunk where
 -- DO NOT Export cLens
 cLens :: (forall c. (Quantity c, Constrained c, SymbolForm c) =>
   Simple Lens c a) -> Simple Lens UncertainChunk a
-cLens l f (UC q u) = fmap (\x -> UC (set l x q) u) (f (q ^. l))
+cLens l f (UCh q u) = fmap (\x -> UCh (set l x q) u) (f (q ^. l))
 
 {-- Constructors --}
 -- | The UncertainQuantity constructor. Requires a Quantity, a percentage, and a typical value
-uc :: (Quantity c, Constrained c, SymbolForm c) =>
+uncrtnChunk :: (Quantity c, Constrained c, SymbolForm c) =>
   c -> Double -> UncertainChunk
-uc q u = UC q (Just u)
+uncrtnChunk q u = UCh q (Just u)
 
 -- | Creates an uncertain varchunk
 uvc :: String -> NP -> Symbol 
                 -> Space -> [Constraint]
                 -> Expr -> Double -> UncertainChunk
-uvc nam trm sym space cs val uncrt = uc
+uvc nam trm sym space cs val uncrt = uncrtnChunk
   (cvc nam trm sym space cs val) uncrt

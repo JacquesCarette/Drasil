@@ -36,7 +36,7 @@ module Language.Drasil (
   -- Chunk.Eq
   , QDefinition(..), fromEqn, fromEqn', getVC, equat
   -- Chunk.UncertainQuantity
-  , UncertainQuantity(..), UncertQ, uq, uqNU, uqc, uqcNU, uqcND
+  , UncertainQuantity(..), UncertainChunk(..), UncertQ, uq, uqNU, uqc, uqcNU, uqcND, uncrtnChunk, uvc
   -- Chunk.Unital
   , UnitalChunk(..), makeUCWDS, ucFromCV
   , uc, uc', ucs, ucs', ucsWS

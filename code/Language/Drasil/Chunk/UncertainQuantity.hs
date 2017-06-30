@@ -137,3 +137,33 @@ uvc :: String -> NP -> Symbol
                 -> Expr -> Double -> UncertainChunk
 uvc nam trm sym space cs val uncrt = uncrtnChunk
   (cvc nam trm sym space cs val) uncrt
+
+---
+-- UncertainWrapper for wrapping anything that is constrained
+data UncertainWrapper where
+  UncrtnW :: (Constrained c, SymbolForm c, UncertainQuantity c) => c -> UncertainWrapper
+
+instance Chunk UncertainWrapper where
+  id = uwlens id
+instance Eq UncertainWrapper where
+  a == b = (a ^. id) == (b ^. id)
+instance Constrained UncertainWrapper where
+  constraints = uwlens constraints
+  reasVal = uwlens reasVal
+instance NamedIdea UncertainWrapper where
+  term = uwlens term
+  getA (UncrtnW a) = getA a
+instance SymbolForm UncertainWrapper where
+  symbol = uwlens symbol
+instance Quantity UncertainWrapper where
+  getSymb (UncrtnW a) = getSymb a
+  getUnit (UncrtnW a) = getUnit a
+  typ = uwlens typ
+
+uncrtnw :: (Constrained c, SymbolForm c, UncertainQuantity c) => c -> UncertainWrapper
+uncrtnw = UncrtnW
+
+-- do not export
+uwlens :: (forall c. (Constrained c, SymbolForm c, UncertainQuantity c) => 
+  Simple Lens c a) -> Simple Lens UncertainWrapper a
+uwlens l f (UncrtnW a) = fmap (\x -> UncrtnW (set l x a)) (f (a ^. l))

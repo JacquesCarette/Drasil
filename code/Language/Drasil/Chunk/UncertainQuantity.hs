@@ -86,9 +86,52 @@ uqcNU :: (Unit u) => String -> NP -> String -> Symbol -> u
 uqcNU nam trm desc sym un space cs val = uqNU $
   cuc' nam trm desc sym un space cs val
 
---uncertainty quanity constraint no discription
+--uncertainty quanity constraint no description
 uqcND :: (Unit u) => String -> NP -> Symbol -> u 
                   -> Space -> [Constraint]
                   -> Expr -> Double -> UncertQ
 uqcND nam trm sym un space cs val uncrt = uq
   (cuc' nam trm "" sym un space cs val) uncrt
+
+
+
+data UncertainChunk where 
+  UC :: (Quantity c, Constrained c, SymbolForm c) => c
+        -> Maybe Double -> UncertainChunk
+
+instance Eq UncertainChunk where
+  (UC c1 _) == (UC c2 _) = (c1 ^. id) == (c2 ^. id)
+instance Chunk UncertainChunk where
+  id = newLens id
+instance NamedIdea UncertainChunk where
+  term = newLens term
+  getA (UC n _) = getA n
+instance Quantity UncertainChunk where
+  typ = newLens typ
+  getSymb (UC c _) = getSymb c
+  getUnit (UC c _) = getUnit c
+instance UncertainQuantity UncertainChunk where --makes sense?
+  uncert f (UC a b) = fmap (\x -> UC a x) (f b)
+instance Constrained UncertainChunk where
+  constraints = newLens constraints
+  reasVal = newLens reasVal
+instance SymbolForm UncertainChunk where
+  symbol = newLens symbol
+
+-- DO NOT Export newLens
+newLens :: (forall c. (Quantity c, Constrained c, SymbolForm c) =>
+  Simple Lens c a) -> Simple Lens UncertainChunk a
+newLens l f (UC q u) = fmap (\x -> UC (set l x q) u) (f (q ^. l))
+
+{-- Constructors --}
+-- | The UncertainQuantity constructor. Requires a Quantity, a percentage, and a typical value
+uc :: (Quantity c, Constrained c, SymbolForm c) =>
+  c -> Double -> UncertainChunk
+uc q u = UC q (Just u)
+
+-- | Creates an uncertain varchunk
+uvc :: String -> NP -> Symbol 
+                -> Space -> [Constraint]
+                -> Expr -> Double -> UncertainChunk
+uvc nam trm sym space cs val uncrt = uc
+  (cvc nam trm sym space cs val) uncrt

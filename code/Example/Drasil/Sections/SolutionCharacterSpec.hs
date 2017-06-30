@@ -7,6 +7,7 @@ module Drasil.Sections.SolutionCharacterSpec
   sSubSec,
   scsAssembler,
   pdAssembler,
+  gsdAssembler,
   siCon,
   siSect,
   siTMod,
@@ -48,6 +49,10 @@ data SubSec where
 
 sSubSec :: (NamedIdea c) => c -> [SecItem] -> SubSec
 sSubSec sectionName xs = SectionModel sectionName xs
+
+--------------------------
+-- SECITEM CONSTRUCTORS --
+--------------------------
 
 siCon :: [Contents] -> SecItem
 siCon xs = Cont xs
@@ -187,16 +192,10 @@ pdAssembler progName (SectionModel niname xs) subsecs = section (titleize niname
   [problemDescriptionIntro progName (pullSents xs)] subsections
   where subsections = map (render progName) subsecs
 
-problemDescriptionIntro :: NamedIdea c => c -> [Sentence] -> Contents
-problemDescriptionIntro progName []       = problemDescriptionSent progName EmptyS EmptyS
-problemDescriptionIntro progName [x]      = Paragraph x
-problemDescriptionIntro progName (x:y:xs) = problemDescriptionSent progName x y
-
-problemDescriptionSent :: NamedIdea c => c -> Sentence -> Sentence -> Contents
-problemDescriptionSent progName start end = foldlSP [start, (short progName), 
-  S "is a computer", (phrase program), S "developed to", end]
-
-
+gsdAssembler :: NamedIdea c => c -> SubSec -> [SubSec] -> Section
+gsdAssembler progName (SectionModel niname _) subsecs = section (titleize niname)
+  [genenralSystemIntro] subsections
+  where subsections = map (render progName) subsecs
 
 --------------------
 -- Section Render --
@@ -204,28 +203,36 @@ problemDescriptionSent progName start end = foldlSP [start, (short progName),
 
 render :: (NamedIdea c) => c -> SubSec -> Section
 render progName item@(SectionModel niname _)
-    | compareID niname (Doc.assumption ^. id)     = assumptionSect item
-    | compareID niname (Doc.thModel ^. id)        = theoreticalModelSect item progName
-    | compareID niname (Doc.genDefn ^. id)        = generalDefinitionSect item
-    | compareID niname (Doc.inModel ^. id)        = instanceModelSect item
-    | compareID niname (Doc.dataDefn ^. id)       = dataDefinitionSect item
-    | compareID niname (Doc.dataConst ^. id)      = dataConstraintSect item
-    | compareID niname (Doc.termAndDef ^. id)     = termDefinitionSect item
-    | compareID niname (Doc.goalStmt ^. id)       = goalStatementSect item
-    | otherwise                                   = genericSect item
+    | compareID niname (Doc.assumption ^. id)       = assumptionSect item
+    | compareID niname (Doc.thModel ^. id)          = theoreticalModelSect item progName
+    | compareID niname (Doc.genDefn ^. id)          = generalDefinitionSect item
+    | compareID niname (Doc.inModel ^. id)          = instanceModelSect item
+    | compareID niname (Doc.dataDefn ^. id)         = dataDefinitionSect item
+    | compareID niname (Doc.dataConst ^. id)        = dataConstraintSect item
+    | compareID niname (Doc.termAndDef ^. id)       = termDefinitionSect item
+    | compareID niname (Doc.goalStmt ^. id)         = goalStatementSect item
+    | compareID niname (Doc.systemConstraint ^. id) = systemConstraintSect item
+    | otherwise                                     = genericSect item
 
 ------------------------------
 -- Section Render Functions --
 ------------------------------
 
 genericSect :: SubSec -> Section
-genericSect (SectionModel niname xs) = section ((pullTitle xs) niname) (pullContents xs)
-  (pullSections xs)
+genericSect (SectionModel niname xs) = section ((pullTitle xs) niname)
+  (pullContents xs) (pullSections xs)
 
+------------------------------------------------
+-- GENERAL SYSTEM DESCRIPTION SECTION BUILDER --
+------------------------------------------------
 
----------------------------------
--- Specific System Description --
----------------------------------
+systemConstraintSect :: SubSec -> Section
+systemConstraintSect (SectionModel niname xs) = section (titleize' niname)
+  ((systemConstraintIntro (pullSents xs)):(pullContents xs)) (pullSections xs)
+
+-------------------------------------------------
+-- Specific System Description SECTION BUILDER --
+-------------------------------------------------
 
 termDefinitionSect :: SubSec -> Section
 termDefinitionSect (SectionModel niname xs) = section (titleize' niname)
@@ -235,21 +242,17 @@ goalStatementSect :: SubSec -> Section
 goalStatementSect (SectionModel niname xs) = section (titleize' niname)
   ((goalStatementIntro (pullSents xs)):(pullContents xs)) (pullSections xs)
 
-goalStatementIntro :: [Sentence] -> Contents
-goalStatementIntro inputs = foldlSP [S "Given", 
-  ((foldlList inputs) `sC` S "the"), plural Doc.goalStmt +: S "are"]
-
--------------------------------------------
--- Solution Characteristic Specification --
--------------------------------------------
+-----------------------------------------------------------
+-- Solution Characteristic Specification SECTION BUILDER --
+-----------------------------------------------------------
 
 assumptionSect :: SubSec -> Section
 assumptionSect (SectionModel niname xs) = section (titleize' niname)
   (assumpIntro:(pullContents xs)) (pullSections xs)
 
 theoreticalModelSect :: (NamedIdea a) => SubSec -> a -> Section
-theoreticalModelSect (SectionModel niname xs) progName = section (titleize' niname) 
-  ((tModIntro progName):(pullContents xs)) (pullSections xs)
+theoreticalModelSect (SectionModel niname xs) progName = section
+  (titleize' niname) ((tModIntro progName):(pullContents xs)) (pullSections xs)
 
 --FIXME geenrate tables here
 --s4_2_2_TMods = map cpSymMapT cpTMods
@@ -282,14 +285,59 @@ dataConstraintSect (SectionModel niname xs) = section (titleize' niname)
 --FIXME generate tables here
 --
 
-scsIntro :: (NamedIdea c) => c -> Contents
-scsIntro progName = foldlSP [S "The", plural Doc.inModel, 
-  S "that govern", short progName, S "are presented in" +:+. 
-  S "FIXME REF to IModSection", S "The", phrase Doc.information, S "to understand", 
-  (S "meaning" `ofThe` plural Doc.inModel), 
-  S "and their derivation is also presented, so that the", plural Doc.inModel, 
-  S "can be verified"]
+--------------------------------------------
+-- CONTENT BUILDING FUNCTIONS & CONSTANTS --
+--------------------------------------------
 
+--------------------------------
+-- GENERAL SYSTEM DESCRIPTION --
+--------------------------------
+
+genenralSystemIntro :: Contents
+genenralSystemIntro = foldlSP [S "This", phrase Doc.section_, S "provides general",
+  phrase Doc.information, S "about the", phrase Doc.system `sC` S "identifies",
+  S "the interfaces between the", phrase Doc.system, S "and its", 
+  phrase Doc.environment `sC` S "and describes the", plural Doc.userCharacteristic, 
+  S "and the", plural Doc.systemConstraint]
+
+--------------------------
+-- USER CHARACTERISTICS --
+--------------------------
+
+
+
+
+------------------------
+-- SYSTEM CONSTRAINTS --
+------------------------
+
+systemConstraintIntro :: [Sentence] -> Contents
+systemConstraintIntro [] = Paragraph (S "There are no" +:+.
+  plural Doc.systemConstraint)
+systemConstraintIntro l = foldlSP l
+
+
+---------------------------------
+-- SPECIFIC SYSTEM DESCRIPTION --
+---------------------------------
+
+-------------------------
+-- PROBLEM DESCRIPTION --
+-------------------------
+
+problemDescriptionIntro :: NamedIdea c => c -> [Sentence] -> Contents
+problemDescriptionIntro progName []       = problemDescriptionSent progName
+  EmptyS EmptyS
+problemDescriptionIntro progName [x]      = Paragraph x
+problemDescriptionIntro progName (x:y:xs) = problemDescriptionSent progName x y
+
+problemDescriptionSent :: NamedIdea c => c -> Sentence -> Sentence -> Contents
+problemDescriptionSent progName start end = foldlSP [start, (short progName), 
+  S "is a computer", (phrase program), S "developed to", end]
+
+--------------------------
+-- TERM AND DEFINITIONS --
+--------------------------
 
 termDefinitionIntro :: [Sentence] -> Contents
 termDefinitionIntro end = Paragraph $ foldle (+:+) (+:+) (EmptyS)
@@ -299,12 +347,41 @@ termDefinitionIntro end = Paragraph $ foldle (+:+) (+:+) (EmptyS)
   S "and making it easier to correctly understand the", plural Doc.requirement, 
   foldlSent end]
 
+--------------------
+-- GOAL STATEMENT --
+--------------------
+
+goalStatementIntro :: [Sentence] -> Contents
+goalStatementIntro inputs = Paragraph $ foldl (+:+) EmptyS [S "Given", 
+  (inputToSystem inputs), plural Doc.goalStmt +: S "are"]
+  where inputToSystem [] = S "the inputs" `sC` S "the" --FIXME add ref input variables if none are given?
+        inputToSystem listInputs = (foldlList listInputs) `sC` S "the"
+
+
+-------------------------------------------
+-- SOLUTION CHARACTERISTIC SPECIFICATION --
+-------------------------------------------
+
+scsIntro :: (NamedIdea c) => c -> Contents
+scsIntro progName = foldlSP [S "The", plural Doc.inModel, 
+  S "that govern", short progName, S "are presented in" +:+. 
+  S "FIXME REF to IModSection", S "The", phrase Doc.information, S "to understand", 
+  (S "meaning" `ofThe` plural Doc.inModel), 
+  S "and their derivation is also presented, so that the", plural Doc.inModel, 
+  S "can be verified"]
+
+
+-----------------
+-- ASSUMPTIONS --
+-----------------
+
 -- takes a bunch of references to things discribed in the wrapper
 assumpIntro :: Contents
 assumpIntro = Paragraph $ foldlSent 
-  [S "This", (phrase Doc.section_), S "simplifies the original", (phrase Doc.problem), 
-  S "and helps in developing the", (phrase Doc.thModel), S "by filling in the", 
-  S "missing", (phrase Doc.information), S "for the" +:+. (phrase Doc.physicalSystem), 
+  [S "This", (phrase Doc.section_), S "simplifies the original", 
+  (phrase Doc.problem), S "and helps in developing the", (phrase Doc.thModel), 
+  S "by filling in the", S "missing", (phrase Doc.information), S "for the" +:+. 
+  (phrase Doc.physicalSystem), 
   S "The numbers given in the square brackets refer to the", 
   foldr1 sC (map (refs) (itemsAndRefs)) `sC` S "or", 
   refs (Doc.likelyChg) `sC` S "in which the respective", 
@@ -312,12 +389,18 @@ assumpIntro = Paragraph $ foldlSent
   where refs chunk = (titleize' chunk) {--+:+ sSqBr (makeRef ref)--} 
         itemsAndRefs = [Doc.thModel, Doc.genDefn, Doc.dataDefn, Doc.inModel] --FIXME ADD REFS BACK
 
+------------------------
+-- THEORETICAL MODELS --
+------------------------
 
 tModIntro :: (NamedIdea a) => a -> Contents
 tModIntro progName = foldlSP [S "This", phrase Doc.section_, S "focuses on",
   S "the", phrase Doc.general, (plural equation), S "and", S "laws that",
   short progName, S "is based on"]
 
+-------------------------
+-- GENERAL DEFINITIONS --
+-------------------------
 
 generalDefinitionIntro :: (LayoutObj t) => [t] -> Contents
 generalDefinitionIntro [] = Paragraph $ S "There are no general definitions."
@@ -327,12 +410,19 @@ generalDefinitionIntro _ = foldlSP [S "This", phrase Doc.section_,
   plural Doc.dataDefn `sC` S "which in turn are used to", S "build the", 
   plural Doc.inModel]
 
+----------------------
+-- DATA DEFINITIONS --
+----------------------
 
 dataDefinitionIntro :: [Sentence] -> Contents
 dataDefinitionIntro xs = Paragraph $ (foldlSent [S "This", phrase Doc.section_, 
     S "collects and defines all the", plural Doc.datum, 
     S "needed to build the", plural Doc.inModel] +:+ foldl (+:+) EmptyS xs)
 
+
+---------------------
+-- INSTANCE MODELS --
+---------------------
 
 -- just need to provide the four references in order to this function. Nothing can be input into r4 if only three tables are present
 iModIntro :: Contents
@@ -353,6 +443,11 @@ listofTablesToRefs  [x]    = (makeRef x) +:+ S "shows"
 listofTablesToRefs  [x,y]  = (makeRef x) `sC` S "and" +:+ listofTablesToRefs [y]
 listofTablesToRefs  (x:xs) = (makeRef x) `sC` listofTablesToRefs (xs)
 
+
+---------------------
+-- DATA CONSTRAINT --
+---------------------
+
 -- reference to the input/ ouput tables -> optional middle sentence(s) (use EmptyS if not wanted) -> 
 -- True if standard ending sentence wanted -> optional trailing sentence(s) -> Contents
 dataConstraintParagraph :: [Contents] -> [Sentence] -> Contents
@@ -363,25 +458,29 @@ dataConstraintParagraph tableRef (mid:xs) = Paragraph $
   (dataConstraintClosingSent xs)
 
 dataConstraintIntroSent :: [Contents] -> Sentence
-dataConstraintIntroSent tableRef = foldlSent [(listofTablesToRefs tableRef), S "the", 
-  plural Doc.datumConstraint, S "on the", phrase Doc.input_, 
-  S "and", phrase Doc.output_ +:+. (plural Doc.variable `sC` S "respectively"), S "The", 
-  phrase Doc.column, S "for", phrase Doc.physical, plural Doc.constraint, S "gives the", 
-  phrase Doc.physical, plural Doc.limitation, S "on the range of", plural Doc.value, 
+dataConstraintIntroSent tableRef = foldlSent [(listofTablesToRefs tableRef), 
+  S "the", plural Doc.datumConstraint, S "on the", phrase Doc.input_, 
+  S "and", phrase Doc.output_ +:+. (plural Doc.variable `sC` S "respectively"), 
+  S "The", phrase Doc.column, S "for", phrase Doc.physical, 
+  plural Doc.constraint, S "gives the", phrase Doc.physical, 
+  plural Doc.limitation, S "on the range of", plural Doc.value, 
   S "that can be taken by the", phrase Doc.variable]
 
 dataConstraintClosingSent :: [Sentence] -> Sentence
 dataConstraintClosingSent trailing = (foldlSent
   [S "The", plural Doc.constraint, S "are conservative, to give", 
   (phrase Doc.user `ofThe` phrase Doc.model), S "the flexibility to", 
-  S "experiment with unusual situations. The", phrase Doc.column, S "of", S "typical",
-  plural Doc.value, S "is intended to provide a feel for a common scenario"])
+  S "experiment with unusual situations. The", phrase Doc.column, 
+  S "of", S "typical", plural Doc.value, 
+  S "is intended to provide a feel for a common scenario"])
   +:+ dataConstraintUncertainty +:+ S "FIXME" +:+ (foldl (+:+) EmptyS trailing) 
   --FIXME make uncertainty specificiable 
 
 dataConstraintUncertainty :: Sentence
-dataConstraintUncertainty = foldlSent [S "The", phrase Doc.uncertainty, phrase Doc.column,
-  S "provides an", S "estimate of the confidence with which the", phrase Doc.physical,
+dataConstraintUncertainty = foldlSent [S "The", phrase Doc.uncertainty, 
+  phrase Doc.column, S "provides an", 
+  S "estimate of the confidence with which the", phrase Doc.physical,
   plural Doc.quantity +:+. S "can be measured", S "This", phrase Doc.information,
   S "would be part of the", phrase Doc.input_, S "if one were performing an",
   phrase Doc.uncertainty, S "quantification exercise"]
+

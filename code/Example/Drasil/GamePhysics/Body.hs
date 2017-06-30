@@ -44,7 +44,6 @@ import Drasil.DocumentLanguage
 import Drasil.Sections.SpecificSystemDescription
 import Drasil.Sections.SolutionCharacterSpec
 import Drasil.Sections.Requirements
-import Drasil.Sections.GeneralSystDesc
 
 authors :: People
 authors = [alex, luthfi]
@@ -162,12 +161,18 @@ s2_4_intro = foldlSent
 --------------------------------------------
 
 s3 :: Section
-s3 = genSysF [] s3_1_intro [] []
+s3 = gsdAssembler chipmunk generalSystemDescriptionSect
+  [userCharacteristicSect, systemConstraintSect]
 
+generalSystemDescriptionSect :: SubSec
+generalSystemDescriptionSect = sSubSec generalSystemDescription []
 
 --------------------------------
 -- 3.1 : User Characteristics --
 --------------------------------
+
+userCharacteristicSect :: SubSec
+userCharacteristicSect = sSubSec userCharacteristic [(siCon [s3_1_intro])]
 
 s3_1_intro :: Contents
 s3_1_intro = foldlSP
@@ -175,10 +180,13 @@ s3_1_intro = foldlSP
   S "should have an understanding of first year programming concepts",
   S "and an understanding of high school", (phrase physics)]
 
+
 -------------------------------
 -- 3.2 : System Constraints  --
 -------------------------------
 
+systemConstraintSect :: SubSec
+systemConstraintSect = sSubSec systemConstraint []
 
 ---------------------------------------------
 -- SECTION 4 : SPECIFIC SYSTEM DESCRIPTION --

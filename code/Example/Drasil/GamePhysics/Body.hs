@@ -155,7 +155,7 @@ s2_4_intro = foldlSent
 --------------------------------------------
 
 s3 :: Section
-s3 = gsdAssembler chipmunk cpSymbMap generalSystemDescriptionSect
+s3 = assembler chipmunk cpSymbMap generalSystemDescriptionSect
   [userCharacteristicSect, systemConstraintSect]
 
 generalSystemDescriptionSect :: SubSec
@@ -199,7 +199,7 @@ s4 = specSysDescr physLib [s4_1, s4_2]
 s4_1 :: Section
 s4_1_intro :: Sentence
 
-s4_1 = pdAssembler chipmunk cpSymbMap problemDescriptionSect [termAndDefSect, 
+s4_1 = assembler chipmunk cpSymbMap problemDescriptionSect [termAndDefSect, 
   goalStatementSect]
 
 problemDescriptionSect :: SubSec
@@ -290,9 +290,11 @@ s4_1_2_list = enumSimple 1 (getAcc goalStmt) s4_1_2_list'
 --------------------------------------------------
 
 s4_2 :: Section
+s4_2 = assembler chipmunk cpSymbMap scsSect [assumSec, tModSec, genDefSec, iModSec,
+  dataDefSec, dataConSec]
 
--- testing refactoring
-assumSec, tModSec, genDefSec, iModSec, dataDefSec, dataConSec :: SubSec
+assumSec, tModSec, genDefSec, iModSec, dataDefSec, dataConSec, scsSect :: SubSec
+scsSect = sSubSec solutionCharSpec []
 assumSec = (sSubSec assumption [(siCon [s4_2_1_list])])
 tModSec = (sSubSec thModel [(siTMod cpTMods)])
 genDefSec = (sSubSec genDefn [])
@@ -300,8 +302,6 @@ iModSec = (sSubSec inModel [(siIMod iModels)])
 dataDefSec = (sSubSec dataDefn [(siSent [s4_2_4_intro]), (siDDef cpDDefs)])
 dataConSec = (sSubSec dataConst [(siUQI cpInputConstraints), (siUQO cpOutputConstraints)])
 
-s4_2 = scsAssembler chipmunk cpSymbMap [assumSec, tModSec, genDefSec, iModSec,
-  dataDefSec, dataConSec]
 
 -------------------------
 -- 4.2.1 : Assumptions --

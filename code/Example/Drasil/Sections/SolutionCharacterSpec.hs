@@ -5,6 +5,7 @@ module Drasil.Sections.SolutionCharacterSpec
   SecItem,
   SubSec,
   sSubSec,
+  assembler,
   scsAssembler,
   pdAssembler,
   gsdAssembler,
@@ -229,21 +230,21 @@ pullSubSec nameid ls = getItem (\x -> (getID x) == (nameid ^. id)) ls
 -- Section Assembler --
 -----------------------
 
-scsAssembler :: NamedIdea c => c -> SymbolMap -> [SubSec] -> Section
-scsAssembler progName symbolMap subsecs = section
-  (titleize' Doc.solutionCharSpec) [scsIntro progName] subsections
+assembler :: NamedIdea c => c -> SymbolMap -> SubSec -> [SubSec] -> Section
+assembler progName symbolMap thisSection subsecs = 
+  (sectionMap progName thisSection) subsections
   where subsections = map (render progName symbolMap) subsecs 
-  --FIXME put in correct order, if out of order for subsections
 
-pdAssembler :: NamedIdea c => c -> SymbolMap -> SubSec -> [SubSec] -> Section
-pdAssembler progName symbolMap (SectionModel niname xs) subsecs = section
-  (titleize niname) [problemDescriptionIntro progName (pullSents xs)] subsections
-  where subsections = map (render progName symbolMap) subsecs
-
-gsdAssembler :: NamedIdea c => c -> SymbolMap -> SubSec -> [SubSec] -> Section
-gsdAssembler progName symbolMap (SectionModel niname _) subsecs = section
-  (titleize niname) [genenralSystemIntro] subsections
-  where subsections = map (render progName symbolMap) subsecs
+sectionMap :: NamedIdea c => c -> SubSec -> [Section] -> Section
+sectionMap progName (SectionModel niname xs)  
+  |  compareID niname (Doc.solutionCharSpec ^. id)         = section (titleize' niname)
+    [scsIntro progName]
+  | compareID niname (Doc.problemDescription ^. id)       = section (titleize niname)
+    [problemDescriptionIntro progName (pullSents xs)]
+  | compareID niname (Doc.generalSystemDescription ^. id) = section (titleize niname)
+    [genenralSystemIntro]
+  | compareID niname (Doc.requirement ^. id)              = section (titleize niname)
+    [requirementsIntro]
 
 --------------------
 -- Section Render --
@@ -538,3 +539,23 @@ dataConstraintUncertainty = foldlSent [S "The", phrase Doc.uncertainty,
   S "would be part of the", phrase Doc.input_, S "if one were performing an",
   phrase Doc.uncertainty, S "quantification exercise"]
 
+------------------
+-- REQUIREMENTS --
+------------------
+
+requirementsIntro :: Contents
+requirementsIntro = foldlSP
+        [S "This", (phrase Doc.section_), S "provides the",
+        (plural Doc.functionalRequirement) `sC` S "the business tasks that the",
+        (phrase Doc.software), S "is expected to complete, and the", 
+        (plural Doc.nonfunctionalRequirement) `sC` S "the qualities that the",
+        (phrase Doc.software), S "is expected to exhibit"]
+
+---------------------------------
+-- NON-FUNCTIONAL REQUIREMENTS --
+---------------------------------
+
+
+-----------------------------
+-- FUNCTIONAL REQUIREMENTS --
+-----------------------------

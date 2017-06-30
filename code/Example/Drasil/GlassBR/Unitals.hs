@@ -44,6 +44,11 @@ gbInputs = [pb_tol, tNT]
 gbInputs_' :: [ConstrainedChunk]
 gbInputs_' = [glass_type, nom_thick]
 
+--FIXME: RENAME THE ABOVE LISTS
+
+gbInputDataConstraints :: [UncertainWrapper]
+gbInputDataConstraints = (map uncrtnw gbInputs) ++ (map uncrtnw gbInputs_)
+
 plate_len = uqcND "plate_len" (nounPhraseSP "plate length (long dimension)")
   lA millimetre Real 
   [ physc $ \c -> c :> (Dbl 0),
@@ -63,7 +68,7 @@ plate_width = uqcND "plate_width" (nounPhraseSP "plate width (short dimension)")
 pb_tol = uvc "pb_tol" (nounPhraseSP "tolerable probability of breakage") 
   (sub cP (Atomic "btol")) Real
   [ physc $ \c -> (Dbl 0) :< c ,
-    physc $ \c -> c :< (Dbl 1) ] (Dbl 0.008) defaultUncrt
+    physc $ \c -> c :< (Dbl 1) ] (Dbl 0.008) (0.001)
 
 char_weight = uqcND "char_weight" (nounPhraseSP "charge weight") 
   lW kilogram Real

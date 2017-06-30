@@ -473,7 +473,7 @@ inputVarSD    = displayConstr standOffDist (45 :: Double)       (addPercent 10)
 {-input and output tables-}
 
 --s6_2_5_table1, s6_2_5_table3 :: Contents
-s6_2_5_table1 = inDataConstTbl (gbInputs_) --FIXME: still need to add [tNT, pb_tol, glass_type, nom_thick]
+s6_2_5_table1 = inDataConstTbl (gbInputDataConstraints) --FIXME: still need to add [tNT, pb_tol, glass_type, nom_thick]
 s6_2_5_table3 = outDataConstTbl [prob_br]
 
 s6_2_5_table2_formatF2 :: UnitaryChunk -> Double -> (Sentence, Sentence)

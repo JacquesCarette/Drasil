@@ -123,8 +123,8 @@ auxiliaryConstants = assumption4_constants ++ gBRSpecParamVals
 
 --Used in "Functional Requirements" Section--
 requiredInputs :: [QSWrapper]
-requiredInputs = (map qs [plate_len, plate_width, char_weight, pb_tol])
-  ++ (map qs [tNT, nom_thick]) ++ (map qs [sdx, sdy, sdz])
+requiredInputs = (map qs [plate_len, plate_width, char_weight])
+  ++ (map qs [pb_tol, tNT, nom_thick]) ++ (map qs [sdx, sdy, sdz])
   ++ (map qs [glass_type])
 --------------------------------------------------------------------------------
 

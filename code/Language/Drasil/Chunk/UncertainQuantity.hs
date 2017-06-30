@@ -13,7 +13,7 @@ import Language.Drasil.Chunk.NamedIdea
 import Language.Drasil.Chunk.Quantity
 import Language.Drasil.Chunk.Constrained
 import Language.Drasil.Chunk.SymbolForm
---import Language.Drasil.Chunk.Concept
+import Language.Drasil.Chunk.Concept
 import Language.Drasil.Unit
 import Language.Drasil.Expr
 import Language.Drasil.NounPhrase
@@ -33,7 +33,7 @@ class Quantity c => UncertainQuantity c where
 -- UQ takes a constrained chunk, an uncertainty (between 0 and 1), and a typical value
 
 data UncertQ where
-  UQ :: (Quantity c, Constrained c, SymbolForm c) => c
+  UQ :: (Quantity c, Constrained c, Concept c, SymbolForm c) => c
         -> Maybe Double -> UncertQ
   
 instance Eq UncertQ where
@@ -54,19 +54,22 @@ instance Constrained UncertQ where
   reasVal = qlens reasVal
 instance SymbolForm UncertQ where
   symbol = qlens symbol
+instance Concept UncertQ where
+  defn = qlens defn
+  cdom = qlens cdom
 
 -- DO NOT Export qlens
-qlens :: (forall c. (Quantity c, Constrained c, SymbolForm c) =>
+qlens :: (forall c. (Quantity c, Constrained c, Concept c, SymbolForm c) =>
   Simple Lens c a) -> Simple Lens UncertQ a
 qlens l f (UQ q u) = fmap (\x -> UQ (set l x q) u) (f (q ^. l))
 
 {-- Constructors --}
 -- | The UncertainQuantity constructor. Requires a Quantity, a percentage, and a typical value
-uq :: (Quantity c, Constrained c, SymbolForm c) =>
+uq :: (Quantity c, Constrained c, Concept c, SymbolForm c) =>
   c -> Double -> UncertQ
 uq q u = UQ q (Just u)
 
-uqNU :: (Quantity c, Constrained c, SymbolForm c) =>
+uqNU :: (Quantity c, Constrained c, Concept c, SymbolForm c) =>
   c -> UncertQ
 uqNU q = UQ q Nothing
 
@@ -76,14 +79,14 @@ uqc :: (Unit u) => String -> NP -> String -> Symbol -> u
 uqc nam trm desc sym un space cs val uncrt = uq
   (cuc' nam trm desc sym un space cs val) uncrt
 
---uncertainty quantity constraint with no uncertainty
+--uncertainty quanity constraint no uncertainty
 uqcNU :: (Unit u) => String -> NP -> String -> Symbol -> u 
                   -> Space -> [Constraint]
                   -> Expr -> UncertQ
 uqcNU nam trm desc sym un space cs val = uqNU $
   cuc' nam trm desc sym un space cs val
 
---uncertainty quantity constraint with no description
+--uncertainty quanity constraint no discription
 uqcND :: (Unit u) => String -> NP -> Symbol -> u 
                   -> Space -> [Constraint]
                   -> Expr -> Double -> UncertQ

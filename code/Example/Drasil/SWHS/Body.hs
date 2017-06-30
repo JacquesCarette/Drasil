@@ -66,9 +66,7 @@ authors = manyNames swhsPeople
 
 swhs_si :: SystemInformation
 swhs_si = SI swhs_pcm srs swhsPeople
-  this_si swhsSymbols 
-  ((map cqs swhsUnits) ++ (map cqs swhsUnitless) {-++ (map cqs swhsConstrained)-} :: [CQSWrapper]) 
-  acronyms
+  this_si swhsSymbols (swhsSymbols) acronyms
   (swhsDataDefs :: [QDefinition])
   ((map qs swhsInputs) :: [QSWrapper])
   ((map qs swhsOutputs) :: [QSWrapper])

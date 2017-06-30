@@ -17,8 +17,8 @@ import Data.Drasil.Units.PhysicalProperties
 
 import Control.Lens ((^.))
 
-pcmSymbols :: [QSWrapper]
-pcmSymbols = map qs pcmUnits
+pcmSymbols :: [CQSWrapper]
+pcmSymbols = map cqs pcmUnits
 
 -- All values with constraints; built off of the Unital Chunks
 

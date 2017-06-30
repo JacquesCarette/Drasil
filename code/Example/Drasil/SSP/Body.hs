@@ -60,25 +60,9 @@ this_si :: [UnitDefn]
 this_si = map UU [metre, degree] ++ map UU [newton, pascal]
 
 ssp_si :: SystemInformation
-ssp_si = SI ssa srs [henryFrankis] this_si (sspSymbols)
-  ([] :: [CQSWrapper])
-  acronyms
-  sspDataDefs
-  (map qs sspInputs) 
-  (map qs sspOutputs)
-  [Parallel (head sspDataDefs) (tail sspDataDefs)]
-  sspConstrained
-
-{- 
-glassSystInfo :: SystemInformation
-glassSystInfo = SI glassBRProg srs authors this_si this_symbols 
-  ([] :: [CQSWrapper]) 
-  (acronyms)
-  (dataDefns)
-  (map qs gbInputs)
-  (map qs gbOutputs) 
-  (gbQDefns :: [Block QDefinition]) 
-  gbConstrained-}
+ssp_si = SI ssa srs [henryFrankis]
+  this_si sspSymbols (sspSymbols) acronyms sspDataDefs (map qs sspInputs) (map qs sspOutputs)
+  [Parallel (head sspDataDefs) (tail sspDataDefs)] sspConstrained
 
 mkSRS :: DocDesc
 mkSRS = RefSec (RefProg intro
@@ -740,8 +724,8 @@ s5_1_list = enumSimple 1 (short requirement) [
     S "by the" +:+ titleize morPrice +:+. phrase method_)
   ]
 
-s5_1_table = mkInputDatTb ([qs coords] ++ --this has to be seperate since coords is a different type
-  map qs [elasticMod, cohesion, poissnsRatio, fricAngle, dryWeight, satWeight, waterWeight])
+s5_1_table = mkInputDatTb ([cqs coords] ++ --this has to be seperate since coords is a different type
+  map cqs [elasticMod, cohesion, poissnsRatio, fricAngle, dryWeight, satWeight, waterWeight])
 
 -- SECTION 5.2 --
 s5_2 = nonFuncReqF [accuracy, performanceSpd]

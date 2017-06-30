@@ -6,9 +6,9 @@ import Data.Drasil.Quantities.SolidMechanics as SM
 import Data.Drasil.Concepts.Physics as CP
 import Data.Drasil.Units.Physics
 
-sspSymbols :: [QSWrapper]
-sspSymbols = (map qs sspInputs) ++ (map qs sspOutputs) ++
-  (map qs sspUnits) ++ (map qs sspUnitless)
+sspSymbols :: [CQSWrapper]
+sspSymbols = (map cqs sspInputs) ++ (map cqs sspOutputs) ++
+  (map cqs sspUnits) ++ (map cqs sspUnitless) 
 
 ---------------------------
 -- Imported UnitalChunks --

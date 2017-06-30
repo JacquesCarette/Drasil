@@ -71,7 +71,7 @@ incl = text "require"
 
 -- short names, packaged up above (and used below)
 renderCode' :: Config -> [Label] -> AbstractCode -> Code
-renderCode' c ms (AbsCode p) = Code [fileCode c p ms Source (ext c)]
+renderCode' c ms (AbsCode p) = Code $ fileCode c p ms Source (ext c)
 
 include' :: Label -> Doc
 include' n = incl <+> quotes (text n)
@@ -82,7 +82,7 @@ luastateType _ (Base _) _    = empty
 luastateType _ (Type name) _ = text name <> colon <> text initName
 luastateType c s d           = stateTypeD c s d
 
-luatop :: Config -> FileType -> Label -> [Module] -> Doc
+luatop :: Config -> FileType -> Label -> Module -> Doc
 luatop c ft _ _ = vcat [
     methodDoc c ft "" tableFindFunc,      --Needed for IndexOf function calls. TODO: only include this if IndexOf is used in the code
     blank,
@@ -127,9 +127,9 @@ luatop c ft _ _ = vcat [
                             \    return new_class\n\
                             \end"
 
-luabody :: Config -> FileType -> Label -> [Module] -> Doc
-luabody c f p modules = let ms = foldl1 (++) (map classes modules) in
-  vibmap (classDoc c f p) $ fixCtorNames initName ms
+luabody :: Config -> FileType -> Label -> Module -> Doc
+luabody c f p (Mod _ _ _ _ cs) =
+  vibmap (classDoc c f p) $ fixCtorNames initName cs
 
 -- code doc functions
 binOpDoc' :: BinaryOp -> Doc

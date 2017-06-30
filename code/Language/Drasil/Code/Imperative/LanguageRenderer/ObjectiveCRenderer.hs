@@ -88,9 +88,9 @@ str = text "NSString"
 
 -- short names, packaged up above (and used below)
 renderCode' :: Config -> [Label] -> AbstractCode -> Code
-renderCode' c ms (AbsCode p) = Code [
-    fileCode c p ms Header objcHeaderExt,
-    fileCode c p ms Source (ext c)]
+renderCode' c ms (AbsCode p) = Code $
+    (fileCode c p ms Header objcHeaderExt) ++
+    (fileCode c p ms Source (ext c))
 
 objcstateType :: Config -> StateType -> DecDef -> Doc
 objcstateType c (List lt _) Dec    = list c lt <> ptr
@@ -102,7 +102,7 @@ objcstateType _ (Base String) _    = str
 objcstateType _ (Type name) Dec    = text name <> ptr
 objcstateType c s d                = stateTypeD c s d
 
-objctop :: Config -> FileType -> Label -> [Module] -> Doc
+objctop :: Config -> FileType -> Label -> Module -> Doc
 objctop c Header _ _ = vcat [
     include c "<Foundation/NSObject.h>",
     include c "<Foundation/NSString.h>",
@@ -116,14 +116,14 @@ objctop c Source p _ = vcat [
     include c "<Foundation/NSValue.h>",
     include c "<Foundation/NSAutoreleasePool.h>"]
 
-objcbody :: Config -> FileType -> Label -> [Module] -> Doc
-objcbody c f@(Header) p modules = let ms = foldl1 (++) (map classes modules) in
+objcbody :: Config -> FileType -> Label -> Module -> Doc
+objcbody c f@(Header) p (Mod _ _ _ _ cs) =
     vcat [
-    clsDecListDoc c ms,
+    clsDecListDoc c cs,
     blank,
-    vibmap (classDoc c f p) (fixCtorNames sagaInit ms)]
-objcbody c f@(Source) p modules = let ms = foldl1 (++) (map classes modules) in
-    vibmap (classDoc c f p) (fixCtorNames sagaInit ms)
+    vibmap (classDoc c f p) (fixCtorNames sagaInit cs)]
+objcbody c f@(Source) p (Mod _ _ _ _ cs) =
+    vibmap (classDoc c f p) (fixCtorNames sagaInit cs)
 
 -- code doc functions
 assignDoc' :: Config -> Assignment -> Doc

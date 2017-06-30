@@ -62,19 +62,19 @@ csharpConfig _ c =
 
 -- short names, packaged up above (and used below)
 renderCode' :: Config -> [Label] -> AbstractCode -> Code
-renderCode' c ms (AbsCode p) = Code [fileCode c p [m] Source (ext c) | m <- ms]
+renderCode' c ms (AbsCode p) = Code $ fileCode c p ms Source (ext c)
 
-cstop :: Config -> FileType -> Label -> [Module] -> Doc
+cstop :: Config -> FileType -> Label -> Module -> Doc
 cstop c _ _ _ = vcat [
     include c "System" <> endStatement c,
     include c "System.Collections" <> endStatement c,
     include c "System.Collections.Generic" <> endStatement c]
 
-csbody :: Config -> a -> Label -> [Module] -> Doc
-csbody c _ p  modules = let ms = foldl1 (++) (map classes modules) in
+csbody :: Config -> a -> Label -> Module -> Doc
+csbody c _ p (Mod _ _ _ _ cs) =
     vcat [
     package c p <+> lbrace,
-    oneTab $ vibmap (classDoc c Source p) ms,
+    oneTab $ vibmap (classDoc c Source p) cs,
     rbrace]
 
 -- code doc functions

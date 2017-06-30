@@ -7,7 +7,7 @@ module Language.Drasil.Code.Imperative.LanguageRenderer (
     Config(..),
 
     -- * Language Parametric Functions
-    fileCode, fileCodeSplit,
+    fileCode,
     
     -- * Common Syntax
     classDec, dot, doubleSlash, forLabel, new,
@@ -78,8 +78,8 @@ data Config = Config {
     blockStart :: Doc, blockEnd :: Doc,
     ifBodyStart :: Doc, elseIf :: Doc,
     
-    top :: FileType -> Label -> [Module] -> Doc,
-    body :: FileType -> Label -> [Module] -> Doc,
+    top :: FileType -> Label -> Module -> Doc,
+    body :: FileType -> Label -> Module -> Doc,
     bottom :: FileType -> Doc,
     
     assignDoc :: Assignment -> Doc,
@@ -127,17 +127,17 @@ data Config = Config {
 -- CFamily Parametric Functions --
 ----------------------------------
 
-fileCode :: Config -> Package -> [Label] -> FileType -> Label -> (FilePath, Doc)
-fileCode c (Pack p ms) ns f e = (fileName c p ns ++ e, fileDoc c f p ms) -- -$ map (clsWithName ms) ns)
+-- fileCode :: Config -> Package -> [Label] -> FileType -> Label -> (FilePath, Doc)
+-- fileCode c (Pack p ms) ns f e = (fileName c p ns ++ e, fileDoc c f p ms) -- -$ map (clsWithName ms) ns)
 
-fileCodeSplit :: Config -> Package -> [Label] -> FileType -> Label -> [(FilePath, Doc)]
-fileCodeSplit c (Pack p ms) ns f e = --let classes = map (clsWithName ms) ns in
-  [(fileName c (moduleName cls) ns ++ e, fileDoc c f p [cls]) | cls <- ms]
+fileCode :: Config -> Package -> [Label] -> FileType -> Label -> [(FilePath, Doc)]
+fileCode c (Pack p ms) ns f e = --let classes = map (clsWithName ms) ns in
+  [(fileName c (moduleName cls) ns ++ e, fileDoc c f p cls) | cls <- ms]
 
-fileDoc :: Config -> FileType -> Label -> [Module] -> Doc
-fileDoc c f p ms = vibcat [
-    top c f p ms,
-    body c f p ms,
+fileDoc :: Config -> FileType -> Label -> Module -> Doc
+fileDoc c f p m = vibcat [
+    top c f p m,
+    body c f p m,
     bottom c f]
 
 ----------------------------------------

@@ -63,8 +63,8 @@ cppConfig options c =
         objVarDoc = objVarDoc' c, paramDoc = paramDoc' c, paramListDoc = paramListDocD c, patternDoc = patternDocD c, printDoc = printDoc' c, retDoc = retDocD c, scopeDoc = scopeDocD,
         stateDoc = stateDocD c, stateListDoc = stateListDocD c, statementDoc = statementDocD c, methodDoc = methodDoc' c,
         methodListDoc = methodListDoc' c, methodTypeDoc = methodTypeDocD c, unOpDoc = unOpDocD, valueDoc = valueDoc' c,
-        functionDoc = functionDocD c, functionListDoc = functionListDocD c,
-        ioDoc = ioDocD c,inputDoc = inputDocD c,
+        functionDoc = methodDoc' c, functionListDoc = functionListDocD c,
+        ioDoc = ioDocD c,inputDoc = inputDoc' c,
         complexDoc = complexDocD c,
         getEnv = \_ -> error "Cpp does not implement getEnv (yet)"
     }
@@ -79,11 +79,8 @@ ptrAccess = text "->"
 -- short names, packaged up above (and used below)
 renderCode' :: Config -> [Label] -> AbstractCode -> Code
 renderCode' c ms (AbsCode p) =
-    if splitSource
-    then Code $ (fileCodeSplit c p ms Header cppHeaderExt) ++
-                (fileCodeSplit c p ms Source (ext c))
-    else Code [ fileCode c p ms Header cppHeaderExt,
-                fileCode c p ms Source (ext c) ]
+  Code $ (fileCode c p ms Header cppHeaderExt) ++
+         (fileCode c p ms Source (ext c))
 
 
 cppstateType :: Config -> StateType -> DecDef -> Doc
@@ -94,10 +91,10 @@ cppstateType _ (Type name) Dec  = text name <> ptr
 cppstateType c (Iterator t) _   = text "std::" <> stateType c (List Dynamic t) Dec <> text "::iterator"
 cppstateType c s d              = stateTypeD c s d
 
-cpptop :: Config -> FileType -> Label -> [Module] -> Doc
-cpptop c Header p _ = vcat [
-    text "#ifndef" <+> text p <> text "_h",
-    text "#define" <+> text p <> text "_h",
+cpptop :: Config -> FileType -> Label -> Module -> Doc
+cpptop c Header _ (Mod n _ _ _ _) = vcat [
+    text "#ifndef" <+> text n <> text "_h",
+    text "#define" <+> text n <> text "_h",
     blank,
     include c "<string>",
     include c $ "<" ++ render (list c Dynamic) ++ ">",
@@ -106,8 +103,8 @@ cpptop c Header p _ = vcat [
     usingNameSpace c "std" (Just $ render (list c Dynamic)),
     usingNameSpace c "std" (Just "ifstream"),
     usingNameSpace c "std" (Just "ofstream")]
-cpptop c Source p _ = vcat [          --TODO remove includes if they aren't used
-    include c ("\"" ++ p ++ cppHeaderExt ++ "\""),
+cpptop c Source p (Mod n _ _ _ _) = vcat [          --TODO remove includes if they aren't used
+    include c ("\"" ++ n ++ cppHeaderExt ++ "\""),
     include c "<algorithm>",
     include c "<iostream>",
     include c "<fstream>",
@@ -122,8 +119,8 @@ cpptop c Source p _ = vcat [          --TODO remove includes if they aren't used
     usingNameSpace c "std" (Just "ifstream"),
     usingNameSpace c "std" (Just "ofstream")]
 
-cppbody :: Config -> FileType -> Label -> [Module] -> Doc
-cppbody c f@(Header) p modules = let cs = foldl1 (++) (map classes modules) in
+cppbody :: Config -> FileType -> Label -> Module -> Doc
+cppbody c f@(Header) p (Mod _ _ _ _ cs) =
     vcat [
     package c p <+> lbrace,
     oneTabbed [
@@ -131,8 +128,11 @@ cppbody c f@(Header) p modules = let cs = foldl1 (++) (map classes modules) in
         blank,
         vibmap (classDoc c f p) cs],
     rbrace]
-cppbody c f@(Source) p modules = let cs = foldl1 (++) (map classes modules) in
-   vibmap (classDoc c f p) cs
+cppbody c f@(Source) p (Mod _ _ _ fs cs) =
+   vcat [
+     vibmap (classDoc c f p) cs,
+     functionListDoc c f p fs
+   ]
 
 cppbottom :: FileType -> Doc
 cppbottom Header = text "#endif"
@@ -264,6 +264,14 @@ valueDoc' c v@(Arg _) = valueDocD' c v
 --valueDoc' c Input = inputFunc c <> dot <> text "ignore()"
 --valueDoc' c (InputFile v) = valueDoc c v <> dot <> text "ignore()"
 valueDoc' c v = valueDocD c v
+
+inputDoc' :: Config -> IOType -> StateType -> Value -> Doc
+inputDoc' _ _ (Base (FileType _)) _ = error "File type is not valid input"
+inputDoc' c io (Base _) v = inputFn io <+> text ">>" <+> valueDoc c v
+  where  inputFn :: IOType -> Doc
+         inputFn Console = inputFunc c
+         inputFn (File f) = valueDoc c f
+inputDoc' c io s v = inputDocD c io s v 
 
 ----------------------
 -- Helper Functions --

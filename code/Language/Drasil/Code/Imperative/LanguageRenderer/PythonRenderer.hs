@@ -71,7 +71,7 @@ initName = "__init__"
 
 -- short names, packaged up above (and used below)
 renderCode' :: Config -> [Label] -> AbstractCode -> Code
-renderCode' c ms (AbsCode p) = Code $ fileCodeSplit c p ms Source (ext c)
+renderCode' c ms (AbsCode p) = Code $ fileCode c p ms Source (ext c)
 
 include' :: Label -> Doc
 include' n = text incl <+> text n <+> text imp
@@ -84,27 +84,24 @@ pystateType _   (Base String)  _ = text "str"
 pystateType _   (Base _)       _ = empty
 pystateType c  s               d = stateTypeD c s d
 
-pytop :: Config -> FileType -> Label -> [Module] -> Doc
-pytop _ _ _ [] = vcat [
-    text "from __future__ import print_function",
-    text "import sys",
-    text "import math" ]
-pytop c f p ms = let modNames = map moduleName ms
-                     libNames = concat $ map libs ms
-                     libraries = reduceLibs libNames modNames
-  in  pytop c f p [] $+$
-        (vcat $ map (\x -> text "import" <+> text x) libraries)
+pytop :: Config -> FileType -> Label -> Module -> Doc
+pytop c f p m = let modNames = moduleName m
+                    libNames = libs m
+  in  vcat [
+        text "from __future__ import print_function",
+        text "import sys",
+        text "import math" 
+      ] 
+      $+$
+      (vcat $ map (\x -> text "import" <+> text x) libNames)
       
 
 
-pybody :: Config -> FileType -> Label -> [Module] -> Doc
-pybody _ _ _ [] = blank
-pybody c f p ((Mod _ _ _ fs cs):ms) = 
+pybody :: Config -> FileType -> Label -> Module -> Doc
+pybody c f p (Mod _ _ _ fs cs) = 
   functionListDoc c f p fs
   $+$ blank $+$
   (vcat $ intersperse blank (map (classDoc c f p) (fixCtorNames initName cs))) 
-  $+$ blank $+$
-  pybody c f p ms
 
 -- code doc functions
 binOpDoc' :: BinaryOp -> Doc
@@ -243,7 +240,7 @@ functionDoc' c _ _ (Method n _ _ ps b) = vcat [
         where bodyD | null b    = text "None"
                     | otherwise = bodyDoc c b
 functionDoc' c _ _ (MainMethod b) = bodyDoc c b
-functionDoc' _ _ _ _ = empty
+functionDoc' _ _ _ _ = error "Class method type cannot exist outside of class"
 
 inputDoc' :: Config -> IOType -> StateType -> Value -> Doc
 inputDoc' c io (Base Boolean) v = statementDoc c NoLoop

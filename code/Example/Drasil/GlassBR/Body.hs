@@ -126,6 +126,10 @@ requiredInputs :: [QSWrapper]
 requiredInputs = (map qs [plate_len, plate_width, char_weight])
   ++ (map qs [pb_tol, tNT]) ++ (map qs [sdx, sdy, sdz])
   ++ (map qs [glass_type, nom_thick])
+
+s7_1_req6_pulledList :: [QDefinition]
+s7_1_req6_pulledList = [loadDF, nonFL, glaTyFac, dimLL, tolPre, tolStrDisFac, strDisFac, hFromt]
+
 --------------------------------------------------------------------------------
 
 {--INTRODUCTION--}
@@ -586,7 +590,7 @@ s7_1_req6 = [(Enumeration $ Simple $ [(acroR 6, Nested (titleize output_ +:+
     [Flat $ (at_start demand) +:+ sParen (getS demand) +:+ sParen (makeRef (gbSymbMapT calOfDe))]
     ++
     map (\c -> Flat $ (at_start c) +:+ sParen (getS c) +:+ sParen (makeRef (gbSymbMapD c)))
-    [loadDF, nonFL, glaTyFac, dimLL, tolPre, tolStrDisFac, strDisFac, hFromt] 
+    s7_1_req6_pulledList
     ++
     [Flat $ (titleize aspectR) +:+ sParen (short aspectR) {-+:+ E ((C aspectR) := (C plate_len):/(C plate_width))-}] --short is technically a symbol here (see Concepts.hs)
     ))])]

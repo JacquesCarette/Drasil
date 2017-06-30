@@ -57,8 +57,8 @@ acronyms :: [CI]
 acronyms = [assumption, dataDefn, genDefn, goalStmt, inModel, likelyChg, ode,
             physSyst, requirement, srs, progName, thModel]
 
-pcmSymbols :: [CQSWrapper]
-pcmSymbols = (map cqs pcmUnits) ++ (map cqs pcmConstraints)
+pcmSymbols :: [QSWrapper]
+pcmSymbols = (map qs pcmUnits) ++ (map qs pcmConstraints)
 
 pcmUnits :: [UCWrapper]
 pcmUnits = map ucw [density, tau, in_SA, out_SA,
@@ -94,7 +94,7 @@ mkSRS = RefSec (RefProg intro
   map Verbatim [s3, s4, s5, s6, s7, s8, s9]
 
 pcm_si :: SystemInformation
-pcm_si = SI srs_swhs srs [thulasi] this_si pcmSymbols (pcmSymbols)
+pcm_si = SI srs_swhs srs [thulasi] this_si pcmSymbols ([] :: [CQSWrapper])
   acronyms ([dd1HtFluxC] :: [QDefinition]) (map qs pcmConstraints) 
   ([] :: [QSWrapper]) ([] :: [Block QDefinition])
   ([] :: [ConstrainedChunk])-- Place Holder until Data Definitions can be created

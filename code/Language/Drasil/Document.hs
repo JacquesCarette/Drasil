@@ -20,7 +20,7 @@ type Header   = Sentence -- Used when creating sublists
 type Depth    = Int
 type Width    = Float
 type Height   = Float
-type Pair     = (Title,ItemType) -- ^ Title: Item
+type ListPair = (Title,ItemType) -- ^ Title: Item
 type Filepath = String
 type Label    = Sentence
 type Sections = [Section]
@@ -56,11 +56,21 @@ data Contents = Table [Sentence] [[Sentence]] Title Bool
      --        UsesHierarchy [(ModuleChunk,[ModuleChunk])]
                | Graph [(Sentence, Sentence)] (Maybe Width) (Maybe Height) Label
                -- ^ TODO: Fill this one in.
+               ------NEW TMOD/DDEF/IM/GD BEGINS HERE------
+               ---- FIXME: The above Definition will need to be removed ----
+               | TMod [(Identifier,[Contents])] RefName RelationConcept -- Ex. (Label, Paragraph $ phrase thing) and Reference name
+               | GDef
+               | IMod
+               | DDef
+               
+type Identifier = String
+type RefName = Sentence
 
 data ListType = Bullet [ItemType] -- ^ Bulleted list
               | Number [ItemType] -- ^ Enumerated List
-              | Simple [Pair] -- ^ Simple list with items denoted by @-@
-              | Desc [Pair] -- ^ Descriptive list, renders as "Title: Item" (see 'Pair')
+              | Simple [ListPair] -- ^ Simple list with items denoted by @-@
+              | Desc [ListPair] -- ^ Descriptive list, renders as "Title: Item" (see 'ListPair')
+              | Definitions [ListPair] -- ^ Renders a list of "@Title@ is the @Item@"
          
 data ItemType = Flat Sentence -- ^ Standard singular item
               | Nested Header ListType -- ^ Nest a list as an item
@@ -71,6 +81,7 @@ data DType = Data QDefinition -- ^ QDefinition is the chunk with the defining
            | General -- ^ Not implemented as of yet
            | Theory RelationConcept -- ^ Theoretical models use a relation as
                                     -- their definition
+           | Instance
 
 -- | Every layout object has a reference name (for intra-document referencing)
 -- and a reference type (denoting what type of reference to create)
@@ -97,9 +108,10 @@ instance LayoutObj Contents where
   refName (UnlikelyChange ucc)= S $ "UC" ++ alphanumOnly (ucc ^. id)
 --  refName (UsesHierarchy _)   = S $ "Figure:UsesHierarchy"
   refName (Graph _ _ _ l)     = S "Figure:" :+: inferName l
+  refName (TMod _ _ _)          = error "TMod referencing unimplemented"
   rType (Table _ _ _ _)    = Tab
   rType (Figure _ _)       = Fig
-  rType (Definition _ _)     = Def
+  rType (Definition _ _)   = Def
   rType (Module _)         = Mod
   rType (Requirement _)    = Req
   rType (Assumption _)     = Assump
@@ -107,6 +119,7 @@ instance LayoutObj Contents where
   rType (UnlikelyChange _) = UC
 --  rType (UsesHierarchy _)  = Fig
   rType (Graph _ _ _ _)    = Fig
+  rType (TMod _ _ _)           = Def
   rType _ = error "Attempting to reference unimplemented reference type"
   
 -- | Automatically create the label for a definition

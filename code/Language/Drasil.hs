@@ -8,7 +8,7 @@ module Language.Drasil (
   , Recipe(..)
   -- Expr
   , Expr(..), Relation, UFunc(..), BiFunc(..), Bound(..), DerivType(..)
-  , log, abs, sin, cos, tan, sec, csc, cot, exp, SymbolMap, symbolMap
+  , log, abs, sin, cos, tan, sec, csc, cot, exp, SymbolMap, symbolMap, vars
   , summation, product, cross
   -- all the stuff from Unicode
   , Greek(..), Special(..)
@@ -44,7 +44,7 @@ module Language.Drasil (
   -- Chunk.Unitary
   , Unitary(..), UnitaryChunk, unitary
   -- Chunk.Relation
-  , NamedRelation, makeNR, RelationConcept, makeRC
+  , NamedRelation, makeNR, RelationConcept, makeRC, relat
   -- Chunk.Method
   , MethodChunk, fromEC, makeStdInputMethod, makeFileInputMethod
   , makeFileOutputMethod, makeMainMethod, input, output, exc, methcc, mType
@@ -72,9 +72,9 @@ module Language.Drasil (
   , PluralRule(..), compoundPhrase, compoundPhrase', compoundPhrase'', compoundPhrase''', titleize, titleize'
   , nounPhrase'', nounPhraseSP
   -- Document
-  , LayoutObj(..), Document(..), DType(..), Section(..), Contents(..), 
-    SecCons(..), ListType(..), ItemType(..),
-    section
+  , LayoutObj(..), Document(..), DType(..), Section(..), Contents(..)
+  , SecCons(..), ListType(..), ItemType(..), ListPair
+  , section
   -- Reference
   , makeRef
   -- Space
@@ -102,10 +102,11 @@ import Language.Drasil.SystemInformation
 import Language.Drasil.Expr (Expr(..), Relation, UFunc(..), BiFunc(..), 
           Bound(..),DerivType(..), log, sin, cos, tan, sec, csc, cot, exp,
           summation, product, cross)
-import Language.Drasil.Expr.Extract (SymbolMap, symbolMap)
+import Language.Drasil.Expr.Extract (SymbolMap, symbolMap, vars)
 import Language.Drasil.Output.Formats (DocType(SRS,MG,MIS,LPM,Website))
-import Language.Drasil.Document (LayoutObj(..), Document(..), DType(..), 
-  Section(..), Contents(..), SecCons(..), ListType(..),ItemType(..),section)
+import Language.Drasil.Document (LayoutObj(..), Document(..), DType(..)
+  , Section(..), Contents(..), SecCons(..), ListType(..), ItemType(..), section
+  , ListPair)
 import Language.Drasil.Recipe (Recipe(..))
 import Language.Drasil.Unicode -- all of it
 import Language.Drasil.Unit -- all of it
@@ -123,7 +124,8 @@ import Language.Drasil.Chunk.Constrained
 import Language.Drasil.Chunk.Unital(UnitalChunk(..), makeUCWDS, ucFromCV
                                   , uc, uc', ucs, ucs', ucsWS)
 import Language.Drasil.Chunk.Unitary
-import Language.Drasil.Chunk.Relation(NamedRelation, makeNR, RelationConcept, makeRC)
+import Language.Drasil.Chunk.Relation(NamedRelation, makeNR, RelationConcept, 
+                                      makeRC, relat)
 import Language.Drasil.Chunk.Req
 import Language.Drasil.Chunk.LC
 import Language.Drasil.Chunk.Method

@@ -192,13 +192,16 @@ lay (Requirement _)   = H.Paragraph (H.EmptyS)  -- need to implement!
 lay (Assumption _)    = H.Paragraph (H.EmptyS)  -- need to implement!
 lay (LikelyChange _)  = H.Paragraph (H.EmptyS)  -- need to implement!
 lay (UnlikelyChange _)= H.Paragraph (H.EmptyS)  -- need to implement!
+lay (TMod ps rf r)       = H.Definition (Theory r) 
+  (map (\(x,y) -> (x, map lay y)) ps) (spec rf)
 
 -- | Translates lists
 makeL :: ListType -> H.ListType
-makeL (Bullet bs) = H.Unordered $ map item bs
-makeL (Number ns) = H.Ordered $ map item ns
-makeL (Simple ps) = H.Simple $ zip (map (spec . fst) ps) (map (item . snd) ps)
-makeL (Desc ps)   = H.Desc $ zip (map (spec . fst) ps) (map (item . snd) ps)
+makeL (Bullet bs)      = H.Unordered   $ map item bs
+makeL (Number ns)      = H.Ordered     $ map item ns
+makeL (Simple ps)      = H.Simple      $ map (\(x,y) -> (spec x, item y)) ps
+makeL (Desc ps)        = H.Desc        $ map (\(x,y) -> (spec x, item y)) ps
+makeL (Definitions ps) = H.Definitions $ map (\(x,y) -> (spec x, item y)) ps
 
 -- | Helper for translating list items
 item :: ItemType -> H.ItemType
@@ -207,18 +210,18 @@ item (Nested t s) = H.Nested (spec t) (makeL s)
 
 -- | Translates definitions
 -- (Data defs, General defs, Theoretical models, etc.)
-makePairs :: DType -> SymbolMap -> [(String,H.LayoutObj)]
+makePairs :: DType -> SymbolMap -> [(String,[H.LayoutObj])]
 makePairs (Data c) m = [
-  ("Label",       H.Paragraph $ H.N $ c ^. symbol),
-  ("Units",       H.Paragraph $ spec $ unit'2Contents c),
-  ("Equation",    H.HDiv ["equation"] [H.Tagless (buildEqn c)] (H.EmptyS)),
-  ("Description", H.Paragraph (buildDDDescription c m))
+  ("Label",       [H.Paragraph $ H.N $ c ^. symbol]),
+  ("Units",       [H.Paragraph $ spec $ unit'2Contents c]),
+  ("Equation",    [H.HDiv ["equation"] [H.Tagless (buildEqn c)] (H.EmptyS)]),
+  ("Description", [H.Paragraph (buildDDDescription c m)])
   ]
 makePairs (Theory c) _ = [
-  ("Label",       H.Paragraph $ spec (phrase $ c ^. term)),
-  ("Equation",    H.HDiv ["equation"] [H.Tagless (H.E (rel (relat c)))] 
-                  (H.EmptyS)),
-  ("Description", H.Paragraph (spec (c ^. defn)))
+  ("Label",       [H.Paragraph $ spec (phrase $ c ^. term)]),
+  ("Equation",    [H.HDiv ["equation"] [H.Tagless (H.E (rel (relat c)))]
+                  (H.EmptyS)]),
+  ("Description", [H.Paragraph (spec (c ^. defn))])
   ]
 makePairs General _ = error "Not yet implemented"
 

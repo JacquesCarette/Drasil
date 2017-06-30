@@ -14,8 +14,10 @@ import Control.Lens ((^.))
 import Drasil.Sections.TableOfUnits (table_of_units)
 import Drasil.Sections.TableOfSymbols (table)
 import Drasil.Sections.TableOfAbbAndAcronyms (table_of_abb_and_acronyms)
+import Drasil.DocumentLanguage.Definitions
 import qualified Drasil.SRS as SRS
 import qualified Drasil.Sections.Introduction as Intro
+import qualified Drasil.Sections.SpecificSystemDescription as SSD
 
 import Data.Drasil.Concepts.Documentation (refmat, tOfSymb)
 
@@ -44,6 +46,32 @@ data IntroSub where
   IScope   :: Sentence -> Sentence -> IntroSub
   IChar    :: Sentence -> Sentence -> Sentence -> IntroSub
   IOrgSec  :: Sentence -> CI -> Section -> Sentence -> IntroSub
+  
+-- | Specific system description subsections
+data SSDSub where
+  SSDSubVerb :: Section -> SSDSub
+  SSDProblem :: ProblemDescription -> SSDSub
+  SSDSolChSpec :: SolChSpec -> SSDSub
+
+-- | Problem Description section
+data ProblemDescription where
+  PDVerb :: Section -> ProblemDescription
+  -- PDProg :: --TODO
+  
+-- | Solution Characteristics Specification section
+data SolChSpec where
+  SCSVerb :: Section -> SolChSpec
+  SCSProg :: [SCSSub] -> SymbolMap -> SolChSpec
+  
+-- | Solution Characteristics Specification subsections
+data SCSSub where
+  SCSSubVerb :: Section -> SCSSub
+  -- Assumptions :: --TODO
+  TMs :: Fields -> [RelationConcept] -> SCSSub
+  GDs :: Fields -> [RelationConcept] -> SCSSub
+  DDs :: Fields -> [QDefinition]     -> SCSSub
+  IMs :: Fields -> [RelationConcept] -> SCSSub
+  -- Constraints :: --TODO
 
 -- | Reference section. Contents are top level followed by a list of subsections.
 -- RefVerb is used for including verbatim subsections
@@ -56,9 +84,16 @@ data IntroSec = IntroProg Sentence Sentence [IntroSub]
   -- ^ Temporary, will be modified once we've figured out more about the section.
               | IntroVerb Section
 
--- | Document sections are either Verbatim, Reference, or Introduction 
--- sections (for now!)
-data DocSection = Verbatim Section | RefSec RefSec | IntroSec IntroSec
+-- | Specific System Description section . Contains a list of subsections. 
+-- Verbatim sections handled by SSDVerb           
+data SSDSec = SSDProg [SSDSub] | SSDVerb Section
+
+-- | Document sections are either Verbatim, Reference, Introduction, or Specific
+-- System Description sections (for now!)
+data DocSection = Verbatim Section 
+                | RefSec RefSec 
+                | IntroSec IntroSec
+                | SSDSec SSDSec
 
 -- | For creating the table of symbols intro
 data TSIntro = TypogConvention [TConvention] -- ^ Typographic conventions used
@@ -69,7 +104,8 @@ data TSIntro = TypogConvention [TConvention] -- ^ Typographic conventions used
 -- | Possible typographic conventions
 data TConvention = Vector Emphasis -- ^ How vectors are emphasized
                  | Verb Sentence -- ^ Verbatim for specialized conventions
-                 
+
+-- | How to handle Emphasis                 
 data Emphasis = Bold
               | Italics
 
@@ -115,9 +151,10 @@ mkSections :: SystemInformation -> DocDesc -> [Section]
 mkSections si l = foldr doit [] l
   where
     doit :: DocSection -> [Section] -> [Section]
-    doit (Verbatim s) ls = s : ls
-    doit (RefSec rs)  ls = mkRefSec si rs : ls
+    doit (Verbatim s)  ls = s : ls
+    doit (RefSec rs)   ls = mkRefSec si rs : ls
     doit (IntroSec is) ls = mkIntroSec si is : ls
+    doit (SSDSec ss)   ls = mkSSDSec si ss : ls
 
 -- | Helper for creating the reference section and subsections
 mkRefSec :: SystemInformation -> RefSec -> Section
@@ -229,3 +266,42 @@ mkIntroSec si (IntroProg probIntro progDefn l) =
       Intro.charIntRdrF know understand sys appStandd (SRS.userChar [] []) : l'
     mkSubIntro _ (IOrgSec i b s t) l' = Intro.orgSec i b s t : l'
     -- FIXME: s should be "looked up" using "b" once we have all sections being generated
+
+mkSSDSec :: SystemInformation -> SSDSec -> Section
+mkSSDSec _ (SSDVerb s) = s
+mkSSDSec si (SSDProg l) = 
+  SSD.specSysDescr (siSys si) $ foldr (mkSubSSD si) [] l
+  where
+    mkSubSSD :: SystemInformation -> SSDSub -> [Section] -> [Section]
+    mkSubSSD _ (SSDSubVerb s) l'      = s : l'
+    mkSubSSD sysi (SSDProblem pd) l'    = mkSSDProb sysi pd : l'
+    mkSubSSD sysi (SSDSolChSpec scs) l' = mkSolChSpec sysi scs : l'
+
+mkSSDProb :: SystemInformation -> ProblemDescription -> Section
+mkSSDProb _ (PDVerb s) = s
+
+mkSolChSpec :: SystemInformation -> SolChSpec -> Section
+mkSolChSpec _ (SCSVerb s) = s
+mkSolChSpec si (SCSProg l m) = 
+  SRS.solCharSpec [SSD.solutionCharSpecIntro (siSys si) inModSec] $ 
+    foldr (mkSubSCS si) [] l
+  where
+    mkSubSCS :: SystemInformation -> SCSSub -> [Section] -> [Section]
+    mkSubSCS _ (SCSSubVerb s) l' = s : l'
+    mkSubSCS si' (TMs fields ts) l' = 
+      SSD.thModF (siSys si') (map (tmodel fields m) ts) : l'
+    inModSec = (SRS.inModel [Paragraph EmptyS] []) 
+    --FIXME: inModSec should be replaced with a walk
+    -- over the SCSProg and generate a relevant intro.
+    -- Could start with just a quick check of whether or not IM is included and 
+    -- then error out if necessary.
+
+  
+-- Helper
+siSys :: SystemInformation -> NWrapper
+siSys (SI sys _ _ _ _ _ _ _ _ _ _ _) = nw sys
+  
+  
+  
+  
+  

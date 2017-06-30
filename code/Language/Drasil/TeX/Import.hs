@@ -184,28 +184,31 @@ lay x@(UnlikelyChange ucc)=
   (spec $ refName x)
 lay x@(Graph ps w h t)    = T.Graph (map (\(y,z) -> (spec y, spec z)) ps)
                               w h (spec t) (spec $ refName x)
+lay (TMod ps r _)         = T.Definition (map (\(x,y) -> (x, map lay y)) ps)
+  (spec r)
 
 makeL :: ListType -> T.ListType  
-makeL (Bullet bs) = T.Enum $ (map item bs)
-makeL (Number ns) = T.Item $ (map item ns)
-makeL (Simple ps) = T.Simple $ zip (map (spec . fst) ps) (map (item . snd) ps)
-makeL (Desc ps)   = T.Desc $ zip (map (spec . fst) ps) (map (item . snd) ps)
+makeL (Bullet bs)      = T.Enum        $ (map item bs)
+makeL (Number ns)      = T.Item        $ (map item ns)
+makeL (Simple ps)      = T.Simple      $ map (\(x,y) -> (spec x, item y)) ps
+makeL (Desc ps)        = T.Desc        $ map (\(x,y) -> (spec x, item y)) ps
+makeL (Definitions ps) = T.Definitions $ map (\(x,y) -> (spec x, item y)) ps
 
 item :: ItemType -> T.ItemType
 item (Flat i) = T.Flat (spec i)
 item (Nested t s) = T.Nested (spec t) (makeL s) 
   
-makePairs :: DType -> SymbolMap -> [(String,T.LayoutObj)]
+makePairs :: DType -> SymbolMap -> [(String,[T.LayoutObj])]
 makePairs (Data c) m = [
-  ("Label",       T.Paragraph $ T.N $ c ^. symbol),
-  ("Units",       T.Paragraph $ spec $ unit'2Contents c),
-  ("Equation",    eqnStyleDD $ buildEqn c),
-  ("Description", T.Paragraph (buildDDDescription c m))
+  ("Label",       [T.Paragraph $ T.N $ c ^. symbol]),
+  ("Units",       [T.Paragraph $ spec $ unit'2Contents c]),
+  ("Equation",    [eqnStyleDD $ buildEqn c]),
+  ("Description", [T.Paragraph (buildDDDescription c m)])
   ]
 makePairs (Theory c) _ = [
-  ("Label",       T.Paragraph $ spec (phrase $ c ^. term)),
-  ("Equation",    eqnStyleTM $ T.E (rel (relat c))),
-  ("Description", T.Paragraph (spec (c ^. defn)))
+  ("Label",       [T.Paragraph $ spec (phrase $ c ^. term)]),
+  ("Equation",    [eqnStyleTM $ T.E (rel (relat c))]),
+  ("Description", [T.Paragraph (spec (c ^. defn))])
   ]
 makePairs General _ = error "Not yet implemented"
 

@@ -84,7 +84,7 @@ parseDoc los' = [PreP FullPage, PreP HyperRef, PreP AMSMath] ++
    --     parseDoc' ((CodeBlock _):los) =
    --       (PreP Listings):parseDoc' los
         parseDoc' ((Definition ps _):los) =
-          (parseDoc' (map snd ps)) ++
+          (concat $ map parseDoc' (map snd ps)) ++
           (PreP LongTable):(PreP BookTabs):parseDoc' los
         parseDoc' ((Figure _ _ _):los) =
           (PreP Graphics):(PreP Caption):parseDoc' los

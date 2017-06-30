@@ -35,7 +35,7 @@ data SystemInformation where
   _inputs :: [h],
   _outputs :: [i],
   _defSequence :: [Block QDefinition],
-  _constraints :: [j]
+  _constraints :: [j] --TODO: Add SymbolMap OR enough info to gen SymbolMap
   } -> SystemInformation
   
   

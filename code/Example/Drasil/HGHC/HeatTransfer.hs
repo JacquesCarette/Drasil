@@ -8,10 +8,10 @@ hghcSymMap :: SymbolMap
 hghcSymMap = symbolMap symbols
 
 symbols :: [QSWrapper]
-symbols = map qs vars ++ map qs htVars
+symbols = map qs hghcVars ++ map qs htVars
 
-vars :: [QDefinition]
-vars = [htTransCladFuel, htTransCladCool]
+hghcVars :: [QDefinition]
+hghcVars = [htTransCladFuel, htTransCladCool]
 
 htVars :: [VarChunk]
 htVars = [cladThick, coolFilmCond, gapFilmCond, cladCond]

@@ -32,7 +32,7 @@ thisSRS :: DocDesc
 thisSRS = RefSec (RefProg intro [TUnits, tsymb [TSPurpose, SymbConvention [Lit (nw nuclearPhys), Manual (nw fp)]]]) : [Verbatim s3]
   
 s3 :: Section --, s4 
-s3 = dataDefnF EmptyS (map (Definition hghcSymMap . Data) vars)
+s3 = dataDefnF EmptyS (map (Definition hghcSymMap . Data) hghcVars)
   
 srsBody :: Document
 srsBody = mkDoc thisSRS thisSI
@@ -41,10 +41,10 @@ mgSecs, misSecs :: [Section]
 (mgSecs, misSecs) = makeDD [] [] [] modules
   
 mgBody :: Document
-mgBody = doc "MG" vars (name spencerSmith) mgSecs
+mgBody = doc "MG" hghcVars (name spencerSmith) mgSecs
 
 misBody :: Document
-misBody = doc "MIS" vars (name spencerSmith) misSecs
+misBody = doc "MIS" hghcVars (name spencerSmith) misSecs
 
 doc :: SymbolForm s => String -> [s] -> Sentence -> [Section] -> Document
 doc nam ls author body =

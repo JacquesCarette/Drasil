@@ -91,15 +91,16 @@ data LayoutObj = Table Tags [[Spec]] Label Bool Caption
                | HDiv Tags [LayoutObj] Label
                | Tagless Contents
              --  CodeBlock Code
-               | Definition DType [(String,LayoutObj)] Label
+               | Definition DType [(String,[LayoutObj])] Label
                | List ListType
                | Figure Label Caption Filepath
                | Module String Label
                -- Span Tags Contents
                
 data ListType = Ordered [ItemType] | Unordered [ItemType]
-              | Simple [(Title,ItemType)]
-              | Desc [(Title,ItemType)]
+              | Simple      [(Title,ItemType)]
+              | Desc        [(Title,ItemType)]
+              | Definitions  [(Title,ItemType)]
 
 data ItemType = Flat Spec | Nested Spec ListType
 

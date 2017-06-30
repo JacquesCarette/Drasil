@@ -277,7 +277,7 @@ p_unit (UDiv n d) = toMath $
 ------------------ DATA DEFINITION PRINTING-----------------
 -----------------------------------------------------------------
 
-makeDefn :: [(String,LayoutObj)] -> D -> D
+makeDefn :: [(String,[LayoutObj])] -> D -> D
 makeDefn [] _ = error "Empty definition"
 makeDefn ps l = beginDefn %% makeDefTable ps l %% endDefn
 
@@ -288,7 +288,7 @@ beginDefn = (pure $ text "~") <> newline
 endDefn :: D
 endDefn = pure $ text "\\end{minipage}" TP.<> dbs
 
-makeDefTable :: [(String,LayoutObj)] -> D -> D
+makeDefTable :: [(String,[LayoutObj])] -> D -> D
 makeDefTable [] _ = error "Trying to make empty Data Defn"
 makeDefTable ps l = vcat [
   pure $ text $ "\\begin{tabular}{p{"++show colAwidth++"\\textwidth} p{"++show colBwidth++"\\textwidth}}",
@@ -298,10 +298,12 @@ makeDefTable ps l = vcat [
   pure $ dbs <+> text ("\\bottomrule \\end{tabular}")
   ]
 
-makeDRows :: [(String,LayoutObj)] -> D
+makeDRows :: [(String,[LayoutObj])] -> D
 makeDRows []         = error "No fields to create Defn table"
-makeDRows ((f,d):[]) = dBoilerplate %% (pure $ text (f ++ " & ")) <> lo d
-makeDRows ((f,d):ps) = dBoilerplate %% (pure $ text (f ++ " & ")) <> lo d
+makeDRows ((f,d):[]) = dBoilerplate %% (pure $ text (f ++ " & ")) <>
+  (vcat $ map lo d)
+makeDRows ((f,d):ps) = dBoilerplate %% (pure $ text (f ++ " & ")) <> 
+  (vcat $ map lo d)
                        %% makeDRows ps
 dBoilerplate :: D
 dBoilerplate = pure $ dbs <+> text "\\midrule" <+> dbs
@@ -325,6 +327,7 @@ makeList (Simple items) = itemize   $ vcat (sim_item items)
 makeList (Desc items)   = description $ vcat (sim_item items)
 makeList (Item items)   = itemize   $ vcat (map p_item items)
 makeList (Enum items)   = enumerate $ vcat (map p_item items)
+makeList (Definitions items) = description $ vcat (def_item items)
 
 p_item :: ItemType -> D
 p_item (Flat s) = item (spec s)
@@ -335,7 +338,12 @@ sim_item [] = [empty]
 sim_item ((x,y):zs) = item' (spec (x :+: S ":")) (sp_item y) : sim_item zs
     where sp_item (Flat s) = spec s
           sp_item (Nested t s) = vcat [spec t, makeList s]
-
+          
+def_item :: [(Spec, ItemType)] -> [D]
+def_item [] = [empty]
+def_item ((x,y):zs) = item (spec (x :+: S " is the " :+: d_item y)) : def_item zs
+  where d_item (Flat s) = s
+        d_item (Nested _ _) = error "Cannot use sublists in definitions"
 -----------------------------------------------------------------
 ------------------ FIGURE PRINTING--------------------------
 -----------------------------------------------------------------

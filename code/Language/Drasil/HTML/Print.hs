@@ -50,6 +50,7 @@ printLO (List t)                = makeList t
 printLO (Figure r c f)          = makeFigure (p_spec r) (p_spec c) f
 printLO (Module m l)            = makeModule m (p_spec l)
 
+
 -- | Called by build, uses 'printLO' to render the layout 
 -- objects in Doc format.
 print :: [LayoutObj] -> Doc
@@ -220,7 +221,7 @@ makeColumns ls = vcat $ map (td . text . p_spec) ls
 -----------------------------------------------------------------
 
 -- | Renders definition tables (Data, General, Theory, etc.)
-makeDefn :: L.DType -> [(String,LayoutObj)] -> String -> Doc
+makeDefn :: L.DType -> [(String,[LayoutObj])] -> String -> Doc
 makeDefn _ [] _   = error "Empty definition"
 makeDefn dt ps l = refwrap l $ wrap "table" [dtag dt] (makeDRows ps)
   where dtag (L.Data _)   = "ddefn"
@@ -228,10 +229,10 @@ makeDefn dt ps l = refwrap l $ wrap "table" [dtag dt] (makeDRows ps)
         dtag (L.General)  = "gdefn"
 
 -- | Helper for making the definition table rows
-makeDRows :: [(String,LayoutObj)] -> Doc
+makeDRows :: [(String,[LayoutObj])] -> Doc
 makeDRows []         = error "No fields to create defn table"
-makeDRows ((f,d):[]) = tr (th (text f) $$ td (printLO d))
-makeDRows ((f,d):ps) = tr (th (text f) $$ td (printLO d)) $$ makeDRows ps
+makeDRows ((f,d):[]) = tr (th (text f) $$ td (vcat $ map printLO d))
+makeDRows ((f,d):ps) = tr (th (text f) $$ td (vcat $ map printLO d)) $$ makeDRows ps
 
 -----------------------------------------------------------------
 ------------------BEGIN LIST PRINTING----------------------------
@@ -248,6 +249,9 @@ makeList t@(Ordered items) = wrap (show t ++ "l") ["list"] (vcat $ map
   (wrap "li" [] . p_item) items)
 makeList t@(Unordered items) = wrap (show t ++ "l") ["list"] (vcat $ map
   (wrap "li" [] . p_item) items)
+makeList (Definitions items) = div_tag ["list"] 
+  (vcat $ map (\(b,e) -> wrap "p" [] ((text (p_spec b ++ " is the") <+> 
+  (p_item e)))) items)
 
 -- | Helper for rendering list items
 p_item :: ItemType -> Doc  

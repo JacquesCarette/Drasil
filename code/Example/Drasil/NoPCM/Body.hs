@@ -94,7 +94,7 @@ mkSRS = RefSec (RefProg intro
   map Verbatim [s3, s4, s5, s6, s7, s8, s9]
 
 pcm_si :: SystemInformation
-pcm_si = SI srs_swhs srs [thulasi] this_si pcmSymbols ([] :: [CQSWrapper])
+pcm_si = SI srs_swhs srs [thulasi] this_si pcmSymbols (map cqs pcmUnits :: [CQSWrapper])
   acronyms ([dd1HtFluxC] :: [QDefinition]) (map qs pcmConstraints) 
   ([] :: [QSWrapper]) ([] :: [Block QDefinition])
   ([] :: [ConstrainedChunk])-- Place Holder until Data Definitions can be created

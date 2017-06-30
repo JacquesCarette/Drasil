@@ -29,7 +29,7 @@ gbConstrained :: [ConstrWrapper]
 gbConstrained = map cnstrw gbInputs ++ map cnstrw [prob_br]
 
 plate_len, plate_width, char_weight, standOffDist:: UncertQ
-tNT, pb_tol, glass_type, nom_thick :: ConstrainedChunk
+tNT, glass_type, nom_thick :: ConstrainedChunk
 
 {--}
 
@@ -37,10 +37,10 @@ defaultUncrt :: Double
 defaultUncrt = 0.1
 
 gbInputs_ :: [UncertQ]
-gbInputs_ = [plate_len, plate_width, char_weight, standOffDist]
+gbInputs_ = [pb_tol, plate_len, plate_width, char_weight, standOffDist]
 
 gbInputs :: [ConstrainedChunk]
-gbInputs = [pb_tol, tNT, nom_thick, glass_type]
+gbInputs = [ tNT, nom_thick, glass_type]
 
 plate_len = uqcND "plate_len" (nounPhraseSP "plate length (long dimension)")
   lA millimetre Real 
@@ -58,10 +58,10 @@ plate_width = uqcND "plate_width" (nounPhraseSP "plate width (short dimension)")
     sfwrc $ \c -> c :<= (C dim_max),
     sfwrc $ \c -> ((C plate_len) :/ c) :< (C ar_max) ] (Dbl 1200) defaultUncrt
 
-pb_tol = cvc "pb_tol" (nounPhraseSP "tolerable probability of breakage") 
+pb_tol = uq (cvc "pb_tol" (nounPhraseSP "tolerable probability of breakage") 
   (sub cP (Atomic "btol")) Real
   [ physc $ \c -> (Dbl 0) :< c ,
-    physc $ \c -> c :< (Dbl 1) ] (Dbl 0.008) 
+    physc $ \c -> c :< (Dbl 1) ] (Dbl 0.008) ) defaultUncrt
 
 char_weight = uqcND "char_weight" (nounPhraseSP "charge weight") 
   lW kilogram Real

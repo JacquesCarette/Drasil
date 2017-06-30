@@ -5,6 +5,7 @@ module Drasil.Sections.SpecificSystemDescription
   , physSystDesc
   , goalStmtF
   , solChSpecF
+  , solutionCharSpecIntro 
   , assumpF
   , thModF
   , genDefnF

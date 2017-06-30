@@ -7,6 +7,11 @@ import Drasil.SWHS.Unitals
 import Data.Drasil.Utils (getS, unwrap)
 import Data.Drasil.SentenceStructures (foldlSent, isThe, sAnd, ofThe)
 import Data.Drasil.Quantities.Physics (time)
+import Data.Drasil.Concepts.Math (equation)
+import Drasil.SWHS.Concepts (water)
+import Data.Drasil.SentenceStructures (foldlSent)
+import Data.Drasil.Concepts.PhysicalProperties
+import Data.Drasil.Concepts.Thermodynamics (melting, boil_pt, temp)
 import Control.Lens ((^.))
 
 swhsInModels :: [RelationConcept]
@@ -21,12 +26,22 @@ eBalanceOnWtr = makeRC "eBalanceOnWtr" (nounPhraseSP "Energy balance on water to
   --FIXME: title uses temp_W title
 
 balWtr_Rel :: Relation
-balWtr_Rel = ((FCall (C temp_W) [C time]) + (V ", ") + (Int 0) :<= (C time) :<= (C time_final) + (V ", such that ") +
-  (Deriv Total (C temp_W) (C time))) := (Int 1) / (C tau_W) *
-  (((C temp_C) - (FCall (C temp_W) [C time])))
+balWtr_Rel = (Deriv Total (C temp_W) (C time)) := (Int 1) / (C tau_W) *
+  (((C temp_C) - (FCall (C temp_W) [C time])) +
+  (C eta) * ((FCall (C temp_PCM) [C time]) - (FCall (C temp_W) [C time])))
 
 balWtrDesc :: Sentence
-balWtrDesc = fixmeS
+balWtrDesc = foldlSent [(E $ C temp_W) `isThe` phrase temp_W +:+. sParen (unwrap $ getUnit temp_W),
+  (E $ C temp_PCM) `isThe` phrase temp_PCM +:+. sParen (unwrap $ getUnit temp_PCM),
+  (E $ C temp_C) `isThe` phrase temp_C +:+. sParen (unwrap $ getUnit temp_C),
+  (E $ C tau_W := (C w_mass * C htCap_W) / (C coil_HTC * C coil_SA)), S "is a constant" +:+. sParen (unwrap $ getUnit tau_W),
+  (E $ C eta := (C pcm_HTC * C pcm_SA) / (C coil_HTC * C coil_SA)), S "is a constant" +:+. sParen (S "dimensionless"),
+  S "The above", phrase equation, S "applies as long as the", phrase water, S "is in", phrase liquid,
+  S "form" `sC` (E $ Int 0 :< C temp_W :< (Int 100)), sParen (unwrap $ getUnit temp_W), S "where",
+  S $ show (0 :: Integer), sParen (unwrap $ getUnit temp_W) `sAnd` (S $ show (100 :: Integer)),
+  sParen (unwrap $ getUnit temp_W), S "are the", phrase melting `sAnd` plural boil_pt, S "of",
+  phrase water `sC` S "respectively", sParen (acroA 14 `sC` acroA 19)]
+
 
 ---------
 -- IM2 --
@@ -36,10 +51,16 @@ eBalanceOnPCM = makeRC "eBalanceOnPCM" (nounPhraseSP "Energy balance on PCM to f
   balPCMDesc balPCM_Rel
 
 balPCM_Rel :: Relation
-balPCM_Rel = Int 0 := Int 0
+balPCM_Rel = (Deriv Total (C temp_PCM) (C time)) := Case [case1, case2, case3, case4]
+  where case1 = (((Int 1) / (C tau_S_P)) * ((FCall (C temp_W) [C time]) - (FCall (C temp_PCM) [C time])), (C temp_PCM) :< (C temp_melt_P))
+        case2 = (((Int 1) / (C tau_L_P)) * ((FCall (C temp_W) [C time]) - (FCall (C temp_PCM) [C time])), (C temp_PCM) :> (C temp_melt_P))
+        case3 = ((Int 0), (C temp_PCM) := (C temp_melt_P))
+        case4 = ((Int 0), (Int 0) :< (C melt_frac) :< (Int 1))
+
 
 balPCMDesc :: Sentence
-balPCMDesc = fixmeS
+balPCMDesc = foldlSent [(E $ C temp_W) `isThe` S "water temperature" +:+. sParen (unwrap $ getUnit temp_W), fixmeS]
+
 
 ---------
 -- IM3 --
@@ -95,6 +116,13 @@ htPCMDesc = foldlSent [S "The above equation is derived using" +:+. (acroT 2 `sA
   S "since the PCM is assumed to either be in a solid or liquid state", sParen (acroA 18)]
 
 {--}
+
+{--varWithDesc :: N c => c -> Sentence
+varWithDesc conceptVar = (E $ C conceptVar) `isThe` phrase conceptVar +:+.
+  sParen (unwrap $ getUnit conceptVar)
+
+--need to create a wrapper
+--}
 
 fixmeS :: Sentence
 fixmeS = S "Add description"

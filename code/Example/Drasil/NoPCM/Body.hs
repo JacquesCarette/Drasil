@@ -68,7 +68,7 @@ pcmUnits = map ucw [density, tau, in_SA, out_SA,
   temp_diff, temp_env, thFluxVect, time, ht_flux_C,
   vol, w_mass, w_vol]
 
-pcmConstraints :: [ConstrConcept]
+pcmConstraints :: [UncertQ]
 pcmConstraints =  [coil_SA, htCap_W, coil_HTC, temp_init,
   time_final, tank_length, temp_C, w_density, diam, temp_W]
 

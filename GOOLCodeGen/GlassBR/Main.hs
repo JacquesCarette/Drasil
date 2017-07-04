@@ -13,16 +13,14 @@ import Modules.ReadTable
 
 main :: IO()
 main = do
-  genCode pythonLabel
-  genCode goolLabel
+  genCode cppLabel
 
 genCode :: String -> IO()
 genCode lang = createCodeFiles $ makeCode 
   lang 
-  (Options Nothing Nothing Nothing (Just "Code")) 
-  (map moduleName classes) 
+  (Options Nothing Nothing Nothing (Just "Code"))  
   (toAbsCode "GlassBR" classes)
 
 classes :: [Module]
-classes = [inputParameters, derivedValues, inputFormat, inputConstraints, interpolation,   calculations, outputFormat, control, readTable]
+classes = [inputParameters, derivedValues, inputFormat, inputConstraints, interpolation,   calculations, outputFormat, control]--, readTable]
 

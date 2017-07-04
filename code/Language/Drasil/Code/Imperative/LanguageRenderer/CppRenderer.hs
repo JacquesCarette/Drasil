@@ -4,7 +4,6 @@ module Language.Drasil.Code.Imperative.LanguageRenderer.CppRenderer (
     cppConfig
 ) where
 
-import Language.Drasil.Config(splitSource)
 import Language.Drasil.Code.Code (Code(..))
 import Language.Drasil.Code.Imperative.AST
   hiding (comment,bool,int,float,char,tryBody,catchBody,initState,guard,update)
@@ -32,7 +31,7 @@ cppConfig options c =
         endStatement     = semi,
         enumsEqualInts   = False,
         ext              = ".cpp",
-        fileName         = \p _ -> p,
+        fileName         = fileNameD c,
         include          = includeD "#include",
         includeScope     = \_ -> empty,
         inherit          = colon,
@@ -77,10 +76,10 @@ ptr = text "*"
 ptrAccess = text "->"
 
 -- short names, packaged up above (and used below)
-renderCode' :: Config -> [Label] -> AbstractCode -> Code
-renderCode' c ms (AbsCode p) =
-  Code $ (fileCode c p ms Header cppHeaderExt) ++
-         (fileCode c p ms Source (ext c))
+renderCode' :: Config -> AbstractCode -> Code
+renderCode' c (AbsCode p@(Pack l ms)) =
+  Code $ (fileCode c (Pack l (ignoreMain ms)) Header cppHeaderExt) ++
+         (fileCode c p Source (ext c))
 
 
 cppstateType :: Config -> StateType -> DecDef -> Doc
@@ -103,8 +102,15 @@ cpptop c Header _ (Mod n _ _ _ _) = vcat [
     usingNameSpace c "std" (Just $ render (list c Dynamic)),
     usingNameSpace c "std" (Just "ifstream"),
     usingNameSpace c "std" (Just "ofstream")]
-cpptop c Source p (Mod n _ _ _ _) = vcat [          --TODO remove includes if they aren't used
-    include c ("\"" ++ n ++ cppHeaderExt ++ "\""),
+cpptop c Source p m@(Mod n l _ _ _) = vcat $ [          --TODO remove includes if they aren't used
+    if notMainModule m 
+      then include c ("\"" ++ n ++ cppHeaderExt ++ "\"")
+      else empty,
+    blank] 
+    ++
+    (map (\x -> include c ("\"" ++ x ++ cppHeaderExt ++ "\"")) l)
+    ++ 
+    [blank,
     include c "<algorithm>",
     include c "<iostream>",
     include c "<fstream>",

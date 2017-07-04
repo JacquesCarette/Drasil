@@ -29,7 +29,7 @@ javaConfig options c =
         endStatement     = semi,
         enumsEqualInts   = False,
         ext              = ".java",
-        fileName         = \_ ns -> head ns,
+        fileName         = fileNameD c,
         include          = includeD "import",
         includeScope     = (scopeDoc c),
         inherit          = text "extends",
@@ -67,8 +67,8 @@ javaConfig options c =
     }
 
 -- short names, packaged up above (and used below)
-renderCode' :: Config -> [Label] -> AbstractCode -> Code
-renderCode' c ms (AbsCode p) = Code $ fileCode c p ms Source (ext c)
+renderCode' :: Config -> AbstractCode -> Code
+renderCode' c (AbsCode p) = Code $ fileCode c p Source (ext c)
 
 package' :: Label -> Doc
 package' n = text "package" <+> text n

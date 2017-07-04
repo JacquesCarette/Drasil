@@ -32,7 +32,7 @@ objcConfig options c =
         endStatement     = semi,
         enumsEqualInts   = False,
         ext              = ".m",
-        fileName         = \p _ -> p,
+        fileName         = fileNameD c,
         include          = includeD "#import",
         includeScope     = \_ -> empty,
         inherit          = colon,
@@ -87,10 +87,10 @@ ptr = text "*"
 str = text "NSString"
 
 -- short names, packaged up above (and used below)
-renderCode' :: Config -> [Label] -> AbstractCode -> Code
-renderCode' c ms (AbsCode p) = Code $
-    (fileCode c p ms Header objcHeaderExt) ++
-    (fileCode c p ms Source (ext c))
+renderCode' :: Config -> AbstractCode -> Code
+renderCode' c (AbsCode p@(Pack l ms)) =
+  Code $ (fileCode c (Pack l (ignoreMain ms)) Header  objcHeaderExt) ++
+    (fileCode c p Source (ext c))
 
 objcstateType :: Config -> StateType -> DecDef -> Doc
 objcstateType c (List lt _) Dec    = list c lt <> ptr

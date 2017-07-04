@@ -25,7 +25,7 @@ pythonConfig _ c =
         endStatement     = empty,
         enumsEqualInts   = True,
         ext              = ".py",
-        fileName         = \p _ -> p,
+        fileName         = fileNameD c,
         include          = include',
         includeScope     = \_ -> empty,
         inherit          = empty,
@@ -70,8 +70,8 @@ incl = "from"
 initName = "__init__"
 
 -- short names, packaged up above (and used below)
-renderCode' :: Config -> [Label] -> AbstractCode -> Code
-renderCode' c ms (AbsCode p) = Code $ fileCode c p ms Source (ext c)
+renderCode' :: Config -> AbstractCode -> Code
+renderCode' c (AbsCode p) = Code $ fileCode c p Source (ext c)
 
 include' :: Label -> Doc
 include' n = text incl <+> text n <+> text imp

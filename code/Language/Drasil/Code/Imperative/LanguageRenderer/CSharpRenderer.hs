@@ -23,7 +23,7 @@ csharpConfig _ c =
         endStatement     = semi,
         enumsEqualInts   = False,
         ext              = ".cs",
-        fileName         = \_ ns -> head ns,
+        fileName         = fileNameD c,
         include          = includeD "using",
         includeScope     = scopeDoc c,
         inherit          = colon,
@@ -61,8 +61,8 @@ csharpConfig _ c =
     }
 
 -- short names, packaged up above (and used below)
-renderCode' :: Config -> [Label] -> AbstractCode -> Code
-renderCode' c ms (AbsCode p) = Code $ fileCode c p ms Source (ext c)
+renderCode' :: Config -> AbstractCode -> Code
+renderCode' c (AbsCode p) = Code $ fileCode c p Source (ext c)
 
 cstop :: Config -> FileType -> Label -> Module -> Doc
 cstop c _ _ _ = vcat [

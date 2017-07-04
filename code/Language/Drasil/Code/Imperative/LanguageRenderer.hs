@@ -13,7 +13,7 @@ module Language.Drasil.Code.Imperative.LanguageRenderer (
     classDec, dot, doubleSlash, forLabel, new,
     
     -- * Default Functions available for use in renderers
-    assignDocD,assignDocD',binOpDocD,bodyDocD,blockDocD,callFuncParamListD,conditionalDocD,conditionalDocD',conditionalDocD'',declarationDocD,declarationDocD',
+    fileNameD,assignDocD,assignDocD',binOpDocD,bodyDocD,blockDocD,callFuncParamListD,conditionalDocD,conditionalDocD',conditionalDocD'',declarationDocD,declarationDocD',
     enumElementsDocD,exceptionDocD,exprDocD,exprDocD',exprDocD'',funcAppDocD,funcDocD,includeD,iterationDocD,litDocD,
     clsDecDocD,clsDecListDocD,classDocD,namespaceD,objAccessDocD,objVarDocD,
     paramDocD,paramListDocD,patternDocD,printDocD,retDocD,scopeDocD,stateDocD,stateListDocD,
@@ -50,7 +50,7 @@ data FileType = Header | Source
 
 -- | Configuration record (explicit dictionary) for a language
 data Config = Config {
-    renderCode :: [Label] -> AbstractCode -> Code,
+    renderCode :: AbstractCode -> Code,
     
     argsList :: Doc,
     bitArray :: Doc,
@@ -58,7 +58,7 @@ data Config = Config {
     endStatement :: Doc,
     enumsEqualInts :: Bool,     --whether Enum elements should explictly be set equal to their ordinal integers (in the default enumElementsDoc implementation)
     ext :: Label,
-    fileName :: Label -> [Label] -> String,
+    fileName :: Module -> String,
     include :: Label -> Doc,
     includeScope :: Scope -> Doc,
     inherit :: Doc,
@@ -130,15 +130,18 @@ data Config = Config {
 -- fileCode :: Config -> Package -> [Label] -> FileType -> Label -> (FilePath, Doc)
 -- fileCode c (Pack p ms) ns f e = (fileName c p ns ++ e, fileDoc c f p ms) -- -$ map (clsWithName ms) ns)
 
-fileCode :: Config -> Package -> [Label] -> FileType -> Label -> [(FilePath, Doc)]
-fileCode c (Pack p ms) ns f e = --let classes = map (clsWithName ms) ns in
-  [(fileName c (moduleName cls) ns ++ e, fileDoc c f p cls) | cls <- ms]
+fileCode :: Config -> Package -> FileType -> Label -> [(FilePath, Doc)]
+fileCode c (Pack p ms) f e = --let classes = map (clsWithName ms) ns in
+  [(fileName c m ++ e, fileDoc c f p m) | m <- ms]
 
 fileDoc :: Config -> FileType -> Label -> Module -> Doc
 fileDoc c f p m = vibcat [
     top c f p m,
     body c f p m,
     bottom c f]
+    
+fileNameD :: Config -> Module -> String
+fileNameD _ = moduleName
 
 ----------------------------------------
 -- Syntax common to several renderers --

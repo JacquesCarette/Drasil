@@ -24,7 +24,7 @@ luaConfig _ c =
         endStatement     = empty,
         enumsEqualInts   = True,
         ext              = ".lua",
-        fileName         = \p _ -> p,
+        fileName         = fileNameD c,
         include          = include',
         includeScope     = \_ -> empty,
         inherit          = text "inheritsFrom",
@@ -70,8 +70,8 @@ incl :: Doc
 incl = text "require"
 
 -- short names, packaged up above (and used below)
-renderCode' :: Config -> [Label] -> AbstractCode -> Code
-renderCode' c ms (AbsCode p) = Code $ fileCode c p ms Source (ext c)
+renderCode' :: Config -> AbstractCode -> Code
+renderCode' c (AbsCode p) = Code $ fileCode c p Source (ext c)
 
 include' :: Label -> Doc
 include' n = incl <+> quotes (text n)

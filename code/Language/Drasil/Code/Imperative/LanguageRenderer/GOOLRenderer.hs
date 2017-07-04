@@ -27,7 +27,7 @@ goolConfig options c =
         endStatement     = empty,
         enumsEqualInts   = False,
         ext              = ".hs",
-        fileName         = \p _ -> p,
+        fileName         = fileNameD c,
         include          = includeD "import",
         includeScope     = \_ -> empty,
         inherit          = text "extends",
@@ -74,8 +74,8 @@ classNameList = "clsNames"
 makeAbsCode = "makeAbstractCode"
 
 -- short names, packaged up above (and used below)
-renderCode' :: Config -> [Label] -> AbstractCode -> Code
-renderCode' c ms (AbsCode p) = Code $ fileCode c p ms Source (ext c)
+renderCode' :: Config -> AbstractCode -> Code
+renderCode' c (AbsCode p) = Code $ fileCode c p Source (ext c)
 
 goolstateType :: Config -> StateType -> DecDef -> Doc
 goolstateType c (List lt t) _ = parens $ text "List" <+> listTypeDoc lt <+> stateType c t Dec

@@ -15,7 +15,7 @@ import Prelude hiding (id)
 import Data.Drasil.Utils
 import Data.Drasil.SentenceStructures (foldlSent, foldlList, ofThe, isThe, 
   showingCxnBw, figureLabel, foldlSP, sAnd, foldlsC, tAndDWAcc, tAndDWSym,
-  tAndDOnly, sVersus, {-displayConstr,-} inDataConstTbl, outDataConstTbl)
+  tAndDOnly, sVersus, inDataConstTbl, outDataConstTbl)
 
 import Drasil.Template.MG
 import Drasil.Template.DD
@@ -68,22 +68,27 @@ glassBR_srs' :: Document
 glassBR_srs' = mkDoc' mkSRS (for'' titleize phrase) glassSystInfo
 
 mkSRS :: DocDesc 
-mkSRS = RefSec (RefProg intro [TUnits, tsymb [TSPurpose, SymbOrder], TAandA]):
-  IntroSec (IntroProg startIntro (short gLassBR) 
-  [IPurpose (s2_1_intro_p1), 
-  IScope incScoR endScoR, 
-  IChar knowIR undIR appStanddIR, 
-  IOrgSec s2_3_intro dataDefn s6_2_4 s2_3_intro_end]) :
-  map Verbatim [s3, s4, s5, s6, s7, s8, s9, s10, s11, s12]
+mkSRS = [RefSec (RefProg intro
+  [TUnits,
+  tsymb [TSPurpose, SymbOrder],
+  TAandA])] ++
+  [IntroSec (IntroProg startIntro (short gLassBR)
+     [IPurpose (s2_1_intro_p1),
+     IScope incScoR endScoR,
+     IChar knowIR undIR appStanddIR,
+     IOrgSec s2_3_intro dataDefn s6_2_4 s2_3_intro_end])] ++
+  map Verbatim [s3, s4, s5 {-, s6-}] ++
+  [SSDSec (SSDVerb s6)] {-(SSDProg [SSDProblem, SSDSolChSpec])-} ++
+  map Verbatim [s7, s8, s9, s10, s11, s12]
   
 glassSystInfo :: SystemInformation
-glassSystInfo = SI glassBRProg srs authors this_si this_symbols 
-  ([] :: [CQSWrapper]) 
+glassSystInfo = SI glassBRProg srs authors this_si this_symbols
+  ([] :: [CQSWrapper])
   (acronyms)
   (dataDefns)
   (map qs gbInputs)
-  (map qs gbOutputs) 
-  (gbQDefns :: [Block QDefinition]) 
+  (map qs gbOutputs)
+  (gbQDefns :: [Block QDefinition])
   gbConstrained
   --FIXME: All named ideas, not just acronyms.
   

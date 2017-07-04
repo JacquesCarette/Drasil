@@ -62,11 +62,16 @@ dedescr =
   S "is the", (demandq ^. defn), S "obtained from Figure 2 by interpolation using", --use MakeRef? Issue #216
   (phrase standOffDist), sParen (getS standOffDist), S "and", 
   (getS eqTNTWeight) +:+. S "as parameters", 
-  (getS eqTNTWeight), S "is defined as", (getS eqTNTWeight),
-  S "=", (getS char_weight) +:+. S "* TNT" +:+. ((getS char_weight) `isThe`
+  (getS eqTNTWeight), S "is defined as" +:+.
+  E (C eqTNTWeight := (C char_weight) * (C tNT)) +:+. ((getS char_weight) `isThe`
   (phrase char_weight)) +:+. ((getS tNT) `isThe`
   (phrase tNT)), (getS standOffDist) `isThe`
-  (phrase standOffDist), S "where", (getS standOffDist), S "= "]
-  --equation in sentence
+  (phrase standOffDist), S "where FIXME", S "where",
+  sParen (getS sdx `sC` getS sdy `sC` getS sdz), S "are coordinates"]
+  --FIXME: pull out equations from sentence!
+  --FIXME: pull out [SDx, SDy, SDz] somewhere...
+  --FIXME: add equation for SD
+    {-Attempt 1: E ((C standOffDist) := {-sqrt-} (E (sup (sdx ^. symbol) (2)) :+ E (sup (sdy ^. symbol) (2)) :+ E (sup (sdz ^. symbol) (2)))),
+    Attempt 2: (((C sdx) ^ 2) :+ ((C sdy) ^ 2) :+ ((C sdz) ^ 2))) <-- incorrect output-}
 
 {--}

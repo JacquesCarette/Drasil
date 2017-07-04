@@ -141,11 +141,11 @@ s7_1_req6_pulledList = [loadDF, nonFL, glaTyFac, dimLL, tolPre, tolStrDisFac, st
 
 startIntro, knowIR, undIR, appStanddIR, incScoR, endScoR :: Sentence
 startIntro = foldlSent [at_start software, 
-  S "is helpful to efficiently and correctly predict the", 
+  S "is helpful to efficiently and correctly predict the",
   phrase blastRisk, S "involved with the" +:+. phrase glaSlab, 
-  S "The", phrase blast, S "under consideration is" +:+. (blast ^. defn), 
-  S "The", phrase software `sC` S "herein called", short gLassBR, 
-  S "aims to predict the", phrase blastRisk, S "involved with the", 
+  S "The", phrase blast, S "under consideration is" +:+. (blast ^. defn),
+  S "The", phrase software `sC` S "herein called", short gLassBR,
+  S "aims to predict the", phrase blastRisk, S "involved with the",
   phrase glaSlab, S "using an intuitive interface"]
 knowIR = (phrase theory +:+ S "behind" +:+ phrase glBreakage `sAnd`
   phrase blastRisk)

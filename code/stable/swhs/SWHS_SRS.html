@@ -1092,7 +1092,7 @@ SWHS is a computer program developed to investigate the effect of employing PCM 
 Terminology and Definitions
 </h4>
 <p class="paragraph">
-This subsection provides a list of terms that are used in the subsequent sections and their meaning, with the purpose of reducing ambiguity and making it easier to correctly understand the requirements.
+This subsection provides a list of terms that are used in the subsequent sections and their meaning, with the purpose of reducing ambiguity and making it easier to correctly understand the requirements:
 </p>
 <ul class="list">
 <li>
@@ -1239,6 +1239,9 @@ A18: The PCM is either in a liquid state or a solid state but not a gaseous stat
 </p>
 <p>
 A19: The pressure in the tank is atmospheric, so the melting point temperature and boiling point temperature are 0&deg;C and 100&deg;C, respectively [IM1, IM3].
+</p>
+<p>
+A20: When considering the volume of water in the tank, the volume of the heating coil is assumed to be negligible [R2].
 </p>
 </div>
 </div>
@@ -1405,6 +1408,85 @@ General Definitions
 <p class="paragraph">
 This section collects the laws and equations that will be used in deriving the data definitions, which in turn are used to build the instance models.
 </p>
+<a id="T:nwtnCooling">
+<table class="tdefn">
+<tr>
+<th>
+Label
+</th>
+<td>
+<p class="paragraph">
+Newton's law of cooling
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Equation
+</th>
+<td>
+<a id="">
+<div class="equation">
+<b>q</b>(t)=h&Delta;T(t)
+</div>
+</a>
+</td>
+</tr>
+<tr>
+<th>
+Description
+</th>
+<td>
+<p class="paragraph">
+Newton's law of cooling describes convective cooling from a surface. The law is stated as: the rate of heat loss from a body is proportional to the difference in temperatures between the body and its surroundings. Add Description.
+</p>
+</td>
+</tr>
+</table>
+</a>
+<a id="T:rocTempSimp">
+<table class="tdefn">
+<tr>
+<th>
+Label
+</th>
+<td>
+<p class="paragraph">
+Simplified rate of change of temperature
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Equation
+</th>
+<td>
+<a id="">
+<div class="equation">
+mC<div class="fraction">
+<span class="fup">
+dT
+</span>
+<span class="fdn">
+dt
+</span>
+</div>=q<sub>in</sub>A<sub>in</sub>-q<sub>out</sub>A<sub>out</sub>+gV
+</div>
+</a>
+</td>
+</tr>
+<tr>
+<th>
+Description
+</th>
+<td>
+<p class="paragraph">
+Add Description
+</p>
+</td>
+</tr>
+</table>
+</a>
 <p class="paragraph">
 Detailed derivation of simplified rate of change of temperature:
 </p>
@@ -5755,10 +5837,10 @@ Traceability Graph Showing the Connections Between Requirements, Instance Models
 </a>
 </div>
 </a>
-<a id="Sec:ValuOfAuxiCons">
+<a id="Sec:ValuofAuxiCons">
 <div class="section">
 <h2>
-Values Of Auxiliary Constants
+Values of Auxiliary Constants
 </h2>
 <p class="paragraph">
 This section contains the standard values that are used for calculations in SWHS.

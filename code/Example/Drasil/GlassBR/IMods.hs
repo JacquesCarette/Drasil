@@ -59,15 +59,15 @@ de_rel = (C demand) := FCall (C demand) [C eqTNTWeight, C standOffDist]
 dedescr :: Sentence
 dedescr = 
   foldlSent [(getS demand), S "or", (phrase demandq) `sC`
-  S "is the", (demandq ^. defn), S "obtained from Figure 2 by interpolation using", --use MakeRef? Issue #216
-  (phrase standOffDist), sParen (getS standOffDist), S "and", 
-  (getS eqTNTWeight) +:+. S "as parameters", 
-  (getS eqTNTWeight), S "is defined as" +:+.
-  E (equat wtntWithEqn) +:+. ((getS char_weight) `isThe`
-  (phrase char_weight)) +:+. ((getS tNT) `isThe`
-  (phrase tNT)), (getS standOffDist) `isThe`
-  (phrase standOffDist), S "where", E (equat sdWithEqn), S "where",
-  sParen (getS sdx `sC` getS sdy `sC` getS sdz), S "are coordinates"]
+    S "is the", (demandq ^. defn), S "obtained from Figure 2 by interpolation using", --use MakeRef? Issue #216
+    (phrase standOffDist), sParen (getS standOffDist), S "and", 
+    (getS eqTNTWeight) +:+. S "as parameters", 
+    (getS eqTNTWeight), S "is defined as" +:+.
+    E (equat wtntWithEqn) +:+. ((getS char_weight) `isThe`
+    (phrase char_weight)) +:+. ((getS tNT) `isThe`
+    (phrase tNT)), (getS standOffDist) `isThe`
+    (phrase standOffDist), S "where", E (equat sdWithEqn), S "where",
+    sParen (getS sdx `sC` getS sdy `sC` getS sdz), S "are coordinates"]
   --FIXME: pull out [SDx, SDy, SDz] somewhere...
 
 {--}

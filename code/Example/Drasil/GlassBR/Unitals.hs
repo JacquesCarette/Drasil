@@ -159,7 +159,7 @@ sdz = unitary "sdz" (nounPhraseSP "stand off distance (z-component)")
 load_dur    = unitary "load_dur"    (nounPhraseSP "duration of load")
   (sub lT lD) second Integer
 eqTNTWeight = unitary "eqTNTWeight" (nounPhraseSP "explosive mass in equivalent weight of TNT") --replace with short TNT?
-  (sub (char_weight ^. symbol) (tNT ^. symbol)) kilogram Rational
+  (sub (char_weight ^. symbol) (tNT ^. symbol)) kilogram Real
 
 {-Quantities-}
 

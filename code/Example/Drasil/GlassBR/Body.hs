@@ -450,12 +450,6 @@ s6_2_4_DDefns ::[Contents]
 s6_2_4_DDefns = map gbSymbMapD dataDefns
 
 {--Data Constraints--}
---FIXME: Considered duplication?
-s6_2_5 = datConF EmptyS 
-  dataConstraintUncertainty end [s6_2_5_table1]
-  where end = foldlSent [(makeRef s10), S "gives the", 
-              (plural value `ofThe` S "specification"), plural parameter,
-              S "used in" +:+. (makeRef s6_2_5_table1)]
 
 {-input and output tables-}
 
@@ -523,7 +517,7 @@ preceding `followA` num = preceding +:+ S "following" +:+ acroA num
 
 s7_1_req3 = foldlSent [S "The", phrase system, S "shall check the entered",
   plural inValue, S "to ensure that they do not exceed the",
-  plural datumConstraint, S "mentioned in" +:+. (makeRef s6_2_5),
+  plural datumConstraint, S "mentioned in" +:+. makeRef (SRS.datCon SRS.missingP []),
   S "If any of the", plural inParam,
   S "is out of bounds, an error message is displayed and the",
   plural calculation, S "stop"]
@@ -651,7 +645,7 @@ s9_dataDef =  ["DD1", "DD2", "DD3", "DD4", "DD5", "DD6", "DD7", "DD8", "DD9"]
 s9_dataDefRef = map (refFromType Data gbSymbMap) dataDefns
 
 s9_data  = ["Data Constraints"]
-s9_dataRef = [makeRef s6_2_5]
+s9_dataRef = [makeRef (SRS.datCon SRS.missingP [])]
 
 s9_funcReq = ["R1", "R2", "R3", "R4", "R5", "R6"]
 s9_funcReqRef = makeListRef s9_funcReq s7_1

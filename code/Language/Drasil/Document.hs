@@ -111,10 +111,10 @@ instance LayoutObj Contents where
   refName (UnlikelyChange ucc)= S $ "UC" ++ alphanumOnly (ucc ^. id)
 --  refName (UsesHierarchy _)   = S $ "Figure:UsesHierarchy"
   refName (Graph _ _ _ l)     = S "Figure:" :+: inferName l
-  refName (TMod _ _ _)          = error "TMod referencing unimplemented"
+  refName (TMod _ _ _)        = error "TMod referencing unimplemented"
   refName (IMod)              = error "IMod referencing unimplemented"
   refName (GDef)              = error "GDef referencing unimplemented"
-  refName (DDef)              = error "DDef referencing unimplemented"
+  refName (DDef _ _ _)        = error "DDef referencing unimplemented"
   rType (Table _ _ _ _)    = Tab
   rType (Figure _ _)       = Fig
   rType (Definition _ _)   = Def
@@ -125,10 +125,10 @@ instance LayoutObj Contents where
   rType (UnlikelyChange _) = UC
 --  rType (UsesHierarchy _)  = Fig
   rType (Graph _ _ _ _)    = Fig
-  rType (TMod _ _ _)           = Def
+  rType (TMod _ _ _)        = Def
   rType (IMod)              = Def
   rType (GDef)              = Def
-  rType (DDef)              = Def
+  rType (DDef _ _ _)        = Def
   rType _ = error "Attempting to reference unimplemented reference type"
   
 -- | Automatically create the label for a definition

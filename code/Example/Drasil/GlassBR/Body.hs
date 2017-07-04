@@ -46,7 +46,7 @@ this_si = map UU [metre, second] ++ map UU [pascal, newton]
 
 s3, s4, s5,
   s6, s6_1, s6_1_1, s6_1_2, s6_1_3, s6_2, s6_2_1, 
-  s6_2_2, s6_2_3, s6_2_4, s6_2_5, s7, s7_1, s7_2,
+  s6_2_2, s6_2_3, s6_2_4, s7, s7_1, s7_2,
   s8, s9, s10, s11, s12 :: Section
 
 s4_1_bullets, s5_1_table, s5_2_bullets, 
@@ -355,15 +355,12 @@ s6_1_3_list_goalStmt1 = [foldlSent [S "Analyze and predict whether the",
 s6_2_5_intro2 :: Sentence
 
 s6_2 = solChSpecF gLassBR (s6_1, s8) (EmptyS) 
- (tbRef, dataConstraintUncertainty, end)
+ (EmptyS, dataConstraintUncertainty, end)
  (s6_2_1_list, s6_2_2_TMods, [], s6_2_4_DDefns, s6_2_3_IMods, 
   [s6_2_5_table1, s6_2_5_table3]) []
-  where tbRef = (makeRef s6_2_5_table1) +:+ S "shows"
-        end = foldlSent [(makeRef s10), S "gives", 
+  where end = foldlSent [(makeRef s10), S "gives", 
              (plural value `ofThe` S "specification"), plural parameter, 
-              S "used in" +:+. (makeRef s6_2_5_table1), getS ar_max, --FIXME: Issue #167
-              S "refers to the", phrase ar_max, 
-              S "for the plate of glass"] +:+ s6_2_5_intro2
+              S "used in" +:+. (makeRef s6_2_5_table1)] +:+ s6_2_5_intro2
 
 s6_2_intro = foldlSP [S "This", phrase section_, 
   S "explains all the", plural assumption, S "considered and the", 
@@ -454,14 +451,6 @@ s6_2_4_DDefns = map gbSymbMapD dataDefns
 
 {--Data Constraints--}
 
-s6_2_5 = datConF ((makeRef s6_2_5_table1) +:+ S "shows") 
-  dataConstraintUncertainty end [s6_2_5_table1] --issue #213: discrepancy? --reference removed table? June 28
-  where end = foldlSent [(makeRef s6_2_5_table3), S "gives the", 
-              (plural value `ofThe` S "specification"), plural parameter,
-              S "used in" +:+. (makeRef s6_2_5_table1), 
-              getS ar_max, --FIXME: Issue #167
-              S "refers to the", phrase ar_max, S "for the plate of glass"]
-
 {-input and output tables-}
 
 s6_2_5_table1 = inDataConstTbl (gbInputDataConstraints) --FIXME: still need to add [glass_type, nom_thick]
@@ -528,7 +517,7 @@ preceding `followA` num = preceding +:+ S "following" +:+ acroA num
 
 s7_1_req3 = foldlSent [S "The", phrase system, S "shall check the entered",
   plural inValue, S "to ensure that they do not exceed the",
-  plural datumConstraint, S "mentioned in" +:+. (makeRef s6_2_5),
+  plural datumConstraint, S "mentioned in" +:+. S "this section (Data Constraints)"{-(makeRef s6_2_5)-},
   S "If any of the", plural inParam,
   S "is out of bounds, an error message is displayed and the",
   plural calculation, S "stop"]
@@ -656,7 +645,7 @@ s9_dataDef =  ["DD1", "DD2", "DD3", "DD4", "DD5", "DD6", "DD7", "DD8", "DD9"]
 s9_dataDefRef = map (refFromType Data gbSymbMap) dataDefns
 
 s9_data  = ["Data Constraints"]
-s9_dataRef = [makeRef s6_2_5]
+s9_dataRef = [makeRef s10] --FIXME: can no longer implement?
 
 s9_funcReq = ["R1", "R2", "R3", "R4", "R5", "R6"]
 s9_funcReqRef = makeListRef s9_funcReq s7_1

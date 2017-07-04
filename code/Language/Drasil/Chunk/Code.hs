@@ -233,6 +233,7 @@ codeEquat (CodeDefinition _ e) = e
 spaceToCodeType :: Space -> CodeType
 spaceToCodeType S.Integer = G.Integer
 spaceToCodeType S.Natural = G.Integer
+spaceToCodeType S.Radians = G.Float
 spaceToCodeType S.Real = G.Float
 spaceToCodeType S.Rational = G.Float
 spaceToCodeType S.Boolean = G.Boolean

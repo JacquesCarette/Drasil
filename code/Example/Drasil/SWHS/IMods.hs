@@ -9,10 +9,8 @@ import Data.Drasil.SentenceStructures (foldlSent, isThe, sAnd, ofThe)
 import Data.Drasil.Quantities.Physics (time, energy)
 import Data.Drasil.Concepts.Math (equation, change)
 import Drasil.SWHS.Concepts
-import Data.Drasil.SentenceStructures (foldlSent)
 import Data.Drasil.Concepts.PhysicalProperties
 import Data.Drasil.Concepts.Thermodynamics
-import Control.Lens ((^.))
 
 swhsInModels :: [RelationConcept]
 swhsInModels = [eBalanceOnWtr, eBalanceOnPCM, heatEInWtr, heatEInPCM]

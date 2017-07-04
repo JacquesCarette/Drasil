@@ -312,6 +312,7 @@ executable chipmunkdocs
     , Drasil.Sections.Requirements
     , Drasil.Sections.TraceabilityMandGs
     , Drasil.Sections.ReferenceMaterial
+    , Drasil.Sections.AuxiliaryConstants
     , Drasil.SRS
     , Drasil.Sections.TableOfAbbAndAcronyms
     , Drasil.Sections.TableOfSymbols

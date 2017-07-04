@@ -44,6 +44,7 @@ import Drasil.DocumentLanguage
 import Drasil.Sections.SpecificSystemDescription
 import Drasil.Sections.SolutionCharacterSpec
 import Drasil.Sections.Requirements
+import Drasil.Sections.AuxiliaryConstants
 
 authors :: People
 authors = [alex, luthfi]
@@ -61,7 +62,7 @@ mkSRS = RefSec (RefProg RM.intro [TUnits, tsymb tableOfSymbols, TAandA]) :
   IScope s2_2_intro_p1 s2_2_intro_p2, 
   IChar (S "rigid body dynamics") (S "high school calculus") (EmptyS), 
   IOrgSec s2_4_intro inModel s4_2 EmptyS]) :
-  map Verbatim [s3, s4, s5, s6, s7, s8, s9]
+  map Verbatim [s3, s4, s5, s6, s7, s8, s9, s10]
     where tableOfSymbols = [TSPurpose, TypogConvention[Vector Bold], SymbOrder]
 
 
@@ -734,55 +735,62 @@ s8_table3 = Table (EmptyS:s8_row_header_t3)
   (showingCxnBw (traceyMatrix) (titleize' item +:+ 
   S "and Other" +:+ titleize' section_)) True
 
+-----------------------------------
+-- VALUES OF AUXILIARY CONSTANTS --
+-----------------------------------
+
+s9 :: Section
+s9 = valsOfAuxConstantsF chipmunk []
+
 ----------------
 -- REFERENCES --
 ----------------
 --}
 -- To be added --
 
-s9 :: Section
-s9 = SRS.reference [s9_list] []
+s10 :: Section
+s10 = SRS.reference [s10_list] []
 
-s9_list :: Contents
-s9_list = mkRefsList 1 (map (foldl (+:+) EmptyS) [s9_ref1, s9_ref2, s9_ref3, 
-  s9_ref4, s9_ref5, s9_ref6, s9_ref7, s9_ref8, s9_ref9, s9_ref10])
+s10_list :: Contents
+s10_list = mkRefsList 1 (map (foldl (+:+) EmptyS) [s10_ref1, s10_ref2, s10_ref3, 
+  s10_ref4, s10_ref5, s10_ref6, s10_ref7, s10_ref8, s10_ref9, s10_ref10])
 
 -- make sure all refs are proper format
 
-s9_ref1, s9_ref2, s9_ref3, s9_ref4, s9_ref5, s9_ref6, s9_ref7, 
-  s9_ref8, s9_ref9, s9_ref10 :: [Sentence]
+s10_ref1, s10_ref2, s10_ref3, s10_ref4, s10_ref5, s10_ref6, s10_ref7, 
+  s10_ref8, s10_ref9, s10_ref10 :: [Sentence]
 
-s9_ref1 = [S "David L. Parnas.", S "Designing Software for Ease of Extension",
+s10_ref1 = [S "David L. Parnas.", S "Designing Software for Ease of Extension",
   S "and Contraction.", S "ICSE '78: Proceedings of the 3rd international", 
   S "conference on Software engineering,", S "264-277, 1978"]
 
-s9_ref2 = [S "Greg Wilson and D.A. Aruliah and C. Titus Brown and Neil P.", 
+s10_ref2 = [S "Greg Wilson and D.A. Aruliah and C. Titus Brown and Neil P.", 
   S "Chue Hong and Matt Davis and Richard T. Guy and Steven H.D. Haddock", 
   S "and Kathryn D. Huff and Ian M. Mitchell and Mark D. Plumblet and Ben Waugh", 
   S "and Ethan P. White and Paul Wilson. Best Practices for Scientific", 
   S "Computing, 2013"]
 
-s9_ref3 = [S "David L. Parnas. On the Criteria To Be Used in Decomposing Systems", 
+s10_ref3 = [S "David L. Parnas. On the Criteria To Be Used in Decomposing Systems", 
   S "into Modules. Comm. ACM, vol. 15, no. 2, pp. 1053-1058, 1972"]
 
-s9_ref4 = [S "D. L. Parnas and P. C. Clements and D. M. Weiss.",
+s10_ref4 = [S "D. L. Parnas and P. C. Clements and D. M. Weiss.",
   S "The Modular Structure of Complex Systems.", S "ICSE '84: Proceedings of", 
   S "the 7th international conference on Software engineering" `sC` 
   S "408-417, 1984"]
 
-s9_ref5 = [S "David L. Parnas and P.C. Clements.", S "A Rational Design", 
+s10_ref5 = [S "David L. Parnas and P.C. Clements.", S "A Rational Design", 
   S "Process: How and Why to Fake it.", S "IEEE Transactions on Software", 
   S "Engineering,", S "251-257" `sC` S "1986"]
 
-s9_ref6 = [S "Nirmitha Koothoor. A document drive approach to certifying" +:+. 
+s10_ref6 = [S "Nirmitha Koothoor. A document drive approach to certifying" +:+. 
   (phrase sciCompS), S "Master's thesis, McMaster University,", 
   S "Hamilton, Ontario, Canada, 2013."]
 
-s9_ref7 = [S "David L. Parnas and P.C. Clements. A rational design process: How", 
+s10_ref7 = [S "David L. Parnas and P.C. Clements. A rational design process: How", 
   S "and why to fake it. IEEE Transactions on Software Engineering,", 
   S "12(2):251-257, February 1986."]
 
-s9_ref8 = [S "W. Spencer Smith and Lei Lai. A new requirements template for",
+s10_ref8 = [S "W. Spencer Smith and Lei Lai. A new requirements template for",
   S "scientific computing. In J. Ralyt" :+: (F Acute 'e') `sC` 
   S "P. Agerfalk, and N. Kraiem,", S "editors, Proceedings of the First", 
   S "International Workshopon", S "Situational Requirements Engineering", 
@@ -791,7 +799,7 @@ s9_ref8 = [S "W. Spencer Smith and Lei Lai. A new requirements template for",
   S "2005. In conjunction with 13th IEEE International Requirements", 
   S "Engineering Conference."]
 
-s9_ref9 = [S "J. Frederick Bueche. Introduction to Physics for Scientists", 
+s10_ref9 = [S "J. Frederick Bueche. Introduction to Physics for Scientists", 
   S "Fourth Edition. 1986"]
 
-s9_ref10 = [S "Marilyn Lightstone. Derivation of Tank/PCM Model. 2012"]
+s10_ref10 = [S "Marilyn Lightstone. Derivation of Tank/PCM Model. 2012"]

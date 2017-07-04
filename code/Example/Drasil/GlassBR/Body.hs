@@ -8,12 +8,12 @@ import Data.Drasil.Concepts.Documentation
 import Data.Drasil.Software.Products
 import Data.Drasil.Concepts.Computation
 import Data.Drasil.Concepts.Software (performance)
-import Data.Drasil.Concepts.Math (graph, calculation, equation, 
+import Data.Drasil.Concepts.Math (graph, calculation, equation,
   surface, probability, parameter)
 import Data.Drasil.Concepts.Thermodynamics (heat)
 import Prelude hiding (id)
 import Data.Drasil.Utils
-import Data.Drasil.SentenceStructures (foldlSent, foldlList, ofThe, isThe, 
+import Data.Drasil.SentenceStructures (foldlSent, foldlList, ofThe, isThe,
   showingCxnBw, figureLabel, foldlSP, sAnd, foldlsC, tAndDWAcc, tAndDWSym,
   tAndDOnly, sVersus, inDataConstTbl, outDataConstTbl)
 
@@ -133,7 +133,8 @@ requiredInputs = (map qs [plate_len, plate_width, char_weight])
   ++ (map qs [glass_type, nom_thick])
 
 s7_1_req6_pulledList :: [QDefinition]
-s7_1_req6_pulledList = [loadDF, nonFL, glaTyFac, dimLL, tolPre, tolStrDisFac, strDisFac, hFromt]
+s7_1_req6_pulledList = [loadDF, nonFL, glaTyFac, dimLL, tolPre,
+  tolStrDisFac, strDisFac, hFromt]
 
 --------------------------------------------------------------------------------
 
@@ -210,9 +211,9 @@ s4 = genSysF [] s4_1_bullets [] []
 s4_1_bullets = enumBullet [(S "The" +:+ phrase endUser +:+ S "of" +:+ 
   short gLassBR +:+ S "is expected to have completed at least" +:+.
   (S "equivalent" `ofThe` 
-  S "second year of an undergraduate degree in civil or structural engineering")), 
-  (S "The" +:+ phrase endUser +:+ S "is expected to have an understanding of" +:+
-  phrase theory +:+ S "behind" +:+. (phrase glBreakage `sAnd`
+  S "second year of an undergraduate degree in civil or structural engineering")
+  ), (S "The" +:+ phrase endUser +:+ S "is expected to have an understanding of"
+  +:+ phrase theory +:+ S "behind" +:+. (phrase glBreakage `sAnd`
   phrase blastRisk)), (S "The" +:+ phrase endUser +:+
   S "is expected to have basic" +:+ phrase computer +:+
   S "literacy to handle the" +:+. phrase software)]
@@ -397,8 +398,9 @@ assumption2 = [foldlSent [S "Following", (sSqBr (S "4 (pg. 1)")) `sC`
   phrase surface, S "and edge treatments that alter the glass strength"]]
 
 assumption3 :: [Sentence]
-assumption3 = [foldlSent [S "This", phrase system, S "only considers the external", 
-  phrase explosion, S "scenario for its", plural calculation]]
+assumption3 = [foldlSent [S "This", phrase system,
+  S "only considers the external", phrase explosion, S "scenario for its",
+  plural calculation]]
 
 assumption4 :: [Sentence]
 assumption4 = [foldlSent [S "The", plural value, S "provided in", makeRef s10,
@@ -425,7 +427,7 @@ assumption8 :: [Sentence]
 assumption8 = [foldlSent [S "With", phrase reference, S "to A4 the",
   phrase value, S "of", phrase loadDF, sParen (getS loadDF), 
   S "is a constant in" +:+. short gLassBR, S "It is calculated by the" +:
-  phrase equation +:+. E ((C loadDF) := loadDF_eq), S "Using this" `sC`
+  phrase equation +:+. E (C loadDF := equat loadDF), S "Using this" `sC`
   E ((C loadDF) := (Dbl 0.27))]]
 
 {--Theoretical Models--}
@@ -452,37 +454,17 @@ s6_2_4_DDefns = map gbSymbMapD dataDefns
 
 {--Data Constraints--}
 
-s6_2_5 = datConF ((makeRef s6_2_5_table1) +:+ S "shows") dataConstraintUncertainty end 
-                 [s6_2_5_table1] --issue #213: discrepancy? --reference removed table? June 28
+s6_2_5 = datConF ((makeRef s6_2_5_table1) +:+ S "shows") 
+  dataConstraintUncertainty end [s6_2_5_table1] --issue #213: discrepancy? --reference removed table? June 28
   where end = foldlSent [(makeRef s6_2_5_table3), S "gives the", 
               (plural value `ofThe` S "specification"), plural parameter,
               S "used in" +:+. (makeRef s6_2_5_table1), 
               getS ar_max, --FIXME: Issue #167
               S "refers to the", phrase ar_max, S "for the plate of glass"]
-{-
-s6_2_5_table1 = Table [S "Var", S "Physical Constraints", S "Software Constraints",
-  S "Typical Value", S "Typical Uncertainty"]
-  dataConstList
-  (titleize' inVar) 
-  True
 
-dataConstList :: [[Sentence]]
-dataConstList = [inputVarA, inputVarB, inputVarPbTol, inputVarW,
-  inputVarTNT, inputVarSD]
-
-inputVarA, inputVarB, inputVarPbTol, inputVarW, inputVarTNT, inputVarSD :: [Sentence]
-
-inputVarA     = displayConstr plate_len    (1500 :: Double)     (addPercent 10)
-inputVarB     = displayConstr plate_width  (1200 :: Double)     (addPercent 10)
-inputVarPbTol = displayConstr pb_tol       (0.008 :: Double) (addPercent 0.1)
-inputVarW     = displayConstr char_weight  (42 :: Double)       (addPercent 10)
-inputVarTNT   = displayConstr tNT          (1 :: Int)        (addPercent 10)
-inputVarSD    = displayConstr standOffDist (45 :: Double)       (addPercent 10)
--}
 {-input and output tables-}
 
---s6_2_5_table1, s6_2_5_table3 :: Contents
-s6_2_5_table1 = inDataConstTbl (gbInputDataConstraints) --FIXME: still need to add [tNT, pb_tol, glass_type, nom_thick]
+s6_2_5_table1 = inDataConstTbl (gbInputDataConstraints) --FIXME: still need to add [glass_type, nom_thick]
 s6_2_5_table3 = outDataConstTbl [prob_br]
 
 s6_2_5_table2_formatF2 :: UnitaryChunk -> Double -> (Sentence, Sentence)
@@ -492,12 +474,6 @@ s6_2_5_table2_formatF2 varName val = (getS varName, E (Dbl val) +:+
 s6_2_5_intro2 = foldlSent [(makeRef s6_2_5_table3), S "shows the", 
   plural constraint, S "that must be satisfied by the", phrase output_]
 
-{-
-s6_2_5_table3 = Table [S "Var", S "Physical Constraints"] (mkTable 
-  [(\x -> P $ fst(x)), (\x -> snd(x))] 
-  [(prob_br ^. symbol, E (Int 0 :< C prob_br :< Int 1))])
-  (titleize output_ +:+ titleize' variable) True
--}
 {--REQUIREMENTS--}
 
 s7 = reqF [s7_1, s7_2]
@@ -509,7 +485,8 @@ s7_1 = SRS.funcReq (s7_1_list) []
 s7_1_req6 :: [Contents] -- :: ItemType
 s7_1_req1, s7_1_req2, s7_1_req3, s7_1_req4, s7_1_req5 :: Sentence
 
-s7_1_list = [enumSimple 1 (getAcc requirement) (s7_1_listOfReqs)] ++ s7_1_req6 ++ [s7_1_req1Table]
+s7_1_list = [enumSimple 1 (getAcc requirement) (s7_1_listOfReqs)] ++ 
+  s7_1_req6 ++ [s7_1_req1Table]
 
 s7_1_listOfReqs :: [Sentence]
 s7_1_listOfReqs = [s7_1_req1, s7_1_req2, s7_1_req3, s7_1_req4, s7_1_req5]
@@ -597,7 +574,8 @@ s7_1_req6 = [(Enumeration $ Simple $ [(acroR 6, Nested (titleize output_ +:+
     map (\c -> Flat $ (at_start c) +:+ sParen (getS c) +:+ sParen (makeRef (gbSymbMapD c)))
     s7_1_req6_pulledList
     ++
-    [Flat $ (titleize aspectR) +:+ sParen (short aspectR) {-+:+ E ((C aspectR) := (C plate_len):/(C plate_width))-}] --short is technically a symbol here (see Concepts.hs)
+    [Flat $ (titleize aspectR) +:+ sParen (short aspectR) {-+:+ E ((C aspectR) := (C plate_len):/(C plate_width))-}]
+    --short is technically a symbol here (see Concepts.hs)
     ))])]
 
 {--Nonfunctional Requirements--}
@@ -868,7 +846,7 @@ s11_ref2 = [S "W. S. Smith and L. Lai",
 
 s11_ref3 = [S "J. Robertson and S. Robertson", 
   Quote (S "Volere requirements specification template edition 16.") +:+
-  Quote (S "www.cs.uic.edu/ i442/VolereMaterials/templateArchive16/c" +:+ S "Volere template16.pdf"),
+  Quote (S "www.cs.uic.edu/ i442/VolereMaterials/templateArchive16/c Volere template16.pdf"),
   S "2012."]
   --FIXME:Make a compoundNC "requirement specification template"?
 

@@ -75,7 +75,7 @@ mkSRS = RefSec (RefProg intro
     , IOrgSec orgSecStart inModel (SRS.inModel SRS.missingP []) orgSecEnd]) :
     --FIXME: SRS.inModel should be removed and the instance model section
     --should be looked up from "inModel" by the interpreter while generating.
-  map Verbatim [s3, s4, s5, s6, s8]
+  map Verbatim [s3, s4, s5, s6, s7, s8]
 
 ssp_srs, ssp_mg :: Document
 ssp_srs = mkDoc mkSRS ssp_si

@@ -225,6 +225,7 @@ executable ssp
     , Drasil.DocumentLanguage
     , Drasil.DocumentLanguage.Definitions
     , Drasil.Sections.TableOfUnits
+    , Drasil.Sections.AuxiliaryConstants
     , Drasil.Template.DD
     , Drasil.Template.Helpers
     , Drasil.Template.MG

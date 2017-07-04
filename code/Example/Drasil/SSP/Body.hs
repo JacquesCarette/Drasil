@@ -23,6 +23,7 @@ import Drasil.DocumentLanguage
 import Drasil.Sections.SpecificSystemDescription
 import Drasil.Sections.Requirements
 import Drasil.Sections.GeneralSystDesc
+import Drasil.Sections.AuxiliaryConstants
 
 import Data.Drasil.Concepts.Documentation
 import Data.Drasil.Concepts.Physics
@@ -40,7 +41,7 @@ import Drasil.Template.MG
 import Drasil.Template.DD
 
 --type declarations for sections--
-s3, s4, s5, s6, s7 :: Section
+s3, s4, s5, s6, s7, s8 :: Section
 
 s1_2_intro :: [TSIntro]
 
@@ -51,7 +52,7 @@ s4_1_1_list, s4_1_2_p1, s4_1_2_bullets,
   s4_1_2_p2, s4_1_2_fig1, s4_1_2_fig2,
   s4_1_3_list, s4_2_1_list,
   s4_2_5_p2, s4_2_5_p3, s5_1_list, s5_1_table,
-  s7_list :: Contents
+  s8_list :: Contents
 
 s4_2_2_tmods, s4_2_3_genDefs, s4_2_4_dataDefs, s4_2_5_IMods :: [Contents]
 
@@ -74,7 +75,7 @@ mkSRS = RefSec (RefProg intro
     , IOrgSec orgSecStart inModel (SRS.inModel SRS.missingP []) orgSecEnd]) :
     --FIXME: SRS.inModel should be removed and the instance model section
     --should be looked up from "inModel" by the interpreter while generating.
-  map Verbatim [s3, s4, s5, s6, s7]
+  map Verbatim [s3, s4, s5, s6, s8]
 
 ssp_srs, ssp_mg :: Document
 ssp_srs = mkDoc mkSRS ssp_si
@@ -735,10 +736,13 @@ s5_2 = nonFuncReqF [accuracy, performanceSpd]
 -- SECTION 6 --
 s6 = SRS.likeChg [] []
 
--- References --
-s7 = SRS.reference [s7_list] []
+-- SECTION 7 --
+s7 = valsOfAuxConstantsF ssa []
 
-s7_list = mkRefsList 1 [ --FIXME: names should be in italics
+-- References --
+s8 = SRS.reference [s8_list] []
+
+s8_list = mkRefsList 1 [ --FIXME: names should be in italics
   S "Q.H. Qian D.Y. Zhu, C.F. Lee and G.R. Chen. A concise algorithm for computing" +:+
             S "the factor of safety using the morgensternprice method. Can. Geotech. J.," +:+.
             S "(42):272-278, 19 February 2005",

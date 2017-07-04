@@ -7,7 +7,7 @@ import Language.Drasil
 import Data.Drasil.SI_Units
 import Data.Drasil.Utils(symbolMapFun, mkDataDef)
 import Control.Lens((^.))
-import Prelude hiding (log, id)
+import Prelude hiding (log, id, sqrt)
 import Data.Drasil.SentenceStructures (foldlSent)
 
 --FIXME: Many of the current terms can be separated into terms and defns!
@@ -300,6 +300,8 @@ bomb          = dcc "bomb"        (nounPhraseSP "bomb") ("a container filled wit
 explosion     = dcc "explosion"   (nounPhraseSP "explosion") 
   "a destructive shattering of something"
 
+{--}
+
 this_symbols :: [QSWrapper]
 this_symbols = ((map qs gBRSpecParamVals) ++ (map qs glassBRSymbolsWithDefns)
   ++ (map qs glassBRSymbols) ++ (map qs glassBRUnitless) ++ (map qs gbInputs)
@@ -313,3 +315,45 @@ gbSymbMapD term_ = (symbolMapFun gbSymbMap Data) term_
 
 gbSymbMapT :: RelationConcept -> Contents
 gbSymbMapT term_ = (symbolMapFun gbSymbMap Theory) term_
+
+{--}
+
+--Constants--
+
+constant_M :: QDefinition
+constant_M = mkDataDef sflawParamM sfpMVal
+
+sfpMVal :: Expr
+sfpMVal = (Int 7)
+
+constant_K :: QDefinition
+constant_K = mkDataDef sflawParamK sfpKVal
+
+sfpKVal :: Expr
+sfpKVal = (Grouping (Dbl 2.86)):*(Int 10):^(Neg (Int 53))
+
+constant_ModElas :: QDefinition
+constant_ModElas = mkDataDef mod_elas modElasVal
+
+modElasVal :: Expr
+modElasVal = (Grouping (Dbl 7.17)):*(Int 10):^(Int 7)
+
+constant_LoadDur :: QDefinition
+constant_LoadDur = mkDataDef load_dur durOfLoadVal
+
+durOfLoadVal :: Expr
+durOfLoadVal = (Int 3)
+
+--More Equations
+
+sdWithEqn :: QDefinition
+sdWithEqn = mkDataDef standOffDist sdCalculation
+
+sdCalculation :: Expr
+sdCalculation = sqrt (((C sdx) :^ (Int 2)) + ((C sdy) :^ (Int 2)) + ((C sdz) :^ (Int 2)))
+
+wtntWithEqn :: QDefinition
+wtntWithEqn = mkDataDef eqTNTWeight wtntCalculation
+
+wtntCalculation :: Expr
+wtntCalculation = (C char_weight) :* (C tNT)

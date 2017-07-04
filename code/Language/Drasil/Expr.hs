@@ -165,10 +165,14 @@ data UFunc where
   Csc :: Expr -> UFunc
   Cot :: Expr -> UFunc
   Exp :: Expr -> UFunc
+  Sqrt :: Expr -> UFunc
   
 -- | Smart constructor to take the log of an expression
 log :: Expr -> Expr
 log = UnaryOp . Log
+
+sqrt :: Expr -> Expr
+sqrt = UnaryOp . Sqrt
 
 -- | Smart constructor to apply sin to an expression
 sin :: Expr -> Expr
@@ -211,4 +215,3 @@ data BiFunc where
 -- | Smart constructor to cross product two expressions
 cross :: Expr -> Expr -> Expr
 cross e1 e2 = BinaryOp (Cross e1 e2)
-  

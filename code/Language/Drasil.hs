@@ -8,7 +8,7 @@ module Language.Drasil (
   , Recipe(..)
   -- Expr
   , Expr(..), Relation, UFunc(..), BiFunc(..), Bound(..), DerivType(..)
-  , log, abs, sin, cos, tan, sec, csc, cot, exp, SymbolMap, symbolMap, vars
+  , log, abs, sin, cos, tan, sec, csc, cot, exp, sqrt, SymbolMap, symbolMap, vars
   , summation, product, cross
   -- all the stuff from Unicode
   , Greek(..), Special(..)
@@ -97,10 +97,10 @@ module Language.Drasil (
   , CodeSpec, codeSpec
 ) where
 
-import Prelude hiding (log, sin, cos, tan, id, return, print, break, exp, product)
+import Prelude hiding (log, sin, cos, tan, sqrt, id, return, print, break, exp, product)
 import Language.Drasil.SystemInformation
 import Language.Drasil.Expr (Expr(..), Relation, UFunc(..), BiFunc(..), 
-          Bound(..),DerivType(..), log, sin, cos, tan, sec, csc, cot, exp,
+          Bound(..),DerivType(..), log, sin, cos, tan, sqrt, sec, csc, cot, exp,
           summation, product, cross)
 import Language.Drasil.Expr.Extract (SymbolMap, symbolMap, vars)
 import Language.Drasil.Output.Formats (DocType(SRS,MG,MIS,LPM,Website))

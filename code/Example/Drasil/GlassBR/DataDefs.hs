@@ -1,7 +1,7 @@
 module Drasil.GlassBR.DataDefs where
 
 import Language.Drasil
-import Prelude hiding (log, id, exp)
+import Prelude hiding (log, id, exp, sqrt)
 import Drasil.GlassBR.Unitals
 import Data.Drasil.Utils
 
@@ -116,7 +116,7 @@ tolStrDisFac_eq = log (log ((Int 1):/((Int 1):-(C pb_tol)))
 tolStrDisFac :: QDefinition
 tolStrDisFac = mkDataDef sdf_tol tolStrDisFac_eq
 
---Constants-- --in this file temporarily
+--Constants-- --FIXME: in this file temporarily
 
 constant_M :: QDefinition
 constant_M = mkDataDef sflawParamM sfpMVal
@@ -141,3 +141,12 @@ constant_LoadDur = mkDataDef load_dur durOfLoadVal
 
 durOfLoadVal :: Expr
 durOfLoadVal = (Int 3)
+
+--More Equations
+--Are not DATA DEFINITIONS!
+
+sdWithEqn :: QDefinition
+sdWithEqn = mkDataDef standOffDist sdCalculation
+
+sdCalculation :: Expr
+sdCalculation = sqrt (((C sdx) :^ (Int 2)) + ((C sdy) :^ (Int 2)) + ((C sdz) :^ (Int 2)))

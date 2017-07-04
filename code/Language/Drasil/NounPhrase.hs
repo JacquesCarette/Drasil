@@ -11,7 +11,7 @@ module Language.Drasil.NounPhrase
   , PluralRule(..)
   )where
 
-import Data.Char (toUpper)
+import Data.Char (toUpper, toLower)
 import Data.List (intersperse)
 import Language.Drasil.Spec (Sentence(..), (+:+))
 --Linguistically, nounphrase might not be the best name (yet!), but once
@@ -214,7 +214,7 @@ sPlur a _ = S "MISSING PLURAL FOR:" +:+ a
 cap :: Sentence -> CapitalizationRule -> Sentence
 cap _ (Replace s) = s
 cap (S (s:ss))   CapFirst = S $ (toUpper s : ss)
-cap (S s)        CapWords = S $ findHyph $ concat (intersperse " " 
+cap (S s)        CapWords = S $ findNotCaps $ findHyph $ concat (intersperse " " 
   (map (\x -> (toUpper (head x) : (tail x))) (words s)))
 cap ((S s1) :+: (S s2)) r = cap (S (s1++s2)) r
 cap (s1 :+: s2 :+: s3)  CapWords = cap (s1 :+: s2) CapWords +:+ cap s3 CapWords
@@ -228,6 +228,20 @@ findHyph "" = ""
 findHyph s
       | [head s] == "-" = "-" ++ [toUpper (head(tail s))] ++ tail (tail s)
       | otherwise = [head s] ++ findHyph (tail s)
+
+-- Finds words that should not be capitalized in a title and changes them back to lowercase
+findNotCaps :: String -> String
+findNotCaps "" = ""
+findNotCaps s = concat $ intersperse " " ((head $ words s) : map isNotCaps (tail $ words s))
+
+isNotCaps :: String -> String
+isNotCaps s
+  | (toLower (head s) : tail s) `elem` doNotCaps = toLower (head s) : tail s
+  | otherwise = s
+
+doNotCaps :: [String]
+doNotCaps = ["a", "an", "the", "at", "by", "for", "in", "of",
+  "on", "to", "up", "and", "as", "but", "or", "nor"] --Ref http://grammar.yourdictionary.com
 
 -- ity, ness, ion :: String -> String
 -- Maybe export these for use in irregular cases?

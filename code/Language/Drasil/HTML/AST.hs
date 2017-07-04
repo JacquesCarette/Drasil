@@ -126,4 +126,4 @@ instance Show Function where
   show Cot = "cot"
   show Cross = "&#10799;"
   show Exp = "e"
-  show Sqrt = "sqrt"
+  show Sqrt = "&radic;"

@@ -278,7 +278,7 @@ eqTNTChar     = dcc "eqTNTChar"   (nounPhraseSP "equivalent TNT charge mass")
     "design explosive threat.")
 sD            = cc' stdOffDist
   (S "The distance from the glazing surface to the centroid of a hemispherical" +:+
-   S "high explosive charge. It is represented by the coordinates (SDx, SDy, SDz)")
+   S "high explosive charge. It is represented by the coordinates (SDx, SDy, SDz).")
 blast         = dcc "blast"       (nounPhraseSP "blast") 
   "any kind of man-made explosion"
 blastTy       = dcc "blastTy"     (nounPhraseSP "blast type")

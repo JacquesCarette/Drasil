@@ -229,8 +229,8 @@ Use Case NO. & Use Case Name & Actor & Input and Output
 2 & Output & GlassBR & Whether or not the glass slab is safe for the calculated load and supporting calculated values
 \\
 \bottomrule
-\caption{Table 1: Use Case Table}
-\label{Table:Tabl1:UseCaseTabl}
+\caption{Use Case Table}
+\label{Table:UseCaseTabl}
 \end{longtable}
 \subsection{Individual Product Use Cases}
 \label{Sec:IndiProdUseCase}
@@ -269,7 +269,7 @@ This subsection provides a list of terms that are used in the subsequent section
 \item{Specified design load - The magnitude in kPa (psf), type (for example, wind or snow) and duration of the load given by the specifying authority.}
 \item{Long duration load - Any load lasting approximately 30 days.}
 \end{enumerate}
-\item{Stand off distance ($SD$) - The distance from the glazing surface to the centroid of a hemispherical high explosive charge. It is represented by the coordinates (SDx, SDy, SDz).}
+\item{Stand off distance (SD) - The distance from the glazing surface to the centroid of a hemispherical high explosive charge. It is represented by the coordinates (SDx, SDy, SDz).}
 \item{Load share factor (LSF) - A multiplying factor derived from the load sharing between the double glazing, of equal or different thickness's and types (including the layered behaviour of LG under long duration loads), in a sealed IG unit.}
 \item{Glass type factor (GTF) - A multiplying factor for adjusting the LR of different glass type, that is, AN, HS, or FT in monolithic glass, LG (Laminated Glass), or IG (Insulating Glass) constructions.}
 \item{Probability of breakage ($P_{b}$) - The fraction of glass lites or plies that would break at the first occurrence of a specified load and duration, typically expressed in lites per 1000.}
@@ -323,7 +323,7 @@ t_{d}=3
 \item[A5:]Glass under consideration is assumed to be a single lite. Hence the value of $LSF$ is equal to 1 for all calculations in GlassBR.
 \item[A6:]Boundary conditions for the glass slab is assumed to be 4-sided support for calculations.
 \item[A7:]The response type considered in GlassBR is flexural.
-\item[A8:]With reference to A4 the value of load duration factor ($LDF$) is a constant in GlassBR. It is calculated by the equation: $LDF=(\frac{t_{d}}{60})^{\frac{m}{16}}$. Using this, $LDF=0.27$.
+\item[A8:]With reference to A4 the value of load duration factor ($LDF$) is a constant in GlassBR. It is calculated by the equation: $LDF=\left(\frac{t_{d}}{60}\right)^{\frac{m}{16}}$. Using this, $LDF=0.27$.
 \end{itemize}
 \subsubsection{Theoretical Models}
 \label{Sec:TheoMode}
@@ -370,7 +370,7 @@ Label & $B$
 \\ \midrule \\
 Units & 
 \\ \midrule \\
-Equation & $B$ = $\frac{k}{(\frac{a}{1000}\frac{b}{1000})^{m-1}}((E*1000)(\frac{h}{1000})^{2})^{m}*LDFe^{J}$
+Equation & $B$ = $\frac{k}{\left(\frac{a}{1000}\frac{b}{1000}\right)^{m-1}}\left(\left(E*1000\right)\left(\frac{h}{1000}\right)^{2}\right)^{m}*LDFe^{J}$
 \\ \midrule \\
 Description & $B$ is the risk of failure\newline$k$ is the surface flaw parameter\newline$a$ is the plate length (long dimension)\newline$b$ is the plate width (short dimension)\newline$m$ is the surface flaw parameter\newline$E$ is the modulus of elasticity of glass\newline$h$ is the actual thickness\newline$LDF$ is the load duration factor\newline$J$ is the stress distribution factor (Function)
 \\ \bottomrule \end{tabular}
@@ -407,15 +407,15 @@ Description & $h$ is the actual thickness
 ~\newline
 \noindent \begin{minipage}{\textwidth}
 \begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
-\toprule \textbf{Refname} & \textbf{DD:lDurFac}
+\toprule \textbf{Refname} & \textbf{DD:loadDurFactor}
 \phantomsection 
-\label{DD:lDurFac}
+\label{DD:loadDurFactor}
 \\ \midrule \\
 Label & $LDF$
 \\ \midrule \\
 Units & 
 \\ \midrule \\
-Equation & $LDF$ = $(\frac{t_{d}}{60})^{\frac{m}{16}}$
+Equation & $LDF$ = $\left(\frac{t_{d}}{60}\right)^{\frac{m}{16}}$
 \\ \midrule \\
 Description & $LDF$ is the load duration factor\newline$t_{d}$ is the duration of load\newline$m$ is the surface flaw parameter
 \\ \bottomrule \end{tabular}
@@ -431,7 +431,7 @@ Label & $J$
 \\ \midrule \\
 Units & 
 \\ \midrule \\
-Equation & $J$ = $J(\hat{q},\frac{a}{b})$
+Equation & $J$ = $J\left(\hat{q},\frac{a}{b}\right)$
 \\ \midrule \\
 Description & $J$ is the stress distribution factor (Function)\newline$J$ is the stress distribution factor (Function)\newline$\hat{q}$ is the dimensionless load\newline$a$ is the plate length (long dimension)\newline$b$ is the plate width (short dimension)
 \\ \bottomrule \end{tabular}
@@ -439,15 +439,15 @@ Description & $J$ is the stress distribution factor (Function)\newline$J$ is the
 ~\newline
 \noindent \begin{minipage}{\textwidth}
 \begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
-\toprule \textbf{Refname} & \textbf{DD:nonFactorL}
+\toprule \textbf{Refname} & \textbf{DD:nFL}
 \phantomsection 
-\label{DD:nonFactorL}
+\label{DD:nFL}
 \\ \midrule \\
 Label & $NFL$
 \\ \midrule \\
 Units & 
 \\ \midrule \\
-Equation & $NFL$ = $\frac{\hat{q}_{tol}Eh^{4}}{(ab)^{2}}$
+Equation & $NFL$ = $\frac{\hat{q}_{tol}Eh^{4}}{\left(ab\right)^{2}}$
 \\ \midrule \\
 Description & $NFL$ is the non-factored load\newline$\hat{q}_{tol}$ is the tolerable load\newline$E$ is the modulus of elasticity of glass\newline$h$ is the actual thickness\newline$a$ is the plate length (long dimension)\newline$b$ is the plate width (short dimension)
 \\ \bottomrule \end{tabular}
@@ -455,15 +455,19 @@ Description & $NFL$ is the non-factored load\newline$\hat{q}_{tol}$ is the toler
 ~\newline
 \noindent \begin{minipage}{\textwidth}
 \begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
-\toprule \textbf{Refname} & \textbf{DD:glassTypeFac}
+\toprule \textbf{Refname} & \textbf{DD:gTF}
 \phantomsection 
-\label{DD:glassTypeFac}
+\label{DD:gTF}
 \\ \midrule \\
 Label & $GTF$
 \\ \midrule \\
 Units & 
 \\ \midrule \\
-Equation & $GTF$ = $GTF(g)$
+Equation & $GTF$ = $\begin{cases}
+1.0, & g=AN\\
+4.0, & g=FT\\
+2.0, & g=HS
+\end{cases}$
 \\ \midrule \\
 Description & $GTF$ is the function that maps from the glass type ($g$) to a real number, as follows: $GTF$($g$) = ($g$ = AN => 1.0|$g$ = FT => 4.0|$g$ = HS => 2.0). AN is annealed glass. FT is fully tempered glass. HS is heat strengthened glass.\newline$GTF$ is the function that maps from the glass type ($g$) to a real number, as follows: $GTF$($g$) = ($g$ = AN => 1.0|$g$ = FT => 4.0|$g$ = HS => 2.0). AN is annealed glass. FT is fully tempered glass. HS is heat strengthened glass.\newline$g$ is the glass type, g in {AN, HS, FT}
 \\ \bottomrule \end{tabular}
@@ -479,7 +483,7 @@ Label & $\hat{q}$
 \\ \midrule \\
 Units & 
 \\ \midrule \\
-Equation & $\hat{q}$ = $\frac{q(ab)^{2}}{Eh^{4}*GTF}$
+Equation & $\hat{q}$ = $\frac{q\left(ab\right)^{2}}{Eh^{4}*GTF}$
 \\ \midrule \\
 Description & $\hat{q}$ is the dimensionless load\newline$q$ is the applied load (demand)\newline$a$ is the plate length (long dimension)\newline$b$ is the plate width (short dimension)\newline$E$ is the modulus of elasticity of glass\newline$h$ is the actual thickness\newline$GTF$ is the glass type factor
 \\ \bottomrule \end{tabular}
@@ -495,7 +499,7 @@ Label & $\hat{q}_{tol}$
 \\ \midrule \\
 Units & 
 \\ \midrule \\
-Equation & $\hat{q}_{tol}$ = $\hat{q}_{tol}(J_{tol},\frac{a}{b})$
+Equation & $\hat{q}_{tol}$ = $\hat{q}_{tol}\left(J_{tol},\frac{a}{b}\right)$
 \\ \midrule \\
 Description & $\hat{q}_{tol}$ is the tolerable load\newline$\hat{q}_{tol}$ is the tolerable load\newline$J_{tol}$ is the stress distribution factor (Function) based on Pbtol\newline$a$ is the plate length (long dimension)\newline$b$ is the plate width (short dimension)
 \\ \bottomrule \end{tabular}
@@ -511,7 +515,7 @@ Label & $J_{tol}$
 \\ \midrule \\
 Units & 
 \\ \midrule \\
-Equation & $J_{tol}$ = $\log(\log(\frac{1}{1-P_{btol}})\frac{(\frac{a}{1000}\frac{b}{1000})^{m-1}}{k((E*1000)(\frac{h}{1000})^{2})^{m}*LDF})$
+Equation & $J_{tol}$ = $\log\left(\log\left(\frac{1}{1-P_{btol}}\right)\frac{\left(\frac{a}{1000}\frac{b}{1000}\right)^{m-1}}{k\left(\left(E*1000\right)\left(\frac{h}{1000}\right)^{2}\right)^{m}*LDF}\right)$
 \\ \midrule \\
 Description & $J_{tol}$ is the stress distribution factor (Function) based on Pbtol\newline$P_{btol}$ is the tolerable probability of breakage\newline$a$ is the plate length (long dimension)\newline$b$ is the plate width (short dimension)\newline$m$ is the surface flaw parameter\newline$k$ is the surface flaw parameter\newline$E$ is the modulus of elasticity of glass\newline$h$ is the actual thickness\newline$LDF$ is the load duration factor
 \\ \bottomrule \end{tabular}
@@ -556,7 +560,7 @@ Description & $LR$ is the load resistance, which is also called capacity. $NFL$ 
 \\ \midrule \\
 Label & Calculation of Demand(q)
 \\ \midrule \\
-Equation & $q=q(w_{TNT},SD)$
+Equation & $q=q\left(w_{TNT},SD\right)$
 \\ \midrule \\
 Description & $q$ or demand, is the 3 second duration equivalent pressure obtained from Figure 2 by interpolation using stand off distance ($SD$) and $w_{TNT}$ as parameters. $w_{TNT}$ is defined as $w_{TNT}$ = $w$ * TNT. $w$ is the charge weight. $TNT$ is the TNT equivalent factor. $SD$ is the stand off distance where $SD$ = .
 \\ \bottomrule \end{tabular}
@@ -579,11 +583,11 @@ $w$ & $w\geq{}0.0$ & $w_{max}\leq{}w\leq{}w_{min}$ & 42 kg & 10$\%$
 \\
 $TNT$ & $TNT>0.0$ &  & 1 & 10$\%$
 \\
-$SD$ & $SD>0.0$ & $SD_{min}<SD<SD_{max}$ & 45 m & 10$\%$
+$SD$ & $SD>0.0$ & $SD_{min}<SD$ and $SD<SD_{max}$ & $45.0$ m & 0.1
 \\
 \bottomrule
-\caption{Table 2: Input Variables}
-\label{Table:Tabl2:InpuVari}
+\caption{Input Data Constraints}
+\label{Table:InpuDataCons}
 \end{longtable}
 \begin{longtable}{l l}
 \toprule
@@ -605,20 +609,8 @@ $SD_{min}$ & 6 m
 $SD_{max}$ & 130 m
 \\
 \bottomrule
-\caption{Table 3: Specification Parameter Values}
-\label{Table:Tabl3:SpecParaValu}
-\end{longtable}
-Table~\ref{Table:Tabl4:OutpVari} shows the constraints that must be satisfied by the output.
-\begin{longtable}{l l}
-\toprule
-Var & Physical Constraints
-\\
-\midrule
-$P_{b}$ & 0 < $P_{b}$ < 1
-\\
-\bottomrule
-\caption{Table 4: Output Variables}
-\label{Table:Tabl4:OutpVari}
+\caption{Output Data Constraints}
+\label{Table:OutpDataCons}
 \end{longtable}
 \section{Requirements}
 \label{Sec:Requ}
@@ -654,7 +646,7 @@ $P_{btol}$ & Tolerable probability of breakage &
 $TNT$ & TNT equivalent factor & 
 \\
 \bottomrule
-\label{Table:TablofSymb}
+\label{Table:RequInpu}
 \end{longtable*}
 \begin{itemize}
 \item[R2:]The system shall set the known values as follows:

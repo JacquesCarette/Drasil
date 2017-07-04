@@ -648,7 +648,7 @@ rigFoSDerivation = [foldlSP [S "RFEM analysis can also be used to calculate the 
 noTypicalVal, vertConvention :: Sentence
 noTypicalVal   = short notApp
 vertConvention = S "Consecutive vertexes have increasing x" +:+. plural value +:+
-  S "The start and end vertices of all layers go to the same x" +:+. plural value
+  S "The start and end vertices of all layers go to the same x" +:+. plural value --Monotonicly increasing?
 
 verticesConst :: Sentence -> [Sentence]
 verticesConst vertexType = [vertVar vertexType, vertConvention, noTypicalVal, noTypicalVal, noTypicalVal]

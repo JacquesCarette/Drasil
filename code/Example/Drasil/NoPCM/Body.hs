@@ -273,10 +273,10 @@ s4_1_2_list = enumSimple 1 (short physSyst) $ map foldlSent_ [physSyst1, physSys
 
 s4_1_3 = SRS.goalStmt [s4_1_3_intro, s4_1_3_list] []
 
-s4_1_3_intro = Paragraph $ foldl (+:+) (EmptyS) [S "Given the", phrase temp,
-  S "of the", phrase coil `sC` S "initial", phrase temp, S "of the",
-  phrase water `sC` S "and material", plural property `sC`
-  S "the", phrase goalStmt, S "is"]
+s4_1_3_intro = foldlSPCol [S "Given the", phrase temp,
+  S "of the", phrase coil `sC` S "initial", phrase temp_W 
+  `sC` S "and material", plural property `sC`
+  S "the", phrase goalStmt, S "are"]
 
 s4_1_3_list = Enumeration $ Simple $ map (\(a, b) -> (a, Flat b)) [
   (acroGS 1, S "predict the" +:+ phrase temp_W +:+ S "over time"),

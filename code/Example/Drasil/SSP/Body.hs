@@ -660,7 +660,7 @@ slopeVert = verticesConst $ phrase slope
 
 dataConstIn :: [[Sentence]]
 dataConstIn = [waterVert, slipVert, slopeVert] ++ map fmtInConstr sspInputs
--}
+
 {-output data-}
 slipVert2 :: [[Sentence]]
 slipVert2 = [[vertVar $ phrase slip, S "Vertices's monotonic", S "None"]]
@@ -674,7 +674,7 @@ displayContr' s = (init $ makeConstraint s EmptyS) ++ [S "None"]
 dataConstOut :: [[Sentence]]
 dataConstOut = [(displayContr' . head) sspOutputs] ++ slipVert2 ++
   map displayContr' (tail sspOutputs)
-
+-}
 {-input and output tables-}
 s4_2_6Table2, s4_2_6Table3 :: Contents
 s4_2_6Table2 = inDataConstTbl sspInputs --FIXME: needs more inputs but cannot express them yet

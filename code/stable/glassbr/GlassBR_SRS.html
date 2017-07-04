@@ -848,7 +848,7 @@ This section presents the scope of the project. It describes the expected use of
 <h3>
 Product Use Case Table
 </h3>
-<a id="Table:Tabl1:UseCaseTabl">
+<a id="Table:UseCaseTabl">
 <table class="table">
 <tr>
 <th>
@@ -894,7 +894,7 @@ Whether or not the glass slab is safe for the calculated load and supporting cal
 </tr>
 </table>
 <p class="caption">
-Table 1: Use Case Table
+Use Case Table
 </p>
 </a>
 </div>
@@ -980,7 +980,7 @@ Load:
 Load resistance (LR) - The uniform lateral load that a glass construction can sustain based upon a given probability of breakage and load duration as defined in [4 (pg. 1, 53)], following A2 and A1 respectively.
 </li>
 <li>
-Non-factored load  (NFL) - Three second duration uniform load associated with a probability of breakage less than or equal to 8 lites per 1000 for monolithic AN glass.
+Non-factored load (NFL) - Three second duration uniform load associated with a probability of breakage less than or equal to 8 lites per 1000 for monolithic AN glass.
 </li>
 <li>
 Glass weight load - The dead load component of the glass weight.
@@ -1412,7 +1412,7 @@ h is the actual thickness
 </tr>
 </table>
 </a>
-<a id="DD:lDurFac">
+<a id="DD:loadDurFactor">
 <table class="ddefn">
 <tr>
 <th>
@@ -1525,7 +1525,7 @@ J is the stress distribution factor (Function)<br />J is the stress distribution
 </tr>
 </table>
 </a>
-<a id="DD:nonFactorL">
+<a id="DD:nFL">
 <table class="ddefn">
 <tr>
 <th>
@@ -1578,7 +1578,7 @@ NFL is the non-factored load<br />q&#770;<sub>tol</sub> is the tolerable load<br
 </tr>
 </table>
 </a>
-<a id="DD:glassTypeFac">
+<a id="DD:gTF">
 <table class="ddefn">
 <tr>
 <th>
@@ -1607,7 +1607,26 @@ Equation
 <td>
 <a id="">
 <div class="equation">
-GTF = GTF(g)
+GTF = <span class="casebr">
+{
+</span>
+<div class="cases">
+<span>
+1.0 , <span class="case">
+g=AN
+</span>
+</span>
+<span>
+4.0 , <span class="case">
+g=FT
+</span>
+</span>
+<span>
+2.0 , <span class="case">
+g=HS
+</span>
+</span>
+</div>
 </div>
 </a>
 </td>
@@ -1939,7 +1958,7 @@ Data Constraints
 <p class="paragraph">
 <a href=#Table:Tabl2:InpuVari>this Table</a> shows the data constraints on the input and output variables, respectively. The column for physical constraints gives the physical limitations on the range of values that can be taken by the variable. The constraints are conservative, to give the user of the model the flexibility to experiment with unusual situations. The column of typical values is intended to provide a feel for a common scenario. The uncertainty column provides an estimate of the confidence with which the physical quantities can be measured. This information would be part of the input if one were performing an uncertainty quantification exercise. <a href=#Table:Tabl3:SpecParaValu>this Table</a> gives the values of the specification parameters used in <a href=#Table:Tabl2:InpuVari>this Table</a>. AR<sub>max</sub> refers to the maximum aspect ratio for the plate of glass.
 </p>
-<a id="Table:Tabl2:InpuVari">
+<a id="Table:InpuDataCons">
 <table class="table">
 <tr>
 <th>
@@ -1960,6 +1979,40 @@ Typical Uncertainty
 </tr>
 <tr>
 <td>
+P<sub>btol</sub>
+</td>
+<td>
+0.0&lt;P<sub>btol</sub> and P<sub>btol</sub>&lt;1.0
+</td>
+<td>
+None
+</td>
+<td>
+0.008
+</td>
+<td>
+1.0e-3
+</td>
+</tr>
+<tr>
+<td>
+TNT
+</td>
+<td>
+TNT&gt;0.0
+</td>
+<td>
+None
+</td>
+<td>
+1
+</td>
+<td>
+0.1
+</td>
+</tr>
+<tr>
+<td>
 a
 </td>
 <td>
@@ -1973,7 +2026,7 @@ b
 </div>&gt;1.0
 </td>
 <td>
-d<sub>min</sub>&le;a&le;d<sub>max</sub> and <div class="fraction">
+d<sub>min</sub>&le;a, a&le;d<sub>max</sub>, and <div class="fraction">
 <span class="fup">
 a
 </span>
@@ -1983,10 +2036,10 @@ b
 </div>&lt;AR<sub>max</sub>
 </td>
 <td>
-1500 mm
+1500.0 mm
 </td>
 <td>
-10%
+0.1
 </td>
 </tr>
 <tr>
@@ -1997,7 +2050,7 @@ b
 b&gt;0.0 and b&lt;a
 </td>
 <td>
-d<sub>min</sub>&le;b&le;d<sub>max</sub> and <div class="fraction">
+d<sub>min</sub>&le;b, b&le;d<sub>max</sub>, and <div class="fraction">
 <span class="fup">
 a
 </span>
@@ -2007,27 +2060,10 @@ b
 </div>&lt;AR<sub>max</sub>
 </td>
 <td>
-1200 mm
+1200.0 mm
 </td>
 <td>
-10%
-</td>
-</tr>
-<tr>
-<td>
-P<sub>btol</sub>
-</td>
-<td>
-0.0&lt;P<sub>btol</sub>&lt;1.0
-</td>
-<td>
-
-</td>
-<td>
-8.0e-3
-</td>
-<td>
-0.1%
+0.1
 </td>
 </tr>
 <tr>
@@ -2038,30 +2074,13 @@ w
 w&ge;0.0
 </td>
 <td>
-w<sub>max</sub>&le;w&le;w<sub>min</sub>
+w<sub>max</sub>&le;w and w&le;w<sub>min</sub>
 </td>
 <td>
-42 kg
+42.0 kg
 </td>
 <td>
-10%
-</td>
-</tr>
-<tr>
-<td>
-TNT
-</td>
-<td>
-TNT&gt;0.0
-</td>
-<td>
-
-</td>
-<td>
-1
-</td>
-<td>
-10%
+0.1
 </td>
 </tr>
 <tr>
@@ -2072,95 +2091,21 @@ SD
 SD&gt;0.0
 </td>
 <td>
-SD<sub>min</sub>&lt;SD&lt;SD<sub>max</sub>
+SD<sub>min</sub>&lt;SD and SD&lt;SD<sub>max</sub>
 </td>
 <td>
-45 m
+45.0 m
 </td>
 <td>
-10%
+0.1
 </td>
 </tr>
 </table>
 <p class="caption">
-Table 2: Input Variables
+Input Data Constraints
 </p>
 </a>
-<a id="Table:Tabl3:SpecParaValu">
-<table class="table">
-<tr>
-<th>
-Var
-</th>
-<th>
-Value
-</th>
-</tr>
-<tr>
-<td>
-d<sub>min</sub>
-</td>
-<td>
-0.1 m
-</td>
-</tr>
-<tr>
-<td>
-d<sub>max</sub>
-</td>
-<td>
-0.1 m
-</td>
-</tr>
-<tr>
-<td>
-AR<sub>max</sub>
-</td>
-<td>
-5
-</td>
-</tr>
-<tr>
-<td>
-w<sub>min</sub>
-</td>
-<td>
-4.5 kg
-</td>
-</tr>
-<tr>
-<td>
-w<sub>max</sub>
-</td>
-<td>
-910 kg
-</td>
-</tr>
-<tr>
-<td>
-SD<sub>min</sub>
-</td>
-<td>
-6 m
-</td>
-</tr>
-<tr>
-<td>
-SD<sub>max</sub>
-</td>
-<td>
-130 m
-</td>
-</tr>
-</table>
-<p class="caption">
-Table 3: Specification Parameter Values
-</p>
-</a>
-<p class="paragraph">
-<a href=#Table:Tabl4:OutpVari>this Table</a> shows the constraints that must be satisfied by the output.
-</p>
-<a id="Table:Tabl4:OutpVari">
+<a id="Table:OutpDataCons">
 <table class="table">
 <tr>
 <th>
@@ -2169,18 +2114,24 @@ Var
 <th>
 Physical Constraints
 </th>
+<th>
+Typical Value
+</th>
 </tr>
 <tr>
 <td>
 P<sub>b</sub>
 </td>
 <td>
-0 < P<sub>b</sub> < 1
+0.0&lt;P<sub>b</sub> and P<sub>b</sub>&lt;1.0
+</td>
+<td>
+0.4
 </td>
 </tr>
 </table>
 <p class="caption">
-Table 4: Output Variables
+Output Data Constraints
 </p>
 </a>
 </div>

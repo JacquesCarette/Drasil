@@ -34,9 +34,6 @@ data Expr where
   (:+)     :: Expr -> Expr -> Expr -- Addition
   (:-)     :: Expr -> Expr -> Expr -- Subtraction
   (:.)     :: Expr -> Expr -> Expr -- Dot product
-  (:&&)    :: Expr -> Expr -> Expr -- logical and
-  (:||)    :: Expr -> Expr -> Expr -- logical or
-  Not      :: Expr -> Expr -- logical not
   Neg      :: Expr -> Expr -- Negation
   Deriv    :: DerivType -> Expr -> Expr -> Expr -- Derivative, syntax is:
   -- Type (Partial or total) -> principal part of change -> with respect to
@@ -58,7 +55,38 @@ data Expr where
   (:>)  :: Expr -> Expr -> Expr
   (:<=) :: Expr -> Expr -> Expr
   (:>=) :: Expr -> Expr -> Expr
- 
+  -- start of logic Expr
+  (:&&)    :: Expr -> Expr -> Expr -- logical and
+  (:||)    :: Expr -> Expr -> Expr -- logical or
+  Not      :: Expr -> Expr -- logical not
+  {-
+  -- FIXME: rememeber to add to instance Eq
+  IsIn  :: Expr -> Set -> Expr --	&isin; \in
+  NotIn :: Expr -> Set -> Expr -- &notin; \notin
+  Forall :: [Expr] -> Expr -> Expr -- &forall; \forall
+  Exists :: [Expr] -> Expr -> Expr -- &exist; \exists
+    --ex. Forall [V "x" `IsIn` Reals, V "x" :> Int 1] (V "x" :^ Int 2 :> V "x")
+    -- => forall x in R where x>1: x^2 > x
+  (:=>)  :: Expr -> Expr -> Expr -- implies, &rArr; \implies
+  (:<=>) :: Expr -> Expr -> Expr -- if and only if, &hArr; \iff
+  Monotonic :: Maybe Direction -> Expr -> Expr --like this? or defined as below (see monotoniclyIncr)
+
+data Set = Naturals --Possibly use Space rather than create a new type
+         | Reals
+         | MkSet String
+         
+instance Eq Set where
+  Set a    == Set b    = a == b
+  Naturals == Naturals = True
+  Reals    == Reals    = True
+  _ == _               = False
+
+data Direction = Increasing
+               | Decreasing
+
+monotoniclyIncr :: Expr -> Expr --Needs indexing, squaring of sets
+monotoniclyIncr xy = Forall [xy `IsIn` MkSet "R^2"] (V "x_1" :< V "x_2"  :=>  V "y_1" :< V "y_2")
+-}
 type Variable = String
 
 data DerivType = Part

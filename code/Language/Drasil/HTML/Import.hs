@@ -79,6 +79,7 @@ ufunc (Sec e) = (H.Sec, expr e)
 ufunc (Csc e) = (H.Csc, expr e)
 ufunc (Cot e) = (H.Cot, expr e)
 ufunc (Exp e) = (H.Exp, expr e)
+ufunc (Sqrt e) = (H.Sqrt, expr e)
 
 -- | Helper function for translating 'BiFunc's
 bfunc :: BiFunc -> (H.Function, [H.Expr])

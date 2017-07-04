@@ -78,6 +78,7 @@ ufunc (Product (Just (s, Low v, High h)) e) =
 ufunc (Product Nothing e) = (T.Product Nothing, expr e)
 ufunc (Product _ _) = error "TeX/Import.hs Incorrect use of Product"
 ufunc (Exp e) = (T.Exp, expr e)
+ufunc (Sqrt e) = (T.Sqrt, expr e)
 
 bfunc :: BiFunc -> (T.Function, [T.Expr])
 bfunc (Cross e1 e2) = (T.Cross, map expr [e1,e2])

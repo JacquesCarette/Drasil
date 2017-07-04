@@ -52,6 +52,7 @@ data Function = Log
            | Cross
            | Product (Maybe ((Symbol, Expr), Expr))
            | Exp
+           | Sqrt
 
 -- | Internal HTML version of Sentence 
 -- (for converting 'Language.Drasil.Spec.Sentence')
@@ -125,4 +126,4 @@ instance Show Function where
   show Cot = "cot"
   show Cross = "&#10799;"
   show Exp = "e"
-  
+  show Sqrt = "sqrt"

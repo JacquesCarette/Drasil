@@ -344,16 +344,16 @@ constant_LoadDur = mkDataDef load_dur durOfLoadVal
 durOfLoadVal :: Expr
 durOfLoadVal = (Int 3)
 
---More Equations
+--Equations--
 
 sdWithEqn :: QDefinition
 sdWithEqn = mkDataDef standOffDist sdCalculation
 
-sdCalculation :: Expr
-sdCalculation = sqrt (((C sdx) :^ (Int 2)) + ((C sdy) :^ (Int 2)) + ((C sdz) :^ (Int 2)))
+sdCalculation :: Relation
+sdCalculation = (C standOffDist) := sqrt (((C sdx) :^ (Int 2)) + ((C sdy) :^ (Int 2)) + ((C sdz) :^ (Int 2)))
 
 wtntWithEqn :: QDefinition
 wtntWithEqn = mkDataDef eqTNTWeight wtntCalculation
 
-wtntCalculation :: Expr
-wtntCalculation = (C char_weight) :* (C tNT)
+wtntCalculation :: Relation
+wtntCalculation = (C eqTNTWeight) := (C char_weight) :* (C tNT)

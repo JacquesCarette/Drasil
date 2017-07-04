@@ -47,6 +47,7 @@ data Function = Log
            | Cot
            | Cross
            | Exp
+           | Sqrt
            
 infixr 5 :+:
 data Spec = E Expr
@@ -116,3 +117,4 @@ instance Show Function where
   show Cot = "\\cot"
   show Cross = "\\times"
   show Exp = "e"
+  show Sqrt = "\\sqrt"

@@ -150,3 +150,9 @@ sdWithEqn = mkDataDef standOffDist sdCalculation
 
 sdCalculation :: Expr
 sdCalculation = sqrt (((C sdx) :^ (Int 2)) + ((C sdy) :^ (Int 2)) + ((C sdz) :^ (Int 2)))
+
+wtntWithEqn :: QDefinition
+wtntWithEqn = mkDataDef eqTNTWeight wtntCalculation
+
+wtntCalculation :: Expr
+wtntCalculation = (C char_weight) :* (C tNT)

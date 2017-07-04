@@ -96,7 +96,9 @@ data ObserverPattern = InitObserverList {observerType :: StateType, observers ::
                      | AddObserver {observerType :: StateType, observer :: Value}
                      | NotifyObservers {observerType :: StateType, receiveFunc :: Label, notifyParams :: [Value]} deriving Show
                      
-data Complex = ReadAll Value Value  -- ReadAll File String[][]
+data Complex = ReadAll Value Value  -- ReadAll File String[]
+             | ListSlice Value Value (Maybe Value) (Maybe Value) (Maybe Value)  -- new list var, old list var, start, stop, step
+             | StringSplit Value Value String -- new string, old string, delimiter
                  deriving Show
 data Assignment = Assign Value Value
                 | PlusEquals Value Value
@@ -151,13 +153,10 @@ data Function = Func {funcName :: Label, funcParams :: [Value]}
               | ListAccess Value
               | ListAdd Value Value     --ListAdd index value
               | ListSet Value Value     --ListSet index value
-              | ListPopulate Value StateType --ListPopulate size type : populates the list with a default value for its type. Ignored in languages where it's unnecessary in order to use the ListSet function.
-              | ListSlice (Maybe Value) (Maybe Value) (Maybe Value)   
-                  --ListSlice start stop step
+              | ListPopulate Value StateType --ListPopulate size type : populates the list with a default value for its type. Ignored in languages where it's unnecessary in order to use the ListSet function.  
               | ListAppend Value
               | IterBegin | IterEnd
               | Floor | Ceiling
-              | StringSplit String  --StringSplit delimiter
               
              
     deriving (Eq, Show)
@@ -545,11 +544,11 @@ listAccess = ListAccess
 listAppend :: Value -> Function
 listAppend = ListAppend
 
-listSlice :: (Maybe Value) -> (Maybe Value) -> (Maybe Value) -> Function
-listSlice = ListSlice
+listSlice :: Value -> Value -> (Maybe Value) -> (Maybe Value) -> (Maybe Value) -> Statement
+listSlice v1 v2 b e s = ComplexState $ ListSlice v1 v2 b e s
 
-stringSplit :: String -> Function
-stringSplit = StringSplit
+stringSplit :: Value -> Value -> String -> Statement
+stringSplit v1 v2 d = ComplexState $ StringSplit v1 v2 d
 
 oneLiner :: Statement -> Body
 oneLiner s = [Block [s]]

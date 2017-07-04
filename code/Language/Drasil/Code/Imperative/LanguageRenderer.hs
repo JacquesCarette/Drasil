@@ -319,8 +319,6 @@ funcDocD c (ListSet i@(EnumVar _) v) = funcDoc c $ ListSet (i $. cast' Integer) 
 funcDocD c (ListSet i@(EnumElement _ _) v) = funcDoc c $ ListSet (i $. cast' Integer) v
 funcDocD c (ListSet i v) = brackets (valueDoc c i) <+> equals <+> valueDoc c v
 funcDocD _ (ListPopulate _ _) = empty
-funcDocD _ (ListSlice _ _ _) = error "No default implementation"
-funcDocD _ (StringSplit _) = error "No default implementation"
 funcDocD c (IterBegin) = dot <> funcAppDoc c "begin" []
 funcDocD c (IterEnd) = dot <> funcAppDoc c "end" []
 funcDocD _ Floor = error $
@@ -473,7 +471,7 @@ statementDocD c loc (FreeState v) = text "delete" <+> valueDoc c v <> end c loc
 statementDocD c loc (ExceptState e) = exceptionDoc c e <> end c loc
 statementDocD c loc (PatternState p) = patternDoc c p <> end c loc
 statementDocD c loc (IOState io) = ioDoc c io <> end c loc
-statementDocD c loc (ComplexState cplx) = complexDoc c cplx <> end c loc
+statementDocD c loc (ComplexState cplx) = complexDoc c cplx
 
 ioDocD :: Config -> IOSt -> Doc
 ioDocD c (OpenFile f n m) = statementDoc c NoLoop (valStmt $ objMethodCall f "open" [n, litString (modeStr m)])

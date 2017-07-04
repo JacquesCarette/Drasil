@@ -22,5 +22,5 @@ genCode lang = createCodeFiles $ makeCode
   (toAbsCode "GlassBR" classes)
 
 classes :: [Module]
-classes = [inputParameters, derivedValues, inputFormat, inputConstraints, interpolation,   calculations, outputFormat, control]--, readTable]
+classes = [inputParameters, derivedValues, inputFormat, inputConstraints, interpolation,   calculations, outputFormat, control, readTable]
 

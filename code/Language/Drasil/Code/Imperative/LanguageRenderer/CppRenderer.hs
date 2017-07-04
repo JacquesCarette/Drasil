@@ -64,7 +64,7 @@ cppConfig options c =
         methodListDoc = methodListDoc' c, methodTypeDoc = methodTypeDocD c, unOpDoc = unOpDocD, valueDoc = valueDoc' c,
         functionDoc = methodDoc' c, functionListDoc = functionListDocD c,
         ioDoc = ioDocD c,inputDoc = inputDoc' c,
-        complexDoc = complexDocD c,
+        complexDoc = complexDoc' c,
         getEnv = \_ -> error "Cpp does not implement getEnv (yet)"
     }
 
@@ -117,6 +117,7 @@ cpptop c Source p m@(Mod n l _ _ _) = vcat $ [          --TODO remove includes i
     include c "<iterator>",     --used only when printing a list
     include c "<string>",
     include c "<math.h>",       --used for Floor and Ceiling functions
+    include c "<sstream>",
     include c $ "<" ++ render (list c Dynamic) ++ ">",
     blank,
     usingNameSpace c p Nothing,
@@ -279,6 +280,60 @@ inputDoc' c io (Base _) v = inputFn io <+> text ">>" <+> valueDoc c v
          inputFn (File f) = valueDoc c f
 inputDoc' c io s v = inputDocD c io s v 
 
+complexDoc' :: Config -> Complex -> Doc
+complexDoc' c (ReadAll f v) = statementDoc c NoLoop 
+  (valStmt $  
+    funcApp' "std::copy" [
+      funcApp' "std::istream_iterator<std::string>" [f],
+      funcApp' "std::istream_iterator<std::string>" [],
+      funcApp' "std::back_inserter" [v]
+    ]
+  )
+complexDoc' c (ListSlice vnew vold b e s) = let l_temp = "temp"
+                                                v_temp = var l_temp
+                                                l_i = "i"
+                                                v_i = var l_i
+                                            in
+  vcat [
+    blockStart c,
+    oneTab $ bodyDoc c [ 
+      block [
+        listDec' l_temp string 0,
+        for (varDecDef l_i (Base Integer) (getB b)) (v_i ?< getE e) (getS s v_i)
+          [ 
+            block [
+              
+            ]          
+          ]
+      ] 
+    ],
+    blockEnd c
+  ]
+  where  getB Nothing = litInt 0
+         getB (Just n) = n
+         getE Nothing = vold$.listSize
+         getE (Just n) = n
+         getS Nothing v = (&++) v
+         getS (Just n) v = v &+= n
+complexDoc' c (StringSplit vnew vold d) = let l_ss = "ss"
+                                              v_ss = var "ss"
+                                              l_word = "word"
+                                              v_word = var "word" 
+                                          in
+  vcat [
+    blockStart c,
+    oneTab $ bodyDoc c [ 
+      block [
+        DeclState $ VarDec l_ss (Type "std::stringstream"),
+        valStmt $ objMethodCall v_ss "str" [vold],
+        varDec l_word string,
+        while (funcApp' "std::getline" [v_ss, v_word, litString d]) (oneLiner $ valStmt $ vnew$.(listAppend v_word))
+      ] 
+    ],
+    blockEnd c
+  ]
+  
+  
 ----------------------
 -- Helper Functions --
 ----------------------

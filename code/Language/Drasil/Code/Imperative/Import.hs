@@ -17,7 +17,6 @@ generateCode spec = let modules = genModules spec
    in createCodeFiles $ makeCode 
         pythonLabel
         (Options Nothing Nothing Nothing (Just "Code")) 
-        (map moduleName modules) 
         (toAbsCode (codeName $ program spec) modules)
 
 genModules :: CodeSpec -> [Module]

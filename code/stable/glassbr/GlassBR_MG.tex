@@ -36,7 +36,7 @@ After completing the first stage of the design, the Software Requirements Specif
 \item{Maintainers: The hierarchical structure of the module guide improves the maintainers' understanding when they need to make changes to the system. It is important for a maintainer to update the relevant sections of the document after changes have been made.}
 \item{Designers: Once the module guide has been written, it can be used to check for consistency, feasibility and flexibility. Designers can verify the system in various ways, such as consistency among modules, feasibility of the decomposition, and flexibility of the design.}
 \end{enumerate}
-Section~\ref{Sec:LikeandUnliChan}  lists the likely and unlikely changes of the software requirements. Section~\ref{Sec:MH}  summarizes the module decomposition that was constructed according to the likely changes. Section~\ref{Sec:ModuDeco}  gives a detailed description of the modules. Section~\ref{Sec:TM}  includes two traceability matrices. One checks the completeness of the design against the requirements provided in the SRS. The other shows the relation between anticipated changes and the modules. Section~\ref{Sec:UH}  describes the use relation between modules.
+Section~\ref{Sec:LikeandUnliChan}  lists the likely and unlikely changes of the software requirements. Section~\ref{Sec:ModuHier}  summarizes the module decomposition that was constructed according to the likely changes. Section~\ref{Sec:ModuDeco}  gives a detailed description of the modules. Section~\ref{Sec:TracMatr}  includes two traceability matrices. One checks the completeness of the design against the requirements provided in the SRS. The other shows the relation between anticipated changes and the modules. Section~\ref{Sec:UsesHier}  describes the use relation between modules.
 \section{Likely and Unlikely Changes}
 \label{Sec:LikeandUnliChan}
 This section lists possible changes to the system. According to the likeliness of the change, the possible changes are classified into two categories. Likely changes are listed in Section~\ref{Sec:LikeChan} and unlikely changes are listed in Section~\ref{Sec:UnliChan}
@@ -67,7 +67,7 @@ Likely changes are the source of the information that is to be hidden inside the
 \begin{description}
 \item[\refstepcounter{lcnum}\lcthelcnum\label{LCinterp}:]The algorithm used for interpolation.
 \end{description}
-\subsection{Unikely Changes}
+\subsection{Unlikely Changes}
 \label{Sec:UnliChan}
 The module design should be as general as possible. However, a general system is more complex. Sometimes this complexity is not necessary. Fixing some design decisions at the system architecture stage can simplify the software design. If these decision should later need to be changed, then many parts of the design will potentially need to be modified. Hence, it is not intended that these decisions will be changed.  As an example, the model is assumed to follow the definition in the SRS.  If a new model is used, this will mean a change to the input format, fit parameters module, control, and output format modules.
 \begin{description}
@@ -148,7 +148,7 @@ Software Decision Module & Interpolation Module
 \label{Table:ModuHier}
 \end{longtable}
 \section{Module Decomposition}
-\label{Sec:MD}
+\label{Sec:ModuDeco}
 Modules are decomposed according to the principle of ``information hiding" proposed by Parnas. The Secrets field in a module decomposition is a brief statement of the design decision hidden by the module. The Services field specifies what the module will do without documenting how to do it. For each module, a suggestion for the implementing software is given under the Implemented By title. If the entry is OS, this means that the module is provided by the operating system. If the entry is GlassBR, this means that the module is provided by the GlassBR program. Only the leaf modules in the hierarchy have to be implemented. If a dash (--) is shown, this means that the module is not a leaf and will not have to be implemented. Whether or not this module is implemented depends on the programming language selected.
 \subsection{Hardware Hiding Module (M\ref{MhwHiding})}
 \label{Sec:HardHidiModu()}

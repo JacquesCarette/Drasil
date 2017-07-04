@@ -1702,8 +1702,72 @@ Instance Models
 This section transforms the problem defined in <a href=#Sec:ProbDesc>this Section</a> into one which is expressed in mathematical terms. It uses concrete symbols defined in <a href=#Sec:DataDefi>this Section</a> to replace the abstract symbols in the models identified in <a href=#Sec:TheoMode>this Section</a> and <a href=#Sec:GeneDefi>this Section</a>.
 </p>
 <p class="paragraph">
-The goals GS1 to GS4 are solved by IM1 to IM4. The solutions for IM1 and IM2 are coupled since the solution for T<sub>W</sub> and T<sub>P</sub> depend on one another. IM3 can be solved once IM1 has been solved. The solution of IM2 and IM4 are also coupled, since the temperature of the phase change material and change in heat energy in the PCM depend on the phase change. (Instance models are left out because they are not currently implemented in Drasil.)
+The goals GS1 to GS4 are solved by IM1 to IM4. The solutions for IM1 and IM2 are coupled since the solution for T<sub>W</sub> and T<sub>P</sub> depend on one another. IM3 can be solved once IM1 has been solved. The solution of IM2 and IM4 are also coupled, since the temperature of the phase change material and change in heat energy in the PCM depend on the phase change.
 </p>
+<a id="T:eBalanceOnWtr">
+<table class="tdefn">
+<tr>
+<th>
+Label
+</th>
+<td>
+<p class="paragraph">
+Energy balance on water to find the temperature of the water
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Equation
+</th>
+<td>
+<a id="">
+<div class="equation">
+<div class="fraction">
+<span class="fup">
+dT<sub>W</sub>
+</span>
+<span class="fdn">
+dt
+</span>
+</div>=<div class="fraction">
+<span class="fup">
+1
+</span>
+<span class="fdn">
+&tau;<sub>W</sub>
+</span>
+</div>(T<sub>C</sub>-T<sub>W</sub>(t)+&eta;(T<sub>P</sub>(t)-T<sub>W</sub>(t)))
+</div>
+</a>
+</td>
+</tr>
+<tr>
+<th>
+Description
+</th>
+<td>
+<p class="paragraph">
+T<sub>W</sub> is the temperature of the water (&deg;C). T<sub>P</sub> is the temperature of the phase change material (&deg;C). T<sub>C</sub> is the temperature of the heating coil (&deg;C). &tau;<sub>W</sub>=<div class="fraction">
+<span class="fup">
+m<sub>W</sub>C<sub>W</sub>
+</span>
+<span class="fdn">
+h<sub>C</sub>A<sub>C</sub>
+</span>
+</div> is a constant (s). &eta;=<div class="fraction">
+<span class="fup">
+h<sub>P</sub>A<sub>P</sub>
+</span>
+<span class="fdn">
+h<sub>C</sub>A<sub>C</sub>
+</span>
+</div> is a constant (dimensionless). The above equation applies as long as the water is in liquid form, 0&lt;T<sub>W</sub>&lt;100 (&deg;C) where 0 (&deg;C) and 100 (&deg;C) are the melting and boiling point temperatures of water, respectively (A14, A19).
+</p>
+</td>
+</tr>
+</table>
+</a>
 <p class="paragraph">
 Derivation of the energy balance on water:
 </p>
@@ -1787,7 +1851,14 @@ m<sub>W</sub>C<sub>W</sub>
 </span>
 </div>(T<sub>C</sub>-T<sub>W</sub>)+<div class="fraction">
 <span class="fup">
-h<sub>C</sub>A<sub>C</sub>/h<sub>C</sub>A<sub>C</sub>h<sub>P</sub>A<sub>P</sub>
+h<sub>C</sub>A<sub>C</sub>
+</span>
+<span class="fdn">
+h<sub>C</sub>A<sub>C</sub>
+</span>
+</div><div class="fraction">
+<span class="fup">
+h<sub>P</sub>A<sub>P</sub>
 </span>
 <span class="fdn">
 m<sub>W</sub>C<sub>W</sub>
@@ -1816,7 +1887,14 @@ m<sub>W</sub>C<sub>W</sub>
 </span>
 </div>(T<sub>C</sub>-T<sub>W</sub>)+<div class="fraction">
 <span class="fup">
-h<sub>P</sub>A<sub>P</sub>/h<sub>C</sub>A<sub>C</sub>h<sub>C</sub>A<sub>C</sub>
+h<sub>P</sub>A<sub>P</sub>
+</span>
+<span class="fdn">
+h<sub>C</sub>A<sub>C</sub>
+</span>
+</div><div class="fraction">
+<span class="fup">
+h<sub>C</sub>A<sub>C</sub>
 </span>
 <span class="fdn">
 m<sub>W</sub>C<sub>W</sub>
@@ -1825,7 +1903,21 @@ m<sub>W</sub>C<sub>W</sub>
 </div>
 </a>
 <p class="paragraph">
-Setting &tau;<sub>W</sub>=m<sub>W</sub>C<sub>W</sub>/h<sub>C</sub>A<sub>C</sub> and &eta;=h<sub>P</sub>A<sub>P</sub>/h<sub>C</sub>A<sub>C</sub>, Equation (5) can be written as:
+Setting &tau;<sub>W</sub>=<div class="fraction">
+<span class="fup">
+m<sub>W</sub>C<sub>W</sub>
+</span>
+<span class="fdn">
+h<sub>C</sub>A<sub>C</sub>
+</span>
+</div> and &eta;=<div class="fraction">
+<span class="fup">
+h<sub>P</sub>A<sub>P</sub>
+</span>
+<span class="fdn">
+h<sub>C</sub>A<sub>C</sub>
+</span>
+</div>, Equation (5) can be written as:
 </p>
 <a id="">
 <div class="equation">
@@ -1854,7 +1946,14 @@ dt
 </div>
 </a>
 <p class="paragraph">
-Finally, factoring out 1/&tau;<sub>W</sub>, we are left with the governing ODE for IM1:
+Finally, factoring out <div class="fraction">
+<span class="fup">
+1
+</span>
+<span class="fdn">
+&tau;<sub>W</sub>
+</span>
+</div>, we are left with the governing ODE for IM1:
 </p>
 <a id="">
 <div class="equation">
@@ -1874,6 +1973,101 @@ dt
 </span>
 </div>(T<sub>C</sub>-T<sub>W</sub>+&eta;(T<sub>P</sub>-T<sub>W</sub>))
 </div>
+</a>
+<a id="T:eBalanceOnPCM">
+<table class="tdefn">
+<tr>
+<th>
+Label
+</th>
+<td>
+<p class="paragraph">
+Energy balance on PCM to find T_p
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Equation
+</th>
+<td>
+<a id="">
+<div class="equation">
+<div class="fraction">
+<span class="fup">
+dT<sub>P</sub>
+</span>
+<span class="fdn">
+dt
+</span>
+</div>=<span class="casebr">
+{
+</span>
+<div class="cases">
+<span>
+<div class="fraction">
+<span class="fup">
+1
+</span>
+<span class="fdn">
+&tau;<sub>P</sub><sup>S</sup>
+</span>
+</div>(T<sub>W</sub>(t)-T<sub>P</sub>(t)) , <span class="case">
+T<sub>P</sub>&lt;T<sub>melt</sub><sup>P</sup>
+</span>
+</span>
+<span>
+<div class="fraction">
+<span class="fup">
+1
+</span>
+<span class="fdn">
+&tau;<sub>P</sub><sup>L</sup>
+</span>
+</div>(T<sub>W</sub>(t)-T<sub>P</sub>(t)) , <span class="case">
+T<sub>P</sub>&gt;T<sub>melt</sub><sup>P</sup>
+</span>
+</span>
+<span>
+0 , <span class="case">
+T<sub>P</sub>=T<sub>melt</sub><sup>P</sup>
+</span>
+</span>
+<span>
+0 , <span class="case">
+0&lt;&phi;&lt;1
+</span>
+</span>
+</div>
+</div>
+</a>
+</td>
+</tr>
+<tr>
+<th>
+Description
+</th>
+<td>
+<p class="paragraph">
+T<sub>W</sub> is the temperature of the water (&deg;C). T<sub>P</sub> is the temperature of the phase change material (&deg;C). &tau;<sub>P</sub><sup>S</sup>=<div class="fraction">
+<span class="fup">
+m<sub>P</sub>C<sub>P</sub><sup>S</sup>
+</span>
+<span class="fdn">
+h<sub>P</sub>A<sub>P</sub>
+</span>
+</div> is a constant (s). &tau;<sub>P</sub><sup>L</sup>=<div class="fraction">
+<span class="fup">
+m<sub>P</sub>C<sub>P</sub><sup>L</sup>
+</span>
+<span class="fdn">
+h<sub>P</sub>A<sub>P</sub>
+</span>
+</div> is a constant (s)..
+</p>
+</td>
+</tr>
+</table>
 </a>
 <p class="paragraph">
 Detailed derivation of the energy balance on the PCM during sensible heating phase:
@@ -1961,6 +2155,102 @@ In the case where T<sub>P</sub>=T<sub>melt</sub><sup>P</sup> and not all of the 
 <p class="paragraph">
 This derivation does not consider the boiling of the PCM, as the PCM is assumed to either be in a solid state or a liquid state (A18).
 </p>
+<a id="T:heatEInWtr">
+<table class="tdefn">
+<tr>
+<th>
+Label
+</th>
+<td>
+<p class="paragraph">
+Heat energy in the water
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Equation
+</th>
+<td>
+<a id="">
+<div class="equation">
+E<sub>W</sub>(t)=C<sub>W</sub>m<sub>W</sub>(T<sub>W</sub>(t)-T<sub>init</sub>)
+</div>
+</a>
+</td>
+</tr>
+<tr>
+<th>
+Description
+</th>
+<td>
+<p class="paragraph">
+The above equation is derived using T2. E<sub>W</sub> is the change in thermal energy of the liquid water relative to the energy at the initial temperature (T<sub>init</sub>) (J). C<sub>W</sub> is the specific heat capacity of liquid water (J/(kg&deg;C)) and m<sub>W</sub> is the mass of the water (kg). The change in temperature is the difference between the temperature at time t (s), T<sub>W</sub> and the initial temperature, T<sub>init</sub> (&deg;C). This equation applies as long as 0&lt;T<sub>W</sub>&lt;0&deg;C (A14, A19).
+</p>
+</td>
+</tr>
+</table>
+</a>
+<a id="T:heatEInPCM">
+<table class="tdefn">
+<tr>
+<th>
+Label
+</th>
+<td>
+<p class="paragraph">
+Heat energy in the PCM
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Equation
+</th>
+<td>
+<a id="">
+<div class="equation">
+E<sub>P</sub>=<span class="casebr">
+{
+</span>
+<div class="cases">
+<span>
+C<sub>P</sub><sup>S</sup>m<sub>P</sub>(T<sub>P</sub>(t)-T<sub>init</sub>) , <span class="case">
+T<sub>P</sub>&lt;T<sub>melt</sub><sup>P</sup>
+</span>
+</span>
+<span>
+E<sub>P</sub><sub>melt</sub><sup>init</sup>+H<sub>f</sub>m<sub>P</sub>+C<sub>P</sub><sup>L</sup>m<sub>P</sub>(T<sub>P</sub>(t)-T<sub>melt</sub><sup>P</sup>) , <span class="case">
+T<sub>P</sub>&gt;T<sub>melt</sub><sup>P</sup>
+</span>
+</span>
+<span>
+E<sub>P</sub><sub>melt</sub><sup>init</sup>+Q<sub>P</sub>(t) , <span class="case">
+T<sub>P</sub>=T<sub>melt</sub><sup>P</sup>
+</span>
+</span>
+<span>
+E<sub>P</sub><sub>melt</sub><sup>init</sup>+Q<sub>P</sub>(t) , <span class="case">
+0&lt;&phi;&lt;1
+</span>
+</span>
+</div>
+</div>
+</a>
+</td>
+</tr>
+<tr>
+<th>
+Description
+</th>
+<td>
+<p class="paragraph">
+The above equation is derived using T2 and T3. E<sub>P</sub> is the change in thermal energy of the PCM relative to the energy at the initial temperature (T<sub>init</sub>) J. E<sub>P</sub> for the solid PCM is found using T2 for sensible heat ing, with the specific heat capacity of the solid PCM, C<sub>P</sub><sup>S</sup> (J/(kg&deg;C)) and the change in the PCM temperature from the initial temperature (&deg;C). E<sub>P</sub> for the melted PCM (T<sub>P</sub>&gt;E<sub>P</sub><sub>melt</sub><sup>init</sup>) is found using T2 for sensible heat of the liquid. PCM plus the energy when melting starts, plus the energy required to melt all of the PCM The energy when melting starts is E<sub>P</sub><sub>melt</sub><sup>init</sup> (J). The energy required to melt all of the PCM is H<sub>f</sub>m<sub>P</sub> (J) (DD3). the specific heat capacity of the liquid PCM is C<sub>P</sub><sup>L</sup> (J/(kg&deg;C)) and the change in temperature is T<sub>P</sub>-T<sub>melt</sub><sup>P</sup> (&deg;C). E<sub>P</sub> during melting of the PCM is found using the energy required at the instant melting of the PCM begins, E<sub>P</sub><sub>melt</sub><sup>init</sup> plus the latent heat energy added to the PCM, Q<sub>P</sub> (J) since the time when melting began t<sub>melt</sub><sup>init</sup> (s). The heat energy for boiling of the PCM is not detailed, since the PCM is assumed to either be in a solid or liquid state (A18).
+</p>
+</td>
+</tr>
+</table>
+</a>
 </div>
 </a>
 <a id="Sec:DataCons">

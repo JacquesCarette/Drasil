@@ -73,7 +73,7 @@ htCap_V      = uc' "htCap_V"
 pcm_initMltE = uc' "pcm_initMltE" (nounPhraseSP
   "change in heat energy in the PCM at the instant when melting begins")
   "Change in thermal energy in the phase change material at the melting point"
-  (sup (sub (sens_heat ^. symbol) (Atomic "Pmelt")) (Atomic "init")) joule
+  (sup (sub (sub (sens_heat ^. symbol) (Atomic "P")) (Atomic "melt")) (Atomic "init")) joule
 
 vol_ht_gen   = uc' "vol_ht_gen"
   (nounPhraseSP "volumetric heat generation per unit volume")

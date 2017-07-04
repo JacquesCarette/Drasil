@@ -527,7 +527,7 @@ s5_1_list_items = [
   ]
 
 s5_1_list_words = map (\x -> Enumeration $ Simple [x])
-  $ mkEnumAbbrevList 1 (short requirement) $ map foldlSent [
+  $ mkEnumAbbrevList 1 (short requirement) $ map foldlSent_ [
 
   [titleize input_, S "the following", plural quantity `sC`
   S "which define the", phrase tank, S "parameters, material",
@@ -536,23 +536,23 @@ s5_1_list_words = map (\x -> Enumeration $ Simple [x])
   [S "Use the", plural input_, S "in", acroR 1, S "to find the",
   phrase mass, S "needed for", acroIM 1, S "to", acroIM 4 `sC`
   S "as follows, where", getS w_vol `isThe` phrase w_vol,
-  S "and", getS tank_vol `isThe` phrase tank_vol],
+  S "and" +: (getS tank_vol `isThe` phrase tank_vol)],
 
   [S "Verify that the", plural input_, S "satisfy the required",
-  phrase physicalConstraint, S "shown in", makeRef s4_2_6_table1],
+  phrase physicalConstraint, S "shown in" +:+. makeRef s4_2_6_table1],
 
   [titleize' output_, S "and", plural input_, plural quantity, S "and derived",
   plural quantity, S "in the following list: the", plural quantity, S "from",
-  (acroR 1) `sC` S "the", phrase mass, S "from", acroR 2, S "and", getS tau_W,
+  (acroR 1) `sC` S "the", phrase mass, S "from", acroR 2, S "and", getS tau_W +:+.
   sParen(S "from" +:+ acroIM 1)],
 
   [S "Calculate and output the", phrase temp, S "of the", phrase water,
-  sParen (getS temp_W :+: sParen (getS time)), S "over the", phrase simulation,
+  sParen (getS temp_W :+: sParen (getS time)), S "over the", phrase simulation +:+.
   phrase time],
 
   [S "Calculate and", phrase output_, S "the", phrase w_E,
   sParen (getS w_E :+: sParen (getS time)), S "over the",
-  phrase simulation, phrase time, sParen (S "from" +:+ acroIM 3)]
+  phrase simulation, phrase time +:+. sParen (S "from" +:+ acroIM 3)]
   ]
 
 -------------------------------------------

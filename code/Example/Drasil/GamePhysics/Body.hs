@@ -447,7 +447,7 @@ s5_1_req1 = foldlSent [S "Create a", (phrase CP.space), S "for all of the",
 
 s5_1_req2 = foldlSent [S "Input the initial", 
   (plural QPP.mass) `sC` (plural QP.velocity) `sC` 
-  (plural QM.orientation) `sC` (plural QP.angularVelocity ), 
+  (plural QM.orientation) `sC` (plural QP.angularVelocity), 
   S "of" `sC` S "and", (plural QP.force), S "applied on", 
   (plural CP.rigidBody)]
 
@@ -546,10 +546,12 @@ s7 = SRS.offShelfSol [s7_intro, s7_2dlist,
 
 s7_intro = s7_intro_param physLib
 
-s7_intro_param lib = Paragraph $ S "As mentioned in" +:+. ((makeRef s4_1) `sC`
-  S "there already exist free" +:+ (phrase openSource) +:+ (phrase game) +:+
-  (plural lib)) +:+ S "Similar" +:+ (getAcc twoD) +:+ 
-  (plural lib) +:+ S "are:"
+s7_intro_param :: NamedIdea n => n -> Contents
+s7_intro_param lib = Paragraph $ foldle (+:+) (+:) EmptyS 
+  [S "As mentioned in", (makeRef s4_1) `sC`
+  S "there already exist free", (phrase openSource), (phrase game) +:+.
+  (plural lib), S "Similar", (getAcc twoD), 
+  (plural lib), S "are"]
 
 s7_2dlist = enumBullet [(S "Box2D: http://box2d.org/"),
   (S "Nape Physics Engine: http://napephys.com/")]

@@ -8,6 +8,7 @@ import qualified Language.Drasil.HTML.AST as H
 import Language.Drasil.Unicode (Special(Partial))
 import Language.Drasil.Chunk.Eq
 import Language.Drasil.Chunk.Relation
+import Language.Drasil.Chunk.ExprRelat (relat)
 import Language.Drasil.Chunk.Module
 import Language.Drasil.Chunk.NamedIdea (term)
 import Language.Drasil.Chunk.Concept (defn)
@@ -246,7 +247,7 @@ makePairs (Data c) m = [
   ]
 makePairs (Theory c) _ = [
   ("Label",       [H.Paragraph $ spec (phrase $ c ^. term)]),
-  ("Equation",    [H.HDiv ["equation"] [H.Tagless (H.E (rel (relat c)))]
+  ("Equation",    [H.HDiv ["equation"] [H.Tagless (H.E (rel (c ^. relat)))]
                   (H.EmptyS)]),
   ("Description", [H.Paragraph (spec (c ^. defn))])
   ]

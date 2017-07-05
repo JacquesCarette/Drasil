@@ -62,7 +62,7 @@ mkRelField t _ General l@Units fs = undefined
 mkRelField _ _ _ Units _ = error $ 
   "Models cannot have units - See Drasil.DocumentLanguage.Definitions"
 --(show l, (Paragraph $ unit'2Contents t):[]) : fs
-mkRelField t _ _ l@DefiningEquation fs = (show l, (EqnBlock $ relat t):[]) : fs
+mkRelField t _ _ l@DefiningEquation fs = (show l, (EqnBlock $ t ^. relat):[]) : fs
 mkRelField t m _ l@(Description v u intro) fs =
   (show l, Paragraph intro : buildDescription v u t m) : fs
 
@@ -81,7 +81,8 @@ mkQField _ _ _ _ = undefined
 buildDescription :: Verbosity -> InclUnits -> RelationConcept -> SymbolMap -> 
   [Contents]
 buildDescription Succinct _ _ _ = []
-buildDescription Verbose u t m = [Enumeration (Definitions (descPairs u (vars (relat t) m)))]
+buildDescription Verbose u t m = 
+  [Enumeration (Definitions (descPairs u (vars (t ^. relat) m)))]
 
 -- | Create the description field (if necessary) using the given verbosity and
 -- including or ignoring units for a data definition

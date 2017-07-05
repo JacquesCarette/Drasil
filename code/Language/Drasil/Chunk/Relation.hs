@@ -1,8 +1,8 @@
 {-# LANGUAGE GADTs, Rank2Types #-}
 module Language.Drasil.Chunk.Relation
   ( NamedRelation, RelationConcept
-  , makeNR, relat
-  , nrelat, makeRC
+  , makeNR
+  , makeRC
   ) where
 
 import Control.Lens (Simple, Lens, (^.), set)
@@ -12,6 +12,7 @@ import Language.Drasil.Chunk
 import Language.Drasil.Chunk.NamedIdea
 import Language.Drasil.Chunk.Concept
 import Language.Drasil.Spec (Sentence(..))
+import Language.Drasil.Chunk.ExprRelat
 
 import Language.Drasil.NounPhrase (NP)
 
@@ -24,9 +25,6 @@ data NamedRelation where
 --namewrap :: NamedRelation -> NWrapper
 --namewrap (NR c _) = nw c
 
-nrelat :: NamedRelation -> Relation
-nrelat (NR _ r) = r
-
 instance Chunk NamedRelation where
   id = cp id
 
@@ -34,11 +32,11 @@ instance NamedIdea NamedRelation where
   term = cp term
   getA (NR c _) = getA c
   
+instance ExprRelat NamedRelation where
+  relat f (NR n r) = fmap (\x -> NR n x) (f r)
+  
 data RelationConcept where 
   RC :: Concept c => c -> Relation -> RelationConcept
-
-relat :: RelationConcept -> Relation
-relat (RC _ r) = r
 
 instance Chunk RelationConcept where
   id = rcl id
@@ -50,6 +48,9 @@ instance NamedIdea RelationConcept where
 instance Concept RelationConcept where
   defn = rcl defn
   cdom = rcl cdom
+
+instance ExprRelat RelationConcept where
+  relat f (RC c r) = fmap (\x -> RC c x) (f r)
 
 -- don't export this
 rcl:: (forall c. (Concept c) => Simple Lens c a) -> Simple Lens RelationConcept a

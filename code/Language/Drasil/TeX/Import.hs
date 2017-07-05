@@ -11,6 +11,7 @@ import qualified Language.Drasil.TeX.AST as T
 import Language.Drasil.Unicode (Special(Partial))
 import Language.Drasil.Chunk.Eq
 import Language.Drasil.Chunk.Relation
+import Language.Drasil.Chunk.ExprRelat (relat)
 import Language.Drasil.Chunk.Module
 import Language.Drasil.Chunk.NamedIdea (term)
 import Language.Drasil.Chunk.SymbolForm (SymbolForm, symbol)
@@ -235,7 +236,7 @@ makePairs (Data c) m = [
   ]
 makePairs (Theory c) _ = [
   ("Label",       [T.Paragraph $ spec (phrase $ c ^. term)]),
-  ("Equation",    [eqnStyleTM $ T.E (rel (relat c))]),
+  ("Equation",    [eqnStyleTM $ T.E (rel (c ^. relat))]),
   ("Description", [T.Paragraph (spec (c ^. defn))])
   ]
 makePairs General _ = error "Not yet implemented"

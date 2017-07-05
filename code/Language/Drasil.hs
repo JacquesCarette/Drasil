@@ -119,13 +119,14 @@ import Language.Drasil.Chunk.VarChunk
 import Language.Drasil.Chunk.Quantity
 import Language.Drasil.Chunk.UncertainQuantity
 import Language.Drasil.Chunk.ConVar
+import Language.Drasil.Chunk.ExprRelat
 import Language.Drasil.Chunk.Eq (QDefinition(..), fromEqn, fromEqn', getVC, equat)
 import Language.Drasil.Chunk.Constrained
 import Language.Drasil.Chunk.Unital(UnitalChunk(..), makeUCWDS, ucFromCV
                                   , uc, uc', ucs, ucs', ucsWS)
 import Language.Drasil.Chunk.Unitary
 import Language.Drasil.Chunk.Relation(NamedRelation, makeNR, RelationConcept, 
-                                      makeRC, relat)
+                                      makeRC)
 import Language.Drasil.Chunk.Req
 import Language.Drasil.Chunk.LC
 import Language.Drasil.Chunk.Method

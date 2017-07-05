@@ -438,7 +438,7 @@ s4_1_3_intro = foldlSPCol [S "Given the", phrase temp_C `sC`
 
 s4_1_3_list :: Contents
 s4_1_3_list = enumSimple 1 (short goalStmt) $
-  map (goalState) [temp_W, temp_PCM, w_E, pcm_E]
+  map (goalState) outputConstraints
 
 goalState :: NamedIdea varTerm => varTerm -> Sentence
 goalState varTerm = foldlSent [S "Predict the", phrase varTerm,
@@ -996,8 +996,10 @@ specParamVal22 = [getS time_final_max, E (Int 86400) +:+ (unwrap $ getUnit time_
 ------------------------------
 
 s4_2_6_table3 :: Contents
-s4_2_6_table3 = outDataConstTbl [temp_W, temp_PCM, w_E, pcm_E]
+s4_2_6_table3 = outDataConstTbl outputConstraints
 --FIXME: add "(by A11)" in Physical Constraints of `temp_W` and `temp_PCM`?
+
+outputConstraints = [temp_W, temp_PCM, w_E, pcm_E]
 
 -- Other Notes:
 ---- Will there be a way to have asterisks for certain pieces of the table?

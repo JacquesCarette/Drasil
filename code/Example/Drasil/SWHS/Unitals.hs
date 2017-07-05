@@ -38,7 +38,6 @@ in_SA, out_SA, htCap_L, htCap_S, htCap_V,
   t_final_melt, temp_diff, tank_vol, w_vol, deltaT,
   tau, tau_L_P, tau_S_P, tau_W :: UnitalChunk
 
-
 ---------------------
 -- Regular Symbols --
 ---------------------

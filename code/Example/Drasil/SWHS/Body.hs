@@ -50,7 +50,7 @@ import Data.Drasil.Concepts.Software(correctness, verifiability,
 
 import Data.Drasil.SentenceStructures (showingCxnBw, foldlSent, foldlSent_,
   foldlSentCol, foldlSP, foldlSP_, foldlSPCol, foldlsC, isThe, ofThe, ofThe',
-  sAnd, displayConstr)
+  sAnd, inDataConstTbl)
 
 acronyms :: [CI]
 acronyms = [assumption, dataDefn, genDefn, goalStmt, inModel, likelyChg, ode,
@@ -910,40 +910,12 @@ s4_2_6_DataConTables :: [Contents]
 s4_2_6_DataConTables = [s4_2_6_table1, s4_2_6_table3]
 
 s4_2_6_table1 :: Contents
-s4_2_6_table1 = Table [S "Var", titleize' physicalConstraint, titleize software +:+
-  titleize' constraint, S "Typical" +:+ titleize value, S "Uncertainty"]
-  (mkTable [(\x -> x!!0), (\x -> x!!1), (\x -> x!!2), (\x -> x!!3), (\x -> x!!4)]
-  s4_2_6_conListIn) (titleize input_ +:+ titleize' variable) True
+s4_2_6_table1 = inDataConstTbl inputConstraints
 
-s4_2_6_conListIn ::[[Sentence]]
-s4_2_6_conListIn = [con1, con2, con3, con4, con5, con6, con7, con8,
-  con9, con10, con11, con12, con13, con14, con15, con16, con17]
-
-con1, con2, con3, con4, con5, con6, con7, con8, con9, con10,
-  con11, con12, con13, con14, con15, con16, con17 :: [Sentence]
-
-con1 = displayConstr tank_length (1.5 :: Double) (S "10" :+: (P (Special Percent)))
-con2 = displayConstr diam (0.412 :: Double) (S "10" :+: (P (Special Percent)))
-con3 = displayConstr pcm_vol (0.05 :: Double) (S "10" :+: (P (Special Percent)))
-con4 = displayConstr pcm_SA (1.2 :: Double) (S "10" :+: (P (Special Percent)))
-con5 = displayConstr pcm_density (1007 :: Int) (S "10" :+: (P (Special Percent)))
-con6 = displayConstr temp_melt_P (44.2 :: Double) (S "10" :+: (P (Special Percent)))
-con7 = displayConstr htCap_S_P (1760 :: Int) (S "10" :+: (P (Special Percent)))
-con8 = displayConstr htCap_L_P (2270 :: Int) (S "10" :+: (P (Special Percent)))
-con9 = displayConstr htFusion (211600 :: Int) (S "10" :+: (P (Special Percent)))
-con10 = displayConstr coil_SA (0.12 :: Double) (S "10" :+: (P (Special Percent)))
-con11 = displayConstr temp_C (50 :: Int) (S "10" :+: (P (Special Percent)))
-con12 = displayConstr w_density (1000 :: Int) (S "10" :+: (P (Special Percent)))
-con13 = displayConstr htCap_W (4186 :: Int) (S "10" :+: (P (Special Percent)))
-con14 = displayConstr coil_HTC (1000 :: Int) (S "10" :+: (P (Special Percent)))
-con15 = displayConstr pcm_HTC (1000 :: Int) (S "10" :+: (P (Special Percent)))
-con16 = displayConstr temp_init (40 :: Int) (S "10" :+: (P (Special Percent)))
-con17 = displayConstr time_final (50000 :: Int) (S "10" :+: (P (Special Percent)))
-
-inputVar :: [QSWrapper]
-inputVar = map qs [tank_length, diam, pcm_vol, pcm_SA, pcm_density,
-  temp_melt_P, htCap_S_P, htCap_L_P, htFusion, coil_SA, temp_C,
-  w_density, htCap_W, coil_HTC, pcm_HTC, temp_init, time_final]
+inputConstraints :: [UncertQ]
+inputConstraints = [tank_length, diam, pcm_vol, pcm_SA, pcm_density,
+  temp_melt_P, htCap_S_P, htCap_L_P, htFusion, coil_SA,
+  temp_C, w_density, htCap_W, coil_HTC, pcm_HTC, temp_init, time_final]
 
 s4_2_6_T1footer :: Sentence
 s4_2_6_T1footer = foldlSent_ $ map foldlSent [
@@ -1138,7 +1110,7 @@ s5_1_1_Table = (Table [titleize symbol_, titleize unit_, titleize description]
   [getS,
   --(\ch -> Sy (unit_symb ch)),
   unit'2Contents,
-  phrase] inputVar)
+  phrase] (map qs inputConstraints))
   (titleize input_ +:+ titleize variable +:+ titleize requirement) False)
 
 s5_1_2_Sent = Enumeration (Simple [(acroR 2, Flat (foldlSent

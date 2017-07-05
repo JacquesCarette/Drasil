@@ -242,18 +242,18 @@ s3 = stakehldrGeneral (gLassBR)
 
 {--GENERAL SYSTEM DESCRIPTION--}
 
-s4 = genSysF [] s4_1_bullets [] []
+s4 = genSysF [] (s4_1_bullets (endUser) (gLassBR)) [] []
+
+isExpctdToHv :: Sentence -> Sentence -> Sentence
+a `isExpctdToHv` b = S "The" +:+ a +:+ S "is expected to have" +:+ b
 
 {--User Characteristics--}
-
-s4_1_bullets = enumBullet [(S "The" +:+ phrase endUser +:+ S "of" +:+ 
-  short gLassBR +:+ S "is expected to have completed at least" +:+.
-  (S "equivalent" `ofThe` 
-  S "second year of an undergraduate degree in civil or structural engineering")
-  ), (S "The" +:+ phrase endUser +:+ S "is expected to have an understanding of"
-  +:+ phrase theory +:+ S "behind" +:+. (phrase glBreakage `sAnd`
-  phrase blastRisk)), (S "The" +:+ phrase endUser +:+
-  S "is expected to have basic" +:+ phrase computer +:+
+s4_1_bullets intendedIndvdl progName = enumBullet 
+  [((phrase intendedIndvdl +:+ S "of" +:+ short progName) `isExpctdToHv` S "completed at least" +:+.
+  (S "equivalent" `ofThe` S "second year of an undergraduate degree in civil or structural engineering")),
+  (phrase intendedIndvdl `isExpctdToHv` S "an understanding of" +:+ phrase theory +:+ S "behind" +:+. 
+  (phrase glBreakage `sAnd` phrase blastRisk)),
+  (phrase intendedIndvdl `isExpctdToHv` S "basic" +:+ phrase computer +:+
   S "literacy to handle the" +:+. phrase software)]
 
 {--System Constraints--}

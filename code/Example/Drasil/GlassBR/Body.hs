@@ -72,7 +72,7 @@ mkSRS = [RefSec (RefProg intro
   [TUnits,
   tsymb [TSPurpose, SymbOrder],
   TAandA])] ++
-  [IntroSec (IntroProg startIntro (short gLassBR)
+  [IntroSec (IntroProg (startIntro (blstRskInvWGlassSlab) (gLassBR)) (short gLassBR)
      [IPurpose (s2_1_intro_p1),
      IScope incScoR endScoR,
      IChar knowIR undIR appStanddIR,
@@ -168,16 +168,24 @@ s7_1_req6_pulledList = [loadDF, nonFL, glaTyFac, dimLL, tolPre,
 
 --------------------------------------------------------------------------------
 
+--ISSUE #342--
+
+underConsidertn :: ConceptChunk -> Sentence
+underConsidertn chunk = S "The" +:+ (phrase chunk) +:+ S "under consideration is" +:+. (chunk ^. defn) 
+
+blstRskInvWGlassSlab :: Sentence
+blstRskInvWGlassSlab = phrase blastRisk +:+ S "involved with the" +:+ phrase glaSlab
+
+--------------
+
 {--INTRODUCTION--}
 
-startIntro, knowIR, undIR, appStanddIR, incScoR, endScoR :: Sentence
-startIntro = foldlSent [at_start software, 
-  S "is helpful to efficiently and correctly predict the",
-  phrase blastRisk, S "involved with the" +:+. phrase glaSlab, 
-  S "The", phrase blast, S "under consideration is" +:+. (blast ^. defn),
-  S "The", phrase software `sC` S "herein called", short gLassBR,
-  S "aims to predict the", phrase blastRisk, S "involved with the",
-  phrase glaSlab, S "using an intuitive interface"]
+startIntro :: Sentence -> CI -> Sentence
+knowIR, undIR, appStanddIR, incScoR, endScoR :: Sentence
+startIntro sfwrPredicts progName = foldlSent [
+  at_start software, S "is helpful to efficiently and correctly predict the" +:+. sfwrPredicts, 
+  underConsidertn blast,
+  S "The", phrase software `sC` S "herein called", short progName, S "aims to predict the", sfwrPredicts, S "using an intuitive interface"]
 knowIR = (phrase theory +:+ S "behind" +:+ phrase glBreakage `sAnd`
   phrase blastRisk)
 undIR = (foldlList [S "second year calculus", S "structural mechanics", 

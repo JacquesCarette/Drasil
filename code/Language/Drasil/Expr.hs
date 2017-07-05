@@ -60,10 +60,8 @@ data Expr where
   (:&&)    :: Expr -> Expr -> Expr -- logical and
   (:||)    :: Expr -> Expr -> Expr -- logical or
   Not      :: Expr -> Expr -- logical not
-
-  -- FIXME: rememeber to add to instance Eq
-  IsIn  :: [Expr] -> Set -> Expr --	&isin; \in
-  NotIn :: [Expr] -> Set -> Expr -- &notin; \notin
+  IsIn  :: [Expr] -> Set -> Expr --	element of
+  NotIn :: [Expr] -> Set -> Expr -- not a member of
   State :: [Quantifier] -> Expr -> Expr
     --ex. State [(Forall $ [V "x"] `IsIn` Reals), V "x" :> Int 1] (V "x" :^ Int 2 :> V "x")
     -- => forall x in R, x>1: x^2 > x

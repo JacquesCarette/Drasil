@@ -186,6 +186,11 @@ theCustom :: (NamedIdea c) => (c -> Sentence) -> c -> NamedChunk
 theCustom f t = npnc ("the" ++ t ^. id) (nounPhrase''(S "the" +:+ (f t)) 
   (S "the" +:+ (f t)) CapFirst CapWords)
 
+this :: (NamedIdea c) => c -> NamedChunk
+this t = npnc ("this" ++ t ^. id) (nounPhrase'' 
+  (S "this" +:+ (phrase $ t ^. term)) (S "this" +:+ (plural $ t ^. term))
+  CapFirst CapWords)
+
 aNP :: (NamedIdea c) => c -> NP --Should not be allowed to pluralize
 aNP t = nounPhrase'' 
   (S "a" +:+ (phrase $ t ^. term)) (S "a" +:+ (phrase $ t ^. term))

@@ -204,18 +204,19 @@ endScoR = foldl (+:+) EmptyS [S "use the", plural datum,
 {--Purpose of Document--}
 
 s2_1_intro_p1 :: Sentence
-s2_1_intro_p1 = foldlSent [S "The main", phrase purpose, S "of this",
-  phrase document, S "is to predict whether a given", phrase glaSlab,
-  S "is likely to resist a specified" +:+. phrase blast,
+s2_1_intro_p1 = foldlSent [S "The main", phrase purpose, S "of",
+  (prpseOfWhat phrase), S "is" +:+. prpse,
   S "The", plural goal `sAnd` plural thModel, S "used in the",
-  short gLassBR, S "code are provided" `sC`
-  S "with an emphasis on explicitly identifying", plural assumption,
-  S "and unambiguous" +:+. plural definition, S "This", phrase document, 
-  S "is intended to be used as a", phrase reference, S "to provide all", 
+  short progName, S "code are provided" `sC`
+  S "with an emphasis on explicitly identifying" +:+. explctID,
+  (prpseOfWhat at_start), S "is intended to be used as a", phrase reference, S "to provide all", 
   phrase information, S "necessary to understand and verify the" +:+.
   phrase analysis, S "The", short srs, S "is abstract because the", 
-  plural content, S "say what", phrase problem, 
-  S "is being solved, but not how to solve it"]
+  plural content, S "say what", phrase problem, S "is being solved, but not how to solve it"] --General?
+  where prpseOfWhat oper = oper $ this document
+        prpse            = S "to predict whether a given" +:+ phrase glaSlab +:+ S "is likely to resist a specified" +:+ phrase blast
+        progName         = gLassBR
+        explctID         = plural assumption +:+ S "and unambiguous" +:+ plural definition
 
 {--Scope of Requirements--}
 

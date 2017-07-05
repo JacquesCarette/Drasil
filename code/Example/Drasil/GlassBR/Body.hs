@@ -92,8 +92,14 @@ glassSystInfo = SI glassBRProg srs authors this_si this_symbols
   gbConstrained
   --FIXME: All named ideas, not just acronyms.
   
+glassChoices :: Choices
+glassChoices = Choices {
+  logFile = "log.txt",
+  logging = LogAll
+}  
+  
 glassBR_code :: CodeSpec
-glassBR_code = codeSpec glassSystInfo
+glassBR_code = codeSpec' glassSystInfo glassChoices
 
 mgBod :: [Section]
 (mgBod, _) = makeDD likelyChanges unlikelyChanges reqs modules

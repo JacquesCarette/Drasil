@@ -29,29 +29,49 @@ data Generator = Generator {
   genCalcBlock :: CodeDefinition -> Body,
   genCaseBlock :: [(Expr,Relation)] -> Body,  
 
-  genOutputFormat :: [CodeChunk] -> Method
+  genOutputFormat :: [CodeChunk] -> Method,
+  
+  genMethodCall :: Scope -> MethodType -> Label -> [Parameter] -> Body -> Method,
+  
+  logName :: String,
+  
+  publicMethod :: MethodType -> Label -> [Parameter] -> Body -> Method,
+  privateMethod :: MethodType -> Label -> [Parameter] -> Body -> Method
+                  
 }
 
 generator :: CodeSpec -> Generator -> Generator
-generator spec g = Generator {
-  generateCode = generateCodeD spec g,
-  
-  genModules = genModulesD spec g,
-  
-  genInputMod = genInputModD g,
-  genCalcMod = genCalcModD g,
-  genOutputMod = genOutputModD g,
-  
-  genInputClass = genInputClassD g,
-  genInputFormat = genInputFormatD g,
-  genInputConstraints = genInputConstraintsD g,
+generator spec g = 
+  let chs = choices spec
+      methodCallFunc = case (logging chs) of LogFunc -> loggedMethod
+                                             LogAll  -> loggedMethod
+                                             _       -> genMethodCallD
+  in Generator {
+      generateCode = generateCodeD spec g,
+      
+      genModules = genModulesD spec g,
+      
+      genInputMod = genInputModD g,
+      genCalcMod = genCalcModD g,
+      genOutputMod = genOutputModD g,
+      
+      genInputClass = genInputClassD g,
+      genInputFormat = genInputFormatD g,
+      genInputConstraints = genInputConstraintsD g,
 
-  genCalcFuncs = genCalcFuncsD g,
-  genCalcBlock = genCalcBlockD g,
-  genCaseBlock = genCaseBlockD g,  
+      genCalcFuncs = genCalcFuncsD g,
+      genCalcBlock = genCalcBlockD g,
+      genCaseBlock = genCaseBlockD g,  
 
-  genOutputFormat = genOutputFormatD g
-}
+      genOutputFormat = genOutputFormatD g,
+      
+      genMethodCall = methodCallFunc g,
+      
+      logName = logFile $ choices spec,
+      
+      publicMethod = genMethodCall g Public,
+      privateMethod = genMethodCall g Private
+    }
 
 generateCodeD :: CodeSpec -> Generator -> IO () 
 generateCodeD s g = let modules = genModules g 
@@ -61,7 +81,7 @@ generateCodeD s g = let modules = genModules g
         (toAbsCode (codeName $ program s) modules)
 
 genModulesD :: CodeSpec -> Generator -> [Module]
-genModulesD (CodeSpec _ i o d cm) g = genInputMod g i cm
+genModulesD (CodeSpec _ i o d cm _) g = genInputMod g i cm
                                    ++ genCalcMod g d
                                    ++ genOutputMod g o
 
@@ -91,13 +111,13 @@ genInputClassD g ins cm = pubClass
           map (\x -> pubMVar 4 (convType $ codeType x) (codeName x)) ins
 
 genInputFormatD :: Generator -> [CodeChunk] -> Method
-genInputFormatD _ ins = let l_infile = "infile"
+genInputFormatD g ins = let l_infile = "infile"
                             v_infile = var l_infile
                             l_filename = "filename"
                             p_filename = param l_filename string
                             v_filename = var l_filename
                         in
-  pubMethod methodTypeVoid "get_inputs" 
+  publicMethod g methodTypeVoid "get_inputs" 
     [ p_filename ]
     [ block $
         [
@@ -111,9 +131,9 @@ genInputFormatD _ ins = let l_infile = "infile"
     ]
           
 genInputConstraintsD :: Generator -> [CodeChunk] -> ConstraintMap -> Method
-genInputConstraintsD _ vars cm = 
+genInputConstraintsD g vars cm = 
   let cs = concatMap (\x -> constraintLookup x cm) vars in
-    pubMethod methodTypeVoid "input_constraints" [] [ block $
+    publicMethod g methodTypeVoid "input_constraints" [] [ block $
       map (\x -> ifCond [((?!) (convExpr x), oneLiner $ throw "InputError")] noElse) cs
     ]
 
@@ -125,7 +145,7 @@ genCalcModD g defs = [buildModule "Calculations" [] [] (genCalcFuncs g defs) []]
         
 genCalcFuncsD :: Generator -> [CodeDefinition] -> [Method]
 genCalcFuncsD g = map 
-  ( \x -> pubMethod 
+  ( \x -> publicMethod g 
             (methodType $ convType (codeType x)) 
             ("calc_" ++ codeName x) 
             (getParams (codevars $ codeEquat x)) 
@@ -161,7 +181,7 @@ genOutputFormatD g outs = let l_outfile = "outfile"
                               p_filename = param l_filename string
                               v_filename = var l_filename
                           in
-  pubMethod methodTypeVoid "write_output" 
+  publicMethod g methodTypeVoid "write_output" 
     (p_filename:getParams outs)
     [ block $
         [
@@ -178,7 +198,26 @@ genOutputFormatD g outs = let l_outfile = "outfile"
         [ closeFile v_outfile ]
     ]         
     
+-----
 
+genMethodCallD :: Generator -> Scope -> MethodType -> Label -> [Parameter] 
+                  -> Body -> Method
+genMethodCallD _ s t n p b = Method n s t p b
+
+loggedMethod :: Generator -> Scope -> MethodType -> Label -> [Parameter] 
+                  -> Body -> Method
+loggedMethod g s t n p b = let l_outfile = "outfile"
+                               v_outfile = var l_outfile 
+                           in
+  Method n s t p $ 
+  (
+    block [
+      varDec l_outfile outfile,
+      openFileW v_outfile (litString $ logName g),  
+      printFileStrLn v_outfile (n ++ "(" ++ ") called"),
+      closeFile v_outfile      
+    ]
+  ) : b
 
 -- helpers
     

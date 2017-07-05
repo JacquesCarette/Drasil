@@ -95,7 +95,7 @@ module Language.Drasil (
   , People, Person, person, HasName, name, manyNames, person', personWM
   , personWM', mononym
   -- CodeSpec
-  , CodeSpec, codeSpec, Choices(..), Logging(..), defaultChoices
+  , CodeSpec, codeSpec, codeSpec', Choices(..), Logging(..), defaultChoices
 ) where
 
 import Prelude hiding (log, sin, cos, tan, sqrt, id, return, print, break, exp, product)

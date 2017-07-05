@@ -7,6 +7,7 @@ module Data.Drasil.SentenceStructures
   , showingCxnBw, refineChain, foldlSP, foldlSP_, foldlSPCol
   , maybeChanged, maybeExpanded, maybeWOVerb
   , tAndDWAcc, tAndDWSym, tAndDOnly
+  , followA
   {-below is to be moved-}
   , makeConstraint, displayConstr
   , fmtInConstr
@@ -171,6 +172,9 @@ fmtOutputConstr q qlst = [getS q] ++ physC q qlst ++ sfwrC q qlst ++ rval q qlst
 
 none :: Sentence
 none = S "None"
+
+followA :: Sentence -> Int -> Sentence
+preceding `followA` num = preceding +:+ S "following" +:+ acroA num
 
 --These check the entire list of UncertainQuantity and if they are all empty in that field,
 -- return empty list, otherwise return the appropriate thing

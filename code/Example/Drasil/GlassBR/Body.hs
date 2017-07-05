@@ -15,7 +15,7 @@ import Prelude hiding (id)
 import Data.Drasil.Utils
 import Data.Drasil.SentenceStructures (foldlSent, foldlList, ofThe, isThe,
   showingCxnBw, figureLabel, foldlSP, sAnd, foldlsC, tAndDWAcc, tAndDWSym,
-  tAndDOnly, sVersus, inDataConstTbl, outDataConstTbl)
+  tAndDOnly, sVersus, inDataConstTbl, outDataConstTbl, followA)
 
 import Drasil.Template.MG
 import Drasil.Template.DD
@@ -50,11 +50,11 @@ s3, s4, s5,
   s8, s9, s10, s11, s12 :: Section
 
 s4_1_bullets, s5_1_table, s5_2_bullets, 
-  s6_1_1_bullets, s6_1_2_list, s6_1_3_list, 
-  s6_2_intro, s6_2_5_table1, s6_2_5_table3,
-  s7_2_intro, s9_table1, s9_table2, s9_table3,
-  s11_list, s12_intro, fig_glassbr, fig_2, 
-  fig_3, fig_4, fig_5, fig_6 :: Contents
+  s6_1_2_list, s6_2_intro, s6_2_5_table1, 
+  s6_2_5_table3, s7_2_intro, s9_table1,
+  s9_table2, s9_table3, s11_list, s12_intro,
+  fig_glassbr, fig_2, fig_3, fig_4, fig_5,
+  fig_6 :: Contents
 
 s6_2_1_list, s7_1_list, s9_intro2 :: [Contents]
 
@@ -111,6 +111,36 @@ termsWithAccDefn  = [sD, loadShareFac, glTyFac, aspectRatio]
 glassTypes = [annealedGl, fTemperedGl, hStrengthGl]
 loadTypes = [loadResis, nonFactoredL,glassWL, shortDurLoad,
   specDeLoad, longDurLoad] 
+
+s6_1_1_bullets :: Contents
+s6_1_1_bullets = Enumeration $ (Number $
+  map tAndDOnly termsWithDefsOnly
+  ++
+  s6_1_1_bullets_glTySubSec
+  ++
+  s6_1_1_bullets_loadSubSec
+  ++
+  map tAndDWAcc termsWithAccDefn
+  ++
+  [tAndDWSym (probBreak) (prob_br)])
+
+s6_1_1_bullets_glTySubSec, s6_1_1_bullets_loadSubSec :: [ItemType]
+
+s6_1_1_bullets_glTySubSec = [Nested (((titleize glassTy) :+: S ":"))
+  (Bullet $ map tAndDWAcc glassTypes)]
+
+s6_1_1_bullets_loadSubSec = [Nested (((at_start load) :+: S ":"))
+  (Bullet $ map tAndDWAcc (take 2 loadTypes)
+  ++ 
+  map tAndDOnly (drop 2 loadTypes))]
+
+--Used in "Likely Changes" Section--
+s8_list :: Contents
+s8_list = enumSimple 1 (short likelyChg) s8_likelychg_list
+
+--Used in "Goal Statements" Section--
+s6_1_3_list :: Contents
+s6_1_3_list = enumSimple 1 (short goalStmt) s6_1_3_list_goalStmt1
 
 --Used in "Traceability Matrices and Graphs" Section--
 traceyMatrices, traceyGraphs :: [Contents]
@@ -222,6 +252,7 @@ s4_1_bullets = enumBullet [(S "The" +:+ phrase endUser +:+ S "of" +:+
 
 {--SCOPE OF THE PROJECT-}
 
+--Awaiting Issue #257
 s5 = scopeOfTheProjF (short gLassBR) (s5_1_table) (s5_2_bullets)
 
 {--Product Use Case Table--}
@@ -232,7 +263,8 @@ s5_1_table_UC1, s5_1_table_UC2 :: [Sentence]
 
 s5_1_table_UC1 = [S "1", titleize' input_, titleize user,
   titleize' characteristic +:+ S "of the" +:+ phrase glaSlab +:+ S "and of the"
-  +:+. phrase blast +:+ S "Details in" +:+ (makeRef (SRS.indPRCase SRS.missingP []))]
+  +:+. phrase blast +:+ S "Details in" +:+
+  (makeRef (SRS.indPRCase SRS.missingP []))]
 
 s5_1_table_UC2 = [S "2", titleize output_, short gLassBR, S "Whether or not the" 
   +:+ phrase glaSlab +:+ S "is safe for the calculated" +:+ phrase load +:+
@@ -292,29 +324,6 @@ s6_1 = probDescF start gLassBR ending [s6_1_1, s6_1_2, s6_1_3]
 s6_1_1 = termDefnF (S "All of the terms are extracted from" +:+ 
   sSqBr (S "4") +:+ S "in" +:+ (makeRef s11)) [s6_1_1_bullets]
 
-s6_1_1_bullets = Enumeration $ (Number $
-  map tAndDOnly termsWithDefsOnly
-  ++
-  s6_1_1_bullets_glTySubSec
-  ++
-  s6_1_1_bullets_loadSubSec
-  ++
-  map tAndDWAcc termsWithAccDefn
-  ++
-  [tAndDWSym (probBreak) (prob_br)])
-
--- Terminology and Definition Subsection Helpers --
-
-s6_1_1_bullets_glTySubSec, s6_1_1_bullets_loadSubSec :: [ItemType]
-
-s6_1_1_bullets_glTySubSec = [Nested (((titleize glassTy) :+: S ":"))
-  (Bullet $ map tAndDWAcc glassTypes)]
-
-s6_1_1_bullets_loadSubSec = [Nested (((at_start load) :+: S ":"))
-  (Bullet $ map tAndDWAcc (take 2 loadTypes)
-  ++ 
-  map tAndDOnly (drop 2 loadTypes))]
-
 {--Physical System Description--}
 
 s6_1_2 = physSystDesc (short gLassBR) (fig_glassbr) [s6_1_2_list, fig_glassbr]
@@ -323,6 +332,7 @@ fig_glassbr = Figure (at_start $ the physicalSystem) "physicalsystimage.png"
   
 s6_1_2_list = enumSimple 1 (short physSyst) s6_1_2_list_physys
 
+--"Dead" knowledge?
 s6_1_2_list_physys :: [Sentence]
 s6_1_2_list_physys1, s6_1_2_list_physys2 :: Sentence
 
@@ -341,8 +351,6 @@ s6_1_2_list_physys2 = foldlSent [S "The point of"
 s6_1_3 = goalStmtF [foldlList [S "dimensions" `ofThe`S "glass plane", 
   phrase glassTy, plural characteristic `ofThe` phrase explosion, 
   S "the" +:+ phrase pb_tol]] [s6_1_3_list]
-
-s6_1_3_list = enumSimple 1 (short goalStmt) s6_1_3_list_goalStmt1
 
 s6_1_3_list_goalStmt1 :: [Sentence]
 s6_1_3_list_goalStmt1 = [foldlSent [S "Analyze and predict whether the", 
@@ -370,9 +378,9 @@ s6_2_intro = foldlSP [S "This", phrase section_,
 
 s6_2_1 = assumpF (s6_2_2) (s6_2_4) (s6_2_4) (s6_2_3) (s8) (s6_2_1_list)
 --FIXME:remove duplicatie s6_2_4 
-s6_2_1_list = 
-  [(enumSimple 1 (short assumption) s6_2_1_listOfAssumptions)]
+s6_2_1_list = [(enumSimple 1 (short assumption) s6_2_1_listOfAssumptions)]
 
+--Considered "dead" knowledge since it is a list of sentences?
 s6_2_1_listOfAssumptions :: [Sentence]
 s6_2_1_listOfAssumptions = assumption1 ++ assumption2 ++ assumption3 ++ 
   assumption4 ++ assumption5 ++ assumption6 ++ assumption7 ++ assumption8
@@ -471,7 +479,7 @@ s7 = reqF [s7_1, s7_2]
 
 s7_1 = SRS.funcReq (s7_1_list) []
 
-s7_1_req6 :: [Contents]
+s7_1_req6 :: [Contents] --FIXME: Issue #327
 s7_1_req1, s7_1_req2, s7_1_req3, s7_1_req4, s7_1_req5 :: Sentence
 
 s7_1_list = [enumSimple 1 (getAcc requirement) (s7_1_listOfReqs)] ++ 
@@ -490,10 +498,8 @@ s7_1_req1Table = Table
   [at_start symbol_, at_start description, S "Units"]
   (mkTable
   [(\ch -> (\(Just t) -> (getS t)) (getSymb ch)),
-   (at_start), 
-  unit'2Contents]
-  requiredInputs)
-  (S "Required Inputs") False
+   (at_start), unit'2Contents] requiredInputs)
+  (S "Required Inputs following R1") True
 
 s7_1_req2 = foldlSent [S "The", phrase system,
    S "shall set the known", plural value +: S "as follows",
@@ -512,9 +518,6 @@ s7_1_req2 = foldlSent [S "The", phrase system,
 --FIXME:should constants, LDF, and LSF have some sort of field that holds
 -- the assumption(s) that're being followed?
 
-followA :: Sentence -> Int -> Sentence
-preceding `followA` num = preceding +:+ S "following" +:+ acroA num
-
 s7_1_req3 = foldlSent [S "The", phrase system, S "shall check the entered",
   plural inValue, S "to ensure that they do not exceed the",
   plural datumConstraint, S "mentioned in" +:+. makeRef (SRS.datCon SRS.missingP []),
@@ -532,6 +535,7 @@ s7_1_req5 = S "If" +:+ (getS is_safe1) `sAnd` (getS is_safe2) +:+
   phrase output_ +:+ S "the message" +:+ Quote (safeMessage ^. defn) +:+
   S "If the" +:+ phrase condition +:+ S "is false, then" +:+ phrase output_ +:+
   S "the message" +:+ Quote (notSafe ^. defn)
+
 {-
 s7_1_req6 = [(Enumeration $ Simple $ [(acroR 6, Nested (titleize output_ +:+
   S "the following" +: plural quantity)
@@ -585,9 +589,7 @@ s7_2_intro = foldlSP [
 
 s8 = SRS.likeChg [s8_list] []
 
-s8_list :: Contents
-s8_list = enumSimple 1 (short likelyChg) s8_likelychg_list
-
+--Considered "dead" knowldege?
 s8_likelychg_list :: [Sentence]
 s8_likelychg_list = [s8_likelychg1, s8_likelychg2, s8_likelychg3, s8_likelychg4, 
   s8_likelychg5]

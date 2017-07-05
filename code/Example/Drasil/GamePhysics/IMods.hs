@@ -10,6 +10,7 @@ import qualified Data.Drasil.Concepts.Physics as CP (rigidBody)
 import qualified Data.Drasil.Quantities.Physics as QP (acceleration, 
   angularAccel, force, gravitationalAccel, velocity, 
   momentOfInertia, angularVelocity, position, time, impulseS)
+import qualified Data.Drasil.Quantities.PhysicalProperties as QPP
 import Drasil.GamePhysics.Unitals
 import Prelude hiding (id)
 import Control.Lens ((^.))
@@ -131,3 +132,20 @@ helper1 t i EmptyS = (P $ t ^. symbol) :+: (S i) :+: (S "(t)") +:+
 helper1 t i opt = (P $ t ^. symbol) :+: (S i) :+: (S "(t)") +:+ 
   S "is the" +:+ (S i) :+: (S "-th body's") +:+ (phrase t) +:+ opt +:+
   S "at time t" +:+ (sParen $ Sy $ unit_symb t)
+
+
+
+massRigidK       = cvR (dccWDS "mass" (cn $ "mass of the k-th rigid body") 
+  (phrase QPP.mass)) (sub (QPP.mass ^. symbol) (Atomic "k"))
+
+inertiaRigidK    = cvR (dccWDS "momentOfInertia" (compoundPhrase'
+  (QP.momentOfInertia ^. term) (cn "of the k-th rigid body"))
+  (phrase QP.momentOfInertia)) (sub (QP.momentOfInertia ^. symbol) (Atomic "k"))
+
+pointOfCollision = cvR (dccWDS "point_c" (cn "point of collision") 
+  (S "point")) (Atomic "P")
+
+{--displaceVectBtw  = cvR (ddcWDS "dispBtwVect" (compoundPhrase' 
+  (QP.displacement ^. term) (cn "vector between the centre of mass of the k-th
+  body and point P"))) (sub (QP.displacement ^. symbol) ) 
+--}

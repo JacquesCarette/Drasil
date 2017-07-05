@@ -13,7 +13,7 @@ import Data.Drasil.Concepts.Software
 import Drasil.Sections.TraceabilityMandGs
 import qualified Data.Drasil.Quantities.Math as QM (orientation)
 import qualified Data.Drasil.Quantities.Physics as QP (time, 
-  position, force, velocity, angularVelocity)
+  position, force, velocity, angularVelocity, linearVelocity)
 import qualified Data.Drasil.Quantities.PhysicalProperties as QPP (mass)
 import qualified Data.Drasil.Concepts.Physics as CP (rigidBody, elasticity, 
   cartesian, friction, rightHand, collision, space, joint)
@@ -251,34 +251,40 @@ s4_1_2_list :: Contents
 goalStatementSect :: SubSec
 goalStatementSect = sSubSec goalStmt [(siCon [s4_1_2_list])]
 
+
+goalStatementStruct property inputs item adjective outputs object condition1 condition2 = 
+  [S "Given the", condition0 property, (inputList item), 
+  adjective, S "a set of", (plural object) `sC` S "determine", condition1,
+  (foldlList $ map plural outputs), S "over a period of", (phrase QP.time), 
+  condition2]
+  where condition0 EmptyS = S "initial"
+        condition0 p      = p `sC` (S "initial")
+        inputList EmptyS = (foldlList $ map plural inputs)
+        inputList i      = (foldlList $ map plural inputs) `sC` S "and" +:+ i
+
+s4_1_2_stmt1 = goalStatementStruct (plural physicalProperty) 
+  (take 2 inputSymbols) (plural QP.force) (S "applied on")
+  (take 2 outputSymbols) CP.rigidBody 
+  (S "their new") EmptyS
+
+s4_1_2_stmt2 = goalStatementStruct (plural physicalProperty) 
+  (drop 3 $ take 5 inputSymbols) (plural QP.force) (S "applied on")
+  (drop 3 $ take 5 inputSymbols) CP.rigidBody 
+  (S "their new") EmptyS
+
+s4_1_2_stmt3 = goalStatementStruct EmptyS
+  (take 2 inputSymbols) EmptyS (S "of")
+  (take 0 inputSymbols) CP.rigidBody 
+  (S "if any of them will collide with one another") EmptyS
+
+s4_1_2_stmt4 = goalStatementStruct (plural physicalProperty)
+  ([QP.position, QM.orientation, QP.linearVelocity, QP.angularVelocity]) --fixme input symbols
+  EmptyS (S "of")
+  ([QP.position, QM.orientation, QP.linearVelocity, QP.angularVelocity]) --fixme input symbols
+  CP.rigidBody (S "the new") (S "of the" +:+ (plural CP.rigidBody) +:+ 
+  S "that have undergone a" +:+ (phrase CP.collision))
+
 s4_1_2_stmt1, s4_1_2_stmt2, s4_1_2_stmt3, s4_1_2_stmt4 :: [Sentence]
-s4_1_2_stmt1 = [S "Given the", (plural physicalProperty) `sC` S "initial", 
-  (plural QP.position), S "and",
-  (plural QP.velocity) `sC` S "and", (plural QP.force),
-  S "applied on a set of", (plural CP.rigidBody) `sC`
-  S "determine their new", (plural QP.position), S "and",
-  (plural QP.velocity), S "over a period of", (phrase QP.time)]
-
-s4_1_2_stmt2 = [S "Given the", (plural physicalProperty) `sC` S "initial", 
-  (plural QM.orientation), S "and", (plural QP.angularVelocity ) `sC`
-  S "and", (plural QP.force), S "applied on a set of", 
-  (plural CP.rigidBody) `sC` S "determine their new",
-  (plural QM.orientation), S "and", (plural QP.angularVelocity), 
-  S "over a period of", (phrase QP.time)]
-
-s4_1_2_stmt3 = [S "Given the initial", (plural QP.position), S "and", 
-  (plural QP.velocity), S "of a", S "set of", 
-  (plural CP.rigidBody) `sC` S "determine if any of",
-  S "them will collide with one another over a period of", 
-  (phrase QP.time)]
-
-s4_1_2_stmt4 = [S "Given the", (plural physicalProperty) :+: S ",", 
-  S "initial linear and angular", (plural QP.position), 
-  S "and", (plural QP.velocity) `sC` S "determine the new",
-  (plural QP.position), S "and", (plural QP.velocity),
-  S "over a period of", (phrase QP.time), S "of",
-  (plural CP.rigidBody), S "that have undergone a", 
-  (phrase CP.collision)]
 
 s4_1_2_list' :: [Sentence]
 s4_1_2_list' = map (foldlSent) [s4_1_2_stmt1, s4_1_2_stmt2, s4_1_2_stmt3, 

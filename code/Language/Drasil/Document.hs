@@ -8,7 +8,7 @@ import Language.Drasil.Chunk.Module
 import Language.Drasil.Chunk.Other
 import Language.Drasil.Chunk.Req
 import Language.Drasil.Chunk.LC
-import Language.Drasil.Spec (Sentence(..), RefType(..))
+import Language.Drasil.Spec (Sentence(..), RefType(..), (+:+))
 import Language.Drasil.RefHelpers
 import Language.Drasil.Expr
 import Language.Drasil.Expr.Extract (SymbolMap)
@@ -61,6 +61,7 @@ data Contents = Table [Sentence] [[Sentence]] Title Bool
                ---- FIXME: The below TMod, GDef, IMod, and DDef will need to be
                --- consolidated into one type (similar to deprecated Definition)
                --------------------------------------------
+               | Defnt DType [(Identifier, [Contents])] RefName
                | TMod [(Identifier,[Contents])] RefName RelationConcept -- Ex. (Label, Paragraph $ phrase thing) and Reference name
                | GDef
                | IMod
@@ -85,6 +86,8 @@ data DType = Data QDefinition -- ^ QDefinition is the chunk with the defining
            | Theory RelationConcept -- ^ Theoretical models use a relation as
                                     -- their definition
            | Instance
+           | TM
+           | DD
 
 -- | Every layout object has a reference name (for intra-document referencing)
 -- and a reference type (denoting what type of reference to create)
@@ -101,8 +104,9 @@ instance LayoutObj Contents where
   refName (Figure l _)        = S "Figure:" :+: inferName l
   refName (Paragraph _)       = error "Can't reference paragraphs" --yet
   refName (EqnBlock _)        = error "EqnBlock ref unimplemented"
---  refName (CodeBlock _)       = error "Codeblock ref unimplemented"
-  refName (Definition _ d)      = getDefName d
+--  refName (CodeBlock _)     = error "Codeblock ref unimplemented"
+  refName (Definition _ d)    = getDefName d
+  refName (Defnt dt _ r)       = getDefName dt +:+ r
   refName (Enumeration _)     = error "List refs unimplemented"
   refName (Module mc)         = S $ "M" ++ alphanumOnly (mc ^. id)
   refName (Requirement rc)    = S $ "R" ++ alphanumOnly (rc ^. id)
@@ -118,6 +122,7 @@ instance LayoutObj Contents where
   rType (Table _ _ _ _)    = Tab
   rType (Figure _ _)       = Fig
   rType (Definition _ _)   = Def
+  rType (Defnt _ _ _)       = Def
   rType (Module _)         = Mod
   rType (Requirement _)    = Req
   rType (Assumption _)     = Assump
@@ -135,6 +140,8 @@ instance LayoutObj Contents where
 getDefName :: DType -> Sentence
 getDefName (Data c)   = S $ "DD:" ++ (repUnd (c ^. id))
 getDefName (Theory c) = S $ "T:" ++ (repUnd (c ^. id))
+getDefName TM = S "T:"
+getDefName DD = S "DD:"
 getDefName _          = error "Unimplemented definition type reference"
 
 ---------------------------------------------------------------------------

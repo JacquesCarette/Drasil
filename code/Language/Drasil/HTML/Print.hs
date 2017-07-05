@@ -132,8 +132,6 @@ p_expr (Sub a b)  = p_expr a ++ "-" ++ p_expr b
 p_expr (Frac a b) = fraction (p_expr a) (p_expr b) --Found in HTMLHelpers
 p_expr (Div a b)  = divide a b
 p_expr (Pow a b)  = pow a b
-p_expr (And a b)  = p_expr a ++ "&and;" ++ p_expr b
-p_expr (Or a b)   = p_expr a ++ "&or;" ++ p_expr b
 p_expr (Sym s)    = symbol s
 p_expr (Eq a b)   = p_expr a ++ "=" ++ p_expr b
 p_expr (NEq a b)  = p_expr a ++ "&ne;" ++ p_expr b
@@ -142,12 +140,25 @@ p_expr (Gt a b)   = p_expr a ++ "&gt;" ++ p_expr b
 p_expr (LEq a b)  = p_expr a ++ "&le;" ++ p_expr b
 p_expr (GEq a b)  = p_expr a ++ "&ge;" ++ p_expr b
 p_expr (Dot a b)  = p_expr a ++ "&sdot;" ++ p_expr b
-p_expr (Not a)    = "&not;" ++ p_expr a
 p_expr (Neg a)    = neg a
 p_expr (Call f x) = p_expr f ++ paren (concat $ intersperse "," $ map p_expr x)
 p_expr (Case ps)  = cases ps (p_expr)
 p_expr (Op f es)  = p_op f es
 p_expr (Grouping e) = paren (p_expr e)
+--Logic
+p_expr (Not a)    = "&not;" ++ p_expr a
+p_expr (And a b)  = p_expr a ++ "&and;" ++ p_expr b
+p_expr (Or a b)   = p_expr a ++ "&or;" ++ p_expr b
+p_expr (Impl a b) = p_expr a ++ "&rArr;" ++ p_expr b
+p_expr (Iff a b)  = p_expr a ++ "&hArr;" ++ p_expr b
+p_expr (IsIn  a b) = (concat $ intersperse "," $ map p_expr a) ++ "&isin;"  ++ show b
+p_expr (NotIn a b) = (concat $ intersperse "," $ map p_expr a) ++ "&notin;" ++ show b
+p_expr (State a b) = (concat $ intersperse "," $ map p_quan a) ++ ": " ++ p_expr b
+
+-- | Helper for rendering Quantifier statements
+p_quan :: Quantifier -> String
+p_quan (Forall e) = "&forall;" ++ p_expr e
+p_quan (Exists e) = "&exist;"  ++ p_expr e
 
 -- | Helper for properly rendering multiplication of expressions
 mul :: Expr -> Expr -> String

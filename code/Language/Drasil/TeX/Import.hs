@@ -1,9 +1,10 @@
 module Language.Drasil.TeX.Import where
 
-import Control.Lens hiding ((:>),(:<))
+import Control.Lens hiding ((:>),(:<),set)
 import Prelude hiding (id)
 import Language.Drasil.Expr (Expr(..), Relation, UFunc(..), BiFunc(..),
-                             Bound(..),DerivType(..))
+                             Bound(..),DerivType(..), Set, Quantifier(..))
+import Language.Drasil.Space (Space(..))
 import Language.Drasil.Expr.Extract
 import Language.Drasil.Spec
 import qualified Language.Drasil.TeX.AST as T
@@ -33,9 +34,6 @@ expr (a :/ b)          = T.Frac (replace_divs a) (replace_divs b)
 expr (a :^ b)          = T.Pow  (expr a) (expr b)
 expr (a :- b)          = T.Sub  (expr a) (expr b)
 expr (a :. b)          = T.Dot  (expr a) (expr b)
-expr (a :&& b)         = T.And  (expr a) (expr b)
-expr (a :|| b)         = T.Or   (expr a) (expr b)
-expr (Not a)           = T.Not  (expr a)
 expr (Neg a)           = T.Neg  (expr a)
 expr (C c)             = T.Sym  (c ^. symbol)
 expr (Deriv Part a 1)  = T.Mul (T.Sym (Special Partial)) (expr a)
@@ -57,6 +55,19 @@ expr x@(_ :>= _)       = rel x
 expr (UnaryOp u)       = (\(x,y) -> T.Op x [y]) (ufunc u)
 expr (Grouping e)      = T.Grouping (expr e)
 expr (BinaryOp b)      = (\(x,y) -> T.Op x y) (bfunc b)
+expr (Not a)           = T.Not  (expr a)
+expr (a :&& b)         = T.And  (expr a) (expr b)
+expr (a :|| b)         = T.Or   (expr a) (expr b)
+expr (a  :=>  b)       = T.Impl  (expr a) (expr b)
+expr (a  :<=> b)       = T.Iff   (expr a) (expr b)
+expr (IsIn  a b)       = T.IsIn  (map expr a) (set b)
+expr (NotIn a b)       = T.NotIn (map expr a) (set b)
+expr (State a b)       = T.State (map quan a) (expr b)
+
+-- | Healper for translating Quantifier
+quan :: Quantifier -> T.Quantifier
+quan (Forall e) = T.Forall (expr e)
+quan (Exists e) = T.Exists (expr e)
 
 ufunc :: UFunc -> (T.Function, T.Expr)
 ufunc (Log e) = (T.Log, expr e)
@@ -92,6 +103,20 @@ rel (a :<= b) = T.LEq (expr a) (expr b)
 rel (a :>= b) = T.GEq (expr a) (expr b)
 rel _ = error "Attempting to use non-Relation Expr in relation context."
 
+-- | Helper for translating Sets
+set :: Set -> T.Set
+set Integer  = T.Integer
+set Rational = T.Rational
+set Real     = T.Real
+set Natural  = T.Natural
+set Boolean  = T.Boolean
+set Char     = T.Char
+set String   = T.String
+set Radians  = T.Radians
+set (Vect a) = T.Vect (set a)
+set (Obj a)  = T.Obj a
+
+-- | Helper function for translating Integrals (from 'UFunc')
 integral :: UFunc -> (T.Function, T.Expr)
 integral (Integral (Just (Low v), Just (High h)) e wrtc) = 
   (T.Integral (Just (expr v), Just (expr h)) (int_wrt wrtc), expr e)

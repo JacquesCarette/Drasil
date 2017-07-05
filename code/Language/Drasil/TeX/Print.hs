@@ -121,8 +121,6 @@ p_expr (Mul x y)  = mul x y
 p_expr (Frac n d) = "\\frac{" ++ (p_expr n) ++ "}{" ++ (p_expr d) ++"}"
 p_expr (Div n d)  = divide n d
 p_expr (Pow x y)  = pow x y
-p_expr (And x y)  = p_expr x ++ "\\wedge{}" ++ p_expr y
-p_expr (Or x y)   = p_expr x ++ "\\vee{}" ++ p_expr y
 p_expr (Sym s)    = symbol s
 p_expr (Eq x y)   = p_expr x ++ "=" ++ p_expr y
 p_expr (NEq x y)  = p_expr x ++ "\\neq{}" ++ p_expr y
@@ -131,13 +129,27 @@ p_expr (Gt x y)   = p_expr x ++ ">" ++ p_expr y
 p_expr (GEq x y)  = p_expr x ++ "\\geq{}" ++ p_expr y
 p_expr (LEq x y)  = p_expr x ++ "\\leq{}" ++ p_expr y
 p_expr (Dot x y)  = p_expr x ++ "\\cdot{}" ++ p_expr y
-p_expr (Not x)    = "\\neg{}" ++ p_expr x
 p_expr (Neg x)    = neg x
 p_expr (Call f x) = p_expr f ++ paren (concat $ intersperse "," $ map p_expr x)
 p_expr (Case ps)  = "\\begin{cases}\n" ++ cases ps ++ "\n\\end{cases}"
 p_expr (Op f es)  = p_op f es
 p_expr (Grouping x) = paren (p_expr x)
+--Logic
+p_expr (Not x)    = "\\neg{}" ++ p_expr x
+p_expr (And x y)  = p_expr x ++ "\\land{}" ++ p_expr y
+p_expr (Or x y)   = p_expr x ++ "\\lor{}" ++ p_expr y
+p_expr (Impl a b) = p_expr a ++ "\\implies{}" ++ p_expr b
+p_expr (Iff a b)  = p_expr a ++ "\\iff{}" ++ p_expr b
+p_expr (IsIn  a b) = (concat $ intersperse "," $ map p_expr a) ++ "\\in{}"  ++ show b
+p_expr (NotIn a b) = (concat $ intersperse "," $ map p_expr a) ++ "\\notin{}" ++ show b
+p_expr (State a b) = (concat $ intersperse "," $ map p_quan a) ++ ": " ++ p_expr b
 
+-- | Helper for rendering Quantifier statements
+p_quan :: Quantifier -> String
+p_quan (Forall e) = "\\forall{}" ++ p_expr e
+p_quan (Exists e) = "\\exists{}" ++ p_expr e
+
+-- | Helper for properly rendering multiplication of expressions
 mul :: Expr -> Expr -> String
 mul x y@(Dbl _)   = mulParen x ++ "*" ++ p_expr y
 mul x y@(Int _)   = mulParen x ++ "*" ++ p_expr y

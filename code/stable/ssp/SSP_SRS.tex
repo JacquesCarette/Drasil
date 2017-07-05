@@ -3,6 +3,7 @@
 \usepackage{hyperref}
 \hypersetup{bookmarks=true,colorlinks=true,linkcolor=red,citecolor=blue,filecolor=magenta,urlcolor=cyan}
 \usepackage{amsmath}
+\usepackage{amssymb}
 \usepackage{longtable}
 \usepackage{booktabs}
 \usepackage{caption}
@@ -241,7 +242,7 @@ This section first presents the problem description, which gives a high-level vi
 SSA is a computer program developed to evaluate the factor of safety of a slope's slip surface and to calculate the displacement that the slope will experience.
 \subsubsection{Terminology and Definitions}
 \label{Sec:TermandDefi}
-This subsection provides a list of terms that are used in the subsequent sections and their meaning, with the purpose of reducing ambiguity and making it easier to correctly understand the requirements.
+This subsection provides a list of terms that are used in the subsequent sections and their meaning, with the purpose of reducing ambiguity and making it easier to correctly understand the requirements:
 \begin{itemize}
 \item[Factor of Safety:]Stability metric. How likely a slip surface is to experience failure through slipping.
 \item[Critical Slip Surface:]Slip surface of the slope that has the lowest global factor of safety, and therefore most likely to experience failure.
@@ -990,6 +991,8 @@ Var & Physical Constraints & Typical Value
 \midrule
 $FS$ & $0<FS$ & $1.0$
 \\
+$(x,y)$ & $\forall{}(x,y), \forall{}x1,x2\in{}\mathbb{R}: x1<x2\implies{}y1<y2$ & $1.0$ m
+\\
 $\delta{}x_{i}$ & None & $1.0$ m
 \\
 $\delta{}y_{i}$ & None & $1.0$ m
@@ -1046,6 +1049,9 @@ $\gamma{}_{w}$ & $\frac{\text{N}}{\text{m}^{3}}$ & unit weight of water
 SSA is intended to be an educational tool, so accuracy and performance are not priorities. Rather, the non-functional requirement priorities are correctness, understandability, reusability, and maintainability.
 \section{Likely Changes}
 \label{Sec:LikeChan}
+\section{Values of Auxiliary Constants}
+\label{Sec:ValuofAuxiCons}
+There are no auxiliary constants.
 \section{References}
 \label{Sec:Refe}
 \begin{itemize}

@@ -50,7 +50,7 @@ import Data.Drasil.Concepts.Software(correctness, verifiability,
 
 import Data.Drasil.SentenceStructures (showingCxnBw, foldlSent, foldlSent_,
   foldlSentCol, foldlSP, foldlSP_, foldlSPCol, foldlsC, isThe, ofThe, ofThe',
-  sAnd, inDataConstTbl)
+  sAnd, inDataConstTbl, outDataConstTbl)
 
 acronyms :: [CI]
 acronyms = [assumption, dataDefn, genDefn, goalStmt, inModel, likelyChg, ode,
@@ -996,36 +996,11 @@ specParamVal22 = [getS time_final_max, E (Int 86400) +:+ (unwrap $ getUnit time_
 ------------------------------
 
 s4_2_6_table3 :: Contents
-s4_2_6_table3 = Table [S "Var", titleize' physicalConstraint]
-  (mkTable [(\x -> x!!0), (\x -> x!!1)] s4_2_6_conListOut) 
-  (titleize output_ +:+ titleize' variable) True
+s4_2_6_table3 = outDataConstTbl [temp_W, temp_PCM, w_E, pcm_E]
+--FIXME: add "(by A11)" in Physical Constraints of `temp_W` and `temp_PCM`?
 
-s4_2_6_conListOut ::[[Sentence]]
-s4_2_6_conListOut = [con18, con19, con20, con21]
-  
-con18, con19, con20, con21 :: [Sentence]
-
-con18 = [getS temp_W, E (C temp_init :<= C temp_W :<= C temp_C) +:+
-  sParen (S "by" +:+ acroA 11)]
-
-con19 = [getS temp_PCM, E (C temp_init :<= C temp_PCM :<= C temp_C) +:+
-  sParen (S "by" +:+ acroA 11)]
-
-con20 = [getS w_E, E $ C w_E :>= Int 0]
-
-con21 = [getS pcm_E, E $ C pcm_E :>= Int 0]
-
--- Typical values and constraints must be added to UC definitions for mkTable
--- to work here.
-
--- Add constraints (and typical values) to the knowledge capture of each
--- variable, so that lambdas can be used to extract constraints?
--- Add "Uncertainty" to UnitalChunks??
 -- Other Notes:
 ---- Will there be a way to have asterisks for certain pieces of the table?
-
---Tables 2 and 3 will be delayed for now bc they are similar to table 1
-
 
 ----------------------------------------------
 -- 4.2.7 : Properties of A Correct Solution --

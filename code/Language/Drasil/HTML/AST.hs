@@ -96,6 +96,7 @@ data LayoutObj = Table Tags [[Spec]] Label Bool Caption
                | List ListType
                | Figure Label Caption Filepath
                | Module String Label
+               | Assumption Contents Label
                -- Span Tags Contents
                
 data ListType = Ordered [ItemType] | Unordered [ItemType]

@@ -49,6 +49,7 @@ printLO (Header n contents)     = h n $ text (p_spec contents)
 printLO (List t)                = makeList t
 printLO (Figure r c f)          = makeFigure (p_spec r) (p_spec c) f
 printLO (Module m l)            = makeModule m (p_spec l)
+printLO (Assumption a l)        = makeAssump (p_spec a) (p_spec l)
 
 
 -- | Called by build, uses 'printLO' to render the layout 
@@ -306,3 +307,7 @@ binfix_op _ _ = error "Attempting to print binary operate with inappropriate" ++
 -- | Renders modules
 makeModule :: String -> String -> Doc
 makeModule m l = refwrap l (paragraph $ wrap "b" [] (text m))
+
+-- | Renders assumptions
+makeAssump :: String -> String -> Doc
+makeAssump a l = refwrap l (paragraph $ wrap "p" ["assumption"] (text a))

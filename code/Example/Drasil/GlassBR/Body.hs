@@ -181,11 +181,12 @@ blstRskInvWGlassSlab = phrase blastRisk +:+ S "involved with the" +:+ phrase gla
 {--INTRODUCTION--}
 
 startIntro :: Sentence -> CI -> Sentence
-knowIR, undIR, appStanddIR, incScoR, endScoR :: Sentence
 startIntro sfwrPredicts progName = foldlSent [
   at_start software, S "is helpful to efficiently and correctly predict the" +:+. sfwrPredicts, 
-  underConsidertn blast,
-  S "The", phrase software `sC` S "herein called", short progName, S "aims to predict the", sfwrPredicts, S "using an intuitive interface"]
+  underConsidertn blast, S "The", phrase software `sC` S "herein called", short progName, 
+  S "aims to predict the", sfwrPredicts, S "using an intuitive interface"]
+
+knowIR, undIR, appStanddIR, incScoR, endScoR :: Sentence
 knowIR = (phrase theory +:+ S "behind" +:+ phrase glBreakage `sAnd`
   phrase blastRisk)
 undIR = (foldlList [S "second year calculus", S "structural mechanics", 

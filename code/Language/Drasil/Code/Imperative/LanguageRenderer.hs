@@ -472,6 +472,7 @@ statementDocD c loc (ExceptState e) = exceptionDoc c e <> end c loc
 statementDocD c loc (PatternState p) = patternDoc c p <> end c loc
 statementDocD c loc (IOState io) = ioDoc c io <> end c loc
 statementDocD c loc (ComplexState cplx) = complexDoc c cplx
+statementDocD c loc (MultiState s) = vcat $ map (statementDoc c loc) s
 
 ioDocD :: Config -> IOSt -> Doc
 ioDocD c (OpenFile f n m) = statementDoc c NoLoop (valStmt $ objMethodCall f "open" [n, litString (modeStr m)])

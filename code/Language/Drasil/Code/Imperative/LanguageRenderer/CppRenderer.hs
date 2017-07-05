@@ -289,16 +289,16 @@ complexDoc' c (ReadAll f v) = statementDoc c NoLoop
       funcApp' "std::back_inserter" [v]
     ]
   )
-complexDoc' c (ListSlice vnew vold b e s) = let l_temp = "temp"
-                                                v_temp = var l_temp
-                                                l_i = "i"
-                                                v_i = var l_i
-                                            in
+complexDoc' c (ListSlice st vnew vold b e s) = let l_temp = "temp"
+                                                   v_temp = var l_temp
+                                                   l_i = "i"
+                                                   v_i = var l_i
+                                               in
   vcat [
     blockStart c,
     oneTab $ bodyDoc c [ 
       block [
-        listDec' l_temp string 0,
+        listDec' l_temp st 0,
         for (varDecDef l_i (Base Integer) (getB b)) (v_i ?< getE e) (getS s v_i)
           [ 
             block [

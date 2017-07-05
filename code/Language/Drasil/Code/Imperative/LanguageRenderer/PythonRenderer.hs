@@ -257,7 +257,7 @@ ioDoc' c io = ioDocD c io
 
 complexDoc' :: Config -> Complex -> Doc
 complexDoc' c (ReadAll f v) = statementDoc c NoLoop (v &= objMethodCall f "readlines" [])
-complexDoc' c (ListSlice vnew vold b e s) = 
+complexDoc' c (ListSlice _ vnew vold b e s) = 
   valueDoc c vnew <+> equals <+> valueDoc c vold <> (brackets $ 
   getVal b <> colon <> getVal e <> colon <> getVal s)
     where getVal Nothing  = empty

@@ -8,6 +8,7 @@ import Prelude hiding (id)
 import Language.Drasil.Chunk (Chunk(..))
 import Language.Drasil.Chunk.SymbolForm (SymbolForm)
 import Language.Drasil.Symbol
+import Language.Drasil.Space ()
 
 import Control.Lens ((^.))
 
@@ -59,28 +60,20 @@ data Expr where
   (:&&)    :: Expr -> Expr -> Expr -- logical and
   (:||)    :: Expr -> Expr -> Expr -- logical or
   Not      :: Expr -> Expr -- logical not
-  {-
+
   -- FIXME: rememeber to add to instance Eq
-  IsIn  :: Expr -> Set -> Expr --	&isin; \in
-  NotIn :: Expr -> Set -> Expr -- &notin; \notin
-  Forall :: [Expr] -> Expr -> Expr -- &forall; \forall
-  Exists :: [Expr] -> Expr -> Expr -- &exist; \exists
-    --ex. Forall [V "x" `IsIn` Reals, V "x" :> Int 1] (V "x" :^ Int 2 :> V "x")
-    -- => forall x in R where x>1: x^2 > x
+  IsIn  :: [Expr] -> Set -> Expr --	&isin; \in
+  NotIn :: [Expr] -> Set -> Expr -- &notin; \notin
+  State :: [Quantifier] -> Expr -> Expr
+    --ex. State [(Forall $ [V "x"] `IsIn` Reals), V "x" :> Int 1] (V "x" :^ Int 2 :> V "x")
+    -- => forall x in R, x>1: x^2 > x
   (:=>)  :: Expr -> Expr -> Expr -- implies, &rArr; \implies
   (:<=>) :: Expr -> Expr -> Expr -- if and only if, &hArr; \iff
-  Monotonic :: Maybe Direction -> Expr -> Expr --like this? or defined as below (see monotoniclyIncr)
+  --Monotonic :: Maybe Direction -> Expr -> Expr --like this? or defined as below (see monotoniclyIncr)
 
-data Set = Naturals --Possibly use Space rather than create a new type
-         | Reals
-         | MkSet String
-         
-instance Eq Set where
-  Set a    == Set b    = a == b
-  Naturals == Naturals = True
-  Reals    == Reals    = True
-  _ == _               = False
-
+data Set = Space deriving Eq
+data Quantifier = Forall Expr | Exists Expr deriving Eq -- &forall; \forall -- &exist; \exists
+{-
 data Direction = Increasing
                | Decreasing
 
@@ -115,8 +108,6 @@ instance Eq Expr where
   (:+) a b == (:+) c d         =  a == c && b == d || a == d && b == c
   (:-) a b == (:-) c d         =  a == c && b == d
   (:.) a b == (:.) c d         =  a == c && b == d || a == d && b == c
-  (:&&) a b == (:&&) c d       =  a == c && b == d || a == d && b == c
-  (:||) a b == (:||) c d       =  a == c && b == d || a == d && b == c
   Not a == Not b               =  a == b
   Neg a == Neg b               =  a == b
   Deriv t1 a b == Deriv t2 c d =  t1 == t2 && a == c && b == d
@@ -129,6 +120,14 @@ instance Eq Expr where
   (:>)  a b == (:>)  c d       =  a == c && b == d
   (:<=) a b == (:<=) c d       =  a == c && b == d
   (:>=) a b == (:>=) c d       =  a == c && b == d
+  --Logic
+  (:&&) a b  == (:&&) c d      =  a == c && b == d || a == d && b == c
+  (:||) a b  == (:||) c d      =  a == c && b == d || a == d && b == c
+  (:=>) a b  == (:=>) c d      =  a == c && b == d
+  (:<=>) a b == (:<=>) c d     =  a == c && b == d || a == d && b == c
+  IsIn  a b  == IsIn  c d      =  a == c && b == d
+  NotIn a b  == NotIn c d      =  a == c && b == d
+  State a b  == State c d      =  a == c && b == d
   _ == _                       =  False
 
 instance Fractional Expr where

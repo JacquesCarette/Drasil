@@ -4,7 +4,7 @@ module Language.Drasil.Expr.Extract(dep, vars, codevars, toVC, SymbolMap, symbol
 import Data.List (nub)
 import Control.Lens hiding ((:<),(:>))
 import Prelude hiding (id)
-import Language.Drasil.Expr (Expr(..), UFunc(..), BiFunc(..))
+import Language.Drasil.Expr (Expr(..), UFunc(..), BiFunc(..), Quantifier(..))
 import Language.Drasil.Chunk (Chunk, id)
 import Language.Drasil.Chunk.Quantity (Quantity)
 import Language.Drasil.Chunk.Wrapper.QSWrapper (QSWrapper, qs)
@@ -51,6 +51,11 @@ dep (a :<= b)     = nub (dep a ++ dep b)
 dep (UnaryOp u)   = dep (unpack u)
 dep (Grouping e)  = dep e
 dep (BinaryOp b)  = nub (concat $ map dep (binop b))
+dep (a :=>  b)    = nub (dep a ++ dep b)
+dep (a :<=> b)    = nub (dep a ++ dep b)
+dep (IsIn  a _)   = nub (concat $ map dep a)
+dep (NotIn a _)   = nub (concat $ map dep a)
+dep (State a b)   = nub ((concat $ map (dep . quant) a) ++ dep b)
 
 -- | Get a list of VarChunks from an equation in order to print
 vars :: Expr -> SymbolMap -> [VarChunk]
@@ -81,6 +86,11 @@ vars (a :>= b)    m = nub (vars a m ++ vars b m)
 vars (UnaryOp u)  m = vars (unpack u) m
 vars (Grouping e) m = vars e m
 vars (BinaryOp b) m = nub (concat $ map (\x -> vars x m) (binop b))
+vars (a :=>  b)   m = nub (vars a m ++ vars b m)
+vars (a :<=> b)   m = nub (vars a m ++ vars b m)
+vars (IsIn  a _)  m = nub (concat $ map (\x -> vars x m) a)
+vars (NotIn a _)  m = nub (concat $ map (\x -> vars x m) a)
+vars (State a b)  m = nub ((concat $ map (\x -> vars (quant x) m) a) ++ vars b m)
 
 -- | Get a list of CodeChunks from an equation
 codevars :: Expr -> [CodeChunk]
@@ -111,6 +121,11 @@ codevars (a :>= b)    = nub (codevars a ++ codevars b)
 codevars (UnaryOp u)  = codevars (unpack u)
 codevars (Grouping e) = codevars e
 codevars (BinaryOp b) = nub (concat $ map (\x -> codevars x) (binop b))
+codevars (a :=>  b)   = nub (codevars a ++ codevars b)
+codevars (a :<=> b)   = nub (codevars a ++ codevars b)
+codevars (IsIn  a _)  = nub (concat $ map codevars a)
+codevars (NotIn a _)  = nub (concat $ map codevars a)
+codevars (State a b)  = nub ((concat $ map (codevars . quant) a) ++ codevars b)
 
 -- | Helper function for vars and dep, gets the Expr portion of a UFunc
 unpack :: UFunc -> Expr
@@ -131,6 +146,11 @@ unpack (Exp e) = e
 -- | Helper function for vars and dep, gets Exprs from binary operations.
 binop :: BiFunc -> [Expr]
 binop (Cross e f) = [e,f]
+
+-- | Helper function for vars and dep, gets Exprs from Quantifier
+quant :: Quantifier -> Expr
+quant (Forall e) = e
+quant (Exists e) = e
 
 -- Steven edit:  need this to have a type for code generation
 --   setting to all to rational

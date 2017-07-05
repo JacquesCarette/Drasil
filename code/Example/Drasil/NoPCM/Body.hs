@@ -322,7 +322,7 @@ s4_2 = solChSpecF progName (s4_1, s6) s4_2_4_intro_end (mid,
   -- phrase time, sSqBr (acroGD "1")]-}
 assump3, assump4 :: Contents
 assump3 = Assumption $ nw $ npnc "assump3" $ nounPhraseSP "The water in the tank is fully mixed, so the water temperature is the same throughout the entire tank."
-assump4 = Assumption $ nw $ npnc "assump3" $ nounPhraseSP "The water density has no spatial variation; that is it is constant over the entire volume."
+assump4 = Assumption $ nw $ npnc "assump4" $ nounPhraseSP "The water density has no spatial variation; that is it is constant over the entire volume."
 
 -- assump3 = [S "The", phrase water, S "in the", phrase tank,
   -- S "is fully mixed, so the", phrase temp_W `isThe`

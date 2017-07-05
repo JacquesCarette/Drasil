@@ -43,7 +43,7 @@ module Language.Drasil.Code.Imperative.AST (
     objDecNew,objDecNewVoid,objDecNew',objDecNewVoid',objMethodCall, objMethodCallVoid, 
     listSize, listAccess, listAppend, listSlice, stringSplit,
     valStmt,funcApp,funcApp',func,continue,
-    toAbsCode, getClassName, buildModule, moduleName, libs, classes, functions, ignoreMain, notMainModule
+    toAbsCode, getClassName, buildModule, moduleName, libs, classes, functions, ignoreMain, notMainModule, multi
 ) where
 
 import Data.List (zipWith4)
@@ -67,6 +67,7 @@ data Statement = AssignState Assignment | DeclState Declaration
                | PatternState Pattern           --deals with special design patterns
                | IOState IOSt
                | ComplexState Complex
+               | MultiState [Statement]
                   deriving Show
 data IOSt = OpenFile Value Value Mode
           | CloseFile Value
@@ -97,7 +98,7 @@ data ObserverPattern = InitObserverList {observerType :: StateType, observers ::
                      | NotifyObservers {observerType :: StateType, receiveFunc :: Label, notifyParams :: [Value]} deriving Show
                      
 data Complex = ReadAll Value Value  -- ReadAll File String[]
-             | ListSlice Value Value (Maybe Value) (Maybe Value) (Maybe Value)  -- new list var, old list var, start, stop, step
+             | ListSlice StateType Value Value (Maybe Value) (Maybe Value) (Maybe Value)  -- new list var, old list var, start, stop, step
              | StringSplit Value Value String -- new string, old string, delimiter
                  deriving Show
 data Assignment = Assign Value Value
@@ -544,8 +545,8 @@ listAccess = ListAccess
 listAppend :: Value -> Function
 listAppend = ListAppend
 
-listSlice :: Value -> Value -> (Maybe Value) -> (Maybe Value) -> (Maybe Value) -> Statement
-listSlice v1 v2 b e s = ComplexState $ ListSlice v1 v2 b e s
+listSlice :: StateType -> Value -> Value -> (Maybe Value) -> (Maybe Value) -> (Maybe Value) -> Statement
+listSlice st v1 v2 b e s = ComplexState $ ListSlice st v1 v2 b e s
 
 stringSplit :: Value -> Value -> String -> Statement
 stringSplit v1 v2 d = ComplexState $ StringSplit v1 v2 d
@@ -834,3 +835,6 @@ notMain _              = True
 
 notMainModule :: Module -> Bool
 notMainModule m = foldl (&&) True (map notMain $ functions m)
+
+multi :: [Statement] -> Statement
+multi = MultiState

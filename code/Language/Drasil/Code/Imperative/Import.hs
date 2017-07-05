@@ -12,26 +12,67 @@ import Language.Drasil.CodeSpec
 
 import Prelude hiding (log, exp, return)
 
-generateCode :: CodeSpec -> IO () 
-generateCode spec = let modules = genModules spec 
+data Generator = Generator { 
+  generateCode :: IO (),
+  
+  genModules :: [Module],
+  
+  genInputMod :: [CodeChunk] -> ConstraintMap -> [Module],
+  genCalcMod :: [CodeDefinition] -> [Module],
+  genOutputMod :: [CodeChunk] -> [Module],
+  
+  genInputClass :: [CodeChunk] -> ConstraintMap -> Class,
+  genInputFormat :: [CodeChunk] -> Method,
+  genInputConstraints :: [CodeChunk] -> ConstraintMap -> Method,
+
+  genCalcFuncs :: [CodeDefinition] -> [Method],
+  genCalcBlock :: CodeDefinition -> Body,
+  genCaseBlock :: [(Expr,Relation)] -> Body,  
+
+  genOutputFormat :: [CodeChunk] -> Method
+}
+
+generator :: CodeSpec -> Generator -> Generator
+generator spec g = Generator {
+  generateCode = generateCodeD spec g,
+  
+  genModules = genModulesD spec g,
+  
+  genInputMod = genInputModD g,
+  genCalcMod = genCalcModD g,
+  genOutputMod = genOutputModD g,
+  
+  genInputClass = genInputClassD g,
+  genInputFormat = genInputFormatD g,
+  genInputConstraints = genInputConstraintsD g,
+
+  genCalcFuncs = genCalcFuncsD g,
+  genCalcBlock = genCalcBlockD g,
+  genCaseBlock = genCaseBlockD g,  
+
+  genOutputFormat = genOutputFormatD g
+}
+
+generateCodeD :: CodeSpec -> Generator -> IO () 
+generateCodeD s g = let modules = genModules g 
    in createCodeFiles $ makeCode 
         pythonLabel
         (Options Nothing Nothing Nothing (Just "Code")) 
-        (toAbsCode (codeName $ program spec) modules)
+        (toAbsCode (codeName $ program s) modules)
 
-genModules :: CodeSpec -> [Module]
-genModules (CodeSpec _ i o d cm) = genInputMod i cm
-                                   ++ genCalcMod d
-                                   ++ genOutputMod o
+genModulesD :: CodeSpec -> Generator -> [Module]
+genModulesD (CodeSpec _ i o d cm) g = genInputMod g i cm
+                                   ++ genCalcMod g d
+                                   ++ genOutputMod g o
 
 
 ------- INPUT ----------  
 
-genInputMod :: (CodeEntity c) => [c] -> ConstraintMap -> [Module]
-genInputMod ins cm = [buildModule "InputParameters" [] [] [] [(genInputClass ins cm)]]
+genInputModD :: Generator -> [CodeChunk] -> ConstraintMap -> [Module]
+genInputModD g ins cm = [buildModule "InputParameters" [] [] [] [(genInputClass g ins cm)]]
 
-genInputClass :: (CodeEntity c) => [c] -> ConstraintMap -> Class
-genInputClass ins cm = pubClass
+genInputClassD :: Generator -> [CodeChunk] -> ConstraintMap -> Class
+genInputClassD g ins cm = pubClass
   "InputParameters"
   Nothing
   genInputVars
@@ -40,8 +81,8 @@ genInputClass ins cm = pubClass
         "InputParameters" 
         []
         [zipBlockWith (&=) vars vals],
-      genInputFormat ins,
-      genInputConstraints ins cm
+      genInputFormat g ins,
+      genInputConstraints g ins cm
     ]
   )  
   where vars         = map (\x -> var $ codeName x) ins
@@ -49,13 +90,13 @@ genInputClass ins cm = pubClass
         genInputVars = 
           map (\x -> pubMVar 4 (convType $ codeType x) (codeName x)) ins
 
-genInputFormat :: (CodeEntity c) => [c] -> Method
-genInputFormat ins = let l_infile = "infile"
-                         v_infile = var l_infile
-                         l_filename = "filename"
-                         p_filename = param l_filename string
-                         v_filename = var l_filename
-                     in
+genInputFormatD :: Generator -> [CodeChunk] -> Method
+genInputFormatD _ ins = let l_infile = "infile"
+                            v_infile = var l_infile
+                            l_filename = "filename"
+                            p_filename = param l_filename string
+                            v_filename = var l_filename
+                        in
   pubMethod methodTypeVoid "get_inputs" 
     [ p_filename ]
     [ block $
@@ -69,8 +110,8 @@ genInputFormat ins = let l_infile = "infile"
         [ closeFile v_infile ]
     ]
           
-genInputConstraints :: (CodeEntity c) => [c] -> ConstraintMap -> Method
-genInputConstraints vars cm = 
+genInputConstraintsD :: Generator -> [CodeChunk] -> ConstraintMap -> Method
+genInputConstraintsD _ vars cm = 
   let cs = concatMap (\x -> constraintLookup x cm) vars in
     pubMethod methodTypeVoid "input_constraints" [] [ block $
       map (\x -> ifCond [((?!) (convExpr x), oneLiner $ throw "InputError")] noElse) cs
@@ -79,21 +120,21 @@ genInputConstraints vars cm =
     
 ------- CALC ----------    
     
-genCalcMod :: [CodeDefinition] -> [Module]
-genCalcMod defs = [buildModule "Calculations" [] [] (genCalcFuncs defs) []]   
+genCalcModD :: Generator -> [CodeDefinition] -> [Module]
+genCalcModD g defs = [buildModule "Calculations" [] [] (genCalcFuncs g defs) []]   
         
-genCalcFuncs :: [CodeDefinition] -> [Method]
-genCalcFuncs = map 
+genCalcFuncsD :: Generator -> [CodeDefinition] -> [Method]
+genCalcFuncsD g = map 
   ( \x -> pubMethod 
             (methodType $ convType (codeType x)) 
             ("calc_" ++ codeName x) 
             (getParams (codevars $ codeEquat x)) 
-            (genCalcBlock x)
+            (genCalcBlock g x)
   )
 
-genCalcBlock :: CodeDefinition -> Body
-genCalcBlock def 
-  | isCase (codeEquat def) = genCaseBlock $ getCases (codeEquat def)
+genCalcBlockD :: Generator -> CodeDefinition -> Body
+genCalcBlockD g def 
+  | isCase (codeEquat def) = genCaseBlock g $ getCases (codeEquat def)
   | otherwise              = oneLiner $ return $ convExpr (codeEquat def)
   where isCase (Case _) = True
         isCase _        = False
@@ -101,8 +142,8 @@ genCalcBlock def
         getCases _         = error "impossible to get here"
 
 
-genCaseBlock :: [(Expr,Relation)] -> Body
-genCaseBlock cs = oneLiner $ ifCond (genIf cs) noElse
+genCaseBlockD :: Generator -> [(Expr,Relation)] -> Body
+genCaseBlockD g cs = oneLiner $ ifCond (genIf cs) noElse
   where genIf :: [(Expr,Relation)] -> [(Value,Body)]
         genIf = map 
           (\(e,r) -> (convExpr r, oneLiner $ return (convExpr e)))
@@ -110,16 +151,16 @@ genCaseBlock cs = oneLiner $ ifCond (genIf cs) noElse
 
 ----- OUTPUT -------
           
-genOutputMod :: (CodeEntity c) => [c] -> [Module]
-genOutputMod outs = [buildModule "OutputFormat" [] [] [genOutputFormat outs] []]  
+genOutputModD :: Generator -> [CodeChunk] -> [Module]
+genOutputModD g outs = [buildModule "OutputFormat" [] [] [genOutputFormat g outs] []]  
     
-genOutputFormat :: (CodeEntity c) => [c] -> Method
-genOutputFormat outs = let l_outfile = "outfile"
-                           v_outfile = var l_outfile
-                           l_filename = "filename"
-                           p_filename = param l_filename string
-                           v_filename = var l_filename
-                       in
+genOutputFormatD :: Generator -> [CodeChunk] -> Method
+genOutputFormatD g outs = let l_outfile = "outfile"
+                              v_outfile = var l_outfile
+                              l_filename = "filename"
+                              p_filename = param l_filename string
+                              v_filename = var l_filename
+                          in
   pubMethod methodTypeVoid "write_output" 
     (p_filename:getParams outs)
     [ block $

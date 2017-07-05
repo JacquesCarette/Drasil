@@ -12,8 +12,9 @@ import Language.Drasil.Make.Print (genMake)
 import Language.Drasil.Document
 import Language.Drasil.Format(Format(TeX, HTML))
 import Language.Drasil.Recipe(Recipe(Recipe))
-import Language.Drasil.Code.Imperative.Import (generateCode)
+import Language.Drasil.Code.Imperative.Import (generator, generateCode)
 import Language.Drasil.CodeSpec
+import Data.Function (fix)
 
 
 -- | Generate a number of artifacts based on a list of recipes.
@@ -76,7 +77,7 @@ genCode spec = do
   workingDir <- getCurrentDirectory
   createDirectoryIfMissing False "src"
   setCurrentDirectory "src"
-  generateCode spec
+  generateCode (fix $ generator spec)
   setCurrentDirectory workingDir
 
 -- -- | Calls the code generator using the 'ModuleChunk's

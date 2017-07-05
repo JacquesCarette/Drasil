@@ -50,7 +50,7 @@ import Data.Drasil.Concepts.Software(correctness, verifiability,
 
 import Data.Drasil.SentenceStructures (showingCxnBw, foldlSent, foldlSent_,
   foldlSentCol, foldlSP, foldlSP_, foldlSPCol, foldlsC, isThe, ofThe, ofThe',
-  sAnd, inDataConstTbl, outDataConstTbl)
+  sAnd)
 
 acronyms :: [CI]
 acronyms = [assumption, dataDefn, genDefn, goalStmt, inModel, likelyChg, ode,
@@ -999,6 +999,7 @@ s4_2_6_table3 :: Contents
 s4_2_6_table3 = outDataConstTbl outputConstraints
 --FIXME: add "(by A11)" in Physical Constraints of `temp_W` and `temp_PCM`?
 
+outputConstraints :: [UncertQ]
 outputConstraints = [temp_W, temp_PCM, w_E, pcm_E]
 
 -- Other Notes:

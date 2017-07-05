@@ -8,8 +8,7 @@ module Data.Drasil.SentenceStructures
   , maybeChanged, maybeExpanded, maybeWOVerb
   , tAndDWAcc, tAndDWSym, tAndDOnly
   , followA
-  {-below is to be moved-}
-  , inDataConstTbl, outDataConstTbl
+  , fmtInputConstr, fmtOutputConstr, physC, sfwrC, typUnc, rval
   ) where
 
 import Language.Drasil
@@ -146,9 +145,12 @@ tAndDWSym tD sym = Flat $ ((at_start tD) :+: sParenDash (getS sym)) :+: (tD ^. d
 tAndDOnly :: Concept s => s -> ItemType
 tAndDOnly chunk  = Flat $ ((at_start chunk) +:+ S "- ") :+: (chunk ^. defn)
 
+followA :: Sentence -> Int -> Sentence
+preceding `followA` num = preceding +:+ S "following" +:+ acroA num
+
 {-BELOW IS TO BE MOVED TO EXAMPLE/DRASIL/SECTIONS-}
 
--- Start of attempt at intelligent format-er for input constraints
+-- Start of attempt at intelligent formatter for input constraints
 -- these are the helper functions for inDataConstTbl
 
 fmtInputConstr :: (UncertainQuantity c, Constrained c, SymbolForm c) => c -> [c] -> [Sentence]
@@ -160,8 +162,7 @@ fmtOutputConstr q qlst = [getS q] ++ physC q qlst ++ sfwrC q qlst ++ rval q qlst
 none :: Sentence
 none = S "None"
 
-followA :: Sentence -> Int -> Sentence
-preceding `followA` num = preceding +:+ S "following" +:+ acroA num
+
 
 --These check the entire list of UncertainQuantity and if they are all empty in that field,
 -- return empty list, otherwise return the appropriate thing
@@ -200,7 +201,7 @@ typUnc q qlst
         isUn (Just _) = True
         isUn Nothing  = False
 
---Formaters for the constraints
+--Formatters for the constraints
 fmtPhys :: (Constrained s, SymbolForm s) => s -> Sentence
 fmtPhys s = foldlList $ fmtCP $ filter filterP (s ^. constraints)
   where filterP (Phys _) = True
@@ -212,30 +213,3 @@ fmtSfwr s = foldlList $ fmtCS $ filter filterS (s ^. constraints)
   where filterS (Phys _) = False
         filterS (Sfwr _) = True
         fmtCS = map (\(Sfwr f) -> E $ f (C s))
-
--- Creates the input Data Constraints Table
-inDataConstTbl :: (UncertainQuantity c, SymbolForm c, Constrained c) => [c] -> Contents
-inDataConstTbl qlst = Table ([S "Var"] ++ (isPhys $ physC (head qlst) qlst) ++
-  (isSfwr $ sfwrC (head qlst) qlst) ++ [S "Typical" +:+ titleize value] ++
-  (isUnc $ typUnc (head qlst) qlst))
-  (map (\x -> fmtInputConstr x qlst) qlst)
-  (S "Input Data Constraints") True
-  where isPhys [] = []
-        isPhys _  = [titleize' physicalConstraint]
-        isSfwr [] = []
-        isSfwr _  = [titleize' softwareConstraint]
-        isUnc  [] = []
-        isUnc  _  = [S "Typical Uncertainty"]
-
--- Creates the output Data Constraints Table
-outDataConstTbl :: (SymbolForm c, Constrained c) => [c] -> Contents
-outDataConstTbl qlst = Table ([S "Var"] ++ (isPhys $ physC (head qlst) qlst) ++
-  (isSfwr $ sfwrC (head qlst) qlst) ++ (isTypVal $ rval (head qlst) qlst))
-  (map (\x -> fmtOutputConstr x qlst) qlst)
-  (S "Output Data Constraints") True
-  where isPhys [] = []
-        isPhys _  = [titleize' physicalConstraint]
-        isSfwr [] = []
-        isSfwr _  = [titleize' softwareConstraint]
-        isTypVal  [] = []
-        isTypVal  _  = [S "Typical" +:+ titleize value]

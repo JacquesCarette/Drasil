@@ -27,6 +27,7 @@ import qualified Data.Drasil.Concepts.Documentation as Doc
 import Data.List (find)
 import Prelude hiding (id)
 import Control.Lens ((^.))
+import Drasil.Sections.SpecificSystemDescription (inDataConstTbl, outDataConstTbl)
 
 data SecItem where 
   Cont      :: [Contents] -> SecItem

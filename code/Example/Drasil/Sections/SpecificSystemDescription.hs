@@ -13,6 +13,7 @@ module Drasil.Sections.SpecificSystemDescription
   , inModelF
   , datConF
   , dataConstraintUncertainty
+  , inDataConstTbl, outDataConstTbl 
   ) where
 
 import qualified Data.Drasil.Concepts.Documentation as D
@@ -231,3 +232,30 @@ dataConstraintUncertainty = foldlSent [S "The", phrase uncertainty, phrase colum
   plural quantity +:+. S "can be measured", S "This", phrase information,
   S "would be part of the", phrase input_, S "if one were performing an",
   phrase uncertainty, S "quantification exercise"]
+
+-- Creates the input Data Constraints Table
+inDataConstTbl :: (UncertainQuantity c, SymbolForm c, Constrained c) => [c] -> Contents
+inDataConstTbl qlst = Table ([S "Var"] ++ (isPhys $ physC (head qlst) qlst) ++
+  (isSfwr $ sfwrC (head qlst) qlst) ++ [S "Typical" +:+ titleize value] ++
+  (isUnc $ typUnc (head qlst) qlst))
+  (map (\x -> fmtInputConstr x qlst) qlst)
+  (S "Input Data Constraints") True
+  where isPhys [] = []
+        isPhys _  = [titleize' physicalConstraint]
+        isSfwr [] = []
+        isSfwr _  = [titleize' softwareConstraint]
+        isUnc  [] = []
+        isUnc  _  = [S "Typical Uncertainty"]
+
+-- Creates the output Data Constraints Table
+outDataConstTbl :: (SymbolForm c, Constrained c) => [c] -> Contents
+outDataConstTbl qlst = Table ([S "Var"] ++ (isPhys $ physC (head qlst) qlst) ++
+  (isSfwr $ sfwrC (head qlst) qlst) ++ (isTypVal $ rval (head qlst) qlst))
+  (map (\x -> fmtOutputConstr x qlst) qlst)
+  (S "Output Data Constraints") True
+  where isPhys [] = []
+        isPhys _  = [titleize' physicalConstraint]
+        isSfwr [] = []
+        isSfwr _  = [titleize' softwareConstraint]
+        isTypVal  [] = []
+        isTypVal  _  = [S "Typical" +:+ titleize value]

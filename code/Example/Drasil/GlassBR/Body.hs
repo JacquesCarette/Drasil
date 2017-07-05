@@ -232,7 +232,7 @@ s5_1_table_UC1, s5_1_table_UC2 :: [Sentence]
 
 s5_1_table_UC1 = [S "1", titleize' input_, titleize user,
   titleize' characteristic +:+ S "of the" +:+ phrase glaSlab +:+ S "and of the"
-  +:+. phrase blast +:+ S "Details in this section"] -- +:+ (makeRef s5_2)] --FIXME
+  +:+. phrase blast +:+ S "Details in" +:+ (makeRef (SRS.indPRCase SRS.missingP []))]
 
 s5_1_table_UC2 = [S "2", titleize output_, short gLassBR, S "Whether or not the" 
   +:+ phrase glaSlab +:+ S "is safe for the calculated" +:+ phrase load +:+
@@ -369,7 +369,7 @@ s6_2_intro = foldlSP [S "This", phrase section_,
 {--Assumptions--}
 
 s6_2_1 = assumpF (s6_2_2) (s6_2_4) (s6_2_4) (s6_2_3) (s8) (s6_2_1_list)
---FIXME:remove duplicatie s6_2_4
+--FIXME:remove duplicatie s6_2_4 
 s6_2_1_list = 
   [(enumSimple 1 (short assumption) s6_2_1_listOfAssumptions)]
 
@@ -453,7 +453,7 @@ s6_2_4_DDefns = map gbSymbMapD dataDefns
 
 {-input and output tables-}
 
-s6_2_5_table1 = inDataConstTbl (gbInputDataConstraints) --FIXME: still need to add [glass_type, nom_thick]
+s6_2_5_table1 = inDataConstTbl (gbInputDataConstraints)
 s6_2_5_table3 = outDataConstTbl [prob_br]
 
 s6_2_5_table2_formatF2 :: UnitaryChunk -> Double -> (Sentence, Sentence)
@@ -471,7 +471,7 @@ s7 = reqF [s7_1, s7_2]
 
 s7_1 = SRS.funcReq (s7_1_list) []
 
-s7_1_req6 :: [Contents] -- :: ItemType
+s7_1_req6 :: [Contents]
 s7_1_req1, s7_1_req2, s7_1_req3, s7_1_req4, s7_1_req5 :: Sentence
 
 s7_1_list = [enumSimple 1 (getAcc requirement) (s7_1_listOfReqs)] ++ 

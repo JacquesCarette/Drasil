@@ -12,11 +12,12 @@ import Data.Drasil.Utils (getS)
 
 iModels :: [RelationConcept]
 iModels = [probOfBr, calOfCap, calOfDe]
+--make probOfBr into an NPNC type? (along with calOfCap, calOfDe)
 
 {--}
 
 probOfBr :: RelationConcept
-probOfBr = makeRC "probOfBr" (nounPhraseSP "Probability of Glass Breakage") --make into an NPNC type? (along with calOfCap, calOfDe)
+probOfBr = makeRC "probOfBr" (nounPhraseSP "Probability of Glass Breakage")
   pbdescr pb_rel 
 
 pb_rel :: Relation
@@ -67,7 +68,6 @@ dedescr =
   (phrase char_weight)) +:+. ((getS tNT) `isThe`
   (phrase tNT)), (getS standOffDist) `isThe`
   (phrase standOffDist), S "where", E (equat sdWithEqn), S "where",
-  sParen (getS sdx `sC` getS sdy `sC` getS sdz), S "are coordinates"]
-  --FIXME: pull out [SDx, SDy, SDz] somewhere...
+  sParen (sdVectorSent), S "are coordinates"]
 
 {--}

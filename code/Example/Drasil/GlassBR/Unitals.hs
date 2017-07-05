@@ -5,12 +5,12 @@ import Drasil.GlassBR.Concepts
 
 import Language.Drasil
 import Data.Drasil.SI_Units
-import Data.Drasil.Utils(symbolMapFun, mkDataDef)
+import Data.Drasil.Utils(symbolMapFun, mkDataDef, getS)
 import Control.Lens((^.))
 import Prelude hiding (log, id, sqrt)
 import Data.Drasil.SentenceStructures (foldlSent)
 
---FIXME: Many of the current terms can be separated into terms and defns!
+--FIXME: Many of the current terms can be separated into terms and defns?
 
 {--}
 
@@ -24,30 +24,34 @@ mod_elas    = uc' "mod_elas"      (nounPhraseSP "modulus of elasticity of glass"
 {--}
 
 gbConstrained :: [ConstrWrapper]
-gbConstrained = map cnstrw gbInputs ++ map cnstrw [prob_br]
+gbConstrained = map cnstrw gbInputsWUncrtn ++ map cnstrw [prob_br]
 
-plate_len, plate_width, char_weight, standOffDist:: UncertQ
+plate_len, plate_width, char_weight, standOffDist :: UncertQ
 pb_tol, tNT :: UncertainChunk
-glass_type, nom_thick:: ConstrainedChunk
+glass_type, nom_thick :: ConstrainedChunk
 
 {--}
 
 defaultUncrt :: Double
 defaultUncrt = 0.1
 
-gbInputs_ :: [UncertQ]
-gbInputs_ = [plate_len, plate_width, char_weight, standOffDist]
+gbInputs :: [QSWrapper]
+gbInputs = (map qs gbInputsWUnitsUncrtn) ++ (map qs gbInputsWUncrtn) ++ (map qs gbInputsNoUncrtn)
 
-gbInputs :: [UncertainChunk]
-gbInputs = [pb_tol, tNT]
+--inputs with units and uncertainties
+gbInputsWUnitsUncrtn :: [UncertQ]
+gbInputsWUnitsUncrtn = [plate_len, plate_width, char_weight, standOffDist]
 
-gbInputs_' :: [ConstrainedChunk]
-gbInputs_' = [glass_type, nom_thick]
+--inputs with uncertainties and no units
+gbInputsWUncrtn :: [UncertainChunk]
+gbInputsWUncrtn = [pb_tol, tNT]
 
---FIXME: RENAME THE ABOVE LISTS
+--inputs with no uncertainties
+gbInputsNoUncrtn :: [ConstrainedChunk]
+gbInputsNoUncrtn = [glass_type, nom_thick]
 
 gbInputDataConstraints :: [UncertainWrapper]
-gbInputDataConstraints = (map uncrtnw gbInputs) ++ (map uncrtnw gbInputs_)
+gbInputDataConstraints = (map uncrtnw gbInputsWUncrtn) ++ (map uncrtnw gbInputsWUnitsUncrtn)
 
 plate_len = uqcND "plate_len" (nounPhraseSP "plate length (long dimension)")
   lA millimetre Real 
@@ -105,7 +109,6 @@ gbOutputs :: [QSWrapper]
 gbOutputs = map qs [is_safe1, is_safe2] ++ map qs [prob_br]
 
 prob_br :: ConstrainedChunk
-
 prob_br = cvc "prob_br" (nounPhraseSP "probability of breakage")
   (sub cP lB) Rational
   [ physc $ \c -> (Dbl 0) :< c,
@@ -136,11 +139,9 @@ sd_max     = mkDataDef (unitary "sd_max"      (nounPhraseSP "maximum stand off d
 {--}
 
 glassBRSymbols :: [UnitaryChunk]
-glassBRSymbols = [act_thick, sflawParamK, sflawParamM,
-  demand, sdx, sdy, sdz, load_dur, eqTNTWeight]
+glassBRSymbols = [act_thick, sflawParamK, sflawParamM, demand, sdx, sdy, sdz, load_dur, eqTNTWeight]
 
-act_thick, sflawParamK, sflawParamM, demand, sdx, sdy,
-  sdz, load_dur, eqTNTWeight :: UnitaryChunk
+act_thick, sflawParamK, sflawParamM, demand, sdx, sdy, sdz, load_dur, eqTNTWeight :: UnitaryChunk
 
 act_thick   = unitary "act_thick"   (nounPhraseSP "actual thickness")
   lH millimetre Rational
@@ -278,8 +279,9 @@ eqTNTChar     = dcc "eqTNTChar"   (nounPhraseSP "equivalent TNT charge mass")
     "design explosive threat.")
 sD            = cc' stdOffDist
   (S "The distance from the glazing surface to the centroid of a hemispherical" +:+
-   S "high explosive charge. It is represented by the coordinates (SDx, SDy, SDz).")
-blast         = dcc "blast"       (nounPhraseSP "blast") 
+   S "high explosive charge. It is represented by the coordinates" +:+.
+   sParen (sdVectorSent))
+blast         = dcc "blast"       (nounPhraseSP "blast")  
   "any kind of man-made explosion"
 blastTy       = dcc "blastTy"     (nounPhraseSP "blast type")
   ("The blast type input includes parameters like weight of charge, TNT " ++
@@ -304,8 +306,8 @@ explosion     = dcc "explosion"   (nounPhraseSP "explosion")
 
 this_symbols :: [QSWrapper]
 this_symbols = ((map qs gBRSpecParamVals) ++ (map qs glassBRSymbolsWithDefns)
-  ++ (map qs glassBRSymbols) ++ (map qs glassBRUnitless) ++ (map qs gbInputs)
-  ++ (map qs gbInputs_))
+  ++ (map qs glassBRSymbols) ++ (map qs glassBRUnitless) ++ (map qs gbInputsWUncrtn)
+  ++ (map qs gbInputsWUnitsUncrtn))
 
 gbSymbMap :: SymbolMap
 gbSymbMap = symbolMap this_symbols
@@ -351,6 +353,9 @@ sdWithEqn = mkDataDef standOffDist sdCalculation
 
 sdCalculation :: Relation
 sdCalculation = (C standOffDist) := sqrt (((C sdx) :^ (Int 2)) + ((C sdy) :^ (Int 2)) + ((C sdz) :^ (Int 2)))
+
+sdVectorSent :: Sentence
+sdVectorSent = getS sdx `sC` getS sdy `sC` getS sdz
 
 wtntWithEqn :: QDefinition
 wtntWithEqn = mkDataDef eqTNTWeight wtntCalculation

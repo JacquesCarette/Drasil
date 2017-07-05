@@ -21,9 +21,7 @@ acronyms = [assumption, annealedGlass, aspectR, dataDefn, fullyTGlass,
 annealedGlass, aspectR, fullyTGlass, glassTypeFac, heatSGlass, loadDurFactor,
   iGlass, lGlass, lResistance, lShareFac, eqTNT, gLassBR, stdOffDist, nFL :: CI
 
---FIXME: So many of these are duplicates of other named chunks/concepts
 --FIXME: Add compound nounphrases
---FIXME: Remove `glassTypeFac` once figured out how to incorporate `glassTypeFac_` into s6_1_1_bullets.
 
 annealedGlass = commonIdea "annealedGlass" (nounPhraseSP "annealed glass")          "AN"
 aspectR       = commonIdea' "aspectR"      (nounPhraseSP "aspect ratio")            (Atomic "AR")

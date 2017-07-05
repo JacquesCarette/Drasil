@@ -138,11 +138,11 @@ p_expr (Grouping x) = paren (p_expr x)
 p_expr (Not x)    = "\\neg{}" ++ p_expr x
 p_expr (And x y)  = p_expr x ++ "\\land{}" ++ p_expr y
 p_expr (Or x y)   = p_expr x ++ "\\lor{}" ++ p_expr y
-p_expr (Impl a b) = p_expr a ++ "\\implies " ++ p_expr b
-p_expr (Iff a b)  = p_expr a ++ "\\iff " ++ p_expr b
+p_expr (Impl a b) = p_expr a ++ "\\implies{}" ++ p_expr b
+p_expr (Iff a b)  = p_expr a ++ "\\iff{}" ++ p_expr b
 p_expr (IsIn  a b) = (concat $ intersperse "," $ map p_expr a) ++ "\\in{}"  ++ show b
 p_expr (NotIn a b) = (concat $ intersperse "," $ map p_expr a) ++ "\\notin{}" ++ show b
-p_expr (State a b) = (concat $ intersperse "," $ map p_quan a) ++ ": " ++ p_expr b
+p_expr (State a b) = (concat $ intersperse ", " $ map p_quan a) ++ ": " ++ p_expr b
 
 -- | Helper for rendering Quantifier statements
 p_quan :: Quantifier -> String

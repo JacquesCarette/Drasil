@@ -1,7 +1,8 @@
 module Language.Drasil.HTML.Import where
 import Prelude hiding (id)
 import Language.Drasil.Expr (Expr(..), Relation, UFunc(..), BiFunc(..),
-                             Bound(..),DerivType(..))
+                             Bound(..),DerivType(..), Set, Quantifier(..))
+import Language.Drasil.Space (Space(..))
 import Language.Drasil.Spec
 import qualified Language.Drasil.HTML.AST as H
 import Language.Drasil.Unicode (Special(Partial))
@@ -12,7 +13,7 @@ import Language.Drasil.Chunk.NamedIdea (term)
 import Language.Drasil.Chunk.Concept (defn)
 import Language.Drasil.Chunk.SymbolForm (SymbolForm, symbol)
 import Language.Drasil.Chunk.VarChunk (VarChunk)
-import Control.Lens hiding ((:>),(:<))
+import Control.Lens hiding ((:>),(:<),set)
 import Language.Drasil.Expr.Extract
 import Language.Drasil.Config (verboseDDDescription)
 import Language.Drasil.Document

@@ -62,7 +62,7 @@ data Set = Integer
          | Char
          | String
          | Radians
-         | Vect Space
+         | Vect Set
          | Obj String
 
 data Quantifier = Forall Expr | Exists Expr

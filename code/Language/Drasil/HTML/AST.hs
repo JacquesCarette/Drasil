@@ -67,7 +67,7 @@ data Set = Integer
          | Char
          | String
          | Radians
-         | Vect Space
+         | Vect Set
          | Obj String
 
 data Quantifier = Forall Expr | Exists Expr
@@ -147,7 +147,7 @@ instance Show Function where
   show Exp = "e"
   show Sqrt = "&radic;"
   
-instance Show Space where
+instance Show Set where
   show Integer = "&#8484;"
   show Rational = "&#8474;"
   show Real = "&#8477;"

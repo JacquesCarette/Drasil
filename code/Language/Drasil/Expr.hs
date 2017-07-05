@@ -8,7 +8,7 @@ import Prelude hiding (id)
 import Language.Drasil.Chunk (Chunk(..))
 import Language.Drasil.Chunk.SymbolForm (SymbolForm)
 import Language.Drasil.Symbol
-import Language.Drasil.Space ()
+import Language.Drasil.Space (Space(..))
 
 import Control.Lens ((^.))
 
@@ -71,7 +71,19 @@ data Expr where
   (:<=>) :: Expr -> Expr -> Expr -- if and only if, &hArr; \iff
   --Monotonic :: Maybe Direction -> Expr -> Expr --like this? or defined as below (see monotoniclyIncr)
 
-data Set = Space deriving Eq
+type Set = Space
+{- --import from space?
+           Integer 
+         | Rational
+         | Real
+         | Natural
+         | Boolean
+         | Char
+         | String
+         | Radians
+         | Vect Set
+         | Obj String-} 
+
 data Quantifier = Forall Expr | Exists Expr deriving Eq -- &forall; \forall -- &exist; \exists
 {-
 data Direction = Increasing

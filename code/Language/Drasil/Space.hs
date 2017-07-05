@@ -16,3 +16,4 @@ data Space where
   Vect :: Space -> Space
   Obj :: String -> Space
   deriving Eq
+  

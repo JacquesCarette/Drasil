@@ -9,8 +9,6 @@ module Data.Drasil.SentenceStructures
   , tAndDWAcc, tAndDWSym, tAndDOnly
   , followA
   {-below is to be moved-}
-  , makeConstraint, displayConstr
-  , fmtInConstr
   , inDataConstTbl, outDataConstTbl
   ) where
 
@@ -149,17 +147,6 @@ tAndDOnly :: Concept s => s -> ItemType
 tAndDOnly chunk  = Flat $ ((at_start chunk) +:+ S "- ") :+: (chunk ^. defn)
 
 {-BELOW IS TO BE MOVED TO EXAMPLE/DRASIL/SECTIONS-}
-
---FIXME: the below three functions are to be removed
-makeConstraint :: (Constrained s, Quantity s, SymbolForm s) => s -> Sentence -> [Sentence]
-makeConstraint s num = [getS s, fmtPhys s, fmtU num s]
-
-displayConstr :: (Constrained s, Quantity s, SymbolForm s, Show a) => s -> a -> Sentence -> [Sentence]
-displayConstr s num uncrty = [getS s, fmtPhys s,
-  fmtSfwr s, fmtU (S (show num)) (qs s), uncrty]
-       
-fmtInConstr :: UncertQ -> [Sentence]
-fmtInConstr q = [getS q, fmtPhys q, fmtSfwr q, fmtU (E $ getRVal q) q, S $ show (q ^. uncert)]
 
 -- Start of attempt at intelligent format-er for input constraints
 -- these are the helper functions for inDataConstTbl

@@ -236,11 +236,11 @@ sectionMap :: NamedIdea c => c -> SubSec -> [Section] -> Section
 sectionMap progName (SectionModel niname xs)  
   |  compareID niname (Doc.solutionCharSpec ^. id)         = section (titleize' niname)
     [scsIntro progName]
-  | compareID niname (Doc.problemDescription ^. id)       = section (titleize niname)
+  | compareID niname  (Doc.problemDescription ^. id)       = section (titleize niname)
     [problemDescriptionIntro progName (pullSents xs)]
-  | compareID niname (Doc.generalSystemDescription ^. id) = section (titleize niname)
+  | compareID niname  (Doc.generalSystemDescription ^. id) = section (titleize niname)
     [genenralSystemIntro]
-  | compareID niname (Doc.requirement ^. id)              = section (titleize niname)
+  | compareID niname  (Doc.requirement ^. id)              = section (titleize niname)
     [requirementsIntro]
 
 --------------------
@@ -249,16 +249,16 @@ sectionMap progName (SectionModel niname xs)
 
 render :: (NamedIdea c) => c -> SymbolMap -> SubSec -> Section
 render progName symbolMap item@(SectionModel niname _)
-    | compareID niname (Doc.assumption ^. id)       = assumptionSect item
-    | compareID niname (Doc.thModel ^. id)          = theoreticalModelSect item progName symbolMap
-    | compareID niname (Doc.genDefn ^. id)          = generalDefinitionSect item symbolMap
-    | compareID niname (Doc.inModel ^. id)          = instanceModelSect item symbolMap
-    | compareID niname (Doc.dataDefn ^. id)         = dataDefinitionSect item symbolMap
-    | compareID niname (Doc.dataConst ^. id)        = dataConstraintSect item 
-    | compareID niname (Doc.termAndDef ^. id)       = termDefinitionSect item
-    | compareID niname (Doc.goalStmt ^. id)         = goalStatementSect item
-    | compareID niname (Doc.systemConstraint ^. id) = systemConstraintSect item
-    | otherwise                                     = genericSect item
+  | compareID niname (Doc.assumption ^. id)       = assumptionSect        item
+  | compareID niname (Doc.thModel ^. id)          = theoreticalModelSect  item symbolMap progName
+  | compareID niname (Doc.genDefn ^. id)          = generalDefinitionSect item symbolMap
+  | compareID niname (Doc.inModel ^. id)          = instanceModelSect     item symbolMap
+  | compareID niname (Doc.dataDefn ^. id)         = dataDefinitionSect    item symbolMap
+  | compareID niname (Doc.dataConst ^. id)        = dataConstraintSect    item 
+  | compareID niname (Doc.termAndDef ^. id)       = termDefinitionSect    item
+  | compareID niname (Doc.goalStmt ^. id)         = goalStatementSect     item
+  | compareID niname (Doc.systemConstraint ^. id) = systemConstraintSect  item
+  | otherwise                                     = genericSect           item
 
 ------------------------------
 -- Section Render Functions --
@@ -296,19 +296,19 @@ assumptionSect :: SubSec -> Section
 assumptionSect (SectionModel niname xs) = section (titleize' niname)
   (assumpIntro:(pullContents xs)) (pullSections xs)
 
-theoreticalModelSect :: (NamedIdea a) => SubSec -> a -> SymbolMap -> Section
-theoreticalModelSect (SectionModel niname xs) progName symbolMap = section
+
+theoreticalModelSect :: (NamedIdea a) => SubSec -> SymbolMap -> a -> Section
+theoreticalModelSect (SectionModel niname xs) symbolMap progName = section
   (titleize' niname) ((tModIntro progName):((map symMap $ pullTMods xs) ++ 
   (pullContents xs))) (pullSections xs)
   where symMap = symbolMapFun symbolMap Theory
 
---FIXME geenrate tables here
---s4_2_2_TMods = map cpSymMapT cpTMods
 
 generalDefinitionSect :: SubSec -> SymbolMap -> Section
 generalDefinitionSect (SectionModel niname xs) _ = section (titleize' niname)
   ((generalDefinitionIntro contents):contents) (pullSections xs)
   where contents = (pullContents xs)
+
 
 instanceModelSect :: SubSec -> SymbolMap -> Section
 instanceModelSect (SectionModel niname xs) symbolMap = section (titleize' niname)
@@ -316,8 +316,6 @@ instanceModelSect (SectionModel niname xs) symbolMap = section (titleize' niname
   (pullContents xs))) (pullSections xs)
   where symMap = symbolMapFun symbolMap Theory
 
---FIXME generate tables here
---s4_2_5_IMods = map cpSymMapT iModels
 
 dataDefinitionSect :: SubSec -> SymbolMap -> Section
 dataDefinitionSect (SectionModel niname xs) symbolMap = section (titleize' niname)
@@ -325,8 +323,6 @@ dataDefinitionSect (SectionModel niname xs) symbolMap = section (titleize' ninam
   (pullContents xs))) (pullSections xs)
   where symMap = (symbolMapFun (symbolMap) Data)
 
---FIXME generate tables here
---s4_2_4_DDefs = map cpSymMapD cpDDefs
 
 dataConstraintSect :: SubSec -> Section
 dataConstraintSect (SectionModel niname xs) = section (titleize' niname)
@@ -355,8 +351,6 @@ genenralSystemIntro = foldlSP [S "This", phrase Doc.section_, S "provides genera
 --------------------------
 -- USER CHARACTERISTICS --
 --------------------------
-
-
 
 
 ------------------------
@@ -433,9 +427,8 @@ assumpIntro = Paragraph $ foldlSent
   [S "This", (phrase Doc.section_), S "simplifies the original", 
   (phrase Doc.problem), S "and helps in developing the", (phrase Doc.thModel), 
   S "by filling in the", S "missing", (phrase Doc.information), S "for the" +:+. 
-  (phrase Doc.physicalSystem), 
-  S "The numbers given in the square brackets refer to the", 
-  foldr1 sC (map (refs) (itemsAndRefs)) `sC` S "or", 
+  (phrase Doc.physicalSystem), S "The numbers given in the square brackets refer to the", 
+  foldr1 sC (map refs itemsAndRefs) `sC` S "or", 
   refs (Doc.likelyChg) `sC` S "in which the respective", 
   (phrase Doc.assumption), S "is used"] --FIXME: use some clever "zipWith"
   where refs chunk = (titleize' chunk) {--+:+ sSqBr (makeRef ref)--} 
@@ -542,11 +535,11 @@ dataConstraintUncertainty = foldlSent [S "The", phrase Doc.uncertainty,
 
 requirementsIntro :: Contents
 requirementsIntro = foldlSP
-        [S "This", (phrase Doc.section_), S "provides the",
-        (plural Doc.functionalRequirement) `sC` S "the business tasks that the",
-        (phrase Doc.software), S "is expected to complete, and the", 
-        (plural Doc.nonfunctionalRequirement) `sC` S "the qualities that the",
-        (phrase Doc.software), S "is expected to exhibit"]
+  [S "This", (phrase Doc.section_), S "provides the",
+  (plural Doc.functionalRequirement) `sC` S "the business tasks that the",
+  (phrase Doc.software), S "is expected to complete, and the", 
+  (plural Doc.nonfunctionalRequirement) `sC` S "the qualities that the",
+  (phrase Doc.software), S "is expected to exhibit"]
 
 ---------------------------------
 -- NON-FUNCTIONAL REQUIREMENTS --

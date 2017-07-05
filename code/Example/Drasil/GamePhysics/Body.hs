@@ -113,13 +113,19 @@ para1_s2_intro = foldlSent
 -- 2.1 : Purpose of Document --
 -------------------------------
 
+detailsAndGoal :: [CI]
+detailsAndGoal = [thModel, goalStmt]
+
 para1_s2_1_intro :: Sentence
-para1_s2_1_intro = foldlSent 
-  [S "This", (phrase document), S "descibes the modeling of an",
+para1_s2_1_intro = para1_s2_1_param chipmunk document (map plural detailsAndGoal)
+
+para1_s2_1_param :: (NamedIdea a) => a -> a -> [Sentence] -> Sentence
+para1_s2_1_param progName typeOf listOf = foldlSent 
+  [S "This", (phrase typeOf), S "descibes the modeling of an",
   (phrase openSource), getAcc twoD, (phrase CP.rigidBody), 
   (phrase physLib), S "used for" +:+. (plural game), S "The", 
-  plural goalStmt, S "and", plural thModel, S "used in",
-  short chipmunk, S "are provided. This", (phrase document),
+  foldlList listOf, S "used in",
+  (short progName), S "are provided. This", (phrase typeOf),
   S "is intended to be used as a reference to provide all",
   S "necessary", (phrase information), S "to understand and verify the", 
   (phrase model)]
@@ -206,24 +212,29 @@ s4_1 = assembler chipmunk cpSymbMap problemDescriptionSect [termAndDefSect,
 problemDescriptionSect :: SubSec
 problemDescriptionSect = sSubSec problemDescription [(siSent [s4_1_intro])]
 
-s4_1_intro = foldlSent 
-  [S "Creating a gaming", (phrase physLib),
-  S "is a difficult task.", (titleize' game), S "need", 
-  (plural physLib), S "that simulate", 
+s4_1_intro = s4_1_intro_param physLib game
+
+s4_1_intro_param :: (NamedIdea a, NamedIdea b) => a -> b -> Sentence
+s4_1_intro_param lib app = foldlSent 
+  [S "Creating a gaming", (phrase lib),
+  S "is a difficult task.", (titleize' app), S "need", 
+  (plural lib), S "that simulate", 
   S "objects acting under various", (phrase physical), S "conditions, while", 
   S "simultaneously being fast and efficient enough to work in soft",
-  (phrase realtime), S "during the" +:+. (phrase game), S "Developing a", 
-  (phrase physLib),
+  (phrase realtime), S "during the" +:+. (phrase app), S "Developing a", 
+  (phrase lib),
   S "from scratch takes a long period of time and is very costly" `sC`
-  S "presenting barriers of entry which make it difficult for", (phrase game),
+  S "presenting barriers of entry which make it difficult for", (phrase app),
   S "developers to include", (phrase physics), 
   S "in their" +:+. (plural product_), S "There are a few", S "free,", 
-  (phrase openSource), S "and high quality", (plural physLib), 
+  (phrase openSource), S "and high quality", (plural lib), 
   S "available to", S "be used for consumer", (plural product_) +:+. 
   (sParen $ makeRef s7), S "By creating a simple, lightweight, fast and portable",
-  (getAcc twoD), (phrase CP.rigidBody), (phrase physLib) `sC`
-  (phrase game), S "development will be more accessible",
+  (getAcc twoD), (phrase CP.rigidBody), (phrase lib) `sC`
+  (phrase app), S "development will be more accessible",
   S "to the masses and higher quality", (plural product_), S "will be produced"]
+
+
 
 -----------------------------------------
 -- 4.1.1 : Terminology and Definitions --
@@ -251,7 +262,7 @@ s4_1_2_list :: Contents
 goalStatementSect :: SubSec
 goalStatementSect = sSubSec goalStmt [(siCon [s4_1_2_list])]
 
-
+goalStatementStruct :: (NamedIdea a, NamedIdea b, NamedIdea c) => Sentence -> [a] -> Sentence -> Sentence -> [b] -> c -> Sentence -> Sentence -> [Sentence]
 goalStatementStruct property inputs item adjective outputs object condition1 condition2 = 
   [S "Given the", condition0 property, (inputList item), 
   adjective, S "a set of", (plural object) `sC` S "determine", condition1,
@@ -323,8 +334,11 @@ s4_2_1_list :: Contents
 s4_2_1_assum1, s4_2_1_assum2, s4_2_1_assum3, s4_2_1_assum4, s4_2_1_assum5, 
   s4_2_1_assum6, s4_2_1_assum7 :: [Sentence]
 
-s4_2_1_assum1 = [S "All objects are", (plural CP.rigidBody)]
-s4_2_1_assum2 = [S "All objects are", (getAcc twoD)]
+allObject :: Sentence -> [Sentence]
+allObject thing = [S "All objects are", thing]
+
+s4_2_1_assum1 = allObject (plural CP.rigidBody)
+s4_2_1_assum2 = allObject (getAcc twoD)
 s4_2_1_assum3 = [S "The library uses a", (phrase CP.cartesian)]
 s4_2_1_assum4 = [S "The axes are defined using", 
   (phrase CP.rightHand)]
@@ -448,7 +462,7 @@ s5_1_req4 = foldlSent [S "Verify that the inputs",
 s5_1_req5 = reqS (QP.position) (QP.velocity) 
   (S "acted upon by a" +:+ (phrase QP.force))
 
-s5_1_req6 = reqS' (QM.orientation) (QP.angularVelocity )
+s5_1_req6 = reqS' (QM.orientation) (QP.angularVelocity)
 
 s5_1_req7 = foldlSent [S "Determine if any of the", 
   (plural CP.rigidBody), S "in the", (phrase CP.space), 
@@ -530,10 +544,12 @@ s7_intro, s7_2dlist, s7_mid, s7_3dlist :: Contents
 s7 = SRS.offShelfSol [s7_intro, s7_2dlist,
   s7_mid, s7_3dlist] []
 
-s7_intro = Paragraph $ S "As mentioned in" +:+. ((makeRef s4_1) `sC`
+s7_intro = s7_intro_param physLib
+
+s7_intro_param lib = Paragraph $ S "As mentioned in" +:+. ((makeRef s4_1) `sC`
   S "there already exist free" +:+ (phrase openSource) +:+ (phrase game) +:+
-  (plural physLib)) +:+ S "Similar" +:+ (getAcc twoD) +:+ 
-  (plural physLib) +:+ S "are:"
+  (plural lib)) +:+ S "Similar" +:+ (getAcc twoD) +:+ 
+  (plural lib) +:+ S "are:"
 
 s7_2dlist = enumBullet [(S "Box2D: http://box2d.org/"),
   (S "Nape Physics Engine: http://napephys.com/")]

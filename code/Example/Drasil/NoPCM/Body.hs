@@ -287,7 +287,7 @@ s4_1_3_list = Enumeration $ Simple $ map (\(a, b) -> (a, Flat b)) [
 ------------------------------------------------------
   
 s4_2 = solChSpecF progName (s4_1, s6) s4_2_4_intro_end (mid,
-  dataConstraintUncertainty, end) ([s4_2_1_list], s4_2_2_T1, s4_2_3_paragraph,
+  dataConstraintUncertainty, end) ([assump3, assump4], s4_2_2_T1, s4_2_3_paragraph,
   s4_2_4_DD1, [swhsSymbMapT eBalanceOnWtr] ++ s4_2_5_d1startPara ++
   s4_2_5_paragraph ++ [swhsSymbMapT heatEInWtr], [s4_2_6_table1, s4_2_6_table2]) []
 
@@ -301,70 +301,73 @@ s4_2 = solChSpecF progName (s4_1, s6) s4_2_4_intro_end (mid,
           S "would be part of the input if one were performing an",
           phrase uncertainty, S "quantification exercise"]
 
-s4_2_1_list :: Contents
-s4_2_1_list = enumSimple 1 (short assumption) $ map foldlSent s4_2_1_assump_list
+-- s4_2_1_list :: Contents
+-- s4_2_1_list = enumSimple 1 (short assumption) $ map foldlSent s4_2_1_assump_list
 
-s4_2_1_assump_list :: [[Sentence]]
+-- s4_2_1_assump_list :: [[Sentence]]
 
-assump3, assump4, assump5, {-assump6,-}{-assump1, assump2, -}
-  assump7_npcm, assump8, assump9, assump10, assump11, assump12 :: [Sentence]
+-- assump3, assump4, assump5, {-assump6,-}{-assump1, assump2, -}
+  -- assump7_npcm, assump8, assump9, assump10, assump11, assump12 :: [Sentence]
 
-s4_2_1_assump_list = [assump1, assump2, assump3, assump4, assump5, assump7,
-  assump7_npcm, assump8, assump9, assump10, assump11, assump12]
+-- s4_2_1_assump_list = [assump1, assump2, assump3, assump4, assump5, assump7,
+  -- assump7_npcm, assump8, assump9, assump10, assump11, assump12]
   
-{-assump1 = [S "The only form of", phrase energy, S "that is",
-  S "relevant for this", phrase problem, S "is" +:+.
-  phrase thermal_energy, S "All other forms of", phrase energy
-  `sC` S "such as", phrase mech_energy `sC` S "are assumed to be negligible",
-  sSqBr (swhsSymbMapTRef t1consThermE)]-}
+-- {-assump1 = [S "The only form of", phrase energy, S "that is",
+  -- S "relevant for this", phrase problem, S "is" +:+.
+  -- phrase thermal_energy, S "All other forms of", phrase energy
+  -- `sC` S "such as", phrase mech_energy `sC` S "are assumed to be negligible",
+  -- sSqBr (swhsSymbMapTRef t1consThermE)]-}
 
-{-assump2 = [S "All", phrase heat_trans, S "coefficients are constant over",
-  phrase time, sSqBr (acroGD "1")]-}
+-- {-assump2 = [S "All", phrase heat_trans, S "coefficients are constant over",
+  -- phrase time, sSqBr (acroGD "1")]-}
+assump3, assump4 :: Contents
+assump3 = Assumption $ nw $ npnc "assump3" $ nounPhraseSP "The water in the tank is fully mixed, so the water temperature is the same throughout the entire tank."
+assump4 = Assumption $ nw $ npnc "assump3" $ nounPhraseSP "The water density has no spatial variation; that is it is constant over the entire volume."
 
-assump3 = [S "The", phrase water, S "in the", phrase tank,
-  S "is fully mixed, so the", phrase temp_W `isThe`
-  S "same throughout the entire", phrase tank,
-  sSqBr (acroGD 2)]
+-- assump3 = [S "The", phrase water, S "in the", phrase tank,
+  -- S "is fully mixed, so the", phrase temp_W `isThe`
+  -- S "same throughout the entire", phrase tank,
+  -- sSqBr (acroGD 2)]
 
-assump4 = [S "The", phrase w_density, S "has no spatial variation; that is"
-  `sC` S "it is constant over their entire", phrase vol, sSqBr (acroGD 2)]
+-- assump4 = [S "The", phrase w_density, S "has no spatial variation; that is"
+  -- `sC` S "it is constant over their entire", phrase vol, sSqBr (acroGD 2)]
 
-assump5 = [S "The", phrase htCap_W, S "has no spatial variation; that",
-  S "is, it is constant over its entire", phrase vol, sSqBr (acroGD 2)]
+-- assump5 = [S "The", phrase htCap_W, S "has no spatial variation; that",
+  -- S "is, it is constant over its entire", phrase vol, sSqBr (acroGD 2)]
 
-{-assump6 = [at_start law_conv_cooling,
-  S "applies between the", phrase coil, S "and the",
-  phrase water, sSqBr (swhsSymbMapDRef dd1HtFluxC)]-}
+-- {-assump6 = [at_start law_conv_cooling,
+  -- S "applies between the", phrase coil, S "and the",
+  -- phrase water, sSqBr (swhsSymbMapDRef dd1HtFluxC)]-}
 
-assump7_npcm = [S "The", phrase temp_C, S "is constant over",
-  phrase time, sSqBr (swhsSymbMapDRef dd1HtFluxC `sC` acroLC 1)]
+-- assump7_npcm = [S "The", phrase temp_C, S "is constant over",
+  -- phrase time, sSqBr (swhsSymbMapDRef dd1HtFluxC `sC` acroLC 1)]
 
-assump8 = [S "The", phrase temp_C, S "does not vary along its length",
-  sSqBr (swhsSymbMapDRef dd1HtFluxC `sC` acroLC 2)]
+-- assump8 = [S "The", phrase temp_C, S "does not vary along its length",
+  -- sSqBr (swhsSymbMapDRef dd1HtFluxC `sC` acroLC 2)]
 
--- TODO: Re-implement above when Data Definitions is created.
+---- TODO: Re-implement above when Data Definitions is created.
 
-assump9 = [S "The", phrase model,
-  S "only accounts for charging of the tank" `sC`
-  S "not discharging. The", phrase temp_W, S "can only increase, or remain",
-  S "constant; it cannot decrease. This implies that the",
-  phrase temp_init, sParen (acroA 12), S "is less than (or equal)",
-  S "to the", phrase temp_C, sSqBr ((acroIM 1) `sC` (acroLC 3))]
+-- assump9 = [S "The", phrase model,
+  -- S "only accounts for charging of the tank" `sC`
+  -- S "not discharging. The", phrase temp_W, S "can only increase, or remain",
+  -- S "constant; it cannot decrease. This implies that the",
+  -- phrase temp_init, sParen (acroA 12), S "is less than (or equal)",
+  -- S "to the", phrase temp_C, sSqBr ((acroIM 1) `sC` (acroLC 3))]
 
-assump10 = [(S "operating" +:+ phrase temp +:+ S "range" `ofThe'`
-  phrase system), S "is such that the", phrase water,
-  S "is always in", phrase liquid, S "form. That is,",
-  S "the", phrase temp, S "will not drop below the",
-  phrase melt_pt, S "of", phrase water `sC` S "or rise above its",
-  phrase boil_pt, sSqBr (acroIM 1)]
+-- assump10 = [(S "operating" +:+ phrase temp +:+ S "range" `ofThe'`
+  -- phrase system), S "is such that the", phrase water,
+  -- S "is always in", phrase liquid, S "form. That is,",
+  -- S "the", phrase temp, S "will not drop below the",
+  -- phrase melt_pt, S "of", phrase water `sC` S "or rise above its",
+  -- phrase boil_pt, sSqBr (acroIM 1)]
 
-assump11 = [S "The", phrase tank, S "is perfectly insulated",
-  S "so that there is no", phrase heat, S "loss from the",
-  phrase tank, sSqBr ((acroIM 1) `sC` (acroLC 4))]
+-- assump11 = [S "The", phrase tank, S "is perfectly insulated",
+  -- S "so that there is no", phrase heat, S "loss from the",
+  -- phrase tank, sSqBr ((acroIM 1) `sC` (acroLC 4))]
 
-assump12 = [S "No internal", phrase heat,
-  S "is generated by the", phrase water `semiCol` S "therefore, the",
-  phrase vol_ht_gen, S "is zero", sSqBr (acroIM 1)]
+-- assump12 = [S "No internal", phrase heat,
+  -- S "is generated by the", phrase water `semiCol` S "therefore, the",
+  -- phrase vol_ht_gen, S "is zero", sSqBr (acroIM 1)]
 
 {-s4_2_2_TMods :: [Contents]
 s4_2_2_TMods = map (Definition nopcmSymbMap . Theory) [t1consThermE]-}

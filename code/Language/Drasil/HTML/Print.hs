@@ -321,4 +321,4 @@ makeModule m l = refwrap l (paragraph $ wrap "b" [] (text m))
 
 -- | Renders assumptions
 makeAssump :: String -> String -> Doc
-makeAssump a l = refwrap l (paragraph $ wrap "p" ["assumption"] (text a))
+makeAssump a l = refwrap l (div_tag ["assumption"] (text a))

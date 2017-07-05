@@ -33,8 +33,6 @@ expr (a :/ b)         = H.Frac  (replace_divs a) (replace_divs b)
 expr (a :^ b)         = H.Pow   (expr a) (expr b)
 expr (a :- b)         = H.Sub   (expr a) (expr b)
 expr (a :. b)         = H.Dot   (expr a) (expr b)
-expr (a :&& b)        = H.And   (expr a) (expr b)
-expr (a :|| b)        = H.Or    (expr a) (expr b)
 expr (Not a)          = H.Not   (expr a)
 expr (Neg a)          = H.Neg   (expr a)
 expr (Deriv Part a 1) = H.Mul (H.Sym (Special Partial)) (expr a)
@@ -57,6 +55,17 @@ expr e@(_ :>= _)      = rel e
 expr (UnaryOp u)      = (\(x,y) -> H.Op x [y]) (ufunc u)
 expr (Grouping e)     = H.Grouping (expr e)
 expr (BinaryOp b)     = (\(x,y) -> H.Op x y) (bfunc b)
+expr (a  :&&  b)      = H.And   (expr a) (expr b)
+expr (a  :||  b)      = H.Or    (expr a) (expr b)
+expr (a  :=>  b)      = H.Impl  (expr a) (expr b)
+expr (a  :<=> b)      = H.Iff   (expr a) (expr b)
+expr (IsIn  a b)      = H.IsIn  (map expr a) (set b)
+expr (NotIn a b)      = H.NotIn (map expr a) (set b)
+expr (State a b)      = H.State (map quan a) (expr b)
+
+quan :: Quantifier -> H.Quantifier
+quan (Forall e) = H.Forall (expr e)
+quan (Exists e) = H.Exists (expr e)
 
 -- | Helper function for translating 'UFunc's
 ufunc :: UFunc -> (H.Function, H.Expr)
@@ -94,6 +103,18 @@ rel (a :> b) = H.Gt (expr a) (expr b)
 rel (a :<= b) = H.LEq (expr a) (expr b)
 rel (a :>= b) = H.GEq (expr a) (expr b)
 rel _ = error "Attempting to use non-Relation Expr in relation context."
+
+set :: Set -> H.Set
+set Integer  = H.Integer
+set Rational = H.Rational
+set Real     = H.Real
+set Natural  = H.Natural
+set Boolean  = H.Boolean
+set Char     = H.Char
+set String   = H.String
+set Radians  = H.Radians
+set (Vect a) = H.Vect (set a)
+set (Obj a)  = H.Obj a
 
 -- | Helper function for translating Integrals (from 'UFunc')
 integral :: UFunc -> (H.Function, H.Expr)

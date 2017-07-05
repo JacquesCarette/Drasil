@@ -32,6 +32,11 @@ data Expr = Var  Variable
           | Case [(Expr,Expr)]
           | Op Function [Expr]
           | Grouping Expr
+          | IsIn  [Expr] Set
+          | NotIn [Expr] Set
+          | State [Quantifier] Expr
+          | Impl Expr Expr
+          | Iff  Expr Expr
           
 data Function = Log
            | Summation (Maybe ((Symbol, Expr),Expr))
@@ -48,7 +53,20 @@ data Function = Log
            | Cross
            | Exp
            | Sqrt
-           
+
+data Set = Integer
+         | Rational
+         | Real
+         | Natural
+         | Boolean
+         | Char
+         | String
+         | Radians
+         | Vect Space
+         | Obj String
+
+data Quantifier = Forall Expr | Exists Expr
+
 infixr 5 :+:
 data Spec = E Expr
           | S String
@@ -118,3 +136,15 @@ instance Show Function where
   show Cross = "\\times"
   show Exp = "e"
   show Sqrt = "\\sqrt"
+  
+instance Show Set where
+  show Integer = "\\mathbb{Z}"
+  show Rational = "\\mathbb{Q}"
+  show Real = "\\mathbb{R}"
+  show Natural = "\\mathbb{N}"
+  show Boolean = "\\mathbb{B}"
+  show Char = "Char"
+  show String = "String"
+  show Radians = "rad"
+  show (Vect a) = "V" ++ show a
+  show (Obj a) = a

@@ -35,6 +35,11 @@ data Expr = Var   Variable
           | Case  [(Expr,Expr)]
           | Op Function [Expr]
           | Grouping Expr
+          | IsIn  [Expr] Set
+          | NotIn [Expr] Set
+          | State [Quantifier] Expr
+          | Impl Expr Expr
+          | Iff  Expr Expr
           
 -- | Internal HTML version of Function 
 -- (for converting Functions from 'Language.Drasil.Expr')
@@ -53,6 +58,19 @@ data Function = Log
            | Product (Maybe ((Symbol, Expr), Expr))
            | Exp
            | Sqrt
+
+data Set = Integer
+         | Rational
+         | Real
+         | Natural
+         | Boolean
+         | Char
+         | String
+         | Radians
+         | Vect Space
+         | Obj String
+
+data Quantifier = Forall Expr | Exists Expr
 
 -- | Internal HTML version of Sentence 
 -- (for converting 'Language.Drasil.Spec.Sentence')
@@ -128,3 +146,15 @@ instance Show Function where
   show Cross = "&#10799;"
   show Exp = "e"
   show Sqrt = "&radic;"
+  
+instance Show Space where
+  show Integer = "&#8484;"
+  show Rational = "&#8474;"
+  show Real = "&#8477;"
+  show Natural = "&#8469;"
+  show Boolean = "&#120121;"
+  show Char = "Char"
+  show String = "String"
+  show Radians = "rad"
+  show (Vect a) = "V" ++ show a
+  show (Obj a) = a

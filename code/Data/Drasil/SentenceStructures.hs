@@ -157,12 +157,10 @@ fmtInputConstr :: (UncertainQuantity c, Constrained c, SymbolForm c) => c -> [c]
 fmtInputConstr q qlst = [getS q] ++ physC q qlst ++ sfwrC q qlst ++ [fmtU (E $ getRVal q) q] ++ typUnc q qlst
 
 fmtOutputConstr :: (Constrained c, SymbolForm c) => c -> [c] -> [Sentence]
-fmtOutputConstr q qlst = [getS q] ++ physC q qlst ++ sfwrC q qlst ++ rval q qlst
+fmtOutputConstr q qlst = [getS q] ++ physC q qlst ++ sfwrC q qlst
 
 none :: Sentence
 none = S "None"
-
-
 
 --These check the entire list of UncertainQuantity and if they are all empty in that field,
 -- return empty list, otherwise return the appropriate thing

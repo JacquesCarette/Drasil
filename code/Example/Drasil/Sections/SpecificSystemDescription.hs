@@ -250,12 +250,10 @@ inDataConstTbl qlst = Table ([S "Var"] ++ (isPhys $ physC (head qlst) qlst) ++
 -- Creates the output Data Constraints Table
 outDataConstTbl :: (SymbolForm c, Constrained c) => [c] -> Contents
 outDataConstTbl qlst = Table ([S "Var"] ++ (isPhys $ physC (head qlst) qlst) ++
-  (isSfwr $ sfwrC (head qlst) qlst) ++ (isTypVal $ rval (head qlst) qlst))
+  (isSfwr $ sfwrC (head qlst) qlst))
   (map (\x -> fmtOutputConstr x qlst) qlst)
   (S "Output Data Constraints") True
   where isPhys [] = []
         isPhys _  = [titleize' physicalConstraint]
         isSfwr [] = []
         isSfwr _  = [titleize' softwareConstraint]
-        isTypVal  [] = []
-        isTypVal  _  = [S "Typical" +:+ titleize value]

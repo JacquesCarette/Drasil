@@ -73,7 +73,7 @@ mkSRS = [RefSec (RefProg intro
   tsymb [TSPurpose, SymbOrder],
   TAandA])] ++
   [IntroSec (IntroProg (startIntro (blstRskInvWGlassSlab) (gLassBR)) (short gLassBR)
-     [IPurpose (s2_1_intro_p1),
+     [IPurpose (s2_1_intro_p1 (document) (gLassBR) (glaSlab)),
      IScope incScoR endScoR,
      IChar knowIR undIR appStanddIR,
      IOrgSec s2_3_intro dataDefn s6_2_4 s2_3_intro_end])] ++
@@ -203,20 +203,18 @@ endScoR = foldl (+:+) EmptyS [S "use the", plural datum,
 
 {--Purpose of Document--}
 
-s2_1_intro_p1 :: Sentence
-s2_1_intro_p1 = foldlSent [S "The main", phrase purpose, S "of",
-  (prpseOfWhat phrase), S "is" +:+. prpse,
-  S "The", plural goal `sAnd` plural thModel, S "used in the",
-  short progName, S "code are provided" `sC`
-  S "with an emphasis on explicitly identifying" +:+. explctID,
-  (prpseOfWhat at_start), S "is intended to be used as a", phrase reference, S "to provide all", 
-  phrase information, S "necessary to understand and verify the" +:+.
-  phrase analysis, S "The", short srs, S "is abstract because the", 
-  plural content, S "say what", phrase problem, S "is being solved, but not how to solve it"] --General?
-  where prpseOfWhat oper = oper $ this document
-        prpse            = S "to predict whether a given" +:+ phrase glaSlab +:+ S "is likely to resist a specified" +:+ phrase blast
-        progName         = gLassBR
-        explctID         = plural assumption +:+ S "and unambiguous" +:+ plural definition
+s2_1_intro_p1 :: NamedChunk -> CI -> NamedChunk -> Sentence
+s2_1_intro_p1 typeOf progName gvnVar = foldlSent [S "The main", phrase purpose, S "of this",
+  (phrase typeOf) +:+. S "is to predict whether a given", phrase gvnVar +:+.
+  S "is likely to", predxnGoal, S "The", plural goal
+  `sAnd` plural thModel, S "used in the", short progName, S "code are provided" `sC`
+  S "with an emphasis on explicitly identifying", (plural assumption) `sAnd` S "unambiguous"
+  +:+. plural definition, S "This", (phrase typeOf), S "is intended to be used as a",
+  phrase reference, S "to provide all", phrase information, 
+  S "necessary to understand and verify the" +:+. phrase analysis, S "The",
+  short srs, S "is abstract because the", plural content, S "say what", phrase problem,
+  S "is being solved, but not how to solve it"] --General?
+  where predxnGoal = S "resist a specified" +:+ phrase blast
 
 {--Scope of Requirements--}
 

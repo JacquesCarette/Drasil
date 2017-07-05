@@ -40,10 +40,14 @@ sspInputs  = [elasticMod, cohesion, poissnsRatio, fricAngle, dryWeight,
               satWeight, waterWeight]
 
 sspOutputs :: [ConstrConcept]
-sspOutputs = [fs, dx_i, dy_i]
+sspOutputs = [fs, coords, dx_i, dy_i]
 
 gtZeroConstr :: [Constraint] --FIXME: move this somewhere in Data?
 gtZeroConstr = [physc $ (:<) (Int 0)]
+
+monotonicIn :: [Constraint]
+monotonicIn = [physc $ \c ->
+  State [Forall c, Forall $ [V "x1", V "x2"] `IsIn` Real] (V "x1" :< V "x2" :=> V "y1" :< V "y2")]
 
 defultUncrt :: Double
 defultUncrt = 0.1
@@ -51,7 +55,7 @@ defultUncrt = 0.1
 elasticMod, cohesion, poissnsRatio, fricAngle, dryWeight, satWeight,
   waterWeight :: UncertQ
   
-fs, dx_i, dy_i :: ConstrConcept
+fs, coords, dx_i, dy_i :: ConstrConcept
 
 {-Intput Variables-}
 --FIXME: add (x,y) when we can index or make related unitals
@@ -90,6 +94,12 @@ waterWeight = uqc "gamma_w" (cn $ "unit weight of water")
 fs          = constrained' (cvR (dcc "FS" (nounPhraseSP $ "global factor of safety")
   "the stability of a surface in a slope") (Atomic "FS")) gtZeroConstr (Dbl 1)
 
+coords      = cuc' "(x,y)"
+  (cn $ "cartesian position coordinates" )
+  ("y is considered parallel to the direction of the force of " ++
+  "gravity and x is considered perpendicular to y")
+  (Atomic "(x,y)") metre Real monotonicIn (Dbl 1)
+
 dx_i        = cuc' "dx_i" (cn $ "displacement") ("in the x-ordinate direction " ++ fsi)
   (sub (Concat [Greek Delta_L, Atomic "x"]) lI) metre Real [] (Dbl 1)
 
@@ -102,7 +112,7 @@ dy_i        = cuc' "dy_i" (cn $ "displacement") ("in the y-ordinate direction " 
 
 sspUnits :: [UCWrapper]
 sspUnits = map ucw [normStress,
-  coords, waterHght, slopeHght, slipHght, xi, critCoords,
+  waterHght, slopeHght, slipHght, xi, critCoords,
   mobShrI, shrResI, shearFNoIntsl, shearRNoIntsl, slcWght, watrForce,
   watrForceDif, intShrForce, baseHydroForce, surfHydroForce,
   totNrmForce, nrmFSubWat, nrmFNoIntsl, surfLoad, baseAngle, surfAngle,
@@ -113,7 +123,7 @@ sspUnits = map ucw [normStress,
   mobShrC, shrResC, rotatedDispl, intNormForce, shrStress]
 
 normStress,
-  coords, waterHght, slopeHght, slipHght, xi, critCoords, mobShrI,
+  waterHght, slopeHght, slipHght, xi, critCoords, mobShrI,
   shearFNoIntsl, shearRNoIntsl, slcWght, watrForce, watrForceDif, shrResI,
   intShrForce, baseHydroForce, surfHydroForce, totNrmForce, nrmFSubWat,
   nrmFNoIntsl, surfLoad, baseAngle, surfAngle, impLoadAngle, baseWthX,
@@ -128,12 +138,6 @@ normStress,
 intNormForce = uc' "E_i" (cn $ "interslice normal force")
   ("exerted between adjacent slices " ++ fisi)
   (sub cE lI) newton
-
-coords      = uc' "(x,y)"
-  (cn $ "cartesian position coordinates" )
-  ("y is considered parallel to the direction of the force of " ++
-  "gravity and x is considered perpendicular to y")
-  (Atomic "(x,y)") metre
 
 waterHght   = uc' "y_wt,i"
   (cn $ "the y ordinate, or height of the water table at i")

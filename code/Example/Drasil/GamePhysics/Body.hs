@@ -277,10 +277,14 @@ s4_1_2_stmt3 = goalStatementStruct EmptyS
   (take 0 inputSymbols) CP.rigidBody 
   (S "if any of them will collide with one another") EmptyS
 
+inputsSubset :: [UnitalChunk]
+inputsSubset = [QP.position, QM.orientation, QP.linearVelocity, 
+  QP.angularVelocity]
+
 s4_1_2_stmt4 = goalStatementStruct (plural physicalProperty)
-  ([QP.position, QM.orientation, QP.linearVelocity, QP.angularVelocity]) --fixme input symbols
+  (inputsSubset) --fixme input symbols
   EmptyS (S "of")
-  ([QP.position, QM.orientation, QP.linearVelocity, QP.angularVelocity]) --fixme input symbols
+  (inputsSubset) --fixme input symbols
   CP.rigidBody (S "the new") (S "of the" +:+ (plural CP.rigidBody) +:+ 
   S "that have undergone a" +:+ (phrase CP.collision))
 

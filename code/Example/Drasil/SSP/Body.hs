@@ -408,9 +408,8 @@ stfMtrxDerivation = [foldlSP [S "Using the force-displacement relationship of", 
   S "refer to an unrotated coordinate system" `sC` getS genDisplace, S "of" +:+. acroGD 9,
   S "The interslice elements are left in their standard coordinate system, and",
   S "therefore are described by the same equation from" +:+. acroGD 8,
-  S "Seen as", getS shrStiffIntsl, S "in" +:+. acroDD 12, getS shrStiffIntsl, --FIXME: Index
-  S "is the shear element in the matrix, and", getS nrmStiffIntsl, S "is the",
-  S "normal element in the matrix, calculated as in", acroDD 14],
+  S "Seen as", getS shrStiffIntsl, S "in" +:+. acroDD 12, isElMx shrStiffIntsl "shear" `sC` --FIXME: Index
+  S "and", isElMx nrmStiffIntsl "normal" `sC` S "calculated as in", acroDD 14],
   
   foldlSP [S "For basal surfaces the stiffness constants and displacements refer",
   S "to a system rotated for the base angle alpha" +:+. sParen (acroDD 5),
@@ -491,9 +490,9 @@ fctSftyDerivation, nrmShrDerivation, intrSlcDerivation,
   rigDisDerivation, rigFoSDerivation :: [Contents]
 
 fctSftyDerivation = [foldlSP [S "Using equation (21) from section 4.2.5, rearranging, and applying the boundary condition that E0",
-  S "and En are equal to 0 an equation for the factor of safety is found as equation (12), also seen in",
+  S "and En are equal to 0 an equation for the factor of safety is found as", eqN 12 `sC` S "also seen in",
   S "IM1. Using equation (21) from section 4.2.5, rearranging, and applying the boundary condition that E0",
-  S "and En are equal to 0 an equation for the factor of safety is found as equation (12), also seen in",
+  S "and En are equal to 0 an equation for the factor of safety is found as", eqN 12 `sC` S "also seen in",
   S "IM1"],
   
   EqnBlock fcSfty_rel,
@@ -503,18 +502,18 @@ fctSftyDerivation = [foldlSP [S "Using equation (21) from section 4.2.5, rearran
   ]
 
 nrmShrDerivation = [foldlSP [S "The last static equation of T2 the moment equilibrium of GD6 about the midpoint of the base is",
-  S "taken, with the assumption of GD5. Results in equation (13)"],
+  S "taken, with the assumption of GD5. Results in", eqN 13],
   
   EqnBlock momEql_rel, --FIXME: this is not *exactly* the equation but very similar
   --Need more simbols (z) to finish
   
-  foldlSP [S "The equation in terms of", getS normToShear, S "leads to equation (14)"],
+  foldlSP [S "The equation in terms of", getS normToShear, S "leads to", eqN 14],
   
   EqnBlock $
   C normToShear := momEql_rel / ((C baseWthX / Int 2) * (C intNormForce * C scalFunc + C intNormForce * C scalFunc)), --FIXME: remove Int 0 from momEql_rel
   
   foldlSP [S "Taking a summation of each slice, and considering the boundary conditions that E0 and En are",
-  S "equal to zero, a general equation for the constant", getS normToShear, S "is developed in equation (15), also found in",
+  S "equal to zero, a general equation for the constant", getS normToShear, S "is developed in", eqN 15 `sC` S "also found in",
   S "IM2"],
   
   EqnBlock $
@@ -556,8 +555,8 @@ intrSlcDerivation = [foldlSP [S "Taking the perpendicular force equilibrium of G
   C watrForce :+ C surfHydroForce :* sin (C surfAngle) :+ 
   C surfLoad :* sin (C impLoadAngle)) :* cos (C baseAngle),
   
-  foldlSP [S "Substituting the equation for N0 i from equation (16) into equation (17) and rearranging results in",
-  S "equation (18)"],
+  foldlSP [S "Substituting the equation for", getS nrmFSubWat, S "from",
+  eqN 16, S "into", eqN 17, S "and rearranging results in", eqN 18],
 
   EqnBlock $
   (C intNormForce) * (((C normToShear)*(C scalFunc) * cos (C baseAngle) - sin (C baseAngle)) * tan (C fricAngle) -
@@ -566,10 +565,12 @@ intrSlcDerivation = [foldlSP [S "Taking the perpendicular force equilibrium of G
   ((C normToShear)*(C scalFunc) * sin (C baseAngle) - cos (C baseAngle)) * (C fs)) +
   (C fs) * (C shearFNoIntsl) - (C shearRNoIntsl),
   
-  foldlSP [S "Where", getS shearRNoIntsl, S "and", getS shearFNoIntsl, S "are the resistive and mobile shear of the slice, without the influence of interslice",
-  S "forces", getS intNormForce, S "and X, as defined in DD10 and DD11. Making use of the constants, and with full",
-  S "equations found below in equations (19) and (20) respectively, then equation (18) can be simplified",
-  S "to equation (21), also seen in IM3"],
+  foldlSP [S "Where", getS shearRNoIntsl `sAnd` getS shearFNoIntsl, S "are the",
+  S "resistive and mobile shear of the slice" `sC` S wiif, getS intNormForce
+  `sAnd` getS intShrForce `sC` S "as defined in", acroDD 10 `sAnd` acroDD 11,
+  S "Making use of the constants, and with full equations found below in",
+  eqN 19 `sAnd` eqN 20, S "respectively, then", eqN 18, S "can be simplified",
+  S "to", eqN 21 `sC` S "also seen in IM3"],
   
   EqnBlock $
   (C shrResC) := ((C normToShear)*(C scalFunc) * cos (C baseAngle) - sin (C baseAngle)) * tan (C fricAngle) -

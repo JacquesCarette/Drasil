@@ -224,6 +224,7 @@ getID (SectionModel niname _) = niname ^. id
 
 pullSubSec :: (NamedIdea a) => a -> [SubSec] -> Maybe SubSec
 pullSubSec nameid ls = getItem (\x -> (getID x) == (nameid ^. id)) ls
+
 -----------------------
 -- Section Assembler --
 -----------------------
@@ -266,7 +267,7 @@ render progName symbolMap item@(SectionModel niname _)
 ------------------------------
 
 genericSect :: SubSec -> Section
-genericSect (SectionModel niname xs) = section ((pullTitle xs) niname)
+genericSect (SectionModel niname xs) = section (pullTitle xs niname)
   (pullContents xs) (pullSections xs)
 
 ------------------------------------------------
@@ -300,36 +301,40 @@ assumptionSect (SectionModel niname xs) = section (titleize' niname)
 
 theoreticalModelSect :: (NamedIdea a) => SubSec -> SymbolMap -> a -> Section
 theoreticalModelSect (SectionModel niname xs) symbolMap progName = section
-  (titleize' niname) ((tModIntro progName):((map symMap $ pullTMods xs) ++ 
-  (pullContents xs))) (pullSections xs)
-  where symMap = symbolMapFun symbolMap Theory
+  (titleize' niname) ((tModIntro progName):theoreticalModels ++ 
+  (pullContents xs)) (pullSections xs)
+  where theoreticalModels = map symMap $ pullTMods xs
+        symMap            = symbolMapFun symbolMap Theory
 
 
 generalDefinitionSect :: SubSec -> SymbolMap -> Section
 generalDefinitionSect (SectionModel niname xs) _ = section (titleize' niname)
-  ((generalDefinitionIntro contents):contents) (pullSections xs)
-  where contents = (pullContents xs)
+  (generalDefsIntro:contents) (pullSections xs)
+  where generalDefsIntro = generalDefinitionIntro contents
+        contents         = (pullContents xs)
 
 
 instanceModelSect :: SubSec -> SymbolMap -> Section
 instanceModelSect (SectionModel niname xs) symbolMap = section (titleize' niname)
-  ((iModIntro):((map symMap $ pullIMods xs) ++ 
-  (pullContents xs))) (pullSections xs)
-  where symMap = symbolMapFun symbolMap Theory
+  (iModIntro:instanceModels ++ (pullContents xs)) (pullSections xs)
+  where symMap         = symbolMapFun symbolMap Theory
+        instanceModels = map symMap $ pullIMods xs
 
 
 dataDefinitionSect :: SubSec -> SymbolMap -> Section
 dataDefinitionSect (SectionModel niname xs) symbolMap = section (titleize' niname)
-  ((dataDefinitionIntro $ pullSents xs):((map symMap $ pullDDefs xs) ++ 
-  (pullContents xs))) (pullSections xs)
-  where symMap = (symbolMapFun (symbolMap) Data)
+  (dataIntro:dataDefinitions ++ (pullContents xs)) (pullSections xs)
+  where dataIntro       = dataDefinitionIntro $ pullSents xs
+        symMap          = (symbolMapFun (symbolMap) Data)
+        dataDefinitions = map symMap $ pullDDefs xs
 
 
 dataConstraintSect :: SubSec -> Section
 dataConstraintSect (SectionModel niname xs) = section (titleize' niname)
-  ((dataConIntro ):[inDataConstTbl $ pullUQI xs, 
-  outDataConstTbl $ pullUQO xs] ++ (pullContents xs)) (pullSections xs)
+  ([dataConIntro, inputTable, outputTable] ++ (pullContents xs)) (pullSections xs)
   where dataConIntro = dataConstraintParagraph (pullContents xs) (pullSents xs)
+        inputTable  = inDataConstTbl $ pullUQI xs
+        outputTable = outDataConstTbl $ pullUQO xs
 
 --FIXME generate tables here
 --

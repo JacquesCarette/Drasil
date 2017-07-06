@@ -27,17 +27,29 @@ codeSpec' (SI sys _ _ _ _ _ _ defs ins outs _ cs) ch = CodeSpec {
 }
 
 data Choices = Choices {
+  impType :: ImplementationType,
   logFile :: String,
-  logging :: Logging
+  logging :: Logging,
+  onSfwrConstraint :: ConstraintBehaviour,
+  onPhysConstraint :: ConstraintBehaviour
 }
+
+data ImplementationType = Library
+                        | Program
 
 data Logging = LogNone
              | LogFunc
              | LogVar
              | LogAll
              
+data ConstraintBehaviour = Warning
+                         | Exception
+             
 defaultChoices :: Choices
 defaultChoices = Choices {
+  impType = Program,
   logFile = "log.txt",
-  logging = LogNone
+  logging = LogNone,
+  onSfwrConstraint = Exception,
+  onPhysConstraint = Warning
 }

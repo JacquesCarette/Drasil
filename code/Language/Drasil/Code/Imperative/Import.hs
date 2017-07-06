@@ -37,16 +37,22 @@ data Generator = Generator {
   logName :: String,
   
   publicMethod :: MethodType -> Label -> [Parameter] -> Body -> Method,
-  privateMethod :: MethodType -> Label -> [Parameter] -> Body -> Method
-                  
+  privateMethod :: MethodType -> Label -> [Parameter] -> Body -> Method,
+  
+  sfwrCBody :: Expr -> Body,
+  physCBody :: Expr -> Body  
 }
 
 generator :: CodeSpec -> Generator -> Generator
 generator spec g = 
   let chs = choices spec
-      methodCallFunc = case (logging chs) of LogFunc -> loggedMethod
-                                             LogAll  -> loggedMethod
-                                             _       -> genMethodCallD
+      methodCallFunc =     case (logging chs) of          LogFunc -> loggedMethod
+                                                          LogAll  -> loggedMethod
+                                                          _       -> genMethodCallD
+      sfwrConstraintFunc = case (onSfwrConstraint chs) of Warning -> constrWarn
+                                                          Exception -> constrExc
+      physConstraintFunc = case (onPhysConstraint chs) of Warning -> constrWarn
+                                                          Exception -> constrExc
   in Generator {
       generateCode = generateCodeD spec g,
       
@@ -71,7 +77,10 @@ generator spec g =
       logName = logFile $ choices spec,
       
       publicMethod = genMethodCall g Public,
-      privateMethod = genMethodCall g Private
+      privateMethod = genMethodCall g Private,
+      
+      sfwrCBody = sfwrConstraintFunc g,
+      physCBody = physConstraintFunc g
     }
 
 generateCodeD :: CodeSpec -> Generator -> IO () 
@@ -133,10 +142,21 @@ genInputFormatD g ins = let l_infile = "infile"
           
 genInputConstraintsD :: Generator -> [CodeChunk] -> ConstraintMap -> Method
 genInputConstraintsD g vars cm = 
-  let cs = concatMap (\x -> constraintLookup x cm) vars in
+  let sfwrCs = concatMap (\x -> sfwrLookup x cm) vars 
+      physCs = concatMap (\x -> physLookup x cm) vars
+  in
     publicMethod g methodTypeVoid "input_constraints" [] [ block $
-      map (\x -> ifCond [((?!) (convExpr x), oneLiner $ throw "InputError")] noElse) cs
+      (map (\x -> ifCond [((?!) (convExpr x), sfwrCBody g x)] noElse) sfwrCs)
+      ++
+      (map (\x -> ifCond [((?!) (convExpr x), physCBody g x)] noElse) physCs)
     ]
+
+-- need Expr -> String to print constraint
+constrWarn :: Generator -> Expr -> Body
+constrWarn _ _ = oneLiner $ printStrLn "Warning: constraint violated"
+
+constrExc :: Generator -> Expr -> Body
+constrExc _ _ = oneLiner $ throw "InputError"
 
     
 ------- CALC ----------    
@@ -215,7 +235,7 @@ loggedMethod g s t n p b = let l_outfile = "outfile"
       block [
         varDec l_outfile outfile,
         openFileW v_outfile (litString $ logName g),  
-        printFileStr v_outfile ("funcion " ++ n ++ "("),
+        printFileStr v_outfile ("function " ++ n ++ "("),
         printParams p v_outfile,
         printFileStrLn v_outfile ") called",
         closeFile v_outfile      

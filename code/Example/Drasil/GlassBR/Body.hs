@@ -96,8 +96,11 @@ glassSystInfo = SI glassBRProg srs authors this_si this_symbols
   
 glassChoices :: Choices
 glassChoices = Choices {
+  impType = Program,
   logFile = "log.txt",
-  logging = LogAll
+  logging = LogAll,
+  onSfwrConstraint = Exception,
+  onPhysConstraint = Warning
 }  
   
 glassBR_code :: CodeSpec

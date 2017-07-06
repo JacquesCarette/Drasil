@@ -234,9 +234,9 @@ endScoR = foldl (+:+) EmptyS [S "use the", plural datum `sAnd`
 
 s2_1_intro_p1 :: NamedChunk -> CI -> NamedChunk -> Sentence
 s2_1_intro_p1 typeOf progName gvnVar = foldlSent [S "The main", phrase purpose,
-  S "of this", phrase typeOf +:+. S "is to predict whether a given",
-  phrase gvnVar +:+. S "is likely to", predxnGoal, S "The", plural goal `sAnd`
-  plural thModel, S "used in the", short progName, S "code are provided" `sC` 
+  S "of this", phrase typeOf, S "is to predict whether a given", phrase gvnVar,
+  S "is likely to" +:+. predxnGoal, S "The", plural goal `sAnd` plural thModel,
+  S "used in the", short progName, S "code are provided" `sC` 
   S "with an emphasis on explicitly identifying", (plural assumption) `sAnd` 
   S "unambiguous" +:+. plural definition, S "This", phrase typeOf, 
   S "is intended to be used as a", phrase reference, S "to provide all", 
@@ -278,7 +278,7 @@ s4 = genSysF [] (s4_1_bullets (endUser) (gLassBR) (secondYear) (undergradDegree)
 {--User Characteristics--}
 s4_1_bullets intendedIndvdl progName yr degreeType prog1 prog2 undrstd1 undrstd2
   = enumBullet [((phrase intendedIndvdl +:+ S "of" +:+ short progName) 
-  `isExpctdToHv` S "completed at least" +:+ S "equivalent" `ofThe` (phrase yr)
+  `isExpctdToHv` S "completed at least" +:+ (S "equivalent" `ofThe` (phrase yr))
   +:+ S "of an" +:+ phrase degreeType +:+ S "in" +:+ phrase prog1 +:+ S "or"
   +:+. phrase prog2), 
   (phrase intendedIndvdl `isExpctdToHv` S "an understanding of" +:+ phrase theory

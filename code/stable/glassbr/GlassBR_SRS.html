@@ -909,7 +909,7 @@ Individual Product Use Cases
 Use Case 1 refers to the user providing input to GlassBR for use within the analysis. There are two classes of inputs: glass geometry and blast type. The glass geometry based inputs include the dimensions of the glass plane, glass type and response type. The blast type input includes parameters like weight of charge, TNT equivalent factor and stand off distance from the point of explosion. These parameters describe charge weight and stand off blast. Another input the user gives is the tolerable value of probability of breakage.
 </li>
 <li>
- Use Case 2 GlassBR outputs if the glass slab will be safe by comparing whether capacity is greater than demand. Capacity is the the load resistance calculated and demand is the requirement which is the 3 second duration equivalent pressure. The second condition is to check whether the calculated probability (P<sub>b</sub>) is less than the tolerable probability (P<sub>btol</sub>) which is obtained from the user as an input. If both conditions return true then it's shown that the glass slab is safe to use, else if both return false then the glass slab is considered unsafe. All the supporting calculated values are also displayed as output.
+Use Case 2 GlassBR outputs if the glass slab will be safe by comparing whether capacity is greater than demand. Capacity is the the load resistance calculated and demand is the requirement which is the 3 second duration equivalent pressure. The second condition is to check whether the calculated probability (P<sub>b</sub>) is less than the tolerable probability (P<sub>btol</sub>) which is obtained from the user as an input. If both conditions return true then it's shown that the glass slab is safe to use, else if both return false then the glass slab is considered unsafe. All the supporting calculated values are also displayed as output.
 </li>
 </ul>
 </div>
@@ -997,7 +997,7 @@ Long duration load - Any load lasting approximately 30 days.
 </ul>
 </li>
 <li>
-Stand off distance (SD) - The distance from the glazing surface to the centroid of a hemispherical high explosive charge. It is represented by the coordinates (SDx, SDy, SDz).
+Stand off distance (SD) - The distance from the glazing surface to the centroid of a hemispherical high explosive charge. It is represented by the coordinates (SD<sub>x</sub>, SD<sub>y</sub>, SD<sub>z</sub>).
 </li>
 <li>
 Load share factor (LSF) - A multiplying factor derived from the load sharing between the double glazing, of equal or different thickness's and types (including the layered behaviour of LG under long duration loads), in a sealed IG unit.
@@ -1942,7 +1942,7 @@ Description
 </th>
 <td>
 <p class="paragraph">
-q or demand, is the 3 second duration equivalent pressure obtained from Figure 2 by interpolation using stand off distance (SD) and w<sub>TNT</sub> as parameters. w<sub>TNT</sub> is defined as w<sub>TNT</sub> = w * TNT. w is the charge weight. TNT is the TNT equivalent factor. SD is the stand off distance where SD = .
+q or demand, is the 3 second duration equivalent pressure obtained from Figure 2 by interpolation using stand off distance (SD) and w<sub>TNT</sub> as parameters. w<sub>TNT</sub> is defined as w<sub>TNT</sub>=wTNT. w is the charge weight. TNT is the TNT equivalent factor. SD is the stand off distance where SD=&radic;(SD<sub>x</sub><sup>2</sup>+SD<sub>y</sub><sup>2</sup>+SD<sub>z</sub><sup>2</sup>) where (SD<sub>x</sub>, SD<sub>y</sub>, SD<sub>z</sub>) are coordinates.
 </p>
 </td>
 </tr>
@@ -2361,7 +2361,7 @@ R6: Output the following quantities:
 Non-Functional Requirements
 </h3>
 <p class="paragraph">
-Given the small size, and relative simplicity, of this problem, performance is not a priority. Any reasonable implementation will be very quick and use minimal storage. Rather than performance, the priority non-functional Rs are correctness, verifiability, understandability, reusability, maintainability and portability.
+Given the small size, and relative simplicity, of this problem, performance is not a priority. Any reasonable implementation will be very quick and use minimal storage. Rather than performance, the priority non-functional Rs are correctness, verifiability, understandability, reusability, maintainability, and portability.
 </p>
 </div>
 </a>
@@ -2397,7 +2397,7 @@ LC5: A7 - The software may be changed to consider more than just flexure of the 
 Traceability Matrices and Graphs
 </h2>
 <p class="paragraph">
-The purpose of the traceability matrices is to provide easy references on what has to be additionally modified if a certain component is changed. Every time a component is changed, the items in the column of that component that are marked with an &quot;X&quot; should be modified as well. <a href=#Table:TracMatrShowtheConnBetwItemofDiffSect>this Table</a> shows the dependencies of theoretical models, data definitions and instance models with each other. <a href=#Table:TracMatrShowtheConnBetwRequandOtheItem>this Table</a> shows the dependencies of requirements on theoretical models, instance models, data definitions and data constraints. <a href=#Table:TracMatrShowtheConnBetwAssuandOtheItem>this Table</a> shows the dependencies of theoretical models, data definitions, instance models, likely changes and requirements on the assumptions.
+The purpose of the traceability matrices is to provide easy references on what has to be additionally modified if a certain component is changed. Every time a component is changed, the items in the column of that component that are marked with an &quot;X&quot; should be modified as well. <a href=#Table:TracMatrShowtheConnBetwItemofDiffSect>this Table</a> shows the dependencies of theoretical models, instance models, and data definitions with each other. <a href=#Table:TracMatrShowtheConnBetwRequandOtheItem>this Table</a> shows the dependencies of requirements on theoretical models, instance models, data definitions, and data constraints. <a href=#Table:TracMatrShowtheConnBetwAssuandOtheItem>this Table</a> shows the dependencies of theoretical models, instance models, data definitions, likely changes and requirements on the assumptions.
 </p>
 <a id="Table:TracMatrShowtheConnBetwItemofDiffSect">
 <table class="table">
@@ -4356,7 +4356,7 @@ Traceability Matrix Showing the Connections Between Assumptions and Other Items
 </p>
 </a>
 <p class="paragraph">
-The purpose of the traceability graphs is also to provide easy references on what has to be additionally modified if a certain component is changed. The arrows in the graphs represent dependencies. The component at the tail of an arrow is depended on by the component at the head of that arrow. Therefore, if a component is changed, the components that it points to should also be changed. <a href=#Figure:Figu2:TracMatrShowtheConnBetwItemofDiffSect>this Figure</a> shows the dependencies of requirements on theoretical models, instance models, data definitions and data constraints. <a href=#Figure:Figu3:TracMatrShowtheConnBetwRequandOtheItem>this Figure</a> shows the dependencies of requirements on theoretical models, instance models, data definitions and data constraints. <a href=#Figure:Figu4:TracMatrShowtheConnBetwAssuandOtheItem>this Figure</a> shows the dependencies of theoretical models, instance models, data definitions, requirements and likely changes on assumptions.
+The purpose of the traceability graphs is also to provide easy references on what has to be additionally modified if a certain component is changed. The arrows in the graphs represent dependencies. The component at the tail of an arrow is depended on by the component at the head of that arrow. Therefore, if a component is changed, the components that it points to should also be changed. <a href=#Figure:Figu2:TracMatrShowtheConnBetwItemofDiffSect>this Figure</a> shows the dependencies of theoretical models, instance models, and data definitions on each other. <a href=#Figure:Figu3:TracMatrShowtheConnBetwRequandOtheItem>this Figure</a> shows the dependencies of requirements on theoretical models, instance models, data definitions, and data constraints. <a href=#Figure:Figu4:TracMatrShowtheConnBetwAssuandOtheItem>this Figure</a> shows the dependencies of theoretical models, instance models, data definitions, requirements, and likely changes on assumptions.
 </p>
 <p class="paragraph">
 NOTE: Building a tool to automatically generate the graphical representation of the matrix by scanning the labels and reference can be future work.

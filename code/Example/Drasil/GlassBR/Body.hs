@@ -156,6 +156,9 @@ traceyMatrices, traceyGraphs :: [Contents]
 traceyMatrices = [s9_table1, s9_table2, s9_table3]
 traceyGraphs = [fig_2, fig_3, fig_4]
 
+solChSpecSubsections :: [CI]
+solChSpecSubsections = [thModel, inModel, dataDefn, dataConst]
+
 --Used in "Values of Auxiliary Constants" Section--
 assumption4_constants :: [QDefinition]
 assumption4_constants = [constant_M, constant_K, constant_ModElas,
@@ -656,12 +659,10 @@ s8_likelychg5 = foldlSent [acroA 7 `sDash` S "The", phrase software,
 {--TRACEABLITY MATRICES AND GRAPHS--}
 
 s9 = traceMGF traceyMatrices
-  [(plural thModel `sC` (plural dataDefn) `sAnd` plural inModel +:+.
-  S "with each other"), (plural requirement +:+ S "on" +:+ plural thModel `sC`
-  (plural inModel) `sC` (plural dataDefn) +:+ S "and" +:+. 
-  plural datumConstraint), (plural thModel `sC` (plural dataDefn) `sC` 
-  plural inModel `sC` plural likelyChg `sAnd` plural requirement +:+ 
-  S "on the" +:+ plural assumption)]
+  [(foldlList (map plural (take 3 solChSpecSubsections)) +:+. S "with each other"),
+   (plural requirement +:+ S "on" +:+. foldlList (map plural solChSpecSubsections)),
+   (foldlsC (map plural (take 3 solChSpecSubsections)) `sC` plural likelyChg `sAnd`
+   plural requirement +:+ S "on the" +:+ plural assumption)]
   (traceyMatrices ++ (s9_intro2) ++ traceyGraphs)
   []
 
@@ -818,13 +819,9 @@ s9_table3 = Table (EmptyS:s9_row_header_t3)
 --
 
 s9_intro2 = traceGIntro traceyGraphs
-  [(plural requirement +:+ S "on" +:+ plural thModel `sC` plural inModel
-  `sC` plural dataDefn +:+ S "and" +:+. plural datumConstraint), 
-  (plural requirement +:+ S "on" +:+ plural thModel `sC` plural inModel
-  `sC` plural dataDefn +:+ S "and" +:+. plural datumConstraint), 
-  (plural thModel `sC` plural inModel `sC` plural dataDefn `sC`
-  plural requirement `sAnd` plural likelyChg +:+ S "on" +:+
-  plural assumption)]
+  [(foldlList (map plural (take 3 solChSpecSubsections)) +:+. S "on each other"),
+  (plural requirement +:+ S "on" +:+. foldlList (map plural solChSpecSubsections)),
+  (foldlList ((map plural (take 3 solChSpecSubsections))++[plural requirement, plural likelyChg +:+ S "on" +:+ plural assumption]))]
 
 fig_2 = figureLabel "2" (traceyMatrix)
   (titleize' item +:+ S "of Different" +:+ titleize' section_)
@@ -902,6 +899,6 @@ fig_5 = Figure (titleize figure +: S "5" +:+ (demandq ^. defn) +:+
 
 fig_6 = Figure (titleize figure +:+ S "6: Non dimensional" +:+ 
   phrase lateral +:+ phrase load +:+ sParen (getS dimlessLoad)
-  `sVersus` titleize aspectR +:+ sParen (short aspectR) {-(P (aspectR))-}
+  `sVersus` titleize aspectR +:+ sParen (short aspectR)
   `sVersus` at_start stressDistFac +:+ sParen (getS stressDistFac))
   "ASTM_F2248-09_BeasonEtAl.png"

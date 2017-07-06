@@ -287,7 +287,7 @@ s4_1_3_list = Enumeration $ Simple $ map (\(a, b) -> (a, Flat b)) [
 ------------------------------------------------------
   
 s4_2 = solChSpecF progName (s4_1, s6) s4_2_4_intro_end (mid,
-  dataConstraintUncertainty, end) ([assump3, assump4], s4_2_2_T1, s4_2_3_paragraph,
+  dataConstraintUncertainty, end) (s4_2_1_list, s4_2_2_T1, s4_2_3_paragraph,
   s4_2_4_DD1, [swhsSymbMapT eBalanceOnWtr] ++ s4_2_5_d1startPara ++
   s4_2_5_paragraph ++ [swhsSymbMapT heatEInWtr], [s4_2_6_table1, s4_2_6_table2]) []
 
@@ -301,15 +301,17 @@ s4_2 = solChSpecF progName (s4_1, s6) s4_2_4_intro_end (mid,
           S "would be part of the input if one were performing an",
           phrase uncertainty, S "quantification exercise"]
 
--- s4_2_1_list :: Contents
--- s4_2_1_list = enumSimple 1 (short assumption) $ map foldlSent s4_2_1_assump_list
+s4_2_1_list :: [Contents]
+s4_2_1_list = assumpNumGen s4_2_1_assump_list
+--enumSimple 1 (short assumption) $ map foldlSent s4_2_1_assump_list
 
 -- s4_2_1_assump_list :: [[Sentence]]
 
 -- assump3, assump4, assump5, {-assump6,-}{-assump1, assump2, -}
   -- assump7_npcm, assump8, assump9, assump10, assump11, assump12 :: [Sentence]
-
--- s4_2_1_assump_list = [assump1, assump2, assump3, assump4, assump5, assump7,
+s4_2_1_assump_list :: [AssumpChunk]
+s4_2_1_assump_list = [assump3, assump4, assump5]
+-- [assump1, assump2, assump3, assump4, assump5, assump7,
   -- assump7_npcm, assump8, assump9, assump10, assump11, assump12]
   
 -- {-assump1 = [S "The only form of", phrase energy, S "that is",
@@ -320,9 +322,13 @@ s4_2 = solChSpecF progName (s4_1, s6) s4_2_4_intro_end (mid,
 
 -- {-assump2 = [S "All", phrase heat_trans, S "coefficients are constant over",
   -- phrase time, sSqBr (acroGD "1")]-}
-assump3, assump4 :: Contents
-assump3 = Assumption $ nw $ npnc "assump3" $ nounPhraseSP "The water in the tank is fully mixed, so the water temperature is the same throughout the entire tank."
-assump4 = Assumption $ nw $ npnc "assump4" $ nounPhraseSP "The water density has no spatial variation; that is it is constant over the entire volume."
+assump3, assump4, assump5 :: AssumpChunk
+assump3 = nw $ npnc "assump3" $ nounPhraseSP "The water in the tank is fully mixed, so the water temperature is the same throughout the entire tank."
+assump4 = nw $ npnc "assump4" $ nounPhraseSP "The water density has no spatial variation; that is it is constant over the entire volume."
+assump5 = nw $ npnc "assump5" $ nounPhraseSP "The specific heat capacity of water has no spatial variation; that is it is constant over the entire volume."
+
+assumpNumGen :: [AssumpChunk] -> [Contents]
+assumpNumGen assump =  zipWith Assumption assump [S "A" :+: (S $ show x) | x <- [1..]]
 
 -- assump3 = [S "The", phrase water, S "in the", phrase tank,
   -- S "is fully mixed, so the", phrase temp_W `isThe`
@@ -397,7 +403,7 @@ s4_2_3_description = map foldlSPCol [
   acroGD 2, S "Assuming", getS density `sC` getS QT.heat_cap_spec,
   S "and", getS QT.temp, S "are constant over the", phrase vol `sC`
   S "which is true in our case by", titleize' assumption,
-  sParen (acroA 3) `sC` sParen (acroA 4) `sC`
+  sParen (acroTA s4_2_1_list assump3) `sC` sParen (acroA 4) `sC`
   S "and", sParen (acroA 5) `sC` S "we have"],
 
   [S "Using the fact that", getS density :+: S "=" :+:

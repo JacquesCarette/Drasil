@@ -1,5 +1,6 @@
 module Data.Drasil.Concepts.Documentation where
 
+import Prelude hiding (id)
 import Language.Drasil
 
 import Data.Drasil.Concepts.Math (graph)
@@ -19,6 +20,9 @@ acroLC numVar = short likelyChg   :+: S (show numVar)
 acroPS numVar = short physSyst    :+: S (show numVar)
 acroR  numVar = short requirement :+: S (show numVar)
 acroT  numVar = short thModel     :+: S (show numVar)
+
+acroTA :: [Contents] -> AssumpChunk -> Sentence
+acroTA assump aId = makeRef $ head $ filter (\x -> (refId x) == (aId ^. id)) assump
 
 assumption, dataDefn, genDefn, goalStmt, inModel, likelyChg, unlikelyChg,
   physSyst, requirement, srs, thModel, mg, desSpec, notApp, dataConst :: CI

@@ -96,7 +96,7 @@ module Language.Drasil (
   , personWM', mononym
   -- CodeSpec
   , CodeSpec, codeSpec, codeSpec', Choices(..), ImplementationType(..)
-  , Logging(..), ConstraintBehaviour(..), defaultChoices
+  , Logging(..), ConstraintBehaviour(..), Structure(..), defaultChoices
 ) where
 
 import Prelude hiding (log, sin, cos, tan, sqrt, id, return, print, break, exp, product)

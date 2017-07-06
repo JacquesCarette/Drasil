@@ -100,7 +100,8 @@ glassChoices = Choices {
   logFile = "log.txt",
   logging = LogAll,
   onSfwrConstraint = Exception,
-  onPhysConstraint = Warning
+  onPhysConstraint = Warning,
+  inputStructure = Loose
 }  
   
 glassBR_code :: CodeSpec

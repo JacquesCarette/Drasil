@@ -98,7 +98,9 @@ pytop c f p m = let modNames = moduleName m
 
 
 pybody :: Config -> FileType -> Label -> Module -> Doc
-pybody c f p (Mod _ _ _ fs cs) = 
+pybody c f p (Mod _ _ vs fs cs) = 
+  (vcat $ map (\x -> statementDoc c NoLoop $ DeclState x) vs)
+  $+$ blank $+$
   functionListDoc c f p fs
   $+$ blank $+$
   (vcat $ intersperse blank (map (classDoc c f p) (fixCtorNames initName cs))) 

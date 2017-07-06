@@ -46,19 +46,21 @@ data Generator = Generator {
 generator :: CodeSpec -> Generator -> Generator
 generator spec g = 
   let chs = choices spec
-      methodCallFunc =     case (logging chs) of          LogFunc -> loggedMethod
-                                                          LogAll  -> loggedMethod
-                                                          _       -> genMethodCallD
-      sfwrConstraintFunc = case (onSfwrConstraint chs) of Warning -> constrWarn
+      methodCallFunc =     case (logging chs) of          LogFunc   -> loggedMethod
+                                                          LogAll    -> loggedMethod
+                                                          _         -> genMethodCallD
+      sfwrConstraintFunc = case (onSfwrConstraint chs) of Warning   -> constrWarn
                                                           Exception -> constrExc
-      physConstraintFunc = case (onPhysConstraint chs) of Warning -> constrWarn
+      physConstraintFunc = case (onPhysConstraint chs) of Warning   -> constrWarn
                                                           Exception -> constrExc
+      inputModFunc =       case (inputStructure chs)   of Loose     -> genInputModNoClass
+                                                          AsClass   -> genInputModClass
   in Generator {
       generateCode = generateCodeD spec g,
       
       genModules = genModulesD spec g,
       
-      genInputMod = genInputModD g,
+      genInputMod = inputModFunc g,
       genCalcMod = genCalcModD g,
       genOutputMod = genOutputModD g,
       
@@ -92,14 +94,22 @@ generateCodeD s g = let modules = genModules g
 
 genModulesD :: CodeSpec -> Generator -> [Module]
 genModulesD (CodeSpec _ i o d cm _) g = genInputMod g i cm
-                                   ++ genCalcMod g d
-                                   ++ genOutputMod g o
+                                     ++ genCalcMod g d
+                                     ++ genOutputMod g o
 
 
 ------- INPUT ----------  
 
-genInputModD :: Generator -> [CodeChunk] -> ConstraintMap -> [Module]
-genInputModD g ins cm = [buildModule "InputParameters" [] [] [] [(genInputClass g ins cm)]]
+genInputModClass :: Generator -> [CodeChunk] -> ConstraintMap -> [Module]
+genInputModClass g ins cm = [buildModule "InputParameters" [] [] [] [(genInputClass g ins cm)]]
+
+genInputModNoClass :: Generator -> [CodeChunk] -> ConstraintMap -> [Module]
+genInputModNoClass g ins cm = [
+    buildModule "InputParameters" [] 
+    (map (\x -> VarDecDef (codeName x) (convType $ codeType x) (defaultValue' $ convType $ codeType x)) ins) 
+    [genInputFormat g ins, genInputConstraints g ins cm] 
+    []
+  ]
 
 genInputClassD :: Generator -> [CodeChunk] -> ConstraintMap -> Class
 genInputClassD g ins cm = pubClass

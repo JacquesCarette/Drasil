@@ -16,6 +16,10 @@ hghcVars = [htTransCladFuel, htTransCladCool]
 htVars :: [VarChunk]
 htVars = [cladThick, coolFilmCond, gapFilmCond, cladCond]
 
+htInputs, htOutputs :: [QSWrapper]
+htInputs = map qs htVars
+htOutputs = map qs hghcVars
+
 cladThick, coolFilmCond, gapFilmCond, cladCond :: VarChunk
 cladThick    = makeVC "cladThick"    (cn''' "clad thickness")
   ((Greek Tau_L) `sub` lC)

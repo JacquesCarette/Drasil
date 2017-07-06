@@ -31,7 +31,8 @@ data Choices = Choices {
   logFile :: String,
   logging :: Logging,
   onSfwrConstraint :: ConstraintBehaviour,
-  onPhysConstraint :: ConstraintBehaviour
+  onPhysConstraint :: ConstraintBehaviour,
+  inputStructure :: Structure
 }
 
 data ImplementationType = Library
@@ -44,6 +45,9 @@ data Logging = LogNone
              
 data ConstraintBehaviour = Warning
                          | Exception
+                         
+data Structure = Loose
+               | AsClass
              
 defaultChoices :: Choices
 defaultChoices = Choices {
@@ -51,5 +55,6 @@ defaultChoices = Choices {
   logFile = "log.txt",
   logging = LogNone,
   onSfwrConstraint = Exception,
-  onPhysConstraint = Warning
+  onPhysConstraint = Warning,
+  inputStructure = AsClass
 }

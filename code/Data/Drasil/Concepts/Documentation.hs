@@ -48,16 +48,16 @@ notApp      = commonIdea "notApp"      (nounPhraseSP "not applicable")          
 
 -- concepts relating to the templates and their contents
 
-analysis, appendix, characteristic, client, column, company, component,
+analysis, appendix, characteristic, client, class_, column, company, component,
   condition, constraint, connection, content, context, customer, datum, decision,
   definition, dependency, description, design, document, documentation,
   element, endUser, environment, figure, functional, game, general, 
   goal, guide, implementation, individual, information, interest, input_, instance_,
   intReader, introduction, item, label, library, limitation, literacy, method_, module_,
   model, name_, nonfunctional, offShelf, open, organization, output_, physics, physical,
-  plan, priority, problem, product_, project, property, purpose, quantity, realtime,
-  reference, requirement_, reviewer, scope, second_, section_, source, simulation,
-  software, solution, specific, specification, stakeholder, statement, 
+  plan, practice, priority, problem, product_, project, property, purpose, quantity,
+  realtime, reference, requirement_, reviewer, scope, second_, section_, source,
+  simulation, software, solution, specific, specification, stakeholder, statement, 
   symbol_, system, table_, template, terminology, theory, traceyGraph, traceyMatrix,
   uncertainty, user, useCase, validation, value, variable, video,
   verification, year :: NamedChunk
@@ -65,6 +65,7 @@ analysis, appendix, characteristic, client, column, company, component,
 analysis        = npnc "analysis"       (cnIS "analysis")
 appendix        = npnc "appendix"       (cnICES "appendix")
 characteristic  = npnc "characteristic" (cn' "characteristic")
+class_          = npnc "class"          (cn''' "class")
 client          = npnc "client"         (cn' "client")
 column          = npnc "column"         (cn' "column") --general enough to be in Documentation?
 company         = npnc "company"        (cnIES "company")
@@ -117,6 +118,7 @@ output_         = npnc "output"         (cn' "output")
 physics         = npnc "physics"        (cn' "physics")
 physical        = npnc "physical"       (cn' "physical") -- FIXME: Adjective
 plan            = npnc "plan"           (cn' "plan")
+practice        = npnc "practice"       (cn' "practice")
 priority        = npnc "priority"       (cnIES "priority")
 problem         = npnc "problem"        (cn' "problem")
 product_        = npnc "product"        (cn' "product")
@@ -186,7 +188,7 @@ designDoc, generalSystemDescription, indPRCase,
   nonfunctionalRequirement, softwareConstraint, softwareDoc, softwareReq,
   softwareSys, softwareVerif, softwareVAV, solutionCharSpec,
   solutionCharacteristic, offShelfSolution, physicalSim, productUC, 
-  useCaseTable, physicalProperty, vavPlan :: NamedChunk
+  useCaseTable, physicalProperty, vavPlan, userInput :: NamedChunk
  
 datumConstraint              = compoundNC' datum constraint
 designDoc                    = compoundNC design document
@@ -216,6 +218,7 @@ systemConstraint             = compoundNC system constraint
 systemdescription            = compoundNC system description
 useCaseTable                 = compoundNC useCase table_
 userCharacteristic           = compoundNC user characteristic
+userInput                    = compoundNC user input_
 vavPlan                      = compoundNC vav plan
 
 -- extra utilities --

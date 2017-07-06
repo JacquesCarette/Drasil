@@ -2,7 +2,7 @@ module Data.Drasil.Concepts.Thermodynamics where
 
 import Language.Drasil
 
-boiling, boil_pt, law_cons_energy, law_conv_cooling, latent_heat, melting, melt_pt, phase_change,
+boiling, boil_pt, degree_', law_cons_energy, law_conv_cooling, latent_heat, melting, melt_pt, phase_change,
   sens_heat, temp, thermal_analysis, thermal_conduction, thermal_energy,
   thermal_conductor, heat, heat_cap_spec, ht_flux, heat_trans :: ConceptChunk
 
@@ -13,6 +13,8 @@ boiling             = dcc "boiling"         (cn "boiling")
                       "Phase change from liquid to vapour"
 boil_pt             = dcc "boil_pt"         (cn' "boiling point temperature")
                       "Temperature at which a substance changes from liquid to vapour"
+degree_'            = dcc "degree" (cn' "degree")
+                      "A measure of the warmth or coldness of an object or substance"
 heat                = dcc "heat"            (cn "heat")
                       ("Noun: The amount of heat energy inside a body. " ++
                       "Verb: To transfer thermal energy to a body")

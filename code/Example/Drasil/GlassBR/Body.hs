@@ -52,7 +52,7 @@ s3, s4, s5,
 
 s5_1_table, s5_2_bullets, 
   s6_1_2_list, s6_2_intro, s6_2_5_table1, 
-  s6_2_5_table3, s7_2_intro, s9_table1,
+  s6_2_5_table2, s7_2_intro, s9_table1,
   s9_table2, s9_table3, s11_list, s12_intro,
   fig_glassbr, fig_2, fig_3, fig_4, fig_5,
   fig_6 :: Contents
@@ -407,7 +407,7 @@ s6_2_5_intro2 :: Sentence
 s6_2 = solChSpecF gLassBR (s6_1, s8) (EmptyS) 
  (EmptyS, dataConstraintUncertainty, end)
  (s6_2_1_list, s6_2_2_TMods, [], s6_2_4_DDefns, s6_2_3_IMods, 
-  [s6_2_5_table1, s6_2_5_table3]) []
+  [s6_2_5_table1, s6_2_5_table2]) []
   where end = foldlSent [(makeRef s10), S "gives", 
              (plural value `ofThe` S "specification"), plural parameter, 
               S "used in" +:+. (makeRef s6_2_5_table1)] +:+ s6_2_5_intro2
@@ -504,13 +504,13 @@ s6_2_4_DDefns = map gbSymbMapD dataDefns
 {-input and output tables-}
 
 s6_2_5_table1 = inDataConstTbl (gbInputDataConstraints)
-s6_2_5_table3 = outDataConstTbl [prob_br]
+s6_2_5_table2 = outDataConstTbl [prob_br]
 
 s6_2_5_table2_formatF2 :: UnitaryChunk -> Double -> (Sentence, Sentence)
 s6_2_5_table2_formatF2 varName val = (getS varName, E (Dbl val) +:+
   Sy (unit_symb varName))
 
-s6_2_5_intro2 = foldlSent [(makeRef s6_2_5_table3), S "shows the", 
+s6_2_5_intro2 = foldlSent [(makeRef s6_2_5_table2), S "shows the", 
   plural constraint, S "that must be satisfied by the", phrase output_]
 
 {--REQUIREMENTS--}

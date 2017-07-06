@@ -46,9 +46,8 @@ this_si :: [UnitDefn]
 this_si = map UU [metre, second] ++ map UU [pascal, newton]
 
 s3, s4, s5,
-  s6, s6_1, s6_1_1, s6_1_2, s6_1_3, s6_2, s6_2_1, 
-  s6_2_2, s6_2_3, s6_2_4, s7, s7_1, s7_2,
-  s8, s9, s10, s11, s12 :: Section
+  s6, s6_1, s6_1_1, s6_1_2, s6_1_3, s6_2, 
+  s7, s7_1, s7_2, s8, s9, s10, s11, s12 :: Section
 
 s5_1_table, s5_2_bullets, 
   s6_1_2_list, s6_2_intro, s6_2_5_table1, 
@@ -78,7 +77,7 @@ mkSRS = [RefSec (RefProg intro
      [IPurpose (s2_1_intro_p1 (document) (gLassBR) (glaSlab)),
      IScope incScoR endScoR,
      IChar knowIR undIR appStanddIR,
-     IOrgSec s2_3_intro dataDefn s6_2_4 s2_3_intro_end])] ++
+     IOrgSec s2_3_intro dataDefn (SRS.dataDefn SRS.missingP []) s2_3_intro_end])] ++
   map Verbatim [s3, s4, s5 {-, s6-}] ++
   [SSDSec (SSDVerb s6)] {-(SSDProg [SSDProblem, SSDSolChSpec])-} ++
   map Verbatim [s7, s8, s9, s10, s11, s12]
@@ -418,8 +417,6 @@ s6_2_intro = foldlSP [S "This", phrase section_,
 
 {--Assumptions--}
 
-s6_2_1 = assumpF (s6_2_2) (s6_2_4) (s6_2_4) (s6_2_3) (s8) (s6_2_1_list)
---FIXME:remove duplicatie s6_2_4 
 s6_2_1_list = [(enumSimple 1 (short assumption) s6_2_1_listOfAssumptions)]
 
 --Considered "dead" knowledge since it is a list of sentences?
@@ -479,22 +476,15 @@ assumption8 = [foldlSent [S "With", phrase reference, S "to A4 the",
 
 {--Theoretical Models--}
 
-s6_2_2 = thModF (gLassBR) (s6_2_2_TMods) 
-  
 s6_2_2_TMods :: [Contents]
 s6_2_2_TMods = map gbSymbMapT tModels
 
 {--Instance Models--}
 
-s6_2_3 = inModelF s6_1 s6_2_4 s6_2_2 s6_2_2 (s6_2_3_IMods) 
-  --FIXME:remove duplicate s6_2_2 section
-
 s6_2_3_IMods :: [Contents]
 s6_2_3_IMods = map gbSymbMapT iModels
 
 {--Data Definitions--}
-
-s6_2_4 = dataDefnF EmptyS (s6_2_4_DDefns)
 
 s6_2_4_DDefns ::[Contents] 
 s6_2_4_DDefns = map gbSymbMapD dataDefns
@@ -694,7 +684,7 @@ s9_funcReq = ["R1", "R2", "R3", "R4", "R5", "R6"]
 s9_funcReqRef = makeListRef s9_funcReq s7_1
 
 s9_assump = ["A1", "A2", "A3", "A4", "A5", "A6", "A7", "A8"]
-s9_assumpRef = makeListRef s9_assump s6_2_1
+s9_assumpRef = makeListRef s9_assump (SRS.assump SRS.missingP [])
 
 s9_likelyChg = ["LC1", "LC2", "LC3", "LC4", "LC5"]
 s9_likelyChgRef = makeListRef s9_likelyChg s8

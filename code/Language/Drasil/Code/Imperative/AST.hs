@@ -157,9 +157,7 @@ data Function = Func {funcName :: Label, funcParams :: [Value]}
               | ListPopulate Value StateType --ListPopulate size type : populates the list with a default value for its type. Ignored in languages where it's unnecessary in order to use the ListSet function.  
               | ListAppend Value
               | IterBegin | IterEnd
-              | Floor | Ceiling
-              
-             
+              | Floor | Ceiling            
     deriving (Eq, Show)
 data Comment = Comment Label | CommentDelimit Label Int
     deriving (Eq, Show)
@@ -679,6 +677,7 @@ func = Func
 
 continue :: Statement
 continue = JumpState Continue
+
 -----------------------
 -- Comment Functions --
 -----------------------

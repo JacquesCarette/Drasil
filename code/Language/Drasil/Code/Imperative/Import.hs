@@ -11,6 +11,7 @@ import Language.Drasil.Expr.Extract hiding (vars)
 import Language.Drasil.CodeSpec
 
 import Prelude hiding (log, exp, return)
+import Data.List (intersperse)
 
 data Generator = Generator { 
   generateCode :: IO (),
@@ -116,19 +117,19 @@ genInputFormatD g ins = let l_infile = "infile"
                             l_filename = "filename"
                             p_filename = param l_filename string
                             v_filename = var l_filename
-                        in
-  publicMethod g methodTypeVoid "get_inputs" 
-    [ p_filename ]
-    [ block $
-        [
-          varDec l_infile infile,
-          openFileR v_infile v_filename
-        ] 
-        ++
-        map (\x -> getFileInput v_infile (convType $ codeType x) (var $ codeName x)) ins
-        ++ 
-        [ closeFile v_infile ]
-    ]
+  in
+    publicMethod g methodTypeVoid "get_inputs" 
+      [ p_filename ]
+      [ block $
+          [
+            varDec l_infile infile,
+            openFileR v_infile v_filename
+          ] 
+          ++
+          map (\x -> getFileInput v_infile (convType $ codeType x) (var $ codeName x)) ins
+          ++ 
+          [ closeFile v_infile ]
+      ]
           
 genInputConstraintsD :: Generator -> [CodeChunk] -> ConstraintMap -> Method
 genInputConstraintsD g vars cm = 
@@ -180,23 +181,23 @@ genOutputFormatD g outs = let l_outfile = "outfile"
                               l_filename = "filename"
                               p_filename = param l_filename string
                               v_filename = var l_filename
-                          in
-  publicMethod g methodTypeVoid "write_output" 
-    (p_filename:getParams outs)
-    [ block $
-        [
-          varDec l_outfile outfile,
-          openFileW v_outfile v_filename
-        ] 
-        ++
-        concatMap 
-          (\x -> [ printFileStr v_outfile ((codeName x) ++ " = "), 
-                   printFileLn v_outfile (convType $ codeType x) 
-                     (var $ codeName x)
-                 ] ) outs
-        ++ 
-        [ closeFile v_outfile ]
-    ]         
+  in
+    publicMethod g methodTypeVoid "write_output" 
+      (p_filename:getParams outs)
+      [ block $
+          [
+            varDec l_outfile outfile,
+            openFileW v_outfile v_filename
+          ] 
+          ++
+          concatMap 
+            (\x -> [ printFileStr v_outfile ((codeName x) ++ " = "), 
+                     printFileLn v_outfile (convType $ codeType x) 
+                       (var $ codeName x)
+                   ] ) outs
+          ++ 
+          [ closeFile v_outfile ]
+      ]         
     
 -----
 
@@ -208,21 +209,36 @@ loggedMethod :: Generator -> Scope -> MethodType -> Label -> [Parameter]
                   -> Body -> Method
 loggedMethod g s t n p b = let l_outfile = "outfile"
                                v_outfile = var l_outfile 
-                           in
-  Method n s t p $ 
-  (
-    block [
-      varDec l_outfile outfile,
-      openFileW v_outfile (litString $ logName g),  
-      printFileStrLn v_outfile (n ++ "(" ++ ") called"),
-      closeFile v_outfile      
-    ]
-  ) : b
+  in
+    Method n s t p $ 
+    (
+      block [
+        varDec l_outfile outfile,
+        openFileW v_outfile (litString $ logName g),  
+        printFileStr v_outfile ("funcion " ++ n ++ "("),
+        printParams p v_outfile,
+        printFileStrLn v_outfile ") called",
+        closeFile v_outfile      
+      ]
+    ) : b
+  where
+    printParams ps v_outfile = multi $ 
+      intersperse (printFileStr v_outfile ", ") $
+      map (\x -> printFile v_outfile (paramType x) (paramVal x)) ps
+  
 
 -- helpers
     
 getParams :: (CodeEntity c) => [c] -> [Parameter]
 getParams = map (\y -> param (codeName y) (convType $ codeType y))
+          
+paramType :: Parameter -> StateType
+paramType (StateParam _ s) = s
+paramType (FuncParam _ _ _) = error "Function param not implemented"
+
+paramVal :: Parameter -> Value
+paramVal (StateParam l _) = var l
+paramVal (FuncParam _ _ _) = error "Function param not implemented"        
           
 convType :: C.CodeType -> I.StateType
 convType C.Boolean = bool

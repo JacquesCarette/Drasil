@@ -345,7 +345,7 @@ resShrDerivation = [foldlSP [S "The", phrase shrResI, S "of a slice is defined a
   getS intShrForce, S "in the equation are unknown, while the other values",
   S "are found from the physical force definitions of", acroDD 1, S "to" +:+. acroDD 9,
   S "Consider a force equilibrium without the affect of interslice forces,",
-  S "to obtain a solvable value as done for", getS nrmFNoIntsl, S "in equation (2)"],
+  S "to obtain a solvable value as done for", getS nrmFNoIntsl, S "in", eqN 2],
 
   EqnBlock $
   (C nrmFNoIntsl) := (((C slcWght) :+ (C surfHydroForce) :* (cos (C surfAngle)) :+ 
@@ -356,7 +356,7 @@ resShrDerivation = [foldlSP [S "The", phrase shrResI, S "of a slice is defined a
   
   foldlSP [S "Using", getS nrmFNoIntsl `sC` S "a", phrase shearRNoIntsl,
   shearRNoIntsl ^. defn, S "can be solved for in terms of all known",
-  S "values as done in equation (3)"],
+  S "values as done in", eqN 3],
   
   EqnBlock $
   C shearRNoIntsl := (C nrmFNoIntsl) * tan (C fricAngle) +
@@ -375,7 +375,7 @@ resShrDerivation = [foldlSP [S "The", phrase shrResI, S "of a slice is defined a
 mobShrDerivation :: [Contents]
 mobShrDerivation = [foldlSP [S "The", phrase mobShrI, S "acting on a slice is",
   S "defined as", getS mobShrI, S "from the force equilibrium in", acroGD 2 `sC`
-  S "also shown in equation (4)"],
+  S "also shown in", eqN 4],
   
   EqnBlock $
   (C nrmFSubWat) := (((C slcWght) - (C intShrForce) + (C intShrForce) :+
@@ -387,7 +387,7 @@ mobShrDerivation = [foldlSP [S "The", phrase mobShrI, S "acting on a slice is",
   
   foldlSP [S "The equation is unsolvable, containing the unknown", getTandS intNormForce,
   S "and" +:+. getTandS intShrForce, S "Consider a force equilibrium", S wiif `sC`
-  S "to obtain the", getTandS shearFNoIntsl `sC` S "as done in equation (5)"], --FIXME: use wiif from shearFNoIntsl's definition but removed index
+  S "to obtain the", getTandS shearFNoIntsl `sC` S "as done in", eqN 5], --FIXME: use wiif from shearFNoIntsl's definition but removed index
   
   EqnBlock $
   C shearFNoIntsl := ((C slcWght) :+ (C surfHydroForce) :* (cos (C surfAngle)) :+ 
@@ -402,7 +402,7 @@ mobShrDerivation = [foldlSP [S "The", phrase mobShrI, S "acting on a slice is",
 
 stfMtrxDerivation :: [Contents]
 stfMtrxDerivation = [foldlSP [S "Using the force-displacement relationship of", acroGD 8,
-  S "to define stiffness matrix", getS shrStiffIntsl `sC` S "as seen in equation (6)"], --FIXME: index
+  S "to define stiffness matrix", getS shrStiffIntsl `sC` S "as seen in", eqN 6], --FIXME: index
 
   foldlSP [S "For interslice surfaces the stiffness constants and displacements",
   S "refer to an unrotated coordinate system" `sC` getS genDisplace, S "of" +:+. acroGD 9,
@@ -412,18 +412,23 @@ stfMtrxDerivation = [foldlSP [S "Using the force-displacement relationship of", 
   S "is the shear element in the matrix, and", getS nrmStiffIntsl, S "is the",
   S "normal element in the matrix, calculated as in", acroDD 14],
   
-  foldlSP [S "For basal surfaces the stiffness constants and displacements refer to a system rotated for the base",
-  S "angle alpha (DD5). To analyze the effect of force-displacement relationships occurring on both basal",
-  S "and interslice surfaces of an element i they must reference the same coordinate system. The basal",
-  S "stiffness matrix must be rotated counter clockwise to align with the angle of the basal surface.",
-  S "The base stiffness counter clockwise rotation is applied in equation (7) to the new matrix", getS nrmFNoIntsl],
+  foldlSP [S "For basal surfaces the stiffness constants and displacements refer",
+  S "to a system rotated for the base angle alpha" +:+. sParen (acroDD 5),
+  S "To analyze the effect of force-displacement relationships occurring on both basal",
+  S "and interslice surfaces of an element i they must reference the same coordinate",
+  S "system. The basal stiffness matrix must be rotated counter clockwise to align",
+  S "with the angle of the basal surface. The base stiffness counter clockwise rotation",
+  S "is applied in", eqN 6, S "to the new matrix", getS nrmFNoIntsl],
   
-  foldlSP [S "The Hooke's law force displacement relationship of GD8 applied to the base also references a",
-  S "displacement vector", getS rotatedDispl, S "of GD9 rotated for the base angle of the slice", getS baseAngle, S ". The basal displacement",
-  S "vector", getS genDisplace, S "is rotated clockwise to align with the interslice displacement vector", getS genDisplace, S ", applying the",
-  S "definition of", getS rotatedDispl, S "in terms of", getS genDisplace, S "as seen in GD9. Using this with base stiffness matrix K*i, a basal",
-  S "force displacement relationship in the same coordinate system as the interslice relationship can be",
-  S "derived as done in equation (8)"],
+  foldlSP [S "The Hooke's law force displacement relationship of", acroGD 8,
+  S "applied to the base also references a displacement vector", getS rotatedDispl,
+  S "of", acroGD 9, S "rotated for the base angle of the slice", getS baseAngle +:+.
+  S "The basal displacement vector", getS genDisplace, S "is rotated clockwise",
+  S "to align with the interslice displacement vector", getS genDisplace `sC`
+  S "applying the definition of", getS rotatedDispl, S "in terms of", getS genDisplace,
+  S "as seen in" +:+. acroGD 9, S "Using this with base stiffness matrix", getS shrStiffBase --FIXME: index, should be K*i"
+  `sC` S "a basal force displacement relationship in the same coordinate system",
+  S "as the interslice relationship can be derived as done in", eqN 8],
   
   foldlSP [S "The new effective base stiffness matrix K0i ,as derived in equation (7) is defined in equation (9). This",
   S "is seen as matrix Kb,i in GD12.", getS shrStiffBase, S "is the shear element in the matrix, and", getS nrmStiffBase, S "is the normal",

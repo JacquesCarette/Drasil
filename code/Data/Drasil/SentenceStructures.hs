@@ -8,12 +8,15 @@ module Data.Drasil.SentenceStructures
   , maybeChanged, maybeExpanded, maybeWOVerb
   , tAndDWAcc, tAndDWSym, tAndDOnly
   , followA
+  , getTandS
+  , eqN
   , fmtInputConstr, fmtOutputConstr, physC, sfwrC, typUnc, rval
   ) where
 
 import Language.Drasil
 import Data.Drasil.Utils (foldle, foldle1, getS, fmtU, getRVal)
 import Data.Drasil.Concepts.Documentation
+import Data.Drasil.Concepts.Math (equation)
 import Control.Lens ((^.))
 
 {--** Sentence Folding **--}
@@ -31,13 +34,13 @@ foldlSentCol = foldle (+:+) (+:) EmptyS
 
 -- | fold sentences then turns into content
 foldlSP :: [Sentence] -> Contents
-foldlSP = (Paragraph . foldlSent)
+foldlSP = Paragraph . foldlSent
 
 foldlSP_ :: [Sentence] -> Contents
-foldlSP_ = (Paragraph . foldlSent_)
+foldlSP_ = Paragraph . foldlSent_
 
 foldlSPCol :: [Sentence] -> Contents
-foldlSPCol = (Paragraph . foldlSentCol)
+foldlSPCol = Paragraph . foldlSentCol
 
 -- | creates a list of elements seperated by commas, including the last element
 foldlsC :: [Sentence] -> Sentence
@@ -147,6 +150,14 @@ tAndDOnly chunk  = Flat $ ((at_start chunk) +:+ S "- ") :+: (chunk ^. defn)
 
 followA :: Sentence -> Int -> Sentence
 preceding `followA` num = preceding +:+ S "following" +:+ acroA num
+
+-- | Used when you want to say a term followed by its symbol. ex. "...using the Force F in..."
+getTandS :: (SymbolForm a, NamedIdea a) => a -> Sentence
+getTandS a = phrase a +:+ getS a
+
+--Ideally this would create a reference to the equation too
+eqN :: Int -> Sentence
+eqN n = phrase equation +:+ sParen (S $ show n)
 
 {-BELOW IS TO BE MOVED TO EXAMPLE/DRASIL/SECTIONS-}
 

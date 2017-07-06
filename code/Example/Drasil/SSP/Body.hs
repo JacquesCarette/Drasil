@@ -330,8 +330,8 @@ resShrDerivation :: [Contents]
 resShrDerivation = [foldlSP [S "The", phrase shrResI, S "of a slice is defined as", 
   getS shrResI, S "in" +:+. acroGD 3, S "The", phrase nrmFSubWat, S "in the equation for", getS shrResI,
   S "of the soil is defined in the perpendicular force equilibrium of a slice from", 
-  acroGD 2 `sC` S "using the", phrase nrmFSubWat, getS nrmFSubWat, S "of", acroT 4, 
-  S "shown in equation (1)"],
+  acroGD 2 `sC` S "using the", getTandS nrmFSubWat, S "of", acroT 4, 
+  S "shown in", eqN 1],
   
   EqnBlock $
   (C nrmFSubWat) := (((C slcWght) - (C intShrForce) + (C intShrForce) :+ 
@@ -378,14 +378,16 @@ mobShrDerivation = [foldlSP [S "The", phrase mobShrI, S "acting on a slice is",
   S "also shown in equation (4)"],
   
   EqnBlock $
-  (C nrmFSubWat) := (((C slcWght) - (C intShrForce) + (C intShrForce) :+ (C surfHydroForce) :* (cos (C surfAngle)) :+ --FIXME: add indexing
+  (C nrmFSubWat) := (((C slcWght) - (C intShrForce) + (C intShrForce) :+
+  (C surfHydroForce) :* (cos (C surfAngle)) :+ --FIXME: add indexing
   (C surfLoad) :* (cos (C impLoadAngle))) :* (sin (C baseAngle)) :-
-  (Neg (C earthqkLoadFctr) :* (C slcWght) - (C intNormForce) + (C intNormForce) - (C watrForce) + (C watrForce) :+ (C surfHydroForce)
+  (Neg (C earthqkLoadFctr) :* (C slcWght) - (C intNormForce) + (C intNormForce)
+  - (C watrForce) + (C watrForce) :+ (C surfHydroForce)
   :* sin (C surfAngle) :+ (C surfLoad) :* (sin (C impLoadAngle))) :* (cos (C baseAngle))),
   
-  foldlSP [S "The equation is unsolvable, containing the unknown", phrase intNormForce, getS intNormForce, S "and shear force X.",
-  S "Consider a force equilibrium without the affect of interslice forces, to obtain the mobile shear force",
-  S "without the influence of interslice forces T, as done in equation (5)"],
+  foldlSP [S "The equation is unsolvable, containing the unknown", getTandS intNormForce,
+  S "and" +:+. getTandS intShrForce, S "Consider a force equilibrium", S wiif `sC`
+  S "to obtain the", getTandS shearFNoIntsl `sC` S "as done in equation (5)"], --FIXME: use wiif from shearFNoIntsl's definition but removed index
   
   EqnBlock $
   C shearFNoIntsl := ((C slcWght) :+ (C surfHydroForce) :* (cos (C surfAngle)) :+ 
@@ -393,18 +395,22 @@ mobShrDerivation = [foldlSP [S "The", phrase mobShrI, S "acting on a slice is",
   (Neg (C earthqkLoadFctr) :* (C slcWght) :- (C watrForceDif) :+ (C surfHydroForce)
   :* sin (C surfAngle) :+ (C surfLoad) :* (sin (C impLoadAngle))) :* (cos (C baseAngle)),
   
-  foldlSP [S "The values of", getS shearRNoIntsl, S "and", getS shearFNoIntsl, S "are now defined completely in terms of the known force property values",
-  S "of DD1 to DD9"]
+  foldlSP [S "The values of", getS shearRNoIntsl, S "and", getS shearFNoIntsl,
+  S "are now defined completely in terms of the known force property values of",
+  acroDD 1, S "to", acroDD 9]
   ]
 
 stfMtrxDerivation :: [Contents]
-stfMtrxDerivation = [foldlSP [S "Using the force-displacement relationship of GD8",
-  S "to define stiffness matrix Ki, as seen in equation (6)"],
+stfMtrxDerivation = [foldlSP [S "Using the force-displacement relationship of", acroGD 8,
+  S "to define stiffness matrix", getS shrStiffIntsl `sC` S "as seen in equation (6)"], --FIXME: index
 
-  foldlSP [S "For interslice surfaces the stiffness constants and displacements refer to an unrotated coordinate",
-  S "system,", getS genDisplace, S "of GD9. The interslice elements are left in their standard coordinate system, and",
-  S "therefore are described by the same equation from GD8. Seen as Ks,i in DD12.", getS shrStiffIntsl, S "is the shear",
-  S "element in the matrix, and", getS nrmStiffIntsl, S "is the normal element in the matrix, calculated as in DD14"],
+  foldlSP [S "For interslice surfaces the stiffness constants and displacements",
+  S "refer to an unrotated coordinate system" `sC` getS genDisplace, S "of" +:+. acroGD 9,
+  S "The interslice elements are left in their standard coordinate system, and",
+  S "therefore are described by the same equation from" +:+. acroGD 8,
+  S "Seen as", getS shrStiffIntsl, S "in" +:+. acroDD 12, getS shrStiffIntsl, --FIXME: Index
+  S "is the shear element in the matrix, and", getS nrmStiffIntsl, S "is the",
+  S "normal element in the matrix, calculated as in", acroDD 14],
   
   foldlSP [S "For basal surfaces the stiffness constants and displacements refer to a system rotated for the base",
   S "angle alpha (DD5). To analyze the effect of force-displacement relationships occurring on both basal",

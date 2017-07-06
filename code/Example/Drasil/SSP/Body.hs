@@ -415,10 +415,10 @@ stfMtrxDerivation = [foldlSP [S "Using the force-displacement relationship of", 
   foldlSP [S "For basal surfaces the stiffness constants and displacements refer",
   S "to a system rotated for the base angle alpha" +:+. sParen (acroDD 5),
   S "To analyze the effect of force-displacement relationships occurring on both basal",
-  S "and interslice surfaces of an element i they must reference the same coordinate",
+  S "and interslice surfaces of an element", getS index, S "they must reference the same coordinate",
   S "system. The basal stiffness matrix must be rotated counter clockwise to align",
   S "with the angle of the basal surface. The base stiffness counter clockwise rotation",
-  S "is applied in", eqN 6, S "to the new matrix", getS nrmFNoIntsl],
+  S "is applied in", eqN 7, S "to the new matrix", getS nrmFNoIntsl],
   
   foldlSP [S "The Hooke's law force displacement relationship of", acroGD 8,
   S "applied to the base also references a displacement vector", getS rotatedDispl,
@@ -430,10 +430,13 @@ stfMtrxDerivation = [foldlSP [S "Using the force-displacement relationship of", 
   `sC` S "a basal force displacement relationship in the same coordinate system",
   S "as the interslice relationship can be derived as done in", eqN 8],
   
-  foldlSP [S "The new effective base stiffness matrix K0i ,as derived in equation (7) is defined in equation (9). This",
-  S "is seen as matrix Kb,i in GD12.", getS shrStiffBase, S "is the shear element in the matrix, and", getS nrmStiffBase, S "is the normal",
-  S "element in the matrix, calculated as in DD14. The notation is simplified by the introduction of",
-  S "the constants KbA,i and KbB,i, defined in equations (10) and (11) respectively"],
+  foldlSP [S "The new effective base stiffness matrix", getS shrStiffBase, --FIXME: index
+  S "as derived in", eqN 7, S "is defined in" +:+. eqN 9, S "This is seen as matrix",
+  getS shrStiffBase, S "in" +:+. acroGD 12, isElMx shrStiffBase "shear" `sC` S "and",
+  isElMx nrmStiffBase "normal" `sC` S "calculated as in" +:+. acroDD 14,
+  S "The notation is simplified by the introduction of the constants",
+  getS shrStiffBase `sAnd` getS shrStiffBase `sC` S "defined in", eqN 10 `sAnd`--FIXME: index should be KbA,i and KbB,i
+  eqN 11, S "respectively"],
   
   EqnBlock $
   (C shrStiffBase) := (C shrStiffBase) * (cos (C baseAngle)) :^ (Int 2) :+ --FIXME: the first symbol should be K_(bA,i), waiting on indexing
@@ -443,10 +446,14 @@ stfMtrxDerivation = [foldlSP [S "Using the force-displacement relationship of", 
   (C shrStiffBase) := ((C shrStiffBase)-(C nrmStiffBase)) * --FIXME: the first symbol should be K_(bB,i), waiting on indexing
   (sin (C baseAngle)) * (cos (C baseAngle)),
   
-  foldlSP [S "A force-displacement relationship for an element i can be written in terms of displacements occurring",
-  S "in the unrotated coordinate system", getS genDisplace, S "of GD9 using the matrix Ks,i, and Kb,i as seen in",
-  S "DD12"]
+  foldlSP [S "A force-displacement relationship for an element", getS index, S "can be written",
+  S "in terms of displacements occurring in the unrotated coordinate system",
+  getS genDisplace `sOf` acroGD 9, S "using the matrix", getS shrStiffBase `sC` --FIXME: index
+  S "and", getS shrStiffBase, S "as seen in", acroDD 12]
   ]
+
+isElMx :: (SymbolForm a) => a -> String -> Sentence
+isElMx sym kword = getS sym `isThe` S kword +:+ S "element in the matrix"
 
 -- SECTION 4.2.5 --
 -- Instance Models is automatically generated in solChSpecF using the paragraphs below

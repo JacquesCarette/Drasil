@@ -316,9 +316,11 @@ shrStress    = uc' "tau_i" (cn "shear stress") ("acting on the base of a slice")
 ----------------------
 
 sspUnitless :: [ConVar]
-sspUnitless = [earthqkLoadFctr, normToShear,scalFunc, numbSlices, minFunction, fsloc]
+sspUnitless = [earthqkLoadFctr, normToShear,scalFunc,
+  numbSlices, minFunction, fsloc, index]
 
-earthqkLoadFctr, normToShear, scalFunc, numbSlices, minFunction, fsloc :: ConVar
+earthqkLoadFctr, normToShear, scalFunc,
+  numbSlices, minFunction, fsloc, index :: ConVar
 
 earthqkLoadFctr = cvR (dcc "K_c" (nounPhraseSP $ "earthquake load factor") ("proportionality " ++
   "factor of force that weight pushes outwards; caused by seismic earth movements")) (sub cK lC)
@@ -338,3 +340,6 @@ minFunction = cvR (dcc "Upsilon" (nounPhraseSP "function") ("generic minimizatio
 
 fsloc       = cvR (dcc "FS_loci" (nounPhraseSP "local factor of safety") fsi)
   (sub (Atomic "FS") (Atomic "Loc,i"))
+
+index       = cvR (dcc "index" (nounPhraseSP "index") ("used to show a quantity " ++
+  "applies to only one slice")) lI

@@ -66,8 +66,8 @@ rc (x:y:[]) = S "and the" +:+ (plural $ x ^. term) +:+ S "to the" +:+.
 rc (x:y:xs) = S "the" +:+ word x +:+ S "to the" +:+ word y `sC` rc ([y] ++ xs)
 rc _ = error "refineChain helper encountered an unexpected empty list"
 
-figureLabel :: [Char] -> NPNC -> Sentence -> [Char]-> Contents
-figureLabel num traceyMG contents filePath = Figure (titleize figure +: S num
+figureLabel :: Int -> NPNC -> Sentence -> [Char]-> Contents
+figureLabel num traceyMG contents filePath = Figure (titleize figure +: (S (show num))
   +:+ (showingCxnBw (traceyMG) (contents))) filePath
 
 showingCxnBw :: NPNC -> Sentence -> Sentence

@@ -256,10 +256,10 @@ s2_1_intro_p1 typeOf progName gvnVar = foldlSent [S "The main", phrase purpose,
 
 s2_3_intro = foldlSent [S "The", phrase organization, S "of this",
   phrase document, S "follows the", phrase template, S "for an", short srs,
-  S "for", phrase sciCompS, S "proposed by" +:+ sSqBr (S "1") 
-  `sAnd` sSqBr (S "2"), sParen (S "in" +:+ (makeRef s11)) `sC`
+  S "for", phrase sciCompS, S "proposed by" +:+ (sSqBrForNums 1) 
+  `sAnd` (sSqBrForNums 2), sParen (S "in" +:+ (makeRef s11)) `sC`
   S "with some aspects taken from Volere", phrase template, S "16", 
-  sSqBr (S "3")]
+  (sSqBrForNums 3)]
   
 s2_3_intro_end = foldl (+:+) EmptyS [(at_start' $ the dataDefn), 
   S "are used to support", (plural definition `ofThe` S "different"), 
@@ -365,7 +365,7 @@ s6_1 = probDescF start gLassBR ending [s6_1_1, s6_1_2, s6_1_3]
 {--Terminology and Definitions--}
 
 s6_1_1 = termDefnF (S "All of the terms are extracted from" +:+ 
-  sSqBr (S "4") +:+ S "in" +:+ (makeRef s11)) [s6_1_1_bullets]
+  (sSqBrForNums 4) +:+ S "in" +:+ (makeRef s11)) [s6_1_1_bullets]
 
 {--Physical System Description--}
 
@@ -824,15 +824,15 @@ s9_intro2 = traceGIntro traceyGraphs
   (foldlList ((map plural (take 3 solChSpecSubsections))++
   [plural requirement, plural likelyChg +:+ S "on" +:+ plural assumption]))]
 
-fig_2 = figureLabel "2" (traceyMatrix)
+fig_2 = figureLabel 2 (traceyMatrix)
   (titleize' item +:+ S "of Different" +:+ titleize' section_)
   ("Trace.png")
 
-fig_3 = figureLabel "3" (traceyMatrix)
+fig_3 = figureLabel 3 (traceyMatrix)
   (titleize' requirement `sAnd` S "Other" +:+ titleize' item)
   ("RTrace.png")
 
-fig_4 = figureLabel "4" (traceyMatrix)
+fig_4 = figureLabel 4 (traceyMatrix)
   (titleize' assumption `sAnd` S "Other" +:+ titleize' item)
   ("ATrace.png")
 

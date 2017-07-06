@@ -217,9 +217,13 @@ collisionImpulse = ucFromCV impul impulseU
                 (QP.impulseS ^. symbol)
 
 
+force_i = ucFromCV theforce newton
+  where theforce = cvR (dccWDS "force_i" (compoundPhrase' 
+                (QP.force ^. term) (cn "applied to the i-th body at time t")) 
+                (phrase QP.force)) (QP.force ^. symbol)
+
 force_1     = ucFromCV (forceParam "1" "first")               newton
 force_2     = ucFromCV (forceParam "2" "second")              newton
-force_i     = ucFromCV (forceParam "i" "i-th")                newton
 mass_1      = ucFromCV (massParam "1" "first")                kilogram
 mass_2      = ucFromCV (massParam "2" "second")               kilogram
 vel_A       = ucFromCV (velParam "A" cA)                      velU

@@ -1,23 +1,19 @@
 module Drasil.GamePhysics.IMods where
 
---import qualified Drasil.GamePhysics.Unitals as GPUN
-
 import Language.Drasil
 import Data.Drasil.Utils (foldle1, fmtU, getS)
 import Data.Drasil.SentenceStructures (foldlSent)
 import qualified Data.Drasil.Quantities.Math as QM (orientation)
 import qualified Data.Drasil.Concepts.Physics as CP (rigidBody)
-import qualified Data.Drasil.Quantities.Physics as QP (acceleration, 
-  angularAccel, force, gravitationalAccel, velocity, 
+import qualified Data.Drasil.Quantities.Physics as QP (acceleration,
+  angularAccel, force, gravitationalAccel, velocity,
   momentOfInertia, angularVelocity, position, time, impulseS)
 import Drasil.GamePhysics.Unitals
 import Prelude hiding (id)
 import Control.Lens ((^.))
 
-
 iModels :: [RelationConcept]
 iModels = [im1, im2, im3]
-
 
 {-- Force on the translational motion  --}
 im1 :: RelationConcept
@@ -39,17 +35,11 @@ im1descr = foldlSent [S "The above equation expresses the total",
   S "then obtained from this equation using DD2, DD3 and DD4. It is currently", 
   S "assumed that there is no damping (A6) or constraints (A7) involved"]
 
-im1leg = foldle1 (+:+.) (+:+.) 
-  [defList massIRigidBody,
-  S "g is the acceleration due to gravity (ms-2)",
-  defList timeT,
-  defList initTime,
-  (helper1 QP.position "i" 
-  (S "specifically the position of its center of mass, pCM(t) (DD1))")),
-  (helper1 QP.acceleration "i" EmptyS),
-  (helper1 QP.velocity "i" EmptyS),
-  S "F(t) is the force applied to the i-th body at time t (N)"]
+im1leg = foldle1 (+:+) (+:+) $ map defList im1legTerms
 
+im1legTerms :: [UnitalChunk]
+im1legTerms = [massIRigidBody, QP.gravitationalAccel, timeT, initTime, pos_CM, 
+  QP.acceleration, QP.velocity, force_i]
 {-- --}
 
 im2 :: RelationConcept
@@ -69,16 +59,11 @@ im2descr = foldlSent [S "The above equation for the total angular acceleration",
   S "are then obtained from this equation using DD5, DD6 and DD7. It is",
   S "currently assumed that there is no damping (A6) or constraints (A7) involved"]
 
-im2leg = foldle1 (+:+.) (+:+.) 
-  [defList massIRigidBody,
-  S "g is the acceleration due to gravity (ms-2)",
-  defList timeT,
-  defList initTime,
-  (helper1 QM.orientation "i" EmptyS),
-  (helper1 QP.angularVelocity "i" EmptyS),
-  (helper1 QP.angularAccel "k" EmptyS),
-  defList torque_i +:+ S "Signed direction of torque is defined by (A4)",
-  defList momtInert_k]
+im2leg = foldle1 (+:+) (+:+) $ map defList im2legTerms  
+
+im2legTerms :: [UnitalChunk] 
+im2legTerms = [massIRigidBody, QP.gravitationalAccel, timeT, initTime, 
+  QM.orientation, QP.angularVelocity, QP.angularAccel, torque_i, momtInert_k]
 
 {-- --}
 
@@ -118,29 +103,12 @@ im3descr = foldlSent [S "This instance model is based on our assumptions",
 defList :: (Quantity a, SymbolForm a) => a -> Sentence
 defList thing = foldlSent [(getS thing), S "is the", (phrase thing), sParen (fmtU EmptyS thing)]
 
-im3leg = foldle1 (+:+) (+:+) 
-  [defList massIRigidBody,
-  defList momtInert_k,
-  defList timeT,
-  defList initTime,
-  defList time_c,
-  defList QP.position +:+. (S "specifically the position of its center of mass, pCM(t) (DD1))"),
-  defList QP.velocity,
-  defList QM.orientation,
-  defList QP.angularVelocity,
-  defList normalVect +:+. S "Its signed direction is determined by (A4)",
-  defList collisionImpulse, 
-  defList pointOfCollision,
-  defList contDisp_k]
-
-{-- __n(t) is the n-th body's __ -option- at time t (units) --}
-helper1 :: (Unitary c, SymbolForm c) => c -> String -> Sentence -> Sentence
-helper1 t i EmptyS = (P $ t ^. symbol) :+: (S i) :+: (S "(t)") +:+ 
-  S "is the" +:+ (S i) :+: (S "-th body's") +:+ (phrase t) +:+
-  S "at time t" +:+ (sParen $ Sy $ unit_symb t)
-helper1 t i opt = (P $ t ^. symbol) :+: (S i) :+: (S "(t)") +:+ 
-  S "is the" +:+ (S i) :+: (S "-th body's") +:+ (phrase t) +:+ opt +:+
-  S "at time t" +:+ (sParen $ Sy $ unit_symb t)
+im3leg = foldle1 (+:+) (+:+) $ map defList im3legTerms
+  
+im3legTerms :: [UnitalChunk]
+im3legTerms = [massIRigidBody, momtInert_k, timeT, initTime, time_c, pos_CM,
+  QP.velocity, QM.orientation, QP.angularVelocity, normalVect, -- +:+. S "Its signed direction is determined by (A4)",
+  collisionImpulse, pointOfCollision, contDisp_k]
 
 
 {--displaceVectBtw  = cvR (ddcWDS "dispBtwVect" (compoundPhrase' 

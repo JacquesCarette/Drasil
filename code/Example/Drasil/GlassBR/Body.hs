@@ -73,7 +73,8 @@ mkSRS = [RefSec (RefProg intro
   [TUnits,
   tsymb [TSPurpose, SymbOrder],
   TAandA])] ++
-  [IntroSec (IntroProg (startIntro (blstRskInvWGlassSlab) (gLassBR)) (short gLassBR)
+  [IntroSec 
+  (IntroProg (startIntro (blstRskInvWGlassSlab) (gLassBR)) (short gLassBR)
      [IPurpose (s2_1_intro_p1 (document) (gLassBR) (glaSlab)),
      IScope incScoR endScoR,
      IChar knowIR undIR appStanddIR,
@@ -178,10 +179,12 @@ s7_1_req6_pulledList = [loadDF, nonFL, glaTyFac, dimLL, tolPre,
 --ISSUE #342--
 
 underConsidertn :: ConceptChunk -> Sentence
-underConsidertn chunk = S "The" +:+ (phrase chunk) +:+ S "under consideration is" +:+. (chunk ^. defn) 
+underConsidertn chunk = S "The" +:+ (phrase chunk) +:+ 
+  S "under consideration is" +:+. (chunk ^. defn) 
 
 blstRskInvWGlassSlab :: Sentence
-blstRskInvWGlassSlab = phrase blastRisk +:+ S "involved with the" +:+ phrase glaSlab
+blstRskInvWGlassSlab = phrase blastRisk +:+ S "involved with the" +:+ 
+  phrase glaSlab
 
 isExpctdToHv :: Sentence -> Sentence -> Sentence
 a `isExpctdToHv` b = S "The" +:+ a +:+ S "is expected to have" +:+ b
@@ -197,9 +200,10 @@ s4_1_bullets :: (NamedIdea n, NamedIdea n1, NamedIdea n2, NamedIdea n3,
 
 startIntro :: Sentence -> CI -> Sentence
 startIntro sfwrPredicts progName = foldlSent [
-  at_start software, S "is helpful to efficiently and correctly predict the" +:+. sfwrPredicts, 
-  underConsidertn blast, S "The", phrase software `sC` S "herein called", short progName, 
-  S "aims to predict the", sfwrPredicts, S "using an intuitive interface"]
+  at_start software, S "is helpful to efficiently and correctly predict the"
+  +:+. sfwrPredicts, underConsidertn blast, S "The", phrase software `sC`
+  S "herein called", short progName, S "aims to predict the", sfwrPredicts, 
+  S "using an intuitive interface"]
 
 knowIR, undIR, appStanddIR, incScoR, endScoR :: Sentence
 knowIR = (phrase theory +:+ S "behind" +:+ phrase glBreakage `sAnd`
@@ -219,15 +223,16 @@ endScoR = foldl (+:+) EmptyS [S "use the", plural datum,
 {--Purpose of Document--}
 
 s2_1_intro_p1 :: NamedChunk -> CI -> NamedChunk -> Sentence
-s2_1_intro_p1 typeOf progName gvnVar = foldlSent [S "The main", phrase purpose, S "of this",
-  phrase typeOf +:+. S "is to predict whether a given", phrase gvnVar +:+.
-  S "is likely to", predxnGoal, S "The", plural goal `sAnd` plural thModel,
-  S "used in the", short progName, S "code are provided" `sC` 
-  S "with an emphasis on explicitly identifying", (plural assumption) `sAnd` S "unambiguous"
-  +:+. plural definition, S "This", phrase typeOf, S "is intended to be used as a",
-  phrase reference, S "to provide all", phrase information, 
-  S "necessary to understand and verify the" +:+. phrase analysis, S "The",
-  short srs, S "is abstract because the", plural content, S "say what", phrase problem,
+s2_1_intro_p1 typeOf progName gvnVar = foldlSent [S "The main", phrase purpose,
+  S "of this", phrase typeOf +:+. S "is to predict whether a given",
+  phrase gvnVar +:+. S "is likely to", predxnGoal, S "The", plural goal `sAnd`
+  plural thModel, S "used in the", short progName, S "code are provided" `sC` 
+  S "with an emphasis on explicitly identifying", (plural assumption) `sAnd` 
+  S "unambiguous" +:+. plural definition, S "This", phrase typeOf, 
+  S "is intended to be used as a", phrase reference, S "to provide all", 
+  phrase information, S "necessary to understand and verify the" +:+. 
+  phrase analysis, S "The", short srs, S "is abstract because the",
+  plural content, S "say what", phrase problem, 
   S "is being solved, but not how to solve it"] --General?
   where predxnGoal = S "resist a specified" +:+ phrase blast
 
@@ -257,14 +262,19 @@ s3 = stakehldrGeneral (gLassBR)
 
 {--GENERAL SYSTEM DESCRIPTION--}
 
-s4 = genSysF [] (s4_1_bullets (endUser) (gLassBR) (secondYear) (undergradDegree) (civilEng) (structuralEng) (glBreakage) (blastRisk)) [] []
+s4 = genSysF [] (s4_1_bullets (endUser) (gLassBR) (secondYear) (undergradDegree)
+  (civilEng) (structuralEng) (glBreakage) (blastRisk)) [] []
 
 {--User Characteristics--}
-s4_1_bullets intendedIndvdl progName yr degreeType prog1 prog2 undrstd1 undrstd2 = enumBullet 
-  [((phrase intendedIndvdl +:+ S "of" +:+ short progName) `isExpctdToHv` S "completed at least" +:+
-  (S "equivalent" `ofThe` (phrase yr)) +:+ S "of an" +:+ phrase degreeType +:+ S "in" +:+ phrase prog1 +:+ S "or" +:+. phrase prog2),
-  (phrase intendedIndvdl `isExpctdToHv` S "an understanding of" +:+ phrase theory +:+ S "behind" +:+. (phrase undrstd1 `sAnd` phrase undrstd2)),
-  (phrase intendedIndvdl `isExpctdToHv` S "basic" +:+ phrase computerLiteracy +:+ S "to handle the" +:+. phrase software)]
+s4_1_bullets intendedIndvdl progName yr degreeType prog1 prog2 undrstd1 undrstd2
+  = enumBullet [((phrase intendedIndvdl +:+ S "of" +:+ short progName) 
+  `isExpctdToHv` S "completed at least" +:+ S "equivalent" `ofThe` (phrase yr)
+  +:+ S "of an" +:+ phrase degreeType +:+ S "in" +:+ phrase prog1 +:+ S "or"
+  +:+. phrase prog2), 
+  (phrase intendedIndvdl `isExpctdToHv` S "an understanding of" +:+ phrase theory
+  +:+ S "behind" +:+. (phrase undrstd1 `sAnd` phrase undrstd2)),
+  (phrase intendedIndvdl `isExpctdToHv` S "basic" +:+ phrase computerLiteracy
+  +:+ S "to handle the" +:+. phrase software)]
 
 --
 
@@ -540,8 +550,8 @@ s7_1_req2 = foldlSent [S "The", phrase system,
 
 s7_1_req3 = foldlSent [S "The", phrase system, S "shall check the entered",
   plural inValue, S "to ensure that they do not exceed the",
-  plural datumConstraint, S "mentioned in" +:+. makeRef (SRS.datCon SRS.missingP []),
-  S "If any of the", plural inParam,
+  plural datumConstraint, S "mentioned in" +:+. 
+  makeRef (SRS.datCon SRS.missingP []), S "If any of the", plural inParam,
   S "is out of bounds, an error message is displayed and the",
   plural calculation, S "stop"]
 
@@ -553,8 +563,8 @@ s7_1_req5 = S "If" +:+ (getS is_safe1) `sAnd` (getS is_safe2) +:+
   sParen (S "from" +:+ (makeRef (gbSymbMapT t1SafetyReq))
   `sAnd` (makeRef (gbSymbMapT t2SafetyReq))) +:+ S "are true" `sC`
   phrase output_ +:+ S "the message" +:+ Quote (safeMessage ^. defn) +:+
-  S "If the" +:+ phrase condition +:+ S "is false, then" +:+ phrase output_ +:+
-  S "the message" +:+ Quote (notSafe ^. defn)
+  S "If the" +:+ phrase condition +:+ S "is false, then" +:+ phrase output_ 
+  +:+ S "the message" +:+ Quote (notSafe ^. defn)
 
 {-
 s7_1_req6 = [(Enumeration $ Simple $ [(acroR 6, Nested (titleize output_ +:+

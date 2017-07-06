@@ -628,23 +628,24 @@ s8 = SRS.likeChg [s8_list] []
 
 --Considered "dead" knowldege?
 s8_likelychg_list :: [Sentence]
-s8_likelychg_list = [s8_likelychg1, s8_likelychg2, s8_likelychg3, s8_likelychg4, 
+s8_likelychg_list = [s8_likelychg1 (blastRisk), s8_likelychg2, s8_likelychg3, s8_likelychg4, 
   s8_likelychg5]
 
-s8_likelychg1, s8_likelychg2, s8_likelychg3, s8_likelychg4, 
+s8_likelychg1 :: NamedChunk -> Sentence
+s8_likelychg2, s8_likelychg3, s8_likelychg4, 
   s8_likelychg5 :: Sentence
 
-s8_likelychg1 = foldlSent [acroA 3 `sDash` S "The", phrase system, 
-  S "currently only calculates for external" +:+. phrase blastRisk, 
-  S "In the future", plural calculation,
-  S "can be added for the internal", phrase blastRisk]
+s8_likelychg1 mainConcept = foldlSent [acroA 3 `sDash` S "The", 
+  phrase system, S "currently only calculates for external" +:+.
+  phrase mainConcept, S "In the future", plural calculation,
+  S "can be added for the internal", phrase mainConcept]
 
 s8_likelychg2 = foldlSent [acroA 4 `sC` (acroA 8 `sDash`
   S "Currently the"), plural value, S "for",
-  (getS sflawParamM) `sC` (getS sflawParamK) `sC`
-  S "and", (getS mod_elas), S "are assumed to be the", 
-  S "same for all glass. In the future these", plural value, 
-  S "can be changed to", phrase variable, plural input_]
+  foldlList (map getS (take 3 assumption4_constants)),
+  S "are assumed to be the same for all glass. In the", 
+  S "future these", plural value, S "can be changed to",
+  phrase variable, plural input_]
 
 s8_likelychg3 = foldlSent [acroA 5 `sDash` S "The", phrase software, 
   S "may be changed to accommodate more than a single", phrase lite]
@@ -821,7 +822,8 @@ s9_table3 = Table (EmptyS:s9_row_header_t3)
 s9_intro2 = traceGIntro traceyGraphs
   [(foldlList (map plural (take 3 solChSpecSubsections)) +:+. S "on each other"),
   (plural requirement +:+ S "on" +:+. foldlList (map plural solChSpecSubsections)),
-  (foldlList ((map plural (take 3 solChSpecSubsections))++[plural requirement, plural likelyChg +:+ S "on" +:+ plural assumption]))]
+  (foldlList ((map plural (take 3 solChSpecSubsections))++
+  [plural requirement, plural likelyChg +:+ S "on" +:+ plural assumption]))]
 
 fig_2 = figureLabel "2" (traceyMatrix)
   (titleize' item +:+ S "of Different" +:+ titleize' section_)

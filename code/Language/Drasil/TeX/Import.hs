@@ -199,7 +199,7 @@ lay x@(Definition m c)      = T.Definition (makePairs c m) (spec $ refName x)
 lay (Enumeration cs)      = T.List $ makeL cs
 lay x@(Figure c f)        = T.Figure (spec (refName x)) (spec c) f
 lay x@(Module m)          = T.Module (formatName m) (spec $ refName x)
-lay x@(Requirement r)     = 
+lay x@(Requirement r _)     = 
   T.Requirement (spec (phrase (r ^. term))) (spec $ refName x)
 lay x@(Assumption a _)      = 
   T.Assumption (spec (phrase $ a ^. term)) (spec $ refName x)

@@ -21,8 +21,15 @@ acroPS numVar = short physSyst    :+: S (show numVar)
 acroR  numVar = short requirement :+: S (show numVar)
 acroT  numVar = short thModel     :+: S (show numVar)
 
-acroTA :: [Contents] -> AssumpChunk -> Sentence
-acroTA assump aId = makeRef $ head $ filter (\x -> (refId x) == (aId ^. id)) assump
+
+-- Creates an ordered list of items to be referenced.
+-- Helps with the formatting of HTML documents for the most part.
+-- Takes a list of Contents (e.g. Assumptions, LikelyChanges) and a
+-- number from which to start counting.
+acroNumGen :: [Contents] -> Int -> [Contents]
+acroNumGen [] _ = []
+acroNumGen assump num = (f $ head assump) : acroNumGen (tail assump) (num + 1)
+  where f (Assumption a _) = Assumption a (S "A" :+: (S $ show num))
 
 assumption, dataDefn, genDefn, goalStmt, inModel, likelyChg, unlikelyChg,
   physSyst, requirement, srs, thModel, mg, desSpec, notApp, dataConst :: CI

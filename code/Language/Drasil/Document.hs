@@ -48,8 +48,8 @@ data Contents = Table [Sentence] [[Sentence]] Title Bool
                -- looking up variables (currently a hack)
                | Enumeration ListType -- ^ Lists
                | Figure Label Filepath -- ^ Should use relative file path.
-               | Module ModuleChunk 
-               | Requirement ReqChunk
+               | Module ModuleChunk
+               | Requirement ReqChunk Sentence
                | Assumption AssumpChunk Sentence
                | LikelyChange LCChunk
                | UnlikelyChange UCChunk
@@ -94,7 +94,6 @@ data DType = Data QDefinition -- ^ QDefinition is the chunk with the defining
 class LayoutObj l where
   refName :: l -> Sentence
   rType   :: l -> RefType
-  refId   :: l -> String
 
 instance LayoutObj Section where
   refName (Section t _) = S "Sec:" :+: inferName t
@@ -110,8 +109,8 @@ instance LayoutObj Contents where
   refName (Defnt dt _ r)       = getDefName dt +:+ r
   refName (Enumeration _)     = error "List refs unimplemented"
   refName (Module mc)         = S $ "M" ++ alphanumOnly (mc ^. id)
-  refName (Requirement rc)    = S $ "R" ++ alphanumOnly (rc ^. id)
-  refName (Assumption _ aId)     = aId
+  refName (Requirement rc _)    = S $ "R" ++ alphanumOnly (rc ^. id)
+  refName (Assumption ac _)     = S $ "A" ++ alphanumOnly (ac ^. id)
   refName (LikelyChange lcc)  = S $ "LC" ++ alphanumOnly (lcc ^. id)
   refName (UnlikelyChange ucc)= S $ "UC" ++ alphanumOnly (ucc ^. id)
 --  refName (UsesHierarchy _)   = S $ "Figure:UsesHierarchy"
@@ -125,7 +124,7 @@ instance LayoutObj Contents where
   rType (Definition _ _)   = Def
   rType (Defnt _ _ _)       = Def
   rType (Module _)         = Mod
-  rType (Requirement _)    = Req
+  rType (Requirement _ _)    = Req
   rType (Assumption _ _)     = Assump
   rType (LikelyChange _)   = LC
   rType (UnlikelyChange _) = UC
@@ -136,7 +135,6 @@ instance LayoutObj Contents where
   rType (GDef)              = Def
   rType (DDef _ _ _)        = Def
   rType _ = error "Attempting to reference unimplemented reference type"
-  refId (Assumption ac _)   = (ac ^. id)
   
 -- | Automatically create the label for a definition
 getDefName :: DType -> Sentence

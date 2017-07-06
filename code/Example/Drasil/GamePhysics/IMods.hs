@@ -10,7 +10,6 @@ import qualified Data.Drasil.Concepts.Physics as CP (rigidBody)
 import qualified Data.Drasil.Quantities.Physics as QP (acceleration, 
   angularAccel, force, gravitationalAccel, velocity, 
   momentOfInertia, angularVelocity, position, time, impulseS)
-import qualified Data.Drasil.Quantities.PhysicalProperties as QPP
 import Drasil.GamePhysics.Unitals
 import Prelude hiding (id)
 import Control.Lens ((^.))
@@ -116,7 +115,7 @@ im3descr = foldlSent [S "This instance model is based on our assumptions",
   S "P is the point of collision (m)"
 --}
 
-
+defList :: (Quantity a, SymbolForm a) => a -> Sentence
 defList thing = foldlSent [(getS thing), S "is the", (phrase thing), sParen (fmtU EmptyS thing)]
 
 im3leg = foldle1 (+:+) (+:+) 

@@ -423,7 +423,8 @@ s6_2_1_list = [(enumSimple 1 (short assumption) s6_2_1_listOfAssumptions)]
 
 s6_2_1_listOfAssumptions :: [Sentence]
 s6_2_1_listOfAssumptions = assumption1 ++ assumption2 ++ assumption3 ++ 
-  (assumption4 (load_dur)) ++ assumption5 ++ assumption6 ++ assumption7 ++ (assumption8 (loadDF))
+  (assumption4 (load_dur)) ++ assumption5 ++ assumption6 ++ assumption7 ++
+  (assumption8 (loadDF))
 
 assumption1 :: [Sentence]
 assumption1 = [foldlSent [S "The standard E1300-09a for", 
@@ -438,7 +439,8 @@ assumption1 = [foldlSent [S "The standard E1300-09a for",
 
 assumption2 :: [Sentence]
 assumption2 = [foldlSent [S "Following", (sSqBr (S "4 (pg. 1)")) `sC`
-  S "this", phrase practice, S "does not apply to any form of wired, patterned" `sC`
+  S "this", phrase practice,
+  S "does not apply to any form of wired, patterned" `sC`
   S "etched, sandblasted, drilled, notched, or grooved glass with", 
   phrase surface `sAnd` S "edge treatments that alter the glass strength"]]
 
@@ -448,9 +450,9 @@ assumption3 = [foldlSent [S "This", phrase system,
   plural calculation]]
 
 assumption4 :: UnitaryChunk -> [Sentence]
-assumption4 mainIdea = [foldlSent [S "The", plural value, S "provided in", makeRef s10,
-  S "are assumed for the", phrase mainIdea, sParen (getS mainIdea) `sC` 
-  S "and the material properties of", 
+assumption4 mainIdea = [foldlSent [S "The", plural value, S "provided in", 
+  makeRef s10, S "are assumed for the", phrase mainIdea, sParen (getS mainIdea)
+  `sC` S "and the material properties of",
   foldlList (map getS (take 3 assumption4_constants))]]
 
 assumption5 :: [Sentence]
@@ -517,7 +519,8 @@ s7_1_list = [enumSimple 1 (getAcc requirement) (s7_1_listOfReqs)] ++
   s7_1_req6 ++ [s7_1_req1Table]
 
 s7_1_listOfReqs :: [Sentence]
-s7_1_listOfReqs = [s7_1_req1, s7_1_req2, s7_1_req3, s7_1_req4, s7_1_req5 (output_)]
+s7_1_listOfReqs = [s7_1_req1, s7_1_req2, s7_1_req3, s7_1_req4,
+  s7_1_req5 (output_)]
 
 s7_1_req1 = foldlSent [at_start input_, S "the", plural quantity, S "from",
   makeRef s7_1_req1Table `sC` S "which define the glass dimensions" `sC` 
@@ -621,8 +624,8 @@ s8 = SRS.likeChg [s8_list] []
 
 --Considered "dead" knowldege?
 s8_likelychg_list :: [Sentence]
-s8_likelychg_list = [s8_likelychg1 (blastRisk), s8_likelychg2, s8_likelychg3, s8_likelychg4, 
-  s8_likelychg5]
+s8_likelychg_list = [s8_likelychg1 (blastRisk), s8_likelychg2, s8_likelychg3,
+  s8_likelychg4, s8_likelychg5]
 
 s8_likelychg1 :: NamedChunk -> Sentence
 s8_likelychg2, s8_likelychg3, s8_likelychg4, 
@@ -653,10 +656,12 @@ s8_likelychg5 = foldlSent [acroA 7 `sDash` S "The", phrase software,
 {--TRACEABLITY MATRICES AND GRAPHS--}
 
 s9 = traceMGF traceyMatrices
-  [(foldlList (map plural (take 3 solChSpecSubsections)) +:+. S "with each other"),
-   (plural requirement +:+ S "on" +:+. foldlList (map plural solChSpecSubsections)),
-   (foldlsC (map plural (take 3 solChSpecSubsections)) `sC` plural likelyChg `sAnd`
-   plural requirement +:+ S "on the" +:+ plural assumption)]
+  [(foldlList (map plural (take 3 solChSpecSubsections)) +:+. 
+  S "with each other"),
+  (plural requirement +:+ S "on" +:+.
+  foldlList (map plural solChSpecSubsections)),
+  (foldlsC (map plural (take 3 solChSpecSubsections)) `sC` plural likelyChg
+  `sAnd` plural requirement +:+ S "on the" +:+ plural assumption)]
   (traceyMatrices ++ (s9_intro2) ++ traceyGraphs)
   []
 
@@ -814,7 +819,8 @@ s9_table3 = Table (EmptyS:s9_row_header_t3)
 
 s9_intro2 = traceGIntro traceyGraphs
   [(foldlList (map plural (take 3 solChSpecSubsections)) +:+. S "on each other"),
-  (plural requirement +:+ S "on" +:+. foldlList (map plural solChSpecSubsections)),
+  (plural requirement +:+ S "on" +:+. foldlList 
+  (map plural solChSpecSubsections)),
   (foldlList ((map plural (take 3 solChSpecSubsections))++
   [plural requirement, plural likelyChg +:+ S "on" +:+ plural assumption]))]
 

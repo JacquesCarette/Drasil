@@ -3,7 +3,7 @@ module Data.Drasil.Concepts.Education where
 import Language.Drasil
 import Data.Drasil.Concepts.Documentation
 
-calculus, civil, degree_, engineering, structural,
+calculus, civil, degree_, engineering, structural, mechanics,
   undergraduate :: NamedChunk
 
 calculus        = npnc "calculus"       (cn "calculus")

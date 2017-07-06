@@ -337,6 +337,12 @@ s4_2_1_assum1, s4_2_1_assum2, s4_2_1_assum3, s4_2_1_assum4, s4_2_1_assum5,
 allObject :: Sentence -> [Sentence]
 allObject thing = [S "All objects are", thing]
 
+thereNo :: [Sentence] -> [Sentence]
+thereNo [x]      = [S "There is no", x, S "involved throughout the", 
+  (phrase simulation)]
+thereNo l = [S "There are no", foldlList l, S "involved throughout the", 
+  (phrase simulation)]
+
 s4_2_1_assum1 = allObject (plural CP.rigidBody)
 s4_2_1_assum2 = allObject (getAcc twoD)
 s4_2_1_assum3 = [S "The library uses a", (phrase CP.cartesian)]
@@ -345,11 +351,9 @@ s4_2_1_assum4 = [S "The axes are defined using",
 s4_2_1_assum5 = [S "All", (plural CP.rigidBody), 
   (plural CP.collision), S "are vertex-to-edge", 
   (plural CP.collision)]
-s4_2_1_assum6 = [S "There is no damping", 
-  S "involved throughout the", (phrase simulation)]
-s4_2_1_assum7 = [S "There are no", (plural CM.constraint),
-  S "and", (plural CP.joint), S "involved throughout the", 
-  (phrase simulation)]
+
+s4_2_1_assum6 = thereNo [S "damping"]
+s4_2_1_assum7 = thereNo [(plural CM.constraint), (plural CP.joint)]
 
 s4_2_1_list = enumSimple 1 (getAcc assumption) $ map (foldlSent) 
   [s4_2_1_assum1, s4_2_1_assum2, s4_2_1_assum3, s4_2_1_assum4, s4_2_1_assum5, 

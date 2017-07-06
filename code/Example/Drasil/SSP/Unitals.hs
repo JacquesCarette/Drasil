@@ -24,9 +24,12 @@ genForce = uc CP.force cF newton
 -------------
 -- HELPERS --
 -------------
-fsi, fisi :: String
+fsi, fisi, wiif, wla, smsi :: String
 fsi   = "for slice index i"
 fisi  = "for interslice index i"
+wiif  = "without the influence of interslice forces"
+wla   = "without length adjustment"
+smsi  = "refers to either slice i midpoint, or slice interface i"
 
 --------------------------------
 -- START OF CONSTRAINEDCHUNKS --
@@ -141,22 +144,22 @@ intNormForce = uc' "E_i" (cn $ "interslice normal force")
 
 waterHght   = uc' "y_wt,i"
   (cn $ "the y ordinate, or height of the water table at i")
-  "refers to either slice i midpoint, or slice interface i"
+  smsi
   (sub lY (Atomic "wt,i")) metre
 
 slopeHght   = uc' "y_us,i" (cn $ "the y ordinate, or height of the " ++
   "top of the slope at i")
-  "refers to either slice i midpoint, or slice interface i"
+  smsi
   (sub lY (Atomic "us,i")) metre
 
 slipHght    = uc' "y_slip,i" (cn $ "the y ordinate, or height of " ++
   "the slip surface at i")
-  "refers to either slice i midpoint, or slice interface i"
+  smsi
   (sub lY (Atomic "slip,i")) metre
 
 xi          = uc' "x_i"
   (cn $ "x ordinate")
-  "refers to either slice i midpoint, or slice interface i"
+  smsi
   (sub lX lI) metre
 
 critCoords  = uc' "(xcs,ycs)" (cn $ "the set of x and y coordinates")
@@ -168,25 +171,25 @@ mobShrI     = uc' "S_i" (cn $ "mobilized shear force")
   fsi
   (sub cS lI) newton
 
-shrResI     = uc' "P_i" (cn $ "resistive shear force") ("Mohr Coulomb frictional " ++
-  "force that describes the limit of mobilized shear force the slice i " ++
-  "can withstand before failure")
+shrResI     = uc' "P_i" (cn $ "resistive shear force") ("Mohr Coulomb " ++
+  "frictional force that describes the limit of mobilized shear force the " ++
+  "slice i can withstand before failure")
   (sub cP lI) newton
   
-mobShrC     = uc' "Psi" (cn $ "constant") ("converts mobile shear without " ++ 
-  "the influence of interslice forces, to a calculation considering the interslice forces")
+mobShrC     = uc' "Psi" (cn $ "constant") ("converts mobile shear " ++ 
+  wiif ++ ", to a calculation considering the interslice forces")
   (sub (Greek Psi) lC) newton
 
-shrResC     = uc' "Phi" (cn $ "constant") ("converts resistive shear without " ++ 
-  "the influence of interslice forces, to a calculation considering the interslice forces")
+shrResC     = uc' "Phi" (cn $ "constant") ("converts resistive shear " ++ 
+  wiif ++ ", to a calculation considering the interslice forces")
   (sub (Greek Phi) lC) newton
 
 shearFNoIntsl = uc' "T_i"
-  (cn $ "mobilized shear force") ("without the influence of interslice forces " ++ fsi)
+  (cn $ "mobilized shear force") (wiif ++ " " ++ fsi)
   (sub cT lI) newton
 
 shearRNoIntsl = uc' "R_i"
-  (cn $ "resistive shear force") ("neglecting the influence of interslice forces " ++ fsi)
+  (cn $ "resistive shear force") (wiif ++ " " ++ fsi)
   (sub cR lI) newton
 
 slcWght     = uc' "W_i" (cn $ "weight") ("downward force caused by gravity on slice i")
@@ -221,7 +224,7 @@ nrmFSubWat = uc' "N'_i" (cn $ "effective normal force") ("for a soil surface, " 
   (sub (prime $ Atomic "N") lI) newton
 
 nrmFNoIntsl = uc' "N*_i" (cn $ "effective normal force") ("for a soil surface, " ++
-  "neglecting the influence of interslice forces")
+  wiif)
   (sub (Atomic "N*") lI) newton
 
 surfLoad    = uc' "Q_i" (cn $ "imposed surface load") 
@@ -260,19 +263,19 @@ genDisplace = uc' "genDisplace" (cn $ "displacement") "generic displacement of a
   (Greek Delta_L) metre
 
 shrStiffIntsl = uc' "K_st,i" (cn $ "shear stiffness")
-  ("for interslice surface, without length adjustment " ++ fisi)
+  ("for interslice surface, " ++ wla ++ " " ++ fisi)
   (sub cK (Atomic "st,i")) pascal
 
 shrStiffBase  = uc' "K_bt,i" (cn $ "shear stiffness") 
-  ("for a slice base surface, without length adjustment " ++ fsi)
+  ("for a slice base surface, " ++ wla ++ " " ++ fsi)
   (sub cK (Atomic "bt,i")) pascal
 
 nrmStiffIntsl = uc' "K_sn,i" (cn $ "normal stiffness")
-  ("for an interslice surface, without length adjustment " ++ fisi)
+  ("for an interslice surface, " ++ wla ++ " " ++ fisi)
   (sub cK (Atomic "sn,i")) pascal
 
 nrmStiffBase = uc' "K_bn,i" (cn $ "normal stiffness") 
-  ("for a slice base surface, without length adjustment " ++ fsi)
+  ("for a slice base surface, " ++ wla ++ " " ++ fsi)
   (sub cK (Atomic "bn,i")) pascal
 
 shrStiffRes  = uc' "K_tr" (cn $ "shear stiffness")

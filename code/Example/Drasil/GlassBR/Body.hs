@@ -8,7 +8,7 @@ import Data.Drasil.Concepts.Documentation
 import Data.Drasil.Concepts.Education
 import Data.Drasil.Software.Products
 import Data.Drasil.Concepts.Computation
-import Data.Drasil.Concepts.Software (performance)
+import Data.Drasil.Concepts.Software
 import Data.Drasil.Concepts.Math (graph, calculation, equation,
   surface, probability, parameter)
 import Data.Drasil.Concepts.Thermodynamics (heat)
@@ -176,6 +176,11 @@ requiredInputs = (map qs [plate_len, plate_width, char_weight])
 s7_1_req6_pulledList :: [QDefinition]
 s7_1_req6_pulledList = [loadDF, nonFL, glaTyFac, dimLL, tolPre,
   tolStrDisFac, strDisFac, hFromt]
+
+--Used in "Non-Functional Requirements" Section--
+gBRpriorityNFReqs :: [ConceptChunk]
+gBRpriorityNFReqs = [correctness, verifiability, understandability, 
+  reusability, maintainability, portability]
 
 --------------------------------------------------------------------------------
 
@@ -601,7 +606,7 @@ s7_1_req6 = [(Enumeration $ Simple $ [(acroR 6, Nested (titleize output_ +:+
     [Flat $ (titleize lResistance) +:+ sParen (short lResistance) +:+ sParen (makeRef (gbSymbMapT calOfCap))] ++
     [Flat $ (at_start demand) +:+ sParen (getS demand) +:+ sParen (makeRef (gbSymbMapT calOfDe))]
     ++
-    map (\c -> Flat $ (at_start c) +:+ sParen (getS c) +:+ sParen (makeRef (gbSymbMapD c)))
+    map (\d -> Flat $ (at_start d) +:+ sParen (getS d) +:+ sParen (makeRef (gbSymbMapD d)))
     s7_1_req6_pulledList
     ++
     [Flat $ (titleize aspectR) +:+ sParen (short aspectR) {-+:+ E ((C aspectR) := (C plate_len):/(C plate_width))-}]
@@ -619,8 +624,7 @@ s7_2_intro = foldlSP [
   S "will be very quick and use minimal storage", 
   S "Rather than", phrase performance `sC` S "the", phrase priority, 
   phrase nonfunctional, short requirement :+:
-  S "s are correctness, verifiability, understandability, reusability,", 
-  S "maintainability and portability"]
+  S "s are", foldlList (map phrase gBRpriorityNFReqs)]
 
 {--LIKELY CHANGES--}
 

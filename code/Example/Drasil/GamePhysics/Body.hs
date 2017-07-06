@@ -262,16 +262,16 @@ s4_1_2_list :: Contents
 goalStatementSect :: SubSec
 goalStatementSect = sSubSec goalStmt [(siCon [s4_1_2_list])]
 
-goalStatementStruct :: (NamedIdea a, NamedIdea b, NamedIdea c) => Sentence -> [a] -> Sentence -> Sentence -> [b] -> c -> Sentence -> Sentence -> [Sentence]
-goalStatementStruct property inputs item adjective outputs object condition1 condition2 = 
-  [S "Given the", condition0 property, (inputList item), 
-  adjective, S "a set of", (plural object) `sC` S "determine", condition1,
-  (foldlList $ map plural outputs), S "over a period of", (phrase QP.time), 
-  condition2]
-  where condition0 EmptyS = S "initial"
-        condition0 p      = p `sC` (S "initial")
-        inputList EmptyS  = (foldlList $ map plural inputs)
-        inputList i       = (foldlList $ map plural inputs) `sC` S "and" +:+ i
+goalStatementStruct :: (NamedIdea a, NamedIdea b) => Sentence -> [a] -> Sentence -> Sentence -> [a] -> b -> Sentence -> Sentence -> [Sentence]
+goalStatementStruct state inputs wrt adjective outputs object condition1 condition2 = 
+  [S "Given the", initial state, (listOfInputs wrt), adjective, S "a set of", 
+  (plural object) `sC` S "determine", condition1, listOfOutputs, 
+  S "over a period of", (phrase QP.time), condition2]
+  where initial EmptyS      = S "initial"
+        initial p           = p `sC` (S "initial")
+        listOfInputs EmptyS = (foldlList $ map plural inputs)
+        listOfInputs i      = (foldlList $ map plural inputs) `sC` S "and" +:+ i
+        listOfOutputs       = (foldlList $ map plural outputs)
 
 s4_1_2_stmt1 = goalStatementStruct (plural physicalProperty) 
   (take 2 inputSymbols) (plural QP.force) (S "applied on")
@@ -288,14 +288,14 @@ s4_1_2_stmt3 = goalStatementStruct EmptyS
   (take 0 inputSymbols) CP.rigidBody 
   (S "if any of them will collide with one another") EmptyS
 
-inputsSubset :: [UnitalChunk]
-inputsSubset = [QP.position, QM.orientation, QP.linearVelocity, 
+goalStatement4Inputs :: [UnitalChunk]
+goalStatement4Inputs = [QP.position, QM.orientation, QP.linearVelocity, 
   QP.angularVelocity]
 
 s4_1_2_stmt4 = goalStatementStruct (plural physicalProperty)
-  (inputsSubset) --fixme input symbols
+  (goalStatement4Inputs) --fixme input symbols
   EmptyS (S "of")
-  (inputsSubset) --fixme input symbols
+  (goalStatement4Inputs) --fixme input symbols
   CP.rigidBody (S "the new") (S "of the" +:+ (plural CP.rigidBody) +:+ 
   S "that have undergone a" +:+ (phrase CP.collision))
 

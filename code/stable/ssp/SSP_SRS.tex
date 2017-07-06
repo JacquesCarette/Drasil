@@ -66,6 +66,8 @@ $H_{i}$ & Interslice Water Force: exerted in the x-ordinate direction between ad
 \\
 $h_{i}$ & Midpoint Height: distance from the slip base to the slope surface in a vertical line from the midpoint of the slice for slice index i & m
 \\
+$i$ & Index: used to show a quantity applies to only one slice & 
+\\
 $K$ & Stiffness: The extent a body resists strain. & $\frac{\text{N}}{\text{m}}$
 \\
 $K_{bn,i}$ & Normal Stiffness: for a slice base surface, without length adjustment for slice index i & Pa
@@ -739,16 +741,16 @@ Description & $K_{st,i}$ is the shear stiffness
 \end{minipage}\\
 Using the force-displacement relationship of GD8 to define stiffness matrix $K_{st,i}$, as seen in equation (6).
 For interslice surfaces the stiffness constants and displacements refer to an unrotated coordinate system, $\delta{}$ of GD9. The interslice elements are left in their standard coordinate system, and therefore are described by the same equation from GD8. Seen as $K_{st,i}$ in DD12. $K_{st,i}$ is the shear element in the matrix, and $K_{sn,i}$ is the normal element in the matrix, calculated as in DD14.
-For basal surfaces the stiffness constants and displacements refer to a system rotated for the base angle alpha (DD5). To analyze the effect of force-displacement relationships occurring on both basal and interslice surfaces of an element i they must reference the same coordinate system. The basal stiffness matrix must be rotated counter clockwise to align with the angle of the basal surface. The base stiffness counter clockwise rotation is applied in equation (7) to the new matrix $N*_{i}$.
-The Hooke's law force displacement relationship of GD8 applied to the base also references a displacement vector $\varepsilon{}_{i}$ of GD9 rotated for the base angle of the slice $\alpha{}_{i}$ . The basal displacement vector $\delta{}$ is rotated clockwise to align with the interslice displacement vector $\delta{}$ , applying the definition of $\varepsilon{}_{i}$ in terms of $\delta{}$ as seen in GD9. Using this with base stiffness matrix K*i, a basal force displacement relationship in the same coordinate system as the interslice relationship can be derived as done in equation (8).
-The new effective base stiffness matrix K0i ,as derived in equation (7) is defined in equation (9). This is seen as matrix Kb,i in GD12. $K_{bt,i}$ is the shear element in the matrix, and $K_{bn,i}$ is the normal element in the matrix, calculated as in DD14. The notation is simplified by the introduction of the constants KbA,i and KbB,i, defined in equations (10) and (11) respectively.
+For basal surfaces the stiffness constants and displacements refer to a system rotated for the base angle alpha (DD5). To analyze the effect of force-displacement relationships occurring on both basal and interslice surfaces of an element $i$ they must reference the same coordinate system. The basal stiffness matrix must be rotated counter clockwise to align with the angle of the basal surface. The base stiffness counter clockwise rotation is applied in equation (7) to the new matrix $N*_{i}$.
+The Hooke's law force displacement relationship of GD8 applied to the base also references a displacement vector $\varepsilon{}_{i}$ of GD9 rotated for the base angle of the slice $\alpha{}_{i}$ The basal displacement vector. $\delta{}$ is rotated clockwise to align with the interslice displacement vector $\delta{}$, applying the definition of $\varepsilon{}_{i}$ in terms of $\delta{}$ as seen in GD9. Using this with base stiffness matrix $K_{bt,i}$, a basal force displacement relationship in the same coordinate system as the interslice relationship can be derived as done in equation (8).
+The new effective base stiffness matrix $K_{bt,i}$ as derived in equation (7) is defined in equation (9). This is seen as matrix $K_{bt,i}$ in GD12. $K_{bt,i}$ is the shear element in the matrix, and $K_{bn,i}$ is the normal element in the matrix, calculated as in DD14. The notation is simplified by the introduction of the constants $K_{bt,i}$ and $K_{bt,i}$, defined in equation (10) and equation (11) respectively.
 \begin{equation}
 K_{bt,i}=K_{bt,i}\cos\left(\alpha{}_{i}\right)^{2}+K_{bn,i}\sin\left(\alpha{}_{i}\right)^{2}
 \end{equation}
 \begin{equation}
 K_{bt,i}=\left(K_{bt,i}-K_{bn,i}\right)\sin\left(\alpha{}_{i}\right)\cos\left(\alpha{}_{i}\right)
 \end{equation}
-A force-displacement relationship for an element i can be written in terms of displacements occurring in the unrotated coordinate system $\delta{}$ of GD9 using the matrix Ks,i, and Kb,i as seen in DD12.
+A force-displacement relationship for an element $i$ can be written in terms of displacements occurring in the unrotated coordinate system $\delta{}$ of GD9 using the matrix $K_{bt,i}$, and $K_{bt,i}$ as seen in DD12.
 ~\newline
 \noindent \begin{minipage}{\textwidth}
 \begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
@@ -865,11 +867,11 @@ Taking the parallel force equilibrium of GD2 with the definition of mobile shear
 \begin{equation}
 \frac{N_{i}\tan\left(\varphi{}'\right)+c'b_{i}\sec\left(\alpha{}_{i}\right)}{FS}=\left(W_{i}-\lambda{}f_{i}E_{i}+\lambda{}f_{i}E_{i}+U_{b,i}\cos\left(\beta{}_{i}\right)+Q_{i}\cos\left(\omega{}_{i}\right)\right)\sin\left(\alpha{}_{i}\right)+\left(-K_{c}W_{i}-E_{i}+E_{i}-H_{i}+H_{i}+U_{t,i}\sin\left(\beta{}_{i}\right)+Q_{i}\sin\left(\omega{}_{i}\right)\right)\cos\left(\alpha{}_{i}\right)
 \end{equation}
-Substituting the equation for N0 i from equation (16) into equation (17) and rearranging results in equation (18).
+Substituting the equation for $N'_{i}$ from equation (16) into equation (17) and rearranging results in equation (18).
 \begin{equation}
 E_{i}\left(\left(\lambda{}f_{i}\cos\left(\alpha{}_{i}\right)-\sin\left(\alpha{}_{i}\right)\right)\tan\left(\varphi{}'\right)-\left(\lambda{}f_{i}\sin\left(\alpha{}_{i}\right)-\cos\left(\alpha{}_{i}\right)\right)*FS\right)=E_{i}\left(\left(\lambda{}f_{i}\cos\left(\alpha{}_{i}\right)-\sin\left(\alpha{}_{i}\right)\right)\tan\left(\varphi{}'\right)-\left(\lambda{}f_{i}\sin\left(\alpha{}_{i}\right)-\cos\left(\alpha{}_{i}\right)\right)*FS\right)+FS*T_{i}-R_{i}
 \end{equation}
-Where $R_{i}$ and $T_{i}$ are the resistive and mobile shear of the slice, without the influence of interslice forces $E_{i}$ and X, as defined in DD10 and DD11. Making use of the constants, and with full equations found below in equations (19) and (20) respectively, then equation (18) can be simplified to equation (21), also seen in IM3.
+Where $R_{i}$ and $T_{i}$ are the resistive and mobile shear of the slice, without the influence of interslice forces $E_{i}$ and $X_{i}$, as defined in DD10 and DD11 Making use of the constants, and with full equations found below in equation (19) and equation (20) respectively, then equation (18) can be simplified to equation (21), also seen in IM3.
 \begin{equation}
 \Phi{}_{c}=\left(\lambda{}f_{i}\cos\left(\alpha{}_{i}\right)-\sin\left(\alpha{}_{i}\right)\right)\tan\left(\varphi{}'\right)-\left(\lambda{}f_{i}\sin\left(\alpha{}_{i}\right)-\cos\left(\alpha{}_{i}\right)\right)*FS
 \end{equation}

@@ -224,6 +224,17 @@ m
 </tr>
 <tr>
 <td>
+i
+</td>
+<td>
+Index: used to show a quantity applies to only one slice
+</td>
+<td>
+
+</td>
+</tr>
+<tr>
+<td>
 K
 </td>
 <td>
@@ -2460,10 +2471,10 @@ For interslice surfaces the stiffness constants and displacements refer to an un
 For basal surfaces the stiffness constants and displacements refer to a system rotated for the base angle alpha (DD5). To analyze the effect of force-displacement relationships occurring on both basal and interslice surfaces of an element i they must reference the same coordinate system. The basal stiffness matrix must be rotated counter clockwise to align with the angle of the basal surface. The base stiffness counter clockwise rotation is applied in equation (7) to the new matrix N*<sub>i</sub>.
 </p>
 <p class="paragraph">
-The Hooke's law force displacement relationship of GD8 applied to the base also references a displacement vector &epsilon;<sub>i</sub> of GD9 rotated for the base angle of the slice &alpha;<sub>i</sub> . The basal displacement vector &delta; is rotated clockwise to align with the interslice displacement vector &delta; , applying the definition of &epsilon;<sub>i</sub> in terms of &delta; as seen in GD9. Using this with base stiffness matrix K*i, a basal force displacement relationship in the same coordinate system as the interslice relationship can be derived as done in equation (8).
+The Hooke's law force displacement relationship of GD8 applied to the base also references a displacement vector &epsilon;<sub>i</sub> of GD9 rotated for the base angle of the slice &alpha;<sub>i</sub> The basal displacement vector. &delta; is rotated clockwise to align with the interslice displacement vector &delta;, applying the definition of &epsilon;<sub>i</sub> in terms of &delta; as seen in GD9. Using this with base stiffness matrix K<sub>bt,i</sub>, a basal force displacement relationship in the same coordinate system as the interslice relationship can be derived as done in equation (8).
 </p>
 <p class="paragraph">
-The new effective base stiffness matrix K0i ,as derived in equation (7) is defined in equation (9). This is seen as matrix Kb,i in GD12. K<sub>bt,i</sub> is the shear element in the matrix, and K<sub>bn,i</sub> is the normal element in the matrix, calculated as in DD14. The notation is simplified by the introduction of the constants KbA,i and KbB,i, defined in equations (10) and (11) respectively.
+The new effective base stiffness matrix K<sub>bt,i</sub> as derived in equation (7) is defined in equation (9). This is seen as matrix K<sub>bt,i</sub> in GD12. K<sub>bt,i</sub> is the shear element in the matrix, and K<sub>bn,i</sub> is the normal element in the matrix, calculated as in DD14. The notation is simplified by the introduction of the constants K<sub>bt,i</sub> and K<sub>bt,i</sub>, defined in equation (10) and equation (11) respectively.
 </p>
 <a id="">
 <div class="equation">
@@ -2476,7 +2487,7 @@ K<sub>bt,i</sub>=(K<sub>bt,i</sub>-K<sub>bn,i</sub>)sin(&alpha;<sub>i</sub>)cos(
 </div>
 </a>
 <p class="paragraph">
-A force-displacement relationship for an element i can be written in terms of displacements occurring in the unrotated coordinate system &delta; of GD9 using the matrix Ks,i, and Kb,i as seen in DD12.
+A force-displacement relationship for an element i can be written in terms of displacements occurring in the unrotated coordinate system &delta; of GD9 using the matrix K<sub>bt,i</sub>, and K<sub>bt,i</sub> as seen in DD12.
 </p>
 <a id="DD:force">
 <table class="ddefn">
@@ -2983,7 +2994,7 @@ FS
 </div>
 </a>
 <p class="paragraph">
-Substituting the equation for N0 i from equation (16) into equation (17) and rearranging results in equation (18).
+Substituting the equation for N'<sub>i</sub> from equation (16) into equation (17) and rearranging results in equation (18).
 </p>
 <a id="">
 <div class="equation">
@@ -2991,7 +3002,7 @@ E<sub>i</sub>((&lambda;f<sub>i</sub>cos(&alpha;<sub>i</sub>)-sin(&alpha;<sub>i</
 </div>
 </a>
 <p class="paragraph">
-Where R<sub>i</sub> and T<sub>i</sub> are the resistive and mobile shear of the slice, without the influence of interslice forces E<sub>i</sub> and X, as defined in DD10 and DD11. Making use of the constants, and with full equations found below in equations (19) and (20) respectively, then equation (18) can be simplified to equation (21), also seen in IM3.
+Where R<sub>i</sub> and T<sub>i</sub> are the resistive and mobile shear of the slice, without the influence of interslice forces E<sub>i</sub> and X<sub>i</sub>, as defined in DD10 and DD11 Making use of the constants, and with full equations found below in equation (19) and equation (20) respectively, then equation (18) can be simplified to equation (21), also seen in IM3.
 </p>
 <a id="">
 <div class="equation">

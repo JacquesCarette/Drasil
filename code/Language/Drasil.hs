@@ -97,6 +97,8 @@ module Language.Drasil (
   -- CodeSpec
   , CodeSpec, codeSpec, codeSpec', Choices(..), ImplementationType(..)
   , Logging(..), ConstraintBehaviour(..), Structure(..), defaultChoices
+  -- Chunk.Theory
+  , Theory, quantities, defined_quant, invariants, defined_fun
 ) where
 
 import Prelude hiding (log, sin, cos, tan, sqrt, id, return, print, break, exp, product)
@@ -124,6 +126,7 @@ import Language.Drasil.Chunk.ConVar
 import Language.Drasil.Chunk.ExprRelat
 import Language.Drasil.Chunk.Eq (QDefinition(..), fromEqn, fromEqn', getVC, equat)
 import Language.Drasil.Chunk.Constrained
+import Language.Drasil.Chunk.Theory
 import Language.Drasil.Chunk.Unital(UnitalChunk(..), makeUCWDS, ucFromCV
                                   , uc, uc', ucs, ucs', ucsWS)
 import Language.Drasil.Chunk.Unitary

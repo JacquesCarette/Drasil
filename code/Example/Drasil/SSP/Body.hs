@@ -383,7 +383,7 @@ mobShrDerivation = [foldlSP [S "The", phrase mobShrI, S "acting on a slice is",
   (Neg (C earthqkLoadFctr) :* (C slcWght) - (C intNormForce) + (C intNormForce) - (C watrForce) + (C watrForce) :+ (C surfHydroForce)
   :* sin (C surfAngle) :+ (C surfLoad) :* (sin (C impLoadAngle))) :* (cos (C baseAngle))),
   
-  foldlSP [S "The equation is unsolvable, containing the unknown interslice normal force", getS intNormForce, S "and shear force X.",
+  foldlSP [S "The equation is unsolvable, containing the unknown", phrase intNormForce, getS intNormForce, S "and shear force X.",
   S "Consider a force equilibrium without the affect of interslice forces, to obtain the mobile shear force",
   S "without the influence of interslice forces T, as done in equation (5)"],
   

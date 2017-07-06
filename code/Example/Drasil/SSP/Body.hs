@@ -104,7 +104,7 @@ sspSymMapD = symbolMapFun sspSymMap Data
 --automatically generated in mkSRS using the intro below
 
 s1_2_intro = [TSPurpose, TypogConvention [Verb $
-  plural value +:+S "with a subscript i implies that the" +:+
+  plural value +:+ S "with a subscript i implies that the" +:+
   phrase value +:+ S "will be taken at and analyzed at a" +:+
   phrase slice +:+ S "or" +:+ phrase slice +:+
   S "interface composing the total slip" +:+ phrase mass]]
@@ -125,10 +125,13 @@ startIntro = foldlSent [S "A", phrase slope, S "of geological",
   S "assessment" `ofThe` S "safety of a", phrase slope `sC` S "identifying the",
   phrase surface, S "most likely to", S "experience slip and an index of", 
   S "it's relative stability known as the", phrase fs_rc]
-kSent = S "a" +:+ phrase ssa +:+. phrase problem +:+ S "The developed"
-  +:+ phrase program +:+ S "will be referred to as the" +:+ introduceAbb ssa +:+
-  phrase program
+kSent = keySent ssa
 
+keySent :: (NamedIdea a) => a -> Sentence
+keySent pname = S "a" +:+ phrase pname +:+. phrase problem +:+ S "The developed"
+  +:+ phrase program +:+ S "will be referred to as the" +:+ introduceAbb pname +:+
+  phrase program
+  
 -- SECTION 2.1 --
 -- Purpose of Document automatically generated in introductionF
 prpsOfDoc_p1 :: Sentence

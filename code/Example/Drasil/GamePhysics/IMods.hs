@@ -3,14 +3,12 @@ module Drasil.GamePhysics.IMods where
 import Language.Drasil
 import Data.Drasil.Utils (foldle1, fmtU, getS)
 import Data.Drasil.SentenceStructures (foldlSent)
-import qualified Data.Drasil.Quantities.Math as QM (orientation)
 import qualified Data.Drasil.Concepts.Physics as CP (rigidBody)
 import qualified Data.Drasil.Quantities.Physics as QP (acceleration,
-  angularAccel, force, gravitationalAccel, velocity,
-  momentOfInertia, angularVelocity, position, time, impulseS)
+  angularAccel, force, gravitationalAccel, momentOfInertia, angularVelocity, 
+  time, impulseS)
 import Drasil.GamePhysics.Unitals
 import Prelude hiding (id)
-import Control.Lens ((^.))
 
 iModels :: [RelationConcept]
 iModels = [im1, im2, im3]

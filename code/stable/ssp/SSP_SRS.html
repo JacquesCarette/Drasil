@@ -359,7 +359,7 @@ Number of Slices: the slip mass has been divided into
 N*<sub>i</sub>
 </td>
 <td>
-Effective Normal Force: for a soil surface, neglecting the influence of interslice forces
+Effective Normal Force: for a soil surface, without the influence of interslice forces
 </td>
 <td>
 N
@@ -370,7 +370,7 @@ N
 P<sub>i</sub>
 </td>
 <td>
-Shear Resistance: Mohr Coulomb frictional force that describes the limit of mobilized shear force the slice i can withstand before failure
+Resistive Shear Force: Mohr Coulomb frictional force that describes the limit of mobilized shear force the slice i can withstand before failure
 </td>
 <td>
 N
@@ -392,7 +392,7 @@ N
 R<sub>i</sub>
 </td>
 <td>
-Shear Resistance: without the influence of interslice forcesfor slice index i
+Resistive Shear Force: without the influence of interslice forces for slice index i
 </td>
 <td>
 N
@@ -414,7 +414,7 @@ N
 T<sub>i</sub>
 </td>
 <td>
-Mobilized Shear Force: without the influence of interslice forcesfor slice index i
+Mobilized Shear Force: without the influence of interslice forces for slice index i
 </td>
 <td>
 N
@@ -924,7 +924,7 @@ Theoretical Model
 Introduction
 </h2>
 <p class="paragraph">
-A slope of geological mass, composed of soil and rock, is subject to the influence of gravity on the mass. For an unstable slope this can cause instability in the form of soil/rock movement. The effects of soil/rock movement can range from inconvenient to seriously hazardous, resulting in signifcant life and economic loses. Slope stability is of interest both when analyzing natural slopes, and when designing an excavated slope. Slope stability analysis is the assessment of the safety of a slope, identifying the surface most likely to experience slip and an index of it's relative stability known as the factor of safety.
+A slope of geological mass, composed of soil and rock, is subject to the influence of gravity on the mass. For an unstable slope this can cause instability in the form of soil/rock movement. The effects of soil/rock movement can range from inconvenient to seriously hazardous, resulting in signifcant life and economic loses. Slope stability is of interest both when analyzing natural slopes, and when designing an excavated slope. Slope stability analysis is the assessment of the safety of a slope, identifying the surface most likely to experience slip and an index of its relative stability known as the factor of safety.
 </p>
 <p class="paragraph">
 The following section provides an overview of the Software Requirements Specification (SRS) for a slope stability analysis problem. The developed program will be referred to as the Slope Stability Analysis (SSA) program. This section explains the purpose of this document, the scope of the system, the organization of the document, and the characteristics of the intended reader.
@@ -935,7 +935,7 @@ The following section provides an overview of the Software Requirements Specific
 Purpose of Document
 </h3>
 <p class="paragraph">
-The SSA program determines the critical slip surface, and it's respective factor of safety as a method of assessing the stability of a slope design. The program is intended to be used as an educational tool for introducing slope stability issues, and will facilitate the analysis and design of a safe slope.
+The SSA program determines the critical slip surface, and its respective factor of safety as a method of assessing the stability of a slope design. The program is intended to be used as an educational tool for introducing slope stability issues, and will facilitate the analysis and design of a safe slope.
 </p>
 <p class="paragraph">
 This document will be used as a starting point for subsequent development phases, including writing the design specification and the software verification and validation plan. The design document will show how the requirements are to be realized, including decisions on the numerical algorithms and programming environment. The verification and validation plan will show the steps that will be used to increase confidence in the software documentation and the implementation. Although the SRS fits in a series of documents that follow the so-called waterfall model, the actual development process is not constrained in any way. Even when the waterfall model is not followed, as Parnas and Clements point out, the most logical way to present the documentation is still to &quot;fake&quot; a rational design process.
@@ -2304,14 +2304,14 @@ Description
 </th>
 <td>
 <p class="paragraph">
-R<sub>i</sub> is the shear resistance<br />W<sub>i</sub> is the weight<br />U<sub>t,i</sub> is the surface hydrostatic force<br />&beta;<sub>i</sub> is the angle<br />Q<sub>i</sub> is the imposed surface load<br />&omega;<sub>i</sub> is the angle<br />&alpha;<sub>i</sub> is the angle<br />K<sub>c</sub> is the earthquake load factor<br />&Delta;H<sub>i</sub> is the difference between interslice forces acting in the x-ordinate direction of the slice on each side<br />U<sub>b,i</sub> is the base hydrostatic force<br />&phiv;' is the effective angle of friction<br />c' is the effective cohesion<br />b<sub>i</sub> is the base width of a slice
+R<sub>i</sub> is the resistive shear force<br />W<sub>i</sub> is the weight<br />U<sub>t,i</sub> is the surface hydrostatic force<br />&beta;<sub>i</sub> is the angle<br />Q<sub>i</sub> is the imposed surface load<br />&omega;<sub>i</sub> is the angle<br />&alpha;<sub>i</sub> is the angle<br />K<sub>c</sub> is the earthquake load factor<br />&Delta;H<sub>i</sub> is the difference between interslice forces acting in the x-ordinate direction of the slice on each side<br />U<sub>b,i</sub> is the base hydrostatic force<br />&phiv;' is the effective angle of friction<br />c' is the effective cohesion<br />b<sub>i</sub> is the base width of a slice
 </p>
 </td>
 </tr>
 </table>
 </a>
 <p class="paragraph">
-The resistive shear force of a slice is defined as Pi in GD3. The effective normal in the equation for Pi of the soil is defined in the perpendicular force equilibrium of a slice from GD2, using the effective normal N0i of T4 shown in equation (1).
+The resistive shear force of a slice is defined as P<sub>i</sub> in GD3. The effective normal force in the equation for P<sub>i</sub> of the soil is defined in the perpendicular force equilibrium of a slice from GD2, using the effective normal force N'<sub>i</sub> of T4 shown in equation (1).
 </p>
 <a id="">
 <div class="equation">
@@ -2319,7 +2319,7 @@ N'<sub>i</sub>=(W<sub>i</sub>-X<sub>i</sub>+X<sub>i</sub>+U<sub>t,i</sub>cos(&be
 </div>
 </a>
 <p class="paragraph">
-The values of the interslice forces E<sub>i</sub> and X<sub>i</sub> in the equation are unknown, while the other values are found from the physical force definitions of DD1 to DD9. Consider a force equilibrium without the affect of interslice forces, to obtain a solvable value as done for N*i in equation (2).
+The values of the interslice forces E<sub>i</sub> and X<sub>i</sub> in the equation are unknown, while the other values are found from the physical force definitions of DD1 to DD9. Consider a force equilibrium without the affect of interslice forces, to obtain a solvable value as done for N*<sub>i</sub> in equation (2).
 </p>
 <a id="">
 <div class="equation">
@@ -2327,7 +2327,7 @@ N*<sub>i</sub>=(W<sub>i</sub>+U<sub>t,i</sub>cos(&beta;<sub>i</sub>)+Q<sub>i</su
 </div>
 </a>
 <p class="paragraph">
-Using N*i, a resistive shear force neglecting the influence of interslice forces can be solved for in terms of all known values as done in equation (3).
+Using N*<sub>i</sub>, a resistive shear force without the influence of interslice forces for slice index i can be solved for in terms of all known values as done in equation (3).
 </p>
 <a id="">
 <div class="equation">
@@ -2386,7 +2386,7 @@ T<sub>i</sub> is the mobilized shear force<br />W<sub>i</sub> is the weight<br /
 </table>
 </a>
 <p class="paragraph">
-The mobile shear force acting on a slice is defined as Si from the force equilibrium in GD2, also shown in equation (4).
+The mobilized shear force acting on a slice is defined as S<sub>i</sub> from the force equilibrium in GD2, also shown in equation (4).
 </p>
 <a id="">
 <div class="equation">
@@ -2394,7 +2394,7 @@ N'<sub>i</sub>=(W<sub>i</sub>-X<sub>i</sub>+X<sub>i</sub>+U<sub>t,i</sub>cos(&be
 </div>
 </a>
 <p class="paragraph">
-The equation is unsolvable, containing the unknown interslice normal force E<sub>i</sub> and shear force X. Consider a force equilibrium without the affect of interslice forces, to obtain the mobile shear force without the influence of interslice forces T, as done in equation (5).
+The equation is unsolvable, containing the unknown interslice normal force E<sub>i</sub> and interslice shear force X<sub>i</sub>. Consider a force equilibrium without the influence of interslice forces, to obtain the mobilized shear force T<sub>i</sub>, as done in equation (5).
 </p>
 <a id="">
 <div class="equation">
@@ -2451,10 +2451,10 @@ K<sub>st,i</sub> is the shear stiffness
 </table>
 </a>
 <p class="paragraph">
-Using the force-displacement relationship of GD8 to define stiffness matrix Ki, as seen in equation (6).
+Using the force-displacement relationship of GD8 to define stiffness matrix K<sub>st,i</sub>, as seen in equation (6).
 </p>
 <p class="paragraph">
-For interslice surfaces the stiffness constants and displacements refer to an unrotated coordinate system, &delta; of GD9. The interslice elements are left in their standard coordinate system, and therefore are described by the same equation from GD8. Seen as Ks,i in DD12. K<sub>st,i</sub> is the shear element in the matrix, and K<sub>sn,i</sub> is the normal element in the matrix, calculated as in DD14.
+For interslice surfaces the stiffness constants and displacements refer to an unrotated coordinate system, &delta; of GD9. The interslice elements are left in their standard coordinate system, and therefore are described by the same equation from GD8. Seen as K<sub>st,i</sub> in DD12. K<sub>st,i</sub> is the shear element in the matrix, and K<sub>sn,i</sub> is the normal element in the matrix, calculated as in DD14.
 </p>
 <p class="paragraph">
 For basal surfaces the stiffness constants and displacements refer to a system rotated for the base angle alpha (DD5). To analyze the effect of force-displacement relationships occurring on both basal and interslice surfaces of an element i they must reference the same coordinate system. The basal stiffness matrix must be rotated counter clockwise to align with the angle of the basal surface. The base stiffness counter clockwise rotation is applied in equation (7) to the new matrix N*<sub>i</sub>.
@@ -3392,9 +3392,6 @@ Var
 <th>
 Physical Constraints
 </th>
-<th>
-Typical Value
-</th>
 </tr>
 <tr>
 <td>
@@ -3402,9 +3399,6 @@ FS
 </td>
 <td>
 0&lt;FS
-</td>
-<td>
-1.0
 </td>
 </tr>
 <tr>
@@ -3414,9 +3408,6 @@ FS
 <td>
 &forall;(x,y), &forall;x1,x2&isin;&#8477;: x1&lt;x2 &rArr; y1&lt;y2
 </td>
-<td>
-1.0 m
-</td>
 </tr>
 <tr>
 <td>
@@ -3425,9 +3416,6 @@ FS
 <td>
 None
 </td>
-<td>
-1.0 m
-</td>
 </tr>
 <tr>
 <td>
@@ -3435,9 +3423,6 @@ None
 </td>
 <td>
 None
-</td>
-<td>
-1.0 m
 </td>
 </tr>
 </table>

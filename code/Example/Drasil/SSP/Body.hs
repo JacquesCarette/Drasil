@@ -327,10 +327,10 @@ s4_2_4_dataDefs = (map sspSymMapD (take 10 sspDataDefs)) ++ resShrDerivation ++
   stfMtrxDerivation ++ (map sspSymMapD (drop 12 sspDataDefs)) --FIXME: is there a better way of shoving these derivations in the middle of the Data Defs?
 
 resShrDerivation :: [Contents]
-resShrDerivation = [foldlSP [S "The resistive shear force of a slice is defined as", 
-  getS shrResI, S "in" +:+. acroGD 3, S "The effective normal in the equation for", getS shrResI,
+resShrDerivation = [foldlSP [S "The", phrase shrResI, S "of a slice is defined as", 
+  getS shrResI, S "in" +:+. acroGD 3, S "The", phrase nrmFSubWat, S "in the equation for", getS shrResI,
   S "of the soil is defined in the perpendicular force equilibrium of a slice from", 
-  acroGD 2 `sC` S "using the", S "effective normal", getS nrmFSubWat, S "of", acroT 4, 
+  acroGD 2 `sC` S "using the", phrase nrmFSubWat, getS nrmFSubWat, S "of", acroT 4, 
   S "shown in equation (1)"],
   
   EqnBlock $
@@ -350,14 +350,17 @@ resShrDerivation = [foldlSP [S "The resistive shear force of a slice is defined 
   EqnBlock $
   (C nrmFNoIntsl) := (((C slcWght) :+ (C surfHydroForce) :* (cos (C surfAngle)) :+ 
   (C surfLoad) :* (cos (C impLoadAngle))) :* (cos (C baseAngle)) :+
-  (Neg (C earthqkLoadFctr) :* (C slcWght) - (C watrForce) + (C watrForce) :+ (C surfHydroForce)
-  :* sin (C surfAngle) :+ (C surfLoad) :* (sin (C impLoadAngle))) :* (sin (C baseAngle)) :- (C baseHydroForce)),
+  (Neg (C earthqkLoadFctr) :* (C slcWght) - (C watrForce) + (C watrForce) :+
+  (C surfHydroForce) :* sin (C surfAngle) :+
+  (C surfLoad) :* (sin (C impLoadAngle))) :* (sin (C baseAngle)) :- (C baseHydroForce)),
   
-  foldlSP [S "Using", getS nrmFNoIntsl `sC` S "a", phrase shearRNoIntsl, shearRNoIntsl ^. defn, S "can be solved for in",
-  S "terms of all known values as done in equation (3)"],
+  foldlSP [S "Using", getS nrmFNoIntsl `sC` S "a", phrase shearRNoIntsl,
+  shearRNoIntsl ^. defn, S "can be solved for in terms of all known",
+  S "values as done in equation (3)"],
   
   EqnBlock $
-  C shearRNoIntsl := (C nrmFNoIntsl) * tan (C fricAngle) + (C cohesion) * (C baseWthX) * sec (C baseAngle),
+  C shearRNoIntsl := (C nrmFNoIntsl) * tan (C fricAngle) +
+  (C cohesion) * (C baseWthX) * sec (C baseAngle),
   
   EqnBlock $
   C shearRNoIntsl := (((C slcWght) :+ (C surfHydroForce) :* (cos (C surfAngle)) :+ 
@@ -370,8 +373,9 @@ resShrDerivation = [foldlSP [S "The resistive shear force of a slice is defined 
   ]
 
 mobShrDerivation :: [Contents]
-mobShrDerivation = [foldlSP [S "The", phrase mobShrI, S "acting on a slice is defined",
-  S "as", getS mobShrI, S "from the force equilibrium in GD2, also shown in equation (4)"],
+mobShrDerivation = [foldlSP [S "The", phrase mobShrI, S "acting on a slice is",
+  S "defined as", getS mobShrI, S "from the force equilibrium in", acroGD 2 `sC`
+  S "also shown in equation (4)"],
   
   EqnBlock $
   (C nrmFSubWat) := (((C slcWght) - (C intShrForce) + (C intShrForce) :+ (C surfHydroForce) :* (cos (C surfAngle)) :+ --FIXME: add indexing

@@ -168,7 +168,7 @@ mobShrI     = uc' "S_i" (cn $ "mobilized shear force")
   fsi
   (sub cS lI) newton
 
-shrResI     = uc' "P_i" (cn $ "shear resistance") ("Mohr Coulomb frictional " ++
+shrResI     = uc' "P_i" (cn $ "resistive shear force") ("Mohr Coulomb frictional " ++
   "force that describes the limit of mobilized shear force the slice i " ++
   "can withstand before failure")
   (sub cP lI) newton

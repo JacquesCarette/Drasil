@@ -44,24 +44,23 @@ notApp      = commonIdea "notApp"      (nounPhraseSP "not applicable")          
 
 -- concepts relating to the templates and their contents
 
-analysis, appendix, characteristic, civil, client, column, company, component,
+analysis, appendix, characteristic, client, column, company, component,
   condition, constraint, connection, content, context, customer, datum, decision,
-  degree_, definition, dependency, description, design, document, documentation,
-  element, endUser, engineering, environment, figure, functional, game, general, 
+  definition, dependency, description, design, document, documentation,
+  element, endUser, environment, figure, functional, game, general, 
   goal, guide, implementation, individual, information, interest, input_, instance_,
   intReader, introduction, item, label, library, limitation, literacy, method_, module_,
   model, name_, nonfunctional, offShelf, open, organization, output_, physics, physical,
   plan, priority, problem, product_, project, property, purpose, quantity, realtime,
   reference, requirement_, reviewer, scope, second_, section_, source, simulation,
-  software, solution, specific, specification, stakeholder, statement, structural, 
+  software, solution, specific, specification, stakeholder, statement, 
   symbol_, system, table_, template, terminology, theory, traceyGraph, traceyMatrix,
-  uncertainty, undergraduate, user, useCase, validation, value, variable, video,
+  uncertainty, user, useCase, validation, value, variable, video,
   verification, year :: NamedChunk
 
 analysis        = npnc "analysis"       (cnIS "analysis")
 appendix        = npnc "appendix"       (cnICES "appendix")
 characteristic  = npnc "characteristic" (cn' "characteristic")
-civil           = npnc "civil"          (cn' "civil") --FIXME: Adjective; separate file for education?
 client          = npnc "client"         (cn' "client")
 column          = npnc "column"         (cn' "column") --general enough to be in Documentation?
 company         = npnc "company"        (cnIES "company")
@@ -75,7 +74,6 @@ customer        = npnc "customer"       (cn' "customer")
 datum           = npnc "datum"          (cnUM  "datum")
 decision        = npnc "decision"       (cn'  "decision")
 definition      = npnc "definition"     (cn' "definition")
-degree_         = npnc "degree"         (cn' "degree") --separate file for education?
 dependency      = npnc "dependency"     (cnIES "dependency")
 description     = npnc "description"    (cn' "description")
 design          = npnc "design"         (cn' "design")
@@ -83,7 +81,6 @@ document        = npnc "document"       (cn' "document")
 documentation   = npnc "documentation"  (cn' "documentation")
 element         = npnc "element"        (cn' "element")
 endUser         = npnc "end user"       (cn' "end user")
-engineering     = npnc "engineering"    (cn' "engineering") --separate file for education?
 environment     = npnc "environment"    (cn' "environment") -- Is this term in the right spot?
 figure          = npnc "figure"         (cn' "figure")
 functional      = npnc "functional"     (cn' "functional") --FIXME: Adjective
@@ -128,7 +125,7 @@ reference       = npnc "reference"      (cn' "reference")
 requirement_    = npnc "requirement"    (cn' "requirement") -- FIXME: Eventually only have one requirement
 reviewer        = npnc "reviewer"       (cn' "reviewer")
 scope           = npnc "scope"          (cn' "scope")
-second_         = npnc "second"         (cn' "second")
+second_         = npnc "second"         (cn' "second") --Does it make sense for this to be here?
 section_        = npnc "section"        (cn' "section")
 source          = npnc "source"         (cn' "source")
 simulation      = npnc "simulation"     (cn' "simulation")
@@ -138,7 +135,6 @@ specific        = npnc "specific"       (cn' "specific") -- FIXME: Adjective
 specification   = npnc "specification"  (cn' "specification")
 stakeholder     = npnc "stakeholder"    (cn' "stakeholder")
 statement       = npnc "statement"      (cn' "statement")
-structural      = npnc "structural"     (cn' "structural") --FIXME: Adjective; separate file for education?
 symbol_         = npnc "symbol"         (cn' "symbol")
 system          = npnc "system"         (cn' "system")
 table_          = npnc "table"          (cn' "table")
@@ -148,7 +144,6 @@ theory          = npnc "theory"         (cnIES "theory")
 traceyGraph     = npnc "traceyGraph"    (cn' "traceability graph")
 traceyMatrix    = npnc "traceyMatrix"   (cnICES "traceability matrix")
 uncertainty     = npnc "uncertainty"    (cnIES "uncertainty")
-undergraduate   = npnc "undergraduate"  (cn' "undergraduate") --separate file for education?
 user            = npnc "user"           (cn' "user")
 useCase         = npnc "useCase"        (cn' "use case")
 validation      = npnc "validation"     (cn' "validation")
@@ -187,10 +182,8 @@ designDoc, generalSystemDescription, indPRCase,
   nonfunctionalRequirement, softwareConstraint, softwareDoc, softwareReq,
   softwareSys, softwareVerif, softwareVAV, solutionCharSpec,
   solutionCharacteristic, offShelfSolution, physicalSim, productUC, 
-  useCaseTable, physicalProperty, vavPlan, undergradDegree,
-  secondYear, structuralEng, civilEng :: NamedChunk
+  useCaseTable, physicalProperty, vavPlan :: NamedChunk
  
-civilEng                     = compoundNC civil engineering --separate file for education?
 datumConstraint              = compoundNC' datum constraint
 designDoc                    = compoundNC design document
 functionalRequirement        = compoundNC functional requirement_
@@ -205,7 +198,6 @@ physicalSystem               = compoundNC physical system
 problemDescription           = compoundNC problem description
 prodUCTable                  = compoundNC productUC table_
 productUC                    = compoundNC product_ useCase
-secondYear                   = compoundNC second_ year --separate file for education?
 softwareConstraint           = compoundNC software constraint
 softwareDoc                  = compoundNC software documentation
 softwareReq                  = compoundNC' software requirement_
@@ -215,11 +207,9 @@ softwareVerif                = compoundNC software verification
 solutionCharSpec             = compoundNC''' (NP.plural) solutionCharacteristic specification
 solutionCharacteristic       = compoundNC solution characteristic
 specificsystemdescription    = compoundNC specific systemdescription
-structuralEng                = compoundNC structural engineering --separate file for education?
 sysCont                      = compoundNC system context
 systemConstraint             = compoundNC system constraint
 systemdescription            = compoundNC system description
-undergradDegree              = compoundNC undergraduate degree_ --separate file for education?
 useCaseTable                 = compoundNC useCase table_
 userCharacteristic           = compoundNC user characteristic
 vavPlan                      = compoundNC vav plan

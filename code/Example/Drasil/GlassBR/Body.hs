@@ -5,6 +5,7 @@ import Language.Drasil
 import Data.Drasil.SI_Units
 import Data.Drasil.Authors
 import Data.Drasil.Concepts.Documentation
+import Data.Drasil.Concepts.Education
 import Data.Drasil.Software.Products
 import Data.Drasil.Concepts.Computation
 import Data.Drasil.Concepts.Software (performance)

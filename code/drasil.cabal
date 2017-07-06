@@ -20,6 +20,7 @@ library
     Data.Drasil.Concepts.Documentation
     Data.Drasil.Concepts.Thermodynamics
     Data.Drasil.Concepts.PhysicalProperties
+    Data.Drasil.Concepts.Education
     Data.Drasil.Concepts.Physics
     Data.Drasil.Concepts.Software
     Data.Drasil.Concepts.Math

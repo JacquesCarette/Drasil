@@ -194,6 +194,9 @@ s4_1_bullets :: (NamedIdea n, NamedIdea n1, NamedIdea n2, NamedIdea n3,
   n5 -> n4 -> n3 -> n2 -> n1 -> n -> Contents
 --FIXME: better way to do this? ; is this really necessary (i.e. too many things being passed in)
 
+ptOfExplsn:: NamedChunk
+ptOfExplsn       = npnc "ptOfExplsn"       (cn' "point of explosion")
+
 --------------
 
 {--INTRODUCTION--}
@@ -364,16 +367,17 @@ s6_1_2_list = enumSimple 1 (short physSyst) s6_1_2_list_physys
 
 --"Dead" knowledge?
 s6_1_2_list_physys :: [Sentence]
-s6_1_2_list_physys1, s6_1_2_list_physys2 :: Sentence
+s6_1_2_list_physys1 :: Sentence
+s6_1_2_list_physys2 :: NamedIdea n => n -> Sentence
 
-s6_1_2_list_physys = [s6_1_2_list_physys1, s6_1_2_list_physys2]
+s6_1_2_list_physys = [s6_1_2_list_physys1, s6_1_2_list_physys2 (ptOfExplsn)]
 
 s6_1_2_list_physys1 = at_start glaSlab
 
-s6_1_2_list_physys2 = foldlSent [S "The point of"
-  +:+. phrase explosion, S "Where the", phrase bomb `sC` 
+s6_1_2_list_physys2 imprtntElem = foldlSent [S "The"
+  +:+. phrase imprtntElem, S "Where the", phrase bomb `sC` 
   S "or", (blast ^. defn) `sC` S "is located. The", phrase sD
-  `isThe` S "distance between the point of", phrase explosion,
+  `isThe` S "distance between the", phrase imprtntElem,
   S "and the glass"]
 
 {--Goal Statements--}

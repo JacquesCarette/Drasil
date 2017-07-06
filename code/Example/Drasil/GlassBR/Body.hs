@@ -185,7 +185,10 @@ blstRskInvWGlassSlab = phrase blastRisk +:+ S "involved with the" +:+ phrase gla
 isExpctdToHv :: Sentence -> Sentence -> Sentence
 a `isExpctdToHv` b = S "The" +:+ a +:+ S "is expected to have" +:+ b
 
-s4_1_bullets :: NamedChunk -> CI -> Contents
+s4_1_bullets :: (NamedIdea n, NamedIdea n1, NamedIdea n2, NamedIdea n3,
+  NamedIdea n4, NamedIdea n5, NamedIdea c , NamedIdea n6) => n6 -> c ->
+  n5 -> n4 -> n3 -> n2 -> n1 -> n -> Contents
+--FIXME: better way to do this? ; is this really necessary (i.e. too many things being passed in)
 
 --------------
 
@@ -216,11 +219,11 @@ endScoR = foldl (+:+) EmptyS [S "use the", plural datum,
 
 s2_1_intro_p1 :: NamedChunk -> CI -> NamedChunk -> Sentence
 s2_1_intro_p1 typeOf progName gvnVar = foldlSent [S "The main", phrase purpose, S "of this",
-  (phrase typeOf) +:+. S "is to predict whether a given", phrase gvnVar +:+.
-  S "is likely to", predxnGoal, S "The", plural goal
-  `sAnd` plural thModel, S "used in the", short progName, S "code are provided" `sC`
+  phrase typeOf +:+. S "is to predict whether a given", phrase gvnVar +:+.
+  S "is likely to", predxnGoal, S "The", plural goal `sAnd` plural thModel,
+  S "used in the", short progName, S "code are provided" `sC` 
   S "with an emphasis on explicitly identifying", (plural assumption) `sAnd` S "unambiguous"
-  +:+. plural definition, S "This", (phrase typeOf), S "is intended to be used as a",
+  +:+. plural definition, S "This", phrase typeOf, S "is intended to be used as a",
   phrase reference, S "to provide all", phrase information, 
   S "necessary to understand and verify the" +:+. phrase analysis, S "The",
   short srs, S "is abstract because the", plural content, S "say what", phrase problem,
@@ -253,16 +256,16 @@ s3 = stakehldrGeneral (gLassBR)
 
 {--GENERAL SYSTEM DESCRIPTION--}
 
-s4 = genSysF [] (s4_1_bullets (endUser) (gLassBR)) [] []
+s4 = genSysF [] (s4_1_bullets (endUser) (gLassBR) (secondYear) (undergradDegree) (civilEng) (structuralEng) (glBreakage) (blastRisk)) [] []
 
 {--User Characteristics--}
-s4_1_bullets intendedIndvdl progName = enumBullet 
-  [((phrase intendedIndvdl +:+ S "of" +:+ short progName) `isExpctdToHv` S "completed at least" +:+.
-  (S "equivalent" `ofThe` S "second year of an undergraduate degree in civil or structural engineering")),
-  (phrase intendedIndvdl `isExpctdToHv` S "an understanding of" +:+ phrase theory +:+ S "behind" +:+. 
-  (phrase glBreakage `sAnd` phrase blastRisk)),
-  (phrase intendedIndvdl `isExpctdToHv` S "basic" +:+ phrase computer +:+
-  S "literacy to handle the" +:+. phrase software)]
+s4_1_bullets intendedIndvdl progName yr degreeType prog1 prog2 undrstd1 undrstd2 = enumBullet 
+  [((phrase intendedIndvdl +:+ S "of" +:+ short progName) `isExpctdToHv` S "completed at least" +:+
+  (S "equivalent" `ofThe` (phrase yr)) +:+ S "of an" +:+ phrase degreeType +:+ S "in" +:+ phrase prog1 +:+ S "or" +:+. phrase prog2),
+  (phrase intendedIndvdl `isExpctdToHv` S "an understanding of" +:+ phrase theory +:+ S "behind" +:+. (phrase undrstd1 `sAnd` phrase undrstd2)),
+  (phrase intendedIndvdl `isExpctdToHv` S "basic" +:+ phrase computerLiteracy +:+ S "to handle the" +:+. phrase software)]
+
+--
 
 {--System Constraints--}
 

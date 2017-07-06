@@ -22,15 +22,17 @@ type_           = npnc "type"           (cn' "type")
 
 
 dataStruct, dataStruct', dataType, dataType', 
-  inDatum, outDatum, inParam, inVar, inValue, inQty :: NamedChunk
+  inDatum, outDatum, inParam, inVar, inValue, inQty,
+  computerLiteracy :: NamedChunk
 
-dataStruct    = compoundNC'' NP.plural NP.phrase datum structure
-dataStruct'   = compoundNC'' NP.plural NP.plural datum structure
-dataType      = compoundNC'' NP.plural NP.phrase datum type_
-dataType'     = compoundNC'' NP.plural NP.plural datum type_
-inDatum       = compoundNC input_ datum
-outDatum      = compoundNC output_ datum
-inParam       = compoundNC input_ parameter
-inVar         = compoundNC input_ variable
-inValue       = compoundNC input_ value
-inQty         = compoundNC input_ quantity
+dataStruct       = compoundNC'' NP.plural NP.phrase datum structure
+dataStruct'      = compoundNC'' NP.plural NP.plural datum structure
+dataType         = compoundNC'' NP.plural NP.phrase datum type_
+dataType'        = compoundNC'' NP.plural NP.plural datum type_
+inDatum          = compoundNC input_ datum
+outDatum         = compoundNC output_ datum
+inParam          = compoundNC input_ parameter
+inVar            = compoundNC input_ variable
+inValue          = compoundNC input_ value
+inQty            = compoundNC input_ quantity
+computerLiteracy = compoundNC computer literacy

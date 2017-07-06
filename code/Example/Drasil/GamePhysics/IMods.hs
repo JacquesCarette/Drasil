@@ -3,7 +3,7 @@ module Drasil.GamePhysics.IMods where
 --import qualified Drasil.GamePhysics.Unitals as GPUN
 
 import Language.Drasil
-import Data.Drasil.Utils (foldle1)
+import Data.Drasil.Utils (foldle1, fmtU, getS)
 import Data.Drasil.SentenceStructures (foldlSent)
 import qualified Data.Drasil.Quantities.Math as QM (orientation)
 import qualified Data.Drasil.Concepts.Physics as CP (rigidBody)
@@ -41,9 +41,10 @@ im1descr = foldlSent [S "The above equation expresses the total",
   S "assumed that there is no damping (A6) or constraints (A7) involved"]
 
 im1leg = foldle1 (+:+.) (+:+.) 
-  [S "mi is the mass of the i-th rigid body (kg)",
+  [defList massIRigidBody,
   S "g is the acceleration due to gravity (ms-2)",
-  S "t is a point in time and t0 denotes the initial time (s)",
+  defList timeT,
+  defList initTime,
   (helper1 QP.position "i" 
   (S "specifically the position of its center of mass, pCM(t) (DD1))")),
   (helper1 QP.acceleration "i" EmptyS),
@@ -70,15 +71,15 @@ im2descr = foldlSent [S "The above equation for the total angular acceleration",
   S "currently assumed that there is no damping (A6) or constraints (A7) involved"]
 
 im2leg = foldle1 (+:+.) (+:+.) 
-  [S "mi is the mass of the i-th rigid body (kg)",
+  [defList massIRigidBody,
   S "g is the acceleration due to gravity (ms-2)",
-  S "t is a point in time and t0 denotes the initial time (s)",
+  defList timeT,
+  defList initTime,
   (helper1 QM.orientation "i" EmptyS),
   (helper1 QP.angularVelocity "i" EmptyS),
   (helper1 QP.angularAccel "k" EmptyS),
-  S "t i(t) is the torque applied to the i-th body at time t (N m)",
-  S "Signed direction of torque is defined by (A4)",
-  S "Ii is the moment of inertia of the i-th body (kg m2)"]
+  defList torque_i +:+ S "Signed direction of torque is defined by (A4)",
+  defList momtInert_k]
 
 {-- --}
 
@@ -108,21 +109,30 @@ im3descr = foldlSent [S "This instance model is based on our assumptions",
   S "regarding rigid body (A1, A2) collisions (A5). Again, this does not take",
   S "damping (A6) or constraints (A7) into account"]
 
-im3leg = foldle1 (+:+.) (+:+.) 
-  [S "mk is the mass of the k-th rigid body (kg)",
-  S "Ik is the moment of inertia of the k-th rigid body (kg m2)",
+
+{--S "Ik is the moment of inertia of the k-th rigid body (kg m2)",
   S "t is a point in time, t0 denotes the initial time" `sC` 
   S "and tc denotes the time at collision (s)",
-  (helper1 QP.position "i" (S "specifically the position of its center of mass, pCM(t) (DD1))")),
-  (helper1 QP.velocity "k" EmptyS),
-  (helper1 QM.orientation "k" EmptyS),
-  (helper1 QP.angularVelocity "k" EmptyS), 
-  S "n is the" +:+ (phrase normalVect) +:+ S "(m)", 
-  S "Its signed direction is determined by (A4)",
-  S "j is the" +:+ (phrase QP.impulseS) +:+ S "(DD8) (N s)", 
-  S "P is the point of collision (m)",
-  S "rkP is the displacement vector between the center of mass" +:+
-  S "of the k-th body and point P (m)"]
+  S "P is the point of collision (m)"
+--}
+
+
+defList thing = foldlSent [(getS thing), S "is the", (phrase thing), sParen (fmtU EmptyS thing)]
+
+im3leg = foldle1 (+:+) (+:+) 
+  [defList massIRigidBody,
+  defList momtInert_k,
+  defList timeT,
+  defList initTime,
+  defList time_c,
+  defList QP.position +:+. (S "specifically the position of its center of mass, pCM(t) (DD1))"),
+  defList QP.velocity,
+  defList QM.orientation,
+  defList QP.angularVelocity,
+  defList normalVect +:+. S "Its signed direction is determined by (A4)",
+  defList collisionImpulse, 
+  defList pointOfCollision,
+  defList contDisp_k]
 
 {-- __n(t) is the n-th body's __ -option- at time t (units) --}
 helper1 :: (Unitary c, SymbolForm c) => c -> String -> Sentence -> Sentence
@@ -133,17 +143,6 @@ helper1 t i opt = (P $ t ^. symbol) :+: (S i) :+: (S "(t)") +:+
   S "is the" +:+ (S i) :+: (S "-th body's") +:+ (phrase t) +:+ opt +:+
   S "at time t" +:+ (sParen $ Sy $ unit_symb t)
 
-
-
-massRigidK       = cvR (dccWDS "mass" (cn $ "mass of the k-th rigid body") 
-  (phrase QPP.mass)) (sub (QPP.mass ^. symbol) (Atomic "k"))
-
-inertiaRigidK    = cvR (dccWDS "momentOfInertia" (compoundPhrase'
-  (QP.momentOfInertia ^. term) (cn "of the k-th rigid body"))
-  (phrase QP.momentOfInertia)) (sub (QP.momentOfInertia ^. symbol) (Atomic "k"))
-
-pointOfCollision = cvR (dccWDS "point_c" (cn "point of collision") 
-  (S "point")) (Atomic "P")
 
 {--displaceVectBtw  = cvR (ddcWDS "dispBtwVect" (compoundPhrase' 
   (QP.displacement ^. term) (cn "vector between the centre of mass of the k-th

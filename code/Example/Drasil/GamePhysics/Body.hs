@@ -270,8 +270,8 @@ goalStatementStruct property inputs item adjective outputs object condition1 con
   condition2]
   where condition0 EmptyS = S "initial"
         condition0 p      = p `sC` (S "initial")
-        inputList EmptyS = (foldlList $ map plural inputs)
-        inputList i      = (foldlList $ map plural inputs) `sC` S "and" +:+ i
+        inputList EmptyS  = (foldlList $ map plural inputs)
+        inputList i       = (foldlList $ map plural inputs) `sC` S "and" +:+ i
 
 s4_1_2_stmt1 = goalStatementStruct (plural physicalProperty) 
   (take 2 inputSymbols) (plural QP.force) (S "applied on")

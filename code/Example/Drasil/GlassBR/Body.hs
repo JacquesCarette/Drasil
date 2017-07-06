@@ -522,13 +522,14 @@ s7 = reqF [s7_1, s7_2]
 s7_1 = SRS.funcReq (s7_1_list) []
 
 s7_1_req6 :: [Contents] --FIXME: Issue #327
-s7_1_req1, s7_1_req2, s7_1_req3, s7_1_req4, s7_1_req5 :: Sentence
+s7_1_req1, s7_1_req2, s7_1_req3, s7_1_req4 :: Sentence
+s7_1_req5 :: NamedChunk -> Sentence
 
 s7_1_list = [enumSimple 1 (getAcc requirement) (s7_1_listOfReqs)] ++ 
   s7_1_req6 ++ [s7_1_req1Table]
 
 s7_1_listOfReqs :: [Sentence]
-s7_1_listOfReqs = [s7_1_req1, s7_1_req2, s7_1_req3, s7_1_req4, s7_1_req5]
+s7_1_listOfReqs = [s7_1_req1, s7_1_req2, s7_1_req3, s7_1_req4, s7_1_req5 (output_)]
 
 s7_1_req1 = foldlSent [at_start input_, S "the", plural quantity, S "from",
   makeRef s7_1_req1Table `sC` S "which define the glass dimensions" `sC` 
@@ -571,11 +572,11 @@ s7_1_req4 = foldlSent [titleize output_, S "the", plural inQty,
   S "from", acroR 1, S "and the known", plural quantity,
   S "from", acroR 2]
 
-s7_1_req5 = S "If" +:+ (getS is_safe1) `sAnd` (getS is_safe2) +:+
+s7_1_req5 cmd = S "If" +:+ (getS is_safe1) `sAnd` (getS is_safe2) +:+
   sParen (S "from" +:+ (makeRef (gbSymbMapT t1SafetyReq))
   `sAnd` (makeRef (gbSymbMapT t2SafetyReq))) +:+ S "are true" `sC`
-  phrase output_ +:+ S "the message" +:+ Quote (safeMessage ^. defn) +:+
-  S "If the" +:+ phrase condition +:+ S "is false, then" +:+ phrase output_ 
+  phrase cmd +:+ S "the message" +:+ Quote (safeMessage ^. defn) +:+
+  S "If the" +:+ phrase condition +:+ S "is false, then" +:+ phrase cmd
   +:+ S "the message" +:+ Quote (notSafe ^. defn)
 
 {-

@@ -124,7 +124,7 @@ startIntro = foldlSent [S "A", phrase slope, S "of geological",
   S "and when designing an excavated" +:+. phrase slope, at_start ssa, S "is",
   S "assessment" `ofThe` S "safety of a", phrase slope `sC` S "identifying the",
   phrase surface, S "most likely to", S "experience slip and an index of", 
-  S "it's relative stability known as the", phrase fs_rc]
+  S "its relative stability known as the", phrase fs_rc]
 kSent = keySent ssa
 
 keySent :: (NamedIdea a) => a -> Sentence
@@ -136,7 +136,7 @@ keySent pname = S "a" +:+ phrase pname +:+. phrase problem +:+ S "The developed"
 -- Purpose of Document automatically generated in introductionF
 prpsOfDoc_p1 :: Sentence
 prpsOfDoc_p1 = foldlSent [S "The", short ssa, phrase program,
-  S "determines the", phrase crtSlpSrf `sC` S "and it's respective",
+  S "determines the", phrase crtSlpSrf `sC` S "and its respective",
   phrase fs_rc, S "as a", phrase method_,
   S "of assessing the stability of a", phrase slope +:+. phrase design,
   S "The", phrase program,
@@ -328,9 +328,9 @@ s4_2_4_dataDefs = (map sspSymMapD (take 10 sspDataDefs)) ++ resShrDerivation ++
 
 resShrDerivation :: [Contents]
 resShrDerivation = [foldlSP [S "The resistive shear force of a slice is defined as", 
-  S "Pi in" +:+. acroGD 3, S "The effective normal in the equation for Pi of the", 
-  S "soil is defined in the perpendicular force equilibrium of a slice from", 
-  acroGD 2 `sC` S "using the", S "effective normal N0i of", acroT 4, 
+  getS shrResI, S "in" +:+. acroGD 3, S "The effective normal in the equation for", getS shrResI,
+  S "of the soil is defined in the perpendicular force equilibrium of a slice from", 
+  acroGD 2 `sC` S "using the", S "effective normal", getS nrmFSubWat, S "of", acroT 4, 
   S "shown in equation (1)"],
   
   EqnBlock $
@@ -341,9 +341,11 @@ resShrDerivation = [foldlSP [S "The resistive shear force of a slice is defined 
   (C watrForce) :+ (C watrForce) :+ (C surfHydroForce) :* sin (C surfAngle) :+ 
   (C surfLoad) :* (sin (C impLoadAngle))) :* (sin (C baseAngle)) :- (C baseHydroForce)),
   
-  foldlSP [S "The values of the interslice forces", getS intNormForce, S "and", getS intShrForce, S "in the equation are unknown, while the other values",
-  S "are found from the physical force definitions of DD1 to DD9. Consider a force equilibrium without",
-  S "the affect of interslice forces, to obtain a solvable value as done for N*i in equation (2)"],
+  foldlSP [S "The values of the interslice forces", getS intNormForce, S "and",
+  getS intShrForce, S "in the equation are unknown, while the other values",
+  S "are found from the physical force definitions of", acroDD 1, S "to" +:+. acroDD 9,
+  S "Consider a force equilibrium without the affect of interslice forces,",
+  S "to obtain a solvable value as done for", getS nrmFNoIntsl, S "in equation (2)"],
 
   EqnBlock $
   (C nrmFNoIntsl) := (((C slcWght) :+ (C surfHydroForce) :* (cos (C surfAngle)) :+ 
@@ -351,7 +353,7 @@ resShrDerivation = [foldlSP [S "The resistive shear force of a slice is defined 
   (Neg (C earthqkLoadFctr) :* (C slcWght) - (C watrForce) + (C watrForce) :+ (C surfHydroForce)
   :* sin (C surfAngle) :+ (C surfLoad) :* (sin (C impLoadAngle))) :* (sin (C baseAngle)) :- (C baseHydroForce)),
   
-  foldlSP [S "Using N*i, a resistive shear force neglecting the influence of interslice forces can be solved for in",
+  foldlSP [S "Using", getS nrmFNoIntsl `sC` S "a", phrase shearRNoIntsl, shearRNoIntsl ^. defn, S "can be solved for in",
   S "terms of all known values as done in equation (3)"],
   
   EqnBlock $
@@ -361,14 +363,15 @@ resShrDerivation = [foldlSP [S "The resistive shear force of a slice is defined 
   C shearRNoIntsl := (((C slcWght) :+ (C surfHydroForce) :* (cos (C surfAngle)) :+ 
   (C surfLoad) :* (cos (C impLoadAngle))) :* (cos (C baseAngle)) :+
   (Neg (C earthqkLoadFctr) :* (C slcWght) :- (C watrForceDif) :+ (C surfHydroForce)
-  :* sin (C surfAngle) :+ (C surfLoad) :* (sin (C impLoadAngle))) :* (sin (C baseAngle)) :- (C baseHydroForce)) :*
+  :* sin (C surfAngle) :+ (C surfLoad) :* (sin (C impLoadAngle))) :* (sin (C baseAngle))
+  :- (C baseHydroForce)) :*
   tan (C fricAngle) :+ (C cohesion) :* (C baseWthX) :* sec (C baseAngle)
   
   ]
 
 mobShrDerivation :: [Contents]
-mobShrDerivation = [foldlSP [S "The mobile shear force acting on a slice is defined",
-  S "as Si from the force equilibrium in GD2, also shown in equation (4)"],
+mobShrDerivation = [foldlSP [S "The", phrase mobShrI, S "acting on a slice is defined",
+  S "as", getS mobShrI, S "from the force equilibrium in GD2, also shown in equation (4)"],
   
   EqnBlock $
   (C nrmFSubWat) := (((C slcWght) - (C intShrForce) + (C intShrForce) :+ (C surfHydroForce) :* (cos (C surfAngle)) :+ --FIXME: add indexing

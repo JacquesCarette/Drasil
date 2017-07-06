@@ -182,11 +182,11 @@ shrResC     = uc' "Phi" (cn $ "constant") ("converts resistive shear without " +
   (sub (Greek Phi) lC) newton
 
 shearFNoIntsl = uc' "T_i"
-  (cn $ "mobilized shear force") ("without the influence of interslice forces" ++ fsi)
+  (cn $ "mobilized shear force") ("without the influence of interslice forces " ++ fsi)
   (sub cT lI) newton
 
 shearRNoIntsl = uc' "R_i"
-  (cn $ "shear resistance") ("without the influence of interslice forces" ++ fsi)
+  (cn $ "resistive shear force") ("neglecting the influence of interslice forces " ++ fsi)
   (sub cR lI) newton
 
 slcWght     = uc' "W_i" (cn $ "weight") ("downward force caused by gravity on slice i")

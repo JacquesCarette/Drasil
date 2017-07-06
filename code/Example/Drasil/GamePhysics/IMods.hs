@@ -37,9 +37,6 @@ im1descr = foldlSent [S "The above equation expresses the total",
 
 im1leg = foldle1 (+:+) (+:+) $ map defList im1legTerms
 
-im1legTerms :: [UnitalChunk]
-im1legTerms = [massIRigidBody, QP.gravitationalAccel, timeT, initTime, pos_CM, 
-  QP.acceleration, QP.velocity, force_i]
 {-- --}
 
 im2 :: RelationConcept
@@ -60,10 +57,6 @@ im2descr = foldlSent [S "The above equation for the total angular acceleration",
   S "currently assumed that there is no damping (A6) or constraints (A7) involved"]
 
 im2leg = foldle1 (+:+) (+:+) $ map defList im2legTerms  
-
-im2legTerms :: [UnitalChunk] 
-im2legTerms = [massIRigidBody, QP.gravitationalAccel, timeT, initTime, 
-  QM.orientation, QP.angularVelocity, QP.angularAccel, torque_i, momtInert_k]
 
 {-- --}
 
@@ -105,11 +98,6 @@ defList thing = foldlSent [(getS thing), S "is the", (phrase thing), sParen (fmt
 
 im3leg = foldle1 (+:+) (+:+) $ map defList im3legTerms
   
-im3legTerms :: [UnitalChunk]
-im3legTerms = [massIRigidBody, momtInert_k, timeT, initTime, time_c, pos_CM,
-  QP.velocity, QM.orientation, QP.angularVelocity, normalVect, -- +:+. S "Its signed direction is determined by (A4)",
-  collisionImpulse, pointOfCollision, contDisp_k]
-
 
 {--displaceVectBtw  = cvR (ddcWDS "dispBtwVect" (compoundPhrase' 
   (QP.displacement ^. term) (cn "vector between the centre of mass of the k-th

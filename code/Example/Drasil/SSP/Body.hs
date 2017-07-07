@@ -464,7 +464,7 @@ s4_2_5_p2 = foldlSP [S "The", titleize morPrice,
   plural slice, S "of" +:+. phrase mass, S "Static equilibrium",
   S "analysis using two", phrase force, S "equilibrium, and one moment",
   phrase equation, S "as in" +:+. acroT 2, S "The", phrase problem,
-  S "is statically indeterminate with only these 3", plural equation, S "and one", --FIXME: T2, T3, GD5, DD1, DD9, DD10, DD11 should be references to other things in the body
+  S "is statically indeterminate with only these 3", plural equation, S "and one", --FIXME: T2, T3, GD5, DD1, DD9, DD10, DD11 should be references
   S "constitutive", phrase equation, sParen $ S "the Mohr Coulomb shear strength of" +:+ acroT 3,
   S "so the", phrase assumption, S "of", acroGD 5, S "is used. Solving for",
   phrase force, S "equilibrium allows", plural definition, S "of all", plural force,
@@ -472,12 +472,12 @@ s4_2_5_p2 = foldlSP [S "The", titleize morPrice,
   acroDD 9 `sC` S "as done in", acroDD 10 `sC` acroDD 11]
 
 s4_2_5_p3 = foldlSP [plural value `ofThe'` (phrase intrslce +:+ phrase normForce),
-  S "E the interslice normal/shear", phrase force, S "magnitude ratio", getS normToShear `sC` --FIXME: 'E' should be the symbol captital E, same with lambda
-  S "and the", titleize fs_rc, (sParen $ getS fs) `sC` S "are unknown.",  --FIXME: get the relation concept symbol 'FS' from factor of safety in Defs.hs
+  getS intNormForce, S "the", getTandS normToShear `sC`
+  S "and the", titleize fs_rc, (sParen $ getS fs) `sC` S "are unknown.",
   at_start' equation, S "for the unknowns are written in terms of only the",
   plural value, S "in", acroDD 1, S "to", acroDD 9 `sC` S "the", plural value, S "of", getS shearRNoIntsl `sC`
   S "and", getS shearFNoIntsl, S "in", acroDD 10, S "and", acroDD 11 `sC`
-  S "and each", --FIXME: DD10, DD11 should be references to other things in the body
+  S "and each", --FIXME: DD10, DD11 should be references
   S "other. The relationships between the unknowns are non linear" `sC`
   S "and therefore explicit", plural equation, S "cannot be derived and an",
   S "iterative", plural solution, S "method is required"]
@@ -489,16 +489,15 @@ s4_2_5_IMods = concat $ weave [map (\x -> [sspSymMapT x]) sspIMods, --FIXME: ? i
 fctSftyDerivation, nrmShrDerivation, intrSlcDerivation,
   rigDisDerivation, rigFoSDerivation :: [Contents]
 
-fctSftyDerivation = [foldlSP [S "Using equation (21) from section 4.2.5, rearranging, and applying the boundary condition that E0",
-  S "and En are equal to 0 an equation for the factor of safety is found as", eqN 12 `sC` S "also seen in",
-  S "IM1. Using equation (21) from section 4.2.5, rearranging, and applying the boundary condition that E0",
-  S "and En are equal to 0 an equation for the factor of safety is found as", eqN 12 `sC` S "also seen in",
-  S "IM1"],
+fctSftyDerivation = [foldlSP [S "Using", eqN 21, S "from section 4.2.5, rearranging,",
+  S "and applying the boundary condition that", getS intNormForce `sAnd` getS intNormForce, --FIXME: Index
+  S "are equal to", E $ Int 0, S "an equation for the", phrase fs_rc, S "is found as",
+  eqN 12 `sC` S "also seen in", acroIM 1],
   
   EqnBlock fcSfty_rel,
   
-  foldlSP [S "The constants", getS mobShrC, S "and", getS shrResC, S "described in equations 20 and 19 are functions of the unknowns: the",
-  S "interslice normal/shear force ratio", getS normToShear, S "(IM2) and the Factor of Safety itself", getS fs, S "(IM1)"]
+  foldlSP [S "The constants", getS mobShrC `sAnd` getS shrResC, S "described in", eqN 20 `sAnd` eqN 19, S "are functions of the unknowns: the",
+  getTandS normToShear, S "(IM2) and the Factor of Safety itself", getS fs, S "(IM1)"]
   ]
 
 nrmShrDerivation = [foldlSP [S "The last static equation of T2 the moment equilibrium of GD6 about the midpoint of the base is",
@@ -584,7 +583,7 @@ intrSlcDerivation = [foldlSP [S "Taking the perpendicular force equilibrium of G
   (C intNormForce) := ((C mobShrC)*(C intNormForce) + (C fs)*(C shearFNoIntsl)
   - (C shearRNoIntsl)) / (C shrResC),
   
-  foldlSP [S "The constants", getS mobShrC, S "and", getS shrResC, S "in equation (21) for", getS intNormForce, S "is a function of the unknown values, the interslice",
+  foldlSP [S "The constants", getS mobShrC, S "and", getS shrResC, S "in", eqN 21, S "for", getS intNormForce, S "is a function of the unknown values, the interslice",
   S "normal/shear force ratio", getS normToShear, S "(IM2), and the Factor of Safety", getS fs, S "(IM1)"]
   ]
 

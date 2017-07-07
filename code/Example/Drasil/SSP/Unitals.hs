@@ -325,8 +325,8 @@ earthqkLoadFctr, normToShear, scalFunc,
 earthqkLoadFctr = cvR (dcc "K_c" (nounPhraseSP $ "earthquake load factor") ("proportionality " ++
   "factor of force that weight pushes outwards; caused by seismic earth movements")) (sub cK lC)
 
-normToShear = cvR (dcc "lambda" (nounPhraseSP $ "ratio") ("between interslice normal and " ++
-  "shear forces (applied to all interslices)")) (Greek Lambda_L)
+normToShear = cvR (dcc "lambda" (nounPhraseSP $ "interslice normal/shear force ratio")
+  ("applied to all interslices")) (Greek Lambda_L)
 
 scalFunc    = cvR (dcc "f_i" (nounPhraseSP $ "scaling function") ("magnitude of interslice " ++
   "forces as a function of the x coordinate" ++ fisi ++ "; can be constant or a half-sine"))

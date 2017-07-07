@@ -30,7 +30,7 @@ risk_eq :: Expr
 risk_eq = ((C sflawParamK) / (Grouping (((C plate_len) / (1000)) *
   ((C plate_width) / (1000)))) :^ ((C sflawParamM) - (1))) *
   (Grouping ((Grouping ((C mod_elas) * (1000))) * 
-  (Grouping ((C act_thick) / (1000))) :^ (2))) :^ (C sflawParamM) * 
+  (square (Grouping ((C act_thick) / (1000)))))) :^ (C sflawParamM) * 
   (C loadDF) * (exp (C stressDistFac))
 
 --DD2--
@@ -70,7 +70,7 @@ strDisFac = mkDataDef stressDistFac strDisFac_eq
 
 nonFL_eq :: Expr
 nonFL_eq = ((C tolLoad) * (C mod_elas) * (C act_thick) :^ (4)) /
-  ((Grouping ((C plate_len) * (C plate_width))) :^ (2))
+  (square (Grouping ((C plate_len) * (C plate_width))))
 
 nonFL :: QDefinition
 nonFL = mkDataDef nonFactorL nonFL_eq
@@ -90,7 +90,7 @@ glaTyFac = mkDataDef gTF glaTyFac_eq
 --DD7--
 
 dimLL_eq :: Expr
-dimLL_eq = ((C demand) * ((Grouping ((C plate_len) * (C plate_width))) :^ (2)))
+dimLL_eq = ((C demand) * (square (Grouping ((C plate_len) * (C plate_width)))))
   / ((C mod_elas) * ((C act_thick) :^ (4)) * (C gTF))
 
 dimLL :: QDefinition
@@ -111,8 +111,8 @@ tolStrDisFac_eq = log (log ((1) / ((1) - (C pb_tol)))
   * ((Grouping (((C plate_len) / (1000)) * ((C plate_width) / (1000)))) :^
   ((C sflawParamM) - (1)) / ((C sflawParamK) *
   (Grouping (Grouping ((C mod_elas) * (1000)) *
-  (Grouping ((C act_thick) / (1000))) :^
-  (2))) :^ (C sflawParamM) * (C loadDF))))
+  (square (Grouping ((C act_thick) / (1000))))
+  )) :^ (C sflawParamM) * (C loadDF))))
 
 tolStrDisFac :: QDefinition
 tolStrDisFac = mkDataDef sdf_tol tolStrDisFac_eq

@@ -258,7 +258,7 @@ aspectRatio   = cc aspectR
     "sides, the ratio of the length of one of the supported edges " ++
     "perpendicular to the free edge, to the length of the free edge, is " ++
     "equal to or greater than 0.5.")
-blast         = dcc "blast"       (nounPhraseSent $ S "blast") --temporary implementation
+blast         = dcc "blast"       (nounPhraseSP "blast")
   "any kind of man-made explosion"
 blastResisGla = dcc "blastResisGla"    (nounPhraseSP "blast resistant glazing")
   ("Glazing that provides protection against air blast pressure generated " ++
@@ -400,8 +400,7 @@ sdWithEqn :: QDefinition
 sdWithEqn = mkDataDef standOffDist sdCalculation
 
 sdCalculation :: Relation
-sdCalculation = (C standOffDist) := sqrt (((C sdx) :^ (2)) + ((C sdy) :^ (2)) + ((C sdz) :^ (2)))
---FIXME: Create a `square` function?
+sdCalculation = (C standOffDist) := sqrt ((square (C sdx)) + (square (C sdy)) + (square (C sdz)))
 
 sdVectorSent :: Sentence
 sdVectorSent = getS sdx `sC` getS sdy `sC` getS sdz

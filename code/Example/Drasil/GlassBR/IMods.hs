@@ -9,6 +9,7 @@ import Drasil.GlassBR.DataDefs
 import Drasil.GlassBR.Concepts
 import Data.Drasil.Concepts.Documentation
 import Data.Drasil.Utils (getS)
+import Data.Drasil.Concepts.Math (parameter)
 
 iModels :: [RelationConcept]
 iModels = [probOfBr, calOfCap, calOfDe]
@@ -61,14 +62,15 @@ de_rel = (C demand) := FCall (C demand) [C eqTNTWeight, C standOffDist]
 dedescr :: Sentence
 dedescr = 
   foldlSent [(getS demand), S "or", (phrase demandq) `sC`
-  S "is the", (demandq ^. defn), S "obtained from Figure 2 by interpolation using", --use MakeRef? Issue #216
+  S "is the", (demandq ^. defn), 
+  S "obtained from Figure 2 by interpolation using", --use MakeRef? Issue #216
   (phrase standOffDist), sParen (getS standOffDist), S "and", 
-  (getS eqTNTWeight) +:+. S "as parameters", 
+  (getS eqTNTWeight), S "as" +:+. plural parameter, 
   (getS eqTNTWeight), S "is defined as" +:+.
   E (equat wtntWithEqn) +:+. ((getS char_weight) `isThe`
   (phrase char_weight)) +:+. ((getS tNT) `isThe`
   (phrase tNT)), (getS standOffDist) `isThe`
   (phrase standOffDist), S "where", E (equat sdWithEqn), S "where",
-  sParen (sdVectorSent), S "are coordinates"]
+  sParen (sdVectorSent), S "are", plural coordinate]
 
 {--}

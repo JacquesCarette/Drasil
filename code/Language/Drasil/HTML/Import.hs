@@ -84,14 +84,14 @@ ufunc (Product _ _) = error "HTML/Import.hs Incorrect use of Product"
 ufunc (Abs e) = (H.Abs, expr e)
 ufunc (Norm e) = (H.Norm, expr e)
 ufunc i@(Integral _ _ _) = integral i
-ufunc (Sin e) = (H.Sin, expr e)
-ufunc (Cos e) = (H.Cos, expr e)
-ufunc (Tan e) = (H.Tan, expr e)
-ufunc (Sec e) = (H.Sec, expr e)
-ufunc (Csc e) = (H.Csc, expr e)
-ufunc (Cot e) = (H.Cot, expr e)
-ufunc (Exp e) = (H.Exp, expr e)
-ufunc (Sqrt e) = (H.Sqrt, expr e)
+ufunc (Sin e)    = (H.Sin, expr e)
+ufunc (Cos e)    = (H.Cos, expr e)
+ufunc (Tan e)    = (H.Tan, expr e)
+ufunc (Sec e)    = (H.Sec, expr e)
+ufunc (Csc e)    = (H.Csc, expr e)
+ufunc (Cot e)    = (H.Cot, expr e)
+ufunc (Exp e)    = (H.Exp, expr e)
+ufunc (Sqrt e)   = (H.Sqrt, expr e)
 
 -- | Helper function for translating 'BiFunc's
 bfunc :: BiFunc -> (H.Function, [H.Expr])

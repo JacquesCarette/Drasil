@@ -167,19 +167,20 @@ data UFunc where
     ((Maybe Bound), (Maybe Bound)) -> Expr -> c -> UFunc
     -- Integral (low,high) Bounds (if any), then (expression to integrate) 
     -- and finally which chunk (variable) we are integrating with respect to.
-  Sin :: Expr -> UFunc
-  Cos :: Expr -> UFunc
-  Tan :: Expr -> UFunc
-  Sec :: Expr -> UFunc
-  Csc :: Expr -> UFunc
-  Cot :: Expr -> UFunc
-  Exp :: Expr -> UFunc
-  Sqrt :: Expr -> UFunc
+  Sin    :: Expr -> UFunc
+  Cos    :: Expr -> UFunc
+  Tan    :: Expr -> UFunc
+  Sec    :: Expr -> UFunc
+  Csc    :: Expr -> UFunc
+  Cot    :: Expr -> UFunc
+  Exp    :: Expr -> UFunc
+  Sqrt   :: Expr -> UFunc
   
 -- | Smart constructor to take the log of an expression
 log :: Expr -> Expr
 log = UnaryOp . Log
 
+-- | Smart constructor to take the square root of an expression
 sqrt :: Expr -> Expr
 sqrt = UnaryOp . Sqrt
 
@@ -224,3 +225,6 @@ data BiFunc where
 -- | Smart constructor to cross product two expressions
 cross :: Expr -> Expr -> Expr
 cross e1 e2 = BinaryOp (Cross e1 e2)
+
+square :: Expr -> Expr
+square x = x :^ 2

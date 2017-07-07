@@ -52,7 +52,7 @@ data Function = Log
            | Cot
            | Cross
            | Exp
-           | Sqrt
+           | Sqrt           
 
 data Set = Integer
          | Rational
@@ -121,30 +121,30 @@ data ItemType = Flat Spec
               | Nested Spec ListType
 
 instance Show Function where
-  show Log = "\\log"
-  show (Summation _) = "\\displaystyle\\sum"
-  show (Product _) = "\\displaystyle\\prod"
-  show Abs = ""
-  show Norm = ""
+  show Log            = "\\log"
+  show (Summation _)  = "\\displaystyle\\sum"
+  show (Product _)    = "\\displaystyle\\prod"
+  show Abs            = ""
+  show Norm           = ""
   show (Integral _ _) = "\\int"
-  show Sin = "\\sin"
-  show Cos = "\\cos"
-  show Tan = "\\tan"
-  show Sec = "\\sec"
-  show Csc = "\\csc"
-  show Cot = "\\cot"
-  show Cross = "\\times"
-  show Exp = "e"
-  show Sqrt = "\\sqrt"
+  show Sin            = "\\sin"
+  show Cos            = "\\cos"
+  show Tan            = "\\tan"
+  show Sec            = "\\sec"
+  show Csc            = "\\csc"
+  show Cot            = "\\cot"
+  show Cross          = "\\times"
+  show Exp            = "e"
+  show Sqrt           = "\\sqrt"
   
 instance Show Set where
-  show Integer = "\\mathbb{Z}"
+  show Integer  = "\\mathbb{Z}"
   show Rational = "\\mathbb{Q}"
-  show Real = "\\mathbb{R}"
-  show Natural = "\\mathbb{N}"
-  show Boolean = "\\mathbb{B}"
-  show Char = "Char"
-  show String = "String"
-  show Radians = "rad"
+  show Real     = "\\mathbb{R}"
+  show Natural  = "\\mathbb{N}"
+  show Boolean  = "\\mathbb{B}"
+  show Char     = "Char"
+  show String   = "String"
+  show Radians  = "rad"
   show (Vect a) = "V" ++ show a
-  show (Obj a) = a
+  show (Obj a)  = a

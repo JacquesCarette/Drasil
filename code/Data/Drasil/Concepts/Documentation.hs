@@ -58,8 +58,8 @@ notApp      = commonIdea "notApp"      (nounPhraseSP "not applicable")          
 -- concepts relating to the templates and their contents
 
 analysis, appendix, characteristic, client, class_, column, company, component,
-  condition, constraint, connection, content, context, customer, datum, decision,
-  definition, dependency, description, design, document, documentation,
+  condition, constraint, connection, content, context, coordinate, customer, datum, 
+  decision, definition, dependency, description, design, document, documentation,
   element, endUser, environment, figure, functional, game, general, goal, guide,
   implementation, individual, information, interest, interface, input_, instance_,
   intReader, introduction, item, label, library, limitation, literacy, method_,
@@ -84,6 +84,7 @@ constraint      = npnc "constraint"     (cn' "constraint")
 connection      = npnc "connection"     (cn' "connection")
 content         = npnc "content"        (cn' "content")
 context         = npnc "context"        (cn' "context")
+coordinate      = npnc "coordinate"     (cn' "coordinate")
 customer        = npnc "customer"       (cn' "customer")
 datum           = npnc "datum"          (cnUM  "datum")
 decision        = npnc "decision"       (cn'  "decision")

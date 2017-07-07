@@ -58,7 +58,7 @@ $F$ & Force: An interaction that tends to produce change in the motion of an obj
 \\
 $f_{i}$ & Scaling Function: magnitude of interslice forces as a function of the x coordinatefor interslice index i; can be constant or a half-sine & 
 \\
-$FS$ & Global Factor of Safety: the stability of a surface in a slope & 
+$FS$ & Factor of Safety: the global stability of a surface in a slope & 
 \\
 $FS_{Loc,i}$ & Local Factor of Safety: for slice index i & 
 \\
@@ -150,7 +150,7 @@ $\Delta{}H_{i}$ & Difference Between Interslice Forces Acting in the X-Ordinate 
 \\
 $\varepsilon{}_{i}$ & Displacement: in rotated coordinate system & m
 \\
-$\lambda{}$ & Ratio: between interslice normal and shear forces (applied to all interslices) & 
+$\lambda{}$ & Interslice Normal/shear Force Ratio: applied to all interslices & 
 \\
 $\mu{}$ & Pore Pressure: from water within the soil & Pa
 \\
@@ -664,7 +664,7 @@ Units & N
 \\ \midrule \\
 Equation & $X_{i}$ = $\lambda{}f_{i}E_{i}$
 \\ \midrule \\
-Description & $X_{i}$ is the interslice shear force\newline$\lambda{}$ is the ratio\newline$f_{i}$ is the scaling function\newline$E_{i}$ is the interslice normal force
+Description & $X_{i}$ is the interslice shear force\newline$\lambda{}$ is the interslice normal/shear force ratio\newline$f_{i}$ is the scaling function\newline$E_{i}$ is the interslice normal force
 \\ \bottomrule \end{tabular}
 \end{minipage}\\
 ~\newline
@@ -790,7 +790,7 @@ Description & $K_{no}$ is the normal stiffness\newline$E_{i}$ is the interslice 
 \label{Sec:InstMode}
 This section transforms the problem defined in Section~\ref{Sec:ProbDesc} into one which is expressed in mathematical terms. It uses concrete symbols defined in Section~\ref{Sec:DataDefi} to replace the abstract symbols in the models identified in Section~\ref{Sec:TheoMode} and Section~\ref{Sec:GeneDefi}.
 The Morgenstern Price method is a vertical slice, limit equilibrium slope stability analysis method. Analysis is performed by breaking the assumed failure surface into a series of vertical slices of mass. Static equilibrium analysis using two force equilibrium, and one moment equation as in T2. The problem is statically indeterminate with only these 3 equations and one constitutive equation (the Mohr Coulomb shear strength of T3) so the assumption of GD5 is used. Solving for force equilibrium allows definitions of all forces in terms of the physical properties of DD1 to DD9, as done in DD10, DD11.
-The values of the interslice normal force E the interslice normal/shear force magnitude ratio $\lambda{}$, and the Factor of Safety ($FS$), are unknown. Equations for the unknowns are written in terms of only the values in DD1 to DD9, the values of $R_{i}$, and $T_{i}$ in DD10 and DD11, and each other. The relationships between the unknowns are non linear, and therefore explicit equations cannot be derived and an iterative solutions method is required.
+The values of the interslice normal force $E_{i}$ the interslice normal/shear force ratio $\lambda{}$, and the Factor of Safety ($FS$), are unknown. Equations for the unknowns are written in terms of only the values in DD1 to DD9, the values of $R_{i}$, and $T_{i}$ in DD10 and DD11, and each other. The relationships between the unknowns are non linear, and therefore explicit equations cannot be derived and an iterative solutions method is required.
 ~\newline
 \noindent \begin{minipage}{\textwidth}
 \begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
@@ -805,11 +805,11 @@ Equation & $FS=\frac{\displaystyle\sum_{v=1}^{n-1}{\left[R_{i}\displaystyle\prod
 Description & Equation for the Factor of Safety is the ratio between resistive and mobile shear of the slip surface. The sum of values from each slice is taken to find the total resistive and mobile shear for the slip surface. The constants $\Phi{}_{c}$ and $\Psi{}_{c}$ convert the resistive and mobile shear without the inluence of interslice forces, to a calculation considering the interslice forces.
 \\ \bottomrule \end{tabular}
 \end{minipage}\\
-Using equation (21) from section 4.2.5, rearranging, and applying the boundary condition that E0 and En are equal to 0 an equation for the factor of safety is found as equation (12), also seen in IM1. Using equation (21) from section 4.2.5, rearranging, and applying the boundary condition that E0 and En are equal to 0 an equation for the factor of safety is found as equation (12), also seen in IM1.
+Using equation (21) from section 4.2.5, rearranging, and applying the boundary condition that $E_{i}$ and $E_{i}$ are equal to $0$, an equation for the factor of safety is found as equation (12), also seen in IM1.
 \begin{equation}
 FS=\frac{\displaystyle\sum_{v=1}^{n-1}{\left[R_{i}\displaystyle\prod_{c=i}^{n-1}{\frac{\Psi{}_{c}}{\Phi{}_{c}}}\right]}+R_{i}}{\displaystyle\sum_{v=1}^{n-1}{\left[T_{i}\displaystyle\prod_{c=i}^{n-1}{\frac{\Psi{}_{c}}{\Phi{}_{c}}}\right]}+T_{i}}
 \end{equation}
-The constants $\Psi{}_{c}$ and $\Phi{}_{c}$ described in equations 20 and 19 are functions of the unknowns: the interslice normal/shear force ratio $\lambda{}$ (IM2) and the Factor of Safety itself $FS$ (IM1).
+The constants $\Psi{}_{c}$ and $\Phi{}_{c}$ described in equation (20) and equation (19) are functions of the unknowns: the interslice normal/shear force ratio $\lambda{}$ (IM2) and the factor of safety $FS$ (IM1).
 ~\newline
 \noindent \begin{minipage}{\textwidth}
 \begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
@@ -828,7 +828,7 @@ b_{i}\left(E_{i}+H_{i}\right)\tan\left(\alpha{}_{i}\right), & i=n
 Description & $\lambda{}$ is the magnitude ratio between shear and normal forces at the interslice interfaces as the assumption of the Morgenstern Price method in GD5. The inclination function f determines the relative magnitude ratio between the different interslices, while $\lambda{}$ determines the magnitude. $\lambda{}$ uses the sum of interslice normal and shear forces taken from each interslice.
 \\ \bottomrule \end{tabular}
 \end{minipage}\\
-The last static equation of T2 the moment equilibrium of GD6 about the midpoint of the base is taken, with the assumption of GD5. Results in equation (13).
+Taking the last static equation of T2 with the moment equilibrium of GD6 about the midpoint of the base and the assumption of GD5 results in equation (13).
 \begin{equation}
 0=-E_{i}\left(1-\frac{b_{i}}{2}\tan\left(\alpha{}_{i}\right)\right)+E_{i}\left(1-\frac{b_{i}}{2}\tan\left(\alpha{}_{i}\right)\right)-H_{i}\left(1-\frac{b_{i}}{2}\tan\left(\alpha{}_{i}\right)\right)+H_{i}\left(1-\frac{b_{i}}{2}\tan\left(\alpha{}_{i}\right)\right)-\frac{b_{i}}{2}\left(X_{i}+X_{i}\right)+\frac{K_{c}W_{i}h_{i}}{2}-U_{t,i}\sin\left(\beta{}_{i}\right)h_{i}-Q_{i}\sin\left(\omega{}_{i}\right)h_{i}
 \end{equation}
@@ -836,11 +836,11 @@ The equation in terms of $\lambda{}$ leads to equation (14).
 \begin{equation}
 \lambda{}=\frac{0=-E_{i}\left(1-\frac{b_{i}}{2}\tan\left(\alpha{}_{i}\right)\right)+E_{i}\left(1-\frac{b_{i}}{2}\tan\left(\alpha{}_{i}\right)\right)-H_{i}\left(1-\frac{b_{i}}{2}\tan\left(\alpha{}_{i}\right)\right)+H_{i}\left(1-\frac{b_{i}}{2}\tan\left(\alpha{}_{i}\right)\right)-\frac{b_{i}}{2}\left(X_{i}+X_{i}\right)+\frac{K_{c}W_{i}h_{i}}{2}-U_{t,i}\sin\left(\beta{}_{i}\right)h_{i}-Q_{i}\sin\left(\omega{}_{i}\right)h_{i}}{b_{i}/2\left(E_{i}f_{i}+E_{i}f_{i}\right)}
 \end{equation}
-Taking a summation of each slice, and considering the boundary conditions that E0 and En are equal to zero, a general equation for the constant $\lambda{}$ is developed in equation (15), also found in IM2.
+Taking a summation of each slice, and applying the boundary condition that $E_{i}$ and $E_{i}$ are equal to $0$, a general equation for the constant $\lambda{}$ is developed in equation (15), also found in IM2.
 \begin{equation}
 \lambda{}=\frac{\displaystyle\sum_{i=1}^{n}{\left[b_{i}\left(E_{i}+E_{i}+H_{i}+H_{i}\right)\tan\left(\alpha{}_{i}\right)+h_{i}\left(K_{c}W_{i}-2U_{t,i}\sin\left(\beta{}_{i}\right)-2Q_{i}\sin\left(\omega{}_{i}\right)\right)\right]}}{\displaystyle\sum_{i=1}^{n}{\left[b_{i}\left(E_{i}f_{i}+E_{i}f_{i}\right)\right]}}
 \end{equation}
-Equation (15) for $\lambda{}$, is a function of the unknown interslice normal force $E_{i}$ (IM3).
+equation (15) for $\lambda{}$, is a function of the unknown interslice normal force $E_{i}$ IM3.
 ~\newline
 \noindent \begin{minipage}{\textwidth}
 \begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
@@ -859,11 +859,11 @@ Equation & $E_{i}=\begin{cases}
 Description & The value of the interslice normal force $E_{i}$ at interface i. The net force is the weight of the slices adjacent to interface i exert horizontally on each other.
 \\ \bottomrule \end{tabular}
 \end{minipage}\\
-Taking the perpendicular force equilibrium of GD1 with the effective stress definition from T4 that $N_{i}=N'_{i}-U_{b,i}$, and the assumption of GD5 the equilibrium equation can be rewritten as equation (16).
+Taking the normal force equilibrium of GD1 with the effective stress definition from T4 that $N_{i}=N'_{i}-U_{b,i}$, and the assumption of GD5 the equilibrium equation can be rewritten as equation (16).
 \begin{equation}
 N'_{i}=\left(W_{i}-\lambda{}f_{i}E_{i}+\lambda{}f_{i}E_{i}+U_{b,i}\cos\left(\beta{}_{i}\right)+Q_{i}\cos\left(\omega{}_{i}\right)\right)\cos\left(\alpha{}_{i}\right)+\left(-K_{c}W_{i}-E_{i}+E_{i}-H_{i}+H_{i}+U_{t,i}\sin\left(\beta{}_{i}\right)+Q_{i}\sin\left(\omega{}_{i}\right)\right)\sin\left(\alpha{}_{i}\right)-U_{b,i}
 \end{equation}
-Taking the parallel force equilibrium of GD2 with the definition of mobile shear from GD4 and the assumption of GD5, the equilibrium equation can be rewritten as equation (17).
+Taking the base shear force equilibrium of GD2 with the definition of mobile shear from GD4 and the assumption of GD5, the equilibrium equation can be rewritten as equation (17).
 \begin{equation}
 \frac{N_{i}\tan\left(\varphi{}'\right)+c'b_{i}\sec\left(\alpha{}_{i}\right)}{FS}=\left(W_{i}-\lambda{}f_{i}E_{i}+\lambda{}f_{i}E_{i}+U_{b,i}\cos\left(\beta{}_{i}\right)+Q_{i}\cos\left(\omega{}_{i}\right)\right)\sin\left(\alpha{}_{i}\right)+\left(-K_{c}W_{i}-E_{i}+E_{i}-H_{i}+H_{i}+U_{t,i}\sin\left(\beta{}_{i}\right)+Q_{i}\sin\left(\omega{}_{i}\right)\right)\cos\left(\alpha{}_{i}\right)
 \end{equation}
@@ -881,7 +881,7 @@ Where $R_{i}$ and $T_{i}$ are the resistive and mobile shear of the slice, witho
 \begin{equation}
 E_{i}=\frac{\Psi{}_{c}E_{i}+FS*T_{i}-R_{i}}{\Phi{}_{c}}
 \end{equation}
-The constants $\Psi{}_{c}$ and $\Phi{}_{c}$ in equation (21) for $E_{i}$ is a function of the unknown values, the interslice normal/shear force ratio $\lambda{}$ (IM2), and the Factor of Safety $FS$ (IM1).
+The constants $\Psi{}_{c}$ and $\Phi{}_{c}$ described in equation (20) and equation (19) are functions of the unknowns: the interslice normal/shear force ratio $\lambda{}$ (IM2) and the factor of safety $FS$ (IM1).
 ~\newline
 \noindent \begin{minipage}{\textwidth}
 \begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
@@ -896,7 +896,7 @@ Equation & $-\Delta{}H_{i}-K_{c}W_{i}-U_{b,i}\sin\left(\alpha{}_{i}\right)+U_{t,
 Description & There is one set of force displacement equilibrium equations in the x and y directions for each element. System of equations solved for displacements ( $\delta{}x_{i}$ and $\delta{}y_{i}$ ) $\Delta{}H_{i}$ = $H_{i}$ is the net hydrostatic force across a slice. $K_{c}$ is the earthquake load factor. $W_{i}$ is the weight of the slice. $U_{b,i}$ is the pore water pressure acting on the slice base. $U_{t,i}$ is the pore water pressure acting on the slice surface. $\alpha{}_{i}$ is the angle of the base with the horizontal. $\beta{}_{i}$ is the angle of the surface with the horizontal. $\delta{}x_{i}$ is the x displacement of slice i. $\delta{}y_{i}$ is the y displacement of slice i. $\ell{}_{s,i}$ is the length of the interslice surface i. $\ell{}_{b,i}$ is the length of the base surface i. $K_{st,i}$ is the interslice shear stiffness at surface i.  Kst,i-1 is the interslice normal stiffness at surface i. KbA,i, and KbB,i are the base stiffness values for slice i.
 \\ \bottomrule \end{tabular}
 \end{minipage}\\
-Using the net force-displacement equilibrium equation of a slice from DD13, with the definitions of the stiffness matrices from DD12, and the force definitions from GD7, a broken down forcedisplacement equilibrium equation can be derived. Equation (22) gives the broken down equation in the x direction, and equation (23) gives the broken down equation in the y direction..
+Using the net force-displacement equilibrium equation of a slice from DD13 with the definitions of the stiffness matrices from DD12 and the force definitions from GD7 a broken down force displacement equilibrium equation can be derived. equation (22) gives the broken down equation in the x direction, and equation (23) gives the broken down equation in the y direction.
 \begin{equation}
 -\Delta{}H_{i}-K_{c}W_{i}-U_{b,i}\sin\left(\alpha{}_{i}\right)+U_{t,i}\sin\left(\beta{}_{i}\right)+Q_{i}\sin\left(\omega{}_{i}\right)=\delta{}x_{i}-\ell{}_{s,i}K_{sn,i}+\delta{}x_{i}\left(-\ell{}_{s,i}K_{sn,i}+\ell{}_{s,i}K_{sn,i}+\ell{}_{b,i}K_{sn,i}\right)+\delta{}x_{i}-\ell{}_{s,i}K_{sn,i}+\delta{}y_{i}-\ell{}_{b,i}K_{sn,i}=-W_{i}-U_{b,i}\cos\left(\alpha{}_{i}\right)+U_{t,i}\cos\left(\beta{}_{i}\right)+Q_{i}\cos\left(\omega{}_{i}\right)=\delta{}y_{i}-\ell{}_{s,i}K_{sn,i}+\delta{}y_{i}\left(-\ell{}_{s,i}K_{sn,i}+\ell{}_{s,i}K_{sn,i}+\ell{}_{b,i}K_{sn,i}\right)+\delta{}y_{i}-\ell{}_{s,i}K_{sn,i}+\delta{}x_{i}-\ell{}_{b,i}K_{sn,i}
 \end{equation}
@@ -915,34 +915,34 @@ Equation & $FS_{Loc,i}=\frac{c'-K_{bn,i}\delta{}v_{i}\tan\left(\varphi{}'\right)
 Description & $FS_{Loc,i}$ is the factor of safety for slice i. $FS$ is the factor of safety for the entire slip surface. $c'$ is the cohesion of slice i's base. $\varphi{}'$ is the effective angle of friction of slice i's base. $\delta{}v_{i}$ is the normal displacement of slice i. $\delta{}u_{i}$ is the shear displacement of slice i. $K_{bt,i}$ is the length of the base of slice i. $K_{bn,i}$ is the base normal stiffness at surface i. $n$ is the number of slices in the slip surface.
 \\ \bottomrule \end{tabular}
 \end{minipage}\\
-RFEM analysis can also be used to calculate the Factor of safety for the slope. For a slice element i the displacements $\delta{}x_{i}$ and $\delta{}y_{i}$, are solved from the system of equations in IM4. The definition of $\varepsilon{}_{i}$ as the rotation of the displacement vector $\delta{}$ is seen in GD9. This is used to find the displacements of the slice parallel to the base of the slice $\delta{}u_{i}$ in equation (24) and normal to the base of the slice $\delta{}v_{i}$ in equation (25).
+RFEM analysis can also be used to calculate the factor of safety for the slope. For a slice element $i$ the displacements $\delta{}x_{i}$ and $\delta{}y_{i}$, are solved from the system of equations in IM4. The definition of $\varepsilon{}_{i}$ as the rotation of the displacement vector $\delta{}$ is seen in GD9. This is used to find the displacements of the slice parallel to the base of the slice $\delta{}u_{i}$ in equation (24) and normal to the base of the slice $\delta{}v_{i}$ in equation (25).
 \begin{equation}
 \delta{}u_{i}=\cos\left(\alpha{}_{i}\right)\delta{}x_{i}+\sin\left(\alpha{}_{i}\right)\delta{}y_{i}
 \end{equation}
 \begin{equation}
 \delta{}v_{i}=\left(-\sin\left(\alpha{}_{i}\right)\right)\delta{}x_{i}+\sin\left(\alpha{}_{i}\right)\delta{}y_{i}
 \end{equation}
-With the definition of normal stiffness from DD14 to find the normal stiffness of the base $K_{bn,i}$ and the now known base displacement perpendicular to the surface $\delta{}v_{i}$ from equation (25), the normal base stress can be calculated from the force-displacement relationship of T5. Stress $\sigma{}$ is used in place of force $F$ as the stiffness hasn't been normalized for the length of the base. Results in equation (26).
+With the definition of normal stiffness from DD14 to find the normal stiffness of the base $K_{bn,i}$ and the now known base displacement perpendicular to the surface $\delta{}v_{i}$ from equation (25) the normal base stress can be calculated from the force-displacement relationship of T5. Stress $\sigma{}$ is used in place of force $F$ as the stiffness hasn't been normalized for the length of the base. Results in equation (26).
 \begin{equation}
 \sigma{}=K_{bn,i}\delta{}v_{i}
 \end{equation}
-The resistive shear to calculate the factor of safety $FS$ in is found from the Mohr Coulomb resistive strength of soil in T3. Using the normal stress $\sigma{}$ from equation (26) as the stress the resistive shear of the slice can be calculated from calculated in equation (27).
+The resistive shear to calculate the factor of safety $FS$ is found from the Mohr Coulomb resistive strength of soil in T3 Using the normal stress $\sigma{}$ from equation (26) as the stress, the resistive shear of the slice can be calculated from equation (27).
 \begin{equation}
 S_{i}=c'-\sigma{}\tan\left(\varphi{}'\right)
 \end{equation}
-Previously the value of the base shear stiffness $K_{bt,i}$ as seen in equation (28) was unsolvable because the normal stress $\sigma{}$ was unknown. With the definition of $\sigma{}$ from equation (26) and the definition of displacement shear to the base $\delta{}u_{i}$ from equation (25), the value of $K_{bt,i}$ becomes solvable.
+Previously the value of the shear stiffness $K_{bt,i}$ as seen in equation (28) was unsolvable because the normal stress $\sigma{}$ was unknown. With the definition of $\sigma{}$ from equation (26) and the definition of displacement shear to the base $\delta{}u_{i}$ from equation (25), the value of $K_{bt,i}$ becomes solvable.
 \begin{equation}
 K_{bt,i}=\frac{E_{i}}{2\left(1+\nu{}\right)}\frac{0.1}{b_{i}}+\frac{c'-\sigma{}\tan\left(\varphi{}'\right)}{|\delta{}u_{i}|+a}
 \end{equation}
-With shear stiffness $K_{bt,i}$ calculated in equation (28) and shear displacement $\delta{}u_{i}$ calculated in equation (24) values now known the shear stress acting on the base of a slice $\tau{}_{i}$ can be calculated using T5, as done in equation (29). Again stress $\tau{}_{i}$ is used in place of force $F$ as the stiffness hasn't been normalized for the length of the base.
+With shear stiffness $K_{bt,i}$ calculated in equation (28) and shear displacement $\delta{}u_{i}$ calculated in equation (24) values now known the shear stress acting on the base of a slice $\tau{}_{i}$ can be calculated using T5, as done in equation (29). Again, stress $\tau{}_{i}$ is used in place of force $F$ as the stiffness has not been normalized for the length of the base.
 \begin{equation}
 \tau{}_{i}=K_{bt,i}\delta{}u_{i}
 \end{equation}
-The shear stress on the base $\tau{}_{i}$ acts as the mobile shear acting on the base. Using the definition Factor of Safety equation from T1, with the definitions of resistive shear strength of a slice $S_{i}$ from equation (27) and shear stress on a slice $\tau{}_{i}$ from equation (29) the factor of safety for a slice $FS_{Loc,i}$ can be found from as seen in equation (30), and IM5.
+The shear stress acting on the base of a slice $\tau{}_{i}$ acts as the mobile shear acting on the base. Using the definition Factor of Safety equation from T1, with the definitions of resistive shear strength of a slice $S_{i}$ from equation (27) and shear stress on a slice $\tau{}_{i}$ from equation (29) the local factor of safety $FS_{Loc,i}$ can be found from as seen in equation (30) and IM5.
 \begin{equation}
 FS_{Loc,i}=\frac{S_{i}}{\tau{}_{i}}=\frac{c'-K_{bn,i}\delta{}v_{i}\tan\left(\varphi{}'\right)}{K_{bt,i}\delta{}u_{i}}
 \end{equation}
-The global Factor of Safety is then the ratio of the summation of the resistive and mobile shears for each slice, with a weighting for the length of the slices base. Shown in equation (31), and IM5.
+The global Factor of Safety is then the ratio of the summation of the resistive and mobile shears for each slice, with a weighting for the length of the slices base. Shown in equation (31) and IM5.
 \begin{equation}
 FS=\frac{\displaystyle\sum_{i=1}^{n}{\left[\ell{}_{b,i}S_{i}\right]}}{\displaystyle\sum_{i=1}^{n}{\left[\ell{}_{b,i}\tau{}_{i}\right]}}=\frac{\displaystyle\sum_{i=1}^{n}{\left[\ell{}_{b,i}\left(c'-K_{bn,i}\delta{}v_{i}\tan\left(\varphi{}'\right)\right)\right]}}{\displaystyle\sum_{i=1}^{n}{\left[\ell{}_{b,i}K_{bt,i}\delta{}u_{i}\right]}}
 \end{equation}

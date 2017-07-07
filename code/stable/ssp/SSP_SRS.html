@@ -183,7 +183,7 @@ Scaling Function: magnitude of interslice forces as a function of the x coordina
 FS
 </td>
 <td>
-Global Factor of Safety: the stability of a surface in a slope
+Factor of Safety: the global stability of a surface in a slope
 </td>
 <td>
 
@@ -689,7 +689,7 @@ m
 &lambda;
 </td>
 <td>
-Ratio: between interslice normal and shear forces (applied to all interslices)
+Interslice Normal/shear Force Ratio: applied to all interslices
 </td>
 <td>
 
@@ -2269,7 +2269,7 @@ Description
 </th>
 <td>
 <p class="paragraph">
-X<sub>i</sub> is the interslice shear force<br />&lambda; is the ratio<br />f<sub>i</sub> is the scaling function<br />E<sub>i</sub> is the interslice normal force
+X<sub>i</sub> is the interslice shear force<br />&lambda; is the interslice normal/shear force ratio<br />f<sub>i</sub> is the scaling function<br />E<sub>i</sub> is the interslice normal force
 </p>
 </td>
 </tr>
@@ -2630,7 +2630,7 @@ This section transforms the problem defined in <a href=#Sec:ProbDesc>this Sectio
 The Morgenstern Price method is a vertical slice, limit equilibrium slope stability analysis method. Analysis is performed by breaking the assumed failure surface into a series of vertical slices of mass. Static equilibrium analysis using two force equilibrium, and one moment equation as in T2. The problem is statically indeterminate with only these 3 equations and one constitutive equation (the Mohr Coulomb shear strength of T3) so the assumption of GD5 is used. Solving for force equilibrium allows definitions of all forces in terms of the physical properties of DD1 to DD9, as done in DD10, DD11.
 </p>
 <p class="paragraph">
-The values of the interslice normal force E the interslice normal/shear force magnitude ratio &lambda;, and the Factor of Safety (FS), are unknown. Equations for the unknowns are written in terms of only the values in DD1 to DD9, the values of R<sub>i</sub>, and T<sub>i</sub> in DD10 and DD11, and each other. The relationships between the unknowns are non linear, and therefore explicit equations cannot be derived and an iterative solutions method is required.
+The values of the interslice normal force E<sub>i</sub> the interslice normal/shear force ratio &lambda;, and the Factor of Safety (FS), are unknown. Equations for the unknowns are written in terms of only the values in DD1 to DD9, the values of R<sub>i</sub>, and T<sub>i</sub> in DD10 and DD11, and each other. The relationships between the unknowns are non linear, and therefore explicit equations cannot be derived and an iterative solutions method is required.
 </p>
 <a id="T:fctSfty">
 <table class="tdefn">
@@ -2690,7 +2690,7 @@ Equation for the Factor of Safety is the ratio between resistive and mobile shea
 </table>
 </a>
 <p class="paragraph">
-Using equation (21) from section 4.2.5, rearranging, and applying the boundary condition that E0 and En are equal to 0 an equation for the factor of safety is found as equation (12), also seen in IM1. Using equation (21) from section 4.2.5, rearranging, and applying the boundary condition that E0 and En are equal to 0 an equation for the factor of safety is found as equation (12), also seen in IM1.
+Using equation (21) from section 4.2.5, rearranging, and applying the boundary condition that E<sub>i</sub> and E<sub>i</sub> are equal to 0, an equation for the factor of safety is found as equation (12), also seen in IM1.
 </p>
 <a id="">
 <div class="equation">
@@ -2719,7 +2719,7 @@ FS=<div class="fraction">
 </div>
 </a>
 <p class="paragraph">
-The constants &Psi;<sub>c</sub> and &Phi;<sub>c</sub> described in equations 20 and 19 are functions of the unknowns: the interslice normal/shear force ratio &lambda; (IM2) and the Factor of Safety itself FS (IM1).
+The constants &Psi;<sub>c</sub> and &Phi;<sub>c</sub> described in equation (20) and equation (19) are functions of the unknowns: the interslice normal/shear force ratio &lambda; (IM2) and the factor of safety FS (IM1).
 </p>
 <a id="T:nrmShrFor">
 <table class="tdefn">
@@ -2777,7 +2777,7 @@ Description
 </table>
 </a>
 <p class="paragraph">
-The last static equation of T2 the moment equilibrium of GD6 about the midpoint of the base is taken, with the assumption of GD5. Results in equation (13).
+Taking the last static equation of T2 with the moment equilibrium of GD6 about the midpoint of the base and the assumption of GD5 results in equation (13).
 </p>
 <a id="">
 <div class="equation">
@@ -2884,7 +2884,7 @@ b<sub>i</sub>/2(E<sub>i</sub>f<sub>i</sub>+E<sub>i</sub>f<sub>i</sub>)
 </div>
 </a>
 <p class="paragraph">
-Taking a summation of each slice, and considering the boundary conditions that E0 and En are equal to zero, a general equation for the constant &lambda; is developed in equation (15), also found in IM2.
+Taking a summation of each slice, and applying the boundary condition that E<sub>i</sub> and E<sub>i</sub> are equal to 0, a general equation for the constant &lambda; is developed in equation (15), also found in IM2.
 </p>
 <a id="">
 <div class="equation">
@@ -2899,7 +2899,7 @@ Taking a summation of each slice, and considering the boundary conditions that E
 </div>
 </a>
 <p class="paragraph">
-Equation (15) for &lambda;, is a function of the unknown interslice normal force E<sub>i</sub> (IM3).
+equation (15) for &lambda;, is a function of the unknown interslice normal force E<sub>i</sub> IM3.
 </p>
 <a id="T:intsliceFs">
 <table class="tdefn">
@@ -2971,7 +2971,7 @@ The value of the interslice normal force E<sub>i</sub> at interface i. The net f
 </table>
 </a>
 <p class="paragraph">
-Taking the perpendicular force equilibrium of GD1 with the effective stress definition from T4 that N<sub>i</sub>=N'<sub>i</sub>-U<sub>b,i</sub>, and the assumption of GD5 the equilibrium equation can be rewritten as equation (16).
+Taking the normal force equilibrium of GD1 with the effective stress definition from T4 that N<sub>i</sub>=N'<sub>i</sub>-U<sub>b,i</sub>, and the assumption of GD5 the equilibrium equation can be rewritten as equation (16).
 </p>
 <a id="">
 <div class="equation">
@@ -2979,7 +2979,7 @@ N'<sub>i</sub>=(W<sub>i</sub>-&lambda;f<sub>i</sub>E<sub>i</sub>+&lambda;f<sub>i
 </div>
 </a>
 <p class="paragraph">
-Taking the parallel force equilibrium of GD2 with the definition of mobile shear from GD4 and the assumption of GD5, the equilibrium equation can be rewritten as equation (17).
+Taking the base shear force equilibrium of GD2 with the definition of mobile shear from GD4 and the assumption of GD5, the equilibrium equation can be rewritten as equation (17).
 </p>
 <a id="">
 <div class="equation">
@@ -3027,7 +3027,7 @@ E<sub>i</sub>=<div class="fraction">
 </div>
 </a>
 <p class="paragraph">
-The constants &Psi;<sub>c</sub> and &Phi;<sub>c</sub> in equation (21) for E<sub>i</sub> is a function of the unknown values, the interslice normal/shear force ratio &lambda; (IM2), and the Factor of Safety FS (IM1).
+The constants &Psi;<sub>c</sub> and &Phi;<sub>c</sub> described in equation (20) and equation (19) are functions of the unknowns: the interslice normal/shear force ratio &lambda; (IM2) and the factor of safety FS (IM1).
 </p>
 <a id="T:forDisEqlb">
 <table class="tdefn">
@@ -3066,7 +3066,7 @@ There is one set of force displacement equilibrium equations in the x and y dire
 </table>
 </a>
 <p class="paragraph">
-Using the net force-displacement equilibrium equation of a slice from DD13, with the definitions of the stiffness matrices from DD12, and the force definitions from GD7, a broken down forcedisplacement equilibrium equation can be derived. Equation (22) gives the broken down equation in the x direction, and equation (23) gives the broken down equation in the y direction..
+Using the net force-displacement equilibrium equation of a slice from DD13 with the definitions of the stiffness matrices from DD12 and the force definitions from GD7 a broken down force displacement equilibrium equation can be derived. equation (22) gives the broken down equation in the x direction, and equation (23) gives the broken down equation in the y direction.
 </p>
 <a id="">
 <div class="equation">
@@ -3120,7 +3120,7 @@ FS<sub>Loc,i</sub> is the factor of safety for slice i. FS is the factor of safe
 </table>
 </a>
 <p class="paragraph">
-RFEM analysis can also be used to calculate the Factor of safety for the slope. For a slice element i the displacements &delta;x<sub>i</sub> and &delta;y<sub>i</sub>, are solved from the system of equations in IM4. The definition of &epsilon;<sub>i</sub> as the rotation of the displacement vector &delta; is seen in GD9. This is used to find the displacements of the slice parallel to the base of the slice &delta;u<sub>i</sub> in equation (24) and normal to the base of the slice &delta;v<sub>i</sub> in equation (25).
+RFEM analysis can also be used to calculate the factor of safety for the slope. For a slice element i the displacements &delta;x<sub>i</sub> and &delta;y<sub>i</sub>, are solved from the system of equations in IM4. The definition of &epsilon;<sub>i</sub> as the rotation of the displacement vector &delta; is seen in GD9. This is used to find the displacements of the slice parallel to the base of the slice &delta;u<sub>i</sub> in equation (24) and normal to the base of the slice &delta;v<sub>i</sub> in equation (25).
 </p>
 <a id="">
 <div class="equation">
@@ -3133,7 +3133,7 @@ RFEM analysis can also be used to calculate the Factor of safety for the slope. 
 </div>
 </a>
 <p class="paragraph">
-With the definition of normal stiffness from DD14 to find the normal stiffness of the base K<sub>bn,i</sub> and the now known base displacement perpendicular to the surface &delta;v<sub>i</sub> from equation (25), the normal base stress can be calculated from the force-displacement relationship of T5. Stress &sigma; is used in place of force F as the stiffness hasn't been normalized for the length of the base. Results in equation (26).
+With the definition of normal stiffness from DD14 to find the normal stiffness of the base K<sub>bn,i</sub> and the now known base displacement perpendicular to the surface &delta;v<sub>i</sub> from equation (25) the normal base stress can be calculated from the force-displacement relationship of T5. Stress &sigma; is used in place of force F as the stiffness hasn't been normalized for the length of the base. Results in equation (26).
 </p>
 <a id="">
 <div class="equation">
@@ -3141,7 +3141,7 @@ With the definition of normal stiffness from DD14 to find the normal stiffness o
 </div>
 </a>
 <p class="paragraph">
-The resistive shear to calculate the factor of safety FS in is found from the Mohr Coulomb resistive strength of soil in T3. Using the normal stress &sigma; from equation (26) as the stress the resistive shear of the slice can be calculated from calculated in equation (27).
+The resistive shear to calculate the factor of safety FS is found from the Mohr Coulomb resistive strength of soil in T3 Using the normal stress &sigma; from equation (26) as the stress, the resistive shear of the slice can be calculated from equation (27).
 </p>
 <a id="">
 <div class="equation">
@@ -3149,7 +3149,7 @@ S<sub>i</sub>=c'-&sigma;tan(&phiv;')
 </div>
 </a>
 <p class="paragraph">
-Previously the value of the base shear stiffness K<sub>bt,i</sub> as seen in equation (28) was unsolvable because the normal stress &sigma; was unknown. With the definition of &sigma; from equation (26) and the definition of displacement shear to the base &delta;u<sub>i</sub> from equation (25), the value of K<sub>bt,i</sub> becomes solvable.
+Previously the value of the shear stiffness K<sub>bt,i</sub> as seen in equation (28) was unsolvable because the normal stress &sigma; was unknown. With the definition of &sigma; from equation (26) and the definition of displacement shear to the base &delta;u<sub>i</sub> from equation (25), the value of K<sub>bt,i</sub> becomes solvable.
 </p>
 <a id="">
 <div class="equation">
@@ -3178,7 +3178,7 @@ c'-&sigma;tan(&phiv;')
 </div>
 </a>
 <p class="paragraph">
-With shear stiffness K<sub>bt,i</sub> calculated in equation (28) and shear displacement &delta;u<sub>i</sub> calculated in equation (24) values now known the shear stress acting on the base of a slice &tau;<sub>i</sub> can be calculated using T5, as done in equation (29). Again stress &tau;<sub>i</sub> is used in place of force F as the stiffness hasn't been normalized for the length of the base.
+With shear stiffness K<sub>bt,i</sub> calculated in equation (28) and shear displacement &delta;u<sub>i</sub> calculated in equation (24) values now known the shear stress acting on the base of a slice &tau;<sub>i</sub> can be calculated using T5, as done in equation (29). Again, stress &tau;<sub>i</sub> is used in place of force F as the stiffness has not been normalized for the length of the base.
 </p>
 <a id="">
 <div class="equation">
@@ -3186,7 +3186,7 @@ With shear stiffness K<sub>bt,i</sub> calculated in equation (28) and shear disp
 </div>
 </a>
 <p class="paragraph">
-The shear stress on the base &tau;<sub>i</sub> acts as the mobile shear acting on the base. Using the definition Factor of Safety equation from T1, with the definitions of resistive shear strength of a slice S<sub>i</sub> from equation (27) and shear stress on a slice &tau;<sub>i</sub> from equation (29) the factor of safety for a slice FS<sub>Loc,i</sub> can be found from as seen in equation (30), and IM5.
+The shear stress acting on the base of a slice &tau;<sub>i</sub> acts as the mobile shear acting on the base. Using the definition Factor of Safety equation from T1, with the definitions of resistive shear strength of a slice S<sub>i</sub> from equation (27) and shear stress on a slice &tau;<sub>i</sub> from equation (29) the local factor of safety FS<sub>Loc,i</sub> can be found from as seen in equation (30) and IM5.
 </p>
 <a id="">
 <div class="equation">
@@ -3208,7 +3208,7 @@ K<sub>bt,i</sub>&delta;u<sub>i</sub>
 </div>
 </a>
 <p class="paragraph">
-The global Factor of Safety is then the ratio of the summation of the resistive and mobile shears for each slice, with a weighting for the length of the slices base. Shown in equation (31), and IM5.
+The global Factor of Safety is then the ratio of the summation of the resistive and mobile shears for each slice, with a weighting for the length of the slices base. Shown in equation (31) and IM5.
 </p>
 <a id="">
 <div class="equation">

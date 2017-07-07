@@ -104,9 +104,10 @@ sspSymMapD = symbolMapFun sspSymMap Data
 --automatically generated in mkSRS using the intro below
 
 s1_2_intro = [TSPurpose, TypogConvention [Verb $
-  plural value +:+ S "with a subscript i implies that the" +:+
-  phrase value +:+ S "will be taken at and analyzed at a" +:+
-  phrase slice +:+ S "or" +:+ phrase slice +:+
+  plural value +:+ S "with a subscript" +:+ getS index +:+
+  S "implies that the" +:+ phrase value +:+
+  S "will be taken at and analyzed at a" +:+
+  phrase slice `sOr` phrase slice +:+
   S "interface composing the total slip" +:+ phrase mass]]
 
 -- SECTION 1.3 --
@@ -201,10 +202,10 @@ s4_1 = probDescF EmptyS ssa ending [s4_1_1, s4_1_2, s4_1_3]
 s4_1_1 = termDefnF EmptyS [s4_1_1_list]
 
 s4_1_1_list = Enumeration $ Simple $ --FIXME: combine this definition below? But fs_rc already has a definition
-  ([(titleize $ fs_rc, Flat $ S "Stability metric. How likely a" +:+
-    (phrase slpSrf) +:+. S "is to experience failure through slipping")] ++
+--  ([(titleize $ fs_rc, Flat $ S "Stability metric. How likely a" +:+
+--    (phrase slpSrf) +:+. S "is to experience failure through slipping")] ++
   map (\x -> (titleize $ x, Flat $ x ^. defn))
-      [crtSlpSrf, stress, strain, normForce, shearForce, tension, compression, plnStrn])
+      ([cw fs] ++ map cw [crtSlpSrf, stress, strain, normForce, shearForce, tension, compression, plnStrn])
       -- most of these are in concepts (physics or solidMechanics) except for crtSlpSrf & plnStrn which is in defs.hs
 
 -- SECTION 4.1.2 --

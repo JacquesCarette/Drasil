@@ -21,7 +21,7 @@ module Language.Drasil (
   , makeVC, vc, makeVCObj, SymbolForm(..)
   , dcc, dccWDS, cv, dcc', vc', ccs, cc, cc'
   , Quantity(..), ConVar(..), cvR, cvRs
-  , Concept(..)
+  , Concept(..), cw, CWrapper
   , CommonIdea(..)
   --, commonidea, CI
   , commonIdea, CI, commonIdea', commonIdea''

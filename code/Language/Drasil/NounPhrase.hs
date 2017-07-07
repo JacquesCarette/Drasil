@@ -4,7 +4,7 @@ module Language.Drasil.NounPhrase
   , NP
   , pn, pn', pn'', pn''', pnIrr
   , cn, cn', cn'', cn''', cnIP, cnIrr, cnIES, cnICES, cnIS, cnUM
-  , nounPhrase, nounPhrase', nounPhrase'', nounPhraseSP
+  , nounPhrase, nounPhrase', nounPhrase'', nounPhraseSP, nounPhraseSent
   , compoundPhrase, compoundPhrase', compoundPhrase'', compoundPhrase'''
   , at_start, at_start', titleize, titleize'
   , CapitalizationRule(..)
@@ -136,6 +136,10 @@ nounPhrase'' = Phrase
 -- only the first argument
 nounPhraseSP :: String -> NP
 nounPhraseSP s = Phrase (S s) (S s) CapFirst CapWords
+
+-- | For Reuirements, Assumptions, LikelyChanges, etc. to allow for referencing.
+nounPhraseSent :: Sentence -> NP
+nounPhraseSent s = Phrase (s) (s) CapFirst CapWords
 
 -- | Combine two noun phrases. The singular form becomes 'phrase' from t1 followed
 -- by phrase of t2. The plural becomes phrase of t1 followed by plural of t2.

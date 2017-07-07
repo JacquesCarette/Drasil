@@ -71,7 +71,7 @@ module Language.Drasil (
   , cnIrr, cnIES, cnICES, cnIS, cnUM, nounPhrase, nounPhrase', at_start, at_start'
   , CapitalizationRule(..)
   , PluralRule(..), compoundPhrase, compoundPhrase', compoundPhrase'', compoundPhrase''', titleize, titleize'
-  , nounPhrase'', nounPhraseSP
+  , nounPhrase'', nounPhraseSP, nounPhraseSent
   -- Document
   , LayoutObj(..), Document(..), DType(..), Section(..), Contents(..)
   , SecCons(..), ListType(..), ItemType(..), ListPair

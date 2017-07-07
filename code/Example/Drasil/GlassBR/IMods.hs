@@ -21,7 +21,7 @@ probOfBr = makeRC "probOfBr" (nounPhraseSP "Probability of Glass Breakage")
   pbdescr pb_rel 
 
 pb_rel :: Relation
-pb_rel = (C prob_br) := 1 - (exp(Neg (C risk)))
+pb_rel = (C prob_br) := 1 - (exp (Neg (C risk)))
 
 pbdescr :: Sentence
 pbdescr =
@@ -35,7 +35,7 @@ calOfCap = makeRC "calOfCap" (nounPhraseSP "Calculation of Capacity(LR)")
   capdescr cap_rel
 
 cap_rel :: Relation
-cap_rel = (C lRe) := ((C nonFL):*(C glaTyFac):*(C loadSF)) 
+cap_rel = (C lRe) := ((C nonFL)*(C glaTyFac)*(C loadSF)) 
 
 capdescr :: Sentence
 capdescr =

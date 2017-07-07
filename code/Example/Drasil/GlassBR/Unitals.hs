@@ -60,10 +60,10 @@ gbInputDataConstraints = (map uncrtnw gbInputsWUncrtn) ++
 plate_len = uqcND "plate_len" (nounPhraseSP "plate length (long dimension)")
   lA millimetre Real 
   [ physc $ \c -> c :> (Dbl 0),
-    physc $ \c -> (c :/ (C plate_width)) :> (Dbl 1),
+    physc $ \c -> (c / (C plate_width)) :> (Dbl 1),
     sfwrc $ \c -> (C dim_min) :<= c,
     sfwrc $ \c -> c :<= (C dim_max),
-    sfwrc $ \c -> (c :/ (C plate_width)) :< (C ar_max) ] (Dbl 1500) defaultUncrt
+    sfwrc $ \c -> (c / (C plate_width)) :< (C ar_max) ] (Dbl 1500) defaultUncrt
 
 plate_width = uqcND "plate_width" (nounPhraseSP "plate width (short dimension)")
   lB millimetre Real
@@ -71,7 +71,7 @@ plate_width = uqcND "plate_width" (nounPhraseSP "plate width (short dimension)")
     physc $ \c -> c :< (C plate_len),
     sfwrc $ \c -> (C dim_min) :<= c,
     sfwrc $ \c -> c :<= (C dim_max),
-    sfwrc $ \c -> ((C plate_len) :/ c) :< (C ar_max) ] (Dbl 1200) defaultUncrt
+    sfwrc $ \c -> ((C plate_len) / c) :< (C ar_max) ] (Dbl 1200) defaultUncrt
 
 pb_tol = uvc "pb_tol" (nounPhraseSP "tolerable probability of breakage") 
   (sub cP (Atomic "btol")) Real
@@ -86,7 +86,7 @@ char_weight = uqcND "char_weight" (nounPhraseSP "charge weight")
 
 tNT = uvc "tNT" (nounPhraseSP "TNT equivalent factor")
   (Atomic "TNT") Integer
-  [ physc $ \c -> c :> (Dbl 0) ] (Int 1) defaultUncrt
+  [ physc $ \c -> c :> (Dbl 0) ] (1) defaultUncrt
 
 standOffDist = uqcND "standOffDist" (nounPhraseSP "stand off distance") 
   (Atomic "SD") metre Real
@@ -374,25 +374,25 @@ constant_M :: QDefinition
 constant_M = mkDataDef sflawParamM sfpMVal
 
 sfpMVal :: Expr
-sfpMVal = (Int 7)
+sfpMVal = (7)
 
 constant_K :: QDefinition
 constant_K = mkDataDef sflawParamK sfpKVal
 
 sfpKVal :: Expr
-sfpKVal = (Grouping (Dbl 2.86)):*(Int 10):^(Neg (Int 53))
+sfpKVal = (Grouping (Dbl 2.86)) * (10) :^ (Neg (53))
 
 constant_ModElas :: QDefinition
 constant_ModElas = mkDataDef mod_elas modElasVal
 
 modElasVal :: Expr
-modElasVal = (Grouping (Dbl 7.17)):*(Int 10):^(Int 7)
+modElasVal = (Grouping (Dbl 7.17)) * (10) :^ (7)
 
 constant_LoadDur :: QDefinition
 constant_LoadDur = mkDataDef load_dur durOfLoadVal
 
 durOfLoadVal :: Expr
-durOfLoadVal = (Int 3)
+durOfLoadVal = (3)
 
 --Equations--
 
@@ -400,7 +400,7 @@ sdWithEqn :: QDefinition
 sdWithEqn = mkDataDef standOffDist sdCalculation
 
 sdCalculation :: Relation
-sdCalculation = (C standOffDist) := sqrt (((C sdx) :^ (Int 2)) + ((C sdy) :^ (Int 2)) + ((C sdz) :^ (Int 2)))
+sdCalculation = (C standOffDist) := sqrt (((C sdx) :^ (2)) + ((C sdy) :^ (2)) + ((C sdz) :^ (2)))
 --FIXME: Create a `square` function?
 
 sdVectorSent :: Sentence
@@ -410,4 +410,4 @@ wtntWithEqn :: QDefinition
 wtntWithEqn = mkDataDef eqTNTWeight wtntCalculation
 
 wtntCalculation :: Relation
-wtntCalculation = (C eqTNTWeight) := (C char_weight) :* (C tNT)
+wtntCalculation = (C eqTNTWeight) := (C char_weight) * (C tNT)

@@ -10,10 +10,10 @@ y_interp :: QDefinition
 y_interp = fromEqn' "y_interp" (nounPhraseSP "interpolated y value") lY lin_interp
 
 lin_interp :: Expr
-lin_interp = (((C y_2) - (C y_1)) :/ ((C x_2) - (C x_1))) * ((C x) - (C x_1)) + (C y_1)
+lin_interp = (((C y_2) - (C y_1)) / ((C x_2) - (C x_1))) * ((C x) - (C x_1)) + (C y_1)
 
 interpolate :: Expr -> Expr -> Expr -> Expr -> Expr -> Expr
-interpolate y1 y2 x1 x2 x = ((y2-y1):/(x2-x1))*(x-x1)+y1
+interpolate y1 y2 x1 x2 x = ((y2 - y1) / (x2 - x1)) * (x - x1) + y1
 
 --interpolation b/w q1 and q2
 w_TNT :: QDefinition

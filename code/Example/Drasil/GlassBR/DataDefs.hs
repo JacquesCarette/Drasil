@@ -27,11 +27,11 @@ risk :: QDefinition
 risk = mkDataDef risk_fun risk_eq
 
 risk_eq :: Expr
-risk_eq = ((C sflawParamK) :/ (Grouping (((C plate_len) :/ (Int 1000)) :*
-  ((C plate_width) :/ (Int 1000)))) :^ ((C sflawParamM) - (Int 1))) :*
-  (Grouping ((Grouping ((C mod_elas) :* (Int 1000))) :* 
-  (Grouping ((C act_thick) :/ (Int 1000))) :^ (Int 2))) :^ (C sflawParamM) :* 
-  (C loadDF) :* (exp (C stressDistFac))
+risk_eq = ((C sflawParamK) / (Grouping (((C plate_len) / (1000)) *
+  ((C plate_width) / (1000)))) :^ ((C sflawParamM) - (1))) *
+  (Grouping ((Grouping ((C mod_elas) * (1000))) * 
+  (Grouping ((C act_thick) / (1000))) :^ (2))) :^ (C sflawParamM) * 
+  (C loadDF) * (exp (C stressDistFac))
 
 --DD2--
 
@@ -49,7 +49,7 @@ hFromt = mkDataDef act_thick hFromt_eq
 --DD3--
 
 loadDF_eq :: Expr 
-loadDF_eq = (Grouping ((C load_dur):/(Int 60))):^((C sflawParamM):/(Int 16))
+loadDF_eq = (Grouping ((C load_dur) / (60))) :^ ((C sflawParamM) / (16))
 
 --FIXME: Should we be using id here? My gut says no, but I'll look in 
 -- more depth shortly.
@@ -61,7 +61,7 @@ loadDF = mkDataDef lDurFac loadDF_eq
 
 strDisFac_eq :: Expr
 strDisFac_eq = FCall (C stressDistFac) 
-  [C dimlessLoad, (C plate_len):/(C plate_width)]
+  [C dimlessLoad, (C plate_len) / (C plate_width)]
 
 strDisFac :: QDefinition
 strDisFac = mkDataDef stressDistFac strDisFac_eq
@@ -69,8 +69,8 @@ strDisFac = mkDataDef stressDistFac strDisFac_eq
 --DD5--
 
 nonFL_eq :: Expr
-nonFL_eq = ((C tolLoad):*(C mod_elas):*(C act_thick):^(Int 4)):/
-  ((Grouping ((C plate_len):*(C plate_width))):^(Int 2))
+nonFL_eq = ((C tolLoad) * (C mod_elas) * (C act_thick) :^ (4)) /
+  ((Grouping ((C plate_len) * (C plate_width))) :^ (2))
 
 nonFL :: QDefinition
 nonFL = mkDataDef nonFactorL nonFL_eq
@@ -90,8 +90,8 @@ glaTyFac = mkDataDef gTF glaTyFac_eq
 --DD7--
 
 dimLL_eq :: Expr
-dimLL_eq = ((C demand):*((Grouping ((C plate_len):*(C plate_width))):^(Int 2)))
-  :/((C mod_elas):*((C act_thick):^(Int 4)):*(C gTF))
+dimLL_eq = ((C demand) * ((Grouping ((C plate_len) * (C plate_width))) :^ (2)))
+  / ((C mod_elas) * ((C act_thick) :^ (4)) * (C gTF))
 
 dimLL :: QDefinition
 dimLL = mkDataDef dimlessLoad dimLL_eq
@@ -99,7 +99,7 @@ dimLL = mkDataDef dimlessLoad dimLL_eq
 --DD8--
 
 tolPre_eq :: Expr
-tolPre_eq = FCall (C tolLoad) [C sdf_tol, (C plate_len):/(C plate_width)]
+tolPre_eq = FCall (C tolLoad) [C sdf_tol, (C plate_len) / (C plate_width)]
 
 tolPre :: QDefinition
 tolPre = mkDataDef tolLoad tolPre_eq
@@ -107,12 +107,12 @@ tolPre = mkDataDef tolLoad tolPre_eq
 --DD9--
 
 tolStrDisFac_eq :: Expr
-tolStrDisFac_eq = log (log ((Int 1):/((Int 1):-(C pb_tol)))
-  :*((Grouping (((C plate_len):/(Int 1000)):*((C plate_width):/(Int 1000)))):^
-  ((C sflawParamM) :- (Int 1)):/((C sflawParamK):*
-  (Grouping (Grouping ((C mod_elas):*(Int 1000)):*
-  (Grouping ((C act_thick):/(Int 1000))):^
-  (Int 2))):^(C sflawParamM):*(C loadDF))))
+tolStrDisFac_eq = log (log ((1) / ((1) - (C pb_tol)))
+  * ((Grouping (((C plate_len) / (1000)) * ((C plate_width) / (1000)))) :^
+  ((C sflawParamM) - (1)) / ((C sflawParamK) *
+  (Grouping (Grouping ((C mod_elas) * (1000)) *
+  (Grouping ((C act_thick) / (1000))) :^
+  (2))) :^ (C sflawParamM) * (C loadDF))))
 
 tolStrDisFac :: QDefinition
 tolStrDisFac = mkDataDef sdf_tol tolStrDisFac_eq

@@ -1,7 +1,8 @@
 module Data.Drasil.SI_Units where
 import Language.Drasil.Chunk.Concept (dcc)
 import Language.Drasil.Unit (Unit(..), UDefn(..), FundUnit(..), DerUChunk(..),
-  UnitDefn(..), new_unit, (^:), (/:), makeDerU)
+  UnitDefn(..), new_unit, (^:), (/:), (*:), makeDerU, shift, scale,
+  derUC, derUC', derUC'')
 import Language.Drasil.Unicode (Special(Circle), Greek(Omega))
 import Language.Drasil.Symbol
 import Language.Drasil.Spec (USymb(..))
@@ -53,152 +54,94 @@ becquerel, calorie, centigrade, coulomb, farad, gray, henry, hertz, joule,
   katal, kilopascal, kilowatt, lumen, lux,  millimetre, newton, ohm,
   pascal, radian, siemens, sievert, steradian, tesla, volt, watt, weber :: DerUChunk
 
-becquerel = DUC
-    (UD (dcc "becquerel" (cn' "becquerel") "activity") (UName $ Atomic "Bq")) --of a Radionuclide
-    (USynonym (UPow (second ^. usymb) (-1)))
+becquerel = derUC' "becquerel" 
+  "becquerel" "activity" (Atomic "Bq") --of a Radionuclide
+  (USynonym (second ^: (-1)))
   
-calorie = DUC
-    (UD (dcc "calorie" (cn' "calorie") "energy") (UName $ Atomic "cal"))
-    (UScale 4.184 (joule ^. usymb))
-    
-centigrade = DUC 
-    (UD (dcc "centigrade" (cn "centigrade") "temperature") 
-        (UName (Concat [Special Circle, Atomic "C"])))
-    (UShift 273.15 (kelvin ^. usymb))
+calorie = derUC' "calorie" 
+  "calorie" "energy" (Atomic "cal") (scale 4.184 joule)
+
+centigrade = derUC "centigrade" 
+  "centigrade" "temperature" ((Concat [Special Circle, Atomic "C"]))
+  (shift 273.15 kelvin)
+
+coulomb = derUC' "coulomb" 
+  "coulomb" "electric charge" (Atomic "C") (USynonym (ampere *: second))
+
+farad = derUC' "farad" 
+  "farad" "capacitance" (Atomic "F") (USynonym (coulomb /: volt))
+
+gray = derUC' "gray" 
+  "gray" "absorbed dose" (Atomic "Gy") (USynonym (joule /: kilogram))
   
-coulomb = DUC
-    (UD (dcc "coulomb" (cn' "coulomb") "electric charge") (UName $ Atomic "C"))
-    (USynonym (UProd [ampere ^. usymb, second ^. usymb]))
-    
-farad = DUC
-    (UD (dcc "farad" (cn' "farad") "capacitance") (UName $ Atomic "F"))
-    (USynonym (UDiv (coulomb ^. usymb) (volt ^. usymb)))
-    
-gray = DUC
-    (UD (dcc "gray" (cn' "gray") "absorbed dose") (UName $ Atomic "Gy"))
-    (USynonym (UDiv (joule ^. usymb) (kilogram ^. usymb)))
-    
-henry = DUC
-    (UD (dcc "henry" (cnIES "henry") "inductance") (UName $ Atomic "H"))
-    (USynonym (UDiv (weber ^. usymb) (ampere ^. usymb)))
-    
-hertz = DUC
-    (UD (dcc "hertz" (cn "hertz") "frequency") (UName $ Atomic "Hz"))
-    (USynonym (UPow (second ^. usymb) (-1)))
+henry = derUC'' "henry" 
+  (cnIES "henry") "inductance" (Atomic "H") (USynonym (weber /: ampere))
+  
+hertz = derUC "hertz" 
+  "hertz" "frequency" (Atomic "Hz") (USynonym (second ^: (-1)))
 
-joule = DUC
-    (UD (dcc "joule" (cn' "joule") "energy") (UName $ Atomic "J"))
-    (USynonym (UProd [kilogram ^. usymb, m_2 ^. usymb,
-                      UPow (second ^. usymb) (-2)]))
-                    
-katal = DUC
-    (UD (dcc "katal" (cn' "katal") "catalytic activity") (UName $ Atomic "kat"))
-    (USynonym (UDiv (mole ^. usymb) (second ^. usymb)))
+joule = derUC' "joule" 
+  "joule" "energy" (Atomic "J") 
+  (USynonym (UProd [kilogram ^. usymb, m_2 ^. usymb, (second ^: (-2))]))
 
-kilopascal = DUC
-    (UD (dcc "kilopascal" (cn' "kilopascal") "pressure")
-        (UName $ Concat [Atomic "k", Atomic "Pa"]))
-    (UScale 1000 (pascal ^. usymb))
+katal = derUC' "katal" 
+  "katal" "catalytic activity" (Atomic "kat") (USynonym (mole /: second))
 
-kilowatt = DUC
-    (UD (dcc "kilowatt" (cn' "kilowatt") "power")
-        (UName $ Concat [Atomic "k", Atomic "W"]))
-    (UScale 1000 (watt ^. usymb))
+kilopascal = derUC' "kilopascal" 
+  "kilopascal" "pressure"
+  (Concat [Atomic "k", Atomic "Pa"]) (scale 1000 pascal)
 
-lumen = DUC
-    (UD (dcc "lumen" (cn' "lumen") "luminous flux") (UName $ Atomic "lm"))
-    (USynonym (UProd [candela ^. usymb, steradian ^. usymb]))
+kilowatt = derUC' "kilowatt" 
+  "kilowatt" "power" (Concat [Atomic "k", Atomic "W"]) (scale 1000 watt)
 
-lux = DUC
-    (UD (dcc "lux" (cn "lux") "illuminance") (UName $ Atomic "lx"))
-    (USynonym (UDiv (lumen ^. usymb) (m_2 ^. usymb)))
+lumen = derUC' "lumen" 
+  "lumen" "luminous flux" (Atomic "lm") (USynonym (candela *: steradian))
 
-millimetre = DUC
-    (UD (dcc "millimetre" (cn' "millimetre") "length")
-        (UName $ (Atomic "mm")))
-    (UScale 0.0001 (metre ^. usymb))
+lux = derUC "lux" 
+  "lux" "illuminance" (Atomic "lx") (USynonym (lumen /: m_2))
 
-newton = DUC
-    (UD (dcc "newton" (cn' "newton") "force") (UName $ Atomic "N"))
-    (USynonym (UProd [(kilogram ^. usymb), (UPow (second ^. usymb) (-2))]))
-    
-ohm = DUC
-    (UD (dcc "ohm" (cn' "ohm") "resistance") (UName $ Greek Omega))
-    (USynonym (UDiv (volt ^. usymb) (ampere ^. usymb)))
-    
-pascal = DUC
-    (UD (dcc "pascal" (cn' "pascal") "pressure") (UName $ Atomic "Pa"))
-    (USynonym (UProd [(kilogram ^. usymb), (UPow (metre ^. usymb) (-1)),
-                        (UPow (second ^. usymb) (-2))]))
-    
-radian = DUC
-    (UD (dcc "radian" (cn' "radian") "angle") (UName $ Atomic "rad"))
-    (USynonym (metre /: metre))
-                        
-siemens = DUC
-    (UD (dcc "siemens" (cn "siemens") "conductance") (UName $ Atomic "S"))
-    (USynonym (UPow (ohm ^. usymb) (-1)))
-    
-sievert = DUC
-    (UD (dcc "sievert" (cn' "sievert") "dose equivalent") (UName $ Atomic "Sv"))
-    (USynonym (UDiv (joule ^. usymb) (kilogram ^. usymb)))
-                      
-steradian = DUC
-    (UD (dcc "steradian" (cn' "steradian") "solid angle") (UName $ Atomic "sr"))
-    (USynonym (UDiv (m_2 ^. usymb) (m_2 ^. usymb)))
-    
-tesla = DUC
-    (UD (dcc "tesla" (cn "tesla") "magnetic flux density") (UName $ Atomic "T"))
-    (USynonym (UDiv (weber ^. usymb) (m_2 ^. usymb)))
+millimetre = derUC' "millimetre"
+  "millimetre" "length" (Atomic "mm") (scale 0.0001 metre)
 
-volt = DUC
-   (UD (dcc "volt" (cn' "volt") "voltage") (UName $ Atomic "V"))
-   (USynonym (UDiv (watt ^. usymb) (ampere ^. usymb)))
+newton = derUC' "newton"
+  "newton" "force" (Atomic "N")
+  (USynonym (UProd [(kilogram ^. usymb), (second ^: (-2))]))
+  
+ohm = derUC' "ohm"
+  "ohm" "resistance" (Greek Omega) (USynonym (volt /: ampere))
+  
+pascal = derUC' "pascal" 
+  "pascal" "pressure" (Atomic "Pa")
+  (USynonym (UProd [(kilogram ^. usymb), (metre ^: (-1)), (second ^: (-2))]))
+  
+radian = derUC' "radian" 
+  "radian" "angle" (Atomic "rad") (USynonym (metre /: metre))
+            
+siemens = derUC "siemens" 
+  "siemens" "conductance" (Atomic "S") (USynonym (ohm ^: (-1)))
+  
+sievert = derUC' "sievert" 
+  "sievert" "dose equivalent" (Atomic "Sv")
+  (USynonym (joule /: kilogram))
+            
+steradian = derUC' "steradian" 
+  "steradian" "solid angle" (Atomic "sr") (USynonym (m_2 /: m_2 ))
+  
+tesla = derUC "tesla"
+  "tesla" "magnetic flux density" (Atomic "T") (USynonym (weber /: m_2))
 
-watt = DUC
-    (UD (dcc "watt" (cn' "watt") "power") (UName $ Atomic "W"))
-    (USynonym (UProd [kilogram ^. usymb, m_2 ^. usymb,
-                      UPow (second ^. usymb) (-3)]))
-                    
-weber = DUC
-    (UD (dcc "weber" (cn' "weber") "magnetic flux") (UName $ Atomic "Wb"))
-    (USynonym (UProd [volt ^. usymb, second ^. usymb]))
-    
--- FIXME: Need to add pi 
---degrees = DUC
-  --  (UD (dcc "Degrees" "angle") (UName (Special Circle)))
-  --  Equiv to pi/180 rad.
+volt = derUC' "volt" 
+  "volt" "voltage" (Atomic "V") (USynonym (watt /: ampere))
+
+watt = derUC' "watt" "watt" "power" (Atomic "W")
+  (USynonym (UProd [kilogram ^. usymb, m_2 ^. usymb, (second ^: (-3))]))
+          
+weber = derUC' "weber"
+  "weber" "magnetic flux" (Atomic "Wb") (USynonym (volt *: second))
+  
 degree :: FundUnit --FIXME: define degree in terms of radians and pi
 degree = UD (dcc "degree" (cn' "degree") "angle") (UName (Special Circle))
 
--- FIXME: These should probably be moved elsewhere --
---    UPDATE: Moved these units to Physics and Physical Properties (densityU and stiffnessU)
-    
-{-velU, accelU, angVelU, angAccelU, momtInertU, densityU :: DerUChunk
-velU         = new_unit "velocity"             $ metre /: second
-accelU       = new_unit "acceleration"         $ metre /: s_2
-
-angVelU      = new_unit "angular velocity"     $ radians /: second
-angAccelU    = new_unit "angular acceleration" $ radians /: s_2
-momtInertU   = new_unit "moment of inertia"    $ kilogram *: m_2
-densityU     = new_unit "density"              $ kilogram /: m_3
-
-impulseU, springConstU, torqueU :: DerUChunk
-impulseU     = new_unit "impulse"              $ newton *: second
-springConstU = new_unit "spring constant"      $ newton /: metre
-torqueU      = new_unit "torque"               $ newton *: metre
-
--- Should we allow multiple different unit names for the same units?
-momentOfForceU, stiffnessU :: DerUChunk
-momentOfForceU = new_unit "moment of force"    $ newton *: metre
-stiffnessU     = new_unit "stiffness"          $ newton /: metre 
-
-gravConstU :: DerUChunk
-gravConstU = makeDerU (dcc "gravConstU" (cn "gravitational constant")
-  "universal gravitational constant") $
-   USynonym (UDiv (m_3 ^. usymb) (UProd [kilogram ^. usymb, s_2 ^. usymb]))-}
-
-------
 specificE :: DerUChunk
 specificE = makeDerU (dcc "specificE" (cnIES "specific energy") 
   "energy per unit mass") $ USynonym (joule /: kilogram)
@@ -206,4 +149,9 @@ specificE = makeDerU (dcc "specificE" (cnIES "specific energy")
 specific_weight :: DerUChunk
 specific_weight = makeDerU (dcc "specific_weight" (cn' "specific weight")
   "weight per unit volume") $
-  USynonym (UDiv (newton ^. usymb) (UPow (metre ^. usymb) (3)))
+  USynonym (UDiv (newton ^. usymb) (metre ^: 3))
+  
+-- FIXME: Need to add pi 
+--degrees = DUC
+  --  (UD (dcc "Degrees" "angle") (UName (Special Circle)))
+  --  Equiv to pi/180 rad.

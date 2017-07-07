@@ -421,15 +421,25 @@ s6_2_intro = foldlSP [S "This", phrase section_,
 
 {--Assumptions--}
 
-s6_2_1_list = [(enumSimple 1 (short assumption) s6_2_1_listOfAssumptions)]
+s6_2_1_list = acroNumGen assumptions 1
 
-s6_2_1_listOfAssumptions :: [Sentence]
-s6_2_1_listOfAssumptions = assumption1 ++ assumption2 ++ assumption3 ++ 
-  (assumption4 (load_dur)) ++ assumption5 ++ assumption6 ++ assumption7 ++
-  (assumption8 (loadDF))
+assumptions :: [Contents]
+assumptions = [assumption1, assumption2, assumption3, assumption4, assumption5,
+  assumption6, assumption7, assumption8]
 
-assumption1 :: [Sentence]
-assumption1 = [foldlSent [S "The standard E1300-09a for", 
+assumption1, assumption2, assumption3, assumption4, assumption5,
+  assumption6, assumption7, assumption8 :: Contents
+assumption1 = Assumption (nw $ npnc "assumption1" $ nounPhraseSent a1Desc)              EmptyS
+assumption2 = Assumption (nw $ npnc "assumption2" $ nounPhraseSent a2Desc)              EmptyS
+assumption3 = Assumption (nw $ npnc "assumption3" $ nounPhraseSent a3Desc)              EmptyS
+assumption4 = Assumption (nw $ npnc "assumption4" $ nounPhraseSent (a4Desc (load_dur))) EmptyS
+assumption5 = Assumption (nw $ npnc "assumption5" $ nounPhraseSent a5Desc)              EmptyS
+assumption6 = Assumption (nw $ npnc "assumption6" $ nounPhraseSent a6Desc)              EmptyS
+assumption7 = Assumption (nw $ npnc "assumption7" $ nounPhraseSent a7Desc)              EmptyS
+assumption8 = Assumption (nw $ npnc "assumption8" $ nounPhraseSent (a8Desc (loadDF)))   EmptyS
+
+a1Desc :: Sentence
+a1Desc = foldlSent [S "The standard E1300-09a for",
   phrase calculation, S "applies only to monolithic, laminated, or insulating", 
   S "glass constructions of rectangular shape with continuous", 
   phrase lateral +:+. S "support along one, two, three, or four edges", 
@@ -437,48 +447,48 @@ assumption1 = [foldlSent [S "The standard E1300-09a for",
   S "for two, three" `sAnd` S "four-sided support", plural condition,
   S "are simply supported and free to slip in plane; (2) glass supported on",
   S "two sides acts as a simply supported beam and (3) glass supported on", 
-  S "one side acts as a cantilever"]]
+  S "one side acts as a cantilever"]
 
-assumption2 :: [Sentence]
-assumption2 = [foldlSent [S "Following", (sSqBr (S "4 (pg. 1)")) `sC`
+a2Desc :: Sentence
+a2Desc = foldlSent [S "Following", (sSqBr (S "4 (pg. 1)")) `sC`
   S "this", phrase practice,
   S "does not apply to any form of wired, patterned" `sC`
   S "etched, sandblasted, drilled, notched, or grooved glass with", 
-  phrase surface `sAnd` S "edge treatments that alter the glass strength"]]
+  phrase surface `sAnd` S "edge treatments that alter the glass strength"]
 
-assumption3 :: [Sentence]
-assumption3 = [foldlSent [S "This", phrase system,
+a3Desc :: Sentence
+a3Desc = foldlSent [S "This", phrase system,
   S "only considers the external", phrase explosion, S "scenario for its",
-  plural calculation]]
+  plural calculation]
 
-assumption4 :: UnitaryChunk -> [Sentence]
-assumption4 mainIdea = [foldlSent [S "The", plural value, S "provided in", 
+a4Desc :: UnitaryChunk -> Sentence
+a4Desc mainIdea = foldlSent [S "The", plural value, S "provided in", 
   makeRef s10, S "are assumed for the", phrase mainIdea, sParen (getS mainIdea)
   `sC` S "and the material properties of",
-  foldlList (map getS (take 3 assumption4_constants))]]
+  foldlList (map getS (take 3 assumption4_constants))]
 
-assumption5 :: [Sentence]
-assumption5 = [foldlSent [S "Glass under consideration", 
+a5Desc :: Sentence
+a5Desc = foldlSent [S "Glass under consideration", 
   S "is assumed to be a single" +:+. phrase lite, S "Hence the", 
   phrase value, S "of", short lShareFac, S "is equal to 1 for all", 
-  plural calculation, S "in", short gLassBR]]
+  plural calculation, S "in", short gLassBR]
 
-assumption6 :: [Sentence]
-assumption6 = [foldlSent [S "Boundary", plural condition, S "for the", 
+a6Desc :: Sentence
+a6Desc = foldlSent [S "Boundary", plural condition, S "for the", 
   phrase glaSlab, S "is assumed to be 4-sided support for",
-  plural calculation]]
+  plural calculation]
 
-assumption7 :: [Sentence]
-assumption7 = [foldlSent [S "The response type considered in", short gLassBR,
-  S "is flexural"]]
+a7Desc :: Sentence
+a7Desc = foldlSent [S "The response type considered in", short gLassBR,
+  S "is flexural"]
 
-assumption8 :: QDefinition -> [Sentence]
-assumption8 mainConcept = [foldlSent [S "With", phrase reference, S "to",
+a8Desc :: QDefinition -> Sentence
+a8Desc mainConcept = foldlSent [S "With", phrase reference, S "to",
   acroA 4, S "the", phrase value, S "of", phrase mainConcept, 
   sParen (getS mainConcept), S "is a constant in" +:+. short gLassBR,
   S "It is calculated by the" +: phrase equation +:+. 
   E (C mainConcept := equat mainConcept), S "Using this" `sC`
-  E ((C mainConcept) := (Dbl 0.27))]]
+  E ((C mainConcept) := (Dbl 0.27))]
 
 {--Theoretical Models--}
 

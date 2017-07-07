@@ -28,8 +28,8 @@ module Language.Drasil (
   -- Chunk.NamedIdea
   , NamedIdea(..), NamedChunk, short, nc, nc', npnc
   , compoundterm, for, for', for'', of_, of_', of_'', of__, of'', compoundNC, compoundNC'
-  , compoundNC'', compoundNC''', npnc', with, with', and_, and_', andRT, aNP, the, a_, theCustom
-  , this
+  , compoundNC'', compoundNC''', npnc', with, with', and_, and_', andRT, aNP, the, a_
+  , ofA,theCustom, this
   -- Chunk.Constrained
   , Constrained(..), ConstrainedChunk(..), Constraint(..), ConstrConcept(..)
   , physc, sfwrc, constrained, cuc, cvc, constrained', cuc', constrainedNRV'

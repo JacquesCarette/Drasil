@@ -3,6 +3,7 @@
 \usepackage{hyperref}
 \hypersetup{bookmarks=true,colorlinks=true,linkcolor=red,citecolor=blue,filecolor=magenta,urlcolor=cyan}
 \usepackage{amsmath}
+\usepackage{amssymb}
 \usepackage{longtable}
 \usepackage{booktabs}
 \usepackage{caption}
@@ -150,8 +151,6 @@ $V_{P}$ & Volume of PCM & $\text{m}^{3}$
 $V_{tank}$ & Volume of the cylindrical tank & $\text{m}^{3}$
 \\
 $V_{W}$ & Volume of water & $\text{m}^{3}$
-\\
-$\Delta{}T$ & Temperature difference & ${}^{\circ}C$
 \\
 $\Delta{}T$ & Change in temperature & ${}^{\circ}C$
 \\
@@ -416,11 +415,11 @@ Description & Add Description
 Detailed derivation of simplified rate of change of temperature:
 Integrating \hyperref[T:t1ConsThermE]{Definition~T:t1ConsThermE} over a volume ($V$), we have:
 \begin{equation}
-(-\int_{V}{\nabla{}\cdot{}\mathbf{q}dV})+\int_{V}{gdV}=\int_{V}{\rho{}C\frac{\partial{}T}{\partial{}t}dV}
+\left(-\int_{V}{\nabla{}\cdot{}\mathbf{q}dV}\right)+\int_{V}{gdV}=\int_{V}{\rho{}C\frac{\partial{}T}{\partial{}t}dV}
 \end{equation}
 Applying Gauss's Divergence Theorem to the first term over the surface $S$ of the volume, with $\mathbf{q}$ as the thermal flux vector for the surface and $\mathbf{\hat{n}}$ as a unit outward normal vector for a surface:
 \begin{equation}
-(-\int_{S}{\mathbf{q}\cdot{}\mathbf{\hat{n}}dS})+\int_{V}{gdV}=\int_{V}{\rho{}C\frac{\partial{}T}{\partial{}t}dV}
+\left(-\int_{S}{\mathbf{q}\cdot{}\mathbf{\hat{n}}dS}\right)+\int_{V}{gdV}=\int_{V}{\rho{}C\frac{\partial{}T}{\partial{}t}dV}
 \end{equation}
 We consider an arbitrary volume. The volumetric heat generation per unit volume is assumed constant. Then (1) can be written as:
 \begin{equation}
@@ -448,7 +447,7 @@ Label & $q_{C}$
 \\ \midrule \\
 Units & $\frac{\text{W}}{\text{m}^{2}}$
 \\ \midrule \\
-Equation & $q_{C}$ = $h_{C}(T_{C}-T_{W}(t))$
+Equation & $q_{C}$ = $h_{C}\left(T_{C}-T_{W}\left(t\right)\right)$
 \\ \midrule \\
 Description & $q_{C}$ is the heat flux into the water from the coil\newline$h_{C}$ is the convective heat transfer coefficient between coil and water\newline$T_{C}$ is the temperature of the heating coil\newline$T_{W}$ is the temperature of the water\newline$t$ is the time
 \\ \bottomrule \end{tabular}
@@ -464,7 +463,7 @@ Label & $q_{P}$
 \\ \midrule \\
 Units & $\frac{\text{W}}{\text{m}^{2}}$
 \\ \midrule \\
-Equation & $q_{P}$ = $h_{P}(T_{W}(t)-T_{P}(t))$
+Equation & $q_{P}$ = $h_{P}\left(T_{W}\left(t\right)-T_{P}\left(t\right)\right)$
 \\ \midrule \\
 Description & $q_{P}$ is the heat flux into the PCM from water\newline$h_{P}$ is the convective heat transfer coefficient between PCM and water\newline$T_{W}$ is the temperature of the water\newline$t$ is the time\newline$T_{P}$ is the temperature of the phase change material
 \\ \bottomrule \end{tabular}
@@ -646,7 +645,7 @@ $C_{P}^{L}$ & $C_{P}^{L}>0$ & $C_{P}^{L}_{min}<C_{P}^{L}<C_{P}^{L}_{max}$ & $227
 \\
 $H_{f}$ & $H_{f}>0$ & $H_{f}_{min}<H_{f}<H_{f}_{max}$ & $211600.0$ $\frac{\text{J}}{\text{kg}}$ & 0.1
 \\
-$A_{C}$ & $A_{C}>0$ & $A_{C}\leq{}A_{C}^{max}$ & $0.12.0$ $\text{m}^{2}$ & 0.1
+$A_{C}$ & $A_{C}>0$ & $A_{C}\leq{}A_{C}^{max}$ & $0.12$ $\text{m}^{2}$ & 0.1
 \\
 $T_{C}$ & $0<T_{C}<100$ & None & $50.0$ ${}^{\circ}C$ & 0.1
 \\
@@ -681,17 +680,17 @@ $E_{P}$ & $E_{P}\geq{}0$
 \\
 \bottomrule
 \caption{Output Data Constraints}
-\label{Table:DataCons}
+\label{Table:OutpDataCons}
 \end{longtable}
 \subsubsection{Properties of a Correct Solution}
-\label{Sec:PropofACorrSolu}
+\label{Sec:PropofaCorrSolu}
 A correct solution must exhibit the law of conservation of energy. This means that the change in heat energy in the water should equal the difference between the total energy input from the heating coil and the energy output to the PCM. This can be shown as an equation by taking \hyperref[DD:ht.flux.C]{Definition~DD:ht.flux.C} and \hyperref[DD:ht.flux.P]{Definition~DD:ht.flux.P}, multiplying each by their respective surface area of heat transfer, and integrating each over the simulation time, as follows:
 \begin{equation}
-E_{W}=\int_{0}^{t}{h_{C}A_{C}(T_{C}-T_{W}(t))dt}-\int_{0}^{t}{h_{P}A_{P}(T_{W}(t)-T_{P}(t))dt}
+E_{W}=\int_{0}^{t}{h_{C}A_{C}\left(T_{C}-T_{W}\left(t\right)\right)dt}-\int_{0}^{t}{h_{P}A_{P}\left(T_{W}\left(t\right)-T_{P}\left(t\right)\right)dt}
 \end{equation}
 In addition, the change in heat energy in the PCM should equal the energy input to the PCM from the water. This can be expressed as
 \begin{equation}
-E_{P}=\int_{0}^{t}{h_{P}A_{P}(T_{W}(t)-T_{P}(t))dt}
+E_{P}=\int_{0}^{t}{h_{P}A_{P}\left(T_{W}\left(t\right)-T_{P}\left(t\right)\right)dt}
 \end{equation}
 Equations (reference) and (reference) can be used as ``sanity"checks to gain confidence in any solution computed by SWHS. The relative error between the results computed by SWHS and the results calculated from the RHS of these equations should be less than 0.001% (R9).
 \section{Requirements}
@@ -748,7 +747,7 @@ $t_{final}$ & s & final time
 \item[R2:]Use the inputs in R1 to find the mass needed for IM1 to IM4, as follows, where $V_{W}$ is the volume of water and $V_{tank}$ is the volume of the cylindrical tank.
 \end{itemize}
 \begin{equation}
-m_{W}=V_{W}\rho{}_{W}=(V_{tank}-V_{P})\rho{}_{W}=(\frac{D}{2}L-V_{P})\rho{}_{W}
+m_{W}=V_{W}\rho{}_{W}=\left(V_{tank}-V_{P}\right)\rho{}_{W}=\left(\frac{D}{2}L-V_{P}\right)\rho{}_{W}
 \end{equation}
 \begin{equation}
 m_{P}=V_{P}\rho{}_{P}
@@ -760,7 +759,7 @@ m_{P}=V_{P}\rho{}_{P}
 \item[R6:]Calculate and output the temperature of the phase change material ($T_{P}$($t$)) over the simulation time (from IM2).
 \item[R7:]Calculate and output the change in heat energy in the water ($E_{W}$($t$)) over the simulation time (from IM3).
 \item[R8:]Calculate and output the change in heat energy in the PCM ($E_{P}$($t$)) over the simulation time (from IM4).
-\item[R9:]Verify that the energy outputs ($E_{W}$($t$) and $E_{P}$($t$)) follow the law of conservation of energy, as outlined in Section~\ref{Sec:PropofACorrSolu}, with relative error no greater than 0.001%.
+\item[R9:]Verify that the energy outputs ($E_{W}$($t$) and $E_{P}$($t$)) follow the law of conservation of energy, as outlined in Section~\ref{Sec:PropofaCorrSolu}, with relative error no greater than 0.001%.
 \item[R10:]Calculate and output the time at which the PCM begins to melt $t_{melt}^{init}$ (from IM2).
 \item[R11:]Calculate and output the time at which the PCM stops melting $t_{melt}^{final}$ (from IM2).
 \end{itemize}

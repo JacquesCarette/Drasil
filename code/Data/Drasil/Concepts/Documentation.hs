@@ -178,7 +178,7 @@ orgOfDoc, prpsOfDoc, refmat, scpOfReq, consVals,
 corSol       = npnc "corSol"       (cn' "correct solution")
 charOfIR     = npnc "charOfIR"     (characteristic `of__` intReader)
 orgOfDoc     = npnc "orgOfDoc"     (organization `of_` document)
-propOfCorSol = npnc "propOfCorSol" (property `of__` (a_ corSol))
+propOfCorSol = npnc "propOfCorSol" (property `ofA` corSol)
 prpsOfDoc    = npnc "prpsOfDoc"    (purpose `of_` document)
 refmat       = npnc "refmat"       (cn' "reference material")
 scpOfReq     = npnc "scpOfReq"     (scope `of_'` requirement)

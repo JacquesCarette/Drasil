@@ -21,7 +21,7 @@ class Chunk c => NamedIdea c where
 
 -- | Get short form (if it exists), else get term.
 short :: NamedIdea c => c -> Sentence
-short c = maybe (phrase (c^.term)) (\x -> x) (getA c)
+short c = maybe (phrase (c ^. term)) (\x -> x) (getA c)
 
 -- === DATA TYPES/INSTANCES === --
 data NamedChunk = NC String NP (Maybe Sentence)
@@ -200,3 +200,10 @@ a_ :: (NamedIdea c) => c -> NamedChunk --Pluralization disallowed
 a_ t = npnc ("a" ++ t ^.id) (nounPhrase'' 
   (S "a" +:+ (phrase $ t ^. term)) (S "a" +:+ (phrase $ t ^. term)) 
   CapFirst CapWords)
+
+ofA :: (NamedIdea c, NamedIdea d) => c -> d -> NP
+ofA t1 t2 = nounPhrase'' 
+  ((plural $ t1^.term) +:+ S "of a" +:+ (phrase $ t2^.term))
+  ((plural $ t1^.term) +:+ S "of a" +:+ (phrase $ t2^.term))
+  (Replace ((at_start' $ t1 ^. term) +:+ S "of a" +:+ (phrase $ t2 ^. term)))
+  (Replace ((titleize' $ t1 ^. term) +:+ S "of a" +:+ (titleize $ t2 ^. term)))

@@ -303,9 +303,14 @@ siSys (SI sys _ _ _ _ _ _ _ _ _ _ _) = nw sys
 --BELOW IS IN THIS FILE TEMPORARILY--
 --Creates Contents using an id and description (passed in as a Sentence).
 mkAssump :: String -> Sentence -> Contents
-mkAssump id desc = Assumption (nw $ npnc id $ nounPhraseSent (desc)) EmptyS
+mkAssump i desc = Assumption (nw $ npnc i $ nounPhraseSent (desc)) EmptyS
 
 --Creates Contents using an id and description (passed in as a String).
 mkAssump' :: String -> String -> Sentence -> Contents
-mkAssump' id desc x = Assumption (nw $ npnc id $ nounPhraseSP (desc)) x
-  
+mkAssump' i desc x = Assumption (nw $ npnc i $ nounPhraseSP (desc)) x
+
+mkRequirement :: String -> Sentence -> Contents
+mkRequirement i desc = Requirement (ReqChunk (nw $ npnc i $ nounPhraseSent desc) []) EmptyS
+
+mkLklyChnk :: String -> Sentence -> Contents
+mkLklyChnk i desc = LikelyChange (LCChunk (nw $ npnc i $ nounPhraseSent desc) []) EmptyS

@@ -519,9 +519,6 @@ s7 = reqF [s7_1, s7_2]
 
 s7_1 = SRS.funcReq (s7_1_list) []
 
-mkRequirement :: String -> Sentence -> Contents
-mkRequirement id desc = Requirement (ReqChunk (nw $ npnc id $ nounPhraseSent desc) []) EmptyS
-
 s7_1_list = (acroNumGen s7_1_listOfReqs 1) ++ s7_1_req6 ++ [s7_1_req1Table]
 
 s7_1_req1, s7_1_req2, s7_1_req3, s7_1_req4, s7_1_req5 :: Contents
@@ -640,9 +637,6 @@ s8 = SRS.likeChg s8_list []
 
 s8_list :: [Contents]
 s8_list = acroNumGen likelyChanges_SRS 1
-
-mkLklyChnk :: String -> Sentence -> Contents
-mkLklyChnk id desc = LikelyChange (LCChunk (nw $ npnc id $ nounPhraseSent desc) []) EmptyS
 
 likelyChanges_SRS :: [Contents]
 likelyChanges_SRS = [s8_likelychg1, s8_likelychg2, s8_likelychg3,

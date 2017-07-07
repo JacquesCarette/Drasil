@@ -222,10 +222,9 @@ s4_1_2_p1 = foldlSP [at_start analysis, S "of the", phrase slope,
 s4_1_2_bullets = enumBullet [
   (at_start' itslPrpty +:+ S "convention is noted by j. The end" +:+
     plural itslPrpty +:+ S "are usually not of" +:+ phrase interest `sC`
-    S "therefore use the" +:+ plural itslPrpty +:+ S "from" +:+
-    S "1" +:+ P (Special LEQ) +:+ (E . V) "i" +:+ P (Special LEQ) +:+.
-    (E $ (C numbSlices) :- Int 1)),--FIXME: this whole thing should be one expr
-  (at_start slice +:+ plural property +:+. S "convention is noted by i")
+    S "therefore use the" +:+ plural itslPrpty +:+ S "from" +:+ 
+    (E $ Int 1 :<= C index :<= (C numbSlices) :- Int 1)),
+  (at_start slice +:+ plural property +:+. S "convention is noted by" +:+ getS index)
   ]
 
 s4_1_2_p2 = foldlSP [S "A", phrase fbd, S "of the", plural force,
@@ -489,7 +488,7 @@ s4_2_5_IMods = concat $ weave [map (\x -> [sspSymMapT x]) sspIMods, --FIXME: ? i
 fctSftyDerivation, nrmShrDerivation, intrSlcDerivation,
   rigDisDerivation, rigFoSDerivation :: [Contents]
 
-fctSftyDerivation = [foldlSP [S "Using", eqN 21, S "from", S "section 4.2.5" `sC`
+fctSftyDerivation = [foldlSP [S "Using", eqN 21, S "from", acroIM 3 `sC`
   S "rearranging, and", boundaryCon `sC` S "an equation for the", phrase fs_rc,
   S "is found as", eqN 12 `sC` S "also seen in", acroIM 1],
   
@@ -718,25 +717,11 @@ slopeVert = verticesConst $ phrase slope
 
 dataConstIn :: [[Sentence]]
 dataConstIn = [waterVert, slipVert, slopeVert] ++ map fmtInConstr sspInputs
-
-{-output data-}
-slipVert2 :: [[Sentence]]
-slipVert2 = [[vertVar $ phrase slip, S "Vertices's monotonic", S "None"]]
-
-vertVar :: Sentence -> Sentence
-vertVar vertexType = getS coords +:+ S "of" +:+ vertexType +:+ S "vertices'"
-
-displayContr' :: (Constrained s, SymbolForm s) => s -> [Sentence]
-displayContr' s = (init $ makeConstraint s EmptyS) ++ [S "None"]
-
-dataConstOut :: [[Sentence]]
-dataConstOut = [(displayContr' . head) sspOutputs] ++ slipVert2 ++
-  map displayContr' (tail sspOutputs)
 -}
 {-input and output tables-}
 s4_2_6Table2, s4_2_6Table3 :: Contents
 s4_2_6Table2 = inDataConstTbl sspInputs --FIXME: needs more inputs but cannot express them yet
-s4_2_6Table3 = outDataConstTbl sspOutputs --FIXME: needs more outputs but cannot express them yet
+s4_2_6Table3 = outDataConstTbl sspOutputs --FIXME: monotonic may need work
 
 -- SECTION 5 --
 s5 = reqF [s5_1, s5_2]

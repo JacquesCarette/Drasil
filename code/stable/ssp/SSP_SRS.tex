@@ -260,8 +260,8 @@ This subsection provides a list of terms that are used in the subsequent section
 \label{Sec:PhysSystDesc}
 Analysis of the slope is performed by looking at properties of the slope as a series of slice elements. Some properties are interslice properties, and some are slice or slice base properties. The index convention for referencing which interslice or slice is being used is shown in Figure~\ref{Figure:Indeconvfornumbslicandinteforcvaris}.
 \begin{enumerate}
-\item{Interslice properties convention is noted by j. The end interslice properties are usually not of interest, therefore use the interslice properties from 1 $\leq{}$ $i$ $\leq{}$ $n-1$.}
-\item{Slice properties convention is noted by i.}
+\item{Interslice properties convention is noted by j. The end interslice properties are usually not of interest, therefore use the interslice properties from $1\leq{}i\leq{}n-1$}
+\item{Slice properties convention is noted by. $i$}
 \end{enumerate}
 A free body diagram of the forces acting on the slice is displayed in Figure~\ref{Figure:Forcactionaslic}.
 \begin{figure}
@@ -805,7 +805,7 @@ Equation & $FS=\frac{\displaystyle\sum_{v=1}^{n-1}{\left[R_{i}\displaystyle\prod
 Description & Equation for the Factor of Safety is the ratio between resistive and mobile shear of the slip surface. The sum of values from each slice is taken to find the total resistive and mobile shear for the slip surface. The constants $\Phi{}_{c}$ and $\Psi{}_{c}$ convert the resistive and mobile shear without the inluence of interslice forces, to a calculation considering the interslice forces.
 \\ \bottomrule \end{tabular}
 \end{minipage}\\
-Using equation (21) from section 4.2.5, rearranging, and applying the boundary condition that $E_{i}$ and $E_{i}$ are equal to $0$, an equation for the factor of safety is found as equation (12), also seen in IM1.
+Using equation (21) from IM3, rearranging, and applying the boundary condition that $E_{i}$ and $E_{i}$ are equal to $0$, an equation for the factor of safety is found as equation (12), also seen in IM1.
 \begin{equation}
 FS=\frac{\displaystyle\sum_{v=1}^{n-1}{\left[R_{i}\displaystyle\prod_{c=i}^{n-1}{\frac{\Psi{}_{c}}{\Phi{}_{c}}}\right]}+R_{i}}{\displaystyle\sum_{v=1}^{n-1}{\left[T_{i}\displaystyle\prod_{c=i}^{n-1}{\frac{\Psi{}_{c}}{\Phi{}_{c}}}\right]}+T_{i}}
 \end{equation}

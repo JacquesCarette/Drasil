@@ -114,6 +114,551 @@ swhs_mg = mgDoc swhsFull authors mgBod
 -- Section 2 : INTRODUCTION --
 ------------------------------
 
+-- In Concepts.hs "swhs_pcm" gives "s for program name, and there is a
+-- similar paragraph in each of the other eolar water heating systems
+-- incorporating PCM" which is not capitlaized whereas the stable version is
+
+-- NamedChunks... Sometimes capitalized, sometimes not, sometimes plural,
+-- sometimes not, sometimes need to be used in different tenses. How to
+-- accomodate all this?
+
+-- The second paragraph is general between examples. It can probably be
+-- abstracted out.
+
+-------------------------------
+-- 2.1 : Purpose of Document --
+-------------------------------
+
+-- Besides program name, these two paragraphs are general, mostly repeated
+-- between examples, and can be abstracted out.
+
+--How to italicize words in sentence?
+--How to cite?
+
+---------------------------------
+-- 2.2 : Scope of Requirements --
+---------------------------------
+
+-- There is a similar paragraph in each example, but there's a lot of specific
+-- info here. Would need to abstract out the object of analysis (i.e. solar
+-- water heating tank incorporating PCM, 2D slope composed of homogeneous soil
+-- layers, glass slab and blast, or 2D bodies acted on by forces) and also
+-- abstract out the overall goal of the program (i.e. predict the temperature
+-- and energy histories for the water and PCM, simulate how 2D rigid bodies
+-- interact with each other, predict whether the glass slab is safe to use or
+-- not, etc.). If that is done, then this paragraph can also be abstracted out.
+
+----------------------------------------------
+-- 2.3 : Characteristics of Intended Reader --
+----------------------------------------------
+------------------------------------
+-- 2.4 : Organization of Document --
+------------------------------------
+--------------------------------------------
+-- Section 3: GENERAL SYSTEM DESCRIPTION --
+--------------------------------------------
+
+s3 :: Section
+s3 = genSysF [s3_1] s3_2_contents [] []
+-- First empty list is the list of constraints
+
+--------------------------
+-- 3.1 : System Context --
+--------------------------
+
+s3_1 :: Section
+s3_1 = SRS.sysCont [s3_1_contents, sys_context_fig, s3_1_2_intro,
+  s3_1_2_respBullets] []
+
+s3_1_2_respBullets :: Contents
+s3_1_2_respBullets = Enumeration $ Bullet $ [s3_1_2_userResp, s3_1_2_swhsResp]
+
+--------------------------------
+-- 3.2 : User Characteristics --
+--------------------------------
+
+------------------------------
+-- 3.3 : System Constraints --
+------------------------------
+
+---------------------------------------------
+-- Section 4 : SPECIFIC SYSTEM DESCRIPTION --
+---------------------------------------------
+
+s4 :: Section
+s4 = specSysDesF s4_intro_end [s4_1, s4_2]
+
+-------------------------------
+-- 4.1 : Problem Description --
+-------------------------------
+
+s4_1 :: Section
+s4_1 = SRS.probDesc [s4_1_intro]
+  [s4_1_1, s4_1_2, s4_1_3]
+
+-----------------------------------------
+-- 4.1.1 : Terminology and Definitions --
+-----------------------------------------
+
+s4_1_1 :: Section
+s4_1_1 = termDefnF EmptyS [s4_1_1_bullets]
+
+-- Above paragraph is repeated in all examples, can be abstracted out. (Note:
+-- GlassBR has an additional sentence with a reference at the end.)
+
+s4_1_1_bullets :: Contents
+s4_1_1_bullets = Enumeration (Bullet $ map s4_1_1_bullet_map_f
+  [CT.ht_flux, phase_change_material, CT.heat_cap_spec,
+  CT.thermal_conduction, transient])
+
+s4_1_1_bullet_map_f :: Concept c => c -> ItemType
+s4_1_1_bullet_map_f c = Flat $ foldlSent [at_start c +: EmptyS, (c ^. defn)]
+
+-- Structure of this list is same in all examples, probably can be automated.
+
+-- Included heat flux and specific heat in NamedChunks even though they are
+-- already in SWHSUnits
+
+-----------------------------------------
+-- 4.1.2 : Physical System Description --
+-----------------------------------------
+
+s4_1_2 :: Section
+s4_1_2 = physSystDesc (short progName) (fig_tank) [s4_1_2_list, fig_tank]
+
+-- Above paragraph is general except for progName and figure. However, not
+-- every example has a physical system. Also, the SSP example is different, so
+-- this paragraph can not be abstracted out as is.
+
+s4_1_2_list :: Contents
+s4_1_2_list = enumSimple 1 (short physSyst) $ map foldlSent_ s4_1_2_physSystList
+
+s4_1_2_physSystList :: [[Sentence]]
+s4_1_2_physSystList = [physSyst1, physSyst2, physSyst3]
+
+-----------------------------
+-- 4.1.3 : Goal Statements --
+-----------------------------
+
+s4_1_3 :: Section
+s4_1_3 = SRS.goalStmt [s4_1_3_intro, s4_1_3_list] []
+
+s4_1_3_list :: Contents
+s4_1_3_list = enumSimple 1 (short goalStmt) $
+  map (goalState) outputConstraints
+
+-- List structure is repeated between examples. (For all of these lists I am
+-- imagining the potential for something like what was done with the lists in
+-- MG, where you define goals, assumptions, physical system components, etc. in
+-- separate files, import them and pass them as arguments to some "makeSRS"
+-- function and the rest is automated.)
+
+--------------------------------------------------
+-- 4.2 : Solution Characteristics Specification --
+--------------------------------------------------
+
+s4_2 :: Section
+s4_2 = solChSpecF progName (s4_1, s6) s4_2_4_intro_end
+  (s4_2_6_mid, dataConstraintUncertainty, s4_2_6_T1footer) ([s4_2_1_list], s4_2_2_T1 ++
+  s4_2_2_T2 ++ s4_2_2_T3, s4_2_3_genDefs ++ s4_2_3_deriv,
+  s4_2_4_DD1 ++ s4_2_4_DD2 ++ s4_2_4_DD3 ++ s4_2_4_DD4, (s4_2_5_IMods),
+  s4_2_6_DataConTables) [s4_2_7]
+
+-------------------------
+-- 4.2.1 : Assumptions --
+-------------------------
+
+s4_2_1 :: Section
+s4_2_1 = assumpF
+  (SRS.thModel SRS.missingP [])
+  (SRS.genDefn SRS.missingP [])
+  (SRS.dataDefn SRS.missingP [])
+  s4_2_5 s6 [s4_2_1_list]
+
+s4_2_1_list :: Contents
+s4_2_1_list = enumSimple 1 (short assumption) $ map foldlSent s4_2_1_assump_list
+
+s4_2_1_assump_list :: [[Sentence]]
+s4_2_1_assump_list = [assump1, assump2, assump3, assump4, assump5, assump6,
+  assump7, assump8, assump9, assump10, assump11, assump12, assump13, assump14,
+  assump15, assump16, assump17, assump18, assump19, assump20]
+
+-- Again, list structure is same between all examples.
+
+-- Can booktabs colored links be used? The box links completely cover nearby
+-- punctuation.
+
+--------------------------------
+-- 4.2.2 : Theoretical Models --
+--------------------------------
+
+-- Theory has to be RelationChunk....
+-- No way to include "Source" or "Ref. By" sections?
+
+---------------------------------
+-- 4.2.3 : General Definitions --
+---------------------------------
+
+-- SECTION 4.2.3 --
+-- General Definitions is automatically generated in solChSpecF
+s4_2_3_genDefs :: [Contents]
+s4_2_3_genDefs = map swhsSymbMapT swhsGenDefs
+
+s4_2_3_deriv :: [Contents]
+s4_2_3_deriv = [s4_2_3_deriv_1, s4_2_3_deriv_2, s4_2_3_deriv_3,
+  s4_2_3_deriv_4, s4_2_3_deriv_5, s4_2_3_deriv_6, s4_2_3_deriv_7,
+  s4_2_3_deriv_8, s4_2_3_deriv_9, s4_2_3_deriv_10, s4_2_3_deriv_11]
+
+
+------------------------------
+-- 4.2.4 : Data Definitions --
+------------------------------
+-----------------------------
+-- 4.2.5 : Instance Models --
+-----------------------------
+
+s4_2_5 :: Section
+s4_2_5 = inModelF s4_1
+  (SRS.dataDefn SRS.missingP [])
+  (SRS.thModel SRS.missingP [])
+  (SRS.genDefn SRS.missingP [])
+  s4_2_5_IMods
+
+s4_2_5_IMods :: [Contents]
+s4_2_5_IMods = concat $ weave [s4_2_5_derivations,
+  map (\x -> [swhsSymbMapT x]) swhsInModels]
+
+s4_2_5_derivations :: [[Contents]]
+s4_2_5_derivations = [s4_2_5_subpar, s4_2_5_deriv1, s4_2_5_deriv2]
+  
+s4_2_5_deriv1 :: [Contents]
+s4_2_5_deriv1 = s4_2_5_d1startPara ++
+  (weave [s4_2_5_d1sent_list, s4_2_5_d1eqn_list])
+
+s4_2_5_d1eqn_list = map EqnBlock [s4_2_5_d_eqn1, s4_2_5_d_eqn2,
+  s4_2_5_d_eqn3, s4_2_5_d_eqn4, s4_2_5_d_eqn5, s4_2_5_d_eqn6, s4_2_5_d_eqn7]
+
+s4_2_5_d1sent_list = map foldlSPCol [s4_2_5_d1sent_1, s4_2_5_d1sent_2,
+  s4_2_5_d1sent_3, s4_2_5_d1sent_4, s4_2_5_d1sent_5, s4_2_5_d1sent_6, s4_2_5_d1sent_7]
+
+s4_2_5_deriv2 :: [Contents]
+s4_2_5_deriv2 = s4_2_5_d2startPara ++ (weave [s4_2_5_d2eqn_list,
+  s4_2_5_d2sent_list]) ++ s4_2_5_d2endPara
+
+s4_2_5_d2sent_list = map foldlSPCol [s4_2_5_d2sent_1, s4_2_5_d2sent_2, s4_2_5_d2sent_3]
+
+s4_2_5_d2eqn_list = map (EqnBlock) [s4_2_5_d2eqn1, s4_2_5_d2eqn2,
+  s4_2_5_d2eqn3, s4_2_5_d2eqn4]
+
+----------------------------
+-- 4.2.6 Data Constraints --
+----------------------------
+------------------------------
+-- Data Constraint: Table 1 --
+------------------------------
+
+s4_2_6_DataConTables :: [Contents]
+s4_2_6_DataConTables = [s4_2_6_table1, s4_2_6_table3]
+
+s4_2_6_table1 :: Contents
+s4_2_6_table1 = inDataConstTbl inputConstraints
+
+inputConstraints :: [UncertQ]
+inputConstraints = [tank_length, diam, pcm_vol, pcm_SA, pcm_density,
+  temp_melt_P, htCap_S_P, htCap_L_P, htFusion, coil_SA,
+  temp_C, w_density, htCap_W, coil_HTC, pcm_HTC, temp_init, time_final]
+
+------------------------------
+-- Data Constraint: Table 2 --
+------------------------------
+
+------------------------------
+-- Data Constraint: Table 3 --
+------------------------------
+
+s4_2_6_table3 :: Contents
+s4_2_6_table3 = outDataConstTbl outputConstraints
+--FIXME: add "(by A11)" in Physical Constraints of `temp_W` and `temp_PCM`?
+
+outputConstraints :: [UncertQ]
+outputConstraints = [temp_W, temp_PCM, w_E, pcm_E]
+
+-- Other Notes:
+---- Will there be a way to have asterisks for certain pieces of the table?
+
+----------------------------------------------
+-- 4.2.7 : Properties of A Correct Solution --
+----------------------------------------------
+
+s4_2_7 :: Section
+s4_2_7 = SRS.propCorSol (s4_2_7_deriv) []
+
+s4_2_7_deriv :: [Contents]
+s4_2_7_deriv = [s4_2_7_deriv_1, s4_2_7_deriv_2, s4_2_7_deriv_3,
+  s4_2_7_deriv_4, s4_2_7_deriv_5]
+
+-- Above section only occurs in this example (although maybe it SHOULD be in
+-- the others).
+
+-- Remember to insert references in above derivation when available
+
+------------------------------
+-- Section 5 : REQUIREMENTS --
+------------------------------
+
+s5 :: Section
+s5 = reqF [s5_1, s5_2]
+
+-----------------------------------
+-- 5.1 : Functional Requirements --
+-----------------------------------
+
+s5_1 :: Section
+s5_1 = SRS.funcReq s5_1_list []
+
+s5_1_list :: [Contents]
+s5_1_list = [s5_1_1_Sent, s5_1_1_Table, s5_1_2_Sent, s5_1_2_Eqn1, s5_1_2_Eqn2, s5_1_Reqs]
+
+s5_1_1_Table = (Table [titleize symbol_, titleize unit_, titleize description]
+  (mkTable
+  [getS,
+  --(\ch -> Sy (unit_symb ch)),
+  unit'2Contents,
+  phrase] (map qs inputConstraints))
+  (titleize input_ +:+ titleize variable +:+ titleize requirement) False)
+
+s5_1_Reqs :: Contents
+s5_1_Reqs = enumSimple 3 (short requirement) $ map foldlSent reqList
+-- Want to add req1 and req2 but they include a table and another enumeration
+-- so not sure how to implement yet
+
+reqList :: [[Sentence]]
+reqList = [req3, req4, req5, req6, req7, req8, req9, req10, req11]
+
+---------------------------------------
+-- 5.2 : Non-functional Requirements --
+---------------------------------------
+--------------------------------
+-- Section 6 : LIKELY CHANGES --
+--------------------------------
+
+s6 :: Section
+s6 = SRS.likeChg [s6_list] []
+
+s6_list :: Contents
+s6_list = enumSimple 1 (short likelyChg) $ map foldlSent s6_likeChg_list
+
+s6_likeChg_list :: [[Sentence]]
+s6_likeChg_list = [likeChg1, likeChg2, likeChg3, likeChg4, likeChg5, likeChg6]
+
+s6_start :: Int -> Sentence
+s6_start numVar = acroA numVar +:+ S "-"
+
+-- List structure same in all examples.
+
+--add referencing to assumptions?
+
+--------------------------------------------------
+-- Section 7 : TRACEABILITY MATRICES AND GRAPHS --
+--------------------------------------------------
+
+s7 :: Section
+s7 = traceMGF s7_refList s7_trailing
+  ([s7_table1, s7_table2, s7_table3] ++
+  (s7_intro2) ++ [s7_fig1, s7_fig2]) []
+
+s7_refList :: [Contents]
+s7_refList = [s7_table1, s7_table2, s7_table3]
+
+s7_trailing :: [Sentence]
+s7_trailing = [s7_trailing_1, s7_trailing_2, s7_trailing_3]
+
+s7_instaModel, s7_data, s7_funcReq, s7_likelyChg, s7_dataDefs, s7_genDefs,
+  s7_assump, s7_theories :: [String]
+  
+s7_dataRef, s7_funcReqRef, s7_instaModelRef, s7_assumpRef, s7_theoriesRef,
+  s7_dataDefRef, s7_likelyChgRef, s7_genDefRef :: [Sentence]
+
+s7_instaModel = ["IM1", "IM2", "IM3", "IM4"]
+s7_instaModelRef = map (refFromType Theory swhsSymMap) swhsInModels
+
+s7_funcReq = ["R1", "R2", "R3", "R4", "R5", "R6", "R7", "R8", "R9", "R10",
+  "R11"]
+s7_funcReqRef = makeListRef s7_funcReq s5_1
+
+s7_data = ["Data Constraints"]
+s7_dataRef = [makeRef s4_2_6_table1] --FIXME: Reference section?
+
+s7_assump = ["A1", "A2", "A3", "A4", "A5", "A6", "A7", "A8", "A9", "A10",
+  "A11", "A12", "A13", "A14", "A15", "A16", "A17", "A18", "A19"]
+s7_assumpRef = makeListRef s7_assump s4_2_1
+
+s7_theories = ["T1", "T2", "T3"]
+s7_theoriesRef = map (refFromType Theory swhsSymMap) tModels
+
+s7_genDefs = ["GD1", "GD2"]
+s7_genDefRef = map (refFromType Theory swhsSymMap) swhsGenDefs
+
+s7_dataDefs = ["DD1", "DD2", "DD3", "DD4"]
+s7_dataDefRef = map (refFromType Data swhsSymMap) swhsDataDefs
+
+s7_likelyChg = ["LC1", "LC2", "LC3", "LC4", "LC5", "LC6"]
+s7_likelyChgRef = makeListRef s7_likelyChg s6
+
+{-Traceability Matrix 1-}
+
+s7_row_t1 :: [String]
+s7_row_t1 = s7_theories ++ s7_genDefs ++ s7_dataDefs ++ s7_instaModel
+
+s7_row_header_t1 :: [Sentence]
+s7_row_header_t1 = zipWith itemRefToSent s7_row_t1 
+  (s7_theoriesRef ++ s7_genDefRef ++ s7_dataDefRef ++ s7_instaModelRef)
+
+s7_columns_t1 :: [[String]]
+s7_columns_t1 = [s7_t1_T1, s7_t1_T2, s7_t1_T3, s7_t1_GD1, s7_t1_GD2, s7_t1_DD1,
+  s7_t1_DD2, s7_t1_DD3, s7_t1_DD4, s7_t1_IM1, s7_t1_IM2, s7_t1_IM3, s7_t1_IM4]
+
+s7_t1_T1, s7_t1_T2, s7_t1_T3, s7_t1_GD1, s7_t1_GD2, s7_t1_DD1, s7_t1_DD2,
+  s7_t1_DD3, s7_t1_DD4, s7_t1_IM1, s7_t1_IM2, s7_t1_IM3, s7_t1_IM4 :: [String]
+
+--list of each item that "X" item requires for traceability matrix
+s7_t1_T1 = []
+s7_t1_T2 = ["T3"]
+s7_t1_T3 = []
+s7_t1_GD1 = []
+s7_t1_GD2 = ["T1"]
+s7_t1_DD1 = ["GD1"]
+s7_t1_DD2 = ["GD1"]
+s7_t1_DD3 = []
+s7_t1_DD4 = ["DD3"]
+s7_t1_IM1 = ["GD2", "DD1", "DD2", "IM2"]
+s7_t1_IM2 = ["GD2", "DD2", "DD4", "IM1", "IM4"]
+s7_t1_IM3 = ["T2"]
+s7_t1_IM4 = ["T2", "T3", "DD2", "DD3", "DD4", "IM2"]
+
+{-Traceability Matrix 2-}
+
+s7_row_t2 :: [String]
+s7_row_t2 = s7_instaModel ++ s7_data ++ s7_funcReq
+
+--column header
+s7_row_header_t2 :: [Sentence]
+s7_row_header_t2 = zipWith itemRefToSent s7_row_t2 
+  (s7_instaModelRef ++ s7_dataRef ++ s7_funcReqRef)
+
+--row header
+s7_col_header_t2 :: [Sentence]
+s7_col_header_t2 = zipWith itemRefToSent (s7_instaModel ++ s7_funcReq)
+  (s7_instaModelRef ++ s7_funcReqRef)
+
+s7_columns_t2 :: [[String]]
+s7_columns_t2 = [s7_t2_IM1, s7_t2_IM2, s7_t2_IM3, s7_t2_IM4, s7_t2_R1, 
+  s7_t2_R2, s7_t2_R3, s7_t2_R4, s7_t2_R5, s7_t2_R6, s7_t2_R7, s7_t2_R8, 
+  s7_t2_R9, s7_t2_R10, s7_t2_R11]
+
+s7_t2_IM1, s7_t2_IM2, s7_t2_IM3, s7_t2_IM4, s7_t2_R1, s7_t2_R2,
+  s7_t2_R3, s7_t2_R4, s7_t2_R5, s7_t2_R6, s7_t2_R7, s7_t2_R8, 
+  s7_t2_R9, s7_t2_R10, s7_t2_R11 :: [String]
+
+--list of each item that "X" item requires for traceability matrix
+s7_t2_IM1 = ["IM2", "R1", "R2"]
+s7_t2_IM2 = ["IM1", "IM4", "R1", "R2"]
+s7_t2_IM3 = ["R1", "R2"]
+s7_t2_IM4 = ["IM2", "R1", "R2"]
+s7_t2_R1 = []
+s7_t2_R2 = ["R1"]
+s7_t2_R3 = ["Data Constraints"]
+s7_t2_R4 = ["IM1", "IM2", "R1", "R2"]
+s7_t2_R5 = ["IM1"]
+s7_t2_R6 = ["IM2"]
+s7_t2_R7 = ["IM3"]
+s7_t2_R8 = ["IM4"]
+s7_t2_R9 = ["IM3", "IM4"]
+s7_t2_R10 = ["IM2"]
+s7_t2_R11 = ["IM2"]
+
+s7_table2 :: Contents
+s7_table2 = Table (EmptyS:s7_row_header_t2)
+  (makeTMatrix (s7_col_header_t2) (s7_columns_t2) (s7_row_t2))
+  (showingCxnBw traceyMatrix
+  (titleize' requirement `sAnd` titleize' inModel)) True
+
+{-Traceability Matrix 3-}
+
+s7_row_t3 :: [String]
+s7_row_t3 = s7_assump
+
+s7_row_header_t3, s7_col_header_t3 :: [Sentence]
+s7_row_header_t3 = zipWith itemRefToSent s7_assump s7_assumpRef
+
+s7_col_header_t3 = zipWith itemRefToSent
+  (s7_theories ++ s7_genDefs ++ s7_dataDefs ++ s7_instaModel ++ s7_likelyChg)
+  (s7_theoriesRef ++ s7_genDefRef ++ s7_dataDefRef ++ s7_instaModelRef ++ s7_likelyChgRef)
+
+s7_columns_t3 :: [[String]]
+s7_columns_t3 = [s7_t3_T1, s7_t3_T2, s7_t3_T3, s7_t3_GD1, s7_t3_GD2, s7_t3_DD1, 
+  s7_t3_DD2, s7_t3_DD3, s7_t3_DD4, s7_t3_IM1, s7_t3_IM2, s7_t3_IM3, s7_t3_IM4,
+  s7_t3_LC1, s7_t3_LC2, s7_t3_LC3, s7_t3_LC4, s7_t3_LC5, s7_t3_LC6]
+
+s7_t3_T1, s7_t3_T2, s7_t3_T3, s7_t3_GD1, s7_t3_GD2, s7_t3_DD1, s7_t3_DD2, s7_t3_DD3,
+  s7_t3_DD4, s7_t3_IM1, s7_t3_IM2, s7_t3_IM3, s7_t3_IM4, s7_t3_LC1, s7_t3_LC2,
+  s7_t3_LC3, s7_t3_LC4, s7_t3_LC5, s7_t3_LC6 :: [String]
+
+s7_t3_T1  = ["A1"]
+s7_t3_T2  = []
+s7_t3_T3  = []
+s7_t3_GD1 = ["A2"]
+s7_t3_GD2 = ["A3", "A4", "A5", "A6"]
+s7_t3_DD1 = ["A7", "A8", "A9"]
+s7_t3_DD2 = ["A3", "A4", "A10"]
+s7_t3_DD3 = []
+s7_t3_DD4 = []
+s7_t3_IM1 = ["A11", "A12", "A14", "A15", "A16", "A19"]
+s7_t3_IM2 = ["A12", "A13", "A16", "A17", "A18"]
+s7_t3_IM3 = ["A14", "A19"]
+s7_t3_IM4 = ["A13", "A18"]
+s7_t3_LC1 = ["A4"]
+s7_t3_LC2 = ["A8"]
+s7_t3_LC3 = ["A9"]
+s7_t3_LC4 = ["A11"]
+s7_t3_LC5 = ["A12"]
+s7_t3_LC6 = ["A15"]
+
+
+-- These matrices can probably be generated automatically when enough info is
+-- abstracted out.
+
+------------------------
+-- Traceabilty Graphs --
+------------------------
+-------------------------------------------------
+-- Section 8 :  Specification Parameter Values --
+-------------------------------------------------
+s8 :: Section
+s8 = valsOfAuxConstantsF progName specParamValList
+
+----------------------------
+-- Section 9 : References --
+----------------------------
+
+s9 :: Section
+s9 = SRS.reference [s9_refs] []
+
+s9_refs :: Contents
+s9_refs = mkRefsList 1 $ map foldlsC s9_refList
+
+s9_refList :: [[Sentence]]
+s9_refList = [ref1, ref2, ref3, ref4, ref5, ref6]
+
+-- ============== --
+-- Dead Knowledge --
+-- ============== --
+
+
+------------------------------
+-- Section 2 : INTRODUCTION --
+------------------------------
+
 s2_intro :: Sentence
 s2_intro = foldlSent [S "Due to increasing cost, diminishing",
   S "availability, and negative environmental impact of",
@@ -248,17 +793,9 @@ s2_4_trail = foldlSent_ [S "The", plural inModel,
 -- Section 3: GENERAL SYSTEM DESCRIPTION --
 --------------------------------------------
 
-s3 :: Section
-s3 = genSysF [s3_1] s3_2_contents [] []
--- First empty list is the list of constraints
-
 --------------------------
 -- 3.1 : System Context --
 --------------------------
-
-s3_1 :: Section
-s3_1 = SRS.sysCont [s3_1_contents, sys_context_fig, s3_1_2_intro,
-  s3_1_2_respBullets] []
 
 s3_1_contents ::Contents
 s3_1_contents = foldlSP [makeRef sys_context_fig, S "shows the" +:+.
@@ -280,9 +817,6 @@ s3_1_2_intro = foldlSPCol [short progName +:+.
   S "The only external interaction is through the", phrase user +:+.
   S "interface", S "responsibilities" `ofThe'` phrase user `sAnd`
   S "the", phrase system, S "are as follows"]
-
-s3_1_2_respBullets :: Contents
-s3_1_2_respBullets = Enumeration $ Bullet $ [s3_1_2_userResp, s3_1_2_swhsResp]
 
 -- User Responsibilities --
 s3_1_2_userResp :: ItemType
@@ -332,9 +866,6 @@ s3_2_contents = foldlSP [S "The end", phrase user, S "of",
 -- Section 4 : SPECIFIC SYSTEM DESCRIPTION --
 ---------------------------------------------
 
-s4 :: Section
-s4 = specSysDesF s4_intro_end [s4_1, s4_2]
-
 s4_intro_end :: Sentence
 s4_intro_end = foldlSent_ [plural thModel `sC` plural genDefn `sC`
   plural dataDefn `sC` S "and finally the", plural inModel,
@@ -351,10 +882,6 @@ s4_intro_end = foldlSent_ [plural thModel `sC` plural genDefn `sC`
 -- 4.1 : Problem Description --
 -------------------------------
 
-s4_1 :: Section
-s4_1 = SRS.probDesc [s4_1_intro]
-  [s4_1_1, s4_1_2, s4_1_3]
-
 s4_1_intro :: Contents
 s4_1_intro = foldlSP [short progName, S "is a computer",
   phrase program, S "developed to investigate the effect of",
@@ -366,42 +893,12 @@ s4_1_intro = foldlSP [short progName, S "is a computer",
 -- 4.1.1 : Terminology and Definitions --
 -----------------------------------------
 
-s4_1_1 :: Section
-s4_1_1 = termDefnF EmptyS [s4_1_1_bullets]
-
--- Above paragraph is repeated in all examples, can be abstracted out. (Note:
--- GlassBR has an additional sentence with a reference at the end.)
-
-s4_1_1_bullets :: Contents
-s4_1_1_bullets = Enumeration (Bullet $ map s4_1_1_bullet_map_f
-  [CT.ht_flux, phase_change_material, CT.heat_cap_spec,
-  CT.thermal_conduction, transient])
-
-s4_1_1_bullet_map_f :: Concept c => c -> ItemType
-s4_1_1_bullet_map_f c = Flat $ foldlSent [at_start c +: EmptyS, (c ^. defn)]
-
--- Structure of this list is same in all examples, probably can be automated.
-
--- Included heat flux and specific heat in NamedChunks even though they are
--- already in SWHSUnits
-
 -----------------------------------------
 -- 4.1.2 : Physical System Description --
 -----------------------------------------
 
-s4_1_2 :: Section
-s4_1_2 = physSystDesc (short progName) (fig_tank) [s4_1_2_list, fig_tank]
 
--- Above paragraph is general except for progName and figure. However, not
--- every example has a physical system. Also, the SSP example is different, so
--- this paragraph can not be abstracted out as is.
-
-s4_1_2_list :: Contents
-s4_1_2_list = enumSimple 1 (short physSyst) $ map foldlSent_ s4_1_2_physSystList
-
-s4_1_2_physSystList :: [[Sentence]]
 physSyst1, physSyst2, physSyst3 :: [Sentence]
-s4_1_2_physSystList = [physSyst1, physSyst2, physSyst3]
 
 physSyst1 = [at_start tank, S "containing" +:+. phrase water]
 --
@@ -424,9 +921,6 @@ fig_tank = Figure (
 -- 4.1.3 : Goal Statements --
 -----------------------------
 
-s4_1_3 :: Section
-s4_1_3 = SRS.goalStmt [s4_1_3_intro, s4_1_3_list] []
-
 s4_1_3_intro :: Contents
 s4_1_3_intro = foldlSPCol [S "Given the", phrase temp_C `sC`
   S "initial", plural condition, S "for the", phrase temp_W
@@ -435,10 +929,6 @@ s4_1_3_intro = foldlSPCol [S "Given the", phrase temp_C `sC`
 
 -- 2 examples include this paragraph, 2 don't. The "givens" would need to be
 -- abstracted out if this paragraph were to be abstracted out.
-
-s4_1_3_list :: Contents
-s4_1_3_list = enumSimple 1 (short goalStmt) $
-  map (goalState) outputConstraints
 
 goalState :: NamedIdea varTerm => varTerm -> Sentence
 goalState varTerm = foldlSent [S "Predict the", phrase varTerm,
@@ -454,31 +944,9 @@ goalState varTerm = foldlSent [S "Predict the", phrase varTerm,
 -- 4.2 : Solution Characteristics Specification --
 --------------------------------------------------
 
-s4_2 :: Section
-s4_2 = solChSpecF progName (s4_1, s6) s4_2_4_intro_end
-  (s4_2_6_mid, dataConstraintUncertainty, s4_2_6_T1footer) ([s4_2_1_list], s4_2_2_T1 ++
-  s4_2_2_T2 ++ s4_2_2_T3, s4_2_3_genDefs ++ s4_2_3_deriv,
-  s4_2_4_DD1 ++ s4_2_4_DD2 ++ s4_2_4_DD3 ++ s4_2_4_DD4, (s4_2_5_IMods),
-  s4_2_6_DataConTables) [s4_2_7]
-
 -------------------------
 -- 4.2.1 : Assumptions --
 -------------------------
-
-s4_2_1 :: Section
-s4_2_1 = assumpF
-  (SRS.thModel SRS.missingP [])
-  (SRS.genDefn SRS.missingP [])
-  (SRS.dataDefn SRS.missingP [])
-  s4_2_5 s6 [s4_2_1_list]
-
-s4_2_1_list :: Contents
-s4_2_1_list = enumSimple 1 (short assumption) $ map foldlSent s4_2_1_assump_list
-
-s4_2_1_assump_list :: [[Sentence]]
-s4_2_1_assump_list = [assump1, assump2, assump3, assump4, assump5, assump6,
-  assump7, assump8, assump9, assump10, assump11, assump12, assump13, assump14,
-  assump15, assump16, assump17, assump18, assump19, assump20]
 
 assump1, assump2, assump3, assump4, assump5, assump6,
   assump7, assump8, assump9, assump10, assump11, assump12, assump13, assump14,
@@ -592,16 +1060,6 @@ assump20 = [S "When considering the", phrase w_vol, S "in the",
 -- 4.2.3 : General Definitions --
 ---------------------------------
 
--- SECTION 4.2.3 --
--- General Definitions is automatically generated in solChSpecF
-s4_2_3_genDefs :: [Contents]
-s4_2_3_genDefs = map swhsSymbMapT swhsGenDefs
-
-s4_2_3_deriv :: [Contents]
-s4_2_3_deriv = [s4_2_3_deriv_1, s4_2_3_deriv_2, s4_2_3_deriv_3,
-  s4_2_3_deriv_4, s4_2_3_deriv_5, s4_2_3_deriv_6, s4_2_3_deriv_7,
-  s4_2_3_deriv_8, s4_2_3_deriv_9, s4_2_3_deriv_10, s4_2_3_deriv_11]
-
 s4_2_3_deriv_1, s4_2_3_deriv_2, s4_2_3_deriv_3,
   s4_2_3_deriv_4, s4_2_3_deriv_5, s4_2_3_deriv_6, s4_2_3_deriv_7,
   s4_2_3_deriv_8, s4_2_3_deriv_9, s4_2_3_deriv_10, s4_2_3_deriv_11 :: Contents
@@ -679,13 +1137,6 @@ s4_2_4_intro_end = foldlSent [S "The dimension of each",
 -- 4.2.5 : Instance Models --
 -----------------------------
 
-s4_2_5 :: Section
-s4_2_5 = inModelF s4_1
-  (SRS.dataDefn SRS.missingP [])
-  (SRS.thModel SRS.missingP [])
-  (SRS.genDefn SRS.missingP [])
-  s4_2_5_IMods
-
 s4_2_5_subpar :: [Contents]
 s4_2_5_subpar = [foldlSP [S "The goals",  acroGS 1, S "to",
   acroGS 4, S "are solved by", acroIM 1, S "to" +:+.
@@ -698,27 +1149,11 @@ s4_2_5_subpar = [foldlSP [S "The goals",  acroGS 1, S "to",
   phrase temp_PCM `sAnd` phrase pcm_E, S "depend on the",
   phrase CT.phase_change]]
 
-s4_2_5_IMods :: [Contents]
-s4_2_5_IMods = concat $ weave [s4_2_5_derivations , map (\x -> [swhsSymbMapT x]) swhsInModels]
-
-s4_2_5_derivations :: [[Contents]]
-s4_2_5_derivations = [s4_2_5_subpar, s4_2_5_deriv1, s4_2_5_deriv2]
-  
-s4_2_5_deriv1 :: [Contents]
-s4_2_5_deriv1 = s4_2_5_d1startPara ++
-  (weave [s4_2_5_d1sent_list, s4_2_5_d1eqn_list])
-
 s4_2_5_d1startPara, s4_2_5_d2startPara, s4_2_5_d2endPara, s4_2_5_d1eqn_list,
   s4_2_5_d1sent_list, s4_2_5_d2eqn_list, s4_2_5_d2sent_list :: [Contents]
 
 s4_2_5_d1startPara = [foldlSPCol [S "Derivation of the",
   phrase energy, S "balance on", phrase water]]
-
-s4_2_5_d1eqn_list = map EqnBlock [s4_2_5_d_eqn1, s4_2_5_d_eqn2,
-  s4_2_5_d_eqn3, s4_2_5_d_eqn4, s4_2_5_d_eqn5, s4_2_5_d_eqn6, s4_2_5_d_eqn7]
-
-s4_2_5_d1sent_list = map foldlSPCol [s4_2_5_d1sent_1, s4_2_5_d1sent_2,
-  s4_2_5_d1sent_3, s4_2_5_d1sent_4, s4_2_5_d1sent_5, s4_2_5_d1sent_6, s4_2_5_d1sent_7]
   
 s4_2_5_d1sent_1, s4_2_5_d1sent_2, s4_2_5_d1sent_3, s4_2_5_d1sent_4,
   s4_2_5_d1sent_5, s4_2_5_d1sent_6, s4_2_5_d1sent_7 :: [Sentence]
@@ -802,12 +1237,6 @@ s4_2_5_d_eqn7 = (Deriv Total (C temp_W) (C time) := (1 / (C tau_W)) *
 -- Replace Derivs with regular derivative when available
 -- Fractions in paragraph?
 
-s4_2_5_deriv2 :: [Contents]
-s4_2_5_deriv2 = s4_2_5_d2startPara ++ (weave [s4_2_5_d2eqn_list,
-  s4_2_5_d2sent_list]) ++ s4_2_5_d2endPara
-
-s4_2_5_d2sent_list = map foldlSPCol [s4_2_5_d2sent_1, s4_2_5_d2sent_2, s4_2_5_d2sent_3]
-
 s4_2_5_d2sent_1, s4_2_5_d2sent_2, s4_2_5_d2sent_3 :: [Sentence]
 
 s4_2_5_d2sent_1 = [S "Using", swhsSymbMapDRef dd2HtFluxP, S "for", getS ht_flux_P `sC`
@@ -818,10 +1247,6 @@ s4_2_5_d2sent_2 = [S "Dividing by", getS pcm_mass :+: getS htCap_S_P, S "we obta
 s4_2_5_d2sent_3 = [S "Setting", getS tau_S_P :+: S "=" :+: getS pcm_mass :+: 
   getS htCap_S_P :+: S "/" :+: getS pcm_HTC :+: getS pcm_SA `sC`
   S "this can be written as"]
-
-
-s4_2_5_d2eqn_list = map (EqnBlock) [s4_2_5_d2eqn1, s4_2_5_d2eqn2,
-  s4_2_5_d2eqn3, s4_2_5_d2eqn4]
 
 s4_2_5_d2eqn1, s4_2_5_d2eqn2, s4_2_5_d2eqn3, s4_2_5_d2eqn4 :: Expr
 
@@ -906,17 +1331,6 @@ s4_2_6_mid = foldlSent [S "The", phrase column, S "for", phrase software,
 -- Data Constraint: Table 1 --
 ------------------------------
 
-s4_2_6_DataConTables :: [Contents]
-s4_2_6_DataConTables = [s4_2_6_table1, s4_2_6_table3]
-
-s4_2_6_table1 :: Contents
-s4_2_6_table1 = inDataConstTbl inputConstraints
-
-inputConstraints :: [UncertQ]
-inputConstraints = [tank_length, diam, pcm_vol, pcm_SA, pcm_density,
-  temp_melt_P, htCap_S_P, htCap_L_P, htFusion, coil_SA,
-  temp_C, w_density, htCap_W, coil_HTC, pcm_HTC, temp_init, time_final]
-
 s4_2_6_T1footer :: Sentence
 s4_2_6_T1footer = foldlSent_ $ map foldlSent [
 
@@ -943,78 +1357,15 @@ s4_2_6_T1footer = foldlSent_ $ map foldlSent [
 -- Data Constraint: Table 2 --
 ------------------------------
 
--- See Section 8 - Specification Parameter Values
-
-{--
-s4_2_6_table2 :: Contents
-s4_2_6_table2 = Table [S "Var", titleize value]
-  (mkTable [(\x -> x!!0), (\x -> x!!1)] s4_2_6_specParamVals) 
-  (titleize specification +:+ titleize parameter +:+ titleize' value) True
---}
-
-{--
-s4_2_6_specParamVals :: [[Sentence]]
-s4_2_6_specParamVals = [specParamVal1, specParamVal2, specParamVal3, specParamVal4,
-  specParamVal5, specParamVal6, specParamVal7, specParamVal8, specParamVal9,
-  specParamVal10, specParamVal11, specParamVal12, specParamVal13, specParamVal14,
-  specParamVal15, specParamVal16, specParamVal17, specParamVal18, specParamVal19,
-  specParamVal20, specParamVal21, specParamVal22]
-
-specParamVal1, specParamVal2, specParamVal3, specParamVal4,
-  specParamVal5, specParamVal6, specParamVal7, specParamVal8, specParamVal9,
-  specParamVal10, specParamVal11, specParamVal12, specParamVal13, specParamVal14,
-  specParamVal15, specParamVal16, specParamVal17, specParamVal18, specParamVal19,
-  specParamVal20, specParamVal21, specParamVal22 :: [Sentence]
-
-specParamVal1 = [getS tank_length_min, E (Dbl 0.1) +:+ (unwrap $ getUnit tank_length)]
-specParamVal2 = [getS tank_length_max, E (Int 50) +:+ (unwrap $ getUnit tank_length)]
-specParamVal3 = [E $ C diam :/ C tank_length_min, E (Dbl 0.002)]
-specParamVal4 = [E $ C diam :/ C tank_length_max, E (Int 200)]
-specParamVal5 = [S "minfrac", E $ Int 10 :^ (Int (-6))]
-specParamVal6 = [getS htFusion_min, E (Dbl 0.001) +:+ (unwrap $ getUnit pcm_HTC)]
-specParamVal7 = [getS pcm_density_min, E (Int 500) +:+ (unwrap $ getUnit pcm_density)]
-specParamVal8 = [getS pcm_density_max, E (Int 20000) +:+ (unwrap $ getUnit pcm_density)]
-specParamVal9 = [getS htCap_S_P_min, E (Int 100) +:+ (unwrap $ getUnit htCap_S_P)]
-specParamVal10 = [getS htCap_S_P_max, E (Int 4000) +:+ (unwrap $ getUnit htCap_S_P)]
-specParamVal11 = [getS htCap_L_P_min, E (Int 100) +:+ (unwrap $ getUnit htCap_L_P)]
-specParamVal12 = [getS htCap_L_P_max, E (Int 5000) +:+ (unwrap $ getUnit htCap_L_P)]
-specParamVal13 = [getS coil_SA_max, P (Greek Pi_L) +:+
-  sParen (E ((C diam :/ Int 2) :^ (Int 2))) +:+ (unwrap $ getUnit coil_SA)]
-specParamVal14 = [getS w_density_min, E (Int 950) +:+ (unwrap $ getUnit w_density)]
-specParamVal15 = [getS w_density_max, E (Int 1000) +:+ (unwrap $ getUnit w_density)]
-specParamVal16 = [getS htCap_W_min, E (Int 4170) +:+ (unwrap $ getUnit htCap_W)]
-specParamVal17 = [getS htCap_W_max, E (Int 4210) +:+ (unwrap $ getUnit htCap_W)]
-specParamVal18 = [getS coil_HTC_min, E (Int 10) +:+ (unwrap $ getUnit coil_HTC)]
-specParamVal19 = [getS coil_HTC_max, E (Int 10000) +:+ (unwrap $ getUnit coil_HTC)]
-specParamVal20 = [getS pcm_HTC_min, E (Int 10) +:+ (unwrap $ getUnit pcm_HTC)]
-specParamVal21 = [getS pcm_HTC_max, E (Int 10000) +:+ (unwrap $ getUnit pcm_HTC)]
-specParamVal22 = [getS time_final_max, E (Int 86400) +:+ (unwrap $ getUnit time_final)]
---}
+-- See Section 8 - Specification Parameter Values for table 3 from case study
 
 ------------------------------
 -- Data Constraint: Table 3 --
 ------------------------------
 
-s4_2_6_table3 :: Contents
-s4_2_6_table3 = outDataConstTbl outputConstraints
---FIXME: add "(by A11)" in Physical Constraints of `temp_W` and `temp_PCM`?
-
-outputConstraints :: [UncertQ]
-outputConstraints = [temp_W, temp_PCM, w_E, pcm_E]
-
--- Other Notes:
----- Will there be a way to have asterisks for certain pieces of the table?
-
 ----------------------------------------------
 -- 4.2.7 : Properties of A Correct Solution --
 ----------------------------------------------
-
-s4_2_7 :: Section
-s4_2_7 = SRS.propCorSol (s4_2_7_deriv) []
-
-s4_2_7_deriv :: [Contents]
-s4_2_7_deriv = [s4_2_7_deriv_1, s4_2_7_deriv_2, s4_2_7_deriv_3,
-  s4_2_7_deriv_4, s4_2_7_deriv_5]
 
 s4_2_7_deriv_1, s4_2_7_deriv_2, s4_2_7_deriv_3,
   s4_2_7_deriv_4, s4_2_7_deriv_5 :: Contents
@@ -1063,33 +1414,16 @@ s4_2_7_deriv_5 = foldlSP [titleize' equation, S "(reference) and",
 -- Section 5 : REQUIREMENTS --
 ------------------------------
 
-s5 :: Section
-s5 = reqF [s5_1, s5_2]
-
 -----------------------------------
 -- 5.1 : Functional Requirements --
 -----------------------------------
 
-s5_1 :: Section
-s5_1 = SRS.funcReq s5_1_list []
-
-s5_1_list :: [Contents]
-s5_1_list = [s5_1_1_Sent, s5_1_1_Table, s5_1_2_Sent, s5_1_2_Eqn1, s5_1_2_Eqn2, s5_1_Reqs]
-
-s5_1_1_Sent, s5_1_1_Table, s5_1_2_Sent, s5_1_2_Eqn1, s5_1_2_Eqn2, s5_1_Reqs :: Contents
+s5_1_1_Sent, s5_1_1_Table, s5_1_2_Sent, s5_1_2_Eqn1, s5_1_2_Eqn2 :: Contents
 
 s5_1_1_Sent = Enumeration (Simple [(acroR 1, Flat (foldlSentCol
   [titleize input_, S "the following", plural quantity `sC`
   S "which define the", phrase tank, plural parameter `sC` S "material",
   plural property `sAnd` S "initial", plural condition]))])
-
-s5_1_1_Table = (Table [titleize symbol_, titleize unit_, titleize description]
-  (mkTable
-  [getS,
-  --(\ch -> Sy (unit_symb ch)),
-  unit'2Contents,
-  phrase] (map qs inputConstraints))
-  (titleize input_ +:+ titleize variable +:+ titleize requirement) False)
 
 s5_1_2_Sent = Enumeration (Simple [(acroR 2, Flat (foldlSent
   [S "Use the", plural input_, S "in", acroR 1, S "to find the",
@@ -1103,12 +1437,8 @@ s5_1_2_Eqn1 = EqnBlock ((C w_mass) := (C w_vol) * (C w_density) := ((C tank_vol)
 
 s5_1_2_Eqn2 = EqnBlock ((C pcm_mass) := (C pcm_vol) * (C pcm_density))
 
-s5_1_Reqs = enumSimple 3 (short requirement) $ map foldlSent reqList
 -- Want to add req1 and req2 but they include a table and another enumeration
 -- so not sure how to implement yet
-
-reqList :: [[Sentence]]
-reqList = [req3, req4, req5, req6, req7, req8, req9, req10, req11]
 
 req3, req4, req5, req6, req7, req8, req9, req10, req11 :: [Sentence]
 
@@ -1179,18 +1509,7 @@ s5_2 = nonFuncReqF [performance] [correctness, verifiability,
 -- Section 6 : LIKELY CHANGES --
 --------------------------------
 
-s6 :: Section
-s6 = SRS.likeChg [s6_list] []
-
-s6_list :: Contents
-s6_list = enumSimple 1 (short likelyChg) $ map foldlSent s6_likeChg_list
-
-s6_likeChg_list :: [[Sentence]]
 likeChg1, likeChg2, likeChg3, likeChg4, likeChg5, likeChg6 :: [Sentence]
-s6_likeChg_list = [likeChg1, likeChg2, likeChg3, likeChg4, likeChg5, likeChg6]
-
-s6_start :: Int -> Sentence
-s6_start numVar = acroA numVar +:+ S "-"
 
 likeChg1 = [s6_start 4, short phsChgMtrl,
   S "is actually a poor", phrase CT.thermal_conductor `sC` S "so",
@@ -1228,17 +1547,6 @@ likeChg6 = [s6_start 15, S "Any real", phrase tank,
 -- Section 7 : TRACEABILITY MATRICES AND GRAPHS --
 --------------------------------------------------
 
-s7 :: Section
-s7 = traceMGF s7_refList s7_trailing
-  ([s7_table1, s7_table2, s7_table3] ++
-  (s7_intro2) ++ [s7_fig1, s7_fig2]) []
-
-s7_refList :: [Contents]
-s7_refList = [s7_table1, s7_table2, s7_table3]
-
-s7_trailing :: [Sentence]
-s7_trailing = [s7_trailing_1, s7_trailing_2, s7_trailing_3]
-
 s7_trailing_1, s7_trailing_2, s7_trailing_3 :: Sentence
 
 s7_trailing_1 = foldlSent [plural thModel `sC` plural genDefn `sC` plural dataDefn `sC`
@@ -1251,162 +1559,11 @@ s7_trailing_3 = foldlSent_ [plural thModel `sC` plural genDefn `sC` plural dataD
   plural inModel `sC` S "and", plural likelyChg, S "on the",
   plural assumption]
 
-s7_instaModel, s7_data, s7_funcReq, s7_likelyChg, s7_dataDefs, s7_genDefs,
-  s7_assump, s7_theories :: [String]
-  
-s7_dataRef, s7_funcReqRef, s7_instaModelRef, s7_assumpRef, s7_theoriesRef,
-  s7_dataDefRef, s7_likelyChgRef, s7_genDefRef :: [Sentence]
-
-s7_instaModel = ["IM1", "IM2", "IM3", "IM4"]
-s7_instaModelRef = map (refFromType Theory swhsSymMap) swhsInModels
-
-s7_funcReq = ["R1", "R2", "R3", "R4", "R5", "R6", "R7", "R8", "R9", "R10",
-  "R11"]
-s7_funcReqRef = makeListRef s7_funcReq s5_1
-
-s7_data = ["Data Constraints"]
-s7_dataRef = [makeRef s4_2_6_table1] --FIXME: Reference section?
-
-s7_assump = ["A1", "A2", "A3", "A4", "A5", "A6", "A7", "A8", "A9", "A10",
-  "A11", "A12", "A13", "A14", "A15", "A16", "A17", "A18", "A19"]
-s7_assumpRef = makeListRef s7_assump s4_2_1
-
-s7_theories = ["T1", "T2", "T3"]
-s7_theoriesRef = map (refFromType Theory swhsSymMap) tModels
-
-s7_genDefs = ["GD1", "GD2"]
-s7_genDefRef = map (refFromType Theory swhsSymMap) swhsGenDefs
-
-s7_dataDefs = ["DD1", "DD2", "DD3", "DD4"]
-s7_dataDefRef = map (refFromType Data swhsSymMap) swhsDataDefs
-
-s7_likelyChg = ["LC1", "LC2", "LC3", "LC4", "LC5", "LC6"]
-s7_likelyChgRef = makeListRef s7_likelyChg s6
-
-{-Traceability Matrix 1-}
-
-s7_row_t1 :: [String]
-s7_row_t1 = s7_theories ++ s7_genDefs ++ s7_dataDefs ++ s7_instaModel
-
-s7_row_header_t1 :: [Sentence]
-s7_row_header_t1 = zipWith itemRefToSent s7_row_t1 
-  (s7_theoriesRef ++ s7_genDefRef ++ s7_dataDefRef ++ s7_instaModelRef)
-
-s7_columns_t1 :: [[String]]
-s7_columns_t1 = [s7_t1_T1, s7_t1_T2, s7_t1_T3, s7_t1_GD1, s7_t1_GD2, s7_t1_DD1,
-  s7_t1_DD2, s7_t1_DD3, s7_t1_DD4, s7_t1_IM1, s7_t1_IM2, s7_t1_IM3, s7_t1_IM4]
-
-s7_t1_T1, s7_t1_T2, s7_t1_T3, s7_t1_GD1, s7_t1_GD2, s7_t1_DD1, s7_t1_DD2,
-  s7_t1_DD3, s7_t1_DD4, s7_t1_IM1, s7_t1_IM2, s7_t1_IM3, s7_t1_IM4 :: [String]
-
---list of each item that "X" item requires for traceability matrix
-s7_t1_T1 = []
-s7_t1_T2 = ["T3"]
-s7_t1_T3 = []
-s7_t1_GD1 = []
-s7_t1_GD2 = ["T1"]
-s7_t1_DD1 = ["GD1"]
-s7_t1_DD2 = ["GD1"]
-s7_t1_DD3 = []
-s7_t1_DD4 = ["DD3"]
-s7_t1_IM1 = ["GD2", "DD1", "DD2", "IM2"]
-s7_t1_IM2 = ["GD2", "DD2", "DD4", "IM1", "IM4"]
-s7_t1_IM3 = ["T2"]
-s7_t1_IM4 = ["T2", "T3", "DD2", "DD3", "DD4", "IM2"]
-
 s7_table1 :: Contents
 s7_table1 = Table (EmptyS:s7_row_header_t1)
   (makeTMatrix (s7_row_header_t1) (s7_columns_t1) (s7_row_t1))
   (showingCxnBw traceyMatrix
   (titleize' item +:+ S "of Different" +:+ titleize' section_)) True
-
-{-Traceability Matrix 2-}
-
-s7_row_t2 :: [String]
-s7_row_t2 = s7_instaModel ++ s7_data ++ s7_funcReq
-
---column header
-s7_row_header_t2 :: [Sentence]
-s7_row_header_t2 = zipWith itemRefToSent s7_row_t2 
-  (s7_instaModelRef ++ s7_dataRef ++ s7_funcReqRef)
-
---row header
-s7_col_header_t2 :: [Sentence]
-s7_col_header_t2 = zipWith itemRefToSent (s7_instaModel ++ s7_funcReq)
-  (s7_instaModelRef ++ s7_funcReqRef)
-
-s7_columns_t2 :: [[String]]
-s7_columns_t2 = [s7_t2_IM1, s7_t2_IM2, s7_t2_IM3, s7_t2_IM4, s7_t2_R1, 
-  s7_t2_R2, s7_t2_R3, s7_t2_R4, s7_t2_R5, s7_t2_R6, s7_t2_R7, s7_t2_R8, 
-  s7_t2_R9, s7_t2_R10, s7_t2_R11]
-
-s7_t2_IM1, s7_t2_IM2, s7_t2_IM3, s7_t2_IM4, s7_t2_R1, s7_t2_R2,
-  s7_t2_R3, s7_t2_R4, s7_t2_R5, s7_t2_R6, s7_t2_R7, s7_t2_R8, 
-  s7_t2_R9, s7_t2_R10, s7_t2_R11 :: [String]
-
---list of each item that "X" item requires for traceability matrix
-s7_t2_IM1 = ["IM2", "R1", "R2"]
-s7_t2_IM2 = ["IM1", "IM4", "R1", "R2"]
-s7_t2_IM3 = ["R1", "R2"]
-s7_t2_IM4 = ["IM2", "R1", "R2"]
-s7_t2_R1 = []
-s7_t2_R2 = ["R1"]
-s7_t2_R3 = ["Data Constraints"]
-s7_t2_R4 = ["IM1", "IM2", "R1", "R2"]
-s7_t2_R5 = ["IM1"]
-s7_t2_R6 = ["IM2"]
-s7_t2_R7 = ["IM3"]
-s7_t2_R8 = ["IM4"]
-s7_t2_R9 = ["IM3", "IM4"]
-s7_t2_R10 = ["IM2"]
-s7_t2_R11 = ["IM2"]
-
-s7_table2 :: Contents
-s7_table2 = Table (EmptyS:s7_row_header_t2)
-  (makeTMatrix (s7_col_header_t2) (s7_columns_t2) (s7_row_t2))
-  (showingCxnBw traceyMatrix
-  (titleize' requirement `sAnd` titleize' inModel)) True
-
-{-Traceability Matrix 3-}
-
-s7_row_t3 :: [String]
-s7_row_t3 = s7_assump
-
-s7_row_header_t3, s7_col_header_t3 :: [Sentence]
-s7_row_header_t3 = zipWith itemRefToSent s7_assump s7_assumpRef
-
-s7_col_header_t3 = zipWith itemRefToSent
-  (s7_theories ++ s7_genDefs ++ s7_dataDefs ++ s7_instaModel ++ s7_likelyChg)
-  (s7_theoriesRef ++ s7_genDefRef ++ s7_dataDefRef ++ s7_instaModelRef ++ s7_likelyChgRef)
-
-s7_columns_t3 :: [[String]]
-s7_columns_t3 = [s7_t3_T1, s7_t3_T2, s7_t3_T3, s7_t3_GD1, s7_t3_GD2, s7_t3_DD1, 
-  s7_t3_DD2, s7_t3_DD3, s7_t3_DD4, s7_t3_IM1, s7_t3_IM2, s7_t3_IM3, s7_t3_IM4,
-  s7_t3_LC1, s7_t3_LC2, s7_t3_LC3, s7_t3_LC4, s7_t3_LC5, s7_t3_LC6]
-
-s7_t3_T1, s7_t3_T2, s7_t3_T3, s7_t3_GD1, s7_t3_GD2, s7_t3_DD1, s7_t3_DD2, s7_t3_DD3,
-  s7_t3_DD4, s7_t3_IM1, s7_t3_IM2, s7_t3_IM3, s7_t3_IM4, s7_t3_LC1, s7_t3_LC2,
-  s7_t3_LC3, s7_t3_LC4, s7_t3_LC5, s7_t3_LC6 :: [String]
-
-s7_t3_T1  = ["A1"]
-s7_t3_T2  = []
-s7_t3_T3  = []
-s7_t3_GD1 = ["A2"]
-s7_t3_GD2 = ["A3", "A4", "A5", "A6"]
-s7_t3_DD1 = ["A7", "A8", "A9"]
-s7_t3_DD2 = ["A3", "A4", "A10"]
-s7_t3_DD3 = []
-s7_t3_DD4 = []
-s7_t3_IM1 = ["A11", "A12", "A14", "A15", "A16", "A19"]
-s7_t3_IM2 = ["A12", "A13", "A16", "A17", "A18"]
-s7_t3_IM3 = ["A14", "A19"]
-s7_t3_IM4 = ["A13", "A18"]
-s7_t3_LC1 = ["A4"]
-s7_t3_LC2 = ["A8"]
-s7_t3_LC3 = ["A9"]
-s7_t3_LC4 = ["A11"]
-s7_t3_LC5 = ["A12"]
-s7_t3_LC6 = ["A15"]
 
 s7_table3 :: Contents
 s7_table3 = Table (EmptyS:s7_row_header_t3)
@@ -1442,21 +1599,9 @@ s7_fig2 = Figure (showingCxnBw traceyGraph (titleize' requirement `sC`
 -------------------------------------------------
 -- Section 8 :  Specification Parameter Values --
 -------------------------------------------------
-s8 :: Section
-s8 = valsOfAuxConstantsF progName specParamValList
-
 ----------------------------
 -- Section 9 : References --
 ----------------------------
-
-s9 :: Section
-s9 = SRS.reference [s9_refs] []
-
-s9_refs :: Contents
-s9_refs = mkRefsList 1 $ map foldlsC s9_refList
-
-s9_refList :: [[Sentence]]
-s9_refList = [ref1, ref2, ref3, ref4, ref5, ref6]
 
 ref1, ref2, ref3, ref4, ref5, ref6 :: [Sentence]
 

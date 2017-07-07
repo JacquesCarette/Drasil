@@ -146,10 +146,6 @@ s6_1_1_bullets_loadSubSec = [Nested (((at_start load) :+: S ":"))
   ++ 
   map tAndDOnly (drop 2 loadTypes))]
 
---Used in "Likely Changes" Section--
-s8_list :: Contents
-s8_list = enumSimple 1 (short likelyChg) s8_likelychg_list
-
 --Used in "Goal Statements" Section--
 s6_1_3_list :: Contents
 s6_1_3_list = enumSimple 1 (short goalStmt) s6_1_3_list_goalStmt1
@@ -632,37 +628,49 @@ s7_2_intro = foldlSP [
 
 {--LIKELY CHANGES--}
 
-s8 = SRS.likeChg [s8_list] []
+s8 = SRS.likeChg s8_list []
 
---Considered "dead" knowldege?
-s8_likelychg_list :: [Sentence]
-s8_likelychg_list = [s8_likelychg1 (blastRisk), s8_likelychg2, s8_likelychg3,
+s8_list :: [Contents]
+s8_list = acroNumGen likelyChanges_SRS 1
+
+mkLklyChnk :: String -> Sentence -> Contents
+mkLklyChnk id desc = LikelyChange (LCChunk (nw $ npnc id $ nounPhraseSent desc) []) EmptyS
+
+likelyChanges_SRS :: [Contents]
+likelyChanges_SRS = [s8_likelychg1, s8_likelychg2, s8_likelychg3,
   s8_likelychg4, s8_likelychg5]
 
-s8_likelychg1 :: NamedChunk -> Sentence
-s8_likelychg2, s8_likelychg3, s8_likelychg4, 
-  s8_likelychg5 :: Sentence
+s8_likelychg1, s8_likelychg2, s8_likelychg3, s8_likelychg4, s8_likelychg5 :: Contents
 
-s8_likelychg1 mainConcept = foldlSent [acroA 3 `sDash` S "The", 
+s8_likelychg1 = mkLklyChnk "s8_likelychg1" (lc1Desc (blastRisk))
+s8_likelychg2 = mkLklyChnk "s8_likelychg2" (lc2Desc)
+s8_likelychg3 = mkLklyChnk "s8_likelychg3" (lc3Desc)
+s8_likelychg4 = mkLklyChnk "s8_likelychg4" (lc4Desc)
+s8_likelychg5 = mkLklyChnk "s8_likelychg5" (lc5Desc)
+
+lc1Desc :: NamedChunk -> Sentence
+lc2Desc, lc3Desc, lc4Desc, lc5Desc :: Sentence
+
+lc1Desc mainConcept = foldlSent [acroA 3 `sDash` S "The", 
   phrase system, S "currently only calculates for external" +:+.
   phrase mainConcept, S "In the future", plural calculation,
   S "can be added for the internal", phrase mainConcept]
 
-s8_likelychg2 = foldlSent [acroA 4 `sC` (acroA 8 `sDash`
+lc2Desc = foldlSent [acroA 4 `sC` (acroA 8 `sDash`
   S "Currently the"), plural value, S "for",
   foldlList (map getS (take 3 assumption4_constants)),
   S "are assumed to be the same for all glass. In the", 
   S "future these", plural value, S "can be changed to",
   phrase variable, plural input_]
 
-s8_likelychg3 = foldlSent [acroA 5 `sDash` S "The", phrase software, 
+lc3Desc = foldlSent [acroA 5 `sDash` S "The", phrase software, 
   S "may be changed to accommodate more than a single", phrase lite]
 
-s8_likelychg4 = foldlSent [acroA 6 `sDash` S "The", phrase software, 
+lc4Desc = foldlSent [acroA 6 `sDash` S "The", phrase software, 
   S "may be changed to accommodate more boundary", plural condition, 
   S "than 4-sided support"]
 
-s8_likelychg5 = foldlSent [acroA 7 `sDash` S "The", phrase software, 
+lc5Desc = foldlSent [acroA 7 `sDash` S "The", phrase software, 
   S "may be changed to consider more than just flexure of the glass"]
 
 {--TRACEABLITY MATRICES AND GRAPHS--}

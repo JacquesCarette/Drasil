@@ -302,10 +302,10 @@ siSys (SI sys _ _ _ _ _ _ _ _ _ _ _) = nw sys
 
 --BELOW IS IN THIS FILE TEMPORARILY--
 --Creates Contents using an id and description (passed in as a Sentence).
-makeAssump :: String -> Sentence -> Contents
-makeAssump id desc = Assumption (nw $ npnc id $ nounPhraseSent (desc)) EmptyS
+mkAssump :: String -> Sentence -> Contents
+mkAssump id desc = Assumption (nw $ npnc id $ nounPhraseSent (desc)) EmptyS
 
 --Creates Contents using an id and description (passed in as a String).
-makeAssump' :: String -> String -> Sentence -> Contents
-makeAssump' id desc x = Assumption (nw $ npnc id $ nounPhraseSP (desc)) x
+mkAssump' :: String -> String -> Sentence -> Contents
+mkAssump' id desc x = Assumption (nw $ npnc id $ nounPhraseSP (desc)) x
   

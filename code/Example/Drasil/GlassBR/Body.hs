@@ -427,16 +427,16 @@ assumptions :: [Contents]
 assumptions = [assumption1, assumption2, assumption3, assumption4, assumption5,
   assumption6, assumption7, assumption8]
 
-assumption1, assumption2, assumption3, assumption4, assumption5,
-  assumption6, assumption7, assumption8 :: Contents
-assumption1 = Assumption (nw $ npnc "assumption1" $ nounPhraseSent a1Desc)              EmptyS
-assumption2 = Assumption (nw $ npnc "assumption2" $ nounPhraseSent a2Desc)              EmptyS
-assumption3 = Assumption (nw $ npnc "assumption3" $ nounPhraseSent a3Desc)              EmptyS
-assumption4 = Assumption (nw $ npnc "assumption4" $ nounPhraseSent (a4Desc (load_dur))) EmptyS
-assumption5 = Assumption (nw $ npnc "assumption5" $ nounPhraseSent a5Desc)              EmptyS
-assumption6 = Assumption (nw $ npnc "assumption6" $ nounPhraseSent a6Desc)              EmptyS
-assumption7 = Assumption (nw $ npnc "assumption7" $ nounPhraseSent a7Desc)              EmptyS
-assumption8 = Assumption (nw $ npnc "assumption8" $ nounPhraseSent (a8Desc (loadDF)))   EmptyS
+assumption1, assumption2, assumption3, assumption4, assumption5, assumption6,
+  assumption7, assumption8 :: Contents
+assumption1 = mkAssump "assumption1" a1Desc
+assumption2 = mkAssump "assumption2" a2Desc
+assumption3 = mkAssump "assumption3" a3Desc
+assumption4 = mkAssump "assumption4" (a4Desc (load_dur))
+assumption5 = mkAssump "assumption5" a5Desc
+assumption6 = mkAssump "assumption6" a6Desc
+assumption7 = mkAssump "assumption7" a7Desc
+assumption8 = mkAssump "assumption8" (a8Desc (loadDF))
 
 a1Desc :: Sentence
 a1Desc = foldlSent [S "The standard E1300-09a for",

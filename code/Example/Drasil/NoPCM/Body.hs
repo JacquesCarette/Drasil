@@ -7,7 +7,7 @@ import Drasil.NoPCM.Definitions (ht_trans, srs_swhs)
 
 import Drasil.SWHS.Body (s2_3_knowlegde, s2_3_understanding, s2_4_intro,
   s3, physSyst1, physSyst2, s4_2_4_intro_end, s4_2_5_d1startPara,
-  s5_2, s6_start, s7_trailing, ref2, ref3, ref4, ref5, ref6)
+  s5_2, s7_trailing, ref2, ref3, ref4, ref5, ref6)
 import Drasil.SWHS.Concepts (progName, water, gauss_div, sWHT, tank, coil,
   transient, perfect_insul)
 import Drasil.SWHS.Unitals (w_vol, tank_length, tank_vol, tau_W, temp_W, w_mass,
@@ -28,7 +28,7 @@ import Language.Drasil
 import Data.Drasil.SI_Units
 import Data.Drasil.Authors
 import Data.Drasil.Utils (enumSimple, getS, mkRefsList, makeListRef, refFromType,
-  itemRefToSent, makeTMatrix, itemRefToSent, mkEnumAbbrevList, weave)
+  itemRefToSent, makeTMatrix, itemRefToSent, weave)
 import Data.Drasil.Concepts.Documentation
 import Data.Drasil.Concepts.Math (ode, unit_, rOfChng, equation)
 import Data.Drasil.Concepts.Software
@@ -76,7 +76,7 @@ s4, s4_1, s4_1_1, s4_1_2, s4_1_3, s4_2, {-s3, s3_1, -}
 
 s4_1_intro, s4_1_1_bullets, {-s3_1_intro, sys_context_fig, s3_2_intro, s3_3_intro, -}
   s4_1_2_list, s4_1_3_intro, s4_1_3_list, fig_tank,
-  s4_2_6_table1, s4_2_6_table2, s6_list, s9_refs :: Contents
+  s4_2_6_table1, s4_2_6_table2, s9_refs :: Contents
 
 --------------------------------
 --Section 1 : REFERENCE MATERIAL
@@ -549,7 +549,7 @@ s5 = reqF [s5_1, s5_2]
 s5_1 = SRS.funcReq s5_1_list [] --TODO: Placeholder values until content can be added
 
 s5_1_list_words, s5_1_list, s5_1_list_items :: [Contents]
-s5_1_list = weave [s5_1_list_words, s5_1_list_items]
+s5_1_list = weave [acroNumGen s5_1_list_words 1, s5_1_list_items]
 
 s5_1_list_items = [
 
@@ -564,34 +564,56 @@ s5_1_list_items = [
   (((C diam) / 2) * (C tank_length) * (C w_density)))
   ]
 
-s5_1_list_words = map (\x -> Enumeration $ Simple [x])
-  $ mkEnumAbbrevList 1 (short requirement) $ map foldlSent_ [
+-- s5_1_list_words = map (\x -> Enumeration $ Simple [x])
+  -- $ mkEnumAbbrevList 1 (short requirement) $ map foldlSent_ [
 
-  [titleize input_, S "the following", plural quantity `sC`
-  S "which define the", phrase tank, S "parameters, material",
-  plural property, S "and initial" +: plural condition],
+  -- [titleize input_, S "the following", plural quantity `sC`
+  -- S "which define the", phrase tank, S "parameters, material",
+  -- plural property, S "and initial" +: plural condition],
 
-  [S "Use the", plural input_, S "in", acroR 1, S "to find the",
-  phrase mass, S "needed for", acroIM 1, S "to", acroIM 4 `sC`
-  S "as follows, where", getS w_vol `isThe` phrase w_vol,
-  S "and" +: (getS tank_vol `isThe` phrase tank_vol)],
+  -- [S "Use the", plural input_, S "in", acroR 1, S "to find the",
+  -- phrase mass, S "needed for", acroIM 1, S "to", acroIM 4 `sC`
+  -- S "as follows, where", getS w_vol `isThe` phrase w_vol,
+  -- S "and" +: (getS tank_vol `isThe` phrase tank_vol)],
 
-  [S "Verify that the", plural input_, S "satisfy the required",
-  phrase physicalConstraint, S "shown in" +:+. makeRef s4_2_6_table1],
+  -- [S "Verify that the", plural input_, S "satisfy the required",
+  -- phrase physicalConstraint, S "shown in" +:+. makeRef s4_2_6_table1],
 
-  [titleize' output_, S "and", plural input_, plural quantity, S "and derived",
-  plural quantity, S "in the following list: the", plural quantity, S "from",
-  (acroR 1) `sC` S "the", phrase mass, S "from", acroR 2, S "and", getS tau_W +:+.
-  sParen(S "from" +:+ acroIM 1)],
+  -- [titleize' output_, S "and", plural input_, plural quantity, S "and derived",
+  -- plural quantity, S "in the following list: the", plural quantity, S "from",
+  -- (acroR 1) `sC` S "the", phrase mass, S "from", acroR 2, S "and", getS tau_W +:+.
+  -- sParen(S "from" +:+ acroIM 1)],
 
-  [S "Calculate and output the", phrase temp, S "of the", phrase water,
-  sParen (getS temp_W :+: sParen (getS time)), S "over the", phrase simulation +:+.
-  phrase time],
+  -- [S "Calculate and output the", phrase temp, S "of the", phrase water,
+  -- sParen (getS temp_W :+: sParen (getS time)), S "over the", phrase simulation +:+.
+  -- phrase time],
 
-  [S "Calculate and", phrase output_, S "the", phrase w_E,
-  sParen (getS w_E :+: sParen (getS time)), S "over the",
-  phrase simulation, phrase time +:+. sParen (S "from" +:+ acroIM 3)]
-  ]
+  -- [S "Calculate and", phrase output_, S "the", phrase w_E,
+  -- sParen (getS w_E :+: sParen (getS time)), S "over the",
+  -- phrase simulation, phrase time +:+. sParen (S "from" +:+ acroIM 3)]
+  -- ]
+
+s5_1_list_words = [req1, req2, req3, req4, req5, req6]
+
+req1, req2, req3, req4, req5, req6 :: Contents
+
+--Empty list is supposed to take a ModuleChunk. Not sure what to put there.
+req1 = Requirement (ReqChunk (nw $ npnc "req1" $ nounPhraseSP ("Input the following " ++
+  "quantities, which define the tank parameters, material properties and initial " ++
+  "conditions:")) []) EmptyS
+req2 = Requirement (ReqChunk (nw $ npnc "req2" $ nounPhraseSP ("Use the inputs " ++
+  "in R1 to find the mass needed for IM1 as follows, where Vw is the volume of " ++
+  "water in the tank and Vt is the volume of the tank:")) []) EmptyS
+req3 = Requirement (ReqChunk (nw $ npnc "req3" $ nounPhraseSP ("Verify that the " ++
+  "inputs satisfy the required physical constraints shown in Table 1.")) []) EmptyS
+req4 = Requirement (ReqChunk (nw $ npnc "req4" $ nounPhraseSP ("Output and input " ++
+  "quantities and derived quantities in the following list: the quantities from " ++
+  "R1, the mass from R2 and tauW from IM1")) []) EmptyS
+req5 = Requirement (ReqChunk (nw $ npnc "req5" $ nounPhraseSP ("Calculate and " ++
+  "output the temperature of the water (Tw(t)) over the simulation time (from IM1)."))
+  []) EmptyS
+req6 = Requirement (ReqChunk (nw $ npnc "req6" $ nounPhraseSP ("Calculate and output " ++
+  "the energy in the water (Ew(t)) over the simulation time (from IM2).")) []) EmptyS
 
 -------------------------------------------
 --Section 5.2 : NON-FUNCTIONAL REQUIREMENTS
@@ -608,31 +630,51 @@ s5_1_list_words = map (\x -> Enumeration $ Simple [x])
 --Section 6 : LIKELY CHANGES
 ----------------------------
 
-s6 = SRS.likeChg [s6_list] []
+s6 = SRS.likeChg s6_list []
 
-s6_list = enumSimple 1 (short likelyChg) $ map foldlSent s6_likeChg_list
+s6_list :: [Contents]
+s6_list = acroNumGen s6_likeChg_list 1
 
-s6_likeChg_list :: [[Sentence]]
-likeChg1, likeChg2, likeChg3, likeChg4 :: [Sentence]
-
+s6_likeChg_list :: [Contents]
 s6_likeChg_list = [likeChg1, likeChg2, likeChg3, likeChg4]
 
-likeChg1 = [s6_start 7, S "The", phrase temp_C,
-  S "will change over", S "course" `ofThe` S "day, depending",
-  S "on the", phrase energy, S "received from the sun"]
+likeChg1, likeChg2, likeChg3, likeChg4 :: Contents
 
-likeChg2 = [s6_start 8, S "The", phrase temp_C,
-  S "will actually change along its length as the",
-  phrase water, S "within it cools"]
+--Empty list is supposed to take a ModuleChunk. Not sure what to put there.
+likeChg1 = LikelyChange (LCChunk (nw $ npnc "likeChg1" $ nounPhraseSP ("The temperature " ++
+  "of the coil will change over the course of the day, depending on the energy " ++
+  "recieved from the sun.")) []) EmptyS
+likeChg2 = LikelyChange (LCChunk (nw $ npnc "likeChg2" $ nounPhraseSP ("The temperature " ++
+  "of the coil will actually change along its length as the water within it " ++
+  "cools.")) []) EmptyS
+likeChg3 = LikelyChange (LCChunk (nw $ npnc "likeChg3" $ nounPhraseSP ("The model " ++
+  "currently only accounts for charging of the tank. A more complete " ++
+  "model would also account for discharging of the tank.")) []) EmptyS
+likeChg4 = LikelyChange (LCChunk (nw $ npnc "likeChg4" $ nounPhraseSP ("Any real tank " ++
+  "cannot be perfectly insulated and will lose heat.")) []) EmptyS
+-- s6_list = enumSimple 1 (short likelyChg) $ map foldlSent s6_likeChg_list
 
-likeChg3 = [s6_start 9, S "The", phrase model +:+.
-  S "currently only accounts for charging of the tank",
-  S "A more complete", phrase model, S "would also",
-  S "account for discharging of the tank"]
+-- s6_likeChg_list :: [[Sentence]]
+-- likeChg1, likeChg2, likeChg3, likeChg4 :: [Sentence]
 
-likeChg4 = [s6_start 11, S "Any real", phrase tank,
-  S "cannot be perfectly insulated and will lose",
-  phrase heat]
+-- s6_likeChg_list = [likeChg1, likeChg2, likeChg3, likeChg4]
+
+-- likeChg1 = [s6_start 7, S "The", phrase temp_C,
+  -- S "will change over", S "course" `ofThe` S "day, depending",
+  -- S "on the", phrase energy, S "received from the sun"]
+
+-- likeChg2 = [s6_start 8, S "The", phrase temp_C,
+  -- S "will actually change along its length as the",
+  -- phrase water, S "within it cools"]
+
+-- likeChg3 = [s6_start 9, S "The", phrase model +:+.
+  -- S "currently only accounts for charging of the tank",
+  -- S "A more complete", phrase model, S "would also",
+  -- S "account for discharging of the tank"]
+
+-- likeChg4 = [s6_start 11, S "Any real", phrase tank,
+  -- S "cannot be perfectly insulated and will lose",
+  -- phrase heat]
 
 
 

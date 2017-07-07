@@ -51,7 +51,7 @@ data Contents = Table [Sentence] [[Sentence]] Title Bool
                | Module ModuleChunk
                | Requirement ReqChunk Sentence
                | Assumption AssumpChunk Sentence
-               | LikelyChange LCChunk
+               | LikelyChange LCChunk Sentence
                | UnlikelyChange UCChunk
      --        UsesHierarchy [(ModuleChunk,[ModuleChunk])]
                | Graph [(Sentence, Sentence)] (Maybe Width) (Maybe Height) Label
@@ -111,7 +111,7 @@ instance LayoutObj Contents where
   refName (Module mc)         = S $ "M" ++ alphanumOnly (mc ^. id)
   refName (Requirement rc _)    = S $ "R" ++ alphanumOnly (rc ^. id)
   refName (Assumption ac _)     = S $ "A" ++ alphanumOnly (ac ^. id)
-  refName (LikelyChange lcc)  = S $ "LC" ++ alphanumOnly (lcc ^. id)
+  refName (LikelyChange lcc _)  = S $ "LC" ++ alphanumOnly (lcc ^. id)
   refName (UnlikelyChange ucc)= S $ "UC" ++ alphanumOnly (ucc ^. id)
 --  refName (UsesHierarchy _)   = S $ "Figure:UsesHierarchy"
   refName (Graph _ _ _ l)     = S "Figure:" :+: inferName l
@@ -126,7 +126,7 @@ instance LayoutObj Contents where
   rType (Module _)         = Mod
   rType (Requirement _ _)    = Req
   rType (Assumption _ _)     = Assump
-  rType (LikelyChange _)   = LC
+  rType (LikelyChange _ _)   = LC
   rType (UnlikelyChange _) = UC
 --  rType (UsesHierarchy _)  = Fig
   rType (Graph _ _ _ _)    = Fig

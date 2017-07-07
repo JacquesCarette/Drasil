@@ -137,7 +137,7 @@ mgLikelyChanges :: [LCChunk] -> Section
 mgLikelyChanges lccs =
   Section (titleize' likelyChg) (
     [ Con mgLikelyChangesIntro ]
-    ++ map (Con . LikelyChange) lccs
+    ++ map (Con . (\x -> LikelyChange x EmptyS)) lccs
   )
 
 mgUnlikelyChanges :: [UCChunk] -> Section
@@ -266,7 +266,7 @@ mgTraceLC lccs = Table [titleize likelyChg, S "Modules"]
   (map mgLCTraceEntry lccs) (S "Trace Between Likely Changes and Modules") True
 
 mgLCTraceEntry :: LCChunk -> [Sentence]
-mgLCTraceEntry lcc = [ makeRef (LikelyChange lcc),
+mgLCTraceEntry lcc = [ makeRef (LikelyChange lcc EmptyS),
                        mgListModules (lcRelatedModules lcc)
                      ]
 

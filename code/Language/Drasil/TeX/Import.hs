@@ -203,7 +203,7 @@ lay x@(Requirement r _)     =
   T.Requirement (spec (phrase (r ^. term))) (spec $ refName x)
 lay x@(Assumption a _)      = 
   T.Assumption (spec (phrase $ a ^. term)) (spec $ refName x)
-lay x@(LikelyChange lc)   = 
+lay x@(LikelyChange lc _)   = 
   T.LikelyChange (spec (phrase $ lc ^. term))
   (spec $ refName x)
 lay x@(UnlikelyChange ucc)= 

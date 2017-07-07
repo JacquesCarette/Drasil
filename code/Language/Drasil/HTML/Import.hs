@@ -214,9 +214,9 @@ lay (Enumeration cs)  = H.List $ makeL cs
 lay x@(Figure c f)    = H.Figure (spec (refName x)) (spec c) f
 lay x@(Module m)      = H.Module (formatName m) (spec $ refName x)
 lay (Graph _ _ _ _)   = H.Paragraph (H.EmptyS)  -- need to implement!
-lay (Requirement _ _)   = H.Paragraph (H.EmptyS)  -- need to implement!
+lay x@(Requirement r id)   = H.Requirement (spec (phrase $ r ^. term)) (spec $ refName x) (spec id)
 lay x@(Assumption a id)    = H.Assumption (spec (phrase $ a ^. term)) (spec $ refName x) (spec id)
-lay (LikelyChange _)  = H.Paragraph (H.EmptyS)  -- need to implement!
+lay x@(LikelyChange lc id)  = H.LikelyChange (spec (phrase $ lc ^. term)) (spec $ refName x) (spec id)
 lay (UnlikelyChange _)= H.Paragraph (H.EmptyS)  -- need to implement!
 lay (TMod ps rf r)    = H.Definition (Theory r) 
   (map (\(x,y) -> (x, map lay y)) ps) (spec rf)

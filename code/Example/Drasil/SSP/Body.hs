@@ -489,19 +489,26 @@ s4_2_5_IMods = concat $ weave [map (\x -> [sspSymMapT x]) sspIMods, --FIXME: ? i
 fctSftyDerivation, nrmShrDerivation, intrSlcDerivation,
   rigDisDerivation, rigFoSDerivation :: [Contents]
 
-fctSftyDerivation = [foldlSP [S "Using", eqN 21, S "from section 4.2.5, rearranging,",
-  S "and applying the boundary condition that", getS intNormForce `sAnd` getS intNormForce, --FIXME: Index
-  S "are equal to", E $ Int 0, S "an equation for the", phrase fs_rc, S "is found as",
-  eqN 12 `sC` S "also seen in", acroIM 1],
+fctSftyDerivation = [foldlSP [S "Using", eqN 21, S "from", S "section 4.2.5" `sC`
+  S "rearranging, and", boundaryCon `sC` S "an equation for the", phrase fs_rc,
+  S "is found as", eqN 12 `sC` S "also seen in", acroIM 1],
   
   EqnBlock fcSfty_rel,
   
-  foldlSP [S "The constants", getS mobShrC `sAnd` getS shrResC, S "described in", eqN 20 `sAnd` eqN 19, S "are functions of the unknowns: the",
-  getTandS normToShear, S "(IM2) and the Factor of Safety itself", getS fs, S "(IM1)"]
-  ]
+  fUnknowns]
 
-nrmShrDerivation = [foldlSP [S "The last static equation of T2 the moment equilibrium of GD6 about the midpoint of the base is",
-  S "taken, with the assumption of GD5. Results in", eqN 13],
+boundaryCon :: Sentence
+boundaryCon = foldlSent_ [S "applying the boundary condition that", --FIXME: Index
+  getS intNormForce `sAnd` getS intNormForce,  S "are equal to", E $ Int 0]
+
+fUnknowns :: Contents
+fUnknowns = foldlSP [S "The constants", getS mobShrC `sAnd` getS shrResC, S "described in",
+  eqN 20 `sAnd` eqN 19, S "are functions of the unknowns: the",
+  getTandS normToShear, sParen (acroIM 2) `andThe` getTandS fs, sParen (acroIM 1)]
+
+nrmShrDerivation = [foldlSP [S "Taking the last static equation of", acroT 2,
+  S "with the", phrase momentEql `sOf` acroGD 6, S "about the midpoint of the base",
+  S "and the assumption of", acroGD 5, S "results in", eqN 13],
   
   EqnBlock momEql_rel, --FIXME: this is not *exactly* the equation but very similar
   --Need more simbols (z) to finish
@@ -509,11 +516,12 @@ nrmShrDerivation = [foldlSP [S "The last static equation of T2 the moment equili
   foldlSP [S "The equation in terms of", getS normToShear, S "leads to", eqN 14],
   
   EqnBlock $
-  C normToShear := momEql_rel / ((C baseWthX / Int 2) * (C intNormForce * C scalFunc + C intNormForce * C scalFunc)), --FIXME: remove Int 0 from momEql_rel
+  C normToShear := momEql_rel / ((C baseWthX / Int 2) * --FIXME: remove Int 0 from momEql_rel
+  (C intNormForce * C scalFunc + C intNormForce * C scalFunc)), 
   
-  foldlSP [S "Taking a summation of each slice, and considering the boundary conditions that E0 and En are",
-  S "equal to zero, a general equation for the constant", getS normToShear, S "is developed in", eqN 15 `sC` S "also found in",
-  S "IM2"],
+  foldlSP [S "Taking a summation of each slice, and", boundaryCon `sC`
+  S "a general equation for the constant", getS normToShear, S "is developed in",
+  eqN 15 `sC` S "also found in", acroIM 2], --NOTE: "Taking this with that and the assumption of _ to get equation #" pattern
   
   EqnBlock $
   C normToShear := summation (Just (lI, Low $ Int 1, High $ C numbSlices))
@@ -523,12 +531,15 @@ nrmShrDerivation = [foldlSP [S "The last static equation of T2 the moment equili
   summation (Just (lI, Low $ Int 1, High $ C numbSlices))
   (C baseWthX * (C intNormForce * C scalFunc + C intNormForce * C scalFunc)),
   
-  foldlSP [S "Equation (15) for", getS normToShear `sC` S "is a function of the unknown interslice normal force", getS intNormForce, S "(IM3)"]
+  foldlSP [eqN 15, S "for", getS normToShear `sC` S "is a function of the unknown",
+  getTandS intNormForce, acroIM 3]
   ]
 
-intrSlcDerivation = [foldlSP [S "Taking the perpendicular force equilibrium of GD1 with the effective stress definition from T4",
-  S "that", E (C totNrmForce := C nrmFSubWat - C baseHydroForce) `sC` S "and the assumption of GD5 the equilibrium equation can be rewritten as",
-  S "equation (16)"],
+intrSlcDerivation = [foldlSP [S "Taking the", phrase normForcEq `sOf` acroGD 1,
+  S "with the", phrase effStress, S "definition from", acroT 4, --NOTE: "Taking this with that and the assumption of _ to get equation #" pattern
+  S "that", E (C totNrmForce := C nrmFSubWat - C baseHydroForce) `sC`
+  S "and the assumption of", acroGD 5, S "the equilibrium equation can be rewritten as",
+  eqN 16],
   
   EqnBlock $
   C nrmFSubWat := ((C slcWght :- C normToShear :* C scalFunc :* C intNormForce :+ 
@@ -540,8 +551,9 @@ intrSlcDerivation = [foldlSP [S "Taking the perpendicular force equilibrium of G
   C watrForce :+ C surfHydroForce :* sin (C surfAngle) :+ 
   C surfLoad :* sin (C impLoadAngle)) :* sin (C baseAngle)) - (C baseHydroForce),
   
-  foldlSP [S "Taking the parallel force equilibrium of GD2 with the definition of mobile shear from GD4 and",
-  S "the assumption of GD5, the equilibrium equation can be rewritten as equation (17)"],
+  foldlSP [S "Taking the", phrase bsShrFEq `sOf` acroGD 2, S "with the definition of",
+  phrase mobShr, S "from", acroGD 4, S "and", S "the assumption of", acroGD 5 `sC`
+  S "the equilibrium equation can be rewritten as", eqN 17], --NOTE: "Taking this with that and the assumption of _ to get equation #" pattern
   
   EqnBlock $
   ((C totNrmForce) * tan (C fricAngle) + (C cohesion) * (C baseWthX) * sec (C baseAngle)) / (C fs) := --FIXME: pull the left side of this from GD4
@@ -569,7 +581,7 @@ intrSlcDerivation = [foldlSP [S "Taking the perpendicular force equilibrium of G
   `sAnd` getS intShrForce `sC` S "as defined in", acroDD 10 `sAnd` acroDD 11,
   S "Making use of the constants, and with full equations found below in",
   eqN 19 `sAnd` eqN 20, S "respectively, then", eqN 18, S "can be simplified",
-  S "to", eqN 21 `sC` S "also seen in IM3"],
+  S "to", eqN 21 `sC` S "also seen in", acroIM 3],
   
   EqnBlock $
   (C shrResC) := ((C normToShear)*(C scalFunc) * cos (C baseAngle) - sin (C baseAngle)) * tan (C fricAngle) -
@@ -583,39 +595,47 @@ intrSlcDerivation = [foldlSP [S "Taking the perpendicular force equilibrium of G
   (C intNormForce) := ((C mobShrC)*(C intNormForce) + (C fs)*(C shearFNoIntsl)
   - (C shearRNoIntsl)) / (C shrResC),
   
-  foldlSP [S "The constants", getS mobShrC, S "and", getS shrResC, S "in", eqN 21, S "for", getS intNormForce, S "is a function of the unknown values, the interslice",
-  S "normal/shear force ratio", getS normToShear, S "(IM2), and the Factor of Safety", getS fs, S "(IM1)"]
-  ]
+  fUnknowns]
 
-rigDisDerivation = [foldlSP [S "Using the net force-displacement equilibrium equation of a slice from DD13, with the definitions",
-  S "of the stiffness matrices from DD12, and the force definitions from GD7, a broken down forcedisplacement",
-  S "equilibrium equation can be derived. Equation (22) gives the broken down equation",
-  S "in the x direction, and equation (23) gives the broken down equation in the y direction."],
+rigDisDerivation = [foldlSP [S "Using the net force-displacement equilibrium equation of a slice",
+  S "from", acroDD 13, S "with the definitions of the", S "stiffness matrices",
+  S "from", acroDD 12, S "and the force definitions",
+  S "from", acroGD 7 , S "a broken down force displacement equilibrium equation" +:+. S "can be derived",
+  eqN 22, S "gives the broken down equation in the x direction" `sC` S "and", eqN 23,
+  S "gives the broken down equation in the y direction"],
 
   EqnBlock fDisEq_rel, --FIXME: Original equations need indexing
   
-  foldlSP [S "Using the known input assumption of A2, the force variable definitions of DD1 to DD8 on the left",
-  S "side of the equations can be solved for. The only unknown in the variables to solve for the stiffness",
-  S "values from DD14 is the displacements. Therefore taking the equation from each slice a set of", E $ (Int 2) * (C numbSlices),
-  S "equations, with", E $ (Int 2) * (C numbSlices), S "unknown displacements in the x and y directions of each slice can be derived.",
-  S "Solutions for the displacements of each slice can then be found. The use of displacement in the",
-  S "definition of the stiffness values makes the equation implicit, which means an iterative solution",
+  foldlSP [S "Using the known input assumption of", acroA 2 `sC` S "the force",
+  S "variable definitions of", acroDD 1, S "to", acroDD 8, S "on the left",
+  S "side of the equations can be solved for. The only unknown in the variables",
+  S "to solve for the stiffness values from", acroDD 14 +:+. S "is the displacements",
+  S "Therefore taking the equation from each slice a set of", E $ (Int 2) * (C numbSlices),
+  S "equations, with", E $ (Int 2) * (C numbSlices), S "unknown displacements in the",
+  S "x and y directions of each slice can be derived. Solutions for the displacements",
+  S "of each slice can then be found. The use of displacement in the definition of the",
+  S "stiffness values makes the equation implicit, which means an iterative solution",
   S "method, with an initial guess for the displacements in the stiffness values is required"]
   ]
 
-rigFoSDerivation = [foldlSP [S "RFEM analysis can also be used to calculate the Factor of safety for the slope. For a slice element",
-  S "i the displacements", getS dx_i, S "and", getS dy_i `sC` S "are solved from the system of equations in IM4. The definition of",
-  getS rotatedDispl, S "as the rotation of the displacement vector", getS genDisplace{-FIXME: index i-}, S "is seen in GD9. This is",
-  S "used to find the displacements of the slice parallel to the base of the slice", getS shrDispl, S "in equation",
-  S "(24) and normal to the base of the slice", getS nrmDispl, S "in equation (25)"],
+rigFoSDerivation = [foldlSP [S "RFEM analysis can also be used to calculate the",
+  phrase fs, S "for the slope. For a slice element", getS index, S "the displacements",
+  getS dx_i, S "and", getS dy_i `sC` S "are solved from the system of equations in" +:+.
+  acroIM 4, S "The definition of", getS rotatedDispl, S "as the rotation of the",
+  S "displacement vector", getS genDisplace, S "is seen in" +:+. acroGD 9, S "This is", --FIXME: index i
+  S "used to find the displacements of the slice parallel to the base of the slice",
+  getS shrDispl `sIn` eqN 24, S "and normal to the base of the slice", getS nrmDispl,
+  S "in", eqN 25],
   
   EqnBlock $
   C shrDispl := cos(C baseAngle) * C dx_i + sin(C baseAngle) * C dy_i,
   EqnBlock $
   C nrmDispl := Neg (sin(C baseAngle)) * C dx_i + sin(C baseAngle) * C dy_i,
   
-  foldlSP [S "With the definition of normal stiffness from DD14 to find the normal stiffness of the base", getS nrmStiffBase,
-  S "and the now known base displacement perpendicular to the surface", getS nrmDispl, S "from equation (25), the",
+  foldlSP [S "With the definition of normal stiffness from", acroDD 14, --FIXME: grab nrmStiffBase's term name?
+  S "to find the normal stiffness of the base", getS nrmStiffBase,
+  S "and the now known base displacement perpendicular to the surface",
+  getS nrmDispl, S "from", eqN 25, S "the",
   S "normal base stress can be calculated from the force-displacement relationship of T5. Stress", getS normStress, S "is",
   S "used in place of force", getS genForce, S "as the stiffness hasn't been normalized for the length of the base. Results",
   S "in equation (26)"],

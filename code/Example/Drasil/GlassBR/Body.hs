@@ -519,18 +519,26 @@ s7 = reqF [s7_1, s7_2]
 
 s7_1 = SRS.funcReq (s7_1_list) []
 
+mkRequirement :: String -> Sentence -> Contents
+mkRequirement id desc = Requirement (ReqChunk (nw $ npnc id $ nounPhraseSent desc) []) EmptyS
+
+s7_1_list = (acroNumGen s7_1_listOfReqs 1) ++ s7_1_req6 ++ [s7_1_req1Table]
+
+s7_1_req1, s7_1_req2, s7_1_req3, s7_1_req4, s7_1_req5 :: Contents
+req1Desc, req2Desc, req3Desc, req4Desc :: Sentence
+req5Desc :: NamedChunk -> Sentence
 s7_1_req6 :: [Contents] --FIXME: Issue #327
-s7_1_req1, s7_1_req2, s7_1_req3, s7_1_req4 :: Sentence
-s7_1_req5 :: NamedChunk -> Sentence
 
-s7_1_list = [enumSimple 1 (getAcc requirement) (s7_1_listOfReqs)] ++ 
-  s7_1_req6 ++ [s7_1_req1Table]
+s7_1_listOfReqs :: [Contents]
+s7_1_listOfReqs = [s7_1_req1, s7_1_req2, s7_1_req3, s7_1_req4, s7_1_req5]
 
-s7_1_listOfReqs :: [Sentence]
-s7_1_listOfReqs = [s7_1_req1, s7_1_req2, s7_1_req3, s7_1_req4,
-  s7_1_req5 (output_)]
+s7_1_req1 = mkRequirement "s7_1_req1" req1Desc
+s7_1_req2 = mkRequirement "s7_1_req2" req2Desc
+s7_1_req3 = mkRequirement "s7_1_req3" req3Desc
+s7_1_req4 = mkRequirement "s7_1_req4" req4Desc
+s7_1_req5 = mkRequirement "s7_1_req5" (req5Desc (output_))
 
-s7_1_req1 = foldlSent [at_start input_, S "the", plural quantity, S "from",
+req1Desc = foldlSent [at_start input_, S "the", plural quantity, S "from",
   makeRef s7_1_req1Table `sC` S "which define the glass dimensions" `sC` 
   (glassTy ^. defn) `sC` S "tolerable", phrase probability,
   S "of failure and", (plural characteristic `ofThe` phrase blast)]
@@ -543,7 +551,7 @@ s7_1_req1Table = Table
    (at_start), unit'2Contents] requiredInputs)
   (S "Required Inputs following R1") True
 
-s7_1_req2 = foldlSent [S "The", phrase system,
+req2Desc = foldlSent [S "The", phrase system,
    S "shall set the known", plural value +: S "as follows",
    foldlList [(foldlsC (map getS assumption4_constants) `followA` 4),
      ((getS loadDF) `followA` 8), 
@@ -560,18 +568,18 @@ s7_1_req2 = foldlSent [S "The", phrase system,
 --FIXME:should constants, LDF, and LSF have some sort of field that holds
 -- the assumption(s) that're being followed?
 
-s7_1_req3 = foldlSent [S "The", phrase system, S "shall check the entered",
+req3Desc = foldlSent [S "The", phrase system, S "shall check the entered",
   plural inValue, S "to ensure that they do not exceed the",
   plural datumConstraint, S "mentioned in" +:+. 
   makeRef (SRS.datCon SRS.missingP []), S "If any of the", plural inParam,
   S "is out of bounds, an error message is displayed and the",
   plural calculation, S "stop"]
 
-s7_1_req4 = foldlSent [titleize output_, S "the", plural inQty,
+req4Desc = foldlSent [titleize output_, S "the", plural inQty,
   S "from", acroR 1 `sAnd` S "the known", plural quantity,
   S "from", acroR 2]
 
-s7_1_req5 cmd = S "If" +:+ (getS is_safe1) `sAnd` (getS is_safe2) +:+
+req5Desc cmd = S "If" +:+ (getS is_safe1) `sAnd` (getS is_safe2) +:+
   sParen (S "from" +:+ (makeRef (gbSymbMapT t1SafetyReq))
   `sAnd` (makeRef (gbSymbMapT t2SafetyReq))) +:+ S "are true" `sC`
   phrase cmd +:+ S "the message" +:+ Quote (safeMessage ^. defn) +:+

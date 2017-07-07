@@ -622,66 +622,66 @@ Description & The above equation is derived using T2 and T3. $E_{P}$ is the chan
 \end{minipage}\\
 \subsubsection{Data Constraints}
 \label{Sec:DataCons}
-Table~\ref{Table:InpuVari}, and Table~\ref{Table:OutpVari} shows the data constraints on the input and output variables, respectively. The column for physical constraints gives the physical limitations on the range of values that can be taken by the variable. The uncertainty column provides an estimate of the confidence with which the physical quantities can be measured. This information would be part of the input if one were performing an uncertainty quantification exercise. The constraints are conservative, to give the user of the model the flexibility to experiment with unusual situations. The column of typical values is intended to provide a feel for a common scenario. The column for software constraints restricts the range of inputs to reasonable values. (*) These quantities cannot be equal to zero, or there will be a divide by zero in the model. (+) These quantities cannot be zero, or there would be freezing (A13). (#) The constraints on the surface area are calculated by considering the surface area to volume ratio. The assumption is that the lowest ratio is 1 and the highest possible is $\frac{2}{h_{min}}$, where $h_{min}$ is the thickness of a ``sheet" of PCM. A thin sheet has the greatest surface area to volume ratio. (**) The constraint on the maximum time at the end of the simulation is the total number of secondsin one day.
+Table~\ref{Table:InpuDataCons}, and Table~\ref{Table:OutpDataCons} shows the data constraints on the input and output variables, respectively. The column for physical constraints gives the physical limitations on the range of values that can be taken by the variable. The uncertainty column provides an estimate of the confidence with which the physical quantities can be measured. This information would be part of the input if one were performing an uncertainty quantification exercise. The constraints are conservative, to give the user of the model the flexibility to experiment with unusual situations. The column of typical values is intended to provide a feel for a common scenario. The column for software constraints restricts the range of inputs to reasonable values. (*) These quantities cannot be equal to zero, or there will be a divide by zero in the model. (+) These quantities cannot be zero, or there would be freezing (A13). (#) The constraints on the surface area are calculated by considering the surface area to volume ratio. The assumption is that the lowest ratio is 1 and the highest possible is $\frac{2}{h_{min}}$, where $h_{min}$ is the thickness of a ``sheet" of PCM. A thin sheet has the greatest surface area to volume ratio. (**) The constraint on the maximum time at the end of the simulation is the total number of secondsin one day.
 \begin{longtable}{l l l l l}
 \toprule
-Var & Physical Constraints & Software Constraints & Typical Value & Uncertainty
+Var & Physical Constraints & Software Constraints & Typical Value & Typical Uncertainty
 \\
 \midrule
-$L$ & $L>0$ & $L_{min}\leq{}L\leq{}L_{max}$ & 1.5 m & 10$\%$
+$L$ & $L>0$ & $L_{min}\leq{}L\leq{}L_{max}$ & $1.5$ m & 0.1
 \\
-$D$ & $D>0$ & $\frac{D}{L_{max}}\leq{}\frac{D}{L}\leq{}\frac{D}{L_{min}}$ & 0.412 m & 10$\%$
+$D$ & $D>0$ & $\frac{D}{L_{max}}\leq{}\frac{D}{L}\leq{}\frac{D}{L_{min}}$ & $0.412$ m & 0.1
 \\
-$V_{P}$ & $V_{P}>0$ and $V_{P}<V_{tank}$ & $V_{P}\geq{}V_{tank}$ & 5.0e-2 $\text{m}^{3}$ & 10$\%$
+$V_{P}$ & $V_{P}>0$ and $V_{P}<V_{tank}$ & $V_{P}\geq{}V_{tank}$ & $0.05$ $\text{m}^{3}$ & 0.1
 \\
-$A_{P}$ & $A_{P}>0$ & $V_{P}\leq{}A_{P}\leq{}\frac{2}{h_{min}}V_{tank}$ & 1.2 $\text{m}^{2}$ & 10$\%$
+$A_{P}$ & $A_{P}>0$ & $V_{P}\leq{}A_{P}\leq{}\frac{2}{h_{min}}V_{tank}$ & $1.2$ $\text{m}^{2}$ & 0.1
 \\
-$\rho{}_{P}$ & $\rho{}_{P}>0$ and $\rho{}_{P}^{min}<\rho{}_{P}<\rho{}_{P}^{max}$ &  & 1007 $\frac{\text{kg}}{\text{m}^{3}}$ & 10$\%$
+$\rho{}_{P}$ & $\rho{}_{P}>0$ and $\rho{}_{P}^{min}<\rho{}_{P}<\rho{}_{P}^{max}$ & None & $1007.0$ $\frac{\text{kg}}{\text{m}^{3}}$ & 0.1
 \\
-$T_{melt}^{P}$ & $0<T_{melt}^{P}<T_{C}$ &  & 44.2 ${}^{\circ}C$ & 10$\%$
+$T_{melt}^{P}$ & $0<T_{melt}^{P}<T_{C}$ & None & $44.2$ ${}^{\circ}C$ & 0.1
 \\
-$C_{P}^{S}$ & $C_{P}^{S}>0$ & $C_{P}^{S}_{min}<C_{P}^{S}<C_{P}^{S}_{max}$ & 1760 $\frac{\text{J}}{(\text{kg}{}^{\circ}C)}$ & 10$\%$
+$C_{P}^{S}$ & $C_{P}^{S}>0$ & $C_{P}^{S}_{min}<C_{P}^{S}<C_{P}^{S}_{max}$ & $1760.0$ $\frac{\text{J}}{(\text{kg}{}^{\circ}C)}$ & 0.1
 \\
-$C_{P}^{L}$ & $C_{P}^{L}>0$ & $C_{P}^{L}_{min}<C_{P}^{L}<C_{P}^{L}_{max}$ & 2270 $\frac{\text{J}}{(\text{kg}{}^{\circ}C)}$ & 10$\%$
+$C_{P}^{L}$ & $C_{P}^{L}>0$ & $C_{P}^{L}_{min}<C_{P}^{L}<C_{P}^{L}_{max}$ & $2270.0$ $\frac{\text{J}}{(\text{kg}{}^{\circ}C)}$ & 0.1
 \\
-$H_{f}$ & $H_{f}>0$ & $H_{f}_{min}<H_{f}<H_{f}_{max}$ & 211600 $\frac{\text{J}}{\text{kg}}$ & 10$\%$
+$H_{f}$ & $H_{f}>0$ & $H_{f}_{min}<H_{f}<H_{f}_{max}$ & $211600.0$ $\frac{\text{J}}{\text{kg}}$ & 0.1
 \\
-$A_{C}$ & $A_{C}>0$ & $A_{C}\leq{}A_{C}^{max}$ & 0.12 $\text{m}^{2}$ & 10$\%$
+$A_{C}$ & $A_{C}>0$ & $A_{C}\leq{}A_{C}^{max}$ & $0.12.0$ $\text{m}^{2}$ & 0.1
 \\
-$T_{C}$ & $0<T_{C}<100$ &  & 50 ${}^{\circ}C$ & 10$\%$
+$T_{C}$ & $0<T_{C}<100$ & None & $50.0$ ${}^{\circ}C$ & 0.1
 \\
-$\rho{}_{W}$ & $\rho{}_{W}>0$ & $\rho{}_{W}^{min}<\rho{}_{W}\leq{}\rho{}_{W}^{max}$ & 1000 $\frac{\text{kg}}{\text{m}^{3}}$ & 10$\%$
+$\rho{}_{W}$ & $\rho{}_{W}>0$ & $\rho{}_{W}^{min}<\rho{}_{W}\leq{}\rho{}_{W}^{max}$ & $1000.0$ $\frac{\text{kg}}{\text{m}^{3}}$ & 0.1
 \\
-$C_{W}$ & $C_{W}>0$ & $C_{W}^{min}<C_{W}<C_{W}^{max}$ & 4186 $\frac{\text{J}}{(\text{kg}{}^{\circ}C)}$ & 10$\%$
+$C_{W}$ & $C_{W}>0$ & $C_{W}^{min}<C_{W}<C_{W}^{max}$ & $4186.0$ $\frac{\text{J}}{(\text{kg}{}^{\circ}C)}$ & 0.1
 \\
-$h_{C}$ & $h_{C}>0$ & $h_{C}^{min}\leq{}h_{C}\leq{}h_{C}^{max}$ & 1000 $\frac{\text{W}}{(\text{m}^{2}{}^{\circ}C)}$ & 10$\%$
+$h_{C}$ & $h_{C}>0$ & $h_{C}^{min}\leq{}h_{C}\leq{}h_{C}^{max}$ & $1000.0$ $\frac{\text{W}}{(\text{m}^{2}{}^{\circ}C)}$ & 0.1
 \\
-$h_{P}$ & $h_{P}>0$ & $h_{P}^{min}\leq{}h_{P}\leq{}h_{P}^{max}$ & 1000 $\frac{\text{W}}{(\text{m}^{2}{}^{\circ}C)}$ & 10$\%$
+$h_{P}$ & $h_{P}>0$ & $h_{P}^{min}\leq{}h_{P}\leq{}h_{P}^{max}$ & $1000.0$ $\frac{\text{W}}{(\text{m}^{2}{}^{\circ}C)}$ & 0.1
 \\
-$T_{init}$ & $0<T_{init}<T_{melt}$ &  & 40 ${}^{\circ}C$ & 10$\%$
+$T_{init}$ & $0<T_{init}<T_{melt}$ & None & $40.0$ ${}^{\circ}C$ & 0.1
 \\
-$t_{final}$ & $t_{final}>0$ & $t_{final}<t_{final}^{max}$ & 50000 s & 10$\%$
+$t_{final}$ & $t_{final}>0$ & $t_{final}<t_{final}^{max}$ & $50000.0$ s & 0.1
 \\
 \bottomrule
-\caption{Input Variables}
-\label{Table:InpuVari}
+\caption{Input Data Constraints}
+\label{Table:InpuDataCons}
 \end{longtable}
 \begin{longtable}{l l}
 \toprule
 Var & Physical Constraints
 \\
 \midrule
-$T_{W}$ & $T_{init}\leq{}T_{W}\leq{}T_{C}$ (by A11)
+$T_{W}$ & $T_{init}\leq{}T_{W}\leq{}T_{C}$
 \\
-$T_{P}$ & $T_{init}\leq{}T_{P}\leq{}T_{C}$ (by A11)
+$T_{P}$ & $T_{init}\leq{}T_{P}\leq{}T_{C}$
 \\
 $E_{W}$ & $E_{W}\geq{}0$
 \\
 $E_{P}$ & $E_{P}\geq{}0$
 \\
 \bottomrule
-\caption{Output Variables}
-\label{Table:OutpVari}
+\caption{Output Data Constraints}
+\label{Table:DataCons}
 \end{longtable}
 \subsubsection{Properties of a Correct Solution}
 \label{Sec:PropofACorrSolu}
@@ -704,7 +704,7 @@ This section provides the functional requirements, the business tasks that the s
 \end{itemize}
 \begin{longtable*}{l l l}
 \toprule
-symbol & unit & description
+Symbol & Unit & Description
 \\
 \midrule
 $L$ & m & length of tank
@@ -817,7 +817,7 @@ IM4 (\hyperref[T:heatEInPCM]{Definition~T:heatEInPCM}) &  & X & X &  &  &  & X &
 \end{longtable}
 \begin{longtable}{l l l l l l l l l l l l l l l l l}
 \toprule
- & IM1 (\hyperref[T:eBalanceOnWtr]{Definition~T:eBalanceOnWtr}) & IM2 (\hyperref[T:eBalanceOnPCM]{Definition~T:eBalanceOnPCM}) & IM3 (\hyperref[T:heatEInWtr]{Definition~T:heatEInWtr}) & IM4 (\hyperref[T:heatEInPCM]{Definition~T:heatEInPCM}) & Data Constraints (Table~\ref{Table:InpuVari}) & R1 (Section~\ref{Sec:FuncRequ}) & R2 (Section~\ref{Sec:FuncRequ}) & R3 (Section~\ref{Sec:FuncRequ}) & R4 (Section~\ref{Sec:FuncRequ}) & R5 (Section~\ref{Sec:FuncRequ}) & R6 (Section~\ref{Sec:FuncRequ}) & R7 (Section~\ref{Sec:FuncRequ}) & R8 (Section~\ref{Sec:FuncRequ}) & R9 (Section~\ref{Sec:FuncRequ}) & R10 (Section~\ref{Sec:FuncRequ}) & R11 (Section~\ref{Sec:FuncRequ})
+ & IM1 (\hyperref[T:eBalanceOnWtr]{Definition~T:eBalanceOnWtr}) & IM2 (\hyperref[T:eBalanceOnPCM]{Definition~T:eBalanceOnPCM}) & IM3 (\hyperref[T:heatEInWtr]{Definition~T:heatEInWtr}) & IM4 (\hyperref[T:heatEInPCM]{Definition~T:heatEInPCM}) & Data Constraints (Table~\ref{Table:InpuDataCons}) & R1 (Section~\ref{Sec:FuncRequ}) & R2 (Section~\ref{Sec:FuncRequ}) & R3 (Section~\ref{Sec:FuncRequ}) & R4 (Section~\ref{Sec:FuncRequ}) & R5 (Section~\ref{Sec:FuncRequ}) & R6 (Section~\ref{Sec:FuncRequ}) & R7 (Section~\ref{Sec:FuncRequ}) & R8 (Section~\ref{Sec:FuncRequ}) & R9 (Section~\ref{Sec:FuncRequ}) & R10 (Section~\ref{Sec:FuncRequ}) & R11 (Section~\ref{Sec:FuncRequ})
 \\
 \midrule
 IM1 (\hyperref[T:eBalanceOnWtr]{Definition~T:eBalanceOnWtr}) &  & X &  &  &  & X & X &  &  &  &  &  &  &  &  & 

@@ -1,4 +1,5 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML'></script>
 <html>
 <head>
 <link rel="stylesheet" type="text/css" href="SWHS_SRS.css">
@@ -9,7 +10,7 @@ Software Requirements Specification for Solar Water Heating Systems Incorporatin
 <body>
 <div class="title">
 <h1>
-Software Requirements Specification for solar water heating systems incorporating PCM
+Software Requirements Specification for Solar Water Heating Systems Incorporating PCM
 </h1>
 </div>
 <div class="author">
@@ -261,7 +262,7 @@ J
 </tr>
 <tr>
 <td>
-E<sub>Pmelt</sub><sup>init</sup>
+E<sub>P</sub><sub>melt</sub><sup>init</sup>
 </td>
 <td>
 Change in heat energy in the PCM at the instant when melting begins
@@ -613,6 +614,17 @@ Melting point temperature
 </tr>
 <tr>
 <td>
+t
+</td>
+<td>
+Time
+</td>
+<td>
+s
+</td>
+</tr>
+<tr>
+<td>
 T<sub>P</sub>
 </td>
 <td>
@@ -631,17 +643,6 @@ Temperature of the water
 </td>
 <td>
 &deg;C
-</td>
-</tr>
-<tr>
-<td>
-t
-</td>
-<td>
-Time
-</td>
-<td>
-s
 </td>
 </tr>
 <tr>
@@ -1336,9 +1337,6 @@ T<sub>boil</sub>&lt;T
 </span>
 </span>
 </div>
-<span class="casebr">
-}
-</span>
 </div>
 </a>
 </td>
@@ -1719,6 +1717,7 @@ H<sub>f</sub> is the specific latent heat of fusion<br />Q is the latent heat<br
 </td>
 </tr>
 </table>
+</a>
 <a id="DD:melt.frac">
 <table class="ddefn">
 <tr>
@@ -1773,7 +1772,6 @@ Description
 </table>
 </a>
 </div>
-</a>
 </a>
 <a id="Sec:InstMode">
 <div class="subsubsection">
@@ -2341,9 +2339,7 @@ The above equation is derived using T2 and T3. E<sub>P</sub> is the change in th
 Data Constraints
 </h4>
 <p class="paragraph">
-<a href=#Table:Tabl1>this Table</a> and <a href=#Table:Tabl2>this Table</a> show the data constraints on the input and output variables, respectively. The column for physical constraints gives the physical limitations on the range of values that can be taken by the variable. The column for software constraints restricts the range of inputs to reasonable values. The constraints are conservative, to give the user of the model the flexibility to experiment with unusual situations. The column of typical values is intended to provide a feel for a common scenario. The uncertainty column provides an estimate of the confidence with which the physical quantities can be measured. This information would be part of the input if one were performing an uncertainty quantification exercise. (The tables are left out because features they should use are not yet implemented in Drasil.)
-</p>
-<a href=#Table:InpuVari>this Table</a>, and <a href=#Table:OutpVari>this Table</a> shows the data constraints on the input and output variables, respectively. The column for physical constraints gives the physical limitations on the range of values that can be taken by the variable. The uncertainty column provides an estimate of the confidence with which the physical quantities can be measured. This information would be part of the input if one were performing an uncertainty quantification exercise. The constraints are conservative, to give the user of the model the flexibility to experiment with unusual situations. The column of typical values is intended to provide a feel for a common scenario. The column for software constraints restricts the range of inputs to reasonable values. (*) These quantities cannot be equal to zero, or there will be a divide by zero in the model. (+) These quantities cannot be zero, or there would be freezing (A13). (#) The constraints on the surface area are calculated by considering the surface area to volume ratio. The assumption is that the lowest ratio is 1 and the highest possible is <div class="fraction">
+<a href=#Table:InpuDataCons>this Table</a>, and <a href=#Table:OutpDataCons>this Table</a> shows the data constraints on the input and output variables, respectively. The column for physical constraints gives the physical limitations on the range of values that can be taken by the variable. The uncertainty column provides an estimate of the confidence with which the physical quantities can be measured. This information would be part of the input if one were performing an uncertainty quantification exercise. The constraints are conservative, to give the user of the model the flexibility to experiment with unusual situations. The column of typical values is intended to provide a feel for a common scenario. The column for software constraints restricts the range of inputs to reasonable values. (*) These quantities cannot be equal to zero, or there will be a divide by zero in the model. (+) These quantities cannot be zero, or there would be freezing (A13). (#) The constraints on the surface area are calculated by considering the surface area to volume ratio. The assumption is that the lowest ratio is 1 and the highest possible is <div class="fraction">
 <span class="fup">
 2
 </span>
@@ -2352,7 +2348,7 @@ h<sub>min</sub>
 </span>
 </div>, where h<sub>min</sub> is the thickness of a &quot;sheet&quot; of PCM. A thin sheet has the greatest surface area to volume ratio. (**) The constraint on the maximum time at the end of the simulation is the total number of secondsin one day.
 </p>
-<a id="Table:InpuVari">
+<a id="Table:InpuDataCons">
 <table class="table">
 <tr>
 <th>
@@ -2368,7 +2364,7 @@ Software Constraints
 Typical Value
 </th>
 <th>
-Uncertainty
+Typical Uncertainty
 </th>
 </tr>
 <tr>
@@ -2385,7 +2381,7 @@ L<sub>min</sub>&le;L&le;L<sub>max</sub>
 1.5 m
 </td>
 <td>
-10%
+0.1
 </td>
 </tr>
 <tr>
@@ -2423,7 +2419,7 @@ L<sub>min</sub>
 0.412 m
 </td>
 <td>
-10%
+0.1
 </td>
 </tr>
 <tr>
@@ -2437,10 +2433,10 @@ V<sub>P</sub>&gt;0 and V<sub>P</sub>&lt;V<sub>tank</sub>
 V<sub>P</sub>&ge;V<sub>tank</sub>
 </td>
 <td>
-5.0e-2 m<sup>3</sup>
+0.05 m<sup>3</sup>
 </td>
 <td>
-10%
+0.1
 </td>
 </tr>
 <tr>
@@ -2464,7 +2460,7 @@ h<sub>min</sub>
 1.2 m<sup>2</sup>
 </td>
 <td>
-10%
+0.1
 </td>
 </tr>
 <tr>
@@ -2475,13 +2471,13 @@ h<sub>min</sub>
 &rho;<sub>P</sub>&gt;0 and &rho;<sub>P</sub><sup>min</sup>&lt;&rho;<sub>P</sub>&lt;&rho;<sub>P</sub><sup>max</sup>
 </td>
 <td>
-
+None
 </td>
 <td>
-1007 kg/(m<sup>3</sup>)
+1007.0 kg/(m<sup>3</sup>)
 </td>
 <td>
-10%
+0.1
 </td>
 </tr>
 <tr>
@@ -2492,13 +2488,13 @@ T<sub>melt</sub><sup>P</sup>
 0&lt;T<sub>melt</sub><sup>P</sup>&lt;T<sub>C</sub>
 </td>
 <td>
-
+None
 </td>
 <td>
 44.2 &deg;C
 </td>
 <td>
-10%
+0.1
 </td>
 </tr>
 <tr>
@@ -2512,10 +2508,10 @@ C<sub>P</sub><sup>S</sup>&gt;0
 C<sub>P</sub><sup>S</sup><sub>min</sub>&lt;C<sub>P</sub><sup>S</sup>&lt;C<sub>P</sub><sup>S</sup><sub>max</sub>
 </td>
 <td>
-1760 J/(kg&deg;C)
+1760.0 J/(kg&deg;C)
 </td>
 <td>
-10%
+0.1
 </td>
 </tr>
 <tr>
@@ -2529,10 +2525,10 @@ C<sub>P</sub><sup>L</sup>&gt;0
 C<sub>P</sub><sup>L</sup><sub>min</sub>&lt;C<sub>P</sub><sup>L</sup>&lt;C<sub>P</sub><sup>L</sup><sub>max</sub>
 </td>
 <td>
-2270 J/(kg&deg;C)
+2270.0 J/(kg&deg;C)
 </td>
 <td>
-10%
+0.1
 </td>
 </tr>
 <tr>
@@ -2546,10 +2542,10 @@ H<sub>f</sub>&gt;0
 H<sub>f</sub><sub>min</sub>&lt;H<sub>f</sub>&lt;H<sub>f</sub><sub>max</sub>
 </td>
 <td>
-211600 J/kg
+211600.0 J/kg
 </td>
 <td>
-10%
+0.1
 </td>
 </tr>
 <tr>
@@ -2566,7 +2562,7 @@ A<sub>C</sub>&le;A<sub>C</sub><sup>max</sup>
 0.12 m<sup>2</sup>
 </td>
 <td>
-10%
+0.1
 </td>
 </tr>
 <tr>
@@ -2577,13 +2573,13 @@ T<sub>C</sub>
 0&lt;T<sub>C</sub>&lt;100
 </td>
 <td>
-
+None
 </td>
 <td>
-50 &deg;C
+50.0 &deg;C
 </td>
 <td>
-10%
+0.1
 </td>
 </tr>
 <tr>
@@ -2597,10 +2593,10 @@ T<sub>C</sub>
 &rho;<sub>W</sub><sup>min</sup>&lt;&rho;<sub>W</sub>&le;&rho;<sub>W</sub><sup>max</sup>
 </td>
 <td>
-1000 kg/(m<sup>3</sup>)
+1000.0 kg/(m<sup>3</sup>)
 </td>
 <td>
-10%
+0.1
 </td>
 </tr>
 <tr>
@@ -2614,10 +2610,10 @@ C<sub>W</sub>&gt;0
 C<sub>W</sub><sup>min</sup>&lt;C<sub>W</sub>&lt;C<sub>W</sub><sup>max</sup>
 </td>
 <td>
-4186 J/(kg&deg;C)
+4186.0 J/(kg&deg;C)
 </td>
 <td>
-10%
+0.1
 </td>
 </tr>
 <tr>
@@ -2631,10 +2627,10 @@ h<sub>C</sub>&gt;0
 h<sub>C</sub><sup>min</sup>&le;h<sub>C</sub>&le;h<sub>C</sub><sup>max</sup>
 </td>
 <td>
-1000 W/(m<sup>2</sup>&deg;C)
+1000.0 W/(m<sup>2</sup>&deg;C)
 </td>
 <td>
-10%
+0.1
 </td>
 </tr>
 <tr>
@@ -2648,10 +2644,10 @@ h<sub>P</sub>&gt;0
 h<sub>P</sub><sup>min</sup>&le;h<sub>P</sub>&le;h<sub>P</sub><sup>max</sup>
 </td>
 <td>
-1000 W/(m<sup>2</sup>&deg;C)
+1000.0 W/(m<sup>2</sup>&deg;C)
 </td>
 <td>
-10%
+0.1
 </td>
 </tr>
 <tr>
@@ -2662,13 +2658,13 @@ T<sub>init</sub>
 0&lt;T<sub>init</sub>&lt;T<sub>melt</sub>
 </td>
 <td>
-
+None
 </td>
 <td>
-40 &deg;C
+40.0 &deg;C
 </td>
 <td>
-10%
+0.1
 </td>
 </tr>
 <tr>
@@ -2682,18 +2678,18 @@ t<sub>final</sub>&gt;0
 t<sub>final</sub>&lt;t<sub>final</sub><sup>max</sup>
 </td>
 <td>
-50000 s
+50000.0 s
 </td>
 <td>
-10%
+0.1
 </td>
 </tr>
 </table>
 <p class="caption">
-Input Variables
+Input Data Constraints
 </p>
 </a>
-<a id="Table:OutpVari">
+<a id="Table:OutpDataCons">
 <table class="table">
 <tr>
 <th>
@@ -2708,7 +2704,7 @@ Physical Constraints
 T<sub>W</sub>
 </td>
 <td>
-T<sub>init</sub>&le;T<sub>W</sub>&le;T<sub>C</sub> (by A11)
+T<sub>init</sub>&le;T<sub>W</sub>&le;T<sub>C</sub>
 </td>
 </tr>
 <tr>
@@ -2716,7 +2712,7 @@ T<sub>init</sub>&le;T<sub>W</sub>&le;T<sub>C</sub> (by A11)
 T<sub>P</sub>
 </td>
 <td>
-T<sub>init</sub>&le;T<sub>P</sub>&le;T<sub>C</sub> (by A11)
+T<sub>init</sub>&le;T<sub>P</sub>&le;T<sub>C</sub>
 </td>
 </tr>
 <tr>
@@ -2737,7 +2733,7 @@ E<sub>P</sub>&ge;0
 </tr>
 </table>
 <p class="caption">
-Output Variables
+Output Data Constraints
 </p>
 </a>
 </div>
@@ -2794,13 +2790,13 @@ R1: Input the following quantities, which define the tank parameters, material p
 <table class="table">
 <tr>
 <th>
-symbol
+Symbol
 </th>
 <th>
-unit
+Unit
 </th>
 <th>
-description
+Description
 </th>
 </tr>
 <tr>
@@ -3734,7 +3730,7 @@ IM3 (<a href=#T:heatEInWtr>this Definition</a>)
 IM4 (<a href=#T:heatEInPCM>this Definition</a>)
 </th>
 <th>
-Data Constraints (<a href=#Table:InpuVari>this Table</a>)
+Data Constraints (<a href=#Table:InpuDataCons>this Table</a>)
 </th>
 <th>
 R1 (<a href=#Sec:FuncRequ>this Section</a>)

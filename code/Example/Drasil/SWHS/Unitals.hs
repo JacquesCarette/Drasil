@@ -26,7 +26,7 @@ swhsUnits = map ucw [in_SA, out_SA, heat_cap_spec, htCap_L,
   vol_ht_gen, htTransCoeff, pcm_mass, w_mass, ht_flux, latent_heat,
   thFluxVect, ht_flux_C, ht_flux_in, ht_flux_out, ht_flux_P, latentE_P, temp,
   boil_pt, temp_env, melt_pt, t_init_melt,
-  t_final_melt, temp_diff, vol, tank_vol, w_vol, deltaT,
+  t_final_melt, vol, tank_vol, w_vol, deltaT,
   density, tau, tau_L_P, tau_S_P, tau_W] ++
   map ucw [mass, time] -- ++ [tank_length, diam, coil_SA]
 
@@ -376,7 +376,7 @@ htFusion_min, htFusion_max, coil_SA_max :: UnitaryChunk
 
 -- Used in Constraint 1
 tank_length_min = mkDataDef (unitary "tank_length_min" (nounPhraseSP "minimum length of tank")
-  (sub (tank_length ^. symbol) (Atomic "min")) metre Rational) 0.1
+  (sub (tank_length ^. symbol) (Atomic "min")) metre Rational) (Dbl 0.1)
 
 tank_length_max = mkDataDef (unitary "tank_length_max" (nounPhraseSP "maximum length of tank")
   (sub (tank_length ^. symbol) (Atomic "max")) metre Rational) (Int 50)

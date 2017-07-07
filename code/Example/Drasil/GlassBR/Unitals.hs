@@ -18,13 +18,15 @@ glassBRSymbolsWithDefns :: [UnitalChunk]
 glassBRSymbolsWithDefns = [mod_elas]
 
 mod_elas :: UnitalChunk
-mod_elas    = uc' "mod_elas"      (nounPhraseSP "modulus of elasticity of glass")
+mod_elas    = uc' "mod_elas"     (nounPhraseSP "modulus of elasticity of glass")
   "The ratio of tensile stress to tensile strain of glass." cE kilopascal
 
 {--}
 
 gbConstrained :: [ConstrWrapper]
-gbConstrained = map cnstrw gbInputsWUncrtn ++ map cnstrw gbInputsWUnitsUncrtn ++ map cnstrw [prob_br]
+
+gbConstrained = (map cnstrw gbInputsWUncrtn) ++ (map cnstrw gbInputsWUnitsUncrtn)
+  ++ (map cnstrw [prob_br])
 
 plate_len, plate_width, char_weight, standOffDist :: UncertQ
 pb_tol, tNT :: UncertainChunk
@@ -36,7 +38,8 @@ defaultUncrt :: Double
 defaultUncrt = 0.1
 
 gbInputs :: [QSWrapper]
-gbInputs = (map qs gbInputsWUnitsUncrtn) ++ (map qs gbInputsWUncrtn) ++ (map qs gbInputsNoUncrtn)
+gbInputs = (map qs gbInputsWUnitsUncrtn) ++ (map qs gbInputsWUncrtn) ++ 
+  (map qs gbInputsNoUncrtn)
 
 --inputs with units and uncertainties
 gbInputsWUnitsUncrtn :: [UncertQ]
@@ -51,7 +54,8 @@ gbInputsNoUncrtn :: [ConstrainedChunk]
 gbInputsNoUncrtn = [glass_type, nom_thick]
 
 gbInputDataConstraints :: [UncertainWrapper]
-gbInputDataConstraints = (map uncrtnw gbInputsWUncrtn) ++ (map uncrtnw gbInputsWUnitsUncrtn)
+gbInputDataConstraints = (map uncrtnw gbInputsWUncrtn) ++ 
+  (map uncrtnw gbInputsWUnitsUncrtn)
 
 plate_len = uqcND "plate_len" (nounPhraseSP "plate length (long dimension)")
   lA millimetre Real 
@@ -91,6 +95,7 @@ standOffDist = uqcND "standOffDist" (nounPhraseSP "stand off distance")
     sfwrc $ \c -> c :< (C sd_max) ] (Dbl 45) defaultUncrt
 --FIXME: ^ incorporate definition in here
 
+--FIXME: Issue #309
 nom_thick = cuc "nom_thick" 
   (nounPhraseSP $ "nominal thickness t in {2.5, 2.7, 3.0, 4.0, 5.0, 6.0, 8.0, 10.0, 12.0, 16.0, 19.0, 22.0}")
   lT millimetre Rational
@@ -101,7 +106,7 @@ nom_thick = cuc "nom_thick"
 glass_type  = cvc "glass_type" (nounPhraseSP "glass type g in {AN, HS, FT}")
   lG String
   [ physc $ \c -> (c := (V "AN")) :|| (c := (V "HS")) :|| (c := (V "FT")) ] (V "HS")
---FIXME:Creating variables increases duplication; find a way to incorporate preexisting chunks in constraints
+--FIXME: Creating variables increases duplication; find a way to incorporate preexisting chunks in constraints
 
 {--}
 
@@ -112,7 +117,8 @@ prob_br :: ConstrainedChunk
 prob_br = cvc "prob_br" (nounPhraseSP "probability of breakage")
   (sub cP lB) Rational
   [ physc $ \c -> (Dbl 0) :< c,
-    physc $ \c -> c :< (Dbl 1) ] (Dbl 0.4) --FIXME: should there be a typical value here?
+    physc $ \c -> c :< (Dbl 1) ] (Dbl 0.4)
+  --FIXME: should there be a typical value here?
 
 {--}
 
@@ -121,44 +127,68 @@ gBRSpecParamVals = [dim_max, dim_min, ar_max, cWeightMax, sd_min, sd_max]
 
 dim_max, dim_min, ar_max, cWeightMax, cWeightMin, sd_min, sd_max :: QDefinition
 
-dim_max     = mkDataDef (unitary "dim_max"     (nounPhraseSP "maximum value for one of the dimensions of the glass plate") 
+dim_max     = mkDataDef (unitary "dim_max"
+  (nounPhraseSP "maximum value for one of the dimensions of the glass plate") 
   (sub lD (Atomic "max")) millimetre Real) (Dbl 0.1)
-dim_min     = mkDataDef (unitary "dim_min"     (nounPhraseSP "minimum value for one of the dimensions of the glass plate") 
+
+dim_min     = mkDataDef (unitary "dim_min"
+  (nounPhraseSP "minimum value for one of the dimensions of the glass plate") 
   (sub lD (Atomic "min")) millimetre Real) (Dbl 5)
-ar_max     = mkDataDef (vc "ar_max"        (nounPhraseSP "maximum aspect ratio")
+
+ar_max     = mkDataDef (vc "ar_max"
+  (nounPhraseSP "maximum aspect ratio")
   (sub (Atomic "AR") (Atomic "max")) Rational) (Dbl 5)
-cWeightMax = mkDataDef (unitary "cWeightMax"  (nounPhraseSP "maximum permissible input charge weight")
+
+cWeightMax = mkDataDef (unitary "cWeightMax" 
+  (nounPhraseSP "maximum permissible input charge weight")
   (sub (char_weight ^. symbol) (Atomic "max")) kilogram Rational) (Dbl 910)
-cWeightMin = mkDataDef (unitary "cWeightMin"  (nounPhraseSP "minimum permissible input charge weight")
+
+cWeightMin = mkDataDef (unitary "cWeightMin"
+  (nounPhraseSP "minimum permissible input charge weight")
   (sub (char_weight ^. symbol) (Atomic "min")) kilogram Rational) (Dbl 4.5)
-sd_min     = mkDataDef (unitary "sd_min"      (nounPhraseSP "minimum stand off distance permissible for input") 
+
+sd_min     = mkDataDef (unitary "sd_min"
+  (nounPhraseSP "minimum stand off distance permissible for input") 
   (sub (standOffDist ^. symbol) (Atomic "min")) metre Real) (Dbl 6)
-sd_max     = mkDataDef (unitary "sd_max"      (nounPhraseSP "maximum stand off distance permissible for input") 
+
+sd_max     = mkDataDef (unitary "sd_max"
+  (nounPhraseSP "maximum stand off distance permissible for input")
   (sub (standOffDist ^. symbol) (Atomic "max")) metre Real) (Dbl 130)
 
 {--}
 
 glassBRSymbols :: [UnitaryChunk]
-glassBRSymbols = [act_thick, sflawParamK, sflawParamM, demand, sdx, sdy, sdz, load_dur, eqTNTWeight]
+glassBRSymbols = [act_thick, sflawParamK, sflawParamM, demand, sdx, sdy, sdz,
+  load_dur, eqTNTWeight]
 
-act_thick, sflawParamK, sflawParamM, demand, sdx, sdy, sdz, load_dur, eqTNTWeight :: UnitaryChunk
+act_thick, sflawParamK, sflawParamM, demand, sdx, sdy, sdz, load_dur,
+  eqTNTWeight :: UnitaryChunk
 
 act_thick   = unitary "act_thick"   (nounPhraseSP "actual thickness")
   lH millimetre Rational
+
 demand      = unitary "demand"      (nounPhraseSP "applied load (demand)")
   lQ kilopascal Rational --correct Space used?
-eqTNTWeight = unitary "eqTNTWeight" (nounPhraseSP "explosive mass in equivalent weight of TNT") --replace with short TNT?
+
+eqTNTWeight = unitary "eqTNTWeight" 
+  (nounPhraseSP "explosive mass in equivalent weight of TNT")
   (sub (char_weight ^. symbol) (tNT ^. symbol)) kilogram Real
+
 load_dur    = unitary "load_dur"    (nounPhraseSP "duration of load")
   (sub lT lD) second Integer
+
 sdx         = unitary "sdx" (nounPhraseSP "stand off distance (x-component)")
   (sub (standOffDist ^. symbol) lX) metre Rational
+
 sdy         = unitary "sdy" (nounPhraseSP "stand off distance (y-component)")
   (sub (standOffDist ^. symbol) lY) metre Rational
+
 sdz         = unitary "sdz" (nounPhraseSP "stand off distance (z-component)")
   (sub (standOffDist ^. symbol) lZ) metre Rational
+
 sflawParamK = unitary "sflawParamK" (nounPhraseSP "surface flaw parameter") --parameterize?
   lK sFlawPU Rational
+
 sflawParamM = unitary "sflawParamM" (nounPhraseSP "surface flaw parameter") --parameterize?
   lM sFlawPU Integer
 
@@ -171,27 +201,39 @@ glassBRUnitless = [risk_fun, is_safe1, is_safe2, stressDistFac, sdf_tol,
 risk_fun, is_safe1, is_safe2, stressDistFac, sdf_tol,
   dimlessLoad, tolLoad, lRe, loadSF, gTF, lDurFac, nonFactorL :: VarChunk
 
-dimlessLoad   = makeVC "dimlessLoad"   (nounPhraseSP "dimensionless load") 
+dimlessLoad   = makeVC "dimlessLoad" (nounPhraseSP "dimensionless load") 
   (hat lQ)
-gTF           = vc "gTF"               (glassTypeFac ^. term) (Atomic "GTF") Integer
-is_safe1      = vc "is_safe1"          (nounPhraseSP $ "true when calculated probability is " ++
-  "less than tolerable probability") (Concat [Atomic "is", Special UScore, 
-  Atomic "safe1"]) Boolean
-is_safe2      = vc "is_safe2"          (nounPhraseSP $ "true when load resistance (capacity) " ++
-  "is greater than load (demand)") (Concat [Atomic "is", Special UScore, 
-  Atomic "safe2"]) Boolean
+
+gTF           = vc "gTF"             (glassTypeFac ^. term) (Atomic "GTF") Integer
+
+is_safe1      = vc "is_safe1"        (nounPhraseSP $ "true when calculated" ++
+  " probability is less than tolerable probability")
+  (Concat [Atomic "is", Special UScore, Atomic "safe1"]) Boolean
+
+is_safe2      = vc "is_safe2"        (nounPhraseSP $ "true when load resistance "
+  ++ "(capacity) is greater than load (demand)")
+  (Concat [Atomic "is", Special UScore, Atomic "safe2"]) Boolean
+
 lDurFac       = vc' loadDurFactor  (Atomic "LDF") Real
+
 loadSF        = vc "loadSF"        (lShareFac ^. term) (Atomic "LSF") Integer
+
 lRe           = vc' lResistance (Atomic "LR") Real
+
 nonFactorL    = vc' nonFactoredL (Atomic "NFL") Real
-risk_fun      = makeVC "risk_fun"      (nounPhraseSP "risk of failure")
-  cB
-sdf_tol       = makeVC "sdf_tol" (nounPhraseSP "stress distribution factor (Function) based on Pbtol")
+
+risk_fun      = makeVC "risk_fun"    (nounPhraseSP "risk of failure") cB
+
+sdf_tol       = makeVC "sdf_tol"     (nounPhraseSP $ "stress distribution" ++
+  " factor (Function) based on Pbtol") 
   (sub (stressDistFac ^. symbol) (Atomic "tol"))
-stressDistFac = makeVC "stressDistFac"  (nounPhraseSP "stress distribution factor (Function)")
-  cJ
-tolLoad       = makeVC "tolLoad"        (nounPhraseSP "tolerable load")
+
+stressDistFac = makeVC "stressDistFac" (nounPhraseSP $ "stress distribution" ++
+  " factor (Function)") cJ
+
+tolLoad       = makeVC "tolLoad"       (nounPhraseSP "tolerable load")
   (sub (dimlessLoad ^. symbol) (Atomic "tol"))
+
 
 terms :: [ConceptChunk]
 terms = [aspectRatio, glBreakage, lite, glassTy,
@@ -224,8 +266,8 @@ blastResisGla = dcc "blastResisGla"    (nounPhraseSP "blast resistant glazing")
 blastTy       = dcc "blastTy"     (nounPhraseSP "blast type")
   ("The blast type input includes parameters like weight of charge, TNT " ++
     "equivalent factor and stand off distance from the point of explosion.")
-bomb          = dcc "bomb"        (nounPhraseSP "bomb") ("a container filled with" ++
-  " a destructive substance designed to exlode on impact or via detonation")
+bomb          = dcc "bomb"        (nounPhraseSP "bomb") ("a container filled " ++
+  "with a destructive substance designed to exlode on impact or via detonation")
 capacity      = dcc "capacity"    (nounPhraseSP "capacity")
   "the load resistance calculated"
 demandq       = dcc "demandq"     (nounPhraseSP "demand") 
@@ -252,34 +294,36 @@ glBreakage    = dcc "glBreakage"  (nounPhraseSP "glass breakage")
 glTyFac       = cc' glassTypeFac
   (foldlSent [S "A multiplying factor for adjusting the", (getAcc lResistance), 
   S "of different glass type, that is,", (getAcc annealedGlass) `sC` 
-  (getAcc heatSGlass) `sC` S "or", (getAcc fullyTGlass), S "in monolithic glass" `sC`
-  (getAcc lGlass), sParen (titleize lGlass) `sC` S "or",
+  (getAcc heatSGlass) `sC` S "or", (getAcc fullyTGlass), S "in monolithic glass"
+  `sC` (getAcc lGlass), sParen (titleize lGlass) `sC` S "or",
   (getAcc iGlass), sParen (titleize iGlass), S "constructions"])
 hStrengthGl   = cc heatSGlass
   ("A flat, monolithic, glass lite of uniform thickness that has been " ++
     "subjected to a special heat treatment process where the residual " ++
     "surface compression is not less than 24 MPa (3500psi) or greater " ++
     "than 52 MPa (7500 psi), as defined in [6].")
-lateral       = dcc "lateral"     (nounPhraseSP "lateral") "Perpendicular to the glass surface."
-lite          = dcc "lite"        (cn' "lite") --is used in the plural form
+lateral       = dcc "lateral"     (nounPhraseSP "lateral") 
+  "Perpendicular to the glass surface."
+lite          = dcc "lite"        (cn' "lite")
   ("Pieces of glass that are cut, prepared, and used to create the window " ++
     "or door.")
-load          = dcc "load"        (nounPhraseSP "load") "A uniformly distributed lateral pressure."
+load          = dcc "load"        (nounPhraseSP "load") 
+  "A uniformly distributed lateral pressure."
 loadResis     = cc lResistance
   ("The uniform lateral load that a glass construction can sustain based " ++
     "upon a given probability of breakage and load duration as defined in " ++
     "[4 (pg. 1, 53)], following A2 and A1 respectively.")
 loadShareFac  = cc' lShareFac
-  (foldlSent [S "A multiplying factor derived from the load sharing between the double",
-  S "glazing, of equal or different thickness's and types (including the",
+  (foldlSent [S "A multiplying factor derived from the load sharing between the ",
+  S "double glazing, of equal or different thickness's and types (including the",
   S "layered behaviour of", (getAcc lGlass), S "under long duration",
   S "loads), in a sealed", (getAcc iGlass), S "unit"])
 longDurLoad   = dcc "longDurLoad"        (nounPhraseSP "long duration load")
   ("Any load lasting approximately 30 days.")
 nonFactoredL  = cc' nFL
-  (foldlSent [S "Three second duration uniform load associated with a probability of",
-    S "breakage less than or equal to 8", (plural lite), S "per 1000 for monolithic",
-    (getAcc annealedGlass), S "glass"])
+  (foldlSent [S "Three second duration uniform load associated with a probability",
+    S " of breakage less than or equal to 8", (plural lite), S "per 1000 for", 
+    S "monolithic", (getAcc annealedGlass), S "glass"])
 notSafe       = dcc "notSafe"     (nounPhraseSP "not safe")
   ("For the given input parameters, the glass is NOT considered safe.")
 probBreak     = cc prob_br
@@ -289,8 +333,8 @@ probBreak     = cc prob_br
 safeMessage   = dcc "safeMessage" (nounPhraseSP "safe")
   ("For the given input parameters, the glass is considered safe.")
 sD            = cc' stdOffDist
-  (S "The distance from the glazing surface to the centroid of a hemispherical" +:+
-   S "high explosive charge. It is represented by the coordinates" +:+.
+  (S "The distance from the glazing surface to the centroid of a hemispherical"
+   +:+ S "high explosive charge. It is represented by the coordinates" +:+.
    sParen (sdVectorSent))
 shortDurLoad  = dcc "shortDurLoad"       (nounPhraseSP "short duration load")
   "Any load lasting 3s or less."
@@ -308,8 +352,8 @@ specDeLoad    = dcc "specDeLoad"  (nounPhraseSP "specified design load")
 
 this_symbols :: [QSWrapper]
 this_symbols = ((map qs gBRSpecParamVals) ++ (map qs glassBRSymbolsWithDefns)
-  ++ (map qs glassBRSymbols) ++ (map qs glassBRUnitless) ++ (map qs gbInputsWUncrtn)
-  ++ (map qs gbInputsWUnitsUncrtn))
+  ++ (map qs glassBRSymbols) ++ (map qs glassBRUnitless)
+  ++ (map qs gbInputsWUncrtn) ++ (map qs gbInputsWUnitsUncrtn))
 
 {--}
 
@@ -357,6 +401,7 @@ sdWithEqn = mkDataDef standOffDist sdCalculation
 
 sdCalculation :: Relation
 sdCalculation = (C standOffDist) := sqrt (((C sdx) :^ (Int 2)) + ((C sdy) :^ (Int 2)) + ((C sdz) :^ (Int 2)))
+--FIXME: Create a `square` function?
 
 sdVectorSent :: Sentence
 sdVectorSent = getS sdx `sC` getS sdy `sC` getS sdz

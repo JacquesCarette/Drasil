@@ -60,7 +60,8 @@ loadDF = mkDataDef lDurFac loadDF_eq
 --DD4--
 
 strDisFac_eq :: Expr
-strDisFac_eq = FCall (C stressDistFac) [C dimlessLoad, (C plate_len):/(C plate_width)]
+strDisFac_eq = FCall (C stressDistFac) 
+  [C dimlessLoad, (C plate_len):/(C plate_width)]
 
 strDisFac :: QDefinition
 strDisFac = mkDataDef stressDistFac strDisFac_eq

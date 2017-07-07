@@ -63,7 +63,7 @@ analysis, appendix, characteristic, client, class_, column, company, component,
   intReader, introduction, item, label, library, limitation, literacy, method_, module_,
   model, name_, nonfunctional, offShelf, open, organization, output_, physics, physical,
   plan, practice, priority, problem, product_, project, property, purpose, quantity,
-  realtime, reference, requirement_, reviewer, scope, second_, section_, source,
+  realtime, reference, requirement_, reviewer, safety, scope, second_, section_, source,
   simulation, software, solution, specific, specification, stakeholder, statement, 
   symbol_, system, table_, template, terminology, theory, traceyGraph, traceyMatrix,
   uncertainty, user, useCase, validation, value, variable, video,
@@ -137,6 +137,7 @@ realtime        = npnc "real-time"      (cn' "real-time")
 reference       = npnc "reference"      (cn' "reference")
 requirement_    = npnc "requirement"    (cn' "requirement") -- FIXME: Eventually only have one requirement
 reviewer        = npnc "reviewer"       (cn' "reviewer")
+safety          = npnc "safety"         (cnIES "safety")
 scope           = npnc "scope"          (cn' "scope")
 second_         = npnc "second"         (cn' "second") --Does it make sense for this to be here?
 section_        = npnc "section"        (cn' "section")
@@ -192,8 +193,8 @@ designDoc, generalSystemDescription, indPRCase,
   physicalConstraint, physicalSystem, problemDescription, prodUCTable,
   specificsystemdescription, systemdescription, systemConstraint, sysCont,
   userCharacteristic, datumConstraint, functionalRequirement,
-  nonfunctionalRequirement, softwareConstraint, softwareDoc, softwareReq,
-  softwareSys, softwareVerif, softwareVAV, solutionCharSpec,
+  nonfunctionalRequirement, safetyReq, softwareConstraint, softwareDoc,
+  softwareReq, softwareSys, softwareVerif, softwareVAV, solutionCharSpec,
   solutionCharacteristic, offShelfSolution, physicalSim, productUC, 
   useCaseTable, physicalProperty, vavPlan, userInput :: NamedChunk
  
@@ -211,6 +212,7 @@ physicalSystem               = compoundNC physical system
 problemDescription           = compoundNC problem description
 prodUCTable                  = compoundNC productUC table_
 productUC                    = compoundNC product_ useCase
+safetyReq                    = compoundNC safety requirement_
 softwareConstraint           = compoundNC software constraint
 softwareDoc                  = compoundNC software documentation
 softwareReq                  = compoundNC' software requirement_

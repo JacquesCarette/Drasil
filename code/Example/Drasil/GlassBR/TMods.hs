@@ -25,13 +25,13 @@ t1descr :: Sentence
 t1descr = 
   foldlSent [S "If", (getS is_safe1), S "= True, the glass is" +:+. 
   S "considered safe", (getS is_safe1), S "and", (getS is_safe2),
-  sParen (S "from" +:+ (makeRef ((Definition (symbolMap glassBRSymbols) . Theory) t2SafetyReq))),
+  sParen (S "from" +:+ 
+  (makeRef ((Definition (symbolMap glassBRSymbols) . Theory) t2SafetyReq))),
   S "are either" +:+. S "both True or both False",
   ((getS prob_br) `isThe` (phrase prob_br)) 
   `sC` S "as calculated in" +:+.
   (makeRef ((Definition (symbolMap glassBRSymbols) . Theory) probOfBr)),
-  (getS pb_tol) `isThe` (phrase pb_tol),
-  S "entered by the user"]
+  (getS pb_tol) `isThe` (phrase pb_tol), S "entered by the user"]
 
 t2SafetyReq :: RelationConcept
 t2SafetyReq = makeRC "t2SafetyReq" (nounPhraseSP "Safety Requirement-2")
@@ -51,4 +51,5 @@ t2descr =
   sParen (S "also called capacity") `sC` S "as defined in" +:+. 
   (makeRef ((Definition (symbolMap glassBRSymbols) . Theory) calOfCap)), 
   (getS demand), sParen (S "also referred as the" +:+ (titleize demandq)),
-  S "is the", (demandq ^. defn) `sC` S "as defined in", (makeRef ((Definition (symbolMap glassBRSymbols) . Theory) calOfDe))]
+  S "is the", (demandq ^. defn) `sC` S "as defined in",
+  (makeRef ((Definition (symbolMap glassBRSymbols) . Theory) calOfDe))]

@@ -31,15 +31,18 @@ x   = makeVC "x"    (nounPhraseSP "x")    lX -- = params.wtnt from mainFun.py
 
 w_j, w_jPlus1 :: VarChunk
 w_j      = makeVC "w_j"      (nounPhraseSP "wj") (sub (lW) (lJ))
-w_jPlus1 = makeVC "w_jPlus1" (nounPhraseSP "wj plus 1") (sub (lW) (Concat [lJ, Atomic "+1"])) -- better way to implement "+1"?
+w_jPlus1 = makeVC "w_jPlus1" (nounPhraseSP "wj plus 1")
+  (sub (lW) (Concat [lJ, Atomic "+1"])) -- better way to implement "+1"?
 
 s_j, s_jPlus1 :: VarChunk
 s_j      = makeVC "s_j"      (nounPhraseSP "sj") (sub (lS) (lJ))
-s_jPlus1 = makeVC "s_jPlus1" (nounPhraseSP "sj plus 1") (sub (lS) (Concat [lJ, Atomic "+1"])) -- better way to implement "+1"?
+s_jPlus1 = makeVC "s_jPlus1" (nounPhraseSP "sj plus 1") 
+  (sub (lS) (Concat [lJ, Atomic "+1"])) -- better way to implement "+1"?
 
 q_j, q_jPlus1 :: VarChunk
 q_j      = makeVC "q_j"      (nounPhraseSP "qj") (sub (lQ) (lJ))
-q_jPlus1 = makeVC "q_jPlus1" (nounPhraseSP "qj plus 1") (sub (lQ) (Concat [lJ, Atomic "+1"])) -- better way to implement "+1"?
+q_jPlus1 = makeVC "q_jPlus1" (nounPhraseSP "qj plus 1") 
+  (sub (lQ) (Concat [lJ, Atomic "+1"])) -- better way to implement "+1"?
 
 q_1, q_2 :: VarChunk
 q_1 = makeVC "q_1" (nounPhraseSP "q_1") (sub (lQ) (Atomic "1"))

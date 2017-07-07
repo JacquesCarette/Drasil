@@ -43,10 +43,11 @@ capdescr =
   S "which" +:+. S "is also called capacity" +:+. ((getS nonFL) `isThe`
   (phrase nonFL)) +:+. ((short glassTypeFac) `isThe` (phrase glassTypeFac))
   +:+. ((short lShareFac) `isThe` (phrase lShareFac)), S "Follows",
-  (acroA 2), S "and", (acroA 1), sParen (Quote (S "In development of this procedure, it was assumed that" +:+
-  S "all four edges of the glass are simply supported and free to slip in the" +:+
-  S "plane of the glass. This boundary condition has been shown to be typical" +:+
-  S "of many glass installations")) +:+ S "from [4 (pg. 53)]"]
+  (acroA 2), S "and", (acroA 1), sParen (Quote 
+  (S "In development of this procedure, it was assumed that" +:+
+  S "all four edges of the glass are simply supported and free to slip" +:+
+  S "in the plane of the glass. This boundary condition has been shown" +:+
+  S "to be typical of many glass installations")) +:+ S "from [4 (pg. 53)]"]
 
 {--}
 

@@ -1,5 +1,6 @@
 --------------------------------------------------
 ### Summary of Folder Structure and File Contents
+Last updated: July 7, 2017
 --------------------------------------------------
 
 ASTM_F2248-09.png
@@ -26,6 +27,9 @@ DataDefs.hs
 IMods.hs
   - GlassBR's specific knowledge-base for instance models.
   
+Interpolation.hs
+  - Chunks that express the interpolation math model for GlassBR.
+
 Main.hs 
   - A list of what should be generated
   

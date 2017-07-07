@@ -60,16 +60,16 @@ notApp      = commonIdea "notApp"      (nounPhraseSP "not applicable")          
 analysis, appendix, characteristic, client, class_, column, company, component,
   condition, constraint, connection, content, context, customer, datum, decision,
   definition, dependency, description, design, document, documentation,
-  element, endUser, environment, figure, functional, game, general, 
-  goal, guide, implementation, individual, information, interest, input_, instance_,
-  intReader, introduction, item, label, library, limitation, literacy, method_, module_,
-  model, name_, nonfunctional, offShelf, open, organization, output_, physics, physical,
-  plan, practice, priority, problem, product_, project, property, purpose, quantity,
-  realtime, reference, requirement_, reviewer, safety, scope, second_, section_, source,
-  simulation, software, solution, specific, specification, stakeholder, statement, 
-  symbol_, system, table_, template, terminology, theory, traceyGraph, traceyMatrix,
-  uncertainty, user, useCase, validation, value, variable, video,
-  verification, year :: NamedChunk
+  element, endUser, environment, figure, functional, game, general, goal, guide,
+  implementation, individual, information, interest, interface, input_, instance_,
+  intReader, introduction, item, label, library, limitation, literacy, method_,
+  module_, model, name_, nonfunctional, offShelf, open, organization, output_, 
+  physics, physical, plan, practice, priority, problem, product_, project, property,
+  purpose, quantity, realtime, reference, requirement_, reviewer, safety, scope,
+  second_, section_, source, simulation, software, solution, specific, specification,
+  stakeholder, statement, symbol_, system, table_, template, terminology, theory,
+  traceyGraph, traceyMatrix, uncertainty, user, useCase, validation, value, variable,
+  video, verification, year :: NamedChunk
 
 analysis        = npnc "analysis"       (cnIS "analysis")
 appendix        = npnc "appendix"       (cnICES "appendix")
@@ -106,6 +106,7 @@ implementation  = npnc "implementation" (cn' "implementation")
 individual      = npnc "individual"     (cn' "individual")
 information     = npnc "information"    (cn "information")
 interest        = npnc "interest"       (cn' "interest")
+interface       = npnc "interface"      (cn' "interface")
 input_          = npnc "input"          (cn' "input")
 instance_       = npnc "instance"       (cn' "instance")
 intReader       = npnc "intReader"      (cn' "intended reader")

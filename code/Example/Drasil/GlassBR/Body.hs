@@ -77,7 +77,7 @@ mkSRS = [RefSec (RefProg intro
   (IntroProg (startIntro (blstRskInvWGlassSlab) (gLassBR)) (short gLassBR)
      [IPurpose (s2_1_intro_p1 (document) (gLassBR) (glaSlab)),
      IScope incScoR endScoR,
-     IChar knowIR undIR appStanddIR,
+     IChar (rdrKnldgbleIn (glBreakage) (blastRisk)) undIR appStanddIR,
      IOrgSec s2_3_intro dataDefn (SRS.dataDefn SRS.missingP []) s2_3_intro_end])] ++
   map Verbatim [s3, s4, s5 {-, s6-}] ++
   [SSDSec (SSDVerb s6)] {-(SSDProg [SSDProblem, SSDSolChSpec])-} ++
@@ -201,7 +201,7 @@ blstRskInvWGlassSlab = phrase blastRisk +:+ S "involved with the" +:+
 isExpctdToHv :: Sentence -> Sentence -> Sentence
 a `isExpctdToHv` b = S "The" +:+ a +:+ S "is expected to have" +:+ b
 
-s4_1_bullets :: (NamedIdea n, NamedIdea n1, NamedIdea n2, NamedIdea n3,
+s4_1_bullets :: (NamedIdea n1, NamedIdea n, NamedIdea n2, NamedIdea n3,
   NamedIdea n4, NamedIdea n5, NamedIdea c , NamedIdea n6) => n6 -> c ->
   n5 -> n4 -> n3 -> n2 -> n1 -> n -> Contents
 --FIXME: better way to do this? ; is this really necessary (i.e. too many things being passed in)
@@ -218,11 +218,13 @@ startIntro sfwrPredicts progName = foldlSent [
   at_start software, S "is helpful to efficiently and correctly predict the"
   +:+. sfwrPredicts, underConsidertn blast, S "The", phrase software `sC`
   S "herein called", short progName, S "aims to predict the", sfwrPredicts, 
-  S "using an intuitive interface"]
+  S "using an intuitive", phrase interface]
 
-knowIR, undIR, appStanddIR, incScoR, endScoR :: Sentence
-knowIR = (phrase theory +:+ S "behind" +:+ phrase glBreakage `sAnd`
-  phrase blastRisk)
+rdrKnldgbleIn :: (NamedIdea n, NamedIdea n1) => n1 -> n -> Sentence
+rdrKnldgbleIn undrstd1 undrstd2 = (phrase theory +:+ S "behind" +:+ 
+  phrase undrstd1 `sAnd` phrase undrstd2)
+
+undIR, appStanddIR, incScoR, endScoR :: Sentence
 undIR = (foldlList [phrase scndYrCalculus, phrase structuralMechanics, 
   S "computer applications in" +:+ phrase civilEng])
 appStanddIR = (S "In addition, reviewers should be familiar with the" +:+
@@ -285,8 +287,8 @@ s4_1_bullets intendedIndvdl progName yr degreeType prog1 prog2 undrstd1 undrstd2
   `isExpctdToHv` S "completed at least" +:+ (S "equivalent" `ofThe` (phrase yr))
   +:+ S "of an" +:+ phrase degreeType +:+ S "in" +:+ phrase prog1 +:+ S "or"
   +:+. phrase prog2), 
-  (phrase intendedIndvdl `isExpctdToHv` S "an understanding of" +:+ phrase theory
-  +:+ S "behind" +:+. (phrase undrstd1 `sAnd` phrase undrstd2)),
+  (phrase intendedIndvdl `isExpctdToHv` S "an understanding of" +:+.
+  rdrKnldgbleIn (undrstd1) (undrstd2)),
   (phrase intendedIndvdl `isExpctdToHv` S "basic" +:+ phrase computerLiteracy
   +:+ S "to handle the" +:+. phrase software)]
 

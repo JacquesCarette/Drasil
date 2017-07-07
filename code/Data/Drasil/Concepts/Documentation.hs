@@ -28,8 +28,10 @@ acroT  numVar = short thModel     :+: S (show numVar)
 -- number from which to start counting.
 acroNumGen :: [Contents] -> Int -> [Contents]
 acroNumGen [] _ = []
-acroNumGen assump num = (f $ head assump) : acroNumGen (tail assump) (num + 1)
+acroNumGen (first:rest) num = (f first) : acroNumGen rest (num + 1)
   where f (Assumption a _) = Assumption a (S "A" :+: (S $ show num))
+        f (Requirement r _) = Requirement r (S "R" :+: (S $ show num))
+        f (LikelyChange lc _) = LikelyChange lc (S "LC" :+: (S $ show num))
 
 assumption, dataDefn, genDefn, goalStmt, inModel, likelyChg, unlikelyChg,
   physSyst, requirement, srs, thModel, mg, desSpec, notApp, dataConst :: CI

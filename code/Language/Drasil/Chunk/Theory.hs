@@ -1,20 +1,21 @@
 {-# Language GADTs, Rank2Types #-}
 
 module Language.Drasil.Chunk.Theory 
-  ( tc', Theory(..), TheoryChunk, TheoryModel
+  ( tc', Theory(..), TheoryChunk, TheoryModel, tm, tw
   )where
 
 import Language.Drasil.Chunk
 import Language.Drasil.Chunk.Concept
 import Language.Drasil.Chunk.Constrained
 import Language.Drasil.Chunk.Eq
+import Language.Drasil.Chunk.NamedIdea
 import Language.Drasil.Chunk.Quantity
 
-import Control.Lens (Simple, Lens)
+import Control.Lens (Simple, Lens, set, (^.))
 import Prelude hiding (id)
 
 class Theory t where
-  valid_context :: Simple Lens t [t]
+  valid_context :: Simple Lens t [TWrapper]
   spaces :: Simple Lens t [SpaceDefn] 
   quantities :: Simple Lens t [QWrapper]
   operations :: Simple Lens t [CWrapper] -- FIXME: Should not be Concept
@@ -25,7 +26,7 @@ class Theory t where
 data SpaceDefn = SpaceDefn -- FIXME: This should be defined.
   
 data TheoryChunk where
-  TC :: String -> [TheoryChunk] -> [SpaceDefn] -> [QWrapper] -> [CWrapper] -> 
+  TC :: String -> [TWrapper] -> [SpaceDefn] -> [QWrapper] -> [CWrapper] -> 
     [QDefinition] -> [Constraint] -> [QDefinition] -> TheoryChunk
     
 instance Theory TheoryChunk where
@@ -50,10 +51,56 @@ instance Chunk TheoryChunk where
 data TheoryModel where
   TM :: (Concept c, Theory t) => c -> t -> TheoryModel
   
-tc :: (Quantity q, Concept c) => String -> [TheoryChunk] -> [SpaceDefn] -> [q] ->
-  [c] -> [QDefinition] -> [Constraint] -> [QDefinition] -> TheoryChunk
-tc cid t s q c = TC cid t s (map qw q) (map cw c)
+instance Chunk TheoryModel where
+  id = cl id
+instance NamedIdea TheoryModel where
+  term = cl term
+  getA (TM c _) = getA c
+instance Concept TheoryModel where
+  defn = cl defn
+  cdom = cl cdom
+instance Theory TheoryModel where
+  valid_context = tl valid_context
+  spaces        = tl spaces
+  quantities    = tl quantities
+  operations    = tl operations
+  defined_quant = tl defined_quant
+  invariants    = tl invariants
+  defined_fun   = tl defined_fun
+  
+  
+cl :: (forall c. (Concept c) => Simple Lens c a) -> Simple Lens TheoryModel a
+cl l f (TM c t) = fmap (\x -> TM (set l x c) t) (f (c ^. l))
+
+tl :: (forall t. (Theory t) => Simple Lens t a) -> Simple Lens TheoryModel a
+tl l f (TM c t) = fmap (\x -> TM c (set l x t)) (f (t ^. l))
+  
+tc :: (Theory t, Quantity q, Concept c) => String -> [t] -> 
+  [SpaceDefn] -> [q] -> [c] -> [QDefinition] -> [Constraint] -> 
+  [QDefinition] -> TheoryChunk
+tc cid t s q c = TC cid (map tw t) s (map qw q) (map cw c)
 
 tc' :: (Quantity q, Concept c) => String -> [q] -> [c] -> [QDefinition] -> 
   [Constraint] -> [QDefinition] -> TheoryChunk
-tc' cid q c = tc cid [] [] (map qw q) (map cw c)
+tc' cid q c = TC cid ([] :: [TWrapper]) [] (map qw q) (map cw c)
+
+tm :: (Concept c, Theory t) => c -> t -> TheoryModel
+tm = TM
+
+data TWrapper where
+  TW :: (Theory t) => t -> TWrapper
+  
+instance Theory TWrapper where
+  valid_context = twl valid_context
+  spaces        = twl spaces
+  quantities    = twl quantities
+  operations    = twl operations
+  defined_quant = twl defined_quant
+  invariants    = twl invariants
+  defined_fun   = twl defined_fun
+  
+twl :: (forall t. (Theory t) => Simple Lens t a) -> Simple Lens TWrapper a
+twl l f (TW t) = fmap (\x -> TW (set l x t)) (f (t ^. l))
+
+tw :: Theory t => t -> TWrapper
+tw = TW

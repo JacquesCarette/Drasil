@@ -98,7 +98,7 @@ module Language.Drasil (
   , CodeSpec, codeSpec, codeSpec', Choices(..), ImplementationType(..)
   , Logging(..), ConstraintBehaviour(..), Structure(..), defaultChoices
   -- Chunk.Theory
-  , Theory, quantities, defined_quant, invariants, defined_fun
+  , Theory(..), tc', TheoryChunk, TheoryModel, tm, tw
 ) where
 
 import Prelude hiding (log, sin, cos, tan, sqrt, id, return, print, break, exp, product)

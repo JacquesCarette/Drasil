@@ -295,13 +295,17 @@ mkSolChSpec si (SCSProg l m) =
     -- over the SCSProg and generate a relevant intro.
     -- Could start with just a quick check of whether or not IM is included and 
     -- then error out if necessary.
-
   
 -- Helper
 siSys :: SystemInformation -> NWrapper
 siSys (SI sys _ _ _ _ _ _ _ _ _ _ _) = nw sys
-  
-  
-  
-  
+
+--BELOW IS IN THIS FILE TEMPORARILY--
+--Creates Contents using an id and description (passed in as a Sentence).
+makeAssump :: String -> Sentence -> Contents
+makeAssump id desc = Assumption (nw $ npnc id $ nounPhraseSent (desc)) EmptyS
+
+--Creates Contents using an id and description (passed in as a String).
+makeAssump' :: String -> String -> Sentence -> Contents
+makeAssump' id desc x = Assumption (nw $ npnc id $ nounPhraseSP (desc)) x
   

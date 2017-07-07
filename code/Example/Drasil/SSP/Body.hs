@@ -635,49 +635,58 @@ rigFoSDerivation = [foldlSP [S "RFEM analysis can also be used to calculate the"
   foldlSP [S "With the definition of normal stiffness from", acroDD 14, --FIXME: grab nrmStiffBase's term name?
   S "to find the normal stiffness of the base", getS nrmStiffBase,
   S "and the now known base displacement perpendicular to the surface",
-  getS nrmDispl, S "from", eqN 25, S "the",
-  S "normal base stress can be calculated from the force-displacement relationship of T5. Stress", getS normStress, S "is",
-  S "used in place of force", getS genForce, S "as the stiffness hasn't been normalized for the length of the base. Results",
-  S "in equation (26)"],
+  getS nrmDispl, S "from", eqN 25, S "the", S "normal base stress",
+  S "can be calculated from the force-displacement relationship of" +:+. acroT 5,
+  S "Stress", getS normStress `sIs` S "used in place of force", getS genForce, --FIXME: use getTandS
+  S "as the stiffness hasn't been normalized for the length of the base. Results" --FIXME: grammar
+  `sIn` eqN 26],
 
   EqnBlock $
   C normStress := C nrmStiffBase * C nrmDispl, --FIXME: index
   
-  foldlSP [S "The resistive shear to calculate the factor of safety", getS fs, S "in is found from the Mohr Coulomb resistive",
-  S "strength of soil in T3. Using the normal stress", getS normStress, S "from equation (26) as the stress the resistive",
-  S "shear of the slice can be calculated from calculated in equation (27)"],
+  foldlSP [S "The resistive shear to calculate the", getTandS fs,
+  S "is found from the Mohr Coulomb resistive strength of soil in", acroT 3,
+  S "Using the", getTandS normStress, S "from", eqN 26, S "as the stress, the resistive",
+  S "shear of the slice can be calculated from", eqN 27],
   
   EqnBlock $
   C mobShrI := C cohesion - C normStress * tan(C fricAngle), --FIXME: index and prime
   
-  foldlSP [S "Previously the value of the base shear stiffness", getS shrStiffBase, S "as seen in equation (28) was unsolvable because",
-  S "the normal stress", getS normStress, S "was unknown. With the definition of", getS normStress, S "from equation (26) and the definition",
-  S "of displacement shear to the base", getS shrDispl, S "from equation (25), the value of", getS shrStiffBase, S "becomes solvable"],
+  foldlSP [S "Previously the value of the", getTandS shrStiffBase,
+  S "as seen in", eqN 28, S "was unsolvable because the", getTandS normStress,
+  S "was unknown. With the definition of", getS normStress, S "from", eqN 26,
+  S "and the definition of displacement shear to the base", getS shrDispl,
+  S "from", eqN 25 `sC` S "the value of", getS shrStiffBase, S "becomes solvable"],
   
   EqnBlock $
   C shrStiffBase := C intNormForce / (Int 2 * (Int 1 + C poissnsRatio)) * (Dbl 0.1 / C baseWthX) +
   (C cohesion - C normStress * tan(C fricAngle)) / (abs (C shrDispl) + V "a"),
   
-  foldlSP [S "With shear stiffness", getS shrStiffBase, S "calculated in equation (28) and shear displacement", getS shrDispl, S "calculated in",
-  S "equation (24) values now known the shear stress acting on the base of a slice", getS shrStress, S "can be calculated",
-  S "using T5, as done in equation (29). Again stress", getS shrStress, S "is used in place of force", getS genForce, S "as the stiffness hasn't",
-  S "been normalized for the length of the base"],
+  foldlSP [S "With", getTandS shrStiffBase, S "calculated in", eqN 28,
+  S "and shear displacement", getS shrDispl, S "calculated in", eqN 24, --FIXME: grab term too once we have a displacement modifier
+  S "values now known the", phrase shrStress, shrStress ^. defn, getS shrStress,
+  S "can be calculated using", acroT 5 `sC` S "as done in" +:+. eqN 29,
+  S "Again, stress", getS shrStress, S "is used in place of force", getS genForce, --FIXME: grab term
+  S "as the stiffness has not been normalized for the length of the base"],
   
   EqnBlock $
   C shrStress := C shrStiffBase * C shrDispl,
   
-  foldlSP [S "The shear stress on the base", getS shrStress, S "acts as the mobile shear acting on the base. Using the definition",
-  S "Factor of Safety equation from T1, with the definitions of resistive shear strength of a slice", getS mobShrI,
-  S "from equation (27) and shear stress on a slice", getS shrStress, S "from equation (29) the factor of safety for a slice",
-  getS fsloc, S "can be found from as seen in equation (30), and IM5"],
+  foldlSP [S "The", phrase shrStress, shrStress ^. defn, getS shrStress, --FIXME: ISSUE #348
+  S "acts as the mobile shear acting on the base. Using the definition",
+  titleize fs, S "equation from", acroT 1 `sC` S "with the definitions of",
+  S "resistive shear strength of a slice", getS mobShrI,
+  S "from equation (27) and shear stress on a slice", getS shrStress, S "from",
+  eqN 29, S "the", getTandS fsloc, S "can be found from as seen in", eqN 30 `sAnd` acroIM 5],
   
   EqnBlock $
   C fsloc := C mobShrI / C shrStress :=
   (C cohesion - C nrmStiffBase * C nrmDispl * tan(C fricAngle)) /
   (C shrStiffBase * C shrDispl), --FIXME: pull parts of this equation from other equations such as IM5
   
-  foldlSP [S "The global Factor of Safety is then the ratio of the summation of the resistive and mobile shears",
-  S "for each slice, with a weighting for the length of the slices base. Shown in equation (31), and IM5"],
+  foldlSP [S "The global", titleize fs, S "is then the ratio of the summation",
+  S "of the resistive and mobile shears for each slice, with a weighting for the",
+  S "length of the slices base. Shown in", eqN 31 `sAnd` acroIM 5],
   
   EqnBlock $ --FIXME: pull from other equations in derivation
   (C fs) := summation (Just (lI, Low $ Int 1, High $ C numbSlices))

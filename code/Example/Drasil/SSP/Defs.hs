@@ -48,8 +48,7 @@ crtSlpSrf = dccWDS "critical slip surface" (cn' "critical slip surface")
     ((phrase factor) `sOf` (phrase safety)) `sC` S "and therefore most likely to experience failure.")
     
 --
-factor, safety :: NamedChunk
+factor :: NamedChunk
 factor = npnc "factor" (cn' "factor")
-safety = npnc "safety" (cnIES "safety")
 factorOfSafety :: NP
 factorOfSafety = factor `of_''` safety

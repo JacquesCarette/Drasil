@@ -348,7 +348,7 @@ s4_2_1_assum5 = [S "All", (plural CP.rigidBody),
   (plural CP.collision), S "are vertex-to-edge", 
   (plural CP.collision)]
 
-s4_2_1_assum6 = thereNo [S "damping"]
+s4_2_1_assum6 = thereNo [S "damping"] --fixme: damping should be a concept in math or physics??
 s4_2_1_assum7 = thereNo [(plural CM.constraint), (plural CP.joint)]
 
 s4_2_1_list = enumSimple 1 (getAcc assumption) $ map (foldlSent) 

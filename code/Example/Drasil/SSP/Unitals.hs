@@ -309,7 +309,7 @@ rotatedDispl = uc' "varepsilon_i" (cn "displacement") ("in rotated coordinate sy
   (sub (Greek Epsilon_V) lI) metre
   
 shrStress    = uc' "tau_i" (cn "shear stress") ("acting on the base of a slice")
-  (sub (Greek Tau_L) lI) newton
+  (sub (Greek Tau_L) lI) pascal
 
 ----------------------
 -- Unitless Symbols --

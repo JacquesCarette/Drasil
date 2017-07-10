@@ -81,7 +81,7 @@ bShFEq_desc = foldlSent [S "For a", phrase slice, S "of", phrase mass,
 
 --
 resShr :: RelationConcept
-resShr = makeRC "resShr" (nounPhraseSP "resistive shear") resShr_desc resShr_rel
+resShr = makeRC "resShr" (nounPhraseSP "resistive shear force") resShr_desc resShr_rel
 
 resShr_rel :: Relation
 resShr_rel = C shrResI := C nrmFSubWat :* tan (C fricAngle) :+ C cohesion :* C baseWthX :* sec (C baseAngle)
@@ -91,8 +91,8 @@ resShr_desc = foldlSent [S "The Mohr-Coulomb resistive shear strength of a",
   phrase slice, getS shrResI, S "is adjusted to account for the",
   S "effective", phrase normal,
   (E $ (C nrmStrss) := (C nrmFSubWat) := (C totNrmForce) :- (C baseHydroForce)),
-  S "of a soil from" +:+. acroT 4, -- FIXME: add prime to nrmStrss aboves
-  S "Also and the cohesion is adjusted to account for the", phrase len,
+  S "of a soil from" +:+. acroT 4, -- FIXME: add prime to nrmStrss above
+  S "T3 FIXME: update discription.", S "The cohesion is adjusted to account for the", phrase len,
   S "l of the plane where the", phrase normal, S "occurs, where",
   (E $ (C baseLngth) := (C baseWthX) :* sec (C baseAngle))`sC` S "and", getS baseWthX,
   S "is the x width of the base. Therefore", --FIXME: do propering indexes and primes here

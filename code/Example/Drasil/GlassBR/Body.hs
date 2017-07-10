@@ -317,17 +317,17 @@ s5_1_table_UC2 = [S "2", titleize output_, short gLassBR, S "Whether or not the"
 
 {--Individual Product Use Cases--}
 
-s5_2_bullets = enumBullet [s5_2_bt_sent1, s5_2_bt_sent2]
+s5_2_bullets = enumBullet [s5_2_bt_sent1 (input_) (user) (glassGeo) (blastTy), s5_2_bt_sent2]
 
-s5_2_bt_sent1 :: Sentence
-s5_2_bt_sent1 = foldlSent [titleize useCase, S "1 refers to the", phrase user,
-  S "providing", phrase input_, S "to", short gLassBR, S "for use within the"
-  +:+. phrase analysis, S "There are two", plural class_, S "of" +: plural input_
-  +:+. (phrase glassGeo `sAnd` phrase blastTy), (glassGeo ^. defn),
-  (blastTy ^. defn), S "These", plural parameter, S "describe",
-  phrase char_weight `sAnd` S "stand off" +:+. phrase blast, S "Another",
-  phrase input_, S "the", phrase user, S "gives" `isThe` S "tolerable", 
-  phrase value, S "of", phrase prob_br]
+s5_2_bt_sent1 :: NamedChunk -> NamedChunk -> ConceptChunk -> ConceptChunk -> Sentence
+s5_2_bt_sent1 io prsn iClass1 iClass2 = foldlSent [titleize useCase, 
+  S "1 refers to the", phrase prsn, S "providing", phrase io, S "to",
+  short gLassBR, S "for use within the" +:+. phrase analysis, 
+  S "There are two", plural class_, S "of" +: plural io +:+.
+  (phrase iClass1 `sAnd` phrase iClass2), (iClass1 ^. defn), (iClass2 ^. defn),
+  S "These", plural parameter, S "describe", phrase char_weight `sAnd` 
+  S "stand off" +:+. phrase blast, S "Another", phrase io, S "the", phrase prsn,
+  S "gives" `isThe` S "tolerable", phrase value, S "of", phrase prob_br]
 
 s5_2_bt_sent2 :: Sentence
 s5_2_bt_sent2 = foldlSent [titleize useCase, S "2", short gLassBR,

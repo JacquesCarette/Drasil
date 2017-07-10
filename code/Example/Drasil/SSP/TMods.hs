@@ -70,7 +70,7 @@ mcSS_desc = foldlSent [S "For a", phrase soil, S "under", phrase stress,
   getTandS shrStress, S "is proportional to the product of the",
   phrase normStress, S "on the plane", getS normStress,
   S "with it's static", phrase friction, S "in the angular form" +:+.
-  (E $ (tan (C fricAngle)) := (C surfHydroForce)), --FIXME: sould say U_s but there is no way to say that yet
+  (E $ tan (C fricAngle) := C surfHydroForce), --FIXME: sould say U_s but there is no way to say that yet
   S "The", getS shrStress, S "versus", getS normStress, S "relationship is not truly",
   phrase linear `sC` S "but assuming the effective", phrase normForce,
   S "is strong enough it can be approximated with a", phrase linear,

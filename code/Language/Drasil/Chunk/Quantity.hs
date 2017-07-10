@@ -1,10 +1,13 @@
 {-# OPTIONS -Wall #-}
-{-# LANGUAGE GADTs #-}
-module Language.Drasil.Chunk.Quantity where
+{-# LANGUAGE GADTs,Rank2Types #-}
+module Language.Drasil.Chunk.Quantity 
+  ( Quantity(..), QWrapper, qw
+  ) where
 
 import Control.Lens
 
 import Language.Drasil.Space
+import Language.Drasil.Chunk
 import Language.Drasil.Chunk.NamedIdea
 import Language.Drasil.Chunk.VarChunk
 import Language.Drasil.Chunk.ConVar
@@ -36,4 +39,25 @@ instance Quantity ConVar where
   typ    f (CV c s t) = fmap (\x -> CV c s x) (f t)
   getSymb   = Just . SF 
   getUnit _ = Nothing
+
+data QWrapper where
+  QW :: (Quantity q) => q -> QWrapper
   
+instance Chunk QWrapper where
+  id = qlens id
+  
+instance NamedIdea QWrapper where
+  term = qlens term
+  getA (QW a) = getA a
+  
+instance Quantity QWrapper where
+  typ = qlens typ
+  getSymb (QW a) = getSymb a
+  getUnit (QW a) = getUnit a
+
+qlens :: (forall c. (Quantity c) => 
+  Simple Lens c a) -> Simple Lens QWrapper a
+qlens l f (QW a) = fmap (\x -> QW (set l x a)) (f (a ^. l))
+
+qw :: Quantity q => q -> QWrapper
+qw = QW

@@ -412,3 +412,9 @@ wtntWithEqn = mkDataDef eqTNTWeight wtntCalculation
 
 wtntCalculation :: Relation
 wtntCalculation = (C eqTNTWeight) := (C char_weight) * (C tNT)
+
+aspectRWithEqn :: QDefinition
+aspectRWithEqn = mkDataDef aspectR aspectRCalculation
+
+aspectRCalculation :: Relation
+aspectRCalculation = (C aspectR) := (C plate_len)/(C plate_width)

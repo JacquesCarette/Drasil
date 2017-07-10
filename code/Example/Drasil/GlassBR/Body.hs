@@ -10,8 +10,8 @@ import Data.Drasil.Software.Products
 import Data.Drasil.Concepts.Computation
 import Data.Drasil.Concepts.Thermodynamics (degree_')
 import Data.Drasil.Concepts.Software
-import Data.Drasil.Concepts.Math (graph, calculation, equation,
-  surface, probability, parameter)
+import Data.Drasil.Concepts.Math (graph, calculation, probability,
+  parameter)
 import Data.Drasil.Concepts.Thermodynamics (heat)
 import Prelude hiding (id)
 import Data.Drasil.Utils
@@ -528,7 +528,7 @@ s7_1_req6 = [(Enumeration $ Simple $ [(acroR 6, Nested (titleize output_ +:+
     map (\d -> Flat $ (at_start d) +:+ sParen (getS d) +:+ sParen (makeRef (gbSymbMapD d)))
     s7_1_req6_pulledList
     ++
-    [Flat $ (titleize aspectR) +:+ sParen (getS aspectR) +:+ E ((C aspectR) := (C plate_len)/(C plate_width))] --FIXME:pull out eqn
+    [Flat $ (titleize aspectR) +:+ sParen (getS aspectR) +:+ E (equat aspectRWithEqn)] --FIXME:pull out eqn
     ))])]
 
 {--Nonfunctional Requirements--}

@@ -60,9 +60,9 @@ notApp      = commonIdea "notApp"      (nounPhraseSP "not applicable")          
 analysis, appendix, characteristic, class_, client, code, column, company, component,
   condition, constraint, connection, content, context, coordinate, customer, datum, 
   decision, definition, dependency, description, design, document, documentation,
-  element, endUser, environment, failure, figure, functional, game, general, goal,
-  guide, implementation, individual, information, interest, interface, input_,
-  instance_, intReader, introduction, item, label, library, limitation, literacy,
+  effect, element, endUser, environment, failure, figure, functional, game, general,
+  goal, guide, implementation, individual, information, interest, interface, input_,
+  instance_, intReader, introduction, item, loss, label, library, limitation, literacy,
   material_, message, method_, module_, model, name_, nonfunctional, offShelf, open,
   organization, output_, physics, physical, plan, practice, priority, problem, product_, 
   project, property, purpose, quantity, realtime, reference, requirement_, reviewer,
@@ -95,6 +95,7 @@ description     = npnc "description"    (cn' "description")
 design          = npnc "design"         (cn' "design")
 document        = npnc "document"       (cn' "document")
 documentation   = npnc "documentation"  (cn' "documentation")
+effect          = npnc "effect"         (cn' "effect")
 element         = npnc "element"        (cn' "element")
 endUser         = npnc "end user"       (cn' "end user")
 environment     = npnc "environment"    (cn' "environment") -- Is this term in the right spot?
@@ -114,11 +115,13 @@ input_          = npnc "input"          (cn' "input")
 instance_       = npnc "instance"       (cn' "instance")
 intReader       = npnc "intReader"      (cn' "intended reader")
 introduction    = npnc "introduction"   (cn' "introduction")
+issue           = npnc "issue"          (cn' "issue")
 item            = npnc "item"           (cn' "item")
 label           = npnc "label"          (cn' "label")
 library         = npnc "library"        (cnIES "library")
 limitation      = npnc "limitation"     (cn' "limitation")
 literacy        = npnc "literacy"       (cnIES "literacy")
+loss            = npnc "loss"           (cn'' "loss")
 material_       = npnc "material"       (cn' "material")
 message         = npnc "message"        (cn' "message")
 method_         = npnc "method"         (cn' "method")

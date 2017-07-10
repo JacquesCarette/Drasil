@@ -18,6 +18,7 @@ import Data.Drasil.Utils
 import Data.Drasil.SentenceStructures (foldlSent, foldlList, ofThe, isThe,
   showingCxnBw, figureLabel, foldlSP, sAnd, foldlsC, tAndDWAcc, tAndDWSym,
   tAndDOnly, sVersus, followA, foldlSent_)
+import Data.Drasil.Concepts.PhysicalProperties (dimension)
 
 import Drasil.Template.MG
 import Drasil.Template.DD
@@ -75,7 +76,7 @@ mkSRS = [RefSec (RefProg intro
   tsymb [TSPurpose, SymbOrder],
   TAandA])] ++
   [IntroSec 
-  (IntroProg (startIntro (blstRskInvWGlassSlab) (gLassBR)) (short gLassBR)
+  (IntroProg (startIntro (software) (blstRskInvWGlassSlab) (gLassBR)) (short gLassBR)
      [IPurpose (s2_1_intro_p1 (document) (gLassBR) (glaSlab)),
      IScope incScoR endScoR,
      IChar (rdrKnldgbleIn (glBreakage) (blastRisk)) undIR appStanddIR,
@@ -204,14 +205,17 @@ s4_1_bullets :: (NamedIdea n1, NamedIdea n, NamedIdea n2, NamedIdea n3,
 ptOfExplsn:: NamedChunk
 ptOfExplsn       = npnc "ptOfExplsn"       (cn' "point of explosion")
 
+lateralLoad :: NamedChunk
+lateralLoad      = compoundNC lateral load
+
 --------------
 
 {--INTRODUCTION--}
 
-startIntro :: Sentence -> CI -> Sentence
-startIntro sfwrPredicts progName = foldlSent [
-  at_start software, S "is helpful to efficiently and correctly predict the"
-  +:+. sfwrPredicts, underConsidertn blast, S "The", phrase software `sC`
+startIntro :: NamedChunk -> Sentence -> CI -> Sentence
+startIntro prgm sfwrPredicts progName = foldlSent [
+  at_start prgm, S "is helpful to efficiently and correctly predict the"
+  +:+. sfwrPredicts, underConsidertn blast, S "The", phrase prgm `sC`
   S "herein called", short progName, S "aims to predict the", sfwrPredicts, 
   S "using an intuitive", phrase interface]
 
@@ -221,7 +225,7 @@ rdrKnldgbleIn undrstd1 undrstd2 = (phrase theory +:+ S "behind" +:+
 
 undIR, appStanddIR, incScoR, endScoR :: Sentence
 undIR = (foldlList [phrase scndYrCalculus, phrase structuralMechanics, 
-  S "computer applications in" +:+ phrase civilEng])
+  plural computerApp +:+ S "in" +:+ phrase civilEng])
 appStanddIR = (S "In addition" `sC` plural reviewer +:+ S "should be familiar with the" +:+
   S "applicable" +:+ plural standard +:+ S "for constructions using glass from" +:+
   sSqBr (S "4-6") +:+ S "in" +:+. (makeRef s11))
@@ -246,6 +250,7 @@ s2_1_intro_p1 typeOf progName gvnVar = foldlSent [S "The main", phrase purpose,
   plural content, S "say what", phrase problem, 
   S "is being solved, but not how to solve it"] --General?
   where predxnGoal = S "resist a specified" +:+ phrase blast
+--FIXME: ^helpful or unnecessary?
 
 {--Scope of Requirements--}
 
@@ -253,10 +258,10 @@ s2_1_intro_p1 typeOf progName gvnVar = foldlSent [S "The main", phrase purpose,
 
 s2_3_intro = foldlSent [S "The", phrase organization, S "of this",
   phrase document, S "follows the", phrase template, S "for an", short srs,
-  S "for", phrase sciCompS, S "proposed by" +:+ (sSqBrForNums 1) 
-  `sAnd` (sSqBrForNums 2), sParen (S "in" +:+ (makeRef s11)) `sC`
+  S "for", phrase sciCompS, S "proposed by" +:+ (sSqBrNum 1) 
+  `sAnd` (sSqBrNum 2), sParen (S "in" +:+ (makeRef s11)) `sC`
   S "with some aspects taken from Volere", phrase template, S "16", 
-  (sSqBrForNums 3)]
+  (sSqBrNum 3)]
   
 s2_3_intro_end = foldl (+:+) EmptyS [(at_start' $ the dataDefn), 
   S "are used to support", (plural definition `ofThe` S "different"), 
@@ -278,10 +283,9 @@ s4 = genSysF [] (s4_1_bullets (endUser) (gLassBR) (secondYear) (undergradDegree)
 
 {--User Characteristics--}
 s4_1_bullets intendedIndvdl progName yr degreeType prog1 prog2 undrstd1 undrstd2
-  = enumBullet [((phrase intendedIndvdl +:+ S "of" +:+ short progName) 
-  `isExpctdToHv` S "completed at least" +:+ (S "equivalent" `ofThe` (phrase yr))
-  +:+ S "of an" +:+ phrase degreeType +:+ S "in" +:+ phrase prog1 +:+ S "or"
-  +:+. phrase prog2), 
+  = enumBullet [foldlSent [(phrase intendedIndvdl +:+ S "of" +:+ short progName) 
+  `isExpctdToHv` S "completed at least", (S "equivalent" `ofThe` (phrase yr)),
+  S "of an", phrase degreeType, S "in", phrase prog1, S "or", phrase prog2], 
   (phrase intendedIndvdl `isExpctdToHv` S "an understanding of" +:+.
   rdrKnldgbleIn (undrstd1) (undrstd2)),
   (phrase intendedIndvdl `isExpctdToHv` S "basic" +:+ phrase computerLiteracy
@@ -317,14 +321,13 @@ s5_2_bullets = enumBullet [s5_2_bt_sent1, s5_2_bt_sent2]
 
 s5_2_bt_sent1 :: Sentence
 s5_2_bt_sent1 = foldlSent [titleize useCase, S "1 refers to the", phrase user,
-  S "providing", phrase input_, S "to", short gLassBR,
-  S "for use within the" +:+. phrase analysis, S "There are two", plural class_, 
-  S "of" +: plural input_ +:+. (phrase glassGeo `sAnd` phrase blastTy),
-  (glassGeo ^. defn), (blastTy ^. defn), S "These",
-  plural parameter, S "describe", phrase char_weight `sAnd`
-  S "stand off" +:+. phrase blast, S "Another", phrase input_,
-  S "the", phrase user, S "gives" `isThe` S "tolerable", phrase value, S "of",
-  phrase prob_br]
+  S "providing", phrase input_, S "to", short gLassBR, S "for use within the"
+  +:+. phrase analysis, S "There are two", plural class_, S "of" +: plural input_
+  +:+. (phrase glassGeo `sAnd` phrase blastTy), (glassGeo ^. defn),
+  (blastTy ^. defn), S "These", plural parameter, S "describe",
+  phrase char_weight `sAnd` S "stand off" +:+. phrase blast, S "Another",
+  phrase input_, S "the", phrase user, S "gives" `isThe` S "tolerable", 
+  phrase value, S "of", phrase prob_br]
 
 s5_2_bt_sent2 :: Sentence
 s5_2_bt_sent2 = foldlSent [titleize useCase, S "2", short gLassBR,
@@ -334,11 +337,10 @@ s5_2_bt_sent2 = foldlSent [titleize useCase, S "2", short gLassBR,
   `sAnd` (phrase demandq `isThe` phrase requirement) +:+. 
   (S "which" `isThe` (demandq ^. defn)), S "The second", 
   phrase condition, S "is to check whether the calculated", 
-  phrase probability, sParen (getS prob_br), 
-  S "is less than the tolerable", phrase probability, sParen (getS pb_tol),
-  S "which is obtained from the", phrase user, S "as an" +:+. phrase input_,
-  S "If both", plural condition, S "return true then it's shown that the",
-  phrase glaSlab, S "is safe to use" `sC` S "else if both return false then the", 
+  phrase probability, sParen (getS prob_br), S "is less than the tolerable",
+  phrase probability, sParen (getS pb_tol), S "which is obtained from the",
+  phrase user, S "as an" +:+. phrase input_, S "If both", plural condition,
+  S "return true then it's shown that the", phrase glaSlab, S "is safe to use" `sC` S "else if both return false then the", 
   phrase glaSlab +:+. S "is considered unsafe", 
   S "All the supporting calculated", plural value, S "are also displayed as", 
   phrase output_]
@@ -350,7 +352,7 @@ s6 = specSysDesF (S "and" +:+ plural definition) [s6_1, s6_2]
 {--PROBLEM DESCRIPTION--}
 
 s6_1 = probDescF start gLassBR ending [s6_1_1, s6_1_2, s6_1_3]
-  where start = foldlSent [S "A", phrase system, 
+  where start = foldlSent [S "A", phrase system,
                 S "is needed to efficiently and correctly predict the", 
                 phrase blastRisk +:+ S "involved with the glass"]
         ending = foldl (+:+) EmptyS [S "interpret the", plural input_, 
@@ -362,7 +364,7 @@ s6_1 = probDescF start gLassBR ending [s6_1_1, s6_1_2, s6_1_3]
 {--Terminology and Definitions--}
 
 s6_1_1 = termDefnF (S "All of the terms are extracted from" +:+ 
-  (sSqBrForNums 4) +:+ S "in" +:+ (makeRef s11)) [s6_1_1_bullets]
+  (sSqBrNum 4) +:+ S "in" +:+ (makeRef s11)) [s6_1_1_bullets]
 
 {--Physical System Description--}
 
@@ -389,7 +391,7 @@ s6_1_2_list_physys2 imprtntElem = foldlSent [S "The"
 
 {--Goal Statements--}
 
-s6_1_3 = goalStmtF [foldlList [S "dimensions" `ofThe`S "glass plane", 
+s6_1_3 = goalStmtF [foldlList [(plural dimension) `ofThe`S "glass plane", 
   phrase glassTy, plural characteristic `ofThe` phrase explosion, 
   S "the" +:+ phrase pb_tol]] [s6_1_3_list]
 
@@ -410,9 +412,9 @@ s6_2 = solChSpecF gLassBR (s6_1, s8) (EmptyS)
              (plural value `ofThe` S "specification"), plural parameter,
               S "used in" +:+. (makeRef s6_2_5_table1)] +:+ s6_2_5_intro2
 
-s6_2_intro = foldlSP [S "This", phrase section_, 
-  S "explains all the", plural assumption, S "considered and the", 
-  plural thModel, S "which are supported by the", plural dataDefn]
+s6_2_intro = foldlSP [S "This", phrase section_, S "explains all the",
+  plural assumption, S "considered and the", plural thModel,
+  S "which are supported by the", plural dataDefn]
 
 {--Assumptions--}
 
@@ -466,9 +468,10 @@ s7_1_req4 = mkRequirement "s7_1_req4" req4Desc
 s7_1_req5 = mkRequirement "s7_1_req5" (req5Desc (output_))
 
 req1Desc = foldlSent [at_start input_, S "the", plural quantity, S "from",
-  makeRef s7_1_req1Table `sC` S "which define the glass dimensions" `sC` 
-  (glassTy ^. defn) `sC` S "tolerable", phrase probability,
-  S "of failure and", (plural characteristic `ofThe` phrase blast)]
+  makeRef s7_1_req1Table `sC` S "which define the glass", 
+  plural dimension `sC` (glassTy ^. defn) `sC` S "tolerable", 
+  phrase probability, S "of failure and", 
+  (plural characteristic `ofThe` phrase blast)]
 
 s7_1_req1Table :: Contents
 s7_1_req1Table = Table 
@@ -591,10 +594,8 @@ lc5Desc = foldlSent [acroA 7 `sDash` S "The", phrase software,
 {--TRACEABLITY MATRICES AND GRAPHS--}
 
 s9 = traceMGF traceyMatrices
-  [(foldlList (map plural (take 3 solChSpecSubsections)) +:+. 
-  S "with each other"),
-  (plural requirement +:+ S "on" +:+.
-  foldlList (map plural solChSpecSubsections)),
+  [(foldlList (map plural (take 3 solChSpecSubsections)) +:+. S "with each other"),
+  (plural requirement +:+ S "on" +:+. foldlList (map plural solChSpecSubsections)),
   (foldlsC (map plural (take 3 solChSpecSubsections)) `sC` plural likelyChg
   `sAnd` plural requirement +:+ S "on the" +:+ plural assumption)]
   (traceyMatrices ++ (s9_intro2) ++ traceyGraphs)
@@ -831,10 +832,11 @@ s12_intro = foldlSP [
 
 fig_5 = Figure (titleize figure +: S "5" +:+ (demandq ^. defn) +:+ 
   sParen (getS demand) `sVersus` at_start sD `sVersus` 
-  at_start char_weight +:+ sParen (getS sflawParamM)) "ASTM_F2248-09.png"
+  at_start char_weight +:+ sParen (getS sflawParamM))
+  "ASTM_F2248-09.png"
 
-fig_6 = Figure (titleize figure +:+ S "6: Non dimensional" +:+ 
-  phrase lateral +:+ phrase load +:+ sParen (getS dimlessLoad)
+fig_6 = Figure (titleize figure +: S "6" +:+ S "Non dimensional" +:+ 
+  phrase lateralLoad +:+ sParen (getS dimlessLoad)
   `sVersus` titleize aspectR +:+ sParen (getS aspectR)
   `sVersus` at_start stressDistFac +:+ sParen (getS stressDistFac))
   "ASTM_F2248-09_BeasonEtAl.png"

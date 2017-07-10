@@ -60,15 +60,15 @@ notApp      = commonIdea "notApp"      (nounPhraseSP "not applicable")          
 analysis, appendix, characteristic, class_, client, code, column, company, component,
   condition, constraint, connection, content, context, coordinate, customer, datum, 
   decision, definition, dependency, description, design, document, documentation,
-  element, endUser, environment, figure, functional, game, general, goal, guide,
-  implementation, individual, information, interest, interface, input_, instance_,
-  intReader, introduction, item, label, library, limitation, literacy, material_, 
-  message, method_, module_, model, name_, nonfunctional, offShelf, open, organization,
-  output_, physics, physical, plan, practice, priority, problem, product_, project, 
-  property, purpose, quantity, realtime, reference, requirement_, reviewer, safety, 
-  scope, second_, section_, scenario, source, simulation, software, solution, specific,
-  specification, stakeholder, standard, statement, symbol_, system, table_, template,
-  terminology, theory, traceyGraph, traceyMatrix, uncertainty, user, useCase, 
+  element, endUser, environment, failure, figure, functional, game, general, goal,
+  guide, implementation, individual, information, interest, interface, input_,
+  instance_, intReader, introduction, item, label, library, limitation, literacy,
+  material_, message, method_, module_, model, name_, nonfunctional, offShelf, open,
+  organization, output_, physics, physical, plan, practice, priority, problem, product_, 
+  project, property, purpose, quantity, realtime, reference, requirement_, reviewer,
+  safety, scope, second_, section_, scenario, source, simulation, software, solution, 
+  specific, specification, stakeholder, standard, statement, symbol_, system, table_,
+  template, terminology, theory, traceyGraph, traceyMatrix, uncertainty, user, useCase, 
   validation, value, variable, video, verification, year :: NamedChunk
 
 analysis        = npnc "analysis"       (cnIS "analysis")
@@ -98,6 +98,7 @@ documentation   = npnc "documentation"  (cn' "documentation")
 element         = npnc "element"        (cn' "element")
 endUser         = npnc "end user"       (cn' "end user")
 environment     = npnc "environment"    (cn' "environment") -- Is this term in the right spot?
+failure         = npnc "failure"        (cn' "failure")
 figure          = npnc "figure"         (cn' "figure")
 functional      = npnc "functional"     (cn' "functional") --FIXME: Adjective
 game            = npnc "game"           (cn' "game")

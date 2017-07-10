@@ -13,8 +13,9 @@ mod_calc_desc :: Sentence -> ConceptChunk
 mod_calc_desc defnFromEx = dccWDS "mod_calc_desc" (cn' "calculation")   defnFromEx
 
 
-computer, os, structure, type_ :: NamedChunk
+application, computer, os, structure, type_ :: NamedChunk
 
+application     = npnc "application"    (cn' "application")
 computer        = npnc "computer"       (cn' "computer")
 os              = npnc' "os"            (cn' "operating system") "OS"
 structure       = npnc "structure"      (cn' "structure")
@@ -23,7 +24,7 @@ type_           = npnc "type"           (cn' "type")
 
 dataStruct, dataStruct', dataType, dataType', 
   inDatum, outDatum, inParam, inVar, inValue, inQty,
-  computerLiteracy :: NamedChunk
+  computerLiteracy, computerApp :: NamedChunk
 
 dataStruct       = compoundNC'' NP.plural NP.phrase datum structure
 dataStruct'      = compoundNC'' NP.plural NP.plural datum structure
@@ -36,3 +37,4 @@ inVar            = compoundNC input_ variable
 inValue          = compoundNC input_ value
 inQty            = compoundNC input_ quantity
 computerLiteracy = compoundNC computer literacy
+computerApp      = compoundNC computer application

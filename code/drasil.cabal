@@ -255,6 +255,7 @@ executable glassbr
       Drasil.DocumentLanguage
     , Drasil.DocumentLanguage.Definitions
     , Drasil.GlassBR.Body
+    , Drasil.GlassBR.Assumptions
     , Drasil.GlassBR.Changes
     , Drasil.GlassBR.Concepts
     , Drasil.GlassBR.Unitals

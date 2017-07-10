@@ -28,14 +28,14 @@ assumptions = [assumption1, assumption2, assumption3, assumption4, assumption5,
 
 assumption1, assumption2, assumption3, assumption4, assumption5, assumption6,
   assumption7, assumption8 :: Contents
-assumption1 = mkAssump "assumption1" a1Desc
-assumption2 = mkAssump "assumption2" a2Desc
-assumption3 = mkAssump "assumption3" a3Desc
-assumption4 = mkAssump "assumption4" (a4Desc (load_dur))
-assumption5 = mkAssump "assumption5" a5Desc
-assumption6 = mkAssump "assumption6" a6Desc
-assumption7 = mkAssump "assumption7" a7Desc
-assumption8 = mkAssump "assumption8" (a8Desc (loadDF))
+assumption1 = mkAssump "assumption1"   a1Desc              --glassTyAssumps
+assumption2 = mkAssump "assumption2"   a2Desc              --glassCondition
+assumption3 = mkAssump "assumption3"   a3Desc              --explsnScenario
+assumption4 = mkAssump "assumption4"   (a4Desc (load_dur)) --standardValues
+assumption5 = mkAssump "assumption5"   a5Desc              --glassLiteAssmp
+assumption6 = mkAssump "assumption6"   a6Desc              --bndryConditions
+assumption7 = mkAssump "assumption7"   a7Desc              --responseTyAssump
+assumption8 = mkAssump "assumption8"   (a8Desc (loadDF))   --ldfConstant
 
 a1Desc :: Sentence
 a1Desc = foldlSent [S "The standard E1300-09a for",

@@ -257,18 +257,23 @@ fig_forceacting = Figure (at_start' force +:+ S "acting on a" +:+ (phrase slice)
   "ForceDiagram.png"
 
 -- SECTION 4.1.3 --
-s4_1_3 = goalStmtF (map (\(x, y) -> x `ofThe` y) [(S "geometry",
-         S "water" +:+ phrase table_),
-         (S "geometry", S "layers composing the plane of a" +:+ phrase slope),
-         (plural mtrlPrpty, S "layers")]) [s4_1_3_list]
+s4_1_3 = goalStmtF (map (\(x, y) -> x `ofThe` y) [
+  (S "geometry", S "water" +:+ phrase table_),
+  (S "geometry", S "layers composing the plane of a" +:+ phrase slope),
+  (plural mtrlPrpty, S "layers")
+  ]) [s4_1_3_list]
 
-s4_1_3_list = enumSimple 1 (short goalStmt) [
-  (S "Evaluate local and global" +:+ plural fs_rc +:+
-      S "along a given" +:+. phrase slpSrf),
-  (S "Identify the" +:+ phrase crtSlpSrf +:+ S "for the" +:+ phrase slope `sC`
-      S "with the lowest" +:+. phrase fs_rc),
-  (S "Determine" +:+. (S "displacement" `ofThe` phrase slope))
-  ]
+s4_1_3_list = enumSimple 1 (short goalStmt) sspGoals
+
+sspGoals :: [Sentence]
+sspGoals = [locAndGlFS, lowestFS, displSlope]
+
+locAndGlFS, lowestFS, displSlope :: Sentence
+locAndGlFS = S "Evaluate local and global" +:+ plural fs_rc +:+
+  S "along a given" +:+. phrase slpSrf
+lowestFS   = S "Identify the" +:+ phrase crtSlpSrf +:+ S "for the" +:+
+  phrase slope `sC` S "with the lowest" +:+. phrase fs_rc
+displSlope = S "Determine" +:+. (S "displacement" `ofThe` phrase slope)
 
 -- SECTION 4.2 --
 s4_2 = solChSpecF ssa (s4_1, s6) ddEnding (EmptyS, dataConstraintUncertainty, EmptyS)
@@ -284,44 +289,60 @@ s4_2 = solChSpecF ssa (s4_1, s6) ddEnding (EmptyS, dataConstraintUncertainty, Em
 -- SECTION 4.2.1 --
 -- Assumptions is automatically generated in solChSpecF using the list below
 
-s4_2_1_list = enumSimple 1 (short assumption) [
-  (S "The" +:+ phrase slpSrf +:+ S "is concave with respect to" +:+
-    S "the" +:+. phrase slopeSrf +:+ ((getS coords +:+
-    S "coordinates") `ofThe'` S "failure") +:+ phrase surface +:+.
-    S "follow a monotonic function"),
-  (S "geometry" `ofThe'` phrase slope `sC` S "and" +:+
-    (plural mtrlPrpty `ofThe` plural soilLyr) +:+.
-    S "are given as inputs"),
-  (S "different layers" `ofThe'` phrase soil +:+ S "are homogeneous" `sC`
-    S "with consistent" +:+ plural soilPrpty +:+ S "throughout" `sC`
-    S "and independent of dry or saturated" +:+ plural condition `sC`
-    S "with the exception of" +:+ phrase unit_ +:+. S "weight"),
-  (at_start' soilLyr +:+ S "are treated as if they have" +:+.
-    S "isotropic properties"),
-  (at_start intrslce +:+ S "normal and" +:+ plural shearForce +:+ S "have a" +:+
-    S "linear relationship, proportional to a constant" +:+
-    sParen (getS normToShear) +:+ S "and an" +:+
-    phrase intrslce +:+ phrase force +:+ S "function" +:+ sParen (getS scalFunc) +:+.
-    S "depending on x position"),
-  (at_start slice +:+ S "to base normal and" +:+ plural shearForce +:+ S "have" +:+
-    S "a linear relationship, dependent on the" +:+
-    phrase fs_rc +:+ sParen (getS fs) `sC`
-    S "and the Coulomb sliding law."),
-  (S "The" +:+ phrase stress :+: S "-" :+: phrase strain +:+ S "curve for" +:+ --FIXME: add hypens to drasil language
-    phrase intrslce +:+ S "relationships is linear with a constant" +:+.
-    phrase slope),
-  (S "The" +:+ phrase slope +:+ S "and" +:+ phrase slpSrf +:+.
-    S "extends far into and out of the geometry (z coordinate)" +:+
-    S "This implies plane" +:+ phrase strain +:+ plural condition `sC`
-    S "making 2D analysis appropriate."),
-  (S "The effective normal" +:+ phrase stress +:+ S "is large enough" +:+
-    S "that the resistive shear to effective normal" +:+
-    phrase stress +:+ S "relationship can be approximated as a" +:+.
-    S "linear relationship"),
-  (S "The" +:+ phrase surface +:+ S "and base of a" +:+
-    phrase slice +:+ S "between" +:+ phrase intrslce +:+.
-    S "nodes are approximated as straight lines")
-  ]
+s4_2_1_list = enumSimple 1 (short assumption) sspAssumptions
+
+sspAssumptions :: [Sentence]
+sspAssumptions = [monotonicF, slopeG, homogeneousL, isotropicP,
+  linearS, linearF, stressC, planeS, largeN, straightS]
+
+monotonicF, slopeG, homogeneousL, isotropicP, linearS,
+  linearF, stressC, planeS, largeN, straightS :: Sentence
+
+monotonicF = S "The" +:+ phrase slpSrf +:+ S "is concave with respect to" +:+
+  S "the" +:+. phrase slopeSrf +:+ ((getS coords +:+
+  S "coordinates") `ofThe'` S "failure") +:+ phrase surface +:+.
+  S "follow a monotonic function"
+
+slopeG = S "geometry" `ofThe'` phrase slope `sC` S "and" +:+
+  (plural mtrlPrpty `ofThe` plural soilLyr) +:+.
+  S "are given as inputs"
+
+homogeneousL = S "different layers" `ofThe'` phrase soil +:+ S "are homogeneous" `sC`
+  S "with consistent" +:+ plural soilPrpty +:+ S "throughout" `sC`
+  S "and independent of dry or saturated" +:+ plural condition `sC`
+  S "with the exception of" +:+ phrase unit_ +:+. S "weight"
+
+isotropicP = at_start' soilLyr +:+ S "are treated as if they have" +:+.
+  S "isotropic properties"
+
+linearS = at_start intrslce +:+ S "normal and" +:+ plural shearForce +:+ S "have a" +:+
+  S "linear relationship, proportional to a constant" +:+
+  sParen (getS normToShear) +:+ S "and an" +:+
+  phrase intrslce +:+ phrase force +:+ S "function" +:+ sParen (getS scalFunc) +:+.
+  S "depending on x position"
+
+linearF = at_start slice +:+ S "to base normal and" +:+ plural shearForce +:+ S "have" +:+
+  S "a linear relationship, dependent on the" +:+
+  phrase fs_rc +:+ sParen (getS fs) `sC`
+  S "and the Coulomb sliding law."
+
+stressC = S "The" +:+ phrase stress :+: S "-" :+: phrase strain +:+ S "curve for" +:+ --FIXME: add hypens to drasil language
+  phrase intrslce +:+ S "relationships is linear with a constant" +:+.
+  phrase slope
+
+planeS = S "The" +:+ phrase slope +:+ S "and" +:+ phrase slpSrf +:+.
+  S "extends far into and out of the geometry (z coordinate)" +:+
+  S "This implies plane" +:+ phrase strain +:+ plural condition `sC`
+  S "making 2D analysis appropriate."
+
+largeN = S "The effective normal" +:+ phrase stress +:+ S "is large enough" +:+
+  S "that the resistive shear to effective normal" +:+
+  phrase stress +:+ S "relationship can be approximated as a" +:+.
+  S "linear relationship"
+
+straightS = S "The" +:+ phrase surface +:+ S "and base of a" +:+
+  phrase slice +:+ S "between" +:+ phrase intrslce +:+.
+  S "nodes are approximated as straight lines"
 
 -- SECTION 4.2.2 --
 -- TModels is automatically generated in solChSpecF using the tmods below
@@ -727,9 +748,6 @@ waterVert, slipVert, slopeVert :: [Sentence]
 waterVert = verticesConst $ S "water" +:+ phrase table_
 slipVert  = verticesConst $ phrase slip
 slopeVert = verticesConst $ phrase slope
-
-dataConstIn :: [[Sentence]]
-dataConstIn = [waterVert, slipVert, slopeVert] ++ map fmtInConstr sspInputs
 -}
 {-input and output tables-}
 s4_2_6Table2, s4_2_6Table3 :: Contents

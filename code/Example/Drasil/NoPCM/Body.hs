@@ -74,8 +74,8 @@ pcmConstraints =  [coil_SA, htCap_W, coil_HTC, temp_init,
 s4, s4_1, s4_1_1, s4_1_2, s4_1_3, s4_2, {-s3, s3_1, -}
   s5, s5_1, s6, s7, s8, s9 :: Section -- s5_2,
 
-s4_1_intro, s4_1_1_bullets, {-s3_1_intro, sys_context_fig, s3_2_intro, s3_3_intro, -}
-  s4_1_2_list, s4_1_3_intro, s4_1_3_list, fig_tank,
+s4_1_1_bullets, {-s3_1_intro, sys_context_fig, s3_2_intro, s3_3_intro, -}
+  s4_1_2_list,
   s4_2_6_table1, s4_2_6_table2, s9_refs :: Contents
 
 --------------------------------
@@ -86,11 +86,11 @@ mkSRS :: DocDesc
 mkSRS = RefSec (RefProg intro
   [TUnits, tsymb [TSPurpose, SymbConvention
   [Lit (nw ht_trans), Doc' (nw progName)], SymbOrder], TAandA]) :
-  IntroSec (IntroProg s2_start s2_end
-  [IPurpose s2_1,
-  IScope s2_2_start s2_2_end,
+  IntroSec (IntroProg (s2_start energy source progName) (s2_end progName program)
+  [IPurpose (s2_1 purpose document progName goal thModel assumption definition information model srs reference content problem),
+  IScope (s2_2_start thermal_analysis sWHT) (s2_2_end temp thermal_energy water),
   IChar s2_3_knowlegde s2_3_understanding EmptyS,
-  IOrgSec s2_4_intro inModel (SRS.inModel SRS.missingP []) s2_4_end]) :
+  IOrgSec s2_4_intro inModel (SRS.inModel SRS.missingP []) (s2_4_end inModel ode progName)]) :
   map Verbatim [s3, s4, s5, s6, s7, s8, s9]
 
 pcm_si :: SystemInformation
@@ -111,45 +111,55 @@ nopcmSymbMap = symbolMap pcmSymbols
 --Section 2 : INTRODUCTION
 --------------------------
 
-s2_start, s2_end, s2_1, s2_2_start, s2_2_end, {-s2_3kn, s2_3un, s2_4s, -}s2_4_end :: Sentence
+s2_start :: ConceptChunk -> NamedChunk -> CI-> Sentence
 
-s2_start = foldlSent [S "Due to increasing cost, diminishing",
+s2_start en so pro = foldlSent [S "Due to increasing cost, diminishing",
   S "availability, and negative environmental impact of",
   S "fossil fuels, there is a higher demand for renewable",
-  phrase energy, plural source, S "and",
-  phrase energy +:+. S "storage technology", at_start' progName,
-  S "provide a novel way of storing", phrase energy]
+  phrase en, plural so, S "and",
+  phrase en +:+. S "storage technology", at_start' pro,
+  S "provide a novel way of storing", phrase en]
 
-s2_end = foldlSent_ [EmptyS +:+. plural progName, S "The developed",
-  phrase program, S "will be referred to as", titleize progName,
-  sParen (short progName)]
+s2_end :: CI -> ConceptChunk -> Sentence
+
+s2_end pro pr = foldlSent_ [EmptyS +:+. plural pro, S "The developed",
+  phrase pr, S "will be referred to as", titleize pro,
+  sParen (short pro)]
 
 -----------------------------------
 --Section 2.1 : PURPOSE OF DOCUMENT
 -----------------------------------
 
-s2_1 = foldlSent [S "The main", phrase purpose, S "of this",
-  phrase document, S "is to describe the modelling of" +:+.
-  phrase progName, S "The", plural goal, S "and", plural thModel,
-  S "used in the", short progName, S "code are provided, with an emphasis",
-  S "on explicitly identifying", plural assumption, S "and unambiguous" +:+.
-  plural definition, S "This", phrase document,
-  S "is intended to be used as a", phrase reference,
-  S "to provide ad hoc access to all", phrase information,
-  S "necessary to understand and verify the" +:+. phrase model, S "The",
-  short srs, S "is abstract because the", plural content, S "say what",
-  phrase problem, S "is being solved, but do not say how to solve it"]
+s2_1 :: NamedChunk -> NamedChunk -> CI -> NamedChunk -> CI -> CI -> NamedChunk ->
+  NamedChunk -> NamedChunk -> CI -> NamedChunk -> NamedChunk -> NamedChunk -> Sentence
+
+s2_1 pu doc pro go tm assu def inf mo sr ref con pr =
+  foldlSent [S "The main", phrase pu, S "of this",
+  phrase doc, S "is to describe the modelling of" +:+.
+  phrase pro, S "The", plural go, S "and", plural tm,
+  S "used in the", short pro, S "code are provided, with an emphasis",
+  S "on explicitly identifying", plural assu, S "and unambiguous" +:+.
+  plural def, S "This", phrase doc,
+  S "is intended to be used as a", phrase ref,
+  S "to provide ad hoc access to all", phrase inf,
+  S "necessary to understand and verify the" +:+. phrase mo, S "The",
+  short sr, S "is abstract because the", plural con, S "say what",
+  phrase pr, S "is being solved, but do not say how to solve it"]
 
 -------------------------------------
 --Section 2.2 : SCOPE OF REQUIREMENTS
 -------------------------------------
 
-s2_2_start = foldlSent_ [phrase thermal_analysis, S "of a single",
-  phrase sWHT]
+s2_2_start :: ConceptChunk -> ConceptChunk -> Sentence
 
-s2_2_end = foldlSent_ [S "predict the",
-  phrase temp, S "and", phrase thermal_energy,
-  S "histories for the", phrase water]
+s2_2_start ta sw = foldlSent_ [phrase ta, S "of a single",
+  phrase sw]
+
+s2_2_end :: ConceptChunk -> ConceptChunk -> ConceptChunk -> Sentence
+
+s2_2_end tem te wa = foldlSent_ [S "predict the",
+  phrase tem, S "and", phrase te,
+  S "histories for the", phrase wa]
 
 --------------------------------------------------
 --Section 2.3 : CHARACTERISTICS Of INTENDED READER
@@ -183,12 +193,14 @@ s2_3 = charIntRdrF knowledge understanding sWHS EmptyS
   S "for", phrase sciCompS, S "proposed by [2] and",
   sSqBr (S "5")]-}
 
-s2_4_end = foldlSent_ [S "The", phrase inModel,
+s2_4_end :: CI -> CI -> CI -> Sentence
+
+s2_4_end im od pro= foldlSent_ [S "The", phrase im,
   sParen (makeRef (SRS.inModel SRS.missingP [])),
   S "to be solved is referred to as" +:+. acroIM 1,
-  S "The", phrase inModel, S "provides the",
-  titleize ode, sParen (short ode), S "that model the" +:+. phrase progName,
-  short progName, S "solves this", short ode]
+  S "The", phrase im, S "provides the",
+  titleize od, sParen (short od), S "that model the" +:+. phrase pro,
+  short pro, S "solves this", short od]
 
 
 
@@ -242,20 +254,22 @@ sys_context_fig = Figure (makeRef sys_context_fig :+: S ":" +:+
 -----------------------------------------
 
 --TODO: finish filling in the subsections
-s4 = specSysDesF words_ [s4_1, s4_2]
-  where words_ = (plural definition +:+ S "and finally the" +:+
-                  phrase inModel +:+ sParen (getAcc ode) +:+
-                  S "that" +:+ plural model +:+ S "the" +:+ phrase sWHT)
+s4 = specSysDesF (words_ definition inModel ode model sWHT) [s4_1, s4_2]
+  where words_ def im od mo sw = (plural def +:+ S "and finally the" +:+
+                                  phrase im +:+ sParen (getAcc od) +:+
+                                  S "that" +:+ plural mo +:+ S "the" +:+ phrase sw)
 
 -----------------------------------
 --Section 4.1 : PROBLEM DESCRIPTION
 -----------------------------------
 
-s4_1 = SRS.probDesc [s4_1_intro] [s4_1_1, s4_1_2, s4_1_3]
+s4_1 = SRS.probDesc [s4_1_intro progName program water sWHT] [s4_1_1, s4_1_2, s4_1_3]
 
-s4_1_intro = foldlSP [getAcc progName, S "is a computer",
-  phrase program, S "developed to investigate",
-  S "the heating of", phrase water, S "in a", phrase sWHT]
+s4_1_intro :: CI -> ConceptChunk -> ConceptChunk -> ConceptChunk -> Contents
+
+s4_1_intro pro pr wa sw = foldlSP [getAcc pro, S "is a computer",
+  phrase pr, S "developed to investigate",
+  S "the heating of", phrase wa, S "in a", phrase sw]
 
 s4_1_1 = termDefnF EmptyS [s4_1_1_bullets]
 
@@ -263,43 +277,50 @@ s4_1_1_bullets = Enumeration $ (Bullet $ map (\x -> Flat $
   (at_start x) :+: S ":" +:+ (x ^. defn))
   [ht_flux, heat_cap_spec, thermal_conduction, transient])
   
-s4_1_2 = physSystDesc (getAcc progName) fig_tank [s4_1_2_list, fig_tank]
+s4_1_2 = physSystDesc (getAcc progName) (fig_tank sWHT ht_flux coil ht_flux_C)
+  [s4_1_2_list, (fig_tank sWHT ht_flux coil ht_flux_C)]
 
-fig_tank = Figure (at_start sWHT `sC` S "with" +:+ phrase ht_flux +:+
-  S "from" +:+ phrase coil +:+ S "of" +:+ getS ht_flux_C)
+fig_tank :: ConceptChunk -> ConceptChunk -> ConceptChunk -> UnitalChunk -> Contents
+
+fig_tank sw hf co hfc = Figure (at_start sw `sC` S "with" +:+ phrase hf +:+
+  S "from" +:+ phrase co +:+ S "of" +:+ getS hfc)
   "TankWaterOnly.png"
 
 s4_1_2_list = enumSimple 1 (short physSyst) $ map foldlSent_ [physSyst1, physSyst2]
 
-s4_1_3 = SRS.goalStmt [s4_1_3_intro, s4_1_3_list] []
+s4_1_3 = SRS.goalStmt [s4_1_3_intro temp coil temp_W property goalStmt, s4_1_3_list temp_W w_E] []
 
-s4_1_3_intro = foldlSPCol [S "Given the", phrase temp,
-  S "of the", phrase coil `sC` S "initial", phrase temp_W 
-  `sC` S "and material", plural property `sC`
-  S "the", phrase goalStmt, S "are"]
+s4_1_3_intro :: ConceptChunk -> ConceptChunk -> UncertQ -> NamedChunk -> CI -> Contents
 
-s4_1_3_list = Enumeration $ Simple $ map (\(a, b) -> (a, Flat b)) [
-  (acroGS 1, S "predict the" +:+ phrase temp_W +:+ S "over time"),
-  (acroGS 2, S "predict the" +:+ phrase w_E +:+ S "over time")]
+s4_1_3_intro te co tw pr gs = foldlSPCol [S "Given the", phrase te,
+  S "of the", phrase co `sC` S "initial", phrase tw 
+  `sC` S "and material", plural pr `sC`
+  S "the", phrase gs, S "are"]
+
+s4_1_3_list :: UncertQ -> UncertQ -> Contents
+
+s4_1_3_list tw we = Enumeration $ Simple $ map (\(a, b) -> (a, Flat b)) [
+  (acroGS 1, S "predict the" +:+ phrase tw +:+ S "over time"),
+  (acroGS 2, S "predict the" +:+ phrase we +:+ S "over time")]
 
 ------------------------------------------------------
 --Section 4.2 : SOLUTION CHARACTERISTICS SPECIFICATION
 ------------------------------------------------------
   
-s4_2 = solChSpecF progName (s4_1, s6) s4_2_4_intro_end (mid,
-  dataConstraintUncertainty, end) (s4_2_1_list, s4_2_2_T1, s4_2_3_paragraph,
+s4_2 = solChSpecF progName (s4_1, s6) s4_2_4_intro_end (mid column software constraint input_ value,
+  dataConstraintUncertainty, end uncertainty column quantity information) (s4_2_1_list, s4_2_2_T1, s4_2_3_paragraph rOfChng temp,
   s4_2_4_DD1, [swhsSymbMapT eBalanceOnWtr] ++ s4_2_5_d1startPara ++
   s4_2_5_paragraph ++ [swhsSymbMapT heatEInWtr], [s4_2_6_table1, s4_2_6_table2]) []
 
-  where mid = foldlSent [S "The", phrase column, S "for", phrase software,
-          plural constraint, S "restricts the range of",
-          plural input_, S "to reasonable", plural value]
+  where mid co so con inp val = foldlSent [S "The", phrase co, S "for", phrase so,
+          plural con, S "restricts the range of",
+          plural inp, S "to reasonable", plural val]
 
-        end = foldlSent [S "The", phrase uncertainty, phrase column,
+        end unc co qu inf = foldlSent [S "The", phrase unc, phrase co,
           S "provides an estimate of the confidence with which the physical",
-          S "quantities can be measured. This", phrase information,
+          plural qu, S "can be measured. This", phrase inf,
           S "would be part of the input if one were performing an",
-          phrase uncertainty, S "quantification exercise"]
+          phrase unc, S "quantification exercise"]
 
 s4_2_1_list :: [Contents]
 s4_2_1_list = acroNumGen s4_2_1_assump_list 1
@@ -435,13 +456,20 @@ assump14 = mkAssump "assump14"
 {-s4_2_2_TMods :: [Contents]
 s4_2_2_TMods = map (Definition nopcmSymbMap . Theory) [t1consThermE]-}
 
-s4_2_3_equation, s4_2_3_description, s4_2_3_paragraph, s4_2_5_equation,
+s4_2_3_equation, s4_2_5_equation,
   s4_2_5_description, s4_2_5_paragraph :: [Contents]
 
-s4_2_3_paragraph = (map swhsSymbMapT swhsGenDefs) ++ [foldlSPCol [S "Detailed derivation of simplified",
-  phrase rOfChng, S "of", phrase temp]] ++ (weave [s4_2_3_description, s4_2_3_equation])
+s4_2_3_paragraph :: ConceptChunk -> ConceptChunk -> [Contents]
+s4_2_3_paragraph roc te = (map swhsSymbMapT swhsGenDefs) ++ [foldlSPCol [S "Detailed derivation of simplified",
+  phrase roc, S "of", phrase te]] ++ (weave [s4_2_3_description t1ConsThermE vol
+  gauss_div surface thFluxVect uNormalVect unit_ vol_ht_gen ht_flux_in ht_flux_out
+  in_SA out_SA density QT.heat_cap_spec QT.temp assumption assump3 assump4 assump5 mass, s4_2_3_equation])
 
-s4_2_3_description = map foldlSPCol [
+s4_2_3_description :: RelationConcept -> UnitalChunk -> ConceptChunk -> ConVar -> UnitalChunk -> ConVar -> ConceptChunk -> UnitalChunk ->
+  UnitalChunk -> UnitalChunk -> UnitalChunk -> UnitalChunk -> UnitalChunk -> UnitalChunk -> UnitalChunk -> CI -> Contents -> Contents ->
+  Contents -> UnitalChunk -> [Contents]
+
+s4_2_3_description t1C vo gd su tfv unv un vhg hfi hfo iS oS den hcs te assu a3 a4 a5 ma = map foldlSPCol [
 
   [S "Integrating", swhsSymbMapTRef t1ConsThermE,
   S "over a", phrase vol, sParen (getS vol) `sC` S "we have"],

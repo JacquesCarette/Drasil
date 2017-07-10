@@ -184,11 +184,15 @@ s3 = genSysF [] userCharIntro [] []
 -- SECTION 3.1 --
 -- User Characteristics automatically generated in genSysF with the userContraints intro below
 userCharIntro :: Contents
-userCharIntro = foldlSP [S "The", phrase endUser, S "of",
-  short ssa,
-  S "should have an understanding of undergraduate Level 1 Calculus and",
-  titleize physics `sC` S "and be familiar with", phrase soil,
-  S "and", plural mtrlPrpty]
+userCharIntro = userChar ssa [S "Calculus", titleize physics]
+  [phrase soil, plural mtrlPrpty]
+
+userChar :: (NamedIdea a) => a -> [Sentence] -> [Sentence] -> Contents
+userChar pname understandings familiarities = foldlSP [
+  S "The", phrase endUser, S "of", short pname,
+  S "should have an understanding of undergraduate Level 1",
+  foldlList understandings `sC`
+  S "and be familiar with", foldlList familiarities]
 
 -- SECTION 3.2 --
 -- System Constraints automatically generated in genSysF

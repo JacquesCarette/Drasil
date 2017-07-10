@@ -13,18 +13,18 @@ glassBRProg = dcc' "glassBRProg" (nounPhraseSP "GlassBR program")
 -- FIXME: Use actual acronyms instead of CCs.
 
 acronyms :: [CI]
-acronyms = [assumption, annealedGlass, aspectR, dataDefn, fullyTGlass,
+acronyms = [assumption, annealedGlass, dataDefn, fullyTGlass,
   goalStmt, glassTypeFac, heatSGlass, iGlass, inModel, likelyChg, 
   loadDurFactor, lGlass, lResistance, lShareFac, nFL, physSyst, requirement,
   srs, thModel, eqTNT, stdOffDist]
 
-annealedGlass, aspectR, fullyTGlass, glassTypeFac, heatSGlass, loadDurFactor,
+annealedGlass, fullyTGlass, glassTypeFac, heatSGlass, loadDurFactor,
   iGlass, lGlass, lResistance, lShareFac, eqTNT, gLassBR, stdOffDist, nFL :: CI
 
 --FIXME: Add compound nounphrases
 
 annealedGlass = commonIdea "annealedGlass" (nounPhraseSP "annealed glass")          "AN"
-aspectR       = commonIdea' "aspectR"      (nounPhraseSP "aspect ratio")            (Atomic "AR")
+--aspectR       = commonIdea' "aspectR"      (nounPhraseSP "aspect ratio")            (Atomic "AR")
 fullyTGlass   = commonIdea "fullyTGlass"   (nounPhraseSP "fully tempered glass")    "FT"
 glassTypeFac  = commonIdea "glassTypeFac"  (nounPhraseSP "glass type factor")       "GTF"
 heatSGlass    = commonIdea "heatSGlass"    (nounPhraseSP "heat strengthened glass") "HS"
@@ -41,6 +41,7 @@ nFL           = commonIdea "nFL"           (nounPhraseSP "non-factored load")   
 {-Terminology-}
 -- TODO: See if we can make some of these terms less specific and/or parameterized.
  
-blastRisk, glaSlab :: NamedChunk
-blastRisk    = npnc "blastRisk" (nounPhraseSP "blast risk")
-glaSlab      = npnc "glaSlab"   (nounPhraseSP "glass slab")
+blastRisk, cantilever, glaSlab :: NamedChunk
+blastRisk    = npnc "blastRisk"  (nounPhraseSP "blast risk")
+cantilever   = npnc "cantilever" (nounPhraseSP "cantilever")
+glaSlab      = npnc "glaSlab"    (nounPhraseSP "glass slab")

@@ -17,7 +17,7 @@ import Prelude hiding (id)
 import Data.Drasil.Utils
 import Data.Drasil.SentenceStructures (foldlSent, foldlList, ofThe, isThe,
   showingCxnBw, figureLabel, foldlSP, sAnd, foldlsC, tAndDWAcc, tAndDWSym,
-  tAndDOnly, sVersus, followA)
+  tAndDOnly, sVersus, followA, foldlSent_)
 
 import Drasil.Template.MG
 import Drasil.Template.DD
@@ -119,7 +119,7 @@ termsWithDefsOnly, termsWithAccDefn, glassTypes, loadTypes :: [ConceptChunk]
 
 termsWithDefsOnly = [glBreakage, lateral, lite, specA, blastResisGla,
   eqTNTChar]
-termsWithAccDefn  = [sD, loadShareFac, glTyFac, aspectRatio]
+termsWithAccDefn  = [sD, loadShareFac, glTyFac]
 glassTypes = [annealedGl, fTemperedGl, hStrengthGl]
 loadTypes = [loadResis, nonFactoredL,glassWL, shortDurLoad,
   specDeLoad, longDurLoad] 
@@ -134,7 +134,9 @@ s6_1_1_bullets = Enumeration $ (Number $
   ++
   map tAndDWAcc termsWithAccDefn
   ++
-  [tAndDWSym (probBreak) (prob_br)])
+  [tAndDWSym (probBreak) (prob_br)] --FIXME: merge
+  ++
+  [tAndDWSym (aspectRatio) (aspectR)]) --FIXME: merge
 
 s6_1_1_bullets_glTySubSec, s6_1_1_bullets_loadSubSec :: [ItemType]
 
@@ -223,8 +225,8 @@ rdrKnldgbleIn undrstd1 undrstd2 = (phrase theory +:+ S "behind" +:+
 undIR, appStanddIR, incScoR, endScoR :: Sentence
 undIR = (foldlList [phrase scndYrCalculus, phrase structuralMechanics, 
   S "computer applications in" +:+ phrase civilEng])
-appStanddIR = (S "In addition, reviewers should be familiar with the" +:+
-  S "applicable standards for constructions using glass from" +:+
+appStanddIR = (S "In addition" `sC` plural reviewer +:+ S "should be familiar with the" +:+
+  S "applicable" +:+ plural standard +:+ S "for constructions using glass from" +:+
   sSqBr (S "4-6") +:+ S "in" +:+. (makeRef s11))
 incScoR = foldl (+:+) EmptyS [S "getting all", plural inParam, 
   S "related to the", phrase glaSlab `sAnd` S "also the", plural parameter, 
@@ -238,7 +240,7 @@ s2_1_intro_p1 :: NamedChunk -> CI -> NamedChunk -> Sentence
 s2_1_intro_p1 typeOf progName gvnVar = foldlSent [S "The main", phrase purpose,
   S "of this", phrase typeOf, S "is to predict whether a given", phrase gvnVar,
   S "is likely to" +:+. predxnGoal, S "The", plural goal `sAnd` plural thModel,
-  S "used in the", short progName, S "code are provided" `sC` 
+  S "used in the", short progName, phrase code, S "are provided" `sC` 
   S "with an emphasis on explicitly identifying", (plural assumption) `sAnd` 
   S "unambiguous" +:+. plural definition, S "This", phrase typeOf, 
   S "is intended to be used as a", phrase reference, S "to provide all", 
@@ -443,7 +445,7 @@ a1Desc = foldlSent [S "The standard E1300-09a for",
   S "for two, three" `sAnd` S "four-sided support", plural condition,
   S "are simply supported and free to slip in plane; (2) glass supported on",
   S "two sides acts as a simply supported beam and (3) glass supported on", 
-  S "one side acts as a cantilever"]
+  S "one side acts as a", phrase cantilever]
 
 a2Desc :: Sentence
 a2Desc = foldlSent [S "Following", (sSqBr (S "4 (pg. 1)")) `sC`
@@ -454,13 +456,13 @@ a2Desc = foldlSent [S "Following", (sSqBr (S "4 (pg. 1)")) `sC`
 
 a3Desc :: Sentence
 a3Desc = foldlSent [S "This", phrase system,
-  S "only considers the external", phrase explosion, S "scenario for its",
-  plural calculation]
+  S "only considers the external", phrase explosion, phrase scenario,
+  S "for its", plural calculation]
 
 a4Desc :: UnitaryChunk -> Sentence
 a4Desc mainIdea = foldlSent [S "The", plural value, S "provided in", 
   makeRef s10, S "are assumed for the", phrase mainIdea, sParen (getS mainIdea)
-  `sC` S "and the material properties of",
+  `sC` S "and the", plural materialProprty, S "of",
   foldlList (map getS (take 3 assumption4_constants))]
 
 a5Desc :: Sentence
@@ -576,46 +578,29 @@ req4Desc = foldlSent [titleize output_, S "the", plural inQty,
   S "from", acroR 1 `sAnd` S "the known", plural quantity,
   S "from", acroR 2]
 
-req5Desc cmd = S "If" +:+ (getS is_safe1) `sAnd` (getS is_safe2) +:+
+req5Desc cmd = foldlSent_ [S "If", (getS is_safe1) `sAnd` (getS is_safe2),
   sParen (S "from" +:+ (makeRef (gbSymbMapT t1SafetyReq))
-  `sAnd` (makeRef (gbSymbMapT t2SafetyReq))) +:+ S "are true" `sC`
-  phrase cmd +:+ S "the message" +:+ Quote (safeMessage ^. defn) +:+
-  S "If the" +:+ phrase condition +:+ S "is false, then" +:+ phrase cmd
-  +:+ S "the message" +:+ Quote (notSafe ^. defn)
-
-{-
-s7_1_req6 = [(Enumeration $ Simple $ [(acroR 6, Nested (titleize output_ +:+
-  S "the following" +: plural quantity)
-  (Bullet $ 
-    [Flat $ (at_start prob_br) +:+ sParen (getS prob_br) +:+ sParen (makeRef (gbSymbMapT probOfBr))] ++
-    [Flat $ (titleize lResistance) +:+ sParen (short lResistance) +:+ sParen (makeRef (gbSymbMapT calOfCap))] ++
-    [Flat $ (at_start demand) +:+ sParen (getS demand) +:+ sParen (makeRef (gbSymbMapT calOfDe))] ++
-    [Flat $ (at_start act_thick) +:+ sParen (getS act_thick) +:+ sParen (makeRef (gbSymbMapD hFromt))] ++
-    [Flat $ (titleize loadDF) +:+ sParen (getS loadDF) +:+ sParen (makeRef (gbSymbMapD loadDF))] ++
-    [Flat $ (at_start strDisFac) +:+ sParen (getS strDisFac) +:+ sParen (makeRef (gbSymbMapD strDisFac))] ++
-    [Flat $ (titleize nonFL) +:+ sParen (getS nonFL) +:+ sParen (makeRef (gbSymbMapD nonFL))] ++
-    [Flat $ (titleize gTF) +:+ sParen (getS gTF) +:+ sParen (makeRef (gbSymbMapD glaTyFac))] ++
-    map (\c -> Flat $ (at_start c) +:+ sParen (getS c) +:+ sParen (makeRef (gbSymbMapD c))) [dimLL, tolPre, tolStrDisFac] ++
-    [Flat $ (titleize aspectR) +:+ sParen (short aspectR {-getS aspectR -}) {-+:+ E ((C aspectR) := (C plate_len):/(C plate_width))-}]
-    ))])]
--}
+  `sAnd` (makeRef (gbSymbMapT t2SafetyReq))), S "are true" `sC`
+  phrase cmd, S "the", phrase message, Quote (safeMessage ^. defn),
+  S "If the", phrase condition, S "is false, then", phrase cmd,
+  S "the", phrase message, Quote (notSafe ^. defn)]
 
 s7_1_req6 = [(Enumeration $ Simple $ [(acroR 6, Nested (titleize output_ +:+
   S "the following" +: plural quantity)
   (Bullet $ 
     --FIXME:The implementation below is quite repetitive in nature.
     --map (\(c, d) -> Flat $ (at_start c) +:+ sParen (getS c) +:+ sParen (makeRef (gbSymbMapT d)))
-    --[(prob_br, probOfBr), (demand, calOfDe), (lResistance, calOfCap)]
+    --[(prob_br, probOfBr), (demand, calOfDe), (lRe, calOfCap)]
     --FIXME:The above doesn't work becuase prob_br = ConstrainedChunk, demand = UnitaryChunk, lResistance = CI
+    --Create a new wrapper? Why isn't mapping qs allowing `getS` or `at_start` function applications?
     [Flat $ (at_start prob_br) +:+ sParen (getS prob_br) +:+ sParen (makeRef (gbSymbMapT probOfBr))] ++
-    [Flat $ (titleize lResistance) +:+ sParen (short lResistance) +:+ sParen (makeRef (gbSymbMapT calOfCap))] ++
+    [Flat $ (at_start lRe) +:+ sParen (getS lRe) +:+ sParen (makeRef (gbSymbMapT calOfCap))] ++
     [Flat $ (at_start demand) +:+ sParen (getS demand) +:+ sParen (makeRef (gbSymbMapT calOfDe))]
     ++
     map (\d -> Flat $ (at_start d) +:+ sParen (getS d) +:+ sParen (makeRef (gbSymbMapD d)))
     s7_1_req6_pulledList
     ++
-    [Flat $ (titleize aspectR) +:+ sParen (short aspectR) {-+:+ E ((C aspectR) := (C plate_len):/(C plate_width))-}]
-    --short is technically a symbol here (see Concepts.hs)
+    [Flat $ (titleize aspectR) +:+ sParen (getS aspectR) +:+ E ((C aspectR) := (C plate_len)/(C plate_width))] --FIXME:pull out eqn
     ))])]
 
 {--Nonfunctional Requirements--}
@@ -922,6 +907,6 @@ fig_5 = Figure (titleize figure +: S "5" +:+ (demandq ^. defn) +:+
 
 fig_6 = Figure (titleize figure +:+ S "6: Non dimensional" +:+ 
   phrase lateral +:+ phrase load +:+ sParen (getS dimlessLoad)
-  `sVersus` titleize aspectR +:+ sParen (short aspectR)
+  `sVersus` titleize aspectR +:+ sParen (getS aspectR)
   `sVersus` at_start stressDistFac +:+ sParen (getS stressDistFac))
   "ASTM_F2248-09_BeasonEtAl.png"

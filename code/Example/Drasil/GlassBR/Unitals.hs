@@ -198,8 +198,10 @@ glassBRUnitless :: [VarChunk]
 glassBRUnitless = [risk_fun, is_safe1, is_safe2, stressDistFac, sdf_tol,
   dimlessLoad, tolLoad, lRe, loadSF, gTF, lDurFac, nonFactorL]
 
-risk_fun, is_safe1, is_safe2, stressDistFac, sdf_tol,
+aspectR, risk_fun, is_safe1, is_safe2, stressDistFac, sdf_tol,
   dimlessLoad, tolLoad, lRe, loadSF, gTF, lDurFac, nonFactorL :: VarChunk
+
+aspectR       = makeVC "aspectR"     (nounPhraseSP "aspect ratio") (Atomic "AR")
 
 dimlessLoad   = makeVC "dimlessLoad" (nounPhraseSP "dimensionless load") 
   (hat lQ)

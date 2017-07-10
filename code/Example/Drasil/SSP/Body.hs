@@ -104,11 +104,9 @@ sspSymMapD = symbolMapFun sspSymMap Data
 --automatically generated in mkSRS using the intro below
 
 s1_2_intro = [TSPurpose, TypogConvention [Verb $
-  plural value +:+ S "with a subscript" +:+ getS index +:+
-  S "implies that the" +:+ phrase value +:+
-  S "will be taken at and analyzed at a" +:+
-  phrase slice `sOr` phrase slice +:+
-  S "interface composing the total slip" +:+ phrase mass]]
+  plural value +:+ S "with a subscript" +:+ getS index +:+ S "implies that the"
+  +:+ phrase value +:+ S "will be taken at and analyzed at a" +:+ phrase slice
+  `sOr` phrase slice +:+ S "interface composing the total slip" +:+ phrase mass]]
 
 -- SECTION 1.3 --
 --automatically generated in mkSRS
@@ -119,13 +117,13 @@ startIntro = foldlSent [S "A", phrase slope, S "of geological",
   phrase mass `sC` S "composed of", phrase soil, S "and rock, is subject", 
   S "to the influence of gravity on the" +:+. phrase mass, S "For an unstable",
   phrase slope +:+. S "this can cause instability in the form of soil/rock movement",
-  S "The effects of soil/rock movement can range from inconvenient to seriously",
-  S "hazardous, resulting in signifcant life and economic loses.", at_start slope,
-  S "stability is of", phrase interest, S "both when analyzing natural", plural slope `sC`
-  S "and when designing an excavated" +:+. phrase slope, at_start ssa, S "is",
-  S "assessment" `ofThe` S "safety of a", phrase slope `sC` S "identifying the",
-  phrase surface, S "most likely to", S "experience slip and an index of", 
-  S "its relative stability known as the", phrase fs_rc]
+  S "The effects of soil/rock movement can range from inconvenient to seriously" +:+.
+  S "hazardous, resulting in signifcant life and economic losses", at_start slope,
+  S "stability is of", phrase interest, S "both when analyzing natural",
+  plural slope `sC` S "and when designing an excavated" +:+. phrase slope,
+  at_start ssa, S "is assessment" `ofThe` S "safety of a", phrase slope `sC`
+  S "identifying the", phrase surface, S "most likely to experience slip" `sAnd`
+  S "an index of its relative stability known as the", phrase fs_rc]
 kSent = keySent ssa
 
 keySent :: (NamedIdea a) => a -> Sentence
@@ -151,7 +149,7 @@ purposeDoc pname what calculates how introduces analysizes =
   S "of" +:+. how, S "The", phrase program,
   S "is intended to be used as an educational tool for",
   S "introducing", introduces `sC` S "and will facilitate the",
-  phrase analysis, S "and", phrase design, S "of a", analysizes]
+  phrase analysis `sAnd` phrase design, S "of a", analysizes]
 
 -- SECTION 2.2 --
 -- Scope of Requirements automatically generated in introductionF
@@ -159,8 +157,8 @@ scpIncl, scpEnd :: Sentence
 scpIncl = S "stability analysis of a 2 dimensional" +:+ phrase slope `sC`
   S "composed of homogeneous" +:+ plural soilLyr
 scpEnd  = S "identify the most likely failure" +:+
-  phrase surface +:+ S "within the possible" +:+ phrase input_ +:+ S "range" `sC`
-  S "and find the" +:+ phrase fs_rc +:+ S "for the" +:+
+  phrase surface +:+ S "within the possible" +:+ phrase input_ +:+ 
+  S "range" `sC` S "and find the" +:+ phrase fs_rc +:+ S "for the" +:+
   phrase slope +:+ S "as well as displacement of" +:+ phrase soil +:+
   S "that will occur on the" +:+ phrase slope
 
@@ -175,8 +173,8 @@ orgSecStart = foldlSent [S "The", phrase organization, S "of this",
   short srs, S "for", phrase sciCompS,
   S "proposed by Koothoor as well as Smith and Lai"]
 orgSecEnd   = S "The" +:+ plural inModel +:+ S "provide the set of" +:+
-  S "algebraic" +:+ plural equation +:+ S "that must be solved iteratively to perform a" +:+
-  titleize morPrice +:+ titleize analysis
+  S "algebraic" +:+ plural equation +:+ S "that must be solved iteratively" +:+
+  S "to perform a" +:+ titleize morPrice +:+ titleize analysis
 
 -- SECTION 3 --
 s3 = genSysF [] userCharIntro [] []
@@ -242,7 +240,8 @@ s4_1_2_bullets = enumBullet [
     plural itslPrpty +:+ S "are usually not of" +:+ phrase interest `sC`
     S "therefore use the" +:+ plural itslPrpty +:+ S "from" +:+ 
     (E $ Int 1 :<= C index :<= (C numbSlices) :- Int 1)),
-  (at_start slice +:+ plural property +:+. S "convention is noted by" +:+ getS index)
+  (at_start slice +:+ plural property +:+. S "convention is noted by"
+  +:+ getS index)
   ]
 
 s4_1_2_p2 = foldlSP [S "A", phrase fbd, S "of the", plural force,
@@ -250,7 +249,7 @@ s4_1_2_p2 = foldlSP [S "A", phrase fbd, S "of the", plural force,
 
 fig_indexconv :: Contents
 fig_indexconv = Figure (S "Index convention for numbering" +:+
-  phrase slice +:+ S "and" +:+ phrase intrslce +:+
+  phrase slice `sAnd` phrase intrslce +:+
   phrase force +:+ plural variable) "IndexConvention.png"
 
 fig_forceacting :: Contents
@@ -280,12 +279,13 @@ displSlope = S "Determine" +:+. (S "displacement" `ofThe` phrase slope)
 s4_2 = solChSpecF ssa (s4_1, s6) ddEnding (EmptyS, dataConstraintUncertainty, EmptyS)
   ([s4_2_1_list], s4_2_2_tmods, s4_2_3_genDefs, s4_2_4_dataDefs, 
   s4_2_5_p2:s4_2_5_p3:s4_2_5_IMods, [s4_2_6Table2, s4_2_6Table3]) []
-  where ddEnding = foldlSent [at_start' definition, acroDD 1, S "to", acroDD 8, S "are the",
-          phrase force, plural variable, S "that can be solved by direct",
-          S "analysis of given" +:+. plural input_, S "The", phrase intrslce, 
+  where ddEnding = foldlSent [at_start' definition, acroDD 1, S "to", acroDD 8,
+          S "are the", phrase force, plural variable, S "that can be solved by",
+          S "direct analysis of given" +:+. plural input_, S "The", phrase intrslce, 
           S "forces", acroDD 9, S "are", phrase force, plural variable, 
-          S "that must be written in terms of", acroDD 1, S "to", acroDD 8 +:+. S "to solve"]
- --       tbRef = makeRef s4_2_6Table2 +:+ S "and" +:+ makeRef s4_2_6Table3 +:+ S "show"
+          S "that must be written in terms of", acroDD 1, S "to", acroDD 8, 
+          S "to solve"]
+ --       tbRef = makeRef s4_2_6Table2 `sAnd` makeRef s4_2_6Table3 +:+ S "show"
 
 -- SECTION 4.2.1 --
 -- Assumptions is automatically generated in solChSpecF using the list below
@@ -305,27 +305,29 @@ s4_2_3_genDefs = map sspSymMapT sspGenDefs
 -- Data Definitions is automatically generated in solChSpecF
 s4_2_4_dataDefs = (map sspSymMapD (take 10 sspDataDefs)) ++ resShrDerivation ++
   [sspSymMapD (sspDataDefs !! 10)] ++ mobShrDerivation ++ [sspSymMapD (sspDataDefs !! 11)] ++
-  stfMtrxDerivation ++ (map sspSymMapD (drop 12 sspDataDefs)) --FIXME: is there a better way of shoving these derivations in the middle of the Data Defs?
+  stfMtrxDerivation ++ (map sspSymMapD (drop 12 sspDataDefs)) 
+  --FIXME: is there a better way of shoving these derivations in the middle of the Data Defs?
 
 resShrDerivation :: [Contents]
 resShrDerivation = [foldlSP [S "The", phrase shrResI, S "of a slice is defined as", 
-  getS shrResI, S "in" +:+. acroGD 3, S "The", phrase nrmFSubWat, S "in the equation for", getS shrResI,
-  S "of the soil is defined in the perpendicular force equilibrium of a slice from", 
-  acroGD 2 `sC` S "using the", getTandS nrmFSubWat, S "of", acroT 4, 
-  S "shown in", eqN 1],
+  getS shrResI, S "in" +:+. acroGD 3, S "The", phrase nrmFSubWat, S "in the", 
+  phrase equation, S "for", getS shrResI, S "of the soil is defined in the", 
+  S "perpendicular force equilibrium of a slice from", acroGD 2 `sC` S "using the",
+  getTandS nrmFSubWat, S "of", acroT 4, S "shown in", eqN 1],
   
   EqnBlock $
-  (C nrmFSubWat) := (((C slcWght) - (C intShrForce) + (C intShrForce) :+ 
-  (C surfHydroForce) :* (cos (C surfAngle)) :+ --FIXME: add indexing
-  (C surfLoad) :* (cos (C impLoadAngle))) :* (cos (C baseAngle)) :+
-  (Neg (C earthqkLoadFctr) :* (C slcWght) :- (C intNormForce) :+ (C intNormForce) :- 
-  (C watrForce) :+ (C watrForce) :+ (C surfHydroForce) :* sin (C surfAngle) :+ 
-  (C surfLoad) :* (sin (C impLoadAngle))) :* (sin (C baseAngle)) :- (C baseHydroForce)),
+  (C nrmFSubWat) := (((C slcWght) - (C intShrForce) + (C intShrForce) + 
+  (C surfHydroForce) * (cos (C surfAngle)) + --FIXME: add indexing
+  (C surfLoad) * (cos (C impLoadAngle))) * (cos (C baseAngle)) +
+  (Neg (C earthqkLoadFctr) * (C slcWght) - (C intNormForce) + (C intNormForce) -
+  (C watrForce) + (C watrForce) + (C surfHydroForce) * sin (C surfAngle) + 
+  (C surfLoad) * (sin (C impLoadAngle))) * (sin (C baseAngle)) - (C baseHydroForce)),
   
-  foldlSP [S "The values of the interslice forces", getS intNormForce, S "and",
+  foldlSP [S "The values of the interslice forces", getS intNormForce `sAnd`
   getS intShrForce, S "in the equation are unknown, while the other values",
-  S "are found from the physical force definitions of", acroDD 1, S "to" +:+. acroDD 9,
-  S "Consider a force equilibrium without the affect of interslice forces,",
+  S "are found from the physical force", plural definition, S "of", acroDD 1,
+  S "to" +:+. acroDD 9, 
+  S "Consider a force equilibrium without the affect of interslice forces" `sC`
   S "to obtain a solvable value as done for", getS nrmFNoIntsl, S "in", eqN 2],
 
   EqnBlock $
@@ -376,7 +378,7 @@ mobShrDerivation = [foldlSP [S "The", phrase mobShrI, S "acting on a slice is",
   (Neg (C earthqkLoadFctr) :* (C slcWght) :- (C watrForceDif) :+ (C surfHydroForce)
   :* sin (C surfAngle) :+ (C surfLoad) :* (sin (C impLoadAngle))) :* (cos (C baseAngle)),
   
-  foldlSP [S "The values of", getS shearRNoIntsl, S "and", getS shearFNoIntsl,
+  foldlSP [S "The values of", getS shearRNoIntsl `sAnd` getS shearFNoIntsl,
   S "are now defined completely in terms of the known force property values of",
   acroDD 1, S "to", acroDD 9]
   ]
@@ -405,7 +407,7 @@ stfMtrxDerivation = [foldlSP [S "Using the force-displacement relationship of", 
   S "of", acroGD 9, S "rotated for the base angle of the slice", getS baseAngle +:+.
   S "The basal displacement vector", getS genDisplace, S "is rotated clockwise",
   S "to align with the interslice displacement vector", getS genDisplace `sC`
-  S "applying the definition of", getS rotatedDispl, S "in terms of", getS genDisplace,
+  S "applying the", phrase definition, S "of", getS rotatedDispl, S "in terms of", getS genDisplace,
   S "as seen in" +:+. acroGD 9, S "Using this with base stiffness matrix", getS shrStiffBase --FIXME: index, should be K*i"
   `sC` S "a basal force displacement relationship in the same coordinate system",
   S "as the interslice relationship can be derived as done in", eqN 8],
@@ -441,7 +443,7 @@ isElMx sym kword = getS sym `isThe` S kword +:+ S "element in the matrix"
 s4_2_5_p2 = foldlSP [S "The", titleize morPrice,
   phrase method_, S "is a vertical", phrase slice `sC` S "limit equilibrium",
   phrase ssa +:+. phrase method_, at_start analysis, S "is performed by",
-  S "breaking the", S "assumed failure", phrase surface, S "into a series of vertical",
+  S "breaking the assumed failure", phrase surface, S "into a series of vertical",
   plural slice, S "of" +:+. phrase mass, S "Static equilibrium",
   S "analysis using two", phrase force, S "equilibrium, and one moment",
   phrase equation, S "as in" +:+. acroT 2, S "The", phrase problem,
@@ -456,9 +458,9 @@ s4_2_5_p3 = foldlSP [plural value `ofThe'` (phrase intrslce +:+ phrase normForce
   getS intNormForce, S "the", getTandS normToShear `sC`
   S "and the", titleize fs_rc, (sParen $ getS fs) `sC` S "are unknown.",
   at_start' equation, S "for the unknowns are written in terms of only the",
-  plural value, S "in", acroDD 1, S "to", acroDD 9 `sC` S "the", plural value, S "of", getS shearRNoIntsl `sC`
-  S "and", getS shearFNoIntsl, S "in", acroDD 10, S "and", acroDD 11 `sC`
-  S "and each", --FIXME: DD10, DD11 should be references
+  plural value, S "in", acroDD 1, S "to", acroDD 9 `sC` S "the", plural value,
+  S "of", getS shearRNoIntsl `sC` S "and", getS shearFNoIntsl, S "in", acroDD 10,
+  S "and", acroDD 11 `sC` S "and each", --FIXME: DD10, DD11 should be references
   S "other. The relationships between the unknowns are non linear" `sC`
   S "and therefore explicit", plural equation, S "cannot be derived and an",
   S "iterative", plural solution, S "method is required"]
@@ -517,7 +519,7 @@ nrmShrDerivation = [foldlSP [S "Taking the last static equation of", acroT 2,
   ]
 
 intrSlcDerivation = [foldlSP [S "Taking the", phrase normForcEq `sOf` acroGD 1,
-  S "with the", phrase effStress, S "definition from", acroT 4, --NOTE: "Taking this with that and the assumption of _ to get equation #" pattern
+  S "with the", phrase effStress, phrase definition, S "from", acroT 4, --NOTE: "Taking this with that and the assumption of _ to get equation #" pattern
   S "that", E (C totNrmForce := C nrmFSubWat - C baseHydroForce) `sC`
   S "and the assumption of", acroGD 5, S "the equilibrium equation can be rewritten as",
   eqN 16],
@@ -532,8 +534,8 @@ intrSlcDerivation = [foldlSP [S "Taking the", phrase normForcEq `sOf` acroGD 1,
   C watrForce :+ C surfHydroForce :* sin (C surfAngle) :+ 
   C surfLoad :* sin (C impLoadAngle)) :* sin (C baseAngle)) - (C baseHydroForce),
   
-  foldlSP [S "Taking the", phrase bsShrFEq `sOf` acroGD 2, S "with the definition of",
-  phrase mobShr, S "from", acroGD 4, S "and", S "the assumption of", acroGD 5 `sC`
+  foldlSP [S "Taking the", phrase bsShrFEq `sOf` acroGD 2, S "with the", phrase definition,
+  S "of", phrase mobShr, S "from", acroGD 4 `sAnd` S "the assumption of", acroGD 5 `sC`
   S "the equilibrium equation can be rewritten as", eqN 17], --NOTE: "Taking this with that and the assumption of _ to get equation #" pattern
   
   EqnBlock $
@@ -579,8 +581,8 @@ intrSlcDerivation = [foldlSP [S "Taking the", phrase normForcEq `sOf` acroGD 1,
   fUnknowns]
 
 rigDisDerivation = [foldlSP [S "Using the net force-displacement equilibrium equation of a slice",
-  S "from", acroDD 13, S "with the definitions of the", S "stiffness matrices",
-  S "from", acroDD 12, S "and the force definitions",
+  S "from", acroDD 13, S "with the", plural definition, S "of the stiffness matrices",
+  S "from", acroDD 12, S "and the force", plural definition,
   S "from", acroGD 7 , S "a broken down force displacement equilibrium equation" +:+. S "can be derived",
   eqN 22, S "gives the broken down equation in the x direction" `sC` S "and", eqN 23,
   S "gives the broken down equation in the y direction"],
@@ -588,21 +590,21 @@ rigDisDerivation = [foldlSP [S "Using the net force-displacement equilibrium equ
   EqnBlock fDisEq_rel, --FIXME: Original equations need indexing
   
   foldlSP [S "Using the known input assumption of", acroA 2 `sC` S "the force",
-  S "variable definitions of", acroDD 1, S "to", acroDD 8, S "on the left",
+  S "variable", plural definition, S "of", acroDD 1, S "to", acroDD 8, S "on the left",
   S "side of the equations can be solved for. The only unknown in the variables",
   S "to solve for the stiffness values from", acroDD 14 +:+. S "is the displacements",
   S "Therefore taking the equation from each slice a set of", E $ (Int 2) * (C numbSlices),
   S "equations, with", E $ (Int 2) * (C numbSlices), S "unknown displacements in the",
   S "x and y directions of each slice can be derived. Solutions for the displacements",
-  S "of each slice can then be found. The use of displacement in the definition of the",
-  S "stiffness values makes the equation implicit, which means an iterative solution",
+  S "of each slice can then be found. The use of displacement in the", phrase definition,
+  S "of the stiffness values makes the equation implicit, which means an iterative solution",
   S "method, with an initial guess for the displacements in the stiffness values is required"]
   ]
 
 rigFoSDerivation = [foldlSP [S "RFEM analysis can also be used to calculate the",
   phrase fs, S "for the slope. For a slice element", getS index, S "the displacements",
-  getS dx_i, S "and", getS dy_i `sC` S "are solved from the system of equations in" +:+.
-  acroIM 4, S "The definition of", getS rotatedDispl, S "as the rotation of the",
+  getS dx_i `sAnd` getS dy_i `sC` S "are solved from the system of equations in" +:+.
+  acroIM 4, S "The", phrase definition, S "of", getS rotatedDispl, S "as the rotation of the",
   S "displacement vector", getS genDisplace, S "is seen in" +:+. acroGD 9, S "This is", --FIXME: index i
   S "used to find the displacements of the slice parallel to the base of the slice",
   getS shrDispl `sIn` eqN 24, S "and normal to the base of the slice", getS nrmDispl,
@@ -613,10 +615,10 @@ rigFoSDerivation = [foldlSP [S "RFEM analysis can also be used to calculate the"
   EqnBlock $
   C nrmDispl := Neg (sin(C baseAngle)) * C dx_i + sin(C baseAngle) * C dy_i,
   
-  foldlSP [S "With the definition of normal stiffness from", acroDD 14, --FIXME: grab nrmStiffBase's term name?
+  foldlSP [S "With the", phrase definition, S "of normal stiffness from", acroDD 14, --FIXME: grab nrmStiffBase's term name?
   S "to find the normal stiffness of the base", getS nrmStiffBase,
   S "and the now known base displacement perpendicular to the surface",
-  getS nrmDispl, S "from", eqN 25, S "the", S "normal base stress",
+  getS nrmDispl, S "from", eqN 25, S "the normal base stress",
   S "can be calculated from the force-displacement relationship of" +:+. acroT 5,
   S "Stress", getS normStress `sIs` S "used in place of force", getS genForce, --FIXME: use getTandS
   S "as the stiffness hasn't been normalized for the length of the base. Results" --FIXME: grammar
@@ -635,8 +637,8 @@ rigFoSDerivation = [foldlSP [S "RFEM analysis can also be used to calculate the"
   
   foldlSP [S "Previously the value of the", getTandS shrStiffBase,
   S "as seen in", eqN 28, S "was unsolvable because the", getTandS normStress,
-  S "was unknown. With the definition of", getS normStress, S "from", eqN 26,
-  S "and the definition of displacement shear to the base", getS shrDispl,
+  S "was unknown. With the", phrase definition, S "of", getS normStress, S "from", eqN 26,
+  S "and the", phrase definition, S "of displacement shear to the base", getS shrDispl,
   S "from", eqN 25 `sC` S "the value of", getS shrStiffBase, S "becomes solvable"],
   
   EqnBlock $
@@ -654,9 +656,9 @@ rigFoSDerivation = [foldlSP [S "RFEM analysis can also be used to calculate the"
   C shrStress := C shrStiffBase * C shrDispl,
   
   foldlSP [S "The", phrase shrStress, shrStress ^. defn, getS shrStress, --FIXME: ISSUE #348
-  S "acts as the mobile shear acting on the base. Using the definition",
-  titleize fs, S "equation from", acroT 1 `sC` S "with the definitions of",
-  S "resistive shear strength of a slice", getS mobShrI,
+  S "acts as the mobile shear acting on the base. Using the", phrase definition,
+  titleize fs, S "equation from", acroT 1 `sC` S "with the", plural definition,
+  S "of resistive shear strength of a slice", getS mobShrI,
   S "from equation (27) and shear stress on a slice", getS shrStress, S "from",
   eqN 29, S "the", getTandS fsloc, S "can be found from as seen in", eqN 30 `sAnd` acroIM 5],
   
@@ -718,45 +720,44 @@ sspRequirements = [readAndStore, generateCSS, testSlipSrf, prepareSlipS, calcula
 readAndStore, generateCSS, testSlipSrf, prepareSlipS, calculateFS, rankSlope,
   generateCSS', repeatFindFS, prepareCSS, calculateFS', displayGraph :: Sentence
 
-readAndStore = S "Read the" +:+ phrase input_ +:+ S "file, and store the" +:+.
-  plural datum +:+ S "Necessary" +:+ plural inDatum +:+ S "summarized in" +:+.
-  makeRef s5_1_table
+readAndStore = foldlSent [S "Read the", phrase input_, S "file, and store the" +:+.
+  plural datum, S "Necessary", plural inDatum, S "summarized in", makeRef s5_1_table]
 
-generateCSS  = S "Generate potential" +:+ phrase crtSlpSrf :+:
-  S "'s for the" +:+ phrase input_ +:+. phrase slope
+generateCSS  = foldlSent [S "Generate potential", phrase crtSlpSrf :+:
+  S "'s for the", phrase input_, phrase slope]
 
-testSlipSrf  = S "Test the" +:+ plural slpSrf +:+ S "to determine if they" +:+
-  S "are physically realizable based on a set of pass or fail criteria."
+testSlipSrf  = foldlSent [S "Test the", plural slpSrf, S "to determine if they",
+  S "are physically realizable based on a set of pass or fail criteria"]
 
-prepareSlipS = S "Prepare the" +:+ plural slpSrf +:+ S "for a" +:+ phrase method_ +:+
-  S "of" +:+ plural slice +:+. S "or limit equilibrium analysis"
+prepareSlipS = foldlSent [S "Prepare the", plural slpSrf, S "for a", phrase method_,
+  S "of", plural slice, S "or limit equilibrium analysis"]
 
 calculateFS  = S "Calculate" +:+. (plural fs_rc `ofThe` plural slpSrf)
 
-rankSlope    = S "Rank and weight the" +:+ plural slope +:+ S "based on their" +:+
-  phrase fs_rc `sC` S "such that a" +:+ phrase slpSrf +:+ S "with a smaller" +:+
-  phrase fs_rc +:+. S "has a larger weighting"
+rankSlope    = foldlSent [S "Rank and weight the", plural slope, S "based on their",
+  phrase fs_rc `sC` S "such that a", phrase slpSrf, S "with a smaller", phrase fs_rc,
+  S "has a larger weighting"]
 
-generateCSS' = S "Generate new potential" +:+ plural crtSlpSrf +:+
-  S "based on previously analysed" +:+ plural slpSrf +:+ S "with low" +:+.
-  plural fs_rc
+generateCSS' = foldlSent [S "Generate new potential", plural crtSlpSrf,
+  S "based on previously analysed", plural slpSrf, S "with low",
+  plural fs_rc]
 
-repeatFindFS = S "Repeat" +:+ plural requirement +:+ acroR 3 +:+ S "to" +:+
-  acroR 7 +:+ S "until the" +:+ S "minimum" +:+ phrase fs_rc +:+ S "remains" +:+
-  S "approximately the same over a predetermined number of repetitions." +:+
-  S "Identify the" +:+ (phrase slpSrf) +:+ S "that generates the minimum" +:+
-  phrase fs_rc +:+ S "as the" +:+. phrase crtSlpSrf
+repeatFindFS = foldlSent [S "Repeat", plural requirement, acroR 3, S "to",
+  acroR 7, S "until the", S "minimum", phrase fs_rc, S "remains" +:+. 
+  S "approximately the same over a predetermined number of repetitions",
+  S "Identify the", (phrase slpSrf), S "that generates the minimum",
+  phrase fs_rc, S "as the", phrase crtSlpSrf]
 
-prepareCSS   = S "Prepare the" +:+ phrase crtSlpSrf +:+ S "for" +:+ phrase method_ +:+
-  S "of" +:+ plural slice +:+. S "or limit equilibrium analysis"
+prepareCSS   = foldlSent [S "Prepare the", phrase crtSlpSrf, S "for", phrase method_,
+  S "of", plural slice, S "or limit equilibrium analysis"]
 
-calculateFS' = S "Calculate" +:+ (phrase fs_rc `ofThe` phrase crtSlpSrf) +:+
-  S "using the" +:+ titleize morPrice +:+. phrase method_
+calculateFS' = foldlSent [S "Calculate", (phrase fs_rc `ofThe` phrase crtSlpSrf),
+  S "using the", titleize morPrice, phrase method_]
 
-displayGraph = S "Display the" +:+ phrase crtSlpSrf +:+ S "and the" +:+
-  phrase slice +:+ phrase element +:+. S "displacements graphically" +:+
-  S "Give" +:+ (plural value `ofThe` plural fs_rc) +:+ S "calculated" +:+
-  S "by the" +:+ titleize morPrice +:+. phrase method_
+displayGraph = foldlSent [S "Display the", phrase crtSlpSrf, S "and the",
+  phrase slice, phrase element +:+. S "displacements graphically",
+  S "Give", (plural value `ofThe` plural fs_rc), S "calculated",
+  S "by the", titleize morPrice, phrase method_]
 
 
 s5_1_table = mkInputDatTb ([cqs coords] ++ --this has to be seperate since coords is a different type

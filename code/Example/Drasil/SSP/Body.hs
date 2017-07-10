@@ -136,14 +136,22 @@ keySent pname = S "a" +:+ phrase pname +:+. phrase problem +:+ S "The developed"
 -- SECTION 2.1 --
 -- Purpose of Document automatically generated in introductionF
 prpsOfDoc_p1 :: Sentence
-prpsOfDoc_p1 = foldlSent [S "The", short ssa, phrase program,
-  S "determines the", phrase crtSlpSrf `sC` S "and its respective",
-  phrase fs_rc, S "as a", phrase method_,
-  S "of assessing the stability of a", phrase slope +:+. phrase design,
-  S "The", phrase program,
+prpsOfDoc_p1 = purposeDoc ssa crtSlpSrf fs how introduces analysizes
+  where how = S "assessing the stability of a" +:+ phrase slope +:+ phrase design
+        introduces = phrase slope +:+ S "stability issues"
+        analysizes = S "safe" +:+ phrase slope
+
+purposeDoc :: (NamedIdea a, NamedIdea b, NamedIdea c) =>
+              a -> b -> c -> Sentence -> Sentence -> Sentence
+              -> Sentence
+purposeDoc pname what calculates how introduces analysizes =
+  foldlSent [S "The", short pname, phrase program,
+  S "determines the", phrase what `sC` S "and its respective",
+  phrase calculates, S "as a", phrase method_,
+  S "of" +:+. how, S "The", phrase program,
   S "is intended to be used as an educational tool for",
-  S "introducing", phrase slope, S "stability issues, and will facilitate the",
-  phrase analysis, S "and", phrase design, S "of a safe", phrase slope]
+  S "introducing", introduces `sC` S "and will facilitate the",
+  phrase analysis, S "and", phrase design, S "of a", analysizes]
 
 -- SECTION 2.2 --
 -- Scope of Requirements automatically generated in introductionF

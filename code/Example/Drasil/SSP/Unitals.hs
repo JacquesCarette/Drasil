@@ -5,6 +5,7 @@ import Data.Drasil.SI_Units
 import Data.Drasil.Quantities.SolidMechanics as SM
 import Data.Drasil.Concepts.Physics as CP
 import Data.Drasil.Units.Physics
+import Drasil.SSP.Defs (fs_concept)
 
 sspSymbols :: [CQSWrapper]
 sspSymbols = (map cqs sspInputs) ++ (map cqs sspOutputs) ++
@@ -94,8 +95,7 @@ waterWeight = uqc "gamma_w" (cn $ "unit weight of water")
   (Dbl 9.8) defultUncrt
 
 {-Output Variables-} --FIXME: See if there should be typical values
-fs          = constrained' (cvR (dcc "FS" (nounPhraseSP $ "factor of safety")
-  "the global stability of a surface in a slope") (Atomic "FS")) gtZeroConstr (Dbl 1)
+fs          = constrained' (cvR fs_concept (Atomic "FS")) gtZeroConstr (Dbl 1)
 
 coords      = cuc' "(x,y)"
   (cn $ "cartesian position coordinates" )

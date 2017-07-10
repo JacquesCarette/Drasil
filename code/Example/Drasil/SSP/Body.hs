@@ -201,12 +201,13 @@ s4_1 = probDescF EmptyS ssa ending [s4_1_1, s4_1_2, s4_1_3]
 -- SECTION 4.1.1 --
 s4_1_1 = termDefnF EmptyS [s4_1_1_list]
 
-s4_1_1_list = Enumeration $ Simple $ --FIXME: combine this definition below? But fs_rc already has a definition
---  ([(titleize $ fs_rc, Flat $ S "Stability metric. How likely a" +:+
---    (phrase slpSrf) +:+. S "is to experience failure through slipping")] ++
+s4_1_1_list = Enumeration $ Simple $
   map (\x -> (titleize $ x, Flat $ x ^. defn))
-      ([cw fs] ++ map cw [crtSlpSrf, stress, strain, normForce, shearForce, tension, compression, plnStrn])
-      -- most of these are in concepts (physics or solidMechanics) except for crtSlpSrf & plnStrn which is in defs.hs
+  (map cw [fs_concept, crtSlpSrf, stress, strain, normForce,
+  shearForce, tension, compression, plnStrn])
+  -- most of these are in concepts (physics or solidMechanics)
+  -- except for crtSlpSrf & plnStrn which is in defs.hs
+  -- and fs which is in Unitals.hs
 
 -- SECTION 4.1.2 --
 s4_1_2 = SRS.physSyst [s4_1_2_p1, s4_1_2_bullets, s4_1_2_p2, s4_1_2_fig1, s4_1_2_fig2] []

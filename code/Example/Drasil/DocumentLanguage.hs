@@ -67,7 +67,7 @@ data SolChSpec where
 data SCSSub where
   SCSSubVerb :: Section -> SCSSub
   -- Assumptions :: --TODO
-  TMs :: Fields -> [RelationConcept] -> SCSSub
+  TMs :: Fields -> [TheoryModel] -> SCSSub
   GDs :: Fields -> [RelationConcept] -> SCSSub
   DDs :: Fields -> [QDefinition]     -> SCSSub
   IMs :: Fields -> [RelationConcept] -> SCSSub

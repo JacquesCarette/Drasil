@@ -98,6 +98,7 @@ library
     , Language.Drasil.Chunk.Relation
     , Language.Drasil.Chunk.Req
     , Language.Drasil.Chunk.SymbolForm
+    , Language.Drasil.Chunk.Theory
     , Language.Drasil.Chunk.UncertainQuantity
     , Language.Drasil.Chunk.Unital
     , Language.Drasil.Chunk.Unitary

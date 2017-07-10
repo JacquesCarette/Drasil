@@ -226,9 +226,9 @@ rdrKnldgbleIn undrstd1 undrstd2 = (phrase theory +:+ S "behind" +:+
 undIR, appStanddIR, incScoR, endScoR :: Sentence
 undIR = (foldlList [phrase scndYrCalculus, phrase structuralMechanics, 
   plural computerApp +:+ S "in" +:+ phrase civilEng])
-appStanddIR = (S "In addition" `sC` plural reviewer +:+ S "should be familiar with the" +:+
-  S "applicable" +:+ plural standard +:+ S "for constructions using glass from" +:+
-  sSqBr (S "4-6") +:+ S "in" +:+. (makeRef s11))
+appStanddIR = (S "In addition" `sC` plural reviewer +:+ S "should be familiar"
+  +:+ S "with the applicable" +:+ plural standard +:+ S "for constructions using" 
+  +:+ S "glass from" +:+ sSqBr (S "4-6") +:+ S "in" +:+. (makeRef s11))
 incScoR = foldl (+:+) EmptyS [S "getting all", plural inParam, 
   S "related to the", phrase glaSlab `sAnd` S "also the", plural parameter, 
   S "related to", phrase blastTy]
@@ -317,9 +317,11 @@ s5_1_table_UC2 = [S "2", titleize output_, short gLassBR, S "Whether or not the"
 
 {--Individual Product Use Cases--}
 
-s5_2_bullets = enumBullet [s5_2_bt_sent1 (input_) (user) (glassGeo) (blastTy), s5_2_bt_sent2]
+s5_2_bullets = enumBullet [s5_2_bt_sent1 (input_) (user) (glassGeo) (blastTy),
+  s5_2_bt_sent2 (output_) (glaSlab) (capacity) (demandq) (probability)]
 
-s5_2_bt_sent1 :: NamedChunk -> NamedChunk -> ConceptChunk -> ConceptChunk -> Sentence
+s5_2_bt_sent1 :: NamedChunk -> NamedChunk -> ConceptChunk -> 
+  ConceptChunk -> Sentence
 s5_2_bt_sent1 io prsn iClass1 iClass2 = foldlSent [titleize useCase, 
   S "1 refers to the", phrase prsn, S "providing", phrase io, S "to",
   short gLassBR, S "for use within the" +:+. phrase analysis, 
@@ -329,21 +331,23 @@ s5_2_bt_sent1 io prsn iClass1 iClass2 = foldlSent [titleize useCase,
   S "stand off" +:+. phrase blast, S "Another", phrase io, S "the", phrase prsn,
   S "gives" `isThe` S "tolerable", phrase value, S "of", phrase prob_br]
 
-s5_2_bt_sent2 :: Sentence
-s5_2_bt_sent2 = foldlSent [titleize useCase, S "2", short gLassBR,
-  plural output_, S "if the", phrase glaSlab, S "will be safe by",
-  S "comparing whether", phrase capacity, S "is greater than" +:+. 
-  (phrase demandq), (at_start capacity `isThe` (capacity ^. defn))
-  `sAnd` (phrase demandq `isThe` phrase requirement) +:+. 
-  (S "which" `isThe` (demandq ^. defn)), S "The second", 
+s5_2_bt_sent2 :: NamedChunk -> NamedChunk -> ConceptChunk -> ConceptChunk ->
+  ConceptChunk -> Sentence
+s5_2_bt_sent2 io mainObj compare1 compare2 factorOfComparison = foldlSent 
+  [titleize useCase, S "2", short gLassBR, plural io, S "if the", phrase mainObj,
+  S "will be safe by", S "comparing whether", phrase compare1, S "is greater than"
+  +:+. (phrase compare2), (at_start compare1 `isThe` (compare1 ^. defn))
+  `sAnd` (phrase compare2 `isThe` phrase requirement) +:+. 
+  (S "which" `isThe` (compare2 ^. defn)), S "The second", 
   phrase condition, S "is to check whether the calculated", 
-  phrase probability, sParen (getS prob_br), S "is less than the tolerable",
-  phrase probability, sParen (getS pb_tol), S "which is obtained from the",
-  phrase user, S "as an" +:+. phrase input_, S "If both", plural condition,
-  S "return true then it's shown that the", phrase glaSlab, S "is safe to use" `sC` S "else if both return false then the", 
-  phrase glaSlab +:+. S "is considered unsafe", 
-  S "All the supporting calculated", plural value, S "are also displayed as", 
-  phrase output_]
+  phrase factorOfComparison, sParen (getS prob_br), 
+  S "is less than the tolerable", phrase factorOfComparison, 
+  sParen (getS pb_tol), S "which is obtained from the", phrase user, S "as an"
+  +:+. phrase input_, S "If both", plural condition, 
+  S "return true then it's shown that the", phrase mainObj, S "is safe to use" 
+  `sC` S "else if both return false then the", phrase mainObj +:+. 
+  S "is considered unsafe", S "All the supporting calculated", plural value, 
+  S "are also displayed as", phrase io]
 
 {--SPECIFIC SYSTEM DESCRIPTION--}
 

@@ -212,16 +212,17 @@ executable ssp
   other-modules:
       Drasil.Sections.ReferenceMaterial
     , Drasil.SRS
+    , Drasil.SSP.Assumptions
     , Drasil.SSP.Body
     , Drasil.SSP.Changes
+    , Drasil.SSP.DataDefs
     , Drasil.SSP.Defs
+    , Drasil.SSP.GenDefs
+    , Drasil.SSP.IMods
     , Drasil.SSP.Modules
     , Drasil.SSP.Reqs
-    , Drasil.SSP.Unitals
     , Drasil.SSP.TMods
-    , Drasil.SSP.GenDefs
-    , Drasil.SSP.DataDefs
-    , Drasil.SSP.IMods
+    , Drasil.SSP.Unitals
     , Drasil.Sections.TableOfAbbAndAcronyms
     , Drasil.Sections.TableOfSymbols
     , Drasil.DocumentLanguage

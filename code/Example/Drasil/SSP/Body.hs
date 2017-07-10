@@ -49,8 +49,7 @@ s4_1, s4_1_1, s4_1_2,
   s4_1_3, s4_2, s5_1, s5_2 :: Section
 
 s4_1_1_list, s4_1_2_p1, s4_1_2_bullets,
-  s4_1_2_p2, s4_1_2_fig1, s4_1_2_fig2,
-  s4_1_3_list, s4_2_1_list,
+  s4_1_2_p2, s4_1_3_list, s4_2_1_list,
   s4_2_5_p2, s4_2_5_p3, s5_1_list, s5_1_table,
   s8_list :: Contents
 
@@ -215,23 +214,27 @@ s4_1_1 = termDefnF EmptyS [s4_1_1_list]
 
 s4_1_1_list = Enumeration $ Simple $
   map (\x -> (titleize $ x, Flat $ x ^. defn))
-  (map cw [fs_concept, crtSlpSrf, stress, strain, normForce,
-  shearForce, tension, compression, plnStrn])
+  [fs_concept, crtSlpSrf, stress, strain, normForce,
+  shearForce, tension, compression, plnStrn]
   -- most of these are in concepts (physics or solidMechanics)
   -- except for crtSlpSrf & plnStrn which is in defs.hs
   -- and fs which is in Unitals.hs
 
 -- SECTION 4.1.2 --
-s4_1_2 = SRS.physSyst [s4_1_2_p1, s4_1_2_bullets, s4_1_2_p2, s4_1_2_fig1, s4_1_2_fig2] []
+s4_1_2 = SRS.physSyst
+  [s4_1_2_p1, s4_1_2_bullets, s4_1_2_p2, fig_indexconv, fig_forceacting] []
 
-s4_1_2_p1 = foldlSP [at_start analysis, S "of the", phrase slope,
-  S "is performed by looking at", plural property, S "of the",
-  phrase slope, S "as a series of", phrase slice +:+. plural element,
-  S "Some", plural property, S "are", plural itslPrpty `sC`
-  S "and some are", phrase slice, S "or", phrase slice,
-  S "base" +:+. plural property, S "The index convention for referencing which",
-  phrase intrslce, S "or", phrase slice, S "is being used is shown in",
-  makeRef fig_indexconv]
+s4_1_2_p1 = physSystIntro slope how intrslce slice (S "slice base") fig_indexconv
+  where how = S "as a series of" +:+ phrase slice +:+. plural element
+
+physSystIntro :: (NamedIdea a, NamedIdea b, NamedIdea c, LayoutObj d) =>
+  a -> Sentence -> b -> c -> Sentence -> d -> Contents
+physSystIntro what how p1 p2 p3 indexref = foldlSP [
+  at_start analysis, S "of the", phrase what, S "is performed by looking at",
+  plural property, S "of the", phrase what, how, S "Some", plural property,
+  S "are", phrase p1, plural property `sC` S "and some are", phrase p2 `sOr`
+  p3 +:+. plural property, S "The index convention for referencing which",
+  phrase p1 `sOr` phrase p2, S "is being used is shown in", makeRef indexref]
 
 s4_1_2_bullets = enumBullet [
   (at_start' itslPrpty +:+ S "convention is noted by j. The end" +:+
@@ -244,14 +247,10 @@ s4_1_2_bullets = enumBullet [
 s4_1_2_p2 = foldlSP [S "A", phrase fbd, S "of the", plural force,
   S "acting on the", phrase slice, S "is displayed in", makeRef fig_forceacting]
 
-s4_1_2_fig1 = fig_indexconv
-
 fig_indexconv :: Contents
 fig_indexconv = Figure (S "Index convention for numbering" +:+
   phrase slice +:+ S "and" +:+ phrase intrslce +:+
   phrase force +:+ plural variable) "IndexConvention.png"
-
-s4_1_2_fig2 = fig_forceacting
 
 fig_forceacting :: Contents
 fig_forceacting = Figure (at_start' force +:+ S "acting on a" +:+ (phrase slice))

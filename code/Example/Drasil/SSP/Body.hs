@@ -761,42 +761,55 @@ s5 = reqF [s5_1, s5_2]
 s5_1 = SRS.funcReq
   [s5_1_list, s5_1_table] []
 
-s5_1_list = enumSimple 1 (short requirement) [
-  (S "Read the" +:+ phrase input_ +:+ S "file, and store the" +:+. plural datum +:+
-    S "Necessary" +:+ plural inDatum +:+ S "summarized in" +:+.
-    makeRef s5_1_table),
-  (S "Generate potential" +:+ phrase crtSlpSrf :+:
-    S "'s for the" +:+ phrase input_ +:+. phrase slope),
-  (S "Test the" +:+ plural slpSrf +:+ S "to determine" +:+
-    S "if they are physically realizable based" +:+.
-    S "on a set of pass or fail criteria"),
-  (S "Prepare the" +:+ plural slpSrf +:+ S "for a" +:+ phrase method_ +:+
-    S "of" +:+ plural slice +:+. S "or limit equilibrium analysis"),
-  (S "Calculate" +:+. (plural fs_rc `ofThe` plural slpSrf)),
-  (S "Rank and weight the" +:+ plural slope +:+ S "based on their" +:+
-    phrase fs_rc `sC` S "such that a" +:+ phrase slpSrf +:+
-    S "with a smaller" +:+ phrase fs_rc +:+.
-    S "has a larger weighting"),
-  (S "Generate new potential" +:+ plural crtSlpSrf +:+
-    S "based on previously analysed" +:+ plural slpSrf +:+
-    S "with low" +:+. plural fs_rc),
-  (S "Repeat" +:+ plural requirement +:+ acroR 3 +:+ S "to" +:+
-    acroR 7 +:+ S "until the" +:+
-    S "minimum" +:+ phrase fs_rc +:+ S "remains approximately" +:+
-    S "the same over a predetermined number of" +:+
-    S "repetitions. Identify the" +:+ (phrase slpSrf) +:+
-    S "that generates the minimum" +:+ phrase fs_rc +:+
-    S "as the" +:+. phrase crtSlpSrf),
-  (S "Prepare the" +:+ phrase crtSlpSrf +:+ S "for" +:+ phrase method_ +:+
-    S "of" +:+ plural slice +:+. S "or limit equilibrium analysis"),
-  (S "Calculate" +:+ (phrase fs_rc `ofThe` phrase crtSlpSrf) +:+
-    S "using the" +:+ titleize morPrice +:+. phrase method_),
-  (S "Display the" +:+ phrase crtSlpSrf +:+ S "and the" +:+
-    phrase slice +:+ phrase element +:+.
-    S "displacements graphically" +:+ S "Give" +:+
-    (plural value `ofThe` plural fs_rc) +:+ S "calculated" +:+
-    S "by the" +:+ titleize morPrice +:+. phrase method_)
-  ]
+s5_1_list = enumSimple 1 (short requirement) sspRequirements
+
+sspRequirements :: [Sentence]
+sspRequirements = [readAndStore, generateCSS, testSlipSrf, prepareSlipS, calculateFS,
+  rankSlope, generateCSS', repeatFindFS, prepareCSS, calculateFS', displayGraph]
+
+readAndStore, generateCSS, testSlipSrf, prepareSlipS, calculateFS, rankSlope,
+  generateCSS', repeatFindFS, prepareCSS, calculateFS', displayGraph :: Sentence
+
+readAndStore = S "Read the" +:+ phrase input_ +:+ S "file, and store the" +:+.
+  plural datum +:+ S "Necessary" +:+ plural inDatum +:+ S "summarized in" +:+.
+  makeRef s5_1_table
+
+generateCSS  = S "Generate potential" +:+ phrase crtSlpSrf :+:
+  S "'s for the" +:+ phrase input_ +:+. phrase slope
+
+testSlipSrf  = S "Test the" +:+ plural slpSrf +:+ S "to determine if they" +:+
+  S "are physically realizable based on a set of pass or fail criteria."
+
+prepareSlipS = S "Prepare the" +:+ plural slpSrf +:+ S "for a" +:+ phrase method_ +:+
+  S "of" +:+ plural slice +:+. S "or limit equilibrium analysis"
+
+calculateFS  = S "Calculate" +:+. (plural fs_rc `ofThe` plural slpSrf)
+
+rankSlope    = S "Rank and weight the" +:+ plural slope +:+ S "based on their" +:+
+  phrase fs_rc `sC` S "such that a" +:+ phrase slpSrf +:+ S "with a smaller" +:+
+  phrase fs_rc +:+. S "has a larger weighting"
+
+generateCSS' = S "Generate new potential" +:+ plural crtSlpSrf +:+
+  S "based on previously analysed" +:+ plural slpSrf +:+ S "with low" +:+.
+  plural fs_rc
+
+repeatFindFS = S "Repeat" +:+ plural requirement +:+ acroR 3 +:+ S "to" +:+
+  acroR 7 +:+ S "until the" +:+ S "minimum" +:+ phrase fs_rc +:+ S "remains" +:+
+  S "approximately the same over a predetermined number of repetitions." +:+
+  S "Identify the" +:+ (phrase slpSrf) +:+ S "that generates the minimum" +:+
+  phrase fs_rc +:+ S "as the" +:+. phrase crtSlpSrf
+
+prepareCSS   = S "Prepare the" +:+ phrase crtSlpSrf +:+ S "for" +:+ phrase method_ +:+
+  S "of" +:+ plural slice +:+. S "or limit equilibrium analysis"
+
+calculateFS' = S "Calculate" +:+ (phrase fs_rc `ofThe` phrase crtSlpSrf) +:+
+  S "using the" +:+ titleize morPrice +:+. phrase method_
+
+displayGraph = S "Display the" +:+ phrase crtSlpSrf +:+ S "and the" +:+
+  phrase slice +:+ phrase element +:+. S "displacements graphically" +:+
+  S "Give" +:+ (plural value `ofThe` plural fs_rc) +:+ S "calculated" +:+
+  S "by the" +:+ titleize morPrice +:+. phrase method_
+
 
 s5_1_table = mkInputDatTb ([cqs coords] ++ --this has to be seperate since coords is a different type
   map cqs [elasticMod, cohesion, poissnsRatio, fricAngle, dryWeight, satWeight, waterWeight])

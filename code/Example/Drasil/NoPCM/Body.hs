@@ -325,72 +325,63 @@ s4_2_1_assump_list = [assump1, assump2, assump3, assump4, assump5, assump6, assu
   -- phrase time, sSqBr (acroGD "1")]-}
 assump1, assump2, assump3, assump4, assump5, assump6, assump7, assump8, assump9,
   assump10, assump11, assump12, assump13, assump14 :: Contents
-assump1 = Assumption (nw $ npnc "assump1" $
-  nounPhraseSent (S "The only form of" +:+ phrase energy +:+ S "that is" +:+
+assump1 = mkAssump "assump1"
+  (S "The only form of" +:+ phrase energy +:+ S "that is" +:+
   S "relevant for this" +:+ phrase problem +:+ S "is" +:+. phrase thermal_energy
   +:+ S "All other forms of" +:+ phrase energy `sC` S "such as" +:+
   phrase mech_energy `sC` S "are assumed to be negligible" +:+.
-  sSqBr (swhsSymbMapTRef t1ConsThermE)))
-  EmptyS
-assump2 = Assumption (nw $ npnc "assump2" $
-  nounPhraseSent (S "All" +:+ phrase heat_trans +:+ S "coefficients are constant over"
-  +:+ phrase time +:+. sSqBr (acroGD 1)))
-  EmptyS
-assump3 = Assumption (nw $ npnc "assump3" $
-  nounPhraseSent (S "The" +:+ phrase water +:+ S "in the" +:+ phrase tank +:+
+  sSqBr (swhsSymbMapTRef t1ConsThermE))
+assump2 = mkAssump "assump2" 
+  (S "All" +:+ phrase heat_trans +:+ S "coefficients are constant over"
+  +:+ phrase time +:+. sSqBr (acroGD 1))
+assump3 = mkAssump "assump3"
+  (S "The" +:+ phrase water +:+ S "in the" +:+ phrase tank +:+
   S "is fully mixed, so the" +:+ phrase temp_W `isThe` S "same throughout the entire"
-  +:+ phrase tank +:+. sSqBr (acroGD 2)))
-  EmptyS
-assump4 = Assumption (nw $ npnc "assump4" $
-  nounPhraseSent (S "The" +:+ phrase w_density +:+ S "has no spatial variation; that is"
-  `sC` S "it is constant over their entire" +:+ phrase vol +:+. sSqBr (acroGD 2)))
-  EmptyS
-assump5 = Assumption (nw $ npnc "assump5" $
-  nounPhraseSent (S "The" +:+ phrase htCap_W +:+ S "has no spatial variation; that"
-  +:+ S "is, it is constant over its entire" +:+ phrase vol +:+. sSqBr (acroGD 2)))
-  EmptyS
-assump6 = Assumption (nw $ npnc "assump6" $
-  nounPhraseSent (S "Newton's law of convective cooling applies between the" +:+
-  phrase coil `sAnd` S "the" +:+ phrase water +:+ sSqBr (swhsSymbMapDRef dd1HtFluxC)))
-  EmptyS
-assump7 = Assumption (nw $ npnc "assump7" $
-  nounPhraseSent (S "The" +:+ phrase temp_C +:+ S "is constant over" +:+ phrase time
-  +:+. sSqBr (swhsSymbMapDRef dd1HtFluxC `sC` makeRef likeChg1)))
-  EmptyS
-assump8 = Assumption (nw $ npnc "assump8" $
-  nounPhraseSent (S "The" +:+ phrase temp_C +:+ S "does not vary along its length"
-  +:+. sSqBr (swhsSymbMapDRef dd1HtFluxC `sC` makeRef likeChg2)))
-  EmptyS
-assump9 = Assumption (nw $ npnc "assump9" $
-  nounPhraseSent (S "The" +:+ phrase model +:+ S "only accounts for charging" +:+
+  +:+ phrase tank +:+. sSqBr (acroGD 2))
+assump4 = mkAssump "assump4"
+  (S "The" +:+ phrase w_density +:+ S "has no spatial variation; that is"
+  `sC` S "it is constant over their entire" +:+ phrase vol +:+. sSqBr (acroGD 2))
+assump5 = mkAssump "assump5"
+  (S "The" +:+ phrase htCap_W +:+ S "has no spatial variation; that"
+  +:+ S "is, it is constant over its entire" +:+ phrase vol +:+. sSqBr (acroGD 2))
+assump6 = mkAssump "assump6"
+  (S "Newton's law of convective cooling applies between the" +:+
+  phrase coil `sAnd` S "the" +:+ phrase water +:+ sSqBr (swhsSymbMapDRef dd1HtFluxC))
+assump7 = mkAssump "assump7"
+  (S "The" +:+ phrase temp_C +:+ S "is constant over" +:+ phrase time
+  +:+. sSqBr (swhsSymbMapDRef dd1HtFluxC `sC` makeRef likeChg1))
+assump8 = mkAssump "assump8"
+  (S "The" +:+ phrase temp_C +:+ S "does not vary along its length"
+  +:+. sSqBr (swhsSymbMapDRef dd1HtFluxC `sC` makeRef likeChg2))
+assump9 = mkAssump "assump9"
+  (S "The" +:+ phrase model +:+ S "only accounts for charging" +:+
   S "of the tank" `sC` S "not discharging. The" +:+ phrase temp_W +:+ S "can only" +:+
   S "increase, or remain constant; it cannot decrease. This implies that the" +:+
   phrase temp_init +:+ S "is less than (or equal to) the" +:+ phrase temp_C +:+.
-  sSqBr ((acroIM 1) `sC` (makeRef likeChg3))))
-  EmptyS
-assump10 = Assumption (nw $ npnc "assump10" $
-  nounPhraseSent ((S "operating" +:+ phrase temp +:+ S "range" `ofThe'` phrase system)
+  sSqBr ((acroIM 1) `sC` (makeRef likeChg3)))
+assump10 = mkAssump "assump10"
+  ((S "operating" +:+ phrase temp +:+ S "range" `ofThe'` phrase system)
   +:+ S "is such that the" +:+ phrase water +:+ S "is always in" +:+ phrase liquid +:+ S "form. That is," +:+
   S "the" +:+ phrase temp +:+ S "will not drop below the" +:+ phrase melt_pt +:+
   S "of" +:+ phrase water `sC` S "or rise above its" +:+ phrase boil_pt +:+.
-  sSqBr (acroIM 1))) EmptyS
-assump11 = Assumption (nw $ npnc "assump11" $
-  nounPhraseSent (S "The" +:+ phrase tank +:+ S "is perfectly insulated so that" +:+
+  sSqBr (acroIM 1))
+assump11 = mkAssump "assump11"
+  (S "The" +:+ phrase tank +:+ S "is perfectly insulated so that" +:+
   S "there is no" +:+ phrase heat +:+ S "loss from the" +:+ phrase tank +:+.
-  sSqBr ((acroIM 1) `sC` (makeRef likeChg4))))
-  EmptyS
-assump12 = Assumption (nw $ npnc "assump12" $ nounPhraseSent (S "No internal" +:+
-  phrase heat +:+ S "is generated by the" +:+ phrase water `semiCol`
-  S "therefore, the" +:+ phrase vol_ht_gen +:+ S "is zero" +:+. sSqBr (acroIM 1)))
-  EmptyS
-assump13 = Assumption (nw $ npnc "assump13" $ nounPhraseSent (S "The pressure in the" +:+
-  phrase tank +:+ S "is atmospheric, so the" +:+ phrase melt_pt `sAnd` phrase boil_pt
-  +:+ S "are" +:+ S (show (0 :: Integer)) :+: Sy (unit_symb QT.temp) `sAnd`
-  S (show (100 :: Integer)) :+: Sy (unit_symb QT.temp) `sC` S "respectively" +:+.
-  sSqBr ((acroIM 1) `sC` (acroIM 3)))) EmptyS
-assump14 = Assumption (nw $ npnc "assump14" $ nounPhraseSent (S "When considering the"
-  +:+ phrase w_vol +:+ S "in the" +:+ phrase tank `sC` (phrase vol `ofThe` phrase coil)
-  +:+ S "is assumed to be negligible" +:+. sSqBr (makeRef req2))) EmptyS
+  sSqBr ((acroIM 1) `sC` (makeRef likeChg4)))
+assump12 = mkAssump "assump12"
+  (S "No internal" +:+ phrase heat +:+ S "is generated by the" +:+ phrase water
+  `semiCol` S "therefore, the" +:+ phrase vol_ht_gen +:+ S "is zero" +:+.
+  sSqBr (acroIM 1))
+assump13 = mkAssump "assump13"
+  (S "The pressure in the" +:+ phrase tank +:+ S "is atmospheric, so the" +:+
+  phrase melt_pt `sAnd` phrase boil_pt +:+ S "are" +:+ S (show (0 :: Integer))
+  :+: Sy (unit_symb QT.temp) `sAnd` S (show (100 :: Integer)) :+: Sy (unit_symb QT.temp) 
+  `sC` S "respectively" +:+. sSqBr ((acroIM 1) `sC` (acroIM 3)))
+assump14 = mkAssump "assump14"
+  (S "When considering the" +:+ phrase w_vol +:+ S "in the" +:+
+  phrase tank `sC` (phrase vol `ofThe` phrase coil) +:+
+  S "is assumed to be negligible" +:+. sSqBr (makeRef req2))
 
 -- assumpNumGen :: [AssumpChunk] -> [Contents]
 -- assumpNumGen assump =  zipWith Assumption assump [S "A" :+: (S $ show x) | x <- [1..]]

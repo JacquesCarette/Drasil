@@ -7,19 +7,21 @@ import Data.Drasil.Concepts.Math (parameter)
 
 
 algorithm :: ConceptChunk
-algorithm    = dcc "algorithm"    (cn' "algorithm")               "A series of steps to be followed in calculations and problem-solving operations"
+algorithm    = dcc "algorithm" (cn' "algorithm")
+  "A series of steps to be followed in calculations and problem-solving operations"
 
 mod_calc_desc :: Sentence -> ConceptChunk
-mod_calc_desc defnFromEx = dccWDS "mod_calc_desc" (cn' "calculation")   defnFromEx
-
+mod_calc_desc defnFromEx = dccWDS "mod_calc_desc" (cn' "calculation") defnFromEx
 
 application, computer, os, structure, type_ :: NamedChunk
-
-application     = npnc "application"    (cn' "application")
-computer        = npnc "computer"       (cn' "computer")
-os              = npnc' "os"            (cn' "operating system") "OS"
-structure       = npnc "structure"      (cn' "structure")
-type_           = npnc "type"           (cn' "type")
+-------------------------------------------------------------------------------
+--  NC      |       |      id       |       term               |  abbreviation
+-------------------------------------------------------------------------------
+application  = npnc  "application"    (cn' "application")      
+computer     = npnc  "computer"       (cn' "computer")         
+structure    = npnc  "structure"      (cn' "structure")         
+type_        = npnc  "type"           (cn' "type")
+os           = npnc' "os"             (cn' "operating system")    "OS"
 
 
 dataStruct, dataStruct', dataType, dataType', 

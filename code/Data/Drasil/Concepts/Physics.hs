@@ -19,29 +19,29 @@ rigidBody, velocity, friction, elasticity, energy, mech_energy, collision, space
   strain, angDisp, angVelo, angAccel, linDisp, linVelo, linAccel, 
   joint :: ConceptChunk
 
-rigidBody  = dcc "rigidBody" 
-  (cnIES "rigid body") "A solid body in which deformation is neglected."
-velocity   = dccWDS "velocity" (cnIES "velocity")
+rigidBody    = dcc "rigidBody" (cnIES "rigid body") 
+  "A solid body in which deformation is neglected."
+velocity     = dccWDS "velocity" (cnIES "velocity")
   (S "The rate of change of a body's" +:+ (phrase position))
-friction   = dcc "friction" (cn' "friction")
+friction     = dcc "friction" (cn' "friction")
   "The force resisting the relative motion of two surfaces."
-elasticity = dcc "elasticity" (cnIES "elasticity") 
+elasticity   = dcc "elasticity" (cnIES "elasticity") 
   ("Ratio of the relative velocities " ++
   "of two colliding objects after and before a collision.")
-energy = dcc "energy" (cn "energy")
+energy       = dcc "energy" (cn "energy")
   "Power derived from the utilization of physical or chemical resources."
-mech_energy = dcc "mech_energy" (cn "mechanical energy")
+mech_energy  = dcc "mech_energy" (cn "mechanical energy")
   "The energy that comes from motion and position"
-collision  = dcc "collision" (cn' "collision")
+collision    = dcc "collision" (cn' "collision")
   ("An encounter between particles resulting " ++
   "in an exchange or transformation of energy.")
-space      = dcc "space" (cn' "space") 
+space        = dcc "space" (cn' "space") 
   ("A two-dimensional extent where objects and " ++
   "events have relative positions and directions.")
-cartesian  = dcc "cartesian" (pn' "Cartesian coordinate system") 
+cartesian    = dcc "cartesian" (pn' "Cartesian coordinate system") 
   ("A coordinate system that specifies each point uniquely in a plane by a " ++
   "pair of numerical coordinates.")
-rightHand  = dcc "rightHand" (cn' "right-handed coordinate system")
+rightHand    = dcc "rightHand" (cn' "right-handed coordinate system")
   "A coordinate system where the positive z-axis comes out of the screen."
   
 joint        = dcc "joint"    (cn' "joint") ("a connection between two rigid " ++ 
@@ -58,7 +58,7 @@ distance     = dcc "distance" (cn' "distance")
   "The interval measured along a path connecting two locations"
 stress       = dcc "stress" (cn'' "stress")
   ("Forces that are exerted between planes internal to" ++
-  " a larger body subject to external loading.") --definition used in SSP, can be made clearer
+  " a larger body subject to external loading.")            --definition used in SSP, can be made clearer
 strain       = dccWDS "strain" (cn' "strain")
   ((titleize stress) +:+
   S "forces that result in deformation of the body/plane.") --definition used in SSP, can be made clearer
@@ -70,34 +70,37 @@ compression  = dccWDS "compression" (cn' "compression")
   S "that causes displacement of the body towards its center.")
   
 --FIXME: COMBINATION HACK (for all below)
-angDisp = dcc "angularDisplacement" (compoundPhrase' (angular ^. term)
-                  (displacement ^. term))
-                  "The angle through which an object moves on a circular path"
-angVelo = dcc "angularVelocity" (compoundPhrase' (angular ^. term)
-                  (velocity ^. term))
-                  "The rate of change of angular position of a rotating body"
+angDisp = dcc "angularDisplacement" 
+  (compoundPhrase' (angular ^. term) (displacement ^. term))
+  "The angle through which an object moves on a circular path"
+angVelo = dcc "angularVelocity" 
+  (compoundPhrase' (angular ^. term) (velocity ^. term))
+  "The rate of change of angular position of a rotating body"
 angAccel = dcc "angularAcceleration"
-                  (compoundPhrase' (angular ^. term) (acceleration ^. term))
-                  "The rate of change of angular velocity"
-linDisp = dcc "linearDisplacement" (compoundPhrase' (linear ^. term)
-                  (displacement ^. term)) "Movement in one direction along a single axis"
-linVelo = dcc "linearVelocity" (compoundPhrase' (linear ^. term)
-                  (velocity ^. term)) "The speed of a moving object, dependent on the perspective taken"
-linAccel = dcc "linearAcceleration" (compoundPhrase' (linear ^. term)
-                   (acceleration ^. term)) "The rate of change of velocity without a change in direction"
+  (compoundPhrase' (angular ^. term) (acceleration ^. term))
+  "The rate of change of angular velocity"
+linDisp = dcc "linearDisplacement" 
+  (compoundPhrase' (linear ^. term) (displacement ^. term)) 
+  "Movement in one direction along a single axis"
+linVelo = dcc "linearVelocity" 
+  (compoundPhrase' (linear ^. term) (velocity ^. term)) 
+  "The speed of a moving object, dependent on the perspective taken"
+linAccel = dcc "linearAcceleration" 
+  (compoundPhrase' (linear ^. term) (acceleration ^. term)) 
+  "The rate of change of velocity without a change in direction"
 
 -- The following feel like they're missing something/need to be more
 -- descriptive. See issue tracker for details.  
 -- FIXME: plurals below?
 
 restitutionCoef = dcc "restitutionCoef" (cn "coefficient of restitution")
-                  "A measure of the restitution of a collision between two objects"
+   "A measure of the restitution of a collision between two objects"
 momentOfInertia = dcc "momentOfInertia" (cn "moment of inertia")
-                  "A quantity expressing a body's tendency to resist angular acceleration"
+   "A quantity expressing a body's tendency to resist angular acceleration"
 
 --FIXME: These two should be built off "impulse"
 impulseV   = dcc "impulseV" (cn "impulse (vector)")
-                  "A force acting briefly on a body and producing a finite change of momentum in a given direction" 
+   "A force acting briefly on a body and producing a finite change of momentum in a given direction" 
 impulseS   = dcc "impulseS" (cn "impulse (scalar)") "A force acting briefly on a body and producing a finite change of momentum" 
 
 gravitationalAccel = dcc "gravitationalAccel" 
@@ -105,11 +108,15 @@ gravitationalAccel = dcc "gravitationalAccel"
 gravitationalConst = dcc "gravitationalConst" (cn "gravitational constant" )
   "gravitational constant (6.673 * 10E-11)"
 
-time = dcc "time" (cn' "time") "The indefinite continued progress of existence and events in the past, present, and future regarded as a whole"
-torque = dcc "torque" (cn' "torque") "A twisting force that tends to cause rotation"
+time   = dcc "time"   (cn' "time") 
+  "The indefinite continued progress of existence and events in the past, present, and future regarded as a whole"
+torque = dcc "torque" (cn' "torque") 
+  "A twisting force that tends to cause rotation"
 
 fbd = dcc "FBD" (cn' "free body diagram")
   "A graphical illustration used to visualize the applied forces, movements, and resulting reactions on a body in a steady state condition"
 
-linear = dcc "linear" (cn' "linear") "Arranged in or extending along a straight or nearly straight line"
-angular = dcc "angular" (cn' "angular") "Denoting physical properties or quantities measured with reference to or by means of an angle"
+linear  = dcc "linear"  (cn' "linear" ) 
+  "Arranged in or extending along a straight or nearly straight line"
+angular = dcc "angular" (cn' "angular") 
+  "Denoting physical properties or quantities measured with reference to or by means of an angle"

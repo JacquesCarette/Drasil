@@ -13,7 +13,7 @@ boiling             = dcc "boiling"         (cn "boiling")
                       "Phase change from liquid to vapour"
 boil_pt             = dcc "boil_pt"         (cn' "boiling point temperature")
                       "Temperature at which a substance changes from liquid to vapour"
-degree_'            = dcc "degree" (cn' "degree")
+degree_'            = dcc "degree"          (cn' "degree")
                       "A measure of the warmth or coldness of an object or substance"
 heat                = dcc "heat"            (cn "heat")
                       ("Noun: The amount of heat energy inside a body. " ++
@@ -22,7 +22,8 @@ heat_trans          = dcc "heat_trans"      (cn' "heat transfer")
                       "The generation, use, conversion, and exchange of thermal energy and heat between physical systems"
 heat_cap_spec       = dcc "heat_cap_spec"   (cnIES "specific heat capacity")
                       "The amount of energy required to raise the temperature of the unit mass of a given substance by a given amount"
-ht_flux             = dcc "ht_flux" (cn'' "heat flux") "The rate of thermal energy transfer through a given surface per unit time"
+ht_flux             = dcc "ht_flux"         (cn'' "heat flux") 
+  "The rate of thermal energy transfer through a given surface per unit time"
 latent_heat         = dcc "latent_heat"     (cn' "latent heat")
                       "The heat required to convert a solid into a liquid or vapor, or a liquid into a vapor, without change of temperature"
 law_cons_energy     = dcc "law_cons_energy" 

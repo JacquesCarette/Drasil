@@ -10,7 +10,7 @@ angle, area, calculation, diameter, equation, euclidN, euclidSpace, gradient,
 
 ode :: CI
 
-angle        = dcc "angle"        (cn' "angle")                    ("The amount of rotation needed to bring one line or plane into" ++
+angle        = dcc "angle"        (cn' "angle")                   ("The amount of rotation needed to bring one line or plane into" ++
                                                                   "coincidence with another")
 area         = dcc "area"         (cn' "area")                    "A part of an object or surface"
 calculation  = dcc "calculation"  (cn' "calculation")             "A mathematical determination of the size or number of something"
@@ -52,9 +52,9 @@ normalV      = dcc "normal vector"  (compoundPhrase' (normal ^. term)
 perpV        = dcc "perp_vect"      (compoundPhrase' (perp ^. term)
                 (vector ^. term))
                 "Vector perpendicular or 90 degrees to another vector"
-rOfChng      = dcc "rOfChng" ((rate) `of_` (change))
+rOfChng      = dcc "rOfChng"        ((rate) `of_` (change))
                 "Ratio between a change in one variable relative to a corresponding change in another"
-surArea      = dcc "surArea"  (compoundPhrase' (surface ^. term) (area ^. term))
+surArea      = dcc "surArea"        (compoundPhrase' (surface ^. term) (area ^. term))
                 "A measure of the total area that the surface of the object occupies"
 unitV        = dcc "unit_vect"      (compoundPhrase' (unit_ ^. term)
                 (vector ^. term)) "A vector that has a magnitude of one"

@@ -9,7 +9,8 @@ import qualified Language.Drasil.NounPhrase as NP
 
 -- acronyms to be used throughout
 -- ex. S "as seen in (A1)" -> S "as seen in" +:+ sParen (acroA "1")
-acroA, acroDD, acroGD, acroGS, acroIM, acroLC, acroPS, acroR, acroT :: Int -> Sentence
+acroA, acroDD, acroGD, acroGS, acroIM, acroLC, acroPS
+  , acroR, acroT :: Int -> Sentence
 
 acroA  numVar = short assumption  :+: S (show numVar)
 acroDD numVar = short dataDefn    :+: S (show numVar)
@@ -35,8 +36,10 @@ acroNumGen (first:rest) num = (f first) : acroNumGen rest (num + 1)
 
 assumption, dataDefn, genDefn, goalStmt, inModel, likelyChg, unlikelyChg,
   physSyst, requirement, srs, thModel, mg, desSpec, notApp, dataConst :: CI
---FIXME: Add compound NounPhrases instead of cn'
-    --UPDATE: Added compoundPhrase where it could be applied. Verify that this is complete.
+
+--------------------------------------------------------------------------------
+-- CI       |           |    id       |         term            | abbreviation |
+--------------------------------------------------------------------------------
 assumption  = commonIdea "assumption"  (cn' "assumption")                                  "A"
 dataDefn    = commonIdea "dataDefn"    (cn' "data definition")                             "DD"
 desSpec     = commonIdea "desSpec"     (fterms compoundPhrase design specification)        "DS"
@@ -46,12 +49,15 @@ dataConst   = commonIdea "dataConst"   (cn' "data constraint")                  
 inModel     = commonIdea "inModel"     (fterms compoundPhrase instance_ model)             "IM"
 likelyChg   = commonIdea "likelyChg"   (cn' "likely change")                               "LC"
 unlikelyChg = commonIdea "unlikelyChg" (cn' "unlikely change")                             "UC"
-physSyst    = commonIdea "physSyst"  (fterms compoundPhrase physicalSystem description)    "PS"
+physSyst    = commonIdea "physSyst"    (fterms compoundPhrase physicalSystem description)  "PS"
 requirement = commonIdea "requirement" (cn' "requirement")                                 "R"
 thModel     = commonIdea "thModel"     (cn' "theoretical model")                           "T"
 mg          = commonIdea "mg"          (fterms compoundPhrase module_ guide)               "MG"
-srs         = commonIdea "srs"      (compoundPhrase''' NP.plural (softwareReq ^. term) (specification ^. term))   "SRS"
 notApp      = commonIdea "notApp"      (nounPhraseSP "not applicable")                     "N/A"
+
+srs = commonIdea "srs" 
+  (compoundPhrase''' NP.plural (softwareReq ^. term) (specification ^. term))
+  "SRS"
 
 ---------------------------------------------------------------------
 
@@ -72,120 +78,116 @@ analysis, appendix, body, characteristic, class_, client, code, column, company,
   task, template, term_, terminology, theory, traceyGraph, traceyMatrix, uncertainty,
   user, useCase, validation, value, variable, video, verification, year :: NamedChunk
 
-analysis        = npnc "analysis"       (cnIS "analysis")
+analysis        = npnc "analysis"       (cnIS   "analysis")
 appendix        = npnc "appendix"       (cnICES "appendix")
-body            = npnc "body"           (cnIES "body")
-characteristic  = npnc "characteristic" (cn' "characteristic")
-class_          = npnc "class"          (cn''' "class")
-client          = npnc "client"         (cn' "client")
-code            = npnc "code"           (cn "code")
-column          = npnc "column"         (cn' "column") --general enough to be in Documentation?
-company         = npnc "company"        (cnIES "company")
-component       = npnc "component"      (cn' "component")
-condition       = npnc "condition"      (cn' "condition")
-constraint      = npnc "constraint"     (cn' "constraint")
-consumer        = npnc "consumer"       (cn' "consumer")
-connection      = npnc "connection"     (cn' "connection")
-content         = npnc "content"        (cn' "content")
-context         = npnc "context"        (cn' "context")
-coordinate      = npnc "coordinate"     (cn' "coordinate")
-customer        = npnc "customer"       (cn' "customer")
-datum           = npnc "datum"          (cnUM  "datum")
-decision        = npnc "decision"       (cn'  "decision")
-definition      = npnc "definition"     (cn' "definition")
-dependency      = npnc "dependency"     (cnIES "dependency")
-description     = npnc "description"    (cn' "description")
-design          = npnc "design"         (cn' "design")
-document        = npnc "document"       (cn' "document")
-documentation   = npnc "documentation"  (cn' "documentation")
-effect          = npnc "effect"         (cn' "effect")
-element         = npnc "element"        (cn' "element")
-endUser         = npnc "end user"       (cn' "end user")
-environment     = npnc "environment"    (cn' "environment") -- Is this term in the right spot?
-failure         = npnc "failure"        (cn' "failure")
-figure          = npnc "figure"         (cn' "figure")
-functional      = npnc "functional"     (cn' "functional") --FIXME: Adjective
-game            = npnc "game"           (cn' "game")
-general         = npnc "general"        (cn' "general")  -- FIXME: Adjective
-goal            = npnc "goal"           (cn' "goal")
-guide           = npnc "guide"          (cn' "guide")
-implementation  = npnc "implementation" (cn' "implementation")
-individual      = npnc "individual"     (cn' "individual")
-information     = npnc "information"    (cn "information")
-interest        = npnc "interest"       (cn' "interest")
-interface       = npnc "interface"      (cn' "interface")
-input_          = npnc "input"          (cn' "input")
-instance_       = npnc "instance"       (cn' "instance")
-intReader       = npnc "intReader"      (cn' "intended reader")
-introduction    = npnc "introduction"   (cn' "introduction")
-issue           = npnc "issue"          (cn' "issue")
-item            = npnc "item"           (cn' "item")
-label           = npnc "label"          (cn' "label")
-library         = npnc "library"        (cnIES "library")
-limitation      = npnc "limitation"     (cn' "limitation")
-literacy        = npnc "literacy"       (cnIES "literacy")
-loss            = npnc "loss"           (cn''' "loss")
-material_       = npnc "material"       (cn' "material")
-message         = npnc "message"        (cn' "message")
-method_         = npnc "method"         (cn' "method")
-module_         = npnc "module"         (cn' "module")
-model           = npnc "model"          (cn' "model")
-name_           = npnc "name"           (cn' "name")
-nonfunctional   = npnc "non-functional" (cn' "non-functional") -- FIXME: Adjective
-object          = npnc "object"         (cn' "object")
-offShelf        = npnc "Off-the-Shelf"  (cn' "Off-the-Shelf")
-open            = npnc "open"           (cn' "open")
-organization    = npnc "organization"   (cn' "organization")
-output_         = npnc "output"         (cn' "output")
-physics         = npnc "physics"        (cn' "physics")
-physical        = npnc "physical"       (cn' "physical") -- FIXME: Adjective
-plan            = npnc "plan"           (cn' "plan")
-practice        = npnc "practice"       (cn' "practice")
-priority        = npnc "priority"       (cnIES "priority")
-problem         = npnc "problem"        (cn' "problem")
-product_        = npnc "product"        (cn' "product")
-project         = npnc "project"        (cn' "project")
-property        = npnc "property"       (cnIES "property")
-purpose         = npnc "purpose"        (cn' "purpose")
-quantity        = npnc "quantity"       (cnIES "quantity") --general enough to be in documentaion.hs?
-realtime        = npnc "real-time"      (cn' "real-time")
-reference       = npnc "reference"      (cn' "reference")
-requirement_    = npnc "requirement"    (cn' "requirement") -- FIXME: Eventually only have one requirement
-response        = npnc "response"       (cn' "response")
-reviewer        = npnc "reviewer"       (cn' "reviewer")
-safety          = npnc "safety"         (cnIES "safety")
-scope           = npnc "scope"          (cn' "scope")
-second_         = npnc "second"         (cn' "second") --Does it make sense for this to be here?
-section_        = npnc "section"        (cn' "section")
-scenario        = npnc "scenario"       (cn' "scenario")
-source          = npnc "source"         (cn' "source")
-simulation      = npnc "simulation"     (cn' "simulation")
-solution        = npnc "solution"       (cn' "solution")
-software        = npnc "software"       (cn "software")
-specific        = npnc "specific"       (cn' "specific") -- FIXME: Adjective
-specification   = npnc "specification"  (cn' "specification")
-stakeholder     = npnc "stakeholder"    (cn' "stakeholder")
-standard        = npnc "standard"       (cn' "standard")
-statement       = npnc "statement"      (cn' "statement")
-symbol_         = npnc "symbol"         (cn' "symbol")
-system          = npnc "system"         (cn' "system")
-table_          = npnc "table"          (cn' "table")
-task            = npnc "task"           (cn' "task")
-template        = npnc "template"       (cn' "template")
-term_           = npnc "term"           (cn' "term")
-terminology     = npnc "terminology"    (cnIES "terminology")
-theory          = npnc "theory"         (cnIES "theory")
-traceyGraph     = npnc "traceyGraph"    (cn' "traceability graph")
+characteristic  = npnc "characteristic" (cn'    "characteristic")
+class_          = npnc "class"          (cn'''  "class")
+client          = npnc "client"         (cn'    "client")
+code            = npnc "code"           (cn     "code")
+column          = npnc "column"         (cn'    "column")       --general enough to be in Documentation?
+company         = npnc "company"        (cnIES  "company")
+component       = npnc "component"      (cn'    "component")
+condition       = npnc "condition"      (cn'    "condition")
+constraint      = npnc "constraint"     (cn'    "constraint")
+connection      = npnc "connection"     (cn'    "connection")
+content         = npnc "content"        (cn'    "content")
+context         = npnc "context"        (cn'    "context")
+coordinate      = npnc "coordinate"     (cn'    "coordinate")
+customer        = npnc "customer"       (cn'    "customer")
+datum           = npnc "datum"          (cnUM   "datum")
+decision        = npnc "decision"       (cn'    "decision")
+definition      = npnc "definition"     (cn'    "definition")
+dependency      = npnc "dependency"     (cnIES  "dependency")
+description     = npnc "description"    (cn'    "description")
+design          = npnc "design"         (cn'    "design")
+document        = npnc "document"       (cn'    "document")
+documentation   = npnc "documentation"  (cn'    "documentation")
+effect          = npnc "effect"         (cn'    "effect")
+element         = npnc "element"        (cn'    "element")
+endUser         = npnc "end user"       (cn'    "end user")
+environment     = npnc "environment"    (cn'    "environment")  -- Is this term in the right spot?
+failure         = npnc "failure"        (cn'    "failure")
+figure          = npnc "figure"         (cn'    "figure")
+functional      = npnc "functional"     (cn'    "functional")   --FIXME: Adjective
+game            = npnc "game"           (cn'    "game")
+general         = npnc "general"        (cn'    "general")      --FIXME: Adjective
+goal            = npnc "goal"           (cn'    "goal")
+guide           = npnc "guide"          (cn'    "guide")
+implementation  = npnc "implementation" (cn'    "implementation")
+individual      = npnc "individual"     (cn'    "individual")
+information     = npnc "information"    (cn     "information")
+interest        = npnc "interest"       (cn'    "interest")
+interface       = npnc "interface"      (cn'    "interface")
+input_          = npnc "input"          (cn'    "input")
+instance_       = npnc "instance"       (cn'    "instance")
+intReader       = npnc "intReader"      (cn'    "intended reader")
+introduction    = npnc "introduction"   (cn'    "introduction")
+issue           = npnc "issue"          (cn'    "issue")
+item            = npnc "item"           (cn'    "item")
+label           = npnc "label"          (cn'    "label")
+library         = npnc "library"        (cnIES  "library")
+limitation      = npnc "limitation"     (cn'    "limitation")
+literacy        = npnc "literacy"       (cnIES  "literacy")
+loss            = npnc "loss"           (cn'''  "loss")
+material_       = npnc "material"       (cn'    "material")
+message         = npnc "message"        (cn'    "message")
+method_         = npnc "method"         (cn'    "method")
+module_         = npnc "module"         (cn'    "module")
+model           = npnc "model"          (cn'    "model")
+name_           = npnc "name"           (cn'    "name")
+nonfunctional   = npnc "non-functional" (cn'    "non-functional") --FIXME: Adjective
+offShelf        = npnc "Off-the-Shelf"  (cn'    "Off-the-Shelf")
+open            = npnc "open"           (cn'    "open")
+organization    = npnc "organization"   (cn'    "organization")
+output_         = npnc "output"         (cn'    "output")
+physics         = npnc "physics"        (cn'    "physics")
+physical        = npnc "physical"       (cn'    "physical")       --FIXME: Adjective
+plan            = npnc "plan"           (cn'    "plan")
+practice        = npnc "practice"       (cn'    "practice")
+priority        = npnc "priority"       (cnIES  "priority")
+problem         = npnc "problem"        (cn'    "problem")
+product_        = npnc "product"        (cn'    "product")
+project         = npnc "project"        (cn'    "project")
+property        = npnc "property"       (cnIES  "property")
+purpose         = npnc "purpose"        (cn'    "purpose")
+quantity        = npnc "quantity"       (cnIES  "quantity")       --general enough to be in documentaion.hs?
+realtime        = npnc "real-time"      (cn'    "real-time")
+reference       = npnc "reference"      (cn'    "reference")
+requirement_    = npnc "requirement"    (cn'    "requirement")    --FIXME: Eventually only have one requirement
+response        = npnc "response"       (cn'    "response")
+reviewer        = npnc "reviewer"       (cn'    "reviewer")
+safety          = npnc "safety"         (cnIES  "safety")
+scope           = npnc "scope"          (cn'    "scope")
+second_         = npnc "second"         (cn'    "second")         --Does it make sense for this to be here?
+section_        = npnc "section"        (cn'    "section")
+scenario        = npnc "scenario"       (cn'    "scenario")
+source          = npnc "source"         (cn'    "source")
+simulation      = npnc "simulation"     (cn'    "simulation")
+solution        = npnc "solution"       (cn'    "solution")
+software        = npnc "software"       (cn     "software")
+specific        = npnc "specific"       (cn'    "specific")       --FIXME: Adjective
+specification   = npnc "specification"  (cn'    "specification")
+stakeholder     = npnc "stakeholder"    (cn'    "stakeholder")
+standard        = npnc "standard"       (cn'    "standard")
+statement       = npnc "statement"      (cn'    "statement")
+symbol_         = npnc "symbol"         (cn'    "symbol")
+system          = npnc "system"         (cn'    "system")
+table_          = npnc "table"          (cn'    "table")
+template        = npnc "template"       (cn'    "template")
+term_           = npnc "term"           (cn'    "term")
+terminology     = npnc "terminology"    (cnIES  "terminology")
+theory          = npnc "theory"         (cnIES  "theory")
+traceyGraph     = npnc "traceyGraph"    (cn'    "traceability graph")
 traceyMatrix    = npnc "traceyMatrix"   (cnICES "traceability matrix")
-uncertainty     = npnc "uncertainty"    (cnIES "uncertainty")
-user            = npnc "user"           (cn' "user")
-useCase         = npnc "useCase"        (cn' "use case")
-validation      = npnc "validation"     (cn' "validation")
-value           = npnc "value"          (cn' "value")
-variable        = npnc "variable"       (cn' "variable")
-verification    = npnc "verification"   (cn' "verification")
-video           = npnc "video"          (cn' "video")
-year            = npnc "year"           (cn' "year")
+uncertainty     = npnc "uncertainty"    (cnIES  "uncertainty")
+user            = npnc "user"           (cn'    "user")
+useCase         = npnc "useCase"        (cn'    "use case")
+validation      = npnc "validation"     (cn'    "validation")
+value           = npnc "value"          (cn'    "value")
+variable        = npnc "variable"       (cn'    "variable")
+verification    = npnc "verification"   (cn'    "verification")
+video           = npnc "video"          (cn'    "video")
+year            = npnc "year"           (cn'    "year")
 
 
 orgOfDoc, prpsOfDoc, refmat, scpOfReq, consVals,

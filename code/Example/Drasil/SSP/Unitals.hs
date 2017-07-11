@@ -16,7 +16,7 @@ sspSymbols = (map cqs sspInputs) ++ (map cqs sspOutputs) ++
 ---------------------------
 {-
 SM.mobShear, SM.shearRes, SM.stffness
-SM.poissnsR, SM.elastMod <- ConstrainedChunks
+SM.poissnsR, SM.elastMod <- Used to make UncertQ
 -}
 normStress = SM.nrmStrss
 genForce = uc CP.force cF newton 

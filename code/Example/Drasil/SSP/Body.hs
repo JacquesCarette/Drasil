@@ -634,7 +634,7 @@ rigFoSDerivation = [foldlSP [S "RFEM analysis can also be used to calculate the"
   S "and the now known base displacement perpendicular to the surface",
   getS nrmDispl, S "from", eqN 25, S "the normal base stress",
   S "can be calculated from the force-displacement relationship of" +:+. acroT 5,
-  S "Stress", getS normStress `sIs` S "used in place of force", getS genForce, --FIXME: use getTandS
+  S "Stress", getS normStress `sIs` S "used in place of", getTandS genForce, --FIXME: use getTandS
   S "as the stiffness hasn't been normalized for" +:+. (S "length" `ofThe` S "base"), 
   S "Results" `sIn` eqN 26], --FIXME: grammar
 

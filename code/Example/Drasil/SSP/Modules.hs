@@ -41,8 +41,7 @@ mod_inputf_desc = dccWDS "mod_inputf_desc" (cn' "input format")
   S "file, and/or prompted command line" +:+. plural input_ +:+ at_start' inDatum +:+
   S "includes the x,y coordinates of the" +:+ phrase slope `sC` S "with a set of" +:+
   S "coordinates for each layer. Each layer's" +:+ plural soilPrpty +:+ S "of" +:+
-  (foldlList (map (\x -> (phrase x)) $
-  (map cqs [fricAngle, cohesion, dryWeight, satWeight]) ++ [cqs elastMod, cqs poissnsRatio])) +:+ --NOTE: elastMod is not a ConstrainedChunk so it must be seperated
+  (foldlList $ map phrase [fricAngle, cohesion, dryWeight, satWeight, elasticMod, poissnsRatio]) +:+
   S "are stored in" +:+ plural vector +:+ S "of" +:+. plural soilPrpty +:+
   S "If a piezometric" +:+ phrase surface_ +:+ S "exists in the" +:+ phrase slope +:+
   S "it's coordinates and the" +:+ phrase waterWeight +:+ S "are also" +:+

@@ -47,7 +47,7 @@ crtSlpSrf = dccWDS "critical slip surface" (cn' "critical slip surface")
   ((at_start slpSrf) +:+ S "of the" +:+ (phrase slope) +:+ S "that has the lowest global" +:+
   ((phrase factor) `sOf` (phrase safety)) `sC` S "and therefore most likely to experience failure.")
 
-fs_concept = dcc "FS" (nounPhraseSP $ "factor of safety")
+fs_concept = dcc "FS" factorOfSafety
   "The global stability of a surface in a slope"
 -- OLD DEFN: Stability metric. How likely a slip surface is to experience failure through slipping.
 

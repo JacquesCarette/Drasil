@@ -222,6 +222,7 @@ executable ssp
     , Drasil.SSP.IMods
     , Drasil.SSP.Modules
     , Drasil.SSP.Reqs
+    , Drasil.SSP.Requirements
     , Drasil.SSP.TMods
     , Drasil.SSP.Unitals
     , Drasil.Sections.TableOfAbbAndAcronyms

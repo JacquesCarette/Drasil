@@ -10,7 +10,7 @@ angle, area, calculation, diameter, equation, euclidN, euclidSpace, gradient,
 
 ode :: CI
 
-angle        = dcc "angle"        (cn' "area")                    ("The amount of rotation needed to bring one line or plane into" ++
+angle        = dcc "angle"        (cn' "angle")                    ("The amount of rotation needed to bring one line or plane into" ++
                                                                   "coincidence with another")
 area         = dcc "area"         (cn' "area")                    "A part of an object or surface"
 calculation  = dcc "calculation"  (cn' "calculation")             "A mathematical determination of the size or number of something"

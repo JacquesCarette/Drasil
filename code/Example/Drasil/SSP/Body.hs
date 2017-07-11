@@ -8,15 +8,16 @@ import Data.Drasil.SI_Units
 import Data.Drasil.Authors
 
 import Drasil.SSP.Assumptions
-import Drasil.SSP.Defs
-import Drasil.SSP.Unitals
-import Drasil.SSP.Modules
 import Drasil.SSP.Changes
-import Drasil.SSP.Reqs
-import Drasil.SSP.TMods
-import Drasil.SSP.GenDefs
 import Drasil.SSP.DataDefs
+import Drasil.SSP.Defs
+import Drasil.SSP.GenDefs
 import Drasil.SSP.IMods
+import Drasil.SSP.Modules
+import Drasil.SSP.Reqs
+import Drasil.SSP.Requirements
+import Drasil.SSP.TMods
+import Drasil.SSP.Unitals
 import qualified Drasil.SRS as SRS
 
 import Drasil.Sections.ReferenceMaterial
@@ -52,7 +53,7 @@ s4_1, s4_1_1, s4_1_2,
 
 s4_1_1_list, s4_1_2_p1, s4_1_2_bullets,
   s4_1_2_p2, s4_1_3_list, s4_2_1_list,
-  s4_2_5_p2, s4_2_5_p3, s5_1_list, s5_1_table,
+  s4_2_5_p2, s4_2_5_p3, s5_1_list,
   s8_list :: Contents
 
 s4_2_2_tmods, s4_2_3_genDefs, s4_2_4_dataDefs, s4_2_5_IMods :: [Contents]
@@ -126,7 +127,7 @@ startIntro = foldlSent [S "A", phrase slope, S "of geological",
   phrase slope, at_start ssa, S "is", (S "assessment" `ofThe` S "safety of a"),
   phrase slope `sC` S "identifying the", phrase surface,
   S "most likely to experience slip" `sAnd` S "an index of its relative stability", 
-  S "known as the", phrase fs_rc]
+  S "known as the", phrase fs]
 kSent = keySent ssa
 
 keySent :: (NamedIdea a) => a -> Sentence
@@ -456,7 +457,7 @@ s4_2_5_p2 = foldlSP [S "The", titleize morPrice,
   S "analysis using two", phrase force, S "equilibrium, and one moment",
   phrase equation, S "as in" +:+. acroT 2, S "The", phrase problem,
   S "is statically indeterminate with only these 3", plural equation, S "and one", --FIXME: T2, T3, GD5, DD1, DD9, DD10, DD11 should be references
-  S "constitutive", phrase equation, sParen $ S "the Mohr Coulomb shear strength of", 
+  S "constitutive", phrase equation, sParen $ S "the Mohr Coulomb shear strength of" +:+ 
   acroT 3, S "so the", phrase assumption, S "of", acroGD 5, S "is used. Solving for",
   phrase force, S "equilibrium allows", plural definition, S "of all", plural force,
   S "in terms of the", plural physicalProperty, S "of", acroDD 1, S "to",
@@ -724,61 +725,9 @@ s5 = reqF [s5_1, s5_2]
 
 -- SECTION 5.1 --
 s5_1 = SRS.funcReq
-  [s5_1_list, s5_1_table] []
+  [s5_1_list, sspInputDataTable] []
 
 s5_1_list = enumSimple 1 (short requirement) sspRequirements
-
-sspRequirements :: [Sentence]
-sspRequirements = [readAndStore, generateCSS, testSlipSrf, prepareSlipS,
-  calculateFS, rankSlope, generateCSS', repeatFindFS, prepareCSS, 
-  calculateFS', displayGraph]
-
-readAndStore, generateCSS, testSlipSrf, prepareSlipS, calculateFS, rankSlope,
-  generateCSS', repeatFindFS, prepareCSS, calculateFS', displayGraph :: Sentence
-
-readAndStore = foldlSent [S "Read the", phrase input_, S "file, and store the" +:+.
-  plural datum, S "Necessary", plural inDatum, S "summarized in", 
-  makeRef s5_1_table]
-
-generateCSS  = foldlSent [S "Generate potential", phrase crtSlpSrf :+:
-  S "'s for the", phrase input_, phrase slope]
-
-testSlipSrf  = foldlSent [S "Test the", plural slpSrf, S "to determine if they",
-  S "are physically realizable based on a set of pass or fail criteria"]
-
-prepareSlipS = foldlSent [S "Prepare the", plural slpSrf, S "for a", 
-  phrase method_, S "of", plural slice, S "or limit equilibrium analysis"]
-
-calculateFS  = S "Calculate" +:+. (plural fs_rc `ofThe` plural slpSrf)
-
-rankSlope    = foldlSent [S "Rank and weight the", plural slope, 
-  S "based on their", phrase fs_rc `sC` S "such that a", phrase slpSrf,
-  S "with a smaller", phrase fs_rc, S "has a larger weighting"]
-
-generateCSS' = foldlSent [S "Generate new potential", plural crtSlpSrf,
-  S "based on previously analysed", plural slpSrf, S "with low",
-  plural fs_rc]
-
-repeatFindFS = foldlSent [S "Repeat", plural requirement, acroR 3, S "to",
-  acroR 7, S "until the minimum", phrase fs_rc, S "remains" +:+. 
-  S "approximately the same over a predetermined number of repetitions",
-  S "Identify the", (phrase slpSrf), S "that generates the minimum",
-  phrase fs_rc, S "as the", phrase crtSlpSrf]
-
-prepareCSS   = foldlSent [S "Prepare the", phrase crtSlpSrf, S "for", 
-  phrase method_, S "of", plural slice, S "or limit equilibrium analysis"]
-
-calculateFS' = foldlSent [S "Calculate", (phrase fs_rc `ofThe` phrase crtSlpSrf),
-  S "using the", titleize morPrice, phrase method_]
-
-displayGraph = foldlSent [S "Display the", phrase crtSlpSrf, S "and the",
-  phrase slice, phrase element +:+. S "displacements graphically",
-  S "Give", (plural value `ofThe` plural fs_rc), S "calculated",
-  S "by the", titleize morPrice, phrase method_]
-
-
-s5_1_table = mkInputDatTb ([cqs coords] ++ --this has to be seperate since coords is a different type
-  map cqs [elasticMod, cohesion, poissnsRatio, fricAngle, dryWeight, satWeight, waterWeight])
 
 -- SECTION 5.2 --
 s5_2 = nonFuncReqF [accuracy, performanceSpd]

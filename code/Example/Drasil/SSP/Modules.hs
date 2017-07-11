@@ -3,7 +3,6 @@ module Drasil.SSP.Modules where
 import Language.Drasil
 
 import Data.Drasil.Modules
-import Data.Drasil.Quantities.SolidMechanics
 import Data.Drasil.SentenceStructures
 
 import Data.Drasil.Concepts.Math

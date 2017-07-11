@@ -10,7 +10,7 @@ import Data.Drasil.SentenceStructures
 import Data.Drasil.Utils
 import Data.Drasil.Quantities.Physics
 import Data.Drasil.Concepts.Documentation
-import Data.Drasil.Concepts.Math (normal, surface)
+import Data.Drasil.Concepts.Math (surface)
 import Data.Drasil.Concepts.SolidMechanics (normForce, shearForce)
 import Data.Drasil.Concepts.Physics (linear, stress, friction)
 import Data.Drasil.Quantities.PhysicalProperties

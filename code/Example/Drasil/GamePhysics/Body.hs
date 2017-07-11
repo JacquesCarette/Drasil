@@ -259,9 +259,9 @@ goalStatementSect = sSubSec goalStmt [(siCon [s4_1_2_list])]
 
 goalStatementStruct :: (NamedIdea a, NamedIdea b) => Sentence -> [a] -> 
   Sentence -> Sentence -> [a] -> b -> Sentence -> Sentence -> [Sentence]
-goalStatementStruct state inputs wrt adjective outputs object condition1 condition2 = 
+goalStatementStruct state inputs wrt adjective outputs objct condition1 condition2 = 
   [S "Given the", initial state, (listOfInputs wrt), adjective, S "a set of", 
-  (plural object) `sC` S "determine", condition1, listOfOutputs, 
+  (plural objct) `sC` S "determine", condition1, listOfOutputs, 
   S "over a period of", (phrase QP.time), condition2]
   where initial EmptyS      = S "initial"
         initial p           = p `sC` (S "initial")

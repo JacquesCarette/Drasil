@@ -53,6 +53,7 @@ expr x@(_ :> _)        = rel x
 expr x@(_ :< _)        = rel x
 expr x@(_ :<= _)       = rel x
 expr x@(_ :>= _)       = rel x
+expr (Matrix a)        = T.Mtx $ map (map expr) a
 expr (UnaryOp u)       = (\(x,y) -> T.Op x [y]) (ufunc u)
 expr (Grouping e)      = T.Grouping (expr e)
 expr (BinaryOp b)      = (\(x,y) -> T.Op x y) (bfunc b)

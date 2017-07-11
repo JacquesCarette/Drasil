@@ -40,6 +40,7 @@ data Expr = Var   Variable
           | State [Quantifier] Expr
           | Impl Expr Expr
           | Iff  Expr Expr
+          | Mtx [[Expr]]
           
 -- | Internal HTML version of Function 
 -- (for converting Functions from 'Language.Drasil.Expr')

@@ -37,6 +37,7 @@ data Expr = Var  Variable
           | State [Quantifier] Expr
           | Impl Expr Expr
           | Iff  Expr Expr
+          | Mtx [[Expr]]
           
 data Function = Log
            | Summation (Maybe ((Symbol, Expr),Expr))

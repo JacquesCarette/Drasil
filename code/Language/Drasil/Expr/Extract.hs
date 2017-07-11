@@ -56,6 +56,7 @@ dep (a :<=> b)    = nub (dep a ++ dep b)
 dep (IsIn  a _)   = nub (concat $ map dep a)
 dep (NotIn a _)   = nub (concat $ map dep a)
 dep (State a b)   = nub ((concat $ map (dep . quant) a) ++ dep b)
+dep (Matrix a)    = nub (concat $ map (concat . map dep) a)
 
 -- | Get a list of VarChunks from an equation in order to print
 vars :: Expr -> SymbolMap -> [VarChunk]
@@ -91,6 +92,7 @@ vars (a :<=> b)   m = nub (vars a m ++ vars b m)
 vars (IsIn  a _)  m = nub (concat $ map (\x -> vars x m) a)
 vars (NotIn a _)  m = nub (concat $ map (\x -> vars x m) a)
 vars (State a b)  m = nub ((concat $ map (\x -> vars (quant x) m) a) ++ vars b m)
+vars (Matrix a)   m = nub (concat $ map (\x -> concat $ map (\y -> vars y m) x) a)
 
 -- | Get a list of CodeChunks from an equation
 codevars :: Expr -> [CodeChunk]
@@ -126,6 +128,8 @@ codevars (a :<=> b)   = nub (codevars a ++ codevars b)
 codevars (IsIn  a _)  = nub (concat $ map codevars a)
 codevars (NotIn a _)  = nub (concat $ map codevars a)
 codevars (State a b)  = nub ((concat $ map (codevars . quant) a) ++ codevars b)
+codevars (Matrix a)   = nub (concat $ map (concat . map codevars) a)
+
 
 -- | Helper function for vars and dep, gets the Expr portion of a UFunc
 unpack :: UFunc -> Expr
@@ -142,6 +146,7 @@ unpack (Csc e) = e
 unpack (Cot e) = e
 unpack (Product _ e) = e
 unpack (Exp e) = e
+unpack (Sqrt e) = e
 
 -- | Helper function for vars and dep, gets Exprs from binary operations.
 binop :: BiFunc -> [Expr]

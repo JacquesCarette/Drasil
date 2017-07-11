@@ -2,9 +2,14 @@ module Data.Drasil.Concepts.Thermodynamics where
 
 import Language.Drasil
 
+import Data.Drasil.Concepts.Documentation (source)
+import Data.Drasil.Concepts.Physics (energy)
+
+import Control.Lens((^.))
+
 boiling, boil_pt, degree_', law_cons_energy, law_conv_cooling, latent_heat, melting, melt_pt, phase_change,
   sens_heat, temp, thermal_analysis, thermal_conduction, thermal_energy,
-  thermal_conductor, heat, heat_cap_spec, ht_flux, heat_trans :: ConceptChunk
+  thermal_conductor, heat, heat_cap_spec, ht_flux, heat_trans, enerSrc :: ConceptChunk
 
   
 -- FIXME: "Boiling" is not a noun. How should we deal with it?
@@ -52,3 +57,7 @@ thermal_conductor   = dcc "thermal_conductor"
                       ("An object through which thermal energy can be transferred easily")
 thermal_energy      = dcc "thermal_energy" 
                       (cnIES "thermal energy") "The energy that comes from heat"
+
+enerSrc             = dcc "enerSrc" (compoundPhrase' (energy ^. term)
+                      (source ^. term))
+                      "A source from which useful energy can be extracted"

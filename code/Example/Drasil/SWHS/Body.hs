@@ -49,7 +49,7 @@ import Data.Drasil.Concepts.Software(correctness, verifiability,
   understandability, reusability, maintainability)
 
 import Data.Drasil.SentenceStructures (showingCxnBw, foldlSent, foldlSent_,
-  foldlSentCol, foldlSP, foldlSP_, foldlSPCol, foldlsC, isThe, ofThe, ofThe',
+  foldlSP, foldlSP_, foldlSPCol, foldlsC, isThe, ofThe, ofThe',
   sAnd)
 
 acronyms :: [CI]
@@ -417,7 +417,7 @@ s5_1 :: Section
 s5_1 = SRS.funcReq s5_1_list []
 
 s5_1_list :: [Contents]
-s5_1_list = [s5_1_1_Sent, s5_1_1_Table, s5_1_2_Sent, s5_1_2_Eqn1, s5_1_2_Eqn2, s5_1_Reqs]
+s5_1_list = [req1, s5_1_1_Table, req2, s5_1_2_Eqn1, s5_1_2_Eqn2, s5_1_Reqs]
 
 s5_1_1_Table = (Table [titleize symbol_, titleize unit_, titleize description]
   (mkTable
@@ -971,7 +971,7 @@ assump3 = mkAssump "assump3"
 assump4 = mkAssump "assump4"
   (S "The" +:+ phrase temp_PCM `isThe` S "same throughout the" +:+
   phrase pcm_vol +:+. sSqBr (acroGD 2 `sC` swhsSymbMapDRef dd2HtFluxP `sC`
-  acroLC 1))
+  makeRef likeChg1))
 --
 assump5 = mkAssump "assump5"
   (S "The" +:+ phrase w_density `sAnd` phrase pcm_density +:+
@@ -996,7 +996,7 @@ assump8 = mkAssump "assump8"
 --
 assump9 = mkAssump "assump9"
   (S "The" +:+ phrase temp_C +:+ S "does not vary along its length" +:+.
-  sSqBr (swhsSymbMapDRef dd1HtFluxC `sC` acroLC 3))
+  sSqBr (swhsSymbMapDRef dd1HtFluxC `sC` makeRef likeChg3))
 --
 assump10 = mkAssump "assump10"
   ((CT.law_conv_cooling ^. defn) +:+ S "applies between the" +:+
@@ -1010,12 +1010,12 @@ assump11 = mkAssump "assump11"
   phrase temp_PCM +:+ S "can only increase, or remain" +:+
   S "constant; they do not decrease. This implies that the" +:+
   phrase temp_init +:+ sParen (acroA 12) +:+ S "is less than (or equal)" +:+
-  S "to the" +:+ phrase temp_C +:+. sSqBr ((acroIM 1) `sC` (acroLC 4)))
+  S "to the" +:+ phrase temp_C +:+. sSqBr ((acroIM 1) `sC` (makeRef likeChg4)))
 --
 assump12 = mkAssump "assump12"
   (phrase temp_init `ofThe'` phrase water
   `sAnd` S "the" +:+ short phsChgMtrl `isThe` S "same" +:+.
-  sSqBr ((acroIM 1) `sC` (acroIM 2) `sC` (acroLC 5)))
+  sSqBr ((acroIM 1) `sC` (acroIM 2) `sC` (makeRef likeChg5)))
 --
 assump13 = mkAssump "assump13"
   (S "The" +:+ phrase simulation +:+ S "will start with the" +:+
@@ -1033,7 +1033,7 @@ assump14 = mkAssump "assump14"
 assump15 = mkAssump "assump15"
   (S "The" +:+ phrase tank +:+ S "is" +:+ phrase perfect_insul +:+
   S "so that there is no" +:+ phrase CT.heat +:+ S "loss from the" +:+
-  phrase tank +:+. sSqBr ((acroIM 1) `sC` (acroLC 6)))
+  phrase tank +:+. sSqBr ((acroIM 1) `sC` (makeRef likeChg6)))
 --
 assump16 = mkAssump "assump16"
   (S "No internal" +:+ phrase CT.heat +:+
@@ -1060,7 +1060,7 @@ assump19 = mkAssump "assump19"
 assump20 = mkAssump "assump20"
   (S "When considering the" +:+ phrase w_vol +:+ S "in the" +:+
   phrase tank `sC` (phrase vol `ofThe` phrase coil) +:+
-  S "is assumed to be negligible" +:+. sSqBr (acroR 2))
+  S "is assumed to be negligible" +:+. sSqBr (makeRef req2))
 
 -- Again, list structure is same between all examples.
 
@@ -1436,18 +1436,20 @@ s4_2_7_deriv_5 = foldlSP [titleize' equation, S "(reference) and",
 -- 5.1 : Functional Requirements --
 -----------------------------------
 
-s5_1_1_Sent, s5_1_1_Table, s5_1_2_Sent, s5_1_2_Eqn1, s5_1_2_Eqn2 :: Contents
+req1, s5_1_1_Table, req2, s5_1_2_Eqn1, s5_1_2_Eqn2 :: Contents
 
-s5_1_1_Sent = Enumeration (Simple [(acroR 1, Flat (foldlSentCol
-  [titleize input_, S "the following", plural quantity `sC`
-  S "which define the", phrase tank, plural parameter `sC` S "material",
-  plural property `sAnd` S "initial", plural condition]))])
+req1 = Requirement (ReqChunk (nw $ npnc "req1" $
+  nounPhraseSent (titleize input_ +:+ S "the following" +:+ plural quantity `sC`
+  S "which define the" +:+ phrase tank +:+ plural parameter `sC` S "material" +:+
+  plural property +:+ S "and initial" +: plural condition))
+  []) EmptyS
 
-s5_1_2_Sent = Enumeration (Simple [(acroR 2, Flat (foldlSent
-  [S "Use the", plural input_, S "in", acroR 1, S "to find the",
-  phrase mass, S "needed for", acroIM 1, S "to", acroIM 4 `sC`
-  S "as follows, where", getS w_vol `isThe` phrase w_vol `sAnd`
-  getS tank_vol `isThe` phrase tank_vol]))])
+req2 = Requirement (ReqChunk (nw $ npnc "req2" $
+  nounPhraseSent (S "Use the" +:+ plural input_ +:+ S "in" +:+ makeRef req1 +:+
+  S "to find the" +:+ phrase mass +:+ S "needed for" +:+ acroIM 1 +:+ S "to" +:+
+  acroIM 4 `sC` S "as follows, where" +:+ getS w_vol `isThe` phrase w_vol +:+
+  S "and" +: (getS tank_vol `isThe` phrase tank_vol)))
+  []) EmptyS
 
 s5_1_2_Eqn1 = EqnBlock ((C w_mass) := (C w_vol) * (C w_density) := ((C tank_vol) -
   (C pcm_vol)) * (C w_density) := (((C diam) / 2) * (C tank_length) -

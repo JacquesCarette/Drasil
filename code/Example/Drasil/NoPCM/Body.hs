@@ -11,14 +11,14 @@ import Drasil.SWHS.Body (s2_3_knowlegde, s2_3_understanding, s2_4_intro,
   s5_2, s7_trailing, ref2, ref3, ref4, ref5, ref6, likeChg2, likeChg3,
   likeChg4, likeChg6)
 import Drasil.SWHS.Concepts (progName, water, gauss_div, sWHT, tank, coil,
-  transient, perfect_insul)
+  transient, perfect_insul, tank_para)
 import Drasil.SWHS.Unitals (w_vol, tank_length, tank_vol, tau_W, temp_W, w_mass,
   diam, coil_SA, temp_C, w_density, htCap_W, temp_init, time_final,
   in_SA, out_SA, vol_ht_gen, thFluxVect, ht_flux_in, ht_flux_out, tau, htCap_L,
   htTransCoeff, temp_env, diam, tank_length, w_vol, ht_flux_C, coil_HTC, temp_diff,
   w_E, tank_length_min, tank_length_max, htTransCoeff_min, w_density_min,
   w_density_max, htCap_W_min, htCap_W_max, coil_HTC_min, coil_HTC_max,
-  time_final_max)
+  time_final_max, sim_time)
 import Drasil.SWHS.DataDefs(swhsSymbMapDRef, swhsSymbMapTRef, dd1HtFluxC,
   s4_2_4_DD1, swhsSymbMapT)
 import Drasil.SWHS.TMods (s4_2_2_T1, t1ConsThermE)
@@ -32,7 +32,7 @@ import Data.Drasil.Authors
 import Data.Drasil.Utils (enumSimple, getS, mkRefsList, makeListRef, refFromType,
   itemRefToSent, makeTMatrix, itemRefToSent, weave)
 import Data.Drasil.Concepts.Documentation
-import Data.Drasil.Concepts.Math (ode, unit_, rOfChng, equation)
+import Data.Drasil.Concepts.Math (ode, unit_, rOfChng, equation, parameter)
 import Data.Drasil.Concepts.Software
 import Data.Drasil.Concepts.PhysicalProperties (liquid)
 import Data.Drasil.Concepts.Physics (energy, mech_energy)
@@ -41,6 +41,7 @@ import qualified Data.Drasil.Quantities.Thermodynamics as QT
 import Data.Drasil.Quantities.Physics (time)
 import Data.Drasil.Quantities.PhysicalProperties (vol, mass, density)
 import Data.Drasil.Quantities.Math (uNormalVect, surface, gradient)
+import Data.Drasil.Software.Products (compPro)
 
 import Drasil.Sections.ReferenceMaterial (intro)
 import qualified Drasil.SRS as SRS
@@ -51,6 +52,7 @@ import Drasil.Sections.TraceabilityMandGs
 import Drasil.Sections.AuxiliaryConstants
 
 import Data.Drasil.SentenceStructures
+uncertCol                    = compoundNC uncertainty column
 
 this_si :: [UnitDefn]
 this_si = map UU [metre, kilogram, second] ++ map UU [centigrade, joule, watt]
@@ -88,7 +90,7 @@ mkSRS :: DocDesc
 mkSRS = RefSec (RefProg intro
   [TUnits, tsymb [TSPurpose, SymbConvention
   [Lit (nw ht_trans), Doc' (nw progName)], SymbOrder], TAandA]) :
-  IntroSec (IntroProg (s2_start energy source progName) (s2_end progName program)
+  IntroSec (IntroProg (s2_start enerSrc energy progName) (s2_end progName program)
   [IPurpose (s2_1 purpose document progName goal thModel assumption definition information model srs reference content problem),
   IScope (s2_2_start thermal_analysis sWHT) (s2_2_end temp thermal_energy water),
   IChar s2_3_knowlegde s2_3_understanding EmptyS,
@@ -113,12 +115,12 @@ nopcmSymbMap = symbolMap pcmSymbols
 --Section 2 : INTRODUCTION
 --------------------------
 
-s2_start :: ConceptChunk -> NamedChunk -> CI-> Sentence
+s2_start :: ConceptChunk -> ConceptChunk -> CI-> Sentence
 
-s2_start en so pro = foldlSent [S "Due to increasing cost, diminishing",
+s2_start es en pro = foldlSent [S "Due to increasing cost, diminishing",
   S "availability, and negative environmental impact of",
   S "fossil fuels, there is a higher demand for renewable",
-  phrase en, plural so, S "and",
+  phrase es, S "and",
   phrase en +:+. S "storage technology", at_start' pro,
   S "provide a novel way of storing", phrase en]
 
@@ -265,12 +267,12 @@ s4 = specSysDesF (words_ definition inModel ode model sWHT) [s4_1, s4_2]
 --Section 4.1 : PROBLEM DESCRIPTION
 -----------------------------------
 
-s4_1 = SRS.probDesc [s4_1_intro progName program water sWHT] [s4_1_1, s4_1_2, s4_1_3]
+s4_1 = SRS.probDesc [s4_1_intro progName compPro water sWHT] [s4_1_1, s4_1_2, s4_1_3]
 
-s4_1_intro :: CI -> ConceptChunk -> ConceptChunk -> ConceptChunk -> Contents
+s4_1_intro :: CI -> NamedChunk -> ConceptChunk -> ConceptChunk -> Contents
 
-s4_1_intro pro pr wa sw = foldlSP [getAcc pro, S "is a computer",
-  phrase pr, S "developed to investigate",
+s4_1_intro pro cp wa sw = foldlSP [getAcc pro, S "is a",
+  phrase cp, S "developed to investigate",
   S "the heating of", phrase wa, S "in a", phrase sw]
 
 s4_1_1 = termDefnF EmptyS [s4_1_1_bullets]
@@ -309,16 +311,16 @@ s4_1_3_list tw we = Enumeration $ Simple $ map (\(a, b) -> (a, Flat b)) [
 --Section 4.2 : SOLUTION CHARACTERISTICS SPECIFICATION
 ------------------------------------------------------
   
-s4_2 = solChSpecF progName (s4_1, s6) s4_2_4_intro_end (mid column software constraint input_ value,
-  dataConstraintUncertainty, end uncertainty column quantity information) (s4_2_1_list, s4_2_2_T1, s4_2_3_paragraph rOfChng temp,
+s4_2 = solChSpecF progName (s4_1, s6) s4_2_4_intro_end (mid column softwareConstraint input_ value,
+  dataConstraintUncertainty, end uncertCol quantity information uncertainty) (s4_2_1_list, s4_2_2_T1, s4_2_3_paragraph rOfChng temp,
   s4_2_4_DD1, [swhsSymbMapT eBalanceOnWtr] ++ s4_2_5_d1startPara ++
   s4_2_5_paragraph ++ [swhsSymbMapT heatEInWtr], [s4_2_6_table1, s4_2_6_table2]) []
 
-  where mid co so con inp val = foldlSent [S "The", phrase co, S "for", phrase so,
-          plural con, S "restricts the range of",
+  where mid co sc inp val = foldlSent [S "The", phrase co, S "for",
+          plural sc, S "restricts the range of",
           plural inp, S "to reasonable", plural val]
 
-        end unc co qu inf = foldlSent [S "The", phrase unc, phrase co,
+        end uc qu inf unc = foldlSent [S "The", phrase uc,
           S "provides an estimate of the confidence with which the physical",
           plural qu, S "can be measured. This", phrase inf,
           S "would be part of the input if one were performing an",
@@ -491,10 +493,10 @@ s4_2_5_description roc tw en wa vo wv ma wm hcw ht hfc csa ta pi a11 vhg a12 eq 
 
 --TODO: Implement physical properties of a substance
 
-  [S "To find the", phrase rOfChng, S "of", getS temp_W `sC`
-  S "we look at the", phrase energy, S "balance on" +:+.
-  phrase water, S "The", phrase vol, S "being considered" `isThe`
-  phrase w_vol, getS w_vol `sC` S "which has", phrase mass,
+  [S "To find the", phrase roc, S "of", getS tw `sC`
+  S "we look at the", phrase en, S "balance on" +:+.
+  phrase wa, S "The", phrase vo, S "being considered" `isThe`
+  phrase wv, getS wv `sC` S "which has", phrase ma,
   getS w_mass, S "and" +:+. (phrase htCap_W `sC` getS htCap_W),
   at_start heat_trans, S "occurs in the water from the coil as", (getS ht_flux_C
   `sC` S "over area") +:+. getS coil_SA, S "No",
@@ -618,13 +620,13 @@ req1, req2, req3, req4, req5, req6 :: Contents
 --Empty list is supposed to take a ModuleChunk. Not sure what to put there.
 req1 = Requirement (ReqChunk (nw $ npnc "req1" $
   nounPhraseSent (titleize input_ +:+ S "the following" +:+ plural quantity `sC`
-  S "which define the" +:+ phrase tank +:+ S "parameters, material" +:+
+  S "which define the" +:+ plural tank_para `sC` S "material" +:+
   plural property +:+ S "and initial" +: plural condition))
   []) EmptyS
 req2 = Requirement (ReqChunk (nw $ npnc "req2" $
   nounPhraseSent (S "Use the" +:+ plural input_ +:+ S "in" +:+ makeRef req1 +:+
   S "to find the" +:+ phrase mass +:+ S "needed for" +:+ acroIM 1 +:+ S "to" +:+
-  acroIM 4 `sC` S "as follows, where" +:+ getS w_vol `isThe` phrase w_vol +:+
+  acroIM 2 `sC` S "as follows, where" +:+ getS w_vol `isThe` phrase w_vol +:+
   S "and" +: (getS tank_vol `isThe` phrase tank_vol)))
   []) EmptyS
 req3 = Requirement (ReqChunk (nw $ npnc "req3" $
@@ -638,14 +640,14 @@ req4 = Requirement (ReqChunk (nw $ npnc "req4" $
   S "from" +:+ makeRef req2 +:+ S "and" +:+ getS tau_W +:+. sParen(S "from" +:+ acroIM 1)))
   []) EmptyS
 req5 = Requirement (ReqChunk (nw $ npnc "req5" $
-  nounPhraseSent (S "Calculate and output the" +:+ phrase temp +:+ S "of the" +:+
-  phrase water +:+ sParen (getS temp_W :+: sParen (getS time)) +:+ S "over the" +:+
-  phrase simulation +:+. phrase time))
+  nounPhraseSent (S "Calculate and output the" +:+ phrase temp_W +:+
+  sParen (getS temp_W :+: sParen (getS time)) +:+ S "over the" +:+
+  phrase sim_time))
   []) EmptyS
 req6 = Requirement (ReqChunk (nw $ npnc "req6" $
   nounPhraseSent (S "Calculate and" +:+ phrase output_ +:+ S "the" +:+ phrase w_E
-  +:+ sParen (getS w_E :+: sParen (getS time)) +:+ S "over the" +:+ phrase simulation
-  +:+ phrase time +:+. sParen (S "from" +:+ acroIM 3)))
+  +:+ sParen (getS w_E :+: sParen (getS time)) +:+ S "over the" +:+ phrase sim_time
+  +:+. sParen (S "from" +:+ acroIM 3)))
   []) EmptyS
 
 -------------------------------------------
@@ -693,6 +695,7 @@ likeChg4 = LikelyChange (LCChunk (nw $ npnc "likeChg4" $
   nounPhraseSent (makeRef assump11 :+: S "- Any real" +:+ phrase tank +:+
   S "cannot be perfectly insulated and will lose" +:+. phrase heat))
   []) EmptyS-}
+  
 -- s6_list = enumSimple 1 (short likelyChg) $ map foldlSent s6_likeChg_list
 
 -- s6_likeChg_list :: [[Sentence]]

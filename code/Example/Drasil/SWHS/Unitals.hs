@@ -4,6 +4,7 @@ import Drasil.SWHS.Concepts
 
 import Language.Drasil
 import Data.Drasil.SI_Units
+import Data.Drasil.Concepts.Documentation (simulation)
 import qualified Data.Drasil.Units.Thermodynamics as UT
 import Data.Drasil.Quantities.Thermodynamics
 import Data.Drasil.Quantities.Physics (time)
@@ -159,6 +160,10 @@ tau_S_P      = uc' "tau_S_P" (nounPhraseSP "ODE parameter for solid PCM")
 tau_W        = uc' "tau_W" (nounPhraseSP "ODE parameter for water")
   "Derived parameter based on rate of change of temperature of water"
   (sub (Greek Tau_L) cW) second
+
+sim_time     = uc' "sim_time" (compoundPhrase' (simulation ^. term)
+  (time ^. term)) "Time over which the simulation runs"
+  lT second
 
 ----------------------
 -- Unitless symbols --

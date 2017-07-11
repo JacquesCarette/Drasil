@@ -10,6 +10,7 @@ import Data.Drasil.SI_Units
 import Data.Drasil.Authors
 import Data.Drasil.Concepts.Documentation
 import Data.Drasil.Concepts.Software
+import Data.Drasil.Concepts.Computation
 import Drasil.Sections.TraceabilityMandGs
 import qualified Data.Drasil.Quantities.Math as QM (orientation)
 import qualified Data.Drasil.Quantities.Physics as QP (time, 
@@ -21,9 +22,8 @@ import qualified Data.Drasil.Concepts.PhysicalProperties as CPP (ctrOfMass,
   dimension)
 import qualified Data.Drasil.Concepts.Math as CM (equation, surface, ode, 
   constraint)
-import Data.Drasil.Utils (foldle, 
-  makeTMatrix, itemRefToSent, refFromType, makeListRef, enumSimple, 
-  enumBullet, mkRefsList)
+import Data.Drasil.Utils (makeTMatrix, itemRefToSent, refFromType,
+  makeListRef, enumSimple, enumBullet, mkRefsList)
 import Data.Drasil.SentenceStructures
 import Data.Drasil.Software.Products
 
@@ -64,7 +64,6 @@ mkSRS = RefSec (RefProg RM.intro [TUnits, tsymb tableOfSymbols, TAandA]) :
   IOrgSec s2_4_intro inModel s4_2 EmptyS]) :
   map Verbatim [s3, s4, s5, s6, s7, s8, s9, s10]
     where tableOfSymbols = [TSPurpose, TypogConvention[Vector Bold], SymbOrder]
-
 
     --FIXME: Need to be able to print defn for gravitational constant.
 
@@ -124,10 +123,10 @@ para1_s2_1_param progName typeOf listOf = foldlSent
   [S "This", (phrase typeOf), S "descibes the modeling of an",
   (phrase openSource), getAcc twoD, (phrase CP.rigidBody), 
   (phrase physLib), S "used for" +:+. (plural game), S "The", 
-  foldlList listOf, S "used in",
-  (short progName), S "are provided. This", (phrase typeOf),
-  S "is intended to be used as a reference to provide all",
-  S "necessary", (phrase information), S "to understand and verify the", 
+  foldlList listOf, S "used in", (short progName), 
+  S "are provided. This", (phrase typeOf), 
+  S "is intended to be used as a reference to provide all necessary",
+  (phrase information), S "to understand and verify the",
   (phrase model)]
 
 ---------------------------------
@@ -135,11 +134,11 @@ para1_s2_1_param progName typeOf listOf = foldlSent
 ---------------------------------
 s2_2_intro_p1, s2_2_intro_p2 :: Sentence
 
-s2_2_intro_p1 = foldle (+:+) (+:+) EmptyS
-  [S "the", (phrase physicalSim),  S "of", (getAcc twoD), 
-  (plural CP.rigidBody), S "acted on by forces"] 
+s2_2_intro_p1 = foldlSent_
+  [S "the", (phrase physicalSim), S "of", (getAcc twoD), 
+  (plural CP.rigidBody), S "acted on by", plural QP.force]
   
-s2_2_intro_p2 = foldle (+:+) (+:+) EmptyS [S "simulate how these", 
+s2_2_intro_p2 = foldlSent_ [S "simulate how these", 
   (plural CP.rigidBody), S "interact with one another"]
 
 ----------------------------------------------
@@ -153,9 +152,9 @@ s2_2_intro_p2 = foldle (+:+) (+:+) EmptyS [S "simulate how these",
 s2_4_intro :: Sentence
 
 s2_4_intro = foldlSent 
-  [S "The", (phrase organization), S "of this", (phrase document), S "follows the",
-  S "template for an", (getAcc srs), S "for scientific",
-  S "computing", (phrase software), S "proposed by [1] and [2]"]
+  [S "The", (phrase organization), S "of this", (phrase document), 
+  S "follows the", phrase template, S "for an", (getAcc srs),
+  S "for", phrase sciCompS, S "proposed by [1] and [2]"]
 
 --------------------------------------------
 -- Section 3: GENERAL SYSTEM DESCRIPTION --
@@ -177,10 +176,9 @@ userCharacteristicSect = sSubSec userCharacteristic [(siCon [s3_1_intro])]
 
 s3_1_intro :: Contents
 s3_1_intro = foldlSP
-  [S "The end user of", (short chipmunk),
+  [S "The", phrase endUser `sOf` short chipmunk,
   S "should have an understanding of first year programming concepts",
-  S "and an understanding of high school", (phrase physics)]
-
+  S "and an understanding of high school", phrase physics]
 
 -------------------------------
 -- 3.2 : System Constraints  --
@@ -216,24 +214,21 @@ s4_1_intro = s4_1_intro_param physLib game
 
 s4_1_intro_param :: (NamedIdea a, NamedIdea b) => a -> b -> Sentence
 s4_1_intro_param lib app = foldlSent 
-  [S "Creating a gaming", (phrase lib),
-  S "is a difficult task.", (titleize' app), S "need", 
-  (plural lib), S "that simulate", 
-  S "objects acting under various", (phrase physical), S "conditions, while", 
+  [S "Creating a gaming", (phrase lib) +:+. S "is a difficult", phrase task,
+  (titleize' app), S "need",  (plural lib), S "that simulate", plural object,
+  S "acting under various", (phrase physical), plural condition `sC` S "while", 
   S "simultaneously being fast and efficient enough to work in soft",
   (phrase realtime), S "during the" +:+. (phrase app), S "Developing a", 
-  (phrase lib),
-  S "from scratch takes a long period of time and is very costly" `sC`
+  (phrase lib), S "from scratch takes a long period of time and is very costly" `sC`
   S "presenting barriers of entry which make it difficult for", (phrase app),
-  S "developers to include", (phrase physics), 
-  S "in their" +:+. (plural product_), S "There are a few", S "free,", 
-  (phrase openSource), S "and high quality", (plural lib), 
-  S "available to", S "be used for consumer", (plural product_) +:+. 
+  S "developers to include", (phrase physics), S "in their" +:+. (plural product_),
+  S "There are a few free" `sC` (phrase openSource) `sAnd` S "high quality", (plural lib), 
+  S "available to be used for", phrase consumer, plural product_ +:+. 
   (sParen $ makeRef s7), S "By creating a simple, lightweight, fast and portable",
   (getAcc twoD), (phrase CP.rigidBody), (phrase lib) `sC`
   (phrase app), S "development will be more accessible",
-  S "to the masses and higher quality", (plural product_), S "will be produced"]
-
+  S "to the", plural QPP.mass `sAnd` S "higher quality", (plural product_),
+  S "will be produced"]
 
 
 -----------------------------------------
@@ -262,7 +257,8 @@ s4_1_2_list :: Contents
 goalStatementSect :: SubSec
 goalStatementSect = sSubSec goalStmt [(siCon [s4_1_2_list])]
 
-goalStatementStruct :: (NamedIdea a, NamedIdea b) => Sentence -> [a] -> Sentence -> Sentence -> [a] -> b -> Sentence -> Sentence -> [Sentence]
+goalStatementStruct :: (NamedIdea a, NamedIdea b) => Sentence -> [a] -> 
+  Sentence -> Sentence -> [a] -> b -> Sentence -> Sentence -> [Sentence]
 goalStatementStruct state inputs wrt adjective outputs object condition1 condition2 = 
   [S "Given the", initial state, (listOfInputs wrt), adjective, S "a set of", 
   (plural object) `sC` S "determine", condition1, listOfOutputs, 
@@ -285,7 +281,7 @@ s4_1_2_stmt2 = goalStatementStruct (plural physicalProperty)
 
 s4_1_2_stmt3 = goalStatementStruct EmptyS
   (take 2 inputSymbols) EmptyS (S "of")
-  (take 0 inputSymbols) CP.rigidBody 
+  (take 0 inputSymbols) CP.rigidBody
   (S "if any of them will collide with one another") EmptyS
 
 goalStatement4Inputs :: [UnitalChunk]
@@ -312,8 +308,8 @@ s4_1_2_list = enumSimple 1 (getAcc goalStmt) s4_1_2_list'
 --------------------------------------------------
 
 s4_2 :: Section
-s4_2 = assembler chipmunk cpSymbMap scsSect [assumSec, tModSec, genDefSec, iModSec,
-  dataDefSec, dataConSec]
+s4_2 = assembler chipmunk cpSymbMap scsSect [assumSec, tModSec, genDefSec,
+  iModSec, dataDefSec, dataConSec]
 
 assumSec, tModSec, genDefSec, iModSec, dataDefSec, dataConSec, scsSect :: SubSec
 scsSect = sSubSec solutionCharSpec []
@@ -360,8 +356,8 @@ s4_2_1_list = enumSimple 1 (getAcc assumption) $ map (foldlSent)
   s4_2_1_assum6, s4_2_1_assum7]
 
 s4_2_1_list_a :: [[Sentence]]
-s4_2_1_list_a = [s4_2_1_assum1, s4_2_1_assum2, s4_2_1_assum3, s4_2_1_assum4, s4_2_1_assum5, 
-  s4_2_1_assum6, s4_2_1_assum7]
+s4_2_1_list_a = [s4_2_1_assum1, s4_2_1_assum2, s4_2_1_assum3, s4_2_1_assum4,
+  s4_2_1_assum5, s4_2_1_assum6, s4_2_1_assum7]
 
 
 --------------------------------
@@ -376,7 +372,7 @@ s4_2_3_intro :: Contents
 -- s4_2_3_GDefs :: [Contents]
 
 s4_2_3_intro = foldlSP 
-  [S "This", (phrase section_), S "collects the laws and", 
+  [S "This", (phrase section_), S "collects the laws" `sAnd` 
   (plural CM.equation), S "that will be used in deriving the", 
   (plural dataDefn) `sC` S "which in turn will be used to build the", 
   (plural inModel)]
@@ -435,7 +431,7 @@ s5_1_req1, s5_1_req2, s5_1_req3, s5_1_req4, s5_1_req5, s5_1_req6,
   s5_1_req7, s5_1_req8 :: Sentence
 
 reqFrame :: Sentence -> Sentence -> Sentence -> Sentence -> Sentence
-reqFrame a b x z = foldlSent [S "Determine the", a, S "and", b, 
+reqFrame a b x z = foldlSent [S "Determine the", a `sAnd` b, 
   S "over a period of", (phrase QP.time), S "of the", x, z]
 
 reqS :: (NamedIdea a, NamedIdea b) => a -> b -> Sentence -> Sentence
@@ -456,10 +452,10 @@ s5_1_req2 = foldlSent [S "Input the initial",
   (plural CP.rigidBody)]
 
 s5_1_req3 = foldlSent [S "Input the", (phrase CM.surface), 
-  (plural property), S "of the bodies, such as", (phrase CP.friction), 
-  S "or", (phrase CP.elasticity)]
+  (plural property), S "of the", plural body, S "such as",
+  (phrase CP.friction) `sOr` (phrase CP.elasticity)]
 
-s5_1_req4 = foldlSent [S "Verify that the inputs", 
+s5_1_req4 = foldlSent [S "Verify that the", plural input_,
   S "satisfy the required", plural physicalConstraint, S "from", 
   (makeRef s4_2)]
 
@@ -474,8 +470,6 @@ s5_1_req7 = foldlSent [S "Determine if any of the",
 
 s5_1_req8 = reqS (QP.position) (QP.velocity) 
   (S "that have undergone a" +:+ (phrase CP.collision))
-
-
 
 -- Currently need separate chunks for plurals like rigid bodies,
 -- velocities, etc.
@@ -494,12 +488,15 @@ s5_2_intro :: Contents
 
 s5_2 = SRS.nonfuncReq [s5_2_intro] []
 
+chpmnkPriorityNFReqs :: [ConceptChunk]
+chpmnkPriorityNFReqs = [correctness, understandability, portability,
+  reliability, maintainability]
+
 s5_2_intro = foldlSP 
-  [(titleize' game), S "are resource intensive, so performance",
-  S "is a high priority. Other", (phrase nonfunctional), plural requirement,
-  S "that are a",
-  S "priority are: correctness, understandability, portability,",
-  S "reliability, and maintainability"]
+  [(titleize' game), S "are resource intensive, so", phrase performance,
+  S "is a high" +:+. phrase priority, S "Other", plural nonfunctional +:
+  S "that are a", phrase priority, S "are", 
+  foldlList (map phrase chpmnkPriorityNFReqs)]
 
 --------------------------------
 -- SECTION 6 : LIKELY CHANGES --
@@ -519,8 +516,8 @@ s6_likelyChg_stmt1, s6_likelyChg_stmt2, s6_likelyChg_stmt3,
 
 --these statements look like they could be parametrized
 s6_likelyChg_stmt1 = (S "internal" +:+ (getAcc CM.ode) :+: 
-  S "-solving algorithm used by the" +:+ (phrase library)) `maybeChanged` 
-  (S "in the future")
+  S "-solving" +:+ phrase algorithm +:+ S "used by the" +:+
+  (phrase library)) `maybeChanged` (S "in the future")
 
 s6_likelyChg_stmt2 = (phrase library) `maybeExpanded`
   (S "to deal with edge-to-edge and vertex-to-vertex" +:+ (plural CP.collision))
@@ -529,14 +526,13 @@ s6_likelyChg_stmt3 = (phrase library) `maybeExpanded`
   S "to include motion with damping"
 
 s6_likelyChg_stmt4 = (phrase library) `maybeExpanded` (S "to include" +:+ 
-  (plural CP.joint) +:+ S "and" +:+ (plural CM.constraint))
+  (plural CP.joint) `sAnd` (plural CM.constraint))
 
 s6_list' :: [Sentence]
 s6_list' = [s6_likelyChg_stmt1, s6_likelyChg_stmt2, s6_likelyChg_stmt3,
   s6_likelyChg_stmt4]
 
 s6_list = enumSimple 1 (getAcc likelyChg) s6_list'
-
 
 -----------------------------------------
 -- SECTION 7 : OFF-THE-SHELF SOLUTIONS --
@@ -545,17 +541,15 @@ s6_list = enumSimple 1 (getAcc likelyChg) s6_list'
 s7 :: Section
 s7_intro, s7_2dlist, s7_mid, s7_3dlist :: Contents
 
-s7 = SRS.offShelfSol [s7_intro, s7_2dlist,
-  s7_mid, s7_3dlist] []
+s7 = SRS.offShelfSol [s7_intro, s7_2dlist, s7_mid, s7_3dlist] []
 
-s7_intro = s7_intro_param physLib
+s7_intro = s7_intro_param s4_1 physLib
 
-s7_intro_param :: NamedIdea n => n -> Contents
-s7_intro_param lib = Paragraph $ foldle (+:+) (+:) EmptyS 
-  [S "As mentioned in", (makeRef s4_1) `sC`
+s7_intro_param :: NamedIdea n => Section -> n -> Contents
+s7_intro_param problmDescSec lib = Paragraph $ foldlSentCol 
+  [S "As mentioned in", (makeRef problmDescSec) `sC`
   S "there already exist free", (phrase openSource), (phrase game) +:+.
-  (plural lib), S "Similar", (getAcc twoD), 
-  (plural lib), S "are"]
+  (plural lib), S "Similar", (getAcc twoD), (plural lib), S "are"]
 
 s7_2dlist = enumBullet [(S "Box2D: http://box2d.org/"),
   (S "Nape Physics Engine: http://napephys.com/")]
@@ -584,7 +578,7 @@ s8_trace1 = [(plural goalStmt), (plural requirement), (plural inModel),
   (plural datumConstraint) +:+. S "with each other"]
 
 s8_trace2 = [(plural thModel), (plural genDefn), (plural dataDefn), 
-  (plural inModel) +:+. S "on the assumptions"]
+  (plural inModel), S "on the" +:+. plural assumption]
 
 s8_trace3 = [(plural thModel), (plural genDefn), (plural dataDefn), 
   (plural inModel) +:+ S "on each other"]
@@ -659,7 +653,7 @@ s8_table1 :: Contents
 s8_table1 = Table (EmptyS:(s8_row_header_t1))
   (makeTMatrix s8_col_header_t1 s8_columns_t1 s8_row_t1)
   (showingCxnBw (traceyMatrix) (titleize' requirement +:+ sParen (makeRef s5)
-  `sC` (titleize' goalStmt) +:+ sParen (makeRef s4_1) +:+ S "and Other" +:+
+  `sC` (titleize' goalStmt) +:+ sParen (makeRef s4_1) `sAnd` S "Other" +:+
   titleize' item)) True
 
 s8_columns_t2 :: [[String]]
@@ -715,7 +709,7 @@ s8_table2 :: Contents
 s8_table2 = Table (EmptyS:s8_row_header_t2)
   (makeTMatrix s8_col_header_t2 s8_columns_t2 s8_row_t2) 
   (showingCxnBw (traceyMatrix) (titleize' assumption +:+ sParen (makeRef s4_1) 
-  +:+ S "and Other" +:+ titleize' item)) True
+  `sAnd` S "Other" +:+ titleize' item)) True
 
 
 s8_columns_t3 :: [[String]]
@@ -764,8 +758,8 @@ s8_row_header_t3 = s8_col_header_t3
 s8_table3 :: Contents
 s8_table3 = Table (EmptyS:s8_row_header_t3)
   (makeTMatrix s8_col_header_t3 s8_columns_t3 s8_row_t3)
-  (showingCxnBw (traceyMatrix) (titleize' item +:+ 
-  S "and Other" +:+ titleize' section_)) True
+  (showingCxnBw (traceyMatrix) (titleize' item `sAnd` 
+  S "Other" +:+ titleize' section_)) True
 
 -----------------------------------
 -- VALUES OF AUXILIARY CONSTANTS --

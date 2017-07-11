@@ -57,22 +57,24 @@ notApp      = commonIdea "notApp"      (nounPhraseSP "not applicable")          
 
 -- concepts relating to the templates and their contents
 
-analysis, appendix, characteristic, class_, client, code, column, company, component,
-  condition, constraint, connection, content, context, coordinate, customer, datum, 
-  decision, definition, dependency, description, design, document, documentation,
-  effect, element, endUser, environment, failure, figure, functional, game, general,
-  goal, guide, implementation, individual, information, interest, interface, input_,
-  instance_, intReader, introduction, item, loss, label, library, limitation, literacy,
-  material_, message, method_, module_, model, name_, nonfunctional, offShelf, open,
-  organization, output_, physics, physical, plan, practice, priority, problem, product_, 
-  project, property, purpose, quantity, realtime, reference, requirement_, response, 
-  reviewer, safety, scope, second_, section_, scenario, source, simulation, software, 
-  solution, specific, specification, stakeholder, standard, statement, symbol_, system, 
-  table_, template, term_, terminology, theory, traceyGraph, traceyMatrix, uncertainty, 
+analysis, appendix, body, characteristic, class_, client, code, column, company, 
+  component, condition, constraint, consumer, connection, content, context,
+  coordinate, customer, datum, decision, definition, dependency, description,
+  design, document, documentation, effect, element, endUser, environment, failure,
+  figure, functional, game, general, goal, guide, implementation, individual, 
+  information, interest, interface, input_, instance_, intReader, introduction, 
+  issue, item, loss, label, library, limitation, literacy, material_, message, 
+  method_, module_, model, name_, nonfunctional, object, offShelf, open, organization,
+  output_, physics, physical, plan, practice, priority, problem, product_, project, 
+  property, purpose, quantity, realtime, reference, requirement_, response, reviewer, 
+  safety, scope, second_, section_, scenario, source, simulation, software, solution,
+  specific, specification, stakeholder, standard, statement, symbol_, system, table_,
+  task, template, term_, terminology, theory, traceyGraph, traceyMatrix, uncertainty,
   user, useCase, validation, value, variable, video, verification, year :: NamedChunk
 
 analysis        = npnc "analysis"       (cnIS "analysis")
 appendix        = npnc "appendix"       (cnICES "appendix")
+body            = npnc "body"           (cnIES "body")
 characteristic  = npnc "characteristic" (cn' "characteristic")
 class_          = npnc "class"          (cn''' "class")
 client          = npnc "client"         (cn' "client")
@@ -82,6 +84,7 @@ company         = npnc "company"        (cnIES "company")
 component       = npnc "component"      (cn' "component")
 condition       = npnc "condition"      (cn' "condition")
 constraint      = npnc "constraint"     (cn' "constraint")
+consumer        = npnc "consumer"       (cn' "consumer")
 connection      = npnc "connection"     (cn' "connection")
 content         = npnc "content"        (cn' "content")
 context         = npnc "context"        (cn' "context")
@@ -129,6 +132,7 @@ module_         = npnc "module"         (cn' "module")
 model           = npnc "model"          (cn' "model")
 name_           = npnc "name"           (cn' "name")
 nonfunctional   = npnc "non-functional" (cn' "non-functional") -- FIXME: Adjective
+object          = npnc "object"         (cn' "object")
 offShelf        = npnc "Off-the-Shelf"  (cn' "Off-the-Shelf")
 open            = npnc "open"           (cn' "open")
 organization    = npnc "organization"   (cn' "organization")
@@ -166,6 +170,7 @@ statement       = npnc "statement"      (cn' "statement")
 symbol_         = npnc "symbol"         (cn' "symbol")
 system          = npnc "system"         (cn' "system")
 table_          = npnc "table"          (cn' "table")
+task            = npnc "task"           (cn' "task")
 template        = npnc "template"       (cn' "template")
 term_           = npnc "term"           (cn' "term")
 terminology     = npnc "terminology"    (cnIES "terminology")

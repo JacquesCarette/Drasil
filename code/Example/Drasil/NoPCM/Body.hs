@@ -6,8 +6,10 @@ import Drasil.NoPCM.Definitions (ht_trans, srs_swhs)
 --import Drasil.NoPCM.Unitals hiding (coil_SA, htCap_W, temp_init, time_final)
 
 import Drasil.SWHS.Body (s2_3_knowlegde, s2_3_understanding, s2_4_intro,
-  s3, physSyst1, physSyst2, s4_2_4_intro_end, s4_2_5_d1startPara,
-  s5_2, s7_trailing, ref2, ref3, ref4, ref5, ref6)
+  s3, physSyst1, physSyst2, assump1, assump2, assump7, assump8, assump9,
+  assump14, assump15, assump20, s4_2_4_intro_end, s4_2_5_d1startPara,
+  s5_2, s7_trailing, ref2, ref3, ref4, ref5, ref6, likeChg2, likeChg3,
+  likeChg4, likeChg6)
 import Drasil.SWHS.Concepts (progName, water, gauss_div, sWHT, tank, coil,
   transient, perfect_insul)
 import Drasil.SWHS.Unitals (w_vol, tank_length, tank_vol, tau_W, temp_W, w_mass,
@@ -324,71 +326,29 @@ s4_2 = solChSpecF progName (s4_1, s6) s4_2_4_intro_end (mid column software cons
 
 s4_2_1_list :: [Contents]
 s4_2_1_list = acroNumGen s4_2_1_assump_list 1
---enumSimple 1 (short assumption) $ map foldlSent s4_2_1_assump_list
 
--- s4_2_1_assump_list :: [[Sentence]]
-
--- assump3, assump4, assump5, {-assump6,-}{-assump1, assump2, -}
-  -- assump7_npcm, assump8, assump9, assump10, assump11, assump12 :: [Sentence]
 s4_2_1_assump_list :: [Contents]
-s4_2_1_assump_list = [assump1, assump2, assump3, assump4, assump5, assump6, assump7, assump8, assump9,
-  assump10, assump11, assump12, assump13, assump14]
--- [assump1, assump2, assump3, assump4, assump5, assump7,
-  -- assump7_npcm, assump8, assump9, assump10, assump11, assump12]
+s4_2_1_assump_list = [assump1, assump2, assump3, assump4, assump5, assump7, assump8, assump9,
+  assump9_npnc, assump14, assump15, assump12, assump13, assump20]
   
--- {-assump1 = [S "The only form of", phrase energy, S "that is",
-  -- S "relevant for this", phrase problem, S "is" +:+.
-  -- phrase thermal_energy, S "All other forms of", phrase energy
-  -- `sC` S "such as", phrase mech_energy `sC` S "are assumed to be negligible",
-  -- sSqBr (swhsSymbMapTRef t1consThermE)]-}
+assump3, assump4, assump5, assump9_npnc, assump12, assump13 :: Contents
 
--- {-assump2 = [S "All", phrase heat_trans, S "coefficients are constant over",
-  -- phrase time, sSqBr (acroGD "1")]-}
-assump1, assump2, assump3, assump4, assump5, assump6, assump7, assump8, assump9,
-  assump10, assump11, assump12, assump13, assump14 :: Contents
-assump1 = mkAssump "assump1"
-  (S "The only form of" +:+ phrase energy +:+ S "that is" +:+
-  S "relevant for this" +:+ phrase problem +:+ S "is" +:+. phrase thermal_energy
-  +:+ S "All other forms of" +:+ phrase energy `sC` S "such as" +:+
-  phrase mech_energy `sC` S "are assumed to be negligible" +:+.
-  sSqBr (swhsSymbMapTRef t1ConsThermE))
-assump2 = mkAssump "assump2" 
-  (S "All" +:+ phrase heat_trans +:+ S "coefficients are constant over"
-  +:+ phrase time +:+. sSqBr (acroGD 1))
 assump3 = mkAssump "assump3"
   (S "The" +:+ phrase water +:+ S "in the" +:+ phrase tank +:+
   S "is fully mixed, so the" +:+ phrase temp_W `isThe` S "same throughout the entire"
   +:+ phrase tank +:+. sSqBr (acroGD 2))
 assump4 = mkAssump "assump4"
   (S "The" +:+ phrase w_density +:+ S "has no spatial variation; that is"
-  `sC` S "it is constant over their entire" +:+ phrase vol +:+. sSqBr (acroGD 2))
+  `sC` S "it is constant over their entire" +:+ phrase vol +:+. sSqBr ((acroGD 2)`sC`
+  (acroLC 1)))
 assump5 = mkAssump "assump5"
   (S "The" +:+ phrase htCap_W +:+ S "has no spatial variation; that"
   +:+ S "is, it is constant over its entire" +:+ phrase vol +:+. sSqBr (acroGD 2))
-assump6 = mkAssump "assump6"
-  (S "Newton's law of convective cooling applies between the" +:+
-  phrase coil `sAnd` S "the" +:+ phrase water +:+ sSqBr (swhsSymbMapDRef dd1HtFluxC))
-assump7 = mkAssump "assump7"
-  (S "The" +:+ phrase temp_C +:+ S "is constant over" +:+ phrase time
-  +:+. sSqBr (swhsSymbMapDRef dd1HtFluxC `sC` makeRef likeChg1))
-assump8 = mkAssump "assump8"
-  (S "The" +:+ phrase temp_C +:+ S "does not vary along its length"
-  +:+. sSqBr (swhsSymbMapDRef dd1HtFluxC `sC` makeRef likeChg2))
-assump9 = mkAssump "assump9"
+assump9_npnc = mkAssump "assump9"
   (S "The" +:+ phrase model +:+ S "only accounts for charging" +:+
   S "of the tank" `sC` S "not discharging. The" +:+ phrase temp_W +:+ S "can only" +:+
   S "increase, or remain constant; it cannot decrease. This implies that the" +:+
   phrase temp_init +:+ S "is less than (or equal to) the" +:+ phrase temp_C +:+.
-  sSqBr ((acroIM 1) `sC` (makeRef likeChg3)))
-assump10 = mkAssump "assump10"
-  ((S "operating" +:+ phrase temp +:+ S "range" `ofThe'` phrase system)
-  +:+ S "is such that the" +:+ phrase water +:+ S "is always in" +:+ phrase liquid +:+ S "form. That is," +:+
-  S "the" +:+ phrase temp +:+ S "will not drop below the" +:+ phrase melt_pt +:+
-  S "of" +:+ phrase water `sC` S "or rise above its" +:+ phrase boil_pt +:+.
-  sSqBr (acroIM 1))
-assump11 = mkAssump "assump11"
-  (S "The" +:+ phrase tank +:+ S "is perfectly insulated so that" +:+
-  S "there is no" +:+ phrase heat +:+ S "loss from the" +:+ phrase tank +:+.
   sSqBr ((acroIM 1) `sC` (makeRef likeChg4)))
 assump12 = mkAssump "assump12"
   (S "No internal" +:+ phrase heat +:+ S "is generated by the" +:+ phrase water
@@ -398,11 +358,7 @@ assump13 = mkAssump "assump13"
   (S "The pressure in the" +:+ phrase tank +:+ S "is atmospheric, so the" +:+
   phrase melt_pt `sAnd` phrase boil_pt +:+ S "are" +:+ S (show (0 :: Integer))
   :+: Sy (unit_symb QT.temp) `sAnd` S (show (100 :: Integer)) :+: Sy (unit_symb QT.temp) 
-  `sC` S "respectively" +:+. sSqBr ((acroIM 1) `sC` (acroIM 3)))
-assump14 = mkAssump "assump14"
-  (S "When considering the" +:+ phrase w_vol +:+ S "in the" +:+
-  phrase tank `sC` (phrase vol `ofThe` phrase coil) +:+
-  S "is assumed to be negligible" +:+. sSqBr (makeRef req2))
+  `sC` S "respectively" +:+. sSqBr ((acroIM 1) `sC` (acroIM 2)))
 
 -- assumpNumGen :: [AssumpChunk] -> [Contents]
 -- assumpNumGen assump =  zipWith Assumption assump [S "A" :+: (S $ show x) | x <- [1..]]
@@ -457,7 +413,7 @@ assump14 = mkAssump "assump14"
 s4_2_2_TMods = map (Definition nopcmSymbMap . Theory) [t1consThermE]-}
 
 s4_2_3_equation, s4_2_5_equation,
-  s4_2_5_description, s4_2_5_paragraph :: [Contents]
+  s4_2_5_paragraph :: [Contents]
 
 s4_2_3_paragraph :: ConceptChunk -> ConceptChunk -> [Contents]
 s4_2_3_paragraph roc te = (map swhsSymbMapT swhsGenDefs) ++ [foldlSPCol [S "Detailed derivation of simplified",
@@ -471,28 +427,28 @@ s4_2_3_description :: RelationConcept -> UnitalChunk -> ConceptChunk -> ConVar -
 
 s4_2_3_description t1C vo gd su tfv unv un vhg hfi hfo iS oS den hcs te assu a3 a4 a5 ma = map foldlSPCol [
 
-  [S "Integrating", swhsSymbMapTRef t1ConsThermE,
-  S "over a", phrase vol, sParen (getS vol) `sC` S "we have"],
+  [S "Integrating", swhsSymbMapTRef t1C,
+  S "over a", phrase vo, sParen (getS vo) `sC` S "we have"],
 
-  [S "Applying", titleize gauss_div, S "to the first term over",
-  (phrase surface +:+ getS surface `ofThe` phrase vol) `sC` S "with",
-  getS thFluxVect, S "as the", phrase thFluxVect, S "for the",
-  phrase surface, S "and", getS uNormalVect, S "as a", phrase unit_,
-  S "outward", phrase uNormalVect, S "for a", phrase surface],
+  [S "Applying", titleize gd, S "to the first term over",
+  (phrase su +:+ getS su `ofThe` phrase vo) `sC` S "with",
+  getS tfv, S "as the", phrase tfv, S "for the",
+  phrase su, S "and", getS unv, S "as a", phrase un,
+  S "outward", phrase unv, S "for a", phrase su],
 
-  [S "We consider an arbitrary" +:+. phrase vol, S "The",
-  phrase vol_ht_gen, S "is assumed constant. Then (1) can be written as"],
+  [S "We consider an arbitrary" +:+. phrase vo, S "The",
+  phrase vhg, S "is assumed constant. Then (1) can be written as"],
 
-  [S "Where", getS ht_flux_in `sC` getS ht_flux_out `sC`
-  getS in_SA `sC` S "and", getS out_SA, S "are explained in" +:+.
-  acroGD 2, S "Assuming", getS density `sC` getS QT.heat_cap_spec,
-  S "and", getS QT.temp, S "are constant over the", phrase vol `sC`
-  S "which is true in our case by", titleize' assumption,
-  sParen (makeRef assump3) `sC` sParen (makeRef assump4) `sC`
-  S "and", sParen (makeRef assump5) `sC` S "we have"],
+  [S "Where", getS hfi `sC` getS hfo `sC`
+  getS iS `sC` S "and", getS oS, S "are explained in" +:+.
+  acroGD 2, S "Assuming", getS den `sC` getS hcs,
+  S "and", getS te, S "are constant over the", phrase vo `sC`
+  S "which is true in our case by", titleize' assu,
+  sParen (makeRef a3) `sC` sParen (makeRef a4) `sC`
+  S "and", sParen (makeRef a5) `sC` S "we have"],
 
-  [S "Using the fact that", getS density :+: S "=" :+:
-  getS mass :+: S "/" :+: getS vol `sC` S "(2) can be written as"]
+  [S "Using the fact that", getS den :+: S "=" :+:
+  getS ma :+: S "/" :+: getS vo `sC` S "(2) can be written as"]
   ]
 
 s4_2_3_eq1, s4_2_3_eq2, s4_2_3_eq3, s4_2_3_eq4, s4_2_3_eq5,
@@ -525,9 +481,15 @@ s4_2_3_eq5 = (C mass) :* (C QT.heat_cap_spec) :* Deriv Total (C QT.temp)
 
 s4_2_3_equation = map EqnBlock [s4_2_3_eq1, s4_2_3_eq2, s4_2_3_eq3, s4_2_3_eq4, s4_2_3_eq5]
 
-s4_2_5_paragraph = weave [s4_2_5_description, s4_2_5_equation]
+s4_2_5_paragraph = weave [s4_2_5_description rOfChng temp_W energy water vol w_vol mass w_mass htCap_W heat_trans ht_flux_C coil_SA tank perfect_insul assump15 vol_ht_gen assump12 equation, s4_2_5_equation]
 
-s4_2_5_description = map foldlSPCol [
+s4_2_5_description :: ConceptChunk -> UncertQ -> ConceptChunk -> ConceptChunk -> UnitalChunk -> UnitalChunk -> UnitalChunk -> UnitalChunk ->
+  UncertQ -> ConceptChunk -> UnitalChunk -> UncertQ -> ConceptChunk -> ConceptChunk -> Contents -> UnitalChunk ->
+  Contents -> ConceptChunk -> [Contents]
+
+s4_2_5_description roc tw en wa vo wv ma wm hcw ht hfc csa ta pi a11 vhg a12 eq  = map foldlSPCol [
+
+--TODO: Implement physical properties of a substance
 
   [S "To find the", phrase rOfChng, S "of", getS temp_W `sC`
   S "we look at the", phrase energy, S "balance on" +:+.
@@ -538,7 +500,7 @@ s4_2_5_description = map foldlSPCol [
   `sC` S "over area") +:+. getS coil_SA, S "No",
   phrase heat_trans, S "occurs to", (S "outside" `ofThe`
   phrase tank) `sC` S "since it has been assumed to be",
-  phrase perfect_insul +:+. sParen (makeRef assump11), S "Assuming no",
+  phrase perfect_insul +:+. sParen (makeRef assump15), S "Assuming no",
   phrase vol_ht_gen +:+. (sParen (makeRef assump12) `sC`
   E (C vol_ht_gen := Int 0)), S "Therefore, the", phrase equation, S "for",
   acroGD 2, S "can be written as"],
@@ -707,9 +669,9 @@ s6_list :: [Contents]
 s6_list = acroNumGen s6_likeChg_list 1
 
 s6_likeChg_list :: [Contents]
-s6_likeChg_list = [likeChg1, likeChg2, likeChg3, likeChg4]
+s6_likeChg_list = [likeChg2, likeChg3, likeChg4, likeChg6]
 
-likeChg1, likeChg2, likeChg3, likeChg4 :: Contents
+{-likeChg1, likeChg2, likeChg3, likeChg4 :: Contents
 
 --Empty list is supposed to take a ModuleChunk. Not sure what to put there.
 likeChg1 = LikelyChange (LCChunk (nw $ npnc "likeChg1" $
@@ -730,7 +692,7 @@ likeChg3 = LikelyChange (LCChunk (nw $ npnc "likeChg3" $
 likeChg4 = LikelyChange (LCChunk (nw $ npnc "likeChg4" $
   nounPhraseSent (makeRef assump11 :+: S "- Any real" +:+ phrase tank +:+
   S "cannot be perfectly insulated and will lose" +:+. phrase heat))
-  []) EmptyS
+  []) EmptyS-}
 -- s6_list = enumSimple 1 (short likelyChg) $ map foldlSent s6_likeChg_list
 
 -- s6_likeChg_list :: [[Sentence]]

@@ -259,7 +259,7 @@ s4_1_3_list = enumSimple 1 (short goalStmt) $
 
 s4_2 :: Section
 s4_2 = solChSpecF progName (s4_1, s6) s4_2_4_intro_end
-  (s4_2_6_mid, dataConstraintUncertainty, s4_2_6_T1footer) ([s4_2_1_list], s4_2_2_T1 ++
+  (s4_2_6_mid, dataConstraintUncertainty, s4_2_6_T1footer) (s4_2_1_list, s4_2_2_T1 ++
   s4_2_2_T2 ++ s4_2_2_T3, s4_2_3_genDefs ++ s4_2_3_deriv,
   s4_2_4_DD1 ++ s4_2_4_DD2 ++ s4_2_4_DD3 ++ s4_2_4_DD4, (s4_2_5_IMods),
   s4_2_6_DataConTables) [s4_2_7]
@@ -273,12 +273,12 @@ s4_2_1 = assumpF
   (SRS.thModel SRS.missingP [])
   (SRS.genDefn SRS.missingP [])
   (SRS.dataDefn SRS.missingP [])
-  s4_2_5 s6 [s4_2_1_list]
+  s4_2_5 s6 s4_2_1_list
 
-s4_2_1_list :: Contents
-s4_2_1_list = enumSimple 1 (short assumption) $ map foldlSent s4_2_1_assump_list
+s4_2_1_list :: [Contents]
+s4_2_1_list = acroNumGen s4_2_1_assump_list 1
 
-s4_2_1_assump_list :: [[Sentence]]
+s4_2_1_assump_list :: [Contents]
 s4_2_1_assump_list = [assump1, assump2, assump3, assump4, assump5, assump6,
   assump7, assump8, assump9, assump10, assump11, assump12, assump13, assump14,
   assump15, assump16, assump17, assump18, assump19, assump20]
@@ -443,16 +443,16 @@ reqList = [req3, req4, req5, req6, req7, req8, req9, req10, req11]
 --------------------------------
 
 s6 :: Section
-s6 = SRS.likeChg [s6_list] []
+s6 = SRS.likeChg s6_list []
 
-s6_list :: Contents
-s6_list = enumSimple 1 (short likelyChg) $ map foldlSent s6_likeChg_list
+s6_list :: [Contents]
+s6_list = acroNumGen s6_likeChg_list 1
 
-s6_likeChg_list :: [[Sentence]]
+s6_likeChg_list :: [Contents]
 s6_likeChg_list = [likeChg1, likeChg2, likeChg3, likeChg4, likeChg5, likeChg6]
 
-s6_start :: Int -> Sentence
-s6_start numVar = acroA numVar +:+ S "-"
+s6_start :: Contents -> Sentence
+s6_start assump = makeRef assump +:+ S "-"
 
 -- List structure same in all examples.
 
@@ -950,99 +950,117 @@ goalState varTerm = foldlSent [S "Predict the", phrase varTerm,
 
 assump1, assump2, assump3, assump4, assump5, assump6,
   assump7, assump8, assump9, assump10, assump11, assump12, assump13, assump14,
-  assump15, assump16, assump17, assump18, assump19, assump20 :: [Sentence]
+  assump15, assump16, assump17, assump18, assump19, assump20 :: Contents
 
-assump1 = [S "The only form of", phrase energy, S "that is",
-  S "relevant for this", phrase problem, S "is" +:+.
-  phrase CT.thermal_energy, S "All other forms of", phrase energy
-  `sC` S "such as", phrase mech_energy `sC` S "are assumed to be negligible",
-  sSqBr (swhsSymbMapTRef t1ConsThermE)]
+assump1 = mkAssump "assump1"
+  (S "The only form of" +:+ phrase energy +:+ S "that is" +:+
+  S "relevant for this" +:+ phrase problem +:+ S "is" +:+. phrase CT.thermal_energy
+  +:+ S "All other forms of" +:+ phrase energy `sC` S "such as" +:+
+  phrase mech_energy `sC` S "are assumed to be negligible" +:+.
+  sSqBr (swhsSymbMapTRef t1ConsThermE))
 --
-assump2 = [S "All", phrase CT.heat_trans, S "coefficients are constant over",
-  phrase time, sSqBr (acroGD 1)]
+assump2 = mkAssump "assump2" 
+  (S "All" +:+ phrase CT.heat_trans +:+ S "coefficients are constant over"
+  +:+ phrase time +:+. sSqBr (acroGD 1))
 --
-assump3 = [S "The", phrase water, S "in the", phrase tank,
-  S "is fully mixed, so the", phrase temp_W `isThe`
-  S "same throughout the entire", phrase tank,
-  sSqBr (acroGD 2 `sC` swhsSymbMapDRef dd2HtFluxP)]
+assump3 = mkAssump "assump3"
+  (S "The" +:+ phrase water +:+ S "in the" +:+ phrase tank +:+
+  S "is fully mixed, so the" +:+ (phrase temp_W `isThe` S "same throughout the entire")
+  +:+ phrase tank +:+. sSqBr (acroGD 2 `sC` swhsSymbMapDRef dd2HtFluxP))
 --
-assump4 = [S "The", phrase temp_PCM `isThe` S "same throughout the",
-  phrase pcm_vol, sSqBr (acroGD 2 `sC` swhsSymbMapDRef dd2HtFluxP `sC`
-  acroLC 1)]
+assump4 = mkAssump "assump4"
+  (S "The" +:+ phrase temp_PCM `isThe` S "same throughout the" +:+
+  phrase pcm_vol +:+. sSqBr (acroGD 2 `sC` swhsSymbMapDRef dd2HtFluxP `sC`
+  acroLC 1))
 --
-assump5 = [S "The", phrase w_density `sAnd` phrase pcm_density,
+assump5 = mkAssump "assump5"
+  (S "The" +:+ phrase w_density `sAnd` phrase pcm_density +:+
   S "have no spatial variation; that is" `sC`
-  S "they are each constant over their entire", phrase vol,
-  sSqBr (acroGD 2)]
+  S "they are each constant over their entire" +:+ phrase vol +:+.
+  sSqBr (acroGD 2))
 --
-assump6 = [S "The", phrase htCap_W `sC` phrase htCap_S_P `sC` S "and",
-  phrase htCap_L_P, S "have no spatial variation; that",
-  S "is, they are each constant over their entire",
-  phrase vol, sSqBr (acroGD 2)]
+assump6 = mkAssump "assump6"
+  (S "The" +:+ phrase htCap_W `sC` phrase htCap_S_P `sC` S "and" +:+
+  phrase htCap_L_P +:+ S "have no spatial variation; that" +:+
+  S "is, they are each constant over their entire" +:+
+  phrase vol +:+. sSqBr (acroGD 2))
 --
-assump7 = [(CT.law_conv_cooling ^. defn),
-  S "applies between the", phrase coil `sAnd` S "the",
-  phrase water, sSqBr (swhsSymbMapDRef dd1HtFluxC)]
+assump7 = mkAssump "assump7"
+  ((CT.law_conv_cooling ^. defn) +:+
+  S "applies between the" +:+ phrase coil `sAnd` S "the" +:+
+  phrase water +:+. sSqBr (swhsSymbMapDRef dd1HtFluxC))
 --
-assump8 = [S "The", phrase temp_C, S "is constant over",
-  phrase time, sSqBr (swhsSymbMapDRef dd1HtFluxC `sC` acroLC 2)]
+assump8 = mkAssump "assump8"
+  (S "The" +:+ phrase temp_C +:+ S "is constant over" +:+
+  phrase time +:+. sSqBr (swhsSymbMapDRef dd1HtFluxC `sC` acroLC 2))
 --
-assump9 = [S "The", phrase temp_C, S "does not vary along its length",
-  sSqBr (swhsSymbMapDRef dd1HtFluxC `sC` acroLC 3)]
+assump9 = mkAssump "assump9"
+  (S "The" +:+ phrase temp_C +:+ S "does not vary along its length" +:+.
+  sSqBr (swhsSymbMapDRef dd1HtFluxC `sC` acroLC 3))
 --
-assump10 = [(CT.law_conv_cooling ^. defn), S "applies between the",
-  phrase water `sAnd` S "the", short phsChgMtrl,
-  sSqBr (swhsSymbMapDRef dd2HtFluxP)]
+assump10 = mkAssump "assump10"
+  ((CT.law_conv_cooling ^. defn) +:+ S "applies between the" +:+
+  phrase water `sAnd` S "the" +:+ short phsChgMtrl +:+.
+  sSqBr (swhsSymbMapDRef dd2HtFluxP))
 --
-assump11 = [S "The", phrase model,
-  S "only accounts for", (charging ^. defn) `sC` S "not" +:+.
-  phrase discharging, S "The", phrase temp_W `sAnd`
-  phrase temp_PCM, S "can only increase, or remain",
-  S "constant; they do not decrease. This implies that the",
-  phrase temp_init, sParen (acroA 12), S "is less than (or equal)",
-  S "to the", phrase temp_C, sSqBr ((acroIM 1) `sC` (acroLC 4))]
+assump11 = mkAssump "assump11"
+  (S "The" +:+ phrase model +:+
+  S "only accounts for" +:+ (charging ^. defn) `sC` S "not" +:+.
+  phrase discharging +:+ S "The" +:+ phrase temp_W `sAnd`
+  phrase temp_PCM +:+ S "can only increase, or remain" +:+
+  S "constant; they do not decrease. This implies that the" +:+
+  phrase temp_init +:+ sParen (acroA 12) +:+ S "is less than (or equal)" +:+
+  S "to the" +:+ phrase temp_C +:+. sSqBr ((acroIM 1) `sC` (acroLC 4)))
 --
-assump12 = [phrase temp_init `ofThe'` phrase water
-  `sAnd` S "the", short phsChgMtrl `isThe` S "same",
-  sSqBr ((acroIM 1) `sC` (acroIM 2) `sC` (acroLC 5))]
+assump12 = mkAssump "assump12"
+  (phrase temp_init `ofThe'` phrase water
+  `sAnd` S "the" +:+ short phsChgMtrl `isThe` S "same" +:+.
+  sSqBr ((acroIM 1) `sC` (acroIM 2) `sC` (acroLC 5)))
 --
-assump13 = [S "The", phrase simulation, S "will start with the",
-  short phsChgMtrl, S "in a", (solid ^. defn),
-  sSqBr ((acroIM 2) `sC` (acroIM 4))]
+assump13 = mkAssump "assump13"
+  (S "The" +:+ phrase simulation +:+ S "will start with the" +:+
+  short phsChgMtrl +:+ S "in a" +:+ (solid ^. defn) +:+.
+  sSqBr ((acroIM 2) `sC` (acroIM 4)))
 --
-assump14 = [(S "operating" +:+ phrase temp +:+ S "range" `ofThe'`
-  phrase system), S "is such that the", phrase water,
-  S "is always in" +:+. (liquid ^. defn), S "That is,",
-  S "the", phrase temp, S "will not drop below the",
-  phrase melt_pt, S "of", phrase water `sC` S "or rise above its",
-  phrase boil_pt, sSqBr ((acroIM 1) `sC` (acroIM 3))]
+assump14 = mkAssump "assump14"
+  ((S "operating" +:+ phrase temp +:+ S "range" `ofThe'`
+  phrase system) +:+ S "is such that the" +:+ phrase water +:+
+  S "is always in" +:+. (liquid ^. defn) +:+ S "That is," +:+
+  S "the" +:+ phrase temp +:+ S "will not drop below the" +:+
+  phrase melt_pt +:+ S "of" +:+ phrase water `sC` S "or rise above its" +:+
+  phrase boil_pt +:+. sSqBr ((acroIM 1) `sC` (acroIM 3)))
 --
-assump15 = [S "The", phrase tank, S "is", phrase perfect_insul,
-  S "so that there is no", phrase CT.heat, S "loss from the",
-  phrase tank, sSqBr ((acroIM 1) `sC` (acroLC 6))]
+assump15 = mkAssump "assump15"
+  (S "The" +:+ phrase tank +:+ S "is" +:+ phrase perfect_insul +:+
+  S "so that there is no" +:+ phrase CT.heat +:+ S "loss from the" +:+
+  phrase tank +:+. sSqBr ((acroIM 1) `sC` (acroLC 6)))
 --
-assump16 = [S "No internal", phrase CT.heat,
-  S "is generated by either the", phrase water, S "or the",
-  short phsChgMtrl `semiCol` S "therefore, the", phrase vol_ht_gen,
-  S "is zero", sSqBr ((acroIM 1) `sC` (acroIM 2))]
+assump16 = mkAssump "assump16"
+  (S "No internal" +:+ phrase CT.heat +:+
+  S "is generated by either the" +:+ phrase water +:+ S "or the" +:+
+  short phsChgMtrl `semiCol` S "therefore, the" +:+ phrase vol_ht_gen +:+
+  S "is zero" +:+. sSqBr ((acroIM 1) `sC` (acroIM 2)))
 --
-assump17 = [(phrase vol +:+ phrase change `ofThe'` short phsChgMtrl),
-  S "due to", phrase CT.melting, S "is negligible", sSqBr (acroIM 2)]
+assump17 = mkAssump "assump17"
+  ((phrase vol +:+ phrase change `ofThe'` short phsChgMtrl) +:+
+  S "due to" +:+ phrase CT.melting +:+ S "is negligible" +:+. sSqBr (acroIM 2))
 --
-assump18 = [S "The",
-  short phsChgMtrl, S "is either in a", (liquid ^. defn),
-  S "or a", (solid ^. defn), S "but not a", (gaseous ^. defn),
-  sSqBr ((acroIM 2) `sC` (acroIM 4))]
+assump18 = mkAssump "assump18"
+  (S "The" +:+ short phsChgMtrl +:+ S "is either in a" +:+ (liquid ^. defn) +:+
+  S "or a" +:+ (solid ^. defn) +:+ S "but not a" +:+ (gaseous ^. defn) +:+.
+  sSqBr ((acroIM 2) `sC` (acroIM 4)))
 --
-assump19 = [S "The pressure in the", phrase tank,
-  S "is atmospheric, so the", phrase melt_pt `sAnd`
-  phrase boil_pt, S "are", S (show (0 :: Integer)) :+: Sy (unit_symb temp) `sAnd`
-  S (show (100 :: Integer)) :+: Sy (unit_symb temp) `sC` S "respectively",
-  sSqBr ((acroIM 1) `sC` (acroIM 3))]
+assump19 = mkAssump "assump19"
+  (S "The pressure in the" +:+ phrase tank +:+
+  S "is atmospheric, so the" +:+ phrase melt_pt `sAnd`
+  phrase boil_pt +:+ S "are" +:+ S (show (0 :: Integer)) :+: Sy (unit_symb temp) `sAnd`
+  S (show (100 :: Integer)) :+: Sy (unit_symb temp) `sC` S "respectively" +:+
+  sSqBr ((acroIM 1) `sC` (acroIM 3)))
 
-assump20 = [S "When considering the", phrase w_vol, S "in the",
-  phrase tank `sC` (phrase vol `ofThe` phrase coil),
-  S "is assumed to be negligible", sSqBr (acroR 2)]
+assump20 = mkAssump "assump20"
+  (S "When considering the" +:+ phrase w_vol +:+ S "in the" +:+
+  phrase tank `sC` (phrase vol `ofThe` phrase coil) +:+
+  S "is assumed to be negligible" +:+. sSqBr (acroR 2))
 
 -- Again, list structure is same between all examples.
 
@@ -1509,36 +1527,45 @@ s5_2 = nonFuncReqF [performance] [correctness, verifiability,
 -- Section 6 : LIKELY CHANGES --
 --------------------------------
 
-likeChg1, likeChg2, likeChg3, likeChg4, likeChg5, likeChg6 :: [Sentence]
+likeChg1, likeChg2, likeChg3, likeChg4, likeChg5, likeChg6 :: Contents
 
-likeChg1 = [s6_start 4, short phsChgMtrl,
-  S "is actually a poor", phrase CT.thermal_conductor `sC` S "so",
-  S "the", phrase assumption, S "of uniform", phrase temp_PCM,
-  S "is not likely"]
+likeChg1 = LikelyChange (LCChunk (nw $ npnc "likeChg1" $
+  nounPhraseSent (s6_start assump4 +:+ short phsChgMtrl +:+
+  S "is actually a poor" +:+ phrase CT.thermal_conductor `sC` S "so" +:+
+  S "the" +:+ phrase assumption +:+ S "of uniform" +:+ phrase temp_PCM +:+
+  S "is not likely."))
+  []) EmptyS
 --
-likeChg2 = [s6_start 8, S "The", phrase temp_C,
-  S "will change over", S "course" `ofThe` S "day, depending",
-  S "on the", phrase energy, S "received from the sun"]
+likeChg2 = LikelyChange (LCChunk (nw $ npnc "likeChg2" $
+  nounPhraseSent (s6_start assump8 +:+ S "The" +:+ phrase temp_C +:+
+  S "will change over" +:+ (S "course" `ofThe` S "day, depending") +:+
+  S "on the" +:+ phrase energy +:+ S "received from the sun."))
+  []) EmptyS
 --
-likeChg3 = [s6_start 9, S "The", phrase temp_C,
-  S "will actually change along its length as the",
-  phrase water, S "within it cools"]
+likeChg3 = LikelyChange (LCChunk (nw $ npnc "likeChg3" $
+  nounPhraseSent (s6_start assump9 +:+ S "The" +:+ phrase temp_C +:+
+  S "will actually change along its length as the" +:+ phrase water +:+
+  S "within it cools."))
+  []) EmptyS
 --
-likeChg4 = [s6_start 11, S "The", phrase model,
-  S "currently only accounts for" +:+. (charging ^. defn),
-  S "A more complete", phrase model, S "would also",
-  S "account for", (discharging ^. defn)]
+likeChg4 = LikelyChange (LCChunk (nw $ npnc "likeChg4" $
+  nounPhraseSent (s6_start assump11 +:+ S "The" +:+ phrase model +:+
+  S "currently only accounts for charging of the tank. A more complete"
+  +:+ phrase model +:+ S "would also account for discharging of the tank"))
+  []) EmptyS
 --
-likeChg5 = [s6_start 12, S "To add more",
-  S "flexibility to the", phrase simulation `sC`
+likeChg5 = LikelyChange (LCChunk (nw $ npnc "likeChg5" $
+  nounPhraseSent (s6_start assump12 +:+ S "To add more" +:+
+  S "flexibility to the" +:+ phrase simulation `sC`
   (phrase temp_init `ofThe` phrase water) `sAnd`
-  S "the", short phsChgMtrl, S "could be",
-  S "allowed to have different", plural value]
+  S "the" +:+ short phsChgMtrl +:+ S "could be" +:+
+  S "allowed to have different" +:+. plural value))
+  []) EmptyS
 --
-likeChg6 = [s6_start 15, S "Any real", phrase tank,
-  S "cannot be", phrase perfect_insul `sAnd` S "will lose",
-  phrase CT.heat]
-
+likeChg6 = LikelyChange (LCChunk (nw $ npnc "likeChg6" $
+  nounPhraseSent (s6_start assump15 +:+ S "Any real" +:+ phrase tank +:+
+  S "cannot be perfectly insulated and will lose" +:+. phrase CT.heat))
+  []) EmptyS
 -- List structure same in all examples.
 
 --add referencing to assumptions?

@@ -24,7 +24,6 @@ annealedGlass, fullyTGlass, glassTypeFac, heatSGlass, loadDurFactor,
 --FIXME: Add compound nounphrases
 
 annealedGlass = commonIdea "annealedGlass" (nounPhraseSP "annealed glass")          "AN"
---aspectR       = commonIdea' "aspectR"      (nounPhraseSP "aspect ratio")            (Atomic "AR")
 fullyTGlass   = commonIdea "fullyTGlass"   (nounPhraseSP "fully tempered glass")    "FT"
 glassTypeFac  = commonIdea "glassTypeFac"  (nounPhraseSP "glass type factor")       "GTF"
 heatSGlass    = commonIdea "heatSGlass"    (nounPhraseSP "heat strengthened glass") "HS"
@@ -41,7 +40,16 @@ nFL           = commonIdea "nFL"           (nounPhraseSP "non-factored load")   
 {-Terminology-}
 -- TODO: See if we can make some of these terms less specific and/or parameterized.
  
-blastRisk, cantilever, glaSlab :: NamedChunk
+beam, blastRisk, cantilever, edge, glaPlane, glaSlab, plane,
+  ptOfExplsn:: NamedChunk
+beam         = npnc "beam"       (nounPhraseSP "beam")
 blastRisk    = npnc "blastRisk"  (nounPhraseSP "blast risk")
 cantilever   = npnc "cantilever" (nounPhraseSP "cantilever")
+edge         = npnc "edge"       (nounPhraseSP "edge")
+glass        = npnc "glass"      (nounPhraseSP "glass")
 glaSlab      = npnc "glaSlab"    (nounPhraseSP "glass slab")
+plane        = npnc "plane"      (nounPhraseSP "plane")
+
+ptOfExplsn   = npnc "ptOfExplsn" (cn' "point of explosion")
+
+glaPlane     = compoundNC glass plane

@@ -65,11 +65,11 @@ analysis, appendix, characteristic, class_, client, code, column, company, compo
   instance_, intReader, introduction, item, loss, label, library, limitation, literacy,
   material_, message, method_, module_, model, name_, nonfunctional, offShelf, open,
   organization, output_, physics, physical, plan, practice, priority, problem, product_, 
-  project, property, purpose, quantity, realtime, reference, requirement_, reviewer,
-  safety, scope, second_, section_, scenario, source, simulation, software, solution, 
-  specific, specification, stakeholder, standard, statement, symbol_, system, table_,
-  template, terminology, theory, traceyGraph, traceyMatrix, uncertainty, user, useCase, 
-  validation, value, variable, video, verification, year :: NamedChunk
+  project, property, purpose, quantity, realtime, reference, requirement_, response, 
+  reviewer, safety, scope, second_, section_, scenario, source, simulation, software, 
+  solution, specific, specification, stakeholder, standard, statement, symbol_, system, 
+  table_, template, term_, terminology, theory, traceyGraph, traceyMatrix, uncertainty, 
+  user, useCase, validation, value, variable, video, verification, year :: NamedChunk
 
 analysis        = npnc "analysis"       (cnIS "analysis")
 appendix        = npnc "appendix"       (cnICES "appendix")
@@ -147,6 +147,7 @@ quantity        = npnc "quantity"       (cnIES "quantity") --general enough to b
 realtime        = npnc "real-time"      (cn' "real-time")
 reference       = npnc "reference"      (cn' "reference")
 requirement_    = npnc "requirement"    (cn' "requirement") -- FIXME: Eventually only have one requirement
+response        = npnc "response"       (cn' "response")
 reviewer        = npnc "reviewer"       (cn' "reviewer")
 safety          = npnc "safety"         (cnIES "safety")
 scope           = npnc "scope"          (cn' "scope")
@@ -166,6 +167,7 @@ symbol_         = npnc "symbol"         (cn' "symbol")
 system          = npnc "system"         (cn' "system")
 table_          = npnc "table"          (cn' "table")
 template        = npnc "template"       (cn' "template")
+term_           = npnc "term"           (cn' "term")
 terminology     = npnc "terminology"    (cnIES "terminology")
 theory          = npnc "theory"         (cnIES "theory")
 traceyGraph     = npnc "traceyGraph"    (cn' "traceability graph")

@@ -4,7 +4,8 @@ module Data.Drasil.SentenceStructures
   , sIs, isThe, sOf, sOr, ofThe, ofThe'
   , ofGiv, ofGiv'
   , toThe, tableShows, figureLabel
-  , showingCxnBw, refineChain, foldlSP, foldlSP_, foldlSPCol
+  , isExpctdToHv, underConsidertn, showingCxnBw, refineChain
+  , foldlSP, foldlSP_, foldlSPCol
   , maybeChanged, maybeExpanded, maybeWOVerb
   , tAndDWAcc, tAndDWSym, tAndDOnly
   , followA
@@ -112,6 +113,13 @@ figureLabel num traceyMG contents filePath = Figure (titleize figure +:
 showingCxnBw :: NamedIdea c => c -> Sentence -> Sentence
 showingCxnBw traceyVar contents = titleize traceyVar +:+ S "Showing the" +:+
   titleize' connection +:+ S "Between" +:+ contents
+
+isExpctdToHv :: Sentence -> Sentence -> Sentence
+a `isExpctdToHv` b = S "The" +:+ a +:+ S "is expected to have" +:+ b
+
+underConsidertn :: ConceptChunk -> Sentence
+underConsidertn chunk = S "The" +:+ (phrase chunk) +:+ 
+  S "under consideration is" +:+. (chunk ^. defn)
 
 -- | Create a list in the pattern of "The __ are refined to the __".
 -- Note: Order matters!

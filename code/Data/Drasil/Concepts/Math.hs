@@ -5,7 +5,7 @@ import Control.Lens ((^.))
 
 angle, area, calculation, diameter, equation, euclidN, euclidSpace, gradient, 
   graph, matrix, norm, normal, normalV, number, orient, parameter, perp, perpV, 
-  probability, surArea, surface, unit_, unitV, vector, rate, change, rOfChng, 
+  probability, shape, surArea, surface, unit_, unitV, vector, rate, change, rOfChng, 
   constraint :: ConceptChunk
 
 ode :: CI
@@ -33,6 +33,7 @@ parameter    = dcc "parameter"    (cn' "parameter")               "A quantity wh
 perp         = dcc "perp"         (cn' "perpendicular")           "At right angles"
 probability  = dcc "probability"  (cnIES "probability")           "The likelihood of an event to occur"
 rate         = dcc "rate"         (cn' "rate")                    "Ratio that compares two quantities having different units of measure"
+shape        = dcc "shape"        (cn' "shape")                   "The outline of an area or figure"
 surface      = dcc "surface"      (cn' "surface")                 "The outer or topmost boundary of an object"
 unit_        = dcc "unit"         (cn' "unit")                    "Identity element"
 vector       = dcc "vector"       (cn' "vector")                  "Object with magnitude and direction"

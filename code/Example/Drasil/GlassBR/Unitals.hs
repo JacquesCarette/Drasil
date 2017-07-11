@@ -418,3 +418,8 @@ aspectRWithEqn = mkDataDef aspectR aspectRCalculation
 
 aspectRCalculation :: Relation
 aspectRCalculation = (C aspectR) := (C plate_len)/(C plate_width)
+
+--Below are present in this file temporarily--
+
+lateralLoad :: NamedChunk
+lateralLoad  = compoundNC lateral load

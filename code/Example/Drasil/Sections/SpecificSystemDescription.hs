@@ -71,12 +71,11 @@ termDefnF :: Sentence -> [Contents] -> Section
 termDefnF end otherContents = SRS.termAndDefn ((intro):otherContents) []
       where lastF EmptyS  = EmptyS
             lastF s = S "." +:+ s
-            intro = Paragraph $ foldle (+:+) (+:) (EmptyS)
-                    [S "This subsection provides a list of terms", 
-                    S "that are used in the subsequent", plural section_, S "and their", 
-                    S "meaning, with the", phrase purpose, S "of reducing ambiguity", 
-                    S "and making it easier to correctly understand the" +:+
-                    plural requirement :+: (lastF end)]
+            intro = Paragraph $ foldlSent [S "This subsection provides a list of terms", 
+                    S "that are used in the subsequent", plural section_, 
+                    S "and their meaning, with the", phrase purpose, 
+                    S "of reducing ambiguity and making it easier to correctly", 
+                    S "understand the", plural requirement :+: (lastF end)]
 
 --general introduction for Physical System Description
 physSystDesc :: Sentence -> Contents -> [Contents] -> Section

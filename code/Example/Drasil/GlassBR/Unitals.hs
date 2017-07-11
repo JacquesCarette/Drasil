@@ -316,7 +316,7 @@ loadResis     = cc lResistance
     "upon a given probability of breakage and load duration as defined in " ++
     "[4 (pg. 1, 53)], following A2 and A1 respectively.")
 loadShareFac  = cc' lShareFac
-  (foldlSent [S "A multiplying factor derived from the load sharing between the ",
+  (foldlSent [S "A multiplying factor derived from the load sharing between the",
   S "double glazing, of equal or different thickness's and types (including the",
   S "layered behaviour of", (getAcc lGlass), S "under long duration",
   S "loads), in a sealed", (getAcc iGlass), S "unit"])
@@ -324,7 +324,7 @@ longDurLoad   = dcc "longDurLoad"        (nounPhraseSP "long duration load")
   ("Any load lasting approximately 30 days.")
 nonFactoredL  = cc' nFL
   (foldlSent [S "Three second duration uniform load associated with a probability",
-    S " of breakage less than or equal to 8", (plural lite), S "per 1000 for", 
+    S "of breakage less than or equal to 8", (plural lite), S "per 1000 for", 
     S "monolithic", (getAcc annealedGlass), S "glass"])
 notSafe       = dcc "notSafe"     (nounPhraseSP "not safe")
   ("For the given input parameters, the glass is NOT considered safe.")

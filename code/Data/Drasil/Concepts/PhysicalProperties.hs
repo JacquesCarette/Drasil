@@ -10,7 +10,7 @@ liquid     = dcc "liquid"     (cn' "liquid") "liquid state"
 solid      = dcc "solid"      (cn' "solid") "solid state"
 ctrOfMass  = dcc "ctrOfMass"  (cn "centre of mass") --FIXME: Plural?
   "The mean location of the distribution of mass of the object."
-dimension  = dcc "dimension"  (cn "dimension") "any of a set of basic kinds of quantity, as mass, length, and time"
+dimension  = dcc "dimension"  (cn' "dimension") "any of a set of basic kinds of quantity, as mass, length, and time"
 density    = dcc "density"    (cnIES "density") "mass per unit volume"
 len        = dcc "length"     (cn' "length")
   ("the straight-line distance between two points along an object. " ++

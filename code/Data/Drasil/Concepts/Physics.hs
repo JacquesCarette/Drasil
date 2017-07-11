@@ -4,7 +4,7 @@ module Data.Drasil.Concepts.Physics
   , momentOfInertia, force, impulseS, impulseV, displacement
   , gravitationalAccel, gravitationalConst, position, distance
   , time, torque, fbd, angular, linear, tension, compression, stress, strain
-  , angDisp, angVelo, angAccel, linDisp, linVelo, linAccel, joint 
+  , angDisp, angVelo, angAccel, linDisp, linVelo, linAccel, joint, damping
   ) where
 --This is obviously a bad name, but for now it will do until we come
 --  up with a better one.
@@ -17,7 +17,7 @@ rigidBody, velocity, friction, elasticity, energy, mech_energy, collision, space
   gravitationalAccel, gravitationalConst, position, distance,
   time, torque, fbd, linear, angular, tension, compression, stress, 
   strain, angDisp, angVelo, angAccel, linDisp, linVelo, linAccel, 
-  joint :: ConceptChunk
+  joint, damping :: ConceptChunk
 
 rigidBody    = dcc "rigidBody" (cnIES "rigid body") 
   "A solid body in which deformation is neglected."
@@ -116,7 +116,10 @@ torque = dcc "torque" (cn' "torque")
 fbd = dcc "FBD" (cn' "free body diagram")
   "A graphical illustration used to visualize the applied forces, movements, and resulting reactions on a body in a steady state condition"
 
-linear  = dcc "linear"  (cn' "linear" ) 
+linear  = dcc "linear"  (cn' "linear" )
   "Arranged in or extending along a straight or nearly straight line"
-angular = dcc "angular" (cn' "angular") 
+angular = dcc "angular" (cn' "angular")
   "Denoting physical properties or quantities measured with reference to or by means of an angle"
+
+damping = dcc "damping" (cn' "damping")
+  "An effect that tends to reduce the amplitude of vibrations"

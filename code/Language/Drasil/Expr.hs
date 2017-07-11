@@ -46,6 +46,7 @@ data Expr where
                                   -- F(x,y) would be (FCall F [x,y]) or sim.
   Case     :: [(Expr,Relation)] -> Expr -- For multi-case expressions, 
                                      -- each pair represents one case
+  Matrix   :: [[Expr]] -> Expr
   UnaryOp  :: UFunc -> Expr
   Grouping :: Expr -> Expr
   BinaryOp :: BiFunc -> Expr
@@ -228,3 +229,10 @@ cross e1 e2 = BinaryOp (Cross e1 e2)
 
 square :: Expr -> Expr
 square x = x :^ 2
+
+-- some matrix helper functions
+m2x2 :: Expr -> Expr -> Expr -> Expr -> Expr
+m2x2 a b c d = Matrix [[a,b],[c,d]]
+
+vec2D :: Expr -> Expr -> Expr
+vec2D a b    = Matrix [[a],[b]]

@@ -52,7 +52,6 @@ import Drasil.Sections.TraceabilityMandGs
 import Drasil.Sections.AuxiliaryConstants
 
 import Data.Drasil.SentenceStructures
-uncertCol                    = compoundNC uncertainty column
 
 this_si :: [UnitDefn]
 this_si = map UU [metre, kilogram, second] ++ map UU [centigrade, joule, watt]
@@ -497,24 +496,24 @@ s4_2_5_description roc tw en wa vo wv ma wm hcw ht hfc csa ta pi a11 vhg a12 eq 
   S "we look at the", phrase en, S "balance on" +:+.
   phrase wa, S "The", phrase vo, S "being considered" `isThe`
   phrase wv, getS wv `sC` S "which has", phrase ma,
-  getS w_mass, S "and" +:+. (phrase htCap_W `sC` getS htCap_W),
-  at_start heat_trans, S "occurs in the water from the coil as", (getS ht_flux_C
-  `sC` S "over area") +:+. getS coil_SA, S "No",
-  phrase heat_trans, S "occurs to", (S "outside" `ofThe`
-  phrase tank) `sC` S "since it has been assumed to be",
-  phrase perfect_insul +:+. sParen (makeRef assump15), S "Assuming no",
-  phrase vol_ht_gen +:+. (sParen (makeRef assump12) `sC`
-  E (C vol_ht_gen := Int 0)), S "Therefore, the", phrase equation, S "for",
+  getS wm, S "and" +:+. (phrase hcw `sC` getS hcw),
+  at_start ht, S "occurs in the water from the coil as", (getS hfc
+  `sC` S "over area") +:+. getS csa, S "No",
+  phrase ht, S "occurs to", (S "outside" `ofThe`
+  phrase ta) `sC` S "since it has been assumed to be",
+  phrase pi +:+. sParen (makeRef a11), S "Assuming no",
+  phrase vhg +:+. (sParen (makeRef a12) `sC`
+  E (C vhg := Int 0)), S "Therefore, the", phrase eq, S "for",
   acroGD 2, S "can be written as"],
 
   [S "Using", swhsSymbMapDRef dd1HtFluxC `sC`
   S "this can be written as"],
 
-  [S "Dividing (3) by", getS w_mass :+: getS htCap_W `sC` S "we obtain"],
+  [S "Dividing (3) by", getS wm :+: getS hcw `sC` S "we obtain"],
 
-  [S "Setting", (getS tau_W :+: S "=" :+: getS w_mass :+:
-  getS htCap_W :+: S "/" :+: getS coil_HTC :+: getS coil_SA)
-  `sC` titleize equation, S "(4) can be written in its final form as"]
+  [S "Setting", (getS tau_W :+: S "=" :+: getS wm :+:
+  getS hcw :+: S "/" :+: getS coil_HTC :+: getS csa)
+  `sC` titleize eq, S "(4) can be written in its final form as"]
   ]
 
 s4_2_5_eq1 = (C w_mass) :* (C htCap_W) :* Deriv Total (C temp_W) (C time) :=

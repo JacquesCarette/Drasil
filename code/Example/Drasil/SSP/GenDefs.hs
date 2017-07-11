@@ -93,9 +93,10 @@ resShr_desc = foldlSent [S "The Mohr-Coulomb resistive shear strength of a",
   S "Note the extra", E $ Int 1 , S "is to represent a unit of width which is",
   S "multiplied by the", getTandS baseLngth, S "of the plane where the",
   phrase normal, S "occurs, where", (E $ C baseLngth := C baseWthX * sec(C baseAngle))
-  `sAnd` getS baseWthX, S "is the x width of the base. This accounts for the effective",
-  phrase normal, E $ C nrmFSubWat := C totNrmForce - C baseHydroForce, S "of a soil from", -- FIXME: add prime to nrmStrss above
-  acroT 4, S "where", (E $ C nrmStrss * C baseWthX * sec(C baseAngle) * Int 1 := C nrmFSubWat)]
+  `sAnd` getS baseWthX, S "is the x width of the base. This accounts for the",
+  phrase nrmFSubWat, E $ C nrmFSubWat := C totNrmForce - C baseHydroForce, S "of a soil from", -- FIXME: add prime to nrmStrss
+  acroT 4, S "where the", phrase nrmStrss, S "is multiplied by the same area to obtain the",
+  phrase nrmFSubWat, E $ C nrmStrss * C baseWthX * sec(C baseAngle) * Int 1 := C nrmFSubWat]
 
 --
 mobShr :: RelationConcept

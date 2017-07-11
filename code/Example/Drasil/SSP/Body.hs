@@ -32,7 +32,6 @@ import Data.Drasil.Concepts.Physics
 import Data.Drasil.Concepts.PhysicalProperties
 import Data.Drasil.Concepts.Education
 import Data.Drasil.Concepts.Software
-import Data.Drasil.Concepts.Computation
 import Data.Drasil.Concepts.Math hiding (constraint)
 import Data.Drasil.Concepts.SolidMechanics (normForce, shearForce)
 import Data.Drasil.Software.Products
@@ -289,7 +288,6 @@ s4_2 = solChSpecF ssa (s4_1, s6) ddEnding (EmptyS, dataConstraintUncertainty, Em
           phrase intrslce, S "forces", acroDD 9, S "are", phrase force,
           plural variable, S "that must be written in terms of", acroDD 1, 
           S "to", acroDD 8, S "to solve"]
- --       tbRef = makeRef s4_2_6Table2 `sAnd` makeRef s4_2_6Table3 +:+ S "show"
 
 -- SECTION 4.2.1 --
 -- Assumptions is automatically generated in solChSpecF using the list below
@@ -299,7 +297,7 @@ s4_2_1_list = enumSimple 1 (short assumption) sspAssumptions
 -- SECTION 4.2.2 --
 -- TModels is automatically generated in solChSpecF using the tmods below
 
-s4_2_2_tmods = map sspSymMapT sspTMods --FIX fs_rc to use lowercase
+s4_2_2_tmods = map sspSymMapT sspTMods
 
 -- SECTION 4.2.3 --
 -- General Definitions is automatically generated in solChSpecF
@@ -310,7 +308,7 @@ s4_2_3_genDefs = map sspSymMapT sspGenDefs
 s4_2_4_dataDefs = (map sspSymMapD (take 10 sspDataDefs)) ++ resShrDerivation ++
   [sspSymMapD (sspDataDefs !! 10)] ++ mobShrDerivation ++ [sspSymMapD (sspDataDefs !! 11)] ++
   stfMtrxDerivation ++ (map sspSymMapD (drop 12 sspDataDefs)) 
-  --FIXME: is there a better way of shoving these derivations in the middle of the Data Defs?
+  --FIXME: move to DataDefs
 
 resShrDerivation :: [Contents]
 resShrDerivation = [foldlSP [S "The", phrase shrResI, S "of a slice is", 
@@ -456,7 +454,7 @@ s4_2_5_p2 = foldlSP [S "The", titleize morPrice,
   plural slice, S "of" +:+. phrase mass, S "Static equilibrium",
   S "analysis using two", phrase force, S "equilibrium, and one moment",
   phrase equation, S "as in" +:+. acroT 2, S "The", phrase problem,
-  S "is statically indeterminate with only these 3", plural equation, S "and one", --FIXME: T2, T3, GD5, DD1, DD9, DD10, DD11 should be references
+  S "is statically indeterminate with only these 3", plural equation, S "and one",
   S "constitutive", phrase equation, sParen $ S "the Mohr Coulomb shear strength of" +:+ 
   acroT 3, S "so the", phrase assumption, S "of", acroGD 5, S "is used. Solving for",
   phrase force, S "equilibrium allows", plural definition, S "of all", plural force,
@@ -469,12 +467,12 @@ s4_2_5_p3 = foldlSP [plural value `ofThe'` (phrase intrslce +:+ phrase normForce
   at_start' equation, S "for the unknowns are written in terms of only the",
   plural value, S "in", acroDD 1, S "to", acroDD 9 `sC` S "the", plural value,
   S "of", getS shearRNoIntsl `sC` S "and", getS shearFNoIntsl, S "in", acroDD 10,
-  S "and", acroDD 11 `sC` S "and each", --FIXME: DD10, DD11 should be references
+  S "and", acroDD 11 `sC` S "and each",
   S "other. The relationships between the unknowns are non linear" `sC`
   S "and therefore explicit", plural equation, S "cannot be derived and an",
   S "iterative", plural solution, S "method is required"]
 
-s4_2_5_IMods = concat $ weave [map (\x -> [sspSymMapT x]) sspIMods, --FIXME: ? is there a better way of doing this?
+s4_2_5_IMods = concat $ weave [map (\x -> [sspSymMapT x]) sspIMods, --FIXME: move to IMods
   [fctSftyDerivation, nrmShrDerivation, intrSlcDerivation,
   rigDisDerivation, rigFoSDerivation]]
 
@@ -718,7 +716,7 @@ slopeVert = verticesConst $ phrase slope
 {-input and output tables-}
 s4_2_6Table2, s4_2_6Table3 :: Contents
 s4_2_6Table2 = inDataConstTbl sspInputs --FIXME: needs more inputs but cannot express them yet
-s4_2_6Table3 = outDataConstTbl sspOutputs --FIXME: monotonic may need work
+s4_2_6Table3 = outDataConstTbl sspOutputs
 
 -- SECTION 5 --
 s5 = reqF [s5_1, s5_2]

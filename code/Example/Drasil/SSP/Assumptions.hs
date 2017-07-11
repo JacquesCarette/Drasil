@@ -47,7 +47,7 @@ linearF = at_start slice +:+ S "to base normal and" +:+ plural shearForce +:+ S 
   S "a linear relationship, dependent on the" +:+
   getTandS fs `sC` S "and the Coulomb sliding law."
 
-stressC = S "The" +:+ phrase stress :+: S "-" :+: phrase strain +:+ S "curve for" +:+ --FIXME: add hypens to drasil language
+stressC = S "The" +:+ phrase stress `sDash` phrase strain +:+ S "curve for" +:+
   phrase intrslce +:+ S "relationships is linear with a constant" +:+.
   phrase slope
 

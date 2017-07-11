@@ -49,7 +49,7 @@ sspOutputs = [fs, coords, dx_i, dy_i]
 gtZeroConstr :: [Constraint] --FIXME: move this somewhere in Data?
 gtZeroConstr = [physc $ (:<) (Int 0)]
 
-monotonicIn :: [Constraint]
+monotonicIn :: [Constraint]  --FIXME: Move this? Re word?
 monotonicIn = [physc $ \c ->
   State [Forall c, Forall $ [V "x1", V "x2"] `IsIn` Real] (V "x1" :< V "x2" :=> V "y1" :< V "y2")]
 

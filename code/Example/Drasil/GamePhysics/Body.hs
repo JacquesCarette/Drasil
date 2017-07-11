@@ -227,7 +227,7 @@ s4_1_intro_param lib app = foldlSent
   (sParen $ makeRef s7), S "By creating a simple, lightweight, fast and portable",
   (getAcc twoD), (phrase CP.rigidBody), (phrase lib) `sC`
   (phrase app), S "development will be more accessible",
-  S "to the", plural QPP.mass `sAnd` S "higher quality", (plural product_),
+  S "to the masses" `sAnd` S "higher quality", (plural product_),
   S "will be produced"]
 
 

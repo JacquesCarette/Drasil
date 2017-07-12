@@ -97,10 +97,10 @@ t_symbol s                        = symbol s
 
 -- | Renders symbols for HTML body
 symbol :: Symbol -> String
-symbol (Atomic s)  = s
-symbol (Special s) = unPH $ special s
+symbol (Atomic s)  = "<em>" ++ s ++ "</em>"
+symbol (Special s) = "<em>" ++ (unPH $ special s) ++ "</em>"
 symbol (Concat sl) = foldr (++) "" $ map symbol sl
-symbol (Greek g)   = unPH $ greek g
+symbol (Greek g)   = "<em>" ++ (unPH $ greek g) ++ "</em>"
 --
 -- handle the special cases first, then general case
 symbol (Corners [] [] [x] [] s) = (symbol s) ++ sup (symbol x)
@@ -124,7 +124,7 @@ uSymb (UDiv n d)          = uSymb n ++ "/(" ++ (uSymb d) ++ ")"
 -----------------------------------------------------------------
 -- | Renders expressions in the HTML (called by multiple functions)
 p_expr :: Expr -> String
-p_expr (Var v)    = v
+p_expr (Var v)    = "<em>" ++ v ++ "</em>"
 p_expr (Dbl d)    = showFFloat Nothing d ""
 p_expr (Int i)    = show i
 p_expr (Bln b)    = show b

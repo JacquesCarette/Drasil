@@ -20,6 +20,7 @@ module Drasil.Sections.SolutionCharacterSpec
 
 import Language.Drasil
 import Data.Drasil.Concepts.Math (equation, law)
+import Data.Drasil.Concepts.Computation
 import Data.Drasil.Concepts.Software (program)
 import Data.Drasil.Utils (foldle, symbolMapFun)
 import Data.Drasil.SentenceStructures
@@ -385,7 +386,7 @@ problemDescriptionIntro progName (x:y:_) = problemDescriptionSent progName x y
 
 problemDescriptionSent :: NamedIdea c => c -> Sentence -> Sentence -> Contents
 problemDescriptionSent progName start end = foldlSP [start, (short progName), 
-  S "is a computer", (phrase program), S "developed to", end]
+  S "is a", (phrase computer), (phrase program), S "developed to", end]
 
 --------------------------
 -- TERM AND DEFINITIONS --

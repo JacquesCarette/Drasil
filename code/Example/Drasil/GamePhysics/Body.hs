@@ -21,7 +21,7 @@ import qualified Data.Drasil.Concepts.Physics as CP (rigidBody, elasticity,
 import qualified Data.Drasil.Concepts.PhysicalProperties as CPP (ctrOfMass, 
   dimension)
 import qualified Data.Drasil.Concepts.Math as CM (equation, surface, ode, 
-  constraint)
+  constraint, law)
 import Data.Drasil.Utils (makeTMatrix, itemRefToSent, refFromType,
   makeListRef, enumSimple, enumBullet, mkRefsList)
 import Data.Drasil.SentenceStructures
@@ -372,7 +372,7 @@ s4_2_3_intro :: Contents
 -- s4_2_3_GDefs :: [Contents]
 
 s4_2_3_intro = foldlSP 
-  [S "This", (phrase section_), S "collects the laws" `sAnd` 
+  [S "This", (phrase section_), S "collects the", (plural CM.law) `sAnd` 
   (plural CM.equation), S "that will be used in deriving the", 
   (plural dataDefn) `sC` S "which in turn will be used to build the", 
   (plural inModel)]

@@ -4,9 +4,9 @@ import Language.Drasil
 import Control.Lens ((^.))
 
 angle, area, calculation, diameter, equation, euclidN, euclidSpace, gradient, 
-  graph, matrix, norm, normal, normalV, number, orient, parameter, perp, perpV, 
-  probability, shape, surArea, surface, unit_, unitV, vector, rate, change, rOfChng, 
-  constraint :: ConceptChunk
+  graph, law, matrix, norm, normal, normalV, number, orient, parameter, perp, 
+  perpV, probability, shape, surArea, surface, unit_, unitV, vector, rate, 
+  change, rOfChng, constraint :: ConceptChunk
 
 ode :: CI
 
@@ -23,6 +23,7 @@ euclidSpace  = dcc "euclidSpace"  (cn' "Euclidean")               ("Denoting the
                                                                   "experience")
 gradient     = dcc "gradient"     (cn' "gradient")                "degree of steepness of a graph at any point"
 graph        = dcc "graph"        (cn' "graph")                   "A diagram showing the relation between variable quantities"
+law          = dcc "law"          (cn' "law")                     "a generalization based on a fact or event perceived to be recurrent"
 matrix       = dcc "matrix"       (cnICES "matrix")               ("A rectangular array of quantities or expressions in rows and columns that" ++
                                                                   "is treated as a single entity and manipulated according to particular rules")
 norm         = dcc "norm"         (cn' "norm")                    "Positive length or size of a vector"
@@ -57,4 +58,4 @@ rOfChng      = dcc "rOfChng"        ((rate) `of_` (change))
 surArea      = dcc "surArea"        (compoundPhrase' (surface ^. term) (area ^. term))
                 "A measure of the total area that the surface of the object occupies"
 unitV        = dcc "unit_vect"      (compoundPhrase' (unit_ ^. term)
-                (vector ^. term)) "A vector that has a magnitude of one"
+                (vector ^. term)) "A vector that has a magnitude of one" 

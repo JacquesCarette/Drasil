@@ -19,7 +19,7 @@ module Drasil.Sections.SolutionCharacterSpec
   ) where
 
 import Language.Drasil
-import Data.Drasil.Concepts.Math (equation)
+import Data.Drasil.Concepts.Math (equation, law)
 import Data.Drasil.Concepts.Software (program)
 import Data.Drasil.Utils (foldle, symbolMapFun)
 import Data.Drasil.SentenceStructures
@@ -446,7 +446,7 @@ assumpIntro = Paragraph $ foldlSent
 
 tModIntro :: (NamedIdea a) => a -> Contents
 tModIntro progName = foldlSP [S "This", phrase Doc.section_, S "focuses on",
-  S "the", phrase Doc.general, (plural equation), S "and", S "laws that",
+  S "the", phrase Doc.general, (plural equation), S "and", (plural law),S "that",
   short progName, S "is based on"]
 
 -------------------------
@@ -456,7 +456,7 @@ tModIntro progName = foldlSP [S "This", phrase Doc.section_, S "focuses on",
 generalDefinitionIntro :: (LayoutObj t) => [t] -> Contents
 generalDefinitionIntro [] = Paragraph $ S "There are no general definitions."
 generalDefinitionIntro _ = foldlSP [S "This", phrase Doc.section_, 
-  S "collects the", S "laws and", (plural equation), 
+  S "collects the", (plural law), S "and", (plural equation), 
   S "that will be used in", S "deriving the", 
   plural Doc.dataDefn `sC` S "which in turn are used to", S "build the", 
   plural Doc.inModel]

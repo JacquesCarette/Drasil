@@ -112,8 +112,23 @@ symbol (Atop Vector s)       = "<b>" ++ symbol s ++ "</b>"
 symbol (Atop Hat s)          = symbol s ++ "&#770;"
 symbol (Atop Prime s)        = symbol s ++ "'"
 
+-- | Renders symbols for UNIT SYMBOLS
+usymbol :: Symbol -> String
+usymbol (Atomic s)  = s
+usymbol (Special s) = unPH $ special s
+usymbol (Concat sl) = foldr (++) "" $ map usymbol sl
+usymbol (Greek g)   = unPH $ greek g
+usymbol (Corners [] [] [x] [] s) = (usymbol s) ++ sup (usymbol x)
+usymbol (Corners [] [] [] [x] s) = (usymbol s) ++ sub (usymbol x)
+usymbol (Corners [_] [] [] [] _) = error "rendering of ul prescript"
+usymbol (Corners [] [_] [] [] _) = error "rendering of ll prescript"
+usymbol (Corners _ _ _ _ _)      = error "rendering of Corners (general)"
+usymbol (Atop Vector s)       = "<b>" ++ usymbol s ++ "</b>"
+usymbol (Atop Hat s)          = usymbol s ++ "&#770;"
+usymbol (Atop Prime s)        = usymbol s ++ "'"
+
 uSymb :: USymb -> String
-uSymb (UName s)           = symbol s
+uSymb (UName s)           = usymbol s
 uSymb (UProd l)           = foldr1 (\x -> (x++)) (map uSymb l)
 uSymb (UPow s i)          = uSymb s ++ sup (show i)
 uSymb (UDiv n (UName d))  = uSymb n ++ "/" ++ uSymb (UName d)
@@ -129,13 +144,13 @@ p_expr (Dbl d)    = showFFloat Nothing d ""
 p_expr (Int i)    = show i
 p_expr (Bln b)    = show b
 p_expr (Mul a b)  = mul a b
-p_expr (Add a b)  = p_expr a ++ "+" ++ p_expr b
-p_expr (Sub a b)  = p_expr a ++ "-" ++ p_expr b
+p_expr (Add a b)  = p_expr a ++ " &plus; " ++ p_expr b
+p_expr (Sub a b)  = p_expr a ++ " &minus; " ++ p_expr b
 p_expr (Frac a b) = fraction (p_expr a) (p_expr b) --Found in HTMLHelpers
 p_expr (Div a b)  = divide a b
 p_expr (Pow a b)  = pow a b
 p_expr (Sym s)    = symbol s
-p_expr (Eq a b)   = p_expr a ++ "=" ++ p_expr b
+p_expr (Eq a b)   = p_expr a ++ " = " ++ p_expr b
 p_expr (NEq a b)  = p_expr a ++ "&ne;" ++ p_expr b
 p_expr (Lt a b)   = p_expr a ++ "&lt;" ++ p_expr b
 p_expr (Gt a b)   = p_expr a ++ "&gt;" ++ p_expr b

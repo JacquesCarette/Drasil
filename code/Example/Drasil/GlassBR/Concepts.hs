@@ -18,7 +18,7 @@ acronyms = [assumption, annealedGlass, dataDefn, fullyTGlass,
   loadDurFactor, lGlass, lResistance, lShareFac, nFL, physSyst, requirement,
   srs, thModel, eqTNT, stdOffDist]
 
-annealedGlass, fullyTGlass, glassTypeFac, heatSGlass, loadDurFactor,
+annealedGlass, aR, fullyTGlass, glassTypeFac, heatSGlass, loadDurFactor,
   iGlass, lGlass, lResistance, lShareFac, eqTNT, gLassBR, stdOffDist, nFL :: CI
 
 --FIXME: Add compound nounphrases

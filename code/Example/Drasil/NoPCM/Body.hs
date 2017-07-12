@@ -90,7 +90,7 @@ mkSRS :: DocDesc
 mkSRS = RefSec (RefProg intro
   [TUnits, tsymb [TSPurpose, SymbConvention
   [Lit (nw ht_trans), Doc' (nw progName)], SymbOrder], TAandA]) :
-  IntroSec (IntroProg (s2_start enerSrc energy progName) (s2_end progName program)
+  IntroSec (IntroProg (s2_start ener_src energy progName) (s2_end progName program)
   [IPurpose (s2_1 progName),
   IScope (s2_2_start thermal_analysis sWHT) (s2_2_end temp thermal_energy water),
   IChar s2_3_knowlegde s2_3_understanding EmptyS,
@@ -119,7 +119,7 @@ s2_start :: ConceptChunk -> ConceptChunk -> CI-> Sentence
 s2_start es en pro = foldlSent [S "Due to increasing cost, diminishing",
   S "availability, and negative environmental impact of",
   S "fossil fuels, there is a higher demand for renewable",
-  phrase es, S "and",
+  plural es, S "and",
   phrase en +:+. S "storage technology", at_start' pro,
   S "provide a novel way of storing", phrase en]
 

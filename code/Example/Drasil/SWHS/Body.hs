@@ -15,7 +15,6 @@ import Data.Drasil.Concepts.Math (ode, de, unit_, rOfChng, equation, change,
   parameter)
 
 import Data.Drasil.Concepts.Software (program, performance)
-import Data.Drasil.Concepts.Computation (computer)
 import Data.Drasil.Software.Products
 import Data.Drasil.Utils (enumSimple, weave, getS, itemRefToSent, makeListRef,
   makeTMatrix, mkRefsList, refFromType)
@@ -24,6 +23,8 @@ import Data.Drasil.Quantities.Physics (time, energy)
 import Data.Drasil.Quantities.Math (gradient, surface, uNormalVect, surArea)
 import Data.Drasil.Quantities.Thermodynamics
 import Data.Drasil.Quantities.PhysicalProperties (density, mass, vol)
+
+import Data.Drasil.Software.Products (compPro)
 
 import Drasil.SWHS.Unitals
 import Drasil.SWHS.Concepts
@@ -85,8 +86,9 @@ swhsPeople = [thulasi, brooks, spencerSmith]
 mkSRS :: DocDesc
 mkSRS = RefSec (RefProg intro
   [TUnits, tsymb'' tsymb_intro (TermExcept [uNormalVect]), TAandA]):
-  IntroSec (IntroProg (s2_intro) (s2_kSent) [
-  IPurpose (s2_1_par1),
+  IntroSec (IntroProg (s2_intro CT.ener_src energy swhs_pcm phsChgMtrl progName
+    CT.thermal_energy latent_heat unit_) (s2_kSent swhs_pcm program progName) [
+  IPurpose (s2_1_par1 swhs_pcm progName),
   IScope (s2_2_contents) (s2_2_end),
   IChar (s2_3_knowlegde) (s2_3_understanding) (EmptyS),
   IOrgSec (s2_4_intro) (inModel) (SRS.inModel SRS.missingP []) (s2_4_trail)]) :
@@ -661,27 +663,28 @@ s9_refList = [ref1, ref2, ref3, ref4, ref5, ref6]
 -- Section 2 : INTRODUCTION --
 ------------------------------
 
-s2_intro :: Sentence
-s2_intro = foldlSent [S "Due to increasing cost, diminishing",
+s2_intro :: ConceptChunk -> UnitalChunk -> ConceptChunk -> CI -> CI ->
+  ConceptChunk -> UnitalChunk -> ConceptChunk -> Sentence
+s2_intro es en sp pcmat pro te lh un = foldlSent [S "Due to increasing cost, diminishing",
   S "availability, and negative environmental impact of",
   S "fossil fuels, there is a higher demand for renewable",
-  phrase energy, plural source `sAnd` phrase energy +:+.
-  S "storage technology", (swhs_pcm ^. defn),
-  sParen (short phsChgMtrl), S "use a renewable",
-  phrase energy, phrase source `sAnd` S "provide a novel way of",
-  S "storing" +:+. phrase energy,
-  at_start swhs_pcm, S "improve over the traditional",
-  plural progName, S "because of their smaller size. The",
+  plural es `sAnd` phrase en +:+.
+  S "storage technology", phrase sp,
+  sParen (short pcmat), S "use a renewable",
+  plural es `sAnd` S "provide a novel way of",
+  S "storing" +:+. phrase en,
+  at_start sp, S "improve over the traditional",
+  plural pro, S "because of their smaller size. The",
   S "smaller size is possible because of the ability of",
-  short phsChgMtrl, S "to store", phrase CT.thermal_energy,
-  S "as", phrase latent_heat `sC`
-  S "which allows higher", phrase CT.thermal_energy,
-  S "storage capacity per", phrase unit_, S "weight"]
+  short pcmat, S "to store", phrase te,
+  S "as", phrase lh `sC`
+  S "which allows higher", phrase te,
+  S "storage capacity per", phrase un, S "weight"]
 
-s2_kSent :: Sentence
-s2_kSent = foldlSent_ [EmptyS +:+. phrase swhs_pcm, S "The developed",
-  phrase program, S "will be referred to as", titleize progName,
-  sParen (short progName)] -- SSP has same style sentence here
+s2_kSent :: ConceptChunk -> ConceptChunk -> CI -> Sentence
+s2_kSent sp pr pro = foldlSent_ [EmptyS +:+. phrase sp, S "The developed",
+  phrase pr, S "will be referred to as", titleize pro,
+  sParen (short pro)] -- SSP has same style sentence here
 
 -- In Concepts.hs "swhs_pcm" gives "s for program name, and there is a
 -- similar paragraph in each of the other eolar water heating systems
@@ -698,11 +701,11 @@ s2_kSent = foldlSent_ [EmptyS +:+. phrase swhs_pcm, S "The developed",
 -- 2.1 : Purpose of Document --
 -------------------------------
 
-s2_1_par1 :: Sentence
-s2_1_par1 = foldlSent [S "The main", phrase purpose, S "of this",
+s2_1_par1 :: ConceptChunk -> CI -> Sentence
+s2_1_par1 sp pro = foldlSent [S "The main", phrase purpose, S "of this",
   phrase document, S "is to describe the modelling of" +:+.
-  phrase swhs_pcm, S "The", plural goalStmt `sAnd` plural thModel,
-  S "used in the", short progName, S "code are provided, with an emphasis",
+  phrase sp, S "The", plural goalStmt `sAnd` plural thModel,
+  S "used in the", short pro, S "code are provided, with an emphasis",
   S "on explicitly identifying", plural assumption `sAnd` S "unambiguous" +:+.
   plural definition, S "This", phrase document,
   S "is intended to be used as a", phrase reference,
@@ -747,7 +750,7 @@ s2_2_end = foldlSent_ [S "predict the",
 ----------------------------------------------
 
 s2_3_knowlegde :: Sentence
-s2_3_knowlegde = foldlSent_ [phrase CT.heat, S "transfer" +:+. phrase theory,
+s2_3_knowlegde = foldlSent_ [EmptyS +:+. phrase CT.ht_trans_theo,
   S "A third or fourth year Mechanical Engineering course on this topic",
   S "is recommended"]
 
@@ -885,8 +888,8 @@ s4_intro_end = foldlSent_ [plural thModel `sC` plural genDefn `sC`
 -------------------------------
 
 s4_1_intro :: Contents
-s4_1_intro = foldlSP [short progName, S "is a", phrase computer,
-  phrase program, S "developed to investigate the effect of",
+s4_1_intro = foldlSP [short progName, S "is a", phrase compPro,
+  S "developed to investigate the effect of",
   S "employing", short phsChgMtrl, S "within a", phrase sWHT]
 
 -- section is very different between all examples

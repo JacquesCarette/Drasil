@@ -11,9 +11,11 @@ import Data.Drasil.Concepts.Documentation
 import Data.Drasil.Concepts.PhysicalProperties hiding (density, mass, vol)
 import qualified Data.Drasil.Concepts.Thermodynamics as CT
 import Data.Drasil.Concepts.Physics (mech_energy)
-import Data.Drasil.Concepts.Math (ode, unit_, rOfChng, equation, change, parameter)
+import Data.Drasil.Concepts.Math (ode, de, unit_, rOfChng, equation, change, 
+  parameter)
 
 import Data.Drasil.Concepts.Software (program, performance)
+import Data.Drasil.Concepts.Computation (computer)
 import Data.Drasil.Software.Products
 import Data.Drasil.Utils (enumSimple, weave, getS, itemRefToSent, makeListRef,
   makeTMatrix, mkRefsList, refFromType)
@@ -750,7 +752,7 @@ s2_3_knowlegde = foldlSent_ [phrase CT.heat, S "transfer" +:+. phrase theory,
   S "is recommended"]
 
 s2_3_understanding :: Sentence
-s2_3_understanding = foldlSent_ [S "differential", plural equation `sC`
+s2_3_understanding = foldlSent_ [(phrase de) `sC`
   S "as typically covered in first and second year Calculus courses"]
 
 ------------------------------------
@@ -883,7 +885,7 @@ s4_intro_end = foldlSent_ [plural thModel `sC` plural genDefn `sC`
 -------------------------------
 
 s4_1_intro :: Contents
-s4_1_intro = foldlSP [short progName, S "is a computer",
+s4_1_intro = foldlSP [short progName, S "is a", phrase computer,
   phrase program, S "developed to investigate the effect of",
   S "employing", short phsChgMtrl, S "within a", phrase sWHT]
 

@@ -78,17 +78,26 @@ Steven Palmer}
 \vfill
 \end{frame}
 
-\begin{frame}
+\begin{frame}[t]
 \frametitle{Ontologies}
-{\large \only<1>{\color{blue}}Data.Drasil - \onslide<3->{\only<3>{\color{blue}}Language Concepts} -
-\onslide<5->{\only<5>{\color{blue}}Document Language}}
-\vspace*{.5cm}
+\only<4>{\framesubtitle{Language Concepts}}
+{\large \onslide<1-3,5->{\only<1-2>{\color{blue}}Data.Drasil} 
+\onslide<3,5->{- \only<3>{\color{blue}}Language Concepts}
+\onslide<5->{- \only<5->{\color{blue}}Document Language}}
+
 \only<2>{
 \includegraphics[scale=0.25]{Data_Drasil.png}
 }
 \only<4>{
+\center{\vspace{-1cm}\includegraphics[scale=0.37]{class_hierarchy.png}}
 }
 \only<6>{
+\vspace{2cm}
+\emph{\Large{See Code}}
+%\begin{enumerate}
+%\item \emph{Recipe} language
+%\item Multiple little languages
+%\end{enumerate}
 }
 \end{frame}
 

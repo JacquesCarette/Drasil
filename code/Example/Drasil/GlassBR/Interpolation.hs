@@ -52,7 +52,6 @@ matrixCol i            mat c currentList =
     mat[i][c] ++ currentList
     matrixCol (i-1) (mat) (c) (currentList)
 --start currentList = []; input i should be 0
-
 ---
 
 index1, index2, data_, value :: VarChunk

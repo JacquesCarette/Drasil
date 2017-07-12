@@ -390,7 +390,9 @@ stfMtrxDerivation :: [Contents]
 stfMtrxDerivation = [foldlSP [S "Using the force-displacement relationship of", 
   acroGD 8, S "to define stiffness matrix", getS shrStiffIntsl `sC` S "as seen in",
   eqN 6], --FIXME: index
-
+  
+  EqnBlock $ C shrStiffIntsl := m2x2 (C shrStiffIntsl) (Int 0) (Int 0) (C nrmStiffBase),
+  
   foldlSP [S "For interslice surfaces the stiffness constants and displacements",
   S "refer to an unrotated coordinate system" `sC` getS genDisplace, S "of" +:+.
   acroGD 9, S "The interslice elements are left in their standard coordinate system" `sC`

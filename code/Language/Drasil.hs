@@ -9,7 +9,7 @@ module Language.Drasil (
   -- Expr
   , Expr(..), Relation, UFunc(..), BiFunc(..), Bound(..), DerivType(..), Set, Quantifier(..)
   , log, abs, sin, cos, tan, sec, csc, cot, exp, sqrt, square, SymbolMap, symbolMap, vars
-  , summation, product, cross
+  , summation, product, cross, m2x2, vec2D
   -- all the stuff from Unicode
   , Greek(..), Special(..)
   -- Unit

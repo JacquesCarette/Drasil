@@ -154,7 +154,30 @@ makeCSS _ = vcat [
     text "}"
     ],
   text ".list {text-align:left;}",
-  text ".figure {max-width: 800px;}"
+  text ".figure {max-width: 800px;}",
+  vcat [
+    text ".matrix {position: relative;}",
+    text ".matrix:before, .matrix:after {",
+    text "  content: \"\";",
+    text "  position: absolute;",
+    text "  top: 0;",
+    text "  border: 1px solid #000;",
+    text "  width: 10px;",
+    text "  height: 100%;}",
+    text ".matrix:before {",
+    text "  left: -6px;",
+    text "  border-right: 0px;}",
+    text ".matrix:after {",
+    text "  right: -6px;",
+    text "  border-left: 0px;}",
+    text ".matrix td {",
+    text "  padding: 6px;",
+    text "  text-align: center;",
+    text "  border: 0px;",
+    text "  border-collapse: separate;",
+    text "  margin-left: initial;",
+    text "  margin-right: initial;}"
+    ]
   ]
 
 -- | Create the link to the necessary CSS file

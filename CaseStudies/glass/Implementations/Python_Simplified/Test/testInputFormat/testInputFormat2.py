@@ -10,7 +10,7 @@ class TestInputFormat(unittest.TestCase):
  
     def test_get_input(self):
         params = param.Param()
-        inputFormat.get_input(os.path.join("Test/Inputfiles","testInput1.txt"), params)
+        inputFormat.get_input(os.path.join("Test/Inputfiles", "testInput1.txt"), params)
         self.assertEqual(1200.0, params.a)
         self.assertEqual(1000.0, params.b)
         self.assertEqual(8.0, params.t)

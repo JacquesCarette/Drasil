@@ -345,16 +345,12 @@ resShrDerivation = [foldlSP [S "The", phrase shrResI, S "of a slice is",
   
   EqnBlock $
   C shearRNoIntsl := (C nrmFNoIntsl) * tan (C fricAngle) +
-  (C cohesion) * (C baseWthX) * sec (C baseAngle),
-  
-  EqnBlock $
-  C shearRNoIntsl := (((C slcWght) + (C surfHydroForce) * (cos (C surfAngle)) +
+  (C cohesion) * (C baseWthX) * sec (C baseAngle) := (((C slcWght) + (C surfHydroForce) * (cos (C surfAngle)) +
   (C surfLoad) * (cos (C impLoadAngle))) * (cos (C baseAngle)) +
   (Neg (C earthqkLoadFctr) * (C slcWght) - (C watrForceDif) + (C surfHydroForce)
   * sin (C surfAngle) + (C surfLoad) * (sin (C impLoadAngle))) * (sin (C baseAngle))
   - (C baseHydroForce)) *
   tan (C fricAngle) + (C cohesion) * (C baseWthX) * sec (C baseAngle)
-  
   ]
 
 mobShrDerivation :: [Contents]
@@ -391,7 +387,7 @@ stfMtrxDerivation = [foldlSP [S "Using the force-displacement relationship of",
   acroGD 8, S "to define stiffness matrix", getS shrStiffIntsl `sC` S "as seen in",
   eqN 6], --FIXME: index
   
-  EqnBlock $ C shrStiffIntsl := m2x2 (C shrStiffIntsl) (Int 0) (Int 0) (C nrmStiffBase),
+  EqnBlock $ C shrStiffIntsl := dgnl2x2 (C shrStiffIntsl) (C nrmStiffBase),
   
   foldlSP [S "For interslice surfaces the stiffness constants and displacements",
   S "refer to an unrotated coordinate system" `sC` getS genDisplace, S "of" +:+.
@@ -409,6 +405,12 @@ stfMtrxDerivation = [foldlSP [S "Using the force-displacement relationship of",
   S "The base stiffness counter clockwise rotation is applied in", eqN 7,
   S "to the new matrix", getS nrmFNoIntsl],
   
+  EqnBlock $ C shrStiffIntsl := --FIXME: Index
+  m2x2 (cos(C baseAngle)) (Neg $ sin(C baseAngle)) (sin(C baseAngle)) (cos(C baseAngle)) *
+  C shrStiffIntsl :=
+  m2x2 (C shrStiffBase * cos(C baseAngle)) (Neg $ C nrmStiffBase * sin(C baseAngle))
+  (C shrStiffBase * sin(C baseAngle)) (C nrmStiffBase * cos(C baseAngle)),
+  
   foldlSP [S "The Hooke's law force displacement relationship of", acroGD 8,
   S "applied to the base also references a displacement vector", getS rotatedDispl,
   S "of", acroGD 9, S "rotated for", S "base angle" `ofThe` S "slice", 
@@ -420,6 +422,17 @@ stfMtrxDerivation = [foldlSP [S "Using the force-displacement relationship of",
   `sC` S "a basal force displacement relationship in the same coordinate system",
   S "as the interslice relationship can be derived as done in", eqN 8],
   
+  EqnBlock $ vec2D (C genPressure) (C genPressure) := C shrStiffBase * C rotatedDispl := --FIXME: pull from other equations? index
+  m2x2 (C shrStiffBase * cos(C baseAngle)) (Neg $ C nrmStiffBase * sin(C baseAngle))
+  (C shrStiffBase * sin(C baseAngle)) (C nrmStiffBase * cos(C baseAngle)) *
+  m2x2 (cos(C baseAngle)) (sin(C baseAngle)) (Neg $ sin(C baseAngle)) (cos(C baseAngle)) *
+  vec2D (C dx_i) (C dy_i) := m2x2
+  (C shrStiffBase * cos(C baseAngle) :^ Int 2 + C nrmStiffIntsl * sin(C baseAngle) :^ Int 2)
+  ((C shrStiffBase - C nrmStiffBase) * sin(C baseAngle) * cos(C baseAngle))
+  ((C shrStiffBase - C nrmStiffBase) * sin(C baseAngle) * cos(C baseAngle))
+  (C shrStiffBase * cos(C baseAngle) :^ Int 2 + C nrmStiffIntsl * sin(C baseAngle) :^ Int 2) *
+  vec2D (C dx_i) (C dy_i),
+  
   foldlSP [S "The new effective base stiffness matrix", getS shrStiffBase, --FIXME: index
   S "as derived in", eqN 7, S "is defined in" +:+. eqN 9, S "This is seen as matrix",
   getS shrStiffBase, S "in" +:+. acroGD 12, isElMx shrStiffBase "shear" `sC` S "and",
@@ -427,6 +440,13 @@ stfMtrxDerivation = [foldlSP [S "Using the force-displacement relationship of",
   S "The notation is simplified by", S "introduction" `ofThe` S "constants",
   getS shrStiffBase `sAnd` getS shrStiffBase `sC` S "defined in", eqN 10 `sAnd`--FIXME: index should be KbA,i and KbB,i
   eqN 11, S "respectively"],
+  
+  EqnBlock $ C shrStiffBase := m2x2
+  (C shrStiffBase * cos(C baseAngle) :^ Int 2 + C nrmStiffIntsl * sin(C baseAngle) :^ Int 2)
+  ((C shrStiffBase - C nrmStiffBase) * sin(C baseAngle) * cos(C baseAngle))
+  ((C shrStiffBase - C nrmStiffBase) * sin(C baseAngle) * cos(C baseAngle))
+  (C shrStiffBase * cos(C baseAngle) :^ Int 2 + C nrmStiffIntsl * sin(C baseAngle) :^ Int 2)
+  := m2x2 (C shrStiffBase) (C nrmStiffBase) (C nrmStiffBase) (C shrStiffBase),
   
   EqnBlock $
   (C shrStiffBase) := (C shrStiffBase) * (cos (C baseAngle)) :^ (Int 2) :+ --FIXME: the first symbol should be K_(bA,i), waiting on indexing

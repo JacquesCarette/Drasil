@@ -1,6 +1,6 @@
 module Data.Drasil.Concepts.Physics 
   ( rigidBody, velocity, friction, elasticity, energy, mech_energy, collision, space
-  , cartesian, rightHand, restitutionCoef, acceleration
+  , cartesian, rightHand, restitutionCoef, acceleration, pressure
   , momentOfInertia, force, impulseS, impulseV, displacement
   , gravitationalAccel, gravitationalConst, position, distance
   , time, torque, fbd, angular, linear, tension, compression, stress, strain
@@ -17,7 +17,7 @@ rigidBody, velocity, friction, elasticity, energy, mech_energy, collision, space
   gravitationalAccel, gravitationalConst, position, distance,
   time, torque, fbd, linear, angular, tension, compression, stress, 
   strain, angDisp, angVelo, angAccel, linDisp, linVelo, linAccel, 
-  joint, damping :: ConceptChunk
+  joint, damping, pressure :: ConceptChunk
 
 rigidBody    = dcc "rigidBody" (cnIES "rigid body") 
   "A solid body in which deformation is neglected."
@@ -68,7 +68,10 @@ tension      = dccWDS "tension" (cn' "tension")
 compression  = dccWDS "compression" (cn' "compression")
   (S "A" +:+ (phrase stress) +:+
   S "that causes displacement of the body towards its center.")
-  
+
+pressure     = dccWDS "pressure" (cn' "pressure")
+  (S "A" +:+ (phrase force) +:+ S "exerted over an area")
+
 --FIXME: COMBINATION HACK (for all below)
 angDisp = dcc "angularDisplacement" 
   (compoundPhrase' (angular ^. term) (displacement ^. term))

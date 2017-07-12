@@ -15,11 +15,12 @@ sspSymbols = (map cqs sspInputs) ++ (map cqs sspOutputs) ++
 -- Imported UnitalChunks --
 ---------------------------
 {-
-SM.mobShear, SM.shearRes, SM.stffness
+SM.mobShear, SM.shearRes, SM.stffness <- currently not used
 SM.poissnsR, SM.elastMod <- Used to make UncertQ
 -}
 normStress = SM.nrmStrss
-genForce = uc CP.force cF newton 
+genForce = uc CP.force cF newton
+genPressure = uc CP.pressure (sub lP lI) pascal
 {-must import from Concept.Physics since Quantities.Physics has Force as a vector-}
 
 -------------
@@ -114,7 +115,7 @@ dy_i        = cuc' "dy_i" (cn $ "displacement") ("in the y-ordinate direction " 
 ---------------------------
 
 sspUnits :: [UCWrapper]
-sspUnits = map ucw [normStress,
+sspUnits = map ucw [normStress, genPressure,
   waterHght, slopeHght, slipHght, xi, critCoords,
   mobShrI, shrResI, shearFNoIntsl, shearRNoIntsl, slcWght, watrForce,
   watrForceDif, intShrForce, baseHydroForce, surfHydroForce,
@@ -125,7 +126,7 @@ sspUnits = map ucw [normStress,
   nrmDispl, porePressure, elmNrmDispl, elmPrllDispl, 
   mobShrC, shrResC, rotatedDispl, intNormForce, shrStress]
 
-normStress,
+normStress, genPressure,
   waterHght, slopeHght, slipHght, xi, critCoords, mobShrI,
   shearFNoIntsl, shearRNoIntsl, slcWght, watrForce, watrForceDif, shrResI,
   intShrForce, baseHydroForce, surfHydroForce, totNrmForce, nrmFSubWat,

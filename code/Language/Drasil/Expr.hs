@@ -236,3 +236,6 @@ m2x2 a b c d = Matrix [[a,b],[c,d]]
 
 vec2D :: Expr -> Expr -> Expr
 vec2D a b    = Matrix [[a],[b]]
+
+dgnl2x2 :: Expr -> Expr -> Expr
+dgnl2x2 a d  = m2x2 a (Int 0) (Int 0) d

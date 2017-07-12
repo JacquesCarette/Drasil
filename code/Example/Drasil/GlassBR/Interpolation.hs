@@ -34,8 +34,10 @@ q_1  = makeVC "q_1"    (nounPhraseSP "q_1")  (sub (lQ) (Atomic "1"))
 q_2  = makeVC "q_2"    (nounPhraseSP "q_2")  (sub (lQ) (Atomic "2"))
 i    = makeVC "i"      (nounPhraseSP "i")    lI
 k    = makeVC "k"      (nounPhraseSP "k")    lK
+v    = makeVC "v"      (nounPhraseSP "v")    lV
 
 ---
+{-
 --indInSeq :: Int -> [Double] -> Double -> Maybe _?
 indInSeq (length(arr)-1) _   v = Nothing --FIXME: raise BoundError?
 indInSeq n               arr v = Just
@@ -52,6 +54,21 @@ matrixCol i            mat c currentList =
     mat[i][c] ++ currentList
     matrixCol (i-1) (mat) (c) (currentList)
 --start currentList = []; input i should be 0
+-}
+
+---> Python code to Expr
+
+indInSeq :: Expr
+indInSeq = (C i)
+--FIXME: how to capture constraints "arr[i] <= v and v <= arr[i+1]"
+
+matrixCol :: Expr
+matrixCol = 0
+--FIXME: implementing matrix as an expression???
+
+--interpY :: Expr
+--interpY = lin_interp (z_array[i], y_1, z_array[i+1], y_2, z)
+
 ---
 
 index1, index2, data_, value :: VarChunk

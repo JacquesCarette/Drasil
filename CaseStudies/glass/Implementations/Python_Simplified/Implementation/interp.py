@@ -13,7 +13,8 @@ def lin_interp(x1, y1, x2, y2, x):
     y = (y2 - y1)/(x2 - x1)*(x - x1) + y1
     return y
 
-    
+# arr => Sj (i.e. sequence of numbers representing possible standOff distances)
+# v   => SD calculated (i.e. number)
 def indInSeq(arr, v):
     for i in range(len(arr) - 1):
         if arr[i] <= v and v <= arr[i+1]:
@@ -31,7 +32,7 @@ def interpY(x_array, y_array, z_array, x, z):
     i = indInSeq(z_array, z)
     
     # x and y values for the z curves at i and i+1 (z_1 and z_2)
-    x_z_1 = matrixCol(x_array, i)
+    x_z_1 = (x_array, i)
     y_z_1 = matrixCol(y_array, i)
     x_z_2 = matrixCol(x_array, i + 1)
     y_z_2 = matrixCol(y_array, i + 1)

@@ -79,11 +79,9 @@
 \\
 24 & incorrectWEqUpprBndTest & testCheckConstraints17 & see 14 & see 14 & testInput10.txt & w = 910 & "Encountered an unexpected exception" & 
 \\
-25 & ? & testCheckConstraints18 & " & " & " & " & REMOVE? Or was it supposed to follow the pattern and have tnt = 0? like \#15 &
+25 & incorrectSDEqLwrBndTest & testCheckConstraints18 & see 16 & see 16 & testInput11.txt & sdx = 0; sdy = 6; sdz = 0 & "Encountered an unexpected exception" & 
 \\
-26 & incorrectSDEqLwrBndTest & testCheckConstraints19 & see 16 & see 16 & testInput11.txt & sdx = 0; sdy = 6; sdz = 0 & "Encountered an unexpected exception" & 
-\\
-27 & incorrectWEqUpprBndTest & testCheckConstraints20 & see 17 & see 17 & testInput12.txt & sdx = 130; sdy = 0; sdz = 0 & "Encountered an unexpected exception" & 
+26 & incorrectWEqUpprBndTest & testCheckConstraints19 & see 17 & see 17 & testInput12.txt & sdx = 130; sdy = 0; sdz = 0 & "Encountered an unexpected exception" & 
 \\
 \hline
 \end{tabular}
@@ -100,11 +98,11 @@
 \textbf{Ref} & \textbf{Test Name} & \textbf{fileName.py} & \textbf{Test Purpose} & \textbf{Traceability} & \textbf{Input File} & \textbf{Significant Input} & \textbf{Expected Output} & \textbf{Notes} \\
 \hline
 \hline
-28 & TstDrvdVals\_HSGlTy & testDerivedValues & to ensure initial inputs have been correctly converted into derived quantities & following term definitions and equations from Data Definitions & defaultInput.txt & see Input File & - &
+27 & TstDrvdVals\_HSGlTy & testDerivedValues & to ensure initial inputs have been correctly converted into derived quantities & following term definitions and equations from Data Definitions & defaultInput.txt & see Input File & - &
 \\
-29 & TstDrvdVals\_ANGlTy & testDerivedValues2 & " & " & testInput1.txt & " & - & 
+28 & TstDrvdVals\_ANGlTy & testDerivedValues2 & " & " & testInput1.txt & " & - & 
 \\
-30 & TstDrvdVals\_FTGlTy & testDerivedValues3 & " & " & testInput2.txt & " & - &
+29 & TstDrvdVals\_FTGlTy & testDerivedValues3 & " & " & testInput2.txt & " & - &
 \\               
 \hline
 \end{tabular}
@@ -121,11 +119,11 @@
 \textbf{Ref} & \textbf{Test Name} & \textbf{fileName.py} & \textbf{Test Purpose} & \textbf{Traceability} & \textbf{Input File} & \textbf{Significant Input} & \textbf{Expected Output} & \textbf{Notes} \\
 \hline
 \hline
-31 & TstInFmt\_1 & testInputFormat & to ensure data is being read in from the input file correctly & - & defaultInput.txt & see Input File & - &
+30 & TstInFmt\_1 & testInputFormat & to ensure data is being read in from the input file correctly & - & defaultInput.txt & see Input File & - &
 \\
-32 & TstInFmt\_2 & testInputFormat2 & " & - & testInput1.txt & " & - & 
+31 & TstInFmt\_2 & testInputFormat2 & " & - & testInput1.txt & " & - & 
 \\
-33 & TstInFmt\_3 & testInputFormat3 & " & - & testInput2.txt & " & - &               
+32 & TstInFmt\_3 & testInputFormat3 & " & - & testInput2.txt & " & - &               
 \\               
 \hline
 \end{tabular}
@@ -142,33 +140,33 @@
 \textbf{Ref} & \textbf{Test Name} & \textbf{fileName.py} & \textbf{Test Purpose} & \textbf{Traceability} & \textbf{Input File} & \textbf{Significant Input} & \textbf{Expected Output} & \textbf{Notes} \\
 \hline
 \hline
-34 & testInterp & testInterp & to ensure interpolated values are correctly calculated & - & - & x in {[}x1, x2{]} & & 
+33 & testInterp & testInterp & to ensure interpolated values are correctly calculated & - & - & x in {[}x1, x2{]} & & 
 \\
-35 & testInterp2 & testInterp2 & " & - & - & x in {[}x1, x2{]},where x is a Float & & 
+34 & testInterp2 & testInterp2 & " & - & - & x in {[}x1, x2{]},where x is a Float & & 
 \\
-36 & testInterp3 & testInterp3 & " & - & - & x1 \textless x2 \textless x & &  
+35 & testInterp3 & testInterp3 & " & - & - & x1 \textless x2 \textless x & &  
 \\
-37 & testInterp4 & testInterp4 & " & - & - & x \textless x2 \textless x1 & &  
+36 & testInterp4 & testInterp4 & " & - & - & x \textless x2 \textless x1 & &  
 \\
-38 & testInterp5 & testInterp5 & " & - & - & negative, x \textless x2 \textless x1 & &  
+37 & testInterp5 & testInterp5 & " & - & - & negative, x \textless x2 \textless x1 & &  
 \\
-39 & testInterp6 & testInterp6 & " & - & - & negative, x in {[}x1, x2{]} & &  
+38 & testInterp6 & testInterp6 & " & - & - & negative, x in {[}x1, x2{]} & &  
 \\
-40 & testInterp7 & testInterp7 & " & - & - & negative, x1 \textless x2 \textless x & &  
+39 & testInterp7 & testInterp7 & " & - & - & negative, x1 \textless x2 \textless x & &  
 \\
-41 & testInterp8 & testInterp8 & " & - & - & value1 in data1 and jdx == 0? & &  
+40 & testInterp8 & testInterp8 & " & - & - & value1 in data1 and jdx == 0? & &  
 \\
-42 & testInterp9 & testInterp9 & " & - & - & value1 in data1 and jdx == 0 and data2{[}jdx, idx{]} == data2{[}jdx+1, idx{]} & &  
+41 & testInterp9 & testInterp9 & " & - & - & value1 in data1 and jdx == 0 and data2{[}jdx, idx{]} == data2{[}jdx+1, idx{]} & &  
 \\
-43 & testInterp10 & testInterp10 & " & - & - & value1 in data1 and data2{[}jdx, idx{]} == data2{[}jdx+1, idx{]} and value2 \textgreater data2{[}jdx, idx{]} & &  
+42 & testInterp10 & testInterp10 & " & - & - & value1 in data1 and data2{[}jdx, idx{]} == data2{[}jdx+1, idx{]} and value2 \textgreater data2{[}jdx, idx{]} & &  
 \\
-44 & testInterp11 & testInterp11 & " & - & - & value1 in data1 and data2{[}jdx, idx{]} == data2{[}jdx+1, idx{]} and value2 \textless data2{[}jdx, idx{]} & &  
+43 & testInterp11 & testInterp11 & " & - & - & value1 in data1 and data2{[}jdx, idx{]} == data2{[}jdx+1, idx{]} and value2 \textless data2{[}jdx, idx{]} & &  
 \\
-45 & testInterp12 & testInterp12 & " & - & - & value1 in data1 and data2{[}jdx, idx{]} == data2{[}jdx+1, idx{]} and jdx+1 == (data2{[}:, idx{]}).argmax and value2 \textgreater data2{[}jdx, idx{]} & &  
+44 & testInterp12 & testInterp12 & " & - & - & value1 in data1 and data2{[}jdx, idx{]} == data2{[}jdx+1, idx{]} and jdx+1 == (data2{[}:, idx{]}).argmax and value2 \textgreater data2{[}jdx, idx{]} & &  
 \\
-46 & testInterp13 & testInterp13 & " & - & - & value1 not in data1 and value2 in data2{[}:, idx{]} and kdx == 0 & &  
+45 & testInterp13 & testInterp13 & " & - & - & value1 not in data1 and value2 in data2{[}:, idx{]} and kdx == 0 & &  
 \\
-47 & testInterp14 & testInterp14 & " & - & - & value1 not in data1 and value2 in data2{[}:, idx{]} and data2{[}:, idx+1{]} and data2{[}kdx, idx+1{]} = data2 {[}kdx+1, idx+1{]} & &  
+46 & testInterp14 & testInterp14 & " & - & - & value1 not in data1 and value2 in data2{[}:, idx{]} and data2{[}:, idx+1{]} and data2{[}kdx, idx+1{]} = data2 {[}kdx+1, idx+1{]} & &  
 \\
 \hline
 \end{tabular}
@@ -185,19 +183,19 @@
 \textbf{Ref} & \textbf{Test Name} & \textbf{fileName.py} & \textbf{Test Purpose} & \textbf{Traceability} & \textbf{Input File} & \textbf{Significant Input} & \textbf{Expected Output} & \textbf{Notes} \\
 \hline
 \hline
-48 & TstMain\_1 & testMainFun & to determine if the main program produces the correct output & coordinates the running of the program & defaultInput.txt & see Input File & outputfile.txt = output.txt &
+47 & TstMain\_1 & testMainFun & to determine if the main program produces the correct output & coordinates the running of the program & defaultInput.txt & see Input File & outputfile.txt = output.txt &
 \\
-49 & TstMain\_2 & testMainFun2 & " & " & testInput1.txt & " & outputfile.txt = output1.txt &
+48 & TstMain\_2 & testMainFun2 & " & " & testInput1.txt & " & outputfile.txt = output1.txt &
 \\
-50 & TstMain\_3 & testMainFun3 & " & " & testInput2.txt & " & outputfile.txt = output2.txt &
+49 & TstMain\_3 & testMainFun3 & " & " & testInput2.txt & " & outputfile.txt = output2.txt &
 \\
-51 & TstMain\_4 & testMainFun4 & " & " & testInput3.txt & " & outputfile.txt = output3.txt &
+50 & TstMain\_4 & testMainFun4 & " & " & testInput3.txt & " & outputfile.txt = output3.txt &
 \\
-52 & TstMain\_5 & testMainFun5 & " & " & testInput4.txt & " & outputfile.txt = output4.txt &
+51 & TstMain\_5 & testMainFun5 & " & " & testInput4.txt & " & outputfile.txt = output4.txt &
 \\
-53 & TstMain\_6 & testMainFun6 & " & " & testInput5.txt & " & outputfile.txt = output5.txt &
+52 & TstMain\_6 & testMainFun6 & " & " & testInput5.txt & " & outputfile.txt = output5.txt &
 \\
-54 & TstMain\_7 & testMainFun7 & " & " & testInput6.txt & " & outputfile.txt = output6.txt &
+53 & TstMain\_7 & testMainFun7 & " & " & testInput6.txt & " & outputfile.txt = output6.txt &
 \\
 \hline
 \end{tabular}
@@ -214,11 +212,11 @@
 \textbf{Ref} & \textbf{Test Name} & \textbf{fileName.py} & \textbf{Test Purpose} & \textbf{Traceability} & \textbf{Input File} & \textbf{Significant Input} & \textbf{Expected Output} & \textbf{Notes} \\
 \hline
 \hline
-55 & TstOutFmt\_1 & testOutputFormat & to ensure structure of output data matches desired output formatting & - & defaultInput.txt & see Input File & testoutput.txt = output.txt &
+54 & TstOutFmt\_1 & testOutputFormat & to ensure structure of output data matches desired output formatting & - & defaultInput.txt & see Input File & testoutput.txt = output.txt &
 \\
-56 & TstOutFmt\_2 & testOutputFormat2 & " & - & testInput3.txt & " & testoutput.txt = output3.txt &
+55 & TstOutFmt\_2 & testOutputFormat2 & " & - & testInput3.txt & " & testoutput.txt = output3.txt &
 \\
-57 & TstOutFmt\_3 & testOutputFormat3 & " & - & testInput4.txt & " & testoutput.txt = output4.txt &
+56 & TstOutFmt\_3 & testOutputFormat3 & " & - & testInput4.txt & " & testoutput.txt = output4.txt &
 \\
 \hline
 \end{tabular}
@@ -235,9 +233,9 @@
 \textbf{Ref} & \textbf{Test Name} & \textbf{fileName.py} & \textbf{Test Purpose} & \textbf{Traceability} & \textbf{Input File} & \textbf{Significant Input} & \textbf{Expected Output} & \textbf{Notes} \\
 \hline
 \hline
-59 & testReadTable & testReadTable & to make sure correct data is read from file (necessary for different interpolations) & - & testTable1.txt & see Input File & &
+58 & testReadTable & testReadTable & to make sure correct data is read from file (necessary for different interpolations) & - & testTable1.txt & see Input File & &
 \\
-60 & testReadTable2 & testReadTable2 & " & - & testTable2.txt & " & &
+59 & testReadTable2 & testReadTable2 & " & - & testTable2.txt & " & &
 \\
 \hline     
 \end{tabular}

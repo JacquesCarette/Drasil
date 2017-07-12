@@ -119,9 +119,9 @@ termsWithDefsOnly, termsWithAccDefn, glassTypes, loadTypes :: [ConceptChunk]
 
 termsWithDefsOnly = [glBreakage, lateral, lite, specA, blastResisGla,
   eqTNTChar]
-termsWithAccDefn  = [sD, loadShareFac, glTyFac]
+termsWithAccDefn  = [sD, loadShareFac, glTyFac, aspectRatio]
 glassTypes = [annealedGl, fTemperedGl, hStrengthGl]
-loadTypes = [loadResis, nonFactoredL,glassWL, shortDurLoad,
+loadTypes = [loadResis, nonFactoredL, glassWL, shortDurLoad,
   specDeLoad, longDurLoad] 
 
 s6_1_1_bullets :: Contents
@@ -134,9 +134,7 @@ s6_1_1_bullets = Enumeration $ (Number $
   ++
   map tAndDWAcc termsWithAccDefn
   ++
-  [tAndDWSym (probBreak) (prob_br)] --FIXME: merge
-  ++
-  [tAndDWSym (aspectRatio) (aspectR)]) --FIXME: merge
+  [tAndDWSym (probBreak) (prob_br)]) --FIXME: merge
 
 s6_1_1_bullets_glTySubSec, s6_1_1_bullets_loadSubSec :: [ItemType]
 

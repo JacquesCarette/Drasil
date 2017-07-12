@@ -207,7 +207,7 @@ This section provides general information about the system, identifies the inter
 \subsection{User Characteristics}
 \label{Sec:UserChar}
 \begin{enumerate}
-\item{The end user of GlassBR is expected to have completed at least the equivalent of the second year of an undergraduate degree in civil or structural engineering.}
+\item{The end user of GlassBR is expected to have completed at least the equivalent of the second year of an undergraduate degree in civil engineering or structural engineering.}
 \item{The end user is expected to have an understanding of theory behind glass breakage and blast risk.}
 \item{The end user is expected to have basic computer literacy to handle the software.}
 \end{enumerate}
@@ -269,7 +269,7 @@ This subsection provides a list of terms that are used in the subsequent section
 \item{Specified design load - The magnitude in kPa (psf), type (for example, wind or snow) and duration of the load given by the specifying authority.}
 \item{Long duration load - Any load lasting approximately 30 days.}
 \end{enumerate}
-\item{Stand off distance (SD) - The distance from the glazing surface to the centroid of a hemispherical high explosive charge. It is represented by the coordinates (SDx, SDy, SDz).}
+\item{Stand off distance (SD) - The distance from the glazing surface to the centroid of a hemispherical high explosive charge. It is represented by the coordinates ($SD_{x}$, $SD_{y}$, $SD_{z}$).}
 \item{Load share factor (LSF) - A multiplying factor derived from the load sharing between the double glazing, of equal or different thickness's and types (including the layered behaviour of LG under long duration loads), in a sealed IG unit.}
 \item{Glass type factor (GTF) - A multiplying factor for adjusting the LR of different glass type, that is, AN, HS, or FT in monolithic glass, LG (Laminated Glass), or IG (Insulating Glass) constructions.}
 \item{Probability of breakage ($P_{b}$) - The fraction of glass lites or plies that would break at the first occurrence of a specified load and duration, typically expressed in lites per 1000.}
@@ -356,6 +356,9 @@ Equation & $is\_safe2=LR>q$
 Description & If $is\_safe2$ = True, the glass is considered safe. $is\_safe1$ (from \hyperref[T:t1SafetyReq]{Definition~T:t1SafetyReq}) and $is\_safe2$ are either both True or both False. LR is the load resistance (also called capacity), as defined in \hyperref[T:calOfCap]{Definition~T:calOfCap}. $q$ (also referred as the Demand) is the 3 second duration equivalent pressure, as defined in \hyperref[T:calOfDe]{Definition~T:calOfDe}.
 \\ \bottomrule \end{tabular}
 \end{minipage}\\
+\subsubsection{General Definitions}
+\label{Sec:GeneDefi}
+There are no general definitions.
 \subsubsection{Data Definitions}
 \label{Sec:DataDefi}
 This section collects and defines all the data needed to build the instance models.
@@ -562,7 +565,7 @@ Label & Calculation of Demand(q)
 \\ \midrule \\
 Equation & $q=q\left(w_{TNT},SD\right)$
 \\ \midrule \\
-Description & $q$ or demand, is the 3 second duration equivalent pressure obtained from Figure 2 by interpolation using stand off distance ($SD$) and $w_{TNT}$ as parameters. $w_{TNT}$ is defined as $w_{TNT}$ = $w$ * TNT. $w$ is the charge weight. $TNT$ is the TNT equivalent factor. $SD$ is the stand off distance where $SD$ = .
+Description & $q$ or demand, is the 3 second duration equivalent pressure obtained from Figure 2 by interpolation using stand off distance ($SD$) and $w_{TNT}$ as parameters. $w_{TNT}$ is defined as $w_{TNT}$ = $w$ * TNT. $w$ is the charge weight. $TNT$ is the TNT equivalent factor. $SD$ is the stand off distance where $SD=\sqrt\left(SD_{x}^{2}+SD_{y}^{2}+SD_{z}^{2}\right)$ where ($SD_{x}$, $SD_{y}$, $SD_{z}$) are coordinates.
 \\ \bottomrule \end{tabular}
 \end{minipage}\\
 \subsubsection{Data Constraints}

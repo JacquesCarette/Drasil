@@ -24,6 +24,7 @@ annealedGlass, fullyTGlass, glassTypeFac, heatSGlass, loadDurFactor,
 --FIXME: Add compound nounphrases
 
 annealedGlass = commonIdea "annealedGlass" (nounPhraseSP "annealed glass")          "AN"
+aR            = commonIdea "aR"            (nounPhraseSP "aspect ratio")            "AR"
 fullyTGlass   = commonIdea "fullyTGlass"   (nounPhraseSP "fully tempered glass")    "FT"
 glassTypeFac  = commonIdea "glassTypeFac"  (nounPhraseSP "glass type factor")       "GTF"
 heatSGlass    = commonIdea "heatSGlass"    (nounPhraseSP "heat strengthened glass") "HS"

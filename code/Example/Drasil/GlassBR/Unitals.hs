@@ -201,7 +201,7 @@ glassBRUnitless = [risk_fun, is_safe1, is_safe2, stressDistFac, sdf_tol,
 aspectR, risk_fun, is_safe1, is_safe2, stressDistFac, sdf_tol,
   dimlessLoad, tolLoad, lRe, loadSF, gTF, lDurFac, nonFactorL :: VarChunk
 
-aspectR       = makeVC "aspectR"     (nounPhraseSP "aspect ratio") (Atomic "AR")
+aspectR       = makeVC "aspectR"     (aR ^. term) (Atomic "AR")
 
 dimlessLoad   = makeVC "dimlessLoad" (nounPhraseSP "dimensionless load") 
   (hat lQ)
@@ -253,7 +253,7 @@ aspectRatio, glBreakage, lite, glassTy, annealedGl, fTemperedGl, hStrengthGl,
 annealedGl    = cc annealedGlass
   ("A flat, monolithic, glass lite which has uniform thickness where the " ++
     "residual surface stresses are almost zero, as defined in [5].")
-aspectRatio   = cc aspectR
+aspectRatio   = cc aR
   ("The ratio of the long dimension of the glass to the short dimension of " ++
     "the glass. For glass supported on four sides, the aspect ratio is " ++
     "always equal to or greater than 1.0. For glass supported on three " ++

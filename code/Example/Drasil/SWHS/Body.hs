@@ -310,9 +310,18 @@ s4_2_3_genDefs :: [Contents]
 s4_2_3_genDefs = map swhsSymbMapT swhsGenDefs
 
 s4_2_3_deriv :: [Contents]
-s4_2_3_deriv = [s4_2_3_deriv_1 rOfChng temp, s4_2_3_deriv_2 t1ConsThermE vol, s4_2_3_deriv_3,
-  s4_2_3_deriv_4 gauss_div surface vol thFluxVect uNormalVect unit_, s4_2_3_deriv_5, s4_2_3_deriv_6, s4_2_3_deriv_7,
-  s4_2_3_deriv_8, s4_2_3_deriv_9, s4_2_3_deriv_10, s4_2_3_deriv_11]
+s4_2_3_deriv = [s4_2_3_deriv_1 rOfChng temp,
+  s4_2_3_deriv_2 t1ConsThermE vol,
+  s4_2_3_deriv_3,
+  s4_2_3_deriv_4 gauss_div surface vol thFluxVect uNormalVect unit_,
+  s4_2_3_deriv_5,
+  s4_2_3_deriv_6 vol vol_ht_gen,
+  s4_2_3_deriv_7,
+  s4_2_3_deriv_8 ht_flux_in ht_flux_out in_SA out_SA density heat_cap_spec temp
+    vol assumption assump3 assump4 assump5 assump6,
+  s4_2_3_deriv_9,
+  s4_2_3_deriv_10 density mass vol,
+  s4_2_3_deriv_11]
 
 
 ------------------------------
@@ -334,23 +343,34 @@ s4_2_5_IMods = concat $ weave [s4_2_5_derivations,
   map (\x -> [swhsSymbMapT x]) swhsInModels]
 
 s4_2_5_derivations :: [[Contents]]
-s4_2_5_derivations = [s4_2_5_subpar, s4_2_5_deriv1, s4_2_5_deriv2]
+s4_2_5_derivations = [s4_2_5_subpar solution temp_W temp_PCM pcm_E CT.phase_change,
+  s4_2_5_deriv1,
+  s4_2_5_deriv2]
   
 s4_2_5_deriv1 :: [Contents]
-s4_2_5_deriv1 = s4_2_5_d1startPara ++
+s4_2_5_deriv1 = (s4_2_5_d1startPara energy water) ++
   (weave [s4_2_5_d1sent_list, s4_2_5_d1eqn_list])
 
 s4_2_5_d1eqn_list = map EqnBlock [s4_2_5_d_eqn1, s4_2_5_d_eqn2,
   s4_2_5_d_eqn3, s4_2_5_d_eqn4, s4_2_5_d_eqn5, s4_2_5_d_eqn6, s4_2_5_d_eqn7]
 
-s4_2_5_d1sent_list = map foldlSPCol [s4_2_5_d1sent_1, s4_2_5_d1sent_2,
-  s4_2_5_d1sent_3, s4_2_5_d1sent_4, s4_2_5_d1sent_5, s4_2_5_d1sent_6, s4_2_5_d1sent_7]
+s4_2_5_d1sent_list = map foldlSPCol
+  [s4_2_5_d1sent_1 rOfChng temp_W energy water vol w_vol w_mass htCap_W ht_flux_C
+    ht_flux_P coil_SA pcm_SA CT.heat_trans tank perfect_insul vol_ht_gen,
+  s4_2_5_d1sent_2 dd1HtFluxC dd2HtFluxP ht_flux_C ht_flux_P,
+  s4_2_5_d1sent_3 w_mass htCap_W,
+  s4_2_5_d1sent_4 rightSide coil_HTC coil_SA,
+  s4_2_5_d1sent_5, s4_2_5_d1sent_6, s4_2_5_d1sent_7]
 
 s4_2_5_deriv2 :: [Contents]
-s4_2_5_deriv2 = s4_2_5_d2startPara ++ (weave [s4_2_5_d2eqn_list,
-  s4_2_5_d2sent_list]) ++ s4_2_5_d2endPara
+s4_2_5_deriv2 =
+  (s4_2_5_d2startPara energy phsChgMtrl sens_heat rOfChng temp_PCM vol pcm_vol
+    pcm_mass htCap_S_P ht_flux_P pcm_SA ht_flux_out vol_ht_gen) ++
+  (weave [s4_2_5_d2eqn_list, s4_2_5_d2sent_list]) ++ (s4_2_5_d2endPara phsChgMtrl
+  htCap_S_P htCap_L_P tau_S_P tau_L_P surface CT.melting vol temp_PCM temp_melt_P
+  CT.boiling solid liquid)
 
-s4_2_5_d2sent_list = map foldlSPCol [s4_2_5_d2sent_1, s4_2_5_d2sent_2, s4_2_5_d2sent_3]
+s4_2_5_d2sent_list = map foldlSPCol [s4_2_5_d2sent_1 dd2HtFluxP ht_flux_P, s4_2_5_d2sent_2, s4_2_5_d2sent_3]
 
 s4_2_5_d2eqn_list = map (EqnBlock) [s4_2_5_d2eqn1, s4_2_5_d2eqn2,
   s4_2_5_d2eqn3, s4_2_5_d2eqn4]
@@ -1086,9 +1106,8 @@ assump20 = mkAssump "assump20"
 -- 4.2.3 : General Definitions --
 ---------------------------------
 
-s4_2_3_deriv_3,
-  s4_2_3_deriv_5, s4_2_3_deriv_6, s4_2_3_deriv_7,
-  s4_2_3_deriv_8, s4_2_3_deriv_9, s4_2_3_deriv_10, s4_2_3_deriv_11 :: Contents
+s4_2_3_deriv_3, s4_2_3_deriv_5, s4_2_3_deriv_7, s4_2_3_deriv_9,
+  s4_2_3_deriv_11 :: Contents
 
 s4_2_3_deriv_1 :: ConceptChunk -> UnitalChunk -> Contents
 s4_2_3_deriv_1 roc tem = foldlSPCol [S "Detailed derivation of simplified",
@@ -1121,8 +1140,9 @@ s4_2_3_deriv_5 = EqnBlock
   vol)) := UnaryOp (Integral (Just (Low (C vol)), Nothing)
   ((C density) * (C heat_cap_spec) * Deriv Part (C temp) (C time)) vol))
 
-s4_2_3_deriv_6 = foldlSPCol [S "We consider an arbitrary" +:+. phrase vol, S "The",
-  phrase vol_ht_gen, S "is assumed constant. Then (1) can be written as"]
+s4_2_3_deriv_6 :: UnitalChunk -> UnitalChunk -> Contents
+s4_2_3_deriv_6 vo vhg = foldlSPCol [S "We consider an arbitrary" +:+. phrase vo, S "The",
+  phrase vhg, S "is assumed constant. Then (1) can be written as"]
 
 s4_2_3_deriv_7 = EqnBlock
   ((C ht_flux_in) * (C in_SA) - (C ht_flux_out) *
@@ -1130,21 +1150,25 @@ s4_2_3_deriv_7 = EqnBlock
   (Just (Low (C vol)), Nothing) ((C density) * (C heat_cap_spec) *
   Deriv Part (C temp) (C time)) vol))
 
-s4_2_3_deriv_8 = foldlSPCol [S "Where", getS ht_flux_in `sC` getS ht_flux_out `sC`
-  getS in_SA `sC` S "and", getS out_SA, S "are explained in" +:+.
-  acroGD 2, S "Assuming", getS density `sC` getS heat_cap_spec `sAnd`
-  getS temp, S "are constant over the", phrase vol `sC`
-  S "which is true in our case by", titleize' assumption,
-  sParen (acroA 3) `sC` sParen (acroA 4) `sC`
-  sParen (acroA 5) `sC` S "and", sParen (acroA 6) `sC` S "we have"]
+s4_2_3_deriv_8 :: UnitalChunk -> UnitalChunk -> UnitalChunk -> UnitalChunk ->
+  UnitalChunk -> UnitalChunk -> UnitalChunk -> UnitalChunk -> CI -> Contents ->
+  Contents -> Contents -> Contents -> Contents
+s4_2_3_deriv_8 hfi hfo isa osa den hcs tem vo assu a3 a4 a5 a6 = foldlSPCol [S "Where", getS hfi `sC` getS hfo `sC`
+  getS isa `sC` S "and", getS osa, S "are explained in" +:+.
+  acroGD 2, S "Assuming", getS den `sC` getS hcs `sAnd`
+  getS tem, S "are constant over the", phrase vo `sC`
+  S "which is true in our case by", titleize' assu,
+  sParen (makeRef a3) `sC` sParen (makeRef a4) `sC`
+  sParen (makeRef a5) `sC` S "and", sParen (makeRef a6) `sC` S "we have"]
 
 s4_2_3_deriv_9 = EqnBlock
   ((C density) * (C heat_cap_spec) * (C vol) * Deriv Total (C temp)
   (C time) := (C ht_flux_in) * (C in_SA) - (C ht_flux_out) *
   (C out_SA) + (C vol_ht_gen) * (C vol))
 
-s4_2_3_deriv_10 = foldlSPCol [S "Using the fact that", getS density :+: S "=" :+:
-  getS mass :+: S "/" :+: getS vol `sC` S "(2) can be written as"]
+s4_2_3_deriv_10 :: UnitalChunk -> UnitalChunk -> UnitalChunk -> Contents
+s4_2_3_deriv_10 den ma vo = foldlSPCol [S "Using the fact that", getS den :+: S "=" :+:
+  getS ma :+: S "/" :+: getS vo `sC` S "(2) can be written as"]
 
 s4_2_3_deriv_11 = EqnBlock
   ((C mass) * (C heat_cap_spec) * Deriv Total (C temp)
@@ -1167,63 +1191,69 @@ s4_2_4_intro_end = foldlSent [S "The dimension of each",
 -- 4.2.5 : Instance Models --
 -----------------------------
 
-s4_2_5_subpar :: [Contents]
-s4_2_5_subpar = [foldlSP [S "The goals",  acroGS 1, S "to",
-  acroGS 4, S "are solved by", acroIM 1, S "to" +:+.
-  acroIM 4, S "The", plural solution, S "for", acroIM 1 `sAnd` acroIM 2,
-  S "are coupled since the", phrase solution,
-  S "for", getS temp_W `sAnd` getS temp_PCM +:+.
+s4_2_5_subpar :: NamedChunk -> UncertQ -> UncertQ -> UncertQ -> ConceptChunk -> [Contents]
+s4_2_5_subpar sol temw tempcm epcm pc = [foldlSP [S "The goals", acroGS 1, S "to",
+  acroGS 4, S "are solved by", acroIM 1, S "to" +:+. acroIM 4, S "The", plural sol,
+  S "for", acroIM 1 `sAnd` acroIM 2, S "are coupled since the", phrase sol,
+  S "for", getS temw `sAnd` getS tempcm +:+.
   S "depend on one another", acroIM 3, S "can be solved once",
-  acroIM 1, S "has been solved. The", phrase solution, S "of",
+  acroIM 1, S "has been solved. The", phrase sol, S "of",
   acroIM 2 `sAnd` acroIM 4, S "are also coupled, since the",
-  phrase temp_PCM `sAnd` phrase pcm_E, S "depend on the",
-  phrase CT.phase_change]]
+  phrase tempcm `sAnd` phrase epcm, S "depend on the",
+  phrase pc]]
 
-s4_2_5_d1startPara, s4_2_5_d2startPara, s4_2_5_d2endPara, s4_2_5_d1eqn_list,
-  s4_2_5_d1sent_list, s4_2_5_d2eqn_list, s4_2_5_d2sent_list :: [Contents]
+s4_2_5_d1startPara :: UnitalChunk -> ConceptChunk -> [Contents]
+s4_2_5_d1startPara en wa = [foldlSPCol [S "Derivation of the",
+  phrase en, S "balance on", phrase wa]]
 
-s4_2_5_d1startPara = [foldlSPCol [S "Derivation of the",
-  phrase energy, S "balance on", phrase water]]
-  
-s4_2_5_d1sent_1, s4_2_5_d1sent_2, s4_2_5_d1sent_3, s4_2_5_d1sent_4,
-  s4_2_5_d1sent_5, s4_2_5_d1sent_6, s4_2_5_d1sent_7 :: [Sentence]
-
-s4_2_5_d1sent_1 = [S "To find the", phrase rOfChng, S "of", getS temp_W `sC`
-  S "we look at the", phrase energy, S "balance on" +:+.
-  phrase water, S "The", phrase vol, S "being considered" `isThe`
-  phrase w_vol, getS w_vol `sC` S "which has", phrase w_mass +:+.
-  (getS w_mass `sAnd` phrase htCap_W `sC` getS htCap_W),
-  getS ht_flux_C, S "represents the", phrase ht_flux_C `sAnd`
-  getS ht_flux_P, S "represents the", phrase ht_flux_P `sC`
-  S "over", phrase coil_SA `sAnd` phrase pcm_SA, S "of",
-  getS coil_SA `sAnd` getS pcm_SA `sC` S "respectively. No",
-  phrase CT.heat_trans, S "occurs to", (S "outside" `ofThe`
-  phrase tank) `sC` S "since it has been assumed to be",
-  phrase perfect_insul +:+. sParen (acroA 15), S "Assuming no",
-  phrase vol_ht_gen +:+. (sParen (acroA 16) `sC`
-  (E $ C vol_ht_gen := Int 0)), S "Therefore, the", phrase equation, S "for",
+s4_2_5_d1sent_1 :: ConceptChunk -> UncertQ -> UnitalChunk -> ConceptChunk ->
+  UnitalChunk -> UnitalChunk -> UnitalChunk -> UncertQ ->
+  UnitalChunk -> UnitalChunk -> UncertQ -> UncertQ -> ConceptChunk ->
+  ConceptChunk -> ConceptChunk -> UnitalChunk -> [Sentence]
+s4_2_5_d1sent_1 roc temw en wa vo wvo wma hcw hfc hfp csa psa ht ta purin vhg =
+  [S "To find the", phrase roc, S "of", getS temw `sC`
+  S "we look at the", phrase en, S "balance on" +:+.
+  phrase wa, S "The", phrase vo, S "being considered" `isThe`
+  phrase wvo, getS wvo `sC` S "which has", phrase wma +:+.
+  (getS wma `sAnd` phrase hcw `sC` getS hcw),
+  getS hfc, S "represents the", phrase hfc `sAnd`
+  getS hfp, S "represents the", phrase hfp `sC`
+  S "over", phrase csa `sAnd` phrase psa, S "of",
+  getS csa `sAnd` getS psa `sC` S "respectively. No",
+  phrase ht, S "occurs to", (S "outside" `ofThe`
+  phrase ta) `sC` S "since it has been assumed to be",
+  phrase purin +:+. sParen (acroA 15), S "Assuming no",
+  phrase vhg +:+. (sParen (acroA 16) `sC`
+  (E $ C vhg := Int 0)), S "Therefore, the", phrase equation, S "for",
   acroGD 2, S "can be written as"]
 
-s4_2_5_d1sent_2 = [S "Using", swhsSymbMapDRef dd1HtFluxC `sAnd`
-  swhsSymbMapDRef dd2HtFluxP, S "for", getS ht_flux_C `sAnd`
-  getS ht_flux_P, S "respectively, this can be written as"]
+s4_2_5_d1sent_2 :: QDefinition -> QDefinition -> UnitalChunk ->
+  UnitalChunk -> [Sentence]
+s4_2_5_d1sent_2 d1hf d2hf hfc hfp = [S "Using", swhsSymbMapDRef d1hf `sAnd`
+  swhsSymbMapDRef d2hf, S "for", getS hfc `sAnd`
+  getS hfp, S "respectively, this can be written as"]
 
-s4_2_5_d1sent_3 = [S "Dividing (3) by", getS w_mass :+: getS htCap_W `sC` S "we obtain"]
+s4_2_5_d1sent_3 :: UnitalChunk -> UncertQ -> [Sentence]
+s4_2_5_d1sent_3 wm hcw = [S "Dividing (3) by", getS wm :+: getS hcw `sC` S "we obtain"]
 
-s4_2_5_d1sent_4 = [S "Factoring the negative sign out of",
-  S "second term" `ofThe` short rightSide,
+s4_2_5_d1sent_4 :: CI -> UncertQ -> UncertQ -> [Sentence]
+s4_2_5_d1sent_4 rs chtc csa = [S "Factoring the negative sign out of",
+  S "second term" `ofThe` short rs,
   S "of", titleize equation,
   S "(4) and multiplying it by",
-  getS coil_HTC :+: getS coil_SA :+: S "/" :+:
-  getS coil_HTC :+: getS coil_SA, S "yields"]
+  getS chtc :+: getS csa :+: S "/" :+:
+  getS chtc :+: getS csa, S "yields"]
 
+s4_2_5_d1sent_5 :: [Sentence]
 s4_2_5_d1sent_5 = [S "Which simplifies to"]
 
+s4_2_5_d1sent_6 :: [Sentence]
 s4_2_5_d1sent_6 = [S "Setting",
   (E $ C tau_W := (C w_mass :* C htCap_W) :/ (C coil_HTC :* C coil_SA)) `sAnd`
   (E $ C eta := (C pcm_HTC :* C pcm_SA) :/ (C coil_HTC :* C coil_SA)) `sC`
   titleize equation, S "(5) can be written as"]
 
+s4_2_5_d1sent_7 :: [Sentence]
 s4_2_5_d1sent_7 = [S "Finally, factoring out", (E $ Int 1 :/ C tau_W) `sC` S "we are" +:+
   S "left with the governing", short ode, S "for", acroIM 1]
 
@@ -1267,13 +1297,14 @@ s4_2_5_d_eqn7 = (Deriv Total (C temp_W) (C time) := (1 / (C tau_W)) *
 -- Replace Derivs with regular derivative when available
 -- Fractions in paragraph?
 
-s4_2_5_d2sent_1, s4_2_5_d2sent_2, s4_2_5_d2sent_3 :: [Sentence]
-
-s4_2_5_d2sent_1 = [S "Using", swhsSymbMapDRef dd2HtFluxP, S "for", getS ht_flux_P `sC`
+s4_2_5_d2sent_1 :: QDefinition -> UnitalChunk -> [Sentence]
+s4_2_5_d2sent_1 d2hfp hfp = [S "Using", swhsSymbMapDRef d2hfp, S "for", getS hfp `sC`
   S "this", phrase equation, S "can be written as"]
 
+s4_2_5_d2sent_2 :: [Sentence]
 s4_2_5_d2sent_2 = [S "Dividing by", getS pcm_mass :+: getS htCap_S_P, S "we obtain"]
 
+s4_2_5_d2sent_3 :: [Sentence]
 s4_2_5_d2sent_3 = [S "Setting", getS tau_S_P :+: S "=" :+: getS pcm_mass :+: 
   getS htCap_S_P :+: S "/" :+: getS pcm_HTC :+: getS pcm_SA `sC`
   S "this can be written as"]
@@ -1292,52 +1323,60 @@ s4_2_5_d2eqn3 = (Deriv Total (C temp_PCM) (C time) := ((C pcm_HTC) *
 s4_2_5_d2eqn4 = (Deriv Total (C temp_PCM) (C time) := (1 / (C tau_S_P)) *
   ((C temp_W) - (C temp_PCM)))
 
-s4_2_5_d2startPara = map foldlSPCol [
+s4_2_5_d1eqn_list, s4_2_5_d1sent_list, s4_2_5_d2eqn_list, s4_2_5_d2sent_list :: [Contents]
 
-  [S "Detailed derivation of the", phrase energy, S "balance on the",
-  short phsChgMtrl, S "during", phrase sens_heat :+: S "ing phase"],
+s4_2_5_d2startPara :: UnitalChunk -> CI -> UnitalChunk -> ConceptChunk ->
+  UncertQ -> UnitalChunk -> UncertQ -> UnitalChunk -> UncertQ -> UnitalChunk -> UncertQ ->
+  UnitalChunk -> UnitalChunk -> [Contents]
+s4_2_5_d2startPara en pcmat sh roc ptem vo pvo pma hcsp hfp psa hfo vhg = map foldlSPCol [
 
-  [S "To find the", phrase rOfChng, S "of", getS temp_PCM `sC`
-  S "we look at the", phrase energy, S "balance on the" +:+.
-  short phsChgMtrl, S "The", phrase vol,
-  S "being considered is the" +:+. (phrase pcm_vol `sC` getS pcm_vol),
+  [S "Detailed derivation of the", phrase en, S "balance on the",
+  short pcmat, S "during", phrase sh :+: S "ing phase"],
+
+  [S "To find the", phrase roc, S "of", getS ptem `sC`
+  S "we look at the", phrase en, S "balance on the" +:+.
+  short pcmat, S "The", phrase vo,
+  S "being considered is the" +:+. (phrase pvo `sC` getS pvo),
   S "The derivation that follows is initially for the",
-  phrase solid +:+. short phsChgMtrl, S "The", phrase pcm_mass, S "is",
-  getS pcm_mass `sAnd` S "the", phrase htCap_S_P, S "is" +:+. getS htCap_S_P,
-  S "The", phrase ht_flux_P, S "is", getS ht_flux_P, S "over",
-  phrase pcm_SA +:+. getS pcm_SA, S "There is no" +:+. phrase ht_flux_out,
-  S "Assuming no", phrase vol_ht_gen, sParen (acroA 16) `sC`
-  getS vol_ht_gen :+: S "=0, the", phrase equation, S "for", acroGD 2,
+  phrase solid +:+. short pcmat, S "The", phrase pma, S "is",
+  getS pma `sAnd` S "the", phrase hcsp, S "is" +:+. getS hcsp,
+  S "The", phrase hfp, S "is", getS hfp, S "over",
+  phrase psa +:+. getS psa, S "There is no" +:+. phrase hfo,
+  S "Assuming no", phrase vhg, sParen (acroA 16) `sC`
+  getS vhg :+: S "=0, the", phrase equation, S "for", acroGD 2,
   S "can be written as"]
 
   ]
 
-s4_2_5_d2endPara = map foldlSP [
+s4_2_5_d2endPara :: CI -> UncertQ -> UncertQ -> UnitalChunk ->
+  UnitalChunk -> ConVar -> ConceptChunk -> UnitalChunk -> UncertQ -> UncertQ -> ConceptChunk ->
+  ConceptChunk -> ConceptChunk -> [Contents]
+s4_2_5_d2endPara pcmat hcsp hclp tsp tlp sur mel vo ptem tmp boi so li = map foldlSP [
 
   [titleize equation,
-  S "(6) applies for the", phrase solid +:+. short phsChgMtrl,
-  S "In the case where all of the", short phsChgMtrl,
+  S "(6) applies for the", phrase solid +:+. short pcmat,
+  S "In the case where all of the", short pcmat,
   S "is melted, the same derivation applies, except that",
-  getS htCap_S_P, S "is replaced by", getS htCap_L_P `sC`
-  S "and thus", getS tau_S_P, S "is replaced by" +:+.
-  getS tau_L_P, S "Although a small change in", phrase surface,
-  S "area would be expected with", phrase CT.melting `sC`
+  getS hcsp, S "is replaced by", getS hclp `sC`
+  S "and thus", getS tsp, S "is replaced by" +:+.
+  getS tlp, S "Although a small change in", phrase sur,
+  S "area would be expected with", phrase mel `sC`
   S "this is not included, since",
-  (phrase vol +:+ S "change" `ofThe` short phsChgMtrl),
-  S "with", phrase CT.melting,
+  (phrase vo +:+ S "change" `ofThe` short pcmat),
+  S "with", phrase mel,
   S "is assumed to be negligible", sParen (acroA 17)],
 
-  [S "In the case where", getS temp_PCM :+: S "=" :+:
-  getS temp_melt_P `sAnd` S "not all of the", short phsChgMtrl,
-  S "is melted, the", phrase temp_PCM +:+. S "does not change",
-  S "Therefore, in this case d" :+: getS temp_PCM :+: S "/d" :+:
+  [S "In the case where", getS ptem :+: S "=" :+:
+  getS tmp `sAnd` S "not all of the", short pcmat,
+  S "is melted, the", phrase ptem +:+. S "does not change",
+  S "Therefore, in this case d" :+: getS ptem :+: S "/d" :+:
   getS time :+: S "=0"],
 
   [S "This derivation does not consider",
-  (phrase CT.boiling `ofThe` short phsChgMtrl) `sC`
-  S "as the", short phsChgMtrl,
-  S "is assumed to either be in a", (solid ^. defn),
-  S "or a", (liquid ^. defn), sParen (acroA 18)]
+  (phrase boi `ofThe` short pcmat) `sC`
+  S "as the", short pcmat,
+  S "is assumed to either be in a", (so ^. defn),
+  S "or a", (li ^. defn), sParen (makeRef assump18)]
 
   ]
 

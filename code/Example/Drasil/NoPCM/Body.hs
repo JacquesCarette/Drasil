@@ -33,10 +33,9 @@ import Data.Drasil.Utils (enumSimple, getS, mkRefsList, makeListRef, refFromType
 import Data.Drasil.Concepts.Documentation
 import Data.Drasil.Concepts.Math (ode, de, unit_, rOfChng, equation)
 import Data.Drasil.Concepts.Software
-import Data.Drasil.Concepts.Physics (energy)
 import Data.Drasil.Concepts.Thermodynamics
 import qualified Data.Drasil.Quantities.Thermodynamics as QT
-import Data.Drasil.Quantities.Physics (time)
+import Data.Drasil.Quantities.Physics (time, energy)
 import Data.Drasil.Quantities.PhysicalProperties (vol, mass, density)
 import Data.Drasil.Quantities.Math (uNormalVect, surface, gradient)
 import Data.Drasil.Software.Products (compPro)
@@ -115,7 +114,7 @@ nopcmSymbMap = symbolMap pcmSymbols
 --Section 2 : INTRODUCTION
 --------------------------
 
-s2_start :: ConceptChunk -> ConceptChunk -> CI-> Sentence
+s2_start :: ConceptChunk -> UnitalChunk -> CI-> Sentence
 s2_start es en pro = foldlSent [S "Due to increasing cost, diminishing",
   S "availability, and negative environmental impact of",
   S "fossil fuels, there is a higher demand for renewable",
@@ -303,7 +302,7 @@ s4_1_3_list temw we = Enumeration $ Simple $ map (\(a, b) -> (a, Flat b)) [
   
 s4_2 = solChSpecF progName (s4_1, s6) s4_2_4_intro_end (mid,
   dataConstraintUncertainty, end) (s4_2_1_list, s4_2_2_T1, s4_2_3_paragraph rOfChng temp,
-  s4_2_4_DD1, [swhsSymbMapT eBalanceOnWtr] ++ s4_2_5_d1startPara ++
+  s4_2_4_DD1, [swhsSymbMapT eBalanceOnWtr] ++ (s4_2_5_d1startPara energy water) ++
   s4_2_5_paragraph ++ [swhsSymbMapT heatEInWtr], [s4_2_6_table1, s4_2_6_table2]) []
 
   where mid = foldlSent [S "The", phrase column, S "for",
@@ -491,7 +490,7 @@ s4_2_5_description = map foldlSPCol
   s4_2_5_desc3 w_mass htCap_W,
   s4_2_5_desc4 tau_W w_mass htCap_W coil_HTC coil_SA]
 
-s4_2_5_desc1 :: ConceptChunk -> UncertQ -> ConceptChunk -> ConceptChunk ->
+s4_2_5_desc1 :: ConceptChunk -> UncertQ -> UnitalChunk -> ConceptChunk ->
   UnitalChunk -> UnitalChunk -> UnitalChunk -> UnitalChunk ->
   UncertQ -> ConceptChunk -> UnitalChunk -> UncertQ -> ConceptChunk ->
   ConceptChunk -> Contents -> UnitalChunk -> Contents -> [Sentence]

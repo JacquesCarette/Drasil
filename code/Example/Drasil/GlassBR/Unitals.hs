@@ -99,16 +99,11 @@ standOffDist = uqcND "standOffDist" (nounPhraseSP "stand off distance")
 nom_thick = cuc "nom_thick" 
   (nounPhraseSP $ "nominal thickness t in {2.5, 2.7, 3.0, 4.0, 5.0, 6.0, 8.0, 10.0, 12.0, 16.0, 19.0, 22.0}")
   lT millimetre Rational
-  [ physc $ \c -> helper c (map show nominalThicknesses) ] (V "8.0")
+  [ physc $ \c -> createCnstrnts c (map show nominalThicknesses) ] (V "8.0")
 
 glass_type  = cvc "glass_type" (nounPhraseSP "glass type g in {AN, HS, FT}")
   lG String
-  [ physc $ \c -> helper c glassTypeAbbrs ] (V "HS")
---FIXME: Creating variables increases duplication; find a way to incorporate preexisting chunks in constraints
-
-helper c [x] = (c := (V x))
-helper c [x, y] = (c := (V x)) :|| (c := (V y))
-helper c (x:y:xs) = helper c [x, y] :|| (helper c (xs))
+  [ physc $ \c -> createCnstrnts c glassTypeAbbrs ] (V "HS")
 
 {--}
 

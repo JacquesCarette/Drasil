@@ -7,6 +7,7 @@ module Language.Drasil.Chunk.Constrained (
   , ConstrConcept(..)
   , physc, sfwrc, constrained, cuc, cvc, constrained', cuc', constrainedNRV'
   , ConstrWrapper(..), cnstrw
+  , createCnstrnts
   ) where
 
 import Control.Lens (Simple, Lens, (^.), set)
@@ -179,3 +180,10 @@ cnstrw = CnstrW
 cwlens :: (forall c. (Constrained c, SymbolForm c) => 
   Simple Lens c a) -> Simple Lens ConstrWrapper a
 cwlens l f (CnstrW a) = fmap (\x -> CnstrW (set l x a)) (f (a ^. l))
+
+--Helper Functions--
+--Helper function that takes a chunk and list of possible values to create a list of constraints
+createCnstrnts c [x] = (c := (V x))
+createCnstrnts c [x, y] = (c := (V x)) :|| (c := (V y))
+createCnstrnts c (x:y:xs) = createCnstrnts c [x, y] :|| (createCnstrnts c (xs))
+--FIXME: in correct file?

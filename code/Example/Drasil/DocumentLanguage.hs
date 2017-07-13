@@ -69,7 +69,7 @@ data SCSSub where
   -- Assumptions :: --TODO
   TMs :: Fields -> [TheoryModel] -> SCSSub
   GDs :: Fields -> [RelationConcept] -> SCSSub
-  DDs :: Fields -> [QDefinition]     -> SCSSub
+  DDs :: Fields -> [QDefinition]     -> SCSSub --FIXME: Need DD intro
   IMs :: Fields -> [RelationConcept] -> SCSSub
   -- Constraints :: --TODO
 
@@ -290,6 +290,9 @@ mkSolChSpec si (SCSProg l m) =
     mkSubSCS _ (SCSSubVerb s) l' = s : l'
     mkSubSCS si' (TMs fields ts) l' = 
       SSD.thModF (siSys si') (map (tmodel fields m) ts) : l'
+    mkSubSCS si' (DDs fields ds) l' =
+      SSD.dataDefnF EmptyS (map (ddefn fields m) ds) : l'
+      --FIXME: need to keep track of DD intro.
     inModSec = (SRS.inModel [Paragraph EmptyS] []) 
     --FIXME: inModSec should be replaced with a walk
     -- over the SCSProg and generate a relevant intro.

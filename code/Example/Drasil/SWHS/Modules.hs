@@ -14,7 +14,7 @@ import Data.Drasil.Concepts.Thermodynamics (law_cons_energy, melting)
 
 modules :: [ModuleChunk]
 modules = [mod_hw, mod_behav, mod_inputf, mod_inputp, mod_inputv, mod_outputf,
-          mod_outputv, mod_temp, mod_ener, mod_sw, mod_seq,
+          mod_outputv, mod_temp, mod_ener, mod_ctrl, mod_sw, mod_seq,
           mod_ode, mod_plot]
 
 -- HW Hiding Module
@@ -45,8 +45,8 @@ mod_inputv = mod_io_fun
 
 -- Output Format Module
 mod_outputf_desc :: ConceptChunk
-mod_outputf_desc = mod_outputf_desc_fun (phrase input_ +:+ plural parameter `sC`
-  plural temp `sC` plural energy `sC` S "and" +:+ plural time +:+ S "when" +:+
+mod_outputf_desc = mod_outputf_desc_fun (phrase energy `sC` phrase input_ +:+
+  plural parameter `sC` plural temp `sC` S "and" +:+ plural time +:+ S "when" +:+
   phrase melting +:+. S "starts and stops")
 
 mod_outputf :: ModuleChunk

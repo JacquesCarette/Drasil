@@ -39,11 +39,11 @@ langs = Map.fromList[
   ]
 
 -- | Takes a language parameter, a set of optional parameters, and a list of module names, and passes an 'AbstractCode' to the required rendering function, which produces a 'Code'
-makeCode :: String -> Options -> [String] -> AbstractCode -> Code
-makeCode l options lbls code  =
+makeCode :: String -> Options -> AbstractCode -> Code
+makeCode l options code  =
     -- First, if we have gen-time globals, instantiate them
     case Map.lookup l langs of
-        Just c  -> renderCode (fix $ c options) lbls code
+        Just c  -> renderCode (fix $ c options) code
         Nothing -> error errStr
           where errStr = "GOOL.CodeGeneration.makeCode: must supply "
                          ++ (listLabels $ Map.keys langs)

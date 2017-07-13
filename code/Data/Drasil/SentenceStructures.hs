@@ -4,16 +4,21 @@ module Data.Drasil.SentenceStructures
   , sIs, isThe, sOf, sOr, ofThe, ofThe'
   , ofGiv, ofGiv'
   , toThe, tableShows, figureLabel
-  , showingCxnBw, refineChain, foldlSP, foldlSP_, foldlSPCol
+  , isExpctdToHv, underConsidertn, showingCxnBw, refineChain
+  , foldlSP, foldlSP_, foldlSPCol
   , maybeChanged, maybeExpanded, maybeWOVerb
   , tAndDWAcc, tAndDWSym, tAndDOnly
-  , makeConstraint, displayConstr
-  , fmtInConstr
+  , followA
+  , getTandS
+  , eqN
+  , displayConstrntAsSet
+  , fmtInputConstr, fmtOutputConstr, physC, sfwrC, typUnc, rval
   ) where
 
 import Language.Drasil
-import Data.Drasil.Utils (foldle, foldle1, getS, fmtU)
+import Data.Drasil.Utils (foldle, foldle1, getS, fmtU, getRVal)
 import Data.Drasil.Concepts.Documentation
+import Data.Drasil.Concepts.Math (equation)
 import Control.Lens ((^.))
 
 {--** Sentence Folding **--}
@@ -31,13 +36,13 @@ foldlSentCol = foldle (+:+) (+:) EmptyS
 
 -- | fold sentences then turns into content
 foldlSP :: [Sentence] -> Contents
-foldlSP = (Paragraph . foldlSent)
+foldlSP = Paragraph . foldlSent
 
 foldlSP_ :: [Sentence] -> Contents
-foldlSP_ = (Paragraph . foldlSent_)
+foldlSP_ = Paragraph . foldlSent_
 
 foldlSPCol :: [Sentence] -> Contents
-foldlSPCol = (Paragraph . foldlSentCol)
+foldlSPCol = Paragraph . foldlSentCol
 
 -- | creates a list of elements seperated by commas, including the last element
 foldlsC :: [Sentence] -> Sentence
@@ -102,13 +107,20 @@ tableShows ref trailing = (makeRef ref) +:+ S "shows the" +:+
 
 -- | Function that creates (a label for) a figure
 --FIXME: Is `figureLabel` defined in the correct file?
-figureLabel :: NamedIdea c => [Char] -> c -> Sentence -> [Char]-> Contents
+figureLabel :: NamedIdea c => Int -> c -> Sentence -> [Char]-> Contents
 figureLabel num traceyMG contents filePath = Figure (titleize figure +: 
-  S num +:+ (showingCxnBw (traceyMG) (contents))) filePath
+  (S (show num)) +:+ (showingCxnBw (traceyMG) (contents))) filePath
 
 showingCxnBw :: NamedIdea c => c -> Sentence -> Sentence
 showingCxnBw traceyVar contents = titleize traceyVar +:+ S "Showing the" +:+
   titleize' connection +:+ S "Between" +:+ contents
+
+isExpctdToHv :: Sentence -> Sentence -> Sentence
+a `isExpctdToHv` b = S "The" +:+ a +:+ S "is expected to have" +:+ b
+
+underConsidertn :: ConceptChunk -> Sentence
+underConsidertn chunk = S "The" +:+ (phrase chunk) +:+ 
+  S "under consideration is" +:+. (chunk ^. defn)
 
 -- | Create a list in the pattern of "The __ are refined to the __".
 -- Note: Order matters!
@@ -117,14 +129,12 @@ refineChain (x:y:[]) = S "The" +:+ plural x +:+ S "are refined to the" +:+ plura
 refineChain (x:y:xs) = refineChain [x,y] `sC` rc ([y] ++ xs)
 refineChain _ = error "refineChain encountered an unexpected empty list"
 
-
 -- | Helper used by refineChain
 rc :: NamedIdea c => [c] -> Sentence
 rc (x:y:[]) = S "and the" +:+ (plural x) +:+ S "to the" +:+. 
   (plural y)
 rc (x:y:xs) = S "the" +:+ plural x +:+ S "to the" +:+ plural y `sC` rc ([y] ++ xs)
 rc _ = error "refineChain helper encountered an unexpected empty list"
-
 
 -- | helper functions for making likely change statements
 likelyFrame :: Sentence -> Sentence -> Sentence -> Sentence
@@ -145,14 +155,77 @@ tAndDWSym tD sym = Flat $ ((at_start tD) :+: sParenDash (getS sym)) :+: (tD ^. d
 tAndDOnly :: Concept s => s -> ItemType
 tAndDOnly chunk  = Flat $ ((at_start chunk) +:+ S "- ") :+: (chunk ^. defn)
 
---FIXME:Reduce duplication. Idealy only use displayConstr. Gamephysics uses pi/2 which is not a "number" yet
-makeConstraint :: (Constrained s, Quantity s, SymbolForm s) => s -> Sentence -> [Sentence]
-makeConstraint s num = [getS s, fmtPhys s, fmtU num s]
+followA :: Sentence -> Int -> Sentence
+preceding `followA` num = preceding +:+ S "following" +:+ acroA num
 
-displayConstr :: (Constrained s, Quantity s, SymbolForm s, Show a) => s -> a -> Sentence -> [Sentence]
-displayConstr s num uncrty = [getS s, fmtPhys s,
-  fmtSfwr s, fmtU (S (show num)) (qs s), uncrty]
+-- | Used when you want to say a term followed by its symbol. ex. "...using the Force F in..."
+getTandS :: (SymbolForm a, NamedIdea a) => a -> Sentence
+getTandS a = phrase a +:+ getS a
 
+--Ideally this would create a reference to the equation too
+eqN :: Int -> Sentence
+eqN n = phrase equation +:+ sParen (S $ show n)
+
+--Produces a sentence from a ConstrainedChunk that displays the constraints in a {}.
+displayConstrntAsSet :: ConstrainedChunk -> Sentence
+displayConstrntAsSet ch = getS ch `sIn` accessConstrnts ch
+
+--'displayConstrntAsSet' helper
+accessConstrnts :: (Constrained s, SymbolForm s) => s -> Sentence
+accessConstrnts ch = foldlSent_ $ map (\(Phys f) -> S "{" :+: (E $ f (C ch)):+: S "}")  (ch ^. constraints)
+
+{-BELOW IS TO BE MOVED TO EXAMPLE/DRASIL/SECTIONS-}
+
+-- Start of attempt at intelligent formatter for input constraints
+-- these are the helper functions for inDataConstTbl
+
+fmtInputConstr :: (UncertainQuantity c, Constrained c, SymbolForm c) => c -> [c] -> [Sentence]
+fmtInputConstr q qlst = [getS q] ++ physC q qlst ++ sfwrC q qlst ++ [fmtU (E $ getRVal q) q] ++ typUnc q qlst
+
+fmtOutputConstr :: (Constrained c, SymbolForm c) => c -> [c] -> [Sentence]
+fmtOutputConstr q qlst = [getS q] ++ physC q qlst ++ sfwrC q qlst
+
+none :: Sentence
+none = S "None"
+
+--These check the entire list of UncertainQuantity and if they are all empty in that field,
+-- return empty list, otherwise return the appropriate thing
+physC :: (Constrained c, SymbolForm c) => c -> [c] -> [Sentence]
+physC q qlst
+  | noPhysC (foldlSent_ $ map fmtPhys qlst) = []
+  | noPhysC (fmtPhys q) = [none]
+  | otherwise = [fmtPhys q]
+  where noPhysC EmptyS = True
+        noPhysC _      = False
+        
+sfwrC :: (Constrained c, SymbolForm c) => c -> [c] -> [Sentence]
+sfwrC q qlst
+  | noSfwrC (foldlSent_ $ map fmtSfwr qlst) = []
+  | noSfwrC (fmtSfwr q) = [none]
+  | otherwise = [fmtSfwr q]
+  where noSfwrC EmptyS = True
+        noSfwrC _      = False
+
+rval :: (Constrained c) => c -> [c] -> [Sentence]
+rval q qlst
+  | null (filter isRV $ map (^. reasVal) qlst) = []
+  | isRV (q ^. reasVal) = [fmtU (E $ getRVal q) q]
+  | otherwise = [none]
+  where isRV (Just _) = True
+        isRV Nothing  = False
+        
+typUnc :: (UncertainQuantity c) => c -> [c] -> [Sentence]
+typUnc q qlst
+  | null (filter isUn $ map (^. uncert) qlst) = []
+  | isUn (q ^. uncert) = [S $ show $ unwU (q ^. uncert)]
+  | otherwise = [none]
+  where unwU (Just u) = u
+        unwU Nothing  = error $ "Something when wrong with 'typUnc'." ++
+                        "'typUnc' was possibly called by fmtInputConstr or inDataConstTbl."
+        isUn (Just _) = True
+        isUn Nothing  = False
+
+--Formatters for the constraints
 fmtPhys :: (Constrained s, SymbolForm s) => s -> Sentence
 fmtPhys s = foldlList $ fmtCP $ filter filterP (s ^. constraints)
   where filterP (Phys _) = True
@@ -164,19 +237,3 @@ fmtSfwr s = foldlList $ fmtCS $ filter filterS (s ^. constraints)
   where filterS (Phys _) = False
         filterS (Sfwr _) = True
         fmtCS = map (\(Sfwr f) -> E $ f (C s))
-       
-fmtInConstr :: UncertQ -> [Sentence]
-fmtInConstr q = [getS q, fmtPhys q, fmtSfwr q, fmtU (S $ show $ typVal q) q, S $ show (q ^. uncert)]
-
--- Start of attempt at intelligent format-er for input constraints
---take one input and all inputs
-{-
-fmtInputConstr :: UncertQ -> [UncertQ] -> [Sentence]
-fmtInputConstr q qs = [getS q] ++ physC q qs ++ sfwrC q ++ [fmtU (S $ show $ typVal q) q] ++ typUnc q
-
-physC :: [UncertQ] -> [Sentence]
-physC q qs
-  | isPhysC (fmtPhys qs) = [fmtPhys q]
-  | otherwise = []
-  where isPhysC fmtPhys q
--}

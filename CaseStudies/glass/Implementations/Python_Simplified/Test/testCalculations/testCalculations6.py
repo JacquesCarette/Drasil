@@ -22,6 +22,7 @@ class TestCalculations(unittest.TestCase):
         self.assertEqual(pb,3.170717616254970e-02)
         
     def test_calc_lr(self):
+    	# lr, nfl = calculations.calc_lr(float64(4.1523490997079925e+01), self.params)
         nfl = calculations.calc_nfl(float64(4.1523490997079925e+01), self.params)
         lr = calculations.calc_lr(nfl, self.params)
         self.assertTupleEqual((lr,nfl),(6.8430021557880369,3.4215010778940185))

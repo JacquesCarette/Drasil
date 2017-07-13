@@ -73,6 +73,9 @@ sParen x = S "(" :+: x :+: S ")"
 sSqBr :: Sentence -> Sentence
 sSqBr x = S "[" :+: x :+: S "]"
 
+sSqBrNum :: Int -> Sentence
+sSqBrNum y = S "[" :+: (S (show y)) :+: S "]"
+
 -- | Helper for concatenating two sentences with a space between them.
 (+:+) :: Sentence -> Sentence -> Sentence
 EmptyS +:+ b = b

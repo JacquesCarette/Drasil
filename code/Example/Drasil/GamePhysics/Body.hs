@@ -10,20 +10,20 @@ import Data.Drasil.SI_Units
 import Data.Drasil.Authors
 import Data.Drasil.Concepts.Documentation
 import Data.Drasil.Concepts.Software
+import Data.Drasil.Concepts.Computation
 import Drasil.Sections.TraceabilityMandGs
 import qualified Data.Drasil.Quantities.Math as QM (orientation)
 import qualified Data.Drasil.Quantities.Physics as QP (time, 
-  position, force, velocity, angularVelocity)
+  position, force, velocity, angularVelocity, linearVelocity)
 import qualified Data.Drasil.Quantities.PhysicalProperties as QPP (mass)
 import qualified Data.Drasil.Concepts.Physics as CP (rigidBody, elasticity, 
-  cartesian, friction, rightHand, collision, space, joint)
+  cartesian, friction, rightHand, collision, space, joint, damping)
 import qualified Data.Drasil.Concepts.PhysicalProperties as CPP (ctrOfMass, 
   dimension)
 import qualified Data.Drasil.Concepts.Math as CM (equation, surface, ode, 
-  constraint)
-import Data.Drasil.Utils (foldle, 
-  makeTMatrix, itemRefToSent, refFromType, makeListRef, enumSimple, 
-  enumBullet, mkRefsList, symbolMapFun)
+  constraint, law)
+import Data.Drasil.Utils (makeTMatrix, itemRefToSent, refFromType,
+  makeListRef, enumSimple, enumBullet, mkRefsList)
 import Data.Drasil.SentenceStructures
 import Data.Drasil.Software.Products
 
@@ -44,7 +44,7 @@ import Drasil.DocumentLanguage
 import Drasil.Sections.SpecificSystemDescription
 import Drasil.Sections.SolutionCharacterSpec
 import Drasil.Sections.Requirements
-import Drasil.Sections.GeneralSystDesc
+import Drasil.Sections.AuxiliaryConstants
 
 authors :: People
 authors = [alex, luthfi]
@@ -61,17 +61,16 @@ mkSRS = RefSec (RefProg RM.intro [TUnits, tsymb tableOfSymbols, TAandA]) :
   [IPurpose (para1_s2_1_intro), 
   IScope s2_2_intro_p1 s2_2_intro_p2, 
   IChar (S "rigid body dynamics") (S "high school calculus") (EmptyS), 
-  IOrgSec s2_4_intro inModel s4_2_5 EmptyS]) :
-  map Verbatim [{--genSec,--} s3, s4, s5, s6, s7, s8, s9]
+  IOrgSec s2_4_intro inModel s4_2 EmptyS]) :
+  map Verbatim [s3, s4, s5, s6, s7, s8, s9, s10]
     where tableOfSymbols = [TSPurpose, TypogConvention[Vector Bold], SymbOrder]
-
 
     --FIXME: Need to be able to print defn for gravitational constant.
 
 chipmunkSysInfo :: SystemInformation
 chipmunkSysInfo = SI chipmunk srs authors chipUnits cpSymbols 
   ([] :: [CQSWrapper]) cpAcronyms (cpDDefs) (inputSymbols) (outputSymbols) 
-  (cpQDefs) chipmunkConstraints--FIXME: All named ideas, not just acronyms.
+  (cpQDefs) cpInputConstraints--FIXME: All named ideas, not just acronyms.
 
 chipUnits :: [UnitDefn]
 chipUnits = map UU [metre, kilogram, second] ++ map UU [newton, radian]
@@ -85,12 +84,6 @@ mgBod :: [Section]
 cpSymbMap :: SymbolMap
 cpSymbMap = symbolMap cpSymbols
 
-cpSymMapT :: RelationConcept -> Contents 
-cpSymMapT = symbolMapFun cpSymbMap Theory
-
-cpSymMapD :: QDefinition -> Contents 
-cpSymMapD = symbolMapFun cpSymbMap Data
-
 --FIXME: The SRS has been partly switched over to the new docLang, so some of
 -- the sections below are now redundant. I have not removed them yet, because
 -- it makes it easier to test between the two different versions as changes
@@ -101,39 +94,6 @@ cpSymMapD = symbolMapFun cpSymbMap Data
 -- SOFTWARE REQUIREMENTS SPECIFICATION --
 -- =================================== --
 
--- testing refactoring
---testSec = sSubSec assumption []
---genSec = genericSect testSec
-------------------------------
---        KNOWLEDGE         --
-------------------------------
-
-lengthConstraint, massConstraint, mmntOfInConstraint, gravAccelConstraint, 
-  posConstraint, veloConstraint, orientConstraint, angVeloConstraint, 
-  forceConstraint, torqueConstraint, restCoefConstraint :: [Sentence]
-
--- make into a type
-lengthConstraint = makeConstraint lengthCons (S "44.2")
-massConstraint = makeConstraint massCons (S "56.2")
-mmntOfInConstraint = makeConstraint mmntOfInCons (S "74.5")
-gravAccelConstraint = makeConstraint gravAccelCons (S "9.8")
-posConstraint = makeConstraint posCons (S "(0.412, 0.502)")
-veloConstraint = makeConstraint veloCons (S "2.51")
-orientConstraint = makeConstraint orientCons (S "pi/2")
-angVeloConstraint = makeConstraint angVeloCons (S "2.1")
-forceConstraint = makeConstraint forceCons (S "98.1")
-torqueConstraint = makeConstraint torqueCons (S "200")
-restCoefConstraint = makeConstraint restCoefCons (S "0.8")
-
--- these should be maps from the type of above
-physicalConstraint_inputs, physicalConstraint_outputs :: [[Sentence]]
-physicalConstraint_inputs = [lengthConstraint, massConstraint, 
-  mmntOfInConstraint, gravAccelConstraint, posConstraint, veloConstraint, 
-  orientConstraint, angVeloConstraint, forceConstraint, torqueConstraint,
-  restCoefConstraint]
-
-physicalConstraint_outputs = [posConstraint, veloConstraint, 
-  orientConstraint, angVeloConstraint]
 
 ------------------------------
 -- Section : INTRODUCTION --
@@ -152,15 +112,26 @@ para1_s2_intro = foldlSent
 -- 2.1 : Purpose of Document --
 -------------------------------
 
+detailsAndGoal :: [CI]
+detailsAndGoal = [thModel, goalStmt]
+
 para1_s2_1_intro :: Sentence
-para1_s2_1_intro = foldlSent 
-  [S "This", (phrase document), S "descibes the modeling of an",
-  (phrase openSource), getAcc twoD, (phrase CP.rigidBody), 
-  (phrase physLib), S "used for" +:+. (plural game), S "The", 
-  plural goalStmt, S "and", plural thModel, S "used in",
-  short chipmunk, S "are provided. This", (phrase document),
-  S "is intended to be used as a reference to provide all",
-  S "necessary", (phrase information), S "to understand and verify the", 
+para1_s2_1_intro = para1_s2_1_param chipmunk document programDescription 
+  (plural game) (map plural detailsAndGoal)
+
+programDescription :: Sentence
+programDescription = foldlSent_ [(phrase openSource), getAcc twoD, 
+  (phrase CP.rigidBody), (phrase physLib)]
+
+para1_s2_1_param :: (NamedIdea a) => a -> a -> Sentence -> Sentence ->
+  [Sentence] -> Sentence
+para1_s2_1_param progName typeOf progDescrip appOf listOf = foldlSent 
+  [S "This", (phrase typeOf), S "descibes the modeling of an",
+  progDescrip, S "used for" +:+. appOf, S "The", 
+  foldlList listOf, S "used in", (short progName), 
+  S "are provided. This", (phrase typeOf), 
+  S "is intended to be used as a reference to provide all necessary",
+  (phrase information), S "to understand and verify the",
   (phrase model)]
 
 ---------------------------------
@@ -168,11 +139,11 @@ para1_s2_1_intro = foldlSent
 ---------------------------------
 s2_2_intro_p1, s2_2_intro_p2 :: Sentence
 
-s2_2_intro_p1 = foldle (+:+) (+:+) EmptyS
-  [S "the", (phrase physicalSim),  S "of", (getAcc twoD), 
-  (plural CP.rigidBody), S "acted on by forces"] 
+s2_2_intro_p1 = foldlSent_
+  [S "the", (phrase physicalSim), S "of", (getAcc twoD), 
+  (plural CP.rigidBody), S "acted on by", plural QP.force]
   
-s2_2_intro_p2 = foldle (+:+) (+:+) EmptyS [S "simulate how these", 
+s2_2_intro_p2 = foldlSent_ [S "simulate how these", 
   (plural CP.rigidBody), S "interact with one another"]
 
 ----------------------------------------------
@@ -185,36 +156,41 @@ s2_2_intro_p2 = foldle (+:+) (+:+) EmptyS [S "simulate how these",
 
 s2_4_intro :: Sentence
 
--- FIXME: Citations.
--- FIXME: This can probably be completely pulled out is we decide on the 
---  right convention for the intro across examples.
 s2_4_intro = foldlSent 
-  [S "The", (phrase organization), S "of this", (phrase document), S "follows the",
-  S "template for an", (getAcc srs), S "for scientific",
-  S "computing", (phrase software), S "proposed by [1] and [2]"]
+  [S "The", (phrase organization), S "of this", (phrase document), 
+  S "follows the", phrase template, S "for an", (getAcc srs),
+  S "for", phrase sciCompS, S "proposed by [1] and [2]"]
 
 --------------------------------------------
 -- Section 3: GENERAL SYSTEM DESCRIPTION --
 --------------------------------------------
 
 s3 :: Section
-s3 = genSysF [] s3_1_intro [] []
+s3 = assembler chipmunk cpSymbMap generalSystemDescriptionSect
+  [userCharacteristicSect, systemConstraintSect]
 
+generalSystemDescriptionSect :: SubSec
+generalSystemDescriptionSect = sSubSec generalSystemDescription []
 
 --------------------------------
 -- 3.1 : User Characteristics --
 --------------------------------
 
+userCharacteristicSect :: SubSec
+userCharacteristicSect = sSubSec userCharacteristic [(siCon [s3_1_intro])]
+
 s3_1_intro :: Contents
 s3_1_intro = foldlSP
-  [S "The end user of", (short chipmunk),
+  [S "The", phrase endUser `sOf` short chipmunk,
   S "should have an understanding of first year programming concepts",
-  S "and an understanding of high school", (phrase physics)]
+  S "and an understanding of high school", phrase physics]
 
 -------------------------------
 -- 3.2 : System Constraints  --
 -------------------------------
 
+systemConstraintSect :: SubSec
+systemConstraintSect = sSubSec systemConstraint []
 
 ---------------------------------------------
 -- SECTION 4 : SPECIFIC SYSTEM DESCRIPTION --
@@ -231,83 +207,100 @@ s4 = specSysDescr physLib [s4_1, s4_2]
 -------------------------------
 
 s4_1 :: Section
-s4_1_intro :: Contents
+s4_1_intro :: Sentence
 
-s4_1 = SRS.probDesc [s4_1_intro] [s4_1_1, s4_1_2]
+s4_1 = assembler chipmunk cpSymbMap problemDescriptionSect [termAndDefSect, 
+  goalStatementSect]
 
-s4_1_intro = foldlSP 
-  [S "Creating a gaming", (phrase physLib),
-  S "is a difficult task.", (titleize' game), S "need", 
-  (plural physLib), S "that simulate", 
-  S "objects acting under various", (phrase physical), S "conditions, while", 
+problemDescriptionSect :: SubSec
+problemDescriptionSect = sSubSec problemDescription [(siSent [s4_1_intro])]
+
+s4_1_intro = s4_1_intro_param physLib game
+
+s4_1_intro_param :: (NamedIdea a, NamedIdea b) => a -> b -> Sentence
+s4_1_intro_param lib app = foldlSent 
+  [S "Creating a gaming", (phrase lib) +:+. S "is a difficult", phrase task,
+  (titleize' app), S "need",  (plural lib), S "that simulate", plural object,
+  S "acting under various", (phrase physical), plural condition `sC` S "while", 
   S "simultaneously being fast and efficient enough to work in soft",
-  (phrase realtime), S "during the" +:+. (phrase game), S "Developing a", 
-  (phrase physLib),
-  S "from scratch takes a long period of time and is very costly" `sC`
-  S "presenting barriers of entry which make it difficult for", (phrase game),
-  S "developers to include", (phrase physics), 
-  S "in their" +:+. (plural product_), S "There are a few", S "free,", 
-  (phrase openSource), S "and high quality", (plural physLib), 
-  S "available to", S "be used for consumer", (plural product_) +:+. 
+  (phrase realtime), S "during the" +:+. (phrase app), S "Developing a", 
+  (phrase lib), S "from scratch takes a long period of time and is very costly" `sC`
+  S "presenting barriers of entry which make it difficult for", (phrase app),
+  S "developers to include", (phrase physics), S "in their" +:+. (plural product_),
+  S "There are a few free" `sC` (phrase openSource) `sAnd` S "high quality", (plural lib), 
+  S "available to be used for", phrase consumer, plural product_ +:+. 
   (sParen $ makeRef s7), S "By creating a simple, lightweight, fast and portable",
-  (getAcc twoD), (phrase CP.rigidBody), (phrase physLib) `sC`
-  (phrase game), S "development will be more accessible",
-  S "to the masses and higher quality", (plural product_), S "will be produced"]
+  (getAcc twoD), (phrase CP.rigidBody), (phrase lib) `sC`
+  (phrase app), S "development will be more accessible",
+  S "to the masses" `sAnd` S "higher quality", (plural product_),
+  S "will be produced"]
+
 
 -----------------------------------------
 -- 4.1.1 : Terminology and Definitions --
 -----------------------------------------
 
-s4_1_1 :: Section
 s4_1_1_bullets :: Contents
 
-s4_1_1 = termDefnF EmptyS [s4_1_1_bullets]
+termAndDefSect :: SubSec
+termAndDefSect = sSubSec termAndDef [(siSTitl), (siCon [s4_1_1_bullets])]
 
 s4_1_1_terms :: [ConceptChunk]
 s4_1_1_terms = [CP.rigidBody, CP.elasticity, CPP.ctrOfMass, 
   CP.cartesian, CP.rightHand]
 
 s4_1_1_bullets = enumBullet 
-  (map (\x -> (at_start x) :+: S ":" +:+ (x ^. defn)) s4_1_1_terms)
+  (map (\x -> (at_start x) +: EmptyS +:+ (x ^. defn)) s4_1_1_terms)
 
 
 -----------------------------
 -- 4.1.2 : Goal Statements --
 -----------------------------
 
-s4_1_2 :: Section
 s4_1_2_list :: Contents
 
-s4_1_2 = SRS.goalStmt [s4_1_2_list] []
+goalStatementSect :: SubSec
+goalStatementSect = sSubSec goalStmt [(siCon [s4_1_2_list])]
+
+goalStatementStruct :: (NamedIdea a, NamedIdea b) => Sentence -> [a] -> 
+  Sentence -> Sentence -> [a] -> b -> Sentence -> Sentence -> [Sentence]
+goalStatementStruct state inputs wrt adjective outputs objct condition1 condition2 = 
+  [S "Given the", initial state, (listOfInputs wrt), adjective, S "a set of", 
+  (plural objct) `sC` S "determine", condition1, listOfOutputs, 
+  S "over a period of", (phrase QP.time), condition2]
+  where initial EmptyS      = S "initial"
+        initial p           = p `sC` (S "initial")
+        listOfInputs EmptyS = (foldlList $ map plural inputs)
+        listOfInputs i      = (foldlList $ map plural inputs) `sC` S "and" +:+ i
+        listOfOutputs       = (foldlList $ map plural outputs)
+
+s4_1_2_stmt1 = goalStatementStruct (plural physicalProperty) 
+  (take 2 inputSymbols) (plural QP.force) (S "applied on")
+  (take 2 outputSymbols) CP.rigidBody 
+  (S "their new") EmptyS
+
+s4_1_2_stmt2 = goalStatementStruct (plural physicalProperty) 
+  (drop 3 $ take 5 inputSymbols) (plural QP.force) (S "applied on")
+  (drop 3 $ take 5 inputSymbols) CP.rigidBody 
+  (S "their new") EmptyS
+
+s4_1_2_stmt3 = goalStatementStruct EmptyS
+  (take 2 inputSymbols) EmptyS (S "of")
+  (take 0 inputSymbols) CP.rigidBody
+  (S "if any of them will collide with one another") EmptyS
+
+goalStatement4Inputs :: [UnitalChunk]
+goalStatement4Inputs = [QP.position, QM.orientation, QP.linearVelocity, 
+  QP.angularVelocity]
+
+s4_1_2_stmt4 = goalStatementStruct (plural physicalProperty)
+  (goalStatement4Inputs) --fixme input symbols
+  EmptyS (S "of")
+  (goalStatement4Inputs) --fixme input symbols
+  CP.rigidBody (S "the new") (S "of the" +:+ (plural CP.rigidBody) +:+ 
+  S "that have undergone a" +:+ (phrase CP.collision))
 
 s4_1_2_stmt1, s4_1_2_stmt2, s4_1_2_stmt3, s4_1_2_stmt4 :: [Sentence]
-s4_1_2_stmt1 = [S "Given the", (plural physicalProperty) `sC` S "initial", 
-  (plural QP.position), S "and",
-  (plural QP.velocity) `sC` S "and", (plural QP.force),
-  S "applied on a set of", (plural CP.rigidBody) `sC`
-  S "determine their new", (plural QP.position), S "and",
-  (plural QP.velocity), S "over a period of", (phrase QP.time)]
-
-s4_1_2_stmt2 = [S "Given the", (plural physicalProperty) `sC` S "initial", 
-  (plural QM.orientation), S "and", (plural QP.angularVelocity ) `sC`
-  S "and", (plural QP.force), S "applied on a set of", 
-  (plural CP.rigidBody) `sC` S "determine their new",
-  (plural QM.orientation), S "and", (plural QP.angularVelocity), 
-  S "over a period of", (phrase QP.time)]
-
-s4_1_2_stmt3 = [S "Given the initial", (plural QP.position), S "and", 
-  (plural QP.velocity), S "of a", S "set of", 
-  (plural CP.rigidBody) `sC` S "determine if any of",
-  S "them will collide with one another over a period of", 
-  (phrase QP.time)]
-
-s4_1_2_stmt4 = [S "Given the", (plural physicalProperty) :+: S ",", 
-  S "initial linear and angular", (plural QP.position), 
-  S "and", (plural QP.velocity) `sC` S "determine the new",
-  (plural QP.position), S "and", (plural QP.velocity),
-  S "over a period of", (phrase QP.time), S "of",
-  (plural CP.rigidBody), S "that have undergone a", 
-  (phrase CP.collision)]
 
 s4_1_2_list' :: [Sentence]
 s4_1_2_list' = map (foldlSent) [s4_1_2_stmt1, s4_1_2_stmt2, s4_1_2_stmt3, 
@@ -320,99 +313,71 @@ s4_1_2_list = enumSimple 1 (getAcc goalStmt) s4_1_2_list'
 --------------------------------------------------
 
 s4_2 :: Section
+s4_2 = assembler chipmunk cpSymbMap scsSect [assumSec, tModSec, genDefSec,
+  iModSec, dataDefSec, dataConSec]
 
---s4_2 = SRS.solCharSpec []
--- [s4_2_1, s4_2_2, s4_2_3, s4_2_4, s4_2_5, dataConstraints]
+assumSec, tModSec, genDefSec, iModSec, dataDefSec, dataConSec, scsSect :: SubSec
+scsSect = sSubSec solutionCharSpec []
+assumSec = (sSubSec assumption [(siCon [s4_2_1_list])])
+tModSec = (sSubSec thModel [(siTMod cpTMods)])
+genDefSec = (sSubSec genDefn [])
+iModSec = (sSubSec inModel [(siIMod iModels)])
+dataDefSec = (sSubSec dataDefn [(siSent [s4_2_4_intro]), (siDDef cpDDefs)])
+dataConSec = (sSubSec dataConst [(siUQI cpInputConstraints), (siUQO cpOutputConstraints)])
 
 
-s4_2 = solutionCharactersticCon chipmunk solutionContainer []
-
-
-
-solutionContainer :: SOLsec
-solutionContainer = mkSOLsec assumptionSub theoreticalModelSub generalDefSub
-  dataDefinitionSub instanceModelSub dataConstraintSub
-
-assumptionSub, theoreticalModelSub, dataDefinitionSub, instanceModelSub :: SOLsub
-assumptionSub = mkSOLsub EmptyS EmptyS EmptyS s6 [s4_2_1_intro, s4_2_1_list]
-theoreticalModelSub = mkSOLsub EmptyS EmptyS EmptyS s4_2 s4_2_2_TMods
-dataDefinitionSub = mkSOLsub EmptyS EmptyS s4_2_4_intro s4_2 s4_2_4_DDefs
-instanceModelSub = mkSOLsub EmptyS EmptyS EmptyS s4_1 s4_2_5_IMods
-generalDefSub = mkSOLsub EmptyS EmptyS EmptyS s4_2 []
-dataConstraintSub = mkSOLsub EmptyS dataConstraintUncertainty EmptyS s4_2
-  [dataConstraintInputTable, dataConstraintOutputTable]
 -------------------------
 -- 4.2.1 : Assumptions --
 -------------------------
 
-s4_2_1 :: Section
-s4_2_1_intro, s4_2_1_list :: Contents
-
-s4_2_1 = SRS.assump [s4_2_1_intro, s4_2_1_list] []
-
--- TODO: Add assumption references in the original and this SRS. --
-s4_2_1_intro = foldlSP 
-  [S "This", (phrase section_), S "simplifies the original", (phrase problem),
-  S "and helps in developing the", (phrase thModel), S "by filling in the",
-  S "missing", (phrase information), S "for the" +:+. (phrase physicalSystem),
-  S "The numbers given in", S "the square brackets refer to the", 
-  foldr1 sC (map (refs) itemsAndRefs) `sC` S "or", 
-  refs (likelyChg, s6) `sC` S "in which the respective",
-  (phrase assumption), S "is used"]
-  where refs (chunk, ref) = (titleize' chunk) +:+ (sSqBr $ makeRef ref)
-
-itemsAndRefs :: [(CI, Section)]
-itemsAndRefs = [(thModel, s4_2_2), (genDefn, s4_2_3), (dataDefn, s4_2_4), 
-  (inModel, s4_2_5)]
+s4_2_1_list :: Contents
 
 s4_2_1_assum1, s4_2_1_assum2, s4_2_1_assum3, s4_2_1_assum4, s4_2_1_assum5, 
   s4_2_1_assum6, s4_2_1_assum7 :: [Sentence]
 
-s4_2_1_assum1 = [S "All objects are", (plural CP.rigidBody)]
-s4_2_1_assum2 = [S "All objects are", (getAcc twoD)]
+allObject :: Sentence -> [Sentence]
+allObject thing = [S "All objects are", thing]
+
+thereNo :: [Sentence] -> [Sentence]
+thereNo [x]      = [S "There is no", x, S "involved throughout the", 
+  (phrase simulation)]
+thereNo l        = [S "There are no", foldlList l, S "involved throughout the", 
+  (phrase simulation)]
+
+s4_2_1_assum1 = allObject (plural CP.rigidBody)
+s4_2_1_assum2 = allObject (getAcc twoD)
 s4_2_1_assum3 = [S "The library uses a", (phrase CP.cartesian)]
 s4_2_1_assum4 = [S "The axes are defined using", 
   (phrase CP.rightHand)]
 s4_2_1_assum5 = [S "All", (plural CP.rigidBody), 
   (plural CP.collision), S "are vertex-to-edge", 
   (plural CP.collision)]
-s4_2_1_assum6 = [S "There is no damping", 
-  S "involved throughout the", (phrase simulation)]
-s4_2_1_assum7 = [S "There are no", (plural CM.constraint),
-  S "and", (plural CP.joint), S "involved throughout the", 
-  (phrase simulation)]
 
-s4_2_1_list' :: [Sentence]
-s4_2_1_list' = map (foldlSent) [s4_2_1_assum1, s4_2_1_assum2, s4_2_1_assum3, 
-  s4_2_1_assum4, s4_2_1_assum5, s4_2_1_assum6, s4_2_1_assum7]
+s4_2_1_assum6 = thereNo [(phrase CP.damping)]
+s4_2_1_assum7 = thereNo [(plural CM.constraint), (plural CP.joint)]
 
-s4_2_1_list = enumSimple 1 (getAcc assumption) s4_2_1_list'
+s4_2_1_list = enumSimple 1 (getAcc assumption) $ map (foldlSent) 
+  [s4_2_1_assum1, s4_2_1_assum2, s4_2_1_assum3, s4_2_1_assum4, s4_2_1_assum5, 
+  s4_2_1_assum6, s4_2_1_assum7]
+
+s4_2_1_list_a :: [[Sentence]]
+s4_2_1_list_a = [s4_2_1_assum1, s4_2_1_assum2, s4_2_1_assum3, s4_2_1_assum4,
+  s4_2_1_assum5, s4_2_1_assum6, s4_2_1_assum7]
 
 
 --------------------------------
 -- 4.2.2 : Theoretical Models --
 --------------------------------
 
-s4_2_2 :: Section
-s4_2_2_TMods :: [Contents]
-
-s4_2_2 = thModF (chipmunk) s4_2_2_TMods
-
-s4_2_2_TMods = map cpSymMapT cpTMods
-
 ---------------------------------
 -- 4.2.3 : General Definitions --
 ---------------------------------
 
-s4_2_3 :: Section
 s4_2_3_intro :: Contents
 -- s4_2_3_GDefs :: [Contents]
 
-s4_2_3 = SRS.genDefn ([s4_2_3_intro] {- ++
-  (map Con s4_2_3_GDefs)-}) []
-
 s4_2_3_intro = foldlSP 
-  [S "This", (phrase section_), S "collects the laws and", 
+  [S "This", (phrase section_), S "collects the", (plural CM.law) `sAnd` 
   (plural CM.equation), S "that will be used in deriving the", 
   (plural dataDefn) `sC` S "which in turn will be used to build the", 
   (plural inModel)]
@@ -427,29 +392,13 @@ s4_2_3_GDefs = map (Definition . General) gDefs)
 -- 4.2.4 : Data Definitions --
 ------------------------------
 
-s4_2_4 :: Section
 s4_2_4_intro :: Sentence
-s4_2_4_DDefs :: [Contents]
-
-s4_2_4 = dataDefnF s4_2_4_intro s4_2_4_DDefs
-
 s4_2_4_intro = foldlSent [S "The", (phrase CPP.dimension), 
   S "of each", (phrase quantity), S "is also given"]
-
-s4_2_4_DDefs = map cpSymMapD cpDDefs
 
 -----------------------------
 -- 4.2.5 : Instance Models --
 -----------------------------
-
-s4_2_5 :: Section
-s4_2_5_IMods :: [Contents]
-
-s4_2_5 = inModelF s4_1 s4_2_4 s4_2_2 s4_2_3 s4_2_5_IMods
-
--- Instance models not fully yet implemented --
-
-s4_2_5_IMods = map cpSymMapT iModels
 
 ------------------------------
 -- Collision Diagram        --
@@ -465,22 +414,6 @@ secCollisionDiagram = Paragraph $ foldlSent [ S "This section presents an image"
 
 {--fig_1 = Figure (titleize figure +:+ S "1:" +:+ S "Collision between two rigid bodies")
 "CollisionDiagram.png" --}
-------------------------------
--- 4.2.6 : Data Constraints --
-------------------------------
-
-dataConstraints :: Section
-dataConstraintInputTable, dataConstraintOutputTable :: Contents
-
-dataConstraints = datConF EmptyS dataConstraintUncertainty EmptyS [dataConstraintInputTable, dataConstraintOutputTable]
-
-dataConstraintInputTable = Table [S "Var", titleize' physicalConstraint, S "Typical Value"]
-  (physicalConstraint_inputs) 
-  ((titleize input_) +:+ S "Variables") True
-
-dataConstraintOutputTable = Table [S "Var", titleize' physicalConstraint]
-  (map (take 2) physicalConstraint_outputs)
-  ((titleize output_) +:+ S "Variables") True
 
 
 ------------------------------
@@ -502,15 +435,19 @@ s5_1 = SRS.funcReq [s5_1_list] []
 s5_1_req1, s5_1_req2, s5_1_req3, s5_1_req4, s5_1_req5, s5_1_req6,
   s5_1_req7, s5_1_req8 :: Sentence
 
-reqFrame :: Sentence -> Sentence -> Sentence -> Sentence -> Sentence
-reqFrame a b x z = foldlSent [S "Determine the", a, S "and", b, 
+  -- | template for requirements
+requirementTemplate :: Sentence -> Sentence -> Sentence -> Sentence -> Sentence
+requirementTemplate a b x z = foldlSent [S "Determine the", a `sAnd` b, 
   S "over a period of", (phrase QP.time), S "of the", x, z]
 
-reqS :: (NamedIdea a, NamedIdea b) => a -> b -> Sentence -> Sentence
-reqS a b d = reqFrame (plural a) (plural b) ((getAcc twoD)
+  -- | with added constraint
+requirementS :: (NamedIdea a, NamedIdea b) => a -> b -> Sentence -> Sentence
+requirementS a b d = requirementTemplate (plural a) (plural b) ((getAcc twoD)
   +:+ (plural CP.rigidBody)) d
-reqS' :: (NamedIdea a, NamedIdea b) => a -> b -> Sentence
-reqS' a b = reqS a b EmptyS 
+
+  -- | without added constraint
+requirementS' :: (NamedIdea a, NamedIdea b) => a -> b -> Sentence
+requirementS' a b = requirementS a b EmptyS 
 
 -- some requirements look like they could be parametrized
 s5_1_req1 = foldlSent [S "Create a", (phrase CP.space), S "for all of the",
@@ -519,31 +456,29 @@ s5_1_req1 = foldlSent [S "Create a", (phrase CP.space), S "for all of the",
 
 s5_1_req2 = foldlSent [S "Input the initial", 
   (plural QPP.mass) `sC` (plural QP.velocity) `sC` 
-  (plural QM.orientation) `sC` (plural QP.angularVelocity ), 
+  (plural QM.orientation) `sC` (plural QP.angularVelocity), 
   S "of" `sC` S "and", (plural QP.force), S "applied on", 
   (plural CP.rigidBody)]
 
 s5_1_req3 = foldlSent [S "Input the", (phrase CM.surface), 
-  (plural property), S "of the bodies, such as", (phrase CP.friction), 
-  S "or", (phrase CP.elasticity)]
+  (plural property), S "of the", plural body, S "such as",
+  (phrase CP.friction) `sOr` (phrase CP.elasticity)]
 
-s5_1_req4 = foldlSent [S "Verify that the inputs", 
+s5_1_req4 = foldlSent [S "Verify that the", plural input_,
   S "satisfy the required", plural physicalConstraint, S "from", 
-  (makeRef dataConstraintInputTable)]
+  (makeRef s4_2)]
 
-s5_1_req5 = reqS (QP.position) (QP.velocity) 
+s5_1_req5 = requirementS (QP.position) (QP.velocity) 
   (S "acted upon by a" +:+ (phrase QP.force))
 
-s5_1_req6 = reqS' (QM.orientation) (QP.angularVelocity )
+s5_1_req6 = requirementS' (QM.orientation) (QP.angularVelocity)
 
 s5_1_req7 = foldlSent [S "Determine if any of the", 
   (plural CP.rigidBody), S "in the", (phrase CP.space), 
   S "have collided"]
 
-s5_1_req8 = reqS (QP.position) (QP.velocity) 
+s5_1_req8 = requirementS (QP.position) (QP.velocity) 
   (S "that have undergone a" +:+ (phrase CP.collision))
-
-
 
 -- Currently need separate chunks for plurals like rigid bodies,
 -- velocities, etc.
@@ -562,12 +497,15 @@ s5_2_intro :: Contents
 
 s5_2 = SRS.nonfuncReq [s5_2_intro] []
 
+chpmnkPriorityNFReqs :: [ConceptChunk]
+chpmnkPriorityNFReqs = [correctness, understandability, portability,
+  reliability, maintainability]
+
 s5_2_intro = foldlSP 
-  [(titleize' game), S "are resource intensive, so performance",
-  S "is a high priority. Other", (phrase nonfunctional), plural requirement,
-  S "that are a",
-  S "priority are: correctness, understandability, portability,",
-  S "reliability, and maintainability"]
+  [(titleize' game), S "are resource intensive, so", phrase performance,
+  S "is a high" +:+. phrase priority, S "Other", plural nonfunctional +:
+  S "that are a", phrase priority, S "are", 
+  foldlList (map phrase chpmnkPriorityNFReqs)]
 
 --------------------------------
 -- SECTION 6 : LIKELY CHANGES --
@@ -587,24 +525,23 @@ s6_likelyChg_stmt1, s6_likelyChg_stmt2, s6_likelyChg_stmt3,
 
 --these statements look like they could be parametrized
 s6_likelyChg_stmt1 = (S "internal" +:+ (getAcc CM.ode) :+: 
-  S "-solving algorithm used by the" +:+ (phrase library)) `maybeChanged` 
-  (S "in the future")
+  S "-solving" +:+ phrase algorithm +:+ S "used by the" +:+
+  (phrase library)) `maybeChanged` (S "in the future")
 
 s6_likelyChg_stmt2 = (phrase library) `maybeExpanded`
   (S "to deal with edge-to-edge and vertex-to-vertex" +:+ (plural CP.collision))
 
 s6_likelyChg_stmt3 = (phrase library) `maybeExpanded` 
-  S "to include motion with damping"
+  S "to include motion with" +:+ (phrase CP.damping)
 
 s6_likelyChg_stmt4 = (phrase library) `maybeExpanded` (S "to include" +:+ 
-  (plural CP.joint) +:+ S "and" +:+ (plural CM.constraint))
+  (plural CP.joint) `sAnd` (plural CM.constraint))
 
 s6_list' :: [Sentence]
 s6_list' = [s6_likelyChg_stmt1, s6_likelyChg_stmt2, s6_likelyChg_stmt3,
   s6_likelyChg_stmt4]
 
 s6_list = enumSimple 1 (getAcc likelyChg) s6_list'
-
 
 -----------------------------------------
 -- SECTION 7 : OFF-THE-SHELF SOLUTIONS --
@@ -613,13 +550,15 @@ s6_list = enumSimple 1 (getAcc likelyChg) s6_list'
 s7 :: Section
 s7_intro, s7_2dlist, s7_mid, s7_3dlist :: Contents
 
-s7 = SRS.offShelfSol [s7_intro, s7_2dlist,
-  s7_mid, s7_3dlist] []
+s7 = SRS.offShelfSol [s7_intro, s7_2dlist, s7_mid, s7_3dlist] []
 
-s7_intro = Paragraph $ S "As mentioned in" +:+. ((makeRef s4_1) `sC`
-  S "there already exist free" +:+ (phrase openSource) +:+ (phrase game) +:+
-  (plural physLib)) +:+ S "Similar" +:+ (getAcc twoD) +:+ 
-  (plural physLib) +:+ S "are:"
+s7_intro = s7_intro_param s4_1 physLib
+
+s7_intro_param :: NamedIdea n => Section -> n -> Contents
+s7_intro_param problmDescSec lib = Paragraph $ foldlSentCol 
+  [S "As mentioned in", (makeRef problmDescSec) `sC`
+  S "there already exist free", (phrase openSource), (phrase game) +:+.
+  (plural lib), S "Similar", (getAcc twoD), (plural lib), S "are"]
 
 s7_2dlist = enumBullet [(S "Box2D: http://box2d.org/"),
   (S "Nape Physics Engine: http://napephys.com/")]
@@ -648,7 +587,7 @@ s8_trace1 = [(plural goalStmt), (plural requirement), (plural inModel),
   (plural datumConstraint) +:+. S "with each other"]
 
 s8_trace2 = [(plural thModel), (plural genDefn), (plural dataDefn), 
-  (plural inModel) +:+. S "on the assumptions"]
+  (plural inModel), S "on the" +:+. plural assumption]
 
 s8_trace3 = [(plural thModel), (plural genDefn), (plural dataDefn), 
   (plural inModel) +:+ S "on each other"]
@@ -671,19 +610,19 @@ s8_dataDef = ["DD1","DD2","DD3","DD4","DD5","DD6","DD7","DD8"]
 s8_dataDefRef = map (refFromType Data cpSymbMap) cpDDefs
 
 s8_assump = ["A1", "A2", "A3", "A4", "A5", "A6", "A7"]
-s8_assumpRef = makeListRef s4_2_1_list' s4_2_1
+s8_assumpRef = makeListRef s4_2_1_list_a s4_1
 
 s8_funcReq =  ["R1","R2","R3", "R4", "R5", "R6", "R7", "R8"]
 s8_funcReqRef = makeListRef s5_1_list' s5_1
 
 s8_data = ["Data Constraints"]
-s8_dataRef = [makeRef dataConstraints]
+s8_dataRef = [makeRef s4_2]
 
 s8_goalstmt = ["GS1", "GS2", "GS3", "GS4"]
-s8_goalstmtRef = makeListRef s4_1_2_list' s4_1_2
+s8_goalstmtRef = makeListRef s4_1_2_list' s4_1
 
 s8_genDef = ["GD1", "GD2", "GD3", "GD4", "GD5", "GD6", "GD7"]
-s8_genDefRef = makeListRef s8_genDef s4_2_3
+s8_genDefRef = makeListRef s8_genDef s4_2
 
 s8_likelyChg = ["LC1", "LC2", "LC3", "LC4"]
 s8_likelyChgRef = makeListRef s6_list' s6
@@ -723,7 +662,7 @@ s8_table1 :: Contents
 s8_table1 = Table (EmptyS:(s8_row_header_t1))
   (makeTMatrix s8_col_header_t1 s8_columns_t1 s8_row_t1)
   (showingCxnBw (traceyMatrix) (titleize' requirement +:+ sParen (makeRef s5)
-  `sC` (titleize' goalStmt) +:+ sParen (makeRef s4_1_2) +:+ S "and Other" +:+
+  `sC` (titleize' goalStmt) +:+ sParen (makeRef s4_1) `sAnd` S "Other" +:+
   titleize' item)) True
 
 s8_columns_t2 :: [[String]]
@@ -778,8 +717,8 @@ s8_col_header_t2 = zipWith itemRefToSent (s8_cols_t2) (s8_cols_ref_t2)
 s8_table2 :: Contents
 s8_table2 = Table (EmptyS:s8_row_header_t2)
   (makeTMatrix s8_col_header_t2 s8_columns_t2 s8_row_t2) 
-  (showingCxnBw (traceyMatrix) (titleize' assumption +:+ sParen (makeRef s4_2_1) 
-  +:+ S "and Other" +:+ titleize' item)) True
+  (showingCxnBw (traceyMatrix) (titleize' assumption +:+ sParen (makeRef s4_1) 
+  `sAnd` S "Other" +:+ titleize' item)) True
 
 
 s8_columns_t3 :: [[String]]
@@ -828,8 +767,15 @@ s8_row_header_t3 = s8_col_header_t3
 s8_table3 :: Contents
 s8_table3 = Table (EmptyS:s8_row_header_t3)
   (makeTMatrix s8_col_header_t3 s8_columns_t3 s8_row_t3)
-  (showingCxnBw (traceyMatrix) (titleize' item +:+ 
-  S "and Other" +:+ titleize' section_)) True
+  (showingCxnBw (traceyMatrix) (titleize' item `sAnd` 
+  S "Other" +:+ titleize' section_)) True
+
+-----------------------------------
+-- VALUES OF AUXILIARY CONSTANTS --
+-----------------------------------
+
+s9 :: Section
+s9 = valsOfAuxConstantsF chipmunk []
 
 ----------------
 -- REFERENCES --
@@ -837,49 +783,49 @@ s8_table3 = Table (EmptyS:s8_row_header_t3)
 --}
 -- To be added --
 
-s9 :: Section
-s9 = SRS.reference [s9_list] []
+s10 :: Section
+s10 = SRS.reference [s10_list] []
 
-s9_list :: Contents
-s9_list = mkRefsList 1 (map (foldl (+:+) EmptyS) [s9_ref1, s9_ref2, s9_ref3, 
-  s9_ref4, s9_ref5, s9_ref6, s9_ref7, s9_ref8, s9_ref9, s9_ref10])
+s10_list :: Contents
+s10_list = mkRefsList 1 (map (foldl (+:+) EmptyS) [s10_ref1, s10_ref2, s10_ref3, 
+  s10_ref4, s10_ref5, s10_ref6, s10_ref7, s10_ref8, s10_ref9, s10_ref10])
 
 -- make sure all refs are proper format
 
-s9_ref1, s9_ref2, s9_ref3, s9_ref4, s9_ref5, s9_ref6, s9_ref7, 
-  s9_ref8, s9_ref9, s9_ref10 :: [Sentence]
+s10_ref1, s10_ref2, s10_ref3, s10_ref4, s10_ref5, s10_ref6, s10_ref7, 
+  s10_ref8, s10_ref9, s10_ref10 :: [Sentence]
 
-s9_ref1 = [S "David L. Parnas.", S "Designing Software for Ease of Extension",
+s10_ref1 = [S "David L. Parnas.", S "Designing Software for Ease of Extension",
   S "and Contraction.", S "ICSE '78: Proceedings of the 3rd international", 
   S "conference on Software engineering,", S "264-277, 1978"]
 
-s9_ref2 = [S "Greg Wilson and D.A. Aruliah and C. Titus Brown and Neil P.", 
+s10_ref2 = [S "Greg Wilson and D.A. Aruliah and C. Titus Brown and Neil P.", 
   S "Chue Hong and Matt Davis and Richard T. Guy and Steven H.D. Haddock", 
   S "and Kathryn D. Huff and Ian M. Mitchell and Mark D. Plumblet and Ben Waugh", 
   S "and Ethan P. White and Paul Wilson. Best Practices for Scientific", 
   S "Computing, 2013"]
 
-s9_ref3 = [S "David L. Parnas. On the Criteria To Be Used in Decomposing Systems", 
+s10_ref3 = [S "David L. Parnas. On the Criteria To Be Used in Decomposing Systems", 
   S "into Modules. Comm. ACM, vol. 15, no. 2, pp. 1053-1058, 1972"]
 
-s9_ref4 = [S "D. L. Parnas and P. C. Clements and D. M. Weiss.",
+s10_ref4 = [S "D. L. Parnas and P. C. Clements and D. M. Weiss.",
   S "The Modular Structure of Complex Systems.", S "ICSE '84: Proceedings of", 
   S "the 7th international conference on Software engineering" `sC` 
   S "408-417, 1984"]
 
-s9_ref5 = [S "David L. Parnas and P.C. Clements.", S "A Rational Design", 
+s10_ref5 = [S "David L. Parnas and P.C. Clements.", S "A Rational Design", 
   S "Process: How and Why to Fake it.", S "IEEE Transactions on Software", 
   S "Engineering,", S "251-257" `sC` S "1986"]
 
-s9_ref6 = [S "Nirmitha Koothoor. A document drive approach to certifying" +:+. 
+s10_ref6 = [S "Nirmitha Koothoor. A document drive approach to certifying" +:+. 
   (phrase sciCompS), S "Master's thesis, McMaster University,", 
   S "Hamilton, Ontario, Canada, 2013."]
 
-s9_ref7 = [S "David L. Parnas and P.C. Clements. A rational design process: How", 
+s10_ref7 = [S "David L. Parnas and P.C. Clements. A rational design process: How", 
   S "and why to fake it. IEEE Transactions on Software Engineering,", 
   S "12(2):251-257, February 1986."]
 
-s9_ref8 = [S "W. Spencer Smith and Lei Lai. A new requirements template for",
+s10_ref8 = [S "W. Spencer Smith and Lei Lai. A new requirements template for",
   S "scientific computing. In J. Ralyt" :+: (F Acute 'e') `sC` 
   S "P. Agerfalk, and N. Kraiem,", S "editors, Proceedings of the First", 
   S "International Workshopon", S "Situational Requirements Engineering", 
@@ -888,7 +834,7 @@ s9_ref8 = [S "W. Spencer Smith and Lei Lai. A new requirements template for",
   S "2005. In conjunction with 13th IEEE International Requirements", 
   S "Engineering Conference."]
 
-s9_ref9 = [S "J. Frederick Bueche. Introduction to Physics for Scientists", 
+s10_ref9 = [S "J. Frederick Bueche. Introduction to Physics for Scientists", 
   S "Fourth Edition. 1986"]
 
-s9_ref10 = [S "Marilyn Lightstone. Derivation of Tank/PCM Model. 2012"]
+s10_ref10 = [S "Marilyn Lightstone. Derivation of Tank/PCM Model. 2012"]

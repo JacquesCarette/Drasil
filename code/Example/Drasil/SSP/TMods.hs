@@ -10,7 +10,7 @@ import Data.Drasil.SentenceStructures
 import Data.Drasil.Utils
 import Data.Drasil.Quantities.Physics
 import Data.Drasil.Concepts.Documentation
-import Data.Drasil.Concepts.Math (normal, surface)
+import Data.Drasil.Concepts.Math (surface)
 import Data.Drasil.Concepts.SolidMechanics (normForce, shearForce)
 import Data.Drasil.Concepts.Physics (linear, stress, friction)
 import Data.Drasil.Quantities.PhysicalProperties
@@ -59,23 +59,23 @@ mcShrStrgth :: RelationConcept
 mcShrStrgth = makeRC "mcShrStrgth" (nounPhraseSP "Mohr-Coulumb shear strength")  mcSS_desc mcSS_rel
 
 mcSS_rel :: Relation --FIXME: Should be P with no subscript i
-mcSS_rel = (C shrResI) := ((C normStress) :* (tan (C fricAngle)) :+ (C cohesion))
+mcSS_rel = (C shrStress) := ((C normStress) :* (tan (C fricAngle)) :+ (C cohesion))
 
 mcSS_desc :: Sentence
 mcSS_desc = foldlSent [S "For a", phrase soil, S "under", phrase stress,
   S "it will exert a shear resistive strength based on the",
   S "Coulomb sliding law. The resistive shear is the maximum amount of shear a",
   phrase surface, S "can experience while remaining rigid, analogous to a maximum" +:+.
-  phrase normForce, S "In this", phrase model, S "the", phrase shearForce,
-  getS shrResI, S "is proportional to the product of the",
-  phrase normal, phrase stress, S "on the plane", getS normStress,
+  phrase normForce, S "In this", phrase model, S "the",
+  getTandS shrStress, S "is proportional to the product of the",
+  phrase normStress, S "on the plane", getS normStress,
   S "with it's static", phrase friction, S "in the angular form" +:+.
-  (E $ (tan (C fricAngle)) := (C surfHydroForce)), --FIXME: sould say U_s but there is no way to say that yet
-  S "The", getS shrResI, S "versus", getS normStress, S "relationship is not truly",
+  (E $ tan (C fricAngle) := C surfHydroForce), --FIXME: sould say U_s but there is no way to say that yet
+  S "The", getS shrStress, S "versus", getS normStress, S "relationship is not truly",
   phrase linear `sC` S "but assuming the effective", phrase normForce,
   S "is strong enough it can be approximated with a", phrase linear,
   S "fit", sParen (acroA 9), S "where the cohesion", getS cohesion,
-  S "represents the", getS shrResI, S "intercept of the fitted line"]
+  S "represents the", getS shrStress, S "intercept of the fitted line"]
 
 --
 

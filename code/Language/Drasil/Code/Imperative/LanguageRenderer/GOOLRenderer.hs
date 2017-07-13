@@ -27,7 +27,7 @@ goolConfig options c =
         endStatement     = empty,
         enumsEqualInts   = False,
         ext              = ".hs",
-        fileName         = \p _ -> p,
+        fileName         = fileNameD c,
         include          = includeD "import",
         includeScope     = \_ -> empty,
         inherit          = text "extends",
@@ -74,8 +74,8 @@ classNameList = "clsNames"
 makeAbsCode = "makeAbstractCode"
 
 -- short names, packaged up above (and used below)
-renderCode' :: Config -> [Label] -> AbstractCode -> Code
-renderCode' c ms (AbsCode p) = Code [fileCode c p ms Source (ext c)]
+renderCode' :: Config -> AbstractCode -> Code
+renderCode' c (AbsCode p) = Code $ fileCode c p Source (ext c)
 
 goolstateType :: Config -> StateType -> DecDef -> Doc
 goolstateType c (List lt t) _ = parens $ text "List" <+> listTypeDoc lt <+> stateType c t Dec
@@ -90,7 +90,7 @@ goolstateType _ (EnumType enum) _ = parens $ text "EnumType" <+> lbl enum
 goolstateType _ (Base (FileType Read)) _ = text "infile"
 goolstateType _ (Base (FileType Write)) _ = text "outfile"
 
-gooltop :: Config -> Label -> FileType -> Label -> [Module] -> Doc
+gooltop :: Config -> Label -> FileType -> Label -> Module -> Doc
 gooltop c hsMod _ _ _ = vcat [
     text $ "module " ++ hsMod ++ " (" ++ classNameList ++ ", " ++ makeAbsCode ++ ") where",
     blank,
@@ -98,8 +98,8 @@ gooltop c hsMod _ _ _ = vcat [
     include c "GOOL.CodeGeneration.AbstractCode",
     include c "GOOL.Auxil.DataTypes"]
 
-goolbody :: Config -> a -> Label -> [Module] -> Doc
-goolbody c _ p modules = let cs = foldl1 (++) (map classes modules) in
+goolbody :: Config -> a -> Label -> Module -> Doc
+goolbody c _ p (Mod _ _ _ _ cs) =
     vibcat [
     package c p,
     clsDecListDoc c cs,
@@ -185,15 +185,10 @@ funcDoc' c (ListAdd i v) = text "ListAdd" <+> valueDoc c i <+> valueDoc c v
 funcDoc' c (ListAppend v) = text "ListAppend" <+> valueDoc c v
 funcDoc' c (ListSet i v) = text "ListSet" <+> valueDoc c i <+> valueDoc c v
 funcDoc' c (ListPopulate v t) = text "ListPopulate" <+> valueDoc c v <+> stateType c t Dec
-funcDoc' c (ListSlice b e s) = text "ListSlice" 
-  <+> justValueDoc c b 
-  <+> justValueDoc c e
-  <+> justValueDoc c s
 funcDoc' _ (IterBegin) = text "IterBegin"
 funcDoc' _ (IterEnd) = text "IterEnd"
 funcDoc' _ Floor = text "Floor"
 funcDoc' _ Ceiling = text "Ceiling"
-funcDoc' _ (StringSplit d) = text "StringSplit" <+> lbl d
 
 iterationDoc' :: Config -> Iteration -> Doc
 iterationDoc' c (For initv cond upd b) = vcat [

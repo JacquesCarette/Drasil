@@ -66,8 +66,8 @@ rc (x:y:[]) = S "and the" +:+ (plural $ x ^. term) +:+ S "to the" +:+.
 rc (x:y:xs) = S "the" +:+ word x +:+ S "to the" +:+ word y `sC` rc ([y] ++ xs)
 rc _ = error "refineChain helper encountered an unexpected empty list"
 
-figureLabel :: [Char] -> NPNC -> Sentence -> [Char]-> Contents
-figureLabel num traceyMG contents filePath = Figure (titleize figure +: S num
+figureLabel :: Int -> NPNC -> Sentence -> [Char]-> Contents
+figureLabel num traceyMG contents filePath = Figure (titleize figure +: (S (show num))
   +:+ (showingCxnBw (traceyMG) (contents))) filePath
 
 showingCxnBw :: NPNC -> Sentence -> Sentence
@@ -143,7 +143,7 @@ specSysDesIntro l_end = Paragraph $ foldlSent
             [S "This", phrase section_, S "first presents the",
             phrase problemDescription `sC` S "which gives a high-level view of the",
             phrase problem, S "to be solved. This is followed by the",
-            plural solutionCharSpec `sC` S "which presents the",
+            phrase solutionCharSpec `sC` S "which presents the",
             plural assumption `sC` plural theory `sC` l_end]
 
 --Up to change, decide on what ending sentence structure we would like to employ

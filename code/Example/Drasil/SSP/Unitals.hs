@@ -5,41 +5,54 @@ import Data.Drasil.SI_Units
 import Data.Drasil.Quantities.SolidMechanics as SM
 import Data.Drasil.Concepts.Physics as CP
 import Data.Drasil.Units.Physics
+import Drasil.SSP.Defs (fs_concept)
 
 sspSymbols :: [CQSWrapper]
-sspSymbols = (map cqs sspConstrained) ++ (map cqs sspUnits) ++ (map cqs sspUnitless) 
+sspSymbols = (map cqs sspInputs) ++ (map cqs sspOutputs) ++
+  (map cqs sspUnits) ++ (map cqs sspUnitless) 
 
 ---------------------------
 -- Imported UnitalChunks --
 ---------------------------
 {-
-SM.mobShear, SM.shearRes, SM.stffness
-SM.poissnsR, SM.elastMod <- ConstrainedChunks
+SM.mobShear, SM.shearRes, SM.stffness <- currently not used
+SM.poissnsR, SM.elastMod <- Used to make UncertQ
 -}
 normStress = SM.nrmStrss
-genForce = uc CP.force cF newton 
+genForce = uc CP.force cF newton
+genPressure = uc CP.pressure (sub lP lI) pascal
 {-must import from Concept.Physics since Quantities.Physics has Force as a vector-}
 
 -------------
 -- HELPERS --
 -------------
-fsi, fisi :: String
+fsi, fisi, wiif, wla, smsi :: String
 fsi   = "for slice index i"
 fisi  = "for interslice index i"
+wiif  = "without the influence of interslice forces"
+wla   = "without length adjustment"
+smsi  = "refers to either slice i midpoint, or slice interface i"
 
 --------------------------------
 -- START OF CONSTRAINEDCHUNKS --
 --------------------------------
 
-sspConstrained, sspOutputs :: [ConstrConcept]
+sspConstrained :: [ConstrWrapper]
+sspConstrained = map cnstrw sspInputs ++ map cnstrw sspOutputs
+
 sspInputs :: [UncertQ]
-sspConstrained = map cCnptfromUQ sspInputs ++ sspOutputs
 sspInputs  = [elasticMod, cohesion, poissnsRatio, fricAngle, dryWeight,
               satWeight, waterWeight]
-sspOutputs = [fs, dx_i, dy_i]
+
+sspOutputs :: [ConstrConcept]
+sspOutputs = [fs, coords, dx_i, dy_i]
 
 gtZeroConstr :: [Constraint] --FIXME: move this somewhere in Data?
 gtZeroConstr = [physc $ (:<) (Int 0)]
+
+monotonicIn :: [Constraint]  --FIXME: Move this? Re word?
+monotonicIn = [physc $ \c ->
+  State [Forall c, Forall $ [V "x1", V "x2"] `IsIn` Real] (V "x1" :< V "x2" :=> V "y1" :< V "y2")]
 
 defultUncrt :: Double
 defultUncrt = 0.1
@@ -47,58 +60,63 @@ defultUncrt = 0.1
 elasticMod, cohesion, poissnsRatio, fricAngle, dryWeight, satWeight,
   waterWeight :: UncertQ
   
-fs, dx_i, dy_i :: ConstrConcept
+fs, coords, dx_i, dy_i :: ConstrConcept
 
 {-Intput Variables-}
 --FIXME: add (x,y) when we can index or make related unitals
 
-elasticMod = uq (constrained' SM.elastMod gtZeroConstr) defultUncrt 15000
+elasticMod = uq (constrained' SM.elastMod gtZeroConstr (Dbl 15000)) defultUncrt
 
 cohesion     = uqc "c'" (cn $ "effective cohesion")
   "internal pressure that sticks particles of soil together"
-  (prime $ Atomic "c") pascal Real gtZeroConstr defultUncrt 10
+  (prime $ Atomic "c") pascal Real gtZeroConstr (Dbl 10) defultUncrt
 
 poissnsRatio = uq (constrained' SM.poissnsR
-  [physc $ \c -> (Int 0) :< c :< (Int 1)]) defultUncrt 0.4
+  [physc $ \c -> (Int 0) :< c :< (Int 1)] (Dbl 0.4)) defultUncrt
 
 fricAngle    = uqc "varphi'" (cn $ "effective angle of friction")
   ("The angle of inclination with respect to the horizontal axis of " ++
   "the Mohr-Coulomb shear resistance line") --http://www.geotechdata.info
   (prime $ Greek Phi_V) degree Real [physc $ \c -> (Int 0) :< c :< (Int 90)]
-  defultUncrt 25
+  (Dbl 25) defultUncrt
 
 dryWeight   = uqc "gamma" (cn $ "dry unit weight")
   "The weight of a dry soil/ground layer divided by the volume of the layer."
   (Greek Gamma_L) specific_weight Real gtZeroConstr
-  defultUncrt 20
+  (Dbl 20) defultUncrt
 
 satWeight   = uqc "gamma_sat" (cn $ "saturated unit weight")
   "The weight of saturated soil/ground layer divided by the volume of the layer."
   (sub (Greek Gamma_L) (Atomic "Sat")) specific_weight Real gtZeroConstr
-  defultUncrt 20
+  (Dbl 20) defultUncrt
 
 waterWeight = uqc "gamma_w" (cn $ "unit weight of water")
   "The weight of one cubic meter of water."
   (sub (Greek Gamma_L) lW) specific_weight Real gtZeroConstr
-  defultUncrt 9.8
+  (Dbl 9.8) defultUncrt
 
-{-Output Variables-}
-fs          = constrained' (cvR (dcc "FS" (nounPhraseSP $ "global factor of safety")
-  "the stability of a surface in a slope") (Atomic "FS")) gtZeroConstr
+{-Output Variables-} --FIXME: See if there should be typical values
+fs          = constrained' (cvR fs_concept (Atomic "FS")) gtZeroConstr (Dbl 1)
+
+coords      = cuc' "(x,y)"
+  (cn $ "cartesian position coordinates" )
+  ("y is considered parallel to the direction of the force of " ++
+  "gravity and x is considered perpendicular to y")
+  (Atomic "(x,y)") metre Real monotonicIn (Dbl 1)
 
 dx_i        = cuc' "dx_i" (cn $ "displacement") ("in the x-ordinate direction " ++ fsi)
-  (sub (Concat [Greek Delta_L, Atomic "x"]) lI) metre Real []
+  (sub (Concat [Greek Delta_L, Atomic "x"]) lI) metre Real [] (Dbl 1)
 
 dy_i        = cuc' "dy_i" (cn $ "displacement") ("in the y-ordinate direction " ++ fsi)
-  (sub (Concat [Greek Delta_L, Atomic "y"]) lI) metre Real []
+  (sub (Concat [Greek Delta_L, Atomic "y"]) lI) metre Real [] (Dbl 1)
 
 ---------------------------
 -- START OF UNITALCHUNKS --
 ---------------------------
 
 sspUnits :: [UCWrapper]
-sspUnits = map ucw [normStress,
-  coords, waterHght, slopeHght, slipHght, xi, critCoords,
+sspUnits = map ucw [normStress, genPressure,
+  waterHght, slopeHght, slipHght, xi, critCoords,
   mobShrI, shrResI, shearFNoIntsl, shearRNoIntsl, slcWght, watrForce,
   watrForceDif, intShrForce, baseHydroForce, surfHydroForce,
   totNrmForce, nrmFSubWat, nrmFNoIntsl, surfLoad, baseAngle, surfAngle,
@@ -108,8 +126,8 @@ sspUnits = map ucw [normStress,
   nrmDispl, porePressure, elmNrmDispl, elmPrllDispl, 
   mobShrC, shrResC, rotatedDispl, intNormForce, shrStress]
 
-normStress,
-  coords, waterHght, slopeHght, slipHght, xi, critCoords, mobShrI,
+normStress, genPressure,
+  waterHght, slopeHght, slipHght, xi, critCoords, mobShrI,
   shearFNoIntsl, shearRNoIntsl, slcWght, watrForce, watrForceDif, shrResI,
   intShrForce, baseHydroForce, surfHydroForce, totNrmForce, nrmFSubWat,
   nrmFNoIntsl, surfLoad, baseAngle, surfAngle, impLoadAngle, baseWthX,
@@ -125,30 +143,24 @@ intNormForce = uc' "E_i" (cn $ "interslice normal force")
   ("exerted between adjacent slices " ++ fisi)
   (sub cE lI) newton
 
-coords      = uc' "(x,y)"
-  (cn $ "cartesian position coordinates" )
-  ("y is considered parallel to the direction of the force of " ++
-  "gravity and x is considered perpendicular to y")
-  (Atomic "(x,y)") metre
-
 waterHght   = uc' "y_wt,i"
   (cn $ "the y ordinate, or height of the water table at i")
-  "refers to either slice i midpoint, or slice interface i"
+  smsi
   (sub lY (Atomic "wt,i")) metre
 
 slopeHght   = uc' "y_us,i" (cn $ "the y ordinate, or height of the " ++
   "top of the slope at i")
-  "refers to either slice i midpoint, or slice interface i"
+  smsi
   (sub lY (Atomic "us,i")) metre
 
 slipHght    = uc' "y_slip,i" (cn $ "the y ordinate, or height of " ++
   "the slip surface at i")
-  "refers to either slice i midpoint, or slice interface i"
+  smsi
   (sub lY (Atomic "slip,i")) metre
 
 xi          = uc' "x_i"
   (cn $ "x ordinate")
-  "refers to either slice i midpoint, or slice interface i"
+  smsi
   (sub lX lI) metre
 
 critCoords  = uc' "(xcs,ycs)" (cn $ "the set of x and y coordinates")
@@ -160,25 +172,25 @@ mobShrI     = uc' "S_i" (cn $ "mobilized shear force")
   fsi
   (sub cS lI) newton
 
-shrResI     = uc' "P_i" (cn $ "shear resistance") ("Mohr Coulomb frictional " ++
-  "force that describes the limit of mobilized shear force the slice i " ++
-  "can withstand before failure")
+shrResI     = uc' "P_i" (cn $ "resistive shear force") ("Mohr Coulomb " ++
+  "frictional force that describes the limit of mobilized shear force the " ++
+  "slice i can withstand before failure")
   (sub cP lI) newton
   
-mobShrC     = uc' "Psi" (cn $ "constant") ("converts mobile shear without " ++ 
-  "the influence of interslice forces, to a calculation considering the interslice forces")
+mobShrC     = uc' "Psi" (cn $ "constant") ("converts mobile shear " ++ 
+  wiif ++ ", to a calculation considering the interslice forces")
   (sub (Greek Psi) lC) newton
 
-shrResC     = uc' "Phi" (cn $ "constant") ("converts resistive shear without " ++ 
-  "the influence of interslice forces, to a calculation considering the interslice forces")
+shrResC     = uc' "Phi" (cn $ "constant") ("converts resistive shear " ++ 
+  wiif ++ ", to a calculation considering the interslice forces")
   (sub (Greek Phi) lC) newton
 
 shearFNoIntsl = uc' "T_i"
-  (cn $ "mobilized shear force") ("without the influence of interslice forces" ++ fsi)
+  (cn $ "mobilized shear force") (wiif ++ " " ++ fsi)
   (sub cT lI) newton
 
 shearRNoIntsl = uc' "R_i"
-  (cn $ "shear resistance") ("without the influence of interslice forces" ++ fsi)
+  (cn $ "resistive shear force") (wiif ++ " " ++ fsi)
   (sub cR lI) newton
 
 slcWght     = uc' "W_i" (cn $ "weight") ("downward force caused by gravity on slice i")
@@ -213,7 +225,7 @@ nrmFSubWat = uc' "N'_i" (cn $ "effective normal force") ("for a soil surface, " 
   (sub (prime $ Atomic "N") lI) newton
 
 nrmFNoIntsl = uc' "N*_i" (cn $ "effective normal force") ("for a soil surface, " ++
-  "neglecting the influence of interslice forces")
+  wiif)
   (sub (Atomic "N*") lI) newton
 
 surfLoad    = uc' "Q_i" (cn $ "imposed surface load") 
@@ -252,19 +264,19 @@ genDisplace = uc' "genDisplace" (cn $ "displacement") "generic displacement of a
   (Greek Delta_L) metre
 
 shrStiffIntsl = uc' "K_st,i" (cn $ "shear stiffness")
-  ("for interslice surface, without length adjustment " ++ fisi)
+  ("for interslice surface, " ++ wla ++ " " ++ fisi)
   (sub cK (Atomic "st,i")) pascal
 
 shrStiffBase  = uc' "K_bt,i" (cn $ "shear stiffness") 
-  ("for a slice base surface, without length adjustment " ++ fsi)
+  ("for a slice base surface, " ++ wla ++ " " ++ fsi)
   (sub cK (Atomic "bt,i")) pascal
 
 nrmStiffIntsl = uc' "K_sn,i" (cn $ "normal stiffness")
-  ("for an interslice surface, without length adjustment " ++ fisi)
+  ("for an interslice surface, " ++ wla ++ " " ++ fisi)
   (sub cK (Atomic "sn,i")) pascal
 
 nrmStiffBase = uc' "K_bn,i" (cn $ "normal stiffness") 
-  ("for a slice base surface, without length adjustment " ++ fsi)
+  ("for a slice base surface, " ++ wla ++ " " ++ fsi)
   (sub cK (Atomic "bn,i")) pascal
 
 shrStiffRes  = uc' "K_tr" (cn $ "shear stiffness")
@@ -298,22 +310,24 @@ rotatedDispl = uc' "varepsilon_i" (cn "displacement") ("in rotated coordinate sy
   (sub (Greek Epsilon_V) lI) metre
   
 shrStress    = uc' "tau_i" (cn "shear stress") ("acting on the base of a slice")
-  (sub (Greek Tau_L) lI) newton
+  (sub (Greek Tau_L) lI) pascal
 
 ----------------------
 -- Unitless Symbols --
 ----------------------
 
 sspUnitless :: [ConVar]
-sspUnitless = [earthqkLoadFctr, normToShear,scalFunc, numbSlices, minFunction, fsloc]
+sspUnitless = [earthqkLoadFctr, normToShear,scalFunc,
+  numbSlices, minFunction, fsloc, index]
 
-earthqkLoadFctr, normToShear, scalFunc, numbSlices, minFunction, fsloc :: ConVar
+earthqkLoadFctr, normToShear, scalFunc,
+  numbSlices, minFunction, fsloc, index :: ConVar
 
 earthqkLoadFctr = cvR (dcc "K_c" (nounPhraseSP $ "earthquake load factor") ("proportionality " ++
   "factor of force that weight pushes outwards; caused by seismic earth movements")) (sub cK lC)
 
-normToShear = cvR (dcc "lambda" (nounPhraseSP $ "ratio") ("between interslice normal and " ++
-  "shear forces (applied to all interslices)")) (Greek Lambda_L)
+normToShear = cvR (dcc "lambda" (nounPhraseSP $ "interslice normal/shear force ratio")
+  ("applied to all interslices")) (Greek Lambda_L)
 
 scalFunc    = cvR (dcc "f_i" (nounPhraseSP $ "scaling function") ("magnitude of interslice " ++
   "forces as a function of the x coordinate" ++ fisi ++ "; can be constant or a half-sine"))
@@ -327,3 +341,6 @@ minFunction = cvR (dcc "Upsilon" (nounPhraseSP "function") ("generic minimizatio
 
 fsloc       = cvR (dcc "FS_loci" (nounPhraseSP "local factor of safety") fsi)
   (sub (Atomic "FS") (Atomic "Loc,i"))
+
+index       = cvR (dcc "index" (nounPhraseSP "index") ("used to show a quantity " ++
+  "applies to only one slice")) lI

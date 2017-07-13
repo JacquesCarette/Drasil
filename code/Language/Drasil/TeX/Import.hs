@@ -1,20 +1,23 @@
 module Language.Drasil.TeX.Import where
 
-import Control.Lens hiding ((:>),(:<))
+import Control.Lens hiding ((:>),(:<),set)
 import Prelude hiding (id)
 import Language.Drasil.Expr (Expr(..), Relation, UFunc(..), BiFunc(..),
-                             Bound(..),DerivType(..))
+                             Bound(..),DerivType(..), Set, Quantifier(..))
+import Language.Drasil.Space (Space(..))
 import Language.Drasil.Expr.Extract
 import Language.Drasil.Spec
 import qualified Language.Drasil.TeX.AST as T
 import Language.Drasil.Unicode (Special(Partial))
 import Language.Drasil.Chunk.Eq
 import Language.Drasil.Chunk.Relation
+import Language.Drasil.Chunk.ExprRelat (relat)
 import Language.Drasil.Chunk.Module
 import Language.Drasil.Chunk.NamedIdea (term)
 import Language.Drasil.Chunk.SymbolForm (SymbolForm, symbol)
 import Language.Drasil.Chunk.Concept (defn)
 import Language.Drasil.Chunk.VarChunk (VarChunk)
+import Language.Drasil.ChunkDB (SymbolMap)
 import Language.Drasil.Config (verboseDDDescription, numberedDDEquations, numberedTMEquations)
 import Language.Drasil.Document
 import Language.Drasil.Symbol
@@ -33,9 +36,6 @@ expr (a :/ b)          = T.Frac (replace_divs a) (replace_divs b)
 expr (a :^ b)          = T.Pow  (expr a) (expr b)
 expr (a :- b)          = T.Sub  (expr a) (expr b)
 expr (a :. b)          = T.Dot  (expr a) (expr b)
-expr (a :&& b)         = T.And  (expr a) (expr b)
-expr (a :|| b)         = T.Or   (expr a) (expr b)
-expr (Not a)           = T.Not  (expr a)
 expr (Neg a)           = T.Neg  (expr a)
 expr (C c)             = T.Sym  (c ^. symbol)
 expr (Deriv Part a 1)  = T.Mul (T.Sym (Special Partial)) (expr a)
@@ -54,9 +54,23 @@ expr x@(_ :> _)        = rel x
 expr x@(_ :< _)        = rel x
 expr x@(_ :<= _)       = rel x
 expr x@(_ :>= _)       = rel x
+expr (Matrix a)        = T.Mtx $ map (map expr) a
 expr (UnaryOp u)       = (\(x,y) -> T.Op x [y]) (ufunc u)
 expr (Grouping e)      = T.Grouping (expr e)
 expr (BinaryOp b)      = (\(x,y) -> T.Op x y) (bfunc b)
+expr (Not a)           = T.Not  (expr a)
+expr (a :&& b)         = T.And  (expr a) (expr b)
+expr (a :|| b)         = T.Or   (expr a) (expr b)
+expr (a  :=>  b)       = T.Impl  (expr a) (expr b)
+expr (a  :<=> b)       = T.Iff   (expr a) (expr b)
+expr (IsIn  a b)       = T.IsIn  (map expr a) (set b)
+expr (NotIn a b)       = T.NotIn (map expr a) (set b)
+expr (State a b)       = T.State (map quan a) (expr b)
+
+-- | Healper for translating Quantifier
+quan :: Quantifier -> T.Quantifier
+quan (Forall e) = T.Forall (expr e)
+quan (Exists e) = T.Exists (expr e)
 
 ufunc :: UFunc -> (T.Function, T.Expr)
 ufunc (Log e) = (T.Log, expr e)
@@ -78,6 +92,7 @@ ufunc (Product (Just (s, Low v, High h)) e) =
 ufunc (Product Nothing e) = (T.Product Nothing, expr e)
 ufunc (Product _ _) = error "TeX/Import.hs Incorrect use of Product"
 ufunc (Exp e) = (T.Exp, expr e)
+ufunc (Sqrt e) = (T.Sqrt, expr e)
 
 bfunc :: BiFunc -> (T.Function, [T.Expr])
 bfunc (Cross e1 e2) = (T.Cross, map expr [e1,e2])
@@ -91,6 +106,20 @@ rel (a :<= b) = T.LEq (expr a) (expr b)
 rel (a :>= b) = T.GEq (expr a) (expr b)
 rel _ = error "Attempting to use non-Relation Expr in relation context."
 
+-- | Helper for translating Sets
+set :: Set -> T.Set
+set Integer  = T.Integer
+set Rational = T.Rational
+set Real     = T.Real
+set Natural  = T.Natural
+set Boolean  = T.Boolean
+set Char     = T.Char
+set String   = T.String
+set Radians  = T.Radians
+set (Vect a) = T.Vect (set a)
+set (Obj a)  = T.Obj a
+
+-- | Helper function for translating Integrals (from 'UFunc')
 integral :: UFunc -> (T.Function, T.Expr)
 integral (Integral (Just (Low v), Just (High h)) e wrtc) = 
   (T.Integral (Just (expr v), Just (expr h)) (int_wrt wrtc), expr e)
@@ -172,11 +201,11 @@ lay x@(Definition m c)      = T.Definition (makePairs c m) (spec $ refName x)
 lay (Enumeration cs)      = T.List $ makeL cs
 lay x@(Figure c f)        = T.Figure (spec (refName x)) (spec c) f
 lay x@(Module m)          = T.Module (formatName m) (spec $ refName x)
-lay x@(Requirement r)     = 
+lay x@(Requirement r _)     = 
   T.Requirement (spec (phrase (r ^. term))) (spec $ refName x)
-lay x@(Assumption a)      = 
+lay x@(Assumption a _)      = 
   T.Assumption (spec (phrase $ a ^. term)) (spec $ refName x)
-lay x@(LikelyChange lc)   = 
+lay x@(LikelyChange lc _)   = 
   T.LikelyChange (spec (phrase $ lc ^. term))
   (spec $ refName x)
 lay x@(UnlikelyChange ucc)= 
@@ -184,28 +213,33 @@ lay x@(UnlikelyChange ucc)=
   (spec $ refName x)
 lay x@(Graph ps w h t)    = T.Graph (map (\(y,z) -> (spec y, spec z)) ps)
                               w h (spec t) (spec $ refName x)
+lay (TMod ps r _)         = T.Definition (map (\(x,y) -> (x, map lay y)) ps)
+  (spec r)
+lay (DDef ps r _)         = T.Definition (map (\(x,y) -> (x, map lay y)) ps)
+  (spec r)
 
 makeL :: ListType -> T.ListType  
-makeL (Bullet bs) = T.Enum $ (map item bs)
-makeL (Number ns) = T.Item $ (map item ns)
-makeL (Simple ps) = T.Simple $ zip (map (spec . fst) ps) (map (item . snd) ps)
-makeL (Desc ps)   = T.Desc $ zip (map (spec . fst) ps) (map (item . snd) ps)
+makeL (Bullet bs)      = T.Enum        $ (map item bs)
+makeL (Number ns)      = T.Item        $ (map item ns)
+makeL (Simple ps)      = T.Simple      $ map (\(x,y) -> (spec x, item y)) ps
+makeL (Desc ps)        = T.Desc        $ map (\(x,y) -> (spec x, item y)) ps
+makeL (Definitions ps) = T.Definitions $ map (\(x,y) -> (spec x, item y)) ps
 
 item :: ItemType -> T.ItemType
 item (Flat i) = T.Flat (spec i)
 item (Nested t s) = T.Nested (spec t) (makeL s) 
   
-makePairs :: DType -> SymbolMap -> [(String,T.LayoutObj)]
+makePairs :: DType -> SymbolMap -> [(String,[T.LayoutObj])]
 makePairs (Data c) m = [
-  ("Label",       T.Paragraph $ T.N $ c ^. symbol),
-  ("Units",       T.Paragraph $ spec $ unit'2Contents c),
-  ("Equation",    eqnStyleDD $ buildEqn c),
-  ("Description", T.Paragraph (buildDDDescription c m))
+  ("Label",       [T.Paragraph $ T.N $ c ^. symbol]),
+  ("Units",       [T.Paragraph $ spec $ unit'2Contents c]),
+  ("Equation",    [eqnStyleDD $ buildEqn c]),
+  ("Description", [T.Paragraph (buildDDDescription c m)])
   ]
 makePairs (Theory c) _ = [
-  ("Label",       T.Paragraph $ spec (phrase $ c ^. term)),
-  ("Equation",    eqnStyleTM $ T.E (rel (relat c))),
-  ("Description", T.Paragraph (spec (c ^. defn)))
+  ("Label",       [T.Paragraph $ spec (phrase $ c ^. term)]),
+  ("Equation",    [eqnStyleTM $ T.E (rel (c ^. relat))]),
+  ("Description", [T.Paragraph (spec (c ^. defn))])
   ]
 makePairs General _ = error "Not yet implemented"
 

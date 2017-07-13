@@ -29,7 +29,7 @@ javaConfig options c =
         endStatement     = semi,
         enumsEqualInts   = False,
         ext              = ".java",
-        fileName         = \_ ns -> head ns,
+        fileName         = fileNameD c,
         include          = includeD "import",
         includeScope     = (scopeDoc c),
         inherit          = text "extends",
@@ -67,8 +67,8 @@ javaConfig options c =
     }
 
 -- short names, packaged up above (and used below)
-renderCode' :: Config -> [Label] -> AbstractCode -> Code
-renderCode' c ms (AbsCode p) = Code [fileCode c p [m] Source (ext c) | m <- ms]
+renderCode' :: Config -> AbstractCode -> Code
+renderCode' c (AbsCode p) = Code $ fileCode c p Source (ext c)
 
 package' :: Label -> Doc
 package' n = text "package" <+> text n
@@ -79,7 +79,7 @@ jstateType c s@(List lt t) d = case t of Base Integer -> list c lt <> angles (te
 jstateType _ (Base String) _ = text "String"
 jstateType c s d = stateTypeD c s d
 
-jtop :: Config -> FileType -> Label -> [Module] -> Doc
+jtop :: Config -> FileType -> Label -> Module -> Doc
 jtop c _ p _ = vcat [
     package c p <> (endStatement c)
     -- blank,
@@ -89,9 +89,9 @@ jtop c _ p _ = vcat [
     -- include c ("java.util." ++ render (list c Dynamic)) <> endStatement c
     ]
 
-jbody :: Config -> a -> Label -> [Module] -> Doc
-jbody c _ p modules = let ms = foldl1 (++) (map classes modules) in
-  vibmap (classDoc c Source p) ms
+jbody :: Config -> a -> Label -> Module -> Doc
+jbody c _ p (Mod _ _ _ _ cs) =
+  vibmap (classDoc c Source p) cs
 
 -- code doc functions
 binOpDoc' :: BinaryOp -> Doc

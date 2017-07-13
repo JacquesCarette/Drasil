@@ -9,8 +9,10 @@ import Language.Drasil.Chunk
 import Language.Drasil.Chunk.NamedIdea (NamedIdea(..), NamedChunk)
 import Language.Drasil.Chunk.VarChunk (VarChunk)
 import Language.Drasil.Chunk.Eq
-import Language.Drasil.Expr.Extract
 import Language.Drasil.Chunk.Wrapper (nw, NWrapper)
+import Language.Drasil.ChunkDB
+import Language.Drasil.Expr.Extract
+
 import qualified Language.Drasil.Code.Imperative.AST as A
 
 -- BEGIN METHODCHUNK --

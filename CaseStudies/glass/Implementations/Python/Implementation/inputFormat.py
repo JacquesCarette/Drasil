@@ -19,7 +19,7 @@ def get_input(filename, params):
     # dimensions of glass slab
     params.a = float64(infile.readline())
     params.b = float64(infile.readline())
-    params.t = infile.readline()
+    params.t = infile.readline().rstrip()
     text = infile.readline()
     # glass type
     params.gt = infile.readline().rstrip()

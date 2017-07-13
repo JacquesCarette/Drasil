@@ -131,12 +131,12 @@ makeCSS _ = vcat [
     ],
   text ".fdn {border-top: thin solid black;}",
   text ".table {text-align:left;padding-left:1%;width:90%;margin-bottom:2%;margin-top:2%}",
-  text ("table, th, td {border: 1px solid black; border-collapse: collapse;" ++ 
+  text ("table, th, td {border-collapse: collapse;" ++ 
     "margin-left:auto;margin-right:auto;}"),
-  text "th, td {padding:1%;}",
-  text ".tdefn {width:75%;margin-top:1%;margin-bottom:1%;}",
-  text ".tdefn th {width:15%; padding:1%;}",
-  text ".ddefn {width:75%;margin-top:1%;margin-bottom:1%;}",
+  text "th, td {border: 1px solid black; padding:1%;}",
+  text ".tdefn, .ddefn {width:75%;margin-top:1%;margin-bottom:1%;}",
+  text ".tdefn th {width:15%;}",
+  text ".ddefn th {width:15%;}",
   text ".section {width:80%; margin:0 auto;text-align:left;}",
   vcat [
     text ".code {",
@@ -154,7 +154,27 @@ makeCSS _ = vcat [
     text "}"
     ],
   text ".list {text-align:left;}",
-  text ".figure {max-width: 800px;}"
+  text ".figure {max-width: 800px;}",
+  vcat [
+    text ".matrix {position: relative;}",
+    text ".matrix:before, .matrix:after {",
+    text "  content: \"\";",
+    text "  position: absolute;",
+    text "  top: 0;",
+    text "  border: 1px solid #000;",
+    text "  width: 6px;",
+    text "  height: 100%;}",
+    text ".matrix:before {",
+    text "  left: -6px;",
+    text "  border-right: 0px;}",
+    text ".matrix:after {",
+    text "  right: -6px;",
+    text "  border-left: 0px;}",
+    text ".matrix td {",
+    text "  padding: 6px;",
+    text "  text-align: center;",
+    text "  border: 0px;}"
+    ]
   ]
 
 -- | Create the link to the necessary CSS file

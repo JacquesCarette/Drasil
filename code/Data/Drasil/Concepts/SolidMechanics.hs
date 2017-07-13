@@ -9,31 +9,32 @@ import Language.Drasil
 elastMod, mobShear, normForce, nrmStrss, poissnsR, shearForce,
   shearRes, stffness :: ConceptChunk
 
-elastMod   = dccWDS "E" (cn "elastic modulus") (S "The ratio of the" +:+
-  phrase stress +:+ S "exerted on a body to the resulting" 
-  +:+. phrase strain)
+elastMod   = dccWDS "E" (cn "elastic modulus") 
+  (S "The ratio of the" +:+ phrase stress +:+ 
+  S "exerted on a body to the resulting" +:+. phrase strain)
 
-mobShear   = dccWDS "S" (cn "mobilized shear force") (S "The amount of" +:+
-  S "shear" +:+ (phrase force) +:+ S "resisted by the body" +:+
+mobShear   = dccWDS "S" (cn "mobilized shear force") 
+  (S "The amount of shear" +:+ (phrase force) +:+ S "resisted by the body" +:+
   S "when shear" +:+ (phrase stress) +:+ S "is applied.")
 
 normForce  = dccWDS "normForce" (cn' "normal force")
   (S "A" +:+ phrase force +:+ S "applied perpendicular" +:+ 
   S "to the plane of the material.")
   
-nrmStrss   = dccWDS "nrmStrss" (cn "normal stress") (S "The" +:+
-  phrase stress +:+ S "exerted perpendicular to the plain of the object")
+nrmStrss   = dccWDS "nrmStrss" (cn "normal stress") 
+  (S "The" +:+ phrase stress +:+ 
+  S "exerted perpendicular to the plain of the object")
   
-poissnsR   = dccWDS "nu" (nounPhraseSP "Poisson's ratio") (S "The ratio" +:+
-  S "of perpendicular" +:+ phrase strain +:+ S "to parellel" +:+.
-  phrase strain)
+poissnsR   = dccWDS "nu" (nounPhraseSP "Poisson's ratio") 
+  (S "The ratio of perpendicular" +:+ phrase strain +:+ 
+  S "to parellel" +:+. phrase strain)
   
-shearRes   = dccWDS "P" (cn "shear resistance") (S "The resulting" +:+
-  phrase friction +:+ S "caused by a shear" +:+. phrase stress)
+shearRes   = dccWDS "P" (cn "shear resistance") 
+  (S "The resulting" +:+ phrase friction +:+ 
+  S "caused by a shear" +:+. phrase stress)
   
 shearForce = dccWDS "shearForce" (cn' "shear force")
-  (S "A" +:+ phrase force +:+ S "applied parallel" +:+ 
-  S "to the plane of the material.")
+  (S "A" +:+ phrase force +:+ S "applied parallel to the plane of the material.")
   
-stffness   = dccWDS "K" (cn "stiffness") (S "The extent a body" +:+
-  S "resists" +:+. phrase strain)
+stffness   = dccWDS "K" (cn "stiffness") 
+  (S "The extent a body" +:+ S "resists" +:+. phrase strain)

@@ -1,4 +1,5 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML'></script>
 <html>
 <head>
 <link rel="stylesheet" type="text/css" href="SWHS_SRS.css">
@@ -9,7 +10,7 @@ Software Requirements Specification for Solar Water Heating Systems Incorporatin
 <body>
 <div class="title">
 <h1>
-Software Requirements Specification for solar water heating systems incorporating PCM
+Software Requirements Specification for Solar Water Heating Systems Incorporating PCM
 </h1>
 </div>
 <div class="author">
@@ -261,7 +262,7 @@ J
 </tr>
 <tr>
 <td>
-E<sub>Pmelt</sub><sup>init</sup>
+E<sub>P</sub><sub>melt</sub><sup>init</sup>
 </td>
 <td>
 Change in heat energy in the PCM at the instant when melting begins
@@ -613,6 +614,17 @@ Melting point temperature
 </tr>
 <tr>
 <td>
+t
+</td>
+<td>
+Time
+</td>
+<td>
+s
+</td>
+</tr>
+<tr>
+<td>
 T<sub>P</sub>
 </td>
 <td>
@@ -631,17 +643,6 @@ Temperature of the water
 </td>
 <td>
 &deg;C
-</td>
-</tr>
-<tr>
-<td>
-t
-</td>
-<td>
-Time
-</td>
-<td>
-s
 </td>
 </tr>
 <tr>
@@ -1092,7 +1093,7 @@ SWHS is a computer program developed to investigate the effect of employing PCM 
 Terminology and Definitions
 </h4>
 <p class="paragraph">
-This subsection provides a list of terms that are used in the subsequent sections and their meaning, with the purpose of reducing ambiguity and making it easier to correctly understand the requirements.
+This subsection provides a list of terms that are used in the subsequent sections and their meaning, with the purpose of reducing ambiguity and making it easier to correctly understand the requirements:
 </p>
 <ul class="list">
 <li>
@@ -1240,6 +1241,9 @@ A18: The PCM is either in a liquid state or a solid state but not a gaseous stat
 <p>
 A19: The pressure in the tank is atmospheric, so the melting point temperature and boiling point temperature are 0&deg;C and 100&deg;C, respectively [IM1, IM3].
 </p>
+<p>
+A20: When considering the volume of water in the tank, the volume of the heating coil is assumed to be negligible [R2].
+</p>
 </div>
 </div>
 </a>
@@ -1333,9 +1337,6 @@ T<sub>boil</sub>&lt;T
 </span>
 </span>
 </div>
-<span class="casebr">
-}
-</span>
 </div>
 </a>
 </td>
@@ -1405,6 +1406,85 @@ General Definitions
 <p class="paragraph">
 This section collects the laws and equations that will be used in deriving the data definitions, which in turn are used to build the instance models.
 </p>
+<a id="T:nwtnCooling">
+<table class="tdefn">
+<tr>
+<th>
+Label
+</th>
+<td>
+<p class="paragraph">
+Newton's law of cooling
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Equation
+</th>
+<td>
+<a id="">
+<div class="equation">
+<b>q</b>(t)=h&Delta;T(t)
+</div>
+</a>
+</td>
+</tr>
+<tr>
+<th>
+Description
+</th>
+<td>
+<p class="paragraph">
+Newton's law of cooling describes convective cooling from a surface. The law is stated as: the rate of heat loss from a body is proportional to the difference in temperatures between the body and its surroundings. Add Description.
+</p>
+</td>
+</tr>
+</table>
+</a>
+<a id="T:rocTempSimp">
+<table class="tdefn">
+<tr>
+<th>
+Label
+</th>
+<td>
+<p class="paragraph">
+Simplified rate of change of temperature
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Equation
+</th>
+<td>
+<a id="">
+<div class="equation">
+mC<div class="fraction">
+<span class="fup">
+dT
+</span>
+<span class="fdn">
+dt
+</span>
+</div>=q<sub>in</sub>A<sub>in</sub>-q<sub>out</sub>A<sub>out</sub>+gV
+</div>
+</a>
+</td>
+</tr>
+<tr>
+<th>
+Description
+</th>
+<td>
+<p class="paragraph">
+Add Description
+</p>
+</td>
+</tr>
+</table>
+</a>
 <p class="paragraph">
 Detailed derivation of simplified rate of change of temperature:
 </p>
@@ -1637,6 +1717,7 @@ H<sub>f</sub> is the specific latent heat of fusion<br />Q is the latent heat<br
 </td>
 </tr>
 </table>
+</a>
 <a id="DD:melt.frac">
 <table class="ddefn">
 <tr>
@@ -1692,7 +1773,6 @@ Description
 </a>
 </div>
 </a>
-</a>
 <a id="Sec:InstMode">
 <div class="subsubsection">
 <h4>
@@ -1702,8 +1782,72 @@ Instance Models
 This section transforms the problem defined in <a href=#Sec:ProbDesc>this Section</a> into one which is expressed in mathematical terms. It uses concrete symbols defined in <a href=#Sec:DataDefi>this Section</a> to replace the abstract symbols in the models identified in <a href=#Sec:TheoMode>this Section</a> and <a href=#Sec:GeneDefi>this Section</a>.
 </p>
 <p class="paragraph">
-The goals GS1 to GS4 are solved by IM1 to IM4. The solutions for IM1 and IM2 are coupled since the solution for T<sub>W</sub> and T<sub>P</sub> depend on one another. IM3 can be solved once IM1 has been solved. The solution of IM2 and IM4 are also coupled, since the temperature of the phase change material and change in heat energy in the PCM depend on the phase change. (Instance models are left out because they are not currently implemented in Drasil.)
+The goals GS1 to GS4 are solved by IM1 to IM4. The solutions for IM1 and IM2 are coupled since the solution for T<sub>W</sub> and T<sub>P</sub> depend on one another. IM3 can be solved once IM1 has been solved. The solution of IM2 and IM4 are also coupled, since the temperature of the phase change material and change in heat energy in the PCM depend on the phase change.
 </p>
+<a id="T:eBalanceOnWtr">
+<table class="tdefn">
+<tr>
+<th>
+Label
+</th>
+<td>
+<p class="paragraph">
+Energy balance on water to find the temperature of the water
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Equation
+</th>
+<td>
+<a id="">
+<div class="equation">
+<div class="fraction">
+<span class="fup">
+dT<sub>W</sub>
+</span>
+<span class="fdn">
+dt
+</span>
+</div>=<div class="fraction">
+<span class="fup">
+1
+</span>
+<span class="fdn">
+&tau;<sub>W</sub>
+</span>
+</div>(T<sub>C</sub>-T<sub>W</sub>(t)+&eta;(T<sub>P</sub>(t)-T<sub>W</sub>(t)))
+</div>
+</a>
+</td>
+</tr>
+<tr>
+<th>
+Description
+</th>
+<td>
+<p class="paragraph">
+T<sub>W</sub> is the temperature of the water (&deg;C). T<sub>P</sub> is the temperature of the phase change material (&deg;C). T<sub>C</sub> is the temperature of the heating coil (&deg;C). &tau;<sub>W</sub>=<div class="fraction">
+<span class="fup">
+m<sub>W</sub>C<sub>W</sub>
+</span>
+<span class="fdn">
+h<sub>C</sub>A<sub>C</sub>
+</span>
+</div> is a constant (s). &eta;=<div class="fraction">
+<span class="fup">
+h<sub>P</sub>A<sub>P</sub>
+</span>
+<span class="fdn">
+h<sub>C</sub>A<sub>C</sub>
+</span>
+</div> is a constant (dimensionless). The above equation applies as long as the water is in liquid form, 0&lt;T<sub>W</sub>&lt;100 (&deg;C) where 0 (&deg;C) and 100 (&deg;C) are the melting and boiling point temperatures of water, respectively (A14, A19).
+</p>
+</td>
+</tr>
+</table>
+</a>
 <p class="paragraph">
 Derivation of the energy balance on water:
 </p>
@@ -1787,7 +1931,14 @@ m<sub>W</sub>C<sub>W</sub>
 </span>
 </div>(T<sub>C</sub>-T<sub>W</sub>)+<div class="fraction">
 <span class="fup">
-h<sub>C</sub>A<sub>C</sub>/h<sub>C</sub>A<sub>C</sub>h<sub>P</sub>A<sub>P</sub>
+h<sub>C</sub>A<sub>C</sub>
+</span>
+<span class="fdn">
+h<sub>C</sub>A<sub>C</sub>
+</span>
+</div><div class="fraction">
+<span class="fup">
+h<sub>P</sub>A<sub>P</sub>
 </span>
 <span class="fdn">
 m<sub>W</sub>C<sub>W</sub>
@@ -1816,7 +1967,14 @@ m<sub>W</sub>C<sub>W</sub>
 </span>
 </div>(T<sub>C</sub>-T<sub>W</sub>)+<div class="fraction">
 <span class="fup">
-h<sub>P</sub>A<sub>P</sub>/h<sub>C</sub>A<sub>C</sub>h<sub>C</sub>A<sub>C</sub>
+h<sub>P</sub>A<sub>P</sub>
+</span>
+<span class="fdn">
+h<sub>C</sub>A<sub>C</sub>
+</span>
+</div><div class="fraction">
+<span class="fup">
+h<sub>C</sub>A<sub>C</sub>
 </span>
 <span class="fdn">
 m<sub>W</sub>C<sub>W</sub>
@@ -1825,7 +1983,21 @@ m<sub>W</sub>C<sub>W</sub>
 </div>
 </a>
 <p class="paragraph">
-Setting &tau;<sub>W</sub>=m<sub>W</sub>C<sub>W</sub>/h<sub>C</sub>A<sub>C</sub> and &eta;=h<sub>P</sub>A<sub>P</sub>/h<sub>C</sub>A<sub>C</sub>, Equation (5) can be written as:
+Setting &tau;<sub>W</sub>=<div class="fraction">
+<span class="fup">
+m<sub>W</sub>C<sub>W</sub>
+</span>
+<span class="fdn">
+h<sub>C</sub>A<sub>C</sub>
+</span>
+</div> and &eta;=<div class="fraction">
+<span class="fup">
+h<sub>P</sub>A<sub>P</sub>
+</span>
+<span class="fdn">
+h<sub>C</sub>A<sub>C</sub>
+</span>
+</div>, Equation (5) can be written as:
 </p>
 <a id="">
 <div class="equation">
@@ -1854,7 +2026,14 @@ dt
 </div>
 </a>
 <p class="paragraph">
-Finally, factoring out 1/&tau;<sub>W</sub>, we are left with the governing ODE for IM1:
+Finally, factoring out <div class="fraction">
+<span class="fup">
+1
+</span>
+<span class="fdn">
+&tau;<sub>W</sub>
+</span>
+</div>, we are left with the governing ODE for IM1:
 </p>
 <a id="">
 <div class="equation">
@@ -1874,6 +2053,101 @@ dt
 </span>
 </div>(T<sub>C</sub>-T<sub>W</sub>+&eta;(T<sub>P</sub>-T<sub>W</sub>))
 </div>
+</a>
+<a id="T:eBalanceOnPCM">
+<table class="tdefn">
+<tr>
+<th>
+Label
+</th>
+<td>
+<p class="paragraph">
+Energy balance on PCM to find T_p
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Equation
+</th>
+<td>
+<a id="">
+<div class="equation">
+<div class="fraction">
+<span class="fup">
+dT<sub>P</sub>
+</span>
+<span class="fdn">
+dt
+</span>
+</div>=<span class="casebr">
+{
+</span>
+<div class="cases">
+<span>
+<div class="fraction">
+<span class="fup">
+1
+</span>
+<span class="fdn">
+&tau;<sub>P</sub><sup>S</sup>
+</span>
+</div>(T<sub>W</sub>(t)-T<sub>P</sub>(t)) , <span class="case">
+T<sub>P</sub>&lt;T<sub>melt</sub><sup>P</sup>
+</span>
+</span>
+<span>
+<div class="fraction">
+<span class="fup">
+1
+</span>
+<span class="fdn">
+&tau;<sub>P</sub><sup>L</sup>
+</span>
+</div>(T<sub>W</sub>(t)-T<sub>P</sub>(t)) , <span class="case">
+T<sub>P</sub>&gt;T<sub>melt</sub><sup>P</sup>
+</span>
+</span>
+<span>
+0 , <span class="case">
+T<sub>P</sub>=T<sub>melt</sub><sup>P</sup>
+</span>
+</span>
+<span>
+0 , <span class="case">
+0&lt;&phi;&lt;1
+</span>
+</span>
+</div>
+</div>
+</a>
+</td>
+</tr>
+<tr>
+<th>
+Description
+</th>
+<td>
+<p class="paragraph">
+T<sub>W</sub> is the temperature of the water (&deg;C). T<sub>P</sub> is the temperature of the phase change material (&deg;C). &tau;<sub>P</sub><sup>S</sup>=<div class="fraction">
+<span class="fup">
+m<sub>P</sub>C<sub>P</sub><sup>S</sup>
+</span>
+<span class="fdn">
+h<sub>P</sub>A<sub>P</sub>
+</span>
+</div> is a constant (s). &tau;<sub>P</sub><sup>L</sup>=<div class="fraction">
+<span class="fup">
+m<sub>P</sub>C<sub>P</sub><sup>L</sup>
+</span>
+<span class="fdn">
+h<sub>P</sub>A<sub>P</sub>
+</span>
+</div> is a constant (s)..
+</p>
+</td>
+</tr>
+</table>
 </a>
 <p class="paragraph">
 Detailed derivation of the energy balance on the PCM during sensible heating phase:
@@ -1961,6 +2235,102 @@ In the case where T<sub>P</sub>=T<sub>melt</sub><sup>P</sup> and not all of the 
 <p class="paragraph">
 This derivation does not consider the boiling of the PCM, as the PCM is assumed to either be in a solid state or a liquid state (A18).
 </p>
+<a id="T:heatEInWtr">
+<table class="tdefn">
+<tr>
+<th>
+Label
+</th>
+<td>
+<p class="paragraph">
+Heat energy in the water
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Equation
+</th>
+<td>
+<a id="">
+<div class="equation">
+E<sub>W</sub>(t)=C<sub>W</sub>m<sub>W</sub>(T<sub>W</sub>(t)-T<sub>init</sub>)
+</div>
+</a>
+</td>
+</tr>
+<tr>
+<th>
+Description
+</th>
+<td>
+<p class="paragraph">
+The above equation is derived using T2. E<sub>W</sub> is the change in thermal energy of the liquid water relative to the energy at the initial temperature (T<sub>init</sub>) (J). C<sub>W</sub> is the specific heat capacity of liquid water (J/(kg&deg;C)) and m<sub>W</sub> is the mass of the water (kg). The change in temperature is the difference between the temperature at time t (s), T<sub>W</sub> and the initial temperature, T<sub>init</sub> (&deg;C). This equation applies as long as 0&lt;T<sub>W</sub>&lt;0&deg;C (A14, A19).
+</p>
+</td>
+</tr>
+</table>
+</a>
+<a id="T:heatEInPCM">
+<table class="tdefn">
+<tr>
+<th>
+Label
+</th>
+<td>
+<p class="paragraph">
+Heat energy in the PCM
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Equation
+</th>
+<td>
+<a id="">
+<div class="equation">
+E<sub>P</sub>=<span class="casebr">
+{
+</span>
+<div class="cases">
+<span>
+C<sub>P</sub><sup>S</sup>m<sub>P</sub>(T<sub>P</sub>(t)-T<sub>init</sub>) , <span class="case">
+T<sub>P</sub>&lt;T<sub>melt</sub><sup>P</sup>
+</span>
+</span>
+<span>
+E<sub>P</sub><sub>melt</sub><sup>init</sup>+H<sub>f</sub>m<sub>P</sub>+C<sub>P</sub><sup>L</sup>m<sub>P</sub>(T<sub>P</sub>(t)-T<sub>melt</sub><sup>P</sup>) , <span class="case">
+T<sub>P</sub>&gt;T<sub>melt</sub><sup>P</sup>
+</span>
+</span>
+<span>
+E<sub>P</sub><sub>melt</sub><sup>init</sup>+Q<sub>P</sub>(t) , <span class="case">
+T<sub>P</sub>=T<sub>melt</sub><sup>P</sup>
+</span>
+</span>
+<span>
+E<sub>P</sub><sub>melt</sub><sup>init</sup>+Q<sub>P</sub>(t) , <span class="case">
+0&lt;&phi;&lt;1
+</span>
+</span>
+</div>
+</div>
+</a>
+</td>
+</tr>
+<tr>
+<th>
+Description
+</th>
+<td>
+<p class="paragraph">
+The above equation is derived using T2 and T3. E<sub>P</sub> is the change in thermal energy of the PCM relative to the energy at the initial temperature (T<sub>init</sub>) J. E<sub>P</sub> for the solid PCM is found using T2 for sensible heat ing, with the specific heat capacity of the solid PCM, C<sub>P</sub><sup>S</sup> (J/(kg&deg;C)) and the change in the PCM temperature from the initial temperature (&deg;C). E<sub>P</sub> for the melted PCM (T<sub>P</sub>&gt;E<sub>P</sub><sub>melt</sub><sup>init</sup>) is found using T2 for sensible heat of the liquid. PCM plus the energy when melting starts, plus the energy required to melt all of the PCM The energy when melting starts is E<sub>P</sub><sub>melt</sub><sup>init</sup> (J). The energy required to melt all of the PCM is H<sub>f</sub>m<sub>P</sub> (J) (DD3). the specific heat capacity of the liquid PCM is C<sub>P</sub><sup>L</sup> (J/(kg&deg;C)) and the change in temperature is T<sub>P</sub>-T<sub>melt</sub><sup>P</sup> (&deg;C). E<sub>P</sub> during melting of the PCM is found using the energy required at the instant melting of the PCM begins, E<sub>P</sub><sub>melt</sub><sup>init</sup> plus the latent heat energy added to the PCM, Q<sub>P</sub> (J) since the time when melting began t<sub>melt</sub><sup>init</sup> (s). The heat energy for boiling of the PCM is not detailed, since the PCM is assumed to either be in a solid or liquid state (A18).
+</p>
+</td>
+</tr>
+</table>
+</a>
 </div>
 </a>
 <a id="Sec:DataCons">
@@ -1969,9 +2339,7 @@ This derivation does not consider the boiling of the PCM, as the PCM is assumed 
 Data Constraints
 </h4>
 <p class="paragraph">
-<a href=#Table:Tabl1>this Table</a> and <a href=#Table:Tabl2>this Table</a> show the data constraints on the input and output variables, respectively. The column for physical constraints gives the physical limitations on the range of values that can be taken by the variable. The column for software constraints restricts the range of inputs to reasonable values. The constraints are conservative, to give the user of the model the flexibility to experiment with unusual situations. The column of typical values is intended to provide a feel for a common scenario. The uncertainty column provides an estimate of the confidence with which the physical quantities can be measured. This information would be part of the input if one were performing an uncertainty quantification exercise. (The tables are left out because features they should use are not yet implemented in Drasil.)
-</p>
-<a href=#Table:InpuVari>this Table</a>, and <a href=#Table:OutpVari>this Table</a> shows the data constraints on the input and output variables, respectively. The column for physical constraints gives the physical limitations on the range of values that can be taken by the variable. The uncertainty column provides an estimate of the confidence with which the physical quantities can be measured. This information would be part of the input if one were performing an uncertainty quantification exercise. The constraints are conservative, to give the user of the model the flexibility to experiment with unusual situations. The column of typical values is intended to provide a feel for a common scenario. The column for software constraints restricts the range of inputs to reasonable values. (*) These quantities cannot be equal to zero, or there will be a divide by zero in the model. (+) These quantities cannot be zero, or there would be freezing (A13). (#) The constraints on the surface area are calculated by considering the surface area to volume ratio. The assumption is that the lowest ratio is 1 and the highest possible is <div class="fraction">
+<a href=#Table:InpuDataCons>this Table</a>, and <a href=#Table:OutpDataCons>this Table</a> shows the data constraints on the input and output variables, respectively. The column for physical constraints gives the physical limitations on the range of values that can be taken by the variable. The uncertainty column provides an estimate of the confidence with which the physical quantities can be measured. This information would be part of the input if one were performing an uncertainty quantification exercise. The constraints are conservative, to give the user of the model the flexibility to experiment with unusual situations. The column of typical values is intended to provide a feel for a common scenario. The column for software constraints restricts the range of inputs to reasonable values. (*) These quantities cannot be equal to zero, or there will be a divide by zero in the model. (+) These quantities cannot be zero, or there would be freezing (A13). (#) The constraints on the surface area are calculated by considering the surface area to volume ratio. The assumption is that the lowest ratio is 1 and the highest possible is <div class="fraction">
 <span class="fup">
 2
 </span>
@@ -1980,7 +2348,7 @@ h<sub>min</sub>
 </span>
 </div>, where h<sub>min</sub> is the thickness of a &quot;sheet&quot; of PCM. A thin sheet has the greatest surface area to volume ratio. (**) The constraint on the maximum time at the end of the simulation is the total number of secondsin one day.
 </p>
-<a id="Table:InpuVari">
+<a id="Table:InpuDataCons">
 <table class="table">
 <tr>
 <th>
@@ -1996,7 +2364,7 @@ Software Constraints
 Typical Value
 </th>
 <th>
-Uncertainty
+Typical Uncertainty
 </th>
 </tr>
 <tr>
@@ -2013,7 +2381,7 @@ L<sub>min</sub>&le;L&le;L<sub>max</sub>
 1.5 m
 </td>
 <td>
-10%
+0.1
 </td>
 </tr>
 <tr>
@@ -2051,7 +2419,7 @@ L<sub>min</sub>
 0.412 m
 </td>
 <td>
-10%
+0.1
 </td>
 </tr>
 <tr>
@@ -2065,10 +2433,10 @@ V<sub>P</sub>&gt;0 and V<sub>P</sub>&lt;V<sub>tank</sub>
 V<sub>P</sub>&ge;V<sub>tank</sub>
 </td>
 <td>
-5.0e-2 m<sup>3</sup>
+0.05 m<sup>3</sup>
 </td>
 <td>
-10%
+0.1
 </td>
 </tr>
 <tr>
@@ -2092,7 +2460,7 @@ h<sub>min</sub>
 1.2 m<sup>2</sup>
 </td>
 <td>
-10%
+0.1
 </td>
 </tr>
 <tr>
@@ -2103,13 +2471,13 @@ h<sub>min</sub>
 &rho;<sub>P</sub>&gt;0 and &rho;<sub>P</sub><sup>min</sup>&lt;&rho;<sub>P</sub>&lt;&rho;<sub>P</sub><sup>max</sup>
 </td>
 <td>
-
+None
 </td>
 <td>
-1007 kg/(m<sup>3</sup>)
+1007.0 kg/(m<sup>3</sup>)
 </td>
 <td>
-10%
+0.1
 </td>
 </tr>
 <tr>
@@ -2120,13 +2488,13 @@ T<sub>melt</sub><sup>P</sup>
 0&lt;T<sub>melt</sub><sup>P</sup>&lt;T<sub>C</sub>
 </td>
 <td>
-
+None
 </td>
 <td>
 44.2 &deg;C
 </td>
 <td>
-10%
+0.1
 </td>
 </tr>
 <tr>
@@ -2140,10 +2508,10 @@ C<sub>P</sub><sup>S</sup>&gt;0
 C<sub>P</sub><sup>S</sup><sub>min</sub>&lt;C<sub>P</sub><sup>S</sup>&lt;C<sub>P</sub><sup>S</sup><sub>max</sub>
 </td>
 <td>
-1760 J/(kg&deg;C)
+1760.0 J/(kg&deg;C)
 </td>
 <td>
-10%
+0.1
 </td>
 </tr>
 <tr>
@@ -2157,10 +2525,10 @@ C<sub>P</sub><sup>L</sup>&gt;0
 C<sub>P</sub><sup>L</sup><sub>min</sub>&lt;C<sub>P</sub><sup>L</sup>&lt;C<sub>P</sub><sup>L</sup><sub>max</sub>
 </td>
 <td>
-2270 J/(kg&deg;C)
+2270.0 J/(kg&deg;C)
 </td>
 <td>
-10%
+0.1
 </td>
 </tr>
 <tr>
@@ -2174,10 +2542,10 @@ H<sub>f</sub>&gt;0
 H<sub>f</sub><sub>min</sub>&lt;H<sub>f</sub>&lt;H<sub>f</sub><sub>max</sub>
 </td>
 <td>
-211600 J/kg
+211600.0 J/kg
 </td>
 <td>
-10%
+0.1
 </td>
 </tr>
 <tr>
@@ -2194,7 +2562,7 @@ A<sub>C</sub>&le;A<sub>C</sub><sup>max</sup>
 0.12 m<sup>2</sup>
 </td>
 <td>
-10%
+0.1
 </td>
 </tr>
 <tr>
@@ -2205,13 +2573,13 @@ T<sub>C</sub>
 0&lt;T<sub>C</sub>&lt;100
 </td>
 <td>
-
+None
 </td>
 <td>
-50 &deg;C
+50.0 &deg;C
 </td>
 <td>
-10%
+0.1
 </td>
 </tr>
 <tr>
@@ -2225,10 +2593,10 @@ T<sub>C</sub>
 &rho;<sub>W</sub><sup>min</sup>&lt;&rho;<sub>W</sub>&le;&rho;<sub>W</sub><sup>max</sup>
 </td>
 <td>
-1000 kg/(m<sup>3</sup>)
+1000.0 kg/(m<sup>3</sup>)
 </td>
 <td>
-10%
+0.1
 </td>
 </tr>
 <tr>
@@ -2242,10 +2610,10 @@ C<sub>W</sub>&gt;0
 C<sub>W</sub><sup>min</sup>&lt;C<sub>W</sub>&lt;C<sub>W</sub><sup>max</sup>
 </td>
 <td>
-4186 J/(kg&deg;C)
+4186.0 J/(kg&deg;C)
 </td>
 <td>
-10%
+0.1
 </td>
 </tr>
 <tr>
@@ -2259,10 +2627,10 @@ h<sub>C</sub>&gt;0
 h<sub>C</sub><sup>min</sup>&le;h<sub>C</sub>&le;h<sub>C</sub><sup>max</sup>
 </td>
 <td>
-1000 W/(m<sup>2</sup>&deg;C)
+1000.0 W/(m<sup>2</sup>&deg;C)
 </td>
 <td>
-10%
+0.1
 </td>
 </tr>
 <tr>
@@ -2276,10 +2644,10 @@ h<sub>P</sub>&gt;0
 h<sub>P</sub><sup>min</sup>&le;h<sub>P</sub>&le;h<sub>P</sub><sup>max</sup>
 </td>
 <td>
-1000 W/(m<sup>2</sup>&deg;C)
+1000.0 W/(m<sup>2</sup>&deg;C)
 </td>
 <td>
-10%
+0.1
 </td>
 </tr>
 <tr>
@@ -2290,13 +2658,13 @@ T<sub>init</sub>
 0&lt;T<sub>init</sub>&lt;T<sub>melt</sub>
 </td>
 <td>
-
+None
 </td>
 <td>
-40 &deg;C
+40.0 &deg;C
 </td>
 <td>
-10%
+0.1
 </td>
 </tr>
 <tr>
@@ -2310,18 +2678,18 @@ t<sub>final</sub>&gt;0
 t<sub>final</sub>&lt;t<sub>final</sub><sup>max</sup>
 </td>
 <td>
-50000 s
+50000.0 s
 </td>
 <td>
-10%
+0.1
 </td>
 </tr>
 </table>
 <p class="caption">
-Input Variables
+Input Data Constraints
 </p>
 </a>
-<a id="Table:OutpVari">
+<a id="Table:OutpDataCons">
 <table class="table">
 <tr>
 <th>
@@ -2336,7 +2704,7 @@ Physical Constraints
 T<sub>W</sub>
 </td>
 <td>
-T<sub>init</sub>&le;T<sub>W</sub>&le;T<sub>C</sub> (by A11)
+T<sub>init</sub>&le;T<sub>W</sub>&le;T<sub>C</sub>
 </td>
 </tr>
 <tr>
@@ -2344,7 +2712,7 @@ T<sub>init</sub>&le;T<sub>W</sub>&le;T<sub>C</sub> (by A11)
 T<sub>P</sub>
 </td>
 <td>
-T<sub>init</sub>&le;T<sub>P</sub>&le;T<sub>C</sub> (by A11)
+T<sub>init</sub>&le;T<sub>P</sub>&le;T<sub>C</sub>
 </td>
 </tr>
 <tr>
@@ -2365,12 +2733,12 @@ E<sub>P</sub>&ge;0
 </tr>
 </table>
 <p class="caption">
-Output Variables
+Output Data Constraints
 </p>
 </a>
 </div>
 </a>
-<a id="Sec:PropofACorrSolu">
+<a id="Sec:PropofaCorrSolu">
 <div class="subsubsection">
 <h4>
 Properties of a Correct Solution
@@ -2422,13 +2790,13 @@ R1: Input the following quantities, which define the tank parameters, material p
 <table class="table">
 <tr>
 <th>
-symbol
+Symbol
 </th>
 <th>
-unit
+Unit
 </th>
 <th>
-description
+Description
 </th>
 </tr>
 <tr>
@@ -2662,7 +3030,7 @@ R7: Calculate and output the change in heat energy in the water (E<sub>W</sub>(t
 R8: Calculate and output the change in heat energy in the PCM (E<sub>P</sub>(t)) over the simulation time (from IM4).
 </p>
 <p>
-R9: Verify that the energy outputs (E<sub>W</sub>(t) and E<sub>P</sub>(t)) follow the law of conservation of energy, as outlined in <a href=#Sec:PropofACorrSolu>this Section</a>, with relative error no greater than 0.001%.
+R9: Verify that the energy outputs (E<sub>W</sub>(t) and E<sub>P</sub>(t)) follow the law of conservation of energy, as outlined in <a href=#Sec:PropofaCorrSolu>this Section</a>, with relative error no greater than 0.001%.
 </p>
 <p>
 R10: Calculate and output the time at which the PCM begins to melt t<sub>melt</sub><sup>init</sup> (from IM2).
@@ -3362,7 +3730,7 @@ IM3 (<a href=#T:heatEInWtr>this Definition</a>)
 IM4 (<a href=#T:heatEInPCM>this Definition</a>)
 </th>
 <th>
-Data Constraints (<a href=#Table:InpuVari>this Table</a>)
+Data Constraints (<a href=#Table:InpuDataCons>this Table</a>)
 </th>
 <th>
 R1 (<a href=#Sec:FuncRequ>this Section</a>)
@@ -5465,10 +5833,10 @@ Traceability Graph Showing the Connections Between Requirements, Instance Models
 </a>
 </div>
 </a>
-<a id="Sec:ValuOfAuxiCons">
+<a id="Sec:ValuofAuxiCons">
 <div class="section">
 <h2>
-Values Of Auxiliary Constants
+Values of Auxiliary Constants
 </h2>
 <p class="paragraph">
 This section contains the standard values that are used for calculations in SWHS.

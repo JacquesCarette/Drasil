@@ -43,7 +43,7 @@ module Language.Drasil.Code.Imperative.AST (
     objDecNew,objDecNewVoid,objDecNew',objDecNewVoid',objMethodCall, objMethodCallVoid, 
     listSize, listAccess, listAppend, listSlice, stringSplit,
     valStmt,funcApp,funcApp',func,continue,
-    toAbsCode, getClassName, buildModule, moduleName, libs, classes,
+    toAbsCode, getClassName, buildModule, moduleName, libs, classes, functions, ignoreMain, notMainModule, multi
 ) where
 
 import Data.List (zipWith4)
@@ -67,6 +67,7 @@ data Statement = AssignState Assignment | DeclState Declaration
                | PatternState Pattern           --deals with special design patterns
                | IOState IOSt
                | ComplexState Complex
+               | MultiState [Statement]
                   deriving Show
 data IOSt = OpenFile Value Value Mode
           | CloseFile Value
@@ -96,7 +97,9 @@ data ObserverPattern = InitObserverList {observerType :: StateType, observers ::
                      | AddObserver {observerType :: StateType, observer :: Value}
                      | NotifyObservers {observerType :: StateType, receiveFunc :: Label, notifyParams :: [Value]} deriving Show
                      
-data Complex = ReadAll Value Value  -- ReadAll File String[][]
+data Complex = ReadAll Value Value  -- ReadAll File String[]
+             | ListSlice StateType Value Value (Maybe Value) (Maybe Value) (Maybe Value)  -- new list var, old list var, start, stop, step
+             | StringSplit Value Value String -- new string, old string, delimiter
                  deriving Show
 data Assignment = Assign Value Value
                 | PlusEquals Value Value
@@ -151,15 +154,10 @@ data Function = Func {funcName :: Label, funcParams :: [Value]}
               | ListAccess Value
               | ListAdd Value Value     --ListAdd index value
               | ListSet Value Value     --ListSet index value
-              | ListPopulate Value StateType --ListPopulate size type : populates the list with a default value for its type. Ignored in languages where it's unnecessary in order to use the ListSet function.
-              | ListSlice (Maybe Value) (Maybe Value) (Maybe Value)   
-                  --ListSlice start stop step
+              | ListPopulate Value StateType --ListPopulate size type : populates the list with a default value for its type. Ignored in languages where it's unnecessary in order to use the ListSet function.  
               | ListAppend Value
               | IterBegin | IterEnd
-              | Floor | Ceiling
-              | StringSplit String  --StringSplit delimiter
-              
-             
+              | Floor | Ceiling            
     deriving (Eq, Show)
 data Comment = Comment Label | CommentDelimit Label Int
     deriving (Eq, Show)
@@ -545,11 +543,11 @@ listAccess = ListAccess
 listAppend :: Value -> Function
 listAppend = ListAppend
 
-listSlice :: (Maybe Value) -> (Maybe Value) -> (Maybe Value) -> Function
-listSlice = ListSlice
+listSlice :: StateType -> Value -> Value -> (Maybe Value) -> (Maybe Value) -> (Maybe Value) -> Statement
+listSlice st v1 v2 b e s = ComplexState $ ListSlice st v1 v2 b e s
 
-stringSplit :: String -> Function
-stringSplit = StringSplit
+stringSplit :: Value -> Value -> String -> Statement
+stringSplit v1 v2 d = ComplexState $ StringSplit v1 v2 d
 
 oneLiner :: Statement -> Body
 oneLiner s = [Block [s]]
@@ -679,6 +677,7 @@ func = Func
 
 continue :: Statement
 continue = JumpState Continue
+
 -----------------------
 -- Comment Functions --
 -----------------------
@@ -822,3 +821,19 @@ libs (Mod _ ls _ _ _) = ls
 
 classes :: Module -> [Class]
 classes (Mod _ _ _ _ cs) = cs
+
+functions :: Module -> [Method]
+functions (Mod _ _ _ fs _) = fs
+
+ignoreMain :: [Module] -> [Module]
+ignoreMain ms = filter notMainModule ms
+
+notMain :: Method -> Bool
+notMain (MainMethod _) = False
+notMain _              = True
+
+notMainModule :: Module -> Bool
+notMainModule m = foldl (&&) True (map notMain $ functions m)
+
+multi :: [Statement] -> Statement
+multi = MultiState

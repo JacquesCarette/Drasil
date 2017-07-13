@@ -3,7 +3,6 @@ module Drasil.SSP.Modules where
 import Language.Drasil
 
 import Data.Drasil.Modules
-import Data.Drasil.Quantities.SolidMechanics
 import Data.Drasil.SentenceStructures
 
 import Data.Drasil.Concepts.Math
@@ -41,8 +40,7 @@ mod_inputf_desc = dccWDS "mod_inputf_desc" (cn' "input format")
   S "file, and/or prompted command line" +:+. plural input_ +:+ at_start' inDatum +:+
   S "includes the x,y coordinates of the" +:+ phrase slope `sC` S "with a set of" +:+
   S "coordinates for each layer. Each layer's" +:+ plural soilPrpty +:+ S "of" +:+
-  (foldlList (map (\x -> (phrase x)) $
-  (map cqs [fricAngle, cohesion, dryWeight, satWeight]) ++ [cqs elastMod, cqs poissnsRatio])) +:+ --NOTE: elastMod is not a ConstrainedChunk so it must be seperated
+  (foldlList $ map phrase [fricAngle, cohesion, dryWeight, satWeight, elasticMod, poissnsRatio]) +:+
   S "are stored in" +:+ plural vector +:+ S "of" +:+. plural soilPrpty +:+
   S "If a piezometric" +:+ phrase surface_ +:+ S "exists in the" +:+ phrase slope +:+
   S "it's coordinates and the" +:+ phrase waterWeight +:+ S "are also" +:+
@@ -134,7 +132,7 @@ mod_slipweight_desc = dccWDS "mod_slipweight_desc" (cn' "slip weighting")
 mod_slipweight :: ModuleChunk
 mod_slipweight = makeImpModule mod_slipweight_desc
   (S "The weighting for each" +:+ phrase slpSrf +:+ S "in a set of" +:+
-  plural slpSrf `sC` S "based on each" +:+ phrase slpSrf :+: S "'s" +:+. 
+  plural slpSrf `sC` S "based on each" +:+ phrase's slpSrf +:+. 
   phrase fs_rc) --FIXME: use possesive noun function in line above
   ssa
   []

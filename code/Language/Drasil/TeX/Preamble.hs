@@ -23,6 +23,7 @@ data Package = AMSMath
              | Tikz
              | Dot2Tex
              | AdjustBox
+             | AMSsymb
              deriving Eq
 
 addPackage :: Package -> D
@@ -39,6 +40,7 @@ addPackage Tikz      = usepackage "tikz" %%
                        command "usetikzlibrary" "arrows.meta, shapes"
 addPackage Dot2Tex   = usepackage "dot2texi"
 addPackage AdjustBox = usepackage "adjustbox"
+addPackage AMSsymb   = usepackage "amssymb"
 
 data Def = AssumpCounter
          | LCCounter
@@ -74,7 +76,7 @@ genPreamble los = let preamble = parseDoc los
         listdefs (_:ds)        = listdefs ds
 
 parseDoc :: [LayoutObj] -> [Preamble]
-parseDoc los' = [PreP FullPage, PreP HyperRef, PreP AMSMath] ++
+parseDoc los' = [PreP FullPage, PreP HyperRef, PreP AMSMath, PreP AMSsymb] ++
   (nub $ parseDoc' los')
   where parseDoc' [] = []
         parseDoc' ((Table _ _ _ _):los) =
@@ -84,7 +86,7 @@ parseDoc los' = [PreP FullPage, PreP HyperRef, PreP AMSMath] ++
    --     parseDoc' ((CodeBlock _):los) =
    --       (PreP Listings):parseDoc' los
         parseDoc' ((Definition ps _):los) =
-          (parseDoc' (map snd ps)) ++
+          (concat $ map parseDoc' (map snd ps)) ++
           (PreP LongTable):(PreP BookTabs):parseDoc' los
         parseDoc' ((Figure _ _ _):los) =
           (PreP Graphics):(PreP Caption):parseDoc' los

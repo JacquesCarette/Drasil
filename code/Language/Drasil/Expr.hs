@@ -8,6 +8,7 @@ import Prelude hiding (id)
 import Language.Drasil.Chunk (Chunk(..))
 import Language.Drasil.Chunk.SymbolForm (SymbolForm)
 import Language.Drasil.Symbol
+import Language.Drasil.Space (Space(..))
 
 import Control.Lens ((^.))
 
@@ -34,9 +35,6 @@ data Expr where
   (:+)     :: Expr -> Expr -> Expr -- Addition
   (:-)     :: Expr -> Expr -> Expr -- Subtraction
   (:.)     :: Expr -> Expr -> Expr -- Dot product
-  (:&&)    :: Expr -> Expr -> Expr -- logical and
-  (:||)    :: Expr -> Expr -> Expr -- logical or
-  Not      :: Expr -> Expr -- logical not
   Neg      :: Expr -> Expr -- Negation
   Deriv    :: DerivType -> Expr -> Expr -> Expr -- Derivative, syntax is:
   -- Type (Partial or total) -> principal part of change -> with respect to
@@ -48,6 +46,7 @@ data Expr where
                                   -- F(x,y) would be (FCall F [x,y]) or sim.
   Case     :: [(Expr,Relation)] -> Expr -- For multi-case expressions, 
                                      -- each pair represents one case
+  Matrix   :: [[Expr]] -> Expr
   UnaryOp  :: UFunc -> Expr
   Grouping :: Expr -> Expr
   BinaryOp :: BiFunc -> Expr
@@ -58,7 +57,40 @@ data Expr where
   (:>)  :: Expr -> Expr -> Expr
   (:<=) :: Expr -> Expr -> Expr
   (:>=) :: Expr -> Expr -> Expr
- 
+  -- start of logic Expr
+  (:&&)    :: Expr -> Expr -> Expr -- logical and
+  (:||)    :: Expr -> Expr -> Expr -- logical or
+  Not      :: Expr -> Expr -- logical not
+  IsIn  :: [Expr] -> Set -> Expr --	element of
+  NotIn :: [Expr] -> Set -> Expr -- not a member of
+  State :: [Quantifier] -> Expr -> Expr
+    --ex. State [(Forall $ [V "x"] `IsIn` Reals), V "x" :> Int 1] (V "x" :^ Int 2 :> V "x")
+    -- => forall x in R, x>1: x^2 > x
+  (:=>)  :: Expr -> Expr -> Expr -- implies, &rArr; \implies
+  (:<=>) :: Expr -> Expr -> Expr -- if and only if, &hArr; \iff
+  --Monotonic :: Maybe Direction -> Expr -> Expr --like this? or defined as below (see monotoniclyIncr)
+
+type Set = Space
+{- --import from space?
+           Integer 
+         | Rational
+         | Real
+         | Natural
+         | Boolean
+         | Char
+         | String
+         | Radians
+         | Vect Set
+         | Obj String-} 
+
+data Quantifier = Forall Expr | Exists Expr deriving Eq -- &forall; \forall -- &exist; \exists
+{-
+data Direction = Increasing
+               | Decreasing
+
+monotoniclyIncr :: Expr -> Expr --Needs indexing, squaring of sets
+monotoniclyIncr xy = Forall [xy `IsIn` MkSet "R^2"] (V "x_1" :< V "x_2"  :=>  V "y_1" :< V "y_2")
+-}
 type Variable = String
 
 data DerivType = Part
@@ -87,8 +119,6 @@ instance Eq Expr where
   (:+) a b == (:+) c d         =  a == c && b == d || a == d && b == c
   (:-) a b == (:-) c d         =  a == c && b == d
   (:.) a b == (:.) c d         =  a == c && b == d || a == d && b == c
-  (:&&) a b == (:&&) c d       =  a == c && b == d || a == d && b == c
-  (:||) a b == (:||) c d       =  a == c && b == d || a == d && b == c
   Not a == Not b               =  a == b
   Neg a == Neg b               =  a == b
   Deriv t1 a b == Deriv t2 c d =  t1 == t2 && a == c && b == d
@@ -101,6 +131,14 @@ instance Eq Expr where
   (:>)  a b == (:>)  c d       =  a == c && b == d
   (:<=) a b == (:<=) c d       =  a == c && b == d
   (:>=) a b == (:>=) c d       =  a == c && b == d
+  --Logic
+  (:&&) a b  == (:&&) c d      =  a == c && b == d || a == d && b == c
+  (:||) a b  == (:||) c d      =  a == c && b == d || a == d && b == c
+  (:=>) a b  == (:=>) c d      =  a == c && b == d
+  (:<=>) a b == (:<=>) c d     =  a == c && b == d || a == d && b == c
+  IsIn  a b  == IsIn  c d      =  a == c && b == d
+  NotIn a b  == NotIn c d      =  a == c && b == d
+  State a b  == State c d      =  a == c && b == d
   _ == _                       =  False
 
 instance Fractional Expr where
@@ -130,17 +168,22 @@ data UFunc where
     ((Maybe Bound), (Maybe Bound)) -> Expr -> c -> UFunc
     -- Integral (low,high) Bounds (if any), then (expression to integrate) 
     -- and finally which chunk (variable) we are integrating with respect to.
-  Sin :: Expr -> UFunc
-  Cos :: Expr -> UFunc
-  Tan :: Expr -> UFunc
-  Sec :: Expr -> UFunc
-  Csc :: Expr -> UFunc
-  Cot :: Expr -> UFunc
-  Exp :: Expr -> UFunc
+  Sin    :: Expr -> UFunc
+  Cos    :: Expr -> UFunc
+  Tan    :: Expr -> UFunc
+  Sec    :: Expr -> UFunc
+  Csc    :: Expr -> UFunc
+  Cot    :: Expr -> UFunc
+  Exp    :: Expr -> UFunc
+  Sqrt   :: Expr -> UFunc
   
 -- | Smart constructor to take the log of an expression
 log :: Expr -> Expr
 log = UnaryOp . Log
+
+-- | Smart constructor to take the square root of an expression
+sqrt :: Expr -> Expr
+sqrt = UnaryOp . Sqrt
 
 -- | Smart constructor to apply sin to an expression
 sin :: Expr -> Expr
@@ -183,4 +226,16 @@ data BiFunc where
 -- | Smart constructor to cross product two expressions
 cross :: Expr -> Expr -> Expr
 cross e1 e2 = BinaryOp (Cross e1 e2)
-  
+
+square :: Expr -> Expr
+square x = x :^ 2
+
+-- some matrix helper functions
+m2x2 :: Expr -> Expr -> Expr -> Expr -> Expr
+m2x2 a b c d = Matrix [[a,b],[c,d]]
+
+vec2D :: Expr -> Expr -> Expr
+vec2D a b    = Matrix [[a],[b]]
+
+dgnl2x2 :: Expr -> Expr -> Expr
+dgnl2x2 a d  = m2x2 a (Int 0) (Int 0) d

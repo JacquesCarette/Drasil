@@ -7,13 +7,13 @@ module Language.Drasil.Code.Imperative.LanguageRenderer (
     Config(..),
 
     -- * Language Parametric Functions
-    fileCode, fileCodeSplit,
+    fileCode,
     
     -- * Common Syntax
     classDec, dot, doubleSlash, forLabel, new,
     
     -- * Default Functions available for use in renderers
-    assignDocD,assignDocD',binOpDocD,bodyDocD,blockDocD,callFuncParamListD,conditionalDocD,conditionalDocD',conditionalDocD'',declarationDocD,declarationDocD',
+    fileNameD,assignDocD,assignDocD',binOpDocD,bodyDocD,blockDocD,callFuncParamListD,conditionalDocD,conditionalDocD',conditionalDocD'',declarationDocD,declarationDocD',
     enumElementsDocD,exceptionDocD,exprDocD,exprDocD',exprDocD'',funcAppDocD,funcDocD,includeD,iterationDocD,litDocD,
     clsDecDocD,clsDecListDocD,classDocD,namespaceD,objAccessDocD,objVarDocD,
     paramDocD,paramListDocD,patternDocD,printDocD,retDocD,scopeDocD,stateDocD,stateListDocD,
@@ -50,7 +50,7 @@ data FileType = Header | Source
 
 -- | Configuration record (explicit dictionary) for a language
 data Config = Config {
-    renderCode :: [Label] -> AbstractCode -> Code,
+    renderCode :: AbstractCode -> Code,
     
     argsList :: Doc,
     bitArray :: Doc,
@@ -58,7 +58,7 @@ data Config = Config {
     endStatement :: Doc,
     enumsEqualInts :: Bool,     --whether Enum elements should explictly be set equal to their ordinal integers (in the default enumElementsDoc implementation)
     ext :: Label,
-    fileName :: Label -> [Label] -> String,
+    fileName :: Module -> String,
     include :: Label -> Doc,
     includeScope :: Scope -> Doc,
     inherit :: Doc,
@@ -78,8 +78,8 @@ data Config = Config {
     blockStart :: Doc, blockEnd :: Doc,
     ifBodyStart :: Doc, elseIf :: Doc,
     
-    top :: FileType -> Label -> [Module] -> Doc,
-    body :: FileType -> Label -> [Module] -> Doc,
+    top :: FileType -> Label -> Module -> Doc,
+    body :: FileType -> Label -> Module -> Doc,
     bottom :: FileType -> Doc,
     
     assignDoc :: Assignment -> Doc,
@@ -127,18 +127,21 @@ data Config = Config {
 -- CFamily Parametric Functions --
 ----------------------------------
 
-fileCode :: Config -> Package -> [Label] -> FileType -> Label -> (FilePath, Doc)
-fileCode c (Pack p ms) ns f e = (fileName c p ns ++ e, fileDoc c f p ms) -- -$ map (clsWithName ms) ns)
+-- fileCode :: Config -> Package -> [Label] -> FileType -> Label -> (FilePath, Doc)
+-- fileCode c (Pack p ms) ns f e = (fileName c p ns ++ e, fileDoc c f p ms) -- -$ map (clsWithName ms) ns)
 
-fileCodeSplit :: Config -> Package -> [Label] -> FileType -> Label -> [(FilePath, Doc)]
-fileCodeSplit c (Pack p ms) ns f e = --let classes = map (clsWithName ms) ns in
-  [(fileName c (moduleName cls) ns ++ e, fileDoc c f p [cls]) | cls <- ms]
+fileCode :: Config -> Package -> FileType -> Label -> [(FilePath, Doc)]
+fileCode c (Pack p ms) f e = --let classes = map (clsWithName ms) ns in
+  [(fileName c m ++ e, fileDoc c f p m) | m <- ms]
 
-fileDoc :: Config -> FileType -> Label -> [Module] -> Doc
-fileDoc c f p ms = vibcat [
-    top c f p ms,
-    body c f p ms,
+fileDoc :: Config -> FileType -> Label -> Module -> Doc
+fileDoc c f p m = vibcat [
+    top c f p m,
+    body c f p m,
     bottom c f]
+    
+fileNameD :: Config -> Module -> String
+fileNameD _ = moduleName
 
 ----------------------------------------
 -- Syntax common to several renderers --
@@ -316,8 +319,6 @@ funcDocD c (ListSet i@(EnumVar _) v) = funcDoc c $ ListSet (i $. cast' Integer) 
 funcDocD c (ListSet i@(EnumElement _ _) v) = funcDoc c $ ListSet (i $. cast' Integer) v
 funcDocD c (ListSet i v) = brackets (valueDoc c i) <+> equals <+> valueDoc c v
 funcDocD _ (ListPopulate _ _) = empty
-funcDocD _ (ListSlice _ _ _) = error "No default implementation"
-funcDocD _ (StringSplit _) = error "No default implementation"
 funcDocD c (IterBegin) = dot <> funcAppDoc c "begin" []
 funcDocD c (IterEnd) = dot <> funcAppDoc c "end" []
 funcDocD _ Floor = error $
@@ -470,7 +471,8 @@ statementDocD c loc (FreeState v) = text "delete" <+> valueDoc c v <> end c loc
 statementDocD c loc (ExceptState e) = exceptionDoc c e <> end c loc
 statementDocD c loc (PatternState p) = patternDoc c p <> end c loc
 statementDocD c loc (IOState io) = ioDoc c io <> end c loc
-statementDocD c loc (ComplexState cplx) = complexDoc c cplx <> end c loc
+statementDocD c loc (ComplexState cplx) = complexDoc c cplx
+statementDocD c loc (MultiState s) = vcat $ map (statementDoc c loc) s
 
 ioDocD :: Config -> IOSt -> Doc
 ioDocD c (OpenFile f n m) = statementDoc c NoLoop (valStmt $ objMethodCall f "open" [n, litString (modeStr m)])

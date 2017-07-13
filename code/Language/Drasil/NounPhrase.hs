@@ -4,14 +4,14 @@ module Language.Drasil.NounPhrase
   , NP
   , pn, pn', pn'', pn''', pnIrr
   , cn, cn', cn'', cn''', cnIP, cnIrr, cnIES, cnICES, cnIS, cnUM
-  , nounPhrase, nounPhrase', nounPhrase'', nounPhraseSP
+  , nounPhrase, nounPhrase', nounPhrase'', nounPhraseSP, nounPhraseSent
   , compoundPhrase, compoundPhrase', compoundPhrase'', compoundPhrase'''
   , at_start, at_start', titleize, titleize'
   , CapitalizationRule(..)
   , PluralRule(..)
   )where
 
-import Data.Char (toUpper)
+import Data.Char (toUpper, toLower)
 import Data.List (intersperse)
 import Language.Drasil.Spec (Sentence(..), (+:+))
 --Linguistically, nounphrase might not be the best name (yet!), but once
@@ -137,6 +137,10 @@ nounPhrase'' = Phrase
 nounPhraseSP :: String -> NP
 nounPhraseSP s = Phrase (S s) (S s) CapFirst CapWords
 
+-- | For Reuirements, Assumptions, LikelyChanges, etc. to allow for referencing.
+nounPhraseSent :: Sentence -> NP
+nounPhraseSent s = Phrase (s) (s) CapFirst CapWords
+
 -- | Combine two noun phrases. The singular form becomes 'phrase' from t1 followed
 -- by phrase of t2. The plural becomes phrase of t1 followed by plural of t2.
 -- Uses standard CapFirst sentence case and CapWords title case.
@@ -167,7 +171,6 @@ compoundPhrase'' f1 f2 t1 t2 = Phrase
 compoundPhrase''' :: (NP -> Sentence) -> NP -> NP -> NP
 compoundPhrase''' f1 t1 t2 = Phrase 
   (f1 t1 +:+ phrase t2) (f1 t1 +:+ plural t2) CapFirst CapWords
-
 
 -- === Helpers === 
 -- | Helper function for getting the sentence case of a noun phrase.
@@ -214,7 +217,7 @@ sPlur a _ = S "MISSING PLURAL FOR:" +:+ a
 cap :: Sentence -> CapitalizationRule -> Sentence
 cap _ (Replace s) = s
 cap (S (s:ss))   CapFirst = S $ (toUpper s : ss)
-cap (S s)        CapWords = S $ findHyph $ concat (intersperse " " 
+cap (S s)        CapWords = S $ findNotCaps $ findHyph $ concat (intersperse " " 
   (map (\x -> (toUpper (head x) : (tail x))) (words s)))
 cap ((S s1) :+: (S s2)) r = cap (S (s1++s2)) r
 cap (s1 :+: s2 :+: s3)  CapWords = cap (s1 :+: s2) CapWords +:+ cap s3 CapWords
@@ -228,6 +231,20 @@ findHyph "" = ""
 findHyph s
       | [head s] == "-" = "-" ++ [toUpper (head(tail s))] ++ tail (tail s)
       | otherwise = [head s] ++ findHyph (tail s)
+
+-- Finds words that should not be capitalized in a title and changes them back to lowercase
+findNotCaps :: String -> String
+findNotCaps "" = ""
+findNotCaps s = concat $ intersperse " " ((head $ words s) : map isNotCaps (tail $ words s))
+
+isNotCaps :: String -> String
+isNotCaps s
+  | (toLower (head s) : tail s) `elem` doNotCaps = toLower (head s) : tail s
+  | otherwise = s
+
+doNotCaps :: [String]
+doNotCaps = ["a", "an", "the", "at", "by", "for", "in", "of",
+  "on", "to", "up", "and", "as", "but", "or", "nor"] --Ref http://grammar.yourdictionary.com
 
 -- ity, ness, ion :: String -> String
 -- Maybe export these for use in irregular cases?

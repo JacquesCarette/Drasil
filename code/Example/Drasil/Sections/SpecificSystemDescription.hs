@@ -5,6 +5,7 @@ module Drasil.Sections.SpecificSystemDescription
   , physSystDesc
   , goalStmtF
   , solChSpecF
+  , solutionCharSpecIntro 
   , assumpF
   , thModF
   , genDefnF
@@ -12,11 +13,7 @@ module Drasil.Sections.SpecificSystemDescription
   , inModelF
   , datConF
   , dataConstraintUncertainty
-  , mkSOLsec
-  , mkSOLsub
-  , solutionCharactersticCon
-  , SOLsec
-  , SOLsub
+  , inDataConstTbl, outDataConstTbl 
   ) where
 
 import qualified Data.Drasil.Concepts.Documentation as D
@@ -27,15 +24,6 @@ import Data.Drasil.Concepts.Software (program)
 import Data.Drasil.Utils (foldle)
 import Data.Drasil.SentenceStructures
 import qualified Drasil.SRS as SRS
-
-data SOLsec = Sect SOLsub SOLsub SOLsub SOLsub SOLsub SOLsub
-data SOLsub = Subs Sentence Sentence Sentence Section [Contents]
-
-mkSOLsec :: SOLsub -> SOLsub -> SOLsub -> SOLsub -> SOLsub -> SOLsub -> SOLsec
-mkSOLsec as tm gd dd im dc = Sect as tm gd dd im dc
-
-mkSOLsub :: Sentence -> Sentence -> Sentence -> Section -> [Contents] -> SOLsub
-mkSOLsub start middle end refSection ys = Subs start middle end refSection ys
 
 
 -- | Specific System description section builder. Takes the system and subsections.
@@ -62,7 +50,7 @@ specSysDesIntro l_end = foldlSP
             [S "This", phrase section_, S "first presents the", 
             phrase problemDescription `sC` S "which gives a high-level view of the", 
             phrase problem, S "to be solved. This is followed by the", 
-            plural solutionCharSpec `sC` S "which presents the", 
+            phrase solutionCharSpec `sC` S "which presents the", 
             plural assumption `sC` plural theory `sC` l_end]
 
 --Up to change, decide on what ending sentence structure we would like to employ
@@ -83,12 +71,11 @@ termDefnF :: Sentence -> [Contents] -> Section
 termDefnF end otherContents = SRS.termAndDefn ((intro):otherContents) []
       where lastF EmptyS  = EmptyS
             lastF s = S "." +:+ s
-            intro = Paragraph $ foldle (+:+) (+:+.) (EmptyS)
-                    [S "This subsection provides a list of terms", 
-                    S "that are used in the subsequent", plural section_, S "and their", 
-                    S "meaning, with the", phrase purpose, S "of reducing ambiguity", 
-                    S "and making it easier to correctly understand the" +:+
-                    plural requirement :+: (lastF end)]
+            intro = Paragraph $ foldlSent [S "This subsection provides a list of terms", 
+                    S "that are used in the subsequent", plural section_, 
+                    S "and their meaning, with the", phrase purpose, 
+                    S "of reducing ambiguity and making it easier to correctly", 
+                    S "understand the", plural requirement :+: (lastF end)]
 
 --general introduction for Physical System Description
 physSystDesc :: Sentence -> Contents -> [Contents] -> Section
@@ -121,42 +108,6 @@ solChSpecF progName (probDes, likeChg) ddEndSent (mid, hasUncertainty, trail) (a
         dataDefin    = dataDefnF ddEndSent dd
         instModels   = inModelF  probDes dataDefin theModels generDefn i
         dataConstr   = datConF mid hasUncertainty trail dc
-
-
-solutionCharactersticCon :: (NamedIdea a) => a -> SOLsec -> [Section] -> Section
-solutionCharactersticCon progName (Sect as tm gd dd im dc) xs = SRS.solCharSpec
-  [solutionCharSpecIntro progName instanceModels] (subsections)
-  where assumptions        = assumptionSub        as
-          theoreticalModels generalDefinitions dataDefinitions instanceModels 
-        theoreticalModels  = theoreticalModelSub  tm progName
-        generalDefinitions = generalDefinitionSub gd
-        dataDefinitions    = dataDefinitionSub    dd
-        instanceModels     = instanceModelSub     im 
-          dataDefinitions theoreticalModels generalDefinitions
-        dataConstraints    = dataConstraintSub    dc
-        subsections = [assumptions, theoreticalModels, generalDefinitions,
-                       dataDefinitions, instanceModels, dataConstraints] ++ xs
-
-assumptionSub :: SOLsub -> Section -> Section -> Section -> Section -> Section
-assumptionSub (Subs _ _ _ sectionRef ys) ref1 ref2 ref3 ref4 = SRS.assump
-  ((assumpIntro ref1 ref2 ref3 ref4 sectionRef):ys) []
-
-theoreticalModelSub :: (NamedIdea a) => SOLsub -> a -> Section
-theoreticalModelSub (Subs _ _ _ _ ys) progName = SRS.thModel ((thModIntro progName):ys) []
-
-generalDefinitionSub :: SOLsub -> Section
-generalDefinitionSub (Subs _ _ _ _ ys) = SRS.genDefn (generalDefinitionIntro ys:ys) []
-
-dataDefinitionSub :: SOLsub -> Section
-dataDefinitionSub (Subs _ _ ending _ ys) = SRS.dataDefn ((dataDefinitionIntro ending):ys) []
-
-instanceModelSub :: SOLsub -> Section -> Section -> Section -> Section
-instanceModelSub (Subs _ _ _ sectionRef ys) ref1 ref2 ref3 = SRS.inModel ((introContent):ys) []
-  where introContent = inModelIntro sectionRef ref1 ref2 ref3
-
-dataConstraintSub :: SOLsub -> Section
-dataConstraintSub (Subs uncertain mid trail _ ys) = SRS.datCon ((dataContent):ys) []
-  where dataContent = dataConstraintParagraph uncertain (listofTablesToRefs ys) mid trail
 
 
 solutionCharSpecIntro :: (NamedIdea a) => a -> Section -> Contents
@@ -280,3 +231,28 @@ dataConstraintUncertainty = foldlSent [S "The", phrase uncertainty, phrase colum
   plural quantity +:+. S "can be measured", S "This", phrase information,
   S "would be part of the", phrase input_, S "if one were performing an",
   phrase uncertainty, S "quantification exercise"]
+
+-- Creates the input Data Constraints Table
+inDataConstTbl :: (UncertainQuantity c, SymbolForm c, Constrained c) => [c] -> Contents
+inDataConstTbl qlst = Table ([S "Var"] ++ (isPhys $ physC (head qlst) qlst) ++
+  (isSfwr $ sfwrC (head qlst) qlst) ++ [S "Typical" +:+ titleize value] ++
+  (isUnc $ typUnc (head qlst) qlst))
+  (map (\x -> fmtInputConstr x qlst) qlst)
+  (S "Input Data Constraints") True
+  where isPhys [] = []
+        isPhys _  = [titleize' physicalConstraint]
+        isSfwr [] = []
+        isSfwr _  = [titleize' softwareConstraint]
+        isUnc  [] = []
+        isUnc  _  = [S "Typical Uncertainty"]
+
+-- Creates the output Data Constraints Table
+outDataConstTbl :: (SymbolForm c, Constrained c) => [c] -> Contents
+outDataConstTbl qlst = Table ([S "Var"] ++ (isPhys $ physC (head qlst) qlst) ++
+  (isSfwr $ sfwrC (head qlst) qlst))
+  (map (\x -> fmtOutputConstr x qlst) qlst)
+  (S "Output Data Constraints") True
+  where isPhys [] = []
+        isPhys _  = [titleize' physicalConstraint]
+        isSfwr [] = []
+        isSfwr _  = [titleize' softwareConstraint]

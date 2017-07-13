@@ -121,8 +121,6 @@ p_expr (Mul x y)  = mul x y
 p_expr (Frac n d) = "\\frac{" ++ (p_expr n) ++ "}{" ++ (p_expr d) ++"}"
 p_expr (Div n d)  = divide n d
 p_expr (Pow x y)  = pow x y
-p_expr (And x y)  = p_expr x ++ "\\wedge{}" ++ p_expr y
-p_expr (Or x y)   = p_expr x ++ "\\vee{}" ++ p_expr y
 p_expr (Sym s)    = symbol s
 p_expr (Eq x y)   = p_expr x ++ "=" ++ p_expr y
 p_expr (NEq x y)  = p_expr x ++ "\\neq{}" ++ p_expr y
@@ -131,13 +129,39 @@ p_expr (Gt x y)   = p_expr x ++ ">" ++ p_expr y
 p_expr (GEq x y)  = p_expr x ++ "\\geq{}" ++ p_expr y
 p_expr (LEq x y)  = p_expr x ++ "\\leq{}" ++ p_expr y
 p_expr (Dot x y)  = p_expr x ++ "\\cdot{}" ++ p_expr y
-p_expr (Not x)    = "\\neg{}" ++ p_expr x
 p_expr (Neg x)    = neg x
 p_expr (Call f x) = p_expr f ++ paren (concat $ intersperse "," $ map p_expr x)
 p_expr (Case ps)  = "\\begin{cases}\n" ++ cases ps ++ "\n\\end{cases}"
 p_expr (Op f es)  = p_op f es
 p_expr (Grouping x) = paren (p_expr x)
+p_expr (Mtx a)    = "\\begin{bmatrix}\n" ++ p_matrix a ++ "\n\\end{bmatrix}"
+--Logic
+p_expr (Not x)    = "\\neg{}" ++ p_expr x
+p_expr (And x y)  = p_expr x ++ "\\land{}" ++ p_expr y
+p_expr (Or x y)   = p_expr x ++ "\\lor{}" ++ p_expr y
+p_expr (Impl a b) = p_expr a ++ "\\implies{}" ++ p_expr b
+p_expr (Iff a b)  = p_expr a ++ "\\iff{}" ++ p_expr b
+p_expr (IsIn  a b) = (concat $ intersperse "," $ map p_expr a) ++ "\\in{}"  ++ show b
+p_expr (NotIn a b) = (concat $ intersperse "," $ map p_expr a) ++ "\\notin{}" ++ show b
+p_expr (State a b) = (concat $ intersperse ", " $ map p_quan a) ++ ": " ++ p_expr b
 
+-- | For printing Matrix
+p_matrix :: [[Expr]] -> String
+p_matrix [] = ""
+p_matrix [x] = p_in x
+p_matrix (x:xs) = p_matrix [x] ++ "\\\\\n" ++ p_matrix xs
+
+p_in :: [Expr] -> String
+p_in [] = ""
+p_in [x] = p_expr x
+p_in (x:xs) = p_in [x] ++ " & " ++ p_in xs
+
+-- | Helper for rendering Quantifier statements
+p_quan :: Quantifier -> String
+p_quan (Forall e) = "\\forall{}" ++ p_expr e
+p_quan (Exists e) = "\\exists{}" ++ p_expr e
+
+-- | Helper for properly rendering multiplication of expressions
 mul :: Expr -> Expr -> String
 mul x y@(Dbl _)   = mulParen x ++ "*" ++ p_expr y
 mul x y@(Int _)   = mulParen x ++ "*" ++ p_expr y
@@ -277,7 +301,7 @@ p_unit (UDiv n d) = toMath $
 ------------------ DATA DEFINITION PRINTING-----------------
 -----------------------------------------------------------------
 
-makeDefn :: [(String,LayoutObj)] -> D -> D
+makeDefn :: [(String,[LayoutObj])] -> D -> D
 makeDefn [] _ = error "Empty definition"
 makeDefn ps l = beginDefn %% makeDefTable ps l %% endDefn
 
@@ -288,7 +312,7 @@ beginDefn = (pure $ text "~") <> newline
 endDefn :: D
 endDefn = pure $ text "\\end{minipage}" TP.<> dbs
 
-makeDefTable :: [(String,LayoutObj)] -> D -> D
+makeDefTable :: [(String,[LayoutObj])] -> D -> D
 makeDefTable [] _ = error "Trying to make empty Data Defn"
 makeDefTable ps l = vcat [
   pure $ text $ "\\begin{tabular}{p{"++show colAwidth++"\\textwidth} p{"++show colBwidth++"\\textwidth}}",
@@ -298,10 +322,12 @@ makeDefTable ps l = vcat [
   pure $ dbs <+> text ("\\bottomrule \\end{tabular}")
   ]
 
-makeDRows :: [(String,LayoutObj)] -> D
+makeDRows :: [(String,[LayoutObj])] -> D
 makeDRows []         = error "No fields to create Defn table"
-makeDRows ((f,d):[]) = dBoilerplate %% (pure $ text (f ++ " & ")) <> lo d
-makeDRows ((f,d):ps) = dBoilerplate %% (pure $ text (f ++ " & ")) <> lo d
+makeDRows ((f,d):[]) = dBoilerplate %% (pure $ text (f ++ " & ")) <>
+  (vcat $ map lo d)
+makeDRows ((f,d):ps) = dBoilerplate %% (pure $ text (f ++ " & ")) <> 
+  (vcat $ map lo d)
                        %% makeDRows ps
 dBoilerplate :: D
 dBoilerplate = pure $ dbs <+> text "\\midrule" <+> dbs
@@ -325,6 +351,7 @@ makeList (Simple items) = itemize   $ vcat (sim_item items)
 makeList (Desc items)   = description $ vcat (sim_item items)
 makeList (Item items)   = itemize   $ vcat (map p_item items)
 makeList (Enum items)   = enumerate $ vcat (map p_item items)
+makeList (Definitions items) = description $ vcat (def_item items)
 
 p_item :: ItemType -> D
 p_item (Flat s) = item (spec s)
@@ -335,7 +362,12 @@ sim_item [] = [empty]
 sim_item ((x,y):zs) = item' (spec (x :+: S ":")) (sp_item y) : sim_item zs
     where sp_item (Flat s) = spec s
           sp_item (Nested t s) = vcat [spec t, makeList s]
-
+          
+def_item :: [(Spec, ItemType)] -> [D]
+def_item [] = [empty]
+def_item ((x,y):zs) = item (spec (x :+: S " is the " :+: d_item y)) : def_item zs
+  where d_item (Flat s) = s
+        d_item (Nested _ _) = error "Cannot use sublists in definitions"
 -----------------------------------------------------------------
 ------------------ FIGURE PRINTING--------------------------
 -----------------------------------------------------------------

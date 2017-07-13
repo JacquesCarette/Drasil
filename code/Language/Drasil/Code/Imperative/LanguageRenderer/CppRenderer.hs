@@ -4,7 +4,6 @@ module Language.Drasil.Code.Imperative.LanguageRenderer.CppRenderer (
     cppConfig
 ) where
 
-import Language.Drasil.Config(splitSource)
 import Language.Drasil.Code.Code (Code(..))
 import Language.Drasil.Code.Imperative.AST
   hiding (comment,bool,int,float,char,tryBody,catchBody,initState,guard,update)
@@ -32,7 +31,7 @@ cppConfig options c =
         endStatement     = semi,
         enumsEqualInts   = False,
         ext              = ".cpp",
-        fileName         = \p _ -> p,
+        fileName         = fileNameD c,
         include          = includeD "#include",
         includeScope     = \_ -> empty,
         inherit          = colon,
@@ -63,9 +62,9 @@ cppConfig options c =
         objVarDoc = objVarDoc' c, paramDoc = paramDoc' c, paramListDoc = paramListDocD c, patternDoc = patternDocD c, printDoc = printDoc' c, retDoc = retDocD c, scopeDoc = scopeDocD,
         stateDoc = stateDocD c, stateListDoc = stateListDocD c, statementDoc = statementDocD c, methodDoc = methodDoc' c,
         methodListDoc = methodListDoc' c, methodTypeDoc = methodTypeDocD c, unOpDoc = unOpDocD, valueDoc = valueDoc' c,
-        functionDoc = functionDocD c, functionListDoc = functionListDocD c,
-        ioDoc = ioDocD c,inputDoc = inputDocD c,
-        complexDoc = complexDocD c,
+        functionDoc = methodDoc' c, functionListDoc = functionListDocD c,
+        ioDoc = ioDocD c,inputDoc = inputDoc' c,
+        complexDoc = complexDoc' c,
         getEnv = \_ -> error "Cpp does not implement getEnv (yet)"
     }
 
@@ -77,13 +76,10 @@ ptr = text "*"
 ptrAccess = text "->"
 
 -- short names, packaged up above (and used below)
-renderCode' :: Config -> [Label] -> AbstractCode -> Code
-renderCode' c ms (AbsCode p) =
-    if splitSource
-    then Code $ (fileCodeSplit c p ms Header cppHeaderExt) ++
-                (fileCodeSplit c p ms Source (ext c))
-    else Code [ fileCode c p ms Header cppHeaderExt,
-                fileCode c p ms Source (ext c) ]
+renderCode' :: Config -> AbstractCode -> Code
+renderCode' c (AbsCode p@(Pack l ms)) =
+  Code $ (fileCode c (Pack l (ignoreMain ms)) Header cppHeaderExt) ++
+         (fileCode c p Source (ext c))
 
 
 cppstateType :: Config -> StateType -> DecDef -> Doc
@@ -94,10 +90,10 @@ cppstateType _ (Type name) Dec  = text name <> ptr
 cppstateType c (Iterator t) _   = text "std::" <> stateType c (List Dynamic t) Dec <> text "::iterator"
 cppstateType c s d              = stateTypeD c s d
 
-cpptop :: Config -> FileType -> Label -> [Module] -> Doc
-cpptop c Header p _ = vcat [
-    text "#ifndef" <+> text p <> text "_h",
-    text "#define" <+> text p <> text "_h",
+cpptop :: Config -> FileType -> Label -> Module -> Doc
+cpptop c Header _ (Mod n _ _ _ _) = vcat [
+    text "#ifndef" <+> text n <> text "_h",
+    text "#define" <+> text n <> text "_h",
     blank,
     include c "<string>",
     include c $ "<" ++ render (list c Dynamic) ++ ">",
@@ -106,14 +102,22 @@ cpptop c Header p _ = vcat [
     usingNameSpace c "std" (Just $ render (list c Dynamic)),
     usingNameSpace c "std" (Just "ifstream"),
     usingNameSpace c "std" (Just "ofstream")]
-cpptop c Source p _ = vcat [          --TODO remove includes if they aren't used
-    include c ("\"" ++ p ++ cppHeaderExt ++ "\""),
+cpptop c Source p m@(Mod n l _ _ _) = vcat $ [          --TODO remove includes if they aren't used
+    if notMainModule m 
+      then include c ("\"" ++ n ++ cppHeaderExt ++ "\"")
+      else empty,
+    blank] 
+    ++
+    (map (\x -> include c ("\"" ++ x ++ cppHeaderExt ++ "\"")) l)
+    ++ 
+    [blank,
     include c "<algorithm>",
     include c "<iostream>",
     include c "<fstream>",
     include c "<iterator>",     --used only when printing a list
     include c "<string>",
     include c "<math.h>",       --used for Floor and Ceiling functions
+    include c "<sstream>",
     include c $ "<" ++ render (list c Dynamic) ++ ">",
     blank,
     usingNameSpace c p Nothing,
@@ -122,8 +126,8 @@ cpptop c Source p _ = vcat [          --TODO remove includes if they aren't used
     usingNameSpace c "std" (Just "ifstream"),
     usingNameSpace c "std" (Just "ofstream")]
 
-cppbody :: Config -> FileType -> Label -> [Module] -> Doc
-cppbody c f@(Header) p modules = let cs = foldl1 (++) (map classes modules) in
+cppbody :: Config -> FileType -> Label -> Module -> Doc
+cppbody c f@(Header) p (Mod _ _ _ _ cs) =
     vcat [
     package c p <+> lbrace,
     oneTabbed [
@@ -131,8 +135,11 @@ cppbody c f@(Header) p modules = let cs = foldl1 (++) (map classes modules) in
         blank,
         vibmap (classDoc c f p) cs],
     rbrace]
-cppbody c f@(Source) p modules = let cs = foldl1 (++) (map classes modules) in
-   vibmap (classDoc c f p) cs
+cppbody c f@(Source) p (Mod _ _ _ fs cs) =
+   vcat [
+     vibmap (classDoc c f p) cs,
+     functionListDoc c f p fs
+   ]
 
 cppbottom :: FileType -> Doc
 cppbottom Header = text "#endif"
@@ -265,6 +272,68 @@ valueDoc' c v@(Arg _) = valueDocD' c v
 --valueDoc' c (InputFile v) = valueDoc c v <> dot <> text "ignore()"
 valueDoc' c v = valueDocD c v
 
+inputDoc' :: Config -> IOType -> StateType -> Value -> Doc
+inputDoc' _ _ (Base (FileType _)) _ = error "File type is not valid input"
+inputDoc' c io (Base _) v = inputFn io <+> text ">>" <+> valueDoc c v
+  where  inputFn :: IOType -> Doc
+         inputFn Console = inputFunc c
+         inputFn (File f) = valueDoc c f
+inputDoc' c io s v = inputDocD c io s v 
+
+complexDoc' :: Config -> Complex -> Doc
+complexDoc' c (ReadAll f v) = statementDoc c NoLoop 
+  (valStmt $  
+    funcApp' "std::copy" [
+      funcApp' "std::istream_iterator<std::string>" [f],
+      funcApp' "std::istream_iterator<std::string>" [],
+      funcApp' "std::back_inserter" [v]
+    ]
+  )
+complexDoc' c (ListSlice st vnew vold b e s) = let l_temp = "temp"
+                                                   v_temp = var l_temp
+                                                   l_i = "i"
+                                                   v_i = var l_i
+                                               in
+  vcat [
+    blockStart c,
+    oneTab $ bodyDoc c [ 
+      block [
+        listDec' l_temp st 0,
+        for (varDecDef l_i (Base Integer) (getB b)) (v_i ?< getE e) (getS s v_i)
+          [ 
+            block [
+              
+            ]          
+          ]
+      ] 
+    ],
+    blockEnd c
+  ]
+  where  getB Nothing = litInt 0
+         getB (Just n) = n
+         getE Nothing = vold$.listSize
+         getE (Just n) = n
+         getS Nothing v = (&++) v
+         getS (Just n) v = v &+= n
+complexDoc' c (StringSplit vnew vold d) = let l_ss = "ss"
+                                              v_ss = var "ss"
+                                              l_word = "word"
+                                              v_word = var "word" 
+                                          in
+  vcat [
+    blockStart c,
+    oneTab $ bodyDoc c [ 
+      block [
+        DeclState $ VarDec l_ss (Type "std::stringstream"),
+        valStmt $ objMethodCall v_ss "str" [vold],
+        varDec l_word string,
+        while (funcApp' "std::getline" [v_ss, v_word, litString d]) (oneLiner $ valStmt $ vnew$.(listAppend v_word))
+      ] 
+    ],
+    blockEnd c
+  ]
+  
+  
 ----------------------
 -- Helper Functions --
 ----------------------

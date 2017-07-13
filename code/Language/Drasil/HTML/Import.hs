@@ -1,18 +1,21 @@
 module Language.Drasil.HTML.Import where
 import Prelude hiding (id)
 import Language.Drasil.Expr (Expr(..), Relation, UFunc(..), BiFunc(..),
-                             Bound(..),DerivType(..))
+                             Bound(..),DerivType(..), Set, Quantifier(..))
+import Language.Drasil.Space (Space(..))
 import Language.Drasil.Spec
 import qualified Language.Drasil.HTML.AST as H
 import Language.Drasil.Unicode (Special(Partial))
 import Language.Drasil.Chunk.Eq
 import Language.Drasil.Chunk.Relation
+import Language.Drasil.Chunk.ExprRelat (relat)
 import Language.Drasil.Chunk.Module
 import Language.Drasil.Chunk.NamedIdea (term)
 import Language.Drasil.Chunk.Concept (defn)
 import Language.Drasil.Chunk.SymbolForm (SymbolForm, symbol)
 import Language.Drasil.Chunk.VarChunk (VarChunk)
-import Control.Lens hiding ((:>),(:<))
+import Language.Drasil.ChunkDB (SymbolMap)
+
 import Language.Drasil.Expr.Extract
 import Language.Drasil.Config (verboseDDDescription)
 import Language.Drasil.Document
@@ -20,6 +23,8 @@ import Language.Drasil.Symbol
 import Language.Drasil.Misc (unit'2Contents)
 import Language.Drasil.SymbolAlphabet (lD)
 import Language.Drasil.NounPhrase (phrase)
+
+import Control.Lens hiding ((:>),(:<),set)
 
 -- | expr translation function from Drasil to HTML 'AST'
 expr :: Expr -> H.Expr
@@ -33,9 +38,6 @@ expr (a :/ b)         = H.Frac  (replace_divs a) (replace_divs b)
 expr (a :^ b)         = H.Pow   (expr a) (expr b)
 expr (a :- b)         = H.Sub   (expr a) (expr b)
 expr (a :. b)         = H.Dot   (expr a) (expr b)
-expr (a :&& b)        = H.And   (expr a) (expr b)
-expr (a :|| b)        = H.Or    (expr a) (expr b)
-expr (Not a)          = H.Not   (expr a)
 expr (Neg a)          = H.Neg   (expr a)
 expr (Deriv Part a 1) = H.Mul (H.Sym (Special Partial)) (expr a)
 expr (Deriv Total a 1)= H.Mul (H.Sym lD) (expr a)
@@ -54,9 +56,23 @@ expr e@(_ :> _)       = rel e
 expr e@(_ :< _)       = rel e
 expr e@(_ :<= _)      = rel e
 expr e@(_ :>= _)      = rel e
+expr (Matrix a)       = H.Mtx $ map (map expr) a
 expr (UnaryOp u)      = (\(x,y) -> H.Op x [y]) (ufunc u)
 expr (Grouping e)     = H.Grouping (expr e)
 expr (BinaryOp b)     = (\(x,y) -> H.Op x y) (bfunc b)
+expr (Not a)          = H.Not   (expr a)
+expr (a  :&&  b)      = H.And   (expr a) (expr b)
+expr (a  :||  b)      = H.Or    (expr a) (expr b)
+expr (a  :=>  b)      = H.Impl  (expr a) (expr b)
+expr (a  :<=> b)      = H.Iff   (expr a) (expr b)
+expr (IsIn  a b)      = H.IsIn  (map expr a) (set b)
+expr (NotIn a b)      = H.NotIn (map expr a) (set b)
+expr (State a b)      = H.State (map quan a) (expr b)
+
+-- | Healper for translating Quantifier
+quan :: Quantifier -> H.Quantifier
+quan (Forall e) = H.Forall (expr e)
+quan (Exists e) = H.Exists (expr e)
 
 -- | Helper function for translating 'UFunc's
 ufunc :: UFunc -> (H.Function, H.Expr)
@@ -72,13 +88,14 @@ ufunc (Product _ _) = error "HTML/Import.hs Incorrect use of Product"
 ufunc (Abs e) = (H.Abs, expr e)
 ufunc (Norm e) = (H.Norm, expr e)
 ufunc i@(Integral _ _ _) = integral i
-ufunc (Sin e) = (H.Sin, expr e)
-ufunc (Cos e) = (H.Cos, expr e)
-ufunc (Tan e) = (H.Tan, expr e)
-ufunc (Sec e) = (H.Sec, expr e)
-ufunc (Csc e) = (H.Csc, expr e)
-ufunc (Cot e) = (H.Cot, expr e)
-ufunc (Exp e) = (H.Exp, expr e)
+ufunc (Sin e)    = (H.Sin, expr e)
+ufunc (Cos e)    = (H.Cos, expr e)
+ufunc (Tan e)    = (H.Tan, expr e)
+ufunc (Sec e)    = (H.Sec, expr e)
+ufunc (Csc e)    = (H.Csc, expr e)
+ufunc (Cot e)    = (H.Cot, expr e)
+ufunc (Exp e)    = (H.Exp, expr e)
+ufunc (Sqrt e)   = (H.Sqrt, expr e)
 
 -- | Helper function for translating 'BiFunc's
 bfunc :: BiFunc -> (H.Function, [H.Expr])
@@ -93,6 +110,19 @@ rel (a :> b) = H.Gt (expr a) (expr b)
 rel (a :<= b) = H.LEq (expr a) (expr b)
 rel (a :>= b) = H.GEq (expr a) (expr b)
 rel _ = error "Attempting to use non-Relation Expr in relation context."
+
+-- | Helper for translating Sets
+set :: Set -> H.Set
+set Integer  = H.Integer
+set Rational = H.Rational
+set Real     = H.Real
+set Natural  = H.Natural
+set Boolean  = H.Boolean
+set Char     = H.Char
+set String   = H.String
+set Radians  = H.Radians
+set (Vect a) = H.Vect (set a)
+set (Obj a)  = H.Obj a
 
 -- | Helper function for translating Integrals (from 'UFunc')
 integral :: UFunc -> (H.Function, H.Expr)
@@ -188,17 +218,22 @@ lay (Enumeration cs)  = H.List $ makeL cs
 lay x@(Figure c f)    = H.Figure (spec (refName x)) (spec c) f
 lay x@(Module m)      = H.Module (formatName m) (spec $ refName x)
 lay (Graph _ _ _ _)   = H.Paragraph (H.EmptyS)  -- need to implement!
-lay (Requirement _)   = H.Paragraph (H.EmptyS)  -- need to implement!
-lay (Assumption _)    = H.Paragraph (H.EmptyS)  -- need to implement!
-lay (LikelyChange _)  = H.Paragraph (H.EmptyS)  -- need to implement!
+lay x@(Requirement r id)   = H.Requirement (spec (phrase $ r ^. term)) (spec $ refName x) (spec id)
+lay x@(Assumption a id)    = H.Assumption (spec (phrase $ a ^. term)) (spec $ refName x) (spec id)
+lay x@(LikelyChange lc id)  = H.LikelyChange (spec (phrase $ lc ^. term)) (spec $ refName x) (spec id)
 lay (UnlikelyChange _)= H.Paragraph (H.EmptyS)  -- need to implement!
+lay (TMod ps rf r)    = H.Definition (Theory r) 
+  (map (\(x,y) -> (x, map lay y)) ps) (spec rf)
+lay (DDef ps rf d)    = H.Definition (Data d)
+  (map (\(x,y) -> (x, map lay y)) ps) (spec rf)
 
 -- | Translates lists
 makeL :: ListType -> H.ListType
-makeL (Bullet bs) = H.Unordered $ map item bs
-makeL (Number ns) = H.Ordered $ map item ns
-makeL (Simple ps) = H.Simple $ zip (map (spec . fst) ps) (map (item . snd) ps)
-makeL (Desc ps)   = H.Desc $ zip (map (spec . fst) ps) (map (item . snd) ps)
+makeL (Bullet bs)      = H.Unordered   $ map item bs
+makeL (Number ns)      = H.Ordered     $ map item ns
+makeL (Simple ps)      = H.Simple      $ map (\(x,y) -> (spec x, item y)) ps
+makeL (Desc ps)        = H.Desc        $ map (\(x,y) -> (spec x, item y)) ps
+makeL (Definitions ps) = H.Definitions $ map (\(x,y) -> (spec x, item y)) ps
 
 -- | Helper for translating list items
 item :: ItemType -> H.ItemType
@@ -207,18 +242,18 @@ item (Nested t s) = H.Nested (spec t) (makeL s)
 
 -- | Translates definitions
 -- (Data defs, General defs, Theoretical models, etc.)
-makePairs :: DType -> SymbolMap -> [(String,H.LayoutObj)]
+makePairs :: DType -> SymbolMap -> [(String,[H.LayoutObj])]
 makePairs (Data c) m = [
-  ("Label",       H.Paragraph $ H.N $ c ^. symbol),
-  ("Units",       H.Paragraph $ spec $ unit'2Contents c),
-  ("Equation",    H.HDiv ["equation"] [H.Tagless (buildEqn c)] (H.EmptyS)),
-  ("Description", H.Paragraph (buildDDDescription c m))
+  ("Label",       [H.Paragraph $ H.N $ c ^. symbol]),
+  ("Units",       [H.Paragraph $ spec $ unit'2Contents c]),
+  ("Equation",    [H.HDiv ["equation"] [H.Tagless (buildEqn c)] (H.EmptyS)]),
+  ("Description", [H.Paragraph (buildDDDescription c m)])
   ]
 makePairs (Theory c) _ = [
-  ("Label",       H.Paragraph $ spec (phrase $ c ^. term)),
-  ("Equation",    H.HDiv ["equation"] [H.Tagless (H.E (rel (relat c)))] 
-                  (H.EmptyS)),
-  ("Description", H.Paragraph (spec (c ^. defn)))
+  ("Label",       [H.Paragraph $ spec (phrase $ c ^. term)]),
+  ("Equation",    [H.HDiv ["equation"] [H.Tagless (H.E (rel (c ^. relat)))]
+                  (H.EmptyS)]),
+  ("Description", [H.Paragraph (spec (c ^. defn))])
   ]
 makePairs General _ = error "Not yet implemented"
 
@@ -238,15 +273,3 @@ descLines []       = error "No chunks to describe"
 descLines (vc:[])  = (H.N (vc ^. symbol) H.:+: 
   (H.S " is the " H.:+: (spec (phrase $ vc ^. term))))
 descLines (vc:vcs) = descLines (vc:[]) H.:+: H.HARDNL H.:+: descLines vcs
-
---buildModuleDesc :: ModuleChunk -> [H.LayoutObj]
---buildModuleDesc m = [
---  H.List H.Simple
---    [ H.S (bold "Secrets: ") H.:+: (spec $ secret m),
---      H.S (bold "Services: ") H.:+: (spec $ m ^. term),
---      H.S (bold "Implemented By: ") H.:+: (H.S $ getImp $ imp m)
---    ]
---  ]
---  where bold = \x -> "<b>" ++ x ++ "</b>"
---        getImp (Just x) = x
---        getImp Nothing  = "--"

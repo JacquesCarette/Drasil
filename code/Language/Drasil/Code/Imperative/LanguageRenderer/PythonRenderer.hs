@@ -25,7 +25,7 @@ pythonConfig _ c =
         endStatement     = empty,
         enumsEqualInts   = True,
         ext              = ".py",
-        fileName         = \p _ -> p,
+        fileName         = fileNameD c,
         include          = include',
         includeScope     = \_ -> empty,
         inherit          = empty,
@@ -70,8 +70,8 @@ incl = "from"
 initName = "__init__"
 
 -- short names, packaged up above (and used below)
-renderCode' :: Config -> [Label] -> AbstractCode -> Code
-renderCode' c ms (AbsCode p) = Code $ fileCodeSplit c p ms Source (ext c)
+renderCode' :: Config -> AbstractCode -> Code
+renderCode' c (AbsCode p) = Code $ fileCode c p Source (ext c)
 
 include' :: Label -> Doc
 include' n = text incl <+> text n <+> text imp
@@ -84,27 +84,26 @@ pystateType _   (Base String)  _ = text "str"
 pystateType _   (Base _)       _ = empty
 pystateType c  s               d = stateTypeD c s d
 
-pytop :: Config -> FileType -> Label -> [Module] -> Doc
-pytop _ _ _ [] = vcat [
-    text "from __future__ import print_function",
-    text "import sys",
-    text "import math" ]
-pytop c f p ms = let modNames = map moduleName ms
-                     libNames = concat $ map libs ms
-                     libraries = reduceLibs libNames modNames
-  in  pytop c f p [] $+$
-        (vcat $ map (\x -> text "import" <+> text x) libraries)
+pytop :: Config -> FileType -> Label -> Module -> Doc
+pytop c f p m = let modNames = moduleName m
+                    libNames = libs m
+  in  vcat [
+        text "from __future__ import print_function",
+        text "import sys",
+        text "import math" 
+      ] 
+      $+$
+      (vcat $ map (\x -> text "import" <+> text x) libNames)
       
 
 
-pybody :: Config -> FileType -> Label -> [Module] -> Doc
-pybody _ _ _ [] = blank
-pybody c f p ((Mod _ _ _ fs cs):ms) = 
+pybody :: Config -> FileType -> Label -> Module -> Doc
+pybody c f p (Mod _ _ vs fs cs) = 
+  (vcat $ map (\x -> statementDoc c NoLoop $ DeclState x) vs)
+  $+$ blank $+$
   functionListDoc c f p fs
   $+$ blank $+$
   (vcat $ intersperse blank (map (classDoc c f p) (fixCtorNames initName cs))) 
-  $+$ blank $+$
-  pybody c f p ms
 
 -- code doc functions
 binOpDoc' :: BinaryOp -> Doc
@@ -151,11 +150,6 @@ funcDoc' c (ListAdd i v) = dot <> funcAppDoc c "insert" [i, v]
 funcDoc' c (ListPopulate size t) = brackets (valueDoc c dftVal) <+> char '*' <+> valueDoc c size
     where dftVal = case t of Base bt   -> defaultValue bt
                              _         -> error $ "ListPopulate does not yet support list type " ++ render (doubleQuotes $ stateType c t Def)
-funcDoc' c (ListSlice b e s) = brackets $ 
-  getVal b <> colon <> getVal e <> colon <> getVal s 
-    where getVal Nothing  = empty
-          getVal (Just v) = valueDoc c v
-funcDoc' c (StringSplit d) = dot <> funcAppDoc c "split" [litString d]
 funcDoc' c f = funcDocD c f
 
 iterationDoc' :: Config -> Iteration -> Doc
@@ -243,7 +237,7 @@ functionDoc' c _ _ (Method n _ _ ps b) = vcat [
         where bodyD | null b    = text "None"
                     | otherwise = bodyDoc c b
 functionDoc' c _ _ (MainMethod b) = bodyDoc c b
-functionDoc' _ _ _ _ = empty
+functionDoc' _ _ _ _ = error "Class method type cannot exist outside of class"
 
 inputDoc' :: Config -> IOType -> StateType -> Value -> Doc
 inputDoc' c io (Base Boolean) v = statementDoc c NoLoop
@@ -265,6 +259,13 @@ ioDoc' c io = ioDocD c io
 
 complexDoc' :: Config -> Complex -> Doc
 complexDoc' c (ReadAll f v) = statementDoc c NoLoop (v &= objMethodCall f "readlines" [])
+complexDoc' c (ListSlice _ vnew vold b e s) = 
+  valueDoc c vnew <+> equals <+> valueDoc c vold <> (brackets $ 
+  getVal b <> colon <> getVal e <> colon <> getVal s)
+    where getVal Nothing  = empty
+          getVal (Just v) = valueDoc c v
+complexDoc' c (StringSplit vnew vold d) = 
+  valueDoc c vnew <+> equals <+> valueDoc c vold <> dot <> funcAppDoc c "split" [litString d]
   
 -- helpers
 

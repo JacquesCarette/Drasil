@@ -35,21 +35,24 @@ itslPrpty = compoundNC intrslce property
 slopeSrf  = compoundNC slope surface_
 soilLyr   = compoundNC soil (npnc "layer" (cn' "layer"))
 
-crtSlpSrf, plnStrn :: ConceptChunk --FIXME: move to Concepts/soldMechanics.hs? They are too spicific though
+crtSlpSrf, plnStrn, fs_concept :: ConceptChunk --FIXME: move to Concepts/soldMechanics.hs? They are too spicific though
 plnStrn = dcc "plane strain" (cn' "plane strain") 
-          ("The resultant stresses in one of the directions of a " ++
-          "3 dimensional material can be approximated as 0. Results " ++
-          "when the length of one dimension of the body dominates the " ++
-          "others. Stresses in the dominate dimensions direction are " ++
-          "the ones that can be approximated as 0.")
-          
+  ("The resultant stresses in one of the directions of a " ++
+  "3 dimensional material can be approximated as 0. Results " ++
+  "when the length of one dimension of the body dominates the " ++
+  "others. Stresses in the dominate dimensions direction are " ++
+  "the ones that can be approximated as 0.")
+
 crtSlpSrf = dccWDS "critical slip surface" (cn' "critical slip surface") 
-    ((at_start slpSrf) +:+ S "of the" +:+ (phrase slope) +:+ S "that has the lowest global" +:+
-    ((phrase factor) `sOf` (phrase safety)) `sC` S "and therefore most likely to experience failure.")
-    
+  ((at_start slpSrf) +:+ S "of the" +:+ (phrase slope) +:+ S "that has the lowest global" +:+
+  ((phrase factor) `sOf` (phrase safety)) `sC` S "and therefore most likely to experience failure.")
+
+fs_concept = dcc "FS" factorOfSafety
+  "The global stability of a surface in a slope"
+-- OLD DEFN: Stability metric. How likely a slip surface is to experience failure through slipping.
+
 --
-factor, safety :: NamedChunk
-factor = npnc "factor" (cn' "factor")
-safety = npnc "safety" (cnIES "safety")
+factor :: NamedChunk --FIXME: this is here becuase this phrase is used in datadefs and instance models
+factor = npnc "factor" (cn' "factor") -- possible use this everywhere (fs, fs_rc, fs_concept...)
 factorOfSafety :: NP
 factorOfSafety = factor `of_''` safety

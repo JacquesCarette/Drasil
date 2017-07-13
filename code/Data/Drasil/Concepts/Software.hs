@@ -11,12 +11,11 @@ c :: ConceptChunk
 c = dcc "c" (pn "C") "C programming language"
 
 physLib :: ConceptChunk
-physLib = dcc "physLib"         (cnIES "physics library") 
-  ("A programming library which" ++ 
-  "provides functions for modelling physical phenomenon.")
+physLib = dcc "physLib" (cnIES "physics library") 
+  ("A programming library which provides functions for modelling physical phenomenon.")
 
 program :: ConceptChunk
-program = dcc "program"         (cn' "program")
+program = dcc "program" (cn' "program")
   ("A series of coded software instructions to control the operation of a " ++
   "computer or other machine.")
 
@@ -25,37 +24,37 @@ program = dcc "program"         (cn' "program")
 accuracy, correctness, maintainability, performance, performanceSpd, portability, reliability,
   reusability, understandability, verifiability :: ConceptChunk
   
-accuracy = dcc "accuracy" (nounPhraseSP "accuracy")
-          "The quality or state of being correct or precise"
+accuracy          = dcc "accuracy"          (nounPhraseSP "accuracy")
+  "The quality or state of being correct or precise"
 
-correctness = dcc "correctness" (nounPhraseSP "correctness")
-              "The quality or state of being free from error"
-              
-maintainability = dcc "maintainability" (nounPhraseSP "maintainability")
-                  "The probability of performing a successful repair action within a given time"
+correctness       = dcc "correctness"       (nounPhraseSP "correctness")
+  "The quality or state of being free from error"
+  
+maintainability   = dcc "maintainability"   (nounPhraseSP "maintainability")
+  "The probability of performing a successful repair action within a given time"
 
-performance = dcc "performance" (nounPhraseSP "performance")
-              "The action or process of carrying out or accomplishing an action, task, or function"
-              
-performanceSpd = dcc (performance ^. id) (nounPhrase'' (phrase performance) (S "speed") CapFirst CapWords)
-              "The action or process of carrying out or accomplishing an action, task, or function quickly"
-             
-portability = dcc "portability" (nounPhraseSP "portability")
-              "The ability of software to be transferred from one machine or system to another"
+performance       = dcc "performance"       (nounPhraseSP "performance")
+  "The action or process of carrying out or accomplishing an action, task, or function"
+  
+performanceSpd    = dcc (performance ^. id) (nounPhrase'' (phrase performance) (S "speed") CapFirst CapWords)
+  "The action or process of carrying out or accomplishing an action, task, or function quickly"
+ 
+portability       = dcc "portability"       (nounPhraseSP "portability")
+  "The ability of software to be transferred from one machine or system to another"
 
-reliability = dcc "reliability" (nounPhraseSP "reliability")
-              ("The degree to which the result of a measurement, calculation," ++
-              "or specification can be depended on to be accurate")
+reliability       = dcc "reliability"       (nounPhraseSP "reliability")
+  ("The degree to which the result of a measurement, calculation," ++
+  "or specification can be depended on to be accurate")
 
-reusability = dcc "reusability" (nounPhraseSP "reusability")
-              "The use of existing assets in some form within the software product development process"
+reusability       = dcc "reusability"       (nounPhraseSP "reusability")
+  "The use of existing assets in some form within the software product development process"
 
 understandability = dcc "understandability" (nounPhraseSP "understandability")
-                    "The property of being understandable"
+  "The property of being understandable"
 
-verifiability = dcc "verifiability" (nounPhraseSP "verifiability")
-                "the quality or state of being capable of being verified , confirmed , or substantiated"
-                  
+verifiability     = dcc "verifiability"     (nounPhraseSP "verifiability")
+  "the quality or state of being capable of being verified , confirmed , or substantiated"
+  
 -- MODULES Concepts (Maybe move to D.D.C.Software.Modules ?)
 
 --FIXME: "hiding" is not a noun.
@@ -126,30 +125,30 @@ modInterpDatum = dccWDS "modInterpDatum" (cn "interpolation datum") (foldlSent
 
 mod_seq_serv :: ConceptChunk
 mod_seq_serv = dccWDS "mod_seq_serv" (cn' "sequence data structure")
-    (S "Provides array manipulation operations, such as building an array" `sC`
-    S "accessing a specific entry, slicing an array, etc.")
+  (S "Provides array manipulation operations, such as building an array" `sC`
+  S "accessing a specific entry, slicing an array, etc.")
 
 mod_linked_serv :: ConceptChunk
 mod_linked_serv = dccWDS "mod_linked_serv" (cn' "linked data structure")
-    (S "Provides tree manipulation operations, such as building a tree" `sC`
-    S "accessing a specific entry, etc.")
+  (S "Provides tree manipulation operations, such as building a tree" `sC`
+  S "accessing a specific entry, etc.")
 
 mod_assoc_serv :: ConceptChunk
 mod_assoc_serv = dccWDS "mod_assoc_serv" (cn' "associative data structure")
-    (S "Provides operations on hash tables, such as building a hash table" `sC`
-    S "accessing a specific entry, etc.")
+  (S "Provides operations on hash tables, such as building a hash table" `sC`
+  S "accessing a specific entry, etc.")
 
 mod_vector_serv :: ConceptChunk
 mod_vector_serv = dccWDS "mod_vector_serv" (cn' "vector")
-    (S "Provides vector operations such as addition, scalar and vector" +:+
-    S "multiplication, dot and cross products, rotations, etc.")
-    
+  (S "Provides vector operations such as addition, scalar and vector" +:+
+  S "multiplication, dot and cross products, rotations, etc.")
+  
 mod_plot_desc :: ConceptChunk
 mod_plot_desc = dcc "mod_plot_desc" (cn' "plotting") "Provides a plot function."
 
 mod_outputf_desc_fun :: Sentence -> ConceptChunk
 mod_outputf_desc_fun desc = dccWDS "mod_outputf_desc" (cn' "output format")
-    (S "Outputs the results of the calculations, including the" +:+ desc)
+  (S "Outputs the results of the calculations, including the" +:+ desc)
 
 -- ODE Solver Module
 mod_ode_desc :: ConceptChunk

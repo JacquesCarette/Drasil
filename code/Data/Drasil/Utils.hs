@@ -14,6 +14,7 @@ module Data.Drasil.Utils
   , mkRefsList
   , mkInputDatTb
   , getS
+  , getRVal
   , addPercent
   , weave
   , fmtU
@@ -22,7 +23,6 @@ module Data.Drasil.Utils
   , symbolMapFun
   , fterms , fterm
   , mkDataDef
-  , inDataConstTbl, outDataConstTbl
   , prodUCTbl
   ) where
 
@@ -37,7 +37,6 @@ import Language.Drasil {-(Sentence(Sy, P, EmptyS, S, (:+:), E), (+:+),
   UnitalChunk, QDefinition, term, id, unit, ucw)-}
 import Data.Drasil.Concepts.Documentation
 import Data.Drasil.Concepts.Math (unit_)
-import Data.Drasil.Concepts.Documentation (value, physicalConstraint, variable)
   
 -- | fold helper functions applies f to all but the last element, applies g to
 -- last element and the accumulator
@@ -92,7 +91,7 @@ fmtUS num units  = num +:+ units
 -- | takes a amount and adds a unit to it
 -- n - sentenc representing an amount
 -- u - unit we want to attach to amount
-fmtU :: (Quantity a, SymbolForm a) => Sentence -> a -> Sentence
+fmtU :: (Quantity a) => Sentence -> a -> Sentence
 fmtU n u  = n +:+ (unwrap $ getUnit u)
 
 -- | takes a chunk and a list of binary operator contraints to make an expression (Sentence)
@@ -105,6 +104,12 @@ fmtBF symb ((f,num):xs) = (E ((C symb) `f` num)) +:+ S "and" +:+ (fmtBF symb xs)
 -- | gets symbol from chunk
 getS :: (SymbolForm a) => a -> Sentence
 getS s  = P $ s ^. symbol
+
+-- | gets a reasonable or typical value from a Constrained chunk
+getRVal :: (Constrained c) => c -> Expr
+getRVal c = uns (c ^. reasVal)
+  where uns (Just e) = e
+        uns Nothing  = (V "WARNING: getRVal found no Expr")
 
 -- | outputs sentence with % attached to it
 addPercent :: Float ->  Sentence
@@ -191,17 +196,6 @@ mkDataDef concept equation = datadef $ getUnit concept
                            (concept ^. symbol) a equation
         datadef Nothing  = fromEqn' (concept ^. id) (concept ^. term)
                            (concept ^. symbol) equation
-
--- Creates the input Data Constraints Table with physical constraints only
-inDataConstTbl :: [[Sentence]] -> Integer -> Contents
-inDataConstTbl inputs tableNumb = Table [S "Var", titleize' physicalConstraint, titleize' softwareConstraint,
-  S "Typical" +:+ titleize value, S "Typical Uncertainty"]
-  inputs (S "Table" +: S (show tableNumb) +:+ S "Input Data Constraints") True
-  
-  -- Creates the output Data Constraints Table with physical constraints only
-outDataConstTbl :: [[Sentence]] -> Integer -> Contents
-outDataConstTbl outputs tableNumb = Table [S "Var", titleize' physicalConstraint, titleize' softwareConstraint]
-  outputs (S "Table" +: S (show tableNumb) +:+ S "Output Data Constraints") True
 
 prodUCTbl :: [[Sentence]] -> Contents
 prodUCTbl cases = Table [titleize useCase +:+. S "NO", titleize useCase +:+

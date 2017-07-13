@@ -49,6 +49,10 @@ printLO (Header n contents)     = h n $ text (p_spec contents)
 printLO (List t)                = makeList t
 printLO (Figure r c f)          = makeFigure (p_spec r) (p_spec c) f
 printLO (Module m l)            = makeModule m (p_spec l)
+printLO (Assumption a l id)        = makeRefList (p_spec a) (p_spec l) (p_spec id)
+printLO (Requirement r l id)        = makeRefList (p_spec r) (p_spec l) (p_spec id)
+printLO (LikelyChange lc l id)        = makeRefList (p_spec lc) (p_spec l) (p_spec id)
+
 
 -- | Called by build, uses 'printLO' to render the layout 
 -- objects in Doc format.
@@ -91,26 +95,30 @@ t_symbol (Corners [] [] [] [x] s) = t_symbol s ++ "_" ++ t_symbol x
 t_symbol (Corners [] [] [x] [] s) = t_symbol s ++ "^" ++ t_symbol x
 t_symbol s                        = symbol s
 
--- | Renders symbols for HTML body
+-- | Adds emphises to symbols by defult. Use symbolNoEm for no emphises.
+--   Units do not need emphises for example.
 symbol :: Symbol -> String
-symbol (Atomic s)  = s
-symbol (Special s) = unPH $ special s
-symbol (Concat sl) = foldr (++) "" $ map symbol sl
-symbol (Greek g)   = unPH $ greek g
---
+symbol s = "<em>" ++ symbolNoEm s ++ "</em>"
+
+-- | Renders symbols for HTML document
+symbolNoEm :: Symbol -> String
+symbolNoEm (Atomic s)  = s
+symbolNoEm (Special s) = unPH $ special s
+symbolNoEm (Concat sl) = foldr (++) "" $ map symbolNoEm sl
+symbolNoEm (Greek g)   = unPH $ greek g
 -- handle the special cases first, then general case
-symbol (Corners [] [] [x] [] s) = (symbol s) ++ sup (symbol x)
-symbol (Corners [] [] [] [x] s) = (symbol s) ++ sub (symbol x)
-symbol (Corners [_] [] [] [] _) = error "rendering of ul prescript"
-symbol (Corners [] [_] [] [] _) = error "rendering of ll prescript"
-symbol (Corners _ _ _ _ _)      = error "rendering of Corners (general)"
-symbol (Atop Vector s)       = "<b>" ++ symbol s ++ "</b>"
-symbol (Atop Hat s)          = symbol s ++ "&#770;"
-symbol (Atop Prime s)        = symbol s ++ "'"
+symbolNoEm (Corners [] [] [x] [] s) = (symbolNoEm s) ++ sup (symbolNoEm x)
+symbolNoEm (Corners [] [] [] [x] s) = (symbolNoEm s) ++ sub (symbolNoEm x)
+symbolNoEm (Corners [_] [] [] [] _) = error "rendering of ul prescript"
+symbolNoEm (Corners [] [_] [] [] _) = error "rendering of ll prescript"
+symbolNoEm (Corners _ _ _ _ _)      = error "rendering of Corners (general)"
+symbolNoEm (Atop Vector s)       = "<b>" ++ symbolNoEm s ++ "</b>"
+symbolNoEm (Atop Hat s)          = symbolNoEm s ++ "&#770;"
+symbolNoEm (Atop Prime s)        = symbolNoEm s ++ "'"
 
 uSymb :: USymb -> String
-uSymb (UName s)           = symbol s
-uSymb (UProd l)           = foldr1 (\x -> (x++)) (map uSymb l)
+uSymb (UName s)           = symbolNoEm s
+uSymb (UProd l)           = foldr1 (\x -> ((x++"&sdot;")++) ) (map uSymb l)
 uSymb (UPow s i)          = uSymb s ++ sup (show i)
 uSymb (UDiv n (UName d))  = uSymb n ++ "/" ++ uSymb (UName d)
 uSymb (UDiv n d)          = uSymb n ++ "/(" ++ (uSymb d) ++ ")"
@@ -120,42 +128,65 @@ uSymb (UDiv n d)          = uSymb n ++ "/(" ++ (uSymb d) ++ ")"
 -----------------------------------------------------------------
 -- | Renders expressions in the HTML (called by multiple functions)
 p_expr :: Expr -> String
-p_expr (Var v)    = v
+p_expr (Var v)    = symbol (Atomic v) --Ensures variables are rendered the same as other symbols
 p_expr (Dbl d)    = showFFloat Nothing d ""
 p_expr (Int i)    = show i
 p_expr (Bln b)    = show b
 p_expr (Mul a b)  = mul a b
-p_expr (Add a b)  = p_expr a ++ "+" ++ p_expr b
-p_expr (Sub a b)  = p_expr a ++ "-" ++ p_expr b
+p_expr (Add a b)  = p_expr a ++ " &plus; " ++ p_expr b
+p_expr (Sub a b)  = p_expr a ++ " &minus; " ++ p_expr b
 p_expr (Frac a b) = fraction (p_expr a) (p_expr b) --Found in HTMLHelpers
 p_expr (Div a b)  = divide a b
 p_expr (Pow a b)  = pow a b
-p_expr (And a b)  = p_expr a ++ "&and;" ++ p_expr b
-p_expr (Or a b)   = p_expr a ++ "&or;" ++ p_expr b
 p_expr (Sym s)    = symbol s
-p_expr (Eq a b)   = p_expr a ++ "=" ++ p_expr b
+p_expr (Eq a b)   = p_expr a ++ " = " ++ p_expr b
 p_expr (NEq a b)  = p_expr a ++ "&ne;" ++ p_expr b
-p_expr (Lt a b)   = p_expr a ++ "&lt;" ++ p_expr b
-p_expr (Gt a b)   = p_expr a ++ "&gt;" ++ p_expr b
-p_expr (LEq a b)  = p_expr a ++ "&le;" ++ p_expr b
-p_expr (GEq a b)  = p_expr a ++ "&ge;" ++ p_expr b
+p_expr (Lt a b)   = p_expr a ++ "&thinsp;&lt;&thinsp;" ++ p_expr b --thin spaces make these more readable
+p_expr (Gt a b)   = p_expr a ++ "&thinsp;&gt;&thinsp;" ++ p_expr b
+p_expr (LEq a b)  = p_expr a ++ "&thinsp;&le;&thinsp;" ++ p_expr b
+p_expr (GEq a b)  = p_expr a ++ "&thinsp;&ge;&thinsp;" ++ p_expr b
 p_expr (Dot a b)  = p_expr a ++ "&sdot;" ++ p_expr b
-p_expr (Not a)    = "&not;" ++ p_expr a
 p_expr (Neg a)    = neg a
 p_expr (Call f x) = p_expr f ++ paren (concat $ intersperse "," $ map p_expr x)
 p_expr (Case ps)  = cases ps (p_expr)
 p_expr (Op f es)  = p_op f es
 p_expr (Grouping e) = paren (p_expr e)
+p_expr (Mtx a)    = "<table class=\"matrix\">\n" ++ p_matrix a ++ "</table>"
+--Logic
+p_expr (Not a)    = "&not;" ++ p_expr a
+p_expr (And a b)  = p_expr a ++ " &and; " ++ p_expr b
+p_expr (Or a b)   = p_expr a ++ " &or; " ++ p_expr b
+p_expr (Impl a b) = p_expr a ++ " &rArr; " ++ p_expr b
+p_expr (Iff a b)  = p_expr a ++ " &hArr; " ++ p_expr b
+p_expr (IsIn  a b) = (concat $ intersperse "," $ map p_expr a) ++ "&thinsp;&isin;&thinsp;"  ++ show b
+p_expr (NotIn a b) = (concat $ intersperse "," $ map p_expr a) ++ "&thinsp;&notin;&thinsp;" ++ show b
+p_expr (State a b) = (concat $ intersperse ", " $ map p_quan a) ++ ": " ++ p_expr b
+
+-- | For printing Matrix
+p_matrix :: [[Expr]] -> String
+p_matrix [] = ""
+p_matrix [x] = "<tr>" ++ p_in x ++ "</tr>\n"
+p_matrix (x:xs) = p_matrix [x] ++ p_matrix xs
+
+p_in :: [Expr] -> String
+p_in [] = ""
+p_in [x] = "<td>" ++ p_expr x ++ "</td>"
+p_in (x:xs) = p_in [x] ++ p_in xs
+
+-- | Helper for rendering Quantifier statements
+p_quan :: Quantifier -> String
+p_quan (Forall e) = "&forall;" ++ p_expr e
+p_quan (Exists e) = "&exist;"  ++ p_expr e
 
 -- | Helper for properly rendering multiplication of expressions
 mul :: Expr -> Expr -> String
-mul a b@(Dbl _) = mulParen a ++ "*" ++ p_expr b
-mul a b@(Int _) = mulParen a ++ "*" ++ p_expr b
-mul x@(Sym (Concat _)) y = p_expr x ++ "*" ++ mulParen y
-mul x y@(Sym (Concat _)) = mulParen x ++ "*" ++ p_expr y
-mul x@(Sym (Atomic s)) y = if length s > 1 then p_expr x ++ "*" ++ mulParen y else
+mul a b@(Dbl _) = mulParen a ++ "&sdot;" ++ p_expr b
+mul a b@(Int _) = mulParen a ++ "&sdot;" ++ p_expr b
+mul x@(Sym (Concat _)) y = p_expr x ++ "&sdot;" ++ mulParen y
+mul x y@(Sym (Concat _)) = mulParen x ++ "&sdot;" ++ p_expr y
+mul x@(Sym (Atomic s)) y = if length s > 1 then p_expr x ++ "&sdot;" ++ mulParen y else
                             p_expr x ++ mulParen y
-mul x y@(Sym (Atomic s)) = if length s > 1 then mulParen x ++ "*" ++ p_expr y else
+mul x y@(Sym (Atomic s)) = if length s > 1 then mulParen x ++ "&sdot;" ++ p_expr y else
                             mulParen x ++ p_expr y
 mul a b         = mulParen a ++ mulParen b
 
@@ -220,7 +251,7 @@ makeColumns ls = vcat $ map (td . text . p_spec) ls
 -----------------------------------------------------------------
 
 -- | Renders definition tables (Data, General, Theory, etc.)
-makeDefn :: L.DType -> [(String,LayoutObj)] -> String -> Doc
+makeDefn :: L.DType -> [(String,[LayoutObj])] -> String -> Doc
 makeDefn _ [] _   = error "Empty definition"
 makeDefn dt ps l = refwrap l $ wrap "table" [dtag dt] (makeDRows ps)
   where dtag (L.Data _)   = "ddefn"
@@ -228,10 +259,10 @@ makeDefn dt ps l = refwrap l $ wrap "table" [dtag dt] (makeDRows ps)
         dtag (L.General)  = "gdefn"
 
 -- | Helper for making the definition table rows
-makeDRows :: [(String,LayoutObj)] -> Doc
+makeDRows :: [(String,[LayoutObj])] -> Doc
 makeDRows []         = error "No fields to create defn table"
-makeDRows ((f,d):[]) = tr (th (text f) $$ td (printLO d))
-makeDRows ((f,d):ps) = tr (th (text f) $$ td (printLO d)) $$ makeDRows ps
+makeDRows ((f,d):[]) = tr (th (text f) $$ td (vcat $ map printLO d))
+makeDRows ((f,d):ps) = tr (th (text f) $$ td (vcat $ map printLO d)) $$ makeDRows ps
 
 -----------------------------------------------------------------
 ------------------BEGIN LIST PRINTING----------------------------
@@ -248,6 +279,9 @@ makeList t@(Ordered items) = wrap (show t ++ "l") ["list"] (vcat $ map
   (wrap "li" [] . p_item) items)
 makeList t@(Unordered items) = wrap (show t ++ "l") ["list"] (vcat $ map
   (wrap "li" [] . p_item) items)
+makeList (Definitions items) = div_tag ["list"] 
+  (vcat $ map (\(b,e) -> wrap "p" [] ((text (p_spec b ++ " is the") <+> 
+  (p_item e)))) items)
 
 -- | Helper for rendering list items
 p_item :: ItemType -> Doc  
@@ -302,3 +336,7 @@ binfix_op _ _ = error "Attempting to print binary operate with inappropriate" ++
 -- | Renders modules
 makeModule :: String -> String -> Doc
 makeModule m l = refwrap l (paragraph $ wrap "b" [] (text m))
+
+-- | Renders assumptions, requirements, likely changes
+makeRefList :: String -> String -> String -> Doc
+makeRefList a l i = refwrap l (wrap "ul" [] (text $ i ++ ": " ++ a))

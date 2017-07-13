@@ -20,6 +20,7 @@ library
     Data.Drasil.Concepts.Documentation
     Data.Drasil.Concepts.Thermodynamics
     Data.Drasil.Concepts.PhysicalProperties
+    Data.Drasil.Concepts.Education
     Data.Drasil.Concepts.Physics
     Data.Drasil.Concepts.Software
     Data.Drasil.Concepts.Math
@@ -87,6 +88,7 @@ library
     , Language.Drasil.Chunk.ConVar
     , Language.Drasil.Chunk.Constrained
     , Language.Drasil.Chunk.Eq
+    , Language.Drasil.Chunk.ExprRelat
     , Language.Drasil.Chunk.LC
     , Language.Drasil.Chunk.Method
     , Language.Drasil.Chunk.Module
@@ -96,6 +98,7 @@ library
     , Language.Drasil.Chunk.Relation
     , Language.Drasil.Chunk.Req
     , Language.Drasil.Chunk.SymbolForm
+    , Language.Drasil.Chunk.Theory
     , Language.Drasil.Chunk.UncertainQuantity
     , Language.Drasil.Chunk.Unital
     , Language.Drasil.Chunk.Unitary
@@ -103,6 +106,7 @@ library
     , Language.Drasil.Chunk.Wrapper
     , Language.Drasil.Chunk.Wrapper.QSWrapper
     , Language.Drasil.Chunk.Wrapper.UWrapper
+    , Language.Drasil.ChunkDB
     , Language.Drasil.Expr.Extract
     , Language.Drasil.Make.AST
     , Language.Drasil.Make.Helpers
@@ -135,6 +139,8 @@ executable tiny
     , Drasil.Sections.ReferenceMaterial
     , Drasil.Sections.TableOfAbbAndAcronyms
     , Drasil.DocumentLanguage
+    , Drasil.DocumentLanguage.Chunk.GenDefn
+    , Drasil.DocumentLanguage.Definitions
     , Drasil.Sections.TableOfUnits
     , Drasil.Template.DD
     , Drasil.Template.Helpers
@@ -180,6 +186,8 @@ executable nopcm
     , Drasil.SRS
     , Drasil.Sections.TableOfAbbAndAcronyms
     , Drasil.DocumentLanguage
+    , Drasil.DocumentLanguage.Chunk.GenDefn
+    , Drasil.DocumentLanguage.Definitions
     , Drasil.Sections.SpecificSystemDescription
     , Drasil.Sections.Introduction
     , Drasil.Sections.Requirements
@@ -208,20 +216,25 @@ executable ssp
   other-modules:
       Drasil.Sections.ReferenceMaterial
     , Drasil.SRS
+    , Drasil.SSP.Assumptions
     , Drasil.SSP.Body
     , Drasil.SSP.Changes
+    , Drasil.SSP.DataDefs
     , Drasil.SSP.Defs
+    , Drasil.SSP.GenDefs
+    , Drasil.SSP.IMods
     , Drasil.SSP.Modules
     , Drasil.SSP.Reqs
-    , Drasil.SSP.Unitals
+    , Drasil.SSP.Requirements
     , Drasil.SSP.TMods
-    , Drasil.SSP.GenDefs
-    , Drasil.SSP.DataDefs
-    , Drasil.SSP.IMods
+    , Drasil.SSP.Unitals
     , Drasil.Sections.TableOfAbbAndAcronyms
     , Drasil.Sections.TableOfSymbols
     , Drasil.DocumentLanguage
+    , Drasil.DocumentLanguage.Chunk.GenDefn
+    , Drasil.DocumentLanguage.Definitions
     , Drasil.Sections.TableOfUnits
+    , Drasil.Sections.AuxiliaryConstants
     , Drasil.Template.DD
     , Drasil.Template.Helpers
     , Drasil.Template.MG
@@ -247,6 +260,8 @@ executable glassbr
   main-is: Drasil/GlassBR/Main.hs
   other-modules:
       Drasil.DocumentLanguage
+    , Drasil.DocumentLanguage.Chunk.GenDefn
+    , Drasil.DocumentLanguage.Definitions
     , Drasil.GlassBR.Body
     , Drasil.GlassBR.Changes
     , Drasil.GlassBR.Concepts
@@ -291,6 +306,8 @@ executable chipmunkdocs
   main-is: Drasil/GamePhysics/Main.hs
   other-modules:
       Drasil.DocumentLanguage
+    , Drasil.DocumentLanguage.Chunk.GenDefn
+    , Drasil.DocumentLanguage.Definitions
     , Drasil.GamePhysics.Body
     , Drasil.GamePhysics.Changes
     , Drasil.GamePhysics.Concepts
@@ -307,6 +324,7 @@ executable chipmunkdocs
     , Drasil.Sections.Requirements
     , Drasil.Sections.TraceabilityMandGs
     , Drasil.Sections.ReferenceMaterial
+    , Drasil.Sections.AuxiliaryConstants
     , Drasil.SRS
     , Drasil.Sections.TableOfAbbAndAcronyms
     , Drasil.Sections.TableOfSymbols
@@ -332,6 +350,8 @@ executable swhs
   main-is: Drasil/SWHS/Main.hs
   other-modules:
       Drasil.DocumentLanguage
+    , Drasil.DocumentLanguage.Chunk.GenDefn
+    , Drasil.DocumentLanguage.Definitions
     , Drasil.Sections.SpecificSystemDescription
     , Drasil.Sections.Introduction
     , Drasil.Sections.Requirements

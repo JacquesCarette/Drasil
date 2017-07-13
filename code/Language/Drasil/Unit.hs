@@ -6,6 +6,8 @@ module Language.Drasil.Unit (
   , UnitDefn(..)                -- wrapper for 'Unit' class
   , from_udefn, makeDerU, unitCon
   , (^:), (/:), (*:), new_unit
+  , scale, shift
+  , derUC, derUC', derUC''
   ) where
 
 import Prelude hiding (id)
@@ -15,7 +17,9 @@ import Control.Lens (Simple, Lens, set, (^.))
 import Language.Drasil.Chunk (Chunk(..))
 import Language.Drasil.Chunk.NamedIdea (NamedIdea(..))
 import Language.Drasil.Chunk.Concept (Concept(..), ConceptChunk, dcc)
+import Language.Drasil.NounPhrase
 import Language.Drasil.Spec (USymb(..))
+import Language.Drasil.Symbol
 
 import Language.Drasil.NounPhrase (cn')
 
@@ -44,6 +48,19 @@ from_udefn (UShift _ s) = s
 -- | Create a derived unit chunk from a concept and a unit equation
 makeDerU :: ConceptChunk -> UDefn -> DerUChunk
 makeDerU concept eqn = DUC (UD concept (from_udefn eqn)) eqn
+
+-- | Create a derived unit chunk from an id, term (as 'String'), definition,
+-- symbol, and unit equation
+derUC, derUC' :: String -> String -> String -> Symbol -> UDefn -> DerUChunk
+-- | Uses self-plural term
+derUC  a b c s u = DUC (UD (dcc a (cn b) c) (UName $ s)) u
+-- | Uses term that pluralizes by adding *s* to the end
+derUC' a b c s u = DUC (UD (dcc a (cn' b) c) (UName $ s)) u
+
+-- | Create a derived unit chunk from an id, term (as noun phrase), definition, 
+-- symbol, and unit equation
+derUC'' :: String -> NP -> String -> Symbol -> UDefn -> DerUChunk
+derUC'' a b c s u = DUC (UD (dcc a b c) (UName $ s)) u
 
 --FIXME: Make this use a meaningful identifier.
 -- | Helper for fundamental unit concept chunk creation. Uses the same string
@@ -124,6 +141,14 @@ u1 /: u2 = UDiv (u1 ^. usymb) (u2 ^. usymb)
 -- | Combinator for multiplying two units together
 (*:) :: (Unit u1, Unit u2) => u1 -> u2 -> USymb
 u1 *: u2 = UProd [(u1 ^. usymb), (u2 ^. usymb)]
+
+-- | Combinator for scaling one unit by some number
+scale :: Unit s => Double -> s -> UDefn
+scale a b = UScale a (b ^. usymb)
+
+-- | Combinator for shifting one unit by some number
+shift :: Unit s => Double -> s -> UDefn
+shift a b = UShift a (b ^. usymb)
 
 -- | Smart constructor for new derived units from existing units.
 new_unit :: String -> USymb -> DerUChunk

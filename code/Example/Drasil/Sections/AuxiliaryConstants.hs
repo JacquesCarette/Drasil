@@ -9,7 +9,11 @@ import Data.Drasil.Utils(getS)
 import qualified Data.Drasil.Concepts.Math as CM
 
 valsOfAuxConstantsF :: (NamedIdea a) => a ->[QDefinition] -> Section
-valsOfAuxConstantsF kWord listOfConstants = (SRS.valsOfAuxCons) [intro (kWord), tableOfConstants (listOfConstants)] []
+valsOfAuxConstantsF kWord listOfConstants = (SRS.valsOfAuxCons) (contentGenerator kWord listOfConstants)  []
+
+contentGenerator :: (NamedIdea a) => a -> [QDefinition] -> [Contents]
+contentGenerator _ [] = [foldlSP [S "There are no auxiliary constants"]]
+contentGenerator a b  = [intro a, tableOfConstants b]
 
 --FIXME: general introduction?
 intro :: (NamedIdea a) => a -> Contents
@@ -21,3 +25,4 @@ tableOfConstants f = Table
   (mkTable [getS, phrase, (\c -> E $ equat c), unit'2Contents] f)
   (S "Auxiliary Constants")
   True
+

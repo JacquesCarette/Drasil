@@ -18,7 +18,6 @@ from . import testCheckConstraints16
 from . import testCheckConstraints17
 from . import testCheckConstraints18
 from . import testCheckConstraints19
-from . import testCheckConstraints20
 
 class CheckConTests(unittest.TestSuite):
 
@@ -35,7 +34,7 @@ class CheckConTests(unittest.TestSuite):
                              testCheckConstraints13.TestCheckConstraints, testCheckConstraints14.TestCheckConstraints,
                              testCheckConstraints15.TestCheckConstraints, testCheckConstraints16.TestCheckConstraints,
                              testCheckConstraints17.TestCheckConstraints, testCheckConstraints18.TestCheckConstraints,
-                             testCheckConstraints19.TestCheckConstraints, testCheckConstraints20.TestCheckConstraints]))
+                             testCheckConstraints19.TestCheckConstraints]))
 
     testSuite.run(testResult)
     checkCon_results = testResult.testsRun

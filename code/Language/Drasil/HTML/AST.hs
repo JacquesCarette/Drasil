@@ -35,6 +35,12 @@ data Expr = Var   Variable
           | Case  [(Expr,Expr)]
           | Op Function [Expr]
           | Grouping Expr
+          | IsIn  [Expr] Set
+          | NotIn [Expr] Set
+          | State [Quantifier] Expr
+          | Impl Expr Expr
+          | Iff  Expr Expr
+          | Mtx [[Expr]]
           
 -- | Internal HTML version of Function 
 -- (for converting Functions from 'Language.Drasil.Expr')
@@ -52,6 +58,20 @@ data Function = Log
            | Cross
            | Product (Maybe ((Symbol, Expr), Expr))
            | Exp
+           | Sqrt
+
+data Set = Integer
+         | Rational
+         | Real
+         | Natural
+         | Boolean
+         | Char
+         | String
+         | Radians
+         | Vect Set
+         | Obj String
+
+data Quantifier = Forall Expr | Exists Expr
 
 -- | Internal HTML version of Sentence 
 -- (for converting 'Language.Drasil.Spec.Sentence')
@@ -91,15 +111,19 @@ data LayoutObj = Table Tags [[Spec]] Label Bool Caption
                | HDiv Tags [LayoutObj] Label
                | Tagless Contents
              --  CodeBlock Code
-               | Definition DType [(String,LayoutObj)] Label
+               | Definition DType [(String,[LayoutObj])] Label
                | List ListType
                | Figure Label Caption Filepath
                | Module String Label
+               | Assumption Contents Label Label
+               | LikelyChange Contents Label Label
+               | Requirement Contents Label Label
                -- Span Tags Contents
                
 data ListType = Ordered [ItemType] | Unordered [ItemType]
-              | Simple [(Title,ItemType)]
-              | Desc [(Title,ItemType)]
+              | Simple      [(Title,ItemType)]
+              | Desc        [(Title,ItemType)]
+              | Definitions  [(Title,ItemType)]
 
 data ItemType = Flat Spec | Nested Spec ListType
 
@@ -110,18 +134,30 @@ instance Show ListType where
   show (Simple _)  = error "Printing Simple list failed, see ASTHTML/PrintHTML"
 
 instance Show Function where
-  show Log = "log"
-  show (Summation _) = "&sum;"
-  show (Product _) = "&prod;"
-  show Abs = ""
-  show Norm = ""
+  show Log            = "log"
+  show (Summation _)  = "&sum;"
+  show (Product _)    = "&prod;"
+  show Abs            = ""
+  show Norm           = ""
   show (Integral _ _) = "&int;"
-  show Sin = "sin"
-  show Cos = "cos"
-  show Tan = "tan"
-  show Sec = "sec"
-  show Csc = "csc"
-  show Cot = "cot"
-  show Cross = "&#10799;"
-  show Exp = "e"
+  show Sin            = "sin"
+  show Cos            = "cos"
+  show Tan            = "tan"
+  show Sec            = "sec"
+  show Csc            = "csc"
+  show Cot            = "cot"
+  show Cross          = "&#10799;"
+  show Exp            = "e"
+  show Sqrt           = "&radic;"
   
+instance Show Set where
+  show Integer  = "&#8484;"
+  show Rational = "&#8474;"
+  show Real     = "&#8477;"
+  show Natural  = "&#8469;"
+  show Boolean  = "&#120121;"
+  show Char     = "Char"
+  show String   = "String"
+  show Radians  = "rad"
+  show (Vect a) = "V" ++ show a
+  show (Obj a)  = a

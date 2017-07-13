@@ -11,6 +11,7 @@ import Language.Drasil.Chunk.SymbolForm (SymbolForm, symbol)
 import Language.Drasil.Chunk.Concept
 import Language.Drasil.Chunk.ConVar
 import Language.Drasil.Chunk.Quantity (Quantity(..))
+import Language.Drasil.Chunk.ExprRelat
 import Language.Drasil.Chunk.VarChunk (VarChunk, vc)
 import Language.Drasil.Chunk.Unital (ucFromCV)
 import Language.Drasil.Unit (Unit(..))
@@ -45,6 +46,9 @@ instance Quantity QDefinition where
   getSymb (EC a _) = getSymb a
   getUnit (EC a _) = getUnit a
   -- DO SOMETHING
+  
+instance ExprRelat QDefinition where
+  relat f (EC a b) = fmap (\x -> EC a x) (f b)
   
 {-instance Unit' QDefinition where
   unit' = ul . unit'-}

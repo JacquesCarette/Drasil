@@ -32,6 +32,12 @@ data Expr = Var  Variable
           | Case [(Expr,Expr)]
           | Op Function [Expr]
           | Grouping Expr
+          | IsIn  [Expr] Set
+          | NotIn [Expr] Set
+          | State [Quantifier] Expr
+          | Impl Expr Expr
+          | Iff  Expr Expr
+          | Mtx [[Expr]]
           
 data Function = Log
            | Summation (Maybe ((Symbol, Expr),Expr))
@@ -47,7 +53,21 @@ data Function = Log
            | Cot
            | Cross
            | Exp
-           
+           | Sqrt           
+
+data Set = Integer
+         | Rational
+         | Real
+         | Natural
+         | Boolean
+         | Char
+         | String
+         | Radians
+         | Vect Set
+         | Obj String
+
+data Quantifier = Forall Expr | Exists Expr
+
 infixr 5 :+:
 data Spec = E Expr
           | S String
@@ -82,7 +102,7 @@ data LayoutObj = Table [[Spec]] Label Bool Title
                | Paragraph Contents
                | EqnBlock Contents
              --  | CodeBlock Code
-               | Definition [(String,LayoutObj)] Label
+               | Definition [(String,[LayoutObj])] Label
                | List ListType
                | Figure Label Caption Filepath
                | Module String Label
@@ -96,22 +116,36 @@ data ListType = Item [ItemType]
               | Enum [ItemType]
               | Simple [(Spec,ItemType)]
               | Desc [(Spec,ItemType)]
+              | Definitions [(Spec, ItemType)]
 
 data ItemType = Flat Spec
               | Nested Spec ListType
 
 instance Show Function where
-  show Log = "\\log"
-  show (Summation _) = "\\displaystyle\\sum"
-  show (Product _) = "\\displaystyle\\prod"
-  show Abs = ""
-  show Norm = ""
+  show Log            = "\\log"
+  show (Summation _)  = "\\displaystyle\\sum"
+  show (Product _)    = "\\displaystyle\\prod"
+  show Abs            = ""
+  show Norm           = ""
   show (Integral _ _) = "\\int"
-  show Sin = "\\sin"
-  show Cos = "\\cos"
-  show Tan = "\\tan"
-  show Sec = "\\sec"
-  show Csc = "\\csc"
-  show Cot = "\\cot"
-  show Cross = "\\times"
-  show Exp = "e"
+  show Sin            = "\\sin"
+  show Cos            = "\\cos"
+  show Tan            = "\\tan"
+  show Sec            = "\\sec"
+  show Csc            = "\\csc"
+  show Cot            = "\\cot"
+  show Cross          = "\\times"
+  show Exp            = "e"
+  show Sqrt           = "\\sqrt"
+  
+instance Show Set where
+  show Integer  = "\\mathbb{Z}"
+  show Rational = "\\mathbb{Q}"
+  show Real     = "\\mathbb{R}"
+  show Natural  = "\\mathbb{N}"
+  show Boolean  = "\\mathbb{B}"
+  show Char     = "Char"
+  show String   = "String"
+  show Radians  = "rad"
+  show (Vect a) = "V" ++ show a
+  show (Obj a)  = a

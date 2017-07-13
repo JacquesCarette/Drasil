@@ -9,14 +9,52 @@ data CodeSpec = CodeSpec {
   inputs :: [CodeChunk],
   outputs :: [CodeChunk],
   relations :: [CodeDefinition],
-  cMap :: ConstraintMap  
+  cMap :: ConstraintMap,
+  choices :: Choices
 }
 
 codeSpec :: SystemInformation -> CodeSpec
-codeSpec (SI sys _ _ _ _ _ _ defs ins outs _ cs) = CodeSpec {
+codeSpec si = codeSpec' si defaultChoices
+
+codeSpec' :: SystemInformation -> Choices -> CodeSpec
+codeSpec' (SI sys _ _ _ _ _ _ defs ins outs _ cs) ch = CodeSpec {
   program = NICN sys,
   inputs = map codevar ins,
   outputs = map codevar outs,
   relations = map qtoc defs,
-  cMap = constraintMap cs
+  cMap = constraintMap cs,
+  choices = ch
+}
+
+data Choices = Choices {
+  impType :: ImplementationType,
+  logFile :: String,
+  logging :: Logging,
+  onSfwrConstraint :: ConstraintBehaviour,
+  onPhysConstraint :: ConstraintBehaviour,
+  inputStructure :: Structure
+}
+
+data ImplementationType = Library
+                        | Program
+
+data Logging = LogNone
+             | LogFunc
+             | LogVar
+             | LogAll
+             
+data ConstraintBehaviour = Warning
+                         | Exception
+                         
+data Structure = Loose
+               | AsClass
+             
+defaultChoices :: Choices
+defaultChoices = Choices {
+  impType = Program,
+  logFile = "log.txt",
+  logging = LogNone,
+  onSfwrConstraint = Exception,
+  onPhysConstraint = Warning,
+  inputStructure = AsClass
 }

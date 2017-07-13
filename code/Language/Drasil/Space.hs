@@ -15,3 +15,5 @@ data Space where
   Radians :: Space
   Vect :: Space -> Space
   Obj :: String -> Space
+  deriving Eq
+  

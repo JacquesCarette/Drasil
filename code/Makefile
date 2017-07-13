@@ -71,7 +71,7 @@ docs:
 	stack haddock drasil
 	
 clean: clean_logs
-	rm -r ./SRS ./Website ./MIS ./MG ./C++ .stack-work
+	rm -r ./SRS ./Website ./MIS ./MG ./src .stack-work
 	
 clean_logs:
 	rm *.log

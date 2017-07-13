@@ -26,7 +26,8 @@ lc4 = lcOutputF mod_outputf
 
 lc5 = lcEqns mod_calc
 
-lc6 = lcCtrl mod_ctrl (nounPhraseSP "How the overall control of the calculations is orchestrated.")
+lc6 = lcCtrl mod_ctrl 
+  (nounPhraseSP "How the overall control of the calculations is orchestrated.")
 
 lc7 = lcInterpd mod_interpd
 

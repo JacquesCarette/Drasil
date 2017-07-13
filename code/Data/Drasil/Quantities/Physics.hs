@@ -14,7 +14,7 @@ restitutionCoef = cvR CP.restitutionCoef (sub cC cR)
 angularAccel, angularDisplacement, angularVelocity, acceleration, displacement,
   distance, energy, force, gravitationalAccel, gravitationalConst, impulseS,
   impulseV, linearAccel, linearDisplacement, linearVelocity, momentOfInertia,
-  position, time, torque, velocity :: UnitalChunk
+  position, pressure, time, torque, velocity :: UnitalChunk
 
 angularAccel        = uc CP.angAccel (Greek Alpha_L) angAccelU
 angularDisplacement = uc CP.angDisp (Greek Theta_L) radian
@@ -33,6 +33,7 @@ linearDisplacement  = uc CP.linDisp (Concat [(vec lR), Atomic "(",lT, Atomic ")"
 linearVelocity      = uc CP.linVelo (Concat [(vec lV), Atomic "(", lT, Atomic ")"]) velU
 momentOfInertia     = uc CP.momentOfInertia (vec cI) momtInertU
 position            = uc CP.position (vec lP) metre
+pressure            = uc CP.pressure lP pascal
 time                = uc CP.time lT second
 torque              = uc CP.torque (Greek Tau_L) torqueU
 velocity            = uc CP.velocity (vec lV) velU

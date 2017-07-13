@@ -81,27 +81,26 @@ bShFEq_desc = foldlSent [S "For a", phrase slice, S "of", phrase mass,
 
 --
 resShr :: RelationConcept
-resShr = makeRC "resShr" (nounPhraseSP "resistive shear") resShr_desc resShr_rel
+resShr = makeRC "resShr" (nounPhraseSP "resistive shear force") resShr_desc resShr_rel
 
 resShr_rel :: Relation
 resShr_rel = C shrResI := C nrmFSubWat :* tan (C fricAngle) :+ C cohesion :* C baseWthX :* sec (C baseAngle)
 
 resShr_desc :: Sentence
 resShr_desc = foldlSent [S "The Mohr-Coulomb resistive shear strength of a",
-  phrase slice, getS shrResI, S "is adjusted to account for the",
-  S "effective", phrase normal,
-  (E $ (C nrmStrss) := (C nrmFSubWat) := (C totNrmForce) :- (C baseHydroForce)),
-  S "of a soil from" +:+. acroT 4, -- FIXME: add prime to nrmStrss aboves
-  S "Also and the cohesion is adjusted to account for the", phrase len,
-  S "l of the plane where the", phrase normal, S "occurs, where",
-  (E $ (C baseLngth) := (C baseWthX) :* sec (C baseAngle))`sC` S "and", getS baseWthX,
-  S "is the x width of the base. Therefore", --FIXME: do propering indexes and primes here
-  (E $ (C cohesion) := (C cohesion) :* (C baseWthX) :* sec (C baseAngle))]
-  -- FIXME: Still needs to be more automated
+  phrase slice, getS shrStress, S "from", acroT 3, S "is multiplied by the area",
+  E $ C baseWthX * sec(C baseAngle) * Int 1, S "to obtain the" +:+. getTandS shrResI,
+  S "Note the extra", E $ Int 1 , S "is to represent a unit of width which is",
+  S "multiplied by the", getTandS baseLngth, S "of the plane where the",
+  phrase normal, S "occurs, where", (E $ C baseLngth := C baseWthX * sec(C baseAngle))
+  `sAnd` getS baseWthX, S "is the x width of the base. This accounts for the",
+  phrase nrmFSubWat, E $ C nrmFSubWat := C totNrmForce - C baseHydroForce, S "of a soil from", -- FIXME: add prime to nrmStrss
+  acroT 4, S "where the", phrase nrmStrss, S "is multiplied by the same area to obtain the",
+  phrase nrmFSubWat, E $ C nrmStrss * C baseWthX * sec(C baseAngle) * Int 1 := C nrmFSubWat]
 
 --
 mobShr :: RelationConcept
-mobShr = makeRC "mobShr" (nounPhraseSP "mobile shear") mobShr_desc mobShr_rel
+mobShr = makeRC "mobShr" (nounPhraseSP "mobile shear force") mobShr_desc mobShr_rel
 
 mobShr_rel :: Relation
 mobShr_rel = C mobShrI := C shrResI :/ C fs := 

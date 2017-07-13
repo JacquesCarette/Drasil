@@ -3,6 +3,7 @@
 \usepackage{hyperref}
 \hypersetup{bookmarks=true,colorlinks=true,linkcolor=red,citecolor=blue,filecolor=magenta,urlcolor=cyan}
 \usepackage{amsmath}
+\usepackage{amssymb}
 \usepackage{longtable}
 \usepackage{booktabs}
 \usepackage{caption}
@@ -128,6 +129,9 @@ This section provides an overview of the module design. Modules are summarized i
 \item[\refstepcounter{modnum}\mthemodnum\label{Mmodenerdesc}:]Energy Equations Module
 \end{description}
 \begin{description}
+\item[\refstepcounter{modnum}\mthemodnum\label{MmodControl}:]Control Module
+\end{description}
+\begin{description}
 \item[\refstepcounter{modnum}\mthemodnum\label{Mmodseqserv}:]Sequence Data Structure Module
 \end{description}
 \begin{description}
@@ -211,7 +215,7 @@ Modules are decomposed according to the principle of ``information hiding" propo
 \label{Sec:OutpFormModu()}
 \begin{description}
 \item[Secrets:]The format and structure of the output data.
-\item[Services:]Outputs the results of the calculations, including the input parameters, temperatures, energies, and times when melting starts and stops.
+\item[Services:]Outputs the results of the calculations, including the energy, input parameters, temperatures, and times when melting starts and stops.
 \item[Implemented By:]SWHS
 \end{description}
 \subsection{Output Verification Module (M\ref{Mmodoutputvdesc})}
@@ -231,8 +235,15 @@ Modules are decomposed according to the principle of ``information hiding" propo
 \subsection{Energy Equations Module (M\ref{Mmodenerdesc})}
 \label{Sec:EnerEquaModu()}
 \begin{description}
-\item[Secrets:]The equations for solving for the energies using the input parameters.
+\item[Secrets:]The equations for solving for the energy using the input parameters.
 \item[Services:]Defines the energy equations using the parameters in the input parameters module.
+\item[Implemented By:]SWHS
+\end{description}
+\subsection{Control Module (M\ref{MmodControl})}
+\label{Sec:ContModu()}
+\begin{description}
+\item[Secrets:]The algorithm for coordinating the running of the program.
+\item[Services:]Provides the main program.
 \item[Implemented By:]SWHS
 \end{description}
 \subsection{Software Decision Module}
@@ -343,22 +354,22 @@ digraph G {
 graph [sep = 0. esep = 0, nodesep = 0.1, ranksep = 2];
 node [style = "n"];
 "Input Format Module (M\ref{MmodInputFormat})" -> "Hardware Hiding Module (M\ref{MhwHiding})";
-"Input Format Module (M\ref{MmodInputFormat})" -> "Input Parameters Module (M\ref{MmodInputParam})";
+"Input Format Module (M\ref{MmodInputFormat})" -> "Input Parameter Module (M\ref{MmodInputParam})";
 "Input Format Module (M\ref{MmodInputFormat})" -> "Sequence Data Structure Module (M\ref{Mmodseqserv})";
-"Input Parameters Module (M\ref{MmodInputParam})" -> "Sequence Data Structure Module (M\ref{Mmodseqserv})";
-"Input Verification Module (M\ref{MmodInputVerif})" -> "Input Parameters Module (M\ref{MmodInputParam})";
+"Input Parameter Module (M\ref{MmodInputParam})" -> "Sequence Data Structure Module (M\ref{Mmodseqserv})";
+"Input Verification Module (M\ref{MmodInputVerif})" -> "Input Parameter Module (M\ref{MmodInputParam})";
 "Input Verification Module (M\ref{MmodInputVerif})" -> "Sequence Data Structure Module (M\ref{Mmodseqserv})";
 "Output Format Module (M\ref{Mmodoutputfdesc})" -> "Hardware Hiding Module (M\ref{MhwHiding})";
-"Output Format Module (M\ref{Mmodoutputfdesc})" -> "Input Parameters Module (M\ref{MmodInputParam})";
+"Output Format Module (M\ref{Mmodoutputfdesc})" -> "Input Parameter Module (M\ref{MmodInputParam})";
 "Output Format Module (M\ref{Mmodoutputfdesc})" -> "Sequence Data Structure Module (M\ref{Mmodseqserv})";
-"Output Verification Module (M\ref{Mmodoutputvdesc})" -> "Input Parameters Module (M\ref{MmodInputParam})";
+"Output Verification Module (M\ref{Mmodoutputvdesc})" -> "Input Parameter Module (M\ref{MmodInputParam})";
 "Output Verification Module (M\ref{Mmodoutputvdesc})" -> "Sequence Data Structure Module (M\ref{Mmodseqserv})";
-"Temperature ODEs Module (M\ref{Mmodtempdesc})" -> "Input Parameters Module (M\ref{MmodInputParam})";
+"Temperature ODEs Module (M\ref{Mmodtempdesc})" -> "Input Parameter Module (M\ref{MmodInputParam})";
 "Temperature ODEs Module (M\ref{Mmodtempdesc})" -> "Sequence Data Structure Module (M\ref{Mmodseqserv})";
-"Energy Equations Module (M\ref{Mmodenerdesc})" -> "Input Parameters Module (M\ref{MmodInputParam})";
+"Energy Equations Module (M\ref{Mmodenerdesc})" -> "Input Parameter Module (M\ref{MmodInputParam})";
 "Energy Equations Module (M\ref{Mmodenerdesc})" -> "Sequence Data Structure Module (M\ref{Mmodseqserv})";
 "Control Module (M\ref{MmodControl})" -> "Hardware Hiding Module (M\ref{MhwHiding})";
-"Control Module (M\ref{MmodControl})" -> "Input Parameters Module (M\ref{MmodInputParam})";
+"Control Module (M\ref{MmodControl})" -> "Input Parameter Module (M\ref{MmodInputParam})";
 "Control Module (M\ref{MmodControl})" -> "Input Format Module (M\ref{MmodInputFormat})";
 "Control Module (M\ref{MmodControl})" -> "Input Verification Module (M\ref{MmodInputVerif})";
 "Control Module (M\ref{MmodControl})" -> "Temperature ODEs Module (M\ref{Mmodtempdesc})";

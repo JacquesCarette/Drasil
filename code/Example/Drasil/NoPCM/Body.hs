@@ -281,7 +281,8 @@ fig_tank = Figure (at_start sWHT `sC` S "with" +:+ phrase ht_flux +:+
   "TankWaterOnly.png"
 
 s4_1_2_list :: Contents
-s4_1_2_list = enumSimple 1 (short physSyst) $ map foldlSent_ [physSyst1, physSyst2]
+s4_1_2_list = enumSimple 1 (short physSyst) $ map foldlSent_ [physSyst1 tank water,
+  physSyst2 coil tank ht_flux_C]
 
 s4_1_3 = SRS.goalStmt [s4_1_3_intro temp coil temp_W, s4_1_3_list temp_W w_E] []
 

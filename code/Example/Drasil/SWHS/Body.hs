@@ -163,7 +163,7 @@ swhs_mg = mgDoc swhsFull authors mgBod
 --------------------------------------------
 
 s3 :: Section
-s3 = genSysF [s3_1] s3_2_contents [] []
+s3 = genSysF [s3_1] (s3_2_contents progName) [] []
 -- First empty list is the list of constraints
 
 --------------------------
@@ -171,11 +171,11 @@ s3 = genSysF [s3_1] s3_2_contents [] []
 --------------------------
 
 s3_1 :: Section
-s3_1 = SRS.sysCont [s3_1_contents, sys_context_fig, s3_1_2_intro,
+s3_1 = SRS.sysCont [s3_1_contents progName, sys_context_fig, s3_1_2_intro progName user,
   s3_1_2_respBullets] []
 
 s3_1_2_respBullets :: Contents
-s3_1_2_respBullets = Enumeration $ Bullet $ [s3_1_2_userResp, s3_1_2_swhsResp]
+s3_1_2_respBullets = Enumeration $ Bullet $ [s3_1_2_userResp input_ datum, s3_1_2_swhsResp]
 
 --------------------------------
 -- 3.2 : User Characteristics --
@@ -190,14 +190,14 @@ s3_1_2_respBullets = Enumeration $ Bullet $ [s3_1_2_userResp, s3_1_2_swhsResp]
 ---------------------------------------------
 
 s4 :: Section
-s4 = specSysDesF s4_intro_end [s4_1, s4_2]
+s4 = specSysDesF (s4_intro_end swhs_pcm) [s4_1, s4_2]
 
 -------------------------------
 -- 4.1 : Problem Description --
 -------------------------------
 
 s4_1 :: Section
-s4_1 = SRS.probDesc [s4_1_intro]
+s4_1 = SRS.probDesc [s4_1_intro progName phsChgMtrl sWHT]
   [s4_1_1, s4_1_2, s4_1_3]
 
 -----------------------------------------
@@ -238,14 +238,15 @@ s4_1_2_list :: Contents
 s4_1_2_list = enumSimple 1 (short physSyst) $ map foldlSent_ s4_1_2_physSystList
 
 s4_1_2_physSystList :: [[Sentence]]
-s4_1_2_physSystList = [physSyst1, physSyst2, physSyst3]
+s4_1_2_physSystList = [physSyst1 tank water, physSyst2 coil tank ht_flux_C,
+  physSyst3 phsChgMtrl tank ht_flux_P]
 
 -----------------------------
 -- 4.1.3 : Goal Statements --
 -----------------------------
 
 s4_1_3 :: Section
-s4_1_3 = SRS.goalStmt [s4_1_3_intro, s4_1_3_list] []
+s4_1_3 = SRS.goalStmt [s4_1_3_intro temp_C temp_W temp_PCM, s4_1_3_list] []
 
 s4_1_3_list :: Contents
 s4_1_3_list = enumSimple 1 (short goalStmt) $
@@ -309,8 +310,8 @@ s4_2_3_genDefs :: [Contents]
 s4_2_3_genDefs = map swhsSymbMapT swhsGenDefs
 
 s4_2_3_deriv :: [Contents]
-s4_2_3_deriv = [s4_2_3_deriv_1, s4_2_3_deriv_2, s4_2_3_deriv_3,
-  s4_2_3_deriv_4, s4_2_3_deriv_5, s4_2_3_deriv_6, s4_2_3_deriv_7,
+s4_2_3_deriv = [s4_2_3_deriv_1 rOfChng temp, s4_2_3_deriv_2 t1ConsThermE vol, s4_2_3_deriv_3,
+  s4_2_3_deriv_4 gauss_div surface vol thFluxVect uNormalVect unit_, s4_2_3_deriv_5, s4_2_3_deriv_6, s4_2_3_deriv_7,
   s4_2_3_deriv_8, s4_2_3_deriv_9, s4_2_3_deriv_10, s4_2_3_deriv_11]
 
 
@@ -804,12 +805,12 @@ s2_4_trail sp pro = foldlSent_ [S "The", plural inModel,
 -- 3.1 : System Context --
 --------------------------
 
-s3_1_contents ::Contents
-s3_1_contents = foldlSP [makeRef sys_context_fig, S "shows the" +:+.
+s3_1_contents :: CI -> Contents
+s3_1_contents pro = foldlSP [makeRef sys_context_fig, S "shows the" +:+.
   phrase sysCont, S "A circle represents an external entity outside the",
   phrase software `sC` S "the", phrase user, S "in this case. A",
   S "rectangle represents the", phrase softwareSys, S "itself" +:+.
-  sParen (short progName), S "Arrows are used to show the",
+  sParen (short pro), S "Arrows are used to show the",
   plural datum, S "flow between the", phrase system `sAnd`
   S "its", phrase environment]
 
@@ -818,23 +819,22 @@ sys_context_fig = Figure (foldlSent_
   [makeRef sys_context_fig +: EmptyS, titleize sysCont])
   "SystemContextFigure.png"
 
-s3_1_2_intro :: Contents
-s3_1_2_intro = foldlSPCol [short progName +:+.
-  S "is mostly self-contained",
-  S "The only external interaction is through the", phrase user +:+.
-  S "interface", S "responsibilities" `ofThe'` phrase user `sAnd`
+s3_1_2_intro :: CI -> NamedChunk -> Contents
+s3_1_2_intro pro us = foldlSPCol [short pro +:+. S "is mostly self-contained",
+  S "The only external interaction is through the", phrase us +:+.
+  S "interface", S "responsibilities" `ofThe'` phrase us `sAnd`
   S "the", phrase system, S "are as follows"]
 
 -- User Responsibilities --
-s3_1_2_userResp :: ItemType
-s3_1_2_userResp = Nested (titleize user +: S "Responsibilities")
+s3_1_2_userResp :: NamedChunk -> NamedChunk -> ItemType
+s3_1_2_userResp inp dat = Nested (titleize user +: S "Responsibilities")
   $ Bullet $ map (\c -> Flat c) [
 
-  foldlSent_ [S "Provide the", phrase input_, plural datum, S "to the",
-  phrase system `sC` S "ensuring no errors in the", plural datum, S "entry"],
+  foldlSent_ [S "Provide the", phrase inp, plural dat, S "to the",
+  phrase system `sC` S "ensuring no errors in the", plural dat, S "entry"],
 
   foldlSent_ [S "Take care that consistent", plural unit_,
-  S "are used for", phrase input_, plural variable]
+  S "are used for", phrase inp, plural variable]
 
   ]
 
@@ -857,9 +857,9 @@ s3_1_2_swhsResp = Nested (short progName +: S "Responsibilities")
 -- 3.2 : User Characteristics --
 --------------------------------
 
-s3_2_contents :: Contents
-s3_2_contents = foldlSP [S "The end", phrase user, S "of",
-  short progName, S "should have an understanding of undergraduate",
+s3_2_contents :: CI -> Contents
+s3_2_contents pro = foldlSP [S "The end", phrase user, S "of",
+  short pro, S "should have an understanding of undergraduate",
   S "Level 1 Calculus and", titleize physics]
 
 -- Some of these course names are repeated between examples, could potentially
@@ -873,11 +873,11 @@ s3_2_contents = foldlSP [S "The end", phrase user, S "of",
 -- Section 4 : SPECIFIC SYSTEM DESCRIPTION --
 ---------------------------------------------
 
-s4_intro_end :: Sentence
-s4_intro_end = foldlSent_ [plural thModel `sC` plural genDefn `sC`
+s4_intro_end :: ConceptChunk -> Sentence
+s4_intro_end sw = foldlSent_ [plural thModel `sC` plural genDefn `sC`
   plural dataDefn `sC` S "and finally the", plural inModel,
   sParen (short ode :+: S "s"), S "that", phrase model, S "the",
-  phrase swhs_pcm]
+  phrase sw]
 
 -- Completely general except for solar water heating tank (object of analysis)
 -- and similar between all examples; can be abstracted out.
@@ -889,10 +889,10 @@ s4_intro_end = foldlSent_ [plural thModel `sC` plural genDefn `sC`
 -- 4.1 : Problem Description --
 -------------------------------
 
-s4_1_intro :: Contents
-s4_1_intro = foldlSP [short progName, S "is a", phrase compPro,
+s4_1_intro :: CI -> CI -> ConceptChunk -> Contents
+s4_1_intro pro pcmat sw = foldlSP [short pro, S "is a", phrase compPro,
   S "developed to investigate the effect of",
-  S "employing", short phsChgMtrl, S "within a", phrase sWHT]
+  S "employing", short pcmat, S "within a", phrase sw]
 
 -- section is very different between all examples
 
@@ -905,15 +905,16 @@ s4_1_intro = foldlSP [short progName, S "is a", phrase compPro,
 -----------------------------------------
 
 
-physSyst1, physSyst2, physSyst3 :: [Sentence]
-
-physSyst1 = [at_start tank, S "containing" +:+. phrase water]
+physSyst1 :: ConceptChunk -> ConceptChunk -> [Sentence]
+physSyst1 ta wa = [at_start ta, S "containing" +:+. phrase wa]
 --
-physSyst2 = [at_start coil, S "at bottom of" +:+. phrase tank,
-  sParen (getS ht_flux_C +:+ S "represents the" +:+. phrase ht_flux_C)]
+physSyst2 :: ConceptChunk -> ConceptChunk -> UnitalChunk -> [Sentence]
+physSyst2 co ta hfc = [at_start co, S "at bottom of" +:+. phrase ta,
+  sParen (getS hfc +:+ S "represents the" +:+. phrase hfc)]
 --
-physSyst3 = [short phsChgMtrl, S "suspended in" +:+. phrase tank,
-  sParen (getS ht_flux_P +:+ S "represents the" +:+. phrase ht_flux_P)]
+physSyst3 :: CI -> ConceptChunk -> UnitalChunk -> [Sentence]
+physSyst3 pcmat ta hfp = [short pcmat, S "suspended in" +:+. phrase ta,
+  sParen (getS hfp +:+ S "represents the" +:+. phrase hfp)]
 
 -- Structure of list would be same between examples but content is completely
 -- different
@@ -928,10 +929,10 @@ fig_tank = Figure (
 -- 4.1.3 : Goal Statements --
 -----------------------------
 
-s4_1_3_intro :: Contents
-s4_1_3_intro = foldlSPCol [S "Given the", phrase temp_C `sC`
-  S "initial", plural condition, S "for the", phrase temp_W
-  `sAnd` S "the", phrase temp_PCM `sC` S "and material",
+s4_1_3_intro :: UncertQ -> UncertQ -> UncertQ -> Contents
+s4_1_3_intro temc temw tempcm = foldlSPCol [S "Given the", phrase temc `sC`
+  S "initial", plural condition, S "for the", phrase temw
+  `sAnd` S "the", phrase tempcm `sC` S "and material",
   plural property `sC` S "the", plural goalStmt, S "are"]
 
 -- 2 examples include this paragraph, 2 don't. The "givens" would need to be
@@ -1063,7 +1064,7 @@ assump19 = mkAssump "assump19"
   phrase boil_pt +:+ S "are" +:+ S (show (0 :: Integer)) :+: Sy (unit_symb temp) `sAnd`
   S (show (100 :: Integer)) :+: Sy (unit_symb temp) `sC` S "respectively" +:+
   sSqBr ((acroIM 1) `sC` (acroIM 3)))
-
+--
 assump20 = mkAssump "assump20"
   (S "When considering the" +:+ phrase w_vol +:+ S "in the" +:+
   phrase tank `sC` (phrase vol `ofThe` phrase coil) +:+
@@ -1085,15 +1086,17 @@ assump20 = mkAssump "assump20"
 -- 4.2.3 : General Definitions --
 ---------------------------------
 
-s4_2_3_deriv_1, s4_2_3_deriv_2, s4_2_3_deriv_3,
-  s4_2_3_deriv_4, s4_2_3_deriv_5, s4_2_3_deriv_6, s4_2_3_deriv_7,
+s4_2_3_deriv_3,
+  s4_2_3_deriv_5, s4_2_3_deriv_6, s4_2_3_deriv_7,
   s4_2_3_deriv_8, s4_2_3_deriv_9, s4_2_3_deriv_10, s4_2_3_deriv_11 :: Contents
 
-s4_2_3_deriv_1 = foldlSPCol [S "Detailed derivation of simplified",
-  phrase rOfChng, S "of", phrase temp]
+s4_2_3_deriv_1 :: ConceptChunk -> UnitalChunk -> Contents
+s4_2_3_deriv_1 roc tem = foldlSPCol [S "Detailed derivation of simplified",
+  phrase roc, S "of", phrase tem]
 
-s4_2_3_deriv_2 = foldlSPCol [S "Integrating", swhsSymbMapTRef t1ConsThermE,
-  S "over a", phrase vol, sParen (getS vol) `sC` S "we have"]
+s4_2_3_deriv_2 :: RelationConcept -> UnitalChunk -> Contents
+s4_2_3_deriv_2 t1ct vo = foldlSPCol [S "Integrating", swhsSymbMapTRef t1ct,
+  S "over a", phrase vo, sParen (getS vo) `sC` S "we have"]
 
 s4_2_3_deriv_3 = EqnBlock
   ((Neg (UnaryOp (Integral (Just (Low (C vol)), Nothing)
@@ -1103,11 +1106,13 @@ s4_2_3_deriv_3 = EqnBlock
   UnaryOp (Integral (Just (Low (C vol)), Nothing) ((C density)
   * (C heat_cap_spec) * Deriv Part (C temp) (C time)) vol))
 
-s4_2_3_deriv_4 = foldlSPCol [S "Applying", titleize gauss_div, S "to the first term over",
-  (phrase surface +:+ getS surface `ofThe` phrase vol) `sC` S "with",
-  getS thFluxVect, S "as the", phrase thFluxVect, S "for the",
-  phrase surface `sAnd` getS uNormalVect, S "as a", phrase unit_,
-  S "outward", phrase uNormalVect, S "for a", phrase surface]
+s4_2_3_deriv_4 :: ConceptChunk -> ConVar -> UnitalChunk -> UnitalChunk ->
+  ConVar -> ConceptChunk -> Contents
+s4_2_3_deriv_4 gd su vo tfv unv un = foldlSPCol [S "Applying", titleize gd,
+  S "to the first term over", (phrase su +:+ getS su `ofThe` phrase vo) `sC`
+  S "with", getS tfv, S "as the", phrase tfv, S "for the",
+  phrase surface `sAnd` getS unv, S "as a", phrase un,
+  S "outward", phrase unv, S "for a", phrase su]
 
 s4_2_3_deriv_5 = EqnBlock
   ((Neg (UnaryOp (Integral (Just (Low (C surface)),

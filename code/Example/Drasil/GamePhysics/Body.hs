@@ -430,14 +430,17 @@ s5_1 = SRS.funcReq [s5_1_list] []
 s5_1_req1, s5_1_req2, s5_1_req3, s5_1_req4, s5_1_req5, s5_1_req6,
   s5_1_req7, s5_1_req8 :: Sentence
 
+  -- | template for requirements
 requirementTemplate :: Sentence -> Sentence -> Sentence -> Sentence -> Sentence
 requirementTemplate a b x z = foldlSent [S "Determine the", a `sAnd` b, 
   S "over a period of", (phrase QP.time), S "of the", x, z]
 
+  -- | with added constraint
 requirementS :: (NamedIdea a, NamedIdea b) => a -> b -> Sentence -> Sentence
 requirementS a b d = requirementTemplate (plural a) (plural b) ((getAcc twoD)
   +:+ (plural CP.rigidBody)) d
 
+  -- | without added constraint
 requirementS' :: (NamedIdea a, NamedIdea b) => a -> b -> Sentence
 requirementS' a b = requirementS a b EmptyS 
 

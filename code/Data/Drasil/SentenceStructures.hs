@@ -11,6 +11,7 @@ module Data.Drasil.SentenceStructures
   , followA
   , getTandS
   , eqN
+  , displayConstrntAsSet
   , fmtInputConstr, fmtOutputConstr, physC, sfwrC, typUnc, rval
   ) where
 
@@ -128,14 +129,12 @@ refineChain (x:y:[]) = S "The" +:+ plural x +:+ S "are refined to the" +:+ plura
 refineChain (x:y:xs) = refineChain [x,y] `sC` rc ([y] ++ xs)
 refineChain _ = error "refineChain encountered an unexpected empty list"
 
-
 -- | Helper used by refineChain
 rc :: NamedIdea c => [c] -> Sentence
 rc (x:y:[]) = S "and the" +:+ (plural x) +:+ S "to the" +:+. 
   (plural y)
 rc (x:y:xs) = S "the" +:+ plural x +:+ S "to the" +:+ plural y `sC` rc ([y] ++ xs)
 rc _ = error "refineChain helper encountered an unexpected empty list"
-
 
 -- | helper functions for making likely change statements
 likelyFrame :: Sentence -> Sentence -> Sentence -> Sentence
@@ -166,6 +165,10 @@ getTandS a = phrase a +:+ getS a
 --Ideally this would create a reference to the equation too
 eqN :: Int -> Sentence
 eqN n = phrase equation +:+ sParen (S $ show n)
+
+--
+displayConstrntAsSet :: ConstrainedChunk -> Sentence
+displayConstrntAsSet ch = foldlsC $ map (\(Phys f) -> E $ f (C ch)) (ch ^. constraints)
 
 {-BELOW IS TO BE MOVED TO EXAMPLE/DRASIL/SECTIONS-}
 

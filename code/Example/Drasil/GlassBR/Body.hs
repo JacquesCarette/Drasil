@@ -886,13 +886,13 @@ s12_intro = foldlSP [
   S "used for interpolating", plural value, S "needed in the", plural model]
 
 fig_5 = Figure (titleize figure +: S "5" +:+ (demandq ^. defn) +:+ 
-  sParen (getS demand) `sVersus` at_start sD `sVersus` 
-  at_start char_weight +:+ sParen (getS sflawParamM))
+  sParen (getS demand) `sVersus` at_start sD +:+ sParen (getAcc stdOffDist)
+  `sVersus` at_start char_weight +:+ sParen (getS sflawParamM))
   "ASTM_F2248-09.png"
 
 fig_6 = Figure (titleize figure +: S "6" +:+ S "Non dimensional" +:+ 
   phrase lateralLoad +:+ sParen (getS dimlessLoad)
-  `sVersus` titleize aspectR +:+ sParen (getS aspectR)
+  `sVersus` titleize aspectR +:+ sParen (getAcc aR)
   `sVersus` at_start stressDistFac +:+ sParen (getS stressDistFac))
   "ASTM_F2248-09_BeasonEtAl.png"
 

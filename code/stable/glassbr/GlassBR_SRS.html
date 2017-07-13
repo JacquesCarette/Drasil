@@ -1217,6 +1217,16 @@ If is_safe2 = True, the glass is considered safe. is_safe1 (from <a href=#T:t1Sa
 </a>
 </div>
 </a>
+<a id="Sec:GeneDefi">
+<div class="subsubsection">
+<h4>
+General Definitions
+</h4>
+<p class="paragraph">
+There are no general definitions.
+</p>
+</div>
+</a>
 <a id="Sec:DataDefi">
 <div class="subsubsection">
 <h4>
@@ -1393,9 +1403,6 @@ t=22.0
 </span>
 </span>
 </div>
-<span class="casebr">
-}
-</span>
 </div>
 </a>
 </td>
@@ -1572,7 +1579,7 @@ Description
 </th>
 <td>
 <p class="paragraph">
-NFL is the non-factored load<br />q&#770;<sub>tol</sub> is the tolerable load<br />E is the modulus of elasticity of glass<br />h is the actual thickness<br />a is the plate length (long dimension)<br />b is the plate width (short dimension)
+<em>NFL</em> is the non-factored load<br /><em>q&#770;<sub>tol</sub></em> is the tolerable load<br /><em>E</em> is the modulus of elasticity of glass<br /><em>h</em> is the actual thickness<br /><em>a</em> is the plate length (long dimension)<br /><em>b</em> is the plate width (short dimension)
 </p>
 </td>
 </tr>
@@ -1612,18 +1619,18 @@ GTF = <span class="casebr">
 </span>
 <div class="cases">
 <span>
-1.0 , <span class="case">
-g=AN
+1 , <span class="case">
+<em>g</em> = <em>AN</em>
 </span>
 </span>
 <span>
-4.0 , <span class="case">
-g=FT
+4 , <span class="case">
+<em>g</em> = <em>FT</em>
 </span>
 </span>
 <span>
-2.0 , <span class="case">
-g=HS
+2 , <span class="case">
+<em>g</em> = <em>HS</em>
 </span>
 </span>
 </div>
@@ -1637,7 +1644,7 @@ Description
 </th>
 <td>
 <p class="paragraph">
-GTF is the function that maps from the glass type (g) to a real number, as follows: GTF(g) = (g = AN => 1.0|g = FT => 4.0|g = HS => 2.0). AN is annealed glass. FT is fully tempered glass. HS is heat strengthened glass.<br />GTF is the function that maps from the glass type (g) to a real number, as follows: GTF(g) = (g = AN => 1.0|g = FT => 4.0|g = HS => 2.0). AN is annealed glass. FT is fully tempered glass. HS is heat strengthened glass.<br />g is the glass type, g in {AN, HS, FT}
+<em>GTF</em> is the glass type factor
 </p>
 </td>
 </tr>
@@ -2158,7 +2165,7 @@ Functional Requirements
 R1: Input the following quantities, which define the glass dimensions, type of glass, tolerable probability of failure and the characteristics of the blast:
 </p>
 </div>
-<a id="Table:TablofSymb">
+<a id="Table:RequInpufollR1">
 <table class="table">
 <tr>
 <th>
@@ -4407,7 +4414,7 @@ Unit
 </tr>
 <tr>
 <td>
-m
+<em>m</em>
 </td>
 <td>
 surface flaw parameter
@@ -4421,7 +4428,7 @@ m<sup>12</sup>/(N<sup>7</sup>)
 </tr>
 <tr>
 <td>
-k
+<em>k</em>
 </td>
 <td>
 surface flaw parameter
@@ -4435,7 +4442,7 @@ m<sup>12</sup>/(N<sup>7</sup>)
 </tr>
 <tr>
 <td>
-E
+<em>E</em>
 </td>
 <td>
 modulus of elasticity of glass
@@ -4449,7 +4456,7 @@ kPa
 </tr>
 <tr>
 <td>
-t<sub>d</sub>
+<em>t<sub>d</sub></em>
 </td>
 <td>
 duration of load
@@ -4463,7 +4470,7 @@ s
 </tr>
 <tr>
 <td>
-d<sub>max</sub>
+<em>d<sub>max</sub></em>
 </td>
 <td>
 maximum value for one of the dimensions of the glass plate
@@ -4477,7 +4484,7 @@ mm
 </tr>
 <tr>
 <td>
-d<sub>min</sub>
+<em>d<sub>min</sub></em>
 </td>
 <td>
 minimum value for one of the dimensions of the glass plate
@@ -4491,7 +4498,7 @@ mm
 </tr>
 <tr>
 <td>
-AR<sub>max</sub>
+<em>AR<sub>max</sub></em>
 </td>
 <td>
 maximum aspect ratio
@@ -4505,7 +4512,7 @@ maximum aspect ratio
 </tr>
 <tr>
 <td>
-w<sub>max</sub>
+<em>w<sub>max</sub></em>
 </td>
 <td>
 maximum permissible input charge weight
@@ -4519,7 +4526,7 @@ kg
 </tr>
 <tr>
 <td>
-SD<sub>min</sub>
+<em>SD<sub>min</sub></em>
 </td>
 <td>
 minimum stand off distance permissible for input
@@ -4533,7 +4540,7 @@ m
 </tr>
 <tr>
 <td>
-SD<sub>max</sub>
+<em>SD<sub>max</sub></em>
 </td>
 <td>
 maximum stand off distance permissible for input
@@ -4585,18 +4592,18 @@ References
 Appendix
 </h2>
 <p class="paragraph">
-This appendix holds the graphs (<a href=#Figure:Figu5:3secoduraequipres()versStanoffdistversCharweig()>this Figure</a> and <a href=#Figure:Figu6:Nondimelateload()versAspeRati()versStredistfact(Fun()>this Figure</a>) used for interpolating values needed in the models.
+This appendix holds the graphs (<a href=#Figure:Figu5:3secoduraequipres()versStanoffdist(SD)versCharweig()>this Figure</a> and <a href=#Figure:Figu6:Nondimelateload()versAspeRati(AR)versStredistfact(Fun()>this Figure</a>) used for interpolating values needed in the models.
 </p>
-<a id="Figure:Figu5:3secoduraequipres()versStanoffdistversCharweig()">
-<img class="figure" src="ASTM_F2248-09.png" alt="Figure 5: 3 second duration equivalent pressure (q) versus Stand off distance versus Charge weight (m)"></img>
+<a id="Figure:Figu5:3secoduraequipres()versStanoffdist(SD)versCharweig()">
+<img class="figure" src="ASTM_F2248-09.png" alt="Figure 5: 3 second duration equivalent pressure (<em>q</em>) versus Stand off distance (SD) versus Charge weight (<em>m</em>)"></img>
 <p class="caption">
-Figure 5: 3 second duration equivalent pressure (q) versus Stand off distance versus Charge weight (m)
+Figure 5: 3 second duration equivalent pressure (<em>q</em>) versus Stand off distance (SD) versus Charge weight (<em>m</em>)
 </p>
 </a>
-<a id="Figure:Figu6:Nondimelateload()versAspeRati()versStredistfact(Fun()">
-<img class="figure" src="ASTM_F2248-09_BeasonEtAl.png" alt="Figure 6: Non dimensional lateral load (q&#770;) versus Aspect Ratio (AR) versus Stress distribution factor (Function) (J)"></img>
+<a id="Figure:Figu6:Nondimelateload()versAspeRati(AR)versStredistfact(Fun()">
+<img class="figure" src="ASTM_F2248-09_BeasonEtAl.png" alt="Figure 6: Non dimensional lateral load (<em>q&#770;</em>) versus Aspect Ratio (AR) versus Stress distribution factor (Function) (<em>J</em>)"></img>
 <p class="caption">
-Figure 6: Non dimensional lateral load (q&#770;) versus Aspect Ratio (AR) versus Stress distribution factor (Function) (J)
+Figure 6: Non dimensional lateral load (<em>q&#770;</em>) versus Aspect Ratio (AR) versus Stress distribution factor (Function) (<em>J</em>)
 </p>
 </a>
 </div>

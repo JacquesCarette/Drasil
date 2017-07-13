@@ -132,7 +132,7 @@ mod_slipweight_desc = dccWDS "mod_slipweight_desc" (cn' "slip weighting")
 mod_slipweight :: ModuleChunk
 mod_slipweight = makeImpModule mod_slipweight_desc
   (S "The weighting for each" +:+ phrase slpSrf +:+ S "in a set of" +:+
-  plural slpSrf `sC` S "based on each" +:+ phrase slpSrf :+: S "'s" +:+. 
+  plural slpSrf `sC` S "based on each" +:+ phrase's slpSrf +:+. 
   phrase fs_rc) --FIXME: use possesive noun function in line above
   ssa
   []

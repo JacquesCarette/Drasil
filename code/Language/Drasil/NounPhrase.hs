@@ -172,7 +172,6 @@ compoundPhrase''' :: (NP -> Sentence) -> NP -> NP -> NP
 compoundPhrase''' f1 t1 t2 = Phrase 
   (f1 t1 +:+ phrase t2) (f1 t1 +:+ plural t2) CapFirst CapWords
 
-
 -- === Helpers === 
 -- | Helper function for getting the sentence case of a noun phrase.
 at_start, at_start' :: NounPhrase n => n -> Capitalization

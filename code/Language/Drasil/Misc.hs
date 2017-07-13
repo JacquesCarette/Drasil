@@ -73,3 +73,9 @@ phrase n = NP.phrase (n ^. term)
 -- | Helper for getting the plural of a phrase from a NamedIdea
 plural :: NamedIdea n => n -> Sentence
 plural n = NP.plural (n ^. term)
+
+phrase's, plural's :: NamedIdea n => n -> Sentence
+-- | Singular possesive function
+phrase's a = phrase a :+: S "'s"
+-- | Plural possesive function
+plural's a = plural a :+: S "'"

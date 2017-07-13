@@ -207,7 +207,7 @@ s4 = specSysDesF end [s4_1, s4_2]
 -- SECTION 4.1 --
 s4_1 = probDescF EmptyS ssa ending [s4_1_1, s4_1_2, s4_1_3]
   where ending = S "evaluate the" +:+ phrase fs_rc +:+ S "of a" +:+
-                 phrase slope :+: S "'s" +:+ --FIXME apostrophe on "slope's"
+                 phrase's slope +:+ --FIXME apostrophe on "slope's"
                  phrase slpSrf +:+ S "and to calculate the displacement"
                  +:+ S "that the" +:+ phrase slope +:+ S "will experience"
 

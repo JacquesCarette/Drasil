@@ -89,9 +89,9 @@ mkSRS = RefSec (RefProg intro
   IntroSec (IntroProg (s2_intro CT.ener_src energy swhs_pcm phsChgMtrl progName
     CT.thermal_energy latent_heat unit_) (s2_kSent swhs_pcm program progName) [
   IPurpose (s2_1_par1 swhs_pcm progName),
-  IScope (s2_2_contents) (s2_2_end),
-  IChar (s2_3_knowlegde) (s2_3_understanding) (EmptyS),
-  IOrgSec (s2_4_intro) (inModel) (SRS.inModel SRS.missingP []) (s2_4_trail)]) :
+  IScope (s2_2_contents CT.thermal_analysis tank_pcm) (s2_2_end temp CT.thermal_energy water phsChgMtrl sWHT),
+  IChar (s2_3_knowlegde CT.ht_trans_theo) (s2_3_understanding de) (EmptyS),
+  IOrgSec (s2_4_intro) (inModel) (SRS.inModel SRS.missingP []) (s2_4_trail swhs_pcm progName)]) :
   map Verbatim [s3, s4, s5, s6, s7, s8, s9]
 
 tsymb_intro :: [TSIntro]
@@ -665,8 +665,8 @@ s9_refList = [ref1, ref2, ref3, ref4, ref5, ref6]
 
 s2_intro :: ConceptChunk -> UnitalChunk -> ConceptChunk -> CI -> CI ->
   ConceptChunk -> UnitalChunk -> ConceptChunk -> Sentence
-s2_intro es en sp pcmat pro te lh un = foldlSent [S "Due to increasing cost, diminishing",
-  S "availability, and negative environmental impact of",
+s2_intro es en sp pcmat pro te lh un = foldlSent [S "Due to increasing cost"
+  `sC` S "diminishing availability, and negative environmental impact of",
   S "fossil fuels, there is a higher demand for renewable",
   plural es `sAnd` phrase en +:+.
   S "storage technology", phrase sp,
@@ -725,16 +725,18 @@ s2_1_par1 sp pro = foldlSent [S "The main", phrase purpose, S "of this",
 -- 2.2 : Scope of Requirements --
 ---------------------------------
 
-s2_2_contents, s2_2_end :: Sentence
-s2_2_contents = foldlSent_ [phrase CT.thermal_analysis,
-  S "of a single", phrase tank_pcm]
+s2_2_contents :: ConceptChunk -> ConceptChunk -> Sentence
+s2_2_contents ta tp = foldlSent_ [phrase ta,
+  S "of a single", phrase tp]
 
-s2_2_end = foldlSent_ [S "predict the",
-  phrase temp `sAnd` phrase CT.thermal_energy,
-  S "histories for the", phrase water `sAnd` S "the" +:+.
-  short phsChgMtrl, S "This entire", phrase document,
+s2_2_end :: UnitalChunk -> ConceptChunk -> ConceptChunk -> CI -> ConceptChunk ->
+  Sentence
+s2_2_end t te wa pcmat sw = foldlSent_ [S "predict the",
+  phrase t `sAnd` phrase te,
+  S "histories for the", phrase wa `sAnd` S "the" +:+.
+  short pcmat, S "This entire", phrase document,
   S "is written assuming that the substances inside the",
-  phrase sWHT, S "are", phrase water `sAnd` short phsChgMtrl]
+  phrase sw, S "are", phrase wa `sAnd` short pcmat]
 
 -- There is a similar paragraph in each example, but there's a lot of specific
 -- info here. Would need to abstract out the object of analysis (i.e. solar
@@ -749,13 +751,13 @@ s2_2_end = foldlSent_ [S "predict the",
 -- 2.3 : Characteristics of Intended Reader --
 ----------------------------------------------
 
-s2_3_knowlegde :: Sentence
-s2_3_knowlegde = foldlSent_ [EmptyS +:+. phrase CT.ht_trans_theo,
+s2_3_knowlegde :: ConceptChunk -> Sentence
+s2_3_knowlegde htt = foldlSent_ [EmptyS +:+. phrase htt,
   S "A third or fourth year Mechanical Engineering course on this topic",
   S "is recommended"]
 
-s2_3_understanding :: Sentence
-s2_3_understanding = foldlSent_ [(phrase de) `sC`
+s2_3_understanding :: CI -> Sentence
+s2_3_understanding diffeq = foldlSent_ [(phrase diffeq) `sC`
   S "as typically covered in first and second year Calculus courses"]
 
 ------------------------------------
@@ -768,15 +770,15 @@ s2_4_intro = foldlSent [S "The", phrase organization, S "of this",
   S "for", phrase sciCompS, S "proposed by [citation] and",
   sSqBr (S "citation")]
 
-s2_4_trail :: Sentence
-s2_4_trail = foldlSent_ [S "The", plural inModel,
+s2_4_trail :: ConceptChunk -> CI -> Sentence
+s2_4_trail sp pro = foldlSent_ [S "The", plural inModel,
   sParen (makeRef (SRS.inModel SRS.missingP [])),
   S "to be solved are referred to as", acroIM 1,
   S "to" +:+. acroIM 4, S "The", plural inModel,
   S "provide the", phrase ode, sParen (short ode :+: S "s")
   `sAnd` S "algebraic", plural equation, S "that",
-  phrase model, S "the" +:+. phrase swhs_pcm,
-  short progName, S "solves these", short ode :+: S "s"]
+  phrase model, S "the" +:+. phrase sp,
+  short pro, S "solves these", short ode :+: S "s"]
 
 -- This paragraph is mostly general (besides program name and number of IMs),
 -- but there are some differences between the examples that I'm not sure how to

@@ -31,7 +31,7 @@ import Data.Drasil.Authors
 import Data.Drasil.Utils (enumSimple, getS, mkRefsList, makeListRef, refFromType,
   itemRefToSent, makeTMatrix, itemRefToSent, weave)
 import Data.Drasil.Concepts.Documentation
-import Data.Drasil.Concepts.Math (ode, unit_, rOfChng, equation)
+import Data.Drasil.Concepts.Math (ode, de, unit_, rOfChng, equation)
 import Data.Drasil.Concepts.Software
 import Data.Drasil.Concepts.Physics (energy)
 import Data.Drasil.Concepts.Thermodynamics
@@ -93,7 +93,7 @@ mkSRS = RefSec (RefProg intro
   IntroSec (IntroProg (s2_start ener_src energy progName) (s2_end progName program)
   [IPurpose (s2_1 progName),
   IScope (s2_2_start thermal_analysis sWHT) (s2_2_end temp thermal_energy water),
-  IChar s2_3_knowlegde s2_3_understanding EmptyS,
+  IChar (s2_3_knowlegde ht_trans_theo) (s2_3_understanding de) EmptyS,
   IOrgSec s2_4_intro inModel (SRS.inModel SRS.missingP []) (s2_4_end inModel ode progName)]) :
   map Verbatim [s3, s4, s5, s6, s7, s8, s9]
 

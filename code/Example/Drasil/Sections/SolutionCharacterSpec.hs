@@ -231,9 +231,9 @@ pullSubSec nameid ls = getItem (\x -> (getID x) == (nameid ^. id)) ls
 -----------------------
 
 assembler :: NamedIdea c => c -> SymbolMap -> SubSec -> [SubSec] -> Section
-assembler progName symbolMap thisSection subsecs = 
+assembler progName symMap thisSection subsecs = 
   (sectionMap progName thisSection) subsections
-  where subsections = map (render progName symbolMap) subsecs 
+  where subsections = map (render progName symMap) subsecs 
 
 sectionMap :: NamedIdea c => c -> SubSec -> [Section] -> Section
 sectionMap progName (SectionModel niname xs)  
@@ -251,12 +251,12 @@ sectionMap progName (SectionModel niname xs)
 --------------------
 
 render :: (NamedIdea c) => c -> SymbolMap -> SubSec -> Section
-render progName symbolMap item@(SectionModel niname _)
+render progName symMap item@(SectionModel niname _)
   | compareID niname (Doc.assumption ^. id)       = assumptionSect        item
-  | compareID niname (Doc.thModel ^. id)          = theoreticalModelSect  item symbolMap progName
-  | compareID niname (Doc.genDefn ^. id)          = generalDefinitionSect item symbolMap
-  | compareID niname (Doc.inModel ^. id)          = instanceModelSect     item symbolMap
-  | compareID niname (Doc.dataDefn ^. id)         = dataDefinitionSect    item symbolMap
+  | compareID niname (Doc.thModel ^. id)          = theoreticalModelSect  item symMap progName
+  | compareID niname (Doc.genDefn ^. id)          = generalDefinitionSect item symMap
+  | compareID niname (Doc.inModel ^. id)          = instanceModelSect     item symMap
+  | compareID niname (Doc.dataDefn ^. id)         = dataDefinitionSect    item symMap
   | compareID niname (Doc.dataConst ^. id)        = dataConstraintSect    item 
   | compareID niname (Doc.termAndDef ^. id)       = termDefinitionSect    item
   | compareID niname (Doc.goalStmt ^. id)         = goalStatementSect     item
@@ -301,11 +301,11 @@ assumptionSect (SectionModel niname xs) = section (titleize' niname)
 
 
 theoreticalModelSect :: (NamedIdea a) => SubSec -> SymbolMap -> a -> Section
-theoreticalModelSect (SectionModel niname xs) symbolMap progName = section
+theoreticalModelSect (SectionModel niname xs) syMap progName = section
   (titleize' niname) ((tModIntro progName):theoreticalModels ++ 
   (pullContents xs)) (pullSections xs)
   where theoreticalModels = map symMap $ pullTMods xs
-        symMap            = symbolMapFun symbolMap Theory
+        symMap            = symbolMapFun syMap Theory
 
 
 generalDefinitionSect :: SubSec -> SymbolMap -> Section
@@ -316,17 +316,17 @@ generalDefinitionSect (SectionModel niname xs) _ = section (titleize' niname)
 
 
 instanceModelSect :: SubSec -> SymbolMap -> Section
-instanceModelSect (SectionModel niname xs) symbolMap = section (titleize' niname)
+instanceModelSect (SectionModel niname xs) syMap = section (titleize' niname)
   (iModIntro:instanceModels ++ (pullContents xs)) (pullSections xs)
-  where symMap         = symbolMapFun symbolMap Theory
+  where symMap         = symbolMapFun syMap Theory
         instanceModels = map symMap $ pullIMods xs
 
 
 dataDefinitionSect :: SubSec -> SymbolMap -> Section
-dataDefinitionSect (SectionModel niname xs) symbolMap = section (titleize' niname)
+dataDefinitionSect (SectionModel niname xs) syMap = section (titleize' niname)
   (dataIntro:dataDefinitions ++ (pullContents xs)) (pullSections xs)
   where dataIntro       = dataDefinitionIntro $ pullSents xs
-        symMap          = (symbolMapFun (symbolMap) Data)
+        symMap          = (symbolMapFun (syMap) Data)
         dataDefinitions = map symMap $ pullDDefs xs
 
 

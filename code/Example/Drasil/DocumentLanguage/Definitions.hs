@@ -6,10 +6,13 @@ module Drasil.DocumentLanguage.Definitions
   , Verbosity(..)
   , tmodel
   , ddefn
+  , gdefn
   , InclUnits(..)
   )where
 
 import Language.Drasil
+import Drasil.DocumentLanguage.Chunk.GenDefn
+
 import Control.Lens ((^.))
 
 import Prelude hiding (id)
@@ -46,9 +49,9 @@ ddefn :: Fields -> SymbolMap -> QDefinition -> Contents
 ddefn fs m d = Defnt DD (foldr (mkQField d m) [] fs) (S "DD:" +:+ S (d ^. id))
 --FIXME: Generate the reference names here
 
---gdefn :: Fields -> SymbolMap -> RelationConcept -> Contents
---gdefn fs m t = (\dtype -> Defnt dtype (foldr (mkRelField t m dtype) [] fs)) General
---  (S $ t ^. id) --FIXME: Generate reference names here
+gdefn :: Fields -> SymbolMap -> GenDefn -> Contents
+gdefn fs m g = Defnt General (foldr (mkGDField g m) [] fs)
+  (S $ g ^. id) --FIXME: Generate reference names here
 
 -- | Synonym for easy reading. Model rows are just 'String',['Contents'] pairs
 type ModRow = [(String,[Contents])]
@@ -94,6 +97,21 @@ buildDDescription Succinct u d _ = [Enumeration (Definitions $ (firstPair u d):[
 buildDDescription Verbose u d m = [Enumeration (Definitions 
   (firstPair u d : descPairs u (vars (equat d) m)))]
 
+mkGDField :: GenDefn -> SymbolMap -> Field -> ModRow -> ModRow
+mkGDField g _ l@Label fs = (show l, (Paragraph $ at_start g):[]) : fs
+mkGDField g _ l@Units fs = 
+  let u = gdUnit g in
+    case u of Nothing   -> fs
+              Just udef -> (show l, (Paragraph $ Sy (udef ^. usymb)):[]) : fs
+mkGDField g _ l@DefiningEquation fs = (show l, (EqnBlock (g ^. relat)):[]) : fs
+mkGDField g m l@(Description v u intro) fs = (show l, Paragraph intro : 
+  (buildGDDescription v u (g ^. relat) m)) : fs
+mkGDField _ _ l _ = error $ "Label " ++ show l ++ " not supported for gen defs"
+
+buildGDDescription :: Verbosity -> InclUnits -> Expr -> SymbolMap -> [Contents]
+buildGDDescription Succinct _ _ _ = []
+buildGDDescription Verbose u e m  = 
+  Enumeration (Definitions (descPairs u (vars e m))) : []
 
 -- | Used for definitions. The first pair is the symbol of the quantity we are
 -- defining.

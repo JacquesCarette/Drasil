@@ -12,13 +12,6 @@ y_interp = fromEqn' "y_interp" (nounPhraseSP "interpolated y value") lY lin_inte
 lin_interp :: Expr
 lin_interp = (((C y_2) - (C y_1)) / ((C x_2) - (C x_1))) * ((C x) - (C x_1)) + (C y_1)
 
---interpolation b/w q1 and q2
-w_TNT :: QDefinition
-w_TNT = mkDataDef eqTNTWeight w_TNTEqn
-
-w_TNTEqn :: Expr
-w_TNTEqn = (C char_weight) * (C tNT)
-
 y_2, y_1, x_2, x_1, x :: VarChunk
 y_1  = makeVC "y_1"    (nounPhraseSP "y1")   (sub (lY) (Atomic "1"))
 y_2  = makeVC "y_2"    (nounPhraseSP "y2")   (sub (lY) (Atomic "2"))

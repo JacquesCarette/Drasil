@@ -36,9 +36,7 @@ risk_eq = ((C sflawParamK) / (Grouping (((C plate_len) / (1000)) *
 --DD2--
 
 hFromt_eq :: Relation
-hFromt_eq = (Case (zipWith hFromt_helper
-  [2.16, 2.59, 2.92, 3.78, 4.57, 5.56, 7.42, 9.02, 11.91, 15.09, 18.26, 21.44]
-  [2.5, 2.7, 3.0, 4.0, 5.0, 6.0, 8.0, 10.0, 12.0, 16.0, 19.0, 22.0]))
+hFromt_eq = (Case (zipWith hFromt_helper actualThicknesses nominalThicknesses))
 
 hFromt_helper :: Double -> Double -> (Expr, Relation)
 hFromt_helper result condition = (Dbl result, (C nom_thick) := Dbl condition)
@@ -78,11 +76,10 @@ nonFL = mkDataDef nonFactorL nonFL_eq
 --DD6--
 
 glaTyFac_eq :: Expr
-glaTyFac_eq = (Case (zipWith glaTyFac_helper
-  [1, 4, 2] ["AN", "FT", "HS"]))
+glaTyFac_eq = (Case (zipWith glaTyFac_helper glassTypeFactors glassTypeAbbrs))
 
-glaTyFac_helper :: Double -> String -> (Expr, Relation)
-glaTyFac_helper result condition = (Dbl result, (C glass_type) := V condition)
+glaTyFac_helper :: Integer -> String -> (Expr, Relation)
+glaTyFac_helper result condition = (Int result, (C glass_type) := V condition)
 
 glaTyFac :: QDefinition
 glaTyFac = mkDataDef gTF glaTyFac_eq

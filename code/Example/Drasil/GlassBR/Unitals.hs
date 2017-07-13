@@ -419,7 +419,21 @@ aspectRWithEqn = mkDataDef aspectR aspectRCalculation
 aspectRCalculation :: Relation
 aspectRCalculation = (C aspectR) := (C plate_len)/(C plate_width)
 
---Below are present in this file temporarily--
+--Defined for DataDefs.hs and this file only--
+actualThicknesses :: [Double]
+actualThicknesses = [2.16, 2.59, 2.92, 3.78, 4.57, 5.56, 7.42, 9.02, 11.91, 15.09, 18.26, 21.44]
 
+nominalThicknesses :: [Double]
+nominalThicknesses = [2.5, 2.7, 3.0, 4.0, 5.0, 6.0, 8.0, 10.0, 12.0, 16.0, 19.0, 22.0]
+
+glassTypeFactors :: [Integer]
+glassTypeFactors = [1, 4, 2]
+
+glassTypeAbbrs :: [String]
+glassTypeAbbrs = ["AN", "FT", "HS"] 
+--FIXME: can "map getAcc [annealedGlass, fullyTGlass, heatSGlass]" be used somehow?
+--       or can we access the acronyms as Strings from CIs somehow?
+
+--Below are present in this file temporarily--
 lateralLoad :: NamedChunk
 lateralLoad  = compoundNC lateral load

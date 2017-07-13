@@ -11,7 +11,7 @@ module Data.Drasil.SentenceStructures
   , followA
   , getTandS
   , eqN
-  , displayConstrntAsSet, testingSet
+  , displayConstrntAsSet
   , fmtInputConstr, fmtOutputConstr, physC, sfwrC, typUnc, rval
   ) where
 
@@ -166,12 +166,13 @@ getTandS a = phrase a +:+ getS a
 eqN :: Int -> Sentence
 eqN n = phrase equation +:+ sParen (S $ show n)
 
---
+--Produces a sentence from a ConstrainedChunk that displays the constraints in a {}.
 displayConstrntAsSet :: ConstrainedChunk -> Sentence
-displayConstrntAsSet ch = getS ch `sIn` testingSet ch
+displayConstrntAsSet ch = getS ch `sIn` accessConstrnts ch
 
-testingSet :: (Constrained s, SymbolForm s) => s -> Sentence
-testingSet ch = foldlSent_ $ map (\(Phys f) -> S "{" :+: (E $ f (C ch)):+: S "}")  (ch ^. constraints)
+--'displayConstrntAsSet' helper
+accessConstrnts :: (Constrained s, SymbolForm s) => s -> Sentence
+accessConstrnts ch = foldlSent_ $ map (\(Phys f) -> S "{" :+: (E $ f (C ch)):+: S "}")  (ch ^. constraints)
 
 {-BELOW IS TO BE MOVED TO EXAMPLE/DRASIL/SECTIONS-}
 

@@ -493,8 +493,7 @@ s6_2_5_table1 = inDataConstTbl (gbInputDataConstraints)
 s6_2_5_table2 = outDataConstTbl [prob_br]
 
 s6_2_5_intro2 = foldlSent [(makeRef s6_2_5_table2), S "shows the", 
-  plural constraint, S "that must be satisfied by the", phrase output_,
-  displayConstrntAsSet glass_type]
+  plural constraint, S "that must be satisfied by the", phrase output_]
 
 {--REQUIREMENTS--}
 

@@ -14,7 +14,8 @@ import Language.Drasil.Chunk.NamedIdea (term)
 import Language.Drasil.Chunk.Concept (defn)
 import Language.Drasil.Chunk.SymbolForm (SymbolForm, symbol)
 import Language.Drasil.Chunk.VarChunk (VarChunk)
-import Control.Lens hiding ((:>),(:<),set)
+import Language.Drasil.ChunkDB (SymbolMap)
+
 import Language.Drasil.Expr.Extract
 import Language.Drasil.Config (verboseDDDescription)
 import Language.Drasil.Document
@@ -22,6 +23,8 @@ import Language.Drasil.Symbol
 import Language.Drasil.Misc (unit'2Contents)
 import Language.Drasil.SymbolAlphabet (lD)
 import Language.Drasil.NounPhrase (phrase)
+
+import Control.Lens hiding ((:>),(:<),set)
 
 -- | expr translation function from Drasil to HTML 'AST'
 expr :: Expr -> H.Expr

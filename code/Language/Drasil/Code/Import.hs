@@ -16,6 +16,7 @@ import Language.Drasil.Code.Imperative.Helpers
 import Language.Drasil.Space as S
 import Language.Drasil.Chunk as C
 import Language.Drasil.Chunk.Quantity as Q
+import Language.Drasil.ChunkDB
 
 toCode :: NamedIdea c => c -> [ModuleChunk] -> SymbolMap -> AbstractCode
 toCode prog mcs m = AbsCode $ Pack (prog ^. id)

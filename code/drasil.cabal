@@ -106,6 +106,7 @@ library
     , Language.Drasil.Chunk.Wrapper
     , Language.Drasil.Chunk.Wrapper.QSWrapper
     , Language.Drasil.Chunk.Wrapper.UWrapper
+    , Language.Drasil.ChunkDB
     , Language.Drasil.Expr.Extract
     , Language.Drasil.Make.AST
     , Language.Drasil.Make.Helpers

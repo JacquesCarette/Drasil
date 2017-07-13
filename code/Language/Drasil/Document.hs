@@ -8,10 +8,10 @@ import Language.Drasil.Chunk.Module
 import Language.Drasil.Chunk.Other
 import Language.Drasil.Chunk.Req
 import Language.Drasil.Chunk.LC
+import Language.Drasil.ChunkDB (SymbolMap)
 import Language.Drasil.Spec (Sentence(..), RefType(..), (+:+))
 import Language.Drasil.RefHelpers
 import Language.Drasil.Expr
-import Language.Drasil.Expr.Extract (SymbolMap)
 import Control.Lens ((^.))
 
 type Title    = Sentence

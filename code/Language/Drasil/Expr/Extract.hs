@@ -1,26 +1,18 @@
 {-# LANGUAGE RankNTypes #-}
-module Language.Drasil.Expr.Extract(dep, vars, codevars, toVC, SymbolMap, symbolMap) where
+module Language.Drasil.Expr.Extract(dep, vars, codevars, toVC) where
 
 import Data.List (nub)
 import Control.Lens hiding ((:<),(:>))
 import Prelude hiding (id)
 import Language.Drasil.Expr (Expr(..), UFunc(..), BiFunc(..), Quantifier(..))
-import Language.Drasil.Chunk (Chunk, id)
-import Language.Drasil.Chunk.Quantity (Quantity)
-import Language.Drasil.Chunk.Wrapper.QSWrapper (QSWrapper, qs)
+import Language.Drasil.Chunk (id)
 import Language.Drasil.Chunk.VarChunk (VarChunk(..), vc', makeVC)
 import Language.Drasil.Chunk.SymbolForm (SymbolForm, symbol)
 import Language.Drasil.Space  -- need this for code generation
+import Language.Drasil.ChunkDB
 
 import Language.Drasil.NounPhrase -- temporary until Expr can constrain Quantity without circular import
 import Language.Drasil.Chunk.Code
-
-import qualified Data.Map as Map
-
-type SymbolMap = Map.Map String QSWrapper
-
-symbolMap :: (SymbolForm c, Quantity c) => [c] -> SymbolMap
-symbolMap cs = Map.fromList (map (\x -> ((x ^. id), qs x)) cs)
 
 -- | Get dependencies from an equation  
 dep :: Expr -> [String]
@@ -164,9 +156,3 @@ quant (Exists e) = e
 toVC :: (SymbolForm c) => c -> SymbolMap -> VarChunk
 toVC c m = vc' (lookupC) (lookupC ^. symbol) (Rational)
   where lookupC = symbLookup c m
-
-symbLookup :: (Chunk c) => c -> SymbolMap -> QSWrapper
-symbLookup c m = let lookC = Map.lookup (c ^. id) m in
-                 getS lookC
-  where getS (Just x) = x
-        getS Nothing = error $ "Symbol: " ++ (c ^. id) ++ " not found in SymbolMap"

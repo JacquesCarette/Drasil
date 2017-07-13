@@ -17,6 +17,7 @@ import Language.Drasil.Chunk.NamedIdea (term)
 import Language.Drasil.Chunk.SymbolForm (SymbolForm, symbol)
 import Language.Drasil.Chunk.Concept (defn)
 import Language.Drasil.Chunk.VarChunk (VarChunk)
+import Language.Drasil.ChunkDB (SymbolMap)
 import Language.Drasil.Config (verboseDDDescription, numberedDDEquations, numberedTMEquations)
 import Language.Drasil.Document
 import Language.Drasil.Symbol

@@ -106,7 +106,7 @@ import Language.Drasil.SystemInformation
 import Language.Drasil.Expr (Expr(..), Relation, UFunc(..), BiFunc(..), 
           Bound(..),DerivType(..), Set, Quantifier(..), log, sin, cos, tan, sqrt, square, sec, csc, cot, exp,
           summation, product, cross, m2x2, vec2D, dgnl2x2)
-import Language.Drasil.Expr.Extract (SymbolMap, symbolMap, vars)
+import Language.Drasil.Expr.Extract (vars)
 import Language.Drasil.Output.Formats (DocType(SRS,MG,MIS,LPM,Website))
 import Language.Drasil.Document (LayoutObj(..), Document(..), DType(..)
   , Section(..), Contents(..), SecCons(..), ListType(..), ItemType(..), section
@@ -140,6 +140,7 @@ import Language.Drasil.Chunk.Other
 import Language.Drasil.Chunk.Wrapper
 import Language.Drasil.Chunk.Wrapper.QSWrapper
 import Language.Drasil.Chunk.Wrapper.UWrapper
+import Language.Drasil.ChunkDB (SymbolMap, symbolMap)
 import Language.Drasil.NounPhrase hiding (at_start, at_start', titleize
                                           , titleize', phrase, plural)
 import Language.Drasil.Space (Space(..))

@@ -154,8 +154,8 @@ p_expr (Grouping e) = paren (p_expr e)
 p_expr (Mtx a)    = "<table class=\"matrix\">\n" ++ p_matrix a ++ "</table>"
 --Logic
 p_expr (Not a)    = "&not;" ++ p_expr a
-p_expr (And a b)  = p_expr a ++ "&and;" ++ p_expr b
-p_expr (Or a b)   = p_expr a ++ "&or;" ++ p_expr b
+p_expr (And a b)  = p_expr a ++ " &and; " ++ p_expr b
+p_expr (Or a b)   = p_expr a ++ " &or; " ++ p_expr b
 p_expr (Impl a b) = p_expr a ++ " &rArr; " ++ p_expr b
 p_expr (Iff a b)  = p_expr a ++ " &hArr; " ++ p_expr b
 p_expr (IsIn  a b) = (concat $ intersperse "," $ map p_expr a) ++ "&thinsp;&isin;&thinsp;"  ++ show b

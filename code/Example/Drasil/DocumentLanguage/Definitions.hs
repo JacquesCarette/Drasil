@@ -5,6 +5,7 @@ module Drasil.DocumentLanguage.Definitions
   , Field(..)
   , Verbosity(..)
   , tmodel
+  , ddefn
   , InclUnits(..)
   )where
 
@@ -42,7 +43,7 @@ tmodel fs m t = Defnt TM (foldr (mkTMField t m) [] fs)
 -- | Create a data definition using a list of fields, SymbolMap, and a 
 -- QDefinition (called automatically by 'SCSSub' program)
 ddefn :: Fields -> SymbolMap -> QDefinition -> Contents
-ddefn fs m d = DDef (foldr (mkQField d m) [] fs) (S "DD:" +:+ EmptyS) d 
+ddefn fs m d = Defnt DD (foldr (mkQField d m) [] fs) (S "DD:" +:+ S (d ^. id))
 --FIXME: Generate the reference names here
 
 --gdefn :: Fields -> SymbolMap -> RelationConcept -> Contents
@@ -76,7 +77,6 @@ mkQField d _ l@Units fs = (show l, (Paragraph $ (unit'2Contents d)):[]) : fs
 mkQField d _ l@DefiningEquation fs = (show l, (EqnBlock $ equat d):[]) : fs
 mkQField d m l@(Description v u intro) fs = 
   (show l, Paragraph intro : buildDDescription v u d m) : fs
-mkQField _ _ _ _ = undefined
 
 -- | Create the description field (if necessary) using the given verbosity and
 -- including or ignoring units for a model / general definition

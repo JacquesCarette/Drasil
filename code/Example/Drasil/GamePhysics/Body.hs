@@ -245,7 +245,7 @@ s4_1_1_terms = [CP.rigidBody, CP.elasticity, CPP.ctrOfMass,
   CP.cartesian, CP.rightHand]
 
 s4_1_1_bullets = enumBullet 
-  (map (\x -> (at_start x) :+: S ":" +:+ (x ^. defn)) s4_1_1_terms)
+  (map (\x -> (at_start x) +: EmptyS +:+ (x ^. defn)) s4_1_1_terms)
 
 
 -----------------------------
@@ -336,7 +336,7 @@ allObject thing = [S "All objects are", thing]
 thereNo :: [Sentence] -> [Sentence]
 thereNo [x]      = [S "There is no", x, S "involved throughout the", 
   (phrase simulation)]
-thereNo l = [S "There are no", foldlList l, S "involved throughout the", 
+thereNo l        = [S "There are no", foldlList l, S "involved throughout the", 
   (phrase simulation)]
 
 s4_2_1_assum1 = allObject (plural CP.rigidBody)
@@ -430,15 +430,16 @@ s5_1 = SRS.funcReq [s5_1_list] []
 s5_1_req1, s5_1_req2, s5_1_req3, s5_1_req4, s5_1_req5, s5_1_req6,
   s5_1_req7, s5_1_req8 :: Sentence
 
-reqFrame :: Sentence -> Sentence -> Sentence -> Sentence -> Sentence
-reqFrame a b x z = foldlSent [S "Determine the", a `sAnd` b, 
+requirementTemplate :: Sentence -> Sentence -> Sentence -> Sentence -> Sentence
+requirementTemplate a b x z = foldlSent [S "Determine the", a `sAnd` b, 
   S "over a period of", (phrase QP.time), S "of the", x, z]
 
-reqS :: (NamedIdea a, NamedIdea b) => a -> b -> Sentence -> Sentence
-reqS a b d = reqFrame (plural a) (plural b) ((getAcc twoD)
+requirementS :: (NamedIdea a, NamedIdea b) => a -> b -> Sentence -> Sentence
+requirementS a b d = requirementTemplate (plural a) (plural b) ((getAcc twoD)
   +:+ (plural CP.rigidBody)) d
-reqS' :: (NamedIdea a, NamedIdea b) => a -> b -> Sentence
-reqS' a b = reqS a b EmptyS 
+
+requirementS' :: (NamedIdea a, NamedIdea b) => a -> b -> Sentence
+requirementS' a b = requirementS a b EmptyS 
 
 -- some requirements look like they could be parametrized
 s5_1_req1 = foldlSent [S "Create a", (phrase CP.space), S "for all of the",
@@ -459,16 +460,16 @@ s5_1_req4 = foldlSent [S "Verify that the", plural input_,
   S "satisfy the required", plural physicalConstraint, S "from", 
   (makeRef s4_2)]
 
-s5_1_req5 = reqS (QP.position) (QP.velocity) 
+s5_1_req5 = requirementS (QP.position) (QP.velocity) 
   (S "acted upon by a" +:+ (phrase QP.force))
 
-s5_1_req6 = reqS' (QM.orientation) (QP.angularVelocity)
+s5_1_req6 = requirementS' (QM.orientation) (QP.angularVelocity)
 
 s5_1_req7 = foldlSent [S "Determine if any of the", 
   (plural CP.rigidBody), S "in the", (phrase CP.space), 
   S "have collided"]
 
-s5_1_req8 = reqS (QP.position) (QP.velocity) 
+s5_1_req8 = requirementS (QP.position) (QP.velocity) 
   (S "that have undergone a" +:+ (phrase CP.collision))
 
 -- Currently need separate chunks for plurals like rigid bodies,

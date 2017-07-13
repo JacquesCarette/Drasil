@@ -93,20 +93,22 @@ standOffDist = uqcND "standOffDist" (nounPhraseSP "stand off distance")
   [ physc $ \c -> c :> (Dbl 0),
     sfwrc $ \c -> (C sd_min) :< c,
     sfwrc $ \c -> c :< (C sd_max) ] (Dbl 45) defaultUncrt
---FIXME: ^ incorporate definition in here
+--FIXME: ^ incorporate definition in here?
 
 --FIXME: Issue #309
 nom_thick = cuc "nom_thick" 
   (nounPhraseSP $ "nominal thickness t in {2.5, 2.7, 3.0, 4.0, 5.0, 6.0, 8.0, 10.0, 12.0, 16.0, 19.0, 22.0}")
   lT millimetre Rational
-  [ physc $ \c -> (c := (V "2.5")) :|| (c := (V "2.7")) :|| (c := (V "3.0")) :|| (c := (V "4.0"))
-                  :|| (c := (V "5.0")) :|| (c := (V "6.0")) :|| (c := (V "8.0")) :|| (c := (V "10.0"))
-                  :|| (c := (V "12.0")) :|| (c := (V "16.0")) :|| (c := (V "19.0")) :|| (c := (V "22.0")) ] (V "8.0")
+  [ physc $ \c -> helper c (map show nominalThicknesses) ] (V "8.0")
 
 glass_type  = cvc "glass_type" (nounPhraseSP "glass type g in {AN, HS, FT}")
   lG String
-  [ physc $ \c -> (c := (V "AN")) :|| (c := (V "HS")) :|| (c := (V "FT")) ] (V "HS")
+  [ physc $ \c -> helper c glassTypeAbbrs ] (V "HS")
 --FIXME: Creating variables increases duplication; find a way to incorporate preexisting chunks in constraints
+
+helper c [x] = (c := (V x))
+helper c [x, y] = (c := (V x)) :|| (c := (V y))
+helper c (x:y:xs) = helper c [x, y] :|| (helper c (xs))
 
 {--}
 

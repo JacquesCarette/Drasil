@@ -8,7 +8,7 @@ import Data.Drasil.SI_Units
 import Data.Drasil.Utils(symbolMapFun, mkDataDef, getS)
 import Control.Lens((^.))
 import Prelude hiding (log, id, sqrt)
-import Data.Drasil.SentenceStructures (foldlSent)
+import Data.Drasil.SentenceStructures (foldlSent, displayConstrntsAsSet)
 
 --FIXME: Many of the current terms can be separated into terms and defns?
 
@@ -97,11 +97,11 @@ standOffDist = uqcND "standOffDist" (nounPhraseSP "stand off distance")
 
 --FIXME: Issue #309
 nom_thick = cuc "nom_thick" 
-  (nounPhraseSP $ "nominal thickness t in {2.5, 2.7, 3.0, 4.0, 5.0, 6.0, 8.0, 10.0, 12.0, 16.0, 19.0, 22.0}")
+  (nounPhraseSent $ phrase glassTy +:+ displayConstrntsAsSet nom_thick nominalThicknesses)
   lT millimetre Rational
   [ physc $ \c -> createCnstrnts c (map show nominalThicknesses) ] (V "8.0")
 
-glass_type  = cvc "glass_type" (nounPhraseSP "glass type g in {AN, HS, FT}")
+glass_type  = cvc "glass_type" (nounPhraseSent $ S "glass type" +:+ displayConstrntsAsSet glass_type glassTypeAbbrs)
   lG String
   [ physc $ \c -> createCnstrnts c glassTypeAbbrs ] (V "HS")
 

@@ -95,41 +95,30 @@ t_symbol (Corners [] [] [] [x] s) = t_symbol s ++ "_" ++ t_symbol x
 t_symbol (Corners [] [] [x] [] s) = t_symbol s ++ "^" ++ t_symbol x
 t_symbol s                        = symbol s
 
--- | Renders symbols for HTML body
+-- | Adds emphises to symbols by defult. Use symbolNoEm for no emphises.
+--   Units do not need emphises for example.
 symbol :: Symbol -> String
-symbol (Atomic s)  = "<em>" ++ s ++ "</em>"
-symbol (Special s) = "<em>" ++ (unPH $ special s) ++ "</em>"
-symbol (Concat sl) = foldr (++) "" $ map symbol sl
-symbol (Greek g)   = "<em>" ++ (unPH $ greek g) ++ "</em>"
---
--- handle the special cases first, then general case
-symbol (Corners [] [] [x] [] s) = (symbol s) ++ sup (symbol x)
-symbol (Corners [] [] [] [x] s) = (symbol s) ++ sub (symbol x)
-symbol (Corners [_] [] [] [] _) = error "rendering of ul prescript"
-symbol (Corners [] [_] [] [] _) = error "rendering of ll prescript"
-symbol (Corners _ _ _ _ _)      = error "rendering of Corners (general)"
-symbol (Atop Vector s)       = "<b>" ++ symbol s ++ "</b>"
-symbol (Atop Hat s)          = symbol s ++ "&#770;"
-symbol (Atop Prime s)        = symbol s ++ "'"
+symbol s = "<em>" ++ symbolNoEm s ++ "</em>"
 
--- | Renders symbols for UNIT SYMBOLS
-usymbol :: Symbol -> String
-usymbol (Atomic s)  = s
-usymbol (Special s) = unPH $ special s
-usymbol (Concat sl) = foldr (++) "" $ map usymbol sl
-usymbol (Greek g)   = unPH $ greek g
-usymbol (Corners [] [] [x] [] s) = (usymbol s) ++ sup (usymbol x)
-usymbol (Corners [] [] [] [x] s) = (usymbol s) ++ sub (usymbol x)
-usymbol (Corners [_] [] [] [] _) = error "rendering of ul prescript"
-usymbol (Corners [] [_] [] [] _) = error "rendering of ll prescript"
-usymbol (Corners _ _ _ _ _)      = error "rendering of Corners (general)"
-usymbol (Atop Vector s)       = "<b>" ++ usymbol s ++ "</b>"
-usymbol (Atop Hat s)          = usymbol s ++ "&#770;"
-usymbol (Atop Prime s)        = usymbol s ++ "'"
+-- | Renders symbols for HTML document
+symbolNoEm :: Symbol -> String
+symbolNoEm (Atomic s)  = s
+symbolNoEm (Special s) = unPH $ special s
+symbolNoEm (Concat sl) = foldr (++) "" $ map symbolNoEm sl
+symbolNoEm (Greek g)   = unPH $ greek g
+-- handle the special cases first, then general case
+symbolNoEm (Corners [] [] [x] [] s) = (symbolNoEm s) ++ sup (symbolNoEm x)
+symbolNoEm (Corners [] [] [] [x] s) = (symbolNoEm s) ++ sub (symbolNoEm x)
+symbolNoEm (Corners [_] [] [] [] _) = error "rendering of ul prescript"
+symbolNoEm (Corners [] [_] [] [] _) = error "rendering of ll prescript"
+symbolNoEm (Corners _ _ _ _ _)      = error "rendering of Corners (general)"
+symbolNoEm (Atop Vector s)       = "<b>" ++ symbolNoEm s ++ "</b>"
+symbolNoEm (Atop Hat s)          = symbolNoEm s ++ "&#770;"
+symbolNoEm (Atop Prime s)        = symbolNoEm s ++ "'"
 
 uSymb :: USymb -> String
-uSymb (UName s)           = usymbol s
-uSymb (UProd l)           = foldr1 (\x -> (x++)) (map uSymb l)
+uSymb (UName s)           = symbolNoEm s
+uSymb (UProd l)           = foldr1 (\x -> ((x++"&sdot;")++) ) (map uSymb l)
 uSymb (UPow s i)          = uSymb s ++ sup (show i)
 uSymb (UDiv n (UName d))  = uSymb n ++ "/" ++ uSymb (UName d)
 uSymb (UDiv n d)          = uSymb n ++ "/(" ++ (uSymb d) ++ ")"
@@ -139,7 +128,7 @@ uSymb (UDiv n d)          = uSymb n ++ "/(" ++ (uSymb d) ++ ")"
 -----------------------------------------------------------------
 -- | Renders expressions in the HTML (called by multiple functions)
 p_expr :: Expr -> String
-p_expr (Var v)    = "<em>" ++ v ++ "</em>"
+p_expr (Var v)    = symbol (Atomic v) --Ensures variables are rendered the same as other symbols
 p_expr (Dbl d)    = showFFloat Nothing d ""
 p_expr (Int i)    = show i
 p_expr (Bln b)    = show b
@@ -152,10 +141,10 @@ p_expr (Pow a b)  = pow a b
 p_expr (Sym s)    = symbol s
 p_expr (Eq a b)   = p_expr a ++ " = " ++ p_expr b
 p_expr (NEq a b)  = p_expr a ++ "&ne;" ++ p_expr b
-p_expr (Lt a b)   = p_expr a ++ "&lt;" ++ p_expr b
-p_expr (Gt a b)   = p_expr a ++ "&gt;" ++ p_expr b
-p_expr (LEq a b)  = p_expr a ++ "&le;" ++ p_expr b
-p_expr (GEq a b)  = p_expr a ++ "&ge;" ++ p_expr b
+p_expr (Lt a b)   = p_expr a ++ "&thinsp;&lt;&thinsp;" ++ p_expr b --thin spaces make these more readable
+p_expr (Gt a b)   = p_expr a ++ "&thinsp;&gt;&thinsp;" ++ p_expr b
+p_expr (LEq a b)  = p_expr a ++ "&thinsp;&le;&thinsp;" ++ p_expr b
+p_expr (GEq a b)  = p_expr a ++ "&thinsp;&ge;&thinsp;" ++ p_expr b
 p_expr (Dot a b)  = p_expr a ++ "&sdot;" ++ p_expr b
 p_expr (Neg a)    = neg a
 p_expr (Call f x) = p_expr f ++ paren (concat $ intersperse "," $ map p_expr x)
@@ -169,8 +158,8 @@ p_expr (And a b)  = p_expr a ++ "&and;" ++ p_expr b
 p_expr (Or a b)   = p_expr a ++ "&or;" ++ p_expr b
 p_expr (Impl a b) = p_expr a ++ " &rArr; " ++ p_expr b
 p_expr (Iff a b)  = p_expr a ++ " &hArr; " ++ p_expr b
-p_expr (IsIn  a b) = (concat $ intersperse "," $ map p_expr a) ++ "&isin;"  ++ show b
-p_expr (NotIn a b) = (concat $ intersperse "," $ map p_expr a) ++ "&notin;" ++ show b
+p_expr (IsIn  a b) = (concat $ intersperse "," $ map p_expr a) ++ "&thinsp;&isin;&thinsp;"  ++ show b
+p_expr (NotIn a b) = (concat $ intersperse "," $ map p_expr a) ++ "&thinsp;&notin;&thinsp;" ++ show b
 p_expr (State a b) = (concat $ intersperse ", " $ map p_quan a) ++ ": " ++ p_expr b
 
 -- | For printing Matrix
@@ -191,13 +180,13 @@ p_quan (Exists e) = "&exist;"  ++ p_expr e
 
 -- | Helper for properly rendering multiplication of expressions
 mul :: Expr -> Expr -> String
-mul a b@(Dbl _) = mulParen a ++ "*" ++ p_expr b
-mul a b@(Int _) = mulParen a ++ "*" ++ p_expr b
-mul x@(Sym (Concat _)) y = p_expr x ++ "*" ++ mulParen y
-mul x y@(Sym (Concat _)) = mulParen x ++ "*" ++ p_expr y
-mul x@(Sym (Atomic s)) y = if length s > 1 then p_expr x ++ "*" ++ mulParen y else
+mul a b@(Dbl _) = mulParen a ++ "&sdot;" ++ p_expr b
+mul a b@(Int _) = mulParen a ++ "&sdot;" ++ p_expr b
+mul x@(Sym (Concat _)) y = p_expr x ++ "&sdot;" ++ mulParen y
+mul x y@(Sym (Concat _)) = mulParen x ++ "&sdot;" ++ p_expr y
+mul x@(Sym (Atomic s)) y = if length s > 1 then p_expr x ++ "&sdot;" ++ mulParen y else
                             p_expr x ++ mulParen y
-mul x y@(Sym (Atomic s)) = if length s > 1 then mulParen x ++ "*" ++ p_expr y else
+mul x y@(Sym (Atomic s)) = if length s > 1 then mulParen x ++ "&sdot;" ++ p_expr y else
                             mulParen x ++ p_expr y
 mul a b         = mulParen a ++ mulParen b
 

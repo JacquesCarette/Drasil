@@ -33,11 +33,11 @@ line-height:0;}
   padding-top: 0.15em;}
 .fdn {border-top: thin solid black;}
 .table {text-align:left;padding-left:1%;width:90%;margin-bottom:2%;margin-top:2%}
-table, th, td {border: 1px solid black; border-collapse: collapse;margin-left:auto;margin-right:auto;}
-th, td {padding:1%;}
-.tdefn {width:75%;margin-top:1%;margin-bottom:1%;}
-.tdefn th {width:15%; padding:1%;}
-.ddefn {width:75%;margin-top:1%;margin-bottom:1%;}
+table, th, td {border-collapse: collapse;margin-left:auto;margin-right:auto;}
+th, td {border: 1px solid black; padding:1%;}
+.tdefn, .ddefn {width:75%;margin-top:1%;margin-bottom:1%;}
+.tdefn th {width:15%;}
+.ddefn th {width:15%;}
 .section {width:80%; margin:0 auto;text-align:left;}
 .code {
   display:inline-block;
@@ -53,3 +53,21 @@ th, td {padding:1%;}
 }
 .list {text-align:left;}
 .figure {max-width: 800px;}
+.matrix {position: relative;}
+.matrix:before, .matrix:after {
+  content: "";
+  position: absolute;
+  top: 0;
+  border: 1px solid #000;
+  width: 6px;
+  height: 100%;}
+.matrix:before {
+  left: -6px;
+  border-right: 0px;}
+.matrix:after {
+  right: -6px;
+  border-left: 0px;}
+.matrix td {
+  padding: 6px;
+  text-align: center;
+  border: 0px;}

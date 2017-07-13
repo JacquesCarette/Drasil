@@ -527,7 +527,7 @@ s6_likelyChg_stmt2 = (phrase library) `maybeExpanded`
   (S "to deal with edge-to-edge and vertex-to-vertex" +:+ (plural CP.collision))
 
 s6_likelyChg_stmt3 = (phrase library) `maybeExpanded` 
-  S "to include motion with damping"
+  S "to include motion with" +:+ (phrase CP.damping)
 
 s6_likelyChg_stmt4 = (phrase library) `maybeExpanded` (S "to include" +:+ 
   (plural CP.joint) `sAnd` (plural CM.constraint))

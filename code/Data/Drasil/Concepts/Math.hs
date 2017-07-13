@@ -8,7 +8,7 @@ angle, area, calculation, diameter, equation, euclidN, euclidSpace, gradient,
   perpV, probability, shape, surArea, surface, unit_, unitV, vector, rate, 
   change, rOfChng, constraint :: ConceptChunk
 
-ode, de :: CI
+pde, ode, de :: CI
 
 angle        = dcc "angle"        (cn' "angle")                   ("The amount of rotation needed to bring one line or plane into" ++
                                                                   "coincidence with another")
@@ -43,7 +43,7 @@ orient       = dcc "orientation"  (cn' "orientation")             "The relative 
 --FIXME: use nounphrase instead of cn'
 de           = commonIdea "de"     (cn' "differential equation")          "DE"
 ode          = commonIdea "ode"    (cn' "Ordinary Differential Equation") "ODE"
-
+pde          = commonIdea "pde"    (cn' "partial differential equation")  "PDE"
 
 --FIXME: COMBINATION HACK (all below)
 euclidN      = dcc "euclidNorm"     (compoundPhrase' (euclidSpace ^. term)

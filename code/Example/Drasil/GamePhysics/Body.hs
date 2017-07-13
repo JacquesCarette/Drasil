@@ -120,13 +120,14 @@ para1_s2_1_intro = para1_s2_1_param chipmunk document programDescription
   (plural game) (map plural detailsAndGoal)
 
 programDescription :: Sentence
-programDescription = foldlSent_ [(phrase openSource), getAcc twoD, (phrase CP.rigidBody), 
-  (phrase physLib)]
+programDescription = foldlSent_ [(phrase openSource), getAcc twoD, 
+  (phrase CP.rigidBody), (phrase physLib)]
 
-para1_s2_1_param :: (NamedIdea a) => a -> a -> Sentence -> Sentence -> [Sentence] -> Sentence
-para1_s2_1_param progName typeOf programDescript applicationOf listOf = foldlSent 
+para1_s2_1_param :: (NamedIdea a) => a -> a -> Sentence -> Sentence ->
+  [Sentence] -> Sentence
+para1_s2_1_param progName typeOf progDescrip appOf listOf = foldlSent 
   [S "This", (phrase typeOf), S "descibes the modeling of an",
-  programDescript, S "used for" +:+. applicationOf, S "The", 
+  progDescrip, S "used for" +:+. appOf, S "The", 
   foldlList listOf, S "used in", (short progName), 
   S "are provided. This", (phrase typeOf), 
   S "is intended to be used as a reference to provide all necessary",

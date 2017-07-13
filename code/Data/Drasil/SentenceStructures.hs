@@ -11,7 +11,7 @@ module Data.Drasil.SentenceStructures
   , followA
   , getTandS
   , eqN
-  , displayConstrntAsSet
+  , displayConstrntAsSet, testingSet
   , fmtInputConstr, fmtOutputConstr, physC, sfwrC, typUnc, rval
   ) where
 
@@ -168,7 +168,10 @@ eqN n = phrase equation +:+ sParen (S $ show n)
 
 --
 displayConstrntAsSet :: ConstrainedChunk -> Sentence
-displayConstrntAsSet ch = foldlsC $ map (\(Phys f) -> E $ f (C ch)) (ch ^. constraints)
+displayConstrntAsSet ch = getS ch `sIn` testingSet ch
+
+testingSet :: (Constrained s, SymbolForm s) => s -> Sentence
+testingSet ch = foldlSent_ $ map (\(Phys f) -> S "{" :+: (E $ f (C ch)):+: S "}")  (ch ^. constraints)
 
 {-BELOW IS TO BE MOVED TO EXAMPLE/DRASIL/SECTIONS-}
 

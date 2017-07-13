@@ -19,15 +19,19 @@ x_1  = makeVC "x_1"    (nounPhraseSP "x1")   (sub (lX) (Atomic "1"))
 x_2  = makeVC "x_2"    (nounPhraseSP "x2")   (sub (lX) (Atomic "2"))
 x    = makeVC "x"    	 (nounPhraseSP "x")    lX -- = params.wtnt from mainFun.py
 
-w_j, s_j, q_j, q_1, q_2, i, k :: VarChunk
+w_j, s_j, q_j, q_1, q_2, i, v, z, z_array, y_array, x_array :: VarChunk
 w_j  = makeVC "w_j"    (nounPhraseSP "wj")   (sub (lW) (lJ))
 s_j  = makeVC "s_j"    (nounPhraseSP "sj")   (sub (lS) (lJ))
 q_j  = makeVC "q_j"    (nounPhraseSP "qj")   (sub (lQ) (lJ))
 q_1  = makeVC "q_1"    (nounPhraseSP "q_1")  (sub (lQ) (Atomic "1"))
 q_2  = makeVC "q_2"    (nounPhraseSP "q_2")  (sub (lQ) (Atomic "2"))
 i    = makeVC "i"      (nounPhraseSP "i")    lI
-k    = makeVC "k"      (nounPhraseSP "k")    lK
+--k    = makeVC "k"      (nounPhraseSP "k")    lK
 v    = makeVC "v"      (nounPhraseSP "v")    lV
+z    = makeVC "z"      (nounPhraseSP "z")    lZ
+z_array = makeVC "z_array" (nounPhraseSP "z_array") (sub (lZ) (Atomic "array"))
+y_array = makeVC "y_array" (nounPhraseSP "y_array") (sub (lY) (Atomic "array"))
+x_array = makeVC "x_array" (nounPhraseSP "x_array") (sub (lX) (Atomic "array"))
 
 ---
 {-
@@ -57,10 +61,21 @@ indInSeq = (C i)
 
 matrixCol :: Expr
 matrixCol = 0
---FIXME: implementing matrix as an expression???
+--FIXME: implementing [] as an expression???
 
---interpY :: Expr
---interpY = lin_interp (z_array[i], y_1, z_array[i+1], y_2, z)
+iVal, x_z_1, y_z_1, x_z_2, y_z_2, y_2Expr, y_2Expr :: Expr
+interpY :: Expr
+
+iVal = (FCall (indInSeq) [C z_array, C z])
+x_z_1 = (FCall (matrixCol)[C x_array, C i]){-(C x_array, C i) -> leads to (Expr, Expr) -> error since FCall expects an Expr-}
+y_z_1 = (FCall (matrixCol)[C y_array, C i])
+x_z_2 = (FCall (matrixCol)[C x_array, (C i) + 1])
+y_z_2 = (FCall (matrixCol)[C y_array, (C i) + 1])
+j = FCall (indInSeq) [x_z_1, C x]
+k = FCall (indInSeq) [x_z_2, C x]
+y_1Expr = FCall (lin_interp) [x_z_1{-[C j]-},      y_z_1{-[C j]-}, x_z_1{-[C j + 1] -},       y_z_1{-[C j + 1] -}, C x]
+y_2Expr = FCall (lin_interp) [x_z_2{-[k]-},        y_z_2{-[C k]-}, x_z_2{-[k + 1]-},          y_z_2{-[k + 1]-},    C x]
+interpY = FCall (lin_interp) [C z_array {-!!(i)-}, y_1Expr,        C z_array{-!!(iVal + 1)-}, y_2Expr,             C z]
 
 ---
 

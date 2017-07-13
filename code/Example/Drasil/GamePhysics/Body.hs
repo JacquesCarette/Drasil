@@ -116,13 +116,17 @@ detailsAndGoal :: [CI]
 detailsAndGoal = [thModel, goalStmt]
 
 para1_s2_1_intro :: Sentence
-para1_s2_1_intro = para1_s2_1_param chipmunk document (map plural detailsAndGoal)
+para1_s2_1_intro = para1_s2_1_param chipmunk document programDescription 
+  (plural game) (map plural detailsAndGoal)
 
-para1_s2_1_param :: (NamedIdea a) => a -> a -> [Sentence] -> Sentence
-para1_s2_1_param progName typeOf listOf = foldlSent 
+programDescription :: Sentence
+programDescription = foldlSent_ [(phrase openSource), getAcc twoD, (phrase CP.rigidBody), 
+  (phrase physLib)]
+
+para1_s2_1_param :: (NamedIdea a) => a -> a -> Sentence -> Sentence -> [Sentence] -> Sentence
+para1_s2_1_param progName typeOf programDescript applicationOf listOf = foldlSent 
   [S "This", (phrase typeOf), S "descibes the modeling of an",
-  (phrase openSource), getAcc twoD, (phrase CP.rigidBody), 
-  (phrase physLib), S "used for" +:+. (plural game), S "The", 
+  programDescript, S "used for" +:+. applicationOf, S "The", 
   foldlList listOf, S "used in", (short progName), 
   S "are provided. This", (phrase typeOf), 
   S "is intended to be used as a reference to provide all necessary",

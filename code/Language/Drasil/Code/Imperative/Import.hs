@@ -32,7 +32,7 @@ data Generator = Generator {
 
   genOutputFormat :: [CodeChunk] -> Method,
   
-  genMethodCall :: Scope -> MethodType -> Label -> [Parameter] -> Body -> Method,
+  genMethodCall :: Scope -> Permanence -> MethodType -> Label -> [Parameter] -> Body -> Method,
   
   logName :: String,
   
@@ -78,8 +78,8 @@ generator spec g =
       
       logName = logFile $ choices spec,
       
-      publicMethod = genMethodCall g Public,
-      privateMethod = genMethodCall g Private,
+      publicMethod = genMethodCall g Public Static,
+      privateMethod = genMethodCall g Private Dynamic,
       
       sfwrCBody = sfwrConstraintFunc g,
       physCBody = physConstraintFunc g
@@ -231,16 +231,16 @@ genOutputFormatD g outs = let l_outfile = "outfile"
     
 -----
 
-genMethodCallD :: Generator -> Scope -> MethodType -> Label -> [Parameter] 
+genMethodCallD :: Generator -> Scope -> Permanence -> MethodType -> Label -> [Parameter] 
                   -> Body -> Method
-genMethodCallD _ s t n p b = Method n s t p b
+genMethodCallD _ s pr t n p b = Method n s pr t p b
 
-loggedMethod :: Generator -> Scope -> MethodType -> Label -> [Parameter] 
+loggedMethod :: Generator -> Scope -> Permanence -> MethodType -> Label -> [Parameter] 
                   -> Body -> Method
-loggedMethod g s t n p b = let l_outfile = "outfile"
-                               v_outfile = var l_outfile 
+loggedMethod g s pr t n p b = let l_outfile = "outfile"
+                                  v_outfile = var l_outfile 
   in
-    Method n s t p $ 
+    Method n s pr t p $ 
     (
       block [
         varDec l_outfile outfile,

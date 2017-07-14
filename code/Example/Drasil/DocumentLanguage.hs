@@ -306,11 +306,11 @@ siSys (SI sys _ _ _ _ _ _ _ _ _ _ _) = nw sys
 --BELOW IS IN THIS FILE TEMPORARILY--
 --Creates Contents using an id and description (passed in as a Sentence).
 mkAssump :: String -> Sentence -> Contents
-mkAssump i desc = Assumption (nw $ npnc i $ nounPhraseSent (desc)) EmptyS
+mkAssump i desc = mkAssumpCustom i desc EmptyS
 
 --Creates Contents using an id and description (passed in as a String).
-mkAssump' :: String -> String -> Sentence -> Contents
-mkAssump' i desc x = Assumption (nw $ npnc i $ nounPhraseSP (desc)) x
+mkAssumpCustom :: String -> Sentence -> Sentence -> Contents
+mkAssumpCustom i desc x = Assumption (nw $ npnc i $ nounPhraseSent (desc)) x
 
 mkRequirement :: String -> Sentence -> Contents
 mkRequirement i desc = Requirement (ReqChunk (nw $ npnc i $ nounPhraseSent desc) []) EmptyS

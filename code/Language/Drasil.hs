@@ -78,7 +78,7 @@ module Language.Drasil (
   , SecCons(..), ListType(..), ItemType(..), ListPair
   , section
   -- Reference
-  , makeRef
+  , makeRef, acroTest
   -- Space
   , Space(..)
   -- Symbol
@@ -148,7 +148,7 @@ import Language.Drasil.Space (Space(..))
 import Language.Drasil.Spec (USymb(..), Sentence(..), Accent(..), 
                               sParen, sSqBr, sSqBrNum, sC, (+:+), (+:+.), (+.), (+:),
                               semiCol, sParenDash, sDash)
-import Language.Drasil.Reference (makeRef)
+import Language.Drasil.Reference (makeRef, acroTest)
 import Language.Drasil.Symbol (Symbol(..), sub, sup, vec, hat, prime)
 import Language.Drasil.SymbolAlphabet
 import Language.Drasil.Misc -- all of it

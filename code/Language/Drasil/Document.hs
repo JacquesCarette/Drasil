@@ -100,48 +100,48 @@ instance LayoutObj Section where
   rType _ = Sect
 
 instance LayoutObj Contents where
-  refName (Table _ _ l _)     = S "Table:" :+: inferName l
-  refName (Figure l _)        = S "Figure:" :+: inferName l
-  refName (Paragraph _)       = error "Can't reference paragraphs" --yet
-  refName (EqnBlock _)        = error "EqnBlock ref unimplemented"
---  refName (CodeBlock _)     = error "Codeblock ref unimplemented"
-  refName (Definition _ d)    = getDefName d
-  refName (Defnt dt _ r)       = getDefName dt +:+ r
-  refName (Enumeration _)     = error "List refs unimplemented"
-  refName (Module mc)         = S $ "M" ++ alphanumOnly (mc ^. id)
+  refName (Table _ _ l _)       = S "Table:" :+: inferName l
+  refName (Figure l _)          = S "Figure:" :+: inferName l
+  refName (Paragraph _)         = error "Can't reference paragraphs" --yet
+  refName (EqnBlock _)          = error "EqnBlock ref unimplemented"
+--  refName (CodeBlock _)         = error "Codeblock ref unimplemented"
+  refName (Definition _ d)      = getDefName d
+  refName (Defnt dt _ r)        = getDefName dt +:+ r
+  refName (Enumeration _)       = error "List refs unimplemented"
+  refName (Module mc)           = S $ "M" ++ alphanumOnly (mc ^. id)
   refName (Requirement rc _)    = S $ "R" ++ alphanumOnly (rc ^. id)
   refName (Assumption ac _)     = S $ "A" ++ alphanumOnly (ac ^. id)
   refName (LikelyChange lcc _)  = S $ "LC" ++ alphanumOnly (lcc ^. id)
-  refName (UnlikelyChange ucc)= S $ "UC" ++ alphanumOnly (ucc ^. id)
---  refName (UsesHierarchy _)   = S $ "Figure:UsesHierarchy"
-  refName (Graph _ _ _ l)     = S "Figure:" :+: inferName l
-  refName (TMod _ _ _)        = error "TMod referencing unimplemented"
-  refName (IMod)              = error "IMod referencing unimplemented"
-  refName (GDef)              = error "GDef referencing unimplemented"
-  refName (DDef _ _ _)        = error "DDef referencing unimplemented"
-  rType (Table _ _ _ _)    = Tab
-  rType (Figure _ _)       = Fig
-  rType (Definition _ _)   = Def
-  rType (Defnt _ _ _)       = Def
-  rType (Module _)         = Mod
-  rType (Requirement _ _)    = Req
-  rType (Assumption _ _)     = Assump
-  rType (LikelyChange _ _)   = LC
-  rType (UnlikelyChange _) = UC
---  rType (UsesHierarchy _)  = Fig
-  rType (Graph _ _ _ _)    = Fig
-  rType (TMod _ _ _)        = Def
-  rType (IMod)              = Def
-  rType (GDef)              = Def
-  rType (DDef _ _ _)        = Def
-  rType _ = error "Attempting to reference unimplemented reference type"
+  refName (UnlikelyChange ucc)  = S $ "UC" ++ alphanumOnly (ucc ^. id)
+--  refName (UsesHierarchy _)     = S $ "Figure:UsesHierarchy"
+  refName (Graph _ _ _ l)       = S "Figure:" :+: inferName l
+  refName (TMod _ _ _)          = error "TMod referencing unimplemented"
+  refName (IMod)                = error "IMod referencing unimplemented"
+  refName (GDef)                = error "GDef referencing unimplemented"
+  refName (DDef _ _ _)          = error "DDef referencing unimplemented"
+  rType (Table _ _ _ _)         = Tab
+  rType (Figure _ _)            = Fig
+  rType (Definition _ _)        = Def
+  rType (Defnt _ _ _)           = Def
+  rType (Module _)              = Mod
+  rType (Requirement _ _)       = Req
+  rType (Assumption _ _)        = Assump
+  rType (LikelyChange _ _)      = LC
+  rType (UnlikelyChange _)      = UC
+ -- rType (UsesHierarchy _)       = Fig
+  rType (Graph _ _ _ _)         = Fig
+  rType (TMod _ _ _)            = Def
+  rType (IMod)                  = Def
+  rType (GDef)                  = Def
+  rType (DDef _ _ _)            = Def
+  rType _                       = error "Attempting to reference unimplemented reference type"
   
 -- | Automatically create the label for a definition
 getDefName :: DType -> Sentence
 getDefName (Data c)   = S $ "DD:" ++ (repUnd (c ^. id))
 getDefName (Theory c) = S $ "T:" ++ (repUnd (c ^. id))
-getDefName TM = S "T:"
-getDefName DD = S "DD:"
+getDefName TM         = S "T:"
+getDefName DD         = S "DD:"
 getDefName _          = error "Unimplemented definition type reference"
 
 ---------------------------------------------------------------------------

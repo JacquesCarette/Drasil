@@ -8,6 +8,12 @@
 \usepackage{booktabs}
 \usepackage{caption}
 \usepackage{graphics}
+\newcounter{assumpnum}
+\newcommand{\atheassumpnum}{A\theassumpnum}
+\newcounter{reqnum}
+\newcommand{\rthereqnum}{R\thereqnum}
+\newcounter{lcnum}
+\newcommand{\lcthelcnum}{LC\thelcnum}
 \title{Software Requirements Specification for Solar Water Heating Systems Incorporating PCM}
 \author{Thulasi Jegatheesan, Brooks MacLachlan, and Spencer Smith}
 \begin{document}
@@ -215,7 +221,7 @@ T & Theoretical Model
 \end{longtable*}
 \section{Introduction}
 \label{Sec:Intr}
-Due to increasing cost, diminishing availability, and negative environmental impact of fossil fuels, there is a higher demand for renewable energy sources and energy storage technology. Solar water heating systems incorporating phase change material (PCM) use a renewable energy source and provide a novel way of storing energy. Solar water heating systems incorporating PCM improve over the traditional solar water heating systems because of their smaller size. The smaller size is possible because of the ability of PCM to store thermal energy as latent heat, which allows higher thermal energy storage capacity per unit weight.
+Due to increasing cost, diminishing availability, and negative environmental impact of fossil fuels, there is a higher demand for renewable energy sources and energy storage technology. Solar water heating systems incorporating phase change material (PCM) use renewable energy sources and provide a novel way of storing energy. Solar water heating systems incorporating PCM improve over the traditional solar water heating systems because of their smaller size. The smaller size is possible because of the ability of PCM to store thermal energy as latent heat, which allows higher thermal energy storage capacity per unit weight.
 The following section provides an overview of the Software Requirements Specification (SRS) for solar water heating systems incorporating PCM. The developed program will be referred to as Solar Water Heating System (SWHS). This section explains the purpose of this document, the scope of the system, the organization of the document, and the characteristics of the intended reader.
 \subsection{Purpose of Document}
 \label{Sec:PurpofDocu}
@@ -272,7 +278,7 @@ This section first presents the problem description, which gives a high-level vi
 SWHS is a computer program developed to investigate the effect of employing PCM within a solar water heating tank.
 \subsubsection{Terminology and Definitions}
 \label{Sec:TermandDefi}
-This subsection provides a list of terms that are used in the subsequent sections and their meaning, with the purpose of reducing ambiguity and making it easier to correctly understand the requirements:
+This subsection provides a list of terms that are used in the subsequent sections and their meaning, with the purpose of reducing ambiguity and making it easier to correctly understand the requirements.
 \begin{enumerate}
 \item{Heat flux: The rate of thermal energy transfer through a given surface per unit time.}
 \item{Phase change material: A substance that uses phase changes (such as melting) to absorb or release large amounts of heat at a constant temperature.}
@@ -310,28 +316,66 @@ The instance models that govern SWHS are presented in Section~\ref{Sec:InstMode}
 \subsubsection{Assumptions}
 \label{Sec:Assu}
 This section simplifies the original problem and helps in developing the theoretical model by filling in the missing information for the physical system. The numbers given in the square brackets refer to the Theoretical Models [Section~\ref{Sec:TheoMode}], General Definitions [Section~\ref{Sec:GeneDefi}], Data Definitions [Section~\ref{Sec:DataDefi}], Instance Models [Section~\ref{Sec:InstMode}], or Likely Changes [Section~\ref{Sec:LikeChan}], in which the respective assumption is used.
-\begin{itemize}
-\item[A1:]The only form of energy that is relevant for this problem is thermal energy. All other forms of energy, such as mechanical energy, are assumed to be negligible [\hyperref[T:t1ConsThermE]{Definition~T:t1ConsThermE}].
-\item[A2:]All heat transfer coefficients are constant over time [GD1].
-\item[A3:]The water in the tank is fully mixed, so the temperature of the water is the same throughout the entire tank [GD2, \hyperref[DD:ht.flux.P]{Definition~DD:ht.flux.P}].
-\item[A4:]The temperature of the phase change material is the same throughout the volume of PCM [GD2, \hyperref[DD:ht.flux.P]{Definition~DD:ht.flux.P}, LC1].
-\item[A5:]The density of water and density of PCM have no spatial variation; that is, they are each constant over their entire volume [GD2].
-\item[A6:]The specific heat capacity of water, specific heat capacity of PCM as a solid, and specific heat capacity of PCM as a liquid have no spatial variation; that is, they are each constant over their entire volume [GD2].
-\item[A7:]Newton's law of convective cooling applies between the heating coil and the water [\hyperref[DD:ht.flux.C]{Definition~DD:ht.flux.C}].
-\item[A8:]The temperature of the heating coil is constant over time [\hyperref[DD:ht.flux.C]{Definition~DD:ht.flux.C}, LC2].
-\item[A9:]The temperature of the heating coil does not vary along its length [\hyperref[DD:ht.flux.C]{Definition~DD:ht.flux.C}, LC3].
-\item[A10:]Newton's law of convective cooling applies between the water and the PCM [\hyperref[DD:ht.flux.P]{Definition~DD:ht.flux.P}].
-\item[A11:]The model only accounts for charging of the tank, not discharging. The temperature of the water and temperature of the phase change material can only increase, or remain constant; they do not decrease. This implies that the initial temperature (A12) is less than (or equal) to the temperature of the heating coil [IM1, LC4].
-\item[A12:]The initial temperature of the water and the PCM is the same [IM1, IM2, LC5].
-\item[A13:]The simulation will start with the PCM in a solid state [IM2, IM4].
-\item[A14:]The operating temperature range of the system is such that the water is always in liquid state. That is, the temperature will not drop below the melting point temperature of water, or rise above its boiling point temperature [IM1, IM3].
-\item[A15:]The tank is perfectly insulated so that there is no heat loss from the tank [IM1, LC6].
-\item[A16:]No internal heat is generated by either the water or the PCM; therefore, the volumetric heat generation per unit volume is zero [IM1, IM2].
-\item[A17:]The volume change of the PCM due to melting is negligible [IM2].
-\item[A18:]The PCM is either in a liquid state or a solid state but not a gaseous state [IM2, IM4].
-\item[A19:]The pressure in the tank is atmospheric, so the melting point temperature and boiling point temperature are 0${}^{\circ}C$ and 100${}^{\circ}C$, respectively [IM1, IM3].
-\item[A20:]When considering the volume of water in the tank, the volume of the heating coil is assumed to be negligible [R2].
-\end{itemize}
+\begin{description}
+\item[\refstepcounter{assumpnum}\atheassumpnum\label{Aassump1}:]The only form of energy that is relevant for this problem is thermal energy. All other forms of energy, such as mechanical energy, are assumed to be negligible [\hyperref[T:t1ConsThermE]{Definition~T:t1ConsThermE}].
+\end{description}
+\begin{description}
+\item[\refstepcounter{assumpnum}\atheassumpnum\label{Aassump2}:]All heat transfer coefficients are constant over time [GD1].
+\end{description}
+\begin{description}
+\item[\refstepcounter{assumpnum}\atheassumpnum\label{Aassump3}:]The water in the tank is fully mixed, so the temperature of the water is the same throughout the entire tank [GD2, \hyperref[DD:ht.flux.P]{Definition~DD:ht.flux.P}].
+\end{description}
+\begin{description}
+\item[\refstepcounter{assumpnum}\atheassumpnum\label{Aassump4}:]The temperature of the phase change material is the same throughout the volume of PCM [GD2, \hyperref[DD:ht.flux.P]{Definition~DD:ht.flux.P}, LC\ref{LClikeChg1}].
+\end{description}
+\begin{description}
+\item[\refstepcounter{assumpnum}\atheassumpnum\label{Aassump5}:]The density of water and density of PCM have no spatial variation; that is, they are each constant over their entire volume [GD2].
+\end{description}
+\begin{description}
+\item[\refstepcounter{assumpnum}\atheassumpnum\label{Aassump6}:]The specific heat capacity of water, specific heat capacity of PCM as a solid, and specific heat capacity of PCM as a liquid have no spatial variation; that is, they are each constant over their entire volume [GD2].
+\end{description}
+\begin{description}
+\item[\refstepcounter{assumpnum}\atheassumpnum\label{Aassump7}:]Newton's law of convective cooling applies between the heating coil and the water [\hyperref[DD:ht.flux.C]{Definition~DD:ht.flux.C}].
+\end{description}
+\begin{description}
+\item[\refstepcounter{assumpnum}\atheassumpnum\label{Aassump8}:]The temperature of the heating coil is constant over time [\hyperref[DD:ht.flux.C]{Definition~DD:ht.flux.C}, LC\ref{LClikeChg2}].
+\end{description}
+\begin{description}
+\item[\refstepcounter{assumpnum}\atheassumpnum\label{Aassump9}:]The temperature of the heating coil does not vary along its length [\hyperref[DD:ht.flux.C]{Definition~DD:ht.flux.C}, LC\ref{LClikeChg3}].
+\end{description}
+\begin{description}
+\item[\refstepcounter{assumpnum}\atheassumpnum\label{Aassump10}:]Newton's law of convective cooling applies between the water and the PCM [\hyperref[DD:ht.flux.P]{Definition~DD:ht.flux.P}].
+\end{description}
+\begin{description}
+\item[\refstepcounter{assumpnum}\atheassumpnum\label{Aassump11}:]The model only accounts for charging of the tank, not discharging. The temperature of the water and temperature of the phase change material can only increase, or remain constant; they do not decrease. This implies that the initial temperature (A12) is less than (or equal) to the temperature of the heating coil [IM1, LC\ref{LClikeChg4}].
+\end{description}
+\begin{description}
+\item[\refstepcounter{assumpnum}\atheassumpnum\label{Aassump12}:]The initial temperature of the water and the PCM is the same [IM1, IM2, LC\ref{LClikeChg5}].
+\end{description}
+\begin{description}
+\item[\refstepcounter{assumpnum}\atheassumpnum\label{Aassump13}:]The simulation will start with the PCM in a solid state [IM2, IM4].
+\end{description}
+\begin{description}
+\item[\refstepcounter{assumpnum}\atheassumpnum\label{Aassump14}:]The operating temperature range of the system is such that the water is always in liquid state. That is, the temperature will not drop below the melting point temperature of water, or rise above its boiling point temperature [IM1, IM3].
+\end{description}
+\begin{description}
+\item[\refstepcounter{assumpnum}\atheassumpnum\label{Aassump15}:]The tank is perfectly insulated so that there is no heat loss from the tank [IM1, LC\ref{LClikeChg6}].
+\end{description}
+\begin{description}
+\item[\refstepcounter{assumpnum}\atheassumpnum\label{Aassump16}:]No internal heat is generated by either the water or the PCM; therefore, the volumetric heat generation per unit volume is zero [IM1, IM2].
+\end{description}
+\begin{description}
+\item[\refstepcounter{assumpnum}\atheassumpnum\label{Aassump17}:]The volume change of the PCM due to melting is negligible [IM2].
+\end{description}
+\begin{description}
+\item[\refstepcounter{assumpnum}\atheassumpnum\label{Aassump18}:]The PCM is either in a liquid state or a solid state but not a gaseous state [IM2, IM4].
+\end{description}
+\begin{description}
+\item[\refstepcounter{assumpnum}\atheassumpnum\label{Aassump19}:]The pressure in the tank is atmospheric, so the melting point temperature and boiling point temperature are 0${}^{\circ}C$ and 100${}^{\circ}C$, respectively [IM1, IM3]
+\end{description}
+\begin{description}
+\item[\refstepcounter{assumpnum}\atheassumpnum\label{Aassump20}:]When considering the volume of water in the tank, the volume of the heating coil is assumed to be negligible [R\ref{Rreq2}].
+\end{description}
 \subsubsection{Theoretical Models}
 \label{Sec:TheoMode}
 This section focuses on the general equations and laws that SWHS is based on.
@@ -425,7 +469,7 @@ We consider an arbitrary volume. The volumetric heat generation per unit volume 
 \begin{equation}
 q_{in}A_{in}-q_{out}A_{out}+gV=\int_{V}{\rho{}C\frac{\partial{}T}{\partial{}t}dV}
 \end{equation}
-Where $q_{in}$, $q_{out}$, $A_{in}$, and $A_{out}$ are explained in GD2. Assuming $\rho{}$, $C$ and $T$ are constant over the volume, which is true in our case by Assumptions (A3), (A4), (A5), and (A6), we have:
+Where $q_{in}$, $q_{out}$, $A_{in}$, and $A_{out}$ are explained in GD2. Assuming $\rho{}$, $C$ and $T$ are constant over the volume, which is true in our case by Assumptions (A\ref{Aassump3}), (A\ref{Aassump4}), (A\ref{Aassump5}), and (A\ref{Aassump6}), we have:
 \begin{equation}
 \rho{}CV\frac{dT}{dt}=q_{in}A_{in}-q_{out}A_{out}+gV
 \end{equation}
@@ -519,7 +563,7 @@ Description & $T_{W}$ is the temperature of the water (${}^{\circ}C$). $T_{P}$ i
 \\ \bottomrule \end{tabular}
 \end{minipage}\\
 Derivation of the energy balance on water:
-To find the rate of change of $T_{W}$, we look at the energy balance on water. The volume being considered is the volume of water $V_{W}$, which has mass of water $m_{W}$ and specific heat capacity of water, $C_{W}$. $q_{C}$ represents the heat flux into the water from the coil and $q_{P}$ represents the heat flux into the PCM from water, over heating coil surface area and phase change material surface area of $A_{C}$ and $A_{P}$, respectively. No heat transfer occurs to the outside of the tank, since it has been assumed to be perfectly insulated (A15). Assuming no volumetric heat generation per unit volume (A16), $g=0$. Therefore, the equation for GD2 can be written as:
+To find the rate of change of $T_{W}$, we look at the energy balance on water. The volume being considered is the volume of water $V_{W}$, which has mass of water $m_{W}$ and specific heat capacity of water, $C_{W}$. $q_{C}$ represents the heat flux into the water from the coil and $q_{P}$ represents the heat flux into the PCM from water, over heating coil surface area and phase change material surface area of $A_{C}$ and $A_{P}$, respectively. No heat transfer occurs to the outside of the tank, since it has been assumed to be perfectly insulated (A\ref{Aassump15}). Assuming no volumetric heat generation per unit volume (A\ref{Aassump16}), $g=0$. Therefore, the equation for GD2 can be written as:
 \begin{equation}
 m_{W}C_{W}\frac{dT_{W}}{dt}=q_{C}A_{C}-q_{P}A_{P}
 \end{equation}
@@ -567,7 +611,7 @@ Description & $T_{W}$ is the temperature of the water (${}^{\circ}C$). $T_{P}$ i
 \\ \bottomrule \end{tabular}
 \end{minipage}\\
 Detailed derivation of the energy balance on the PCM during sensible heating phase:
-To find the rate of change of $T_{P}$, we look at the energy balance on the PCM. The volume being considered is the volume of PCM, $V_{P}$. The derivation that follows is initially for the solid PCM. The mass of phase change material is $m_{P}$ and the specific heat capacity of PCM as a solid is $C_{P}^{S}$. The heat flux into the PCM from water is $q_{P}$ over phase change material surface area $A_{P}$. There is no heat flux output. Assuming no volumetric heat generation per unit volume (A16), $g$=0, the equation for GD2 can be written as:
+To find the rate of change of $T_{P}$, we look at the energy balance on the PCM. The volume being considered is the volume of PCM, $V_{P}$. The derivation that follows is initially for the solid PCM. The mass of phase change material is $m_{P}$ and the specific heat capacity of PCM as a solid is $C_{P}^{S}$. The heat flux into the PCM from water is $q_{P}$ over phase change material surface area $A_{P}$. There is no heat flux output. Assuming no volumetric heat generation per unit volume (A\ref{Aassump16}), $g$=0, the equation for GD2 can be written as:
 \begin{equation}
 m_{P}C_{P}^{S}\frac{dT_{P}}{dt}=q_{P}A_{P}
 \end{equation}
@@ -583,9 +627,9 @@ Setting $\tau{}_{P}^{S}$=$m_{P}$$C_{P}^{S}$/$h_{P}$$A_{P}$, this can be written 
 \begin{equation}
 \frac{dT_{P}}{dt}=\frac{1}{\tau{}_{P}^{S}}\left(T_{W}-T_{P}\right)
 \end{equation}
-Equation (6) applies for the solid PCM. In the case where all of the PCM is melted, the same derivation applies, except that $C_{P}^{S}$ is replaced by $C_{P}^{L}$, and thus $\tau{}_{P}^{S}$ is replaced by $\tau{}_{P}^{L}$. Although a small change in surface area would be expected with melting, this is not included, since the volume change of the PCM with melting is assumed to be negligible (A17).
+Equation (6) applies for the solid PCM. In the case where all of the PCM is melted, the same derivation applies, except that $C_{P}^{S}$ is replaced by $C_{P}^{L}$, and thus $\tau{}_{P}^{S}$ is replaced by $\tau{}_{P}^{L}$. Although a small change in surface area would be expected with melting, this is not included, since the volume change of the PCM with melting is assumed to be negligible (A\ref{Aassump17}).
 In the case where $T_{P}$=$T_{melt}^{P}$ and not all of the PCM is melted, the temperature of the phase change material does not change. Therefore, in this case d$T_{P}$/d$t$=0.
-This derivation does not consider the boiling of the PCM, as the PCM is assumed to either be in a solid state or a liquid state (A18).
+This derivation does not consider the boiling of the PCM, as the PCM is assumed to either be in a solid state or a liquid state (A\ref{Aassump18}).
 ~\newline
 \noindent \begin{minipage}{\textwidth}
 \begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
@@ -621,7 +665,7 @@ Description & The above equation is derived using T2 and T3. $E_{P}$ is the chan
 \end{minipage}\\
 \subsubsection{Data Constraints}
 \label{Sec:DataCons}
-Table~\ref{Table:InpuDataCons}, and Table~\ref{Table:OutpDataCons} shows the data constraints on the input and output variables, respectively. The column for physical constraints gives the physical limitations on the range of values that can be taken by the variable. The uncertainty column provides an estimate of the confidence with which the physical quantities can be measured. This information would be part of the input if one were performing an uncertainty quantification exercise. The constraints are conservative, to give the user of the model the flexibility to experiment with unusual situations. The column of typical values is intended to provide a feel for a common scenario. The column for software constraints restricts the range of inputs to reasonable values. (*) These quantities cannot be equal to zero, or there will be a divide by zero in the model. (+) These quantities cannot be zero, or there would be freezing (A13). (#) The constraints on the surface area are calculated by considering the surface area to volume ratio. The assumption is that the lowest ratio is 1 and the highest possible is $\frac{2}{h_{min}}$, where $h_{min}$ is the thickness of a ``sheet" of PCM. A thin sheet has the greatest surface area to volume ratio. (**) The constraint on the maximum time at the end of the simulation is the total number of secondsin one day.
+Table~\ref{Table:InpuDataCons}, and Table~\ref{Table:OutpDataCons} shows the data constraints on the input and output variables, respectively. The column for physical constraints gives the physical limitations on the range of values that can be taken by the variable. The uncertainty column provides an estimate of the confidence with which the physical quantities can be measured. This information would be part of the input if one were performing an uncertainty quantification exercise. The constraints are conservative, to give the user of the model the flexibility to experiment with unusual situations. The column of typical values is intended to provide a feel for a common scenario. The column for software constraints restricts the range of inputs to reasonable values. (*) These quantities cannot be equal to zero, or there will be a divide by zero in the model. (+) These quantities cannot be zero, or there would be freezing (A\ref{Aassump13}). (#) The constraints on the surface area are calculated by considering the surface area to volume ratio. The assumption is that the lowest ratio is 1 and the highest possible is $\frac{2}{h_{min}}$, where $h_{min}$ is the thickness of a ``sheet" of PCM. A thin sheet has the greatest surface area to volume ratio. (**) The constraint on the maximum time at the end of the simulation is the total number of secondsin one day.
 \begin{longtable}{l l l l l}
 \toprule
 Var & Physical Constraints & Software Constraints & Typical Value & Typical Uncertainty
@@ -698,9 +742,9 @@ Equations (reference) and (reference) can be used as ``sanity"checks to gain con
 This section provides the functional requirements, the business tasks that the software is expected to complete, and the non-functional requirements, the qualities that the software is expected to exhibit.
 \subsection{Functional Requirements}
 \label{Sec:FuncRequ}
-\begin{itemize}
-\item[R1:]Input the following quantities, which define the tank parameters, material properties and initial conditions:
-\end{itemize}
+\begin{description}
+\item[\refstepcounter{reqnum}\rthereqnum\label{Rreq1}:]Input the following quantities, which define the tank parameters, material properties and initial conditions:
+\end{description}
 \begin{longtable*}{l l l}
 \toprule
 Symbol & Unit & Description
@@ -743,9 +787,9 @@ $t_{final}$ & s & final time
 \bottomrule
 \label{Table:InpuVariRequ}
 \end{longtable*}
-\begin{itemize}
-\item[R2:]Use the inputs in R1 to find the mass needed for IM1 to IM4, as follows, where $V_{W}$ is the volume of water and $V_{tank}$ is the volume of the cylindrical tank.
-\end{itemize}
+\begin{description}
+\item[\refstepcounter{reqnum}\rthereqnum\label{Rreq2}:]Use the inputs in R\ref{Rreq1} to find the mass needed for IM1 to IM4, as follows, where $V_{W}$ is the volume of water and $V_{tank}$ is the volume of the cylindrical tank:
+\end{description}
 \begin{equation}
 m_{W}=V_{W}\rho{}_{W}=\left(V_{tank}-V_{P}\right)\rho{}_{W}=\left(\frac{D}{2}L-V_{P}\right)\rho{}_{W}
 \end{equation}
@@ -768,14 +812,24 @@ m_{P}=V_{P}\rho{}_{P}
 This problem is small in size and relatively simple, so performance is not a priority. Any reasonable implementation will be very quick and use minimal storage. Rather than performance, the non-functional requirement priorities are correctness, verifiability, understandability, reusability, and maintainability.
 \section{Likely Changes}
 \label{Sec:LikeChan}
-\begin{itemize}
-\item[LC1:]A4 - PCM is actually a poor thermal conductor, so the assumption of uniform temperature of the phase change material is not likely.
-\item[LC2:]A8 - The temperature of the heating coil will change over the course of the day, depending on the energy received from the sun.
-\item[LC3:]A9 - The temperature of the heating coil will actually change along its length as the water within it cools.
-\item[LC4:]A11 - The model currently only accounts for charging of the tank. A more complete model would also account for discharging of the tank.
-\item[LC5:]A12 - To add more flexibility to the simulation, the initial temperature of the water and the PCM could be allowed to have different values.
-\item[LC6:]A15 - Any real tank cannot be perfectly insulated and will lose heat.
-\end{itemize}
+\begin{description}
+\item[\refstepcounter{lcnum}\lcthelcnum\label{LClikeChg1}:]A\ref{Aassump4} - PCM is actually a poor thermal conductor, so the assumption of uniform temperature of the phase change material is not likely.
+\end{description}
+\begin{description}
+\item[\refstepcounter{lcnum}\lcthelcnum\label{LClikeChg2}:]A\ref{Aassump8} - The temperature of the heating coil will change over the course of the day, depending on the energy received from the sun.
+\end{description}
+\begin{description}
+\item[\refstepcounter{lcnum}\lcthelcnum\label{LClikeChg3}:]A\ref{Aassump9} - The temperature of the heating coil will actually change along its length as the water within it cools.
+\end{description}
+\begin{description}
+\item[\refstepcounter{lcnum}\lcthelcnum\label{LClikeChg4}:]A\ref{Aassump11} - The model currently only accounts for charging of the tank. A more complete model would also account for discharging of the tank
+\end{description}
+\begin{description}
+\item[\refstepcounter{lcnum}\lcthelcnum\label{LClikeChg5}:]A\ref{Aassump12} - To add more flexibility to the simulation, the initial temperature of the water and the PCM could be allowed to have different values.
+\end{description}
+\begin{description}
+\item[\refstepcounter{lcnum}\lcthelcnum\label{LClikeChg6}:]A\ref{Aassump15} - Any real tank cannot be perfectly insulated and will lose heat.
+\end{description}
 \section{Traceability Matrices and Graphs}
 \label{Sec:TracMatrandGrap}
 The purpose of the traceability matrices is to provide easy references on what has to be additionally modified if a certain component is changed. Every time a component is changed, the items in the column of that component that are marked with an ``X" should be modified as well. Table~\ref{Table:TracMatrShowtheConnBetwItemofDiffSect} shows the dependencies of theoretical models, general definitions, data definitions, and instance models with each other. Table~\ref{Table:TracMatrShowtheConnBetwRequandInstMode} shows the dependencies of instance models, requirements, and data constraints on each other. Table~\ref{Table:TracMatrShowtheConnBetwAssuandOtheItem} shows the dependencies of theoretical models, general definitions, data definitions, instance models, and likely changes on the assumptions.

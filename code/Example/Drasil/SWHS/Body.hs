@@ -699,8 +699,8 @@ s2_intro es en sp pcmat pro te lh un = foldlSent [S "Due to increasing cost"
   `sC` S "diminishing availability, and negative environmental impact of",
   S "fossil fuels, there is a higher demand for renewable",
   plural es `sAnd` phrase en +:+.
-  S "storage technology", phrase sp,
-  sParen (short pcmat), S "use a renewable",
+  S "storage technology", sp ^. defn,
+  sParen (short pcmat), S "use renewable",
   plural es `sAnd` S "provide a novel way of",
   S "storing" +:+. phrase en,
   at_start sp, S "improve over the traditional",
@@ -787,7 +787,7 @@ s2_3_knowlegde htt = foldlSent_ [EmptyS +:+. phrase htt,
   S "is recommended"]
 
 s2_3_understanding :: CI -> Sentence
-s2_3_understanding diffeq = foldlSent_ [(phrase diffeq) `sC`
+s2_3_understanding diffeq = foldlSent_ [(plural diffeq) `sC`
   S "as typically covered in first and second year Calculus courses"]
 
 ------------------------------------

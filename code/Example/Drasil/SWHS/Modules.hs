@@ -66,7 +66,7 @@ mod_outputv = mod_param_fun swhsProg [mod_inputp, mod_seq]
 
 -- Temperature ODEs Module
 mod_temp_desc :: ConceptChunk
-mod_temp_desc = dccWDS "mod_temp_desc" (nounPhraseSP "temperature ODEs") (
+mod_temp_desc = dccWDS "mod_temp_desc" (cn' "temperature ODE") (
   S "Defines the" +:+ (short ode) :+: S "s" --FIXME uses a plural abbreviation?
   +:+ S "using the" +:+ plural parameter +:+ S "in the" +:+
   phrase input_ +:+ plural parameter +:+. phrase module_)
@@ -78,7 +78,7 @@ mod_temp = makeImpModule mod_temp_desc (S "The " :+: (short ode) :+: S "s" +:+
 
 -- Energy Equations Module
 mod_ener_desc :: ConceptChunk
-mod_ener_desc = dccWDS "mod_ener_desc" (nounPhraseSP "energy equations") (
+mod_ener_desc = dccWDS "mod_ener_desc" (cn' "energy equation") (
   S "Defines the" +:+ phrase energy +:+ plural equation +:+ S "using the" +:+
   plural parameter +:+ S "in the" +:+ phrase input_ +:+ plural parameter +:+.
   phrase module_)

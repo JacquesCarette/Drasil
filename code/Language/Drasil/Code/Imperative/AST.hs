@@ -35,7 +35,7 @@ module Language.Drasil.Code.Imperative.AST (
     print,printLn,printStr,printStrLn,
     printFile,printFileLn,printFileStr,printFileStrLn,
     print',printLn',printStr',printStrLn',
-    getInput,getFileInput,getFileInputAll,
+    getInput,getFileInput,getFileInputAll,getFileInputLine,
     openFileR, openFileW, closeFile,
     return,returnVar,switch,throw,tryCatch,typ,varDec,varDecDef,while,zipBlockWith,zipBlockWith4,
     addComments,comment,commentDelimit,endCommentDelimit,prefixFirstBlock,
@@ -43,10 +43,11 @@ module Language.Drasil.Code.Imperative.AST (
     objDecNew,objDecNewVoid,objDecNew',objDecNewVoid',objMethodCall, objMethodCallVoid, 
     listSize, listAccess, listAppend, listSlice, stringSplit,
     valStmt,funcApp,funcApp',func,continue,
-    toAbsCode, getClassName, buildModule, moduleName, libs, classes, functions, ignoreMain, notMainModule, multi
+    toAbsCode, getClassName, buildModule, moduleName, libs, classes, functions, ignoreMain, notMainModule, multi,
+    convToClass
 ) where
 
-import Data.List (zipWith4)
+import Data.List (zipWith4, find)
 import Prelude hiding (break,print,return,log,exp)
 
 import Language.Drasil.Code.Imperative.Helpers (capitalize)
@@ -97,9 +98,10 @@ data ObserverPattern = InitObserverList {observerType :: StateType, observers ::
                      | AddObserver {observerType :: StateType, observer :: Value}
                      | NotifyObservers {observerType :: StateType, receiveFunc :: Label, notifyParams :: [Value]} deriving Show
                      
-data Complex = ReadAll Value Value  -- ReadAll File String[]
+data Complex = ReadLine Value Value -- ReadLine File StringVar
+             | ReadAll Value Value  -- ReadAll File String[]Var
              | ListSlice StateType Value Value (Maybe Value) (Maybe Value) (Maybe Value)  -- new list var, old list var, start, stop, step
-             | StringSplit Value Value String -- new string, old string, delimiter
+             | StringSplit Value Value Char -- new string, old string, delimiter
                  deriving Show
 data Assignment = Assign Value Value
                 | PlusEquals Value Value
@@ -146,7 +148,8 @@ data Literal = LitBool Bool
              | LitStr String
     deriving (Eq, Show)
 data Function = Func {funcName :: Label, funcParams :: [Value]}
-              | Cast StateType      --Cast targetType : typecast
+              -- added sourceType to cast for now -- type checking in GOOL would be nice!
+              | Cast StateType StateType      --Cast targetType sourceType : typecast
               | Get Label
               | Set Label Value
               | IndexOf Value
@@ -189,7 +192,7 @@ data Parameter = StateParam Label StateType
 -- 0=never delete, 4=always, 1-3=language-defined.
 -- This allows the programmer to specify a different set of variables to delete explicitly for different languages.
 data StateVar = StateVar Label Scope Permanence StateType Int
-data Method = Method Label Scope MethodType [Parameter] Body
+data Method = Method Label Scope Permanence MethodType [Parameter] Body
             | GetMethod Label MethodType
             | SetMethod Label Parameter
             | MainMethod Body
@@ -288,13 +291,13 @@ pubGVar :: Int -> StateType -> Label -> StateVar
 pubGVar del t n = StateVar n Public Static t del
 
 privMethod :: MethodType -> Label -> [Parameter] -> Body -> Method
-privMethod t n ps b = Method n Private t ps b
+privMethod t n ps b = Method n Private Dynamic t ps b
 
 pubMethod :: MethodType -> Label -> [Parameter] -> Body -> Method
-pubMethod t n ps b = Method n Public t ps b
+pubMethod t n ps b = Method n Public Dynamic t ps b
 
 constructor :: Label -> [Parameter] -> Body -> Method
-constructor n ps b = Method n Public (Construct n) ps b
+constructor n ps b = Method n Public Dynamic (Construct n) ps b
 
 mainMethod :: Body -> Method
 mainMethod = MainMethod
@@ -455,11 +458,11 @@ binExpr v1 op v2 = Expr $ BinaryExpr v1 op v2
 break :: Statement
 break = JumpState Break
 
-cast :: StateType -> Function
+cast :: StateType -> StateType -> Function
 cast = Cast
 
-cast' :: BaseType -> Function
-cast' = Cast . Base
+cast' :: BaseType -> BaseType -> Function
+cast' t s = Cast (Base t) (Base s)
 
 constDecDef :: Label -> Literal -> Statement
 constDecDef n l = DeclState $ ConstDecDef n l
@@ -546,7 +549,7 @@ listAppend = ListAppend
 listSlice :: StateType -> Value -> Value -> (Maybe Value) -> (Maybe Value) -> (Maybe Value) -> Statement
 listSlice st v1 v2 b e s = ComplexState $ ListSlice st v1 v2 b e s
 
-stringSplit :: Value -> Value -> String -> Statement
+stringSplit :: Value -> Value -> Char -> Statement
 stringSplit v1 v2 d = ComplexState $ StringSplit v1 v2 d
 
 oneLiner :: Statement -> Body
@@ -608,6 +611,9 @@ getInput s v = IOState $ In Console s v
 -- file input
 getFileInput :: Value -> StateType -> Value -> Statement
 getFileInput f s v = IOState $ In (File f) s v
+
+getFileInputLine :: Value -> Value -> Statement
+getFileInputLine f v = ComplexState $ ReadLine f v
 
 getFileInputAll :: Value -> Value -> Statement
 getFileInputAll f v = ComplexState $ ReadAll f v
@@ -727,11 +733,11 @@ convertToClass (Enum _ _ _) = error "convertToClass: Cannot convert Enum-type Cl
 convertToClass c = c
 
 convertToMethod :: Method -> Method
-convertToMethod (GetMethod n t) = Method (getterName n) Public t [] getBody
+convertToMethod (GetMethod n t) = Method (getterName n) Public Dynamic t [] getBody
     where getBody = oneLiner $ return (Self$->(Var n))
-convertToMethod (SetMethod n p@(StateParam pn _)) = Method (setterName n) Public Void [p] setBody
+convertToMethod (SetMethod n p@(StateParam pn _)) = Method (setterName n) Public Dynamic Void [p] setBody
     where setBody = oneLiner $ Self$->(Var n) &=. pn
-convertToMethod (MainMethod b) = Method "main" Public Void [] b
+convertToMethod (MainMethod b) = Method "main" Public Static Void [] b
 convertToMethod t = t
 
 -- | Takes a "find" Value (old), a "replace" Value (new),
@@ -837,3 +843,48 @@ notMainModule m = foldl (&&) True (map notMain $ functions m)
 
 multi :: [Statement] -> Statement
 multi = MultiState
+
+
+
+
+convToClass :: Module -> Module
+convToClass (Mod n l vs fs cs) = Mod n l [] [] (replaceClass n cs vs fs)
+
+replaceClass :: String -> [Class] -> [Declaration] -> [Method] -> [Class]
+replaceClass n [] vs fs = [addToClass (pubClass n Nothing [] []) vs fs]
+replaceClass n cs vs fs =   
+  case find (\x -> className x == n) cs of Nothing -> (addToClass (pubClass n Nothing [] []) vs fs):cs
+                                           Just c  -> (addToClass c vs fs):(removeClass cs)
+  where removeClass [] = []
+        removeClass (ch:ct) = if (className ch == n) 
+                                then removeClass ct
+                                else ch:removeClass ct
+                                                       
+
+addToClass :: Class -> [Declaration] -> [Method] -> Class
+addToClass (Class n p s v m) ds fs = let containsMain = foldl (||) False (map isMain fs)
+  in    
+    if containsMain 
+      then Class n p s (addToSV ds v) (addToMethod fs m)
+      else MainClass n (addToSV ds v) (addToMethod fs m)
+    where isMain (MainMethod _) = True
+          isMain _              = False
+addToClass (MainClass n v m) ds fs = MainClass n (addToSV ds v) (addToMethod fs m)
+addToClass _ _ _ = error "Unsupported class for Java imperative to OO conversion"
+
+addToMethod :: [Method] -> [Method] -> [Method]
+addToMethod f m = m ++ (map fToM f)
+
+fToM :: Method -> Method
+fToM (Method l _ _ t ps b) = Method l Public Static t ps b
+fToM m = m
+
+addToSV :: [Declaration] -> [StateVar] -> [StateVar]
+addToSV d sv = sv ++ (map dToSV d)
+
+dToSV :: Declaration -> StateVar
+dToSV (VarDec l s) = StateVar l Public Static s 0
+dToSV (VarDecDef l s _) = StateVar l Public Static s 0
+dToSV (ListDec p l s _) = StateVar l Public Static (List p s) 0
+dToSV (ObjDecDef l s _) = StateVar l Public Static s 0
+dToSV _ = error "Not implemented"

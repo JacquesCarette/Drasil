@@ -53,7 +53,7 @@ import Data.Drasil.Concepts.Software(correctness, verifiability,
 
 import Data.Drasil.SentenceStructures (showingCxnBw, foldlSent, foldlSent_,
   foldlSP, foldlSP_, foldlSPCol, foldlsC, isThe, ofThe, ofThe',
-  sAnd)
+  sAnd, sOf)
 
 acronyms :: [CI]
 acronyms = [assumption, dataDefn, genDefn, goalStmt, inModel, likelyChg, ode,
@@ -171,11 +171,12 @@ s3 = genSysF [s3_1] (s3_2_contents progName) [] []
 --------------------------
 
 s3_1 :: Section
-s3_1 = SRS.sysCont [s3_1_contents progName, sys_context_fig, s3_1_2_intro progName user,
-  s3_1_2_respBullets] []
+s3_1 = SRS.sysCont [s3_1_contents progName, sys_context_fig, s3_1_2_intro 
+  progName user, s3_1_2_respBullets] []
 
 s3_1_2_respBullets :: Contents
-s3_1_2_respBullets = Enumeration $ Bullet $ [s3_1_2_userResp input_ datum, s3_1_2_swhsResp]
+s3_1_2_respBullets = Enumeration $ Bullet $ [s3_1_2_userResp input_ datum,
+  s3_1_2_swhsResp]
 
 --------------------------------
 -- 3.2 : User Characteristics --
@@ -264,8 +265,8 @@ s4_1_3_list = enumSimple 1 (short goalStmt) $
 
 s4_2 :: Section
 s4_2 = solChSpecF progName (s4_1, s6) s4_2_4_intro_end
-  (s4_2_6_mid, dataConstraintUncertainty, s4_2_6_T1footer) (s4_2_1_list, s4_2_2_T1 ++
-  s4_2_2_T2 ++ s4_2_2_T3, s4_2_3_genDefs ++ s4_2_3_deriv,
+  (s4_2_6_mid, dataConstraintUncertainty, s4_2_6_T1footer) (s4_2_1_list, 
+  s4_2_2_T1 ++ s4_2_2_T2 ++ s4_2_2_T3, s4_2_3_genDefs ++ s4_2_3_deriv,
   s4_2_4_DD1 ++ s4_2_4_DD2 ++ s4_2_4_DD3 ++ s4_2_4_DD4, (s4_2_5_IMods),
   s4_2_6_DataConTables) [s4_2_7]
 
@@ -317,8 +318,8 @@ s4_2_3_deriv = [s4_2_3_deriv_1 rOfChng temp,
   s4_2_3_deriv_5,
   s4_2_3_deriv_6 vol vol_ht_gen,
   s4_2_3_deriv_7,
-  s4_2_3_deriv_8 ht_flux_in ht_flux_out in_SA out_SA density heat_cap_spec temp
-    vol assumption assump3 assump4 assump5 assump6,
+  s4_2_3_deriv_8 ht_flux_in ht_flux_out in_SA out_SA density heat_cap_spec
+    temp vol assumption assump3 assump4 assump5 assump6,
   s4_2_3_deriv_9,
   s4_2_3_deriv_10 density mass vol,
   s4_2_3_deriv_11]
@@ -343,9 +344,8 @@ s4_2_5_IMods = concat $ weave [s4_2_5_derivations,
   map (\x -> [swhsSymbMapT x]) swhsInModels]
 
 s4_2_5_derivations :: [[Contents]]
-s4_2_5_derivations = [s4_2_5_subpar solution temp_W temp_PCM pcm_E CT.phase_change,
-  s4_2_5_deriv1,
-  s4_2_5_deriv2]
+s4_2_5_derivations = [s4_2_5_subpar solution temp_W temp_PCM pcm_E 
+  CT.phase_change, s4_2_5_deriv1, s4_2_5_deriv2]
   
 s4_2_5_deriv1 :: [Contents]
 s4_2_5_deriv1 = (s4_2_5_d1startPara energy water) ++
@@ -355,8 +355,9 @@ s4_2_5_d1eqn_list = map EqnBlock [s4_2_5_d_eqn1, s4_2_5_d_eqn2,
   s4_2_5_d_eqn3, s4_2_5_d_eqn4, s4_2_5_d_eqn5, s4_2_5_d_eqn6, s4_2_5_d_eqn7]
 
 s4_2_5_d1sent_list = map foldlSPCol
-  [s4_2_5_d1sent_1 rOfChng temp_W energy water vol w_vol w_mass htCap_W ht_flux_C
-    ht_flux_P coil_SA pcm_SA CT.heat_trans tank perfect_insul vol_ht_gen,
+  [s4_2_5_d1sent_1 rOfChng temp_W energy water vol w_vol w_mass htCap_W 
+    ht_flux_C ht_flux_P coil_SA pcm_SA CT.heat_trans tank perfect_insul 
+    vol_ht_gen,
   s4_2_5_d1sent_2 dd1HtFluxC dd2HtFluxP ht_flux_C ht_flux_P,
   s4_2_5_d1sent_3 w_mass htCap_W,
   s4_2_5_d1sent_4 rightSide coil_HTC coil_SA,
@@ -370,7 +371,8 @@ s4_2_5_deriv2 =
   htCap_S_P htCap_L_P tau_S_P tau_L_P surface CT.melting vol temp_PCM temp_melt_P
   CT.boiling solid liquid)
 
-s4_2_5_d2sent_list = map foldlSPCol [s4_2_5_d2sent_1 dd2HtFluxP ht_flux_P, s4_2_5_d2sent_2, s4_2_5_d2sent_3]
+s4_2_5_d2sent_list = map foldlSPCol [s4_2_5_d2sent_1 dd2HtFluxP ht_flux_P,
+  s4_2_5_d2sent_2, s4_2_5_d2sent_3]
 
 s4_2_5_d2eqn_list = map (EqnBlock) [s4_2_5_d2eqn1, s4_2_5_d2eqn2,
   s4_2_5_d2eqn3, s4_2_5_d2eqn4]
@@ -618,16 +620,17 @@ s7_row_header_t3 = zipWith itemRefToSent s7_assump s7_assumpRef
 
 s7_col_header_t3 = zipWith itemRefToSent
   (s7_theories ++ s7_genDefs ++ s7_dataDefs ++ s7_instaModel ++ s7_likelyChg)
-  (s7_theoriesRef ++ s7_genDefRef ++ s7_dataDefRef ++ s7_instaModelRef ++ s7_likelyChgRef)
+  (s7_theoriesRef ++ s7_genDefRef ++ s7_dataDefRef ++ s7_instaModelRef ++ 
+    s7_likelyChgRef)
 
 s7_columns_t3 :: [[String]]
 s7_columns_t3 = [s7_t3_T1, s7_t3_T2, s7_t3_T3, s7_t3_GD1, s7_t3_GD2, s7_t3_DD1, 
   s7_t3_DD2, s7_t3_DD3, s7_t3_DD4, s7_t3_IM1, s7_t3_IM2, s7_t3_IM3, s7_t3_IM4,
   s7_t3_LC1, s7_t3_LC2, s7_t3_LC3, s7_t3_LC4, s7_t3_LC5, s7_t3_LC6]
 
-s7_t3_T1, s7_t3_T2, s7_t3_T3, s7_t3_GD1, s7_t3_GD2, s7_t3_DD1, s7_t3_DD2, s7_t3_DD3,
-  s7_t3_DD4, s7_t3_IM1, s7_t3_IM2, s7_t3_IM3, s7_t3_IM4, s7_t3_LC1, s7_t3_LC2,
-  s7_t3_LC3, s7_t3_LC4, s7_t3_LC5, s7_t3_LC6 :: [String]
+s7_t3_T1, s7_t3_T2, s7_t3_T3, s7_t3_GD1, s7_t3_GD2, s7_t3_DD1, s7_t3_DD2, 
+  s7_t3_DD3, s7_t3_DD4, s7_t3_IM1, s7_t3_IM2, s7_t3_IM3, s7_t3_IM4, s7_t3_LC1,
+  s7_t3_LC2, s7_t3_LC3, s7_t3_LC4, s7_t3_LC5, s7_t3_LC6 :: [String]
 
 s7_t3_T1  = ["A1"]
 s7_t3_T2  = []
@@ -982,9 +985,9 @@ assump1, assump2, assump3, assump4, assump5, assump6,
 
 assump1 = mkAssump "assump1"
   (S "The only form of" +:+ phrase energy +:+ S "that is" +:+
-  S "relevant for this" +:+ phrase problem +:+ S "is" +:+. phrase CT.thermal_energy
-  +:+ S "All other forms of" +:+ phrase energy `sC` S "such as" +:+
-  phrase mech_energy `sC` S "are assumed to be negligible" +:+.
+  S "relevant for this" +:+ phrase problem +:+ S "is" +:+. 
+  phrase CT.thermal_energy +:+ S "All other forms of" +:+ phrase energy `sC`
+  S "such as" +:+ phrase mech_energy `sC` S "are assumed to be negligible" +:+.
   sSqBr (swhsSymbMapTRef t1ConsThermE))
 --
 assump2 = mkAssump "assump2" 
@@ -993,8 +996,9 @@ assump2 = mkAssump "assump2"
 --
 assump3 = mkAssump "assump3"
   (S "The" +:+ phrase water +:+ S "in the" +:+ phrase tank +:+
-  S "is fully mixed, so the" +:+ (phrase temp_W `isThe` S "same throughout the entire")
-  +:+ phrase tank +:+. sSqBr (acroGD 2 `sC` swhsSymbMapDRef dd2HtFluxP))
+  S "is fully mixed, so the" +:+ (phrase temp_W `isThe` 
+  S "same throughout the entire") +:+ phrase tank +:+. sSqBr (acroGD 2
+  `sC` swhsSymbMapDRef dd2HtFluxP))
 --
 assump4 = mkAssump "assump4"
   (S "The" +:+ phrase temp_PCM `isThe` S "same throughout the" +:+
@@ -1081,9 +1085,9 @@ assump18 = mkAssump "assump18"
 assump19 = mkAssump "assump19"
   (S "The pressure in the" +:+ phrase tank +:+
   S "is atmospheric, so the" +:+ phrase melt_pt `sAnd`
-  phrase boil_pt +:+ S "are" +:+ S (show (0 :: Integer)) :+: Sy (unit_symb temp) `sAnd`
-  S (show (100 :: Integer)) :+: Sy (unit_symb temp) `sC` S "respectively" +:+
-  sSqBr ((acroIM 1) `sC` (acroIM 3)))
+  phrase boil_pt +:+ S "are" +:+ S (show (0 :: Integer)) :+: Sy (unit_symb temp)
+ `sAnd` S (show (100 :: Integer)) :+: Sy (unit_symb temp) `sC` S "respectively" 
+  +:+ sSqBr ((acroIM 1) `sC` (acroIM 3)))
 --
 assump20 = mkAssump "assump20"
   (S "When considering the" +:+ phrase w_vol +:+ S "in the" +:+
@@ -1141,8 +1145,8 @@ s4_2_3_deriv_5 = EqnBlock
   ((C density) * (C heat_cap_spec) * Deriv Part (C temp) (C time)) vol))
 
 s4_2_3_deriv_6 :: UnitalChunk -> UnitalChunk -> Contents
-s4_2_3_deriv_6 vo vhg = foldlSPCol [S "We consider an arbitrary" +:+. phrase vo, S "The",
-  phrase vhg, S "is assumed constant. Then (1) can be written as"]
+s4_2_3_deriv_6 vo vhg = foldlSPCol [S "We consider an arbitrary" +:+. phrase vo, 
+  S "The", phrase vhg, S "is assumed constant. Then (1) can be written as"]
 
 s4_2_3_deriv_7 = EqnBlock
   ((C ht_flux_in) * (C in_SA) - (C ht_flux_out) *
@@ -1153,13 +1157,12 @@ s4_2_3_deriv_7 = EqnBlock
 s4_2_3_deriv_8 :: UnitalChunk -> UnitalChunk -> UnitalChunk -> UnitalChunk ->
   UnitalChunk -> UnitalChunk -> UnitalChunk -> UnitalChunk -> CI -> Contents ->
   Contents -> Contents -> Contents -> Contents
-s4_2_3_deriv_8 hfi hfo isa osa den hcs tem vo assu a3 a4 a5 a6 = foldlSPCol [S "Where", getS hfi `sC` getS hfo `sC`
-  getS isa `sC` S "and", getS osa, S "are explained in" +:+.
-  acroGD 2, S "Assuming", getS den `sC` getS hcs `sAnd`
-  getS tem, S "are constant over the", phrase vo `sC`
-  S "which is true in our case by", titleize' assu,
-  sParen (makeRef a3) `sC` sParen (makeRef a4) `sC`
-  sParen (makeRef a5) `sC` S "and", sParen (makeRef a6) `sC` S "we have"]
+s4_2_3_deriv_8 hfi hfo isa osa den hcs tem vo assu a3 a4 a5 a6 = foldlSPCol 
+  [S "Where", getS hfi `sC` getS hfo `sC` getS isa `sC` S "and", getS osa, 
+  S "are explained in" +:+. acroGD 2, S "Assuming", getS den `sC` getS hcs
+  `sAnd` getS tem, S "are constant over the", phrase vo `sC` S "which is true",
+  S "in our case by", titleize' assu, sParen (makeRef a3) `sC` sParen (makeRef a4)
+  `sC` sParen (makeRef a5) `sC` S "and", sParen (makeRef a6) `sC` S "we have"]
 
 s4_2_3_deriv_9 = EqnBlock
   ((C density) * (C heat_cap_spec) * (C vol) * Deriv Total (C temp)
@@ -1167,8 +1170,8 @@ s4_2_3_deriv_9 = EqnBlock
   (C out_SA) + (C vol_ht_gen) * (C vol))
 
 s4_2_3_deriv_10 :: UnitalChunk -> UnitalChunk -> UnitalChunk -> Contents
-s4_2_3_deriv_10 den ma vo = foldlSPCol [S "Using the fact that", getS den :+: S "=" :+:
-  getS ma :+: S "/" :+: getS vo `sC` S "(2) can be written as"]
+s4_2_3_deriv_10 den ma vo = foldlSPCol [S "Using the fact that", getS den :+:
+  S "=" :+: getS ma :+: S "/" :+: getS vo `sC` S "(2) can be written as"]
 
 s4_2_3_deriv_11 = EqnBlock
   ((C mass) * (C heat_cap_spec) * Deriv Total (C temp)
@@ -1191,16 +1194,16 @@ s4_2_4_intro_end = foldlSent [S "The dimension of each",
 -- 4.2.5 : Instance Models --
 -----------------------------
 
-s4_2_5_subpar :: NamedChunk -> UncertQ -> UncertQ -> UncertQ -> ConceptChunk -> [Contents]
-s4_2_5_subpar sol temw tempcm epcm pc = [foldlSP [S "The goals", acroGS 1, S "to",
-  acroGS 4, S "are solved by", acroIM 1, S "to" +:+. acroIM 4, S "The", plural sol,
-  S "for", acroIM 1 `sAnd` acroIM 2, S "are coupled since the", phrase sol,
-  S "for", getS temw `sAnd` getS tempcm +:+.
-  S "depend on one another", acroIM 3, S "can be solved once",
-  acroIM 1, S "has been solved. The", phrase sol, S "of",
-  acroIM 2 `sAnd` acroIM 4, S "are also coupled, since the",
-  phrase tempcm `sAnd` phrase epcm, S "depend on the",
-  phrase pc]]
+s4_2_5_subpar :: NamedChunk -> UncertQ -> UncertQ -> UncertQ -> ConceptChunk
+  -> [Contents]
+s4_2_5_subpar sol temw tempcm epcm pc = [foldlSP [S "The goals", acroGS 1,
+  S "to", acroGS 4, S "are solved by", acroIM 1, S "to" +:+. acroIM 4,
+  S "The", plural sol, S "for", acroIM 1 `sAnd` acroIM 2, 
+  S "are coupled since the", phrase sol, S "for", getS temw `sAnd` getS tempcm
+  +:+. S "depend on one another", acroIM 3, S "can be solved once", acroIM 1, 
+  S "has been solved. The", phrase sol `sOf` acroIM 2 `sAnd` acroIM 4, 
+  S "are also coupled, since the", phrase tempcm `sAnd` phrase epcm, 
+  S "depend on the", phrase pc]]
 
 s4_2_5_d1startPara :: UnitalChunk -> ConceptChunk -> [Contents]
 s4_2_5_d1startPara en wa = [foldlSPCol [S "Derivation of the",
@@ -1234,7 +1237,8 @@ s4_2_5_d1sent_2 d1hf d2hf hfc hfp = [S "Using", swhsSymbMapDRef d1hf `sAnd`
   getS hfp, S "respectively, this can be written as"]
 
 s4_2_5_d1sent_3 :: UnitalChunk -> UncertQ -> [Sentence]
-s4_2_5_d1sent_3 wm hcw = [S "Dividing (3) by", getS wm :+: getS hcw `sC` S "we obtain"]
+s4_2_5_d1sent_3 wm hcw = [S "Dividing (3) by", getS wm :+: getS hcw `sC`
+  S "we obtain"]
 
 s4_2_5_d1sent_4 :: CI -> UncertQ -> UncertQ -> [Sentence]
 s4_2_5_d1sent_4 rs chtc csa = [S "Factoring the negative sign out of",
@@ -1254,8 +1258,8 @@ s4_2_5_d1sent_6 = [S "Setting",
   titleize equation, S "(5) can be written as"]
 
 s4_2_5_d1sent_7 :: [Sentence]
-s4_2_5_d1sent_7 = [S "Finally, factoring out", (E $ Int 1 :/ C tau_W) `sC` S "we are" +:+
-  S "left with the governing", short ode, S "for", acroIM 1]
+s4_2_5_d1sent_7 = [S "Finally, factoring out", (E $ Int 1 :/ C tau_W) `sC` 
+  S "we are left with the governing", short ode, S "for", acroIM 1]
 
 s4_2_5_d_eqn1, s4_2_5_d_eqn2, s4_2_5_d_eqn3, s4_2_5_d_eqn4, s4_2_5_d_eqn5,
   s4_2_5_d_eqn6, s4_2_5_d_eqn7 :: Expr
@@ -1298,8 +1302,8 @@ s4_2_5_d_eqn7 = (Deriv Total (C temp_W) (C time) := (1 / (C tau_W)) *
 -- Fractions in paragraph?
 
 s4_2_5_d2sent_1 :: QDefinition -> UnitalChunk -> [Sentence]
-s4_2_5_d2sent_1 d2hfp hfp = [S "Using", swhsSymbMapDRef d2hfp, S "for", getS hfp `sC`
-  S "this", phrase equation, S "can be written as"]
+s4_2_5_d2sent_1 d2hfp hfp = [S "Using", swhsSymbMapDRef d2hfp, S "for", 
+  getS hfp `sC` S "this", phrase equation, S "can be written as"]
 
 s4_2_5_d2sent_2 :: [Sentence]
 s4_2_5_d2sent_2 = [S "Dividing by", getS pcm_mass :+: getS htCap_S_P, S "we obtain"]
@@ -1323,12 +1327,14 @@ s4_2_5_d2eqn3 = (Deriv Total (C temp_PCM) (C time) := ((C pcm_HTC) *
 s4_2_5_d2eqn4 = (Deriv Total (C temp_PCM) (C time) := (1 / (C tau_S_P)) *
   ((C temp_W) - (C temp_PCM)))
 
-s4_2_5_d1eqn_list, s4_2_5_d1sent_list, s4_2_5_d2eqn_list, s4_2_5_d2sent_list :: [Contents]
+s4_2_5_d1eqn_list, s4_2_5_d1sent_list, s4_2_5_d2eqn_list, 
+  s4_2_5_d2sent_list :: [Contents]
 
 s4_2_5_d2startPara :: UnitalChunk -> CI -> UnitalChunk -> ConceptChunk ->
-  UncertQ -> UnitalChunk -> UncertQ -> UnitalChunk -> UncertQ -> UnitalChunk -> UncertQ ->
-  UnitalChunk -> UnitalChunk -> [Contents]
-s4_2_5_d2startPara en pcmat sh roc ptem vo pvo pma hcsp hfp psa hfo vhg = map foldlSPCol [
+  UncertQ -> UnitalChunk -> UncertQ -> UnitalChunk -> UncertQ -> UnitalChunk -> 
+  UncertQ -> UnitalChunk -> UnitalChunk -> [Contents]
+s4_2_5_d2startPara en pcmat sh roc ptem vo pvo pma hcsp hfp psa hfo vhg = map 
+  foldlSPCol [
 
   [S "Detailed derivation of the", phrase en, S "balance on the",
   short pcmat, S "during", phrase sh :+: S "ing phase"],
@@ -1348,8 +1354,8 @@ s4_2_5_d2startPara en pcmat sh roc ptem vo pvo pma hcsp hfp psa hfo vhg = map fo
 
   ]
 
-s4_2_5_d2endPara :: CI -> UncertQ -> UncertQ -> UnitalChunk ->
-  UnitalChunk -> ConVar -> ConceptChunk -> UnitalChunk -> UncertQ -> UncertQ -> ConceptChunk ->
+s4_2_5_d2endPara :: CI -> UncertQ -> UncertQ -> UnitalChunk -> UnitalChunk -> 
+  ConVar -> ConceptChunk -> UnitalChunk -> UncertQ -> UncertQ -> ConceptChunk ->
   ConceptChunk -> ConceptChunk -> [Contents]
 s4_2_5_d2endPara pcmat hcsp hclp tsp tlp sur mel vo ptem tmp boi so li = map foldlSP [
 
@@ -1629,15 +1635,14 @@ likeChg6 = LikelyChange (LCChunk (nw $ npnc "likeChg6" $
 
 s7_trailing_1, s7_trailing_2, s7_trailing_3 :: Sentence
 
-s7_trailing_1 = foldlSent [plural thModel `sC` plural genDefn `sC` plural dataDefn `sC`
-  S "and", plural inModel, S "with each other"]
+s7_trailing_1 = foldlSent [plural thModel `sC` plural genDefn `sC` plural dataDefn
+  `sC` S "and", plural inModel, S "with each other"]
 
 s7_trailing_2 = foldlSent [plural inModel `sC` plural requirement `sC` S "and",
   plural datum, plural constraint, S "on each other"]
 
-s7_trailing_3 = foldlSent_ [plural thModel `sC` plural genDefn `sC` plural dataDefn `sC`
-  plural inModel `sC` S "and", plural likelyChg, S "on the",
-  plural assumption]
+s7_trailing_3 = foldlSent_ [plural thModel `sC` plural genDefn `sC` plural dataDefn
+  `sC` plural inModel `sC` S "and", plural likelyChg, S "on the", plural assumption]
 
 s7_table1 :: Contents
 s7_table1 = Table (EmptyS:s7_row_header_t1)

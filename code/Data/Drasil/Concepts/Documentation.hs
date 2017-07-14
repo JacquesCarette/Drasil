@@ -64,10 +64,10 @@ srs = commonIdea "srs"
 -- concepts relating to the templates and their contents
 
 analysis, appendix, body, characteristic, class_, client, code, column, company, 
-  component, condition, constraint, consumer, connection, content, context,
+  component, concept, condition, constraint, consumer, connection, content, context,
   coordinate, customer, datum, decision, definition, dependency, description,
   design, document, documentation, effect, element, endUser, environment, failure,
-  figure, functional, game, general, goal, guide, implementation, individual, 
+  figure, first, functional, game, general, goal, guide, implementation, individual, 
   information, interest, interface, input_, instance_, intReader, introduction, 
   issue, item, loss, label, library, limitation, literacy, material_, message, 
   method_, module_, model, name_, nonfunctional, object, offShelf, open, organization,
@@ -88,6 +88,7 @@ code            = npnc "code"           (cn     "code"               )
 column          = npnc "column"         (cn'    "column"             ) --general enough to be in Documentation?
 company         = npnc "company"        (cnIES  "company"            )
 component       = npnc "component"      (cn'    "component"          )
+concept         = npnc "concept"        (cn'    "concept"            )
 condition       = npnc "condition"      (cn'    "condition"          )
 connection      = npnc "connection"     (cn'    "connection"         )
 constraint      = npnc "constraint"     (cn'    "constraint"         )
@@ -110,6 +111,7 @@ endUser         = npnc "end user"       (cn'    "end user"           )
 environment     = npnc "environment"    (cn'    "environment"        ) -- Is this term in the right spot?
 failure         = npnc "failure"        (cn'    "failure"            )
 figure          = npnc "figure"         (cn'    "figure"             )
+first           = npnc "first"          (cn'    "first"              ) --Does it make sense for this to be here?
 functional      = npnc "functional"     (cn'    "functional"         ) --FIXME: Adjective
 game            = npnc "game"           (cn'    "game"               )
 general         = npnc "general"        (cn'    "general"            ) --FIXME: Adjective

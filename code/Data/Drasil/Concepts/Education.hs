@@ -5,7 +5,7 @@ import Data.Drasil.Concepts.Documentation
 import Data.Drasil.Concepts.PhysicalProperties
 
 calculus, civil, degree_, engineering, structural, mechanics,
-  undergraduate :: NamedChunk
+  undergraduate, highSchool :: NamedChunk
 
 calculus        = npnc "calculus"       (cn   "calculus"     )
 civil           = npnc "civil"          (cn'  "civil"        )--FIXME: Adjective
@@ -14,13 +14,18 @@ engineering     = npnc "engineering"    (cn'  "engineering"  )
 mechanics       = npnc "mechanics"      (cn   "mechanics"    )
 structural      = npnc "structural"     (cn'  "structural"   )--FIXME: Adjective
 undergraduate   = npnc "undergraduate"  (cn'  "undergraduate")
+highSchool      = npnc "highSchool"     (cn'  "high school"  )
 
 
-undergradDegree, scndYrCalculus, solidMechanics, secondYear,
-  structuralEng, structuralMechanics, civilEng :: NamedChunk
+undergradDegree, scndYrCalculus, solidMechanics, secondYear, structuralEng,
+  structuralMechanics, civilEng, highSchoolCalculus, highSchoolPhysics,
+  frstYr :: NamedChunk
 
 civilEng                     = compoundNC civil engineering
+highSchoolCalculus           = compoundNC highSchool calculus
+highSchoolPhysics            = compoundNC highSchool physics
 scndYrCalculus               = compoundNC secondYear calculus
+frstYr                       = compoundNC first year
 secondYear                   = compoundNC second_ year
 solidMechanics               = compoundNC solid mechanics
 structuralEng                = compoundNC structural engineering

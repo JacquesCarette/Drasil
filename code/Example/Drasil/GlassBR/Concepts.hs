@@ -42,7 +42,7 @@ nFL           = commonIdea "nFL"           (nounPhraseSP "non-factored load")   
 -- TODO: See if we can make some of these terms less specific and/or parameterized.
  
 beam, blastRisk, cantilever, edge, glaPlane, glaSlab, plane,
-  ptOfExplsn:: NamedChunk
+  glass, ptOfExplsn:: NamedChunk
 beam         = npnc "beam"       (nounPhraseSP "beam")
 blastRisk    = npnc "blastRisk"  (nounPhraseSP "blast risk")
 cantilever   = npnc "cantilever" (nounPhraseSP "cantilever")

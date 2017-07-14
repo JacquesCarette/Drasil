@@ -22,15 +22,14 @@ class TestCalculations(unittest.TestCase):
         
     def test_calc_lr(self):
     	#lr, nfl = calculations.calc_lr(float64(4.152349099707993e+01), self.params)
-        nfl = calculations.calc_nfl(float64(4.152349099707993e+01), self.params)
+        nfl, test = calculations.calc_nfl(float64(4.152349099707993e+01), self.params)
         lr = calculations.calc_lr(nfl, self.params)
-        self.assertTupleEqual((lr,nfl),(6.8430021557880387,3.4215010778940194))
+        self.assertTupleEqual((lr, nfl), (6.8430021557880387, 3.4215010778940194))
         
     def test_is_safe(self):
         is_safe1 = calculations.is_safe1(float64(1.301524590203718e-04), self.params)
         is_safe2 = calculations.is_safe2(float64(6.8430021557880387e+00), float64(3.2582859920186165e+00))
-        self.assertTupleEqual((is_safe1,is_safe2),(True,True))
-        #'For the given input parameters, the glass is considered safe'))
+        self.assertTupleEqual((is_safe1, is_safe2), (True, True))
         #self.assertTupleEqual((is_safe1,is_safe2,safe),(True,True,\
         #'For the given input parameters, the glass is considered safe'))
      

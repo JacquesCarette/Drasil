@@ -568,8 +568,9 @@ req5Desc cmd = foldlSent_ [S "If", (getS is_safe1) `sAnd` (getS is_safe2),
   S "If the", phrase condition, S "is false, then", phrase cmd,
   S "the", phrase message, Quote (notSafe ^. defn)]
 
-testing :: [QSWrapper]
-testing = [qs prob_br] ++ [qs lRe] ++ [qs demand]
+--testing :: [QSWrapper]
+--testing = qs prob_br : qs lRe : qs demand : []
+--FIXME:find a way to use this in s7_1_req6
 
 s7_1_req6 = [(Enumeration $ Simple $ [(acroR 6, Nested (titleize output_ +:+
   S "the following" +: plural quantity)

@@ -25,8 +25,8 @@ mod_elas    = uc' "mod_elas"     (nounPhraseSP "modulus of elasticity of glass")
 
 gbConstrained :: [ConstrWrapper]
 
-gbConstrained = (map cnstrw gbInputsWUncrtn) ++ (map cnstrw gbInputsWUnitsUncrtn)
-  ++ (map cnstrw [prob_br])
+gbConstrained = (map cnstrw gbInputsWUncrtn) ++ 
+  (map cnstrw gbInputsWUnitsUncrtn) ++ (map cnstrw [prob_br])
 
 plate_len, plate_width, char_weight, standOffDist :: UncertQ
 pb_tol, tNT :: UncertainChunk
@@ -97,11 +97,13 @@ standOffDist = uqcND "standOffDist" (nounPhraseSP "stand off distance")
 
 --FIXME: Issue #309
 nom_thick = cuc "nom_thick" 
-  (nounPhraseSent $ S "nominal thickness" +:+ displayConstrntsAsSet nom_thick nominalThicknesses)
+  (nounPhraseSent $ S "nominal thickness" +:+ displayConstrntsAsSet 
+    nom_thick nominalThicknesses)
   lT millimetre Rational
   [ physc $ \c -> createCnstrnts c (map show nominalThicknesses) ] (V "8.0")
 
-glass_type  = cvc "glass_type" (nounPhraseSent $ phrase glassTy +:+ displayConstrntsAsSet glass_type glassTypeAbbrs)
+glass_type  = cvc "glass_type" (nounPhraseSent $ phrase glassTy +:+ 
+    displayConstrntsAsSet glass_type glassTypeAbbrs)
   lG String
   [ physc $ \c -> createCnstrnts c glassTypeAbbrs ] (V "HS")
 
@@ -122,7 +124,8 @@ prob_br = cvc "prob_br" (nounPhraseSP "probability of breakage")
 gBRSpecParamVals :: [QDefinition]
 gBRSpecParamVals = [dim_max, dim_min, ar_max, cWeightMax, sd_min, sd_max]
 
-dim_max, dim_min, ar_max, cWeightMax, cWeightMin, sd_min, sd_max :: QDefinition
+dim_max, dim_min, ar_max, cWeightMax, cWeightMin, sd_min,
+  sd_max :: QDefinition
 
 dim_max     = mkDataDef (unitary "dim_max"
   (nounPhraseSP "maximum value for one of the dimensions of the glass plate") 
@@ -172,22 +175,22 @@ eqTNTWeight = unitary "eqTNTWeight"
   (sub (char_weight ^. symbol) (tNT ^. symbol)) kilogram Real
 
 load_dur    = unitary "load_dur"    (nounPhraseSP "duration of load")
-  (sub lT lD) second Integer
+  (sub lT lD) second Real
 
 sdx         = unitary "sdx" (nounPhraseSP "stand off distance (x-component)")
-  (sub (standOffDist ^. symbol) lX) metre Rational
+  (sub (standOffDist ^. symbol) lX) metre Real
 
 sdy         = unitary "sdy" (nounPhraseSP "stand off distance (y-component)")
-  (sub (standOffDist ^. symbol) lY) metre Rational
+  (sub (standOffDist ^. symbol) lY) metre Real
 
 sdz         = unitary "sdz" (nounPhraseSP "stand off distance (z-component)")
-  (sub (standOffDist ^. symbol) lZ) metre Rational
+  (sub (standOffDist ^. symbol) lZ) metre Real
 
 sflawParamK = unitary "sflawParamK" (nounPhraseSP "surface flaw parameter") --parameterize?
-  lK sFlawPU Rational
+  lK sFlawPU Real
 
 sflawParamM = unitary "sflawParamM" (nounPhraseSP "surface flaw parameter") --parameterize?
-  lM sFlawPU Integer
+  lM sFlawPU Real
 
 {-Quantities-}
 
@@ -209,8 +212,8 @@ is_safe1      = vc "is_safe1"        (nounPhraseSP $ "true when calculated" ++
   " probability is less than tolerable probability")
   (Concat [Atomic "is", Special UScore, Atomic "safe1"]) Boolean
 
-is_safe2      = vc "is_safe2"        (nounPhraseSP $ "true when load resistance "
-  ++ "(capacity) is greater than load (demand)")
+is_safe2      = vc "is_safe2"        (nounPhraseSP $ "true when load resistance"
+  ++ " (capacity) is greater than load (demand)")
   (Concat [Atomic "is", Special UScore, Atomic "safe2"]) Boolean
 
 lDurFac       = vc' loadDurFactor  (Atomic "LDF") Real
@@ -227,8 +230,8 @@ sdf_tol       = makeVC "sdf_tol"     (nounPhraseSP $ "stress distribution" ++
   " factor (Function) based on Pbtol") 
   (sub (stressDistFac ^. symbol) (Atomic "tol"))
 
-stressDistFac = makeVC "stressDistFac" (nounPhraseSP $ "stress distribution" ++
-  " factor (Function)") cJ
+stressDistFac = makeVC "stressDistFac" (nounPhraseSP $ "stress distribution" 
+  ++ " factor (Function)") cJ
 
 tolLoad       = makeVC "tolLoad"       (nounPhraseSP "tolerable load")
   (sub (dimlessLoad ^. symbol) (Atomic "tol"))
@@ -320,9 +323,9 @@ loadShareFac  = cc' lShareFac
 longDurLoad   = dcc "longDurLoad"        (nounPhraseSP "long duration load")
   ("Any load lasting approximately 30 days.")
 nonFactoredL  = cc' nFL
-  (foldlSent [S "Three second duration uniform load associated with a probability",
-    S "of breakage less than or equal to 8", (plural lite), S "per 1000 for", 
-    S "monolithic", (getAcc annealedGlass), S "glass"])
+  (foldlSent [S "Three second duration uniform load associated with a", 
+    S "probability of breakage less than or equal to 8", (plural lite),
+    S "per 1000 for monolithic", (getAcc annealedGlass), S "glass"])
 notSafe       = dcc "notSafe"     (nounPhraseSP "not safe")
   ("For the given input parameters, the glass is NOT considered safe.")
 probBreak     = cc prob_br
@@ -341,8 +344,8 @@ specA         = dcc "specA"       (nounPhraseSP "specifying authority")
   ("The design professional responsible for interpreting applicable " ++
     "regulations of authorities having jurisdiction and considering " ++
     "appropriate site specific factors to determine the appropriate " ++
-    "values used to calculate the specified design load, and furnishing " ++
-    "other information required to perform this practice.")
+    "values used to calculate the specified design load, and furnishing" ++
+    " other information required to perform this practice.")
 specDeLoad    = dcc "specDeLoad"  (nounPhraseSP "specified design load")
   ("The magnitude in kPa (psf), type (for example, wind or snow) and " ++
     "duration of the load given by the specifying authority.")
@@ -398,10 +401,14 @@ sdWithEqn :: QDefinition
 sdWithEqn = mkDataDef standOffDist sdCalculation
 
 sdCalculation :: Relation
-sdCalculation = (C standOffDist) := sqrt ((square (C sdx)) + (square (C sdy)) + (square (C sdz)))
+sdCalculation = (C standOffDist) := sqrt ((square (C sdx)) + (square (C sdy))
+  + (square (C sdz)))
 
 sdVectorSent :: Sentence
 sdVectorSent = getS sdx `sC` getS sdy `sC` getS sdz
+
+--sdVector :: Vector
+--sdVector = Vect [sdx, sdy, sdz]
 
 wtntWithEqn :: QDefinition
 wtntWithEqn = mkDataDef eqTNTWeight wtntCalculation
@@ -417,10 +424,12 @@ aspectRCalculation = (C aspectR) := (C plate_len)/(C plate_width)
 
 --Defined for DataDefs.hs and this file only--
 actualThicknesses :: [Double]
-actualThicknesses = [2.16, 2.59, 2.92, 3.78, 4.57, 5.56, 7.42, 9.02, 11.91, 15.09, 18.26, 21.44]
+actualThicknesses = [2.16, 2.59, 2.92, 3.78, 4.57, 5.56, 7.42, 9.02, 11.91,
+  15.09, 18.26, 21.44]
 
 nominalThicknesses :: [Double]
-nominalThicknesses = [2.5, 2.7, 3.0, 4.0, 5.0, 6.0, 8.0, 10.0, 12.0, 16.0, 19.0, 22.0]
+nominalThicknesses = [2.5, 2.7, 3.0, 4.0, 5.0, 6.0, 8.0, 10.0, 12.0, 16.0, 19.0,
+  22.0]
 
 glassTypeFactors :: [Integer]
 glassTypeFactors = [1, 4, 2]

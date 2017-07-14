@@ -72,15 +72,19 @@ mkSRS :: DocDesc
 mkSRS = [RefSec (RefProg intro
   [TUnits,
   tsymb [TSPurpose, SymbOrder],
-  TAandA])] ++
+  TAandA])]
+  ++
   [IntroSec 
   (IntroProg (startIntro (software) (blstRskInvWGlassSlab) (gLassBR)) (short gLassBR)
      [IPurpose (s2_1_intro_p1 (document) (gLassBR) (glaSlab)),
      IScope incScoR endScoR,
      IChar (rdrKnldgbleIn (glBreakage) (blastRisk)) undIR appStanddIR,
-     IOrgSec s2_3_intro dataDefn (SRS.dataDefn SRS.missingP []) s2_3_intro_end])] ++
-  map Verbatim [s3, s4, s5 {-, s6-}] ++
-  [SSDSec (SSDVerb s6)] {-(SSDProg [SSDProblem, SSDSolChSpec])-} ++
+     IOrgSec s2_3_intro dataDefn (SRS.dataDefn SRS.missingP []) s2_3_intro_end])]
+  ++
+  map Verbatim [s3, s4, s5 {-, s6-}]
+  ++
+  [SSDSec (SSDVerb s6)] {-(SSDProg [SSDProblem, SSDSolChSpec])-}
+  ++
   map Verbatim [s7, s8, s9, s10, s11, s12]
   
 glassSystInfo :: SystemInformation
@@ -319,13 +323,13 @@ s5_2_bt_sent2 io mainObj compare1 compare2 factorOfComparison = foldlSent
   `sAnd` (phrase compare2 `isThe` phrase requirement) +:+. 
   (S "which" `isThe` (compare2 ^. defn)), S "The second", phrase condition, 
   S "is to check whether the calculated", phrase factorOfComparison, 
-  sParen (getS prob_br), S "is less than the tolerable", phrase factorOfComparison, 
-  sParen (getS pb_tol), S "which is obtained from the", phrase user, S "as an"
-  +:+. phrase input_, S "If both", plural condition, 
-  S "return true then it's shown that the", phrase mainObj, S "is safe to use" 
-  `sC` S "else if both return false then the", phrase mainObj +:+. 
-  S "is considered unsafe", S "All the supporting calculated", plural value, 
-  S "are also displayed as", phrase io]
+  sParen (getS prob_br), S "is less than the tolerable", 
+  phrase factorOfComparison, sParen (getS pb_tol), 
+  S "which is obtained from the", phrase user, S "as an" +:+. phrase input_,
+  S "If both", plural condition, S "return true then it's shown that the", 
+  phrase mainObj, S "is safe to use" `sC` S "else if both return false then the",
+  phrase mainObj +:+. S "is considered unsafe", S "All the supporting calculated",
+  plural value, S "are also displayed as", phrase io]
 
 {--SPECIFIC SYSTEM DESCRIPTION--}
 
@@ -339,14 +343,14 @@ s6_1 = probDescF start gLassBR ending [s6_1_1, s6_1_2, s6_1_3]
                 phrase blastRisk +:+ S "involved with the glass"]
         ending = foldl (+:+) EmptyS [S "interpret the", plural input_, 
                 S "to give out the", plural output_, 
-                S "which predicts whether the", phrase glaSlab,
+                S "which predicts whether the", phrase glaSlab, 
                 S "can withstand the", phrase blast, S "under the", 
                 plural condition]
 
 {--Terminology and Definitions--}
 
-s6_1_1 = termDefnF (S "All of the" +:+ plural term_ +:+ S "are extracted from" +:+ 
-  (sSqBrNum 4) `sIn` (makeRef s11)) [s6_1_1_bullets]
+s6_1_1 = termDefnF (S "All of the" +:+ plural term_ +:+ S "are extracted from" 
+  +:+ (sSqBrNum 4) `sIn` (makeRef s11)) [s6_1_1_bullets]
 
 {--Physical System Description--}
 
@@ -423,18 +427,19 @@ a1Desc = foldlSent [S "The standard E1300-09a for",
   phrase calculation, S "applies only to monolithic, laminated, or insulating", 
   S "glass constructions of rectangular", phrase shape, S "with continuous", 
   phrase lateral +:+. S "support along one, two, three, or four", plural edge, 
-  S "This", phrase practice, S "assumes that (1) the supported glass", plural edge,
-  S "for two, three" `sAnd` S "four-sided support", plural condition,
-  S "are simply supported and free to slip in", phrase plane `semiCol`
-  S "(2) glass supported on two sides acts as a simply supported", phrase beam `sAnd`
-  S "(3) glass supported on one side acts as a", phrase cantilever]
+  S "This", phrase practice, S "assumes that (1) the supported glass",
+  plural edge, S "for two, three" `sAnd` S "four-sided support",
+  plural condition, S "are simply supported and free to slip in", phrase plane
+  `semiCol` S "(2) glass supported on two sides acts as a simply supported",
+  phrase beam `sAnd` S "(3) glass supported on one side acts as a", 
+  phrase cantilever]
 
 a2Desc :: Sentence
 a2Desc = foldlSent [S "Following", (sSqBr (S "4 (pg. 1)")) `sC`
-  S "this", phrase practice, S "does not apply to any form of wired" `sC`
-  S "patterned" `sC` S "etched" `sC` S"sandblasted" `sC` S "drilled" `sC` 
-  S "notched" `sC` S "or grooved glass with", phrase surface `sAnd` 
-  S "edge treatments that alter the glass strength"]
+  S "this", phrase practice, S "does not apply to any form of", 
+  foldlsC [S "wired", S "patterned", S "etched", S"sandblasted",
+  S "drilled", S "notched", S "or grooved"], phrase glass, S "with", 
+  phrase surface `sAnd` S "edge treatments that alter the glass strength"]
 
 a3Desc :: Sentence
 a3Desc = foldlSent [S "This", phrase system,
@@ -614,7 +619,8 @@ likelyChanges_SRS :: [Contents]
 likelyChanges_SRS = [s8_likelychg1, s8_likelychg2, s8_likelychg3,
   s8_likelychg4, s8_likelychg5]
 
-s8_likelychg1, s8_likelychg2, s8_likelychg3, s8_likelychg4, s8_likelychg5 :: Contents
+s8_likelychg1, s8_likelychg2, s8_likelychg3, s8_likelychg4, 
+  s8_likelychg5 :: Contents
 
 s8_likelychg1 = mkLklyChnk "s8_likelychg1" (lc1Desc (blastRisk))
 s8_likelychg2 = mkLklyChnk "s8_likelychg2" (lc2Desc)
@@ -650,12 +656,22 @@ lc5Desc = foldlSent [acroA 7 `sDash` S "The", phrase software,
 {--TRACEABLITY MATRICES AND GRAPHS--}
 
 s9 = traceMGF traceyMatrices
-  [(foldlList (map plural (take 3 solChSpecSubsections)) +:+. S "with each other"),
-  (plural requirement +:+ S "on" +:+. foldlList (map plural solChSpecSubsections)),
-  (foldlsC (map plural (take 3 solChSpecSubsections)) `sC` plural likelyChg
-  `sAnd` plural requirement +:+ S "on the" +:+ plural assumption)]
+  [s9_table1Desc, s9_table2Desc, s9_table3Desc]
   (traceyMatrices ++ (s9_intro2) ++ traceyGraphs)
   []
+
+s9_table1Desc :: Sentence
+s9_table1Desc = foldlList (map plural (take 3 solChSpecSubsections)) +:+. 
+  S "with each other"
+
+s9_table2Desc :: Sentence
+s9_table2Desc = plural requirement +:+ S "on" +:+. foldlList 
+  (map plural solChSpecSubsections)
+
+s9_table3Desc :: Sentence
+s9_table3Desc = foldlsC (map plural (take 3 solChSpecSubsections)) `sC`
+  plural likelyChg `sAnd` plural requirement +:+ S "on the" +:+ 
+  plural assumption
 
 s9_theorys, s9_instaModel, s9_dataDef, s9_data, s9_funcReq, s9_assump, 
   s9_likelyChg :: [String]
@@ -745,8 +761,8 @@ s9_t2_r2 = []
 s9_t2_r3 = ["Data Constraints"]
 s9_t2_r4 = ["R1", "R2"]
 s9_t2_r5 = ["T1", "T2"]
-s9_t2_r6 = ["IM1", "IM2", "IM3", "DD2", "DD3", "DD4", "DD5", "DD6", "DD7", "DD8", 
-  "DD9"]
+s9_t2_r6 = ["IM1", "IM2", "IM3", "DD2", "DD3", "DD4", "DD5", "DD6", "DD7", 
+  "DD8", "DD9"]
 
 s9_table2 = Table (EmptyS:s9_row_header_t2)
   (makeTMatrix s9_col_header_t2 s9_columns_t2 s9_row_t2)

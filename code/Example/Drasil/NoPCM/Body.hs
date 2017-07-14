@@ -50,6 +50,7 @@ import Drasil.Sections.AuxiliaryConstants
 
 import Data.Drasil.SentenceStructures
 
+
 this_si :: [UnitDefn]
 this_si = map UU [metre, kilogram, second] ++ map UU [centigrade, joule, watt]
 
@@ -97,18 +98,20 @@ mkSRS = RefSec (RefProg intro
   map Verbatim [s3, s4, s5, s6, s7, s8, s9]
 
 pcm_si :: SystemInformation
-pcm_si = SI srs_swhs srs [thulasi] this_si pcmSymbols (pcmSymbols)
-  acronyms ([dd1HtFluxC] :: [QDefinition]) (map qs pcmConstraints) 
-  ([] :: [QSWrapper]) ([] :: [Block QDefinition])
-  ([] :: [ConstrainedChunk])-- Place Holder until Data Definitions can be created
+pcm_si = SI srs_swhs srs [thulasi] this_si pcmSymbols 
+  (pcmSymbols)
+  acronyms
+  ([dd1HtFluxC])          --dataDefs
+  (map qs pcmConstraints) --inputs
+  ([] :: [QSWrapper])     --outputs
+  ([] :: [Block QDefinition])
+  (pcmConstraints)        --constrained
 
 pcm_srs :: Document
 pcm_srs = mkDoc mkSRS pcm_si
 
 nopcmSymbMap :: SymbolMap
 nopcmSymbMap = symbolMap pcmSymbols
-
-
 
 --------------------------
 --Section 2 : INTRODUCTION
@@ -193,10 +196,8 @@ s2_4_end im od pro = foldlSent_ [S "The", phrase im,
   sParen (makeRef (SRS.inModel SRS.missingP [])),
   S "to be solved is referred to as" +:+. acroIM 1,
   S "The", phrase im, S "provides the",
-  titleize od, sParen (short od), S "that model the" +:+. phrase pro,
-  short pro, S "solves this", short od]
-
-
+  titleize od, sParen (short od), S "that model the"
+  +:+. phrase pro, short pro, S "solves this", short od]
 
 ----------------------------------------
 --Section 3 : GENERAL SYSTEM DESCRIPTION
@@ -249,7 +250,7 @@ s2_4_end im od pro = foldlSent_ [S "The", phrase im,
 
 --TODO: finish filling in the subsections
 s4 = specSysDesF (words_ sWHT) [s4_1, s4_2]
-  where words_ sw = (plural definition +:+ S "and finally the" +:+
+  where words_ sw = (plural definition `sAnd` S "finally the" +:+
                     phrase inModel +:+ sParen (getAcc ode) +:+
                     S "that" +:+ plural model +:+ S "the" +:+ phrase sw)
 
@@ -276,7 +277,7 @@ s4_1_2 = physSystDesc (getAcc progName) fig_tank
 
 fig_tank :: Contents
 fig_tank = Figure (at_start sWHT `sC` S "with" +:+ phrase ht_flux +:+
-  S "from" +:+ phrase coil +:+ S "of" +:+ getS ht_flux_C)
+  S "from" +:+ phrase coil `sOf` getS ht_flux_C)
   "TankWaterOnly.png"
 
 s4_1_2_list :: Contents
@@ -291,9 +292,9 @@ s4_1_3_intro te co temw = foldlSPCol [S "Given", phrase te `ofThe`
   plural property `sC` S "the", phrase goalStmt, S "are"]
 
 s4_1_3_list :: UncertQ -> UncertQ -> Contents
-s4_1_3_list temw we = Enumeration $ Simple $ map (\(a, b) -> (a, Flat b)) [
-  (acroGS 1, S "predict the" +:+ phrase temw +:+ S "over time"),
-  (acroGS 2, S "predict the" +:+ phrase we +:+ S "over time")]
+s4_1_3_list temw we = enumSimple 1 (short goalStmt) [
+  (S "predict the" +:+ phrase temw +:+ S "over time"),
+  (S "predict the" +:+ phrase we +:+ S "over time")]
 
 ------------------------------------------------------
 --Section 4.2 : SOLUTION CHARACTERISTICS SPECIFICATION
@@ -324,22 +325,21 @@ s4_2_1_assump_list =[assump1, assump2, assump3, assump4, assump5, assump7, assum
 assump3, assump4, assump5, assump9_npnc, assump12, assump13 :: Contents
 
 assump3 = mkAssump "assump3"
-  (S "The" +:+ phrase water +:+ S "in the" +:+ phrase tank +:+
-  S "is fully mixed, so the" +:+ phrase temp_W `isThe` S "same throughout the entire"
-  +:+ phrase tank +:+. sSqBr (acroGD 2))
+  (foldlSent [S "The", phrase water, S "in the", phrase tank, S "is fully mixed, so the", 
+  phrase temp_W `isThe` S "same throughout the entire", phrase tank, sSqBr (acroGD 2)])
 assump4 = mkAssump "assump4"
-  (S "The" +:+ phrase w_density +:+ S "has no spatial variation; that is"
-  `sC` S "it is constant over their entire" +:+ phrase vol +:+. sSqBr ((acroGD 2)`sC`
-  (makeRef likeChg2)))
+  (foldlSent [S "The", phrase w_density, S "has no spatial variation; that is"
+  `sC` S "it is constant over their entire", phrase vol, sSqBr ((acroGD 2)`sC`
+  (makeRef likeChg2))])
 assump5 = mkAssump "assump5"
-  (S "The" +:+ phrase htCap_W +:+ S "has no spatial variation; that"
-  +:+ S "is, it is constant over its entire" +:+ phrase vol +:+. sSqBr (acroGD 2))
+  (foldlSent [S "The", phrase htCap_W, S "has no spatial variation; that", 
+  S "is, it is constant over its entire", phrase vol, sSqBr (acroGD 2)])
 assump9_npnc = mkAssump "assump9"
-  (S "The" +:+ phrase model +:+ S "only accounts for charging" +:+
-  S "of the tank" `sC` S "not discharging. The" +:+ phrase temp_W +:+ S "can only" +:+
-  S "increase, or remain constant; it cannot decrease. This implies that the" +:+
-  phrase temp_init +:+ S "is less than (or equal to) the" +:+ phrase temp_C +:+.
-  sSqBr ((acroIM 1) `sC` (makeRef likeChg4)))
+  (foldlSent [S "The", phrase model, S "only accounts for charging",
+  S "of the tank" `sC` S "not discharging. The", phrase temp_W, S "can only",
+  S "increase, or remain constant; it cannot decrease. This implies that the",
+  phrase temp_init, S "is less than (or equal to) the", phrase temp_C,
+  sSqBr ((acroIM 1) `sC` (makeRef likeChg4))])
 assump12 = mkAssump "assump12"
   (S "No internal" +:+ phrase heat +:+ S "is generated by the" +:+ phrase water
   `semiCol` S "therefore, the" +:+ phrase vol_ht_gen +:+ S "is zero" +:+.

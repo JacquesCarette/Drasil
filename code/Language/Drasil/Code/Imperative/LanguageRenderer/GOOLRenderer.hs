@@ -27,6 +27,7 @@ goolConfig options c =
         endStatement     = empty,
         enumsEqualInts   = False,
         ext              = ".hs",
+        dir              = "gool",
         fileName         = fileNameD c,
         include          = includeD "import",
         includeScope     = \_ -> empty,
@@ -174,7 +175,7 @@ funcAppDoc' c n vs = lbl n <+> hsList (valueDoc c) vs
 
 funcDoc' :: Config -> Function -> Doc
 funcDoc' c (Func n vs) = text "Func" <+> funcAppDoc c n vs
-funcDoc' c (Cast t) = text "Cast" <+> stateType c t Dec
+funcDoc' c (Cast t s) = text "Cast" <+> stateType c t Dec <+> stateType c s Dec
 funcDoc' _ (Get n) = text "Get" <+> lbl n
 funcDoc' c (Set n v) = text "Set" <+> lbl n <+> valueDoc c v
 funcDoc' c (IndexOf v) = text "IndexOf" <+> valueDoc c v
@@ -310,7 +311,7 @@ statementDoc' c _ (FreeState v) = text "FreeState" <+> valueDoc c v
 statementDoc' c loc s = statementDocD c loc s
 
 methodDoc' :: Config -> FileType -> Label -> Method -> Doc
-methodDoc' c _ _ (Method n s t ps b) = vcat [
+methodDoc' c _ _ (Method n s _ t ps b) = vcat [   -- fix for permanence at some point
     text meth <+> methodTypeDoc c t <+> lbl n <+> paramListDoc c ps,
     bodyDoc c b]
     where meth = case s of Public -> "pubMethod"

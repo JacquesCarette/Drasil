@@ -25,6 +25,7 @@ pythonConfig _ c =
         endStatement     = empty,
         enumsEqualInts   = True,
         ext              = ".py",
+        dir              = "python",
         fileName         = fileNameD c,
         include          = include',
         includeScope     = \_ -> empty,
@@ -140,7 +141,7 @@ exprDoc' c (Exists v) = exprDoc c $ BinaryExpr v NotEqual $ Var "None"
 exprDoc' c e = exprDocD c e
 
 funcDoc' :: Config -> Function -> Doc
-funcDoc' c (Cast t) = stateType c t Def
+funcDoc' c (Cast t _) = stateType c t Def
 funcDoc' _ (Get n) = dot <> text n
 funcDoc' c (Set n v) = dot <> text n <+> equals <+> valueDoc c v
 funcDoc' c (IndexOf v) = dot <> funcAppDoc c "index" [v]
@@ -204,12 +205,12 @@ printDoc' c (File f) False _ v = printFunc c <> parens (valueDoc c v <> text ", 
 printDoc' c (File f) True _ v = printFunc c <> parens (valueDoc c v <> text ", file=" <> valueDoc c f)
 
 methodDoc' :: Config -> FileType -> Label -> Method -> Doc
-methodDoc' c _ _ (Method n _ (Construct _) ps b) = vcat [
+methodDoc' c _ _ (Method n _ _ (Construct _) ps b) = vcat [
     text "def" <+> text n <> parens (valueDoc c Self <> oneParam <> paramListDoc c ps) <> colon,
     oneTab $ bodyDoc c b]
         where oneParam | length ps > 0 = text ", "
                        | otherwise     = empty
-methodDoc' c _ _ (Method n _ _ ps b) = vcat [
+methodDoc' c _ _ (Method n _ _ _ ps b) = vcat [
     text "def" <+> text n <> parens (valueDoc c Self <> oneParam <> paramListDoc c ps) <> colon,
     oneTab bodyD]
         where oneParam | length ps > 0 = text ", "
@@ -230,8 +231,8 @@ valueDoc' c (FuncApp (Just l) n vs) = funcAppDoc c (l ++ "." ++ n) vs
 valueDoc' c v = valueDocD c v
 
 functionDoc' :: Config -> FileType -> Label -> Method -> Doc
-functionDoc' _ _ _ (Method _ _ (Construct _) _ _) = error "Constructor cannot exist outside of class"
-functionDoc' c _ _ (Method n _ _ ps b) = vcat [
+functionDoc' _ _ _ (Method _ _ _ (Construct _) _ _) = error "Constructor cannot exist outside of class"
+functionDoc' c _ _ (Method n _ _ _ ps b) = vcat [
     text "def" <+> text n <> parens (paramListDoc c ps) <> colon,
     oneTab bodyD]
         where bodyD | null b    = text "None"
@@ -258,14 +259,15 @@ ioDoc' c (OpenFile f n m) = statementDoc c NoLoop (f &= funcApp' "open" [n, litS
 ioDoc' c io = ioDocD c io
 
 complexDoc' :: Config -> Complex -> Doc
+complexDoc' c (ReadLine f v) = statementDoc c NoLoop (v &= objMethodCall f "readline" [])
 complexDoc' c (ReadAll f v) = statementDoc c NoLoop (v &= objMethodCall f "readlines" [])
 complexDoc' c (ListSlice _ vnew vold b e s) = 
   valueDoc c vnew <+> equals <+> valueDoc c vold <> (brackets $ 
   getVal b <> colon <> getVal e <> colon <> getVal s)
     where getVal Nothing  = empty
           getVal (Just v) = valueDoc c v
-complexDoc' c (StringSplit vnew vold d) = 
-  valueDoc c vnew <+> equals <+> valueDoc c vold <> dot <> funcAppDoc c "split" [litString d]
+complexDoc' c (StringSplit vnew s d) = 
+  valueDoc c vnew <+> equals <+> valueDoc c s <> dot <> funcAppDoc c "split" [litString [d]]
   
 -- helpers
 

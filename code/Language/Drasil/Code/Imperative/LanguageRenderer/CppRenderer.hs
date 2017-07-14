@@ -31,6 +31,7 @@ cppConfig options c =
         endStatement     = semi,
         enumsEqualInts   = False,
         ext              = ".cpp",
+        dir              = "cpp",
         fileName         = fileNameD c,
         include          = includeD "#include",
         includeScope     = \_ -> empty,
@@ -63,7 +64,7 @@ cppConfig options c =
         stateDoc = stateDocD c, stateListDoc = stateListDocD c, statementDoc = statementDocD c, methodDoc = methodDoc' c,
         methodListDoc = methodListDoc' c, methodTypeDoc = methodTypeDocD c, unOpDoc = unOpDocD, valueDoc = valueDoc' c,
         functionDoc = methodDoc' c, functionListDoc = functionListDocD c,
-        ioDoc = ioDocD c,inputDoc = inputDoc' c,
+        ioDoc = ioDoc' c,inputDoc = inputDoc' c,
         complexDoc = complexDoc' c,
         getEnv = \_ -> error "Cpp does not implement getEnv (yet)"
     }
@@ -71,9 +72,6 @@ cppConfig options c =
 -- for convenience
 cppHeaderExt :: String
 cppHeaderExt = ".hpp"
-ptr, ptrAccess :: Doc
-ptr = text "*"
-ptrAccess = text "->"
 
 -- short names, packaged up above (and used below)
 renderCode' :: Config -> AbstractCode -> Code
@@ -86,12 +84,15 @@ cppstateType :: Config -> StateType -> DecDef -> Doc
 cppstateType _ (Base (FileType Read)) _    = text "ifstream"
 cppstateType _ (Base (FileType Write)) _   = text "ofstream"
 cppstateType _ (Base Boolean) _ = text "bool"
-cppstateType _ (Type name) Dec  = text name <> ptr
+cppstateType _ (Base Float) _   = text "double"
+cppstateType _ (Type name) Dec  = text name
 cppstateType c (Iterator t) _   = text "std::" <> stateType c (List Dynamic t) Dec <> text "::iterator"
 cppstateType c s d              = stateTypeD c s d
 
 cpptop :: Config -> FileType -> Label -> Module -> Doc
-cpptop c Header _ (Mod n _ _ _ _) = vcat [
+cpptop c Header _ (Mod n l _ _ _) = vcat $
+    (map (\x -> include c ("\"" ++ x ++ cppHeaderExt ++ "\"")) l)
+    ++ [
     text "#ifndef" <+> text n <> text "_h",
     text "#define" <+> text n <> text "_h",
     blank,
@@ -127,13 +128,15 @@ cpptop c Source p m@(Mod n l _ _ _) = vcat $ [          --TODO remove includes i
     usingNameSpace c "std" (Just "ofstream")]
 
 cppbody :: Config -> FileType -> Label -> Module -> Doc
-cppbody c f@(Header) p (Mod _ _ _ _ cs) =
+cppbody c f@(Header) p (Mod _ _ _ fs cs) =
     vcat [
     package c p <+> lbrace,
     oneTabbed [
         clsDecListDoc c cs,
         blank,
-        vibmap (classDoc c f p) cs],
+        vibmap (classDoc c f p) cs,
+        blank,
+        functionListDoc c f p fs],
     rbrace]
 cppbody c f@(Source) p (Mod _ _ _ fs cs) =
    vcat [
@@ -164,17 +167,18 @@ exceptionDoc' c (Throw s) = text "throw" <> parens (litDoc c $ LitStr s)
 exceptionDoc' c (TryCatch tryBody catchBody) = vcat [
     text "try" <+> lbrace,
     oneTab $ bodyDoc c tryBody,
-    rbrace <+> text "catch" <+> parens (text "string" <+> text "exc") <+> lbrace,
+    rbrace <+> text "catch" <+> {- parens (text "string" <+> text "exc") <+> -} parens (text "...") <+> lbrace,
     oneTab $ bodyDoc c catchBody,
     rbrace]
 
 funcDoc' :: Config -> Function -> Doc
-funcDoc' c (Func n vs) = ptrAccess <> funcAppDoc c n vs
-funcDoc' c (Get n) = ptrAccess <> funcAppDoc c (getterName n) []
-funcDoc' c (Set n v) = ptrAccess <> funcAppDoc c (setterName n) [v]
+funcDoc' c (Func n vs) = dot <> funcAppDoc c n vs
+funcDoc' c (Get n) = dot <> funcAppDoc c (getterName n) []
+funcDoc' c (Set n v) = dot <> funcAppDoc c (setterName n) [v]
 funcDoc' _ (IndexOf _) = error "IndexOf function must be rendered at the ObjAccess level in C++"
 funcDoc' c ListSize = dot <> funcAppDoc c "size" []
 funcDoc' c (ListAccess i) = dot <> funcAppDoc c "at" [i]
+funcDoc' c (ListAppend v) = dot <> funcAppDoc c "push_back" [v]
 funcDoc' c (ListAdd _ v) = dot <> funcAppDoc c "push_back" [v]
 funcDoc' c (ListSet i v) = dot <> funcAppDoc c "at" [i] <+> equals <+> valueDoc c v
 funcDoc' c f = funcDocD c f
@@ -195,9 +199,9 @@ classDoc' _ (Source) _ (Enum _ _ _) = empty
 classDoc' c ft@(Header) _ (Class n p _ vs fs) =
     let makeTransforms = map convertToMethod
         funcs = fs ++ [destructor c n vs]
-        pubFuncs = concatMap (\f@(Method _ s _ _ _) -> if s == Public then [f] else []) $ makeTransforms funcs
+        pubFuncs = concatMap (\f@(Method _ s _ _ _ _) -> if s == Public then [f] else []) $ makeTransforms funcs
         pubVars = concatMap (\v@(StateVar _ s _ _ _) -> if s == Public then [v] else []) vs
-        privFuncs = concatMap (\f@(Method _ s _ _ _) -> if s == Private then [f] else []) $ makeTransforms funcs
+        privFuncs = concatMap (\f@(Method _ s _ _ _ _) -> if s == Private then [f] else []) $ makeTransforms funcs
         privVars = concatMap (\v@(StateVar _ s _ _ _) -> if s == Private then [v] else []) vs
         pubBlank = if null pubVars then empty else blank
         privBlank = if null privFuncs then empty else blank
@@ -230,14 +234,16 @@ objAccessDoc' :: Config -> Value -> Function -> Doc
 objAccessDoc' c v (IndexOf vr) = funcAppDoc c "find" [v $. IterBegin, v $. IterEnd, vr] <+> text "-" <+> valueDoc c (v $. IterBegin)
 objAccessDoc' c v   (Floor) = funcAppDoc c "floor" [v]
 objAccessDoc' c v   (Ceiling) = funcAppDoc c "ceil" [v]
+objAccessDoc' c v (Cast (Base Float) (Base String)) = funcAppDoc c "std::stod" [v]
 objAccessDoc' c v f = objAccessDocD c v f
 
 objVarDoc' :: Config -> Value -> Value -> Doc
 objVarDoc' c (Self) v = valueDoc c v
-objVarDoc' c v1 v2 = valueDoc c v1 <> ptrAccess <> valueDoc c v2
+objVarDoc' c v1 v2 = valueDoc c v1 <> dot <> valueDoc c v2
 
 paramDoc' :: Config -> Parameter -> Doc
 paramDoc' c (StateParam n t@(List _ _)) = stateType c t Dec <+> text "&" <> text n
+paramDoc' c (StateParam n t@(Type _)) = stateType c t Dec <+> text "&" <> text n 
 paramDoc' c p = paramDocD c p
 
 printDoc' :: Config -> IOType -> Bool -> StateType -> Value -> Doc
@@ -250,11 +256,12 @@ printDoc' c Console newLn _ v@(ListVar _ t) = vcat [
           printLastStr = if newLn then printStrLn else printStr
 printDoc' c Console newLn _ v = printFunc c <+> text "<<" <+> valueDoc c v <+> endl
     where endl = if newLn then text "<<" <+> text "std::endl" else empty
-printDoc' _ (File _) _ _ _ = empty --TODO!
-
+printDoc' c (File f) newLn _ v = valueDoc c f <+> text "<<" <+> valueDoc c v <+> endl
+    where endl = if newLn then text "<<" <+> text "std::endl" else empty
+    
 methodDoc' :: Config -> FileType -> Label -> Method -> Doc
 methodDoc' c ft@(Header) m f = transDecLine c ft m f
-methodDoc' c ft@(Source) m f@(Method _ _ _ _ b) = vcat [
+methodDoc' c ft@(Source) m f@(Method _ _ _ _ _ b) = vcat [
     transDecLine c ft m f <+> lbrace,
     oneTab $ bodyDoc c b,
     rbrace]
@@ -270,6 +277,7 @@ valueDoc' _ (EnumElement _ e) = text e
 valueDoc' c v@(Arg _) = valueDocD' c v
 --valueDoc' c Input = inputFunc c <> dot <> text "ignore()"
 --valueDoc' c (InputFile v) = valueDoc c v <> dot <> text "ignore()"
+valueDoc' c (StateObj _ t vs) = stateType c t Def <> parens (callFuncParamList c vs)
 valueDoc' c v = valueDocD c v
 
 inputDoc' :: Config -> IOType -> StateType -> Value -> Doc
@@ -281,14 +289,18 @@ inputDoc' c io (Base _) v = inputFn io <+> text ">>" <+> valueDoc c v
 inputDoc' c io s v = inputDocD c io s v 
 
 complexDoc' :: Config -> Complex -> Doc
-complexDoc' c (ReadAll f v) = statementDoc c NoLoop 
-  (valStmt $  
-    funcApp' "std::copy" [
-      funcApp' "std::istream_iterator<std::string>" [f],
-      funcApp' "std::istream_iterator<std::string>" [],
-      funcApp' "std::back_inserter" [v]
+complexDoc' c (ReadLine f v) = statementDoc c NoLoop (valStmt $ funcApp' "std::getline" [f, v])
+complexDoc' c (ReadAll f v) = let l_line = "nextLine"
+                                  v_line = var "nextLine" 
+                              in
+  bodyDoc c 
+    [ 
+      block [
+        varDec l_line string,
+        while (funcApp' "std::getline" [f, v_line]) (oneLiner $ valStmt $ v$.(listAppend v_line))
+      ]
     ]
-  )
+    
 complexDoc' c (ListSlice st vnew vold b e s) = let l_temp = "temp"
                                                    v_temp = var l_temp
                                                    l_i = "i"
@@ -300,11 +312,8 @@ complexDoc' c (ListSlice st vnew vold b e s) = let l_temp = "temp"
       block [
         listDec' l_temp st 0,
         for (varDecDef l_i (Base Integer) (getB b)) (v_i ?< getE e) (getS s v_i)
-          [ 
-            block [
-              
-            ]          
-          ]
+          (oneLiner $ valStmt $ v_temp$.(listAppend (vold$.(listAccess v_i)))),
+        vnew &= v_temp
       ] 
     ],
     blockEnd c
@@ -315,7 +324,7 @@ complexDoc' c (ListSlice st vnew vold b e s) = let l_temp = "temp"
          getE (Just n) = n
          getS Nothing v = (&++) v
          getS (Just n) v = v &+= n
-complexDoc' c (StringSplit vnew vold d) = let l_ss = "ss"
+complexDoc' c (StringSplit vnew s d) =    let l_ss = "ss"
                                               v_ss = var "ss"
                                               l_word = "word"
                                               v_word = var "word" 
@@ -325,14 +334,20 @@ complexDoc' c (StringSplit vnew vold d) = let l_ss = "ss"
     oneTab $ bodyDoc c [ 
       block [
         DeclState $ VarDec l_ss (Type "std::stringstream"),
-        valStmt $ objMethodCall v_ss "str" [vold],
+        valStmt $ objMethodCall v_ss "str" [s],
         varDec l_word string,
-        while (funcApp' "std::getline" [v_ss, v_word, litString d]) (oneLiner $ valStmt $ vnew$.(listAppend v_word))
+        while (funcApp' "std::getline" [v_ss, v_word, litChar d]) (oneLiner $ valStmt $ vnew$.(listAppend v_word))
       ] 
     ],
     blockEnd c
   ]
   
+  
+ioDoc' :: Config -> IOSt -> Doc
+ioDoc' c (OpenFile f n m) = valueDoc c f <> dot <> text "open" <> (parens $ valueDoc c n <> text ", " <> modeType m) <> semi
+  where modeType Read = text "std::fstream::in"
+        modeType Write = text "std::fstream::out | std::fstream::app"
+ioDoc' c io = ioDocD c io
   
 ----------------------
 -- Helper Functions --
@@ -362,14 +377,14 @@ destructor _ n vs =
     in pubMethod Void ('~':n) [] dbody
 
 transDecLine :: Config -> FileType -> Label -> Method -> Doc
-transDecLine c (Header) _ (Method n _ t ps _) | isDtor n = text n <> parens (paramListDoc c ps) <> endStatement c
-                                              | otherwise = methodTypeDoc c t <+> (listRef <> text n <> parens (paramListDoc c ps) <> endStatement c)
-    where listRef = case t of (MState (List _ _)) -> text "&"
-                              _           -> empty
-transDecLine c (Source) m (Method n _ t ps _) = ttype <+> (listRef <> text m <> doubleColon <> text n <> parens (paramListDoc c ps))
+transDecLine c (Header) _ (Method n _ _ t ps _) | isDtor n = text n <> parens (paramListDoc c ps) <> endStatement c
+                                                | otherwise = methodTypeDoc c t <+> ({- listRef <> -} text n <> parens (paramListDoc c ps) <> endStatement c)
+  --  where listRef = case t of (MState (List _ _)) -> text "&"
+    --                          _           -> empty
+transDecLine c (Source) m (Method n _ _ t ps _) = ttype <+> ({- listRef <> -} text m <> doubleColon <> text n <> parens (paramListDoc c ps))
     where doubleColon = if null m then empty else colon <> colon
-          listRef = case t of (MState (List _ _)) -> text "&"
-                              _           -> empty
+         -- listRef = case t of (MState (List _ _)) -> text "&"
+           --                   _           -> empty
           ttype | isDtor n = empty
                 | otherwise = methodTypeDoc c t
 transDecLine c ft m f = transDecLine c ft m $ convertToMethod f

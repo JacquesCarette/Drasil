@@ -397,6 +397,7 @@ p_op Abs _ = error "Abs should only take one expr."
 p_op Norm (x:[]) = "||" ++ p_expr x ++ "||"
 p_op Norm _ = error "Norm should only take on expression."
 p_op f@(Exp) (x:[]) = show f ++ "^" ++ brace (p_expr x)
+p_op f@(Sqrt) (x:[]) = show f ++ "{" ++ p_expr x ++ "}"
 p_op f (x:[]) = show f ++ paren (p_expr x) --Unary ops, this will change once more complicated functions appear.
 p_op _ _ = error "Something went wrong with an operation"
 

@@ -5,7 +5,7 @@ import Defs
 import Prelude hiding (return, log, exp)
 
 calculations :: Module
-calculations = buildModule "Calculations" [] [] 
+calculations = buildModule "Calculations" [lib_InputParameters] [] 
   [calc_q_hat_func, calc_j_tol_func, calc_pb_func, calc_nfl_func, calc_lr_func, calc_is_safe1_func, calc_is_safe2_func] []
 
 calc_q_hat_func :: FunctionDecl

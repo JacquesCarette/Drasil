@@ -4,7 +4,7 @@ import Language.Drasil.Code
 import Defs
 
 derivedValues :: Module
-derivedValues = buildModule "DerivedValues" [] [] [derived_params_func] []
+derivedValues = buildModule "DerivedValues" [lib_InputParameters] [] [derived_params_func] []
 
 derived_params_func :: FunctionDecl
 derived_params_func = pubMethod methodTypeVoid "derived_params" [p_params]

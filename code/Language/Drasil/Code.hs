@@ -14,7 +14,7 @@ module Language.Drasil.Code (
     alwaysDel,neverDel,assign,at,binExpr,break,cast,constDecDef,extends,for,
     forEach,ifCond,ifExists,listDec,listDec',listDecValues,listOf,litBool,litChar,
     litFloat,litInt,litObj,litObj',litString,noElse,noParent,objDecDef,oneLiner,param,
-    params,paramToVar,print,printLn,printStr,printStrLn,printFile,printFileLn,printFileStr,openFileR,openFileW,closeFile,getInput,getFileInput,getFileInputAll,
+    params,paramToVar,print,printLn,printStr,printStrLn,printFile,printFileLn,printFileStr,openFileR,openFileW,closeFile,getInput,getFileInput,getFileInputAll,getFileInputLine,
     printFileStrLn,return,returnVar,switch,throw,tryCatch,typ,varDec,varDecDef,
     while,zipBlockWith,zipBlockWith4,addComments,comment,commentDelimit,
     endCommentDelimit,prefixFirstBlock,getterName,setterName,convertToClass,

@@ -5,7 +5,7 @@ import Defs
 
 -- TODO:  add gool support for non-object functions;  don't need a class for this
 inputConstraints :: Module
-inputConstraints = buildModule "InputConstraints" [] [] [check_constraints_func] []
+inputConstraints = buildModule "InputConstraints" [lib_InputParameters] [] [check_constraints_func] []
 
 check_constraints_func :: FunctionDecl
 check_constraints_func = pubMethod methodTypeVoid "check_constraints" [p_params] 

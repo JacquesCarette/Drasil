@@ -427,7 +427,7 @@ glassTypeFactors :: [Integer]
 glassTypeFactors = [1, 4, 2]
 
 glassTypeAbbrs :: [String]
-glassTypeAbbrs = ["AN", "FT", "HS"] 
+glassTypeAbbrs = ["AN", "FT", "HS"]
 --FIXME: can "map getAcc [annealedGlass, fullyTGlass, heatSGlass]" be used somehow?
 --       or can we access the acronyms as Strings from CIs somehow?
 

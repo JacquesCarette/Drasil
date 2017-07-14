@@ -265,7 +265,8 @@ s4_1_3_list = enumSimple 1 (short goalStmt) $
 
 s4_2 :: Section
 s4_2 = solChSpecF progName (s4_1, s6) s4_2_4_intro_end
-  (s4_2_6_mid, dataConstraintUncertainty, s4_2_6_T1footer) (s4_2_1_list, 
+  (s4_2_6_mid, dataConstraintUncertainty, s4_2_6_T1footer quantity surArea
+  vol htTransCoeff_min phsChgMtrl) (s4_2_1_list, 
   s4_2_2_T1 ++ s4_2_2_T2 ++ s4_2_2_T3, s4_2_3_genDefs ++ s4_2_3_deriv,
   s4_2_4_DD1 ++ s4_2_4_DD2 ++ s4_2_4_DD3 ++ s4_2_4_DD4, (s4_2_5_IMods),
   s4_2_6_DataConTables) [s4_2_7]
@@ -357,7 +358,7 @@ s4_2_5_d1eqn_list = map EqnBlock [s4_2_5_d_eqn1, s4_2_5_d_eqn2,
 s4_2_5_d1sent_list = map foldlSPCol
   [s4_2_5_d1sent_1 rOfChng temp_W energy water vol w_vol w_mass htCap_W 
     ht_flux_C ht_flux_P coil_SA pcm_SA CT.heat_trans tank perfect_insul 
-    vol_ht_gen,
+    vol_ht_gen assump15 assump16,
   s4_2_5_d1sent_2 dd1HtFluxC dd2HtFluxP ht_flux_C ht_flux_P,
   s4_2_5_d1sent_3 w_mass htCap_W,
   s4_2_5_d1sent_4 rightSide coil_HTC coil_SA,
@@ -366,7 +367,7 @@ s4_2_5_d1sent_list = map foldlSPCol
 s4_2_5_deriv2 :: [Contents]
 s4_2_5_deriv2 =
   (s4_2_5_d2startPara energy phsChgMtrl sens_heat rOfChng temp_PCM vol pcm_vol
-    pcm_mass htCap_S_P ht_flux_P pcm_SA ht_flux_out vol_ht_gen) ++
+    pcm_mass htCap_S_P ht_flux_P pcm_SA ht_flux_out vol_ht_gen assump16) ++
   (weave [s4_2_5_d2eqn_list, s4_2_5_d2sent_list]) ++ (s4_2_5_d2endPara phsChgMtrl
   htCap_S_P htCap_L_P tau_S_P tau_L_P surface CT.melting vol temp_PCM temp_melt_P
   CT.boiling solid liquid)
@@ -421,8 +422,13 @@ s4_2_7 :: Section
 s4_2_7 = SRS.propCorSol (s4_2_7_deriv) []
 
 s4_2_7_deriv :: [Contents]
-s4_2_7_deriv = [s4_2_7_deriv_1, s4_2_7_deriv_2, s4_2_7_deriv_3,
-  s4_2_7_deriv_4, s4_2_7_deriv_5]
+s4_2_7_deriv =
+  [s4_2_7_deriv_1 CT.law_cons_energy w_E energy coil phsChgMtrl dd1HtFluxC
+    dd2HtFluxP surface CT.heat_trans,
+  s4_2_7_deriv_2,
+  s4_2_7_deriv_3 pcm_E energy phsChgMtrl water,
+  s4_2_7_deriv_4,
+  s4_2_7_deriv_5 equation progName rightSide]
 
 -- Above section only occurs in this example (although maybe it SHOULD be in
 -- the others).
@@ -1024,7 +1030,7 @@ assump7 = mkAssump "assump7"
 --
 assump8 = mkAssump "assump8"
   (S "The" +:+ phrase temp_C +:+ S "is constant over" +:+
-  phrase time +:+. sSqBr (swhsSymbMapDRef dd1HtFluxC `sC` acroLC 2))
+  phrase time +:+. sSqBr (swhsSymbMapDRef dd1HtFluxC `sC` makeRef likeChg2))
 --
 assump9 = mkAssump "assump9"
   (S "The" +:+ phrase temp_C +:+ S "does not vary along its length" +:+.
@@ -1212,9 +1218,9 @@ s4_2_5_d1startPara en wa = [foldlSPCol [S "Derivation of the",
 s4_2_5_d1sent_1 :: ConceptChunk -> UncertQ -> UnitalChunk -> ConceptChunk ->
   UnitalChunk -> UnitalChunk -> UnitalChunk -> UncertQ ->
   UnitalChunk -> UnitalChunk -> UncertQ -> UncertQ -> ConceptChunk ->
-  ConceptChunk -> ConceptChunk -> UnitalChunk -> [Sentence]
-s4_2_5_d1sent_1 roc temw en wa vo wvo wma hcw hfc hfp csa psa ht ta purin vhg =
-  [S "To find the", phrase roc, S "of", getS temw `sC`
+  ConceptChunk -> ConceptChunk -> UnitalChunk -> Contents -> Contents -> [Sentence]
+s4_2_5_d1sent_1 roc temw en wa vo wvo wma hcw hfc hfp csa psa ht ta purin vhg
+  a15 a16 = [S "To find the", phrase roc, S "of", getS temw `sC`
   S "we look at the", phrase en, S "balance on" +:+.
   phrase wa, S "The", phrase vo, S "being considered" `isThe`
   phrase wvo, getS wvo `sC` S "which has", phrase wma +:+.
@@ -1225,8 +1231,8 @@ s4_2_5_d1sent_1 roc temw en wa vo wvo wma hcw hfc hfp csa psa ht ta purin vhg =
   getS csa `sAnd` getS psa `sC` S "respectively. No",
   phrase ht, S "occurs to", (S "outside" `ofThe`
   phrase ta) `sC` S "since it has been assumed to be",
-  phrase purin +:+. sParen (acroA 15), S "Assuming no",
-  phrase vhg +:+. (sParen (acroA 16) `sC`
+  phrase purin +:+. sParen (makeRef a15), S "Assuming no",
+  phrase vhg +:+. (sParen (makeRef a16) `sC`
   (E $ C vhg := Int 0)), S "Therefore, the", phrase equation, S "for",
   acroGD 2, S "can be written as"]
 
@@ -1332,8 +1338,8 @@ s4_2_5_d1eqn_list, s4_2_5_d1sent_list, s4_2_5_d2eqn_list,
 
 s4_2_5_d2startPara :: UnitalChunk -> CI -> UnitalChunk -> ConceptChunk ->
   UncertQ -> UnitalChunk -> UncertQ -> UnitalChunk -> UncertQ -> UnitalChunk -> 
-  UncertQ -> UnitalChunk -> UnitalChunk -> [Contents]
-s4_2_5_d2startPara en pcmat sh roc ptem vo pvo pma hcsp hfp psa hfo vhg = map 
+  UncertQ -> UnitalChunk -> UnitalChunk -> Contents -> [Contents]
+s4_2_5_d2startPara en pcmat sh roc ptem vo pvo pma hcsp hfp psa hfo vhg a16 = map
   foldlSPCol [
 
   [S "Detailed derivation of the", phrase en, S "balance on the",
@@ -1348,7 +1354,7 @@ s4_2_5_d2startPara en pcmat sh roc ptem vo pvo pma hcsp hfp psa hfo vhg = map
   getS pma `sAnd` S "the", phrase hcsp, S "is" +:+. getS hcsp,
   S "The", phrase hfp, S "is", getS hfp, S "over",
   phrase psa +:+. getS psa, S "There is no" +:+. phrase hfo,
-  S "Assuming no", phrase vhg, sParen (acroA 16) `sC`
+  S "Assuming no", phrase vhg, sParen (makeRef a16) `sC`
   getS vhg :+: S "=0, the", phrase equation, S "for", acroGD 2,
   S "can be written as"]
 
@@ -1370,7 +1376,7 @@ s4_2_5_d2endPara pcmat hcsp hclp tsp tlp sur mel vo ptem tmp boi so li = map fol
   S "this is not included, since",
   (phrase vo +:+ S "change" `ofThe` short pcmat),
   S "with", phrase mel,
-  S "is assumed to be negligible", sParen (acroA 17)],
+  S "is assumed to be negligible", sParen (makeRef assump17)],
 
   [S "In the case where", getS ptem :+: S "=" :+:
   getS tmp `sAnd` S "not all of the", short pcmat,
@@ -1406,22 +1412,23 @@ s4_2_6_mid = foldlSent [S "The", phrase column, S "for", phrase software,
 -- Data Constraint: Table 1 --
 ------------------------------
 
-s4_2_6_T1footer :: Sentence
-s4_2_6_T1footer = foldlSent_ $ map foldlSent [
+s4_2_6_T1footer :: NamedChunk -> UnitalChunk -> UnitalChunk -> QDefinition ->
+  CI -> Sentence
+s4_2_6_T1footer qua sa vo htcm pcmat = foldlSent_ $ map foldlSent [
 
-  [sParen (S "*"), S "These", plural quantity, S "cannot be equal to zero" `sC`
+  [sParen (S "*"), S "These", plural qua, S "cannot be equal to zero" `sC`
   S "or there will be a divide by zero in the", phrase model],
 
-  [sParen (S "+"), S "These", plural quantity, S "cannot be zero" `sC`
-  S "or there would be freezing", sParen (acroA 13)],
+  [sParen (S "+"), S "These", plural qua, S "cannot be zero" `sC`
+  S "or there would be freezing", sParen (makeRef assump13)],
 
-  [sParen (S "#"), S "The", plural constraint, S "on the", phrase surArea,
-  S "are calculated by considering the", phrase surArea, S "to", phrase vol +:+.
+  [sParen (S "#"), S "The", plural constraint, S "on the", phrase sa,
+  S "are calculated by considering the", phrase sa, S "to", phrase vo +:+.
   S "ratio", S "The", phrase assumption, S "is that the lowest ratio is 1 and",
-  S "the highest possible is", E (Int 2 :/ C htTransCoeff_min) `sC` S "where",
-  E $ C htTransCoeff_min, S "is the thickness of a", Quote (S "sheet"), S "of" +:+.
-  short phsChgMtrl, S "A thin sheet has the greatest", phrase surArea, S "to",
-  phrase vol, S "ratio"],
+  S "the highest possible is", E (Int 2 :/ C htcm) `sC` S "where",
+  E $ C htcm, S "is the thickness of a", Quote (S "sheet"), S "of" +:+.
+  short pcmat, S "A thin sheet has the greatest", phrase sa, S "to",
+  phrase vo, S "ratio"],
 
   [sParen (S "**"), S "The", phrase constraint, S "on the maximum", phrase time,
   S "at the end of the simulation is the total number of secondsin one day"]
@@ -1442,20 +1449,21 @@ s4_2_6_T1footer = foldlSent_ $ map foldlSent [
 -- 4.2.7 : Properties of A Correct Solution --
 ----------------------------------------------
 
-s4_2_7_deriv_1, s4_2_7_deriv_2, s4_2_7_deriv_3,
-  s4_2_7_deriv_4, s4_2_7_deriv_5 :: Contents
-
-s4_2_7_deriv_1 = foldlSPCol [S "A", phrase corSol, S "must exhibit the" +:+.
-  phrase CT.law_cons_energy, S "This means that the", phrase w_E,
-  S "should equal the difference between the total", phrase energy,
-  phrase input_, S "from the", phrase coil `sAnd` S "the",
-  phrase energy, phrase output_, S "to the" +:+. short phsChgMtrl,
+s4_2_7_deriv_1 :: ConceptChunk -> UncertQ -> UnitalChunk -> ConceptChunk ->
+  CI -> QDefinition -> QDefinition -> ConVar -> ConceptChunk -> Contents
+s4_2_7_deriv_1 lce ewat en co pcmat d1hfc d2hfp su ht  =
+  foldlSPCol [S "A", phrase corSol, S "must exhibit the" +:+.
+  phrase lce, S "This means that the", phrase ewat,
+  S "should equal the difference between the total", phrase en,
+  phrase input_, S "from the", phrase co `sAnd` S "the",
+  phrase en, phrase output_, S "to the" +:+. short pcmat,
   S "This can be shown as an", phrase equation, S "by taking",
-  swhsSymbMapDRef dd1HtFluxC `sAnd` swhsSymbMapDRef dd2HtFluxP `sC`
-  S "multiplying each by their respective", phrase surface,
-  S "area of", phrase CT.heat_trans `sC` S "and integrating each",
-  S "over the", phrase simulation, phrase time `sC` S "as follows"]
+  swhsSymbMapDRef d1hfc `sAnd` swhsSymbMapDRef d2hfp `sC`
+  S "multiplying each by their respective", phrase su,
+  S "area of", phrase ht `sC` S "and integrating each",
+  S "over the", phrase sim_time `sC` S "as follows"]
 
+s4_2_7_deriv_2 :: Contents
 s4_2_7_deriv_2 = EqnBlock
   ((C w_E) := UnaryOp (Integral (Just (Low 0), Just (High (C time)))
   ((C coil_HTC) * (C coil_SA) * ((C temp_C) - FCall (C temp_W)
@@ -1463,22 +1471,26 @@ s4_2_7_deriv_2 = EqnBlock
   ((C pcm_HTC) * (C pcm_SA) * ((FCall (C temp_W) [C time]) -
   (FCall (C temp_PCM) [C time]))) time))
 
-s4_2_7_deriv_3 = foldlSP_ [S "In addition, the", phrase pcm_E, S "should equal the",
-  phrase energy, phrase input_, S "to the", short phsChgMtrl,
-  S "from the" +:+. phrase water, S "This can be expressed as"]
+s4_2_7_deriv_3 :: UncertQ -> UnitalChunk -> CI -> ConceptChunk -> Contents
+s4_2_7_deriv_3 epcm en pcmat wa =
+  foldlSP_ [S "In addition, the", phrase epcm, S "should equal the",
+  phrase en, phrase input_, S "to the", short pcmat,
+  S "from the" +:+. phrase wa, S "This can be expressed as"]
 
+s4_2_7_deriv_4 :: Contents
 s4_2_7_deriv_4 = EqnBlock
   ((C pcm_E) := UnaryOp (Integral (Just (Low 0), Just (High (C time)))
   ((C pcm_HTC) * (C pcm_SA) * ((FCall (C temp_W) [C time]) - (FCall
   (C temp_PCM) [C time]))) time))
 
-s4_2_7_deriv_5 = foldlSP [titleize' equation, S "(reference) and",
+s4_2_7_deriv_5 :: ConceptChunk -> CI -> CI -> Contents
+s4_2_7_deriv_5 eq pro rs = foldlSP [titleize' eq, S "(reference) and",
   S "(reference) can be used as", Quote (S "sanity") :+:
   S "checks to gain confidence in any", phrase solution,
-  S "computed by" +:+. short progName, S "The relative",
-  S "error between the results computed by", short progName `sAnd`
-  S "the results calculated from the", short rightSide, S "of these",
-  plural equation, S "should be less than 0.001%", sParen (acroR 9)]
+  S "computed by" +:+. short pro, S "The relative",
+  S "error between the results computed by", short pro `sAnd`
+  S "the results calculated from the", short rs, S "of these",
+  plural eq, S "should be less than 0.001%", sParen (acroR 9)]
 
 -- Above section only occurs in this example (although maybe it SHOULD be in
 -- the others).

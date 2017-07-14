@@ -885,12 +885,13 @@ s7_table3 = Table (EmptyS:s7_row_header_t3)
 -- Traceabilty Graphs --
 ------------------------
 
+tempName :: [CI]
+tempName = [thModel, genDefn, dataDefn, inModel, likelyChg, assumption]
+
 s7_intro2 :: [Contents]
 s7_intro2 = traceGIntro [s7_fig1, s7_fig2]
 
-  [foldlSent [plural thModel `sC` plural genDefn `sC` plural dataDefn
-  `sC` plural inModel `sC` plural likelyChg `sC` S "and",
-  plural assumption, S "on each other"],
+  [(foldlList $ map plural tempName) +:+. S "on each other",
 
   foldlSent_ [plural inModel `sC` plural requirement `sC`
   S "and", plural datumConstraint, S "on each other"]]

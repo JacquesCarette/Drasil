@@ -414,7 +414,7 @@ s4_2_3_description = map foldlSPCol [
   s4_2_3_desc2 gauss_div surface vol thFluxVect uNormalVect unit_,
   s4_2_3_desc3 vol vol_ht_gen,
   s4_2_3_desc4 ht_flux_in ht_flux_out in_SA out_SA density QT.heat_cap_spec
-    QT.temp vol assump3 assump4 assump5,
+    QT.temp vol [assump3, assump4, assump5],
   s4_2_3_desc5 density mass vol]
 
 s4_2_3_desc1 :: RelationConcept -> UnitalChunk -> [Sentence]
@@ -436,13 +436,13 @@ s4_2_3_desc3 vo vhg = [S "We consider an arbitrary" +:+. phrase vo, S "The",
 
 s4_2_3_desc4 :: UnitalChunk -> UnitalChunk -> UnitalChunk -> UnitalChunk ->
   UnitalChunk -> UnitalChunk -> UnitalChunk -> UnitalChunk ->
-  Contents -> Contents -> Contents -> [Sentence]
-s4_2_3_desc4 hfi hfo iS oS den hcs te vo a3 a4 a5 = [S "Where", getS hfi `sC`
+  [Contents] -> [Sentence]
+s4_2_3_desc4 hfi hfo iS oS den hcs te vo assumps = [S "Where", getS hfi `sC`
   getS hfo `sC` getS iS `sC` S "and", getS oS, S "are explained in" +:+.
   acroGD 2, S "Assuming", getS den `sC` getS hcs, S "and", getS te,
   S "are constant over the", phrase vo `sC` S "which is true in our case by",
-  titleize' assumption, sParen (makeRef a3) `sC` sParen (makeRef a4) `sC`
-  S "and", sParen (makeRef a5) `sC` S "we have"]
+  titleize' assumption, (foldlList $ (map (\d -> sParen (makeRef d))) assumps)
+  `sC` S "we have"]
 
 s4_2_3_desc5 :: UnitalChunk -> UnitalChunk -> UnitalChunk -> [Sentence]
 s4_2_3_desc5 den ma vo = [S "Using the fact that", getS den :+: S "=" :+:

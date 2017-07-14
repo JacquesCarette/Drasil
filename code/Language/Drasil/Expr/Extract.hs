@@ -33,7 +33,7 @@ dep (Dbl _)       = []
 dep (Bln _)       = []
 dep (V _)         = []
 dep (FCall f x)   = nub (dep f ++ (concat $ map dep x))
-dep (Case ls)     = nub (concat (map (dep . fst) ls))
+dep (Case ls)     = nub (concat $ map (dep . fst) ls ++ map (dep . snd) ls)
 dep (a := b)      = nub (dep a ++ dep b)
 dep (a :!= b)     = nub (dep a ++ dep b)
 dep (a :< b)      = nub (dep a ++ dep b)
@@ -69,7 +69,7 @@ vars (Dbl _)      _ = []
 vars (Bln _)      _ = []
 vars (V _)        _ = []
 vars (FCall f x)  m = nub (vars f m ++ (concat $ map (\y -> vars y m) x))
-vars (Case ls)    m = nub (concat (map (\x -> vars (fst x) m) ls))
+vars (Case ls)    m = nub (concat $ map (\x -> vars (fst x) m) ls ++ map (\x -> vars (snd x) m) ls)
 vars (a := b)     m = nub (vars a m ++ vars b m)
 vars (a :!= b)    m = nub (vars a m ++ vars b m)
 vars (a :> b)     m = nub (vars a m ++ vars b m)
@@ -105,7 +105,7 @@ codevars (Dbl _)      = []
 codevars (Bln _)      = []
 codevars (V _)        = []
 codevars (FCall f x)  = nub (codevars f ++ (concat $ map (\y -> codevars y) x))
-codevars (Case ls)    = nub (concat (map (\x -> codevars (fst x)) ls))
+codevars (Case ls)    = nub (concat $ map (codevars . fst) ls ++ map (codevars . snd) ls)
 codevars (a := b)     = nub (codevars a ++ codevars b)
 codevars (a :!= b)    = nub (codevars a ++ codevars b)
 codevars (a :> b)     = nub (codevars a ++ codevars b)

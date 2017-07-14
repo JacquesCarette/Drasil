@@ -30,7 +30,7 @@ acroT  numVar = short thModel     :+: S (show numVar)
 acroNumGen :: [Contents] -> Int -> [Contents]
 acroNumGen [] _ = []
 acroNumGen (first:rest) num = (f first) : acroNumGen rest (num + 1)
-  where f (Assumption a _) = Assumption a (S "A" :+: (S $ show num))
+  where f (Assumption a) = Assumption $ nw $ npnc' (a ^. id) (a ^. term) ("A" ++  (show num))
         f (Requirement r _) = Requirement r (S "R" :+: (S $ show num))
         f (LikelyChange lc _) = LikelyChange lc (S "LC" :+: (S $ show num))
 

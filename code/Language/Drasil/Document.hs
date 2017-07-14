@@ -50,7 +50,7 @@ data Contents = Table [Sentence] [[Sentence]] Title Bool
                | Figure Label Filepath -- ^ Should use relative file path.
                | Module ModuleChunk
                | Requirement ReqChunk Sentence
-               | Assumption AssumpChunk Sentence
+               | Assumption AssumpChunk
                | LikelyChange LCChunk Sentence
                | UnlikelyChange UCChunk
      --        UsesHierarchy [(ModuleChunk,[ModuleChunk])]
@@ -110,7 +110,7 @@ instance LayoutObj Contents where
   refName (Enumeration _)       = error "List refs unimplemented"
   refName (Module mc)           = S $ "M" ++ alphanumOnly (mc ^. id)
   refName (Requirement rc _)    = S $ "R" ++ alphanumOnly (rc ^. id)
-  refName (Assumption ac _)     = S $ "A" ++ alphanumOnly (ac ^. id)
+  refName (Assumption ac)     = S $ "A" ++ alphanumOnly (ac ^. id)
   refName (LikelyChange lcc _)  = S $ "LC" ++ alphanumOnly (lcc ^. id)
   refName (UnlikelyChange ucc)  = S $ "UC" ++ alphanumOnly (ucc ^. id)
 --  refName (UsesHierarchy _)     = S $ "Figure:UsesHierarchy"
@@ -125,7 +125,7 @@ instance LayoutObj Contents where
   rType (Defnt _ _ _)           = Def
   rType (Module _)              = Mod
   rType (Requirement _ _)       = Req
-  rType (Assumption _ _)        = Assump
+  rType (Assumption _)        = Assump
   rType (LikelyChange _ _)      = LC
   rType (UnlikelyChange _)      = UC
  -- rType (UsesHierarchy _)       = Fig

@@ -10,7 +10,7 @@ import Language.Drasil.Chunk.Eq
 import Language.Drasil.Chunk.Relation
 import Language.Drasil.Chunk.ExprRelat (relat)
 import Language.Drasil.Chunk.Module
-import Language.Drasil.Chunk.NamedIdea (term)
+import Language.Drasil.Chunk.NamedIdea (term, short)
 import Language.Drasil.Chunk.Concept (defn)
 import Language.Drasil.Chunk.SymbolForm (SymbolForm, symbol)
 import Language.Drasil.Chunk.VarChunk (VarChunk)
@@ -219,7 +219,7 @@ lay x@(Figure c f)    = H.Figure (spec (refName x)) (spec c) f
 lay x@(Module m)      = H.Module (formatName m) (spec $ refName x)
 lay (Graph _ _ _ _)   = H.Paragraph (H.EmptyS)  -- need to implement!
 lay x@(Requirement r id)   = H.Requirement (spec (phrase $ r ^. term)) (spec $ refName x) (spec id)
-lay x@(Assumption a id)    = H.Assumption (spec (phrase $ a ^. term)) (spec $ refName x) (spec id)
+lay x@(Assumption a)    = H.Assumption (spec (phrase $ a ^. term)) (spec $ refName x) (spec $ short a)
 lay x@(LikelyChange lc id)  = H.LikelyChange (spec (phrase $ lc ^. term)) (spec $ refName x) (spec id)
 lay (UnlikelyChange _)= H.Paragraph (H.EmptyS)  -- need to implement!
 lay (TMod ps rf r)    = H.Definition (Theory r) 

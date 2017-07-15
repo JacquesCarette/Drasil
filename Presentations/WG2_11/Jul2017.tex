@@ -168,6 +168,31 @@ Currently covers
 
 \begin{frame}[plain, fragile]
 \frametitle{GOOL Design}
+{\Large Renderer}
+\begin{itemize} 
+\item uses data type that acts as virtual dispatch table:
+\begin{lstlisting}
+    data Config = Config {
+      assignDoc :: Assignment -> Doc,
+      binOpDoc :: BinaryOp -> Doc,
+      bodyDoc :: Body -> Doc,
+      blockDoc :: Block -> Doc,
+      callFuncParamList :: [Value] -> Doc,
+      conditionalDoc :: Conditional -> Doc,
+      declarationDoc :: Declaration -> Doc,
+      exprDoc :: Expression -> Doc,
+      funcDoc :: Function -> Doc,
+      -- and many more
+    }
+\end{lstlisting}
+\item each of the 7 languages has its own Config that uses a different set of rendering functions
+\item Text.PrettyPrint package used to make rendered code look nice
+\end{itemize}
+\end{frame}
+
+
+\begin{frame}[plain, fragile]
+\frametitle{GOOL Design}
 {\Large GOOL syntax}
 \begin{itemize}
 \item designed to look like a programming language by using
@@ -205,6 +230,58 @@ f = pubMethod (methodType float) "f"
     (litFloat 2) #* (var "x") #/ (var "y"))
 \end{lstlisting}
 \end{frame}
+
+
+\begin{frame}[plain, fragile]
+\frametitle{Choices}
+{\Large Some implementation choices}
+\begin{itemize}
+\item programming language to be rendered?
+\pause
+\item generate library or program?
+\pause
+\item logging?
+\begin{itemize}
+\item function calls
+\item variable assignments
+\end{itemize}
+\pause
+\item documentation in code?
+\begin{itemize}
+\item commented classes
+\item commented functions
+\item commented variables 
+\end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}[plain, fragile]
+\frametitle{Choices}
+{\Large Some design choices}
+\begin{itemize}
+\item structure of input/output?
+\begin{itemize}
+\item file vs console
+\item how data is arranged
+\end{itemize}
+\pause
+\item behaviour on failed constraints?
+\begin{itemize}
+\item print warning
+\item quit with error
+\item throw exception
+\end{itemize}
+\pause
+\item which (common) algorithms to use?
+\begin{itemize}
+\item choice of sorting algorithm
+\item choice of searching algorithm
+\item etc.
+\end{itemize}
+\end{itemize}
+\end{frame}
+
+
 
 % Gool
 %%% - origins (J)

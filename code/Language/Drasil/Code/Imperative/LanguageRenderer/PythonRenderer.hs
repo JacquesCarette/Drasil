@@ -8,7 +8,7 @@ import Language.Drasil.Code.Code (Code(..))
 import Language.Drasil.Code.Imperative.AST 
   hiding (comment,bool,int,float,char,guard,update)
 import Language.Drasil.Code.Imperative.LanguageRenderer
-import Language.Drasil.Code.Imperative.Helpers (blank,oneTab,reduceLibs)
+import Language.Drasil.Code.Imperative.Helpers (blank,oneTab)
 
 import Data.List (intersperse)
 import Prelude hiding (print)
@@ -86,15 +86,14 @@ pystateType _   (Base _)       _ = empty
 pystateType c  s               d = stateTypeD c s d
 
 pytop :: Config -> FileType -> Label -> Module -> Doc
-pytop c f p m = let modNames = moduleName m
-                    libNames = libs m
-  in  vcat [
-        text "from __future__ import print_function",
-        text "import sys",
-        text "import math" 
-      ] 
-      $+$
-      (vcat $ map (\x -> text "import" <+> text x) libNames)
+pytop _ _ _ m =
+  vcat [
+    text "from __future__ import print_function",
+    text "import sys",
+    text "import math" 
+  ] 
+  $+$
+  (vcat $ map (\x -> text "import" <+> text x) (libs m))
       
 
 

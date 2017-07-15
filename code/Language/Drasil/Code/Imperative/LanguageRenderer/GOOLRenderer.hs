@@ -384,10 +384,6 @@ casesDoc c f = hsVList (\(a,b) -> parens $ f a <> comma <+> bodyDoc c b)
 elseBody :: Config -> Body -> Doc
 elseBody c b = if null b then text "noElse" else bodyDoc c b
 
-justValueDoc :: Config -> Maybe Value -> Doc
-justValueDoc c (Just v) = parens $ text "Just" <+> valueDoc c v
-justValueDoc _ Nothing = text "Nothing" 
-
 justDoc :: Maybe Label -> Doc
 justDoc (Just l) = parens $ text "Just" <+> lbl l
 justDoc Nothing = text "Nothing" 

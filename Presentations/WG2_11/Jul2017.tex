@@ -119,6 +119,74 @@ Steven Palmer}
 }
 \end{frame}
 
+\begin{frame}
+\frametitle{GOOL}
+say stuff
+\end{frame}
+\begin{frame}[plain, fragile]
+\frametitle{GOOL Design}
+{\Large Required Features}
+\begin{itemize}
+\item since rendering to multiple languages is the goal, the GOOL must account for both
+\begin{itemize}
+\item<2-> features common to all targeted languages\onslide<3->{, and}
+\item<3-> features not common to all languages, such as
+\begin{itemize}
+\item public/private scoping
+\item dynamic/static binding
+\item explicit destructors
+\item explicit types in IO statements
+\end{itemize}
+\end{itemize}
+\item<4-> when rendering, extra information can be dropped
+\end{itemize}
+\end{frame}
+
+\begin{frame}[plain, fragile]
+\frametitle{GOOL Design}
+{\Large GOOL syntax}
+\begin{itemize}
+\item designed to look like a programming language by using
+\begin{enumerate}
+\item<2-> custom infix operators:
+\begin{lstlisting}
+    -- logical operators
+    (?!), (?<), (?<=), (?>), (?>=), -- etc.
+    -- arithmetic operators
+    (#~), (#/^), (#|), (#+), (#-), -- etc.
+    -- assignment operators
+    (&=), (&-=), (&++), (&~-) -- etc.
+\end{lstlisting}
+\item<3-> smart constructors:
+\begin{lstlisting}
+    bool, int, float, char, string,
+    true, false,
+    pubClass, privClass, 
+    pubMethod, privMethod,
+    print, printLn  -- etc.
+\end{lstlisting}
+\end{enumerate}
+\end{itemize}
+\end{frame}
+
+\begin{frame}[plain, fragile]
+\frametitle{GOOL Design}
+{\Large Example: function definitions in GOOL\\[1cm]}
+\begin{itemize}
+\item consider the function $f(x, y) = 2x/y$
+\item[]
+\item in GOOL this is written
+\begin{lstlisting}
+f :: FunctionDecl
+f = pubMethod
+  (methodType float)
+  "f"
+  [param "x" float, param "y" float] 
+  (oneLiner $ return $ (litFloat 2) #* (var "x") #/ (var "y"))
+\end{lstlisting}
+\end{itemize}
+\end{frame}
+
 % Gool
 % - origins (J)
 % - design

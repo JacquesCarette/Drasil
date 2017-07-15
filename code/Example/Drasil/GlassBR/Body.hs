@@ -44,7 +44,7 @@ import Drasil.Sections.SpecificSystemDescription
 import Drasil.Sections.AuxiliaryConstants
 
 this_si :: [UnitDefn]
-this_si = map UU [metre, second] ++ map UU [pascal, newton]
+this_si = map UU [metre, second, kilogram] ++ map UU [pascal, newton]
 
 s3, s4, s5,
   s6, s6_1, s6_1_1, s6_1_2, s6_1_3, s6_2, 

@@ -13,7 +13,7 @@
 \usetikzlibrary{positioning}
 
 \lstset{frame=none, showstringspaces=false, basicstyle=\footnotesize,
-  xleftmargin=-8mm,language=Haskell}
+  xleftmargin=-6mm,language=Haskell}
 
 \newcommand{\colAwidth}{0.1\textwidth}
 \newcommand{\colBwidth}{0.8\textwidth}
@@ -121,16 +121,40 @@ Steven Palmer}
 
 \begin{frame}
 \frametitle{GOOL}
-say stuff
+{\Large {\color{blue}G}eneric {\color{blue}O}bject-{\color{blue}O}riented {\color{blue}L}anguage.}
+
+History:
+\begin{itemize}
+\item Lucas Beyak
+\item Jason Costabile
+\item Yuriy Toporovskyy
+\end{itemize}
+\pause
+Currently covers
+\begin{itemize}
+\item Java, C\#
+\item C++
+\item Python, Lua
+\item Objective-C
+\item GOOL
+\end{itemize}
 \end{frame}
+
 \begin{frame}[plain, fragile]
 \frametitle{GOOL Design}
-{\Large Required Features}
+{\Large Requirements}
+\begin{enumerate}
+\item Capture the essence of programming in mainstream, pseudo-OO languages.
+\item Make the embedded DSL palatable.
+\item Eschew language-specific ``idiomatic'' patterns.
+\item Target for generation.
+\end{enumerate}
+\pause
 \begin{itemize}
-\item since rendering to multiple languages is the goal, the GOOL must account for both
+\item multiple languages implies GOOL must capture
 \begin{itemize}
-\item<2-> features common to all targeted languages\onslide<3->{, and}
-\item<3-> features not common to all languages, such as
+\item<3-> features common to all targeted languages\onslide<3->{, and}
+\item<4-> \emph{language-required} features not common to all languages:
 \begin{itemize}
 \item public/private scoping
 \item dynamic/static binding
@@ -138,7 +162,7 @@ say stuff
 \item explicit types in IO statements
 \end{itemize}
 \end{itemize}
-\item<4-> when rendering, extra information can be dropped
+\item<5-> when rendering, extra information can be dropped
 \end{itemize}
 \end{frame}
 
@@ -159,36 +183,31 @@ say stuff
 \end{lstlisting}
 \item<3-> smart constructors:
 \begin{lstlisting}
-    bool, int, float, char, string,
-    true, false,
-    pubClass, privClass, 
-    pubMethod, privMethod,
-    print, printLn  -- etc.
+  bool, int, float, char, string,
+  true, false,
+  pubClass, privClass, 
+  pubMethod, privMethod,
+  print, printLn
 \end{lstlisting}
+and so on (about $100$).
 \end{enumerate}
 \end{itemize}
 \end{frame}
 
 \begin{frame}[plain, fragile]
 \frametitle{GOOL Design}
-{\Large Example: function definitions in GOOL\\[1cm]}
-\begin{itemize}
-\item consider the function $f(x, y) = 2x/y$
-\item[]
-\item in GOOL this is written
+Consider the function $f(x, y) = 2x/y$.  In GOOL:
 \begin{lstlisting}
 f :: FunctionDecl
-f = pubMethod
-  (methodType float)
-  "f"
+f = pubMethod (methodType float) "f"
   [param "x" float, param "y" float] 
-  (oneLiner $ return $ (litFloat 2) #* (var "x") #/ (var "y"))
+  (oneLiner $ return $ 
+    (litFloat 2) #* (var "x") #/ (var "y"))
 \end{lstlisting}
-\end{itemize}
 \end{frame}
 
 % Gool
-% - origins (J)
+%%% - origins (J)
 % - design
 %   - meta-language abstracting details (J)
 %     - all required features of all languages (S?)

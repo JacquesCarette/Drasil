@@ -67,13 +67,13 @@ Steven Palmer}
 
 \begin{frame}
 \frametitle{Context}
-{\Large software \onslide<2->{(re)}certification}
+{\Large software \onslide<2->{{\color{red}(re)}}certification}
 \vspace*{.2cm}
 \begin{itemize}
 \item<3->All software artifacts as \textcolor{green}{evidence}:
 \begin{itemize}
 \item \textcolor{blue}{requirements, software specification, software design, code, 
-  tests, ``theory manual'', user manual, \ldots}
+  tests, ``theory manual'', user manual, build mechanism, \ldots}
 \end{itemize}
 \vspace*{.5cm}
 \item<4->Massive amounts of \textcolor{red}{knowledge duplication}
@@ -90,11 +90,12 @@ Steven Palmer}
 \end{frame}
 
 \begin{frame}
-\frametitle{Examples}
+\frametitle{Engineering Software}
+Or, software that engineers write.
 \begin{itemize}
 \item {\color{blue}GlassBR}: Computer whether a given plate of glass will resist a blast force.
 \item GamePhysics: ``Chipmunk'' game physics engine.
-\item SSP: Computation of mixed-soil slop stability.
+\item SSP: Computation of mixed-soil slope stability.
 \item SWHS: Solar Water Heating System (w/ phase change material).
 \item NoPCM: Solar Water Heating System without PCM.
 \item Tiny: convective and effective heat transfer coefficients.
@@ -125,9 +126,9 @@ Steven Palmer}
 
 History:
 \begin{itemize}
-\item Lucas Beyak
-\item Jason Costabile
-\item Yuriy Toporovskyy
+\item Lucas Beyak, JC. SAGA: A DSL for Story Management. DSL 2011.
+\item Jason Costabile. GOOL: A Generic OO Language. M.Eng. 2012.
+\item Yuriy Toporovskyy. Used GOOL for assign. gen. for $2^{\text{nd}}$ year CS (Java) course.
 \end{itemize}
 \pause
 Currently covers
@@ -170,7 +171,7 @@ Currently covers
 \frametitle{GOOL Design}
 {\Large Renderer}
 \begin{itemize} 
-\item uses data type that acts as virtual dispatch table:
+\item uses record that acts as virtual dispatch table:
 \begin{lstlisting}
     data Config = Config {
       assignDoc :: Assignment -> Doc,
@@ -185,8 +186,8 @@ Currently covers
       -- and many more
     }
 \end{lstlisting}
-\item each of the 7 languages has its own Config that uses a different set of rendering functions
-\item Text.PrettyPrint package used to make rendered code look nice
+\item one for each language ($7$)
+\item \lstinline|Text.PrettyPrint| used to make rendered code look nice
 \end{itemize}
 \end{frame}
 
@@ -233,8 +234,8 @@ f = pubMethod (methodType float) "f"
 
 
 \begin{frame}[plain, fragile]
-\frametitle{Choices}
-{\Large Some implementation choices}
+\frametitle{{\color{blue}Implementation} Choices}
+(Of generated code)
 \begin{itemize}
 \item programming language to be rendered?
 \pause
@@ -243,7 +244,7 @@ f = pubMethod (methodType float) "f"
 \item logging?
 \begin{itemize}
 \item function calls
-\item variable assignments
+\item assignments
 \end{itemize}
 \pause
 \item documentation in code?
@@ -256,8 +257,7 @@ f = pubMethod (methodType float) "f"
 \end{frame}
 
 \begin{frame}[plain, fragile]
-\frametitle{Choices}
-{\Large Some design choices}
+\frametitle{{\color{blue}Design} Choices}
 \begin{itemize}
 \item structure of input/output?
 \begin{itemize}
@@ -274,15 +274,28 @@ f = pubMethod (methodType float) "f"
 \pause
 \item which (common) algorithms to use?
 \begin{itemize}
-\item choice of sorting algorithm
-\item choice of searching algorithm
+\item sorting algorithm
+\item searching algorithm
+\item matrix multiplication, solving
+\item ODE solver
 \item etc.
 \end{itemize}
+\pause
+\item Inline code or library calls?
 \end{itemize}
 \end{frame}
 
+\begin{frame}
+\frametitle{\color{red}Open Questions}
+How to classify {\color{blue}\emph{choices}}.
 
+\pause
+\vspace*{10mm}
+Proper {\color{green}Language(s) of choices}.
 
+\vspace*{5mm}
+
+\end{frame}
 % Gool
 %%% - origins (J)
 % - design

@@ -439,9 +439,9 @@ a1Desc = foldlSent [S "The standard E1300-09a for",
 a2Desc :: Sentence
 a2Desc = foldlSent [S "Following", (sSqBr (S "4 (pg. 1)")) `sC`
   S "this", phrase practice, S "does not apply to any form of", 
-  foldlsC [S "wired", S "patterned", S "etched", S"sandblasted",
-  S "drilled", S "notched", S "or grooved"], phrase glass, S "with", 
-  phrase surface `sAnd` S "edge treatments that alter the glass strength"]
+  foldlsC $ map S ["wired", "patterned", "etched", "sandblasted", "drilled",
+  "notched", "or grooved"], phrase glass, S "with", phrase surface 
+  `sAnd` S "edge treatments that alter the glass strength"]
 
 a3Desc :: Sentence
 a3Desc = foldlSent [S "This", phrase system,

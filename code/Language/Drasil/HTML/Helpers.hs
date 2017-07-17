@@ -87,13 +87,13 @@ makeCSS :: Document -> Doc
 makeCSS _ = vcat [
 -- TODO: Autogenerate necessary css selectors only, make CSS configurable
   text "body {min-width: 400px; max-width: 1400px;}",
-  text ".title {text-align:center;}",
-  text ".author {text-align:center;}",
-  text ".paragraph {text-align:justify;}",
+  text ".title {text-align: center;}",
+  text ".author {text-align: center;}",
+  text ".paragraph {text-align: justify;}",
   vcat [
     text ".cases {",
     text "  display: inline-block;",
-    text "  vertical-align:middle;}"],
+    text "  vertical-align: middle;}"],
   vcat [
     text ".case {",
     text "float: right;",
@@ -109,13 +109,13 @@ makeCSS _ = vcat [
     text "  vertical-align: middle;",
     text "  margin: 0 0.2em 0.4ex;",
     text "  text-align: center;",
-    text "  font-size:500%;}"],
+    text "  font-size: 500%;}"],
   vcat [
     text ".caption {",
-    text "text-align:center;",
-    text "font-weight:bold;",
-    text "padding-bottom:1%;",
-    text "line-height:0;}"
+    text "text-align: center;",
+    text "font-weight: bold;",
+    text "padding-bottom: 1%;",
+    text "line-height: 0;}"
     ],
   vcat [
     text ".fraction {",
@@ -130,18 +130,27 @@ makeCSS _ = vcat [
     text "  padding-top: 0.15em;}"
     ],
   text ".fdn {border-top: thin solid black;}",
-  text ".table {text-align:left;padding-left:1%;width:90%;margin-bottom:2%;margin-top:2%}",
-  text ("table, th, td {border-collapse: collapse;" ++ 
-    "margin-left:auto;margin-right:auto;}"),
-  text "th, td {border: 1px solid black; padding:1%;}",
-  text ".tdefn, .ddefn {width:75%;margin-top:1%;margin-bottom:1%;}",
-  text ".tdefn th {width:15%;}",
-  text ".ddefn th {width:15%;}",
-  text ".section {width:80%; margin:0 auto;text-align:left;}",
+  vcat [
+    text ".table {",
+    text "  text-align: left;",
+    text "  padding-left: 1%;",
+    text "  width: 90%;",
+    text "  margin-bottom: 2%;",
+    text "  margin-top: 2%}"],
+  vcat [
+    text "table, th, td {",
+    text "  border-collapse: collapse;",
+    text "  margin-left: auto;",
+    text "  margin-right: auto;}"],
+  text "th, td {border:1px solid black; padding:1%;}",
+  text ".tdefn, .ddefn {width:75%; margin-top:1%; margin-bottom:1%;}",
+  text ".tdefn th {width: 15%;}",
+  text ".ddefn th {width: 15%;}",
+  text ".section {width:80%; margin:0 auto; text-align:left;}",
   vcat [
     text ".code {",
-    text "  display:inline-block;",
-    text "  text-align:left;",
+    text "  display: inline-block;",
+    text "  text-align: left;",
     text ("  font-family: Monaco, Consolas, \"Andale Mono\"," ++
       "\"DejaVu Sans Mono\", monospace;"),
     text "  font-size: 95%;",
@@ -153,10 +162,14 @@ makeCSS _ = vcat [
     text "  background: #faf8f0;",
     text "}"
     ],
-  text ".list {text-align:left;}",
+  text ".list {text-align: left;}",
   text ".figure {max-width: 800px;}",
   vcat [
-    text ".matrix {position: relative;}",
+    text ".matrix {",
+    text "  position: relative;",
+    text "  display: inline-table;",
+    text "  margin: 10px;",
+    text "  vertical-align: middle;}",
     text ".matrix:before, .matrix:after {",
     text "  content: \"\";",
     text "  position: absolute;",

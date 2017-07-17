@@ -4,7 +4,7 @@ import Language.Drasil
 import Data.Drasil.SI_Units
 
 
-stiffnessU :: DerUChunk
+stiffnessU, stiffness3D :: DerUChunk
 
 stiffnessU  = new_unit "stiffness" $ newton /: metre
 

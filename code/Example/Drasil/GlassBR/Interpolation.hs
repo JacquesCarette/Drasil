@@ -34,27 +34,7 @@ y_array = makeVC "y_array" (nounPhraseSP "y_array") (sub (lY) (Atomic "array"))
 x_array = makeVC "x_array" (nounPhraseSP "x_array") (sub (lX) (Atomic "array"))
 y    = makeVC "y"      (nounPhraseSP "y")    lY
 
----
-{-
---indInSeq :: Int -> [Double] -> Double -> Maybe _?
-indInSeq (length(arr)-1) _   v = Nothing --FIXME: raise BoundError?
-indInSeq n               arr v = Just
-  (do
-      if ((arr!!(n) <= v) && (v <= arr!!(n+1)))
-        then return n --FIXME:same result as interp.py?
-      indInSeq (n+1) arr v)
---input n should be 0
-
-matrixCol :: (num t1 , Eq t1) => t1 -> ([t1] -> [t] -> a) -> t -> [a] -> [[a]]
-matrixCol (length mat) _   _ currentList = return currentList
-matrixCol i            mat c currentList = 
-  do
-    mat[i][c] ++ currentList
-    matrixCol (i-1) (mat) (c) (currentList)
---start currentList = []; input i should be 0
--}
-
--- Python code to Expr
+--Python code to Expr
 
 indInSeq :: Expr
 indInSeq = (C i)

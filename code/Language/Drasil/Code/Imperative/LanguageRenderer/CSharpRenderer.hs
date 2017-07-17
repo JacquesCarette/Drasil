@@ -121,6 +121,7 @@ ioDoc' c io = ioDocD c io
 inputDoc' :: Config -> IOType -> StateType -> Value -> Doc
 inputDoc' c io (Base Integer) v = valueDoc c v <+> equals <+> text "Int32.Parse" <> parens (inputFn c io)
 inputDoc' c io (Base Float) v = valueDoc c v <+> equals <+> text "Double.Parse" <> parens (inputFn c io)
+inputDoc' c io (Base String) v = valueDoc c v <+> equals <+> parens (inputFn c io)
 inputDoc' _ _ (Base (FileType _)) _ = error "File type is not valid input"
 inputDoc' c io s v = inputDocD c io s v 
 

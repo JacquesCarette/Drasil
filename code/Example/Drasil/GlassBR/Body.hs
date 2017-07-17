@@ -100,12 +100,14 @@ glassSystInfo = SI glassBRProg srs authors this_si this_symbols
   
 glassChoices :: Choices
 glassChoices = Choices {
+  lang = [Python, Cpp, CSharp, Java],
   impType = Program,
   logFile = "log.txt",
-  logging = LogAll,
-  onSfwrConstraint = Exception,
-  onPhysConstraint = Warning,
-  inputStructure = Loose
+  logging = LogNone,         -- LogNone, LogFunc
+  comments = CommentNone,    -- CommentNone, CommentFunc
+  onSfwrConstraint = Warning,  -- Warning, Exception
+  onPhysConstraint = Warning,  -- Warning, Exception
+  inputStructure = Loose    -- Loose, AsClass
 }  
   
 glassBR_code :: CodeSpec

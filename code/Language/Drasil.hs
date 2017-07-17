@@ -97,7 +97,8 @@ module Language.Drasil (
   , personWM', mononym
   -- CodeSpec
   , CodeSpec, codeSpec, codeSpec', Choices(..), ImplementationType(..)
-  , Logging(..), ConstraintBehaviour(..), Structure(..), defaultChoices
+  , Logging(..), ConstraintBehaviour(..), Structure(..), Lang(..), Comments(..)
+  , defaultChoices
   -- Chunk.Theory
   , Theory(..), tc', TheoryChunk, TheoryModel, tm, tw
 ) where

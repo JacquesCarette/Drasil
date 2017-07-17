@@ -3,20 +3,23 @@ module Language.Drasil.Code.Imperative.Import where
 import Language.Drasil.Code.Code as C
 import Language.Drasil.Code.Imperative.AST as I
 import Language.Drasil.Code.Imperative.LanguageRenderer (Options(..))
-import Language.Drasil.Code.Imperative.Parsers.ConfigParser (pythonLabel)
+import Language.Drasil.Code.Imperative.Parsers.ConfigParser (pythonLabel, cppLabel, cSharpLabel, javaLabel)
 import Language.Drasil.Code.CodeGeneration (createCodeFiles, makeCode)
 import Language.Drasil.Chunk.Code
 import Language.Drasil.Expr as E
 import Language.Drasil.Expr.Extract hiding (vars)
-import Language.Drasil.CodeSpec
+import Language.Drasil.CodeSpec hiding (codeSpec)
 
 import Prelude hiding (log, exp, return)
 import Data.List (intersperse)
+import System.Directory
 
 data Generator = Generator { 
   generateCode :: IO (),
   
   genModules :: [Module],
+  
+  codeSpec :: CodeSpec,
   
   genInputMod :: [CodeChunk] -> ConstraintMap -> [Module],
   genCalcMod :: [CodeDefinition] -> [Module],
@@ -46,9 +49,6 @@ data Generator = Generator {
 generator :: CodeSpec -> Generator -> Generator
 generator spec g = 
   let chs = choices spec
-      methodCallFunc =     case (logging chs) of          LogFunc   -> loggedMethod
-                                                          LogAll    -> loggedMethod
-                                                          _         -> genMethodCallD
       sfwrConstraintFunc = case (onSfwrConstraint chs) of Warning   -> constrWarn
                                                           Exception -> constrExc
       physConstraintFunc = case (onPhysConstraint chs) of Warning   -> constrWarn
@@ -59,6 +59,8 @@ generator spec g =
       generateCode = generateCodeD spec g,
       
       genModules = genModulesD spec g,
+      
+      codeSpec = spec,
       
       genInputMod = inputModFunc g,
       genCalcMod = genCalcModD g,
@@ -74,7 +76,7 @@ generator spec g =
 
       genOutputFormat = genOutputFormatD g,
       
-      genMethodCall = methodCallFunc g,
+      genMethodCall = genMethodCallD g,
       
       logName = logFile $ choices spec,
       
@@ -87,15 +89,29 @@ generator spec g =
 
 generateCodeD :: CodeSpec -> Generator -> IO () 
 generateCodeD s g = let modules = genModules g 
-   in createCodeFiles $ makeCode 
-        pythonLabel
-        (Options Nothing Nothing Nothing (Just "Code")) 
-        (toAbsCode (codeName $ program s) modules)
-
+  in do workingDir <- getCurrentDirectory
+        mapM_ (\x -> do 
+             createDirectoryIfMissing False (getDir x) 
+             setCurrentDirectory (getDir x)
+             createCodeFiles $ makeCode 
+               (getLabel x)
+               (Options Nothing Nothing Nothing (Just "Code")) 
+               (toAbsCode (codeName $ program s) modules)
+             setCurrentDirectory workingDir) (lang $ choices s)    
+  where getLabel Cpp = cppLabel
+        getLabel CSharp = cSharpLabel
+        getLabel Java = javaLabel
+        getLabel Python = pythonLabel
+        getDir Cpp = "cpp"
+        getDir CSharp = "csharp"
+        getDir Java = "java"
+        getDir Python = "python"
+        
 genModulesD :: CodeSpec -> Generator -> [Module]
-genModulesD (CodeSpec _ i o d cm _) g = genInputMod g i cm
-                                     ++ genCalcMod g d
-                                     ++ genOutputMod g o
+genModulesD (CodeSpec _ i o d cm _ _ _ h) g = genInputMod g i cm
+                                       ++ genCalcMod g d
+                                       ++ genOutputMod g o
+                                       ++ map (genHacks g) h -- hack 
 
 
 ------- INPUT ----------  
@@ -233,14 +249,31 @@ genOutputFormatD g outs = let l_outfile = "outfile"
 
 genMethodCallD :: Generator -> Scope -> Permanence -> MethodType -> Label -> [Parameter] 
                   -> Body -> Method
-genMethodCallD _ s pr t n p b = Method n s pr t p b
+genMethodCallD g s pr t n p b = let loggedBody = if (logging $ choices $ codeSpec g) == LogFunc || (logging $ choices $ codeSpec g) == LogAll
+                                                 then loggedMethod g n p b
+                                                 else b
+                                    commBody   = if (comments $ choices $ codeSpec g) == CommentFunc 
+                                                 then commMethod g n p loggedBody
+                                                 else b
+                                    theBody    = commBody
+  in  
+    Method n s pr t p theBody
 
-loggedMethod :: Generator -> Scope -> Permanence -> MethodType -> Label -> [Parameter] 
-                  -> Body -> Method
-loggedMethod g s pr t n p b = let l_outfile = "outfile"
-                                  v_outfile = var l_outfile 
+
+commMethod :: Generator -> Label -> [Parameter] -> Body -> Body
+commMethod g n p b = 
+ (
+    block [
+      comment $ "function '" ++ n ++ "': " ++ (funcTerm n (fMap $ codeSpec g)),
+      multi $ map 
+        (\x -> comment $ "parameter '" ++ (paramName x) ++ "': " ++ (varTerm (paramName x) (vMap $ codeSpec g))) p    
+    ]
+  ) : b
+    
+loggedMethod :: Generator -> Label -> [Parameter] -> Body -> Body
+loggedMethod g n p b = let l_outfile = "outfile"
+                           v_outfile = var l_outfile 
   in
-    Method n s pr t p $ 
     (
       block [
         varDec l_outfile outfile,
@@ -255,8 +288,9 @@ loggedMethod g s pr t n p b = let l_outfile = "outfile"
     printParams ps v_outfile = multi $ 
       intersperse (printFileStr v_outfile ", ") $
       map (\x -> printFile v_outfile (paramType x) (paramVal x)) ps
-  
 
+       
+      
 -- helpers
     
 getParams :: (CodeEntity c) => [c] -> [Parameter]
@@ -268,7 +302,11 @@ paramType (FuncParam _ _ _) = error "Function param not implemented"
 
 paramVal :: Parameter -> Value
 paramVal (StateParam l _) = var l
-paramVal (FuncParam _ _ _) = error "Function param not implemented"        
+paramVal (FuncParam _ _ _) = error "Function param not implemented"     
+
+paramName :: Parameter -> String
+paramName (StateParam l _) = l
+paramName (FuncParam _ _ _) = error "Function param not implemented"   
           
 convType :: C.CodeType -> I.StateType
 convType C.Boolean = bool
@@ -316,3 +354,11 @@ unop (E.Log e)          = I.log (convExpr e)
 unop (E.Abs e)          = (#|) (convExpr e)
 unop (E.Exp e)          = I.exp (convExpr e)
 unop _                  = error "not implemented"
+
+
+-- major hacks --
+genHacks :: Generator -> (String, [Method]) -> Module
+genHacks g (n, m) = buildModule n [] [] (map (genMethodHacks g) m) [] 
+
+genMethodHacks :: Generator -> Method -> Method
+genMethodHacks g (Method l _ _ t ps b) = publicMethod g t l ps b

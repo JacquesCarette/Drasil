@@ -669,7 +669,7 @@ rigFoSDerivation = [foldlSP [S "RFEM analysis can also be used to calculate the"
   (S "resistive shear" `ofThe` S "slice"), S "can be calculated from", eqN 27],
   
   EqnBlock $
-  C mobShrI := C cohesion - C normStress * tan(C fricAngle), --FIXME: index and prime
+  C mobStress := C cohesion - C normStress * tan(C fricAngle), --FIXME: index and prime
   
   foldlSP [S "Previously", phrase value `ofThe` getTandS shrStiffBase,
   S "as seen in", eqN 28, S "was unsolvable because the", getTandS normStress,
@@ -694,12 +694,12 @@ rigFoSDerivation = [foldlSP [S "RFEM analysis can also be used to calculate the"
   foldlSP [S "The", phrase shrStress, shrStress ^. defn, getS shrStress, --FIXME: ISSUE #348
   S "acts as the mobile shear acting on the base. Using the", phrase definition,
   titleize fs, phrase equation, S "from", acroT 1 `sC` S "with the", 
-  plural definition, S "of resistive shear strength of a slice", getS mobShrI,
+  plural definition, S "of resistive shear strength of a slice", getS mobStress,
   S "from", phrase equation, S "(27) and shear stress on a slice", getS shrStress, S "from",
   eqN 29, S "the", getTandS fsloc, S "can be found from as seen in", eqN 30 `sAnd` acroIM 5],
   
   EqnBlock $
-  C fsloc := C mobShrI / C shrStress :=
+  C fsloc := C mobStress / C shrStress :=
   (C cohesion - C nrmStiffBase * C nrmDispl * tan(C fricAngle)) /
   (C shrStiffBase * C shrDispl), --FIXME: pull parts of this equation from other equations such as IM5
   
@@ -709,7 +709,7 @@ rigFoSDerivation = [foldlSP [S "RFEM analysis can also be used to calculate the"
   
   EqnBlock $ --FIXME: pull from other equations in derivation
   (C fs) := summation (Just (lI, Low $ Int 1, High $ C numbSlices))
-  (C baseLngth * C mobShrI) /
+  (C baseLngth * C mobStress) /
   summation (Just (lI, Low $ Int 1, High $ C numbSlices))
   (C baseLngth * C shrStress) :=
   summation (Just (lI, Low $ Int 1, High $ C numbSlices))

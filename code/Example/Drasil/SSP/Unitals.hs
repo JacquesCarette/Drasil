@@ -2,6 +2,7 @@ module Drasil.SSP.Unitals where
 
 import Language.Drasil
 import Data.Drasil.SI_Units
+import Data.Drasil.Units.SolidMechanics (stiffness3D)
 import Data.Drasil.Quantities.SolidMechanics as SM
 import Data.Drasil.Concepts.Physics as CP
 import Data.Drasil.Units.Physics
@@ -124,7 +125,7 @@ sspUnits = map ucw [normStress, genPressure,
   momntOfBdy, genDisplace, SM.stffness, shrStiffIntsl, shrStiffBase,
   nrmStiffIntsl, nrmStiffBase, shrStiffRes, nrmStiffRes, shrDispl,
   nrmDispl, porePressure, elmNrmDispl, elmPrllDispl, 
-  mobShrC, shrResC, rotatedDispl, intNormForce, shrStress]
+  mobShrC, shrResC, rotatedDispl, intNormForce, shrStress, mobStress]
 
 normStress, genPressure,
   waterHght, slopeHght, slipHght, xi, critCoords, mobShrI,
@@ -133,7 +134,7 @@ normStress, genPressure,
   nrmFNoIntsl, surfLoad, baseAngle, surfAngle, impLoadAngle, baseWthX,
   baseLngth, surfLngth, midpntHght, genForce, momntOfBdy, genDisplace,
   shrStiffIntsl, shrStiffBase, nrmStiffIntsl, nrmStiffBase, shrStiffRes,
-  nrmStiffRes, shrDispl, nrmDispl, porePressure, elmNrmDispl,
+  nrmStiffRes, shrDispl, nrmDispl, porePressure, elmNrmDispl, mobStress,
   elmPrllDispl, mobShrC, shrResC, rotatedDispl, intNormForce, shrStress :: UnitalChunk
   
 {-FIXME: Many of these need to be split into term, defn pairs as
@@ -265,27 +266,27 @@ genDisplace = uc' "genDisplace" (cn $ "displacement") "generic displacement of a
 
 shrStiffIntsl = uc' "K_st,i" (cn $ "shear stiffness")
   ("for interslice surface, " ++ wla ++ " " ++ fisi)
-  (sub cK (Atomic "st,i")) pascal
+  (sub cK (Atomic "st,i")) stiffness3D
 
 shrStiffBase  = uc' "K_bt,i" (cn $ "shear stiffness") 
   ("for a slice base surface, " ++ wla ++ " " ++ fsi)
-  (sub cK (Atomic "bt,i")) pascal
+  (sub cK (Atomic "bt,i")) stiffness3D
 
 nrmStiffIntsl = uc' "K_sn,i" (cn $ "normal stiffness")
   ("for an interslice surface, " ++ wla ++ " " ++ fisi)
-  (sub cK (Atomic "sn,i")) pascal
+  (sub cK (Atomic "sn,i")) stiffness3D
 
 nrmStiffBase = uc' "K_bn,i" (cn $ "normal stiffness") 
   ("for a slice base surface, " ++ wla ++ " " ++ fsi)
-  (sub cK (Atomic "bn,i")) pascal
+  (sub cK (Atomic "bn,i")) stiffness3D
 
 shrStiffRes  = uc' "K_tr" (cn $ "shear stiffness")
   "residual strength"
-  (sub cK (Atomic "tr")) pascal
+  (sub cK (Atomic "tr")) stiffness3D
 
 nrmStiffRes  = uc' "K_no" (cn $ "normal stiffness")
   "residual strength"
-  (sub cK (Atomic "no")) pascal
+  (sub cK (Atomic "no")) stiffness3D
 
 shrDispl = uc' "du_i" (cn $ "displacement")
   ("shear displacement " ++ fsi)
@@ -309,8 +310,11 @@ porePressure = uc' "mu" (cn "pore pressure") ("from water within the soil")
 rotatedDispl = uc' "varepsilon_i" (cn "displacement") ("in rotated coordinate system")
   (sub (Greek Epsilon_V) lI) metre
   
-shrStress    = uc' "tau_i" (cn "shear stress") ("acting on the base of a slice")
+shrStress    = uc' "tau_i" (cn "resistive shear stress") ("acting on the base of a slice")
   (sub (Greek Tau_L) lI) pascal
+  
+mobStress    = uc' "s_i" (cn "mobilized shear stress") ("acting on the base of a slice")
+  (sub lS lI) pascal
 
 ----------------------
 -- Unitless Symbols --

@@ -6,4 +6,6 @@ import Data.Drasil.SI_Units
 
 stiffnessU :: DerUChunk
 
-stiffnessU   = new_unit "stiffness"            $ newton /: metre
+stiffnessU  = new_unit "stiffness" $ newton /: metre
+
+stiffness3D = new_unit "3D stiffness" $ pascal /: metre

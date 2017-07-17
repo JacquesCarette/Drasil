@@ -1,6 +1,7 @@
 module Data.Drasil.Concepts.PhysicalProperties where
 
 import Language.Drasil
+import Data.Drasil.Concepts.Documentation
 
 gaseous, liquid, solid, ctrOfMass, density, mass, len, dimension,
   vol :: ConceptChunk
@@ -20,3 +21,7 @@ mass       = dcc "mass"       (cn''' "mass"       )
   "the quantity of matter in a body"
 vol        = dcc "volume"     (cn' "volume"       )
   "the amount of space that a substance or object occupies."
+
+
+materialProprty :: NamedChunk
+materialProprty = compoundNC material_ property

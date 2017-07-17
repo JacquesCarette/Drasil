@@ -224,15 +224,13 @@ designDoc, generalSystemDescription, indPRCase,
   nonfunctionalRequirement, safetyReq, softwareConstraint, softwareDoc,
   softwareReq, softwareSys, softwareVerif, softwareVAV, solutionCharSpec,
   solutionCharacteristic, offShelfSolution, physicalSim, productUC, 
-  useCaseTable, physicalProperty, vavPlan, uncertCol, userInput,
-  materialProprty :: NamedChunk
+  useCaseTable, physicalProperty, vavPlan, uncertCol, userInput :: NamedChunk
  
 datumConstraint              = compoundNC' datum constraint
 designDoc                    = compoundNC design document
 functionalRequirement        = compoundNC functional requirement_
 generalSystemDescription     = compoundNC general systemdescription
 indPRCase                    = compoundNC individual productUC
-materialProprty              = compoundNC material_ property
 nonfunctionalRequirement     = compoundNC nonfunctional requirement_
 offShelfSolution             = compoundNC offShelf solution
 physicalConstraint           = compoundNC physical constraint

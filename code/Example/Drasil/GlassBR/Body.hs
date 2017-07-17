@@ -17,7 +17,7 @@ import Data.Drasil.Concepts.Thermodynamics (heat)
 import Prelude hiding (id)
 import Data.Drasil.Utils
 import Data.Drasil.SentenceStructures
-import Data.Drasil.Concepts.PhysicalProperties (dimension)
+import Data.Drasil.Concepts.PhysicalProperties (dimension, materialProprty)
 
 import Drasil.Template.MG
 import Drasil.Template.DD

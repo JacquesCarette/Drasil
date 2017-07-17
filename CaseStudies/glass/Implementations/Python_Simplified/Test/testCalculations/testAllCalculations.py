@@ -8,28 +8,43 @@ from Implementation import calculations
  
 class TestCalculations(unittest.TestCase):
  
+    def __init__ (self, inputFileName, val1, val2, q_hat_tol_val, lrShouldBe,
+                  nflShouldBe, lrVal, qVal, is_safe1ShouldBe, is_safe2ShouldBe):
+        self.inputFileName    = inputFileName
+        self.val1             = val1
+        self.val2             = val2
+        self.q_hat_tol_val    = q_hat_tol_val
+        self.lrShouldBe       = lrShouldBe
+        self.nflShouldBe      = nflShouldBe
+        self.lrVal            = lrVal
+        self.qVal             = qVal
+        self.is_safe1ShouldBe = is_safe1ShouldBe
+        self.is_safe2ShouldBe = is_safe2ShouldBe
+
     def setUp(self):
+        self.inputFileName = inputFileName
+
         self.params = param.Param()
-        self.inputFormat = inputFormat.get_input(os.path.join("Test/Inputfiles", inputFileName), self.params)
+        self.inputFormat = inputFormat.get_input(os.path.join("Test/Inputfiles", self.inputFileName), self.params)
         self.derivedValues = derivedValues.derived_params(self.params)
- 
+
     def test_calc_pb(self):
         """
         Test to make sure returns expected value of pb.  Test should
         actually use some epsilon error, instead of equality of floats
         """
-        pb = calculations.calc_pb(float64(val1), self.params)
-        self.assertEqual(pb, val2)
+        pb = calculations.calc_pb(float64(self.val1), self.params)
+        self.assertEqual(pb, self.val2)
         
     def test_calc_lr(self):
-        nfl = calculations.calc_nfl(float64(q_hat_tol_value), self.params)
+        nfl = calculations.calc_nfl(float64(self.q_hat_tol_val), self.params)
         lr = calculations.calc_lr(nfl, self.params)
-        self.assertTupleEqual((lr, nfl), (lrShouldBe, nflShouldBe))
+        self.assertTupleEqual((lr, nfl), (self.lrShouldBe, self.nflShouldBe))
         
     def test_is_safe(self):
-        is_safe1 = calculations.is_safe1(float64(val2), self.params)
-        is_safe2 = calculations.is_safe2(float64(lrVal), float64(qVal))
-        self.assertTupleEqual((is_safe1, is_safe2), (is_safe1ShouldBe, is_safe2ShouldBe))
+        is_safe1 = calculations.is_safe1(float64(self.val2), self.params)
+        is_safe2 = calculations.is_safe2(float64(self.lrVal), float64(self.qVal))
+        self.assertTupleEqual((is_safe1, is_safe2), (self.is_safe1ShouldBe, self.is_safe2ShouldBe))
         
 if __name__ == '__main__':
     unittest.main()

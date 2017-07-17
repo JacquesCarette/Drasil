@@ -49,9 +49,9 @@ data Contents = Table [Sentence] [[Sentence]] Title Bool
                | Enumeration ListType -- ^ Lists
                | Figure Label Filepath -- ^ Should use relative file path.
                | Module ModuleChunk
-               | Requirement ReqChunk Sentence
+               | Requirement ReqChunk
                | Assumption AssumpChunk
-               | LikelyChange LCChunk Sentence
+               | LikelyChange LCChunk
                | UnlikelyChange UCChunk
      --        UsesHierarchy [(ModuleChunk,[ModuleChunk])]
                | Graph [(Sentence, Sentence)] (Maybe Width) (Maybe Height) Label
@@ -109,9 +109,9 @@ instance LayoutObj Contents where
   refName (Defnt dt _ r)        = getDefName dt +:+ r
   refName (Enumeration _)       = error "List refs unimplemented"
   refName (Module mc)           = S $ "M" ++ alphanumOnly (mc ^. id)
-  refName (Requirement rc _)    = S $ "R" ++ alphanumOnly (rc ^. id)
+  refName (Requirement rc)    = S $ "R" ++ alphanumOnly (rc ^. id)
   refName (Assumption ac)     = S $ "A" ++ alphanumOnly (ac ^. id)
-  refName (LikelyChange lcc _)  = S $ "LC" ++ alphanumOnly (lcc ^. id)
+  refName (LikelyChange lcc)  = S $ "LC" ++ alphanumOnly (lcc ^. id)
   refName (UnlikelyChange ucc)  = S $ "UC" ++ alphanumOnly (ucc ^. id)
 --  refName (UsesHierarchy _)     = S $ "Figure:UsesHierarchy"
   refName (Graph _ _ _ l)       = S "Figure:" :+: inferName l
@@ -124,9 +124,9 @@ instance LayoutObj Contents where
   rType (Definition _ _)        = Def
   rType (Defnt _ _ _)           = Def
   rType (Module _)              = Mod
-  rType (Requirement _ _)       = Req
+  rType (Requirement _)       = Req
   rType (Assumption _)        = Assump
-  rType (LikelyChange _ _)      = LC
+  rType (LikelyChange _)      = LC
   rType (UnlikelyChange _)      = UC
  -- rType (UsesHierarchy _)       = Fig
   rType (Graph _ _ _ _)         = Fig

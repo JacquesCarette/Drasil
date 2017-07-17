@@ -49,9 +49,9 @@ printLO (Header n contents)     = h n $ text (p_spec contents)
 printLO (List t)                = makeList t
 printLO (Figure r c f)          = makeFigure (p_spec r) (p_spec c) f
 printLO (Module m l)            = makeModule m (p_spec l)
-printLO (Assumption a l id)        = makeRefList (p_spec a) (p_spec l) (p_spec id)
-printLO (Requirement r l id)        = makeRefList (p_spec r) (p_spec l) (p_spec id)
-printLO (LikelyChange lc l id)        = makeRefList (p_spec lc) (p_spec l) (p_spec id)
+printLO (Assumption a l id)       = makeRefList (p_spec a) (p_spec l) (p_spec id)
+printLO (Requirement r l id)       = makeRefList (p_spec r) (p_spec l) (p_spec id)
+printLO (LikelyChange lc l id)      = makeRefList (p_spec lc) (p_spec l) (p_spec id)
 
 
 -- | Called by build, uses 'printLO' to render the layout 

@@ -313,7 +313,7 @@ mkAssumpCustom :: String -> Sentence -> String -> Contents
 mkAssumpCustom i desc x = Assumption $ nw $ npnc' i (nounPhraseSent desc) x
 
 mkRequirement :: String -> Sentence -> Contents
-mkRequirement i desc = Requirement (ReqChunk (nw $ npnc i $ nounPhraseSent desc) []) EmptyS
+mkRequirement i desc = Requirement (ReqChunk (nw $ npnc i $ nounPhraseSent desc) [])
 
 mkLklyChnk :: String -> Sentence -> Contents
-mkLklyChnk i desc = LikelyChange (LCChunk (nw $ npnc i $ nounPhraseSent desc) []) EmptyS
+mkLklyChnk i desc = LikelyChange (LCChunk (nw $ npnc i $ nounPhraseSent desc) [])

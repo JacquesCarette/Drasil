@@ -1507,18 +1507,16 @@ s4_2_7_deriv_5 eq pro rs = foldlSP [titleize' eq, S "(reference) and",
 
 req1, s5_1_1_Table, req2, s5_1_2_Eqn1, s5_1_2_Eqn2 :: Contents
 
-req1 = Requirement (ReqChunk (nw $ npnc "req1" $
-  nounPhraseSent (titleize input_ +:+ S "the following" +:+ plural quantity `sC`
+req1 = mkRequirement "req1" $
+  titleize input_ +:+ S "the following" +:+ plural quantity `sC`
   S "which define the" +:+ phrase tank +:+ plural parameter `sC` S "material" +:+
-  plural property +:+ S "and initial" +: plural condition))
-  []) EmptyS
+  plural property +:+ S "and initial" +: plural condition
 
-req2 = Requirement (ReqChunk (nw $ npnc "req2" $
-  nounPhraseSent (S "Use the" +:+ plural input_ +:+ S "in" +:+ makeRef req1 +:+
+req2 = mkRequirement "req2" $
+  S "Use the" +:+ plural input_ +:+ S "in" +:+ makeRef req1 +:+
   S "to find the" +:+ phrase mass +:+ S "needed for" +:+ acroIM 1 +:+ S "to" +:+
   acroIM 4 `sC` S "as follows, where" +:+ getS w_vol `isThe` phrase w_vol +:+
-  S "and" +: (getS tank_vol `isThe` phrase tank_vol)))
-  []) EmptyS
+  S "and" +: (getS tank_vol `isThe` phrase tank_vol)
 
 s5_1_2_Eqn1 = EqnBlock ((C w_mass) := (C w_vol) * (C w_density) := ((C tank_vol) -
   (C pcm_vol)) * (C w_density) := (((C diam) / 2) * (C tank_length) -
@@ -1600,43 +1598,37 @@ s5_2 = nonFuncReqF [performance] [correctness, verifiability,
 
 likeChg1, likeChg2, likeChg3, likeChg4, likeChg5, likeChg6 :: Contents
 
-likeChg1 = LikelyChange (LCChunk (nw $ npnc "likeChg1" $
-  nounPhraseSent (s6_start assump4 +:+ short phsChgMtrl +:+
+likeChg1 = mkLklyChnk "likeChg1" $
+  s6_start assump4 +:+ short phsChgMtrl +:+
   S "is actually a poor" +:+ phrase CT.thermal_conductor `sC` S "so" +:+
   S "the" +:+ phrase assumption +:+ S "of uniform" +:+ phrase temp_PCM +:+
-  S "is not likely."))
-  []) EmptyS
+  S "is not likely."
 --
-likeChg2 = LikelyChange (LCChunk (nw $ npnc "likeChg2" $
-  nounPhraseSent (s6_start assump8 +:+ S "The" +:+ phrase temp_C +:+
+likeChg2 = mkLklyChnk "likeChg2" $
+  s6_start assump8 +:+ S "The" +:+ phrase temp_C +:+
   S "will change over" +:+ (S "course" `ofThe` S "day, depending") +:+
-  S "on the" +:+ phrase energy +:+ S "received from the sun."))
-  []) EmptyS
+  S "on the" +:+ phrase energy +:+ S "received from the sun."
 --
-likeChg3 = LikelyChange (LCChunk (nw $ npnc "likeChg3" $
-  nounPhraseSent (s6_start assump9 +:+ S "The" +:+ phrase temp_C +:+
+likeChg3 = mkLklyChnk "likeChg3" $
+  s6_start assump9 +:+ S "The" +:+ phrase temp_C +:+
   S "will actually change along its length as the" +:+ phrase water +:+
-  S "within it cools."))
-  []) EmptyS
+  S "within it cools."
 --
-likeChg4 = LikelyChange (LCChunk (nw $ npnc "likeChg4" $
-  nounPhraseSent (s6_start assump11 +:+ S "The" +:+ phrase model +:+
+likeChg4 = mkLklyChnk "likeChg4" $
+  s6_start assump11 +:+ S "The" +:+ phrase model +:+
   S "currently only accounts for charging of the tank. A more complete"
-  +:+ phrase model +:+ S "would also account for discharging of the tank"))
-  []) EmptyS
+  +:+ phrase model +:+ S "would also account for discharging of the tank."
 --
-likeChg5 = LikelyChange (LCChunk (nw $ npnc "likeChg5" $
-  nounPhraseSent (s6_start assump12 +:+ S "To add more" +:+
+likeChg5 = mkLklyChnk "likeChg5" $
+  s6_start assump12 +:+ S "To add more" +:+
   S "flexibility to the" +:+ phrase simulation `sC`
   (phrase temp_init `ofThe` phrase water) `sAnd`
   S "the" +:+ short phsChgMtrl +:+ S "could be" +:+
-  S "allowed to have different" +:+. plural value))
-  []) EmptyS
+  S "allowed to have different" +:+. plural value
 --
-likeChg6 = LikelyChange (LCChunk (nw $ npnc "likeChg6" $
-  nounPhraseSent (s6_start assump15 +:+ S "Any real" +:+ phrase tank +:+
-  S "cannot be perfectly insulated and will lose" +:+. phrase CT.heat))
-  []) EmptyS
+likeChg6 = mkLklyChnk "likeChg6" $
+  s6_start assump15 +:+ S "Any real" +:+ phrase tank +:+
+  S "cannot be perfectly insulated and will lose" +:+. phrase CT.heat
 -- List structure same in all examples.
 
 --add referencing to assumptions?

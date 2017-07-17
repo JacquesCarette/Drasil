@@ -629,37 +629,31 @@ s5_1_list_words = [req1, req2, req3, req4, req5, req6]
 req1, req2, req3, req4, req5, req6 :: Contents
 
 --Empty list is supposed to take a ModuleChunk. Not sure what to put there.
-req1 = Requirement (ReqChunk (nw $ npnc "req1" $
-  nounPhraseSent (titleize input_ +:+ S "the following" +:+ plural quantity `sC`
+req1 = mkRequirement "req1" $
+  titleize input_ +:+ S "the following" +:+ plural quantity `sC`
   S "which define the" +:+ plural tank_para `sC` S "material" +:+
-  plural property +:+ S "and initial" +: plural condition))
-  []) EmptyS
-req2 = Requirement (ReqChunk (nw $ npnc "req2" $
-  nounPhraseSent (S "Use the" +:+ plural input_ +:+ S "in" +:+ makeRef req1 +:+
+  plural property +:+ S "and initial" +: plural condition
+req2 = mkRequirement "req2" $
+  S "Use the" +:+ plural input_ +:+ S "in" +:+ makeRef req1 +:+
   S "to find the" +:+ phrase mass +:+ S "needed for" +:+ acroIM 1 +:+ S "to" +:+
   acroIM 2 `sC` S "as follows, where" +:+ getS w_vol `isThe` phrase w_vol +:+
-  S "and" +: (getS tank_vol `isThe` phrase tank_vol)))
-  []) EmptyS
-req3 = Requirement (ReqChunk (nw $ npnc "req3" $
-  nounPhraseSent (S "Verify that the" +:+ plural input_ +:+ S "satisfy the required"
-  +:+ phrase physicalConstraint +:+ S "shown in" +:+. makeRef s4_2_6_table1))
-  []) EmptyS
-req4 = Requirement (ReqChunk (nw $ npnc "req4" $
-  nounPhraseSent (titleize' output_ +:+ S "and" +:+ plural input_ +:+ plural quantity
+  S "and" +: (getS tank_vol `isThe` phrase tank_vol)
+req3 = mkRequirement "req3" $
+  S "Verify that the" +:+ plural input_ +:+ S "satisfy the required"
+  +:+ phrase physicalConstraint +:+ S "shown in" +:+. makeRef s4_2_6_table1
+req4 = mkRequirement "req4" $
+  titleize' output_ +:+ S "and" +:+ plural input_ +:+ plural quantity
   +:+ S "and derived" +:+ plural quantity +:+ S "in the following list: the" +:+
   plural quantity +:+ S "from" +:+ (makeRef req1) `sC` S "the" +:+ phrase mass +:+
-  S "from" +:+ makeRef req2 +:+ S "and" +:+ getS tau_W +:+. sParen(S "from" +:+ acroIM 1)))
-  []) EmptyS
-req5 = Requirement (ReqChunk (nw $ npnc "req5" $
-  nounPhraseSent (S "Calculate and output the" +:+ phrase temp_W +:+
+  S "from" +:+ makeRef req2 +:+ S "and" +:+ getS tau_W +:+. sParen(S "from" +:+ acroIM 1)
+req5 = mkRequirement "req5" $
+  S "Calculate and output the" +:+ phrase temp_W +:+
   sParen (getS temp_W :+: sParen (getS time)) +:+ S "over the" +:+
-  phrase sim_time))
-  []) EmptyS
-req6 = Requirement (ReqChunk (nw $ npnc "req6" $
-  nounPhraseSent (S "Calculate and" +:+ phrase output_ +:+ S "the" +:+ phrase w_E
+  phrase sim_time
+req6 = mkRequirement "req6" $
+  S "Calculate and" +:+ phrase output_ +:+ S "the" +:+ phrase w_E
   +:+ sParen (getS w_E :+: sParen (getS time)) +:+ S "over the" +:+ phrase sim_time
-  +:+. sParen (S "from" +:+ acroIM 3)))
-  []) EmptyS
+  +:+. sParen (S "from" +:+ acroIM 3)
 
 -------------------------------------------
 --Section 5.2 : NON-FUNCTIONAL REQUIREMENTS

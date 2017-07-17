@@ -4,7 +4,7 @@
 module Language.Drasil.Expr where
 
 import GHC.Real (Ratio(..)) -- why not Data.Ratio?
-import Prelude hiding (id)
+import Prelude hiding (id, sqrt)
 import Language.Drasil.Chunk (Chunk(..))
 import Language.Drasil.Chunk.SymbolForm (SymbolForm)
 import Language.Drasil.Symbol
@@ -217,6 +217,13 @@ exp = UnaryOp . Exp
 summation, product :: (Maybe (Symbol, Bound, Bound)) -> Expr -> Expr
 summation bounds expr = UnaryOp $ Summation bounds expr
 product   bounds expr = UnaryOp $ Product   bounds expr
+
+-- | Euclidean function : takes a vector and returns the sqrt of the sum-of-squares
+euclidean :: SymbolForm t => [t] -> Expr
+euclidean []      = 0
+euclidean [x]     = square (C x)
+euclidean [x, y]  = square (C x) + square (C y)
+euclidean (x:y:z) = sqrt (euclidean [x, y] + euclidean z)
 
 -- | Binary Functions
 data BiFunc where

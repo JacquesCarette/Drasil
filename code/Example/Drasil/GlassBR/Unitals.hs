@@ -8,7 +8,7 @@ import Data.Drasil.SI_Units
 import Data.Drasil.Utils(symbolMapFun, mkDataDef, getS)
 import Control.Lens((^.))
 import Prelude hiding (log, id, sqrt)
-import Data.Drasil.SentenceStructures (foldlSent, displayConstrntsAsSet)
+import Data.Drasil.SentenceStructures (foldlSent, displayConstrntsAsSet, foldlsC)
 
 --FIXME: Many of the current terms can be separated into terms and defns?
 
@@ -401,20 +401,23 @@ sdWithEqn :: QDefinition
 sdWithEqn = mkDataDef standOffDist sdCalculation
 
 sdCalculation :: Relation
-sdCalculation = (C standOffDist) := sqrt ((square (C sdx)) + (square (C sdy))
-  + (square (C sdz)))
+sdCalculation = (C standOffDist) := euclidean sdVector
 
 sdVectorSent :: Sentence
-sdVectorSent = getS sdx `sC` getS sdy `sC` getS sdz
+sdVectorSent = foldlsC (map getS sdVector)
 
---sdVector :: Vector
---sdVector = Vect [sdx, sdy, sdz]
+sdVector :: [UnitaryChunk]
+sdVector = [sdx, sdy, sdz]
+
+--
 
 wtntWithEqn :: QDefinition
 wtntWithEqn = mkDataDef eqTNTWeight wtntCalculation
 
 wtntCalculation :: Relation
 wtntCalculation = (C eqTNTWeight) := (C char_weight) * (C tNT)
+
+--
 
 aspectRWithEqn :: QDefinition
 aspectRWithEqn = mkDataDef aspectR aspectRCalculation

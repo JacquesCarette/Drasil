@@ -38,7 +38,7 @@ matrixCol = 0
 
 {-interpY-}
 
-iVal, x_z_1, y_z_1, x_z_2, y_z_2, y_2Expr, y_1Expr, interpY :: Expr
+iVal, x_z_1, y_z_1, x_z_2, y_z_2, y_2Expr, y_1Expr, interpY, interpZ :: Expr
 
 iVal    = FCall (indInSeq)   [C z_array, C z]
 x_z_1   = FCall (matrixCol)  [C x_array, C i]
@@ -47,15 +47,8 @@ x_z_2   = FCall (matrixCol)  [C x_array, (C i) + 1]
 y_z_2   = FCall (matrixCol)  [C y_array, (C i) + 1]
 j       = FCall (indInSeq)   [x_z_1, C x]
 k       = FCall (indInSeq)   [x_z_2, C x]
-y_1Expr = FCall (lin_interp) [x_z_1{-[C j]-},      y_z_1{-[C j]-}, x_z_1{-[C j + 1] -},       y_z_1{-[C j + 1] -}, C x]
-y_2Expr = FCall (lin_interp) [x_z_2{-[k]-},        y_z_2{-[C k]-}, x_z_2{-[k + 1]-},          y_z_2{-[k + 1]-},    C x]
-interpY = FCall (lin_interp) [C z_array {-!!(i)-}, y_1Expr,        C z_array{-!!(iVal + 1)-}, y_2Expr,             C z]
-
----
-
-{-interpZ-}
-
-interpZ :: Expr
-
---for i in range(len(z_array) - 1):
+y_1Expr = FCall (lin_interp) [x_z_1{-[C j]-}     , y_z_1{-[C j]-}, x_z_1{-[C j + 1] -}      , y_z_1{-[C j + 1] -}, C x]
+y_2Expr = FCall (lin_interp) [x_z_2{-[k]-}       , y_z_2{-[C k]-}, x_z_2{-[k + 1]-}         , y_z_2{-[k + 1]-}   , C x]
+interpY = FCall (lin_interp) [C z_array {-!!(i)-}, y_1Expr       , C z_array{-!!(iVal + 1)-}, y_2Expr            , C z]
 interpZ = FCall (lin_interp) [y_1Expr, C z_array {-!!(i)-}, y_2Expr, C z_array{-!!(iVal + 1)-}, C y]
+--FIXME: "for i in range(len(z_array) - 1):" implementation from 'interpZ'?

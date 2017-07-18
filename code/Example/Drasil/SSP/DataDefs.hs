@@ -58,10 +58,10 @@ intersliceWtrF = mkDataDef watrForce intersliceWtrFEqn
 
 intersliceWtrFEqn :: Expr
 intersliceWtrFEqn = Case [case1,case2,case3]
-  where case1 = (((C slopeHght)-(C slipHght )):^(Int 2):/(Int 2) :* (C satWeight) +
-                 ((C waterHght)-(C slopeHght)):^(Int 2) :* (C satWeight),
+  where case1 = (((C slopeHght)-(C slipHght )):^(Int 2):/(Int 2) * (C satWeight) +
+                 ((C waterHght)-(C slopeHght)):^(Int 2) * (C satWeight),
                 (C waterHght) :>= (C slopeHght))
-        case2 = (((C waterHght)-(C slipHght )):^(Int 2):/(Int 2) :* (C satWeight),
+        case2 = (((C waterHght)-(C slipHght )):^(Int 2):/(Int 2) * (C satWeight),
                 (C slopeHght) :> (C waterHght) :> (C slipHght))
         case3 = (Int 0,(C waterHght) :<= (C slipHght))
 
@@ -71,7 +71,7 @@ angles :: QDefinition
 angles = mkDataDef baseAngle anglesEqn --, surfAngle?
 
 anglesEqn :: Expr
-anglesEqn = ((C slipHght) :- (C slipHght)) :/ ((C slipHght) :- (C slipHght))
+anglesEqn = ((C slipHght) - (C slipHght)) / ((C slipHght) - (C slipHght))
 --FIXME: x_slip,i and x_us,i are not defined, cannot put two equations here,
 --       need a way to index
 
@@ -81,9 +81,9 @@ lengths :: QDefinition
 lengths = mkDataDef baseWthX lengthsEqn --, baseLngth, surfLngth?
 
 lengthsEqn :: Expr
-lengthsEqn = (C slipHght) :- (C slipHght)
---(C baseLngth) := (C baseWthX) :* sec (C baseAngle)
---(C surfLngth) := (C baseWthX) :* sec (C surfAngle)
+lengthsEqn = (C slipHght) - (C slipHght)
+--(C baseLngth) = (C baseWthX) * sec (C baseAngle)
+--(C surfLngth) = (C baseWthX) * sec (C surfAngle)
 
 --DD7
 
@@ -91,7 +91,7 @@ seismicLoadF :: QDefinition
 seismicLoadF = mkDataDef earthqkLoadFctr ssmcLFEqn --correct chunk referenced for definition?
 
 ssmcLFEqn :: Expr
-ssmcLFEqn = ((C earthqkLoadFctr) :* (C slcWght)) 
+ssmcLFEqn = ((C earthqkLoadFctr) * (C slcWght)) 
 --FIXME: need index/ subscript changes
 
 --DD8
@@ -100,7 +100,7 @@ surfLoads :: QDefinition
 surfLoads = mkDataDef surfLoad surfLEqn --, slcWght?
 
 surfLEqn :: Expr
-surfLEqn = (C surfLoad) :* (C impLoadAngle) --FIXME: Should actually just be seperated with ','
+surfLEqn = (C surfLoad) * (C impLoadAngle) --FIXME: Should actually just be seperated with ','
 
 --DD9
 
@@ -108,7 +108,7 @@ intrsliceF :: QDefinition
 intrsliceF = mkDataDef intShrForce intrsliceFEqn
 
 intrsliceFEqn :: Expr
-intrsliceFEqn = (C normToShear) :* (C scalFunc) :* (C intNormForce)
+intrsliceFEqn = (C normToShear) * (C scalFunc) * (C intNormForce)
 
 --DD10
 
@@ -116,11 +116,11 @@ resShearWO :: QDefinition
 resShearWO = mkDataDef shearRNoIntsl resShearWOEqn
 
 resShearWOEqn :: Expr
-resShearWOEqn = (((C slcWght) :+ (C surfHydroForce) :* (cos (C surfAngle)) :+ 
-  (C surfLoad) :* (cos (C impLoadAngle))) :* (cos (C baseAngle)) :+
-  (Neg (C earthqkLoadFctr) :* (C slcWght) :- (C watrForceDif) :+ (C surfHydroForce)
-  :* sin (C surfAngle) :+ (C surfLoad) :* (sin (C impLoadAngle))) :* (sin (C baseAngle)) :- (C baseHydroForce)) :*
-  tan (C fricAngle) :+ (C cohesion) :* (C baseWthX) :* sec (C baseAngle)
+resShearWOEqn = (((C slcWght) + (C surfHydroForce) * (cos (C surfAngle)) + 
+  (C surfLoad) * (cos (C impLoadAngle))) * (cos (C baseAngle)) +
+  (Neg (C earthqkLoadFctr) * (C slcWght) - (C watrForceDif) + (C surfHydroForce)
+  :* sin (C surfAngle) + (C surfLoad) * (sin (C impLoadAngle))) * (sin (C baseAngle)) - (C baseHydroForce)) *
+  tan (C fricAngle) + (C cohesion) * (C baseWthX) * sec (C baseAngle)
 
 --DD11
 
@@ -128,10 +128,10 @@ mobShearWO :: QDefinition
 mobShearWO = mkDataDef shearFNoIntsl mobShearWOEqn
 
 mobShearWOEqn :: Expr 
-mobShearWOEqn = ((C slcWght) :+ (C surfHydroForce) :* (cos (C surfAngle)) :+ 
-  (C surfLoad) :* (cos (C impLoadAngle))) :* (sin (C baseAngle)) :- 
-  (Neg (C earthqkLoadFctr) :* (C slcWght) :- (C watrForceDif) :+ (C surfHydroForce)
-  :* sin (C surfAngle) :+ (C surfLoad) :* (sin (C impLoadAngle))) :* (cos (C baseAngle))
+mobShearWOEqn = ((C slcWght) + (C surfHydroForce) * (cos (C surfAngle)) + 
+  (C surfLoad) * (cos (C impLoadAngle))) * (sin (C baseAngle)) - 
+  (Neg (C earthqkLoadFctr) * (C slcWght) - (C watrForceDif) + (C surfHydroForce)
+  :* sin (C surfAngle) + (C surfLoad) * (sin (C impLoadAngle))) * (cos (C baseAngle))
 
 --DD12
 
@@ -139,7 +139,7 @@ displcmntRxnF :: QDefinition
 displcmntRxnF = mkDataDef shrStiffIntsl displcmntRxnFEqn --, shrStiffBase (correct chunk used?)
 
 displcmntRxnFEqn :: Expr
-displcmntRxnFEqn = (Int 0)
+displcmntRxnFEqn = dgnl2x2 (C shrStiffIntsl) (C nrmStiffBase) * vec2D (C dx_i) (C dy_i)
 
 --DD13 FIXME: id for "Net Force-Displacement Equilibrium"
 
@@ -163,4 +163,4 @@ soilStiffnessEqn = (Case [case1,case2]) --FIXME: see equation 28 in derivation f
         case2 = ((Dbl 0.01) * block + (V "k") / ((C nrmDispl)+(V "A")),
                 (C SM.poissnsR) :>= (Int 0))
         block = (C intNormForce)*((Int 1)-(C SM.poissnsR))/
-                (((Int 1)+(C SM.poissnsR)) :* ((Int 1) :- (Int 2):*(C SM.poissnsR) :+ (C baseWthX)))
+                (((Int 1)+(C SM.poissnsR)) * ((Int 1) - (Int 2):*(C SM.poissnsR) + (C baseWthX)))

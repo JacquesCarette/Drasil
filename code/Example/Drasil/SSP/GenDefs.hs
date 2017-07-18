@@ -200,7 +200,7 @@ hookesLaw2d :: RelationConcept
 hookesLaw2d = makeRC "hookesLaw2d" (nounPhraseSP "Hooke's law 2D") hooke2d_desc hooke2d_rel
 
 hooke2d_rel :: Relation
-hooke2d_rel = (Int 0) := (Int 0) --FIXME: cannot yet generate matrices
+hooke2d_rel = vec2D (C genPressure) (C genPressure) := dgnl2x2 (C shrStiffIntsl) (C nrmStiffBase) * vec2D (C dx_i) (C dy_i)
 
 hooke2d_desc :: Sentence
 hooke2d_desc = foldlSent [S "A 2D component implementation of Hooke's law as seen in" +:+.
@@ -227,7 +227,11 @@ displVect :: RelationConcept
 displVect = makeRC "displVect" (nounPhraseSP "displacement vectors") disVec_desc disVec_rel
 
 disVec_rel :: Relation
-disVec_rel = (Int 0) := (Int 0) --FIXME: cannot yet generate matrices
+disVec_rel = C rotatedDispl := vec2D (C shrDispl) (C nrmDispl) :=
+  m2x2 (cos(C baseAngle)) (sin(C baseAngle)) (Neg $ sin(C baseAngle)) (cos(C baseAngle)) *
+  (C genDisplace) :=
+  m2x2 (cos(C baseAngle)) (sin(C baseAngle)) (Neg $ sin(C baseAngle)) (cos(C baseAngle)) *
+  vec2D (C dx_i) (C dy_i)
 
 disVec_desc :: Sentence
 disVec_desc = foldlSent [at_start' vector, S "describing the", phrase displacement,

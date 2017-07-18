@@ -21,10 +21,11 @@ class TestCheckConstraints(unittest.TestCase):
             derivedValues.derived_params(self.params[i])
     
     def test_check_constraints(self):
-        with self.assertRaises(SystemExit) as context:
-            checkConstraints.check_constraints(self.params[i])
-
-        self.assertEqual((self.errorMsg[i]), context.exception.args[0])
+    	for i in range(self.numTests):
+    	    with self.subTest(i=i):
+    	        with self.assertRaises(SystemExit) as context: 
+    	            checkConstraints.check_constraints(self.params[i]) 
+    	        self.assertEqual((self.errorMsg[i]), context.exception.args[0])
     
 if __name__ == "__main__":
     unittest.main()

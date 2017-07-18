@@ -21,10 +21,12 @@ class TestCheckConstraints(unittest.TestCase):
             derivedValues.derived_params(self.params[i])
     
     def test_check_constraints(self):
-        try:
-            checkConstraints.check_constraints(self.params[i])
-        except:
-            self.fail("Encountered an unexpected exception")
+        for i in range(self.numTests):
+            with self.subTest(i=i):
+                try:
+                    checkConstraints.check_constraints(self.params[i])
+                except:
+                    self.fail("Encountered an unexpected exception")
 
 if __name__ == "__main__":
     unittest.main()

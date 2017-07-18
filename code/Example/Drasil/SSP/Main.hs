@@ -1,8 +1,8 @@
 module Main where
 
-import Language.Drasil (DocType(SRS,MG,Website),Recipe(Recipe),gen)
+import Language.Drasil (DocType(SRS,MG,Website),Recipe(Recipe),gen, genCode)
 
-import Drasil.SSP.Body (ssp_srs, ssp_mg)
+import Drasil.SSP.Body (ssp_srs, ssp_mg, ssp_code)
 
 docs :: [Recipe]
 docs = [Recipe (Website "SSP_SRS") ssp_srs,
@@ -14,3 +14,4 @@ docs = [Recipe (Website "SSP_SRS") ssp_srs,
 main :: IO ()            
 main = do
   gen docs
+--  genCode ssp_code

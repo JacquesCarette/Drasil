@@ -38,7 +38,9 @@ data Symbol where
 --  allow custom?  
 instance Ord Symbol where
   compare (Concat (x:[]))       (Concat (y:[]))        = compare x y
-  compare (Concat (x:xs))       (Concat (x':ys))       = 
+  compare (Concat ((Greek Delta):xs))                b = compare (Concat xs) b 
+  compare a                (Concat ((Greek Delta):ys)) = compare a           (Concat ys)
+  compare (Concat (x:xs))       (Concat (x':ys))       = --The above two lines ensure symbols like "x" and "delta x" stay together
     case compare x x' of
       EQ -> compare xs ys
       other -> other

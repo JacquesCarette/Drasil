@@ -16,7 +16,7 @@ class TestDerivedValues(unittest.TestCase):
         self.assertEqual(1.2, params.asprat)
         self.assertEqual(10.198039027185569, params.sd)
         self.assertEqual(0.2696493494752911, params.ldf)
-        self.assertEqual(10.0,params. wtnt)
+        self.assertEqual(10.0, params.wtnt)
         self.assertEqual(7.42, params.h)
         self.assertEqual(1, params.gtf)
         

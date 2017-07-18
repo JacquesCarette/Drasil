@@ -70,19 +70,19 @@ $i$ & Index: used to show a quantity applies to only one slice &
 \\
 $K$ & Stiffness: The extent a body resists strain. & $\frac{\text{N}}{\text{m}}$
 \\
-$K_{bn,i}$ & Normal Stiffness: for a slice base surface, without length adjustment for slice index i & Pa
+$K_{bn,i}$ & Normal Stiffness: for a slice base surface, without length adjustment for slice index i & $\frac{\text{Pa}}{\text{m}}$
 \\
-$K_{bt,i}$ & Shear Stiffness: for a slice base surface, without length adjustment for slice index i & Pa
+$K_{bt,i}$ & Shear Stiffness: for a slice base surface, without length adjustment for slice index i & $\frac{\text{Pa}}{\text{m}}$
 \\
 $K_{c}$ & Earthquake Load Factor: proportionality factor of force that weight pushes outwards; caused by seismic earth movements & 
 \\
-$K_{no}$ & Normal Stiffness: residual strength & Pa
+$K_{no}$ & Normal Stiffness: residual strength & $\frac{\text{Pa}}{\text{m}}$
 \\
-$K_{sn,i}$ & Normal Stiffness: for an interslice surface, without length adjustment for interslice index i & Pa
+$K_{sn,i}$ & Normal Stiffness: for an interslice surface, without length adjustment for interslice index i & $\frac{\text{Pa}}{\text{m}}$
 \\
-$K_{st,i}$ & Shear Stiffness: for interslice surface, without length adjustment for interslice index i & Pa
+$K_{st,i}$ & Shear Stiffness: for interslice surface, without length adjustment for interslice index i & $\frac{\text{Pa}}{\text{m}}$
 \\
-$K_{tr}$ & Shear Stiffness: residual strength & Pa
+$K_{tr}$ & Shear Stiffness: residual strength & $\frac{\text{Pa}}{\text{m}}$
 \\
 $M$ & Moment of a Body: assumed 2D allowing a scalar & Nm
 \\
@@ -103,6 +103,8 @@ $Q_{i}$ & Imposed Surface Load: a downward force acting into the surface from mi
 $R_{i}$ & Resistive Shear Force: without the influence of interslice forces for slice index i & N
 \\
 $S_{i}$ & Mobilized Shear Force: for slice index i & N
+\\
+$s_{i}$ & Mobilized Shear Stress: acting on the base of a slice & Pa
 \\
 $T_{i}$ & Mobilized Shear Force: without the influence of interslice forces for slice index i & N
 \\
@@ -160,7 +162,7 @@ $\nu{}$ & Poisson's Ratio: The ratio of perpendicular strain to parellel strain.
 \\
 $\sigma{}$ & Normal Stress: The stress exerted perpendicular to the plain of the object & Pa
 \\
-$\tau{}_{i}$ & Shear Stress: acting on the base of a slice & Pa
+$\tau{}_{i}$ & Resistive Shear Stress: acting on the base of a slice & Pa
 \\
 $\Upsilon{}$ & Function: generic minimization function or algorithm & 
 \\
@@ -348,7 +350,7 @@ Label & Mohr-Coulumb shear strength
 \\ \midrule \\
 Equation & $\tau{}_{i}=\sigma{}\tan\left(\varphi{}'\right)+c'$
 \\ \midrule \\
-Description & For a soil under stress it will exert a shear resistive strength based on the Coulomb sliding law. The resistive shear is the maximum amount of shear a surface can experience while remaining rigid, analogous to a maximum normal force. In this model the shear stress $\tau{}_{i}$ is proportional to the product of the normal stress on the plane $\sigma{}$ with it's static friction in the angular form $\tan\left(\varphi{}'\right)=U_{t,i}$. The $\tau{}_{i}$ versus $\sigma{}$ relationship is not truly linear, but assuming the effective normal force is strong enough it can be approximated with a linear fit (A9) where the cohesion $c'$ represents the $\tau{}_{i}$ intercept of the fitted line.
+Description & For a soil under stress it will exert a shear resistive strength based on the Coulomb sliding law. The resistive shear is the maximum amount of shear a surface can experience while remaining rigid, analogous to a maximum normal force. In this model the resistive shear stress $\tau{}_{i}$ is proportional to the product of the normal stress on the plane $\sigma{}$ with it's static friction in the angular form $\tan\left(\varphi{}'\right)=U_{t,i}$. The $\tau{}_{i}$ versus $\sigma{}$ relationship is not truly linear, but assuming the effective normal force is strong enough it can be approximated with a linear fit (A9) where the cohesion $c'$ represents the $\tau{}_{i}$ intercept of the fitted line.
 \\ \bottomrule \end{tabular}
 \end{minipage}\\
 ~\newline
@@ -489,7 +491,16 @@ Description & The net sum of forces acting on a slice for the RFEM model. The fo
 \\ \midrule \\
 Label & Hooke's law 2D
 \\ \midrule \\
-Equation & $0=0$
+Equation & $\begin{bmatrix}
+p_{i}\\
+p_{i}
+\end{bmatrix}=\begin{bmatrix}
+K_{st,i} & 0\\
+0 & K_{bn,i}
+\end{bmatrix}\begin{bmatrix}
+\delta{}x_{i}\\
+\delta{}y_{i}
+\end{bmatrix}$
 \\ \midrule \\
 Description & A 2D component implementation of Hooke's law as seen in T5. $\delta{}n_{i}$ is the displacement of the element normal to the surface and $\delta{}t_{i}$ is the displacement of the element parallel to the surface. Pn,i is the net pressure acting normal to the surface, and Pt,i is the net pressure acting parallel to the surface. Pressure is used in place of force as the surface has not been normalized for it's length. The stiffness values Kn,i and Kt,i are then the resistance to displacement in the respective directions defined as in DD14. The pressure forces would be the result of applied loads on the mass, the product of the stiffness elements with the displacement would be the mass 's reactive force that creates equilibrium with the applied forces after reaching the equilibrium displacement.
 \\ \bottomrule \end{tabular}
@@ -503,7 +514,19 @@ Description & A 2D component implementation of Hooke's law as seen in T5. $\delt
 \\ \midrule \\
 Label & displacement vectors
 \\ \midrule \\
-Equation & $0=0$
+Equation & $\varepsilon{}_{i}=\begin{bmatrix}
+\delta{}u_{i}\\
+\delta{}v_{i}
+\end{bmatrix}=\begin{bmatrix}
+\cos\left(\alpha{}_{i}\right) & \sin\left(\alpha{}_{i}\right)\\
+\left(-\sin\left(\alpha{}_{i}\right)\right) & \cos\left(\alpha{}_{i}\right)
+\end{bmatrix}\delta{}=\begin{bmatrix}
+\cos\left(\alpha{}_{i}\right) & \sin\left(\alpha{}_{i}\right)\\
+\left(-\sin\left(\alpha{}_{i}\right)\right) & \cos\left(\alpha{}_{i}\right)
+\end{bmatrix}\begin{bmatrix}
+\delta{}x_{i}\\
+\delta{}y_{i}
+\end{bmatrix}$
 \\ \midrule \\
 Description & Vectors describing the displacement of slice i. $\delta{}$ is the displacement in the unrotated coordinate system, where $\delta{}x_{i}$ is the displacement of the slice perpendicular to the direction of gravity, and $\delta{}y_{i}$ is the displacement of the slice parallel to the force of gravity. $\varepsilon{}_{i}$ is the displacement in the rotated coordinate system, where $\delta{}u_{i}$ is the displacement of the slice parallel to the slice base, and $\delta{}y_{i}$ is the displacement of the slice perpendicular to the slice base. $\varepsilon{}_{i}$ can also be found by rotating $\delta{}$ clockwise by the base angle, $\alpha{}_{i}$ through a rotation matrix as shown.
 \\ \bottomrule \end{tabular}
@@ -731,11 +754,17 @@ The values of $R_{i}$ and $T_{i}$ are now defined completely in terms of the kno
 \\ \midrule \\
 Label & $K_{st,i}$
 \\ \midrule \\
-Units & Pa
+Units & $\frac{\text{Pa}}{\text{m}}$
 \\ \midrule \\
-Equation & $K_{st,i}$ = $0$
+Equation & $K_{st,i}$ = $\begin{bmatrix}
+K_{st,i} & 0\\
+0 & K_{bn,i}
+\end{bmatrix}\begin{bmatrix}
+\delta{}x_{i}\\
+\delta{}y_{i}
+\end{bmatrix}$
 \\ \midrule \\
-Description & $K_{st,i}$ is the shear stiffness
+Description & $K_{st,i}$ is the shear stiffness\newline$K_{st,i}$ is the shear stiffness\newline$K_{bn,i}$ is the normal stiffness\newline$\delta{}x_{i}$ is the displacement\newline$\delta{}y_{i}$ is the displacement
 \\ \bottomrule \end{tabular}
 \end{minipage}\\
 Using the force-displacement relationship of GD8 to define stiffness matrix $K_{st,i}$, as seen in equation (6).
@@ -820,7 +849,7 @@ Description & $F$ is the force\newline$\ell{}_{s,i}$ is the length of an intersl
 \\ \midrule \\
 Label & $K_{no}$
 \\ \midrule \\
-Units & Pa
+Units & $\frac{\text{Pa}}{\text{m}}$
 \\ \midrule \\
 Equation & $K_{no}$ = $\begin{cases}
 \frac{E_{i}\left(1-\nu{}\right)}{\left(1+\nu{}\right)\left(1-2\nu{}+b_{i}\right)}, & \nu{}<0\\
@@ -972,23 +1001,23 @@ With the definition of normal stiffness from DD14 to find the normal stiffness o
 \end{equation}
 The resistive shear to calculate the factor of safety $FS$ is found from the Mohr Coulomb resistive strength of soil in T3 Using the normal stress $\sigma{}$ from equation (26) as the stress, the resistive shear of the slice can be calculated from equation (27).
 \begin{equation}
-S_{i}=c'-\sigma{}\tan\left(\varphi{}'\right)
+s_{i}=c'-\sigma{}\tan\left(\varphi{}'\right)
 \end{equation}
 Previously the value of the shear stiffness $K_{bt,i}$ as seen in equation (28) was unsolvable because the normal stress $\sigma{}$ was unknown. With the definition of $\sigma{}$ from equation (26) and the definition of displacement shear to the base $\delta{}u_{i}$ from equation (25), the value of $K_{bt,i}$ becomes solvable.
 \begin{equation}
 K_{bt,i}=\frac{E_{i}}{2\left(1+\nu{}\right)}\frac{0.1}{b_{i}}+\frac{c'-\sigma{}\tan\left(\varphi{}'\right)}{|\delta{}u_{i}|+a}
 \end{equation}
-With shear stiffness $K_{bt,i}$ calculated in equation (28) and shear displacement $\delta{}u_{i}$ calculated in equation (24) values now known the shear stress acting on the base of a slice $\tau{}_{i}$ can be calculated using T5, as done in equation (29). Again, stress $\tau{}_{i}$ is used in place of force $F$ as the stiffness has not been normalized for the length of the base.
+With shear stiffness $K_{bt,i}$ calculated in equation (28) and shear displacement $\delta{}u_{i}$ calculated in equation (24) values now known the resistive shear stress acting on the base of a slice $\tau{}_{i}$ can be calculated using T5, as done in equation (29). Again, stress $\tau{}_{i}$ is used in place of force $F$ as the stiffness has not been normalized for the length of the base.
 \begin{equation}
 \tau{}_{i}=K_{bt,i}\delta{}u_{i}
 \end{equation}
-The shear stress acting on the base of a slice $\tau{}_{i}$ acts as the mobile shear acting on the base. Using the definition Factor of Safety equation from T1, with the definitions of resistive shear strength of a slice $S_{i}$ from equation (27) and shear stress on a slice $\tau{}_{i}$ from equation (29) the local factor of safety $FS_{Loc,i}$ can be found from as seen in equation (30) and IM5.
+The resistive shear stress acting on the base of a slice $\tau{}_{i}$ acts as the mobile shear acting on the base. Using the definition Factor of Safety equation from T1, with the definitions of resistive shear strength of a slice $s_{i}$ from equation (27) and shear stress on a slice $\tau{}_{i}$ from equation (29) the local factor of safety $FS_{Loc,i}$ can be found from as seen in equation (30) and IM5.
 \begin{equation}
-FS_{Loc,i}=\frac{S_{i}}{\tau{}_{i}}=\frac{c'-K_{bn,i}\delta{}v_{i}\tan\left(\varphi{}'\right)}{K_{bt,i}\delta{}u_{i}}
+FS_{Loc,i}=\frac{s_{i}}{\tau{}_{i}}=\frac{c'-K_{bn,i}\delta{}v_{i}\tan\left(\varphi{}'\right)}{K_{bt,i}\delta{}u_{i}}
 \end{equation}
 The global Factor of Safety is then the ratio of the summation of the resistive and mobile shears for each slice, with a weighting for the length of the slice's base. Shown in equation (31) and IM5.
 \begin{equation}
-FS=\frac{\displaystyle\sum_{i=1}^{n}{\left[\ell{}_{b,i}S_{i}\right]}}{\displaystyle\sum_{i=1}^{n}{\left[\ell{}_{b,i}\tau{}_{i}\right]}}=\frac{\displaystyle\sum_{i=1}^{n}{\left[\ell{}_{b,i}\left(c'-K_{bn,i}\delta{}v_{i}\tan\left(\varphi{}'\right)\right)\right]}}{\displaystyle\sum_{i=1}^{n}{\left[\ell{}_{b,i}K_{bt,i}\delta{}u_{i}\right]}}
+FS=\frac{\displaystyle\sum_{i=1}^{n}{\left[\ell{}_{b,i}s_{i}\right]}}{\displaystyle\sum_{i=1}^{n}{\left[\ell{}_{b,i}\tau{}_{i}\right]}}=\frac{\displaystyle\sum_{i=1}^{n}{\left[\ell{}_{b,i}\left(c'-K_{bn,i}\delta{}v_{i}\tan\left(\varphi{}'\right)\right)\right]}}{\displaystyle\sum_{i=1}^{n}{\left[\ell{}_{b,i}K_{bt,i}\delta{}u_{i}\right]}}
 \end{equation}
 ~\newline
 \noindent \begin{minipage}{\textwidth}

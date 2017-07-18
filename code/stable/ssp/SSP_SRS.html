@@ -213,6 +213,17 @@ N
 </tr>
 <tr>
 <td>
+<em>&Delta;H<sub>i</sub></em>
+</td>
+<td>
+Difference Between Interslice Forces: exerted in the x-ordinate direction between adjacent slices for interslice index i
+</td>
+<td>
+N
+</td>
+</tr>
+<tr>
+<td>
 <em>h<sub>i</sub></em>
 </td>
 <td>
@@ -543,6 +554,17 @@ m
 </tr>
 <tr>
 <td>
+<em>z<sub>i</sub></em>
+</td>
+<td>
+Center of Slice Height: the distance from the lowest part of the slice to the height of the centers of slice
+</td>
+<td>
+m
+</td>
+</tr>
+<tr>
+<td>
 <em>{x<sub>cs</sub>,y<sub>cs</sub>}</em>
 </td>
 <td>
@@ -682,17 +704,6 @@ Displacement: in the y-ordinate direction for slice index i
 </td>
 <td>
 m
-</td>
-</tr>
-<tr>
-<td>
-<em>&Delta;H<sub>i</sub></em>
-</td>
-<td>
-Difference Between Interslice Forces Acting in the X-Ordinate Direction of the Slice on Each Side: for interslice index i
-</td>
-<td>
-N
 </td>
 </tr>
 <tr>
@@ -1062,7 +1073,7 @@ SSA is a computer program developed to evaluate the factor of safety of a slope'
 Terminology and Definitions
 </h4>
 <p class="paragraph">
-This subsection provides a list of terms that are used in the subsequent sections and their meaning, with the purpose of reducing ambiguity and making it easier to correctly understand the requirements.
+This subsection provides a list of terms that are used in the subsequent sections and their meaning, with the purpose of reducing ambiguity and making it easier to correctly understand the requirements:
 </p>
 <div class="list">
 <p>
@@ -1619,28 +1630,28 @@ Equation
 <td>
 <a id="">
 <div class="equation">
-0 = -<em>E<sub>i</sub></em>(1 &minus; <div class="fraction">
+0 = -<em>E<sub>i</sub></em>(<em>z<sub>i</sub></em> &minus; <div class="fraction">
 <span class="fup">
 <em>b<sub>i</sub></em>
 </span>
 <span class="fdn">
 2
 </span>
-</div>tan(<em>&alpha;<sub>i</sub></em>)) &plus; <em>E<sub>i</sub></em>(1 &minus; <div class="fraction">
+</div>tan(<em>&alpha;<sub>i</sub></em>)) &plus; <em>E<sub>i</sub></em>(<em>z<sub>i</sub></em> &minus; <div class="fraction">
 <span class="fup">
 <em>b<sub>i</sub></em>
 </span>
 <span class="fdn">
 2
 </span>
-</div>tan(<em>&alpha;<sub>i</sub></em>)) &minus; <em>H<sub>i</sub></em>(1 &minus; <div class="fraction">
+</div>tan(<em>&alpha;<sub>i</sub></em>)) &minus; <em>H<sub>i</sub></em>(<em>z<sub>i</sub></em> &minus; <div class="fraction">
 <span class="fup">
 <em>b<sub>i</sub></em>
 </span>
 <span class="fdn">
 2
 </span>
-</div>tan(<em>&alpha;<sub>i</sub></em>)) &plus; <em>H<sub>i</sub></em>(1 &minus; <div class="fraction">
+</div>tan(<em>&alpha;<sub>i</sub></em>)) &plus; <em>H<sub>i</sub></em>(<em>z<sub>i</sub></em> &minus; <div class="fraction">
 <span class="fup">
 <em>b<sub>i</sub></em>
 </span>
@@ -2358,7 +2369,7 @@ Description
 </th>
 <td>
 <p class="paragraph">
-<em>R<sub>i</sub></em> is the resistive shear force<br /><em>W<sub>i</sub></em> is the weight<br /><em>U<sub>t,i</sub></em> is the surface hydrostatic force<br /><em>&beta;<sub>i</sub></em> is the angle<br /><em>Q<sub>i</sub></em> is the imposed surface load<br /><em>&omega;<sub>i</sub></em> is the angle<br /><em>&alpha;<sub>i</sub></em> is the angle<br /><em>K<sub>c</sub></em> is the earthquake load factor<br /><em>&Delta;H<sub>i</sub></em> is the difference between interslice forces acting in the x-ordinate direction of the slice on each side<br /><em>U<sub>b,i</sub></em> is the base hydrostatic force<br /><em>&phiv;'</em> is the effective angle of friction<br /><em>c'</em> is the effective cohesion<br /><em>b<sub>i</sub></em> is the base width of a slice
+<em>R<sub>i</sub></em> is the resistive shear force<br /><em>W<sub>i</sub></em> is the weight<br /><em>U<sub>t,i</sub></em> is the surface hydrostatic force<br /><em>&beta;<sub>i</sub></em> is the angle<br /><em>Q<sub>i</sub></em> is the imposed surface load<br /><em>&omega;<sub>i</sub></em> is the angle<br /><em>&alpha;<sub>i</sub></em> is the angle<br /><em>K<sub>c</sub></em> is the earthquake load factor<br /><em>&Delta;H<sub>i</sub></em> is the difference between interslice forces<br /><em>U<sub>b,i</sub></em> is the base hydrostatic force<br /><em>&phiv;'</em> is the effective angle of friction<br /><em>c'</em> is the effective cohesion<br /><em>b<sub>i</sub></em> is the base width of a slice
 </p>
 </td>
 </tr>
@@ -2428,7 +2439,7 @@ Description
 </th>
 <td>
 <p class="paragraph">
-<em>T<sub>i</sub></em> is the mobilized shear force<br /><em>W<sub>i</sub></em> is the weight<br /><em>U<sub>t,i</sub></em> is the surface hydrostatic force<br /><em>&beta;<sub>i</sub></em> is the angle<br /><em>Q<sub>i</sub></em> is the imposed surface load<br /><em>&omega;<sub>i</sub></em> is the angle<br /><em>&alpha;<sub>i</sub></em> is the angle<br /><em>K<sub>c</sub></em> is the earthquake load factor<br /><em>&Delta;H<sub>i</sub></em> is the difference between interslice forces acting in the x-ordinate direction of the slice on each side
+<em>T<sub>i</sub></em> is the mobilized shear force<br /><em>W<sub>i</sub></em> is the weight<br /><em>U<sub>t,i</sub></em> is the surface hydrostatic force<br /><em>&beta;<sub>i</sub></em> is the angle<br /><em>Q<sub>i</sub></em> is the imposed surface load<br /><em>&omega;<sub>i</sub></em> is the angle<br /><em>&alpha;<sub>i</sub></em> is the angle<br /><em>K<sub>c</sub></em> is the earthquake load factor<br /><em>&Delta;H<sub>i</sub></em> is the difference between interslice forces
 </p>
 </td>
 </tr>
@@ -2878,42 +2889,42 @@ Taking the last static equation of T2 with the moment equilibrium of GD6 about t
 </p>
 <a id="">
 <div class="equation">
-0 = -<em>E<sub>i</sub></em>(1 &minus; <div class="fraction">
+0 = -<em>E<sub>i</sub></em>(<em>z<sub>i</sub></em> &minus; <div class="fraction">
 <span class="fup">
 <em>b<sub>i</sub></em>
 </span>
 <span class="fdn">
 2
 </span>
-</div>tan(<em>&alpha;<sub>i</sub></em>)) &plus; <em>E<sub>i</sub></em>(1 &minus; <div class="fraction">
+</div>tan(<em>&alpha;<sub>i</sub></em>)) &plus; <em>E<sub>i</sub></em>(<em>z<sub>i</sub></em> &minus; <div class="fraction">
 <span class="fup">
 <em>b<sub>i</sub></em>
 </span>
 <span class="fdn">
 2
 </span>
-</div>tan(<em>&alpha;<sub>i</sub></em>)) &minus; <em>H<sub>i</sub></em>(1 &minus; <div class="fraction">
+</div>tan(<em>&alpha;<sub>i</sub></em>)) &minus; <em>H<sub>i</sub></em>(<em>z<sub>i</sub></em> &minus; <div class="fraction">
 <span class="fup">
 <em>b<sub>i</sub></em>
 </span>
 <span class="fdn">
 2
 </span>
-</div>tan(<em>&alpha;<sub>i</sub></em>)) &plus; <em>H<sub>i</sub></em>(1 &minus; <div class="fraction">
+</div>tan(<em>&alpha;<sub>i</sub></em>)) &plus; <em>H<sub>i</sub></em>(<em>z<sub>i</sub></em> &minus; <div class="fraction">
 <span class="fup">
 <em>b<sub>i</sub></em>
 </span>
 <span class="fdn">
 2
 </span>
-</div>tan(<em>&alpha;<sub>i</sub></em>)) &minus; <div class="fraction">
+</div>tan(<em>&alpha;<sub>i</sub></em>)) &minus; <em>&lambda;</em><div class="fraction">
 <span class="fup">
 <em>b<sub>i</sub></em>
 </span>
 <span class="fdn">
 2
 </span>
-</div>(<em>X<sub>i</sub></em> &plus; <em>X<sub>i</sub></em>) &plus; <div class="fraction">
+</div>(<em>E<sub>i</sub></em><em>f<sub>i</sub></em> &plus; <em>E<sub>i</sub></em><em>f<sub>i</sub></em>) &plus; <div class="fraction">
 <span class="fup">
 <em>K<sub>c</sub></em><em>W<sub>i</sub></em><em>h<sub>i</sub></em>
 </span>
@@ -2930,49 +2941,7 @@ The equation in terms of <em>&lambda;</em> leads to equation (14).
 <div class="equation">
 <em>&lambda;</em> = <div class="fraction">
 <span class="fup">
-0 = -<em>E<sub>i</sub></em>(1 &minus; <div class="fraction">
-<span class="fup">
-<em>b<sub>i</sub></em>
-</span>
-<span class="fdn">
-2
-</span>
-</div>tan(<em>&alpha;<sub>i</sub></em>)) &plus; <em>E<sub>i</sub></em>(1 &minus; <div class="fraction">
-<span class="fup">
-<em>b<sub>i</sub></em>
-</span>
-<span class="fdn">
-2
-</span>
-</div>tan(<em>&alpha;<sub>i</sub></em>)) &minus; <em>H<sub>i</sub></em>(1 &minus; <div class="fraction">
-<span class="fup">
-<em>b<sub>i</sub></em>
-</span>
-<span class="fdn">
-2
-</span>
-</div>tan(<em>&alpha;<sub>i</sub></em>)) &plus; <em>H<sub>i</sub></em>(1 &minus; <div class="fraction">
-<span class="fup">
-<em>b<sub>i</sub></em>
-</span>
-<span class="fdn">
-2
-</span>
-</div>tan(<em>&alpha;<sub>i</sub></em>)) &minus; <div class="fraction">
-<span class="fup">
-<em>b<sub>i</sub></em>
-</span>
-<span class="fdn">
-2
-</span>
-</div>(<em>X<sub>i</sub></em> &plus; <em>X<sub>i</sub></em>) &plus; <div class="fraction">
-<span class="fup">
-<em>K<sub>c</sub></em><em>W<sub>i</sub></em><em>h<sub>i</sub></em>
-</span>
-<span class="fdn">
-2
-</span>
-</div> &minus; <em>U<sub>t,i</sub></em>sin(<em>&beta;<sub>i</sub></em>)<em>h<sub>i</sub></em> &minus; <em>Q<sub>i</sub></em>sin(<em>&omega;<sub>i</sub></em>)<em>h<sub>i</sub></em>
+-<em>E<sub>i</sub></em>(<em>z<sub>i</sub></em> &minus; <em>b<sub>i</sub></em>/2tan(<em>&alpha;<sub>i</sub></em>)) &plus; <em>E<sub>i</sub></em>(<em>z<sub>i</sub></em> &minus; <em>b<sub>i</sub></em>/2tan(<em>&alpha;<sub>i</sub></em>)) &minus; <em>H<sub>i</sub></em>(<em>z<sub>i</sub></em> &minus; <em>b<sub>i</sub></em>/2tan(<em>&alpha;<sub>i</sub></em>)) &plus; <em>H<sub>i</sub></em>(<em>z<sub>i</sub></em> &minus; <em>b<sub>i</sub></em>/2tan(<em>&alpha;<sub>i</sub></em>)) &plus; <em>K<sub>c</sub></em><em>W<sub>i</sub></em><em>h<sub>i</sub></em>/2 &minus; <em>U<sub>t,i</sub></em>sin(<em>&beta;<sub>i</sub></em>)<em>h<sub>i</sub></em> &minus; <em>Q<sub>i</sub></em>sin(<em>&omega;<sub>i</sub></em>)<em>h<sub>i</sub></em>
 </span>
 <span class="fdn">
 <em>b<sub>i</sub></em>/2(<em>E<sub>i</sub></em><em>f<sub>i</sub></em> &plus; <em>E<sub>i</sub></em><em>f<sub>i</sub></em>)
@@ -3076,7 +3045,7 @@ Taking the normal force equilibrium of GD1 with the effective stress definition 
 </div>
 </a>
 <p class="paragraph">
-Taking the base shear force equilibrium of GD2 with the definition of mobile shear force from GD4 and the assumption of GD5, the equilibrium equation can be rewritten as equation (17).
+Taking the base shear force equilibrium of GD2 with the definition of mobilized shear force from GD4 and the assumption of GD5, the equilibrium equation can be rewritten as equation (17).
 </p>
 <a id="">
 <div class="equation">

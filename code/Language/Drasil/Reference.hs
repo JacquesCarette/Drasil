@@ -9,12 +9,25 @@ import Control.Lens ((^.))
 makeRef :: (LayoutObj l) => l -> Sentence
 makeRef r = Ref (rType r) (refName r)
 
--- Testing stuff
--- acroTest :: Contents -> [Contents] -> Sentence
--- acroTest ref reflst = makeRef $ find ref reflst
+-- This works for passing the correct id to the reference generator for Assumptions,
+-- Requirements and Likely Changes but I question whether we should use it.
+-- Pass it the item to be referenced and the enumerated list of the respective
+-- contents for that file. Change rType values to implement.
 
--- find :: Contents -> [Contents] -> Contents
--- find _ [] = error "This object does not match any of the enumerated objects provided by the list."
--- find itm@(Assumption comp1 _) (frst@(Assumption comp2 _):lst)
-  -- | (comp1 ^. id) == (comp2 ^. id) = frst
-  -- | otherwise = find itm lst
+{-import Language.Drasil.Chunk.Req
+import Language.Drasil.Chunk.LC
+
+acroTest :: Contents -> [Contents] -> Sentence
+acroTest ref reflst = makeRef $ find ref reflst
+
+find :: Contents -> [Contents] -> Contents
+find _ [] = error "This object does not match any of the enumerated objects provided by the list."
+find itm@(Assumption comp1) (frst@(Assumption comp2):lst)
+  | (comp1 ^. id) == (comp2 ^. id) = frst
+  | otherwise = find itm lst
+find itm@(Requirement comp1) (frst@(Requirement comp2):lst)
+  | ((rNI comp1) ^. id) == ((rNI comp2) ^. id) = frst
+  | otherwise = find itm lst
+find itm@(LikelyChange comp1) (frst@(LikelyChange comp2):lst)
+  | ((lcCC comp1) ^. id) == ((lcCC comp2) ^. id) = frst
+  | otherwise = find itm lst-}

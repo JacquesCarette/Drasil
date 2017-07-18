@@ -252,7 +252,7 @@ N/m
 Normal Stiffness: for a slice base surface, without length adjustment for slice index i
 </td>
 <td>
-Pa
+Pa/m
 </td>
 </tr>
 <tr>
@@ -263,7 +263,7 @@ Pa
 Shear Stiffness: for a slice base surface, without length adjustment for slice index i
 </td>
 <td>
-Pa
+Pa/m
 </td>
 </tr>
 <tr>
@@ -285,7 +285,7 @@ Earthquake Load Factor: proportionality factor of force that weight pushes outwa
 Normal Stiffness: residual strength
 </td>
 <td>
-Pa
+Pa/m
 </td>
 </tr>
 <tr>
@@ -296,7 +296,7 @@ Pa
 Normal Stiffness: for an interslice surface, without length adjustment for interslice index i
 </td>
 <td>
-Pa
+Pa/m
 </td>
 </tr>
 <tr>
@@ -307,7 +307,7 @@ Pa
 Shear Stiffness: for interslice surface, without length adjustment for interslice index i
 </td>
 <td>
-Pa
+Pa/m
 </td>
 </tr>
 <tr>
@@ -318,7 +318,7 @@ Pa
 Shear Stiffness: residual strength
 </td>
 <td>
-Pa
+Pa/m
 </td>
 </tr>
 <tr>
@@ -429,6 +429,17 @@ Mobilized Shear Force: for slice index i
 </td>
 <td>
 N
+</td>
+</tr>
+<tr>
+<td>
+<em>s<sub>i</sub></em>
+</td>
+<td>
+Mobilized Shear Stress: acting on the base of a slice
+</td>
+<td>
+Pa
 </td>
 </tr>
 <tr>
@@ -744,7 +755,7 @@ Pa
 <em>&tau;<sub>i</sub></em>
 </td>
 <td>
-Shear Stress: acting on the base of a slice
+Resistive Shear Stress: acting on the base of a slice
 </td>
 <td>
 Pa
@@ -1307,7 +1318,7 @@ Description
 </th>
 <td>
 <p class="paragraph">
-For a soil under stress it will exert a shear resistive strength based on the Coulomb sliding law. The resistive shear is the maximum amount of shear a surface can experience while remaining rigid, analogous to a maximum normal force. In this model the shear stress <em>&tau;<sub>i</sub></em> is proportional to the product of the normal stress on the plane <em>&sigma;</em> with it's static friction in the angular form tan(<em>&phiv;'</em>) = <em>U<sub>t,i</sub></em>. The <em>&tau;<sub>i</sub></em> versus <em>&sigma;</em> relationship is not truly linear, but assuming the effective normal force is strong enough it can be approximated with a linear fit (A9) where the cohesion <em>c'</em> represents the <em>&tau;<sub>i</sub></em> intercept of the fitted line.
+For a soil under stress it will exert a shear resistive strength based on the Coulomb sliding law. The resistive shear is the maximum amount of shear a surface can experience while remaining rigid, analogous to a maximum normal force. In this model the resistive shear stress <em>&tau;<sub>i</sub></em> is proportional to the product of the normal stress on the plane <em>&sigma;</em> with it's static friction in the angular form tan(<em>&phiv;'</em>) = <em>U<sub>t,i</sub></em>. The <em>&tau;<sub>i</sub></em> versus <em>&sigma;</em> relationship is not truly linear, but assuming the effective normal force is strong enough it can be approximated with a linear fit (A9) where the cohesion <em>c'</em> represents the <em>&tau;<sub>i</sub></em> intercept of the fitted line.
 </p>
 </td>
 </tr>
@@ -1722,7 +1733,16 @@ Equation
 <td>
 <a id="">
 <div class="equation">
-0 = 0
+<table class="matrix">
+<tr><td><em>p<sub>i</sub></em></td></tr>
+<tr><td><em>p<sub>i</sub></em></td></tr>
+</table> = <table class="matrix">
+<tr><td><em>K<sub>st,i</sub></em></td><td>0</td></tr>
+<tr><td>0</td><td><em>K<sub>bn,i</sub></em></td></tr>
+</table><table class="matrix">
+<tr><td><em>&delta;x<sub>i</sub></em></td></tr>
+<tr><td><em>&delta;y<sub>i</sub></em></td></tr>
+</table>
 </div>
 </a>
 </td>
@@ -1758,7 +1778,19 @@ Equation
 <td>
 <a id="">
 <div class="equation">
-0 = 0
+<em>&epsilon;<sub>i</sub></em> = <table class="matrix">
+<tr><td><em>&delta;u<sub>i</sub></em></td></tr>
+<tr><td><em>&delta;v<sub>i</sub></em></td></tr>
+</table> = <table class="matrix">
+<tr><td>cos(<em>&alpha;<sub>i</sub></em>)</td><td>sin(<em>&alpha;<sub>i</sub></em>)</td></tr>
+<tr><td>(-sin(<em>&alpha;<sub>i</sub></em>))</td><td>cos(<em>&alpha;<sub>i</sub></em>)</td></tr>
+</table><em>&delta;</em> = <table class="matrix">
+<tr><td>cos(<em>&alpha;<sub>i</sub></em>)</td><td>sin(<em>&alpha;<sub>i</sub></em>)</td></tr>
+<tr><td>(-sin(<em>&alpha;<sub>i</sub></em>))</td><td>cos(<em>&alpha;<sub>i</sub></em>)</td></tr>
+</table><table class="matrix">
+<tr><td><em>&delta;x<sub>i</sub></em></td></tr>
+<tr><td><em>&delta;y<sub>i</sub></em></td></tr>
+</table>
 </div>
 </a>
 </td>
@@ -2439,7 +2471,7 @@ Units
 </th>
 <td>
 <p class="paragraph">
-Pa
+Pa/m
 </p>
 </td>
 </tr>
@@ -2450,7 +2482,13 @@ Equation
 <td>
 <a id="">
 <div class="equation">
-<em>K<sub>st,i</sub></em> = 0
+<em>K<sub>st,i</sub></em> = <table class="matrix">
+<tr><td><em>K<sub>st,i</sub></em></td><td>0</td></tr>
+<tr><td>0</td><td><em>K<sub>bn,i</sub></em></td></tr>
+</table><table class="matrix">
+<tr><td><em>&delta;x<sub>i</sub></em></td></tr>
+<tr><td><em>&delta;y<sub>i</sub></em></td></tr>
+</table>
 </div>
 </a>
 </td>
@@ -2461,7 +2499,7 @@ Description
 </th>
 <td>
 <p class="paragraph">
-<em>K<sub>st,i</sub></em> is the shear stiffness
+<em>K<sub>st,i</sub></em> is the shear stiffness<br /><em>K<sub>st,i</sub></em> is the shear stiffness<br /><em>K<sub>bn,i</sub></em> is the normal stiffness<br /><em>&delta;x<sub>i</sub></em> is the displacement<br /><em>&delta;y<sub>i</sub></em> is the displacement
 </p>
 </td>
 </tr>
@@ -2612,7 +2650,7 @@ Units
 </th>
 <td>
 <p class="paragraph">
-Pa
+Pa/m
 </p>
 </td>
 </tr>
@@ -3204,7 +3242,7 @@ The resistive shear to calculate the factor of safety <em>FS</em> is found from 
 </p>
 <a id="">
 <div class="equation">
-<em>S<sub>i</sub></em> = <em>c'</em> &minus; <em>&sigma;</em>tan(<em>&phiv;'</em>)
+<em>s<sub>i</sub></em> = <em>c'</em> &minus; <em>&sigma;</em>tan(<em>&phiv;'</em>)
 </div>
 </a>
 <p class="paragraph">
@@ -3237,7 +3275,7 @@ Previously the value of the shear stiffness <em>K<sub>bt,i</sub></em> as seen in
 </div>
 </a>
 <p class="paragraph">
-With shear stiffness <em>K<sub>bt,i</sub></em> calculated in equation (28) and shear displacement <em>&delta;u<sub>i</sub></em> calculated in equation (24) values now known the shear stress acting on the base of a slice <em>&tau;<sub>i</sub></em> can be calculated using T5, as done in equation (29). Again, stress <em>&tau;<sub>i</sub></em> is used in place of force <em>F</em> as the stiffness has not been normalized for the length of the base.
+With shear stiffness <em>K<sub>bt,i</sub></em> calculated in equation (28) and shear displacement <em>&delta;u<sub>i</sub></em> calculated in equation (24) values now known the resistive shear stress acting on the base of a slice <em>&tau;<sub>i</sub></em> can be calculated using T5, as done in equation (29). Again, stress <em>&tau;<sub>i</sub></em> is used in place of force <em>F</em> as the stiffness has not been normalized for the length of the base.
 </p>
 <a id="">
 <div class="equation">
@@ -3245,13 +3283,13 @@ With shear stiffness <em>K<sub>bt,i</sub></em> calculated in equation (28) and s
 </div>
 </a>
 <p class="paragraph">
-The shear stress acting on the base of a slice <em>&tau;<sub>i</sub></em> acts as the mobile shear acting on the base. Using the definition Factor of Safety equation from T1, with the definitions of resistive shear strength of a slice <em>S<sub>i</sub></em> from equation (27) and shear stress on a slice <em>&tau;<sub>i</sub></em> from equation (29) the local factor of safety <em>FS<sub>Loc,i</sub></em> can be found from as seen in equation (30) and IM5.
+The resistive shear stress acting on the base of a slice <em>&tau;<sub>i</sub></em> acts as the mobile shear acting on the base. Using the definition Factor of Safety equation from T1, with the definitions of resistive shear strength of a slice <em>s<sub>i</sub></em> from equation (27) and shear stress on a slice <em>&tau;<sub>i</sub></em> from equation (29) the local factor of safety <em>FS<sub>Loc,i</sub></em> can be found from as seen in equation (30) and IM5.
 </p>
 <a id="">
 <div class="equation">
 <em>FS<sub>Loc,i</sub></em> = <div class="fraction">
 <span class="fup">
-<em>S<sub>i</sub></em>
+<em>s<sub>i</sub></em>
 </span>
 <span class="fdn">
 <em>&tau;<sub>i</sub></em>
@@ -3273,7 +3311,7 @@ The global Factor of Safety is then the ratio of the summation of the resistive 
 <div class="equation">
 <em>FS</em> = <div class="fraction">
 <span class="fup">
-&sum;<sub><em>i</em>=1</sub><sup><em>n</em></sup>(<em>&#8467;<sub>b,i</sub></em><em>S<sub>i</sub></em>)
+&sum;<sub><em>i</em>=1</sub><sup><em>n</em></sup>(<em>&#8467;<sub>b,i</sub></em><em>s<sub>i</sub></em>)
 </span>
 <span class="fdn">
 &sum;<sub><em>i</em>=1</sub><sup><em>n</em></sup>(<em>&#8467;<sub>b,i</sub></em><em>&tau;<sub>i</sub></em>)

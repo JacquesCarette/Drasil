@@ -15,7 +15,7 @@ class TestEnergy(unittest.TestCase):
         temp = [40, 41, 42, 43, 44]
         expE = [0, 837095.09369793726918140921263406, 1674190.1873958745383628184252681,
                 2511285.2810938118075442276379022, 3348380.3747917490767256368505363]
-        eWat = energy.energy1Wat(temp, self.params)
+        eWat = energy.energyWat(temp, self.params)
         self.assertAlmostEqual(eWat[0], expE[0], places=None, msg='energy1Wat: eWat[0]', delta=1e-9)
         self.assertAlmostEqual(eWat[1], expE[1], places=None, msg='energy1Wat: eWat[1]', delta=1e-9)
         self.assertAlmostEqual(eWat[2], expE[2], places=None, msg='energy1Wat: eWat[2]', delta=1e-9)
@@ -36,7 +36,7 @@ class TestEnergy(unittest.TestCase):
         temp = [44.2, 44.3, 44.4, 44.5, 44.6]
         expE = [3515799.3935313365305619186930631, 3599508.9029011302574800596143265, 3683218.4122709239843982005355899,
                 3766927.9216407177113163414568533, 3850637.4310105114382344823781167]
-        eWat = energy.energy2Wat(temp, self.params)
+        eWat = energy.energyWat(temp, self.params)
         self.assertAlmostEqual(eWat[0], expE[0], places=None, msg='energy2Wat: eWat[0]', delta=1e-8)
         self.assertAlmostEqual(eWat[1], expE[1], places=None, msg='energy2Wat: eWat[1]', delta=1e-8)
         self.assertAlmostEqual(eWat[2], expE[2], places=None, msg='energy2Wat: eWat[2]', delta=1e-8)
@@ -57,7 +57,7 @@ class TestEnergy(unittest.TestCase):
         temp = [45, 46, 47, 48, 49]
         expE = [4185475.4684896863459070460631703, 5022570.5621876236150884552758044, 5859665.6558855608842698644884384,
                 6696760.7495834981534512737010725, 7533855.8432814354226326829137066]
-        eWat = energy.energy3Wat(temp, self.params)
+        eWat = energy.energyWat(temp, self.params)
         self.assertAlmostEqual(eWat[0], expE[0], places=None, msg='energy3Wat: eWat[0]', delta=1e-9)
         self.assertAlmostEqual(eWat[1], expE[1], places=None, msg='energy3Wat: eWat[1]', delta=1e-9)
         self.assertAlmostEqual(eWat[2], expE[2], places=None, msg='energy3Wat: eWat[2]', delta=1e-9)

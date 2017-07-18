@@ -614,6 +614,17 @@ Melting point temperature
 </tr>
 <tr>
 <td>
+<em>&Delta;T</em>
+</td>
+<td>
+Change in temperature
+</td>
+<td>
+&deg;C
+</td>
+</tr>
+<tr>
+<td>
 <em>t</em>
 </td>
 <td>
@@ -687,17 +698,6 @@ Volume of water
 </td>
 <td>
 m<sup>3</sup>
-</td>
-</tr>
-<tr>
-<td>
-<em>&Delta;T</em>
-</td>
-<td>
-Change in temperature
-</td>
-<td>
-&deg;C
 </td>
 </tr>
 <tr>
@@ -3048,35 +3048,51 @@ R2: Use the inputs in <a href=#Rreq1>this Requirement</a> to find the mass neede
 <em>m<sub>P</sub></em> = <em>V<sub>P</sub></em><em>&rho;<sub>P</sub></em>
 </div>
 </a>
-<div class="list">
-<p>
+<a id="Rreq3">
+<ul>
 R3: Verify that the inputs satisfy the required physical constraints shown in <a href=#Table:TracMatrShowtheConnBetwItemofDiffSect>this Table</a>.
-</p>
-<p>
+</ul>
+</a>
+<a id="Rreq4">
+<ul>
 R4: Output the input quantities and derived quantities in the following list: the quantities from R1, the masses from R2, <em>&tau;<sub>W</sub></em> (from IM1), <em>&eta;</em> (from IM1), <em>&tau;<sub>P</sub><sup>S</sup></em> (from IM2) and <em>&tau;<sub>P</sub><sup>L</sup></em> (from IM2).
-</p>
-<p>
+</ul>
+</a>
+<a id="Rreq5">
+<ul>
 R5: Calculate and output the temperature of the water (<em>T<sub>W</sub></em>(<em>t</em>)) over the simulation time (from IM1).
-</p>
-<p>
+</ul>
+</a>
+<a id="Rreq6">
+<ul>
 R6: Calculate and output the temperature of the phase change material (<em>T<sub>P</sub></em>(<em>t</em>)) over the simulation time (from IM2).
-</p>
-<p>
+</ul>
+</a>
+<a id="Rreq7">
+<ul>
 R7: Calculate and output the change in heat energy in the water (<em>E<sub>W</sub></em>(<em>t</em>)) over the simulation time (from IM3).
-</p>
-<p>
+</ul>
+</a>
+<a id="Rreq8">
+<ul>
 R8: Calculate and output the change in heat energy in the PCM (<em>E<sub>P</sub></em>(<em>t</em>)) over the simulation time (from IM4).
-</p>
-<p>
+</ul>
+</a>
+<a id="Rreq9">
+<ul>
 R9: Verify that the energy outputs (<em>E<sub>W</sub></em>(<em>t</em>) and <em>E<sub>P</sub></em>(<em>t</em>)) follow the law of conservation of energy, as outlined in <a href=#Sec:PropofaCorrSolu>this Section</a>, with relative error no greater than 0.001%.
-</p>
-<p>
+</ul>
+</a>
+<a id="Rreq10">
+<ul>
 R10: Calculate and output the time at which the PCM begins to melt <em>t<sub>melt</sub><sup>init</sup></em> (from IM2).
-</p>
-<p>
+</ul>
+</a>
+<a id="Rreq11">
+<ul>
 R11: Calculate and output the time at which the PCM stops melting <em>t<sub>melt</sub><sup>final</sup></em> (from IM2).
-</p>
-</div>
+</ul>
+</a>
 </div>
 </a>
 <a id="Sec:Non-Requ">

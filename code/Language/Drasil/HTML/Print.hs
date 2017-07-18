@@ -1,6 +1,6 @@
 module Language.Drasil.HTML.Print where
 
-import Prelude hiding (print)
+import Prelude hiding (print, id)
 import Data.List (intersperse)
 import Text.PrettyPrint hiding (render)
 import Numeric (showFFloat)
@@ -188,6 +188,7 @@ mul x@(Sym (Atomic s)) y = if length s > 1 then p_expr x ++ "&sdot;" ++ mulParen
                             p_expr x ++ mulParen y
 mul x y@(Sym (Atomic s)) = if length s > 1 then mulParen x ++ "&sdot;" ++ p_expr y else
                             mulParen x ++ p_expr y
+mul x@(Div _ _) y = paren (p_expr x) ++ mulParen y
 mul a b         = mulParen a ++ mulParen b
 
 -- | Helper for properly rendering parentheses around multiplication

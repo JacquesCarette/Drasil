@@ -86,6 +86,22 @@ ssp_mg = mgDoc ssa (name henryFrankis) mgBod
 mgBod :: [Section]
 (mgBod, _) = makeDD likelyChanges unlikelyChanges reqs modules
 
+sspChoices :: Choices
+sspChoices = Choices {
+  lang = [Python, Cpp, CSharp, Java],
+  impType = Program,
+  logFile = "log.txt",
+  logging = LogNone,         -- LogNone, LogFunc
+  comments = CommentNone,    -- CommentNone, CommentFunc
+  onSfwrConstraint = Warning,  -- Warning, Exception
+  onPhysConstraint = Warning,  -- Warning, Exception
+  inputStructure = Loose    -- Loose, AsClass
+}  
+  
+ssp_code :: CodeSpec
+ssp_code = codeSpec' ssp_si sspChoices
+
+
 -- SYMBOL MAP HELPERS --
 sspSymMap :: SymbolMap
 sspSymMap = symbolMap sspSymbols

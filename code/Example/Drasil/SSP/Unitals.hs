@@ -201,8 +201,8 @@ watrForce    = uc' "H_i" (cn $ "interslice water force") ("exerted in the " ++
   "x-ordinate direction between adjacent slices " ++ fisi)
   (sub cH lI) newton
 
-watrForceDif = uc' "dH_i" (cn $ "difference between interslice forces acting " ++ 
-  "in the x-ordinate direction of the slice on each side") fisi
+watrForceDif = uc' "dH_i" (cn $ "difference between interslice forces") ("exerted in the " ++
+  "x-ordinate direction between adjacent slices " ++ fisi)
   (sub (Concat [Greek Delta, cH]) lI) newton
 
 intShrForce = uc' "X_i" (cn $ "interslice shear force") 

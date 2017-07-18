@@ -69,7 +69,7 @@ pcmUnits = map ucw [density, tau, in_SA, out_SA,
   vol, w_mass, w_vol]
 
 pcmConstraints :: [UncertQ]
-pcmConstraints =  [coil_SA, htCap_W, coil_HTC, temp_init,
+pcmConstraints =  [coil_SA, w_E, htCap_W, coil_HTC, temp_init,
   time_final, tank_length, temp_C, w_density, diam, temp_W]
 
 s4, s4_1, s4_1_1, s4_1_2, s4_1_3, s4_2,

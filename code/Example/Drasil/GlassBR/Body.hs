@@ -575,21 +575,17 @@ req5Desc cmd = foldlSent_ [S "If", (getS is_safe1) `sAnd` (getS is_safe2),
   S "If the", phrase condition, S "is false, then", phrase cmd,
   S "the", phrase message, Quote (notSafe ^. defn)]
 
---testing :: [QSWrapper]
---testing = qs prob_br : qs lRe : qs demand : []
---FIXME:find a way to use this in s7_1_req6
+testing :: [QSWrapper]
+testing = qs prob_br : qs lRe : qs demand : []
+testing1 :: [RelationConcept]
+testing1 = [probOfBr, calOfCap, calOfDe]
+tempHelper c d = (c, d)
 
 s7_1_req6 = [(Enumeration $ Simple $ [(acroR 6, Nested (titleize output_ +:+
   S "the following" +: plural quantity)
   (Bullet $ 
-    --FIXME:The implementation below is quite repetitive in nature.
-    --map (\(c, d) -> Flat $ (at_start c) +:+ sParen (getS c) +:+ sParen (makeRef (gbSymbMapT d)))
-    --[(prob_br, probOfBr), (demand, calOfDe), (lRe, calOfCap)]
-    --FIXME:The above doesn't work becuase prob_br = ConstrainedChunk, demand = UnitaryChunk, lRe = VarChunk
-    --Create a new wrapper? Why isn't mapping qs allowing `getS` or `at_start` function applications?
-    [Flat $ (at_start prob_br) +:+ sParen (getS prob_br) +:+ sParen (makeRef (gbSymbMapT probOfBr))] ++
-    [Flat $ (at_start lRe) +:+ sParen (getS lRe) +:+ sParen (makeRef (gbSymbMapT calOfCap))] ++
-    [Flat $ (at_start demand) +:+ sParen (getS demand) +:+ sParen (makeRef (gbSymbMapT calOfDe))]
+    map (\(c, d) -> Flat $ (at_start c) +:+ sParen (getS c) +:+ sParen (makeRef (gbSymbMapT d)))
+    (zipWith tempHelper (map qs testing) testing1)
     ++
     map (\d -> Flat $ (at_start d) +:+ sParen (getS d) +:+ sParen (makeRef (gbSymbMapD d)))
     s7_1_req6_pulledList

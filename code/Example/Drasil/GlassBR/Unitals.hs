@@ -287,7 +287,7 @@ fTemperedGl   = cc fullyTGlass
 glassGeo      = dcc "glassGeo"    (nounPhraseSP "glass geometry")
   ("The glass geometry based inputs include the dimensions of the glass " ++
     "plane, glass type and response type.")
-glassTy       = dcc "glassTy"     (cn' "glass types") "type of glass"
+glassTy       = dcc "glassTy"     (cn' "glass type") "type of glass"
 glassWL       = dcc "glassWL"     (nounPhraseSP "glass weight load")
   ("The dead load component of the glass weight.")
 glBreakage    = dcc "glBreakage"  (nounPhraseSP "glass breakage")

@@ -46,3 +46,62 @@ class CheckConTests(unittest.TestSuite):
 
     if checkCon_failures > 0:
         print(testResult.failures)
+
+#####
+
+class TestCheckConstraints(unittest.TestCase):
+    
+    def setUp(self):
+        self.params = param.Param()
+        self.inputFormat = inputFormat.get_input(os.path.join("Test/Inputfiles", inputFileName), self.params) # a < 0
+        self.derivedValues = derivedValues.derived_params(self.params)
+    
+    def test_check_constraints(self):
+        with self.assertRaises(SystemExit) as context:
+            checkConstraints.check_constraints(self.params)
+
+        self.assertEqual((errorMsg), context.exception.args[0])
+    
+
+if __name__ == "__main__":
+    unittest.main()
+
+#####
+
+
+"""
+constraints1.txt
+fileName                 , inputFileName           , errorMsg
+testCheckConstraints.py  , "testInvalidInput1.txt" , "InputError: a and b must be greater than 0"
+testCheckConstraints2.py , "testInvalidInput2.txt" , "InputError: a and b must be greater than 0"
+testCheckConstraints3.py , "testInvalidInput3.txt" , "InputError: a/b must be between 1 and 5"
+testCheckConstraints4.py , "testInvalidInput4.txt" , "InputError: a/b must be between 1 and 5"
+testCheckConstraints5.py , "testInvalidInput5.txt" , "InputError: t must be in [2.5,2.7,3.0,4.0,5.0,6.0,8.0,10.0,12.0,16.0,19.0,22.0]"
+testCheckConstraints6.py , "testInvalidInput6.txt" , "InputError: wtnt must be between 4.5 and 910"
+testCheckConstraints7.py , "testInvalidInput7.txt" , "InputError: wtnt must be between 4.5 and 910"
+testCheckConstraints8.py , "testInvalidInput8.txt" , "InputError: TNT must be greater than 0"
+testCheckConstraints9.py , "testInvalidInput9.txt" , "InputError: SD must be between 6 and 130"
+testCheckConstraints10.py, "testInvalidInput10.txt", "InputError: SD must be between 6 and 130"
+testCheckConstraints11.py, "testInvalidInput11.txt", "InputError: a and b must be greater than 0"
+testCheckConstraints12.py, "testInvalidInput12.txt", "InputError: a and b must be greater than 0"
+testCheckConstraints13.py, "testInvalidInput13.txt", "InputError: TNT must be greater than 0"
+"""
+
+"""
+    def test_check_constraints(self):
+        try:
+            checkConstraints.check_constraints(self.params)
+        except:
+            self.fail("Encountered an unexpected exception")
+"""
+
+"""
+constraints2.txt
+fileName                 , inputFileName
+testCheckConstraints14.py, "testInput7.txt"
+testCheckConstraints15.py, "testInput8.txt"
+testCheckConstraints16.py, "testInput9.txt"
+testCheckConstraints17.py, "testInput10.txt"
+testCheckConstraints18.py, "testInput11.txt"
+testCheckConstraints19.py, "testInput12.txt"
+"""

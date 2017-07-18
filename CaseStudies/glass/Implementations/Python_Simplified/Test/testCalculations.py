@@ -3,48 +3,50 @@ import unittest
 from Implementation import param
 from Implementation import inputFormat
 from Implementation import derivedValues
-from numpy import float64
 from Implementation import calculations
  
 class TestCalculations(unittest.TestCase):
  
-    def __init__ (self, inputFileName, val1, val2, q_hat_tol_val, lrShouldBe,
-                  nflShouldBe, lrVal, qVal, is_safe1ShouldBe, is_safe2ShouldBe):
-        self.inputFileName    = inputFileName
-        self.val1             = val1
-        self.val2             = val2
-        self.q_hat_tol_val    = q_hat_tol_val
-        self.lrShouldBe       = lrShouldBe
-        self.nflShouldBe      = nflShouldBe
-        self.lrVal            = lrVal
-        self.qVal             = qVal
-        self.is_safe1ShouldBe = is_safe1ShouldBe
-        self.is_safe2ShouldBe = is_safe2ShouldBe
-
     def setUp(self):
-        self.inputFileName = inputFileName
-
-        self.params = param.Param()
-        self.inputFormat = inputFormat.get_input(os.path.join("Test/Inputfiles", self.inputFileName), self.params)
-        self.derivedValues = derivedValues.derived_params(self.params)
+        with open(os.path.join("Test/Inputfiles", "calculations.txt"), 'r') as f:
+            input = f.readlines()
+        input = list(map(lambda x: x.split(","), input))
+        self.numTests = len(input)
+        self.inputFileName    = [row[0] for row in input]
+        self.val1             = [float(row[1]) for row in input]
+        self.val2             = [float(row[2]) for row in input]
+        self.q_hat_tol_val    = [float(row[3]) for row in input]
+        self.lrShouldBe       = [float(row[4]) for row in input]
+        self.nflShouldBe      = [float(row[5]) for row in input]
+        self.lrVal            = [float(row[6]) for row in input]
+        self.qVal             = [float(row[7]) for row in input]
+        self.is_safe1ShouldBe = [row[8].rstrip() == "True" for row in input]
+        self.is_safe2ShouldBe = [row[9].rstrip() == "True" for row in input]
+        self.params           = [param.Param() for i in range(self.numTests)]
+        for i in range(self.numTests):
+            inputFormat.get_input(os.path.join("Test/Inputfiles", self.inputFileName[i]), self.params[i])
+            derivedValues.derived_params(self.params[i])
 
     def test_calc_pb(self):
-        """
-        Test to make sure returns expected value of pb.  Test should
-        actually use some epsilon error, instead of equality of floats
-        """
-        pb = calculations.calc_pb(float64(self.val1), self.params)
-        self.assertEqual(pb, self.val2)
-        
+        for i in range(self.numTests):
+            with self.subTest(i=i):
+                pb = calculations.calc_pb(self.val1[i], self.params[i])
+                self.assertAlmostEqual(pb, self.val2[i])
+               
     def test_calc_lr(self):
-        nfl = calculations.calc_nfl(float64(self.q_hat_tol_val), self.params)
-        lr = calculations.calc_lr(nfl, self.params)
-        self.assertTupleEqual((lr, nfl), (self.lrShouldBe, self.nflShouldBe))
+        for i in range(self.numTests):
+            with self.subTest(i=i):
+                nfl = calculations.calc_nfl(self.q_hat_tol_val[i], self.params[i])
+                lr = calculations.calc_lr(nfl, self.params[i])
+                self.assertTupleEqual((lr, nfl), (self.lrShouldBe[i], self.nflShouldBe[i]))
         
     def test_is_safe(self):
-        is_safe1 = calculations.is_safe1(float64(self.val2), self.params)
-        is_safe2 = calculations.is_safe2(float64(self.lrVal), float64(self.qVal))
-        self.assertTupleEqual((is_safe1, is_safe2), (self.is_safe1ShouldBe, self.is_safe2ShouldBe))
+        for i in range(self.numTests):
+            with self.subTest(i=i):
+                is_safe1 = calculations.is_safe1(self.val2[i], self.params[i])
+                is_safe2 = calculations.is_safe2(self.lrVal[i], self.qVal[i])
+                self.assertTupleEqual((is_safe1, is_safe2), (self.is_safe1ShouldBe[i], self.is_safe2ShouldBe[i]))
+                
         
 if __name__ == '__main__':
     unittest.main()

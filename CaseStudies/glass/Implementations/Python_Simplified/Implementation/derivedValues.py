@@ -18,7 +18,6 @@ def derived_params(params):
     # cal weight of tnt
     params.wtnt = params.w * params.tnt
     # cal actual thickness
-    print(params.t)
     if params.t == "2.5":
         params.h = 2.16
     elif params.t == "2.7":
@@ -55,4 +54,3 @@ def derived_params(params):
         params.gtf = 4
     else:
         print("Wrong glass type entered")
-    return params

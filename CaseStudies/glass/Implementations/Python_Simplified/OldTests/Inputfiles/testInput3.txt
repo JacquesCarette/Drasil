@@ -1,7 +1,7 @@
 #DIMENSION( length , breadth , thickness in mm)
 1600
 1500
-3
+10
 #GLASS TYPE ( AN , HS , FT )
 HS
 #WEIGHT OF CHARGE (in kg)
@@ -13,4 +13,4 @@ HS
 1.5
 11.0
 #TOLERABLE PROBABILITY 
-0.008
+0.0001

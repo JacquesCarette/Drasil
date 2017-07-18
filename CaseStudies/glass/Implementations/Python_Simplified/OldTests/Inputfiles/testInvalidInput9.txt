@@ -1,7 +1,7 @@
 #DIMENSION( length , breadth , thickness in mm)
 1600
 1500
-3
+10
 #GLASS TYPE ( AN , HS , FT )
 HS
 #WEIGHT OF CHARGE (in kg)
@@ -10,7 +10,7 @@ HS
 1.0
 #STAND OFF DISTANCE in meters (SDx, SDy, SDz  )
 0
-1.5
-11.0
+1.0
+2.0
 #TOLERABLE PROBABILITY 
 0.008

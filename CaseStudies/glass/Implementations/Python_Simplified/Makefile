@@ -42,11 +42,7 @@ doc :
 	to a new directory /glass/doc
 
 test :
-	@$(foreach TEST, $(TEST_SRC), \
-		echo === Running test: $(TEST) $(COM_SEP) \
-		$(PY) $(PYFLAGS) unittest $(TEST_MOD) $(COM_SEP) \
-	)
-	$(PY) $(PYFLAGS) $(TEST_ALL)
+	$(PY) $(PYFLAGS) unittest discover Test
 
 all : prog doc test
 

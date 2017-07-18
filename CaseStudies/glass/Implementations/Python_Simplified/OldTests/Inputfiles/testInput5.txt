@@ -1,11 +1,11 @@
 #DIMENSION( length , breadth , thickness in mm)
 1600
 1500
-3
+10
 #GLASS TYPE ( AN , HS , FT )
 HS
 #WEIGHT OF CHARGE (in kg)
-10
+60
 #TNT EQUIVALENT FACTOR 
 1.0
 #STAND OFF DISTANCE in meters (SDx, SDy, SDz  )

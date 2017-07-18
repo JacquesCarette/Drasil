@@ -1,7 +1,7 @@
 #DIMENSION( length , breadth , thickness in mm)
-1600
+7500
 1500
-3
+10
 #GLASS TYPE ( AN , HS , FT )
 HS
 #WEIGHT OF CHARGE (in kg)

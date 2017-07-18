@@ -34,3 +34,4 @@ Main
 *.synctex.gz
 *.pyc
 __pycache__
+*.class

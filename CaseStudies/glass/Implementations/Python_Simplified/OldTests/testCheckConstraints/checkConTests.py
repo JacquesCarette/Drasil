@@ -48,7 +48,7 @@ class CheckConTests(unittest.TestSuite):
         print(testResult.failures)
 
 #####
-
+"""
 class TestCheckConstraints(unittest.TestCase):
     
     def setUp(self):
@@ -65,7 +65,7 @@ class TestCheckConstraints(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
-
+"""
 #####
 
 

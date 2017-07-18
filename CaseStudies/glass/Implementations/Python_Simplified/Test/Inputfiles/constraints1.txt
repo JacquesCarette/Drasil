@@ -1,0 +1,13 @@
+testInvalidInput1.txt,InputError: a and b must be greater than 0
+testInvalidInput2.txt,InputError: a and b must be greater than 0
+testInvalidInput3.txt,InputError: a/b must be between 1 and 5
+testInvalidInput4.txt,InputError: a/b must be between 1 and 5
+testInvalidInput5.txt,InputError: t must be in [2.5,2.7,3.0,4.0,5.0,6.0,8.0,10.0,12.0,16.0,19.0,22.0]
+testInvalidInput6.txt,InputError: wtnt must be between 4.5 and 910
+testInvalidInput7.txt,InputError: wtnt must be between 4.5 and 910
+testInvalidInput8.txt,InputError: TNT must be greater than 0
+testInvalidInput9.txt,InputError: SD must be between 6 and 130
+testInvalidInput10.txt,InputError: SD must be between 6 and 130
+testInvalidInput11.txt,InputError: a and b must be greater than 0
+testInvalidInput12.txt,InputError: a and b must be greater than 0
+testInvalidInput13.txt,InputError: TNT must be greater than 0

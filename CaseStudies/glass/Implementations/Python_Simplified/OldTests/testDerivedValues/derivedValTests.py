@@ -41,8 +41,8 @@ class DerivedValTests(unittest.TestSuite):
 
 """
 """
-testFileName      , inputFileName     , arExpected        , sdExpected        , ldfExpected       , wtntExpected, hExpected, gtfExpected
-testDerivedValues , "defaultInput.txt", 1.0666666666666667, 11.10180165558726 , 0.2696493494752911, 10.0        , 9.02     , 2
-testDerivedValues2, "testInput1.txt"  , 1.2               , 10.198039027185569, 0.2696493494752911, 10.0        , 7.42     , 1
-testDerivedValues3, "testInput2.txt"  , 1.25              , 9.093404203047394 , 0.2696493494752911, 15.0        , 9.02     , 4
+testFileName         , inputFileName     , arExpected        , sdExpected        , ldfExpected       , wtntExpected, hExpected, gtfExpected
+testDerivedValues.py , "defaultInput.txt", 1.0666666666666667, 11.10180165558726 , 0.2696493494752911, 10.0        , 9.02     , 2
+testDerivedValues2.py, "testInput1.txt"  , 1.2               , 10.198039027185569, 0.2696493494752911, 10.0        , 7.42     , 1
+testDerivedValues3.py, "testInput2.txt"  , 1.25              , 9.093404203047394 , 0.2696493494752911, 15.0        , 9.02     , 4
 """

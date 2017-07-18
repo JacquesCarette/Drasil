@@ -137,16 +137,16 @@ momentEql :: RelationConcept
 momentEql = makeRC "momentEql" (nounPhraseSP "moment equilibrium") momEql_desc momEql_rel
 
 momEql_rel :: Relation
-momEql_rel = (Int 0) := Neg (C intNormForce) :* (Int 1 :- C baseWthX :/ Int 2 :* 
-                        tan (C baseAngle)) :+ C intNormForce :* (Int 1 :- 
+momEql_rel = (Int 0) := Neg (C intNormForce) :* (C sliceHght :- C baseWthX :/ Int 2 :* 
+                        tan (C baseAngle)) :+ C intNormForce :* (C sliceHght :- 
                         C baseWthX :/ Int 2 :* tan (C baseAngle)) :- C watrForce :*
-                        (Int 1 :- C baseWthX :/ Int 2 :* tan (C baseAngle)) :+ 
-                        C watrForce :* (Int 1 :- C baseWthX :/ Int 2 :* 
+                        (C sliceHght :- C baseWthX :/ Int 2 :* tan (C baseAngle)) :+ 
+                        C watrForce :* (C sliceHght :- C baseWthX :/ Int 2 :* 
                         tan (C baseAngle)) :- C baseWthX :/ Int 2 :* 
                         (C intShrForce :+ C intShrForce) :+ C earthqkLoadFctr :* 
                         C slcWght :* C midpntHght :/ Int 2 :- C surfHydroForce :*
                         sin (C surfAngle) :* C midpntHght :- C surfLoad :* 
-                        sin (C impLoadAngle) :* C midpntHght -- FIXME: replace Int 1 with zi and add the proper index for zi, bi, Ei, Hi and Xi
+                        sin (C impLoadAngle) :* C midpntHght -- FIXME: add the proper index for zi, bi, Ei, Hi and Xi
 
 momEql_desc :: Sentence
 momEql_desc = foldlSent [S "For a", phrase slice, S "of", phrase mass,

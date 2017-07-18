@@ -124,11 +124,11 @@ sspUnits = map ucw [normStress, genPressure,
   impLoadAngle, baseWthX, baseLngth, surfLngth, midpntHght, genForce,
   momntOfBdy, genDisplace, SM.stffness, shrStiffIntsl, shrStiffBase,
   nrmStiffIntsl, nrmStiffBase, shrStiffRes, nrmStiffRes, shrDispl,
-  nrmDispl, porePressure, elmNrmDispl, elmPrllDispl, 
+  nrmDispl, porePressure, elmNrmDispl, elmPrllDispl, sliceHght,
   mobShrC, shrResC, rotatedDispl, intNormForce, shrStress, mobStress]
 
 normStress, genPressure,
-  waterHght, slopeHght, slipHght, xi, critCoords, mobShrI,
+  waterHght, slopeHght, slipHght, xi, critCoords, mobShrI, sliceHght,
   shearFNoIntsl, shearRNoIntsl, slcWght, watrForce, watrForceDif, shrResI,
   intShrForce, baseHydroForce, surfHydroForce, totNrmForce, nrmFSubWat,
   nrmFNoIntsl, surfLoad, baseAngle, surfAngle, impLoadAngle, baseWthX,
@@ -315,6 +315,9 @@ shrStress    = uc' "tau_i" (cn "resistive shear stress") ("acting on the base of
   
 mobStress    = uc' "s_i" (cn "mobilized shear stress") ("acting on the base of a slice")
   (sub lS lI) pascal
+
+sliceHght    = uc' "z_i" (cn "center of slice height") ("the distance from the lowest part " ++
+  "of the slice to the height of the centers of slice") (sub lZ lI) metre
 
 ----------------------
 -- Unitless Symbols --

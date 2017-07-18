@@ -53,7 +53,7 @@ import Data.Drasil.Concepts.Software(correctness, verifiability,
 
 import Data.Drasil.SentenceStructures (showingCxnBw, foldlSent, foldlSent_,
   foldlSP, foldlSP_, foldlSPCol, foldlsC, isThe, ofThe, ofThe',
-  sAnd, sOf)
+  sAnd, sOf, foldlSentCol)
 
 acronyms :: [CI]
 acronyms = [assumption, dataDefn, genDefn, goalStmt, inModel, likelyChg, ode,
@@ -458,8 +458,10 @@ s5_1 :: Section
 s5_1 = SRS.funcReq s5_1_list []
 
 s5_1_list :: [Contents]
-s5_1_list = [req1, s5_1_1_Table, req2, s5_1_2_Eqn1, s5_1_2_Eqn2, s5_1_Reqs]
+s5_1_list = (acroNumGen [req1] 1) ++ [s5_1_1_Table] ++ (acroNumGen [req2] 2) ++
+  [s5_1_2_Eqn1, s5_1_2_Eqn2, s5_1_Reqs]
 
+s5_1_1_Table :: Contents
 s5_1_1_Table = (Table [titleize symbol_, titleize unit_, titleize description]
   (mkTable
   [getS,
@@ -1513,18 +1515,18 @@ s4_2_7_deriv_5 eq pro rs = foldlSP [titleize' eq, S "(reference) and",
 -- 5.1 : Functional Requirements --
 -----------------------------------
 
-req1, s5_1_1_Table, req2, s5_1_2_Eqn1, s5_1_2_Eqn2 :: Contents
+req1, req2, s5_1_2_Eqn1, s5_1_2_Eqn2 :: Contents
 
-req1 = mkRequirement "req1" $
-  titleize input_ +:+ S "the following" +:+ plural quantity `sC`
-  S "which define the" +:+ phrase tank +:+ plural parameter `sC` S "material" +:+
-  plural property +:+ S "and initial" +: plural condition
+req1 = mkRequirement "req1" $ foldlSentCol [
+  titleize input_, S "the following", plural quantity `sC`
+  S "which define the", phrase tank, plural parameter `sC` S "material",
+  plural property, S "and initial", plural condition]
 
-req2 = mkRequirement "req2" $
-  S "Use the" +:+ plural input_ +:+ S "in" +:+ makeRef req1 +:+
-  S "to find the" +:+ phrase mass +:+ S "needed for" +:+ acroIM 1 +:+ S "to" +:+
-  acroIM 4 `sC` S "as follows, where" +:+ getS w_vol `isThe` phrase w_vol +:+
-  S "and" +: (getS tank_vol `isThe` phrase tank_vol)
+req2 = mkRequirement "req2" $ foldlSentCol [
+  S "Use the", plural input_, S "in", makeRef req1,
+  S "to find the", phrase mass, S "needed for", acroIM 1, S "to",
+  acroIM 4 `sC` S "as follows, where", getS w_vol `isThe` phrase w_vol,
+  S "and", getS tank_vol `isThe` phrase tank_vol]
 
 s5_1_2_Eqn1 = EqnBlock ((C w_mass) := (C w_vol) * (C w_density) := ((C tank_vol) -
   (C pcm_vol)) * (C w_density) := (((C diam) / 2) * (C tank_length) -

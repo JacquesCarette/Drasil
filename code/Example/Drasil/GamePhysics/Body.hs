@@ -220,7 +220,7 @@ s4_1_intro = s4_1_intro_param physLib game
 
 s4_1_intro_param :: (NamedIdea a, NamedIdea b) => a -> b -> Sentence
 s4_1_intro_param lib app = foldlSent 
-  [S "Creating a gaming", (phrase lib) +:+. S "is a difficult", phrase task,
+  [S "Creating a gaming", (phrase lib), S "is a difficult" +:+. phrase task,
   (titleize' app), S "need",  (plural lib), S "that simulate", plural object,
   S "acting under various", (phrase physical), plural condition `sC` S "while", 
   S "simultaneously being fast and efficient enough to work in soft",

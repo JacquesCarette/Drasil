@@ -20,7 +20,7 @@ cpSymbols = (map qs cpUnits) ++ [qs QP.restitutionCoef] ++
   (map qs cpUnitless) ++ (map qs cpInputConstraints)
 
 inputSymbols = map qs [QP.position, QP.velocity, QP.force, QM.orientation, 
-  QP.linearVelocity, QP.angularVelocity, QP.gravitationalConst, QPP.mass, 
+  QP.angularVelocity, QP.linearVelocity, QP.gravitationalConst, QPP.mass, 
   QPP.len, QP.momentOfInertia, QP.torque] ++ [qs QP.restitutionCoef]
 
 outputSymbols = map qs [QP.position, QP.velocity, QM.orientation, 
@@ -143,8 +143,8 @@ pos_i = ucFromCV posi metre
                (sub (QP.position ^. symbol) lI)
 
 acc_i = ucFromCV accI accelU
-  where accI = cvR (dccWDS "acc_i" (compoundPhrase' (QP.acceleration ^. term) 
-               (cn "of the i-th body's acceleration")) (phrase QP.acceleration))
+  where accI = cvR (dccWDS "acc_i" (compoundPhrase' (cn "the i-th body's")
+               (QP.acceleration ^. term)) (phrase QP.acceleration))
                (sub (QP.acceleration ^. symbol) lI)
 
 vel_i = ucFromCV accI velU
@@ -298,3 +298,8 @@ im2legTerms = [massIRigidBody, QP.gravitationalAccel, timeT, initTime,
 im3legTerms = [massIRigidBody, momtInert_k, timeT, initTime, time_c, pos_CM,
   QP.velocity, QM.orientation, QP.angularVelocity, normalVect, -- +:+. S "Its signed direction is determined by (A4)",
   collisionImpulse, pointOfCollision, contDisp_k]
+
+---------------------
+-- GOAL STATEMENTS --
+---------------------
+

@@ -76,7 +76,7 @@ nonFL = mkDataDef nonFactorL nonFL_eq
 --DD6--
 
 glaTyFac_eq :: Expr
-glaTyFac_eq = (Case (zipWith glaTyFac_helper glassTypeFactors glassTypeAbbrs))
+glaTyFac_eq = (Case (zipWith glaTyFac_helper glassTypeFactors glassTypeAbbrsAsString))
 
 glaTyFac_helper :: Integer -> String -> (Expr, Relation)
 glaTyFac_helper result condition = (Int result, (C glass_type) := V condition)

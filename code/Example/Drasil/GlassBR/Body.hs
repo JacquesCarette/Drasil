@@ -121,12 +121,11 @@ glassBR_mg = mgDoc'' glassBRProg (for'' titleize phrase) mg_authors mgBod
 
 --------------------------------------------------------------------------------
 --Used in "Terms And Definitions" Section--
-termsWithDefsOnly, termsWithAccDefn, glassTypes, loadTypes :: [ConceptChunk]
+termsWithDefsOnly, termsWithAccDefn, loadTypes :: [ConceptChunk]
 
 termsWithDefsOnly = [glBreakage, lateral, lite, specA, blastResisGla,
   eqTNTChar]
 termsWithAccDefn  = [sD, loadShareFac, glTyFac, aspectRatio]
-glassTypes = [annealedGl, fTemperedGl, hStrengthGl]
 loadTypes = [loadResis, nonFactoredL, glassWL, shortDurLoad,
   specDeLoad, longDurLoad] 
 

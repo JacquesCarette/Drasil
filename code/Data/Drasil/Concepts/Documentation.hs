@@ -35,8 +35,8 @@ acroNumGen (first:rest) num = (f first) : acroNumGen rest (num + 1)
         f (LikelyChange lc) = LikelyChange $ LCChunk (nw $ npnc' (lc ^. id) (lc ^. term) (extrctStrng (short likelyChg) ++ (show num))) []
         extrctStrng (S strng) = strng
 
--- extrctStrng :: Sentence -> String
--- extrctStrng (S strng) = strng
+extrctStrng :: Sentence -> String
+extrctStrng (S strng) = strng
 
 assumption, dataDefn, genDefn, goalStmt, inModel, likelyChg, unlikelyChg,
   physSyst, requirement, srs, thModel, mg, desSpec, notApp, dataConst :: CI

@@ -86,12 +86,20 @@ swhsPeople = [thulasi, brooks, spencerSmith]
 mkSRS :: DocDesc
 mkSRS = RefSec (RefProg intro
   [TUnits, tsymb'' tsymb_intro (TermExcept [uNormalVect]), TAandA]):
+
   IntroSec (IntroProg (s2_intro CT.ener_src energy swhs_pcm phsChgMtrl progName
     CT.thermal_energy latent_heat unit_) (s2_kSent swhs_pcm program progName) [
+
   IPurpose (s2_1_par1 swhs_pcm progName),
-  IScope (s2_2_contents CT.thermal_analysis tank_pcm) (s2_2_end temp CT.thermal_energy water phsChgMtrl sWHT),
+
+  IScope (s2_2_contents CT.thermal_analysis tank_pcm)
+  (s2_2_end temp CT.thermal_energy water phsChgMtrl sWHT),
+
   IChar (s2_3_knowlegde CT.ht_trans_theo) (s2_3_understanding de) (EmptyS),
-  IOrgSec (s2_4_intro) (inModel) (SRS.inModel SRS.missingP []) (s2_4_trail swhs_pcm progName)]) :
+
+  IOrgSec (s2_4_intro) (inModel) (SRS.inModel SRS.missingP [])
+  (s2_4_trail swhs_pcm progName)]) :
+  
   map Verbatim [s3, s4, s5, s6, s7, s8, s9]
 
 tsymb_intro :: [TSIntro]

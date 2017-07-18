@@ -330,8 +330,9 @@ s5_2_bt_sent2 io mainObj compare1 compare2 factorOfComparison = foldlSent
   S "which is obtained from the", phrase user, S "as an" +:+. phrase input_,
   S "If both", plural condition, S "return true then it's shown that the", 
   phrase mainObj, S "is safe to use" `sC` S "else if both return false then the",
-  phrase mainObj +:+. S "is considered unsafe", S "All the supporting calculated",
-  plural value, S "are also displayed as", phrase io]
+  phrase mainObj +:+. S "is considered unsafe", 
+  S "All the supporting calculated", plural value, S "are also displayed as",
+  phrase io]
 
 {--SPECIFIC SYSTEM DESCRIPTION--}
 
@@ -580,17 +581,19 @@ testing = qs prob_br : qs lRe : qs demand : []
 testing1 :: [RelationConcept]
 testing1 = [probOfBr, calOfCap, calOfDe]
 tempHelper c d = (c, d)
+--FIXME: rename or find better implementation?
 
 s7_1_req6 = [(Enumeration $ Simple $ [(acroR 6, Nested (titleize output_ +:+
   S "the following" +: plural quantity)
   (Bullet $ 
-    map (\(c, d) -> Flat $ (at_start c) +:+ sParen (getS c) +:+ sParen (makeRef (gbSymbMapT d)))
-    (zipWith tempHelper (map qs testing) testing1)
+    map (\(c, d) -> Flat $ (at_start c) +:+ sParen (getS c) +:+
+     sParen (makeRef (gbSymbMapT d))) (zipWith tempHelper (map qs testing) testing1)
     ++
-    map (\d -> Flat $ (at_start d) +:+ sParen (getS d) +:+ sParen (makeRef (gbSymbMapD d)))
-    s7_1_req6_pulledList
+    map (\d -> Flat $ (at_start d) +:+ sParen (getS d) +:+ 
+      sParen (makeRef (gbSymbMapD d))) s7_1_req6_pulledList
     ++
-    [Flat $ (titleize aspectR) +:+ sParen (getS aspectR) +:+ E (equat aspectRWithEqn)]
+    [Flat $ (titleize aspectR) +:+ sParen (getS aspectR) +:+
+     E (equat aspectRWithEqn)]
     ))])]
 
 {--Nonfunctional Requirements--}
@@ -598,8 +601,8 @@ s7_1_req6 = [(Enumeration $ Simple $ [(acroR 6, Nested (titleize output_ +:+
 s7_2 = SRS.nonfuncReq [s7_2_intro] []
 
 s7_2_intro = foldlSP [
-  S "Given the small size, and relative simplicity, of this", 
-  phrase problem `sC` phrase performance, S "is not a" +:+. phrase priority, 
+  S "Given the small size, and relative simplicity, of this", phrase problem
+  `sC` phrase performance, S "is not a" +:+. phrase priority,  
   S "Any reasonable", phrase implementation +:+. 
   S "will be very quick and use minimal storage", 
   S "Rather than", phrase performance `sC` S "the", phrase priority, 

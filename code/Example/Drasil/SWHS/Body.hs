@@ -459,7 +459,7 @@ s5_1 = SRS.funcReq s5_1_list []
 
 s5_1_list :: [Contents]
 s5_1_list = (acroNumGen [req1] 1) ++ [s5_1_1_Table] ++ (acroNumGen [req2] 2) ++
-  [s5_1_2_Eqn1, s5_1_2_Eqn2, s5_1_Reqs]
+  [s5_1_2_Eqn1, s5_1_2_Eqn2] ++ (acroNumGen s5_1_Reqs 3) 
 
 s5_1_1_Table :: Contents
 s5_1_1_Table = (Table [titleize symbol_, titleize unit_, titleize description]
@@ -470,13 +470,8 @@ s5_1_1_Table = (Table [titleize symbol_, titleize unit_, titleize description]
   phrase] (map qs inputConstraints))
   (titleize input_ +:+ titleize variable +:+ titleize requirement) False)
 
-s5_1_Reqs :: Contents
-s5_1_Reqs = enumSimple 3 (short requirement) $ map foldlSent reqList
--- Want to add req1 and req2 but they include a table and another enumeration
--- so not sure how to implement yet
-
-reqList :: [[Sentence]]
-reqList = [req3, req4, req5, req6, req7, req8, req9, req10, req11]
+s5_1_Reqs :: [Contents]
+s5_1_Reqs = [req3, req4, req5, req6, req7, req8, req9, req10, req11]
 
 ---------------------------------------
 -- 5.2 : Non-functional Requirements --
@@ -705,8 +700,10 @@ s9_refList = [ref1, ref2, ref3, ref4, ref5, ref6]
 
 s2_intro :: ConceptChunk -> UnitalChunk -> ConceptChunk -> CI -> CI ->
   ConceptChunk -> UnitalChunk -> ConceptChunk -> Sentence
-s2_intro es en sp pcmat pro te lh un = foldlSent [S "Due to increasing cost"
-  `sC` S "diminishing availability, and negative environmental impact of",
+s2_intro es en sp pcmat pro te lh un = foldlSent [
+  S "Due to increasing cost"
+  `sC` S "diminishing availability" `sC`
+  S "and negative environmental impact of",
   S "fossil fuels, there is a higher demand for renewable",
   plural es `sAnd` phrase en +:+.
   S "storage technology", sp ^. defn,
@@ -999,116 +996,113 @@ assump1, assump2, assump3, assump4, assump5, assump6,
   assump7, assump8, assump9, assump10, assump11, assump12, assump13, assump14,
   assump15, assump16, assump17, assump18, assump19, assump20 :: Contents
 
-assump1 = mkAssump "assump1"
-  (S "The only form of" +:+ phrase energy +:+ S "that is" +:+
-  S "relevant for this" +:+ phrase problem +:+ S "is" +:+. 
-  phrase CT.thermal_energy +:+ S "All other forms of" +:+ phrase energy `sC`
-  S "such as" +:+ phrase mech_energy `sC` S "are assumed to be negligible" +:+.
-  sSqBr (swhsSymbMapTRef t1ConsThermE))
+assump1 = mkAssump "assump1" $ foldlSent [
+  S "The only form of", phrase energy, S "that is",
+  S "relevant for this", phrase problem, S "is" +:+. 
+  phrase CT.thermal_energy, S "All other forms of", phrase energy `sC`
+  S "such as", phrase mech_energy `sC` S "are assumed to be negligible",
+  sSqBr $ swhsSymbMapTRef t1ConsThermE]
 --
-assump2 = mkAssump "assump2" 
-  (S "All" +:+ phrase CT.heat_trans +:+ S "coefficients are constant over"
-  +:+ phrase time +:+. sSqBr (acroGD 1))
+assump2 = mkAssump "assump2" $ foldlSent [
+  S "All", phrase CT.heat_trans, S "coefficients are constant over",
+  phrase time, sSqBr $ acroGD 1]
 --
-assump3 = mkAssump "assump3"
-  (S "The" +:+ phrase water +:+ S "in the" +:+ phrase tank +:+
-  S "is fully mixed, so the" +:+ (phrase temp_W `isThe` 
-  S "same throughout the entire") +:+ phrase tank +:+. sSqBr (acroGD 2
-  `sC` swhsSymbMapDRef dd2HtFluxP))
+assump3 = mkAssump "assump3" $ foldlSent [
+  S "The", phrase water, S "in the", phrase tank,
+  S "is fully mixed, so the", phrase temp_W `isThe` 
+  S "same throughout the entire", phrase tank,
+  sSqBr $ acroGD 2 `sC` swhsSymbMapDRef dd2HtFluxP]
 --
-assump4 = mkAssump "assump4"
-  (S "The" +:+ phrase temp_PCM `isThe` S "same throughout the" +:+
-  phrase pcm_vol +:+. sSqBr (acroGD 2 `sC` swhsSymbMapDRef dd2HtFluxP `sC`
-  makeRef likeChg1))
+assump4 = mkAssump "assump4" $ foldlSent [
+  S "The", phrase temp_PCM `isThe` S "same throughout the", phrase pcm_vol,
+  sSqBr $ acroGD 2 `sC` swhsSymbMapDRef dd2HtFluxP `sC` makeRef likeChg1]
 --
-assump5 = mkAssump "assump5"
-  (S "The" +:+ phrase w_density `sAnd` phrase pcm_density +:+
+assump5 = mkAssump "assump5" $ foldlSent [
+  S "The", phrase w_density `sAnd` phrase pcm_density,
   S "have no spatial variation; that is" `sC`
-  S "they are each constant over their entire" +:+ phrase vol +:+.
-  sSqBr (acroGD 2))
+  S "they are each constant over their entire", phrase vol,
+  sSqBr $ acroGD 2]
 --
-assump6 = mkAssump "assump6"
-  (S "The" +:+ phrase htCap_W `sC` phrase htCap_S_P `sC` S "and" +:+
-  phrase htCap_L_P +:+ S "have no spatial variation; that" +:+
-  S "is, they are each constant over their entire" +:+
-  phrase vol +:+. sSqBr (acroGD 2))
+assump6 = mkAssump "assump6" $ foldlSent [
+  S "The", phrase htCap_W `sC` phrase htCap_S_P `sC` S "and",
+  phrase htCap_L_P, S "have no spatial variation; that",
+  S "is" `sC` S "they are each constant over their entire",
+  phrase vol, sSqBr $ acroGD 2]
 --
-assump7 = mkAssump "assump7"
-  ((CT.law_conv_cooling ^. defn) +:+
-  S "applies between the" +:+ phrase coil `sAnd` S "the" +:+
-  phrase water +:+. sSqBr (swhsSymbMapDRef dd1HtFluxC))
+assump7 = mkAssump "assump7" $ foldlSent [
+  CT.law_conv_cooling ^. defn, S "applies between the",
+  phrase coil `sAnd` S "the", phrase water,
+  sSqBr $ swhsSymbMapDRef dd1HtFluxC]
 --
-assump8 = mkAssump "assump8"
-  (S "The" +:+ phrase temp_C +:+ S "is constant over" +:+
-  phrase time +:+. sSqBr (swhsSymbMapDRef dd1HtFluxC `sC` makeRef likeChg2))
+assump8 = mkAssump "assump8" $ foldlSent [
+  S "The", phrase temp_C, S "is constant over", phrase time,
+  sSqBr $ swhsSymbMapDRef dd1HtFluxC `sC` makeRef likeChg2]
 --
-assump9 = mkAssump "assump9"
-  (S "The" +:+ phrase temp_C +:+ S "does not vary along its length" +:+.
-  sSqBr (swhsSymbMapDRef dd1HtFluxC `sC` makeRef likeChg3))
+assump9 = mkAssump "assump9" $ foldlSent [
+  S "The", phrase temp_C, S "does not vary along its length",
+  sSqBr $ swhsSymbMapDRef dd1HtFluxC `sC` makeRef likeChg3]
 --
-assump10 = mkAssump "assump10"
-  ((CT.law_conv_cooling ^. defn) +:+ S "applies between the" +:+
-  phrase water `sAnd` S "the" +:+ short phsChgMtrl +:+.
-  sSqBr (swhsSymbMapDRef dd2HtFluxP))
+assump10 = mkAssump "assump10" $ foldlSent [
+  CT.law_conv_cooling ^. defn, S "applies between the",
+  phrase water `sAnd` S "the", short phsChgMtrl,
+  sSqBr $ swhsSymbMapDRef dd2HtFluxP]
 --
-assump11 = mkAssump "assump11"
-  (S "The" +:+ phrase model +:+
-  S "only accounts for" +:+ (charging ^. defn) `sC` S "not" +:+.
-  phrase discharging +:+ S "The" +:+ phrase temp_W `sAnd`
-  phrase temp_PCM +:+ S "can only increase, or remain" +:+
-  S "constant; they do not decrease. This implies that the" +:+
-  phrase temp_init +:+ sParen (acroA 12) +:+ S "is less than (or equal)" +:+
-  S "to the" +:+ phrase temp_C +:+. sSqBr ((acroIM 1) `sC` (makeRef likeChg4)))
+assump11 = mkAssump "assump11" $ foldlSent [
+  S "The", phrase model, S "only accounts for", (charging ^. defn) `sC`
+  S "not" +:+. phrase discharging, S "The", phrase temp_W `sAnd`
+  phrase temp_PCM, S "can only increase, or remain",
+  S "constant; they do not decrease. This implies that the",
+  phrase temp_init, makeRef assump12, S "is less than (or equal)",
+  S "to the", phrase temp_C, sSqBr $ acroIM 1 `sC` makeRef likeChg4]
 --
-assump12 = mkAssump "assump12"
-  (phrase temp_init `ofThe'` phrase water
-  `sAnd` S "the" +:+ short phsChgMtrl `isThe` S "same" +:+.
-  sSqBr ((acroIM 1) `sC` (acroIM 2) `sC` (makeRef likeChg5)))
+assump12 = mkAssump "assump12" $ foldlSent [
+  phrase temp_init `ofThe'` phrase water `sAnd` S "the",
+  short phsChgMtrl `isThe` S "same",
+  sSqBr $ acroIM 1 `sC` acroIM 2 `sC` makeRef likeChg5]
 --
-assump13 = mkAssump "assump13"
-  (S "The" +:+ phrase simulation +:+ S "will start with the" +:+
-  short phsChgMtrl +:+ S "in a" +:+ (solid ^. defn) +:+.
-  sSqBr ((acroIM 2) `sC` (acroIM 4)))
+assump13 = mkAssump "assump13" $ foldlSent [
+  S "The", phrase simulation, S "will start with the",
+  short phsChgMtrl, S "in a", solid ^. defn,
+  sSqBr $ acroIM 2 `sC` acroIM 4]
 --
-assump14 = mkAssump "assump14"
-  ((S "operating" +:+ phrase temp +:+ S "range" `ofThe'`
-  phrase system) +:+ S "is such that the" +:+ phrase water +:+
-  S "is always in" +:+. (liquid ^. defn) +:+ S "That is," +:+
-  S "the" +:+ phrase temp +:+ S "will not drop below the" +:+
-  phrase melt_pt +:+ S "of" +:+ phrase water `sC` S "or rise above its" +:+
-  phrase boil_pt +:+. sSqBr ((acroIM 1) `sC` (acroIM 3)))
+assump14 = mkAssump "assump14" $ foldlSent [
+  (S "operating" +:+ phrase temp +:+ S "range") `ofThe'` phrase system,
+  S "is such that the", phrase water,
+  S "is always in" +:+. (liquid ^. defn), S "That is" `sC`
+  S "the", phrase temp, S "will not drop below the",
+  phrase melt_pt, S "of", phrase water `sC` S "or rise above its",
+  phrase boil_pt, sSqBr $ acroIM 1 `sC` acroIM 3]
 --
-assump15 = mkAssump "assump15"
-  (S "The" +:+ phrase tank +:+ S "is" +:+ phrase perfect_insul +:+
-  S "so that there is no" +:+ phrase CT.heat +:+ S "loss from the" +:+
-  phrase tank +:+. sSqBr ((acroIM 1) `sC` (makeRef likeChg6)))
+assump15 = mkAssump "assump15" $ foldlSent [
+  S "The", phrase tank, S "is", phrase perfect_insul,
+  S "so that there is no", phrase CT.heat, S "loss from the",
+  phrase tank, sSqBr $ acroIM 1 `sC` makeRef likeChg6]
 --
-assump16 = mkAssump "assump16"
-  (S "No internal" +:+ phrase CT.heat +:+
-  S "is generated by either the" +:+ phrase water +:+ S "or the" +:+
-  short phsChgMtrl `semiCol` S "therefore, the" +:+ phrase vol_ht_gen +:+
-  S "is zero" +:+. sSqBr ((acroIM 1) `sC` (acroIM 2)))
+assump16 = mkAssump "assump16" $ foldlSent [
+  S "No internal", phrase CT.heat, S "is generated by either the",
+  phrase water, S "or the", short phsChgMtrl `semiCol`
+  S "therefore, the", phrase vol_ht_gen, S "is zero",
+  sSqBr $ acroIM 1 `sC` acroIM 2]
 --
-assump17 = mkAssump "assump17"
-  ((phrase vol +:+ phrase change `ofThe'` short phsChgMtrl) +:+
-  S "due to" +:+ phrase CT.melting +:+ S "is negligible" +:+. sSqBr (acroIM 2))
+assump17 = mkAssump "assump17" $ foldlSent [
+  (phrase vol +:+ phrase change) `ofThe'` short phsChgMtrl,
+  S "due to", phrase CT.melting, S "is negligible", sSqBr $ acroIM 2]
 --
-assump18 = mkAssump "assump18"
-  (S "The" +:+ short phsChgMtrl +:+ S "is either in a" +:+ (liquid ^. defn) +:+
-  S "or a" +:+ (solid ^. defn) +:+ S "but not a" +:+ (gaseous ^. defn) +:+.
-  sSqBr ((acroIM 2) `sC` (acroIM 4)))
+assump18 = mkAssump "assump18" $ foldlSent [
+  S "The", short phsChgMtrl, S "is either in a", liquid ^. defn,
+  S "or a", solid ^. defn, S "but not a", gaseous ^. defn,
+  sSqBr $ acroIM 2 `sC` acroIM 4]
 --
-assump19 = mkAssump "assump19"
-  (S "The pressure in the" +:+ phrase tank +:+
-  S "is atmospheric, so the" +:+ phrase melt_pt `sAnd`
-  phrase boil_pt +:+ S "are" +:+ S (show (0 :: Integer)) :+: Sy (unit_symb temp)
- `sAnd` S (show (100 :: Integer)) :+: Sy (unit_symb temp) `sC` S "respectively" 
-  +:+ sSqBr ((acroIM 1) `sC` (acroIM 3)))
+assump19 = mkAssump "assump19" $ foldlSent [
+  S "The pressure in the", phrase tank, S "is atmospheric, so the",
+  phrase melt_pt `sAnd` phrase boil_pt, S "are", S (show (0 :: Integer)) :+:
+  Sy (unit_symb temp) `sAnd` S (show (100 :: Integer)) :+:
+  Sy (unit_symb temp) `sC` S "respectively", sSqBr $ acroIM 1 `sC` acroIM 3]
 --
-assump20 = mkAssump "assump20"
-  (S "When considering the" +:+ phrase w_vol +:+ S "in the" +:+
-  phrase tank `sC` (phrase vol `ofThe` phrase coil) +:+
-  S "is assumed to be negligible" +:+. sSqBr (makeRef req2))
+assump20 = mkAssump "assump20" $ foldlSent [
+  S "When considering the", phrase w_vol, S "in the",
+  phrase tank `sC` (phrase vol `ofThe` phrase coil),
+  S "is assumed to be negligible", sSqBr $ makeRef req2]
 
 -- Again, list structure is same between all examples.
 
@@ -1500,7 +1494,7 @@ s4_2_7_deriv_5 eq pro rs = foldlSP [titleize' eq, S "(reference) and",
   S "computed by" +:+. short pro, S "The relative",
   S "error between the results computed by", short pro `sAnd`
   S "the results calculated from the", short rs, S "of these",
-  plural eq, S "should be less than 0.001%", sParen (acroR 9)]
+  plural eq, S "should be less than 0.001%", makeRef req9]
 
 -- Above section only occurs in this example (although maybe it SHOULD be in
 -- the others).
@@ -1515,7 +1509,8 @@ s4_2_7_deriv_5 eq pro rs = foldlSP [titleize' eq, S "(reference) and",
 -- 5.1 : Functional Requirements --
 -----------------------------------
 
-req1, req2, s5_1_2_Eqn1, s5_1_2_Eqn2 :: Contents
+req1, req2, s5_1_2_Eqn1, s5_1_2_Eqn2, req3, req4,
+  req5, req6, req7, req8, req9, req10, req11 :: Contents
 
 req1 = mkRequirement "req1" $ foldlSentCol [
   titleize input_, S "the following", plural quantity `sC`
@@ -1534,15 +1529,12 @@ s5_1_2_Eqn1 = EqnBlock ((C w_mass) := (C w_vol) * (C w_density) := ((C tank_vol)
 
 s5_1_2_Eqn2 = EqnBlock ((C pcm_mass) := (C pcm_vol) * (C pcm_density))
 
--- Want to add req1 and req2 but they include a table and another enumeration
--- so not sure how to implement yet
-
-req3, req4, req5, req6, req7, req8, req9, req10, req11 :: [Sentence]
-
-req3 = [S "Verify that the", plural input_, S "satisfy the required" +:+
+req3 = mkRequirement "req3" $ foldlSent [
+  S "Verify that the", plural input_, S "satisfy the required",
   phrase physical, plural constraint, S "shown in", makeRef s7_table1]
 --
-req4 = [titleize output_, S "the", phrase input_, plural quantity `sAnd`
+req4 = mkRequirement "req4" $ foldlSent [
+  titleize output_, S "the", phrase input_, plural quantity `sAnd`
   S "derived", plural quantity +: S "in the following list",
   S "the", plural quantity, S "from", acroR 1 `sC` S "the",
   plural mass, S "from", acroR 2 `sC` getS tau_W,
@@ -1551,33 +1543,40 @@ req4 = [titleize output_, S "the", phrase input_, plural quantity `sAnd`
   sParen (S "from" +:+ acroIM 2) `sAnd` getS tau_L_P,
   sParen (S "from" +:+ acroIM 2)]
 --
-req5 = [S "Calculate and", phrase output_, S "the", phrase temp_W,
+req5 = mkRequirement "req5" $ foldlSent [
+  S "Calculate and", phrase output_, S "the", phrase temp_W,
   sParen(getS temp_W :+: sParen (getS time)), S "over the",
   phrase simulation, phrase time, sParen (S "from" +:+ acroIM 1)]
 --
-req6 = [S "Calculate and", phrase output_, S "the", phrase temp_PCM,
+req6 = mkRequirement "req6" $ foldlSent [
+  S "Calculate and", phrase output_, S "the", phrase temp_PCM,
   sParen (getS temp_PCM :+: sParen (getS time)), S "over the",
   phrase simulation, phrase time, sParen (S "from" +:+ acroIM 2)]
 --
-req7 = [S "Calculate and", phrase output_, S "the", phrase w_E,
+req7 = mkRequirement "req7" $ foldlSent [
+  S "Calculate and", phrase output_, S "the", phrase w_E,
   sParen (getS w_E :+: sParen (getS time)), S "over the",
   phrase simulation, phrase time, sParen (S "from" +:+ acroIM 3)]
 --
-req8 = [S "Calculate and", phrase output_, S "the", phrase pcm_E,
+req8 = mkRequirement "req8" $ foldlSent [
+  S "Calculate and", phrase output_, S "the", phrase pcm_E,
   sParen (getS pcm_E :+: sParen (getS time)), S "over the",
   phrase simulation, phrase time, sParen (S "from" +:+ acroIM 4)]
 --
-req9 = [S "Verify that the", phrase energy, plural output_,
+req9 = mkRequirement "req9" $ foldlSent [
+  S "Verify that the", phrase energy, plural output_,
   sParen (getS w_E :+: sParen (getS time) `sAnd` getS pcm_E :+:
   sParen (getS time)), S "follow the", phrase CT.law_cons_energy `sC`
   S "as outlined in", makeRef s4_2_7 `sC` S "with relative error",
   S "no greater than 0.001%"]
 --
-req10 = [S "Calculate and", phrase output_, S "the", phrase time,
+req10 = mkRequirement "req10" $ foldlSent [
+  S "Calculate and", phrase output_, S "the", phrase time,
   S "at which the", short phsChgMtrl, S "begins to melt",
   getS t_init_melt, sParen (S "from" +:+ acroIM 2)]
 --
-req11 = [S "Calculate and", phrase output_, S "the", phrase time,
+req11 = mkRequirement "req11" $ foldlSent [
+  S "Calculate and", phrase output_, S "the", phrase time,
   S "at which the", short phsChgMtrl, S "stops", phrase CT.melting,
   getS t_final_melt, sParen (S "from" +:+ acroIM 2)]
 

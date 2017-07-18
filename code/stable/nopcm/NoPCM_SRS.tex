@@ -275,7 +275,7 @@ This section simplifies the original problem and helps in developing the theoret
 \item[\refstepcounter{assumpnum}\atheassumpnum\label{Aassump9}:]The temperature of the heating coil does not vary along its length [\hyperref[DD:ht.flux.C]{Definition~DD:ht.flux.C}, LC\ref{LClikeChg3}].
 \end{description}
 \begin{description}
-\item[\refstepcounter{assumpnum}\atheassumpnum\label{Aassump9}:]The model only accounts for charging of the tank, not discharging. The temperature of the water can only increase, or remain constant; it cannot decrease. This implies that the initial temperature is less than (or equal to) the temperature of the heating coil [IM1, LC\ref{LClikeChg4}].
+\item[\refstepcounter{assumpnum}\atheassumpnum\label{Aassump9npnc}:]The model only accounts for charging of the tank, not discharging. The temperature of the water can only increase, or remain constant; it cannot decrease. This implies that the initial temperature is less than (or equal to) the temperature of the heating coil [IM1, LC\ref{LClikeChg4}].
 \end{description}
 \begin{description}
 \item[\refstepcounter{assumpnum}\atheassumpnum\label{Aassump14}:]The operating temperature range of the system is such that the water is always in liquid state. That is, the temperature will not drop below the melting point temperature of water, or rise above its boiling point temperature [IM1, IM3].
@@ -306,7 +306,7 @@ Label & Conservation of thermal energy
 \\ \midrule \\
 Equation & $-\nabla{}\cdot{}\mathbf{q}+g=\rho{}C\frac{\partial{}T}{\partial{}t}$
 \\ \midrule \\
-Description & The above equation gives the law of conservation of energy for transient heat transfer in a material of specific heat capacity $C$ ($\frac{\text{J}}{(\text{kg}{}^{\circ}C)}$) and density, $\rho{}$ ($\frac{\text{kg}}{\text{m}^{3}}$), where $\mathbf{q}$ is the thermal flux vector ($\frac{\text{W}}{\text{m}^{2}}$), $g$ is the volumetric heat generation per unit volume ($\frac{\text{W}}{\text{m}^{3}}$), $T$ is the temperature (${}^{\circ}C$), $t$ is time (s), and $\nabla{}$ is the degree of steepness of a graph at any point. For this equation to apply, other forms of energy, such as mechanical energy, are assumed to be negligible in the system (A1).
+Description & The above equation gives the law of conservation of energy for transient heat transfer in a material of specific heat capacity $C$ ($\frac{\text{J}}{(\text{kg}{}^{\circ}C)}$) and density, $\rho{}$ ($\frac{\text{kg}}{\text{m}^{3}}$), where $\mathbf{q}$ is the thermal flux vector ($\frac{\text{W}}{\text{m}^{2}}$), $g$ is the volumetric heat generation per unit volume ($\frac{\text{W}}{\text{m}^{3}}$), $T$ is the temperature (${}^{\circ}C$), $t$ is time (s), and $\nabla{}$ is the degree of steepness of a graph at any point. For this equation to apply, other forms of energy, such as mechanical energy, are assumed to be negligible in the system (A\ref{Aassump1}).
 \\ \bottomrule \end{tabular}
 \end{minipage}\\
 \subsubsection{General Definitions}
@@ -394,7 +394,7 @@ Label & Energy balance on water to find the temperature of the water
 \\ \midrule \\
 Equation & $\frac{dT_{W}}{dt}=\frac{1}{\tau{}_{W}}\left(T_{C}-T_{W}\left(t\right)+\eta{}\left(T_{P}\left(t\right)-T_{W}\left(t\right)\right)\right)$
 \\ \midrule \\
-Description & $T_{W}$ is the temperature of the water (${}^{\circ}C$). $T_{P}$ is the temperature of the phase change material (${}^{\circ}C$). $T_{C}$ is the temperature of the heating coil (${}^{\circ}C$). $\tau{}_{W}=\frac{m_{W}C_{W}}{h_{C}A_{C}}$ is a constant (s). $\eta{}=\frac{h_{P}A_{P}}{h_{C}A_{C}}$ is a constant (dimensionless). The above equation applies as long as the water is in liquid form, $0<T_{W}<100$ (${}^{\circ}C$) where 0 (${}^{\circ}C$) and 100 (${}^{\circ}C$) are the melting and boiling point temperatures of water, respectively (A14, A19).
+Description & $T_{W}$ is the temperature of the water (${}^{\circ}C$). $T_{P}$ is the temperature of the phase change material (${}^{\circ}C$). $T_{C}$ is the temperature of the heating coil (${}^{\circ}C$). $\tau{}_{W}=\frac{m_{W}C_{W}}{h_{C}A_{C}}$ is a constant (s). $\eta{}=\frac{h_{P}A_{P}}{h_{C}A_{C}}$ is a constant (dimensionless). The above equation applies as long as the water is in liquid form, $0<T_{W}<100$ (${}^{\circ}C$) where 0 (${}^{\circ}C$) and 100 (${}^{\circ}C$) are the melting and boiling point temperatures of water, respectively (A\ref{Aassump14}, A\ref{Aassump19}).
 \\ \bottomrule \end{tabular}
 \end{minipage}\\
 Derivation of the energy balance on water:
@@ -425,7 +425,7 @@ Label & Heat energy in the water
 \\ \midrule \\
 Equation & $E_{W}\left(t\right)=C_{W}m_{W}\left(T_{W}\left(t\right)-T_{init}\right)$
 \\ \midrule \\
-Description & The above equation is derived using T2. $E_{W}$ is the change in thermal energy of the liquid water relative to the energy at the initial temperature ($T_{init}$) (J). $C_{W}$ is the specific heat capacity of liquid water ($\frac{\text{J}}{(\text{kg}{}^{\circ}C)}$) and $m_{W}$ is the mass of the water (kg). The change in temperature is the difference between the temperature at time $t$ (s), $T_{W}$ and the initial temperature, $T_{init}$ (${}^{\circ}C$). This equation applies as long as $0<T_{W}<0$${}^{\circ}C$ (A14, A19).
+Description & The above equation is derived using T2. $E_{W}$ is the change in thermal energy of the liquid water relative to the energy at the initial temperature ($T_{init}$) (J). $C_{W}$ is the specific heat capacity of liquid water ($\frac{\text{J}}{(\text{kg}{}^{\circ}C)}$) and $m_{W}$ is the mass of the water (kg). The change in temperature is the difference between the temperature at time $t$ (s), $T_{W}$ and the initial temperature, $T_{init}$ (${}^{\circ}C$). This equation applies as long as $0<T_{W}<0$${}^{\circ}C$ (A\ref{Aassump14}, A\ref{Aassump19}).
 \\ \bottomrule \end{tabular}
 \end{minipage}\\
 \subsubsection{Data Constraints}

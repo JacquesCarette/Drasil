@@ -334,7 +334,7 @@ assump4 = mkAssump "assump4"
 assump5 = mkAssump "assump5"
   (foldlSent [S "The", phrase htCap_W, S "has no spatial variation; that", 
   S "is, it is constant over its entire", phrase vol, sSqBr (acroGD 2)])
-assump9_npnc = mkAssump "assump9"
+assump9_npnc = mkAssump "assump9_npnc"
   (foldlSent [S "The", phrase model, S "only accounts for charging",
   S "of the tank" `sC` S "not discharging. The", phrase temp_W, S "can only",
   S "increase, or remain constant; it cannot decrease. This implies that the",

@@ -24,6 +24,7 @@ import Data.Drasil.SentenceStructures (foldlSent, isThe)
 import Drasil.SWHS.DataDefs
 
 import Control.Lens ((^.))
+import Drasil.DocumentLanguage
 
 tModels :: [RelationConcept]
 tModels = [t1ConsThermE] ++ [t2SensHtE] ++ [t3LatHtE]
@@ -64,7 +65,7 @@ t1descr = foldlSent [
   S "to apply" `sC` S "other forms of", phrase energy `sC` S "such as",
   phrase mech_energy `sC`
   S "are assumed to be negligible in the", phrase system,
-  sParen (acroA 1)]
+  sParen (makeRef (mkAssump "assump1" EmptyS))]
 
 --referencing within a simple list is not yet implemented.
 --Forgot many "S" and ":+:" typing out above description

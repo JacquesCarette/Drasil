@@ -15,5 +15,8 @@ data Space where
   Radians :: Space
   Vect :: Space -> Space
   Obj :: String -> Space
+  DiscreteI :: [Int] -> Space --ex. let A = {1,2,4,7}
+  DiscreteD :: [Double] -> Space
+  DiscreteS :: [String] -> Space --ex. let Meal = {"breakfast","lunch", "dinner"}
   deriving Eq
   

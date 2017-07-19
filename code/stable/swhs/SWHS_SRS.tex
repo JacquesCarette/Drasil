@@ -347,7 +347,7 @@ This section simplifies the original problem and helps in developing the theoret
 \item[\refstepcounter{assumpnum}\atheassumpnum\label{Aassump10}:]Newton's law of convective cooling applies between the water and the PCM [\hyperref[DD:ht.flux.P]{Definition~DD:ht.flux.P}].
 \end{description}
 \begin{description}
-\item[\refstepcounter{assumpnum}\atheassumpnum\label{Aassump11}:]The model only accounts for charging of the tank, not discharging. The temperature of the water and temperature of the phase change material can only increase, or remain constant; they do not decrease. This implies that the initial temperature (A12) is less than (or equal) to the temperature of the heating coil [IM1, LC\ref{LClikeChg4}].
+\item[\refstepcounter{assumpnum}\atheassumpnum\label{Aassump11}:]The model only accounts for charging of the tank, not discharging. The temperature of the water and temperature of the phase change material can only increase, or remain constant; they do not decrease. This implies that the initial temperature [A\ref{Aassump12}] is less than (or equal) to the temperature of the heating coil [IM1, LC\ref{LClikeChg4}].
 \end{description}
 \begin{description}
 \item[\refstepcounter{assumpnum}\atheassumpnum\label{Aassump12}:]The initial temperature of the water and the PCM is the same [IM1, IM2, LC\ref{LClikeChg5}].
@@ -371,7 +371,7 @@ This section simplifies the original problem and helps in developing the theoret
 \item[\refstepcounter{assumpnum}\atheassumpnum\label{Aassump18}:]The PCM is either in a liquid state or a solid state but not a gaseous state [IM2, IM4].
 \end{description}
 \begin{description}
-\item[\refstepcounter{assumpnum}\atheassumpnum\label{Aassump19}:]The pressure in the tank is atmospheric, so the melting point temperature and boiling point temperature are 0${}^{\circ}C$ and 100${}^{\circ}C$, respectively [IM1, IM3]
+\item[\refstepcounter{assumpnum}\atheassumpnum\label{Aassump19}:]The pressure in the tank is atmospheric, so the melting point temperature and boiling point temperature are 0${}^{\circ}C$ and 100${}^{\circ}C$, respectively [IM1, IM3].
 \end{description}
 \begin{description}
 \item[\refstepcounter{assumpnum}\atheassumpnum\label{Aassump20}:]When considering the volume of water in the tank, the volume of the heating coil is assumed to be negligible [R\ref{Rreq2}].
@@ -390,7 +390,7 @@ Label & Conservation of thermal energy
 \\ \midrule \\
 Equation & $-\nabla{}\cdot{}\mathbf{q}+g=\rho{}C\frac{\partial{}T}{\partial{}t}$
 \\ \midrule \\
-Description & The above equation gives the law of conservation of energy for transient heat transfer in a material of specific heat capacity $C$ ($\frac{\text{J}}{(\text{kg}{}^{\circ}C)}$) and density, $\rho{}$ ($\frac{\text{kg}}{\text{m}^{3}}$), where $\mathbf{q}$ is the thermal flux vector ($\frac{\text{W}}{\text{m}^{2}}$), $g$ is the volumetric heat generation per unit volume ($\frac{\text{W}}{\text{m}^{3}}$), $T$ is the temperature (${}^{\circ}C$), $t$ is time (s), and $\nabla{}$ is the degree of steepness of a graph at any point. For this equation to apply, other forms of energy, such as mechanical energy, are assumed to be negligible in the system (A1).
+Description & The above equation gives the law of conservation of energy for transient heat transfer in a material of specific heat capacity $C$ ($\frac{\text{J}}{(\text{kg}{}^{\circ}C)}$) and density, $\rho{}$ ($\frac{\text{kg}}{\text{m}^{3}}$), where $\mathbf{q}$ is the thermal flux vector ($\frac{\text{W}}{\text{m}^{2}}$), $g$ is the volumetric heat generation per unit volume ($\frac{\text{W}}{\text{m}^{3}}$), $T$ is the temperature (${}^{\circ}C$), $t$ is time (s), and $\nabla{}$ is the degree of steepness of a graph at any point. For this equation to apply, other forms of energy, such as mechanical energy, are assumed to be negligible in the system (A\ref{Aassump1}).
 \\ \bottomrule \end{tabular}
 \end{minipage}\\
 ~\newline
@@ -559,7 +559,7 @@ Label & Energy balance on water to find the temperature of the water
 \\ \midrule \\
 Equation & $\frac{dT_{W}}{dt}=\frac{1}{\tau{}_{W}}\left(T_{C}-T_{W}\left(t\right)+\eta{}\left(T_{P}\left(t\right)-T_{W}\left(t\right)\right)\right)$
 \\ \midrule \\
-Description & $T_{W}$ is the temperature of the water (${}^{\circ}C$). $T_{P}$ is the temperature of the phase change material (${}^{\circ}C$). $T_{C}$ is the temperature of the heating coil (${}^{\circ}C$). $\tau{}_{W}=\frac{m_{W}C_{W}}{h_{C}A_{C}}$ is a constant (s). $\eta{}=\frac{h_{P}A_{P}}{h_{C}A_{C}}$ is a constant (dimensionless). The above equation applies as long as the water is in liquid form, $0<T_{W}<100$ (${}^{\circ}C$) where 0 (${}^{\circ}C$) and 100 (${}^{\circ}C$) are the melting and boiling point temperatures of water, respectively (A14, A19).
+Description & $T_{W}$ is the temperature of the water (${}^{\circ}C$). $T_{P}$ is the temperature of the phase change material (${}^{\circ}C$). $T_{C}$ is the temperature of the heating coil (${}^{\circ}C$). $\tau{}_{W}=\frac{m_{W}C_{W}}{h_{C}A_{C}}$ is a constant (s). $\eta{}=\frac{h_{P}A_{P}}{h_{C}A_{C}}$ is a constant (dimensionless). The above equation applies as long as the water is in liquid form, $0<T_{W}<100$ (${}^{\circ}C$) where 0 (${}^{\circ}C$) and 100 (${}^{\circ}C$) are the melting and boiling point temperatures of water, respectively (A\ref{Aassump14}, A\ref{Aassump19}).
 \\ \bottomrule \end{tabular}
 \end{minipage}\\
 Derivation of the energy balance on water:
@@ -641,7 +641,7 @@ Label & Heat energy in the water
 \\ \midrule \\
 Equation & $E_{W}\left(t\right)=C_{W}m_{W}\left(T_{W}\left(t\right)-T_{init}\right)$
 \\ \midrule \\
-Description & The above equation is derived using T2. $E_{W}$ is the change in thermal energy of the liquid water relative to the energy at the initial temperature ($T_{init}$) (J). $C_{W}$ is the specific heat capacity of liquid water ($\frac{\text{J}}{(\text{kg}{}^{\circ}C)}$) and $m_{W}$ is the mass of the water (kg). The change in temperature is the difference between the temperature at time $t$ (s), $T_{W}$ and the initial temperature, $T_{init}$ (${}^{\circ}C$). This equation applies as long as $0<T_{W}<0$${}^{\circ}C$ (A14, A19).
+Description & The above equation is derived using T2. $E_{W}$ is the change in thermal energy of the liquid water relative to the energy at the initial temperature ($T_{init}$) (J). $C_{W}$ is the specific heat capacity of liquid water ($\frac{\text{J}}{(\text{kg}{}^{\circ}C)}$) and $m_{W}$ is the mass of the water (kg). The change in temperature is the difference between the temperature at time $t$ (s), $T_{W}$ and the initial temperature, $T_{init}$ (${}^{\circ}C$). This equation applies as long as $0<T_{W}<0$${}^{\circ}C$ (A\ref{Aassump14}, A\ref{Aassump19}).
 \\ \bottomrule \end{tabular}
 \end{minipage}\\
 ~\newline
@@ -660,7 +660,7 @@ E_{P}_{melt}^{init}+Q_{P}\left(t\right), & T_{P}=T_{melt}^{P}\\
 E_{P}_{melt}^{init}+Q_{P}\left(t\right), & 0<\phi{}<1
 \end{cases}$
 \\ \midrule \\
-Description & The above equation is derived using T2 and T3. $E_{P}$ is the change in thermal energy of the PCM relative to the energy at the initial temperature ($T_{init}$) J. $E_{P}$ for the solid PCM is found using T2 for sensible heat ing, with the specific heat capacity of the solid PCM, $C_{P}^{S}$ ($\frac{\text{J}}{(\text{kg}{}^{\circ}C)}$) and the change in the PCM temperature from the initial temperature (${}^{\circ}C$). $E_{P}$ for the melted PCM ($T_{P}>E_{P}_{melt}^{init}$) is found using T2 for sensible heat of the liquid. PCM plus the energy when melting starts, plus the energy required to melt all of the PCM The energy when melting starts is $E_{P}_{melt}^{init}$ (J). The energy required to melt all of the PCM is $H_{f}m_{P}$ (J) (DD3). the specific heat capacity of the liquid PCM is $C_{P}^{L}$ ($\frac{\text{J}}{(\text{kg}{}^{\circ}C)}$) and the change in temperature is $T_{P}-T_{melt}^{P}$ (${}^{\circ}C$). $E_{P}$ during melting of the PCM is found using the energy required at the instant melting of the PCM begins, $E_{P}_{melt}^{init}$ plus the latent heat energy added to the PCM, $Q_{P}$ (J) since the time when melting began $t_{melt}^{init}$ (s). The heat energy for boiling of the PCM is not detailed, since the PCM is assumed to either be in a solid or liquid state (A18).
+Description & The above equation is derived using T2 and T3. $E_{P}$ is the change in thermal energy of the PCM relative to the energy at the initial temperature ($T_{init}$) J. $E_{P}$ for the solid PCM is found using T2 for sensible heat ing, with the specific heat capacity of the solid PCM, $C_{P}^{S}$ ($\frac{\text{J}}{(\text{kg}{}^{\circ}C)}$) and the change in the PCM temperature from the initial temperature (${}^{\circ}C$). $E_{P}$ for the melted PCM ($T_{P}>E_{P}_{melt}^{init}$) is found using T2 for sensible heat of the liquid. PCM plus the energy when melting starts, plus the energy required to melt all of the PCM The energy when melting starts is $E_{P}_{melt}^{init}$ (J). The energy required to melt all of the PCM is $H_{f}m_{P}$ (J) (DD3). the specific heat capacity of the liquid PCM is $C_{P}^{L}$ ($\frac{\text{J}}{(\text{kg}{}^{\circ}C)}$) and the change in temperature is $T_{P}-T_{melt}^{P}$ (${}^{\circ}C$). $E_{P}$ during melting of the PCM is found using the energy required at the instant melting of the PCM begins, $E_{P}_{melt}^{init}$ plus the latent heat energy added to the PCM, $Q_{P}$ (J) since the time when melting began $t_{melt}^{init}$ (s). The heat energy for boiling of the PCM is not detailed, since the PCM is assumed to either be in a solid or liquid state (A\ref{Aassump18}).
 \\ \bottomrule \end{tabular}
 \end{minipage}\\
 \subsubsection{Data Constraints}
@@ -736,7 +736,7 @@ In addition, the change in heat energy in the PCM should equal the energy input 
 \begin{equation}
 E_{P}=\int_{0}^{t}{h_{P}A_{P}\left(T_{W}\left(t\right)-T_{P}\left(t\right)\right)dt}
 \end{equation}
-Equations (reference) and (reference) can be used as ``sanity"checks to gain confidence in any solution computed by SWHS. The relative error between the results computed by SWHS and the results calculated from the RHS of these equations should be less than 0.001% (R9).
+Equations (reference) and (reference) can be used as ``sanity"checks to gain confidence in any solution computed by SWHS. The relative error between the results computed by SWHS and the results calculated from the RHS of these equations should be less than 0.001% R\ref{Rreq9}.
 \section{Requirements}
 \label{Sec:Requ}
 This section provides the functional requirements, the business tasks that the software is expected to complete, and the non-functional requirements, the qualities that the software is expected to exhibit.
@@ -796,17 +796,33 @@ m_{W}=V_{W}\rho{}_{W}=\left(V_{tank}-V_{P}\right)\rho{}_{W}=\left(\frac{D}{2}L-V
 \begin{equation}
 m_{P}=V_{P}\rho{}_{P}
 \end{equation}
-\begin{itemize}
-\item[R3:]Verify that the inputs satisfy the required physical constraints shown in Table~\ref{Table:TracMatrShowtheConnBetwItemofDiffSect}.
-\item[R4:]Output the input quantities and derived quantities in the following list: the quantities from R1, the masses from R2, $\tau{}_{W}$ (from IM1), $\eta{}$ (from IM1), $\tau{}_{P}^{S}$ (from IM2) and $\tau{}_{P}^{L}$ (from IM2).
-\item[R5:]Calculate and output the temperature of the water ($T_{W}$($t$)) over the simulation time (from IM1).
-\item[R6:]Calculate and output the temperature of the phase change material ($T_{P}$($t$)) over the simulation time (from IM2).
-\item[R7:]Calculate and output the change in heat energy in the water ($E_{W}$($t$)) over the simulation time (from IM3).
-\item[R8:]Calculate and output the change in heat energy in the PCM ($E_{P}$($t$)) over the simulation time (from IM4).
-\item[R9:]Verify that the energy outputs ($E_{W}$($t$) and $E_{P}$($t$)) follow the law of conservation of energy, as outlined in Section~\ref{Sec:PropofaCorrSolu}, with relative error no greater than 0.001%.
-\item[R10:]Calculate and output the time at which the PCM begins to melt $t_{melt}^{init}$ (from IM2).
-\item[R11:]Calculate and output the time at which the PCM stops melting $t_{melt}^{final}$ (from IM2).
-\end{itemize}
+\begin{description}
+\item[\refstepcounter{reqnum}\rthereqnum\label{Rreq3}:]Verify that the inputs satisfy the required physical constraints shown in Table~\ref{Table:TracMatrShowtheConnBetwItemofDiffSect}.
+\end{description}
+\begin{description}
+\item[\refstepcounter{reqnum}\rthereqnum\label{Rreq4}:]Output the input quantities and derived quantities in the following list: the quantities from R1, the masses from R2, $\tau{}_{W}$ (from IM1), $\eta{}$ (from IM1), $\tau{}_{P}^{S}$ (from IM2) and $\tau{}_{P}^{L}$ (from IM2).
+\end{description}
+\begin{description}
+\item[\refstepcounter{reqnum}\rthereqnum\label{Rreq5}:]Calculate and output the temperature of the water ($T_{W}$($t$)) over the simulation time (from IM1).
+\end{description}
+\begin{description}
+\item[\refstepcounter{reqnum}\rthereqnum\label{Rreq6}:]Calculate and output the temperature of the phase change material ($T_{P}$($t$)) over the simulation time (from IM2).
+\end{description}
+\begin{description}
+\item[\refstepcounter{reqnum}\rthereqnum\label{Rreq7}:]Calculate and output the change in heat energy in the water ($E_{W}$($t$)) over the simulation time (from IM3).
+\end{description}
+\begin{description}
+\item[\refstepcounter{reqnum}\rthereqnum\label{Rreq8}:]Calculate and output the change in heat energy in the PCM ($E_{P}$($t$)) over the simulation time (from IM4).
+\end{description}
+\begin{description}
+\item[\refstepcounter{reqnum}\rthereqnum\label{Rreq9}:]Verify that the energy outputs ($E_{W}$($t$) and $E_{P}$($t$)) follow the law of conservation of energy, as outlined in Section~\ref{Sec:PropofaCorrSolu}, with relative error no greater than 0.001%.
+\end{description}
+\begin{description}
+\item[\refstepcounter{reqnum}\rthereqnum\label{Rreq10}:]Calculate and output the time at which the PCM begins to melt $t_{melt}^{init}$ (from IM2).
+\end{description}
+\begin{description}
+\item[\refstepcounter{reqnum}\rthereqnum\label{Rreq11}:]Calculate and output the time at which the PCM stops melting $t_{melt}^{final}$ (from IM2).
+\end{description}
 \subsection{Non-Functional Requirements}
 \label{Sec:Non-Requ}
 This problem is small in size and relatively simple, so performance is not a priority. Any reasonable implementation will be very quick and use minimal storage. Rather than performance, the non-functional requirement priorities are correctness, verifiability, understandability, reusability, and maintainability.

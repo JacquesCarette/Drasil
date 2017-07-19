@@ -1235,7 +1235,7 @@ A10: Newton's law of convective cooling applies between the water and the PCM [<
 </a>
 <a id="Aassump11">
 <ul>
-A11: The model only accounts for charging of the tank, not discharging. The temperature of the water and temperature of the phase change material can only increase, or remain constant; they do not decrease. This implies that the initial temperature (A12) is less than (or equal) to the temperature of the heating coil [IM1, <a href=#LClikeChg4>this Likely Change</a>].
+A11: The model only accounts for charging of the tank, not discharging. The temperature of the water and temperature of the phase change material can only increase, or remain constant; they do not decrease. This implies that the initial temperature [<a href=#Aassump12>this Assumption</a>] is less than (or equal) to the temperature of the heating coil [IM1, <a href=#LClikeChg4>this Likely Change</a>].
 </ul>
 </a>
 <a id="Aassump12">
@@ -1275,7 +1275,7 @@ A18: The PCM is either in a liquid state or a solid state but not a gaseous stat
 </a>
 <a id="Aassump19">
 <ul>
-A19: The pressure in the tank is atmospheric, so the melting point temperature and boiling point temperature are 0&deg;C and 100&deg;C, respectively [IM1, IM3]
+A19: The pressure in the tank is atmospheric, so the melting point temperature and boiling point temperature are 0&deg;C and 100&deg;C, respectively [IM1, IM3].
 </ul>
 </a>
 <a id="Aassump20">
@@ -1330,7 +1330,7 @@ Description
 </th>
 <td>
 <p class="paragraph">
-The above equation gives the law of conservation of energy for transient heat transfer in a material of specific heat capacity <em>C</em> (J/(kg&sdot;&deg;C)) and density, <em>&rho;</em> (kg/(m<sup>3</sup>)), where <em><b>q</b></em> is the thermal flux vector (W/(m<sup>2</sup>)), <em>g</em> is the volumetric heat generation per unit volume (W/(m<sup>3</sup>)), <em>T</em> is the temperature (&deg;C), <em>t</em> is time (s), and <em>&nabla;</em> is the degree of steepness of a graph at any point. For this equation to apply, other forms of energy, such as mechanical energy, are assumed to be negligible in the system (A1).
+The above equation gives the law of conservation of energy for transient heat transfer in a material of specific heat capacity <em>C</em> (J/(kg&sdot;&deg;C)) and density, <em>&rho;</em> (kg/(m<sup>3</sup>)), where <em><b>q</b></em> is the thermal flux vector (W/(m<sup>2</sup>)), <em>g</em> is the volumetric heat generation per unit volume (W/(m<sup>3</sup>)), <em>T</em> is the temperature (&deg;C), <em>t</em> is time (s), and <em>&nabla;</em> is the degree of steepness of a graph at any point. For this equation to apply, other forms of energy, such as mechanical energy, are assumed to be negligible in the system (<a href=#Aassump1>this Assumption</a>).
 </p>
 </td>
 </tr>
@@ -1880,7 +1880,7 @@ Description
 <span class="fdn">
 <em>h<sub>C</sub></em><em>A<sub>C</sub></em>
 </span>
-</div> is a constant (dimensionless). The above equation applies as long as the water is in liquid form, 0&thinsp;&lt;&thinsp;<em>T<sub>W</sub></em>&thinsp;&lt;&thinsp;100 (&deg;C) where 0 (&deg;C) and 100 (&deg;C) are the melting and boiling point temperatures of water, respectively (A14, A19).
+</div> is a constant (dimensionless). The above equation applies as long as the water is in liquid form, 0&thinsp;&lt;&thinsp;<em>T<sub>W</sub></em>&thinsp;&lt;&thinsp;100 (&deg;C) where 0 (&deg;C) and 100 (&deg;C) are the melting and boiling point temperatures of water, respectively (<a href=#Aassump14>this Assumption</a>, <a href=#Aassump19>this Assumption</a>).
 </p>
 </td>
 </tr>
@@ -2303,7 +2303,7 @@ Description
 </th>
 <td>
 <p class="paragraph">
-The above equation is derived using T2. <em>E<sub>W</sub></em> is the change in thermal energy of the liquid water relative to the energy at the initial temperature (<em>T<sub>init</sub></em>) (J). <em>C<sub>W</sub></em> is the specific heat capacity of liquid water (J/(kg&sdot;&deg;C)) and <em>m<sub>W</sub></em> is the mass of the water (kg). The change in temperature is the difference between the temperature at time <em>t</em> (s), <em>T<sub>W</sub></em> and the initial temperature, <em>T<sub>init</sub></em> (&deg;C). This equation applies as long as 0&thinsp;&lt;&thinsp;<em>T<sub>W</sub></em>&thinsp;&lt;&thinsp;0&deg;C (A14, A19).
+The above equation is derived using T2. <em>E<sub>W</sub></em> is the change in thermal energy of the liquid water relative to the energy at the initial temperature (<em>T<sub>init</sub></em>) (J). <em>C<sub>W</sub></em> is the specific heat capacity of liquid water (J/(kg&sdot;&deg;C)) and <em>m<sub>W</sub></em> is the mass of the water (kg). The change in temperature is the difference between the temperature at time <em>t</em> (s), <em>T<sub>W</sub></em> and the initial temperature, <em>T<sub>init</sub></em> (&deg;C). This equation applies as long as 0&thinsp;&lt;&thinsp;<em>T<sub>W</sub></em>&thinsp;&lt;&thinsp;0&deg;C (<a href=#Aassump14>this Assumption</a>, <a href=#Aassump19>this Assumption</a>).
 </p>
 </td>
 </tr>
@@ -2363,7 +2363,7 @@ Description
 </th>
 <td>
 <p class="paragraph">
-The above equation is derived using T2 and T3. <em>E<sub>P</sub></em> is the change in thermal energy of the PCM relative to the energy at the initial temperature (<em>T<sub>init</sub></em>) J. <em>E<sub>P</sub></em> for the solid PCM is found using T2 for sensible heat ing, with the specific heat capacity of the solid PCM, <em>C<sub>P</sub><sup>S</sup></em> (J/(kg&sdot;&deg;C)) and the change in the PCM temperature from the initial temperature (&deg;C). <em>E<sub>P</sub></em> for the melted PCM (<em>T<sub>P</sub></em>&thinsp;&gt;&thinsp;<em>E<sub>P</sub><sub>melt</sub><sup>init</sup></em>) is found using T2 for sensible heat of the liquid. PCM plus the energy when melting starts, plus the energy required to melt all of the PCM The energy when melting starts is <em>E<sub>P</sub><sub>melt</sub><sup>init</sup></em> (J). The energy required to melt all of the PCM is <em>H<sub>f</sub></em><em>m<sub>P</sub></em> (J) (DD3). the specific heat capacity of the liquid PCM is <em>C<sub>P</sub><sup>L</sup></em> (J/(kg&sdot;&deg;C)) and the change in temperature is <em>T<sub>P</sub></em> &minus; <em>T<sub>melt</sub><sup>P</sup></em> (&deg;C). <em>E<sub>P</sub></em> during melting of the PCM is found using the energy required at the instant melting of the PCM begins, <em>E<sub>P</sub><sub>melt</sub><sup>init</sup></em> plus the latent heat energy added to the PCM, <em>Q<sub>P</sub></em> (J) since the time when melting began <em>t<sub>melt</sub><sup>init</sup></em> (s). The heat energy for boiling of the PCM is not detailed, since the PCM is assumed to either be in a solid or liquid state (A18).
+The above equation is derived using T2 and T3. <em>E<sub>P</sub></em> is the change in thermal energy of the PCM relative to the energy at the initial temperature (<em>T<sub>init</sub></em>) J. <em>E<sub>P</sub></em> for the solid PCM is found using T2 for sensible heat ing, with the specific heat capacity of the solid PCM, <em>C<sub>P</sub><sup>S</sup></em> (J/(kg&sdot;&deg;C)) and the change in the PCM temperature from the initial temperature (&deg;C). <em>E<sub>P</sub></em> for the melted PCM (<em>T<sub>P</sub></em>&thinsp;&gt;&thinsp;<em>E<sub>P</sub><sub>melt</sub><sup>init</sup></em>) is found using T2 for sensible heat of the liquid. PCM plus the energy when melting starts, plus the energy required to melt all of the PCM The energy when melting starts is <em>E<sub>P</sub><sub>melt</sub><sup>init</sup></em> (J). The energy required to melt all of the PCM is <em>H<sub>f</sub></em><em>m<sub>P</sub></em> (J) (DD3). the specific heat capacity of the liquid PCM is <em>C<sub>P</sub><sup>L</sup></em> (J/(kg&sdot;&deg;C)) and the change in temperature is <em>T<sub>P</sub></em> &minus; <em>T<sub>melt</sub><sup>P</sup></em> (&deg;C). <em>E<sub>P</sub></em> during melting of the PCM is found using the energy required at the instant melting of the PCM begins, <em>E<sub>P</sub><sub>melt</sub><sup>init</sup></em> plus the latent heat energy added to the PCM, <em>Q<sub>P</sub></em> (J) since the time when melting began <em>t<sub>melt</sub><sup>init</sup></em> (s). The heat energy for boiling of the PCM is not detailed, since the PCM is assumed to either be in a solid or liquid state (<a href=#Aassump18>this Assumption</a>).
 </p>
 </td>
 </tr>
@@ -2798,7 +2798,7 @@ In addition, the change in heat energy in the PCM should equal the energy input 
 </div>
 </a>
 <p class="paragraph">
-Equations (reference) and (reference) can be used as &quot;sanity&quot;checks to gain confidence in any solution computed by SWHS. The relative error between the results computed by SWHS and the results calculated from the RHS of these equations should be less than 0.001% (R9).
+Equations (reference) and (reference) can be used as &quot;sanity&quot;checks to gain confidence in any solution computed by SWHS. The relative error between the results computed by SWHS and the results calculated from the RHS of these equations should be less than 0.001% <a href=#Rreq9>this Requirement</a>.
 </p>
 </div>
 </a>

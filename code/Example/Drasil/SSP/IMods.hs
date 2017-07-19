@@ -31,9 +31,9 @@ fctSfty = makeRC "fctSfty" factorOfSafety fcSfty_desc fcSfty_rel
 fcSfty_rel :: Relation
 fcSfty_rel = (C fs) := (sumOp shearRNoIntsl :+ (C shearRNoIntsl)) :/ 
                        (sumOp shearFNoIntsl :+ (C shearFNoIntsl))
-  where prodOp    = product   (Just (lC, Low $ V "i", High $ (V "n") :- (Int 1)))
+  where prodOp    = product   (Just (lC, Low $ C index, High $ C numbSlices - Int 1))
                               ((C mobShrC) :/ (C shrResC))
-        sumOp sym = summation (Just (lV, Low $ Int 1, High $ (V "n") :- (Int 1)))
+        sumOp sym = summation (Just (lV, Low $ Int 1, High $ C numbSlices - Int 1))
                               ((C sym) :* prodOp)
 
 fcSfty_desc :: Sentence
@@ -49,18 +49,25 @@ nrmShrFor :: RelationConcept
 nrmShrFor = makeRC "nrmShrFor" (nounPhraseSP "normal/shear force ratio") nrmShrF_desc nrmShrF_rel
 
 nrmShrF_rel :: Relation
-nrmShrF_rel = (C fs) := Case [case1,case2,case3]
-  where case1 = ((C baseWthX)*((C intNormForce)+(C watrForce)) * tan (C baseAngle) , (V "i") := Int 1) --FIXME: use index i
+nrmShrF_rel = (C normFunc) := Case [case1,case2,case3]:=
+  C shearFunc := Case [
+  (C baseWthX * C scalFunc * C intNormForce, C index := Int 1),
+  (C baseWthX * (C scalFunc * C intNormForce + C scalFunc * C intNormForce),
+    Int 2 :<= C index :<= (C numbSlices :- Int 1)),
+  (C baseWthX * C scalFunc * C intNormForce, C index := Int 1)
+  ]
+  := --FIXME: move to seperate instance model
+  C normToShear := summ (C normFunc) / summ (C shearFunc)
+  where summ = summation (Just (index ^. symbol, Low $ Int 1, High $ C numbSlices))
+        case1 = ((C baseWthX)*((C intNormForce)+(C watrForce)) * tan (C baseAngle) , C index := Int 1) --FIXME: use index i
         case2 = ((C baseWthX)*((C intNormForce)+(C intNormForce)+(C watrForce)+(C watrForce)) * tan (C baseAngle),
-                Int 2 :<= (V "i") :<= ((C numbSlices) - (Int 1)))
-        case3 = ((C baseWthX)*((C intNormForce)+(C watrForce)) * tan (C baseAngle) , (V "i") := (C numbSlices))
-
---FIXME: add the long equation
+                Int 2 :<= C index :<= ((C numbSlices) - (Int 1)))
+        case3 = ((C baseWthX)*((C intNormForce)+(C watrForce)) * tan (C baseAngle) , C index := (C numbSlices))
 
 nrmShrF_desc :: Sentence
 nrmShrF_desc = foldlSent [getS normToShear `isThe` S "magnitude ratio between",
   S "shear and normal forces at the interslice interfaces as the assumption of", 
-  S "the Morgenstern Price method in GD5. The inclination function f determines",
+  S "the Morgenstern Price method in", acroGD 5, S "The inclination function f determines",
   S "the relative magnitude ratio between the different interslices, while",
   getS normToShear, S "determines the" +:+. S "magnitude", getS normToShear,
   S "uses the sum of interslice normal and shear forces taken from each interslice"]
@@ -71,12 +78,12 @@ intsliceFs :: RelationConcept
 intsliceFs = makeRC "intsliceFs" (nounPhraseSP "interslice forces") sliceFs_desc sliceFs_rel
 
 sliceFs_rel :: Relation
-sliceFs_rel = (C intNormForce) := Case [
+sliceFs_rel = C intNormForce := Case [
   (((C fs) * (C shearFNoIntsl) :- (C shearRNoIntsl)) :/ (C shrResC),
     C index := (Int 1)),
   (((C mobShrC) * (C intNormForce) :+ (C fs) * (C shearFNoIntsl) :- (C shearRNoIntsl)):/ (C shrResC),
     (Int 1) :<= C index :<= ((C numbSlices) :- (Int 1))),
-  ((Int 0), C index := (Int 0) :|| C index := C numbSlices)]
+  ((Int 0), C index := (Int 0) :|| C index := C numbSlices)]  
   -- FIXME: Use index i as part of condition
 
 sliceFs_desc :: Sentence

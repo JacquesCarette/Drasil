@@ -125,7 +125,7 @@ dy_i        = cuc' "dy_i" (cn $ "displacement") ("in the y-ordinate direction " 
 ---------------------------
 
 sspUnits :: [UCWrapper]
-sspUnits = map ucw [normStress, genPressure,
+sspUnits = map ucw [normStress, genPressure, normFunc, shearFunc,
   waterHght, slopeHght, slipHght, xi, critCoords,
   mobShrI, shrResI, shearFNoIntsl, shearRNoIntsl, slcWght, watrForce,
   watrForceDif, intShrForce, baseHydroForce, surfHydroForce,
@@ -136,7 +136,7 @@ sspUnits = map ucw [normStress, genPressure,
   nrmDispl, porePressure, elmNrmDispl, elmPrllDispl, sliceHght,
   mobShrC, shrResC, rotatedDispl, intNormForce, shrStress, mobStress]
 
-normStress, genPressure,
+normStress, genPressure, normFunc, shearFunc,
   waterHght, slopeHght, slipHght, xi, critCoords, mobShrI, sliceHght,
   shearFNoIntsl, shearRNoIntsl, slcWght, watrForce, watrForceDif, shrResI,
   intShrForce, baseHydroForce, surfHydroForce, totNrmForce, nrmFSubWat,
@@ -327,6 +327,12 @@ mobStress    = uc' "s_i" (cn "mobilized shear stress") ("acting on the base of a
 
 sliceHght    = uc' "z_i" (cn "center of slice height") ("the distance from the lowest part " ++
   "of the slice to the height of the centers of slice") (sub lZ lI) metre
+
+normFunc     = uc' "C1_i" (cn "interslice normal force function") ("FIXME: missing discription")
+  (sub (Concat [cC, Atomic "1"]) lI) momentOfForceU
+  
+shearFunc    = uc' "C2_i" (cn "interslice shear force function") ("FIXME: missing discription")
+  (sub (Concat [cC, Atomic "2"]) lI) momentOfForceU
 
 ----------------------
 -- Unitless Symbols --

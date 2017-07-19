@@ -14,4 +14,4 @@ docs = [Recipe (Website "SSP_SRS") ssp_srs,
 main :: IO ()            
 main = do
   gen docs
---  genCode ssp_code
+  genCode ssp_code

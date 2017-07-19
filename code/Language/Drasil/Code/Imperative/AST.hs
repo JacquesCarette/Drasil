@@ -28,7 +28,7 @@ module Language.Drasil.Code.Imperative.AST (
     (#~),(#/^),(#|),(#+),(#-),(#*),(#/),(#%),(#^),
     (&=),(&.=),(&=.),(&+=),(&-=),(&++),(&~-),(&.+=),(&.-=),(&.++),(&.~-),
     ($->),($.),($:),
-    log,exp,alwaysDel,neverDel,
+    log,exp,sin,cos,tan,csc,sec,cot,alwaysDel,neverDel,
     assign,at,binExpr,break,cast,cast',constDecDef,extends,for,forEach,ifCond,ifExists,listDec,listDecValues,listDec',
     listOf,litBool,litChar,litFloat,litInt,litObj,litObj',litString,noElse,noParent,objDecDef,oneLiner,
     param,params,paramToVar,
@@ -48,7 +48,7 @@ module Language.Drasil.Code.Imperative.AST (
 ) where
 
 import Data.List (zipWith4, find)
-import Prelude hiding (break,print,return,log,exp)
+import Prelude hiding (break,print,return,log,exp,sin,cos,tan)
 
 import Language.Drasil.Code.Imperative.Helpers (capitalize)
 
@@ -170,6 +170,7 @@ data Expression = UnaryExpr UnaryOp Value
     deriving (Eq, Show)
 data UnaryOp = Negate | SquareRoot | Abs
              | Not | Log | Exp
+             | Sin | Cos | Tan
     deriving (Eq, Show)
 data BinaryOp = Equal | NotEqual | Greater | GreaterEqual | Less | LessEqual
               | Plus | Minus | Multiply | Divide | Power | Modulo
@@ -439,6 +440,24 @@ log = unExpr Log
 
 exp :: Value -> Value
 exp = unExpr Exp
+
+sin :: Value -> Value
+sin = unExpr Sin
+
+cos :: Value -> Value
+cos = unExpr Cos
+
+tan :: Value -> Value
+tan = unExpr Tan
+
+csc :: Value -> Value
+csc v = (litFloat 1.0) #/ (sin v)
+
+sec :: Value -> Value
+sec v = (litFloat 1.0) #/ (cos v)
+
+cot :: Value -> Value
+cot v = (litFloat 1.0) #/ (tan v)
 
 alwaysDel :: Int
 alwaysDel = 4

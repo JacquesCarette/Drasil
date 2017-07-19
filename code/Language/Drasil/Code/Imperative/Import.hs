@@ -30,7 +30,7 @@ data Generator = Generator {
   genInputConstraints :: [CodeChunk] -> ConstraintMap -> Method,
 
   genCalcFuncs :: [CodeDefinition] -> [Method],
-  genCalcBlock :: CodeDefinition -> Body,
+  genCalcBlock :: Expr -> Body,
   genCaseBlock :: [(Expr,Relation)] -> Body,  
 
   genOutputFormat :: [CodeChunk] -> Method,
@@ -191,29 +191,26 @@ genCalcModD :: Generator -> [CodeDefinition] -> [Module]
 genCalcModD g defs = [buildModule "Calculations" [] [] (genCalcFuncs g defs) []]   
         
 genCalcFuncsD :: Generator -> [CodeDefinition] -> [Method]
-genCalcFuncsD g = map 
-  ( \x -> publicMethod g 
+genCalcFuncsD g cds = 
+  let defs = filter (\x -> validExpr (codeEquat x)) cds  -- filter valid expr's for now
+  in map 
+    ( \x -> publicMethod g 
             (methodType $ convType (codeType x)) 
             ("calc_" ++ codeName x) 
             (getParams (codevars $ codeEquat x)) 
-            (genCalcBlock g x)
-  )
+            (genCalcBlock g $ codeEquat x)
+    ) defs
 
-genCalcBlockD :: Generator -> CodeDefinition -> Body
-genCalcBlockD g def 
-  | isCase (codeEquat def) = genCaseBlock g $ getCases (codeEquat def)
-  | otherwise              = oneLiner $ return $ convExpr (codeEquat def)
-  where isCase (Case _) = True
-        isCase _        = False
-        getCases (Case cs) = cs
-        getCases _         = error "impossible to get here"
-
+genCalcBlockD :: Generator -> Expr -> Body
+genCalcBlockD g e
+  | containsCase e   = genCaseBlock g $ getCases e
+  | otherwise        = oneLiner $ return $ convExpr e
 
 genCaseBlockD :: Generator -> [(Expr,Relation)] -> Body
 genCaseBlockD g cs = oneLiner $ ifCond (genIf cs) noElse
   where genIf :: [(Expr,Relation)] -> [(Value,Body)]
         genIf = map 
-          (\(e,r) -> (convExpr r, oneLiner $ return (convExpr e)))
+          (\(e,r) -> (convExpr r, genCalcBlock g e))
 
 
 ----- OUTPUT -------
@@ -318,6 +315,52 @@ convType (C.List t) = listT $ convType t
 convType (C.Object n) = obj n
 convType _ = error "No type conversion"
 
+-- Some Expr can't be converted to code yet...
+-- rather than stop execution with failure,
+-- just check ahead of time and don't try to convert for now
+validExpr :: Expr -> Bool
+validExpr (V _)        = True
+validExpr (Dbl _)      = True
+validExpr (Int _)      = True
+validExpr (Bln _)      = True
+validExpr (a :/ b)     = (validExpr a) && (validExpr b)
+validExpr (a :* b)     = (validExpr a) && (validExpr b)
+validExpr (a :+ b)     = (validExpr a) && (validExpr b)
+validExpr (a :^ b)     = (validExpr a) && (validExpr b)
+validExpr (a :- b)     = (validExpr a) && (validExpr b)
+validExpr (a :. b)     = (validExpr a) && (validExpr b)
+validExpr (a :&& b)    = (validExpr a) && (validExpr b)
+validExpr (a :|| b)    = (validExpr a) && (validExpr b)
+validExpr (Deriv _ _ _) = False
+validExpr (E.Not e)      = validExpr e
+validExpr (Neg e)      = validExpr e
+validExpr (C _)        = True
+validExpr (FCall (C c) x)  = foldl (&&) True (map validExpr x)
+validExpr (FCall _ _)  = False
+validExpr (a := b)     = (validExpr a) && (validExpr b)
+validExpr (a :!= b)    = (validExpr a) && (validExpr b)
+validExpr (a :> b)     = (validExpr a) && (validExpr b)
+validExpr (a :< b)     = (validExpr a) && (validExpr b)
+validExpr (a :<= b)    = (validExpr a) && (validExpr b)
+validExpr (a :>= b)    = (validExpr a) && (validExpr b)
+validExpr (UnaryOp u)  = validunop u
+validExpr (Grouping e) = validExpr e
+validExpr (BinaryOp _) = False
+validExpr (Case c)     = foldl (&&) True (map (\(e, r) -> validExpr e && validExpr r) c)
+validExpr _            = False
+
+validunop :: UFunc -> Bool
+validunop (E.Log e)          = validExpr e
+validunop (E.Abs e)          = validExpr e
+validunop (E.Exp e)          = validExpr e
+validunop (E.Sin e)          = validExpr e
+validunop (E.Cos e)          = validExpr e
+validunop (E.Tan e)          = validExpr e
+validunop (E.Csc e)          = validExpr e
+validunop (E.Sec e)          = validExpr e
+validunop (E.Cot e)          = validExpr e
+validunop _                  = False
+
 convExpr :: Expr -> Value
 convExpr (V v)        = litString v  -- V constructor should be removed
 convExpr (Dbl d)      = litFloat d
@@ -353,8 +396,98 @@ unop :: UFunc -> Value
 unop (E.Log e)          = I.log (convExpr e)
 unop (E.Abs e)          = (#|) (convExpr e)
 unop (E.Exp e)          = I.exp (convExpr e)
+unop (E.Sin e)          = I.sin (convExpr e)
+unop (E.Cos e)          = I.cos (convExpr e)
+unop (E.Tan e)          = I.tan (convExpr e)
+unop (E.Csc e)          = I.csc (convExpr e)
+unop (E.Sec e)          = I.sec (convExpr e)
+unop (E.Cot e)          = I.cot (convExpr e)
 unop _                  = error "not implemented"
 
+
+containsCase :: Expr -> Bool
+containsCase (Case _) = True
+containsCase (a :/ b)     = (containsCase a) || (containsCase b)
+containsCase (a :* b)     = (containsCase a) || (containsCase b)
+containsCase (a :+ b)     = (containsCase a) || (containsCase b)
+containsCase (a :^ b)     = (containsCase a) || (containsCase b)
+containsCase (a :- b)     = (containsCase a) || (containsCase b)
+containsCase (a :. b)     = (containsCase a) || (containsCase b)
+containsCase (a :&& b)    = (containsCase a) || (containsCase b)
+containsCase (a :|| b)    = (containsCase a) || (containsCase b)
+containsCase (Deriv _ _ _) = error "not implemented"
+containsCase (E.Not e)      = containsCase e
+containsCase (Neg e)      = containsCase e
+containsCase (a := b)     = (containsCase a) || (containsCase b)
+containsCase (a :!= b)    = (containsCase a) || (containsCase b)
+containsCase (a :> b)     = (containsCase a) || (containsCase b)
+containsCase (a :< b)     = (containsCase a) || (containsCase b)
+containsCase (a :<= b)    = (containsCase a) || (containsCase b)
+containsCase (a :>= b)    = (containsCase a) || (containsCase b)
+containsCase (UnaryOp u)  = unopcase u
+containsCase (Grouping e) = containsCase e
+containsCase (BinaryOp _) = error "not implemented"
+containsCase _            = False
+
+unopcase :: UFunc -> Bool
+unopcase (E.Log e)          = containsCase e
+unopcase (E.Abs e)          = containsCase e
+unopcase (E.Exp e)          = containsCase e
+unopcase (E.Sin e)          = containsCase e
+unopcase (E.Cos e)          = containsCase e
+unopcase (E.Tan e)          = containsCase e
+unopcase (E.Sec e)          = containsCase e
+unopcase (E.Csc e)          = containsCase e
+unopcase (E.Cot e)          = containsCase e
+unopcase _                  = error "not implemented"
+
+getCases :: Expr -> [(Expr, Relation)]
+getCases (Case a)     = a
+getCases e            = getCases (compactCase e)
+
+compactCase :: Expr -> Expr
+compactCase (a :/ b)     = compactCaseBinary (:/) a b
+compactCase (a :* b)     = compactCaseBinary (:*) a b
+compactCase (a :+ b)     = compactCaseBinary (:+) a b
+compactCase (a :^ b)     = compactCaseBinary (:^) a b
+compactCase (a :- b)     = compactCaseBinary (:-) a b
+compactCase (a :. b)     = compactCaseBinary (:.) a b
+compactCase (a :&& b)    = compactCaseBinary (:&&) a b
+compactCase (a :|| b)    = compactCaseBinary (:||) a b
+compactCase (Deriv _ _ _) = error "not implemented"
+compactCase (E.Not e)    = compactCaseUnary E.Not e
+compactCase (Neg e)      = compactCaseUnary Neg e
+compactCase (a := b)     = compactCaseBinary (:=) a b
+compactCase (a :!= b)    = compactCaseBinary (:!=) a b
+compactCase (a :> b)     = compactCaseBinary (:>) a b
+compactCase (a :< b)     = compactCaseBinary (:<) a b
+compactCase (a :<= b)    = compactCaseBinary (:<=) a b
+compactCase (a :>= b)    = compactCaseBinary (:>=) a b
+compactCase (UnaryOp u)  = unopcomcase u
+compactCase (Grouping e) = compactCaseUnary Grouping e
+compactCase (BinaryOp _) = error "not implemented"
+compactCase e            = e
+
+unopcomcase :: UFunc -> Expr
+unopcomcase (E.Log e)   = compactCaseUnary (UnaryOp . E.Log) e
+unopcomcase (E.Abs e)   = compactCaseUnary (UnaryOp . E.Abs) e
+unopcomcase (E.Exp e)   = compactCaseUnary (UnaryOp . E.Exp) e
+unopcomcase (E.Sin e)   = compactCaseUnary (UnaryOp . E.Sin) e
+unopcomcase (E.Cos e)   = compactCaseUnary (UnaryOp . E.Cos) e
+unopcomcase (E.Tan e)   = compactCaseUnary (UnaryOp . E.Tan) e
+unopcomcase (E.Sec e)   = compactCaseUnary (UnaryOp . E.Sec) e
+unopcomcase (E.Csc e)   = compactCaseUnary (UnaryOp . E.Csc) e
+unopcomcase (E.Cot e)   = compactCaseUnary (UnaryOp . E.Cot) e
+unopcomcase _           = error "not implemented"
+
+compactCaseBinary :: (Expr -> Expr -> Expr) -> Expr -> Expr -> Expr
+compactCaseBinary op (Case c) b = Case (map (\(e, r) -> (e `op` b, r)) c)
+compactCaseBinary op a (Case c) = Case (map (\(e, r) -> (a `op` e, r)) c)
+compactCaseBinary op a b        = (compactCase a) `op` (compactCase b)
+
+compactCaseUnary :: (Expr -> Expr) -> Expr -> Expr
+compactCaseUnary op (Case c) = Case (map (\(e, r) -> (op e, r)) c)
+compactCaseUnary op a        = op (compactCase a)
 
 -- major hacks --
 genHacks :: Generator -> (String, [Method]) -> Module

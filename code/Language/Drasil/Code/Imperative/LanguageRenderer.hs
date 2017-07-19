@@ -546,6 +546,9 @@ unOpDocD Abs = text "fabs"
 unOpDocD Not = text "!"
 unOpDocD Log = text "log"
 unOpDocD Exp = text "exp"
+unOpDocD Sin = text "sin"
+unOpDocD Cos = text "cos"
+unOpDocD Tan = text "tan"
 
 unOpDocD' :: UnaryOp -> Doc
 unOpDocD' SquareRoot = text "math.sqrt"
@@ -553,6 +556,9 @@ unOpDocD' Abs = text "math.fabs"
 unOpDocD' Not = text "not"
 unOpDocD' Log = text "math.log"
 unOpDocD' Exp = text "math.exp"
+unOpDocD' Sin = text "math.sin"
+unOpDocD' Cos = text "math.cos"
+unOpDocD' Tan = text "math.tan"
 unOpDocD' op = unOpDocD op
 
 valueDocD :: Config -> Value -> Doc

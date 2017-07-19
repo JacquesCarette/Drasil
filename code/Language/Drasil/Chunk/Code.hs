@@ -156,7 +156,7 @@ specialToCodeName Hash     = "#" -- TODO: Double check that this is valid for
 toCodeName :: String -> String
 toCodeName s =
     let illegalChars = [
-            "~","`","-","=","!","@","#","$","%","^","&","*","(",")","+",
+            ",","~","`","-","=","!","@","#","$","%","^","&","*","(",")","+",
             "[","]","\\",";","'",".","/","{","}","|",":","\"","<",">","?"," "]
     in foldl varNameReplace s illegalChars
     where  varNameReplace :: String -> String -> String

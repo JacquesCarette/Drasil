@@ -127,6 +127,9 @@ instance LayoutObj Contents where
   rType (Requirement _)       = Req
   rType (Assumption _)        = Assump
   rType (LikelyChange _)      = LC
+  -- rType (Requirement r)       = Req $ short r
+  -- rType (Assumption a)        = Assump $ short a
+  -- rType (LikelyChange lc)      = LC $ short lc
   rType (UnlikelyChange _)      = UC
  -- rType (UsesHierarchy _)       = Fig
   rType (Graph _ _ _ _)         = Fig

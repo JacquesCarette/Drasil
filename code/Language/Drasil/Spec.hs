@@ -63,6 +63,9 @@ instance Show RefType where
   show Req = "Requirement"
   show Assump = "Assumption"
   show LC = "Likely Change"
+  -- show (Req (S r)) = r
+  -- show (Assump (S a)) = a
+  -- show (LC (S lc)) = lc
   show UC = "Unlikely Change"
 
 -- | Helper function for wrapping sentences in parentheses.

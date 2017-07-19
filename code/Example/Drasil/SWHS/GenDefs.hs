@@ -6,7 +6,6 @@ import Language.Drasil
 import Data.Drasil.SentenceStructures (foldlSent)
 import Data.Drasil.Quantities.PhysicalProperties as QPP
 import Data.Drasil.Quantities.Thermodynamics as QT
-import Data.Drasil.Units.Thermodynamics as UT
 import Data.Drasil.Quantities.Physics as QP
 import Drasil.SWHS.Unitals
 import Data.Drasil.SentenceStructures (isThe, sAnd)
@@ -23,7 +22,7 @@ swhsGenDefs = [nwtnCooling, rocTempSimp]
 
 --
 nwtnCooling :: RelationConcept
-nwtnCooling = makeRC "nwtnCooling" (nounPhraseSP "Newton's law of cooling") 
+nwtnCooling = makeRC "nwtnCooling" (nounPhraseSP "NewtoIsInn's law of cooling") 
   nwtnCooling_desc nwtnCooling_rel
 
 nwtnCooling_rel :: Relation

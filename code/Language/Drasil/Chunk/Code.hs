@@ -150,6 +150,8 @@ specialToCodeName LEQ      = "leq"
 specialToCodeName Partial  = "partial"
 specialToCodeName UScore   = "_"
 specialToCodeName Percent  = "%"
+specialToCodeName CurlyBrOpen = "{"
+specialToCodeName CurlyBrClose = "}"
 specialToCodeName Hash     = "#" -- TODO: Double check that this is valid for 
                                  -- all of the output langs.
 
@@ -157,7 +159,7 @@ toCodeName :: String -> String
 toCodeName s =
     let illegalChars = [
             ",","~","`","-","=","!","@","#","$","%","^","&","*","(",")","+",
-            "[","]","\\",";","'",".","/","{","}","|",":","\"","<",">","?"," "]
+            "[","]","\\",";","'",".","/","|",":","\"","<",">","?"," "]
     in foldl varNameReplace s illegalChars
     where  varNameReplace :: String -> String -> String
            varNameReplace l old = replace old "_" l

@@ -169,7 +169,7 @@ eqN n = phrase equation +:+ sParen (S $ show n)
 
 --Produces a sentence that displays the constraints in a {}.
 displayConstrntsAsSet :: SymbolForm a => a -> [String] -> Sentence
-displayConstrntsAsSet ch listOfVals = getS ch `sIn` (S "{" :+: (foldlsC (map S listOfVals)) :+: S "}")
+displayConstrntsAsSet ch listOfVals = getS ch `sIn` (sCurlyBr (foldlsC (map S listOfVals)))
 
 extrctStrng :: Sentence -> String
 extrctStrng (S strng) = strng

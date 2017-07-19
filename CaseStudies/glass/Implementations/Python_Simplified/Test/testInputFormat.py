@@ -30,13 +30,13 @@ class TestInputFormat(unittest.TestCase):
             inputFormat.get_input(os.path.join("Test/Inputfiles", self.inputFileName[i]), self.params[i])
 
         self.assertEqual(self.aExpctd[i], self.params[i])
-        self.assertEqual(self.bExpctd[i], params.b)
-        self.assertEqual(self.tExpctd[i], params.t)
-        self.assertEqual(self.gtExpctd[i], params.gt)
-        self.assertEqual(self.wExpctd[i], params.w)
-        self.assertEqual(self.tntExpctd[i], params.tnt)
-        self.assertEqual((self.sdxExpctd[i], self.sdyExpctd, self.sdzExpctd), params.sdvect)
-        self.assertEqual(self.pbTolExpctd[i], params.pbtol)
+        self.assertEqual(self.bExpctd[i], self.params[i])
+        self.assertEqual(self.tExpctd[i], self.params[i])
+        self.assertEqual(self.gtExpctd[i], self.params[i])
+        self.assertEqual(self.wExpctd[i], self.params[i])
+        self.assertEqual(self.tntExpctd[i], self.params[i])
+        self.assertEqual((self.sdxExpctd[i], self.sdyExpctd, self.sdzExpctd), self.params[i])
+        self.assertEqual(self.pbTolExpctd[i], self.params[i])
         
 if __name__ == '__main__':
     unittest.main()

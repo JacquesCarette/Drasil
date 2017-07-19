@@ -118,9 +118,10 @@ set String   = T.String
 set Radians  = T.Radians
 set (Vect a) = T.Vect (set a)
 set (Obj a)  = T.Obj a
-set (DiscreteI a) = T.DiscreteI a
-set (DiscreteD a) = T.DiscreteD a
-set (DiscreteS a) = T.DiscreteS a
+--set (Discrete a) = T.Discrete (set a)
+--set (DiscreteI a) = T.DiscreteI a
+--set (DiscreteD a) = T.DiscreteD a
+--set (DiscreteS a) = T.DiscreteS a
 
 -- | Helper function for translating Integrals (from 'UFunc')
 integral :: UFunc -> (T.Function, T.Expr)

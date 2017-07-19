@@ -66,9 +66,10 @@ data Set = Integer
          | Radians
          | Vect Set
          | Obj String
-         | DiscreteI [Int]
-         | DiscreteD [Double]
-         | DiscreteS [String]
+         | Discrete Set
+         -- DiscreteI [Int]
+         -- DiscreteD [Double]
+         -- DiscreteS [String]
 
 data Quantifier = Forall Expr | Exists Expr
 
@@ -153,6 +154,7 @@ instance Show Set where
   show Radians  = "rad"
   show (Vect a) = "V" ++ show a
   show (Obj a)  = a
-  show (DiscreteI a)  = "\\{" ++ (foldl (++) "" . intersperse ", " . map show) a ++ "\\}"
-  show (DiscreteD a)  = "\\{" ++ (foldl (++) "" . intersperse ", " . map show) a ++ "\\}"
-  show (DiscreteS a) = "\\{" ++ (foldl (++) "" . intersperse ", ") a ++ "\\}"
+  show (Discrete a)  = "\\{" ++ show a ++ "\\}"
+  --show (DiscreteI a)  = "\\{" ++ (foldl (++) "" . intersperse ", " . map show) a ++ "\\}"
+  --show (DiscreteD a)  = "\\{" ++ (foldl (++) "" . intersperse ", " . map show) a ++ "\\}"
+  --show (DiscreteS a) = "\\{" ++ (foldl (++) "" . intersperse ", ") a ++ "\\}"

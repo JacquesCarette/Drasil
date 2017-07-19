@@ -106,6 +106,7 @@ fmtBF symb ((f,num):xs) = (E ((C symb) `f` num)) +:+ S "and" +:+ (fmtBF symb xs)
 getS :: (SymbolForm a) => a -> Sentence
 getS s  = P $ s ^. symbol
 
+--Sentence Combinator needs to be moved from this file (see issue #355)
 sCurlyBr :: Sentence -> Sentence
 sCurlyBr x = Sp CurlyBrOpen :+: x :+: Sp CurlyBrClose
 

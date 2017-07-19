@@ -243,7 +243,12 @@ spaceToCodeType S.Boolean = G.Boolean
 spaceToCodeType S.Char = G.Char
 spaceToCodeType S.String = G.String
 spaceToCodeType (S.Vect s) = G.List (spaceToCodeType s)
-spaceToCodeType (S.Obj n) = G.Object (toCodeName n) 
+spaceToCodeType (S.Obj n) = G.Object (toCodeName n)
+--spaceToCodeType (S.Discrete d) = G.List (spaceToCodeType d)
+--spaceToCodeType (S.DiscreteI _) = G.List (spaceToCodeType S.Integer)
+--spaceToCodeType (S.DiscreteD _) = G.List (spaceToCodeType S.Rational)
+--spaceToCodeType (S.DiscreteS _) = G.List (spaceToCodeType S.String)
+
 
 -- codeExpr :: Expr -> Expr
 -- codeExpr (a :/ b)     = (codeExpr a) :/ (codeExpr b)

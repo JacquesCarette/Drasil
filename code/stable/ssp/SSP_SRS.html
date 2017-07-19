@@ -114,6 +114,28 @@ m
 </tr>
 <tr>
 <td>
+<em>a</em>
+</td>
+<td>
+Constant: FIXME: missing discription
+</td>
+<td>
+m
+</td>
+</tr>
+<tr>
+<td>
+<em>A</em>
+</td>
+<td>
+Constant: FIXME: missing discription
+</td>
+<td>
+m
+</td>
+</tr>
+<tr>
+<td>
 <em>b<sub>i</sub></em>
 </td>
 <td>
@@ -132,6 +154,28 @@ Effective Cohesion: internal pressure that sticks particles of soil together
 </td>
 <td>
 Pa
+</td>
+</tr>
+<tr>
+<td>
+<em>C1<sub>i</sub></em>
+</td>
+<td>
+Interslice Normal Force Function: FIXME: missing discription
+</td>
+<td>
+N&sdot;m
+</td>
+</tr>
+<tr>
+<td>
+<em>C2<sub>i</sub></em>
+</td>
+<td>
+Interslice Shear Force Function: FIXME: missing discription
+</td>
+<td>
+N&sdot;m
 </td>
 </tr>
 <tr>
@@ -719,6 +763,17 @@ m
 </tr>
 <tr>
 <td>
+<em>&kappa;</em>
+</td>
+<td>
+Constant: FIXME: missing discription
+</td>
+<td>
+Pa
+</td>
+</tr>
+<tr>
+<td>
 <em>&lambda;</em>
 </td>
 <td>
@@ -1073,7 +1128,7 @@ SSA is a computer program developed to evaluate the factor of safety of a slope'
 Terminology and Definitions
 </h4>
 <p class="paragraph">
-This subsection provides a list of terms that are used in the subsequent sections and their meaning, with the purpose of reducing ambiguity and making it easier to correctly understand the requirements:
+This subsection provides a list of terms that are used in the subsequent sections and their meaning, with the purpose of reducing ambiguity and making it easier to correctly understand the requirements.
 </p>
 <div class="list">
 <p>
@@ -2643,7 +2698,7 @@ Description
 </tr>
 </table>
 </a>
-<a id="DD:K.no">
+<a id="DD:K.bt,i">
 <table class="ddefn">
 <tr>
 <th>
@@ -2651,7 +2706,7 @@ Label
 </th>
 <td>
 <p class="paragraph">
-<em>K<sub>no</sub></em>
+<em>K<sub>bt,i</sub></em>
 </p>
 </td>
 </tr>
@@ -2672,7 +2727,74 @@ Equation
 <td>
 <a id="">
 <div class="equation">
-<em>K<sub>no</sub></em> = <span class="casebr">
+<em>K<sub>bt,i</sub></em> = <div class="fraction">
+<span class="fup">
+<em>E<sub>i</sub></em>
+</span>
+<span class="fdn">
+2(1 &plus; <em>&nu;</em>)
+</span>
+</div><div class="fraction">
+<span class="fup">
+0.1
+</span>
+<span class="fdn">
+<em>b<sub>i</sub></em>
+</span>
+</div> &plus; <div class="fraction">
+<span class="fup">
+<em>c'</em> &minus; <em>&sigma;</em>tan(<em>&phiv;'</em>)
+</span>
+<span class="fdn">
+|<em>&delta;u<sub>i</sub></em>| &plus; <em>a</em>
+</span>
+</div>
+</div>
+</a>
+</td>
+</tr>
+<tr>
+<th>
+Description
+</th>
+<td>
+<p class="paragraph">
+<em>K<sub>bt,i</sub></em> is the shear stiffness<br /><em>E<sub>i</sub></em> is the interslice normal force<br /><em>&nu;</em> is the Poisson's ratio<br /><em>b<sub>i</sub></em> is the base width of a slice<br /><em>c'</em> is the effective cohesion<br /><em>&sigma;</em> is the normal stress<br /><em>&phiv;'</em> is the effective angle of friction<br /><em>&delta;u<sub>i</sub></em> is the displacement<br /><em>a</em> is the constant
+</p>
+</td>
+</tr>
+</table>
+</a>
+<a id="DD:K.bn,i">
+<table class="ddefn">
+<tr>
+<th>
+Label
+</th>
+<td>
+<p class="paragraph">
+<em>K<sub>bn,i</sub></em>
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Units
+</th>
+<td>
+<p class="paragraph">
+Pa/m
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Equation
+</th>
+<td>
+<a id="">
+<div class="equation">
+<em>K<sub>bn,i</sub></em> = <span class="casebr">
 {
 </span>
 <div class="cases">
@@ -2698,7 +2820,7 @@ Equation
 </span>
 </div> &plus; <div class="fraction">
 <span class="fup">
-<em>k</em>
+<em>&kappa;</em>
 </span>
 <span class="fdn">
 <em>&delta;v<sub>i</sub></em> &plus; <em>A</em>
@@ -2718,7 +2840,7 @@ Description
 </th>
 <td>
 <p class="paragraph">
-<em>K<sub>no</sub></em> is the normal stiffness<br /><em>E<sub>i</sub></em> is the interslice normal force<br /><em>&nu;</em> is the Poisson's ratio<br /><em>b<sub>i</sub></em> is the base width of a slice<br /><em>&delta;v<sub>i</sub></em> is the displacement
+<em>K<sub>bn,i</sub></em> is the normal stiffness<br /><em>E<sub>i</sub></em> is the interslice normal force<br /><em>&nu;</em> is the Poisson's ratio<br /><em>b<sub>i</sub></em> is the base width of a slice<br /><em>&kappa;</em> is the constant<br /><em>&delta;v<sub>i</sub></em> is the displacement<br /><em>A</em> is the constant
 </p>
 </td>
 </tr>
@@ -2848,7 +2970,7 @@ Equation
 <td>
 <a id="">
 <div class="equation">
-<em>FS</em> = <span class="casebr">
+<em>C1<sub>i</sub></em> = <span class="casebr">
 {
 </span>
 <div class="cases">
@@ -2867,6 +2989,32 @@ Equation
 <em>i</em> = <em>n</em>
 </span>
 </span>
+</div> = <em>C2<sub>i</sub></em> = <span class="casebr">
+{
+</span>
+<div class="cases">
+<span>
+<em>b<sub>i</sub></em><em>f<sub>i</sub></em><em>E<sub>i</sub></em> , <span class="case">
+<em>i</em> = 1
+</span>
+</span>
+<span>
+<em>b<sub>i</sub></em>(<em>f<sub>i</sub></em><em>E<sub>i</sub></em> &plus; <em>f<sub>i</sub></em><em>E<sub>i</sub></em>) , <span class="case">
+2&thinsp;&le;&thinsp;<em>i</em>&thinsp;&le;&thinsp;<em>n</em> &minus; 1
+</span>
+</span>
+<span>
+<em>b<sub>i</sub></em><em>f<sub>i</sub></em><em>E<sub>i</sub></em> , <span class="case">
+<em>i</em> = 1
+</span>
+</span>
+</div> = <em>&lambda;</em> = <div class="fraction">
+<span class="fup">
+&sum;<sub><em>i</em>=1</sub><sup><em>n</em></sup>(<em>C1<sub>i</sub></em>)
+</span>
+<span class="fdn">
+&sum;<sub><em>i</em>=1</sub><sup><em>n</em></sup>(<em>C2<sub>i</sub></em>)
+</span>
 </div>
 </div>
 </a>
@@ -2878,7 +3026,7 @@ Description
 </th>
 <td>
 <p class="paragraph">
-<em>&lambda;</em> is the magnitude ratio between shear and normal forces at the interslice interfaces as the assumption of the Morgenstern Price method in GD5. The inclination function f determines the relative magnitude ratio between the different interslices, while <em>&lambda;</em> determines the magnitude. <em>&lambda;</em> uses the sum of interslice normal and shear forces taken from each interslice.
+<em>&lambda;</em> is the magnitude ratio between shear and normal forces at the interslice interfaces as the assumption of the Morgenstern Price method in GD5 The inclination function f determines the relative magnitude ratio between the different interslices, while <em>&lambda;</em> determines the magnitude. <em>&lambda;</em> uses the sum of interslice normal and shear forces taken from each interslice.
 </p>
 </td>
 </tr>
@@ -2941,10 +3089,10 @@ The equation in terms of <em>&lambda;</em> leads to equation (14).
 <div class="equation">
 <em>&lambda;</em> = <div class="fraction">
 <span class="fup">
--<em>E<sub>i</sub></em>(<em>z<sub>i</sub></em> &minus; <em>b<sub>i</sub></em>/2tan(<em>&alpha;<sub>i</sub></em>)) &plus; <em>E<sub>i</sub></em>(<em>z<sub>i</sub></em> &minus; <em>b<sub>i</sub></em>/2tan(<em>&alpha;<sub>i</sub></em>)) &minus; <em>H<sub>i</sub></em>(<em>z<sub>i</sub></em> &minus; <em>b<sub>i</sub></em>/2tan(<em>&alpha;<sub>i</sub></em>)) &plus; <em>H<sub>i</sub></em>(<em>z<sub>i</sub></em> &minus; <em>b<sub>i</sub></em>/2tan(<em>&alpha;<sub>i</sub></em>)) &plus; <em>K<sub>c</sub></em><em>W<sub>i</sub></em><em>h<sub>i</sub></em>/2 &minus; <em>U<sub>t,i</sub></em>sin(<em>&beta;<sub>i</sub></em>)<em>h<sub>i</sub></em> &minus; <em>Q<sub>i</sub></em>sin(<em>&omega;<sub>i</sub></em>)<em>h<sub>i</sub></em>
+-<em>E<sub>i</sub></em>(<em>z<sub>i</sub></em> &minus; (<em>b<sub>i</sub></em>/2)tan(<em>&alpha;<sub>i</sub></em>)) &plus; <em>E<sub>i</sub></em>(<em>z<sub>i</sub></em> &minus; (<em>b<sub>i</sub></em>/2)tan(<em>&alpha;<sub>i</sub></em>)) &minus; <em>H<sub>i</sub></em>(<em>z<sub>i</sub></em> &minus; (<em>b<sub>i</sub></em>/2)tan(<em>&alpha;<sub>i</sub></em>)) &plus; <em>H<sub>i</sub></em>(<em>z<sub>i</sub></em> &minus; (<em>b<sub>i</sub></em>/2)tan(<em>&alpha;<sub>i</sub></em>)) &plus; <em>K<sub>c</sub></em><em>W<sub>i</sub></em><em>h<sub>i</sub></em>/2 &minus; <em>U<sub>t,i</sub></em>sin(<em>&beta;<sub>i</sub></em>)<em>h<sub>i</sub></em> &minus; <em>Q<sub>i</sub></em>sin(<em>&omega;<sub>i</sub></em>)<em>h<sub>i</sub></em>
 </span>
 <span class="fdn">
-<em>b<sub>i</sub></em>/2(<em>E<sub>i</sub></em><em>f<sub>i</sub></em> &plus; <em>E<sub>i</sub></em><em>f<sub>i</sub></em>)
+(<em>b<sub>i</sub></em>/2)(<em>E<sub>i</sub></em><em>f<sub>i</sub></em> &plus; <em>E<sub>i</sub></em><em>f<sub>i</sub></em>)
 </span>
 </div>
 </div>
@@ -3455,6 +3603,48 @@ Typical Uncertainty
 0.1
 </td>
 </tr>
+<tr>
+<td>
+<em>a</em>
+</td>
+<td>
+None
+</td>
+<td>
+0.0 m
+</td>
+<td>
+0.1
+</td>
+</tr>
+<tr>
+<td>
+<em>A</em>
+</td>
+<td>
+None
+</td>
+<td>
+0.0 m
+</td>
+<td>
+0.1
+</td>
+</tr>
+<tr>
+<td>
+<em>&kappa;</em>
+</td>
+<td>
+None
+</td>
+<td>
+0.0 Pa
+</td>
+<td>
+0.1
+</td>
+</tr>
 </table>
 <p class="caption">
 Input Data Constraints
@@ -3660,6 +3850,39 @@ N/(m<sup>3</sup>)
 </td>
 <td>
 unit weight of water
+</td>
+</tr>
+<tr>
+<td>
+<em>a</em>
+</td>
+<td>
+m
+</td>
+<td>
+constant
+</td>
+</tr>
+<tr>
+<td>
+<em>A</em>
+</td>
+<td>
+m
+</td>
+<td>
+constant
+</td>
+</tr>
+<tr>
+<td>
+<em>&kappa;</em>
+</td>
+<td>
+Pa
+</td>
+<td>
+constant
 </td>
 </tr>
 </table>

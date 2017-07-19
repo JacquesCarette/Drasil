@@ -46,9 +46,17 @@ Symbol & Description & Units
 \midrule
 $(x,y)$ & Cartesian Position Coordinates: y is considered parallel to the direction of the force of gravity and x is considered perpendicular to y & m
 \\
+$a$ & Constant: FIXME: missing discription & m
+\\
+$A$ & Constant: FIXME: missing discription & m
+\\
 $b_{i}$ & Base Width of a Slice: in the x-ordinate direction only for slice index i & m
 \\
 $c'$ & Effective Cohesion: internal pressure that sticks particles of soil together & Pa
+\\
+$C1_{i}$ & Interslice Normal Force Function: FIXME: missing discription & Nm
+\\
+$C2_{i}$ & Interslice Shear Force Function: FIXME: missing discription & Nm
 \\
 $E$ & Elastic Modulus: The ratio of the stress exerted on a body to the resulting strain. & Pa
 \\
@@ -156,6 +164,8 @@ $\delta{}y_{i}$ & Displacement: in the y-ordinate direction for slice index i & 
 \\
 $\varepsilon{}_{i}$ & Displacement: in rotated coordinate system & m
 \\
+$\kappa{}$ & Constant: FIXME: missing discription & Pa
+\\
 $\lambda{}$ & Interslice Normal/shear Force Ratio: applied to all interslices & 
 \\
 $\mu{}$ & Pore Pressure: from water within the soil & Pa
@@ -250,7 +260,7 @@ This section first presents the problem description, which gives a high-level vi
 SSA is a computer program developed to evaluate the factor of safety of a slope's slip surface and to calculate the displacement that the slope will experience.
 \subsubsection{Terminology and Definitions}
 \label{Sec:TermandDefi}
-This subsection provides a list of terms that are used in the subsequent sections and their meaning, with the purpose of reducing ambiguity and making it easier to correctly understand the requirements:
+This subsection provides a list of terms that are used in the subsequent sections and their meaning, with the purpose of reducing ambiguity and making it easier to correctly understand the requirements.
 \begin{itemize}
 \item[Factor of Safety:]The global stability of a surface in a slope
 \item[Critical Slip Surface:]Slip surface of the slope that has the lowest global factor of safety, and therefore most likely to experience failure.
@@ -845,20 +855,36 @@ Description & $F$ is the force\newline$\ell{}_{s,i}$ is the length of an intersl
 ~\newline
 \noindent \begin{minipage}{\textwidth}
 \begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
-\toprule \textbf{Refname} & \textbf{DD:K.no}
+\toprule \textbf{Refname} & \textbf{DD:K.bt,i}
 \phantomsection 
-\label{DD:K.no}
+\label{DD:K.bt,i}
 \\ \midrule \\
-Label & $K_{no}$
+Label & $K_{bt,i}$
 \\ \midrule \\
 Units & $\frac{\text{Pa}}{\text{m}}$
 \\ \midrule \\
-Equation & $K_{no}$ = $\begin{cases}
+Equation & $K_{bt,i}$ = $\frac{E_{i}}{2\left(1+\nu{}\right)}\frac{0.1}{b_{i}}+\frac{c'-\sigma{}\tan\left(\varphi{}'\right)}{|\delta{}u_{i}|+a}$
+\\ \midrule \\
+Description & $K_{bt,i}$ is the shear stiffness\newline$E_{i}$ is the interslice normal force\newline$\nu{}$ is the Poisson's ratio\newline$b_{i}$ is the base width of a slice\newline$c'$ is the effective cohesion\newline$\sigma{}$ is the normal stress\newline$\varphi{}'$ is the effective angle of friction\newline$\delta{}u_{i}$ is the displacement\newline$a$ is the constant
+\\ \bottomrule \end{tabular}
+\end{minipage}\\
+~\newline
+\noindent \begin{minipage}{\textwidth}
+\begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
+\toprule \textbf{Refname} & \textbf{DD:K.bn,i}
+\phantomsection 
+\label{DD:K.bn,i}
+\\ \midrule \\
+Label & $K_{bn,i}$
+\\ \midrule \\
+Units & $\frac{\text{Pa}}{\text{m}}$
+\\ \midrule \\
+Equation & $K_{bn,i}$ = $\begin{cases}
 \frac{E_{i}\left(1-\nu{}\right)}{\left(1+\nu{}\right)\left(1-2\nu{}+b_{i}\right)}, & \nu{}<0\\
-0.01\frac{E_{i}\left(1-\nu{}\right)}{\left(1+\nu{}\right)\left(1-2\nu{}+b_{i}\right)}+\frac{k}{\delta{}v_{i}+A}, & \nu{}\geq{}0
+0.01\frac{E_{i}\left(1-\nu{}\right)}{\left(1+\nu{}\right)\left(1-2\nu{}+b_{i}\right)}+\frac{\kappa{}}{\delta{}v_{i}+A}, & \nu{}\geq{}0
 \end{cases}$
 \\ \midrule \\
-Description & $K_{no}$ is the normal stiffness\newline$E_{i}$ is the interslice normal force\newline$\nu{}$ is the Poisson's ratio\newline$b_{i}$ is the base width of a slice\newline$\delta{}v_{i}$ is the displacement
+Description & $K_{bn,i}$ is the normal stiffness\newline$E_{i}$ is the interslice normal force\newline$\nu{}$ is the Poisson's ratio\newline$b_{i}$ is the base width of a slice\newline$\kappa{}$ is the constant\newline$\delta{}v_{i}$ is the displacement\newline$A$ is the constant
 \\ \bottomrule \end{tabular}
 \end{minipage}\\
 \subsubsection{Instance Models}
@@ -894,13 +920,17 @@ The constants $\Psi{}_{c}$ and $\Phi{}_{c}$ described in equation (20) and equat
 \\ \midrule \\
 Label & normal/shear force ratio
 \\ \midrule \\
-Equation & $FS=\begin{cases}
+Equation & $C1_{i}=\begin{cases}
 b_{i}\left(E_{i}+H_{i}\right)\tan\left(\alpha{}_{i}\right), & i=1\\
 b_{i}\left(E_{i}+E_{i}+H_{i}+H_{i}\right)\tan\left(\alpha{}_{i}\right), & 2\leq{}i\leq{}n-1\\
 b_{i}\left(E_{i}+H_{i}\right)\tan\left(\alpha{}_{i}\right), & i=n
-\end{cases}$
+\end{cases}=C2_{i}=\begin{cases}
+b_{i}f_{i}E_{i}, & i=1\\
+b_{i}\left(f_{i}E_{i}+f_{i}E_{i}\right), & 2\leq{}i\leq{}n-1\\
+b_{i}f_{i}E_{i}, & i=1
+\end{cases}=\lambda{}=\frac{\displaystyle\sum_{i=1}^{n}{\left[C1_{i}\right]}}{\displaystyle\sum_{i=1}^{n}{\left[C2_{i}\right]}}$
 \\ \midrule \\
-Description & $\lambda{}$ is the magnitude ratio between shear and normal forces at the interslice interfaces as the assumption of the Morgenstern Price method in GD5. The inclination function f determines the relative magnitude ratio between the different interslices, while $\lambda{}$ determines the magnitude. $\lambda{}$ uses the sum of interslice normal and shear forces taken from each interslice.
+Description & $\lambda{}$ is the magnitude ratio between shear and normal forces at the interslice interfaces as the assumption of the Morgenstern Price method in GD5 The inclination function f determines the relative magnitude ratio between the different interslices, while $\lambda{}$ determines the magnitude. $\lambda{}$ uses the sum of interslice normal and shear forces taken from each interslice.
 \\ \bottomrule \end{tabular}
 \end{minipage}\\
 Taking the last static equation of T2 with the moment equilibrium of GD6 about the midpoint of the base and the assumption of GD5 results in equation (13).
@@ -1057,6 +1087,12 @@ $\gamma{}_{Sat}$ & $0<\gamma{}_{Sat}$ & $20.0$ $\frac{\text{N}}{\text{m}^{3}}$ &
 \\
 $\gamma{}_{w}$ & $0<\gamma{}_{w}$ & $9.8$ $\frac{\text{N}}{\text{m}^{3}}$ & 0.1
 \\
+$a$ & None & $0.0$ m & 0.1
+\\
+$A$ & None & $0.0$ m & 0.1
+\\
+$\kappa{}$ & None & $0.0$ Pa & 0.1
+\\
 \bottomrule
 \caption{Input Data Constraints}
 \label{Table:InpuDataCons}
@@ -1116,6 +1152,12 @@ $\gamma{}$ & $\frac{\text{N}}{\text{m}^{3}}$ & dry unit weight
 $\gamma{}_{Sat}$ & $\frac{\text{N}}{\text{m}^{3}}$ & saturated unit weight
 \\
 $\gamma{}_{w}$ & $\frac{\text{N}}{\text{m}^{3}}$ & unit weight of water
+\\
+$a$ & m & constant
+\\
+$A$ & m & constant
+\\
+$\kappa{}$ & Pa & constant
 \\
 \bottomrule
 \caption{Required Inputs}

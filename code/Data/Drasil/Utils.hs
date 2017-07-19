@@ -24,6 +24,7 @@ module Data.Drasil.Utils
   , fterms , fterm
   , mkDataDef
   , prodUCTbl
+  , sCurlyBr
   ) where
 
 import Prelude hiding (id)
@@ -104,6 +105,9 @@ fmtBF symb ((f,num):xs) = (E ((C symb) `f` num)) +:+ S "and" +:+ (fmtBF symb xs)
 -- | gets symbol from chunk
 getS :: (SymbolForm a) => a -> Sentence
 getS s  = P $ s ^. symbol
+
+sCurlyBr :: Sentence -> Sentence
+sCurlyBr x = Sp CurlyBrOpen :+: x :+: Sp CurlyBrClose
 
 -- | gets a reasonable or typical value from a Constrained chunk
 getRVal :: (Constrained c) => c -> Expr

@@ -66,7 +66,7 @@ module Language.Drasil (
   -- Spec
   , USymb(..), Sentence(..), Accent(..), sParen, sSqBr, sSqBrNum
   , (+:+), (+:+.), (+.), sC, (+:), semiCol, sParenDash
-  , sDash, sCurlyBr
+  , sDash
   -- NounPhrase
   , NounPhrase(..), NP, pn, pn', pn'', pn''', pnIrr, cn, cn', cn'', cn''', cnIP
   , cnIrr, cnIES, cnICES, cnIS, cnUM, nounPhrase, nounPhrase', at_start, at_start'
@@ -148,7 +148,7 @@ import Language.Drasil.NounPhrase hiding (at_start, at_start', titleize
 import Language.Drasil.Space (Space(..))
 import Language.Drasil.Spec (USymb(..), Sentence(..), Accent(..), 
                               sParen, sSqBr, sSqBrNum, sC, (+:+), (+:+.), (+.), (+:),
-                              semiCol, sParenDash, sDash, sCurlyBr)
+                              semiCol, sParenDash, sDash)
 import Language.Drasil.Reference (makeRef)--, acroTest)
 import Language.Drasil.Symbol (Symbol(..), sub, sup, vec, hat, prime)
 import Language.Drasil.SymbolAlphabet

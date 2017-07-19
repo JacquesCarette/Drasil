@@ -21,6 +21,7 @@ import Data.Drasil.Utils (foldle, foldle1, getS, fmtU, getRVal)
 import Data.Drasil.Concepts.Documentation
 import Data.Drasil.Concepts.Math (equation)
 import Control.Lens ((^.))
+import Data.Drasil.Utils(sCurlyBr)
 
 {--** Sentence Folding **--}
 -- | partial function application of foldle for sentences specifically

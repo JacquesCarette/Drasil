@@ -455,3 +455,25 @@ glassTypeAbbrs = map getAcc glassTypes
 --Below are present in this file temporarily--
 lateralLoad :: NamedChunk
 lateralLoad  = compoundNC lateral load
+
+{-
+--GlassType Data-Type
+
+-- | A Constrained is a 'Quantity' that has value constraints
+-- and maybe reasonable value
+class Quantity c => GlassType c where
+  constraints :: Simple Lens c [GlassType]
+
+data GlassType where
+  Factors  :: Integer
+  Abbr :: Sentence
+  
+factors :: Integer
+factors = Factors
+
+abbr :: Sentence
+abbr = Abbr 
+
+I think it would be best to create a GlassType data-type, with fieds factors and abbr. Then glassTypeFactors and glassTypeAbbr would be a [ GlassType].
+Same for the actual/nominal thickness pairs of lists. They should be in the document as a single list of pairs. For actual usage, the information can
+then be extracted. -@JacquesCarette comment in commit 6e95430-} 

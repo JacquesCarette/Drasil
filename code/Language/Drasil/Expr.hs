@@ -219,11 +219,8 @@ summation bounds expr = UnaryOp $ Summation bounds expr
 product   bounds expr = UnaryOp $ Product   bounds expr
 
 -- | Euclidean function : takes a vector and returns the sqrt of the sum-of-squares
-euclidean :: SymbolForm t => [t] -> Expr
-euclidean []      = 0
-euclidean [x]     = square (C x)
-euclidean [x, y]  = square (C x) + square (C y)
-euclidean (x:y:z) = sqrt (euclidean [x, y] + euclidean z)
+euclidean :: [Expr] -> Expr
+euclidean = sqrt . sum . map square
 
 -- | Binary Functions
 data BiFunc where

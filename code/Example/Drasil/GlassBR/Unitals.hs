@@ -402,7 +402,7 @@ sdWithEqn :: QDefinition
 sdWithEqn = mkDataDef standOffDist sdCalculation
 
 sdCalculation :: Relation
-sdCalculation = (C standOffDist) := euclidean sdVector
+sdCalculation = (C standOffDist) := euclidean (map C sdVector)
 
 sdVectorSent :: Sentence
 sdVectorSent = foldlsC (map getS sdVector)

@@ -74,7 +74,7 @@ balPCMDesc = foldlSent [(E $ C temp_W) `isThe` phrase temp_W +:+. sParen (unwrap
   (E $ (C tau_S_P) := ((C pcm_mass) * (C htCap_S_P)) / ((C pcm_HTC) * (C pcm_SA))),
   S "is a constant" +:+. sParen (unwrap $ getUnit tau_S_P),
   (E $ (C tau_L_P) := ((C pcm_mass) * (C htCap_L_P)) / ((C pcm_HTC) * (C pcm_SA))),
-  S "is a constant" +:+. sParen (unwrap $ getUnit tau_S_P)]
+  S "is a constant", sParen (unwrap $ getUnit tau_S_P)]
 
 
 ---------

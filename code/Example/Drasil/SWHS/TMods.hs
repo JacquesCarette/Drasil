@@ -68,8 +68,6 @@ t1descr = foldlSent [
   sParen (makeRef (mkAssump "assump1" EmptyS))]
 
 --referencing within a simple list is not yet implemented.
---Forgot many "S" and ":+:" typing out above description
----- lost a lot of time fixing
 
 -------------------------
 -- Theoretical Model 2 --
@@ -148,7 +146,8 @@ t3descr = foldlSent [
   getS latent_heat `isThe` S "change in",
   phrase thermal_energy, sParen (Sy (joule ^. usymb)) `sC`
   phrase latent_heat +:+. phrase energy,
-  S "FIXME: THE INTEGRAL FROM THE ABOVE EQUATION SHOULD GO HERE"
+  E (FCall (C latent_heat) [C time] := UnaryOp (Integral (Just (Low 0),
+  Just (High (C time))) (Deriv Total (FCall (C latent_heat) [C tau]) (C tau)) tau))
   `isThe` phrase rOfChng, S "of",
   getS latent_heat, S "with respect",
   S "to", phrase time, getS tau +:+.

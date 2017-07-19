@@ -22,7 +22,6 @@ swhsInModels = [eBalanceOnWtr, eBalanceOnPCM, heatEInWtr, heatEInPCM]
 eBalanceOnWtr :: RelationConcept
 eBalanceOnWtr = makeRC "eBalanceOnWtr" (nounPhraseSP "Energy balance on water to find the temperature of the water")
   balWtrDesc balWtr_Rel
-  --FIXME: title uses temp_W title
 
 balWtr_Rel :: Relation
 balWtr_Rel = (Deriv Total (C temp_W) (C time)) := (Int 1) / (C tau_W) *

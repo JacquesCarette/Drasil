@@ -8,8 +8,8 @@ import Data.Drasil.SI_Units
 import Data.Drasil.Utils(symbolMapFun, mkDataDef, getS)
 import Control.Lens((^.))
 import Prelude hiding (log, id, sqrt)
-import Data.Drasil.SentenceStructures (foldlSent, displayConstrntsAsSet, foldlsC)
-import Data.Drasil.Concepts.Documentation
+import Data.Drasil.SentenceStructures (foldlSent, 
+  displayConstrntsAsSet, foldlsC, extrctStrng)
 
 --FIXME: Many of the current terms can be separated into terms and defns?
 
@@ -99,14 +99,14 @@ standOffDist = uqcND "standOffDist" (nounPhraseSP "stand off distance")
 --FIXME: Issue #309
 nom_thick = cuc "nom_thick" 
   (nounPhraseSent $ S "nominal thickness" +:+ displayConstrntsAsSet 
-    nom_thick nominalThicknesses)
+    nom_thick (map show nominalThicknesses))
   lT millimetre Rational
   [ physc $ \c -> createCnstrnts c (map show nominalThicknesses) ] (V "8.0") --FIXME: no typical value!
 
 glass_type  = cvc "glass_type" (nounPhraseSent $ phrase glassTy +:+ 
-    displayConstrntsAsSet glass_type glassTypeAbbrsAsString)
+    displayConstrntsAsSet glass_type (map extrctStrng glassTypeAbbrs))
   lG String
-  [ physc $ \c -> createCnstrnts c glassTypeAbbrsAsString] (V "HS") --FIXME: no typical value!
+  [ physc $ \c -> createCnstrnts c (map extrctStrng glassTypeAbbrs)] (V "HS") --FIXME: no typical value!
 
 {--}
 
@@ -427,8 +427,15 @@ aspectRCalculation :: Relation
 aspectRCalculation = (C aspectR) := (C plate_len)/(C plate_width)
 
 --
-glassTypes :: [ConceptChunk]
+--Pulled to be used in "Terms And Definitions" Section--
+termsWithDefsOnly, termsWithAccDefn, loadTypes, glassTypes :: [ConceptChunk]
+
 glassTypes = [annealedGl, fTemperedGl, hStrengthGl]
+termsWithDefsOnly = [glBreakage, lateral, lite, specA, blastResisGla,
+  eqTNTChar]
+termsWithAccDefn  = [sD, loadShareFac, glTyFac, aspectRatio]
+loadTypes = [loadResis, nonFactoredL, glassWL, shortDurLoad,
+  specDeLoad, longDurLoad] 
 
 --Defined for DataDefs.hs and this file only--
 actualThicknesses :: [Double]
@@ -444,12 +451,6 @@ glassTypeFactors = [1, 4, 2]
 
 glassTypeAbbrs :: [Sentence]
 glassTypeAbbrs = map getAcc glassTypes
-
-glassTypeAbbrsAsString :: [String]
-glassTypeAbbrsAsString = (map extrctStrng (glassTypeAbbrs))
---glassTypeAbbrs = ["AN", "FT", "HS"]
---FIXME: can "map getAcc [annealedGlass, fullyTGlass, heatSGlass]" be used somehow?
---       or can we access the acronyms as Strings from CIs somehow?
 
 --Below are present in this file temporarily--
 lateralLoad :: NamedChunk

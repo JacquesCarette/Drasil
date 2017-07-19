@@ -120,15 +120,6 @@ glassBR_mg :: Document
 glassBR_mg = mgDoc'' glassBRProg (for'' titleize phrase) mg_authors mgBod
 
 --------------------------------------------------------------------------------
---Used in "Terms And Definitions" Section--
-termsWithDefsOnly, termsWithAccDefn, loadTypes :: [ConceptChunk]
-
-termsWithDefsOnly = [glBreakage, lateral, lite, specA, blastResisGla,
-  eqTNTChar]
-termsWithAccDefn  = [sD, loadShareFac, glTyFac, aspectRatio]
-loadTypes = [loadResis, nonFactoredL, glassWL, shortDurLoad,
-  specDeLoad, longDurLoad] 
-
 s6_1_1_bullets :: Contents
 s6_1_1_bullets = Enumeration $ (Number $
   map tAndDOnly termsWithDefsOnly
@@ -579,13 +570,14 @@ testing :: [QSWrapper]
 testing = qs prob_br : qs lRe : qs demand : []
 testing1 :: [RelationConcept]
 testing1 = [probOfBr, calOfCap, calOfDe]
-tempHelper c d = (c, d)
+tempHelper :: t1 -> t -> (t1, t)
+tempHelper a b = (a, b)
 --FIXME: rename or find better implementation?
 
 s7_1_req6 = [(Enumeration $ Simple $ [(acroR 6, Nested (titleize output_ +:+
   S "the following" +: plural quantity)
   (Bullet $ 
-    map (\(c, d) -> Flat $ (at_start c) +:+ sParen (getS c) +:+
+    map (\(a, d) -> Flat $ (at_start a) +:+ sParen (getS a) +:+
      sParen (makeRef (gbSymbMapT d))) (zipWith tempHelper (map qs testing) testing1)
     ++
     map (\d -> Flat $ (at_start d) +:+ sParen (getS d) +:+ 

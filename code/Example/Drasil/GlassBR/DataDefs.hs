@@ -4,6 +4,7 @@ import Language.Drasil
 import Prelude hiding (log, id, exp, sqrt)
 import Drasil.GlassBR.Unitals
 import Data.Drasil.Utils
+import Data.Drasil.SentenceStructures (extrctStrng)
 
 --FIXME: having id "" and term "" is completely bogus, and should not
 --  be allowed.  This implicitly says that something here does not make sense.
@@ -76,7 +77,7 @@ nonFL = mkDataDef nonFactorL nonFL_eq
 --DD6--
 
 glaTyFac_eq :: Expr
-glaTyFac_eq = (Case (zipWith glaTyFac_helper glassTypeFactors glassTypeAbbrsAsString))
+glaTyFac_eq = (Case (zipWith glaTyFac_helper glassTypeFactors (map extrctStrng glassTypeAbbrs)))
 
 glaTyFac_helper :: Integer -> String -> (Expr, Relation)
 glaTyFac_helper result condition = (Int result, (C glass_type) := V condition)

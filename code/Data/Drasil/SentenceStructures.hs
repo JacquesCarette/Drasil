@@ -13,6 +13,7 @@ module Data.Drasil.SentenceStructures
   , eqN
   , displayConstrntsAsSet
   , fmtInputConstr, fmtOutputConstr, physC, sfwrC, typUnc, rval
+  , extrctStrng
   ) where
 
 import Language.Drasil
@@ -167,8 +168,11 @@ eqN :: Int -> Sentence
 eqN n = phrase equation +:+ sParen (S $ show n)
 
 --Produces a sentence that displays the constraints in a {}.
---displayConstrntsAsSet :: ConstrainedChunk -> Sentence
-displayConstrntsAsSet ch listOfVals = getS ch `sIn` (S "{" :+: (foldlsC (map S $ map show listOfVals)) :+: S "}")
+displayConstrntsAsSet :: SymbolForm a => a -> [String] -> Sentence
+displayConstrntsAsSet ch listOfVals = getS ch `sIn` (S "{" :+: (foldlsC (map S listOfVals)) :+: S "}")
+
+extrctStrng :: Sentence -> String
+extrctStrng (S strng) = strng
 
 {-BELOW IS TO BE MOVED TO EXAMPLE/DRASIL/SECTIONS-}
 

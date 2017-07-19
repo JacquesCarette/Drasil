@@ -20,7 +20,7 @@ import Data.Drasil.Concepts.Math (equation, angle)
 sspDataDefs :: [QDefinition]
 sspDataDefs = [sliceWght, baseWtrF, surfWtrF, intersliceWtrF, angles,
   lengths, seismicLoadF, surfLoads, intrsliceF, resShearWO, mobShearWO,
-  displcmntRxnF, netFDsplcmntEqbm, soilStiffness]
+  displcmntRxnF, netFDsplcmntEqbm, shearStiffness, soilStiffness]
 
 fixmeS :: Sentence
 fixmeS = S "FIXME: add description"
@@ -159,14 +159,22 @@ netFDsplcmntEqbmEqn = Neg (C surfLngth) * (C nrmStiffIntsl) * (C genDisplace) +
 
 --DD14
 
+shearStiffness :: QDefinition
+shearStiffness = mkDataDef shrStiffBase shearStiffnessEqn  
+
+shearStiffnessEqn :: Expr
+shearStiffnessEqn = C intNormForce / (Int 2 * (Int 1 + C poissnsRatio)) * (Dbl 0.1 / C baseWthX) +
+  (C cohesion - C normStress * tan(C fricAngle)) / (abs (C shrDispl) + C constant_a)
+
+--DD15 this is the second part to the original DD14
+
 soilStiffness :: QDefinition
-soilStiffness = mkDataDef nrmStiffRes --FIXME: No equation section? Instead, there are "Input" and "Output" sections
-  soilStiffnessEqn
+soilStiffness = mkDataDef nrmStiffBase soilStiffnessEqn
 
 soilStiffnessEqn :: Expr
-soilStiffnessEqn = (Case [case1,case2]) --FIXME: see equation 28 in derivation for RFEM Factor of Safety (IM5)
+soilStiffnessEqn = (Case [case1,case2])
   where case1 = (block, (C SM.poissnsR) :< (Int 0))
-        case2 = ((Dbl 0.01) * block + (V "k") / ((C nrmDispl)+(V "A")),
+        case2 = ((Dbl 0.01) * block + (C constant_K) / ((C nrmDispl)+(C constant_A)),
                 (C SM.poissnsR) :>= (Int 0))
         block = (C intNormForce)*((Int 1)-(C SM.poissnsR))/
                 (((Int 1)+(C SM.poissnsR)) * ((Int 1) - (Int 2):*(C SM.poissnsR) + (C baseWthX)))

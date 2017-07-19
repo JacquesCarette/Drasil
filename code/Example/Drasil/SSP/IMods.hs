@@ -365,7 +365,7 @@ rigFoSDerivation = [foldlSP [S "RFEM analysis can also be used to calculate the"
   
   EqnBlock $
   C shrStiffBase := C intNormForce / (Int 2 * (Int 1 + C poissnsRatio)) * (Dbl 0.1 / C baseWthX) +
-  (C cohesion - C normStress * tan(C fricAngle)) / (abs (C shrDispl) + V "a"),
+  (C cohesion - C normStress * tan(C fricAngle)) / (abs (C shrDispl) + C constant_a),
   
   foldlSP [S "With", getTandS shrStiffBase, S "calculated in", eqN 28,
   S "and shear displacement", getS shrDispl, S "calculated in", eqN 24, --FIXME: grab term too once we have a displacement modifier

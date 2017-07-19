@@ -43,7 +43,7 @@ sspConstrained = map cnstrw sspInputs ++ map cnstrw sspOutputs
 
 sspInputs :: [UncertQ]
 sspInputs  = [elasticMod, cohesion, poissnsRatio, fricAngle, dryWeight,
-              satWeight, waterWeight]
+              satWeight, waterWeight, constant_a, constant_A, constant_K]
 
 sspOutputs :: [ConstrConcept]
 sspOutputs = [fs, coords, dx_i, dy_i]
@@ -59,7 +59,7 @@ defultUncrt :: Double
 defultUncrt = 0.1
 
 elasticMod, cohesion, poissnsRatio, fricAngle, dryWeight, satWeight,
-  waterWeight :: UncertQ
+  waterWeight, constant_a, constant_A, constant_K :: UncertQ
   
 fs, coords, dx_i, dy_i :: ConstrConcept
 
@@ -95,6 +95,15 @@ waterWeight = uqc "gamma_w" (cn $ "unit weight of water")
   "The weight of one cubic meter of water."
   (sub (Greek Gamma_L) lW) specific_weight Real gtZeroConstr
   (Dbl 9.8) defultUncrt
+  
+constant_a  = uqc "a" (cn "constant") "FIXME: missing discription"
+  lA metre Real [] (Dbl 0) defultUncrt
+  
+constant_A  = uqc "A" (cn "constant") "FIXME: missing discription"
+  cA metre Real [] (Dbl 0) defultUncrt
+  
+constant_K  = uqc "kappa" (cn "constant") "FIXME: missing discription"
+  (Greek Kappa_L) pascal Real [] (Dbl 0) defultUncrt
 
 {-Output Variables-} --FIXME: See if there should be typical values
 fs          = constrained' (cvR fs_concept (Atomic "FS")) gtZeroConstr (Dbl 1)

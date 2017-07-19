@@ -273,6 +273,7 @@ executable glassbr
     , Drasil.GlassBR.TMods
     , Drasil.GlassBR.IMods
     , Drasil.GlassBR.DataDefs
+    , Drasil.GlassBR.References
     , Drasil.GlassBR.Units
     , Drasil.Sections.SpecificSystemDescription
     , Drasil.Sections.Introduction

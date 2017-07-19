@@ -2,7 +2,7 @@
 -- | Contains Sentences and helpers
 module Language.Drasil.Spec where
 
-import Language.Drasil.Unicode (Greek,Special)
+import Language.Drasil.Unicode (Greek,Special,Special(CurlyBrOpen,CurlyBrClose))
 import Language.Drasil.Symbol
 import Language.Drasil.Expr
 
@@ -78,6 +78,9 @@ sSqBr x = S "[" :+: x :+: S "]"
 
 sSqBrNum :: Int -> Sentence
 sSqBrNum y = S "[" :+: (S (show y)) :+: S "]"
+
+sCurlyBr :: Sentence -> Sentence
+sCurlyBr x = Sp CurlyBrOpen :+: x :+: Sp CurlyBrClose
 
 -- | Helper for concatenating two sentences with a space between them.
 (+:+) :: Sentence -> Sentence -> Sentence

@@ -97,12 +97,12 @@ standOffDist = uqcND "standOffDist" (nounPhraseSP "stand off distance")
 
 --FIXME: Issue #309
 nom_thick = cuc "nom_thick" 
-  (nounPhraseSent $ S "nominal thickness" +:+ displayConstrntsAsSet 
+  (nounPhraseSent $ S "nominal thickness" `sC` displayConstrntsAsSet 
     nom_thick (map show nominalThicknesses))
   lT millimetre ({-Discrete-} Rational) 
   [ physc $ \c -> createCnstrnts c (map show nominalThicknesses) ] (V "8.0") --FIXME: no typical value!
 
-glass_type  = cvc "glass_type" (nounPhraseSent $ phrase glassTy +:+ 
+glass_type  = cvc "glass_type" (nounPhraseSent $ phrase glassTy `sC` 
     displayConstrntsAsSet glass_type (map extrctStrng glassTypeAbbrs))
   lG ({-Discrete-} String)
   [ physc $ \c -> createCnstrnts c (map extrctStrng glassTypeAbbrs)] (V "HS") --FIXME: no typical value!

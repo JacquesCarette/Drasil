@@ -10,7 +10,7 @@ import Data.Drasil.SentenceStructures (foldlsC)
 s11_list :: Contents
 s11_list = mkRefsList 1 (map (foldlsC) references)
 
-s11_ref1, s11_ref2, s11_ref3, s11_ref4, s11_ref5, s11_ref6 :: [Sentence]
+s11_ref1, s11_ref2, s11_ref3, s11_ref4, s11_ref5, s11_ref6, s11_ref7 :: [Sentence]
 
 references :: [[Sentence]]
 references = [s11_ref1, s11_ref2, s11_ref3, s11_ref4, s11_ref5, s11_ref6]
@@ -48,3 +48,8 @@ s11_ref5 = [S "ASTM", S "developed by subcommittee C1408", S "Book of standards 
 s11_ref6 = [S "ASTM", S "developed by subcommittee C14.08", S "Book of standards 15.02",
   Quote (at_start specification +:+ S "for" +:+ plural heat +:+.
   S "treated flat glass-Kind HS, kind FT coated and uncoated glass, C1048")]
+
+--FIXME: check whether citation format is correct
+s11_ref7 = [S "Lynn Beason, Terry L. Kohutek, and Joseph M. Bracci",
+  Quote (S "Basis for ASTME E 1300 Annealed Glass Thickness Selection Charts"),
+  S "1998."]

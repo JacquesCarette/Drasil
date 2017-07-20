@@ -24,6 +24,8 @@ gbQDefns = [Parallel hFromt {-DD2-} [loadDF {-DD3-}, glaTyFac {-DD6-}]] ++ --can
 
 --DD1--
 
+--Source : #7 -> See Issue #357
+
 risk :: QDefinition
 risk = mkDataDef risk_fun risk_eq
 

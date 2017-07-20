@@ -45,6 +45,12 @@ varTerm cname m = lookV (Map.lookup cname m)
         lookV Nothing = ""
         lookV (Just cc) = getStr (phrase $ cc ^. term)  
         
+varType :: String -> VarMap -> CodeType
+varType cname m = lookV (Map.lookup cname m)
+  where lookV :: (Maybe CodeChunk) -> CodeType
+        lookV Nothing = error "Variable not found"
+        lookV (Just cc) = codeType cc
+        
 getStr :: Sentence -> String
 getStr (S s) = s
 getStr (P s) = symbToCodeName s

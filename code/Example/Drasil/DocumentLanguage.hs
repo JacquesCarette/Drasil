@@ -290,7 +290,7 @@ mkSolChSpec si (SCSProg l m) =
     mkSubSCS _ (SCSSubVerb s) l' = s : l'
     mkSubSCS si' (TMs fields ts) l' = 
       SSD.thModF (siSys si') (map (tmodel fields m) ts) : l'
-    mkSubSCS si' (DDs fields ds) l' =
+    mkSubSCS _ (DDs fields ds) l' =
       SSD.dataDefnF EmptyS (map (ddefn fields m) ds) : l'
       --FIXME: need to keep track of DD intro.
     inModSec = (SRS.inModel [Paragraph EmptyS] []) 
@@ -306,14 +306,19 @@ siSys (SI sys _ _ _ _ _ _ _ _ _ _ _) = nw sys
 --BELOW IS IN THIS FILE TEMPORARILY--
 --Creates Contents using an id and description (passed in as a Sentence).
 mkAssump :: String -> Sentence -> Contents
-mkAssump i desc = mkAssumpCustom i desc ""
+mkAssump i desc = Assumption $ nw $ npnc i (nounPhraseSent desc)
 
---Creates Contents using an id and description (passed in as a String).
 mkAssumpCustom :: String -> Sentence -> String -> Contents
-mkAssumpCustom i desc x = Assumption $ nw $ npnc' i (nounPhraseSent desc) x
+mkAssumpCustom i desc enid = Assumption $ nw $ npnc' i (nounPhraseSent desc) enid
 
 mkRequirement :: String -> Sentence -> Contents
-mkRequirement i desc = Requirement (ReqChunk (nw $ npnc i $ nounPhraseSent desc) [])
+mkRequirement i desc = Requirement $ ReqChunk (nw $ npnc i $ nounPhraseSent desc) []
+
+mkRequirementCustom :: String -> Sentence -> String -> Contents
+mkRequirementCustom i desc enid = Requirement $ ReqChunk (nw $ npnc' i (nounPhraseSent desc) enid) []
 
 mkLklyChnk :: String -> Sentence -> Contents
-mkLklyChnk i desc = LikelyChange (LCChunk (nw $ npnc i $ nounPhraseSent desc) [])
+mkLklyChnk i desc = LikelyChange $ LCChunk (nw $ npnc i $ nounPhraseSent desc) []
+
+mkLklyChnkCustom :: String -> Sentence -> String -> Contents
+mkLklyChnkCustom i desc enid = LikelyChange $ LCChunk (nw $ npnc' i (nounPhraseSent desc) enid) []

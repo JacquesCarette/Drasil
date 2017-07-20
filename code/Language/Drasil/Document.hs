@@ -8,6 +8,7 @@ import Language.Drasil.Chunk.Module
 import Language.Drasil.Chunk.Other
 import Language.Drasil.Chunk.Req
 import Language.Drasil.Chunk.LC
+import Language.Drasil.Chunk.NamedIdea
 import Language.Drasil.ChunkDB (SymbolMap)
 import Language.Drasil.Spec (Sentence(..), RefType(..), (+:+))
 import Language.Drasil.RefHelpers
@@ -124,12 +125,9 @@ instance LayoutObj Contents where
   rType (Definition _ _)        = Def
   rType (Defnt _ _ _)           = Def
   rType (Module _)              = Mod
-  rType (Requirement _)       = Req
-  rType (Assumption _)        = Assump
-  rType (LikelyChange _)      = LC
-  -- rType (Requirement r)       = Req $ short r
-  -- rType (Assumption a)        = Assump $ short a
-  -- rType (LikelyChange lc)      = LC $ short lc
+  rType (Requirement r)       = Req $ short r
+  rType (Assumption a)        = Assump $ short a
+  rType (LikelyChange lc)      = LC $ short lc
   rType (UnlikelyChange _)      = UC
  -- rType (UsesHierarchy _)       = Fig
   rType (Graph _ _ _ _)         = Fig

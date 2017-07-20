@@ -4,6 +4,9 @@ import Language.Drasil.Document
 import Language.Drasil.Spec
 import Control.Lens ((^.))
 
+import Language.Drasil.Chunk.Req
+import Language.Drasil.Chunk.LC
+
 
 -- | Create References to a given 'LayoutObj'
 makeRef :: (LayoutObj l) => l -> Sentence
@@ -14,8 +17,6 @@ makeRef r = Ref (rType r) (refName r)
 -- Pass it the item to be referenced and the enumerated list of the respective
 -- contents for that file. Change rType values to implement.
 
-{-import Language.Drasil.Chunk.Req
-import Language.Drasil.Chunk.LC
 
 acroTest :: Contents -> [Contents] -> Sentence
 acroTest ref reflst = makeRef $ find ref reflst
@@ -30,4 +31,4 @@ find itm@(Requirement comp1) (frst@(Requirement comp2):lst)
   | otherwise = find itm lst
 find itm@(LikelyChange comp1) (frst@(LikelyChange comp2):lst)
   | ((lcCC comp1) ^. id) == ((lcCC comp2) ^. id) = frst
-  | otherwise = find itm lst-}
+  | otherwise = find itm lst

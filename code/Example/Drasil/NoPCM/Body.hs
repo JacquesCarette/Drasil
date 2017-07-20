@@ -316,11 +316,8 @@ s4_2 = solChSpecF progName (s4_1, s6) s4_2_4_intro_end (mid,
           phrase uncertainty, S "quantification exercise"]
 
 s4_2_1_list :: [Contents]
-s4_2_1_list = acroNumGen s4_2_1_assump_list 1
-
-s4_2_1_assump_list :: [Contents]
-s4_2_1_assump_list =[assump1, assump2, assump3, assump4, assump5, assump7, assump8,
-  assump9, assump9_npnc, assump14, assump15, assump12, assump13, assump20]
+s4_2_1_list = acroNumGen [assump1, assump2, assump3, assump4, assump5, assump7, assump8,
+  assump9, assump9_npnc, assump14, assump15, assump12, assump13, assump20] 1
   
 assump3, assump4, assump5, assump9_npnc, assump12, assump13 :: Contents
 
@@ -330,7 +327,7 @@ assump3 = mkAssump "assump3"
 assump4 = mkAssump "assump4"
   (foldlSent [S "The", phrase w_density, S "has no spatial variation; that is"
   `sC` S "it is constant over their entire", phrase vol, sSqBr ((acroGD 2)`sC`
-  (makeRef likeChg2))])
+  (acroTest likeChg2 s6_list))])
 assump5 = mkAssump "assump5"
   (foldlSent [S "The", phrase htCap_W, S "has no spatial variation; that", 
   S "is, it is constant over its entire", phrase vol, sSqBr (acroGD 2)])
@@ -503,8 +500,8 @@ s4_2_5_desc1 roc temw en wa vo wv ma wm hcw ht hfc csa ta purin a11 vhg a12 =
   `sC` S "over area") +:+. getS csa, S "No",
   phrase ht, S "occurs to", (S "outside" `ofThe`
   phrase ta) `sC` S "since it has been assumed to be",
-  phrase purin +:+. sParen (makeRef a11), S "Assuming no",
-  phrase vhg +:+. (sParen (makeRef a12) `sC`
+  phrase purin +:+. sParen (acroTest a11 s4_2_1_list), S "Assuming no",
+  phrase vhg +:+. (sParen (acroTest a12 s4_2_1_list) `sC`
   E (C vhg := Int 0)), S "Therefore, the", phrase equation, S "for",
   acroGD 2, S "can be written as"]
 
@@ -578,7 +575,7 @@ s5 = reqF [s5_1, s5_2]
 s5_1 = SRS.funcReq s5_1_list [] --TODO: Placeholder values until content can be added
 
 s5_1_list :: [Contents]
-s5_1_list = weave [acroNumGen s5_1_list_words 1, s5_1_list_items]
+s5_1_list = weave [s5_1_list_words_num, s5_1_list_items]
 
 s5_1_list_items :: [Contents]
 s5_1_list_items = [
@@ -623,8 +620,8 @@ s5_1_list_items = [
   -- phrase simulation, phrase time +:+. sParen (S "from" +:+ acroIM 3)]
   -- ]
 
-s5_1_list_words :: [Contents]
-s5_1_list_words = [req1, req2, req3, req4, req5, req6]
+s5_1_list_words_num :: [Contents]
+s5_1_list_words_num = acroNumGen [req1, req2, req3, req4, req5, req6] 1
 
 req1, req2, req3, req4, req5, req6 :: Contents
 
@@ -644,8 +641,8 @@ req3 = mkRequirement "req3" $
 req4 = mkRequirement "req4" $
   titleize' output_ +:+ S "and" +:+ plural input_ +:+ plural quantity
   +:+ S "and derived" +:+ plural quantity +:+ S "in the following list: the" +:+
-  plural quantity +:+ S "from" +:+ (makeRef req1) `sC` S "the" +:+ phrase mass +:+
-  S "from" +:+ makeRef req2 +:+ S "and" +:+ getS tau_W +:+. sParen(S "from" +:+ acroIM 1)
+  plural quantity +:+ S "from" +:+ (acroTest req1 s5_1_list_words_num) `sC` S "the" +:+ phrase mass +:+
+  S "from" +:+ acroTest req2 s5_1_list_words_num +:+ S "and" +:+ getS tau_W +:+. sParen(S "from" +:+ acroIM 1)
 req5 = mkRequirement "req5" $
   S "Calculate and output the" +:+ phrase temp_W +:+
   sParen (getS temp_W :+: sParen (getS time)) +:+ S "over the" +:+

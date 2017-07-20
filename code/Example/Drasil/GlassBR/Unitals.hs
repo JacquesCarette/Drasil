@@ -55,8 +55,7 @@ gbInputsNoUncrtn :: [ConstrainedChunk]
 gbInputsNoUncrtn = [glass_type, nom_thick]
 
 gbInputDataConstraints :: [UncertainWrapper]
-gbInputDataConstraints = (map uncrtnw gbInputsWUncrtn) ++ 
-  (map uncrtnw gbInputsWUnitsUncrtn)
+gbInputDataConstraints = (map uncrtnw gbInputsWUnitsUncrtn) ++ (map uncrtnw gbInputsWUncrtn)
 
 plate_len = uqcND "plate_len" (nounPhraseSP "plate length (long dimension)")
   lA millimetre Real 

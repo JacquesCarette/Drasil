@@ -53,7 +53,7 @@ s4_1, s4_1_1, s4_1_2,
 
 s4_1_1_list, s4_1_2_p1, s4_1_2_bullets,
   s4_1_2_p2, s4_1_3_list, s4_2_1_list,
-  instModIntro1, instModIntro2, s5_1_list :: Contents
+  s5_1_list :: Contents
 
 s4_2_2_tmods, s4_2_3_genDefs, s4_2_4_dataDefs, s4_2_5_IMods :: [Contents]
 
@@ -328,31 +328,6 @@ s4_2_4_dataDefs = (map sspSymMapD (take 10 sspDataDefs)) ++ resShrDerivation ++
 
 -- SECTION 4.2.5 --
 -- Instance Models is automatically generated in solChSpecF using the paragraphs below
-
-instModIntro1 = foldlSP [S "The", titleize morPrice,
-  phrase method_, S "is a vertical", phrase slice `sC` S "limit equilibrium",
-  phrase ssa +:+. phrase method_, at_start analysis, S "is performed by",
-  S "breaking the assumed failure", phrase surface, S "into a series of vertical",
-  plural slice, S "of" +:+. phrase mass, S "Static equilibrium",
-  S "analysis using two", phrase force, S "equilibrium, and one moment",
-  phrase equation, S "as in" +:+. acroT 2, S "The", phrase problem,
-  S "is statically indeterminate with only these 3", plural equation, S "and one",
-  S "constitutive", phrase equation, sParen $ S "the Mohr Coulomb shear strength of" +:+ 
-  acroT 3, S "so the", phrase assumption, S "of", acroGD 5, S "is used. Solving for",
-  phrase force, S "equilibrium allows", plural definition, S "of all", plural force,
-  S "in terms of the", plural physicalProperty, S "of", acroDD 1, S "to",
-  acroDD 9 `sC` S "as done in", acroDD 10 `sC` acroDD 11]
-
-instModIntro2 = foldlSP [plural value `ofThe'` (phrase intrslce +:+ phrase normForce),
-  getS intNormForce, S "the", getTandS normToShear `sC`
-  S "and the", titleize fs_rc, (sParen $ getS fs) `sC` S "are unknown.",
-  at_start' equation, S "for the unknowns are written in terms of only the",
-  plural value, S "in", acroDD 1, S "to", acroDD 9 `sC` S "the", plural value,
-  S "of", getS shearRNoIntsl `sC` S "and", getS shearFNoIntsl, S "in", acroDD 10,
-  S "and", acroDD 11 `sC` S "and each",
-  S "other. The relationships between the unknowns are non linear" `sC`
-  S "and therefore explicit", plural equation, S "cannot be derived and an",
-  S "iterative", plural solution, S "method is required"]
 
 s4_2_5_IMods = concat $ weave [map (\x -> [sspSymMapT x]) sspIMods, --FIXME: move to IMods
   [fctSftyDerivation, nrmShrDerivation, intrSlcDerivation,

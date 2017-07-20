@@ -12,8 +12,9 @@ import Data.Drasil.Utils
 import Data.Drasil.Concepts.Documentation
 import Data.Drasil.SentenceStructures
 import Control.Lens ((^.))
-import Data.Drasil.Concepts.Math (equation)
-import Data.Drasil.Concepts.Physics (displacement)
+import Data.Drasil.Concepts.Math (equation, surface)
+import Data.Drasil.Concepts.Physics (displacement, force)
+import Data.Drasil.Concepts.PhysicalProperties (mass)
 
 -----------------------
 --  Instance Models  --
@@ -165,7 +166,38 @@ crtSlpId_desc = foldlSent [S "Given the necessary slope inputs, a minimization",
   S "algorithm or function", getS minFunction, S "will identify the", phrase crtSlpSrf,
   S "of the slope, with the critical slip coordinates", getS critCoords, 
   S "and the minimum factor of safety FSmin that results"]
-  
+
+-----------
+-- Intro --
+-----------
+
+instModIntro1, instModIntro2 :: Contents
+
+instModIntro1 = foldlSP [S "The", titleize morPrice,
+  phrase method_, S "is a vertical", phrase slice `sC` S "limit equilibrium",
+  phrase ssa +:+. phrase method_, at_start analysis, S "is performed by",
+  S "breaking the assumed failure", phrase surface, S "into a series of vertical",
+  plural slice, S "of" +:+. phrase mass, S "Static equilibrium",
+  S "analysis using two", phrase force, S "equilibrium, and one moment",
+  phrase equation, S "as in" +:+. acroT 2, S "The", phrase problem,
+  S "is statically indeterminate with only these 3", plural equation, S "and one",
+  S "constitutive", phrase equation, sParen $ S "the Mohr Coulomb shear strength of" +:+ 
+  acroT 3, S "so the", phrase assumption, S "of", acroGD 5, S "is used. Solving for",
+  phrase force, S "equilibrium allows", plural definition, S "of all", plural force,
+  S "in terms of the", plural physicalProperty, S "of", acroDD 1, S "to",
+  acroDD 9 `sC` S "as done in", acroDD 10 `sC` acroDD 11]
+
+instModIntro2 = foldlSP [plural value `ofThe'` (phrase intrslce +:+ phrase totNrmForce),
+  getS intNormForce, S "the", getTandS normToShear `sC`
+  S "and the", titleize fs, (sParen $ getS fs) `sC` S "are unknown.",
+  at_start' equation, S "for the unknowns are written in terms of only the",
+  plural value, S "in", acroDD 1, S "to", acroDD 9 `sC` S "the", plural value,
+  S "of", getS shearRNoIntsl `sC` S "and", getS shearFNoIntsl, S "in", acroDD 10,
+  S "and", acroDD 11 `sC` S "and each",
+  S "other. The relationships between the unknowns are non linear" `sC`
+  S "and therefore explicit", plural equation, S "cannot be derived and an",
+  S "iterative", plural solution, S "method is required"]
+
 -----------------
 -- Derivations --
 -----------------

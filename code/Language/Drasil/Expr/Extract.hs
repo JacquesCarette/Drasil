@@ -49,6 +49,7 @@ dep (IsIn  a _)   = nub (concat $ map dep a)
 dep (NotIn a _)   = nub (concat $ map dep a)
 dep (State a b)   = nub ((concat $ map (dep . quant) a) ++ dep b)
 dep (Matrix a)    = nub (concat $ map (concat . map dep) a)
+dep (Index a i)   = nub (dep a ++ dep i)
 
 -- | Get a list of VarChunks from an equation in order to print
 vars :: Expr -> SymbolMap -> [VarChunk]
@@ -85,6 +86,7 @@ vars (IsIn  a _)  m = nub (concat $ map (\x -> vars x m) a)
 vars (NotIn a _)  m = nub (concat $ map (\x -> vars x m) a)
 vars (State a b)  m = nub ((concat $ map (\x -> vars (quant x) m) a) ++ vars b m)
 vars (Matrix a)   m = nub (concat $ map (\x -> concat $ map (\y -> vars y m) x) a)
+vars (Index a i)  m = nub (vars a m ++ vars i m)
 
 -- | Get a list of CodeChunks from an equation
 codevars :: Expr -> [CodeChunk]
@@ -121,7 +123,7 @@ codevars (IsIn  a _)  = nub (concat $ map codevars a)
 codevars (NotIn a _)  = nub (concat $ map codevars a)
 codevars (State a b)  = nub ((concat $ map (codevars . quant) a) ++ codevars b)
 codevars (Matrix a)   = nub (concat $ map (concat . map codevars) a)
-
+codevars (Index a i)  = nub (codevars a ++ codevars i)
 
 -- | Helper function for vars and dep, gets the Expr portion of a UFunc
 unpack :: UFunc -> Expr

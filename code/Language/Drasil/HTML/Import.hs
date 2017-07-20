@@ -57,6 +57,7 @@ expr e@(_ :< _)       = rel e
 expr e@(_ :<= _)      = rel e
 expr e@(_ :>= _)      = rel e
 expr (Matrix a)       = H.Mtx $ map (map expr) a
+expr (Index a i)      = H.Index (expr a) (expr i)
 expr (UnaryOp u)      = (\(x,y) -> H.Op x [y]) (ufunc u)
 expr (Grouping e)     = H.Grouping (expr e)
 expr (BinaryOp b)     = (\(x,y) -> H.Op x y) (bfunc b)

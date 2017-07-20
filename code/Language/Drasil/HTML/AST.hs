@@ -43,6 +43,7 @@ data Expr = Var   Variable
           | Impl Expr Expr
           | Iff  Expr Expr
           | Mtx [[Expr]]
+          | Index Expr Expr
           
 -- | Internal HTML version of Function 
 -- (for converting Functions from 'Language.Drasil.Expr')

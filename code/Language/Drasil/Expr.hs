@@ -47,6 +47,8 @@ data Expr where
   Case     :: [(Expr,Relation)] -> Expr -- For multi-case expressions, 
                                      -- each pair represents one case
   Matrix   :: [[Expr]] -> Expr
+  Index    :: Expr -> Expr -> Expr  -- for accessing elements of sequence/list/vect etc.
+                                    -- arr[i] is (Index arr i)
   UnaryOp  :: UFunc -> Expr
   Grouping :: Expr -> Expr
   BinaryOp :: BiFunc -> Expr

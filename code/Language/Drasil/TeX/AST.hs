@@ -39,6 +39,7 @@ data Expr = Var  Variable
           | Impl Expr Expr
           | Iff  Expr Expr
           | Mtx [[Expr]]
+          | Index Expr Expr
           
 data Function = Log
            | Summation (Maybe ((Symbol, Expr),Expr))

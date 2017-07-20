@@ -135,6 +135,7 @@ p_expr (Case ps)  = "\\begin{cases}\n" ++ cases ps ++ "\n\\end{cases}"
 p_expr (Op f es)  = p_op f es
 p_expr (Grouping x) = paren (p_expr x)
 p_expr (Mtx a)    = "\\begin{bmatrix}\n" ++ p_matrix a ++ "\n\\end{bmatrix}"
+p_expr (Index a i)= p_expr a ++ sqbrac (p_expr i)
 --Logic
 p_expr (Not x)    = "\\neg{}" ++ p_expr x
 p_expr (And x y)  = p_expr x ++ "\\land{}" ++ p_expr y

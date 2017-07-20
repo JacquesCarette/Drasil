@@ -13,10 +13,10 @@ glassBRProg = dcc' "glassBRProg" (nounPhraseSP "GlassBR program")
 -- FIXME: Use actual acronyms instead of CCs.
 
 acronyms :: [CI]
-acronyms = [assumption, annealedGlass, dataDefn, fullyTGlass,
+acronyms = [assumption, annealedGlass, aR, dataDefn, fullyTGlass,
   goalStmt, glassTypeFac, heatSGlass, iGlass, inModel, likelyChg, 
-  loadDurFactor, lGlass, lResistance, lShareFac, nFL, physSyst, requirement,
-  srs, thModel, eqTNT, stdOffDist]
+  loadDurFactor, lGlass, lResistance, lShareFac, notApp, nFL, physSyst,
+  requirement, stdOffDist, srs, thModel, eqTNT]
 
 annealedGlass, aR, fullyTGlass, glassTypeFac, heatSGlass, loadDurFactor,
   iGlass, lGlass, lResistance, lShareFac, eqTNT, gLassBR, stdOffDist, nFL :: CI

@@ -134,7 +134,7 @@ s6_1_1_bullets = Enumeration $ (Number $
 
 s6_1_1_bullets_glTySubSec, s6_1_1_bullets_loadSubSec :: [ItemType]
 
-s6_1_1_bullets_glTySubSec = [Nested (((titleize glassTy) :+: S ":"))
+s6_1_1_bullets_glTySubSec = [Nested (((titleize' glassTy) :+: S ":"))
   (Bullet $ map tAndDWAcc glassTypes)]
 
 s6_1_1_bullets_loadSubSec = [Nested (((at_start load) :+: S ":"))

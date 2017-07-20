@@ -51,8 +51,8 @@ mod_derivedv = mod_derivedv_fun glassBRProg [mod_inputp]
 -- calculations module
 glassBR_calcDesc :: Sentence
 glassBR_calcDesc =(foldlSent [S "Defines the", plural equation,
-  S "for solving for the", S "probability of glass breakage" `sC`
-  phrase demandq `sC` phrase capacity, S "using the", plural parameter, 
+  S "for solving for the", foldlList [S "probability of glass breakage",
+  phrase demandq, phrase capacity], S "using the", plural parameter, 
   S "in the", plural inParam, S "module"])
 
 mod_calc :: ModuleChunk

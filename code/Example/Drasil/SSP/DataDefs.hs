@@ -153,9 +153,10 @@ netFDsplcmntEqbm :: QDefinition
 netFDsplcmntEqbm = mkDataDef genForce netFDsplcmntEqbmEqn
 
 netFDsplcmntEqbmEqn :: Expr
-netFDsplcmntEqbmEqn = Neg (C surfLngth) * (C nrmStiffIntsl) * (C genDisplace) +
-  ((C surfLngth) * (C nrmStiffIntsl) + (C baseLngth) * (C nrmStiffBase) + (C surfLngth) * (C nrmStiffIntsl)) * (C genDisplace) -
-  (C surfLngth) * (C nrmStiffIntsl) * (C genDisplace) --FIXME: needs indexing
+netFDsplcmntEqbmEqn = Neg (inx surfLngth (-1)) * (inx nrmStiffIntsl (-1)) * (inx genDisplace (-1)) +
+  (inx surfLngth (-1) * inx nrmStiffIntsl (-1) + inx baseLngth 0 * inx nrmStiffBase 0 +
+  inx surfLngth 0 * inx nrmStiffIntsl 0) * (inx genDisplace 0) -
+  (inx surfLngth 0) * (inx nrmStiffIntsl 0) * (inx genDisplace 1)
 
 --DD14
 

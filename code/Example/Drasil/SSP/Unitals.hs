@@ -257,11 +257,11 @@ baseWthX    = uc' "b_i" (cn $ "base width of a slice")
   (sub lB lI) metre
 
 baseLngth   = uc' "l_b,i" (cn $ "total base length of a slice") fsi
-  (sub (Greek Ell) (Atomic "b,i")) metre
+  (sub (Greek Ell) (Atomic "b")) metre
 
 surfLngth   = uc' "l_s,i" (cn $ "length of an interslice surface")
   ("from slip base to slope surface in a vertical line from an interslice vertex " ++ fisi)
-  (sub (Greek Ell) (Atomic "s,i")) metre
+  (sub (Greek Ell) (Atomic "s")) metre
 
 midpntHght  = uc' "h_i" (cn $ "midpoint height")
   ("distance from the slip base to the slope surface in a vertical line from the midpoint of the slice " ++ fsi)
@@ -364,5 +364,17 @@ minFunction = cvR (dcc "Upsilon" (nounPhraseSP "function") ("generic minimizatio
 fsloc       = cvR (dcc "FS_loci" (nounPhraseSP "local factor of safety") fsi)
   (sub (Atomic "FS") (Atomic "Loc,i"))
 
+--------------------
+-- Index Function --
+--------------------
+
 index       = cvR (dcc "index" (nounPhraseSP "index") ("used to show a quantity " ++
   "applies to only one slice")) lI
+
+--FIXME: possibly move to Language/Drasil/Expr.hs
+
+inx :: SymbolForm e => e -> Integer -> Expr
+inx e n 
+  | n < 0     = Index (C e) (C index - Int (-n))
+  | n == 0    = Index (C e) (C index)
+  | otherwise = Index (C e) (C index + Int n)

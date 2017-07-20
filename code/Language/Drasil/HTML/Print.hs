@@ -152,7 +152,8 @@ p_expr (Case ps)  = cases ps (p_expr)
 p_expr (Op f es)  = p_op f es
 p_expr (Grouping e) = paren (p_expr e)
 p_expr (Mtx a)    = "<table class=\"matrix\">\n" ++ p_matrix a ++ "</table>"
-p_expr (Index a i)= p_expr a ++ sqbrac (p_expr i)
+p_expr (Index a@(Sym (Corners [] [] [] [_] _)) i) = p_expr a ++ sub ("," ++ p_expr i)
+p_expr (Index a i)= p_expr a ++ sub (p_expr i)
 --Logic
 p_expr (Not a)    = "&not;" ++ p_expr a
 p_expr (And a b)  = p_expr a ++ " &and; " ++ p_expr b

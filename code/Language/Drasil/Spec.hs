@@ -55,18 +55,18 @@ data RefType = Tab -- ^ Table
              | UC -- ^ Unlikely Change
 
 instance Show RefType where
-  show Tab = "this Table"
-  show Fig = "this Figure"
-  show Sect = "this Section"
-  show Def = "this Definition"
-  show Mod = "this Module"
+  show Tab = "Table"
+  show Fig = "Figure"
+  show Sect = "Section"
+  show Def = "Definition"
+  show Mod = "Module"
   show (Req (S r)) = r
   show (Assump (S a)) = a
   show (LC (S lc)) = lc
-  show (Req _) = "this Requirement"
-  show (Assump _) = "this Assumption"
-  show (LC _) = "this Likely Change"
-  show UC = "this Unlikely Change"
+  show (Req _) = "Requirement"
+  show (Assump _) = "Assumption"
+  show (LC _) = "Likely Change"
+  show UC = "Unlikely Change"
 
 -- | Helper function for wrapping sentences in parentheses.
 sParen :: Sentence -> Sentence

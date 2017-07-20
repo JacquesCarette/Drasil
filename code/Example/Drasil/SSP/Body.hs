@@ -53,7 +53,7 @@ s4_1, s4_1_1, s4_1_2,
 
 s4_1_1_list, s4_1_2_p1, s4_1_2_bullets,
   s4_1_2_p2, s4_1_3_list, s4_2_1_list,
-  s4_2_5_p2, s4_2_5_p3, s5_1_list :: Contents
+  instModIntro1, instModIntro2, s5_1_list :: Contents
 
 s4_2_2_tmods, s4_2_3_genDefs, s4_2_4_dataDefs, s4_2_5_IMods :: [Contents]
 
@@ -297,7 +297,7 @@ displSlope = S "Determine" +:+. (S "displacement" `ofThe` phrase slope)
 -- SECTION 4.2 --
 s4_2 = solChSpecF ssa (s4_1, s6) ddEnding (EmptyS, dataConstraintUncertainty, EmptyS)
   ([s4_2_1_list], s4_2_2_tmods, s4_2_3_genDefs, s4_2_4_dataDefs, 
-  s4_2_5_p2:s4_2_5_p3:s4_2_5_IMods, [s4_2_6Table2, s4_2_6Table3]) []
+  instModIntro1:instModIntro2:s4_2_5_IMods, [s4_2_6Table2, s4_2_6Table3]) []
   where ddEnding = foldlSent [at_start' definition, acroDD 1, S "to", acroDD 8,
           S "are the", phrase force, plural variable, S "that can be solved by",
           S "direct analysis of given" +:+. plural input_, S "The", 
@@ -329,7 +329,7 @@ s4_2_4_dataDefs = (map sspSymMapD (take 10 sspDataDefs)) ++ resShrDerivation ++
 -- SECTION 4.2.5 --
 -- Instance Models is automatically generated in solChSpecF using the paragraphs below
 
-s4_2_5_p2 = foldlSP [S "The", titleize morPrice,
+instModIntro1 = foldlSP [S "The", titleize morPrice,
   phrase method_, S "is a vertical", phrase slice `sC` S "limit equilibrium",
   phrase ssa +:+. phrase method_, at_start analysis, S "is performed by",
   S "breaking the assumed failure", phrase surface, S "into a series of vertical",
@@ -343,7 +343,7 @@ s4_2_5_p2 = foldlSP [S "The", titleize morPrice,
   S "in terms of the", plural physicalProperty, S "of", acroDD 1, S "to",
   acroDD 9 `sC` S "as done in", acroDD 10 `sC` acroDD 11]
 
-s4_2_5_p3 = foldlSP [plural value `ofThe'` (phrase intrslce +:+ phrase normForce),
+instModIntro2 = foldlSP [plural value `ofThe'` (phrase intrslce +:+ phrase normForce),
   getS intNormForce, S "the", getTandS normToShear `sC`
   S "and the", titleize fs_rc, (sParen $ getS fs) `sC` S "are unknown.",
   at_start' equation, S "for the unknowns are written in terms of only the",

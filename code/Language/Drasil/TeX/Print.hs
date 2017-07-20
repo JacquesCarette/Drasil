@@ -135,6 +135,7 @@ p_expr (Case ps)  = "\\begin{cases}\n" ++ cases ps ++ "\n\\end{cases}"
 p_expr (Op f es)  = p_op f es
 p_expr (Grouping x) = paren (p_expr x)
 p_expr (Mtx a)    = "\\begin{bmatrix}\n" ++ p_matrix a ++ "\n\\end{bmatrix}"
+p_expr (Index a@(Sym (Corners [] [] [] [_] _)) i) = brace (p_expr a) ++"_"++ brace ("," ++ p_expr i)
 p_expr (Index a i)= brace (p_expr a) ++"_"++ brace (p_expr i)
 --Logic
 p_expr (Not x)    = "\\neg{}" ++ p_expr x

@@ -275,19 +275,19 @@ genDisplace = uc' "genDisplace" (cn $ "displacement") "generic displacement of a
 
 shrStiffIntsl = uc' "K_st,i" (cn $ "shear stiffness")
   ("for interslice surface, " ++ wla ++ " " ++ fisi)
-  (sub cK (Atomic "st,i")) stiffness3D
+  (sub cK (Atomic "st")) stiffness3D
 
 shrStiffBase  = uc' "K_bt,i" (cn $ "shear stiffness") 
   ("for a slice base surface, " ++ wla ++ " " ++ fsi)
-  (sub cK (Atomic "bt,i")) stiffness3D
+  (sub cK (Atomic "bt")) stiffness3D
 
 nrmStiffIntsl = uc' "K_sn,i" (cn $ "normal stiffness")
   ("for an interslice surface, " ++ wla ++ " " ++ fisi)
-  (sub cK (Atomic "sn,i")) stiffness3D
+  (sub cK (Atomic "sn")) stiffness3D
 
 nrmStiffBase = uc' "K_bn,i" (cn $ "normal stiffness") 
   ("for a slice base surface, " ++ wla ++ " " ++ fsi)
-  (sub cK (Atomic "bn,i")) stiffness3D
+  (sub cK (Atomic "bn")) stiffness3D
 
 shrStiffRes  = uc' "K_tr" (cn $ "shear stiffness")
   "residual strength"

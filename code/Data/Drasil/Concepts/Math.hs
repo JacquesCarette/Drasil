@@ -54,7 +54,7 @@ normalV      = dcc "normal vector"  (compoundPhrase' (normal ^. term)
 perpV        = dcc "perp_vect"      (compoundPhrase' (perp ^. term)
                 (vector ^. term))
                 "Vector perpendicular or 90 degrees to another vector"
-rOfChng      = dcc "rOfChng"        ((rate) `of_` (change))
+rOfChng      = dcc "rOfChng"        (rate `of_` change)
                 "Ratio between a change in one variable relative to a corresponding change in another"
 surArea      = dcc "surArea"        (compoundPhrase' (surface ^. term) (area ^. term))
                 "A measure of the total area that the surface of the object occupies"

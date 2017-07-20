@@ -2,6 +2,10 @@ module Drasil.SWHS.References where
 
 import Language.Drasil
 
+----------------------------
+-- Section 9 : References --
+----------------------------
+
 ref1, ref2, ref3, ref4, ref5, ref6 :: [Sentence]
 
 ref1 = [S "J. Frederick Bueche. Introduction to Physics for Scientists. McGraw Hill",

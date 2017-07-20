@@ -10,7 +10,7 @@ import Data.Drasil.Quantities.Thermodynamics
 import Data.Drasil.Quantities.Physics (time)
 import Data.Drasil.Quantities.Math (surface, uNormalVect, surArea)
 import Data.Drasil.Quantities.PhysicalProperties (mass, density, vol)
-import Data.Drasil.Units.PhysicalProperties
+import Data.Drasil.Units.PhysicalProperties (densityU)
 import Data.Drasil.Utils(mkDataDef)
 
 import Control.Lens ((^.))

@@ -88,15 +88,35 @@ mkSRS = [RefSec (RefProg intro
   map Verbatim [s7, s8, s9, s10, s11, s12]
   
 glassSystInfo :: SystemInformation
-glassSystInfo = SI glassBRProg srs authors this_si this_symbols
-  ([] :: [CQSWrapper])
-  (acronyms)
-  (dataDefns)
-  (map qs gbInputs)
-  (map qs gbOutputs)
-  (gbQDefns :: [Block QDefinition])
-  gbConstrained
+glassSystInfo = SI {
+  _sys = glassBRProg,
+  _kind = srs,
+  _authors = authors,
+  _units = this_si this_symbols,
+  _quants = ([] :: [CQSWrapper]),
+  _namedIdeas = (acronyms),
+  _definitions = (dataDefns),
+  _inputs = (map qs gbInputs),
+  _outputs = (map qs gbOutputs),
+  _defSequence = (gbQDefns :: [Block QDefinition]),
+  _constraints = gbConstrained
+}
   --FIXME: All named ideas, not just acronyms.
+  
+  
+    _sys :: a,
+  _kind :: b,
+  _authors :: [c],
+  _units :: [d],
+  _quants :: [e],
+  _concepts :: [f],
+  _namedIdeas :: [g],
+  _definitions :: [QDefinition],
+  _inputs :: [h],
+  _outputs :: [i],
+  _defSequence :: [Block QDefinition],
+  _constraints :: [j] --TODO: Add SymbolMap OR enough info to gen SymbolMap
+  } -> SystemInformation
   
 glassChoices :: Choices
 glassChoices = Choices {

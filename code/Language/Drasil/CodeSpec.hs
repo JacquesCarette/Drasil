@@ -2,6 +2,7 @@ module Language.Drasil.CodeSpec where
 
 import Language.Drasil.Chunk.Code
 import Language.Drasil.Chunk.NamedIdea
+import Language.Drasil.Chunk.Eq
 import Language.Drasil.NounPhrase
 import Language.Drasil.Spec
 import Language.Drasil.SystemInformation
@@ -19,6 +20,7 @@ data CodeSpec = CodeSpec {
   cMap :: ConstraintMap,
   fMap :: FunctionMap,
   vMap :: VarMap,
+  fMods :: [FuncMod],
   choices :: Choices,
   mods :: [(String, [FunctionDecl])] -- hack
 }
@@ -69,9 +71,20 @@ codeSpec' (SI sys _ _ _ q _ _ defs ins outs _ cs) ch = CodeSpec {
   cMap = constraintMap cs,
   fMap = functionMap $ map qtoc defs,
   vMap = varMap (map codevar q),
+  fMods = [funcMod "Calculations" defs],
   choices = ch,
   mods = modHack
 }
+
+codeSpec'' :: SystemInformation -> [FuncMod] -> Choices -> CodeSpec
+codeSpec'' si fm ch = 
+  let sp = codeSpec' si ch 
+  in  sp { fMods = fm }
+
+data FuncMod = FuncMod String [CodeDefinition]
+
+funcMod :: String -> [QDefinition] -> FuncMod
+funcMod n qd = FuncMod n $ map qtoc qd
 
 data Choices = Choices {
   lang :: [Lang],

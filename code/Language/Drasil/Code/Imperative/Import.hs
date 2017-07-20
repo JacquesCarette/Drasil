@@ -23,7 +23,7 @@ data Generator = Generator {
   codeSpec :: CodeSpec,
   
   genInputMod :: [CodeChunk] -> ConstraintMap -> [Module],
-  genCalcMod :: [CodeDefinition] -> [Module],
+  genCalcMod :: String -> [CodeDefinition] -> Module,
   genOutputMod :: [CodeChunk] -> [Module],
   
   genInputClass :: [CodeChunk] -> ConstraintMap -> Class,
@@ -46,10 +46,7 @@ data Generator = Generator {
   sfwrCBody :: Expr -> Body,
   physCBody :: Expr -> Body,
   
-  assign :: Value -> Value -> Statement,
-  
-  currentModule :: String,
-  currentFunc :: String
+  assign :: Value -> Value -> Statement
 }
 
 generator :: CodeSpec -> Generator -> Generator
@@ -66,9 +63,9 @@ generator spec g =
                                                           _         -> (\_ -> I.assign)
                                                           
   in Generator {
-      generateCode = generateCodeD spec g,
+      generateCode = generateCodeD g,
       
-      genModules = genModulesD spec g,
+      genModules = genModulesD g,
       
       codeSpec = spec,
       
@@ -96,14 +93,12 @@ generator spec g =
       sfwrCBody = sfwrConstraintFunc g,
       physCBody = physConstraintFunc g,
       
-      assign = assignFunc g,
-      
-      currentModule = "",
-      currentFunc = ""
+      assign = assignFunc g
     }
 
-generateCodeD :: CodeSpec -> Generator -> IO () 
-generateCodeD s g = let modules = genModules g 
+generateCodeD :: Generator -> IO () 
+generateCodeD g = let s = codeSpec g
+                      modules = genModules g 
   in do workingDir <- getCurrentDirectory
         mapM_ (\x -> do 
              createDirectoryIfMissing False (getDir x) 
@@ -122,11 +117,11 @@ generateCodeD s g = let modules = genModules g
         getDir Java = "java"
         getDir Python = "python"
         
-genModulesD :: CodeSpec -> Generator -> [Module]
-genModulesD (CodeSpec _ i o d cm _ _ _ h) g = genInputMod (g { currentModule = "InputParameters" }) i cm
-                                       ++ genCalcMod (g { currentModule = "Calculations" }) d
-                                       ++ genOutputMod (g { currentModule = "OutputFormat" }) o
-                                       ++ map (genHacks g) h -- hack 
+genModulesD :: Generator -> [Module]
+genModulesD g = genInputMod g (inputs $ codeSpec g) (cMap $ codeSpec g)
+             ++ map (\(FuncMod n d) -> genCalcMod g n d) (fMods $ codeSpec g)
+             ++ genOutputMod g (outputs $ codeSpec g)
+             ++ map (genHacks g) (mods $ codeSpec g) -- hack 
 
 
 ------- INPUT ----------  
@@ -162,12 +157,11 @@ genInputClassD g ins cm = pubClass
           map (\x -> pubMVar 0 (convType $ codeType x) (codeName x)) ins
 
 genInputFormatD :: Generator -> [CodeChunk] -> Method
-genInputFormatD gen ins = let g = gen { currentFunc = "get_inputs" }
-                              l_infile = "infile"
-                              v_infile = var l_infile
-                              l_filename = "filename"
-                              p_filename = param l_filename string
-                              v_filename = var l_filename
+genInputFormatD g ins = let l_infile = "infile"
+                            v_infile = var l_infile
+                            l_filename = "filename"
+                            p_filename = param l_filename string
+                            v_filename = var l_filename
   in
     publicMethod g methodTypeVoid "get_inputs" 
       [ p_filename ]
@@ -183,9 +177,8 @@ genInputFormatD gen ins = let g = gen { currentFunc = "get_inputs" }
       ]
           
 genInputConstraintsD :: Generator -> [CodeChunk] -> ConstraintMap -> Method
-genInputConstraintsD gen vars cm = 
-  let g = gen { currentFunc = "get_inputs" }
-      sfwrCs = concatMap (\x -> sfwrLookup x cm) vars 
+genInputConstraintsD g vars cm = 
+  let sfwrCs = concatMap (\x -> sfwrLookup x cm) vars 
       physCs = concatMap (\x -> physLookup x cm) vars
   in
     publicMethod g methodTypeVoid "input_constraints" [] [ block $
@@ -204,18 +197,16 @@ constrExc _ _ = oneLiner $ throw "InputError"
     
 ------- CALC ----------    
     
-genCalcModD :: Generator -> [CodeDefinition] -> [Module]
-genCalcModD g defs = [buildModule "Calculations" [] [] (map (genCalcFunc g) (filter (\x -> validExpr (codeEquat x)) defs)) []]   
+genCalcModD :: Generator -> String -> [CodeDefinition] -> Module
+genCalcModD g n defs = buildModule n [] [] (map (genCalcFunc g) (filter (\x -> validExpr (codeEquat x)) defs)) []   
         
 genCalcFuncD :: Generator -> CodeDefinition -> Method
-genCalcFuncD gen cdef = 
-  let n = "calc_" ++ codeName cdef
-      g = gen { currentFunc = n }
-  in  publicMethod g 
-        (methodType $ convType (codeType cdef)) 
-        n
-        (getParams (codevars $ codeEquat cdef)) 
-        (genCalcBlock g $ codeEquat cdef)
+genCalcFuncD g cdef = 
+  publicMethod g 
+    (methodType $ convType (codeType cdef)) 
+    (codeName cdef)
+    (getParams (codevars $ codeEquat cdef)) 
+    (genCalcBlock g $ codeEquat cdef)
 
 genCalcBlockD :: Generator -> Expr -> Body
 genCalcBlockD g e
@@ -235,9 +226,8 @@ genOutputModD :: Generator -> [CodeChunk] -> [Module]
 genOutputModD g outs = [buildModule "OutputFormat" [] [] [genOutputFormat g outs] []]  
     
 genOutputFormatD :: Generator -> [CodeChunk] -> Method
-genOutputFormatD gen outs = 
-  let g = gen { currentFunc = "write_output" }
-      l_outfile = "outfile"
+genOutputFormatD g outs = 
+  let l_outfile = "outfile"
       v_outfile = var l_outfile
       l_filename = "filename"
       p_filename = param l_filename string
@@ -295,7 +285,7 @@ loggedMethod g n p b = let l_outfile = "outfile"
         openFileW v_outfile (litString $ logName g),  
         printFileStr v_outfile ("function " ++ n ++ "("),
         printParams p v_outfile,
-        printFileStrLn v_outfile (") called in module " ++ currentModule g),
+        printFileStrLn v_outfile ") called",
         closeFile v_outfile      
       ]
     ) : b
@@ -316,8 +306,7 @@ loggedAssign g a b = let l_outfile = "outfile"
         varDec l_outfile outfile,
         openFileW v_outfile (litString $ logName g),  
         printFileStr v_outfile ("var '" ++ (valName a) ++ "' assigned to "),
-        printFile v_outfile (convType $ varType (valName b) (vMap $ codeSpec g)) b,
-        printFileStrLn v_outfile (" in function " ++ (currentFunc g) ++ " in module " ++ (currentModule g)),
+        printFileLn v_outfile (convType $ varType (valName b) (vMap $ codeSpec g)) b,
         closeFile v_outfile       
       ]
       
@@ -373,7 +362,7 @@ validExpr (Deriv _ _ _) = False
 validExpr (E.Not e)      = validExpr e
 validExpr (Neg e)      = validExpr e
 validExpr (C _)        = True
-validExpr (FCall (C c) x)  = foldl (&&) True (map validExpr x)
+validExpr (FCall (C _) x)  = foldl (&&) True (map validExpr x)
 validExpr (FCall _ _)  = False
 validExpr (a := b)     = (validExpr a) && (validExpr b)
 validExpr (a :!= b)    = (validExpr a) && (validExpr b)

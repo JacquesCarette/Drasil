@@ -26,9 +26,9 @@ y    = makeVC "y"      (nounPhraseSP "y")    lY
 
 --Python code to Expr
 
-indInSeq :: Expr
-indInSeq = (C i)
---FIXME: how to capture constraints "arr[i] <= v and v <= arr[i+1]"
+indInSeq :: Expr -> Relation
+indInSeq arr = arr{-[C i]-} :<= (C i) :<= arr{-[(C i) + 1]-}
+--FIXME: captured constraints "arr[i] <= v and v <= arr[i+1]" correctly?
 
 matrixCol :: Expr
 matrixCol = 0

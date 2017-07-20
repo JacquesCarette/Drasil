@@ -9,7 +9,7 @@ import Data.Drasil.Quantities.Thermodynamics as QT
 import Data.Drasil.Quantities.Physics as QP
 import Drasil.SWHS.Unitals
 import Data.Drasil.SentenceStructures (isThe, sAnd)
-import Data.Drasil.Utils (getS)
+import Data.Drasil.Utils (getS, unwrap)
 import Data.Drasil.Concepts.Documentation (acroA)
 import Data.Drasil.Concepts.Math (equation, rOfChng)
 
@@ -63,11 +63,6 @@ rocTempSimp_desc = foldlSent [S "The basic", phrase equation, S "governing the",
   S "heat transfer rates, respectively" +:+. sParen (Sy $ unit_symb QT.ht_flux),
   getS in_SA `sAnd` getS out_SA, S "are the surface areas over which the",
   S "heat is being transferred in and out, respectively" +:+.
-  sParen (Sy $ unit_symb in_SA), getS vol_ht_gen `isThe`
+  sParen (unwrap $ getUnit pcm_SA), getS vol_ht_gen `isThe`
   S "volumetric heat generated" +:+. sParen (Sy $ unit_symb vol_ht_gen),
   getS QPP.vol `isThe` phrase QPP.vol, sParen (Sy $ unit_symb QPP.vol)]
-
-
-
-
-

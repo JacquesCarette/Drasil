@@ -35,6 +35,7 @@ import Drasil.SWHS.GenDefs
 import Drasil.SWHS.Modules
 import Drasil.SWHS.Changes
 import Drasil.SWHS.Reqs
+import Drasil.SWHS.References
 
 import qualified Drasil.SRS as SRS
 import Drasil.Template.MG
@@ -127,7 +128,7 @@ swhs_mg = mgDoc swhsFull authors mgBod
 ------------------------------
 
 -- In Concepts.hs "swhs_pcm" gives "s for program name, and there is a
--- similar paragraph in each of the other eolar water heating systems
+-- similar paragraph in each of the other solar water heating systems
 -- incorporating PCM" which is not capitlaized whereas the stable version is
 
 -- NamedChunks... Sometimes capitalized, sometimes not, sometimes plural,
@@ -724,7 +725,7 @@ s2_kSent sp pr pro = foldlSent_ [EmptyS +:+. phrase sp, S "The developed",
   sParen (short pro)] -- SSP has same style sentence here
 
 -- In Concepts.hs "swhs_pcm" gives "s for program name, and there is a
--- similar paragraph in each of the other eolar water heating systems
+-- similar paragraph in each of the other solar water heating systems
 -- incorporating PCM" which is not capitlaized whereas the stable version is
 
 -- NamedChunks... Sometimes capitalized, sometimes not, sometimes plural,
@@ -777,7 +778,7 @@ s2_2_end t te wa pcmat sw = foldlSent_ [S "predict the",
 
 -- There is a similar paragraph in each example, but there's a lot of specific
 -- info here. Would need to abstract out the object of analysis (i.e. solar
--- water heating tank incorporating PCM, 2D slope composed of homogeneous soil
+-- water heating tank rating PCM, 2D slope composed of homogeneous soil
 -- layers, glass slab and blast, or 2D bodies acted on by forces) and also
 -- abstract out the overall goal of the program (i.e. predict the temperature
 -- and energy histories for the water and PCM, simulate how 2D rigid bodies
@@ -1700,32 +1701,3 @@ s7_fig2 = Figure (showingCxnBw traceyGraph (titleize' requirement `sC`
 ----------------------------
 -- Section 9 : References --
 ----------------------------
-
-ref1, ref2, ref3, ref4, ref5, ref6 :: [Sentence]
-
-ref1 = [S "J. Frederick Bueche. Introduction to Physics for Scientists. McGraw Hill",
-  S "United States", S "fourth edition edition", S "1986."]
-
-ref2 = [S "F. P. Incropera", S "D. P. Dewitt", S "T. L. Bergman",
-  S "and A. S. Lavine. Fundamentals of Heat and Mass Transfer. John Wiley" +:+
-  S "and Sons", S "United States", S "sixth edition edition", S "2007."]
-
-ref3 = [S "Nirmitha Koothoor. A document drive approach to certifying" +:+
-  S "scientific computing software. Master's thesis", S "McMaster University",
-  S "Hamilton", S "Ontario", S "Canada", S "2013."]
-
-ref4 = [S "Marilyn Lightstone. Derivation of tank/pcm model. Personal Notes",
-  S "2012."]
-
-ref5 = [S "David L. Parnas and P.C. Clements. A rational design process:" +:+
-  S "How and why to fake it. IEEE Transactions on Software Engineering",
-  S "12" :+: Quote (S "2") :+: S ":251-257", S "February 1986."]
-
-ref6 = [S "W. Spencer Smith and Lei Lai. A new requirements template for" +:+
-  S "scientific computing. In J. Ralyt" :+: (F Acute 'e'), S "P. Agerfalk",
-  S "and N. Kraiem", S "editors", S "Proceedings of the First" +:+
-  S "International Workshop on Situational Requirements Engineering" +:+
-  S "Processes - Methods, Techniques and Tools to Support" +:+
-  S "Situation-Specific Requirements Engineering Processes, SREP'05",
-  S "pages 107-121", S "Paris", S "France", S "2005. In conjunction with" +:+
-  S "13th IEEE International Requirements Engineering Conference."]

@@ -1,0 +1,28 @@
+E	71700000.0
+a	1600.0
+asprat	1.06666666667
+b	1500.0
+gt	HS
+gtf	2
+h	9.02
+k	2.86e-53
+ldf	0.2696493494752911
+lsf	1
+m	7
+pbtol	0.0001
+sd	11.10180165558726
+sdvect	(0.0, 1.5, 11.0)
+t	10.0
+td	3
+tnt	1.0
+w	10.0
+wtnt	10.0
+Demand (q) 3.258285992018616e+00
+Stress Distribution Factor (J) 9.548951781296090e+00
+Tolerable Pressure 1.895908087386919e+01
+Probability of Breakage (Pb) 1.301524590203718e-04
+Capacity (LR)3.124424950223241e+00
+Non-Factored Load (NFL)1.562212475111620e+00
+Safety Requirement-1 0.000000
+Safety Requirement-2 0.000000
+For the given input parameters, the glass is NOT considered safe

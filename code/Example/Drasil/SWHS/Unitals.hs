@@ -37,7 +37,7 @@ in_SA, out_SA, htCap_L, htCap_S, htCap_V,
   thFluxVect, ht_flux_C, ht_flux_in, ht_flux_out, ht_flux_P, latentE_P,
   temp_env, t_init_melt,
   t_final_melt, temp_diff, tank_vol, w_vol, deltaT,
-  tau, tau_L_P, tau_S_P, tau_W :: UnitalChunk
+  tau, tau_L_P, tau_S_P, tau_W, sim_time :: UnitalChunk
 
 ---------------------
 -- Regular Symbols --

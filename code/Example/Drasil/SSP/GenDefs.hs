@@ -137,16 +137,16 @@ momentEql :: RelationConcept
 momentEql = makeRC "momentEql" (nounPhraseSP "moment equilibrium") momEql_desc momEql_rel
 
 momEql_rel :: Relation
-momEql_rel = (Int 0) := Neg (C intNormForce) :* (Int 1 :- C baseWthX :/ Int 2 :* 
-                        tan (C baseAngle)) :+ C intNormForce :* (Int 1 :- 
+momEql_rel = (Int 0) := Neg (C intNormForce) :* (C sliceHght :- C baseWthX :/ Int 2 :* 
+                        tan (C baseAngle)) :+ C intNormForce :* (C sliceHght :- 
                         C baseWthX :/ Int 2 :* tan (C baseAngle)) :- C watrForce :*
-                        (Int 1 :- C baseWthX :/ Int 2 :* tan (C baseAngle)) :+ 
-                        C watrForce :* (Int 1 :- C baseWthX :/ Int 2 :* 
+                        (C sliceHght :- C baseWthX :/ Int 2 :* tan (C baseAngle)) :+ 
+                        C watrForce :* (C sliceHght :- C baseWthX :/ Int 2 :* 
                         tan (C baseAngle)) :- C baseWthX :/ Int 2 :* 
                         (C intShrForce :+ C intShrForce) :+ C earthqkLoadFctr :* 
                         C slcWght :* C midpntHght :/ Int 2 :- C surfHydroForce :*
                         sin (C surfAngle) :* C midpntHght :- C surfLoad :* 
-                        sin (C impLoadAngle) :* C midpntHght -- FIXME: replace Int 1 with zi and add the proper index for zi, bi, Ei, Hi and Xi
+                        sin (C impLoadAngle) :* C midpntHght -- FIXME: add the proper index for zi, bi, Ei, Hi and Xi
 
 momEql_desc :: Sentence
 momEql_desc = foldlSent [S "For a", phrase slice, S "of", phrase mass,
@@ -200,7 +200,7 @@ hookesLaw2d :: RelationConcept
 hookesLaw2d = makeRC "hookesLaw2d" (nounPhraseSP "Hooke's law 2D") hooke2d_desc hooke2d_rel
 
 hooke2d_rel :: Relation
-hooke2d_rel = (Int 0) := (Int 0) --FIXME: cannot yet generate matrices
+hooke2d_rel = vec2D (C genPressure) (C genPressure) := dgnl2x2 (C shrStiffIntsl) (C nrmStiffBase) * vec2D (C dx_i) (C dy_i)
 
 hooke2d_desc :: Sentence
 hooke2d_desc = foldlSent [S "A 2D component implementation of Hooke's law as seen in" +:+.
@@ -227,7 +227,11 @@ displVect :: RelationConcept
 displVect = makeRC "displVect" (nounPhraseSP "displacement vectors") disVec_desc disVec_rel
 
 disVec_rel :: Relation
-disVec_rel = (Int 0) := (Int 0) --FIXME: cannot yet generate matrices
+disVec_rel = C rotatedDispl := vec2D (C shrDispl) (C nrmDispl) :=
+  m2x2 (cos(C baseAngle)) (sin(C baseAngle)) (Neg $ sin(C baseAngle)) (cos(C baseAngle)) *
+  (C genDisplace) :=
+  m2x2 (cos(C baseAngle)) (sin(C baseAngle)) (Neg $ sin(C baseAngle)) (cos(C baseAngle)) *
+  vec2D (C dx_i) (C dy_i)
 
 disVec_desc :: Sentence
 disVec_desc = foldlSent [at_start' vector, S "describing the", phrase displacement,

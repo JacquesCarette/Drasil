@@ -1,4 +1,4 @@
-def energy1Wat(tWat, params):
+def energyWat(tWat, params):
     eWat = []
     for temp in tWat:
         eWat = eWat + [params.C_w * params.Mw * (temp - params.Tinit)]
@@ -6,17 +6,17 @@ def energy1Wat(tWat, params):
     return eWat
 
 
-def energy2Wat(tWat, params):
-    eWat = []
-    for temp in tWat:
-        eWat = eWat + [params.C_w * params.Mw * (temp - params.Tinit)]
+# def energy2Wat(tWat, params):
+    # eWat = []
+    # for temp in tWat:
+        # eWat = eWat + [params.C_w * params.Mw * (temp - params.Tinit)]
 
-    return eWat
+    # return eWat
 
 
-def energy3Wat(tWat, params):
-    eWat = []
-    for temp in tWat:
-        eWat = eWat + [params.C_w * params.Mw * (temp - params.Tinit)]
+# def energy3Wat(tWat, params):
+    # eWat = []
+    # for temp in tWat:
+        # eWat = eWat + [params.C_w * params.Mw * (temp - params.Tinit)]
 
-    return eWat
+    # return eWat

@@ -8,7 +8,7 @@ module Language.Drasil (
   , Recipe(..)
   -- Expr
   , Expr(..), Relation, UFunc(..), BiFunc(..), Bound(..), DerivType(..), Set, Quantifier(..)
-  , log, abs, sin, cos, tan, sec, csc, cot, exp, sqrt, square, SymbolMap, symbolMap, vars
+  , log, abs, sin, cos, tan, sec, csc, cot, exp, sqrt, square, euclidean, SymbolMap, symbolMap, vars
   , summation, product, cross, m2x2, vec2D, dgnl2x2
   -- all the stuff from Unicode
   , Greek(..), Special(..)
@@ -34,6 +34,7 @@ module Language.Drasil (
   , Constrained(..), ConstrainedChunk(..), Constraint(..), ConstrConcept(..)
   , physc, sfwrc, constrained, cuc, cvc, constrained', cuc', constrainedNRV'
   , ConstrWrapper(..), cnstrw
+  , createCnstrnts
   -- Chunk.Eq
   , QDefinition(..), fromEqn, fromEqn', getVC, equat
   -- Chunk.UncertainQuantity
@@ -77,7 +78,7 @@ module Language.Drasil (
   , SecCons(..), ListType(..), ItemType(..), ListPair
   , section
   -- Reference
-  , makeRef
+  , makeRef, acroTest
   -- Space
   , Space(..)
   -- Symbol
@@ -96,7 +97,8 @@ module Language.Drasil (
   , personWM', mononym
   -- CodeSpec
   , CodeSpec, codeSpec, codeSpec', Choices(..), ImplementationType(..)
-  , Logging(..), ConstraintBehaviour(..), Structure(..), defaultChoices
+  , Logging(..), ConstraintBehaviour(..), Structure(..), Lang(..), Comments(..)
+  , defaultChoices
   -- Chunk.Theory
   , Theory(..), tc', TheoryChunk, TheoryModel, tm, tw
 ) where
@@ -105,7 +107,7 @@ import Prelude hiding (log, sin, cos, tan, sqrt, id, return, print, break, exp, 
 import Language.Drasil.SystemInformation
 import Language.Drasil.Expr (Expr(..), Relation, UFunc(..), BiFunc(..), 
           Bound(..),DerivType(..), Set, Quantifier(..), log, sin, cos, tan, sqrt, square, sec, csc, cot, exp,
-          summation, product, cross, m2x2, vec2D, dgnl2x2)
+          summation, product, cross, m2x2, vec2D, dgnl2x2, euclidean)
 import Language.Drasil.Expr.Extract (vars)
 import Language.Drasil.Output.Formats (DocType(SRS,MG,MIS,LPM,Website))
 import Language.Drasil.Document (LayoutObj(..), Document(..), DType(..)
@@ -147,7 +149,7 @@ import Language.Drasil.Space (Space(..))
 import Language.Drasil.Spec (USymb(..), Sentence(..), Accent(..), 
                               sParen, sSqBr, sSqBrNum, sC, (+:+), (+:+.), (+.), (+:),
                               semiCol, sParenDash, sDash)
-import Language.Drasil.Reference (makeRef)
+import Language.Drasil.Reference (makeRef, acroTest)
 import Language.Drasil.Symbol (Symbol(..), sub, sup, vec, hat, prime)
 import Language.Drasil.SymbolAlphabet
 import Language.Drasil.Misc -- all of it

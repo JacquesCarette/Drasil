@@ -31,6 +31,8 @@ Main
 /code/MIS/
 /code/Website/
 /code/Docs
+/code/src
 *.synctex.gz
 *.pyc
 __pycache__
+*.class

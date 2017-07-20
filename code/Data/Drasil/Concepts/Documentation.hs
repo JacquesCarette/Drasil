@@ -30,9 +30,10 @@ acroT  numVar = short thModel     :+: S (show numVar)
 acroNumGen :: [Contents] -> Int -> [Contents]
 acroNumGen [] _ = []
 acroNumGen (first:rest) num = (f first) : acroNumGen rest (num + 1)
-  where f (Assumption a _) = Assumption a (S "A" :+: (S $ show num))
-        f (Requirement r _) = Requirement r (S "R" :+: (S $ show num))
-        f (LikelyChange lc _) = LikelyChange lc (S "LC" :+: (S $ show num))
+  where f (Assumption a) = Assumption $ nw $ npnc' (a ^. id) (a ^. term) (extrctStrng (short assumption) ++  (show num))
+        f (Requirement r) = Requirement $ ReqChunk (nw $ npnc' (r ^. id) (r ^. term) (extrctStrng (short requirement) ++ (show num))) []
+        f (LikelyChange lc) = LikelyChange $ LCChunk (nw $ npnc' (lc ^. id) (lc ^. term) (extrctStrng (short likelyChg) ++ (show num))) []
+        extrctStrng (S strng) = strng
 
 assumption, dataDefn, genDefn, goalStmt, inModel, likelyChg, unlikelyChg,
   physSyst, requirement, srs, thModel, mg, desSpec, notApp, dataConst :: CI
@@ -64,10 +65,10 @@ srs = commonIdea "srs"
 -- concepts relating to the templates and their contents
 
 analysis, appendix, body, characteristic, class_, client, code, column, company, 
-  component, condition, constraint, consumer, connection, content, context,
+  component, concept, condition, constraint, consumer, connection, content, context,
   coordinate, customer, datum, decision, definition, dependency, description,
   design, document, documentation, effect, element, endUser, environment, failure,
-  figure, functional, game, general, goal, guide, implementation, individual, 
+  figure, first, functional, game, general, goal, guide, implementation, individual, 
   information, interest, interface, input_, instance_, intReader, introduction, 
   issue, item, loss, label, library, limitation, literacy, material_, message, 
   method_, module_, model, name_, nonfunctional, object, offShelf, open, organization,
@@ -88,6 +89,7 @@ code            = npnc "code"           (cn     "code"               )
 column          = npnc "column"         (cn'    "column"             ) --general enough to be in Documentation?
 company         = npnc "company"        (cnIES  "company"            )
 component       = npnc "component"      (cn'    "component"          )
+concept         = npnc "concept"        (cn'    "concept"            )
 condition       = npnc "condition"      (cn'    "condition"          )
 connection      = npnc "connection"     (cn'    "connection"         )
 constraint      = npnc "constraint"     (cn'    "constraint"         )
@@ -110,6 +112,7 @@ endUser         = npnc "end user"       (cn'    "end user"           )
 environment     = npnc "environment"    (cn'    "environment"        ) -- Is this term in the right spot?
 failure         = npnc "failure"        (cn'    "failure"            )
 figure          = npnc "figure"         (cn'    "figure"             )
+first           = npnc "first"          (cn'    "first"              ) --Does it make sense for this to be here?
 functional      = npnc "functional"     (cn'    "functional"         ) --FIXME: Adjective
 game            = npnc "game"           (cn'    "game"               )
 general         = npnc "general"        (cn'    "general"            ) --FIXME: Adjective
@@ -222,15 +225,13 @@ designDoc, generalSystemDescription, indPRCase,
   nonfunctionalRequirement, safetyReq, softwareConstraint, softwareDoc,
   softwareReq, softwareSys, softwareVerif, softwareVAV, solutionCharSpec,
   solutionCharacteristic, offShelfSolution, physicalSim, productUC, 
-  useCaseTable, physicalProperty, vavPlan, uncertCol, userInput,
-  materialProprty :: NamedChunk
+  useCaseTable, physicalProperty, vavPlan, uncertCol, userInput :: NamedChunk
  
 datumConstraint              = compoundNC' datum constraint
 designDoc                    = compoundNC design document
 functionalRequirement        = compoundNC functional requirement_
 generalSystemDescription     = compoundNC general systemdescription
 indPRCase                    = compoundNC individual productUC
-materialProprty              = compoundNC material_ property
 nonfunctionalRequirement     = compoundNC nonfunctional requirement_
 offShelfSolution             = compoundNC offShelf solution
 physicalConstraint           = compoundNC physical constraint

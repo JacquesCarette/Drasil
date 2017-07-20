@@ -2,7 +2,7 @@
 -- | Contains Sentences and helpers
 module Language.Drasil.Spec where
 
-import Language.Drasil.Unicode (Greek,Special)
+import Language.Drasil.Unicode (Greek,Special,Special(CurlyBrOpen,CurlyBrClose))
 import Language.Drasil.Symbol
 import Language.Drasil.Expr
 
@@ -49,21 +49,24 @@ data RefType = Tab -- ^ Table
              | Sect -- ^ Section
              | Def -- ^ Definition (includes theoretical models)
              | Mod -- ^ Module
-             | Req -- ^ Requirement
-             | Assump -- ^ Assumption
-             | LC -- ^ Likely Change
+             | Req Sentence-- ^ Requirement
+             | Assump Sentence-- ^ Assumption
+             | LC Sentence-- ^ Likely Change
              | UC -- ^ Unlikely Change
 
 instance Show RefType where
-  show Tab = "Table"
-  show Fig = "Figure"
-  show Sect = "Section"
-  show Def = "Definition"
-  show Mod = "Module"
-  show Req = "Requirement"
-  show Assump = "Assumption"
-  show LC = "Likely Change"
-  show UC = "Unlikely Change"
+  show Tab = "this Table"
+  show Fig = "this Figure"
+  show Sect = "this Section"
+  show Def = "this Definition"
+  show Mod = "this Module"
+  show (Req (S r)) = r
+  show (Assump (S a)) = a
+  show (LC (S lc)) = lc
+  show (Req _) = "this Requirement"
+  show (Assump _) = "this Assumption"
+  show (LC _) = "this Likely Change"
+  show UC = "this Unlikely Change"
 
 -- | Helper function for wrapping sentences in parentheses.
 sParen :: Sentence -> Sentence
@@ -75,6 +78,9 @@ sSqBr x = S "[" :+: x :+: S "]"
 
 sSqBrNum :: Int -> Sentence
 sSqBrNum y = S "[" :+: (S (show y)) :+: S "]"
+
+sCurlyBr :: Sentence -> Sentence
+sCurlyBr x = Sp CurlyBrOpen :+: x :+: Sp CurlyBrClose
 
 -- | Helper for concatenating two sentences with a space between them.
 (+:+) :: Sentence -> Sentence -> Sentence

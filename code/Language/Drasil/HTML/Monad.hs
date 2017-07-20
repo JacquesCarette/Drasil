@@ -69,9 +69,11 @@ instance RenderGreek PrintHTML where
   greek Zeta      = PH "&Zeta;"
   
 instance RenderSpecial PrintHTML where
-  special Circle  = PH "&deg;"
-  special Partial = PH "&part;"
-  special LEQ     = PH "&le;"
-  special UScore  = PH "_"
-  special Percent = PH "%"
-  special Hash    = PH "#"
+  special Circle       = PH "&deg;"
+  special Partial      = PH "&part;"
+  special LEQ          = PH "&le;"
+  special UScore       = PH "_"
+  special Percent      = PH "%"
+  special Hash         = PH "#"
+  special CurlyBrOpen  = PH "{"
+  special CurlyBrClose = PH "}"

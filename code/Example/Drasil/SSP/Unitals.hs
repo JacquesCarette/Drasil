@@ -2,6 +2,7 @@ module Drasil.SSP.Unitals where
 
 import Language.Drasil
 import Data.Drasil.SI_Units
+import Data.Drasil.Units.SolidMechanics (stiffness3D)
 import Data.Drasil.Quantities.SolidMechanics as SM
 import Data.Drasil.Concepts.Physics as CP
 import Data.Drasil.Units.Physics
@@ -42,7 +43,7 @@ sspConstrained = map cnstrw sspInputs ++ map cnstrw sspOutputs
 
 sspInputs :: [UncertQ]
 sspInputs  = [elasticMod, cohesion, poissnsRatio, fricAngle, dryWeight,
-              satWeight, waterWeight]
+              satWeight, waterWeight, constant_a, constant_A, constant_K]
 
 sspOutputs :: [ConstrConcept]
 sspOutputs = [fs, coords, dx_i, dy_i]
@@ -58,7 +59,7 @@ defultUncrt :: Double
 defultUncrt = 0.1
 
 elasticMod, cohesion, poissnsRatio, fricAngle, dryWeight, satWeight,
-  waterWeight :: UncertQ
+  waterWeight, constant_a, constant_A, constant_K :: UncertQ
   
 fs, coords, dx_i, dy_i :: ConstrConcept
 
@@ -94,6 +95,15 @@ waterWeight = uqc "gamma_w" (cn $ "unit weight of water")
   "The weight of one cubic meter of water."
   (sub (Greek Gamma_L) lW) specific_weight Real gtZeroConstr
   (Dbl 9.8) defultUncrt
+  
+constant_a  = uqc "a" (cn "constant") "FIXME: missing discription"
+  lA metre Real [] (Dbl 0) defultUncrt
+  
+constant_A  = uqc "A" (cn "constant") "FIXME: missing discription"
+  cA metre Real [] (Dbl 0) defultUncrt
+  
+constant_K  = uqc "kappa" (cn "constant") "FIXME: missing discription"
+  (Greek Kappa_L) pascal Real [] (Dbl 0) defultUncrt
 
 {-Output Variables-} --FIXME: See if there should be typical values
 fs          = constrained' (cvR fs_concept (Atomic "FS")) gtZeroConstr (Dbl 1)
@@ -115,7 +125,7 @@ dy_i        = cuc' "dy_i" (cn $ "displacement") ("in the y-ordinate direction " 
 ---------------------------
 
 sspUnits :: [UCWrapper]
-sspUnits = map ucw [normStress, genPressure,
+sspUnits = map ucw [normStress, genPressure, normFunc, shearFunc,
   waterHght, slopeHght, slipHght, xi, critCoords,
   mobShrI, shrResI, shearFNoIntsl, shearRNoIntsl, slcWght, watrForce,
   watrForceDif, intShrForce, baseHydroForce, surfHydroForce,
@@ -123,17 +133,17 @@ sspUnits = map ucw [normStress, genPressure,
   impLoadAngle, baseWthX, baseLngth, surfLngth, midpntHght, genForce,
   momntOfBdy, genDisplace, SM.stffness, shrStiffIntsl, shrStiffBase,
   nrmStiffIntsl, nrmStiffBase, shrStiffRes, nrmStiffRes, shrDispl,
-  nrmDispl, porePressure, elmNrmDispl, elmPrllDispl, 
-  mobShrC, shrResC, rotatedDispl, intNormForce, shrStress]
+  nrmDispl, porePressure, elmNrmDispl, elmPrllDispl, sliceHght,
+  mobShrC, shrResC, rotatedDispl, intNormForce, shrStress, mobStress]
 
-normStress, genPressure,
-  waterHght, slopeHght, slipHght, xi, critCoords, mobShrI,
+normStress, genPressure, normFunc, shearFunc,
+  waterHght, slopeHght, slipHght, xi, critCoords, mobShrI, sliceHght,
   shearFNoIntsl, shearRNoIntsl, slcWght, watrForce, watrForceDif, shrResI,
   intShrForce, baseHydroForce, surfHydroForce, totNrmForce, nrmFSubWat,
   nrmFNoIntsl, surfLoad, baseAngle, surfAngle, impLoadAngle, baseWthX,
   baseLngth, surfLngth, midpntHght, genForce, momntOfBdy, genDisplace,
   shrStiffIntsl, shrStiffBase, nrmStiffIntsl, nrmStiffBase, shrStiffRes,
-  nrmStiffRes, shrDispl, nrmDispl, porePressure, elmNrmDispl,
+  nrmStiffRes, shrDispl, nrmDispl, porePressure, elmNrmDispl, mobStress,
   elmPrllDispl, mobShrC, shrResC, rotatedDispl, intNormForce, shrStress :: UnitalChunk
   
 {-FIXME: Many of these need to be split into term, defn pairs as
@@ -200,8 +210,8 @@ watrForce    = uc' "H_i" (cn $ "interslice water force") ("exerted in the " ++
   "x-ordinate direction between adjacent slices " ++ fisi)
   (sub cH lI) newton
 
-watrForceDif = uc' "dH_i" (cn $ "difference between interslice forces acting " ++ 
-  "in the x-ordinate direction of the slice on each side") fisi
+watrForceDif = uc' "dH_i" (cn $ "difference between interslice forces") ("exerted in the " ++
+  "x-ordinate direction between adjacent slices " ++ fisi)
   (sub (Concat [Greek Delta, cH]) lI) newton
 
 intShrForce = uc' "X_i" (cn $ "interslice shear force") 
@@ -247,11 +257,11 @@ baseWthX    = uc' "b_i" (cn $ "base width of a slice")
   (sub lB lI) metre
 
 baseLngth   = uc' "l_b,i" (cn $ "total base length of a slice") fsi
-  (sub (Greek Ell) (Atomic "b,i")) metre
+  (sub (Greek Ell) (Atomic "b")) metre
 
 surfLngth   = uc' "l_s,i" (cn $ "length of an interslice surface")
   ("from slip base to slope surface in a vertical line from an interslice vertex " ++ fisi)
-  (sub (Greek Ell) (Atomic "s,i")) metre
+  (sub (Greek Ell) (Atomic "s")) metre
 
 midpntHght  = uc' "h_i" (cn $ "midpoint height")
   ("distance from the slip base to the slope surface in a vertical line from the midpoint of the slice " ++ fsi)
@@ -265,27 +275,27 @@ genDisplace = uc' "genDisplace" (cn $ "displacement") "generic displacement of a
 
 shrStiffIntsl = uc' "K_st,i" (cn $ "shear stiffness")
   ("for interslice surface, " ++ wla ++ " " ++ fisi)
-  (sub cK (Atomic "st,i")) pascal
+  (sub cK (Atomic "st,i")) stiffness3D
 
 shrStiffBase  = uc' "K_bt,i" (cn $ "shear stiffness") 
   ("for a slice base surface, " ++ wla ++ " " ++ fsi)
-  (sub cK (Atomic "bt,i")) pascal
+  (sub cK (Atomic "bt,i")) stiffness3D
 
 nrmStiffIntsl = uc' "K_sn,i" (cn $ "normal stiffness")
   ("for an interslice surface, " ++ wla ++ " " ++ fisi)
-  (sub cK (Atomic "sn,i")) pascal
+  (sub cK (Atomic "sn,i")) stiffness3D
 
 nrmStiffBase = uc' "K_bn,i" (cn $ "normal stiffness") 
   ("for a slice base surface, " ++ wla ++ " " ++ fsi)
-  (sub cK (Atomic "bn,i")) pascal
+  (sub cK (Atomic "bn,i")) stiffness3D
 
 shrStiffRes  = uc' "K_tr" (cn $ "shear stiffness")
   "residual strength"
-  (sub cK (Atomic "tr")) pascal
+  (sub cK (Atomic "tr")) stiffness3D
 
 nrmStiffRes  = uc' "K_no" (cn $ "normal stiffness")
   "residual strength"
-  (sub cK (Atomic "no")) pascal
+  (sub cK (Atomic "no")) stiffness3D
 
 shrDispl = uc' "du_i" (cn $ "displacement")
   ("shear displacement " ++ fsi)
@@ -309,8 +319,20 @@ porePressure = uc' "mu" (cn "pore pressure") ("from water within the soil")
 rotatedDispl = uc' "varepsilon_i" (cn "displacement") ("in rotated coordinate system")
   (sub (Greek Epsilon_V) lI) metre
   
-shrStress    = uc' "tau_i" (cn "shear stress") ("acting on the base of a slice")
+shrStress    = uc' "tau_i" (cn "resistive shear stress") ("acting on the base of a slice")
   (sub (Greek Tau_L) lI) pascal
+  
+mobStress    = uc' "s_i" (cn "mobilized shear stress") ("acting on the base of a slice")
+  (sub lS lI) pascal
+
+sliceHght    = uc' "z_i" (cn "center of slice height") ("the distance from the lowest part " ++
+  "of the slice to the height of the centers of slice") (sub lZ lI) metre
+
+normFunc     = uc' "C1_i" (cn "interslice normal force function") ("FIXME: missing discription")
+  (sub (Concat [cC, Atomic "1"]) lI) momentOfForceU
+  
+shearFunc    = uc' "C2_i" (cn "interslice shear force function") ("FIXME: missing discription")
+  (sub (Concat [cC, Atomic "2"]) lI) momentOfForceU
 
 ----------------------
 -- Unitless Symbols --
@@ -342,5 +364,17 @@ minFunction = cvR (dcc "Upsilon" (nounPhraseSP "function") ("generic minimizatio
 fsloc       = cvR (dcc "FS_loci" (nounPhraseSP "local factor of safety") fsi)
   (sub (Atomic "FS") (Atomic "Loc,i"))
 
+--------------------
+-- Index Function --
+--------------------
+
 index       = cvR (dcc "index" (nounPhraseSP "index") ("used to show a quantity " ++
   "applies to only one slice")) lI
+
+--FIXME: possibly move to Language/Drasil/Expr.hs
+
+inx :: SymbolForm e => e -> Integer -> Expr
+inx e n 
+  | n < 0     = Index (C e) (C index - Int (-n))
+  | n == 0    = Index (C e) (C index)
+  | otherwise = Index (C e) (C index + Int n)

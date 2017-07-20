@@ -1,10 +1,10 @@
 body {min-width: 400px; max-width: 1400px;}
-.title {text-align:center;}
-.author {text-align:center;}
-.paragraph {text-align:justify;}
+.title {text-align: center;}
+.author {text-align: center;}
+.paragraph {text-align: justify;}
 .cases {
   display: inline-block;
-  vertical-align:middle;}
+  vertical-align: middle;}
 .case {
 float: right;
 padding-left: 1em;}
@@ -17,12 +17,12 @@ padding-left: 1em;}
   vertical-align: middle;
   margin: 0 0.2em 0.4ex;
   text-align: center;
-  font-size:500%;}
+  font-size: 500%;}
 .caption {
-text-align:center;
-font-weight:bold;
-padding-bottom:1%;
-line-height:0;}
+text-align: center;
+font-weight: bold;
+padding-bottom: 1%;
+line-height: 0;}
 .fraction {
   display: inline-block;
   vertical-align: middle;
@@ -32,16 +32,24 @@ line-height:0;}
   display: block;
   padding-top: 0.15em;}
 .fdn {border-top: thin solid black;}
-.table {text-align:left;padding-left:1%;width:90%;margin-bottom:2%;margin-top:2%}
-table, th, td {border: 1px solid black; border-collapse: collapse;margin-left:auto;margin-right:auto;}
-th, td {padding:1%;}
-.tdefn {width:75%;margin-top:1%;margin-bottom:1%;}
-.tdefn th {width:15%; padding:1%;}
-.ddefn {width:75%;margin-top:1%;margin-bottom:1%;}
-.section {width:80%; margin:0 auto;text-align:left;}
+.table {
+  text-align: left;
+  padding-left: 1%;
+  width: 90%;
+  margin-bottom: 2%;
+  margin-top: 2%}
+table, th, td {
+  border-collapse: collapse;
+  margin-left: auto;
+  margin-right: auto;}
+th, td {border: 1px solid black; padding: 1%;}
+.tdefn, .ddefn {width: 75%; margin-top: 1%; margin-bottom: 1%;}
+.tdefn th {width: 15%;}
+.ddefn th {width: 15%;}
+.section {width: 80%; margin: 0 auto; text-align: left;}
 .code {
-  display:inline-block;
-  text-align:left;
+  display: inline-block;
+  text-align: left;
   font-family: Monaco, Consolas, "Andale Mono","DejaVu Sans Mono", monospace;
   font-size: 95%;
   line-height: 140%;
@@ -51,5 +59,27 @@ th, td {padding:1%;}
   white-space: -o-pre-wrap;
   background: #faf8f0;
 }
-.list {text-align:left;}
+.list {text-align: left;}
 .figure {max-width: 800px;}
+.matrix {
+  position: relative;
+  display: inline-table;
+  margin: 10px;
+  vertical-align: middle;}
+.matrix:before, .matrix:after {
+  content: "";
+  position: absolute;
+  top: 0;
+  border: 1px solid #000;
+  width: 6px;
+  height: 100%;}
+.matrix:before {
+  left: -6px;
+  border-right: 0px;}
+.matrix:after {
+  right: -6px;
+  border-left: 0px;}
+.matrix td {
+  padding: 6px;
+  text-align: center;
+  border: 0px;}

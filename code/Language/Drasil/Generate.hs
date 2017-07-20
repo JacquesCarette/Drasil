@@ -80,6 +80,7 @@ genCode spec = do
   generateCode (fix $ generator spec)
   setCurrentDirectory workingDir
 
+
 -- -- | Calls the code generator using the 'ModuleChunk's
 -- genCode :: NamedIdea c => c -> [ModuleChunk] -> SymbolMap -> IO ()
 -- genCode cc mcs m = prntCode cc (filter generated mcs) m

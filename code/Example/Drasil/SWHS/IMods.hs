@@ -1,6 +1,7 @@
 module Drasil.SWHS.IMods where
 
 import Language.Drasil
+import Drasil.DocumentLanguage
 import Data.Drasil.Concepts.Documentation
 import Prelude hiding (id)
 import Drasil.SWHS.Unitals
@@ -21,7 +22,6 @@ swhsInModels = [eBalanceOnWtr, eBalanceOnPCM, heatEInWtr, heatEInPCM]
 eBalanceOnWtr :: RelationConcept
 eBalanceOnWtr = makeRC "eBalanceOnWtr" (nounPhraseSP "Energy balance on water to find the temperature of the water")
   balWtrDesc balWtr_Rel
-  --FIXME: title uses temp_W title
 
 balWtr_Rel :: Relation
 balWtr_Rel = (Deriv Total (C temp_W) (C time)) := (Int 1) / (C tau_W) *
@@ -42,7 +42,7 @@ balWtrDesc = foldlSent [(E $ C temp_W) `isThe` phrase temp_W +:+. sParen (unwrap
   sParen (unwrap $ getUnit temp_W) `sAnd` (S $ show (100 :: Integer)),
   sParen (unwrap $ getUnit temp_W), S "are the", phrase melting `sAnd`
   plural boil_pt, S "of", phrase water `sC` S "respectively",
-  sParen (acroA 14 `sC` acroA 19)]
+  sParen (makeRef (mkAssump "assump14" EmptyS) `sC` makeRef (mkAssump "assump19" EmptyS))]
 
 
 ---------
@@ -73,7 +73,7 @@ balPCMDesc = foldlSent [(E $ C temp_W) `isThe` phrase temp_W +:+. sParen (unwrap
   (E $ (C tau_S_P) := ((C pcm_mass) * (C htCap_S_P)) / ((C pcm_HTC) * (C pcm_SA))),
   S "is a constant" +:+. sParen (unwrap $ getUnit tau_S_P),
   (E $ (C tau_L_P) := ((C pcm_mass) * (C htCap_L_P)) / ((C pcm_HTC) * (C pcm_SA))),
-  S "is a constant" +:+. sParen (unwrap $ getUnit tau_S_P)]
+  S "is a constant", sParen (unwrap $ getUnit tau_S_P)]
 
 
 ---------
@@ -101,7 +101,7 @@ htWtrDesc = foldlSent [S "The above", phrase equation, S "is derived using" +:+.
   phrase temp_init `sC` getS temp_init +:+. sParen (unwrap $ getUnit temp_init),
   S "This", phrase equation, S "applies as long as",
   (E $ (Int 0) :< (C temp_W) :< (Int 0)) :+: (unwrap $ getUnit temp_W),
-  sParen (acroA 14 `sC` acroA 19)]
+  sParen (makeRef (mkAssump "assump14" EmptyS) `sC` makeRef (mkAssump "assump19" EmptyS))]
 
 ---------
 -- IM4 --
@@ -160,7 +160,7 @@ htPCMDesc = foldlSent [S "The above", phrase equation,
   S "for", phrase boiling, S "of the", short phsChgMtrl,
   S "is not detailed" `sC` S "since the", short phsChgMtrl,
   S "is assumed to either be in a", phrase solid, S "or", phrase liquid,
-  S "state", sParen (acroA 18)]
+  S "state", sParen (makeRef (mkAssump "assump18" EmptyS))]
 
 
 

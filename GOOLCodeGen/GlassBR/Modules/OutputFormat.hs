@@ -4,7 +4,7 @@ import Language.Drasil.Code
 import Defs
 
 outputFormat :: Module
-outputFormat = buildModule "OutputFormat" [] [] [display_output_func] []
+outputFormat = buildModule "OutputFormat" [lib_InputParameters] [] [display_output_func] []
 
 display_output_func :: FunctionDecl
 display_output_func = pubMethod methodTypeVoid "display_output" 

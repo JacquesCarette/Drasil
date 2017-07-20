@@ -4,7 +4,7 @@
 module Language.Drasil.Expr where
 
 import GHC.Real (Ratio(..)) -- why not Data.Ratio?
-import Prelude hiding (id)
+import Prelude hiding (id, sqrt)
 import Language.Drasil.Chunk (Chunk(..))
 import Language.Drasil.Chunk.SymbolForm (SymbolForm)
 import Language.Drasil.Symbol
@@ -47,6 +47,8 @@ data Expr where
   Case     :: [(Expr,Relation)] -> Expr -- For multi-case expressions, 
                                      -- each pair represents one case
   Matrix   :: [[Expr]] -> Expr
+  Index    :: Expr -> Expr -> Expr  -- for accessing elements of sequence/list/vect etc.
+                                    -- arr[i] is (Index arr i)
   UnaryOp  :: UFunc -> Expr
   Grouping :: Expr -> Expr
   BinaryOp :: BiFunc -> Expr
@@ -217,6 +219,10 @@ exp = UnaryOp . Exp
 summation, product :: (Maybe (Symbol, Bound, Bound)) -> Expr -> Expr
 summation bounds expr = UnaryOp $ Summation bounds expr
 product   bounds expr = UnaryOp $ Product   bounds expr
+
+-- | Euclidean function : takes a vector and returns the sqrt of the sum-of-squares
+euclidean :: [Expr] -> Expr
+euclidean = sqrt . sum . map square
 
 -- | Binary Functions
 data BiFunc where

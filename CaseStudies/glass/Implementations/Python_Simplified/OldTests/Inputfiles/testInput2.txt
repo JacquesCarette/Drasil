@@ -1,0 +1,16 @@
+#DIMENSION( length , breadth , thickness in mm)
+2000
+1600
+10
+#GLASS TYPE ( AN , HS , FT )
+FT
+#WEIGHT OF CHARGE (in kg)
+15
+#TNT EQUIVALENT FACTOR 
+1.0
+#STAND OFF DISTANCE in meters (SDx, SDy, SDz  )
+0.5
+1.2
+9.0
+#TOLERABLE PROBABILITY 
+0.009

@@ -3,6 +3,7 @@
 \usepackage{hyperref}
 \hypersetup{bookmarks=true,colorlinks=true,linkcolor=red,citecolor=blue,filecolor=magenta,urlcolor=cyan}
 \usepackage{amsmath}
+\usepackage{amssymb}
 \usepackage{longtable}
 \usepackage{booktabs}
 \usepackage{caption}
@@ -31,7 +32,7 @@ s & time (second)
 \\
 N & force (newton)
 \\
-rad & angle (radians)
+rad & angle (radian)
 \\
 \bottomrule
 \label{Table:TablofUnit}
@@ -159,11 +160,14 @@ Due to the rising cost of developing video games, developers are looking for way
 The following section provides an overview of the Software Requirements Specification (SRS) for Chipmunk2D, an open source 2D rigid body physics library. This section explains the purpose of this document, the scope of the system, and the organization of the document.
 \subsection{Purpose of Document}
 \label{Sec:PurpofDocu}
-This document descibes the modeling of an open source 2D rigid body physics library used for games. The goal statements and theoretical models used in Chipmunk2D are provided. This document is intended to be used as a reference to provide all necessary information to understand and verify the model.
-This document will be used as a starting point for subsequent development phases, including writing the design specification and the software verification and validation plan. The design document will show how the requirements are to be realized. The verification and validation plan will show the steps that will be used to increase confidence in the software documentation and the implementation.
+This document descibes the modeling of an open source 2D rigid body physics library used for games. The theoretical models andgoal statements used in Chipmunk2D are provided. This document is intended to be used as a reference to provide all necessary information to understand and verify the model.
+This document will be used as a starting point for subsequent development phases, including writing the design specification and the software verification and validation plan. The design document will show how the requirements are to be realized, including decisions on the numerical algorithms and programming environment. The verification and validation plan will show the steps that will be used to increase confidence in the software documentation and the implementation. Although the SRS fits in a series of documents that follow the so-called waterfall model, the actual development process is not constrained in any way. Even when the waterfall model is not followed, as Parnas and Clements point out, the most logical way to present the documentation is still to &quot;fake&quot; a rational design process.
 \subsection{Scope of Requirements}
 \label{Sec:ScopofRequ}
-The scope of the requirements includes the physical simulation of 2D rigid bodies acted on by forces. Given 2D rigid bodies, Chipmunk2D is intended to simulate how these rigid bodies interact with one another.
+The scope of the requirements includes the physical simulation of 2D rigid bodies acted on by forces. Given the appropriate inputs, the code for Chipmunk2D is intended to simulate how these rigid bodies interact with one another.
+\subsection{Characteristics of Intended Reader}
+\label{Sec:CharofInteRead}
+Reviewers of this documentation should have a strong knowledge in rigid body dynamics. The reviewers should also have an understanding of high school calculus. The users of Chipmunk2D can have a lower level of expertise, as explained in Section~\ref{Sec:UserChar}.
 \subsection{Organization of Document}
 \label{Sec:OrgaofDocu}
 The organization of this document follows the template for an SRS for scientific computing software proposed by [1] and [2]. The presentation follows the standard pattern of presenting goals, theories, definitions, and assumptions. For readers that would like a more bottom up approach, they can start reading the instance models in Section~\ref{Sec:InstMode} and trace back to find any additional information they require.
@@ -185,7 +189,7 @@ This section first presents the problem description, which gives a high-level vi
 Creating a gaming physics library is a difficult task. Games need physics libraries that simulate objects acting under various physical conditions, while simultaneously being fast and efficient enough to work in soft real-time during the game. Developing a physics library from scratch takes a long period of time and is very costly, presenting barriers of entry which make it difficult for game developers to include physics in their products. There are a few free, open source and high quality physics libraries available to be used for consumer products (Section~\ref{Sec:Off-Solu}). By creating a simple, lightweight, fast and portable 2D rigid body physics library, game development will be more accessible to the masses and higher quality products will be produced.
 \subsubsection{Terminology and Definitions}
 \label{Sec:TermandDefi}
-This subsection provides a list of terms that are used in subsequent sections and their meaning, with the purpose of reducing ambiguity and making it easier to correctly understand the requirements:
+This subsection provides a list of terms that are used in the subsequent sections and their meaning, with the purpose of reducing ambiguity and making it easier to correctly understand the requirements:
 \begin{enumerate}
 \item{Rigid body: A solid body in which deformation is neglected.}
 \item{Elasticity: Ratio of the relative velocities of two colliding objects after and before a collision.}
@@ -199,9 +203,9 @@ This subsection provides a list of terms that are used in subsequent sections an
 \item[GS1:]Given the physical properties, initial positions and velocities, and forces applied on a set of rigid bodies, determine their new positions and velocities over a period of time.
 \item[GS2:]Given the physical properties, initial orientations and angular velocities, and forces applied on a set of rigid bodies, determine their new orientations and angular velocities over a period of time.
 \item[GS3:]Given the initial positions and velocities of a set of rigid bodies, determine if any of them will collide with one another over a period of time.
-\item[GS4:]Given the physical properties, initial linear and angular positions and velocities, determine the new positions and velocities over a period of time of rigid bodies that have undergone a collision.
+\item[GS4:]Given the physical properties, initial positions, orientations, linear velocities, and angular velocities of a set of rigid bodies, determine the new positions, orientations, linear velocities, and angular velocities over a period of time of the rigid bodies that have undergone a collision.
 \end{itemize}
-\subsection{Solution Characteristics Specification}
+\subsection{Solution Characteristics Specifications}
 \label{Sec:SoluCharSpec}
 \subsubsection{Assumptions}
 \label{Sec:Assu}
@@ -217,7 +221,7 @@ This section simplifies the original problem and helps in developing the theoret
 \end{itemize}
 \subsubsection{Theoretical Models}
 \label{Sec:TheoMode}
-This section focuses on the general equations the physics library is based on.
+This section focuses on the general equations and laws that Chipmunk2D is based on.
 ~\newline
 \noindent \begin{minipage}{\textwidth}
 \begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
@@ -381,13 +385,13 @@ Description & $\theta{}(t)$ is the angular displacement of a rigid body as a fun
 \phantomsection 
 \label{DD:angularVelocity}
 \\ \midrule \\
-Label & $\omega{}(t)$
+Label & $\omega{}$
 \\ \midrule \\
 Units & $\frac{\text{rad}}{\text{s}}$
 \\ \midrule \\
-Equation & $\omega{}(t)$ = $\frac{d\theta{}(t)}{dt}$
+Equation & $\omega{}$ = $\frac{d\theta{}\left(t\right)}{dt}$
 \\ \midrule \\
-Description & $\omega{}(t)$ is the angular velocity of a rigid body as a function of time $t$ (s), also equal to the derivative of its angular displacement with respect to time $t$\newline$\theta{}$ is the angular displacement\newline$t$ is the time
+Description & $\omega{}$ is the angular velocity\newline$\theta{}$ is the angular displacement\newline$t$ is the time
 \\ \bottomrule \end{tabular}
 \end{minipage}\\
 ~\newline
@@ -397,11 +401,11 @@ Description & $\omega{}(t)$ is the angular velocity of a rigid body as a functio
 \phantomsection 
 \label{DD:angularAcceleration}
 \\ \midrule \\
-Label & $\alpha{}(t)$
+Label & $\alpha{}$
 \\ \midrule \\
 Units & $\frac{\text{rad}}{\text{s}^{2}}$
 \\ \midrule \\
-Equation & $\alpha{}(t)$ = $\frac{d\omega{}(t)}{dt}$
+Equation & $\alpha{}$ = $\frac{d\omega{}\left(t\right)}{dt}$
 \\ \midrule \\
 Description & $\alpha{}(t)$ is the angular acceleration of a rigid body as a function of time $t$ (s), also equal to the derivative of its angular velocity with respect to time $t$\newline$\omega{}$ is the angular velocity\newline$t$ is the time
 \\ \bottomrule \end{tabular}

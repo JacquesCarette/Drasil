@@ -32,6 +32,7 @@ objcConfig options c =
         endStatement     = semi,
         enumsEqualInts   = False,
         ext              = ".m",
+        dir              = "obj-c",
         fileName         = fileNameD c,
         include          = includeD "#import",
         includeScope     = \_ -> empty,
@@ -236,7 +237,7 @@ classDoc' c ft _ (MainClass n vs fs) = vcat [
     where stateBlank = if null vs then empty else blank
 
 objAccessDoc' :: Config -> Value -> Function -> Doc
-objAccessDoc' c v f@(Cast _) = objAccessDocD c v f
+objAccessDoc' c v f@(Cast _ _) = objAccessDocD c v f
 objAccessDoc' c v (ListPopulate size t) = iterationDoc c $ For (varDecDef i (Base Integer) (litInt 0)) (Var i ?< size) ((&.++)i) forBody
     where i = "i"
           dftVal = case t of Base bt -> defaultValue bt
@@ -274,9 +275,9 @@ printDoc' _ (File _) _ _ _ = error "Not implemented yet!"
                            
 methodDoc' :: Config -> FileType -> Label -> Method -> Doc
 methodDoc' _ Header _ (MainMethod _) = empty
-methodDoc' c Header _ f@(Method n _ _ _ _) | isDtor n  = empty
+methodDoc' c Header _ f@(Method n _ _ _ _ _) | isDtor n  = empty
                                            | otherwise = transDecLine c f <> endStatement c 
-methodDoc' c Source _ f@(Method _ _ (Construct _) _ b) = vcat [
+methodDoc' c Source _ f@(Method _ _ _ (Construct _) _ b) = vcat [
     transDecLine c f <+> lbrace,
     oneTab $ bodyDoc c $ [
         Block $ AssignState (Assign Self $ ObjAccess super $ Func defaultInit []) :
@@ -289,7 +290,7 @@ methodDoc' c Source _ f@(Method _ _ (Construct _) _ b) = vcat [
     where ctorPoolDec = if null b then [] else [varDecDef "pool" (Type "NSAutoreleasePool") $ Var "[[NSAutoreleasePool alloc] init]"]
           ctorIfState = if null b then [] else [CondState (If [(Self, b)] [])]
           ctorPoolDrain = if null b then [] else [ValState $ ObjAccess (Var "pool") (Func "drain" [])]
-methodDoc' c Source _ f@(Method _ _ _ _ b) = vcat [
+methodDoc' c Source _ f@(Method _ _ _ _ _ b) = vcat [
     transDecLine c f <+> lbrace,
     oneTab $ bodyDoc c b,
     rbrace]
@@ -331,7 +332,7 @@ valueDoc' c (StateObj _ t@(List lt _) [s]) = brackets (alloc c t <> innerFuncApp
           size = case lt of Static  -> []
                             Dynamic -> [s]
 valueDoc' c (StateObj _ t@(List _ _) _) = brackets (alloc c t <> innerFuncAppDoc c defaultInit [])
-valueDoc' c (StateObj _ t vs) = brackets (funcDoc c (Cast t) <+> alloc c t <> innerFuncAppDoc c sagaInit vs)
+valueDoc' c (StateObj _ t vs) = brackets (funcDoc c (Cast t t) <+> alloc c t <> innerFuncAppDoc c sagaInit vs) -- cast needs fixing
 valueDoc' c (Arg i) = nsFromCString c $ argsListAccess c i
 --valueDoc' c Input = inputFunc c <> parens (text "\"%*s\"")
 valueDoc' c v = valueDocD c v
@@ -351,7 +352,7 @@ destructor _ vs =
         releaseStatements = concatMap (\(StateVar lbl _ _ _ _) -> [ValState $ (Var lbl $. Func release [])]) releaseVars
         releaseBlock = if null releaseVars then [] else [Block(releaseStatements)]
         deallocBody = releaseBlock ++ (oneLiner $ ValState (super $. Func dealloc []))
-    in Method dealloc Public Void [] deallocBody
+    in Method dealloc Public Dynamic Void [] deallocBody
 
 alloc :: Config -> StateType -> Doc
 alloc c t = brackets (stateType c t Def <> innerFuncAppDoc c "alloc" [])
@@ -407,7 +408,7 @@ colonMapListDoc s f es = hcat [listColon es, himap s f es]
 
 -- | formats a Doc string for the declarationDoc line of a function
 transDecLine :: Config -> Method -> Doc
-transDecLine c (Method n _ t ps _) = methodTypeDoc c t <+> text n <> paramListDoc c ps
+transDecLine c (Method n _ _ t ps _) = methodTypeDoc c t <+> text n <> paramListDoc c ps
 transDecLine c f = transDecLine c $ convertToMethod f
 
 -- | makes a list c of values into the correct format for initializing a list c with a set of objects

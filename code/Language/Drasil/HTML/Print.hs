@@ -1,6 +1,6 @@
 module Language.Drasil.HTML.Print where
 
-import Prelude hiding (print)
+import Prelude hiding (print, id)
 import Data.List (intersperse)
 import Text.PrettyPrint hiding (render)
 import Numeric (showFFloat)
@@ -49,9 +49,9 @@ printLO (Header n contents)     = h n $ text (p_spec contents)
 printLO (List t)                = makeList t
 printLO (Figure r c f)          = makeFigure (p_spec r) (p_spec c) f
 printLO (Module m l)            = makeModule m (p_spec l)
-printLO (Assumption a l id)        = makeRefList (p_spec a) (p_spec l) (p_spec id)
-printLO (Requirement r l id)        = makeRefList (p_spec r) (p_spec l) (p_spec id)
-printLO (LikelyChange lc l id)        = makeRefList (p_spec lc) (p_spec l) (p_spec id)
+printLO (Assumption a l id)       = makeRefList (p_spec a) (p_spec l) (p_spec id)
+printLO (Requirement r l id)       = makeRefList (p_spec r) (p_spec l) (p_spec id)
+printLO (LikelyChange lc l id)      = makeRefList (p_spec lc) (p_spec l) (p_spec id)
 
 
 -- | Called by build, uses 'printLO' to render the layout 
@@ -86,7 +86,7 @@ p_spec (Sy s)     = uSymb s
 p_spec (G g)      = unPH $ greek g
 p_spec (Sp s)     = unPH $ special s
 p_spec HARDNL     = "<br />"
-p_spec (Ref r a)  = reflink (p_spec a) ("this " ++ show r)
+p_spec (Ref r a)  = reflink (p_spec a) (show r)
 p_spec EmptyS     = ""
 
 -- | Renders symbols for HTML title
@@ -152,6 +152,8 @@ p_expr (Case ps)  = cases ps (p_expr)
 p_expr (Op f es)  = p_op f es
 p_expr (Grouping e) = paren (p_expr e)
 p_expr (Mtx a)    = "<table class=\"matrix\">\n" ++ p_matrix a ++ "</table>"
+p_expr (Index a@(Sym (Corners [] [] [] [_] _)) i) = p_expr a ++ sub ("," ++ p_expr i)
+p_expr (Index a i)= p_expr a ++ sub (p_expr i)
 --Logic
 p_expr (Not a)    = "&not;" ++ p_expr a
 p_expr (And a b)  = p_expr a ++ " &and; " ++ p_expr b
@@ -188,6 +190,7 @@ mul x@(Sym (Atomic s)) y = if length s > 1 then p_expr x ++ "&sdot;" ++ mulParen
                             p_expr x ++ mulParen y
 mul x y@(Sym (Atomic s)) = if length s > 1 then mulParen x ++ "&sdot;" ++ p_expr y else
                             mulParen x ++ p_expr y
+mul x@(Div _ _) y = paren (p_expr x) ++ mulParen y
 mul a b         = mulParen a ++ mulParen b
 
 -- | Helper for properly rendering parentheses around multiplication

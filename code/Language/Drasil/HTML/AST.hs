@@ -7,6 +7,8 @@ import Language.Drasil.Spec (USymb, RefType)
 import Language.Drasil.Unicode (Greek, Special)
 import Language.Drasil.Document (DType (..))
 
+import Data.List (intersperse)
+
 -- | Internal HTML version of Expr 
 -- (for converting 'Language.Drasil.Expr.Expr')
 data Expr = Var   Variable
@@ -41,6 +43,7 @@ data Expr = Var   Variable
           | Impl Expr Expr
           | Iff  Expr Expr
           | Mtx [[Expr]]
+          | Index Expr Expr
           
 -- | Internal HTML version of Function 
 -- (for converting Functions from 'Language.Drasil.Expr')
@@ -70,6 +73,10 @@ data Set = Integer
          | Radians
          | Vect Set
          | Obj String
+         | Discrete Set
+         -- DiscreteI [Int]
+         -- DiscreteD [Double]
+         -- DiscreteS [String]
 
 data Quantifier = Forall Expr | Exists Expr
 
@@ -161,3 +168,7 @@ instance Show Set where
   show Radians  = "rad"
   show (Vect a) = "V" ++ show a
   show (Obj a)  = a
+  show (Discrete a)  = "{" ++ show a ++ "}"
+  --show (DiscreteI a)  = "{" ++ (foldl (++) "" . intersperse ", " . map show) a ++ "}"
+  --show (DiscreteD a)  = "{" ++ (foldl (++) "" . intersperse ", " . map show) a ++ "}"
+  --show (DiscreteS a) = "{" ++ (foldl (++) "" . intersperse ", ") a ++ "}"

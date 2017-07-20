@@ -123,10 +123,10 @@ This section provides an overview of the module design. Modules are summarized i
 \item[\refstepcounter{modnum}\mthemodnum\label{Mmodoutputvdesc}:]Output Verification Module
 \end{description}
 \begin{description}
-\item[\refstepcounter{modnum}\mthemodnum\label{Mmodtempdesc}:]Temperature ODEs Module
+\item[\refstepcounter{modnum}\mthemodnum\label{Mmodtempdesc}:]Temperature ODE Module
 \end{description}
 \begin{description}
-\item[\refstepcounter{modnum}\mthemodnum\label{Mmodenerdesc}:]Energy Equations Module
+\item[\refstepcounter{modnum}\mthemodnum\label{Mmodenerdesc}:]Energy Equation Module
 \end{description}
 \begin{description}
 \item[\refstepcounter{modnum}\mthemodnum\label{MmodControl}:]Control Module
@@ -157,9 +157,9 @@ Behaviour Hiding Module & Input Format Module
 \\
  & Output Verification Module
 \\
- & Temperature ODEs Module
+ & Temperature ODE Module
 \\
- & Energy Equations Module
+ & Energy Equation Module
 \\
  & Control Module
 \\
@@ -225,14 +225,14 @@ Modules are decomposed according to the principle of ``information hiding" propo
 \item[Services:]Verifies that the output energy results follow the law of conservation of energy. Throws a warning if the relative error exceeds the error threshold.
 \item[Implemented By:]SWHS
 \end{description}
-\subsection{Temperature ODEs Module (M\ref{Mmodtempdesc})}
-\label{Sec:TempODEsModu()}
+\subsection{Temperature ODE Module (M\ref{Mmodtempdesc})}
+\label{Sec:TempODEModu()}
 \begin{description}
 \item[Secrets:]The ODEs for solving the temperature, using the input parameters.
 \item[Services:]Defines the ODEs using the parameters in the input parameters module.
 \item[Implemented By:]SWHS
 \end{description}
-\subsection{Energy Equations Module (M\ref{Mmodenerdesc})}
+\subsection{Energy Equation Module (M\ref{Mmodenerdesc})}
 \label{Sec:EnerEquaModu()}
 \begin{description}
 \item[Secrets:]The equations for solving for the energy using the input parameters.
@@ -364,16 +364,16 @@ node [style = "n"];
 "Output Format Module (M\ref{Mmodoutputfdesc})" -> "Sequence Data Structure Module (M\ref{Mmodseqserv})";
 "Output Verification Module (M\ref{Mmodoutputvdesc})" -> "Input Parameter Module (M\ref{MmodInputParam})";
 "Output Verification Module (M\ref{Mmodoutputvdesc})" -> "Sequence Data Structure Module (M\ref{Mmodseqserv})";
-"Temperature ODEs Module (M\ref{Mmodtempdesc})" -> "Input Parameter Module (M\ref{MmodInputParam})";
-"Temperature ODEs Module (M\ref{Mmodtempdesc})" -> "Sequence Data Structure Module (M\ref{Mmodseqserv})";
-"Energy Equations Module (M\ref{Mmodenerdesc})" -> "Input Parameter Module (M\ref{MmodInputParam})";
-"Energy Equations Module (M\ref{Mmodenerdesc})" -> "Sequence Data Structure Module (M\ref{Mmodseqserv})";
+"Temperature ODE Module (M\ref{Mmodtempdesc})" -> "Input Parameter Module (M\ref{MmodInputParam})";
+"Temperature ODE Module (M\ref{Mmodtempdesc})" -> "Sequence Data Structure Module (M\ref{Mmodseqserv})";
+"Energy Equation Module (M\ref{Mmodenerdesc})" -> "Input Parameter Module (M\ref{MmodInputParam})";
+"Energy Equation Module (M\ref{Mmodenerdesc})" -> "Sequence Data Structure Module (M\ref{Mmodseqserv})";
 "Control Module (M\ref{MmodControl})" -> "Hardware Hiding Module (M\ref{MhwHiding})";
 "Control Module (M\ref{MmodControl})" -> "Input Parameter Module (M\ref{MmodInputParam})";
 "Control Module (M\ref{MmodControl})" -> "Input Format Module (M\ref{MmodInputFormat})";
 "Control Module (M\ref{MmodControl})" -> "Input Verification Module (M\ref{MmodInputVerif})";
-"Control Module (M\ref{MmodControl})" -> "Temperature ODEs Module (M\ref{Mmodtempdesc})";
-"Control Module (M\ref{MmodControl})" -> "Energy Equations Module (M\ref{Mmodenerdesc})";
+"Control Module (M\ref{MmodControl})" -> "Temperature ODE Module (M\ref{Mmodtempdesc})";
+"Control Module (M\ref{MmodControl})" -> "Energy Equation Module (M\ref{Mmodenerdesc})";
 "Control Module (M\ref{MmodControl})" -> "ODE Solver Module (M\ref{Mmododedesc})";
 "Control Module (M\ref{MmodControl})" -> "Plotting Module (M\ref{Mmodplotdesc})";
 "Control Module (M\ref{MmodControl})" -> "Output Verification Module (M\ref{Mmodoutputvdesc})";

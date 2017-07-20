@@ -5,7 +5,7 @@ import Drasil.GlassBR.IMods
 import Drasil.GlassBR.Concepts
 
 import Language.Drasil
-import Data.Drasil.SentenceStructures (foldlSent, isThe)
+import Data.Drasil.SentenceStructures (foldlSent, isThe, sAnd)
 import Prelude hiding (id)
 import Control.Lens ((^.))
 import Data.Drasil.Utils (getS)
@@ -24,10 +24,10 @@ safety_require1_rel = (C is_safe1) := (C prob_br) :< (C pb_tol)
 t1descr :: Sentence
 t1descr = 
   foldlSent [S "If", (getS is_safe1), S "= True, the glass is" +:+. 
-  S "considered safe", (getS is_safe1), S "and", (getS is_safe2),
+  S "considered safe", (getS is_safe1) `sAnd` (getS is_safe2),
   sParen (S "from" +:+ 
-  (makeRef ((Definition (symbolMap glassBRSymbols) . Theory) t2SafetyReq))),
-  S "are either" +:+. S "both True or both False",
+  (makeRef ((Definition (symbolMap glassBRSymbols) . Theory) t2SafetyReq))) +:+.
+  S "are either both True or both False",
   ((getS prob_br) `isThe` (phrase prob_br)) 
   `sC` S "as calculated in" +:+.
   (makeRef ((Definition (symbolMap glassBRSymbols) . Theory) probOfBr)),
@@ -42,14 +42,17 @@ safety_require2_rel = (C is_safe2) := (C lRe) :> (C demand)
 
 --relation within relation
 t2descr :: Sentence
-t2descr = 
-  foldlSent [S "If", (getS is_safe2), S "= True, the glass is" +:+.
-  S "considered safe", (getS is_safe1), sParen (S "from" +:+ 
-  (makeRef ((Definition (symbolMap glassBRSymbols) . Theory) t1SafetyReq))),
-  S "and", (getS is_safe2) +:+. S "are either both True or both False",
-  (short lResistance) `isThe` (phrase lResistance), 
-  sParen (S "also called capacity") `sC` S "as defined in" +:+. 
-  (makeRef ((Definition (symbolMap glassBRSymbols) . Theory) calOfCap)), 
-  (getS demand), sParen (S "also referred as the" +:+ (titleize demandq)),
-  S "is the", (demandq ^. defn) `sC` S "as defined in",
-  (makeRef ((Definition (symbolMap glassBRSymbols) . Theory) calOfDe))]
+t2descr = tDescr (is_safe2) s ending
+  where s = ((getS is_safe1) +:+ sParen (S "from" +:+ (makeRef ((Definition
+            (symbolMap glassBRSymbols) . Theory) t1SafetyReq))) `sAnd` 
+            (getS is_safe2))
+        ending = (short lResistance) `isThe` (phrase lResistance) +:+ 
+                 sParen (S "also called capacity") `sC` S "as defined in" +:+. 
+                 (makeRef ((Definition (symbolMap glassBRSymbols) . Theory) calOfCap)) +:+
+                 (getS demand) +:+ sParen (S "also referred as the" +:+ (titleize demandq)) 
+                 `isThe` (demandq ^. defn) `sC` S "as defined in" +:+ (makeRef ((Definition
+                 (symbolMap glassBRSymbols) . Theory) calOfDe))
+
+tDescr :: VarChunk -> Sentence -> Sentence -> Sentence
+tDescr main s ending = foldlSent [S "If", getS main, S "= True, the glass is" +:+.
+  S "considered safe", s +:+. S "are either both True or both False", ending]

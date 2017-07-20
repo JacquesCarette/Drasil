@@ -33,7 +33,7 @@ dep (Dbl _)       = []
 dep (Bln _)       = []
 dep (V _)         = []
 dep (FCall f x)   = nub (dep f ++ (concat $ map dep x))
-dep (Case ls)     = nub (concat (map (dep . fst) ls))
+dep (Case ls)     = nub (concat $ map (dep . fst) ls ++ map (dep . snd) ls)
 dep (a := b)      = nub (dep a ++ dep b)
 dep (a :!= b)     = nub (dep a ++ dep b)
 dep (a :< b)      = nub (dep a ++ dep b)
@@ -49,6 +49,7 @@ dep (IsIn  a _)   = nub (concat $ map dep a)
 dep (NotIn a _)   = nub (concat $ map dep a)
 dep (State a b)   = nub ((concat $ map (dep . quant) a) ++ dep b)
 dep (Matrix a)    = nub (concat $ map (concat . map dep) a)
+dep (Index a i)   = nub (dep a ++ dep i)
 
 -- | Get a list of VarChunks from an equation in order to print
 vars :: Expr -> SymbolMap -> [VarChunk]
@@ -69,7 +70,7 @@ vars (Dbl _)      _ = []
 vars (Bln _)      _ = []
 vars (V _)        _ = []
 vars (FCall f x)  m = nub (vars f m ++ (concat $ map (\y -> vars y m) x))
-vars (Case ls)    m = nub (concat (map (\x -> vars (fst x) m) ls))
+vars (Case ls)    m = nub (concat $ map (\x -> vars (fst x) m) ls ++ map (\x -> vars (snd x) m) ls)
 vars (a := b)     m = nub (vars a m ++ vars b m)
 vars (a :!= b)    m = nub (vars a m ++ vars b m)
 vars (a :> b)     m = nub (vars a m ++ vars b m)
@@ -85,6 +86,7 @@ vars (IsIn  a _)  m = nub (concat $ map (\x -> vars x m) a)
 vars (NotIn a _)  m = nub (concat $ map (\x -> vars x m) a)
 vars (State a b)  m = nub ((concat $ map (\x -> vars (quant x) m) a) ++ vars b m)
 vars (Matrix a)   m = nub (concat $ map (\x -> concat $ map (\y -> vars y m) x) a)
+vars (Index a i)  m = nub (vars a m ++ vars i m)
 
 -- | Get a list of CodeChunks from an equation
 codevars :: Expr -> [CodeChunk]
@@ -105,7 +107,7 @@ codevars (Dbl _)      = []
 codevars (Bln _)      = []
 codevars (V _)        = []
 codevars (FCall f x)  = nub (codevars f ++ (concat $ map (\y -> codevars y) x))
-codevars (Case ls)    = nub (concat (map (\x -> codevars (fst x)) ls))
+codevars (Case ls)    = nub (concat $ map (codevars . fst) ls ++ map (codevars . snd) ls)
 codevars (a := b)     = nub (codevars a ++ codevars b)
 codevars (a :!= b)    = nub (codevars a ++ codevars b)
 codevars (a :> b)     = nub (codevars a ++ codevars b)
@@ -121,7 +123,7 @@ codevars (IsIn  a _)  = nub (concat $ map codevars a)
 codevars (NotIn a _)  = nub (concat $ map codevars a)
 codevars (State a b)  = nub ((concat $ map (codevars . quant) a) ++ codevars b)
 codevars (Matrix a)   = nub (concat $ map (concat . map codevars) a)
-
+codevars (Index a i)  = nub (codevars a ++ codevars i)
 
 -- | Helper function for vars and dep, gets the Expr portion of a UFunc
 unpack :: UFunc -> Expr

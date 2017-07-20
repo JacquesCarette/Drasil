@@ -11,8 +11,9 @@ module Data.Drasil.SentenceStructures
   , followA
   , getTandS
   , eqN
-  , displayConstrntAsSet
+  , displayConstrntsAsSet
   , fmtInputConstr, fmtOutputConstr, physC, sfwrC, typUnc, rval
+  , extrctStrng
   ) where
 
 import Language.Drasil
@@ -20,6 +21,7 @@ import Data.Drasil.Utils (foldle, foldle1, getS, fmtU, getRVal)
 import Data.Drasil.Concepts.Documentation
 import Data.Drasil.Concepts.Math (equation)
 import Control.Lens ((^.))
+import Language.Drasil.Spec(sCurlyBr)
 
 {--** Sentence Folding **--}
 -- | partial function application of foldle for sentences specifically
@@ -166,13 +168,12 @@ getTandS a = phrase a +:+ getS a
 eqN :: Int -> Sentence
 eqN n = phrase equation +:+ sParen (S $ show n)
 
---Produces a sentence from a ConstrainedChunk that displays the constraints in a {}.
-displayConstrntAsSet :: ConstrainedChunk -> Sentence
-displayConstrntAsSet ch = getS ch `sIn` accessConstrnts ch
+--Produces a sentence that displays the constraints in a {}.
+displayConstrntsAsSet :: SymbolForm a => a -> [String] -> Sentence
+displayConstrntsAsSet ch listOfVals = getS ch `sIn` (sCurlyBr (foldlsC (map S listOfVals)))
 
---'displayConstrntAsSet' helper
-accessConstrnts :: (Constrained s, SymbolForm s) => s -> Sentence
-accessConstrnts ch = foldlSent_ $ map (\(Phys f) -> S "{" :+: (E $ f (C ch)):+: S "}")  (ch ^. constraints)
+extrctStrng :: Sentence -> String
+extrctStrng (S strng) = strng
 
 {-BELOW IS TO BE MOVED TO EXAMPLE/DRASIL/SECTIONS-}
 

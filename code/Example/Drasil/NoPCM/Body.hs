@@ -33,10 +33,9 @@ import Data.Drasil.Utils (enumSimple, getS, mkRefsList, makeListRef, refFromType
 import Data.Drasil.Concepts.Documentation
 import Data.Drasil.Concepts.Math (ode, de, unit_, rOfChng, equation)
 import Data.Drasil.Concepts.Software
-import Data.Drasil.Concepts.Physics (energy)
 import Data.Drasil.Concepts.Thermodynamics
 import qualified Data.Drasil.Quantities.Thermodynamics as QT
-import Data.Drasil.Quantities.Physics (time)
+import Data.Drasil.Quantities.Physics (time, energy)
 import Data.Drasil.Quantities.PhysicalProperties (vol, mass, density)
 import Data.Drasil.Quantities.Math (uNormalVect, surface, gradient)
 import Data.Drasil.Software.Products (compPro)
@@ -50,6 +49,7 @@ import Drasil.Sections.TraceabilityMandGs
 import Drasil.Sections.AuxiliaryConstants
 
 import Data.Drasil.SentenceStructures
+
 
 this_si :: [UnitDefn]
 this_si = map UU [metre, kilogram, second] ++ map UU [centigrade, joule, watt]
@@ -69,7 +69,7 @@ pcmUnits = map ucw [density, tau, in_SA, out_SA,
   vol, w_mass, w_vol]
 
 pcmConstraints :: [UncertQ]
-pcmConstraints =  [coil_SA, htCap_W, coil_HTC, temp_init,
+pcmConstraints =  [coil_SA, w_E, htCap_W, coil_HTC, temp_init,
   time_final, tank_length, temp_C, w_density, diam, temp_W]
 
 s4, s4_1, s4_1_1, s4_1_2, s4_1_3, s4_2,
@@ -98,10 +98,14 @@ mkSRS = RefSec (RefProg intro
   map Verbatim [s3, s4, s5, s6, s7, s8, s9]
 
 pcm_si :: SystemInformation
-pcm_si = SI srs_swhs srs [thulasi] this_si pcmSymbols (pcmSymbols)
-  acronyms ([dd1HtFluxC] :: [QDefinition]) (map qs pcmConstraints) 
-  ([] :: [QSWrapper]) ([] :: [Block QDefinition])
-  ([] :: [ConstrainedChunk])-- Place Holder until Data Definitions can be created
+pcm_si = SI srs_swhs srs [thulasi] this_si pcmSymbols 
+  (pcmSymbols)
+  acronyms
+  ([dd1HtFluxC])          --dataDefs
+  (map qs pcmConstraints) --inputs
+  ([] :: [QSWrapper])     --outputs
+  ([] :: [Block QDefinition])
+  (pcmConstraints)        --constrained
 
 pcm_srs :: Document
 pcm_srs = mkDoc mkSRS pcm_si
@@ -109,13 +113,11 @@ pcm_srs = mkDoc mkSRS pcm_si
 nopcmSymbMap :: SymbolMap
 nopcmSymbMap = symbolMap pcmSymbols
 
-
-
 --------------------------
 --Section 2 : INTRODUCTION
 --------------------------
 
-s2_start :: ConceptChunk -> ConceptChunk -> CI-> Sentence
+s2_start :: ConceptChunk -> UnitalChunk -> CI-> Sentence
 s2_start es en pro = foldlSent [S "Due to increasing cost, diminishing",
   S "availability, and negative environmental impact of",
   S "fossil fuels, there is a higher demand for renewable",
@@ -135,7 +137,7 @@ s2_end pro pr = foldlSent_ [EmptyS +:+. plural pro, S "The developed",
 s2_1 :: CI -> Sentence
 s2_1 pro = foldlSent [S "The main", phrase purpose, S "of this",
   phrase document, S "is to describe the modelling of" +:+.
-  phrase pro, S "The", plural goal, S "and", plural thModel,
+  phrase pro, S "The", plural goal `sAnd` plural thModel,
   S "used in the", short pro, S "code are provided, with an emphasis",
   S "on explicitly identifying", plural assumption, S "and unambiguous" +:+.
   plural definition, S "This", phrase document,
@@ -154,7 +156,7 @@ s2_2_start ta sw = foldlSent_ [phrase ta, S "of a single", phrase sw]
 
 s2_2_end :: ConceptChunk -> ConceptChunk -> ConceptChunk -> Sentence
 s2_2_end tem te wa = foldlSent_ [S "predict the",
-  phrase tem, S "and", phrase te,
+  phrase tem `sAnd` phrase te,
   S "histories for the", phrase wa]
 
 --------------------------------------------------
@@ -194,10 +196,8 @@ s2_4_end im od pro = foldlSent_ [S "The", phrase im,
   sParen (makeRef (SRS.inModel SRS.missingP [])),
   S "to be solved is referred to as" +:+. acroIM 1,
   S "The", phrase im, S "provides the",
-  titleize od, sParen (short od), S "that model the" +:+. phrase pro,
-  short pro, S "solves this", short od]
-
-
+  titleize od, sParen (short od), S "that model the"
+  +:+. phrase pro, short pro, S "solves this", short od]
 
 ----------------------------------------
 --Section 3 : GENERAL SYSTEM DESCRIPTION
@@ -250,7 +250,7 @@ s2_4_end im od pro = foldlSent_ [S "The", phrase im,
 
 --TODO: finish filling in the subsections
 s4 = specSysDesF (words_ sWHT) [s4_1, s4_2]
-  where words_ sw = (plural definition +:+ S "and finally the" +:+
+  where words_ sw = (plural definition `sAnd` S "finally the" +:+
                     phrase inModel +:+ sParen (getAcc ode) +:+
                     S "that" +:+ plural model +:+ S "the" +:+ phrase sw)
 
@@ -277,7 +277,7 @@ s4_1_2 = physSystDesc (getAcc progName) fig_tank
 
 fig_tank :: Contents
 fig_tank = Figure (at_start sWHT `sC` S "with" +:+ phrase ht_flux +:+
-  S "from" +:+ phrase coil +:+ S "of" +:+ getS ht_flux_C)
+  S "from" +:+ phrase coil `sOf` getS ht_flux_C)
   "TankWaterOnly.png"
 
 s4_1_2_list :: Contents
@@ -287,15 +287,14 @@ s4_1_2_list = enumSimple 1 (short physSyst) $ map foldlSent_ [physSyst1 tank wat
 s4_1_3 = SRS.goalStmt [s4_1_3_intro temp coil temp_W, s4_1_3_list temp_W w_E] []
 
 s4_1_3_intro :: ConceptChunk -> ConceptChunk -> UncertQ -> Contents
-s4_1_3_intro te co temw = foldlSPCol [S "Given the", phrase te,
-  S "of the", phrase co `sC` S "initial", phrase temw 
-  `sC` S "and material", plural property `sC`
-  S "the", phrase goalStmt, S "are"]
+s4_1_3_intro te co temw = foldlSPCol [S "Given", phrase te `ofThe`
+  phrase co `sC` S "initial", phrase temw  `sC` S "and material",
+  plural property `sC` S "the", phrase goalStmt, S "are"]
 
 s4_1_3_list :: UncertQ -> UncertQ -> Contents
-s4_1_3_list temw we = Enumeration $ Simple $ map (\(a, b) -> (a, Flat b)) [
-  (acroGS 1, S "predict the" +:+ phrase temw +:+ S "over time"),
-  (acroGS 2, S "predict the" +:+ phrase we +:+ S "over time")]
+s4_1_3_list temw we = enumSimple 1 (short goalStmt) [
+  (S "predict the" +:+ phrase temw +:+ S "over time"),
+  (S "predict the" +:+ phrase we +:+ S "over time")]
 
 ------------------------------------------------------
 --Section 4.2 : SOLUTION CHARACTERISTICS SPECIFICATION
@@ -303,7 +302,7 @@ s4_1_3_list temw we = Enumeration $ Simple $ map (\(a, b) -> (a, Flat b)) [
   
 s4_2 = solChSpecF progName (s4_1, s6) s4_2_4_intro_end (mid,
   dataConstraintUncertainty, end) (s4_2_1_list, s4_2_2_T1, s4_2_3_paragraph rOfChng temp,
-  s4_2_4_DD1, [swhsSymbMapT eBalanceOnWtr] ++ s4_2_5_d1startPara ++
+  s4_2_4_DD1, [swhsSymbMapT eBalanceOnWtr] ++ (s4_2_5_d1startPara energy water) ++
   s4_2_5_paragraph ++ [swhsSymbMapT heatEInWtr], [s4_2_6_table1, s4_2_6_table2]) []
 
   where mid = foldlSent [S "The", phrase column, S "for",
@@ -317,31 +316,27 @@ s4_2 = solChSpecF progName (s4_1, s6) s4_2_4_intro_end (mid,
           phrase uncertainty, S "quantification exercise"]
 
 s4_2_1_list :: [Contents]
-s4_2_1_list = acroNumGen s4_2_1_assump_list 1
-
-s4_2_1_assump_list :: [Contents]
-s4_2_1_assump_list =[assump1, assump2, assump3, assump4, assump5, assump7, assump8,
-  assump9, assump9_npnc, assump14, assump15, assump12, assump13, assump20]
+s4_2_1_list = acroNumGen [assump1, assump2, assump3, assump4, assump5, assump7, assump8,
+  assump9, assump9_npnc, assump14, assump15, assump12, assump13, assump20] 1
   
 assump3, assump4, assump5, assump9_npnc, assump12, assump13 :: Contents
 
 assump3 = mkAssump "assump3"
-  (S "The" +:+ phrase water +:+ S "in the" +:+ phrase tank +:+
-  S "is fully mixed, so the" +:+ phrase temp_W `isThe` S "same throughout the entire"
-  +:+ phrase tank +:+. sSqBr (acroGD 2))
+  (foldlSent [S "The", phrase water, S "in the", phrase tank, S "is fully mixed, so the", 
+  phrase temp_W `isThe` S "same throughout the entire", phrase tank, sSqBr (acroGD 2)])
 assump4 = mkAssump "assump4"
-  (S "The" +:+ phrase w_density +:+ S "has no spatial variation; that is"
-  `sC` S "it is constant over their entire" +:+ phrase vol +:+. sSqBr ((acroGD 2)`sC`
-  (makeRef likeChg2)))
+  (foldlSent [S "The", phrase w_density, S "has no spatial variation; that is"
+  `sC` S "it is constant over their entire", phrase vol, sSqBr ((acroGD 2)`sC`
+  (acroTest likeChg2 s6_list))])
 assump5 = mkAssump "assump5"
-  (S "The" +:+ phrase htCap_W +:+ S "has no spatial variation; that"
-  +:+ S "is, it is constant over its entire" +:+ phrase vol +:+. sSqBr (acroGD 2))
-assump9_npnc = mkAssump "assump9"
-  (S "The" +:+ phrase model +:+ S "only accounts for charging" +:+
-  S "of the tank" `sC` S "not discharging. The" +:+ phrase temp_W +:+ S "can only" +:+
-  S "increase, or remain constant; it cannot decrease. This implies that the" +:+
-  phrase temp_init +:+ S "is less than (or equal to) the" +:+ phrase temp_C +:+.
-  sSqBr ((acroIM 1) `sC` (makeRef likeChg4)))
+  (foldlSent [S "The", phrase htCap_W, S "has no spatial variation; that", 
+  S "is, it is constant over its entire", phrase vol, sSqBr (acroGD 2)])
+assump9_npnc = mkAssump "assump9_npnc"
+  (foldlSent [S "The", phrase model, S "only accounts for charging",
+  S "of the tank" `sC` S "not discharging. The", phrase temp_W, S "can only",
+  S "increase, or remain constant; it cannot decrease. This implies that the",
+  phrase temp_init, S "is less than (or equal to) the", phrase temp_C,
+  sSqBr ((acroIM 1) `sC` (makeRef likeChg4))])
 assump12 = mkAssump "assump12"
   (S "No internal" +:+ phrase heat +:+ S "is generated by the" +:+ phrase water
   `semiCol` S "therefore, the" +:+ phrase vol_ht_gen +:+ S "is zero" +:+.
@@ -415,7 +410,7 @@ s4_2_3_description = map foldlSPCol [
   s4_2_3_desc2 gauss_div surface vol thFluxVect uNormalVect unit_,
   s4_2_3_desc3 vol vol_ht_gen,
   s4_2_3_desc4 ht_flux_in ht_flux_out in_SA out_SA density QT.heat_cap_spec
-    QT.temp vol assump3 assump4 assump5,
+    QT.temp vol [assump3, assump4, assump5],
   s4_2_3_desc5 density mass vol]
 
 s4_2_3_desc1 :: RelationConcept -> UnitalChunk -> [Sentence]
@@ -428,7 +423,7 @@ s4_2_3_desc2 gd su vo tfv unv un =
   [S "Applying", titleize gd, S "to the first term over",
   (phrase su +:+ getS su `ofThe` phrase vo) `sC` S "with",
   getS tfv, S "as the", phrase tfv, S "for the",
-  phrase su, S "and", getS unv, S "as a", phrase un,
+  phrase su `sAnd` getS unv, S "as a", phrase un,
   S "outward", phrase unv, S "for a", phrase su]
 
 s4_2_3_desc3 :: UnitalChunk -> UnitalChunk -> [Sentence]
@@ -437,13 +432,13 @@ s4_2_3_desc3 vo vhg = [S "We consider an arbitrary" +:+. phrase vo, S "The",
 
 s4_2_3_desc4 :: UnitalChunk -> UnitalChunk -> UnitalChunk -> UnitalChunk ->
   UnitalChunk -> UnitalChunk -> UnitalChunk -> UnitalChunk ->
-  Contents -> Contents -> Contents -> [Sentence]
-s4_2_3_desc4 hfi hfo iS oS den hcs te vo a3 a4 a5 = [S "Where", getS hfi `sC`
+  [Contents] -> [Sentence]
+s4_2_3_desc4 hfi hfo iS oS den hcs te vo assumps = [S "Where", getS hfi `sC`
   getS hfo `sC` getS iS `sC` S "and", getS oS, S "are explained in" +:+.
-  acroGD 2, S "Assuming", getS den `sC` getS hcs, S "and", getS te,
+  acroGD 2, S "Assuming", getS den `sC` getS hcs `sAnd` getS te,
   S "are constant over the", phrase vo `sC` S "which is true in our case by",
-  titleize' assumption, sParen (makeRef a3) `sC` sParen (makeRef a4) `sC`
-  S "and", sParen (makeRef a5) `sC` S "we have"]
+  titleize' assumption, (foldlList $ (map (\d -> sParen (makeRef d))) assumps)
+  `sC` S "we have"]
 
 s4_2_3_desc5 :: UnitalChunk -> UnitalChunk -> UnitalChunk -> [Sentence]
 s4_2_3_desc5 den ma vo = [S "Using the fact that", getS den :+: S "=" :+:
@@ -452,29 +447,29 @@ s4_2_3_desc5 den ma vo = [S "Using the fact that", getS den :+: S "=" :+:
 s4_2_3_eq1, s4_2_3_eq2, s4_2_3_eq3, s4_2_3_eq4, s4_2_3_eq5 :: Expr
 
 s4_2_3_eq1 = (Neg (UnaryOp (Integral (Just (Low (C vol)), Nothing)
-  ((C gradient) :. (C thFluxVect)) vol))) :+ UnaryOp
+  ((C gradient) :. (C thFluxVect)) vol))) + UnaryOp
   (Integral (Just (Low (C vol)), Nothing) (C vol_ht_gen) vol) :=
   UnaryOp (Integral (Just (Low (C vol)), Nothing) ((C density)
-  :* (C QT.heat_cap_spec) :* Deriv Part (C QT.temp) (C time)) vol)
+  * (C QT.heat_cap_spec) * Deriv Part (C QT.temp) (C time)) vol)
 
 s4_2_3_eq2 = (Neg (UnaryOp (Integral (Just (Low (C surface)),
-  Nothing) ((C thFluxVect) :. (C uNormalVect)) surface))) :+
+  Nothing) ((C thFluxVect) :. (C uNormalVect)) surface))) +
   (UnaryOp (Integral (Just (Low (C vol)), Nothing) (C vol_ht_gen)
   vol)) := UnaryOp (Integral (Just (Low (C vol)), Nothing)
   ((C density) * (C QT.heat_cap_spec) * Deriv Part (C QT.temp) (C time)) vol)
 
-s4_2_3_eq3 = (C ht_flux_in) :* (C in_SA) :- (C ht_flux_out) :*
-  (C out_SA) :+ (C vol_ht_gen) :* (C vol) := UnaryOp (Integral
-  (Just (Low (C vol)), Nothing) ((C density) :* (C QT.heat_cap_spec) :*
+s4_2_3_eq3 = (C ht_flux_in) * (C in_SA) - (C ht_flux_out) *
+  (C out_SA) + (C vol_ht_gen) * (C vol) := UnaryOp (Integral
+  (Just (Low (C vol)), Nothing) ((C density) * (C QT.heat_cap_spec) *
   Deriv Part (C QT.temp) (C time)) vol)
 
-s4_2_3_eq4 = (C density) :* (C QT.heat_cap_spec) :* (C vol) :* Deriv Total (C QT.temp)
-  (C time) := (C ht_flux_in) :* (C in_SA) :- (C ht_flux_out) :*
-  (C out_SA) :+ (C vol_ht_gen) :* (C vol)
+s4_2_3_eq4 = (C density) * (C QT.heat_cap_spec) * (C vol) * Deriv Total (C QT.temp)
+  (C time) := (C ht_flux_in) * (C in_SA) - (C ht_flux_out) *
+  (C out_SA) + (C vol_ht_gen) * (C vol)
 
-s4_2_3_eq5 = (C mass) :* (C QT.heat_cap_spec) :* Deriv Total (C QT.temp)
-  (C time) := (C ht_flux_in) :* (C in_SA) :- (C ht_flux_out)
-  :* (C out_SA) :+ (C vol_ht_gen) :* (C vol)
+s4_2_3_eq5 = (C mass) * (C QT.heat_cap_spec) * Deriv Total (C QT.temp)
+  (C time) := (C ht_flux_in) * (C in_SA) - (C ht_flux_out)
+  * (C out_SA) + (C vol_ht_gen) * (C vol)
 
 s4_2_3_equation :: [Contents]
 s4_2_3_equation = map EqnBlock [s4_2_3_eq1, s4_2_3_eq2, s4_2_3_eq3, s4_2_3_eq4, s4_2_3_eq5]
@@ -491,12 +486,12 @@ s4_2_5_description = map foldlSPCol
   s4_2_5_desc3 w_mass htCap_W,
   s4_2_5_desc4 tau_W w_mass htCap_W coil_HTC coil_SA]
 
-s4_2_5_desc1 :: ConceptChunk -> UncertQ -> ConceptChunk -> ConceptChunk ->
+s4_2_5_desc1 :: ConceptChunk -> UncertQ -> UnitalChunk -> ConceptChunk ->
   UnitalChunk -> UnitalChunk -> UnitalChunk -> UnitalChunk ->
   UncertQ -> ConceptChunk -> UnitalChunk -> UncertQ -> ConceptChunk ->
   ConceptChunk -> Contents -> UnitalChunk -> Contents -> [Sentence]
 s4_2_5_desc1 roc temw en wa vo wv ma wm hcw ht hfc csa ta purin a11 vhg a12 =
-  [S "To find the", phrase roc, S "of", getS temw `sC`
+  [S "To find the", phrase roc `sOf` getS temw `sC`
   S "we look at the", phrase en, S "balance on" +:+.
   phrase wa, S "The", phrase vo, S "being considered" `isThe`
   phrase wv, getS wv `sC` S "which has", phrase ma,
@@ -505,8 +500,8 @@ s4_2_5_desc1 roc temw en wa vo wv ma wm hcw ht hfc csa ta purin a11 vhg a12 =
   `sC` S "over area") +:+. getS csa, S "No",
   phrase ht, S "occurs to", (S "outside" `ofThe`
   phrase ta) `sC` S "since it has been assumed to be",
-  phrase purin +:+. sParen (makeRef a11), S "Assuming no",
-  phrase vhg +:+. (sParen (makeRef a12) `sC`
+  phrase purin +:+. sParen (acroTest a11 s4_2_1_list), S "Assuming no",
+  phrase vhg +:+. (sParen (acroTest a12 s4_2_1_list) `sC`
   E (C vhg := Int 0)), S "Therefore, the", phrase equation, S "for",
   acroGD 2, S "can be written as"]
 
@@ -528,18 +523,18 @@ s4_2_5_equation = map EqnBlock [s4_2_5_eq1, s4_2_5_eq2, s4_2_5_eq3, s4_2_5_eq4]
 
 s4_2_5_eq1, s4_2_5_eq2, s4_2_5_eq3, s4_2_5_eq4 ::Expr
 
-s4_2_5_eq1 = (C w_mass) :* (C htCap_W) :* Deriv Total (C temp_W) (C time) :=
-  (C ht_flux_C) :* (C coil_SA)
+s4_2_5_eq1 = (C w_mass) * (C htCap_W) * Deriv Total (C temp_W) (C time) :=
+  (C ht_flux_C) * (C coil_SA)
  
-s4_2_5_eq2 = (C w_mass) :* (C htCap_W) :* Deriv Total (C temp_W) (C time) :=
-  (C coil_HTC) :* (C coil_SA) :* ((C temp_C) :- (C temp_W))
+s4_2_5_eq2 = (C w_mass) * (C htCap_W) * Deriv Total (C temp_W) (C time) :=
+  (C coil_HTC) * (C coil_SA) * ((C temp_C) - (C temp_W))
 
-s4_2_5_eq3 = Deriv Total (C temp_W) (C time) := ((C coil_HTC) :*
-  (C coil_SA)) :/ ((C w_mass) :* (C htCap_W)) :* ((C temp_C) :-
+s4_2_5_eq3 = Deriv Total (C temp_W) (C time) := ((C coil_HTC) *
+  (C coil_SA)) / ((C w_mass) * (C htCap_W)) * ((C temp_C) -
   (C temp_W))
 
-s4_2_5_eq4 = Deriv Total (C temp_W) (C time) := (1 / (C tau_W)) :*
-  ((C temp_C) :- (C temp_W))
+s4_2_5_eq4 = Deriv Total (C temp_W) (C time) := (1 / (C tau_W)) *
+  ((C temp_C) - (C temp_W))
 
 s4_2_6_table1 :: Contents
 s4_2_6_table1 = inDataConstTbl s4_2_6_conListIn
@@ -580,7 +575,7 @@ s5 = reqF [s5_1, s5_2]
 s5_1 = SRS.funcReq s5_1_list [] --TODO: Placeholder values until content can be added
 
 s5_1_list :: [Contents]
-s5_1_list = weave [acroNumGen s5_1_list_words 1, s5_1_list_items]
+s5_1_list = weave [s5_1_list_words_num, s5_1_list_items]
 
 s5_1_list_items :: [Contents]
 s5_1_list_items = [
@@ -592,8 +587,8 @@ s5_1_list_items = [
   phrase] inputVar)
   (titleize input_ +:+ titleize variable +:+ titleize requirement) False,
 
-  EqnBlock ((C w_mass) := (C w_vol) :* (C w_density) :=
-  (((C diam) / 2) :* (C tank_length) :* (C w_density)))
+  EqnBlock ((C w_mass) := (C w_vol) * (C w_density) :=
+  (((C diam) / 2) * (C tank_length) * (C w_density)))
   ]
 
 -- s5_1_list_words = map (\x -> Enumeration $ Simple [x])
@@ -625,43 +620,37 @@ s5_1_list_items = [
   -- phrase simulation, phrase time +:+. sParen (S "from" +:+ acroIM 3)]
   -- ]
 
-s5_1_list_words :: [Contents]
-s5_1_list_words = [req1, req2, req3, req4, req5, req6]
+s5_1_list_words_num :: [Contents]
+s5_1_list_words_num = acroNumGen [req1, req2, req3, req4, req5, req6] 1
 
 req1, req2, req3, req4, req5, req6 :: Contents
 
 --Empty list is supposed to take a ModuleChunk. Not sure what to put there.
-req1 = Requirement (ReqChunk (nw $ npnc "req1" $
-  nounPhraseSent (titleize input_ +:+ S "the following" +:+ plural quantity `sC`
+req1 = mkRequirement "req1" $
+  titleize input_ +:+ S "the following" +:+ plural quantity `sC`
   S "which define the" +:+ plural tank_para `sC` S "material" +:+
-  plural property +:+ S "and initial" +: plural condition))
-  []) EmptyS
-req2 = Requirement (ReqChunk (nw $ npnc "req2" $
-  nounPhraseSent (S "Use the" +:+ plural input_ +:+ S "in" +:+ makeRef req1 +:+
+  plural property +:+ S "and initial" +: plural condition
+req2 = mkRequirement "req2" $
+  S "Use the" +:+ plural input_ +:+ S "in" +:+ makeRef req1 +:+
   S "to find the" +:+ phrase mass +:+ S "needed for" +:+ acroIM 1 +:+ S "to" +:+
   acroIM 2 `sC` S "as follows, where" +:+ getS w_vol `isThe` phrase w_vol +:+
-  S "and" +: (getS tank_vol `isThe` phrase tank_vol)))
-  []) EmptyS
-req3 = Requirement (ReqChunk (nw $ npnc "req3" $
-  nounPhraseSent (S "Verify that the" +:+ plural input_ +:+ S "satisfy the required"
-  +:+ phrase physicalConstraint +:+ S "shown in" +:+. makeRef s4_2_6_table1))
-  []) EmptyS
-req4 = Requirement (ReqChunk (nw $ npnc "req4" $
-  nounPhraseSent (titleize' output_ +:+ S "and" +:+ plural input_ +:+ plural quantity
+  S "and" +: (getS tank_vol `isThe` phrase tank_vol)
+req3 = mkRequirement "req3" $
+  S "Verify that the" +:+ plural input_ +:+ S "satisfy the required"
+  +:+ phrase physicalConstraint +:+ S "shown in" +:+. makeRef s4_2_6_table1
+req4 = mkRequirement "req4" $
+  titleize' output_ +:+ S "and" +:+ plural input_ +:+ plural quantity
   +:+ S "and derived" +:+ plural quantity +:+ S "in the following list: the" +:+
-  plural quantity +:+ S "from" +:+ (makeRef req1) `sC` S "the" +:+ phrase mass +:+
-  S "from" +:+ makeRef req2 +:+ S "and" +:+ getS tau_W +:+. sParen(S "from" +:+ acroIM 1)))
-  []) EmptyS
-req5 = Requirement (ReqChunk (nw $ npnc "req5" $
-  nounPhraseSent (S "Calculate and output the" +:+ phrase temp_W +:+
+  plural quantity +:+ S "from" +:+ (acroTest req1 s5_1_list_words_num) `sC` S "the" +:+ phrase mass +:+
+  S "from" +:+ acroTest req2 s5_1_list_words_num +:+ S "and" +:+ getS tau_W +:+. sParen(S "from" +:+ acroIM 1)
+req5 = mkRequirement "req5" $
+  S "Calculate and output the" +:+ phrase temp_W +:+
   sParen (getS temp_W :+: sParen (getS time)) +:+ S "over the" +:+
-  phrase sim_time))
-  []) EmptyS
-req6 = Requirement (ReqChunk (nw $ npnc "req6" $
-  nounPhraseSent (S "Calculate and" +:+ phrase output_ +:+ S "the" +:+ phrase w_E
+  phrase sim_time
+req6 = mkRequirement "req6" $
+  S "Calculate and" +:+ phrase output_ +:+ S "the" +:+ phrase w_E
   +:+ sParen (getS w_E :+: sParen (getS time)) +:+ S "over the" +:+ phrase sim_time
-  +:+. sParen (S "from" +:+ acroIM 3)))
-  []) EmptyS
+  +:+. sParen (S "from" +:+ acroIM 3)
 
 -------------------------------------------
 --Section 5.2 : NON-FUNCTIONAL REQUIREMENTS
@@ -886,12 +875,13 @@ s7_table3 = Table (EmptyS:s7_row_header_t3)
 -- Traceabilty Graphs --
 ------------------------
 
+tempName :: [CI]
+tempName = [thModel, genDefn, dataDefn, inModel, likelyChg, assumption]
+
 s7_intro2 :: [Contents]
 s7_intro2 = traceGIntro [s7_fig1, s7_fig2]
 
-  [foldlSent [plural thModel `sC` plural genDefn `sC` plural dataDefn
-  `sC` plural inModel `sC` plural likelyChg `sC` S "and",
-  plural assumption, S "on each other"],
+  [(foldlList $ map plural tempName) +:+. S "on each other",
 
   foldlSent_ [plural inModel `sC` plural requirement `sC`
   S "and", plural datumConstraint, S "on each other"]]

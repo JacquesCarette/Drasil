@@ -10,7 +10,7 @@ import Language.Drasil.Chunk.Eq
 import Language.Drasil.Chunk.Relation
 import Language.Drasil.Chunk.ExprRelat (relat)
 import Language.Drasil.Chunk.Module
-import Language.Drasil.Chunk.NamedIdea (term)
+import Language.Drasil.Chunk.NamedIdea (term, short)
 import Language.Drasil.Chunk.Concept (defn)
 import Language.Drasil.Chunk.SymbolForm (SymbolForm, symbol)
 import Language.Drasil.Chunk.VarChunk (VarChunk)
@@ -57,6 +57,7 @@ expr e@(_ :< _)       = rel e
 expr e@(_ :<= _)      = rel e
 expr e@(_ :>= _)      = rel e
 expr (Matrix a)       = H.Mtx $ map (map expr) a
+expr (Index a i)      = H.Index (expr a) (expr i)
 expr (UnaryOp u)      = (\(x,y) -> H.Op x [y]) (ufunc u)
 expr (Grouping e)     = H.Grouping (expr e)
 expr (BinaryOp b)     = (\(x,y) -> H.Op x y) (bfunc b)
@@ -123,6 +124,10 @@ set String   = H.String
 set Radians  = H.Radians
 set (Vect a) = H.Vect (set a)
 set (Obj a)  = H.Obj a
+--set (Discrete a)  = H.Discrete (set a)
+--set (DiscreteI a) = H.DiscreteI a
+--set (DiscreteD a) = H.DiscreteD a
+--set (DiscreteS a) = H.DiscreteS a
 
 -- | Helper function for translating Integrals (from 'UFunc')
 integral :: UFunc -> (H.Function, H.Expr)
@@ -218,9 +223,9 @@ lay (Enumeration cs)  = H.List $ makeL cs
 lay x@(Figure c f)    = H.Figure (spec (refName x)) (spec c) f
 lay x@(Module m)      = H.Module (formatName m) (spec $ refName x)
 lay (Graph _ _ _ _)   = H.Paragraph (H.EmptyS)  -- need to implement!
-lay x@(Requirement r id)   = H.Requirement (spec (phrase $ r ^. term)) (spec $ refName x) (spec id)
-lay x@(Assumption a id)    = H.Assumption (spec (phrase $ a ^. term)) (spec $ refName x) (spec id)
-lay x@(LikelyChange lc id)  = H.LikelyChange (spec (phrase $ lc ^. term)) (spec $ refName x) (spec id)
+lay x@(Requirement r)   = H.Requirement (spec (phrase $ r ^. term)) (spec $ refName x) (spec $ short r)
+lay x@(Assumption a)    = H.Assumption (spec (phrase $ a ^. term)) (spec $ refName x) (spec $ short a)
+lay x@(LikelyChange lc)  = H.LikelyChange (spec (phrase $ lc ^. term)) (spec $ refName x) (spec $ short lc)
 lay (UnlikelyChange _)= H.Paragraph (H.EmptyS)  -- need to implement!
 lay (TMod ps rf r)    = H.Definition (Theory r) 
   (map (\(x,y) -> (x, map lay y)) ps) (spec rf)

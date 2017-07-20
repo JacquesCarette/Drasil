@@ -58,6 +58,7 @@ data Config = Config {
     endStatement :: Doc,
     enumsEqualInts :: Bool,     --whether Enum elements should explictly be set equal to their ordinal integers (in the default enumElementsDoc implementation)
     ext :: Label,
+    dir :: Label,
     fileName :: Module -> String,
     include :: Label -> Doc,
     includeScope :: Scope -> Doc,
@@ -304,19 +305,19 @@ funcAppDocD c n vs = text n <> parens (callFuncParamList c vs)
 
 funcDocD :: Config -> Function -> Doc
 funcDocD c (Func n vs) = dot <> funcAppDoc c n vs
-funcDocD c (Cast t) = parens (stateType c t Dec)
+funcDocD c (Cast t _) = parens (stateType c t Dec)
 funcDocD c (Get n) = dot <> funcAppDoc c (getterName n) []
 funcDocD c (Set n v) = dot <> funcAppDoc c (setterName n) [v]
 funcDocD c (IndexOf v) = dot <> funcAppDoc c "IndexOf" [v]
 funcDocD _ ListSize = dot <> text "Count"
-funcDocD c (ListAccess v@(EnumVar _)) = funcDoc c $ ListAccess (v $. cast' Integer)
-funcDocD c (ListAccess v@(EnumElement _ _)) = funcDoc c $ ListAccess (v $. cast' Integer)
-funcDocD c (ListAccess v@(ObjAccess (ListVar _ (EnumType _)) (ListAccess _))) = funcDoc c $ ListAccess (v $. cast' Integer)
+funcDocD c (ListAccess v@(EnumVar _)) = funcDoc c $ ListAccess (v $. cast' Integer Integer)  -- needs fixing (sourceType?)
+funcDocD c (ListAccess v@(EnumElement _ _)) = funcDoc c $ ListAccess (v $. cast' Integer Integer) -- needs fixing (sourceType?)
+funcDocD c (ListAccess v@(ObjAccess (ListVar _ (EnumType _)) (ListAccess _))) = funcDoc c $ ListAccess (v $. cast' Integer Integer) -- needs fixing (sourceType?)
 funcDocD c (ListAccess i) = brackets $ valueDoc c i
 funcDocD c (ListAdd i v) = dot <> funcAppDoc c "Insert" [i, v]
 funcDocD c (ListAppend v) = dot <> funcAppDoc c "append" [v]
-funcDocD c (ListSet i@(EnumVar _) v) = funcDoc c $ ListSet (i $. cast' Integer) v
-funcDocD c (ListSet i@(EnumElement _ _) v) = funcDoc c $ ListSet (i $. cast' Integer) v
+funcDocD c (ListSet i@(EnumVar _) v) = funcDoc c $ ListSet (i $. cast' Integer Integer) v -- needs fixing (sourceType?)
+funcDocD c (ListSet i@(EnumElement _ _) v) = funcDoc c $ ListSet (i $. cast' Integer Integer) v -- needs fixing (sourceType?)
 funcDocD c (ListSet i v) = brackets (valueDoc c i) <+> equals <+> valueDoc c v
 funcDocD _ (ListPopulate _ _) = empty
 funcDocD c (IterBegin) = dot <> funcAppDoc c "begin" []
@@ -385,7 +386,7 @@ namespaceD n = text "namespace" <+> text n
 objAccessDocD :: Config -> Value -> Function -> Doc
 objAccessDocD c (Self) (Func n vs) = funcAppDoc c n vs
 objAccessDocD _ _ (ListPopulate _ _) = empty
-objAccessDocD c v f@(Cast _) = funcDoc c f <> parens (valueDoc c v)
+objAccessDocD c v f@(Cast _ _) = funcDoc c f <> parens (valueDoc c v)
 objAccessDocD c v   (Floor) = funcAppDoc c "Math.Floor" [v]
 objAccessDocD c v   (Ceiling) = funcAppDoc c "Math.Ceiling" [v]
 objAccessDocD c v f = valueDoc c v <> funcDoc c f
@@ -470,8 +471,8 @@ statementDocD c _ (CommentState s) = comment c s
 statementDocD c loc (FreeState v) = text "delete" <+> valueDoc c v <> end c loc
 statementDocD c loc (ExceptState e) = exceptionDoc c e <> end c loc
 statementDocD c loc (PatternState p) = patternDoc c p <> end c loc
-statementDocD c loc (IOState io) = ioDoc c io <> end c loc
-statementDocD c loc (ComplexState cplx) = complexDoc c cplx
+statementDocD c _ (IOState io) = ioDoc c io
+statementDocD c _ (ComplexState cplx) = complexDoc c cplx
 statementDocD c loc (MultiState s) = vcat $ map (statementDoc c loc) s
 
 ioDocD :: Config -> IOSt -> Doc
@@ -479,10 +480,11 @@ ioDocD c (OpenFile f n m) = statementDoc c NoLoop (valStmt $ objMethodCall f "op
   where modeStr Read = "r"
         modeStr Write = "w"
 ioDocD c (CloseFile f) = statementDoc c NoLoop (valStmt $ objMethodCall f "close" [])
-ioDocD c (Out t newLn s v) = printDoc c t newLn s v
-ioDocD c (In t s v) = inputDoc c t s v
+ioDocD c (Out t newLn s v) = printDoc c t newLn s v <> semi
+ioDocD c (In t s v) = inputDoc c t s v <> semi
 
 inputDocD :: Config -> IOType -> StateType -> Value -> Doc
+inputDocD _ _ (Base (FileType _)) _ = error "File type is not valid input"
 inputDocD _ _ (Base _) _ = error "No default implementation"
 inputDocD _ _ _ _ = error "Type not supported for input"
 
@@ -501,10 +503,12 @@ stateTypeD _ (Iterator _) _      = empty
 stateTypeD _ (EnumType enum) _   = text enum
 
 methodDocD :: Config -> FileType -> Label -> Method -> Doc
-methodDocD c _ _ (Method n s t ps b) = vcat [
-    scopeDoc c s <+> methodTypeDoc c t <+> text n <> parens (paramListDoc c ps) <+> lbrace,
+methodDocD c _ _ (Method n s p t ps b) = vcat [
+    scopeDoc c s <+> perm p <> methodTypeDoc c t <+> text n <> parens (paramListDoc c ps) <+> lbrace,
     oneTab $ bodyDoc c b,
     rbrace]
+  where perm Dynamic = empty
+        perm Static  = text "static "
 methodDocD c _ _ (MainMethod b) = vcat [
     scopeDoc c Public <+> text "static" <+> methodTypeDoc c Void <+> text "Main" <> parens (text "string[] args") <+> lbrace,
     oneTab $ bodyDoc c b,
@@ -542,6 +546,9 @@ unOpDocD Abs = text "fabs"
 unOpDocD Not = text "!"
 unOpDocD Log = text "log"
 unOpDocD Exp = text "exp"
+unOpDocD Sin = text "sin"
+unOpDocD Cos = text "cos"
+unOpDocD Tan = text "tan"
 
 unOpDocD' :: UnaryOp -> Doc
 unOpDocD' SquareRoot = text "math.sqrt"
@@ -549,6 +556,9 @@ unOpDocD' Abs = text "math.fabs"
 unOpDocD' Not = text "not"
 unOpDocD' Log = text "math.log"
 unOpDocD' Exp = text "math.exp"
+unOpDocD' Sin = text "math.sin"
+unOpDocD' Cos = text "math.cos"
+unOpDocD' Tan = text "math.tan"
 unOpDocD' op = unOpDocD op
 
 valueDocD :: Config -> Value -> Doc
@@ -581,9 +591,9 @@ complexDocD _ _ = error "No default implementation for ComplexState"
 
 addDefaultCtor :: Config -> Label -> Label -> [Method] -> [Method]
 addDefaultCtor _ modName ctorName fs =
-    case find ctor fs of Nothing   -> Method ctorName Public (Construct modName) [] [] : fs
+    case find ctor fs of Nothing   -> Method ctorName Public Dynamic (Construct modName) [] [] : fs
                          _ -> fs
-    where ctor (Method _ _ (Construct _) _ _) = True
+    where ctor (Method _ _ _ (Construct _) _ _) = True
           ctor _ = False
 
 comment :: Config -> Comment -> Doc
@@ -602,7 +612,7 @@ end c NoLoop = endStatement c
 -- change the name of constructors in the given list of Transformations
 fixCtorName :: Label -> [Method] -> [Method]
 fixCtorName newName = map (fixTran newName)
-  where fixTran nn (Method _ s (Construct m) p b) = Method nn s (Construct m) p b
+  where fixTran nn (Method _ s pr (Construct m) p b) = Method nn s pr (Construct m) p b
         fixTran _ f = f
 
 -- change the constructor name on all modules

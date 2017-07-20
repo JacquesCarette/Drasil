@@ -22,25 +22,25 @@ def derived_params(params):
         params.h = 2.16
     elif params.t == "2.7":
         params.h = 2.59
-    elif params.t == "3.0":
+    elif params.t == "3":
         params.h = 2.92
-    elif params.t == "4.0":
+    elif params.t == "4":
         params.h = 3.78
-    elif params.t == "5.0":
+    elif params.t == "5":
         params.h = 4.57
-    elif params.t == "6.0":
+    elif params.t == "6":
         params.h = 5.56
-    elif params.t == "8.0":
+    elif params.t == "8":
         params.h = 7.42
-    elif params.t == "10.0":
+    elif params.t == "10":
         params.h = 9.02
-    elif params.t == "12.0":
+    elif params.t == "12":
         params.h = 11.91
-    elif params.t == "16.0":
+    elif params.t == "16":
         params.h = 15.09
-    elif params.t == "19.0":
+    elif params.t == "19":
         params.h = 18.26
-    elif params.t == "22.0":
+    elif params.t == "22":
         params.h = 21.44
     else:
         print("Wrong thickness entered -Not a industrial standard ")
@@ -54,4 +54,3 @@ def derived_params(params):
         params.gtf = 4
     else:
         print("Wrong glass type entered")
-    return params

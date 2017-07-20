@@ -55,6 +55,7 @@ expr x@(_ :< _)        = rel x
 expr x@(_ :<= _)       = rel x
 expr x@(_ :>= _)       = rel x
 expr (Matrix a)        = T.Mtx $ map (map expr) a
+expr (Index a i)       = T.Index (expr a) (expr i)
 expr (UnaryOp u)       = (\(x,y) -> T.Op x [y]) (ufunc u)
 expr (Grouping e)      = T.Grouping (expr e)
 expr (BinaryOp b)      = (\(x,y) -> T.Op x y) (bfunc b)
@@ -118,6 +119,10 @@ set String   = T.String
 set Radians  = T.Radians
 set (Vect a) = T.Vect (set a)
 set (Obj a)  = T.Obj a
+--set (Discrete a) = T.Discrete (set a)
+--set (DiscreteI a) = T.DiscreteI a
+--set (DiscreteD a) = T.DiscreteD a
+--set (DiscreteS a) = T.DiscreteS a
 
 -- | Helper function for translating Integrals (from 'UFunc')
 integral :: UFunc -> (T.Function, T.Expr)
@@ -201,11 +206,11 @@ lay x@(Definition m c)      = T.Definition (makePairs c m) (spec $ refName x)
 lay (Enumeration cs)      = T.List $ makeL cs
 lay x@(Figure c f)        = T.Figure (spec (refName x)) (spec c) f
 lay x@(Module m)          = T.Module (formatName m) (spec $ refName x)
-lay x@(Requirement r _)     = 
+lay x@(Requirement r)     = 
   T.Requirement (spec (phrase (r ^. term))) (spec $ refName x)
-lay x@(Assumption a _)      = 
+lay x@(Assumption a)      = 
   T.Assumption (spec (phrase $ a ^. term)) (spec $ refName x)
-lay x@(LikelyChange lc _)   = 
+lay x@(LikelyChange lc)   = 
   T.LikelyChange (spec (phrase $ lc ^. term))
   (spec $ refName x)
 lay x@(UnlikelyChange ucc)= 

@@ -11,6 +11,7 @@ import Data.Drasil.Authors
 import Data.Drasil.Concepts.Documentation
 import Data.Drasil.Concepts.Software
 import Data.Drasil.Concepts.Computation
+import Data.Drasil.Concepts.Education
 import Drasil.Sections.TraceabilityMandGs
 import qualified Data.Drasil.Quantities.Math as QM (orientation)
 import qualified Data.Drasil.Quantities.Physics as QP (time, 
@@ -60,7 +61,7 @@ mkSRS = RefSec (RefProg RM.intro [TUnits, tsymb tableOfSymbols, TAandA]) :
   IntroSec (IntroProg para1_s2_intro (short chipmunk) 
   [IPurpose (para1_s2_1_intro), 
   IScope s2_2_intro_p1 s2_2_intro_p2, 
-  IChar (S "rigid body dynamics") (S "high school calculus") (EmptyS), 
+  IChar (S "rigid body dynamics") (phrase highSchoolCalculus) (EmptyS), 
   IOrgSec s2_4_intro inModel s4_2 EmptyS]) :
   map Verbatim [s3, s4, s5, s6, s7, s8, s9, s10]
     where tableOfSymbols = [TSPurpose, TypogConvention[Vector Bold], SymbOrder]
@@ -130,9 +131,9 @@ para1_s2_1_param progName typeOf progDescrip appOf listOf = foldlSent
   progDescrip, S "used for" +:+. appOf, S "The", 
   foldlList listOf, S "used in", (short progName), 
   S "are provided. This", (phrase typeOf), 
-  S "is intended to be used as a reference to provide all necessary",
-  (phrase information), S "to understand and verify the",
-  (phrase model)]
+  S "is intended to be used as a", (phrase reference), 
+  S "to provide all necessary", (phrase information), 
+  S "to understand and verify the", (phrase model)]
 
 ---------------------------------
 -- 2.2 : Scope of Requirements --
@@ -140,7 +141,7 @@ para1_s2_1_param progName typeOf progDescrip appOf listOf = foldlSent
 s2_2_intro_p1, s2_2_intro_p2 :: Sentence
 
 s2_2_intro_p1 = foldlSent_
-  [S "the", (phrase physicalSim), S "of", (getAcc twoD), 
+  [S "the", (phrase physicalSim) `sOf` (getAcc twoD), 
   (plural CP.rigidBody), S "acted on by", plural QP.force]
   
 s2_2_intro_p2 = foldlSent_ [S "simulate how these", 
@@ -158,8 +159,8 @@ s2_4_intro :: Sentence
 
 s2_4_intro = foldlSent 
   [S "The", (phrase organization), S "of this", (phrase document), 
-  S "follows the", phrase template, S "for an", (getAcc srs),
-  S "for", phrase sciCompS, S "proposed by [1] and [2]"]
+  S "follows the", phrase template, S "for an", (getAcc srs), S "for", 
+  (phrase sciCompS), S "proposed by", (sSqBrNum 1) `sAnd` (sSqBrNum 2)]
 
 --------------------------------------------
 -- Section 3: GENERAL SYSTEM DESCRIPTION --
@@ -182,8 +183,8 @@ userCharacteristicSect = sSubSec userCharacteristic [(siCon [s3_1_intro])]
 s3_1_intro :: Contents
 s3_1_intro = foldlSP
   [S "The", phrase endUser `sOf` short chipmunk,
-  S "should have an understanding of first year programming concepts",
-  S "and an understanding of high school", phrase physics]
+  S "should have an understanding of", phrase frstYr, S "programming",
+  plural concept `sAnd` S "an understanding of", phrase highSchoolPhysics]
 
 -------------------------------
 -- 3.2 : System Constraints  --
@@ -219,21 +220,20 @@ s4_1_intro = s4_1_intro_param physLib game
 
 s4_1_intro_param :: (NamedIdea a, NamedIdea b) => a -> b -> Sentence
 s4_1_intro_param lib app = foldlSent 
-  [S "Creating a gaming", (phrase lib) +:+. S "is a difficult", phrase task,
+  [S "Creating a gaming", (phrase lib), S "is a difficult" +:+. phrase task,
   (titleize' app), S "need",  (plural lib), S "that simulate", plural object,
   S "acting under various", (phrase physical), plural condition `sC` S "while", 
   S "simultaneously being fast and efficient enough to work in soft",
   (phrase realtime), S "during the" +:+. (phrase app), S "Developing a", 
-  (phrase lib), S "from scratch takes a long period of time and is very costly" `sC`
-  S "presenting barriers of entry which make it difficult for", (phrase app),
-  S "developers to include", (phrase physics), S "in their" +:+. (plural product_),
-  S "There are a few free" `sC` (phrase openSource) `sAnd` S "high quality", (plural lib), 
-  S "available to be used for", phrase consumer, plural product_ +:+. 
+  (phrase lib), S "from scratch takes a long period of", (phrase QP.time) `sAnd`
+  S "is very costly" `sC` S "presenting barriers of entry which make it difficult for",
+  (phrase app), S "developers to include", (phrase physics), S "in their" +:+. 
+  (plural product_), S "There are a few free" `sC` (phrase openSource) `sAnd` S "high quality",
+  (plural lib), S "available to be used for", phrase consumer, plural product_ +:+. 
   (sParen $ makeRef s7), S "By creating a simple, lightweight, fast and portable",
-  (getAcc twoD), (phrase CP.rigidBody), (phrase lib) `sC`
-  (phrase app), S "development will be more accessible",
-  S "to the masses" `sAnd` S "higher quality", (plural product_),
-  S "will be produced"]
+  (getAcc twoD), (phrase CP.rigidBody), (phrase lib) `sC` (phrase app),
+  S "development will be more accessible to the masses" `sAnd` S "higher quality",
+  (plural product_), S "will be produced"]
 
 
 -----------------------------------------
@@ -393,8 +393,8 @@ s4_2_3_GDefs = map (Definition . General) gDefs)
 ------------------------------
 
 s4_2_4_intro :: Sentence
-s4_2_4_intro = foldlSent [S "The", (phrase CPP.dimension), 
-  S "of each", (phrase quantity), S "is also given"]
+s4_2_4_intro = foldlSent [S "The", (phrase CPP.dimension)
+   `sOf` S "each", (phrase quantity), S "is also given"]
 
 -----------------------------
 -- 4.2.5 : Instance Models --

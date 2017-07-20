@@ -1,7 +1,7 @@
 module Drasil.GlassBR.IMods where
 
 import Language.Drasil
-import Data.Drasil.SentenceStructures (foldlSent, isThe)
+import Data.Drasil.SentenceStructures (foldlSent, isThe, sAnd, sOr)
 import Prelude hiding (id, exp)
 import Control.Lens ((^.))
 import Drasil.GlassBR.Unitals
@@ -13,7 +13,6 @@ import Data.Drasil.Concepts.Math (parameter)
 
 iModels :: [RelationConcept]
 iModels = [probOfBr, calOfCap, calOfDe]
---make probOfBr into an NPNC type? (along with calOfCap, calOfDe)
 
 {--}
 
@@ -44,7 +43,7 @@ capdescr =
   S "which" +:+. S "is also called capacity" +:+. ((getS nonFL) `isThe`
   (phrase nonFL)) +:+. ((short glassTypeFac) `isThe` (phrase glassTypeFac))
   +:+. ((short lShareFac) `isThe` (phrase lShareFac)), S "Follows",
-  (acroA 2), S "and", (acroA 1), sParen (Quote 
+  (acroA 2) `sAnd` (acroA 1), sParen (Quote 
   (S "In development of this procedure, it was assumed that" +:+
   S "all four edges of the glass are simply supported and free to slip" +:+
   S "in the plane of the glass. This boundary condition has been shown" +:+
@@ -61,7 +60,7 @@ de_rel = (C demand) := FCall (C demand) [C eqTNTWeight, C standOffDist]
 
 dedescr :: Sentence
 dedescr = 
-  foldlSent [(getS demand), S "or", (phrase demandq) `sC`
+  foldlSent [(getS demand `sOr` phrase demandq) `sC`
   S "is the", (demandq ^. defn), 
   S "obtained from Figure 2 by interpolation using", --use MakeRef? Issue #216
   (phrase standOffDist), sParen (getS standOffDist), S "and", 

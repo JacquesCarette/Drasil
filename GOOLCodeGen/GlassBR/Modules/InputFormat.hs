@@ -4,7 +4,7 @@ import Language.Drasil.Code
 import Defs
 
 inputFormat :: Module
-inputFormat = buildModule "InputFormat" [] [] [get_input_func] []
+inputFormat = buildModule "InputFormat" [lib_InputParameters] [] [get_input_func] []
 
 get_input_func :: FunctionDecl
 get_input_func = pubMethod methodTypeVoid "get_input" [p_filename, p_params] 

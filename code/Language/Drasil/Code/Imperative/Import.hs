@@ -3,20 +3,23 @@ module Language.Drasil.Code.Imperative.Import where
 import Language.Drasil.Code.Code as C
 import Language.Drasil.Code.Imperative.AST as I
 import Language.Drasil.Code.Imperative.LanguageRenderer (Options(..))
-import Language.Drasil.Code.Imperative.Parsers.ConfigParser (pythonLabel)
+import Language.Drasil.Code.Imperative.Parsers.ConfigParser (pythonLabel, cppLabel, cSharpLabel, javaLabel)
 import Language.Drasil.Code.CodeGeneration (createCodeFiles, makeCode)
 import Language.Drasil.Chunk.Code
 import Language.Drasil.Expr as E
 import Language.Drasil.Expr.Extract hiding (vars)
-import Language.Drasil.CodeSpec
+import Language.Drasil.CodeSpec hiding (codeSpec)
 
 import Prelude hiding (log, exp, return)
 import Data.List (intersperse)
+import System.Directory
 
 data Generator = Generator { 
   generateCode :: IO (),
   
   genModules :: [Module],
+  
+  codeSpec :: CodeSpec,
   
   genInputMod :: [CodeChunk] -> ConstraintMap -> [Module],
   genCalcMod :: [CodeDefinition] -> [Module],
@@ -27,12 +30,12 @@ data Generator = Generator {
   genInputConstraints :: [CodeChunk] -> ConstraintMap -> Method,
 
   genCalcFuncs :: [CodeDefinition] -> [Method],
-  genCalcBlock :: CodeDefinition -> Body,
+  genCalcBlock :: Expr -> Body,
   genCaseBlock :: [(Expr,Relation)] -> Body,  
 
   genOutputFormat :: [CodeChunk] -> Method,
   
-  genMethodCall :: Scope -> MethodType -> Label -> [Parameter] -> Body -> Method,
+  genMethodCall :: Scope -> Permanence -> MethodType -> Label -> [Parameter] -> Body -> Method,
   
   logName :: String,
   
@@ -46,9 +49,6 @@ data Generator = Generator {
 generator :: CodeSpec -> Generator -> Generator
 generator spec g = 
   let chs = choices spec
-      methodCallFunc =     case (logging chs) of          LogFunc   -> loggedMethod
-                                                          LogAll    -> loggedMethod
-                                                          _         -> genMethodCallD
       sfwrConstraintFunc = case (onSfwrConstraint chs) of Warning   -> constrWarn
                                                           Exception -> constrExc
       physConstraintFunc = case (onPhysConstraint chs) of Warning   -> constrWarn
@@ -59,6 +59,8 @@ generator spec g =
       generateCode = generateCodeD spec g,
       
       genModules = genModulesD spec g,
+      
+      codeSpec = spec,
       
       genInputMod = inputModFunc g,
       genCalcMod = genCalcModD g,
@@ -74,12 +76,12 @@ generator spec g =
 
       genOutputFormat = genOutputFormatD g,
       
-      genMethodCall = methodCallFunc g,
+      genMethodCall = genMethodCallD g,
       
       logName = logFile $ choices spec,
       
-      publicMethod = genMethodCall g Public,
-      privateMethod = genMethodCall g Private,
+      publicMethod = genMethodCall g Public Static,
+      privateMethod = genMethodCall g Private Dynamic,
       
       sfwrCBody = sfwrConstraintFunc g,
       physCBody = physConstraintFunc g
@@ -87,15 +89,29 @@ generator spec g =
 
 generateCodeD :: CodeSpec -> Generator -> IO () 
 generateCodeD s g = let modules = genModules g 
-   in createCodeFiles $ makeCode 
-        pythonLabel
-        (Options Nothing Nothing Nothing (Just "Code")) 
-        (toAbsCode (codeName $ program s) modules)
-
+  in do workingDir <- getCurrentDirectory
+        mapM_ (\x -> do 
+             createDirectoryIfMissing False (getDir x) 
+             setCurrentDirectory (getDir x)
+             createCodeFiles $ makeCode 
+               (getLabel x)
+               (Options Nothing Nothing Nothing (Just "Code")) 
+               (toAbsCode (codeName $ program s) modules)
+             setCurrentDirectory workingDir) (lang $ choices s)    
+  where getLabel Cpp = cppLabel
+        getLabel CSharp = cSharpLabel
+        getLabel Java = javaLabel
+        getLabel Python = pythonLabel
+        getDir Cpp = "cpp"
+        getDir CSharp = "csharp"
+        getDir Java = "java"
+        getDir Python = "python"
+        
 genModulesD :: CodeSpec -> Generator -> [Module]
-genModulesD (CodeSpec _ i o d cm _) g = genInputMod g i cm
-                                     ++ genCalcMod g d
-                                     ++ genOutputMod g o
+genModulesD (CodeSpec _ i o d cm _ _ _ h) g = genInputMod g i cm
+                                       ++ genCalcMod g d
+                                       ++ genOutputMod g o
+                                       ++ map (genHacks g) h -- hack 
 
 
 ------- INPUT ----------  
@@ -175,29 +191,26 @@ genCalcModD :: Generator -> [CodeDefinition] -> [Module]
 genCalcModD g defs = [buildModule "Calculations" [] [] (genCalcFuncs g defs) []]   
         
 genCalcFuncsD :: Generator -> [CodeDefinition] -> [Method]
-genCalcFuncsD g = map 
-  ( \x -> publicMethod g 
+genCalcFuncsD g cds = 
+  let defs = filter (\x -> validExpr (codeEquat x)) cds  -- filter valid expr's for now
+  in map 
+    ( \x -> publicMethod g 
             (methodType $ convType (codeType x)) 
             ("calc_" ++ codeName x) 
             (getParams (codevars $ codeEquat x)) 
-            (genCalcBlock g x)
-  )
+            (genCalcBlock g $ codeEquat x)
+    ) defs
 
-genCalcBlockD :: Generator -> CodeDefinition -> Body
-genCalcBlockD g def 
-  | isCase (codeEquat def) = genCaseBlock g $ getCases (codeEquat def)
-  | otherwise              = oneLiner $ return $ convExpr (codeEquat def)
-  where isCase (Case _) = True
-        isCase _        = False
-        getCases (Case cs) = cs
-        getCases _         = error "impossible to get here"
-
+genCalcBlockD :: Generator -> Expr -> Body
+genCalcBlockD g e
+  | containsCase e   = genCaseBlock g $ getCases e
+  | otherwise        = oneLiner $ return $ convExpr e
 
 genCaseBlockD :: Generator -> [(Expr,Relation)] -> Body
 genCaseBlockD g cs = oneLiner $ ifCond (genIf cs) noElse
   where genIf :: [(Expr,Relation)] -> [(Value,Body)]
         genIf = map 
-          (\(e,r) -> (convExpr r, oneLiner $ return (convExpr e)))
+          (\(e,r) -> (convExpr r, genCalcBlock g e))
 
 
 ----- OUTPUT -------
@@ -231,16 +244,33 @@ genOutputFormatD g outs = let l_outfile = "outfile"
     
 -----
 
-genMethodCallD :: Generator -> Scope -> MethodType -> Label -> [Parameter] 
+genMethodCallD :: Generator -> Scope -> Permanence -> MethodType -> Label -> [Parameter] 
                   -> Body -> Method
-genMethodCallD _ s t n p b = Method n s t p b
+genMethodCallD g s pr t n p b = let loggedBody = if (logging $ choices $ codeSpec g) == LogFunc || (logging $ choices $ codeSpec g) == LogAll
+                                                 then loggedMethod g n p b
+                                                 else b
+                                    commBody   = if (comments $ choices $ codeSpec g) == CommentFunc 
+                                                 then commMethod g n p loggedBody
+                                                 else b
+                                    theBody    = commBody
+  in  
+    Method n s pr t p theBody
 
-loggedMethod :: Generator -> Scope -> MethodType -> Label -> [Parameter] 
-                  -> Body -> Method
-loggedMethod g s t n p b = let l_outfile = "outfile"
-                               v_outfile = var l_outfile 
+
+commMethod :: Generator -> Label -> [Parameter] -> Body -> Body
+commMethod g n p b = 
+ (
+    block [
+      comment $ "function '" ++ n ++ "': " ++ (funcTerm n (fMap $ codeSpec g)),
+      multi $ map 
+        (\x -> comment $ "parameter '" ++ (paramName x) ++ "': " ++ (varTerm (paramName x) (vMap $ codeSpec g))) p    
+    ]
+  ) : b
+    
+loggedMethod :: Generator -> Label -> [Parameter] -> Body -> Body
+loggedMethod g n p b = let l_outfile = "outfile"
+                           v_outfile = var l_outfile 
   in
-    Method n s t p $ 
     (
       block [
         varDec l_outfile outfile,
@@ -255,8 +285,9 @@ loggedMethod g s t n p b = let l_outfile = "outfile"
     printParams ps v_outfile = multi $ 
       intersperse (printFileStr v_outfile ", ") $
       map (\x -> printFile v_outfile (paramType x) (paramVal x)) ps
-  
 
+       
+      
 -- helpers
     
 getParams :: (CodeEntity c) => [c] -> [Parameter]
@@ -268,7 +299,11 @@ paramType (FuncParam _ _ _) = error "Function param not implemented"
 
 paramVal :: Parameter -> Value
 paramVal (StateParam l _) = var l
-paramVal (FuncParam _ _ _) = error "Function param not implemented"        
+paramVal (FuncParam _ _ _) = error "Function param not implemented"     
+
+paramName :: Parameter -> String
+paramName (StateParam l _) = l
+paramName (FuncParam _ _ _) = error "Function param not implemented"   
           
 convType :: C.CodeType -> I.StateType
 convType C.Boolean = bool
@@ -279,6 +314,52 @@ convType C.String = string
 convType (C.List t) = listT $ convType t
 convType (C.Object n) = obj n
 convType _ = error "No type conversion"
+
+-- Some Expr can't be converted to code yet...
+-- rather than stop execution with failure,
+-- just check ahead of time and don't try to convert for now
+validExpr :: Expr -> Bool
+validExpr (V _)        = True
+validExpr (Dbl _)      = True
+validExpr (Int _)      = True
+validExpr (Bln _)      = True
+validExpr (a :/ b)     = (validExpr a) && (validExpr b)
+validExpr (a :* b)     = (validExpr a) && (validExpr b)
+validExpr (a :+ b)     = (validExpr a) && (validExpr b)
+validExpr (a :^ b)     = (validExpr a) && (validExpr b)
+validExpr (a :- b)     = (validExpr a) && (validExpr b)
+validExpr (a :. b)     = (validExpr a) && (validExpr b)
+validExpr (a :&& b)    = (validExpr a) && (validExpr b)
+validExpr (a :|| b)    = (validExpr a) && (validExpr b)
+validExpr (Deriv _ _ _) = False
+validExpr (E.Not e)      = validExpr e
+validExpr (Neg e)      = validExpr e
+validExpr (C _)        = True
+validExpr (FCall (C c) x)  = foldl (&&) True (map validExpr x)
+validExpr (FCall _ _)  = False
+validExpr (a := b)     = (validExpr a) && (validExpr b)
+validExpr (a :!= b)    = (validExpr a) && (validExpr b)
+validExpr (a :> b)     = (validExpr a) && (validExpr b)
+validExpr (a :< b)     = (validExpr a) && (validExpr b)
+validExpr (a :<= b)    = (validExpr a) && (validExpr b)
+validExpr (a :>= b)    = (validExpr a) && (validExpr b)
+validExpr (UnaryOp u)  = validunop u
+validExpr (Grouping e) = validExpr e
+validExpr (BinaryOp _) = False
+validExpr (Case c)     = foldl (&&) True (map (\(e, r) -> validExpr e && validExpr r) c)
+validExpr _            = False
+
+validunop :: UFunc -> Bool
+validunop (E.Log e)          = validExpr e
+validunop (E.Abs e)          = validExpr e
+validunop (E.Exp e)          = validExpr e
+validunop (E.Sin e)          = validExpr e
+validunop (E.Cos e)          = validExpr e
+validunop (E.Tan e)          = validExpr e
+validunop (E.Csc e)          = validExpr e
+validunop (E.Sec e)          = validExpr e
+validunop (E.Cot e)          = validExpr e
+validunop _                  = False
 
 convExpr :: Expr -> Value
 convExpr (V v)        = litString v  -- V constructor should be removed
@@ -315,4 +396,102 @@ unop :: UFunc -> Value
 unop (E.Log e)          = I.log (convExpr e)
 unop (E.Abs e)          = (#|) (convExpr e)
 unop (E.Exp e)          = I.exp (convExpr e)
+unop (E.Sin e)          = I.sin (convExpr e)
+unop (E.Cos e)          = I.cos (convExpr e)
+unop (E.Tan e)          = I.tan (convExpr e)
+unop (E.Csc e)          = I.csc (convExpr e)
+unop (E.Sec e)          = I.sec (convExpr e)
+unop (E.Cot e)          = I.cot (convExpr e)
 unop _                  = error "not implemented"
+
+
+containsCase :: Expr -> Bool
+containsCase (Case _) = True
+containsCase (a :/ b)     = (containsCase a) || (containsCase b)
+containsCase (a :* b)     = (containsCase a) || (containsCase b)
+containsCase (a :+ b)     = (containsCase a) || (containsCase b)
+containsCase (a :^ b)     = (containsCase a) || (containsCase b)
+containsCase (a :- b)     = (containsCase a) || (containsCase b)
+containsCase (a :. b)     = (containsCase a) || (containsCase b)
+containsCase (a :&& b)    = (containsCase a) || (containsCase b)
+containsCase (a :|| b)    = (containsCase a) || (containsCase b)
+containsCase (Deriv _ _ _) = error "not implemented"
+containsCase (E.Not e)      = containsCase e
+containsCase (Neg e)      = containsCase e
+containsCase (a := b)     = (containsCase a) || (containsCase b)
+containsCase (a :!= b)    = (containsCase a) || (containsCase b)
+containsCase (a :> b)     = (containsCase a) || (containsCase b)
+containsCase (a :< b)     = (containsCase a) || (containsCase b)
+containsCase (a :<= b)    = (containsCase a) || (containsCase b)
+containsCase (a :>= b)    = (containsCase a) || (containsCase b)
+containsCase (UnaryOp u)  = unopcase u
+containsCase (Grouping e) = containsCase e
+containsCase (BinaryOp _) = error "not implemented"
+containsCase _            = False
+
+unopcase :: UFunc -> Bool
+unopcase (E.Log e)          = containsCase e
+unopcase (E.Abs e)          = containsCase e
+unopcase (E.Exp e)          = containsCase e
+unopcase (E.Sin e)          = containsCase e
+unopcase (E.Cos e)          = containsCase e
+unopcase (E.Tan e)          = containsCase e
+unopcase (E.Sec e)          = containsCase e
+unopcase (E.Csc e)          = containsCase e
+unopcase (E.Cot e)          = containsCase e
+unopcase _                  = error "not implemented"
+
+getCases :: Expr -> [(Expr, Relation)]
+getCases (Case a)     = a
+getCases e            = getCases (compactCase e)
+
+compactCase :: Expr -> Expr
+compactCase (a :/ b)     = compactCaseBinary (:/) a b
+compactCase (a :* b)     = compactCaseBinary (:*) a b
+compactCase (a :+ b)     = compactCaseBinary (:+) a b
+compactCase (a :^ b)     = compactCaseBinary (:^) a b
+compactCase (a :- b)     = compactCaseBinary (:-) a b
+compactCase (a :. b)     = compactCaseBinary (:.) a b
+compactCase (a :&& b)    = compactCaseBinary (:&&) a b
+compactCase (a :|| b)    = compactCaseBinary (:||) a b
+compactCase (Deriv _ _ _) = error "not implemented"
+compactCase (E.Not e)    = compactCaseUnary E.Not e
+compactCase (Neg e)      = compactCaseUnary Neg e
+compactCase (a := b)     = compactCaseBinary (:=) a b
+compactCase (a :!= b)    = compactCaseBinary (:!=) a b
+compactCase (a :> b)     = compactCaseBinary (:>) a b
+compactCase (a :< b)     = compactCaseBinary (:<) a b
+compactCase (a :<= b)    = compactCaseBinary (:<=) a b
+compactCase (a :>= b)    = compactCaseBinary (:>=) a b
+compactCase (UnaryOp u)  = unopcomcase u
+compactCase (Grouping e) = compactCaseUnary Grouping e
+compactCase (BinaryOp _) = error "not implemented"
+compactCase e            = e
+
+unopcomcase :: UFunc -> Expr
+unopcomcase (E.Log e)   = compactCaseUnary (UnaryOp . E.Log) e
+unopcomcase (E.Abs e)   = compactCaseUnary (UnaryOp . E.Abs) e
+unopcomcase (E.Exp e)   = compactCaseUnary (UnaryOp . E.Exp) e
+unopcomcase (E.Sin e)   = compactCaseUnary (UnaryOp . E.Sin) e
+unopcomcase (E.Cos e)   = compactCaseUnary (UnaryOp . E.Cos) e
+unopcomcase (E.Tan e)   = compactCaseUnary (UnaryOp . E.Tan) e
+unopcomcase (E.Sec e)   = compactCaseUnary (UnaryOp . E.Sec) e
+unopcomcase (E.Csc e)   = compactCaseUnary (UnaryOp . E.Csc) e
+unopcomcase (E.Cot e)   = compactCaseUnary (UnaryOp . E.Cot) e
+unopcomcase _           = error "not implemented"
+
+compactCaseBinary :: (Expr -> Expr -> Expr) -> Expr -> Expr -> Expr
+compactCaseBinary op (Case c) b = Case (map (\(e, r) -> (e `op` b, r)) c)
+compactCaseBinary op a (Case c) = Case (map (\(e, r) -> (a `op` e, r)) c)
+compactCaseBinary op a b        = (compactCase a) `op` (compactCase b)
+
+compactCaseUnary :: (Expr -> Expr) -> Expr -> Expr
+compactCaseUnary op (Case c) = Case (map (\(e, r) -> (op e, r)) c)
+compactCaseUnary op a        = op (compactCase a)
+
+-- major hacks --
+genHacks :: Generator -> (String, [Method]) -> Module
+genHacks g (n, m) = buildModule n [] [] (map (genMethodHacks g) m) [] 
+
+genMethodHacks :: Generator -> Method -> Method
+genMethodHacks g (Method l _ _ t ps b) = publicMethod g t l ps b

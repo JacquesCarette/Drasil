@@ -24,6 +24,7 @@ luaConfig _ c =
         endStatement     = empty,
         enumsEqualInts   = True,
         ext              = ".lua",
+        dir              = "lua",
         fileName         = fileNameD c,
         include          = include',
         includeScope     = \_ -> empty,
@@ -177,7 +178,7 @@ exceptionDoc' c (TryCatch tryBody catchBody) = vcat [
     where status = "excstatus"
 
 funcDoc' :: Config -> Function -> Doc
-funcDoc' _ (Cast _) = empty
+funcDoc' _ (Cast _ _) = empty
 funcDoc' c (Func n vs) = colon <> funcAppDoc c n vs
 funcDoc' c (Get n) = colon <> funcAppDoc c (getterName n) []
 funcDoc' c (Set n v) = colon <> funcAppDoc c (setterName n) [v]
@@ -218,7 +219,7 @@ classDoc' c f _ (MainClass _ _ fs) = methodListDoc c f "" fs
 
 objAccessDoc' :: Config -> Value -> Function -> Doc
 objAccessDoc' c v@(Self) f = valueDoc c v <> funcDoc c f
-objAccessDoc' c v (Cast _) = valueDoc c v
+objAccessDoc' c v (Cast _ _) = valueDoc c v
 objAccessDoc' c v f@(ListSize) = funcDoc c f <> parens (valueDoc c v)
 objAccessDoc' c v f@(ListAdd i e) = funcDoc c f <> parens (callFuncParamList c [v, listIndex i, e])       --add 1 to account for Lua's 1-indexed lists
 objAccessDoc' c v f@(IndexOf vari) = funcDoc c f <> parens (callFuncParamList c [v, vari])
@@ -234,7 +235,7 @@ paramDoc' _ (StateParam n _) = text n
 paramDoc' c p = paramDocD c p
 
 methodDoc' :: Config -> FileType -> Label -> Method -> Doc
-methodDoc' c ft m f@(Method _ _ (Construct _) _ b) =
+methodDoc' c ft m f@(Method _ _ _ (Construct _) _ b) =
     let temp = Var "temp"
     in vcat [
         transDecLine c ft m f,
@@ -247,7 +248,7 @@ methodDoc' c ft m f@(Method _ _ (Construct _) _ b) =
             retDoc c $ Ret temp],
         text "end"]
     where bodyBlank = if null b then empty else blank
-methodDoc' c ft m f@(Method _ _ _ _ b) = vcat [
+methodDoc' c ft m f@(Method _ _ _ _ _ b) = vcat [
     transDecLine c ft m f,
     oneTab $ bodyDoc c b,
     text "end"]
@@ -275,7 +276,7 @@ listIndex :: Value -> Value     --AbstractCode lists are 0-indexed, but Lua's ar
 listIndex i = i #+ litInt 1
 
 transDecLine :: Config -> FileType -> Label -> Method -> Doc
-transDecLine c _ m (Method n _ _ ps _) = text "function" <+> text m <> modColon <> text n <> parens (paramListDoc c ps)
+transDecLine c _ m (Method n _ _ _ ps _) = text "function" <+> text m <> modColon <> text n <> parens (paramListDoc c ps)
     where modColon = if null m then empty else colon
 transDecLine _ _ _ (GetMethod _ _) = error $
   "transDecLine undefined for _ _ _ (GetMethod _ _) pattern. See " ++

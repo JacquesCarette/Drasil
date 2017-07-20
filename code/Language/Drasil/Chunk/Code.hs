@@ -2,7 +2,8 @@
 module Language.Drasil.Chunk.Code (
     CodeIdea(..), CodeEntity(..), CodeName(..), CodeChunk(..), CodeDefinition(..),
     codevar, qtoc, codeEquat, 
-    ConstraintMap, constraintMap, physLookup, sfwrLookup, constraintLookup
+    ConstraintMap, constraintMap, physLookup, sfwrLookup, constraintLookup,
+    symbToCodeName
   ) where
 
 import Control.Lens
@@ -149,14 +150,16 @@ specialToCodeName LEQ      = "leq"
 specialToCodeName Partial  = "partial"
 specialToCodeName UScore   = "_"
 specialToCodeName Percent  = "%"
+specialToCodeName CurlyBrOpen = "{"
+specialToCodeName CurlyBrClose = "}"
 specialToCodeName Hash     = "#" -- TODO: Double check that this is valid for 
                                  -- all of the output langs.
 
 toCodeName :: String -> String
 toCodeName s =
     let illegalChars = [
-            "~","`","-","=","!","@","#","$","%","^","&","*","(",")","+",
-            "[","]","\\",";","'",".","/","{","}","|",":","\"","<",">","?"," "]
+            ",","~","`","-","=","!","@","#","$","%","^","&","*","(",")","+",
+            "[","]","\\",";","'",".","/","|",":","\"","<",">","?"," "]
     in foldl varNameReplace s illegalChars
     where  varNameReplace :: String -> String -> String
            varNameReplace l old = replace old "_" l
@@ -240,7 +243,12 @@ spaceToCodeType S.Boolean = G.Boolean
 spaceToCodeType S.Char = G.Char
 spaceToCodeType S.String = G.String
 spaceToCodeType (S.Vect s) = G.List (spaceToCodeType s)
-spaceToCodeType (S.Obj n) = G.Object (toCodeName n) 
+spaceToCodeType (S.Obj n) = G.Object (toCodeName n)
+--spaceToCodeType (S.Discrete d) = G.List (spaceToCodeType d)
+--spaceToCodeType (S.DiscreteI _) = G.List (spaceToCodeType S.Integer)
+--spaceToCodeType (S.DiscreteD _) = G.List (spaceToCodeType S.Rational)
+--spaceToCodeType (S.DiscreteS _) = G.List (spaceToCodeType S.String)
+
 
 -- codeExpr :: Expr -> Expr
 -- codeExpr (a :/ b)     = (codeExpr a) :/ (codeExpr b)

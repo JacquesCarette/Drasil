@@ -47,6 +47,10 @@ icdict1 = {'Tw': pardict['Tinit']}#,
 # DSargs1.varspecs = temperature.temperature1()
 # DSargs1.ics = icdict1
 # waterTemp = PyDSTool.Generator.Vode_ODEsystem(DSargs1)
+# traj1 = waterTemp.compute('waterTemp')
+# pts1 = traj1.sample()
+
+# evs1 = traj1.getEvents('event_melt_begin')
 
 def DSargs1(t, y):
     return (1.0 / params.tau_w) * (params.Tc - y)
@@ -56,15 +60,12 @@ values = int(params.tfinal / params.tstep)
 t = np.linspace(0.0000000001, params.tfinal, values) # Does not work with zero as input
 pts1 = {'t':  t,
         'Tw': np.zeros(values)}
-        
+
 for ii in range(len(pts1['t'])):
     pts1['Tw'][ii] = waterTemp.integrate(pts1['t'][ii])
-# traj1 = waterTemp.compute('waterTemp')
-# pts1 = traj1.sample()
-
-# evs1 = traj1.getEvents('event_melt_begin')
-eWat = energy.energy1Wat(pts1['Tw'], params)
+eWat = energy.energyWat(pts1['Tw'], params)
 # ePCM = energy.energy1PCM(pts1['Tp'], params)
+
 time = []
 for element in pts1['t']:
     time = time + [element]

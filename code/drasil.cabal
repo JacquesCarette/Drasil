@@ -114,6 +114,7 @@ library
     , Language.Drasil.Make.Print
     , Language.Drasil.Output.Formats
     , Language.Drasil.Printing.Helpers
+    , Language.Drasil.Defs
 
   Build-Depends:
     base >= 4.7,
@@ -224,6 +225,7 @@ executable ssp
     , Drasil.SSP.GenDefs
     , Drasil.SSP.IMods
     , Drasil.SSP.Modules
+    , Drasil.SSP.References
     , Drasil.SSP.Reqs
     , Drasil.SSP.Requirements
     , Drasil.SSP.TMods
@@ -271,6 +273,7 @@ executable glassbr
     , Drasil.GlassBR.TMods
     , Drasil.GlassBR.IMods
     , Drasil.GlassBR.DataDefs
+    , Drasil.GlassBR.References
     , Drasil.GlassBR.Units
     , Drasil.Sections.SpecificSystemDescription
     , Drasil.Sections.Introduction

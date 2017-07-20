@@ -17,18 +17,18 @@ x_2  = makeVC "x_2"    (nounPhraseSP "x2")   (sub (lX) (Atomic "2"))
 x    = makeVC "x"      (nounPhraseSP "x")    lX -- = params.wtnt from mainFun.py
 
 i, z, z_array, y_array, x_array, y, arr :: VarChunk
-i    = makeVC "i"      (nounPhraseSP "i")    lI
-z    = makeVC "z"      (nounPhraseSP "z")    lZ
+i    = makeVC "i"          (nounPhraseSP "i")       lI
+z    = makeVC "z"          (nounPhraseSP "z")       lZ
 z_array = makeVC "z_array" (nounPhraseSP "z_array") (sub (lZ) (Atomic "array"))
 y_array = makeVC "y_array" (nounPhraseSP "y_array") (sub (lY) (Atomic "array"))
 x_array = makeVC "x_array" (nounPhraseSP "x_array") (sub (lX) (Atomic "array"))
-y    = makeVC "y"      (nounPhraseSP "y")    lY
-arr  = makeVC "arr"    (nounPhraseSP "arr") (Atomic "arr") --temporary variable for indInSeq?
+y    = makeVC "y"          (nounPhraseSP "y")       lY
+arr  = makeVC "arr"        (nounPhraseSP "arr")     (Atomic "arr") --FIXME: temporary variable for indInSeq?
 
 --Python code to Expr
 
 indInSeq :: Relation
-indInSeq = (C arr){-[C i]-} :<= (C i) :<= (C arr){-[(C i) + 1]-}
+indInSeq = (Index (C arr) (C i)) :<= (C i) :<= (Index (C arr) (C i))
 --FIXME: captured constraints "arr[i] <= v and v <= arr[i+1]" correctly?
 
 matrixCol :: Expr
@@ -42,14 +42,14 @@ matrixCol = 0
 iVal, x_z_1, y_z_1, x_z_2, y_z_2, j, k, y_2Expr, y_1Expr, interpY, interpZ :: Expr
 
 iVal    = FCall (indInSeq)   [C z_array, C z]
-x_z_1   = FCall (matrixCol)  [C x_array, C i]
-y_z_1   = FCall (matrixCol)  [C y_array, C i]
-x_z_2   = FCall (matrixCol)  [C x_array, (C i) + 1]
-y_z_2   = FCall (matrixCol)  [C y_array, (C i) + 1]
+x_z_1   = FCall (matrixCol)  [C x_array, iVal]
+y_z_1   = FCall (matrixCol)  [C y_array, iVal]
+x_z_2   = FCall (matrixCol)  [C x_array, iVal + 1]
+y_z_2   = FCall (matrixCol)  [C y_array, iVal + 1]
 j       = FCall (indInSeq)   [x_z_1, C x]
 k       = FCall (indInSeq)   [x_z_2, C x]
-y_1Expr = FCall (lin_interp) [x_z_1 {-[C j]-}     , y_z_1{-[C j]-}, x_z_1{-[C j + 1] -}      , y_z_1{-[C j + 1] -}, C x]
-y_2Expr = FCall (lin_interp) [x_z_2{-[k]-}       , y_z_2{-[C k]-}, x_z_2{-[k + 1]-}         , y_z_2{-[k + 1]-}   , C x]
-interpY = FCall (lin_interp) [C z_array {-!!(i)-}, y_1Expr       , C z_array{-!!(iVal + 1)-}, y_2Expr            , C z]
-interpZ = FCall (lin_interp) [y_1Expr, C z_array {-!!(i)-}, y_2Expr, C z_array{-!!(iVal + 1)-}, C y]
+y_1Expr = FCall (lin_interp) [(Index x_z_1 j), (Index y_z_1 j), (Index x_z_1 (j+1)), (Index y_z_1 (j+1)), C x]
+y_2Expr = FCall (lin_interp) [(Index x_z_2 k), (Index y_z_2 k), (Index x_z_2 (k+1)), (Index y_z_2 (k+1)), C x]
+interpY = FCall (lin_interp) [(Index (C z_array) iVal), y_1Expr, (Index (C z_array) (iVal+1)), y_2Expr, C z]
+interpZ = FCall (lin_interp) [y_1Expr, (Index (C z_array) (C i)), y_2Expr, (Index (C z_array) (iVal+1)), C y]
 --FIXME: "for i in range(len(z_array) - 1):" implementation from 'interpZ'?

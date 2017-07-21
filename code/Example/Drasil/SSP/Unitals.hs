@@ -391,8 +391,10 @@ indx1 a = Index (C a) (Int 1)
 indxn :: (SymbolForm a) => a -> Expr
 indxn a = Index (C a) (C numbSlices)
 
-inxi :: SymbolForm e => e -> Expr
-inxi e = inx e 0
+inxi, inxiP1, inxiM1 :: SymbolForm e => e -> Expr
+inxiP1 e = inx e 1
+inxi   e = inx e 0
+inxiM1 e = inx e (-1)
 
 inx :: SymbolForm e => e -> Integer -> Expr
 inx e n 

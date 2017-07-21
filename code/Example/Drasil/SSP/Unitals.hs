@@ -115,10 +115,10 @@ coords      = cuc' "(x,y)"
   (Atomic "(x,y)") metre Real monotonicIn (Dbl 1)
 
 dx_i        = cuc' "dx_i" (cn $ "displacement") ("in the x-ordinate direction " ++ fsi)
-  (sub (Concat [Greek Delta_L, Atomic "x"]) lI) metre Real [] (Dbl 1)
+  (Concat [Greek Delta_L, Atomic "x"]) metre Real [] (Dbl 1)
 
 dy_i        = cuc' "dy_i" (cn $ "displacement") ("in the y-ordinate direction " ++ fsi)
-  (sub (Concat [Greek Delta_L, Atomic "y"]) lI) metre Real [] (Dbl 1)
+  (Concat [Greek Delta_L, Atomic "y"]) metre Real [] (Dbl 1)
 
 ---------------------------
 -- START OF UNITALCHUNKS --
@@ -329,7 +329,7 @@ shrStress    = uc' "tau_i" (cn "resistive shear stress") ("acting on the base of
   (sub (Greek Tau_L) lI) pascal
   
 mobStress    = uc' "s_i" (cn "mobilized shear stress") ("acting on the base of a slice")
-  (sub lS lI) pascal
+  (lS) pascal
 
 sliceHght    = uc' "z_i" (cn "center of slice height") ("the distance from the lowest part " ++
   "of the slice to the height of the centers of slice") (sub lZ lI) metre
@@ -359,7 +359,7 @@ normToShear = cvR (dcc "lambda" (nounPhraseSP $ "interslice normal/shear force r
 
 scalFunc    = cvR (dcc "f_i" (nounPhraseSP $ "scaling function") ("magnitude of interslice " ++
   "forces as a function of the x coordinate" ++ fisi ++ "; can be constant or a half-sine"))
-  (sub lF lI)
+  (lF)
 
 numbSlices  = cvRs (dcc "n" (nounPhraseSP "number of slices") "the slip mass has been divided into")
   lN Natural

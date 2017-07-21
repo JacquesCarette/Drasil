@@ -80,39 +80,39 @@ intsliceFs :: RelationConcept
 intsliceFs = makeRC "intsliceFs" (nounPhraseSP "interslice forces") sliceFs_desc sliceFs_rel
 
 sliceFs_rel :: Relation
-sliceFs_rel = C intNormForce := Case [
-  (((C fs) * (C shearFNoIntsl) :- (C shearRNoIntsl)) :/ (C shrResC),
+sliceFs_rel = inxi intNormForce := Case [
+  (((C fs) * indx1 shearFNoIntsl - indx1 shearRNoIntsl) / indx1 shrResC,
     C index := (Int 1)),
-  (((C mobShrC) * (C intNormForce) :+ (C fs) * (C shearFNoIntsl) :- (C shearRNoIntsl)):/ (C shrResC),
-    (Int 1) :<= C index :<= ((C numbSlices) :- (Int 1))),
+  ((inx mobShrC (-1) * inx intNormForce (-1) + C fs * inxi shearFNoIntsl - inxi shearRNoIntsl) / inxi shrResC,
+    (Int 2) :<= C index :<= ((C numbSlices) :- (Int 1))),
   ((Int 0), C index := (Int 0) :|| C index := C numbSlices)]  
   -- FIXME: Use index i as part of condition
 
 sliceFs_desc :: Sentence
 sliceFs_desc = foldlSent [S "The value of the interslice normal force",
-  getS intNormForce, S "at interface i. The net force" `isThe` S "weight",
-  S "of the slices adjacent to interface i exert horizontally on each other"]
+  getS intNormForce, S "at interface", getS index +:+. S "The net force" `isThe` S "weight",
+  S "of the slices adjacent to interface", getS index, S "exert horizontally on each other"]
   --FIXME: "i" needs to be pulled out and used as a symbol
 
 --
 forDisEqlb :: RelationConcept
 forDisEqlb = makeRC "forDisEqlb" (nounPhraseSP "force displacement equilibrium") fDisEq_desc fDisEq_rel
 
-fDisEq_rel :: Relation
-fDisEq_rel = Neg (C watrForceDif) - (C earthqkLoadFctr)*(C slcWght) -
-  (C baseHydroForce)*(sin(C baseAngle)) +
-  (C surfHydroForce)*sin(C surfAngle) + (C surfLoad)*sin(C impLoadAngle) :=
-  C dx_i * (Neg (C surfLngth) * C nrmStiffIntsl) +
-  C dx_i * (Neg (C surfLngth) * C nrmStiffIntsl + C surfLngth * C nrmStiffIntsl + C baseLngth * C nrmStiffIntsl) +
-  C dx_i * (Neg (C surfLngth) * C nrmStiffIntsl) +
-  C dy_i * (Neg (C baseLngth) * C nrmStiffIntsl)
+fDisEq_rel :: Relation --FIXME: split into two IMOD and add K_aA and K_bB
+fDisEq_rel = Neg (inxi watrForceDif) - (C earthqkLoadFctr)*(inxi slcWght) -
+  (inxi baseHydroForce)*(sin(inxi baseAngle)) +
+  (inxi surfHydroForce)*sin(inxi surfAngle) + (inxi surfLoad)*sin(inxi impLoadAngle) :=
+  inx  dx_i (-1) * (Neg (inx surfLngth (-1)) * inx nrmStiffIntsl (-1)) +
+  inxi dx_i * (Neg (inx surfLngth (-1)) * inx nrmStiffIntsl (-1) + inxi surfLngth * inxi nrmStiffIntsl + inxi baseLngth * inxi nrmStiffIntsl) +
+  inx  dx_i 1 * (Neg (inxi surfLngth) * inxi nrmStiffIntsl) +
+  inxi dy_i * (Neg (inxi baseLngth) * inxi nrmStiffIntsl)
   :=
-  Neg (C slcWght) - (C baseHydroForce)*(cos(C baseAngle)) +
-  (C surfHydroForce)*cos(C surfAngle) + (C surfLoad)*cos(C impLoadAngle) :=
-  C dy_i * (Neg (C surfLngth) * C nrmStiffIntsl) +
-  C dy_i * (Neg (C surfLngth) * C nrmStiffIntsl + C surfLngth * C nrmStiffIntsl + C baseLngth * C nrmStiffIntsl) +
-  C dy_i * (Neg (C surfLngth) * C nrmStiffIntsl) +
-  C dx_i * (Neg (C baseLngth) * C nrmStiffIntsl)
+  Neg (inxi slcWght) - (inxi baseHydroForce)*(cos(inxi baseAngle)) +
+  (inxi surfHydroForce)*cos(inxi surfAngle) + (inxi surfLoad)*cos(inxi impLoadAngle) :=
+  inx  dy_i (-1) * (Neg (inx surfLngth (-1)) * inx shrStiffIntsl (-1)) +
+  inxi dy_i * (Neg (inx surfLngth (-1)) * inx shrStiffIntsl (-1) + inxi surfLngth * inxi nrmStiffIntsl + inxi baseLngth * inxi nrmStiffIntsl) +
+  inx  dy_i 1 * (Neg (inxi surfLngth) * inxi shrStiffIntsl) +
+  inxi dx_i * (Neg (inxi baseLngth) * inxi shrStiffIntsl)
   --FIXME: index fixes
 
 fDisEq_desc :: Sentence
@@ -140,8 +140,11 @@ rfemFoS :: RelationConcept
 rfemFoS = makeRC "rfemFoS" (nounPhraseSP "RFEM factor of safety") rfemFoS_desc rfemFoS_rel
 
 rfemFoS_rel :: Relation
-rfemFoS_rel = (C fsloc) := ((C cohesion):-(C nrmStiffBase)*(C nrmDispl)*(tan (C fricAngle))):/
-  ((C shrStiffBase)*(C shrDispl)) 
+rfemFoS_rel = (inxi fsloc) := ((C cohesion):-(inxi nrmStiffBase)*(inxi nrmDispl)*(tan (inxi fricAngle))):/
+  ((inxi shrStiffBase)*(inxi shrDispl)) :=
+  C fs := summ (C baseLngth * (C cohesion - C nrmStiffBase * C nrmDispl * tan(C fricAngle))) /
+  summ (C baseLngth * Grouping (C shrStiffBase * C shrDispl))
+  where summ = summation (Just (index ^. symbol, Low $ Int 1, High $ C numbSlices))
   --FIXME: add the other long equation, see derivation equation 31
 
 rfemFoS_desc :: Sentence
@@ -160,7 +163,7 @@ crtSlpId :: RelationConcept
 crtSlpId = makeRC "crtSlpId" (nounPhraseSP "critical slip identification") crtSlpId_desc crtSlpId_rel
 
 crtSlpId_rel :: Relation
-crtSlpId_rel = (C fs) := (FCall (C minFunction) [C critCoords, V "Input"]) --FIXME: add subscript to fs
+crtSlpId_rel = (Index (C fs) (V "min")) := (FCall (C minFunction) [C critCoords, V "Input"]) --FIXME: add subscript to fs
 
 crtSlpId_desc :: Sentence
 crtSlpId_desc = foldlSent [S "Given the necessary slope inputs, a minimization",

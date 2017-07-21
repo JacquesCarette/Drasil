@@ -177,7 +177,7 @@ slipDist    = uc' "x_slip,i" (cn $ "x ordinate")
 xi          = uc' "x_i"
   (cn $ "x ordinate")
   smsi
-  (sub lX lI) metre
+  lX metre
 
 critCoords  = uc' "(xcs,ycs)" (cn $ "the set of x and y coordinates")
   "describe the vertices of the critical slip surface"
@@ -234,15 +234,15 @@ surfHydroForce = uc' "U_t,i" (cn $ "surface hydrostatic force")
 
 totNrmForce = uc' "N_i" (cn $ "normal force") ("total reactive force " ++
   "for a soil surface subject to a body resting on it")
-  (sub cN lI) newton
+  cN newton
 
 nrmFSubWat = uc' "N'_i" (cn $ "effective normal force") ("for a soil surface, " ++
   "subtracting pore water reactive force from total reactive force")
-  (sub (prime $ Atomic "N") lI) newton
+  (prime $ Atomic "N") newton
 
 nrmFNoIntsl = uc' "N*_i" (cn $ "effective normal force") ("for a soil surface, " ++
   wiif)
-  (sub (Atomic "N*") lI) newton
+  (Atomic "N*") newton
 
 surfLoad    = uc' "Q_i" (cn $ "imposed surface load") 
   "a downward force acting into the surface from midpoint of slice i"
@@ -271,7 +271,7 @@ surfLngth   = uc' "l_s,i" (cn $ "length of an interslice surface")
 
 midpntHght  = uc' "h_i" (cn $ "midpoint height")
   ("distance from the slip base to the slope surface in a vertical line from the midpoint of the slice " ++ fsi)
-  (sub lH lI) metre
+  (lH) metre
 
 momntOfBdy  = uc' "M" (cn $ "moment of a body") ("assumed 2D allowing a scalar")
   cM momentOfForceU --FIXME: move in concepts.physics ?
@@ -305,19 +305,19 @@ nrmStiffRes  = uc' "K_no" (cn $ "normal stiffness")
 
 shrDispl = uc' "du_i" (cn $ "displacement")
   ("shear displacement " ++ fsi)
-  (sub (Concat [Greek Delta_L, Atomic "u"]) lI) metre
+  (Concat [Greek Delta_L, Atomic "u"]) metre
 
 nrmDispl = uc' "dv_i" (cn $ "displacement")
   ("normal displacement " ++ fsi)
-  (sub (Concat [Greek Delta_L, Atomic "v"]) lI) metre
+  (Concat [Greek Delta_L, Atomic "v"]) metre
   
 elmNrmDispl  = uc' "dt_i" (cn $ "displacement")
   ("for the element normal to the surface " ++ fsi)
-  (sub (Concat [Greek Delta_L, Atomic "t"]) lI) metre
+  (Concat [Greek Delta_L, Atomic "t"]) metre
   
 elmPrllDispl = uc' "dn_i" (cn $ "displacement")
   ("for the element parallel to the surface " ++ fsi)
-  (sub (Concat [Greek Delta_L, Atomic "n"]) lI) metre
+  (Concat [Greek Delta_L, Atomic "n"]) metre
 
 porePressure = uc' "mu" (cn "pore pressure") ("from water within the soil")
   (Greek Mu_L) pascal
@@ -332,7 +332,7 @@ mobStress    = uc' "s_i" (cn "mobilized shear stress") ("acting on the base of a
   (lS) pascal
 
 sliceHght    = uc' "z_i" (cn "center of slice height") ("the distance from the lowest part " ++
-  "of the slice to the height of the centers of slice") (sub lZ lI) metre
+  "of the slice to the height of the centers of slice") (lZ) metre
 
 normFunc     = uc' "C1_i" (cn "interslice normal force function") ("FIXME: missing discription")
   (Concat [cC, Atomic "1"]) momentOfForceU

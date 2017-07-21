@@ -258,7 +258,7 @@ htCap_L_P    = uqc "htCap_L_P" (nounPhraseSP "specific heat capacity of PCM as a
   "given unit mass of liquid phase change material by a given amount")
   (sup (sub (heat_cap_spec ^. symbol) cP) cL) UT.heat_cap_spec Rational
   [physc $ \c -> c :> Int 0,
-  sfwrc $ \c -> C htCap_L_P_min :< c :< C htCap_L_P_max] (Dbl 2270) 0.1
+  sfwrc $ \c -> (Index (c) (V "min")) :< c :< (Index (c) (V "max"))] (Dbl 2270) 0.1
 
 --Constraint 9
 htFusion     = uqc "htFusion" (nounPhraseSP "specific latent heat of fusion")

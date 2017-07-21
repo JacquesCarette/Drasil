@@ -67,6 +67,7 @@ instance Show RefType where
   show (Assump Nothing) = "Assumption"
   show (LC Nothing) = "Likely Change"
   show UC = "Unlikely Change"
+  show _ = error "Type not recognized"
 
 -- | Helper function for wrapping sentences in parentheses.
 sParen :: Sentence -> Sentence

@@ -263,6 +263,9 @@ makeDefn dt ps l = refwrap l $ wrap "table" [dtag dt] (makeDRows ps)
   where dtag (L.Data _)   = "ddefn"
         dtag (L.Theory _) = "tdefn"
         dtag (L.General)  = "gdefn"
+        dtag (L.Instance) = error "Not yet implemented"
+        dtag (L.TM) = error "Not yet implemented"
+        dtag (L.DD) = error "Not yet implemented"
 
 -- | Helper for making the definition table rows
 makeDRows :: [(String,[LayoutObj])] -> Doc

@@ -30,15 +30,15 @@ fctSfty = makeRC "fctSfty" factorOfSafety fcSfty_desc fcSfty_rel
 --FIXME: first shearRNoIntsl should have local index v, not i, last occurence should have index n
 --       similar case with shearFNoIntsl
 fcSfty_rel :: Relation
-fcSfty_rel = (C fs) := (sumOp shearRNoIntsl + Index (C shearRNoIntsl) (C numbSlices)) :/ 
-                       (sumOp shearFNoIntsl + Index (C shearFNoIntsl) (C numbSlices))
+fcSfty_rel = C fs := sumOp shearRNoIntsl / sumOp shearFNoIntsl
   where prodOp    = product   (Just (lU, Low $ C index, High $ C numbSlices - Int 1))
                               (Index (C mobShrC) (C varblU) / Index (C shrResC) (C varblU))
         sumOp sym = summation (Just (lV, Low $ Int 1, High $ C numbSlices - Int 1))
-                              (Index (C sym) (C varblV) :* prodOp)
+                              (Index (C sym) (C varblV) :* prodOp) +
+                              Index (C sym) (C numbSlices)
 
 fcSfty_desc :: Sentence
-fcSfty_desc = foldlSent [S "Equation for the", S "Factor of Safety" `isThe` S "ratio",
+fcSfty_desc = foldlSent [S "Equation for the", titleize fs `isThe` S "ratio",
   S "between resistive and mobile shear of the slip surface. The sum of values",
   S "from each slice is taken to find the total resistive and mobile shear for",
   S "the slip surface. The constants", getS shrResC, S "and", getS mobShrC, 
@@ -73,7 +73,6 @@ nrmShrF_desc = foldlSent [getS normToShear `isThe` S "magnitude ratio between",
   S "the relative magnitude ratio between the different interslices, while",
   getS normToShear, S "determines the" +:+. S "magnitude", getS normToShear,
   S "uses the sum of interslice normal and shear forces taken from each interslice"]
-  --FIXME: "i" needs to be pulled out and used as a symbol
 
 --
 intsliceFs :: RelationConcept
@@ -335,8 +334,8 @@ intrSlcDerivation = [foldlSP [S "Taking the", S "normal force equilibrium" `sOf`
   ((C normToShear)*(C scalFunc) * sin (C baseAngle) - cos (C baseAngle)) * (C fs),
   
   EqnBlock $
-  (C intNormForce) := ((C mobShrC)*(C intNormForce) + (C fs)*(C shearFNoIntsl)
-  - (C shearRNoIntsl)) / (C shrResC),
+  (inxi intNormForce) := (inx mobShrC (-1) * inx intNormForce (-1) + C fs * inxi shearFNoIntsl
+  - inxi shearRNoIntsl) / inxi shrResC,
   
   fUnknowns]
 

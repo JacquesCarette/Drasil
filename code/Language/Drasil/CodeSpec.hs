@@ -12,6 +12,8 @@ import Language.Drasil.Defs -- hack
 import qualified Data.Map as Map
 import Control.Lens ((^.))
 
+import Prelude hiding (const)
+
 data CodeSpec = CodeSpec {
   program :: CodeName,
   inputs :: [CodeChunk],
@@ -21,6 +23,7 @@ data CodeSpec = CodeSpec {
   fMap :: FunctionMap,
   vMap :: VarMap,
   fMods :: [FuncMod],
+  const :: [CodeDefinition],
   choices :: Choices,
   mods :: [(String, [FunctionDecl])] -- hack
 }
@@ -63,7 +66,7 @@ codeSpec :: SystemInformation -> CodeSpec
 codeSpec si = codeSpec' si defaultChoices
 
 codeSpec' :: SystemInformation -> Choices -> CodeSpec
-codeSpec' (SI {_sys = sys, _quants = q, _definitions = defs, _inputs = ins, _outputs = outs, _constraints = cs}) ch = CodeSpec {
+codeSpec' (SI {_sys = sys, _quants = q, _definitions = defs, _inputs = ins, _outputs = outs, _constraints = cs, _constants = constants}) ch = CodeSpec {
   program = NICN sys,
   inputs = map codevar ins,
   outputs = map codevar outs,
@@ -72,6 +75,7 @@ codeSpec' (SI {_sys = sys, _quants = q, _definitions = defs, _inputs = ins, _out
   fMap = functionMap $ map qtoc defs,
   vMap = varMap (map codevar q),
   fMods = [funcMod "Calculations" defs],
+  const = map qtoc constants,
   choices = ch,
   mods = modHack
 }

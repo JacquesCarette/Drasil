@@ -100,7 +100,8 @@ glassSystInfo = SI {
   _inputs = (map qs gbInputs),
   _outputs = (map qs gbOutputs),
   _defSequence = (gbQDefns :: [Block QDefinition]),
-  _constraints = gbConstrained
+  _constraints = gbConstrained,
+  _constants = gbConstants
 }
   --FIXME: All named ideas, not just acronyms.
   

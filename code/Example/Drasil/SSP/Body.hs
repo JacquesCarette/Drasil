@@ -74,7 +74,8 @@ ssp_si = SI {
   _inputs = (map qs sspInputs),
   _outputs = (map qs sspOutputs),
   _defSequence = [Parallel (head sspDataDefs) (tail sspDataDefs)],
-  _constraints = sspConstrained
+  _constraints = sspConstrained,
+  _constants = []
 }
 
 mkSRS :: DocDesc

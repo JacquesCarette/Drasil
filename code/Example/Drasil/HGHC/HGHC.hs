@@ -36,7 +36,8 @@ thisSI = SI {
   _inputs = htInputs,
   _outputs = htOutputs,
   _defSequence = ([] :: [Block QDefinition]),
-  _constraints = ([] :: [ConstrainedChunk])
+  _constraints = ([] :: [ConstrainedChunk]),
+  _constants = []
 }
   
 thisSRS :: DocDesc

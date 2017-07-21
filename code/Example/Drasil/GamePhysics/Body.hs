@@ -81,7 +81,8 @@ chipmunkSysInfo = SI {
   _inputs = (inputSymbols), 
   _outputs = (outputSymbols), 
   _defSequence = (cpQDefs), 
-  _constraints = cpInputConstraints
+  _constraints = cpInputConstraints,
+  _constants = []
 }
 --FIXME: All named ideas, not just acronyms.
 

@@ -82,7 +82,8 @@ swhs_si = SI {
   _inputs = ((map qs swhsInputs) :: [QSWrapper]),
   _outputs = ((map qs swhsOutputs) :: [QSWrapper]),
   _defSequence = ([] :: [Block QDefinition]),
-  _constraints = (swhsConstrained)
+  _constraints = (swhsConstrained),
+  _constants = []
 }
   --Note: The second swhsSymbols here is
     -- Redundant b/c the unitals are not really concepts (yet). There

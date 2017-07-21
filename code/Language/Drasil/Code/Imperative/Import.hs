@@ -11,7 +11,7 @@ import Language.Drasil.Expr as E
 import Language.Drasil.Expr.Extract hiding (vars)
 import Language.Drasil.CodeSpec hiding (codeSpec)
 
-import Prelude hiding (log, exp, return)
+import Prelude hiding (log, exp, return, const)
 import Data.List (intersperse)
 import System.Directory
 
@@ -23,17 +23,18 @@ data Generator = Generator {
   codeSpec :: CodeSpec,
   
   genInputMod :: [CodeChunk] -> ConstraintMap -> [Module],
-  genCalcMod :: String -> [CodeDefinition] -> Module,
-  genOutputMod :: [CodeChunk] -> [Module],
-  
   genInputClass :: [CodeChunk] -> ConstraintMap -> Class,
   genInputFormat :: [CodeChunk] -> Method,
   genInputConstraints :: [CodeChunk] -> ConstraintMap -> Method,
-
+  
+  genConstMod :: Module,
+  
+  genCalcMod :: String -> [CodeDefinition] -> Module,
   genCalcFunc :: CodeDefinition -> Method,
   genCalcBlock :: Expr -> Body,
   genCaseBlock :: [(Expr,Relation)] -> Body,  
 
+  genOutputMod :: [CodeChunk] -> [Module],
   genOutputFormat :: [CodeChunk] -> Method,
   
   genMethodCall :: Scope -> Permanence -> MethodType -> Label -> [Parameter] -> Body -> Method,
@@ -70,17 +71,18 @@ generator spec g =
       codeSpec = spec,
       
       genInputMod = inputModFunc g,
-      genCalcMod = genCalcModD g,
-      genOutputMod = genOutputModD g,
-      
       genInputClass = genInputClassD g,
       genInputFormat = genInputFormatD g,
       genInputConstraints = genInputConstraintsD g,
-
+      
+      genConstMod = genConstModD g,
+      
+      genCalcMod = genCalcModD g,
       genCalcFunc = genCalcFuncD g,
       genCalcBlock = genCalcBlockD g,
       genCaseBlock = genCaseBlockD g,  
-
+ 
+      genOutputMod = genOutputModD g,
       genOutputFormat = genOutputFormatD g,
       
       genMethodCall = genMethodCallD g,
@@ -119,6 +121,7 @@ generateCodeD g = let s = codeSpec g
         
 genModulesD :: Generator -> [Module]
 genModulesD g = genInputMod g (inputs $ codeSpec g) (cMap $ codeSpec g)
+             ++ [genConstMod g]
              ++ map (\(FuncMod n d) -> genCalcMod g n d) (fMods $ codeSpec g)
              ++ genOutputMod g (outputs $ codeSpec g)
              ++ map (genHacks g) (mods $ codeSpec g) -- hack 
@@ -194,6 +197,20 @@ constrWarn _ _ = oneLiner $ printStrLn "Warning: constraint violated"
 constrExc :: Generator -> Expr -> Body
 constrExc _ _ = oneLiner $ throw "InputError"
 
+
+---- CONST ----
+
+genConstModD :: Generator -> Module
+genConstModD g = buildModule "Constants" [] [] [] [genConstClassD g]
+
+genConstClassD :: Generator -> Class
+genConstClassD g = pubClass
+  "Constants"
+  Nothing
+  genVars
+  []
+  where genVars = 
+          map (\x -> pubGVar 0 (convType $ codeType x) (codeName x)) (const $ codeSpec g)
     
 ------- CALC ----------    
     

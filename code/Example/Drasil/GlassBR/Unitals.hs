@@ -55,7 +55,8 @@ gbInputsNoUncrtn :: [ConstrainedChunk]
 gbInputsNoUncrtn = [glass_type, nom_thick]
 
 gbInputDataConstraints :: [UncertainWrapper]
-gbInputDataConstraints = (map uncrtnw gbInputsWUnitsUncrtn) ++ (map uncrtnw gbInputsWUncrtn)
+gbInputDataConstraints = (map uncrtnw gbInputsWUncrtn) ++ 
+  (map uncrtnw gbInputsWUnitsUncrtn)
 
 plate_len = uqcND "plate_len" (nounPhraseSP "plate length (long dimension)")
   lA millimetre Real 
@@ -97,12 +98,12 @@ standOffDist = uqcND "standOffDist" (nounPhraseSP "stand off distance")
 
 --FIXME: Issue #309
 nom_thick = cuc "nom_thick" 
-  (nounPhraseSent $ S "nominal thickness" `sC` displayConstrntsAsSet 
+  (nounPhraseSent $ S "nominal thickness" +:+ displayConstrntsAsSet 
     nom_thick (map show nominalThicknesses))
   lT millimetre ({-Discrete-} Rational) 
   [ physc $ \c -> createCnstrnts c (map show nominalThicknesses) ] (V "8.0") --FIXME: no typical value!
 
-glass_type  = cvc "glass_type" (nounPhraseSent $ phrase glassTy `sC` 
+glass_type  = cvc "glass_type" (nounPhraseSent $ phrase glassTy +:+ 
     displayConstrntsAsSet glass_type (map extrctStrng glassTypeAbbrs))
   lG ({-Discrete-} String)
   [ physc $ \c -> createCnstrnts c (map extrctStrng glassTypeAbbrs)] (V "HS") --FIXME: no typical value!
@@ -111,16 +112,6 @@ glass_type  = cvc "glass_type" (nounPhraseSent $ phrase glassTy `sC`
 
 gbOutputs :: [QSWrapper]
 gbOutputs = map qs [is_safe1, is_safe2] ++ map qs [prob_br]
-
-is_safe1, is_safe2 :: VarChunk
-
-is_safe1      = vc "is_safe1"        (nounPhraseSP $ "true when calculated" ++
-  " probability is less than tolerable probability")
-  (Concat [Atomic "is", Special UScore, Atomic "safe1"]) Boolean
-
-is_safe2      = vc "is_safe2"        (nounPhraseSP $ "true when load resistance"
-  ++ " (capacity) is greater than load (demand)")
-  (Concat [Atomic "is", Special UScore, Atomic "safe2"]) Boolean
 
 prob_br :: ConstrainedChunk
 prob_br = cvc "prob_br" (nounPhraseSP "probability of breakage")
@@ -132,8 +123,7 @@ prob_br = cvc "prob_br" (nounPhraseSP "probability of breakage")
 {--}
 
 gBRSpecParamVals :: [QDefinition]
-gBRSpecParamVals = [dim_max, dim_min, ar_max, cWeightMax, cWeightMin, 
-  sd_min, sd_max]
+gBRSpecParamVals = [dim_max, dim_min, ar_max, cWeightMax, sd_min, sd_max]
 
 dim_max, dim_min, ar_max, cWeightMax, cWeightMin, sd_min,
   sd_max :: QDefinition
@@ -206,10 +196,10 @@ sflawParamM = unitary "sflawParamM" (nounPhraseSP "surface flaw parameter") --pa
 {-Quantities-}
 
 glassBRUnitless :: [VarChunk]
-glassBRUnitless = [risk_fun, stressDistFac, sdf_tol, dimlessLoad,
-  tolLoad, lRe, loadSF, gTF, lDurFac, nonFactorL]
+glassBRUnitless = [risk_fun, is_safe1, is_safe2, stressDistFac, sdf_tol,
+  dimlessLoad, tolLoad, lRe, loadSF, gTF, lDurFac, nonFactorL]
 
-aspectR, risk_fun, stressDistFac, sdf_tol,
+aspectR, risk_fun, is_safe1, is_safe2, stressDistFac, sdf_tol,
   dimlessLoad, tolLoad, lRe, loadSF, gTF, lDurFac, nonFactorL :: VarChunk
 
 aspectR       = makeVC "aspectR"     (aR ^. term) (Atomic "AR")
@@ -219,13 +209,21 @@ dimlessLoad   = makeVC "dimlessLoad" (nounPhraseSP "dimensionless load")
 
 gTF           = vc "gTF"             (glassTypeFac ^. term) (Atomic "GTF") Integer
 
-lDurFac       = vc "lDurFac" (loadDurFactor ^. term)  (Atomic "LDF") Real
+is_safe1      = vc "is_safe1"        (nounPhraseSP $ "true when calculated" ++
+  " probability is less than tolerable probability")
+  (Concat [Atomic "is", Special UScore, Atomic "safe1"]) Boolean
+
+is_safe2      = vc "is_safe2"        (nounPhraseSP $ "true when load resistance"
+  ++ " (capacity) is greater than load (demand)")
+  (Concat [Atomic "is", Special UScore, Atomic "safe2"]) Boolean
+
+lDurFac       = vc' loadDurFactor  (Atomic "LDF") Real
 
 loadSF        = vc "loadSF"        (lShareFac ^. term) (Atomic "LSF") Integer
 
-lRe           = vc "lRe" (lResistance ^. term) (Atomic "LR") Real
+lRe           = vc' lResistance (Atomic "LR") Real
 
-nonFactorL    = vc "nonFactorL" (nonFactoredL ^. term) (Atomic "NFL") Real
+nonFactorL    = vc' nonFactoredL (Atomic "NFL") Real
 
 risk_fun      = makeVC "risk_fun"    (nounPhraseSP "risk of failure") cB
 
@@ -356,9 +354,8 @@ specDeLoad    = dcc "specDeLoad"  (nounPhraseSP "specified design load")
 {--}
 
 this_symbols :: [QSWrapper]
-this_symbols = (gbInputs ++ gbOutputs ++ (map qs gBRSpecParamVals) ++ 
-  (map qs glassBRSymbolsWithDefns) ++ (map qs glassBRSymbols) ++ 
-  (map qs glassBRUnitless))
+this_symbols = ((map qs gBRSpecParamVals) ++ (map qs glassBRSymbolsWithDefns)
+  ++ (map qs glassBRSymbols) ++ (map qs glassBRUnitless) ++ gbInputs)
 
 {--}
 
@@ -374,6 +371,9 @@ gbSymbMapT term_ = (symbolMapFun gbSymbMap Theory) term_
 {--}
 
 --Constants--
+
+gbConstants :: [QDefinition]
+gbConstants = [constant_M, constant_K, constant_ModElas, constant_LoadDur]
 
 constant_M :: QDefinition
 constant_M = mkDataDef sflawParamM sfpMVal

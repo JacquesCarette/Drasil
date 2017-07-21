@@ -112,7 +112,8 @@ pcm_si = SI {
   _inputs = (map qs pcmConstraints), --inputs
   _outputs = ([] :: [QSWrapper]),     --outputs
   _defSequence = ([] :: [Block QDefinition]),
-  _constraints = (pcmConstraints)        --constrained
+  _constraints = (pcmConstraints),        --constrained
+  _constants = []
 }
 
 pcm_srs :: Document

@@ -49,9 +49,9 @@ data RefType = Tab -- ^ Table
              | Sect -- ^ Section
              | Def -- ^ Definition (includes theoretical models)
              | Mod -- ^ Module
-             | Req Sentence-- ^ Requirement
-             | Assump Sentence-- ^ Assumption
-             | LC Sentence-- ^ Likely Change
+             | Req (Maybe Sentence)-- ^ Requirement
+             | Assump (Maybe Sentence)-- ^ Assumption
+             | LC (Maybe Sentence)-- ^ Likely Change
              | UC -- ^ Unlikely Change
 
 instance Show RefType where
@@ -60,12 +60,12 @@ instance Show RefType where
   show Sect = "Section"
   show Def = "Definition"
   show Mod = "Module"
-  show (Req (S r)) = r
-  show (Assump (S a)) = a
-  show (LC (S lc)) = lc
-  show (Req _) = "Requirement"
-  show (Assump _) = "Assumption"
-  show (LC _) = "Likely Change"
+  -- show (Req (S r)) = r
+  -- show (Assump (S a)) = a
+  -- show (LC (S lc)) = lc
+  show (Req Nothing) = "Requirement"
+  show (Assump Nothing) = "Assumption"
+  show (LC Nothing) = "Likely Change"
   show UC = "Unlikely Change"
 
 -- | Helper function for wrapping sentences in parentheses.

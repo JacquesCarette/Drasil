@@ -5,7 +5,7 @@ import Language.Drasil.Symbol (Symbol)
 import Language.Drasil.Unicode (Greek,Special)
 import Language.Drasil.Spec (USymb, RefType)
 
-import Data.List (intersperse)
+--import Data.List (intersperse)
 
 data Expr = Var  Variable
           | Dbl  Double

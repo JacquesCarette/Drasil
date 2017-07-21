@@ -151,7 +151,7 @@ normStress, genPressure, normFunc, shearFunc, slopeDist, slipDist,
 
 intNormForce = uc' "E_i" (cn $ "interslice normal force")
   ("exerted between adjacent slices " ++ fisi)
-  (sub cE lI) newton
+  (cE) newton
 
 waterHght   = uc' "y_wt,i"
   (cn $ "y ordinate")
@@ -191,34 +191,34 @@ mobShrI     = uc' "S_i" (cn $ "mobilized shear force")
 shrResI     = uc' "P_i" (cn $ "resistive shear force") ("Mohr Coulomb " ++
   "frictional force that describes the limit of mobilized shear force the " ++
   "slice i can withstand before failure")
-  (sub cP lI) newton
+  (cP) newton
   
 mobShrC     = uc' "Psi" (cn $ "constant") ("converts mobile shear " ++ 
   wiif ++ ", to a calculation considering the interslice forces")
-  (sub (Greek Psi) lC) newton
+  (Greek Psi) newton
 
 shrResC     = uc' "Phi" (cn $ "constant") ("converts resistive shear " ++ 
   wiif ++ ", to a calculation considering the interslice forces")
-  (sub (Greek Phi) lC) newton
+  (Greek Phi) newton
 
 shearFNoIntsl = uc' "T_i"
   (cn $ "mobilized shear force") (wiif ++ " " ++ fsi)
-  (sub cT lI) newton
+  cT newton
 
 shearRNoIntsl = uc' "R_i"
   (cn $ "resistive shear force") (wiif ++ " " ++ fsi)
-  (sub cR lI) newton
+  (cR) newton
 
 slcWght     = uc' "W_i" (cn $ "weight") ("downward force caused by gravity on slice i")
-  (sub cW lI) newton
+  (cW) newton
 
 watrForce    = uc' "H_i" (cn $ "interslice water force") ("exerted in the " ++
   "x-ordinate direction between adjacent slices " ++ fisi)
-  (sub cH lI) newton
+  (cH) newton
 
 watrForceDif = uc' "dH_i" (cn $ "difference between interslice forces") ("exerted in the " ++
   "x-ordinate direction between adjacent slices " ++ fisi)
-  (sub (Concat [Greek Delta, cH]) lI) newton
+  (Concat [Greek Delta, cH]) newton
 
 intShrForce = uc' "X_i" (cn $ "interslice shear force") 
   ("exerted between adjacent slices " ++ fisi)
@@ -226,11 +226,11 @@ intShrForce = uc' "X_i" (cn $ "interslice shear force")
 
 baseHydroForce = uc' "U_b,i" (cn $ "base hydrostatic force")
   ("from water pressure within the slice " ++ fsi)
-  (sub cU (Atomic "b,i")) newton
+  (sub cU (Atomic "b")) newton
 
 surfHydroForce = uc' "U_t,i" (cn $ "surface hydrostatic force")
   ("from water pressure acting into the slice from standing water on the slope surface " ++ fsi)
-  (sub cU (Atomic "t,i")) newton
+  (sub cU (Atomic "t")) newton
 
 totNrmForce = uc' "N_i" (cn $ "normal force") ("total reactive force " ++
   "for a soil surface subject to a body resting on it")
@@ -256,7 +256,7 @@ surfAngle   = uc' "beta_i" (cn $ "angle") ("surface of the mass relative to the 
 
 impLoadAngle = uc' "omega_i" (cn $ "angle")
   ("of imposed surface load acting into the surface relative to the vertical " ++ fsi)
-  (sub (Greek Omega_L) lI) degree
+  (Greek Omega_L) degree
 
 baseWthX    = uc' "b_i" (cn $ "base width of a slice")
   ("in the x-ordinate direction only " ++ fsi)
@@ -335,21 +335,21 @@ sliceHght    = uc' "z_i" (cn "center of slice height") ("the distance from the l
   "of the slice to the height of the centers of slice") (sub lZ lI) metre
 
 normFunc     = uc' "C1_i" (cn "interslice normal force function") ("FIXME: missing discription")
-  (sub (Concat [cC, Atomic "1"]) lI) momentOfForceU
+  (Concat [cC, Atomic "1"]) momentOfForceU
   
 shearFunc    = uc' "C2_i" (cn "interslice shear force function") ("FIXME: missing discription")
-  (sub (Concat [cC, Atomic "2"]) lI) momentOfForceU
-
+  (Concat [cC, Atomic "2"]) momentOfForceU  
+  
 ----------------------
 -- Unitless Symbols --
 ----------------------
 
 sspUnitless :: [ConVar]
 sspUnitless = [earthqkLoadFctr, normToShear,scalFunc,
-  numbSlices, minFunction, fsloc, index]
+  numbSlices, minFunction, fsloc, index, varblU, varblV]
 
 earthqkLoadFctr, normToShear, scalFunc,
-  numbSlices, minFunction, fsloc, index :: ConVar
+  numbSlices, minFunction, fsloc, index, varblU, varblV :: ConVar
 
 earthqkLoadFctr = cvR (dcc "K_c" (nounPhraseSP $ "earthquake load factor") ("proportionality " ++
   "factor of force that weight pushes outwards; caused by seismic earth movements")) (sub cK lC)
@@ -374,10 +374,22 @@ fsloc       = cvR (dcc "FS_loci" (nounPhraseSP "local factor of safety") fsi)
 -- Index Function --
 --------------------
 
-index       = cvR (dcc "index" (nounPhraseSP "index") ("used to show a quantity " ++
-  "applies to only one slice")) lI
+varblU = cvRs (dcc "varblU" (nounPhraseSP "local index")
+  ("used as a bound variable index in calculations"))
+  lU Natural
+varblV = cvRs (dcc "varblV" (nounPhraseSP "local index")
+  ("used as a bound variable index in calculations"))
+  lV Natural
+
+index       = cvRs (dcc "index" (nounPhraseSP "index") ("used to show a quantity " ++
+  "applies to only one slice")) lI Natural
 
 --FIXME: possibly move to Language/Drasil/Expr.hs
+indx1 :: (SymbolForm a) => a -> Expr
+indx1 a = Index (C a) (Int 1)
+
+indxn :: (SymbolForm a) => a -> Expr
+indxn a = Index (C a) (C numbSlices)
 
 inxi :: SymbolForm e => e -> Expr
 inxi e = inx e 0

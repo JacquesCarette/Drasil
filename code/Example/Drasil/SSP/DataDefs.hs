@@ -112,11 +112,10 @@ lengthLsEqn = (inxi baseWthX) * sec (inxi surfAngle)
 --DD7
 
 seismicLoadF :: QDefinition
-seismicLoadF = mkDataDef earthqkLoadFctr ssmcLFEqn --correct chunk referenced for definition?
+seismicLoadF = mkDataDef earthqkLoadFctr ssmcLFEqn --FIXME: K_E missing for unitals?
 
 ssmcLFEqn :: Expr
-ssmcLFEqn = ((C earthqkLoadFctr) * (inxi slcWght)) 
---FIXME: need index/ subscript changes
+ssmcLFEqn = ((C earthqkLoadFctr) * (inxi slcWght))
 
 --DD8
 

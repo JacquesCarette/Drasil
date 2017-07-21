@@ -30,12 +30,12 @@ fctSfty = makeRC "fctSfty" factorOfSafety fcSfty_desc fcSfty_rel
 --FIXME: first shearRNoIntsl should have local index v, not i, last occurence should have index n
 --       similar case with shearFNoIntsl
 fcSfty_rel :: Relation
-fcSfty_rel = (C fs) := (sumOp shearRNoIntsl :+ (C shearRNoIntsl)) :/ 
-                       (sumOp shearFNoIntsl :+ (C shearFNoIntsl))
-  where prodOp    = product   (Just (lC, Low $ C index, High $ C numbSlices - Int 1))
-                              ((C mobShrC) :/ (C shrResC))
+fcSfty_rel = (C fs) := (sumOp shearRNoIntsl + Index (C shearRNoIntsl) (C numbSlices)) :/ 
+                       (sumOp shearFNoIntsl + Index (C shearFNoIntsl) (C numbSlices))
+  where prodOp    = product   (Just (lU, Low $ C index, High $ C numbSlices - Int 1))
+                              (Index (C mobShrC) (C varblU) / Index (C shrResC) (C varblU))
         sumOp sym = summation (Just (lV, Low $ Int 1, High $ C numbSlices - Int 1))
-                              ((C sym) :* prodOp)
+                              (Index (C sym) (C varblV) :* prodOp)
 
 fcSfty_desc :: Sentence
 fcSfty_desc = foldlSent [S "Equation for the", S "Factor of Safety" `isThe` S "ratio",
@@ -50,20 +50,21 @@ nrmShrFor :: RelationConcept
 nrmShrFor = makeRC "nrmShrFor" (nounPhraseSP "normal/shear force ratio") nrmShrF_desc nrmShrF_rel
 
 nrmShrF_rel :: Relation
-nrmShrF_rel = (C normFunc) := Case [case1,case2,case3]:=
-  C shearFunc := Case [
+nrmShrF_rel = (inxi normFunc) := Case [case1,case2,case3]:=
+  inxi shearFunc := Case [
   (C baseWthX * C scalFunc * C intNormForce, C index := Int 1),
-  (C baseWthX * (C scalFunc * C intNormForce + C scalFunc * C intNormForce),
+  (inxi baseWthX * (inxi scalFunc * inxi intNormForce + inx scalFunc (-1) * inx intNormForce (-1)),
     Int 2 :<= C index :<= (C numbSlices :- Int 1)),
-  (C baseWthX * C scalFunc * C intNormForce, C index := Int 1)
+  (indxn baseWthX * Index (C intNormForce) (C numbSlices - Int 1) * Index (C watrForce) (C numbSlices - Int 1), C index := Int 1)
   ]
   := --FIXME: move to seperate instance model
-  C normToShear := summ (C normFunc) / summ (C shearFunc)
+  C normToShear := summ (inxi normFunc) / summ (inxi shearFunc)
   where summ = summation (Just (index ^. symbol, Low $ Int 1, High $ C numbSlices))
-        case1 = ((C baseWthX)*((C intNormForce)+(C watrForce)) * tan (C baseAngle) , C index := Int 1) --FIXME: use index i
-        case2 = ((C baseWthX)*((C intNormForce)+(C intNormForce)+(C watrForce)+(C watrForce)) * tan (C baseAngle),
+        case1 = ((indx1 baseWthX)*((indx1 intNormForce)+(indx1 watrForce)) * tan (indx1 baseAngle) , C index := Int 1)
+        case2 = ((inxi baseWthX)*(Grouping (inxi intNormForce + inx intNormForce (-1))+ Grouping (inxi watrForce + inx watrForce (-1))) * tan (inxi baseAngle)
+                + (C midpntHght) * (C earthqkLoadFctr * inxi slcWght - Int 2 * inxi surfHydroForce * sin (inxi surfAngle) - Int 2 * inxi surfLoad * cos (inxi impLoadAngle)),
                 Int 2 :<= C index :<= ((C numbSlices) - (Int 1)))
-        case3 = ((C baseWthX)*((C intNormForce)+(C watrForce)) * tan (C baseAngle) , C index := (C numbSlices))
+        case3 = ((indxn baseWthX)*(Index (C intNormForce) (C numbSlices - Int 1) + Index (C watrForce) (C numbSlices - Int 1)) * tan (Index (C baseAngle) (C numbSlices - Int 1)) , C index := (C numbSlices))
 
 nrmShrF_desc :: Sentence
 nrmShrF_desc = foldlSent [getS normToShear `isThe` S "magnitude ratio between",

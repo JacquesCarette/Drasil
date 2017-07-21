@@ -19,6 +19,7 @@ import Language.Drasil.Symbol (Symbol)
 import Language.Drasil.Space
 
 import Language.Drasil.NounPhrase (NP, phrase)
+import Language.Drasil.Spec
 
 -- BEGIN EQCHUNK --
 -- | A QDefinition is a 'Quantity' with a defining equation.
@@ -55,32 +56,32 @@ instance ExprRelat QDefinition where
 -- END EQCHUNK --
 
 -- don't export this
-ul :: Simple Lens QDefinition E
-ul f (EC a b) = fmap (\(E x) -> EC x b) (f (E a))
+ul :: Simple Lens QDefinition H
+ul f (EC a b) = fmap (\(H x) -> EC x b) (f (H a))
 
 -- or this
 elens :: (forall c. (SymbolForm c, Quantity c) => Simple Lens c a) 
-  -> Simple Lens E a
-elens l f (E a) = fmap (\x -> E (set l x a)) (f (a ^. l))
+  -> Simple Lens H a
+elens l f (H a) = fmap (\x -> H (set l x a)) (f (a ^. l))
 
 -- and especially not this
-data E where
-  E :: (SymbolForm c, Quantity c) => c -> E
+data H where
+  H :: (SymbolForm c, Quantity c) => c -> H
 
-instance Chunk E where
+instance Chunk H where
   id = elens id
 
-instance NamedIdea E where
+instance NamedIdea H where
   term = elens term
-  getA (E a) = getA a
+  getA (H a) = getA a
   
-instance SymbolForm E where 
+instance SymbolForm H where 
   symbol = elens symbol
   
-instance Quantity E where
+instance Quantity H where
   typ = elens typ
-  getSymb (E c) = getSymb c
-  getUnit (E c) = getUnit c
+  getSymb (H c) = getSymb c
+  getUnit (H c) = getUnit c
   
 -- useful: to be used for equations with units
 --FIXME: Space hack
@@ -89,9 +90,9 @@ instance Quantity E where
 
 -- | Create a 'QDefinition' with an id, noun phrase (term), symbol,
 -- unit, and defining equation.
-fromEqn :: Unit u => String -> NP -> Symbol -> u -> Expr -> QDefinition
-fromEqn nm desc symb chunk eqn = 
-  EC (ucFromCV (cv (dccWDS nm desc (phrase desc)) symb Rational) chunk) eqn
+fromEqn :: Unit u => String -> NP -> Sentence -> Symbol -> u -> Expr -> QDefinition
+fromEqn nm desc extra symb chunk eqn = 
+  EC (ucFromCV (cv (dccWDS nm desc (phrase desc +:+ extra)) symb Rational) chunk) eqn
 
 -- and without
 --FIXME: Space hack

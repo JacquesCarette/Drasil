@@ -221,8 +221,8 @@ s2_1_intro_p1 typeOf progName gvnVar = foldlSent [S "The main", phrase purpose,
   S "of this", phrase typeOf, S "is to predict whether a given", phrase gvnVar,
   S "is likely to" +:+. predxnGoal, S "The", plural goal `sAnd` plural thModel,
   S "used in the", short progName, phrase code, S "are provided" `sC` 
-  S "with an emphasis on explicitly identifying", (plural assumption) `sAnd` 
-  S "unambiguous" +:+. plural definition, S "This", phrase typeOf, 
+  S "with an", phrase emphasis, S "on explicitly identifying", (plural assumption)
+  `sAnd` S "unambiguous" +:+. plural definition, S "This", phrase typeOf, 
   S "is intended to be used as a", phrase reference, S "to provide all", 
   phrase information, S "necessary to understand and verify the" +:+. 
   phrase analysis, S "The", short srs, S "is abstract because the",
@@ -425,22 +425,22 @@ assumption8 = mkAssump "assumption8"   (a8Desc (loadDF))   --ldfConstant
 
 a1Desc :: Sentence
 a1Desc = foldlSent [S "The standard E1300-09a for",
-  phrase calculation, S "applies only to monolithic, laminated, or insulating", 
-  S "glass constructions of rectangular", phrase shape, S "with continuous", 
-  phrase lateral +:+. S "support along one, two, three, or four", plural edge, 
-  S "This", phrase practice, S "assumes that (1) the supported glass",
-  plural edge, S "for two, three" `sAnd` S "four-sided support",
+  phrase calculation, S "applies only to", foldlOptions $ map S ["monolithic", "laminated",
+  "insulating"], S "glass constructions of rectangular", phrase shape, S "with continuous", 
+  phrase lateral +:+. S "support along", foldlOptions $ map S ["one", "two", "three", "four"],
+  plural edge, S "This", phrase practice, S "assumes that", sParenNum 1,
+  S "the supported glass", plural edge, S "for two, three" `sAnd` S "four-sided support",
   plural condition, S "are simply supported and free to slip in", phrase plane
-  `semiCol` S "(2) glass supported on two sides acts as a simply supported",
-  phrase beam `sAnd` S "(3) glass supported on one side acts as a", 
+  `semiCol` (sParenNum 2), S "glass supported on two sides acts as a simply supported",
+  phrase beam `sAnd` (sParenNum 3), S "glass supported on one side acts as a", 
   phrase cantilever]
 
 a2Desc :: Sentence
 a2Desc = foldlSent [S "Following", (sSqBr (S "4 (pg. 1)")) `sC`
   S "this", phrase practice, S "does not apply to any form of", 
-  foldlsC $ map S ["wired", "patterned", "etched", "sandblasted", "drilled",
-  "notched", "or grooved"], phrase glass, S "with", phrase surface 
-  `sAnd` S "edge treatments that alter the glass strength"]
+  foldlOptions $ map S ["wired", "patterned", "etched", "sandblasted",
+  "drilled", "notched", "grooved glass"], S "with", phrase surface `sAnd` 
+  S "edge treatments that alter the glass strength"]
 
 a3Desc :: Sentence
 a3Desc = foldlSent [S "This", phrase system,
@@ -471,8 +471,8 @@ a7Desc = foldlSent [S "The", phrase response, S "type considered in",
 a8Desc :: QDefinition -> Sentence
 a8Desc mainConcept = foldlSent [S "With", phrase reference, S "to",
   acroA 4, S "the", phrase value `sOf` phrase mainConcept, 
-  sParen (getS mainConcept), S "is a constant in" +:+. short gLassBR,
-  S "It is calculated by the" +: phrase equation +:+. 
+  sParen (getS mainConcept), S "is a", phrase constant, S "in" +:+.
+  short gLassBR, S "It is calculated by the" +: phrase equation +:+. 
   E (C mainConcept := equat mainConcept), S "Using this" `sC`
   E (C mainConcept := (Dbl 0.27))]
 
@@ -558,8 +558,8 @@ req2Desc = foldlSent [S "The", phrase system,
 
 req3Desc = foldlSent [S "The", phrase system, S "shall check the entered",
   plural inValue, S "to ensure that they do not exceed the",
-  plural datumConstraint, S "mentioned in" +:+. 
-  makeRef (SRS.datCon SRS.missingP []), S "If any of the", plural inParam,
+  plural datumConstraint, S "mentioned in" +:+. makeRef 
+  (SRS.datCon SRS.missingP []), S "If any of the", plural inParam,
   S "is out of bounds, an error", phrase message, S "is displayed and the",
   plural calculation, S "stop"]
 

@@ -38,9 +38,9 @@ acroNumGen (first:rest) num = (f first) : acroNumGen rest (num + 1)
 assumption, dataDefn, genDefn, goalStmt, inModel, likelyChg, unlikelyChg,
   physSyst, requirement, srs, thModel, mg, desSpec, notApp, dataConst :: CI
 
---------------------------------------------------------------------------------
--- CI       |           |    id       |         term            | abbreviation |
---------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------------------
+-- | CI       |           |    id       |         term                        | abbreviation | --
+-------------------------------------------------------------------------------------------------
 assumption  = commonIdea "assumption"  (cn' "assumption")                                  "A"
 dataDefn    = commonIdea "dataDefn"    (cn' "data definition")                             "DD"
 desSpec     = commonIdea "desSpec"     (fterms compoundPhrase design specification)        "DS"
@@ -65,19 +65,20 @@ srs = commonIdea "srs"
 -- concepts relating to the templates and their contents
 
 analysis, appendix, body, characteristic, class_, client, code, column, company, 
-  component, concept, condition, constraint, consumer, connection, content, context,
-  coordinate, customer, datum, decision, definition, dependency, description,
-  design, document, documentation, effect, element, endUser, environment, failure,
-  figure, first, functional, game, general, goal, guide, implementation, individual, 
-  information, interest, interface, input_, instance_, intReader, introduction, 
-  issue, item, loss, label, library, limitation, literacy, material_, message, 
-  method_, module_, model, name_, nonfunctional, object, offShelf, open, organization,
-  output_, physics, physical, plan, practice, priority, problem, product_, project, 
-  property, purpose, quantity, realtime, reference, requirement_, response, reviewer, 
-  safety, scope, second_, section_, scenario, source, simulation, software, solution,
-  specific, specification, stakeholder, standard, statement, symbol_, system, table_,
-  task, template, term_, terminology, theory, traceyGraph, traceyMatrix, uncertainty,
-  user, useCase, validation, value, variable, video, verification, year :: NamedChunk
+  component, concept, condition, connection, constant, constraint, consumer, content,
+  context, coordinate, customer, datum, decision, definition, dependency, description,
+  design, document, documentation, effect, element, emphasis, endUser, environment,
+  failure, figure, first, functional, game, general, goal, guide, implementation,
+  individual, information, interest, interface, input_, instance_, intReader,
+  introduction, issue, item, loss, label, library, limitation, literacy, material_,
+  message, method_, module_, model, name_, nonfunctional, object, offShelf, open,
+  organization, output_, physics, physical, plan, practice, priority, problem, 
+  product_, project, property, purpose, quantity, realtime, reference, requirement_,
+  response, reviewer, safety, scope, second_, section_, scenario, source, simulation,
+  software, solution, specific, specification, stakeholder, standard, statement, symbol_,
+  system, table_, task, template, term_, terminology, theory, traceyGraph, traceyMatrix,
+  uncertainty, user, useCase, validation, value, variable, video,
+  verification, year :: NamedChunk
 
 analysis        = npnc "analysis"       (cnIS   "analysis"           )
 appendix        = npnc "appendix"       (cnICES "appendix"           )
@@ -92,6 +93,7 @@ component       = npnc "component"      (cn'    "component"          )
 concept         = npnc "concept"        (cn'    "concept"            )
 condition       = npnc "condition"      (cn'    "condition"          )
 connection      = npnc "connection"     (cn'    "connection"         )
+constant        = npnc "constant"       (cn'    "constant"           )
 constraint      = npnc "constraint"     (cn'    "constraint"         )
 consumer        = npnc "consumer"       (cn'    "consumer"           )
 content         = npnc "content"        (cn'    "content"            )
@@ -108,6 +110,7 @@ document        = npnc "document"       (cn'    "document"           )
 documentation   = npnc "documentation"  (cn'    "documentation"      )
 effect          = npnc "effect"         (cn'    "effect"             )
 element         = npnc "element"        (cn'    "element"            )
+emphasis        = npnc "emphasis"       (cnIS   "emphasis"           )
 endUser         = npnc "end user"       (cn'    "end user"           )
 environment     = npnc "environment"    (cn'    "environment"        ) -- Is this term in the right spot?
 failure         = npnc "failure"        (cn'    "failure"            )

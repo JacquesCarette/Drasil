@@ -72,12 +72,15 @@ instance Show RefType where
 sParen :: Sentence -> Sentence
 sParen x = S "(" :+: x :+: S ")"
 
+sParenNum :: Int -> Sentence
+sParenNum y = sParen (S (show y))
+
 -- | Helper function for wrapping sentences in square brackets.
 sSqBr :: Sentence -> Sentence
 sSqBr x = S "[" :+: x :+: S "]"
 
 sSqBrNum :: Int -> Sentence
-sSqBrNum y = S "[" :+: (S (show y)) :+: S "]"
+sSqBrNum y = sSqBr (S (show y))
 
 sCurlyBr :: Sentence -> Sentence
 sCurlyBr x = Sp CurlyBrOpen :+: x :+: Sp CurlyBrClose

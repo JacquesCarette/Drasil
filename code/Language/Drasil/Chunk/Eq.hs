@@ -18,7 +18,7 @@ import Language.Drasil.Unit (Unit(..))
 import Language.Drasil.Symbol (Symbol)
 import Language.Drasil.Space
 
-import Language.Drasil.NounPhrase (NP, phrase)
+import Language.Drasil.NounPhrase (NP, phrase, nounPhraseSent)
 import Language.Drasil.Spec
 
 -- BEGIN EQCHUNK --
@@ -92,14 +92,16 @@ instance Quantity H where
 -- unit, and defining equation.
 fromEqn :: Unit u => String -> NP -> Sentence -> Symbol -> u -> Expr -> QDefinition
 fromEqn nm desc extra symb chunk eqn = 
-  EC (ucFromCV (cv (dccWDS nm desc (phrase desc +:+ extra)) symb Rational) chunk) eqn
+  EC (ucFromCV (cv (dccWDS nm (desc) (phrase desc)) symb Rational) chunk) eqn
+  --EC (ucFromCV (cv (dccWDS nm (desc) (phrase desc +:+ extra)) symb Rational) chunk) eqn
 
 -- and without
 --FIXME: Space hack
 -- | Same as fromEqn, but has no units.
-fromEqn' :: String -> NP -> Symbol -> Expr -> QDefinition
-fromEqn' nm desc symb eqn = 
+fromEqn' :: String -> NP -> Sentence -> Symbol -> Expr -> QDefinition
+fromEqn' nm desc extra symb eqn = 
   EC (cv (dccWDS nm desc (phrase desc)) symb Rational) eqn
+  --EC (cv (dccWDS nm desc (phrase desc +:+ extra)) symb Rational) eqn
   
 -- | Returns a 'VarChunk' from a 'QDefinition'.
 -- Currently only used in example /Modules/ which are being reworked.

@@ -22,7 +22,7 @@ module Data.Drasil.Utils
   , fmtBF
   , symbolMapFun
   , fterms , fterm
-  , mkDataDef
+  , mkDataDef, mkDataDef'
   , prodUCTbl
   ) where
 
@@ -189,12 +189,20 @@ unwrap Nothing  = EmptyS
 symbolMapFun :: SymbolMap -> (d -> DType) -> (d -> Contents)
 symbolMapFun progSymbMap fun = (Definition (progSymbMap) . fun)
 
--- Used to help make data definitions when id, term, and symbol come from the same sourse
-mkDataDef :: (SymbolForm c, Quantity c) => c -> Expr -> Sentence -> QDefinition
-mkDataDef concept equation extraInfo = datadef $ getUnit concept
+-- Used to help make Qdefinitions when id, term, and symbol come from the same source
+mkDataDef :: (SymbolForm c, Quantity c) => c -> Expr -> QDefinition
+mkDataDef concept equation = datadef $ getUnit concept
+  where datadef (Just a) = fromEqn  (concept ^. id) (concept ^. term) EmptyS
+                           (concept ^. symbol) a equation
+        datadef Nothing  = fromEqn' (concept ^. id) (concept ^. term) EmptyS
+                           (concept ^. symbol) equation
+
+-- Same as 'mkDataDef', but with an additional Sentence that can be taken as "extra information"; issue #350
+mkDataDef' :: (SymbolForm c, Quantity c) => c -> Expr -> Sentence -> QDefinition
+mkDataDef' concept equation extraInfo = datadef $ getUnit concept
   where datadef (Just a) = fromEqn  (concept ^. id) (concept ^. term) (extraInfo)
                            (concept ^. symbol) a equation
-        datadef Nothing  = fromEqn' (concept ^. id) (concept ^. term)
+        datadef Nothing  = fromEqn' (concept ^. id) (concept ^. term) (extraInfo)
                            (concept ^. symbol) equation
 
 prodUCTbl :: [[Sentence]] -> Contents

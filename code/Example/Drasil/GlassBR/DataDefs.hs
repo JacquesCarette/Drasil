@@ -5,6 +5,7 @@ import Prelude hiding (log, id, exp, sqrt)
 import Drasil.GlassBR.Unitals
 import Data.Drasil.Utils
 import Data.Drasil.SentenceStructures (extrctStrng)
+import Data.Drasil.Concepts.PhysicalProperties (dimension)
 
 --FIXME: having id "" and term "" is completely bogus, and should not
 --  be allowed.  This implicitly says that something here does not make sense.
@@ -115,4 +116,6 @@ tolStrDisFac_eq = log (log ((1) / ((1) - (C pb_tol)))
   )) :^ (C sflawParamM) * (C loadDF))))
 
 tolStrDisFac :: QDefinition
-tolStrDisFac = mkDataDef sdf_tol tolStrDisFac_eq
+tolStrDisFac = mkDataDef' sdf_tol tolStrDisFac_eq 
+  ((E (C plate_len)) `sC` (E (C plate_width)) +:+ S "are" +:+ plural dimension +:+
+   S "of the plate" `sC` S "where" +:+. sParen (E (C plate_len :> C plate_width)))

@@ -180,6 +180,7 @@ executable nopcm
     , Drasil.SWHS.Modules
     , Drasil.SWHS.References
     , Drasil.SWHS.Reqs
+    , Drasil.SWHS.Requirements
     , Drasil.SWHS.TMods
     , Drasil.SWHS.IMods
     , Drasil.SWHS.Unitals
@@ -374,6 +375,7 @@ executable swhs
     , Drasil.SWHS.Modules
     , Drasil.SWHS.References
     , Drasil.SWHS.Reqs
+    , Drasil.SWHS.Requirements
     , Drasil.SWHS.TMods
     , Drasil.SWHS.IMods
     , Drasil.SWHS.Unitals

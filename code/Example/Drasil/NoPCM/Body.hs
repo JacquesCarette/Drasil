@@ -100,14 +100,20 @@ mkSRS = RefSec (RefProg intro
   map Verbatim [s3, s4, s5, s6, s7, s8, s9]
 
 pcm_si :: SystemInformation
-pcm_si = SI srs_swhs srs [thulasi] this_si pcmSymbols 
-  (pcmSymbols)
-  acronyms
-  ([dd1HtFluxC])          --dataDefs
-  (map qs pcmConstraints) --inputs
-  ([] :: [QSWrapper])     --outputs
-  ([] :: [Block QDefinition])
-  (pcmConstraints)        --constrained
+pcm_si = SI {
+  _sys = srs_swhs,
+  _kind = srs,
+  _authors = [thulasi],
+  _units = this_si,
+  _quants = pcmSymbols,
+  _concepts = (pcmSymbols),
+  _namedIdeas = acronyms,
+  _definitions = ([dd1HtFluxC]),          --dataDefs
+  _inputs = (map qs pcmConstraints), --inputs
+  _outputs = ([] :: [QSWrapper]),     --outputs
+  _defSequence = ([] :: [Block QDefinition]),
+  _constraints = (pcmConstraints)        --constrained
+}
 
 pcm_srs :: Document
 pcm_srs = mkDoc mkSRS pcm_si

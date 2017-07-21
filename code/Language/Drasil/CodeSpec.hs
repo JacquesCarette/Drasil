@@ -63,7 +63,7 @@ codeSpec :: SystemInformation -> CodeSpec
 codeSpec si = codeSpec' si defaultChoices
 
 codeSpec' :: SystemInformation -> Choices -> CodeSpec
-codeSpec' (SI sys _ _ _ q _ _ defs ins outs _ cs) ch = CodeSpec {
+codeSpec' (SI {_sys = sys, _quants = q, _definitions = defs, _inputs = ins, _outputs = outs, _constraints = cs}) ch = CodeSpec {
   program = NICN sys,
   inputs = map codevar ins,
   outputs = map codevar outs,

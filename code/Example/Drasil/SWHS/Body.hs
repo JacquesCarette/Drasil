@@ -70,13 +70,20 @@ authors :: Sentence
 authors = manyNames swhsPeople
 
 swhs_si :: SystemInformation
-swhs_si = SI swhs_pcm srs swhsPeople
-  this_si swhsSymbols (swhsSymbols) acronyms
-  (swhsDataDefs :: [QDefinition])
-  ((map qs swhsInputs) :: [QSWrapper])
-  ((map qs swhsOutputs) :: [QSWrapper])
-  ([] :: [Block QDefinition])
-  (swhsConstrained)
+swhs_si = SI {
+  _sys = swhs_pcm,
+  _kind = srs, 
+  _authors = swhsPeople,
+  _units = this_si,
+  _quants = swhsSymbols,
+  _concepts = (swhsSymbols),
+  _namedIdeas = acronyms,
+  _definitions = (swhsDataDefs :: [QDefinition]),
+  _inputs = ((map qs swhsInputs) :: [QSWrapper]),
+  _outputs = ((map qs swhsOutputs) :: [QSWrapper]),
+  _defSequence = ([] :: [Block QDefinition]),
+  _constraints = (swhsConstrained)
+}
   --Note: The second swhsSymbols here is
     -- Redundant b/c the unitals are not really concepts (yet). There
     -- Will still likely be a better way to do this.

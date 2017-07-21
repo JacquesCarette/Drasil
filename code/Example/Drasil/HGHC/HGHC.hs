@@ -24,9 +24,20 @@ modules = [mod_calc, mod_hw, mod_inputp, mod_inputf, mod_behav, mod_outputf,
   mod_ctrl]
   
 thisSI :: SystemInformation
-thisSI = SI hghc srs [spencerSmith] si_units symbols ([] :: [UCWrapper]) ([] :: [CI]) 
-  hghcVars htInputs htOutputs ([] :: [Block QDefinition])
-  ([] :: [ConstrainedChunk])
+thisSI = SI {
+  _sys = hghc,
+  _kind = srs,
+  _authors = [spencerSmith],
+  _units = si_units,  
+  _quants = symbols,
+  _concepts = ([] :: [UCWrapper]),
+  _namedIdeas = ([] :: [CI]), 
+  _definitions = hghcVars,
+  _inputs = htInputs,
+  _outputs = htOutputs,
+  _defSequence = ([] :: [Block QDefinition]),
+  _constraints = ([] :: [ConstrainedChunk])
+}
   
 thisSRS :: DocDesc
 thisSRS = RefSec (RefProg intro [TUnits, tsymb [TSPurpose, SymbConvention [Lit (nw nuclearPhys), Manual (nw fp)]]]) : [Verbatim s3]

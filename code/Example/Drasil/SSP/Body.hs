@@ -62,9 +62,20 @@ this_si :: [UnitDefn]
 this_si = map UU [metre, degree] ++ map UU [newton, pascal]
 
 ssp_si :: SystemInformation
-ssp_si = SI ssa srs [henryFrankis]
-  this_si sspSymbols (sspSymbols) acronyms sspDataDefs (map qs sspInputs) (map qs sspOutputs)
-  [Parallel (head sspDataDefs) (tail sspDataDefs)] sspConstrained
+ssp_si = SI {
+  _sys = ssa, 
+  _kind = srs, 
+  _authors = [henryFrankis],
+  _units = this_si,
+  _quants = sspSymbols,
+  _concepts = (sspSymbols),
+  _namedIdeas = acronyms,
+  _definitions = sspDataDefs,
+  _inputs = (map qs sspInputs),
+  _outputs = (map qs sspOutputs),
+  _defSequence = [Parallel (head sspDataDefs) (tail sspDataDefs)],
+  _constraints = sspConstrained
+}
 
 mkSRS :: DocDesc
 mkSRS = RefSec (RefProg intro

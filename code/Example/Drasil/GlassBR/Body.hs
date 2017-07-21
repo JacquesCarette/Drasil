@@ -92,8 +92,9 @@ glassSystInfo = SI {
   _sys = glassBRProg,
   _kind = srs,
   _authors = authors,
-  _units = this_si this_symbols,
-  _quants = ([] :: [CQSWrapper]),
+  _units = this_si,
+  _quants = this_symbols,
+  _concepts = ([] :: [CQSWrapper]),
   _namedIdeas = (acronyms),
   _definitions = (dataDefns),
   _inputs = (map qs gbInputs),
@@ -103,20 +104,6 @@ glassSystInfo = SI {
 }
   --FIXME: All named ideas, not just acronyms.
   
-  
-    _sys :: a,
-  _kind :: b,
-  _authors :: [c],
-  _units :: [d],
-  _quants :: [e],
-  _concepts :: [f],
-  _namedIdeas :: [g],
-  _definitions :: [QDefinition],
-  _inputs :: [h],
-  _outputs :: [i],
-  _defSequence :: [Block QDefinition],
-  _constraints :: [j] --TODO: Add SymbolMap OR enough info to gen SymbolMap
-  } -> SystemInformation
   
 glassChoices :: Choices
 glassChoices = Choices {
@@ -154,7 +141,7 @@ s6_1_1_bullets = Enumeration $ (Number $
 
 s6_1_1_bullets_glTySubSec, s6_1_1_bullets_loadSubSec :: [ItemType]
 
-s6_1_1_bullets_glTySubSec = [Nested (((titleize' glassTy) :+: S ":"))
+s6_1_1_bullets_glTySubSec = [Nested (((titleize glassTy) :+: S ":"))
   (Bullet $ map tAndDWAcc glassTypes)]
 
 s6_1_1_bullets_loadSubSec = [Nested (((at_start load) :+: S ":"))

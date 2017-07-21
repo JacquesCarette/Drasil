@@ -31,11 +31,11 @@ sliceWght :: QDefinition
 sliceWght = mkDataDef slcWght slcWgtEqn
 
 slcWgtEqn :: Expr
-slcWgtEqn = (C baseWthX) * (Case [case1,case2,case3])
-  where case1 = (((C slopeHght)-(C slipHght ))*(C satWeight),(C waterHght) :>= (C slopeHght))
-        case2 = (((C slopeHght)-(C waterHght))*(C dryWeight) + ((C waterHght)-(C slipHght))*(C satWeight),
-                (C slopeHght) :> (C waterHght) :> (C slipHght))
-        case3 = (((C slopeHght)-(C slipHght ))*(C dryWeight),(C waterHght) :<= (C slipHght))
+slcWgtEqn = (inxi baseWthX) * (Case [case1,case2,case3])
+  where case1 = (((inxi slopeHght)-(inxi slipHght ))*(C satWeight),(inxi waterHght) :>= (inxi slopeHght))
+        case2 = (((inxi slopeHght)-(inxi waterHght))*(C dryWeight) + ((C waterHght)-(C slipHght))*(C satWeight),
+                (inxi slopeHght) :> (inxi waterHght) :> (inxi slipHght))
+        case3 = (((inxi slopeHght)-(inxi slipHght ))*(C dryWeight),(inxi waterHght) :<= (inxi slipHght))
 
 --DD2
 

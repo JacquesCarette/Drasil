@@ -156,17 +156,17 @@ intNormForce = uc' "E_i" (cn $ "interslice normal force")
 waterHght   = uc' "y_wt,i"
   (cn $ "the y ordinate, or height of the water table at i")
   smsi
-  (sub lY (Atomic "wt,i")) metre
+  (sub lY (Atomic "wt")) metre
 
 slopeHght   = uc' "y_us,i" (cn $ "the y ordinate, or height of the " ++
   "top of the slope at i")
   smsi
-  (sub lY (Atomic "us,i")) metre
+  (sub lY (Atomic "us")) metre
 
 slipHght    = uc' "y_slip,i" (cn $ "the y ordinate, or height of " ++
   "the slip surface at i")
   smsi
-  (sub lY (Atomic "slip,i")) metre
+  (sub lY (Atomic "slip")) metre
 
 xi          = uc' "x_i"
   (cn $ "x ordinate")
@@ -254,7 +254,7 @@ impLoadAngle = uc' "omega_i" (cn $ "angle")
 
 baseWthX    = uc' "b_i" (cn $ "base width of a slice")
   ("in the x-ordinate direction only " ++ fsi)
-  (sub lB lI) metre
+  (lB) metre
 
 baseLngth   = uc' "l_b,i" (cn $ "total base length of a slice") fsi
   (sub (Greek Ell) (Atomic "b")) metre
@@ -372,6 +372,9 @@ index       = cvR (dcc "index" (nounPhraseSP "index") ("used to show a quantity 
   "applies to only one slice")) lI
 
 --FIXME: possibly move to Language/Drasil/Expr.hs
+
+inxi :: SymbolForm e => e -> Expr
+inxi e = inx e 0
 
 inx :: SymbolForm e => e -> Integer -> Expr
 inx e n 

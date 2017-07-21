@@ -126,7 +126,7 @@ dy_i        = cuc' "dy_i" (cn $ "displacement") ("in the y-ordinate direction " 
 
 sspUnits :: [UCWrapper]
 sspUnits = map ucw [normStress, genPressure, normFunc, shearFunc,
-  waterHght, slopeHght, slipHght, xi, critCoords,
+  waterHght, slopeHght, slipHght, xi, critCoords, slopeDist, slipDist,
   mobShrI, shrResI, shearFNoIntsl, shearRNoIntsl, slcWght, watrForce,
   watrForceDif, intShrForce, baseHydroForce, surfHydroForce,
   totNrmForce, nrmFSubWat, nrmFNoIntsl, surfLoad, baseAngle, surfAngle,
@@ -136,7 +136,7 @@ sspUnits = map ucw [normStress, genPressure, normFunc, shearFunc,
   nrmDispl, porePressure, elmNrmDispl, elmPrllDispl, sliceHght,
   mobShrC, shrResC, rotatedDispl, intNormForce, shrStress, mobStress]
 
-normStress, genPressure, normFunc, shearFunc,
+normStress, genPressure, normFunc, shearFunc, slopeDist, slipDist,
   waterHght, slopeHght, slipHght, xi, critCoords, mobShrI, sliceHght,
   shearFNoIntsl, shearRNoIntsl, slcWght, watrForce, watrForceDif, shrResI,
   intShrForce, baseHydroForce, surfHydroForce, totNrmForce, nrmFSubWat,
@@ -154,19 +154,25 @@ intNormForce = uc' "E_i" (cn $ "interslice normal force")
   (sub cE lI) newton
 
 waterHght   = uc' "y_wt,i"
-  (cn $ "the y ordinate, or height of the water table at i")
-  smsi
+  (cn $ "y ordinate")
+  ("height of the water table at i, " ++ smsi)
   (sub lY (Atomic "wt")) metre
 
-slopeHght   = uc' "y_us,i" (cn $ "the y ordinate, or height of the " ++
-  "top of the slope at i")
-  smsi
+slopeHght   = uc' "y_us,i" (cn $ "y ordinate")
+  ("height of the top of the slope at i, " ++ smsi)
   (sub lY (Atomic "us")) metre
 
-slipHght    = uc' "y_slip,i" (cn $ "the y ordinate, or height of " ++
-  "the slip surface at i")
-  smsi
+slipHght    = uc' "y_slip,i" (cn $ "y ordinate")
+  ("height of the slip surface at i, " ++ smsi)
   (sub lY (Atomic "slip")) metre
+
+slopeDist   = uc' "x_us,i" (cn $ "x ordinate")
+  ("distance of the edge of the slope at i, " ++ smsi)
+  (sub lX (Atomic "us")) metre 
+
+slipDist    = uc' "x_slip,i" (cn $ "x ordinate")
+  ("distance of the slip surface at i, " ++ smsi)
+  (sub lX (Atomic "slip")) metre
 
 xi          = uc' "x_i"
   (cn $ "x ordinate")
@@ -243,10 +249,10 @@ surfLoad    = uc' "Q_i" (cn $ "imposed surface load")
   (sub cQ lI) newton
 
 baseAngle   = uc' "alpha_i" (cn $ "angle") ("base of the mass relative to the horizontal " ++ fsi)
-  (sub (Greek Alpha_L) lI) degree
+  (Greek Alpha_L) degree
 
 surfAngle   = uc' "beta_i" (cn $ "angle") ("surface of the mass relative to the horizontal " ++ fsi)
-  (sub (Greek Beta_L) lI) degree
+  (Greek Beta_L) degree
 
 impLoadAngle = uc' "omega_i" (cn $ "angle")
   ("of imposed surface load acting into the surface relative to the vertical " ++ fsi)

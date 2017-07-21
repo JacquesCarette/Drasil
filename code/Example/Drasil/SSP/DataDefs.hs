@@ -18,8 +18,8 @@ import Data.Drasil.Concepts.Math (equation, angle)
 ------------------------
 
 sspDataDefs :: [QDefinition]
-sspDataDefs = [sliceWght, baseWtrF, surfWtrF, intersliceWtrF, angles,
-  lengths, seismicLoadF, surfLoads, intrsliceF, resShearWO, mobShearWO,
+sspDataDefs = [sliceWght, baseWtrF, surfWtrF, intersliceWtrF, angleA, angleB,
+  lengthB, lengthLb, lengthLs, seismicLoadF, surfLoads, intrsliceF, resShearWO, mobShearWO,
   displcmntRxnF, netFDsplcmntEqbm, shearStiffness, soilStiffness]
 
 fixmeS :: Sentence
@@ -33,7 +33,7 @@ sliceWght = mkDataDef slcWght slcWgtEqn
 slcWgtEqn :: Expr
 slcWgtEqn = (inxi baseWthX) * (Case [case1,case2,case3])
   where case1 = (((inxi slopeHght)-(inxi slipHght ))*(C satWeight),(inxi waterHght) :>= (inxi slopeHght))
-        case2 = (((inxi slopeHght)-(inxi waterHght))*(C dryWeight) + ((C waterHght)-(C slipHght))*(C satWeight),
+        case2 = (((inxi slopeHght)-(inxi waterHght))*(C dryWeight) + ((inxi waterHght)-(inxi slipHght))*(C satWeight),
                 (inxi slopeHght) :> (inxi waterHght) :> (inxi slipHght))
         case3 = (((inxi slopeHght)-(inxi slipHght ))*(C dryWeight),(inxi waterHght) :<= (inxi slipHght))
 
@@ -43,9 +43,9 @@ baseWtrF :: QDefinition
 baseWtrF = mkDataDef baseHydroForce bsWtrFEqn 
 
 bsWtrFEqn :: Expr
-bsWtrFEqn = (C baseLngth)*(Case [case1,case2])
-  where case1 = (((C waterHght)-(C slipHght))*(C waterWeight),(C waterHght) :> (C slipHght))
-        case2 = (Int 0, (C waterHght) :<= (C slipHght))
+bsWtrFEqn = (inxi baseLngth)*(Case [case1,case2])
+  where case1 = (((inxi waterHght)-(inxi slipHght))*(C waterWeight),(inxi waterHght) :> (inxi slipHght))
+        case2 = (Int 0, (inxi waterHght) :<= (inxi slipHght))
 
 --DD3
 
@@ -53,9 +53,9 @@ surfWtrF :: QDefinition
 surfWtrF = mkDataDef surfHydroForce surfWtrFEqn
 
 surfWtrFEqn :: Expr
-surfWtrFEqn = (C surfLngth)*(Case [case1,case2])
-  where case1 = (((C waterHght)-(C slopeHght))*(C waterWeight),(C waterHght) :> (C slopeHght))
-        case2 = (Int 0, (C waterHght) :<= (C slopeHght))
+surfWtrFEqn = (inxi surfLngth)*(Case [case1,case2])
+  where case1 = (((inxi waterHght)-(inxi slopeHght))*(C waterWeight),(inxi waterHght) :> (inxi slopeHght))
+        case2 = (Int 0, (inxi waterHght) :<= (inxi slopeHght))
 
 --DD4
 
@@ -64,32 +64,50 @@ intersliceWtrF = mkDataDef watrForce intersliceWtrFEqn
 
 intersliceWtrFEqn :: Expr
 intersliceWtrFEqn = Case [case1,case2,case3]
-  where case1 = (((C slopeHght)-(C slipHght )):^(Int 2):/(Int 2) * (C satWeight) +
-                 ((C waterHght)-(C slopeHght)):^(Int 2) * (C satWeight),
-                (C waterHght) :>= (C slopeHght))
-        case2 = (((C waterHght)-(C slipHght )):^(Int 2):/(Int 2) * (C satWeight),
-                (C slopeHght) :> (C waterHght) :> (C slipHght))
-        case3 = (Int 0,(C waterHght) :<= (C slipHght))
+  where case1 = (((inxi slopeHght)-(inxi slipHght )):^(Int 2):/(Int 2) * (C satWeight) +
+                 ((inxi waterHght)-(inxi slopeHght)):^(Int 2) * (C satWeight),
+                (inxi waterHght) :>= (inxi slopeHght))
+        case2 = (((inxi waterHght)-(inxi slipHght )):^(Int 2):/(Int 2) * (C satWeight),
+                (inxi slopeHght) :> (inxi waterHght) :> (inxi slipHght))
+        case3 = (Int 0,(inxi waterHght) :<= (inxi slipHght))
 
 --DD5
 
-angles :: QDefinition
-angles = mkDataDef baseAngle anglesEqn --, surfAngle?
+angleA :: QDefinition
+angleA = mkDataDef baseAngle angleAEqn
 
-anglesEqn :: Expr
-anglesEqn = ((C slipHght) - (C slipHght)) / ((C slipHght) - (C slipHght))
---FIXME: x_slip,i and x_us,i are not defined, cannot put two equations here,
---       need a way to index
+angleAEqn :: Expr
+angleAEqn = (inxi slipHght - inx slipHght (-1)) / (inxi slipDist - inx slipDist (-1))
+
+--DD5.5
+angleB :: QDefinition
+angleB = mkDataDef surfAngle angleBEqn
+
+angleBEqn :: Expr
+angleBEqn = (inxi slopeHght - inx slopeHght (-1)) / (inxi slopeDist - inx slopeDist (-1))
 
 --DD6
 
-lengths :: QDefinition
-lengths = mkDataDef baseWthX lengthsEqn --, baseLngth, surfLngth?
+lengthB :: QDefinition
+lengthB = mkDataDef baseWthX lengthBEqn
 
-lengthsEqn :: Expr
-lengthsEqn = (C slipHght) - (C slipHght)
---(C baseLngth) = (C baseWthX) * sec (C baseAngle)
---(C surfLngth) = (C baseWthX) * sec (C surfAngle)
+lengthBEqn :: Expr
+lengthBEqn = inxi slipDist - inx slipDist (-1)
+
+--DD6.3
+
+lengthLb :: QDefinition
+lengthLb = mkDataDef baseLngth lengthLbEqn
+
+lengthLbEqn :: Expr
+lengthLbEqn = (inxi baseWthX) * sec (inxi baseAngle)
+--DD6.6
+
+lengthLs :: QDefinition
+lengthLs = mkDataDef surfLngth lengthLsEqn
+
+lengthLsEqn :: Expr
+lengthLsEqn = (inxi baseWthX) * sec (inxi surfAngle)
 
 --DD7
 

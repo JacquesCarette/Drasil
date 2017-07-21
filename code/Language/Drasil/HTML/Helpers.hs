@@ -159,9 +159,7 @@ makeCSS _ = vcat [
     text "  white-space: pre-wrap;",
     text "  white-space: -moz-pre-wrap;",
     text "  white-space: -o-pre-wrap;",
-    text "  background: #faf8f0;",
-    text "}"
-    ],
+    text "  background: #faf8f0;}"],
   text ".list {text-align: left;}",
   text ".figure {max-width: 800px;}",
   vcat [

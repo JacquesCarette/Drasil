@@ -23,7 +23,7 @@ class TestDerivedValues(unittest.TestCase):
             derivedValues.derived_params(self.params[i])
     
     def test_derived_params(self):
-        for i in range(self.numTests):
+        for i in range(self.numTests): #AttributeError: 'TestDerivedValues' object has no attribute 'numTests'
             with self.subTest(i=i):
                 self.assertEqual(self.arExpected[i], self.params.asprat)
                 self.assertEqual(self.sdExpected[i], self.params.sd)

@@ -26,7 +26,7 @@ class TestOutputFormat(unittest.TestCase):
         self.params         = [param.Param() for i in range(self.numTests)]
 
         for i in range(self.numTests):
-            inputFormat.get_input(self.inputFileName[i], self.params[i])
+            inputFormat.get_input(self.inputFileName[i], self.params[i]) # FileNotDoundError: [Errno 2] No such file or directory: 'testInput3.txt'
             derivedValues.derived_params(self.params[i])
             outputFormat.display_output("testoutput.txt", self.qVal[i], self.jVal[i],
                                                 self.qHatTolVal[i], self.pbVal[i], 

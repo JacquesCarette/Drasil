@@ -16,7 +16,7 @@ import Control.Lens((^.))
 
 cpSymbols, inputSymbols, outputSymbols :: [QSWrapper]
 
-cpSymbols = (map qs cpUnits) ++ [qs QP.restitutionCoef] ++ 
+cpSymbols = (map qs cpUnits) ++ 
   (map qs cpUnitless) ++ (map qs cpInputConstraints)
 
 inputSymbols = map qs [QP.position, QP.velocity, QP.force, QM.orientation, 
@@ -26,13 +26,16 @@ inputSymbols = map qs [QP.position, QP.velocity, QP.force, QM.orientation,
 outputSymbols = map qs [QP.position, QP.velocity, QM.orientation, 
   QP.angularVelocity]
 
+--  [lengthCons, massCons, mmntOfInCons, gravAccelCons, posCons, orientCons,
+--  veloCons, angVeloCons, forceCons, torqueCons, restCoefCons]
+
 
 cpUnits :: [UnitalChunk]
-cpUnits = [QP.acceleration, QP.angularAccel, QP.force, QP.gravitationalAccel, 
-  QP.gravitationalConst, QP.momentOfInertia, QP.impulseV, QP.impulseS, QPP.len, 
-  QPP.mass, iVect, jVect, normalVect, QP.angularVelocity, QP.position, 
-  QM.orientation, QP.distance, QP.displacement, QP.time, QP.torque,
-  QP.angularDisplacement, QP.velocity, pos_CM, pos_i, mass_i, mTot, acc_i, vel_i,
+cpUnits = [QP.acceleration, QP.angularAccel, QP.gravitationalAccel, 
+  QP.impulseV, QP.impulseS, 
+  iVect, jVect, normalVect,
+  QP.distance, QP.displacement, QP.time,
+  QP.angularDisplacement, pos_CM, pos_i, mass_i, mTot, acc_i, vel_i,
   QP.linearDisplacement, QP.linearVelocity, QP.linearAccel, initRelVel, normalLen,
   perpLen_A, perpLen_B, force_i, torque_i, time_c, vel_A, vel_B, mass_A, mass_B,
   angVel_A, angVel_B]

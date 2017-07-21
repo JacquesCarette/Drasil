@@ -31,9 +31,15 @@ indInSeq :: Relation
 indInSeq = (Index (C arr) (C i)) :<= (C i) :<= (Index (C arr) (C i))
 --FIXME: captured constraints "arr[i] <= v and v <= arr[i+1]" correctly?
 
-matrixCol :: Expr
-matrixCol = 0
+--matrixCol :: Expr -> Expr -> Expr
+--matrixCol array col = matrixColHlpr (Matrix [[array]]) col []
 --FIXME: implementing [] as an expression???
+
+--matrixColHlpr :: Expr -> Expr -> [Expr] -> Expr
+--matrixColHlpr a c strt = [Index a c] : strt
+--Work in progress...?^
+--[1, 3]
+--[4, 5]
 
 ---
 

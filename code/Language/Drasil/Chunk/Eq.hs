@@ -18,7 +18,7 @@ import Language.Drasil.Unit (Unit(..))
 import Language.Drasil.Symbol (Symbol)
 import Language.Drasil.Space
 
-import Language.Drasil.NounPhrase (NP, phrase, nounPhraseSent)
+import Language.Drasil.NounPhrase (NP, phrase)
 import Language.Drasil.Spec
 
 -- BEGIN EQCHUNK --
@@ -91,7 +91,7 @@ instance Quantity H where
 -- | Create a 'QDefinition' with an id, noun phrase (term), symbol,
 -- unit, and defining equation.
 fromEqn :: Unit u => String -> NP -> Sentence -> Symbol -> u -> Expr -> QDefinition
-fromEqn nm desc extra symb chunk eqn = 
+fromEqn nm desc _ symb chunk eqn = 
   EC (ucFromCV (cv (dccWDS nm (desc) (phrase desc)) symb Rational) chunk) eqn
   --EC (ucFromCV (cv (dccWDS nm (desc) (phrase desc +:+ extra)) symb Rational) chunk) eqn
 
@@ -99,7 +99,7 @@ fromEqn nm desc extra symb chunk eqn =
 --FIXME: Space hack
 -- | Same as fromEqn, but has no units.
 fromEqn' :: String -> NP -> Sentence -> Symbol -> Expr -> QDefinition
-fromEqn' nm desc extra symb eqn = 
+fromEqn' nm desc _ symb eqn = 
   EC (cv (dccWDS nm desc (phrase desc)) symb Rational) eqn
   --EC (cv (dccWDS nm desc (phrase desc +:+ extra)) symb Rational) eqn
   

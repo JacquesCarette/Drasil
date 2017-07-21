@@ -293,6 +293,8 @@ mkSolChSpec si (SCSProg l m) =
       SSD.thModF (siSys si') (map (tmodel fields m) ts) : l'
     mkSubSCS _ (DDs fields ds) l' =
       SSD.dataDefnF EmptyS (map (ddefn fields m) ds) : l'
+    mkSubSCS _ (GDs _ _) _ = error "GDs not yet implemented"
+    mkSubSCS _ (IMs _ _) _ = error "IMs not yet implemented"
       --FIXME: need to keep track of DD intro.
     inModSec = (SRS.inModel [Paragraph EmptyS] []) 
     --FIXME: inModSec should be replaced with a walk

@@ -191,19 +191,19 @@ symbolMapFun progSymbMap fun = (Definition (progSymbMap) . fun)
 
 -- Used to help make Qdefinitions when id, term, and symbol come from the same source
 mkDataDef :: (SymbolForm c, Quantity c) => c -> Expr -> QDefinition
-mkDataDef concept equation = datadef $ getUnit concept
-  where datadef (Just a) = fromEqn  (concept ^. id) (concept ^. term) EmptyS
-                           (concept ^. symbol) a equation
-        datadef Nothing  = fromEqn' (concept ^. id) (concept ^. term) EmptyS
-                           (concept ^. symbol) equation
+mkDataDef cncpt equation = datadef $ getUnit cncpt
+  where datadef (Just a) = fromEqn  (cncpt ^. id) (cncpt ^. term) EmptyS
+                           (cncpt ^. symbol) a equation
+        datadef Nothing  = fromEqn' (cncpt ^. id) (cncpt ^. term) EmptyS
+                           (cncpt ^. symbol) equation
 
 -- Same as 'mkDataDef', but with an additional Sentence that can be taken as "extra information"; issue #350
 mkDataDef' :: (SymbolForm c, Quantity c) => c -> Expr -> Sentence -> QDefinition
-mkDataDef' concept equation extraInfo = datadef $ getUnit concept
-  where datadef (Just a) = fromEqn  (concept ^. id) (concept ^. term) (extraInfo)
-                           (concept ^. symbol) a equation
-        datadef Nothing  = fromEqn' (concept ^. id) (concept ^. term) (extraInfo)
-                           (concept ^. symbol) equation
+mkDataDef' cncpt equation extraInfo = datadef $ getUnit cncpt
+  where datadef (Just a) = fromEqn  (cncpt ^. id) (cncpt ^. term) (extraInfo)
+                           (cncpt ^. symbol) a equation
+        datadef Nothing  = fromEqn' (cncpt ^. id) (cncpt ^. term) (extraInfo)
+                           (cncpt ^. symbol) equation
 
 prodUCTbl :: [[Sentence]] -> Contents
 prodUCTbl cases = Table [titleize useCase +:+. S "NO", titleize useCase +:+

@@ -10,11 +10,8 @@ import Data.Drasil.Authors
 import Data.Drasil.Concepts.Documentation
 import Data.Drasil.Concepts.PhysicalProperties hiding (density, mass, vol)
 import qualified Data.Drasil.Concepts.Thermodynamics as CT
-import Data.Drasil.Concepts.Physics (mech_energy)
-import Data.Drasil.Concepts.Math (ode, de, unit_, rOfChng, equation, change,
-  parameter)
-import Data.Drasil.Concepts.Software (correctness, verifiability,
-  understandability, reusability, maintainability, program)
+import Data.Drasil.Concepts.Math (ode, de, unit_, rOfChng, equation)
+import Data.Drasil.Concepts.Software (program)
 
 import Data.Drasil.Software.Products
 import Data.Drasil.Utils (enumSimple, weave, getS, itemRefToSent, makeListRef,
@@ -54,7 +51,7 @@ import Drasil.Sections.AuxiliaryConstants (valsOfAuxConstantsF)
 
 import Data.Drasil.SentenceStructures (showingCxnBw, foldlSent, foldlSent_,
   foldlSP, foldlSP_, foldlSPCol, foldlsC, isThe, ofThe, ofThe',
-  sAnd, sOf, foldlSentCol)
+  sAnd, sOf)
 
 acronyms :: [CI]
 acronyms = [assumption, dataDefn, genDefn, goalStmt, inModel, likelyChg, ode,

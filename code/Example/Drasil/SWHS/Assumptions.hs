@@ -5,7 +5,7 @@ import Data.Drasil.Concepts.Documentation (acroGD, acroIM, system, simulation,
   model, problem)
 import Drasil.DocumentLanguage (mkAssump)
 
-import Drasil.SWHS.DataDefs (dd1HtFluxC, dd2HtFluxP, dd3HtFusion, dd4MeltFrac,
+import Drasil.SWHS.DataDefs (dd1HtFluxC, dd2HtFluxP,
   swhsSymbMapDRef, swhsSymbMapTRef)
 import Drasil.SWHS.Concepts (coil, tank, phsChgMtrl, water, perfect_insul, charging,
   discharging)

@@ -115,16 +115,16 @@ seismicLoadF :: QDefinition
 seismicLoadF = mkDataDef earthqkLoadFctr ssmcLFEqn --correct chunk referenced for definition?
 
 ssmcLFEqn :: Expr
-ssmcLFEqn = ((C earthqkLoadFctr) * (C slcWght)) 
+ssmcLFEqn = ((C earthqkLoadFctr) * (inxi slcWght)) 
 --FIXME: need index/ subscript changes
 
 --DD8
 
 surfLoads :: QDefinition
-surfLoads = mkDataDef surfLoad surfLEqn --, slcWght?
+surfLoads = mkDataDef surfLoad surfLEqn --FIXEME: is this data definition nessisary?
 
 surfLEqn :: Expr
-surfLEqn = (C surfLoad) * (C impLoadAngle) --FIXME: Should actually just be seperated with ','
+surfLEqn = (inxi surfLoad) * (inxi impLoadAngle) --FIXME: should be split into two DataDefs
 
 --DD9
 
@@ -132,7 +132,7 @@ intrsliceF :: QDefinition
 intrsliceF = mkDataDef intShrForce intrsliceFEqn
 
 intrsliceFEqn :: Expr
-intrsliceFEqn = (C normToShear) * (C scalFunc) * (C intNormForce)
+intrsliceFEqn = (C normToShear) * (inxi scalFunc) * (inxi intNormForce)
 
 --DD10
 
@@ -140,11 +140,11 @@ resShearWO :: QDefinition
 resShearWO = mkDataDef shearRNoIntsl resShearWOEqn
 
 resShearWOEqn :: Expr
-resShearWOEqn = (((C slcWght) + (C surfHydroForce) * (cos (C surfAngle)) + 
-  (C surfLoad) * (cos (C impLoadAngle))) * (cos (C baseAngle)) +
-  (Neg (C earthqkLoadFctr) * (C slcWght) - (C watrForceDif) + (C surfHydroForce)
-  :* sin (C surfAngle) + (C surfLoad) * (sin (C impLoadAngle))) * (sin (C baseAngle)) - (C baseHydroForce)) *
-  tan (C fricAngle) + (C cohesion) * (C baseWthX) * sec (C baseAngle)
+resShearWOEqn = (((inxi slcWght) + (inxi surfHydroForce) * (cos (inxi surfAngle)) + 
+  (inxi surfLoad) * (cos (inxi impLoadAngle))) * (cos (inxi baseAngle)) +
+  (Neg (C earthqkLoadFctr) * (inxi slcWght) - (inxi watrForceDif) + (inxi surfHydroForce)
+  :* sin (inxi surfAngle) + (inxi surfLoad) * (sin (inxi impLoadAngle))) * (sin (inxi baseAngle)) - (inxi baseHydroForce)) *
+  tan (C fricAngle) + (inxi cohesion) * (inxi baseWthX) * sec (inxi baseAngle)
 
 --DD11
 
@@ -152,10 +152,10 @@ mobShearWO :: QDefinition
 mobShearWO = mkDataDef shearFNoIntsl mobShearWOEqn
 
 mobShearWOEqn :: Expr 
-mobShearWOEqn = ((C slcWght) + (C surfHydroForce) * (cos (C surfAngle)) + 
-  (C surfLoad) * (cos (C impLoadAngle))) * (sin (C baseAngle)) - 
-  (Neg (C earthqkLoadFctr) * (C slcWght) - (C watrForceDif) + (C surfHydroForce)
-  :* sin (C surfAngle) + (C surfLoad) * (sin (C impLoadAngle))) * (cos (C baseAngle))
+mobShearWOEqn = ((inxi slcWght) + (inxi surfHydroForce) * (cos (inxi surfAngle)) + 
+  (inxi surfLoad) * (cos (inxi impLoadAngle))) * (sin (inxi baseAngle)) - 
+  (Neg (C earthqkLoadFctr) * (inxi slcWght) - (inxi watrForceDif) + (inxi surfHydroForce)
+  :* sin (inxi surfAngle) + (inxi surfLoad) * (sin (inxi impLoadAngle))) * (cos (inxi baseAngle))
 
 --DD12
 
@@ -163,7 +163,7 @@ displcmntRxnF :: QDefinition
 displcmntRxnF = mkDataDef shrStiffIntsl displcmntRxnFEqn --, shrStiffBase (correct chunk used?)
 
 displcmntRxnFEqn :: Expr
-displcmntRxnFEqn = dgnl2x2 (C shrStiffIntsl) (C nrmStiffBase) * vec2D (C dx_i) (C dy_i)
+displcmntRxnFEqn = dgnl2x2 (inxi shrStiffIntsl) (inxi nrmStiffBase) * vec2D (inxi dx_i) (inxi dy_i)
 
 --DD13 FIXME: id for "Net Force-Displacement Equilibrium"
 

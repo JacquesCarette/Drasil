@@ -222,7 +222,7 @@ watrForceDif = uc' "dH_i" (cn $ "difference between interslice forces") ("exerte
 
 intShrForce = uc' "X_i" (cn $ "interslice shear force") 
   ("exerted between adjacent slices " ++ fisi)
-  (sub cX lI) newton
+  (cX) newton
 
 baseHydroForce = uc' "U_b,i" (cn $ "base hydrostatic force")
   ("from water pressure within the slice " ++ fsi)
@@ -246,7 +246,7 @@ nrmFNoIntsl = uc' "N*_i" (cn $ "effective normal force") ("for a soil surface, "
 
 surfLoad    = uc' "Q_i" (cn $ "imposed surface load") 
   "a downward force acting into the surface from midpoint of slice i"
-  (sub cQ lI) newton
+  (cQ) newton
 
 baseAngle   = uc' "alpha_i" (cn $ "angle") ("base of the mass relative to the horizontal " ++ fsi)
   (Greek Alpha_L) degree

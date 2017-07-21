@@ -123,7 +123,7 @@ prob_br = cvc "prob_br" (nounPhraseSP "probability of breakage")
 {--}
 
 gBRSpecParamVals :: [QDefinition]
-gBRSpecParamVals = [dim_max, dim_min, ar_max, cWeightMax, sd_min, sd_max]
+gBRSpecParamVals = [dim_max, dim_min, ar_max, cWeightMax, cWeightMin, sd_min, sd_max]
 
 dim_max, dim_min, ar_max, cWeightMax, cWeightMin, sd_min,
   sd_max :: QDefinition

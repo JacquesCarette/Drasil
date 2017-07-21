@@ -26,16 +26,11 @@ inputSymbols = map qs [QP.position, QP.velocity, QP.force, QM.orientation,
 outputSymbols = map qs [QP.position, QP.velocity, QM.orientation, 
   QP.angularVelocity]
 
---  [lengthCons, massCons, mmntOfInCons, gravAccelCons, posCons, orientCons,
---  veloCons, angVeloCons, forceCons, torqueCons, restCoefCons]
-
 
 cpUnits :: [UnitalChunk]
 cpUnits = [QP.acceleration, QP.angularAccel, QP.gravitationalAccel, 
-  QP.impulseV, QP.impulseS, 
-  iVect, jVect, normalVect,
-  QP.distance, QP.displacement, QP.time,
-  QP.angularDisplacement, pos_CM, pos_i, mass_i, mTot, acc_i, vel_i,
+  QP.impulseV, QP.impulseS, iVect, jVect, normalVect, QP.distance, QP.displacement, 
+  QP.time, QP.angularDisplacement, pos_CM, pos_i, mass_i, mTot, acc_i, vel_i,
   QP.linearDisplacement, QP.linearVelocity, QP.linearAccel, initRelVel, normalLen,
   perpLen_A, perpLen_B, force_i, torque_i, time_c, vel_A, vel_B, mass_A, mass_B,
   angVel_A, angVel_B]
@@ -76,7 +71,7 @@ angParam n w = cvR (dccWDS "angular velocity" (compoundPhrase'
 
 perpParam n w = cvR (dccWDS ("|| r_A" ++ n ++ " x n ||") 
   (compoundPhrase' (compoundPhrase (cn' "length of the") (QM.perpVect ^. term))
-  (cn $ "to the contact displacement vector of rigid body" ++ n)) 
+  (cn $ "to the contact displacement vector of rigid body " ++ n)) 
   (phrase QM.perpVect)) (Concat [Atomic "||", w, Atomic "*", --should be x for cross
   (QM.perpVect ^. symbol), Atomic "||"])
 

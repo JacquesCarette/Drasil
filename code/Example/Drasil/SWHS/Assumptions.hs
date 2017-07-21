@@ -1,7 +1,8 @@
 module Drasil.SWHS.Assumptions where
 
 import Language.Drasil
-import Data.Drasil.Concepts.Documentation
+import Data.Drasil.Concepts.Documentation (acroGD, acroIM, system, simulation,
+  model, problem)
 import Drasil.DocumentLanguage (mkAssump)
 
 import Drasil.SWHS.DataDefs (dd1HtFluxC, dd2HtFluxP, dd3HtFusion, dd4MeltFrac,

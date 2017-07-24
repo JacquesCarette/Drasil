@@ -9,7 +9,7 @@ import Data.Drasil.Utils(symbolMapFun, mkDataDef, getS)
 import Control.Lens((^.))
 import Prelude hiding (log, id, sqrt)
 import Data.Drasil.SentenceStructures (foldlSent, 
-  displayConstrntsAsSet, foldlsC, extrctStrng)
+  displayConstrntsAsSet, foldlsC)
 
 --FIXME: Many of the current terms can be separated into terms and defns?
 
@@ -104,9 +104,9 @@ nom_thick = cuc "nom_thick"
   [ physc $ \c -> createCnstrnts c (map show nominalThicknesses) ] (V "8.0") --FIXME: no typical value!
 
 glass_type  = cvc "glass_type" (nounPhraseSent $ phrase glassTy +:+ 
-    displayConstrntsAsSet glass_type (map extrctStrng glassTypeAbbrs))
+    displayConstrntsAsSet glass_type glassTypeAbbrsStr)
   lG ({-Discrete-} String)
-  [ physc $ \c -> createCnstrnts c (map extrctStrng glassTypeAbbrs)] (V "HS") --FIXME: no typical value!
+  [ physc $ \c -> createCnstrnts c glassTypeAbbrsStr] (V "HS") --FIXME: no typical value!
 
 {--}
 
@@ -453,7 +453,10 @@ glassTypeFactors :: [Integer]
 glassTypeFactors = [1, 4, 2]
 
 glassTypeAbbrs :: [Sentence]
-glassTypeAbbrs = map getAcc glassTypes
+glassTypeAbbrs = map S glassTypeAbbrsStr
+
+glassTypeAbbrsStr :: [String]
+glassTypeAbbrsStr = ["AN", "FT", "HS"]
 
 --Below are present in this file temporarily--
 lateralLoad :: NamedChunk

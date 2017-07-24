@@ -4,7 +4,7 @@ import Language.Drasil
 import Prelude hiding (log, id, exp, sqrt)
 import Drasil.GlassBR.Unitals
 import Data.Drasil.Utils
-import Data.Drasil.SentenceStructures (extrctStrng, sAnd)
+import Data.Drasil.SentenceStructures (sAnd)
 import Data.Drasil.Concepts.PhysicalProperties (dimension)
 import Data.Drasil.Concepts.Math (probability, parameter, calculation)
 import Data.Drasil.Concepts.Documentation (datum)
@@ -82,7 +82,7 @@ nonFL = mkDataDef' nonFactorL nonFL_eq (aGrtrThanB +:+ hRef +:+ qHtTlTolRef)
 --DD6--
 
 glaTyFac_eq :: Expr
-glaTyFac_eq = (Case (zipWith glaTyFac_helper glassTypeFactors (map extrctStrng glassTypeAbbrs)))
+glaTyFac_eq = (Case (zipWith glaTyFac_helper glassTypeFactors glassTypeAbbrsStr))
 
 glaTyFac_helper :: Integer -> String -> (Expr, Relation)
 glaTyFac_helper result condition = (Int result, (C glass_type) := V condition)

@@ -221,13 +221,13 @@ s2_1_intro_p1 typeOf progName gvnVar = foldlSent [S "The main", phrase purpose,
   S "of this", phrase typeOf, S "is to predict whether a given", phrase gvnVar,
   S "is likely to" +:+. predxnGoal, S "The", plural goal `sAnd` plural thModel,
   S "used in the", short progName, phrase code, S "are provided" `sC` 
-  S "with an", phrase emphasis, S "on explicitly identifying", (plural assumption)
-  `sAnd` S "unambiguous" +:+. plural definition, S "This", phrase typeOf, 
-  S "is intended to be used as a", phrase reference, S "to provide all", 
-  phrase information, S "necessary to understand and verify the" +:+. 
-  phrase analysis, S "The", short srs, S "is abstract because the",
-  plural content, S "say what", phrase problem, 
-  S "is being solved, but not how to solve it"] --General?
+  S "with an", phrase emphasis, S "on explicitly identifying", 
+  (plural assumption) `sAnd` S "unambiguous" +:+. plural definition, S "This",
+  phrase typeOf, S "is intended to be used as a", phrase reference, 
+  S "to provide all", phrase information, S "necessary to understand and verify",
+  S "the" +:+. phrase analysis, S "The", short srs, S "is abstract because the",
+  plural content, S "say what", phrase problem, S "is being solved" `sC`
+  S "but not how to solve it"] --General?
   where predxnGoal = S "resist a specified" +:+ phrase blast
 --FIXME: ^helpful or unnecessary?
 
@@ -425,13 +425,14 @@ assumption8 = mkAssump "assumption8"   (a8Desc (loadDF))   --ldfConstant
 
 a1Desc :: Sentence
 a1Desc = foldlSent [S "The standard E1300-09a for",
-  phrase calculation, S "applies only to", foldlOptions $ map S ["monolithic", "laminated",
-  "insulating"], S "glass constructions of rectangular", phrase shape, S "with continuous", 
-  phrase lateral +:+. S "support along", foldlOptions $ map S ["one", "two", "three", "four"],
-  plural edge, S "This", phrase practice, S "assumes that", sParenNum 1,
-  S "the supported glass", plural edge, S "for two, three" `sAnd` S "four-sided support",
-  plural condition, S "are simply supported and free to slip in", phrase plane
-  `semiCol` (sParenNum 2), S "glass supported on two sides acts as a simply supported",
+  phrase calculation, S "applies only to", foldlOptions $ map S ["monolithic",
+  "laminated", "insulating"], S "glass constructions of rectangular", 
+  phrase shape, S "with continuous", phrase lateral +:+. S "support along",
+  foldlOptions $ map S ["one", "two", "three", "four"], plural edge, S "This",
+  phrase practice, S "assumes that", sParenNum 1, S "the supported glass", 
+  plural edge, S "for two, three" `sAnd` S "four-sided support", plural condition,
+  S "are simply supported and free to slip in", phrase plane `semiCol` 
+  (sParenNum 2), S "glass supported on two sides acts as a simply supported",
   phrase beam `sAnd` (sParenNum 3), S "glass supported on one side acts as a", 
   phrase cantilever]
 

@@ -51,7 +51,7 @@ import Drasil.Sections.AuxiliaryConstants (valsOfAuxConstantsF)
 
 import Data.Drasil.SentenceStructures (showingCxnBw, foldlSent, foldlSent_,
   foldlSP, foldlSP_, foldlSPCol, foldlsC, isThe, ofThe, ofThe',
-  sAnd, sOf)
+  sAnd, sOf, foldlList)
 
 acronyms :: [CI]
 acronyms = [assumption, dataDefn, genDefn, goalStmt, inModel, likelyChg, ode,
@@ -382,9 +382,9 @@ s4_2_5_deriv2 :: [Contents]
 s4_2_5_deriv2 =
   (s4_2_5_d2startPara energy phsChgMtrl sens_heat rOfChng temp_PCM vol pcm_vol
     pcm_mass htCap_S_P ht_flux_P pcm_SA ht_flux_out vol_ht_gen assump16) ++
-  (weave [s4_2_5_d2eqn_list, s4_2_5_d2sent_list]) ++ (s4_2_5_d2endPara phsChgMtrl
-  htCap_S_P htCap_L_P tau_S_P tau_L_P surface CT.melting vol temp_PCM temp_melt_P
-  CT.boiling solid liquid)
+  (weave [s4_2_5_d2eqn_list, s4_2_5_d2sent_list]) ++ (s4_2_5_d2endPara 
+  phsChgMtrl htCap_S_P htCap_L_P tau_S_P tau_L_P surface CT.melting vol 
+  temp_PCM temp_melt_P CT.boiling solid liquid)
 
 s4_2_5_d2sent_list = map foldlSPCol [s4_2_5_d2sent_1 dd2HtFluxP ht_flux_P,
   s4_2_5_d2sent_2, s4_2_5_d2sent_3]
@@ -1057,11 +1057,11 @@ s4_2_3_deriv_8 :: UnitalChunk -> UnitalChunk -> UnitalChunk -> UnitalChunk ->
   UnitalChunk -> UnitalChunk -> UnitalChunk -> UnitalChunk -> CI -> Contents ->
   Contents -> Contents -> Contents -> Contents
 s4_2_3_deriv_8 hfi hfo isa osa den hcs tem vo assu a3 a4 a5 a6 = foldlSPCol 
-  [S "Where", getS hfi `sC` getS hfo `sC` getS isa `sC` S "and", getS osa, 
+  [S "Where", foldlList (map getS [hfi, hfo, isa, osa]), 
   S "are explained in" +:+. acroGD 2, S "Assuming", getS den `sC` getS hcs
   `sAnd` getS tem, S "are constant over the", phrase vo `sC` S "which is true",
-  S "in our case by", titleize' assu, sParen (makeRef a3) `sC` sParen (makeRef a4)
-  `sC` sParen (makeRef a5) `sC` S "and", sParen (makeRef a6) `sC` S "we have"]
+  S "in our case by", titleize' assu, 
+  foldlList (map (\c -> sParen (makeRef c)) [a3, a4, a5, a6]) `sC` S "we have"]
 
 s4_2_3_deriv_9 = EqnBlock
   ((C density) * (C heat_cap_spec) * (C vol) * Deriv Total (C temp)
@@ -1126,7 +1126,7 @@ s4_2_5_d1sent_1 roc temw en wa vo wvo wma hcw hfc hfp csa psa ht ta purin vhg
   phrase ta) `sC` S "since it has been assumed to be",
   phrase purin +:+. sParen (makeRef a15), S "Assuming no",
   phrase vhg +:+. (sParen (makeRef a16) `sC`
-  (E $ C vhg := Int 0)), S "Therefore, the", phrase equation, S "for",
+  (E $ C vhg := 0)), S "Therefore, the", phrase equation, S "for",
   acroGD 2, S "can be written as"]
 
 s4_2_5_d1sent_2 :: QDefinition -> QDefinition -> UnitalChunk ->
@@ -1152,12 +1152,12 @@ s4_2_5_d1sent_5 = [S "Which simplifies to"]
 
 s4_2_5_d1sent_6 :: [Sentence]
 s4_2_5_d1sent_6 = [S "Setting",
-  (E $ C tau_W := (C w_mass :* C htCap_W) :/ (C coil_HTC :* C coil_SA)) `sAnd`
-  (E $ C eta := (C pcm_HTC :* C pcm_SA) :/ (C coil_HTC :* C coil_SA)) `sC`
+  (E $ C tau_W := (C w_mass * C htCap_W) / (C coil_HTC * C coil_SA)) `sAnd`
+  (E $ C eta := (C pcm_HTC * C pcm_SA) / (C coil_HTC * C coil_SA)) `sC`
   titleize equation, S "(5) can be written as"]
 
 s4_2_5_d1sent_7 :: [Sentence]
-s4_2_5_d1sent_7 = [S "Finally, factoring out", (E $ Int 1 :/ C tau_W) `sC` 
+s4_2_5_d1sent_7 = [S "Finally, factoring out", (E $ 1 / C tau_W) `sC` 
   S "we are left with the governing", short ode, S "for", acroIM 1]
 
 s4_2_5_d_eqn1, s4_2_5_d_eqn2, s4_2_5_d_eqn3, s4_2_5_d_eqn4, s4_2_5_d_eqn5,
@@ -1318,7 +1318,7 @@ s4_2_6_T1footer qua sa vo htcm pcmat = foldlSent_ $ map foldlSent [
   [sParen (S "#"), S "The", plural constraint, S "on the", phrase sa,
   S "are calculated by considering the", phrase sa, S "to", phrase vo +:+.
   S "ratio", S "The", phrase assumption, S "is that the lowest ratio is 1 and",
-  S "the highest possible is", E (Int 2 :/ C htcm) `sC` S "where",
+  S "the highest possible is", E (2 / C htcm) `sC` S "where",
   E $ C htcm, S "is the thickness of a", Quote (S "sheet"), S "of" +:+.
   short pcmat, S "A thin sheet has the greatest", phrase sa, S "to",
   phrase vo, S "ratio"],

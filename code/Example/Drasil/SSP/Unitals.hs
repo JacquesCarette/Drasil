@@ -3,8 +3,8 @@ module Drasil.SSP.Unitals where
 import Language.Drasil
 import Data.Drasil.SI_Units
 import Data.Drasil.Units.SolidMechanics (stiffness3D)
-import Data.Drasil.Quantities.SolidMechanics as SM
-import Data.Drasil.Concepts.Physics as CP
+import Data.Drasil.Quantities.Physics as QP (force, pressure)
+import Data.Drasil.Quantities.SolidMechanics as SM (nrmStrss, elastMod, poissnsR, stffness)
 import Data.Drasil.Units.Physics
 import Drasil.SSP.Defs (fs_concept)
 
@@ -16,12 +16,13 @@ sspSymbols = (map cqs sspInputs) ++ (map cqs sspOutputs) ++
 -- Imported UnitalChunks --
 ---------------------------
 {-
-SM.mobShear, SM.shearRes, SM.stffness <- currently not used
+SM.mobShear, SM.shearRes <- currently not used
 SM.poissnsR, SM.elastMod <- Used to make UncertQ
 -}
-normStress = SM.nrmStrss
-genForce = uc CP.force cF newton
-genPressure = uc CP.pressure (sub lP lI) pascal
+normStress  = SM.nrmStrss
+genForce = uc QP.force cF newton
+genPressure = QP.pressure
+genStffness = SM.stffness
 {-must import from Concept.Physics since Quantities.Physics has Force as a vector-}
 
 -------------
@@ -131,12 +132,12 @@ sspUnits = map ucw [normStress, genPressure, normFunc, shearFunc,
   watrForceDif, intShrForce, baseHydroForce, surfHydroForce,
   totNrmForce, nrmFSubWat, nrmFNoIntsl, surfLoad, baseAngle, surfAngle,
   impLoadAngle, baseWthX, baseLngth, surfLngth, midpntHght, genForce,
-  momntOfBdy, genDisplace, SM.stffness, shrStiffIntsl, shrStiffBase,
+  momntOfBdy, genDisplace, genStffness, shrStiffIntsl, shrStiffBase,
   nrmStiffIntsl, nrmStiffBase, shrStiffRes, nrmStiffRes, shrDispl,
   nrmDispl, porePressure, elmNrmDispl, elmPrllDispl, sliceHght,
   mobShrC, shrResC, rotatedDispl, intNormForce, shrStress, mobStress]
 
-normStress, genPressure, normFunc, shearFunc, slopeDist, slipDist,
+normStress, genPressure, normFunc, shearFunc, slopeDist, slipDist, genStffness,
   waterHght, slopeHght, slipHght, xi, critCoords, mobShrI, sliceHght,
   shearFNoIntsl, shearRNoIntsl, slcWght, watrForce, watrForceDif, shrResI,
   intShrForce, baseHydroForce, surfHydroForce, totNrmForce, nrmFSubWat,

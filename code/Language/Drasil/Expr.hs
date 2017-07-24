@@ -222,7 +222,11 @@ product   bounds expr = UnaryOp $ Product   bounds expr
 
 -- | Euclidean function : takes a vector and returns the sqrt of the sum-of-squares
 euclidean :: [Expr] -> Expr
-euclidean = sqrt . sum . map square
+euclidean = sqrt . sum' . map square
+
+-- | Used by 'euclidean' function (in place of 'sum') to fix representation of computation
+sum' :: (Num a, Foldable t) => t a -> a
+sum' x = foldr1 (+) x
 
 -- | Binary Functions
 data BiFunc where

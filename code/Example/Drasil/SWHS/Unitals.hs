@@ -10,7 +10,7 @@ import Data.Drasil.Quantities.Thermodynamics
 import Data.Drasil.Quantities.Physics (time)
 import Data.Drasil.Quantities.Math (surface, uNormalVect, surArea)
 import Data.Drasil.Quantities.PhysicalProperties (mass, density, vol)
-import Data.Drasil.Units.PhysicalProperties
+import Data.Drasil.Units.PhysicalProperties (densityU)
 import Data.Drasil.Utils(mkDataDef)
 
 import Control.Lens ((^.))
@@ -250,7 +250,7 @@ htCap_S_P    = uqc "htCap_S_P" (nounPhraseSP "specific heat capacity of PCM as a
   "given unit mass of solid phase change material by a given amount")
   (sup (sub (heat_cap_spec ^. symbol) cP) cS) UT.heat_cap_spec Rational
   [physc $ \c -> c :> Int 0,
-  sfwrc $ \c -> C htCap_S_P_min :< c :< C htCap_S_P_max] (Dbl 1760) 0.1
+  sfwrc $ \c -> (Index (c) (V "min")) :< c :< (Index (c) (V "max"))] (Dbl 1760) 0.1
 
 -- Constraint 8
 htCap_L_P    = uqc "htCap_L_P" (nounPhraseSP "specific heat capacity of PCM as a liquid")
@@ -258,7 +258,7 @@ htCap_L_P    = uqc "htCap_L_P" (nounPhraseSP "specific heat capacity of PCM as a
   "given unit mass of liquid phase change material by a given amount")
   (sup (sub (heat_cap_spec ^. symbol) cP) cL) UT.heat_cap_spec Rational
   [physc $ \c -> c :> Int 0,
-  sfwrc $ \c -> C htCap_L_P_min :< c :< C htCap_L_P_max] (Dbl 2270) 0.1
+  sfwrc $ \c -> (Index (c) (V "min")) :< c :< (Index (c) (V "max"))] (Dbl 2270) 0.1
 
 --Constraint 9
 htFusion     = uqc "htFusion" (nounPhraseSP "specific latent heat of fusion")

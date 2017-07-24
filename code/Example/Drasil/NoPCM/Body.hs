@@ -4,10 +4,11 @@ import Control.Lens ((^.))
 import Prelude hiding (id)
 import Drasil.NoPCM.Definitions (ht_trans, srs_swhs)
 
+import Drasil.SWHS.Assumptions (assump1, assump2, assump7, assump8, assump9,
+  assump14, assump15, assump20)
 import Drasil.SWHS.Body (s2_3_knowlegde, s2_3_understanding, s2_4_intro,
-  s3, physSyst1, physSyst2, assump1, assump2, assump7, assump8, assump9,
-  assump14, assump15, assump20, s4_2_4_intro_end, s4_2_5_d1startPara,
-  s5_2, s7_trailing, ref2, ref3, ref4, ref5, ref6, likeChg2, likeChg3,
+  s3, physSyst1, physSyst2, s4_2_4_intro_end, s4_2_5_d1startPara,
+  s7_trailing, likeChg2, likeChg3,
   likeChg4, likeChg6)
 import Drasil.SWHS.Concepts (progName, water, gauss_div, sWHT, tank, coil,
   transient, perfect_insul, tank_para)
@@ -23,6 +24,8 @@ import Drasil.SWHS.DataDefs(swhsSymbMapDRef, swhsSymbMapTRef, dd1HtFluxC,
 import Drasil.SWHS.TMods (s4_2_2_T1, t1ConsThermE)
 import Drasil.SWHS.GenDefs (swhsGenDefs)
 import Drasil.SWHS.IMods (eBalanceOnWtr, heatEInWtr)
+import Drasil.SWHS.References (ref2, ref3, ref4, ref5, ref6)
+import Drasil.SWHS.Requirements (s5_2)
 
 import Language.Drasil
 
@@ -98,14 +101,21 @@ mkSRS = RefSec (RefProg intro
   map Verbatim [s3, s4, s5, s6, s7, s8, s9]
 
 pcm_si :: SystemInformation
-pcm_si = SI srs_swhs srs [thulasi] this_si pcmSymbols 
-  (pcmSymbols)
-  acronyms
-  ([dd1HtFluxC])          --dataDefs
-  (map qs pcmConstraints) --inputs
-  ([] :: [QSWrapper])     --outputs
-  ([] :: [Block QDefinition])
-  (pcmConstraints)        --constrained
+pcm_si = SI {
+  _sys = srs_swhs,
+  _kind = srs,
+  _authors = [thulasi],
+  _units = this_si,
+  _quants = pcmSymbols,
+  _concepts = (pcmSymbols),
+  _namedIdeas = acronyms,
+  _definitions = ([dd1HtFluxC]),          --dataDefs
+  _inputs = (map qs pcmConstraints), --inputs
+  _outputs = ([] :: [QSWrapper]),     --outputs
+  _defSequence = ([] :: [Block QDefinition]),
+  _constraints = (pcmConstraints),        --constrained
+  _constants = []
+}
 
 pcm_srs :: Document
 pcm_srs = mkDoc mkSRS pcm_si

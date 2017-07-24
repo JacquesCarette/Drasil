@@ -96,13 +96,13 @@ makeCSS _ = vcat [
     text "  vertical-align: middle;}"],
   vcat [
     text ".case {",
-    text "float: right;",
-    text "padding-left: 1em;}"],
+    text "  float: right;",
+    text "  padding-left: 1em;}"],
   vcat [
     text ".cases > span {",
     text "  display: block;",
-    text "  padding-top: 0.15em;",
-    text "  padding-left: 1.5em;}"],
+    text "  padding-top: 0.1em;",
+    text "  padding-left: 0em;}"],
   vcat [
     text ".casebr {",
     text "  display: inline-block;",
@@ -112,10 +112,10 @@ makeCSS _ = vcat [
     text "  font-size: 500%;}"],
   vcat [
     text ".caption {",
-    text "text-align: center;",
-    text "font-weight: bold;",
-    text "padding-bottom: 1%;",
-    text "line-height: 0;}"
+    text "  text-align: center;",
+    text "  font-weight: bold;",
+    text "  padding-bottom: 1%;",
+    text "  line-height: 0;}"
     ],
   vcat [
     text ".fraction {",
@@ -159,9 +159,7 @@ makeCSS _ = vcat [
     text "  white-space: pre-wrap;",
     text "  white-space: -moz-pre-wrap;",
     text "  white-space: -o-pre-wrap;",
-    text "  background: #faf8f0;",
-    text "}"
-    ],
+    text "  background: #faf8f0;}"],
   text ".list {text-align: left;}",
   text ".figure {max-width: 800px;}",
   vcat [
@@ -175,16 +173,16 @@ makeCSS _ = vcat [
     text "  position: absolute;",
     text "  top: 0;",
     text "  border: 1px solid #000;",
-    text "  width: 6px;",
+    text "  width: 5px;",
     text "  height: 100%;}",
     text ".matrix:before {",
-    text "  left: -6px;",
+    text "  left: -5px;",
     text "  border-right: 0px;}",
     text ".matrix:after {",
-    text "  right: -6px;",
+    text "  right: -5px;",
     text "  border-left: 0px;}",
     text ".matrix td {",
-    text "  padding: 6px;",
+    text "  padding: 5px;",
     text "  text-align: center;",
     text "  border: 0px;}"
     ]

@@ -1,7 +1,8 @@
 module Language.Drasil.Code.Imperative.Import where
 
 import Language.Drasil.Code.Code as C
-import Language.Drasil.Code.Imperative.AST as I
+import Language.Drasil.Code.Imperative.AST as I hiding ((&=),assign)
+import qualified Language.Drasil.Code.Imperative.AST as I (assign)
 import Language.Drasil.Code.Imperative.LanguageRenderer (Options(..))
 import Language.Drasil.Code.Imperative.Parsers.ConfigParser (pythonLabel, cppLabel, cSharpLabel, javaLabel)
 import Language.Drasil.Code.CodeGeneration (createCodeFiles, makeCode)
@@ -10,7 +11,7 @@ import Language.Drasil.Expr as E
 import Language.Drasil.Expr.Extract hiding (vars)
 import Language.Drasil.CodeSpec hiding (codeSpec)
 
-import Prelude hiding (log, exp, return)
+import Prelude hiding (log, exp, return, const)
 import Data.List (intersperse)
 import System.Directory
 
@@ -22,17 +23,18 @@ data Generator = Generator {
   codeSpec :: CodeSpec,
   
   genInputMod :: [CodeChunk] -> ConstraintMap -> [Module],
-  genCalcMod :: [CodeDefinition] -> [Module],
-  genOutputMod :: [CodeChunk] -> [Module],
-  
   genInputClass :: [CodeChunk] -> ConstraintMap -> Class,
   genInputFormat :: [CodeChunk] -> Method,
   genInputConstraints :: [CodeChunk] -> ConstraintMap -> Method,
-
-  genCalcFuncs :: [CodeDefinition] -> [Method],
+  
+  genConstMod :: Module,
+  
+  genCalcMod :: String -> [CodeDefinition] -> Module,
+  genCalcFunc :: CodeDefinition -> Method,
   genCalcBlock :: Expr -> Body,
   genCaseBlock :: [(Expr,Relation)] -> Body,  
 
+  genOutputMod :: [CodeChunk] -> [Module],
   genOutputFormat :: [CodeChunk] -> Method,
   
   genMethodCall :: Scope -> Permanence -> MethodType -> Label -> [Parameter] -> Body -> Method,
@@ -43,7 +45,9 @@ data Generator = Generator {
   privateMethod :: MethodType -> Label -> [Parameter] -> Body -> Method,
   
   sfwrCBody :: Expr -> Body,
-  physCBody :: Expr -> Body  
+  physCBody :: Expr -> Body,
+  
+  assign :: Value -> Value -> Statement
 }
 
 generator :: CodeSpec -> Generator -> Generator
@@ -55,25 +59,30 @@ generator spec g =
                                                           Exception -> constrExc
       inputModFunc =       case (inputStructure chs)   of Loose     -> genInputModNoClass
                                                           AsClass   -> genInputModClass
+      assignFunc =         case (logging chs)          of LogVar    -> loggedAssign
+                                                          LogAll    -> loggedAssign
+                                                          _         -> (\_ -> I.assign)
+                                                          
   in Generator {
-      generateCode = generateCodeD spec g,
+      generateCode = generateCodeD g,
       
-      genModules = genModulesD spec g,
+      genModules = genModulesD g,
       
       codeSpec = spec,
       
       genInputMod = inputModFunc g,
-      genCalcMod = genCalcModD g,
-      genOutputMod = genOutputModD g,
-      
       genInputClass = genInputClassD g,
       genInputFormat = genInputFormatD g,
       genInputConstraints = genInputConstraintsD g,
-
-      genCalcFuncs = genCalcFuncsD g,
+      
+      genConstMod = genConstModD g,
+      
+      genCalcMod = genCalcModD g,
+      genCalcFunc = genCalcFuncD g,
       genCalcBlock = genCalcBlockD g,
       genCaseBlock = genCaseBlockD g,  
-
+ 
+      genOutputMod = genOutputModD g,
       genOutputFormat = genOutputFormatD g,
       
       genMethodCall = genMethodCallD g,
@@ -84,11 +93,14 @@ generator spec g =
       privateMethod = genMethodCall g Private Dynamic,
       
       sfwrCBody = sfwrConstraintFunc g,
-      physCBody = physConstraintFunc g
+      physCBody = physConstraintFunc g,
+      
+      assign = assignFunc g
     }
 
-generateCodeD :: CodeSpec -> Generator -> IO () 
-generateCodeD s g = let modules = genModules g 
+generateCodeD :: Generator -> IO () 
+generateCodeD g = let s = codeSpec g
+                      modules = genModules g 
   in do workingDir <- getCurrentDirectory
         mapM_ (\x -> do 
              createDirectoryIfMissing False (getDir x) 
@@ -107,11 +119,12 @@ generateCodeD s g = let modules = genModules g
         getDir Java = "java"
         getDir Python = "python"
         
-genModulesD :: CodeSpec -> Generator -> [Module]
-genModulesD (CodeSpec _ i o d cm _ _ _ h) g = genInputMod g i cm
-                                       ++ genCalcMod g d
-                                       ++ genOutputMod g o
-                                       ++ map (genHacks g) h -- hack 
+genModulesD :: Generator -> [Module]
+genModulesD g = genInputMod g (inputs $ codeSpec g) (cMap $ codeSpec g)
+             ++ [genConstMod g]
+             ++ map (\(FuncMod n d) -> genCalcMod g n d) (fMods $ codeSpec g)
+             ++ genOutputMod g (outputs $ codeSpec g)
+             ++ map (genHacks g) (mods $ codeSpec g) -- hack 
 
 
 ------- INPUT ----------  
@@ -136,7 +149,7 @@ genInputClassD g ins cm = pubClass
     [ constructor 
         "InputParameters" 
         []
-        [zipBlockWith (&=) vars vals],
+        [zipBlockWith (assign g) vars vals],
       genInputFormat g ins,
       genInputConstraints g ins cm
     ]
@@ -144,7 +157,7 @@ genInputClassD g ins cm = pubClass
   where vars         = map (\x -> var $ codeName x) ins
         vals         = map (\x -> defaultValue' $ convType $ codeType x) ins        
         genInputVars = 
-          map (\x -> pubMVar 4 (convType $ codeType x) (codeName x)) ins
+          map (\x -> pubMVar 0 (convType $ codeType x) (codeName x)) ins
 
 genInputFormatD :: Generator -> [CodeChunk] -> Method
 genInputFormatD g ins = let l_infile = "infile"
@@ -184,22 +197,33 @@ constrWarn _ _ = oneLiner $ printStrLn "Warning: constraint violated"
 constrExc :: Generator -> Expr -> Body
 constrExc _ _ = oneLiner $ throw "InputError"
 
+
+---- CONST ----
+
+genConstModD :: Generator -> Module
+genConstModD g = buildModule "Constants" [] [] [] [genConstClassD g]
+
+genConstClassD :: Generator -> Class
+genConstClassD g = pubClass
+  "Constants"
+  Nothing
+  genVars
+  []
+  where genVars = 
+          map (\x -> pubGVar 0 (convType $ codeType x) (codeName x)) (const $ codeSpec g)
     
 ------- CALC ----------    
     
-genCalcModD :: Generator -> [CodeDefinition] -> [Module]
-genCalcModD g defs = [buildModule "Calculations" [] [] (genCalcFuncs g defs) []]   
+genCalcModD :: Generator -> String -> [CodeDefinition] -> Module
+genCalcModD g n defs = buildModule n [] [] (map (genCalcFunc g) (filter (\x -> validExpr (codeEquat x)) defs)) []   
         
-genCalcFuncsD :: Generator -> [CodeDefinition] -> [Method]
-genCalcFuncsD g cds = 
-  let defs = filter (\x -> validExpr (codeEquat x)) cds  -- filter valid expr's for now
-  in map 
-    ( \x -> publicMethod g 
-            (methodType $ convType (codeType x)) 
-            ("calc_" ++ codeName x) 
-            (getParams (codevars $ codeEquat x)) 
-            (genCalcBlock g $ codeEquat x)
-    ) defs
+genCalcFuncD :: Generator -> CodeDefinition -> Method
+genCalcFuncD g cdef = 
+  publicMethod g 
+    (methodType $ convType (codeType cdef)) 
+    (codeName cdef)
+    (getParams (codevars $ codeEquat cdef)) 
+    (genCalcBlock g $ codeEquat cdef)
 
 genCalcBlockD :: Generator -> Expr -> Body
 genCalcBlockD g e
@@ -219,11 +243,12 @@ genOutputModD :: Generator -> [CodeChunk] -> [Module]
 genOutputModD g outs = [buildModule "OutputFormat" [] [] [genOutputFormat g outs] []]  
     
 genOutputFormatD :: Generator -> [CodeChunk] -> Method
-genOutputFormatD g outs = let l_outfile = "outfile"
-                              v_outfile = var l_outfile
-                              l_filename = "filename"
-                              p_filename = param l_filename string
-                              v_filename = var l_filename
+genOutputFormatD g outs = 
+  let l_outfile = "outfile"
+      v_outfile = var l_outfile
+      l_filename = "filename"
+      p_filename = param l_filename string
+      v_filename = var l_filename
   in
     publicMethod g methodTypeVoid "write_output" 
       (p_filename:getParams outs)
@@ -251,7 +276,7 @@ genMethodCallD g s pr t n p b = let loggedBody = if (logging $ choices $ codeSpe
                                                  else b
                                     commBody   = if (comments $ choices $ codeSpec g) == CommentFunc 
                                                  then commMethod g n p loggedBody
-                                                 else b
+                                                 else loggedBody
                                     theBody    = commBody
   in  
     Method n s pr t p theBody
@@ -286,7 +311,21 @@ loggedMethod g n p b = let l_outfile = "outfile"
       intersperse (printFileStr v_outfile ", ") $
       map (\x -> printFile v_outfile (paramType x) (paramVal x)) ps
 
-       
+
+----
+
+loggedAssign :: Generator -> Value -> Value -> Statement
+loggedAssign g a b = let l_outfile = "outfile"
+                         v_outfile = var l_outfile 
+  in
+    multi [
+        I.assign a b,
+        varDec l_outfile outfile,
+        openFileW v_outfile (litString $ logName g),  
+        printFileStr v_outfile ("var '" ++ (valName a) ++ "' assigned to "),
+        printFileLn v_outfile (convType $ varType (valName b) (vMap $ codeSpec g)) b,
+        closeFile v_outfile       
+      ]
       
 -- helpers
     
@@ -304,6 +343,11 @@ paramVal (FuncParam _ _ _) = error "Function param not implemented"
 paramName :: Parameter -> String
 paramName (StateParam l _) = l
 paramName (FuncParam _ _ _) = error "Function param not implemented"   
+
+valName :: Value -> String
+valName (Var n) = n
+valName (ObjVar o v) = valName o ++ "." ++ valName v
+valName _ = error "Value has no name"
           
 convType :: C.CodeType -> I.StateType
 convType C.Boolean = bool
@@ -335,7 +379,7 @@ validExpr (Deriv _ _ _) = False
 validExpr (E.Not e)      = validExpr e
 validExpr (Neg e)      = validExpr e
 validExpr (C _)        = True
-validExpr (FCall (C c) x)  = foldl (&&) True (map validExpr x)
+validExpr (FCall (C _) x)  = foldl (&&) True (map validExpr x)
 validExpr (FCall _ _)  = False
 validExpr (a := b)     = (validExpr a) && (validExpr b)
 validExpr (a :!= b)    = (validExpr a) && (validExpr b)

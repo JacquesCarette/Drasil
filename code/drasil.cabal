@@ -171,13 +171,16 @@ executable nopcm
     , Drasil.NoPCM.TMods
     , Drasil.NoPCM.Definitions
     , Drasil.NoPCM.Unitals
+    , Drasil.SWHS.Assumptions
     , Drasil.SWHS.Body
     , Drasil.SWHS.Concepts
     , Drasil.SWHS.DataDefs
     , Drasil.SWHS.GenDefs
     , Drasil.SWHS.Changes
     , Drasil.SWHS.Modules
+    , Drasil.SWHS.References
     , Drasil.SWHS.Reqs
+    , Drasil.SWHS.Requirements
     , Drasil.SWHS.TMods
     , Drasil.SWHS.IMods
     , Drasil.SWHS.Unitals
@@ -362,6 +365,7 @@ executable swhs
     , Drasil.Sections.TraceabilityMandGs
     , Drasil.Sections.ReferenceMaterial
     , Drasil.SRS
+    , Drasil.SWHS.Assumptions
     , Drasil.SWHS.Body
     , Drasil.SWHS.Changes
     , Drasil.SWHS.Concepts
@@ -369,7 +373,9 @@ executable swhs
     , Drasil.SWHS.GenDefs
     , Drasil.SWHS.Generate
     , Drasil.SWHS.Modules
+    , Drasil.SWHS.References
     , Drasil.SWHS.Reqs
+    , Drasil.SWHS.Requirements
     , Drasil.SWHS.TMods
     , Drasil.SWHS.IMods
     , Drasil.SWHS.Unitals

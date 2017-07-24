@@ -2,6 +2,7 @@ module Language.Drasil.CodeSpec where
 
 import Language.Drasil.Chunk.Code
 import Language.Drasil.Chunk.NamedIdea
+import Language.Drasil.Chunk.Eq
 import Language.Drasil.NounPhrase
 import Language.Drasil.Spec
 import Language.Drasil.SystemInformation
@@ -11,6 +12,8 @@ import Language.Drasil.Defs -- hack
 import qualified Data.Map as Map
 import Control.Lens ((^.))
 
+import Prelude hiding (const)
+
 data CodeSpec = CodeSpec {
   program :: CodeName,
   inputs :: [CodeChunk],
@@ -19,6 +22,8 @@ data CodeSpec = CodeSpec {
   cMap :: ConstraintMap,
   fMap :: FunctionMap,
   vMap :: VarMap,
+  fMods :: [FuncMod],
+  const :: [CodeDefinition],
   choices :: Choices,
   mods :: [(String, [FunctionDecl])] -- hack
 }
@@ -45,6 +50,12 @@ varTerm cname m = lookV (Map.lookup cname m)
         lookV Nothing = ""
         lookV (Just cc) = getStr (phrase $ cc ^. term)  
         
+varType :: String -> VarMap -> CodeType
+varType cname m = lookV (Map.lookup cname m)
+  where lookV :: (Maybe CodeChunk) -> CodeType
+        lookV Nothing = error "Variable not found"
+        lookV (Just cc) = codeType cc
+        
 getStr :: Sentence -> String
 getStr (S s) = s
 getStr (P s) = symbToCodeName s
@@ -55,7 +66,7 @@ codeSpec :: SystemInformation -> CodeSpec
 codeSpec si = codeSpec' si defaultChoices
 
 codeSpec' :: SystemInformation -> Choices -> CodeSpec
-codeSpec' (SI sys _ _ _ q _ _ defs ins outs _ cs) ch = CodeSpec {
+codeSpec' (SI {_sys = sys, _quants = q, _definitions = defs, _inputs = ins, _outputs = outs, _constraints = cs, _constants = constants}) ch = CodeSpec {
   program = NICN sys,
   inputs = map codevar ins,
   outputs = map codevar outs,
@@ -63,9 +74,21 @@ codeSpec' (SI sys _ _ _ q _ _ defs ins outs _ cs) ch = CodeSpec {
   cMap = constraintMap cs,
   fMap = functionMap $ map qtoc defs,
   vMap = varMap (map codevar q),
+  fMods = [funcMod "Calculations" defs],
+  const = map qtoc constants,
   choices = ch,
   mods = modHack
 }
+
+codeSpec'' :: SystemInformation -> [FuncMod] -> Choices -> CodeSpec
+codeSpec'' si fm ch = 
+  let sp = codeSpec' si ch 
+  in  sp { fMods = fm }
+
+data FuncMod = FuncMod String [CodeDefinition]
+
+funcMod :: String -> [QDefinition] -> FuncMod
+funcMod n qd = FuncMod n $ map qtoc qd
 
 data Choices = Choices {
   lang :: [Lang],

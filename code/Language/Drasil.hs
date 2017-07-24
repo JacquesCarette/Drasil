@@ -64,7 +64,7 @@ module Language.Drasil (
   --Chunk.UWrapper 
   , UWrapper, uw, ucw, UCWrapper
   -- Spec
-  , USymb(..), Sentence(..), Accent(..), sParen, sSqBr, sSqBrNum
+  , USymb(..), Sentence(..), Accent(..), sParen, sParenNum, sSqBr, sSqBrNum
   , (+:+), (+:+.), (+.), sC, (+:), semiCol, sParenDash
   , sDash
   -- NounPhrase
@@ -147,7 +147,7 @@ import Language.Drasil.NounPhrase hiding (at_start, at_start', titleize
                                           , titleize', phrase, plural)
 import Language.Drasil.Space (Space(..))
 import Language.Drasil.Spec (USymb(..), Sentence(..), Accent(..), 
-                              sParen, sSqBr, sSqBrNum, sC, (+:+), (+:+.), (+.), (+:),
+                              sParen, sParenNum, sSqBr, sSqBrNum, sC, (+:+), (+:+.), (+.), (+:),
                               semiCol, sParenDash, sDash)
 import Language.Drasil.Reference (makeRef, acroTest)
 import Language.Drasil.Symbol (Symbol(..), sub, sup, vec, hat, prime)

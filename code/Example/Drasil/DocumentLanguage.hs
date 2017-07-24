@@ -138,12 +138,12 @@ type DocDesc = [DocSection]
 
 -- | Creates a document from a document description and system information
 mkDoc :: DocDesc -> SystemInformation -> Document
-mkDoc l si@(SI sys kind authors _ _ _ _ _ _ _ _ _) = Document 
+mkDoc l si@(SI {_sys = sys, _kind = kind, _authors = authors}) = Document 
   (kind `for` sys) (manyNames authors) (mkSections si l)
 
 -- | Similar to 'makeDoc', but for when we want to use the short form for titles.  
 mkDoc' :: DocDesc -> (NWrapper -> NWrapper -> Sentence) -> SystemInformation -> Document
-mkDoc' l comb si@(SI sys kind authors _ _ _ _ _ _ _ _ _) = Document 
+mkDoc' l comb si@(SI {_sys = sys, _kind = kind, _authors = authors}) = Document 
   ((nw kind) `comb` (nw sys)) (manyNames authors) (mkSections si l)
 
 -- | Helper for creating the document sections
@@ -162,13 +162,14 @@ mkRefSec _  (RefVerb s) = s
 mkRefSec si (RefProg c l) = section (titleize refmat) [c] (foldr (mkSubRef si) [] l)
   where
     mkSubRef :: SystemInformation -> RefTab -> [Section] -> [Section]
-    mkSubRef (SI _ _ _ u _ _ _ _ _ _ _ _)  TUnits   l' = table_of_units u (tuIntro defaultTUI) : l'
-    mkSubRef (SI _ _ _ u _ _ _ _ _ _ _ _) (TUnits' con) l' = table_of_units u (tuIntro con) : l'
-    mkSubRef (SI _ _ _ _ v _ _ _ _ _ _ _) (TSymb con) l' = 
+    mkSubRef (SI {_units = u})  TUnits   l' = table_of_units u (tuIntro defaultTUI) : l'
+    mkSubRef (SI {_units = u}) (TUnits' con) l' = table_of_units u (tuIntro con) : l'
+    mkSubRef (SI {_quants = v}) (TSymb con) l' = 
       (Section (titleize tOfSymb) 
       (map Con [tsIntro con, (table (sort v) at_start)])) : l'
-    mkSubRef (SI _ _ _ _ _ cccs _ _ _ _ _ _) (TSymb' f con) l' = (mkTSymb cccs f con) : l'
-    mkSubRef (SI _ _ _ _ v cccs n _ _ _ _ _) TAandA l' = (table_of_abb_and_acronyms $ 
+    mkSubRef (SI {_concepts = cccs}) (TSymb' f con) l' = (mkTSymb cccs f con) : l'
+    mkSubRef (SI {_quants = v, _concepts = cccs, _namedIdeas = n}) TAandA l' = 
+      (table_of_abb_and_acronyms $ 
       filter (isJust . getA) (map nw v ++ map nw cccs ++ map nw n)) : l'
     mkSubRef _              (TVerb s) l' = s : l'
 
@@ -260,9 +261,9 @@ mkIntroSec si (IntroProg probIntro progDefn l) =
     mkSubIntro :: SystemInformation -> IntroSub -> [Section] -> [Section]
     mkSubIntro _ (IVerb s) l' = s : l'
     mkSubIntro _ (IPurpose intro) l' = Intro.purposeOfDoc intro : l'
-    mkSubIntro (SI sys _ _ _ _ _ _ _ _ _ _ _) (IScope main intendedPurp) l' = 
+    mkSubIntro (SI {_sys = sys}) (IScope main intendedPurp) l' = 
       Intro.scopeOfRequirements main sys intendedPurp : l'
-    mkSubIntro (SI sys _ _ _ _ _ _ _ _ _ _ _) (IChar know understand appStandd) l' =
+    mkSubIntro (SI {_sys = sys}) (IChar know understand appStandd) l' =
       Intro.charIntRdrF know understand sys appStandd (SRS.userChar [] []) : l'
     mkSubIntro _ (IOrgSec i b s t) l' = Intro.orgSec i b s t : l'
     -- FIXME: s should be "looked up" using "b" once we have all sections being generated
@@ -292,6 +293,8 @@ mkSolChSpec si (SCSProg l m) =
       SSD.thModF (siSys si') (map (tmodel fields m) ts) : l'
     mkSubSCS _ (DDs fields ds) l' =
       SSD.dataDefnF EmptyS (map (ddefn fields m) ds) : l'
+    mkSubSCS _ (GDs _ _) _ = error "GDs not yet implemented"
+    mkSubSCS _ (IMs _ _) _ = error "IMs not yet implemented"
       --FIXME: need to keep track of DD intro.
     inModSec = (SRS.inModel [Paragraph EmptyS] []) 
     --FIXME: inModSec should be replaced with a walk
@@ -301,7 +304,7 @@ mkSolChSpec si (SCSProg l m) =
   
 -- Helper
 siSys :: SystemInformation -> NWrapper
-siSys (SI sys _ _ _ _ _ _ _ _ _ _ _) = nw sys
+siSys (SI {_sys = sys}) = nw sys
 
 --BELOW IS IN THIS FILE TEMPORARILY--
 --Creates Contents using an id and description (passed in as a Sentence).

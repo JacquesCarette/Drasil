@@ -125,9 +125,9 @@ instance LayoutObj Contents where
   rType (Definition _ _)        = Def
   rType (Defnt _ _ _)           = Def
   rType (Module _)              = Mod
-  rType (Requirement r)       = Req $ short r
-  rType (Assumption a)        = Assump $ short a
-  rType (LikelyChange lc)      = LC $ short lc
+  rType (Requirement r)       = Req $ getA r
+  rType (Assumption a)        = Assump $ getA a
+  rType (LikelyChange lc)      = LC $ getA lc
   rType (UnlikelyChange _)      = UC
  -- rType (UsesHierarchy _)       = Fig
   rType (Graph _ _ _ _)         = Fig

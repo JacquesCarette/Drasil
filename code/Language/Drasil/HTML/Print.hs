@@ -5,10 +5,10 @@ import Data.List (intersperse)
 import Text.PrettyPrint hiding (render)
 import Numeric (showFFloat)
 
-import Language.Drasil.HTML.Import (makeDocument)
+import Language.Drasil.HTML.Import (makeDocument, spec)
 import Language.Drasil.HTML.AST
 import Language.Drasil.Output.Formats (DocType(..))
-import Language.Drasil.Spec (USymb(..))
+import Language.Drasil.Spec (USymb(..), RefType(..))
 
 import Language.Drasil.HTML.Helpers
 import Language.Drasil.Printing.Helpers
@@ -86,7 +86,10 @@ p_spec (Sy s)     = uSymb s
 p_spec (G g)      = unPH $ greek g
 p_spec (Sp s)     = unPH $ special s
 p_spec HARDNL     = "<br />"
-p_spec (Ref r a)  = reflink (p_spec a) (show r)
+p_spec (Ref (Assump (Just r)) a) = reflink (p_spec a) (p_spec $ spec r)
+p_spec (Ref (Req (Just r)) a) = reflink (p_spec a) (p_spec $ spec r)
+p_spec (Ref (LC (Just r)) a) = reflink (p_spec a) (p_spec $ spec r)
+p_spec (Ref r a)  = reflink (p_spec a) ("this " ++ show r)
 p_spec EmptyS     = ""
 
 -- | Renders symbols for HTML title
@@ -260,6 +263,9 @@ makeDefn dt ps l = refwrap l $ wrap "table" [dtag dt] (makeDRows ps)
   where dtag (L.Data _)   = "ddefn"
         dtag (L.Theory _) = "tdefn"
         dtag (L.General)  = "gdefn"
+        dtag (L.Instance) = error "Not yet implemented"
+        dtag (L.TM) = error "Not yet implemented"
+        dtag (L.DD) = error "Not yet implemented"
 
 -- | Helper for making the definition table rows
 makeDRows :: [(String,[LayoutObj])] -> Doc

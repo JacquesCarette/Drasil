@@ -10,11 +10,9 @@ import Data.Drasil.Authors
 import Data.Drasil.Concepts.Documentation
 import Data.Drasil.Concepts.PhysicalProperties hiding (density, mass, vol)
 import qualified Data.Drasil.Concepts.Thermodynamics as CT
-import Data.Drasil.Concepts.Physics (mech_energy)
-import Data.Drasil.Concepts.Math (ode, de, unit_, rOfChng, equation, change, 
-  parameter)
+import Data.Drasil.Concepts.Math (ode, de, unit_, rOfChng, equation)
+import Data.Drasil.Concepts.Software (program)
 
-import Data.Drasil.Concepts.Software (program, performance)
 import Data.Drasil.Software.Products
 import Data.Drasil.Utils (enumSimple, weave, getS, itemRefToSent, makeListRef,
   makeTMatrix, mkRefsList, refFromType)
@@ -35,6 +33,9 @@ import Drasil.SWHS.GenDefs
 import Drasil.SWHS.Modules
 import Drasil.SWHS.Changes
 import Drasil.SWHS.Reqs
+import Drasil.SWHS.References
+import Drasil.SWHS.Assumptions
+import Drasil.SWHS.Requirements
 
 import qualified Drasil.SRS as SRS
 import Drasil.Template.MG
@@ -48,12 +49,9 @@ import Drasil.Sections.Requirements
 import Drasil.Sections.GeneralSystDesc
 import Drasil.Sections.AuxiliaryConstants (valsOfAuxConstantsF)
 
-import Data.Drasil.Concepts.Software(correctness, verifiability,
-  understandability, reusability, maintainability)
-
 import Data.Drasil.SentenceStructures (showingCxnBw, foldlSent, foldlSent_,
   foldlSP, foldlSP_, foldlSPCol, foldlsC, isThe, ofThe, ofThe',
-  sAnd, sOf, foldlSentCol)
+  sAnd, sOf)
 
 acronyms :: [CI]
 acronyms = [assumption, dataDefn, genDefn, goalStmt, inModel, likelyChg, ode,
@@ -68,13 +66,21 @@ authors :: Sentence
 authors = manyNames swhsPeople
 
 swhs_si :: SystemInformation
-swhs_si = SI swhs_pcm srs swhsPeople
-  this_si swhsSymbols (swhsSymbols) acronyms
-  (swhsDataDefs :: [QDefinition])
-  ((map qs swhsInputs) :: [QSWrapper])
-  ((map qs swhsOutputs) :: [QSWrapper])
-  ([] :: [Block QDefinition])
-  (swhsConstrained)
+swhs_si = SI {
+  _sys = swhs_pcm,
+  _kind = srs, 
+  _authors = swhsPeople,
+  _units = this_si,
+  _quants = swhsSymbols,
+  _concepts = (swhsSymbols),
+  _namedIdeas = acronyms,
+  _definitions = (swhsDataDefs :: [QDefinition]),
+  _inputs = ((map qs swhsInputs) :: [QSWrapper]),
+  _outputs = ((map qs swhsOutputs) :: [QSWrapper]),
+  _defSequence = ([] :: [Block QDefinition]),
+  _constraints = (swhsConstrained),
+  _constants = []
+}
   --Note: The second swhsSymbols here is
     -- Redundant b/c the unitals are not really concepts (yet). There
     -- Will still likely be a better way to do this.
@@ -127,7 +133,7 @@ swhs_mg = mgDoc swhsFull authors mgBod
 ------------------------------
 
 -- In Concepts.hs "swhs_pcm" gives "s for program name, and there is a
--- similar paragraph in each of the other eolar water heating systems
+-- similar paragraph in each of the other solar water heating systems
 -- incorporating PCM" which is not capitlaized whereas the stable version is
 
 -- NamedChunks... Sometimes capitalized, sometimes not, sometimes plural,
@@ -724,7 +730,7 @@ s2_kSent sp pr pro = foldlSent_ [EmptyS +:+. phrase sp, S "The developed",
   sParen (short pro)] -- SSP has same style sentence here
 
 -- In Concepts.hs "swhs_pcm" gives "s for program name, and there is a
--- similar paragraph in each of the other eolar water heating systems
+-- similar paragraph in each of the other solar water heating systems
 -- incorporating PCM" which is not capitlaized whereas the stable version is
 
 -- NamedChunks... Sometimes capitalized, sometimes not, sometimes plural,
@@ -777,7 +783,7 @@ s2_2_end t te wa pcmat sw = foldlSent_ [S "predict the",
 
 -- There is a similar paragraph in each example, but there's a lot of specific
 -- info here. Would need to abstract out the object of analysis (i.e. solar
--- water heating tank incorporating PCM, 2D slope composed of homogeneous soil
+-- water heating tank rating PCM, 2D slope composed of homogeneous soil
 -- layers, glass slab and blast, or 2D bodies acted on by forces) and also
 -- abstract out the overall goal of the program (i.e. predict the temperature
 -- and energy histories for the water and PCM, simulate how 2D rigid bodies
@@ -991,123 +997,6 @@ goalState varTerm = foldlSent [S "Predict the", phrase varTerm,
 -------------------------
 -- 4.2.1 : Assumptions --
 -------------------------
-
-assump1, assump2, assump3, assump4, assump5, assump6,
-  assump7, assump8, assump9, assump10, assump11, assump12, assump13, assump14,
-  assump15, assump16, assump17, assump18, assump19, assump20 :: Contents
-
-assump1 = mkAssump "assump1" $ foldlSent [
-  S "The only form of", phrase energy, S "that is",
-  S "relevant for this", phrase problem, S "is" +:+. 
-  phrase CT.thermal_energy, S "All other forms of", phrase energy `sC`
-  S "such as", phrase mech_energy `sC` S "are assumed to be negligible",
-  sSqBr $ swhsSymbMapTRef t1ConsThermE]
---
-assump2 = mkAssump "assump2" $ foldlSent [
-  S "All", phrase CT.heat_trans, S "coefficients are constant over",
-  phrase time, sSqBr $ acroGD 1]
---
-assump3 = mkAssump "assump3" $ foldlSent [
-  S "The", phrase water, S "in the", phrase tank,
-  S "is fully mixed, so the", phrase temp_W `isThe` 
-  S "same throughout the entire", phrase tank,
-  sSqBr $ acroGD 2 `sC` swhsSymbMapDRef dd2HtFluxP]
---
-assump4 = mkAssump "assump4" $ foldlSent [
-  S "The", phrase temp_PCM `isThe` S "same throughout the", phrase pcm_vol,
-  sSqBr $ acroGD 2 `sC` swhsSymbMapDRef dd2HtFluxP `sC` makeRef likeChg1]
---
-assump5 = mkAssump "assump5" $ foldlSent [
-  S "The", phrase w_density `sAnd` phrase pcm_density,
-  S "have no spatial variation; that is" `sC`
-  S "they are each constant over their entire", phrase vol,
-  sSqBr $ acroGD 2]
---
-assump6 = mkAssump "assump6" $ foldlSent [
-  S "The", phrase htCap_W `sC` phrase htCap_S_P `sC` S "and",
-  phrase htCap_L_P, S "have no spatial variation; that",
-  S "is" `sC` S "they are each constant over their entire",
-  phrase vol, sSqBr $ acroGD 2]
---
-assump7 = mkAssump "assump7" $ foldlSent [
-  CT.law_conv_cooling ^. defn, S "applies between the",
-  phrase coil `sAnd` S "the", phrase water,
-  sSqBr $ swhsSymbMapDRef dd1HtFluxC]
---
-assump8 = mkAssump "assump8" $ foldlSent [
-  S "The", phrase temp_C, S "is constant over", phrase time,
-  sSqBr $ swhsSymbMapDRef dd1HtFluxC `sC` makeRef likeChg2]
---
-assump9 = mkAssump "assump9" $ foldlSent [
-  S "The", phrase temp_C, S "does not vary along its length",
-  sSqBr $ swhsSymbMapDRef dd1HtFluxC `sC` makeRef likeChg3]
---
-assump10 = mkAssump "assump10" $ foldlSent [
-  CT.law_conv_cooling ^. defn, S "applies between the",
-  phrase water `sAnd` S "the", short phsChgMtrl,
-  sSqBr $ swhsSymbMapDRef dd2HtFluxP]
---
-assump11 = mkAssump "assump11" $ foldlSent [
-  S "The", phrase model, S "only accounts for", (charging ^. defn) `sC`
-  S "not" +:+. phrase discharging, S "The", phrase temp_W `sAnd`
-  phrase temp_PCM, S "can only increase, or remain",
-  S "constant; they do not decrease. This implies that the",
-  phrase temp_init, sSqBr $ makeRef assump12, S "is less than (or equal)",
-  S "to the", phrase temp_C, sSqBr $ acroIM 1 `sC` makeRef likeChg4]
---
-assump12 = mkAssump "assump12" $ foldlSent [
-  phrase temp_init `ofThe'` phrase water `sAnd` S "the",
-  short phsChgMtrl `isThe` S "same",
-  sSqBr $ acroIM 1 `sC` acroIM 2 `sC` makeRef likeChg5]
---
-assump13 = mkAssump "assump13" $ foldlSent [
-  S "The", phrase simulation, S "will start with the",
-  short phsChgMtrl, S "in a", solid ^. defn,
-  sSqBr $ acroIM 2 `sC` acroIM 4]
---
-assump14 = mkAssump "assump14" $ foldlSent [
-  (S "operating" +:+ phrase temp +:+ S "range") `ofThe'` phrase system,
-  S "is such that the", phrase water,
-  S "is always in" +:+. (liquid ^. defn), S "That is" `sC`
-  S "the", phrase temp, S "will not drop below the",
-  phrase melt_pt, S "of", phrase water `sC` S "or rise above its",
-  phrase boil_pt, sSqBr $ acroIM 1 `sC` acroIM 3]
---
-assump15 = mkAssump "assump15" $ foldlSent [
-  S "The", phrase tank, S "is", phrase perfect_insul,
-  S "so that there is no", phrase CT.heat, S "loss from the",
-  phrase tank, sSqBr $ acroIM 1 `sC` makeRef likeChg6]
---
-assump16 = mkAssump "assump16" $ foldlSent [
-  S "No internal", phrase CT.heat, S "is generated by either the",
-  phrase water, S "or the", short phsChgMtrl `semiCol`
-  S "therefore, the", phrase vol_ht_gen, S "is zero",
-  sSqBr $ acroIM 1 `sC` acroIM 2]
---
-assump17 = mkAssump "assump17" $ foldlSent [
-  (phrase vol +:+ phrase change) `ofThe'` short phsChgMtrl,
-  S "due to", phrase CT.melting, S "is negligible", sSqBr $ acroIM 2]
---
-assump18 = mkAssump "assump18" $ foldlSent [
-  S "The", short phsChgMtrl, S "is either in a", liquid ^. defn,
-  S "or a", solid ^. defn, S "but not a", gaseous ^. defn,
-  sSqBr $ acroIM 2 `sC` acroIM 4]
---
-assump19 = mkAssump "assump19" $ foldlSent [
-  S "The pressure in the", phrase tank, S "is atmospheric, so the",
-  phrase melt_pt `sAnd` phrase boil_pt, S "are", S (show (0 :: Integer)) :+:
-  Sy (unit_symb temp) `sAnd` S (show (100 :: Integer)) :+:
-  Sy (unit_symb temp) `sC` S "respectively", sSqBr $ acroIM 1 `sC` acroIM 3]
---
-assump20 = mkAssump "assump20" $ foldlSent [
-  S "When considering the", phrase w_vol, S "in the",
-  phrase tank `sC` (phrase vol `ofThe` phrase coil),
-  S "is assumed to be negligible", sSqBr $ makeRef req2]
-
--- Again, list structure is same between all examples.
-
--- Can booktabs colored links be used? The box links completely cover nearby
--- punctuation.
 
 --------------------------------
 -- 4.2.2 : Theoretical Models --
@@ -1488,8 +1377,8 @@ s4_2_7_deriv_4 = EqnBlock
   (C temp_PCM) [C time]))) time))
 
 s4_2_7_deriv_5 :: ConceptChunk -> CI -> CI -> Contents
-s4_2_7_deriv_5 eq pro rs = foldlSP [titleize' eq, S "(reference) and",
-  S "(reference) can be used as", Quote (S "sanity") :+:
+s4_2_7_deriv_5 eq pro rs = foldlSP [titleize' eq, S "(FIXME: Equation 7) and",
+  S "(FIXME: Equation 8) can be used as", Quote (S "sanity") :+:
   S "checks to gain confidence in any", phrase solution,
   S "computed by" +:+. short pro, S "The relative",
   S "error between the results computed by", short pro `sAnd`
@@ -1508,99 +1397,9 @@ s4_2_7_deriv_5 eq pro rs = foldlSP [titleize' eq, S "(reference) and",
 -----------------------------------
 -- 5.1 : Functional Requirements --
 -----------------------------------
-
-req1, req2, s5_1_2_Eqn1, s5_1_2_Eqn2, req3, req4,
-  req5, req6, req7, req8, req9, req10, req11 :: Contents
-
-req1 = mkRequirement "req1" $ foldlSentCol [
-  titleize input_, S "the following", plural quantity `sC`
-  S "which define the", phrase tank, plural parameter `sC` S "material",
-  plural property, S "and initial", plural condition]
-
-req2 = mkRequirement "req2" $ foldlSentCol [
-  S "Use the", plural input_, S "in", makeRef req1,
-  S "to find the", phrase mass, S "needed for", acroIM 1, S "to",
-  acroIM 4 `sC` S "as follows, where", getS w_vol `isThe` phrase w_vol,
-  S "and", getS tank_vol `isThe` phrase tank_vol]
-
-s5_1_2_Eqn1 = EqnBlock ((C w_mass) := (C w_vol) * (C w_density) := ((C tank_vol) -
-  (C pcm_vol)) * (C w_density) := (((C diam) / 2) * (C tank_length) -
-  (C pcm_vol)) * (C w_density))
-
-s5_1_2_Eqn2 = EqnBlock ((C pcm_mass) := (C pcm_vol) * (C pcm_density))
-
-req3 = mkRequirement "req3" $ foldlSent [
-  S "Verify that the", plural input_, S "satisfy the required",
-  phrase physical, plural constraint, S "shown in", makeRef s7_table1]
---
-req4 = mkRequirement "req4" $ foldlSent [
-  titleize output_, S "the", phrase input_, plural quantity `sAnd`
-  S "derived", plural quantity +: S "in the following list",
-  S "the", plural quantity, S "from", acroR 1 `sC` S "the",
-  plural mass, S "from", acroR 2 `sC` getS tau_W,
-  sParen (S "from" +:+ acroIM 1) `sC` getS eta,
-  sParen (S "from" +:+ acroIM 1) `sC` getS tau_S_P,
-  sParen (S "from" +:+ acroIM 2) `sAnd` getS tau_L_P,
-  sParen (S "from" +:+ acroIM 2)]
---
-req5 = mkRequirement "req5" $ foldlSent [
-  S "Calculate and", phrase output_, S "the", phrase temp_W,
-  sParen(getS temp_W :+: sParen (getS time)), S "over the",
-  phrase simulation, phrase time, sParen (S "from" +:+ acroIM 1)]
---
-req6 = mkRequirement "req6" $ foldlSent [
-  S "Calculate and", phrase output_, S "the", phrase temp_PCM,
-  sParen (getS temp_PCM :+: sParen (getS time)), S "over the",
-  phrase simulation, phrase time, sParen (S "from" +:+ acroIM 2)]
---
-req7 = mkRequirement "req7" $ foldlSent [
-  S "Calculate and", phrase output_, S "the", phrase w_E,
-  sParen (getS w_E :+: sParen (getS time)), S "over the",
-  phrase simulation, phrase time, sParen (S "from" +:+ acroIM 3)]
---
-req8 = mkRequirement "req8" $ foldlSent [
-  S "Calculate and", phrase output_, S "the", phrase pcm_E,
-  sParen (getS pcm_E :+: sParen (getS time)), S "over the",
-  phrase simulation, phrase time, sParen (S "from" +:+ acroIM 4)]
---
-req9 = mkRequirement "req9" $ foldlSent [
-  S "Verify that the", phrase energy, plural output_,
-  sParen (getS w_E :+: sParen (getS time) `sAnd` getS pcm_E :+:
-  sParen (getS time)), S "follow the", phrase CT.law_cons_energy `sC`
-  S "as outlined in", makeRef s4_2_7 `sC` S "with relative error",
-  S "no greater than 0.001%"]
---
-req10 = mkRequirement "req10" $ foldlSent [
-  S "Calculate and", phrase output_, S "the", phrase time,
-  S "at which the", short phsChgMtrl, S "begins to melt",
-  getS t_init_melt, sParen (S "from" +:+ acroIM 2)]
---
-req11 = mkRequirement "req11" $ foldlSent [
-  S "Calculate and", phrase output_, S "the", phrase time,
-  S "at which the", short phsChgMtrl, S "stops", phrase CT.melting,
-  getS t_final_melt, sParen (S "from" +:+ acroIM 2)]
-
--- List structure same between all examples
-
---How to include pi?
---How to add exponents?
-
 ---------------------------------------
 -- 5.2 : Non-functional Requirements --
 ---------------------------------------
-
-s5_2 :: Section
-s5_2 = nonFuncReqF [performance] [correctness, verifiability,
-  understandability, reusability, maintainability]
-  (S "This problem is small in size and relatively simple")
-  (S "Any reasonable implementation will be very quick and use minimal storage.")
-
--- The second sentence of the above paragraph is repeated in all examples (not
--- exactly, but the general idea is). The first sentence is not always
--- repeated, but it is always either stating that performance is a priority or
--- performance is not a priority. This is probably something that can be
--- abstracted out.
-
 --------------------------------
 -- Section 6 : LIKELY CHANGES --
 --------------------------------
@@ -1700,32 +1499,3 @@ s7_fig2 = Figure (showingCxnBw traceyGraph (titleize' requirement `sC`
 ----------------------------
 -- Section 9 : References --
 ----------------------------
-
-ref1, ref2, ref3, ref4, ref5, ref6 :: [Sentence]
-
-ref1 = [S "J. Frederick Bueche. Introduction to Physics for Scientists. McGraw Hill",
-  S "United States", S "fourth edition edition", S "1986."]
-
-ref2 = [S "F. P. Incropera", S "D. P. Dewitt", S "T. L. Bergman",
-  S "and A. S. Lavine. Fundamentals of Heat and Mass Transfer. John Wiley" +:+
-  S "and Sons", S "United States", S "sixth edition edition", S "2007."]
-
-ref3 = [S "Nirmitha Koothoor. A document drive approach to certifying" +:+
-  S "scientific computing software. Master's thesis", S "McMaster University",
-  S "Hamilton", S "Ontario", S "Canada", S "2013."]
-
-ref4 = [S "Marilyn Lightstone. Derivation of tank/pcm model. Personal Notes",
-  S "2012."]
-
-ref5 = [S "David L. Parnas and P.C. Clements. A rational design process:" +:+
-  S "How and why to fake it. IEEE Transactions on Software Engineering",
-  S "12" :+: Quote (S "2") :+: S ":251-257", S "February 1986."]
-
-ref6 = [S "W. Spencer Smith and Lei Lai. A new requirements template for" +:+
-  S "scientific computing. In J. Ralyt" :+: (F Acute 'e'), S "P. Agerfalk",
-  S "and N. Kraiem", S "editors", S "Proceedings of the First" +:+
-  S "International Workshop on Situational Requirements Engineering" +:+
-  S "Processes - Methods, Techniques and Tools to Support" +:+
-  S "Situation-Specific Requirements Engineering Processes, SREP'05",
-  S "pages 107-121", S "Paris", S "France", S "2005. In conjunction with" +:+
-  S "13th IEEE International Requirements Engineering Conference."]

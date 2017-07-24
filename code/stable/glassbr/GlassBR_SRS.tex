@@ -389,6 +389,8 @@ Units &
 Equation & $B$ = $\frac{k}{\left(\frac{a}{1000}\frac{b}{1000}\right)^{m-1}}\left(\left(E*1000\right)\left(\frac{h}{1000}\right)^{2}\right)^{m}*LDFe^{J}$
 \\ \midrule \\
 Description & $B$ is the risk of failure\newline$k$ is the surface flaw parameter\newline$a$ is the plate length (long dimension)\newline$b$ is the plate width (short dimension)\newline$m$ is the surface flaw parameter\newline$E$ is the modulus of elasticity of glass\newline$h$ is the actual thickness\newline$LDF$ is the load duration factor\newline$J$ is the stress distribution factor (Function)
+\\ \midrule \\
+Source & [7]
 \\ \bottomrule \end{tabular}
 \end{minipage}\\
 ~\newline
@@ -417,15 +419,15 @@ Equation & $h$ = $\begin{cases}
 21.44, & t=22.0
 \end{cases}$
 \\ \midrule \\
-Description & $h$ is the actual thickness
+Description & $h$ is the actual thickness\newline$t$ is the nominal thickness $t$ in \{2.5, 2.7, 3.0, 4.0, 5.0, 6.0, 8.0, 10.0, 12.0, 16.0, 19.0, 22.0\}
 \\ \bottomrule \end{tabular}
 \end{minipage}\\
 ~\newline
 \noindent \begin{minipage}{\textwidth}
 \begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
-\toprule \textbf{Refname} & \textbf{DD:loadDurFactor}
+\toprule \textbf{Refname} & \textbf{DD:lDurFac}
 \phantomsection 
-\label{DD:loadDurFactor}
+\label{DD:lDurFac}
 \\ \midrule \\
 Label & $LDF$
 \\ \midrule \\
@@ -455,9 +457,9 @@ Description & $J$ is the stress distribution factor (Function)\newline$J$ is the
 ~\newline
 \noindent \begin{minipage}{\textwidth}
 \begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
-\toprule \textbf{Refname} & \textbf{DD:nFL}
+\toprule \textbf{Refname} & \textbf{DD:nonFactorL}
 \phantomsection 
-\label{DD:nFL}
+\label{DD:nonFactorL}
 \\ \midrule \\
 Label & $NFL$
 \\ \midrule \\
@@ -480,12 +482,12 @@ Label & $GTF$
 Units & 
 \\ \midrule \\
 Equation & $GTF$ = $\begin{cases}
-1.0, & g=AN\\
-4.0, & g=FT\\
-2.0, & g=HS
+1, & g=AN\\
+4, & g=FT\\
+2, & g=HS
 \end{cases}$
 \\ \midrule \\
-Description & $GTF$ is the glass type factor
+Description & $GTF$ is the glass type factor\newline$g$ is the glass type $g$ in \{AN, FT, HS\}
 \\ \bottomrule \end{tabular}
 \end{minipage}\\
 ~\newline
@@ -564,7 +566,7 @@ Label & Calculation of Capacity(LR)
 \\ \midrule \\
 Equation & $LR=NFL*GTF*LSF$
 \\ \midrule \\
-Description & $LR$ is the load resistance, which is also called capacity. $NFL$ is the non-factored Load. $GTF$ is the glass type factor. $LSF$ is the load share factor. Follows $A1$ ("In development of this procedure, it was assumed that all four edges of the glass are simply supported and free to slip in the plane of the glass. This boundary condition has been shown to be typical of many glass installations)" from [4 (pg. 53)].
+Description & $LR$ is the load resistance, which is also called capacity. $NFL$ is the non-factored load. $GTF$ is the glass type factor. $LSF$ is the load share factor. Follows $A1$ ("In development of this procedure, it was assumed that all four edges of the glass are simply supported and free to slip in the plane of the glass. This boundary condition has been shown to be typical of many glass installations)" from [4 (pg. 53)].
 \\ \bottomrule \end{tabular}
 \end{minipage}\\
 ~\newline
@@ -578,7 +580,7 @@ Label & Calculation of Demand(q)
 \\ \midrule \\
 Equation & $q=q\left(w_{TNT},SD\right)$
 \\ \midrule \\
-Description & $q$ or demand, is the 3 second duration equivalent pressure obtained from Figure 2 by interpolation using stand off distance ($SD$) and $w_{TNT}$ as parameters. $w_{TNT}$ is defined as $w_{TNT}$ = $w$ * TNT. $w$ is the charge weight. $TNT$ is the TNT equivalent factor. $SD$ is the stand off distance where $SD=\sqrt\left(SD_{x}^{2}+SD_{y}^{2}+SD_{z}^{2}\right)$ where ($SD_{x}$, $SD_{y}$, $SD_{z}$) are coordinates.
+Description & $q$ or demand, is the 3 second duration equivalent pressure obtained from Figure 2 by interpolation using stand off distance ($SD$) and $w_{TNT}$ as parameters. $w_{TNT}$ is defined as $w_{TNT}=wTNT$. $w$ is the charge weight. $TNT$ is the TNT equivalent factor. $SD$ is the stand off distance where $SD=\sqrt{SD_{x}^{2}+SD_{y}^{2}+SD_{z}^{2}}$ where ($SD_{x}$, $SD_{y}$, $SD_{z}$) are coordinates.
 \\ \bottomrule \end{tabular}
 \end{minipage}\\
 \subsubsection{Data Constraints}
@@ -589,15 +591,15 @@ Table~\ref{Table:Tabl2:InpuVari} shows the data constraints on the input variabl
 Var & Physical Constraints & Software Constraints & Typical Value & Typical Uncertainty
 \\
 \midrule
-$a$ & $a>0.0$ and $\frac{a}{b}>1.0$ & $d_{min}\leq{}a\leq{}d_{max}$ and $\frac{a}{b}<AR_{max}$ & 1500 mm & 10$\%$
+$a$ & $a>0.0$ and $\frac{a}{b}>1.0$ & $d_{min}\leq{}a$, $a\leq{}d_{max}$, and $\frac{a}{b}<AR_{max}$ & $1500.0$ mm & 0.1
 \\
-$b$ & $b>0.0$ and $b<a$ & $d_{min}\leq{}b\leq{}d_{max}$ and $\frac{a}{b}<AR_{max}$ & 1200 mm & 10$\%$
+$b$ & $b>0.0$ and $b<a$ & $d_{min}\leq{}b$, $b\leq{}d_{max}$, and $\frac{a}{b}<AR_{max}$ & $1200.0$ mm & 0.1
 \\
-$P_{btol}$ & $0.0<P_{btol}<1.0$ &  & 8.0e-3 & 0.1$\%$
+$P_{btol}$ & $0.0<P_{btol}$ and $P_{btol}<1.0$ & None & $0.008$ & 1.0e-3
 \\
-$w$ & $w\geq{}0.0$ & $w_{max}\leq{}w\leq{}w_{min}$ & 42 kg & 10$\%$
+$w$ & $w\geq{}0.0$ & $w_{max}\leq{}w$ and $w\leq{}w_{min}$ & $42.0$ kg & 0.1
 \\
-$TNT$ & $TNT>0.0$ &  & 1 & 10$\%$
+$TNT$ & $TNT>0.0$ & None & $1$ & 0.1
 \\
 $SD$ & $SD>0.0$ & $SD_{min}<SD$ and $SD<SD_{max}$ & $45.0$ m & 0.1
 \\
@@ -607,22 +609,10 @@ $SD$ & $SD>0.0$ & $SD_{min}<SD$ and $SD<SD_{max}$ & $45.0$ m & 0.1
 \end{longtable}
 \begin{longtable}{l l}
 \toprule
-Var & Value
+Var & Physical Constraints
 \\
 \midrule
-$d_{min}$ & 0.1 m
-\\
-$d_{max}$ & 0.1 m
-\\
-$AR_{max}$ & 5
-\\
-$w_{min}$ & 4.5 kg
-\\
-$w_{max}$ & 910 kg
-\\
-$SD_{min}$ & 6 m
-\\
-$SD_{max}$ & 130 m
+$P_{b}$ & $0.0<P_{b}$ and $P_{b}<1.0$
 \\
 \bottomrule
 \caption{Output Data Constraints}
@@ -636,7 +626,7 @@ This section provides the functional requirements, the business tasks that the s
 \begin{itemize}
 \item[R1:]Input the following quantities, which define the glass dimensions, type of glass, tolerable probability of failure and the characteristics of the blast:
 \end{itemize}
-\begin{longtable*}{l l l}
+\begin{longtable}{l l l}
 \toprule
 Symbol & Description & Units
 \\
@@ -645,25 +635,26 @@ $a$ & Plate length (long dimension) & mm
 \\
 $b$ & Plate width (short dimension) & mm
 \\
+$w$ & Charge weight & kg
+\\
+$P_{btol}$ & Tolerable probability of breakage & 
+\\
+$TNT$ & TNT equivalent factor & 
+\\
 $SD_{x}$ & Stand off distance (x-component) & m
 \\
 $SD_{y}$ & Stand off distance (y-component) & m
 \\
 $SD_{z}$ & Stand off distance (z-component) & m
 \\
-$t$ & Nominal thickness t in {2.5, 2.7, 3.0, 4.0, 5.0, 6.0, 8.0, 10.0, 12.0, 16.0, 19.0, 22.0} & mm
+$g$ & Glass type $g$ in \{AN, FT, HS\} & 
 \\
-$w$ & Charge weight & kg
-\\
-$g$ & Glass type, g in {AN, HS, FT} & 
-\\
-$P_{btol}$ & Tolerable probability of breakage & 
-\\
-$TNT$ & TNT equivalent factor & 
+$t$ & Nominal thickness $t$ in \{2.5, 2.7, 3.0, 4.0, 5.0, 6.0, 8.0, 10.0, 12.0, 16.0, 19.0, 22.0\} & mm
 \\
 \bottomrule
-\label{Table:RequInpu}
-\end{longtable*}
+\caption{Required Inputs following R1}
+\label{Table:RequInpufollR1}
+\end{longtable}
 \begin{itemize}
 \item[R2:]The system shall set the known values as follows:
           \begin{enumerate}
@@ -692,7 +683,7 @@ $TNT$ & TNT equivalent factor &
 \end{itemize}
 \subsection{Non-Functional Requirements}
 \label{Sec:Non-Requ}
-Given the small size, and relative simplicity, of this problem, performance is not a priority. Any reasonable implementation will be very quick and use minimal storage. Rather than performance, the priority non-functional Rs are correctness, verifiability, understandability, reusability, maintainability and portability.
+Given the small size, and relative simplicity, of this problem, performance is not a priority. Any reasonable implementation will be very quick and use minimal storage. Rather than performance, the priority non-functional Rs are correctness, verifiability, understandability, reusability, maintainability, and portability.
 \section{Likely Changes}
 \label{Sec:LikeChan}
 \begin{itemize}
@@ -868,6 +859,8 @@ $d_{min}$ & minimum value for one of the dimensions of the glass plate & $5.0$ &
 $AR_{max}$ & maximum aspect ratio & $5.0$ & 
 \\
 $w_{max}$ & maximum permissible input charge weight & $910.0$ & kg
+\\
+$w_{min}$ & minimum permissible input charge weight & $4.5$ & kg
 \\
 $SD_{min}$ & minimum stand off distance permissible for input & $6.0$ & m
 \\

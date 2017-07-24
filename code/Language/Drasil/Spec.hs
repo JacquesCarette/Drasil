@@ -49,35 +49,39 @@ data RefType = Tab -- ^ Table
              | Sect -- ^ Section
              | Def -- ^ Definition (includes theoretical models)
              | Mod -- ^ Module
-             | Req Sentence-- ^ Requirement
-             | Assump Sentence-- ^ Assumption
-             | LC Sentence-- ^ Likely Change
+             | Req (Maybe Sentence)-- ^ Requirement
+             | Assump (Maybe Sentence)-- ^ Assumption
+             | LC (Maybe Sentence)-- ^ Likely Change
              | UC -- ^ Unlikely Change
 
 instance Show RefType where
-  show Tab = "this Table"
-  show Fig = "this Figure"
-  show Sect = "this Section"
-  show Def = "this Definition"
-  show Mod = "this Module"
-  show (Req (S r)) = r
-  show (Assump (S a)) = a
-  show (LC (S lc)) = lc
-  show (Req _) = "this Requirement"
-  show (Assump _) = "this Assumption"
-  show (LC _) = "this Likely Change"
-  show UC = "this Unlikely Change"
+  show Tab = "Table"
+  show Fig = "Figure"
+  show Sect = "Section"
+  show Def = "Definition"
+  show Mod = "Module"
+  -- show (Req (S r)) = r
+  -- show (Assump (S a)) = a
+  -- show (LC (S lc)) = lc
+  show (Req Nothing) = "Requirement"
+  show (Assump Nothing) = "Assumption"
+  show (LC Nothing) = "Likely Change"
+  show UC = "Unlikely Change"
+  show _ = error "Type not recognized"
 
 -- | Helper function for wrapping sentences in parentheses.
 sParen :: Sentence -> Sentence
 sParen x = S "(" :+: x :+: S ")"
+
+sParenNum :: Int -> Sentence
+sParenNum y = sParen (S (show y))
 
 -- | Helper function for wrapping sentences in square brackets.
 sSqBr :: Sentence -> Sentence
 sSqBr x = S "[" :+: x :+: S "]"
 
 sSqBrNum :: Int -> Sentence
-sSqBrNum y = S "[" :+: (S (show y)) :+: S "]"
+sSqBrNum y = sSqBr (S (show y))
 
 sCurlyBr :: Sentence -> Sentence
 sCurlyBr x = Sp CurlyBrOpen :+: x :+: Sp CurlyBrClose

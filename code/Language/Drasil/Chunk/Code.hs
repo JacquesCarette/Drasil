@@ -3,7 +3,7 @@ module Language.Drasil.Chunk.Code (
     CodeIdea(..), CodeEntity(..), CodeName(..), CodeChunk(..), CodeDefinition(..),
     codevar, qtoc, codeEquat, 
     ConstraintMap, constraintMap, physLookup, sfwrLookup, constraintLookup,
-    symbToCodeName
+    symbToCodeName, CodeType(..)
   ) where
 
 import Control.Lens

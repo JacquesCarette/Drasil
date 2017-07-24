@@ -53,7 +53,7 @@ s4_1, s4_1_1, s4_1_2,
 
 s4_1_1_list, s4_1_2_p1, s4_1_2_bullets,
   s4_1_2_p2, s4_1_3_list, s4_2_1_list,
-  s4_2_5_p2, s4_2_5_p3, s5_1_list :: Contents
+  s5_1_list :: Contents
 
 s4_2_2_tmods, s4_2_3_genDefs, s4_2_4_dataDefs, s4_2_5_IMods :: [Contents]
 
@@ -62,9 +62,21 @@ this_si :: [UnitDefn]
 this_si = map UU [metre, degree] ++ map UU [newton, pascal]
 
 ssp_si :: SystemInformation
-ssp_si = SI ssa srs [henryFrankis]
-  this_si sspSymbols (sspSymbols) acronyms sspDataDefs (map qs sspInputs) (map qs sspOutputs)
-  [Parallel (head sspDataDefs) (tail sspDataDefs)] sspConstrained
+ssp_si = SI {
+  _sys = ssa, 
+  _kind = srs, 
+  _authors = [henryFrankis],
+  _units = this_si,
+  _quants = sspSymbols,
+  _concepts = (sspSymbols),
+  _namedIdeas = acronyms,
+  _definitions = sspDataDefs,
+  _inputs = (map qs sspInputs),
+  _outputs = (map qs sspOutputs),
+  _defSequence = [Parallel (head sspDataDefs) (tail sspDataDefs)],
+  _constraints = sspConstrained,
+  _constants = []
+}
 
 mkSRS :: DocDesc
 mkSRS = RefSec (RefProg intro
@@ -297,7 +309,7 @@ displSlope = S "Determine" +:+. (S "displacement" `ofThe` phrase slope)
 -- SECTION 4.2 --
 s4_2 = solChSpecF ssa (s4_1, s6) ddEnding (EmptyS, dataConstraintUncertainty, EmptyS)
   ([s4_2_1_list], s4_2_2_tmods, s4_2_3_genDefs, s4_2_4_dataDefs, 
-  s4_2_5_p2:s4_2_5_p3:s4_2_5_IMods, [s4_2_6Table2, s4_2_6Table3]) []
+  instModIntro1:instModIntro2:s4_2_5_IMods, [s4_2_6Table2, s4_2_6Table3]) []
   where ddEnding = foldlSent [at_start' definition, acroDD 1, S "to", acroDD 8,
           S "are the", phrase force, plural variable, S "that can be solved by",
           S "direct analysis of given" +:+. plural input_, S "The", 
@@ -321,38 +333,13 @@ s4_2_3_genDefs = map sspSymMapT sspGenDefs
 
 -- SECTION 4.2.4 --
 -- Data Definitions is automatically generated in solChSpecF
-s4_2_4_dataDefs = (map sspSymMapD (take 10 sspDataDefs)) ++ resShrDerivation ++
-  [sspSymMapD (sspDataDefs !! 10)] ++ mobShrDerivation ++ [sspSymMapD (sspDataDefs !! 11)] ++
-  stfMtrxDerivation ++ (map sspSymMapD (drop 12 sspDataDefs))
+s4_2_4_dataDefs = (map sspSymMapD (take 13 sspDataDefs)) ++ resShrDerivation ++
+  [sspSymMapD (sspDataDefs !! 13)] ++ mobShrDerivation ++ [sspSymMapD (sspDataDefs !! 14)] ++
+  stfMtrxDerivation ++ (map sspSymMapD (drop 15 sspDataDefs))
   --FIXME: derivations should be with the appropriate dataDef
 
 -- SECTION 4.2.5 --
 -- Instance Models is automatically generated in solChSpecF using the paragraphs below
-
-s4_2_5_p2 = foldlSP [S "The", titleize morPrice,
-  phrase method_, S "is a vertical", phrase slice `sC` S "limit equilibrium",
-  phrase ssa +:+. phrase method_, at_start analysis, S "is performed by",
-  S "breaking the assumed failure", phrase surface, S "into a series of vertical",
-  plural slice, S "of" +:+. phrase mass, S "Static equilibrium",
-  S "analysis using two", phrase force, S "equilibrium, and one moment",
-  phrase equation, S "as in" +:+. acroT 2, S "The", phrase problem,
-  S "is statically indeterminate with only these 3", plural equation, S "and one",
-  S "constitutive", phrase equation, sParen $ S "the Mohr Coulomb shear strength of" +:+ 
-  acroT 3, S "so the", phrase assumption, S "of", acroGD 5, S "is used. Solving for",
-  phrase force, S "equilibrium allows", plural definition, S "of all", plural force,
-  S "in terms of the", plural physicalProperty, S "of", acroDD 1, S "to",
-  acroDD 9 `sC` S "as done in", acroDD 10 `sC` acroDD 11]
-
-s4_2_5_p3 = foldlSP [plural value `ofThe'` (phrase intrslce +:+ phrase normForce),
-  getS intNormForce, S "the", getTandS normToShear `sC`
-  S "and the", titleize fs_rc, (sParen $ getS fs) `sC` S "are unknown.",
-  at_start' equation, S "for the unknowns are written in terms of only the",
-  plural value, S "in", acroDD 1, S "to", acroDD 9 `sC` S "the", plural value,
-  S "of", getS shearRNoIntsl `sC` S "and", getS shearFNoIntsl, S "in", acroDD 10,
-  S "and", acroDD 11 `sC` S "and each",
-  S "other. The relationships between the unknowns are non linear" `sC`
-  S "and therefore explicit", plural equation, S "cannot be derived and an",
-  S "iterative", plural solution, S "method is required"]
 
 s4_2_5_IMods = concat $ weave [map (\x -> [sspSymMapT x]) sspIMods, --FIXME: move to IMods
   [fctSftyDerivation, nrmShrDerivation, intrSlcDerivation,

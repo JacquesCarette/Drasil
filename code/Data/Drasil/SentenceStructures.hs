@@ -5,7 +5,7 @@ module Data.Drasil.SentenceStructures
   , ofGiv, ofGiv'
   , toThe, tableShows, figureLabel
   , isExpctdToHv, underConsidertn, showingCxnBw, refineChain
-  , foldlSP, foldlSP_, foldlSPCol
+  , foldlSP, foldlSP_, foldlSPCol,foldlOptions
   , maybeChanged, maybeExpanded, maybeWOVerb
   , tAndDWAcc, tAndDWSym, tAndDOnly
   , followA
@@ -59,6 +59,11 @@ foldlList []    = EmptyS
 foldlList [a,b] = a +:+ S "and" +:+ b
 foldlList lst   = foldle1 sC (\a b -> a `sC` S "and" +:+ b) lst
 
+-- | creates a list of elements seperated by commas, ending in a "_, or _"
+foldlOptions :: [Sentence] -> Sentence
+foldlOptions []    = EmptyS
+foldlOptions [a,b] = a +:+ S "or" +:+ b
+foldlOptions lst   = foldle1 sC (\a b -> a `sC` S "or" +:+ b) lst
 
 {--** Combinators **--}
 sAnd, andIts :: Sentence -> Sentence -> Sentence

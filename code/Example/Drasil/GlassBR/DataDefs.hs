@@ -44,7 +44,7 @@ hFromt_eq :: Relation
 hFromt_eq = (Case (zipWith hFromt_helper actualThicknesses nominalThicknesses))
 
 hFromt_helper :: Double -> Double -> (Expr, Relation)
-hFromt_helper result condition = ((Dbl result)/1000, (C nom_thick) := Dbl condition)
+hFromt_helper result condition = ((Dbl result), (C nom_thick) := Dbl condition)
 
 hFromt :: QDefinition
 hFromt = mkDataDef act_thick hFromt_eq

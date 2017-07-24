@@ -63,7 +63,7 @@ dedescr =
   foldlSent [(getS demand `sOr` phrase demandq) `sC`
   S "is the", (demandq ^. defn), 
   S "obtained from Figure 2 by interpolation using", --use MakeRef? Issue #216
-  (phrase standOffDist), sParen (getS standOffDist), S "and", 
+  (phrase standOffDist), sParen (getS standOffDist) `sAnd`
   (getS eqTNTWeight), S "as" +:+. plural parameter, 
   (getS eqTNTWeight), S "is defined as" +:+.
   E (equat wtntWithEqn) +:+. ((getS char_weight) `isThe`

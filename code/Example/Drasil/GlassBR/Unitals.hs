@@ -9,7 +9,7 @@ import Data.Drasil.Utils(symbolMapFun, mkDataDef, getS)
 import Control.Lens((^.))
 import Prelude hiding (log, id, sqrt)
 import Data.Drasil.SentenceStructures (foldlSent, 
-  displayConstrntsAsSet, foldlsC)
+  displayConstrntsAsSet, foldlsC, foldlOptions)
 
 --FIXME: Many of the current terms can be separated into terms and defns?
 
@@ -296,10 +296,9 @@ glBreakage    = dcc "glBreakage"  (nounPhraseSP "glass breakage")
     "or insulating glass.")
 glTyFac       = cc' glassTypeFac
   (foldlSent [S "A multiplying factor for adjusting the", (getAcc lResistance), 
-  S "of different glass type, that is,", (getAcc annealedGlass) `sC` 
-  (getAcc heatSGlass) `sC` S "or", (getAcc fullyTGlass), S "in monolithic glass"
-  `sC` (getAcc lGlass), sParen (titleize lGlass) `sC` S "or",
-  (getAcc iGlass), sParen (titleize iGlass), S "constructions"])
+  S "of different glass type, that is,", foldlOptions glassTypeAbbrs
+  `sC` S "in monolithic glass" `sC` (getAcc lGlass), sParen (titleize lGlass) `sC`
+   S "or", (getAcc iGlass), sParen (titleize iGlass), S "constructions"])
 hStrengthGl   = cc heatSGlass
   ("A flat, monolithic, glass lite of uniform thickness that has been " ++
     "subjected to a special heat treatment process where the residual " ++

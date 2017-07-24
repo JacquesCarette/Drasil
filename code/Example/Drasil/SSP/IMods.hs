@@ -15,6 +15,7 @@ import Control.Lens ((^.))
 import Data.Drasil.Concepts.Math (equation, surface)
 import Data.Drasil.Concepts.Physics (displacement, force)
 import Data.Drasil.Concepts.PhysicalProperties (mass)
+import Drasil.SSP.GenDefs (momExpr)
 
 -----------------------
 --  Instance Models  --
@@ -234,16 +235,8 @@ nrmShrDerivation = [foldlSP [S "Taking the last static", phrase equation,
   acroGD 5, S "results in", eqN 13],
   
   EqnBlock $ Int 0 :=
-  Neg (inxi intNormForce) :* (inxi sliceHght :- inxi baseWthX :/ Int 2 :* 
-  tan (inxi baseAngle)) :+ inxiM1 intNormForce :* (inxiM1 sliceHght :- 
-  inxi baseWthX :/ Int 2 :* tan (inxi baseAngle)) :- inxi watrForce :*
-  (inxi sliceHght :- inxi baseWthX :/ Int 2 :* tan (inxi baseAngle)) :+ 
-  inxiM1 watrForce :* (inxiM1 sliceHght :- inxi baseWthX :/ Int 2 :* 
-  tan (inxi baseAngle)) :- C normToShear * (inxi baseWthX :/ Int 2) :* 
-  (inxi intNormForce * inxi scalFunc + inxiM1 intNormForce * inxiM1 scalFunc) :+
-  C earthqkLoadFctr :* inxi slcWght :* inxi midpntHght :/ Int 2 :-
-  inxi surfHydroForce :* sin (inxi surfAngle) :* inxi midpntHght :-
-  inxi surfLoad :* sin (inxi impLoadAngle) :* inxi midpntHght,
+  momExpr (\ x y -> x :- (C normToShear * (inxi baseWthX :/ Int 2) :* 
+  (inxi intNormForce * inxi scalFunc + inxiM1 intNormForce * inxiM1 scalFunc)) :+ y),
   
   foldlSP [S "The", phrase equation, S "in terms of", getS normToShear, S "leads to", eqN 14],
   
@@ -348,7 +341,7 @@ rigDisDerivation = [foldlSP [S "Using the net force-displacement equilibrium",
   `sC` S "and", eqN 23, S "gives the broken down", phrase equation,
   S "in the y direction"],
 
-  EqnBlock fDisEq_rel, --FIXME: Original equations need indexing
+  EqnBlock fDisEq_rel,
   
   foldlSP [S "Using the known input assumption of", acroA 2 `sC` S "the force",
   S "variable", plural definition, S "of", acroDD 1, S "to", acroDD 8, S "on",

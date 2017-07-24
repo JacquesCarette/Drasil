@@ -129,20 +129,24 @@ nmShrR_desc = foldlSent [S "The", phrase assumption, S "for the Morgenstern Pric
   S "or a constant"]
 
 --
+momExpr :: (Expr -> Expr -> Expr) -> Expr
+momExpr _e_ = _e_ (Neg (inxi intNormForce) :* (inxi sliceHght :- inxi baseWthX :/ Int 2 :* 
+  tan (inxi baseAngle)) :+ inxiM1 intNormForce :* (inxiM1 sliceHght :- 
+  inxi baseWthX :/ Int 2 :* tan (inxi baseAngle)) :- inxi watrForce :*
+  (inxi sliceHght :- inxi baseWthX :/ Int 2 :* tan (inxi baseAngle)) :+ 
+  inxiM1 watrForce :* (inxiM1 sliceHght :- inxi baseWthX :/ Int 2 :* 
+  tan (inxi baseAngle)))
+  
+  (C earthqkLoadFctr :* inxi slcWght :* inxi midpntHght :/ Int 2 :-
+  inxi surfHydroForce :* sin (inxi surfAngle) :* inxi midpntHght :-
+  inxi surfLoad :* sin (inxi impLoadAngle) :* inxi midpntHght)
+
 momentEql :: RelationConcept
 momentEql = makeRC "momentEql" (nounPhraseSP "moment equilibrium") momEql_desc momEql_rel
 
 momEql_rel :: Relation
-momEql_rel = (Int 0) := Neg (C intNormForce) :* (C sliceHght :- C baseWthX :/ Int 2 :* 
-                        tan (C baseAngle)) :+ C intNormForce :* (C sliceHght :- 
-                        C baseWthX :/ Int 2 :* tan (C baseAngle)) :- C watrForce :*
-                        (C sliceHght :- C baseWthX :/ Int 2 :* tan (C baseAngle)) :+ 
-                        C watrForce :* (C sliceHght :- C baseWthX :/ Int 2 :* 
-                        tan (C baseAngle)) :- C baseWthX :/ Int 2 :* 
-                        (C intShrForce :+ C intShrForce) :+ C earthqkLoadFctr :* 
-                        C slcWght :* C midpntHght :/ Int 2 :- C surfHydroForce :*
-                        sin (C surfAngle) :* C midpntHght :- C surfLoad :* 
-                        sin (C impLoadAngle) :* C midpntHght -- FIXME: add the proper index for zi, bi, Ei, Hi and Xi
+momEql_rel = (Int 0) := momExpr
+  (\ x y -> x :- (inxi baseWthX :/ Int 2 :* (inxi intShrForce :+ inxiM1 intShrForce)) :+ y)
 
 momEql_desc :: Sentence
 momEql_desc = foldlSent [S "For a", phrase slice, S "of", phrase mass,

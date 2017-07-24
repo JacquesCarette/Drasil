@@ -22,7 +22,7 @@ swhsGenDefs = [nwtnCooling, rocTempSimp]
 
 --
 nwtnCooling :: RelationConcept
-nwtnCooling = makeRC "nwtnCooling" (nounPhraseSP "NewtoIsInn's law of cooling") 
+nwtnCooling = makeRC "nwtnCooling" (nounPhraseSP "Newton's law of cooling") 
   nwtnCooling_desc nwtnCooling_rel
 
 nwtnCooling_rel :: Relation

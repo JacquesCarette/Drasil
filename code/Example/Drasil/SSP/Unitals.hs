@@ -52,9 +52,9 @@ sspOutputs = [fs, coords, dx_i, dy_i]
 gtZeroConstr :: [Constraint] --FIXME: move this somewhere in Data?
 gtZeroConstr = [physc $ (:<) (Int 0)]
 
-monotonicIn :: [Constraint]  --FIXME: Move this? Re word?
+monotonicIn :: [Constraint]  --FIXME: Move this?
 monotonicIn = [physc $ \c ->
-  State [Forall c, Forall $ [V "x1", V "x2"] `IsIn` Real] (V "x1" :< V "x2" :=> V "y1" :< V "y2")]
+  State [Forall c, Forall $ [C index] `IsIn` Natural] (inx' "x" 0 :< inx' "x" 1 :=> inx' "y" 0 :< inx' "y" 1)]
 
 defultUncrt :: Double
 defultUncrt = 0.1
@@ -402,3 +402,9 @@ inx e n
   | n < 0     = Index (C e) (C index - Int (-n))
   | n == 0    = Index (C e) (C index)
   | otherwise = Index (C e) (C index + Int n)
+
+inx' :: String -> Integer -> Expr
+inx' e n  --FIXME: only used for monotonic, remove when we can treat x and y seperately
+  | n < 0     = Index (V e) (C index - Int (-n))
+  | n == 0    = Index (V e) (C index)
+  | otherwise = Index (V e) (C index + Int n)

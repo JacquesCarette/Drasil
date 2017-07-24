@@ -15,7 +15,7 @@ import Control.Lens ((^.))
 import Data.Drasil.Concepts.Math (equation, surface)
 import Data.Drasil.Concepts.Physics (displacement, force)
 import Data.Drasil.Concepts.PhysicalProperties (mass)
-import Drasil.SSP.GenDefs (momExpr)
+import Drasil.SSP.GenDefs (eqlExpr, momExpr)
 
 -----------------------
 --  Instance Models  --
@@ -235,23 +235,14 @@ nrmShrDerivation = [foldlSP [S "Taking the last static", phrase equation,
   acroGD 5, S "results in", eqN 13],
   
   EqnBlock $ Int 0 :=
-  momExpr (\ x y -> x :- (C normToShear * (inxi baseWthX :/ Int 2) :* 
+  momExpr (\ x y -> x :- (C normToShear * (inxi baseWthX / Int 2) * 
   (inxi intNormForce * inxi scalFunc + inxiM1 intNormForce * inxiM1 scalFunc)) :+ y),
   
   foldlSP [S "The", phrase equation, S "in terms of", getS normToShear, S "leads to", eqN 14],
   
   EqnBlock $
-  C normToShear := 
-  Neg (inxi intNormForce) :* (inxi sliceHght :- inxi baseWthX :/ Int 2 :* 
-  tan (inxi baseAngle)) :+ inxiM1 intNormForce :* (inxiM1 sliceHght :- 
-  inxi baseWthX :/ Int 2 :* tan (inxi baseAngle)) :- inxi watrForce :*
-  (inxi sliceHght :- inxi baseWthX :/ Int 2 :* tan (inxi baseAngle)) :+ 
-  inxiM1 watrForce :* (inxiM1 sliceHght :- inxi baseWthX :/ Int 2 :* 
-  tan (inxi baseAngle)) :+
-  C earthqkLoadFctr :* inxi slcWght :* inxi midpntHght :/ Int 2 :-
-  inxi surfHydroForce :* sin (inxi surfAngle) :* inxi midpntHght :-
-  inxi surfLoad :* sin (inxi impLoadAngle) :* inxi midpntHght
-  / ((inxi baseWthX :/ Int 2) :* 
+  C normToShear := momExpr (+)
+  / ((inxi baseWthX / Int 2) * 
   (inxi intNormForce * inxi scalFunc + inxiM1 intNormForce * inxiM1 scalFunc)), 
   
   foldlSP [S "Taking a summation of each slice, and", boundaryCon `sC`
@@ -277,29 +268,19 @@ intrSlcDerivation = [foldlSP [S "Taking the", S "normal force equilibrium" `sOf`
   S "can be rewritten as", eqN 16],
   
   EqnBlock $
-  inxi nrmFSubWat := ((inxi slcWght :- C normToShear :* inxiM1 scalFunc :* inxiM1 intNormForce :+ 
-  C normToShear :* inxi scalFunc :* inxi intNormForce :+ 
-  inxi baseHydroForce :* cos (inxi surfAngle) :+ inxi surfLoad :* 
-  cos (inxi impLoadAngle)) :* cos (inxi baseAngle)
-  :+ (Neg (C earthqkLoadFctr) :* inxi slcWght :- 
-  inxi intNormForce :+ inxiM1 intNormForce :- inxi watrForce :+ 
-  inxiM1 watrForce :+ inxi surfHydroForce :* sin (inxi surfAngle) :+ 
-  inxi surfLoad :* sin (inxi impLoadAngle)) :* sin (inxi baseAngle)) - (inxi baseHydroForce),
+  inxi nrmFSubWat := eqlExpr cos sin (\x y -> x - C normToShear * inxiM1 scalFunc * inxiM1 intNormForce + 
+  C normToShear * inxi scalFunc * inxi intNormForce + y)
+  - (inxi baseHydroForce),
   
   foldlSP [S "Taking the", S "base shear force equilibrium" `sOf` acroGD 2, S "with the", phrase definition,
   S "of", phrase mobShrI, S "from", acroGD 4 `sAnd` S "the assumption of", acroGD 5 `sC`
   S "the equilibrium", phrase equation, S "can be rewritten as", eqN 17], --NOTE: "Taking this with that and the assumption of _ to get equation #" pattern
   
   EqnBlock $
-  ((inxi totNrmForce) * tan (C fricAngle) + (inxi cohesion) * (inxi baseWthX) * sec (inxi baseAngle)) / (C fs) := --FIXME: pull the left side of this from GD4
-  (inxi slcWght :- C normToShear :* inxiM1 scalFunc :* inxiM1 intNormForce :+ 
-  C normToShear :* inxi scalFunc :* inxi intNormForce :+ 
-  inxi baseHydroForce :* cos (inxi surfAngle) :+ inxi surfLoad :* 
-  cos (inxi impLoadAngle)) :* sin (inxi baseAngle)
-  :+ (Neg (C earthqkLoadFctr) :* inxi slcWght :- 
-  inxi intNormForce :+ inxiM1 intNormForce :- inxi watrForce :+ 
-  inxiM1 watrForce :+ inxi surfHydroForce :* sin (inxi surfAngle) :+ 
-  inxi surfLoad :* sin (inxi impLoadAngle)) :* cos (inxi baseAngle),
+  ((inxi totNrmForce) * tan (C fricAngle) + (inxi cohesion) * (inxi baseWthX) *
+  sec (inxi baseAngle)) / (C fs) := --FIXME: pull the left side of this from GD4
+  eqlExpr sin cos (\x y -> x - C normToShear * inxiM1 scalFunc * inxiM1 intNormForce + 
+  C normToShear * inxi scalFunc * inxi intNormForce + y),
   
   foldlSP [S "Substituting the", phrase equation, S "for", getS nrmFSubWat,
   S "from", eqN 16, S "into", eqN 17, S "and rearranging results in", eqN 18],

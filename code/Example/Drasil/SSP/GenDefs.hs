@@ -15,13 +15,13 @@ import Data.Drasil.Concepts.Math
 import Data.Drasil.Utils
 import qualified Drasil.SRS as SRS
 
-eqlExpr :: (Expr -> Expr) -> (Expr -> Expr) -> Expr
-eqlExpr e1_ e2_ = ((inxi slcWght) - (inxiM1 intShrForce) + (inxi intShrForce) + 
+eqlExpr :: (Expr -> Expr) -> (Expr -> Expr) -> (Expr -> Expr -> Expr) -> Expr
+eqlExpr f1_ f2_ _e_ = ((inxi slcWght) `_e_`
   (inxi surfHydroForce) * (cos (inxi surfAngle)) +
-  (inxi surfLoad) * (cos (inxi impLoadAngle))) * (e1_ (inxi baseAngle)) +
+  (inxi surfLoad) * (cos (inxi impLoadAngle))) * (f1_ (inxi baseAngle)) +
   (Neg (C earthqkLoadFctr) * (inxi slcWght) - (inxi intNormForce) + (inxiM1 intNormForce) -
   (inxi watrForce) + (inxiM1 watrForce) + (inxi surfHydroForce) * sin (inxi surfAngle) + 
-  (inxi surfLoad) * (e2_ (inxi impLoadAngle))) * (e2_ (inxi baseAngle))
+  (inxi surfLoad) * (sin (inxi impLoadAngle))) * (f2_ (inxi baseAngle))
 
 ---------------------------
 --  General Definitions  --
@@ -36,7 +36,7 @@ normForcEq :: RelationConcept
 normForcEq = makeRC "normForcEq" (nounPhraseSP "normal force equilibrium") nmFEq_desc nmFEq_rel
 
 nmFEq_rel :: Relation
-nmFEq_rel = inxi totNrmForce := eqlExpr cos sin
+nmFEq_rel = inxi totNrmForce := eqlExpr cos sin (\x y -> x - inxiM1 intShrForce + inxi intShrForce + y)
 
 nmFEq_desc :: Sentence
 nmFEq_desc = foldlSent [S "For a", phrase slice, S "of", phrase mass,
@@ -58,7 +58,7 @@ bsShrFEq :: RelationConcept
 bsShrFEq = makeRC "bsShrFEq" (nounPhraseSP "base shear force equilibrium") bShFEq_desc bShFEq_rel
 
 bShFEq_rel :: Relation
-bShFEq_rel = inxi mobShrI := eqlExpr sin cos
+bShFEq_rel = inxi mobShrI := eqlExpr sin cos (\x y -> x - inxiM1 intShrForce + inxi intShrForce + y)
 
 bShFEq_desc :: Sentence
 bShFEq_desc = foldlSent [S "For a", phrase slice, S "of", phrase mass,
@@ -76,11 +76,14 @@ bShFEq_desc = foldlSent [S "For a", phrase slice, S "of", phrase mass,
   acroDD 9]
 
 --
+shrResEqn :: Expr
+shrResEqn = inxi nrmFSubWat * tan (C fricAngle) + C cohesion * inxi baseWthX * sec (inxi baseAngle)
+
 resShr :: RelationConcept
 resShr = makeRC "resShr" (nounPhraseSP "resistive shear force") resShr_desc resShr_rel
 
 resShr_rel :: Relation
-resShr_rel = C shrResI := C nrmFSubWat :* tan (C fricAngle) :+ C cohesion :* C baseWthX :* sec (C baseAngle)
+resShr_rel = inxi shrResI := shrResEqn
 
 resShr_desc :: Sentence
 resShr_desc = foldlSent [S "The Mohr-Coulomb resistive shear strength of a",
@@ -99,8 +102,7 @@ mobShr :: RelationConcept
 mobShr = makeRC "mobShr" (nounPhraseSP "mobile shear force") mobShr_desc mobShr_rel
 
 mobShr_rel :: Relation
-mobShr_rel = C mobShrI := C shrResI :/ C fs := 
-  (C nrmFSubWat :* tan (C fricAngle) :+ C cohesion :* C baseWthX :* sec (C baseAngle)) :/ C fs
+mobShr_rel = inxi mobShrI := inxi shrResI / C fs := shrResEqn / C fs
 
 mobShr_desc :: Sentence
 mobShr_desc = foldlSent [
@@ -130,13 +132,12 @@ nmShrR_desc = foldlSent [S "The", phrase assumption, S "for the Morgenstern Pric
 
 --
 momExpr :: (Expr -> Expr -> Expr) -> Expr
-momExpr _e_ = _e_ (Neg (inxi intNormForce) :* (inxi sliceHght :- inxi baseWthX :/ Int 2 :* 
+momExpr _e_ = (Neg (inxi intNormForce) :* (inxi sliceHght :- inxi baseWthX :/ Int 2 :* 
   tan (inxi baseAngle)) :+ inxiM1 intNormForce :* (inxiM1 sliceHght :- 
   inxi baseWthX :/ Int 2 :* tan (inxi baseAngle)) :- inxi watrForce :*
   (inxi sliceHght :- inxi baseWthX :/ Int 2 :* tan (inxi baseAngle)) :+ 
   inxiM1 watrForce :* (inxiM1 sliceHght :- inxi baseWthX :/ Int 2 :* 
-  tan (inxi baseAngle)))
-  
+  tan (inxi baseAngle))) `_e_`
   (C earthqkLoadFctr :* inxi slcWght :* inxi midpntHght :/ Int 2 :-
   inxi surfHydroForce :* sin (inxi surfAngle) :* inxi midpntHght :-
   inxi surfLoad :* sin (inxi impLoadAngle) :* inxi midpntHght)
@@ -165,12 +166,12 @@ netForce :: RelationConcept
 netForce = makeRC "netForce" (nounPhraseSP "net force") fNet_desc fNet_rel
 
 fNet_rel :: Relation
-fNet_rel = C genForce := (Neg $ C watrForceDif) - (C earthqkLoadFctr)*(C slcWght)
-  - (C baseHydroForce) * sin (C baseAngle) + (C surfHydroForce) * sin (C surfAngle)
-  + (C surfLoad) * sin (C impLoadAngle)
+fNet_rel = C genForce := (Neg $ inxi watrForceDif) - (C earthqkLoadFctr)*(inxi slcWght)
+  - (inxi baseHydroForce) * sin (inxi baseAngle) + (inxi surfHydroForce) * sin (inxi surfAngle)
+  + (inxi surfLoad) * sin (inxi impLoadAngle)
 {-
-C genForce := (Neg $ C slcWght) + (C baseHydroForce) * cos (C baseAngle) - (C surfHydroForce) * cos (C surfAngle)
-  - (C surfLoad) * cos (C impLoadAngle)
+C genForce := (Neg $ inxi slcWght) + (inxi baseHydroForce) * cos (inxi baseAngle) - (inxi surfHydroForce) * cos (inxi surfAngle)
+  - (inxi surfLoad) * cos (inxi impLoadAngle)
 -}
 --FIXME: requires two lines of equal signs
 
@@ -200,7 +201,7 @@ hookesLaw2d :: RelationConcept
 hookesLaw2d = makeRC "hookesLaw2d" (nounPhraseSP "Hooke's law 2D") hooke2d_desc hooke2d_rel
 
 hooke2d_rel :: Relation
-hooke2d_rel = vec2D (C genPressure) (C genPressure) := dgnl2x2 (C shrStiffIntsl) (C nrmStiffBase) * vec2D (C dx_i) (C dy_i)
+hooke2d_rel = vec2D (inxi genPressure) (inxi genPressure) := dgnl2x2 (inxi shrStiffIntsl) (inxi nrmStiffBase) * vec2D (inxi dx_i) (inxi dy_i)
 
 hooke2d_desc :: Sentence
 hooke2d_desc = foldlSent [S "A 2D component implementation of Hooke's law as seen in" +:+.
@@ -227,11 +228,11 @@ displVect :: RelationConcept
 displVect = makeRC "displVect" (nounPhraseSP "displacement vectors") disVec_desc disVec_rel
 
 disVec_rel :: Relation
-disVec_rel = C rotatedDispl := vec2D (C shrDispl) (C nrmDispl) :=
-  m2x2 (cos(C baseAngle)) (sin(C baseAngle)) (Neg $ sin(C baseAngle)) (cos(C baseAngle)) *
-  (C genDisplace) :=
-  m2x2 (cos(C baseAngle)) (sin(C baseAngle)) (Neg $ sin(C baseAngle)) (cos(C baseAngle)) *
-  vec2D (C dx_i) (C dy_i)
+disVec_rel = inxi rotatedDispl := vec2D (inxi shrDispl) (inxi nrmDispl) :=
+  m2x2 (cos(inxi baseAngle)) (sin(inxi baseAngle)) (Neg $ sin(inxi baseAngle)) (cos(inxi baseAngle)) *
+  (inxi genDisplace) :=
+  m2x2 (cos(inxi baseAngle)) (sin(inxi baseAngle)) (Neg $ sin(inxi baseAngle)) (cos(inxi baseAngle)) *
+  vec2D (inxi dx_i) (inxi dy_i)
 
 disVec_desc :: Sentence
 disVec_desc = foldlSent [at_start' vector, S "describing the", phrase displacement,

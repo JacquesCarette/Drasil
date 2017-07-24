@@ -323,10 +323,10 @@ porePressure = uc' "mu" (cn "pore pressure") ("from water within the soil")
   (Greek Mu_L) pascal
 
 rotatedDispl = uc' "varepsilon_i" (cn "displacement") ("in rotated coordinate system")
-  (sub (Greek Epsilon_V) lI) metre
+  (Greek Epsilon_V) metre
   
 shrStress    = uc' "tau_i" (cn "resistive shear stress") ("acting on the base of a slice")
-  (sub (Greek Tau_L) lI) pascal
+  (Greek Tau_L) pascal
   
 mobStress    = uc' "s_i" (cn "mobilized shear stress") ("acting on the base of a slice")
   (lS) pascal

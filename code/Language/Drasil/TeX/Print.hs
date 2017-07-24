@@ -111,7 +111,7 @@ sFormat Prime  s = symbol s ++ "'"
 -----------------------------------------------------------------
 -- (Since this is all implicitly in Math, leave it as String for now)
 p_expr :: Expr -> String
-p_expr (Var v)    = v
+p_expr (Var v)    = symbol (Atomic v) --Ensures variables are rendered the same as other symbols
 p_expr (Dbl d)    = showFFloat Nothing d ""
 p_expr (Int i)    = show i
 p_expr (Bln b)    = show b
@@ -147,6 +147,19 @@ p_expr (IsIn  a b) = (concat $ intersperse "," $ map p_expr a) ++ "\\in{}"  ++ s
 p_expr (NotIn a b) = (concat $ intersperse "," $ map p_expr a) ++ "\\notin{}" ++ show b
 p_expr (State a b) = (concat $ intersperse ", " $ map p_quan a) ++ ": " ++ p_expr b
 
+-- | For printing indexes. Ensures only simple Expr's get rendered as an index
+p_indx :: Expr -> String
+p_indx e@(Var _)    = p_expr e
+p_indx e@(Dbl _)    = p_expr e
+p_indx e@(Int _)    = p_expr e
+p_indx e@(Sym _)    = p_expr e
+p_indx e@(Add _ _)  = p_expr e
+p_indx e@(Sub _ _)  = p_expr e
+p_indx e@(Mul _ _)  = p_expr e
+p_indx   (Frac a b) = divide a b --no block division 
+p_indx e@(Div _ _)  = p_expr e
+p_indx _            = error "Tried to Index a non-simple expr in LaTeX, currently not supported."
+
 -- | For printing Matrix
 p_matrix :: [[Expr]] -> String
 p_matrix [] = ""
@@ -165,13 +178,13 @@ p_quan (Exists e) = "\\exists{}" ++ p_expr e
 
 -- | Helper for properly rendering multiplication of expressions
 mul :: Expr -> Expr -> String
-mul x y@(Dbl _)   = mulParen x ++ "*" ++ p_expr y
-mul x y@(Int _)   = mulParen x ++ "*" ++ p_expr y
-mul x@(Sym (Concat _)) y = p_expr x ++ "*" ++ mulParen y
-mul x y@(Sym (Concat _)) = mulParen x ++ "*" ++ p_expr y
-mul x@(Sym (Atomic s)) y = if length s > 1 then p_expr x ++ "*" ++ mulParen y else
+mul x y@(Dbl _)   = mulParen x ++ "\\cdot{}" ++ p_expr y
+mul x y@(Int _)   = mulParen x ++ "\\cdot{}" ++ p_expr y
+mul x@(Sym (Concat _)) y = p_expr x ++ "\\cdot{}" ++ mulParen y
+mul x y@(Sym (Concat _)) = mulParen x ++ "\\cdot{}" ++ p_expr y
+mul x@(Sym (Atomic s)) y = if length s > 1 then p_expr x ++ "\\cdot{}" ++ mulParen y else
                             p_expr x ++ mulParen y
-mul x y@(Sym (Atomic s)) = if length s > 1 then mulParen x ++ "*" ++ p_expr y else
+mul x y@(Sym (Atomic s)) = if length s > 1 then mulParen x ++ "\\cdot{}" ++ p_expr y else
                             mulParen x ++ p_expr y
 mul x y           = mulParen x ++ mulParen y
 

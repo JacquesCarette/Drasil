@@ -173,10 +173,10 @@ p_indx e@(Var _)    = p_expr e
 p_indx e@(Dbl _)    = p_expr e
 p_indx e@(Int _)    = p_expr e
 p_indx e@(Sym _)    = p_expr e
-p_indx (Add a b)    = p_expr a ++ "&plus;"  ++ p_expr b --removed spaces
-p_indx (Sub a b)    = p_expr a ++ "&minus;" ++ p_expr b
+p_indx   (Add a b)  = p_expr a ++ "&plus;"  ++ p_expr b --removed spaces
+p_indx   (Sub a b)  = p_expr a ++ "&minus;" ++ p_expr b
 p_indx e@(Mul _ _)  = p_expr e
-p_indx (Frac a b)   = divide a b --no block divition 
+p_indx   (Frac a b) = divide a b --no block division 
 p_indx e@(Div _ _)  = p_expr e
 p_indx _            = error "Tried to Index a non-simple expr in HTML, currently not supported."
 

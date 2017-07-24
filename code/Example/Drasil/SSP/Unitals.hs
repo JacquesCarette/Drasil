@@ -20,10 +20,9 @@ SM.mobShear, SM.shearRes <- currently not used
 SM.poissnsR, SM.elastMod <- Used to make UncertQ
 -}
 normStress  = SM.nrmStrss
-genForce = uc QP.force cF newton
+genForce = uc QP.force cF newton --must import from Concept.Physics since force is a vector otherwise
 genPressure = QP.pressure
 genStffness = SM.stffness
-{-must import from Concept.Physics since Quantities.Physics has Force as a vector-}
 
 -------------
 -- HELPERS --
@@ -54,7 +53,8 @@ gtZeroConstr = [physc $ (:<) (Int 0)]
 
 monotonicIn :: [Constraint]  --FIXME: Move this?
 monotonicIn = [physc $ \c ->
-  State [Forall c, Forall $ [C index] `IsIn` Natural] (inx' "x" 0 :< inx' "x" 1 :=> inx' "y" 0 :< inx' "y" 1)]
+  State [Forall c, Forall $ [C index] `IsIn` Natural]
+  (inx' "x" 0 :< inx' "x" 1 :=> inx' "y" 0 :< inx' "y" 1)]
 
 defultUncrt :: Double
 defultUncrt = 0.1

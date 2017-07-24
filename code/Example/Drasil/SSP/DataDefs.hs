@@ -12,6 +12,7 @@ import Data.Drasil.Concepts.Documentation
 import Data.Drasil.SentenceStructures
 import Control.Lens ((^.))
 import Data.Drasil.Concepts.Math (equation, angle)
+import Drasil.SSP.GenDefs (eqlExpr)
 
 ------------------------
 --  Data Definitions  --
@@ -211,12 +212,7 @@ resShrDerivation = [foldlSP [S "The", phrase shrResI, S "of a slice is",
   S "using the", getTandS nrmFSubWat, S "of", acroT 4, S "shown in", eqN 1],
   
   EqnBlock $
-  (inxi nrmFSubWat) := (((inxi slcWght) - (inxiM1 intShrForce) + (inxi intShrForce) + 
-  (inxi surfHydroForce) * (cos (inxi surfAngle)) +
-  (inxi surfLoad) * (cos (inxi impLoadAngle))) * (cos (inxi baseAngle)) +
-  (Neg (C earthqkLoadFctr) * (inxi slcWght) - (inxi intNormForce) + (inxiM1 intNormForce) -
-  (inxi watrForce) + (inxiM1 watrForce) + (inxi surfHydroForce) * sin (inxi surfAngle) + 
-  (inxi surfLoad) * (sin (inxi impLoadAngle))) * (sin (inxi baseAngle)) - (inxi baseHydroForce)),
+  (inxi nrmFSubWat) := eqlExpr cos sin - inxi baseHydroForce,
   
   foldlSP [S "values" `ofThe'` S "interslice forces", getS intNormForce `sAnd`
   getS intShrForce, S "in the", phrase equation, S "are unknown, while the other",

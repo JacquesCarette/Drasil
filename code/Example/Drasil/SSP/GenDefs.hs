@@ -15,6 +15,14 @@ import Data.Drasil.Concepts.Math
 import Data.Drasil.Utils
 import qualified Drasil.SRS as SRS
 
+eqlExpr :: (Expr -> Expr) -> (Expr -> Expr) -> Expr
+eqlExpr e1_ e2_ = ((inxi slcWght) - (inxiM1 intShrForce) + (inxi intShrForce) + 
+  (inxi surfHydroForce) * (cos (inxi surfAngle)) +
+  (inxi surfLoad) * (cos (inxi impLoadAngle))) * (e1_ (inxi baseAngle)) +
+  (Neg (C earthqkLoadFctr) * (inxi slcWght) - (inxi intNormForce) + (inxiM1 intNormForce) -
+  (inxi watrForce) + (inxiM1 watrForce) + (inxi surfHydroForce) * sin (inxi surfAngle) + 
+  (inxi surfLoad) * (e2_ (inxi impLoadAngle))) * (e2_ (inxi baseAngle))
+
 ---------------------------
 --  General Definitions  --
 ---------------------------
@@ -28,13 +36,7 @@ normForcEq :: RelationConcept
 normForcEq = makeRC "normForcEq" (nounPhraseSP "normal force equilibrium") nmFEq_desc nmFEq_rel
 
 nmFEq_rel :: Relation
-nmFEq_rel = C totNrmForce := ((C slcWght :- C intShrForce :+ C intShrForce :+ 
-                          C baseHydroForce :* cos (C surfAngle) :+ C surfLoad :* 
-                          cos (C impLoadAngle)) :* cos (C baseAngle)
-                          :+ (Neg (C earthqkLoadFctr) :* C slcWght :- 
-                          C intNormForce :+ C intNormForce :- C watrForce :+ 
-                          C watrForce :+ C surfHydroForce :* sin (C surfAngle) :+ 
-                          C surfLoad :* cos (C impLoadAngle)) :* sin (C baseAngle)) -- FIXME: add the proper index for intShrForce and intNormForce
+nmFEq_rel = inxi totNrmForce := eqlExpr cos sin
 
 nmFEq_desc :: Sentence
 nmFEq_desc = foldlSent [S "For a", phrase slice, S "of", phrase mass,
@@ -56,13 +58,7 @@ bsShrFEq :: RelationConcept
 bsShrFEq = makeRC "bsShrFEq" (nounPhraseSP "base shear force equilibrium") bShFEq_desc bShFEq_rel
 
 bShFEq_rel :: Relation
-bShFEq_rel = C mobShrI := ((C slcWght :- C intShrForce :+ C intShrForce :+ 
-                          C baseHydroForce :* cos (C surfAngle) :+ C surfLoad :* 
-                          cos (C impLoadAngle)) :* sin (C baseAngle)
-                          :- (Neg (C earthqkLoadFctr) :* C slcWght :- 
-                          C intNormForce :+ C intNormForce :- C watrForce :+ 
-                          C watrForce :+ C surfHydroForce :* sin (C surfAngle) :+ 
-                          C surfLoad :* cos (C impLoadAngle)) :* cos (C baseAngle)) -- FIXME: add the proper index for intShrForce and intNormForce
+bShFEq_rel = inxi mobShrI := eqlExpr sin cos
 
 bShFEq_desc :: Sentence
 bShFEq_desc = foldlSent [S "For a", phrase slice, S "of", phrase mass,

@@ -135,8 +135,7 @@ p_expr (Case ps)  = "\\begin{cases}\n" ++ cases ps ++ "\n\\end{cases}"
 p_expr (Op f es)  = p_op f es
 p_expr (Grouping x) = paren (p_expr x)
 p_expr (Mtx a)    = "\\begin{bmatrix}\n" ++ p_matrix a ++ "\n\\end{bmatrix}"
-p_expr (Index a@(Sym (Corners [] [] [] [_] _)) i) = p_expr a ++"{}_"++ brace ("," ++ p_expr i)
-p_expr (Index a i)= brace (p_expr a) ++"_"++ brace (p_expr i)
+p_expr (Index a i) = p_indx a i
 --Logic
 p_expr (Not x)    = "\\neg{}" ++ p_expr x
 p_expr (And x y)  = p_expr x ++ "\\land{}" ++ p_expr y
@@ -147,18 +146,24 @@ p_expr (IsIn  a b) = (concat $ intersperse "," $ map p_expr a) ++ "\\in{}"  ++ s
 p_expr (NotIn a b) = (concat $ intersperse "," $ map p_expr a) ++ "\\notin{}" ++ show b
 p_expr (State a b) = (concat $ intersperse ", " $ map p_quan a) ++ ": " ++ p_expr b
 
--- | For printing indexes. Ensures only simple Expr's get rendered as an index
-p_indx :: Expr -> String
-p_indx e@(Var _)    = p_expr e
-p_indx e@(Dbl _)    = p_expr e
-p_indx e@(Int _)    = p_expr e
-p_indx e@(Sym _)    = p_expr e
-p_indx e@(Add _ _)  = p_expr e
-p_indx e@(Sub _ _)  = p_expr e
-p_indx e@(Mul _ _)  = p_expr e
-p_indx   (Frac a b) = divide a b --no block division 
-p_indx e@(Div _ _)  = p_expr e
-p_indx _            = error "Tried to Index a non-simple expr in LaTeX, currently not supported."
+-- | For printing indexes
+p_indx :: Expr -> Expr -> String
+p_indx (Sym (Corners [] [] [] [x] s)) i = symbol s ++"_"++ brace (symbol x ++","++ p_sub i)
+p_indx a@(Sym (Atomic _)) i = p_expr a ++"_"++ brace (p_sub i)
+p_indx a@(Sym (Greek  _)) i = p_expr a ++"_"++ brace (p_sub i)
+p_indx a                  i = brace (p_expr a) ++"_"++ brace (p_sub i)
+-- Ensures only simple Expr's get rendered as an index
+p_sub :: Expr -> String
+p_sub e@(Var _)    = p_expr e
+p_sub e@(Dbl _)    = p_expr e
+p_sub e@(Int _)    = p_expr e
+p_sub e@(Sym _)    = p_expr e
+p_sub e@(Add _ _)  = p_expr e
+p_sub e@(Sub _ _)  = p_expr e
+p_sub e@(Mul _ _)  = p_expr e
+p_sub   (Frac a b) = divide a b --no block division in an index
+p_sub e@(Div _ _)  = p_expr e
+p_sub _            = error "Tried to Index a non-simple expr in LaTeX, currently not supported."
 
 -- | For printing Matrix
 p_matrix :: [[Expr]] -> String

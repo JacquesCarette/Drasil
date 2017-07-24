@@ -41,7 +41,7 @@ risk = mkDataDef' risk_fun risk_eq (aGrtrThanB +:+ hRef +:+ ldfRef +:+ jRef)
 --DD2--
 
 hFromt_eq :: Relation
-hFromt_eq = (Case (zipWith hFromt_helper actualThicknesses nominalThicknesses))
+hFromt_eq = (1/1000) * (Case (zipWith hFromt_helper actualThicknesses nominalThicknesses))
 
 hFromt_helper :: Double -> Double -> (Expr, Relation)
 hFromt_helper result condition = ((Dbl result), (C nom_thick) := Dbl condition)

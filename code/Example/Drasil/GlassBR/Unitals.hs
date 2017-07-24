@@ -442,7 +442,7 @@ loadTypes = [loadResis, nonFactoredL, glassWL, shortDurLoad,
 
 --Defined for DataDefs.hs and this file only--
 actualThicknesses :: [Double]
-actualThicknesses = map (\c -> c/1000) [2.16, 2.59, 2.92, 3.78, 4.57, 5.56, 7.42, 9.02, 11.91,
+actualThicknesses = [2.16, 2.59, 2.92, 3.78, 4.57, 5.56, 7.42, 9.02, 11.91,
   15.09, 18.26, 21.44]
 
 nominalThicknesses :: [Double]

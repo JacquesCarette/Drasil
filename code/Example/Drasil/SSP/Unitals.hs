@@ -129,7 +129,7 @@ sspUnits :: [UCWrapper]
 sspUnits = map ucw [normStress, genPressure, normFunc, shearFunc,
   waterHght, slopeHght, slipHght, xi, yi, critCoords, slopeDist, slipDist,
   mobShrI, shrResI, shearFNoIntsl, shearRNoIntsl, slcWght, watrForce,
-  watrForceDif, intShrForce, baseHydroForce, surfHydroForce,
+  watrForceDif, intShrForce, baseHydroForce, surfHydroForce, effStiffA, effStiffB,
   totNrmForce, nrmFSubWat, nrmFNoIntsl, surfLoad, baseAngle, surfAngle,
   impLoadAngle, baseWthX, baseLngth, surfLngth, midpntHght, genForce,
   momntOfBdy, genDisplace, genStffness, shrStiffIntsl, shrStiffBase,
@@ -141,7 +141,7 @@ normStress, genPressure, normFunc, shearFunc, slopeDist, slipDist, genStffness,
   waterHght, slopeHght, slipHght, xi, yi, critCoords, mobShrI, sliceHght,
   shearFNoIntsl, shearRNoIntsl, slcWght, watrForce, watrForceDif, shrResI,
   intShrForce, baseHydroForce, surfHydroForce, totNrmForce, nrmFSubWat,
-  nrmFNoIntsl, surfLoad, baseAngle, surfAngle, impLoadAngle, baseWthX,
+  nrmFNoIntsl, surfLoad, baseAngle, surfAngle, impLoadAngle, baseWthX, effStiffA, effStiffB,
   baseLngth, surfLngth, midpntHght, genForce, momntOfBdy, genDisplace,
   shrStiffIntsl, shrStiffBase, nrmStiffIntsl, nrmStiffBase, shrStiffRes,
   nrmStiffRes, shrDispl, nrmDispl, porePressure, elmNrmDispl, mobStress,
@@ -302,6 +302,14 @@ shrStiffRes  = uc' "K_tr" (cn $ "shear stiffness")
 nrmStiffRes  = uc' "K_no" (cn $ "normal stiffness")
   "residual strength"
   (sub cK (Atomic "no")) stiffness3D
+
+effStiffA   = uc' "K_bA" (cn $ "effective base stiffness A")
+  ("for rotated coordinates of a slice base surface, " ++ fsi)
+  (sub cK (Atomic "bA")) stiffness3D
+
+effStiffB   = uc' "K_bB" (cn $ "effective base stiffness A")
+  ("for rotated coordinates of a slice base surface, " ++ fsi)
+  (sub cK (Atomic "bB")) stiffness3D
 
 shrDispl = uc' "du_i" (cn $ "displacement")
   ("shear displacement " ++ fsi)

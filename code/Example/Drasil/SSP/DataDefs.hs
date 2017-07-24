@@ -323,12 +323,12 @@ stfMtrxDerivation = [foldlSP [S "Using the force-displacement relationship of",
   (inxi shrStiffBase * cos(inxi baseAngle) :^ Int 2 + inxi nrmStiffIntsl * sin(inxi baseAngle) :^ Int 2) *
   vec2D (inxi dx_i) (inxi dy_i),
   
-  foldlSP [S "The new effective base stiffness matrix", getS shrStiffBase, --FIXME: index
+  foldlSP [S "The new effective base stiffness matrix", getS shrStiffBase, --FIXME: add symbol?
   S "as derived in", eqN 7, S "is defined in" +:+. eqN 9, S "This is seen as matrix",
   getS shrStiffBase, S "in" +:+. acroGD 12, isElMx shrStiffBase "shear" `sC` S "and",
   isElMx nrmStiffBase "normal" `sC` S "calculated as in" +:+. acroDD 14,
   S "The notation is simplified by", S "introduction" `ofThe` S "constants",
-  getS shrStiffBase `sAnd` getS shrStiffBase `sC` S "defined in", eqN 10 `sAnd`--FIXME: index should be KbA,i and KbB,i
+  getS effStiffA `sAnd` getS effStiffB `sC` S "defined in", eqN 10 `sAnd`
   eqN 11, S "respectively"],
   
   EqnBlock $ inxi shrStiffBase := m2x2
@@ -336,14 +336,14 @@ stfMtrxDerivation = [foldlSP [S "Using the force-displacement relationship of",
   ((inxi shrStiffBase - inxi nrmStiffBase) * sin(inxi baseAngle) * cos(inxi baseAngle))
   ((inxi shrStiffBase - inxi nrmStiffBase) * sin(inxi baseAngle) * cos(inxi baseAngle))
   (inxi shrStiffBase * cos(inxi baseAngle) :^ Int 2 + inxi nrmStiffIntsl * sin(inxi baseAngle) :^ Int 2)
-  := m2x2 (inxi shrStiffBase) (inxi nrmStiffBase) (inxi nrmStiffBase) (inxi shrStiffBase),
+  := m2x2 (inxi effStiffA) (inxi effStiffB) (inxi effStiffB) (inxi effStiffA),
   
   EqnBlock $
-  (inxi shrStiffBase) := (inxi shrStiffBase) * (cos (inxi baseAngle)) :^ (Int 2) :+ --FIXME: the first symbol should be K_(bA,i), waiting on indexing
+  (inxi effStiffA) := (inxi shrStiffBase) * (cos (inxi baseAngle)) :^ (Int 2) :+
   (inxi nrmStiffBase) * (sin (inxi baseAngle)) :^ (Int 2),
   
   EqnBlock $
-  (inxi shrStiffBase) := ((inxi shrStiffBase)-(inxi nrmStiffBase)) * --FIXME: the first symbol should be K_(bB,i), waiting on indexing
+  (inxi effStiffB) := ((inxi shrStiffBase)-(inxi nrmStiffBase)) *
   (sin (inxi baseAngle)) * (cos (inxi baseAngle)),
   
   foldlSP [S "A force-displacement relationship for an element", getS index,

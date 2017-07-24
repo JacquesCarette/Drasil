@@ -2,9 +2,9 @@ module Drasil.SWHS.Requirements where
 
 import Language.Drasil
 
-import Data.Drasil.Concepts.Documentation (acroIM, output_, requirement_,
+import Data.Drasil.Concepts.Documentation (acroIM, output_,
   acroR, simulation, quantity, input_, physical, constraint, condition,
-  property, requirement_)
+  property)
 import Data.Drasil.Utils (getS)
 import Drasil.DocumentLanguage (mkRequirement)
 import Drasil.Sections.Requirements (nonFuncReqF)

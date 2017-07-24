@@ -1,14 +1,8 @@
 module Language.Drasil.Expr.Math where
 
-import GHC.Real (Ratio(..)) -- why not Data.Ratio?
 import Prelude hiding (id, sqrt)
-import Language.Drasil.Chunk (Chunk(..))
-import Language.Drasil.Chunk.SymbolForm (SymbolForm)
 import Language.Drasil.Symbol
-import Language.Drasil.Space (Space(..))
 import Language.Drasil.Expr
-
-import Control.Lens ((^.))
 
 -- | Smart constructor to take the log of an expression
 log :: Expr -> Expr

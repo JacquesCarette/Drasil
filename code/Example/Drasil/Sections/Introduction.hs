@@ -109,15 +109,15 @@ charIntRdrF know und progName appStandd r =
 --paragraph called by charIntRdrF
 -- topic1     - sentence the reader should have knowledge in
 -- topic2     - sentence the reader should understand
--- standard   - sentence of the standards the reader should be familiar with
+-- stdrd      - sentence of the standards the reader should be familiar with
 -- sectionRef - reference to user characteristic section
 intReaderIntro :: (NamedIdea a) => 
   Sentence -> Sentence -> a -> Sentence -> Section -> [Contents]
-intReaderIntro topic1 topic2 progName standard sectionRef = 
+intReaderIntro topic1 topic2 progName stdrd sectionRef = 
   [foldlSP [S "Reviewers of this",
   (phrase documentation), S "should have a strong knowledge in" +:+. topic1,
   S "The reviewers should also have an understanding of" +:+. topic2 :+:
-  standard, S "The", (plural user), S "of", (short progName),
+  stdrd, S "The", (plural user), S "of", (short progName),
   S "can have a lower level of expertise, as explained in", (makeRef sectionRef)]]
 
 -- | Organization of the document section constructor.  => Sentence -> c -> Section -> Sentence -> Section

@@ -148,7 +148,7 @@ p_expr (State a b) = (concat $ intersperse ", " $ map p_quan a) ++ ": " ++ p_exp
 
 -- | For printing indexes
 p_indx :: Expr -> Expr -> String
-p_indx (Sym (Corners [] [] [] [x] s)) i = symbol s ++"_"++ brace (symbol x ++","++ p_sub i)
+p_indx (Sym (Corners [] [] [] [x] s)) i = p_expr $ Sym $ Corners [][][][Concat [x, Atomic (","++ p_sub i)]] s
 p_indx a@(Sym (Atomic _)) i = p_expr a ++"_"++ brace (p_sub i)
 p_indx a@(Sym (Greek  _)) i = p_expr a ++"_"++ brace (p_sub i)
 p_indx a                  i = brace (p_expr a) ++"_"++ brace (p_sub i)

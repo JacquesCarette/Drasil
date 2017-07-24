@@ -155,8 +155,7 @@ p_expr (Case ps)  = cases ps (p_expr)
 p_expr (Op f es)  = p_op f es
 p_expr (Grouping e) = paren (p_expr e)
 p_expr (Mtx a)    = "<table class=\"matrix\">\n" ++ p_matrix a ++ "</table>"
-p_expr (Index a@(Sym (Corners [] [] [] [_] _)) i) = p_expr a ++ sub ("," ++ p_indx i)
-p_expr (Index a i)= p_expr a ++ sub (p_indx i)
+p_expr (Index a i)= p_indx a i
 --Logic
 p_expr (Not a)    = "&not;" ++ p_expr a
 p_expr (And a b)  = p_expr a ++ " &and; " ++ p_expr b
@@ -167,18 +166,22 @@ p_expr (IsIn  a b) = (concat $ intersperse "," $ map p_expr a) ++ "&thinsp;&isin
 p_expr (NotIn a b) = (concat $ intersperse "," $ map p_expr a) ++ "&thinsp;&notin;&thinsp;" ++ show b
 p_expr (State a b) = (concat $ intersperse ", " $ map p_quan a) ++ ": " ++ p_expr b
 
--- | For printing indexes. Ensures simple expressions get rendered compact
-p_indx :: Expr -> String
-p_indx e@(Var _)    = p_expr e
-p_indx e@(Dbl _)    = p_expr e
-p_indx e@(Int _)    = p_expr e
-p_indx e@(Sym _)    = p_expr e
-p_indx   (Add a b)  = p_expr a ++ "&plus;"  ++ p_expr b --removed spaces
-p_indx   (Sub a b)  = p_expr a ++ "&minus;" ++ p_expr b
-p_indx e@(Mul _ _)  = p_expr e
-p_indx   (Frac a b) = divide a b --no block division 
-p_indx e@(Div _ _)  = p_expr e
-p_indx _            = error "Tried to Index a non-simple expr in HTML, currently not supported."
+-- | For printing indexes
+p_indx :: Expr -> Expr -> String
+p_indx a@(Sym (Corners [] [] [] [_] _)) i = p_expr a ++ sub (","++ p_sub i)
+p_indx a i = p_expr a ++ sub (p_sub i)
+-- Ensures only simple Expr's get rendered as an index
+p_sub :: Expr -> String
+p_sub e@(Var _)    = p_expr e
+p_sub e@(Dbl _)    = p_expr e
+p_sub e@(Int _)    = p_expr e
+p_sub e@(Sym _)    = p_expr e
+p_sub   (Add a b)  = p_expr a ++ "&plus;"  ++ p_expr b --removed spaces
+p_sub   (Sub a b)  = p_expr a ++ "&minus;" ++ p_expr b
+p_sub e@(Mul _ _)  = p_expr e
+p_sub   (Frac a b) = divide a b --no block division 
+p_sub e@(Div _ _)  = p_expr e
+p_sub _            = error "Tried to Index a non-simple expr in HTML, currently not supported."
 
 -- | For printing Matrix
 p_matrix :: [[Expr]] -> String

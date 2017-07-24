@@ -14,6 +14,7 @@ import Language.Drasil.CodeSpec hiding (codeSpec)
 import Prelude hiding (log, exp, return, const)
 import Data.List (intersperse)
 import System.Directory
+import Data.Map (member)
 
 data Generator = Generator { 
   generateCode :: IO (),
@@ -222,7 +223,7 @@ genCalcFuncD g cdef =
   publicMethod g 
     (methodType $ convType (codeType cdef)) 
     (codeName cdef)
-    (getParams (codevars $ codeEquat cdef)) 
+    (getParams g (codevars $ codeEquat cdef)) 
     (genCalcBlock g $ codeEquat cdef)
 
 genCalcBlockD :: Generator -> Expr -> Body
@@ -251,7 +252,7 @@ genOutputFormatD g outs =
       v_filename = var l_filename
   in
     publicMethod g methodTypeVoid "write_output" 
-      (p_filename:getParams outs)
+      (p_filename:getParams g outs)
       [ block $
           [
             varDec l_outfile outfile,
@@ -329,8 +330,8 @@ loggedAssign g a b = let l_outfile = "outfile"
       
 -- helpers
     
-getParams :: (CodeEntity c) => [c] -> [Parameter]
-getParams = map (\y -> param (codeName y) (convType $ codeType y))
+getParams :: (CodeEntity c) => Generator -> [c] -> [Parameter]
+getParams g cs = map (\y -> param (codeName y) (convType $ codeType y)) (filter (\x -> not $ member (codeName x) (constMap $ codeSpec g)) cs)
           
 paramType :: Parameter -> StateType
 paramType (StateParam _ s) = s

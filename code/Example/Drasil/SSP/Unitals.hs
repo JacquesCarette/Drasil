@@ -54,7 +54,7 @@ gtZeroConstr = [physc $ (:<) (Int 0)]
 monotonicIn :: [Constraint]  --FIXME: Move this?
 monotonicIn = [physc $ \c ->
   State [Forall c, Forall $ [C index] `IsIn` Natural]
-  (inx' "x" 0 :< inx' "x" 1 :=> inx' "y" 0 :< inx' "y" 1)]
+  (inx xi 0 :< inx xi 1 :=> inx yi 0 :< inx yi 1)]
 
 defultUncrt :: Double
 defultUncrt = 0.1
@@ -127,7 +127,7 @@ dy_i        = cuc' "dy_i" (cn $ "displacement") ("in the y-ordinate direction " 
 
 sspUnits :: [UCWrapper]
 sspUnits = map ucw [normStress, genPressure, normFunc, shearFunc,
-  waterHght, slopeHght, slipHght, xi, critCoords, slopeDist, slipDist,
+  waterHght, slopeHght, slipHght, xi, yi, critCoords, slopeDist, slipDist,
   mobShrI, shrResI, shearFNoIntsl, shearRNoIntsl, slcWght, watrForce,
   watrForceDif, intShrForce, baseHydroForce, surfHydroForce,
   totNrmForce, nrmFSubWat, nrmFNoIntsl, surfLoad, baseAngle, surfAngle,
@@ -138,7 +138,7 @@ sspUnits = map ucw [normStress, genPressure, normFunc, shearFunc,
   mobShrC, shrResC, rotatedDispl, intNormForce, shrStress, mobStress]
 
 normStress, genPressure, normFunc, shearFunc, slopeDist, slipDist, genStffness,
-  waterHght, slopeHght, slipHght, xi, critCoords, mobShrI, sliceHght,
+  waterHght, slopeHght, slipHght, xi, yi, critCoords, mobShrI, sliceHght,
   shearFNoIntsl, shearRNoIntsl, slcWght, watrForce, watrForceDif, shrResI,
   intShrForce, baseHydroForce, surfHydroForce, totNrmForce, nrmFSubWat,
   nrmFNoIntsl, surfLoad, baseAngle, surfAngle, impLoadAngle, baseWthX,
@@ -175,10 +175,9 @@ slipDist    = uc' "x_slip,i" (cn $ "x ordinate")
   ("distance of the slip surface at i, " ++ smsi)
   (sub lX (Atomic "slip")) metre
 
-xi          = uc' "x_i"
-  (cn $ "x ordinate")
-  smsi
-  lX metre
+yi = uc' "y_i" (cn $ "y ordinate") smsi lY metre
+  
+xi = uc' "x_i" (cn $ "x ordinate") smsi lX metre
 
 critCoords  = uc' "(xcs,ycs)" (cn $ "the set of x and y coordinates")
   "describe the vertices of the critical slip surface"
@@ -402,9 +401,3 @@ inx e n
   | n < 0     = Index (C e) (C index - Int (-n))
   | n == 0    = Index (C e) (C index)
   | otherwise = Index (C e) (C index + Int n)
-
-inx' :: String -> Integer -> Expr
-inx' e n  --FIXME: only used for monotonic, remove when we can treat x and y seperately
-  | n < 0     = Index (V e) (C index - Int (-n))
-  | n == 0    = Index (V e) (C index)
-  | otherwise = Index (V e) (C index + Int n)

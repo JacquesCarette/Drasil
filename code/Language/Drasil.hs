@@ -99,7 +99,7 @@ module Language.Drasil (
   , CodeSpec, codeSpec, codeSpec', Choices(..), ImplementationType(..)
   , Logging(..), ConstraintBehaviour(..), Structure(..), Lang(..), Comments(..)
   , defaultChoices
-  , ModDef(..), FuncDef(..), FuncStmt(..), addModDefs  -- hacks
+  , ModDef(..), FuncDef(..), FuncStmt(..), addModDefs, funcDef, fasg, ffor  -- hacks
   -- Chunk.Theory
   , Theory(..), tc', TheoryChunk, TheoryModel, tm, tw
 ) where

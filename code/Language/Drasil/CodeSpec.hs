@@ -13,6 +13,7 @@ import Language.Drasil.SystemInformation
 import Language.Drasil.Code -- for hack
 import Language.Drasil.Defs -- for hack
 import Language.Drasil.Expr -- for hack
+import Language.Drasil.Space -- for hack
 
 import qualified Data.Map as Map
 import Control.Lens ((^.))
@@ -151,20 +152,29 @@ defaultChoices = Choices {
 data ModDef = ModDef String [FuncDef]
 
 data FuncDef where
-  FuncDef :: (Quantity c, SymbolForm c) => String -> [c] -> c -> [FuncStmt] -> FuncDef  
-  
+  FuncDef :: String -> [CodeChunk] -> CodeType -> [FuncStmt] -> FuncDef
+
+funcDef :: (Quantity c, SymbolForm c) => String -> [c] -> Space -> [FuncStmt] -> FuncDef  
+funcDef s i t fs = FuncDef s (map codevar i) (spaceToCodeType t) fs 
+ 
 data FuncStmt where
-  FAsg :: (Quantity c, SymbolForm c) => c -> Expr -> FuncStmt
-  FFor :: (Quantity c, SymbolForm c) => c -> Expr -> [FuncStmt] -> FuncStmt
+  FAsg :: CodeChunk -> Expr -> FuncStmt
+  FFor :: CodeChunk -> Expr -> [FuncStmt] -> FuncStmt
   FWhile :: Expr -> [FuncStmt] -> FuncStmt
   FCond :: Expr -> [FuncStmt] -> [FuncStmt] -> FuncStmt
   FRet :: Expr -> FuncStmt
+  
+fasg :: (Quantity c, SymbolForm c) => c -> Expr -> FuncStmt
+fasg v e = FAsg (codevar v) e
+
+ffor :: (Quantity c, SymbolForm c) => c -> Expr -> [FuncStmt] -> FuncStmt
+ffor v e fs = FFor (codevar v) e fs
 
 addModDefs :: CodeSpec -> [ModDef] -> CodeSpec
 addModDefs cs@(CodeSpec{ modDefs = md }) mdnew = cs { modDefs = md ++ mdnew }
 
 ---- major hacks ----
 modHack :: [(String, [FunctionDecl])]
-modHack = [("ReadTable", [read_z_array_func, read_x_array_func, read_y_array_func]),
-           ("Interpolation", [lin_interp_func, indInSeq_func, matrixCol_func, interpY_func, interpZ_func])
+modHack = [("ReadTable", [read_z_array_func, read_x_array_func, read_y_array_func])--,
+           --("Interpolation", [lin_interp_func, indInSeq_func, matrixCol_func, interpY_func, interpZ_func])
           ] 

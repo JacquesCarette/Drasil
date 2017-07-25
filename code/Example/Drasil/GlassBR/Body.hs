@@ -38,6 +38,7 @@ import Drasil.GlassBR.TMods
 import Drasil.GlassBR.IMods
 import Drasil.GlassBR.DataDefs
 import Drasil.GlassBR.References
+import Drasil.GlassBR.Interpolation
 
 import Drasil.Sections.TraceabilityMandGs
 import Drasil.Sections.Stakeholders
@@ -109,7 +110,7 @@ glassChoices = Choices {
 }  
   
 glassBR_code :: CodeSpec
-glassBR_code = codeSpec' glassSystInfo glassChoices
+glassBR_code = addModDefs (codeSpec' glassSystInfo glassChoices) [interpMod]
 
 mgBod :: [Section]
 (mgBod, _) = makeDD likelyChanges unlikelyChanges reqs modules

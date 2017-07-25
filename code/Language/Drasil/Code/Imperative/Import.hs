@@ -125,7 +125,8 @@ genModulesD g = genInputMod g (inputs $ codeSpec g) (cMap $ codeSpec g)
              ++ [genConstMod g]
              ++ map (\(FuncMod n d) -> genCalcMod g n d) (fMods $ codeSpec g)
              ++ genOutputMod g (outputs $ codeSpec g)
-             ++ map (genHacks g) (mods $ codeSpec g) -- hack 
+             ++ map (genModDef g) (modDefs $ codeSpec g) -- hack
+      --       ++ map (genHacks g) (mods $ codeSpec g) -- hack 
 
 
 ------- INPUT ----------  
@@ -533,6 +534,22 @@ compactCaseBinary op a b        = (compactCase a) `op` (compactCase b)
 compactCaseUnary :: (Expr -> Expr) -> Expr -> Expr
 compactCaseUnary op (Case c) = Case (map (\(e, r) -> (op e, r)) c)
 compactCaseUnary op a        = op (compactCase a)
+
+-- medium hacks --
+genModDef :: Generator -> ModDef -> Module
+genModDef g (ModDef n fs) = buildModule n [] [] (map (genFuncDef g) fs) []
+
+genFuncDef :: Generator -> FuncDef -> Method
+genFuncDef g (FuncDef n i o s) = publicMethod g (methodType $ convType o) n (getParams g i) [ block (map (convStmt g) s) ]
+
+convStmt :: Generator -> FuncStmt -> Statement
+convStmt g (FAsg v e) = assign g (var $ codeName v) (convExpr e)
+convStmt _ _ = error ""
+--convStmt (FFor v e) = 
+ -- FFor :: CodeChunk -> Expr -> [FuncStmt] -> FuncStmt
+ -- FWhile :: Expr -> [FuncStmt] -> FuncStmt
+ -- FCond :: Expr -> [FuncStmt] -> [FuncStmt] -> FuncStmt
+ -- FRet :: Expr -> FuncStmt
 
 -- major hacks --
 genHacks :: Generator -> (String, [Method]) -> Module

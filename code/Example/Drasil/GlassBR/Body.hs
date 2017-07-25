@@ -10,6 +10,7 @@ import Data.Drasil.Software.Products
 import Data.Drasil.Concepts.Computation
 import Data.Drasil.Concepts.Physics (distance)
 import Data.Drasil.Concepts.Thermodynamics (degree_')
+import Data.Drasil.Concepts.PhysicalProperties (flexure)
 import Data.Drasil.Concepts.Software
 import Data.Drasil.Concepts.Math (graph, calculation, probability,
   parameter, surface, equation, shape)
@@ -89,19 +90,19 @@ mkSRS = [RefSec (RefProg intro
   
 glassSystInfo :: SystemInformation
 glassSystInfo = SI {
-  _sys = glassBRProg,
-  _kind = srs,
-  _authors = authors,
-  _units = this_si,
-  _quants = this_symbols,
-  _concepts = ([] :: [CQSWrapper]),
-  _namedIdeas = (acronyms),
+  _sys         = glassBRProg,
+  _kind        = srs,
+  _authors     = authors,
+  _units       = this_si,
+  _quants      = this_symbols,
+  _concepts    = ([] :: [CQSWrapper]),
+  _namedIdeas  = (acronyms),
   _definitions = (dataDefns),
-  _inputs = (map qs gbInputs),
-  _outputs = (map qs gbOutputs),
+  _inputs      = (map qs gbInputs),
+  _outputs     = (map qs gbOutputs),
   _defSequence = (gbQDefns :: [Block QDefinition]),
   _constraints = gbConstrained,
-  _constants = gbConstants
+  _constants   = gbConstants
 }
   --FIXME: All named ideas, not just acronyms.
   
@@ -198,20 +199,20 @@ startIntro prgm sfwrPredicts progName = foldlSent [
   S "using an intuitive", phrase interface]
 
 rdrKnldgbleIn :: (NamedIdea n, NamedIdea n1) => n1 -> n -> Sentence
-rdrKnldgbleIn undrstd1 undrstd2 = (phrase theory +:+ S "behind" +:+ 
+rdrKnldgbleIn undrstd1 undrstd2 = (phrase theory +:+ S "behind" +:+
   phrase undrstd1 `sAnd` phrase undrstd2)
 
 undIR, appStanddIR, incScoR, endScoR :: Sentence
-undIR = (foldlList [phrase scndYrCalculus, phrase structuralMechanics, 
+undIR = (foldlList [phrase scndYrCalculus, phrase structuralMechanics,
   plural computerApp `sIn` phrase civilEng])
-appStanddIR = foldlSent [S "In addition" `sC` plural reviewer, 
+appStanddIR = foldlSent [S "In addition" `sC` plural reviewer,
   S "should be familiar with the applicable", plural standard,
   S "for constructions using glass from", sSqBr (S "4-6") `sIn`
   (makeRef s11)]
-incScoR = foldl (+:+) EmptyS [S "getting all", plural inParam, 
-  S "related to the", phrase glaSlab `sAnd` S "also the", plural parameter, 
+incScoR = foldl (+:+) EmptyS [S "getting all", plural inParam,
+  S "related to the", phrase glaSlab `sAnd` S "also the", plural parameter,
   S "related to", phrase blastTy]
-endScoR = foldl (+:+) EmptyS [S "use the", plural datum `sAnd` 
+endScoR = foldl (+:+) EmptyS [S "use the", plural datum `sAnd`
   S "predict whether the", phrase glaSlab, S "is safe to use or not"]
 
 {--Purpose of Document--}
@@ -219,17 +220,16 @@ endScoR = foldl (+:+) EmptyS [S "use the", plural datum `sAnd`
 s2_1_intro_p1 :: NamedChunk -> CI -> NamedChunk -> Sentence
 s2_1_intro_p1 typeOf progName gvnVar = foldlSent [S "The main", phrase purpose,
   S "of this", phrase typeOf, S "is to predict whether a given", phrase gvnVar,
-  S "is likely to" +:+. predxnGoal, S "The", plural goal `sAnd` plural thModel,
-  S "used in the", short progName, phrase code, S "are provided" `sC` 
-  S "with an", phrase emphasis, S "on explicitly identifying", 
+  S "is likely to resist a specified" +:+. phrase blast, S "The", plural goal
+  `sAnd` plural thModel, S "used in the", short progName, phrase code, 
+  S "are provided" `sC` S "with an", phrase emphasis, S "on explicitly identifying",
   (plural assumption) `sAnd` S "unambiguous" +:+. plural definition, S "This",
-  phrase typeOf, S "is intended to be used as a", phrase reference, 
+  phrase typeOf, S "is intended to be used as a", phrase reference,
   S "to provide all", phrase information, S "necessary to understand and verify",
   S "the" +:+. phrase analysis, S "The", short srs, S "is abstract because the",
   plural content, S "say what", phrase problem, S "is being solved" `sC`
-  S "but not how to solve it"] --General?
-  where predxnGoal = S "resist a specified" +:+ phrase blast
---FIXME: ^helpful or unnecessary?
+  S "but not how to solve it"] 
+  --FIXME: Last sentence is also present in SWHS and NoPCM... pull out?
 
 {--Scope of Requirements--}
 
@@ -652,7 +652,8 @@ lc4Desc = foldlSent [acroA 6 `sDash` S "The", phrase software,
   S "than 4-sided support"]
 
 lc5Desc = foldlSent [acroA 7 `sDash` S "The", phrase software, 
-  S "may be changed to consider more than just flexure of the glass"]
+  S "may be changed to consider more than just", phrase flexure, 
+  S "of the glass"]
 
 {--TRACEABLITY MATRICES AND GRAPHS--}
 

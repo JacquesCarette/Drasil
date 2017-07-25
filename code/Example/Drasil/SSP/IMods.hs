@@ -59,9 +59,8 @@ nrmShrF_rel = (inxi normFunc) := Case [case1,case2,case3]:=
   (indxn baseWthX * Index (C intNormForce) (C numbSlices - Int 1) * Index (C watrForce) (C numbSlices - Int 1), C index := Int 1)
   ]
   := --FIXME: move to seperate instance model
-  C normToShear := summ (inxi normFunc) / summ (inxi shearFunc)
-  where summ = summation (Just (index ^. symbol, Low $ Int 1, High $ C numbSlices))
-        case1 = ((indx1 baseWthX)*((indx1 intNormForce)+(indx1 watrForce)) * tan (indx1 baseAngle) , C index := Int 1)
+  C normToShear := sum1toN (inxi normFunc) / sum1toN (inxi shearFunc)
+  where case1 = ((indx1 baseWthX)*((indx1 intNormForce)+(indx1 watrForce)) * tan (indx1 baseAngle) , C index := Int 1)
         case2 = ((inxi baseWthX)*(Grouping (inxi intNormForce + inx intNormForce (-1))+ Grouping (inxi watrForce + inx watrForce (-1))) * tan (inxi baseAngle)
                 + (C midpntHght) * (C earthqkLoadFctr * inxi slcWght - Int 2 * inxi surfHydroForce * sin (inxi surfAngle) - Int 2 * inxi surfLoad * cos (inxi impLoadAngle)),
                 Int 2 :<= C index :<= ((C numbSlices) - (Int 1)))
@@ -139,12 +138,16 @@ rfemFoS :: RelationConcept
 rfemFoS = makeRC "rfemFoS" (nounPhraseSP "RFEM factor of safety") rfemFoS_desc rfemFoS_rel
 
 rfemFoS_rel :: Relation
-rfemFoS_rel = (inxi fsloc) := ((C cohesion):-(inxi nrmStiffBase)*(inxi nrmDispl)*(tan (inxi fricAngle))):/
-  ((inxi shrStiffBase)*(inxi shrDispl)) :=
-  C fs := summ (C baseLngth * (C cohesion - C nrmStiffBase * C nrmDispl * tan(C fricAngle))) /
-  summ (C baseLngth * Grouping (C shrStiffBase * C shrDispl))
-  where summ = summation (Just (index ^. symbol, Low $ Int 1, High $ C numbSlices))
-  --FIXME: add the other long equation, see derivation equation 31
+rfemFoS_rel = (inxi fsloc) := fosFracLoc := fosFracSum
+
+fosFracLoc :: Expr
+fosFracLoc = (C cohesion - inxi nrmStiffBase * inxi nrmDispl * tan(C fricAngle)) /
+  (inxi shrStiffBase * inxi shrDispl)
+
+fosFracSum :: Expr
+fosFracSum = sum1toN
+  (inxi baseLngth * (C cohesion - inxi nrmStiffBase * inxi nrmDispl * tan(C fricAngle))) /
+  sum1toN (inxi baseLngth * Grouping (inxi shrStiffBase * inxi shrDispl))
 
 rfemFoS_desc :: Sentence
 rfemFoS_desc = foldlSent [(getS fsloc) `isThe` S "factor of safety for slice i.",
@@ -400,17 +403,13 @@ rigFoSDerivation = [foldlSP [S "RFEM analysis can also be used to calculate the"
   eqN 29, S "the", getTandS fsloc, S "can be found from as seen in", eqN 30 `sAnd` acroIM 5],
   
   EqnBlock $
-  C fsloc := inxi mobStress / inxi shrStress :=
-  (C cohesion - inxi nrmStiffBase * inxi nrmDispl * tan(C fricAngle)) /
-  (inxi shrStiffBase * inxi shrDispl), --FIXME: pull parts of this equation from other equations such as IM5
+  C fsloc := inxi mobStress / inxi shrStress := fosFracLoc,
   
   foldlSP [S "The global", titleize fs, S "is then", S "ratio" `ofThe` S "summation",
   S "of the resistive and mobile shears for each slice, with a weighting for" +:+.
   (S "length" `ofThe` S "slice's base"), S "Shown in", eqN 31 `sAnd` acroIM 5],
   
-  EqnBlock $ --FIXME: pull from other equations in derivation
+  EqnBlock $
   (C fs) := sum1toN (inxi baseLngth * inxi mobStress) /
-  sum1toN (inxi baseLngth * inxi shrStress) := sum1toN
-  (inxi baseLngth * (C cohesion - inxi nrmStiffBase * inxi nrmDispl * tan(C fricAngle))) /
-  sum1toN (inxi baseLngth * Grouping (inxi shrStiffBase * inxi shrDispl))
+  sum1toN (inxi baseLngth * inxi shrStress) := fosFracSum
   ]

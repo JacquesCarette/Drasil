@@ -7,6 +7,7 @@ import Data.Drasil.Quantities.Physics as QP (force, pressure)
 import Data.Drasil.Quantities.SolidMechanics as SM (nrmStrss, elastMod, poissnsR, stffness)
 import Data.Drasil.Units.Physics
 import Drasil.SSP.Defs (fs_concept)
+import Control.Lens ((^.))
 
 sspSymbols :: [CQSWrapper]
 sspSymbols = (map cqs sspInputs) ++ (map cqs sspOutputs) ++
@@ -417,4 +418,4 @@ inx e n
   | otherwise = Index (C e) (C index + Int n)
 
 sum1toN :: Expr -> Expr
-sum1toN = summation (Just (lI, Low 1, High $ C numbSlices))
+sum1toN = summation (Just (index ^. symbol, Low 1, High $ C numbSlices))

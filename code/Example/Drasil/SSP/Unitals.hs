@@ -186,7 +186,7 @@ critCoords  = uc' "(xcs,ycs)" (cn $ "the set of x and y coordinates")
 
 mobShrI     = uc' "S_i" (cn $ "mobilized shear force")
   fsi
-  (sub cS lI) newton
+  (cS) newton
 
 shrResI     = uc' "P_i" (cn $ "resistive shear force") ("Mohr Coulomb " ++
   "frictional force that describes the limit of mobilized shear force the " ++

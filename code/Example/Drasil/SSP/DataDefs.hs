@@ -257,17 +257,12 @@ mobShrDerivation = [foldlSP [S "The", phrase mobShrI, S "acting on a slice is",
   S "also shown in", eqN 4],
   
   EqnBlock $
-  (inxi nrmFSubWat) := (((inxi slcWght) - (inxiM1 intShrForce) + (inxi intShrForce) +
-  (inxi surfHydroForce) * (cos (inxi surfAngle)) +
-  (inxi surfLoad) * (cos (inxi impLoadAngle))) * (sin (inxi baseAngle)) -
-  (Neg (C earthqkLoadFctr) * (inxi slcWght) - (inxi intNormForce) + (inxiM1 intNormForce)
-  - (inxi watrForce) + (inxiM1 watrForce) + (inxi surfHydroForce)
-  * sin (inxi surfAngle) + (inxi surfLoad) * (sin (inxi impLoadAngle))) * (cos (inxi baseAngle))),
+  inxi mobShrI := eqlExpr sin cos (\x y -> x - inxiM1 intShrForce + inxi intShrForce + y),
   
   foldlSP [S "The", phrase equation, S "is unsolvable, containing the unknown",
   getTandS intNormForce, S "and" +:+. getTandS intShrForce, S "Consider a force", 
   S "equilibrium", S wiif `sC` S "to obtain the", getTandS shearFNoIntsl `sC` 
-  S "as done in", eqN 5], --FIXME: use wiif from shearFNoIntsl's definition but removed index
+  S "as done in", eqN 5],
   
   EqnBlock $
   inxi shearFNoIntsl := ((inxi slcWght) :+ (inxi surfHydroForce) :* (cos (inxi surfAngle)) :+ 

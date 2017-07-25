@@ -16,8 +16,8 @@ import Data.Drasil.Utils
 import qualified Drasil.SRS as SRS
 
 eqlExpr :: (Expr -> Expr) -> (Expr -> Expr) -> (Expr -> Expr -> Expr) -> Expr
-eqlExpr f1_ f2_ _e_ = ((inxi slcWght) `_e_`
-  (inxi surfHydroForce) * (cos (inxi surfAngle)) +
+eqlExpr f1_ f2_ _e_ = (inxi slcWght `_e_`
+  (inxi surfHydroForce * cos (inxi surfAngle)) +
   (inxi surfLoad) * (cos (inxi impLoadAngle))) * (f1_ (inxi baseAngle)) +
   (Neg (C earthqkLoadFctr) * (inxi slcWght) - (inxi intNormForce) + (inxiM1 intNormForce) -
   (inxi watrForce) + (inxiM1 watrForce) + (inxi surfHydroForce) * sin (inxi surfAngle) + 

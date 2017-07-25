@@ -35,11 +35,11 @@ class TestInputFormat(unittest.TestCase):
                 self.assertEqual(self.aExpctd[i], self.params[i].a) 
                 #^AssertionError: some number != <Implementation.param.Param. object at 0x032E0Cf0 (some memory space)>
                 self.assertEqual(self.bExpctd[i], self.params[i].b)
-                self.assertEqual(self.tExpctd[i], self.params[i].t)
+                self.assertEqual(self.tExpctd[i], float(self.params[i].t))
                 self.assertEqual(self.gtExpctd[i], self.params[i].gt)
                 self.assertEqual(self.wExpctd[i], self.params[i].w)
                 self.assertEqual(self.tntExpctd[i], self.params[i].tnt)
-                self.assertEqual((self.sdxExpctd[i], self.sdyExpctd, self.sdzExpctd), self.params[i].sdvect)
+                self.assertEqual((self.sdxExpctd[i], self.sdyExpctd[i], self.sdzExpctd[i]), self.params[i].sdvect)
                 self.assertEqual(self.pbTolExpctd[i], self.params[i].pbtol)
         
 if __name__ == '__main__':

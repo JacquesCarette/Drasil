@@ -10,7 +10,7 @@ def check_constraints(params):
         raise SystemExit("InputError: a and b must be greater than 0")
     if params.asprat < 1 or params.asprat > 5:
         raise SystemExit("InputError: a/b must be between 1 and 5")
-    if not (params.t in ["2.5","2.7","3","4","5","6","8","10","12","16","19","22"]):
+    if not (params.t in ["2.5","2.7","3","3.0","4","4.0","5","5.0","6","6.0","8","8.0","10","10.0","12","12.0","16","16.0","19","19.0","22","22.0"]):
         raise SystemExit("InputError: t must be in [2.5,2.7,3.0,4.0,5.0,6.0,8.0,10.0,12.0,16.0,19.0,22.0]")
     if params.tnt <= 0:
         raise SystemExit("InputError: TNT must be greater than 0")

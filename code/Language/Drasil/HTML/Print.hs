@@ -330,8 +330,8 @@ p_op f@(Summation bs) (x:[]) = lrgOp f bs ++ paren (p_expr x)
 p_op (Summation _) _ = error "Something went wrong with a summation"
 p_op f@(Product bs) (x:[]) = lrgOp f bs ++ paren (p_expr x)
 p_op (Product _) _ = error "Something went wrong with a product"
-p_op f@(Integral bs wrtc) (x:[]) = 
-  show f ++ makeIBound bs ++ paren (p_expr x ++ p_expr wrtc)
+p_op f@(Integral bs wrtc) (x:[]) = intg f bs
+  {-show f ++ makeIBound bs-} ++ paren (p_expr x ++ p_expr wrtc)
 p_op (Integral _ _) _  = error "Something went wrong with an integral" 
 p_op Abs (x:[]) = "|" ++ p_expr x ++ "|"
 p_op Abs _ = error "Abs should only take one expr."
@@ -352,6 +352,16 @@ lrgOp f (Just ((s,v),hi)) = "<table class=\"operator\">\n" ++ makeBound (p_expr 
   "<tr><td><span class=\"symb\">" ++ show f ++ "</span></td></tr>\n" ++
   makeBound (symbol s ++"="++ p_expr v) ++ "</table>"
 
+intg :: Function -> (Maybe Expr, Maybe Expr) -> String
+intg f (Nothing, Nothing) = "<span class=\"symb\">" ++ show f ++ "</span>"
+intg f (Just l, Nothing) = "<span class=\"symb\">" ++ show f ++ "</span>" ++ sub (p_expr l ++ " ")
+intg f (low,high) = "<table class=\"operator\">\n" ++ pHigh high ++
+  "<tr><td><span class=\"symb\">" ++ show f ++ "</span></td></tr>\n" ++
+  pLow low ++ "</table>"
+  where pLow Nothing   = ""
+        pLow (Just l)  = makeBound (p_expr l)
+        pHigh Nothing  = ""
+        pHigh (Just hi) = makeBound (p_expr hi)
 -- | Helper for integration bound creation, used by 'p_op'
 makeIBound :: (Maybe Expr, Maybe Expr) -> String
 makeIBound (Just low, Just high) = sub (p_expr low) ++ sup (p_expr high)

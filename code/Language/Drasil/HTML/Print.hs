@@ -326,9 +326,10 @@ makeFigure r c f = refwrap r (image f c $$ caption c)
 -- | Renders expression operations/functions. 
 p_op :: Function -> [Expr] -> String
 p_op f@(Cross) xs = binfix_op f xs
-p_op f@(Summation bs) (x:[]) = show f ++ makeBound bs ++ paren (p_expr x)
+p_op f@(Summation bs) (x:[]) = lrgOp f bs ++ paren (p_expr x)
 p_op (Summation _) _ = error "Something went wrong with a summation"
-p_op f@(Product bs) (x:[]) = show f ++ makeBound bs ++ paren (p_expr x)
+p_op f@(Product bs) (x:[]) = lrgOp f bs ++ paren (p_expr x)
+p_op (Product _) _ = error "Something went wrong with a product"
 p_op f@(Integral bs wrtc) (x:[]) = 
   show f ++ makeIBound bs ++ paren (p_expr x ++ p_expr wrtc)
 p_op (Integral _ _) _  = error "Something went wrong with an integral" 
@@ -340,10 +341,16 @@ p_op f@(Exp) (x:[]) = show f ++ sup (p_expr x)
 p_op f (x:[]) = show f ++ paren (p_expr x) --Unary ops, this will change once more complicated functions appear.
 p_op _ _ = error "Something went wrong with an operation"
 
--- | Helper for summation bound creation, used by 'p_op'
-makeBound :: Maybe ((Symbol, Expr),Expr) -> String
-makeBound (Just ((s,v),hi)) = sub (symbol s ++"="++ p_expr v) ++ sup (p_expr hi)
-makeBound Nothing = ""
+
+-- | Helpers for summation/product, used by 'p_op'
+makeBound :: String -> String
+makeBound s = "<tr><td><span class=\"bound\">" ++ s ++ "</span></td></tr>\n"
+
+lrgOp :: Function -> Maybe ((Symbol, Expr),Expr) -> String
+lrgOp f Nothing = "<span class=\"symb\">" ++ show f ++ "</span>"
+lrgOp f (Just ((s,v),hi)) = "<table class=\"operator\">\n" ++ makeBound (p_expr hi) ++
+  "<tr><td><span class=\"symb\">" ++ show f ++ "</span></td></tr>\n" ++
+  makeBound (symbol s ++"="++ p_expr v) ++ "</table>"
 
 -- | Helper for integration bound creation, used by 'p_op'
 makeIBound :: (Maybe Expr, Maybe Expr) -> String

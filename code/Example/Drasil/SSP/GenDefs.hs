@@ -106,10 +106,10 @@ mobShr_rel = inxi mobShrI := inxi shrResI / C fs := shrResEqn / C fs
 
 mobShr_desc :: Sentence
 mobShr_desc = foldlSent [
-  S "From", phrase definition `ofThe` (phrase fs, S "in", acroT 1 `sC`
+  S "From", phrase definition `ofThe` phrase fs, S "in", acroT 1 `sC`
   S "and the new", phrase definition, S "of", getS shrResI `sC` S "a new",
-  S "relation for", (S "net mobile" +:+ phrase shearForce `ofThe` phrase slice),
-  getS shearFNoIntsl, S "is found as the resistive shear" , getS shrResI,
+  S "relation for", S "net mobile" +:+ phrase shearForce `ofThe` phrase slice,
+  getS shearFNoIntsl, S "is found as the resistive shear", getS shrResI,
   sParen (acroGD 3), S "divided by the factor of safety", getS fs]
 
 --
@@ -229,10 +229,15 @@ displVect = makeRC "displVect" (nounPhraseSP "displacement vectors") disVec_desc
 
 disVec_rel :: Relation
 disVec_rel = inxi rotatedDispl := vec2D (inxi shrDispl) (inxi nrmDispl) :=
-  m2x2 (cos(inxi baseAngle)) (sin(inxi baseAngle)) (Neg $ sin(inxi baseAngle)) (cos(inxi baseAngle)) *
-  (inxi genDisplace) :=
-  m2x2 (cos(inxi baseAngle)) (sin(inxi baseAngle)) (Neg $ sin(inxi baseAngle)) (cos(inxi baseAngle)) *
-  vec2D (inxi dx_i) (inxi dy_i)
+  rotMtx * (inxi genDisplace) := rotMtx * displMtx
+
+displMtx :: Expr
+displMtx = vec2D (inxi dx_i) (inxi dy_i)
+
+rotMtx :: Expr
+rotMtx = m2x2
+  (cos(inxi baseAngle))       (sin(inxi baseAngle))
+  (Neg $ sin(inxi baseAngle)) (cos(inxi baseAngle))
 
 disVec_desc :: Sentence
 disVec_desc = foldlSent [at_start' vector, S "describing the", phrase displacement,
@@ -250,4 +255,4 @@ disVec_desc = foldlSent [at_start' vector, S "describing the", phrase displaceme
   S "can also be found by rotating", getS genDisplace,
   S "clockwise by the base", phrase angle `sC` getS baseAngle,
   S "through a rotation", phrase matrix, S "as shown"]
-  --FIXME: some symbols need to be vectors and indexed
+  --FIXME: some symbols need to be vectors

@@ -12,7 +12,7 @@ import Data.Drasil.Concepts.Documentation
 import Data.Drasil.SentenceStructures
 import Control.Lens ((^.))
 import Data.Drasil.Concepts.Math (equation, angle)
-import Drasil.SSP.GenDefs (eqlExpr)
+import Drasil.SSP.GenDefs (eqlExpr, displMtx, rotMtx)
 
 ------------------------
 --  Data Definitions  --
@@ -163,7 +163,7 @@ displcmntRxnF :: QDefinition
 displcmntRxnF = mkDataDef genPressure displcmntRxnFEqn
 
 displcmntRxnFEqn :: Expr
-displcmntRxnFEqn = dgnl2x2 (inxi shrStiffIntsl) (inxi nrmStiffBase) * vec2D (inxi dx_i) (inxi dy_i)
+displcmntRxnFEqn = dgnl2x2 (inxi shrStiffIntsl) (inxi nrmStiffBase) * displMtx
 
 --DD12.5
 displcmntBasel :: QDefinition
@@ -171,7 +171,7 @@ displcmntBasel = mkDataDef genPressure displcmntBaselEqn
 
 displcmntBaselEqn :: Expr
 displcmntBaselEqn = m2x2 (inxi effStiffA) (inxi effStiffB) (inxi effStiffB) (inxi effStiffA)
-  * vec2D (inxi dx_i) (inxi dy_i)
+  * displMtx
 
 --DD13
 
@@ -280,6 +280,17 @@ mobShrDerivation = [foldlSP [S "The", phrase mobShrI, S "acting on a slice is",
   S "of", acroDD 1, S "to", acroDD 9]
   ]
 
+kiStar :: Expr
+kiStar = m2x2 (inxi shrStiffBase * cos(inxi baseAngle)) (Neg $ inxi nrmStiffBase * sin(inxi baseAngle))
+  (inxi shrStiffBase * sin(inxi baseAngle)) (inxi nrmStiffBase * cos(inxi baseAngle))
+  
+kiPrime :: Expr
+kiPrime = m2x2
+  (inxi shrStiffBase * cos(inxi baseAngle) :^ 2 + inxi nrmStiffIntsl * sin(inxi baseAngle) :^ 2)
+  ((inxi shrStiffBase - inxi nrmStiffBase) * sin(inxi baseAngle) * cos(inxi baseAngle))
+  ((inxi shrStiffBase - inxi nrmStiffBase) * sin(inxi baseAngle) * cos(inxi baseAngle))
+  (inxi shrStiffBase * cos(inxi baseAngle) :^ 2 + inxi nrmStiffIntsl * sin(inxi baseAngle) :^ 2)
+  
 stfMtrxDerivation :: [Contents]
 stfMtrxDerivation = [foldlSP [S "Using the force-displacement relationship of", 
   acroGD 8, S "to define stiffness matrix", getS shrStiffIntsl `sC` S "as seen in",
@@ -291,7 +302,7 @@ stfMtrxDerivation = [foldlSP [S "Using the force-displacement relationship of",
   S "refer to an unrotated coordinate system" `sC` getS genDisplace, S "of" +:+.
   acroGD 9, S "The interslice elements are left in their standard coordinate system" `sC`
   S "and therefore are described by the same", phrase equation, S "from" +:+. acroGD 8,
-  S "Seen as", getS shrStiffIntsl, S "in" +:+. acroDD 12, isElMx shrStiffIntsl "shear" `sC` --FIXME: Index
+  S "Seen as", getS shrStiffIntsl, S "in" +:+. acroDD 12, isElMx shrStiffIntsl "shear" `sC` --FIXEME: add matrix symbols?
   S "and", isElMx nrmStiffIntsl "normal" `sC` S "calculated as in", acroDD 14],
   
   foldlSP [S "For basal surfaces the stiffness constants and displacements refer",
@@ -305,9 +316,7 @@ stfMtrxDerivation = [foldlSP [S "Using the force-displacement relationship of",
   
   EqnBlock $ inxi shrStiffIntsl :=
   m2x2 (cos(inxi baseAngle)) (Neg $ sin(inxi baseAngle)) (sin(inxi baseAngle)) (cos(inxi baseAngle)) *
-  inxi shrStiffIntsl :=
-  m2x2 (inxi shrStiffBase * cos(inxi baseAngle)) (Neg $ inxi nrmStiffBase * sin(inxi baseAngle))
-  (inxi shrStiffBase * sin(inxi baseAngle)) (inxi nrmStiffBase * cos(inxi baseAngle)),
+  inxi shrStiffIntsl := kiStar,
   
   foldlSP [S "The Hooke's law force displacement relationship of", acroGD 8,
   S "applied to the base also references a displacement vector", getS rotatedDispl,
@@ -316,20 +325,12 @@ stfMtrxDerivation = [foldlSP [S "Using the force-displacement relationship of",
   S "is rotated clockwise to align with the interslice displacement vector",
   getS genDisplace `sC` S "applying the", phrase definition, S "of", 
   getS rotatedDispl, S "in terms of", getS genDisplace, S "as seen in" +:+. acroGD 9,
-  S "Using this with base stiffness matrix", getS shrStiffBase --FIXME: index, should be K*i"
+  S "Using this with base stiffness matrix", getS shrStiffBase --FIXME: should be K*i"
   `sC` S "a basal force displacement relationship in the same coordinate system",
   S "as the interslice relationship can be derived as done in", eqN 8],
   
-  EqnBlock $ vec2D (inxi genPressure) (inxi genPressure) := inxi shrStiffBase * C rotatedDispl := --FIXME: pull from other equations? index
-  m2x2 (inxi shrStiffBase * cos(inxi baseAngle)) (Neg $ inxi nrmStiffBase * sin(inxi baseAngle))
-  (inxi shrStiffBase * sin(inxi baseAngle)) (inxi nrmStiffBase * cos(inxi baseAngle)) *
-  m2x2 (cos(inxi baseAngle)) (sin(inxi baseAngle)) (Neg $ sin(inxi baseAngle)) (cos(inxi baseAngle)) *
-  vec2D (inxi dx_i) (inxi dy_i) := m2x2
-  (inxi shrStiffBase * cos(inxi baseAngle) :^ 2 + inxi nrmStiffIntsl * sin(inxi baseAngle) :^ 2)
-  ((inxi shrStiffBase - inxi nrmStiffBase) * sin(inxi baseAngle) * cos(inxi baseAngle))
-  ((inxi shrStiffBase - inxi nrmStiffBase) * sin(inxi baseAngle) * cos(inxi baseAngle))
-  (inxi shrStiffBase * cos(inxi baseAngle) :^ 2 + inxi nrmStiffIntsl * sin(inxi baseAngle) :^ 2) *
-  vec2D (inxi dx_i) (inxi dy_i),
+  EqnBlock $ vec2D (inxi genPressure) (inxi genPressure) := inxi shrStiffBase * C rotatedDispl := --FIXME: add more symbols?
+  kiStar * rotMtx * displMtx := kiPrime * displMtx ,
   
   foldlSP [S "The new effective base stiffness matrix", getS shrStiffBase, --FIXME: add symbol?
   S "as derived in", eqN 7, S "is defined in" +:+. eqN 9, S "This is seen as matrix",
@@ -339,11 +340,7 @@ stfMtrxDerivation = [foldlSP [S "Using the force-displacement relationship of",
   getS effStiffA `sAnd` getS effStiffB `sC` S "defined in", eqN 10 `sAnd`
   eqN 11, S "respectively"],
   
-  EqnBlock $ inxi shrStiffBase := m2x2
-  (inxi shrStiffBase * cos(inxi baseAngle) :^ 2 + inxi nrmStiffIntsl * sin(inxi baseAngle) :^ 2)
-  ((inxi shrStiffBase - inxi nrmStiffBase) * sin(inxi baseAngle) * cos(inxi baseAngle))
-  ((inxi shrStiffBase - inxi nrmStiffBase) * sin(inxi baseAngle) * cos(inxi baseAngle))
-  (inxi shrStiffBase * cos(inxi baseAngle) :^ 2 + inxi nrmStiffIntsl * sin(inxi baseAngle) :^ 2)
+  EqnBlock $ inxi shrStiffBase := kiPrime
   := m2x2 (inxi effStiffA) (inxi effStiffB) (inxi effStiffB) (inxi effStiffA),
   
   EqnBlock $

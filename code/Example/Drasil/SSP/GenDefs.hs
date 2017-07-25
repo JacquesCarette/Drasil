@@ -68,7 +68,7 @@ bShFEq_desc = foldlSent [S "For a", phrase slice, S "of", phrase mass,
   phrase slice), S "Rearranged to solve for the", phrase shearForce,
   S "on the base" +:+. getS mobShrI, at_start force, S "equilibrium is",
   S "derived from the free body diagram of",
-  makeRef (SRS.physSyst SRS.missingP []), S "Index i",
+  makeRef (SRS.physSyst SRS.missingP []), S "Index", getS index,
   S "refers to", (plural value `ofThe` plural property), S "for",
   phrase slice :+: S "/" :+: plural intrslce, S "following convention in" +:+.
   makeRef (SRS.physSyst SRS.missingP []), at_start force, phrase variable,
@@ -106,7 +106,7 @@ mobShr_rel = inxi mobShrI := inxi shrResI / C fs := shrResEqn / C fs
 
 mobShr_desc :: Sentence
 mobShr_desc = foldlSent [
-  S "From", phrase definition `ofThe` ((phrase factor) `sOf` (phrase safety)), S "in", acroT 1 `sC` --FIXME: factor of saftey hacked in to avoid cyclical imports
+  S "From", phrase definition `ofThe` (phrase fs, S "in", acroT 1 `sC`
   S "and the new", phrase definition, S "of", getS shrResI `sC` S "a new",
   S "relation for", (S "net mobile" +:+ phrase shearForce `ofThe` phrase slice),
   getS shearFNoIntsl, S "is found as the resistive shear" , getS shrResI,
@@ -124,7 +124,7 @@ nmShrR_desc = foldlSent [S "The", phrase assumption, S "for the Morgenstern Pric
   phrase method_, sParen (acroA 5), S "that the", phrase intrslce,
   phrase shearForce, getS xi, S "is proportional to the", phrase intrslce, 
   phrase normForce, getS intNormForce, S "by a proportionality constant",
-  getS normToShear, S "and a predetermined scaling function", --FIXME: indexing on normToShear
+  getS normToShear, S "and a predetermined scaling function",
   getS scalFunc `sC` S "that changes", (S "proportionality as a function" `ofThe`
   S "x-ordinate position of the") +:+. phrase intrslce,
   getS scalFunc, S "is typically either a half-sine along the slip", phrase surface `sC`
@@ -179,25 +179,23 @@ fNety_rel = inxi fy := (Neg $ inxi slcWght) + (inxi baseHydroForce) * cos (inxi 
 
 
 fNet_desc :: Sentence
-fNet_desc = foldlSent [S "The net sum of", plural force, S "acting on a",
-  phrase slice, S "for the RFEM" +:+. phrase model, S "The", plural force,
-  S "that create an applied load on the" +:+. phrase slice,
-  -- FIXME: Sentence does not sound like a sentence
-  S "Fx,i refers to the load in the direction", phrase perp, S "to the", --FIXME: Index force
+fNet_desc = foldlSent [S "These equations show the net sum of the", plural force, S "acting on a",
+  phrase slice, S "for the RFEM", phrase model, S "and the", plural force,
+  S "that create an applied load on the" +:+. phrase slice, getS fx,
+  S "refers to the load in the direction", phrase perp, S "to the",
   S "direction of the", phrase force, S "of gravity for", phrase slice,
-  S "i, while Fy,i refers to the load in the direction parallel to the",
-  phrase force, S "of gravity for", phrase slice,
-  S "i.", at_start' force, S "are found in the free body diagram of" +:+.
-  makeRef (SRS.physSyst SRS.missingP []), S "In this", phrase model,
+  getS index `sC` S "while", getS fy, S "refers to the load in the direction parallel to the",
+  phrase force, S "of gravity for", phrase slice +:+. getS index,
+  at_start' force, S "are found in the free body diagram of" +:+.
+  makeRef (SRS.physSyst SRS.missingP []), S "In this", phrase model, --FIXME: hacked link
   S "the", plural element, S "are not exerting", plural force,
   S "on each other" `sC` S "so the", phrase intrslce, plural force,
-  getS intNormForce, S "and", getS intShrForce, S "are not a part of the" +:+. phrase model, S "Index i", 
+  getS intNormForce, S "and", getS intShrForce, S "are not a part of the" +:+. phrase model, S "Index", getS index, 
   S "refers to", (plural value `ofThe` plural property), S "for",
   phrase slice :+: S "/" :+: plural intrslce, S "following", 
   S "convention in" +:+. makeRef (SRS.physSyst SRS.missingP []), 
   at_start force, phrase variable, plural definition, S "can be found in",
   acroDD 1, S "to", acroDD 8]
-  --FIXME:Finish pulling out symbols
 
 --
 hookesLaw2d :: RelationConcept
@@ -220,10 +218,9 @@ hooke2d_desc = foldlSent [S "A 2D component implementation of Hooke's law as see
   S "in the respective directions defined as in" +:+. acroDD 14, S "The pressure",
   plural force, S "would be the result of applied loads on the", phrase mass `sC`
   S "the product of the stiffness", plural element, S "with the", phrase displacement,
-  S "would be the", phrase mass, S "'s reactive", phrase force,
+  S "would be the", phrase's mass, S "reactive", phrase force,
   S "that creates equilibrium with the applied", plural force,
   S "after reaching the equilibrium", phrase displacement]
-  -- FIXME: way to give possessive attribute to noun (ex. "mass's")
 
 
 --
@@ -239,7 +236,7 @@ disVec_rel = inxi rotatedDispl := vec2D (inxi shrDispl) (inxi nrmDispl) :=
 
 disVec_desc :: Sentence
 disVec_desc = foldlSent [at_start' vector, S "describing the", phrase displacement,
-  S "of", phrase slice +:+. S "i", getS genDisplace `isThe`
+  S "of", phrase slice +:+. getS index, getS genDisplace `isThe`
   phrase displacement, S "in the unrotated coordinate system" `sC`
   S "where", getS dx_i `isThe` phrase displacement, S "of the", phrase slice,
   phrase perp, S "to the direction of gravity, and", getS dy_i `isThe`

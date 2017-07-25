@@ -415,3 +415,6 @@ inx e n
   | n < 0     = Index (C e) (C index - Int (-n))
   | n == 0    = Index (C e) (C index)
   | otherwise = Index (C e) (C index + Int n)
+
+sum1toN :: Expr -> Expr
+sum1toN = summation (Just (lI, Low 1, High $ C numbSlices))

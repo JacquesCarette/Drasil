@@ -267,7 +267,7 @@ s4_1_2_bullets = enumBullet [
   (at_start' itslPrpty +:+ S "convention is noted by j. The end" +:+
     plural itslPrpty +:+ S "are usually not of" +:+ phrase interest `sC`
     S "therefore use the" +:+ plural itslPrpty +:+ S "from" +:+ 
-    (E $ 1 :<= C index :<= (C numbSlices) :- Int 1)),
+    (E $ 1 :<= C index :<= (C numbSlices) :- 1)),
   (at_start slice +:+ plural property +:+. S "convention is noted by"
   +:+ getS index)
   ]

@@ -249,11 +249,11 @@ nrmShrDerivation = [foldlSP [S "Taking the last static", phrase equation,
   S "is developed in", eqN 15 `sC` S "also found in", acroIM 2], --NOTE: "Taking this with that and the assumption of _ to get equation #" pattern
   
   EqnBlock $
-  inxi normToShear := summation (Just (lI, Low $ Int 1, High $ C numbSlices))
+  inxi normToShear := sum1toN
   (inxi baseWthX * (Grouping (inxi intNormForce + inxiM1 intNormForce) + Grouping (inxi watrForce + inxiM1 watrForce)) * tan(inxi baseAngle) +
   inxi midpntHght * (C earthqkLoadFctr * inxi slcWght - Int 2 * inxi surfHydroForce * sin(inxi surfAngle) -
   Int 2 * inxi surfLoad * sin(inxi impLoadAngle))) / 
-  summation (Just (lI, Low $ Int 1, High $ C numbSlices))
+  sum1toN
   (inxi baseWthX * (inxi intNormForce * inxi scalFunc + inxiM1 intNormForce * inxiM1 scalFunc)),
   
   foldlSP [eqN 15, S "for", getS normToShear `sC` S "is a function of the unknown",
@@ -317,9 +317,9 @@ rigDisDerivation = [foldlSP [S "Using the net force-displacement equilibrium",
   `ofThe` S "stiffness matrices", S "from", acroDD 12, S "and the force", 
   plural definition, S "from", acroGD 7 , S "a broken down force displacement", 
   S "equilibrium", phrase equation +:+. S "can be derived",
-  eqN 22, S "gives the broken down", phrase equation, S "in the x direction"
+  eqN 22, S "gives the broken down", phrase equation, S "in the", getS xi, S "direction"
   `sC` S "and", eqN 23, S "gives the broken down", phrase equation,
-  S "in the y direction"],
+  S "in the", getS yi, S "direction"],
 
   EqnBlock fDisEq_rel,
   
@@ -328,8 +328,8 @@ rigDisDerivation = [foldlSP [S "Using the net force-displacement equilibrium",
   S "left side" `ofThe` plural equation, S "can be solved for. The only unknown", 
   S "in the variables to solve for the stiffness values from", acroDD 14 +:+. 
   S "is the displacements", S "Therefore taking the", phrase equation, 
-  S "from each slice a set of", E $ (Int 2) * (C numbSlices), plural equation
-  `sC` S "with", E $ (2) * (C numbSlices), S "unknown displacements in the", 
+  S "from each slice a set of", E $ 2 * C numbSlices, plural equation
+  `sC` S "with", E $ 2 * C numbSlices, S "unknown displacements in the", 
   getS xi `sAnd` getS yi, S "directions of each slice can be derived. Solutions for the displacements",
   S "of each slice can then be found. The use of displacement in", phrase definition `ofThe`
   S "stiffness values makes the", phrase equation, S "implicit, which means an iterative solution",
@@ -342,7 +342,7 @@ rigFoSDerivation = [foldlSP [S "RFEM analysis can also be used to calculate the"
   getS dx_i `sAnd` getS dy_i `sC` S "are solved from the system of", plural equation, 
   S "in" +:+. acroIM 4, S "The", phrase definition, S "of", getS rotatedDispl, S "as", 
   S "rotation" `ofThe` S "displacement vector", getS genDisplace, S "is seen in" +:+.
-  acroGD 9, S "This is", --FIXME: index i 
+  acroGD 9, S "This is",
   S "used to find", plural displacement `ofThe` S "slice parallel to", 
   S "base" `ofThe` S "slice", getS shrDispl `sIn` eqN 24, S "and normal to", 
   S "base" `ofThe` S "slice", getS nrmDispl, S "in", eqN 25],
@@ -379,7 +379,7 @@ rigFoSDerivation = [foldlSP [S "RFEM analysis can also be used to calculate the"
   S "from", eqN 25 `sC` S "the value of", getS shrStiffBase, S "becomes solvable"],
   
   EqnBlock $
-  inxi shrStiffBase := inxi intNormForce / (Int 2 * (Int 1 + inxi poissnsRatio)) * (Dbl 0.1 / inxi baseWthX) +
+  inxi shrStiffBase := inxi intNormForce / (2 * (1 + inxi poissnsRatio)) * (Dbl 0.1 / inxi baseWthX) +
   (C cohesion - inxi normStress * tan(C fricAngle)) / (abs (inxi shrDispl) + C constant_a),
   
   foldlSP [S "With", getTandS shrStiffBase, S "calculated in", eqN 28,
@@ -396,7 +396,7 @@ rigFoSDerivation = [foldlSP [S "RFEM analysis can also be used to calculate the"
   S "acts as the mobile shear acting on the base. Using the", phrase definition,
   titleize fs, phrase equation, S "from", acroT 1 `sC` S "with the", 
   plural definition, S "of resistive shear strength of a slice", getS mobStress,
-  S "from", phrase equation, S "(27) and shear stress on a slice", getS shrStress, S "from",
+  S "from", eqN 27, S "and", getTandS shrStress, S "from",
   eqN 29, S "the", getTandS fsloc, S "can be found from as seen in", eqN 30 `sAnd` acroIM 5],
   
   EqnBlock $
@@ -409,12 +409,8 @@ rigFoSDerivation = [foldlSP [S "RFEM analysis can also be used to calculate the"
   (S "length" `ofThe` S "slice's base"), S "Shown in", eqN 31 `sAnd` acroIM 5],
   
   EqnBlock $ --FIXME: pull from other equations in derivation
-  (C fs) := summation (Just (lI, Low $ Int 1, High $ C numbSlices))
-  (inxi baseLngth * inxi mobStress) /
-  summation (Just (lI, Low $ Int 1, High $ C numbSlices))
-  (inxi baseLngth * inxi shrStress) :=
-  summation (Just (lI, Low $ Int 1, High $ C numbSlices))
+  (C fs) := sum1toN (inxi baseLngth * inxi mobStress) /
+  sum1toN (inxi baseLngth * inxi shrStress) := sum1toN
   (inxi baseLngth * (C cohesion - inxi nrmStiffBase * inxi nrmDispl * tan(C fricAngle))) /
-  summation (Just (lI, Low $ Int 1, High $ C numbSlices))
-  (inxi baseLngth * (inxi shrStiffBase * inxi shrDispl)) --FIXME: Grouping with brackets
+  sum1toN (inxi baseLngth * Grouping (inxi shrStiffBase * inxi shrDispl))
   ]

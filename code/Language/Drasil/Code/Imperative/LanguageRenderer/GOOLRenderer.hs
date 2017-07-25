@@ -337,6 +337,9 @@ unOpDoc' Abs = text "#|"
 unOpDoc' Not = text "?!"
 unOpDoc' Log = text "log"
 unOpDoc' Exp = text "exp"
+unOpDoc' Sin = error "Type not yet implemented"
+unOpDoc' Cos = error "Type not yet implemented"
+unOpDoc' Tan = error "Type not yet implemented"
 
 valueDoc' :: Config -> Value -> Doc
 valueDoc' c = parens . valueDoc'' c

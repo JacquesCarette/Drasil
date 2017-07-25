@@ -29,11 +29,13 @@ acroT  numVar = short thModel     :+: S (show numVar)
 -- number from which to start counting.
 acroNumGen :: [Contents] -> Int -> [Contents]
 acroNumGen [] _ = []
-acroNumGen (first:rest) num = (f first) : acroNumGen rest (num + 1)
+acroNumGen (frst:rst) num = (f frst) : acroNumGen rst (num + 1)
   where f (Assumption a) = Assumption $ nw $ npnc' (a ^. id) (a ^. term) (extrctStrng (short assumption) ++  (show num))
         f (Requirement r) = Requirement $ ReqChunk (nw $ npnc' (r ^. id) (r ^. term) (extrctStrng (short requirement) ++ (show num))) []
         f (LikelyChange lc) = LikelyChange $ LCChunk (nw $ npnc' (lc ^. id) (lc ^. term) (extrctStrng (short likelyChg) ++ (show num))) []
+        f _ = error "Type not yet implemented"
         extrctStrng (S strng) = strng
+        extrctStrng _ = error "Invalid acronym type"
 
 assumption, dataDefn, genDefn, goalStmt, inModel, likelyChg, unlikelyChg,
   physSyst, requirement, srs, thModel, mg, desSpec, notApp, dataConst :: CI

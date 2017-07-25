@@ -7,7 +7,7 @@ import Language.Drasil.Spec (USymb, RefType)
 import Language.Drasil.Unicode (Greek, Special)
 import Language.Drasil.Document (DType (..))
 
-import Data.List (intersperse)
+-- import Data.List (intersperse)
 
 -- | Internal HTML version of Expr 
 -- (for converting 'Language.Drasil.Expr.Expr')
@@ -137,8 +137,9 @@ data ItemType = Flat Spec | Nested Spec ListType
 instance Show ListType where
   show (Ordered _)   = "o"
   show (Unordered _) = "u"
-  show (Desc _)    = error "Printing descriptive list failed"
-  show (Simple _)  = error "Printing Simple list failed, see ASTHTML/PrintHTML"
+  show (Desc _)      = error "Printing descriptive list failed"
+  show (Simple _)    = error "Printing Simple list failed, see ASTHTML/PrintHTML"
+  show (Definitions _)  = error "Printing list of definitions failed"
 
 instance Show Function where
   show Log            = "log"

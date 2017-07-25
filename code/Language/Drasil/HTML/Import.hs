@@ -7,7 +7,6 @@ import Language.Drasil.Spec
 import qualified Language.Drasil.HTML.AST as H
 import Language.Drasil.Unicode (Special(Partial))
 import Language.Drasil.Chunk.Eq
-import Language.Drasil.Chunk.Relation
 import Language.Drasil.Chunk.ExprRelat (relat)
 import Language.Drasil.Chunk.Module
 import Language.Drasil.Chunk.NamedIdea (term, short)
@@ -225,8 +224,11 @@ lay x@(Module m)      = H.Module (formatName m) (spec $ refName x)
 lay (Graph _ _ _ _)   = H.Paragraph (H.EmptyS)  -- need to implement!
 lay x@(Requirement r)   = H.Requirement (spec (phrase $ r ^. term)) (spec $ refName x) (spec $ short r)
 lay x@(Assumption a)    = H.Assumption (spec (phrase $ a ^. term)) (spec $ refName x) (spec $ short a)
-lay x@(LikelyChange lc)  = H.LikelyChange (spec (phrase $ lc ^. term)) (spec $ refName x) (spec $ short lc)
-lay (UnlikelyChange _)= H.Paragraph (H.EmptyS)  -- need to implement!
+lay x@(LikelyChange lc) = H.LikelyChange (spec (phrase $ lc ^. term)) (spec $ refName x) (spec $ short lc)
+lay (UnlikelyChange _)  = H.Paragraph (H.EmptyS)  -- need to implement!
+lay (Defnt _ _ _)     = H.Paragraph (H.EmptyS)  -- need to implement!
+lay (GDef)            = H.Paragraph (H.EmptyS)  -- need to implement!
+lay (IMod)            = H.Paragraph (H.EmptyS)  -- need to implement!
 lay (TMod ps rf r)    = H.Definition (Theory r) 
   (map (\(x,y) -> (x, map lay y)) ps) (spec rf)
 lay (DDef ps rf d)    = H.Definition (Data d)
@@ -260,7 +262,10 @@ makePairs (Theory c) _ = [
                   (H.EmptyS)]),
   ("Description", [H.Paragraph (spec (c ^. defn))])
   ]
-makePairs General _ = error "Not yet implemented"
+makePairs General _  = error "Not yet implemented"
+makePairs Instance _ = error "Not yet implemented"
+makePairs TM _       = error "Not yet implemented"
+makePairs DD _       = error "Not yet implemented"
 
 -- | Translates the defining equation from a QDefinition to 
 -- HTML's version of Sentence

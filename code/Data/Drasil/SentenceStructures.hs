@@ -179,6 +179,7 @@ displayConstrntsAsSet ch listOfVals = getS ch `sIn` (sCurlyBr (foldlsC (map S li
 
 extrctStrng :: Sentence -> String
 extrctStrng (S strng) = strng
+extrctStrng _ = error "Invalid type extraction"
 
 {-BELOW IS TO BE MOVED TO EXAMPLE/DRASIL/SECTIONS-}
 

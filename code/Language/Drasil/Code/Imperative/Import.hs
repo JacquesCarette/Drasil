@@ -540,3 +540,6 @@ genHacks g (n, m) = buildModule n [] [] (map (genMethodHacks g) m) []
 
 genMethodHacks :: Generator -> Method -> Method
 genMethodHacks g (Method l _ _ t ps b) = publicMethod g t l ps b
+genMethodHacks _ (GetMethod _ _) = error "not implemented"
+genMethodHacks _ (SetMethod _ _) = error "not implemented"
+genMethodHacks _ (MainMethod _) = error "not implemented"

@@ -10,7 +10,6 @@ import Language.Drasil.Spec
 import qualified Language.Drasil.TeX.AST as T
 import Language.Drasil.Unicode (Special(Partial))
 import Language.Drasil.Chunk.Eq
-import Language.Drasil.Chunk.Relation
 import Language.Drasil.Chunk.ExprRelat (relat)
 import Language.Drasil.Chunk.Module
 import Language.Drasil.Chunk.NamedIdea (term)
@@ -222,6 +221,9 @@ lay (TMod ps r _)         = T.Definition (map (\(x,y) -> (x, map lay y)) ps)
   (spec r)
 lay (DDef ps r _)         = T.Definition (map (\(x,y) -> (x, map lay y)) ps)
   (spec r)
+lay (Defnt _ _ _)     = T.Paragraph (T.EmptyS)  -- need to implement!
+lay (GDef)            = T.Paragraph (T.EmptyS)  -- need to implement!
+lay (IMod)            = T.Paragraph (T.EmptyS)  -- need to implement!
 
 makeL :: ListType -> T.ListType  
 makeL (Bullet bs)      = T.Enum        $ (map item bs)
@@ -247,6 +249,9 @@ makePairs (Theory c) _ = [
   ("Description", [T.Paragraph (spec (c ^. defn))])
   ]
 makePairs General _ = error "Not yet implemented"
+makePairs Instance _ = error "Not yet implemented"
+makePairs TM _       = error "Not yet implemented"
+makePairs DD _       = error "Not yet implemented"
 
 makeUHPairs :: [(ModuleChunk,[ModuleChunk])] -> [(T.Spec,T.Spec)]
 makeUHPairs []          = []

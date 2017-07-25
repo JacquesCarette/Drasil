@@ -6,7 +6,7 @@
 %Information to be included in the title page:
 \title{DRASIL}
 \subtitle{A Knowledge-Based Approach to Scientific Software Development}
-\author{Aaron M, Dan S, Maryyam N, Nicholas R, Henry M}
+\author{Henry M, Aaron M, Maryyam N, Nicholas R, Dan S}
 \institute{McMaster University}
 \date[LSS \today]{Literate Scientific Software Group, \today}
 
@@ -20,7 +20,7 @@
 \begin{itemize}
  \item $\exists$ problems $\in$ D where
  \item $D = \{$ scientific computing, engineering computing $\}$
- \item Problems = [\\ 
+ \item Problems = [\\
   \begin{itemize}
    \item Inconsistent Software Requirement Specifications (SRS) across D
    \item Inconsistency between code and documentation
@@ -39,35 +39,35 @@
 \begin{frame}
 \frametitle{Purpose of Drasil}
 \begin{itemize}
-  \item Solve the four issues
-  \item Promote 
-    \begin{itemize}
-      \item Reusability 
-        \begin{itemize}
-          \item Examples have fully documented code
-          \item Data base to build new examples
-        \end{itemize}
-      \item Maintainability
-        \begin{itemize}
-          \item Make changes in one place, gets updated everywhere
-        \end{itemize}
+ \item Solve the four problems
+ \item Promote
+  \begin{itemize}
+   \item Reusability 
+    \begin{itemize}  
+     \item Examples have fully documented code
+     \item Data base to build new examples
     \end{itemize}
+   \item Maintainability 
+    \begin{itemize}
+     \item Make changes in one place, gets updated everywhere
+    \end{itemize}
+  \end{itemize}
 \end{itemize}
 \end{frame}
 
 \begin{frame}
 \frametitle{What is Drasil?}
 \begin{itemize}
-  \item<1-> Knowledge Capture (Data.Drasil)
-  \item<2-> Language and Rendering (Language.Drasil)
-    \begin{itemize}
-      \item Code Generation: transition from Drasil to working code
-      \item Documentation Generation: transition from Drasil to human readable documentation
-    \end{itemize}
-  \item<3-> Case Studies (Example.Drasil)
-    \begin{itemize}
-      \item This part is where you would input equations, requirements, and output code and documentation
-    \end{itemize}
+ \item<1-> Knowledge Capture (Data.Drasil)
+ \item<2-> Language and Rendering (Language.Drasil)
+  \begin{itemize}
+   \item Code Generation: transition from Drasil to working code
+   \item Documentation Generation: transition from Drasil to human readable documentation
+  \end{itemize}
+ \item<3-> Case Studies (Example.Drasil)
+  \begin{itemize}
+   \item This part is where you would input equations, requirements, and output code and documentation
+  \end{itemize}
 \end{itemize}
 \end{frame}
 
@@ -78,6 +78,82 @@
  \item<2-> Drasil is intended to simplify the generation of documentation and code for scientific software
  \item<3-> Facilitate desirable software qualities such as traceability, verifiability, and reproducibility
  \item<4-> Case studies from which structural patterns and implicit relationships can be extracted, data can be captured, and core systems can be tested and implemented
+ \item<3-> Also to facilitate desirable software qualities such as traceability, verifiability, and reproducibility
+ \item<4-> Case study from which structural patterns and implicit relationships can be extracted, data can be captured, and core systems can be tested and implemented
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{Daily Tasks}
+\begin{itemize}
+ \item<1-> Finding patterns within examples $\Rightarrow$ sentence combinators
+ \item<2-> Finding patterns between examples $\Rightarrow$ extraction of common sections, contents, and concepts
+ \item<3-> Knowledge extraction
+ \item<4-> Reduce duplication
+   \begin{itemize}
+     \item Function efficiency
+     \item Building chunks off of each other
+   \end{itemize}
+ \item<5-> Implement new functions/types created by supervisors
+ \item<6-> Code cleanup and bug fixing
+ \item<7-> Opening/closing issues
+
+\frametitle{Easy of Use}
+\begin{itemize}
+ \item<1-> Input:
+  \begin{itemize}
+   \item<2-> Equations (DataDefs, Instance Models)
+   \item<3-> Requirements
+   \item<4-> Assumptions
+  \end{itemize}
+ \item<5-> Output:
+  \begin{itemize}
+   \item<6-> Code that fits the requirements and assumptions
+   \item<7-> Documentation (Module Guide, Software Requirements Specification)
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{Errors in Drasil?}
+\begin{itemize}
+ \item<1-> Catching and correcting errors in software:
+  \begin{itemize}
+   \item<2-> If there is an error, it will be everywhere
+   \item<3-> Easy to spot
+   \item<4-> Once it's fixed, it is also fixed everywhere else
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{Case Study Contributions}
+\begin{itemize}
+\item<1-> Each member assigned a case study as well as tasks and issues
+\item<2-> SWHS
+  \begin{itemize}
+    \item Largest Example
+    \item ODEs
+  \end{itemize}
+\item<3-> NoPCM
+  \begin{itemize}
+    \item Builds off pre-existing SWHS example
+  \end{itemize}
+\item<4-> GlassBR
+  \begin{itemize}
+    \item General definition's omitted
+  \end{itemize}
+\item<5-> SSP
+  \begin{itemize}
+    \item Indexing
+    \item Sophisticated math
+    \item Diversity of symbols
+  \end{itemize}
+\item<6-> GamePhysics
+  \begin{itemize}
+    \item Most ambiguous example
+    \item SRS for a game physics library
+  \end{itemize}
 \end{itemize}
 \end{frame}
 
@@ -98,34 +174,10 @@
 \end{itemize}
 \end{frame}
 
+
 \begin{frame}
-\frametitle{Case Study Contributions}
-\begin{itemize}
-\item<1-> SWHS
-  \begin{itemize}
-    \item Largest Example
-    \item ODEs
-  \end{itemize}
-\item<2-> NoPCM
-  \begin{itemize}
-    \item Builds of pre-existing SWHS example
-  \end{itemize}
-\item<3-> GlassBR
-  \begin{itemize}
-    \item General definition's omitted
-  \end{itemize}
-\item<4-> SSP
-  \begin{itemize}
-    \item Indexing
-    \item Sophisticated math
-    \item Diversity of symbols
-  \end{itemize}
-\item<5-> GamePhysics
-  \begin{itemize}
-    \item Most ambiguous example
-    \item SRS for a game physics library
-  \end{itemize}
-\end{itemize}
+\frametitle{Collaboration via Github}
+\includegraphics[scale=0.2]{./Github_Logo.png}
 \end{frame}
 
 \begin{frame}

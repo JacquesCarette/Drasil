@@ -21,7 +21,7 @@ import Drasil.SSP.GenDefs (eqlExpr)
 sspDataDefs :: [QDefinition]
 sspDataDefs = [sliceWght, baseWtrF, surfWtrF, intersliceWtrF, angleA, angleB,
   lengthB, lengthLb, lengthLs, seismicLoadF, surfLoads, intrsliceF, resShearWO, mobShearWO,
-  displcmntRxnF, netFDsplcmntEqbm, shearStiffness, soilStiffness]
+  displcmntRxnF, displcmntBasel, netFDsplcmntEqbm, shearStiffness, soilStiffness]
 
 fixmeS :: Sentence
 fixmeS = S "FIXME: add description"
@@ -160,12 +160,20 @@ mobShearWOEqn = ((inxi slcWght) + (inxi surfHydroForce) * (cos (inxi surfAngle))
 --DD12
 
 displcmntRxnF :: QDefinition
-displcmntRxnF = mkDataDef shrStiffIntsl displcmntRxnFEqn --, shrStiffBase (correct chunk used?)
+displcmntRxnF = mkDataDef genPressure displcmntRxnFEqn
 
 displcmntRxnFEqn :: Expr
 displcmntRxnFEqn = dgnl2x2 (inxi shrStiffIntsl) (inxi nrmStiffBase) * vec2D (inxi dx_i) (inxi dy_i)
 
---DD13 FIXME: id for "Net Force-Displacement Equilibrium"
+--DD12.5
+displcmntBasel :: QDefinition
+displcmntBasel = mkDataDef genPressure displcmntBaselEqn
+
+displcmntBaselEqn :: Expr
+displcmntBaselEqn = m2x2 (inxi effStiffA) (inxi effStiffB) (inxi effStiffB) (inxi effStiffA)
+  * vec2D (inxi dx_i) (inxi dy_i)
+
+--DD13
 
 netFDsplcmntEqbm :: QDefinition
 netFDsplcmntEqbm = mkDataDef genForce netFDsplcmntEqbmEqn

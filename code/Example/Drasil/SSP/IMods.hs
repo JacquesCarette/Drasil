@@ -98,22 +98,21 @@ sliceFs_desc = foldlSent [S "The value of the interslice normal force",
 forDisEqlb :: RelationConcept
 forDisEqlb = makeRC "forDisEqlb" (nounPhraseSP "force displacement equilibrium") fDisEq_desc fDisEq_rel
 
-fDisEq_rel :: Relation --FIXME: split into two IMOD and add K_aA and K_bB
+fDisEq_rel :: Relation --FIXME: split into two IMOD
 fDisEq_rel = Neg (inxi watrForceDif) - (C earthqkLoadFctr)*(inxi slcWght) -
   (inxi baseHydroForce)*(sin(inxi baseAngle)) +
   (inxi surfHydroForce)*sin(inxi surfAngle) + (inxi surfLoad)*sin(inxi impLoadAngle) :=
   inx  dx_i (-1) * (Neg (inx surfLngth (-1)) * inx nrmStiffIntsl (-1)) +
-  inxi dx_i * (Neg (inx surfLngth (-1)) * inx nrmStiffIntsl (-1) + inxi surfLngth * inxi nrmStiffIntsl + inxi baseLngth * inxi nrmStiffIntsl) +
+  inxi dx_i * (Neg (inx surfLngth (-1)) * inx nrmStiffIntsl (-1) + inxi surfLngth * inxi nrmStiffIntsl + inxi baseLngth * inxi effStiffA) +
   inx  dx_i 1 * (Neg (inxi surfLngth) * inxi nrmStiffIntsl) +
-  inxi dy_i * (Neg (inxi baseLngth) * inxi nrmStiffIntsl)
+  inxi dy_i * (Neg (inxi baseLngth) * inxi effStiffB)
   :=
   Neg (inxi slcWght) - (inxi baseHydroForce)*(cos(inxi baseAngle)) +
   (inxi surfHydroForce)*cos(inxi surfAngle) + (inxi surfLoad)*cos(inxi impLoadAngle) :=
   inx  dy_i (-1) * (Neg (inx surfLngth (-1)) * inx shrStiffIntsl (-1)) +
-  inxi dy_i * (Neg (inx surfLngth (-1)) * inx shrStiffIntsl (-1) + inxi surfLngth * inxi nrmStiffIntsl + inxi baseLngth * inxi nrmStiffIntsl) +
+  inxi dy_i * (Neg (inx surfLngth (-1)) * inx shrStiffIntsl (-1) + inxi surfLngth * inxi nrmStiffIntsl + inxi baseLngth * inxi effStiffA) +
   inx  dy_i 1 * (Neg (inxi surfLngth) * inxi shrStiffIntsl) +
-  inxi dx_i * (Neg (inxi baseLngth) * inxi shrStiffIntsl)
-  --FIXME: index fixes
+  inxi dx_i * (Neg (inxi baseLngth) * inxi effStiffB)
 
 fDisEq_desc :: Sentence
 fDisEq_desc = foldlSent [S "There is one set of force displacement equilibrium",
@@ -331,7 +330,7 @@ rigDisDerivation = [foldlSP [S "Using the net force-displacement equilibrium",
   S "is the displacements", S "Therefore taking the", phrase equation, 
   S "from each slice a set of", E $ (Int 2) * (C numbSlices), plural equation
   `sC` S "with", E $ (2) * (C numbSlices), S "unknown displacements in the", 
-  S "x and y directions of each slice can be derived. Solutions for the displacements",
+  getS xi `sAnd` getS yi, S "directions of each slice can be derived. Solutions for the displacements",
   S "of each slice can then be found. The use of displacement in", phrase definition `ofThe`
   S "stiffness values makes the", phrase equation, S "implicit, which means an iterative solution",
   S "method, with an initial guess for the displacements in the stiffness", plural value,

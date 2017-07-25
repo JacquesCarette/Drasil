@@ -29,7 +29,7 @@ eqlExpr f1_ f2_ _e_ = ((inxi slcWght) `_e_`
 
 sspGenDefs :: [RelationConcept]
 sspGenDefs = [normForcEq, bsShrFEq, resShr, mobShr,
-  normShrR, momentEql, netForce, hookesLaw2d, displVect]
+  normShrR, momentEql, netForcex, netForcey, hookesLaw2d, displVect]
 
 --
 normForcEq :: RelationConcept
@@ -162,18 +162,21 @@ momEql_desc = foldlSent [S "For a", phrase slice, S "of", phrase mass,
   S "can be found in", acroDD 1, S "to", acroDD 9]
 
 --
-netForce :: RelationConcept
-netForce = makeRC "netForce" (nounPhraseSP "net force") fNet_desc fNet_rel
+netForcex :: RelationConcept
+netForcex = makeRC "netForce" (nounPhraseSP "net x-component force") EmptyS fNetx_rel
 
-fNet_rel :: Relation
-fNet_rel = C genForce := (Neg $ inxi watrForceDif) - (C earthqkLoadFctr)*(inxi slcWght)
+fNetx_rel :: Relation
+fNetx_rel = C genForce := (Neg $ inxi watrForceDif) - (C earthqkLoadFctr)*(inxi slcWght)
   - (inxi baseHydroForce) * sin (inxi baseAngle) + (inxi surfHydroForce) * sin (inxi surfAngle)
   + (inxi surfLoad) * sin (inxi impLoadAngle)
-{-
-C genForce := (Neg $ inxi slcWght) + (inxi baseHydroForce) * cos (inxi baseAngle) - (inxi surfHydroForce) * cos (inxi surfAngle)
-  - (inxi surfLoad) * cos (inxi impLoadAngle)
--}
---FIXME: requires two lines of equal signs
+
+netForcey :: RelationConcept
+netForcey = makeRC "netForce" (nounPhraseSP "net y-component force") fNet_desc fNety_rel
+
+fNety_rel :: Relation
+fNety_rel = C genForce := (Neg $ inxi slcWght) + (inxi baseHydroForce) * cos (inxi baseAngle)
+  - (inxi surfHydroForce) * cos (inxi surfAngle) - (inxi surfLoad) * cos (inxi impLoadAngle)
+
 
 fNet_desc :: Sentence
 fNet_desc = foldlSent [S "The net sum of", plural force, S "acting on a",

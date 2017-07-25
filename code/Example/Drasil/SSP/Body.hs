@@ -87,8 +87,7 @@ mkSRS = RefSec (RefProg intro
       (phrase undergraduate +:+ S "level 4" +:+ phrase physics)
       EmptyS
     , IOrgSec orgSecStart inModel (SRS.inModel SRS.missingP []) orgSecEnd]) :
-    --FIXME: SRS.inModel should be removed and the instance model section
-    --should be looked up from "inModel" by the interpreter while generating.
+    --FIXME: issue #235
   map Verbatim [s3, s4, s5, s6, s7, s8]
 
 ssp_srs, ssp_mg :: Document
@@ -228,16 +227,14 @@ userChar pname understandings familiarities = foldlSP [
 
 -- SECTION 4 --
 s4 = specSysDesF end [s4_1, s4_2]
-  where end = plural definition +:+ S "and finally the" +:+
-              plural inModel +:+ S "that" +:+ phrase model +:+
-              S "the" +:+ phrase slope
+  where end = plural definition +:+ S "and finally the" +:+ plural inModel +:+
+         S "that" +:+ phrase model +:+ S "the" +:+ phrase slope
 
 -- SECTION 4.1 --
 s4_1 = probDescF EmptyS ssa ending [s4_1_1, s4_1_2, s4_1_3]
-  where ending = S "evaluate the" +:+ phrase fs_rc +:+ S "of a" +:+
-                 phrase's slope +:+ --FIXME apostrophe on "slope's"
-                 phrase slpSrf +:+ S "and to calculate the displacement"
-                 +:+ S "that the" +:+ phrase slope +:+ S "will experience"
+  where ending = S "evaluate the" +:+ phrase fs +:+ S "of a" +:+
+          phrase's slope +:+ phrase slpSrf +:+ S "and to calculate the" +:+
+          S "displacement that the" +:+ phrase slope +:+ S "will experience"
 
 -- SECTION 4.1.1 --
 s4_1_1 = termDefnF EmptyS [s4_1_1_list]
@@ -270,7 +267,7 @@ s4_1_2_bullets = enumBullet [
   (at_start' itslPrpty +:+ S "convention is noted by j. The end" +:+
     plural itslPrpty +:+ S "are usually not of" +:+ phrase interest `sC`
     S "therefore use the" +:+ plural itslPrpty +:+ S "from" +:+ 
-    (E $ Int 1 :<= C index :<= (C numbSlices) :- Int 1)),
+    (E $ 1 :<= C index :<= (C numbSlices) :- Int 1)),
   (at_start slice +:+ plural property +:+. S "convention is noted by"
   +:+ getS index)
   ]
@@ -336,15 +333,15 @@ s4_2_3_genDefs = map sspSymMapT sspGenDefs
 s4_2_4_dataDefs = (map sspSymMapD (take 13 sspDataDefs)) ++ resShrDerivation ++
   [sspSymMapD (sspDataDefs !! 13)] ++ mobShrDerivation ++ map sspSymMapD [sspDataDefs !! 14, sspDataDefs !! 15] ++
   stfMtrxDerivation ++ (map sspSymMapD (drop 16 sspDataDefs))
-  --FIXME: derivations should be with the appropriate dataDef
+  --FIXME: derivations should be with the appropriate DataDef
 
 -- SECTION 4.2.5 --
 -- Instance Models is automatically generated in solChSpecF using the paragraphs below
 
-s4_2_5_IMods = concat $ weave [map (\x -> [sspSymMapT x]) sspIMods, --FIXME: move to IMods
+s4_2_5_IMods = concat $ weave [map (\x -> [sspSymMapT x]) sspIMods,
   [fctSftyDerivation, nrmShrDerivation, intrSlcDerivation,
   rigDisDerivation, rigFoSDerivation]]
-
+  --FIXME: derivations should be with the appropriate IMod
 
 -- SECTION 4.2.6 --
 -- Data Constraints is automatically generated in solChSpecF using the tables below
@@ -365,7 +362,7 @@ slopeVert = verticesConst $ phrase slope
 -}
 {-input and output tables-}
 s4_2_6Table2, s4_2_6Table3 :: Contents
-s4_2_6Table2 = inDataConstTbl sspInputs --FIXME: needs more inputs but cannot express them yet
+s4_2_6Table2 = inDataConstTbl sspInputs --FIXME: issue #295
 s4_2_6Table3 = outDataConstTbl sspOutputs
 
 -- SECTION 5 --

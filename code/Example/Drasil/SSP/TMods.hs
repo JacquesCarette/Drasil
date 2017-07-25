@@ -44,21 +44,22 @@ equilibrium :: RelationConcept
 equilibrium = makeRC "equilibrium" (nounPhraseSP "equilibrium") eq_desc eq_rel
 
 eq_rel :: Relation
-eq_rel = UnaryOp (Summation Nothing (C genForce)) := (Int 0) --FIXME: add net x force, net y force, and net moment
+eq_rel = foldr (:=) 0 (map summ [fx, fy, momntOfBdy])
+  where summ = summation Nothing . C
 
 eq_desc :: Sentence
 eq_desc = foldlSent [S "For a body in static equilibrium, the net", plural force,
   S "and net moments acting on the body will cancel out. Assuming a 2D problem",
-  sParen (acroA 8), S "the net x-ordinate (Fx)",
-  S "and y-ordinate (Fy) scalar components will be equal to 0. All", plural force,
+  sParen (acroA 8), S "the", getTandS fx `sAnd` getTandS fy,
+  S "will be equal to" +:+. E 0, S "All", plural force,
   S "and their", phrase distance, S "from the chosen point of rotation will create a",
-  S "net moment equal to 0, also able to be analyzed as a scalar in a 2D problem"]
+  S "net moment equal to" `sC` E 0, S "also able to be analyzed as a scalar in a 2D problem"]
 
 --
 mcShrStrgth :: RelationConcept
 mcShrStrgth = makeRC "mcShrStrgth" (nounPhraseSP "Mohr-Coulumb shear strength")  mcSS_desc mcSS_rel
 
-mcSS_rel :: Relation --FIXME: Should be P with no subscript i
+mcSS_rel :: Relation
 mcSS_rel = (C shrStress) := ((C normStress) :* (tan (C fricAngle)) :+ (C cohesion))
 
 mcSS_desc :: Sentence
@@ -85,7 +86,7 @@ effStress = makeRC "effStress" (nounPhraseSP "effective stress") effS_desc effS_
 effS_rel :: Relation
 effS_rel = (C normStress) := (C normStress) :- (C porePressure)
 
-effS_desc :: Sentence -- FIXME: these are not normStress but they are sigma. And some of these are mu. Also fix equaiton
+effS_desc :: Sentence --FIXME: these are not normStress but they are sigma. Add a prime. Symbol inconsistency 
 effS_desc = foldlSent [getS normStress, S "is the total", phrase stress,
   S "a soil", phrase mass, S "needs to maintain itself as a rigid collection" +:+.
   S "of particles", phrase source `ofThe'` phrase stress,

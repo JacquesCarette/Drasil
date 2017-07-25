@@ -134,7 +134,7 @@ sspUnits = map ucw [normStress, genPressure, normFunc, shearFunc,
   impLoadAngle, baseWthX, baseLngth, surfLngth, midpntHght, genForce,
   momntOfBdy, genDisplace, genStffness, shrStiffIntsl, shrStiffBase,
   nrmStiffIntsl, nrmStiffBase, shrStiffRes, nrmStiffRes, shrDispl,
-  nrmDispl, porePressure, elmNrmDispl, elmPrllDispl, sliceHght,
+  nrmDispl, porePressure, elmNrmDispl, elmPrllDispl, sliceHght, fx, fy,
   mobShrC, shrResC, rotatedDispl, intNormForce, shrStress, mobStress]
 
 normStress, genPressure, normFunc, shearFunc, slopeDist, slipDist, genStffness,
@@ -142,7 +142,7 @@ normStress, genPressure, normFunc, shearFunc, slopeDist, slipDist, genStffness,
   shearFNoIntsl, shearRNoIntsl, slcWght, watrForce, watrForceDif, shrResI,
   intShrForce, baseHydroForce, surfHydroForce, totNrmForce, nrmFSubWat,
   nrmFNoIntsl, surfLoad, baseAngle, surfAngle, impLoadAngle, baseWthX, effStiffA, effStiffB,
-  baseLngth, surfLngth, midpntHght, genForce, momntOfBdy, genDisplace,
+  baseLngth, surfLngth, midpntHght, genForce, momntOfBdy, genDisplace, fx, fy,
   shrStiffIntsl, shrStiffBase, nrmStiffIntsl, nrmStiffBase, shrStiffRes,
   nrmStiffRes, shrDispl, nrmDispl, porePressure, elmNrmDispl, mobStress,
   elmPrllDispl, mobShrC, shrResC, rotatedDispl, intNormForce, shrStress :: UnitalChunk
@@ -346,7 +346,13 @@ normFunc     = uc' "C1_i" (cn "interslice normal force function") ("FIXME: missi
   (Concat [cC, Atomic "1"]) momentOfForceU
   
 shearFunc    = uc' "C2_i" (cn "interslice shear force function") ("FIXME: missing discription")
-  (Concat [cC, Atomic "2"]) momentOfForceU  
+  (Concat [cC, Atomic "2"]) momentOfForceU
+
+fx = uc' "fx" (cn "x-component of the net force") "FIXME: missing discription"
+  (sub cF lX) newton
+
+fy = uc' "fy" (cn "y-component of the net force") "FIXME: missing discription"
+  (sub cF lY) newton
   
 ----------------------
 -- Unitless Symbols --

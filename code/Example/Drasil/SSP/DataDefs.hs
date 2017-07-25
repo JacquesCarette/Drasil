@@ -65,10 +65,10 @@ intersliceWtrF = mkDataDef watrForce intersliceWtrFEqn
 
 intersliceWtrFEqn :: Expr
 intersliceWtrFEqn = Case [case1,case2,case3]
-  where case1 = (((inxi slopeHght)-(inxi slipHght )):^(Int 2):/(Int 2) * (C satWeight) +
-                 ((inxi waterHght)-(inxi slopeHght)):^(Int 2) * (C satWeight),
+  where case1 = (((inxi slopeHght)-(inxi slipHght )):^ 2 :/ 2  * (C satWeight) +
+                 ((inxi waterHght)-(inxi slopeHght)):^ 2  * (C satWeight),
                 (inxi waterHght) :>= (inxi slopeHght))
-        case2 = (((inxi waterHght)-(inxi slipHght )):^(Int 2):/(Int 2) * (C satWeight),
+        case2 = (((inxi waterHght)-(inxi slipHght )):^ 2 :/ 2  * (C satWeight),
                 (inxi slopeHght) :> (inxi waterHght) :> (inxi slipHght))
         case3 = (Int 0,(inxi waterHght) :<= (inxi slipHght))
 
@@ -200,11 +200,11 @@ soilStiffness = mkDataDef nrmStiffBase soilStiffnessEqn
 
 soilStiffnessEqn :: Expr
 soilStiffnessEqn = (Case [case1,case2])
-  where case1 = (block, (C SM.poissnsR) :< (Int 0))
+  where case1 = (block, (C SM.poissnsR) :< 0)
         case2 = ((Dbl 0.01) * block + (C constant_K) / ((C nrmDispl)+(C constant_A)),
-                (C SM.poissnsR) :>= (Int 0))
-        block = (C intNormForce)*((Int 1)-(C SM.poissnsR))/
-                (((Int 1)+(C SM.poissnsR)) * ((Int 1) - (Int 2):*(C SM.poissnsR) + (C baseWthX)))
+                (C SM.poissnsR) :>= 0)
+        block = (C intNormForce)*( 1 -(C SM.poissnsR))/
+                (( 1 +(C SM.poissnsR)) * ( 1  -  2 :*(C SM.poissnsR) + (C baseWthX)))
 
 -----------------
 -- Derivations --
@@ -325,10 +325,10 @@ stfMtrxDerivation = [foldlSP [S "Using the force-displacement relationship of",
   (inxi shrStiffBase * sin(inxi baseAngle)) (inxi nrmStiffBase * cos(inxi baseAngle)) *
   m2x2 (cos(inxi baseAngle)) (sin(inxi baseAngle)) (Neg $ sin(inxi baseAngle)) (cos(inxi baseAngle)) *
   vec2D (inxi dx_i) (inxi dy_i) := m2x2
-  (inxi shrStiffBase * cos(inxi baseAngle) :^ Int 2 + inxi nrmStiffIntsl * sin(inxi baseAngle) :^ Int 2)
+  (inxi shrStiffBase * cos(inxi baseAngle) :^ 2 + inxi nrmStiffIntsl * sin(inxi baseAngle) :^ 2)
   ((inxi shrStiffBase - inxi nrmStiffBase) * sin(inxi baseAngle) * cos(inxi baseAngle))
   ((inxi shrStiffBase - inxi nrmStiffBase) * sin(inxi baseAngle) * cos(inxi baseAngle))
-  (inxi shrStiffBase * cos(inxi baseAngle) :^ Int 2 + inxi nrmStiffIntsl * sin(inxi baseAngle) :^ Int 2) *
+  (inxi shrStiffBase * cos(inxi baseAngle) :^ 2 + inxi nrmStiffIntsl * sin(inxi baseAngle) :^ 2) *
   vec2D (inxi dx_i) (inxi dy_i),
   
   foldlSP [S "The new effective base stiffness matrix", getS shrStiffBase, --FIXME: add symbol?
@@ -340,15 +340,15 @@ stfMtrxDerivation = [foldlSP [S "Using the force-displacement relationship of",
   eqN 11, S "respectively"],
   
   EqnBlock $ inxi shrStiffBase := m2x2
-  (inxi shrStiffBase * cos(inxi baseAngle) :^ Int 2 + inxi nrmStiffIntsl * sin(inxi baseAngle) :^ Int 2)
+  (inxi shrStiffBase * cos(inxi baseAngle) :^ 2 + inxi nrmStiffIntsl * sin(inxi baseAngle) :^ 2)
   ((inxi shrStiffBase - inxi nrmStiffBase) * sin(inxi baseAngle) * cos(inxi baseAngle))
   ((inxi shrStiffBase - inxi nrmStiffBase) * sin(inxi baseAngle) * cos(inxi baseAngle))
-  (inxi shrStiffBase * cos(inxi baseAngle) :^ Int 2 + inxi nrmStiffIntsl * sin(inxi baseAngle) :^ Int 2)
+  (inxi shrStiffBase * cos(inxi baseAngle) :^ 2 + inxi nrmStiffIntsl * sin(inxi baseAngle) :^ 2)
   := m2x2 (inxi effStiffA) (inxi effStiffB) (inxi effStiffB) (inxi effStiffA),
   
   EqnBlock $
-  (inxi effStiffA) := (inxi shrStiffBase) * (cos (inxi baseAngle)) :^ (Int 2) :+
-  (inxi nrmStiffBase) * (sin (inxi baseAngle)) :^ (Int 2),
+  (inxi effStiffA) := (inxi shrStiffBase) * (cos (inxi baseAngle)) :^ 2 :+
+  (inxi nrmStiffBase) * (sin (inxi baseAngle)) :^ 2,
   
   EqnBlock $
   (inxi effStiffB) := ((inxi shrStiffBase)-(inxi nrmStiffBase)) *

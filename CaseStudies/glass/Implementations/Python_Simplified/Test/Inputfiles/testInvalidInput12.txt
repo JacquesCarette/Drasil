@@ -1,6 +1,6 @@
 #DIMENSION( length , breadth , thickness in mm)
 1600
-0
+-1
 10
 #GLASS TYPE ( AN , HS , FT )
 HS

@@ -26,24 +26,23 @@ class TestOutputFormat(unittest.TestCase):
         self.params         = [param.Param() for i in range(self.numTests)]
 
         for i in range(self.numTests):
-            inputFormat.get_input(self.inputFileName[i], self.params[i]) # FileNotDoundError: [Errno 2] No such file or directory: 'testInput3.txt'
+            inputFormat.get_input(os.path.join("Test/Inputfiles", self.inputFileName[i]), self.params[i]) # FileNotDoundError: [Errno 2] No such file or directory: 'testInput3.txt'
             derivedValues.derived_params(self.params[i])
-            outputFormat.display_output("testoutput.txt", self.qVal[i], self.jVal[i],
-                                                self.qHatTolVal[i], self.pbVal[i], 
-                                                self.lrVal[i], self.nflVal[i],
-                                                self.is_safe1State[i], self.is_safe2State[i],
-                                                self.params[i]) 
          
     def test_display_output(self):
         for i in range(self.numTests):
             with self.subTest(i=i):
-                f1 = open(os.path.join("Test/Inputfiles", self.outputFileName[i]), "r")
-                f2 = open("testoutput.txt", "r")
-                text1 = f1.readlines()
-                text2 = f2.readlines()
+                outputFormat.display_output("testoutput.txt", self.qVal[i], self.jVal[i],
+                                                self.qHatTolVal[i], self.pbVal[i], 
+                                                self.lrVal[i], self.nflVal[i],
+                                                self.is_safe1State[i], self.is_safe2State[i],
+                                                self.params[i]) 
+                with open(os.path.join("Test/Inputfiles", self.outputFileName[i]), "r") as f:
+                    text1 = f.readlines()
+                with open("testoutput.txt", "r") as f:
+                    text2 = f.readlines()
                 self.assertEqual(text1,text2)
-                f1.close()
-                f2.close()
+
                 
 if __name__ == "__main__":
         unittest.main()

@@ -32,15 +32,15 @@ class TestInputFormat(unittest.TestCase):
         for i in range(self.numTests):
             with self.subTest(i=i):
 
-                self.assertEqual(self.aExpctd[i], self.params[i]) 
+                self.assertEqual(self.aExpctd[i], self.params[i].a) 
                 #^AssertionError: some number != <Implementation.param.Param. object at 0x032E0Cf0 (some memory space)>
-                self.assertEqual(self.bExpctd[i], self.params[i])
-                self.assertEqual(self.tExpctd[i], self.params[i])
-                self.assertEqual(self.gtExpctd[i], self.params[i])
-                self.assertEqual(self.wExpctd[i], self.params[i])
-                self.assertEqual(self.tntExpctd[i], self.params[i])
-                self.assertEqual((self.sdxExpctd[i], self.sdyExpctd, self.sdzExpctd), self.params[i])
-                self.assertEqual(self.pbTolExpctd[i], self.params[i])
+                self.assertEqual(self.bExpctd[i], self.params[i].b)
+                self.assertEqual(self.tExpctd[i], self.params[i].t)
+                self.assertEqual(self.gtExpctd[i], self.params[i].gt)
+                self.assertEqual(self.wExpctd[i], self.params[i].w)
+                self.assertEqual(self.tntExpctd[i], self.params[i].tnt)
+                self.assertEqual((self.sdxExpctd[i], self.sdyExpctd, self.sdzExpctd), self.params[i].sdvect)
+                self.assertEqual(self.pbTolExpctd[i], self.params[i].pbtol)
         
 if __name__ == '__main__':
     unittest.main()

@@ -1,13 +1,18 @@
+{-# LANGUAGE GADTs #-}
+
 module Language.Drasil.CodeSpec where
 
 import Language.Drasil.Chunk.Code
 import Language.Drasil.Chunk.NamedIdea
 import Language.Drasil.Chunk.Eq
+import Language.Drasil.Chunk.Quantity -- for hack
+import Language.Drasil.Chunk.SymbolForm -- for hack
 import Language.Drasil.NounPhrase
 import Language.Drasil.Spec
 import Language.Drasil.SystemInformation
-import Language.Drasil.Code -- hack
-import Language.Drasil.Defs -- hack
+import Language.Drasil.Code -- for hack
+import Language.Drasil.Defs -- for hack
+import Language.Drasil.Expr -- for hack
 
 import qualified Data.Map as Map
 import Control.Lens ((^.))
@@ -26,7 +31,8 @@ data CodeSpec = CodeSpec {
   fMods :: [FuncMod],
   const :: [CodeDefinition],
   choices :: Choices,
-  mods :: [(String, [FunctionDecl])] -- hack
+  modDefs :: [ModDef],  -- medium hack
+  mods :: [(String, [FunctionDecl])] -- big hack
 }
 
 type FunctionMap = Map.Map String CodeDefinition
@@ -79,6 +85,7 @@ codeSpec' (SI {_sys = sys, _quants = q, _definitions = defs, _inputs = ins, _out
   fMods = [funcMod "Calculations" defs],
   const = map qtoc constants,
   choices = ch,
+  modDefs = [],
   mods = modHack
 }
 
@@ -140,6 +147,21 @@ defaultChoices = Choices {
 }
 
 
+-- medium hacks ---
+data ModDef = ModDef String [FuncDef]
+
+data FuncDef where
+  FuncDef :: (Quantity c, SymbolForm c) => String -> [c] -> c -> [FuncStmt] -> FuncDef  
+  
+data FuncStmt where
+  FAsg :: (Quantity c, SymbolForm c) => c -> Expr -> FuncStmt
+  FFor :: (Quantity c, SymbolForm c) => c -> Expr -> [FuncStmt] -> FuncStmt
+  FWhile :: Expr -> [FuncStmt] -> FuncStmt
+  FCond :: Expr -> [FuncStmt] -> [FuncStmt] -> FuncStmt
+  FRet :: Expr -> FuncStmt
+
+addModDefs :: CodeSpec -> [ModDef] -> CodeSpec
+addModDefs cs@(CodeSpec{ modDefs = md }) mdnew = cs { modDefs = md ++ mdnew }
 
 ---- major hacks ----
 modHack :: [(String, [FunctionDecl])]

@@ -1001,7 +1001,7 @@ Stand off distance (SD) - The distance from the glazing surface to the centroid 
 Load share factor (LSF) - A multiplying factor derived from the load sharing between the double glazing, of equal or different thickness's and types (including the layered behaviour of LG under long duration loads), in a sealed IG unit.
 </li>
 <li>
-Glass type factor (GTF) - A multiplying factor for adjusting the LR of different glass type, that is, AN, HS, or FT in monolithic glass, LG (Laminated Glass), or IG (Insulating Glass) constructions.
+Glass type factor (GTF) - A multiplying factor for adjusting the LR of different glass type, that is, AN, FT, or HS, in monolithic glass, LG (Laminated Glass), or IG (Insulating Glass) constructions.
 </li>
 <li>
 Aspect ratio (AR) - The ratio of the long dimension of the glass to the short dimension of the glass. For glass supported on four sides, the aspect ratio is always equal to or greater than 1.0. For glass supported on three sides, the ratio of the length of one of the supported edges perpendicular to the free edge, to the length of the free edge, is equal to or greater than 0.5.
@@ -1301,7 +1301,7 @@ Description
 </th>
 <td>
 <p class="paragraph">
-B is the risk of failure<br />k is the surface flaw parameter<br />a is the plate length (long dimension)<br />b is the plate width (short dimension)<br />m is the surface flaw parameter<br />E is the modulus of elasticity of glass<br />h is the actual thickness<br />LDF is the load duration factor<br />J is the stress distribution factor (Function)
+<em>B</em> is the risk of failure<br /><em>k</em> is the surface flaw parameter (m<sup>12</sup>/(N<sup>7</sup>))<br /><em>a</em> is the plate length (long dimension) (m)<br /><em>b</em> is the plate width (short dimension) (m)<br /><em>m</em> is the surface flaw parameter (m<sup>12</sup>/(N<sup>7</sup>))<br /><em>E</em> is the modulus of elasticity of glass (Pa)<br /><em>h</em> is the actual thickness (m)<br /><em>LDF</em> is the load duration factor<br /><em>J</em> is the stress distribution factor (Function)
 </p>
 </td>
 </tr>
@@ -1315,7 +1315,7 @@ Label
 </th>
 <td>
 <p class="paragraph">
-h
+<em>h</em>
 </p>
 </td>
 </tr>
@@ -1336,68 +1336,75 @@ Equation
 <td>
 <a id="">
 <div class="equation">
-h = <span class="casebr">
+<em>h</em> = <div class="fraction">
+<span class="fup">
+1
+</span>
+<span class="fdn">
+1000
+</span>
+</div><span class="casebr">
 {
 </span>
 <div class="cases">
 <span>
 2.16 , <span class="case">
-t=2.5
+<em>t</em> = 2.5
 </span>
 </span>
 <span>
 2.59 , <span class="case">
-t=2.7
+<em>t</em> = 2.7
 </span>
 </span>
 <span>
 2.92 , <span class="case">
-t=3.0
+<em>t</em> = 3.0
 </span>
 </span>
 <span>
 3.78 , <span class="case">
-t=4.0
+<em>t</em> = 4.0
 </span>
 </span>
 <span>
 4.57 , <span class="case">
-t=5.0
+<em>t</em> = 5.0
 </span>
 </span>
 <span>
 5.56 , <span class="case">
-t=6.0
+<em>t</em> = 6.0
 </span>
 </span>
 <span>
 7.42 , <span class="case">
-t=8.0
+<em>t</em> = 8.0
 </span>
 </span>
 <span>
 9.02 , <span class="case">
-t=10.0
+<em>t</em> = 10.0
 </span>
 </span>
 <span>
 11.91 , <span class="case">
-t=12.0
+<em>t</em> = 12.0
 </span>
 </span>
 <span>
 15.09 , <span class="case">
-t=16.0
+<em>t</em> = 16.0
 </span>
 </span>
 <span>
 18.26 , <span class="case">
-t=19.0
+<em>t</em> = 19.0
 </span>
 </span>
 <span>
 21.44 , <span class="case">
-t=22.0
+<em>t</em> = 22.0
 </span>
 </span>
 </div>
@@ -1411,7 +1418,7 @@ Description
 </th>
 <td>
 <p class="paragraph">
-h is the actual thickness
+<em>h</em> is the actual thickness (m)<br /><em>t</em> is the nominal thickness <em>t</em> in {2.5, 2.7, 3.0, 4.0, 5.0, 6.0, 8.0, 10.0, 12.0, 16.0, 19.0, 22.0} (mm)
 </p>
 </td>
 </tr>

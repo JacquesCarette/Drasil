@@ -2,7 +2,7 @@
 -- | Contains Sentences and helpers
 module Language.Drasil.Spec where
 
-import Language.Drasil.Unicode (Greek,Special,Special(CurlyBrOpen,CurlyBrClose))
+import Language.Drasil.Unicode (Greek,Special,Special(CurlyBrOpen,CurlyBrClose,SqBrOpen,SqBrClose))
 import Language.Drasil.Symbol
 import Language.Drasil.Expr
 
@@ -78,7 +78,7 @@ sParenNum y = sParen (S (show y))
 
 -- | Helper function for wrapping sentences in square brackets.
 sSqBr :: Sentence -> Sentence
-sSqBr x = S "[" :+: x :+: S "]"
+sSqBr x = Sp SqBrOpen :+: x :+: Sp SqBrClose
 
 sSqBrNum :: Int -> Sentence
 sSqBrNum y = sSqBr (S (show y))

@@ -108,10 +108,10 @@ pcm_si = SI {
   _quants = pcmSymbols,
   _concepts = (pcmSymbols),
   _namedIdeas = acronyms,
-  _definitions = ([dd1HtFluxC]),          --dataDefs
+  _definitions = [dd1HtFluxC],          --dataDefs
   _inputs = (map qs pcmConstraints), --inputs
-  _outputs = ([] :: [QSWrapper]),     --outputs
-  _defSequence = ([] :: [Block QDefinition]),
+  _outputs = (map qs [temp_W, w_E]),     --outputs
+  _defSequence = [Parallel dd1HtFluxC []],
   _constraints = (pcmConstraints),        --constrained
   _constants = []
 }

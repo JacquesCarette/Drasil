@@ -252,7 +252,7 @@ item (Nested t s) = H.Nested (spec t) (makeL s)
 -- (Data defs, General defs, Theoretical models, etc.)
 makePairs :: DType -> SymbolMap -> [(String,[H.LayoutObj])]
 makePairs (Data c) m = [
-  ("Label",       [H.Paragraph $ H.N $ c ^. symbol]),
+  ("Label",       [H.Paragraph $ spec (titleize $ c ^. term)]),
   ("Units",       [H.Paragraph $ spec $ unit'2Contents c]),
   ("Equation",    [H.HDiv ["equation"] [H.Tagless (buildEqn c)] (H.EmptyS)]),
   ("Description", [H.Paragraph (buildDDDescription c m)])
@@ -263,7 +263,7 @@ makePairs (Theory c) _ = [
                   (H.EmptyS)]),
   ("Description", [H.Paragraph (spec (c ^. defn))])
   ]
-makePairs General _  = error "Not yet implemented"
+makePairs General  _ = error "Not yet implemented"
 makePairs Instance _ = error "Not yet implemented"
 makePairs TM _       = error "Not yet implemented"
 makePairs DD _       = error "Not yet implemented"

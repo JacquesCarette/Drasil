@@ -239,7 +239,7 @@ item (Nested t s) = T.Nested (spec t) (makeL s)
   
 makePairs :: DType -> SymbolMap -> [(String,[T.LayoutObj])]
 makePairs (Data c) m = [
-  ("Label",       [T.Paragraph $ T.N $ c ^. symbol]),
+  ("Label",       [T.Paragraph $ spec (titleize $ c ^. term)]),
   ("Units",       [T.Paragraph $ spec $ unit'2Contents c]),
   ("Equation",    [eqnStyleDD $ buildEqn c]),
   ("Description", [T.Paragraph (buildDDDescription c m)])
@@ -249,7 +249,7 @@ makePairs (Theory c) _ = [
   ("Equation",    [eqnStyleTM $ T.E (rel (c ^. relat))]),
   ("Description", [T.Paragraph (spec (c ^. defn))])
   ]
-makePairs General _ = error "Not yet implemented"
+makePairs General  _ = error "Not yet implemented"
 makePairs Instance _ = error "Not yet implemented"
 makePairs TM _       = error "Not yet implemented"
 makePairs DD _       = error "Not yet implemented"

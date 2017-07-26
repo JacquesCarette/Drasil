@@ -275,8 +275,9 @@ buildEqn c = H.N (c ^. symbol) H.:+: H.S " = " H.:+: H.E (expr (equat c))
 
 -- | Build descriptions in data defs based on required verbosity
 buildDDDescription :: QDefinition -> SymbolMap -> H.Spec
-buildDDDescription c m = descLines (
-  (toVC c m):(if verboseDDDescription then (vars (equat c) m) else [])) m
+buildDDDescription c m = descLines 
+  (if verboseDDDescription then (vars (getQ c := equat c) m) else []) m
+  where getQ (EC a _) = C a
 
 -- | Helper for building each line of the description of a data def
 descLines :: [VarChunk] -> SymbolMap -> H.Spec  

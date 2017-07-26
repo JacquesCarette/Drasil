@@ -274,8 +274,9 @@ buildEqn c = T.N (c ^. symbol) T.:+: T.S " = " T.:+: T.E (expr (equat c))
 
 -- Build descriptions in data defs based on required verbosity
 buildDDDescription :: QDefinition -> SymbolMap -> T.Spec
-buildDDDescription c m = descLines (
-  (toVC c m):(if verboseDDDescription then vars (equat c) m else [])) m
+buildDDDescription c m = descLines 
+  (if verboseDDDescription then (vars (getQ c := equat c) m) else []) m
+  where getQ (EC a _) = C a
 
 descLines :: [VarChunk] -> SymbolMap -> T.Spec  
 descLines []    _   = error "No chunks to describe"

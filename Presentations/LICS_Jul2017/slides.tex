@@ -34,7 +34,8 @@
 
 \begin{frame}
 \frametitle{The Goal}
-\includegraphics[scale=0.70]{../WG2_11/generate_all_the_things.jpg}
+\centering
+\includegraphics[scale=0.7]{../WG2_11/generate_all_the_things.jpg}
 \end{frame}
 
 \begin{frame}
@@ -73,88 +74,6 @@
 \end{frame}
 
 \begin{frame}
-\frametitle{Introduction}
-\begin{itemize}
- \item<1-> Scientific and engineering computing has the potential to lead other fields of software with its solid knowledge base
- \item<2-> Drasil is intended to simplify the generation of documentation and code for scientific software
- \item<3-> Facilitate desirable software qualities such as traceability, verifiability, and reproducibility
- \item<4-> Case studies from which structural patterns and implicit relationships can be extracted, data can be captured, and core systems can be tested and implemented
-\end{itemize}
-\end{frame}
-
-\begin{frame}
-\frametitle{Drasil Logic}
-\begin{itemize}
- \item<1-> Drasil is a knowledge capturing system that allows for the easy reuse of information
- \item<2-> Knowledge capture is achieved through the use of data types called chunks
- \item<3-> Combination of chunks to grow information
- \item<4-> Related information should stem from one source (reduces duplication)
-\end{itemize}
-\end{frame}
-
-\begin{frame}
-\frametitle{Collaborative Efforts}
-\begin{itemize}
- \item<1-> Peer review of code\linebreak
- \item<2-> Discussion of all around issues (ex. cyclic imports, referencing problems)\linebreak
- \item<3-> A lot of collaboration through GitHub\linebreak
-\end{itemize}
-\end{frame}
-
-\begin{frame}
-\frametitle{Collaboration via Github}
-\includegraphics[scale=0.2]{./Github_Logo.png}
-\end{frame}
-
-\begin{frame}
-\frametitle{Collaboration via Github}
-Git is a version control system, github is a git repository hosting service that is \alert{free}.
-\begin{itemize}
- \item<1-> Git allows us to collaborate effectively, even when team members are not in the same location
- \item<2-> Git combined with haskell, allows us to make large changes while easily maintaining a working version of Drasil
- \item<3-> Git \alert{(when used properly)} prevents catastrophic lose of work
-\end{itemize}
-\end{frame}
-
-\begin{frame}
-\frametitle{Daily Tasks}
-\begin{itemize}
- \item<1-> Finding patterns within examples $\Rightarrow$ sentence combinators
- \item<1-> Finding patterns between examples $\Rightarrow$ extraction of common sections, contents, and concepts
- \includegraphics[scale=0.70]{../WG2_11/WinAndBwExamples.jpg}
- \item<2-> Knowledge extraction
- \item<2-> Reduced duplication due to
-  \begin{itemize}
-   \item Increased function efficiency
-   \item Building chunks off of each other instead of from scratch
-  \end{itemize}
- \item<3-> Implement new functions/types created by supervisors
- \item<4-> Code cleanup and bug fixing
- \item<5-> Opening/closing issues
-\end{itemize}
-\end{frame}
-
-\begin{frame}
-\frametitle{Example}
-\includegraphics[scale=0.70]{InDataConsEx.jpg}
-\end{frame}
-
-\begin{frame}
-\frametitle{Example}
-\includegraphics[scale=0.60]{CodeComparisons.jpg}
-\end{frame}
-
-\begin{frame}
-\frametitle{Example}
-\centering
-\includegraphics[height=0.25\textheight]{ChunkEx.jpg}
-\captionof{figure}{}
-\includegraphics[height=0.40\textheight]{inDataConstTbl.jpg}
-\captionof{figure}{}
-\end{frame}
-
-
-\begin{frame}
 \frametitle{Ease of Use}
 \begin{itemize}
  \item<1-> Input:
@@ -184,32 +103,164 @@ Git is a version control system, github is a git repository hosting service that
 \end{frame}
 
 \begin{frame}
+\frametitle{Drasil Logic}
+\begin{itemize}
+ \item<1-> Drasil is a knowledge capturing system that allows for the easy reuse of information
+ \item<2-> Knowledge capture is achieved through the use of data types called chunks
+ \item<3-> Combination of chunks to grow information
+ \item<4-> Related information should stem from one source (reduces duplication)
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{Growing Chunk}
+\centering
+\includegraphics[scale=0.45]{Tree_Chunk_Model.png}
+\end{frame}
+
+\begin{frame}
+\frametitle{Chunk Combinations}
+\includegraphics[scale=0.19]{Puzzle.png}
+\end{frame}
+
+\begin{frame}
+\frametitle{Drasil Logic Tree}
+\centering
+\includegraphics[scale=0.38]{../WG2_11/class_hierarchy.png}
+
+\end{frame}
+
+\begin{frame}
+\frametitle{Collaborative Efforts}
+\begin{itemize}
+ \item<1-> Peer review of code\linebreak
+ \item<2-> Discussion of all around issues (ex. cyclic imports, referencing problems)\linebreak
+ \item<3-> A lot of collaboration through GitHub\linebreak
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{Collaboration via Github}
+\centering
+\includegraphics[scale=0.2]{./Github_Logo.png}
+\end{frame}
+
+\begin{frame}
+\frametitle{Collaboration via Github}
+Git is a version control system, github is a git repository hosting service that is \alert{free}.
+\begin{itemize}
+ \item<1-> Git allows us to collaborate effectively, even when team members are not in the same location
+ \item<2-> Git combined with haskell, allows us to make large changes while easily maintaining a working version of Drasil
+ \item<3-> Git \alert{(when used properly)} prevents catastrophic lose of work
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{GitHub Issues}
+\begin{center}
+ \includegraphics[scale=0.6]{Old_Issue.png}
+\end{center}
+\end{frame}
+
+\begin{frame}
+\frametitle{GitHub Issues}
+\begin{center}
+ \includegraphics[scale=0.6]{Old_Issue_With_Box.png}
+\end{center}
+\end{frame}
+
+\begin{frame}
+\frametitle{Daily Tasks}
+\begin{itemize}
+ \item<1-> Finding patterns within examples $\Rightarrow$ sentence combinators
+ \item<1-> Finding patterns between examples $\Rightarrow$ extraction of common sections, contents, and concepts
+ \begin{center}
+  \includegraphics[scale=0.6]{../WG2_11/WinAndBwExamples.jpg}
+ \end{center}
+ \item<2-> Knowledge extraction
+ \item<2-> Reduced duplication due to
+  \begin{itemize}
+   \item Increased function efficiency
+   \item Building chunks off of each other instead of from scratch
+  \end{itemize}
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{Example}
+\centering
+\includegraphics[scale=0.7]{InDataConsEx.jpg}
+\end{frame}
+
+\begin{frame}
+\frametitle{Example}
+\centering
+\includegraphics[scale=0.6]{CodeComparisons.jpg}
+\end{frame}
+
+\begin{frame}
+\frametitle{Example}
+\centering
+\includegraphics[height=0.25\textheight]{ChunkEx.jpg}
+\newline
+\newline
+\newline
+\includegraphics[height=0.40\textheight]{inDataConstTbl.jpg}
+\end{frame}
+
+\begin{frame}
+\frametitle{Daily Tasks}
+\begin{itemize}
+ \item Finding patterns within examples $\Rightarrow$ sentence combinators
+ \item Finding patterns between examples $\Rightarrow$ extraction of common sections, contents, and concepts
+ \begin{center}
+  \includegraphics[scale=0.6]{../WG2_11/WinAndBwExamples.jpg}
+ \end{center}
+ \item Knowledge extraction
+ \item Reduced duplication due to
+  \begin{itemize}
+   \item Increased function efficiency
+   \item Building chunks off of each other instead of from scratch
+  \end{itemize}
+ \item<1-> Implement new functions/types created by supervisors
+ \item<2-> Code cleanup and bug fixing
+ \item<3-> Opening/closing issues
+\end{itemize}
+\end{frame}
+
+\begin{frame}
 \frametitle{Case Study Contributions}
 \begin{itemize}
-\item Each member is assigned a case study as well as tasks and issues
-\item<1-> SWHS
+\item Each member is assigned a case study as well as tasks and issues\newline
+\item<1-> SWHS\newline
   \begin{itemize}
-    \item Largest Example
-    \item ODEs
+    \item Largest Example\newline
+    \item ODEs\newline
   \end{itemize}
-\item<2-> NoPCM
+\item<2-> NoPCM\newline
   \begin{itemize}
-    \item Builds off of pre-existing SWHS example
+    \item Builds off of pre-existing SWHS example\newline
   \end{itemize}
-\item<3-> GlassBR
+\item<3-> GlassBR\newline
   \begin{itemize}
-    \item Omitted general definitions
+    \item Omitted general definitions\newline
   \end{itemize}
-\item<4-> SSP
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{Case Study Contributions}
+\begin{itemize}
+\item<1-> SSP\newline
   \begin{itemize}
-    \item Indexing
-    \item Sophisticated math
-    \item Diversity of symbols
+    \item Indexing\newline
+    \item Sophisticated math\newline
+    \item Diversity of symbols\newline
   \end{itemize}
-\item<5-> GamePhysics
+\item<2-> GamePhysics\newline
   \begin{itemize}
-    \item Most ambiguous example
-    \item SRS for a game physics library
+    \item Most ambiguous example\newline
+    \item SRS for a game physics library\newline
   \end{itemize}
 \end{itemize}
 \end{frame}

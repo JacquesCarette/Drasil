@@ -197,7 +197,8 @@ makeCSS _ = vcat [
     text "  border: 0px;}",
     text ".symb {",
     text "  font-size: 150%;",
-    text "  line-height: 110%;}",
+    text "  line-height: 110%;",
+    text "  vertical-align: -10%;}",
     text ".bound {font-size: 80%;}"
     ]
   ]

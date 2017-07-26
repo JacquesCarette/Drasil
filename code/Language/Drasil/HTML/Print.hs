@@ -206,18 +206,23 @@ mul a b@(Int _) = mulParen a ++ "&sdot;" ++ p_expr b
 mul x@(Sym (Concat _)) y = p_expr x ++ "&sdot;" ++ mulParen y
 mul x y@(Sym (Concat _)) = mulParen x ++ "&sdot;" ++ p_expr y
 mul x@(Sym (Atomic s)) y = if length s > 1 then p_expr x ++ "&sdot;" ++ mulParen y else
-                            p_expr x ++ mulParen y
+                            mulParenF x ++ mulParen y
 mul x y@(Sym (Atomic s)) = if length s > 1 then mulParen x ++ "&sdot;" ++ p_expr y else
-                            mulParen x ++ p_expr y
+                            mulParenF x ++ p_expr y
 mul x@(Div _ _) y = paren (p_expr x) ++ mulParen y
-mul a b         = mulParen a ++ mulParen b
+mul a b         = mulParenF a ++ mulParen b
 
--- | Helper for properly rendering parentheses around multiplication
+-- | Helper for properly rendering parentheses around the multiplier
 mulParen :: Expr -> String
 mulParen a@(Add _ _) = paren $ p_expr a
 mulParen a@(Sub _ _) = paren $ p_expr a
---mulParen (Mul n m) = mulParen n ++ mulParen m
 mulParen a = p_expr a
+
+-- for added a thin space after the multiplicand
+mulParenF :: Expr -> String
+mulParenF a@(Add _ _) = paren (p_expr a) ++ "&#8239;"
+mulParenF a@(Sub _ _) = paren (p_expr a) ++ "&#8239;"
+mulParenF a = p_expr a ++ "&#8239;"
 
 -- | Helper for properly rendering division of expressions
 divide :: Expr -> Expr -> String

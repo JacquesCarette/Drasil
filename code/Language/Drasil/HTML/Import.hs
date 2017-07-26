@@ -187,7 +187,7 @@ accent Acute  s = S $ '&' : s : "acute;" --Only works on vowels.
 decorate :: Decoration -> Sentence -> Sentence
 decorate Hat    s = s :+: S "&#770;" 
 decorate Vector s = S "<b>" :+: s :+: S "</b>"
-decorate Prime  s = s :+: S "'"
+decorate Prime  s = s :+: S "&prime;"
 
 -- | Translates from Document to the HTML representation of Document
 makeDocument :: Document -> H.Document

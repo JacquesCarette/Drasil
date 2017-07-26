@@ -22,7 +22,7 @@ import Language.Drasil.Document
 import Language.Drasil.Symbol
 import Language.Drasil.Misc (unit'2Contents)
 import Language.Drasil.SymbolAlphabet
-import Language.Drasil.NounPhrase (phrase)
+import Language.Drasil.NounPhrase (phrase, titleize)
 import Language.Drasil.Unit (usymb)
 
 expr :: Expr -> T.Expr
@@ -245,7 +245,7 @@ makePairs (Data c) m = [
   ("Description", [T.Paragraph (buildDDDescription c m)])
   ]
 makePairs (Theory c) _ = [
-  ("Label",       [T.Paragraph $ spec (phrase $ c ^. term)]),
+  ("Label",       [T.Paragraph $ spec (titleize $ c ^. term)]),
   ("Equation",    [eqnStyleTM $ T.E (rel (c ^. relat))]),
   ("Description", [T.Paragraph (spec (c ^. defn))])
   ]

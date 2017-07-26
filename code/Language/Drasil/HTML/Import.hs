@@ -21,7 +21,7 @@ import Language.Drasil.Document
 import Language.Drasil.Symbol
 import Language.Drasil.Misc (unit'2Contents)
 import Language.Drasil.SymbolAlphabet (lD)
-import Language.Drasil.NounPhrase (phrase)
+import Language.Drasil.NounPhrase (phrase, titleize)
 import Language.Drasil.Unit (usymb)
 
 import Control.Lens hiding ((:>),(:<),set)
@@ -258,7 +258,7 @@ makePairs (Data c) m = [
   ("Description", [H.Paragraph (buildDDDescription c m)])
   ]
 makePairs (Theory c) _ = [
-  ("Label",       [H.Paragraph $ spec (phrase $ c ^. term)]),
+  ("Label",       [H.Paragraph $ spec (titleize $ c ^. term)]),
   ("Equation",    [H.HDiv ["equation"] [H.Tagless (H.E (rel (c ^. relat)))]
                   (H.EmptyS)]),
   ("Description", [H.Paragraph (spec (c ^. defn))])

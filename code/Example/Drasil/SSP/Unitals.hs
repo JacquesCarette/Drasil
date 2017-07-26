@@ -182,8 +182,7 @@ xi = uc' "x_i" (cn $ "x ordinate") smsi lX metre
 
 critCoords  = uc' "(xcs,ycs)" (cn $ "the set of x and y coordinates")
   "describe the vertices of the critical slip surface"
-  (Concat [sub (Atomic "{x") (Atomic "cs"), sub (Atomic ",y") (Atomic "cs"),
-  Atomic "}"]) metre
+  (sCurlyBrSymb (Concat [sub (Atomic "x") (Atomic "cs"), sub (Atomic ",y") (Atomic "cs")])) metre
 
 mobShrI     = uc' "S_i" (cn $ "mobilized shear force")
   fsi

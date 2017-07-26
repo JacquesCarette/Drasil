@@ -52,11 +52,11 @@ The table that follows summarizes the symbols used in this document along with t
 Symbol & Description & Units
 \\
 \midrule
-$a$ & Plate length (long dimension) & mm
+$a$ & Plate length (long dimension) & m
 \\
 $AR_{max}$ & Maximum aspect ratio & 
 \\
-$b$ & Plate width (short dimension) & mm
+$b$ & Plate width (short dimension) & m
 \\
 $B$ & Risk of failure & 
 \\
@@ -64,13 +64,13 @@ $d_{max}$ & Maximum value for one of the dimensions of the glass plate & mm
 \\
 $d_{min}$ & Minimum value for one of the dimensions of the glass plate & mm
 \\
-$E$ & Modulus of elasticity of glass & kPa
+$E$ & Modulus of elasticity of glass & Pa
 \\
 $g$ & Glass type $g$ in \{AN, FT, HS\} & 
 \\
 $GTF$ & Glass type factor & 
 \\
-$h$ & Actual thickness & mm
+$h$ & Actual thickness & m
 \\
 $is\_safe1$ & True when calculated probability is less than tolerable probability & 
 \\
@@ -200,10 +200,10 @@ This document will be used as a starting point for subsequent development phases
 The scope of the requirements includes getting all input parameters related to the glass slab and also the parameters related to blast type. Given the appropriate inputs, the code for GlassBR is intended to use the data and predict whether the glass slab is safe to use or not.
 \subsection{Characteristics of Intended Reader}
 \label{Sec:CharofInteRead}
-Reviewers of this documentation should have a strong knowledge in theory behind glass breakage and blast risk. The reviewers should also have an understanding of second year calculus, structural mechanics, and computer applications in civil engineering.In addition, reviewers should be familiar with the applicable standards for constructions using glass from [4-6] in Section~\ref{Sec:Refe}. The users of GlassBR can have a lower level of expertise, as explained in Section~\ref{Sec:UserChar}.
+Reviewers of this documentation should have a strong knowledge in theory behind glass breakage and blast risk. The reviewers should also have an understanding of second year calculus, structural mechanics, and computer applications in civil engineering.In addition, reviewers should be familiar with the applicable standards for constructions using glass from {[}4-6{]} in Section~\ref{Sec:Refe}. The users of GlassBR can have a lower level of expertise, as explained in Section~\ref{Sec:UserChar}.
 \subsection{Organization of Document}
 \label{Sec:OrgaofDocu}
-The organization of this document follows the template for an SRS for scientific computing software proposed by [1] and [2] (in Section~\ref{Sec:Refe}), with some aspects taken from Volere template 16 [3]. The presentation follows the standard pattern of presenting goals, theories, definitions, and assumptions. For readers that would like a more bottom up approach, they can start reading the data definitions in Section~\ref{Sec:DataDefi} and trace back to find any additional information they require.
+The organization of this document follows the template for an SRS for scientific computing software proposed by {[}1{]} and {[}2{]} (in Section~\ref{Sec:Refe}), with some aspects taken from Volere template 16 {[}3{]}. The presentation follows the standard pattern of presenting goals, theories, definitions, and assumptions. For readers that would like a more bottom up approach, they can start reading the data definitions in Section~\ref{Sec:DataDefi} and trace back to find any additional information they require.
 The goal statements are refined to the theoretical models, and the theoretical models to the instance models. The data definitions are used to support the definitions of the different models.
 \section{Stakeholders}
 \label{Sec:Stak}
@@ -259,7 +259,7 @@ This section first presents the problem description, which gives a high-level vi
 A system is needed to efficiently and correctly predict the blast risk involved with the glass. GlassBR is a computer program developed to interpret the inputs to give out the outputs which predicts whether the glass slab can withstand the blast under the conditions.
 \subsubsection{Terminology and Definitions}
 \label{Sec:TermandDefi}
-This subsection provides a list of terms that are used in the subsequent sections and their meaning, with the purpose of reducing ambiguity and making it easier to correctly understand the requirements. All of the terms are extracted from [4] in Section~\ref{Sec:Refe}.
+This subsection provides a list of terms that are used in the subsequent sections and their meaning, with the purpose of reducing ambiguity and making it easier to correctly understand the requirements. All of the terms are extracted from {[}4{]} in Section~\ref{Sec:Refe}.
 \begin{itemize}
 \item{Glass breakage - The fracture or breakage of any lite or ply in monolithic, laminated, or insulating glass.}
 \item{Lateral - Perpendicular to the glass surface.}
@@ -267,7 +267,7 @@ This subsection provides a list of terms that are used in the subsequent section
 \item{Specifying authority - The design professional responsible for interpreting applicable regulations of authorities having jurisdiction and considering appropriate site specific factors to determine the appropriate values used to calculate the specified design load, and furnishing other information required to perform this practice.}
 \item{Blast resistant glazing - Glazing that provides protection against air blast pressure generated by explosions.}
 \item{Equivalent TNT charge mass - Mass of TNT placed on the ground in a hemisphere that represents the design explosive threat.}
-\item{Glass Types:}
+\item{Glass Type:}
 \begin{enumerate}
 \item{Annealed glass (AN) - A flat, monolithic, glass lite which has uniform thickness where the residual surface stresses are almost zero, as defined in [5].}
 \item{Fully tempered glass (FT) - A flat and monolithic, glass lite of uniform thickness that has been subjected to a special heat treatment process where the residual surface compression is not less than 69 MPa (10 000 psi) or the edge compression not less than 67 MPa (9700 psi), as defined in [6].}
@@ -631,9 +631,9 @@ This section provides the functional requirements, the business tasks that the s
 Symbol & Description & Units
 \\
 \midrule
-$a$ & Plate length (long dimension) & mm
+$a$ & Plate length (long dimension) & m
 \\
-$b$ & Plate width (short dimension) & mm
+$b$ & Plate width (short dimension) & m
 \\
 $w$ & Charge weight & kg
 \\

@@ -64,7 +64,7 @@ plate_len = uqcND "plate_len" (nounPhraseSP "plate length (long dimension)")
     physc $ \c -> (c / (C plate_width)) :> (Dbl 1),
     sfwrc $ \c -> (C dim_min) :<= c,
     sfwrc $ \c -> c :<= (C dim_max),
-    sfwrc $ \c -> (c / (C plate_width)) :< (C ar_max) ] (Dbl 1500) defaultUncrt
+    sfwrc $ \c -> (c / (C plate_width)) :< (C ar_max) ] (Dbl 1.5) defaultUncrt
 
 plate_width = uqcND "plate_width" (nounPhraseSP "plate width (short dimension)")
   lB metre Real
@@ -72,7 +72,7 @@ plate_width = uqcND "plate_width" (nounPhraseSP "plate width (short dimension)")
     physc $ \c -> c :< (C plate_len),
     sfwrc $ \c -> (C dim_min) :<= c,
     sfwrc $ \c -> c :<= (C dim_max),
-    sfwrc $ \c -> ((C plate_len) / c) :< (C ar_max) ] (Dbl 1200) defaultUncrt
+    sfwrc $ \c -> ((C plate_len) / c) :< (C ar_max) ] (Dbl 1.2) defaultUncrt
 
 pb_tol = uvc "pb_tol" (nounPhraseSP "tolerable probability of breakage") 
   (sub cP (Atomic "btol")) Real

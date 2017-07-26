@@ -92,5 +92,6 @@ th, td {border: 1px solid black; padding: 1%;}
   border: 0px;}
 .symb {
   font-size: 150%;
-  line-height: 110%;}
+  line-height: 110%;
+  vertical-align: -10%;}
 .bound {font-size: 80%;}

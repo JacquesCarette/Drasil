@@ -44,6 +44,8 @@ The table that follows summarizes the symbols used in this document along with t
 Symbol & Description & Units
 \\
 \midrule
+$\{x_{cs},y_{cs}\}$ & The Set of X and Y Coordinates: describe the vertices of the critical slip surface & m
+\\
 $(x,y)$ & Cartesian Position Coordinates: y is considered parallel to the direction of the force of gravity and x is considered perpendicular to y & m
 \\
 $a$ & Constant: FIXME: missing discription & m
@@ -153,8 +155,6 @@ $y_{wt}$ & Y Ordinate: height of the water table at i, refers to either slice i 
 $y$ & Y Ordinate: refers to either slice i midpoint, or slice interface i & m
 \\
 $z$ & Center of Slice Height: the distance from the lowest part of the slice to the height of the centers of slice & m
-\\
-${x_{cs},y_{cs}}$ & The Set of X and Y Coordinates: describe the vertices of the critical slip surface & m
 \\
 $\alpha{}$ & Angle: base of the mass relative to the horizontal for slice index i & ${}^{\circ}$
 \\
@@ -1162,9 +1162,9 @@ FS=\frac{\displaystyle\sum_{i=1}^{n}{\left[\ell{}_{b,i}s_{i}\right]}}{\displayst
 \\ \midrule \\
 Label & critical slip identification
 \\ \midrule \\
-Equation & $FS_{min}=\Upsilon{}\left({x_{cs},y_{cs}},Input\right)$
+Equation & $FS_{min}=\Upsilon{}\left(\{x_{cs},y_{cs}\},Input\right)$
 \\ \midrule \\
-Description & Given the necessary slope inputs, a minimization algorithm or function $\Upsilon{}$ will identify the critical slip surface of the slope, with the critical slip coordinates ${x_{cs},y_{cs}}$ and the minimum factor of safety FSmin that results.
+Description & Given the necessary slope inputs, a minimization algorithm or function $\Upsilon{}$ will identify the critical slip surface of the slope, with the critical slip coordinates $\{x_{cs},y_{cs}\}$ and the minimum factor of safety FSmin that results.
 \\ \bottomrule \end{tabular}
 \end{minipage}\\
 \subsubsection{Data Constraints}

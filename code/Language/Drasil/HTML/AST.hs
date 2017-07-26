@@ -124,6 +124,7 @@ data LayoutObj = Table Tags [[Spec]] Label Bool Caption
                | Module String Label
                | Assumption Contents Label Label
                | LikelyChange Contents Label Label
+               | UnlikelyChange Contents Label Label
                | Requirement Contents Label Label
                -- Span Tags Contents
                

@@ -33,6 +33,7 @@ acroNumGen (frst:rst) num = (f frst) : acroNumGen rst (num + 1)
   where f (Assumption a) = Assumption $ nw $ npnc' (a ^. id) (a ^. term) (extrctStrng (short assumption) ++  (show num))
         f (Requirement r) = Requirement $ ReqChunk (nw $ npnc' (r ^. id) (r ^. term) (extrctStrng (short requirement) ++ (show num))) []
         f (LikelyChange lc) = LikelyChange $ LCChunk (nw $ npnc' (lc ^. id) (lc ^. term) (extrctStrng (short likelyChg) ++ (show num))) []
+        f (UnlikelyChange uc) = UnlikelyChange $ nw $ npnc' (uc ^. id) (uc ^. term) (extrctStrng (short unlikelyChg) ++  (show num))
         f _ = error "Type not yet implemented"
         extrctStrng (S strng) = strng
         extrctStrng _ = error "Invalid acronym type"

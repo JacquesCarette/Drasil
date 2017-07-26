@@ -32,3 +32,7 @@ find itm@(Requirement comp1) (frst@(Requirement comp2):lst)
 find itm@(LikelyChange comp1) (frst@(LikelyChange comp2):lst)
   | ((lcCC comp1) ^. id) == ((lcCC comp2) ^. id) = frst
   | otherwise = find itm lst
+find itm@(UnlikelyChange comp1) (frst@(UnlikelyChange comp2):lst)
+  | (comp1 ^. id) == (comp2 ^. id) = frst
+  | otherwise = find itm lst
+find _ _ = error "Error: Attempting to find unimplemented type"

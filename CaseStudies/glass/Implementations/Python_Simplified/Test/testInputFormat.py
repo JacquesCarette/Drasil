@@ -26,14 +26,12 @@ class TestInputFormat(unittest.TestCase):
 
         for i in range(self.numTests):
             inputFormat.get_input(os.path.join("Test/Inputfiles", self.inputFileName[i]), self.params[i])
-        #pass
 
     def test_get_input(self):
         for i in range(self.numTests):
             with self.subTest(i=i):
 
                 self.assertEqual(self.aExpctd[i], self.params[i].a) 
-                #^AssertionError: some number != <Implementation.param.Param. object at 0x032E0Cf0 (some memory space)>
                 self.assertEqual(self.bExpctd[i], self.params[i].b)
                 self.assertEqual(self.tExpctd[i], float(self.params[i].t))
                 self.assertEqual(self.gtExpctd[i], self.params[i].gt)

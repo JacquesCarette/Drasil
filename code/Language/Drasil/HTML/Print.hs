@@ -117,7 +117,7 @@ symbolNoEm (Corners [] [_] [] [] _) = error "rendering of ll prescript"
 symbolNoEm (Corners _ _ _ _ _)      = error "rendering of Corners (general)"
 symbolNoEm (Atop Vector s)       = "<b>" ++ symbolNoEm s ++ "</b>"
 symbolNoEm (Atop Hat s)          = symbolNoEm s ++ "&#770;"
-symbolNoEm (Atop Prime s)        = symbolNoEm s ++ "'"
+symbolNoEm (Atop Prime s)        = symbolNoEm s ++ "&prime;"
 
 uSymb :: USymb -> String
 uSymb (UName s)           = symbolNoEm s

@@ -16,13 +16,14 @@ import Language.Drasil.Chunk.NamedIdea (term)
 import Language.Drasil.Chunk.SymbolForm (SymbolForm, symbol)
 import Language.Drasil.Chunk.Concept (defn)
 import Language.Drasil.Chunk.VarChunk (VarChunk)
-import Language.Drasil.ChunkDB (SymbolMap)
+import Language.Drasil.ChunkDB (SymbolMap, getUnitLup)
 import Language.Drasil.Config (verboseDDDescription, numberedDDEquations, numberedTMEquations)
 import Language.Drasil.Document
 import Language.Drasil.Symbol
 import Language.Drasil.Misc (unit'2Contents)
 import Language.Drasil.SymbolAlphabet
 import Language.Drasil.NounPhrase (phrase)
+import Language.Drasil.Unit (usymb)
 
 expr :: Expr -> T.Expr
 expr (V v)             = T.Var  v
@@ -274,12 +275,15 @@ buildEqn c = T.N (c ^. symbol) T.:+: T.S " = " T.:+: T.E (expr (equat c))
 -- Build descriptions in data defs based on required verbosity
 buildDDDescription :: QDefinition -> SymbolMap -> T.Spec
 buildDDDescription c m = descLines (
-  (toVC c m):(if verboseDDDescription then vars (equat c) m else []))
+  (toVC c m):(if verboseDDDescription then vars (equat c) m else [])) m
 
-descLines :: [VarChunk] -> T.Spec  
-descLines []       = error "No chunks to describe"
-descLines (vc:[])  = (T.N (vc ^. symbol) T.:+: (T.S " is the " T.:+: 
-                      (spec (phrase $ vc ^. term))))
-descLines (vc:vcs) = descLines (vc:[]) T.:+: T.HARDNL T.:+: descLines vcs
+descLines :: [VarChunk] -> SymbolMap -> T.Spec  
+descLines []    _   = error "No chunks to describe"
+descLines (vc:[]) m = (T.N (vc ^. symbol) T.:+: 
+  (T.S " is the " T.:+: (spec (phrase $ vc ^. term)) T.:+:
+   unWrp (getUnitLup vc m)))
+  where unWrp (Just a) = T.S " (" T.:+: T.Sy (a ^. usymb) T.:+: T.S ")"
+        unWrp Nothing  = T.S ""
+descLines (vc:vcs) m = descLines (vc:[]) m T.:+: T.HARDNL T.:+: descLines vcs m
 
 

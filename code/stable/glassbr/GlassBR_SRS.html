@@ -1871,7 +1871,7 @@ Equation
 <td>
 <a id="">
 <div class="equation">
-<em>P<sub>b</sub></em>=1-e<sup>-B</sup>
+<em>P<sub>b</sub></em> = 1 &minus; e<sup>-<em>B</em></sup>
 </div>
 </a>
 </td>
@@ -1882,7 +1882,7 @@ Description
 </th>
 <td>
 <p class="paragraph">
-<em>P<sub>b</sub></em> is the calculated probability of breakage. B is the risk of failure.
+<em>P<sub>b</sub></em> is the calculated probability of breakage. <em>B</em> is the risk of failure.
 </p>
 </td>
 </tr>
@@ -1907,7 +1907,7 @@ Equation
 <td>
 <a id="">
 <div class="equation">
-LR=NFL*GTF*LSF
+<em>LR</em> = <em>NFL</em>&sdot;<em>GTF</em>&sdot;<em>LSF</em>
 </div>
 </a>
 </td>
@@ -1918,7 +1918,7 @@ Description
 </th>
 <td>
 <p class="paragraph">
-LR is the load resistance, which is also called capacity. NFL is the non-factored load. GTF is the glass type factor. LSF is the load share factor. Follows A2 and A1 (&quot;In development of this procedure, it was assumed that all four edges of the glass are simply supported and free to slip in the plane of the glass. This boundary condition has been shown to be typical of many glass installations)&quot; from [4 (pg. 53)].
+<em>LR</em> is the load resistance, which is also called capacity. <em>NFL</em> is the non-factored load. <em>GTF</em> is the glass type factor. <em>LSF</em> is the load share factor. Follows A2 and A1 (&quot;In development of this procedure, it was assumed that all four edges of the glass are simply supported and free to slip in the plane of the glass. This boundary condition has been shown to be typical of many glass installations&quot;) from [4 (pg. 53)].
 </p>
 </td>
 </tr>
@@ -1943,7 +1943,7 @@ Equation
 <td>
 <a id="">
 <div class="equation">
-q=q(<em>w<sub>TNT</sub></em>,SD)
+<em>q</em> = <em>q</em>(<em>w<sub>TNT</sub></em>,<em>SD</em>)
 </div>
 </a>
 </td>
@@ -1954,7 +1954,7 @@ Description
 </th>
 <td>
 <p class="paragraph">
-q or demand, is the 3 second duration equivalent pressure obtained from Figure 2 by interpolation using stand off distance (SD) and <em>w<sub>TNT</sub></em> as parameters. <em>w<sub>TNT</sub></em> is defined as <em>w<sub>TNT</sub></em>=wTNT. w is the charge weight. TNT is the TNT equivalent factor. SD is the stand off distance where SD=&radic;(SD<sub>x</sub><sup>2</sup>+SD<sub>y</sub><sup>2</sup>+SD<sub>z</sub><sup>2</sup>) where (SD<sub>x</sub>, SD<sub>y</sub>, SD<sub>z</sub>) are coordinates.
+<em>q</em> or demand, is the 3 second duration equivalent pressure obtained from Figure 2 by interpolation using stand off distance (<em>SD</em>) and <em>w<sub>TNT</sub></em> as parameters. <em>w<sub>TNT</sub></em> is defined as <em>w<sub>TNT</sub></em> = <em>w</em>&#8239;<em>TNT</em>. <em>w</em> is the charge weight. <em>TNT</em> is the TNT equivalent factor. <em>SD</em> is the stand off distance where <em>SD</em> = &radic;(<em>SD<sub>x</sub></em><sup>2</sup> &plus; <em>SD<sub>y</sub></em><sup>2</sup> &plus; <em>SD<sub>z</sub></em><sup>2</sup>) where (<em>SD<sub>x</sub></em>, <em>SD<sub>y</sub></em>, <em>SD<sub>z</sub></em>) are coordinates.
 </p>
 </td>
 </tr>
@@ -1968,7 +1968,7 @@ q or demand, is the 3 second duration equivalent pressure obtained from Figure 2
 Data Constraints
 </h4>
 <p class="paragraph">
-<a href=#Table:Tabl2:InpuVari>this Table</a> shows the data constraints on the input and output variables, respectively. The column for physical constraints gives the physical limitations on the range of values that can be taken by the variable. The constraints are conservative, to give the user of the model the flexibility to experiment with unusual situations. The column of typical values is intended to provide a feel for a common scenario. The uncertainty column provides an estimate of the confidence with which the physical quantities can be measured. This information would be part of the input if one were performing an uncertainty quantification exercise. <a href=#Table:Tabl3:SpecParaValu>this Table</a> gives the values of the specification parameters used in <a href=#Table:Tabl2:InpuVari>this Table</a>. AR<sub>max</sub> refers to the maximum aspect ratio for the plate of glass.
+<a href=#Table:InpuDataCons>this Table</a>, and <a href=#Table:OutpDataCons>this Table</a> shows the data constraints on the input and output variables, respectively. The column for physical constraints gives the physical limitations on the range of values that can be taken by the variable. The uncertainty column provides an estimate of the confidence with which the physical quantities can be measured. This information would be part of the input if one were performing an uncertainty quantification exercise. The constraints are conservative, to give the user of the model the flexibility to experiment with unusual situations. The column of typical values is intended to provide a feel for a common scenario. <a href=#Sec:ValuofAuxiCons>this Section</a> gives the values of the specification parameters used in <a href=#Table:InpuDataCons>this Table</a>.. <a href=#Table:OutpDataCons>this Table</a> shows the constraints that must be satisfied by the output.
 </p>
 <a id="Table:InpuDataCons">
 <table class="table">
@@ -1994,7 +1994,7 @@ Typical Uncertainty
 <em>P<sub>btol</sub></em>
 </td>
 <td>
-0.0&lt;<em>P<sub>btol</sub></em> and <em>P<sub>btol</sub></em>&lt;1.0
+0.0&thinsp;&lt;&thinsp;<em>P<sub>btol</sub></em> and <em>P<sub>btol</sub></em>&thinsp;&lt;&thinsp;1.0
 </td>
 <td>
 None
@@ -2011,7 +2011,7 @@ None
 <em>TNT</em>
 </td>
 <td>
-TNT&gt;0.0
+<em>TNT</em>&thinsp;&gt;&thinsp;0.0
 </td>
 <td>
 None
@@ -2028,24 +2028,24 @@ None
 <em>a</em>
 </td>
 <td>
-a&gt;0.0 and <div class="fraction">
+<em>a</em>&thinsp;&gt;&thinsp;0.0 and <div class="fraction">
 <span class="fup">
 <em>a</em>
 </span>
 <span class="fdn">
 <em>b</em>
 </span>
-</div>&gt;1.0
+</div>&thinsp;&gt;&thinsp;1.0
 </td>
 <td>
-d<sub>min</sub>&le;a, a&le;d<sub>max</sub>, and <div class="fraction">
+<em>d<sub>min</sub></em>&thinsp;&le;&thinsp;<em>a</em>, <em>a</em>&thinsp;&le;&thinsp;<em>d<sub>max</sub></em>, and <div class="fraction">
 <span class="fup">
 <em>a</em>
 </span>
 <span class="fdn">
 <em>b</em>
 </span>
-</div>&lt;AR<sub>max</sub>
+</div>&thinsp;&lt;&thinsp;<em>AR<sub>max</sub></em>
 </td>
 <td>
 1.5 m
@@ -2059,10 +2059,10 @@ d<sub>min</sub>&le;a, a&le;d<sub>max</sub>, and <div class="fraction">
 <em>b</em>
 </td>
 <td>
-b&gt;0.0 and b&lt;a
+<em>b</em>&thinsp;&gt;&thinsp;0.0 and <em>b</em>&thinsp;&lt;&thinsp;<em>a</em>
 </td>
 <td>
-d<sub>min</sub>&le;b, b&le;d<sub>max</sub>, and <div class="fraction">
+<em>d<sub>min</sub></em>&thinsp;&le;&thinsp;<em>b</em>, <em>b</em>&thinsp;&le;&thinsp;<em>d<sub>max</sub></em>, and <div class="fraction">
 <span class="fup">
 <em>a</em>
 </span>
@@ -2083,10 +2083,10 @@ d<sub>min</sub>&le;b, b&le;d<sub>max</sub>, and <div class="fraction">
 <em>w</em>
 </td>
 <td>
-w&ge;0.0
+<em>w</em>&thinsp;&ge;&thinsp;0.0
 </td>
 <td>
-<em>w<sub>max</sub></em>&le;w and w&le;<em>w<sub>min</sub></em>
+<em>w<sub>max</sub></em>&thinsp;&le;&thinsp;<em>w</em> and <em>w</em>&thinsp;&le;&thinsp;<em>w<sub>min</sub></em>
 </td>
 <td>
 42.0 kg
@@ -2132,10 +2132,7 @@ Physical Constraints
 <em>P<sub>b</sub></em>
 </td>
 <td>
-0.0&lt;<em>P<sub>b</sub></em> and <em>P<sub>b</sub></em>&lt;1.0
-</td>
-<td>
-0.4
+0.0&thinsp;&lt;&thinsp;<em>P<sub>b</sub></em> and <em>P<sub>b</sub></em>&thinsp;&lt;&thinsp;1.0
 </td>
 </tr>
 </table>

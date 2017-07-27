@@ -382,11 +382,11 @@ This section collects and defines all the data needed to build the instance mode
 \phantomsection 
 \label{DD:risk.fun}
 \\ \midrule \\
-Label & $B$
+Label & Risk of Failure
 \\ \midrule \\
 Units & 
 \\ \midrule \\
-Equation & $B$ = $\frac{k}{\left(\frac{a}{1000}\frac{b}{1000}\right)^{m-1}}\left(\left(E*1000\right)\left(\frac{h}{1000}\right)^{2}\right)^{m}*LDFe^{J}$
+Equation & $B$ = $\frac{k}{\left(ab\right)^{m-1}}\left(\left(E\right)\left(h\right)^{2}\right)^{m}\cdot{}LDFe^{J}$
 \\ \midrule \\
 Description & $B$ is the risk of failure\newline$k$ is the surface flaw parameter\newline$a$ is the plate length (long dimension)\newline$b$ is the plate width (short dimension)\newline$m$ is the surface flaw parameter\newline$E$ is the modulus of elasticity of glass\newline$h$ is the actual thickness\newline$LDF$ is the load duration factor\newline$J$ is the stress distribution factor (Function)
 \\ \midrule \\
@@ -400,11 +400,11 @@ Source & [7]
 \phantomsection 
 \label{DD:act.thick}
 \\ \midrule \\
-Label & $h$
+Label & Actual Thickness
 \\ \midrule \\
-Units & mm
+Units & m
 \\ \midrule \\
-Equation & $h$ = $\begin{cases}
+Equation & $h$ = $\frac{1}{1000}\begin{cases}
 2.16, & t=2.5\\
 2.59, & t=2.7\\
 2.92, & t=3.0\\
@@ -419,23 +419,23 @@ Equation & $h$ = $\begin{cases}
 21.44, & t=22.0
 \end{cases}$
 \\ \midrule \\
-Description & $h$ is the actual thickness\newline$t$ is the nominal thickness $t$ in \{2.5, 2.7, 3.0, 4.0, 5.0, 6.0, 8.0, 10.0, 12.0, 16.0, 19.0, 22.0\}
+Description & $h$ is the actual thickness (m)\newline$t$ is the nominal thickness $t$ in \{2.5, 2.7, 3.0, 4.0, 5.0, 6.0, 8.0, 10.0, 12.0, 16.0, 19.0, 22.0\} (mm)
 \\ \bottomrule \end{tabular}
 \end{minipage}\\
 ~\newline
 \noindent \begin{minipage}{\textwidth}
 \begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
-\toprule \textbf{Refname} & \textbf{DD:lDurFac}
+\toprule \textbf{Refname} & \textbf{DD:loadDurFactor}
 \phantomsection 
-\label{DD:lDurFac}
+\label{DD:loadDurFactor}
 \\ \midrule \\
-Label & $LDF$
+Label & Load Duration Factor
 \\ \midrule \\
 Units & 
 \\ \midrule \\
 Equation & $LDF$ = $\left(\frac{t_{d}}{60}\right)^{\frac{m}{16}}$
 \\ \midrule \\
-Description & $LDF$ is the load duration factor\newline$t_{d}$ is the duration of load\newline$m$ is the surface flaw parameter
+Description & $LDF$ is the load duration factor\newline$t_{d}$ is the duration of load (s)\newline$m$ is the surface flaw parameter ($\frac{\text{m}^{12}}{\text{N}^{7}}$)
 \\ \bottomrule \end{tabular}
 \end{minipage}\\
 ~\newline
@@ -445,23 +445,23 @@ Description & $LDF$ is the load duration factor\newline$t_{d}$ is the duration o
 \phantomsection 
 \label{DD:stressDistFac}
 \\ \midrule \\
-Label & $J$
+Label & Stress Distribution Factor (Function)
 \\ \midrule \\
 Units & 
 \\ \midrule \\
 Equation & $J$ = $J\left(\hat{q},\frac{a}{b}\right)$
 \\ \midrule \\
-Description & $J$ is the stress distribution factor (Function)\newline$J$ is the stress distribution factor (Function)\newline$\hat{q}$ is the dimensionless load\newline$a$ is the plate length (long dimension)\newline$b$ is the plate width (short dimension)
+Description & $J$ is the stress distribution factor (Function)\newline$\hat{q}$ is the dimensionless load\newline$a$ is the plate length (long dimension) (m)\newline$b$ is the plate width (short dimension) (m)
 \\ \bottomrule \end{tabular}
 \end{minipage}\\
 ~\newline
 \noindent \begin{minipage}{\textwidth}
 \begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
-\toprule \textbf{Refname} & \textbf{DD:nonFactorL}
+\toprule \textbf{Refname} & \textbf{DD:nFL}
 \phantomsection 
-\label{DD:nonFactorL}
+\label{DD:nFL}
 \\ \midrule \\
-Label & $NFL$
+Label & Non-Factored Load
 \\ \midrule \\
 Units & 
 \\ \midrule \\

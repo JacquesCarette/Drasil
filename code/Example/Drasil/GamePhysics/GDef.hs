@@ -24,7 +24,7 @@ impulseRel = FCall (C thFluxVect) [C QP.time] := C htTransCoeff :*
 
 impulseDesc :: Sentence
 impulseDesc = foldlSent [S "An (impulse) (symbol) occurs when a (force)",
-  S "(symbol) acts over an interval of time."]
+  S "(symbol) acts over an interval of time"]
 
 --[impulse, force, changeInMomentum, mass, changeInVelocity]
 
@@ -46,7 +46,7 @@ conservationOfMomentRel = FCall (C thFluxVect) [C QP.time] := C htTransCoeff :*
 conservationOfMomentDesc :: Sentence
 conservationOfMomentDesc = foldlSent [S "In an isolated system,",
   S "where the sum of external (impulses) acting on the system is zero,",
-  S "the total momentum of the bodies is constant (conserved).",
+  S "the total momentum of the bodies is constant (conserved)",
   ]
 
 --[mass, initialVelocity, finalVelocity]
@@ -107,3 +107,73 @@ accelerationDueToGravityDeriv = foldlSent [S "From Newton's law of universal",
   S "Thus:",
   S "(expr6)"
   ]
+
+
+relativeVelocityInCollisionsGDef :: RelationConcept
+relativeVelocityInCollisionsGDef = makeRC "relVeloInColl"
+  (nounPhraseSP "Relative velocity in collision")
+  relativeVelocityInCollisionsDesc relativeVelocityInCollisionsRel
+
+relativeVelocityInCollisionsDesc :: Sentence
+relativeVelocityInCollisionsDesc = foldlSent [S "In a collision, the velocity of",
+  S "(phrase rigid body A)", S "colliding with another body B relative to that",
+  S "body, (symbol vAB), is the difference between the (plural velocity) of A",
+  S "and B at point P"
+  ]
+
+--[velocityAB, collisionPoint, velocityAP, velocityBP]
+
+relativeVelocityInCollisionsRel :: Relation
+relativeVelocityInCollisionsRel = FCall (C thFluxVect) [C QP.time] := C htTransCoeff :*
+  FCall (C temp_diff) [C QP.time] -- replace with proper Expr
+
+coefficientOfRestitutionGDef :: RelationConcept
+coefficientOfRestitutionGDef = makeRC "coeffOfRest" 
+  (nounPhraseSP "Coefficient of restitution")
+  coefficientOfRestitutionDesc coefficientOfRestitutionRel
+
+coefficientOfRestitutionDesc :: Sentence
+coefficientOfRestitutionDesc = foldlSent [S "the (phrase coefOfRest) (symbol) is",
+  S "a unitless, dimensionless quantity that determines the elasticity of a",
+  S "collision between two bodies. (symbol/expr)[CR = 1] results in an elastic",
+  S "collision, while (symbol/expr)[CR < 1] results in an inelastic collision,",
+  S "and (symbol/expr)[CR = 0] results in a totally inelastic collision"
+  ]
+
+--[coefOfRest, normCollisionVect, initRelativeVelocityAB, finalRelativeVelocityAB]
+
+coefficientOfRestitutionRel :: Relation
+coefficientOfRestitutionRel = FCall (C thFluxVect) [C QP.time] := C htTransCoeff :*
+  FCall (C temp_diff) [C QP.time] -- replace with proper Expr
+
+
+torqueGDef :: RelationConcept
+torqueGDef = makeRC "torque"
+  (nounPhraseSP "Torque")
+  torqueDesc torqueRel
+
+torqueDesc :: Sentence
+torqueDesc = foldlSent [S "The (phrase torque) (symbol) on a body measures the",
+  S "the tendency of a force to rotate the body around an axis or pivot"
+  ]
+
+--[torque, force, positionVector]
+
+torqueRel :: Relation
+torqueRel = FCall (C thFluxVect) [C QP.time] := C htTransCoeff :*
+  FCall (C temp_diff) [C QP.time] -- replace with proper Expr
+
+momentOfInertiaGDef :: RelationConcept
+momentOfInertiaGDef = makeRC "momentOfInertia"
+  (nounPhraseSP "Moment of Inertia")
+  momentOfInertiaDesc momentOfInertiaRel
+
+momentOfInertiaDesc :: Sentence
+momentOfInertiaDesc = foldlSent []
+
+
+--[momentOfInertia, numOfParticles, massI, distanceBtwParticleI]
+
+momentOfInertiaRel :: Relation
+momentOfInertiaRel = FCall (C thFluxVect) [C QP.time] := C htTransCoeff :*
+  FCall (C temp_diff) [C QP.time] -- replace with proper Expr

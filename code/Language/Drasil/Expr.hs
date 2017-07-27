@@ -49,6 +49,7 @@ data Expr where
   Matrix   :: [[Expr]] -> Expr
   Index    :: Expr -> Expr -> Expr  -- for accessing elements of sequence/list/vect etc.
                                     -- arr[i] is (Index arr i)
+  Len      :: Expr -> Expr          -- length
   UnaryOp  :: UFunc -> Expr
   Grouping :: Expr -> Expr
   BinaryOp :: BiFunc -> Expr

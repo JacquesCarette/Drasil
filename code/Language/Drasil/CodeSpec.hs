@@ -163,6 +163,9 @@ data FuncStmt where
   FWhile :: Expr -> [FuncStmt] -> FuncStmt
   FCond :: Expr -> [FuncStmt] -> [FuncStmt] -> FuncStmt
   FRet :: Expr -> FuncStmt
+  FThrow :: String -> FuncStmt
+  FTry :: [FuncStmt] -> [FuncStmt] -> FuncStmt
+  FContinue :: FuncStmt
   
 fasg :: (Quantity c, SymbolForm c) => c -> Expr -> FuncStmt
 fasg v e = FAsg (codevar v) e

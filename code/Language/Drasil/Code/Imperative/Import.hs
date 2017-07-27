@@ -424,6 +424,8 @@ convExpr (Deriv _ _ _) = error "not implemented"
 convExpr (E.Not e)      = (?!) (convExpr e)
 convExpr (Neg e)      = (#~) (convExpr e)
 convExpr (C c)        = var (codeName (SFCN c))
+convExpr (Index a i)  = (convExpr a)$.(listAccess $ convExpr i)
+convExpr (Len a)      = (convExpr a)$.listSize
 convExpr (FCall (C c) x)  = funcApp' (codeName (SFCN c)) (map convExpr x)
 convExpr (FCall _ _)  = error "not implemented"
 convExpr (a := b)     = (convExpr a) ?== (convExpr b)
@@ -544,12 +546,15 @@ genFuncDef g (FuncDef n i o s) = publicMethod g (methodType $ convType o) n (get
 
 convStmt :: Generator -> FuncStmt -> Statement
 convStmt g (FAsg v e) = assign g (var $ codeName v) (convExpr e)
-convStmt _ _ = error ""
---convStmt (FFor v e) = 
- -- FFor :: CodeChunk -> Expr -> [FuncStmt] -> FuncStmt
- -- FWhile :: Expr -> [FuncStmt] -> FuncStmt
- -- FCond :: Expr -> [FuncStmt] -> [FuncStmt] -> FuncStmt
- -- FRet :: Expr -> FuncStmt
+convStmt g (FFor v e st) = for (varDecDef (codeName v) int (litInt 0)) (convExpr e) ((&++) (var (codeName v)))
+  [ block (map (convStmt g) st) ]
+convStmt g (FWhile e st) = while (convExpr e) [ block (map (convStmt g) st) ]
+convStmt g (FCond e tSt []) = ifCond [(convExpr e, [ block (map (convStmt g) tSt) ])] noElse
+convStmt g (FCond e tSt eSt) = ifCond [(convExpr e, [ block (map (convStmt g) tSt) ])] [ block (map (convStmt g) eSt) ]  
+convStmt _ (FRet e) = return $ convExpr e
+convStmt _ (FThrow s) = throw s
+convStmt g (FTry t c) = tryCatch [ block (map (convStmt g) t) ] [ block (map (convStmt g) c) ]
+convStmt _ (FContinue) = continue
 
 -- major hacks --
 genHacks :: Generator -> (String, [Method]) -> Module

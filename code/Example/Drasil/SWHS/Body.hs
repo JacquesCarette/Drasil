@@ -58,7 +58,8 @@ acronyms = [assumption, dataDefn, genDefn, goalStmt, inModel, likelyChg, ode,
   phsChgMtrl, physSyst, requirement, rightSide, srs, progName, thModel]
 
 this_si :: [UnitDefn]
-this_si = map UU [metre, kilogram, second] ++ map UU [centigrade, joule, watt]
+this_si = map UU [metre, kilogram, second] ++ 
+  map UU [centigrade, joule, watt]
 
 --Will there be a table of contents?
 
@@ -93,8 +94,9 @@ mkSRS :: DocDesc
 mkSRS = RefSec (RefProg intro
   [TUnits, tsymb'' tsymb_intro (TermExcept [uNormalVect]), TAandA]):
 
-  IntroSec (IntroProg (s2_intro CT.ener_src energy swhs_pcm phsChgMtrl progName
-    CT.thermal_energy latent_heat unit_) (s2_kSent swhs_pcm program progName) [
+  IntroSec (IntroProg (s2_intro CT.ener_src energy swhs_pcm phsChgMtrl 
+    progName CT.thermal_energy latent_heat unit_) (s2_kSent swhs_pcm program
+    progName) [
 
   IPurpose (s2_1_par1 swhs_pcm progName),
 
@@ -707,22 +709,17 @@ s9_refList = [ref1, ref2, ref3, ref4, ref5, ref6]
 s2_intro :: ConceptChunk -> UnitalChunk -> ConceptChunk -> CI -> CI ->
   ConceptChunk -> UnitalChunk -> ConceptChunk -> Sentence
 s2_intro es en sp pcmat pro te lh un = foldlSent [
-  S "Due to increasing cost"
-  `sC` S "diminishing availability" `sC`
-  S "and negative environmental impact of",
-  S "fossil fuels, there is a higher demand for renewable",
-  plural es `sAnd` phrase en +:+.
-  S "storage technology", sp ^. defn,
-  sParen (short pcmat), S "use renewable",
-  plural es `sAnd` S "provide a novel way of",
-  S "storing" +:+. phrase en,
+  S "Due to", foldlList (map S ["increasing cost", "diminishing availability",
+    "negative environmental impact of fossil fuels"]) `sC` S "there is a higher",
+  S "demand for renewable", plural es `sAnd` phrase en +:+. 
+  S "storage technology", sp ^. defn, sParen (short pcmat), S "use renewable",
+  plural es `sAnd` S "provide a novel way of storing" +:+. phrase en,
   at_start sp, S "improve over the traditional",
   plural pro, S "because of their smaller size. The",
   S "smaller size is possible because of the ability of",
-  short pcmat, S "to store", phrase te,
-  S "as", phrase lh `sC`
-  S "which allows higher", phrase te,
-  S "storage capacity per", phrase un, S "weight"]
+  short pcmat, S "to store", phrase te, S "as", phrase lh `sC`
+  S "which allows higher", phrase te, S "storage capacity per",
+  phrase un, S "weight"]
 
 s2_kSent :: ConceptChunk -> ConceptChunk -> CI -> Sentence
 s2_kSent sp pr pro = foldlSent_ [EmptyS +:+. phrase sp, S "The developed",
@@ -810,7 +807,7 @@ s2_3_understanding diffeq = foldlSent_ [(plural diffeq) `sC`
 s2_4_intro :: Sentence
 s2_4_intro = foldlSent [S "The", phrase organization, S "of this",
   phrase document, S "follows the template for an", short srs,
-  S "for", phrase sciCompS, S "proposed by [citation] and",
+  S "for", phrase sciCompS, S "proposed by [citation]" `sAnd`
   sSqBr (S "citation")]
 
 s2_4_trail :: ConceptChunk -> CI -> Sentence
@@ -916,10 +913,9 @@ s3_2_contents pro = foldlSP [S "The end", phrase user, S "of",
 ---------------------------------------------
 
 s4_intro_end :: ConceptChunk -> Sentence
-s4_intro_end sw = foldlSent_ [plural thModel `sC` plural genDefn `sC`
-  plural dataDefn `sC` S "and finally the", plural inModel,
-  sParen (short ode :+: S "s"), S "that", phrase model, S "the",
-  phrase sw]
+s4_intro_end sw = foldlSent_ [foldlsC (map plural (take 3 renameList1))
+  `sC` S "and finally the", plural inModel, sParen (short ode :+: S "s"),
+  S "that", phrase model, S "the", phrase sw]
 
 -- Completely general except for solar water heating tank (object of analysis)
 -- and similar between all examples; can be abstracted out.
@@ -1109,9 +1105,9 @@ s4_2_5_d1startPara en wa = [foldlSPCol [S "Derivation of the",
   phrase en, S "balance on", phrase wa]]
 
 s4_2_5_d1sent_1 :: ConceptChunk -> UncertQ -> UnitalChunk -> ConceptChunk ->
-  UnitalChunk -> UnitalChunk -> UnitalChunk -> UncertQ ->
-  UnitalChunk -> UnitalChunk -> UncertQ -> UncertQ -> ConceptChunk ->
-  ConceptChunk -> ConceptChunk -> UnitalChunk -> Contents -> Contents -> [Sentence]
+  UnitalChunk -> UnitalChunk -> UnitalChunk -> UncertQ -> UnitalChunk -> 
+  UnitalChunk -> UncertQ -> UncertQ -> ConceptChunk -> ConceptChunk -> 
+  ConceptChunk -> UnitalChunk -> Contents -> Contents -> [Sentence]
 s4_2_5_d1sent_1 roc temw en wa vo wvo wma hcw hfc hfp csa psa ht ta purin vhg
   a15 a16 = [S "To find the", phrase roc, S "of", getS temw `sC`
   S "we look at the", phrase en, S "balance on" +:+.
@@ -1205,7 +1201,8 @@ s4_2_5_d2sent_1 d2hfp hfp = [S "Using", swhsSymbMapDRef d2hfp, S "for",
   getS hfp `sC` S "this", phrase equation, S "can be written as"]
 
 s4_2_5_d2sent_2 :: [Sentence]
-s4_2_5_d2sent_2 = [S "Dividing by", getS pcm_mass :+: getS htCap_S_P, S "we obtain"]
+s4_2_5_d2sent_2 = [S "Dividing by", getS pcm_mass :+: getS htCap_S_P,
+  S "we obtain"]
 
 s4_2_5_d2sent_3 :: [Sentence]
 s4_2_5_d2sent_3 = [S "Setting", getS tau_S_P :+: S "=" :+: getS pcm_mass :+: 
@@ -1230,10 +1227,10 @@ s4_2_5_d1eqn_list, s4_2_5_d1sent_list, s4_2_5_d2eqn_list,
   s4_2_5_d2sent_list :: [Contents]
 
 s4_2_5_d2startPara :: UnitalChunk -> CI -> UnitalChunk -> ConceptChunk ->
-  UncertQ -> UnitalChunk -> UncertQ -> UnitalChunk -> UncertQ -> UnitalChunk -> 
-  UncertQ -> UnitalChunk -> UnitalChunk -> Contents -> [Contents]
-s4_2_5_d2startPara en pcmat sh roc ptem vo pvo pma hcsp hfp psa hfo vhg a16 = map
-  foldlSPCol [
+  UncertQ -> UnitalChunk -> UncertQ -> UnitalChunk -> UncertQ -> 
+  UnitalChunk -> UncertQ -> UnitalChunk -> UnitalChunk -> Contents -> [Contents]
+s4_2_5_d2startPara en pcmat sh roc ptem vo pvo pma hcsp hfp psa hfo vhg a16 = 
+  map foldlSPCol [
 
   [S "Detailed derivation of the", phrase en, S "balance on the",
   short pcmat, S "during", phrase sh :+: S "ing phase"],
@@ -1254,9 +1251,10 @@ s4_2_5_d2startPara en pcmat sh roc ptem vo pvo pma hcsp hfp psa hfo vhg a16 = ma
   ]
 
 s4_2_5_d2endPara :: CI -> UncertQ -> UncertQ -> UnitalChunk -> UnitalChunk -> 
-  ConVar -> ConceptChunk -> UnitalChunk -> UncertQ -> UncertQ -> ConceptChunk ->
-  ConceptChunk -> ConceptChunk -> [Contents]
-s4_2_5_d2endPara pcmat hcsp hclp tsp tlp sur mel vo ptem tmp boi so li = map foldlSP [
+  ConVar -> ConceptChunk -> UnitalChunk -> UncertQ -> UncertQ -> 
+  ConceptChunk -> ConceptChunk -> ConceptChunk -> [Contents]
+s4_2_5_d2endPara pcmat hcsp hclp tsp tlp sur mel vo ptem tmp boi so li = map 
+  foldlSP [
 
   [titleize equation,
   S "(6) applies for the", phrase solid +:+. short pcmat,
@@ -1278,8 +1276,7 @@ s4_2_5_d2endPara pcmat hcsp hclp tsp tlp sur mel vo ptem tmp boi so li = map fol
   getS time :+: S "=0"],
 
   [S "This derivation does not consider",
-  (phrase boi `ofThe` short pcmat) `sC`
-  S "as the", short pcmat,
+  (phrase boi `ofThe` short pcmat) `sC` S "as the", short pcmat,
   S "is assumed to either be in a", (so ^. defn),
   S "or a", (li ^. defn), sParen (makeRef assump18)]
 
@@ -1317,14 +1314,15 @@ s4_2_6_T1footer qua sa vo htcm pcmat = foldlSent_ $ map foldlSent [
 
   [sParen (S "#"), S "The", plural constraint, S "on the", phrase sa,
   S "are calculated by considering the", phrase sa, S "to", phrase vo +:+.
-  S "ratio", S "The", phrase assumption, S "is that the lowest ratio is 1 and",
+  S "ratio", S "The", phrase assumption, S "is that the lowest ratio is 1" `sAnd`
   S "the highest possible is", E (2 / C htcm) `sC` S "where",
   E $ C htcm, S "is the thickness of a", Quote (S "sheet"), S "of" +:+.
   short pcmat, S "A thin sheet has the greatest", phrase sa, S "to",
   phrase vo, S "ratio"],
 
-  [sParen (S "**"), S "The", phrase constraint, S "on the maximum", phrase time,
-  S "at the end of the simulation is the total number of secondsin one day"]
+  [sParen (S "**"), S "The", phrase constraint, S "on the maximum", 
+  phrase time, S "at the end of the simulation is the total number of seconds", 
+  S "in one day"]
   
   ]
 
@@ -1377,8 +1375,8 @@ s4_2_7_deriv_4 = EqnBlock
   (C temp_PCM) [C time]))) time))
 
 s4_2_7_deriv_5 :: ConceptChunk -> CI -> CI -> Contents
-s4_2_7_deriv_5 eq pro rs = foldlSP [titleize' eq, S "(FIXME: Equation 7) and",
-  S "(FIXME: Equation 8) can be used as", Quote (S "sanity") :+:
+s4_2_7_deriv_5 eq pro rs = foldlSP [titleize' eq, S "(FIXME: Equation 7)" 
+  `sAnd` S "(FIXME: Equation 8) can be used as", Quote (S "sanity") :+:
   S "checks to gain confidence in any", phrase solution,
   S "computed by" +:+. short pro, S "The relative",
   S "error between the results computed by", short pro `sAnd`
@@ -1443,16 +1441,20 @@ likeChg6 = mkLklyChnk "likeChg6" $
 -- Section 7 : TRACEABILITY MATRICES AND GRAPHS --
 --------------------------------------------------
 
+renameList1, renameList2 :: [CI]
+renameList1  = [thModel, genDefn, dataDefn, inModel, likelyChg, assumption]
+renameList2  = [inModel, requirement, dataConst]
+
 s7_trailing_1, s7_trailing_2, s7_trailing_3 :: Sentence
 
-s7_trailing_1 = foldlSent [plural thModel `sC` plural genDefn `sC` plural dataDefn
-  `sC` S "and", plural inModel, S "with each other"]
+s7_trailing_1 = foldlSent [foldlList $ map plural (take 4 renameList1), 
+  S "with each other"]
 
-s7_trailing_2 = foldlSent [plural inModel `sC` plural requirement `sC` S "and",
-  plural datum, plural constraint, S "on each other"]
+s7_trailing_2 = foldlSent [foldlList $ map plural renameList2, 
+  S "on each other"]
 
-s7_trailing_3 = foldlSent_ [plural thModel `sC` plural genDefn `sC` plural dataDefn
-  `sC` plural inModel `sC` S "and", plural likelyChg, S "on the", plural assumption]
+s7_trailing_3 = foldlSent_ [foldlList $ map plural (take 5 renameList1),
+  S "on the", plural assumption]
 
 s7_table1 :: Contents
 s7_table1 = Table (EmptyS:s7_row_header_t1)
@@ -1476,20 +1478,17 @@ s7_table3 = Table (EmptyS:s7_row_header_t3)
 s7_intro2 :: [Contents]
 s7_intro2 = traceGIntro [s7_fig1, s7_fig2]
 
-  [foldlSent [plural thModel `sC` plural genDefn `sC` plural dataDefn
-  `sC` plural inModel `sC` plural likelyChg `sC` S "and",
-  plural assumption, S "on each other"],
+  [foldlSent [foldlList $ map plural renameList1, S "on each other"],
 
-  foldlSent_ [plural inModel `sC` plural requirement `sC`
-  S "and", plural datumConstraint, S "on each other"]]
+  foldlSent_ [foldlList $ map plural renameList2, S "on each other"]]
 
 s7_fig1 :: Contents
 s7_fig1 = Figure (showingCxnBw traceyGraph (titleize' item +:+
   S "of Different" +:+ titleize' section_)) "ATrace.png"
 
 s7_fig2 :: Contents
-s7_fig2 = Figure (showingCxnBw traceyGraph (titleize' requirement `sC`
-  titleize' inModel `sC` S "and" +:+ titleize' datumConstraint)) "RTrace.png"
+s7_fig2 = Figure (showingCxnBw traceyGraph (foldlList $ map titleize' 
+  renameList2)) "RTrace.png"
 
 -------------------------------------------------
 -- Section 8 :  Specification Parameter Values --

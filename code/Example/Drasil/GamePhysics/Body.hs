@@ -90,7 +90,7 @@ chipUnits :: [UnitDefn]
 chipUnits = map UU [metre, kilogram, second] ++ map UU [newton, radian]
 
 chipmunkMG :: Document
-chipmunkMG = mgDoc' chipmunk auths mgBod
+chipmunkMG = mgDoc'' chipmunk (for'' titleize short) auths mgBod
 
 mgBod :: [Section]
 (mgBod, _) = makeDD likelyChanges unlikelyChanges reqs modules

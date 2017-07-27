@@ -92,7 +92,7 @@ mkSRS = RefSec (RefProg intro
 
 ssp_srs, ssp_mg :: Document
 ssp_srs = mkDoc mkSRS ssp_si
-ssp_mg = mgDoc ssa (name henryFrankis) mgBod
+ssp_mg = mgDoc'' ssa (for'' titleize titleize) (name henryFrankis) mgBod
 
 mgBod :: [Section]
 (mgBod, _) = makeDD likelyChanges unlikelyChanges reqs modules

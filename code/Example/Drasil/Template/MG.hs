@@ -1,4 +1,4 @@
-module Drasil.Template.MG(makeMG, mgDoc, mgDoc', mgDoc'') where
+module Drasil.Template.MG(makeMG, mgDoc'') where
 import Prelude hiding (id)
 
 import Language.Drasil
@@ -13,14 +13,14 @@ import Data.Drasil.SentenceStructures (foldlsC)
 
 import Drasil.Template.Helpers
 
-mgDoc :: NamedIdea c => c -> Sentence -> [Section] -> Document
+{-mgDoc :: NamedIdea c => c -> Sentence -> [Section] -> Document
 mgDoc sys authors secs = 
   Document (titleize mg +:+ S "for" +:+ (titleize sys)) authors secs
 
 --When we want the short form in a title.  
 mgDoc' :: NamedIdea c => c -> Sentence -> [Section] -> Document
 mgDoc' sys authors secs = 
-  Document (titleize mg +:+ S "for" +:+ (short sys)) authors secs
+  Document (titleize mg +:+ S "for" +:+ (short sys)) authors secs-}
 
 mgDoc'' :: NamedIdea c => c -> (NWrapper -> NWrapper -> Sentence) -> Sentence -> [Section] -> Document
 mgDoc'' sys comb authors secs = 

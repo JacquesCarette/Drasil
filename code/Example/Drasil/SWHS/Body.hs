@@ -123,7 +123,7 @@ mgBod :: [Section]
 (mgBod, _) = makeDD likelyChanges unlikelyChanges reqs modules
 
 swhs_mg :: Document
-swhs_mg = mgDoc'' swhsFull (for'' titleize titleize) authors mgBod
+swhs_mg = mgDoc swhsFull (for'' titleize titleize) authors mgBod
 
 
 -- =================================== --

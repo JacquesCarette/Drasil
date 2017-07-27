@@ -126,7 +126,7 @@ mgBod :: [Section]
 (mgBod, _) = makeDD likelyChanges unlikelyChanges reqs modules
 
 glassBR_mg :: Document
-glassBR_mg = mgDoc'' glassBRProg (for'' titleize phrase) mg_authors mgBod
+glassBR_mg = mgDoc glassBRProg (for'' titleize phrase) mg_authors mgBod
 
 --------------------------------------------------------------------------------
 s6_1_1_bullets :: Contents

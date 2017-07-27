@@ -5,15 +5,44 @@ type State  = Sentence
 data Citation where
   Book :: [CiteFieldB] -> Citation
   
-data CiteFieldB = Place    (City, State)
-               | Edition    Sentence
-               | Series     Sentence
+data CiteFieldB =
+               | Author     People
                | Title      Sentence
                | Volume     Sentence
-               | Publisher  Sentence
-               | Author     People
-               | Year       Integer
+               | Series     Sentence
                | Collection Sentence
+               | Publisher  Sentence
+               | Edition    Sentence
+               | Year       Integer
+               | Date Integer Month Integer
+               | Place    (City, State)
+
+data Month = Jan
+           | Feb
+           | Mar
+           | Apr
+           | May
+           | Jun
+           | Jul
+           | Aug
+           | Sep
+           | Oct
+           | Nov
+           | Dec deriving (Eq, Ord)
+           
+instance Show Month where
+  show Jan = "Janurary"
+  show Feb = "February"
+  show Mar = "March"
+  show Apr = "April"
+  show May = "May"
+  show Jun = "June"
+  show Jul = "July"
+  show Aug = "August"
+  show Sep = "September"
+  show Oct = "October"
+  show Nov = "November"
+  show Dec = "December"
 
 -----------------------------
 -- Rendering Unique to TeX --
@@ -26,7 +55,8 @@ instance Show CiteField where
   show Volume     s = showField "volume" s
   show Publisher  s = showField "publisher" s
   show Author     p = showField "author" (rendPeople p)
-  show Year       n = showField "year" (S $ show n)
+  show Year       y = showField "year" (S $ show y)
+  show Date   d m y = showField "year" (S $ unwords [show d, show m, show y])
   show Collection s = showField "collection" s
 
 showField :: String -> Sentence -> String
@@ -40,7 +70,7 @@ rendPeople people = foldl1 (\x y -> S x :+: S " and " :+: S y) $ rendPerson peop
 
 rendPerson :: Person -> String
 rendPerson (Person _ n _ Mono) = n
-rendPerson (Person f l ms _) = l ++ ", " ++ (concat . intersperse " ") (f:ms)
+rendPerson (Person f l ms _) = l ++ ", " ++ unwords (f:ms)
 
 -------------
 -- Helpers --
@@ -76,6 +106,67 @@ cite :: Citation -> String
 cite book = concat $ intersperse "_" $
   map lstName (getAuthors b) ++ [show $ getYear book]
   where lstName (Person _ l _ _) = l
+
+{-below is unfinished and mostly still TeX-}
+------------------------------
+-- Rendering Unique to HTML --
+------------------------------
+instance Show CiteField where
+  show Place (city, state) = showField "place" (city :+: ", " :+: state)
+  show Edition    s = showField "edition" s
+  show Series     s = showField "series" s
+  show Title      s = showField "title" s
+  show Volume     s = showField "volume" s
+  show Publisher  s = showField "publisher" s
+  show Author     p = showField "author" (rendPeople p)
+  show Year       y = showField "year" (S $ show y)
+  show Date   d m y = showField "year" (S $ unwords [show d, show m, show y])
+  show Collection s = showField "collection" s
+
+showField :: String -> Sentence -> String
+showField f s = f ++ "={" ++ rend s ++ "}"
+  where rend :: Sentence -> String
+        rend = p_spec . spec
+
+rendPeople :: People -> Sentence
+rendPeople []  = error "No authors given"
+rendPeople people = foldl1 (\x y -> S x :+: S " and " :+: S y) $ rendPerson people
+
+rendPerson :: Person -> String
+rendPerson (Person _ n _ Mono) = n
+rendPerson (Person f l ms _) = l ++ ", " ++ unwords (f:ms)
+
+-------------
+-- Helpers --
+-------------
+getAuthors :: Citation -> People
+getAuthors (Book fields) = getP fields
+  where getP [] = error "No authors found"
+        getP ((Author people):xs) = people
+        getP (_:xs) = getP xs
+
+getYear :: Citation -> Integer
+getYear (Book fields) = getY fields
+  where getY [] = error "No year found"
+        getY ((Year year):xs) = year
+        getY (_:xs) = getP xs
+
+
+---------------------
+--HTML bibliography--
+---------------------
+mkBibRef :: BibRef -> String
+mkBibRef = listRef . map renderCite
+  where listRef = --some function to get a numbered list
+
+--for when we add other things to reference like website, newspaper, articals
+renderCite :: Citation -> String
+renderCite b@(Book _) = renderBook b
+
+--Rendering a book--
+renderBook :: Citation -> String
+renderBook (Book fields) = unwords $ map show $ sort fields
+
 
 {-
   {-if we want to change BibTeX to more database style-}

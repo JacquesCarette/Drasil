@@ -8,14 +8,15 @@ data Citation where
 data CiteFieldB =
                | Author     People
                | Title      Sentence
-               | Volume     Sentence
                | Series     Sentence
                | Collection Sentence
-               | Publisher  Sentence
+               | Volume     Sentence
                | Edition    Sentence
+               | Publisher  Sentence
+               | Journal    Sentence
                | Year       Integer
                | Date Integer Month Integer
-               | Place    (City, State)
+               | Place    (City, State) deriving (Ord)--State can also mean country
 
 data Month = Jan
            | Feb
@@ -44,34 +45,6 @@ instance Show Month where
   show Nov = "November"
   show Dec = "December"
 
------------------------------
--- Rendering Unique to TeX --
------------------------------
-instance Show CiteField where
-  show Place (city, state) = showField "place" (city :+: ", " :+: state)
-  show Edition    s = showField "edition" s
-  show Series     s = showField "series" s
-  show Title      s = showField "title" s
-  show Volume     s = showField "volume" s
-  show Publisher  s = showField "publisher" s
-  show Author     p = showField "author" (rendPeople p)
-  show Year       y = showField "year" (S $ show y)
-  show Date   d m y = showField "year" (S $ unwords [show d, show m, show y])
-  show Collection s = showField "collection" s
-
-showField :: String -> Sentence -> String
-showField f s = f ++ "={" ++ rend s ++ "}"
-  where rend :: Sentence -> String
-        rend = p_spec . spec
-
-rendPeople :: People -> Sentence
-rendPeople []  = error "No authors given"
-rendPeople people = foldl1 (\x y -> S x :+: S " and " :+: S y) $ rendPerson people
-
-rendPerson :: Person -> String
-rendPerson (Person _ n _ Mono) = n
-rendPerson (Person f l ms _) = l ++ ", " ++ unwords (f:ms)
-
 -------------
 -- Helpers --
 -------------
@@ -85,7 +58,37 @@ getYear :: Citation -> Integer
 getYear (Book fields) = getY fields
   where getY [] = error "No year found"
         getY ((Year year):xs) = year
+        getY ((Date _ _ year):xs) = year
         getY (_:xs) = getP xs
+
+-----------------------------
+-- Rendering Unique to TeX --
+-----------------------------
+instance Show CiteField where
+  show Place (city, state) = showField "place" (city :+: S ", " :+: state)
+  show Edition    s = showField "edition" s
+  show Series     s = showField "series" s
+  show Title      s = showField "title" s
+  show Volume     s = showField "volume" s
+  show Publisher  s = showField "publisher" s
+  show Author     p = showField "author" (rendPeople p)
+  show Year       y = showField "year" (S $ show y)
+  show Date   d m y = showField "year" (S $ unwords [show d, show m, show y])
+  show Collection s = showField "collection" s
+  show Journal    s = showField "journal" s
+
+showField :: String -> Sentence -> String
+showField f s = f ++ "={" ++ rend s ++ "}"
+  where rend :: Sentence -> String
+        rend = p_spec . spec
+
+rendPeople :: People -> Sentence
+rendPeople []  = error "No authors given"
+rendPeople people = foldl1 (\x y -> S x :+: S " and " :+: S y) $ map rendPerson people
+
+rendPerson :: Person -> String
+rendPerson (Person _ n _ Mono) = n
+rendPerson (Person f l ms _) = l ++ ", " ++ unwords (f:ms)
 
 --------------------
 --Tex bibliography--
@@ -112,45 +115,35 @@ cite book = concat $ intersperse "_" $
 -- Rendering Unique to HTML --
 ------------------------------
 instance Show CiteField where
-  show Place (city, state) = showField "place" (city :+: ", " :+: state)
-  show Edition    s = showField "edition" s
-  show Series     s = showField "series" s
-  show Title      s = showField "title" s
-  show Volume     s = showField "volume" s
-  show Publisher  s = showField "publisher" s
-  show Author     p = showField "author" (rendPeople p)
-  show Year       y = showField "year" (S $ show y)
-  show Date   d m y = showField "year" (S $ unwords [show d, show m, show y])
-  show Collection s = showField "collection" s
+  show Place (city, state) = rend (city :+: S ", " :+: state) ++ ":"
+  show Edition    s = rend s ++ " ed.,"
+  show Series     s = "<em>" ++ rend s ++ "</em>."
+  show Title      s = "<em>" ++ rend s ++ "</em>." --If there is a series or collection, this should be in quotes, not italics
+  show Volume     s = "vol." ++ rend s ","
+  show Publisher  s = rend s ++ ","
+  show Author     p = rend rendPeople ++ "."
+  show Year       y = rend (S $ show y) ++ "."
+  show Date   d m y = rend (S $ unwords [show d, show m, show y]) ++ "."
+  show Collection s = "<em>" ++ rend s ++ "</em>."
+  show Journal    s = "<em>" ++ rend s ++ "</em>.,"
 
-showField :: String -> Sentence -> String
-showField f s = f ++ "={" ++ rend s ++ "}"
-  where rend :: Sentence -> String
-        rend = p_spec . spec
+rend :: Sentence -> String
+rend = p_spec . spec
 
 rendPeople :: People -> Sentence
 rendPeople []  = error "No authors given"
-rendPeople people = foldl1 (\x y -> S x :+: S " and " :+: S y) $ rendPerson people
+rendPeople people = foldlList $ map name people --name is found in People.hs, foldlList is in SentenceStructures.hs
 
-rendPerson :: Person -> String
-rendPerson (Person _ n _ Mono) = n
-rendPerson (Person f l ms _) = l ++ ", " ++ unwords (f:ms)
+foldlList :: [Sentence] -> Sentence
+foldlList []    = EmptyS
+foldlList [a,b] = a :+: S " and " :+: b
+foldlList lst   = foldle1 (\a b -> a :+: S ", " :+: b) (\a b -> a :+: S ", and " :+: b) lst
 
--------------
--- Helpers --
--------------
-getAuthors :: Citation -> People
-getAuthors (Book fields) = getP fields
-  where getP [] = error "No authors found"
-        getP ((Author people):xs) = people
-        getP (_:xs) = getP xs
-
-getYear :: Citation -> Integer
-getYear (Book fields) = getY fields
-  where getY [] = error "No year found"
-        getY ((Year year):xs) = year
-        getY (_:xs) = getP xs
-
+foldle1 :: (a -> a -> a) -> (a -> a -> a) -> [a] -> a
+foldle1 _ _ []       = error "foldle1 cannot be used with empty list"
+foldle1 _ _ [x]      = x
+foldle1 _ g [x,y]    = g x y
+foldle1 f g (x:y:xs) = foldle1 f g ((f x y):xs)
 
 ---------------------
 --HTML bibliography--
@@ -165,7 +158,7 @@ renderCite b@(Book _) = renderBook b
 
 --Rendering a book--
 renderBook :: Citation -> String
-renderBook (Book fields) = unwords $ map show $ sort fields
+renderBook (Book fields) = unwords $ map show (sort fields) ++ ["Print."]
 
 
 {-

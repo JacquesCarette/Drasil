@@ -19,7 +19,7 @@ module Language.Drasil (
   -- Chunk
   , Chunk(..), VarChunk(..), ConceptChunk
   , makeVC, vc, makeVCObj, SymbolForm(..)
-  , dcc, dccWDS, cv, dcc', vc', ccs, cc, cc'
+  , dcc, dccWDS, dccWDS', cv, dcc', vc', ccs, cc, cc'
   , Quantity(..), QWrapper, qw, ConVar(..), cvR, cvRs
   , Concept(..), cw, CWrapper
   , CommonIdea(..)
@@ -46,7 +46,7 @@ module Language.Drasil (
   -- Chunk.Unitary
   , Unitary(..), UnitaryChunk, unitary
   -- Chunk.Relation
-  , NamedRelation, makeNR, RelationConcept, makeRC, relat, ExprRelat
+  , NamedRelation(..), makeNR, RelationConcept(..), makeRC, makeRC', relat, ExprRelat
   -- Chunk.Method
   , MethodChunk, fromEC, makeStdInputMethod, makeFileInputMethod
   , makeFileOutputMethod, makeMainMethod, input, output, exc, methcc, mType
@@ -134,7 +134,7 @@ import Language.Drasil.Chunk.Unital(UnitalChunk(..), makeUCWDS, ucFromCV
                                   , uc, uc', ucs, ucs', ucsWS)
 import Language.Drasil.Chunk.Unitary
 import Language.Drasil.Chunk.Relation(NamedRelation, makeNR, RelationConcept, 
-                                      makeRC)
+                                      makeRC, makeRC')
 import Language.Drasil.Chunk.Req
 import Language.Drasil.Chunk.LC
 import Language.Drasil.Chunk.Method

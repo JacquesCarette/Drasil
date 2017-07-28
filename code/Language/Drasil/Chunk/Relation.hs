@@ -1,8 +1,8 @@
 {-# LANGUAGE GADTs, Rank2Types #-}
 module Language.Drasil.Chunk.Relation
-  ( NamedRelation, RelationConcept
+  ( NamedRelation(..), RelationConcept(..)
   , makeNR
-  , makeRC
+  , makeRC, makeRC'
   ) where
 
 import Control.Lens (Simple, Lens, (^.), set)
@@ -59,6 +59,10 @@ rcl l f (RC a b) = fmap (\x -> RC (set l x a) b) (f (a ^. l))
 -- | Create a RelationConcept from a given id, term, defn, and relation.
 makeRC :: String -> NP -> Sentence -> Relation -> RelationConcept
 makeRC rID rTerm rDefn rel = RC (dccWDS rID rTerm rDefn) rel
+
+-- | Create a RelationConcept from a given id, term, defn, abbreviation, and relation.
+makeRC' :: String -> NP -> Sentence -> String -> Relation -> RelationConcept
+makeRC' rID rTerm rDefn rAbb rel = RC (dccWDS' rID rTerm rDefn rAbb) rel
 
 -- don't export this
 cp :: (forall c. (NamedIdea c) => Simple Lens c a) -> Simple Lens NamedRelation a

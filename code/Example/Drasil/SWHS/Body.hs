@@ -27,7 +27,8 @@ import Data.Drasil.Utils (enumSimple, weave, getS, itemRefToSent, makeListRef,
 
 import Data.Drasil.Quantities.Physics (time, energy)
 import Data.Drasil.Quantities.Math (gradient, surface, uNormalVect, surArea)
-import Data.Drasil.Quantities.Thermodynamics
+import Data.Drasil.Quantities.Thermodynamics (temp, heat_cap_spec,
+  latent_heat, sens_heat)
 import Data.Drasil.Quantities.PhysicalProperties (density, mass, vol)
 
 import Data.Drasil.Software.Products (compPro)

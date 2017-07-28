@@ -12,6 +12,7 @@ import Drasil.SSP.Changes
 import Drasil.SSP.DataDefs
 import Drasil.SSP.Defs
 import Drasil.SSP.GenDefs
+import Drasil.SSP.Goals
 import Drasil.SSP.IMods
 import Drasil.SSP.Modules
 import Drasil.SSP.References
@@ -52,7 +53,7 @@ s4_1, s4_1_1, s4_1_2,
   s4_1_3, s4_2, s5_1, s5_2 :: Section
 
 s4_1_1_list, s4_1_2_p1, s4_1_2_bullets,
-  s4_1_2_p2, s4_1_3_list, s4_2_1_list,
+  s4_1_2_p2, goals_list, s4_2_1_list,
   s5_1_list :: Contents
 
 s4_2_2_tmods, s4_2_3_genDefs, s4_2_4_dataDefs, s4_2_5_IMods :: [Contents]
@@ -289,19 +290,9 @@ s4_1_3 = goalStmtF (map (\(x, y) -> x `ofThe` y) [
   (S "geometry", S "water" +:+ phrase table_),
   (S "geometry", S "layers composing the plane of a" +:+ phrase slope),
   (plural mtrlPrpty, S "layers")
-  ]) [s4_1_3_list]
+  ]) [goals_list]
 
-s4_1_3_list = enumSimple 1 (short goalStmt) sspGoals
-
-sspGoals :: [Sentence]
-sspGoals = [locAndGlFS, lowestFS, displSlope]
-
-locAndGlFS, lowestFS, displSlope :: Sentence
-locAndGlFS = S "Evaluate local and global" +:+ plural fs_rc +:+
-  S "along a given" +:+. phrase slpSrf
-lowestFS   = S "Identify the" +:+ phrase crtSlpSrf +:+ S "for the" +:+
-  phrase slope `sC` S "with the lowest" +:+. phrase fs_rc
-displSlope = S "Determine" +:+. (S "displacement" `ofThe` phrase slope)
+goals_list = enumSimple 1 (short goalStmt) sspGoals
 
 -- SECTION 4.2 --
 s4_2 = solChSpecF ssa (s4_1, s6) ddEnding (EmptyS, dataConstraintUncertainty, EmptyS)

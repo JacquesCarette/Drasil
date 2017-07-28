@@ -227,6 +227,7 @@ executable ssp
     , Drasil.SSP.DataDefs
     , Drasil.SSP.Defs
     , Drasil.SSP.GenDefs
+    , Drasil.SSP.Goals
     , Drasil.SSP.IMods
     , Drasil.SSP.Modules
     , Drasil.SSP.References

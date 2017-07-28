@@ -94,8 +94,8 @@ symbol (Greek g)   = unPL $ greek g
 symbol (Concat sl) = foldr (++) "" $ map symbol sl
 --
 -- handle the special cases first, then general case
-symbol (Corners [] [] [x] [] s) = (symbol s) ++"^"++ brace (symbol x)
-symbol (Corners [] [] [] [x] s) = "(" ++ (symbol s) ++"_"++ brace (symbol x) ++ ")"
+symbol (Corners [] [] [x] [] s) = brace $ (symbol s) ++"^"++ brace (symbol x)
+symbol (Corners [] [] [] [x] s) = brace $ (symbol s) ++"_"++ brace (symbol x)
 symbol (Corners [_] [] [] [] _) = error "rendering of ul prescript"
 symbol (Corners [] [_] [] [] _) = error "rendering of ll prescript"
 symbol (Corners _ _ _ _ _)      = error "rendering of Corners (general)"

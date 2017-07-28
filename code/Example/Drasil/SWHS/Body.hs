@@ -7,7 +7,15 @@ import Language.Drasil
 import Data.Drasil.SI_Units
 import Data.Drasil.Authors
 
-import Data.Drasil.Concepts.Documentation
+import Data.Drasil.Concepts.Documentation (section_, traceyGraph, item,
+  assumption, traceyMatrix, thModel, genDefn, dataDefn, inModel, likelyChg,
+  dataConst, requirement, input_, solution, output_, corSol, constraint,
+  value, software, column, model, acroIM, acroGD, acroGS, goalStmt,
+  quantity, property, condition, physics, user, physical, datum, system,
+  variable, sysCont, environment, srs, softwareSys, organization, document,
+  problem, content, information, reference, definition, purpose,
+  description, acroNumGen, symbol_, physSyst)
+
 import Data.Drasil.Concepts.PhysicalProperties hiding (density, mass, vol)
 import qualified Data.Drasil.Concepts.Thermodynamics as CT
 import Data.Drasil.Concepts.Math (ode, de, unit_, rOfChng, equation)

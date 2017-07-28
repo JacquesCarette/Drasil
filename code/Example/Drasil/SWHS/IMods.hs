@@ -49,7 +49,8 @@ balWtrDesc = foldlSent [(E $ C temp_W) `isThe` phrase temp_W +:+. sParen (unwrap
 -- IM2 --
 ---------
 eBalanceOnPCM :: RelationConcept
-eBalanceOnPCM = makeRC "eBalanceOnPCM" (nounPhraseSP "Energy balance on PCM to find T_p")
+eBalanceOnPCM = makeRC "eBalanceOnPCM" (nounPhraseSP
+  "Energy balance on PCM to find T_p") --FIXME: T_p should be called from symbol
   balPCMDesc balPCM_Rel
 
 balPCM_Rel :: Relation

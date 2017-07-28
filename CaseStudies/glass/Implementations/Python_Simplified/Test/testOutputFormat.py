@@ -26,7 +26,7 @@ class TestOutputFormat(unittest.TestCase):
         self.params         = [param.Param() for i in range(self.numTests)]
 
         for i in range(self.numTests):
-            inputFormat.get_input(os.path.join("Test/Inputfiles", self.inputFileName[i]), self.params[i]) # FileNotDoundError: [Errno 2] No such file or directory: 'testInput3.txt'
+            inputFormat.get_input(os.path.join("Test/Inputfiles", self.inputFileName[i]), self.params[i])
             derivedValues.derived_params(self.params[i])
          
     def test_display_output(self):
@@ -41,7 +41,7 @@ class TestOutputFormat(unittest.TestCase):
                     text1 = f.readlines()
                 with open("testoutput.txt", "r") as f:
                     text2 = f.readlines()
-                self.assertEqual(text1,text2)
+                self.assertEqual(text1, text2)
 
                 
 if __name__ == "__main__":

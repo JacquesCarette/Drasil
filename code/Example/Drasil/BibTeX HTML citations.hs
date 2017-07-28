@@ -2,21 +2,22 @@ type BibRef = [Citation]
 type City   = Sentence
 type State  = Sentence
 
-data Citation where
+data Citation where --add artical, website
   Book :: [CiteFieldB] -> Citation
   
-data CiteFieldB =
+data CiteFieldB = --maybe change to take strings?
                | Author     People
                | Title      Sentence
                | Series     Sentence
                | Collection Sentence
-               | Volume     Sentence
-               | Edition    Sentence
+               | Volume     Integer
+               | Edition    Integer
+               | Place    (City, State) --State can also mean country
                | Publisher  Sentence
                | Journal    Sentence
                | Year       Integer
-               | Date Integer Month Integer
-               | Place    (City, State) deriving (Ord)--State can also mean country
+               | Date Integer Month Integer deriving (Eq, Ord)
+               --not sure if you can derive this using Sentence but may work with String
 
 data Month = Jan
            | Feb
@@ -61,15 +62,25 @@ getYear (Book fields) = getY fields
         getY ((Date _ _ year):xs) = year
         getY (_:xs) = getP xs
 
+
+sufx :: Integer -> String
+sufx 1 = "st."
+sufx 2 = "nd."
+sufx 3 = "rd."
+sufx _ = "th."
+
+sufxer :: Integer -> String
+sufxer = sufx . read . last . show
+
 -----------------------------
 -- Rendering Unique to TeX --
 -----------------------------
-instance Show CiteField where
+instance Show CiteField where --may need custom show function
   show Place (city, state) = showField "place" (city :+: S ", " :+: state)
-  show Edition    s = showField "edition" s
+  show Edition    s = showField "edition" (S $ show s :+: sufxer s)
   show Series     s = showField "series" s
   show Title      s = showField "title" s
-  show Volume     s = showField "volume" s
+  show Volume     s = showField "volume" (S $ show s)
   show Publisher  s = showField "publisher" s
   show Author     p = showField "author" (rendPeople p)
   show Year       y = showField "year" (S $ show y)
@@ -94,7 +105,7 @@ rendPerson (Person f l ms _) = l ++ ", " ++ unwords (f:ms)
 --Tex bibliography--
 --------------------
 mkBibRef :: BibRef -> String
-mkBibRef = foldl1 (++"\\n\\n"++) . map renderCite
+mkBibRef = foldl1 (++"\\n\\n"++) . sort . map renderCite
 
 --for when we add other things to reference like website, newspaper, articals
 renderCite :: Citation -> String
@@ -110,16 +121,16 @@ cite book = concat $ intersperse "_" $
   map lstName (getAuthors b) ++ [show $ getYear book]
   where lstName (Person _ l _ _) = l
 
-{-below is unfinished and mostly still TeX-}
+
 ------------------------------
 -- Rendering Unique to HTML --
 ------------------------------
-instance Show CiteField where
+instance Show CiteField where --change to a custom show so that we can render to APA and MLA
   show Place (city, state) = rend (city :+: S ", " :+: state) ++ ":"
-  show Edition    s = rend s ++ " ed.,"
+  show Edition    s = rend (S $ show s :+: sufxer s) ++ " ed.,"
   show Series     s = "<em>" ++ rend s ++ "</em>."
   show Title      s = "<em>" ++ rend s ++ "</em>." --If there is a series or collection, this should be in quotes, not italics
-  show Volume     s = "vol." ++ rend s ","
+  show Volume     s = "vol." ++ show s ++ ","
   show Publisher  s = rend s ++ ","
   show Author     p = rend rendPeople ++ "."
   show Year       y = rend (S $ show y) ++ "."
@@ -148,10 +159,11 @@ foldle1 f g (x:y:xs) = foldle1 f g ((f x y):xs)
 ---------------------
 --HTML bibliography--
 ---------------------
-mkBibRef :: BibRef -> String
-mkBibRef = listRef . map renderCite
-  where listRef = --some function to get a numbered list
-
+mkBibRef :: BibRef -> Contents
+mkBibRef = listRef . sort . map renderCite
+  where listRef = Enumeration . Simple . zip [S $ "[" ++ show x ++ "]:" | x <- [1..]] . map (Flat . S)
+  --some function to get a numbered list, idealy it wouldn't go from string to sentence
+  
 --for when we add other things to reference like website, newspaper, articals
 renderCite :: Citation -> String
 renderCite b@(Book _) = renderBook b
@@ -160,8 +172,18 @@ renderCite b@(Book _) = renderBook b
 renderBook :: Citation -> String
 renderBook (Book fields) = unwords $ map show (sort fields) ++ ["Print."]
 
+{-example of use-}
+ref1 :: Citation
+ref1 = Book [
+  Author [person "John" "Smith"],
+  Title $ S "This is a Title",
+  Place (S "Toronto", S "Canada"),
+  Date 28 July 2017,
+  Publisher $ S "McMaster",
+  Volume 3]
 
 {-
+
   {-if we want to change BibTeX to more database style-}
   _place      :: (City, State),
   _edition    :: Sentence,
@@ -188,4 +210,9 @@ renderBook (Book fields) = unwords $ map show (sort fields) ++ ["Print."]
   {-if there are multiple authors-}
   l1_l2_l3_1ADAD
   author={l1, f1 mi1 and l2, f2 m2 and l3, f3 m3}
+  
+  {-just need these three lines in LaTeX-}
+  \newline
+  \bibliography{filename}
+  \bibstyle{ieeetr} %% note you can use "plain" as a common style
   -}

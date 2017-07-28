@@ -44,8 +44,8 @@ plnStrn = dcc "plane strain" (cn' "plane strain")
   "the ones that can be approximated as 0.")
 
 crtSlpSrf = dccWDS "critical slip surface" (cn' "critical slip surface") 
-  ((at_start slpSrf) +:+ S "of the" +:+ (phrase slope) +:+ S "that has the lowest global" +:+
-  ((phrase factor) `sOf` (phrase safety)) `sC` S "and therefore most likely to experience failure.")
+  (at_start slpSrf +:+ S "of the" +:+ phrase slope +:+ S "that has the lowest global" +:+
+  phrase fs_concept `sC` S "and therefore most likely to experience failure.")
 
 fs_concept = dcc "FS" factorOfSafety
   "The global stability of a surface in a slope"

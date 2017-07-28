@@ -426,6 +426,7 @@ convExpr (Neg e)      = (#~) (convExpr e)
 convExpr (C c)        = var (codeName (SFCN c))
 convExpr (Index a i)  = (convExpr a)$.(listAccess $ convExpr i)
 convExpr (Len a)      = (convExpr a)$.listSize
+convExpr (Append a v) = (convExpr a)$.(listAppend $ convExpr v)
 convExpr (FCall (C c) x)  = funcApp' (codeName (SFCN c)) (map convExpr x)
 convExpr (FCall _ _)  = error "not implemented"
 convExpr (a := b)     = (convExpr a) ?== (convExpr b)
@@ -555,6 +556,9 @@ convStmt _ (FRet e) = return $ convExpr e
 convStmt _ (FThrow s) = throw s
 convStmt g (FTry t c) = tryCatch [ block (map (convStmt g) t) ] [ block (map (convStmt g) c) ]
 convStmt _ (FContinue) = continue
+convStmt _ (FVal e) = valStmt $ convExpr e
+convStmt _ (FDec v (C.List t)) = listDec' (codeName v) (convType t) 0
+convStmt _ (FDec v t) = varDec (codeName v) (convType t)
 
 -- major hacks --
 genHacks :: Generator -> (String, [Method]) -> Module

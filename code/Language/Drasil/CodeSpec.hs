@@ -166,12 +166,17 @@ data FuncStmt where
   FThrow :: String -> FuncStmt
   FTry :: [FuncStmt] -> [FuncStmt] -> FuncStmt
   FContinue :: FuncStmt
+  FVal :: Expr -> FuncStmt
+  FDec :: CodeChunk -> CodeType -> FuncStmt
   
 fasg :: (Quantity c, SymbolForm c) => c -> Expr -> FuncStmt
 fasg v e = FAsg (codevar v) e
 
 ffor :: (Quantity c, SymbolForm c) => c -> Expr -> [FuncStmt] -> FuncStmt
 ffor v e fs = FFor (codevar v) e fs
+
+fdec :: (Quantity c, SymbolForm c) => c -> Space -> FuncStmt
+fdec v t = FDec (codevar v) (spaceToCodeType t)
 
 addModDefs :: CodeSpec -> [ModDef] -> CodeSpec
 addModDefs cs@(CodeSpec{ modDefs = md }) mdnew = cs { modDefs = md ++ mdnew }

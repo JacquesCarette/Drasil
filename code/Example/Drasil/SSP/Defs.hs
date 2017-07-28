@@ -2,7 +2,6 @@ module Drasil.SSP.Defs where
 
 import Language.Drasil
 import Data.Drasil.Concepts.Documentation
-import Data.Drasil.SentenceStructures
 
 ----Acronyms-----
 acronyms :: [CI]

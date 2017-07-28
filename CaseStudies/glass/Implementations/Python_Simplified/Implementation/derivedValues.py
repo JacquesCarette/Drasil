@@ -9,7 +9,7 @@ import math
 
 def derived_params(params):
     # cal aspect ratio
-    params.asprat = round (params.a / params.b, 11)
+    params.asprat = round (params.a / params.b, 15)
     # cal stand off distance
     temp = pow(params.sdvect[0], 2) + pow(params.sdvect[1], 2) + pow(params.sdvect[2], 2)
     params.sd = math.sqrt(temp)

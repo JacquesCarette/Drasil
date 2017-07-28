@@ -19,10 +19,10 @@ swhsSymMap :: SymbolMap
 swhsSymMap = symbolMap swhsSymbols
 
 swhsSymbMapD :: QDefinition -> Contents
-swhsSymbMapD = symbolMapFun swhsSymMap Data
+swhsSymbMapD = symbolMapFun EmptyS swhsSymMap Data
 
 swhsSymbMapT :: RelationConcept -> Contents
-swhsSymbMapT = symbolMapFun swhsSymMap Theory
+swhsSymbMapT = symbolMapFun EmptyS swhsSymMap Theory
 
 swhsSymbMapDRef :: QDefinition -> Sentence
 swhsSymbMapDRef = makeRef . swhsSymbMapD

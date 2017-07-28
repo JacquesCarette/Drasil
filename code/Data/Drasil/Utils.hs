@@ -154,7 +154,7 @@ itemRefToSent a b = S a +:+ sParen b
 
 -- | refFromType takes a function and returns a reference sentence
 refFromType :: (a -> DType) -> SymbolMap -> a -> Sentence
-refFromType f m = (makeRef . Definition m . f)
+refFromType f m = (makeRef . Definition EmptyS m . f)
 
 -- | makeListRef takes a list and a reference and generates references to 
 --   match the length of the list
@@ -186,8 +186,8 @@ unwrap Nothing  = EmptyS
 
 -- Using symbolMap from Extract
 --FIXME: Not sure what type d should be
-symbolMapFun :: SymbolMap -> (d -> DType) -> (d -> Contents)
-symbolMapFun progSymbMap fun = (Definition (progSymbMap) . fun)
+symbolMapFun :: Sentence -> SymbolMap -> (a -> DType) -> a -> Contents
+symbolMapFun abb progSymbMap fun = (Definition abb progSymbMap . fun)
 
 -- Used to help make Qdefinitions when id, term, and symbol come from the same source
 mkDataDef :: (SymbolForm c, Quantity c) => c -> Expr -> QDefinition

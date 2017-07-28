@@ -44,7 +44,7 @@ thisSRS :: DocDesc
 thisSRS = RefSec (RefProg intro [TUnits, tsymb [TSPurpose, SymbConvention [Lit (nw nuclearPhys), Manual (nw fp)]]]) : [Verbatim s3]
   
 s3 :: Section --, s4 
-s3 = dataDefnF EmptyS (map (Definition hghcSymMap . Data) hghcVars)
+s3 = dataDefnF EmptyS (map (Definition EmptyS hghcSymMap . Data) hghcVars)
   
 srsBody :: Document
 srsBody = mkDoc thisSRS thisSI

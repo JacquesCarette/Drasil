@@ -119,10 +119,10 @@ sspSymMap :: SymbolMap
 sspSymMap = symbolMap sspSymbols
 
 sspSymMapT :: RelationConcept -> Contents
-sspSymMapT = symbolMapFun sspSymMap Theory
+sspSymMapT = symbolMapFun EmptyS sspSymMap Theory
 
 sspSymMapD :: QDefinition -> Contents
-sspSymMapD = symbolMapFun sspSymMap Data
+sspSymMapD = symbolMapFun EmptyS sspSymMap Data
 
 -- SECTION 1 --
 --automatically generated in mkSRS -

@@ -44,10 +44,9 @@ data Contents = Table [Sentence] [[Sentence]] Title Bool
                | Paragraph Sentence -- ^ Paragraphs are just sentences.
                | EqnBlock Expr
      --        CodeBlock Code   -- GOOL complicates this.  Removed for now.
-               | Definition Sentence SymbolMap DType
+               | Definition SymbolMap DType
                -- ^ Data/General definition or theoretical model. SymbolMap for
-               -- looking up variables (currently a hack). Sentence holds
-               -- Abbreviation
+               -- looking up variables (currently a hack).
                | Enumeration ListType -- ^ Lists
                | Figure Label Filepath -- ^ Should use relative file path.
                | Module ModuleChunk
@@ -107,7 +106,7 @@ instance LayoutObj Contents where
   refName (Paragraph _)         = error "Can't reference paragraphs" --yet
   refName (EqnBlock _)          = error "EqnBlock ref unimplemented"
 --  refName (CodeBlock _)         = error "Codeblock ref unimplemented"
-  refName (Definition _ _ d)      = getDefName d
+  refName (Definition _ d)      = getDefName d
   refName (Defnt dt _ r)        = getDefName dt +:+ r
   refName (Enumeration _)       = error "List refs unimplemented"
   refName (Module mc)           = S $ "M" ++ alphanumOnly (mc ^. id)
@@ -123,7 +122,7 @@ instance LayoutObj Contents where
   refName (DDef _ _ _)          = error "DDef referencing unimplemented"
   rType (Table _ _ _ _)         = Tab
   rType (Figure _ _)            = Fig
-  rType (Definition _ _ _)        = Def
+  rType (Definition _ _)        = Def
   rType (Defnt _ _ _)           = Def
   rType (Module _)              = Mod
   rType (Requirement r)       = Req $ getA r

@@ -6,6 +6,8 @@ import Control.Lens ((^.))
 
 import Language.Drasil.Chunk.Req
 import Language.Drasil.Chunk.LC
+import Language.Drasil.Chunk.Relation
+import Language.Drasil.Chunk.Eq
 
 
 -- | Create References to a given 'LayoutObj'
@@ -26,6 +28,9 @@ find _ [] = error "This object does not match any of the enumerated objects prov
 find itm@(Assumption comp1) (frst@(Assumption comp2):lst)
   | (comp1 ^. id) == (comp2 ^. id) = frst
   | otherwise = find itm lst
+-- find itm@(Definition _ (Data (EC comp1 _))) (frst@(Definition _ (Data (EC comp2 _))):lst)
+  -- | (comp1 ^. id) == (comp2 ^. id) = frst
+  -- | otherwise = find itm lst
 find itm@(Requirement comp1) (frst@(Requirement comp2):lst)
   | ((rNI comp1) ^. id) == ((rNI comp2) ^. id) = frst
   | otherwise = find itm lst

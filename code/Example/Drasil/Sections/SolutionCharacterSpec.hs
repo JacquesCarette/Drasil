@@ -305,7 +305,7 @@ theoreticalModelSect (SectionModel niname xs) syMap progName = section
   (titleize' niname) ((tModIntro progName):theoreticalModels ++ 
   (pullContents xs)) (pullSections xs)
   where theoreticalModels = map symMap $ pullTMods xs
-        symMap            = symbolMapFun EmptyS syMap Theory
+        symMap            = symbolMapFun syMap Theory
 
 
 generalDefinitionSect :: SubSec -> SymbolMap -> Section
@@ -318,7 +318,7 @@ generalDefinitionSect (SectionModel niname xs) _ = section (titleize' niname)
 instanceModelSect :: SubSec -> SymbolMap -> Section
 instanceModelSect (SectionModel niname xs) syMap = section (titleize' niname)
   (iModIntro:instanceModels ++ (pullContents xs)) (pullSections xs)
-  where symMap         = symbolMapFun EmptyS syMap Theory
+  where symMap         = symbolMapFun syMap Theory
         instanceModels = map symMap $ pullIMods xs
 
 
@@ -326,7 +326,7 @@ dataDefinitionSect :: SubSec -> SymbolMap -> Section
 dataDefinitionSect (SectionModel niname xs) syMap = section (titleize' niname)
   (dataIntro:dataDefinitions ++ (pullContents xs)) (pullSections xs)
   where dataIntro       = dataDefinitionIntro $ pullSents xs
-        symMap          = (symbolMapFun EmptyS (syMap) Data)
+        symMap          = (symbolMapFun (syMap) Data)
         dataDefinitions = map symMap $ pullDDefs xs
 
 

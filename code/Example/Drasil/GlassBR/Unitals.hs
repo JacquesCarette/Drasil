@@ -362,10 +362,10 @@ gbSymbMap :: SymbolMap
 gbSymbMap = symbolMap this_symbols
 
 gbSymbMapD :: QDefinition -> Contents
-gbSymbMapD term_ = (symbolMapFun EmptyS gbSymbMap Data) term_
+gbSymbMapD term_ = (symbolMapFun gbSymbMap Data) term_
 
 gbSymbMapT :: RelationConcept -> Contents
-gbSymbMapT term_ = (symbolMapFun EmptyS gbSymbMap Theory) term_
+gbSymbMapT term_ = (symbolMapFun gbSymbMap Theory) term_
 
 {--}
 

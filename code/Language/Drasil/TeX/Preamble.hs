@@ -24,6 +24,7 @@ data Package = AMSMath
              | Dot2Tex
              | AdjustBox
              | AMSsymb
+             | Breqn
              deriving Eq
 
 addPackage :: Package -> D
@@ -41,6 +42,7 @@ addPackage Tikz      = usepackage "tikz" %%
 addPackage Dot2Tex   = usepackage "dot2texi"
 addPackage AdjustBox = usepackage "adjustbox"
 addPackage AMSsymb   = usepackage "amssymb"
+addPackage Breqn     = usepackage "breqn"
 
 data Def = AssumpCounter
          | LCCounter
@@ -76,7 +78,7 @@ genPreamble los = let preamble = parseDoc los
         listdefs (_:ds)        = listdefs ds
 
 parseDoc :: [LayoutObj] -> [Preamble]
-parseDoc los' = [PreP FullPage, PreP HyperRef, PreP AMSMath, PreP AMSsymb] ++
+parseDoc los' = [PreP FullPage, PreP HyperRef, PreP AMSMath, PreP AMSsymb, PreP Breqn] ++
   (nub $ parseDoc' los')
   where parseDoc' [] = []
         parseDoc' ((Table _ _ _ _):los) =

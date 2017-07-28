@@ -8,7 +8,7 @@ import Drasil.SWHS.Assumptions (assump1, assump2, assump7, assump8, assump9,
   assump14, assump15, assump20)
 import Drasil.SWHS.Body (s2_3_knowlegde, s2_3_understanding, s2_4_intro,
   s3, physSyst1, physSyst2, s4_2_4_intro_end, s4_2_5_d1startPara,
-  s7_trailing, likeChg2, likeChg3, likeChg6)
+  s7_trailing)
 import Drasil.SWHS.Concepts (progName, water, gauss_div, sWHT, tank, coil,
   transient, perfect_insul, tank_para)
 import Drasil.SWHS.Unitals (w_vol, tank_length, tank_vol, tau_W, temp_W, w_mass,
@@ -25,6 +25,7 @@ import Drasil.SWHS.GenDefs (swhsGenDefs)
 import Drasil.SWHS.IMods (eBalanceOnWtr, heatEInWtr)
 import Drasil.SWHS.References (ref2, ref3, ref4, ref5, ref6)
 import Drasil.SWHS.Requirements (s5_2)
+import Drasil.SWHS.LikelyChanges (likeChg2, likeChg3, likeChg6)
 
 import Language.Drasil
 

@@ -70,11 +70,11 @@ $F_{x}$ & X-Component of the Net Force: FIXME: missing discription & N
 \\
 $F_{y}$ & Y-Component of the Net Force: FIXME: missing discription & N
 \\
-$f$ & Scaling Function: magnitude of interslice forces as a function of the x coordinatefor interslice index i; can be constant or a half-sine & 
+$f$ & Scaling Function: magnitude of interslice forces as a function of the x coordinatefor interslice index i; can be constant or a half-sine & Unitless
 \\
-$FS$ & Factor of Safety: The global stability of a surface in a slope & 
+$FS$ & Factor of Safety: The global stability of a surface in a slope & Unitless
 \\
-$FS_{Loc,i}$ & Local Factor of Safety: for slice index i & 
+$FS_{Loc,i}$ & Local Factor of Safety: for slice index i & Unitless
 \\
 $H$ & Interslice Water Force: exerted in the x-ordinate direction between adjacent slices for interslice index i & N
 \\
@@ -82,7 +82,7 @@ $\Delta{}H$ & Difference Between Interslice Forces: exerted in the x-ordinate di
 \\
 $h$ & Midpoint Height: distance from the slip base to the slope surface in a vertical line from the midpoint of the slice for slice index i & m
 \\
-$i$ & Index: used to show a quantity applies to only one slice & 
+$i$ & Index: used to show a quantity applies to only one slice & Unitless
 \\
 $K_{bA}$ & Effective Base Stiffness a: for rotated coordinates of a slice base surface, for slice index i & $\frac{\text{Pa}}{\text{m}}$
 \\
@@ -94,7 +94,7 @@ $K_{bn}$ & Normal Stiffness: for a slice base surface, without length adjustment
 \\
 $K_{bt}$ & Shear Stiffness: for a slice base surface, without length adjustment for slice index i & $\frac{\text{Pa}}{\text{m}}$
 \\
-$K_{c}$ & Earthquake Load Factor: proportionality factor of force that weight pushes outwards; caused by seismic earth movements & 
+$K_{c}$ & Earthquake Load Factor: proportionality factor of force that weight pushes outwards; caused by seismic earth movements & Unitless
 \\
 $K_{no}$ & Normal Stiffness: residual strength & $\frac{\text{Pa}}{\text{m}}$
 \\
@@ -110,7 +110,7 @@ $N$ & Normal Force: total reactive force for a soil surface subject to a body re
 \\
 $N'$ & Effective Normal Force: for a soil surface, subtracting pore water reactive force from total reactive force & N
 \\
-$n$ & Number of Slices: the slip mass has been divided into & 
+$n$ & Number of Slices: the slip mass has been divided into & Unitless
 \\
 $N*$ & Effective Normal Force: for a soil surface, without the influence of interslice forces & N
 \\
@@ -132,9 +132,9 @@ $U_{b}$ & Base Hydrostatic Force: from water pressure within the slice for slice
 \\
 $U_{t}$ & Surface Hydrostatic Force: from water pressure acting into the slice from standing water on the slope surface for slice index i & N
 \\
-$u$ & Local Index: used as a bound variable index in calculations & 
+$u$ & Local Index: used as a bound variable index in calculations & Unitless
 \\
-$v$ & Local Index: used as a bound variable index in calculations & 
+$v$ & Local Index: used as a bound variable index in calculations & Unitless
 \\
 $W$ & Weight: downward force caused by gravity on slice i & N
 \\
@@ -184,17 +184,17 @@ $\varepsilon{}$ & Displacement: in rotated coordinate system & m
 \\
 $\kappa{}$ & Constant: FIXME: missing discription & Pa
 \\
-$\lambda{}$ & Interslice Normal/shear Force Ratio: applied to all interslices & 
+$\lambda{}$ & Interslice Normal/shear Force Ratio: applied to all interslices & Unitless
 \\
 $\mu{}$ & Pore Pressure: from water within the soil & Pa
 \\
-$\nu{}$ & Poisson's Ratio: The ratio of perpendicular strain to parellel strain. & 
+$\nu{}$ & Poisson's Ratio: The ratio of perpendicular strain to parellel strain. & Unitless
 \\
 $\sigma{}$ & Normal Stress: The stress exerted perpendicular to the plain of the object & Pa
 \\
 $\tau{}$ & Resistive Shear Stress: acting on the base of a slice & Pa
 \\
-$\Upsilon{}$ & Function: generic minimization function or algorithm & 
+$\Upsilon{}$ & Function: generic minimization function or algorithm & Unitless
 \\
 $\varphi{}'$ & Effective Angle of Friction: The angle of inclination with respect to the horizontal axis of the Mohr-Coulomb shear resistance line & ${}^{\circ}$
 \\
@@ -325,7 +325,7 @@ Given the geometry of the water table, the geometry of the layers composing the 
 The instance models that govern SSA are presented in Section~\ref{Sec:InstMode}. The information to understand the meaning of the instance models and their derivation is also presented, so that the instance models can be verified.
 \subsubsection{Assumptions}
 \label{Sec:Assu}
-This section simplifies the original problem and helps in developing the theoretical model by filling in the missing information for the physical system. The numbers given in the square brackets refer to the Theoretical Models [Section~\ref{Sec:TheoMode}], General Definitions [Section~\ref{Sec:GeneDefi}], Data Definitions [Section~\ref{Sec:DataDefi}], Instance Models [Section~\ref{Sec:InstMode}], or Likely Changes [Section~\ref{Sec:LikeChan}], in which the respective assumption is used.
+This section simplifies the original problem and helps in developing the theoretical model by filling in the missing information for the physical system. The numbers given in the square brackets refer to the Theoretical Models {[}Section~\ref{Sec:TheoMode}{]}, General Definitions {[}Section~\ref{Sec:GeneDefi}{]}, Data Definitions {[}Section~\ref{Sec:DataDefi}{]}, Instance Models {[}Section~\ref{Sec:InstMode}{]}, or Likely Changes {[}Section~\ref{Sec:LikeChan}{]}, in which the respective assumption is used.
 \begin{itemize}
 \item[A1:]The slip surface is concave with respect to the slope surface. The $(x,y)$ coordinates of the failure surface follow a monotonic function.
 \item[A2:]The geometry of the slope, and the material properties of the soil layers are given as inputs.
@@ -348,7 +348,7 @@ This section focuses on the general equations and laws that SSA is based on.
 \phantomsection 
 \label{T:fs.rc}
 \\ \midrule \\
-Label & factor of safety
+Label & Factor of Safety
 \\ \midrule \\
 Equation & $FS=\frac{P}{S}$
 \\ \midrule \\
@@ -362,7 +362,7 @@ Description & The stability metric of the slope, known as the factor of safety (
 \phantomsection 
 \label{T:equilibrium}
 \\ \midrule \\
-Label & equilibrium
+Label & Equilibrium
 \\ \midrule \\
 Equation & $\displaystyle\sum{\left[F_{x}\right]}=\displaystyle\sum{\left[F_{y}\right]}=\displaystyle\sum{\left[M\right]}=0$
 \\ \midrule \\
@@ -376,7 +376,7 @@ Description & For a body in static equilibrium, the net forces and net moments a
 \phantomsection 
 \label{T:mcShrStrgth}
 \\ \midrule \\
-Label & Mohr-Coulumb shear strength
+Label & Mohr-Coulumb Shear Strength
 \\ \midrule \\
 Equation & $\tau{}=\sigma{}\tan\left(\varphi{}'\right)+c'$
 \\ \midrule \\
@@ -390,7 +390,7 @@ Description & For a soil under stress it will exert a shear resistive strength b
 \phantomsection 
 \label{T:effStress}
 \\ \midrule \\
-Label & effective stress
+Label & Effective Stress
 \\ \midrule \\
 Equation & $\sigma{}=\sigma{}-\mu{}$
 \\ \midrule \\
@@ -404,7 +404,7 @@ Description & $\sigma{}$ is the total stress a soil mass needs to maintain itsel
 \phantomsection 
 \label{T:hookesLaw}
 \\ \midrule \\
-Label & Hooke's law
+Label & Hooke's Law
 \\ \midrule \\
 Equation & $F=K\delta{}$
 \\ \midrule \\
@@ -421,7 +421,7 @@ This section collects the laws and equations that will be used in deriving the d
 \phantomsection 
 \label{T:normForcEq}
 \\ \midrule \\
-Label & normal force equilibrium
+Label & Normal Force Equilibrium
 \\ \midrule \\
 Equation & $N_{i}=\left(W_{i}-X_{i-1}+X_{i}+U_{t,i}\cos\left(\beta{}_{i}\right)+Q_{i}\cos\left(\omega{}_{i}\right)\right)\cos\left(\alpha{}_{i}\right)+\left(-K_{c}W_{i}-E_{i}+E_{i-1}-H_{i}+H_{i-1}+U_{t,i}\sin\left(\beta{}_{i}\right)+Q_{i}\sin\left(\omega{}_{i}\right)\right)\sin\left(\alpha{}_{i}\right)$
 \\ \midrule \\
@@ -435,7 +435,7 @@ Description & For a slice of mass in the slope the force equilibrium to satisfy 
 \phantomsection 
 \label{T:bsShrFEq}
 \\ \midrule \\
-Label & base shear force equilibrium
+Label & Base Shear Force Equilibrium
 \\ \midrule \\
 Equation & $S_{i}=\left(W_{i}-X_{i-1}+X_{i}+U_{t,i}\cos\left(\beta{}_{i}\right)+Q_{i}\cos\left(\omega{}_{i}\right)\right)\sin\left(\alpha{}_{i}\right)+\left(-K_{c}W_{i}-E_{i}+E_{i-1}-H_{i}+H_{i-1}+U_{t,i}\sin\left(\beta{}_{i}\right)+Q_{i}\sin\left(\omega{}_{i}\right)\right)\cos\left(\alpha{}_{i}\right)$
 \\ \midrule \\
@@ -449,7 +449,7 @@ Description & For a slice of mass in the slope the force equilibrium to satisfy 
 \phantomsection 
 \label{T:resShr}
 \\ \midrule \\
-Label & resistive shear force
+Label & Resistive Shear Force
 \\ \midrule \\
 Equation & $P_{i}={N'}_{i}\tan\left(\varphi{}'\right)+c'b_{i}\sec\left(\alpha{}_{i}\right)$
 \\ \midrule \\
@@ -463,7 +463,7 @@ Description & The Mohr-Coulomb resistive shear strength of a slice $\tau{}$ from
 \phantomsection 
 \label{T:mobShr}
 \\ \midrule \\
-Label & mobile shear force
+Label & Mobile Shear Force
 \\ \midrule \\
 Equation & $S_{i}=\frac{P_{i}}{FS}=\frac{{N'}_{i}\tan\left(\varphi{}'\right)+c'b_{i}\sec\left(\alpha{}_{i}\right)}{FS}$
 \\ \midrule \\
@@ -477,7 +477,7 @@ Description & From the definition of the factor of safety in T1, and the new def
 \phantomsection 
 \label{T:normShrR}
 \\ \midrule \\
-Label & interslice normal/shear relationship
+Label & Interslice Normal/shear Relationship
 \\ \midrule \\
 Equation & $X=\lambda{}fE$
 \\ \midrule \\
@@ -491,7 +491,7 @@ Description & The assumption for the Morgenstern Price method (A5) that the inte
 \phantomsection 
 \label{T:momentEql}
 \\ \midrule \\
-Label & moment equilibrium
+Label & Moment Equilibrium
 \\ \midrule \\
 Equation & $0=\left(-E_{i}\right)\left(z_{i}-\frac{b_{i}}{2}\tan\left(\alpha{}_{i}\right)\right)+E_{i-1}\left(z_{i-1}-\frac{b_{i}}{2}\tan\left(\alpha{}_{i}\right)\right)-H_{i}\left(z_{i}-\frac{b_{i}}{2}\tan\left(\alpha{}_{i}\right)\right)+H_{i-1}\left(z_{i-1}-\frac{b_{i}}{2}\tan\left(\alpha{}_{i}\right)\right)-\frac{b_{i}}{2}\left(X_{i}+X_{i-1}\right)+\frac{K_{c}W_{i}h_{i}}{2}-U_{t,i}\sin\left(\beta{}_{i}\right)h_{i}-Q_{i}\sin\left(\omega{}_{i}\right)h_{i}$
 \\ \midrule \\
@@ -505,7 +505,7 @@ Description & For a slice of mass in the slope the moment equilibrium to satisfy
 \phantomsection 
 \label{T:netForce}
 \\ \midrule \\
-Label & net x-component force
+Label & Net X-Component Force
 \\ \midrule \\
 Equation & $F_{x,i}=\left(-{\Delta{}H}_{i}\right)-K_{c}W_{i}-U_{b,i}\sin\left(\alpha{}_{i}\right)+U_{t,i}\sin\left(\beta{}_{i}\right)+Q_{i}\sin\left(\omega{}_{i}\right)$
 \\ \midrule \\
@@ -519,7 +519,7 @@ Description &
 \phantomsection 
 \label{T:netForce}
 \\ \midrule \\
-Label & net y-component force
+Label & Net Y-Component Force
 \\ \midrule \\
 Equation & $F_{y,i}=\left(-W_{i}\right)+U_{b,i}\cos\left(\alpha{}_{i}\right)-U_{t,i}\cos\left(\beta{}_{i}\right)-Q_{i}\cos\left(\omega{}_{i}\right)$
 \\ \midrule \\
@@ -533,7 +533,7 @@ Description & These equations show the net sum of the forces acting on a slice f
 \phantomsection 
 \label{T:hookesLaw2d}
 \\ \midrule \\
-Label & Hooke's law 2D
+Label & Hooke's Law 2D
 \\ \midrule \\
 Equation & $\begin{bmatrix}
 p_{i}\\
@@ -556,7 +556,7 @@ Description & A 2D component implementation of Hooke's law as seen in T5. $\delt
 \phantomsection 
 \label{T:displVect}
 \\ \midrule \\
-Label & displacement vectors
+Label & Displacement Vectors
 \\ \midrule \\
 Equation & $\varepsilon{}_{i}=\begin{bmatrix}
 {\delta{}u}_{i}\\
@@ -585,7 +585,7 @@ This section collects and defines all the data needed to build the instance mode
 \phantomsection 
 \label{DD:W.i}
 \\ \midrule \\
-Label & $W$
+Label & Weight
 \\ \midrule \\
 Units & N
 \\ \midrule \\
@@ -605,7 +605,7 @@ Description & $W$ is the weight (N)\newline$b$ is the base width of a slice (m)\
 \phantomsection 
 \label{DD:U.b,i}
 \\ \midrule \\
-Label & $U_{b}$
+Label & Base Hydrostatic Force
 \\ \midrule \\
 Units & N
 \\ \midrule \\
@@ -624,7 +624,7 @@ Description & $U_{b}$ is the base hydrostatic force (N)\newline$\ell{}_{b}$ is t
 \phantomsection 
 \label{DD:U.t,i}
 \\ \midrule \\
-Label & $U_{t}$
+Label & Surface Hydrostatic Force
 \\ \midrule \\
 Units & N
 \\ \midrule \\
@@ -643,7 +643,7 @@ Description & $U_{t}$ is the surface hydrostatic force (N)\newline$\ell{}_{s}$ i
 \phantomsection 
 \label{DD:H.i}
 \\ \midrule \\
-Label & $H$
+Label & Interslice Water Force
 \\ \midrule \\
 Units & N
 \\ \midrule \\
@@ -663,7 +663,7 @@ Description & $H$ is the interslice water force (N)\newline$y_{us}$ is the y ord
 \phantomsection 
 \label{DD:alpha.i}
 \\ \midrule \\
-Label & $\alpha{}$
+Label & Angle
 \\ \midrule \\
 Units & ${}^{\circ}$
 \\ \midrule \\
@@ -679,7 +679,7 @@ Description & $\alpha{}$ is the angle (${}^{\circ}$)\newline$y_{slip}$ is the y 
 \phantomsection 
 \label{DD:beta.i}
 \\ \midrule \\
-Label & $\beta{}$
+Label & Angle
 \\ \midrule \\
 Units & ${}^{\circ}$
 \\ \midrule \\
@@ -695,7 +695,7 @@ Description & $\beta{}$ is the angle (${}^{\circ}$)\newline$y_{us}$ is the y ord
 \phantomsection 
 \label{DD:b.i}
 \\ \midrule \\
-Label & $b$
+Label & Base Width of a Slice
 \\ \midrule \\
 Units & m
 \\ \midrule \\
@@ -711,7 +711,7 @@ Description & $b$ is the base width of a slice (m)\newline$x_{slip}$ is the x or
 \phantomsection 
 \label{DD:l.b,i}
 \\ \midrule \\
-Label & $\ell{}_{b}$
+Label & Total Base Length of a Slice
 \\ \midrule \\
 Units & m
 \\ \midrule \\
@@ -727,7 +727,7 @@ Description & $\ell{}_{b}$ is the total base length of a slice (m)\newline$b$ is
 \phantomsection 
 \label{DD:l.s,i}
 \\ \midrule \\
-Label & $\ell{}_{s}$
+Label & Length of an Interslice Surface
 \\ \midrule \\
 Units & m
 \\ \midrule \\
@@ -743,9 +743,9 @@ Description & $\ell{}_{s}$ is the length of an interslice surface (m)\newline$b$
 \phantomsection 
 \label{DD:K.c}
 \\ \midrule \\
-Label & $K_{c}$
+Label & Earthquake Load Factor
 \\ \midrule \\
-Units & 
+Units & Unitless
 \\ \midrule \\
 Equation & $K_{c}$ = $K_{c}W_{i}$
 \\ \midrule \\
@@ -759,7 +759,7 @@ Description & $K_{c}$ is the earthquake load factor\newline$W$ is the weight (N)
 \phantomsection 
 \label{DD:Q.i}
 \\ \midrule \\
-Label & $Q$
+Label & Imposed Surface Load
 \\ \midrule \\
 Units & N
 \\ \midrule \\
@@ -775,7 +775,7 @@ Description & $Q$ is the imposed surface load (N)\newline$i$ is the index\newlin
 \phantomsection 
 \label{DD:X.i}
 \\ \midrule \\
-Label & $X$
+Label & Interslice Shear Force
 \\ \midrule \\
 Units & N
 \\ \midrule \\
@@ -791,7 +791,7 @@ Description & $X$ is the interslice shear force (N)\newline$\lambda{}$ is the in
 \phantomsection 
 \label{DD:R.i}
 \\ \midrule \\
-Label & $R$
+Label & Resistive Shear Force
 \\ \midrule \\
 Units & N
 \\ \midrule \\
@@ -819,7 +819,7 @@ R_{i}=N*_{i}\tan\left(\varphi{}'\right)+{c'}_{i}b_{i}\sec\left(\alpha{}_{i}\righ
 \phantomsection 
 \label{DD:T.i}
 \\ \midrule \\
-Label & $T$
+Label & Mobilized Shear Force
 \\ \midrule \\
 Units & N
 \\ \midrule \\
@@ -844,7 +844,7 @@ The values of $R$ and $T$ are now defined completely in terms of the known force
 \phantomsection 
 \label{DD:pressure}
 \\ \midrule \\
-Label & $p$
+Label & Pressure
 \\ \midrule \\
 Units & Pa
 \\ \midrule \\
@@ -866,7 +866,7 @@ Description & $p$ is the pressure (Pa)\newline$K_{st}$ is the shear stiffness ($
 \phantomsection 
 \label{DD:pressure}
 \\ \midrule \\
-Label & $p$
+Label & Pressure
 \\ \midrule \\
 Units & Pa
 \\ \midrule \\
@@ -945,7 +945,7 @@ A force-displacement relationship for an element $i$ can be written in terms of 
 \phantomsection 
 \label{DD:force}
 \\ \midrule \\
-Label & $F$
+Label & Force
 \\ \midrule \\
 Units & N
 \\ \midrule \\
@@ -961,7 +961,7 @@ Description & $F$ is the force (N)\newline$\ell{}_{s}$ is the length of an inter
 \phantomsection 
 \label{DD:K.bt,i}
 \\ \midrule \\
-Label & $K_{bt}$
+Label & Shear Stiffness
 \\ \midrule \\
 Units & $\frac{\text{Pa}}{\text{m}}$
 \\ \midrule \\
@@ -977,7 +977,7 @@ Description & $K_{bt}$ is the shear stiffness ($\frac{\text{Pa}}{\text{m}}$)\new
 \phantomsection 
 \label{DD:K.bn,i}
 \\ \midrule \\
-Label & $K_{bn}$
+Label & Normal Stiffness
 \\ \midrule \\
 Units & $\frac{\text{Pa}}{\text{m}}$
 \\ \midrule \\
@@ -1001,7 +1001,7 @@ The values of the interslice normal force $E$ the interslice normal/shear force 
 \phantomsection 
 \label{T:fctSfty}
 \\ \midrule \\
-Label & factor of safety
+Label & Factor of Safety
 \\ \midrule \\
 Equation & $FS=\frac{\displaystyle\sum_{v=1}^{n-1}{\left[R_{v}\displaystyle\prod_{u=i}^{n-1}{\frac{\Psi{}_{u}}{\Phi{}_{u}}}\right]}+R_{n}}{\displaystyle\sum_{v=1}^{n-1}{\left[T_{v}\displaystyle\prod_{u=i}^{n-1}{\frac{\Psi{}_{u}}{\Phi{}_{u}}}\right]}+T_{n}}$
 \\ \midrule \\
@@ -1020,7 +1020,7 @@ The constants $\Psi{}$ and $\Phi{}$ described in equation (20) and equation (19)
 \phantomsection 
 \label{T:nrmShrFor}
 \\ \midrule \\
-Label & normal/shear force ratio
+Label & Normal/shear Force Ratio
 \\ \midrule \\
 Equation & ${C1}_{i}=\begin{cases}
 b_{1}\left(E_{1}+H_{1}\right)\tan\left(\alpha{}_{1}\right), & i=1\\
@@ -1055,7 +1055,7 @@ equation (15) for $\lambda{}$, is a function of the unknown interslice normal fo
 \phantomsection 
 \label{T:intsliceFs}
 \\ \midrule \\
-Label & interslice forces
+Label & Interslice Forces
 \\ \midrule \\
 Equation & $E_{i}=\begin{cases}
 \frac{FS\cdot{}T_{1}-R_{1}}{\Phi{}_{1}}, & i=1\\
@@ -1096,7 +1096,7 @@ The constants $\Psi{}$ and $\Phi{}$ described in equation (20) and equation (19)
 \phantomsection 
 \label{T:forDisEqlb}
 \\ \midrule \\
-Label & force displacement equilibrium
+Label & Force Displacement Equilibrium
 \\ \midrule \\
 Equation & $\left(-{\Delta{}H}_{i}\right)-K_{c}W_{i}-U_{b,i}\sin\left(\alpha{}_{i}\right)+U_{t,i}\sin\left(\beta{}_{i}\right)+Q_{i}\sin\left(\omega{}_{i}\right)={\delta{}x}_{i-1}\left(-\ell{}_{s,i-1}\right)K_{sn,i-1}+{\delta{}x}_{i}\left(\left(-\ell{}_{s,i-1}\right)K_{sn,i-1}+\ell{}_{s,i}K_{sn,i}+\ell{}_{b,i}K_{bA,i}\right)+{\delta{}x}_{i+1}\left(-\ell{}_{s,i}\right)K_{sn,i}+{\delta{}y}_{i}\left(-\ell{}_{b,i}\right)K_{bB,i}=\left(-W_{i}\right)-U_{b,i}\cos\left(\alpha{}_{i}\right)+U_{t,i}\cos\left(\beta{}_{i}\right)+Q_{i}\cos\left(\omega{}_{i}\right)={\delta{}y}_{i-1}\left(-\ell{}_{s,i-1}\right)K_{st,i-1}+{\delta{}y}_{i}\left(\left(-\ell{}_{s,i-1}\right)K_{st,i-1}+\ell{}_{s,i}K_{sn,i}+\ell{}_{b,i}K_{bA,i}\right)+{\delta{}y}_{i+1}\left(-\ell{}_{s,i}\right)K_{st,i}+{\delta{}x}_{i}\left(-\ell{}_{b,i}\right)K_{bB,i}$
 \\ \midrule \\
@@ -1115,7 +1115,7 @@ Using the known input assumption of A2, the force variable definitions of DD1 to
 \phantomsection 
 \label{T:rfemFoS}
 \\ \midrule \\
-Label & RFEM factor of safety
+Label & RFEM Factor of Safety
 \\ \midrule \\
 Equation & $FS_{Loc,i,i}=\frac{c'-K_{bn,i}{\delta{}v}_{i}\tan\left(\varphi{}'\right)}{K_{bt,i}{\delta{}u}_{i}}=\frac{\displaystyle\sum_{i=1}^{n}{\left[\ell{}_{b,i}\left(c'-K_{bn,i}{\delta{}v}_{i}\tan\left(\varphi{}'\right)\right)\right]}}{\displaystyle\sum_{i=1}^{n}{\left[\ell{}_{b,i}\left(K_{bt,i}{\delta{}u}_{i}\right)\right]}}$
 \\ \midrule \\
@@ -1160,7 +1160,7 @@ FS=\frac{\displaystyle\sum_{i=1}^{n}{\left[\ell{}_{b,i}s_{i}\right]}}{\displayst
 \phantomsection 
 \label{T:crtSlpId}
 \\ \midrule \\
-Label & critical slip identification
+Label & Critical Slip Identification
 \\ \midrule \\
 Equation & $FS_{min}=\Upsilon{}\left(\{x_{cs},y_{cs}\},Input\right)$
 \\ \midrule \\
@@ -1276,12 +1276,12 @@ There are no auxiliary constants.
 \section{References}
 \label{Sec:Refe}
 \begin{itemize}
-\item[[1]:]Q.H. Qian D.Y. Zhu, C.F. Lee and G.R. Chen. A concise algorithm for computing the factor of safety using the morgensternprice method. Can. Geotech. J., (42):272-278, 19 February 2005.
-\item[[2]:]D.G. Fredlund and J.Krahn. Comparison of slope stability methods of analysis. Can. Geotech. J., (14):429-439, 4 April 1977.
-\item[[3]:]Nirmitha Koothoor. A document drive approach to certifying scientific computing software. Master's thesis, McMaster University, Hamilton, Ontario, Canada, 2013.
-\item[[4]:]David L. Parnas and P.C. Clements. A rational design process: How and why to fake it. IEEE Transactions on Software Engineering, 12(2):251-257, February 1986.
-\item[[5]:]W. Spencer Smith and Lei Lai. A new requirements template for scientific computing. In J. Ralyt\'{e}, P. Agerfalk, and N. Kraiem, editors, Proceedings of the First International Workshopon Situational Requirements Engineering Processes - Methods, Techniques and Tools to Support Situation-Specific Requirements Engineering Processes, SREP'05, pages 107-121, Paris, France, 2005. In conjunction with 13th IEEE International Requirements Engineering Conference.
-\item[[6]:]Dieter Stolle and Peijun Guo. Limit equilibrum slope stability analysis using rigid finite elements. Can. Geotech. J., (45):653-662, 20 May 2008.
-\item[[7]:]Tony L.T Zhan Dao-Sheng Ling Yu-Chao Li, Yun-Min Chen and Peter John Cleall. An efficient approach for locating the critical slip surface in slope stability analyses using a real-coded genetic algorithm. Can. Geotech. J., (47):806-820, 25 June 2010.
+\item[{[}1{]}:]Q.H. Qian D.Y. Zhu, C.F. Lee and G.R. Chen. A concise algorithm for computing the factor of safety using the morgensternprice method. Can. Geotech. J., (42):272-278, 19 February 2005.
+\item[{[}2{]}:]D.G. Fredlund and J.Krahn. Comparison of slope stability methods of analysis. Can. Geotech. J., (14):429-439, 4 April 1977.
+\item[{[}3{]}:]Nirmitha Koothoor. A document drive approach to certifying scientific computing software. Master's thesis, McMaster University, Hamilton, Ontario, Canada, 2013.
+\item[{[}4{]}:]David L. Parnas and P.C. Clements. A rational design process: How and why to fake it. IEEE Transactions on Software Engineering, 12(2):251-257, February 1986.
+\item[{[}5{]}:]W. Spencer Smith and Lei Lai. A new requirements template for scientific computing. In J. Ralyt\'{e}, P. Agerfalk, and N. Kraiem, editors, Proceedings of the First International Workshopon Situational Requirements Engineering Processes - Methods, Techniques and Tools to Support Situation-Specific Requirements Engineering Processes, SREP'05, pages 107-121, Paris, France, 2005. In conjunction with 13th IEEE International Requirements Engineering Conference.
+\item[{[}6{]}:]Dieter Stolle and Peijun Guo. Limit equilibrum slope stability analysis using rigid finite elements. Can. Geotech. J., (45):653-662, 20 May 2008.
+\item[{[}7{]}:]Tony L.T Zhan Dao-Sheng Ling Yu-Chao Li, Yun-Min Chen and Peter John Cleall. An efficient approach for locating the critical slip surface in slope stability analyses using a real-coded genetic algorithm. Can. Geotech. J., (47):806-820, 25 June 2010.
 \end{itemize}
 \end{document}

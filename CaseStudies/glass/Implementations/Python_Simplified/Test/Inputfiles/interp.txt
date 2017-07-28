@@ -1,0 +1,46 @@
+fileName      , x1  , y1  , x2  , y2  , x    , yExpctd            ,
+testInterp.py , 4   , 8   , 2   , 4   , 3    , 6                  ,
+testInterp2.py, 3.5 , 8.2 , 1.3 , 4   , 2.1  , 4.892592592592592  ,
+testInterp3.py, 4   , -1  , -3  , 2   , 7    , -6                 ,
+testInterp4.py, -5.6, -0.5, -3.4, 2   , -4.5 , -6.6388888888888888,
+testInterp5.py, -9.9, -1.3, -3.5, -2.4, -12.6, -81.04545454545455 ,
+testInterp6.py, -3  , -2  , -4  , -7  , -5   , -2.6666666666666665,
+testInterp7.py, -2  , -8  , -9  , -5  , -2   , -12.5              ,
+
+lin_interp function inputs ^
+
+---
+
+fileName,      idxShouldBe, jdxShouldBe, kdxShouldBe, num_interp1ShouldBe, num_interp2ShouldBe,    interpValExpctd
+testinterp.py: 2,2,1,0,0,    4.3
+testinterp2.py: 2,5,1,0,1,   4.66
+testinterp3.py: 3,7,1,1,0,   5.8774193548387093
+testinterp4.py: 3,3,0,1,1,   5.3806451612903219
+testinterp5.py: 1,6,1,1,2,   3.9207062600321025
+testinterp6.py: 4,8,0,1,3,   6.895652173913043
+testinterp7.py: 1,8,5,0,1,   4.1
+testinterp8.py: 0,0,0,0,1,   1.9999999999999998
+testinterp9.py: 3,1,0,0,1,   5.15
+testinterp10.py: 3,5,0,0,1,  5.65
+testinterp11.py: 3,3,0,0,1,  5.46
+testinterp12.py: 0,7,4,0,1,  2.95
+testinterp13.py: 2,6,1,1,1,  4.868032786885246
+testinterp14.py: 2,8,4,1,0,  4.9590163934426235
+
+find_bounds and iterp inputs ^
+
+---
+123 ^
+test_lin_interp = 1
+test_find_bounds = 2 --> "find_bounds" function no longer exists in interp
+test_interp = 3 --> "interp" function no longer exists in interp
+23 below
+---
+
+testInterp8.py, ,
+testInterp9.py, ,
+testInterp10.py, ,
+testInterp11.py, ,
+testInterp12.py, ,
+testInterp13.py, ,
+testInterp14.py, ,

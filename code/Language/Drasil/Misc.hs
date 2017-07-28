@@ -28,11 +28,10 @@ mkTable _     []  = []
 mkTable []     _  = error "Attempting to make table without data"
 mkTable fl (c:cl) = map ($ c) fl : mkTable fl cl
 
-
 -- where should this go?
 -- | Get the units for a Quantity, if they exist, and wrap them as a Sentence
 unit'2Contents :: Quantity u => u -> Sentence
-unit'2Contents x = maybe (EmptyS) (\y -> Sy (y ^. usymb)) (getUnit x)
+unit'2Contents x = maybe (S "Unitless") (\y -> Sy (y ^. usymb)) (getUnit x)
 
 -- | Unwrap the /maybe/ abbreviation/acronym for a chunk. 
 -- Only to be used on chunks that definitely __have__ an abbreviation.

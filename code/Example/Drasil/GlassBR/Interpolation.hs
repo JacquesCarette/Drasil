@@ -1,8 +1,6 @@
 module Drasil.GlassBR.Interpolation where
 
 import Language.Drasil
-import Drasil.GlassBR.Unitals(char_weight)
-
 
 v_y_2, v_y_1, v_x_2, v_x_1, v_x :: VarChunk
 v_y_1  = makeVC "y_1"    (nounPhraseSP "y1")   (sub (lY) (Atomic "1"))
@@ -11,7 +9,8 @@ v_x_1  = makeVC "x_1"    (nounPhraseSP "x1")   (sub (lX) (Atomic "1"))
 v_x_2  = makeVC "x_2"    (nounPhraseSP "x2")   (sub (lX) (Atomic "2"))
 v_x    = makeVC "x"      (nounPhraseSP "x")    lX -- = params.wtnt from mainFun.py
 
-v_i, v_j, v_k, v_z, v_z_array, v_y_array, v_x_array, v_y, v_arr :: VarChunk
+v_v, v_x_z_1, v_y_z_1, v_x_z_2, v_y_z_2, v_mat, v_col,
+  v_i, v_j, v_k, v_z, v_z_array, v_y_array, v_x_array, v_y, v_arr :: VarChunk
 v_v    = makeVC "v"          (nounPhraseSP "v")       lV
 v_i    = makeVC "i"          (nounPhraseSP "i")       lI
 v_j    = makeVC "j"          (nounPhraseSP "j")       lJ
@@ -28,7 +27,6 @@ v_x_z_2   = makeVC "x_z_2"   (nounPhraseSP "x_z_2")     (Atomic "x_z_2")
 v_y_z_2   = makeVC "y_z_2"   (nounPhraseSP "y_z_2")     (Atomic "y_z_2")
 v_mat     = makeVC "mat"     (nounPhraseSP "mat")       (Atomic "mat")
 v_col     = makeVC "col"     (nounPhraseSP "col")       (Atomic "col")
-
 
 linInterp :: FuncDef
 linInterp = funcDef "lin_interp" [v_x_1, v_y_1, v_x_2, v_y_2, v_x] Rational 
@@ -113,10 +111,8 @@ interpZ = funcDef "interpZ" [v_x_array, v_y_array, v_z_array, v_x, v_y] Rational
     FThrow "Interpolation of z failed"      
   ]   
 
-  
 interpMod :: ModDef
 interpMod = ModDef "Interpolation" [linInterp, indInSeq, matrixCol, interpY, interpZ]
-
 
 -- hack  (more so than the rest of the module!)
 asExpr :: FuncDef -> Expr

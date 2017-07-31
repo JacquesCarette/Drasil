@@ -3,10 +3,9 @@ type City   = Sentence
 type State  = Sentence
 
 data Citation where --add artical, website
-  Book :: [CiteFieldB] -> Citation
+  Book :: [CiteField] -> Citation
   
-data CiteFieldB = --maybe change to take strings?
-               | Author     People
+data CiteField = Author     People
                | Title      Sentence
                | Series     Sentence
                | Collection Sentence
@@ -46,6 +45,16 @@ instance Show Month where
   show Nov = "November"
   show Dec = "December"
 
+data StyleGuide = MLA | APA | Chicago
+
+useStyle :: StyleGuide -> (CiteField -> String)
+useStyle MLA = showMLA
+useStyle APA = showAPA
+useStyle Chicago = showChicago
+
+styleSetting :: StyleGuide
+styleSetting = MLA --This will be an input for the user eventually
+
 -------------
 -- Helpers --
 -------------
@@ -62,31 +71,50 @@ getYear (Book fields) = getY fields
         getY ((Date _ _ year):xs) = year
         getY (_:xs) = getP xs
 
-
+-- Used only on single digit Int
 sufx :: Integer -> String
 sufx 1 = "st."
 sufx 2 = "nd."
 sufx 3 = "rd."
 sufx _ = "th."
 
+-- Use on any sized Int
 sufxer :: Integer -> String
 sufxer = sufx . read . last . show
+
+-- LFM is Last, First Middle
+rendPersLFM :: Person -> String
+rendPersLFM (Person _ n _ Mono) = n
+rendPersLFM (Person f l ms _) = l ++ ", " ++ unwords (f:ms)
+
+-- LFM' is Last, F. M.
+rendPersLFM' :: Person -> String
+rendPersLFM' (Person _ n _ Mono) = n
+rendPersLFM' (Person f l ms _) = l ++ ", " ++ (unwords . map initial) (f:ms)
+
+-- LFM'' is Last, First M.
+rendPersLFM'' :: Person -> String
+rendPersLFM'' (Person _ n _ Mono) = n
+rendPersLFM'' (Person f l ms _) = l ++ ", " ++ unwords (f:(map initial ms))
+
+initial :: String -> String
+initial = (\xs -> head xs ++ ".")
 
 -----------------------------
 -- Rendering Unique to TeX --
 -----------------------------
-instance Show CiteField where --may need custom show function
-  show Place (city, state) = showField "place" (city :+: S ", " :+: state)
-  show Edition    s = showField "edition" (S $ show s :+: sufxer s)
-  show Series     s = showField "series" s
-  show Title      s = showField "title" s
-  show Volume     s = showField "volume" (S $ show s)
-  show Publisher  s = showField "publisher" s
-  show Author     p = showField "author" (rendPeople p)
-  show Year       y = showField "year" (S $ show y)
-  show Date   d m y = showField "year" (S $ unwords [show d, show m, show y])
-  show Collection s = showField "collection" s
-  show Journal    s = showField "journal" s
+showBibTeX :: CiteField -> String
+showBibTeX (Place (city, state)) = showField "place" (city :+: S ", " :+: state)
+showBibTeX (Edition    s) = showField "edition" (S $ show s :+: sufxer s)
+showBibTeX (Series     s) = showField "series" s
+showBibTeX (Title      s) = showField "title" s
+showBibTeX (Volume     s) = showField "volume" (S $ show s)
+showBibTeX (Publisher  s) = showField "publisher" s
+showBibTeX (Author     p) = showField "author" (rendPeople p)
+showBibTeX (Year       y) = showField "year" (S $ show y)
+showBibTeX (Date   d m y) = showField "year" (S $ unwords [show d, show m, show y])
+showBibTeX (Collection s) = showField "collection" s
+showBibTeX (Journal    s) = showField "journal" s
 
 showField :: String -> Sentence -> String
 showField f s = f ++ "={" ++ rend s ++ "}"
@@ -95,11 +123,7 @@ showField f s = f ++ "={" ++ rend s ++ "}"
 
 rendPeople :: People -> Sentence
 rendPeople []  = error "No authors given"
-rendPeople people = foldl1 (\x y -> S x :+: S " and " :+: S y) $ map rendPerson people
-
-rendPerson :: Person -> String
-rendPerson (Person _ n _ Mono) = n
-rendPerson (Person f l ms _) = l ++ ", " ++ unwords (f:ms)
+rendPeople people = foldl1 (\x y -> S x :+: S " and " :+: S y) $ map rendPersLFM people
 
 --------------------
 --Tex bibliography--
@@ -114,7 +138,8 @@ renderCite b@(Book _) = renderBook b
 --Rendering a book--
 renderBook :: Citation -> String
 renderBook b@(Book fields) = "@book{" ++ cite b ++ ",\\n" ++
-  (concat . intersperse ",\\n" . map show) fields ++ "}"  
+  (concat . intersperse ",\\n" . map showBibTeX) fields ++ "}"
+renderBook _ = error "Tried to render a non-book using renderBook." 
 
 cite :: Citation -> String
 cite book = concat $ intersperse "_" $
@@ -125,25 +150,52 @@ cite book = concat $ intersperse "_" $
 ------------------------------
 -- Rendering Unique to HTML --
 ------------------------------
-instance Show CiteField where --change to a custom show so that we can render to APA and MLA
-  show Place (city, state) = rend (city :+: S ", " :+: state) ++ ":"
-  show Edition    s = rend (S $ show s :+: sufxer s) ++ " ed.,"
-  show Series     s = "<em>" ++ rend s ++ "</em>."
-  show Title      s = "<em>" ++ rend s ++ "</em>." --If there is a series or collection, this should be in quotes, not italics
-  show Volume     s = "vol." ++ show s ++ ","
-  show Publisher  s = rend s ++ ","
-  show Author     p = rend rendPeople ++ "."
-  show Year       y = rend (S $ show y) ++ "."
-  show Date   d m y = rend (S $ unwords [show d, show m, show y]) ++ "."
-  show Collection s = "<em>" ++ rend s ++ "</em>."
-  show Journal    s = "<em>" ++ rend s ++ "</em>.,"
+showMLA :: CiteField -> String
+showMLA (Place (city, state)) = rend (city :+: S ", " :+: state) ++ ":"
+showMLA (Edition    s) = rend (S $ show s :+: sufxer s) ++ " ed.,"
+showMLA (Series     s) = "<em>" ++ rend s ++ "</em>."
+showMLA (Title      s) = "<em>" ++ rend s ++ "</em>." --If there is a series or collection, this should be in quotes, not italics
+showMLA (Volume     s) = "vol." ++ show s ++ ","
+showMLA (Publisher  s) = rend s ++ ","
+showMLA (Author     p) = rend (rendPeople rendPersLFM p) ++ "."
+showMLA (Year       y) = rend (S $ show y) ++ "."
+showMLA (Date   d m y) = rend (S $ unwords [show d, show m, show y]) ++ "."
+showMLA (Collection s) = "<em>" ++ rend s ++ "</em>."
+showMLA (Journal    s) = "<em>" ++ rend s ++ "</em>.,"
+
+showAPA :: CiteField -> String
+showAPA i@(Place      _) = showMLA i --Most items are rendered the same as MLA
+showAPA i@(Edition    _) = showMLA i
+showAPA i@(Series     _) = showMLA i
+showAPA i@(Title      _) = showMLA i
+showAPA i@(Volume     _) = showMLA i
+showAPA i@(Publisher  _) = showMLA i
+showAPA i@(Collection _) = showMLA i
+showAPA i@(Journal    _) = showMLA i
+showAPA (Author   p) = rend (rendPeople rendPersLFM' p) ++ "." --APA uses initals rather than full name
+showAPA (Year     y) = "(" ++ rend (S $ show y) ++ ")." --APA puts "()" around the year
+showAPA (Date _ _ y) = showAPA (Year y) --APA doesn't care about the day or month
+
+showChicago :: CiteField -> String
+showChicago i@(Place      _) = showMLA i --Most items are rendered the same as MLA
+showChicago i@(Edition    _) = showMLA i
+showChicago i@(Series     _) = showMLA i
+showChicago i@(Title      _) = showMLA i
+showChicago i@(Volume     _) = showMLA i
+showChicago i@(Publisher  _) = showMLA i
+showChicago i@(Collection _) = showMLA i
+showChicago i@(Journal    _) = showMLA i
+showChicago i@(Year       _) = showMLA i
+showChicago (Author   p) = rend (rendPeople rendPersLFM'' p) ++ "." --APA uses middle initals rather than full name
+showChicago (Date _ _ y) = showChicago (Year y) --APA doesn't care about the day or month
+
 
 rend :: Sentence -> String
 rend = p_spec . spec
 
-rendPeople :: People -> Sentence
-rendPeople []  = error "No authors given"
-rendPeople people = foldlList $ map name people --name is found in People.hs, foldlList is in SentenceStructures.hs
+rendPeople :: (Person -> String) -> People -> Sentence
+rendPeople f []  = error "No authors given"
+rendPeople f people = foldlList $ map f people --name is found in People.hs, foldlList is in SentenceStructures.hs
 
 foldlList :: [Sentence] -> Sentence
 foldlList []    = EmptyS
@@ -170,7 +222,13 @@ renderCite b@(Book _) = renderBook b
 
 --Rendering a book--
 renderBook :: Citation -> String
-renderBook (Book fields) = unwords $ map show (sort fields) ++ ["Print."]
+renderBook c@(Book fields) = unwords $
+  map (useStyle styleSetting) (sort fields) ++ endingField c styleSetting
+renderBook _ = error "Tried to render a non-book using renderBook."
+
+endingField :: Citation -> StyleGuide -> [String]
+endingField (Book _) MLA = ["Print."]
+endingField _ _ = []
 
 {-example of use-}
 ref1 :: Citation
@@ -215,4 +273,5 @@ ref1 = Book [
   \newline
   \bibliography{filename}
   \bibstyle{ieeetr} %% note you can use "plain" as a common style
+  --this would change if you want MLA vs. APA
   -}

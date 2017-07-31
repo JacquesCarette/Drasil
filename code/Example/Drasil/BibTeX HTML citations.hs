@@ -1,6 +1,9 @@
 type BibRef = [Citation]
 type City   = Sentence
 type State  = Sentence
+type JournalName = Sentence
+type Vol    = Integer
+type Issue  = Integer
 
 data Citation where --add artical, website
   Book :: [CiteField] -> Citation
@@ -13,10 +16,10 @@ data CiteField = Author     People
                | Edition    Integer
                | Place    (City, State) --State can also mean country
                | Publisher  Sentence
-               | Journal    Sentence
+               | Journal    JournalName Vol Issue
                | Year       Integer
                | Date Integer Month Integer deriving (Eq, Ord)
-               --not sure if you can derive this using Sentence but may work with String
+               --ordering is different for different styles.
 
 data Month = Jan
            | Feb
@@ -114,7 +117,7 @@ showBibTeX (Author     p) = showField "author" (rendPeople p)
 showBibTeX (Year       y) = showField "year" (S $ show y)
 showBibTeX (Date   d m y) = showField "year" (S $ unwords [show d, show m, show y])
 showBibTeX (Collection s) = showField "collection" s
-showBibTeX (Journal    s) = showField "journal" s
+showBibTeX (Journal n _ _) = showField "journal" n
 
 showField :: String -> Sentence -> String
 showField f s = f ++ "={" ++ rend s ++ "}"
@@ -146,10 +149,17 @@ cite book = concat $ intersperse "_" $
   map lstName (getAuthors b) ++ [show $ getYear book]
   where lstName (Person _ l _ _) = l
 
-
+{-
+It may be best to use https://github.com/backtracking/bibtex2html
+which reads .bib files and converts them to an .html file. This will ensure
+consistency and maintainability. The issue is that we will need to generate
+the .bib files, read them, run this program, read the html output, and add
+the output to the end of the final html doc.
+-}
 ------------------------------
 -- Rendering Unique to HTML --
 ------------------------------
+{-these apply to books, rendering is slightly different for articals, web, ...-}
 showMLA :: CiteField -> String
 showMLA (Place (city, state)) = rend (city :+: S ", " :+: state) ++ ":"
 showMLA (Edition    s) = rend (S $ show s :+: sufxer s) ++ " ed.,"
@@ -164,31 +174,15 @@ showMLA (Collection s) = "<em>" ++ rend s ++ "</em>."
 showMLA (Journal    s) = "<em>" ++ rend s ++ "</em>.,"
 
 showAPA :: CiteField -> String
-showAPA i@(Place      _) = showMLA i --Most items are rendered the same as MLA
-showAPA i@(Edition    _) = showMLA i
-showAPA i@(Series     _) = showMLA i
-showAPA i@(Title      _) = showMLA i
-showAPA i@(Volume     _) = showMLA i
-showAPA i@(Publisher  _) = showMLA i
-showAPA i@(Collection _) = showMLA i
-showAPA i@(Journal    _) = showMLA i
 showAPA (Author   p) = rend (rendPeople rendPersLFM' p) ++ "." --APA uses initals rather than full name
 showAPA (Year     y) = "(" ++ rend (S $ show y) ++ ")." --APA puts "()" around the year
 showAPA (Date _ _ y) = showAPA (Year y) --APA doesn't care about the day or month
+showAPA i = showMLA i --Most items are rendered the same as MLA
 
 showChicago :: CiteField -> String
-showChicago i@(Place      _) = showMLA i --Most items are rendered the same as MLA
-showChicago i@(Edition    _) = showMLA i
-showChicago i@(Series     _) = showMLA i
-showChicago i@(Title      _) = showMLA i
-showChicago i@(Volume     _) = showMLA i
-showChicago i@(Publisher  _) = showMLA i
-showChicago i@(Collection _) = showMLA i
-showChicago i@(Journal    _) = showMLA i
-showChicago i@(Year       _) = showMLA i
 showChicago (Author   p) = rend (rendPeople rendPersLFM'' p) ++ "." --APA uses middle initals rather than full name
 showChicago (Date _ _ y) = showChicago (Year y) --APA doesn't care about the day or month
-
+showChicago i = showMLA i --Most items are rendered the same as MLA
 
 rend :: Sentence -> String
 rend = p_spec . spec

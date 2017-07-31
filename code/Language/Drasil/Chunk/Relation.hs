@@ -53,7 +53,7 @@ instance ExprRelat RelationConcept where
   relat f (RC c r) = fmap (\x -> RC c x) (f r)
 
 -- don't export this
-rcl:: (forall c. (Concept c) => Simple Lens c a) -> Simple Lens RelationConcept a
+rcl :: (forall c. (Concept c) => Simple Lens c a) -> Simple Lens RelationConcept a
 rcl l f (RC a b) = fmap (\x -> RC (set l x a) b) (f (a ^. l))
 
 -- | Create a RelationConcept from a given id, term, defn, and relation.
@@ -71,3 +71,6 @@ cp l f (NR a b) = fmap (\x -> NR (set l x a) b) (f (a ^. l))
 -- | Create a NamedRelation from a given id, term, and relation.
 makeNR :: String -> NP -> Relation -> NamedRelation
 makeNR rID rTerm rel = NR (nc rID rTerm) rel
+
+instance Eq RelationConcept where
+  a == b = (a ^. id) == (b ^. id)

@@ -28,9 +28,9 @@ find _ [] = error "This object does not match any of the enumerated objects prov
 find itm@(Assumption comp1) (frst@(Assumption comp2):lst)
   | (comp1 ^. id) == (comp2 ^. id) = frst
   | otherwise = find itm lst
--- find itm@(Definition _ (Theory comp1)) (frst@(Definition _ (Theory comp2)):lst)
-  -- | (comp1 ^. id) == (comp2 ^. id) = frst
-  -- | otherwise = find itm lst
+find itm@(Definition _ (Theory comp1)) (frst@(Definition _ (Theory comp2)):lst)
+  | (comp1 ^. id) == (comp2 ^. id) = frst
+  | otherwise = find itm lst
 find itm@(Requirement comp1) (frst@(Requirement comp2):lst)
   | ((rNI comp1) ^. id) == ((rNI comp2) ^. id) = frst
   | otherwise = find itm lst

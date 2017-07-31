@@ -225,13 +225,13 @@ s2_1_intro_p1 typeOf progName gvnVar = foldlSent [S "The main", phrase purpose,
   S "of this", phrase typeOf, S "is to predict whether a given", phrase gvnVar,
   S "is likely to resist a specified" +:+. phrase blast, S "The", plural goal
   `sAnd` plural thModel, S "used in the", short progName, phrase code, 
-  S "are provided" `sC` S "with an", phrase emphasis, S "on explicitly identifying",
-  (plural assumption) `sAnd` S "unambiguous" +:+. plural definition, S "This",
-  phrase typeOf, S "is intended to be used as a", phrase reference,
-  S "to provide all", phrase information, S "necessary to understand and verify",
-  S "the" +:+. phrase analysis, S "The", short srs, S "is abstract because the",
-  plural content, S "say what", phrase problem, S "is being solved" `sC`
-  S "but not how to solve it"] 
+  S "are provided" `sC` S "with an", phrase emphasis, 
+  S "on explicitly identifying", (plural assumption) `sAnd` S "unambiguous" +:+.
+  plural definition, S "This", phrase typeOf, S "is intended to be used as a",
+  phrase reference, S "to provide all", phrase information, 
+  S "necessary to understand and verify the" +:+. phrase analysis, S "The", 
+  short srs, S "is abstract because the", plural content, S "say what",
+  phrase problem, S "is being solved" `sC` S "but not how to solve it"] 
   --FIXME: Last sentence is also present in SWHS and NoPCM... pull out?
 
 {--Scope of Requirements--}
@@ -297,9 +297,9 @@ s5_1_table_UC1 = [S "1", titleize' input_, titleize user,
   +:+. phrase blast +:+ S "Details in" +:+
   (makeRef (SRS.indPRCase SRS.missingP []))]
 
-s5_1_table_UC2 = [S "2", titleize output_, short gLassBR, S "Whether or not the" 
-  +:+ phrase glaSlab +:+ S "is safe for the calculated" +:+ phrase load
-  `sAnd` S "supporting calculated" +:+ plural value]
+s5_1_table_UC2 = [S "2", titleize output_, short gLassBR,
+  S "Whether or not the" +:+ phrase glaSlab +:+ S "is safe for the calculated"
+  +:+ phrase load `sAnd` S "supporting calculated" +:+ plural value]
 
 {--Individual Product Use Cases--}
 
@@ -322,10 +322,10 @@ s5_2 mainObj compare1 compare2 factorOfComparison =
     phrase factorOfComparison, sParen (getS pb_tol), 
     S "which is obtained from the", phrase user, S "as an" +:+. phrase input_,
     S "If both", plural condition, S "return true then it's shown that the", 
-    phrase mainObj, S "is safe to use" `sC` S "else if both return false then the",
-    phrase mainObj +:+. S "is considered unsafe", 
-    S "All the supporting calculated", plural value, S "are also displayed as",
-    phrase output_]
+    phrase mainObj, S "is safe to use" `sC` 
+    S "else if both return false then the", phrase mainObj +:+.
+    S "is considered unsafe", S "All the supporting calculated", plural value,
+    S "are also displayed as", phrase output_]
 
 {-
 s5_2_bt_sent1 :: NamedChunk -> NamedChunk -> ConceptChunk -> 
@@ -376,8 +376,9 @@ s6_1 = probDescF start gLassBR ending [s6_1_1, s6_1_2, s6_1_3]
 
 {--Terminology and Definitions--}
 
-s6_1_1 = termDefnF (Just (S "All of the" +:+ plural term_ +:+ S "are extracted from" 
-  +:+ (sSqBrNum 4) `sIn` (makeRef s11))) [s6_1_1_bullets]
+s6_1_1 = termDefnF (Just (S "All of the" +:+ plural term_ +:+ 
+  S "are extracted from" +:+ (sSqBrNum 4) `sIn` (makeRef s11))) 
+  [s6_1_1_bullets]
 
 {--Physical System Description--}
 
@@ -456,11 +457,11 @@ a1Desc = foldlSent [S "The standard E1300-09a for",
   phrase shape, S "with continuous", phrase lateral +:+. S "support along",
   foldlOptions $ map S ["one", "two", "three", "four"], plural edge, S "This",
   phrase practice, S "assumes that", sParenNum 1, S "the supported glass", 
-  plural edge, S "for two, three" `sAnd` S "four-sided support", plural condition,
-  S "are simply supported and free to slip in", phrase plane `semiCol` 
-  (sParenNum 2), S "glass supported on two sides acts as a simply supported",
-  phrase beam `sAnd` (sParenNum 3), S "glass supported on one side acts as a", 
-  phrase cantilever]
+  plural edge, S "for two, three" `sAnd` S "four-sided support", 
+  plural condition, S "are simply supported and free to slip in", phrase plane
+  `semiCol` (sParenNum 2), S "glass supported on two sides acts as a simply", 
+  S "supported", phrase beam `sAnd` (sParenNum 3), S "glass supported on one", 
+  S "side acts as a", phrase cantilever]
 
 a2Desc :: Sentence
 a2Desc = foldlSent [S "Following", (sSqBr (S "4 (pg. 1)")) `sC`
@@ -738,9 +739,9 @@ s9_row_header_t1 = zipWith itemRefToSent s9_row_t1 (s9_theorysRef ++
 
 -- list of columns and their rows for traceability matrix
 s9_columns_t1 :: [[String]]
-s9_columns_t1 = [s9_t1_T1, s9_t1_T2, s9_t1_IM1, s9_t1_IM2, s9_t1_IM3, s9_t1_DD1, 
-  s9_t1_DD2, s9_t1_DD3, s9_t1_DD4, s9_t1_DD5, s9_t1_DD6, s9_t1_DD7, s9_t1_DD8, 
-  s9_t1_DD9]
+s9_columns_t1 = [s9_t1_T1, s9_t1_T2, s9_t1_IM1, s9_t1_IM2, s9_t1_IM3, 
+  s9_t1_DD1, s9_t1_DD2, s9_t1_DD3, s9_t1_DD4, s9_t1_DD5, s9_t1_DD6, s9_t1_DD7,
+  s9_t1_DD8, s9_t1_DD9]
 
 s9_t1_T1, s9_t1_T2, s9_t1_IM1, s9_t1_IM2, s9_t1_IM3, s9_t1_DD1, s9_t1_DD2, 
   s9_t1_DD3, s9_t1_DD4, s9_t1_DD5, s9_t1_DD6, s9_t1_DD7, s9_t1_DD8, 
@@ -854,8 +855,8 @@ s9_table3 = Table (EmptyS:s9_row_header_t3)
 --
 
 s9_intro2 = traceGIntro traceyGraphs
-  [(foldlList (map plural (take 3 solChSpecSubsections)) +:+. S "on each other"),
-  (plural requirement +:+ S "on" +:+. foldlList 
+  [(foldlList (map plural (take 3 solChSpecSubsections)) +:+. 
+  S "on each other"), (plural requirement +:+ S "on" +:+. foldlList 
   (map plural solChSpecSubsections)),
   (foldlList ((map plural (take 3 solChSpecSubsections))++
   [plural requirement, plural likelyChg +:+ S "on" +:+ plural assumption]))]

@@ -468,7 +468,7 @@ a6Desc = foldlSent [S "Boundary", plural condition, S "for the",
   plural calculation]
 
 a7Desc :: Sentence
-a7Desc = foldlSent [S "The", phrase response, S "type considered in",
+a7Desc = foldlSent [S "The", phrase responseTy, S "considered in",
   short gLassBR, S "is flexural"]
 
 a8Desc :: QDefinition -> Sentence

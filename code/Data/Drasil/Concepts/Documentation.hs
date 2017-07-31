@@ -82,7 +82,7 @@ analysis, appendix, body, characteristic, class_, client, code, column, company,
   response, reviewer, safety, scope, second_, section_, scenario, source, simulation,
   software, solution, specific, specification, stakeholder, standard, statement, symbol_,
   system, table_, task, template, term_, terminology, theory, traceyGraph, traceyMatrix,
-  uncertainty, user, useCase, validation, value, variable, video,
+  type_, uncertainty, user, useCase, validation, value, variable, video,
   verification, year :: NamedChunk
 
 analysis        = npnc "analysis"       (cnIS   "analysis"           )
@@ -194,6 +194,7 @@ terminology     = npnc "terminology"    (cnIES  "terminology"        )
 theory          = npnc "theory"         (cnIES  "theory"             )
 traceyGraph     = npnc "traceyGraph"    (cn'    "traceability graph" )
 traceyMatrix    = npnc "traceyMatrix"   (cnICES "traceability matrix")
+type_           = npnc "type"           (cn'    "type"               )
 uncertainty     = npnc "uncertainty"    (cnIES  "uncertainty"        )
 user            = npnc "user"           (cn'    "user"               )
 useCase         = npnc "useCase"        (cn'    "use case"           )

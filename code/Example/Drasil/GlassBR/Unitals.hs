@@ -285,9 +285,9 @@ fTemperedGl   = cc fullyTGlass
     "subjected to a special heat treatment process where the residual " ++
     "surface compression is not less than 69 MPa (10 000 psi) or the edge " ++
     "compression not less than 67 MPa (9700 psi), as defined in [6].")
-glassGeo      = dcc "glassGeo"    (nounPhraseSP "glass geometry")
-  ("The glass geometry based inputs include the dimensions of the glass " ++
-    "plane, glass type and response type.")
+glassGeo      = dccWDS "glassGeo"    (nounPhraseSP "glass geometry")
+  (S "The glass geometry based inputs include the dimensions of the" +:+ 
+    phrase glaPlane `sC` phrase glassTy `sC` S "and" +:+.  phrase responseTy)
 glassTy       = dcc "glassTy"     (cn' "glass type") "type of glass"
 glassWL       = dcc "glassWL"     (nounPhraseSP "glass weight load")
   ("The dead load component of the glass weight.")

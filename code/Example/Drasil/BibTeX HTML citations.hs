@@ -1,9 +1,9 @@
 type BibRef = [Citation]
 type City   = Sentence
 type State  = Sentence
-type JournalName = Sentence
-type Vol    = Integer
-type Issue  = Integer
+-- type JournalName = Sentence
+-- type Vol    = Integer
+-- type Issue  = Integer
 
 data Citation where --add artical, website
   Book :: [CiteField] -> Citation
@@ -16,7 +16,7 @@ data CiteField = Author     People
                | Edition    Integer
                | Place    (City, State) --State can also mean country
                | Publisher  Sentence
-               | Journal    JournalName Vol Issue
+               | Journal    Sentence
                | Year       Integer
                | Date Integer Month Integer deriving (Eq, Ord)
                --ordering is different for different styles.
@@ -50,10 +50,15 @@ instance Show Month where
 
 data StyleGuide = MLA | APA | Chicago
 
-useStyle :: StyleGuide -> (CiteField -> String)
-useStyle MLA = showMLA
-useStyle APA = showAPA
-useStyle Chicago = showChicago
+useStyleHTML :: StyleGuide -> (CiteField -> String)
+useStyleHTML MLA = showMLA
+useStyleHTML APA = showAPA
+useStyleHTML Chicago = showChicago
+
+useStyleTeX :: StyleGuide -> String
+useStyleTeX MLA = "ieeetr"
+useStyleTeX APA = "apalike"
+useStyleTeX Chicago = "plain"
 
 styleSetting :: StyleGuide
 styleSetting = MLA --This will be an input for the user eventually
@@ -117,7 +122,7 @@ showBibTeX (Author     p) = showField "author" (rendPeople p)
 showBibTeX (Year       y) = showField "year" (S $ show y)
 showBibTeX (Date   d m y) = showField "year" (S $ unwords [show d, show m, show y])
 showBibTeX (Collection s) = showField "collection" s
-showBibTeX (Journal n _ _) = showField "journal" n
+showBibTeX (Journal    s) = showField "journal" s
 
 showField :: String -> Sentence -> String
 showField f s = f ++ "={" ++ rend s ++ "}"
@@ -131,6 +136,12 @@ rendPeople people = foldl1 (\x y -> S x :+: S " and " :+: S y) $ map rendPersLFM
 --------------------
 --Tex bibliography--
 --------------------
+bibLines :: String -> String
+bibLines fname = foldl1 (++"\\n"++) $ [
+  "\\newline",
+  "\\bibliography{" ++ fname ++ "}",
+  "\\bibstyle{" ++ useStyleTeX sg ++ "}"]
+
 mkBibRef :: BibRef -> String
 mkBibRef = foldl1 (++"\\n\\n"++) . sort . map renderCite
 
@@ -150,11 +161,10 @@ cite book = concat $ intersperse "_" $
   where lstName (Person _ l _ _) = l
 
 {-
-It may be best to use https://github.com/backtracking/bibtex2html
+It may be best to use https://github.com/backtracking/bibtex2html or
+nxg.me.uk/dist/bibhtml/ or www.spinellis.gr/sw/textproc/bib2xhtml/ 
 which reads .bib files and converts them to an .html file. This will ensure
-consistency and maintainability. The issue is that we will need to generate
-the .bib files, read them, run this program, read the html output, and add
-the output to the end of the final html doc.
+consistency and maintainability.
 -}
 ------------------------------
 -- Rendering Unique to HTML --
@@ -217,7 +227,7 @@ renderCite b@(Book _) = renderBook b
 --Rendering a book--
 renderBook :: Citation -> String
 renderBook c@(Book fields) = unwords $
-  map (useStyle styleSetting) (sort fields) ++ endingField c styleSetting
+  map (useStyleHTML styleSetting) (sort fields) ++ endingField c styleSetting
 renderBook _ = error "Tried to render a non-book using renderBook."
 
 endingField :: Citation -> StyleGuide -> [String]
@@ -263,9 +273,18 @@ ref1 = Book [
   l1_l2_l3_1ADAD
   author={l1, f1 mi1 and l2, f2 m2 and l3, f3 m3}
   
-  {-just need these three lines in LaTeX-}
-  \newline
-  \bibliography{filename}
-  \bibstyle{ieeetr} %% note you can use "plain" as a common style
-  --this would change if you want MLA vs. APA
-  -}
+  @book{Smith_1993,
+  author    = {John Smith}, 
+  title     = {The title of the work},
+  publisher = {The name of the publisher},
+  year      = 1993,
+  volume    = 4,
+  series    = 10,
+  address   = {The address},
+  edition   = 3,
+  month     = 7,
+  note      = {An optional note},
+  isbn      = {3257227892}
+  }
+  
+-}

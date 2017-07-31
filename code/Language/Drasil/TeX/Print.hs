@@ -492,6 +492,17 @@ makeGraph ps w h c l =
 ---------------------------
 -- Bibliography Printing --
 ---------------------------
+-- Used only on single digit Int
+sufx :: Integer -> String
+sufx 1 = "st."
+sufx 2 = "nd."
+sufx 3 = "rd."
+sufx _ = "th."
+--move these two
+-- Use on any sized Int
+sufxer :: Integer -> String
+sufxer = sufx . read . last . show
+
 showBibTeX :: CiteField -> Spec
 showBibTeX (Place (city, state)) = showField "place" (city :+: S ", " :+: state)
 showBibTeX (Edition    s) = showField "edition" (S $ show s :+: sufxer s)
@@ -519,9 +530,11 @@ rendPersLFM (Person f l ms _) = l ++ ", " ++ unwords (f:ms)
 
 -- | Tex bibliography main function
 makeBib :: BibRef -> D
-makeBib bib = (pure $ text $ "\\begin{filecontents}{bibfile.bib}\\n" ++
-  mkBibRef bib ++ "\\n\\end{filecontents}\\n")  
-  $+$ (pure $ text $ bibLines "bibfile")
+makeBib bib = spec $
+  S "\\begin{filecontents}{bibfile.bib}\\n" :+:
+  mkBibRef bib :+:
+  S "\\n\\end{filecontents}\\n" :+:
+  S (bibLines "bibfile")
 
 bibLines :: String -> String
 bibLines fname = foldl1 (++"\\n"++) $ [
@@ -529,17 +542,17 @@ bibLines fname = foldl1 (++"\\n"++) $ [
   "\\bibliography{" ++ fname ++ "}",
   "\\bibstyle{" ++ useStyleTeX sg ++ "}"]
 
-mkBibRef :: BibRef -> String
-mkBibRef = foldl1 (++"\\n\\n"++) . sort . map renderCite
+mkBibRef :: BibRef -> Spec
+mkBibRef = foldl1 (\x y -> x :+: S "\\n\\n" :+:) . map renderCite
 
 --for when we add other things to reference like website, newspaper, articals
-renderCite :: Citation -> String
+renderCite :: Citation -> Spec
 renderCite b@(Book _) = renderBook b
 
 --Rendering a book--
 renderBook :: Citation -> Spec
-renderBook b@(Book fields) = "@book{" ++ cite b ++ ",\\n" ++
-  (concat . intersperse ",\\n" . map showBibTeX) fields ++ "}"
+renderBook b@(Book fields) = S "@book{" :+: S (cite b) :+: S ",\\n" :+:
+  (foldl1 (:+:) . intersperse (S ",\\n") . map showBibTeX) fields :+: S "}"
 renderBook _ = error "Tried to render a non-book using renderBook." 
 
 cite :: Citation -> String

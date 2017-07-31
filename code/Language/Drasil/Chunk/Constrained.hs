@@ -87,13 +87,13 @@ qslens l f (ConstrainedChunk a b c) =
   
   
 -- | Creates a constrained chunk from a symbolic quantity
-constrained :: (Quantity c, SymbolForm c) => c 
-                -> [Constraint] -> Expr -> ConstrainedChunk
+--constrained :: (Quantity c, SymbolForm c) => c 
+--                -> [Constraint] -> Expr -> ConstrainedChunk
 constrained q cs ex = ConstrainedChunk q cs (Just ex)
   
 -- | Creates a constrained unitary  
-cuc :: (Unit u) => String -> NP -> Symbol -> u 
-                -> Space -> [Constraint] -> Expr -> ConstrainedChunk
+--cuc :: (Unit u) => String -> NP -> Symbol -> u 
+--                -> Space -> [Constraint] -> (Maybe Expr) -> ConstrainedChunk
 cuc i t s u space cs rv = 
   ConstrainedChunk (unitary i t s u space) cs (Just rv)
 

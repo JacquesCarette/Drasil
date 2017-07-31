@@ -275,7 +275,7 @@ s4_1_intro pro cp wa sw = foldlSP [getAcc pro, S "is a",
   phrase cp, S "developed to investigate",
   S "the heating of", phrase wa, S "in a", phrase sw]
 
-s4_1_1 = termDefnF EmptyS [s4_1_1_bullets]
+s4_1_1 = termDefnF Nothing [s4_1_1_bullets]
 
 s4_1_1_bullets :: Contents
 s4_1_1_bullets = Enumeration $ (Bullet $ map (\x -> Flat $ 

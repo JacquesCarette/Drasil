@@ -232,7 +232,7 @@ s4_1 = SRS.probDesc [s4_1_intro progName phsChgMtrl sWHT]
 -----------------------------------------
 
 s4_1_1 :: Section
-s4_1_1 = termDefnF EmptyS [s4_1_1_bullets]
+s4_1_1 = termDefnF Nothing [s4_1_1_bullets]
 
 -- Above paragraph is repeated in all examples, can be abstracted out. (Note:
 -- GlassBR has an additional sentence with a reference at the end.)

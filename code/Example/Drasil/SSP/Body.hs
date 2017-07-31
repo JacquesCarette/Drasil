@@ -238,7 +238,7 @@ s4_1 = probDescF EmptyS ssa ending [s4_1_1, s4_1_2, s4_1_3]
           S "displacement that the" +:+ phrase slope +:+ S "will experience"
 
 -- SECTION 4.1.1 --
-s4_1_1 = termDefnF EmptyS [s4_1_1_list]
+s4_1_1 = termDefnF Nothing [s4_1_1_list]
 
 s4_1_1_list = Enumeration $ Simple $
   map (\x -> (titleize $ x, Flat $ x ^. defn))

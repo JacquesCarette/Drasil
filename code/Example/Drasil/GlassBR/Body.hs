@@ -352,8 +352,8 @@ s6_1 = probDescF start gLassBR ending [s6_1_1, s6_1_2, s6_1_3]
 
 {--Terminology and Definitions--}
 
-s6_1_1 = termDefnF (S "All of the" +:+ plural term_ +:+ S "are extracted from" 
-  +:+ (sSqBrNum 4) `sIn` (makeRef s11)) [s6_1_1_bullets]
+s6_1_1 = termDefnF (Just (S "All of the" +:+ plural term_ +:+ S "are extracted from" 
+  +:+ (sSqBrNum 4) `sIn` (makeRef s11))) [s6_1_1_bullets]
 
 {--Physical System Description--}
 

@@ -1,5 +1,5 @@
 module Drasil.OrganizationOfSRS (introF, prpsOfDocF, refineChain, orgSec, orgSecWTS, genSysF, 
-                                 specSysDesF, termDefnF, solChSpecF, assumpF, assumpF', datConF, reqF,
+                                 specSysDesF, solChSpecF, assumpF, assumpF', datConF, reqF,
                                  figureLabel, showingCxnBw, thModF, genDefnF, inModelF,
                                  dataDefnF, inModelF', traceMGF, systCon, stakehldr,
                                  stakeholderIntro, traceGIntro, physSystDesc, charIntRdrF) where
@@ -9,7 +9,7 @@ import Control.Lens ((^.))
 import Data.Drasil.Concepts.Documentation
 import Data.Drasil.Concepts.Math (equation, matrix, graph)
 import Data.Drasil.Concepts.Computation (algorithm)
-import Data.Drasil.Utils (foldle, foldlsC, foldlSent, foldlList)
+import Data.Drasil.Utils (foldle)
 import qualified Drasil.SRS as SRS
 
 --Provide the start to the intro, then the key sentence relating to the overview, and subsections
@@ -152,18 +152,6 @@ specSysDesIntro l_end = Paragraph $ foldlSent
                                (phrase $ inModel ^. term) +:+ sParen (getAcc ode)
                                S "that models the" +:+. word_  --FIXME: We need something to handle the use of nouns as verbs
                   eND (False) =  S "and" +:+. plural definition-}
-
---can take a (Just sentence) if needed or Nothing if not
-termDefnF :: Maybe Sentence -> [Contents] -> Section
-termDefnF end otherContents = SRS.termAndDefn ((intro):otherContents) []
-      where lastF Nothing  = EmptyS
-            lastF (Just s) = s
-            intro = Paragraph $ foldle (+:+) (+:) (EmptyS)
-                    [S "This subsection provides a list of terms",
-                    S "that are used in the subsequent", plural section_, S "and their",
-                    S "meaning, with the", phrase purpose, S "of reducing ambiguity",
-                    S "and making it easier to correctly understand the",
-                    plural requirement, lastF end]
 
 --general introduction for Physical System Description
 physSystDesc :: Sentence -> Contents -> [Contents] -> Section

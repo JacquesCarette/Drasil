@@ -118,7 +118,7 @@ prob_br = cvc "prob_br" (nounPhraseSP "probability of breakage")
   (sub cP lB) Rational
   [ physc $ \c -> (Dbl 0) :< c,
     physc $ \c -> c :< (Dbl 1) ] (Dbl 0.4)
-  --FIXME: should there be a typical value here?
+  --FIXME: no typical value!
 
 {--}
 

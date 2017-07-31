@@ -63,6 +63,8 @@ module Language.Drasil (
   , cqs, qs, nw, CQSWrapper, QSWrapper, NWrapper
   --Chunk.UWrapper 
   , UWrapper, uw, ucw, UCWrapper
+  --Citations
+  , BibRef, City, State, Citation(..), CiteField(..), Month(..), getAuthors, getYear
   -- Spec
   , USymb(..), Sentence(..), Accent(..), sParen, sParenNum, sSqBr, sSqBrNum
   , (+:+), (+:+.), (+.), sC, (+:), semiCol, sParenDash
@@ -149,6 +151,7 @@ import Language.Drasil.Chunk.Wrapper
 import Language.Drasil.Chunk.Wrapper.QSWrapper
 import Language.Drasil.Chunk.Wrapper.UWrapper
 import Language.Drasil.ChunkDB (SymbolMap, symbolMap)
+import Language.Drasil.Citations
 import Language.Drasil.NounPhrase hiding (at_start, at_start', titleize
                                           , titleize', phrase, plural)
 import Language.Drasil.Space (Space(..))

@@ -90,6 +90,9 @@ sufx _ = "th."
 sufxer :: Integer -> String
 sufxer = sufx . read . last . show
 
+rend :: Sentence -> String
+rend = p_spec . spec
+
 -- LFM is Last, First Middle
 rendPersLFM :: Person -> String
 rendPersLFM (Person _ n _ Mono) = n
@@ -126,8 +129,6 @@ showBibTeX (Journal    s) = showField "journal" s
 
 showField :: String -> Sentence -> String
 showField f s = f ++ "={" ++ rend s ++ "}"
-  where rend :: Sentence -> String
-        rend = p_spec . spec
 
 rendPeople :: People -> Sentence
 rendPeople []  = error "No authors given"

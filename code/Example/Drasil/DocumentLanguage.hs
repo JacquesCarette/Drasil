@@ -19,7 +19,7 @@ import qualified Drasil.SRS as SRS
 import qualified Drasil.Sections.Introduction as Intro
 import qualified Drasil.Sections.SpecificSystemDescription as SSD
 
-import Data.Drasil.Concepts.Documentation (refmat, tOfSymb)
+import Data.Drasil.Concepts.Documentation (refmat, tOfSymb, reference)
 
 import Data.Maybe (isJust)
 import Data.List (sort)
@@ -94,6 +94,7 @@ data DocSection = Verbatim Section
                 | RefSec RefSec 
                 | IntroSec IntroSec
                 | SSDSec SSDSec
+                | Bibliography BibRef
 
 -- | For creating the table of symbols intro
 data TSIntro = TypogConvention [TConvention] -- ^ Typographic conventions used
@@ -155,6 +156,11 @@ mkSections si l = foldr doit [] l
     doit (RefSec rs)   ls = mkRefSec si rs : ls
     doit (IntroSec is) ls = mkIntroSec si is : ls
     doit (SSDSec ss)   ls = mkSSDSec si ss : ls
+    doit (Bibliography bib) ls = mkBib bib : ls
+
+-- | Helper for making the bibliography section
+mkBib :: BibRef -> Section
+mkBib bib = section (titleize' reference) [Bib bib] []
 
 -- | Helper for creating the reference section and subsections
 mkRefSec :: SystemInformation -> RefSec -> Section

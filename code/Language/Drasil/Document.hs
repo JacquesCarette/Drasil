@@ -13,6 +13,7 @@ import Language.Drasil.ChunkDB (SymbolMap)
 import Language.Drasil.Spec (Sentence(..), RefType(..), (+:+))
 import Language.Drasil.RefHelpers
 import Language.Drasil.Expr
+import Language.Drasil.Citations
 import Control.Lens ((^.))
 
 type Title    = Sentence
@@ -54,6 +55,7 @@ data Contents = Table [Sentence] [[Sentence]] Title Bool
                | Assumption AssumpChunk
                | LikelyChange LCChunk
                | UnlikelyChange UCChunk
+               | Bib BibRef
      --        UsesHierarchy [(ModuleChunk,[ModuleChunk])]
                | Graph [(Sentence, Sentence)] (Maybe Width) (Maybe Height) Label
                -- ^ TODO: Fill this one in.

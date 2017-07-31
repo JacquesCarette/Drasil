@@ -10,6 +10,7 @@ import Language.Drasil.Chunk.SymbolForm
 import Language.Drasil.Chunk.Constrained
 import Language.Drasil.People
 import Language.Drasil.Unit
+import Language.Drasil.Citations
 
 -- | Data structure for holding all of the requisite information about a system
 -- to be used in artefact generation
@@ -38,7 +39,6 @@ data SystemInformation where
   _constraints :: [j], --TODO: Add SymbolMap OR enough info to gen SymbolMap
   _constants :: [QDefinition]
   } -> SystemInformation
-  
   
 -- | for listing QDefs in SystemInformation
 data Block a = Coupled a a [a]

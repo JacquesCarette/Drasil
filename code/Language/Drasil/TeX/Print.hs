@@ -68,6 +68,7 @@ lo (Requirement n l)       = toText $ makeReq (spec n) (spec l)
 lo (Assumption n l)        = toText $ makeAssump (spec n) (spec l)
 lo (LikelyChange n l)      = toText $ makeLC (spec n) (spec l)
 lo (UnlikelyChange n l)    = toText $ makeUC (spec n) (spec l)
+lo (Bib bib)               = toText $ makeBib bib
 lo (Graph ps w h c l)      = toText $ makeGraph
                                (map (\(a,b) -> (spec a, spec b)) ps)
                                (if isNothing w
@@ -487,3 +488,61 @@ makeGraph ps w h c l =
            label l
          ]
   where q x = (pure $ text "\"") <> x <> (pure $ text "\"")
+
+---------------------------
+-- Bibliography Printing --
+---------------------------
+showBibTeX :: CiteField -> Spec
+showBibTeX (Place (city, state)) = showField "place" (city :+: S ", " :+: state)
+showBibTeX (Edition    s) = showField "edition" (S $ show s :+: sufxer s)
+showBibTeX (Series     s) = showField "series" s
+showBibTeX (Title      s) = showField "title" s
+showBibTeX (Volume     s) = showField "volume" (S $ show s)
+showBibTeX (Publisher  s) = showField "publisher" s
+showBibTeX (Author     p) = showField "author" (rendPeople p)
+showBibTeX (Year       y) = showField "year" (S $ show y)
+showBibTeX (Date   d m y) = showField "year" (S $ unwords [show d, show m, show y])
+showBibTeX (Collection s) = showField "collection" s
+showBibTeX (Journal    s) = showField "journal" s
+
+showField :: String -> Spec -> Spec
+showField f s = S f :+: S "={" :+: s :+: S "}"
+
+rendPeople :: People -> Spec
+rendPeople []  = error "No authors given"
+rendPeople people = foldl1 (\x y -> S x :+: S " and " :+: S y) $ map rendPersLFM people
+
+-- LFM is Last, First Middle
+rendPersLFM :: Person -> String
+rendPersLFM (Person _ n _ Mono) = n
+rendPersLFM (Person f l ms _) = l ++ ", " ++ unwords (f:ms)
+
+-- | Tex bibliography main function
+makeBib :: BibRef -> D
+makeBib bib = (pure $ text $ "\\begin{filecontents}{bibfile.bib}\\n" ++
+  mkBibRef bib ++ "\\n\\end{filecontents}\\n")  
+  $+$ (pure $ text $ bibLines "bibfile")
+
+bibLines :: String -> String
+bibLines fname = foldl1 (++"\\n"++) $ [
+  "\\newline",
+  "\\bibliography{" ++ fname ++ "}",
+  "\\bibstyle{" ++ useStyleTeX sg ++ "}"]
+
+mkBibRef :: BibRef -> String
+mkBibRef = foldl1 (++"\\n\\n"++) . sort . map renderCite
+
+--for when we add other things to reference like website, newspaper, articals
+renderCite :: Citation -> String
+renderCite b@(Book _) = renderBook b
+
+--Rendering a book--
+renderBook :: Citation -> Spec
+renderBook b@(Book fields) = "@book{" ++ cite b ++ ",\\n" ++
+  (concat . intersperse ",\\n" . map showBibTeX) fields ++ "}"
+renderBook _ = error "Tried to render a non-book using renderBook." 
+
+cite :: Citation -> String
+cite book = concat $ intersperse "_" $
+  map lstName (getAuthors b) ++ [show $ getYear book]
+  where lstName (Person _ l _ _) = l

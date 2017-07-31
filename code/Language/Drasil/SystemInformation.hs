@@ -10,7 +10,6 @@ import Language.Drasil.Chunk.SymbolForm
 import Language.Drasil.Chunk.Constrained
 import Language.Drasil.People
 import Language.Drasil.Unit
-import Language.Drasil.Citations
 
 -- | Data structure for holding all of the requisite information about a system
 -- to be used in artefact generation

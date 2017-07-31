@@ -4,6 +4,8 @@ import Language.Drasil.Expr (Variable)
 import Language.Drasil.Symbol (Symbol)
 import Language.Drasil.Unicode (Greek,Special)
 import Language.Drasil.Spec (USymb, RefType)
+import Language.Drasil.Citations (BibRef, Month(..))
+import Language.Drasil.People (People)
 
 --import Data.List (intersperse)
 
@@ -117,6 +119,7 @@ data LayoutObj = Table [[Spec]] Label Bool Title
                | LikelyChange Contents Label
                | UnlikelyChange Contents Label
                | Graph [(Spec, Spec)] (Maybe Width) (Maybe Height) Caption Label
+               | Bib BibRef
                
 data ListType = Item [ItemType]
               | Enum [ItemType]
@@ -159,3 +162,22 @@ instance Show Set where
   --show (DiscreteI a)  = "\\{" ++ (foldl (++) "" . intersperse ", " . map show) a ++ "\\}"
   --show (DiscreteD a)  = "\\{" ++ (foldl (++) "" . intersperse ", " . map show) a ++ "\\}"
   --show (DiscreteS a) = "\\{" ++ (foldl (++) "" . intersperse ", ") a ++ "\\}"
+
+type BibRef = [Citation]
+type City   = Sentence
+type State  = Sentence
+
+data Citation where --add artical, website
+  Book :: [CiteField] -> Citation
+  
+data CiteField = Author     People
+               | Title      Sentence
+               | Series     Sentence
+               | Collection Sentence
+               | Volume     Integer
+               | Edition    Integer
+               | Place    (City, State) --State can also mean country
+               | Publisher  Sentence
+               | Journal    Sentence
+               | Year       Integer
+               | Date Integer Month Integer

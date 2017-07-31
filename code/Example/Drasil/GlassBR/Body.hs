@@ -1,9 +1,10 @@
 module Drasil.GlassBR.Body where
 import Control.Lens ((^.))
-
 import Language.Drasil
-import Data.Drasil.SI_Units
-import Data.Drasil.Authors
+import Prelude hiding (id)
+
+import Data.Drasil.SI_Units (metre, second, kilogram, pascal, newton)
+import Data.Drasil.Authors (spencerSmith, thulasi, nikitha)
 import Data.Drasil.Concepts.Documentation
 import Data.Drasil.Concepts.Education
 import Data.Drasil.Software.Products
@@ -11,11 +12,13 @@ import Data.Drasil.Concepts.Computation
 import Data.Drasil.Concepts.Physics (distance)
 import Data.Drasil.Concepts.Thermodynamics (degree_')
 import Data.Drasil.Concepts.PhysicalProperties (flexure)
-import Data.Drasil.Concepts.Software
+import Data.Drasil.Concepts.Software (correctness, verifiability,
+  understandability, reusability, maintainability, portability, 
+  performance)
 import Data.Drasil.Concepts.Math (graph, calculation, probability,
   parameter, surface, equation, shape)
-import Prelude hiding (id)
-import Data.Drasil.Utils
+import Data.Drasil.Utils (getS, makeTMatrix, makeListRef, itemRefToSent,
+  refFromType, enumSimple, enumBullet, prodUCTbl)
 import Data.Drasil.SentenceStructures
 import Data.Drasil.Concepts.PhysicalProperties (dimension, materialProprty)
 
@@ -24,6 +27,7 @@ import Drasil.Template.DD
 
 import qualified Drasil.SRS as SRS
 import           Drasil.Sections.ReferenceMaterial
+import           Drasil.DocumentLanguage
 
 import Drasil.GlassBR.Unitals
 import Drasil.GlassBR.Concepts
@@ -35,7 +39,6 @@ import Drasil.GlassBR.IMods
 import Drasil.GlassBR.DataDefs
 import Drasil.GlassBR.References
 
-import Drasil.DocumentLanguage
 import Drasil.Sections.TraceabilityMandGs
 import Drasil.Sections.Stakeholders
 import Drasil.Sections.ScopeOfTheProject
@@ -46,19 +49,6 @@ import Drasil.Sections.AuxiliaryConstants
 
 this_si :: [UnitDefn]
 this_si = map UU [metre, second, kilogram] ++ map UU [pascal, newton]
-
-s3, s4, s5,
-  s6, s6_1, s6_1_1, s6_1_2, s6_1_3, s6_2, 
-  s7, s7_1, s7_2, s8, s9, s10, s11, s12 :: Section
-
-s5_1_table, s5_2_bullets, 
-  s6_1_2_list, s6_2_intro, s6_2_5_table1, 
-  s6_2_5_table2, s7_2_intro, s9_table1,
-  s9_table2, s9_table3, s12_intro, 
-  fig_glassbr, fig_2, fig_3, fig_4, fig_5,
-  fig_6 :: Contents
-
-s7_1_list, s9_intro2 :: [Contents]
 
 mg_authors, s2_3_intro_end, s2_3_intro :: Sentence
 mg_authors = manyNames [spencerSmith, thulasi]
@@ -105,8 +95,7 @@ glassSystInfo = SI {
   _constants   = gbConstants
 }
   --FIXME: All named ideas, not just acronyms.
-  
-  
+
 glassChoices :: Choices
 glassChoices = Choices {
   lang = [Python, Cpp, CSharp, Java],
@@ -127,6 +116,19 @@ mgBod :: [Section]
 
 glassBR_mg :: Document
 glassBR_mg = mgDoc glassBRProg (for'' titleize phrase) mg_authors mgBod
+
+s3, s4, s5,
+  s6, s6_1, s6_1_1, s6_1_2, s6_1_3, s6_2, 
+  s7, s7_1, s7_2, s8, s9, s10, s11, s12 :: Section
+
+s5_1_table, s5_2_bullets, 
+  s6_1_2_list, s6_2_intro, s6_2_5_table1, 
+  s6_2_5_table2, s7_2_intro, s9_table1,
+  s9_table2, s9_table3, s12_intro, 
+  fig_glassbr, fig_2, fig_3, fig_4, fig_5,
+  fig_6 :: Contents
+
+s7_1_list, s9_intro2 :: [Contents]
 
 --------------------------------------------------------------------------------
 s6_1_1_bullets :: Contents

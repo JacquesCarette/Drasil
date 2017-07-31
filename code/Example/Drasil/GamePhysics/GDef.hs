@@ -27,7 +27,7 @@ impulseDesc = foldlSent [S "An", (phrase impulseS), (getS impulseS),
   S "occurs when a", (phrase force), (getS force), 
   S "acts over an interval of", (phrase time)]
 
---[impulse, force, changeInMomentum, mass, changeInVelocity]
+--[impulseS, force, changeInMomentum, mass, changeInVelocity]
 
 impulseDeriv :: Sentence
 impulseDeriv = foldlSent [S "Newton's second law of motion (ref to T1)", 
@@ -85,7 +85,7 @@ accelerationDueToGravityRel = FCall (C thFluxVect) [C QP.time] := C htTransCoeff
 accelerationDueToGravityDesc :: Sentence
 accelerationDueToGravityDesc = foldlSent [S ""]
 
--- [forceDueToGravity, mass, gravityConst]
+-- [gravitationalAccel, mass, gravitationalConst]
 
 accelerationDueToGravityDeriv :: Sentence
 accelerationDueToGravityDeriv = foldlSent [S "From Newton's law of universal",
@@ -165,7 +165,7 @@ torqueDesc = foldlSent [S "The", (phrase torque), (getS torque),
   S "to rotate the body around an axis or pivot"
   ]
 
---[torque, force, positionVector]
+--[torque, force, position]
 
 torqueRel :: Relation
 torqueRel = FCall (C thFluxVect) [C QP.time] := C htTransCoeff :*
@@ -180,7 +180,7 @@ momentOfInertiaDesc :: Sentence
 momentOfInertiaDesc = foldlSent []
 
 
---[momentOfInertia, numOfParticles, massI, distanceBtwParticleI]
+--[momentOfInertia, numOfParticles, mass_i, distanceBtwParticleI]
 
 momentOfInertiaRel :: Relation
 momentOfInertiaRel = FCall (C thFluxVect) [C QP.time] := C htTransCoeff :*

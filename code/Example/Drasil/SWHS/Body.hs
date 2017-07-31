@@ -33,24 +33,49 @@ import Data.Drasil.Quantities.PhysicalProperties (density, mass, vol)
 
 import Data.Drasil.Software.Products (compPro)
 
-import Drasil.SWHS.Unitals
-import Drasil.SWHS.Concepts
-import Drasil.SWHS.TMods
-import Drasil.SWHS.IMods
-import Drasil.SWHS.DataDefs
-import Drasil.SWHS.GenDefs
-import Drasil.SWHS.Modules
-import Drasil.SWHS.Changes
-import Drasil.SWHS.Reqs
-import Drasil.SWHS.References
-import Drasil.SWHS.Assumptions
-import Drasil.SWHS.Requirements
-import Drasil.SWHS.LikelyChanges
+import Drasil.SWHS.Unitals (pcm_SA, temp_W, temp_PCM, pcm_HTC, pcm_E,
+  temp_C, coil_SA, w_E, coil_HTC, sim_time, tau_S_P, htCap_S_P, pcm_mass,
+  ht_flux_P, eta, tau_W, htCap_W, w_mass, ht_flux_C, vol_ht_gen,
+  out_SA, ht_flux_out, ht_flux_in, in_SA, thFluxVect, time_final,
+  specParamValList, w_density, temp_init, htCap_L_P, htFusion, pcm_density,
+  temp_melt_P, pcm_vol, diam, tau_L_P, tank_length, htTransCoeff_min,
+  w_vol, swhsConstrained, swhsOutputs, swhsInputs, swhsSymbols)
+import Drasil.SWHS.Concepts (progName, sWHT, water, rightSide, phsChgMtrl,
+  coil, perfect_insul, tank, transient, gauss_div, swhs_pcm,
+  phase_change_material, tank_pcm, swhsFull)
+import Drasil.SWHS.TMods (tModels, t1ConsThermE, s4_2_2_T1, s4_2_2_T2,
+  s4_2_2_T3)
+import Drasil.SWHS.IMods (swhsInModels)
+import Drasil.SWHS.DataDefs (swhsSymbMapDRef, swhsSymbMapTRef, swhsDataDefs,
+  swhsSymMap, dd1HtFluxC, dd2HtFluxP, swhsSymbMapT, s4_2_4_DD1, s4_2_4_DD2,
+  s4_2_4_DD3, s4_2_4_DD4)
+import Drasil.SWHS.GenDefs (swhsGenDefs)
+import Drasil.SWHS.Modules (modules)
+import Drasil.SWHS.Changes (likelyChanges, unlikelyChanges)
+import Drasil.SWHS.Reqs (reqs)
+import Drasil.SWHS.References (ref1, ref2, ref3, ref4, ref5, ref6)
+import Drasil.SWHS.Assumptions (assump1, assump2, assump3, assump4,
+  assump5, assump6, assump7, assump8, assump9, assump10, assump11,
+  assump12, assump13, assump14, assump15, assump16, assump17,
+  assump18, assump19, assump20)
+import Drasil.SWHS.Requirements (req1, req2, s5_1_2_Eqn1, s5_1_2_Eqn2,
+  req3, req4, req5, req6, req7, req8, req9, req10, req11, s5_2)
+import Drasil.SWHS.LikelyChanges (likeChg1, likeChg2, likeChg3, likeChg4,
+  likeChg5, likeChg6)
 
 import qualified Drasil.SRS as SRS
-import Drasil.Template.MG
-import Drasil.Template.DD
-import Drasil.DocumentLanguage
+
+import Drasil.Template.MG (mgDoc)
+import Drasil.Template.DD (makeDD)
+import Drasil.DocumentLanguage (DocDesc, mkDoc, tsymb'',
+  LFunc (TermExcept),
+  Literature (Lit, Doc'),
+  TSIntro (SymbOrder, SymbConvention, TSPurpose),
+  DocSection (Verbatim, IntroSec, RefSec), 
+  IntroSub(IOrgSec, IChar, IScope, IPurpose),
+  IntroSec (IntroProg),
+  RefTab (TAandA, TUnits),
+  RefSec (RefProg))
 
 import Drasil.Sections.ReferenceMaterial (intro)
 import Drasil.Sections.SpecificSystemDescription

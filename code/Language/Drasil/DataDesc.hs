@@ -12,7 +12,7 @@ data Contents = Contents CodeChunk
 
 data Entry = Entry Contents             -- regular entry (float, int, bool, etc)
            | ListEntry [Ind] Contents   -- index to insert into list
-           | Junk                       -- junk should be skipped in input file
+           | Junk  Contents             -- junk should be skipped in input file
 
 data Ind = Explicit Int   -- explicit index
          | WithPattern    -- use current repetition number in repeated pattern
@@ -20,7 +20,8 @@ data Ind = Explicit Int   -- explicit index
            
 type Sep = Char  -- delimiter
   
-data Data = Line LinePattern Sep
+data Data = Singleton Contents
+	      | Line LinePattern Sep
           | Lines LinePattern (Maybe Int) Sep   -- multi-line data
                                                 -- (Maybe Int) = number of lines, Nothing = unknown so go to end of file  
           
@@ -42,3 +43,39 @@ contents c = Contents $ codevar c
 --    Line (Repeat [Junk, ListEntry [WithLine] z_array] Nothing) ',',
 --    Lines (Repeat [ListEntry [WithPattern, WithLine] x_array, ListEntry [WithPattern, WithLine] y_array] Nothing) Nothing ','
 --  ]
+-- ^ pattern evident from TSD.txt
+
+-----
+
+--for glassbr defaultInput:
+
+--c_a     = contents a     --plate length
+--c_b     = contents b     --plate width
+--c_t     = contents t     --nominal thickness
+--c_gt    = contents gt    --glass type
+--c_w     = contents w     --weight of charge
+--c_tnt   = contents tnt   --tnt equivalrny factor
+--c_sdx   = contents sdx   --stand off dist (x)
+--c_sdy   = contents sdy   --stand off dist (y)
+--c_sdz   = contents sdz   --stand off dist (z)
+--c_pbtol = contents pbTol --tolerable probability
+
+{-
+DataDesc [c_a, c_b, c_t, c_gt, c_w, c_tnt, c_sdx, c_sdy, c_sdz, c_pbtol]
+  [Singleton Junk,
+  Singleton c_a, Singleton c_b, Singleton c_t,
+  Singleton Junk,
+  Singleton c_gt, 
+  Singleton Junk,
+  Singleton c_w, 
+  Singleton Junk, 
+  Singleton c_tnt, 
+  Singleton Junk,
+  Singleton c_sdx, Singleton c_sdy, Singleton c_sdz,
+  Singleton Junk,
+  Singleton c_pbtol
+  ]
+
+--FIXME: replace "Singleton _" with "Line Straight [_]" ?
+
+-}

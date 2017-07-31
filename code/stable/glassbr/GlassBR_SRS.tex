@@ -4,6 +4,7 @@
 \hypersetup{bookmarks=true,colorlinks=true,linkcolor=red,citecolor=blue,filecolor=magenta,urlcolor=cyan}
 \usepackage{amsmath}
 \usepackage{amssymb}
+\usepackage{breqn}
 \usepackage{longtable}
 \usepackage{booktabs}
 \usepackage{caption}
@@ -54,79 +55,79 @@ Symbol & Description & Units
 \midrule
 $a$ & Plate length (long dimension) & m
 \\
-$AR_{max}$ & Maximum aspect ratio & 
+${AR_{max}}$ & Maximum aspect ratio & Unitless
 \\
 $b$ & Plate width (short dimension) & m
 \\
-$B$ & Risk of failure & 
+$B$ & Risk of failure & Unitless
 \\
-$d_{max}$ & Maximum value for one of the dimensions of the glass plate & mm
+${d_{max}}$ & Maximum value for one of the dimensions of the glass plate & mm
 \\
-$d_{min}$ & Minimum value for one of the dimensions of the glass plate & mm
+${d_{min}}$ & Minimum value for one of the dimensions of the glass plate & mm
 \\
 $E$ & Modulus of elasticity of glass & Pa
 \\
-$g$ & Glass type $g$ in \{AN, FT, HS\} & 
+$g$ & Glass type $g$ in \{AN, FT, HS\} & Unitless
 \\
-$GTF$ & Glass type factor & 
+$GTF$ & Glass type factor & Unitless
 \\
 $h$ & Actual thickness & m
 \\
-$is\_safe1$ & True when calculated probability is less than tolerable probability & 
+$is\_safe1$ & True when calculated probability is less than tolerable probability & Unitless
 \\
-$is\_safe2$ & True when load resistance (capacity) is greater than load (demand) & 
+$is\_safe2$ & True when load resistance (capacity) is greater than load (demand) & Unitless
 \\
-$J$ & Stress distribution factor (Function) & 
+$J$ & Stress distribution factor (Function) & Unitless
 \\
-$J_{tol}$ & Stress distribution factor (Function) based on Pbtol & 
+${J_{tol}}$ & Stress distribution factor (Function) based on Pbtol & Unitless
 \\
 $k$ & Surface flaw parameter & $\frac{\text{m}^{12}}{\text{N}^{7}}$
 \\
-$LDF$ & Load duration factor & 
+$LDF$ & Load duration factor & Unitless
 \\
-$LR$ & Load resistance & 
+$LR$ & Load resistance & Unitless
 \\
-$LSF$ & Load share factor & 
+$LSF$ & Load share factor & Unitless
 \\
 $m$ & Surface flaw parameter & $\frac{\text{m}^{12}}{\text{N}^{7}}$
 \\
-$NFL$ & Non-factored load & 
+$NFL$ & Non-factored load & Unitless
 \\
-$P_{b}$ & Probability of breakage & 
+${P_{b}}$ & Probability of breakage & Unitless
 \\
-$P_{btol}$ & Tolerable probability of breakage & 
+${P_{btol}}$ & Tolerable probability of breakage & Unitless
 \\
 $q$ & Applied load (demand) & kPa
 \\
-$\hat{q}$ & Dimensionless load & 
+$\hat{q}$ & Dimensionless load & Unitless
 \\
-$\hat{q}_{tol}$ & Tolerable load & 
+${\hat{q}_{tol}}$ & Tolerable load & Unitless
 \\
 $SD$ & Stand off distance & m
 \\
-$SD_{max}$ & Maximum stand off distance permissible for input & m
+${SD_{max}}$ & Maximum stand off distance permissible for input & m
 \\
-$SD_{min}$ & Minimum stand off distance permissible for input & m
+${SD_{min}}$ & Minimum stand off distance permissible for input & m
 \\
-$SD_{x}$ & Stand off distance (x-component) & m
+${SD_{x}}$ & Stand off distance (x-component) & m
 \\
-$SD_{y}$ & Stand off distance (y-component) & m
+${SD_{y}}$ & Stand off distance (y-component) & m
 \\
-$SD_{z}$ & Stand off distance (z-component) & m
+${SD_{z}}$ & Stand off distance (z-component) & m
 \\
 $t$ & Nominal thickness $t$ in \{2.5, 2.7, 3.0, 4.0, 5.0, 6.0, 8.0, 10.0, 12.0, 16.0, 19.0, 22.0\} & mm
 \\
-$t_{d}$ & Duration of load & s
+${t_{d}}$ & Duration of load & s
 \\
-$TNT$ & TNT equivalent factor & 
+$TNT$ & TNT equivalent factor & Unitless
 \\
 $w$ & Charge weight & kg
 \\
-$w_{max}$ & Maximum permissible input charge weight & kg
+${w_{max}}$ & Maximum permissible input charge weight & kg
 \\
-$w_{min}$ & Minimum permissible input charge weight & kg
+${w_{min}}$ & Minimum permissible input charge weight & kg
 \\
-$w_{TNT}$ & Explosive mass in equivalent weight of TNT & kg
+${w_{TNT}}$ & Explosive mass in equivalent weight of TNT & kg
 \\
 \bottomrule
 \label{Table:TablofSymb}
@@ -282,11 +283,11 @@ This subsection provides a list of terms that are used in the subsequent section
 \item{Specified design load - The magnitude in kPa (psf), type (for example, wind or snow) and duration of the load given by the specifying authority.}
 \item{Long duration load - Any load lasting approximately 30 days.}
 \end{enumerate}
-\item{Stand off distance (SD) - The distance from the glazing surface to the centroid of a hemispherical high explosive charge. It is represented by the coordinates ($SD_{x}$, $SD_{y}$, $SD_{z}$).}
+\item{Stand off distance (SD) - The distance from the glazing surface to the centroid of a hemispherical high explosive charge. It is represented by the coordinates (${SD_{x}}$, ${SD_{y}}$, ${SD_{z}}$).}
 \item{Load share factor (LSF) - A multiplying factor derived from the load sharing between the double glazing, of equal or different thickness's and types (including the layered behaviour of LG under long duration loads), in a sealed IG unit.}
 \item{Glass type factor (GTF) - A multiplying factor for adjusting the LR of different glass type, that is, AN, FT, or HS, in monolithic glass, LG (Laminated Glass), or IG (Insulating Glass) constructions.}
 \item{Aspect ratio (AR) - The ratio of the long dimension of the glass to the short dimension of the glass. For glass supported on four sides, the aspect ratio is always equal to or greater than 1.0. For glass supported on three sides, the ratio of the length of one of the supported edges perpendicular to the free edge, to the length of the free edge, is equal to or greater than 0.5.}
-\item{Probability of breakage ($P_{b}$) - The fraction of glass lites or plies that would break at the first occurrence of a specified load and duration, typically expressed in lites per 1000.}
+\item{Probability of breakage (${P_{b}}$) - The fraction of glass lites or plies that would break at the first occurrence of a specified load and duration, typically expressed in lites per 1000.}
 \end{itemize}
 \subsubsection{Physical System Description}
 \label{Sec:PhysSystDesc}

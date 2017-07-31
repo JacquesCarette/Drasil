@@ -353,8 +353,9 @@ specDeLoad    = dcc "specDeLoad"  (nounPhraseSP "specified design load")
 {--}
 
 this_symbols :: [QSWrapper]
-this_symbols = ((map qs gBRSpecParamVals) ++ (map qs glassBRSymbolsWithDefns)
-  ++ (map qs glassBRSymbols) ++ (map qs glassBRUnitless) ++ gbInputs)
+this_symbols = (map qs [prob_br] ++ gbInputs ++ (map qs gBRSpecParamVals) ++ 
+  (map qs glassBRSymbolsWithDefns) ++ (map qs glassBRSymbols) ++
+  (map qs glassBRUnitless))
 
 {--}
 

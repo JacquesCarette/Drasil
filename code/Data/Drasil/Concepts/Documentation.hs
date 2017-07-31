@@ -79,11 +79,11 @@ analysis, appendix, body, characteristic, class_, client, code, column, company,
   message, method_, module_, model, name_, nonfunctional, object, offShelf, open,
   organization, output_, physics, physical, plan, practice, priority, problem, 
   product_, project, property, purpose, quantity, realtime, reference, requirement_,
-  response, reviewer, safety, scope, second_, section_, scenario, source, simulation,
-  software, solution, specific, specification, stakeholder, standard, statement, symbol_,
-  system, table_, task, template, term_, terminology, theory, traceyGraph, traceyMatrix,
-  type_, uncertainty, user, useCase, validation, value, variable, video,
-  verification, year :: NamedChunk
+  response, result, reviewer, safety, scope, second_, section_, scenario, source,
+  simulation, software, solution, specific, specification, stakeholder, standard, 
+  statement, symbol_, system, table_, task, template, term_, terminology, theory,
+  traceyGraph, traceyMatrix, type_, uncertainty, user, useCase, validation, value,
+  variable, video, verification, year :: NamedChunk
 
 analysis        = npnc "analysis"       (cnIS   "analysis"           )
 appendix        = npnc "appendix"       (cnICES "appendix"           )
@@ -169,6 +169,7 @@ realtime        = npnc "real-time"      (cn'    "real-time"          )
 reference       = npnc "reference"      (cn'    "reference"          )
 requirement_    = npnc "requirement"    (cn'    "requirement"        ) --FIXME: Eventually only have one requirement
 response        = npnc "response"       (cn'    "response"           )
+result          = npnc "result"         (cn'    "result"             )
 reviewer        = npnc "reviewer"       (cn'    "reviewer"           )
 safety          = npnc "safety"         (cnIES  "safety"             )
 scope           = npnc "scope"          (cn'    "scope"              )

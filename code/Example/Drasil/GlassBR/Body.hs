@@ -302,9 +302,31 @@ s5_1_table_UC2 = [S "2", titleize output_, short gLassBR, S "Whether or not the"
 
 {--Individual Product Use Cases--}
 
-s5_2_bullets = enumBullet [s5_2_bt_sent1 (input_) (user) (glassGeo) (blastTy),
-  s5_2_bt_sent2 (output_) (glaSlab) (capacity) (demandq) (probability)]
+s5_2_bullets = enumBullet [s5_2 (glaSlab) (capacity) (demandq) (probability)]
 
+s5_2 :: NamedChunk -> ConceptChunk -> ConceptChunk -> ConceptChunk ->
+  Sentence
+s5_2 mainObj compare1 compare2 factorOfComparison =
+  foldlSent [S "Read in the", plural input_ `sAnd` S "output the" +:+. 
+    plural result, S "The", plural input_, S "of", short gLassBR, S "are",
+    (foldlList $ map phrase gbInputs)]
+    +:+
+    foldlSent [short gLassBR, plural output_, S "if the", phrase mainObj, 
+    S "will be safe by comparing whether", phrase compare1, S "is greater than"
+    +:+. (phrase compare2), (at_start compare1 `isThe` (compare1 ^. defn))
+    `sAnd` (phrase compare2 `isThe` phrase requirement) +:+. 
+    (S "which" `isThe` (compare2 ^. defn)), S "The second", phrase condition, 
+    S "is to check whether the calculated", phrase factorOfComparison, 
+    sParen (getS prob_br), S "is less than the tolerable", 
+    phrase factorOfComparison, sParen (getS pb_tol), 
+    S "which is obtained from the", phrase user, S "as an" +:+. phrase input_,
+    S "If both", plural condition, S "return true then it's shown that the", 
+    phrase mainObj, S "is safe to use" `sC` S "else if both return false then the",
+    phrase mainObj +:+. S "is considered unsafe", 
+    S "All the supporting calculated", plural value, S "are also displayed as",
+    phrase output_]
+
+{-
 s5_2_bt_sent1 :: NamedChunk -> NamedChunk -> ConceptChunk -> 
   ConceptChunk -> Sentence
 s5_2_bt_sent1 io prsn iClass1 iClass2 = foldlSent [titleize useCase, 
@@ -333,6 +355,7 @@ s5_2_bt_sent2 io mainObj compare1 compare2 factorOfComparison = foldlSent
   phrase mainObj +:+. S "is considered unsafe", 
   S "All the supporting calculated", plural value, S "are also displayed as",
   phrase io]
+-}
 
 {--SPECIFIC SYSTEM DESCRIPTION--}
 

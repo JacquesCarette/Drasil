@@ -116,6 +116,7 @@ library
     , Language.Drasil.Output.Formats
     , Language.Drasil.Printing.Helpers
     , Language.Drasil.Defs
+    , Language.Drasil.DataDesc
 
   Build-Depends:
     base >= 4.7,

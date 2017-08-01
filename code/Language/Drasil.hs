@@ -100,6 +100,10 @@ module Language.Drasil (
   , Logging(..), ConstraintBehaviour(..), Structure(..), Lang(..), Comments(..)
   , defaultChoices
   , ModDef(..), FuncDef(..), FuncStmt(..), addModDefs, funcDef, fasg, ffor, fdec  -- hacks
+  -- DataDesc
+  , DataDesc
+  , entry, listEntry, junk, singleton, junkLine, singleLine, multiLine
+  , multiLine', straight, repeated, repeated' 
   -- Chunk.Theory
   , Theory(..), tc', TheoryChunk, TheoryModel, tm, tw
 ) where
@@ -159,4 +163,5 @@ import Language.Drasil.Printing.Helpers (capitalize, paren, sqbrac)
 import Language.Drasil.Generate
 import Language.Drasil.People (People, Person, person, HasName(..), manyNames
                                ,person', personWM, personWM', mononym)
-import Language.Drasil.CodeSpec                             
+import Language.Drasil.CodeSpec    
+import Language.Drasil.DataDesc                         

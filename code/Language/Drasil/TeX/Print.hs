@@ -14,7 +14,7 @@ import qualified Language.Drasil.TeX.Import as I
 import qualified Language.Drasil.Output.Formats as A
 import Language.Drasil.Spec (USymb(..), RefType(..))
 import Language.Drasil.Config (lpmTeXParams, colAwidth, colBwidth,
-              LPMParams(..))
+              LPMParams(..),bibStyle)
 import Language.Drasil.Printing.Helpers hiding (paren, sqbrac)
 import Language.Drasil.TeX.Helpers
 import Language.Drasil.TeX.Monad
@@ -22,6 +22,7 @@ import Language.Drasil.TeX.Preamble
 import Language.Drasil.Symbol (Symbol(..),Decoration(..))
 import qualified Language.Drasil.Document as L
 import Language.Drasil.Unicode (RenderGreek(..), RenderSpecial(..))
+import Language.Drasil.People (People,Person(..),Conv(..),lstName)
 
 genTeX :: A.DocType -> L.Document -> TP.Doc
 genTeX typ doc = runPrint (build typ $ I.makeDocument doc) Text
@@ -68,7 +69,7 @@ lo (Requirement n l)       = toText $ makeReq (spec n) (spec l)
 lo (Assumption n l)        = toText $ makeAssump (spec n) (spec l)
 lo (LikelyChange n l)      = toText $ makeLC (spec n) (spec l)
 lo (UnlikelyChange n l)    = toText $ makeUC (spec n) (spec l)
-lo (Bib bib)               = toText $ makeBib bib
+lo (Bib bib)               = toText $ makeBib bib "bibfile"
 lo (Graph ps w h c l)      = toText $ makeGraph
                                (map (\(a,b) -> (spec a, spec b)) ps)
                                (if isNothing w
@@ -501,16 +502,16 @@ sufx _ = "th."
 --move these two
 -- Use on any sized Int
 sufxer :: Integer -> String
-sufxer = sufx . read . last . show
+sufxer = sufx . mod 10
 
 showBibTeX :: CiteField -> Spec
 showBibTeX (Place (city, state)) = showField "place" (city :+: S ", " :+: state)
-showBibTeX (Edition    s) = showField "edition" (S $ show s :+: sufxer s)
+showBibTeX (Edition    s) = showField "edition" (S $ show s ++ sufxer s)
 showBibTeX (Series     s) = showField "series" s
 showBibTeX (Title      s) = showField "title" s
 showBibTeX (Volume     s) = showField "volume" (S $ show s)
 showBibTeX (Publisher  s) = showField "publisher" s
-showBibTeX (Author     p) = showField "author" (rendPeople p)
+showBibTeX (Author     p) = showField "author" (S $ rendPeople p)
 showBibTeX (Year       y) = showField "year" (S $ show y)
 showBibTeX (Date   d m y) = showField "year" (S $ unwords [show d, show m, show y])
 showBibTeX (Collection s) = showField "collection" s
@@ -519,31 +520,32 @@ showBibTeX (Journal    s) = showField "journal" s
 showField :: String -> Spec -> Spec
 showField f s = S f :+: S "={" :+: s :+: S "}"
 
-rendPeople :: People -> Spec
-rendPeople []  = error "No authors given"
-rendPeople people = foldl1 (\x y -> S x :+: S " and " :+: S y) $ map rendPersLFM people
+rendPeople :: People -> String
+rendPeople []  = "N.a." -- "No authors given"
+rendPeople people = foldl1 (\x y -> x ++ " and " ++ y) $ map rendPersLFM people
 
 -- LFM is Last, First Middle
 rendPersLFM :: Person -> String
-rendPersLFM (Person _ n _ Mono) = n
-rendPersLFM (Person f l ms _) = l ++ ", " ++ unwords (f:ms)
+rendPersLFM (Person {_surname = n, _convention = Mono}) = n
+rendPersLFM (Person {_given = f, _surname = l, _middle = ms}) =
+  l ++ ", " ++ unwords (f:ms)
 
 -- | Tex bibliography main function
-makeBib :: BibRef -> D
-makeBib bib = spec $
-  S "\\begin{filecontents}{bibfile.bib}\\n" :+:
+makeBib :: BibRef -> String -> D
+makeBib bib fname = spec $
+  S ("\\begin{filecontents}{"++fname++".bib}\\n") :+:
   mkBibRef bib :+:
   S "\\n\\end{filecontents}\\n" :+:
-  S (bibLines "bibfile")
+  S (bibLines fname)
 
 bibLines :: String -> String
-bibLines fname = foldl1 (++"\\n"++) $ [
+bibLines fname = foldl1 (\x y -> x ++"\\n"++ y) $ [
   "\\newline",
   "\\bibliography{" ++ fname ++ "}",
-  "\\bibstyle{" ++ useStyleTeX sg ++ "}"]
+  "\\bibstyle{" ++ bibStyle ++ "}"]
 
 mkBibRef :: BibRef -> Spec
-mkBibRef = foldl1 (\x y -> x :+: S "\\n\\n" :+:) . map renderCite
+mkBibRef = foldl1 (\x y -> x :+: S "\\n\\n" :+: y) . map renderCite
 
 --for when we add other things to reference like website, newspaper, articals
 renderCite :: Citation -> Spec
@@ -551,11 +553,23 @@ renderCite b@(Book _) = renderBook b
 
 --Rendering a book--
 renderBook :: Citation -> Spec
-renderBook b@(Book fields) = S "@book{" :+: S (cite b) :+: S ",\\n" :+:
+renderBook b@(Book fields) = S "@":+: S (show b) :+: S "{" :+: S (cite b) :+: S ",\\n" :+:
   (foldl1 (:+:) . intersperse (S ",\\n") . map showBibTeX) fields :+: S "}"
-renderBook _ = error "Tried to render a non-book using renderBook." 
+--renderBook _ = error "Tried to render a non-book using renderBook." 
 
 cite :: Citation -> String
 cite book = concat $ intersperse "_" $
-  map lstName (getAuthors b) ++ [show $ getYear book]
-  where lstName (Person _ l _ _) = l
+  map lstName (getAuthors book) ++ [show $ getYear book]
+
+getAuthors :: Citation -> People
+getAuthors (Book fields) = getP fields
+  where getP [] = error "No authors found"
+        getP ((Author people):_) = people
+        getP (_:xs) = getP xs
+
+getYear :: Citation -> Integer
+getYear (Book fields) = getY fields
+  where getY [] = error "No year found"
+        getY ((Year year):_) = year
+        getY ((Date _ _ year):_) = year
+        getY (_:xs) = getY xs

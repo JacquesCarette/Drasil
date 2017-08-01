@@ -89,14 +89,14 @@ mkSRS = RefSec (RefProg intro
       EmptyS
     , IOrgSec orgSecStart inModel (SRS.inModel SRS.missingP []) orgSecEnd]) :
     --FIXME: issue #235
-  map Verbatim [s3, s4, s5, s6, s7, s8] ++ Bibliography [ref1]
+  map Verbatim [s3, s4, s5, s6, s7, s8] ++ [Bibliography [ref1]]
 
 ref1 :: Citation
 ref1 = Book [
   Author [person "John" "Smith"],
   Title $ S "This is a Title",
   Place (S "Toronto", S "Canada"),
-  Date 28 July 2017,
+  Date 28 Jul 2017,
   Publisher $ S "McMaster",
   Volume 3]
   

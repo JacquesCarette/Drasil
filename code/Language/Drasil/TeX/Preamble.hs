@@ -25,6 +25,8 @@ data Package = AMSMath
              | AdjustBox
              | AMSsymb
              | Breqn
+             | FileContents
+             | Cite
              deriving Eq
 
 addPackage :: Package -> D
@@ -43,6 +45,8 @@ addPackage Dot2Tex   = usepackage "dot2texi"
 addPackage AdjustBox = usepackage "adjustbox"
 addPackage AMSsymb   = usepackage "amssymb"
 addPackage Breqn     = usepackage "breqn"
+addPackage FileContents = usepackage "filecontents"
+addPackage Cite      = usepackage "cite"
 
 data Def = AssumpCounter
          | LCCounter
@@ -78,7 +82,8 @@ genPreamble los = let preamble = parseDoc los
         listdefs (_:ds)        = listdefs ds
 
 parseDoc :: [LayoutObj] -> [Preamble]
-parseDoc los' = [PreP FullPage, PreP HyperRef, PreP AMSMath, PreP AMSsymb, PreP Breqn] ++
+parseDoc los' = [PreP FullPage, PreP HyperRef, PreP AMSMath, PreP AMSsymb,
+  PreP Breqn, PreP FileContents, PreP Cite] ++
   (nub $ parseDoc' los')
   where parseDoc' [] = []
         parseDoc' ((Table _ _ _ _):los) =
@@ -104,6 +109,8 @@ parseDoc los' = [PreP FullPage, PreP HyperRef, PreP AMSMath, PreP AMSsymb, PreP 
           (PreD UCCounter):parseDoc' los
         parseDoc' ((Graph _ _ _ _ _):los) =
           (PreP Caption):(PreP Tikz):(PreP Dot2Tex):(PreP AdjustBox):
-          parseDoc' los
+          parseDoc' los  {-FIXME: add the two packages bellow if there is a bibliography-}
+        -- parseDoc' ((Bibliography _):los) = (PreP FileContents):(PreP Cite):
+          -- parseDoc' los
         parseDoc' (_:los) =
           parseDoc' los

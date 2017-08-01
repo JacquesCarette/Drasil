@@ -1,8 +1,11 @@
 module Language.Drasil.People 
-  ( People, Person
+  ( People, Person(..)
   , person, person', personWM, personWM', mononym
   , HasName
-  , name, manyNames) where
+  , name, manyNames
+  , Conv(..) --This is needed to unwrap names for the bibliography
+  , lstName
+  ) where
 
 import Language.Drasil.Spec (Sentence(S, EmptyS),(+:+), sC)
 import Data.List
@@ -70,3 +73,6 @@ manyNames names = nameList names
         nameList [x] = name x
         nameList [x,y] = (name x) `sC` (S "and") +:+ (name y)
         nameList (x : y : rest) = (name x) `sC` (nameList (y : rest))
+
+lstName :: Person -> String
+lstName (Person {_surname = l}) = l

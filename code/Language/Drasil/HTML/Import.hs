@@ -234,6 +234,7 @@ lay (TMod ps rf r)    = H.Definition (Theory r)
   (map (\(x,y) -> (x, map lay y)) ps) (spec rf)
 lay (DDef ps rf d)    = H.Definition (Data d)
   (map (\(x,y) -> (x, map lay y)) ps) (spec rf)
+lay (Bib _)           = H.Paragraph (H.EmptyS) --implimented in TeX but not HTML yet
 
 -- | Translates lists
 makeL :: ListType -> H.ListType

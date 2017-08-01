@@ -4,7 +4,7 @@ import Language.Drasil.Expr (Variable)
 import Language.Drasil.Symbol (Symbol)
 import Language.Drasil.Unicode (Greek,Special)
 import Language.Drasil.Spec (USymb, RefType)
-import Language.Drasil.Citations (BibRef, Month(..))
+import Language.Drasil.Citations (Month(..))
 import Language.Drasil.People (People)
 
 --import Data.List (intersperse)
@@ -164,20 +164,21 @@ instance Show Set where
   --show (DiscreteS a) = "\\{" ++ (foldl (++) "" . intersperse ", ") a ++ "\\}"
 
 type BibRef = [Citation]
-type City   = Sentence
-type State  = Sentence
+type City   = Spec
+type State  = Spec
 
-data Citation where --add artical, website
-  Book :: [CiteField] -> Citation
-  
+data Citation = Book [CiteField]
+  --add artical, website...
 data CiteField = Author     People
-               | Title      Sentence
-               | Series     Sentence
-               | Collection Sentence
+               | Title      Spec
+               | Series     Spec
+               | Collection Spec
                | Volume     Integer
                | Edition    Integer
                | Place    (City, State) --State can also mean country
-               | Publisher  Sentence
-               | Journal    Sentence
+               | Publisher  Spec
+               | Journal    Spec
                | Year       Integer
                | Date Integer Month Integer
+instance Show Citation where
+  show (Book _) = "book"

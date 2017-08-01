@@ -67,3 +67,14 @@ hyperSettings =
 -- | Split up generated code into source files based on modules
 splitSource :: Bool
 splitSource = True
+
+--For the bibliography format
+data StyleGuide = MLA | APA | Chicago
+
+useStyleTeX :: StyleGuide -> String
+useStyleTeX MLA = "ieeetr"
+useStyleTeX APA = "apalike"
+useStyleTeX Chicago = "plain"
+
+bibStyle :: String
+bibStyle = useStyleTeX MLA --This will be an input for the user eventually

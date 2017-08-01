@@ -24,6 +24,7 @@ import Language.Drasil.Misc (unit'2Contents)
 import Language.Drasil.SymbolAlphabet
 import Language.Drasil.NounPhrase (phrase, titleize)
 import Language.Drasil.Unit (usymb)
+import Language.Drasil.Citations (Citation(..),CiteField(..))
 
 expr :: Expr -> T.Expr
 expr (V v)             = T.Var  v
@@ -225,20 +226,24 @@ lay (DDef ps r _)         = T.Definition (map (\(x,y) -> (x, map lay y)) ps)
 lay (Defnt _ _ _)     = T.Paragraph (T.EmptyS)  -- need to implement!
 lay (GDef)            = T.Paragraph (T.EmptyS)  -- need to implement!
 lay (IMod)            = T.Paragraph (T.EmptyS)  -- need to implement!
-lay (Bib bib)         = T.Bib $ layBib bib
+lay (Bib _)         = T.Paragraph (T.EmptyS) --T.Bib $ map layCite bib Still fixing errors
 
-layBib :: BibRef -> T.BibRef
-layBib (Author     p) = T.Author     p
-layBib (Title      s) = T.Title      $ spec s
-layBib (Series     s) = T.Series     $ spec s
-layBib (Collection s) = T.Collection $ spec s
-layBib (Volume     n) = T.Volume     n
-layBib (Edition    n) = T.Edition    n
-layBib (Place (c, s)) = T.Place (spec c, spec s)
-layBib (Publisher  s) = T.Publisher $ spec s
-layBib (Journal    s) = T.Journal   $ spec s
-layBib (Year       n) = T.Year       n
-layBib (Date   n m y) = T.Date   n m y
+-- | For importing bibliography
+layCite :: Citation -> T.Citation
+layCite (Book fields) = T.Book $ map layField fields
+
+layField :: CiteField -> T.CiteField
+layField (Author     p) = T.Author     p
+layField (Title      s) = T.Title      $ spec s
+layField (Series     s) = T.Series     $ spec s
+layField (Collection s) = T.Collection $ spec s
+layField (Volume     n) = T.Volume     n
+layField (Edition    n) = T.Edition    n
+layField (Place (c, s)) = T.Place (spec c, spec s)
+layField (Publisher  s) = T.Publisher $ spec s
+layField (Journal    s) = T.Journal   $ spec s
+layField (Year       n) = T.Year       n
+layField (Date   n m y) = T.Date   n m y
 
 makeL :: ListType -> T.ListType  
 makeL (Bullet bs)      = T.Enum        $ (map item bs)

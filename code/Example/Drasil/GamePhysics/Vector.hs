@@ -23,4 +23,31 @@ v_v2_y    = makeVC "v2_y"    (nounPhrase "v2_y")    (Atomic "v2_y")
 vectEqual, vectAdd, vectSub, vectMult, vectNeg, vectDot, vectCross, vectPerp,
   vectRPerp, vectProject, vectForAngle, vectToAngle, vectRotate, vectUnrotate,
   vectLengthSq, vectLength, vectNormalize, vectClamp, vectLerp, vectDistSq, 
-  vectDist, vectNear :: FuncDef
+  vectDist, vectNear, getX, getY, vect :: FuncDef
+
+vectEqual = funcDef "vectEqual" [v_v1, v_v2] Boolean
+  [
+    FRet (FCond ((FCall (asExpr getX) [v_v1]) :== (FCall (asExpr getX) [v_v2])) :&&
+                ((FCall (asExpr getY) [v_v1]) :== (FCall (asExpr getY) [v_v2]))
+         )
+  ]
+
+vectAdd = funcDef "vectAdd" [v_v1, v_v2] vector
+  [
+    FRet (FCall (asExpr vect) 
+      [
+        ((FCall (asExpr getX) [v_v1]) + (FCall (asExpr getX) [v_v2])),
+        ((FCall (asExpr getY) [v_v1]) + (FCall (asExpr getY) [v_v2]))
+      ]
+  ]
+  
+vectSub = funcDef "vectSub" [v_v1, v_v2] vector
+  [
+    FRet (FCall (asExpr vect)
+      [
+        ((FCall (asExpr getX) [v_v1]) - (FCall (asExpr getX) [v_v2])),
+        ((FCall (asExpr getY) [v_v1]) - (FCall (asExpr getY) [v_v2]))
+      ]
+  ]
+  
+ 

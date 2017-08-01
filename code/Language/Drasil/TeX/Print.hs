@@ -14,7 +14,7 @@ import qualified Language.Drasil.TeX.Import as I
 import qualified Language.Drasil.Output.Formats as A
 import Language.Drasil.Spec (USymb(..), RefType(..))
 import Language.Drasil.Config (lpmTeXParams, colAwidth, colBwidth,
-              LPMParams(..),bibStyle)
+              LPMParams(..),bibStyle,bibFname)
 import Language.Drasil.Printing.Helpers hiding (paren, sqbrac)
 import Language.Drasil.TeX.Helpers
 import Language.Drasil.TeX.Monad
@@ -69,7 +69,7 @@ lo (Requirement n l)       = toText $ makeReq (spec n) (spec l)
 lo (Assumption n l)        = toText $ makeAssump (spec n) (spec l)
 lo (LikelyChange n l)      = toText $ makeLC (spec n) (spec l)
 lo (UnlikelyChange n l)    = toText $ makeUC (spec n) (spec l)
-lo (Bib bib)               = toText $ makeBib bib "bibfile"
+lo (Bib bib)               = toText $ makeBib bib
 lo (Graph ps w h c l)      = toText $ makeGraph
                                (map (\(a,b) -> (spec a, spec b)) ps)
                                (if isNothing w
@@ -531,21 +531,21 @@ rendPersLFM (Person {_given = f, _surname = l, _middle = ms}) =
   l ++ ", " ++ unwords (f:ms)
 
 -- | Tex bibliography main function
-makeBib :: BibRef -> String -> D
-makeBib bib fname = spec $
-  S ("\\begin{filecontents}{"++fname++".bib}\\n") :+:
+makeBib :: BibRef -> D
+makeBib bib = spec $
+  S ("\\begin{filecontents*}{"++bibFname++".bib}\n") :+: --bibFname is in Config.hs
   mkBibRef bib :+:
-  S "\\n\\end{filecontents}\\n" :+:
-  S (bibLines fname)
+  S "\n\\end{filecontents*}\n" :+:
+  S bibLines
 
-bibLines :: String -> String
-bibLines fname = foldl1 (\x y -> x ++"\\n"++ y) $ [
-  "\\newline",
-  "\\bibliography{" ++ fname ++ "}",
-  "\\bibstyle{" ++ bibStyle ++ "}"]
+bibLines :: String
+bibLines =
+  "\\nocite{*}\n" ++ 
+  "\\bibstyle{" ++ bibStyle ++ "}\n" ++ --bibStyle is in Config.hs
+  "\\printbibliography"
 
 mkBibRef :: BibRef -> Spec
-mkBibRef = foldl1 (\x y -> x :+: S "\\n\\n" :+: y) . map renderCite
+mkBibRef = foldl1 (\x y -> x :+: S "\n\n" :+: y) . map renderCite
 
 --for when we add other things to reference like website, newspaper, articals
 renderCite :: Citation -> Spec
@@ -553,8 +553,8 @@ renderCite b@(Book _) = renderBook b
 
 --Rendering a book--
 renderBook :: Citation -> Spec
-renderBook b@(Book fields) = S "@":+: S (show b) :+: S "{" :+: S (cite b) :+: S ",\\n" :+:
-  (foldl1 (:+:) . intersperse (S ",\\n") . map showBibTeX) fields :+: S "}"
+renderBook b@(Book fields) = S "@":+: S (show b) :+: S "{" :+: S (cite b) :+: S ",\n" :+:
+  (foldl1 (:+:) . intersperse (S ",\n") . map showBibTeX) fields :+: S "}"
 --renderBook _ = error "Tried to render a non-book using renderBook." 
 
 cite :: Citation -> String

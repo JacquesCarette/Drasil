@@ -68,7 +68,7 @@ hyperSettings =
 splitSource :: Bool
 splitSource = True
 
---For the bibliography format
+-- | The bibliography format
 data StyleGuide = MLA | APA | Chicago
 
 useStyleTeX :: StyleGuide -> String
@@ -78,3 +78,7 @@ useStyleTeX Chicago = "plain"
 
 bibStyle :: String
 bibStyle = useStyleTeX MLA --This will be an input for the user eventually
+
+-- | Used to name the BibTeX file
+bibFname :: String
+bibFname = "bibfile" --needed in TeX/Print and TeX/Preamble

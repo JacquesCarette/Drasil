@@ -161,6 +161,7 @@ mkSections si l = foldr doit [] l
 -- | Helper for making the bibliography section
 mkBib :: BibRef -> Section
 mkBib bib = section (titleize' reference) [Bib bib] []
+  --FIXME: TeX auto generates this title but HTML needs it
 
 -- | Helper for creating the reference section and subsections
 mkRefSec :: SystemInformation -> RefSec -> Section

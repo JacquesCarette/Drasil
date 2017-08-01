@@ -226,7 +226,7 @@ lay (DDef ps r _)         = T.Definition (map (\(x,y) -> (x, map lay y)) ps)
 lay (Defnt _ _ _)     = T.Paragraph (T.EmptyS)  -- need to implement!
 lay (GDef)            = T.Paragraph (T.EmptyS)  -- need to implement!
 lay (IMod)            = T.Paragraph (T.EmptyS)  -- need to implement!
-lay (Bib _)         = T.Paragraph (T.EmptyS) --T.Bib $ map layCite bib Still fixing errors
+lay (Bib bib)         = T.Bib $ map layCite bib
 
 -- | For importing bibliography
 layCite :: Citation -> T.Citation

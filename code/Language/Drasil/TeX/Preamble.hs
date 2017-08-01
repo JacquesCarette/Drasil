@@ -2,7 +2,7 @@ module Language.Drasil.TeX.Preamble(genPreamble) where
 
 import Data.List (nub)
 
-import Language.Drasil.Config (hyperSettings, fontSize)
+import Language.Drasil.Config (hyperSettings, fontSize,bibFname)
 import Language.Drasil.TeX.Monad
 import Language.Drasil.TeX.AST
 import Language.Drasil.TeX.Helpers
@@ -26,7 +26,7 @@ data Package = AMSMath
              | AMSsymb
              | Breqn
              | FileContents
-             | Cite
+             | BibLaTeX
              deriving Eq
 
 addPackage :: Package -> D
@@ -46,13 +46,14 @@ addPackage AdjustBox = usepackage "adjustbox"
 addPackage AMSsymb   = usepackage "amssymb"
 addPackage Breqn     = usepackage "breqn"
 addPackage FileContents = usepackage "filecontents"
-addPackage Cite      = usepackage "cite"
+addPackage BibLaTeX  = command1o "usepackage" (Just "backend=bibtex") "biblatex"
 
 data Def = AssumpCounter
          | LCCounter
          | ModCounter
          | ReqCounter
          | UCCounter
+         | Bibliography
          deriving Eq
 
 addDef :: Def -> D
@@ -66,7 +67,7 @@ addDef ReqCounter    = count "reqnum" %%
                        comm "rthereqnum" "R\\thereqnum" Nothing
 addDef UCCounter     = count "ucnum" %%
                        comm "uctheucnum" "UC\\theucnum" Nothing
-
+addDef Bibliography  = command "bibliography" bibFname 
 
 genPreamble :: [LayoutObj] -> D
 genPreamble los = let preamble = parseDoc los
@@ -83,7 +84,7 @@ genPreamble los = let preamble = parseDoc los
 
 parseDoc :: [LayoutObj] -> [Preamble]
 parseDoc los' = [PreP FullPage, PreP HyperRef, PreP AMSMath, PreP AMSsymb,
-  PreP Breqn, PreP FileContents, PreP Cite] ++
+  PreP Breqn, PreP FileContents, PreP BibLaTeX, PreD Bibliography] ++
   (nub $ parseDoc' los')
   where parseDoc' [] = []
         parseDoc' ((Table _ _ _ _):los) =

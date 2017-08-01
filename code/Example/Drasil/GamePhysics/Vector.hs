@@ -50,4 +50,21 @@ vectSub = funcDef "vectSub" [v_v1, v_v2] vector
       ]
   ]
   
- 
+vectMult = funcDef "vectMult" [v_v1, v_v2] vector
+  [
+    FRet (FCall (asExpr vect)
+      [
+        ((FCall (asExpr getX) [v_v1]) * (FCall (asExpr getx) [v_v2])),
+        ((FCall (asExpr getY) [v_v1]) * (FCall (asExpr getY) [v_v2]))
+      ]
+  ]
+  
+vectNeg = funcDef "vectNeg" [v_v] vector
+  [
+    FRet (FCall (asExpr vect)
+      [
+        ((FCall (asExpr) getX) [v_v]) * (- 1.0),
+        ((FCall (asExpr) getY) [v_v]) * (- 1.0)
+      ]
+  ]
+

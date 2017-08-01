@@ -1,11 +1,30 @@
 module Drasil.SWHS.Body where
 
 import Control.Lens ((^.))
-import Prelude hiding (id)
 
-import Language.Drasil
-import Data.Drasil.SI_Units
-import Data.Drasil.Authors
+import Language.Drasil (CI, ConceptChunk, UnitalChunk, UncertQ,
+  QDefinition, ConVar, NamedChunk, NamedIdea, RelationConcept,
+  Section, Document, Concept, QSWrapper, Person, Block,
+  _constraints, _constants, _defSequence, _inputs, _outputs, _units,
+  _definitions, _concepts, _namedIdeas, _quants, _authors, _kind, _sys,
+  sC, titleize, titleize', plural, short, makeRef, phrase,
+  sParen, sSqBr, defn, nw, at_start, (+:+), (+:+.), (+:),
+  unit'2Contents, qs, mkTable, for'', manyNames,
+  UnitDefn (UU),
+  DType (Data, Theory),
+  Contents (Table, Figure, EqnBlock, Enumeration),
+  ItemType (Flat, Nested),
+  ListType (Bullet),
+  SystemInformation (SI),
+  Bound (High, Low),
+  UFunc (Integral),
+  DerivType (Total, Part),
+  Expr (C, FCall, UnaryOp, (:=), Deriv, (:.), Neg),
+  Sentence (S, EmptyS, (:+:), Quote, E))
+
+import Data.Drasil.SI_Units (joule, watt, centigrade, second, metre,
+  kilogram)
+import Data.Drasil.Authors (thulasi, brooks, spencerSmith)
 
 import Data.Drasil.Concepts.Documentation (section_, traceyGraph, item,
   assumption, traceyMatrix, thModel, genDefn, dataDefn, inModel, likelyChg,
@@ -16,22 +35,20 @@ import Data.Drasil.Concepts.Documentation (section_, traceyGraph, item,
   problem, content, information, reference, definition, purpose,
   description, acroNumGen, symbol_, physSyst)
 
-import Data.Drasil.Concepts.PhysicalProperties hiding (density, mass, vol)
-import qualified Data.Drasil.Concepts.Thermodynamics as CT
+import Data.Drasil.Concepts.PhysicalProperties (liquid, solid)
+import qualified Data.Drasil.Concepts.Thermodynamics as CT (boiling,
+  law_cons_energy, heat_trans, phase_change, melting, thermal_conduction,
+  ht_flux, heat_cap_spec, thermal_energy, ht_trans_theo, thermal_analysis,
+  ener_src)
 import Data.Drasil.Concepts.Math (ode, de, unit_, rOfChng, equation)
 import Data.Drasil.Concepts.Software (program)
-
-import Data.Drasil.Software.Products
-import Data.Drasil.Utils (enumSimple, weave, getS, itemRefToSent, makeListRef,
-  makeTMatrix, mkRefsList, refFromType)
+import Data.Drasil.Software.Products (sciCompS, compPro)
 
 import Data.Drasil.Quantities.Physics (time, energy)
 import Data.Drasil.Quantities.Math (gradient, surface, uNormalVect, surArea)
 import Data.Drasil.Quantities.Thermodynamics (temp, heat_cap_spec,
   latent_heat, sens_heat)
 import Data.Drasil.Quantities.PhysicalProperties (density, mass, vol)
-
-import Data.Drasil.Software.Products (compPro)
 
 import Drasil.SWHS.Unitals (pcm_SA, temp_W, temp_PCM, pcm_HTC, pcm_E,
   temp_C, coil_SA, w_E, coil_HTC, sim_time, tau_S_P, htCap_S_P, pcm_mass,
@@ -63,7 +80,9 @@ import Drasil.SWHS.Requirements (req1, req2, s5_1_2_Eqn1, s5_1_2_Eqn2,
 import Drasil.SWHS.LikelyChanges (likeChg1, likeChg2, likeChg3, likeChg4,
   likeChg5, likeChg6)
 
-import qualified Drasil.SRS as SRS
+import qualified Drasil.SRS as SRS (reference, inModel, missingP, likeChg,
+  funcReq, propCorSol, genDefn, dataDefn, thModel, probDesc, goalStmt,
+  sysCont)
 
 import Drasil.Template.MG (mgDoc)
 import Drasil.Template.DD (makeDD)
@@ -78,15 +97,21 @@ import Drasil.DocumentLanguage (DocDesc, mkDoc, tsymb'',
   RefSec (RefProg))
 
 import Drasil.Sections.ReferenceMaterial (intro)
-import Drasil.Sections.SpecificSystemDescription
-import Drasil.Sections.TraceabilityMandGs
-import Drasil.Sections.Requirements
-import Drasil.Sections.GeneralSystDesc
+import Drasil.Sections.SpecificSystemDescription (inModelF, assumpF,
+  inDataConstTbl, outDataConstTbl, dataConstraintUncertainty, solChSpecF,
+  termDefnF, specSysDesF, physSystDesc)
+import Drasil.Sections.TraceabilityMandGs (traceMGF, traceGIntro)
+import Drasil.Sections.Requirements (reqF)
+import Drasil.Sections.GeneralSystDesc (genSysF)
 import Drasil.Sections.AuxiliaryConstants (valsOfAuxConstantsF)
 
+import Data.Drasil.Utils (enumSimple, weave, getS, itemRefToSent, makeListRef,
+  makeTMatrix, mkRefsList, refFromType)
 import Data.Drasil.SentenceStructures (showingCxnBw, foldlSent, foldlSent_,
   foldlSP, foldlSP_, foldlSPCol, foldlsC, isThe, ofThe, ofThe',
   sAnd, sOf, foldlList)
+
+-------------------------------------------------------------------------------
 
 acronyms :: [CI]
 acronyms = [assumption, dataDefn, genDefn, goalStmt, inModel, likelyChg, ode,

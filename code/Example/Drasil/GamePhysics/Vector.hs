@@ -63,8 +63,57 @@ vectNeg = funcDef "vectNeg" [v_v] vector
   [
     FRet (FCall (asExpr vect)
       [
-        ((FCall (asExpr) getX) [v_v]) * (- 1.0),
-        ((FCall (asExpr) getY) [v_v]) * (- 1.0)
+        ((FCall (asExpr getX) [v_v]) * (- 1.0),
+        (FCall (asExpr getY) [v_v]) * (- 1.0))
       ]
   ]
+
+vectDot = funcDef "vectDot" [v_v1, v_v2] Rational
+  [
+    FRet (
+      (FCall (asExpr getX) [v_v1]) *
+      (FCall (asExpr getX) [v_v2]) +
+      (FCall (asExpr getY) [v_v1]) *
+      (FCall (asExpr getY) [v_v2])
+    )
+  ]
+
+vectCross = funcDef "vectCross" [v_v1, v_v2] Rational
+  [
+    FRet (
+      ((FCall (asExpr getX) [v_v1]) *
+      (FCall (asExpr getY) [v_v2])) -
+      ((FCall (asExpr getY) [v_v1]) *
+      (FCall (asExpr getX) [v_v2])) 
+    )
+  ]
+  
+vectPerp = funcDef "vectPerp" [v_v] vector
+  [
+    FRet (FCall (asExpr vect) 
+      [
+        ((FCall (asExpr getY) [v_v]) * (- 1.0)),
+        (FCall (asExpr getX) [v_v])
+      ]
+  ]
+
+vectRPerp = funcDef "vectRPerp" [v_v] vector
+  [
+    FRet (FCall (asExpr vect)
+      [
+        (FCall (asExpr getY) [v_v]),
+        ((FCall (asExpr getX) [v_v] * (- 1.0))
+      ]
+  ]
+   
+vectProject = funcDef "vectProject" [v_v1, v_v2] vector   
+  [ 
+    FRet (FCall (asExpr vectMult) 
+      [
+        v_v2,
+        ((FCall (asExpr vectDot) [v_v1, v_v2]) / (FCall (asExpr vectDot) [v_v1, v_v2]))
+      ]
+  ]
+
+
 

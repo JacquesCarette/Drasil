@@ -123,7 +123,7 @@ s3, s4, s5,
   s6, s6_1, s6_1_1, s6_1_2, s6_1_3, s6_2, 
   s7, s7_1, s7_2, s8, s9, s10, s11, s12 :: Section
 
-s5_1_table, s5_2_bullets, 
+s5_1_table,
   s6_1_2_list, s6_2_intro, s6_2_5_table1, 
   s6_2_5_table2, s7_2_intro, s9_table1,
   s9_table2, s9_table3, s12_intro, 
@@ -285,7 +285,7 @@ s4_1_bullets intendedIndvdl progName yr degreeType prog1 prog2 undrstd1 undrstd2
 {--SCOPE OF THE PROJECT-}
 
 --Awaiting Closure of Issue #257
-s5 = scopeOfTheProjF (short gLassBR) (s5_1_table) (s5_2_bullets)
+s5 = scopeOfTheProjF (short gLassBR) (s5_1_table) (s5_2 (glaSlab) (capacity) (demandq) (probability))
 
 {--Product Use Case Table--}
 
@@ -304,46 +304,19 @@ s5_1_table_UC2 = [S "2", titleize output_, short gLassBR,
 
 {--Individual Product Use Cases--}
 
-s5_2_bullets = enumBullet [s5_2 (glaSlab) (capacity) (demandq) (probability)]
-
 s5_2 :: NamedChunk -> ConceptChunk -> ConceptChunk -> ConceptChunk ->
-  Sentence
-s5_2 mainObj compare1 compare2 factorOfComparison =
-  foldlSent [S "Read in the", plural input_ `sAnd` S "output the" +:+. 
-    plural result, S "The", plural input_, S "of", short gLassBR, S "are",
-    (foldlList $ map phrase gbInputs)]
-    +:+
-    foldlSent [short gLassBR, plural output_, S "if the", phrase mainObj, 
-    S "will be safe by comparing whether", phrase compare1, S "is greater than"
-    +:+. (phrase compare2), (at_start compare1 `isThe` (compare1 ^. defn))
-    `sAnd` (phrase compare2 `isThe` phrase requirement) +:+. 
-    (S "which" `isThe` (compare2 ^. defn)), S "The second", phrase condition, 
-    S "is to check whether the calculated", phrase factorOfComparison, 
-    sParen (getS prob_br), S "is less than the tolerable", 
-    phrase factorOfComparison, sParen (getS pb_tol), 
-    S "which is obtained from the", phrase user, S "as an" +:+. phrase input_,
-    S "If both", plural condition, S "return true then it's shown that the", 
-    phrase mainObj, S "is safe to use" `sC` 
-    S "else if both return false then the", phrase mainObj +:+.
-    S "is considered unsafe", S "All the supporting calculated", plural value,
-    S "are also displayed as", phrase output_]
-
-{-
-s5_2_bt_sent1 :: NamedChunk -> NamedChunk -> ConceptChunk -> 
-  ConceptChunk -> Sentence
-s5_2_bt_sent1 io prsn iClass1 iClass2 = foldlSent [titleize useCase, 
-  S "1 refers to the", phrase prsn, S "providing", phrase io, S "to",
-  short gLassBR, S "for use within the" +:+. phrase analysis, 
-  S "There are two", plural class_, S "of" +: plural io +:+.
-  (phrase iClass1 `sAnd` phrase iClass2), (iClass1 ^. defn), (iClass2 ^. defn),
-  S "These", plural parameter, S "describe", phrase char_weight `sAnd` 
-  S "stand off" +:+. phrase blast, S "Another", phrase io, S "the", phrase prsn,
-  S "gives" `isThe` S "tolerable", phrase value `sOf` phrase prob_br]
-
-s5_2_bt_sent2 :: NamedChunk -> NamedChunk -> ConceptChunk -> ConceptChunk ->
-  ConceptChunk -> Sentence
-s5_2_bt_sent2 io mainObj compare1 compare2 factorOfComparison = foldlSent 
-  [titleize useCase, S "2", short gLassBR, plural io, S "if the", phrase mainObj,
+  Contents
+s5_2 mainObj compare1 compare2 factorOfComparison = 
+  foldlSP [S "The", phrase user, S "provides the", plural input_, S "to", 
+  short gLassBR, S "for use within the" +:+. phrase analysis, S "There are two main",
+  plural class_, S "of" +: plural input_ +:+. (phrase glassGeo `sAnd` phrase blastTy),
+  S "The", phrase glassGeo, S "based", plural input_, S "include" +:+. (phrase glassTy
+  `sAnd` plural dimension `ofThe` phrase glaPlane), blastTy ^. defn, S "These", 
+  plural parameter, S "describe" +:+. (phrase char_weight `sAnd` S "stand off blast"),
+  S "Another", phrase input_, S "the", phrase user, S "gives is the tolerable" +:+. 
+  (phrase value `sOf` phrase prob_br)
+  +:+
+  short gLassBR, plural output_, S "if the", phrase mainObj,
   S "will be safe by comparing whether", phrase compare1, S "is greater than"
   +:+. (phrase compare2), (at_start compare1 `isThe` (compare1 ^. defn))
   `sAnd` (phrase compare2 `isThe` phrase requirement) +:+. 
@@ -353,11 +326,10 @@ s5_2_bt_sent2 io mainObj compare1 compare2 factorOfComparison = foldlSent
   phrase factorOfComparison, sParen (getS pb_tol), 
   S "which is obtained from the", phrase user, S "as an" +:+. phrase input_,
   S "If both", plural condition, S "return true then it's shown that the", 
-  phrase mainObj, S "is safe to use" `sC` S "else if both return false then the",
-  phrase mainObj +:+. S "is considered unsafe", 
-  S "All the supporting calculated", plural value, S "are also displayed as",
-  phrase io]
--}
+  phrase mainObj, S "is safe to use" `sC` 
+  S "else if both return false then the", phrase mainObj +:+.
+  S "is considered unsafe", S "All the supporting calculated", plural value,
+  S "are also displayed as", phrase output_]
 
 {--SPECIFIC SYSTEM DESCRIPTION--}
 

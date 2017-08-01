@@ -89,7 +89,7 @@ data IntroSec = IntroProg Sentence Sentence [IntroSub]
 -- Verbatim sections handled by SSDVerb           
 data SSDSec = SSDProg [SSDSub] | SSDVerb Section
 
-data StkhldrSec = StkhldrProg CI Sentence [StkhldrSub] | StkhldrVerb Section
+data StkhldrSec = StkhldrProg CI Sentence {-[StkhldrSub]-} | StkhldrVerb Section
 
 data StkhldrSub where
   StkhldrSubVerb :: Section -> StkhldrSub
@@ -272,7 +272,7 @@ defaultTUI = [System, Derived, TUPurpose]
 
 mkStkhldrSec :: StkhldrSec -> Section
 mkStkhldrSec (StkhldrVerb s) = s
-mkStkhldrSec (StkhldrProg key details x) = (Stk.stakehldrGeneral key details) 
+mkStkhldrSec (StkhldrProg key details) = (Stk.stakehldrGeneral key details) 
 --FIXME: WIP "x" --> implement use of StkhldrSub or remove entirely?
 
 mkIntroSec :: SystemInformation -> IntroSec -> Section

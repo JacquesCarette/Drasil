@@ -152,6 +152,7 @@ executable tiny
     , Drasil.Template.MIS
     , Drasil.Sections.SpecificSystemDescription
     , Drasil.Sections.SolutionCharacterSpec
+    , Drasil.Sections.Stakeholders
     , Drasil.SRS
     , Drasil.Sections.Introduction
   Build-Depends:
@@ -191,6 +192,7 @@ executable nopcm
     , Drasil.Sections.TraceabilityMandGs
     , Drasil.Sections.ReferenceMaterial
     , Drasil.Sections.AuxiliaryConstants
+    , Drasil.Sections.Stakeholders
     , Drasil.SRS
     , Drasil.Sections.TableOfAbbAndAcronyms
     , Drasil.DocumentLanguage
@@ -240,6 +242,7 @@ executable ssp
     , Drasil.SSP.Unitals
     , Drasil.Sections.TableOfAbbAndAcronyms
     , Drasil.Sections.TableOfSymbols
+    , Drasil.Sections.Stakeholders
     , Drasil.DocumentLanguage
     , Drasil.DocumentLanguage.Chunk.GenDefn
     , Drasil.DocumentLanguage.Definitions
@@ -338,6 +341,7 @@ executable chipmunkdocs
     , Drasil.Sections.TraceabilityMandGs
     , Drasil.Sections.ReferenceMaterial
     , Drasil.Sections.AuxiliaryConstants
+    , Drasil.Sections.Stakeholders
     , Drasil.SRS
     , Drasil.Sections.TableOfAbbAndAcronyms
     , Drasil.Sections.TableOfSymbols
@@ -391,6 +395,7 @@ executable swhs
     , Drasil.Sections.TableOfSymbols
     , Drasil.Sections.TableOfUnits
     , Drasil.Sections.AuxiliaryConstants
+    , Drasil.Sections.Stakeholders
     , Drasil.Template.DD
     , Drasil.Template.Helpers
     , Drasil.Template.MG

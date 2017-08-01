@@ -74,7 +74,7 @@ mkSRS = [RefSec (RefProg intro
      IChar (rdrKnldgbleIn (glBreakage) (blastRisk)) undIR appStanddIR,
      IOrgSec s2_3_intro dataDefn (SRS.dataDefn SRS.missingP []) s2_3_intro_end])]
   ++
-  map Verbatim [s3, s4, s5 {-, s6-}]
+  map Verbatim [s3, s4, s5]
   ++
   [SSDSec (SSDVerb s6)] {-(SSDProg [SSDProblem, SSDSolChSpec])-}
   ++
@@ -294,17 +294,15 @@ s5_1_table = prodUCTbl [s5_1_table_UC1, s5_1_table_UC2]
 
 s5_1_table_UC1, s5_1_table_UC2 :: [Sentence]
 
-s5_1_table_UC1 = [S "1", titleize' input_, titleize user,
-  titleize' characteristic +:+ S "of the" +:+ phrase glaSlab `sAnd` S "of the"
-  +:+. phrase blast +:+ S "Details in" +:+
-  (makeRef (SRS.indPRCase SRS.missingP []))]
+s5_1_table_UC1 = [titleize user, titleize' characteristic +:+ S "of the"
+  +:+ phrase glaSlab `sAnd` S "of the" +:+. phrase blast +:+ S "Details in"
+  +:+ (makeRef (SRS.indPRCase SRS.missingP []))]
 
-s5_1_table_UC2 = [S "2", titleize output_, short gLassBR,
-  S "Whether" `sOr` S "not the" +:+ phrase glaSlab +:+ S "is safe for the"
-  +:+ S "calculated" +:+ phrase load `sAnd` S "supporting calculated" +:+ 
-  plural value]
+s5_1_table_UC2 = [short gLassBR, S "Whether" `sOr` S "not the" +:+ 
+  phrase glaSlab +:+ S "is safe for the" +:+ S "calculated" +:+ phrase load
+  `sAnd` S "supporting calculated" +:+ plural value]
 
-{--Individual Product Use Cases--}
+{--Individual Product Use Case--}
 
 s5_2 :: NamedChunk -> ConceptChunk -> ConceptChunk -> ConceptChunk ->
   Contents

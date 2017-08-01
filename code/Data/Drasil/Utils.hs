@@ -206,7 +206,6 @@ mkDataDef' cncpt equation extraInfo = datadef $ getUnit cncpt
                            (cncpt ^. symbol) equation
 
 prodUCTbl :: [[Sentence]] -> Contents
-prodUCTbl cases = Table [titleize useCase +:+. S "NO", titleize useCase +:+
-  titleize name_, S "Actor", titleize input_ +:+ S "and" +:+ titleize output_]
+prodUCTbl cases = Table [S "Actor", titleize input_ +:+ S "and" +:+ titleize output_]
   cases
   (titleize useCaseTable) True

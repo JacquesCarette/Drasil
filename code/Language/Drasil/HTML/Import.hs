@@ -23,6 +23,7 @@ import Language.Drasil.Misc (unit'2Contents)
 import Language.Drasil.SymbolAlphabet (lD)
 import Language.Drasil.NounPhrase (phrase, titleize)
 import Language.Drasil.Unit (usymb)
+import Language.Drasil.Citations (Citation(..),CiteField(..))
 
 import Control.Lens hiding ((:>),(:<),set)
 
@@ -234,7 +235,24 @@ lay (TMod ps rf r)    = H.Definition (Theory r)
   (map (\(x,y) -> (x, map lay y)) ps) (spec rf)
 lay (DDef ps rf d)    = H.Definition (Data d)
   (map (\(x,y) -> (x, map lay y)) ps) (spec rf)
-lay (Bib _)           = H.Paragraph (H.EmptyS) --implimented in TeX but not HTML yet
+lay (Bib bib)         = H.Bib $ map layCite bib
+
+-- | For importing bibliography
+layCite :: Citation -> H.Citation
+layCite (Book fields) = H.Book $ map layField fields
+
+layField :: CiteField -> H.CiteField
+layField (Author     p) = H.Author     p
+layField (Title      s) = H.Title      $ spec s
+layField (Series     s) = H.Series     $ spec s
+layField (Collection s) = H.Collection $ spec s
+layField (Volume     n) = H.Volume     n
+layField (Edition    n) = H.Edition    n
+layField (Place (c, s)) = H.Place (spec c, spec s)
+layField (Publisher  s) = H.Publisher $ spec s
+layField (Journal    s) = H.Journal   $ spec s
+layField (Year       n) = H.Year       n
+layField (Date   n m y) = H.Date   n m y
 
 -- | Translates lists
 makeL :: ListType -> H.ListType

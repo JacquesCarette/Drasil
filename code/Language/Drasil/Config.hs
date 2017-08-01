@@ -76,8 +76,14 @@ useStyleTeX MLA = "ieeetr"
 useStyleTeX APA = "apalike"
 useStyleTeX Chicago = "plain"
 
-bibStyle :: String
-bibStyle = useStyleTeX MLA --This will be an input for the user eventually
+bibStyleT :: String
+bibStyleT = useStyleTeX bibStyle --This will be an input for the user eventually
+
+bibStyleH :: StyleGuide
+bibStyleH = bibStyle
+
+bibStyle :: StyleGuide
+bibStyle = MLA
 
 -- | Used to name the BibTeX file
 bibFname :: String

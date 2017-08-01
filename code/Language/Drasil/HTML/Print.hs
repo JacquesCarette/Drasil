@@ -1,7 +1,7 @@
 module Language.Drasil.HTML.Print where
 
 import Prelude hiding (print, id)
-import Data.List (intersperse)
+import Data.List (intersperse, sort)
 import Text.PrettyPrint hiding (render)
 import Numeric (showFFloat)
 
@@ -16,6 +16,8 @@ import Language.Drasil.Unicode
 import Language.Drasil.Symbol (Symbol(..), Decoration(..))
 import qualified Language.Drasil.Document as L
 import Language.Drasil.HTML.Monad
+import Language.Drasil.People (People,Person(..),Conv(..))
+import Language.Drasil.Config (StyleGuide(..), bibStyleH)
 
 --FIXME? Use Doc in place of Strings for p_spec/title_spec
 
@@ -53,6 +55,7 @@ printLO (Assumption a l id)       = makeRefList (p_spec a) (p_spec l) (p_spec id
 printLO (Requirement r l id)       = makeRefList (p_spec r) (p_spec l) (p_spec id)
 printLO (LikelyChange lc l id)      = makeRefList (p_spec lc) (p_spec l) (p_spec id)
 printLO (UnlikelyChange uc l id)      = makeRefList (p_spec uc) (p_spec l) (p_spec id)
+printLO (Bib bib)               = printLO $ makeBib bib
 
 
 -- | Called by build, uses 'printLO' to render the layout 
@@ -389,3 +392,110 @@ makeModule m l = refwrap l (paragraph $ wrap "b" [] (text m))
 -- | Renders assumptions, requirements, likely changes
 makeRefList :: String -> String -> String -> Doc
 makeRefList a l i = refwrap l (wrap "ul" [] (text $ i ++ ": " ++ a))
+
+---------------------
+--HTML bibliography--
+---------------------
+-- **THE MAIN FUNCTION**
+makeBib :: BibRef -> LayoutObj
+makeBib = listRef . sort . map renderCite
+  where listRef = List . Simple . zip [S $ "[" ++ show x ++ "]:" | x <- [(1 :: Integer)..]] . map (Flat . S)
+  --some function to get a numbered list, idealy it wouldn't go from string to Spec
+  
+--for when we add other things to reference like website, newspaper, articals
+renderCite :: Citation -> String
+renderCite b@(Book _) = renderBook b
+
+--Rendering a book--
+renderBook :: Citation -> String
+renderBook c@(Book fields) = unwords $
+  map (useStyleHTML bibStyleH) (sort fields) ++ endingField c bibStyleH
+renderBook _ = error "Tried to render a non-book using renderBook."
+
+endingField :: Citation -> StyleGuide -> [String]
+endingField c@(Book _) MLA = [show c ++ "."]
+endingField _ _ = []
+
+useStyleHTML :: StyleGuide -> (CiteField -> String)
+useStyleHTML MLA = showMLA
+useStyleHTML APA = showAPA
+useStyleHTML Chicago = showChicago
+
+-- FIXME: move these show functions and use tags, combinators
+showMLA :: CiteField -> String
+showMLA (Place (city, state)) = rend (city :+: S ", " :+: state) ++ ":"
+showMLA (Edition    s) = rend (S $ show s ++ sufxer s) ++ " ed.,"
+showMLA (Series     s) = "<em>" ++ rend s ++ "</em>."
+showMLA (Title      s) = "<em>" ++ rend s ++ "</em>." --If there is a series or collection, this should be in quotes, not italics
+showMLA (Volume     s) = "vol." ++ show s ++ ","
+showMLA (Publisher  s) = rend s ++ ","
+showMLA (Author     p) = rend (rendPeople rendPersLFM p) ++ "."
+showMLA (Year       y) = rend (S $ show y) ++ "."
+showMLA (Date   d m y) = rend (S $ unwords [show d, show m, show y]) ++ "."
+showMLA (Collection s) = "<em>" ++ rend s ++ "</em>."
+showMLA (Journal    s) = "<em>" ++ rend s ++ "</em>.,"
+
+showAPA :: CiteField -> String
+showAPA (Author   p) = rend (rendPeople rendPersLFM' p) ++ "." --APA uses initals rather than full name
+showAPA (Year     y) = "(" ++ rend (S $ show y) ++ ")." --APA puts "()" around the year
+showAPA (Date _ _ y) = showAPA (Year y) --APA doesn't care about the day or month
+showAPA i = showMLA i --Most items are rendered the same as MLA
+
+showChicago :: CiteField -> String
+showChicago (Author   p) = rend (rendPeople rendPersLFM'' p) ++ "." --APA uses middle initals rather than full name
+showChicago (Date _ _ y) = showChicago (Year y) --APA doesn't care about the day or month
+showChicago i = showMLA i --Most items are rendered the same as MLA
+
+rend :: Spec -> String
+rend = p_spec
+
+--FIXME: move this
+-- Used only on single digit Int
+sufx :: Integer -> String
+sufx 1 = "st."
+sufx 2 = "nd."
+sufx 3 = "rd."
+sufx _ = "th."
+
+-- Use on any sized Int
+sufxer :: Integer -> String
+sufxer = sufx . mod 10
+
+
+-- PEOPLE RENDERING --
+
+rendPeople :: (Person -> String) -> People -> Spec
+rendPeople _ []  = error "No authors given"
+rendPeople f people = foldlList $ map (S . f) people --name is found in People.hs, foldlList is in SentenceStructures.hs
+
+foldlList :: [Spec] -> Spec
+foldlList []    = EmptyS
+foldlList [a,b] = a :+: S " and " :+: b
+foldlList lst   = foldle1 (\a b -> a :+: S ", " :+: b) (\a b -> a :+: S ", and " :+: b) lst
+
+foldle1 :: (a -> a -> a) -> (a -> a -> a) -> [a] -> a
+foldle1 _ _ []       = error "foldle1 cannot be used with empty list"
+foldle1 _ _ [x]      = x
+foldle1 _ g [x,y]    = g x y
+foldle1 f g (x:y:xs) = foldle1 f g ((f x y):xs)
+
+-- LFM is Last, First Middle
+rendPersLFM :: Person -> String
+rendPersLFM (Person {_surname = n, _convention = Mono}) = n
+rendPersLFM (Person {_given = f, _surname = l, _middle = ms}) =
+  l ++ ", " ++ unwords (f:ms)
+
+-- LFM' is Last, F. M.
+rendPersLFM' :: Person -> String
+rendPersLFM' (Person {_surname = n, _convention = Mono}) = n
+rendPersLFM' (Person {_given = f, _surname = l, _middle = ms}) =
+  l ++ ", " ++ (unwords . map initial) (f:ms)
+
+-- LFM'' is Last, First M.
+rendPersLFM'' :: Person -> String
+rendPersLFM'' (Person {_surname = n, _convention = Mono}) = n
+rendPersLFM'' (Person {_given = f, _surname = l, _middle = ms}) =
+  l ++ ", " ++ unwords (f:(map initial ms))
+
+initial :: String -> String
+initial = (\xs -> head xs : ".")

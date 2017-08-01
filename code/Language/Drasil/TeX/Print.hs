@@ -14,7 +14,7 @@ import qualified Language.Drasil.TeX.Import as I
 import qualified Language.Drasil.Output.Formats as A
 import Language.Drasil.Spec (USymb(..), RefType(..))
 import Language.Drasil.Config (lpmTeXParams, colAwidth, colBwidth,
-              LPMParams(..),bibStyle,bibFname)
+              LPMParams(..),bibStyleT,bibFname)
 import Language.Drasil.Printing.Helpers hiding (paren, sqbrac)
 import Language.Drasil.TeX.Helpers
 import Language.Drasil.TeX.Monad
@@ -541,7 +541,7 @@ makeBib bib = spec $
 bibLines :: String
 bibLines =
   "\\nocite{*}\n" ++ 
-  "\\bibstyle{" ++ bibStyle ++ "}\n" ++ --bibStyle is in Config.hs
+  "\\bibstyle{" ++ bibStyleT ++ "}\n" ++ --bibStyle is in Config.hs
   "\\printbibliography"
 
 mkBibRef :: BibRef -> Spec

@@ -142,4 +142,17 @@ vectRotate = funcDec "vectRotate" [v_v1, v_v2] vector
         ((FCall (asExpr getX) [v_v1]) * (FCall (asExpr getY) [v_v2]) +
         ((FCall (asExpr getY) [v_v1]) * (FCall (asExpr getX) [v_v2]))
       ]
-  ]        
+  ]
+  
+vectUnrotate = funcDec "vectUnrotate" [v_v1, v_v2] vector
+  [
+    FRet (FCall (asExpr vect)
+      [
+        ((FCall (asExpr getX) [v_v1]) * (FCall (asExpr getX) [v_v2])) +
+        ((FCall (asExpr getY) [v_v1]) * (FCall (asExpr getY) [v_v2])),
+        ((FCall (asExpr getY) [v_v1]) * (FCall (asExpr getX) [v_v2])) -
+        ((FCall (asExpr getX) [v_v1]) * (FCall (asExpr getY) [v_v2]))
+      ]
+  ]
+  
+        

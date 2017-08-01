@@ -111,11 +111,11 @@ instance LayoutObj Contents where
   refName (Definition _ d)        = getDefName d
   refName (Defnt dt _ r)          = getDefName dt +:+ r
   refName (Enumeration _)         = error "List refs unimplemented"
-  refName (Module mc)             = S $ "M" ++ alphanumOnly (mc ^. id)
-  refName (Requirement rc)        = S $ "R" ++ alphanumOnly (rc ^. id)
-  refName (Assumption ac)         = S $ "A" ++ alphanumOnly (ac ^. id)
-  refName (LikelyChange lcc)      = S $ "LC" ++ alphanumOnly (lcc ^. id)
-  refName (UnlikelyChange ucc)    = S $ "UC" ++ alphanumOnly (ucc ^. id)
+  refName (Module mc)             = S $ "M:" ++ alphanumOnly (mc ^. id)
+  refName (Requirement rc)        = S $ "R:" ++ alphanumOnly (rc ^. id)
+  refName (Assumption ac)         = S $ "A:" ++ alphanumOnly (ac ^. id)
+  refName (LikelyChange lcc)      = S $ "LC:" ++ alphanumOnly (lcc ^. id)
+  refName (UnlikelyChange ucc)    = S $ "UC:" ++ alphanumOnly (ucc ^. id)
 --  refName (UsesHierarchy _)     = S $ "Figure:UsesHierarchy"
   refName (Graph _ _ _ l)         = S "Figure:" :+: inferName l
   refName (TMod _ _ _)            = error "TMod referencing unimplemented"

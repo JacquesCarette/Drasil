@@ -91,7 +91,7 @@ p_spec (Ref (Def (Just r)) a) = reflink (p_spec a) (p_spec $ spec r)
 p_spec (Ref (Assump (Just r)) a) = reflink (p_spec a) (p_spec $ spec r)
 p_spec (Ref (Req (Just r)) a) = reflink (p_spec a) (p_spec $ spec r)
 p_spec (Ref (LC (Just r)) a) = reflink (p_spec a) (p_spec $ spec r)
-p_spec (Ref r a)  = reflink (p_spec a) ("this " ++ show r)
+p_spec (Ref _ a)  = reflink (p_spec a) (p_spec a)--("this " ++ show r)
 p_spec EmptyS     = ""
 
 -- | Renders symbols for HTML title

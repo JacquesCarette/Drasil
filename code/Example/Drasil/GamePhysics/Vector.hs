@@ -155,4 +155,17 @@ vectUnrotate = funcDec "vectUnrotate" [v_v1, v_v2] vector
       ]
   ]
   
-        
+vectLengthSq = funcDec "vectLengthSq" [v_v] Rational
+  [
+    FRet (FCall (asExpr vectDot) [v_v, v_v])
+  ]
+  
+vectLength = funcDec "vectLength" [v_v] Rational
+  [
+    FRet (FCall (asExpr sqrt)
+      [
+        (FCall (asExpr vectLengthSq) [v_v]) 
+      ]
+  ]
+  
+      

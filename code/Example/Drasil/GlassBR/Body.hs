@@ -197,7 +197,7 @@ gBRpriorityNFReqs = [correctness, verifiability, understandability,
 
 startIntro :: NamedChunk -> Sentence -> CI -> Sentence
 startIntro prgm sfwrPredicts progName = foldlSent [
-  at_start prgm, S "is helpful to efficiently and correctly predict the"
+  at_start prgm, S "is helpful to efficiently" `sAnd` S "correctly predict the"
   +:+. sfwrPredicts, underConsidertn blast, S "The", phrase prgm `sC`
   S "herein called", short progName, S "aims to predict the", sfwrPredicts, 
   S "using an intuitive", phrase interface]
@@ -217,7 +217,8 @@ incScoR = foldl (+:+) EmptyS [S "getting all", plural inParam,
   S "related to the", phrase glaSlab `sAnd` S "also the", plural parameter,
   S "related to", phrase blastTy]
 endScoR = foldl (+:+) EmptyS [S "use the", plural datum `sAnd`
-  S "predict whether the", phrase glaSlab, S "is safe to use or not"]
+  S "predict whether the", phrase glaSlab, S "is safe to use" `sOr` 
+  S "not"]
 
 {--Purpose of Document--}
 
@@ -230,8 +231,8 @@ s2_1_intro_p1 typeOf progName gvnVar = foldlSent [S "The main", phrase purpose,
   S "on explicitly identifying", (plural assumption) `sAnd` S "unambiguous" +:+.
   plural definition, S "This", phrase typeOf, S "is intended to be used as a",
   phrase reference, S "to provide all", phrase information, 
-  S "necessary to understand and verify the" +:+. phrase analysis, S "The", 
-  short srs, S "is abstract because the", plural content, S "say what",
+  S "necessary to understand" `sAnd` S "verify the" +:+. phrase analysis,
+  S "The", short srs, S "is abstract because the", plural content, S "say what",
   phrase problem, S "is being solved" `sC` S "but not how to solve it"] 
   --FIXME: Last sentence is also present in SWHS and NoPCM... pull out?
 
@@ -299,8 +300,9 @@ s5_1_table_UC1 = [S "1", titleize' input_, titleize user,
   (makeRef (SRS.indPRCase SRS.missingP []))]
 
 s5_1_table_UC2 = [S "2", titleize output_, short gLassBR,
-  S "Whether or not the" +:+ phrase glaSlab +:+ S "is safe for the calculated"
-  +:+ phrase load `sAnd` S "supporting calculated" +:+ plural value]
+  S "Whether" `sOr` S "not the" +:+ phrase glaSlab +:+ S "is safe for the"
+  +:+ S "calculated" +:+ phrase load `sAnd` S "supporting calculated" +:+ 
+  plural value]
 
 {--Individual Product Use Cases--}
 
@@ -339,7 +341,7 @@ s6 = specSysDesF (S "and" +:+ plural definition) [s6_1, s6_2]
 
 s6_1 = probDescF start gLassBR ending [s6_1_1, s6_1_2, s6_1_3]
   where start = foldlSent [S "A", phrase system,
-                S "is needed to efficiently and correctly predict the", 
+                S "is needed to efficiently" `sAnd` S "correctly predict the", 
                 phrase blastRisk +:+ S "involved with the glass"]
         ending = foldl (+:+) EmptyS [S "interpret the", plural input_, 
                 S "to give out the", plural output_, 
@@ -349,7 +351,7 @@ s6_1 = probDescF start gLassBR ending [s6_1_1, s6_1_2, s6_1_3]
 
 {--Terminology and Definitions--}
 
-s6_1_1 = termDefnF (Just (S "All of the" +:+ plural term_ +:+ 
+s6_1_1 = termDefnF (Just (S "All" `sOf` S "the" +:+ plural term_ +:+ 
   S "are extracted from" +:+ (sSqBrNum 4) `sIn` (makeRef s11))) 
   [s6_1_1_bullets]
 
@@ -383,9 +385,9 @@ s6_1_3 = goalStmtF [foldlList [plural dimension `ofThe` phrase glaPlane,
   S "the" +:+ phrase pb_tol]] [s6_1_3_list]
 
 s6_1_3_list_goalStmt1 :: [Sentence]
-s6_1_3_list_goalStmt1 = [foldlSent [S "Analyze and predict whether the",
-  phrase glaSlab, S "under consideration will be able to withstand the",
-  phrase explosion, S "of a certain", phrase degree_',
+s6_1_3_list_goalStmt1 = [foldlSent [S "Analyze" `sAnd` S "predict whether", 
+  S "the", phrase glaSlab, S "under consideration will be able to withstand", 
+  S "the", phrase explosion `sOf` S "a certain", phrase degree_',
   S "which is calculated based on", phrase userInput]]
 
 {--SOLUTION CHARACTERISTICS SPECIFICATION--}
@@ -400,7 +402,7 @@ s6_2 = solChSpecF gLassBR (s6_1, s8) (EmptyS)
               S "used in" +:+. (makeRef s6_2_5_table1)] +:+ s6_2_5_intro2
 
 s6_2_intro = foldlSP [S "This", phrase section_, S "explains all the",
-  plural assumption, S "considered and the", plural thModel,
+  plural assumption, S "considered" `sAnd` S "the", plural thModel,
   S "which are supported by the", plural dataDefn]
 
 {--Assumptions--}
@@ -426,15 +428,15 @@ assumption8 = mkAssump "assumption8"   (a8Desc (loadDF))   --ldfConstant
 a1Desc :: Sentence
 a1Desc = foldlSent [S "The standard E1300-09a for",
   phrase calculation, S "applies only to", foldlOptions $ map S ["monolithic",
-  "laminated", "insulating"], S "glass constructions of rectangular", 
+  "laminated", "insulating"], S "glass constructions" `sOf` S "rectangular", 
   phrase shape, S "with continuous", phrase lateral +:+. S "support along",
   foldlOptions $ map S ["one", "two", "three", "four"], plural edge, S "This",
   phrase practice, S "assumes that", sParenNum 1, S "the supported glass", 
   plural edge, S "for two, three" `sAnd` S "four-sided support", 
-  plural condition, S "are simply supported and free to slip in", phrase plane
-  `semiCol` (sParenNum 2), S "glass supported on two sides acts as a simply", 
-  S "supported", phrase beam `sAnd` (sParenNum 3), S "glass supported on one", 
-  S "side acts as a", phrase cantilever]
+  plural condition, S "are simply supported" `sAnd` S "free to slip in", 
+  phrase plane `semiCol` (sParenNum 2), S "glass supported on two sides acts",
+  S "as a simply supported", phrase beam `sAnd` (sParenNum 3), S "glass",
+  S "supported on one side acts as a", phrase cantilever]
 
 a2Desc :: Sentence
 a2Desc = foldlSent [S "Following", (sSqBr (S "4 (pg. 1)")) `sC`
@@ -563,9 +565,9 @@ req2Desc = foldlSent [S "The", phrase system,
 req3Desc = foldlSent [S "The", phrase system, S "shall check the entered",
   plural inValue, S "to ensure that they do not exceed the",
   plural datumConstraint, S "mentioned in" +:+. makeRef 
-  (SRS.datCon SRS.missingP []), S "If any of the", plural inParam,
-  S "is out of bounds, an error", phrase message, S "is displayed and the",
-  plural calculation, S "stop"]
+  (SRS.datCon SRS.missingP []), S "If any" `sOf` S "the", plural inParam,
+  S "is out" `sOf` S "bounds, an error", phrase message, S "is displayed" `sAnd` 
+  S "the", plural calculation, S "stop"]
 
 req4Desc = foldlSent [titleize output_, S "the", plural inQty,
   S "from", acroR 1 `sAnd` S "the known", plural quantity,
@@ -604,10 +606,10 @@ s7_1_req6 = [(Enumeration $ Simple $ [(acroR 6, Nested (titleize output_ +:+
 s7_2 = SRS.nonfuncReq [s7_2_intro] []
 
 s7_2_intro = foldlSP [
-  S "Given the small size, and relative simplicity, of this", phrase problem
-  `sC` phrase performance, S "is not a" +:+. phrase priority,  
+  S "Given the small size" `sC` S "and relative simplicity," `sOf` S "this",
+  phrase problem `sC` phrase performance, S "is not a" +:+. phrase priority,  
   S "Any reasonable", phrase implementation +:+. 
-  S "will be very quick and use minimal storage", 
+  (S "will be very quick" `sAnd` S "use minimal storage"),
   S "Rather than", phrase performance `sC` S "the", phrase priority, 
   phrase nonfunctional, short requirement :+:
   S "s are", foldlList (map phrase gBRpriorityNFReqs)]

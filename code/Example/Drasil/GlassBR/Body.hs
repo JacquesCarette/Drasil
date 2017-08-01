@@ -39,6 +39,7 @@ import Drasil.GlassBR.IMods
 import Drasil.GlassBR.DataDefs
 import Drasil.GlassBR.References
 import Drasil.GlassBR.Interpolation
+import Drasil.GlassBR.DataDescriptions
 
 import Drasil.Sections.TraceabilityMandGs
 import Drasil.Sections.Stakeholders

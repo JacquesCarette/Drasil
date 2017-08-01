@@ -105,7 +105,7 @@ module Language.Drasil (
   -- DataDesc
   , DataDesc
   , entry, listEntry, junk, singleton, junkLine, singleLine, multiLine
-  , multiLine', straight, repeated, repeated' 
+  , multiLine', straight, repeated, repeated', Ind(..)
   -- Chunk.Theory
   , Theory(..), tc', TheoryChunk, TheoryModel, tm, tw
 ) where

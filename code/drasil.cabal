@@ -284,6 +284,7 @@ executable glassbr
     , Drasil.GlassBR.References
     , Drasil.GlassBR.Units
     , Drasil.GlassBR.Interpolation
+    , Drasil.GlassBR.DataDescriptions
     , Drasil.Sections.SpecificSystemDescription
     , Drasil.Sections.Introduction
     , Drasil.Sections.Requirements

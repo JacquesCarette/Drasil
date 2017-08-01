@@ -48,7 +48,7 @@ junkLine :: Data
 junkLine = JunkData
 
 singleLine :: LinePattern -> Delim -> Data
-singleLine = Line
+singleLine = Line 
 
 multiLine :: LinePattern -> Delim -> Data
 multiLine l d = Lines l Nothing d 
@@ -64,41 +64,3 @@ repeated e = Repeat e Nothing
 
 repeated' :: [Entry] -> Int -> LinePattern
 repeated' e i = Repeat e (Just i)
-
-
--- for glassbr read_table:
-
---c_z_array = contents z_array
---c_x_array = contents x_array
---c_y_array = contents y_array
-
---DataDesc [c_x_array, c_y_array, c_z_array] [
---    Line (Repeat [Junk, ListEntry [WithLine] z_array] Nothing) ',',
---    Lines (Repeat [ListEntry [WithPattern, WithLine] x_array, ListEntry [WithPattern, WithLine] y_array] Nothing) Nothing ','
---  ]
--- ^ pattern evident from TSD.txt
-
------
-
---for glassbr defaultInput:
-
-{-
-glassInputData :: 
-glassInputData = 
-  [ Singleton Junk,
-    Singleton c_a, Singleton c_b, Singleton c_t,
-    Singleton Junk,
-    Singleton c_gt, 
-    Singleton Junk,
-    Singleton c_w, 
-    Singleton Junk, 
-    Singleton c_tnt, 
-    Singleton Junk,
-    Singleton c_sdx, Singleton c_sdy, Singleton c_sdz,
-    Singleton Junk,
-    Singleton c_pbtol
-  ]
-
---FIXME: replace "Singleton _" with "Line Straight [_]" ?
-
--}

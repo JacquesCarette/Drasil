@@ -105,11 +105,16 @@ fromEqn' nm desc _ symb eqn =
 
 -- | Create a 'QDefinition' with an id, noun phrase (term), symbol,
 -- abbreviation, unit, and defining equation.
-fromEqn'' :: Unit u => String -> NP -> Sentence -> Symbol -> String -> u -> Expr -> QDefinition
-fromEqn'' nm desc _ symb abb chunk eqn = 
+fromEqn'' :: (Unit u) => String -> NP -> Sentence -> Symbol -> String -> Maybe u -> Expr -> QDefinition
+fromEqn'' nm desc _ symb abb Nothing eqn = 
+  EC (cv (dccWDS' nm (desc) (phrase desc) abb) symb Rational) eqn
+fromEqn'' nm desc _ symb abb (Just chunk) eqn = 
   EC (ucFromCV (cv (dccWDS' nm (desc) (phrase desc) abb) symb Rational) chunk) eqn
   
 -- | Returns a 'VarChunk' from a 'QDefinition'.
 -- Currently only used in example /Modules/ which are being reworked.
 getVC :: QDefinition -> VarChunk
 getVC qd = vc (qd ^. id) (qd ^. term) (qd ^. symbol) (qd ^. typ)
+
+instance Eq QDefinition where
+  a == b = (a ^. id) == (b ^. id)

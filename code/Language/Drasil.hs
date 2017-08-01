@@ -46,7 +46,7 @@ module Language.Drasil (
   -- Chunk.Unitary
   , Unitary(..), UnitaryChunk, unitary
   -- Chunk.Relation
-  , NamedRelation(..), makeNR, RelationConcept(..), makeRC, makeRC', relat, ExprRelat
+  , NamedRelation, makeNR, RelationConcept, makeRC, makeRC', relat, ExprRelat
   -- Chunk.Method
   , MethodChunk, fromEC, makeStdInputMethod, makeFileInputMethod
   , makeFileOutputMethod, makeMainMethod, input, output, exc, methcc, mType

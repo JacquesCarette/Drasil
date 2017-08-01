@@ -47,7 +47,7 @@ data USymb = UName Symbol
 data RefType = Tab -- ^ Table
              | Fig -- ^ Figure
              | Sect -- ^ Section
-             | Def -- ^ Definition (includes theoretical models)
+             | Def (Maybe Sentence)-- ^ Definition (includes theoretical models)
              | Mod -- ^ Module
              | Req (Maybe Sentence)-- ^ Requirement
              | Assump (Maybe Sentence)-- ^ Assumption
@@ -58,11 +58,11 @@ instance Show RefType where
   show Tab = "Table"
   show Fig = "Figure"
   show Sect = "Section"
-  show Def = "Definition"
   show Mod = "Module"
   -- show (Req (S r)) = r
   -- show (Assump (S a)) = a
   -- show (LC (S lc)) = lc
+  show (Def Nothing) = "Definition"
   show (Req Nothing) = "Requirement"
   show (Assump Nothing) = "Assumption"
   show (LC Nothing) = "Likely Change"

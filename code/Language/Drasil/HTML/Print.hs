@@ -87,6 +87,7 @@ p_spec (Sy s)     = uSymb s
 p_spec (G g)      = unPH $ greek g
 p_spec (Sp s)     = unPH $ special s
 p_spec HARDNL     = "<br />"
+p_spec (Ref (Def (Just r)) a) = reflink (p_spec a) (p_spec $ spec r)
 p_spec (Ref (Assump (Just r)) a) = reflink (p_spec a) (p_spec $ spec r)
 p_spec (Ref (Req (Just r)) a) = reflink (p_spec a) (p_spec $ spec r)
 p_spec (Ref (LC (Just r)) a) = reflink (p_spec a) (p_spec $ spec r)

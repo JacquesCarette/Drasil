@@ -697,7 +697,7 @@ s6_list = acroNumGen [likeChg2, likeChg3, likeChg3_npcm, likeChg6] 1
   -- []) EmptyS
 likeChg3_npcm :: Contents
 likeChg3_npcm = mkLklyChnk "likeChg3" $
-  makeRef assump9_npcm :+: S "- The" +:+ phrase model +:+
+  acroTest assump9_npcm s4_2_1_list :+: S "- The" +:+ phrase model +:+
   S "currently only accounts for charging of the tank. A more complete"
   +:+ phrase model +:+. S "would also account for discharging of the tank"
 -- likeChg4 = LikelyChange (LCChunk (nw $ npnc "likeChg4" $

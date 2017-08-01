@@ -292,5 +292,5 @@ mgUH mcs = Graph (makePairs mcs) (Just 10) (Just 8) (S "Uses Hierarchy")
                              then makePairs mcs'
                              else makePairs' m (uses m) ++ makePairs mcs'
           where makePairs' _ []       = []
-                makePairs' m1 (m2:ms) = (entry m1, entry m2):makePairs' m1 ms
-                  where entry m' = S (formatName m') +:+ (sParen (makeRef $ Module m'))
+                makePairs' m1 (m2:ms) = (entr m1, entr m2):makePairs' m1 ms
+                  where entr m' = S (formatName m') +:+ (sParen (makeRef $ Module m'))

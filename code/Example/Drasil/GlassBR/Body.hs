@@ -3,7 +3,7 @@ import Control.Lens ((^.))
 import Language.Drasil
 import Prelude hiding (id)
 
-import Data.Drasil.SI_Units (metre, second, kilogram, pascal, newton)
+import Data.Drasil.SI_Units (metre, second, kilogram, pascal, newton, millimetre)
 import Data.Drasil.Authors (spencerSmith, thulasi, nikitha)
 import Data.Drasil.Concepts.Documentation
 import Data.Drasil.Concepts.Education
@@ -557,8 +557,11 @@ s7_1_req5 = mkRequirement "s7_1_req5" (req5Desc (output_))
 req1Desc = foldlSent [at_start input_, S "the", plural quantity, S "from",
   makeRef s7_1_req1Table `sC` S "which define the", phrase glass,
   plural dimension `sC` (glassTy ^. defn) `sC` S "tolerable", 
-  phrase probability `sOf` phrase failure `sAnd` 
-  (plural characteristic `ofThe` phrase blast)]
+  phrase probability `sOf` phrase failure, S "and",
+  (plural characteristic `ofThe` phrase blast), S "Note:",
+  getS plate_len `sAnd` getS plate_width, 
+  S "will be input in terms of", plural millimetre `sAnd` 
+  S "will be converted to the equivalent value in", plural metre]
 
 s7_1_req1Table :: Contents
 s7_1_req1Table = Table 

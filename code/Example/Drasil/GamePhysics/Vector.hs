@@ -39,6 +39,7 @@ vectAdd = funcDef "vectAdd" [v_v1, v_v2] (Vect Rational)
         ((FCall (asExpr getX) [v_v1]) + (FCall (asExpr getX) [v_v2])),
         ((FCall (asExpr getY) [v_v1]) + (FCall (asExpr getY) [v_v2]))
       ]
+    )
   ]
   
 vectSub = funcDef "vectSub" [v_v1, v_v2] (Vect Rational)
@@ -48,6 +49,7 @@ vectSub = funcDef "vectSub" [v_v1, v_v2] (Vect Rational)
         ((FCall (asExpr getX) [v_v1]) - (FCall (asExpr getX) [v_v2])),
         ((FCall (asExpr getY) [v_v1]) - (FCall (asExpr getY) [v_v2]))
       ]
+    )
   ]
   
 vectMult = funcDef "vectMult" [v_v1, v_v2] (Vect Rational)
@@ -57,6 +59,7 @@ vectMult = funcDef "vectMult" [v_v1, v_v2] (Vect Rational)
         ((FCall (asExpr getX) [v_v1]) * (FCall (asExpr getX) [v_v2])),
         ((FCall (asExpr getY) [v_v1]) * (FCall (asExpr getY) [v_v2]))
       ]
+    )
   ]
 
 vectNeg = funcDef "vectNeg" [v_v] (Vect Rational)
@@ -66,6 +69,7 @@ vectNeg = funcDef "vectNeg" [v_v] (Vect Rational)
         (FCall (asExpr getX) [v_v]),
         (FCall (asExpr getY) [v_v])
       ]
+    )
   ]
 
 vectDot = funcDef "vectDot" [v_v1, v_v2] Rational
@@ -95,6 +99,7 @@ vectPerp = funcDef "vectPerp" [v_v] (Vect Rational)
         (Neg (FCall (asExpr getY) [v_v])),
         (FCall (asExpr getX) [v_v])
       ]
+    )
   ]
 
 vectRPerp = funcDef "vectRPerp" [v_v] (Vect Rational)
@@ -104,6 +109,7 @@ vectRPerp = funcDef "vectRPerp" [v_v] (Vect Rational)
         (FCall (asExpr getY) [v_v]),
         (Neg (FCall (asExpr getX) [v_v]))
       ]
+    )
   ]
    
 vectProject = funcDef "vectProject" [v_v1, v_v2] (Vect Rational)   
@@ -113,6 +119,7 @@ vectProject = funcDef "vectProject" [v_v1, v_v2] (Vect Rational)
         v_v2,
         ((FCall (asExpr vectDot) [v_v1, v_v2]) / (FCall (asExpr vectDot) [v_v2, v_v2]))
       ]
+    )
   ]
 
 vectForAngle = funcDef "vectForAngle" [rad] (Vect Rational)
@@ -122,6 +129,7 @@ vectForAngle = funcDef "vectForAngle" [rad] (Vect Rational)
         (Cos rad]),
         (Sin rad)
       ]
+    )
   ]
 
 vectToAngle = funcDef "vectToAngle" [v_v] Radians
@@ -131,6 +139,7 @@ vectToAngle = funcDef "vectToAngle" [v_v] Radians
         (FCall (asExpr getY) [v_v]),
         (FCall (asExpr getX) [v_v]
       ]
+    )
   ]
 
 vectRotate = funcDef "vectRotate" [v_v1, v_v2] (Vect Rational)
@@ -139,9 +148,10 @@ vectRotate = funcDef "vectRotate" [v_v1, v_v2] (Vect Rational)
       [
         ((FCall (asExpr getX) [v_v1]) * (FCall (asExpr getX) [v_v2])) -
         ((FCall (asExpr getY) [v_v1]) * (FCall (asExpr getY) [v_v2])),
-        ((FCall (asExpr getX) [v_v1]) * (FCall (asExpr getY) [v_v2]) +
+        ((FCall (asExpr getX) [v_v1]) * (FCall (asExpr getY) [v_v2])) +
         ((FCall (asExpr getY) [v_v1]) * (FCall (asExpr getX) [v_v2]))
       ]
+    )
   ]
   
 vectUnrotate = funcDef "vectUnrotate" [v_v1, v_v2] (Vect Rational)
@@ -153,6 +163,7 @@ vectUnrotate = funcDef "vectUnrotate" [v_v1, v_v2] (Vect Rational)
         ((FCall (asExpr getY) [v_v1]) * (FCall (asExpr getX) [v_v2])) -
         ((FCall (asExpr getX) [v_v1]) * (FCall (asExpr getY) [v_v2]))
       ]
+    )
   ]
   
 vectLengthSq = funcDef "vectLengthSq" [v_v] Rational
@@ -165,10 +176,14 @@ vectLength = funcDef "vectLength" [v_v] Rational
     FRet (Sqrt (FCall (asExpr vectLengthSq) [v_v]))
   ]
   
---vectClamp = funcDef "vectClamp" [v_v, length] (Vect Rational)
---  [
---
---  ]
+vectClamp = funcDef "vectClamp" [v_v, length] (Vect Rational)
+  [
+    (FCond (FCall (asExpr vectLength) [v_v]) :< length) 
+      [FRet v_v] 
+      [FRet (FCall (asExpr vectMult) 
+        [FCall (asExpr vectNormalize) [v_v], length]
+      ] 
+  ]
 
 vectLerp = funcDef "vectLerp" [v_v1, v_v2, t] (Vect Rational)
   [
@@ -179,6 +194,27 @@ vectLerp = funcDef "vectLerp" [v_v1, v_v2, t] (Vect Rational)
       ]
   ]
 
+vectNormalize = funcDef "vectNormalize" [v_v] (Vect Rational)
+  [
+    FRet (FCall (asExpr vectMult) 
+      [v_v, (1.0 / (FCall (asExpr vectLength) [v_v]) + DBL_MIN)]
+    )
+  ]
 
+vectDistSq = funcDef "vectDistSq" [v_v1, v_v2] Rational
+  [
+    FRet (FCall (asExpr vectLengthSq) [(FCall (asExpr vectSub) [v_v1, v_v2]]))
+  ]
+
+vectDist = funcDef "vectDist" [v_v1, v_v2] Rational
+  [
+    FRet (Sqrt (FCall (asExpr vectDistSq) [v_v1, v_v2]))
+  ]
+
+
+vectNear = funcDef "vectNear" [v_v1, v_v2, dist] Boolean
+  [
+    FRet ((FCall (asExpr vectDist) [v_v1, v_v2]) :< dist) 
+  ]
 
 

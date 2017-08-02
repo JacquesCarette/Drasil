@@ -102,7 +102,7 @@ vectRPerp = funcDef "vectRPerp" [v_v] vector
     FRet (FCall (asExpr vect)
       [
         (FCall (asExpr getY) [v_v]),
-        (negate (FCall (asExpr getX) [v_v])
+        (negate (FCall (asExpr getX) [v_v]))
       ]
   ]
    

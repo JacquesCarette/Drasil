@@ -317,8 +317,8 @@ s4_1_3_list temw we = enumSimple 1 (short goalStmt) [
 ------------------------------------------------------
   
 s4_2 = solChSpecF progName (s4_1, s6) s4_2_4_intro_end (mid,
-  dataConstraintUncertainty, end) (s4_2_1_list, s4_2_2_T1, s4_2_3_paragraph rOfChng temp,
-  s4_2_4_DD1, [swhsSymbMapT eBalanceOnWtr] ++ (s4_2_5_d1startPara energy water) ++
+  dataConstraintUncertainty, end) (s4_2_1_list, acroNumGen s4_2_2_T1 1, s4_2_3_paragraph rOfChng temp,
+  acroNumGen s4_2_4_DD1 1, [swhsSymbMapT eBalanceOnWtr] ++ (s4_2_5_d1startPara energy water) ++
   s4_2_5_paragraph ++ [swhsSymbMapT heatEInWtr], [s4_2_6_table1, s4_2_6_table2]) []
 
   where mid = foldlSent [S "The", phrase column, S "for",

@@ -9,7 +9,7 @@ import Language.Drasil.Unicode (Special(Partial))
 import Language.Drasil.Chunk.Eq
 import Language.Drasil.Chunk.ExprRelat (relat)
 import Language.Drasil.Chunk.Module
-import Language.Drasil.Chunk.NamedIdea (term, short)
+import Language.Drasil.Chunk.NamedIdea (term, short, getA)
 import Language.Drasil.Chunk.Concept (defn)
 import Language.Drasil.Chunk.SymbolForm (SymbolForm, symbol)
 import Language.Drasil.Chunk.VarChunk (VarChunk)
@@ -276,12 +276,14 @@ item (Nested t s) = H.Nested (spec t) (makeL s)
 -- (Data defs, General defs, Theoretical models, etc.)
 makePairs :: DType -> SymbolMap -> [(String,[H.LayoutObj])]
 makePairs (Data c) m = [
-  ("Label",       [H.Paragraph $ spec (titleize $ c ^. term)]),
+  ("Number",      [H.Paragraph $ spec $ missingAcro $ getA c]),
+  ("Label",       [H.Paragraph $ spec $ titleize $ c ^. term]),
   ("Units",       [H.Paragraph $ spec $ unit'2Contents c]),
   ("Equation",    [H.HDiv ["equation"] [H.Tagless (buildEqn c)] (H.EmptyS)]),
   ("Description", [H.Paragraph (buildDDDescription c m)])
   ]
 makePairs (Theory c) _ = [
+  ("Number",      [H.Paragraph $ spec $ missingAcro $ getA c]),
   ("Label",       [H.Paragraph $ spec (titleize $ c ^. term)]),
   ("Equation",    [H.HDiv ["equation"] [H.Tagless (H.E (rel (c ^. relat)))]
                   (H.EmptyS)]),
@@ -291,6 +293,10 @@ makePairs General  _ = error "Not yet implemented"
 makePairs Instance _ = error "Not yet implemented"
 makePairs TM _       = error "Not yet implemented"
 makePairs DD _       = error "Not yet implemented"
+
+missingAcro :: Maybe Sentence -> Sentence
+missingAcro Nothing = EmptyS
+missingAcro (Just a) = S "<b>":+: a :+: S "</b>"
 
 -- | Translates the defining equation from a QDefinition to 
 -- HTML's version of Sentence

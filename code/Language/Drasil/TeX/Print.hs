@@ -22,7 +22,7 @@ import Language.Drasil.TeX.Preamble
 import Language.Drasil.Symbol (Symbol(..),Decoration(..))
 import qualified Language.Drasil.Document as L
 import Language.Drasil.Unicode (RenderGreek(..), RenderSpecial(..))
-import Language.Drasil.People (People,Person(..),Conv(..),lstName)
+import Language.Drasil.People (People,rendPersLFM,lstName)
 
 genTeX :: A.DocType -> L.Document -> TP.Doc
 genTeX typ doc = runPrint (build typ $ I.makeDocument doc) Text
@@ -493,44 +493,7 @@ makeGraph ps w h c l =
 ---------------------------
 -- Bibliography Printing --
 ---------------------------
--- Used only on single digit Int
-sufx :: Integer -> String
-sufx 1 = "st."
-sufx 2 = "nd."
-sufx 3 = "rd."
-sufx _ = "th."
---move these two
--- Use on any sized Int
-sufxer :: Integer -> String
-sufxer = sufx . mod 10
-
-showBibTeX :: CiteField -> Spec
-showBibTeX (Place (city, state)) = showField "place" (city :+: S ", " :+: state)
-showBibTeX (Edition    s) = showField "edition" (S $ show s ++ sufxer s)
-showBibTeX (Series     s) = showField "series" s
-showBibTeX (Title      s) = showField "title" s
-showBibTeX (Volume     s) = showField "volume" (S $ show s)
-showBibTeX (Publisher  s) = showField "publisher" s
-showBibTeX (Author     p) = showField "author" (S $ rendPeople p)
-showBibTeX (Year       y) = showField "year" (S $ show y)
-showBibTeX (Date   d m y) = showField "year" (S $ unwords [show d, show m, show y])
-showBibTeX (Collection s) = showField "collection" s
-showBibTeX (Journal    s) = showField "journal" s
-
-showField :: String -> Spec -> Spec
-showField f s = S f :+: S "={" :+: s :+: S "}"
-
-rendPeople :: People -> String
-rendPeople []  = "N.a." -- "No authors given"
-rendPeople people = foldl1 (\x y -> x ++ " and " ++ y) $ map rendPersLFM people
-
--- LFM is Last, First Middle
-rendPersLFM :: Person -> String
-rendPersLFM (Person {_surname = n, _convention = Mono}) = n
-rendPersLFM (Person {_given = f, _surname = l, _middle = ms}) =
-  l ++ ", " ++ unwords (f:ms)
-
--- | Tex bibliography main function
+-- **THE MAIN FUNCTION** --
 makeBib :: BibRef -> D
 makeBib bib = spec $
   S ("\\begin{filecontents*}{"++bibFname++".bib}\n") :+: --bibFname is in Config.hs
@@ -573,3 +536,23 @@ getYear (Book fields) = getY fields
         getY ((Year year):_) = year
         getY ((Date _ _ year):_) = year
         getY (_:xs) = getY xs
+
+showBibTeX :: CiteField -> Spec
+showBibTeX (Place (city, state)) = showField "place" (city :+: S ", " :+: state)
+showBibTeX (Edition    s) = showField "edition" (S $ show s ++ sufxer s)
+showBibTeX (Series     s) = showField "series" s
+showBibTeX (Title      s) = showField "title" s
+showBibTeX (Volume     s) = showField "volume" (S $ show s)
+showBibTeX (Publisher  s) = showField "publisher" s
+showBibTeX (Author     p) = showField "author" (S $ rendPeople p)
+showBibTeX (Year       y) = showField "year" (S $ show y)
+showBibTeX (Date   d m y) = showField "year" (S $ unwords [show d, show m, show y])
+showBibTeX (Collection s) = showField "collection" s
+showBibTeX (Journal    s) = showField "journal" s
+
+showField :: String -> Spec -> Spec
+showField f s = S f :+: S "={" :+: s :+: S "}"
+
+rendPeople :: People -> String
+rendPeople []  = "N.a." -- "No authors given"
+rendPeople people = foldl1 (\x y -> x ++ " and " ++ y) $ map rendPersLFM people

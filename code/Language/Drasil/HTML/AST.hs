@@ -212,7 +212,7 @@ instance Eq CiteField where
   (==) (Date _ _ _) (Date _ _ _) = True
   (==) _ _ = False
 
-instance Ord CiteField where
+instance Ord CiteField where --This is only true for MLA
   compare (Author     _) _ = LT
   compare _ (Author     _) = GT
   compare (Title      _) _ = LT

@@ -37,13 +37,15 @@ indent :: Doc -> Doc
 indent = nest 4
 
 -- | basic plaintext (String) wrapping
-paren,brace,dollar,quotes,sqbrac,angbrac :: String -> String
+paren,brace,dollar,quotes,sqbrac,angbrac,dot,comm :: String -> String
 paren  = \x -> "(" ++ x ++ ")"
 brace  = \x -> "{" ++ x ++ "}"
 dollar = \x -> "$" ++ x ++ "$"
 quotes = \x -> "\"" ++ x ++ "\""
 sqbrac = \x -> "[" ++ x ++ "]"
 angbrac = \x -> "<" ++ x ++ ">"
+dot    = \x -> x ++ "."
+comm   = \x -> x ++ ","
 
 -- | String capitalization
 capitalize :: String -> String
@@ -56,3 +58,17 @@ upcase []      = text []
 upcase (c:cs)  = text $ toUpper c:cs --capitalize first letter of string
 lowcase []     = text []
 lowcase (c:cs) = text $ toLower c:cs --make first letter lowercase
+
+
+--FIXME: move this. It is here for not since TeX and HTML
+--       use this for bibliography rendering
+-- Used only on single digit Int
+sufx :: Integer -> String
+sufx 1 = "st"
+sufx 2 = "nd"
+sufx 3 = "rd"
+sufx _ = "th"
+
+-- Use on any sized Int
+sufxer :: Integer -> String
+sufxer = dot . sufx . mod 10

@@ -62,11 +62,13 @@ image :: String -> String -> Doc
 image f c = 
   text $ "<img class=\"figure\" src=\"" ++ f ++ "\" alt=\"" ++ c ++ "\"></img>"
 
-sub,sup :: String -> String  
+sub,sup,em :: String -> String  
 -- | Subscript tag
 sub = \x -> "<sub>" ++ x ++ "</sub>"
 -- | Superscript tag
 sup = \x -> "<sup>" ++ x ++ "</sup>"
+-- | Emphasis (italics) tag
+em  = \x -> "<em>"  ++ x ++ "</em>"
 
 article_title, author :: Doc -> Doc
 -- | Title header

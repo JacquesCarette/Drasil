@@ -4,7 +4,8 @@ module Language.Drasil.People
   , HasName
   , name, manyNames
   , Conv(..) --This is needed to unwrap names for the bibliography
-  , lstName
+  , lstName, initial
+  , rendPersLFM, rendPersLFM', rendPersLFM''
   ) where
 
 import Language.Drasil.Spec (Sentence(S, EmptyS),(+:+), sC)
@@ -76,3 +77,24 @@ manyNames names = nameList names
 
 lstName :: Person -> String
 lstName (Person {_surname = l}) = l
+
+-- LFM is Last, First Middle
+rendPersLFM :: Person -> String
+rendPersLFM (Person {_surname = n, _convention = Mono}) = n
+rendPersLFM (Person {_given = f, _surname = l, _middle = ms}) =
+  l ++ ", " ++ unwords (f:ms)
+
+-- LFM' is Last, F. M.
+rendPersLFM' :: Person -> String
+rendPersLFM' (Person {_surname = n, _convention = Mono}) = n
+rendPersLFM' (Person {_given = f, _surname = l, _middle = ms}) =
+  l ++ ", " ++ (unwords . map initial) (f:ms)
+
+-- LFM'' is Last, First M.
+rendPersLFM'' :: Person -> String
+rendPersLFM'' (Person {_surname = n, _convention = Mono}) = n
+rendPersLFM'' (Person {_given = f, _surname = l, _middle = ms}) =
+  l ++ ", " ++ unwords (f:(map initial ms))
+
+initial :: String -> String
+initial = (\xs -> head xs : ".")

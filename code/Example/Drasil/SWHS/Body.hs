@@ -86,7 +86,7 @@ import qualified Drasil.SRS as SRS (reference, inModel, missingP, likeChg,
 
 import Drasil.Template.MG (mgDoc)
 import Drasil.Template.DD (makeDD)
-import Drasil.DocumentLanguage (DocDesc, mkDoc, tsymb'',
+import Drasil.DocumentLanguage {-(DocDesc, mkDoc, tsymb'',
   LFunc (TermExcept),
   Literature (Lit, Doc'),
   TSIntro (SymbOrder, SymbConvention, TSPurpose),
@@ -94,7 +94,8 @@ import Drasil.DocumentLanguage (DocDesc, mkDoc, tsymb'',
   IntroSub(IOrgSec, IChar, IScope, IPurpose),
   IntroSec (IntroProg),
   RefTab (TAandA, TUnits),
-  RefSec (RefProg))
+  RefSec (RefProg),
+  AuxConstntSec (AuxConsProg))-}
 
 import Drasil.Sections.ReferenceMaterial (intro)
 import Drasil.Sections.SpecificSystemDescription (inModelF, assumpF,
@@ -103,7 +104,6 @@ import Drasil.Sections.SpecificSystemDescription (inModelF, assumpF,
 import Drasil.Sections.TraceabilityMandGs (traceMGF, traceGIntro)
 import Drasil.Sections.Requirements (reqF)
 import Drasil.Sections.GeneralSystDesc (genSysF)
-import Drasil.Sections.AuxiliaryConstants (valsOfAuxConstantsF)
 
 import Data.Drasil.Utils (enumSimple, weave, getS, itemRefToSent, makeListRef,
   makeTMatrix, mkRefsList, refFromType)
@@ -151,24 +151,26 @@ swhsPeople :: [Person]
 swhsPeople = [thulasi, brooks, spencerSmith]
 
 mkSRS :: DocDesc
-mkSRS = RefSec (RefProg intro
-  [TUnits, tsymb'' tsymb_intro (TermExcept [uNormalVect]), TAandA]):
+mkSRS = [RefSec (RefProg intro
+  [TUnits, tsymb'' tsymb_intro (TermExcept [uNormalVect]), TAandA])] ++
 
-  IntroSec (IntroProg (s2_intro CT.ener_src energy swhs_pcm phsChgMtrl 
+  [IntroSec (IntroProg (s2_intro CT.ener_src energy swhs_pcm phsChgMtrl 
     progName CT.thermal_energy latent_heat unit_) (s2_kSent swhs_pcm program
     progName) [
-
+   
   IPurpose (s2_1_par1 swhs_pcm progName),
-
+  
   IScope (s2_2_contents CT.thermal_analysis tank_pcm)
   (s2_2_end temp CT.thermal_energy water phsChgMtrl sWHT),
-
+   
   IChar (s2_3_knowlegde CT.ht_trans_theo) (s2_3_understanding de) (EmptyS),
-
-  IOrgSec (s2_4_intro) (inModel) (SRS.inModel SRS.missingP [])
-  (s2_4_trail swhs_pcm progName)]) :
   
-  map Verbatim [s3, s4, s5, s6, s7, s8, s9]
+  IOrgSec (s2_4_intro) (inModel) (SRS.inModel SRS.missingP [])
+  (s2_4_trail swhs_pcm progName)])] ++
+  
+  map Verbatim [s3, s4, s5, s6, s7] ++ 
+  [AuxConstntSec (AuxConsProg progName specParamValList)] ++
+  [Verbatim s9]
 
 tsymb_intro :: [TSIntro]
 tsymb_intro = [TSPurpose, SymbConvention
@@ -734,9 +736,6 @@ s7_t3_LC6 = ["A15"]
 -------------------------------------------------
 -- Section 8 :  Specification Parameter Values --
 -------------------------------------------------
-s8 :: Section
-s8 = valsOfAuxConstantsF progName specParamValList
-
 ----------------------------
 -- Section 9 : References --
 ----------------------------

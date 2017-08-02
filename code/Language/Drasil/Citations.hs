@@ -10,6 +10,7 @@ type State  = Sentence
 
 data Citation where --add artical, website
   Book :: [CiteField] -> Citation
+  Article :: [CiteField] -> Citation
   
 data CiteField = Author     People
                | Title      Sentence
@@ -22,6 +23,10 @@ data CiteField = Author     People
                | Journal    Sentence
                | Year       Integer
                | Date Integer Month Integer
+               | Page       Integer
+               | Pages    (Integer, Integer)
+               | Note       Sentence --extra text at the end of a citation
+               | Issue      Integer
 
 data Month = Jan
            | Feb
@@ -66,14 +71,20 @@ ref1 = Book [
 -- Helpers --
 -------------
 getAuthors :: Citation -> People
-getAuthors (Book fields) = getP fields
-  where getP [] = error "No authors found"
-        getP ((Author people):_) = people
-        getP (_:xs) = getP xs
+getAuthors (Book    fields) = getP fields
+getAuthors (Article fields) = getP fields
 
 getYear :: Citation -> Integer
-getYear (Book fields) = getY fields
-  where getY [] = error "No year found"
-        getY ((Year year):_) = year
-        getY ((Date _ _ year):_) = year
-        getY (_:xs) = getY xs
+getYear (Book    fields) = getY fields
+getYear (Article fields) = getY fields
+
+getP :: [CiteField] -> People
+getP [] = error "No authors found"
+getP ((Author people):_) = people
+getP (_:xs) = getP xs
+
+getY :: [CiteField] -> Integer
+getY [] = error "No year found"
+getY ((Year year):_) = year
+getY ((Date _ _ year):_) = year
+getY (_:xs) = getY xs

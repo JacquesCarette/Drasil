@@ -512,30 +512,29 @@ mkBibRef = foldl1 (\x y -> x :+: S "\n\n" :+: y) . map renderCite
 
 --for when we add other things to reference like website, newspaper, articals
 renderCite :: Citation -> Spec
-renderCite b@(Book _) = renderBook b
+renderCite c@(Book    fields) = renderF c fields
+renderCite c@(Article fields) = renderF c fields
 
 --Rendering a book--
-renderBook :: Citation -> Spec
-renderBook b@(Book fields) = S "@":+: S (show b) :+: S "{" :+: S (cite b) :+: S ",\n" :+:
+renderF :: Citation -> [CiteField] -> Spec
+renderF c fields = S "@":+: S (show c) :+: S "{" :+: S (cite fields) :+: S ",\n" :+:
   (foldl1 (:+:) . intersperse (S ",\n") . map showBibTeX) fields :+: S "}"
 --renderBook _ = error "Tried to render a non-book using renderBook." 
 
-cite :: Citation -> String
-cite book = concat $ intersperse "_" $
-  map lstName (getAuthors book) ++ [show $ getYear book]
+cite :: [CiteField] -> String
+cite fields = concat $ intersperse "_" $
+  map lstName (getAuthors fields) ++ [show $ getYear fields]
 
-getAuthors :: Citation -> People
-getAuthors (Book fields) = getP fields
-  where getP [] = error "No authors found"
-        getP ((Author people):_) = people
-        getP (_:xs) = getP xs
+getAuthors :: [CiteField] -> People
+getAuthors [] = error "No authors found" --FIXME: return a warning
+getAuthors ((Author people):_) = people
+getAuthors (_:xs) = getAuthors xs
 
-getYear :: Citation -> Integer
-getYear (Book fields) = getY fields
-  where getY [] = error "No year found"
-        getY ((Year year):_) = year
-        getY ((Date _ _ year):_) = year
-        getY (_:xs) = getY xs
+getYear :: [CiteField] -> Integer
+getYear [] = error "No year found" --FIXME: return a warning
+getYear ((Year year):_) = year
+getYear ((Date _ _ year):_) = year
+getYear (_:xs) = getYear xs
 
 showBibTeX :: CiteField -> Spec
 showBibTeX (Place (city, state)) = showField "place" (city :+: S ", " :+: state)
@@ -549,6 +548,10 @@ showBibTeX (Year       y) = showField "year" (S $ show y)
 showBibTeX (Date   d m y) = showField "year" (S $ unwords [show d, show m, show y])
 showBibTeX (Collection s) = showField "collection" s
 showBibTeX (Journal    s) = showField "journal" s
+showBibTeX (Page       s) = showField "pages" (S $ show s)
+showBibTeX (Pages (a, b)) = showField "pages" (S $ show a ++ "-" ++ show b)
+showBibTeX (Note       s) = showField "note" s
+showBibTeX (Issue      s) = showField "number" (S $ show s)
 
 showField :: String -> Spec -> Spec
 showField f s = S f :+: S "={" :+: s :+: S "}"

@@ -182,7 +182,7 @@ type BibRef = [Citation]
 type City   = Spec
 type State  = Spec
 
-data Citation = Book [CiteField]
+data Citation = Book [CiteField] | Article [CiteField]
   --add artical, website...
 data CiteField = Author     People
                | Title      Spec
@@ -195,24 +195,34 @@ data CiteField = Author     People
                | Journal    Spec
                | Year       Integer
                | Date Integer Month Integer
+               | Page       Integer
+               | Pages    (Integer, Integer)
+               | Note       Spec
+               | Issue      Integer -- Issue number
+
 instance Show Citation where
-  show (Book _) = "Print"
+  show (Book    _) = "Print"
+  show (Article _) = "Print"
 
 instance Eq CiteField where
-  (==) (Author _) (Author _) = True
-  (==) (Title _) (Title _) = True
-  (==) (Series _) (Series _) = True
+  (==) (Author _)     (Author _)     = True
+  (==) (Title _)      (Title _)      = True
+  (==) (Series _)     (Series _)     = True
   (==) (Collection _) (Collection _) = True
-  (==) (Volume _) (Volume _) = True
-  (==) (Edition _) (Edition _) = True
-  (==) (Place _) (Place _) = True
-  (==) (Publisher _) (Publisher _) = True
-  (==) (Journal _) (Journal _) = True
-  (==) (Year _) (Year _) = True
-  (==) (Date _ _ _) (Date _ _ _) = True
+  (==) (Volume _)     (Volume _)     = True
+  (==) (Edition _)    (Edition _)    = True
+  (==) (Place _)      (Place _)      = True
+  (==) (Publisher _)  (Publisher _)  = True
+  (==) (Journal _)    (Journal _)    = True
+  (==) (Year _)       (Year _)       = True
+  (==) (Date _ _ _)   (Date _ _ _)   = True
+  (==) (Page _)       (Page _)       = True
+  (==) (Pages _)      (Pages _)      = True
+  (==) (Note _)       (Note _)       = True
+  (==) (Issue _)      (Issue _)      = True
   (==) _ _ = False
 
-instance Ord CiteField where --This is only true for MLA
+instance Ord CiteField where --FIXME: APA has year come directly after Author
   compare (Author     _) _ = LT
   compare _ (Author     _) = GT
   compare (Title      _) _ = LT
@@ -221,6 +231,8 @@ instance Ord CiteField where --This is only true for MLA
   compare _ (Series     _) = GT
   compare (Collection _) _ = LT
   compare _ (Collection _) = GT
+  compare (Journal    _) _ = LT
+  compare _ (Journal    _) = GT
   compare (Volume     _) _ = LT
   compare _ (Volume     _) = GT
   compare (Edition    _) _ = LT
@@ -229,9 +241,15 @@ instance Ord CiteField where --This is only true for MLA
   compare _ (Place      _) = GT
   compare (Publisher  _) _ = LT
   compare _ (Publisher  _) = GT
-  compare (Journal    _) _ = LT
-  compare _ (Journal    _) = GT
+  compare (Issue      _) _ = LT
+  compare _ (Issue      _) = GT
   compare (Year       _) _ = LT
   compare _ (Year       _) = GT
   compare (Date   _ _ _) _ = LT
   compare _ (Date   _ _ _) = GT
+  compare (Page       _) _ = LT
+  compare _ (Page       _) = GT
+  compare (Pages      _) _ = LT
+  compare _ (Pages      _) = GT
+  compare (Note       _) _ = LT
+  compare _ (Note       _) = GT

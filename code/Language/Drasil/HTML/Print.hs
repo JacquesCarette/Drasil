@@ -2,7 +2,7 @@ module Language.Drasil.HTML.Print where
 
 import Prelude hiding (print, id)
 import Data.List (intersperse, sort)
-import Text.PrettyPrint hiding (render)
+import Text.PrettyPrint hiding (render, quotes)
 import Numeric (showFFloat)
 
 import Language.Drasil.HTML.Import (makeDocument, spec)
@@ -404,47 +404,88 @@ makeBib = listRef . map (Flat . S) . sort . map renderCite
   
 --for when we add other things to reference like website, newspaper, articals
 renderCite :: Citation -> String
-renderCite b@(Book _) = renderBook b
-
+renderCite b@(Book _)    = renderBook b
+renderCite a@(Article _) = renderArtcl a
+--FIXME: Collapse renderArtcl and renderBook into one function.
+--       Waitting to make ALL types of citations can be rendered the same.
 --Rendering a book--
 renderBook :: Citation -> String
 renderBook c@(Book fields) = unwords $
-  map (useStyleHTML bibStyleH) (sort fields) ++ endingField c bibStyleH
---renderBook _ = error "Tried to render a non-book using renderBook."
+  map (useStyleBk bibStyleH) (sort fields) ++ endingField c bibStyleH
+renderBook _ = error "Tried to render a non-book using renderBook."
+
+-- Articals (in a journal) --
+renderArtcl :: Citation -> String
+renderArtcl c@(Article fields) = unwords $
+  map (useStyleArtcl bibStyleH) (sort fields) ++ endingField c bibStyleH
+renderArtcl _ = error "Tried to render a non-article using renderArtcl."
 
 endingField :: Citation -> StyleGuide -> [String]
-endingField c@(Book _) MLA = [dot $ show c]
+endingField c MLA = [dot $ show c]
 endingField _ _ = []
 
-useStyleHTML :: StyleGuide -> (CiteField -> String)
-useStyleHTML MLA = showMLA
-useStyleHTML APA = showAPA
-useStyleHTML Chicago = showChicago
+-- Config helpers --
+useStyleBk :: StyleGuide -> (CiteField -> String)
+useStyleBk MLA = bookMLA
+useStyleBk APA = bookAPA
+useStyleBk Chicago = bookChicago
+
+useStyleArtcl :: StyleGuide -> (CiteField -> String)
+useStyleArtcl MLA = artclMLA
+useStyleArtcl APA = artclAPA
+useStyleArtcl Chicago = artclChicago
 
 -- FIXME: move these show functions and use tags, combinators
-showMLA :: CiteField -> String
-showMLA (Place (city, state)) = p_spec (city :+: S ", " :+: state) ++ ":"
-showMLA (Edition    s) = comm $ dot $ p_spec (S $ show s ++ sufxer s) ++ " ed"
-showMLA (Series     s) = dot $ em $ p_spec s
-showMLA (Title      s) = dot $ em $ p_spec s --If there is a series or collection, this should be in quotes, not italics
-showMLA (Volume     s) = comm $ "vol. " ++ show s
-showMLA (Publisher  s) = comm $ p_spec s
-showMLA (Author     p) = dot $ p_spec (rendPeople rendPersLFM p)
-showMLA (Year       y) = dot $ p_spec (S $ show y)
-showMLA (Date   d m y) = dot $ p_spec (S $ unwords [show d, show m, show y])
-showMLA (Collection s) = dot $ em $ p_spec s
-showMLA (Journal    s) = comm $ dot $ em $ p_spec s
+bookMLA :: CiteField -> String
+bookMLA (Place (city, state)) = p_spec (city :+: S ", " :+: state) ++ ":"
+bookMLA (Edition    s) = comm $ show s ++ sufxer s ++ " ed."
+bookMLA (Series     s) = dot $ em $ p_spec s
+bookMLA (Title      s) = dot $ em $ p_spec s --If there is a series or collection, this should be in quotes, not italics
+bookMLA (Volume     s) = comm $ "vol. " ++ show s
+bookMLA (Publisher  s) = comm $ p_spec s
+bookMLA (Author     p) = dot $ p_spec (rendPeople rendPersLFM p)
+bookMLA (Year       y) = dot $ show y
+bookMLA (Date   d m y) = dot $ unwords [show d, show m, show y]
+bookMLA (Collection s) = dot $ em $ p_spec s
+bookMLA (Journal    s) = comm $ em $ p_spec s
+bookMLA (Page       n) = dot $ "p. " ++ show n
+bookMLA (Pages  (a,b)) = dot $ "pp. " ++ show a ++ "&ndash;" ++ show b
+bookMLA (Note       s) = p_spec s
+bookMLA (Issue      n) = comm $ "no. " ++ show n
 
-showAPA :: CiteField -> String
-showAPA (Author   p) = dot $ p_spec (rendPeople rendPersLFM' p) --APA uses initals rather than full name
-showAPA (Year     y) = dot $ paren $ p_spec (S $ show y) --APA puts "()" around the year
-showAPA (Date _ _ y) = showAPA (Year y) --APA doesn't care about the day or month
-showAPA i = showMLA i --Most items are rendered the same as MLA
+bookAPA :: CiteField -> String --FIXME: year needs to come after author in APA
+bookAPA (Author   p) = dot $ p_spec (rendPeople rendPersLFM' p) --APA uses initals rather than full name
+bookAPA (Year     y) = dot $ paren $ show y --APA puts "()" around the year
+bookAPA (Date _ _ y) = bookAPA (Year y) --APA doesn't care about the day or month
+bookAPA (Page     n) = dot $ show n
+bookAPA (Pages (a,b)) = dot $ show a ++ "&ndash;" ++ show b
+bookAPA i = bookMLA i --Most items are rendered the same as MLA
 
-showChicago :: CiteField -> String
-showChicago (Author   p) = dot $ p_spec (rendPeople rendPersLFM'' p) --APA uses middle initals rather than full name
-showChicago (Date _ _ y) = showChicago (Year y) --APA doesn't care about the day or month
-showChicago i = showMLA i --Most items are rendered the same as MLA
+bookChicago :: CiteField -> String
+bookChicago (Author   p) = dot $ p_spec (rendPeople rendPersLFM'' p) --APA uses middle initals rather than full name
+bookChicago (Date _ _ y) = bookChicago (Year y) --APA doesn't care about the day or month
+bookChicago p@(Page   _) = bookAPA p
+bookChicago p@(Pages  _) = bookAPA p
+bookChicago i = bookMLA i --Most items are rendered the same as MLA
+
+-- for artical renderings
+artclMLA :: CiteField -> String
+artclMLA (Title s) = quotes $ p_spec s
+artclMLA i = bookMLA i
+
+artclAPA :: CiteField -> String
+artclAPA (Title  s) = dot $ p_spec s
+artclAPA (Volume n) = em $ show n
+artclAPA (Issue  n) = comm $ paren $ show n
+artclAPA i = bookAPA i
+
+artclChicago :: CiteField -> String
+artclChicago (Title      s) = quotes $ dot $ p_spec s
+artclChicago (Volume     n) = comm $ show n
+artclChicago (Issue      n) = "no. " ++ show n
+artclChicago i@(Year     _) = bookAPA i
+artclChicago i@(Date _ _ _) = bookAPA i
+artclChicago i = bookChicago i
 
 -- PEOPLE RENDERING --
 

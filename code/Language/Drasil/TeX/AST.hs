@@ -167,7 +167,7 @@ type BibRef = [Citation]
 type City   = Spec
 type State  = Spec
 
-data Citation = Book [CiteField]
+data Citation = Book [CiteField] | Article [CiteField]
   --add artical, website...
 data CiteField = Author     People
                | Title      Spec
@@ -180,5 +180,11 @@ data CiteField = Author     People
                | Journal    Spec
                | Year       Integer
                | Date Integer Month Integer
+               | Page       Integer
+               | Pages    (Integer, Integer)
+               | Note       Spec
+               | Issue      Integer
+
 instance Show Citation where
-  show (Book _) = "book"
+  show (Book    _) = "book"
+  show (Article _) = "artical"

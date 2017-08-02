@@ -6,10 +6,19 @@ import Language.Drasil
 -- Section 9 : References --
 ----------------------------
 
-ref1, ref2, ref3, ref4, ref5, ref6 :: [Sentence]
+ref1 :: Citation
 
-ref1 = [S "J. Frederick Bueche. Introduction to Physics for Scientists. McGraw Hill",
-  S "United States", S "fourth edition edition", S "1986."]
+ref2, ref3, ref4, ref5, ref6 :: [Sentence]
+
+ref1 = Article [
+  Author [personWM' "J." ["Frederick"] "Bueche"],
+  Title (S "Introduction to Physics for Scientists"),
+  Publisher (S "McGraw Hill"),
+  Place (S "York", S "USA"),
+  Note (S "fourth edition"),
+  Year 1986]
+
+
 
 ref2 = [S "F. P. Incropera", S "D. P. Dewitt", S "T. L. Bergman",
   S "and A. S. Lavine. Fundamentals of Heat and Mass Transfer. John Wiley" +:+

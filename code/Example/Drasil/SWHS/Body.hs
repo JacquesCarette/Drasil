@@ -4,7 +4,7 @@ import Control.Lens ((^.))
 
 import Language.Drasil (CI, ConceptChunk, UnitalChunk, UncertQ,
   QDefinition, ConVar, NamedChunk, NamedIdea, RelationConcept,
-  Section, Document, Concept, QSWrapper, Person, Block,
+  Section, Document, Concept, QSWrapper, Person, Block, BibRef,
   _constraints, _constants, _defSequence, _inputs, _outputs, _units,
   _definitions, _concepts, _namedIdeas, _quants, _authors, _kind, _sys,
   sC, titleize, titleize', plural, short, makeRef, phrase,
@@ -170,7 +170,7 @@ mkSRS = [RefSec (RefProg intro
   
   map Verbatim [s3, s4, s5, s6, s7] ++ 
   [AuxConstntSec (AuxConsProg progName specParamValList)] ++
-  [Verbatim s9]
+  [Bibliography s9_swhs_citations]
 
 tsymb_intro :: [TSIntro]
 tsymb_intro = [TSPurpose, SymbConvention
@@ -740,6 +740,10 @@ s7_t3_LC6 = ["A15"]
 -- Section 9 : References --
 ----------------------------
 
+s9_swhs_citations :: BibRef
+s9_swhs_citations = [ref1]
+
+{--
 s9 :: Section
 s9 = SRS.reference [s9_refs] []
 
@@ -747,7 +751,8 @@ s9_refs :: Contents
 s9_refs = mkRefsList 1 $ map foldlsC s9_refList
 
 s9_refList :: [[Sentence]]
-s9_refList = [ref1, ref2, ref3, ref4, ref5, ref6]
+s9_refList = [ref2, ref3, ref4, ref5, ref6]
+--}
 
 -- ============== --
 -- Dead Knowledge --

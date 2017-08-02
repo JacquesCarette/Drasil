@@ -111,7 +111,7 @@ interpZ = funcDef "interpZ" [v_x_array, v_y_array, v_z_array, v_x, v_y] Rational
     FThrow "Interpolation of z failed"      
   ]   
 
-interpMod :: ModDef
+interpMod :: Mod
 interpMod = ModDef "Interpolation" [linInterp, indInSeq, matrixCol, interpY, interpZ]
 
 -- hack  (more so than the rest of the module!)

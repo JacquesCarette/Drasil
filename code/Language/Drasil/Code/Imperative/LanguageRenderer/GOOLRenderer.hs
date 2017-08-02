@@ -5,7 +5,7 @@ module Language.Drasil.Code.Imperative.LanguageRenderer.GOOLRenderer (
 ) where
 
 import Language.Drasil.Code.Code (Code(..))
-import Language.Drasil.Code.Imperative.AST hiding (comment,bool,int,float,char)
+import Language.Drasil.Code.Imperative.AST hiding (body,comment,bool,int,float,char)
 import Language.Drasil.Code.Imperative.LanguageRenderer
 import Language.Drasil.Code.Imperative.Helpers (blank,oneTab,oneTabbed,
                             doubleQuotedText,verticalComma,himap,vibcat,vibmap)

@@ -8,13 +8,16 @@ import Drasil.GlassBR.Interpolation
 
 read_table :: DataDesc
 read_table = 
-  [ singleLine (repeated [junk, listEntry [WithLine] v_z_array]) ',',
+  [ singleLine (repeated [junk, listEntry [WithPattern] v_z_array]) ',',
     multiLine (repeated [listEntry [WithPattern, WithLine] v_x_array, listEntry [WithPattern, WithLine] v_y_array]) ','
   ]
 
 -----
 
 --from defaultInput.txt:
+
+inputMod :: Mod
+inputMod = ModData "InputFormat" [glassInputData]
 
 glassInputData :: DataDesc
 glassInputData = 

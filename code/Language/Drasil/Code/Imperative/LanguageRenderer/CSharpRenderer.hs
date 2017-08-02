@@ -5,7 +5,7 @@ module Language.Drasil.Code.Imperative.LanguageRenderer.CSharpRenderer (
 ) where
 
 import Language.Drasil.Code.Code (Code(..))
-import Language.Drasil.Code.Imperative.AST hiding (comment,bool,int,float,char)
+import Language.Drasil.Code.Imperative.AST hiding (body,comment,bool,int,float,char)
 import Language.Drasil.Code.Imperative.LanguageRenderer
 import Language.Drasil.Code.Imperative.Helpers (oneTab, vibmap)
 
@@ -118,15 +118,17 @@ ioDoc' c (OpenFile f n m) = valueDoc c f <+> equals <+> new <+> modeStr m <> par
 ioDoc' c (CloseFile f) = statementDoc c NoLoop (valStmt $ objMethodCall f "Close" [])        
 ioDoc' c io = ioDocD c io
 
-inputDoc' :: Config -> IOType -> StateType -> Value -> Doc
-inputDoc' c io (Base Integer) v = valueDoc c v <+> equals <+> text "Int32.Parse" <> parens (inputFn c io)
-inputDoc' c io (Base Float) v = valueDoc c v <+> equals <+> text "Double.Parse" <> parens (inputFn c io)
-inputDoc' c io (Base String) v = valueDoc c v <+> equals <+> parens (inputFn c io)
+inputDoc' :: Config -> IOType -> StateType -> Maybe Value -> Doc
+inputDoc' c io _ Nothing = inputFn c io
+inputDoc' c io (Base Integer) (Just v) = valueDoc c v <+> equals <+> text "Int32.Parse" <> parens (inputFn c io)
+inputDoc' c io (Base Float) (Just v) = valueDoc c v <+> equals <+> text "Double.Parse" <> parens (inputFn c io)
+inputDoc' c io (Base String) (Just v) = valueDoc c v <+> equals <+> parens (inputFn c io)
 inputDoc' _ _ (Base (FileType _)) _ = error "File type is not valid input"
 inputDoc' c io s v = inputDocD c io s v 
 
 complexDoc' :: Config -> Complex -> Doc
-complexDoc' c (ReadLine f v) = statementDoc c NoLoop (v &= f$.(Func "ReadLine" []))
+complexDoc' c (ReadLine f Nothing) = statementDoc c NoLoop (valStmt $ f$.(Func "ReadLine" []))
+complexDoc' c (ReadLine f (Just v)) = statementDoc c NoLoop (v &= f$.(Func "ReadLine" []))
 complexDoc' c (ReadAll f v) = 
   bodyDoc c $ oneLiner $
     while ((?!) f$->(var "EndOfStream")) (oneLiner $ valStmt $ v$.(listAppend $ f$.(Func "ReadLine" [])))

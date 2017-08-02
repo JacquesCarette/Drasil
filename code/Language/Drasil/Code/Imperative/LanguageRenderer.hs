@@ -24,8 +24,8 @@ module Language.Drasil.Code.Imperative.LanguageRenderer (
 ) where
 
 import Language.Drasil.Code.Code (Code(..))
-import Language.Drasil.Code.Imperative.AST 
-  hiding (comment,bool,int,float,char,string,cases,tryBody,catchBody,guard,
+import Language.Drasil.Code.Imperative.AST
+  hiding (body,comment,bool,int,float,char,string,cases,tryBody,catchBody,guard,
           update,strats)
 import Language.Drasil.Code.Imperative.Helpers (angles,blank,doubleQuotedText,oneTab,
                             oneTabbed,himap,vibcat,vmap,vibmap)
@@ -120,7 +120,7 @@ data Config = Config {
     valueDoc :: Value -> Doc,
     getEnv :: String -> Doc, -- careful, this can fail!
     ioDoc :: IOSt -> Doc,
-    inputDoc :: IOType -> StateType -> Value -> Doc,
+    inputDoc :: IOType -> StateType -> Maybe Value -> Doc,
     complexDoc :: Complex -> Doc
 }
 
@@ -483,7 +483,7 @@ ioDocD c (CloseFile f) = statementDoc c NoLoop (valStmt $ objMethodCall f "close
 ioDocD c (Out t newLn s v) = printDoc c t newLn s v <> semi
 ioDocD c (In t s v) = inputDoc c t s v <> semi
 
-inputDocD :: Config -> IOType -> StateType -> Value -> Doc
+inputDocD :: Config -> IOType -> StateType -> Maybe Value -> Doc
 inputDocD _ _ (Base (FileType _)) _ = error "File type is not valid input"
 inputDocD _ _ (Base _) _ = error "No default implementation"
 inputDocD _ _ _ _ = error "Type not supported for input"

@@ -117,7 +117,7 @@ glassChoices = Choices {
 }  
   
 glassBR_code :: CodeSpec
-glassBR_code = addModDefs (codeSpec' glassSystInfo glassChoices) [interpMod]
+glassBR_code = addModDefs (codeSpec' glassSystInfo glassChoices) [interpMod, inputMod]
 
 mgBod :: [Section]
 (mgBod, _) = makeDD likelyChanges unlikelyChanges reqs modules

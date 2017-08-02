@@ -6,7 +6,7 @@ module Language.Drasil.Code.Imperative.LanguageRenderer.PythonRenderer (
 
 import Language.Drasil.Code.Code (Code(..))
 import Language.Drasil.Code.Imperative.AST 
-  hiding (comment,bool,int,float,char,guard,update)
+  hiding (body,comment,bool,int,float,char,guard,update)
 import Language.Drasil.Code.Imperative.LanguageRenderer
 import Language.Drasil.Code.Imperative.Helpers (blank,oneTab)
 
@@ -239,15 +239,16 @@ functionDoc' c _ _ (Method n _ _ _ ps b) = vcat [
 functionDoc' c _ _ (MainMethod b) = bodyDoc c b
 functionDoc' _ _ _ _ = error "Class method type cannot exist outside of class"
 
-inputDoc' :: Config -> IOType -> StateType -> Value -> Doc
-inputDoc' c io (Base Boolean) v = statementDoc c NoLoop
+inputDoc' :: Config -> IOType -> StateType -> Maybe Value -> Doc
+inputDoc' c io _ Nothing = statementDoc c NoLoop (valStmt $ inputFn io)
+inputDoc' c io (Base Boolean) (Just v) = statementDoc c NoLoop
   (v &= inputFn io ?!= litString "0")
-inputDoc' c io (Base Integer) v = statementDoc c NoLoop
+inputDoc' c io (Base Integer) (Just v) = statementDoc c NoLoop
   (v &= funcApp' "int" [inputFn io])
-inputDoc' c io (Base Float) v = statementDoc c NoLoop
+inputDoc' c io (Base Float) (Just v) = statementDoc c NoLoop
   (v &= funcApp' "float" [inputFn io])
 inputDoc' _ _ (Base (FileType _)) _ = error "File type is not valid input"
-inputDoc' c io (Base _) v = statementDoc c NoLoop
+inputDoc' c io (Base _) (Just v) = statementDoc c NoLoop
   (v &= inputFn io)
 inputDoc' c io s v = inputDocD c io s v 
 
@@ -258,7 +259,8 @@ ioDoc' c (OpenFile f n m) = statementDoc c NoLoop (f &= funcApp' "open" [n, litS
 ioDoc' c io = ioDocD c io
 
 complexDoc' :: Config -> Complex -> Doc
-complexDoc' c (ReadLine f v) = statementDoc c NoLoop (v &= objMethodCall f "readline" [])
+complexDoc' c (ReadLine f (Just v)) = statementDoc c NoLoop (v &= objMethodCall f "readline" [])
+complexDoc' c (ReadLine f Nothing)  = statementDoc c NoLoop (valStmt $ objMethodCall f "readline" [])
 complexDoc' c (ReadAll f v) = statementDoc c NoLoop (v &= objMethodCall f "readlines" [])
 complexDoc' c (ListSlice _ vnew vold b e s) = 
   valueDoc c vnew <+> equals <+> valueDoc c vold <> (brackets $ 

@@ -10,6 +10,7 @@ import Language.Drasil.Chunk.Code
 import Language.Drasil.Expr as E
 import Language.Drasil.Expr.Extract hiding (vars)
 import Language.Drasil.CodeSpec hiding (codeSpec)
+import Language.Drasil.DataDesc
 
 import Prelude hiding (log, exp, return, const)
 import Data.List (intersperse)
@@ -62,8 +63,7 @@ generator spec g =
                                                           AsClass   -> genInputModClass
       assignFunc =         case (logging chs)          of LogVar    -> loggedAssign
                                                           LogAll    -> loggedAssign
-                                                          _         -> (\_ -> I.assign)
-                                                          
+                                                          _         -> (\_ -> I.assign)                                                          
   in Generator {
       generateCode = generateCodeD g,
       
@@ -125,7 +125,7 @@ genModulesD g = genInputMod g (inputs $ codeSpec g) (cMap $ codeSpec g)
              ++ [genConstMod g]
              ++ map (\(FuncMod n d) -> genCalcMod g n d) (fMods $ codeSpec g)
              ++ genOutputMod g (outputs $ codeSpec g)
-             ++ map (genModDef g) (modDefs $ codeSpec g) -- hack
+             ++ map (genModDef g) (mods $ codeSpec g) -- hack
       --       ++ map (genHacks g) (mods $ codeSpec g) -- hack 
 
 
@@ -191,6 +191,28 @@ genInputConstraintsD g vars cm =
       ++
       (map (\x -> ifCond [((?!) (convExpr x), physCBody g x)] noElse) physCs)
     ]
+
+genFileInput :: Generator -> DataDesc -> Method
+genFileInput g dd = 
+  let l_infile = "infile"
+      v_infile = var l_infile
+      l_filename = "filename"
+      p_filename = param l_filename string
+      v_filename = var l_filename
+  in 
+    publicMethod g methodTypeVoid "tempname" (p_filename : (getParams g $ getInputs dd)) $
+      body $ [
+          varDec l_infile infile,
+          openFileR v_infile v_filename
+        ] ++ (concatMap (inData v_infile) dd)
+          ++ [
+          closeFile v_infile 
+        ]
+  where inData :: Value -> Data -> [Statement]
+        inData v_infile (Singleton v) = [getFileInput v_infile (convType $ codeType v) (var $ codeName v)]
+        inData v_infile JunkData = [discardFileLine v_infile]
+        inData _ _ = error "working on implementation"
+    
 
 -- need Expr -> String to print constraint
 constrWarn :: Generator -> Expr -> Body
@@ -539,8 +561,9 @@ compactCaseUnary op (Case c) = Case (map (\(e, r) -> (op e, r)) c)
 compactCaseUnary op a        = op (compactCase a)
 
 -- medium hacks --
-genModDef :: Generator -> ModDef -> Module
+genModDef :: Generator -> Mod -> Module
 genModDef g (ModDef n fs) = buildModule n [] [] (map (genFuncDef g) fs) []
+genModDef g (ModData n ds) = buildModule n [] [] (map (genFileInput g) ds) []
 
 genFuncDef :: Generator -> FuncDef -> Method
 genFuncDef g (FuncDef n i o s) = publicMethod g (methodType $ convType o) n (getParams g i) [ block (map (convStmt g) s) ]

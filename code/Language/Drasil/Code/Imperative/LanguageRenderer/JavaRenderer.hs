@@ -5,7 +5,7 @@ module Language.Drasil.Code.Imperative.LanguageRenderer.JavaRenderer (
 ) where
 
 import Language.Drasil.Code.Code (Code(..))
-import Language.Drasil.Code.Imperative.AST hiding (comment,bool,int,float,char)
+import Language.Drasil.Code.Imperative.AST hiding (body,comment,bool,int,float,char)
 import Language.Drasil.Code.Imperative.LanguageRenderer
 import Language.Drasil.Code.Imperative.Helpers (blank,angles,oneTab,vibmap)
 
@@ -181,8 +181,9 @@ ioDoc' c (OpenFile f n Read) = valueDoc c f <+> equals <+> new <+> text "Scanner
 ioDoc' c (OpenFile f n Write) = valueDoc c f <+> equals <+> new <+> text "PrintWriter" <> parens (valueDoc c n) <> semi
 ioDoc' c io = ioDocD c io
 
-inputDoc' :: Config -> IOType -> StateType -> Value -> Doc
-inputDoc' c io (Base t) v = valueDoc c v <+> equals <+> inputFn c io <> dot <> typeFunc t
+inputDoc' :: Config -> IOType -> StateType -> Maybe Value -> Doc
+inputDoc' c io _ Nothing = inputFn c io <> dot <> text "next()"
+inputDoc' c io (Base t) (Just v) = valueDoc c v <+> equals <+> inputFn c io <> dot <> typeFunc t
   where  typeFunc Integer = text "nextInt()"
          typeFunc Float   = text "nextDouble()"
          typeFunc Boolean = text "nextBoolean()"
@@ -191,7 +192,8 @@ inputDoc' c io (Base t) v = valueDoc c v <+> equals <+> inputFn c io <> dot <> t
 inputDoc' c io s v = inputDocD c io s v 
 
 complexDoc' :: Config -> Complex -> Doc
-complexDoc' c (ReadLine f v) = statementDoc c NoLoop (v &= f$.(Func "nextLine" []))
+complexDoc' c (ReadLine f Nothing) = statementDoc c NoLoop (valStmt $ f$.(Func "nextLine" []))
+complexDoc' c (ReadLine f (Just v)) = statementDoc c NoLoop (v &= f$.(Func "nextLine" []))
 complexDoc' c (ReadAll f v) = statementDoc c NoLoop $
   while (f$.(Func "hasNextLine" [])) (oneLiner $ valStmt $ v$.(listAppend $ f$.(Func "nextLine" [])))    
 complexDoc' c (ListSlice st vnew vold b e s) = let l_temp = "temp"

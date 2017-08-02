@@ -6,7 +6,7 @@ module Language.Drasil.Code.Imperative.LanguageRenderer.LuaRenderer (
 
 import Language.Drasil.Code.Code (Code(..))
 import Language.Drasil.Code.Imperative.AST 
-  hiding (comment,bool,int,float,char,forBody,tryBody,catchBody)
+  hiding (body,comment,bool,int,float,char,forBody,tryBody,catchBody)
 import Language.Drasil.Code.Imperative.LanguageRenderer
 import Language.Drasil.Code.Imperative.Helpers (blank,oneTab,oneTabbed,vmap,vibmap)
 

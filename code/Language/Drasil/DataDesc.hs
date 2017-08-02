@@ -6,6 +6,8 @@ import Language.Drasil.Chunk.Code
 import Language.Drasil.Chunk.Quantity
 import Language.Drasil.Chunk.SymbolForm
 
+import Data.List (nub)
+
 type DataDesc = [Data]
 
 type DataItem = CodeChunk
@@ -64,3 +66,17 @@ repeated e = Repeat e Nothing
 
 repeated' :: [Entry] -> Int -> LinePattern
 repeated' e i = Repeat e (Just i)
+
+
+
+getInputs :: DataDesc -> [CodeChunk]
+getInputs d = nub $ concatMap getDataInputs d
+  where getDataInputs (Singleton v) = [v]
+        getDataInputs (Line lp _) = getPatternInputs lp
+        getDataInputs (Lines lp _ _) = getPatternInputs lp
+        getDataInputs JunkData = []
+        getPatternInputs (Straight e) = concatMap getEntryInputs e
+        getPatternInputs (Repeat e _) = concatMap getEntryInputs e
+        getEntryInputs (Entry v) = [v]
+        getEntryInputs (ListEntry _ v) = [v]
+        getEntryInputs JunkEntry = []        

@@ -14,6 +14,7 @@ import Language.Drasil.Code -- for hack
 import Language.Drasil.Defs -- for hack
 import Language.Drasil.Expr -- for hack
 import Language.Drasil.Space -- for hack
+import Language.Drasil.DataDesc
 
 import qualified Data.Map as Map
 import Control.Lens ((^.))
@@ -32,8 +33,8 @@ data CodeSpec = CodeSpec {
   fMods :: [FuncMod],
   const :: [CodeDefinition],
   choices :: Choices,
-  modDefs :: [ModDef],  -- medium hack
-  mods :: [(String, [FunctionDecl])] -- big hack
+  mods :: [Mod]  -- medium hack
+  --mods :: [(String, [FunctionDecl])] -- big hack
 }
 
 type FunctionMap = Map.Map String CodeDefinition
@@ -86,8 +87,7 @@ codeSpec' (SI {_sys = sys, _quants = q, _definitions = defs, _inputs = ins, _out
   fMods = [funcMod "Calculations" defs],
   const = map qtoc constants,
   choices = ch,
-  modDefs = [],
-  mods = modHack
+  mods = []
 }
 
 codeSpec'' :: SystemInformation -> [FuncMod] -> Choices -> CodeSpec
@@ -147,14 +147,16 @@ defaultChoices = Choices {
   inputStructure = AsClass
 }
 
+type Name = String
 
 -- medium hacks ---
-data ModDef = ModDef String [FuncDef]
+data Mod = ModDef Name [FuncDef]
+         | ModData Name [DataDesc]
 
 data FuncDef where
-  FuncDef :: String -> [CodeChunk] -> CodeType -> [FuncStmt] -> FuncDef
+  FuncDef :: Name -> [CodeChunk] -> CodeType -> [FuncStmt] -> FuncDef
 
-funcDef :: (Quantity c, SymbolForm c) => String -> [c] -> Space -> [FuncStmt] -> FuncDef  
+funcDef :: (Quantity c, SymbolForm c) => Name -> [c] -> Space -> [FuncStmt] -> FuncDef  
 funcDef s i t fs = FuncDef s (map codevar i) (spaceToCodeType t) fs 
  
 data FuncStmt where
@@ -178,8 +180,8 @@ ffor v e fs = FFor (codevar v) e fs
 fdec :: (Quantity c, SymbolForm c) => c -> Space -> FuncStmt
 fdec v t = FDec (codevar v) (spaceToCodeType t)
 
-addModDefs :: CodeSpec -> [ModDef] -> CodeSpec
-addModDefs cs@(CodeSpec{ modDefs = md }) mdnew = cs { modDefs = md ++ mdnew }
+addModDefs :: CodeSpec -> [Mod] -> CodeSpec
+addModDefs cs@(CodeSpec{ mods = md }) mdnew = cs { mods = md ++ mdnew }
 
 ---- major hacks ----
 modHack :: [(String, [FunctionDecl])]

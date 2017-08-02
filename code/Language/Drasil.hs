@@ -101,7 +101,7 @@ module Language.Drasil (
   , CodeSpec, codeSpec, codeSpec', Choices(..), ImplementationType(..)
   , Logging(..), ConstraintBehaviour(..), Structure(..), Lang(..), Comments(..)
   , defaultChoices
-  , ModDef(..), FuncDef(..), FuncStmt(..), addModDefs, funcDef, fasg, ffor, fdec  -- hacks
+  , Mod(..), FuncDef(..), FuncStmt(..), addModDefs, funcDef, fasg, ffor, fdec  -- hacks
   -- DataDesc
   , DataDesc
   , entry, listEntry, junk, singleton, junkLine, singleLine, multiLine

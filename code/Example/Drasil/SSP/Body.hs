@@ -45,7 +45,7 @@ import Drasil.Template.MG
 import Drasil.Template.DD
 
 --type declarations for sections--
-s3, s4, s5, s6, s7, s8 :: Section
+s3, s4, s5, s6, s7 :: Section
 
 s1_2_intro :: [TSIntro]
 
@@ -89,16 +89,7 @@ mkSRS = RefSec (RefProg intro
       EmptyS
     , IOrgSec orgSecStart inModel (SRS.inModel SRS.missingP []) orgSecEnd]) :
     --FIXME: issue #235
-  map Verbatim [s3, s4, s5, s6, s7, s8] ++ [Bibliography [ref1]]
-
-ref1 :: Citation
-ref1 = Book [
-  Author [person "John" "Smith"],
-  Title $ S "This is a Title",
-  Place (S "Toronto", S "Canada"),
-  Date 28 Jul 2017,
-  Publisher $ S "McMaster",
-  Volume 3]
+  map Verbatim [s3, s4, s5, s6, s7] ++ [Bibliography sspCitations]
   
 ssp_srs, ssp_mg :: Document
 ssp_srs = mkDoc mkSRS ssp_si
@@ -386,4 +377,4 @@ s6 = SRS.likeChg [] []
 s7 = valsOfAuxConstantsF ssa []
 
 -- References --
-s8 = SRS.reference [sspReferences] []
+-- automatically generated

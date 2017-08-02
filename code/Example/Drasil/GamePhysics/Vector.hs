@@ -1,4 +1,4 @@
-module Drasil.Gamephys.Vector where
+module Drasil.GamePhysics.Vector where
 
 import Language.Drasil
 
@@ -58,11 +58,11 @@ vectMult = funcDef "vectMult" [v_v1, v_v2] vector
         ((FCall (asExpr getY) [v_v1]) * (FCall (asExpr getY) [v_v2]))
       ]
   ]
-  
+
 vectNeg = funcDef "vectNeg" [v_v] vector
   [
     FRet (FCall (asExpr vect)
-      $ map negate [
+      $ map Neg [
         (FCall (asExpr getX) [v_v]),
         (FCall (asExpr getY) [v_v])
       ]
@@ -92,7 +92,7 @@ vectPerp = funcDef "vectPerp" [v_v] vector
   [
     FRet (FCall (asExpr vect) 
       [
-        (negate (FCall (asExpr getY) [v_v])),
+        (Neg (FCall (asExpr getY) [v_v])),
         (FCall (asExpr getX) [v_v])
       ]
   ]
@@ -102,7 +102,7 @@ vectRPerp = funcDef "vectRPerp" [v_v] vector
     FRet (FCall (asExpr vect)
       [
         (FCall (asExpr getY) [v_v]),
-        (negate (FCall (asExpr getX) [v_v]))
+        (Neg (FCall (asExpr getX) [v_v]))
       ]
   ]
    

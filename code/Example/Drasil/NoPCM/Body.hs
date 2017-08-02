@@ -4,6 +4,9 @@ import Control.Lens ((^.))
 import Prelude hiding (id)
 import Drasil.NoPCM.Definitions (ht_trans, srs_swhs)
 
+-- Since NoPCM is a simplified version of SWHS, the file is to be built off
+-- of the SWHS libraries.  If the source for something cannot be found in
+-- NoPCM, check SWHS.
 import Drasil.SWHS.Assumptions (assump1, assump2, assump7, assump8, assump9,
   assump14, assump15, assump20)
 import Drasil.SWHS.Body (s2_3_knowlegde, s2_3_understanding, s2_4_intro,
@@ -54,13 +57,16 @@ import Drasil.Sections.AuxiliaryConstants
 import Data.Drasil.SentenceStructures
 
 
+-- This defines the standard units used throughout the document
 this_si :: [UnitDefn]
 this_si = map UU [metre, kilogram, second] ++ map UU [centigrade, joule, watt]
 
+-- This defines the list of acronyms that are used throughout the document
 acronyms :: [CI]
 acronyms = [assumption, dataDefn, genDefn, goalStmt, inModel, likelyChg, ode,
             physSyst, requirement, srs, progName, thModel]
 
+-- This contains the list of symbols used throughout the document
 pcmSymbols :: [CQSWrapper]
 pcmSymbols = (map cqs pcmUnits) ++ (map cqs pcmConstraints)
 
@@ -901,7 +907,7 @@ s7_fig2 :: Contents
 s7_fig2 = Figure (showingCxnBw traceyGraph (titleize' requirement `sC`
   titleize' inModel `sC` S "and" +:+ titleize' datumConstraint)) "RTrace.png"
 
-  -- Using the SWHS graphs as place holders until ones can be generated for PCM 
+  -- Using the SWHS graphs as place holders until ones can be generated for NoPCM 
 
 
 

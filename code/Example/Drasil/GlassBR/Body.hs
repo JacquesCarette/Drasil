@@ -42,7 +42,6 @@ import Drasil.GlassBR.Interpolation
 import Drasil.GlassBR.DataDescriptions
 
 import Drasil.Sections.TraceabilityMandGs
-import Drasil.Sections.Stakeholders
 import Drasil.Sections.ScopeOfTheProject
 import Drasil.Sections.Requirements
 import Drasil.Sections.GeneralSystDesc
@@ -74,7 +73,11 @@ mkSRS = [RefSec (RefProg intro
      IChar (rdrKnldgbleIn (glBreakage) (blastRisk)) undIR appStanddIR,
      IOrgSec s2_3_intro dataDefn (SRS.dataDefn SRS.missingP []) s2_3_intro_end])]
   ++
-  map Verbatim [s3, s4, s5]
+  [StkhldrSec (StkhldrProg (gLassBR) 
+  (S "Entuitive. It is developed by Dr. Manuel Campidelli"))] 
+  --FIXME: Turn "People -> Sentence"? (so knowledge can be easily pulled out...)
+  ++
+  map Verbatim [s4, s5]
   ++
   [SSDSec (SSDVerb s6)] {-(SSDProg [SSDProblem, SSDSolChSpec])-}
   ++
@@ -119,7 +122,7 @@ mgBod :: [Section]
 glassBR_mg :: Document
 glassBR_mg = mgDoc glassBRProg (for'' titleize phrase) mg_authors mgBod
 
-s3, s4, s5,
+s4, s5,
   s6, s6_1, s6_1_1, s6_1_2, s6_1_3, s6_2, 
   s7, s7_1, s7_2, s8, s9, s10, s11, s12 :: Section
 
@@ -252,10 +255,6 @@ s2_3_intro_end = foldl (+:+) EmptyS [(at_start' $ the dataDefn),
   plural model]
 
 {--STAKEHOLDERS--}
-
-s3 = stakehldrGeneral (gLassBR) 
-  (S "Entuitive. It is developed by Dr. Manuel Campidelli")
---FIXME: Turn "People -> Sentence"? (so knowledge can be easily pulled out...)
 
 {--The Client--}
 {--The Customer--}

@@ -18,6 +18,7 @@ import Drasil.DocumentLanguage.Definitions
 import qualified Drasil.SRS as SRS
 import qualified Drasil.Sections.Introduction as Intro
 import qualified Drasil.Sections.SpecificSystemDescription as SSD
+import qualified Drasil.Sections.Stakeholders as Stk
 
 import Data.Drasil.Concepts.Documentation (refmat, tOfSymb, reference)
 
@@ -88,11 +89,19 @@ data IntroSec = IntroProg Sentence Sentence [IntroSub]
 -- Verbatim sections handled by SSDVerb           
 data SSDSec = SSDProg [SSDSub] | SSDVerb Section
 
+data StkhldrSec = StkhldrProg CI Sentence {-[StkhldrSub]-} | StkhldrVerb Section
+
+data StkhldrSub where
+  StkhldrSubVerb :: Section -> StkhldrSub
+  Client :: Sentence -> Sentence -> StkhldrSub
+  Cstmr  :: Sentence -> StkhldrSub
+
 -- | Document sections are either Verbatim, Reference, Introduction, or Specific
 -- System Description sections (for now!)
 data DocSection = Verbatim Section 
                 | RefSec RefSec 
                 | IntroSec IntroSec
+                | StkhldrSec StkhldrSec
                 | SSDSec SSDSec
                 | Bibliography BibRef
 
@@ -152,10 +161,11 @@ mkSections :: SystemInformation -> DocDesc -> [Section]
 mkSections si l = foldr doit [] l
   where
     doit :: DocSection -> [Section] -> [Section]
-    doit (Verbatim s)  ls = s : ls
-    doit (RefSec rs)   ls = mkRefSec si rs : ls
-    doit (IntroSec is) ls = mkIntroSec si is : ls
-    doit (SSDSec ss)   ls = mkSSDSec si ss : ls
+    doit (Verbatim s)       ls = s : ls
+    doit (RefSec rs)        ls = mkRefSec si rs : ls
+    doit (IntroSec is)      ls = mkIntroSec si is : ls
+    doit (StkhldrSec sts)   ls = mkStkhldrSec sts : ls
+    doit (SSDSec ss)        ls = mkSSDSec si ss : ls
     doit (Bibliography bib) ls = mkBib bib : ls
 
 -- | Helper for making the bibliography section
@@ -259,6 +269,11 @@ tuI Derived = S "In addition to the basic units, several derived units are" +:+
 -- | Default table of units intro contains the 
 defaultTUI :: [TUIntro]
 defaultTUI = [System, Derived, TUPurpose]
+
+mkStkhldrSec :: StkhldrSec -> Section
+mkStkhldrSec (StkhldrVerb s) = s
+mkStkhldrSec (StkhldrProg key details) = (Stk.stakehldrGeneral key details) 
+--FIXME: WIP "x" --> implement use of StkhldrSub or remove entirely?
 
 mkIntroSec :: SystemInformation -> IntroSec -> Section
 mkIntroSec _ (IntroVerb s) = s

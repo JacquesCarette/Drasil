@@ -27,12 +27,12 @@ vectEqual, vectAdd, vectSub, vectMult, vectNeg, vectDot, vectCross, vectPerp,
 
 vectEqual = funcDef "vectEqual" [v_v1, v_v2] Boolean
   [
-    FRet (FCond ((FCall (asExpr getX) [v_v1]) :== (FCall (asExpr getX) [v_v2])) :&&
-                ((FCall (asExpr getY) [v_v1]) :== (FCall (asExpr getY) [v_v2]))
+    FRet (FCond ((FCall (asExpr getX) [v_v1]) := (FCall (asExpr getX) [v_v2])) :&&
+                ((FCall (asExpr getY) [v_v1]) := (FCall (asExpr getY) [v_v2]))
          )
   ]
 
-vectAdd = funcDef "vectAdd" [v_v1, v_v2] vector
+vectAdd = funcDef "vectAdd" [v_v1, v_v2] (Vect Rational)
   [
     FRet (FCall (asExpr vect) 
       [
@@ -41,7 +41,7 @@ vectAdd = funcDef "vectAdd" [v_v1, v_v2] vector
       ]
   ]
   
-vectSub = funcDef "vectSub" [v_v1, v_v2] vector
+vectSub = funcDef "vectSub" [v_v1, v_v2] (Vect Rational)
   [
     FRet (FCall (asExpr vect)
       [
@@ -50,7 +50,7 @@ vectSub = funcDef "vectSub" [v_v1, v_v2] vector
       ]
   ]
   
-vectMult = funcDef "vectMult" [v_v1, v_v2] vector
+vectMult = funcDef "vectMult" [v_v1, v_v2] (Vect Rational)
   [
     FRet (FCall (asExpr vect)
       [
@@ -59,7 +59,7 @@ vectMult = funcDef "vectMult" [v_v1, v_v2] vector
       ]
   ]
 
-vectNeg = funcDef "vectNeg" [v_v] vector
+vectNeg = funcDef "vectNeg" [v_v] (Vect Rational)
   [
     FRet (FCall (asExpr vect)
       $ map Neg [
@@ -88,7 +88,7 @@ vectCross = funcDef "vectCross" [v_v1, v_v2] Rational
     )
   ]
   
-vectPerp = funcDef "vectPerp" [v_v] vector
+vectPerp = funcDef "vectPerp" [v_v] (Vect Rational)
   [
     FRet (FCall (asExpr vect) 
       [
@@ -97,7 +97,7 @@ vectPerp = funcDef "vectPerp" [v_v] vector
       ]
   ]
 
-vectRPerp = funcDef "vectRPerp" [v_v] vector
+vectRPerp = funcDef "vectRPerp" [v_v] (Vect Rational)
   [
     FRet (FCall (asExpr vect)
       [
@@ -106,7 +106,7 @@ vectRPerp = funcDef "vectRPerp" [v_v] vector
       ]
   ]
    
-vectProject = funcDef "vectProject" [v_v1, v_v2] vector   
+vectProject = funcDef "vectProject" [v_v1, v_v2] (Vect Rational)   
   [ 
     FRet (FCall (asExpr vectMult) 
       [
@@ -115,16 +115,16 @@ vectProject = funcDef "vectProject" [v_v1, v_v2] vector
       ]
   ]
 
-vectForAngle = funcDef "vectForAngle" [rad] vector
+vectForAngle = funcDef "vectForAngle" [rad] (Vect Rational)
   [
     FRet (FCall (asExpr vect)
       [
-        (FCall (asExpr cos) [rad]),
-        (FCall (asExpr sin) [rad])
+        (Cos rad]),
+        (Sin rad)
       ]
   ]
 
-vectToAngle = funcDef "vectToAngle" [v_v] Rational
+vectToAngle = funcDef "vectToAngle" [v_v] Radians
   [
     FRet (FCall (asExpr atan2) 
       [
@@ -133,7 +133,7 @@ vectToAngle = funcDef "vectToAngle" [v_v] Rational
       ]
   ]
 
-vectRotate = funcDec "vectRotate" [v_v1, v_v2] vector
+vectRotate = funcDec "vectRotate" [v_v1, v_v2] (Vect Rational)
   [
     FRet (FCall (asExpr vect)
       [
@@ -144,7 +144,7 @@ vectRotate = funcDec "vectRotate" [v_v1, v_v2] vector
       ]
   ]
   
-vectUnrotate = funcDec "vectUnrotate" [v_v1, v_v2] vector
+vectUnrotate = funcDec "vectUnrotate" [v_v1, v_v2] (Vect Rational)
   [
     FRet (FCall (asExpr vect)
       [
@@ -162,10 +162,7 @@ vectLengthSq = funcDec "vectLengthSq" [v_v] Rational
   
 vectLength = funcDec "vectLength" [v_v] Rational
   [
-    FRet (FCall (asExpr sqrt)
-      [
-        (FCall (asExpr vectLengthSq) [v_v]) 
-      ]
+    FRet (Sqrt (FCall (asExpr vectLengthSq) [v_v]))
   ]
   
       

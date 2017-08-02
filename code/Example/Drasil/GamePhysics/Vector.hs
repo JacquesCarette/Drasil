@@ -133,7 +133,7 @@ vectToAngle = funcDef "vectToAngle" [v_v] Radians
       ]
   ]
 
-vectRotate = funcDec "vectRotate" [v_v1, v_v2] (Vect Rational)
+vectRotate = funcDef "vectRotate" [v_v1, v_v2] (Vect Rational)
   [
     FRet (FCall (asExpr vect)
       [
@@ -144,7 +144,7 @@ vectRotate = funcDec "vectRotate" [v_v1, v_v2] (Vect Rational)
       ]
   ]
   
-vectUnrotate = funcDec "vectUnrotate" [v_v1, v_v2] (Vect Rational)
+vectUnrotate = funcDef "vectUnrotate" [v_v1, v_v2] (Vect Rational)
   [
     FRet (FCall (asExpr vect)
       [
@@ -155,14 +155,30 @@ vectUnrotate = funcDec "vectUnrotate" [v_v1, v_v2] (Vect Rational)
       ]
   ]
   
-vectLengthSq = funcDec "vectLengthSq" [v_v] Rational
+vectLengthSq = funcDef "vectLengthSq" [v_v] Rational
   [
     FRet (FCall (asExpr vectDot) [v_v, v_v])
   ]
   
-vectLength = funcDec "vectLength" [v_v] Rational
+vectLength = funcDef "vectLength" [v_v] Rational
   [
     FRet (Sqrt (FCall (asExpr vectLengthSq) [v_v]))
   ]
   
-      
+--vectClamp = funcDef "vectClamp" [v_v, length] (Vect Rational)
+--  [
+--
+--  ]
+
+vectLerp = funcDef "vectLerp" [v_v1, v_v2, t] (Vect Rational)
+  [
+    FRet (FCall (asExpr vectAdd)
+      [
+        (FCall (asExpr vectMult) [(v_v1), (1.0 - t)]),
+        (FCall (asExpr vectMult) [(v_v2), t])
+      ]
+  ]
+
+
+
+

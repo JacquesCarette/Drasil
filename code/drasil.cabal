@@ -145,6 +145,7 @@ executable tiny
     , Drasil.DocumentLanguage
     , Drasil.DocumentLanguage.Chunk.GenDefn
     , Drasil.DocumentLanguage.Definitions
+    , Drasil.Sections.AuxiliaryConstants
     , Drasil.Sections.TableOfUnits
     , Drasil.Template.DD
     , Drasil.Template.Helpers

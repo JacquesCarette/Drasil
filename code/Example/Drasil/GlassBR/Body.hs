@@ -46,7 +46,6 @@ import Drasil.Sections.ScopeOfTheProject
 import Drasil.Sections.Requirements
 import Drasil.Sections.GeneralSystDesc
 import Drasil.Sections.SpecificSystemDescription
-import Drasil.Sections.AuxiliaryConstants
 
 this_si :: [UnitDefn]
 this_si = map UU [metre, second, kilogram] ++ map UU [pascal, newton]
@@ -128,7 +127,7 @@ glassBR_mg = mgDoc glassBRProg (for'' titleize phrase) mg_authors mgBod
 
 s4, s5,
   s6, s6_1, s6_1_1, s6_1_2, s6_1_3, s6_2, 
-  s7, s7_1, s7_2, s8, s9, s10, s11, s12 :: Section
+  s7, s7_1, s7_2, s8, s9, s11, s12 :: Section
 
 s5_1_table,
   s6_1_2_list, s6_2_intro, s6_2_5_table1, 
@@ -397,9 +396,10 @@ s6_2 = solChSpecF gLassBR (s6_1, s8) (EmptyS)
  (EmptyS, dataConstraintUncertainty, end)
  (s6_2_1_list, s6_2_2_TMods, [], s6_2_4_DDefns, s6_2_3_IMods,
   [s6_2_5_table1, s6_2_5_table2]) []
-  where end = foldlSent [(makeRef s10), S "gives",
-             (plural value `ofThe` S "specification"), plural parameter,
-              S "used in" +:+. (makeRef s6_2_5_table1)] +:+ s6_2_5_intro2
+  where end = foldlSent [(makeRef (SRS.valsOfAuxCons SRS.missingP [])), 
+             S "gives", (plural value `ofThe` S "specification"), 
+             plural parameter, S "used in" +:+. (makeRef s6_2_5_table1)]
+             +:+ s6_2_5_intro2
 
 s6_2_intro = foldlSP [S "This", phrase section_, S "explains all the",
   plural assumption, S "considered" `sAnd` S "the", plural thModel,
@@ -452,9 +452,10 @@ a3Desc = foldlSent [S "This", phrase system,
 
 a4Desc :: UnitaryChunk -> Sentence
 a4Desc mainIdea = foldlSent [S "The", plural value, S "provided in", 
-  makeRef s10, S "are assumed for the", phrase mainIdea, 
-  sParen (getS mainIdea) `sC` S "and the", plural materialProprty `sOf` 
-  foldlList (map getS (take 3 assumption4_constants))]
+  (makeRef (SRS.valsOfAuxCons SRS.missingP [])), S "are assumed for the",
+  phrase mainIdea, sParen (getS mainIdea) `sC` S "and the", 
+  plural materialProprty `sOf` foldlList (map getS
+  (take 3 assumption4_constants))]
 
 a5Desc :: Sentence
 a5Desc = foldlSent [at_start glass, S "under consideration", 
@@ -852,8 +853,6 @@ fig_4 = figureLabel 4 (traceyMatrix)
   ("ATrace.png")
 
 {--VALUES OF AUXILIARY CONSTANTS--}
-
-s10 = valsOfAuxConstantsF gLassBR auxiliaryConstants
 
 {--REFERENCES--}
 

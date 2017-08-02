@@ -39,7 +39,7 @@ import Drasil.GlassBR.IMods
 import Drasil.GlassBR.DataDefs
 import Drasil.GlassBR.References
 import Drasil.GlassBR.Interpolation
-import Drasil.GlassBR.DataDescriptions
+import Drasil.GlassBR.DataDescriptions --FIXME: Redundant import, but doesn't build DataDescriptions.hs file otherwise...
 
 import Drasil.Sections.TraceabilityMandGs
 import Drasil.Sections.ScopeOfTheProject
@@ -81,7 +81,11 @@ mkSRS = [RefSec (RefProg intro
   ++
   [SSDSec (SSDVerb s6)] {-(SSDProg [SSDProblem, SSDSolChSpec])-}
   ++
-  map Verbatim [s7, s8, s9, s10, s11, s12]
+  map Verbatim [s7, s8, s9] 
+  ++ 
+  [AuxConstntSec (AuxConsProg gLassBR auxiliaryConstants)]
+  ++ 
+  map Verbatim [s11, s12]
   
 glassSystInfo :: SystemInformation
 glassSystInfo = SI {

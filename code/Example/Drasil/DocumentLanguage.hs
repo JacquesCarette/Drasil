@@ -19,6 +19,7 @@ import qualified Drasil.SRS as SRS
 import qualified Drasil.Sections.Introduction as Intro
 import qualified Drasil.Sections.SpecificSystemDescription as SSD
 import qualified Drasil.Sections.Stakeholders as Stk
+import qualified Drasil.Sections.AuxiliaryConstants as AC
 
 import Data.Drasil.Concepts.Documentation (refmat, tOfSymb, reference)
 
@@ -91,6 +92,8 @@ data SSDSec = SSDProg [SSDSub] | SSDVerb Section
 
 data StkhldrSec = StkhldrProg CI Sentence {-[StkhldrSub]-} | StkhldrVerb Section
 
+data AuxConstntSec = AuxConsProg CI [QDefinition] | AuxConsVerb Section
+
 data StkhldrSub where
   StkhldrSubVerb :: Section -> StkhldrSub
   Client :: Sentence -> Sentence -> StkhldrSub
@@ -103,6 +106,7 @@ data DocSection = Verbatim Section
                 | IntroSec IntroSec
                 | StkhldrSec StkhldrSec
                 | SSDSec SSDSec
+                | AuxConstntSec AuxConstntSec
                 | Bibliography BibRef
 
 -- | For creating the table of symbols intro
@@ -161,12 +165,13 @@ mkSections :: SystemInformation -> DocDesc -> [Section]
 mkSections si l = foldr doit [] l
   where
     doit :: DocSection -> [Section] -> [Section]
-    doit (Verbatim s)       ls = s : ls
-    doit (RefSec rs)        ls = mkRefSec si rs : ls
-    doit (IntroSec is)      ls = mkIntroSec si is : ls
-    doit (StkhldrSec sts)   ls = mkStkhldrSec sts : ls
-    doit (SSDSec ss)        ls = mkSSDSec si ss : ls
-    doit (Bibliography bib) ls = mkBib bib : ls
+    doit (Verbatim s)        ls = s : ls
+    doit (RefSec rs)         ls = mkRefSec si rs : ls
+    doit (IntroSec is)       ls = mkIntroSec si is : ls
+    doit (StkhldrSec sts)    ls = mkStkhldrSec sts : ls
+    doit (SSDSec ss)         ls = mkSSDSec si ss : ls
+    doit (AuxConstntSec acs) ls = mkAuxConsSec acs : ls
+    doit (Bibliography bib)  ls = mkBib bib : ls
 
 -- | Helper for making the bibliography section
 mkBib :: BibRef -> Section
@@ -274,6 +279,10 @@ mkStkhldrSec :: StkhldrSec -> Section
 mkStkhldrSec (StkhldrVerb s) = s
 mkStkhldrSec (StkhldrProg key details) = (Stk.stakehldrGeneral key details) 
 --FIXME: WIP "x" --> implement use of StkhldrSub or remove entirely?
+
+mkAuxConsSec :: AuxConstntSec -> Section
+mkAuxConsSec (AuxConsVerb s) = s
+mkAuxConsSec (AuxConsProg key listOfCons) = (AC.valsOfAuxConstantsF key listOfCons)
 
 mkIntroSec :: SystemInformation -> IntroSec -> Section
 mkIntroSec _ (IntroVerb s) = s

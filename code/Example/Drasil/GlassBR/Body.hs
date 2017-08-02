@@ -64,7 +64,7 @@ mkSRS :: DocDesc
 mkSRS = [RefSec (RefProg intro
   [TUnits,
   tsymb [TSPurpose, SymbOrder],
-  TAandA])] --FIXME: LR, LDF, and NFL show up in table twice?
+  TAandA])] --FIXME: LR, LDF, and NFL order?
   ++
   [IntroSec 
   (IntroProg (startIntro (software) (blstRskInvWGlassSlab) (gLassBR)) (short gLassBR)
@@ -146,7 +146,7 @@ s6_1_1_bullets = Enumeration $ (Number $
   ++
   map tAndDWAcc termsWithAccDefn
   ++
-  [tAndDWSym (probBreak) (prob_br)]) --FIXME: merge
+  [tAndDWSym (probBreak) (prob_br)]) --FIXME: merge? Needs 2 because there is no instance for (SymbolForm ConceptChunk)...
 
 s6_1_1_bullets_glTySubSec, s6_1_1_bullets_loadSubSec :: [ItemType]
 
@@ -265,7 +265,6 @@ s4 = genSysF [] (s4_1_bullets (endUser) (gLassBR) (secondYear) (undergradDegree)
   (civilEng) (structuralEng) (glBreakage) (blastRisk)) [] []
 
 {--User Characteristics--}
---FIXME: better way to impelement the below function?
 s4_1_bullets :: (NamedIdea n1, NamedIdea n, NamedIdea n2, NamedIdea n3, 
   NamedIdea n4, NamedIdea n5, NamedIdea c, NamedIdea n6) => 
   n6 -> c -> n5 -> n4 -> n3 -> n2 -> n1 -> n -> Contents
@@ -274,9 +273,9 @@ s4_1_bullets intendedIndvdl progName yr degreeType prog1 prog2 undrstd1 undrstd2
   `isExpctdToHv` S "completed at least", (S "equivalent" `ofThe` (phrase yr)),
   S "of an", phrase degreeType `sIn` phrase prog1 `sOr` phrase prog2], 
   (phrase intendedIndvdl `isExpctdToHv` S "an understanding of" +:+.
-  rdrKnldgbleIn (undrstd1) (undrstd2)), 
-  foldlSent [phrase intendedIndvdl `isExpctdToHv` 
-  S "basic", phrase computerLiteracy, S "to handle the", phrase software]]
+  rdrKnldgbleIn (undrstd1) (undrstd2)), foldlSent [phrase intendedIndvdl
+  `isExpctdToHv` S "basic", phrase computerLiteracy, S "to handle the",
+  phrase software]]
 
 --
 

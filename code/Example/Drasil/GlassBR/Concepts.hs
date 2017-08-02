@@ -15,7 +15,7 @@ glassBRProg = dcc' "glassBRProg" (nounPhraseSP "GlassBR program")
 acronyms :: [CI]
 acronyms = [assumption, annealedGlass, aR, dataDefn, fullyTGlass,
   goalStmt, glassTypeFac, heatSGlass, iGlass, inModel, likelyChg, 
-  loadDurFactor, lGlass, lResistance, lShareFac, notApp, nFL, physSyst,
+  loadDurFactor, lGlass, notApp, physSyst, 
   requirement, stdOffDist, srs, thModel, eqTNT]
 
 annealedGlass, aR, fullyTGlass, glassTypeFac, heatSGlass, loadDurFactor,

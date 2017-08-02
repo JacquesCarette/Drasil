@@ -1,8 +1,14 @@
 module Drasil.SWHS.DataDefs where
 
-import Drasil.SWHS.Unitals
+import Drasil.SWHS.Unitals (melt_frac, latentE_P, htFusion, pcm_mass,
+  temp_W, temp_PCM, ht_flux_P, pcm_HTC, coil_HTC, temp_C, swhsSymbols,
+  ht_flux_C)
 
-import Language.Drasil
+import Language.Drasil (QDefinition, Contents, RelationConcept, SymbolMap,
+	nounPhraseSP, symbol, id, fromEqn', makeRef, symbolMap,
+	DType (Data, Theory),
+	Sentence (EmptyS),
+	Expr (C, FCall))
 import Data.Drasil.Quantities.Physics (time)
 import Data.Drasil.Quantities.PhysicalProperties (mass)
 import Data.Drasil.Quantities.Thermodynamics (latent_heat)

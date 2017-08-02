@@ -1,7 +1,7 @@
 module Drasil.SSP.References where
 
 import Language.Drasil
-import Drasil.SSP.Defs (ssa, crtSlpSrf)
+import Drasil.SSP.Defs (ssa, crtSlpSrf, fs_concept)
 
 import Data.Drasil.Concepts.Documentation (analysis)
 import Data.Drasil.Software.Products (sciCompS)
@@ -18,7 +18,7 @@ chen2005 = Article [
           personWM' "C." ["F."] "Lee",
           personWM' "G." ["R."] "Chen"],
   Title (S "A concise algorithm for computing the" +:+
-         S "factor of safety using the morgensternprice method"),
+         phrase fs_concept +:+ S "using the morgenstern price method"),
   Journal (S "Can. Geotech. J."),
   Issue 42,
   Date 19 Feb 2005,

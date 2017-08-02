@@ -8,7 +8,7 @@ type BibRef = [Citation]
 type City   = Sentence
 type State  = Sentence
 
-data Citation where --add artical, website
+data Citation where --add website
   Book :: [CiteField] -> Citation
   Article :: [CiteField] -> Citation
   

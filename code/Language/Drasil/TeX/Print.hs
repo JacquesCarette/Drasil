@@ -510,7 +510,7 @@ bibLines =
 mkBibRef :: BibRef -> Spec
 mkBibRef = foldl1 (\x y -> x :+: S "\n\n" :+: y) . map renderCite
 
---for when we add other things to reference like website, newspaper, articals
+--for when we add other things to reference like website, newspaper
 renderCite :: Citation -> Spec
 renderCite c@(Book    fields) = renderF c fields
 renderCite c@(Article fields) = renderF c fields

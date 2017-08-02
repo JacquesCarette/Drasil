@@ -402,7 +402,7 @@ makeBib = listRef . map (Flat . S) . sort . map renderCite
   where listRef = List . Simple . zip [S $ sqbrac $ show x | x <- [(1 :: Integer)..]]
   --some function to get a numbered list, idealy it wouldn't go from string to Spec
   
---for when we add other things to reference like website, newspaper, articals
+--for when we add other things to reference like website, newspaper
 renderCite :: Citation -> String
 renderCite b@(Book _)    = renderBook b
 renderCite a@(Article _) = renderArtcl a
@@ -468,9 +468,9 @@ bookChicago p@(Page   _) = bookAPA p
 bookChicago p@(Pages  _) = bookAPA p
 bookChicago i = bookMLA i --Most items are rendered the same as MLA
 
--- for artical renderings
+-- for article renderings
 artclMLA :: CiteField -> String
-artclMLA (Title s) = quotes $ p_spec s
+artclMLA (Title s) = quotes $ dot $ p_spec s
 artclMLA i = bookMLA i
 
 artclAPA :: CiteField -> String
@@ -480,7 +480,7 @@ artclAPA (Issue  n) = comm $ paren $ show n
 artclAPA i = bookAPA i
 
 artclChicago :: CiteField -> String
-artclChicago (Title      s) = quotes $ dot $ p_spec s
+artclChicago i@(Title    _) = artclMLA i
 artclChicago (Volume     n) = comm $ show n
 artclChicago (Issue      n) = "no. " ++ show n
 artclChicago i@(Year     _) = bookAPA i

@@ -183,7 +183,7 @@ type City   = Spec
 type State  = Spec
 
 data Citation = Book [CiteField] | Article [CiteField]
-  --add artical, website...
+  --add website...
 data CiteField = Author     People
                | Title      Spec
                | Series     Spec

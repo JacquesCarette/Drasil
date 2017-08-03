@@ -443,7 +443,7 @@ bookMLA (Series     s) = dot $ em $ p_spec s
 bookMLA (Title      s) = dot $ em $ p_spec s --If there is a series or collection, this should be in quotes, not italics
 bookMLA (Volume     s) = comm $ "vol. " ++ show s
 bookMLA (Publisher  s) = comm $ p_spec s
-bookMLA (Author     p) = dot $ p_spec (rendPeople rendPersLFM p)
+bookMLA (Author     p) = needDot $ p_spec (rendPeople rendPersLFM p)
 bookMLA (Year       y) = dot $ show y
 bookMLA (Date   d m y) = dot $ unwords [show d, show m, show y]
 bookMLA (Collection s) = dot $ em $ p_spec s
@@ -454,7 +454,7 @@ bookMLA (Note       s) = p_spec s
 bookMLA (Issue      n) = comm $ "no. " ++ show n
 
 bookAPA :: CiteField -> String --FIXME: year needs to come after author in APA
-bookAPA (Author   p) = dot $ p_spec (rendPeople rendPersLFM' p) --APA uses initals rather than full name
+bookAPA (Author   p) = needDot $ p_spec (rendPeople rendPersLFM' p) --APA uses initals rather than full name
 bookAPA (Year     y) = dot $ paren $ show y --APA puts "()" around the year
 bookAPA (Date _ _ y) = bookAPA (Year y) --APA doesn't care about the day or month
 bookAPA (Page     n) = dot $ show n
@@ -462,7 +462,7 @@ bookAPA (Pages (a,b)) = dot $ show a ++ "&ndash;" ++ show b
 bookAPA i = bookMLA i --Most items are rendered the same as MLA
 
 bookChicago :: CiteField -> String
-bookChicago (Author   p) = dot $ p_spec (rendPeople rendPersLFM'' p) --APA uses middle initals rather than full name
+bookChicago (Author   p) = needDot $ p_spec (rendPeople rendPersLFM'' p) --APA uses middle initals rather than full name
 bookChicago (Date _ _ y) = bookChicago (Year y) --APA doesn't care about the day or month
 bookChicago p@(Page   _) = bookAPA p
 bookChicago p@(Pages  _) = bookAPA p
@@ -503,3 +503,8 @@ foldle1 _ _ []       = error "foldle1 cannot be used with empty list"
 foldle1 _ _ [x]      = x
 foldle1 _ g [x,y]    = g x y
 foldle1 f g (x:y:xs) = foldle1 f g ((f x y):xs)
+
+needDot :: String -> String
+needDot str = dotIt $ last str
+  where dotIt '.' = str
+        dotIt _   = dot str

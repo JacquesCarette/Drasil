@@ -1,4 +1,4 @@
-module Drasil.GamePhysics.Vector where
+module Drasil.GamePhysics.DesignDec.Vector where
 
 import Language.Drasil
 
@@ -217,4 +217,7 @@ vectNear = funcDef "vectNear" [v_v1, v_v2, dist] Boolean
     FRet ((FCall (asExpr vectDist) [v_v1, v_v2]) :< dist) 
   ]
 
+DBL_MIN = fasg v_DBL_MIN (2.2250738585072014e-308) 
 
+asExpr :: FuncDef -> Expr
+asExpr (FuncDef n _ _ _) = C $ makeVC n (nounPhraseSP n) (Atomic n)

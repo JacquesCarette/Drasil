@@ -7,39 +7,47 @@ import Language.Drasil
 ----------------------------
 
 s9_swhs_citations :: BibRef
-s9_swhs_citations = [ref1, ref2]
+s9_swhs_citations = [ref1, ref2, ref3]
 
-ref1, ref2 :: Citation
+ref1, ref2, ref3, ref4 :: Citation
 
-ref3, ref4, ref5, ref6 :: [Sentence]
+ref5, ref6 :: [Sentence]
 
 ref1 = Article [
-  Author [personWM' "J." ["Frederick"] "Bueche"],
+  Author [personWM' "J" ["Frederick"] "Bueche"],
   Title (S "Introduction to Physics for Scientists"),
   Edition 4,
   Publisher (S "McGraw Hill"),
-  Place (S "New York", S "USA"),
+  Place (S "New York City", S "New York"),
   Year 1986]
 
 
 
 ref2 = Article [
-  Author [personWM' "F." ["P."] "Incropera",
-          personWM' "D." ["P."] "Dewitt",
-          personWM' "T." ["L."] "Bergman",
-          personWM' "A." ["S."] "Lavine"],
+  Author [personWM' "F" ["P"] "Incropera",
+          personWM' "D" ["P"] "Dewitt",
+          personWM' "T" ["L"] "Bergman",
+          personWM' "A" ["S"] "Lavine"],
   Title (S "Fundamentals of Heat and Mass Transfer"),
   Edition 6,
   Publisher (S "John Wiley and Sons"),
   Place (S "Hoboken", S "New Jersey"),
   Year 2007]
 
-ref3 = [S "Nirmitha Koothoor. A document drive approach to certifying" +:+
-  S "scientific computing software. Master's thesis", S "McMaster University",
-  S "Hamilton", S "Ontario", S "Canada", S "2013."]
+ref3 = Article [
+  Author [person' "Nirmitha" "Koothoor"],
+  Title (S "A document drive approach to certifying" +:+
+  S "scientific computing software. Master's thesis"),
+  -- FIXME: Automate masters thesis
+  Publisher (S "McMaster University"),
+  Place (S "Hamilton", S "Canada"),
+  Year 2013]
 
-ref4 = [S "Marilyn Lightstone. Derivation of tank/pcm model. Personal Notes",
-  S "2012."]
+ref4 = Article [
+  Author [person' "Marilyn" "Lightstone"],
+  Title (S "Derivation of tank/pcm model"),
+  Note (S "From Marilyn Lightstone's Personal Notes"),
+  Year 2012]
 
 ref5 = [S "David L. Parnas and P.C. Clements. A rational design process:" +:+
   S "How and why to fake it. IEEE Transactions on Software Engineering",

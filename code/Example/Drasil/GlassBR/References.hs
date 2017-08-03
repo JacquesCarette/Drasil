@@ -12,13 +12,26 @@ s11_list = mkRefsList 1 (map (foldlsC) references)
 
 s11_ref1, s11_ref2, s11_ref3, s11_ref4, s11_ref5, s11_ref6, s11_ref7 :: [Sentence]
 
+koothoor2013 :: Citation
+
 references :: [[Sentence]]
 references = [s11_ref1, s11_ref2, s11_ref3, s11_ref4, s11_ref5, s11_ref6]
+
+gbCitations :: BibRef
+gbCitations = [koothoor2013]
 
 s11_ref1 = [S "N. Koothoor",
   Quote (S "A" +:+ phrase document +:+ S "drive approach to certifying" 
   +:+ phrase sciCompS :+: S ",") +:+ S "Master's thesis", 
-  S "McMaster University, Hamilton, Ontario, Canada", S "2013."]
+  S "McMaster University, Hamilton, Ontario, Canada", S "2013.!!!"]
+
+koothoor2013 = MThesis [Author [personWM "Nirmitha" [] "Koothoor"],
+  Title (S "A" +:+ phrase document +:+ S "drive approach to certifying" 
+  +:+ phrase sciCompS),
+  School (S "McMaster University"),
+  Place (S "Hamilton", S "Canada"),
+  Year (2013)
+  ]
 
 s11_ref2 = [S "W. S. Smith and L. Lai", 
   Quote (S "A new requirements template for scientific computing,")
@@ -30,6 +43,13 @@ s11_ref2 = [S "W. S. Smith and L. Lai",
   S "In conjunction with 13th IEEE International Requirements Engineering Conference",
   S "2005."]
   --FIXME:Make a compoundNC "requirement template"?
+
+--smithLai2005 = Article [Author [personWM "W." ["S."] "Smith",
+--                                personWM "L." [] "Lai"],
+--                       Title (),
+--                        Place (S "Paris", S "France")
+--                        Year (2005)
+--                        ]
 
 s11_ref3 = [S "J. Robertson and S. Robertson", 
   Quote (S "Volere requirements specification template edition 16.") +:+

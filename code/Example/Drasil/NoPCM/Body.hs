@@ -1,5 +1,7 @@
 module Drasil.NoPCM.Body where
 
+-- import Drasil.NoPCM.DataDesc
+
 import Control.Lens ((^.))
 import Prelude hiding (id)
 import Drasil.NoPCM.Definitions (ht_trans, srs_swhs)
@@ -26,7 +28,7 @@ import Drasil.SWHS.DataDefs(swhsSymbMapDRef, swhsSymbMapTRef, dd1HtFluxC,
 import Drasil.SWHS.TMods (s4_2_2_T1, t1ConsThermE)
 import Drasil.SWHS.GenDefs (swhsGenDefs)
 import Drasil.SWHS.IMods (eBalanceOnWtr, heatEInWtr)
-import Drasil.SWHS.References (ref2, ref3, ref4, ref5, ref6)
+import Drasil.SWHS.References (ref2)
 import Drasil.SWHS.Requirements (s5_2)
 import Drasil.SWHS.LikelyChanges (likeChg2, likeChg3, likeChg6)
 
@@ -67,18 +69,18 @@ acronyms = [assumption, dataDefn, genDefn, goalStmt, inModel, likelyChg, ode,
             physSyst, requirement, srs, progName, thModel]
 
 -- This contains the list of symbols used throughout the document
-pcmSymbols :: [CQSWrapper]
-pcmSymbols = (map cqs pcmUnits) ++ (map cqs pcmConstraints)
+nopcm_Symbols :: [CQSWrapper]
+nopcm_Symbols = (map cqs nopcm_Units) ++ (map cqs nopcm_Constraints)
 
-pcmUnits :: [UCWrapper]
-pcmUnits = map ucw [density, tau, in_SA, out_SA,
+nopcm_Units :: [UCWrapper]
+nopcm_Units = map ucw [density, tau, in_SA, out_SA,
   htCap_L, QT.ht_flux, ht_flux_in, ht_flux_out, vol_ht_gen,
   htTransCoeff, mass, tank_vol, QT.temp, QT.heat_cap_spec,
   temp_diff, temp_env, thFluxVect, time, ht_flux_C,
   vol, w_mass, w_vol]
 
-pcmConstraints :: [UncertQ]
-pcmConstraints =  [coil_SA, w_E, htCap_W, coil_HTC, temp_init,
+nopcm_Constraints :: [UncertQ]
+nopcm_Constraints =  [coil_SA, w_E, htCap_W, coil_HTC, temp_init,
   time_final, tank_length, temp_C, w_density, diam, temp_W]
 
 s4, s4_1, s4_1_1, s4_1_2, s4_1_3, s4_2,
@@ -107,28 +109,43 @@ mkSRS = RefSec (RefProg intro
   map Verbatim [s3, s4, s5, s6, s7, s8] ++
   [Bibliography s9_refList]
 
-pcm_si :: SystemInformation
-pcm_si = SI {
+nopcm_si :: SystemInformation
+nopcm_si = SI {
   _sys = srs_swhs,
   _kind = srs,
   _authors = [thulasi],
   _units = this_si,
-  _quants = pcmSymbols,
-  _concepts = (pcmSymbols),
+  _quants = nopcm_Symbols,
+  _concepts = (nopcm_Symbols),
   _namedIdeas = acronyms,
   _definitions = [dd1HtFluxC],          --dataDefs
-  _inputs = (map qs pcmConstraints), --inputs
+  _inputs = (map qs nopcm_Constraints), --inputs
   _outputs = (map qs [temp_W, w_E]),     --outputs
   _defSequence = [Parallel dd1HtFluxC []],
-  _constraints = (pcmConstraints),        --constrained
+  _constraints = (nopcm_Constraints),        --constrained
   _constants = []
 }
 
-pcm_srs :: Document
-pcm_srs = mkDoc mkSRS pcm_si
+nopcm_Choices :: Choices
+nopcm_Choices = Choices {
+  lang = [Python, Cpp, CSharp, Java],
+  impType = Program,
+  logFile = "log.txt",
+  logging = LogNone,         -- LogNone, LogFunc
+  comments = CommentNone,    -- CommentNone, CommentFunc
+  onSfwrConstraint = Warning,  -- Warning, Exception
+  onPhysConstraint = Warning,  -- Warning, Exception
+  inputStructure = Loose    -- Loose, AsClass
+}
 
-nopcmSymbMap :: SymbolMap
-nopcmSymbMap = symbolMap pcmSymbols
+-- nopcm_code :: CodeSpec
+-- nopcm_code = addModDefs (codeSpec' nopcm_si nopcm_Choices) [X, inputMod] -- Sub interpolation mod in for X
+
+nopcm_srs :: Document
+nopcm_srs = mkDoc mkSRS nopcm_si
+
+nopcm_SymbMap :: SymbolMap
+nopcm_SymbMap = symbolMap nopcm_Symbols
 
 --------------------------
 --Section 2 : INTRODUCTION
@@ -755,7 +772,7 @@ s7_dataRef, s7_funcReqRef, s7_instaModelRef, s7_assumpRef, s7_theoriesRef,
   s7_dataDefRef, s7_likelyChgRef, s7_genDefRef :: [Sentence]
 
 s7_instaModel = ["IM1", "IM2"]
-s7_instaModelRef = map (refFromType Theory nopcmSymbMap) [eBalanceOnWtr, heatEInWtr]
+s7_instaModelRef = map (refFromType Theory nopcm_SymbMap) [eBalanceOnWtr, heatEInWtr]
 
 s7_funcReq = ["R1", "R2", "R3", "R4", "R5", "R6"]
 s7_funcReqRef = map (\x -> acroTest x s5_1_list_words_num) s5_1_list_words_num--makeListRef s7_funcReq s5_1
@@ -768,13 +785,13 @@ s7_assump = ["A1", "A2", "A3", "A4", "A5", "A6", "A7", "A8", "A9", "A10",
 s7_assumpRef = map (\x -> acroTest x s4_2_1_list) s4_2_1_list--makeListRef s7_assump (SRS.inModel SRS.missingP [])
 
 s7_theories = ["T1"]
-s7_theoriesRef = map (refFromType Theory nopcmSymbMap) [t1ConsThermE]
+s7_theoriesRef = map (refFromType Theory nopcm_SymbMap) [t1ConsThermE]
 
 s7_genDefs = ["GD1", "GD2"]
-s7_genDefRef = map (refFromType Theory nopcmSymbMap) swhsGenDefs
+s7_genDefRef = map (refFromType Theory nopcm_SymbMap) swhsGenDefs
 
 s7_dataDefs = ["DD1"]
-s7_dataDefRef = map (refFromType Data nopcmSymbMap) [dd1HtFluxC]
+s7_dataDefRef = map (refFromType Data nopcm_SymbMap) [dd1HtFluxC]
 
 s7_likelyChg = ["LC1", "LC2", "LC3", "LC4"]
 s7_likelyChgRef = map (\x -> acroTest x s6_list) s6_list--makeListRef s7_likelyChg s6

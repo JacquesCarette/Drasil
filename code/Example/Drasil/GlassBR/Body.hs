@@ -84,6 +84,8 @@ mkSRS = [RefSec (RefProg intro
   ++ 
   [AuxConstntSec (AuxConsProg gLassBR auxiliaryConstants)]
   ++ 
+  [Bibliography gbCitations]
+  ++
   map Verbatim [s11, s12]
   
 glassSystInfo :: SystemInformation

@@ -4,12 +4,15 @@ import Control.Lens ((^.))
 
 import Language.Drasil (CI, ConceptChunk, UnitalChunk, UncertQ,
   QDefinition, ConVar, NamedChunk, NamedIdea, RelationConcept,
-  Section, Document, Concept, QSWrapper, Person, Block, BibRef,
+  Section, Document, Concept, QSWrapper, Person, Block,
+  BibRef, CodeSpec,
   _constraints, _constants, _defSequence, _inputs, _outputs, _units,
   _definitions, _concepts, _namedIdeas, _quants, _authors, _kind, _sys,
   sC, titleize, titleize', plural, short, makeRef, phrase,
   sParen, sSqBr, defn, nw, at_start, (+:+), (+:+.), (+:),
   unit'2Contents, qs, mkTable, for'', manyNames,
+  lang, impType, logFile, logging, comments, onSfwrConstraint,
+  onPhysConstraint, inputStructure, codeSpec',
   UnitDefn (UU),
   DType (Data, Theory),
   Contents (Table, Figure, EqnBlock, Enumeration),
@@ -19,6 +22,11 @@ import Language.Drasil (CI, ConceptChunk, UnitalChunk, UncertQ,
   Bound (High, Low),
   UFunc (Integral),
   DerivType (Total, Part),
+  Choices (Choices),
+  Structure (Loose), Comments (CommentNone), Logging (LogNone),
+  ConstraintBehaviour (Warning),
+  Lang (Java, CSharp, Cpp, Python),
+  ImplementationType (Program),
   Expr (C, FCall, UnaryOp, (:=), Deriv, (:.), Neg),
   Sentence (S, EmptyS, (:+:), Quote, E))
 
@@ -171,6 +179,21 @@ mkSRS = [RefSec (RefProg intro
   map Verbatim [s3, s4, s5, s6, s7] ++ 
   [AuxConstntSec (AuxConsProg progName specParamValList)] ++
   [Bibliography s9_swhs_citations]
+
+swhsChoices :: Choices
+swhsChoices = Choices {
+  lang = [Python, Cpp, CSharp, Java],
+  impType = Program,
+  logFile = "log.txt",
+  logging = LogNone,         -- LogNone, LogFunc
+  comments = CommentNone,    -- CommentNone, CommentFunc
+  onSfwrConstraint = Warning,  -- Warning, Exception
+  onPhysConstraint = Warning,  -- Warning, Exception
+  inputStructure = Loose    -- Loose, AsClass
+}
+
+swhsCode :: CodeSpec
+swhsCode = codeSpec' swhs_si swhsChoices
 
 tsymb_intro :: [TSIntro]
 tsymb_intro = [TSPurpose, SymbConvention

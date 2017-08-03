@@ -252,6 +252,7 @@ layField (Pages     ns) = T.Pages     ns
 layField (Note       s) = T.Note       $ spec s
 layField (Issue      n) = T.Issue      n
 layField (School     s) = T.School     $ spec s
+layField (URL       n)  = T.URL        $ spec n
 
 makeL :: ListType -> T.ListType  
 makeL (Bullet bs)      = T.Enum        $ (map item bs)

@@ -555,6 +555,7 @@ showBibTeX (Pages (a, b)) = showField "pages" (S $ show a ++ "-" ++ show b)
 showBibTeX (Note       s) = showField "note" s
 showBibTeX (Issue      s) = showField "number" (S $ show s)
 showBibTeX (School     s) = showField "school" s
+showBibTeX (URL        s) = showField "url" s
 
 showField :: String -> Spec -> Spec
 showField f s = S f :+: S "={" :+: s :+: S "}"

@@ -3,6 +3,9 @@ module Drasil.NoPCM.DataDesc where
 import Language.Drasil
 import Drasil.SWHS.Unitals
 
+inputMod :: Mod
+inputMod = ModData "InputFormat" [nopcmInputData]
+
 nopcmInputData :: DataDesc
 nopcmInputData =
   [ junkLine,

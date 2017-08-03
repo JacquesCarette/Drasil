@@ -186,6 +186,7 @@ data CiteField = Author     People
                | Note       Spec
                | Issue      Integer
                | School     Spec
+               | URL        Spec
 
 instance Show Citation where
   show (Book      _) = "book"

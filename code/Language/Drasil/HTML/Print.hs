@@ -447,6 +447,7 @@ bookMLA (Note       s) = p_spec s
 bookMLA (Issue      n) = comm $ "no. " ++ show n
 bookMLA (School     s) = comm $ p_spec s
 bookMLA (Thesis     t) = comm $ show t
+bookMLA (URL        s) = dot $ p_spec s
 
 bookAPA :: CiteField -> String --FIXME: year needs to come after author in APA
 bookAPA (Author   p) = needDot $ p_spec (rendPeople rendPersLFM' p) --APA uses initals rather than full name

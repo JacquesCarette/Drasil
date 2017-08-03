@@ -70,6 +70,8 @@ expr (a  :<=> b)      = H.Iff   (expr a) (expr b)
 expr (IsIn  a b)      = H.IsIn  (map expr a) (set b)
 expr (NotIn a b)      = H.NotIn (map expr a) (set b)
 expr (State a b)      = H.State (map quan a) (expr b)
+expr (Len _)          = error "Len not yet implemented"
+expr (Append _ _)     = error "Append not yet implemented"
 
 -- | Healper for translating Quantifier
 quan :: Quantifier -> H.Quantifier
@@ -261,6 +263,7 @@ layField (Pages     ns) = H.Pages     ns
 layField (Note       s) = H.Note       $ spec s
 layField (Issue      n) = H.Issue      n
 layField (School     s) = H.School     $ spec s
+layField (URL        s) = H.URL        $ spec s
 
 -- | Translates lists
 makeL :: ListType -> H.ListType
@@ -279,14 +282,14 @@ item (Nested t s) = H.Nested (spec t) (makeL s)
 -- (Data defs, General defs, Theoretical models, etc.)
 makePairs :: DType -> SymbolMap -> [(String,[H.LayoutObj])]
 makePairs (Data c) m = [
-  ("Number",      [H.Paragraph $ spec $ missingAcro $ getA c]),
+  ("Number",      [H.Paragraph $ spec $ missingAcro (S "DD") $ getA c]),
   ("Label",       [H.Paragraph $ spec $ titleize $ c ^. term]),
   ("Units",       [H.Paragraph $ spec $ unit'2Contents c]),
   ("Equation",    [H.HDiv ["equation"] [H.Tagless (buildEqn c)] (H.EmptyS)]),
   ("Description", [H.Paragraph (buildDDDescription c m)])
   ]
 makePairs (Theory c) _ = [
-  ("Number",      [H.Paragraph $ spec $ missingAcro $ getA c]),
+  ("Number",      [H.Paragraph $ spec $ missingAcro (S "T") $ getA c]),
   ("Label",       [H.Paragraph $ spec (titleize $ c ^. term)]),
   ("Equation",    [H.HDiv ["equation"] [H.Tagless (H.E (rel (c ^. relat)))]
                   (H.EmptyS)]),
@@ -297,9 +300,9 @@ makePairs Instance _ = error "Not yet implemented"
 makePairs TM _       = error "Not yet implemented"
 makePairs DD _       = error "Not yet implemented"
 
-missingAcro :: Maybe Sentence -> Sentence
-missingAcro Nothing = EmptyS
-missingAcro (Just a) = S "<b>":+: a :+: S "</b>"
+missingAcro :: Sentence -> Maybe Sentence -> Sentence
+missingAcro dflt Nothing = S "<b>":+: dflt :+: S "</b>"
+missingAcro _ (Just a) = S "<b>":+: a :+: S "</b>"
 
 -- | Translates the defining equation from a QDefinition to 
 -- HTML's version of Sentence

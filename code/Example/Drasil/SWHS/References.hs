@@ -7,11 +7,9 @@ import Language.Drasil
 ----------------------------
 
 s9_swhs_citations :: BibRef
-s9_swhs_citations = [ref1, ref2, ref3]
+s9_swhs_citations = [ref1, ref2, ref3, ref4, ref5, ref6]
 
-ref1, ref2, ref3, ref4, ref5 :: Citation
-
-ref6 :: [Sentence]
+ref1, ref2, ref3, ref4, ref5, ref6 :: Citation
 
 ref1 = Article [
   Author [personWM' "J" ["Frederick"] "Bueche"],
@@ -59,11 +57,19 @@ ref5 = Article [
   Place (S "Washington", S "USA"),
   Year 1986]
 
-ref6 = [S "W. Spencer Smith and Lei Lai. A new requirements template for" +:+
-  S "scientific computing. In J. Ralyt" :+: (F Acute 'e'), S "P. Agerfalk",
-  S "and N. Kraiem", S "editors", S "Proceedings of the First" +:+
-  S "International Workshop on Situational Requirements Engineering" +:+
-  S "Processes - Methods, Techniques and Tools to Support" +:+
-  S "Situation-Specific Requirements Engineering Processes, SREP'05",
-  S "pages 107-121", S "Paris", S "France", S "2005. In conjunction with" +:+
-  S "13th IEEE International Requirements Engineering Conference."]
+ref6 = Article [
+  Author [personWM' "W." ["Spencer"] "Smith",
+          person' "Lei" "Lai"],
+  Title (S "A new requirements template for scientific computing"),
+  Note (S "In J. Ralyt" :+: (F Acute 'e') `sC` S "P. Agerfalk" `sC`
+  S "and N. Kraiem" `sC` S "editors"),
+  --FIXME: need to add editor field
+  Journal (S "Proceedings of the First International Workshop on" +:+
+  S "Situational Requirements Engineering Processes - Methods," +:+
+  S "Techniques and Tools to Support Situation-Specific Requirements" +:+
+  S "Engineering Processes, SREP'05"),
+  Pages (107, 121),
+  Place (S "Paris", S "France"),
+  Year 2005,
+  Note (S "In conjunction with 13th IEEE International Requirements" +:+
+  S "Engineering Conference")]

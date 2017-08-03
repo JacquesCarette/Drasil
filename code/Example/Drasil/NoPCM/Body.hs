@@ -953,4 +953,4 @@ s8 = valsOfAuxConstantsF progName specParamValList
 -- s9_refs = mkRefsList 1 $ map foldlsC s9_refList
 
 s9_refList :: BibRef
-s9_refList = [ref2 {--, ref3, ref4, ref5, ref6--} ]
+s9_refList = [ref2, ref3, ref4, ref5, ref6]

@@ -360,6 +360,29 @@ pcm_E        = uqcNU "pcm_E" (nounPhraseSP "change in heat energy in the PCM")
 
 
 
+------------------------------
+-- Uncertainties with no Units
+------------------------------
+
+abs_tol, rel_tol, cons_tol :: UncertainChunk
+
+abs_tol = uvc "abs_tol" (nounPhraseSP "absolute tolerance") 
+  (sub cA (Atomic "tol")) Real
+  [ physc $ \c -> (Dbl 0) :< c ,
+    physc $ \c -> c :< (Dbl 1) ] (Dbl (10.0**(-10))) 0.01
+
+rel_tol = uvc "pb_tol" (nounPhraseSP "relative tolerance") 
+  (sub cR (Atomic "tol")) Real
+  [ physc $ \c -> (Dbl 0) :< c ,
+    physc $ \c -> c :< (Dbl 1) ] (Dbl (10.0**(-10))) 0.01
+
+cons_tol = uvc "pb_tol" (nounPhraseSP "relative tolerance for conservation of energy") 
+  (sub cC (Atomic "tol")) Real
+  [ physc $ \c -> (Dbl 0) :< c ,
+    physc $ \c -> c :< (Dbl 1) ] (Dbl (10.0**(-3))) 0.01
+
+
+
 -------------------------
 -- Max / Min Variables --
 -------------------------

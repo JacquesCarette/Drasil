@@ -9,9 +9,9 @@ import Language.Drasil
 s9_swhs_citations :: BibRef
 s9_swhs_citations = [ref1, ref2, ref3]
 
-ref1, ref2, ref3, ref4 :: Citation
+ref1, ref2, ref3, ref4, ref5 :: Citation
 
-ref5, ref6 :: [Sentence]
+ref6 :: [Sentence]
 
 ref1 = Article [
   Author [personWM' "J" ["Frederick"] "Bueche"],
@@ -34,12 +34,11 @@ ref2 = Article [
   Place (S "Hoboken", S "New Jersey"),
   Year 2007]
 
-ref3 = Article [
+ref3 = MThesis [
   Author [person' "Nirmitha" "Koothoor"],
   Title (S "A document drive approach to certifying" +:+
-  S "scientific computing software. Master's thesis"),
-  -- FIXME: Automate masters thesis
-  Publisher (S "McMaster University"),
+  S "scientific computing software"),
+  School (S "McMaster University"),
   Place (S "Hamilton", S "Canada"),
   Year 2013]
 
@@ -49,9 +48,16 @@ ref4 = Article [
   Note (S "From Marilyn Lightstone's Personal Notes"),
   Year 2012]
 
-ref5 = [S "David L. Parnas and P.C. Clements. A rational design process:" +:+
-  S "How and why to fake it. IEEE Transactions on Software Engineering",
-  S "12" :+: Quote (S "2") :+: S ":251-257", S "February 1986."]
+ref5 = Article [
+  Author [personWM' "David" ["L"] "Parnas",
+          personWM' "P" ["C"] "Clements"],
+  Title (S "A rational design process: How and why to fake it"),
+  Journal (S "IEEE Transactions on Software Engineering"),
+  Volume 12,
+  Issue 2,
+  Pages (251, 257),
+  Place (S "Washington", S "USA"),
+  Year 1986]
 
 ref6 = [S "W. Spencer Smith and Lei Lai. A new requirements template for" +:+
   S "scientific computing. In J. Ralyt" :+: (F Acute 'e'), S "P. Agerfalk",

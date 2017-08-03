@@ -30,6 +30,7 @@ data CiteField = Author     People
                | Note       Sentence --extra text at the end of a citation
                | Issue      Integer
                | School     Sentence
+               | URL        Sentence
 
 data Month = Jan
            | Feb

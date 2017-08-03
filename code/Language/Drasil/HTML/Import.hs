@@ -263,6 +263,7 @@ layField (Pages     ns) = H.Pages     ns
 layField (Note       s) = H.Note       $ spec s
 layField (Issue      n) = H.Issue      n
 layField (School     s) = H.School     $ spec s
+layField (URL        s) = H.URL        $ spec s
 
 -- | Translates lists
 makeL :: ListType -> H.ListType

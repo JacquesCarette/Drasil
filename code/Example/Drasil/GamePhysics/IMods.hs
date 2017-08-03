@@ -24,6 +24,8 @@ im1Rel :: Relation -- FIXME: add proper equation
 im1Rel = (C acc_i) := (Deriv Total (FCall (C vel_i) [C QP.time]) (C QP.time))
   := (C QP.gravitationalAccel) + ((FCall (C force_i) [C QP.time]) / (C mass_i))
 
+
+--fixme: need referencing
 im1descr, im1leg :: Sentence
 im1descr = foldlSent [S "The above equation expresses the total", 
   (phrase QP.acceleration), S "of the", (phrase CP.rigidBody), 
@@ -48,6 +50,7 @@ im2Rel = (C QP.angularAccel) := Deriv Total
   (FCall (C QP.angularVelocity) [C QP.time])
   (C QP.time) := ((FCall (C torque_i) [C QP.time]) / (C QP.momentOfInertia))
 
+--fixme: need referencing
 im2descr, im2leg :: Sentence
 im2descr = foldlSent [S "The above equation for the total angular acceleration", 
   S "of the rigid body (A1, A2) i is derived from T5, and the resultant outputs",
@@ -79,6 +82,7 @@ im3Rel3 = (FCall (C angVel_A) [C time_c]) := (FCall (C angVel_A) [C QP.time]) +
 im3Rel4 = (FCall (C angVel_B) [C time_c]) := (FCall (C angVel_B) [C QP.time]) -
   ((C dispUnit) * ((C QP.impulseS) * (C normalVect))) / (C QP.momentOfInertia)
 
+--fixme: need referencing
 im3descr, im3leg :: Sentence
 im3descr = foldlSent [S "This instance model is based on our assumptions",
   S "regarding rigid body (A1, A2) collisions (A5). Again, this does not take",

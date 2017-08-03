@@ -2,7 +2,7 @@ module Language.Drasil.TeX.Preamble(genPreamble) where
 
 import Data.List (nub)
 
-import Language.Drasil.Config (hyperSettings, fontSize)
+import Language.Drasil.Config (hyperSettings, fontSize,bibFname)
 import Language.Drasil.TeX.Monad
 import Language.Drasil.TeX.AST
 import Language.Drasil.TeX.Helpers
@@ -24,6 +24,9 @@ data Package = AMSMath
              | Dot2Tex
              | AdjustBox
              | AMSsymb
+             | Breqn
+             | FileContents
+             | BibLaTeX
              deriving Eq
 
 addPackage :: Package -> D
@@ -41,12 +44,16 @@ addPackage Tikz      = usepackage "tikz" %%
 addPackage Dot2Tex   = usepackage "dot2texi"
 addPackage AdjustBox = usepackage "adjustbox"
 addPackage AMSsymb   = usepackage "amssymb"
+addPackage Breqn     = usepackage "breqn"
+addPackage FileContents = usepackage "filecontents"
+addPackage BibLaTeX  = command1o "usepackage" (Just "backend=bibtex") "biblatex"
 
 data Def = AssumpCounter
          | LCCounter
          | ModCounter
          | ReqCounter
          | UCCounter
+         | Bibliography
          deriving Eq
 
 addDef :: Def -> D
@@ -60,7 +67,7 @@ addDef ReqCounter    = count "reqnum" %%
                        comm "rthereqnum" "R\\thereqnum" Nothing
 addDef UCCounter     = count "ucnum" %%
                        comm "uctheucnum" "UC\\theucnum" Nothing
-
+addDef Bibliography  = command "bibliography" bibFname 
 
 genPreamble :: [LayoutObj] -> D
 genPreamble los = let preamble = parseDoc los
@@ -76,7 +83,8 @@ genPreamble los = let preamble = parseDoc los
         listdefs (_:ds)        = listdefs ds
 
 parseDoc :: [LayoutObj] -> [Preamble]
-parseDoc los' = [PreP FullPage, PreP HyperRef, PreP AMSMath, PreP AMSsymb] ++
+parseDoc los' = [PreP FullPage, PreP HyperRef, PreP AMSMath, PreP AMSsymb,
+  PreP Breqn, PreP FileContents, PreP BibLaTeX, PreD Bibliography] ++
   (nub $ parseDoc' los')
   where parseDoc' [] = []
         parseDoc' ((Table _ _ _ _):los) =
@@ -102,6 +110,8 @@ parseDoc los' = [PreP FullPage, PreP HyperRef, PreP AMSMath, PreP AMSsymb] ++
           (PreD UCCounter):parseDoc' los
         parseDoc' ((Graph _ _ _ _ _):los) =
           (PreP Caption):(PreP Tikz):(PreP Dot2Tex):(PreP AdjustBox):
-          parseDoc' los
+          parseDoc' los  {-FIXME: add the two packages bellow if there is a bibliography-}
+        -- parseDoc' ((Bibliography _):los) = (PreP FileContents):(PreP Cite):
+          -- parseDoc' los
         parseDoc' (_:los) =
           parseDoc' los

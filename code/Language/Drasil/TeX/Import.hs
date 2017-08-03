@@ -10,20 +10,21 @@ import Language.Drasil.Spec
 import qualified Language.Drasil.TeX.AST as T
 import Language.Drasil.Unicode (Special(Partial))
 import Language.Drasil.Chunk.Eq
-import Language.Drasil.Chunk.Relation
 import Language.Drasil.Chunk.ExprRelat (relat)
 import Language.Drasil.Chunk.Module
 import Language.Drasil.Chunk.NamedIdea (term)
 import Language.Drasil.Chunk.SymbolForm (SymbolForm, symbol)
 import Language.Drasil.Chunk.Concept (defn)
 import Language.Drasil.Chunk.VarChunk (VarChunk)
-import Language.Drasil.ChunkDB (SymbolMap)
+import Language.Drasil.ChunkDB (SymbolMap, getUnitLup)
 import Language.Drasil.Config (verboseDDDescription, numberedDDEquations, numberedTMEquations)
 import Language.Drasil.Document
 import Language.Drasil.Symbol
 import Language.Drasil.Misc (unit'2Contents)
 import Language.Drasil.SymbolAlphabet
-import Language.Drasil.NounPhrase (phrase)
+import Language.Drasil.NounPhrase (phrase, titleize)
+import Language.Drasil.Unit (usymb)
+import Language.Drasil.Citations (Citation(..),CiteField(..))
 
 expr :: Expr -> T.Expr
 expr (V v)             = T.Var  v
@@ -222,6 +223,35 @@ lay (TMod ps r _)         = T.Definition (map (\(x,y) -> (x, map lay y)) ps)
   (spec r)
 lay (DDef ps r _)         = T.Definition (map (\(x,y) -> (x, map lay y)) ps)
   (spec r)
+lay (Defnt _ _ _)     = T.Paragraph (T.EmptyS)  -- need to implement!
+lay (GDef)            = T.Paragraph (T.EmptyS)  -- need to implement!
+lay (IMod)            = T.Paragraph (T.EmptyS)  -- need to implement!
+lay (Bib bib)         = T.Bib $ map layCite bib
+
+-- | For importing bibliography
+layCite :: Citation -> T.Citation
+layCite (Book      fields) = T.Book    $ map layField fields
+layCite (Article   fields) = T.Article $ map layField fields
+layCite (MThesis   fields) = T.MThesis   $ map layField fields
+layCite (PhDThesis fields) = T.PhDThesis $ map layField fields
+
+layField :: CiteField -> T.CiteField
+layField (Author     p) = T.Author     p
+layField (Title      s) = T.Title      $ spec s
+layField (Series     s) = T.Series     $ spec s
+layField (Collection s) = T.Collection $ spec s
+layField (Volume     n) = T.Volume     n
+layField (Edition    n) = T.Edition    n
+layField (Place (c, s)) = T.Place (spec c, spec s)
+layField (Publisher  s) = T.Publisher $ spec s
+layField (Journal    s) = T.Journal   $ spec s
+layField (Year       n) = T.Year       n
+layField (Date   n m y) = T.Date   n m y
+layField (Page       n) = T.Page       n
+layField (Pages     ns) = T.Pages     ns
+layField (Note       s) = T.Note       $ spec s
+layField (Issue      n) = T.Issue      n
+layField (School     s) = T.School     $ spec s
 
 makeL :: ListType -> T.ListType  
 makeL (Bullet bs)      = T.Enum        $ (map item bs)
@@ -236,17 +266,20 @@ item (Nested t s) = T.Nested (spec t) (makeL s)
   
 makePairs :: DType -> SymbolMap -> [(String,[T.LayoutObj])]
 makePairs (Data c) m = [
-  ("Label",       [T.Paragraph $ T.N $ c ^. symbol]),
+  ("Label",       [T.Paragraph $ spec (titleize $ c ^. term)]),
   ("Units",       [T.Paragraph $ spec $ unit'2Contents c]),
   ("Equation",    [eqnStyleDD $ buildEqn c]),
   ("Description", [T.Paragraph (buildDDDescription c m)])
   ]
 makePairs (Theory c) _ = [
-  ("Label",       [T.Paragraph $ spec (phrase $ c ^. term)]),
+  ("Label",       [T.Paragraph $ spec (titleize $ c ^. term)]),
   ("Equation",    [eqnStyleTM $ T.E (rel (c ^. relat))]),
   ("Description", [T.Paragraph (spec (c ^. defn))])
   ]
-makePairs General _ = error "Not yet implemented"
+makePairs General  _ = error "Not yet implemented"
+makePairs Instance _ = error "Not yet implemented"
+makePairs TM _       = error "Not yet implemented"
+makePairs DD _       = error "Not yet implemented"
 
 makeUHPairs :: [(ModuleChunk,[ModuleChunk])] -> [(T.Spec,T.Spec)]
 makeUHPairs []          = []
@@ -268,13 +301,17 @@ buildEqn c = T.N (c ^. symbol) T.:+: T.S " = " T.:+: T.E (expr (equat c))
 
 -- Build descriptions in data defs based on required verbosity
 buildDDDescription :: QDefinition -> SymbolMap -> T.Spec
-buildDDDescription c m = descLines (
-  (toVC c m):(if verboseDDDescription then vars (equat c) m else []))
+buildDDDescription c m = descLines 
+  (if verboseDDDescription then (vars (getQ c := equat c) m) else []) m
+  where getQ (EC a _) = C a
 
-descLines :: [VarChunk] -> T.Spec  
-descLines []       = error "No chunks to describe"
-descLines (vc:[])  = (T.N (vc ^. symbol) T.:+: (T.S " is the " T.:+: 
-                      (spec (phrase $ vc ^. term))))
-descLines (vc:vcs) = descLines (vc:[]) T.:+: T.HARDNL T.:+: descLines vcs
+descLines :: [VarChunk] -> SymbolMap -> T.Spec  
+descLines []    _   = error "No chunks to describe"
+descLines (vc:[]) m = (T.N (vc ^. symbol) T.:+: 
+  (T.S " is the " T.:+: (spec (phrase $ vc ^. term)) T.:+:
+   unWrp (getUnitLup vc m)))
+  where unWrp (Just a) = T.S " (" T.:+: T.Sy (a ^. usymb) T.:+: T.S ")"
+        unWrp Nothing  = T.S ""
+descLines (vc:vcs) m = descLines (vc:[]) m T.:+: T.HARDNL T.:+: descLines vcs m
 
 

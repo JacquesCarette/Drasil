@@ -1,8 +1,8 @@
 module Language.Drasil.HTML.Print where
 
 import Prelude hiding (print, id)
-import Data.List (intersperse)
-import Text.PrettyPrint hiding (render)
+import Data.List (intersperse, sort)
+import Text.PrettyPrint hiding (render, quotes)
 import Numeric (showFFloat)
 
 import Language.Drasil.HTML.Import (makeDocument, spec)
@@ -16,6 +16,8 @@ import Language.Drasil.Unicode
 import Language.Drasil.Symbol (Symbol(..), Decoration(..))
 import qualified Language.Drasil.Document as L
 import Language.Drasil.HTML.Monad
+import Language.Drasil.People (People,Person(..),rendPersLFM',rendPersLFM'',Conv(..))
+import Language.Drasil.Config (StyleGuide(..), bibStyleH)
 
 --FIXME? Use Doc in place of Strings for p_spec/title_spec
 
@@ -52,6 +54,8 @@ printLO (Module m l)            = makeModule m (p_spec l)
 printLO (Assumption a l id)       = makeRefList (p_spec a) (p_spec l) (p_spec id)
 printLO (Requirement r l id)       = makeRefList (p_spec r) (p_spec l) (p_spec id)
 printLO (LikelyChange lc l id)      = makeRefList (p_spec lc) (p_spec l) (p_spec id)
+printLO (UnlikelyChange uc l id)      = makeRefList (p_spec uc) (p_spec l) (p_spec id)
+printLO (Bib bib)               = printLO $ makeBib bib
 
 
 -- | Called by build, uses 'printLO' to render the layout 
@@ -86,10 +90,11 @@ p_spec (Sy s)     = uSymb s
 p_spec (G g)      = unPH $ greek g
 p_spec (Sp s)     = unPH $ special s
 p_spec HARDNL     = "<br />"
+p_spec (Ref (Def (Just r)) a) = reflink (p_spec a) (p_spec $ spec r)
 p_spec (Ref (Assump (Just r)) a) = reflink (p_spec a) (p_spec $ spec r)
 p_spec (Ref (Req (Just r)) a) = reflink (p_spec a) (p_spec $ spec r)
 p_spec (Ref (LC (Just r)) a) = reflink (p_spec a) (p_spec $ spec r)
-p_spec (Ref r a)  = reflink (p_spec a) ("this " ++ show r)
+p_spec (Ref _ a)  = reflink (p_spec a) (p_spec a)--("this " ++ show r)
 p_spec EmptyS     = ""
 
 -- | Renders symbols for HTML title
@@ -101,7 +106,7 @@ t_symbol s                        = symbol s
 -- | Adds emphises to symbols by defult. Use symbolNoEm for no emphises.
 --   Units do not need emphises for example.
 symbol :: Symbol -> String
-symbol s = "<em>" ++ symbolNoEm s ++ "</em>"
+symbol s = em $ symbolNoEm s
 
 -- | Renders symbols for HTML document
 symbolNoEm :: Symbol -> String
@@ -117,7 +122,7 @@ symbolNoEm (Corners [] [_] [] [] _) = error "rendering of ll prescript"
 symbolNoEm (Corners _ _ _ _ _)      = error "rendering of Corners (general)"
 symbolNoEm (Atop Vector s)       = "<b>" ++ symbolNoEm s ++ "</b>"
 symbolNoEm (Atop Hat s)          = symbolNoEm s ++ "&#770;"
-symbolNoEm (Atop Prime s)        = symbolNoEm s ++ "'"
+symbolNoEm (Atop Prime s)        = symbolNoEm s ++ "&prime;"
 
 uSymb :: USymb -> String
 uSymb (UName s)           = symbolNoEm s
@@ -134,6 +139,7 @@ p_expr :: Expr -> String
 p_expr (Var v)    = symbol (Atomic v) --Ensures variables are rendered the same as other symbols
 p_expr (Dbl d)    = showFFloat Nothing d ""
 p_expr (Int i)    = show i
+p_expr (Sym s)    = symbol s
 p_expr (Bln b)    = show b
 p_expr (Mul a b)  = mul a b
 p_expr (Add a b)  = p_expr a ++ " &plus; " ++ p_expr b
@@ -141,7 +147,6 @@ p_expr (Sub a b)  = p_expr a ++ " &minus; " ++ p_expr b
 p_expr (Frac a b) = fraction (p_expr a) (p_expr b) --Found in HTMLHelpers
 p_expr (Div a b)  = divide a b
 p_expr (Pow a b)  = pow a b
-p_expr (Sym s)    = symbol s
 p_expr (Eq a b)   = p_expr a ++ " = " ++ p_expr b
 p_expr (NEq a b)  = p_expr a ++ "&ne;" ++ p_expr b
 p_expr (Lt a b)   = p_expr a ++ "&thinsp;&lt;&thinsp;" ++ p_expr b --thin spaces make these more readable
@@ -155,8 +160,7 @@ p_expr (Case ps)  = cases ps (p_expr)
 p_expr (Op f es)  = p_op f es
 p_expr (Grouping e) = paren (p_expr e)
 p_expr (Mtx a)    = "<table class=\"matrix\">\n" ++ p_matrix a ++ "</table>"
-p_expr (Index a@(Sym (Corners [] [] [] [_] _)) i) = p_expr a ++ sub ("," ++ p_expr i)
-p_expr (Index a i)= p_expr a ++ sub (p_expr i)
+p_expr (Index a i)= p_indx a i
 --Logic
 p_expr (Not a)    = "&not;" ++ p_expr a
 p_expr (And a b)  = p_expr a ++ " &and; " ++ p_expr b
@@ -166,6 +170,23 @@ p_expr (Iff a b)  = p_expr a ++ " &hArr; " ++ p_expr b
 p_expr (IsIn  a b) = (concat $ intersperse "," $ map p_expr a) ++ "&thinsp;&isin;&thinsp;"  ++ show b
 p_expr (NotIn a b) = (concat $ intersperse "," $ map p_expr a) ++ "&thinsp;&notin;&thinsp;" ++ show b
 p_expr (State a b) = (concat $ intersperse ", " $ map p_quan a) ++ ": " ++ p_expr b
+
+-- | For printing indexes
+p_indx :: Expr -> Expr -> String
+p_indx a@(Sym (Corners [] [] [] [_] _)) i = p_expr a ++ sub (","++ p_sub i)
+p_indx a i = p_expr a ++ sub (p_sub i)
+-- Ensures only simple Expr's get rendered as an index
+p_sub :: Expr -> String
+p_sub e@(Var _)    = p_expr e
+p_sub e@(Dbl _)    = p_expr e
+p_sub e@(Int _)    = p_expr e
+p_sub e@(Sym _)    = p_expr e
+p_sub   (Add a b)  = p_expr a ++ "&plus;"  ++ p_expr b --removed spaces
+p_sub   (Sub a b)  = p_expr a ++ "&minus;" ++ p_expr b
+p_sub e@(Mul _ _)  = p_expr e
+p_sub   (Frac a b) = divide a b --no block division 
+p_sub e@(Div _ _)  = p_expr e
+p_sub _            = error "Tried to Index a non-simple expr in HTML, currently not supported."
 
 -- | For printing Matrix
 p_matrix :: [[Expr]] -> String
@@ -190,18 +211,23 @@ mul a b@(Int _) = mulParen a ++ "&sdot;" ++ p_expr b
 mul x@(Sym (Concat _)) y = p_expr x ++ "&sdot;" ++ mulParen y
 mul x y@(Sym (Concat _)) = mulParen x ++ "&sdot;" ++ p_expr y
 mul x@(Sym (Atomic s)) y = if length s > 1 then p_expr x ++ "&sdot;" ++ mulParen y else
-                            p_expr x ++ mulParen y
+                            mulParenF x ++ mulParen y
 mul x y@(Sym (Atomic s)) = if length s > 1 then mulParen x ++ "&sdot;" ++ p_expr y else
-                            mulParen x ++ p_expr y
+                            mulParenF x ++ p_expr y
 mul x@(Div _ _) y = paren (p_expr x) ++ mulParen y
-mul a b         = mulParen a ++ mulParen b
+mul a b         = mulParenF a ++ mulParen b
 
--- | Helper for properly rendering parentheses around multiplication
+-- | Helper for properly rendering parentheses around the multiplier
 mulParen :: Expr -> String
 mulParen a@(Add _ _) = paren $ p_expr a
 mulParen a@(Sub _ _) = paren $ p_expr a
---mulParen (Mul n m) = mulParen n ++ mulParen m
 mulParen a = p_expr a
+
+-- for added a thin space after the multiplicand
+mulParenF :: Expr -> String
+mulParenF a@(Add _ _) = paren (p_expr a) ++ "&#8239;"
+mulParenF a@(Sub _ _) = paren (p_expr a) ++ "&#8239;"
+mulParenF a = p_expr a ++ "&#8239;"
 
 -- | Helper for properly rendering division of expressions
 divide :: Expr -> Expr -> String
@@ -310,11 +336,12 @@ makeFigure r c f = refwrap r (image f c $$ caption c)
 -- | Renders expression operations/functions. 
 p_op :: Function -> [Expr] -> String
 p_op f@(Cross) xs = binfix_op f xs
-p_op f@(Summation bs) (x:[]) = show f ++ makeBound bs ++ paren (p_expr x)
+p_op f@(Summation bs) (x:[]) = lrgOp f bs ++ paren (p_expr x)
 p_op (Summation _) _ = error "Something went wrong with a summation"
-p_op f@(Product bs) (x:[]) = show f ++ makeBound bs ++ paren (p_expr x)
-p_op f@(Integral bs wrtc) (x:[]) = 
-  show f ++ makeIBound bs ++ paren (p_expr x ++ p_expr wrtc)
+p_op f@(Product bs) (x:[]) = lrgOp f bs ++ paren (p_expr x)
+p_op (Product _) _ = error "Something went wrong with a product"
+p_op f@(Integral bs wrtc) (x:[]) = intg f bs
+  {-show f ++ makeIBound bs-} ++ paren (p_expr x ++ p_expr wrtc)
 p_op (Integral _ _) _  = error "Something went wrong with an integral" 
 p_op Abs (x:[]) = "|" ++ p_expr x ++ "|"
 p_op Abs _ = error "Abs should only take one expr."
@@ -324,11 +351,27 @@ p_op f@(Exp) (x:[]) = show f ++ sup (p_expr x)
 p_op f (x:[]) = show f ++ paren (p_expr x) --Unary ops, this will change once more complicated functions appear.
 p_op _ _ = error "Something went wrong with an operation"
 
--- | Helper for summation bound creation, used by 'p_op'
-makeBound :: Maybe ((Symbol, Expr),Expr) -> String
-makeBound (Just ((s,v),hi)) = sub (symbol s ++"="++ p_expr v) ++ sup (p_expr hi)
-makeBound Nothing = ""
 
+-- | Helpers for summation/product, used by 'p_op'
+makeBound :: String -> String
+makeBound s = "<tr><td><span class=\"bound\">" ++ s ++ "</span></td></tr>\n"
+
+lrgOp :: Function -> Maybe ((Symbol, Expr),Expr) -> String
+lrgOp f Nothing = "<span class=\"symb\">" ++ show f ++ "</span>"
+lrgOp f (Just ((s,v),hi)) = "<table class=\"operator\">\n" ++ makeBound (p_expr hi) ++
+  "<tr><td><span class=\"symb\">" ++ show f ++ "</span></td></tr>\n" ++
+  makeBound (symbol s ++"="++ p_expr v) ++ "</table>"
+
+intg :: Function -> (Maybe Expr, Maybe Expr) -> String
+intg f (Nothing, Nothing) = "<span class=\"symb\">" ++ show f ++ "</span>"
+intg f (Just l, Nothing) = "<span class=\"symb\">" ++ show f ++ "</span>" ++ sub (p_expr l ++ " ")
+intg f (low,high) = "<table class=\"operator\">\n" ++ pHigh high ++
+  "<tr><td><span class=\"symb\">" ++ show f ++ "</span></td></tr>\n" ++
+  pLow low ++ "</table>"
+  where pLow Nothing   = ""
+        pLow (Just l)  = makeBound (p_expr l)
+        pHigh Nothing  = ""
+        pHigh (Just hi) = makeBound (p_expr hi)
 -- | Helper for integration bound creation, used by 'p_op'
 makeIBound :: (Maybe Expr, Maybe Expr) -> String
 makeIBound (Just low, Just high) = sub (p_expr low) ++ sup (p_expr high)
@@ -349,3 +392,135 @@ makeModule m l = refwrap l (paragraph $ wrap "b" [] (text m))
 -- | Renders assumptions, requirements, likely changes
 makeRefList :: String -> String -> String -> Doc
 makeRefList a l i = refwrap l (wrap "ul" [] (text $ i ++ ": " ++ a))
+
+---------------------
+--HTML bibliography--
+---------------------
+-- **THE MAIN FUNCTION**
+makeBib :: BibRef -> LayoutObj
+makeBib = listRef . map (Flat . S) . sort . map renderCite
+  where listRef = List . Simple . zip [S $ sqbrac $ show x | x <- [(1 :: Integer)..]]
+  --some function to get a numbered list, idealy it wouldn't go from string to Spec
+  
+--for when we add other things to reference like website, newspaper
+renderCite :: Citation -> String
+renderCite b@(Book      fields) = renderF b fields useStyleBk
+renderCite a@(Article   fields) = renderF a fields useStyleArtcl
+renderCite a@(MThesis   fields) = renderF a fields useStyleBk
+renderCite a@(PhDThesis fields) = renderF a fields useStyleBk
+
+renderF :: Citation -> [CiteField] -> (StyleGuide -> (CiteField -> String)) ->  String
+renderF c fields styl = unwords $
+  map (styl bibStyleH) (sort fields) ++ endingField c bibStyleH
+
+endingField :: Citation -> StyleGuide -> [String]
+endingField c MLA = [dot $ show c]
+endingField _ _ = []
+
+-- Config helpers --
+useStyleBk :: StyleGuide -> (CiteField -> String)
+useStyleBk MLA = bookMLA
+useStyleBk APA = bookAPA
+useStyleBk Chicago = bookChicago
+
+useStyleArtcl :: StyleGuide -> (CiteField -> String)
+useStyleArtcl MLA = artclMLA
+useStyleArtcl APA = artclAPA
+useStyleArtcl Chicago = artclChicago
+
+-- FIXME: move these show functions and use tags, combinators
+bookMLA :: CiteField -> String
+bookMLA (Place (city, state)) = p_spec (city :+: S ", " :+: state) ++ ":"
+bookMLA (Edition    s) = comm $ show s ++ sufxer s ++ " ed."
+bookMLA (Series     s) = dot $ em $ p_spec s
+bookMLA (Title      s) = dot $ em $ p_spec s --If there is a series or collection, this should be in quotes, not italics
+bookMLA (Volume     s) = comm $ "vol. " ++ show s
+bookMLA (Publisher  s) = comm $ p_spec s
+bookMLA (Author     p) = dot $ p_spec $ rendPeople' p
+bookMLA (Year       y) = dot $ show y
+bookMLA (Date   d m y) = dot $ unwords [show d, show m, show y]
+bookMLA (Collection s) = dot $ em $ p_spec s
+bookMLA (Journal    s) = comm $ em $ p_spec s
+bookMLA (Page       n) = dot $ "p. " ++ show n
+bookMLA (Pages  (a,b)) = dot $ "pp. " ++ show a ++ "&ndash;" ++ show b
+bookMLA (Note       s) = p_spec s
+bookMLA (Issue      n) = comm $ "no. " ++ show n
+bookMLA (School     s) = comm $ p_spec s
+bookMLA (Thesis     t) = comm $ show t
+
+bookAPA :: CiteField -> String --FIXME: year needs to come after author in APA
+bookAPA (Author   p) = needDot $ p_spec (rendPeople rendPersLFM' p) --APA uses initals rather than full name
+bookAPA (Year     y) = dot $ paren $ show y --APA puts "()" around the year
+bookAPA (Date _ _ y) = bookAPA (Year y) --APA doesn't care about the day or month
+bookAPA (Page     n) = dot $ show n
+bookAPA (Pages (a,b)) = dot $ show a ++ "&ndash;" ++ show b
+bookAPA i = bookMLA i --Most items are rendered the same as MLA
+
+bookChicago :: CiteField -> String
+bookChicago (Author   p) = needDot $ p_spec (rendPeople rendPersLFM'' p) --APA uses middle initals rather than full name
+bookChicago (Date _ _ y) = bookChicago (Year y) --APA doesn't care about the day or month
+bookChicago p@(Page   _) = bookAPA p
+bookChicago p@(Pages  _) = bookAPA p
+bookChicago i = bookMLA i --Most items are rendered the same as MLA
+
+-- for article renderings
+artclMLA :: CiteField -> String
+artclMLA (Title s) = quotes $ dot $ p_spec s
+artclMLA i = bookMLA i
+
+artclAPA :: CiteField -> String
+artclAPA (Title  s) = dot $ p_spec s
+artclAPA (Volume n) = em $ show n
+artclAPA (Issue  n) = comm $ paren $ show n
+artclAPA i = bookAPA i
+
+artclChicago :: CiteField -> String
+artclChicago i@(Title    _) = artclMLA i
+artclChicago (Volume     n) = comm $ show n
+artclChicago (Issue      n) = "no. " ++ show n
+artclChicago i@(Year     _) = bookAPA i
+artclChicago i@(Date _ _ _) = bookAPA i
+artclChicago i = bookChicago i
+
+-- PEOPLE RENDERING --
+
+rendPeople :: (Person -> String) -> People -> Spec
+rendPeople _ []  = S "N.a." -- "No authors given"
+rendPeople f people = foldlList $ map (S . f) people --foldlList is in SentenceStructures.hs
+
+rendPeople' :: People -> Spec
+rendPeople' []  = S "N.a." -- "No authors given"
+rendPeople' people = foldlList $ map (S . rendPers) (init people) ++ [S $ rendPersL $ last people]
+
+foldlList :: [Spec] -> Spec
+foldlList []    = EmptyS
+foldlList [a,b] = a :+: S " and " :+: b
+foldlList lst   = foldle1 (\a b -> a :+: S ", " :+: b) (\a b -> a :+: S ", and " :+: b) lst
+
+foldle1 :: (a -> a -> a) -> (a -> a -> a) -> [a] -> a
+foldle1 _ _ []       = error "foldle1 cannot be used with empty list"
+foldle1 _ _ [x]      = x
+foldle1 _ g [x,y]    = g x y
+foldle1 f g (x:y:xs) = foldle1 f g ((f x y):xs)
+
+needDot :: String -> String
+needDot str = dotIt $ last str
+  where dotIt '.' = str
+        dotIt _   = dot str
+-- LFM is Last, First Middle
+rendPers :: Person -> String
+rendPers (Person {_surname = n, _convention = Mono}) = isInitial n
+rendPers (Person {_given = f, _surname = l, _middle = ms}) =
+  isInitial l ++ ", " ++ unwords (isInitial f: map isInitial ms)
+
+-- To render the last person's name
+rendPersL :: Person -> String
+rendPersL (Person {_surname = n, _convention = Mono}) = n
+rendPersL (Person {_given = f, _surname = l, _middle = []}) =
+  isInitial l ++ ", " ++ isInitial f
+rendPersL (Person {_given = f, _surname = l, _middle = ms}) =
+  isInitial l ++ ", " ++ unwords ([isInitial f] ++ map isInitial (init ms) ++ [last ms])
+
+isInitial :: String -> String
+isInitial [x]  = [x,'.']
+isInitial name = name

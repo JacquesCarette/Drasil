@@ -10,10 +10,12 @@ import Language.Drasil.Chunk.Code
 import Language.Drasil.Expr as E
 import Language.Drasil.Expr.Extract hiding (vars)
 import Language.Drasil.CodeSpec hiding (codeSpec)
+import Language.Drasil.DataDesc
 
 import Prelude hiding (log, exp, return, const)
 import Data.List (intersperse)
 import System.Directory
+import Data.Map (member)
 
 data Generator = Generator { 
   generateCode :: IO (),
@@ -61,8 +63,7 @@ generator spec g =
                                                           AsClass   -> genInputModClass
       assignFunc =         case (logging chs)          of LogVar    -> loggedAssign
                                                           LogAll    -> loggedAssign
-                                                          _         -> (\_ -> I.assign)
-                                                          
+                                                          _         -> (\_ -> I.assign)                                                          
   in Generator {
       generateCode = generateCodeD g,
       
@@ -124,7 +125,8 @@ genModulesD g = genInputMod g (inputs $ codeSpec g) (cMap $ codeSpec g)
              ++ [genConstMod g]
              ++ map (\(FuncMod n d) -> genCalcMod g n d) (fMods $ codeSpec g)
              ++ genOutputMod g (outputs $ codeSpec g)
-             ++ map (genHacks g) (mods $ codeSpec g) -- hack 
+             ++ map (genModDef g) (mods $ codeSpec g) -- hack
+      --       ++ map (genHacks g) (mods $ codeSpec g) -- hack 
 
 
 ------- INPUT ----------  
@@ -190,6 +192,28 @@ genInputConstraintsD g vars cm =
       (map (\x -> ifCond [((?!) (convExpr x), physCBody g x)] noElse) physCs)
     ]
 
+genFileInput :: Generator -> DataDesc -> Method
+genFileInput g dd = 
+  let l_infile = "infile"
+      v_infile = var l_infile
+      l_filename = "filename"
+      p_filename = param l_filename string
+      v_filename = var l_filename
+  in 
+    publicMethod g methodTypeVoid "tempname" (p_filename : (getParams g $ getInputs dd)) $
+      body $ [
+          varDec l_infile infile,
+          openFileR v_infile v_filename
+        ] ++ (concatMap (inData v_infile) dd)
+          ++ [
+          closeFile v_infile 
+        ]
+  where inData :: Value -> Data -> [Statement]
+        inData v_infile (Singleton v) = [getFileInput v_infile (convType $ codeType v) (var $ codeName v)]
+        inData v_infile JunkData = [discardFileLine v_infile]
+        inData _ _ = error "working on implementation"
+    
+
 -- need Expr -> String to print constraint
 constrWarn :: Generator -> Expr -> Body
 constrWarn _ _ = oneLiner $ printStrLn "Warning: constraint violated"
@@ -222,7 +246,7 @@ genCalcFuncD g cdef =
   publicMethod g 
     (methodType $ convType (codeType cdef)) 
     (codeName cdef)
-    (getParams (codevars $ codeEquat cdef)) 
+    (getParams g (codevars $ codeEquat cdef)) 
     (genCalcBlock g $ codeEquat cdef)
 
 genCalcBlockD :: Generator -> Expr -> Body
@@ -251,7 +275,7 @@ genOutputFormatD g outs =
       v_filename = var l_filename
   in
     publicMethod g methodTypeVoid "write_output" 
-      (p_filename:getParams outs)
+      (p_filename:getParams g outs)
       [ block $
           [
             varDec l_outfile outfile,
@@ -329,8 +353,8 @@ loggedAssign g a b = let l_outfile = "outfile"
       
 -- helpers
     
-getParams :: (CodeEntity c) => [c] -> [Parameter]
-getParams = map (\y -> param (codeName y) (convType $ codeType y))
+getParams :: (CodeEntity c) => Generator -> [c] -> [Parameter]
+getParams g cs = map (\y -> param (codeName y) (convType $ codeType y)) (filter (\x -> not $ member (codeName x) (constMap $ codeSpec g)) cs)
           
 paramType :: Parameter -> StateType
 paramType (StateParam _ s) = s
@@ -422,6 +446,9 @@ convExpr (Deriv _ _ _) = error "not implemented"
 convExpr (E.Not e)      = (?!) (convExpr e)
 convExpr (Neg e)      = (#~) (convExpr e)
 convExpr (C c)        = var (codeName (SFCN c))
+convExpr (Index a i)  = (convExpr a)$.(listAccess $ convExpr i)
+convExpr (Len a)      = (convExpr a)$.listSize
+convExpr (Append a v) = (convExpr a)$.(listAppend $ convExpr v)
 convExpr (FCall (C c) x)  = funcApp' (codeName (SFCN c)) (map convExpr x)
 convExpr (FCall _ _)  = error "not implemented"
 convExpr (a := b)     = (convExpr a) ?== (convExpr b)
@@ -533,9 +560,35 @@ compactCaseUnary :: (Expr -> Expr) -> Expr -> Expr
 compactCaseUnary op (Case c) = Case (map (\(e, r) -> (op e, r)) c)
 compactCaseUnary op a        = op (compactCase a)
 
+-- medium hacks --
+genModDef :: Generator -> Mod -> Module
+genModDef g (ModDef n fs) = buildModule n [] [] (map (genFuncDef g) fs) []
+genModDef g (ModData n ds) = buildModule n [] [] (map (genFileInput g) ds) []
+
+genFuncDef :: Generator -> FuncDef -> Method
+genFuncDef g (FuncDef n i o s) = publicMethod g (methodType $ convType o) n (getParams g i) [ block (map (convStmt g) s) ]
+
+convStmt :: Generator -> FuncStmt -> Statement
+convStmt g (FAsg v e) = assign g (var $ codeName v) (convExpr e)
+convStmt g (FFor v e st) = for (varDecDef (codeName v) int (litInt 0)) (convExpr e) ((&++) (var (codeName v)))
+  [ block (map (convStmt g) st) ]
+convStmt g (FWhile e st) = while (convExpr e) [ block (map (convStmt g) st) ]
+convStmt g (FCond e tSt []) = ifCond [(convExpr e, [ block (map (convStmt g) tSt) ])] noElse
+convStmt g (FCond e tSt eSt) = ifCond [(convExpr e, [ block (map (convStmt g) tSt) ])] [ block (map (convStmt g) eSt) ]  
+convStmt _ (FRet e) = return $ convExpr e
+convStmt _ (FThrow s) = throw s
+convStmt g (FTry t c) = tryCatch [ block (map (convStmt g) t) ] [ block (map (convStmt g) c) ]
+convStmt _ (FContinue) = continue
+convStmt _ (FVal e) = valStmt $ convExpr e
+convStmt _ (FDec v (C.List t)) = listDec' (codeName v) (convType t) 0
+convStmt _ (FDec v t) = varDec (codeName v) (convType t)
+
 -- major hacks --
 genHacks :: Generator -> (String, [Method]) -> Module
 genHacks g (n, m) = buildModule n [] [] (map (genMethodHacks g) m) [] 
 
 genMethodHacks :: Generator -> Method -> Method
 genMethodHacks g (Method l _ _ t ps b) = publicMethod g t l ps b
+genMethodHacks _ (GetMethod _ _) = error "not implemented"
+genMethodHacks _ (SetMethod _ _) = error "not implemented"
+genMethodHacks _ (MainMethod _) = error "not implemented"

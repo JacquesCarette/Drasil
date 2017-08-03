@@ -30,11 +30,10 @@ gbQDefns = [Parallel hFromt {-DD2-} [loadDF {-DD3-}, glaTyFac {-DD6-}]] ++ --can
 --Source : #7 -> See Issue #357
 
 risk_eq :: Expr
-risk_eq = ((C sflawParamK) / (Grouping (((C plate_len) / (1000)) *
-  ((C plate_width) / (1000)))) :^ ((C sflawParamM) - (1))) *
-  (Grouping ((Grouping ((C mod_elas) * (1000))) * 
-  (square (Grouping ((C act_thick) / (1000)))))) :^ (C sflawParamM) * 
-  (C loadDF) * (exp (C stressDistFac))
+risk_eq = ((C sflawParamK) / (Grouping ((C plate_len) *
+  (C plate_width))) :^ ((C sflawParamM) - 1) *
+  (Grouping (C mod_elas) * (square (Grouping (C act_thick))))
+  :^ (C sflawParamM) * (C loadDF) * (exp (C stressDistFac)))
 
 risk :: QDefinition
 risk = mkDataDef' risk_fun risk_eq (aGrtrThanB +:+ hRef +:+ ldfRef +:+ jRef)
@@ -42,10 +41,10 @@ risk = mkDataDef' risk_fun risk_eq (aGrtrThanB +:+ hRef +:+ ldfRef +:+ jRef)
 --DD2--
 
 hFromt_eq :: Relation
-hFromt_eq = (Case (zipWith hFromt_helper actualThicknesses nominalThicknesses))
+hFromt_eq = (1/1000) * (Case (zipWith hFromt_helper actualThicknesses nominalThicknesses))
 
 hFromt_helper :: Double -> Double -> (Expr, Relation)
-hFromt_helper result condition = (Dbl result, (C nom_thick) := Dbl condition)
+hFromt_helper result condition = ((Dbl result), (C nom_thick) := Dbl condition)
 
 hFromt :: QDefinition
 hFromt = mkDataDef act_thick hFromt_eq
@@ -111,11 +110,11 @@ tolPre = mkDataDef tolLoad tolPre_eq
 
 tolStrDisFac_eq :: Expr
 tolStrDisFac_eq = log (log ((1) / ((1) - (C pb_tol)))
-  * ((Grouping (((C plate_len) / (1000)) * ((C plate_width) / (1000)))) :^
+  * ((Grouping ((C plate_len) * (C plate_width)) :^
   ((C sflawParamM) - (1)) / ((C sflawParamK) *
-  (Grouping (Grouping ((C mod_elas) * (1000)) *
-  (square (Grouping ((C act_thick) / (1000))))
-  )) :^ (C sflawParamM) * (C loadDF))))
+  (Grouping (Grouping ((C mod_elas) *
+  (square (Grouping (C act_thick))))) :^ 
+  (C sflawParamM) * (C loadDF))))))
 
 tolStrDisFac :: QDefinition
 tolStrDisFac = mkDataDef' sdf_tol tolStrDisFac_eq (aGrtrThanB +:+ hRef +:+ ldfRef +:+ pbTolUsr)

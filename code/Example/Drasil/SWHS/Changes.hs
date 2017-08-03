@@ -1,10 +1,14 @@
 module Drasil.SWHS.Changes where
 
-import Prelude hiding (id)
-import Language.Drasil
-import Drasil.SWHS.Modules
+import Language.Drasil (NP, UCChunk,
+  npnc, nounPhraseSP, nw, getAcc, (+:+), nounPhrase'',
+  CapitalizationRule (CapFirst,CapWords),
+  LCChunk (LCChunk),
+  Sentence (S, (:+:)))
+import Drasil.SWHS.Modules (mod_ctrl, mod_inputf, mod_inputp, mod_outputf,
+  mod_seq, mod_plot, mod_ode, mod_temp, mod_ener, mod_inputv, mod_outputv)
 import Data.Drasil.Concepts.Math (ode)
-import Data.Drasil.Changes
+import Data.Drasil.Changes (ucOutput, ucIO, lcArray,lcOutputF, lcInputF, lcHW)
 
 likelyChanges :: [LCChunk]
 likelyChanges = [lc1, lc2, lc3, lc4, lc5, lc6, lc7, lc8, lc9, lc10, lc11, lc12]

@@ -38,7 +38,9 @@ library
   other-modules:
       Language.Drasil.SystemInformation
     , Language.Drasil.Expr
+    , Language.Drasil.Expr.Math
     , Language.Drasil.Chunk
+    , Language.Drasil.Citations
     , Language.Drasil.Config
     , Language.Drasil.Document
     , Language.Drasil.Format
@@ -115,6 +117,7 @@ library
     , Language.Drasil.Output.Formats
     , Language.Drasil.Printing.Helpers
     , Language.Drasil.Defs
+    , Language.Drasil.DataDesc
 
   Build-Depends:
     base >= 4.7,
@@ -142,6 +145,7 @@ executable tiny
     , Drasil.DocumentLanguage
     , Drasil.DocumentLanguage.Chunk.GenDefn
     , Drasil.DocumentLanguage.Definitions
+    , Drasil.Sections.AuxiliaryConstants
     , Drasil.Sections.TableOfUnits
     , Drasil.Template.DD
     , Drasil.Template.Helpers
@@ -149,6 +153,7 @@ executable tiny
     , Drasil.Template.MIS
     , Drasil.Sections.SpecificSystemDescription
     , Drasil.Sections.SolutionCharacterSpec
+    , Drasil.Sections.Stakeholders
     , Drasil.SRS
     , Drasil.Sections.Introduction
   Build-Depends:
@@ -177,6 +182,7 @@ executable nopcm
     , Drasil.SWHS.DataDefs
     , Drasil.SWHS.GenDefs
     , Drasil.SWHS.Changes
+    , Drasil.SWHS.LikelyChanges
     , Drasil.SWHS.Modules
     , Drasil.SWHS.References
     , Drasil.SWHS.Reqs
@@ -187,6 +193,7 @@ executable nopcm
     , Drasil.Sections.TraceabilityMandGs
     , Drasil.Sections.ReferenceMaterial
     , Drasil.Sections.AuxiliaryConstants
+    , Drasil.Sections.Stakeholders
     , Drasil.SRS
     , Drasil.Sections.TableOfAbbAndAcronyms
     , Drasil.DocumentLanguage
@@ -226,6 +233,7 @@ executable ssp
     , Drasil.SSP.DataDefs
     , Drasil.SSP.Defs
     , Drasil.SSP.GenDefs
+    , Drasil.SSP.Goals
     , Drasil.SSP.IMods
     , Drasil.SSP.Modules
     , Drasil.SSP.References
@@ -235,6 +243,7 @@ executable ssp
     , Drasil.SSP.Unitals
     , Drasil.Sections.TableOfAbbAndAcronyms
     , Drasil.Sections.TableOfSymbols
+    , Drasil.Sections.Stakeholders
     , Drasil.DocumentLanguage
     , Drasil.DocumentLanguage.Chunk.GenDefn
     , Drasil.DocumentLanguage.Definitions
@@ -278,6 +287,8 @@ executable glassbr
     , Drasil.GlassBR.DataDefs
     , Drasil.GlassBR.References
     , Drasil.GlassBR.Units
+    , Drasil.GlassBR.Interpolation
+    , Drasil.GlassBR.DataDescriptions
     , Drasil.Sections.SpecificSystemDescription
     , Drasil.Sections.Introduction
     , Drasil.Sections.Requirements
@@ -331,6 +342,7 @@ executable chipmunkdocs
     , Drasil.Sections.TraceabilityMandGs
     , Drasil.Sections.ReferenceMaterial
     , Drasil.Sections.AuxiliaryConstants
+    , Drasil.Sections.Stakeholders
     , Drasil.SRS
     , Drasil.Sections.TableOfAbbAndAcronyms
     , Drasil.Sections.TableOfSymbols
@@ -372,6 +384,7 @@ executable swhs
     , Drasil.SWHS.DataDefs
     , Drasil.SWHS.GenDefs
     , Drasil.SWHS.Generate
+    , Drasil.SWHS.LikelyChanges
     , Drasil.SWHS.Modules
     , Drasil.SWHS.References
     , Drasil.SWHS.Reqs
@@ -383,6 +396,7 @@ executable swhs
     , Drasil.Sections.TableOfSymbols
     , Drasil.Sections.TableOfUnits
     , Drasil.Sections.AuxiliaryConstants
+    , Drasil.Sections.Stakeholders
     , Drasil.Template.DD
     , Drasil.Template.Helpers
     , Drasil.Template.MG

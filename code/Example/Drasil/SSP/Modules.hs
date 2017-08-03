@@ -2,7 +2,8 @@ module Drasil.SSP.Modules where
 
 import Language.Drasil
 
-import Data.Drasil.Modules
+import Data.Drasil.Modules (mod_hw, mod_behav, mod_sw,
+  mod_ctrl_fun, mod_io_fun, mod_seq_fun, mod_rng_fun, mod_plot_fun, mod_outputf_desc_fun)
 import Data.Drasil.SentenceStructures
 
 import Data.Drasil.Concepts.Math
@@ -18,14 +19,7 @@ modules = [mod_hw, mod_behav, mod_ctrl, mod_inputf, mod_outputf, mod_genalg,
            mod_kinadm, mod_slipslicer, mod_slipweight, mod_mp, mod_rfem,
            mod_sps, mod_sw, mod_sds, mod_rng, mod_plot]
 
--- HW Hiding Module imported from Drasil.Module
--- mod_hw :: ModuleChunk
--- mod_hw = M.mod_hw
-
--- Behaviour Hiding Module
--- mod_behav :: ModuleChunk
--- mod_behav = M.mod_behav
-
+-- HW Hiding Module, Behaviour Hiding Module, and Software Decision Module imported
 
 -- Control module
 mod_ctrl :: ModuleChunk
@@ -132,7 +126,7 @@ mod_slipweight :: ModuleChunk
 mod_slipweight = makeImpModule mod_slipweight_desc
   (foldlSent [S "The weighting for each", phrase slpSrf, S "in a set of",
   plural slpSrf `sC` S "based on each", phrase's slpSrf, 
-  phrase fs]) --FIXME: use possesive noun function in line above
+  phrase fs])
   ssa
   []
   []
@@ -199,34 +193,18 @@ mod_sps = makeImpModule mod_sps_desc
   []
   (Just mod_behav)
 
--- sfwr dec module
--- mod_sw :: ModuleChunk
--- mod_sw = M.mod_sw
-
 -- sequence data structure module
--- mod_sds_desc :: ConceptChunk
--- mod_sds_desc = dccWDS "mod_sds_desc" (cn' "sequence data structure")
-  -- (foldlSent [S "Provides array manipulation, including building an",
-   -- S "array, accessing a specific entry, slicing an array etc.")
-
+  -- "Provides array manipulation, including building an
+  --  array, accessing a specific entry, slicing an array etc."
 mod_sds :: ModuleChunk
 mod_sds = mod_seq_fun matlab []
 
--- rng module
--- mod_rng_desc :: ConceptChunk
--- mod_rng_desc = dccWDS "mod_rng_desc" (cn' "random number generator")
-  -- (foldlSent [S "Randomly produces numbers between 0 and 1, using a",
-   -- S "chaotic function with an external seed. Used when generating",
-   -- (plural slpSrf), S "in the Genetic Algorithm Module.")
-
+-- random number generator module
 mod_rng :: ModuleChunk
 mod_rng = mod_rng_fun matlab [] (foldlSent [S "Randomly produces numbers between 0 and 1" `sC`
   S "using a chaotic function with an external seed. Used when generating",
   plural slpSrf, S "in the", titleize mod_genalg_desc, titleize module_])
 
 -- plotting module
--- mod_plot_desc :: ConceptChunk
--- mod_plot_desc = dcc "mod_plot_desc" (cn' "plotting") "Provides a plot function."
-
 mod_plot :: ModuleChunk
 mod_plot = mod_plot_fun matlab [mod_hw]

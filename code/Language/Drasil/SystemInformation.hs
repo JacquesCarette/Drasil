@@ -39,7 +39,6 @@ data SystemInformation where
   _constants :: [QDefinition]
   } -> SystemInformation
   
-  
 -- | for listing QDefs in SystemInformation
 data Block a = Coupled a a [a]
            | Parallel a [a]

@@ -2,7 +2,7 @@
 -- | Contains Sentences and helpers
 module Language.Drasil.Spec where
 
-import Language.Drasil.Unicode (Greek,Special,Special(CurlyBrOpen,CurlyBrClose))
+import Language.Drasil.Unicode (Greek,Special,Special(CurlyBrOpen,CurlyBrClose,SqBrOpen,SqBrClose))
 import Language.Drasil.Symbol
 import Language.Drasil.Expr
 
@@ -47,7 +47,7 @@ data USymb = UName Symbol
 data RefType = Tab -- ^ Table
              | Fig -- ^ Figure
              | Sect -- ^ Section
-             | Def -- ^ Definition (includes theoretical models)
+             | Def (Maybe Sentence)-- ^ Definition (includes theoretical models)
              | Mod -- ^ Module
              | Req (Maybe Sentence)-- ^ Requirement
              | Assump (Maybe Sentence)-- ^ Assumption
@@ -58,11 +58,11 @@ instance Show RefType where
   show Tab = "Table"
   show Fig = "Figure"
   show Sect = "Section"
-  show Def = "Definition"
   show Mod = "Module"
   -- show (Req (S r)) = r
   -- show (Assump (S a)) = a
   -- show (LC (S lc)) = lc
+  show (Def Nothing) = "Definition"
   show (Req Nothing) = "Requirement"
   show (Assump Nothing) = "Assumption"
   show (LC Nothing) = "Likely Change"
@@ -78,7 +78,7 @@ sParenNum y = sParen (S (show y))
 
 -- | Helper function for wrapping sentences in square brackets.
 sSqBr :: Sentence -> Sentence
-sSqBr x = S "[" :+: x :+: S "]"
+sSqBr x = Sp SqBrOpen :+: x :+: Sp SqBrClose
 
 sSqBrNum :: Int -> Sentence
 sSqBrNum y = sSqBr (S (show y))

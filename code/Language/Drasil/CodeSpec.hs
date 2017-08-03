@@ -1,13 +1,20 @@
+{-# LANGUAGE GADTs #-}
+
 module Language.Drasil.CodeSpec where
 
 import Language.Drasil.Chunk.Code
 import Language.Drasil.Chunk.NamedIdea
 import Language.Drasil.Chunk.Eq
+import Language.Drasil.Chunk.Quantity -- for hack
+import Language.Drasil.Chunk.SymbolForm -- for hack
 import Language.Drasil.NounPhrase
 import Language.Drasil.Spec
 import Language.Drasil.SystemInformation
-import Language.Drasil.Code -- hack
-import Language.Drasil.Defs -- hack
+import Language.Drasil.Code -- for hack
+import Language.Drasil.Defs -- for hack
+import Language.Drasil.Expr -- for hack
+import Language.Drasil.Space -- for hack
+import Language.Drasil.DataDesc
 
 import qualified Data.Map as Map
 import Control.Lens ((^.))
@@ -22,10 +29,12 @@ data CodeSpec = CodeSpec {
   cMap :: ConstraintMap,
   fMap :: FunctionMap,
   vMap :: VarMap,
+  constMap :: FunctionMap,
   fMods :: [FuncMod],
   const :: [CodeDefinition],
   choices :: Choices,
-  mods :: [(String, [FunctionDecl])] -- hack
+  mods :: [Mod]  -- medium hack
+  --mods :: [(String, [FunctionDecl])] -- big hack
 }
 
 type FunctionMap = Map.Map String CodeDefinition
@@ -74,10 +83,11 @@ codeSpec' (SI {_sys = sys, _quants = q, _definitions = defs, _inputs = ins, _out
   cMap = constraintMap cs,
   fMap = functionMap $ map qtoc defs,
   vMap = varMap (map codevar q),
+  constMap = functionMap $ map qtoc constants,
   fMods = [funcMod "Calculations" defs],
   const = map qtoc constants,
   choices = ch,
-  mods = modHack
+  mods = []
 }
 
 codeSpec'' :: SystemInformation -> [FuncMod] -> Choices -> CodeSpec
@@ -137,10 +147,44 @@ defaultChoices = Choices {
   inputStructure = AsClass
 }
 
+type Name = String
 
+-- medium hacks ---
+data Mod = ModDef Name [FuncDef]
+         | ModData Name [DataDesc]
+
+data FuncDef where
+  FuncDef :: Name -> [CodeChunk] -> CodeType -> [FuncStmt] -> FuncDef
+
+funcDef :: (Quantity c, SymbolForm c) => Name -> [c] -> Space -> [FuncStmt] -> FuncDef  
+funcDef s i t fs = FuncDef s (map codevar i) (spaceToCodeType t) fs 
+ 
+data FuncStmt where
+  FAsg :: CodeChunk -> Expr -> FuncStmt
+  FFor :: CodeChunk -> Expr -> [FuncStmt] -> FuncStmt
+  FWhile :: Expr -> [FuncStmt] -> FuncStmt
+  FCond :: Expr -> [FuncStmt] -> [FuncStmt] -> FuncStmt
+  FRet :: Expr -> FuncStmt
+  FThrow :: String -> FuncStmt
+  FTry :: [FuncStmt] -> [FuncStmt] -> FuncStmt
+  FContinue :: FuncStmt
+  FVal :: Expr -> FuncStmt
+  FDec :: CodeChunk -> CodeType -> FuncStmt
+  
+fasg :: (Quantity c, SymbolForm c) => c -> Expr -> FuncStmt
+fasg v e = FAsg (codevar v) e
+
+ffor :: (Quantity c, SymbolForm c) => c -> Expr -> [FuncStmt] -> FuncStmt
+ffor v e fs = FFor (codevar v) e fs
+
+fdec :: (Quantity c, SymbolForm c) => c -> Space -> FuncStmt
+fdec v t = FDec (codevar v) (spaceToCodeType t)
+
+addModDefs :: CodeSpec -> [Mod] -> CodeSpec
+addModDefs cs@(CodeSpec{ mods = md }) mdnew = cs { mods = md ++ mdnew }
 
 ---- major hacks ----
 modHack :: [(String, [FunctionDecl])]
-modHack = [("ReadTable", [read_z_array_func, read_x_array_func, read_y_array_func]),
-           ("Interpolation", [lin_interp_func, indInSeq_func, matrixCol_func, interpY_func, interpZ_func])
+modHack = [("ReadTable", [read_z_array_func, read_x_array_func, read_y_array_func])--,
+           --("Interpolation", [lin_interp_func, indInSeq_func, matrixCol_func, interpY_func, interpZ_func])
           ] 

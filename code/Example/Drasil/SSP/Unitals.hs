@@ -7,6 +7,7 @@ import Data.Drasil.Quantities.Physics as QP (force, pressure)
 import Data.Drasil.Quantities.SolidMechanics as SM (nrmStrss, elastMod, poissnsR, stffness)
 import Data.Drasil.Units.Physics
 import Drasil.SSP.Defs (fs_concept)
+import Control.Lens ((^.))
 
 sspSymbols :: [CQSWrapper]
 sspSymbols = (map cqs sspInputs) ++ (map cqs sspOutputs) ++
@@ -20,10 +21,9 @@ SM.mobShear, SM.shearRes <- currently not used
 SM.poissnsR, SM.elastMod <- Used to make UncertQ
 -}
 normStress  = SM.nrmStrss
-genForce = uc QP.force cF newton
+genForce = uc QP.force cF newton --must import from Concept.Physics since force is a vector otherwise
 genPressure = QP.pressure
 genStffness = SM.stffness
-{-must import from Concept.Physics since Quantities.Physics has Force as a vector-}
 
 -------------
 -- HELPERS --
@@ -54,7 +54,8 @@ gtZeroConstr = [physc $ (:<) (Int 0)]
 
 monotonicIn :: [Constraint]  --FIXME: Move this?
 monotonicIn = [physc $ \c ->
-  State [Forall c, Forall $ [C index] `IsIn` Natural] (inx' "x" 0 :< inx' "x" 1 :=> inx' "y" 0 :< inx' "y" 1)]
+  State [Forall c, Forall $ [C index] `IsIn` Natural]
+  (inx xi 0 :< inx xi 1 :=> inx yi 0 :< inx yi 1)]
 
 defultUncrt :: Double
 defultUncrt = 0.1
@@ -127,22 +128,22 @@ dy_i        = cuc' "dy_i" (cn $ "displacement") ("in the y-ordinate direction " 
 
 sspUnits :: [UCWrapper]
 sspUnits = map ucw [normStress, genPressure, normFunc, shearFunc,
-  waterHght, slopeHght, slipHght, xi, critCoords, slopeDist, slipDist,
+  waterHght, slopeHght, slipHght, xi, yi, critCoords, slopeDist, slipDist,
   mobShrI, shrResI, shearFNoIntsl, shearRNoIntsl, slcWght, watrForce,
-  watrForceDif, intShrForce, baseHydroForce, surfHydroForce,
+  watrForceDif, intShrForce, baseHydroForce, surfHydroForce, effStiffA, effStiffB,
   totNrmForce, nrmFSubWat, nrmFNoIntsl, surfLoad, baseAngle, surfAngle,
   impLoadAngle, baseWthX, baseLngth, surfLngth, midpntHght, genForce,
   momntOfBdy, genDisplace, genStffness, shrStiffIntsl, shrStiffBase,
   nrmStiffIntsl, nrmStiffBase, shrStiffRes, nrmStiffRes, shrDispl,
-  nrmDispl, porePressure, elmNrmDispl, elmPrllDispl, sliceHght,
+  nrmDispl, porePressure, elmNrmDispl, elmPrllDispl, sliceHght, fx, fy,
   mobShrC, shrResC, rotatedDispl, intNormForce, shrStress, mobStress]
 
 normStress, genPressure, normFunc, shearFunc, slopeDist, slipDist, genStffness,
-  waterHght, slopeHght, slipHght, xi, critCoords, mobShrI, sliceHght,
+  waterHght, slopeHght, slipHght, xi, yi, critCoords, mobShrI, sliceHght,
   shearFNoIntsl, shearRNoIntsl, slcWght, watrForce, watrForceDif, shrResI,
   intShrForce, baseHydroForce, surfHydroForce, totNrmForce, nrmFSubWat,
-  nrmFNoIntsl, surfLoad, baseAngle, surfAngle, impLoadAngle, baseWthX,
-  baseLngth, surfLngth, midpntHght, genForce, momntOfBdy, genDisplace,
+  nrmFNoIntsl, surfLoad, baseAngle, surfAngle, impLoadAngle, baseWthX, effStiffA, effStiffB,
+  baseLngth, surfLngth, midpntHght, genForce, momntOfBdy, genDisplace, fx, fy,
   shrStiffIntsl, shrStiffBase, nrmStiffIntsl, nrmStiffBase, shrStiffRes,
   nrmStiffRes, shrDispl, nrmDispl, porePressure, elmNrmDispl, mobStress,
   elmPrllDispl, mobShrC, shrResC, rotatedDispl, intNormForce, shrStress :: UnitalChunk
@@ -175,19 +176,17 @@ slipDist    = uc' "x_slip,i" (cn $ "x ordinate")
   ("distance of the slip surface at i, " ++ smsi)
   (sub lX (Atomic "slip")) metre
 
-xi          = uc' "x_i"
-  (cn $ "x ordinate")
-  smsi
-  lX metre
+yi = uc' "y_i" (cn $ "y ordinate") smsi lY metre
+  
+xi = uc' "x_i" (cn $ "x ordinate") smsi lX metre
 
 critCoords  = uc' "(xcs,ycs)" (cn $ "the set of x and y coordinates")
   "describe the vertices of the critical slip surface"
-  (Concat [sub (Atomic "{x") (Atomic "cs"), sub (Atomic ",y") (Atomic "cs"),
-  Atomic "}"]) metre
+  (sCurlyBrSymb (Concat [sub (Atomic "x") (Atomic "cs"), sub (Atomic ",y") (Atomic "cs")])) metre
 
 mobShrI     = uc' "S_i" (cn $ "mobilized shear force")
   fsi
-  (sub cS lI) newton
+  (cS) newton
 
 shrResI     = uc' "P_i" (cn $ "resistive shear force") ("Mohr Coulomb " ++
   "frictional force that describes the limit of mobilized shear force the " ++
@@ -304,6 +303,14 @@ nrmStiffRes  = uc' "K_no" (cn $ "normal stiffness")
   "residual strength"
   (sub cK (Atomic "no")) stiffness3D
 
+effStiffA   = uc' "K_bA" (cn $ "effective base stiffness A")
+  ("for rotated coordinates of a slice base surface, " ++ fsi)
+  (sub cK (Atomic "bA")) stiffness3D
+
+effStiffB   = uc' "K_bB" (cn $ "effective base stiffness A")
+  ("for rotated coordinates of a slice base surface, " ++ fsi)
+  (sub cK (Atomic "bB")) stiffness3D
+
 shrDispl = uc' "du_i" (cn $ "displacement")
   ("shear displacement " ++ fsi)
   (Concat [Greek Delta_L, Atomic "u"]) metre
@@ -339,7 +346,13 @@ normFunc     = uc' "C1_i" (cn "interslice normal force function") ("FIXME: missi
   (Concat [cC, Atomic "1"]) momentOfForceU
   
 shearFunc    = uc' "C2_i" (cn "interslice shear force function") ("FIXME: missing discription")
-  (Concat [cC, Atomic "2"]) momentOfForceU  
+  (Concat [cC, Atomic "2"]) momentOfForceU
+
+fx = uc' "fx" (cn "x-component of the net force") "FIXME: missing discription"
+  (sub cF lX) newton
+
+fy = uc' "fy" (cn "y-component of the net force") "FIXME: missing discription"
+  (sub cF lY) newton
   
 ----------------------
 -- Unitless Symbols --
@@ -403,8 +416,5 @@ inx e n
   | n == 0    = Index (C e) (C index)
   | otherwise = Index (C e) (C index + Int n)
 
-inx' :: String -> Integer -> Expr
-inx' e n  --FIXME: only used for monotonic, remove when we can treat x and y seperately
-  | n < 0     = Index (V e) (C index - Int (-n))
-  | n == 0    = Index (V e) (C index)
-  | otherwise = Index (V e) (C index + Int n)
+sum1toN :: Expr -> Expr
+sum1toN = summation (Just (index ^. symbol, Low 1, High $ C numbSlices))

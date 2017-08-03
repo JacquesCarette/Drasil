@@ -162,3 +162,5 @@ instance RenderSpecial Latex where
   special Hash         = L "\\#"
   special CurlyBrOpen  = L "\\{"
   special CurlyBrClose = L "\\}"
+  special SqBrOpen     = L "{[}"
+  special SqBrClose    = L "{]}"

@@ -13,8 +13,8 @@ all_results = sum ([calcTests.CalcTests.calc_results, #])
                     inputFormatTests.InputFormatTests.inputFormat_results,
                     # interpTests.InterpTests.interp_results,
                     mainTests.MainTests.main_results,
-                    outputFormatTests.OutputFormatTests.outputFormat_results])
-                    # readTabTests.ReadTabTests.readTab_results])
+                    outputFormatTests.OutputFormatTests.outputFormat_results,
+                    readTabTests.ReadTabTests.readTab_results])
                         
 all_failures = sum ([calcTests.CalcTests.calc_failures, #])
                      checkConTests.CheckConTests.checkCon_failures,
@@ -22,8 +22,8 @@ all_failures = sum ([calcTests.CalcTests.calc_failures, #])
                      inputFormatTests.InputFormatTests.inputFormat_failures,
                      # interpTests.InterpTests.interp_failures,
                      mainTests.MainTests.main_failures,
-                     outputFormatTests.OutputFormatTests.outputFormat_failures])
-                     # readTabTests.ReadTabTests.readTab_failures])
+                     outputFormatTests.OutputFormatTests.outputFormat_failures,
+                     readTabTests.ReadTabTests.readTab_failures])
                      
 all_successes = all_results - all_failures
 

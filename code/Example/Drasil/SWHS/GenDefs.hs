@@ -2,9 +2,13 @@ module Drasil.SWHS.GenDefs where
 
 import Prelude hiding (sin, cos, tan)
 
-import Language.Drasil
+import Language.Drasil (Relation, RelationConcept,
+  unit_symb, phrase, sParen, (+:+.), getUnit, sC, makeRC, nounPhraseSP,
+  Sentence (Sy, S, E),
+  DerivType (Total),
+  Expr (C, (:*), (:-), (:+), (:=), Deriv, FCall))
 import Data.Drasil.SentenceStructures (foldlSent)
-import Data.Drasil.Quantities.PhysicalProperties as QPP
+import Data.Drasil.Quantities.PhysicalProperties as QPP (vol, mass)
 import Data.Drasil.Quantities.Thermodynamics as QT
 import Data.Drasil.Quantities.Physics as QP
 import Drasil.SWHS.Unitals
@@ -22,7 +26,7 @@ swhsGenDefs = [nwtnCooling, rocTempSimp]
 
 --
 nwtnCooling :: RelationConcept
-nwtnCooling = makeRC "nwtnCooling" (nounPhraseSP "NewtoIsInn's law of cooling") 
+nwtnCooling = makeRC "nwtnCooling" (nounPhraseSP "Newton's law of cooling") 
   nwtnCooling_desc nwtnCooling_rel
 
 nwtnCooling_rel :: Relation

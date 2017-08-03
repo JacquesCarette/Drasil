@@ -208,7 +208,7 @@ Modules are decomposed according to the principle of ``information hiding" propo
 \label{Sec:InpuFormModu()}
 \begin{description}
 \item[Secrets:]The format and structure of the input data.
-\item[Services:]Reads the input data from an input file, and/or prompted command line inputs. Input data includes the x,y coordinates of the slope, with a set of coordinates for each layer. Each layer's soil properties of elastic modulus, effective cohesion, Poisson's ratio, effective angle of friction, dry unit weight, saturated unit weight, and unit weight of water are stored in vectors of soil properties. If a piezometric surface exists in the slope it's coordinates and the unit weight of water are also included in the input. Lastly an expected range for the entrance and exit points of the critical slip surface are inputted.
+\item[Services:]Reads the input data from an input file, and/or prompted command line inputs. Input data includes the x,y coordinates of the slope, with a set of coordinates for each layer. Each layer's soil properties of elastic modulus, effective cohesion, Poisson's ratio, effective angle of friction, dry unit weight, saturated unit weight, unit weight of water, constant, constant, and constant are stored in vectors of soil properties. If a piezometric surface exists in the slope it's coordinates and the unit weight of water are also included in the input. Lastly an expected range for the entrance and exit points of the critical slip surface are inputted.
 \item[Implemented By:]SSA
 \end{description}
 \subsection{Output Format Module (M\ref{Mmodoutputfdesc})}
@@ -222,7 +222,7 @@ Modules are decomposed according to the principle of ``information hiding" propo
 \label{Sec:GeneAlgoModu()}
 \begin{description}
 \item[Secrets:]Algorithm to identify the slip surface that has the minimum factor of safety, based on the inputs.
-\item[Services:]Searches the slope for the critical slip surface with the minimum factor of safety
+\item[Services:]Searches the slope for the critical slip surface with the minimum factor of safety.
 \item[Implemented By:]SSA
 \end{description}
 \subsection{Kinetic Admissibility Module (M\ref{Mmodkinadmdesc})}

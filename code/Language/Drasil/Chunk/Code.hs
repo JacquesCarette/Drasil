@@ -3,7 +3,8 @@ module Language.Drasil.Chunk.Code (
     CodeIdea(..), CodeEntity(..), CodeName(..), CodeChunk(..), CodeDefinition(..),
     codevar, qtoc, codeEquat, 
     ConstraintMap, constraintMap, physLookup, sfwrLookup, constraintLookup,
-    symbToCodeName, CodeType(..)
+    symbToCodeName, CodeType(..),
+    spaceToCodeType
   ) where
 
 import Control.Lens
@@ -145,15 +146,17 @@ greekToCodeName Zeta_L    = "zeta"
 greekToCodeName Zeta      = "Zeta"
 
 specialToCodeName :: Special -> String
-specialToCodeName Circle   = "circ"
-specialToCodeName LEQ      = "leq"
-specialToCodeName Partial  = "partial"
-specialToCodeName UScore   = "_"
-specialToCodeName Percent  = "%"
-specialToCodeName CurlyBrOpen = "{"
-specialToCodeName CurlyBrClose = "}"
-specialToCodeName Hash     = "#" -- TODO: Double check that this is valid for 
-                                 -- all of the output langs.
+specialToCodeName Circle        = "circ"
+specialToCodeName LEQ           = "leq"
+specialToCodeName Partial       = "partial"
+specialToCodeName UScore        = "_"
+specialToCodeName Percent       = "%"
+specialToCodeName CurlyBrOpen   = "{"
+specialToCodeName CurlyBrClose  = "}"
+specialToCodeName SqBrOpen      = "["
+specialToCodeName SqBrClose = "]"
+specialToCodeName Hash          = "#" -- TODO: Double check that this is valid for 
+                                      -- all of the output langs.
 
 toCodeName :: String -> String
 toCodeName s =

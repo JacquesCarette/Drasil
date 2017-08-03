@@ -97,3 +97,7 @@ vec = Atop Vector
 -- | Helper for creating a Vector symbol.
 prime :: Symbol -> Symbol
 prime = Atop Prime
+
+-- | Helper for adding {} around a symbol (used for coordinates).
+sCurlyBrSymb :: Symbol -> Symbol
+sCurlyBrSymb x = Concat [(Special CurlyBrOpen), x, (Special CurlyBrClose)]

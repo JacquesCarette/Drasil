@@ -19,7 +19,7 @@ module Language.Drasil.Code.Imperative.AST (
     -- * Convenience functions
     bool,int,float,char,string,infile,outfile,listT,obj,
     methodType,methodTypeVoid,
-    block,defaultValue,defaultValue',
+    block,body,defaultValue,defaultValue',
     true,false,
     var, arg, self, svToVar,
     pubClass,privClass,privMVar,pubMVar,pubGVar,privMethod,pubMethod,constructor,
@@ -36,6 +36,7 @@ module Language.Drasil.Code.Imperative.AST (
     printFile,printFileLn,printFileStr,printFileStrLn,
     print',printLn',printStr',printStrLn',
     getInput,getFileInput,getFileInputAll,getFileInputLine,
+    discardFileInput,discardFileLine,
     openFileR, openFileW, closeFile,
     return,returnVar,switch,throw,tryCatch,typ,varDec,varDecDef,while,zipBlockWith,zipBlockWith4,
     addComments,comment,commentDelimit,endCommentDelimit,prefixFirstBlock,
@@ -73,7 +74,7 @@ data Statement = AssignState Assignment | DeclState Declaration
 data IOSt = OpenFile Value Value Mode
           | CloseFile Value
           | Out IOType Bool StateType Value
-          | In IOType StateType Value
+          | In IOType StateType (Maybe Value)
           deriving Show
 data Mode = Read
           | Write
@@ -98,7 +99,7 @@ data ObserverPattern = InitObserverList {observerType :: StateType, observers ::
                      | AddObserver {observerType :: StateType, observer :: Value}
                      | NotifyObservers {observerType :: StateType, receiveFunc :: Label, notifyParams :: [Value]} deriving Show
                      
-data Complex = ReadLine Value Value -- ReadLine File StringVar
+data Complex = ReadLine Value (Maybe Value) -- ReadLine File StringVar
              | ReadAll Value Value  -- ReadAll File String[]Var
              | ListSlice StateType Value Value (Maybe Value) (Maybe Value) (Maybe Value)  -- new list var, old list var, start, stop, step
              | StringSplit Value Value Char -- new string, old string, delimiter
@@ -243,6 +244,9 @@ methodTypeVoid = Void
 
 block :: [Statement] -> Block
 block = Block
+
+body :: [Statement] -> Body
+body s = [ block s ]
 
 defaultValue :: BaseType -> Value
 defaultValue (Boolean) = false
@@ -625,14 +629,20 @@ printStrLn' Console = printStrLn
 printStrLn' (File f) = printFileStrLn f
 
 getInput :: StateType -> Value -> Statement
-getInput s v = IOState $ In Console s v
+getInput s v = IOState $ In Console s (Just v)
 
 -- file input
 getFileInput :: Value -> StateType -> Value -> Statement
-getFileInput f s v = IOState $ In (File f) s v
+getFileInput f s v = IOState $ In (File f) s (Just v)
+
+discardFileInput :: Value -> Statement
+discardFileInput f = IOState $ In (File f) int Nothing
 
 getFileInputLine :: Value -> Value -> Statement
-getFileInputLine f v = ComplexState $ ReadLine f v
+getFileInputLine f v = ComplexState $ ReadLine f (Just v)
+
+discardFileLine :: Value -> Statement
+discardFileLine f = ComplexState $ ReadLine f Nothing
 
 getFileInputAll :: Value -> Value -> Statement
 getFileInputAll f v = ComplexState $ ReadAll f v

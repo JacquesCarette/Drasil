@@ -29,11 +29,16 @@ acroT  numVar = short thModel     :+: S (show numVar)
 -- number from which to start counting.
 acroNumGen :: [Contents] -> Int -> [Contents]
 acroNumGen [] _ = []
-acroNumGen (first:rest) num = (f first) : acroNumGen rest (num + 1)
+acroNumGen (frst:rst) num = (f frst) : acroNumGen rst (num + 1)
   where f (Assumption a) = Assumption $ nw $ npnc' (a ^. id) (a ^. term) (extrctStrng (short assumption) ++  (show num))
+        f (Definition sm (Data qdef)) = Definition sm $ Data $ fromEqn'' (qdef ^. id) (qdef ^. term) EmptyS (qdef ^. symbol) (extrctStrng (short dataDefn) ++ (show num)) (getUnit qdef) (qdef ^. relat)
+        f (Definition sm (Theory rch)) = Definition sm $ Theory $ makeRC' (rch ^. id) (rch ^. term) (rch ^. defn) (extrctStrng (short thModel) ++ (show num)) (rch ^. relat)
         f (Requirement r) = Requirement $ ReqChunk (nw $ npnc' (r ^. id) (r ^. term) (extrctStrng (short requirement) ++ (show num))) []
-        f (LikelyChange lc) = LikelyChange $ LCChunk (nw $ npnc' (lc ^. id) (lc ^. term) (extrctStrng (short likelyChg) ++ (show num))) []
+        f (LikelyChange lch) = LikelyChange $ LCChunk (nw $ npnc' (lch ^. id) (lch ^. term) (extrctStrng (short likelyChg) ++ (show num))) []
+        f (UnlikelyChange uch) = UnlikelyChange $ nw $ npnc' (uch ^. id) (uch ^. term) (extrctStrng (short unlikelyChg) ++  (show num))
+        f _ = error "Type not yet implemented"
         extrctStrng (S strng) = strng
+        extrctStrng _ = error "Invalid acronym type"
 
 assumption, dataDefn, genDefn, goalStmt, inModel, likelyChg, unlikelyChg,
   physSyst, requirement, srs, thModel, mg, desSpec, notApp, dataConst :: CI
@@ -74,11 +79,11 @@ analysis, appendix, body, characteristic, class_, client, code, column, company,
   message, method_, module_, model, name_, nonfunctional, object, offShelf, open,
   organization, output_, physics, physical, plan, practice, priority, problem, 
   product_, project, property, purpose, quantity, realtime, reference, requirement_,
-  response, reviewer, safety, scope, second_, section_, scenario, source, simulation,
-  software, solution, specific, specification, stakeholder, standard, statement, symbol_,
-  system, table_, task, template, term_, terminology, theory, traceyGraph, traceyMatrix,
-  uncertainty, user, useCase, validation, value, variable, video,
-  verification, year :: NamedChunk
+  response, result, reviewer, safety, scope, second_, section_, scenario, source,
+  simulation, software, solution, specific, specification, stakeholder, standard, 
+  statement, symbol_, system, table_, task, template, term_, terminology, theory,
+  traceyGraph, traceyMatrix, type_, uncertainty, user, useCase, validation, value,
+  variable, video, verification, year :: NamedChunk
 
 analysis        = npnc "analysis"       (cnIS   "analysis"           )
 appendix        = npnc "appendix"       (cnICES "appendix"           )
@@ -164,6 +169,7 @@ realtime        = npnc "real-time"      (cn'    "real-time"          )
 reference       = npnc "reference"      (cn'    "reference"          )
 requirement_    = npnc "requirement"    (cn'    "requirement"        ) --FIXME: Eventually only have one requirement
 response        = npnc "response"       (cn'    "response"           )
+result          = npnc "result"         (cn'    "result"             )
 reviewer        = npnc "reviewer"       (cn'    "reviewer"           )
 safety          = npnc "safety"         (cnIES  "safety"             )
 scope           = npnc "scope"          (cn'    "scope"              )
@@ -189,6 +195,7 @@ terminology     = npnc "terminology"    (cnIES  "terminology"        )
 theory          = npnc "theory"         (cnIES  "theory"             )
 traceyGraph     = npnc "traceyGraph"    (cn'    "traceability graph" )
 traceyMatrix    = npnc "traceyMatrix"   (cnICES "traceability matrix")
+type_           = npnc "type"           (cn'    "type"               )
 uncertainty     = npnc "uncertainty"    (cnIES  "uncertainty"        )
 user            = npnc "user"           (cn'    "user"               )
 useCase         = npnc "useCase"        (cn'    "use case"           )

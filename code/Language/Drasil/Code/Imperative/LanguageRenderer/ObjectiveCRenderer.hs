@@ -6,7 +6,7 @@ module Language.Drasil.Code.Imperative.LanguageRenderer.ObjectiveCRenderer (
 
 import Language.Drasil.Code.Code (Code(..))
 import Language.Drasil.Code.Imperative.AST 
-  hiding (comment,bool,int,float,char,tryBody,catchBody,initState,guard,
+  hiding (body,comment,bool,int,float,char,tryBody,catchBody,initState,guard,
           update,forBody)
 import Language.Drasil.Code.Imperative.LanguageRenderer
 import Language.Drasil.Code.Imperative.Helpers (blank,oneTab,oneTabbed,

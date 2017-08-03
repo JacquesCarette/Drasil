@@ -9,7 +9,7 @@ import Data.Drasil.Utils(symbolMapFun, mkDataDef, getS)
 import Control.Lens((^.))
 import Prelude hiding (log, id, sqrt)
 import Data.Drasil.SentenceStructures (foldlSent, 
-  displayConstrntsAsSet, foldlsC)
+  displayConstrntsAsSet, foldlsC, foldlOptions)
 
 --FIXME: Many of the current terms can be separated into terms and defns?
 
@@ -20,7 +20,7 @@ glassBRSymbolsWithDefns = [mod_elas]
 
 mod_elas :: UnitalChunk
 mod_elas    = uc' "mod_elas"     (nounPhraseSP "modulus of elasticity of glass")
-  "The ratio of tensile stress to tensile strain of glass." cE kilopascal
+  "The ratio of tensile stress to tensile strain of glass." cE pascal
 
 {--}
 
@@ -59,20 +59,20 @@ gbInputDataConstraints = (map uncrtnw gbInputsWUncrtn) ++
   (map uncrtnw gbInputsWUnitsUncrtn)
 
 plate_len = uqcND "plate_len" (nounPhraseSP "plate length (long dimension)")
-  lA millimetre Real 
+  lA metre Real 
   [ physc $ \c -> c :> (Dbl 0),
     physc $ \c -> (c / (C plate_width)) :> (Dbl 1),
     sfwrc $ \c -> (C dim_min) :<= c,
     sfwrc $ \c -> c :<= (C dim_max),
-    sfwrc $ \c -> (c / (C plate_width)) :< (C ar_max) ] (Dbl 1500) defaultUncrt
+    sfwrc $ \c -> (c / (C plate_width)) :< (C ar_max) ] (Dbl 1.5) defaultUncrt
 
 plate_width = uqcND "plate_width" (nounPhraseSP "plate width (short dimension)")
-  lB millimetre Real
+  lB metre Real
   [ physc $ \c -> c :> (Dbl 0),
     physc $ \c -> c :< (C plate_len),
     sfwrc $ \c -> (C dim_min) :<= c,
     sfwrc $ \c -> c :<= (C dim_max),
-    sfwrc $ \c -> ((C plate_len) / c) :< (C ar_max) ] (Dbl 1200) defaultUncrt
+    sfwrc $ \c -> ((C plate_len) / c) :< (C ar_max) ] (Dbl 1.2) defaultUncrt
 
 pb_tol = uvc "pb_tol" (nounPhraseSP "tolerable probability of breakage") 
   (sub cP (Atomic "btol")) Real
@@ -118,7 +118,7 @@ prob_br = cvc "prob_br" (nounPhraseSP "probability of breakage")
   (sub cP lB) Rational
   [ physc $ \c -> (Dbl 0) :< c,
     physc $ \c -> c :< (Dbl 1) ] (Dbl 0.4)
-  --FIXME: should there be a typical value here?
+  --FIXME: no typical value!
 
 {--}
 
@@ -166,7 +166,7 @@ act_thick, sflawParamK, sflawParamM, demand, sdx, sdy, sdz, load_dur,
   eqTNTWeight :: UnitaryChunk
 
 act_thick   = unitary "act_thick"   (nounPhraseSP "actual thickness")
-  lH millimetre Rational
+  lH metre Rational
 
 demand      = unitary "demand"      (nounPhraseSP "applied load (demand)")
   lQ kilopascal Rational --correct Space used?
@@ -285,9 +285,9 @@ fTemperedGl   = cc fullyTGlass
     "subjected to a special heat treatment process where the residual " ++
     "surface compression is not less than 69 MPa (10 000 psi) or the edge " ++
     "compression not less than 67 MPa (9700 psi), as defined in [6].")
-glassGeo      = dcc "glassGeo"    (nounPhraseSP "glass geometry")
-  ("The glass geometry based inputs include the dimensions of the glass " ++
-    "plane, glass type and response type.")
+glassGeo      = dccWDS "glassGeo"    (nounPhraseSP "glass geometry")
+  (S "The glass geometry based inputs include the dimensions of the" +:+ 
+    phrase glaPlane `sC` phrase glassTy `sC` S "and" +:+.  phrase responseTy)
 glassTy       = dcc "glassTy"     (cn' "glass type") "type of glass"
 glassWL       = dcc "glassWL"     (nounPhraseSP "glass weight load")
   ("The dead load component of the glass weight.")
@@ -296,10 +296,9 @@ glBreakage    = dcc "glBreakage"  (nounPhraseSP "glass breakage")
     "or insulating glass.")
 glTyFac       = cc' glassTypeFac
   (foldlSent [S "A multiplying factor for adjusting the", (getAcc lResistance), 
-  S "of different glass type, that is,", (getAcc annealedGlass) `sC` 
-  (getAcc heatSGlass) `sC` S "or", (getAcc fullyTGlass), S "in monolithic glass"
-  `sC` (getAcc lGlass), sParen (titleize lGlass) `sC` S "or",
-  (getAcc iGlass), sParen (titleize iGlass), S "constructions"])
+  S "of different glass type, that is,", foldlOptions glassTypeAbbrs
+  `sC` S "in monolithic glass" `sC` (getAcc lGlass), sParen (titleize lGlass) `sC`
+   S "or", (getAcc iGlass), sParen (titleize iGlass), S "constructions"])
 hStrengthGl   = cc heatSGlass
   ("A flat, monolithic, glass lite of uniform thickness that has been " ++
     "subjected to a special heat treatment process where the residual " ++
@@ -354,8 +353,9 @@ specDeLoad    = dcc "specDeLoad"  (nounPhraseSP "specified design load")
 {--}
 
 this_symbols :: [QSWrapper]
-this_symbols = ((map qs gBRSpecParamVals) ++ (map qs glassBRSymbolsWithDefns)
-  ++ (map qs glassBRSymbols) ++ (map qs glassBRUnitless) ++ gbInputs)
+this_symbols = (map qs [prob_br] ++ gbInputs ++ (map qs gBRSpecParamVals) ++ 
+  (map qs glassBRSymbolsWithDefns) ++ (map qs glassBRSymbols) ++
+  (map qs glassBRUnitless))
 
 {--}
 

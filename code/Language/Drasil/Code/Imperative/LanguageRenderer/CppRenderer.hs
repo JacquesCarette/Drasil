@@ -6,7 +6,7 @@ module Language.Drasil.Code.Imperative.LanguageRenderer.CppRenderer (
 
 import Language.Drasil.Code.Code (Code(..))
 import Language.Drasil.Code.Imperative.AST
-  hiding (comment,bool,int,float,char,tryBody,catchBody,initState,guard,update)
+  hiding (body,comment,bool,int,float,char,tryBody,catchBody,initState,guard,update)
 import Language.Drasil.Code.Imperative.LanguageRenderer
 import Language.Drasil.Code.Imperative.Helpers (blank,
                                                 oneTab,oneTabbed,vmap,vibmap)
@@ -119,6 +119,7 @@ cpptop c Source p m@(Mod n l _ _ _) = vcat $ [          --TODO remove includes i
     include c "<string>",
     include c "<math.h>",       --used for Floor and Ceiling functions
     include c "<sstream>",
+    include c "<limits>",
     include c $ "<" ++ render (list c Dynamic) ++ ">",
     blank,
     usingNameSpace c p Nothing,
@@ -280,16 +281,15 @@ valueDoc' c v@(Arg _) = valueDocD' c v
 valueDoc' c (StateObj _ t vs) = stateType c t Def <> parens (callFuncParamList c vs)
 valueDoc' c v = valueDocD c v
 
-inputDoc' :: Config -> IOType -> StateType -> Value -> Doc
+inputDoc' :: Config -> IOType -> StateType -> Maybe Value -> Doc
 inputDoc' _ _ (Base (FileType _)) _ = error "File type is not valid input"
-inputDoc' c io (Base _) v = inputFn io <+> text ">>" <+> valueDoc c v
-  where  inputFn :: IOType -> Doc
-         inputFn Console = inputFunc c
-         inputFn (File f) = valueDoc c f
+inputDoc' c io _ Nothing = inputFn c io <> dot <> text "ignore(std::numeric_limits<streamsize>::max(), ' ')"
+inputDoc' c io (Base _) (Just v) = inputFn c io <+> text ">>" <+> valueDoc c v
 inputDoc' c io s v = inputDocD c io s v 
 
 complexDoc' :: Config -> Complex -> Doc
-complexDoc' c (ReadLine f v) = statementDoc c NoLoop (valStmt $ funcApp' "std::getline" [f, v])
+complexDoc' c (ReadLine f Nothing)  = valueDoc c f <> dot <> text "ignore(std::numeric_limits<streamsize>::max(), '\\n')" <> semi
+complexDoc' c (ReadLine f (Just v)) = statementDoc c NoLoop (valStmt $ funcApp' "std::getline" [f, v])
 complexDoc' c (ReadAll f v) = let l_line = "nextLine"
                                   v_line = var "nextLine" 
                               in
@@ -392,3 +392,8 @@ transDecLine c ft m f = transDecLine c ft m $ convertToMethod f
 usingNameSpace :: Config -> String -> Maybe String -> Doc
 usingNameSpace c n (Just m) = text "using" <+> text n <> colon <> colon <> text m <> endStatement c
 usingNameSpace c n Nothing  = text "using namespace" <+> text n <> endStatement c
+
+
+inputFn :: Config -> IOType -> Doc
+inputFn c Console = inputFunc c
+inputFn c (File f) = valueDoc c f

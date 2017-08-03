@@ -109,7 +109,7 @@ dispUnit = ucFromCV dispVect metre
 
 -- FIXME: parametrized hack
 dispNorm = ucFromCV norm metre
-  where norm = cvR (dccWDS "euclideanNorm" (cn "euclidean normal of displacement")
+  where norm = cvR (dccWDS "euclideanNorm" (cn "Euclidean norm of the displacement")
                (phrase QM.euclidNorm) ) (QM.euclidNorm ^. symbol)
 
 -- FIXME: parametrized hack

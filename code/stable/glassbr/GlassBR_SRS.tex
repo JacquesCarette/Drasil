@@ -4,6 +4,7 @@
 \hypersetup{bookmarks=true,colorlinks=true,linkcolor=red,citecolor=blue,filecolor=magenta,urlcolor=cyan}
 \usepackage{amsmath}
 \usepackage{amssymb}
+\usepackage{breqn}
 \usepackage{longtable}
 \usepackage{booktabs}
 \usepackage{caption}
@@ -52,81 +53,81 @@ The table that follows summarizes the symbols used in this document along with t
 Symbol & Description & Units
 \\
 \midrule
-$a$ & Plate length (long dimension) & mm
+$a$ & Plate length (long dimension) & m
 \\
-$AR_{max}$ & Maximum aspect ratio & 
+${AR_{max}}$ & Maximum aspect ratio & Unitless
 \\
-$b$ & Plate width (short dimension) & mm
+$b$ & Plate width (short dimension) & m
 \\
-$B$ & Risk of failure & 
+$B$ & Risk of failure & Unitless
 \\
-$d_{max}$ & Maximum value for one of the dimensions of the glass plate & mm
+${d_{max}}$ & Maximum value for one of the dimensions of the glass plate & mm
 \\
-$d_{min}$ & Minimum value for one of the dimensions of the glass plate & mm
+${d_{min}}$ & Minimum value for one of the dimensions of the glass plate & mm
 \\
-$E$ & Modulus of elasticity of glass & kPa
+$E$ & Modulus of elasticity of glass & Pa
 \\
-$g$ & Glass type $g$ in \{AN, FT, HS\} & 
+$g$ & Glass type $g$ in \{AN, FT, HS\} & Unitless
 \\
-$GTF$ & Glass type factor & 
+$GTF$ & Glass type factor & Unitless
 \\
-$h$ & Actual thickness & mm
+$h$ & Actual thickness & m
 \\
-$is\_safe1$ & True when calculated probability is less than tolerable probability & 
+$is\_safe1$ & True when calculated probability is less than tolerable probability & Unitless
 \\
-$is\_safe2$ & True when load resistance (capacity) is greater than load (demand) & 
+$is\_safe2$ & True when load resistance (capacity) is greater than load (demand) & Unitless
 \\
-$J$ & Stress distribution factor (Function) & 
+$J$ & Stress distribution factor (Function) & Unitless
 \\
-$J_{tol}$ & Stress distribution factor (Function) based on Pbtol & 
+${J_{tol}}$ & Stress distribution factor (Function) based on Pbtol & Unitless
 \\
 $k$ & Surface flaw parameter & $\frac{\text{m}^{12}}{\text{N}^{7}}$
 \\
-$LDF$ & Load duration factor & 
+$LDF$ & Load duration factor & Unitless
 \\
-$LR$ & Load resistance & 
+$LR$ & Load resistance & Unitless
 \\
-$LSF$ & Load share factor & 
+$LSF$ & Load share factor & Unitless
 \\
 $m$ & Surface flaw parameter & $\frac{\text{m}^{12}}{\text{N}^{7}}$
 \\
-$NFL$ & Non-factored load & 
+$NFL$ & Non-factored load & Unitless
 \\
-$P_{b}$ & Probability of breakage & 
+${P_{b}}$ & Probability of breakage & Unitless
 \\
-$P_{btol}$ & Tolerable probability of breakage & 
+${P_{btol}}$ & Tolerable probability of breakage & Unitless
 \\
 $q$ & Applied load (demand) & kPa
 \\
-$\hat{q}$ & Dimensionless load & 
+$\hat{q}$ & Dimensionless load & Unitless
 \\
-$\hat{q}_{tol}$ & Tolerable load & 
+${\hat{q}_{tol}}$ & Tolerable load & Unitless
 \\
 $SD$ & Stand off distance & m
 \\
-$SD_{max}$ & Maximum stand off distance permissible for input & m
+${SD_{max}}$ & Maximum stand off distance permissible for input & m
 \\
-$SD_{min}$ & Minimum stand off distance permissible for input & m
+${SD_{min}}$ & Minimum stand off distance permissible for input & m
 \\
-$SD_{x}$ & Stand off distance (x-component) & m
+${SD_{x}}$ & Stand off distance (x-component) & m
 \\
-$SD_{y}$ & Stand off distance (y-component) & m
+${SD_{y}}$ & Stand off distance (y-component) & m
 \\
-$SD_{z}$ & Stand off distance (z-component) & m
+${SD_{z}}$ & Stand off distance (z-component) & m
 \\
 $t$ & Nominal thickness $t$ in \{2.5, 2.7, 3.0, 4.0, 5.0, 6.0, 8.0, 10.0, 12.0, 16.0, 19.0, 22.0\} & mm
 \\
-$t_{d}$ & Duration of load & s
+${t_{d}}$ & Duration of load & s
 \\
-$TNT$ & TNT equivalent factor & 
+$TNT$ & TNT equivalent factor & Unitless
 \\
 $w$ & Charge weight & kg
 \\
-$w_{max}$ & Maximum permissible input charge weight & kg
+${w_{max}}$ & Maximum permissible input charge weight & kg
 \\
-$w_{min}$ & Minimum permissible input charge weight & kg
+${w_{min}}$ & Minimum permissible input charge weight & kg
 \\
-$w_{TNT}$ & Explosive mass in equivalent weight of TNT & kg
+${w_{TNT}}$ & Explosive mass in equivalent weight of TNT & kg
 \\
 \bottomrule
 \label{Table:TablofSymb}
@@ -200,10 +201,10 @@ This document will be used as a starting point for subsequent development phases
 The scope of the requirements includes getting all input parameters related to the glass slab and also the parameters related to blast type. Given the appropriate inputs, the code for GlassBR is intended to use the data and predict whether the glass slab is safe to use or not.
 \subsection{Characteristics of Intended Reader}
 \label{Sec:CharofInteRead}
-Reviewers of this documentation should have a strong knowledge in theory behind glass breakage and blast risk. The reviewers should also have an understanding of second year calculus, structural mechanics, and computer applications in civil engineering.In addition, reviewers should be familiar with the applicable standards for constructions using glass from [4-6] in Section~\ref{Sec:Refe}. The users of GlassBR can have a lower level of expertise, as explained in Section~\ref{Sec:UserChar}.
+Reviewers of this documentation should have a strong knowledge in theory behind glass breakage and blast risk. The reviewers should also have an understanding of second year calculus, structural mechanics, and computer applications in civil engineering.In addition, reviewers should be familiar with the applicable standards for constructions using glass from {[}4-6{]} in Section~\ref{Sec:Refe}. The users of GlassBR can have a lower level of expertise, as explained in Section~\ref{Sec:UserChar}.
 \subsection{Organization of Document}
 \label{Sec:OrgaofDocu}
-The organization of this document follows the template for an SRS for scientific computing software proposed by [1] and [2] (in Section~\ref{Sec:Refe}), with some aspects taken from Volere template 16 [3]. The presentation follows the standard pattern of presenting goals, theories, definitions, and assumptions. For readers that would like a more bottom up approach, they can start reading the data definitions in Section~\ref{Sec:DataDefi} and trace back to find any additional information they require.
+The organization of this document follows the template for an SRS for scientific computing software proposed by {[}1{]} and {[}2{]} (in Section~\ref{Sec:Refe}), with some aspects taken from Volere template 16 {[}3{]}. The presentation follows the standard pattern of presenting goals, theories, definitions, and assumptions. For readers that would like a more bottom up approach, they can start reading the data definitions in Section~\ref{Sec:DataDefi} and trace back to find any additional information they require.
 The goal statements are refined to the theoretical models, and the theoretical models to the instance models. The data definitions are used to support the definitions of the different models.
 \section{Stakeholders}
 \label{Sec:Stak}
@@ -259,7 +260,7 @@ This section first presents the problem description, which gives a high-level vi
 A system is needed to efficiently and correctly predict the blast risk involved with the glass. GlassBR is a computer program developed to interpret the inputs to give out the outputs which predicts whether the glass slab can withstand the blast under the conditions.
 \subsubsection{Terminology and Definitions}
 \label{Sec:TermandDefi}
-This subsection provides a list of terms that are used in the subsequent sections and their meaning, with the purpose of reducing ambiguity and making it easier to correctly understand the requirements. All of the terms are extracted from [4] in Section~\ref{Sec:Refe}.
+This subsection provides a list of terms that are used in the subsequent sections and their meaning, with the purpose of reducing ambiguity and making it easier to correctly understand the requirements. All of the terms are extracted from {[}4{]} in Section~\ref{Sec:Refe}.
 \begin{itemize}
 \item{Glass breakage - The fracture or breakage of any lite or ply in monolithic, laminated, or insulating glass.}
 \item{Lateral - Perpendicular to the glass surface.}
@@ -267,7 +268,7 @@ This subsection provides a list of terms that are used in the subsequent section
 \item{Specifying authority - The design professional responsible for interpreting applicable regulations of authorities having jurisdiction and considering appropriate site specific factors to determine the appropriate values used to calculate the specified design load, and furnishing other information required to perform this practice.}
 \item{Blast resistant glazing - Glazing that provides protection against air blast pressure generated by explosions.}
 \item{Equivalent TNT charge mass - Mass of TNT placed on the ground in a hemisphere that represents the design explosive threat.}
-\item{Glass Types:}
+\item{Glass Type:}
 \begin{enumerate}
 \item{Annealed glass (AN) - A flat, monolithic, glass lite which has uniform thickness where the residual surface stresses are almost zero, as defined in [5].}
 \item{Fully tempered glass (FT) - A flat and monolithic, glass lite of uniform thickness that has been subjected to a special heat treatment process where the residual surface compression is not less than 69 MPa (10 000 psi) or the edge compression not less than 67 MPa (9700 psi), as defined in [6].}
@@ -282,11 +283,11 @@ This subsection provides a list of terms that are used in the subsequent section
 \item{Specified design load - The magnitude in kPa (psf), type (for example, wind or snow) and duration of the load given by the specifying authority.}
 \item{Long duration load - Any load lasting approximately 30 days.}
 \end{enumerate}
-\item{Stand off distance (SD) - The distance from the glazing surface to the centroid of a hemispherical high explosive charge. It is represented by the coordinates ($SD_{x}$, $SD_{y}$, $SD_{z}$).}
+\item{Stand off distance (SD) - The distance from the glazing surface to the centroid of a hemispherical high explosive charge. It is represented by the coordinates (${SD_{x}}$, ${SD_{y}}$, ${SD_{z}}$).}
 \item{Load share factor (LSF) - A multiplying factor derived from the load sharing between the double glazing, of equal or different thickness's and types (including the layered behaviour of LG under long duration loads), in a sealed IG unit.}
-\item{Glass type factor (GTF) - A multiplying factor for adjusting the LR of different glass type, that is, AN, HS, or FT in monolithic glass, LG (Laminated Glass), or IG (Insulating Glass) constructions.}
+\item{Glass type factor (GTF) - A multiplying factor for adjusting the LR of different glass type, that is, AN, FT, or HS, in monolithic glass, LG (Laminated Glass), or IG (Insulating Glass) constructions.}
 \item{Aspect ratio (AR) - The ratio of the long dimension of the glass to the short dimension of the glass. For glass supported on four sides, the aspect ratio is always equal to or greater than 1.0. For glass supported on three sides, the ratio of the length of one of the supported edges perpendicular to the free edge, to the length of the free edge, is equal to or greater than 0.5.}
-\item{Probability of breakage ($P_{b}$) - The fraction of glass lites or plies that would break at the first occurrence of a specified load and duration, typically expressed in lites per 1000.}
+\item{Probability of breakage (${P_{b}}$) - The fraction of glass lites or plies that would break at the first occurrence of a specified load and duration, typically expressed in lites per 1000.}
 \end{itemize}
 \subsubsection{Physical System Description}
 \label{Sec:PhysSystDesc}
@@ -382,11 +383,11 @@ This section collects and defines all the data needed to build the instance mode
 \phantomsection 
 \label{DD:risk.fun}
 \\ \midrule \\
-Label & $B$
+Label & Risk of Failure
 \\ \midrule \\
 Units & 
 \\ \midrule \\
-Equation & $B$ = $\frac{k}{\left(\frac{a}{1000}\frac{b}{1000}\right)^{m-1}}\left(\left(E*1000\right)\left(\frac{h}{1000}\right)^{2}\right)^{m}*LDFe^{J}$
+Equation & $B$ = $\frac{k}{\left(ab\right)^{m-1}}\left(\left(E\right)\left(h\right)^{2}\right)^{m}\cdot{}LDFe^{J}$
 \\ \midrule \\
 Description & $B$ is the risk of failure\newline$k$ is the surface flaw parameter\newline$a$ is the plate length (long dimension)\newline$b$ is the plate width (short dimension)\newline$m$ is the surface flaw parameter\newline$E$ is the modulus of elasticity of glass\newline$h$ is the actual thickness\newline$LDF$ is the load duration factor\newline$J$ is the stress distribution factor (Function)
 \\ \midrule \\
@@ -400,11 +401,11 @@ Source & [7]
 \phantomsection 
 \label{DD:act.thick}
 \\ \midrule \\
-Label & $h$
+Label & Actual Thickness
 \\ \midrule \\
-Units & mm
+Units & m
 \\ \midrule \\
-Equation & $h$ = $\begin{cases}
+Equation & $h$ = $\frac{1}{1000}\begin{cases}
 2.16, & t=2.5\\
 2.59, & t=2.7\\
 2.92, & t=3.0\\
@@ -419,23 +420,23 @@ Equation & $h$ = $\begin{cases}
 21.44, & t=22.0
 \end{cases}$
 \\ \midrule \\
-Description & $h$ is the actual thickness\newline$t$ is the nominal thickness $t$ in \{2.5, 2.7, 3.0, 4.0, 5.0, 6.0, 8.0, 10.0, 12.0, 16.0, 19.0, 22.0\}
+Description & $h$ is the actual thickness (m)\newline$t$ is the nominal thickness $t$ in \{2.5, 2.7, 3.0, 4.0, 5.0, 6.0, 8.0, 10.0, 12.0, 16.0, 19.0, 22.0\} (mm)
 \\ \bottomrule \end{tabular}
 \end{minipage}\\
 ~\newline
 \noindent \begin{minipage}{\textwidth}
 \begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
-\toprule \textbf{Refname} & \textbf{DD:lDurFac}
+\toprule \textbf{Refname} & \textbf{DD:loadDurFactor}
 \phantomsection 
-\label{DD:lDurFac}
+\label{DD:loadDurFactor}
 \\ \midrule \\
-Label & $LDF$
+Label & Load Duration Factor
 \\ \midrule \\
 Units & 
 \\ \midrule \\
 Equation & $LDF$ = $\left(\frac{t_{d}}{60}\right)^{\frac{m}{16}}$
 \\ \midrule \\
-Description & $LDF$ is the load duration factor\newline$t_{d}$ is the duration of load\newline$m$ is the surface flaw parameter
+Description & $LDF$ is the load duration factor\newline$t_{d}$ is the duration of load (s)\newline$m$ is the surface flaw parameter ($\frac{\text{m}^{12}}{\text{N}^{7}}$)
 \\ \bottomrule \end{tabular}
 \end{minipage}\\
 ~\newline
@@ -445,23 +446,23 @@ Description & $LDF$ is the load duration factor\newline$t_{d}$ is the duration o
 \phantomsection 
 \label{DD:stressDistFac}
 \\ \midrule \\
-Label & $J$
+Label & Stress Distribution Factor (Function)
 \\ \midrule \\
 Units & 
 \\ \midrule \\
 Equation & $J$ = $J\left(\hat{q},\frac{a}{b}\right)$
 \\ \midrule \\
-Description & $J$ is the stress distribution factor (Function)\newline$J$ is the stress distribution factor (Function)\newline$\hat{q}$ is the dimensionless load\newline$a$ is the plate length (long dimension)\newline$b$ is the plate width (short dimension)
+Description & $J$ is the stress distribution factor (Function)\newline$\hat{q}$ is the dimensionless load\newline$a$ is the plate length (long dimension) (m)\newline$b$ is the plate width (short dimension) (m)
 \\ \bottomrule \end{tabular}
 \end{minipage}\\
 ~\newline
 \noindent \begin{minipage}{\textwidth}
 \begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
-\toprule \textbf{Refname} & \textbf{DD:nonFactorL}
+\toprule \textbf{Refname} & \textbf{DD:nFL}
 \phantomsection 
-\label{DD:nonFactorL}
+\label{DD:nFL}
 \\ \midrule \\
-Label & $NFL$
+Label & Non-Factored Load
 \\ \midrule \\
 Units & 
 \\ \midrule \\
@@ -631,9 +632,9 @@ This section provides the functional requirements, the business tasks that the s
 Symbol & Description & Units
 \\
 \midrule
-$a$ & Plate length (long dimension) & mm
+$a$ & Plate length (long dimension) & m
 \\
-$b$ & Plate width (short dimension) & mm
+$b$ & Plate width (short dimension) & m
 \\
 $w$ & Charge weight & kg
 \\
@@ -873,12 +874,12 @@ $SD_{max}$ & maximum stand off distance permissible for input & $130.0$ & m
 \section{References}
 \label{Sec:Refe}
 \begin{itemize}
-\item[[1]:]N. Koothoor, ``A document drive approach to certifying scientific computing software," Master's thesis, McMaster University, Hamilton, Ontario, Canada, 2013.
-\item[[2]:]W. S. Smith and L. Lai, ``A new requirements template for scientific computing," in Proceedings of the First International Workshop on Situational Requirements Engineering Processes - Methods, Techniques and Tools to Support Situation-Specific Requirements Engineering Processes, SREP'05 (J.Ralyt\'{e}, P.Agerfalk, and N.Kraiem, eds.), (Paris, France), pp. 107-121, In conjunction with 13th IEEE International Requirements Engineering Conference, 2005.
-\item[[3]:]J. Robertson and S. Robertson, ``Volere requirements specification template edition 16." ``www.cs.uic.edu/ i442/VolereMaterials/templateArchive16/c Volere template16.pdf", 2012.
-\item[[4]:]ASTM Standards Committee, ``Standard practice for determining load resistance of glass in buildings," Standard E1300-09a, American Society for Testing and Material (ASTM), 2009.
-\item[[5]:]ASTM, developed by subcommittee C1408, Book of standards 15.02, ``Standard specification for flat glass, C1036."
-\item[[6]:]ASTM, developed by subcommittee C14.08, Book of standards 15.02, ``Specification for heat treated flat glass-Kind HS, kind FT coated and uncoated glass, C1048."
+\item[{[}1{]}:]N. Koothoor, ``A document drive approach to certifying scientific computing software," Master's thesis, McMaster University, Hamilton, Ontario, Canada, 2013.
+\item[{[}2{]}:]W. S. Smith and L. Lai, ``A new requirements template for scientific computing," in Proceedings of the First International Workshop on Situational Requirements Engineering Processes - Methods, Techniques and Tools to Support Situation-Specific Requirements Engineering Processes, SREP'05 (J.Ralyt\'{e}, P.Agerfalk, and N.Kraiem, eds.), (Paris, France), pp. 107-121, In conjunction with 13th IEEE International Requirements Engineering Conference, 2005.
+\item[{[}3{]}:]J. Robertson and S. Robertson, ``Volere requirements specification template edition 16." ``www.cs.uic.edu/ i442/VolereMaterials/templateArchive16/c Volere template16.pdf", 2012.
+\item[{[}4{]}:]ASTM Standards Committee, ``Standard practice for determining load resistance of glass in buildings," Standard E1300-09a, American Society for Testing and Material (ASTM), 2009.
+\item[{[}5{]}:]ASTM, developed by subcommittee C1408, Book of standards 15.02, ``Standard specification for flat glass, C1036."
+\item[{[}6{]}:]ASTM, developed by subcommittee C14.08, Book of standards 15.02, ``Specification for heat treated flat glass-Kind HS, kind FT coated and uncoated glass, C1048."
 \end{itemize}
 \section{Appendix}
 \label{Sec:Appe}

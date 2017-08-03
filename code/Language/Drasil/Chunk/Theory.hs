@@ -82,7 +82,7 @@ tc cid t s q c = TC cid (map tw t) s (map qw q) (map cw c)
 
 tc' :: (Quantity q, Concept c) => String -> [q] -> [c] -> [QDefinition] -> 
   [Constraint] -> [QDefinition] -> TheoryChunk
-tc' cid q c = TC cid ([] :: [TWrapper]) [] (map qw q) (map cw c)
+tc' cid q c = tc cid ([] :: [TWrapper]) [] q c
 
 tm :: (Concept c, Theory t) => c -> t -> TheoryModel
 tm = TM

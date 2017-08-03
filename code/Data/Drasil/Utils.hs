@@ -186,8 +186,8 @@ unwrap Nothing  = EmptyS
 
 -- Using symbolMap from Extract
 --FIXME: Not sure what type d should be
-symbolMapFun :: SymbolMap -> (d -> DType) -> (d -> Contents)
-symbolMapFun progSymbMap fun = (Definition (progSymbMap) . fun)
+symbolMapFun :: SymbolMap -> (a -> DType) -> a -> Contents
+symbolMapFun progSymbMap fun = (Definition progSymbMap . fun)
 
 -- Used to help make Qdefinitions when id, term, and symbol come from the same source
 mkDataDef :: (SymbolForm c, Quantity c) => c -> Expr -> QDefinition
@@ -206,7 +206,6 @@ mkDataDef' cncpt equation extraInfo = datadef $ getUnit cncpt
                            (cncpt ^. symbol) equation
 
 prodUCTbl :: [[Sentence]] -> Contents
-prodUCTbl cases = Table [titleize useCase +:+. S "NO", titleize useCase +:+
-  titleize name_, S "Actor", titleize input_ +:+ S "and" +:+ titleize output_]
+prodUCTbl cases = Table [S "Actor", titleize input_ +:+ S "and" +:+ titleize output_]
   cases
   (titleize useCaseTable) True

@@ -18,8 +18,10 @@ import Drasil.DocumentLanguage.Definitions
 import qualified Drasil.SRS as SRS
 import qualified Drasil.Sections.Introduction as Intro
 import qualified Drasil.Sections.SpecificSystemDescription as SSD
+import qualified Drasil.Sections.Stakeholders as Stk
+import qualified Drasil.Sections.AuxiliaryConstants as AC
 
-import Data.Drasil.Concepts.Documentation (refmat, tOfSymb)
+import Data.Drasil.Concepts.Documentation (refmat, tOfSymb, reference)
 
 import Data.Maybe (isJust)
 import Data.List (sort)
@@ -28,7 +30,28 @@ import Prelude hiding (id)
 type System = Sentence
 type DocKind = Sentence
 
--- anything with 'Verb' in it should eventually go
+{--}
+
+type DocDesc = [DocSection]
+
+-- | Document sections are either Verbatim, Reference, Introduction, or Specific
+-- System Description sections (for now!)
+data DocSection = Verbatim Section 
+                | RefSec RefSec 
+                | IntroSec IntroSec
+                | StkhldrSec StkhldrSec
+                | SSDSec SSDSec
+                | AuxConstntSec AuxConstntSec
+                | Bibliography BibRef
+
+--FIXME: anything with 'Verb' in it should eventually go
+
+{--}
+
+-- | Reference section. Contents are top level followed by a list of subsections.
+-- RefVerb is used for including verbatim subsections
+data RefSec = RefProg Contents [RefTab] | RefVerb Section -- continue
+
 -- | Reference subsections
 data RefTab where 
   TUnits :: RefTab
@@ -38,62 +61,6 @@ data RefTab where
   TAandA :: RefTab
   TVerb :: Section -> RefTab
   -- add more here
-  
--- | Introduction subsections
-data IntroSub where
-  IVerb    :: Section -> IntroSub
-  IPurpose :: Sentence -> IntroSub
-  IScope   :: Sentence -> Sentence -> IntroSub
-  IChar    :: Sentence -> Sentence -> Sentence -> IntroSub
-  IOrgSec  :: Sentence -> CI -> Section -> Sentence -> IntroSub
-  
--- | Specific system description subsections
-data SSDSub where
-  SSDSubVerb :: Section -> SSDSub
-  SSDProblem :: ProblemDescription -> SSDSub
-  SSDSolChSpec :: SolChSpec -> SSDSub
-
--- | Problem Description section
-data ProblemDescription where
-  PDVerb :: Section -> ProblemDescription
-  -- PDProg :: --TODO
-  
--- | Solution Characteristics Specification section
-data SolChSpec where
-  SCSVerb :: Section -> SolChSpec
-  SCSProg :: [SCSSub] -> SymbolMap -> SolChSpec
-  
--- | Solution Characteristics Specification subsections
-data SCSSub where
-  SCSSubVerb :: Section -> SCSSub
-  -- Assumptions :: --TODO
-  TMs :: Fields -> [TheoryModel] -> SCSSub
-  GDs :: Fields -> [RelationConcept] -> SCSSub
-  DDs :: Fields -> [QDefinition]     -> SCSSub --FIXME: Need DD intro
-  IMs :: Fields -> [RelationConcept] -> SCSSub
-  -- Constraints :: --TODO
-
--- | Reference section. Contents are top level followed by a list of subsections.
--- RefVerb is used for including verbatim subsections
-data RefSec = RefProg Contents [RefTab] | RefVerb Section -- continue
-
---FIXME: This needs to be updated for the requisite information in introductionF
--- | Introduction section. Contents are top level followed by a list of 
--- subsections. IntroVerb is used for including verbatim subsections.
-data IntroSec = IntroProg Sentence Sentence [IntroSub] 
-  -- ^ Temporary, will be modified once we've figured out more about the section.
-              | IntroVerb Section
-
--- | Specific System Description section . Contains a list of subsections. 
--- Verbatim sections handled by SSDVerb           
-data SSDSec = SSDProg [SSDSub] | SSDVerb Section
-
--- | Document sections are either Verbatim, Reference, Introduction, or Specific
--- System Description sections (for now!)
-data DocSection = Verbatim Section 
-                | RefSec RefSec 
-                | IntroSec IntroSec
-                | SSDSec SSDSec
 
 -- | For creating the table of symbols intro
 data TSIntro = TypogConvention [TConvention] -- ^ Typographic conventions used
@@ -134,7 +101,73 @@ data LFunc where
   DefnExcept :: Concept c => [c] -> LFunc
   TAD :: LFunc --Term and Definition
 
-type DocDesc = [DocSection]
+{--}
+
+--FIXME: This needs to be updated for the requisite information in introductionF
+-- | Introduction section. Contents are top level followed by a list of 
+-- subsections. IntroVerb is used for including verbatim subsections.
+data IntroSec = IntroProg Sentence Sentence [IntroSub] 
+  -- ^ Temporary, will be modified once we've figured out more about the section.
+              | IntroVerb Section
+
+-- | Introduction subsections
+data IntroSub where
+  IVerb    :: Section -> IntroSub
+  IPurpose :: Sentence -> IntroSub
+  IScope   :: Sentence -> Sentence -> IntroSub
+  IChar    :: Sentence -> Sentence -> Sentence -> IntroSub
+  IOrgSec  :: Sentence -> CI -> Section -> Sentence -> IntroSub
+
+{--}
+
+-- | Specific System Description section . Contains a list of subsections. 
+-- Verbatim sections handled by SSDVerb           
+data SSDSec = SSDProg [SSDSub] | SSDVerb Section
+
+-- | Specific system description subsections
+data SSDSub where
+  SSDSubVerb :: Section -> SSDSub
+  SSDProblem :: ProblemDescription -> SSDSub
+  SSDSolChSpec :: SolChSpec -> SSDSub
+
+-- | Problem Description section
+data ProblemDescription where
+  PDVerb :: Section -> ProblemDescription
+  -- PDProg :: --TODO
+  
+-- | Solution Characteristics Specification section
+data SolChSpec where
+  SCSVerb :: Section -> SolChSpec
+  SCSProg :: [SCSSub] -> SymbolMap -> SolChSpec
+  
+-- | Solution Characteristics Specification subsections
+data SCSSub where
+  SCSSubVerb :: Section -> SCSSub
+  -- Assumptions :: --TODO
+  TMs :: Fields -> [TheoryModel] -> SCSSub
+  GDs :: Fields -> [RelationConcept] -> SCSSub
+  DDs :: Fields -> [QDefinition]     -> SCSSub --FIXME: Need DD intro
+  IMs :: Fields -> [RelationConcept] -> SCSSub
+  -- Constraints :: --TODO
+
+{--}
+
+-- | Stakeholders section
+data StkhldrSec = StkhldrProg CI Sentence {-[StkhldrSub]-} | StkhldrVerb Section
+
+-- | Stakeholders subsections
+-- FIXME: Remove?
+data StkhldrSub where
+  StkhldrSubVerb :: Section -> StkhldrSub
+  Client :: Sentence -> Sentence -> StkhldrSub
+  Cstmr  :: Sentence -> StkhldrSub
+
+{--}
+
+-- | Values of Auxiliary Constants section
+data AuxConstntSec = AuxConsProg CI [QDefinition] | AuxConsVerb Section
+
+{--}
 
 -- | Creates a document from a document description and system information
 mkDoc :: DocDesc -> SystemInformation -> Document
@@ -151,10 +184,13 @@ mkSections :: SystemInformation -> DocDesc -> [Section]
 mkSections si l = foldr doit [] l
   where
     doit :: DocSection -> [Section] -> [Section]
-    doit (Verbatim s)  ls = s : ls
-    doit (RefSec rs)   ls = mkRefSec si rs : ls
-    doit (IntroSec is) ls = mkIntroSec si is : ls
-    doit (SSDSec ss)   ls = mkSSDSec si ss : ls
+    doit (Verbatim s)        ls = s : ls
+    doit (RefSec rs)         ls = mkRefSec si rs : ls
+    doit (IntroSec is)       ls = mkIntroSec si is : ls
+    doit (StkhldrSec sts)    ls = mkStkhldrSec sts : ls
+    doit (SSDSec ss)         ls = mkSSDSec si ss : ls
+    doit (AuxConstntSec acs) ls = mkAuxConsSec acs : ls
+    doit (Bibliography bib)  ls = mkBib bib : ls
 
 -- | Helper for creating the reference section and subsections
 mkRefSec :: SystemInformation -> RefSec -> Section
@@ -268,6 +304,11 @@ mkIntroSec si (IntroProg probIntro progDefn l) =
     mkSubIntro _ (IOrgSec i b s t) l' = Intro.orgSec i b s t : l'
     -- FIXME: s should be "looked up" using "b" once we have all sections being generated
 
+mkStkhldrSec :: StkhldrSec -> Section
+mkStkhldrSec (StkhldrVerb s) = s
+mkStkhldrSec (StkhldrProg key details) = (Stk.stakehldrGeneral key details) 
+--FIXME: WIP "x" --> implement use of StkhldrSub or remove entirely?
+
 mkSSDSec :: SystemInformation -> SSDSec -> Section
 mkSSDSec _ (SSDVerb s) = s
 mkSSDSec si (SSDProg l) = 
@@ -302,6 +343,16 @@ mkSolChSpec si (SCSProg l m) =
     -- Could start with just a quick check of whether or not IM is included and 
     -- then error out if necessary.
   
+-- | Helper for making the 'Values of Auxiliary Constants' section
+mkAuxConsSec :: AuxConstntSec -> Section
+mkAuxConsSec (AuxConsVerb s) = s
+mkAuxConsSec (AuxConsProg key listOfCons) = (AC.valsOfAuxConstantsF key listOfCons)
+
+-- | Helper for making the bibliography section
+mkBib :: BibRef -> Section
+mkBib bib = section (titleize' reference) [Bib bib] []
+  --FIXME: TeX auto generates this title but HTML needs it
+
 -- Helper
 siSys :: SystemInformation -> NWrapper
 siSys (SI {_sys = sys}) = nw sys

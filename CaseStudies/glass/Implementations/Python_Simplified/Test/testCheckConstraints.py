@@ -10,7 +10,7 @@ class TestCheckConstraints(unittest.TestCase):
     def setUp(self):
     	with open(os.path.join("Test/Inputfiles", "constraints1.txt"), 'r') as f:
     		input = f.readlines()
-    	input = list(map(lambda x: x.split(","), input))
+    	input = list(map(lambda x: x.split(";"), input))
     	self.numTests = len(input)
     	self.inputFileName = [row[0]          for row in input]
     	self.errorMsg      = [row[1].rstrip() for row in input]

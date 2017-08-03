@@ -175,10 +175,11 @@ eqN n = phrase equation +:+ sParen (S $ show n)
 
 --Produces a sentence that displays the constraints in a {}.
 displayConstrntsAsSet :: SymbolForm a => a -> [String] -> Sentence
-displayConstrntsAsSet ch listOfVals = getS ch `sIn` (sCurlyBr (foldlsC (map S listOfVals)))
+displayConstrntsAsSet ch listOfVals = getS ch +:+ (G Epsilon_L) +:+ (sCurlyBr (foldlsC (map S listOfVals)))
 
 extrctStrng :: Sentence -> String
 extrctStrng (S strng) = strng
+extrctStrng _ = error "Invalid type extraction"
 
 {-BELOW IS TO BE MOVED TO EXAMPLE/DRASIL/SECTIONS-}
 

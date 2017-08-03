@@ -59,7 +59,16 @@ data Greek = Alpha_L
 
 -- | Special characters including @<=@, partial derivatives, degree circle, and
 -- underscores
-data Special = LEQ | Partial | Circle | Percent | Hash | CurlyBrOpen | CurlyBrClose | UScore
+data Special = LEQ
+             | Partial
+             | Circle
+             | Percent
+             | Hash
+             | CurlyBrOpen
+             | CurlyBrClose
+             | SqBrOpen
+             | SqBrClose
+             | UScore
   deriving (Eq, Ord)
 
 -- Class for rendering greek characters

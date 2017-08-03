@@ -1,12 +1,51 @@
 module Drasil.SSP.References where
 
 import Language.Drasil
-import Drasil.SSP.Defs (ssa, crtSlpSrf)
+import Drasil.SSP.Defs (ssa, crtSlpSrf, fs_concept)
 
 import Data.Drasil.Concepts.Documentation (analysis)
 import Data.Drasil.Software.Products (sciCompS)
 import Data.Drasil.Utils (mkRefsList)
 
+sspCitations :: BibRef
+sspCitations = [chen2005, parnas1986, koothoor2013]
+
+chen2005, parnas1986, koothoor2013 :: Citation
+--See Language.Drasil.People for all person constructors
+chen2005 = Article [
+  Author [personWM' "Q" ["H"] "Qian",
+          personWM' "D" ["Y"] "Zhu",
+          personWM' "C" ["F"] "Lee",
+          personWM' "G" ["R"] "Chen"],
+  Title (S "A concise algorithm for computing the" +:+
+         phrase fs_concept +:+ S "using the morgenstern price method"),
+  Journal (S "Can. Geotech. J."),
+  Issue 42,
+  Date 19 Feb 2005,
+  Pages (272,278)]
+  
+parnas1986 = Article [
+  Author [personWM "David" ["L"] "Parnas",
+          personWM "Paul"  ["C"] "Clements"],
+  Title $ S "A rational design process:" +:+
+          S "How and why to fake it",
+  Journal $ S "IEEE Transactions on Software Engineering",
+  Volume 12,
+  Issue 2,
+  Pages (251,257),
+  Year 1986,
+  Place (S "Washington", S "USA")
+  ]
+
+koothoor2013 = MThesis [
+  Author [person "Nirmitha" "Koothoor"],
+  Title $ S "A document drive approach to certifying"
+        +:+ phrase sciCompS,
+  School $ S "McMaster University",
+  Place (S "Hamilton", S "Canada"),
+  Year 2013  
+  ]
+  
 sspReferences :: Contents
 sspReferences = mkRefsList 1 [ --FIXME: names should be in italics
   S "Q.H. Qian D.Y. Zhu, C.F. Lee and G.R. Chen. A concise algorithm for computing" +:+

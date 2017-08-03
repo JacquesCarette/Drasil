@@ -13,6 +13,7 @@ import Language.Drasil.ChunkDB (SymbolMap)
 import Language.Drasil.Spec (Sentence(..), RefType(..), (+:+))
 import Language.Drasil.RefHelpers
 import Language.Drasil.Expr
+import Language.Drasil.Citations
 import Control.Lens ((^.))
 
 type Title    = Sentence
@@ -44,9 +45,9 @@ data Contents = Table [Sentence] [[Sentence]] Title Bool
                | Paragraph Sentence -- ^ Paragraphs are just sentences.
                | EqnBlock Expr
      --        CodeBlock Code   -- GOOL complicates this.  Removed for now.
-               | Definition SymbolMap DType 
+               | Definition SymbolMap DType
                -- ^ Data/General definition or theoretical model. SymbolMap for
-               -- looking up variables (currently a hack)
+               -- looking up variables (currently a hack).
                | Enumeration ListType -- ^ Lists
                | Figure Label Filepath -- ^ Should use relative file path.
                | Module ModuleChunk
@@ -54,6 +55,7 @@ data Contents = Table [Sentence] [[Sentence]] Title Bool
                | Assumption AssumpChunk
                | LikelyChange LCChunk
                | UnlikelyChange UCChunk
+               | Bib BibRef
      --        UsesHierarchy [(ModuleChunk,[ModuleChunk])]
                | Graph [(Sentence, Sentence)] (Maybe Width) (Maybe Height) Label
                -- ^ TODO: Fill this one in.
@@ -87,7 +89,7 @@ data DType = Data QDefinition -- ^ QDefinition is the chunk with the defining
            | Theory RelationConcept -- ^ Theoretical models use a relation as
                                     -- their definition
            | Instance
-           | TM
+           | TM -- Are TM and DD needed given that Theory and Data exist?
            | DD
 
 -- | Every layout object has a reference name (for intra-document referencing)
@@ -101,41 +103,43 @@ instance LayoutObj Section where
   rType _ = Sect
 
 instance LayoutObj Contents where
-  refName (Table _ _ l _)       = S "Table:" :+: inferName l
-  refName (Figure l _)          = S "Figure:" :+: inferName l
-  refName (Paragraph _)         = error "Can't reference paragraphs" --yet
-  refName (EqnBlock _)          = error "EqnBlock ref unimplemented"
+  refName (Table _ _ l _)         = S "Table:" :+: inferName l
+  refName (Figure l _)            = S "Figure:" :+: inferName l
+  refName (Paragraph _)           = error "Can't reference paragraphs" --yet
+  refName (EqnBlock _)            = error "EqnBlock ref unimplemented"
 --  refName (CodeBlock _)         = error "Codeblock ref unimplemented"
-  refName (Definition _ d)      = getDefName d
-  refName (Defnt dt _ r)        = getDefName dt +:+ r
-  refName (Enumeration _)       = error "List refs unimplemented"
-  refName (Module mc)           = S $ "M" ++ alphanumOnly (mc ^. id)
-  refName (Requirement rc)    = S $ "R" ++ alphanumOnly (rc ^. id)
-  refName (Assumption ac)     = S $ "A" ++ alphanumOnly (ac ^. id)
-  refName (LikelyChange lcc)  = S $ "LC" ++ alphanumOnly (lcc ^. id)
-  refName (UnlikelyChange ucc)  = S $ "UC" ++ alphanumOnly (ucc ^. id)
+  refName (Definition _ d)        = getDefName d
+  refName (Defnt dt _ r)          = getDefName dt +:+ r
+  refName (Enumeration _)         = error "List refs unimplemented"
+  refName (Module mc)             = S $ "M:" ++ alphanumOnly (mc ^. id)
+  refName (Requirement rc)        = S $ "R:" ++ alphanumOnly (rc ^. id)
+  refName (Assumption ac)         = S $ "A:" ++ alphanumOnly (ac ^. id)
+  refName (LikelyChange lcc)      = S $ "LC:" ++ alphanumOnly (lcc ^. id)
+  refName (UnlikelyChange ucc)    = S $ "UC:" ++ alphanumOnly (ucc ^. id)
 --  refName (UsesHierarchy _)     = S $ "Figure:UsesHierarchy"
-  refName (Graph _ _ _ l)       = S "Figure:" :+: inferName l
-  refName (TMod _ _ _)          = error "TMod referencing unimplemented"
-  refName (IMod)                = error "IMod referencing unimplemented"
-  refName (GDef)                = error "GDef referencing unimplemented"
-  refName (DDef _ _ _)          = error "DDef referencing unimplemented"
-  rType (Table _ _ _ _)         = Tab
-  rType (Figure _ _)            = Fig
-  rType (Definition _ _)        = Def
-  rType (Defnt _ _ _)           = Def
-  rType (Module _)              = Mod
-  rType (Requirement r)       = Req $ getA r
-  rType (Assumption a)        = Assump $ getA a
-  rType (LikelyChange lc)      = LC $ getA lc
-  rType (UnlikelyChange _)      = UC
+  refName (Graph _ _ _ l)         = S "Figure:" :+: inferName l
+  refName (TMod _ _ _)            = error "TMod referencing unimplemented"
+  refName (IMod)                  = error "IMod referencing unimplemented"
+  refName (GDef)                  = error "GDef referencing unimplemented"
+  refName (DDef _ _ _)            = error "DDef referencing unimplemented"
+  rType (Table _ _ _ _)           = Tab
+  rType (Figure _ _)              = Fig
+  rType (Definition _ (Data qd))  = Def $ getA qd
+  rType (Definition _ (Theory rc))= Def $ getA rc
+  rType (Definition _ _)          = Def Nothing
+  rType (Defnt _ _ _)             = Def Nothing
+  rType (Module _)                = Mod
+  rType (Requirement r)           = Req $ getA r
+  rType (Assumption a)            = Assump $ getA a
+  rType (LikelyChange lc)         = LC $ getA lc
+  rType (UnlikelyChange _)        = UC
  -- rType (UsesHierarchy _)       = Fig
-  rType (Graph _ _ _ _)         = Fig
-  rType (TMod _ _ _)            = Def
-  rType (IMod)                  = Def
-  rType (GDef)                  = Def
-  rType (DDef _ _ _)            = Def
-  rType _                       = error "Attempting to reference unimplemented reference type"
+  rType (Graph _ _ _ _)           = Fig
+  rType (TMod _ _ _)              = Def Nothing
+  rType (IMod)                    = Def Nothing
+  rType (GDef)                    = Def Nothing
+  rType (DDef _ _ _)              = Def Nothing
+  rType _                         = error "Attempting to reference unimplemented reference type"
   
 -- | Automatically create the label for a definition
 getDefName :: DType -> Sentence

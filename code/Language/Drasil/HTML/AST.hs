@@ -6,8 +6,10 @@ import Language.Drasil.Symbol (Symbol)
 import Language.Drasil.Spec (USymb, RefType)
 import Language.Drasil.Unicode (Greek, Special)
 import Language.Drasil.Document (DType (..))
+import Language.Drasil.Citations (Month(..))
+import Language.Drasil.People (People)
 
-import Data.List (intersperse)
+-- import Data.List (intersperse)
 
 -- | Internal HTML version of Expr 
 -- (for converting 'Language.Drasil.Expr.Expr')
@@ -124,7 +126,9 @@ data LayoutObj = Table Tags [[Spec]] Label Bool Caption
                | Module String Label
                | Assumption Contents Label Label
                | LikelyChange Contents Label Label
+               | UnlikelyChange Contents Label Label
                | Requirement Contents Label Label
+               | Bib BibRef
                -- Span Tags Contents
                
 data ListType = Ordered [ItemType] | Unordered [ItemType]
@@ -137,8 +141,9 @@ data ItemType = Flat Spec | Nested Spec ListType
 instance Show ListType where
   show (Ordered _)   = "o"
   show (Unordered _) = "u"
-  show (Desc _)    = error "Printing descriptive list failed"
-  show (Simple _)  = error "Printing Simple list failed, see ASTHTML/PrintHTML"
+  show (Desc _)      = error "Printing descriptive list failed"
+  show (Simple _)    = error "Printing Simple list failed, see ASTHTML/PrintHTML"
+  show (Definitions _)  = error "Printing list of definitions failed"
 
 instance Show Function where
   show Log            = "log"
@@ -172,3 +177,96 @@ instance Show Set where
   --show (DiscreteI a)  = "{" ++ (foldl (++) "" . intersperse ", " . map show) a ++ "}"
   --show (DiscreteD a)  = "{" ++ (foldl (++) "" . intersperse ", " . map show) a ++ "}"
   --show (DiscreteS a) = "{" ++ (foldl (++) "" . intersperse ", ") a ++ "}"
+  
+type BibRef = [Citation]
+type City   = Spec
+type State  = Spec
+
+data Citation = Book [CiteField] | Article [CiteField]
+              | MThesis [CiteField] | PhDThesis [CiteField]
+  --add website...
+data CiteField = Author     People
+               | Title      Spec
+               | Series     Spec
+               | Collection Spec
+               | Volume     Integer
+               | Edition    Integer
+               | Place    (City, State) --State can also mean country
+               | Publisher  Spec
+               | Journal    Spec
+               | Year       Integer
+               | Date Integer Month Integer
+               | Page       Integer
+               | Pages    (Integer, Integer)
+               | Note       Spec
+               | Issue      Integer
+               | School     Spec
+               | Thesis     Thesis
+
+data Thesis = M | PhD deriving Eq
+
+instance Show Thesis where
+  show M   = "Master's thesis"
+  show PhD = "PhD thesis"
+
+instance Show Citation where
+  show (Book      _) = "Print"
+  show (Article   _) = "Print"
+  show (MThesis   _) = "Print"
+  show (PhDThesis _) = "Print"
+
+instance Eq CiteField where
+  (==) (Author _)     (Author _)     = True
+  (==) (Title _)      (Title _)      = True
+  (==) (Series _)     (Series _)     = True
+  (==) (Collection _) (Collection _) = True
+  (==) (Volume _)     (Volume _)     = True
+  (==) (Edition _)    (Edition _)    = True
+  (==) (Place _)      (Place _)      = True
+  (==) (Publisher _)  (Publisher _)  = True
+  (==) (Journal _)    (Journal _)    = True
+  (==) (Year _)       (Year _)       = True
+  (==) (Date _ _ _)   (Date _ _ _)   = True
+  (==) (Page _)       (Page _)       = True
+  (==) (Pages _)      (Pages _)      = True
+  (==) (Note _)       (Note _)       = True
+  (==) (Issue _)      (Issue _)      = True
+  (==) (School _)     (School _)     = True
+  (==) (Thesis _)     (Thesis _)     = True
+  (==) _ _ = False
+
+instance Ord CiteField where --FIXME: APA has year come directly after Author
+  compare (Author     _) _ = LT
+  compare _ (Author     _) = GT
+  compare (Title      _) _ = LT
+  compare _ (Title      _) = GT
+  compare (Series     _) _ = LT
+  compare _ (Series     _) = GT
+  compare (Collection _) _ = LT
+  compare _ (Collection _) = GT
+  compare (Journal    _) _ = LT
+  compare _ (Journal    _) = GT
+  compare (Volume     _) _ = LT
+  compare _ (Volume     _) = GT
+  compare (Edition    _) _ = LT
+  compare _ (Edition    _) = GT
+  compare (Thesis     _) _ = LT
+  compare _ (Thesis     _) = GT
+  compare (School     _) _ = LT
+  compare _ (School     _) = GT
+  compare (Place      _) _ = LT
+  compare _ (Place      _) = GT
+  compare (Publisher  _) _ = LT
+  compare _ (Publisher  _) = GT
+  compare (Issue      _) _ = LT
+  compare _ (Issue      _) = GT
+  compare (Year       _) _ = LT
+  compare _ (Year       _) = GT
+  compare (Date   _ _ _) _ = LT
+  compare _ (Date   _ _ _) = GT
+  compare (Page       _) _ = LT
+  compare _ (Page       _) = GT
+  compare (Pages      _) _ = LT
+  compare _ (Pages      _) = GT
+  compare (Note       _) _ = LT
+  compare _ (Note       _) = GT

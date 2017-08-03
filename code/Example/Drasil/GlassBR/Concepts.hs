@@ -15,7 +15,7 @@ glassBRProg = dcc' "glassBRProg" (nounPhraseSP "GlassBR program")
 acronyms :: [CI]
 acronyms = [assumption, annealedGlass, aR, dataDefn, fullyTGlass,
   goalStmt, glassTypeFac, heatSGlass, iGlass, inModel, likelyChg, 
-  loadDurFactor, lGlass, lResistance, lShareFac, notApp, nFL, physSyst,
+  loadDurFactor, lGlass, notApp, physSyst, 
   requirement, stdOffDist, srs, thModel, eqTNT]
 
 annealedGlass, aR, fullyTGlass, glassTypeFac, heatSGlass, loadDurFactor,
@@ -42,7 +42,7 @@ nFL           = commonIdea "nFL"           (nounPhraseSP "non-factored load")   
 -- TODO: See if we can make some of these terms less specific and/or parameterized.
  
 beam, blastRisk, cantilever, edge, glaPlane, glaSlab, plane,
-  glass, ptOfExplsn:: NamedChunk
+  glass, ptOfExplsn, responseTy :: NamedChunk
 beam         = npnc "beam"       (nounPhraseSP "beam")
 blastRisk    = npnc "blastRisk"  (nounPhraseSP "blast risk")
 cantilever   = npnc "cantilever" (nounPhraseSP "cantilever")
@@ -54,3 +54,4 @@ plane        = npnc "plane"      (nounPhraseSP "plane")
 ptOfExplsn   = npnc "ptOfExplsn" (cn' "point of explosion")
 
 glaPlane     = compoundNC glass plane
+responseTy   = compoundNC response type_

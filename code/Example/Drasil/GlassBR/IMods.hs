@@ -39,10 +39,10 @@ cap_rel = (C lRe) := ((C nonFL)*(C glaTyFac)*(C loadSF))
 
 capdescr :: Sentence
 capdescr =
-  foldlSent [(short lResistance) `isThe` (phrase lResistance) `sC`
+  foldlSent [(getS lRe) `isThe` (phrase lResistance) `sC`
   S "which" +:+. S "is also called capacity" +:+. ((getS nonFL) `isThe`
-  (phrase nonFL)) +:+. ((short glassTypeFac) `isThe` (phrase glassTypeFac))
-  +:+. ((short lShareFac) `isThe` (phrase lShareFac)), S "Follows",
+  (phrase nonFL)) +:+. ((getS glaTyFac) `isThe` (phrase glassTypeFac))
+  +:+. ((getS loadSF) `isThe` (phrase lShareFac)), S "Follows",
   (acroA 2) `sAnd` (acroA 1), sParen (Quote 
   (S "In development of this procedure, it was assumed that" +:+
   S "all four edges of the glass are simply supported and free to slip" +:+
@@ -63,7 +63,7 @@ dedescr =
   foldlSent [(getS demand `sOr` phrase demandq) `sC`
   S "is the", (demandq ^. defn), 
   S "obtained from Figure 2 by interpolation using", --use MakeRef? Issue #216
-  (phrase standOffDist), sParen (getS standOffDist), S "and", 
+  (phrase standOffDist), sParen (getS standOffDist) `sAnd`
   (getS eqTNTWeight), S "as" +:+. plural parameter, 
   (getS eqTNTWeight), S "is defined as" +:+.
   E (equat wtntWithEqn) +:+. ((getS char_weight) `isThe`

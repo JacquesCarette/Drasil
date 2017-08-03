@@ -1,5 +1,6 @@
 module Drasil.Sections.Stakeholders 
-  ( stakehldrGeneral) where
+  ( stakehldrGeneral
+  ) where
 
 import Language.Drasil
 import qualified Drasil.SRS as SRS

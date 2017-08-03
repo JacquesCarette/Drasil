@@ -117,7 +117,7 @@ Units
 Plate length (long dimension)
 </td>
 <td>
-mm
+m
 </td>
 </tr>
 <tr>
@@ -139,7 +139,7 @@ Maximum aspect ratio
 Plate width (short dimension)
 </td>
 <td>
-mm
+m
 </td>
 </tr>
 <tr>
@@ -183,7 +183,7 @@ mm
 Modulus of elasticity of glass
 </td>
 <td>
-kPa
+Pa
 </td>
 </tr>
 <tr>
@@ -216,7 +216,7 @@ Glass type factor
 Actual thickness
 </td>
 <td>
-mm
+m
 </td>
 </tr>
 <tr>
@@ -958,7 +958,7 @@ Blast resistant glazing - Glazing that provides protection against air blast pre
 Equivalent TNT charge mass - Mass of TNT placed on the ground in a hemisphere that represents the design explosive threat.
 </li>
 <li>
-Glass Types:
+Glass Type:
 <ul class="list">
 <li>
 Annealed glass (AN) - A flat, monolithic, glass lite which has uniform thickness where the residual surface stresses are almost zero, as defined in [5].
@@ -1001,7 +1001,7 @@ Stand off distance (SD) - The distance from the glazing surface to the centroid 
 Load share factor (LSF) - A multiplying factor derived from the load sharing between the double glazing, of equal or different thickness's and types (including the layered behaviour of LG under long duration loads), in a sealed IG unit.
 </li>
 <li>
-Glass type factor (GTF) - A multiplying factor for adjusting the LR of different glass type, that is, AN, HS, or FT in monolithic glass, LG (Laminated Glass), or IG (Insulating Glass) constructions.
+Glass type factor (GTF) - A multiplying factor for adjusting the LR of different glass type, that is, AN, FT, or HS, in monolithic glass, LG (Laminated Glass), or IG (Insulating Glass) constructions.
 </li>
 <li>
 Aspect ratio (AR) - The ratio of the long dimension of the glass to the short dimension of the glass. For glass supported on four sides, the aspect ratio is always equal to or greater than 1.0. For glass supported on three sides, the ratio of the length of one of the supported edges perpendicular to the free edge, to the length of the free edge, is equal to or greater than 0.5.
@@ -1301,7 +1301,7 @@ Description
 </th>
 <td>
 <p class="paragraph">
-B is the risk of failure<br />k is the surface flaw parameter<br />a is the plate length (long dimension)<br />b is the plate width (short dimension)<br />m is the surface flaw parameter<br />E is the modulus of elasticity of glass<br />h is the actual thickness<br />LDF is the load duration factor<br />J is the stress distribution factor (Function)
+<em>B</em> is the risk of failure<br /><em>k</em> is the surface flaw parameter (m<sup>12</sup>/(N<sup>7</sup>))<br /><em>a</em> is the plate length (long dimension) (m)<br /><em>b</em> is the plate width (short dimension) (m)<br /><em>m</em> is the surface flaw parameter (m<sup>12</sup>/(N<sup>7</sup>))<br /><em>E</em> is the modulus of elasticity of glass (Pa)<br /><em>h</em> is the actual thickness (m)<br /><em>LDF</em> is the load duration factor<br /><em>J</em> is the stress distribution factor (Function)
 </p>
 </td>
 </tr>
@@ -1315,7 +1315,7 @@ Label
 </th>
 <td>
 <p class="paragraph">
-h
+<em>h</em>
 </p>
 </td>
 </tr>
@@ -1336,68 +1336,75 @@ Equation
 <td>
 <a id="">
 <div class="equation">
-h = <span class="casebr">
+<em>h</em> = <div class="fraction">
+<span class="fup">
+1
+</span>
+<span class="fdn">
+1000
+</span>
+</div><span class="casebr">
 {
 </span>
 <div class="cases">
 <span>
 2.16 , <span class="case">
-t=2.5
+<em>t</em> = 2.5
 </span>
 </span>
 <span>
 2.59 , <span class="case">
-t=2.7
+<em>t</em> = 2.7
 </span>
 </span>
 <span>
 2.92 , <span class="case">
-t=3.0
+<em>t</em> = 3.0
 </span>
 </span>
 <span>
 3.78 , <span class="case">
-t=4.0
+<em>t</em> = 4.0
 </span>
 </span>
 <span>
 4.57 , <span class="case">
-t=5.0
+<em>t</em> = 5.0
 </span>
 </span>
 <span>
 5.56 , <span class="case">
-t=6.0
+<em>t</em> = 6.0
 </span>
 </span>
 <span>
 7.42 , <span class="case">
-t=8.0
+<em>t</em> = 8.0
 </span>
 </span>
 <span>
 9.02 , <span class="case">
-t=10.0
+<em>t</em> = 10.0
 </span>
 </span>
 <span>
 11.91 , <span class="case">
-t=12.0
+<em>t</em> = 12.0
 </span>
 </span>
 <span>
 15.09 , <span class="case">
-t=16.0
+<em>t</em> = 16.0
 </span>
 </span>
 <span>
 18.26 , <span class="case">
-t=19.0
+<em>t</em> = 19.0
 </span>
 </span>
 <span>
 21.44 , <span class="case">
-t=22.0
+<em>t</em> = 22.0
 </span>
 </span>
 </div>
@@ -1411,7 +1418,7 @@ Description
 </th>
 <td>
 <p class="paragraph">
-h is the actual thickness
+<em>h</em> is the actual thickness (m)<br /><em>t</em> is the nominal thickness <em>t</em> in {2.5, 2.7, 3.0, 4.0, 5.0, 6.0, 8.0, 10.0, 12.0, 16.0, 19.0, 22.0} (mm)
 </p>
 </td>
 </tr>
@@ -1864,7 +1871,7 @@ Equation
 <td>
 <a id="">
 <div class="equation">
-<em>P<sub>b</sub></em>=1-e<sup>-B</sup>
+<em>P<sub>b</sub></em> = 1 &minus; e<sup>-<em>B</em></sup>
 </div>
 </a>
 </td>
@@ -1875,7 +1882,7 @@ Description
 </th>
 <td>
 <p class="paragraph">
-<em>P<sub>b</sub></em> is the calculated probability of breakage. B is the risk of failure.
+<em>P<sub>b</sub></em> is the calculated probability of breakage. <em>B</em> is the risk of failure.
 </p>
 </td>
 </tr>
@@ -1900,7 +1907,7 @@ Equation
 <td>
 <a id="">
 <div class="equation">
-LR=NFL*GTF*LSF
+<em>LR</em> = <em>NFL</em>&sdot;<em>GTF</em>&sdot;<em>LSF</em>
 </div>
 </a>
 </td>
@@ -1911,7 +1918,7 @@ Description
 </th>
 <td>
 <p class="paragraph">
-LR is the load resistance, which is also called capacity. NFL is the non-factored load. GTF is the glass type factor. LSF is the load share factor. Follows A2 and A1 (&quot;In development of this procedure, it was assumed that all four edges of the glass are simply supported and free to slip in the plane of the glass. This boundary condition has been shown to be typical of many glass installations)&quot; from [4 (pg. 53)].
+<em>LR</em> is the load resistance, which is also called capacity. <em>NFL</em> is the non-factored load. <em>GTF</em> is the glass type factor. <em>LSF</em> is the load share factor. Follows A2 and A1 (&quot;In development of this procedure, it was assumed that all four edges of the glass are simply supported and free to slip in the plane of the glass. This boundary condition has been shown to be typical of many glass installations&quot;) from [4 (pg. 53)].
 </p>
 </td>
 </tr>
@@ -1936,7 +1943,7 @@ Equation
 <td>
 <a id="">
 <div class="equation">
-q=q(<em>w<sub>TNT</sub></em>,SD)
+<em>q</em> = <em>q</em>(<em>w<sub>TNT</sub></em>,<em>SD</em>)
 </div>
 </a>
 </td>
@@ -1947,7 +1954,7 @@ Description
 </th>
 <td>
 <p class="paragraph">
-q or demand, is the 3 second duration equivalent pressure obtained from Figure 2 by interpolation using stand off distance (SD) and <em>w<sub>TNT</sub></em> as parameters. <em>w<sub>TNT</sub></em> is defined as <em>w<sub>TNT</sub></em>=wTNT. w is the charge weight. TNT is the TNT equivalent factor. SD is the stand off distance where SD=&radic;(SD<sub>x</sub><sup>2</sup>+SD<sub>y</sub><sup>2</sup>+SD<sub>z</sub><sup>2</sup>) where (SD<sub>x</sub>, SD<sub>y</sub>, SD<sub>z</sub>) are coordinates.
+<em>q</em> or demand, is the 3 second duration equivalent pressure obtained from Figure 2 by interpolation using stand off distance (<em>SD</em>) and <em>w<sub>TNT</sub></em> as parameters. <em>w<sub>TNT</sub></em> is defined as <em>w<sub>TNT</sub></em> = <em>w</em>&#8239;<em>TNT</em>. <em>w</em> is the charge weight. <em>TNT</em> is the TNT equivalent factor. <em>SD</em> is the stand off distance where <em>SD</em> = &radic;(<em>SD<sub>x</sub></em><sup>2</sup> &plus; <em>SD<sub>y</sub></em><sup>2</sup> &plus; <em>SD<sub>z</sub></em><sup>2</sup>) where (<em>SD<sub>x</sub></em>, <em>SD<sub>y</sub></em>, <em>SD<sub>z</sub></em>) are coordinates.
 </p>
 </td>
 </tr>
@@ -1961,7 +1968,7 @@ q or demand, is the 3 second duration equivalent pressure obtained from Figure 2
 Data Constraints
 </h4>
 <p class="paragraph">
-<a href=#Table:Tabl2:InpuVari>this Table</a> shows the data constraints on the input and output variables, respectively. The column for physical constraints gives the physical limitations on the range of values that can be taken by the variable. The constraints are conservative, to give the user of the model the flexibility to experiment with unusual situations. The column of typical values is intended to provide a feel for a common scenario. The uncertainty column provides an estimate of the confidence with which the physical quantities can be measured. This information would be part of the input if one were performing an uncertainty quantification exercise. <a href=#Table:Tabl3:SpecParaValu>this Table</a> gives the values of the specification parameters used in <a href=#Table:Tabl2:InpuVari>this Table</a>. AR<sub>max</sub> refers to the maximum aspect ratio for the plate of glass.
+<a href=#Table:InpuDataCons>this Table</a>, and <a href=#Table:OutpDataCons>this Table</a> shows the data constraints on the input and output variables, respectively. The column for physical constraints gives the physical limitations on the range of values that can be taken by the variable. The uncertainty column provides an estimate of the confidence with which the physical quantities can be measured. This information would be part of the input if one were performing an uncertainty quantification exercise. The constraints are conservative, to give the user of the model the flexibility to experiment with unusual situations. The column of typical values is intended to provide a feel for a common scenario. <a href=#Sec:ValuofAuxiCons>this Section</a> gives the values of the specification parameters used in <a href=#Table:InpuDataCons>this Table</a>.. <a href=#Table:OutpDataCons>this Table</a> shows the constraints that must be satisfied by the output.
 </p>
 <a id="Table:InpuDataCons">
 <table class="table">
@@ -1987,7 +1994,7 @@ Typical Uncertainty
 <em>P<sub>btol</sub></em>
 </td>
 <td>
-0.0&lt;<em>P<sub>btol</sub></em> and <em>P<sub>btol</sub></em>&lt;1.0
+0.0&thinsp;&lt;&thinsp;<em>P<sub>btol</sub></em> and <em>P<sub>btol</sub></em>&thinsp;&lt;&thinsp;1.0
 </td>
 <td>
 None
@@ -2001,10 +2008,10 @@ None
 </tr>
 <tr>
 <td>
-TNT
+<em>TNT</em>
 </td>
 <td>
-TNT&gt;0.0
+<em>TNT</em>&thinsp;&gt;&thinsp;0.0
 </td>
 <td>
 None
@@ -2018,30 +2025,30 @@ None
 </tr>
 <tr>
 <td>
-a
+<em>a</em>
 </td>
 <td>
-a&gt;0.0 and <div class="fraction">
+<em>a</em>&thinsp;&gt;&thinsp;0.0 and <div class="fraction">
 <span class="fup">
-a
+<em>a</em>
 </span>
 <span class="fdn">
-b
+<em>b</em>
 </span>
-</div>&gt;1.0
+</div>&thinsp;&gt;&thinsp;1.0
 </td>
 <td>
-d<sub>min</sub>&le;a, a&le;d<sub>max</sub>, and <div class="fraction">
+<em>d<sub>min</sub></em>&thinsp;&le;&thinsp;<em>a</em>, <em>a</em>&thinsp;&le;&thinsp;<em>d<sub>max</sub></em>, and <div class="fraction">
 <span class="fup">
-a
+<em>a</em>
 </span>
 <span class="fdn">
-b
+<em>b</em>
 </span>
-</div>&lt;AR<sub>max</sub>
+</div>&thinsp;&lt;&thinsp;<em>AR<sub>max</sub></em>
 </td>
 <td>
-1500.0 mm
+1.5 m
 </td>
 <td>
 0.1
@@ -2049,23 +2056,23 @@ b
 </tr>
 <tr>
 <td>
-b
+<em>b</em>
 </td>
 <td>
-b&gt;0.0 and b&lt;a
+<em>b</em>&thinsp;&gt;&thinsp;0.0 and <em>b</em>&thinsp;&lt;&thinsp;<em>a</em>
 </td>
 <td>
-d<sub>min</sub>&le;b, b&le;d<sub>max</sub>, and <div class="fraction">
+<em>d<sub>min</sub></em>&thinsp;&le;&thinsp;<em>b</em>, <em>b</em>&thinsp;&le;&thinsp;<em>d<sub>max</sub></em>, and <div class="fraction">
 <span class="fup">
-a
+<em>a</em>
 </span>
 <span class="fdn">
-b
+<em>b</em>
 </span>
-</div>&lt;AR<sub>max</sub>
+</div>&thinsp;&lt;&thinsp;<em>AR<sub>max</sub></em>
 </td>
 <td>
-1200.0 mm
+1.2 m
 </td>
 <td>
 0.1
@@ -2073,13 +2080,13 @@ b
 </tr>
 <tr>
 <td>
-w
+<em>w</em>
 </td>
 <td>
-w&ge;0.0
+<em>w</em>&thinsp;&ge;&thinsp;0.0
 </td>
 <td>
-<em>w<sub>max</sub></em>&le;w and w&le;<em>w<sub>min</sub></em>
+<em>w<sub>max</sub></em>&thinsp;&le;&thinsp;<em>w</em> and <em>w</em>&thinsp;&le;&thinsp;<em>w<sub>min</sub></em>
 </td>
 <td>
 42.0 kg
@@ -2090,13 +2097,13 @@ w&ge;0.0
 </tr>
 <tr>
 <td>
-SD
+<em>SD</em>
 </td>
 <td>
-SD&gt;0.0
+<em>SD</em>&thinsp;&gt;&thinsp;0.0
 </td>
 <td>
-SD<sub>min</sub>&lt;SD and SD&lt;SD<sub>max</sub>
+<em>SD<sub>min</sub></em>&thinsp;&lt;&thinsp;<em>SD</em> and <em>SD</em>&thinsp;&lt;&thinsp;<em>SD<sub>max</sub></em>
 </td>
 <td>
 45.0 m
@@ -2119,19 +2126,13 @@ Var
 <th>
 Physical Constraints
 </th>
-<th>
-Typical Value
-</th>
 </tr>
 <tr>
 <td>
 <em>P<sub>b</sub></em>
 </td>
 <td>
-0.0&lt;<em>P<sub>b</sub></em> and <em>P<sub>b</sub></em>&lt;1.0
-</td>
-<td>
-0.4
+0.0&thinsp;&lt;&thinsp;<em>P<sub>b</sub></em> and <em>P<sub>b</sub></em>&thinsp;&lt;&thinsp;1.0
 </td>
 </tr>
 </table>
@@ -2184,7 +2185,7 @@ Units
 Plate length (long dimension)
 </td>
 <td>
-mm
+m
 </td>
 </tr>
 <tr>
@@ -2195,56 +2196,12 @@ mm
 Plate width (short dimension)
 </td>
 <td>
-mm
-</td>
-</tr>
-<tr>
-<td>
-SD<sub>x</sub>
-</td>
-<td>
-Stand off distance (x-component)
-</td>
-<td>
 m
 </td>
 </tr>
 <tr>
 <td>
-SD<sub>y</sub>
-</td>
-<td>
-Stand off distance (y-component)
-</td>
-<td>
-m
-</td>
-</tr>
-<tr>
-<td>
-SD<sub>z</sub>
-</td>
-<td>
-Stand off distance (z-component)
-</td>
-<td>
-m
-</td>
-</tr>
-<tr>
-<td>
-t
-</td>
-<td>
-Nominal thickness <em>t</em> in {2.5, 2.7, 3.0, 4.0, 5.0, 6.0, 8.0, 10.0, 12.0, 16.0, 19.0, 22.0}
-</td>
-<td>
-mm
-</td>
-</tr>
-<tr>
-<td>
-w
+<em>w</em>
 </td>
 <td>
 Charge weight
@@ -2255,38 +2212,87 @@ kg
 </tr>
 <tr>
 <td>
-g
-</td>
-<td>
-Glass type, g in {AN, HS, FT}
-</td>
-<td>
-
-</td>
-</tr>
-<tr>
-<td>
 <em>P<sub>btol</sub></em>
 </td>
 <td>
 Tolerable probability of breakage
 </td>
 <td>
-
+Unitless
 </td>
 </tr>
 <tr>
 <td>
-TNT
+<em>TNT</em>
 </td>
 <td>
 TNT equivalent factor
 </td>
 <td>
-
+Unitless
+</td>
+</tr>
+<tr>
+<td>
+<em>SD<sub>x</sub></em>
+</td>
+<td>
+Stand off distance (x-component)
+</td>
+<td>
+m
+</td>
+</tr>
+<tr>
+<td>
+<em>SD<sub>y</sub></em>
+</td>
+<td>
+Stand off distance (y-component)
+</td>
+<td>
+m
+</td>
+</tr>
+<tr>
+<td>
+<em>SD<sub>z</sub></em>
+</td>
+<td>
+Stand off distance (z-component)
+</td>
+<td>
+m
+</td>
+</tr>
+<tr>
+<td>
+<em>g</em>
+</td>
+<td>
+Glass type <em>g</em> in {AN, FT, HS}
+</td>
+<td>
+Unitless
+</td>
+</tr>
+<tr>
+<td>
+<em>t</em>
+</td>
+<td>
+Nominal thickness <em>t</em> in {2.5, 2.7, 3.0, 4.0, 5.0, 6.0, 8.0, 10.0, 12.0, 16.0, 19.0, 22.0}
+</td>
+<td>
+mm
 </td>
 </tr>
 </table>
+<p class="caption">
+Required Inputs following R1
+</p>
+</a>
+</div>
 </a>
 <div class="list">
 <p>
@@ -2432,13 +2438,13 @@ DD1 (<a href=#DD:risk.fun>this Definition</a>)
 DD2 (<a href=#DD:act.thick>this Definition</a>)
 </th>
 <th>
-DD3 (<a href=#DD:lDurFac>this Definition</a>)
+DD3 (<a href=#DD:loadDurFactor>this Definition</a>)
 </th>
 <th>
 DD4 (<a href=#DD:stressDistFac>this Definition</a>)
 </th>
 <th>
-DD5 (<a href=#DD:nonFactorL>this Definition</a>)
+DD5 (<a href=#DD:nFL>this Definition</a>)
 </th>
 <th>
 DD6 (<a href=#DD:gTF>this Definition</a>)
@@ -2784,7 +2790,7 @@ DD2 (<a href=#DD:act.thick>this Definition</a>)
 </tr>
 <tr>
 <td>
-DD3 (<a href=#DD:lDurFac>this Definition</a>)
+DD3 (<a href=#DD:loadDurFactor>this Definition</a>)
 </td>
 <td>
 
@@ -2878,7 +2884,7 @@ X
 </tr>
 <tr>
 <td>
-DD5 (<a href=#DD:nonFactorL>this Definition</a>)
+DD5 (<a href=#DD:nFL>this Definition</a>)
 </td>
 <td>
 
@@ -3144,13 +3150,13 @@ DD1 (<a href=#DD:risk.fun>this Definition</a>)
 DD2 (<a href=#DD:act.thick>this Definition</a>)
 </th>
 <th>
-DD3 (<a href=#DD:lDurFac>this Definition</a>)
+DD3 (<a href=#DD:loadDurFactor>this Definition</a>)
 </th>
 <th>
 DD4 (<a href=#DD:stressDistFac>this Definition</a>)
 </th>
 <th>
-DD5 (<a href=#DD:nonFactorL>this Definition</a>)
+DD5 (<a href=#DD:nFL>this Definition</a>)
 </th>
 <th>
 DD6 (<a href=#DD:gTF>this Definition</a>)
@@ -3835,7 +3841,7 @@ DD2 (<a href=#DD:act.thick>this Definition</a>)
 </tr>
 <tr>
 <td>
-DD3 (<a href=#DD:lDurFac>this Definition</a>)
+DD3 (<a href=#DD:loadDurFactor>this Definition</a>)
 </td>
 <td>
 
@@ -3893,7 +3899,7 @@ DD4 (<a href=#DD:stressDistFac>this Definition</a>)
 </tr>
 <tr>
 <td>
-DD5 (<a href=#DD:nonFactorL>this Definition</a>)
+DD5 (<a href=#DD:nFL>this Definition</a>)
 </td>
 <td>
 
@@ -4449,7 +4455,7 @@ modulus of elasticity of glass
 (7.17)10<sup>7</sup>
 </td>
 <td>
-kPa
+Pa
 </td>
 </tr>
 <tr>
@@ -4505,7 +4511,7 @@ maximum aspect ratio
 5.0
 </td>
 <td>
-
+Unitless
 </td>
 </tr>
 <tr>

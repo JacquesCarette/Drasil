@@ -7,14 +7,13 @@ import Language.Drasil.Spec
 import qualified Language.Drasil.HTML.AST as H
 import Language.Drasil.Unicode (Special(Partial))
 import Language.Drasil.Chunk.Eq
-import Language.Drasil.Chunk.Relation
 import Language.Drasil.Chunk.ExprRelat (relat)
 import Language.Drasil.Chunk.Module
-import Language.Drasil.Chunk.NamedIdea (term, short)
+import Language.Drasil.Chunk.NamedIdea (term, short, getA)
 import Language.Drasil.Chunk.Concept (defn)
 import Language.Drasil.Chunk.SymbolForm (SymbolForm, symbol)
 import Language.Drasil.Chunk.VarChunk (VarChunk)
-import Language.Drasil.ChunkDB (SymbolMap)
+import Language.Drasil.ChunkDB (SymbolMap, getUnitLup)
 
 import Language.Drasil.Expr.Extract
 import Language.Drasil.Config (verboseDDDescription)
@@ -22,7 +21,9 @@ import Language.Drasil.Document
 import Language.Drasil.Symbol
 import Language.Drasil.Misc (unit'2Contents)
 import Language.Drasil.SymbolAlphabet (lD)
-import Language.Drasil.NounPhrase (phrase)
+import Language.Drasil.NounPhrase (phrase, titleize)
+import Language.Drasil.Unit (usymb)
+import Language.Drasil.Citations (Citation(..),CiteField(..))
 
 import Control.Lens hiding ((:>),(:<),set)
 
@@ -187,7 +188,7 @@ accent Acute  s = S $ '&' : s : "acute;" --Only works on vowels.
 decorate :: Decoration -> Sentence -> Sentence
 decorate Hat    s = s :+: S "&#770;" 
 decorate Vector s = S "<b>" :+: s :+: S "</b>"
-decorate Prime  s = s :+: S "'"
+decorate Prime  s = s :+: S "&prime;"
 
 -- | Translates from Document to the HTML representation of Document
 makeDocument :: Document -> H.Document
@@ -225,12 +226,41 @@ lay x@(Module m)      = H.Module (formatName m) (spec $ refName x)
 lay (Graph _ _ _ _)   = H.Paragraph (H.EmptyS)  -- need to implement!
 lay x@(Requirement r)   = H.Requirement (spec (phrase $ r ^. term)) (spec $ refName x) (spec $ short r)
 lay x@(Assumption a)    = H.Assumption (spec (phrase $ a ^. term)) (spec $ refName x) (spec $ short a)
-lay x@(LikelyChange lc)  = H.LikelyChange (spec (phrase $ lc ^. term)) (spec $ refName x) (spec $ short lc)
-lay (UnlikelyChange _)= H.Paragraph (H.EmptyS)  -- need to implement!
+lay x@(LikelyChange lc) = H.LikelyChange (spec (phrase $ lc ^. term)) (spec $ refName x) (spec $ short lc)
+lay x@(UnlikelyChange uc)  = H.UnlikelyChange (spec (phrase $ uc ^. term)) (spec $ refName x) (spec $ short uc)
+lay (Defnt _ _ _)     = H.Paragraph (H.EmptyS)  -- need to implement!
+lay (GDef)            = H.Paragraph (H.EmptyS)  -- need to implement!
+lay (IMod)            = H.Paragraph (H.EmptyS)  -- need to implement!
 lay (TMod ps rf r)    = H.Definition (Theory r) 
   (map (\(x,y) -> (x, map lay y)) ps) (spec rf)
 lay (DDef ps rf d)    = H.Definition (Data d)
   (map (\(x,y) -> (x, map lay y)) ps) (spec rf)
+lay (Bib bib)         = H.Bib $ map layCite bib
+
+-- | For importing bibliography
+layCite :: Citation -> H.Citation
+layCite (Book      fields) = H.Book      $ map layField fields
+layCite (Article   fields) = H.Article   $ map layField fields
+layCite (MThesis   fields) = H.MThesis   $ H.Thesis H.M   : map layField fields
+layCite (PhDThesis fields) = H.PhDThesis $ H.Thesis H.PhD : map layField fields
+
+layField :: CiteField -> H.CiteField
+layField (Author     p) = H.Author     p
+layField (Title      s) = H.Title      $ spec s
+layField (Series     s) = H.Series     $ spec s
+layField (Collection s) = H.Collection $ spec s
+layField (Volume     n) = H.Volume     n
+layField (Edition    n) = H.Edition    n
+layField (Place (c, s)) = H.Place (spec c, spec s)
+layField (Publisher  s) = H.Publisher $ spec s
+layField (Journal    s) = H.Journal   $ spec s
+layField (Year       n) = H.Year       n
+layField (Date   n m y) = H.Date   n m y
+layField (Page       n) = H.Page       n
+layField (Pages     ns) = H.Pages     ns
+layField (Note       s) = H.Note       $ spec s
+layField (Issue      n) = H.Issue      n
+layField (School     s) = H.School     $ spec s
 
 -- | Translates lists
 makeL :: ListType -> H.ListType
@@ -249,18 +279,27 @@ item (Nested t s) = H.Nested (spec t) (makeL s)
 -- (Data defs, General defs, Theoretical models, etc.)
 makePairs :: DType -> SymbolMap -> [(String,[H.LayoutObj])]
 makePairs (Data c) m = [
-  ("Label",       [H.Paragraph $ H.N $ c ^. symbol]),
+  ("Number",      [H.Paragraph $ spec $ missingAcro $ getA c]),
+  ("Label",       [H.Paragraph $ spec $ titleize $ c ^. term]),
   ("Units",       [H.Paragraph $ spec $ unit'2Contents c]),
   ("Equation",    [H.HDiv ["equation"] [H.Tagless (buildEqn c)] (H.EmptyS)]),
   ("Description", [H.Paragraph (buildDDDescription c m)])
   ]
 makePairs (Theory c) _ = [
-  ("Label",       [H.Paragraph $ spec (phrase $ c ^. term)]),
+  ("Number",      [H.Paragraph $ spec $ missingAcro $ getA c]),
+  ("Label",       [H.Paragraph $ spec (titleize $ c ^. term)]),
   ("Equation",    [H.HDiv ["equation"] [H.Tagless (H.E (rel (c ^. relat)))]
                   (H.EmptyS)]),
   ("Description", [H.Paragraph (spec (c ^. defn))])
   ]
-makePairs General _ = error "Not yet implemented"
+makePairs General  _ = error "Not yet implemented"
+makePairs Instance _ = error "Not yet implemented"
+makePairs TM _       = error "Not yet implemented"
+makePairs DD _       = error "Not yet implemented"
+
+missingAcro :: Maybe Sentence -> Sentence
+missingAcro Nothing = EmptyS
+missingAcro (Just a) = S "<b>":+: a :+: S "</b>"
 
 -- | Translates the defining equation from a QDefinition to 
 -- HTML's version of Sentence
@@ -269,12 +308,16 @@ buildEqn c = H.N (c ^. symbol) H.:+: H.S " = " H.:+: H.E (expr (equat c))
 
 -- | Build descriptions in data defs based on required verbosity
 buildDDDescription :: QDefinition -> SymbolMap -> H.Spec
-buildDDDescription c m = descLines (
-  (toVC c m):(if verboseDDDescription then (vars (equat c) m) else []))
+buildDDDescription c m = descLines 
+  (if verboseDDDescription then (vars (getQ c := equat c) m) else []) m
+  where getQ (EC a _) = C a
 
 -- | Helper for building each line of the description of a data def
-descLines :: [VarChunk] -> H.Spec  
-descLines []       = error "No chunks to describe"
-descLines (vc:[])  = (H.N (vc ^. symbol) H.:+: 
-  (H.S " is the " H.:+: (spec (phrase $ vc ^. term))))
-descLines (vc:vcs) = descLines (vc:[]) H.:+: H.HARDNL H.:+: descLines vcs
+descLines :: [VarChunk] -> SymbolMap -> H.Spec  
+descLines []    _   = error "No chunks to describe"
+descLines (vc:[]) m = (H.N (vc ^. symbol) H.:+: 
+  (H.S " is the " H.:+: (spec (phrase $ vc ^. term)) H.:+:
+   unWrp (getUnitLup vc m)))
+  where unWrp (Just a) = H.S " (" H.:+: H.Sy (a ^. usymb) H.:+: H.S ")"
+        unWrp Nothing  = H.S ""
+descLines (vc:vcs) m = descLines (vc:[]) m H.:+: H.HARDNL H.:+: descLines vcs m

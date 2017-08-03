@@ -67,10 +67,10 @@ probDescF start progName ending subSec = SRS.probDesc [Paragraph intro] subSec
                 (phrase program), S "developed to", ending]
                   
 --can take a (Just sentence) if needed or Nothing if not
-termDefnF :: Sentence -> [Contents] -> Section
+termDefnF :: Maybe Sentence -> [Contents] -> Section
 termDefnF end otherContents = SRS.termAndDefn ((intro):otherContents) []
-      where lastF EmptyS  = EmptyS
-            lastF s = S "." +:+ s
+      where lastF Nothing  = EmptyS
+            lastF (Just s) = S "." +:+ s
             intro = foldlSP [S "This subsection provides a list of terms", 
                     S "that are used in the subsequent", plural section_, 
                     S "and their meaning, with the", phrase purpose, 

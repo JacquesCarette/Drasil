@@ -1,3 +1,4 @@
+import os
 import unittest
 from Implementation import param
 from Implementation import derivedValues
@@ -5,7 +6,7 @@ from Implementation import inputFormat
 
 class TestDerivedValues(unittest.TestCase):
     
-    def setup(self):
+    def setUp(self):
         with open(os.path.join("Test/Inputfiles", "derivedValues.txt"), 'r') as f:
             input = f.readlines()
         input = list(map(lambda x: x.split(","), input))
@@ -25,12 +26,12 @@ class TestDerivedValues(unittest.TestCase):
     def test_derived_params(self):
         for i in range(self.numTests): #AttributeError: 'TestDerivedValues' object has no attribute 'numTests'
             with self.subTest(i=i):
-                self.assertEqual(self.arExpected[i], self.params.asprat)
-                self.assertEqual(self.sdExpected[i], self.params.sd)
-                self.assertEqual(self.ldfExpected[i], self.params.ldf)
-                self.assertEqual(self.wtntExpected[i], self.params.wtnt)
-                self.assertEqual(self.hExpected[i], self.params.h)
-                self.assertEqual(self.gtfExpected[i], self.params.gtf)
+                self.assertEqual(self.arExpected[i], self.params[i].asprat)
+                self.assertEqual(self.sdExpected[i], self.params[i].sd)
+                self.assertEqual(self.ldfExpected[i], self.params[i].ldf)
+                self.assertEqual(self.wtntExpected[i], self.params[i].wtnt)
+                self.assertEqual(self.hExpected[i], self.params[i].h)
+                self.assertEqual(self.gtfExpected[i], self.params[i].gtf)
         
 if __name__ == '__main__':
     unittest.main()

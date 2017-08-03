@@ -1,6 +1,6 @@
 {-# Language GADTs, Rank2Types #-}
 module Language.Drasil.Chunk.Concept 
-  ( Concept(..), ConceptChunk, dcc, dcc', dccWDS, cc, cc', ccs
+  ( Concept(..), ConceptChunk, dcc, dcc', dccWDS, dccWDS', cc, cc', ccs
   , CWrapper, cw
   )where
 
@@ -61,6 +61,11 @@ dcc' i t d a = CC (nc' i t a) (S d) ([] :: [CWrapper])
 -- | Similar to 'dcc', except the definition is a 'Sentence'
 dccWDS :: String -> NP -> Sentence -> ConceptChunk
 dccWDS i t d = CC (nc i t) d ([] :: [CWrapper])
+
+-- | Similar to 'dcc', except the definition is a 'Sentence' and adds
+-- an abbreviation (String)
+dccWDS' :: String -> NP -> Sentence -> String -> ConceptChunk
+dccWDS' i t d a = CC (nc' i t a) d ([] :: [CWrapper])
 
 -- | Constructor for 'ConceptChunk'. Does not allow concept domain tagging.
 cc :: NamedIdea c => c -> String -> ConceptChunk

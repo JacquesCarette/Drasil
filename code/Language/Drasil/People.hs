@@ -1,8 +1,12 @@
 module Language.Drasil.People 
-  ( People, Person
+  ( People, Person(..)
   , person, person', personWM, personWM', mononym
   , HasName
-  , name, manyNames) where
+  , name, manyNames
+  , Conv(..) --This is needed to unwrap names for the bibliography
+  , lstName, initial
+  , rendPersLFM, rendPersLFM', rendPersLFM''
+  ) where
 
 import Language.Drasil.Spec (Sentence(S, EmptyS),(+:+), sC)
 import Data.List
@@ -70,3 +74,31 @@ manyNames names = nameList names
         nameList [x] = name x
         nameList [x,y] = (name x) `sC` (S "and") +:+ (name y)
         nameList (x : y : rest) = (name x) `sC` (nameList (y : rest))
+
+lstName :: Person -> String
+lstName (Person {_surname = l}) = l
+
+-- LFM is Last, First Middle
+rendPersLFM :: Person -> String
+rendPersLFM (Person {_surname = n, _convention = Mono}) = n
+rendPersLFM (Person {_given = f, _surname = l, _middle = ms}) =
+  isInitial l ++ ", " ++ unwords (isInitial f: map isInitial ms)
+
+-- LFM' is Last, F. M.
+rendPersLFM' :: Person -> String
+rendPersLFM' (Person {_surname = n, _convention = Mono}) = n
+rendPersLFM' (Person {_given = f, _surname = l, _middle = ms}) =
+  isInitial l ++ ", " ++ (unwords . map initial) (f:ms)
+
+-- LFM'' is Last, First M.
+rendPersLFM'' :: Person -> String
+rendPersLFM'' (Person {_surname = n, _convention = Mono}) = n
+rendPersLFM'' (Person {_given = f, _surname = l, _middle = ms}) =
+  isInitial l ++ ", " ++ unwords (isInitial f:(map initial ms))
+
+initial :: String -> String
+initial = (\xs -> head xs : ".")
+
+isInitial :: String -> String
+isInitial [x]  = [x,'.']
+isInitial name = name

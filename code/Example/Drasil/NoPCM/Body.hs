@@ -4,12 +4,14 @@ import Control.Lens ((^.))
 import Prelude hiding (id)
 import Drasil.NoPCM.Definitions (ht_trans, srs_swhs)
 
+-- Since NoPCM is a simplified version of SWHS, the file is to be built off
+-- of the SWHS libraries.  If the source for something cannot be found in
+-- NoPCM, check SWHS.
 import Drasil.SWHS.Assumptions (assump1, assump2, assump7, assump8, assump9,
   assump14, assump15, assump20)
 import Drasil.SWHS.Body (s2_3_knowlegde, s2_3_understanding, s2_4_intro,
   s3, physSyst1, physSyst2, s4_2_4_intro_end, s4_2_5_d1startPara,
-  s7_trailing, likeChg2, likeChg3,
-  likeChg4, likeChg6)
+  s7_trailing)
 import Drasil.SWHS.Concepts (progName, water, gauss_div, sWHT, tank, coil,
   transient, perfect_insul, tank_para)
 import Drasil.SWHS.Unitals (w_vol, tank_length, tank_vol, tau_W, temp_W, w_mass,
@@ -26,12 +28,13 @@ import Drasil.SWHS.GenDefs (swhsGenDefs)
 import Drasil.SWHS.IMods (eBalanceOnWtr, heatEInWtr)
 import Drasil.SWHS.References (ref2, ref3, ref4, ref5, ref6)
 import Drasil.SWHS.Requirements (s5_2)
+import Drasil.SWHS.LikelyChanges (likeChg2, likeChg3, likeChg6)
 
 import Language.Drasil
 
 import Data.Drasil.SI_Units
 import Data.Drasil.Authors
-import Data.Drasil.Utils (enumSimple, getS, mkRefsList, makeListRef, refFromType,
+import Data.Drasil.Utils (enumSimple, getS, refFromType,
   itemRefToSent, makeTMatrix, itemRefToSent, weave)
 import Data.Drasil.Concepts.Documentation
 import Data.Drasil.Concepts.Math (ode, de, unit_, rOfChng, equation)
@@ -54,13 +57,16 @@ import Drasil.Sections.AuxiliaryConstants
 import Data.Drasil.SentenceStructures
 
 
+-- This defines the standard units used throughout the document
 this_si :: [UnitDefn]
 this_si = map UU [metre, kilogram, second] ++ map UU [centigrade, joule, watt]
 
+-- This defines the list of acronyms that are used throughout the document
 acronyms :: [CI]
 acronyms = [assumption, dataDefn, genDefn, goalStmt, inModel, likelyChg, ode,
             physSyst, requirement, srs, progName, thModel]
 
+-- This contains the list of symbols used throughout the document
 pcmSymbols :: [CQSWrapper]
 pcmSymbols = (map cqs pcmUnits) ++ (map cqs pcmConstraints)
 
@@ -76,7 +82,7 @@ pcmConstraints =  [coil_SA, w_E, htCap_W, coil_HTC, temp_init,
   time_final, tank_length, temp_C, w_density, diam, temp_W]
 
 s4, s4_1, s4_1_1, s4_1_2, s4_1_3, s4_2,
-  s5, s5_1, s6, s7, s8, s9 :: Section
+  s5, s5_1, s6, s7, s8 :: Section
 
 
 
@@ -98,7 +104,8 @@ mkSRS = RefSec (RefProg intro
   IScope (s2_2_start thermal_analysis sWHT) (s2_2_end temp thermal_energy water),
   IChar (s2_3_knowlegde ht_trans_theo) (s2_3_understanding de) EmptyS,
   IOrgSec s2_4_intro inModel (SRS.inModel SRS.missingP []) (s2_4_end inModel ode progName)]) :
-  map Verbatim [s3, s4, s5, s6, s7, s8, s9]
+  map Verbatim [s3, s4, s5, s6, s7, s8] ++
+  [Bibliography s9_refList]
 
 pcm_si :: SystemInformation
 pcm_si = SI {
@@ -109,10 +116,10 @@ pcm_si = SI {
   _quants = pcmSymbols,
   _concepts = (pcmSymbols),
   _namedIdeas = acronyms,
-  _definitions = ([dd1HtFluxC]),          --dataDefs
+  _definitions = [dd1HtFluxC],          --dataDefs
   _inputs = (map qs pcmConstraints), --inputs
-  _outputs = ([] :: [QSWrapper]),     --outputs
-  _defSequence = ([] :: [Block QDefinition]),
+  _outputs = (map qs [temp_W, w_E]),     --outputs
+  _defSequence = [Parallel dd1HtFluxC []],
   _constraints = (pcmConstraints),        --constrained
   _constants = []
 }
@@ -275,7 +282,7 @@ s4_1_intro pro cp wa sw = foldlSP [getAcc pro, S "is a",
   phrase cp, S "developed to investigate",
   S "the heating of", phrase wa, S "in a", phrase sw]
 
-s4_1_1 = termDefnF EmptyS [s4_1_1_bullets]
+s4_1_1 = termDefnF Nothing [s4_1_1_bullets]
 
 s4_1_1_bullets :: Contents
 s4_1_1_bullets = Enumeration $ (Bullet $ map (\x -> Flat $ 
@@ -311,8 +318,8 @@ s4_1_3_list temw we = enumSimple 1 (short goalStmt) [
 ------------------------------------------------------
   
 s4_2 = solChSpecF progName (s4_1, s6) s4_2_4_intro_end (mid,
-  dataConstraintUncertainty, end) (s4_2_1_list, s4_2_2_T1, s4_2_3_paragraph rOfChng temp,
-  s4_2_4_DD1, [swhsSymbMapT eBalanceOnWtr] ++ (s4_2_5_d1startPara energy water) ++
+  dataConstraintUncertainty, end) (s4_2_1_list, acroNumGen s4_2_2_T1 1, s4_2_3_paragraph rOfChng temp,
+  acroNumGen s4_2_4_DD1 1, [swhsSymbMapT eBalanceOnWtr] ++ (s4_2_5_d1startPara energy water) ++
   s4_2_5_paragraph ++ [swhsSymbMapT heatEInWtr], [s4_2_6_table1, s4_2_6_table2]) []
 
   where mid = foldlSent [S "The", phrase column, S "for",
@@ -327,9 +334,9 @@ s4_2 = solChSpecF progName (s4_1, s6) s4_2_4_intro_end (mid,
 
 s4_2_1_list :: [Contents]
 s4_2_1_list = acroNumGen [assump1, assump2, assump3, assump4, assump5, assump7, assump8,
-  assump9, assump9_npnc, assump14, assump15, assump12, assump13, assump20] 1
+  assump9, assump9_npcm, assump14, assump15, assump12, assump13, assump20] 1
   
-assump3, assump4, assump5, assump9_npnc, assump12, assump13 :: Contents
+assump3, assump4, assump5, assump9_npcm, assump12, assump13 :: Contents
 
 assump3 = mkAssump "assump3"
   (foldlSent [S "The", phrase water, S "in the", phrase tank, S "is fully mixed, so the", 
@@ -341,12 +348,12 @@ assump4 = mkAssump "assump4"
 assump5 = mkAssump "assump5"
   (foldlSent [S "The", phrase htCap_W, S "has no spatial variation; that", 
   S "is, it is constant over its entire", phrase vol, sSqBr (acroGD 2)])
-assump9_npnc = mkAssump "assump9_npnc"
+assump9_npcm = mkAssump "assump9_npnc"
   (foldlSent [S "The", phrase model, S "only accounts for charging",
   S "of the tank" `sC` S "not discharging. The", phrase temp_W, S "can only",
   S "increase, or remain constant; it cannot decrease. This implies that the",
   phrase temp_init, S "is less than (or equal to) the", phrase temp_C,
-  sSqBr ((acroIM 1) `sC` (makeRef likeChg4))])
+  sSqBr ((acroIM 1) `sC` (acroTest likeChg3_npcm s6_list))])
 assump12 = mkAssump "assump12"
   (S "No internal" +:+ phrase heat +:+ S "is generated by the" +:+ phrase water
   `semiCol` S "therefore, the" +:+ phrase vol_ht_gen +:+ S "is zero" +:+.
@@ -447,7 +454,7 @@ s4_2_3_desc4 hfi hfo iS oS den hcs te vo assumps = [S "Where", getS hfi `sC`
   getS hfo `sC` getS iS `sC` S "and", getS oS, S "are explained in" +:+.
   acroGD 2, S "Assuming", getS den `sC` getS hcs `sAnd` getS te,
   S "are constant over the", phrase vo `sC` S "which is true in our case by",
-  titleize' assumption, (foldlList $ (map (\d -> sParen (makeRef d))) assumps)
+  titleize' assumption, (foldlList $ (map (\d -> sParen (acroTest d s4_2_1_list))) assumps)
   `sC` S "we have"]
 
 s4_2_3_desc5 :: UnitalChunk -> UnitalChunk -> UnitalChunk -> [Sentence]
@@ -641,7 +648,7 @@ req1 = mkRequirement "req1" $
   S "which define the" +:+ plural tank_para `sC` S "material" +:+
   plural property +:+ S "and initial" +: plural condition
 req2 = mkRequirement "req2" $
-  S "Use the" +:+ plural input_ +:+ S "in" +:+ makeRef req1 +:+
+  S "Use the" +:+ plural input_ +:+ S "in" +:+ acroTest req1 s5_1_list_words_num +:+
   S "to find the" +:+ phrase mass +:+ S "needed for" +:+ acroIM 1 +:+ S "to" +:+
   acroIM 2 `sC` S "as follows, where" +:+ getS w_vol `isThe` phrase w_vol +:+
   S "and" +: (getS tank_vol `isThe` phrase tank_vol)
@@ -680,10 +687,7 @@ req6 = mkRequirement "req6" $
 s6 = SRS.likeChg s6_list []
 
 s6_list :: [Contents]
-s6_list = acroNumGen s6_likeChg_list 1
-
-s6_likeChg_list :: [Contents]
-s6_likeChg_list = [likeChg2, likeChg3, likeChg4, likeChg6]
+s6_list = acroNumGen [likeChg2, likeChg3, likeChg3_npcm, likeChg6] 1
 
 -- likeChg1, likeChg2, likeChg3, likeChg4 :: Contents
 
@@ -698,11 +702,11 @@ s6_likeChg_list = [likeChg2, likeChg3, likeChg4, likeChg6]
   -- S "will actually change along its length as the" +:+ phrase water +:+
   -- S "within it cools."))
   -- []) EmptyS
--- likeChg3 = LikelyChange (LCChunk (nw $ npnc "likeChg3" $
-  -- nounPhraseSent (makeRef assump9 :+: S "- The" +:+ phrase model +:+
-  -- S "currently only accounts for charging of the tank. A more complete"
-  -- +:+ phrase model +:+ S "would also account for discharging of the tank"))
-  -- []) EmptyS
+likeChg3_npcm :: Contents
+likeChg3_npcm = mkLklyChnk "likeChg3" $
+  acroTest assump9_npcm s4_2_1_list :+: S "- The" +:+ phrase model +:+
+  S "currently only accounts for charging of the tank. A more complete"
+  +:+ phrase model +:+. S "would also account for discharging of the tank"
 -- likeChg4 = LikelyChange (LCChunk (nw $ npnc "likeChg4" $
   -- nounPhraseSent (makeRef assump11 :+: S "- Any real" +:+ phrase tank +:+
   -- S "cannot be perfectly insulated and will lose" +:+. phrase heat))
@@ -754,14 +758,14 @@ s7_instaModel = ["IM1", "IM2"]
 s7_instaModelRef = map (refFromType Theory nopcmSymbMap) [eBalanceOnWtr, heatEInWtr]
 
 s7_funcReq = ["R1", "R2", "R3", "R4", "R5", "R6"]
-s7_funcReqRef = makeListRef s7_funcReq s5_1
+s7_funcReqRef = map (\x -> acroTest x s5_1_list_words_num) s5_1_list_words_num--makeListRef s7_funcReq s5_1
 
 s7_data = ["Data Constraints"]
 s7_dataRef = [makeRef s4_2_6_table1] --FIXME: Reference section?
 
 s7_assump = ["A1", "A2", "A3", "A4", "A5", "A6", "A7", "A8", "A9", "A10",
   "A11", "A12", "A13", "A14"]
-s7_assumpRef = makeListRef s7_assump (SRS.inModel SRS.missingP [])
+s7_assumpRef = map (\x -> acroTest x s4_2_1_list) s4_2_1_list--makeListRef s7_assump (SRS.inModel SRS.missingP [])
 
 s7_theories = ["T1"]
 s7_theoriesRef = map (refFromType Theory nopcmSymbMap) [t1ConsThermE]
@@ -773,7 +777,7 @@ s7_dataDefs = ["DD1"]
 s7_dataDefRef = map (refFromType Data nopcmSymbMap) [dd1HtFluxC]
 
 s7_likelyChg = ["LC1", "LC2", "LC3", "LC4"]
-s7_likelyChgRef = makeListRef s7_likelyChg s6
+s7_likelyChgRef = map (\x -> acroTest x s6_list) s6_list--makeListRef s7_likelyChg s6
 
 {-Traceability Matrix 1-}
 
@@ -904,7 +908,7 @@ s7_fig2 :: Contents
 s7_fig2 = Figure (showingCxnBw traceyGraph (titleize' requirement `sC`
   titleize' inModel `sC` S "and" +:+ titleize' datumConstraint)) "RTrace.png"
 
-  -- Using the SWHS graphs as place holders until ones can be generated for PCM 
+  -- Using the SWHS graphs as place holders until ones can be generated for NoPCM 
 
 
 
@@ -924,12 +928,12 @@ s8 = valsOfAuxConstantsF progName specParamValList
 ------------
 --REFERENCES
 ------------
+--
+--s9 = SRS.reference [s9_refs] []
 
-s9 = SRS.reference [s9_refs] []
+--s9_refs :: Contents
 
-s9_refs :: Contents
+-- s9_refs = mkRefsList 1 $ map foldlsC s9_refList
 
-s9_refs = mkRefsList 1 $ map foldlsC s9_refList
-
-s9_refList :: [[Sentence]]
-s9_refList = [ref2, ref3, ref4, ref5, ref6]
+s9_refList :: BibRef
+s9_refList = [ref2 {--, ref3, ref4, ref5, ref6--} ]

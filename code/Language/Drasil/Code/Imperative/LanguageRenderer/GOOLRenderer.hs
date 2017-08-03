@@ -5,7 +5,7 @@ module Language.Drasil.Code.Imperative.LanguageRenderer.GOOLRenderer (
 ) where
 
 import Language.Drasil.Code.Code (Code(..))
-import Language.Drasil.Code.Imperative.AST hiding (comment,bool,int,float,char)
+import Language.Drasil.Code.Imperative.AST hiding (body,comment,bool,int,float,char)
 import Language.Drasil.Code.Imperative.LanguageRenderer
 import Language.Drasil.Code.Imperative.Helpers (blank,oneTab,oneTabbed,
                             doubleQuotedText,verticalComma,himap,vibcat,vibmap)
@@ -337,6 +337,9 @@ unOpDoc' Abs = text "#|"
 unOpDoc' Not = text "?!"
 unOpDoc' Log = text "log"
 unOpDoc' Exp = text "exp"
+unOpDoc' Sin = error "Type not yet implemented"
+unOpDoc' Cos = error "Type not yet implemented"
+unOpDoc' Tan = error "Type not yet implemented"
 
 valueDoc' :: Config -> Value -> Doc
 valueDoc' c = parens . valueDoc'' c

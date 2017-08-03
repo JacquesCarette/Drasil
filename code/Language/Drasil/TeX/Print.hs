@@ -14,7 +14,7 @@ import qualified Language.Drasil.TeX.Import as I
 import qualified Language.Drasil.Output.Formats as A
 import Language.Drasil.Spec (USymb(..), RefType(..))
 import Language.Drasil.Config (lpmTeXParams, colAwidth, colBwidth,
-              LPMParams(..))
+              LPMParams(..),bibStyleT,bibFname)
 import Language.Drasil.Printing.Helpers hiding (paren, sqbrac)
 import Language.Drasil.TeX.Helpers
 import Language.Drasil.TeX.Monad
@@ -22,6 +22,7 @@ import Language.Drasil.TeX.Preamble
 import Language.Drasil.Symbol (Symbol(..),Decoration(..))
 import qualified Language.Drasil.Document as L
 import Language.Drasil.Unicode (RenderGreek(..), RenderSpecial(..))
+import Language.Drasil.People (People,rendPersLFM,lstName)
 
 genTeX :: A.DocType -> L.Document -> TP.Doc
 genTeX typ doc = runPrint (build typ $ I.makeDocument doc) Text
@@ -68,6 +69,7 @@ lo (Requirement n l)       = toText $ makeReq (spec n) (spec l)
 lo (Assumption n l)        = toText $ makeAssump (spec n) (spec l)
 lo (LikelyChange n l)      = toText $ makeLC (spec n) (spec l)
 lo (UnlikelyChange n l)    = toText $ makeUC (spec n) (spec l)
+lo (Bib bib)               = toText $ makeBib bib
 lo (Graph ps w h c l)      = toText $ makeGraph
                                (map (\(a,b) -> (spec a, spec b)) ps)
                                (if isNothing w
@@ -94,8 +96,8 @@ symbol (Greek g)   = unPL $ greek g
 symbol (Concat sl) = foldr (++) "" $ map symbol sl
 --
 -- handle the special cases first, then general case
-symbol (Corners [] [] [x] [] s) = (symbol s) ++"^"++ brace (symbol x)
-symbol (Corners [] [] [] [x] s) = (symbol s) ++"_"++ brace (symbol x)
+symbol (Corners [] [] [x] [] s) = brace $ (symbol s) ++"^"++ brace (symbol x)
+symbol (Corners [] [] [] [x] s) = brace $ (symbol s) ++"_"++ brace (symbol x)
 symbol (Corners [_] [] [] [] _) = error "rendering of ul prescript"
 symbol (Corners [] [_] [] [] _) = error "rendering of ll prescript"
 symbol (Corners _ _ _ _ _)      = error "rendering of Corners (general)"
@@ -111,7 +113,7 @@ sFormat Prime  s = symbol s ++ "'"
 -----------------------------------------------------------------
 -- (Since this is all implicitly in Math, leave it as String for now)
 p_expr :: Expr -> String
-p_expr (Var v)    = v
+p_expr (Var v)    = symbol (Atomic v) --Ensures variables are rendered the same as other symbols
 p_expr (Dbl d)    = showFFloat Nothing d ""
 p_expr (Int i)    = show i
 p_expr (Bln b)    = show b
@@ -135,8 +137,7 @@ p_expr (Case ps)  = "\\begin{cases}\n" ++ cases ps ++ "\n\\end{cases}"
 p_expr (Op f es)  = p_op f es
 p_expr (Grouping x) = paren (p_expr x)
 p_expr (Mtx a)    = "\\begin{bmatrix}\n" ++ p_matrix a ++ "\n\\end{bmatrix}"
-p_expr (Index a@(Sym (Corners [] [] [] [_] _)) i) = p_expr a ++"{}_"++ brace ("," ++ p_expr i)
-p_expr (Index a i)= brace (p_expr a) ++"_"++ brace (p_expr i)
+p_expr (Index a i) = p_indx a i
 --Logic
 p_expr (Not x)    = "\\neg{}" ++ p_expr x
 p_expr (And x y)  = p_expr x ++ "\\land{}" ++ p_expr y
@@ -146,6 +147,25 @@ p_expr (Iff a b)  = p_expr a ++ "\\iff{}" ++ p_expr b
 p_expr (IsIn  a b) = (concat $ intersperse "," $ map p_expr a) ++ "\\in{}"  ++ show b
 p_expr (NotIn a b) = (concat $ intersperse "," $ map p_expr a) ++ "\\notin{}" ++ show b
 p_expr (State a b) = (concat $ intersperse ", " $ map p_quan a) ++ ": " ++ p_expr b
+
+-- | For printing indexes
+p_indx :: Expr -> Expr -> String
+p_indx (Sym (Corners [] [] [] [x] s)) i = p_expr $ Sym $ Corners [][][][Concat [x, Atomic (","++ p_sub i)]] s
+p_indx a@(Sym (Atomic _)) i = p_expr a ++"_"++ brace (p_sub i)
+p_indx a@(Sym (Greek  _)) i = p_expr a ++"_"++ brace (p_sub i)
+p_indx a                  i = brace (p_expr a) ++"_"++ brace (p_sub i)
+-- Ensures only simple Expr's get rendered as an index
+p_sub :: Expr -> String
+p_sub e@(Var _)    = p_expr e
+p_sub e@(Dbl _)    = p_expr e
+p_sub e@(Int _)    = p_expr e
+p_sub e@(Sym _)    = p_expr e
+p_sub e@(Add _ _)  = p_expr e
+p_sub e@(Sub _ _)  = p_expr e
+p_sub e@(Mul _ _)  = p_expr e
+p_sub   (Frac a b) = divide a b --no block division in an index
+p_sub e@(Div _ _)  = p_expr e
+p_sub _            = error "Tried to Index a non-simple expr in LaTeX, currently not supported."
 
 -- | For printing Matrix
 p_matrix :: [[Expr]] -> String
@@ -165,13 +185,13 @@ p_quan (Exists e) = "\\exists{}" ++ p_expr e
 
 -- | Helper for properly rendering multiplication of expressions
 mul :: Expr -> Expr -> String
-mul x y@(Dbl _)   = mulParen x ++ "*" ++ p_expr y
-mul x y@(Int _)   = mulParen x ++ "*" ++ p_expr y
-mul x@(Sym (Concat _)) y = p_expr x ++ "*" ++ mulParen y
-mul x y@(Sym (Concat _)) = mulParen x ++ "*" ++ p_expr y
-mul x@(Sym (Atomic s)) y = if length s > 1 then p_expr x ++ "*" ++ mulParen y else
+mul x y@(Dbl _)   = mulParen x ++ "\\cdot{}" ++ p_expr y
+mul x y@(Int _)   = mulParen x ++ "\\cdot{}" ++ p_expr y
+mul x@(Sym (Concat _)) y = p_expr x ++ "\\cdot{}" ++ mulParen y
+mul x y@(Sym (Concat _)) = mulParen x ++ "\\cdot{}" ++ p_expr y
+mul x@(Sym (Atomic s)) y = if length s > 1 then p_expr x ++ "\\cdot{}" ++ mulParen y else
                             p_expr x ++ mulParen y
-mul x y@(Sym (Atomic s)) = if length s > 1 then mulParen x ++ "*" ++ p_expr y else
+mul x y@(Sym (Atomic s)) = if length s > 1 then mulParen x ++ "\\cdot{}" ++ p_expr y else
                             mulParen x ++ p_expr y
 mul x y           = mulParen x ++ mulParen y
 
@@ -269,7 +289,7 @@ spec (G g)       = pure $ text $ unPL $ greek g
 spec (Sp s)      = pure $ text $ unPL $ special s
 spec HARDNL      = pure $ text $ "\\newline"
 spec (Ref t@Sect r) = sref (show t) (spec r)
-spec (Ref t@Def r) = hyperref (show t) (spec r)
+spec (Ref t@(Def _) r) = hyperref (show t) (spec r)
 spec (Ref t@Mod r) = mref (show t) (spec r)
 spec (Ref t@(Req _) r) = rref (show t) (spec r)
 spec (Ref t@(Assump _) r) = aref (show t) (spec r)
@@ -469,3 +489,76 @@ makeGraph ps w h c l =
            label l
          ]
   where q x = (pure $ text "\"") <> x <> (pure $ text "\"")
+
+---------------------------
+-- Bibliography Printing --
+---------------------------
+-- **THE MAIN FUNCTION** --
+makeBib :: BibRef -> D
+makeBib bib = spec $
+  S ("\\begin{filecontents*}{"++bibFname++".bib}\n") :+: --bibFname is in Config.hs
+  mkBibRef bib :+:
+  S "\n\\end{filecontents*}\n" :+:
+  S bibLines
+
+bibLines :: String
+bibLines =
+  "\\nocite{*}\n" ++ 
+  "\\bibstyle{" ++ bibStyleT ++ "}\n" ++ --bibStyle is in Config.hs
+  "\\printbibliography"
+
+mkBibRef :: BibRef -> Spec
+mkBibRef = foldl1 (\x y -> x :+: S "\n\n" :+: y) . map renderCite
+
+--for when we add other things to reference like website, newspaper
+renderCite :: Citation -> Spec
+renderCite c@(Book      fields) = renderF c fields
+renderCite c@(Article   fields) = renderF c fields
+renderCite a@(MThesis   fields) = renderF a fields
+renderCite a@(PhDThesis fields) = renderF a fields
+
+--Rendering a book--
+renderF :: Citation -> [CiteField] -> Spec
+renderF c fields = S "@":+: S (show c) :+: S "{" :+: S (cite fields) :+: S ",\n" :+:
+  (foldl1 (:+:) . intersperse (S ",\n") . map showBibTeX) fields :+: S "}"
+--renderBook _ = error "Tried to render a non-book using renderBook." 
+
+cite :: [CiteField] -> String
+cite fields = concat $ intersperse "_" $
+  map lstName (getAuthors fields) ++ [show $ getYear fields]
+
+getAuthors :: [CiteField] -> People
+getAuthors [] = error "No authors found" --FIXME: return a warning
+getAuthors ((Author people):_) = people
+getAuthors (_:xs) = getAuthors xs
+
+getYear :: [CiteField] -> Integer
+getYear [] = error "No year found" --FIXME: return a warning
+getYear ((Year year):_) = year
+getYear ((Date _ _ year):_) = year
+getYear (_:xs) = getYear xs
+
+showBibTeX :: CiteField -> Spec
+showBibTeX (Place (city, state)) = showField "place" (city :+: S ", " :+: state)
+showBibTeX (Edition    s) = showField "edition" (S $ show s ++ sufxer s)
+showBibTeX (Series     s) = showField "series" s
+showBibTeX (Title      s) = showField "title" s
+showBibTeX (Volume     s) = showField "volume" (S $ show s)
+showBibTeX (Publisher  s) = showField "publisher" s
+showBibTeX (Author     p) = showField "author" (S $ rendPeople p)
+showBibTeX (Year       y) = showField "year" (S $ show y)
+showBibTeX (Date   d m y) = showField "year" (S $ unwords [show d, show m, show y])
+showBibTeX (Collection s) = showField "collection" s
+showBibTeX (Journal    s) = showField "journal" s
+showBibTeX (Page       s) = showField "pages" (S $ show s)
+showBibTeX (Pages (a, b)) = showField "pages" (S $ show a ++ "-" ++ show b)
+showBibTeX (Note       s) = showField "note" s
+showBibTeX (Issue      s) = showField "number" (S $ show s)
+showBibTeX (School     s) = showField "school" s
+
+showField :: String -> Spec -> Spec
+showField f s = S f :+: S "={" :+: s :+: S "}"
+
+rendPeople :: People -> String
+rendPeople []  = "N.a." -- "No authors given"
+rendPeople people = foldl1 (\x y -> x ++ " and " ++ y) $ map rendPersLFM people

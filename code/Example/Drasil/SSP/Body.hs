@@ -12,6 +12,7 @@ import Drasil.SSP.Changes
 import Drasil.SSP.DataDefs
 import Drasil.SSP.Defs
 import Drasil.SSP.GenDefs
+import Drasil.SSP.Goals
 import Drasil.SSP.IMods
 import Drasil.SSP.Modules
 import Drasil.SSP.References
@@ -44,7 +45,7 @@ import Drasil.Template.MG
 import Drasil.Template.DD
 
 --type declarations for sections--
-s3, s4, s5, s6, s7, s8 :: Section
+s3, s4, s5, s6, s7 :: Section
 
 s1_2_intro :: [TSIntro]
 
@@ -52,7 +53,7 @@ s4_1, s4_1_1, s4_1_2,
   s4_1_3, s4_2, s5_1, s5_2 :: Section
 
 s4_1_1_list, s4_1_2_p1, s4_1_2_bullets,
-  s4_1_2_p2, s4_1_3_list, s4_2_1_list,
+  s4_1_2_p2, goals_list, s4_2_1_list,
   s5_1_list :: Contents
 
 s4_2_2_tmods, s4_2_3_genDefs, s4_2_4_dataDefs, s4_2_5_IMods :: [Contents]
@@ -87,13 +88,12 @@ mkSRS = RefSec (RefProg intro
       (phrase undergraduate +:+ S "level 4" +:+ phrase physics)
       EmptyS
     , IOrgSec orgSecStart inModel (SRS.inModel SRS.missingP []) orgSecEnd]) :
-    --FIXME: SRS.inModel should be removed and the instance model section
-    --should be looked up from "inModel" by the interpreter while generating.
-  map Verbatim [s3, s4, s5, s6, s7, s8]
-
+    --FIXME: issue #235
+  map Verbatim [s3, s4, s5, s6, s7] ++ [Bibliography sspCitations]
+  
 ssp_srs, ssp_mg :: Document
 ssp_srs = mkDoc mkSRS ssp_si
-ssp_mg = mgDoc ssa (name henryFrankis) mgBod
+ssp_mg = mgDoc ssa (for'' titleize titleize) (name henryFrankis) mgBod
 
 mgBod :: [Section]
 (mgBod, _) = makeDD likelyChanges unlikelyChanges reqs modules
@@ -228,19 +228,17 @@ userChar pname understandings familiarities = foldlSP [
 
 -- SECTION 4 --
 s4 = specSysDesF end [s4_1, s4_2]
-  where end = plural definition +:+ S "and finally the" +:+
-              plural inModel +:+ S "that" +:+ phrase model +:+
-              S "the" +:+ phrase slope
+  where end = plural definition +:+ S "and finally the" +:+ plural inModel +:+
+         S "that" +:+ phrase model +:+ S "the" +:+ phrase slope
 
 -- SECTION 4.1 --
 s4_1 = probDescF EmptyS ssa ending [s4_1_1, s4_1_2, s4_1_3]
-  where ending = S "evaluate the" +:+ phrase fs_rc +:+ S "of a" +:+
-                 phrase's slope +:+ --FIXME apostrophe on "slope's"
-                 phrase slpSrf +:+ S "and to calculate the displacement"
-                 +:+ S "that the" +:+ phrase slope +:+ S "will experience"
+  where ending = S "evaluate the" +:+ phrase fs +:+ S "of a" +:+
+          phrase's slope +:+ phrase slpSrf +:+ S "and to calculate the" +:+
+          S "displacement that the" +:+ phrase slope +:+ S "will experience"
 
 -- SECTION 4.1.1 --
-s4_1_1 = termDefnF EmptyS [s4_1_1_list]
+s4_1_1 = termDefnF Nothing [s4_1_1_list]
 
 s4_1_1_list = Enumeration $ Simple $
   map (\x -> (titleize $ x, Flat $ x ^. defn))
@@ -270,7 +268,7 @@ s4_1_2_bullets = enumBullet [
   (at_start' itslPrpty +:+ S "convention is noted by j. The end" +:+
     plural itslPrpty +:+ S "are usually not of" +:+ phrase interest `sC`
     S "therefore use the" +:+ plural itslPrpty +:+ S "from" +:+ 
-    (E $ Int 1 :<= C index :<= (C numbSlices) :- Int 1)),
+    (E $ 1 :<= C index :<= (C numbSlices) :- 1)),
   (at_start slice +:+ plural property +:+. S "convention is noted by"
   +:+ getS index)
   ]
@@ -292,19 +290,9 @@ s4_1_3 = goalStmtF (map (\(x, y) -> x `ofThe` y) [
   (S "geometry", S "water" +:+ phrase table_),
   (S "geometry", S "layers composing the plane of a" +:+ phrase slope),
   (plural mtrlPrpty, S "layers")
-  ]) [s4_1_3_list]
+  ]) [goals_list]
 
-s4_1_3_list = enumSimple 1 (short goalStmt) sspGoals
-
-sspGoals :: [Sentence]
-sspGoals = [locAndGlFS, lowestFS, displSlope]
-
-locAndGlFS, lowestFS, displSlope :: Sentence
-locAndGlFS = S "Evaluate local and global" +:+ plural fs_rc +:+
-  S "along a given" +:+. phrase slpSrf
-lowestFS   = S "Identify the" +:+ phrase crtSlpSrf +:+ S "for the" +:+
-  phrase slope `sC` S "with the lowest" +:+. phrase fs_rc
-displSlope = S "Determine" +:+. (S "displacement" `ofThe` phrase slope)
+goals_list = enumSimple 1 (short goalStmt) sspGoals
 
 -- SECTION 4.2 --
 s4_2 = solChSpecF ssa (s4_1, s6) ddEnding (EmptyS, dataConstraintUncertainty, EmptyS)
@@ -334,17 +322,17 @@ s4_2_3_genDefs = map sspSymMapT sspGenDefs
 -- SECTION 4.2.4 --
 -- Data Definitions is automatically generated in solChSpecF
 s4_2_4_dataDefs = (map sspSymMapD (take 13 sspDataDefs)) ++ resShrDerivation ++
-  [sspSymMapD (sspDataDefs !! 13)] ++ mobShrDerivation ++ [sspSymMapD (sspDataDefs !! 14)] ++
-  stfMtrxDerivation ++ (map sspSymMapD (drop 15 sspDataDefs))
-  --FIXME: derivations should be with the appropriate dataDef
+  [sspSymMapD (sspDataDefs !! 13)] ++ mobShrDerivation ++ map sspSymMapD [sspDataDefs !! 14, sspDataDefs !! 15] ++
+  stfMtrxDerivation ++ (map sspSymMapD (drop 16 sspDataDefs))
+  --FIXME: derivations should be with the appropriate DataDef
 
 -- SECTION 4.2.5 --
 -- Instance Models is automatically generated in solChSpecF using the paragraphs below
 
-s4_2_5_IMods = concat $ weave [map (\x -> [sspSymMapT x]) sspIMods, --FIXME: move to IMods
+s4_2_5_IMods = concat $ weave [map (\x -> [sspSymMapT x]) sspIMods,
   [fctSftyDerivation, nrmShrDerivation, intrSlcDerivation,
   rigDisDerivation, rigFoSDerivation]]
-
+  --FIXME: derivations should be with the appropriate IMod
 
 -- SECTION 4.2.6 --
 -- Data Constraints is automatically generated in solChSpecF using the tables below
@@ -365,7 +353,7 @@ slopeVert = verticesConst $ phrase slope
 -}
 {-input and output tables-}
 s4_2_6Table2, s4_2_6Table3 :: Contents
-s4_2_6Table2 = inDataConstTbl sspInputs --FIXME: needs more inputs but cannot express them yet
+s4_2_6Table2 = inDataConstTbl sspInputs --FIXME: issue #295
 s4_2_6Table3 = outDataConstTbl sspOutputs
 
 -- SECTION 5 --
@@ -389,4 +377,4 @@ s6 = SRS.likeChg [] []
 s7 = valsOfAuxConstantsF ssa []
 
 -- References --
-s8 = SRS.reference [sspReferences] []
+-- automatically generated

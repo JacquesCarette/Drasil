@@ -239,8 +239,10 @@ lay (Bib bib)         = H.Bib $ map layCite bib
 
 -- | For importing bibliography
 layCite :: Citation -> H.Citation
-layCite (Book    fields) = H.Book    $ map layField fields
-layCite (Article fields) = H.Article $ map layField fields
+layCite (Book      fields) = H.Book      $ map layField fields
+layCite (Article   fields) = H.Article   $ map layField fields
+layCite (MThesis   fields) = H.MThesis   $ H.Thesis H.M   : map layField fields
+layCite (PhDThesis fields) = H.PhDThesis $ H.Thesis H.PhD : map layField fields
 
 layField :: CiteField -> H.CiteField
 layField (Author     p) = H.Author     p
@@ -258,6 +260,7 @@ layField (Page       n) = H.Page       n
 layField (Pages     ns) = H.Pages     ns
 layField (Note       s) = H.Note       $ spec s
 layField (Issue      n) = H.Issue      n
+layField (School     s) = H.School     $ spec s
 
 -- | Translates lists
 makeL :: ListType -> H.ListType

@@ -183,6 +183,7 @@ type City   = Spec
 type State  = Spec
 
 data Citation = Book [CiteField] | Article [CiteField]
+              | MThesis [CiteField] | PhDThesis [CiteField]
   --add website...
 data CiteField = Author     People
                | Title      Spec
@@ -198,11 +199,21 @@ data CiteField = Author     People
                | Page       Integer
                | Pages    (Integer, Integer)
                | Note       Spec
-               | Issue      Integer -- Issue number
+               | Issue      Integer
+               | School     Spec
+               | Thesis     Thesis
+
+data Thesis = M | PhD deriving Eq
+
+instance Show Thesis where
+  show M   = "Master's thesis"
+  show PhD = "PhD thesis"
 
 instance Show Citation where
-  show (Book    _) = "Print"
-  show (Article _) = "Print"
+  show (Book      _) = "Print"
+  show (Article   _) = "Print"
+  show (MThesis   _) = "Print"
+  show (PhDThesis _) = "Print"
 
 instance Eq CiteField where
   (==) (Author _)     (Author _)     = True
@@ -220,6 +231,8 @@ instance Eq CiteField where
   (==) (Pages _)      (Pages _)      = True
   (==) (Note _)       (Note _)       = True
   (==) (Issue _)      (Issue _)      = True
+  (==) (School _)     (School _)     = True
+  (==) (Thesis _)     (Thesis _)     = True
   (==) _ _ = False
 
 instance Ord CiteField where --FIXME: APA has year come directly after Author
@@ -237,6 +250,10 @@ instance Ord CiteField where --FIXME: APA has year come directly after Author
   compare _ (Volume     _) = GT
   compare (Edition    _) _ = LT
   compare _ (Edition    _) = GT
+  compare (Thesis     _) _ = LT
+  compare _ (Thesis     _) = GT
+  compare (School     _) _ = LT
+  compare _ (School     _) = GT
   compare (Place      _) _ = LT
   compare _ (Place      _) = GT
   compare (Publisher  _) _ = LT

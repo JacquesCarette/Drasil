@@ -512,8 +512,10 @@ mkBibRef = foldl1 (\x y -> x :+: S "\n\n" :+: y) . map renderCite
 
 --for when we add other things to reference like website, newspaper
 renderCite :: Citation -> Spec
-renderCite c@(Book    fields) = renderF c fields
-renderCite c@(Article fields) = renderF c fields
+renderCite c@(Book      fields) = renderF c fields
+renderCite c@(Article   fields) = renderF c fields
+renderCite a@(MThesis   fields) = renderF a fields
+renderCite a@(PhDThesis fields) = renderF a fields
 
 --Rendering a book--
 renderF :: Citation -> [CiteField] -> Spec
@@ -552,6 +554,7 @@ showBibTeX (Page       s) = showField "pages" (S $ show s)
 showBibTeX (Pages (a, b)) = showField "pages" (S $ show a ++ "-" ++ show b)
 showBibTeX (Note       s) = showField "note" s
 showBibTeX (Issue      s) = showField "number" (S $ show s)
+showBibTeX (School     s) = showField "school" s
 
 showField :: String -> Spec -> Spec
 showField f s = S f :+: S "={" :+: s :+: S "}"

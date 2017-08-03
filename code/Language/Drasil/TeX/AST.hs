@@ -168,6 +168,7 @@ type City   = Spec
 type State  = Spec
 
 data Citation = Book [CiteField] | Article [CiteField]
+              | MThesis [CiteField] | PhDThesis [CiteField]
   --add website...
 data CiteField = Author     People
                | Title      Spec
@@ -184,7 +185,10 @@ data CiteField = Author     People
                | Pages    (Integer, Integer)
                | Note       Spec
                | Issue      Integer
+               | School     Spec
 
 instance Show Citation where
-  show (Book    _) = "book"
-  show (Article _) = "article"
+  show (Book      _) = "book"
+  show (Article   _) = "article"
+  show (MThesis   _) = "mastersthesis"
+  show (PhDThesis _) = "phdthesis"

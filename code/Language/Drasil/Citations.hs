@@ -9,8 +9,10 @@ type City   = Sentence
 type State  = Sentence
 
 data Citation where --add website
-  Book :: [CiteField] -> Citation
-  Article :: [CiteField] -> Citation
+  Book      :: [CiteField] -> Citation
+  Article   :: [CiteField] -> Citation
+  MThesis   :: [CiteField] -> Citation
+  PhDThesis :: [CiteField] -> Citation
   
 data CiteField = Author     People
                | Title      Sentence
@@ -27,6 +29,7 @@ data CiteField = Author     People
                | Pages    (Integer, Integer)
                | Note       Sentence --extra text at the end of a citation
                | Issue      Integer
+               | School     Sentence
 
 data Month = Jan
            | Feb
@@ -71,12 +74,16 @@ ref1 = Book [
 -- Helpers --
 -------------
 getAuthors :: Citation -> People
-getAuthors (Book    fields) = getP fields
-getAuthors (Article fields) = getP fields
+getAuthors (Book      fields) = getP fields
+getAuthors (Article   fields) = getP fields
+getAuthors (MThesis   fields) = getP fields
+getAuthors (PhDThesis fields) = getP fields
 
 getYear :: Citation -> Integer
-getYear (Book    fields) = getY fields
-getYear (Article fields) = getY fields
+getYear (Book      fields) = getY fields
+getYear (Article   fields) = getY fields
+getYear (MThesis   fields) = getY fields
+getYear (PhDThesis fields) = getY fields
 
 getP :: [CiteField] -> People
 getP [] = error "No authors found"

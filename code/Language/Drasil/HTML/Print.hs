@@ -404,21 +404,14 @@ makeBib = listRef . map (Flat . S) . sort . map renderCite
   
 --for when we add other things to reference like website, newspaper
 renderCite :: Citation -> String
-renderCite b@(Book _)    = renderBook b
-renderCite a@(Article _) = renderArtcl a
---FIXME: Collapse renderArtcl and renderBook into one function.
---       Waitting to make ALL types of citations can be rendered the same.
---Rendering a book--
-renderBook :: Citation -> String
-renderBook c@(Book fields) = unwords $
-  map (useStyleBk bibStyleH) (sort fields) ++ endingField c bibStyleH
-renderBook _ = error "Tried to render a non-book using renderBook."
+renderCite b@(Book      fields) = renderF b fields useStyleBk
+renderCite a@(Article   fields) = renderF a fields useStyleArtcl
+renderCite a@(MThesis   fields) = renderF a fields useStyleBk
+renderCite a@(PhDThesis fields) = renderF a fields useStyleBk
 
--- Articals (in a journal) --
-renderArtcl :: Citation -> String
-renderArtcl c@(Article fields) = unwords $
-  map (useStyleArtcl bibStyleH) (sort fields) ++ endingField c bibStyleH
-renderArtcl _ = error "Tried to render a non-article using renderArtcl."
+renderF :: Citation -> [CiteField] -> (StyleGuide -> (CiteField -> String)) ->  String
+renderF c fields styl = unwords $
+  map (styl bibStyleH) (sort fields) ++ endingField c bibStyleH
 
 endingField :: Citation -> StyleGuide -> [String]
 endingField c MLA = [dot $ show c]
@@ -452,6 +445,8 @@ bookMLA (Page       n) = dot $ "p. " ++ show n
 bookMLA (Pages  (a,b)) = dot $ "pp. " ++ show a ++ "&ndash;" ++ show b
 bookMLA (Note       s) = p_spec s
 bookMLA (Issue      n) = comm $ "no. " ++ show n
+bookMLA (School     s) = comm $ p_spec s
+bookMLA (Thesis     t) = comm $ show t
 
 bookAPA :: CiteField -> String --FIXME: year needs to come after author in APA
 bookAPA (Author   p) = needDot $ p_spec (rendPeople rendPersLFM' p) --APA uses initals rather than full name

@@ -230,8 +230,10 @@ lay (Bib bib)         = T.Bib $ map layCite bib
 
 -- | For importing bibliography
 layCite :: Citation -> T.Citation
-layCite (Book    fields) = T.Book    $ map layField fields
-layCite (Article fields) = T.Article $ map layField fields
+layCite (Book      fields) = T.Book    $ map layField fields
+layCite (Article   fields) = T.Article $ map layField fields
+layCite (MThesis   fields) = T.MThesis   $ map layField fields
+layCite (PhDThesis fields) = T.PhDThesis $ map layField fields
 
 layField :: CiteField -> T.CiteField
 layField (Author     p) = T.Author     p
@@ -249,6 +251,7 @@ layField (Page       n) = T.Page       n
 layField (Pages     ns) = T.Pages     ns
 layField (Note       s) = T.Note       $ spec s
 layField (Issue      n) = T.Issue      n
+layField (School     s) = T.School     $ spec s
 
 makeL :: ListType -> T.ListType  
 makeL (Bullet bs)      = T.Enum        $ (map item bs)

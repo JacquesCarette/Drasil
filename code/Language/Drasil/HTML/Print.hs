@@ -16,7 +16,7 @@ import Language.Drasil.Unicode
 import Language.Drasil.Symbol (Symbol(..), Decoration(..))
 import qualified Language.Drasil.Document as L
 import Language.Drasil.HTML.Monad
-import Language.Drasil.People (People,Person,rendPersLFM,rendPersLFM',rendPersLFM'')
+import Language.Drasil.People (People,Person(..),rendPersLFM',rendPersLFM'',Conv(..))
 import Language.Drasil.Config (StyleGuide(..), bibStyleH)
 
 --FIXME? Use Doc in place of Strings for p_spec/title_spec
@@ -436,7 +436,7 @@ bookMLA (Series     s) = dot $ em $ p_spec s
 bookMLA (Title      s) = dot $ em $ p_spec s --If there is a series or collection, this should be in quotes, not italics
 bookMLA (Volume     s) = comm $ "vol. " ++ show s
 bookMLA (Publisher  s) = comm $ p_spec s
-bookMLA (Author     p) = needDot $ p_spec (rendPeople rendPersLFM p)
+bookMLA (Author     p) = dot $ p_spec $ rendPeople' p
 bookMLA (Year       y) = dot $ show y
 bookMLA (Date   d m y) = dot $ unwords [show d, show m, show y]
 bookMLA (Collection s) = dot $ em $ p_spec s
@@ -486,7 +486,11 @@ artclChicago i = bookChicago i
 
 rendPeople :: (Person -> String) -> People -> Spec
 rendPeople _ []  = S "N.a." -- "No authors given"
-rendPeople f people = foldlList $ map (S . f) people --name is found in People.hs, foldlList is in SentenceStructures.hs
+rendPeople f people = foldlList $ map (S . f) people --foldlList is in SentenceStructures.hs
+
+rendPeople' :: People -> Spec
+rendPeople' []  = S "N.a." -- "No authors given"
+rendPeople' people = foldlList $ map (S . rendPers) (init people) ++ [S $ rendPersL $ last people]
 
 foldlList :: [Spec] -> Spec
 foldlList []    = EmptyS
@@ -503,3 +507,20 @@ needDot :: String -> String
 needDot str = dotIt $ last str
   where dotIt '.' = str
         dotIt _   = dot str
+-- LFM is Last, First Middle
+rendPers :: Person -> String
+rendPers (Person {_surname = n, _convention = Mono}) = isInitial n
+rendPers (Person {_given = f, _surname = l, _middle = ms}) =
+  isInitial l ++ ", " ++ unwords (isInitial f: map isInitial ms)
+
+-- To render the last person's name
+rendPersL :: Person -> String
+rendPersL (Person {_surname = n, _convention = Mono}) = n
+rendPersL (Person {_given = f, _surname = l, _middle = []}) =
+  isInitial l ++ ", " ++ isInitial f
+rendPersL (Person {_given = f, _surname = l, _middle = ms}) =
+  isInitial l ++ ", " ++ unwords ([isInitial f] ++ map isInitial (init ms) ++ [last ms])
+
+isInitial :: String -> String
+isInitial [x]  = [x,'.']
+isInitial name = name

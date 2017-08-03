@@ -13,10 +13,10 @@ sspCitations = [chen2005, parnas1986, koothoor2013]
 chen2005, parnas1986, koothoor2013 :: Citation
 --See Language.Drasil.People for all person constructors
 chen2005 = Article [
-  Author [personWM' "Q." ["H."] "Qian",
-          personWM' "D." ["Y."] "Zhu",
-          personWM' "C." ["F."] "Lee",
-          personWM' "G." ["R."] "Chen"],
+  Author [personWM' "Q" ["H"] "Qian",
+          personWM' "D" ["Y"] "Zhu",
+          personWM' "C" ["F"] "Lee",
+          personWM' "G" ["R"] "Chen"],
   Title (S "A concise algorithm for computing the" +:+
          phrase fs_concept +:+ S "using the morgenstern price method"),
   Journal (S "Can. Geotech. J."),
@@ -25,8 +25,8 @@ chen2005 = Article [
   Pages (272,278)]
   
 parnas1986 = Article [
-  Author [personWM "David" ["L."] "Parnas",
-          personWM "Paul"  ["C."] "Clements"],
+  Author [personWM "David" ["L"] "Parnas",
+          personWM "Paul"  ["C"] "Clements"],
   Title $ S "A rational design process:" +:+
           S "How and why to fake it",
   Journal $ S "IEEE Transactions on Software Engineering",

@@ -82,19 +82,23 @@ lstName (Person {_surname = l}) = l
 rendPersLFM :: Person -> String
 rendPersLFM (Person {_surname = n, _convention = Mono}) = n
 rendPersLFM (Person {_given = f, _surname = l, _middle = ms}) =
-  l ++ ", " ++ unwords (f:ms)
+  isInitial l ++ ", " ++ unwords (isInitial f: map isInitial ms)
 
 -- LFM' is Last, F. M.
 rendPersLFM' :: Person -> String
 rendPersLFM' (Person {_surname = n, _convention = Mono}) = n
 rendPersLFM' (Person {_given = f, _surname = l, _middle = ms}) =
-  l ++ ", " ++ (unwords . map initial) (f:ms)
+  isInitial l ++ ", " ++ (unwords . map initial) (f:ms)
 
 -- LFM'' is Last, First M.
 rendPersLFM'' :: Person -> String
 rendPersLFM'' (Person {_surname = n, _convention = Mono}) = n
 rendPersLFM'' (Person {_given = f, _surname = l, _middle = ms}) =
-  l ++ ", " ++ unwords (f:(map initial ms))
+  isInitial l ++ ", " ++ unwords (isInitial f:(map initial ms))
 
 initial :: String -> String
 initial = (\xs -> head xs : ".")
+
+isInitial :: String -> String
+isInitial [x]  = [x,'.']
+isInitial name = name

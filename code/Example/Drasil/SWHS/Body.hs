@@ -70,7 +70,7 @@ import Drasil.SWHS.GenDefs (swhsGenDefs)
 import Drasil.SWHS.Modules (modules)
 import Drasil.SWHS.Changes (likelyChanges, unlikelyChanges)
 import Drasil.SWHS.Reqs (reqs)
-import Drasil.SWHS.References (ref1, ref2, ref3, ref4, ref5, ref6)
+import Drasil.SWHS.References (s9_swhs_citations)
 import Drasil.SWHS.Assumptions (assump1, assump2, assump3, assump4,
   assump5, assump6, assump7, assump8, assump9, assump10, assump11,
   assump12, assump13, assump14, assump15, assump16, assump17,
@@ -740,19 +740,9 @@ s7_t3_LC6 = ["A15"]
 -- Section 9 : References --
 ----------------------------
 
-s9_swhs_citations :: BibRef
-s9_swhs_citations = [ref1]
 
-{--
-s9 :: Section
-s9 = SRS.reference [s9_refs] []
+-------------------------------------------------------------------------------
 
-s9_refs :: Contents
-s9_refs = mkRefsList 1 $ map foldlsC s9_refList
-
-s9_refList :: [[Sentence]]
-s9_refList = [ref2, ref3, ref4, ref5, ref6]
---}
 
 -- ============== --
 -- Dead Knowledge --

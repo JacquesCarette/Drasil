@@ -6,23 +6,33 @@ import Language.Drasil
 -- Section 9 : References --
 ----------------------------
 
-ref1 :: Citation
+s9_swhs_citations :: BibRef
+s9_swhs_citations = [ref1, ref2]
 
-ref2, ref3, ref4, ref5, ref6 :: [Sentence]
+ref1, ref2 :: Citation
+
+ref3, ref4, ref5, ref6 :: [Sentence]
 
 ref1 = Article [
   Author [personWM' "J." ["Frederick"] "Bueche"],
   Title (S "Introduction to Physics for Scientists"),
+  Edition 4,
   Publisher (S "McGraw Hill"),
-  Place (S "York", S "USA"),
-  Note (S "fourth edition"),
+  Place (S "New York", S "USA"),
   Year 1986]
 
 
 
-ref2 = [S "F. P. Incropera", S "D. P. Dewitt", S "T. L. Bergman",
-  S "and A. S. Lavine. Fundamentals of Heat and Mass Transfer. John Wiley" +:+
-  S "and Sons", S "United States", S "sixth edition edition", S "2007."]
+ref2 = Article [
+  Author [personWM' "F." ["P."] "Incropera",
+          personWM' "D." ["P."] "Dewitt",
+          personWM' "T." ["L."] "Bergman",
+          personWM' "A." ["S."] "Lavine"],
+  Title (S "Fundamentals of Heat and Mass Transfer"),
+  Edition 6,
+  Publisher (S "John Wiley and Sons"),
+  Place (S "Hoboken", S "New Jersey"),
+  Year 2007]
 
 ref3 = [S "Nirmitha Koothoor. A document drive approach to certifying" +:+
   S "scientific computing software. Master's thesis", S "McMaster University",

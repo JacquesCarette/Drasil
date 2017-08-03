@@ -34,7 +34,7 @@ import Language.Drasil
 
 import Data.Drasil.SI_Units
 import Data.Drasil.Authors
-import Data.Drasil.Utils (enumSimple, getS, mkRefsList, refFromType,
+import Data.Drasil.Utils (enumSimple, getS, refFromType,
   itemRefToSent, makeTMatrix, itemRefToSent, weave)
 import Data.Drasil.Concepts.Documentation
 import Data.Drasil.Concepts.Math (ode, de, unit_, rOfChng, equation)
@@ -82,7 +82,7 @@ pcmConstraints =  [coil_SA, w_E, htCap_W, coil_HTC, temp_init,
   time_final, tank_length, temp_C, w_density, diam, temp_W]
 
 s4, s4_1, s4_1_1, s4_1_2, s4_1_3, s4_2,
-  s5, s5_1, s6, s7, s8, s9 :: Section
+  s5, s5_1, s6, s7, s8 :: Section
 
 
 
@@ -104,7 +104,8 @@ mkSRS = RefSec (RefProg intro
   IScope (s2_2_start thermal_analysis sWHT) (s2_2_end temp thermal_energy water),
   IChar (s2_3_knowlegde ht_trans_theo) (s2_3_understanding de) EmptyS,
   IOrgSec s2_4_intro inModel (SRS.inModel SRS.missingP []) (s2_4_end inModel ode progName)]) :
-  map Verbatim [s3, s4, s5, s6, s7, s8, s9]
+  map Verbatim [s3, s4, s5, s6, s7, s8] ++
+  [Bibliography s9_refList]
 
 pcm_si :: SystemInformation
 pcm_si = SI {
@@ -927,12 +928,12 @@ s8 = valsOfAuxConstantsF progName specParamValList
 ------------
 --REFERENCES
 ------------
+--
+--s9 = SRS.reference [s9_refs] []
 
-s9 = SRS.reference [s9_refs] []
+--s9_refs :: Contents
 
-s9_refs :: Contents
+-- s9_refs = mkRefsList 1 $ map foldlsC s9_refList
 
-s9_refs = mkRefsList 1 $ map foldlsC s9_refList
-
-s9_refList :: [[Sentence]]
-s9_refList = [ref2, ref3, ref4, ref5, ref6]
+s9_refList :: BibRef
+s9_refList = [ref2 {--, ref3, ref4, ref5, ref6--} ]

@@ -28,7 +28,7 @@ import Drasil.SWHS.DataDefs(swhsSymbMapDRef, swhsSymbMapTRef, dd1HtFluxC,
 import Drasil.SWHS.TMods (s4_2_2_T1, t1ConsThermE)
 import Drasil.SWHS.GenDefs (swhsGenDefs)
 import Drasil.SWHS.IMods (eBalanceOnWtr, heatEInWtr)
-import Drasil.SWHS.References (ref2)
+import Drasil.SWHS.References (ref2, ref3, ref4, ref5, ref6)
 import Drasil.SWHS.Requirements (s5_2)
 import Drasil.SWHS.LikelyChanges (likeChg2, likeChg3, likeChg6)
 

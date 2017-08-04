@@ -63,7 +63,7 @@ mkSRS :: DocDesc
 mkSRS = [RefSec (RefProg intro
   [TUnits,
   tsymb [TSPurpose, SymbOrder],
-  TAandA])] --FIXME: LR, LDF, and NFL order?
+  TAandA])]
   ++
   [IntroSec 
   (IntroProg (startIntro (software) (blstRskInvWGlassSlab) (gLassBR)) (short gLassBR)

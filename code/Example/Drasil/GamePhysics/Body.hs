@@ -84,6 +84,7 @@ chipmunkSysInfo = SI {
   _constraints = cpInputConstraints,
   _constants = []
 }
+
 --FIXME: All named ideas, not just acronyms.
 
 chipUnits :: [UnitDefn]
@@ -97,6 +98,23 @@ mgBod :: [Section]
 
 cpSymbMap :: SymbolMap
 cpSymbMap = symbolMap cpSymbols
+
+
+chipChoices :: Choices
+chipChoices = Choices {
+  lang             = [Python, Cpp, CSharp, Java],
+  impType          = Library,
+  logFile          = "log.txt",
+  logging          = LogNone,
+  comments         = CommentNone,
+  onSfwrConstraint = Warning,
+  onPhysConstraint = Warning,
+  inputStructure   = Loose
+}
+
+chipCode :: CodeSpec
+chipCode = codeSpec' chipmunkSysInfo chipChoices 
+
 
 --FIXME: The SRS has been partly switched over to the new docLang, so some of
 -- the sections below are now redundant. I have not removed them yet, because

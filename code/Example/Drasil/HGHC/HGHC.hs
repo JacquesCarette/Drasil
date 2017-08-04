@@ -22,6 +22,21 @@ import Drasil.Sections.SpecificSystemDescription
 modules :: [ModuleChunk]
 modules = [mod_calc, mod_hw, mod_inputp, mod_inputf, mod_behav, mod_outputf,
   mod_ctrl]
+
+thisChoices :: Choices
+thisChoices = Choices {
+  lang             = [Python, Cpp, CSharp, Java],
+  impType          = Program,
+  logFile          = "log.txt",
+  logging          = LogNone,
+  comments         = CommentNone, 
+  onSfwrConstraint = Warning,
+  onPhysConstraint = Warning,
+  inputStructure   = AsClass
+}
+
+thisCode :: CodeSpec
+thisCode = codeSpec' thisSI thisChoices
   
 thisSI :: SystemInformation
 thisSI = SI {

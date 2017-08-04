@@ -2,8 +2,7 @@ module Drasil.SWHS.Concepts where
 
 import Language.Drasil (CI, NamedChunk, ConceptChunk,
   (+:+), short, phrase, nounPhrase'', dcc, cn', plural, npnc', term,
-  compoundPhrase, compoundPhrase', nounPhraseSP, npnc, with',
-  commonIdea, nounPhrase,
+  compoundPhrase', nounPhraseSP, npnc, with', commonIdea, nounPhrase,
   Sentence (S),
   CapitalizationRule (CapFirst, CapWords))
 import Data.Drasil.Concepts.Software (program)

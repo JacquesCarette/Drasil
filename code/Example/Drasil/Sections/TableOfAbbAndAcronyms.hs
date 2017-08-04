@@ -4,13 +4,12 @@ module Drasil.Sections.TableOfAbbAndAcronyms
 
 import Language.Drasil
 import Data.Drasil.Concepts.Documentation
-import Data.List (sort)
 
 -- | Creates a standard table of abbreviations and acronyms section from a
 -- given list of abbreviated chunks
 table_of_abb_and_acronyms :: (Ord s, NamedIdea s) => [s] -> Section
 table_of_abb_and_acronyms ls = Section (S "Abbreviations and Acronyms") 
-  [Con (table (sort ls))]
+  [Con (table ls)]
 
 --FIXME? Should it be called Symbol or something like Abbreviation/Acronym?
 --FIXME? Should it be "Description" or "Term" or something else?

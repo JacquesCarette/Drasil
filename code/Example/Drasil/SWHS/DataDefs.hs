@@ -5,10 +5,10 @@ import Drasil.SWHS.Unitals (melt_frac, latentE_P, htFusion, pcm_mass,
   ht_flux_C)
 
 import Language.Drasil (QDefinition, Contents, RelationConcept, SymbolMap,
-	nounPhraseSP, symbol, id, fromEqn', makeRef, symbolMap,
-	DType (Data, Theory),
-	Sentence (EmptyS),
-	Expr (C, FCall))
+  nounPhraseSP, symbol, id, fromEqn', makeRef, symbolMap,
+  DType (Data, Theory),
+  Sentence (EmptyS),
+  Expr (C, FCall))
 import Data.Drasil.Quantities.Physics (time)
 import Data.Drasil.Quantities.PhysicalProperties (mass)
 import Data.Drasil.Quantities.Thermodynamics (latent_heat)

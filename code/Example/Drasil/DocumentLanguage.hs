@@ -206,7 +206,7 @@ mkRefSec si (RefProg c l) = section (titleize refmat) [c] (foldr (mkSubRef si) [
     mkSubRef (SI {_concepts = cccs}) (TSymb' f con) l' = (mkTSymb cccs f con) : l'
     mkSubRef (SI {_quants = v, _concepts = cccs, _namedIdeas = n}) TAandA l' = 
       (table_of_abb_and_acronyms $ 
-      filter (isJust . getA) (map nw v ++ map nw cccs ++ map nw n)) : l'
+      filter (isJust . getA) (map nw cccs ++ map nw n ++ map nw v)) : l'
     mkSubRef _              (TVerb s) l' = s : l'
 
 -- | Helper for creating the table of symbols

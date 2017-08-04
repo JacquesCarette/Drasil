@@ -109,7 +109,7 @@ instance RenderGreek Latex where
   greek Delta_L   = L "\\delta{}"
   greek Delta     = L "\\Delta{}"
   greek Ell       = L "\\ell{}"
-  greek Epsilon_L = L "\\epsilon{}"
+  greek Epsilon_L = L "$\\epsilon{}$"
   greek Epsilon_V = L "\\varepsilon{}"
   greek Epsilon   = L "E"
   greek Eta_L     = L "\\eta{}"

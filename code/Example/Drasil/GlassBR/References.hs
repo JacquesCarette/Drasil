@@ -54,7 +54,7 @@ rbrtsn2012 = Article [Author [personWM "J" [] "Robertson",
 ---
 
 --ref4
-astm_LR2009 = Article [Author [mononym "ASTM Standards Committee"],
+astm_LR2009 = Article [Author [mononym "ASTM_Standards_Committee"],
                     Title (S "Standard Practice for Determining Load Resistance of Glass in Buildings"),
                     Year (2009)]
 --FIXME: Categorize --> S "Standard E1300-09a"
@@ -63,8 +63,7 @@ astm_LR2009 = Article [Author [mononym "ASTM Standards Committee"],
 ---
 
 --ref5
-astm_C1036 = Article [Author [mononym "ASTM"],
-                    Note (S "developed by subcommittee C1408"),
+astm_C1036 = Article [Author [mononym "ASTM_developed_by_subcommittee_C1408"],
                     Note (S "Book of standards 15.02"),
                     Title (S "Standard specification for flat glass, C1036"),
                     Place (S "West Conshohocken", S "PA"),
@@ -76,7 +75,7 @@ astm_C1036 = Article [Author [mononym "ASTM"],
 ---
 
 --ref6
-astm_C1048 = Article [Author [mononym "ASTM developed by subcommittee C14.08"],
+astm_C1048 = Article [Author [mononym "ASTM_developed_by_subcommittee_C14.08"],
                     Title (S "Specification for  heat treated flat glass-Kind" +:+
                            S "HS, kind FT coated and uncoated glass, C1048"),
                     Year (2009)]

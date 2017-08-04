@@ -128,7 +128,7 @@ m
 Maximum aspect ratio
 </td>
 <td>
-
+Unitless
 </td>
 </tr>
 <tr>
@@ -150,7 +150,7 @@ m
 Risk of failure
 </td>
 <td>
-
+Unitless
 </td>
 </tr>
 <tr>
@@ -191,10 +191,10 @@ Pa
 <em>g</em>
 </td>
 <td>
-Glass type, <em>g</em> in {AN, FT, HS}
+Glass type <em>g</em> &#1013; {AN, FT, HS}
 </td>
 <td>
-
+Unitless
 </td>
 </tr>
 <tr>
@@ -205,7 +205,7 @@ Glass type, <em>g</em> in {AN, FT, HS}
 Glass type factor
 </td>
 <td>
-
+Unitless
 </td>
 </tr>
 <tr>
@@ -227,7 +227,7 @@ m
 True when calculated probability is less than tolerable probability
 </td>
 <td>
-
+Unitless
 </td>
 </tr>
 <tr>
@@ -238,7 +238,7 @@ True when calculated probability is less than tolerable probability
 True when load resistance (capacity) is greater than load (demand)
 </td>
 <td>
-
+Unitless
 </td>
 </tr>
 <tr>
@@ -249,7 +249,7 @@ True when load resistance (capacity) is greater than load (demand)
 Stress distribution factor (Function)
 </td>
 <td>
-
+Unitless
 </td>
 </tr>
 <tr>
@@ -260,7 +260,7 @@ Stress distribution factor (Function)
 Stress distribution factor (Function) based on Pbtol
 </td>
 <td>
-
+Unitless
 </td>
 </tr>
 <tr>
@@ -282,7 +282,7 @@ LR
 Load resistance
 </td>
 <td>
-
+Unitless
 </td>
 </tr>
 <tr>
@@ -293,12 +293,12 @@ Load resistance
 Load share factor
 </td>
 <td>
-
+Unitless
 </td>
 </tr>
 <tr>
 <td>
-m
+<em>m</em>
 </td>
 <td>
 Surface flaw parameter
@@ -315,7 +315,7 @@ m<sup>12</sup>/(N<sup>7</sup>)
 Probability of breakage
 </td>
 <td>
-
+Unitless
 </td>
 </tr>
 <tr>
@@ -326,7 +326,7 @@ Probability of breakage
 Tolerable probability of breakage
 </td>
 <td>
-
+Unitless
 </td>
 </tr>
 <tr>
@@ -348,7 +348,7 @@ kPa
 Dimensionless load
 </td>
 <td>
-
+Unitless
 </td>
 </tr>
 <tr>
@@ -359,7 +359,7 @@ Dimensionless load
 Tolerable load
 </td>
 <td>
-
+Unitless
 </td>
 </tr>
 <tr>
@@ -433,7 +433,7 @@ m
 <em>t</em>
 </td>
 <td>
-Nominal thickness, <em>t</em> in {2.5, 2.7, 3.0, 4.0, 5.0, 6.0, 8.0, 10.0, 12.0, 16.0, 19.0, 22.0}
+Nominal thickness <em>t</em> &#1013; {2.5, 2.7, 3.0, 4.0, 5.0, 6.0, 8.0, 10.0, 12.0, 16.0, 19.0, 22.0}
 </td>
 <td>
 mm
@@ -458,7 +458,7 @@ s
 TNT equivalent factor
 </td>
 <td>
-
+Unitless
 </td>
 </tr>
 <tr>
@@ -850,12 +850,6 @@ Product Use Case Table
 <table class="table">
 <tr>
 <th>
-Use Case NO.
-</th>
-<th>
-Use Case Name
-</th>
-<th>
 Actor
 </th>
 <th>
@@ -864,12 +858,6 @@ Input and Output
 </tr>
 <tr>
 <td>
-1
-</td>
-<td>
-Inputs
-</td>
-<td>
 User
 </td>
 <td>
@@ -877,12 +865,6 @@ Characteristics of the glass slab and of the blast. Details in <a href=#Sec:Indi
 </td>
 </tr>
 <tr>
-<td>
-2
-</td>
-<td>
-Output
-</td>
 <td>
 GlassBR
 </td>
@@ -902,14 +884,9 @@ Use Case Table
 <h3>
 Individual Product Use Cases
 </h3>
-<ul class="list">
-<li>
-Use Case 1 refers to the user providing input to GlassBR for use within the analysis. There are two classes of inputs: glass geometry and blast type. The glass geometry based inputs include the dimensions of the glass plane, glass type and response type. The blast type input includes parameters like weight of charge, TNT equivalent factor and stand off distance from the point of explosion. These parameters describe charge weight and stand off blast. Another input the user gives is the tolerable value of probability of breakage.
-</li>
-<li>
-Use Case 2 GlassBR outputs if the glass slab will be safe by comparing whether capacity is greater than demand. Capacity is the the load resistance calculated and demand is the requirement which is the 3 second duration equivalent pressure. The second condition is to check whether the calculated probability (<em>P<sub>b</sub></em>) is less than the tolerable probability (<em>P<sub>btol</sub></em>) which is obtained from the user as an input. If both conditions return true then it's shown that the glass slab is safe to use, else if both return false then the glass slab is considered unsafe. All the supporting calculated values are also displayed as output.
-</li>
-</ul>
+<p class="paragraph">
+The user provides the inputs to GlassBR for use within the analysis. There are two main classes of inputs: glass geometry and blast type. The glass geometry based inputs include the glass type and dimensions of the glass plane. The blast type input includes parameters like weight of charge, TNT equivalent factor and stand off distance from the point of explosion. These parameters describe charge weight and stand off blast. Another input the user gives is the tolerable value of probability of breakage. GlassBR outputs if the glass slab will be safe by comparing whether capacity is greater than demand. Capacity is the the load resistance calculated and demand is the requirement which is the 3 second duration equivalent pressure. The second condition is to check whether the calculated probability (<em>P<sub>b</sub></em>) is less than the tolerable probability (<em>P<sub>btol</sub></em>) which is obtained from the user as an input. If both conditions return true then it's shown that the glass slab is safe to use, else if both return false then the glass slab is considered unsafe. All the supporting calculated values are also displayed as output.
+</p>
 </div>
 </a>
 </div>
@@ -1123,12 +1100,12 @@ A8: With reference to A4 the value of load duration factor (LDF) is a constant i
 </span>
 </div>)<sup><div class="fraction">
 <span class="fup">
-m
+<em>m</em>
 </span>
 <span class="fdn">
 16
 </span>
-</div></sup>. Using this, LDF=0.27.
+</div></sup>. Using this, <em>LDF</em> = 0.27.
 </p>
 </div>
 </div>
@@ -1241,7 +1218,7 @@ Label
 </th>
 <td>
 <p class="paragraph">
-B
+
 </p>
 </td>
 </tr>
@@ -1251,7 +1228,7 @@ Units
 </th>
 <td>
 <p class="paragraph">
-
+Unitless
 </p>
 </td>
 </tr>
@@ -1262,35 +1239,14 @@ Equation
 <td>
 <a id="">
 <div class="equation">
-B = <div class="fraction">
+<em>B</em> = <div class="fraction">
 <span class="fup">
-k
+<em>k</em>
 </span>
 <span class="fdn">
-(<div class="fraction">
-<span class="fup">
-a
+(<em>a</em>&#8239;<em>b</em>)<sup><em>m</em> &minus; 1</sup>
 </span>
-<span class="fdn">
-1000
-</span>
-</div><div class="fraction">
-<span class="fup">
-b
-</span>
-<span class="fdn">
-1000
-</span>
-</div>)<sup>m-1</sup>
-</span>
-</div>((E*1000)(<div class="fraction">
-<span class="fup">
-h
-</span>
-<span class="fdn">
-1000
-</span>
-</div>)<sup>2</sup>)<sup>m</sup>*LDFe<sup>J</sup>
+</div>&#8239;((<em>E</em>)&#8239;(<em>h</em>)<sup>2</sup>)<sup><em>m</em></sup>&sdot;<em>LDF</em>&#8239;e<sup><em>J</em></sup>
 </div>
 </a>
 </td>
@@ -1325,7 +1281,7 @@ Units
 </th>
 <td>
 <p class="paragraph">
-mm
+m
 </p>
 </td>
 </tr>
@@ -1418,7 +1374,7 @@ Description
 </th>
 <td>
 <p class="paragraph">
-<em>h</em> is the actual thickness (m)<br /><em>t</em> is the nominal thickness <em>t</em> in {2.5, 2.7, 3.0, 4.0, 5.0, 6.0, 8.0, 10.0, 12.0, 16.0, 19.0, 22.0} (mm)
+<em>h</em> is the actual thickness (m)<br /><em>t</em> is the nominal thickness <em>t</em> &#1013; {2.5, 2.7, 3.0, 4.0, 5.0, 6.0, 8.0, 10.0, 12.0, 16.0, 19.0, 22.0} (mm)
 </p>
 </td>
 </tr>
@@ -1442,7 +1398,7 @@ Units
 </th>
 <td>
 <p class="paragraph">
-
+Unitless
 </p>
 </td>
 </tr>
@@ -1453,7 +1409,7 @@ Equation
 <td>
 <a id="">
 <div class="equation">
-LDF = (<div class="fraction">
+<em>LDF</em> = (<div class="fraction">
 <span class="fup">
 <em>t<sub>d</sub></em>
 </span>
@@ -1462,7 +1418,7 @@ LDF = (<div class="fraction">
 </span>
 </div>)<sup><div class="fraction">
 <span class="fup">
-m
+<em>m</em>
 </span>
 <span class="fdn">
 16
@@ -1478,7 +1434,7 @@ Description
 </th>
 <td>
 <p class="paragraph">
-LDF is the load duration factor<br /><em>t<sub>d</sub></em> is the duration of load<br />m is the surface flaw parameter
+<em>LDF</em> is the load duration factor<br /><em>t<sub>d</sub></em> is the duration of load (s)<br /><em>m</em> is the surface flaw parameter (m<sup>12</sup>/(N<sup>7</sup>))
 </p>
 </td>
 </tr>
@@ -1502,7 +1458,7 @@ Units
 </th>
 <td>
 <p class="paragraph">
-
+Unitless
 </p>
 </td>
 </tr>
@@ -1515,10 +1471,10 @@ Equation
 <div class="equation">
 J = J(<em>q&#770;</em>,<div class="fraction">
 <span class="fup">
-a
+<em>a</em>
 </span>
 <span class="fdn">
-b
+<em>b</em>
 </span>
 </div>)
 </div>
@@ -1531,7 +1487,7 @@ Description
 </th>
 <td>
 <p class="paragraph">
-J is the stress distribution factor (Function)<br />J is the stress distribution factor (Function)<br /><em>q&#770;</em> is the dimensionless load<br />a is the plate length (long dimension)<br />b is the plate width (short dimension)
+<em>J</em> is the stress distribution factor (Function)<br /><em>q&#770;</em> is the dimensionless load<br /><em>a</em> is the plate length (long dimension) (m)<br /><em>b</em> is the plate width (short dimension) (m)
 </p>
 </td>
 </tr>
@@ -1555,7 +1511,7 @@ Units
 </th>
 <td>
 <p class="paragraph">
-
+Unitless
 </p>
 </td>
 </tr>
@@ -1566,7 +1522,7 @@ Equation
 <td>
 <a id="">
 <div class="equation">
-NFL = <div class="fraction">
+<em>NFL</em> = <div class="fraction">
 <span class="fup">
 <em>q&#770;<sub>tol</sub></em>Eh<sup>4</sup>
 </span>
@@ -1608,7 +1564,7 @@ Units
 </th>
 <td>
 <p class="paragraph">
-
+Unitless
 </p>
 </td>
 </tr>
@@ -1619,7 +1575,7 @@ Equation
 <td>
 <a id="">
 <div class="equation">
-GTF = <span class="casebr">
+<em>GTF</em> = <span class="casebr">
 {
 </span>
 <div class="cases">
@@ -1649,7 +1605,7 @@ Description
 </th>
 <td>
 <p class="paragraph">
-<em>GTF</em> is the glass type factor
+<em>GTF</em> is the glass type factor<br /><em>g</em> is the glass type <em>g</em> &#1013; {AN, FT, HS}
 </p>
 </td>
 </tr>
@@ -1673,7 +1629,7 @@ Units
 </th>
 <td>
 <p class="paragraph">
-
+Unitless
 </p>
 </td>
 </tr>
@@ -1726,7 +1682,7 @@ Units
 </th>
 <td>
 <p class="paragraph">
-
+Unitless
 </p>
 </td>
 </tr>
@@ -1739,10 +1695,10 @@ Equation
 <div class="equation">
 <em>q&#770;<sub>tol</sub></em> = <em>q&#770;<sub>tol</sub></em>(J<sub>tol</sub>,<div class="fraction">
 <span class="fup">
-a
+<em>a</em>
 </span>
 <span class="fdn">
-b
+<em>b</em>
 </span>
 </div>)
 </div>
@@ -1779,7 +1735,7 @@ Units
 </th>
 <td>
 <p class="paragraph">
-
+Unitless
 </p>
 </td>
 </tr>
@@ -1790,40 +1746,19 @@ Equation
 <td>
 <a id="">
 <div class="equation">
-J<sub>tol</sub> = log(log(<div class="fraction">
+<em>J<sub>tol</sub></em> = log(log(<div class="fraction">
 <span class="fup">
 1
 </span>
 <span class="fdn">
-1-<em>P<sub>btol</sub></em>
+1 &minus; <em>P<sub>btol</sub></em>
 </span>
-</div>)<div class="fraction">
+</div>)&#8239;<div class="fraction">
 <span class="fup">
-(<div class="fraction">
-<span class="fup">
-a
+(<em>a</em>&#8239;<em>b</em>)<sup><em>m</em> &minus; 1</sup>
 </span>
 <span class="fdn">
-1000
-</span>
-</div><div class="fraction">
-<span class="fup">
-b
-</span>
-<span class="fdn">
-1000
-</span>
-</div>)<sup>m-1</sup>
-</span>
-<span class="fdn">
-k((E*1000)(<div class="fraction">
-<span class="fup">
-h
-</span>
-<span class="fdn">
-1000
-</span>
-</div>)<sup>2</sup>)<sup>m</sup>*LDF
+<em>k</em>&#8239;((<em>E</em>&#8239;(<em>h</em>)<sup>2</sup>))<sup><em>m</em></sup>&sdot;<em>LDF</em>
 </span>
 </div>)
 </div>
@@ -1836,7 +1771,7 @@ Description
 </th>
 <td>
 <p class="paragraph">
-J<sub>tol</sub> is the stress distribution factor (Function) based on Pbtol<br /><em>P<sub>btol</sub></em> is the tolerable probability of breakage<br />a is the plate length (long dimension)<br />b is the plate width (short dimension)<br />m is the surface flaw parameter<br />k is the surface flaw parameter<br />E is the modulus of elasticity of glass<br />h is the actual thickness<br />LDF is the load duration factor
+<em>J<sub>tol</sub></em> is the stress distribution factor (Function) based on Pbtol<br /><em>P<sub>btol</sub></em> is the tolerable probability of breakage<br /><em>a</em> is the plate length (long dimension) (m)<br /><em>b</em> is the plate width (short dimension) (m)<br /><em>m</em> is the surface flaw parameter (m<sup>12</sup>/(N<sup>7</sup>))<br /><em>k</em> is the surface flaw parameter (m<sup>12</sup>/(N<sup>7</sup>))<br /><em>E</em> is the modulus of elasticity of glass (Pa)<br /><em>h</em> is the actual thickness (m)<br /><em>LDF</em> is the load duration factor
 </p>
 </td>
 </tr>
@@ -2270,7 +2205,7 @@ m
 <em>g</em>
 </td>
 <td>
-Glass type <em>g</em> in {AN, FT, HS}
+Glass type <em>g</em> &#1013; {AN, FT, HS}
 </td>
 <td>
 Unitless
@@ -2281,7 +2216,7 @@ Unitless
 <em>t</em>
 </td>
 <td>
-Nominal thickness <em>t</em> in {2.5, 2.7, 3.0, 4.0, 5.0, 6.0, 8.0, 10.0, 12.0, 16.0, 19.0, 22.0}
+Nominal thickness <em>t</em> &#1013; {2.5, 2.7, 3.0, 4.0, 5.0, 6.0, 8.0, 10.0, 12.0, 16.0, 19.0, 22.0}
 </td>
 <td>
 mm
@@ -4438,7 +4373,7 @@ m<sup>12</sup>/(N<sup>7</sup>)
 surface flaw parameter
 </td>
 <td>
-(2.86)10<sup>-53</sup>
+(2.86)&#8239;10<sup>-53</sup>
 </td>
 <td>
 m<sup>12</sup>/(N<sup>7</sup>)
@@ -4452,7 +4387,7 @@ m<sup>12</sup>/(N<sup>7</sup>)
 modulus of elasticity of glass
 </td>
 <td>
-(7.17)10<sup>7</sup>
+(7.17)&#8239;10<sup>7</sup>
 </td>
 <td>
 Pa

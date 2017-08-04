@@ -1,0 +1,55 @@
+module Drasil.SWHS.DataDesc where
+
+import Language.Drasil
+import Drasil.SWHS.Unitals
+
+swhsInputMod :: Mod
+swhsInputMod = ModData "InputFormat" [swhsInputData]
+
+swhsInputData :: DataDesc
+swhsInputData =
+  [ junkLine, -- 1
+    singleton tank_length,
+    junkLine, -- 3
+    singleton diam,
+    junkLine, -- 5
+    singleton pcm_vol,
+    junkLine, -- 7
+    singleton pcm_SA,
+    junkLine, -- 9
+    singleton pcm_density,
+    junkLine, -- 11
+    singleton temp_melt_P,
+    junkLine, -- 13
+    singleton htCap_S_P,
+    junkLine, -- 15
+    singleton htCap_L_P,
+    junkLine, -- 17
+    singleton htFusion,
+    junkLine, -- 19
+    singleton coil_SA,
+    junkLine, -- 21
+    singleton temp_C,
+    junkLine, -- 23
+    singleton w_density,
+    junkLine, -- 25
+    singleton htCap_W,
+    junkLine, -- 27
+    singleton coil_HTC,
+    junkLine, -- 29
+    singleton pcm_HTC,
+    junkLine, -- 31
+    singleton temp_init,
+    junkLine, -- 33
+    singleton tau, -- FIXME: Not sure if tau should be used for "time-step"
+    junkLine,-- 35
+    singleton time_final,
+    junkLine, -- 37
+    singleton abs_tol,
+    junkLine, -- 39
+    singleton rel_tol,
+    junkLine, -- 41
+    singleton cons_tol
+  ]
+
+-- Numbering refers to corresopnding line on input file

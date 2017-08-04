@@ -12,7 +12,7 @@ import Language.Drasil (CI, ConceptChunk, UnitalChunk, UncertQ,
   sParen, sSqBr, defn, nw, at_start, (+:+), (+:+.), (+:),
   unit'2Contents, qs, mkTable, for'', manyNames,
   lang, impType, logFile, logging, comments, onSfwrConstraint,
-  onPhysConstraint, inputStructure, codeSpec',
+  onPhysConstraint, inputStructure, codeSpec', addModDefs,
   UnitDefn (UU),
   DType (Data, Theory),
   Contents (Table, Figure, EqnBlock, Enumeration),
@@ -87,6 +87,7 @@ import Drasil.SWHS.Requirements (req1, req2, s5_1_2_Eqn1, s5_1_2_Eqn2,
   req3, req4, req5, req6, req7, req8, req9, req10, req11, s5_2)
 import Drasil.SWHS.LikelyChanges (likeChg1, likeChg2, likeChg3, likeChg4,
   likeChg5, likeChg6)
+import Drasil.SWHS.DataDesc (swhsInputMod)
 
 import qualified Drasil.SRS as SRS (reference, inModel, missingP, likeChg,
   funcReq, propCorSol, genDefn, dataDefn, thModel, probDesc, goalStmt,
@@ -94,16 +95,16 @@ import qualified Drasil.SRS as SRS (reference, inModel, missingP, likeChg,
 
 import Drasil.Template.MG (mgDoc)
 import Drasil.Template.DD (makeDD)
-import Drasil.DocumentLanguage {-(DocDesc, mkDoc, tsymb'',
+import Drasil.DocumentLanguage (DocDesc, mkDoc, tsymb'',
   LFunc (TermExcept),
   Literature (Lit, Doc'),
   TSIntro (SymbOrder, SymbConvention, TSPurpose),
-  DocSection (Verbatim, IntroSec, RefSec), 
+  DocSection (Verbatim, IntroSec, RefSec, Bibliography, AuxConstntSec), 
   IntroSub(IOrgSec, IChar, IScope, IPurpose),
   IntroSec (IntroProg),
   RefTab (TAandA, TUnits),
   RefSec (RefProg),
-  AuxConstntSec (AuxConsProg))-}
+  AuxConstntSec (AuxConsProg))
 
 import Drasil.Sections.ReferenceMaterial (intro)
 import Drasil.Sections.SpecificSystemDescription (inModelF, assumpF,
@@ -131,8 +132,8 @@ this_si = map UU [metre, kilogram, second] ++
 
 --Will there be a table of contents?
 
-authors :: Sentence
-authors = manyNames swhsPeople
+swhsAuthors :: Sentence
+swhsAuthors = manyNames swhsPeople
 
 swhs_si :: SystemInformation
 swhs_si = SI {
@@ -193,7 +194,7 @@ swhsChoices = Choices {
 }
 
 swhsCode :: CodeSpec
-swhsCode = codeSpec' swhs_si swhsChoices
+swhsCode = addModDefs (codeSpec' swhs_si swhsChoices) [swhsInputMod]
 
 tsymb_intro :: [TSIntro]
 tsymb_intro = [TSPurpose, SymbConvention
@@ -208,7 +209,7 @@ mgBod :: [Section]
 (mgBod, _) = makeDD likelyChanges unlikelyChanges reqs modules
 
 swhs_mg :: Document
-swhs_mg = mgDoc swhsFull (for'' titleize titleize) authors mgBod
+swhs_mg = mgDoc swhsFull (for'' titleize titleize) swhsAuthors mgBod
 
 
 -- =================================== --

@@ -75,6 +75,18 @@ data Expr where
   (:<=>) :: Expr -> Expr -> Expr -- if and only if, &hArr; \iff
   --Monotonic :: Maybe Direction -> Expr -> Expr --like this? or defined as below (see monotoniclyIncr)
 
+-- Function used to derive the units of an equation based on 
+-- inferUnit :: Relation -> [USymb] -> [USymb] -> USymb
+-- inferUnit (:= left _) [] [] = inferUnit left [] []
+-- inferUnit (:+ a _) num den = inferUnit a num den
+-- inferUnit (:- a _) num den = inferUnit a num den
+-- inferUnit (:* a (C b)) num den = inferUnit a (num:(analyze_n b)) den
+-- inferUnit (:/ a (C b)) num den = inferUnit a num (den:(analyze_d b))
+-- inferUnit (C a) num den = (num:(getUnit a)) den
+-- inferUnit (Deriv _ (C a) (C b)) num den = inferUnit (num:(analyze_n a)) (den:(analyze_d b))
+  -- where analyze_n (Deriv _ (C a) _) = getUnit a
+        -- analyze_d (Deriv _ _ (C b)) = getUnit b
+
 type Set = Space
 {- --import from space?
            Integer 

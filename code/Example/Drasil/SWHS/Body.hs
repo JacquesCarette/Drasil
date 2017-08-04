@@ -5,7 +5,7 @@ import Control.Lens ((^.))
 import Language.Drasil (CI, ConceptChunk, UnitalChunk, UncertQ,
   QDefinition, ConVar, NamedChunk, NamedIdea, RelationConcept,
   Section, Document, Concept, QSWrapper, Person, Block,
-  BibRef, CodeSpec,
+  CodeSpec,
   _constraints, _constants, _defSequence, _inputs, _outputs, _units,
   _definitions, _concepts, _namedIdeas, _quants, _authors, _kind, _sys,
   sC, titleize, titleize', plural, short, makeRef, phrase,
@@ -89,7 +89,7 @@ import Drasil.SWHS.LikelyChanges (likeChg1, likeChg2, likeChg3, likeChg4,
   likeChg5, likeChg6)
 import Drasil.SWHS.DataDesc (swhsInputMod)
 
-import qualified Drasil.SRS as SRS (reference, inModel, missingP, likeChg,
+import qualified Drasil.SRS as SRS (inModel, missingP, likeChg,
   funcReq, propCorSol, genDefn, dataDefn, thModel, probDesc, goalStmt,
   sysCont)
 
@@ -115,7 +115,7 @@ import Drasil.Sections.Requirements (reqF)
 import Drasil.Sections.GeneralSystDesc (genSysF)
 
 import Data.Drasil.Utils (enumSimple, weave, getS, itemRefToSent, makeListRef,
-  makeTMatrix, mkRefsList, refFromType)
+  makeTMatrix, refFromType)
 import Data.Drasil.SentenceStructures (showingCxnBw, foldlSent, foldlSent_,
   foldlSP, foldlSP_, foldlSPCol, foldlsC, isThe, ofThe, ofThe',
   sAnd, sOf, foldlList)

@@ -1,17 +1,24 @@
 module Drasil.SWHS.IMods where
 
-import Language.Drasil
-import Drasil.DocumentLanguage
-import Data.Drasil.Concepts.Documentation
+import Language.Drasil (Relation, RelationConcept,
+  makeRef, sParen, phrase, sC, short, (+:+.), getUnit, (+:+), nounPhraseSP,
+  makeRC, plural,
+  DerivType (Total),
+  Sentence (EmptyS, S, E, (:+:)),
+  Expr (C, (:-), (:*), (:>), (:<), (:=), Int, FCall, Case, Deriv))
+import Drasil.DocumentLanguage (mkAssump)
+import Data.Drasil.Concepts.Documentation (acroT, acroDD)
+
 import Prelude hiding (id)
 import Drasil.SWHS.Unitals
 import Data.Drasil.Utils (getS, unwrap)
 import Data.Drasil.SentenceStructures (foldlSent, isThe, sAnd, ofThe)
 import Data.Drasil.Quantities.Physics (time, energy)
 import Data.Drasil.Concepts.Math (equation, change)
-import Drasil.SWHS.Concepts
-import Data.Drasil.Concepts.PhysicalProperties
-import Data.Drasil.Concepts.Thermodynamics
+import Drasil.SWHS.Concepts (phsChgMtrl, water)
+import Data.Drasil.Concepts.PhysicalProperties (solid, liquid, mass)
+import Data.Drasil.Concepts.Thermodynamics (boiling, heat, temp, melting,
+  latent_heat, sens_heat, heat_cap_spec, thermal_energy, boil_pt)
 
 swhsInModels :: [RelationConcept]
 swhsInModels = [eBalanceOnWtr, eBalanceOnPCM, heatEInWtr, heatEInPCM]

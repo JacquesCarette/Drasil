@@ -1,7 +1,10 @@
 module Drasil.SWHS.DataDesc where
 
-import Language.Drasil
-import Drasil.SWHS.Unitals
+import Language.Drasil (DataDesc, junkLine, singleton, Mod (ModData))
+import Drasil.SWHS.Unitals (tank_length, diam, pcm_vol, pcm_SA, pcm_density,
+    temp_melt_P, htCap_S_P, htCap_L_P, htFusion, coil_SA, temp_C,
+    w_density, htCap_W, coil_HTC, pcm_HTC, temp_init, tau, time_final,
+    abs_tol, rel_tol, cons_tol)
 
 swhsInputMod :: Mod
 swhsInputMod = ModData "InputFormat" [swhsInputData]

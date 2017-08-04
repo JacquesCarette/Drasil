@@ -7,11 +7,14 @@ import Language.Drasil (Relation, RelationConcept,
   Sentence (Sy, S, E),
   DerivType (Total),
   Expr (C, (:*), (:-), (:+), (:=), Deriv, FCall))
+
 import Data.Drasil.SentenceStructures (foldlSent)
 import Data.Drasil.Quantities.PhysicalProperties as QPP (vol, mass)
-import Data.Drasil.Quantities.Thermodynamics as QT
-import Data.Drasil.Quantities.Physics as QP
-import Drasil.SWHS.Unitals
+import Data.Drasil.Quantities.Thermodynamics as QT (ht_flux, heat_cap_spec,
+  temp)
+import Data.Drasil.Quantities.Physics as QP (time)
+import Drasil.SWHS.Unitals (vol_ht_gen, temp_diff, temp_env, pcm_SA,
+  out_SA, in_SA, ht_flux_in, ht_flux_out, htTransCoeff, thFluxVect)
 import Data.Drasil.SentenceStructures (isThe, sAnd)
 import Data.Drasil.Utils (getS, unwrap)
 import Data.Drasil.Concepts.Documentation (acroA)

@@ -43,8 +43,8 @@ ref3 = MThesis [
 ref4 = Article [
   Author [person' "Marilyn" "Lightstone"],
   Title (S "Derivation of tank/pcm model"),
-  Note (S "From Marilyn Lightstone's Personal Notes"),
-  Year 2012]
+  Year 2012,
+  Note (S "From Marilyn Lightstone's Personal Notes")]
 
 ref5 = Article [
   Author [personWM' "David" ["L"] "Parnas",
@@ -64,6 +64,7 @@ ref6 = Article [
   Note (S "In J. Ralyt" :+: (F Acute 'e') `sC` S "P. Agerfalk" `sC`
   S "and N. Kraiem" `sC` S "editors"),
   --FIXME: need to add editor field
+  --FIXME: person' takes strings but we need an "e" with an accent
   Journal (S "Proceedings of the First International Workshop on" +:+
   S "Situational Requirements Engineering Processes - Methods," +:+
   S "Techniques and Tools to Support Situation-Specific Requirements" +:+

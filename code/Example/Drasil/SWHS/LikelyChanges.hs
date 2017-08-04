@@ -1,6 +1,8 @@
 module Drasil.SWHS.LikelyChanges where
 
-import Language.Drasil
+import Language.Drasil (Contents,
+  phrase, plural, short, sC, (+:+), makeRef,
+  Sentence (S))
 import Drasil.DocumentLanguage (mkLklyChnk)
 import Data.Drasil.Concepts.Documentation (assumption, value, simulation,
   model)
@@ -10,7 +12,8 @@ import Drasil.SWHS.Unitals (temp_init, temp_C, temp_PCM)
 import Drasil.SWHS.Assumptions (assump4, assump8, assump9, assump11,
   assump12, assump15)
 
-import qualified Data.Drasil.Concepts.Thermodynamics as CT
+import qualified Data.Drasil.Concepts.Thermodynamics as CT (heat,
+  thermal_conductor)
 import Data.Drasil.Quantities.Physics (energy)
 
 import Data.Drasil.SentenceStructures (foldlSent, sAnd, ofThe)

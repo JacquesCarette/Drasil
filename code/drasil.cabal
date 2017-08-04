@@ -176,6 +176,7 @@ executable nopcm
     , Drasil.NoPCM.TMods
     , Drasil.NoPCM.Definitions
     , Drasil.NoPCM.DataDesc
+    , Drasil.NoPCM.Unitals
     , Drasil.SWHS.Assumptions
     , Drasil.SWHS.Body
     , Drasil.SWHS.Concepts

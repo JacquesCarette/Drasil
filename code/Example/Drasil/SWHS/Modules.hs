@@ -1,7 +1,11 @@
 module Drasil.SWHS.Modules where
+
 import Prelude hiding (id)
-import Language.Drasil
-import Drasil.SWHS.Concepts
+
+import Language.Drasil (ModuleChunk, ConceptChunk,
+  (+:+), phrase, plural, cn', (+:+.), sC, dccWDS, short, makeImpModule,
+  Sentence (S, (:+:)))
+import Drasil.SWHS.Concepts (swhsProg)
 import Data.Drasil.Concepts.Software
 import Data.Drasil.Concepts.Math hiding (constraint)
 import Data.Drasil.Concepts.Computation

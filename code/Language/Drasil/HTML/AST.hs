@@ -262,8 +262,6 @@ instance Ord CiteField where --FIXME: APA has year come directly after Author
   compare _ (Publisher  _) = GT
   compare (Issue      _) _ = LT
   compare _ (Issue      _) = GT
-  compare (Year       _) _ = LT
-  compare _ (Year       _) = GT
   compare (Date   _ _ _) _ = LT
   compare _ (Date   _ _ _) = GT
   compare (Page       _) _ = LT
@@ -274,3 +272,5 @@ instance Ord CiteField where --FIXME: APA has year come directly after Author
   compare _ (Note       _) = GT
   compare (URL       _) _  = LT
   compare _ (URL       _)  = GT
+  compare (Year       _) _ = LT
+  compare _ (Year       _) = GT

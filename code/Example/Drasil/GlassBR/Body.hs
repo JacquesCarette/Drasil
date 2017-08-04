@@ -86,7 +86,7 @@ mkSRS = [RefSec (RefProg intro
   ++ 
   [Bibliography gbCitations]
   ++
-  map Verbatim [s11, s12]
+  [Verbatim s12]
   
 glassSystInfo :: SystemInformation
 glassSystInfo = SI {
@@ -129,7 +129,7 @@ glassBR_mg = mgDoc glassBRProg (for'' titleize phrase) mg_authors mgBod
 
 s4, s5,
   s6, s6_1, s6_1_1, s6_1_2, s6_1_3, s6_2, 
-  s7, s7_1, s7_2, s8, s9, s11, s12 :: Section
+  s7, s7_1, s7_2, s8, s9, s12 :: Section
 
 s5_1_table,
   s6_1_2_list, s6_2_intro, s6_2_5_table1, 
@@ -220,7 +220,7 @@ undIR = (foldlList [phrase scndYrCalculus, phrase structuralMechanics,
 appStanddIR = foldlSent [S "In addition" `sC` plural reviewer,
   S "should be familiar with the applicable", plural standard,
   S "for constructions using glass from", sSqBr (S "4-6") `sIn`
-  (makeRef s11)]
+  (makeRef (SRS.reference SRS.missingP []))]
 incScoR = foldl (+:+) EmptyS [S "getting all", plural inParam,
   S "related to the", phrase glaSlab `sAnd` S "also the", plural parameter,
   S "related to", phrase blastTy]
@@ -251,7 +251,7 @@ s2_1_intro_p1 typeOf progName gvnVar = foldlSent [S "The main", phrase purpose,
 s2_3_intro = foldlSent [S "The", phrase organization, S "of this",
   phrase document, S "follows the", phrase template, S "for an", short srs,
   S "for", phrase sciCompS, S "proposed by" +:+ (sSqBrNum 1) 
-  `sAnd` (sSqBrNum 2), sParen (S "in" +:+ (makeRef s11)) `sC`
+  `sAnd` (sSqBrNum 2), sParen (S "in" +:+ (makeRef (SRS.reference SRS.missingP []))) `sC`
   S "with some aspects taken from Volere", phrase template, S "16",
   (sSqBrNum 3)]
   
@@ -353,8 +353,8 @@ s6_1 = probDescF start gLassBR ending [s6_1_1, s6_1_2, s6_1_3]
 {--Terminology and Definitions--}
 
 s6_1_1 = termDefnF (Just (S "All" `sOf` S "the" +:+ plural term_ +:+ 
-  S "are extracted from" +:+ (sSqBrNum 4) `sIn` (makeRef s11))) 
-  [s6_1_1_bullets]
+  S "are extracted from" +:+ (sSqBrNum 4) `sIn` 
+  (makeRef (SRS.reference SRS.missingP [])))) [s6_1_1_bullets]
 
 {--Physical System Description--}
 
@@ -857,8 +857,6 @@ fig_4 = figureLabel 4 (traceyMatrix)
 {--VALUES OF AUXILIARY CONSTANTS--}
 
 {--REFERENCES--}
-
-s11 = SRS.reference [s11_list] []
 
 {--APPENDIX--}
 

@@ -1,6 +1,6 @@
 module Drasil.NoPCM.Body where
 
--- import Drasil.NoPCM.DataDesc
+import Drasil.NoPCM.DataDesc
 
 import Control.Lens ((^.))
 import Prelude hiding (id)
@@ -138,8 +138,9 @@ nopcm_Choices = Choices {
   inputStructure = Loose    -- Loose, AsClass
 }
 
--- nopcm_code :: CodeSpec
--- nopcm_code = addModDefs (codeSpec' nopcm_si nopcm_Choices) [X, inputMod] -- Sub interpolation mod in for X
+nopcm_code :: CodeSpec
+nopcm_code = addModDefs (codeSpec' nopcm_si nopcm_Choices) [inputMod]
+-- Sub interpolation mod into list when possible              ^
 
 nopcm_srs :: Document
 nopcm_srs = mkDoc mkSRS nopcm_si

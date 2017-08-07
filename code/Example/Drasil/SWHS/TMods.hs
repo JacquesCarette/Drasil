@@ -4,8 +4,9 @@ module Drasil.SWHS.TMods where
 
 import Prelude hiding (id)
 
-import Drasil.SWHS.Unitals
-import Drasil.SWHS.Concepts
+import Drasil.SWHS.Unitals (melt_frac, tau, deltaT, htCap_V, htCap_S,
+  htCap_L, vol_ht_gen, thFluxVect)
+import Drasil.SWHS.Concepts (transient)
 
 import Language.Drasil
 import Data.Drasil.SI_Units

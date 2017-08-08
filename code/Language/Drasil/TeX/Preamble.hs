@@ -27,6 +27,7 @@ data Package = AMSMath
              | Breqn
              | FileContents
              | BibLaTeX
+             | Tabu
              deriving Eq
 
 addPackage :: Package -> D
@@ -47,6 +48,7 @@ addPackage AMSsymb   = usepackage "amssymb"
 addPackage Breqn     = usepackage "breqn"
 addPackage FileContents = usepackage "filecontents"
 addPackage BibLaTeX  = command1o "usepackage" (Just "backend=bibtex") "biblatex"
+addPackage Tabu      = usepackage "tabu"
 
 data Def = AssumpCounter
          | LCCounter
@@ -55,7 +57,7 @@ data Def = AssumpCounter
          | UCCounter
          | Bibliography
          | UseEps
-         deriving Eq
+         | TabuLine         deriving Eq
 
 addDef :: Def -> D
 addDef AssumpCounter = count "assumpnum" %%
@@ -68,7 +70,8 @@ addDef ReqCounter    = count "reqnum" %%
                        comm "rthereqnum" "R\\thereqnum" Nothing
 addDef UCCounter     = count "ucnum" %%
                        comm "uctheucnum" "UC\\theucnum" Nothing
-addDef Bibliography  = command "bibliography" bibFname 
+addDef Bibliography  = command "bibliography" bibFname
+addDef TabuLine      = command0 "global\\tabulinesep=1mm"
 addDef UseEps        = comm "useEps" "\\ensuremath{\\epsilon{}}" Nothing
 
 genPreamble :: [LayoutObj] -> D
@@ -86,8 +89,7 @@ genPreamble los = let preamble = parseDoc los
 
 parseDoc :: [LayoutObj] -> [Preamble]
 parseDoc los' = [PreP FullPage, PreP HyperRef, PreP AMSMath, PreP AMSsymb,
-  PreP Breqn, PreP FileContents, PreP BibLaTeX, PreD Bibliography, PreD UseEps] ++
-  (nub $ parseDoc' los')
+  PreP Breqn, PreP FileContents, PreP BibLaTeX, PreD Bibliography, PreD UseEps, PreP Tabu, PreD TabuLine] ++  (nub $ parseDoc' los')
   where parseDoc' [] = []
         parseDoc' ((Table _ _ _ _):los) =
           (PreP LongTable):(PreP BookTabs):(PreP Caption):parseDoc' los

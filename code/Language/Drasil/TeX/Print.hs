@@ -243,9 +243,9 @@ makeTable lls r bool t =
   %% (if bool then caption t else empty)
   %% label r
   %% (pure $ text ("\\end{" ++ ltab ++ "}"))
-  where header l = concat (replicate ((length (head l))-1) "l ") ++ "l"
+  where header l = concat (replicate ((length (head l))-1) "X[l] ") ++ "l"
 --                    ++ "p" ++ brace (show tableWidth ++ "cm")
-        ltab = "longtable" ++ (if not bool then "*" else "")
+        ltab = "longtabu"--"longtable" ++ (if not bool then "*" else "")
 
 makeRows :: [[Spec]] -> D
 makeRows []     = empty

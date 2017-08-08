@@ -6,12 +6,12 @@ body {min-width: 400px; max-width: 1400px;}
   display: inline-block;
   vertical-align: middle;}
 .case {
-float: right;
-padding-left: 1em;}
+  float: right;
+  padding-left: 1em;}
 .cases > span {
   display: block;
-  padding-top: 0.15em;
-  padding-left: 1.5em;}
+  padding-top: 0.1em;
+  padding-left: 0em;}
 .casebr {
   display: inline-block;
   vertical-align: middle;
@@ -19,10 +19,10 @@ padding-left: 1em;}
   text-align: center;
   font-size: 500%;}
 .caption {
-text-align: center;
-font-weight: bold;
-padding-bottom: 1%;
-line-height: 0;}
+  text-align: center;
+  font-weight: bold;
+  padding-bottom: 1%;
+  line-height: 0;}
 .fraction {
   display: inline-block;
   vertical-align: middle;
@@ -42,11 +42,11 @@ table, th, td {
   border-collapse: collapse;
   margin-left: auto;
   margin-right: auto;}
-th, td {border:1px solid black; padding:1%;}
-.tdefn, .ddefn {width:75%; margin-top:1%; margin-bottom:1%;}
+th, td {border: 1px solid black; padding: 1%;}
+.tdefn, .ddefn {width: 75%; margin-top: 1%; margin-bottom: 1%;}
 .tdefn th {width: 15%;}
 .ddefn th {width: 15%;}
-.section {width:80%; margin:0 auto; text-align:left;}
+.section {width: 80%; margin: 0 auto; text-align: left;}
 .code {
   display: inline-block;
   text-align: left;
@@ -57,8 +57,7 @@ th, td {border:1px solid black; padding:1%;}
   white-space: pre-wrap;
   white-space: -moz-pre-wrap;
   white-space: -o-pre-wrap;
-  background: #faf8f0;
-}
+  background: #faf8f0;}
 .list {text-align: left;}
 .figure {max-width: 800px;}
 .matrix {
@@ -71,15 +70,28 @@ th, td {border:1px solid black; padding:1%;}
   position: absolute;
   top: 0;
   border: 1px solid #000;
-  width: 6px;
+  width: 5px;
   height: 100%;}
 .matrix:before {
-  left: -6px;
+  left: -5px;
   border-right: 0px;}
 .matrix:after {
-  right: -6px;
+  right: -5px;
   border-left: 0px;}
 .matrix td {
-  padding: 6px;
+  padding: 5px;
   text-align: center;
   border: 0px;}
+.operator {
+  position: relative;
+  display: inline-table;
+  margin: -2px 0px 2px;
+  vertical-align: 105%;}
+.operator td {
+  text-align: center;
+  border: 0px;}
+.symb {
+  font-size: 150%;
+  line-height: 110%;
+  vertical-align: -10%;}
+.bound {font-size: 80%;}

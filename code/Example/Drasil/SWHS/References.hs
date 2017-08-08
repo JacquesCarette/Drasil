@@ -1,6 +1,12 @@
 module Drasil.SWHS.References where
 
-import Language.Drasil
+import Language.Drasil (BibRef,
+  (+:+), sC, person', personWM',
+  Accent (Acute),
+  Citation (Article, MThesis),
+  CiteField (Author, Year, Note, Pages, Place, Journal, Title, Issue,
+    School, Volume, Publisher, Edition),
+  Sentence (S, (:+:), F))
 
 ----------------------------
 -- Section 9 : References --

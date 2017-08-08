@@ -1,6 +1,10 @@
 module Drasil.SWHS.Requirements where
 
-import Language.Drasil
+import Language.Drasil (Section,
+  sParen, (+:+), phrase, short, sC, plural, (+:), titleize, makeRef,
+  Contents (EqnBlock),
+  Sentence (S, (:+:)),
+  Expr (C, (:=)))
 
 import Data.Drasil.Concepts.Documentation (acroIM, output_,
   acroR, simulation, quantity, input_, physical, constraint, condition,
@@ -12,7 +16,8 @@ import Drasil.Sections.Requirements (nonFuncReqF)
 import Data.Drasil.Quantities.PhysicalProperties (mass)
 import Data.Drasil.Quantities.Physics (time, energy)
 
-import qualified Data.Drasil.Concepts.Thermodynamics as CT
+import Data.Drasil.Concepts.Thermodynamics as CT (law_cons_energy,
+  melting)
 import Data.Drasil.Concepts.Software (correctness, verifiability,
   understandability, reusability, maintainability, performance)
 import Data.Drasil.Concepts.Math (parameter)

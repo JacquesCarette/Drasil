@@ -54,6 +54,7 @@ data Def = AssumpCounter
          | ReqCounter
          | UCCounter
          | Bibliography
+         | UseEps
          deriving Eq
 
 addDef :: Def -> D
@@ -68,6 +69,7 @@ addDef ReqCounter    = count "reqnum" %%
 addDef UCCounter     = count "ucnum" %%
                        comm "uctheucnum" "UC\\theucnum" Nothing
 addDef Bibliography  = command "bibliography" bibFname 
+addDef UseEps        = comm "useEps" "\\ensuremath{\\epsilon{}}" Nothing
 
 genPreamble :: [LayoutObj] -> D
 genPreamble los = let preamble = parseDoc los
@@ -84,7 +86,7 @@ genPreamble los = let preamble = parseDoc los
 
 parseDoc :: [LayoutObj] -> [Preamble]
 parseDoc los' = [PreP FullPage, PreP HyperRef, PreP AMSMath, PreP AMSsymb,
-  PreP Breqn, PreP FileContents, PreP BibLaTeX, PreD Bibliography] ++
+  PreP Breqn, PreP FileContents, PreP BibLaTeX, PreD Bibliography, PreD UseEps] ++
   (nub $ parseDoc' los')
   where parseDoc' [] = []
         parseDoc' ((Table _ _ _ _):los) =

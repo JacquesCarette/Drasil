@@ -5,17 +5,20 @@
 \usepackage{amsmath}
 \usepackage{amssymb}
 \usepackage{breqn}
+\usepackage{filecontents}
+\usepackage[backend=bibtex]{biblatex}
 \usepackage{longtable}
 \usepackage{booktabs}
 \usepackage{caption}
 \usepackage{graphics}
+\bibliography{bibfile}
+\newcommand{\useEps}{\ensuremath{\epsilon{}}}
 \newcounter{assumpnum}
 \newcommand{\atheassumpnum}{A\theassumpnum}
 \newcounter{reqnum}
 \newcommand{\rthereqnum}{R\thereqnum}
 \newcounter{lcnum}
 \newcommand{\lcthelcnum}{LC\thelcnum}
-\newcommand{\useEps}{\ensuremath{\epsilon{}}}
 \title{Software Requirements Specification for GlassBR program}
 \author{Nikitha Krithnan and Spencer Smith}
 \begin{document}
@@ -68,7 +71,7 @@ ${d_{min}}$ & Minimum value for one of the dimensions of the glass plate & mm
 \\
 $E$ & Modulus of elasticity of glass & Pa
 \\
-$g$ & Glass type $g$ $\epsilon{}$ \{AN, FT, HS\} & Unitless
+$g$ & Glass type $g$ \useEps \{AN, FT, HS\} & Unitless
 \\
 $GTF$ & Glass type factor & Unitless
 \\
@@ -116,7 +119,7 @@ ${SD_{y}}$ & Stand off distance (y-component) & m
 \\
 ${SD_{z}}$ & Stand off distance (z-component) & m
 \\
-$t$ & Nominal thickness $t$ $\epsilon{}$ \{2.5, 2.7, 3.0, 4.0, 5.0, 6.0, 8.0, 10.0, 12.0, 16.0, 19.0, 22.0\} & mm
+$t$ & Nominal thickness $t$ \useEps \{2.5, 2.7, 3.0, 4.0, 5.0, 6.0, 8.0, 10.0, 12.0, 16.0, 19.0, 22.0\} & mm
 \\
 ${t_{d}}$ & Duration of load & s
 \\
@@ -312,31 +315,31 @@ Given the dimensions of the glass plane, glass type, the characteristics of the 
 The instance models that govern GlassBR are presented in Section~\ref{Sec:InstMode}. The information to understand the meaning of the instance models and their derivation is also presented, so that the instance models can be verified.
 \subsubsection{Assumptions}
 \label{Sec:Assu}
-This section simplifies the original problem and helps in developing the theoretical model by filling in the missing information for the physical system. The numbers given in the square brackets refer to the Theoretical Models [Section~\ref{Sec:TheoMode}], Data Definitions [Section~\ref{Sec:DataDefi}], Instance Models [Section~\ref{Sec:InstMode}], or Likely Changes [Section~\ref{Sec:LikeChan}], in which the respective assumption is used.
-\begin{itemize}
-\item[A1:]The standard E1300-09a for calculation applies only to monolithic, laminated, or insulating glass constructions of rectangular shape with continuous lateral support along one, two, three, or four edges. This practice assumes that (1) the supported glass edges for two, three and four-sided support conditions are simply supported and free to slip in plane; (2) glass supported on two sides acts as a simply supported beam and (3) glass supported on one side acts as a cantilever.
-\item[A2:]Following [4 (pg. 1)], this practice does not apply to any form of wired, patterned, etched, sandblasted, drilled, notched, or grooved glass with surface and edge treatments that alter the glass strength.
-\item[A3:]This system only considers the external explosion scenario for its calculations.
-\item[A4:]Standard values used for calculation in GlassBR are:
-\end{itemize}
-\begin{equation}
-m=7
-\end{equation}
-\begin{equation}
-k=(2.86)10^{-53}
-\end{equation}
-\begin{equation}
-E=(7.17)10^{7}
-\end{equation}
-\begin{equation}
-t_{d}=3
-\end{equation}
-\begin{itemize}
-\item[A5:]Glass under consideration is assumed to be a single lite. Hence the value of $LSF$ is equal to 1 for all calculations in GlassBR.
-\item[A6:]Boundary conditions for the glass slab is assumed to be 4-sided support for calculations.
-\item[A7:]The response type considered in GlassBR is flexural.
-\item[A8:]With reference to A4 the value of load duration factor ($LDF$) is a constant in GlassBR. It is calculated by the equation: $LDF=\left(\frac{t_{d}}{60}\right)^{\frac{m}{16}}$. Using this, $LDF=0.27$.
-\end{itemize}
+This section simplifies the original problem and helps in developing the theoretical model by filling in the missing information for the physical system. The numbers given in the square brackets refer to the Theoretical Models {[}Section~\ref{Sec:TheoMode}{]}, General Definitions {[}Section~\ref{Sec:GeneDefi}{]}, Data Definitions {[}Section~\ref{Sec:DataDefi}{]}, Instance Models {[}Section~\ref{Sec:InstMode}{]}, or Likely Changes {[}Section~\ref{Sec:LikeChan}{]}, in which the respective assumption is used.
+\begin{description}
+\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:assumption1}:]The standard E1300-09a for calculation applies only to monolithic, laminated, or insulating glass constructions of rectangular shape with continuous lateral support along. one, two, three, or four edge This practice assumes that (1) the supported glass edge for two, three and four-sided support conditions are simply supported and free to slip in plane; (2) glass supported on two sides acts as a simply supported beam and (3) glass supported on one side acts as a cantilever.
+\end{description}
+\begin{description}
+\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:assumption2}:]Following {[}4 (pg. 1){]}, this practice does not apply to any form of wired, patterned, etched, sandblasted, drilled, notched, or grooved glass with surface and edge treatments that alter the glass strength.
+\end{description}
+\begin{description}
+\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:assumption3}:]This system only considers the external explosion scenario for its calculations.
+\end{description}
+\begin{description}
+\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:assumption4}:]The values provided in Section~\ref{Sec:ValuofAuxiCons} are assumed for the duration of load (${t_{d}}$), and the material properties of $m$, $k$, and $E$.
+\end{description}
+\begin{description}
+\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:assumption5}:]Glass under consideration is assumed to be a single lite. Hence the value of LSF is equal to 1 for all calculations in GlassBR.
+\end{description}
+\begin{description}
+\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:assumption6}:]Boundary conditions for the glass slab is assumed to be 4-sided support for calculations.
+\end{description}
+\begin{description}
+\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:assumption7}:]The response type considered in GlassBR is flexural.
+\end{description}
+\begin{description}
+\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:assumption8}:]With reference to A4 the value of load duration factor ($LDF$) is a constant in GlassBR. It is calculated by the equation: $LDF=\left(\frac{{t_{d}}}{60}\right)^{\frac{m}{16}}$. Using this, $LDF=0.27$.
+\end{description}
 \subsubsection{Theoretical Models}
 \label{Sec:TheoMode}
 This section focuses on the general equations and laws that GlassBR is based on.
@@ -349,9 +352,9 @@ This section focuses on the general equations and laws that GlassBR is based on.
 \\ \midrule \\
 Label & Safety Requirement-1
 \\ \midrule \\
-Equation & $is\_safe1=P_{b}<P_{btol}$
+Equation & $is\_safe1={P_{b}}<{P_{btol}}$
 \\ \midrule \\
-Description & If $is\_safe1$ = True, the glass is considered safe. $is\_safe1$ and $is\_safe2$ (from \hyperref[T:t2SafetyReq]{Definition~T:t2SafetyReq}) are either both True or both False. $P_{b}$ is the probability of breakage, as calculated in \hyperref[T:probOfBr]{Definition~T:probOfBr}. $P_{btol}$ is the tolerable probability of breakage entered by the user.
+Description & If $is\_safe1$ = True, the glass is considered safe. $is\_safe1$ and $is\_safe2$ (from \hyperref[T:t2SafetyReq]{Definition~T:t2SafetyReq}) are either both True or both False. ${P_{b}}$ is the probability of breakage, as calculated in \hyperref[T:probOfBr]{Definition~T:probOfBr}. ${P_{btol}}$ is the tolerable probability of breakage entered by the user.
 \\ \bottomrule \end{tabular}
 \end{minipage}\\
 ~\newline
@@ -418,7 +421,7 @@ Equation & $h$ = $\frac{1}{1000}\begin{cases}
 21.44, & t=22.0
 \end{cases}$
 \\ \midrule \\
-Description & $h$ is the actual thickness (m)\newline$t$ is the nominal thickness $t$ in \{2.5, 2.7, 3.0, 4.0, 5.0, 6.0, 8.0, 10.0, 12.0, 16.0, 19.0, 22.0\} (mm)
+Description & $h$ is the actual thickness (m)\newline$t$ is the nominal thickness $t$ \useEps \{2.5, 2.7, 3.0, 4.0, 5.0, 6.0, 8.0, 10.0, 12.0, 16.0, 19.0, 22.0\} (mm)
 \\ \bottomrule \end{tabular}
 \end{minipage}\\
 ~\newline
@@ -432,9 +435,9 @@ Label & Load Duration Factor
 \\ \midrule \\
 Units & Unitless
 \\ \midrule \\
-Equation & $LDF$ = $\left(\frac{t_{d}}{60}\right)^{\frac{m}{16}}$
+Equation & $LDF$ = $\left(\frac{{t_{d}}}{60}\right)^{\frac{m}{16}}$
 \\ \midrule \\
-Description & $LDF$ is the load duration factor\newline$t_{d}$ is the duration of load (s)\newline$m$ is the surface flaw parameter ($\frac{\text{m}^{12}}{\text{N}^{7}}$)
+Description & $LDF$ is the load duration factor\newline${t_{d}}$ is the duration of load (s)\newline$m$ is the surface flaw parameter ($\frac{\text{m}^{12}}{\text{N}^{7}}$)
 \\ \bottomrule \end{tabular}
 \end{minipage}\\
 ~\newline
@@ -464,9 +467,9 @@ Label & Non-Factored Load
 \\ \midrule \\
 Units & Unitless
 \\ \midrule \\
-Equation & $NFL$ = $\frac{\hat{q}_{tol}Eh^{4}}{\left(ab\right)^{2}}$
+Equation & $NFL$ = $\frac{{\hat{q}_{tol}}Eh^{4}}{\left(ab\right)^{2}}$
 \\ \midrule \\
-Description & $NFL$ is the non-factored load\newline$\hat{q}_{tol}$ is the tolerable load\newline$E$ is the modulus of elasticity of glass\newline$h$ is the actual thickness\newline$a$ is the plate length (long dimension)\newline$b$ is the plate width (short dimension)
+Description & $NFL$ is the non-factored load\newline${\hat{q}_{tol}}$ is the tolerable load\newline$E$ is the modulus of elasticity of glass (Pa)\newline$h$ is the actual thickness (m)\newline$a$ is the plate length (long dimension) (m)\newline$b$ is the plate width (short dimension) (m)
 \\ \bottomrule \end{tabular}
 \end{minipage}\\
 ~\newline
@@ -476,7 +479,7 @@ Description & $NFL$ is the non-factored load\newline$\hat{q}_{tol}$ is the toler
 \phantomsection 
 \label{DD:gTF}
 \\ \midrule \\
-Label & $GTF$
+Label & Glass Type Factor
 \\ \midrule \\
 Units & Unitless
 \\ \midrule \\
@@ -486,7 +489,7 @@ Equation & $GTF$ = $\begin{cases}
 2, & g=HS
 \end{cases}$
 \\ \midrule \\
-Description & $GTF$ is the glass type factor\newline$g$ is the glass type $g$ in \{AN, FT, HS\}
+Description & $GTF$ is the glass type factor\newline$g$ is the glass type $g$ \useEps \{AN, FT, HS\}
 \\ \bottomrule \end{tabular}
 \end{minipage}\\
 ~\newline
@@ -496,13 +499,13 @@ Description & $GTF$ is the glass type factor\newline$g$ is the glass type $g$ in
 \phantomsection 
 \label{DD:dimlessLoad}
 \\ \midrule \\
-Label & $\hat{q}$
+Label & Dimensionless Load
 \\ \midrule \\
 Units & Unitless
 \\ \midrule \\
-Equation & $\hat{q}$ = $\frac{q\left(ab\right)^{2}}{Eh^{4}*GTF}$
+Equation & $\hat{q}$ = $\frac{q\left(ab\right)^{2}}{Eh^{4}\cdot{}GTF}$
 \\ \midrule \\
-Description & $\hat{q}$ is the dimensionless load\newline$q$ is the applied load (demand)\newline$a$ is the plate length (long dimension)\newline$b$ is the plate width (short dimension)\newline$E$ is the modulus of elasticity of glass\newline$h$ is the actual thickness\newline$GTF$ is the glass type factor
+Description & $\hat{q}$ is the dimensionless load\newline$q$ is the applied load (demand) (kPa)\newline$a$ is the plate length (long dimension) (m)\newline$b$ is the plate width (short dimension) (m)\newline$E$ is the modulus of elasticity of glass (Pa)\newline$h$ is the actual thickness (m)\newline$GTF$ is the glass type factor
 \\ \bottomrule \end{tabular}
 \end{minipage}\\
 ~\newline
@@ -512,13 +515,13 @@ Description & $\hat{q}$ is the dimensionless load\newline$q$ is the applied load
 \phantomsection 
 \label{DD:tolLoad}
 \\ \midrule \\
-Label & $\hat{q}_{tol}$
+Label & Tolerable Load
 \\ \midrule \\
 Units & Unitless
 \\ \midrule \\
-Equation & $\hat{q}_{tol}$ = $\hat{q}_{tol}\left(J_{tol},\frac{a}{b}\right)$
+Equation & ${\hat{q}_{tol}}$ = ${\hat{q}_{tol}}\left({J_{tol}},\frac{a}{b}\right)$
 \\ \midrule \\
-Description & $\hat{q}_{tol}$ is the tolerable load\newline$\hat{q}_{tol}$ is the tolerable load\newline$J_{tol}$ is the stress distribution factor (Function) based on Pbtol\newline$a$ is the plate length (long dimension)\newline$b$ is the plate width (short dimension)
+Description & ${\hat{q}_{tol}}$ is the tolerable load\newline${J_{tol}}$ is the stress distribution factor (Function) based on Pbtol\newline$a$ is the plate length (long dimension) (m)\newline$b$ is the plate width (short dimension) (m)
 \\ \bottomrule \end{tabular}
 \end{minipage}\\
 ~\newline
@@ -528,13 +531,13 @@ Description & $\hat{q}_{tol}$ is the tolerable load\newline$\hat{q}_{tol}$ is th
 \phantomsection 
 \label{DD:sdf.tol}
 \\ \midrule \\
-Label & $J_{tol}$
+Label & Stress Distribution Factor (Function) Based on Pbtol
 \\ \midrule \\
 Units & Unitless
 \\ \midrule \\
-Equation & $J_{tol}$ = $\log\left(\log\left(\frac{1}{1-P_{btol}}\right)\frac{\left(\frac{a}{1000}\frac{b}{1000}\right)^{m-1}}{k\left(\left(E*1000\right)\left(\frac{h}{1000}\right)^{2}\right)^{m}*LDF}\right)$
+Equation & ${J_{tol}}$ = $\log\left(\log\left(\frac{1}{1-{P_{btol}}}\right)\frac{\left(ab\right)^{m-1}}{k\left(\left(E\left(h\right)^{2}\right)\right)^{m}\cdot{}LDF}\right)$
 \\ \midrule \\
-Description & $J_{tol}$ is the stress distribution factor (Function) based on Pbtol\newline$P_{btol}$ is the tolerable probability of breakage\newline$a$ is the plate length (long dimension)\newline$b$ is the plate width (short dimension)\newline$m$ is the surface flaw parameter\newline$k$ is the surface flaw parameter\newline$E$ is the modulus of elasticity of glass\newline$h$ is the actual thickness\newline$LDF$ is the load duration factor
+Description & ${J_{tol}}$ is the stress distribution factor (Function) based on Pbtol\newline${P_{btol}}$ is the tolerable probability of breakage\newline$a$ is the plate length (long dimension) (m)\newline$b$ is the plate width (short dimension) (m)\newline$m$ is the surface flaw parameter ($\frac{\text{m}^{12}}{\text{N}^{7}}$)\newline$k$ is the surface flaw parameter ($\frac{\text{m}^{12}}{\text{N}^{7}}$)\newline$E$ is the modulus of elasticity of glass (Pa)\newline$h$ is the actual thickness (m)\newline$LDF$ is the load duration factor
 \\ \bottomrule \end{tabular}
 \end{minipage}\\
 \subsubsection{Instance Models}
@@ -549,9 +552,9 @@ This section transforms the problem defined in Section~\ref{Sec:ProbDesc} into o
 \\ \midrule \\
 Label & Probability of Glass Breakage
 \\ \midrule \\
-Equation & $P_{b}=1-e^{-B}$
+Equation & ${P_{b}}=1-e^{-B}$
 \\ \midrule \\
-Description & $P_{b}$ is the calculated probability of breakage. $B$ is the risk of failure.
+Description & ${P_{b}}$ is the calculated probability of breakage. $B$ is the risk of failure.
 \\ \bottomrule \end{tabular}
 \end{minipage}\\
 ~\newline
@@ -563,9 +566,9 @@ Description & $P_{b}$ is the calculated probability of breakage. $B$ is the risk
 \\ \midrule \\
 Label & Calculation of Capacity(LR)
 \\ \midrule \\
-Equation & $LR=NFL*GTF*LSF$
+Equation & $LR=NFL\cdot{}GTF\cdot{}LSF$
 \\ \midrule \\
-Description & $LR$ is the load resistance, which is also called capacity. $NFL$ is the non-factored load. $GTF$ is the glass type factor. $LSF$ is the load share factor. Follows $A1$ ("In development of this procedure, it was assumed that all four edges of the glass are simply supported and free to slip in the plane of the glass. This boundary condition has been shown to be typical of many glass installations)" from [4 (pg. 53)].
+Description & $LR$ is the load resistance, which is also called capacity. $NFL$ is the non-factored load. $GTF$ is the glass type factor. $LSF$ is the load share factor. Follows A2 and A1 (``In development of this procedure, it was assumed that all four edges of the glass are simply supported and free to slip in the plane of the glass. This boundary condition has been shown to be typical of many glass installations") from [4 (pg. 53)].
 \\ \bottomrule \end{tabular}
 \end{minipage}\\
 ~\newline
@@ -577,9 +580,9 @@ Description & $LR$ is the load resistance, which is also called capacity. $NFL$ 
 \\ \midrule \\
 Label & Calculation of Demand(q)
 \\ \midrule \\
-Equation & $q=q\left(w_{TNT},SD\right)$
+Equation & $q=q\left({w_{TNT}},SD\right)$
 \\ \midrule \\
-Description & $q$ or demand, is the 3 second duration equivalent pressure obtained from Figure 2 by interpolation using stand off distance ($SD$) and $w_{TNT}$ as parameters. $w_{TNT}$ is defined as $w_{TNT}=wTNT$. $w$ is the charge weight. $TNT$ is the TNT equivalent factor. $SD$ is the stand off distance where $SD=\sqrt{SD_{x}^{2}+SD_{y}^{2}+SD_{z}^{2}}$ where ($SD_{x}$, $SD_{y}$, $SD_{z}$) are coordinates.
+Description & $q$ or demand, is the 3 second duration equivalent pressure obtained from Figure 2 by interpolation using stand off distance ($SD$) and ${w_{TNT}}$ as parameters. ${w_{TNT}}$ is defined as ${w_{TNT}}=wTNT$. $w$ is the charge weight. $TNT$ is the TNT equivalent factor. $SD$ is the stand off distance where $SD=\sqrt{{SD_{x}}^{2}+{SD_{y}}^{2}+{SD_{z}}^{2}}$ where (${SD_{x}}$, ${SD_{y}}$, ${SD_{z}}$) are coordinates.
 \\ \bottomrule \end{tabular}
 \end{minipage}\\
 \subsubsection{Data Constraints}
@@ -590,17 +593,17 @@ Table~\ref{Table:Tabl2:InpuVari} shows the data constraints on the input variabl
 Var & Physical Constraints & Software Constraints & Typical Value & Typical Uncertainty
 \\
 \midrule
-$a$ & $a>0.0$ and $\frac{a}{b}>1.0$ & $d_{min}\leq{}a$, $a\leq{}d_{max}$, and $\frac{a}{b}<AR_{max}$ & $1500.0$ mm & 0.1
+$a$ & $a>0.0$ and $\frac{a}{b}>1.0$ & ${d_{min}}\leq{}a$, $a\leq{}{d_{max}}$, and $\frac{a}{b}<{AR_{max}}$ & $1.5$ m & 0.1
 \\
-$b$ & $b>0.0$ and $b<a$ & $d_{min}\leq{}b$, $b\leq{}d_{max}$, and $\frac{a}{b}<AR_{max}$ & $1200.0$ mm & 0.1
+$b$ & $b>0.0$ and $b<a$ & ${d_{min}}\leq{}b$, $b\leq{}{d_{max}}$, and $\frac{a}{b}<{AR_{max}}$ & $1.2$ m & 0.1
 \\
-$P_{btol}$ & $0.0<P_{btol}$ and $P_{btol}<1.0$ & None & $0.008$ & 1.0e-3
+$SD$ & $SD>0.0$ & ${SD_{min}}<SD$ and $SD<{SD_{max}}$ & $45.0$ m & 0.1
 \\
-$w$ & $w\geq{}0.0$ & $w_{max}\leq{}w$ and $w\leq{}w_{min}$ & $42.0$ kg & 0.1
+$w$ & $w\geq{}0.0$ & ${w_{max}}\leq{}w$ and $w\leq{}{w_{min}}$ & $42.0$ kg & 0.1
+\\
+${P_{btol}}$ & $0.0<{P_{btol}}$ and ${P_{btol}}<1.0$ & None & $0.008$ & 1.0e-3
 \\
 $TNT$ & $TNT>0.0$ & None & $1$ & 0.1
-\\
-$SD$ & $SD>0.0$ & $SD_{min}<SD$ and $SD<SD_{max}$ & $45.0$ m & 0.1
 \\
 \bottomrule
 \caption{Input Data Constraints}
@@ -611,7 +614,7 @@ $SD$ & $SD>0.0$ & $SD_{min}<SD$ and $SD<SD_{max}$ & $45.0$ m & 0.1
 Var & Physical Constraints
 \\
 \midrule
-$P_{b}$ & $0.0<P_{b}$ and $P_{b}<1.0$
+${P_{b}}$ & $0.0<{P_{b}}$ and ${P_{b}}<1.0$
 \\
 \bottomrule
 \caption{Output Data Constraints}
@@ -636,19 +639,19 @@ $b$ & Plate width (short dimension) & m
 \\
 $w$ & Charge weight & kg
 \\
-$P_{btol}$ & Tolerable probability of breakage & 
+${P_{btol}}$ & Tolerable probability of breakage & Unitless
 \\
 $TNT$ & TNT equivalent factor & Unitless
 \\
-$SD_{x}$ & Stand off distance (x-component) & m
+${SD_{x}}$ & Stand off distance (x-component) & m
 \\
-$SD_{y}$ & Stand off distance (y-component) & m
+${SD_{y}}$ & Stand off distance (y-component) & m
 \\
-$SD_{z}$ & Stand off distance (z-component) & m
+${SD_{z}}$ & Stand off distance (z-component) & m
 \\
-$g$ & Glass type $g$ $\epsilon{}$ \{AN, FT, HS\} & Unitless
+$g$ & Glass type $g$ \useEps \{AN, FT, HS\} & Unitless
 \\
-$t$ & Nominal thickness $t$ $\epsilon{}$ \{2.5, 2.7, 3.0, 4.0, 5.0, 6.0, 8.0, 10.0, 12.0, 16.0, 19.0, 22.0\} & mm
+$t$ & Nominal thickness $t$ \useEps \{2.5, 2.7, 3.0, 4.0, 5.0, 6.0, 8.0, 10.0, 12.0, 16.0, 19.0, 22.0\} & mm
 \\
 \bottomrule
 \caption{Required Inputs following R1}
@@ -849,21 +852,21 @@ $k$ & surface flaw parameter & $\left(2.86\right)10^{-53}$ & $\frac{\text{m}^{12
 \\
 $E$ & modulus of elasticity of glass & $\left(7.17\right)10^{7}$ & Pa
 \\
-$t_{d}$ & duration of load & $3$ & s
+${t_{d}}$ & duration of load & $3$ & s
 \\
-$d_{max}$ & maximum value for one of the dimensions of the glass plate & $0.1$ & mm
+${d_{max}}$ & maximum value for one of the dimensions of the glass plate & $0.1$ & mm
 \\
-$d_{min}$ & minimum value for one of the dimensions of the glass plate & $5.0$ & mm
+${d_{min}}$ & minimum value for one of the dimensions of the glass plate & $5.0$ & mm
 \\
-$AR_{max}$ & maximum aspect ratio & $5.0$ & 
+${AR_{max}}$ & maximum aspect ratio & $5.0$ & Unitless
 \\
-$w_{max}$ & maximum permissible input charge weight & $910.0$ & kg
+${w_{max}}$ & maximum permissible input charge weight & $910.0$ & kg
 \\
-$w_{min}$ & minimum permissible input charge weight & $4.5$ & kg
+${w_{min}}$ & minimum permissible input charge weight & $4.5$ & kg
 \\
-$SD_{min}$ & minimum stand off distance permissible for input & $6.0$ & m
+${SD_{min}}$ & minimum stand off distance permissible for input & $6.0$ & m
 \\
-$SD_{max}$ & maximum stand off distance permissible for input & $130.0$ & m
+${SD_{max}}$ & maximum stand off distance permissible for input & $130.0$ & m
 \\
 \bottomrule
 \caption{Auxiliary Constants}

@@ -44,7 +44,7 @@ gbInputs = (map qs gbInputsWUnitsUncrtn) ++ (map qs gbInputsWUncrtn) ++
 
 --inputs with units and uncertainties
 gbInputsWUnitsUncrtn :: [UncertQ]
-gbInputsWUnitsUncrtn = [plate_len, plate_width, char_weight, standOffDist]
+gbInputsWUnitsUncrtn = [plate_len, plate_width, standOffDist, char_weight]
 
 --inputs with uncertainties and no units
 gbInputsWUncrtn :: [UncertainChunk]
@@ -55,8 +55,9 @@ gbInputsNoUncrtn :: [ConstrainedChunk]
 gbInputsNoUncrtn = [glass_type, nom_thick]
 
 gbInputDataConstraints :: [UncertainWrapper]
-gbInputDataConstraints = (map uncrtnw gbInputsWUncrtn) ++ 
-  (map uncrtnw gbInputsWUnitsUncrtn)
+gbInputDataConstraints = (map uncrtnw gbInputsWUnitsUncrtn) ++ 
+  (map uncrtnw gbInputsWUncrtn)
+  
 
 plate_len = uqcND "plate_len" (nounPhraseSP "plate length (long dimension)")
   lA metre Real 

@@ -9,7 +9,7 @@ module Data.Drasil.SentenceStructures
   , maybeChanged, maybeExpanded, maybeWOVerb
   , tAndDWAcc, tAndDWSym, tAndDOnly
   , followA
-  , getTandS
+  , getTandS, getTDS
   , eqN
   , displayConstrntsAsSet
   , fmtInputConstr, fmtOutputConstr, physC, sfwrC, typUnc, rval
@@ -168,6 +168,10 @@ preceding `followA` num = preceding +:+ S "following" +:+ acroA num
 -- | Used when you want to say a term followed by its symbol. ex. "...using the Force F in..."
 getTandS :: (SymbolForm a, NamedIdea a) => a -> Sentence
 getTandS a = phrase a +:+ getS a
+
+-- | get term, definition, and symbol
+getTDS :: (SymbolForm a, NamedIdea a, Concept a) => a -> Sentence
+getTDS a = phrase a +:+ (a ^. defn) +:+ getS a
 
 --Ideally this would create a reference to the equation too
 eqN :: Int -> Sentence

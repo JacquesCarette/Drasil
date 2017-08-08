@@ -395,9 +395,8 @@ rigFoSDerivation = [foldlSP [S "RFEM analysis can also be used to calculate the"
   EqnBlock $
   inxi shrStress := inxi shrStiffBase * inxi shrDispl,
   
-  foldlSP [S "The", phrase shrStress, shrStress ^. defn, getS shrStress, --FIXME: ISSUE #348
-  S "acts as the mobile shear acting on the base. Using the", phrase definition,
-  titleize fs, phrase equation, S "from", acroT 1 `sC` S "with the", 
+  foldlSP [S "The", getTDS shrStress, S "acts as the mobile shear acting on the base. Using the",
+  phrase definition, titleize fs, phrase equation, S "from", acroT 1 `sC` S "with the", 
   plural definition, S "of resistive shear strength of a slice", getS mobStress,
   S "from", eqN 27, S "and", getTandS shrStress, S "from",
   eqN 29, S "the", getTandS fsloc, S "can be found from as seen in", eqN 30 `sAnd` acroIM 5],

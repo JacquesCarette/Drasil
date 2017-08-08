@@ -455,7 +455,7 @@ Description & For a slice of mass in the slope the force equilibrium to satisfy 
 \\ \midrule \\
 Label & Resistive Shear Force
 \\ \midrule \\
-Equation & $P_{i}={N'}_{i}\tan\left(\varphi{}'\right)+c'b_{i}\sec\left(\alpha{}_{i}\right)$
+Equation & $P_{i}={N'}_{i}\tan\left({\varphi{}'}_{i}\right)+{c'}_{i}b_{i}\sec\left(\alpha{}_{i}\right)$
 \\ \midrule \\
 Description & The Mohr-Coulomb resistive shear strength of a slice $\tau{}$ from T3 is multiplied by the area $b\sec\left(\alpha{}\right)\cdot{}1$ to obtain the resistive shear force $P$. Note the extra $1$ is to represent a unit of width which is multiplied by the total base length of a slice ${\ell{}_{b}}$ of the plane where the normal occurs, where ${\ell{}_{b}}=b\sec\left(\alpha{}\right)$ and $b$ is the x width of the base. This accounts for the effective normal force $N'=N-{U_{b}}$ of a soil from T4 where the normal stress is multiplied by the same area to obtain the effective normal force $\sigma{}b\sec\left(\alpha{}\right)\cdot{}1=N'$.
 \\ \bottomrule \end{tabular}
@@ -469,7 +469,7 @@ Description & The Mohr-Coulomb resistive shear strength of a slice $\tau{}$ from
 \\ \midrule \\
 Label & Mobile Shear Force
 \\ \midrule \\
-Equation & $S_{i}=\frac{P_{i}}{FS}=\frac{{N'}_{i}\tan\left(\varphi{}'\right)+c'b_{i}\sec\left(\alpha{}_{i}\right)}{FS}$
+Equation & $S_{i}=\frac{P_{i}}{FS}=\frac{{N'}_{i}\tan\left({\varphi{}'}_{i}\right)+{c'}_{i}b_{i}\sec\left(\alpha{}_{i}\right)}{FS}$
 \\ \midrule \\
 Description & From the definition of the factor of safety in T1, and the new definition of $P$, a new relation for the net mobile shear force of the slice $T$ is found as the resistive shear $P$ (GD3) divided by the factor of safety $FS$.
 \\ \bottomrule \end{tabular}
@@ -799,7 +799,7 @@ Label & Resistive Shear Force
 \\ \midrule \\
 Units & N
 \\ \midrule \\
-Equation & $R$ = $\left(\left(W_{i}+{U_{t,i}}\cos\left(\beta{}_{i}\right)+Q_{i}\cos\left(\omega{}_{i}\right)\right)\cos\left(\alpha{}_{i}\right)+\left(-{K_{c}}W_{i}-{\Delta{}H}_{i}+{U_{t,i}}\sin\left(\beta{}_{i}\right)+Q_{i}\sin\left(\omega{}_{i}\right)\right)\sin\left(\alpha{}_{i}\right)-{U_{b,i}}\right)\tan\left(\varphi{}'\right)+{c'}_{i}b_{i}\sec\left(\alpha{}_{i}\right)$
+Equation & $R$ = $\left(\left(W_{i}+{U_{t,i}}\cos\left(\beta{}_{i}\right)+Q_{i}\cos\left(\omega{}_{i}\right)\right)\cos\left(\alpha{}_{i}\right)+\left(-{K_{c}}W_{i}-{\Delta{}H}_{i}+{U_{t,i}}\sin\left(\beta{}_{i}\right)+Q_{i}\sin\left(\omega{}_{i}\right)\right)\sin\left(\alpha{}_{i}\right)-{U_{b,i}}\right)\tan\left({\varphi{}'}_{i}\right)+{c'}_{i}b_{i}\sec\left(\alpha{}_{i}\right)$
 \\ \midrule \\
 Description & $R$ is the resistive shear force (N)\newline$W$ is the weight (N)\newline$i$ is the index\newline${U_{t}}$ is the surface hydrostatic force (N)\newline$\beta{}$ is the angle (${}^{\circ}$)\newline$Q$ is the imposed surface load (N)\newline$\omega{}$ is the angle (${}^{\circ}$)\newline$\alpha{}$ is the angle (${}^{\circ}$)\newline${K_{c}}$ is the earthquake load factor\newline$\Delta{}H$ is the difference between interslice forces (N)\newline${U_{b}}$ is the base hydrostatic force (N)\newline$\varphi{}'$ is the effective angle of friction (${}^{\circ}$)\newline$c'$ is the effective cohesion (Pa)\newline$b$ is the base width of a slice (m)
 \\ \bottomrule \end{tabular}
@@ -814,7 +814,7 @@ N*_{i}=\left(W_{i}+{U_{t,i}}\cos\left(\beta{}_{i}\right)+Q_{i}\cos\left(\omega{}
 \end{dmath}
 Using $N*$, a resistive shear force without the influence of interslice forces for slice index i can be solved for in terms of all known values as done in equation (3).
 \begin{dmath}
-R_{i}=N*_{i}\tan\left(\varphi{}'\right)+{c'}_{i}b_{i}\sec\left(\alpha{}_{i}\right)=\left(\left(W_{i}+{U_{t,i}}\cos\left(\beta{}_{i}\right)+Q_{i}\cos\left(\omega{}_{i}\right)\right)\cos\left(\alpha{}_{i}\right)+\left(-{K_{c}}W_{i}-{\Delta{}H}_{i}+{U_{t,i}}\sin\left(\beta{}_{i}\right)+Q_{i}\sin\left(\omega{}_{i}\right)\right)\sin\left(\alpha{}_{i}\right)-{U_{b,i}}\right)\tan\left(\varphi{}'\right)+{c'}_{i}b_{i}\sec\left(\alpha{}_{i}\right)
+R_{i}=N*_{i}\tan\left({\varphi{}'}_{i}\right)+{c'}_{i}b_{i}\sec\left(\alpha{}_{i}\right)=\left(\left(W_{i}+{U_{t,i}}\cos\left(\beta{}_{i}\right)+Q_{i}\cos\left(\omega{}_{i}\right)\right)\cos\left(\alpha{}_{i}\right)+\left(-{K_{c}}W_{i}-{\Delta{}H}_{i}+{U_{t,i}}\sin\left(\beta{}_{i}\right)+Q_{i}\sin\left(\omega{}_{i}\right)\right)\sin\left(\alpha{}_{i}\right)-{U_{b,i}}\right)\tan\left({\varphi{}'}_{i}\right)+{c'}_{i}b_{i}\sec\left(\alpha{}_{i}\right)
 \end{dmath}
 ~\newline
 \noindent \begin{minipage}{\textwidth}
@@ -969,9 +969,9 @@ Label & Shear Stiffness
 \\ \midrule \\
 Units & $\frac{\text{Pa}}{\text{m}}$
 \\ \midrule \\
-Equation & ${K_{bt}}$ = $\frac{E}{2\left(1+\nu{}\right)}\frac{0.1}{b}+\frac{c'-\sigma{}\tan\left(\varphi{}'\right)}{|\delta{}u|+a}$
+Equation & ${K_{bt}}$ = $\frac{E}{2\left(1+\nu{}\right)}\frac{0.1}{b}+\frac{{c'}_{i}-\sigma{}\tan\left({\varphi{}'}_{i}\right)}{|\delta{}u|+a}$
 \\ \midrule \\
-Description & ${K_{bt}}$ is the shear stiffness ($\frac{\text{Pa}}{\text{m}}$)\newline$E$ is the interslice normal force (N)\newline$\nu{}$ is the Poisson's ratio\newline$b$ is the base width of a slice (m)\newline$c'$ is the effective cohesion (Pa)\newline$\sigma{}$ is the normal stress (Pa)\newline$\varphi{}'$ is the effective angle of friction (${}^{\circ}$)\newline$\delta{}u$ is the displacement (m)\newline$a$ is the constant (m)
+Description & ${K_{bt}}$ is the shear stiffness ($\frac{\text{Pa}}{\text{m}}$)\newline$E$ is the interslice normal force (N)\newline$\nu{}$ is the Poisson's ratio\newline$b$ is the base width of a slice (m)\newline$c'$ is the effective cohesion (Pa)\newline$i$ is the index\newline$\sigma{}$ is the normal stress (Pa)\newline$\varphi{}'$ is the effective angle of friction (${}^{\circ}$)\newline$\delta{}u$ is the displacement (m)\newline$a$ is the constant (m)
 \\ \bottomrule \end{tabular}
 \end{minipage}\\
 ~\newline
@@ -1076,18 +1076,18 @@ Taking the normal force equilibrium of GD1 with the effective stress definition 
 \end{dmath}
 Taking the base shear force equilibrium of GD2 with the definition of mobilized shear force from GD4 and the assumption of GD5, the equilibrium equation can be rewritten as equation (17).
 \begin{dmath}
-\frac{N_{i}\tan\left(\varphi{}'\right)+{c'}_{i}b_{i}\sec\left(\alpha{}_{i}\right)}{FS}=\left(W_{i}-\lambda{}f_{i-1}E_{i-1}+\lambda{}f_{i}E_{i}+{U_{t,i}}\cos\left(\beta{}_{i}\right)+Q_{i}\cos\left(\omega{}_{i}\right)\right)\sin\left(\alpha{}_{i}\right)+\left(-{K_{c}}W_{i}-E_{i}+E_{i-1}-H_{i}+H_{i-1}+{U_{t,i}}\sin\left(\beta{}_{i}\right)+Q_{i}\sin\left(\omega{}_{i}\right)\right)\cos\left(\alpha{}_{i}\right)
+\frac{N_{i}\tan\left({\varphi{}'}_{i}\right)+{c'}_{i}b_{i}\sec\left(\alpha{}_{i}\right)}{FS}=\left(W_{i}-\lambda{}f_{i-1}E_{i-1}+\lambda{}f_{i}E_{i}+{U_{t,i}}\cos\left(\beta{}_{i}\right)+Q_{i}\cos\left(\omega{}_{i}\right)\right)\sin\left(\alpha{}_{i}\right)+\left(-{K_{c}}W_{i}-E_{i}+E_{i-1}-H_{i}+H_{i-1}+{U_{t,i}}\sin\left(\beta{}_{i}\right)+Q_{i}\sin\left(\omega{}_{i}\right)\right)\cos\left(\alpha{}_{i}\right)
 \end{dmath}
 Substituting the equation for $N'$ from equation (16) into equation (17) and rearranging results in equation (18).
 \begin{dmath}
-E_{i}\left(\left(\lambda{}f_{i}\cos\left(\alpha{}_{i}\right)-\sin\left(\alpha{}_{i}\right)\right)\tan\left(\varphi{}'\right)-\left(\lambda{}f_{i}\sin\left(\alpha{}_{i}\right)-\cos\left(\alpha{}_{i}\right)\right)\cdot{}FS\right)=E_{i-1}\left(\left(\lambda{}f_{i-1}\cos\left(\alpha{}_{i}\right)-\sin\left(\alpha{}_{i}\right)\right)\tan\left(\varphi{}'\right)-\left(\lambda{}f_{i-1}\sin\left(\alpha{}_{i}\right)-\cos\left(\alpha{}_{i}\right)\right)\cdot{}FS\right)+FS\cdot{}T_{i}-R_{i}
+E_{i}\left(\left(\lambda{}f_{i}\cos\left(\alpha{}_{i}\right)-\sin\left(\alpha{}_{i}\right)\right)\tan\left({\varphi{}'}_{i}\right)-\left(\lambda{}f_{i}\sin\left(\alpha{}_{i}\right)-\cos\left(\alpha{}_{i}\right)\right)\cdot{}FS\right)=E_{i-1}\left(\left(\lambda{}f_{i-1}\cos\left(\alpha{}_{i}\right)-\sin\left(\alpha{}_{i}\right)\right)\tan\left({\varphi{}'}_{i}\right)-\left(\lambda{}f_{i-1}\sin\left(\alpha{}_{i}\right)-\cos\left(\alpha{}_{i}\right)\right)\cdot{}FS\right)+FS\cdot{}T_{i}-R_{i}
 \end{dmath}
 Where $R$ and $T$ are the resistive and mobile shear of the slice, without the influence of interslice forces $E$ and $X$, as defined in DD10 and DD11 Making use of the constants, and with full equations found below in equation (19) and equation (20) respectively, then equation (18) can be simplified to equation (21), also seen in IM3.
 \begin{dmath}
-\Phi{}_{i}=\left(\lambda{}f_{i}\cos\left(\alpha{}_{i}\right)-\sin\left(\alpha{}_{i}\right)\right)\tan\left(\varphi{}'\right)-\left(\lambda{}f_{i}\sin\left(\alpha{}_{i}\right)-\cos\left(\alpha{}_{i}\right)\right)\cdot{}FS
+\Phi{}_{i}=\left(\lambda{}f_{i}\cos\left(\alpha{}_{i}\right)-\sin\left(\alpha{}_{i}\right)\right)\tan\left({\varphi{}'}_{i}\right)-\left(\lambda{}f_{i}\sin\left(\alpha{}_{i}\right)-\cos\left(\alpha{}_{i}\right)\right)\cdot{}FS
 \end{dmath}
 \begin{dmath}
-\Psi{}_{i}=\left(\lambda{}f_{i}\cos\left(\alpha{}_{i+1}\right)-\sin\left(\alpha{}_{i+1}\right)\right)\tan\left(\varphi{}'\right)-\left(\lambda{}f_{i}\sin\left(\alpha{}_{i+1}\right)-\cos\left(\alpha{}_{i+1}\right)\right)\cdot{}FS
+\Psi{}_{i}=\left(\lambda{}f_{i}\cos\left(\alpha{}_{i+1}\right)-\sin\left(\alpha{}_{i+1}\right)\right)\tan\left({\varphi{}'}_{i}\right)-\left(\lambda{}f_{i}\sin\left(\alpha{}_{i+1}\right)-\cos\left(\alpha{}_{i+1}\right)\right)\cdot{}FS
 \end{dmath}
 \begin{dmath}
 E_{i}=\frac{\Psi{}_{i-1}E_{i-1}+FS\cdot{}T_{i}-R_{i}}{\Phi{}_{i}}
@@ -1121,7 +1121,7 @@ Using the known input assumption of A2, the force variable definitions of DD1 to
 \\ \midrule \\
 Label & RFEM Factor of Safety
 \\ \midrule \\
-Equation & ${FS_{Loc,i,i}}=\frac{c'-{K_{bn,i}}{\delta{}v}_{i}\tan\left(\varphi{}'\right)}{{K_{bt,i}}{\delta{}u}_{i}}=\frac{\displaystyle\sum_{i=1}^{n}{\left[{\ell{}_{b,i}}\left(c'-{K_{bn,i}}{\delta{}v}_{i}\tan\left(\varphi{}'\right)\right)\right]}}{\displaystyle\sum_{i=1}^{n}{\left[{\ell{}_{b,i}}\left({K_{bt,i}}{\delta{}u}_{i}\right)\right]}}$
+Equation & ${FS_{Loc,i,i}}=\frac{{c'}_{i}-{K_{bn,i}}{\delta{}v}_{i}\tan\left({\varphi{}'}_{i}\right)}{{K_{bt,i}}{\delta{}u}_{i}}=\frac{\displaystyle\sum_{i=1}^{n}{\left[{\ell{}_{b,i}}\left({c'}_{i}-{K_{bn,i}}{\delta{}v}_{i}\tan\left({\varphi{}'}_{i}\right)\right)\right]}}{\displaystyle\sum_{i=1}^{n}{\left[{\ell{}_{b,i}}\left({K_{bt,i}}{\delta{}u}_{i}\right)\right]}}$
 \\ \midrule \\
 Description & ${FS_{Loc,i}}$ is the factor of safety for slice i. $FS$ is the factor of safety for the entire slip surface. $c'$ is the cohesion of slice i's base. $\varphi{}'$ is the effective angle of friction of slice i's base. $\delta{}v$ is the normal displacement of slice i. $\delta{}u$ is the shear displacement of slice i. ${K_{bt}}$ is the length of the base of slice i. ${K_{bn}}$ is the base normal stiffness at surface i. $n$ is the number of slices in the slip surface.
 \\ \bottomrule \end{tabular}
@@ -1139,11 +1139,11 @@ With the definition of normal stiffness from DD14 to find the normal stiffness o
 \end{dmath}
 The resistive shear to calculate the factor of safety $FS$ is found from the Mohr Coulomb resistive strength of soil in T3 Using the normal stress $\sigma{}$ from equation (26) as the stress, the resistive shear of the slice can be calculated from equation (27).
 \begin{dmath}
-s_{i}=c'-\sigma{}_{i}\tan\left(\varphi{}'\right)
+s_{i}={c'}_{i}-\sigma{}_{i}\tan\left({\varphi{}'}_{i}\right)
 \end{dmath}
 Previously the value of the shear stiffness ${K_{bt}}$ as seen in equation (28) was unsolvable because the normal stress $\sigma{}$ was unknown. With the definition of $\sigma{}$ from equation (26) and the definition of displacement shear to the base $\delta{}u$ from equation (25), the value of ${K_{bt}}$ becomes solvable.
 \begin{dmath}
-{K_{bt,i}}=\frac{E_{i}}{2\left(1+\nu{}_{i}\right)}\frac{0.1}{b_{i}}+\frac{c'-\sigma{}_{i}\tan\left(\varphi{}'\right)}{|{\delta{}u}_{i}|+a}
+{K_{bt,i}}=\frac{E_{i}}{2\left(1+\nu{}_{i}\right)}\frac{0.1}{b_{i}}+\frac{{c'}_{i}-\sigma{}_{i}\tan\left({\varphi{}'}_{i}\right)}{|{\delta{}u}_{i}|+a}
 \end{dmath}
 With shear stiffness ${K_{bt}}$ calculated in equation (28) and shear displacement $\delta{}u$ calculated in equation (24) values now known the resistive shear stress acting on the base of a slice $\tau{}$ can be calculated using T5, as done in equation (29). Again, stress $\tau{}$ is used in place of force $F$ as the stiffness has not been normalized for the length of the base.
 \begin{dmath}
@@ -1151,11 +1151,11 @@ With shear stiffness ${K_{bt}}$ calculated in equation (28) and shear displaceme
 \end{dmath}
 The resistive shear stress acting on the base of a slice $\tau{}$ acts as the mobile shear acting on the base. Using the definition Factor of Safety equation from T1, with the definitions of resistive shear strength of a slice $s$ from equation (27) and resistive shear stress $\tau{}$ from equation (29) the local factor of safety ${FS_{Loc,i}}$ can be found from as seen in equation (30) and IM5.
 \begin{dmath}
-{FS_{Loc,i}}=\frac{s_{i}}{\tau{}_{i}}=\frac{c'-{K_{bn,i}}{\delta{}v}_{i}\tan\left(\varphi{}'\right)}{{K_{bt,i}}{\delta{}u}_{i}}
+{FS_{Loc,i}}=\frac{s_{i}}{\tau{}_{i}}=\frac{{c'}_{i}-{K_{bn,i}}{\delta{}v}_{i}\tan\left({\varphi{}'}_{i}\right)}{{K_{bt,i}}{\delta{}u}_{i}}
 \end{dmath}
 The global Factor of Safety is then the ratio of the summation of the resistive and mobile shears for each slice, with a weighting for the length of the slice's base. Shown in equation (31) and IM5.
 \begin{dmath}
-FS=\frac{\displaystyle\sum_{i=1}^{n}{\left[{\ell{}_{b,i}}s_{i}\right]}}{\displaystyle\sum_{i=1}^{n}{\left[{\ell{}_{b,i}}\tau{}_{i}\right]}}=\frac{\displaystyle\sum_{i=1}^{n}{\left[{\ell{}_{b,i}}\left(c'-{K_{bn,i}}{\delta{}v}_{i}\tan\left(\varphi{}'\right)\right)\right]}}{\displaystyle\sum_{i=1}^{n}{\left[{\ell{}_{b,i}}\left({K_{bt,i}}{\delta{}u}_{i}\right)\right]}}
+FS=\frac{\displaystyle\sum_{i=1}^{n}{\left[{\ell{}_{b,i}}s_{i}\right]}}{\displaystyle\sum_{i=1}^{n}{\left[{\ell{}_{b,i}}\tau{}_{i}\right]}}=\frac{\displaystyle\sum_{i=1}^{n}{\left[{\ell{}_{b,i}}\left({c'}_{i}-{K_{bn,i}}{\delta{}v}_{i}\tan\left({\varphi{}'}_{i}\right)\right)\right]}}{\displaystyle\sum_{i=1}^{n}{\left[{\ell{}_{b,i}}\left({K_{bt,i}}{\delta{}u}_{i}\right)\right]}}
 \end{dmath}
 ~\newline
 \noindent \begin{minipage}{\textwidth}

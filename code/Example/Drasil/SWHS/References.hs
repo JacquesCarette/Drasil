@@ -1,12 +1,11 @@
 module Drasil.SWHS.References where
 
 import Language.Drasil (BibRef,
-  (+:+), sC, person', personWM',
-  Accent (Acute),
-  Citation (Article, MThesis),
+  person', personWM', (+:+),
+  Citation (Article, MThesis, Misc),
   CiteField (Author, Year, Note, Pages, Place, Journal, Title, Issue,
-    School, Volume, Publisher, Edition),
-  Sentence (S, (:+:), F))
+  School, Volume, Publisher, Edition, Editor),
+  Sentence (S))
 
 ----------------------------
 -- Section 9 : References --
@@ -46,7 +45,7 @@ ref3 = MThesis [
   Place (S "Hamilton", S "Canada"),
   Year 2013]
 
-ref4 = Article [
+ref4 = Misc [
   Author [person' "Marilyn" "Lightstone"],
   Title (S "Derivation of tank/pcm model"),
   Year 2012,
@@ -67,10 +66,11 @@ ref6 = Article [
   Author [personWM' "W." ["Spencer"] "Smith",
           person' "Lei" "Lai"],
   Title (S "A new requirements template for scientific computing"),
-  Note (S "In J. Ralyt" :+: (F Acute 'e') `sC` S "P. Agerfalk" `sC`
-  S "and N. Kraiem" `sC` S "editors"),
-  --FIXME: need to add editor field
+  Editor [person' "J." "Ralyte",
+          person' "PJ" "Agerfalk",
+          person' "N." "Kraiem"],
   --FIXME: person' takes strings but we need an "e" with an accent
+  -- J. Ralyt" :+: (F Acute 'e')
   Journal (S "Proceedings of the First International Workshop on" +:+
   S "Situational Requirements Engineering Processes - Methods," +:+
   S "Techniques and Tools to Support Situation-Specific Requirements" +:+

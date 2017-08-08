@@ -8,8 +8,7 @@ koothoor2013, smithLai2005, rbrtsn2012, astm_LR2009, astm_C1036, astm_C1048, glT
 gbCitations :: BibRef
 gbCitations = [koothoor2013, smithLai2005, rbrtsn2012, astm_LR2009, astm_C1036, astm_C1048, glThick1998]
 
---FIXME: check for references made by documents
---FIXME: all references "Print"?
+--FIXME: check for references made within document
 
 ---
 
@@ -21,7 +20,7 @@ koothoor2013 = MThesis [Author [personWM "N." [] "Koothoor"],
   Year (2013)
   ]
 
---FIXME: Master's thesis format -> Author Name (Year). ... http://libguides.css.edu/c.php?g=41681&p=265023
+--FIXME: Place isn't displayed in TeX?
 
 ---
 
@@ -97,3 +96,4 @@ glThick1998 = Article [Author [personWM "L" [] "Beason",
                     Year (1998)]
 
 --FIXME: check whether citation format is correct
+--FIXME: first listed source in TeX (incorrect alphabetized list)

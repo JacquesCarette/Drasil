@@ -184,7 +184,8 @@ type State  = Spec
 
 data Citation = Book [CiteField] | Article [CiteField]
               | MThesis [CiteField] | PhDThesis [CiteField]
-  --add website...
+              | Misc [CiteField] | Online [CiteField]
+
 data CiteField = Author     People
                | Title      Spec
                | Series     Spec
@@ -203,6 +204,8 @@ data CiteField = Author     People
                | School     Spec
                | Thesis     Thesis
                | URL        Spec
+               | HowPub     Spec
+               | URLdate Integer Month Integer
 
 data Thesis = M | PhD deriving Eq
 
@@ -215,6 +218,8 @@ instance Show Citation where
   show (Article   _) = "Print"
   show (MThesis   _) = "Print"
   show (PhDThesis _) = "Print"
+  show (Misc      _) = ""
+  show (Online    _) = ""
 
 instance Eq CiteField where
   (==) (Author _)     (Author _)     = True
@@ -235,6 +240,8 @@ instance Eq CiteField where
   (==) (School _)     (School _)     = True
   (==) (Thesis _)     (Thesis _)     = True
   (==) (URL _)        (URL _)        = True
+  (==) (HowPub _)     (HowPub _)     = True
+  (==) (URLdate _ _ _) (URLdate _ _ _) = True
   (==) _ _ = False
 
 instance Ord CiteField where --FIXME: APA has year come directly after Author
@@ -260,17 +267,21 @@ instance Ord CiteField where --FIXME: APA has year come directly after Author
   compare _ (Place      _) = GT
   compare (Publisher  _) _ = LT
   compare _ (Publisher  _) = GT
+  compare (HowPub     _) _ = LT
+  compare _ (HowPub     _) = GT
   compare (Issue      _) _ = LT
   compare _ (Issue      _) = GT
   compare (Date   _ _ _) _ = LT
   compare _ (Date   _ _ _) = GT
+  compare (Year       _) _ = LT
+  compare _ (Year       _) = GT
   compare (Page       _) _ = LT
   compare _ (Page       _) = GT
   compare (Pages      _) _ = LT
   compare _ (Pages      _) = GT
-  compare (Note       _) _ = LT
-  compare _ (Note       _) = GT
   compare (URL       _) _  = LT
   compare _ (URL       _)  = GT
-  compare (Year       _) _ = LT
-  compare _ (Year       _) = GT
+  compare (URLdate _ _ _) _ = LT
+  compare _ (URLdate _ _ _) = GT
+  compare (Note       _) _ = LT
+  compare _ (Note       _) = GT

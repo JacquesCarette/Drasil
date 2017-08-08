@@ -169,7 +169,8 @@ type State  = Spec
 
 data Citation = Book [CiteField] | Article [CiteField]
               | MThesis [CiteField] | PhDThesis [CiteField]
-  --add website...
+              | Misc [CiteField] | Online [CiteField]
+
 data CiteField = Author     People
                | Title      Spec
                | Series     Spec
@@ -187,9 +188,13 @@ data CiteField = Author     People
                | Issue      Integer
                | School     Spec
                | URL        Spec
+               | HowPub     Spec
+               | URLdate Integer Month Integer
 
 instance Show Citation where
   show (Book      _) = "book"
   show (Article   _) = "article"
   show (MThesis   _) = "mastersthesis"
   show (PhDThesis _) = "phdthesis"
+  show (Misc      _) = "misc"
+  show (Online    _) = "online"

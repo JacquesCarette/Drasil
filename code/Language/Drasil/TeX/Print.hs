@@ -514,8 +514,10 @@ mkBibRef = foldl1 (\x y -> x :+: S "\n\n" :+: y) . map renderCite
 renderCite :: Citation -> Spec
 renderCite c@(Book      fields) = renderF c fields
 renderCite c@(Article   fields) = renderF c fields
-renderCite a@(MThesis   fields) = renderF a fields
-renderCite a@(PhDThesis fields) = renderF a fields
+renderCite c@(MThesis   fields) = renderF c fields
+renderCite c@(PhDThesis fields) = renderF c fields
+renderCite c@(Misc      fields) = renderF c fields
+renderCite c@(Online    fields) = renderF c fields
 
 --Rendering a book--
 renderF :: Citation -> [CiteField] -> Spec
@@ -547,7 +549,8 @@ showBibTeX (Volume     s) = showField "volume" (S $ show s)
 showBibTeX (Publisher  s) = showField "publisher" s
 showBibTeX (Author     p) = showField "author" (S $ rendPeople p)
 showBibTeX (Year       y) = showField "year" (S $ show y)
-showBibTeX (Date   d m y) = showField "year" (S $ unwords [show d, show m, show y])
+showBibTeX (Date    d m y) = showField "year"    (S $ unwords [show d, show m, show y])
+showBibTeX (URLdate d m y) = showField "urldate" (S $ unwords [show d, show m, show y])
 showBibTeX (Collection s) = showField "collection" s
 showBibTeX (Journal    s) = showField "journal" s
 showBibTeX (Page       s) = showField "pages" (S $ show s)
@@ -556,6 +559,7 @@ showBibTeX (Note       s) = showField "note" s
 showBibTeX (Issue      s) = showField "number" (S $ show s)
 showBibTeX (School     s) = showField "school" s
 showBibTeX (URL        s) = showField "url" s
+showBibTeX (HowPub     s) = showField "howpublished" s
 
 showField :: String -> Spec -> Spec
 showField f s = S f :+: S "={" :+: s :+: S "}"

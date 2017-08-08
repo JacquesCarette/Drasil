@@ -120,3 +120,28 @@ sParenDash = \x -> S " (" :+: x :+: S ") - "
 
 sDash :: Sentence -> Sentence -> Sentence
 y `sDash` z = y +:+ S "-" +:+ z
+
+-- Function used to derive the units of an equation based on 
+-- inferUnit :: Relation -> [USymb] -> [USymb] -> USymb
+-- inferUnit (:= _ _) num den = eliminate (num, den)
+-- inferUnit (:+ a _) num den = inferUnit a num den
+-- inferUnit (:- a _) num den = inferUnit a num den
+-- inferUnit (:* a b) num den = inferUnit a (num:(analyze_n b)) den
+-- inferUnit (:/ a b) num den = inferUnit a num (den:(analyze_d b))
+-- inferUnit (C a) num den = eliminate ((num:(getUnit a)), den)
+-- inferUnit (Deriv _ a b) num den = eliminate ((num:(analyze_n a)), (den:(analyze_d b)))
+  -- where analyze_n (Deriv _ (C a) _) = getUnit a
+        -- analyze_n (C a) = getUnit a
+        -- analyze_d (Deriv _ _ (C b)) = getUnit b
+        -- analyze_d (C b) = getUnit b
+        
+-- eliminate :: ([USymb], [USymb]) -> USymb
+-- eliminate ((frstnum:rstnum), den) = match frstnum den
+  -- where match unt [] = unt
+          
+        -- match unt (frst:rst)
+          -- | unt == frst
+          -- | otherwise = match unt rst
+
+instance Eq USymb where
+  a == b = a == b

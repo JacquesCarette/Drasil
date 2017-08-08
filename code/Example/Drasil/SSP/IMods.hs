@@ -141,12 +141,12 @@ rfemFoS_rel :: Relation
 rfemFoS_rel = (inxi fsloc) := fosFracLoc := fosFracSum
 
 fosFracLoc :: Expr
-fosFracLoc = (C cohesion - inxi nrmStiffBase * inxi nrmDispl * tan(C fricAngle)) /
+fosFracLoc = (inxi cohesion - inxi nrmStiffBase * inxi nrmDispl * tan(inxi fricAngle)) /
   (inxi shrStiffBase * inxi shrDispl)
 
 fosFracSum :: Expr
 fosFracSum = sum1toN
-  (inxi baseLngth * (C cohesion - inxi nrmStiffBase * inxi nrmDispl * tan(C fricAngle))) /
+  (inxi baseLngth * (inxi cohesion - inxi nrmStiffBase * inxi nrmDispl * tan(inxi fricAngle))) /
   sum1toN (inxi baseLngth * Grouping (inxi shrStiffBase * inxi shrDispl))
 
 rfemFoS_desc :: Sentence
@@ -279,7 +279,7 @@ intrSlcDerivation = [foldlSP [S "Taking the", S "normal force equilibrium" `sOf`
   S "the equilibrium", phrase equation, S "can be rewritten as", eqN 17], --NOTE: "Taking this with that and the assumption of _ to get equation #" pattern
   
   EqnBlock $
-  ((inxi totNrmForce) * tan (C fricAngle) + (inxi cohesion) * (inxi baseWthX) *
+  ((inxi totNrmForce) * tan (inxi fricAngle) + (inxi cohesion) * (inxi baseWthX) *
   sec (inxi baseAngle)) / (C fs) := --FIXME: pull the left side of this from GD4
   eqlExpr sin cos (\x y -> x - C normToShear * inxiM1 scalFunc * inxiM1 intNormForce + 
   C normToShear * inxi scalFunc * inxi intNormForce + y),
@@ -288,9 +288,9 @@ intrSlcDerivation = [foldlSP [S "Taking the", S "normal force equilibrium" `sOf`
   S "from", eqN 16, S "into", eqN 17, S "and rearranging results in", eqN 18],
 
   EqnBlock $
-  (inxi intNormForce) * (((C normToShear)*(inxi scalFunc) * cos (inxi baseAngle) - sin (inxi baseAngle)) * tan (C fricAngle) -
+  (inxi intNormForce) * (((C normToShear)*(inxi scalFunc) * cos (inxi baseAngle) - sin (inxi baseAngle)) * tan (inxi fricAngle) -
   ((C normToShear)*(inxi scalFunc) * sin (inxi baseAngle) - cos (inxi baseAngle)) * (C fs)) := 
-  (inxiM1 intNormForce) * (((C normToShear)*(inxiM1 scalFunc) * cos (inxi baseAngle) - sin (inxi baseAngle)) * tan (C fricAngle) -
+  (inxiM1 intNormForce) * (((C normToShear)*(inxiM1 scalFunc) * cos (inxi baseAngle) - sin (inxi baseAngle)) * tan (inxi fricAngle) -
   ((C normToShear)*(inxiM1 scalFunc) * sin (inxi baseAngle) - cos (inxi baseAngle)) * (C fs)) +
   (C fs) * (inxi shearFNoIntsl) - (inxi shearRNoIntsl),
   
@@ -302,11 +302,11 @@ intrSlcDerivation = [foldlSP [S "Taking the", S "normal force equilibrium" `sOf`
   S "can be simplified to", eqN 21 `sC` S "also seen in", acroIM 3],
   
   EqnBlock $
-  (inxi shrResC) := ((C normToShear)*(inxi scalFunc) * cos (inxi baseAngle) - sin (inxi baseAngle)) * tan (C fricAngle) -
+  (inxi shrResC) := ((C normToShear)*(inxi scalFunc) * cos (inxi baseAngle) - sin (inxi baseAngle)) * tan (inxi fricAngle) -
   ((C normToShear)*(inxi scalFunc) * sin (inxi baseAngle) - cos (inxi baseAngle)) * (C fs),
   --FIXME: index everything here and add "Where i is the local slice of mass for 1 :<= i :<= n-1"
   EqnBlock $
-  (inxi mobShrC) := ((C normToShear)*(inxi scalFunc) * cos (inxiP1 baseAngle) - sin (inxiP1 baseAngle)) * tan (C fricAngle) -
+  (inxi mobShrC) := ((C normToShear)*(inxi scalFunc) * cos (inxiP1 baseAngle) - sin (inxiP1 baseAngle)) * tan (inxi fricAngle) -
   ((C normToShear)*(inxi scalFunc) * sin (inxiP1 baseAngle) - cos (inxiP1 baseAngle)) * (C fs),
   
   EqnBlock $
@@ -373,7 +373,7 @@ rigFoSDerivation = [foldlSP [S "RFEM analysis can also be used to calculate the"
   (S "resistive shear" `ofThe` S "slice"), S "can be calculated from", eqN 27],
   
   EqnBlock $
-  inxi mobStress := C cohesion - inxi normStress * tan(C fricAngle), --FIXME: index and prime
+  inxi mobStress := inxi cohesion - inxi normStress * tan(inxi fricAngle), --FIXME: index and prime
   
   foldlSP [S "Previously", phrase value `ofThe` getTandS shrStiffBase,
   S "as seen in", eqN 28, S "was unsolvable because the", getTandS normStress,
@@ -383,7 +383,7 @@ rigFoSDerivation = [foldlSP [S "RFEM analysis can also be used to calculate the"
   
   EqnBlock $
   inxi shrStiffBase := inxi intNormForce / (2 * (1 + inxi poissnsRatio)) * (Dbl 0.1 / inxi baseWthX) +
-  (C cohesion - inxi normStress * tan(C fricAngle)) / (abs (inxi shrDispl) + C constant_a),
+  (inxi cohesion - inxi normStress * tan(inxi fricAngle)) / (abs (inxi shrDispl) + C constant_a),
   
   foldlSP [S "With", getTandS shrStiffBase, S "calculated in", eqN 28,
   S "and shear displacement", getS shrDispl, S "calculated in", eqN 24, --FIXME: grab term too once we have a displacement modifier

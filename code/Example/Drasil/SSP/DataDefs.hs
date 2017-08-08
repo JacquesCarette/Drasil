@@ -144,7 +144,7 @@ resShearWOEqn = (((inxi slcWght) + (inxi surfHydroForce) * (cos (inxi surfAngle)
   (inxi surfLoad) * (cos (inxi impLoadAngle))) * (cos (inxi baseAngle)) +
   (Neg (C earthqkLoadFctr) * (inxi slcWght) - (inxi watrForceDif) + (inxi surfHydroForce)
   :* sin (inxi surfAngle) + (inxi surfLoad) * (sin (inxi impLoadAngle))) * (sin (inxi baseAngle)) - (inxi baseHydroForce)) *
-  tan (C fricAngle) + (inxi cohesion) * (inxi baseWthX) * sec (inxi baseAngle)
+  tan (inxi fricAngle) + (inxi cohesion) * (inxi baseWthX) * sec (inxi baseAngle)
 
 --DD11
 
@@ -191,7 +191,7 @@ shearStiffness = mkDataDef shrStiffBase shearStiffnessEqn
 
 shearStiffnessEqn :: Expr
 shearStiffnessEqn = C intNormForce / (Int 2 * (Int 1 + C poissnsRatio)) * (Dbl 0.1 / C baseWthX) +
-  (C cohesion - C normStress * tan(C fricAngle)) / (abs (C shrDispl) + C constant_a)
+  (inxi cohesion - C normStress * tan(inxi fricAngle)) / (abs (C shrDispl) + C constant_a)
 
 --DD15 this is the second part to the original DD14
 
@@ -242,13 +242,13 @@ resShrDerivation = [foldlSP [S "The", phrase shrResI, S "of a slice is",
   S "values as done in", eqN 3],
   
   EqnBlock $
-  inxi shearRNoIntsl := (inxi nrmFNoIntsl) * tan (C fricAngle) +
+  inxi shearRNoIntsl := (inxi nrmFNoIntsl) * tan (inxi fricAngle) +
   (inxi cohesion) * (inxi baseWthX) * sec (inxi baseAngle) := (((inxi slcWght) + (inxi surfHydroForce) * (cos (inxi surfAngle)) +
   (inxi surfLoad) * (cos (inxi impLoadAngle))) * (cos (inxi baseAngle)) +
   (Neg (C earthqkLoadFctr) * (inxi slcWght) - (inxi watrForceDif) + (inxi surfHydroForce)
   * sin (inxi surfAngle) + (inxi surfLoad) * (sin (inxi impLoadAngle))) * (sin (inxi baseAngle))
   - (inxi baseHydroForce)) *
-  tan (C fricAngle) + (inxi cohesion) * (inxi baseWthX) * sec (inxi baseAngle)
+  tan (inxi fricAngle) + (inxi cohesion) * (inxi baseWthX) * sec (inxi baseAngle)
   ]
 
 mobShrDerivation :: [Contents]

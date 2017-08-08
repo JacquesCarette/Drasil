@@ -77,7 +77,7 @@ bShFEq_desc = foldlSent [S "For a", phrase slice, S "of", phrase mass,
 
 --
 shrResEqn :: Expr
-shrResEqn = inxi nrmFSubWat * tan (C fricAngle) + C cohesion * inxi baseWthX * sec (inxi baseAngle)
+shrResEqn = inxi nrmFSubWat * tan (inxi fricAngle) + inxi cohesion * inxi baseWthX * sec (inxi baseAngle)
 
 resShr :: RelationConcept
 resShr = makeRC "resShr" (nounPhraseSP "resistive shear force") resShr_desc resShr_rel

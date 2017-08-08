@@ -505,7 +505,7 @@ bibLines :: String
 bibLines =
   "\\nocite{*}\n" ++ 
   "\\bibstyle{" ++ bibStyleT ++ "}\n" ++ --bibStyle is in Config.hs
-  "\\printbibliography"
+  "\\printbibliography[heading=none]"
 
 mkBibRef :: BibRef -> Spec
 mkBibRef = foldl1 (\x y -> x :+: S "\n\n" :+: y) . map renderCite

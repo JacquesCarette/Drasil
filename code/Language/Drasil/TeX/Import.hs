@@ -257,6 +257,7 @@ layField (Issue      n) = T.Issue      n
 layField (School     s) = T.School     $ spec s
 layField (URL        n) = T.URL        $ spec n
 layField (HowPub     s) = T.HowPub     $ spec s
+layField (Editor     p) = T.Editor     p
 
 makeL :: ListType -> T.ListType  
 makeL (Bullet bs)      = T.Enum        $ (map item bs)

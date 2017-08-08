@@ -560,6 +560,7 @@ showBibTeX (Issue      s) = showField "number" (S $ show s)
 showBibTeX (School     s) = showField "school" s
 showBibTeX (URL        s) = showField "url" s
 showBibTeX (HowPub     s) = showField "howpublished" s
+showBibTeX (Editor     p) = showField "editor" (S $ rendPeople p)
 
 showField :: String -> Spec -> Spec
 showField f s = S f :+: S "={" :+: s :+: S "}"

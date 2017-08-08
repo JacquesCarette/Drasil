@@ -190,6 +190,7 @@ data CiteField = Author     People
                | URL        Spec
                | HowPub     Spec
                | URLdate Integer Month Integer
+               | Editor     People
 
 instance Show Citation where
   show (Book      _) = "book"

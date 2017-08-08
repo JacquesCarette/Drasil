@@ -16,7 +16,7 @@ import Language.Drasil.Unicode
 import Language.Drasil.Symbol (Symbol(..), Decoration(..))
 import qualified Language.Drasil.Document as L
 import Language.Drasil.HTML.Monad
-import Language.Drasil.People (People,Person(..),rendPersLFM',rendPersLFM'',Conv(..))
+import Language.Drasil.People (People,Person(..),rendPersLFM',rendPersLFM'',Conv(..),nameStr)
 import Language.Drasil.Config (StyleGuide(..), bibStyleH)
 
 --FIXME? Use Doc in place of Strings for p_spec/title_spec
@@ -452,6 +452,7 @@ bookMLA (School     s) = comm $ p_spec s
 bookMLA (Thesis     t) = comm $ show t
 bookMLA (URL        s) = dot $ p_spec s
 bookMLA (HowPub     s) = comm $ p_spec s
+bookMLA (Editor     p) = comm $ "edited by " ++ p_spec (foldlList $ map (S . nameStr) p)
 
 bookAPA :: CiteField -> String --FIXME: year needs to come after author in APA
 bookAPA (Author   p) = needDot $ p_spec (rendPeople rendPersLFM' p) --APA uses initals rather than full name
@@ -460,6 +461,7 @@ bookAPA (Date _ _ y) = bookAPA (Year y) --APA doesn't care about the day or mont
 bookAPA (URLdate d m y) = "Retrieved, " ++ (comm $ unwords [show d, show m, show y])
 bookAPA (Page     n) = dot $ show n
 bookAPA (Pages (a,b)) = dot $ show a ++ "&ndash;" ++ show b
+bookAPA (Editor   p) = dot $ p_spec (foldlList $ map (S . nameStr) p) ++ " (Ed.)"
 bookAPA i = bookMLA i --Most items are rendered the same as MLA
 
 bookChicago :: CiteField -> String
@@ -468,6 +470,7 @@ bookChicago (Date _ _ y) = bookChicago (Year y) --APA doesn't care about the day
 bookChicago (URLdate d m y) = "accessed " ++ (comm $ unwords [show d, show m, show y])
 bookChicago p@(Page   _) = bookAPA p
 bookChicago p@(Pages  _) = bookAPA p
+bookChicago (Editor   p) = dot $ p_spec (foldlList $ map (S . nameStr) p) ++ " ed" ++ addS p
 bookChicago i = bookMLA i --Most items are rendered the same as MLA
 
 -- for article renderings
@@ -531,3 +534,8 @@ rendPersL (Person {_given = f, _surname = l, _middle = ms}) =
 isInitial :: String -> String
 isInitial [x]  = [x,'.']
 isInitial name = name
+
+--adds an 's' if there is more than one person in a list
+addS :: People -> String
+addS (_:_) = "s"
+addS _      = []

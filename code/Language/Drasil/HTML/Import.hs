@@ -268,6 +268,7 @@ layField (Issue      n) = H.Issue      n
 layField (School     s) = H.School     $ spec s
 layField (URL        s) = H.URL        $ spec s
 layField (HowPub     s) = H.HowPub     $ spec s
+layField (Editor     p) = H.Editor     p
 
 -- | Translates lists
 makeL :: ListType -> H.ListType

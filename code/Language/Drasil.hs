@@ -165,6 +165,6 @@ import Language.Drasil.Misc -- all of it
 import Language.Drasil.Printing.Helpers (capitalize, paren, sqbrac)
 import Language.Drasil.Generate
 import Language.Drasil.People (People, Person, person, HasName(..), manyNames
-                               ,person', personWM, personWM', mononym)
+                               ,person', personWM, personWM', mononym, name)
 import Language.Drasil.CodeSpec    
 import Language.Drasil.DataDesc                         

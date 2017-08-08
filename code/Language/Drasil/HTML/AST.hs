@@ -206,6 +206,7 @@ data CiteField = Author     People
                | URL        Spec
                | HowPub     Spec
                | URLdate Integer Month Integer
+               | Editor     People
 
 data Thesis = M | PhD deriving Eq
 
@@ -242,6 +243,7 @@ instance Eq CiteField where
   (==) (URL _)        (URL _)        = True
   (==) (HowPub _)     (HowPub _)     = True
   (==) (URLdate _ _ _) (URLdate _ _ _) = True
+  (==) (Editor _)     (Editor _)     = True
   (==) _ _ = False
 
 instance Ord CiteField where --FIXME: APA has year come directly after Author
@@ -253,6 +255,8 @@ instance Ord CiteField where --FIXME: APA has year come directly after Author
   compare _ (Series     _) = GT
   compare (Collection _) _ = LT
   compare _ (Collection _) = GT
+  compare (Editor     _) _ = LT
+  compare _ (Editor     _) = GT
   compare (Journal    _) _ = LT
   compare _ (Journal    _) = GT
   compare (Volume     _) _ = LT

@@ -15,7 +15,8 @@ data Citation where
   PhDThesis :: [CiteField] -> Citation
   Misc      :: [CiteField] -> Citation
   Online    :: [CiteField] -> Citation
-  
+
+--FIXME: use a 3-tuple for dates?
 data CiteField = Author     People
                | Title      Sentence
                | Series     Sentence
@@ -35,6 +36,7 @@ data CiteField = Author     People
                | URL        Sentence
                | HowPub     Sentence --how it was published, when using Misc
                | URLdate Integer Month Integer --date accessed/viewed
+               | Editor     People
 
 data Month = Jan
            | Feb

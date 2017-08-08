@@ -441,18 +441,18 @@ loadTypes = [loadResis, nonFactoredL, glassWL, shortDurLoad,
   specDeLoad, longDurLoad] 
 
 --Defined for DataDefs.hs and this file only--
-actualThicknesses :: [Double]
+actualThicknesses :: [Double]--[GlassThickness]
 actualThicknesses = [2.16, 2.59, 2.92, 3.78, 4.57, 5.56, 7.42, 9.02, 11.91,
   15.09, 18.26, 21.44]
 
-nominalThicknesses :: [Double]
+nominalThicknesses :: [Double]--[GlassThickness]
 nominalThicknesses = [2.5, 2.7, 3.0, 4.0, 5.0, 6.0, 8.0, 10.0, 12.0, 16.0, 19.0,
   22.0]
 
-glassTypeFactors :: [Integer]
+glassTypeFactors :: [Integer]--[GlassType]
 glassTypeFactors = [1, 4, 2]
 
-glassTypeAbbrs :: [Sentence]
+glassTypeAbbrs :: [Sentence]--[GlassType]
 glassTypeAbbrs = map S glassTypeAbbrsStr
 
 glassTypeAbbrsStr :: [String]
@@ -462,24 +462,16 @@ glassTypeAbbrsStr = ["AN", "FT", "HS"]
 lateralLoad :: NamedChunk
 lateralLoad  = compoundNC lateral load
 
-{-
+
 --GlassType Data-Type
 
--- | A Constrained is a 'Quantity' that has value constraints
--- and maybe reasonable value
-class Quantity c => GlassType c where
-  constraints :: Simple Lens c [GlassType]
+--data GlassType = Factors [Integer] | Abbr [Sentence]
 
-data GlassType where
-  Factors  :: Integer
-  Abbr :: Sentence
-  
-factors :: Integer
-factors = Factors
+--data GlassThickness = Nominal [Double] | Actual [Double]
 
-abbr :: Sentence
-abbr = Abbr 
-
-I think it would be best to create a GlassType data-type, with fieds factors and abbr. Then glassTypeFactors and glassTypeAbbr would be a [ GlassType].
-Same for the actual/nominal thickness pairs of lists. They should be in the document as a single list of pairs. For actual usage, the information can
-then be extracted. -@JacquesCarette comment in commit 6e95430-} 
+--I think it would be best to create a GlassType data-type, with fields factors and abbr.
+--Then glassTypeFactors and glassTypeAbbr would be a [ GlassType]. 
+--Same for the actual/nominal thickness pairs of lists. 
+--They should be in the document as a single list of pairs. 
+--For actual usage, the information can then be extracted. 
+-- @JacquesCarette comment from commit 6e95430 

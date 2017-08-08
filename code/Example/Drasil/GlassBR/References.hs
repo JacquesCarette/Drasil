@@ -39,7 +39,7 @@ smithLai2005 = Article [
   Place (S "Paris", S "France"),
   Pages (107, 121),
   Note (S "In conjunction with 13th IEEE International Requirements" +:+
-  S "Engineering Conference."),
+  S "Engineering Conference,"),
   Year 2005]
 
 ---

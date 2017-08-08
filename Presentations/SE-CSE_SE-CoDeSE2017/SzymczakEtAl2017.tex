@@ -46,7 +46,7 @@
 %\acmPrice{15.00}
 
 \begin{document}
-\title{Progress Report on Drasil: A Framework for Scientific Knowledge Capture and Artifact Generation}
+\title[Progress Report on Drasil]{Progress Report on Drasil: A Framework for Scientific Knowledge Capture and Artifact Generation}
 % \titlenote{Produces the permission block, and
 %   copyright information}
 % \subtitle{Extended Abstract}
@@ -143,56 +143,78 @@ driven design, code generation}
 
 \section{Introduction} \label{SecIntroduction}
 
-- goal to improve the quality of Scientific Computing Software (SCS)
-- in particular the qualities of certifiability, reusability and reproducibility
-for large multi-year, multi-developer projects where the end users do much of
-the development
-- especially important to improve quality where correctness impacts safety
-- examples of nuclear safety analysis and medical imaging
+Every developer should strive towards creating the highest possible quality software.
+As scientists, we should be leading the community in this regard as it is our
+duty to ensure the reusability, reproducibility, and replicability of our work.
 
-- improved documentation is an important part of improved quality, but too much
-time and effort for SCS developers, especially when they are often dealing with
-rapid change.  SCS developers tend to dislike documentation. As observed by
-  Carver~\cite{CarverEtAl2007}, scientists do not view rigid, process-heavy
-  approaches, favourably.  Moreover, they often consider reports for each stage
-  of software development as counterproductive~\cite[p.~373]{Roache1998}.
+Our team is focused on improving the quality of Scientific Computing Software (SCS).
+We have chosen large, multi-year, multi-developer projects where the end users
+do much of the development as our target scope. For these projects, we pay
+particular attention to improving the qualities of reusability, reproducibility,
+and certifiability. Improving these software qualities is especially important where
+correctness can have an impact on safety, for example: nuclear safety analysis
+or medical imaging.
 
+Often considered too high a cost in terms of time and effort for SCS developers, 
+particularly when dealing with rapid changes in development, improved 
+documentation is an important aspect of improving overall software quality. 
+Carver~\cite{CarverEtAl2007} observed that scientists do not view rigid, 
+process-heavy approaches, favourably. SCS developers tend to dislike producing 
+documentation and often consider reports for each stage of software development 
+as counterproductive~\cite[p.~373]{Roache1998}.
+
+Well-maintained documentation provides numerous advantages including:
 \begin{itemize}
-\item Documentation provides advantages
-\begin{itemize}
-\item Improves verifiability, reusability, reproducibility, etc.
-\item From \cite{Parnas2010}
-\begin{itemize}
-\item easier reuse of old designs
-\item better communication about requirements
-\item more
-  useful design reviews
-\item etc.
+\item Improved software qualities 
+	\begin{itemize}
+	\item Verifiability
+	\item Reusability
+	\item Reproducibility
+	\item etc.
+	\end{itemize}
+
+\item From Parnas~\cite{Parnas2010}:
+	\begin{itemize}
+		\item Easier reuse of old designs
+		\item Better communication about requirements
+		\item More useful design reviews
+		\item etc.
 % \item easier integration of separately written modules, more
 %   effective code inspection, more effective testing, and more efficient
 %   corrections and improvements
+	\end{itemize}
 \end{itemize}
-\item New doc found 27 errors \citep{SmithAndKoothoor2016}
-\item Developers see advantage \cite{SmithJegatheesanAndKelly2016}
-\end{itemize}
-\item But documentation is felt to be ...
+
+Previous work by Smith \& Koothoor~\citep{SmithAndKoothoor2016} found 27 errors 
+in an existing software project when creating new documentation. Developers have 
+become aware of these advantages of documentation~\cite{SmithJegatheesanAndKelly2016}.
+
+However, documenting software is typically felt to be:
 \begin{itemize}
 \item Too long
 \item Too difficult to maintain
 \item Not amenable to change
-\item Too tied to waterfall process
-\item Reports counterproductive \citep{Roache1998}
-\end{itemize}
-\item {\textbf{The Solution?}}
+\item Too tied to the waterfall process
+\item Counterproductive when reporting on each stage of development~\citep{Roache1998}
 \end{itemize}
 
-Drasil - a solution proposed in a position paper~\cite{SzymczakEtAl2016} - capture the scientific and documentation knowledge
-and then generate the code and other software artifacts
+\subsection*{The Solution?}
 
-- work on Drasil has continued since the position paper, as described below -
-provide a roadmap of the paper
+\textit{Drasil} -- a framework, utilizing a knowledge-based approach to software 
+development, proposed in a position paper~\cite{SzymczakEtAl2016}. The goal of 
+the approach is to capture scientific and documentation knowledge in a reusable 
+way, then generate the source code and other software artifacts (documentation, 
+build files, tests, etc).
 
-\section{Design of Drasil} \label{SecDevProcess}
+Work on Drasil has continued steadily since the position paper, as described 
+below. We begin with a brief overview of the design of the Drasil framework in 
+Section~\ref{SecDesign}, then describe its development process to date in 
+Section~\ref{SecDevProcess}. Following that, we show an example of Drasil in 
+action (Section~\ref{SecGlassBR}) and the results we've seen to date 
+(Section~\ref{SecQuality}). Finally, we lay out some of the work that still 
+needs to be done (Section~\ref{SecFuture}) before concluding.
+
+\section{Design of Drasil} \label{SecDesign}
 
 - an overview, with an emphasis on the notion of chunks would be good - should
 mention which DSLs are part of DSL - maybe the ontology figure?
@@ -207,14 +229,37 @@ mention which DSLs are part of DSL - maybe the ontology figure?
 
 \section{Development Process for Drasil} \label{SecDevProcess}
 
-- concurrent development of 5 different examples - list the examples - mention
-that they overlap with~\cite{SmithJegatheesanAndKelly2016}
-- use of GitHub
-- peer review of code
-- issue tracking
+Drasil is being developed using a practical, example-driven process. There are 
+currently five different examples being developed concurrently within (and 
+driving the development of) Drasil:
+
+\begin{itemize}
+\item Chipmunk2D Game Engine
+\item Solar Water Heating System Incorporating Phase Change Material (PCM)
+\item Solar Water Heating System (No PCM)
+\item Slope Stability Analysis
+\item Glass Breakage Analysis
+\end{itemize}
+These examples overlap with those found in~\cite{SmithJegatheesanAndKelly2016}.
+
+Our practical design approach allows us the flexibility to prototype without 
+over-designing. As a new feature becomes necessary to continue the 
+implementation of a given example, only then do we design, test, implement, and 
+re-test it. We occasionally implement features we may need in the future, but 
+only in those instances when it is obvious that we are taking the right approach.
+
+The current incarnation of the Drasil framework can be found on GitHub at 
+\href{https://github.com/JacquesCarette/literate-scientific-software}
+{https://github.com/JacquesCarette/literate-scientific-software}. We utilize 
+peer-review of code throughout development to correct missteps early on, and 
+keep an up-to-date issue tracker for any bugs, feature requests, or other 
+``to-do" tasks.
+
+%%TODO: Talk about
 - refactoring - finding patterns
 - knowledge extraction
 - reduction of duplication
+
 
 \section{GlassBR Example} \label{SecGlassBR}
 
@@ -389,11 +434,11 @@ undocumented:
 \item Drasil can potentially check for completeness and consistency
 \end{itemize}
 
-\section{Future Work}
+\section{Future Work} \label{SecFuture}
 
 \section{Concluding Remarks}
 
-\section{Acknowledgments}
+\section{Acknowledgements}
 
 The assistance of McMaster University's Dr.\ Manuel Campidelli, Dr.\ Wael and
 Dr.\ Michael Tait with the GlassBR example is greatly appreciated.

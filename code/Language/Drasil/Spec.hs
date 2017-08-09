@@ -121,27 +121,23 @@ sParenDash = \x -> S " (" :+: x :+: S ") - "
 sDash :: Sentence -> Sentence -> Sentence
 y `sDash` z = y +:+ S "-" +:+ z
 
--- Function used to derive the units of an equation based on 
--- inferUnit :: Relation -> [USymb] -> [USymb] -> USymb
--- inferUnit (:= _ _) num den = eliminate (num, den)
--- inferUnit (:+ a _) num den = inferUnit a num den
--- inferUnit (:- a _) num den = inferUnit a num den
--- inferUnit (:* a b) num den = inferUnit a (num:(analyze_n b)) den
--- inferUnit (:/ a b) num den = inferUnit a num (den:(analyze_d b))
--- inferUnit (C a) num den = eliminate ((num:(getUnit a)), den)
--- inferUnit (Deriv _ a b) num den = eliminate ((num:(analyze_n a)), (den:(analyze_d b)))
-  -- where analyze_n (Deriv _ (C a) _) = getUnit a
-        -- analyze_n (C a) = getUnit a
-        -- analyze_d (Deriv _ _ (C b)) = getUnit b
-        -- analyze_d (C b) = getUnit b
-        
--- eliminate :: ([USymb], [USymb]) -> USymb
--- eliminate ((frstnum:rstnum), den) = match frstnum den
-  -- where match unt [] = unt
-          
-        -- match unt (frst:rst)
-          -- | unt == frst
-          -- | otherwise = match unt rst
+-- Function used to derive the unit of an equation
+-- inferUnit :: Relation -> USymb
+-- inferUnit rel = eliminate $ findUnit rel ([], [])
+  -- where eliminate (frstn:rstn, frstd:rstd)
+
+-- findUnit :: Relation -> ([USymb], [USymb]) -> ([USymb], [USymb])
+-- findUnit (:+ a _) frac = findUnit a frac
+-- findUnit (:- a _) frac = findUnit a frac
+-- findUnit (:* a b) frac = findUnit a (analyze b True frac)
+-- findUnit (:/ a b) frac = findUnit a (analyze b False frac)
+-- findUnit (:= _ _) frac = frac
+  -- where analyze (Deriv _ (C a) (C b)) True (num, den) = (num:(getUnit a), den:(getUnit b))
+        -- analyze (Deriv _ (C a) (C b)) False (num, den) = (num:(getUnit b), den:(getUnit a))
+        -- analyze (C a) True (num, den) = (num:(getUnit a), den)
+        -- analyze (C a) False (num, den) = (num, den:(getUnit b))
+        -- analyze a True (num, den) = findUnit a (num, den)
+        -- analyze a False (num, den) = findUnit a (den, num)
 
 instance Eq USymb where
   a == b = a == b

@@ -40,9 +40,15 @@ data DocSection = Verbatim Section
                 | RefSec RefSec 
                 | IntroSec IntroSec
                 | StkhldrSec StkhldrSec
+                | GSDSec GSDSec
+                | ScpOfProjSec ScpOfProjSec
                 | SSDSec SSDSec
+                | ReqrmntSec ReqrmntSec
+                | LCsSec LCsSec
+                | TraceabilitySec TraceabilitySec
                 | AuxConstntSec AuxConstntSec
                 | Bibliography BibRef
+                | AppndxSec AppndxSec
 
 --FIXME: anything with 'Verb' in it should eventually go
 
@@ -120,6 +126,34 @@ data IntroSub where
 
 {--}
 
+-- | Stakeholders section
+data StkhldrSec = StkhldrProg CI Sentence {-[StkhldrSub]-} | StkhldrVerb Section
+
+-- | Stakeholders subsections
+-- FIXME: Remove since Stk.stakehldrGeneral generates both subsections?
+data StkhldrSub where
+  StkhldrSubVerb :: Section -> StkhldrSub
+  Client :: Sentence -> Sentence -> StkhldrSub
+  Cstmr  :: Sentence -> StkhldrSub
+
+{--}
+
+data GSDSec = GSDVerb Section
+
+-- | Helper for making the 'General System Description' section
+mkGSDSec :: GSDSec -> Section
+mkGSDSec (GSDVerb s) = s
+
+{--}
+
+data ScpOfProjSec = ScpOfProjVerb Section
+
+-- | Helper for making the 'Scope of the Project' section
+mkScpOfProjSec :: ScpOfProjSec -> Section
+mkScpOfProjSec (ScpOfProjVerb s) = s
+
+{--}
+
 -- | Specific System Description section . Contains a list of subsections. 
 -- Verbatim sections handled by SSDVerb           
 data SSDSec = SSDProg [SSDSub] | SSDVerb Section
@@ -133,7 +167,7 @@ data SSDSub where
 -- | Problem Description section
 data ProblemDescription where
   PDVerb :: Section -> ProblemDescription
-  -- PDProg :: --TODO
+  PDProg :: (NamedIdea a) => Sentence -> a -> Sentence -> [Section] -> ProblemDescription
   
 -- | Solution Characteristics Specification section
 data SolChSpec where
@@ -142,25 +176,38 @@ data SolChSpec where
   
 -- | Solution Characteristics Specification subsections
 data SCSSub where
-  SCSSubVerb :: Section -> SCSSub
-  -- Assumptions :: --TODO
-  TMs :: Fields -> [TheoryModel] -> SCSSub
-  GDs :: Fields -> [RelationConcept] -> SCSSub
-  DDs :: Fields -> [QDefinition]     -> SCSSub --FIXME: Need DD intro
-  IMs :: Fields -> [RelationConcept] -> SCSSub
-  -- Constraints :: --TODO
+  SCSSubVerb  :: Section -> SCSSub
+  Assumptions :: {-Fields  ->-} Section -> Section -> Section -> Section -> Section -> [Contents] -> SCSSub --FIXME: temporary definition?
+  TMs         :: Fields  -> [TheoryModel] -> SCSSub
+  GDs         :: Fields  -> [RelationConcept] -> SCSSub
+  DDs         :: Fields  -> [QDefinition]     -> SCSSub --FIXME: Need DD intro
+  IMs         :: Fields  -> [RelationConcept] -> SCSSub
+  Constraints :: Sentence -> Sentence -> Sentence -> [Contents] {-Fields  -> [UncertainWrapper] -> [ConstrainedChunk]-} -> SCSSub --FIXME: temporary definition?
+--FIXME: Work in Progress ^
 
 {--}
 
--- | Stakeholders section
-data StkhldrSec = StkhldrProg CI Sentence {-[StkhldrSub]-} | StkhldrVerb Section
+data ReqrmntSec   = ReqsVerb Section
 
--- | Stakeholders subsections
--- FIXME: Remove?
-data StkhldrSub where
-  StkhldrSubVerb :: Section -> StkhldrSub
-  Client :: Sentence -> Sentence -> StkhldrSub
-  Cstmr  :: Sentence -> StkhldrSub
+-- | Helper for making the 'Requirements' section
+mkReqrmntSec :: ReqrmntSec -> Section
+mkReqrmntSec (ReqsVerb s) = s
+
+{--}
+
+data LCsSec = LCsVerb Section
+
+-- | Helper for making the 'LikelyChanges' section
+mkLCsSec :: LCsSec -> Section
+mkLCsSec (LCsVerb s) = s
+
+{--}
+
+data TraceabilitySec = TraceabilityVerb Section
+
+-- | Helper for making the 'Traceability Matrices and Graphs' section
+mkTraceabilitySec :: TraceabilitySec -> Section
+mkTraceabilitySec (TraceabilityVerb s) = s
 
 {--}
 
@@ -191,6 +238,13 @@ mkSections si l = foldr doit [] l
     doit (SSDSec ss)         ls = mkSSDSec si ss : ls
     doit (AuxConstntSec acs) ls = mkAuxConsSec acs : ls
     doit (Bibliography bib)  ls = mkBib bib : ls
+    doit (GSDSec gs)         ls = mkGSDSec gs : ls 
+    doit (ScpOfProjSec sop)  ls = mkScpOfProjSec sop : ls
+    doit (ReqrmntSec r)      ls = mkReqrmntSec r : ls
+    doit (LCsSec lc)         ls = mkLCsSec lc : ls
+    doit (TraceabilitySec t) ls = mkTraceabilitySec t : ls
+    doit (AppndxSec a)       ls = mkAppndxSec a : ls
+
 
 -- | Helper for creating the reference section and subsections
 mkRefSec :: SystemInformation -> RefSec -> Section
@@ -315,12 +369,13 @@ mkSSDSec si (SSDProg l) =
   SSD.specSysDescr (siSys si) $ foldr (mkSubSSD si) [] l
   where
     mkSubSSD :: SystemInformation -> SSDSub -> [Section] -> [Section]
-    mkSubSSD _ (SSDSubVerb s) l'      = s : l'
+    mkSubSSD _ (SSDSubVerb s) l'        = s : l'
     mkSubSSD sysi (SSDProblem pd) l'    = mkSSDProb sysi pd : l'
     mkSubSSD sysi (SSDSolChSpec scs) l' = mkSolChSpec sysi scs : l'
 
 mkSSDProb :: SystemInformation -> ProblemDescription -> Section
 mkSSDProb _ (PDVerb s) = s
+mkSSDProb _ (PDProg a b c d) = SSD.probDescF a b c d
 
 mkSolChSpec :: SystemInformation -> SolChSpec -> Section
 mkSolChSpec _ (SCSVerb s) = s
@@ -337,21 +392,37 @@ mkSolChSpec si (SCSProg l m) =
     mkSubSCS _ (GDs _ _) _ = error "GDs not yet implemented"
     mkSubSCS _ (IMs _ _) _ = error "IMs not yet implemented"
       --FIXME: need to keep track of DD intro.
+    mkSubSCS _ (Assumptions r1 r2 r3 r4 r5 o) l' = (SSD.assumpF r1 r2 r3 r4 r5 o) : l'
+    mkSubSCS _ (Constraints a b c d) l' = (SSD.datConF a b c d) : l'
     inModSec = (SRS.inModel [Paragraph EmptyS] []) 
     --FIXME: inModSec should be replaced with a walk
     -- over the SCSProg and generate a relevant intro.
     -- Could start with just a quick check of whether or not IM is included and 
     -- then error out if necessary.
+
+{--}
   
 -- | Helper for making the 'Values of Auxiliary Constants' section
 mkAuxConsSec :: AuxConstntSec -> Section
 mkAuxConsSec (AuxConsVerb s) = s
 mkAuxConsSec (AuxConsProg key listOfCons) = (AC.valsOfAuxConstantsF key listOfCons)
 
+{--}
+
 -- | Helper for making the bibliography section
 mkBib :: BibRef -> Section
 mkBib bib = section (titleize' reference) [Bib bib] []
   --FIXME: TeX auto generates this title but HTML needs it
+
+{--}
+
+data AppndxSec = AppndxVerb Section
+
+-- | Helper for making the 'Appendix' section
+mkAppndxSec :: AppndxSec -> Section
+mkAppndxSec (AppndxVerb s) = s
+
+{--}
 
 -- Helper
 siSys :: SystemInformation -> NWrapper

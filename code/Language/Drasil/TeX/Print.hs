@@ -243,13 +243,25 @@ makeTable lls r bool t =
   %% (if bool then caption t else empty)
   %% label r
   %% (pure $ text ("\\end{" ++ ltab ++ "}"))
-  where descr (S x) --makes columns with long fields have room without going over the page
-          | length x > 50 = "X[l]"
+  where descr x --makes columns with long fields have room without going over the page
+          | specLength x > 50 = "X[l]"
           | otherwise     = "l"
-        descr _ = "l"
         ltab = "longtabu" --FIXME: add condition to allow table to span multiple pages
         --"longtable" ++ (if not bool then "*" else "")
-        
+
+-- | determines the length of a Spec
+specLength :: Spec -> Int
+specLength (S x)     = length x
+specLength (E x)     = length $ p_expr x
+specLength (Sy _)    = 1
+specLength (a :+: b) = specLength a + specLength b
+specLength (a :-: b) = specLength a + specLength b
+specLength (a :^: b) = specLength a + specLength b
+specLength (a :/: b) = specLength a + specLength b
+specLength (G _)     = 1
+specLength (EmptyS)  = 0
+specLength _         = 0 
+
 makeRows :: [[Spec]] -> D
 makeRows []     = empty
 makeRows (c:cs) = makeColumns c %% pure dbs %% makeRows cs

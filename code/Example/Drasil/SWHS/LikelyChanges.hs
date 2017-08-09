@@ -12,7 +12,7 @@ import Drasil.SWHS.Unitals (temp_init, temp_C, temp_PCM)
 import Drasil.SWHS.Assumptions (assump4, assump8, assump9, assump11,
   assump12, assump15)
 
-import qualified Data.Drasil.Concepts.Thermodynamics as CT (heat,
+import Data.Drasil.Concepts.Thermodynamics as CT (heat,
   thermal_conductor)
 import Data.Drasil.Quantities.Physics (energy)
 

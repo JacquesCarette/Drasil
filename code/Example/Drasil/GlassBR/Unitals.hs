@@ -466,9 +466,13 @@ lateralLoad  = compoundNC lateral load
 
 --GlassType Data-Type
 
---data GlassType = Factors [Integer] | Abbr [Sentence]
+--data GlassType = GlassTypeFields [Integer] [Sentence]
 
---data GlassThickness = Nominal [Double] | Actual [Double]
+--data GlassTypeFields = Factors [Integer] | Abbr [Sentence]
+
+--data GlassThickness = GlassThicknessFields [Double] [Double]
+
+--data GlassThicknessFields = Nominal [Double] | Actual [Double]
 
 --I think it would be best to create a GlassType data-type, with fields factors and abbr.
 --Then glassTypeFactors and glassTypeAbbr would be a [ GlassType]. 

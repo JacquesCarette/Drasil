@@ -459,6 +459,7 @@ glassTypeAbbrs = map S glassTypeAbbrsStr
 glassTypeAbbrsStr :: [String]
 glassTypeAbbrsStr = ["AN", "FT", "HS"]
 
+
 --Below are present in this file temporarily--
 lateralLoad :: NamedChunk
 lateralLoad  = compoundNC lateral load
@@ -466,13 +467,17 @@ lateralLoad  = compoundNC lateral load
 
 --GlassType Data-Type
 
---data GlassType = GlassTypeFields [Integer] [Sentence]
+-- data GlassType = GlassTypeFields [(Integer, Sentence)]
+-- data GlassTypeFields = Factors [Integer] | Abbr [Sentence]
 
---data GlassTypeFields = Factors [Integer] | Abbr [Sentence]
+-- data GlassThickness = GlassThicknessFields [(Double, Double)]
+-- data GlassThicknessFields = Nominal [Double] | Actual [Double]
 
---data GlassThickness = GlassThicknessFields [Double] [Double]
+-- glassType :: [GlassType]
+-- glassType = [(1, "AN"), (4, "FT"), (2, "HS")]
 
---data GlassThicknessFields = Nominal [Double] | Actual [Double]
+-- glassThickness :: [GlassThickness]
+-- glassThickness = zipWith actualThicknesses nominalThicknesses
 
 --I think it would be best to create a GlassType data-type, with fields factors and abbr.
 --Then glassTypeFactors and glassTypeAbbr would be a [ GlassType]. 

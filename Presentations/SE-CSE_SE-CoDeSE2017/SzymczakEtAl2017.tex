@@ -211,7 +211,7 @@ Work on Drasil has continued steadily since the position paper, as described
 below. We begin with a brief overview of the design of the Drasil framework in 
 Section~\ref{SecDesign}, then describe its development process to date in 
 Section~\ref{SecDevProcess}. Following that, we show an example of Drasil in 
-action (Section~\ref{SecGlassBR}) and the results we've seen to date 
+action (Section~\ref{SecGlassBR}) and the results we have seen to date 
 (Section~\ref{SecQuality}). Finally, we lay out some of the work that still 
 needs to be done (Section~\ref{SecFuture}) before concluding.
 
@@ -360,7 +360,6 @@ used to calculate \jtol{}. We can generate this code as well! Not only
 that, but thanks to the incorporation of GOOL we can also generate Java, Lua, 
 etc. 
 
-
 \begin{figure*}
 \begin{lstlisting}[language=python, frame=single, showstringspaces=false, 
 basicstyle=\small]
@@ -378,7 +377,6 @@ The source knowledge for generating both the documentation and the code has been
 captured using chunks as shown in Figure~\ref{Fig_JtolDrasil}. The value of 
 \jtol{} is calculated from the expression {\inlHask{tolStrDisFac_eq}}, which is 
 part of the {\inlHask{tolStrDisFac}} chunk.
-
 
 \begin{figure*}
 \begin{lstlisting}[language=Haskell, frame=single, showstringspaces=false, 
@@ -419,11 +417,15 @@ tolStrDisFac_eq = log (log ((1) / ((1) - (C pb_tol))) * ((Grouping ((C plate_len
 \label{Fig_JtolDrasil_fix}
 \end{figure*}
 
--All of the knowledge on GlassBR can be put together to generate the software
-requirements specification.  Can point to a figure showing the table of contents
-for the SRS.  Explain that it can be generated in tex (pdf) or html.
+We have similarly captured all of the knowledge pertaining to GlassBR in chunks. 
+This knowledge can be assembled and extracted in different ways to produce a 
+multitude of views, i.e. our artifacts, including the SRS. For a sense of what 
+we can generate from this knowledge, see the table of contents for the currently 
+generated GlassBR SRS (Figure~\ref{Fig_ToCGlassBRSRS}). Again, our documents can 
+be generated in TeX and/or HTML for more flexibility. Both contain automated 
+internal references.
 
-\begin{figure}[htpb]
+\begin{figure}
 \begin{center}
 \includegraphics[scale=0.45]{./figures/TofC.pdf}
 \end{center}
@@ -431,10 +433,9 @@ for the SRS.  Explain that it can be generated in tex (pdf) or html.
 \label{Fig_ToCGlassBRSRS}
 \end{figure}
 
-Part of SRS is automatically generated traceability information between
-definitions, assumptions, theories and instanced models.
+Another thing to note in our SRS is that the traceability information between definitions, assumptions, theories, and instance models is automatically generated, including the traceability graph shown in Figure~\ref{Fig_TraceGraph}.
 
-\begin{figure}[htpb]
+\begin{figure}
 \begin{center}
 \includegraphics[scale=0.45]{./figures/TraceGraph.pdf}
 \end{center}
@@ -444,11 +445,27 @@ definitions, assumptions, theories and instanced models.
 
 \section{Quality Improvements} \label{SecQuality}
 
+Throughout Drasil's development lifecycle, we have already noticed a number of non-trivial quality improvements to the software examples being re-developed. These improvements come in a wide range of areas, but for the sake of brevity we will focus on certifiability, reusability, and reproducibility.
+
 \subsection{Certifiability}
+
+Certifying (or re-certifying) software can be a lengthy and expensive process 
+where a single error can cause the software to fail the certification process. 
+Consider the following equation from our solar water heating example which 
+states that energy must be conserved:
+
+\begin{equation*}
+E_W = \int_{0}^{t} h_C A_C (T_C - T_W(t)) dt - \int_{0}^{t} h_P A_P (T_W(t) - T_P(t)) dt
+\end{equation*}
+
+This is trivial for a human to check, and writing code to check it during the 
+software execution is also very simple. However, it is still time-consuming and 
+should it ever need to change, it would require developers to make a number of 
+modifications to many artifacts  in the future.
 
 \begin{table} 
 \centering
-\caption{Constraints on quantities Used To Verify Inputs}
+\caption{Constraints on Quantities -- Used To Verify Inputs}
 \begin{tabular}{c c r c } 
 \toprule
 \textbf{Var} & \textbf{Constraints} & \textbf{Typical Value} & \textbf{Uncertainty}\\ \midrule
@@ -459,46 +476,48 @@ $\rho_P$ & $\rho_P > 0$	& 1007 kg/m$^3$	& 10\% \\
 \label{tab:pcm}
 \end{table}
 
-\begin{equation*}
-E_W = \int_{0}^{t} h_C A_C (T_C - T_W(t)) dt - \int_{0}^{t} h_P A_P (T_W(t) - T_P(t)) dt
-\end{equation*}
+Thanks to Drasil's knowledge-capture mechanisms, we can capture the above equation in one place, thus any changes can be made very quickly. Not only that, but sanity checks (such as ensuring constraints on inputs) can also be captured and reused (see Table~\ref{tab:pcm}). Capturing that information also delivers a wider array of advantages, including:
 
 \begin{itemize}
-\item \emph{If wrong, wrong everywhere}
-\item Sanity checks captured and reused
-\item Generate guards against invalid input
-\item Generate test cases
-\item Generate view suitable for inspection
-\item Traceability for verification of change
+\item Generate guards against invalid input automatically
+\item Generate certain test cases automatically
+\item Generate views suitable for inspection
 \end{itemize}
+We can also see that it is extremely easy to trace changes and verify that they are correct, thanks to our one-source, generative approach.
+
+We have also touched on one of the greatest advantages which was implied earlier: \emph{If there is an error somewhere, it is wrong everywhere}. This may seem like a disadvantage, but ensuring every artifact contains the same errors means there is a much greater chance of those errors being spotted. In our experience, many examples of software include code that does not match the design (due to hacks, last-minute changes, etc.), and an error which could hamper certification efforts can fly under the radar. 
+
+For (re-)certification purposes, we want to be able to find any and all errors, trace them to their source, and fix them quickly. Drasil has shown great promise in that respect.
 
 \subsection{Reusability}
 
+Reusability is a core tenet of ours for Drasil's development. This can be seen most obviously in the knowledge-capture mechanisms we have created. 
+
+Consider the following software artifacts typically found in a rational, design process for software development~\cite{ParnasAndClements1986}:
+
 \begin{itemize}
-\item De-embed knowledge
-\item Reuse throughout document
+\item Software Requirements Specification (SRS)
+\item Module Interface Guide (MIS)
+\item Source Code
+\item Test cases
+\end{itemize}
+
+Within these artifacts, there is a lot of duplication of specific knowledge related to the software being designed. Knowledge from the SRS will appear, possibly transformed, throughout each of the other artifacts. We seek to de-embed specific knowledge from within any specific artifact to easily reuse it throughout them all. This knowledge includes, but is not limited to:
+
 \begin{itemize}
+\item Scientific Knowledge
+\item Models
 \item Units
 \item Symbols
 \item Descriptions
 \item Traceability information
 \end{itemize}
-\item Reuse between documents
-\begin{itemize}
-\item SRS
-\item MIS
-\item Code
-\item Test cases
-\end{itemize}
-\item Reuse between projects
-\begin{itemize}
-\item Knowledge reuse
-\item A family of related models, or reuse of pieces
-\item Conservation of thermal energy
-\item Interpolation
-\item Etc.
-\end{itemize}
-\end{itemize}
+
+%% TODO: Something about Drasil being awesome at capturing info.
+
+Reusing knowledge across artifacts in one software project is already incredibly useful, however, we have taken it a step further. Drasil allows us to reuse between projects. We can reuse a family of related models, or reuse pieces of knowledge from a given domain as necessary. Consider the vast number of software that rely on interpolation, or must ensure conservation of thermal energy. We can capture this knowledge once and reuse it through all of these projects.
+
+We have already begun using knowledge across projects with great results. Our two implementations of the solar water heating systems have a vast amount of overlap in the requisite knowledge, except for the phase change material, which is not present in one of the examples.
 
 \subsection{Reproducibility}
 

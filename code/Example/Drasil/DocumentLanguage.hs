@@ -43,6 +43,12 @@ data DocSection = Verbatim Section
                 | SSDSec SSDSec
                 | AuxConstntSec AuxConstntSec
                 | Bibliography BibRef
+                | GSDSec GSDSec
+                | ScpOfProjSec ScpOfProjSec
+                | ReqrmntSec ReqrmntSec
+                | LCsSec LCsSec
+                | TraceabilitySec TraceabilitySec
+                | AppndxSec AppndxSec
 
 --FIXME: anything with 'Verb' in it should eventually go
 
@@ -164,6 +170,15 @@ data StkhldrSub where
 
 {--}
 
+data GSDSec = GSDVerb Section
+data ScpOfProjSec = ScpOfProjVerb Section
+data ReqrmntSec   = ReqsVerb Section
+data LCsSec = LCsVerb Section
+data TraceabilitySec = TraceabilityVerb Section
+data AppndxSec = AppndxVerb Section
+
+{--}
+
 -- | Values of Auxiliary Constants section
 data AuxConstntSec = AuxConsProg CI [QDefinition] | AuxConsVerb Section
 
@@ -191,6 +206,36 @@ mkSections si l = foldr doit [] l
     doit (SSDSec ss)         ls = mkSSDSec si ss : ls
     doit (AuxConstntSec acs) ls = mkAuxConsSec acs : ls
     doit (Bibliography bib)  ls = mkBib bib : ls
+    doit (GSDSec gs)         ls = mkGSDSec gs : ls 
+    doit (ScpOfProjSec sop)  ls = mkScpOfProjSec sop : ls
+    doit (ReqrmntSec r)      ls = mkReqrmntSec r : ls
+    doit (LCsSec lc)         ls = mkLCsSec lc : ls
+    doit (TraceabilitySec t) ls = mkTraceabilitySec t : ls
+    doit (AppndxSec a)       ls = mkAppndxSec a : ls
+
+-- | Helper for making the 'General System Description' section
+mkGSDSec :: GSDSec -> Section
+mkGSDSec (GSDVerb s) = s
+
+-- | Helper for making the 'Scope of the Project' section
+mkScpOfProjSec :: ScpOfProjSec -> Section
+mkScpOfProjSec (ScpOfProjVerb s) = s
+
+-- | Helper for making the 'Requirements' section
+mkReqrmntSec :: ReqrmntSec -> Section
+mkReqrmntSec (ReqsVerb s) = s
+
+-- | Helper for making the 'LikelyChanges' section
+mkLCsSec :: LCsSec -> Section
+mkLCsSec (LCsVerb s) = s
+
+-- | Helper for making the 'Traceability Matrices and Graphs' section
+mkTraceabilitySec :: TraceabilitySec -> Section
+mkTraceabilitySec (TraceabilityVerb s) = s
+
+-- | Helper for making the 'Appendix' section
+mkAppndxSec :: AppndxSec -> Section
+mkAppndxSec (AppndxVerb s) = s
 
 -- | Helper for creating the reference section and subsections
 mkRefSec :: SystemInformation -> RefSec -> Section

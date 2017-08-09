@@ -76,20 +76,26 @@ mkSRS = [RefSec (RefProg intro
   (S "Entuitive. It is developed by Dr. Manuel Campidelli"))] 
   --FIXME: Turn "People -> Sentence"? (so knowledge can be easily pulled out...)
   ++
-  map Verbatim [s4, s5]
+  [GSDSec (GSDVerb s4)]
+  ++
+  [ScpOfProjSec (ScpOfProjVerb s5)]
   ++
   [SSDSec (SSDVerb s6)]
   {-[SSDSec (SSDProg 
   [SSDProblem  (PDProg start gLassBR ending [s6_1_1, s6_1_2, s6_1_3])
   {-, SSDSolChSpec (SCSProg )-}])]-}
   ++
-  map Verbatim [s7, s8, s9]
+  [ReqrmntSec (ReqsVerb s7)]
+  ++
+  [LCsSec (LCsVerb s8)]
+  ++
+  [TraceabilitySec (TraceabilityVerb s9)]
   ++ 
   [AuxConstntSec (AuxConsProg gLassBR auxiliaryConstants)]
   ++ 
   [Bibliography gbCitations]
   ++
-  [Verbatim s12]
+  [AppndxSec (AppndxVerb s12)]
   
 glassSystInfo :: SystemInformation
 glassSystInfo = SI {

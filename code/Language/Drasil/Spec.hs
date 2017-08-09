@@ -123,8 +123,8 @@ y `sDash` z = y +:+ S "-" +:+ z
 
 -- Function used to derive the unit of an equation
 -- inferUnit :: Relation -> USymb
--- inferUnit rel = eliminate $ findUnit rel ([], [])
-  -- where eliminate (frstn:rstn, frstd:rstd)
+-- inferUnit rel = eliminate [] $ findUnit rel ([], [])
+  -- where combine (num, den)
 
 -- findUnit :: Relation -> ([USymb], [USymb]) -> ([USymb], [USymb])
 -- findUnit (:+ a _) frac = findUnit a frac
@@ -138,6 +138,12 @@ y `sDash` z = y +:+ S "-" +:+ z
         -- analyze (C a) False (num, den) = (num, den:(getUnit b))
         -- analyze a True (num, den) = findUnit a (num, den)
         -- analyze a False (num, den) = findUnit a (den, num)
+
+-- eliminate :: [USymb] -> ([USymb], [USymb]) -> ([USymb], [USymb])
+-- eliminate lst ([], den) = (lst, den)
+-- eliminate lst (frst:rst, den)
+  -- | delete frst den == den = eliminate (frst:lst) (rst, den)
+  -- | delete frst den /= den = eliminate lst (rst, delete frst den)
 
 instance Eq USymb where
   a == b = a == b

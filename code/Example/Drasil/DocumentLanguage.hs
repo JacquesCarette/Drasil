@@ -40,14 +40,14 @@ data DocSection = Verbatim Section
                 | RefSec RefSec 
                 | IntroSec IntroSec
                 | StkhldrSec StkhldrSec
-                | SSDSec SSDSec
-                | AuxConstntSec AuxConstntSec
-                | Bibliography BibRef
                 | GSDSec GSDSec
                 | ScpOfProjSec ScpOfProjSec
+                | SSDSec SSDSec
                 | ReqrmntSec ReqrmntSec
                 | LCsSec LCsSec
                 | TraceabilitySec TraceabilitySec
+                | AuxConstntSec AuxConstntSec
+                | Bibliography BibRef
                 | AppndxSec AppndxSec
 
 --FIXME: anything with 'Verb' in it should eventually go
@@ -126,6 +126,34 @@ data IntroSub where
 
 {--}
 
+-- | Stakeholders section
+data StkhldrSec = StkhldrProg CI Sentence {-[StkhldrSub]-} | StkhldrVerb Section
+
+-- | Stakeholders subsections
+-- FIXME: Remove since Stk.stakehldrGeneral generates both subsections?
+data StkhldrSub where
+  StkhldrSubVerb :: Section -> StkhldrSub
+  Client :: Sentence -> Sentence -> StkhldrSub
+  Cstmr  :: Sentence -> StkhldrSub
+
+{--}
+
+data GSDSec = GSDVerb Section
+
+-- | Helper for making the 'General System Description' section
+mkGSDSec :: GSDSec -> Section
+mkGSDSec (GSDVerb s) = s
+
+{--}
+
+data ScpOfProjSec = ScpOfProjVerb Section
+
+-- | Helper for making the 'Scope of the Project' section
+mkScpOfProjSec :: ScpOfProjSec -> Section
+mkScpOfProjSec (ScpOfProjVerb s) = s
+
+{--}
+
 -- | Specific System Description section . Contains a list of subsections. 
 -- Verbatim sections handled by SSDVerb           
 data SSDSec = SSDProg [SSDSub] | SSDVerb Section
@@ -156,26 +184,30 @@ data SCSSub where
   IMs         :: Fields  -> [RelationConcept] -> SCSSub
   Constraints :: Sentence -> Sentence -> Sentence -> [Contents] {-Fields  -> [UncertainWrapper] -> [ConstrainedChunk]-} -> SCSSub --FIXME: temporary definition?
 --FIXME: Work in Progress ^
-{--}
-
--- | Stakeholders section
-data StkhldrSec = StkhldrProg CI Sentence {-[StkhldrSub]-} | StkhldrVerb Section
-
--- | Stakeholders subsections
--- FIXME: Remove since Stk.stakehldrGeneral generates both subsections?
-data StkhldrSub where
-  StkhldrSubVerb :: Section -> StkhldrSub
-  Client :: Sentence -> Sentence -> StkhldrSub
-  Cstmr  :: Sentence -> StkhldrSub
 
 {--}
 
-data GSDSec = GSDVerb Section
-data ScpOfProjSec = ScpOfProjVerb Section
 data ReqrmntSec   = ReqsVerb Section
+
+-- | Helper for making the 'Requirements' section
+mkReqrmntSec :: ReqrmntSec -> Section
+mkReqrmntSec (ReqsVerb s) = s
+
+{--}
+
 data LCsSec = LCsVerb Section
+
+-- | Helper for making the 'LikelyChanges' section
+mkLCsSec :: LCsSec -> Section
+mkLCsSec (LCsVerb s) = s
+
+{--}
+
 data TraceabilitySec = TraceabilityVerb Section
-data AppndxSec = AppndxVerb Section
+
+-- | Helper for making the 'Traceability Matrices and Graphs' section
+mkTraceabilitySec :: TraceabilitySec -> Section
+mkTraceabilitySec (TraceabilityVerb s) = s
 
 {--}
 
@@ -213,29 +245,6 @@ mkSections si l = foldr doit [] l
     doit (TraceabilitySec t) ls = mkTraceabilitySec t : ls
     doit (AppndxSec a)       ls = mkAppndxSec a : ls
 
--- | Helper for making the 'General System Description' section
-mkGSDSec :: GSDSec -> Section
-mkGSDSec (GSDVerb s) = s
-
--- | Helper for making the 'Scope of the Project' section
-mkScpOfProjSec :: ScpOfProjSec -> Section
-mkScpOfProjSec (ScpOfProjVerb s) = s
-
--- | Helper for making the 'Requirements' section
-mkReqrmntSec :: ReqrmntSec -> Section
-mkReqrmntSec (ReqsVerb s) = s
-
--- | Helper for making the 'LikelyChanges' section
-mkLCsSec :: LCsSec -> Section
-mkLCsSec (LCsVerb s) = s
-
--- | Helper for making the 'Traceability Matrices and Graphs' section
-mkTraceabilitySec :: TraceabilitySec -> Section
-mkTraceabilitySec (TraceabilityVerb s) = s
-
--- | Helper for making the 'Appendix' section
-mkAppndxSec :: AppndxSec -> Section
-mkAppndxSec (AppndxVerb s) = s
 
 -- | Helper for creating the reference section and subsections
 mkRefSec :: SystemInformation -> RefSec -> Section
@@ -390,16 +399,30 @@ mkSolChSpec si (SCSProg l m) =
     -- over the SCSProg and generate a relevant intro.
     -- Could start with just a quick check of whether or not IM is included and 
     -- then error out if necessary.
+
+{--}
   
 -- | Helper for making the 'Values of Auxiliary Constants' section
 mkAuxConsSec :: AuxConstntSec -> Section
 mkAuxConsSec (AuxConsVerb s) = s
 mkAuxConsSec (AuxConsProg key listOfCons) = (AC.valsOfAuxConstantsF key listOfCons)
 
+{--}
+
 -- | Helper for making the bibliography section
 mkBib :: BibRef -> Section
 mkBib bib = section (titleize' reference) [Bib bib] []
   --FIXME: TeX auto generates this title but HTML needs it
+
+{--}
+
+data AppndxSec = AppndxVerb Section
+
+-- | Helper for making the 'Appendix' section
+mkAppndxSec :: AppndxSec -> Section
+mkAppndxSec (AppndxVerb s) = s
+
+{--}
 
 -- Helper
 siSys :: SystemInformation -> NWrapper

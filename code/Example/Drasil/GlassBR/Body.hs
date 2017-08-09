@@ -78,9 +78,12 @@ mkSRS = [RefSec (RefProg intro
   ++
   map Verbatim [s4, s5]
   ++
-  [SSDSec (SSDVerb s6)] {-(SSDProg [SSDProblem, SSDSolChSpec])-}
+  [SSDSec (SSDVerb s6)]
+  {-[SSDSec (SSDProg 
+  [SSDProblem  (PDProg start gLassBR ending [s6_1_1, s6_1_2, s6_1_3])
+  {-, SSDSolChSpec (SCSProg )-}])]-}
   ++
-  map Verbatim [s7, s8, s9] 
+  map Verbatim [s7, s8, s9]
   ++ 
   [AuxConstntSec (AuxConsProg gLassBR auxiliaryConstants)]
   ++ 
@@ -340,15 +343,17 @@ s6 = specSysDesF (S "and" +:+ plural definition) [s6_1, s6_2]
 
 {--PROBLEM DESCRIPTION--}
 
+start, ending :: Sentence
+start = foldlSent [S "A", phrase system,
+  S "is needed to efficiently" `sAnd` S "correctly predict the", 
+  phrase blastRisk +:+ S "involved with the glass"]
+ending = foldl (+:+) EmptyS [S "interpret the", plural input_, 
+  S "to give out the", plural output_, 
+  S "which predicts whether the", phrase glaSlab, 
+  S "can withstand the", phrase blast, S "under the", 
+  plural condition]
+
 s6_1 = probDescF start gLassBR ending [s6_1_1, s6_1_2, s6_1_3]
-  where start = foldlSent [S "A", phrase system,
-                S "is needed to efficiently" `sAnd` S "correctly predict the", 
-                phrase blastRisk +:+ S "involved with the glass"]
-        ending = foldl (+:+) EmptyS [S "interpret the", plural input_, 
-                S "to give out the", plural output_, 
-                S "which predicts whether the", phrase glaSlab, 
-                S "can withstand the", phrase blast, S "under the", 
-                plural condition]
 
 {--Terminology and Definitions--}
 

@@ -133,7 +133,7 @@ data SSDSub where
 -- | Problem Description section
 data ProblemDescription where
   PDVerb :: Section -> ProblemDescription
-  -- PDProg :: --TODO
+  PDProg :: (NamedIdea a) => Sentence -> a -> Sentence -> [Section] -> ProblemDescription
   
 -- | Solution Characteristics Specification section
 data SolChSpec where
@@ -142,21 +142,21 @@ data SolChSpec where
   
 -- | Solution Characteristics Specification subsections
 data SCSSub where
-  SCSSubVerb :: Section -> SCSSub
-  -- Assumptions :: --TODO
-  TMs :: Fields -> [TheoryModel] -> SCSSub
-  GDs :: Fields -> [RelationConcept] -> SCSSub
-  DDs :: Fields -> [QDefinition]     -> SCSSub --FIXME: Need DD intro
-  IMs :: Fields -> [RelationConcept] -> SCSSub
-  -- Constraints :: --TODO
-
+  SCSSubVerb  :: Section -> SCSSub
+  Assumptions :: {-Fields  ->-} Section -> Section -> Section -> Section -> Section -> [Contents] -> SCSSub --FIXME: temporary definition?
+  TMs         :: Fields  -> [TheoryModel] -> SCSSub
+  GDs         :: Fields  -> [RelationConcept] -> SCSSub
+  DDs         :: Fields  -> [QDefinition]     -> SCSSub --FIXME: Need DD intro
+  IMs         :: Fields  -> [RelationConcept] -> SCSSub
+  Constraints :: Sentence -> Sentence -> Sentence -> [Contents] {-Fields  -> [UncertainWrapper] -> [ConstrainedChunk]-} -> SCSSub --FIXME: temporary definition?
+--FIXME: Work in Progress ^
 {--}
 
 -- | Stakeholders section
 data StkhldrSec = StkhldrProg CI Sentence {-[StkhldrSub]-} | StkhldrVerb Section
 
 -- | Stakeholders subsections
--- FIXME: Remove?
+-- FIXME: Remove since Stk.stakehldrGeneral generates both subsections?
 data StkhldrSub where
   StkhldrSubVerb :: Section -> StkhldrSub
   Client :: Sentence -> Sentence -> StkhldrSub
@@ -315,12 +315,13 @@ mkSSDSec si (SSDProg l) =
   SSD.specSysDescr (siSys si) $ foldr (mkSubSSD si) [] l
   where
     mkSubSSD :: SystemInformation -> SSDSub -> [Section] -> [Section]
-    mkSubSSD _ (SSDSubVerb s) l'      = s : l'
+    mkSubSSD _ (SSDSubVerb s) l'        = s : l'
     mkSubSSD sysi (SSDProblem pd) l'    = mkSSDProb sysi pd : l'
     mkSubSSD sysi (SSDSolChSpec scs) l' = mkSolChSpec sysi scs : l'
 
 mkSSDProb :: SystemInformation -> ProblemDescription -> Section
 mkSSDProb _ (PDVerb s) = s
+mkSSDProb _ (PDProg a b c d) = SSD.probDescF a b c d
 
 mkSolChSpec :: SystemInformation -> SolChSpec -> Section
 mkSolChSpec _ (SCSVerb s) = s
@@ -337,6 +338,8 @@ mkSolChSpec si (SCSProg l m) =
     mkSubSCS _ (GDs _ _) _ = error "GDs not yet implemented"
     mkSubSCS _ (IMs _ _) _ = error "IMs not yet implemented"
       --FIXME: need to keep track of DD intro.
+    mkSubSCS _ (Assumptions r1 r2 r3 r4 r5 o) l' = (SSD.assumpF r1 r2 r3 r4 r5 o) : l'
+    mkSubSCS _ (Constraints a b c d) l' = (SSD.datConF a b c d) : l'
     inModSec = (SRS.inModel [Paragraph EmptyS] []) 
     --FIXME: inModSec should be replaced with a walk
     -- over the SCSProg and generate a relevant intro.

@@ -1,20 +1,34 @@
 module Drasil.SWHS.Unitals where
 
-import Drasil.SWHS.Concepts
+import Prelude hiding (id)
 
-import Language.Drasil
-import Data.Drasil.SI_Units
+import Language.Drasil (UnitaryChunk, QDefinition, UncertQ, UncertainChunk,
+  ConVar, UnitalChunk, UCWrapper, CQSWrapper,
+  symbol, nounPhraseSP, unitary, physc, sfwrc, term, dcc, cvR, uc',
+  uvc, uqc, uqcNU, cC, cA, cR, cP, cW, cH, cL, cS, cD, cT, sup, sub,
+  lH, lF, lT, lQ, lG, of_, phrase, nounPhrase'', compoundPhrase,
+  compoundPhrase', vec, cV, ucw, cqs,
+  Greek (Phi_L, Eta_L, Tau_L, Delta),
+  Symbol (Atomic, Greek, Concat),
+  Space (Rational, Real),
+  CapitalizationRule (CapFirst, CapWords),
+  Expr (C, Int, Dbl, Index, V, (:<), (:*), (:/), (:>), (:>=), (:<=)))
+
+import Data.Drasil.SI_Units (m_2, second, kilogram, metre, joule,
+  centigrade, m_3, specificE)
 import Data.Drasil.Concepts.Documentation (simulation)
-import qualified Data.Drasil.Units.Thermodynamics as UT
-import Data.Drasil.Quantities.Thermodynamics
+import qualified Data.Drasil.Units.Thermodynamics as UT (heat_transfer_coef,
+  heat_cap_spec, thermal_flux, volHtGenU)
+import Data.Drasil.Quantities.Thermodynamics (sens_heat, temp, melt_pt,
+  ht_flux, latent_heat, boil_pt, heat_cap_spec)
 import Data.Drasil.Quantities.Physics (time)
 import Data.Drasil.Quantities.Math (surface, uNormalVect, surArea)
 import Data.Drasil.Quantities.PhysicalProperties (mass, density, vol)
+import Drasil.SWHS.Concepts (water, coil, phsChgMtrl)
 import Data.Drasil.Units.PhysicalProperties (densityU)
 import Data.Drasil.Utils(mkDataDef)
 
 import Control.Lens ((^.))
-import Prelude hiding (id)
 
 swhsSymbols :: [CQSWrapper]
 swhsSymbols = (map cqs swhsUnits) ++ (map cqs swhsUnitless) ++ (map cqs swhsConstrained)

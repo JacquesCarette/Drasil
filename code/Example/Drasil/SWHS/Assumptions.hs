@@ -19,7 +19,7 @@ import Data.Drasil.Quantities.PhysicalProperties (vol)
 import Data.Drasil.Quantities.Physics (time, energy)
 import Data.Drasil.Quantities.Thermodynamics (temp, boil_pt, melt_pt)
 
-import qualified Data.Drasil.Concepts.Thermodynamics as CT (heat, melting,
+import Data.Drasil.Concepts.Thermodynamics as CT (heat, melting,
   law_conv_cooling, heat_trans, thermal_energy)
 import Data.Drasil.Concepts.PhysicalProperties (solid, liquid, gaseous)
 import Data.Drasil.Concepts.Math (change)

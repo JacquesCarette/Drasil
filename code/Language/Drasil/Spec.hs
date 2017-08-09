@@ -6,6 +6,10 @@ import Language.Drasil.Unicode (Greek,Special,Special(CurlyBrOpen,CurlyBrClose,S
 import Language.Drasil.Symbol
 import Language.Drasil.Expr
 
+-- import Language.Drasil.Chunk.Quantity (getUnit)
+
+-- import Data.List (delete)
+
 -- | For writing accented characters
 data Accent = Grave | Acute deriving Eq
 
@@ -127,17 +131,19 @@ y `sDash` z = y +:+ S "-" +:+ z
   -- where combine (num, den)
 
 -- findUnit :: Relation -> ([USymb], [USymb]) -> ([USymb], [USymb])
--- findUnit (:+ a _) frac = findUnit a frac
--- findUnit (:- a _) frac = findUnit a frac
--- findUnit (:* a b) frac = findUnit a (analyze b True frac)
--- findUnit (:/ a b) frac = findUnit a (analyze b False frac)
--- findUnit (:= _ _) frac = frac
-  -- where analyze (Deriv _ (C a) (C b)) True (num, den) = (num:(getUnit a), den:(getUnit b))
-        -- analyze (Deriv _ (C a) (C b)) False (num, den) = (num:(getUnit b), den:(getUnit a))
-        -- analyze (C a) True (num, den) = (num:(getUnit a), den)
-        -- analyze (C a) False (num, den) = (num, den:(getUnit b))
-        -- analyze a True (num, den) = findUnit a (num, den)
-        -- analyze a False (num, den) = findUnit a (den, num)
+-- findUnit (a :+ _) frac = findUnit a frac
+-- findUnit (a :- _) frac = findUnit a frac
+-- findUnit (a :* b) frac = findUnit a (analyze b True frac)
+-- findUnit (a :/ b) frac = findUnit a (analyze b False frac)
+-- findUnit (_ := _) frac = frac
+
+-- analyze :: Expr -> Bool -> ([USymb], [USymb]) -> ([USymb], [USymb])
+-- analyze (Deriv _ (C a) (C b)) True (num, den) = ((getUnit a):num, (getUnit b):den)
+-- analyze (Deriv _ (C a) (C b)) False (num, den) = ((getUnit b):num, (getUnit a):den)
+-- analyze (C a) True (num, den) = ((getUnit a):num, den)
+-- analyze (C b) False (num, den) = (num, (getUnit b):den)
+-- analyze a True (num, den) = findUnit a (num, den)
+-- analyze a False (num, den) = findUnit a (den, num)
 
 -- eliminate :: [USymb] -> ([USymb], [USymb]) -> ([USymb], [USymb])
 -- eliminate lst ([], den) = (lst, den)

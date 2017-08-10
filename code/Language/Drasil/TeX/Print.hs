@@ -252,7 +252,7 @@ makeTable lls r bool t =
 -- | determines the length of a Spec
 specLength :: Spec -> Int
 specLength (S x)     = length x
-specLength (E x)     = (length $ p_expr x) `div` 2 --expressions use about half as much space as their plain text
+specLength (E x)     = length $ filter (\c -> c `notElem` dontCount) $ p_expr x
 specLength (Sy _)    = 1
 specLength (a :+: b) = specLength a + specLength b
 specLength (a :-: b) = specLength a + specLength b
@@ -261,6 +261,9 @@ specLength (a :/: b) = specLength a + specLength b
 specLength (G _)     = 1
 specLength (EmptyS)  = 0
 specLength _         = 0 
+
+dontCount :: String
+dontCount = "\\/[]{}()_^$:"
 
 makeRows :: [[Spec]] -> D
 makeRows []     = empty

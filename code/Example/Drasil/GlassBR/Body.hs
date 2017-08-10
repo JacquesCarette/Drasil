@@ -25,6 +25,8 @@ import Data.Drasil.Concepts.PhysicalProperties (dimension, materialProprty)
 import Drasil.Template.MG
 import Drasil.Template.DD
 
+--import Drasil.DocumentLanguage.Definitions
+
 import qualified Drasil.SRS as SRS
 import           Drasil.Sections.ReferenceMaterial
 import           Drasil.DocumentLanguage
@@ -81,10 +83,13 @@ mkSRS = [RefSec (RefProg intro
   [ScpOfProjSec (ScpOfProjVerb s5)]
   ++
   [SSDSec (SSDVerb s6)]
-  {-[SSDSec (SSDProg 
-  [SSDProblem  (PDProg start gLassBR ending [s6_1_1, s6_1_2, s6_1_3])
-  {-, SSDSolChSpec (SCSProg )-}])]-}
   ++
+  -- [SSDSec (SSDProg 
+  -- [SSDProblem  (PDProg start gLassBR ending [s6_1_1, s6_1_2, s6_1_3])
+  -- , SSDSolChSpec (SCSProg 
+  -- [DDs [Label, Symbol, Units, DefiningEquation, Description (Verbose) (IncludeUnits) (S "Testing")] dataDefns]  
+  -- gbSymbMap)])]
+  -- ++
   [ReqrmntSec (ReqsVerb s7)]
   ++
   [LCsSec (LCsVerb s8)]
@@ -95,7 +100,7 @@ mkSRS = [RefSec (RefProg intro
   ++ 
   [Bibliography gbCitations]
   ++
-  [AppndxSec (AppndxVerb s12)]
+  [AppndxSec (AppndxProg [s12_intro, fig_5, fig_6])]
   
 glassSystInfo :: SystemInformation
 glassSystInfo = SI {
@@ -138,7 +143,7 @@ glassBR_mg = mgDoc glassBRProg (for'' titleize phrase) mg_authors mgBod
 
 s4, s5,
   s6, s6_1, s6_1_1, s6_1_2, s6_1_3, s6_2, 
-  s7, s7_1, s7_2, s8, s9, s12 :: Section
+  s7, s7_1, s7_2, s8, s9{-, s12-} :: Section
 
 s5_1_table,
   s6_1_2_list, s6_2_intro, s6_2_5_table1, 
@@ -871,7 +876,7 @@ fig_4 = figureLabel 4 (traceyMatrix)
 
 {--APPENDIX--}
 
-s12 = SRS.appendix [s12_intro, fig_5, fig_6] []
+--s12 = SRS.appendix [s12_intro, fig_5, fig_6] []
 
 s12_intro = foldlSP [
   S "This", phrase appendix, S "holds the", plural graph, 

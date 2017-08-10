@@ -411,11 +411,12 @@ mkBib bib = section (titleize' reference) [Bib bib] []
 
 {--}
 
-data AppndxSec = AppndxVerb Section
+data AppndxSec = AppndxVerb Section | AppndxProg [Contents]
 
 -- | Helper for making the 'Appendix' section
 mkAppndxSec :: AppndxSec -> Section
-mkAppndxSec (AppndxVerb s) = s
+mkAppndxSec (AppndxVerb s)  = s
+mkAppndxSec (AppndxProg cs) = SRS.appendix cs []
 
 {--}
 

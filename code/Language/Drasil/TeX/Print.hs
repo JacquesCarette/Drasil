@@ -234,7 +234,7 @@ cases (p:ps) = p_expr (fst p) ++ ", & " ++ p_expr (snd p) ++ "\\\\\n" ++ cases p
 
 makeTable :: [[Spec]] -> D -> Bool -> D -> D
 makeTable lls r bool t =
-  pure (text ("\\begin{" ++ ltab ++ "}" ++ (brace . unwords . map descr . head . tail) lls ))
+  pure (text ("\\begin{" ++ ltab ++ "}" ++ (brace . unwords . map descr . takeTailHead) lls ))
   %% (pure (text "\\toprule"))
   %% makeRows [head lls]
   %% (pure (text "\\midrule"))
@@ -246,6 +246,10 @@ makeTable lls r bool t =
   where descr x --makes columns with long fields have room without going over the page
           | specLength x > 50 = "X[l]"
           | otherwise     = "l"
+        takeTailHead :: [[Spec]] -> [Spec]
+        takeTailHead []      = []
+        takeTailHead [x]     = x
+        takeTailHead (_:y:_) = y
         ltab = "longtabu" --FIXME: add condition to allow table to span multiple pages
         --"longtable" ++ (if not bool then "*" else "")
 

@@ -87,7 +87,7 @@ import Drasil.SWHS.DataDesc (swhsInputMod)
 
 import qualified Drasil.SRS as SRS (inModel, missingP, likeChg,
   funcReq, propCorSol, genDefn, dataDefn, thModel, probDesc, goalStmt,
-  sysCont)
+  sysCont, reference)
 
 import Drasil.Template.MG (mgDoc)
 import Drasil.Template.DD (makeDD)
@@ -867,8 +867,8 @@ s2_3_understanding diffeq = foldlSent_ [(plural diffeq) `sC`
 s2_4_intro :: Sentence
 s2_4_intro = foldlSent [S "The", phrase organization, S "of this",
   phrase document, S "follows the template for an", short srs,
-  S "for", phrase sciCompS, S "proposed by [citation]" `sAnd`
-  sSqBr (S "citation")]
+  S "for", phrase sciCompS, S "proposed by", (sSqBrNum 3) `sAnd`
+  (sSqBrNum 6), sParen (makeRef (SRS.reference SRS.missingP []))]
 
 s2_4_trail :: ConceptChunk -> CI -> Sentence
 s2_4_trail sp pro = foldlSent_ [S "The", plural inModel,

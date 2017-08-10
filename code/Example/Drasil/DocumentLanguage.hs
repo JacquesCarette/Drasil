@@ -20,6 +20,7 @@ import qualified Drasil.Sections.Introduction as Intro
 import qualified Drasil.Sections.SpecificSystemDescription as SSD
 import qualified Drasil.Sections.Stakeholders as Stk
 import qualified Drasil.Sections.AuxiliaryConstants as AC
+import qualified Drasil.Sections.ScopeOfTheProject as SotP
 
 import Data.Drasil.Concepts.Documentation (refmat, tOfSymb, reference)
 
@@ -146,11 +147,12 @@ mkGSDSec (GSDVerb s) = s
 
 {--}
 
-data ScpOfProjSec = ScpOfProjVerb Section
+data ScpOfProjSec = ScpOfProjVerb Section | ScpOfProjProg Sentence Contents Contents
 
 -- | Helper for making the 'Scope of the Project' section
 mkScpOfProjSec :: ScpOfProjSec -> Section
 mkScpOfProjSec (ScpOfProjVerb s) = s
+mkScpOfProjSec (ScpOfProjProg a b c) = SotP.scopeOfTheProjF a b c
 
 {--}
 

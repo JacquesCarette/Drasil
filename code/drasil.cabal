@@ -142,6 +142,7 @@ executable tiny
     , Drasil.Sections.TableOfSymbols
     , Drasil.Sections.ReferenceMaterial
     , Drasil.Sections.TableOfAbbAndAcronyms
+    , Drasil.Sections.ScopeOfTheProject
     , Drasil.DocumentLanguage
     , Drasil.DocumentLanguage.Chunk.GenDefn
     , Drasil.DocumentLanguage.Definitions
@@ -197,6 +198,7 @@ executable nopcm
     , Drasil.Sections.ReferenceMaterial
     , Drasil.Sections.AuxiliaryConstants
     , Drasil.Sections.Stakeholders
+    , Drasil.Sections.ScopeOfTheProject
     , Drasil.SRS
     , Drasil.Sections.TableOfAbbAndAcronyms
     , Drasil.DocumentLanguage
@@ -247,6 +249,7 @@ executable ssp
     , Drasil.Sections.TableOfAbbAndAcronyms
     , Drasil.Sections.TableOfSymbols
     , Drasil.Sections.Stakeholders
+    , Drasil.Sections.ScopeOfTheProject
     , Drasil.DocumentLanguage
     , Drasil.DocumentLanguage.Chunk.GenDefn
     , Drasil.DocumentLanguage.Definitions
@@ -346,6 +349,7 @@ executable chipmunkdocs
     , Drasil.Sections.ReferenceMaterial
     , Drasil.Sections.AuxiliaryConstants
     , Drasil.Sections.Stakeholders
+    , Drasil.Sections.ScopeOfTheProject
     , Drasil.SRS
     , Drasil.Sections.TableOfAbbAndAcronyms
     , Drasil.Sections.TableOfSymbols
@@ -379,6 +383,7 @@ executable swhs
     , Drasil.Sections.GeneralSystDesc
     , Drasil.Sections.TraceabilityMandGs
     , Drasil.Sections.ReferenceMaterial
+    , Drasil.Sections.ScopeOfTheProject
     , Drasil.SRS
     , Drasil.SWHS.Assumptions
     , Drasil.SWHS.Body

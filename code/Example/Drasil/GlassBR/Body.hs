@@ -44,7 +44,6 @@ import Drasil.GlassBR.Interpolation
 import Drasil.GlassBR.DataDescriptions --FIXME: Redundant import, but doesn't build DataDescriptions.hs file otherwise...
 
 import Drasil.Sections.TraceabilityMandGs
-import Drasil.Sections.ScopeOfTheProject
 import Drasil.Sections.Requirements
 import Drasil.Sections.GeneralSystDesc
 import Drasil.Sections.SpecificSystemDescription
@@ -80,7 +79,7 @@ mkSRS = [RefSec (RefProg intro
   ++
   [GSDSec (GSDVerb s4)]
   ++
-  [ScpOfProjSec (ScpOfProjVerb s5)]
+  [ScpOfProjSec (ScpOfProjProg (short gLassBR) (s5_1_table) (s5_2 (glaSlab) (capacity) (demandq) (probability)))]
   ++
   [SSDSec (SSDVerb s6)]
   ++
@@ -141,7 +140,7 @@ mgBod :: [Section]
 glassBR_mg :: Document
 glassBR_mg = mgDoc glassBRProg (for'' titleize phrase) mg_authors mgBod
 
-s4, s5,
+s4, {-s5,-}
   s6, s6_1, s6_1_1, s6_1_2, s6_1_3, s6_2, 
   s7, s7_1, s7_2, s8, s9{-, s12-} :: Section
 
@@ -302,8 +301,7 @@ s4_1_bullets intendedIndvdl progName yr degreeType prog1 prog2 undrstd1 undrstd2
 
 {--SCOPE OF THE PROJECT-}
 
---Awaiting Closure of Issue #257
-s5 = scopeOfTheProjF (short gLassBR) (s5_1_table) (s5_2 (glaSlab) (capacity) (demandq) (probability))
+--s5 = scopeOfTheProjF (short gLassBR) (s5_1_table) (s5_2 (glaSlab) (capacity) (demandq) (probability))
 
 {--Product Use Case Table--}
 

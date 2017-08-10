@@ -11,9 +11,12 @@ import Drasil.GlassBR.Interpolation (v_z_array, v_x_array, v_y_array)
 read_table :: DataDesc
 read_table = 
   [ singleLine (repeated [junk, listEntry [WithPattern] v_z_array]) ',',
-    multiLine (repeated [listEntry [WithPattern, WithLine] v_x_array,
-                         listEntry [WithPattern, WithLine] v_y_array]) ','
+    multiLine (repeated [listEntry [WithLine, WithPattern] v_x_array, 
+                         listEntry [WithLine, WithPattern] v_y_array]) ','
   ]
+  
+readTableMod :: Mod
+readTableMod = ModData "ReadTable" [read_table]
 
 -----
 

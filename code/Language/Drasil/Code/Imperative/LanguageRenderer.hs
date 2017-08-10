@@ -320,6 +320,7 @@ funcDocD c (ListSet i@(EnumVar _) v) = funcDoc c $ ListSet (i $. cast' Integer I
 funcDocD c (ListSet i@(EnumElement _ _) v) = funcDoc c $ ListSet (i $. cast' Integer Integer) v -- needs fixing (sourceType?)
 funcDocD c (ListSet i v) = brackets (valueDoc c i) <+> equals <+> valueDoc c v
 funcDocD _ (ListPopulate _ _) = empty
+funcDocD _ (ListExtend _) = empty
 funcDocD c (IterBegin) = dot <> funcAppDoc c "begin" []
 funcDocD c (IterEnd) = dot <> funcAppDoc c "end" []
 funcDocD _ Floor = error $

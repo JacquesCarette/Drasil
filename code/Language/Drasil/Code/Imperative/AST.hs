@@ -42,7 +42,7 @@ module Language.Drasil.Code.Imperative.AST (
     addComments,comment,commentDelimit,endCommentDelimit,prefixFirstBlock,
     getterName,setterName,convertToClass,convertToMethod,bodyReplace,funcReplace,valListReplace,
     objDecNew,objDecNewVoid,objDecNew',objDecNewVoid',objMethodCall, objMethodCallVoid, 
-    listSize, listAccess, listAppend, listSlice, stringSplit,
+    listSize, listAccess, listAppend, listSlice, stringSplit, listExtend,
     valStmt,funcApp,funcApp',func,continue,
     toAbsCode, getClassName, buildModule, moduleName, libs, classes, functions, ignoreMain, notMainModule, multi,
     convToClass
@@ -160,6 +160,7 @@ data Function = Func {funcName :: Label, funcParams :: [Value]}
               | ListSet Value Value     --ListSet index value
               | ListPopulate Value StateType --ListPopulate size type : populates the list with a default value for its type. Ignored in languages where it's unnecessary in order to use the ListSet function.  
               | ListAppend Value
+              | ListExtend StateType
               | IterBegin | IterEnd
               | Floor | Ceiling            
     deriving (Eq, Show)
@@ -568,6 +569,9 @@ listAccess = ListAccess
 
 listAppend :: Value -> Function
 listAppend = ListAppend
+
+listExtend :: StateType -> Function
+listExtend = ListExtend
 
 listSlice :: StateType -> Value -> Value -> (Maybe Value) -> (Maybe Value) -> (Maybe Value) -> Statement
 listSlice st v1 v2 b e s = ComplexState $ ListSlice st v1 v2 b e s

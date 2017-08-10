@@ -150,12 +150,20 @@ funcDoc' c (ListAdd i v) = dot <> funcAppDoc c "insert" [i, v]
 funcDoc' c (ListPopulate size t) = brackets (valueDoc c dftVal) <+> char '*' <+> valueDoc c size
     where dftVal = case t of Base bt   -> defaultValue bt
                              _         -> error $ "ListPopulate does not yet support list type " ++ render (doubleQuotes $ stateType c t Def)
+funcDoc' c (ListExtend t) = dot <> text "append" <> parens (dftVal)
+    where dftVal = case t of Base bt   -> valueDoc c (defaultValue bt)
+                             List _ _  -> brackets empty   
+                             _         -> error $ "ListExtend does not yet support list type " ++ render (doubleQuotes $ stateType c t Def)
 funcDoc' c f = funcDocD c f
 
 iterationDoc' :: Config -> Iteration -> Doc
-iterationDoc' c (For (DeclState (VarDecDef i (Base Integer) _)) (Expr (BinaryExpr _ Less finalv)) (AssignState (PlusPlus _)) b) = 
+iterationDoc' c (For (DeclState (VarDecDef i (Base Integer) initv)) (Expr (BinaryExpr _ Less finalv)) (AssignState (PlusPlus _)) b) = 
     vcat [
-        forLabel <+> text i <+> (iterInLabel c) <+> text "range" <> parens (valueDoc c finalv) <> colon,
+        forLabel <+> text i <+> (iterInLabel c) <+> text "range" <> parens (valueDoc c initv <> text ", " <> valueDoc c finalv) <> colon,
+        oneTab $ bodyDoc c b]
+iterationDoc' c (For (DeclState (VarDecDef i (Base Integer) initv)) (Expr (BinaryExpr _ Less finalv)) (AssignState (PlusEquals _ stepv)) b) = 
+    vcat [
+        forLabel <+> text i <+> (iterInLabel c) <+> text "range" <> parens (valueDoc c initv <> text ", " <> valueDoc c finalv <> text ", " <> valueDoc c stepv) <> colon,
         oneTab $ bodyDoc c b]
 iterationDoc' c (For initv guard update b) = vcat [
     forLabel <+> statementDoc c Loop initv <> semi <+> valueDoc c guard <> semi <+> statementDoc c Loop update,

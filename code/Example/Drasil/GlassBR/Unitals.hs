@@ -442,22 +442,20 @@ loadTypes = [loadResis, nonFactoredL, glassWL, shortDurLoad,
   specDeLoad, longDurLoad] 
 
 --Defined for DataDefs.hs and this file only--
-actualThicknesses :: [Double]--[GlassThickness]
-actualThicknesses = [2.16, 2.59, 2.92, 3.78, 4.57, 5.56, 7.42, 9.02, 11.91,
-  15.09, 18.26, 21.44]
+actualThicknesses :: [Double]
+actualThicknesses = map snd glassThickness
 
-nominalThicknesses :: [Double]--[GlassThickness]
-nominalThicknesses = [2.5, 2.7, 3.0, 4.0, 5.0, 6.0, 8.0, 10.0, 12.0, 16.0, 19.0,
-  22.0]
+nominalThicknesses :: [Double]
+nominalThicknesses = map fst glassThickness 
 
-glassTypeFactors :: [Integer]--[GlassType]
-glassTypeFactors = [1, 4, 2]
+glassTypeFactors :: [Integer]
+glassTypeFactors = map fst glassType
 
-glassTypeAbbrs :: [Sentence]--[GlassType]
+glassTypeAbbrs :: [Sentence]
 glassTypeAbbrs = map S glassTypeAbbrsStr
 
 glassTypeAbbrsStr :: [String]
-glassTypeAbbrsStr = ["AN", "FT", "HS"]
+glassTypeAbbrsStr = map snd glassType 
 
 
 --Below are present in this file temporarily--
@@ -467,21 +465,23 @@ lateralLoad  = compoundNC lateral load
 
 --GlassType Data-Type
 
--- data GlassType = GlassTypeFields [(Integer, Sentence)]
--- data GlassTypeFields = Factors [Integer] | Abbr [Sentence]
+type GlassType = [(Integer, String)] -- [(Factor, Abbr)]
+type GlassThickness = [(Double, Double)] --[(Nominal, Actual)]
 
--- data GlassThickness = GlassThicknessFields [(Double, Double)]
--- data GlassThicknessFields = Nominal [Double] | Actual [Double]
+glassType :: GlassType
+glassType = [(1, "AN"), (4, "FT"), (2, "HS")]
 
--- glassType :: [GlassType]
--- glassType = [(1, "AN"), (4, "FT"), (2, "HS")]
-
--- glassThickness :: [GlassThickness]
--- glassThickness = zipWith actualThicknesses nominalThicknesses
-
---I think it would be best to create a GlassType data-type, with fields factors and abbr.
---Then glassTypeFactors and glassTypeAbbr would be a [ GlassType]. 
---Same for the actual/nominal thickness pairs of lists. 
---They should be in the document as a single list of pairs. 
---For actual usage, the information can then be extracted. 
--- @JacquesCarette comment from commit 6e95430 
+glassThickness :: GlassThickness
+glassThickness =   
+  [(2.5, 2.16),
+  (2.7, 2.59),
+  (3.0, 2.92),
+  (4.0, 3.78),
+  (5.0, 4.57),
+  (6.0, 5.56),
+  (8.0, 7.42),
+  (10.0, 9.02),
+  (12.0, 11.91),
+  (16.0, 15.09),
+  (19.0, 18.26),
+  (22.0, 21.44)]

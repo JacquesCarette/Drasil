@@ -143,6 +143,8 @@ executable tiny
     , Drasil.Sections.ReferenceMaterial
     , Drasil.Sections.TableOfAbbAndAcronyms
     , Drasil.Sections.ScopeOfTheProject
+    , Drasil.Sections.TraceabilityMandGs
+    , Drasil.Sections.GeneralSystDesc
     , Drasil.DocumentLanguage
     , Drasil.DocumentLanguage.Chunk.GenDefn
     , Drasil.DocumentLanguage.Definitions
@@ -250,6 +252,7 @@ executable ssp
     , Drasil.Sections.TableOfSymbols
     , Drasil.Sections.Stakeholders
     , Drasil.Sections.ScopeOfTheProject
+    , Drasil.Sections.TraceabilityMandGs
     , Drasil.DocumentLanguage
     , Drasil.DocumentLanguage.Chunk.GenDefn
     , Drasil.DocumentLanguage.Definitions

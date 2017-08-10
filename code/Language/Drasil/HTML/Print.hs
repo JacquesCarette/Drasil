@@ -459,9 +459,9 @@ bookAPA (Author   p) = needDot $ p_spec (rendPeople rendPersLFM' p) --APA uses i
 bookAPA (Year     y) = dot $ paren $ show y --APA puts "()" around the year
 bookAPA (Date _ _ y) = bookAPA (Year y) --APA doesn't care about the day or month
 bookAPA (URLdate d m y) = "Retrieved, " ++ (comm $ unwords [show d, show m, show y])
-bookAPA (Page     n) = dot $ show n
+bookAPA (Page     n)  = dot $ show n
 bookAPA (Pages (a,b)) = dot $ show a ++ "&ndash;" ++ show b
-bookAPA (Editor   p) = dot $ p_spec (foldlList $ map (S . nameStr) p) ++ " (Ed.)"
+bookAPA (Editor   p)  = dot $ p_spec (foldlList $ map (S . nameStr) p) ++ " (Ed.)"
 bookAPA i = bookMLA i --Most items are rendered the same as MLA
 
 bookChicago :: CiteField -> String
@@ -470,7 +470,7 @@ bookChicago (Date _ _ y) = bookChicago (Year y) --APA doesn't care about the day
 bookChicago (URLdate d m y) = "accessed " ++ (comm $ unwords [show d, show m, show y])
 bookChicago p@(Page   _) = bookAPA p
 bookChicago p@(Pages  _) = bookAPA p
-bookChicago (Editor   p) = dot $ p_spec (foldlList $ map (S . nameStr) p) ++ " ed" ++ addS p
+bookChicago (Editor   p) = dot $ p_spec (foldlList $ map (S . nameStr) p) ++ toPlural p " ed"
 bookChicago i = bookMLA i --Most items are rendered the same as MLA
 
 -- for article renderings
@@ -536,6 +536,6 @@ isInitial [x]  = [x,'.']
 isInitial name = name
 
 --adds an 's' if there is more than one person in a list
-addS :: People -> String
-addS (_:_) = "s"
-addS _      = []
+toPlural :: People -> String -> String
+toPlural (_:_) str = str ++ "s"
+toPlural _     str = str

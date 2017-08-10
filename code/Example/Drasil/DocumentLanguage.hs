@@ -217,13 +217,8 @@ data AuxConstntSec = AuxConsProg CI [QDefinition] | AuxConsVerb Section
 {--}
 
 -- | Creates a document from a document description and system information
-mkDoc :: DocDesc -> SystemInformation -> Document
-mkDoc l si@(SI {_sys = sys, _kind = kind, _authors = authors}) = Document 
-  (kind `for` sys) (manyNames authors) (mkSections si l)
-
--- | Similar to 'makeDoc', but for when we want to use the short form for titles.  
-mkDoc' :: DocDesc -> (NWrapper -> NWrapper -> Sentence) -> SystemInformation -> Document
-mkDoc' l comb si@(SI {_sys = sys, _kind = kind, _authors = authors}) = Document 
+mkDoc :: DocDesc -> (NWrapper -> NWrapper -> Sentence) -> SystemInformation -> Document
+mkDoc l comb si@(SI {_sys = sys, _kind = kind, _authors = authors}) = Document 
   ((nw kind) `comb` (nw sys)) (manyNames authors) (mkSections si l)
 
 -- | Helper for creating the document sections

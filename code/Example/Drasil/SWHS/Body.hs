@@ -10,7 +10,7 @@ import Language.Drasil (CI, ConceptChunk, UnitalChunk, UncertQ,
   _definitions, _concepts, _namedIdeas, _quants, _authors, _kind, _sys,
   sC, titleize, titleize', plural, short, makeRef, phrase,
   sParen, sSqBr, defn, nw, at_start, (+:+), (+:+.), (+:),
-  unit'2Contents, qs, mkTable, for'', manyNames,
+  unit'2Contents, qs, mkTable, for, for'', manyNames,
   lang, impType, logFile, logging, comments, onSfwrConstraint,
   onPhysConstraint, inputStructure, codeSpec', addModDefs,
   UnitDefn (UU),
@@ -201,7 +201,7 @@ tsymb_intro = [TSPurpose, SymbConvention
   [Lit (nw CT.heat_trans), Doc' (nw progName)], SymbOrder]
 
 swhs_srs' :: Document
-swhs_srs' = mkDoc mkSRS swhs_si
+swhs_srs' = mkDoc mkSRS (for) swhs_si
 
 -- It is sometimes hard to remember to add new sections both here and above.
 

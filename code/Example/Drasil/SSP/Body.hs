@@ -92,7 +92,7 @@ mkSRS = RefSec (RefProg intro
   map Verbatim [s3, s4, s5, s6, s7] ++ [Bibliography sspCitations]
   
 ssp_srs, ssp_mg :: Document
-ssp_srs = mkDoc mkSRS ssp_si
+ssp_srs = mkDoc mkSRS (for) ssp_si
 ssp_mg = mgDoc ssa (for'' titleize titleize) (name henryFrankis) mgBod
 
 mgBod :: [Section]

@@ -62,7 +62,7 @@ s3 :: Section --, s4
 s3 = dataDefnF EmptyS (map (Definition hghcSymMap . Data) hghcVars)
   
 srsBody :: Document
-srsBody = mkDoc thisSRS thisSI
+srsBody = mkDoc thisSRS (for) thisSI
 
 mgSecs, misSecs :: [Section]
 (mgSecs, misSecs) = makeDD [] [] [] modules

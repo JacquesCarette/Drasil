@@ -143,7 +143,7 @@ nopcm_code = addModDefs (codeSpec' nopcm_si nopcm_Choices) [inputMod]
 -- Sub interpolation mod into list when possible              ^
 
 nopcm_srs :: Document
-nopcm_srs = mkDoc mkSRS nopcm_si
+nopcm_srs = mkDoc mkSRS (for) nopcm_si
 
 nopcm_SymbMap :: SymbolMap
 nopcm_SymbMap = symbolMap nopcm_Symbols
@@ -156,9 +156,8 @@ s2_start :: ConceptChunk -> UnitalChunk -> CI-> Sentence
 s2_start es en pro = foldlSent [S "Due to increasing cost, diminishing",
   S "availability, and negative environmental impact of",
   S "fossil fuels, there is a higher demand for renewable",
-  plural es, S "and",
-  phrase en +:+. S "storage technology", at_start' pro,
-  S "provide a novel way of storing", phrase en]
+  plural es `sAnd` phrase en +:+. S "storage technology", 
+  at_start' pro, S "provide a novel way of storing", phrase en]
 
 s2_end :: CI -> ConceptChunk -> Sentence
 s2_end pro pr = foldlSent_ [EmptyS +:+. plural pro, S "The developed",
@@ -529,8 +528,8 @@ s4_2_5_desc1 roc temw en wa vo wv ma wm hcw ht hfc csa ta purin a11 vhg a12 =
   [S "To find the", phrase roc `sOf` getS temw `sC`
   S "we look at the", phrase en, S "balance on" +:+.
   phrase wa, S "The", phrase vo, S "being considered" `isThe`
-  phrase wv, getS wv `sC` S "which has", phrase ma,
-  getS wm, S "and" +:+. (phrase hcw `sC` getS hcw),
+  phrase wv, getS wv `sC` S "which has", phrase ma +:+.
+  (getS wm `sAnd` (phrase hcw `sC` getS hcw)),
   at_start ht, S "occurs in the water from the coil as", (getS hfc
   `sC` S "over area") +:+. getS csa, S "No",
   phrase ht, S "occurs to", (S "outside" `ofThe`
@@ -674,10 +673,10 @@ req3 = mkRequirement "req3" $
   S "Verify that the" +:+ plural input_ +:+ S "satisfy the required"
   +:+ phrase physicalConstraint +:+ S "shown in" +:+. makeRef s4_2_6_table1
 req4 = mkRequirement "req4" $
-  titleize' output_ +:+ S "and" +:+ plural input_ +:+ plural quantity
+  titleize' output_ `sAnd` plural input_ +:+ plural quantity
   +:+ S "and derived" +:+ plural quantity +:+ S "in the following list: the" +:+
   plural quantity +:+ S "from" +:+ (acroTest req1 s5_1_list_words_num) `sC` S "the" +:+ phrase mass +:+
-  S "from" +:+ acroTest req2 s5_1_list_words_num +:+ S "and" +:+ getS tau_W +:+. sParen(S "from" +:+ acroIM 1)
+  S "from" +:+ acroTest req2 s5_1_list_words_num `sAnd` getS tau_W +:+. sParen(S "from" +:+ acroIM 1)
 req5 = mkRequirement "req5" $
   S "Calculate and output the" +:+ phrase temp_W +:+
   sParen (getS temp_W :+: sParen (getS time)) +:+ S "over the" +:+

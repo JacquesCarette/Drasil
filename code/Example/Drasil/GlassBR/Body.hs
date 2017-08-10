@@ -57,7 +57,7 @@ authors :: People
 authors = [nikitha, spencerSmith]
 
 glassBR_srs :: Document
-glassBR_srs = mkDoc' mkSRS (for'' titleize phrase) glassSystInfo
+glassBR_srs = mkDoc mkSRS (for'' titleize phrase) glassSystInfo
 
 mkSRS :: DocDesc 
 mkSRS = [RefSec (RefProg intro

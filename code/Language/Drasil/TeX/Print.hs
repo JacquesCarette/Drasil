@@ -1,7 +1,7 @@
 module Language.Drasil.TeX.Print where
 
 import Prelude hiding (print)
-import Data.List (intersperse)
+import Data.List (intersperse,transpose)
 import Text.PrettyPrint (text, (<+>))
 import qualified Text.PrettyPrint as TP
 import Data.Maybe (isNothing, fromJust)
@@ -234,7 +234,7 @@ cases (p:ps) = p_expr (fst p) ++ ", & " ++ p_expr (snd p) ++ "\\\\\n" ++ cases p
 
 makeTable :: [[Spec]] -> D -> Bool -> D -> D
 makeTable lls r bool t =
-  pure (text ("\\begin{" ++ ltab ++ "}" ++ (brace . unwords . map descr . takeTailHead) lls ))
+  pure (text ("\\begin{" ++ ltab ++ "}" ++ (brace . unwords . map descr . anyBig) lls ))
   %% (pure (text "\\toprule"))
   %% makeRows [head lls]
   %% (pure (text "\\midrule"))
@@ -243,15 +243,30 @@ makeTable lls r bool t =
   %% (if bool then caption t else empty)
   %% label r
   %% (pure $ text ("\\end{" ++ ltab ++ "}"))
-  where descr x --makes columns with long fields have room without going over the page
+  where {-descr x --makes columns with long fields have room without going over the page
           | specLength x > 50 = "X[l]"
           | otherwise     = "l"
         takeTailHead :: [[Spec]] -> [Spec]
         takeTailHead []      = []
         takeTailHead [x]     = x
-        takeTailHead (_:y:_) = y
+        takeTailHead (_:y:_) = y-}
         ltab = "longtabu" --FIXME: add condition to allow table to span multiple pages
-        --"longtable" ++ (if not bool then "*" else "")
+        --"longtable" ++ (if not bool then "*" else "")        
+        descr True  = "X[l]"
+        descr False = "l"
+        anyBig = map (foldl (||) False) . transpose . map (map (\x -> specLength x > 50))
+        {-
+        [[a,b  ,c],
+         [d,BIG,f], --> ["l","X[l]","l"]
+         [g,h  ,i]]
+         
+        [[a,b  ,c],
+         [d,e  ,f], --> ["l","X[l]","l"]
+         [g,BIG,i]]
+         
+        [[a  ,b ,c  ],
+         [BIG,e ,f  ], --> ["X[l]","l","X[l]"]
+         [g  ,h ,BIG]]-}
 
 -- | determines the length of a Spec
 specLength :: Spec -> Int

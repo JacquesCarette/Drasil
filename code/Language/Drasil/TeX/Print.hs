@@ -234,7 +234,7 @@ cases (p:ps) = p_expr (fst p) ++ ", & " ++ p_expr (snd p) ++ "\\\\\n" ++ cases p
 
 makeTable :: [[Spec]] -> D -> Bool -> D -> D
 makeTable lls r bool t =
-  pure (text ("\\begin{" ++ ltab ++ "}" ++ (brace . unwords . map descr . anyBig) lls ))
+  pure (text ("\\begin{" ++ ltab ++ "}" ++ (brace . unwords . anyBig) lls ))
   %% (pure (text "\\toprule"))
   %% makeRows [head lls]
   %% (pure (text "\\midrule"))
@@ -243,35 +243,16 @@ makeTable lls r bool t =
   %% (if bool then caption t else empty)
   %% label r
   %% (pure $ text ("\\end{" ++ ltab ++ "}"))
-  where {-descr x --makes columns with long fields have room without going over the page
-          | specLength x > 50 = "X[l]"
-          | otherwise     = "l"
-        takeTailHead :: [[Spec]] -> [Spec]
-        takeTailHead []      = []
-        takeTailHead [x]     = x
-        takeTailHead (_:y:_) = y-}
-        ltab = "longtabu" --FIXME: add condition to allow table to span multiple pages
-        --"longtable" ++ (if not bool then "*" else "")        
+  where ltab = "longtabu" --FIXME: add condition to allow table to span multiple pages
         descr True  = "X[l]"
         descr False = "l"
-        anyBig = map (foldl (||) False) . transpose . map (map (\x -> specLength x > 50))
-        {-
-        [[a,b  ,c],
-         [d,BIG,f], --> ["l","X[l]","l"]
-         [g,h  ,i]]
-         
-        [[a,b  ,c],
-         [d,e  ,f], --> ["l","X[l]","l"]
-         [g,BIG,i]]
-         
-        [[a  ,b ,c  ],
-         [BIG,e ,f  ], --> ["X[l]","l","X[l]"]
-         [g  ,h ,BIG]]-}
+  --returns "X[l]" for columns with long fields
+        anyBig = map (descr . any (\x -> specLength x > 50)) . transpose
 
 -- | determines the length of a Spec
 specLength :: Spec -> Int
 specLength (S x)     = length x
-specLength (E x)     = length $ p_expr x
+specLength (E x)     = (length $ p_expr x) `div` 2 --expressions use about half as much space as their plain text
 specLength (Sy _)    = 1
 specLength (a :+: b) = specLength a + specLength b
 specLength (a :-: b) = specLength a + specLength b

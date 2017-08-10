@@ -68,12 +68,10 @@ import Drasil.SWHS.Unitals (pcm_SA, temp_W, temp_PCM, pcm_HTC, pcm_E,
 import Drasil.SWHS.Concepts (progName, sWHT, water, rightSide, phsChgMtrl,
   coil, perfect_insul, tank, transient, gauss_div, swhs_pcm,
   phase_change_material, tank_pcm, swhsFull)
-import Drasil.SWHS.TMods (tModels, t1ConsThermE, s4_2_2_T1, s4_2_2_T2,
-  s4_2_2_T3)
+import Drasil.SWHS.TMods (tModels, t1ConsThermE, s4_2_2_swhsTMods)
 import Drasil.SWHS.IMods (swhsInModels)
 import Drasil.SWHS.DataDefs (swhsSymbMapDRef, swhsSymbMapTRef, swhsDataDefs,
-  swhsSymMap, dd1HtFluxC, dd2HtFluxP, swhsSymbMapT, s4_2_4_DD1, s4_2_4_DD2,
-  s4_2_4_DD3, s4_2_4_DD4)
+  swhsSymMap, dd1HtFluxC, dd2HtFluxP, swhsSymbMapT, s4_2_4_swhsDataDefs)
 import Drasil.SWHS.GenDefs (swhsGenDefs)
 import Drasil.SWHS.Modules (modules)
 import Drasil.SWHS.Changes (likelyChanges, unlikelyChanges)
@@ -371,9 +369,8 @@ s4_2 :: Section
 s4_2 = solChSpecF progName (s4_1, s6) s4_2_4_intro_end
   (s4_2_6_mid, dataConstraintUncertainty, s4_2_6_T1footer quantity surArea
   vol htTransCoeff_min phsChgMtrl) (s4_2_1_list, 
-  s4_2_2_T1 ++ s4_2_2_T2 ++ s4_2_2_T3, s4_2_3_genDefs ++ s4_2_3_deriv,
-  s4_2_4_DD1 ++ s4_2_4_DD2 ++ s4_2_4_DD3 ++ s4_2_4_DD4, (s4_2_5_IMods),
-  s4_2_6_DataConTables) [s4_2_7]
+  s4_2_2_swhsTMods, s4_2_3_genDefs ++ s4_2_3_deriv,
+  s4_2_4_swhsDataDefs, s4_2_5_IMods, s4_2_6_DataConTables) [s4_2_7]
 
 -------------------------
 -- 4.2.1 : Assumptions --

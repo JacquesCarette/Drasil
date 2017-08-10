@@ -9,11 +9,15 @@ import Language.Drasil (QDefinition, Contents, RelationConcept, SymbolMap,
   DType (Data, Theory),
   Sentence (EmptyS),
   Expr (C, FCall))
+
+import Data.Drasil.Concepts.Documentation (acroNumGen)
+
 import Data.Drasil.Quantities.Physics (time)
 import Data.Drasil.Quantities.PhysicalProperties (mass)
 import Data.Drasil.Quantities.Thermodynamics (latent_heat)
 import Data.Drasil.Utils (symbolMapFun, mkDataDef)
 import Prelude hiding (id)
+
 
 import Control.Lens ((^.))
 
@@ -73,6 +77,9 @@ melt_frac_eqn :: Expr
 melt_frac_eqn = (C latentE_P) / ((C htFusion) * (C pcm_mass))
 
 --Need to add units to data definition descriptions
+
+s4_2_4_swhsDataDefs = acroNumGen (s4_2_4_DD1 ++ s4_2_4_DD2 ++
+  s4_2_4_DD3 ++ s4_2_4_DD4) 1
 
 s4_2_4_DD1, s4_2_4_DD2, s4_2_4_DD3, s4_2_4_DD4 :: [Contents]
 s4_2_4_DD1 = map swhsSymbMapD [dd1HtFluxC]

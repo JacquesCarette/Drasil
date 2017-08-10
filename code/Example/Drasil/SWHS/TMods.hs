@@ -14,7 +14,7 @@ import Language.Drasil (Sentence, Relation, Contents, RelationConcept,
   Sentence (S, (:+:), Sy, E, EmptyS))
 
 import Drasil.DocumentLanguage (mkAssump)
-import Data.Drasil.Concepts.Documentation (system)
+import Data.Drasil.Concepts.Documentation (system, acroNumGen)
 import Data.Drasil.SI_Units (joule)
 
 import Data.Drasil.Concepts.Thermodynamics hiding (temp, heat_cap_spec,
@@ -39,6 +39,8 @@ import Control.Lens ((^.))
 
 tModels :: [RelationConcept]
 tModels = [t1ConsThermE] ++ [t2SensHtE] ++ [t3LatHtE]
+
+s4_2_2_swhsTMods = acroNumGen (s4_2_2_T1 ++ s4_2_2_T2 ++ s4_2_2_T3) 1
 
 -------------------------
 -- Theoretical Model 1 --

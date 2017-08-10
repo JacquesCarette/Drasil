@@ -67,7 +67,7 @@ astm_LR2009 = Misc [Author [mononym "ASTM Standards Committee"],
 ---
 
 --ref5
-astm_C1036 = Misc [Author [mononym "ASTM developed by subcommittee C1408"],
+astm_C1036 = Misc [Author [mononym "ASTM developed by subcommittee C14.08"],
                     Title (S "Standard specification for flat glass, C1036"),
                     Collection (S "Book of standards 15.02"),
                     Place (S "West Conshohocken", S "PA"),

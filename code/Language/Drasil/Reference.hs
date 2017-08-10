@@ -6,8 +6,8 @@ import Control.Lens ((^.))
 
 import Language.Drasil.Chunk.Req
 import Language.Drasil.Chunk.LC
-import Language.Drasil.Chunk.Relation
-import Language.Drasil.Chunk.Eq
+--import Language.Drasil.Chunk.Relation
+--import Language.Drasil.Chunk.Eq
 
 
 -- | Create References to a given 'LayoutObj'

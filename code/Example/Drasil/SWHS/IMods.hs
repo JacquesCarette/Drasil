@@ -2,7 +2,7 @@
 
 import Prelude hiding (id)
 
-import Language.Drasil (Relation, RelationConcept, Contents,
+import Language.Drasil (Relation, RelationConcept,
   makeRef, sParen, phrase, sC, short, (+:+.), getUnit, (+:+), nounPhraseSP,
   makeRC, plural,
   DerivType (Total),

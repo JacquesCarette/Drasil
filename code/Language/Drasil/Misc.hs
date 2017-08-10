@@ -1,14 +1,14 @@
 module Language.Drasil.Misc where
 
 import Language.Drasil.Spec
-import Language.Drasil.Expr
+--import Language.Drasil.Expr
 import Language.Drasil.Chunk.Quantity
 import Language.Drasil.Unit
 import Language.Drasil.Chunk.NamedIdea (NamedIdea, getA, short, term)
 import Language.Drasil.Chunk.Unitary
 import qualified Language.Drasil.NounPhrase as NP
 
-import Data.List (delete)
+--import Data.List (delete)
 
 import Control.Lens ((^.))
 

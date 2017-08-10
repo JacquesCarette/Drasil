@@ -457,14 +457,6 @@ glassTypeAbbrs = map S glassTypeAbbrsStr
 glassTypeAbbrsStr :: [String]
 glassTypeAbbrsStr = map snd glassType 
 
-
---Below are present in this file temporarily--
-lateralLoad :: NamedChunk
-lateralLoad  = compoundNC lateral load
-
-
---GlassType Data-Type
-
 type GlassType = [(Integer, String)] -- [(Factor, Abbr)]
 type GlassThickness = [(Double, Double)] --[(Nominal, Actual)]
 
@@ -485,3 +477,8 @@ glassThickness =
   (16.0, 15.09),
   (19.0, 18.26),
   (22.0, 21.44)]
+
+--Below are present in this file temporarily--
+lateralLoad :: NamedChunk
+lateralLoad  = compoundNC lateral load
+

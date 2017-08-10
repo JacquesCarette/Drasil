@@ -120,6 +120,8 @@ import Data.Drasil.SentenceStructures (showingCxnBw, foldlSent, foldlSent_,
   foldlSP, foldlSP_, foldlSPCol, foldlsC, isThe, ofThe, ofThe',
   sAnd, sOf, foldlList)
 
+import Language.Drasil
+
 -------------------------------------------------------------------------------
 
 acronyms :: [CI]
@@ -1383,7 +1385,7 @@ s4_2_6_T1footer qua sa vo htcm pcmat = foldlSent_ $ map foldlSent [
   [sParen (S "+"), S "These", plural qua, S "cannot be zero" `sC`
   S "or there would be freezing", sParen (makeRef assump13)],
 
-  [sParen (S "#"), S "The", plural constraint, S "on the", phrase sa,
+  [sParen (Sp Hash), S "The", plural constraint, S "on the", phrase sa,
   S "are calculated by considering the", phrase sa, S "to", phrase vo +:+.
   S "ratio", S "The", phrase assumption, S "is that the lowest ratio is 1" `sAnd`
   S "the highest possible is", E (2 / C htcm) `sC` S "where",

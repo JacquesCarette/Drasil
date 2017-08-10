@@ -41,7 +41,7 @@ acroNumGen (frst:rst) num = (f frst) : acroNumGen rst (num + 1)
         extrctStrng _ = error "Invalid acronym type"
 
 assumption, dataDefn, genDefn, goalStmt, inModel, likelyChg, unlikelyChg,
-  physSyst, requirement, srs, thModel, mg, desSpec, notApp, dataConst :: CI
+  physSyst, requirement, srs, thModel, mg, desSpec, notApp, dataConst, typUnc :: CI
 
 -------------------------------------------------------------------------------------------------
 -- | CI       |           |    id       |         term                        | abbreviation | --
@@ -60,6 +60,7 @@ requirement = commonIdea "requirement" (cn' "requirement")                      
 thModel     = commonIdea "thModel"     (cn' "theoretical model")                           "T"
 mg          = commonIdea "mg"          (fterms compoundPhrase module_ guide)               "MG"
 notApp      = commonIdea "notApp"      (nounPhraseSP "not applicable")                     "N/A"
+typUnc      = commonIdea "typUnc"      (cn' "typical uncertainty")                         "TU"
 
 srs = commonIdea "srs" 
   (compoundPhrase''' NP.plural (softwareReq ^. term) (specification ^. term))

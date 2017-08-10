@@ -236,7 +236,7 @@ dataConstraintUncertainty = foldlSent [S "The", phrase uncertainty, phrase colum
 inDataConstTbl :: (UncertainQuantity c, SymbolForm c, Constrained c) => [c] -> Contents
 inDataConstTbl qlst = Table ([S "Var"] ++ (isPhys $ physC (head qlst) qlst) ++
   (isSfwr $ sfwrC (head qlst) qlst) ++ [S "Typical" +:+ titleize value] ++
-  (isUnc $ typUnc (head qlst) qlst))
+  (isUnc $ typUncr (head qlst) qlst))
   (map (\x -> fmtInputConstr x qlst) qlst)
   (S "Input Data Constraints") True
   where isPhys [] = []
@@ -244,7 +244,7 @@ inDataConstTbl qlst = Table ([S "Var"] ++ (isPhys $ physC (head qlst) qlst) ++
         isSfwr [] = []
         isSfwr _  = [titleize' softwareConstraint]
         isUnc  [] = []
-        isUnc  _  = [S "Typical Uncertainty"]
+        isUnc  _  = [short typUnc]
 
 -- Creates the output Data Constraints Table
 outDataConstTbl :: (SymbolForm c, Constrained c) => [c] -> Contents

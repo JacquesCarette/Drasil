@@ -6,7 +6,7 @@ import Data.Drasil.Concepts.Documentation
 ----Acronyms-----
 acronyms :: [CI]
 acronyms = [assumption, dataDefn, genDefn, goalStmt, inModel, likelyChg, 
-  physSyst, requirement, srs, ssa, thModel]
+  physSyst, requirement, srs, ssa, thModel, typUnc]
   
 ssa, ssp :: CI
 ssa = commonIdea "ssa" (cnIS "slope stability analysis") "SSA"

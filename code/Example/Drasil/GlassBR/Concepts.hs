@@ -16,7 +16,7 @@ acronyms :: [CI]
 acronyms = [assumption, annealedGlass, aR, dataDefn, fullyTGlass,
   goalStmt, glassTypeFac, heatSGlass, iGlass, inModel, likelyChg, 
   loadDurFactor, lGlass, lResistance, notApp, nFL, physSyst, 
-  lShareFac, requirement, stdOffDist, srs, thModel, eqTNT]
+  lShareFac, requirement, stdOffDist, srs, thModel, eqTNT, typUnc]
 
 annealedGlass, aR, fullyTGlass, glassTypeFac, heatSGlass, loadDurFactor,
   iGlass, lGlass, lResistance, lShareFac, eqTNT, gLassBR, stdOffDist, nFL :: CI

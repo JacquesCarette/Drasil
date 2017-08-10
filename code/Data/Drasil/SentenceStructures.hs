@@ -12,7 +12,7 @@ module Data.Drasil.SentenceStructures
   , getTandS, getTDS
   , eqN
   , displayConstrntsAsSet
-  , fmtInputConstr, fmtOutputConstr, physC, sfwrC, typUnc, rval
+  , fmtInputConstr, fmtOutputConstr, physC, sfwrC, typUncr, rval
   , extrctStrng
   ) where
 
@@ -191,7 +191,7 @@ extrctStrng _ = error "Invalid type extraction"
 -- these are the helper functions for inDataConstTbl
 
 fmtInputConstr :: (UncertainQuantity c, Constrained c, SymbolForm c) => c -> [c] -> [Sentence]
-fmtInputConstr q qlst = [getS q] ++ physC q qlst ++ sfwrC q qlst ++ [fmtU (E $ getRVal q) q] ++ typUnc q qlst
+fmtInputConstr q qlst = [getS q] ++ physC q qlst ++ sfwrC q qlst ++ [fmtU (E $ getRVal q) q] ++ typUncr q qlst
 
 fmtOutputConstr :: (Constrained c, SymbolForm c) => c -> [c] -> [Sentence]
 fmtOutputConstr q qlst = [getS q] ++ physC q qlst ++ sfwrC q qlst
@@ -225,14 +225,14 @@ rval q qlst
   where isRV (Just _) = True
         isRV Nothing  = False
         
-typUnc :: (UncertainQuantity c) => c -> [c] -> [Sentence]
-typUnc q qlst
+typUncr :: (UncertainQuantity c) => c -> [c] -> [Sentence]
+typUncr q qlst
   | null (filter isUn $ map (^. uncert) qlst) = []
   | isUn (q ^. uncert) = [S $ show $ unwU (q ^. uncert)]
   | otherwise = [none]
   where unwU (Just u) = u
-        unwU Nothing  = error $ "Something when wrong with 'typUnc'." ++
-                        "'typUnc' was possibly called by fmtInputConstr or inDataConstTbl."
+        unwU Nothing  = error $ "Something when wrong with 'typUncr'." ++
+                        "'typUncr' was possibly called by fmtInputConstr or inDataConstTbl."
         isUn (Just _) = True
         isUn Nothing  = False
 

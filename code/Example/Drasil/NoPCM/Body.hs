@@ -66,7 +66,7 @@ this_si = map UU [metre, kilogram, second] ++ map UU [centigrade, joule, watt]
 -- This defines the list of acronyms that are used throughout the document
 acronyms :: [CI]
 acronyms = [assumption, dataDefn, genDefn, goalStmt, inModel, likelyChg, ode,
-            physSyst, requirement, srs, progName, thModel]
+            physSyst, requirement, srs, progName, thModel, typUnc]
 
 -- This contains the list of symbols used throughout the document
 nopcm_Symbols :: [CQSWrapper]

@@ -4,7 +4,7 @@ import Language.Drasil (Contents,
   phrase, sC, unit_symb, sSqBr, defn, short, semiCol, (+:+), (+:+.), makeRef,
   Sentence (S, Sy, (:+:)))
 import Data.Drasil.Concepts.Documentation (acroGD, acroIM, system, simulation,
-  model, problem)
+  model, problem, acroNumGen)
 import Drasil.DocumentLanguage (mkAssump)
 
 import Drasil.SWHS.DataDefs (dd1HtFluxC, dd2HtFluxP,
@@ -31,6 +31,14 @@ import Control.Lens ((^.))
 -------------------------
 -- 4.2.1 : Assumptions --
 -------------------------
+
+s4_2_1_list :: [Contents]
+s4_2_1_list = acroNumGen s4_2_1_assump_list 1
+
+s4_2_1_assump_list :: [Contents]
+s4_2_1_assump_list = [assump1, assump2, assump3, assump4, assump5, assump6,
+  assump7, assump8, assump9, assump10, assump11, assump12, assump13, assump14,
+  assump15, assump16, assump17, assump18, assump19, assump20]
 
 assump1, assump2, assump3, assump4, assump5, assump6, assump7,
   assump8, assump9, assump10, assump11, assump12, assump13, assump14,

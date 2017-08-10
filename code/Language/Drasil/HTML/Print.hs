@@ -416,7 +416,7 @@ renderF c fields styl = unwords $
   map (styl bibStyleH) (sort fields) ++ endingField c bibStyleH
 
 endingField :: Citation -> StyleGuide -> [String]
-endingField c MLA = [dot $ show c]
+endingField c MLA = [show c]
 endingField _ _ = []
 
 -- Config helpers --

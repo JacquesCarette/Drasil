@@ -215,10 +215,10 @@ instance Show Thesis where
   show PhD = "PhD thesis"
 
 instance Show Citation where
-  show (Book      _) = "Print"
-  show (Article   _) = "Print"
-  show (MThesis   _) = "Print"
-  show (PhDThesis _) = "Print"
+  show (Book      _) = "Print."
+  show (Article   _) = "Print."
+  show (MThesis   _) = "Print."
+  show (PhDThesis _) = "Print."
   show (Misc      _) = ""
   show (Online    _) = ""
 

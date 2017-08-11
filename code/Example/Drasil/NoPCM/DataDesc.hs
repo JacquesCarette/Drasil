@@ -1,7 +1,8 @@
 module Drasil.NoPCM.DataDesc (inputMod) where
 
 import Language.Drasil
-import Drasil.SWHS.Unitals
+import Drasil.SWHS.Unitals (tank_length, diam, coil_SA, temp_C, w_density,
+  htCap_W, coil_HTC, temp_init, tau, time_final, abs_tol, rel_tol, cons_tol)
 
 inputMod :: Mod
 inputMod = ModData "InputFormat" [nopcmInputData]

@@ -11,16 +11,16 @@ v_x    = makeVC "x"      (nounPhraseSP "x")    lX -- = params.wtnt from mainFun.
 
 v_v, v_x_z_1, v_y_z_1, v_x_z_2, v_y_z_2, v_mat, v_col,
   v_i, v_j, v_k, v_z, v_z_array, v_y_array, v_x_array, v_y, v_arr :: VarChunk
-v_v    = makeVC "v"          (nounPhraseSP "v")       lV
-v_i    = makeVC "i"          (nounPhraseSP "i")       lI
-v_j    = makeVC "j"          (nounPhraseSP "j")       lJ
-v_k    = makeVC "k"          (nounPhraseSP "k")       lK
-v_z    = makeVC "z"          (nounPhraseSP "z")       lZ
+v_v       = makeVC "v"          (nounPhraseSP "v")       lV
+v_i       = makeVC "i"          (nounPhraseSP "i")       lI
+v_j       = makeVC "j"          (nounPhraseSP "j")       lJ
+v_k       = makeVC "k"          (nounPhraseSP "k")       lK
+v_z       = makeVC "z"          (nounPhraseSP "z")       lZ
 v_z_array = makeVC "z_array" (nounPhraseSP "z_array") (sub (lZ) (Atomic "array"))
 v_y_array = makeVC "y_array" (nounPhraseSP "y_array") (sub (lY) (Atomic "array"))
 v_x_array = makeVC "x_array" (nounPhraseSP "x_array") (sub (lX) (Atomic "array"))
-v_y    = makeVC "y"          (nounPhraseSP "y")       lY
-v_arr  = makeVC "arr"        (nounPhraseSP "arr")     (Atomic "arr") --FIXME: temporary variable for indInSeq?
+v_y       = makeVC "y"          (nounPhraseSP "y")       lY
+v_arr     = makeVC "arr"        (nounPhraseSP "arr")     (Atomic "arr") --FIXME: temporary variable for indInSeq?
 v_x_z_1   = makeVC "x_z_1"   (nounPhraseSP "x_z_1")     (Atomic "x_z_1")
 v_y_z_1   = makeVC "y_z_1"   (nounPhraseSP "y_z_1")     (Atomic "y_z_1")
 v_x_z_2   = makeVC "x_z_2"   (nounPhraseSP "x_z_2")     (Atomic "x_z_2")
@@ -109,7 +109,7 @@ interpZ = funcDef "interpZ" [v_x_array, v_y_array, v_z_array, v_x, v_y] Rational
           ] []                                             
       ],
     FThrow "Interpolation of z failed"      
-  ]   
+  ]
 
 interpMod :: Mod
 interpMod = ModDef "Interpolation" [linInterp, indInSeq, matrixCol, interpY, interpZ]

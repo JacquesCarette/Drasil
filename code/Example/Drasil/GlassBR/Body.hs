@@ -2,7 +2,8 @@ module Drasil.GlassBR.Body where
 import Control.Lens ((^.))
 import Language.Drasil 
 
-import Data.Drasil.SI_Units (metre, second, kilogram, pascal, newton, millimetre)
+import Data.Drasil.SI_Units (metre, second, kilogram, pascal, newton,
+  millimetre)
 import Data.Drasil.Authors (spencerSmith, thulasi, nikitha)
 import Data.Drasil.Concepts.Documentation
 import Data.Drasil.Concepts.Education
@@ -63,20 +64,24 @@ mkSRS = [RefSec (RefProg intro
   TAandA])]
   ++
   [IntroSec 
-  (IntroProg (startIntro (software) (blstRskInvWGlassSlab) (gLassBR)) (short gLassBR)
-     [IPurpose (s2_1_intro_p1 (document) (gLassBR) (glaSlab)),
-     IScope incScoR endScoR,
-     IChar (rdrKnldgbleIn (glBreakage) (blastRisk)) undIR appStanddIR,
-     IOrgSec s2_3_intro dataDefn (SRS.dataDefn SRS.missingP []) s2_3_intro_end])]
+  (
+    IntroProg (startIntro (software) (blstRskInvWGlassSlab) (gLassBR))
+      (short gLassBR)
+    [IPurpose (s2_1_intro_p1 (document) (gLassBR) (glaSlab)),
+    IScope incScoR endScoR,
+    IChar (rdrKnldgbleIn (glBreakage) (blastRisk)) undIR appStanddIR,
+    IOrgSec s2_3_intro dataDefn (SRS.dataDefn SRS.missingP []) s2_3_intro_end])]
   ++
   [StkhldrSec (StkhldrProg (gLassBR) 
-  (S "Entuitive. It is developed by Dr. Manuel Campidelli"))] 
+    (S "Entuitive. It is developed by Dr. Manuel Campidelli"))] 
   --FIXME: Turn "People -> Sentence"? (so knowledge can be easily pulled out...)
   ++
-  [GSDSec (GSDProg [] (s4_1_bullets (endUser) (gLassBR) (secondYear) (undergradDegree)
-  (civilEng) (structuralEng) (glBreakage) (blastRisk)) [] [])]
+  [GSDSec (GSDProg [] (s4_1_bullets (endUser) (gLassBR) (secondYear) 
+    (undergradDegree) (civilEng) (structuralEng) (glBreakage) (blastRisk))
+    [] [])]
   ++
-  [ScpOfProjSec (ScpOfProjProg (short gLassBR) (s5_1_table) (s5_2 (glaSlab) (capacity) (demandq) (probability)))]
+  [ScpOfProjSec (ScpOfProjProg (short gLassBR) (s5_1_table) (s5_2 (glaSlab) 
+    (capacity) (demandq) (probability)))]
   ++
   [SSDSec (SSDVerb s6)]
   ++
@@ -407,10 +412,11 @@ s6_2 = solChSpecF gLassBR (s6_1, (SRS.likeChg SRS.missingP [])) (EmptyS)
  (EmptyS, dataConstraintUncertainty, end)
  (s6_2_1_list, s6_2_2_TMods, [], s6_2_4_DDefns, s6_2_3_IMods,
   [s6_2_5_table1, s6_2_5_table2]) []
-  where end = foldlSent [(makeRef (SRS.valsOfAuxCons SRS.missingP [])), 
-             S "gives", (plural value `ofThe` S "specification"), 
-             plural parameter, S "used in" +:+. (makeRef s6_2_5_table1)]
-             +:+ s6_2_5_intro2
+  where 
+    end = foldlSent [(makeRef (SRS.valsOfAuxCons SRS.missingP [])),
+      S "gives", (plural value `ofThe` S "specification"), 
+      plural parameter, S "used in" +:+. (makeRef s6_2_5_table1)]
+      +:+ s6_2_5_intro2
 
 s6_2_intro = foldlSP [S "This", phrase section_, S "explains all the",
   plural assumption, S "considered" `sAnd` S "the", plural thModel,
@@ -559,10 +565,9 @@ s7_1_req1Table = Table
   (S "Required Inputs following R1") True
 
 req2Desc = foldlSent [S "The", phrase system,
-   S "shall set the known", plural value +: S "as follows",
-   foldlList [(foldlsC (map getS assumption4_constants) `followA` 4),
-     ((getS loadDF) `followA` 8), 
-     (short lShareFac `followA` 5)]]
+  S "shall set the known", plural value +: S "as follows",
+  foldlList [(foldlsC (map getS assumption4_constants) `followA` 4),
+  ((getS loadDF) `followA` 8), (short lShareFac `followA` 5)]]
 
 --ItemType
 {-s7_1_req2 = (Nested (S "The" +:+ phrase system +:+
@@ -579,8 +584,8 @@ req3Desc = foldlSent [S "The", phrase system, S "shall check the entered",
   plural inValue, S "to ensure that they do not exceed the",
   plural datumConstraint, S "mentioned in" +:+. makeRef 
   (SRS.datCon SRS.missingP []), S "If any" `sOf` S "the", plural inParam,
-  S "is out" `sOf` S "bounds, an error", phrase message, S "is displayed" `sAnd` 
-  S "the", plural calculation, S "stop"]
+  S "is out" `sOf` S "bounds, an error", phrase message, S "is displayed"
+  `sAnd` S "the", plural calculation, S "stop"]
 
 req4Desc = foldlSent [titleize output_, S "the", plural inQty,
   S "from", acroR 1 `sAnd` S "the known", plural quantity,
@@ -605,13 +610,13 @@ s7_1_req6 = [(Enumeration $ Simple $ [(acroR 6, Nested (titleize output_ +:+
   S "the following" +: plural quantity)
   (Bullet $ 
     map (\(a, d) -> Flat $ (at_start a) +:+ sParen (getS a) +:+
-     sParen (makeRef (gbSymbMapT d))) (zipWith tempHelper (map qs testing) testing1)
+    sParen (makeRef (gbSymbMapT d))) (zipWith tempHelper (map qs testing) testing1)
     ++
     map (\d -> Flat $ (at_start d) +:+ sParen (getS d) +:+ 
-      sParen (makeRef (gbSymbMapD d))) s7_1_req6_pulledList
+    sParen (makeRef (gbSymbMapD d))) s7_1_req6_pulledList
     ++
     [Flat $ (titleize aspectR) +:+ sParen (getS aspectR) +:+
-     E (equat aspectRWithEqn)]
+    E (equat aspectRWithEqn)]
     ))])]
 
 {--Nonfunctional Requirements--}

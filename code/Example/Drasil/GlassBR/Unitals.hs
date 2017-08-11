@@ -5,8 +5,8 @@ import Drasil.GlassBR.Concepts
 
 import Language.Drasil
 import Data.Drasil.SI_Units
-import Data.Drasil.Utils(symbolMapFun, mkDataDef, getS)
-import Control.Lens((^.))
+import Data.Drasil.Utils (symbolMapFun, mkDataDef, getS)
+import Control.Lens ((^.))
 import Prelude hiding (log, sqrt)
 import Data.Drasil.SentenceStructures (foldlSent, 
   displayConstrntsAsSet, foldlsC, foldlOptions)
@@ -124,7 +124,8 @@ prob_br = cvc "prob_br" (nounPhraseSP "probability of breakage")
 {--}
 
 gBRSpecParamVals :: [QDefinition]
-gBRSpecParamVals = [dim_max, dim_min, ar_max, cWeightMax, cWeightMin, sd_min, sd_max]
+gBRSpecParamVals = [dim_max, dim_min, ar_max, cWeightMax, cWeightMin,
+  sd_min, sd_max]
 
 dim_max, dim_min, ar_max, cWeightMax, cWeightMin, sd_min,
   sd_max :: QDefinition

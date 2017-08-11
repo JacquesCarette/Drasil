@@ -1,4 +1,4 @@
-module Drasil.GlassBR.TMods(tModels, t1SafetyReq, t2SafetyReq) where
+module Drasil.GlassBR.TMods (tModels, t1SafetyReq, t2SafetyReq) where
 
 import Drasil.GlassBR.Unitals
 import Drasil.GlassBR.IMods
@@ -33,12 +33,12 @@ t2descr :: Sentence
 t2descr = tDescr (is_safe2) s ending
   where 
     s = ((getS is_safe1) +:+ sParen (S "from" +:+ (makeRef ((Definition
-        (symbolMap glassBRSymbols) . Theory) t1SafetyReq))) `sAnd` (getS is_safe2))
+      (symbolMap glassBRSymbols) . Theory) t1SafetyReq))) `sAnd` (getS is_safe2))
     ending = (short lResistance) `isThe` (phrase lResistance) +:+ 
-        sParen (S "also called capacity") `sC` S "as defined in" +:+. 
-       (ref calOfCap) +:+
-       (getS demand) +:+ sParen (S "also referred as the" +:+ (titleize demandq)) 
-       `isThe` (demandq ^. defn) `sC` S "as defined in" +:+ ref calOfDe
+      sParen (S "also called capacity") `sC` S "as defined in" +:+. 
+      (ref calOfCap) +:+ (getS demand) +:+ sParen (S "also referred as the" +:+ 
+      (titleize demandq)) `isThe` (demandq ^. defn) `sC` S "as defined in" +:+ 
+      ref calOfDe
 
 tDescr :: VarChunk -> Sentence -> Sentence -> Sentence
 tDescr main s ending = foldlSent [S "If", getS main, S ", the glass is" +:+.

@@ -11,7 +11,6 @@ likelyChanges = [lc1, lc2, lc3, lc4, lc5, lc6, lc7, lc8]
 unlikelyChanges :: [UCChunk]
 unlikelyChanges = [uc1, uc2, uc3, uc4, uc5]
 
-
 {-Likely Changes-}
 
 lc1, lc2, lc3, lc4, lc5, lc6, lc7, lc8 :: LCChunk
@@ -32,7 +31,6 @@ lc6 = lcCtrl mod_ctrl
 lc7 = lcInterpd mod_interpd
 
 lc8 = lcInterp mod_interp
-
 
 {-Unlikely Changes-}
 

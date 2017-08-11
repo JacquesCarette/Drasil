@@ -109,11 +109,9 @@ data Logging = LogNone
              | LogFunc
              | LogVar
              | LogAll
-             deriving Eq
              
 data Comments = CommentNone
               | CommentFunc
-              deriving Eq
              
 data ConstraintBehaviour = Warning
                          | Exception

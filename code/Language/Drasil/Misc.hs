@@ -1,14 +1,16 @@
 module Language.Drasil.Misc where
 
 import Language.Drasil.Spec
---import Language.Drasil.Expr
+import Language.Drasil.Expr
 import Language.Drasil.Chunk.Quantity
 import Language.Drasil.Unit
 import Language.Drasil.Chunk.NamedIdea (NamedIdea, getA, short, term)
 import Language.Drasil.Chunk.Unitary
 import qualified Language.Drasil.NounPhrase as NP
 
---import Data.List (delete)
+import Data.List (delete)
+import Language.Drasil.ChunkDB 
+import Language.Drasil.Chunk.SymbolForm
 
 import Control.Lens ((^.))
 
@@ -82,30 +84,41 @@ phrase's a = phrase a :+: S "'s"
 -- | Plural possesive function
 plural's a = plural a :+: S "'"
 
--- Function used to derive the unit of an equation
--- inferUnit :: Relation -> Maybe UnitDefn
--- inferUnit rel = eliminate [] $ findUnit rel ([], [])
-  -- where combine (num, den)
 
--- findUnit :: Relation -> ([Maybe UnitDefn], [Maybe UnitDefn]) -> ([Maybe UnitDefn], [Maybe UnitDefn])
+--------------------- WIP ---------------------
+-- Function used to derive the unit of an equation. Takes a Relation, sorts the
+-- respective values into lists of units found in the numerator and denominator,
+-- eliminates units found in both list and combines the remainder to create the
+-- units of the equation.
+
+-- inferUnit :: Relation -> SymbolMap -> Maybe UnitDefn
+-- inferUnit rel () = combine $ eliminate symbtab ([], []) $ findUnit rel ([], [])
+  -- where combine (num, den) = 
+          -- | 
+          -- | otherwise = combine 
+
+-- findUnit :: Relation -> ([SF], [SF]) -> ([SF], [SF])
 -- findUnit (_ :+ a) ([], []) = analyze a True ([], [])
 -- findUnit (_ :- a) ([], []) = analyze a True ([], [])
 -- findUnit (a :* b) frac = findUnit a (analyze b True frac)
 -- findUnit (a :/ b) frac = findUnit a (analyze b False frac)
+-- findUnit (a :^ b) frac = error "Exponential not yet implemented"
 -- findUnit (_ :+ _) frac = frac
 -- findUnit (_ :- _) frac = frac
 -- findUnit (_ := _) frac = frac
 
--- analyze :: Expr -> Bool -> ([Maybe UnitDefn], [Maybe UnitDefn]) -> ([Maybe UnitDefn], [Maybe UnitDefn])
--- analyze (Deriv _ (C a) (C b)) True (num, den) = ((getUnit a):num, (getUnit b):den)
--- analyze (Deriv _ (C a) (C b)) False (num, den) = ((getUnit b):num, (getUnit a):den)
--- analyze (C a) True (num, den) = ((getUnit a):num, den)
--- analyze (C b) False (num, den) = (num, (getUnit b):den)
+-- analyze :: Expr -> Bool -> ([SF], [SF]) -> ([SF], [SF])
+-- analyze (Deriv _ (C a) (C b)) True (num, den) = (((SF a) ^. id):num, ((SF b) ^. id):den)
+-- analyze (Deriv _ (C a) (C b)) False (num, den) = (((SF b) ^. id):num, ((SF a) ^. id):den)
+-- analyze (FCall (C a) _) True (num, den) = (((SF a) ^. id):num, den)
+-- analyze (FCall (C a) _) False (num, den) = (num, ((SF a) ^. id):den)
+-- analyze (C a) True (num, den) = (((SF a) ^. id):num, den)
+-- analyze (C b) False (num, den) = (num, ((SF b) ^. id):den)
 -- analyze a True (num, den) = findUnit a (num, den)
 -- analyze a False (num, den) = findUnit a (den, num)
 
--- eliminate :: [Maybe UnitDefn] -> ([Maybe UnitDefn], [Maybe UnitDefn]) -> ([Maybe UnitDefn], [Maybe UnitDefn])
--- eliminate lst ([], den) = (lst, den)
--- eliminate lst (frst:rst, den)
-  -- | delete frst den == den = eliminate (frst:lst) (rst, den)
-  -- | delete frst den /= den = eliminate lst (rst, delete frst den)
+-- eliminate :: SymbolMap -> [Maybe UnitDefn] -> ([SF], [SF]) -> ([Maybe UnitDefn], [Maybe UnitDefn])
+-- eliminate symbtab lst ([], den) = (lst, map (\x -> getUnitLup x symbtab) den)
+-- eliminate symbtab lst (frst:rst, den)
+  -- | delete frst den == den = eliminate symbtab ((getUnitLup frst symbtab):lst) (rst, den)
+  -- | delete frst den /= den = eliminate symbtab lst (rst, delete frst den)

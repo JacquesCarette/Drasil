@@ -2,7 +2,6 @@ module Drasil.GlassBR.Reqs(reqs) where
 
 import Language.Drasil
 import Drasil.GlassBR.Modules
-import Data.Drasil.Modules
 
 reqs :: [ReqChunk]
 reqs = [req1, req2, req3, req4, req5, req6]

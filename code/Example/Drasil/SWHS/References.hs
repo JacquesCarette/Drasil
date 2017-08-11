@@ -1,5 +1,9 @@
 module Drasil.SWHS.References where
 
+import Data.Drasil.Authors (jBueche, fIncropera, dDewitt, tBergman, aLavine,
+  nKoothoor, mLightstone, dParnas, pClements, spencerSmith, lLai,
+  pAgerfalk, nKraiem, jRalyte)
+
 import Language.Drasil (BibRef,
   person', personWM', (+:+),
   Citation (Article, MThesis, Misc),
@@ -17,7 +21,7 @@ s9_swhs_citations = [ref1, ref2, ref3, ref4, ref5, ref6]
 ref1, ref2, ref3, ref4, ref5, ref6 :: Citation
 
 ref1 = Article [
-  Author [personWM' "J" ["Frederick"] "Bueche"],
+  Author [jBueche],
   Title (S "Introduction to Physics for Scientists"),
   Edition 4,
   Publisher (S "McGraw Hill"),
@@ -27,10 +31,7 @@ ref1 = Article [
 
 
 ref2 = Article [
-  Author [personWM' "F" ["P"] "Incropera",
-          personWM' "D" ["P"] "Dewitt",
-          personWM' "T" ["L"] "Bergman",
-          personWM' "A" ["S"] "Lavine"],
+  Author [fIncropera, dDewitt, tBergman, aLavine],
   Title (S "Fundamentals of Heat and Mass Transfer"),
   Edition 6,
   Publisher (S "John Wiley and Sons"),
@@ -38,7 +39,7 @@ ref2 = Article [
   Year 2007]
 
 ref3 = MThesis [
-  Author [person' "Nirmitha" "Koothoor"],
+  Author [nKoothoor],
   Title (S "A document drive approach to certifying" +:+
   S "scientific computing software"),
   School (S "McMaster University"),
@@ -46,14 +47,13 @@ ref3 = MThesis [
   Year 2013]
 
 ref4 = Misc [
-  Author [person' "Marilyn" "Lightstone"],
+  Author [mLightstone],
   Title (S "Derivation of tank/pcm model"),
   Year 2012,
   Note (S "From Marilyn Lightstone's Personal Notes")]
 
 ref5 = Article [
-  Author [personWM' "David" ["L"] "Parnas",
-          personWM' "P" ["C"] "Clements"],
+  Author [dParnas, pClements],
   Title (S "A rational design process: How and why to fake it"),
   Journal (S "IEEE Transactions on Software Engineering"),
   Volume 12,
@@ -63,14 +63,9 @@ ref5 = Article [
   Year 1986]
 
 ref6 = Article [
-  Author [personWM' "W." ["Spencer"] "Smith",
-          person' "Lei" "Lai"],
+  Author [spencerSmith, lLai],
   Title (S "A new requirements template for scientific computing"),
-  Editor [person' "J." "Ralyte",
-          person' "PJ" "Agerfalk",
-          person' "N." "Kraiem"],
-  --FIXME: person' takes strings but we need an "e" with an accent
-  -- J. Ralyt" :+: (F Acute 'e')
+  Editor [pAgerfalk, nKraiem, jRalyte],
   Journal (S "Proceedings of the First International Workshop on" +:+
   S "Situational Requirements Engineering Processes - Methods," +:+
   S "Techniques and Tools to Support Situation-Specific Requirements" +:+

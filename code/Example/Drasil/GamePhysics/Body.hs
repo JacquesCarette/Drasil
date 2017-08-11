@@ -6,7 +6,7 @@ import Control.Lens ((^.))
 import Language.Drasil
 import Data.Drasil.SI_Units
 
-import Data.Drasil.Authors
+import Data.Drasil.Authors (alex, luthfi)
 import Data.Drasil.Concepts.Documentation
 import Data.Drasil.Concepts.Software (physLib, understandability, portability,
   reliability, maintainability, performance, correctness)

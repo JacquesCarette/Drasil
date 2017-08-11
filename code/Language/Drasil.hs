@@ -54,7 +54,7 @@ module Language.Drasil (
   , ModuleChunk, makeRecord, makeImpModule, makeImpModuleNoGen, makeUnimpModule
   , imp, hier, field, formatName, method, secret, uses
   -- Chunk.Req
-  , ReqChunk(..)
+  , ReqChunk(..), emptyN
   -- Chunk.LC
   , LCChunk(..)
   -- Chunk.Other
@@ -166,5 +166,5 @@ import Language.Drasil.Printing.Helpers (capitalize, paren, sqbrac)
 import Language.Drasil.Generate
 import Language.Drasil.People (People, Person, person, HasName(..), manyNames
                                ,person', personWM, personWM', mononym, name)
-import Language.Drasil.CodeSpec    
-import Language.Drasil.DataDesc                         
+import Language.Drasil.CodeSpec
+import Language.Drasil.DataDesc

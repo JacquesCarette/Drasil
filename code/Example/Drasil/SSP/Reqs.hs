@@ -19,6 +19,3 @@ r8  = ReqChunk emptyN [mod_genalg, mod_sds]
 r9  = ReqChunk emptyN [mod_ctrl, mod_outputf, mod_slipslicer, mod_sds]
 r10 = ReqChunk emptyN [mod_outputf, mod_mp, mod_rfem, mod_sds]
 r11 = ReqChunk emptyN [mod_outputf, mod_plot]
-
-emptyN :: NWrapper
-emptyN = nw $ npnc "" (cn "")

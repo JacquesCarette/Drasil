@@ -1,4 +1,4 @@
-module Drasil.GlassBR.Reqs(reqs) where
+module Drasil.GlassBR.Reqs (reqs) where
 
 import Language.Drasil
 import Drasil.GlassBR.Modules
@@ -15,5 +15,4 @@ req4 = ReqChunk (emptyN) [mod_outputf]
 req5 = ReqChunk (emptyN) [mod_outputf, mod_calc]
 req6 = ReqChunk (emptyN) [mod_outputf]
 
-emptyN :: NWrapper
-emptyN = nw $ npnc "" (cn "")
+--FIXME: Why are all of these empty? Makes no sense.

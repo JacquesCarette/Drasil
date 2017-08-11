@@ -2,8 +2,6 @@
 {-# LANGUAGE FlexibleContexts #-}
 module Drasil.SWHS.TMods where
 
-import Prelude hiding (id)
-
 import Language.Drasil (Sentence, Relation, Contents, RelationConcept,
   at_start, unit_symb, sParen, sC, (+:+.), phrase, usymb, makeRC,
   nounPhraseSP, (+:+), (+.), makeRef, defn,

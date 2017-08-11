@@ -1,6 +1,4 @@
-  module Drasil.SWHS.IMods where
-
-import Prelude hiding (id)
+module Drasil.SWHS.IMods where
 
 import Language.Drasil (Relation, RelationConcept,
   makeRef, sParen, phrase, sC, short, (+:+.), getUnit, (+:+), nounPhraseSP,

@@ -1,7 +1,5 @@
 module Drasil.SWHS.Unitals where
 
-import Prelude hiding (id)
-
 import Language.Drasil (UnitaryChunk, QDefinition, UncertQ, UncertainChunk,
   ConVar, UnitalChunk, UCWrapper, CQSWrapper,
   symbol, nounPhraseSP, unitary, physc, sfwrc, term, dcc, cvR, uc',

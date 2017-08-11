@@ -1,7 +1,5 @@
 module Drasil.SWHS.Modules where
 
-import Prelude hiding (id)
-
 import Language.Drasil (ModuleChunk, ConceptChunk,
   (+:+), phrase, plural, cn', (+:+.), sC, dccWDS, short, makeImpModule,
   Sentence (S, (:+:)))

@@ -170,13 +170,23 @@ do much of the development as our target scope. For these projects, we pay
 particular attention to improving the qualities of reusability, reproducibility,
 and certifiability. 
 
-We want to streamline the certification process, by simplifying the creation of the 
-requisite software artifacts (documentation and code) and by ensuring that these artifacts are always consistent. Tracking down the source of any information contained in our artifacts should be trivially easy, yet this is not always the case as documentation is often not a high priority.
+We want to streamline the certification process, by simplifying the creation of 
+the requisite software artifacts (documentation and code) and by ensuring that these 
+artifacts are always consistent. Tracking down the source of any information 
+contained in our artifacts should be trivially easy, yet this is not always the 
+case as documentation is often not a high priority.
 
-Improved documentation is often considered too high a cost in terms of time and effort for SCS developers, particularly when dealing with rapid changes in development. However, it is an important aspect of improving overall software quality. Carver~\cite{CarverEtAl2007} observed that scientists do not view rigid, process-heavy approaches, favourably. SCS developers tend to dislike producing documentation~\cite[p.~373]{Roache1998}.
+Improved documentation is often considered too high a cost in terms of time and 
+effort for SCS developers, particularly when dealing with rapid changes in 
+development. However, it is an important aspect of improving overall software 
+quality. Carver~\cite{CarverEtAl2007} observed that scientists do not view 
+rigid, process-heavy approaches, favourably. SCS developers tend to dislike 
+producing documentation~\cite[p.~373]{Roache1998}.
 
 Previous work by Smith \& Koothoor~\citep{SmithAndKoothoor2016} found 27 errors 
-in an existing software project when creating new documentation. Had they attempted the certification process, most, if not all, of these errors would have led to a failure.
+in an existing software project when creating new documentation. Had they 
+attempted the certification process, most, if not all, of these errors would 
+have led to a failure.
 
 Well-maintained documentation provides numerous advantages including:
 \begin{itemize}
@@ -196,7 +206,10 @@ Well-maintained documentation provides numerous advantages including:
 	\end{itemize}
 \end{itemize}
 
-Developers are being made aware of the advantages of documentation~\cite{SmithJegatheesanAndKelly2016}, yet it can still be difficult to ensure it becomes a high priority because documenting software is typically felt to be:
+Developers are being made aware of the advantages of 
+documentation~\cite{SmithJegatheesanAndKelly2016}, yet it can still be difficult 
+to ensure it becomes a high priority because documenting software is typically 
+felt to be:
 
 \begin{itemize}
 \item Too long
@@ -207,7 +220,9 @@ Developers are being made aware of the advantages of documentation~\cite{SmithJe
 		development~\citep{Roache1998}
 \end{itemize}
 
-There are also other issues with document-rich, certifiable software development. Namely the vast amount of knowledge duplication across software artifacts. Consider a simple piece of software with the following artifacts:
+There are also other issues with document-rich, certifiable software 
+development. Namely the vast amount of knowledge duplication across software 
+artifacts. Consider a simple piece of software with the following artifacts:
 
 \begin{itemize}
 \item Software Requirements Specification (SRS)
@@ -215,9 +230,15 @@ There are also other issues with document-rich, certifiable software development
 \item Source Code
 \item Tests
 \end{itemize}
-Knowledge, such as the functional requirements, from the SRS is duplicated in both the source code and tests. That same knowledge appears in the design document as well, albeit in a transformed state. 
+Knowledge, such as the functional requirements, from the SRS is duplicated in 
+both the source code and tests. That same knowledge appears in the design 
+document as well, albeit in a transformed state. 
 
-Now consider that software certification often requires a great many more artifacts than the four listed above. Much of the same knowledge will appear in all of the artifacts and will need to be maintained. Manually maintaining these artifacts is a lesson in tedium and the time could be better spent elsewhere, if it were easier to deal with automatically.
+Now consider that software certification often requires a great many more 
+artifacts than the four listed above. Much of the same knowledge will appear in 
+all of the artifacts and will need to be maintained. Manually maintaining these 
+artifacts is a lesson in tedium and the time could be better spent elsewhere, if 
+it were easier to deal with automatically.
 
 \subsection*{The Solution?}
 
@@ -378,7 +399,7 @@ SCS.
 \section{A Practical Example (GlassBR)} \label{SecGlassBR}
 
 GlassBR is a piece of software used in Civil Engineering to predict whether or 
-not a slab of glass will be able to withstand a given blast without breaking. It
+not a slab of glass will be able to withstand a given explosion without breaking. It
 has two classes of input: glass geometry and blast type. Each of these input 
 classes has a number of fields (glass type, dimensions, TNT equivalent factor, 
 standoff distance, etc.) used as input to the simulation. Also, a tolerable 

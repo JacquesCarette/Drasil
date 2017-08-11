@@ -1,5 +1,4 @@
 {-# LANGUAGE GADTs #-}
-
 module Language.Drasil.CodeSpec where
 
 import Language.Drasil.Chunk.Code
@@ -40,30 +39,17 @@ data CodeSpec = CodeSpec {
 type FunctionMap = Map.Map String CodeDefinition
 type VarMap      = Map.Map String CodeChunk
 
-functionMap :: [CodeDefinition] -> FunctionMap
-functionMap cs = Map.fromList (map (\x -> (codeName x, x)) cs)
+assocToMap :: CodeIdea a => [a] -> Map.Map String a
+assocToMap = Map.fromList . map (\x -> (codeName x, x))
 
 funcTerm :: String -> FunctionMap -> String
-funcTerm cname m = lookF (Map.lookup cname m)
-  where lookF :: (Maybe CodeDefinition) -> String
-        lookF Nothing = ""
-        lookF (Just cd) = getStr (phrase $ cd ^. term)
+funcTerm cname m = maybe "" (\cd -> getStr (phrase $ cd ^. term)) (Map.lookup cname m)
        
-
-varMap :: [CodeChunk] -> VarMap
-varMap cs = Map.fromList (map (\x -> (codeName x, x)) cs)
-
 varTerm :: String -> VarMap -> String
-varTerm cname m = lookV (Map.lookup cname m)
-  where lookV :: (Maybe CodeChunk) -> String
-        lookV Nothing = ""
-        lookV (Just cc) = getStr (phrase $ cc ^. term)  
+varTerm cname m = maybe "" (\cc -> getStr (phrase $ cc ^. term)) (Map.lookup cname m)
         
 varType :: String -> VarMap -> CodeType
-varType cname m = lookV (Map.lookup cname m)
-  where lookV :: (Maybe CodeChunk) -> CodeType
-        lookV Nothing = error "Variable not found"
-        lookV (Just cc) = codeType cc
+varType cname m = maybe (error "Variable not found") codeType (Map.lookup cname m)
         
 getStr :: Sentence -> String
 getStr (S s) = s
@@ -81,9 +67,9 @@ codeSpec' (SI {_sys = sys, _quants = q, _definitions = defs, _inputs = ins, _out
   outputs = map codevar outs,
   relations = map qtoc defs,
   cMap = constraintMap cs,
-  fMap = functionMap $ map qtoc defs,
-  vMap = varMap (map codevar q),
-  constMap = functionMap $ map qtoc constants,
+  fMap = assocToMap $ map qtoc defs,
+  vMap = assocToMap (map codevar q),
+  constMap = assocToMap $ map qtoc constants,
   fMods = [funcMod "Calculations" defs],
   const = map qtoc constants,
   choices = ch,

@@ -4,7 +4,7 @@ import Language.Drasil (Person, person, personWM)
   
 spencerSmith, henryFrankis, nKoothoor, dParnas, daAruliah, gWilson,
   cTitus, kdHuff, cHong, mDavis, rGuy, shdHaddock, imMitchell, mdPlumblet,
-  bWaugh, epWhite, pWilson :: Person
+  bWaugh, epWhite, pWilson, pcClements :: Person
 spencerSmith = personWM "W"         ["Spencer"]     "Smith"
 dParnas      = personWM "David"     ["L"]           "Parnas"
 daAruliah    = personWM "D"         ["A"]           "Aruliah"
@@ -19,9 +19,10 @@ rGuy         = personWM "Richard"   ["T"]           "Guy"
 shdHaddock   = personWM "Steven"    ["H","D"]       "Haddock"
 imMitchell   = personWM "Ian"       ["M"]           "Mitchell"
 mdPlumblet   = personWM "Mark"      ["D"]           "Plumblet"
-bWaugh       = person   "Ben"                       "Waugh"
-epWhite      = personWM "Ethan"     ["P"]           "White"
-pWilson      = person   "Paul"                      "Wilson"
+bWaugh       = person   "Ben"                       "Waugh" -- Best Practices for Scientific Computing 2013
+epWhite      = personWM "Ethan"     ["P"]           "White" -- Best Practices for Scientific Computing 2013
+pWilson      = person   "Paul"                      "Wilson" -- Best Practices for Scientific Computing 2013
+pcClements   = personWM "P"         ["C"]           "Clements" -- The Modular Structure of Complex Systems ICSE '84
 
 -- short versions for now
 luthfi, alex, nikitha, thulasi, brooks :: Person

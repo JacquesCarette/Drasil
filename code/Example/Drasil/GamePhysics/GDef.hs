@@ -6,7 +6,6 @@ import Language.Drasil
 import Data.Drasil.Utils (foldlSent)
 import Data.Drasil.Concepts.Physics (rigidBody)
 import Data.Drasil.Quantities.PhysicalProperties (mass)
-import Data.Drasil.Quantities.Physics
 
 ----- General Models -----
 

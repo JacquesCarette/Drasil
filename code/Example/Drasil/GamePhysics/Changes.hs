@@ -2,7 +2,6 @@ module Drasil.GamePhysics.Changes where
 
 import Language.Drasil
 import Drasil.GamePhysics.Modules
---import Data.Drasil.Modules
 import Data.Drasil.Changes
 
 likelyChanges :: [LCChunk]

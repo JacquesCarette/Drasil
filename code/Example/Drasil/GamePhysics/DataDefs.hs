@@ -9,7 +9,6 @@ import qualified Data.Drasil.Quantities.Physics as QP (restitutionCoef, time,
 import qualified Data.Drasil.Quantities.Math as QM (orientation)
 import Data.Drasil.Utils (mkDataDef)
 
-
 ----- Data Definitions -----
 
 cpDDefs :: [QDefinition]

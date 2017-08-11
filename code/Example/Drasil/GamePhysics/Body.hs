@@ -11,8 +11,9 @@ import Data.Drasil.Concepts.Documentation
 import Data.Drasil.Concepts.Software (physLib, understandability, portability,
   reliability, maintainability, performance, correctness)
 import Data.Drasil.Concepts.Computation (algorithm)
-import Data.Drasil.Concepts.Education
-import Drasil.Sections.TraceabilityMandGs
+import Data.Drasil.Concepts.Education (highSchoolCalculus, frstYr,
+  highSchoolPhysics)
+import Drasil.Sections.TraceabilityMandGs (traceMGF)
 import qualified Data.Drasil.Quantities.Math as QM (orientation)
 import qualified Data.Drasil.Quantities.Physics as QP (time, 
   position, force, velocity, angularVelocity, linearVelocity)
@@ -44,10 +45,10 @@ import Drasil.GamePhysics.Changes (unlikelyChanges, likelyChanges)
 import Drasil.GamePhysics.Reqs (reqs)
 
 import Drasil.DocumentLanguage 
-import Drasil.Sections.SpecificSystemDescription
+import Drasil.Sections.SpecificSystemDescription (specSysDescr)
 import Drasil.Sections.SolutionCharacterSpec
-import Drasil.Sections.Requirements
-import Drasil.Sections.AuxiliaryConstants
+import Drasil.Sections.Requirements (reqF)
+import Drasil.Sections.AuxiliaryConstants (valsOfAuxConstantsF)
 
 authors :: People
 authors = [alex, luthfi]

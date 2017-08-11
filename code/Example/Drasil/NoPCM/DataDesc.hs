@@ -1,4 +1,4 @@
-module Drasil.NoPCM.DataDesc where
+module Drasil.NoPCM.DataDesc (inputMod) where
 
 import Language.Drasil
 import Drasil.SWHS.Unitals

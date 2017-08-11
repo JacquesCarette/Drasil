@@ -1,4 +1,4 @@
-module Drasil.GlassBR.Reqs where
+module Drasil.GlassBR.Reqs(reqs) where
 
 import Language.Drasil
 import Drasil.GlassBR.Modules
@@ -9,7 +9,7 @@ reqs = [req1, req2, req3, req4, req5, req6]
 
 req1, req2, req3, req4, req5, req6 :: ReqChunk
 
-req1 = ReqChunk (emptyN) [mod_hw, mod_inputf, mod_inputp, mod_ctrl]
+req1 = ReqChunk (emptyN) [mod_inputf, mod_inputp, mod_ctrl]
 req2 = ReqChunk (emptyN) [mod_inputf, mod_inputp]
 req3 = ReqChunk (emptyN) [mod_inputc]
 req4 = ReqChunk (emptyN) [mod_outputf]

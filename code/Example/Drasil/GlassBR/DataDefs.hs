@@ -1,9 +1,17 @@
 module Drasil.GlassBR.DataDefs where
 
-import Language.Drasil
-import Prelude hiding (log, exp, sqrt)
-import Drasil.GlassBR.Unitals
-import Data.Drasil.Utils
+import Language.Drasil (plural, (+:+), (+:+.), sC, phrase, titleize, equat,
+  sParen, square, log, exp, QDefinition, Sentence (S, E), Block (Parallel),
+  Relation, Expr (C, V, FCall, (:>), (:^), Int, Case, Dbl, (:=), Grouping))
+
+import Prelude hiding (log, exp)
+import Drasil.GlassBR.Unitals (tolLoad, dimlessLoad, gTF, stressDistFac, 
+  aspectR, aspectRWithEqn, demand, sdf_tol, nom_thick, act_thick, pb_tol,
+  plate_width, plate_len, sflawParamM, mod_elas, glass_type, sflawParamK,
+  glassTypeFactors, lDurFac, glassTypeAbbrsStr, nonFactorL, 
+  actualThicknesses, nominalThicknesses, load_dur, risk_fun)
+
+import Data.Drasil.Utils (getS, mkDataDef', mkDataDef)
 import Data.Drasil.SentenceStructures (sAnd)
 import Data.Drasil.Concepts.PhysicalProperties (dimension)
 import Data.Drasil.Concepts.Math (probability, parameter, calculation)

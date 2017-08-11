@@ -1,7 +1,9 @@
 module Drasil.GlassBR.Reqs (reqs) where
 
-import Language.Drasil
-import Drasil.GlassBR.Modules
+import Language.Drasil (ReqChunk (ReqChunk), emptyN)
+
+import Drasil.GlassBR.Modules (mod_inputf, mod_inputp, mod_ctrl,
+  mod_inputc, mod_outputf, mod_calc)
 
 reqs :: [ReqChunk]
 reqs = [req1, req2, req3, req4, req5, req6]

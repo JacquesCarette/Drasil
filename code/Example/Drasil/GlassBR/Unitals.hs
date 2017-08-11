@@ -4,12 +4,25 @@ import Drasil.GlassBR.Units
 import Drasil.GlassBR.Concepts
 
 import Language.Drasil
-import Data.Drasil.SI_Units
+import Data.Drasil.SI_Units (kilopascal, metre, second, kilogram,
+  millimetre, pascal)
 import Data.Drasil.Utils (symbolMapFun, mkDataDef, getS)
 import Control.Lens ((^.))
 import Prelude hiding (log, sqrt)
-import Data.Drasil.SentenceStructures (foldlSent, 
-  displayConstrntsAsSet, foldlsC, foldlOptions)
+import Data.Drasil.SentenceStructures (foldlSent, displayConstrntsAsSet,
+  foldlsC, foldlOptions)
+
+import Language.Drasil (Sentence, Relation, NamedChunk, Contents, 
+  RelationConcept, ConceptChunk, SymbolMap, QSWrapper, VarChunk,
+  ConstrainedChunk, UncertainChunk, ConstrWrapper, UncertainWrapper,
+  UnitaryChunk, QDefinition, UncertQ, UncertainChunk, UnitalChunk,
+  symbol, nounPhraseSP, unitary, physc, sfwrc, term, dcc, uc', uvc,
+  cP, sub, lH, lT, lQ, lG, phrase, compoundNC, cc', cc, getAcc, euclidean,
+  symbolMap, qs, sParen, cn', 
+  Symbol (Atomic, Concat),
+  Space (Rational, Real),
+  DType (Data),
+  Expr (C, Dbl, Grouping, V, (:<), (:>), (:=), (:^), Neg))
 
 --FIXME: Many of the current terms can be separated into terms and defns?
 

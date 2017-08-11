@@ -1,6 +1,12 @@
 module Drasil.GlassBR.Interpolation where
 
-import Language.Drasil
+import Language.Drasil (FuncDef (..), Mod (ModDef), 
+  makeVC, nounPhraseSP, fasg, funcDef, ffor,fdec,
+  lY, lX, lZ, sub, lK, lJ, lI, lV,
+  Expr (Len, C, (:<=), (:<=), (:<), (:&&), FCall, Index, Append),  
+  Symbol (Atomic),VarChunk, FuncStmt (..), Space (Rational, Vect))
+
+{--}
 
 v_y_2, v_y_1, v_x_2, v_x_1, v_x :: VarChunk
 v_y_1  = makeVC "y_1"    (nounPhraseSP "y1")   (sub (lY) (Atomic "1"))

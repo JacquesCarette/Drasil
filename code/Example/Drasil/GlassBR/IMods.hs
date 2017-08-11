@@ -1,15 +1,24 @@
 module Drasil.GlassBR.IMods(iModels, probOfBr, calOfCap, calOfDe) where
 
-import Language.Drasil
+import Language.Drasil (sParen, phrase, sC, (+:+.), (+:+), nounPhraseSP,
+  makeRC, plural, equat, defn, exp, 
+  RelationConcept, Sentence (S, E, Quote), Expr (C, (:=), FCall))
+
 import Data.Drasil.SentenceStructures (foldlSent, isThe, sAnd, sOr)
-import Prelude hiding (exp)
-import Control.Lens ((^.))
-import Drasil.GlassBR.Unitals
-import Drasil.GlassBR.DataDefs
-import Drasil.GlassBR.Concepts
-import Data.Drasil.Concepts.Documentation
 import Data.Drasil.Utils (getS)
 import Data.Drasil.Concepts.Math (parameter)
+import Data.Drasil.Concepts.Documentation (acroA, coordinate)
+
+import Prelude hiding (exp)
+import Control.Lens ((^.))
+
+import Drasil.GlassBR.Unitals (tNT, sdWithEqn, demand, standOffDist, 
+  char_weight, eqTNTWeight, demandq, sdVectorSent, wtntWithEqn, loadSF,
+  lRe, risk_fun, prob_br)
+import Drasil.GlassBR.DataDefs (nonFL, risk, glaTyFac)
+import Drasil.GlassBR.Concepts (lResistance, glassTypeFac, lShareFac)
+
+{--}
 
 iModels :: [RelationConcept]
 iModels = [probOfBr, calOfCap, calOfDe]

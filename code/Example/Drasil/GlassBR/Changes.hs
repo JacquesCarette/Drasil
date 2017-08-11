@@ -1,9 +1,14 @@
 module Drasil.GlassBR.Changes(likelyChanges, unlikelyChanges) where
 
-import Language.Drasil
+import Language.Drasil (UCChunk, npnc, nounPhraseSP, nw, LCChunk)
 
-import Drasil.GlassBR.Modules
-import Data.Drasil.Changes
+import Drasil.GlassBR.Modules (mod_inputf, mod_inputp, mod_outputf,
+  mod_calc, mod_ctrl, mod_interpd, mod_interp)
+
+import Data.Drasil.Changes (ucInputS, ucOutput, lcInterpd, lcInterp,
+  ucIO, lcCtrl, lcEqns, lcOutputF, lcInputP, lcHW, lcInputF)
+
+{--}
 
 likelyChanges :: [LCChunk]
 likelyChanges = [lc1, lc2, lc3, lc4, lc5, lc6, lc7, lc8]

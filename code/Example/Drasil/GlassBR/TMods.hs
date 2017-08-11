@@ -1,13 +1,22 @@
 module Drasil.GlassBR.TMods (tModels, t1SafetyReq, t2SafetyReq) where
 
-import Drasil.GlassBR.Unitals
-import Drasil.GlassBR.IMods
-import Drasil.GlassBR.Concepts
+import Drasil.GlassBR.Unitals (is_safe1, is_safe2, demand, 
+  glassBRSymbols, demandq, lRe, pb_tol, prob_br)
+import Drasil.GlassBR.IMods (calOfCap, calOfDe, probOfBr)
+import Drasil.GlassBR.Concepts (lResistance)
 
-import Language.Drasil
-import Data.Drasil.SentenceStructures (foldlSent, isThe, sAnd)
+import Language.Drasil (RelationConcept,
+  sParen, sC, (+:+.), phrase, makeRC, nounPhraseSP, (+:+),
+  makeRef, defn, titleize, short,
+  Expr (C, (:=), (:<), (:>)),
+  Sentence (S), VarChunk, symbolMap, 
+  Contents (Definition), DType (Theory))
 import Control.Lens ((^.))
+
+import Data.Drasil.SentenceStructures (foldlSent, isThe, sAnd)
 import Data.Drasil.Utils (getS)
+
+{--}
 
 tModels :: [RelationConcept]
 tModels = [t1SafetyReq, t2SafetyReq]

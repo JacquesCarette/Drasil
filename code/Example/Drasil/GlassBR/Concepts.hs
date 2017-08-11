@@ -1,9 +1,14 @@
 module Drasil.GlassBR.Concepts where
 
-import Language.Drasil
-import Data.Drasil.Concepts.Documentation
+import Language.Drasil (CI, NamedChunk, ConceptChunk,
+  cn', nounPhraseSP, npnc, commonIdea, compoundNC, pn, dcc')
 
---FIXME: Figure out why this wasn't used in body (until now with srsDoc)
+import Data.Drasil.Concepts.Documentation (assumption, 
+  dataDefn, goalStmt, inModel, likelyChg, notApp, physSyst, 
+  requirement, srs, thModel, typUnc, response, type_)
+
+{--}
+
 glassBRProg :: ConceptChunk
 glassBRProg = dcc' "glassBRProg" (nounPhraseSP "GlassBR program")
   "The glass safety analysis program" "GlassBR" 

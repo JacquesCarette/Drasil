@@ -1,9 +1,12 @@
 module Drasil.GlassBR.DataDescriptions where
 
-import Language.Drasil
-import Drasil.GlassBR.Unitals (plate_len, plate_width, nom_thick, glass_type,
-  char_weight, tNT, sdx, sdy, sdz, pb_tol)
-import Drasil.GlassBR.Interpolation
+import Language.Drasil (junkLine, singleton, repeated, singleLine,
+  multiLine, listEntry, junk,
+  DataDesc, Mod (ModData), Ind (WithPattern, WithLine))
+
+import Drasil.GlassBR.Unitals (plate_len, plate_width, nom_thick,
+  glass_type, char_weight, tNT, sdx, sdy, sdz, pb_tol)
+import Drasil.GlassBR.Interpolation (v_z_array, v_x_array, v_y_array)
 
 --from TSD.txt:
 

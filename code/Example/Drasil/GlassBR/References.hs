@@ -1,6 +1,12 @@
 module Drasil.GlassBR.References (gbCitations) where
 
-import Language.Drasil
+import Language.Drasil (mononym, personWM, (+:+),
+  BibRef, Sentence ((:+:), S),
+  Citation (Article, MThesis, Misc),
+  CiteField (Author, Year, Note, Pages, Place, Journal, Title, School, 
+    Publisher, Editor, Collection, URL))
+
+{--}
 
 koothoor2013, smithLai2005, rbrtsn2012, astm_LR2009, astm_C1036, 
   astm_C1048, glThick1998 :: Citation

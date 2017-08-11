@@ -158,25 +158,25 @@ driven design, code generation}
 
 \section{Introduction} \label{SecIntroduction}
 
-Every developer should strive towards creating the highest possible quality software.
-As scientists, we should be leading the community in this regard as it is our
-duty to ensure the reusability, reproducibility, and replicability of our work.
+Every developer should strive towards creating the highest possible quality 
+software. This is especially true in safety-critical applications where 
+incorrect software could cost lives. As scientists, we should be leading the 
+community in developing high quality software, as it is our duty to ensure the 
+reusability, reproducibility, and replicability of our work.
 
 Our team is focused on improving the quality of Scientific Computing Software (SCS).
 We have chosen large, multi-year, multi-developer projects where the end users
 do much of the development as our target scope. For these projects, we pay
 particular attention to improving the qualities of reusability, reproducibility,
-and certifiability. Improving these software qualities is especially important where
-correctness can have an impact on safety, for example: nuclear safety analysis
-or medical imaging.
+and certifiability. 
 
-Often considered too high a cost in terms of time and effort for SCS developers, 
-particularly when dealing with rapid changes in development, improved 
-documentation is an important aspect of improving overall software quality. 
-Carver~\cite{CarverEtAl2007} observed that scientists do not view rigid, 
-process-heavy approaches, favourably. SCS developers tend to dislike producing 
-documentation and often consider reports for each stage of software development 
-as counterproductive~\cite[p.~373]{Roache1998}.
+We want to streamline the certification process, by simplifying the creation of the 
+requisite software artifacts (documentation and code) and by ensuring that these artifacts are always consistent. Tracking down the source of any information contained in our artifacts should be trivially easy, yet this is not always the case as documentation is often not a high priority.
+
+Improved documentation is often considered too high a cost in terms of time and effort for SCS developers, particularly when dealing with rapid changes in development. However, it is an important aspect of improving overall software quality. Carver~\cite{CarverEtAl2007} observed that scientists do not view rigid, process-heavy approaches, favourably. SCS developers tend to dislike producing documentation~\cite[p.~373]{Roache1998}.
+
+Previous work by Smith \& Koothoor~\citep{SmithAndKoothoor2016} found 27 errors 
+in an existing software project when creating new documentation. Had they attempted the certification process, most, if not all, of these errors would have led to a failure.
 
 Well-maintained documentation provides numerous advantages including:
 \begin{itemize}
@@ -188,24 +188,16 @@ Well-maintained documentation provides numerous advantages including:
 	\item etc.
 	\end{itemize}
 
-\item From Parnas~\cite{Parnas2010}:
+\item Other improvements (from Parnas~\cite{Parnas2010}):
 	\begin{itemize}
 		\item Easier reuse of old designs
 		\item Better communication about requirements
 		\item More useful design reviews
-		\item etc.
-% \item easier integration of separately written modules, more
-%   effective code inspection, more effective testing, and more efficient
-%   corrections and improvements
 	\end{itemize}
 \end{itemize}
 
-Previous work by Smith \& Koothoor~\citep{SmithAndKoothoor2016} found 27 errors 
-in an existing software project when creating new documentation. Developers have
-become aware of these advantages of 
-documentation~\cite{SmithJegatheesanAndKelly2016}.
+Developers are being made aware of the advantages of documentation~\cite{SmithJegatheesanAndKelly2016}, yet it can still be difficult to ensure it becomes a high priority because documenting software is typically felt to be:
 
-However, documenting software is typically felt to be:
 \begin{itemize}
 \item Too long
 \item Too difficult to maintain
@@ -214,6 +206,18 @@ However, documenting software is typically felt to be:
 \item Counterproductive when reporting on each stage of 
 		development~\citep{Roache1998}
 \end{itemize}
+
+There are also other issues with document-rich, certifiable software development. Namely the vast amount of knowledge duplication across software artifacts. Consider a simple piece of software with the following artifacts:
+
+\begin{itemize}
+\item Software Requirements Specification (SRS)
+\item Design Document
+\item Source Code
+\item Tests
+\end{itemize}
+Knowledge, such as the functional requirements, from the SRS is duplicated in both the source code and tests. That same knowledge appears in the design document as well, albeit in a transformed state. 
+
+Now consider that software certification often requires a great many more artifacts than the four listed above. Much of the same knowledge will appear in all of the artifacts and will need to be maintained. Manually maintaining these artifacts is a lesson in tedium and the time could be better spent elsewhere, if it were easier to deal with automatically.
 
 \subsection*{The Solution?}
 
@@ -249,7 +253,7 @@ example, a \textit{Quantity} is a \textit{NamedIdea} (a chunk containing an id,
 as well as a term which represents the idea and a potential abbreviation for 
 that term) which also has a \textit{Space} (integer, boolean, vector, etc.), 
 and symbol representation/units (if applicable).  The notation in
-Figure~\ref{hierarchy} uses a question mark (?) to indicate when a value may or
+Figure~\ref{hierarchy} uses a \verb|+1| to indicate when a value may or
 may not be present (Maybe types in Haskell).
 
 \begin{figure}
@@ -270,8 +274,7 @@ table of units, table of symbols, and table of abbreviations and acronyms
 subsections.
 
 \begin{figure}
-\begin{lstlisting}[language=Haskell, frame=single, showstringspaces=false, 
-basicstyle=\small]
+\begin{lstlisting}[language=Haskell, frame=single, showstringspaces=false]
 mkSRS :: DocDesc 
 mkSRS = [RefSec (RefProg intro 
 	[TUnits, 
@@ -412,12 +415,11 @@ that, but thanks to the incorporation of GOOL we can also generate Java, Lua,
 etc. 
 
 \begin{figure*}
-\begin{lstlisting}[language=python, frame=single, showstringspaces=false, 
-basicstyle=\small]
+\begin{lstlisting}[language=python, frame=single, showstringspaces=false]
 def calc_j_tol(inparams):
     j_tol = math.log((math.log(1.0/(1.0 - inparams.pbtol))) * ((((inparams.a / 1000.0) * 
-        (inparams.b / 1000.0)) ** (inparams.m - 1.0)) / ((inparams.k * (((inparams.E * 1000.0) * 
-        ((inparams.h / 1000.0) ** 2.0)) ** inparams.m)) * inparams.ldf))) 
+      (inparams.b / 1000.0)) ** (inparams.m - 1.0)) / ((inparams.k * (((inparams.E * 1000.0) * 
+      ((inparams.h / 1000.0) ** 2.0)) ** inparams.m)) * inparams.ldf))) 
     return j_tol
 \end{lstlisting}
 \caption{Python code to Calculate \jtol{}}
@@ -430,18 +432,19 @@ captured using chunks as shown in Figure~\ref{Fig_JtolDrasil}. The value of
 part of the {\inlHask{tolStrDisFac}} chunk.
 
 \begin{figure*}
-\begin{lstlisting}[language=Haskell, frame=single, showstringspaces=false, 
-basicstyle=\small] 
-stressDistFac = makeVC "stressDistFac" (nounPhraseSP $ "stress distribution" ++ " factor (Function)") cJ
+\begin{lstlisting}[language=Haskell, frame=single, showstringspaces=false] 
+stressDistFac = makeVC 
+  "stressDistFac" (nounPhraseSP $ "stress distribution" ++ " factor (Function)") cJ
 
-sdf_tol = makeVC "sdf_tol" (nounPhraseSP $ "stress distribution" ++ " factor (Function) based on Pbtol") 
+sdf_tol = makeVC 
+  "sdf_tol" (nounPhraseSP $ "stress distribution" ++ " factor (Function) based on Pbtol") 
   (sub (stressDistFac ^. symbol) (Atomic "tol"))
 
 tolStrDisFac_eq :: Expr
 tolStrDisFac_eq = log (log ((1) / ((1) - (C pb_tol))) * ((Grouping (((C plate_len) / (1000)) * 
   ((C plate_width) / (1000)))) :^ ((C sflawParamM) - (1)) / ((C sflawParamK) * 
-  (Grouping (Grouping ((C mod_elas) * (1000)) * (square (Grouping ((C act_thick) / (1000)))))) :^ 
-  (C sflawParamM) * (C loadDF))))
+  (Grouping (Grouping ((C mod_elas) * (1000)) * 
+  (square (Grouping ((C act_thick) / (1000)))))) :^ (C sflawParamM) * (C loadDF))))
 
 tolStrDisFac :: QDefinition
 tolStrDisFac = mkDataDef sdf_tol tolStrDisFac_eq
@@ -457,12 +460,11 @@ corrected the error in our knowledge-base. Thus, after re-running the generator,
 our code and documentation has now been fixed and remains consistent.
 
 \begin{figure*}
-\begin{lstlisting}[language=Haskell, frame=single, showstringspaces=false, 
-basicstyle=\small]
+\begin{lstlisting}[language=Haskell, frame=single, showstringspaces=false]
 tolStrDisFac_eq :: Expr
-tolStrDisFac_eq = log (log ((1) / ((1) - (C pb_tol))) * ((Grouping ((C plate_len) * (C plate_width))) :^
-  ((C sflawParamM) - (1)) / ((C sflawParamK) * (Grouping ((C mod_elas) * (square (C act_thick)))) :^ 
-  (C sflawParamM) * (C loadDF))))
+tolStrDisFac_eq = log (log ((1) / ((1) - (C pb_tol))) * ((Grouping ((C plate_len) * 
+  (C plate_width))) :^ ((C sflawParamM) - (1)) / ((C sflawParamK) * 
+  (Grouping ((C mod_elas) * (square (C act_thick)))) :^ (C sflawParamM) * (C loadDF))))
 \end{lstlisting}
 \caption{Modified Drasil (Haskell) code for \jtol{}}
 \label{Fig_JtolDrasil_fix}

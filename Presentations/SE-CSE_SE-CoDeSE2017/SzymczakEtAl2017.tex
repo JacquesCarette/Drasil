@@ -677,19 +677,21 @@ can be generated on-the-fly by any who wish to replicate the results or
 double-check the science.
 
 Drasil can also potentially check for completeness and consistency, ensuring 
-the little things that are tedious (if trivial) to manually verify. For 
+the little things that are tedious, if trivial, to manually verify. For 
 example: every symbol should be defined and used and should not change 
 throughout the artifacts (inter- and itra-artifact consistency). This may seem 
 minor, but one of our case studies, which had been reviewed by humans on 
-numerous occassions, introduced a new symbol for an existing concept in an 
-equation derivation which was never defined and did not appear in the table of 
+numerous occasions, introduced a new symbol for an existing concept in a 
+derivation. This new symbol was never defined and did not appear in the table of 
 symbols. When implementing the project in Drasil, however, this error was made 
-obvious almost immediately.
+obvious almost immediately and was easily fixed.
 
 Overall, Drasil lends itself incredibly well to ensuring reproducibility in a 
 much larger sense than we normally consider. It allows us to focus on the 
-science, building our projects from the fundamental knowledge instead of 
-relying on a lone developer's code.
+science, (re-)building our projects from the fundamental knowledge instead of 
+relying on a lone developer's code. Drasil also forces all assumptions to be 
+documented, and disallows local hacks as the generated code should never be 
+modified by a human, it should only be generated.
 
 \section{Future Work} \label{SecFuture}
 

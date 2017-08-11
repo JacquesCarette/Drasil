@@ -312,13 +312,14 @@ currently five different examples being developed concurrently within (and
 driving the development of) Drasil:
 
 \begin{itemize}
-\item Chipmunk2D Game Engine
+\item Chipmunk2D Game Physics Engine
 \item Solar Water Heating System Incorporating Phase Change Material (PCM)
 \item Solar Water Heating System (No PCM)
 \item Slope Stability Analysis
-\item Glass Breakage Analysis
+\item Glass Breakage Analysis (GlassBR)
 \end{itemize}
-These examples overlap with those found in~\cite{SmithJegatheesanAndKelly2016}.
+The original (non-Drasil) documentation for these examples came out of a study
+on Document Driven Design (DDD) for SCS~\cite{SmithJegatheesanAndKelly2016}.
 
 Our practical design approach allows us the flexibility to prototype without 
 over-designing. As a new feature becomes necessary to continue the 
@@ -327,12 +328,23 @@ re-test it. We occasionally implement features we may need in the future, but
 only in those instances when it is obvious that we are taking the right 
 approach.
 
+The five examples provided an ideal means to bring additional members on to the
+project.  Summer student research assistants joined the project and were
+responsible for completing most of the work on translating the original examples
+into Drasil, and then later transforming the examples, as the Drasil DSLs have
+been extended and refactored.  Through their work, the summer students have
+demonstrated that using Drasil does not require prior knowledge of Haskell and
+code generation techniques.  The student members of the Drasil project cover
+disciplines ranging from Chemical Engineering, Applied Mathematics, Computer
+Science and Software Engineering, with levels of education ranging from first to
+third year. None of the students had prior knowledge of Haskell.
+
 The current incarnation of the Drasil framework can be found on GitHub at 
 \href{https://github.com/JacquesCarette/literate-scientific-software}
 {https://github.com/JacquesCarette/literate-scientific-software}. We utilize 
 peer-review of code throughout development to correct missteps early on, and 
 keep an up-to-date issue tracker for any bugs, feature requests, or other 
-``to-do" tasks.
+``to-do'' tasks.
 
 Progressive development of Drasil is achieved by not only looking for new 
 features that must be implemented, but also through a cyclic approach towards 
@@ -341,6 +353,24 @@ framework through refactoring, de-embedding and extracting knowledge from the
 example materials, and reducing knowledge duplication by capturing it in a 
 highly reusable way.
 
+By adopting a practical, example-driven, ``bottom-up,'' approach for the
+development of Drasil, we have avoided the problems inherent in a more
+theoretical, or ``top-down,'' approach.  The size, scope and complexity of SCS
+means that attempting to imagine a priori the DSLs that we would need would be
+exceedingly difficult.  We would invariably leave something out and likely
+provide too simple a framework.  Rather than try to arbitrarily determine the
+initial scope of Drasil, we let the examples tell us what they need. The
+``bottom-up'' approach was previously successfully used for generating members
+of the family of Gaussian elimination algorithms~\cite{Carette2006}.  
+
+The idea that scientific software forms a program
+family~\cite{SmithMcCutchanAndCao2007} is helpful for the current work.  We can
+imagine that each of our five examples provides one specific instance of the
+more general family of SCS.  With five examples we feel confident that enough of
+the commonalities and variabilities between members of the family of SCS are
+present that the initial implementation of Drasil will provide a reasonable
+starting point for implementing a representative subset of the full family of
+SCS.
 
 \section{A Practical Example (GlassBR)} \label{SecGlassBR}
 

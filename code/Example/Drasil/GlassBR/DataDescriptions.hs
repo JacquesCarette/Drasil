@@ -1,7 +1,8 @@
 module Drasil.GlassBR.DataDescriptions where
 
 import Language.Drasil
-import Drasil.GlassBR.Unitals
+import Drasil.GlassBR.Unitals (plate_len, plate_width, nom_thick, glass_type,
+  char_weight, tNT, sdx, sdy, sdz, pb_tol)
 import Drasil.GlassBR.Interpolation
 
 --from TSD.txt:
@@ -9,7 +10,8 @@ import Drasil.GlassBR.Interpolation
 read_table :: DataDesc
 read_table = 
   [ singleLine (repeated [junk, listEntry [WithPattern] v_z_array]) ',',
-    multiLine (repeated [listEntry [WithPattern, WithLine] v_x_array, listEntry [WithPattern, WithLine] v_y_array]) ','
+    multiLine (repeated [listEntry [WithPattern, WithLine] v_x_array,
+                         listEntry [WithPattern, WithLine] v_y_array]) ','
   ]
 
 -----

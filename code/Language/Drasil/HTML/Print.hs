@@ -416,7 +416,7 @@ renderF c fields styl = unwords $
   map (styl bibStyleH) (sort fields) ++ endingField c bibStyleH
 
 endingField :: Citation -> StyleGuide -> [String]
-endingField c MLA = [dot $ show c]
+endingField c MLA = [show c]
 endingField _ _ = []
 
 -- Config helpers --
@@ -452,7 +452,7 @@ bookMLA (School     s) = comm $ p_spec s
 bookMLA (Thesis     t) = comm $ show t
 bookMLA (URL        s) = dot $ p_spec s
 bookMLA (HowPub     s) = comm $ p_spec s
-bookMLA (Editor     p) = comm $ "Ed. " ++ p_spec (foldlList $ map (S . nameStr) p)
+bookMLA (Editor     p) = comm $ "Edited by " ++ p_spec (foldlList $ map (S . nameStr) p)
 
 bookAPA :: CiteField -> String --FIXME: year needs to come after author in APA
 bookAPA (Author   p) = needDot $ p_spec (rendPeople rendPersLFM' p) --APA uses initals rather than full name

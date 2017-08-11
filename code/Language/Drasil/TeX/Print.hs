@@ -22,7 +22,7 @@ import Language.Drasil.TeX.Preamble
 import Language.Drasil.Symbol (Symbol(..),Decoration(..))
 import qualified Language.Drasil.Document as L
 import Language.Drasil.Unicode (RenderGreek(..), RenderSpecial(..))
-import Language.Drasil.People (People,rendPersLFM,lstName)
+import Language.Drasil.People (People,rendPersLFM,lstName,Person(..),Conv(Mono))
 
 genTeX :: A.DocType -> L.Document -> TP.Doc
 genTeX typ doc = runPrint (build typ $ I.makeDocument doc) Text
@@ -570,6 +570,8 @@ showBibTeX (Series     s) = showField "series" s
 showBibTeX (Title      s) = showField "title" s
 showBibTeX (Volume     s) = showField "volume" (S $ show s)
 showBibTeX (Publisher  s) = showField "publisher" s
+showBibTeX (Author p@(Person {_convention=Mono}:_)) = showField "author" (S $ rendPeople p)
+  :+: S ",\n" :+: showField "sortkey" (S $ rendPeople p)
 showBibTeX (Author     p) = showField "author" (S $ rendPeople p)
 showBibTeX (Year       y) = showField "year" (S $ show y)
 showBibTeX (Date    d m y) = showField "year"    (S $ unwords [show d, show m, show y])

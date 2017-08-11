@@ -1,11 +1,14 @@
 module Language.Drasil.Misc where
 
 import Language.Drasil.Spec
+--import Language.Drasil.Expr
 import Language.Drasil.Chunk.Quantity
 import Language.Drasil.Unit
 import Language.Drasil.Chunk.NamedIdea (NamedIdea, getA, short, term)
 import Language.Drasil.Chunk.Unitary
 import qualified Language.Drasil.NounPhrase as NP
+
+--import Data.List (delete)
 
 import Control.Lens ((^.))
 
@@ -78,3 +81,31 @@ phrase's, plural's :: NamedIdea n => n -> Sentence
 phrase's a = phrase a :+: S "'s"
 -- | Plural possesive function
 plural's a = plural a :+: S "'"
+
+-- Function used to derive the unit of an equation
+-- inferUnit :: Relation -> Maybe UnitDefn
+-- inferUnit rel = eliminate [] $ findUnit rel ([], [])
+  -- where combine (num, den)
+
+-- findUnit :: Relation -> ([Maybe UnitDefn], [Maybe UnitDefn]) -> ([Maybe UnitDefn], [Maybe UnitDefn])
+-- findUnit (_ :+ a) ([], []) = analyze a True ([], [])
+-- findUnit (_ :- a) ([], []) = analyze a True ([], [])
+-- findUnit (a :* b) frac = findUnit a (analyze b True frac)
+-- findUnit (a :/ b) frac = findUnit a (analyze b False frac)
+-- findUnit (_ :+ _) frac = frac
+-- findUnit (_ :- _) frac = frac
+-- findUnit (_ := _) frac = frac
+
+-- analyze :: Expr -> Bool -> ([Maybe UnitDefn], [Maybe UnitDefn]) -> ([Maybe UnitDefn], [Maybe UnitDefn])
+-- analyze (Deriv _ (C a) (C b)) True (num, den) = ((getUnit a):num, (getUnit b):den)
+-- analyze (Deriv _ (C a) (C b)) False (num, den) = ((getUnit b):num, (getUnit a):den)
+-- analyze (C a) True (num, den) = ((getUnit a):num, den)
+-- analyze (C b) False (num, den) = (num, (getUnit b):den)
+-- analyze a True (num, den) = findUnit a (num, den)
+-- analyze a False (num, den) = findUnit a (den, num)
+
+-- eliminate :: [Maybe UnitDefn] -> ([Maybe UnitDefn], [Maybe UnitDefn]) -> ([Maybe UnitDefn], [Maybe UnitDefn])
+-- eliminate lst ([], den) = (lst, den)
+-- eliminate lst (frst:rst, den)
+  -- | delete frst den == den = eliminate (frst:lst) (rst, den)
+  -- | delete frst den /= den = eliminate lst (rst, delete frst den)

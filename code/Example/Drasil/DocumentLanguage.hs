@@ -20,6 +20,9 @@ import qualified Drasil.Sections.Introduction as Intro
 import qualified Drasil.Sections.SpecificSystemDescription as SSD
 import qualified Drasil.Sections.Stakeholders as Stk
 import qualified Drasil.Sections.AuxiliaryConstants as AC
+import qualified Drasil.Sections.ScopeOfTheProject as SotP
+import qualified Drasil.Sections.TraceabilityMandGs as TMG
+import qualified Drasil.Sections.GeneralSystDesc as GSD
 
 import Data.Drasil.Concepts.Documentation (refmat, tOfSymb, reference)
 
@@ -138,19 +141,21 @@ data StkhldrSub where
 
 {--}
 
-data GSDSec = GSDVerb Section
+data GSDSec = GSDVerb Section | GSDProg [Section] Contents [Contents] [Section]
 
 -- | Helper for making the 'General System Description' section
 mkGSDSec :: GSDSec -> Section
 mkGSDSec (GSDVerb s) = s
+mkGSDSec (GSDProg a b c d) = GSD.genSysF a b c d
 
 {--}
 
-data ScpOfProjSec = ScpOfProjVerb Section
+data ScpOfProjSec = ScpOfProjVerb Section | ScpOfProjProg Sentence Contents Contents
 
 -- | Helper for making the 'Scope of the Project' section
 mkScpOfProjSec :: ScpOfProjSec -> Section
 mkScpOfProjSec (ScpOfProjVerb s) = s
+mkScpOfProjSec (ScpOfProjProg a b c) = SotP.scopeOfTheProjF a b c
 
 {--}
 
@@ -195,19 +200,21 @@ mkReqrmntSec (ReqsVerb s) = s
 
 {--}
 
-data LCsSec = LCsVerb Section
+data LCsSec = LCsVerb Section | LCsProg [Contents]
 
 -- | Helper for making the 'LikelyChanges' section
 mkLCsSec :: LCsSec -> Section
 mkLCsSec (LCsVerb s) = s
+mkLCsSec (LCsProg c) = SRS.likeChg c []
 
 {--}
 
-data TraceabilitySec = TraceabilityVerb Section
+data TraceabilitySec = TraceabilityVerb Section | TraceabilityProg [Contents] [Sentence] [Contents] [Section]
 
 -- | Helper for making the 'Traceability Matrices and Graphs' section
 mkTraceabilitySec :: TraceabilitySec -> Section
 mkTraceabilitySec (TraceabilityVerb s) = s
+mkTraceabilitySec (TraceabilityProg a b c d) = TMG.traceMGF a b c d
 
 {--}
 

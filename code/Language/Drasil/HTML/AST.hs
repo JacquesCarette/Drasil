@@ -215,10 +215,10 @@ instance Show Thesis where
   show PhD = "PhD thesis"
 
 instance Show Citation where
-  show (Book      _) = "Print"
-  show (Article   _) = "Print"
-  show (MThesis   _) = "Print"
-  show (PhDThesis _) = "Print"
+  show (Book      _) = "Print."
+  show (Article   _) = "Print."
+  show (MThesis   _) = "Print."
+  show (PhDThesis _) = "Print."
   show (Misc      _) = ""
   show (Online    _) = ""
 
@@ -277,6 +277,8 @@ instance Ord CiteField where --FIXME: APA has year come directly after Author
   compare _ (Issue      _) = GT
   compare (Date   _ _ _) _ = LT
   compare _ (Date   _ _ _) = GT
+  compare (Year       _) _ = LT
+  compare _ (Year       _) = GT
   compare (URL       _) _  = LT
   compare _ (URL       _)  = GT
   compare (Page       _) _ = LT
@@ -287,5 +289,3 @@ instance Ord CiteField where --FIXME: APA has year come directly after Author
   compare _ (URLdate _ _ _) = GT
   compare (Note       _) _ = LT
   compare _ (Note       _) = GT
-  compare (Year       _) _ = LT
-  compare _ (Year       _) = GT

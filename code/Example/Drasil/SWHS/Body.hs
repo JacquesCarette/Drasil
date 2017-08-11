@@ -9,7 +9,7 @@ import Language.Drasil (CI, ConceptChunk, UnitalChunk, UncertQ,
   _constraints, _constants, _defSequence, _inputs, _outputs, _units,
   _definitions, _concepts, _namedIdeas, _quants, _authors, _kind, _sys,
   sC, titleize, titleize', plural, short, makeRef, phrase,
-  sParen, sSqBr, defn, nw, at_start, (+:+), (+:+.), (+:),
+  sParen, defn, nw, at_start, (+:+), (+:+.), (+:),
   unit'2Contents, qs, mkTable, for, for'', manyNames,
   lang, impType, logFile, logging, comments, onSfwrConstraint,
   onPhysConstraint, inputStructure, codeSpec', addModDefs,
@@ -68,21 +68,17 @@ import Drasil.SWHS.Unitals (pcm_SA, temp_W, temp_PCM, pcm_HTC, pcm_E,
 import Drasil.SWHS.Concepts (progName, sWHT, water, rightSide, phsChgMtrl,
   coil, perfect_insul, tank, transient, gauss_div, swhs_pcm,
   phase_change_material, tank_pcm, swhsFull)
-import Drasil.SWHS.TMods (tModels, t1ConsThermE, s4_2_2_T1, s4_2_2_T2,
-  s4_2_2_T3)
-import Drasil.SWHS.IMods (swhsInModels)
+import Drasil.SWHS.TMods (tModels, t1ConsThermE, s4_2_2_swhsTMods)
+import Drasil.SWHS.IMods (s4_2_5_IMods)
 import Drasil.SWHS.DataDefs (swhsSymbMapDRef, swhsSymbMapTRef, swhsDataDefs,
-  swhsSymMap, dd1HtFluxC, dd2HtFluxP, swhsSymbMapT, s4_2_4_DD1, s4_2_4_DD2,
-  s4_2_4_DD3, s4_2_4_DD4)
+  swhsSymMap, dd1HtFluxC, dd2HtFluxP, swhsSymbMapT, s4_2_4_swhsDataDefs)
 import Drasil.SWHS.GenDefs (swhsGenDefs)
 import Drasil.SWHS.Modules (modules)
 import Drasil.SWHS.Changes (likelyChanges, unlikelyChanges)
 import Drasil.SWHS.Reqs (reqs)
 import Drasil.SWHS.References (s9_swhs_citations)
-import Drasil.SWHS.Assumptions (assump1, assump2, assump3, assump4,
-  assump5, assump6, assump7, assump8, assump9, assump10, assump11,
-  assump12, assump13, assump14, assump15, assump16, assump17,
-  assump18, assump19, assump20)
+import Drasil.SWHS.Assumptions (s4_2_1_list, assump3, assump4, assump5,
+  assump6, assump13, assump15, assump16, assump17, assump18)
 import Drasil.SWHS.Requirements (req1, req2, s5_1_2_Eqn1, s5_1_2_Eqn2,
   req3, req4, req5, req6, req7, req8, req9, req10, req11, s5_2)
 import Drasil.SWHS.LikelyChanges (likeChg1, likeChg2, likeChg3, likeChg4,
@@ -91,7 +87,7 @@ import Drasil.SWHS.DataDesc (swhsInputMod)
 
 import qualified Drasil.SRS as SRS (inModel, missingP, likeChg,
   funcReq, propCorSol, genDefn, dataDefn, thModel, probDesc, goalStmt,
-  sysCont)
+  sysCont, reference)
 
 import Drasil.Template.MG (mgDoc)
 import Drasil.Template.DD (makeDD)
@@ -371,9 +367,8 @@ s4_2 :: Section
 s4_2 = solChSpecF progName (s4_1, s6) s4_2_4_intro_end
   (s4_2_6_mid, dataConstraintUncertainty, s4_2_6_T1footer quantity surArea
   vol htTransCoeff_min phsChgMtrl) (s4_2_1_list, 
-  s4_2_2_T1 ++ s4_2_2_T2 ++ s4_2_2_T3, s4_2_3_genDefs ++ s4_2_3_deriv,
-  s4_2_4_DD1 ++ s4_2_4_DD2 ++ s4_2_4_DD3 ++ s4_2_4_DD4, (s4_2_5_IMods),
-  s4_2_6_DataConTables) [s4_2_7]
+  s4_2_2_swhsTMods, s4_2_3_genDefs ++ s4_2_3_deriv,
+  s4_2_4_swhsDataDefs, s4_2_5_IModsWithDerivs, s4_2_6_DataConTables) [s4_2_7]
 
 -------------------------
 -- 4.2.1 : Assumptions --
@@ -385,14 +380,6 @@ s4_2_1 = assumpF
   (SRS.genDefn SRS.missingP [])
   (SRS.dataDefn SRS.missingP [])
   s4_2_5 s6 s4_2_1_list
-
-s4_2_1_list :: [Contents]
-s4_2_1_list = acroNumGen s4_2_1_assump_list 1
-
-s4_2_1_assump_list :: [Contents]
-s4_2_1_assump_list = [assump1, assump2, assump3, assump4, assump5, assump6,
-  assump7, assump8, assump9, assump10, assump11, assump12, assump13, assump14,
-  assump15, assump16, assump17, assump18, assump19, assump20]
 
 -- Again, list structure is same between all examples.
 
@@ -442,11 +429,11 @@ s4_2_5 = inModelF s4_1
   (SRS.dataDefn SRS.missingP [])
   (SRS.thModel SRS.missingP [])
   (SRS.genDefn SRS.missingP [])
-  s4_2_5_IMods
+  s4_2_5_IModsWithDerivs
 
-s4_2_5_IMods :: [Contents]
-s4_2_5_IMods = concat $ weave [s4_2_5_derivations,
-  map (\x -> [swhsSymbMapT x]) swhsInModels]
+s4_2_5_IModsWithDerivs :: [Contents]
+s4_2_5_IModsWithDerivs = concat $ weave [s4_2_5_derivations,
+  map (\x -> [swhsSymbMapT x]) s4_2_5_IMods]
 
 s4_2_5_derivations :: [[Contents]]
 s4_2_5_derivations = [s4_2_5_subpar solution temp_W temp_PCM pcm_E 
@@ -607,7 +594,7 @@ s7_dataRef, s7_funcReqRef, s7_instaModelRef, s7_assumpRef, s7_theoriesRef,
   s7_dataDefRef, s7_likelyChgRef, s7_genDefRef :: [Sentence]
 
 s7_instaModel = ["IM1", "IM2", "IM3", "IM4"]
-s7_instaModelRef = map (refFromType Theory swhsSymMap) swhsInModels
+s7_instaModelRef = map (refFromType Theory swhsSymMap) s4_2_5_IMods
 
 s7_funcReq = ["R1", "R2", "R3", "R4", "R5", "R6", "R7", "R8", "R9", "R10",
   "R11"]
@@ -880,8 +867,8 @@ s2_3_understanding diffeq = foldlSent_ [(plural diffeq) `sC`
 s2_4_intro :: Sentence
 s2_4_intro = foldlSent [S "The", phrase organization, S "of this",
   phrase document, S "follows the template for an", short srs,
-  S "for", phrase sciCompS, S "proposed by [citation]" `sAnd`
-  sSqBr (S "citation")]
+  S "for", phrase sciCompS, S "proposed by", (sSqBrNum 3) `sAnd`
+  (sSqBrNum 6), sParen (makeRef (SRS.reference SRS.missingP []))]
 
 s2_4_trail :: ConceptChunk -> CI -> Sentence
 s2_4_trail sp pro = foldlSent_ [S "The", plural inModel,

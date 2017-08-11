@@ -25,8 +25,6 @@ import Data.Drasil.Concepts.PhysicalProperties (dimension, materialProprty)
 import Drasil.Template.MG
 import Drasil.Template.DD
 
---import Drasil.DocumentLanguage.Definitions
-
 import qualified Drasil.SRS as SRS
 import           Drasil.Sections.ReferenceMaterial
 import           Drasil.DocumentLanguage
@@ -44,9 +42,7 @@ import Drasil.GlassBR.Interpolation
 import Drasil.GlassBR.DataDescriptions --FIXME: Redundant import, but doesn't build DataDescriptions.hs file otherwise...
 
 import Drasil.Sections.TraceabilityMandGs
-import Drasil.Sections.ScopeOfTheProject
 import Drasil.Sections.Requirements
-import Drasil.Sections.GeneralSystDesc
 import Drasil.Sections.SpecificSystemDescription
 
 this_si :: [UnitDefn]
@@ -78,9 +74,10 @@ mkSRS = [RefSec (RefProg intro
   (S "Entuitive. It is developed by Dr. Manuel Campidelli"))] 
   --FIXME: Turn "People -> Sentence"? (so knowledge can be easily pulled out...)
   ++
-  [GSDSec (GSDVerb s4)]
+  [GSDSec (GSDProg [] (s4_1_bullets (endUser) (gLassBR) (secondYear) (undergradDegree)
+  (civilEng) (structuralEng) (glBreakage) (blastRisk)) [] [])]
   ++
-  [ScpOfProjSec (ScpOfProjVerb s5)]
+  [ScpOfProjSec (ScpOfProjProg (short gLassBR) (s5_1_table) (s5_2 (glaSlab) (capacity) (demandq) (probability)))]
   ++
   [SSDSec (SSDVerb s6)]
   ++
@@ -92,9 +89,13 @@ mkSRS = [RefSec (RefProg intro
   -- ++
   [ReqrmntSec (ReqsVerb s7)]
   ++
-  [LCsSec (LCsVerb s8)]
+  [LCsSec (LCsProg s8_list)]
   ++
-  [TraceabilitySec (TraceabilityVerb s9)]
+  [TraceabilitySec 
+  (TraceabilityProg (traceyMatrices) 
+    ([s9_table1Desc, s9_table2Desc, s9_table3Desc])
+    (traceyMatrices ++ (s9_intro2) ++ traceyGraphs)
+    ([]))]
   ++ 
   [AuxConstntSec (AuxConsProg gLassBR auxiliaryConstants)]
   ++ 
@@ -133,7 +134,8 @@ glassChoices = Choices {
 }  
   
 glassBR_code :: CodeSpec
-glassBR_code = addModDefs (codeSpec' glassSystInfo glassChoices) [interpMod, inputMod]
+glassBR_code = addModDefs (codeSpec' glassSystInfo glassChoices)
+  [interpMod, inputMod]
 
 mgBod :: [Section]
 (mgBod, _) = makeDD likelyChanges unlikelyChanges reqs modules
@@ -141,9 +143,7 @@ mgBod :: [Section]
 glassBR_mg :: Document
 glassBR_mg = mgDoc glassBRProg (for'' titleize phrase) mg_authors mgBod
 
-s4, s5,
-  s6, s6_1, s6_1_1, s6_1_2, s6_1_3, s6_2, 
-  s7, s7_1, s7_2, s8, s9{-, s12-} :: Section
+s6, s6_1, s6_1_1, s6_1_2, s6_1_3, s6_2, s7, s7_1, s7_2 :: Section
 
 s5_1_table,
   s6_1_2_list, s6_2_intro, s6_2_5_table1, 
@@ -165,7 +165,7 @@ s6_1_1_bullets = Enumeration $ (Number $
   ++
   map tAndDWAcc termsWithAccDefn
   ++
-  [tAndDWSym (probBreak) (prob_br)]) --FIXME: merge? Needs 2 because there is no instance for (SymbolForm ConceptChunk)...
+  [tAndDWSym (probBreak) (prob_br)]) --FIXME: merge? Needs 2 arguments because there is no instance for (SymbolForm ConceptChunk)...
 
 s6_1_1_bullets_glTySubSec, s6_1_1_bullets_loadSubSec :: [ItemType]
 
@@ -265,12 +265,12 @@ s2_1_intro_p1 typeOf progName gvnVar = foldlSent [S "The main", phrase purpose,
 s2_3_intro = foldlSent [S "The", phrase organization, S "of this",
   phrase document, S "follows the", phrase template, S "for an", short srs,
   S "for", phrase sciCompS, S "proposed by" +:+ (sSqBrNum 1) 
-  `sAnd` (sSqBrNum 2), sParen (S "in" +:+ (makeRef (SRS.reference SRS.missingP []))) `sC`
-  S "with some aspects taken from Volere", phrase template, S "16",
-  (sSqBrNum 3)]
+  `sAnd` (sSqBrNum 2), sParen (S "in" +:+ (makeRef (SRS.reference SRS.missingP [])))
+  `sC` S "with some", plural aspect, S "taken from Volere", phrase template,
+  S "16", (sSqBrNum 3)]
   
 s2_3_intro_end = foldl (+:+) EmptyS [(at_start' $ the dataDefn), 
-  S "are used to support", (plural definition `ofThe` S "different"), 
+  S "are used to support", (plural definition `ofThe` S "different"),
   plural model]
 
 {--STAKEHOLDERS--}
@@ -279,9 +279,6 @@ s2_3_intro_end = foldl (+:+) EmptyS [(at_start' $ the dataDefn),
 {--The Customer--}
 
 {--GENERAL SYSTEM DESCRIPTION--}
-
-s4 = genSysF [] (s4_1_bullets (endUser) (gLassBR) (secondYear) (undergradDegree)
-  (civilEng) (structuralEng) (glBreakage) (blastRisk)) [] []
 
 {--User Characteristics--}
 s4_1_bullets :: (NamedIdea n1, NamedIdea n, NamedIdea n2, NamedIdea n3, 
@@ -301,9 +298,6 @@ s4_1_bullets intendedIndvdl progName yr degreeType prog1 prog2 undrstd1 undrstd2
 {--System Constraints--}
 
 {--SCOPE OF THE PROJECT-}
-
---Awaiting Closure of Issue #257
-s5 = scopeOfTheProjF (short gLassBR) (s5_1_table) (s5_2 (glaSlab) (capacity) (demandq) (probability))
 
 {--Product Use Case Table--}
 
@@ -325,12 +319,13 @@ s5_2 :: NamedChunk -> ConceptChunk -> ConceptChunk -> ConceptChunk ->
   Contents
 s5_2 mainObj compare1 compare2 factorOfComparison = 
   foldlSP [S "The", phrase user, S "provides the", plural input_, S "to", 
-  short gLassBR, S "for use within the" +:+. phrase analysis, S "There are two main",
-  plural class_, S "of" +: plural input_ +:+. (phrase glassGeo `sAnd` phrase blastTy),
-  S "The", phrase glassGeo, S "based", plural input_, S "include" +:+. (phrase glassTy
-  `sAnd` plural dimension `ofThe` phrase glaPlane), blastTy ^. defn, S "These", 
-  plural parameter, S "describe" +:+. (phrase char_weight `sAnd` S "stand off blast"),
-  S "Another", phrase input_, S "the", phrase user, S "gives is the tolerable" +:+. 
+  short gLassBR, S "for use within the" +:+. phrase analysis, 
+  S "There are two main", plural class_, S "of" +: plural input_ +:+. 
+  (phrase glassGeo `sAnd` phrase blastTy), S "The", phrase glassGeo, S "based", 
+  plural input_, S "include" +:+. (phrase glassTy `sAnd` plural dimension `ofThe`
+  phrase glaPlane), blastTy ^. defn, S "These", plural parameter, S "describe" 
+  +:+. (phrase char_weight `sAnd` S "stand off blast"), S "Another",
+  phrase input_, S "the", phrase user, S "gives is the tolerable" +:+. 
   (phrase value `sOf` phrase prob_br)
   +:+
   short gLassBR, plural output_, S "if the", phrase mainObj,
@@ -408,9 +403,8 @@ s6_1_3_list_goalStmt1 = [foldlSent [S "Analyze" `sAnd` S "predict whether",
   S "which is calculated based on", phrase userInput]]
 
 {--SOLUTION CHARACTERISTICS SPECIFICATION--}
-s6_2_5_intro2 :: Sentence
 
-s6_2 = solChSpecF gLassBR (s6_1, s8) (EmptyS) 
+s6_2 = solChSpecF gLassBR (s6_1, (SRS.likeChg SRS.missingP [])) (EmptyS) 
  (EmptyS, dataConstraintUncertainty, end)
  (s6_2_1_list, s6_2_2_TMods, [], s6_2_4_DDefns, s6_2_3_IMods,
   [s6_2_5_table1, s6_2_5_table2]) []
@@ -520,6 +514,7 @@ s6_2_4_DDefns = map gbSymbMapD dataDefns
 s6_2_5_table1 = inDataConstTbl (gbInputDataConstraints)
 s6_2_5_table2 = outDataConstTbl [prob_br]
 
+s6_2_5_intro2 :: Sentence
 s6_2_5_intro2 = foldlSent [(makeRef s6_2_5_table2), S "shows the", 
   plural constraint, S "that must be satisfied by the", phrase output_]
 
@@ -635,8 +630,6 @@ s7_2_intro = foldlSP [
 
 {--LIKELY CHANGES--}
 
-s8 = SRS.likeChg s8_list []
-
 s8_list :: [Contents]
 s8_list = acroNumGen likelyChanges_SRS 1
 
@@ -681,11 +674,6 @@ lc5Desc = foldlSent [acroA 7 `sDash` S "The", phrase software,
 
 {--TRACEABLITY MATRICES AND GRAPHS--}
 
-s9 = traceMGF traceyMatrices
-  [s9_table1Desc, s9_table2Desc, s9_table3Desc]
-  (traceyMatrices ++ (s9_intro2) ++ traceyGraphs)
-  []
-
 s9_table1Desc :: Sentence
 s9_table1Desc = foldlList (map plural (take 3 solChSpecSubsections)) +:+. 
   S "with each other"
@@ -724,7 +712,7 @@ s9_assump = ["A1", "A2", "A3", "A4", "A5", "A6", "A7", "A8"]
 s9_assumpRef = makeListRef s9_assump (SRS.assump SRS.missingP [])
 
 s9_likelyChg = ["LC1", "LC2", "LC3", "LC4", "LC5"]
-s9_likelyChgRef = makeListRef s9_likelyChg s8
+s9_likelyChgRef = makeListRef s9_likelyChg (SRS.likeChg SRS.missingP [])
 
 s9_row_t1 :: [String]
 s9_row_t1 = s9_theorys ++ s9_instaModel ++ s9_dataDef
@@ -875,8 +863,6 @@ fig_4 = figureLabel 4 (traceyMatrix)
 {--REFERENCES--}
 
 {--APPENDIX--}
-
---s12 = SRS.appendix [s12_intro, fig_5, fig_6] []
 
 s12_intro = foldlSP [
   S "This", phrase appendix, S "holds the", plural graph, 

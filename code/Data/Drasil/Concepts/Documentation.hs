@@ -70,24 +70,26 @@ srs = commonIdea "srs"
 
 -- concepts relating to the templates and their contents
 
-analysis, appendix, body, characteristic, class_, client, code, column, company, 
-  component, concept, condition, connection, constant, constraint, consumer, content,
-  context, coordinate, customer, datum, decision, definition, dependency, description,
-  design, document, documentation, effect, element, emphasis, endUser, environment,
-  failure, figure, first, functional, game, general, goal, guide, implementation,
-  individual, information, interest, interface, input_, instance_, intReader,
-  introduction, issue, item, loss, label, library, limitation, literacy, material_,
-  message, method_, module_, model, name_, nonfunctional, object, offShelf, open,
-  organization, output_, physics, physical, plan, practice, priority, problem, 
-  product_, project, property, purpose, quantity, realtime, reference, requirement_,
-  response, result, reviewer, safety, scope, second_, section_, scenario, source,
-  simulation, software, solution, specific, specification, stakeholder, standard, 
-  statement, symbol_, system, table_, task, template, term_, terminology, theory,
-  traceyGraph, traceyMatrix, type_, uncertainty, user, useCase, validation, value,
-  variable, video, verification, year :: NamedChunk
+analysis, appendix, aspect, body, characteristic, class_, client, code, column,
+  company, component, concept, condition, connection, constant, constraint, 
+  consumer, content, context, coordinate, customer, datum, decision, definition,
+  dependency, description, design, document, documentation, effect, element,
+  emphasis, endUser, environment, failure, figure, first, functional, game,
+  general, goal, guide, implementation, individual, information, interest, 
+  interface, input_, instance_, intReader, introduction, issue, item, loss,
+  label, library, limitation, literacy, material_, message, method_, module_,
+  model, name_, nonfunctional, object, offShelf, open, organization, output_,
+  physics, physical, plan, practice, priority, problem, product_, project,
+  property, purpose, quantity, realtime, reference, requirement_, response, 
+  result, reviewer, safety, scope, second_, section_, scenario, source,
+  simulation, software, solution, specific, specification, stakeholder,
+  standard, statement, symbol_, system, table_, task, template, term_,
+  terminology, theory, traceyGraph, traceyMatrix, type_, uncertainty, user,
+  useCase, validation, value, variable, video, verification, year :: NamedChunk
 
 analysis        = npnc "analysis"       (cnIS   "analysis"           )
 appendix        = npnc "appendix"       (cnICES "appendix"           )
+aspect          = npnc "aspect"         (cn'    "aspect"             )
 body            = npnc "body"           (cnIES  "body"               )
 characteristic  = npnc "characteristic" (cn'    "characteristic"     )
 class_          = npnc "class"          (cn'''  "class"              )

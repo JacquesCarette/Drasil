@@ -1,4 +1,6 @@
-module Drasil.SWHS.IMods where
+  module Drasil.SWHS.IMods where
+
+import Prelude hiding (id)
 
 import Language.Drasil (Relation, RelationConcept,
   makeRef, sParen, phrase, sC, short, (+:+.), getUnit, (+:+), nounPhraseSP,
@@ -9,8 +11,10 @@ import Language.Drasil (Relation, RelationConcept,
 import Drasil.DocumentLanguage (mkAssump)
 import Data.Drasil.Concepts.Documentation (acroT, acroDD)
 
-import Prelude hiding (id)
-import Drasil.SWHS.Unitals
+import Drasil.SWHS.Unitals (t_init_melt, latentE_P, pcm_E, pcm_initMltE,
+  temp_melt_P, temp_PCM, htCap_L_P, pcm_mass, htFusion, temp_init, htCap_S_P,
+  melt_frac, temp_W, w_mass, w_E, htCap_W, tau_S_P, pcm_SA, tau_L_P, pcm_HTC,
+  coil_SA, coil_HTC, eta, tau_W, temp_C)
 import Data.Drasil.Utils (getS, unwrap)
 import Data.Drasil.SentenceStructures (foldlSent, isThe, sAnd, ofThe)
 import Data.Drasil.Quantities.Physics (time, energy)
@@ -20,8 +24,8 @@ import Data.Drasil.Concepts.PhysicalProperties (solid, liquid, mass)
 import Data.Drasil.Concepts.Thermodynamics (boiling, heat, temp, melting,
   latent_heat, sens_heat, heat_cap_spec, thermal_energy, boil_pt)
 
-swhsInModels :: [RelationConcept]
-swhsInModels = [eBalanceOnWtr, eBalanceOnPCM, heatEInWtr, heatEInPCM]
+s4_2_5_IMods :: [RelationConcept]
+s4_2_5_IMods = [eBalanceOnWtr, eBalanceOnPCM, heatEInWtr, heatEInPCM]
 
 ---------
 -- IM1 --

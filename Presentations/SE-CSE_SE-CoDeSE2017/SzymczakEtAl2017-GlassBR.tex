@@ -169,10 +169,7 @@ Often considered too high a cost in terms of time and effort for SCS developers,
 particularly when dealing with rapid changes in development, improved 
 documentation is an important aspect of improving overall software quality and 
 simplifying the certification process. Carver~\cite{CarverEtAl2007} observed 
-that scientists do not view rigid, process-heavy approaches, favourably. SCS 
-developers tend to dislike producing documentation and often consider reports 
-for each stage of software development as 
-counterproductive~\cite[p.~373]{Roache1998}.
+that scientists do not view rigid, process-heavy approaches, favourably. 
 
 Previous work by Smith \& Koothoor~\citep{SmithAndKoothoor2016} found 27 errors 
 in an existing software project when creating new documentation. Any of these errors could have led to a failure in the certification process, had they been attempting to certify the software.
@@ -188,17 +185,27 @@ Developers are being made aware of the advantages of documentation~\cite{SmithJe
 		development~\citep{Roache1998}
 \end{itemize}
 
+There are also other issues with document-rich certifiable software development. Namely the vast amount of knowledge duplication across software artifacts. Consider a simple piece of software with the following artifacts:
 
+\begin{itemize}
+\item Software Requirements Specification (SRS)
+\item Design Document
+\item Source Code
+\item Tests
+\end{itemize}
+Knowledge, such as the functional requirements, from the SRS is duplicated in both the source code and tests. That same knowledge appears in the design document as well, albeit in a transformed state. 
 
-\subsection*{The Solution?}
+Now consider that software certification often requires a great many more artifacts than simply the four listed above. Much of the same knowledge will appear across all of the artifacts and will need to be maintained should anything change. Manually maintaining these artifacts is a lesson in tedium and the time spent, if it were easier to deal with duplication automatically, could be better used elsewhere.
 
-How can we enjoy the benefits of documentation, without the usually associated
-drudgery?  Our proposed solution is \textit{Drasil} -- a framework that utilizes
+With that in mind, how can we enjoy the benefits of documentation, without the usually
+associated drudgery? Our proposed solution is \textit{Drasil} -- a framework that utilizes
 a knowledge-based approach to software development, as originally proposed in a
 position paper by Szymcak et al~\cite{SzymczakEtAl2016}. The goal of the
 approach is to capture scientific and documentation knowledge in a reusable way,
-then generate the source code and all of the other software artifacts
-(documentation, build files, tests, etc).
+then use that knowledge to generate the source code and all of the other software
+artifacts (documentation, build files, tests, etc).
+
+Several case studies have been reimplemented in Drasil over the course of the framework's development. In this paper we will focus on GlassBR, a piece of scientific software used in civil engineering for computing whether glass panes can safely withstand the force of explosions.
 
 Work on Drasil has continued steadily since the original position paper, as
 described below. We begin with a brief overview of the design of the Drasil

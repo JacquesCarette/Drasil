@@ -10,12 +10,13 @@ library
     Language.Drasil,
     Language.Drasil.Code,
     Data.Drasil.Authors
-    Data.Drasil.SI_Units
-    Data.Drasil.Plurals
-    Data.Drasil.Utils
-    Data.Drasil.SentenceStructures
-    Data.Drasil.Modules
     Data.Drasil.Changes
+    Data.Drasil.Citations
+    Data.Drasil.Modules
+    Data.Drasil.Plurals
+    Data.Drasil.SentenceStructures
+    Data.Drasil.SI_Units
+    Data.Drasil.Utils
     Data.Drasil.Concepts.Computation
     Data.Drasil.Concepts.Documentation
     Data.Drasil.Concepts.Thermodynamics

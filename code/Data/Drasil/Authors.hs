@@ -1,10 +1,12 @@
 module Data.Drasil.Authors where
 
-import Language.Drasil (Person, person)
+import Language.Drasil (Person, person, personWM)
 
-spencerSmith, henryFrankis :: Person
-spencerSmith = person "Spencer" "Smith"
+spencerSmith, henryFrankis, nKoothoor, dParnas :: Person
+spencerSmith = personWM "W" ["Spencer"] "Smith"
 henryFrankis = person "Henry"   "Frankis"
+nKoothoor    = person "Nirmitha" "Koothoor"
+dParnas      = personWM "David" ["L"] "Parnas"
 
 -- short versions for now
 luthfi, alex, nikitha, thulasi, brooks :: Person

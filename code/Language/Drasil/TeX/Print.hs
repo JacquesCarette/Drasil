@@ -120,7 +120,7 @@ p_expr (Bln b)    = show b
 p_expr (Add x y)  = p_expr x ++ "+" ++ p_expr y
 p_expr (Sub x y)  = p_expr x ++ "-" ++ p_expr y
 p_expr (Mul x y)  = mul x y
-p_expr (Frac n d) = "\\frac{" ++ (p_expr n) ++ "}{" ++ (p_expr d) ++"}"
+p_expr (Frac n d) = "\\frac{" ++ needMultlined n ++ "}{" ++ needMultlined d ++"}"
 p_expr (Div n d)  = divide n d
 p_expr (Pow x y)  = pow x y
 p_expr (Sym s)    = symbol s
@@ -147,6 +147,14 @@ p_expr (Iff a b)  = p_expr a ++ "\\iff{}" ++ p_expr b
 p_expr (IsIn  a b) = (concat $ intersperse "," $ map p_expr a) ++ "\\in{}"  ++ show b
 p_expr (NotIn a b) = (concat $ intersperse "," $ map p_expr a) ++ "\\notin{}" ++ show b
 p_expr (State a b) = (concat $ intersperse ", " $ map p_quan a) ++ ": " ++ p_expr b
+
+-- | For seeing if long numerators or denominators need to be on multiple lines
+needMultlined :: Expr -> String
+needMultlined x = p_expr x --FIXME: unfinished. Need a way to split the String allong a "+" or "-"
+  -- | lngth > 55 = multl $ splitAt (lngth `div` 2) (p_expr x)
+  -- | otherwise  = p_expr x
+  -- where lngth = specLength $ E x
+        -- multl (f,s) = "\\begin{multlined}\n" ++ f ++ "\n\\\\\n" ++ s ++ "\\end{multlined}\n"
 
 -- | For printing indexes
 p_indx :: Expr -> Expr -> String
@@ -193,6 +201,7 @@ mul x@(Sym (Atomic s)) y = if length s > 1 then p_expr x ++ "\\cdot{}" ++ mulPar
                             p_expr x ++ mulParen y
 mul x y@(Sym (Atomic s)) = if length s > 1 then mulParen x ++ "\\cdot{}" ++ p_expr y else
                             mulParen x ++ p_expr y
+mul x@(Div _ _) y = paren (p_expr x) ++ mulParen y
 mul x y           = mulParen x ++ mulParen y
 
 mulParen :: Expr -> String
@@ -203,8 +212,8 @@ mulParen a = p_expr a
 divide :: Expr -> Expr -> String
 divide n d@(Add _ _) = p_expr n ++ "/" ++ paren (p_expr d)
 divide n d@(Sub _ _) = p_expr n ++ "/" ++ paren (p_expr d)
-divide n@(Add _ _) d = p_expr n ++ "/" ++ paren (p_expr d)
-divide n@(Sub _ _) d = p_expr n ++ "/" ++ paren (p_expr d)
+divide n@(Add _ _) d = paren (p_expr n) ++ "/" ++ p_expr d
+divide n@(Sub _ _) d = paren (p_expr n) ++ "/" ++ p_expr d
 divide n d = p_expr n ++ "/" ++ p_expr d
 
 neg :: Expr -> String

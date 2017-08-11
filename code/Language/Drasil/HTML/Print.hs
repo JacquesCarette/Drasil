@@ -239,12 +239,12 @@ divide n d = p_expr n ++ "/" ++ p_expr d
 
 -- | Helper for properly rendering negation of expressions
 neg :: Expr -> String
-neg a@(Var _) = "-" ++ p_expr a
-neg a@(Dbl _) = "-" ++ p_expr a
-neg a@(Int _) = "-" ++ p_expr a
-neg a@(Sym _) = "-" ++ p_expr a
+neg a@(Var _) = "&minus" ++ p_expr a
+neg a@(Dbl _) = "&minus" ++ p_expr a
+neg a@(Int _) = "&minus" ++ p_expr a
+neg a@(Sym _) = "&minus" ++ p_expr a
 neg   (Neg n) = p_expr n
-neg a         = paren ("-" ++ p_expr a)
+neg a         = paren ("&minus" ++ p_expr a)
 
 -- | Helper for properly rendering exponents
 pow :: Expr -> Expr -> String

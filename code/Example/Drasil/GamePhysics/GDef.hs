@@ -7,8 +7,6 @@ import Data.Drasil.Utils (foldlSent)
 import Data.Drasil.Concepts.Physics (rigidBody)
 import Data.Drasil.Quantities.PhysicalProperties (mass)
 import Data.Drasil.Quantities.Physics
-import Prelude hiding (id)
-import Control.Lens ((^.))
 
 ----- General Models -----
 

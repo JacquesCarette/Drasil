@@ -8,7 +8,6 @@ import qualified Data.Drasil.Quantities.Physics as QP (acceleration,
   angularAccel, force, gravitationalAccel, momentOfInertia, angularVelocity, 
   time, impulseS)
 import Drasil.GamePhysics.Unitals
-import Prelude hiding (id)
 
 iModels :: [RelationConcept]
 iModels = [im1, im2, im3]

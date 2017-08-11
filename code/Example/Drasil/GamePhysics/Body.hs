@@ -3,7 +3,6 @@ module Drasil.GamePhysics.Body where
 import Drasil.Template.MG 
 import Drasil.Template.DD
 import Control.Lens ((^.))
-import Prelude hiding (id)
 import Language.Drasil
 import Data.Drasil.SI_Units
 

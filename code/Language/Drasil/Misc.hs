@@ -89,10 +89,10 @@ plural's a = plural a :+: S "'"
 -- Function used to derive the unit of an equation. Takes a Relation, sorts the
 -- respective values into lists of units found in the numerator and denominator,
 -- eliminates units found in both list and combines the remainder to create the
--- units of the equation.
+-- units of the equation. WORK IN PROGRESS
 
 -- inferUnit :: Relation -> SymbolMap -> Maybe UnitDefn
--- inferUnit rel () = combine $ eliminate symbtab ([], []) $ findUnit rel ([], [])
+-- inferUnit rel () = combine $ eliminate ([], []) $ convert symbtab $ findUnit rel ([], [])
   -- where combine (num, den) = 
           -- | 
           -- | otherwise = combine 
@@ -117,8 +117,17 @@ plural's a = plural a :+: S "'"
 -- analyze a True (num, den) = findUnit a (num, den)
 -- analyze a False (num, den) = findUnit a (den, num)
 
--- eliminate :: SymbolMap -> [Maybe UnitDefn] -> ([SF], [SF]) -> ([Maybe UnitDefn], [Maybe UnitDefn])
--- eliminate symbtab lst ([], den) = (lst, map (\x -> getUnitLup x symbtab) den)
--- eliminate symbtab lst (frst:rst, den)
-  -- | delete frst den == den = eliminate symbtab ((getUnitLup frst symbtab):lst) (rst, den)
-  -- | delete frst den /= den = eliminate symbtab lst (rst, delete frst den)
+-- convert :: SymbolMap -> ([SF], [SF]) -> ([Maybe UnitDefn], [Maybe UnitDefn])
+-- convert (num, den) = combine ((reorder (map (\x -> getUnitLup x symbtab) num)) ([], []), reorder (map (\x -> getUnitLup x symbtab) den) ([], []))
+-- where reorder [] lst = lst
+      -- reorder (frst:rst) lst = reorder rst (divide frst lst)
+      -- divide (UPow a int) x@(val1, val2) = error "Exponential not yet implemented"
+      -- divide (UDiv a b) lst = 
+      -- divide (UProd a b) x@(val1, val2) =
+      -- combine ((num1, den1), (num2, den2)) = (num1 ++ den2, den1 ++ num2)
+
+-- eliminate :: [Maybe UnitDefn] -> ([Maybe UnitDefn], [Maybe UnitDefn]) -> ([Maybe UnitDefn], [Maybe UnitDefn])
+-- eliminate lst ([], den) = (lst, den)
+-- eliminate lst (frst:rst, den)
+  -- | delete frst den == den = eliminate (frst:lst) (rst, den)
+  -- | delete frst den /= den = eliminate lst (rst, delete frst den)

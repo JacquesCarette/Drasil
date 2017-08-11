@@ -150,11 +150,25 @@ p_expr (State a b) = (concat $ intersperse ", " $ map p_quan a) ++ ": " ++ p_exp
 
 -- | For seeing if long numerators or denominators need to be on multiple lines
 needMultlined :: Expr -> String
-needMultlined x = p_expr x --FIXME: unfinished. Need a way to split the String allong a "+" or "-"
-  -- | lngth > 55 = multl $ splitAt (lngth `div` 2) (p_expr x)
-  -- | otherwise  = p_expr x
-  -- where lngth = specLength $ E x
-        -- multl (f,s) = "\\begin{multlined}\n" ++ f ++ "\n\\\\\n" ++ s ++ "\\end{multlined}\n"
+needMultlined x
+  | lngth > 70 = multl $ mklines $ map p_expr $ groupEx $ splitTerms x
+  | otherwise  = p_expr x
+  where lngth     = specLength $ E x
+        multl str = "\\begin{multlined}\n" ++ str ++ "\\end{multlined}\n"
+        mklines   = unlines . intersperse "\\\\+"
+        foldterms = foldl1 Add
+        --FIXME: make multiple splits if needed; don't always split in 2
+        groupEx lst = extrac $ splitAt (length lst `div` 2) lst
+        extrac ([],[]) = []
+        extrac ([],l)  = [foldterms l]
+        extrac (f,[])  = extrac ([],f)
+        extrac (f,l)   = [foldterms f, foldterms l]
+
+splitTerms :: Expr -> [Expr]
+splitTerms (Neg e)   = map Neg $ splitTerms e
+splitTerms (Add a b) = splitTerms a ++ splitTerms b
+splitTerms (Sub a b) = splitTerms a ++ splitTerms (Neg b)
+splitTerms e = [e]
 
 -- | For printing indexes
 p_indx :: Expr -> Expr -> String

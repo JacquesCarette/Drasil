@@ -295,15 +295,16 @@ genOutputFormatD g outs =
 
 genMethodCallD :: Generator -> Scope -> Permanence -> MethodType -> Label -> [Parameter] 
                   -> Body -> Method
-genMethodCallD g s pr t n p b = let loggedBody = if (logging $ choices $ codeSpec g) == LogFunc || (logging $ choices $ codeSpec g) == LogAll
-                                                 then loggedMethod g n p b
-                                                 else b
-                                    commBody   = if (comments $ choices $ codeSpec g) == CommentFunc 
-                                                 then commMethod g n p loggedBody
-                                                 else loggedBody
-                                    theBody    = commBody
-  in  
-    Method n s pr t p theBody
+genMethodCallD g s pr t n p b = Method n s pr t p (commBody doComments (loggedBody doLog))
+  where
+    ch = choices $ codeSpec g
+    doLog = logging ch
+    doComments = comments ch
+    loggedBody LogFunc = loggedMethod g n p b
+    loggedBody LogAll  = loggedMethod g n p b
+    loggedBody _       = b
+    commBody CommentFunc = commMethod g n p
+    commBody _           = id
 
 
 commMethod :: Generator -> Label -> [Parameter] -> Body -> Body

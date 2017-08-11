@@ -2,7 +2,6 @@ module Drasil.GlassBR.Concepts where
 
 import Language.Drasil
 import Data.Drasil.Concepts.Documentation
-import Prelude hiding (id)
 
 --FIXME: Figure out why this wasn't used in body (until now with srsDoc)
 glassBRProg :: ConceptChunk
@@ -10,8 +9,6 @@ glassBRProg = dcc' "glassBRProg" (nounPhraseSP "GlassBR program")
   "The glass safety analysis program" "GlassBR" 
 
 {-Acronyms-}
--- FIXME: Use actual acronyms instead of CCs.
-
 acronyms :: [CI]
 acronyms = [assumption, annealedGlass, aR, dataDefn, fullyTGlass,
   goalStmt, glassTypeFac, heatSGlass, iGlass, inModel, likelyChg, 

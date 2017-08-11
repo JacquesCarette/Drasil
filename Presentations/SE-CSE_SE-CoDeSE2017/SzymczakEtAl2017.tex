@@ -25,10 +25,10 @@
 \newcommand{\todo}[1]{}
 \fi
 
-\newcommand{\ds}[1]{\authornt{red}{MSN}{#1}} %Dan
+\newcommand{\ds}[1]{\authornt{red}{DS}{#1}} %Dan
 \newcommand{\wss}[1]{\authornt{blue}{SS}{#1}} %Spencer
-\newcommand{\jc}[1]{\authornt{magenta}{MSN}{#1}} %Jacques
-\newcommand{\spr}[1]{\authornt{green}{AW}{#1}} %Steven
+\newcommand{\jc}[1]{\authornt{magenta}{JC}{#1}} %Jacques
+\newcommand{\spr}[1]{\authornt{green}{SP}{#1}} %Steven
 \newcommand{\jtol}{$J_{\mbox{tol}}$}
 \newcommand{\inlHask}[1]{\lstinline[language=Haskell, frame=single, showstringspaces=false]{#1}}
 % DOI
@@ -105,7 +105,20 @@
 % \renewcommand{\shortauthors}{B. Trovato et al.}
 
 \begin{abstract}
-abstract here
+
+\ds{FIX THIS -- DO NOT SUBMIT}
+
+Give me an A! A! Give me a B! B! Give me a STRACT! STRACT! What's that spell? 
+Who cares? I'm just filling in a bit of space to make this look more like a 
+real abstract, but I don't want to use lorem ipsum for some reason. Also, I 
+just realized this will end up in version control so someone could find it one 
+day, but meh, that's okay with me.
+
+I think this is long enough to constitute a "minimum" abstract length, although 
+I'm sure the real one will be far longer. It'll probably be more boring too. What a shame.
+
+\ds{FIX THIS -- DO NOT SUBMIT}
+
 \end{abstract}
 
 %
@@ -187,8 +200,9 @@ Well-maintained documentation provides numerous advantages including:
 \end{itemize}
 
 Previous work by Smith \& Koothoor~\citep{SmithAndKoothoor2016} found 27 errors 
-in an existing software project when creating new documentation. Developers have 
-become aware of these advantages of documentation~\cite{SmithJegatheesanAndKelly2016}.
+in an existing software project when creating new documentation. Developers have
+become aware of these advantages of 
+documentation~\cite{SmithJegatheesanAndKelly2016}.
 
 However, documenting software is typically felt to be:
 \begin{itemize}
@@ -196,12 +210,13 @@ However, documenting software is typically felt to be:
 \item Too difficult to maintain
 \item Not amenable to change
 \item Too tied to the waterfall process
-\item Counterproductive when reporting on each stage of development~\citep{Roache1998}
+\item Counterproductive when reporting on each stage of 
+		development~\citep{Roache1998}
 \end{itemize}
 
 \subsection*{The Solution?}
 
-\textit{Drasil} -- a framework, utilizing a knowledge-based approach to software 
+\textit{Drasil} -- a framework, utilizing a knowledge-based approach to software
 development, proposed in a position paper~\cite{SzymczakEtAl2016}. The goal of 
 the approach is to capture scientific and documentation knowledge in a reusable 
 way, then generate the source code and other software artifacts (documentation, 
@@ -324,7 +339,7 @@ highly reusable way.
 \section{A Practical Example (GlassBR)} \label{SecGlassBR}
 
 GlassBR is a piece of software used in Civil Engineering to predict whether or 
-not a slab of glass will be able to withstand a given blast without breaking. It 
+not a slab of glass will be able to withstand a given blast without breaking. It
 has two classes of input: glass geometry and blast type. Each of these input 
 classes has a number of fields (glass type, dimensions, TNT equivalent factor, 
 standoff distance, etc.) used as input to the simulation. Also, a tolerable 
@@ -355,7 +370,7 @@ distribution factor (\jtol{}) from GlassBR. Figure~\ref{Fig_Jtolpdf}
 shows the Drasil-generated TeX version of the data definition for 
 \jtol{}, however we can also generate the documents in HTML. This 
 figure is part of the requirements for the GlassBR software, and as such, we 
-will eventually need code (like that in Figure~\ref{Fig_JtolPython}) that can be 
+will eventually need code (like that in Figure~\ref{Fig_JtolPython}) that can be
 used to calculate \jtol{}. We can generate this code as well! Not only 
 that, but thanks to the incorporation of GOOL we can also generate Java, Lua, 
 etc. 
@@ -373,7 +388,7 @@ def calc_j_tol(inparams):
 \label{Fig_JtolPython}
 \end{figure*}
 
-The source knowledge for generating both the documentation and the code has been 
+The source knowledge for generating both the documentation and the code has been
 captured using chunks as shown in Figure~\ref{Fig_JtolDrasil}. The value of 
 \jtol{} is calculated from the expression {\inlHask{tolStrDisFac_eq}}, which is 
 part of the {\inlHask{tolStrDisFac}} chunk.
@@ -402,7 +417,7 @@ tolStrDisFac = mkDataDef sdf_tol tolStrDisFac_eq
 Notice there is actually an error in the code and documentation. We should not 
 be dividing by 1000 in a number of places. Luckily, with one quick change to 
 {\inlHask{tolStrDisFac_eq}} (shown in Figure~\ref{Fig_JtolDrasil_fix}), we have 
-corrected the error in our knowledge-base. Thus, after re-running the generator, 
+corrected the error in our knowledge-base. Thus, after re-running the generator,
 our code and documentation has now been fixed and remains consistent.
 
 \begin{figure*}
@@ -417,27 +432,30 @@ tolStrDisFac_eq = log (log ((1) / ((1) - (C pb_tol))) * ((Grouping ((C plate_len
 \label{Fig_JtolDrasil_fix}
 \end{figure*}
 
-We have similarly captured all of the knowledge pertaining to GlassBR in chunks. 
+We have similarly captured all of the knowledge pertaining to GlassBR in chunks.
 This knowledge can be assembled and extracted in different ways to produce a 
 multitude of views, i.e. our artifacts, including the SRS. For a sense of what 
-we can generate from this knowledge, see the table of contents for the currently 
-generated GlassBR SRS (Figure~\ref{Fig_ToCGlassBRSRS}). Again, our documents can 
+we can generate from this knowledge, see the table of contents for the currently
+generated GlassBR SRS (Figure~\ref{Fig_ToCGlassBRSRS}). Again, our documents can
 be generated in TeX and/or HTML for more flexibility. Both contain automated 
 internal references.
 
 \begin{figure}
 \begin{center}
-\includegraphics[scale=0.45]{./figures/TofC.pdf}
+\includegraphics[scale=0.5]{./figures/TofC.pdf}
 \end{center}
 \caption{Table of Contents for Generated SRS for GlassBR}
 \label{Fig_ToCGlassBRSRS}
 \end{figure}
 
-Another thing to note in our SRS is that the traceability information between definitions, assumptions, theories, and instance models is automatically generated, including the traceability graph shown in Figure~\ref{Fig_TraceGraph}.
+Another thing to note in our SRS is that the traceability information between
+definitions, assumptions, theories, and instance models is automatically 
+generated, including the traceability graph shown in 
+Figure~\ref{Fig_TraceGraph}.
 
 \begin{figure}
 \begin{center}
-\includegraphics[scale=0.45]{./figures/TraceGraph.pdf}
+\includegraphics[scale=0.5]{./figures/TraceGraph.pdf}
 \end{center}
 \caption{Traceability Graph}
 \label{Fig_TraceGraph}
@@ -445,7 +463,10 @@ Another thing to note in our SRS is that the traceability information between de
 
 \section{Quality Improvements} \label{SecQuality}
 
-Throughout Drasil's development lifecycle, we have already noticed a number of non-trivial quality improvements to the software examples being re-developed. These improvements come in a wide range of areas, but for the sake of brevity we will focus on certifiability, reusability, and reproducibility.
+Throughout Drasil's development lifecycle, we have already noticed a number of 
+non-trivial quality improvements to the software examples being re-developed. 
+These improvements come in a wide range of areas, but for the sake of brevity 
+we will focus on certifiability, reusability, and reproducibility.
 
 \subsection{Certifiability}
 
@@ -476,24 +497,43 @@ $\rho_P$ & $\rho_P > 0$	& 1007 kg/m$^3$	& 10\% \\
 \label{tab:pcm}
 \end{table}
 
-Thanks to Drasil's knowledge-capture mechanisms, we can capture the above equation in one place, thus any changes can be made very quickly. Not only that, but sanity checks (such as ensuring constraints on inputs) can also be captured and reused (see Table~\ref{tab:pcm}). Capturing that information also delivers a wider array of advantages, including:
+Thanks to Drasil's knowledge-capture mechanisms, we can capture the above 
+equation in one place, thus any changes can be made very quickly. Not only 
+that, but sanity checks (such as ensuring constraints on inputs) can also be 
+captured and reused (see Table~\ref{tab:pcm}). Capturing that information also 
+delivers a wider array of advantages, including:
 
 \begin{itemize}
 \item Generate guards against invalid input automatically
 \item Generate certain test cases automatically
 \item Generate views suitable for inspection
 \end{itemize}
-We can also see that it is extremely easy to trace changes and verify that they are correct, thanks to our one-source, generative approach.
+We can also see that it is extremely easy to trace changes and verify that they 
+are correct, thanks to our one-source, generative approach. We can produce 
+documents similar to those commonly found in literate programming where we 
+display the equations and code implementations (example: the \jtol{} equation 
+and the python code used to calculate it) side-by-side, allowing a human to 
+quickly verify the code is correct.
 
-We have also touched on one of the greatest advantages which was implied earlier: \emph{If there is an error somewhere, it is wrong everywhere}. This may seem like a disadvantage, but ensuring every artifact contains the same errors means there is a much greater chance of those errors being spotted. In our experience, many examples of software include code that does not match the design (due to hacks, last-minute changes, etc.), and an error which could hamper certification efforts can fly under the radar. 
+We have also touched on one of the greatest advantages which was implied 
+earlier: \emph{If there is an error somewhere, it is wrong everywhere}. This 
+may seem like a disadvantage, but ensuring every artifact contains the same 
+errors means there is a much greater chance of those errors being spotted. In 
+our experience, many examples of software include code that does not match the 
+design (due to hacks, last-minute changes, etc.), and an error which could 
+hamper certification efforts can fly under the radar. 
 
-For (re-)certification purposes, we want to be able to find any and all errors, trace them to their source, and fix them quickly. Drasil has shown great promise in that respect.
+For (re-)certification purposes, we want to be able to find any and all errors, 
+trace them to their source, and fix them quickly. Drasil has shown great 
+promise in that respect.
 
 \subsection{Reusability}
 
-Reusability is a core tenet of ours for Drasil's development. This can be seen most obviously in the knowledge-capture mechanisms we have created. 
+Reusability is a core tenet of ours for Drasil's development. This can be seen 
+most obviously in the knowledge-capture mechanisms we have created. 
 
-Consider the following software artifacts typically found in a rational, design process for software development~\cite{ParnasAndClements1986}:
+Consider the following software artifacts typically found in a rational, design 
+process for software development~\cite{ParnasAndClements1986}:
 
 \begin{itemize}
 \item Software Requirements Specification (SRS)
@@ -502,7 +542,11 @@ Consider the following software artifacts typically found in a rational, design 
 \item Test cases
 \end{itemize}
 
-Within these artifacts, there is a lot of duplication of specific knowledge related to the software being designed. Knowledge from the SRS will appear, possibly transformed, throughout each of the other artifacts. We seek to de-embed specific knowledge from within any specific artifact to easily reuse it throughout them all. This knowledge includes, but is not limited to:
+Within these artifacts, there is a lot of duplication of specific knowledge 
+related to the software being designed. Knowledge from the SRS will appear, 
+possibly transformed, throughout each of the other artifacts. We seek to 
+de-embed specific knowledge from within any specific artifact to easily reuse 
+it throughout them all. This knowledge includes, but is not limited to:
 
 \begin{itemize}
 \item Scientific Knowledge
@@ -513,36 +557,124 @@ Within these artifacts, there is a lot of duplication of specific knowledge rela
 \item Traceability information
 \end{itemize}
 
-%% TODO: Something about Drasil being awesome at capturing info.
+\ds{TODO: Something about Drasil being awesome at capturing info.}
 
-Reusing knowledge across artifacts in one software project is already incredibly useful, however, we have taken it a step further. Drasil allows us to reuse between projects. We can reuse a family of related models, or reuse pieces of knowledge from a given domain as necessary. Consider the vast number of software that rely on interpolation, or must ensure conservation of thermal energy. We can capture this knowledge once and reuse it through all of these projects.
+Reusing knowledge across artifacts in one software project is already 
+incredibly useful, however, we have taken it a step further. Drasil allows us 
+to reuse between projects. We can reuse a family of related models, or reuse 
+pieces of knowledge from a given domain as necessary. Consider the vast number 
+of software that rely on interpolation, or must ensure conservation of thermal 
+energy. We can capture this knowledge once and reuse it through all of these 
+projects.
 
-We have already begun using knowledge across projects with great results. Our two implementations of the solar water heating systems have a vast amount of overlap in the requisite knowledge, except for the phase change material, which is not present in one of the examples.
+We have already begun using knowledge across projects with great results. Our 
+two implementations of the solar water heating systems have a vast amount of 
+overlap in the requisite knowledge, except for the phase change material, which 
+is not present in one of the examples.
 
 \subsection{Reproducibility}
 
-\begin{itemize}
-\item Usual emphasis is on reproducing code execution
-\item However, \cite{IonescuAndJansson2013} show reproducibility challenges due to
-undocumented:
+Typically when we refer to reproducibility the emphasis is on reproducing code 
+execution. There are many problems attaining reproducibility at that 
+level~\cite{IonescuAndJansson2013} as there are often undocumented:
+
 \begin{itemize}
 \item Assumptions
 \item Modifications
 \item Hacks
 \end{itemize}
-\item Shouldn't it be easier to independently replicate the work of others?
-\item Require theory, assumptions, equations, etc.
-\item Drasil can potentially check for completeness and consistency
-\end{itemize}
+
+This does not mean that it is impossible to reproduce the execution of some 
+given code, however, what if that code is wrong? Should it not be easier to 
+independently replicate the work of others without relying on the code they've 
+written?
+
+We want to replicate not only the execution of the code, but the whole of the 
+software from theory to implementation. Given the appropriate theoretical 
+knowledge, assumptions, equations, etc. we should be able to take this 
+high-level knowledge and reproduce an implementation which will return 
+consistent results. Drasil allows us to do exactly this; we can capture the 
+high-level science knowledge and use it to reproduce a piece of software. We 
+can also package our projects in a Drasil-ready format, such that the software 
+can be generated on-the-fly by any who wish to replicate the results or 
+double-check the science.
+
+Drasil can also potentially check for completeness and consistency, ensuring 
+the little things that are tedious (if trivial) to manually verify. For 
+example: every symbol should be defined and used and should not change 
+throughout the artifacts (inter- and itra-artifact consistency). This may seem 
+minor, but one of our case studies, which had been reviewed by humans on 
+numerous occassions, introduced a new symbol for an existing concept in an 
+equation derivation which was never defined and did not appear in the table of 
+symbols. When implementing the project in Drasil, however, this error was made 
+obvious almost immediately.
+
+Overall, Drasil lends itself incredibly well to ensuring reproducibility in a 
+much larger sense than we normally consider. It allows us to focus on the 
+science, building our projects from the fundamental knowledge instead of 
+relying on a lone developer's code.
 
 \section{Future Work} \label{SecFuture}
 
+Drasil has come a long way in the last year, yet there is still much to be 
+done. With the current code-generation mechanisms being fairly naive, we have 
+begun work on a language of design which allows us to apply design decisions to 
+the theory knowledge to produce more flexible code. This language allows us to 
+classify design and implementation choices in a reusable manner and will 
+allow us to progress with the generation of design documents, which are 
+currently difficult to produce in Drasil.
+
+Another large feature that will be a necessity in the long-run, but has thus 
+far been relegated to the back-burner, is a much more user-friendly syntax, or 
+even a tool to aid in the creation of Drasil documents. Currently, Drasil is 
+fairly arcane to use, even with our inclusion of more documentation. Yet, with 
+each iteration of the language we introduce new, simplifying abstractions, 
+which have already made it easier to use. However, we are aware of the gap that 
+needs to be closed before it will be ready for our target users.
+
+We are also continuing work on:
+\begin{itemize}
+	\item Generating new types of software artifacts
+	\item Implementing much larger examples
+\end{itemize}
+
+Thanks to our practical-approach to Drasil's design, there will likely be many 
+other minor features to add and changes to make that are not yet entirely clear 
+to us.
+
 \section{Concluding Remarks}
 
-\section{Acknowledgements}
+While Drasil is still a work-in-progress, it shows great promise as a tool to 
+aid SCS developers. The ability to capture scientific knowledge, document it, 
+and transform it into usable code from a single, fully-traceable source should 
+not be underestimated.
 
+We have already seen non-trivial improvements to existing software during its 
+re-implementation in our current working-copy of Drasil. The case studies are 
+now easier to verify, maintain, reuse, and replicate than they were before. 
+There is also far less ambiguity on where certain concepts originated, as 
+everything is captured in one source.
+
+Not only will scientists be able to create higher quality software; they will 
+be able to replicate and reuse each other's work in a far more robust manner 
+than we have currently seen in practice. We hope Drasil will solve many of the 
+reproducibility problems mentioned by Ionescu and 
+Jansson~\cite{IonescuAndJansson2013}.
+
+Software (re-)certification will also become a far less daunting task in a
+future with Drasil. With full traceability of information and the ability to 
+generate new document views on-the-fly, we will be able to streamline the 
+process.
+
+While developing in Drasil does come with a fairly high up-front investment, we 
+believe the long-term maintainability along with the streamlining of 
+verification/certification and other previously mentioned advantages 
+will be well worth the cost.
+
+\begin{acks}
 The assistance of McMaster University's Dr.\ Manuel Campidelli, Dr.\ Wael and
 Dr.\ Michael Tait with the GlassBR example is greatly appreciated.
+\end{acks}
 
 \bibliographystyle{ACM-Reference-Format}
 \bibliography{SzymczakEtAl2017} 

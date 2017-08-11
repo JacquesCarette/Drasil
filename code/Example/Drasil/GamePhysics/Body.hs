@@ -8,8 +8,9 @@ import Data.Drasil.SI_Units
 
 import Data.Drasil.Authors
 import Data.Drasil.Concepts.Documentation
-import Data.Drasil.Concepts.Software
-import Data.Drasil.Concepts.Computation
+import Data.Drasil.Concepts.Software (physLib, understandability, portability,
+  reliability, maintainability, performance, correctness)
+import Data.Drasil.Concepts.Computation (algorithm)
 import Data.Drasil.Concepts.Education
 import Drasil.Sections.TraceabilityMandGs
 import qualified Data.Drasil.Quantities.Math as QM (orientation)
@@ -24,8 +25,9 @@ import qualified Data.Drasil.Concepts.Math as CM (equation, surface, ode,
   constraint, law)
 import Data.Drasil.Utils (makeTMatrix, itemRefToSent, refFromType,
   makeListRef, enumSimple, enumBullet, mkRefsList)
-import Data.Drasil.SentenceStructures
-import Data.Drasil.Software.Products
+import Data.Drasil.SentenceStructures (foldlSent, foldlSent_, foldlList, sOf,
+  sAnd, sOr, maybeChanged, maybeExpanded, foldlSentCol, foldlSP, showingCxnBw)
+import Data.Drasil.Software.Products (videoGame, openSource, sciCompS)
 
 import qualified Drasil.SRS as SRS
 import qualified Drasil.Sections.ReferenceMaterial as RM
@@ -37,11 +39,11 @@ import Drasil.GamePhysics.TMods (cpTMods)
 import Drasil.GamePhysics.IMods (iModels)
 import Drasil.GamePhysics.DataDefs (cpDDefs, cpQDefs)
 
-import Drasil.GamePhysics.Modules
-import Drasil.GamePhysics.Changes
-import Drasil.GamePhysics.Reqs
+import Drasil.GamePhysics.Modules (modules)
+import Drasil.GamePhysics.Changes (unlikelyChanges, likelyChanges)
+import Drasil.GamePhysics.Reqs (reqs)
 
-import Drasil.DocumentLanguage
+import Drasil.DocumentLanguage 
 import Drasil.Sections.SpecificSystemDescription
 import Drasil.Sections.SolutionCharacterSpec
 import Drasil.Sections.Requirements

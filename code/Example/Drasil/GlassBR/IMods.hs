@@ -1,8 +1,8 @@
-module Drasil.GlassBR.IMods where
+module Drasil.GlassBR.IMods(iModels, probOfBr, calOfCap, calOfDe) where
 
 import Language.Drasil
 import Data.Drasil.SentenceStructures (foldlSent, isThe, sAnd, sOr)
-import Prelude hiding (id, exp)
+import Prelude hiding (exp)
 import Control.Lens ((^.))
 import Drasil.GlassBR.Unitals
 import Drasil.GlassBR.DataDefs
@@ -18,10 +18,7 @@ iModels = [probOfBr, calOfCap, calOfDe]
 
 probOfBr :: RelationConcept
 probOfBr = makeRC "probOfBr" (nounPhraseSP "Probability of Glass Breakage")
-  pbdescr pb_rel 
-
-pb_rel :: Relation
-pb_rel = (C prob_br) := 1 - (exp (Neg (C risk)))
+  pbdescr $ (C prob_br) := 1 - exp (- C risk)
 
 pbdescr :: Sentence
 pbdescr =
@@ -32,10 +29,7 @@ pbdescr =
 
 calOfCap :: RelationConcept
 calOfCap = makeRC "calOfCap" (nounPhraseSP "Calculation of Capacity(LR)") 
-  capdescr cap_rel
-
-cap_rel :: Relation
-cap_rel = (C lRe) := ((C nonFL)*(C glaTyFac)*(C loadSF)) 
+  capdescr $ (C lRe) := ((C nonFL) * (C glaTyFac) * (C loadSF))
 
 capdescr :: Sentence
 capdescr =
@@ -44,7 +38,7 @@ capdescr =
   (phrase nonFL)) +:+. ((getS glaTyFac) `isThe` (phrase glassTypeFac))
   +:+. ((getS loadSF) `isThe` (phrase lShareFac)), S "Follows",
   (acroA 2) `sAnd` (acroA 1), sParen (Quote 
-  (S "In development of this procedure, it was assumed that" +:+
+  (S "In the development of this procedure, it was assumed that" +:+
   S "all four edges of the glass are simply supported and free to slip" +:+
   S "in the plane of the glass. This boundary condition has been shown" +:+
   S "to be typical of many glass installations")) +:+ S "from [4 (pg. 53)]"]
@@ -53,10 +47,7 @@ capdescr =
 
 calOfDe :: RelationConcept
 calOfDe = makeRC "calOfDe" (nounPhraseSP "Calculation of Demand(q)") 
-  dedescr de_rel
-
-de_rel :: Relation
-de_rel = (C demand) := FCall (C demand) [C eqTNTWeight, C standOffDist] 
+  dedescr $ (C demand) := FCall (C demand) [C eqTNTWeight, C standOffDist] 
 
 dedescr :: Sentence
 dedescr = 
@@ -71,5 +62,3 @@ dedescr =
   (phrase tNT)), (getS standOffDist) `isThe`
   (phrase standOffDist), S "where", E (equat sdWithEqn), S "where",
   sParen (sdVectorSent), S "are", plural coordinate]
-
-{--}

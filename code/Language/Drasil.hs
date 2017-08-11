@@ -19,7 +19,7 @@ module Language.Drasil (
   -- Chunk
   , Chunk(..), VarChunk(..), ConceptChunk
   , makeVC, vc, makeVCObj, SymbolForm(..)
-  , dcc, dccWDS, dccWDS', cv, dcc', vc', ccs, cc, cc'
+  , dcc, dccWDS, dccWDS', cv, dcc', vc', vc'', ccs, cc, cc'
   , Quantity(..), QWrapper, qw, ConVar(..), cvR, cvRs
   , Concept(..), cw, CWrapper
   , CommonIdea(..)

@@ -1,16 +1,13 @@
 module Drasil.GlassBR.DataDefs where
 
 import Language.Drasil
-import Prelude hiding (log, id, exp, sqrt)
+import Prelude hiding (log, exp, sqrt)
 import Drasil.GlassBR.Unitals
 import Data.Drasil.Utils
 import Data.Drasil.SentenceStructures (sAnd)
 import Data.Drasil.Concepts.PhysicalProperties (dimension)
 import Data.Drasil.Concepts.Math (probability, parameter, calculation)
 import Data.Drasil.Concepts.Documentation (datum)
-
---FIXME: having id "" and term "" is completely bogus, and should not
---  be allowed.  This implicitly says that something here does not make sense.
 
 ----------------------
 -- DATA DEFINITIONS --
@@ -54,9 +51,6 @@ hFromt = mkDataDef act_thick hFromt_eq
 loadDF_eq :: Expr 
 loadDF_eq = (Grouping ((C load_dur) / (60))) :^ ((C sflawParamM) / (16))
 
---FIXME: Should we be using id here? My gut says no, but I'll look in 
--- more depth shortly.
--- Definitely should not have the id being printed (which it currently is)
 loadDF :: QDefinition
 loadDF = mkDataDef lDurFac loadDF_eq
 

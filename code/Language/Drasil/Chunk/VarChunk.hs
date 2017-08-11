@@ -50,6 +50,10 @@ vc i des sym space = VC (nw $ nc i des) sym space
 vc' :: NamedIdea c => c -> Symbol -> Space -> VarChunk
 vc' n s t = VC (nw n) s t
 
+-- | Creates a VarChunk from a 'NamedIdea''s id and term and symbol
+vc'' :: NamedIdea c => c -> Symbol -> VarChunk
+vc'' n sy  = makeVC (n ^. id) (n ^. term) sy
+
 -- | Creates a VarChunk from an id, term, symbol, and 
 makeVCObj :: String -> NP -> Symbol -> String -> VarChunk
 makeVCObj i des sym s = VC (nw $ nc i des) sym (Obj s)

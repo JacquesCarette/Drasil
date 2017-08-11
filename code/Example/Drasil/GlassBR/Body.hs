@@ -1,7 +1,6 @@
 module Drasil.GlassBR.Body where
 import Control.Lens ((^.))
-import Language.Drasil
-import Prelude hiding (id)
+import Language.Drasil 
 
 import Data.Drasil.SI_Units (metre, second, kilogram, pascal, newton, millimetre)
 import Data.Drasil.Authors (spencerSmith, thulasi, nikitha)

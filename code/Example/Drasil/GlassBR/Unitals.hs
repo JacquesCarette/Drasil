@@ -7,7 +7,7 @@ import Language.Drasil
 import Data.Drasil.SI_Units
 import Data.Drasil.Utils(symbolMapFun, mkDataDef, getS)
 import Control.Lens((^.))
-import Prelude hiding (log, id, sqrt)
+import Prelude hiding (log, sqrt)
 import Data.Drasil.SentenceStructures (foldlSent, 
   displayConstrntsAsSet, foldlsC, foldlOptions)
 
@@ -218,13 +218,13 @@ is_safe2      = vc "is_safe2"        (nounPhraseSP $ "true when load resistance"
   ++ " (capacity) is greater than load (demand)")
   (Concat [Atomic "is", Special UScore, Atomic "safe2"]) Boolean
 
-lDurFac       = vc (loadDurFactor ^. id) (loadDurFactor ^. term) (Atomic "LDF") Real
+lDurFac       = vc'' (loadDurFactor) (Atomic "LDF")
 
-loadSF        = vc (lShareFac ^. id) (lShareFac ^. term) (Atomic "LSF") Integer
+loadSF        = vc'' (lShareFac) (Atomic "LSF")
 
-lRe           = vc (lResistance ^. id) (lResistance ^. term) (Atomic "LR") Real
+lRe           = vc'' (lResistance) (Atomic "LR")
 
-nonFactorL    = vc (nonFactoredL ^. id) (nonFactoredL ^. term) (Atomic "NFL") Real
+nonFactorL    = vc'' (nonFactoredL) (Atomic "NFL")
 
 risk_fun      = makeVC "risk_fun"    (nounPhraseSP "risk of failure") cB
 

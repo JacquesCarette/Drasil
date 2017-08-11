@@ -47,7 +47,7 @@
 %\acmPrice{15.00}
 
 \begin{document}
-\title[Drasil]{Drasil: A Framework for Scientific Knowledge Capture and Artifact Generation}
+\title[Drasil Framework]{Drasil: A Framework for Scientific Knowledge Capture and Artifact Generation}
 % \titlenote{Produces the permission block, and
 %   copyright information}
 % \subtitle{Extended Abstract}
@@ -243,12 +243,14 @@ Drasil's design is based around three main components:
 \end{enumerate}
 
 Chunks are the primary knowledge-capture mechanism. There are many flavours of 
-chunk (as shown in Figure~\ref{hierarchy}). The most basic chunk is simply a 
+chunks (as shown in Figure~\ref{hierarchy}). The most basic chunk is simply a 
 piece of data with an id. From there, all other chunks can be created. For 
 example, a \textit{Quantity} is a \textit{NamedIdea} (a chunk containing an id, 
 as well as a term which represents the idea and a potential abbreviation for 
 that term) which also has a \textit{Space} (integer, boolean, vector, etc.), 
-and symbol representation/units (if applicable).
+and symbol representation/units (if applicable).  The notation in
+Figure~\ref{hierarchy} uses a question mark (?) to indicate when a value may or
+may not be present (Maybe types in Haskell).
 
 \begin{figure}
 	\centering
@@ -259,7 +261,7 @@ and symbol representation/units (if applicable).
 
 We can think of chunks as our building blocks of knowledge; they are the 
 ingredients to be used in our \textit{Recipes}. Our language of recipes is a 
-Domain-Specific Language (DSL) embedded in Haskell which is used to define what 
+Domain-Specific Language (DSL) embedded in Haskell that is used to define what 
 we would like to generate, and in what order. A small snippet of recipe 
 language code for our Software Requirements Specification (SRS) can be seen in 
 Figure~\ref{recipeLang}. This code is used to generate the \textit{Reference 
@@ -282,11 +284,12 @@ Language}
 \label{recipeLang}
 \end{figure}
 
-The document generation language is highly abstracted, but allows for a fairly 
-high degree of customization. Drasil also contains a code-generation language 
-integrating GOOL~\cite{GOOL} -- a Generic Object-Oriented Language -- which can 
-generate code in a number of different target languages including Python, Lua, 
-and C++. We will discuss code generation in more depth later on.
+The document generation language is highly abstracted, but allows for a fairly
+high degree of customization. Drasil also contains a code-generation language
+integrating GOOL~\cite{Costabile2012} -- a Generic Object-Oriented Language -- which can
+generate code in a number of different target languages including Python, Lua,
+and C++.  We will discuss code generation in more depth through the example in
+Section~\ref{SecGlassBR}.
 
 Finally, there is the knowledge-base for Drasil (located in Data.Drasil). We 
 are creating a database of reusable scientific knowledge that can be applied 

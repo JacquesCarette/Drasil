@@ -156,30 +156,24 @@ genInputClassD g ins cm = pubClass
       genInputConstraints g ins cm
     ]
   )  
-  where vars         = map (\x -> var $ codeName x) ins
-        vals         = map (\x -> defaultValue' $ convType $ codeType x) ins        
+  where vars         = map (var . codeName) ins
+        vals         = map (defaultValue' . convType . codeType) ins        
         genInputVars = 
           map (\x -> pubMVar 0 (convType $ codeType x) (codeName x)) ins
 
 genInputFormatD :: Generator -> [CodeChunk] -> Method
-genInputFormatD g ins = let l_infile = "infile"
-                            v_infile = var l_infile
-                            l_filename = "filename"
-                            p_filename = param l_filename string
-                            v_filename = var l_filename
+genInputFormatD g ins = 
+  let l_infile = "infile"
+      v_infile = var l_infile
+      l_filename = "filename"
+      p_filename = param l_filename string
+      v_filename = var l_filename
   in
-    publicMethod g methodTypeVoid "get_inputs" 
-      [ p_filename ]
-      [ block $
-          [
-            varDec l_infile infile,
-            openFileR v_infile v_filename
-          ] 
-          ++
-          map (\x -> getFileInput v_infile (convType $ codeType x) (var $ codeName x)) ins
-          ++ 
-          [ closeFile v_infile ]
-      ]
+    publicMethod g methodTypeVoid "get_inputs" [ p_filename ] [ block $ [
+      varDec l_infile infile,
+      openFileR v_infile v_filename ] ++
+      map (\x -> getFileInput v_infile (convType $ codeType x) (var $ codeName x)) ins ++ [
+      closeFile v_infile ] ]
           
 genInputConstraintsD :: Generator -> [CodeChunk] -> ConstraintMap -> Method
 genInputConstraintsD g vars cm = 
@@ -187,10 +181,8 @@ genInputConstraintsD g vars cm =
       physCs = concatMap (\x -> physLookup x cm) vars
   in
     publicMethod g methodTypeVoid "input_constraints" [] [ block $
-      (map (\x -> ifCond [((?!) (convExpr x), sfwrCBody g x)] noElse) sfwrCs)
-      ++
-      (map (\x -> ifCond [((?!) (convExpr x), physCBody g x)] noElse) physCs)
-    ]
+      (map (\x -> ifCond [((?!) (convExpr x), sfwrCBody g x)] noElse) sfwrCs) ++
+      (map (\x -> ifCond [((?!) (convExpr x), physCBody g x)] noElse) physCs) ]
 
 genFileInput :: Generator -> DataDesc -> Method
 genFileInput g dd = 
@@ -202,18 +194,15 @@ genFileInput g dd =
   in 
     publicMethod g methodTypeVoid "tempname" (p_filename : (getParams g $ getInputs dd)) $
       body $ [
-          varDec l_infile infile,
-          openFileR v_infile v_filename
-        ] ++ (concatMap (inData v_infile) dd)
-          ++ [
-          closeFile v_infile 
-        ]
+      varDec l_infile infile,
+      openFileR v_infile v_filename ] ++ 
+      (concatMap (inData v_infile) dd) ++ [
+      closeFile v_infile ]
   where inData :: Value -> Data -> [Statement]
         inData v_infile (Singleton v) = [getFileInput v_infile (convType $ codeType v) (var $ codeName v)]
         inData v_infile JunkData = [discardFileLine v_infile]
         inData _ _ = error "working on implementation"
     
-
 -- need Expr -> String to print constraint
 constrWarn :: Generator -> Expr -> Body
 constrWarn _ _ = oneLiner $ printStrLn "Warning: constraint violated"
@@ -221,25 +210,19 @@ constrWarn _ _ = oneLiner $ printStrLn "Warning: constraint violated"
 constrExc :: Generator -> Expr -> Body
 constrExc _ _ = oneLiner $ throw "InputError"
 
-
 ---- CONST ----
 
 genConstModD :: Generator -> Module
 genConstModD g = buildModule "Constants" [] [] [] [genConstClassD g]
 
 genConstClassD :: Generator -> Class
-genConstClassD g = pubClass
-  "Constants"
-  Nothing
-  genVars
-  []
-  where genVars = 
-          map (\x -> pubGVar 0 (convType $ codeType x) (codeName x)) (const $ codeSpec g)
+genConstClassD g = pubClass "Constants" Nothing genVars []
+  where genVars = map (\x -> pubGVar 0 (convType $ codeType x) (codeName x)) (const $ codeSpec g)
     
 ------- CALC ----------    
     
 genCalcModD :: Generator -> String -> [CodeDefinition] -> Module
-genCalcModD g n defs = buildModule n [] [] (map (genCalcFunc g) (filter (\x -> validExpr (codeEquat x)) defs)) []   
+genCalcModD g n defs = buildModule n [] [] (map (genCalcFunc g) (filter (validExpr . codeEquat) defs)) []   
         
 genCalcFuncD :: Generator -> CodeDefinition -> Method
 genCalcFuncD g cdef = 
@@ -257,9 +240,7 @@ genCalcBlockD g e
 genCaseBlockD :: Generator -> [(Expr,Relation)] -> Body
 genCaseBlockD g cs = oneLiner $ ifCond (genIf cs) noElse
   where genIf :: [(Expr,Relation)] -> [(Value,Body)]
-        genIf = map 
-          (\(e,r) -> (convExpr r, genCalcBlock g e))
-
+        genIf = map (\(e,r) -> (convExpr r, genCalcBlock g e))
 
 ----- OUTPUT -------
           
@@ -274,22 +255,14 @@ genOutputFormatD g outs =
       p_filename = param l_filename string
       v_filename = var l_filename
   in
-    publicMethod g methodTypeVoid "write_output" 
-      (p_filename:getParams g outs)
-      [ block $
-          [
-            varDec l_outfile outfile,
-            openFileW v_outfile v_filename
-          ] 
-          ++
-          concatMap 
-            (\x -> [ printFileStr v_outfile ((codeName x) ++ " = "), 
-                     printFileLn v_outfile (convType $ codeType x) 
-                       (var $ codeName x)
-                   ] ) outs
-          ++ 
-          [ closeFile v_outfile ]
-      ]         
+    publicMethod g methodTypeVoid "write_output" (p_filename:getParams g outs) [ block $ [
+      varDec l_outfile outfile,
+      openFileW v_outfile v_filename ] ++
+      concatMap 
+        (\x -> [ printFileStr v_outfile ((codeName x) ++ " = "), 
+                 printFileLn v_outfile (convType $ codeType x) (var $ codeName x)
+               ] ) outs ++ [
+      closeFile v_outfile ] ]         
     
 -----
 
@@ -306,56 +279,50 @@ genMethodCallD g s pr t n p b = Method n s pr t p (commBody doComments (loggedBo
     commBody CommentFunc = commMethod g n p
     commBody _           = id
 
-
 commMethod :: Generator -> Label -> [Parameter] -> Body -> Body
-commMethod g n p b = 
- (
-    block [
-      comment $ "function '" ++ n ++ "': " ++ (funcTerm n (fMap $ codeSpec g)),
-      multi $ map 
-        (\x -> comment $ "parameter '" ++ (paramName x) ++ "': " ++ (varTerm (paramName x) (vMap $ codeSpec g))) p    
-    ]
-  ) : b
+commMethod g n p b = (
+  block [
+    comment $ "function '" ++ n ++ "': " ++ (funcTerm n (fMap $ codeSpec g)),
+    multi $ map 
+      (\x -> comment $ "parameter '" ++ (paramName x) ++ "': " ++ (varTerm (paramName x) (vMap $ codeSpec g))) p    
+  ]) : b
     
 loggedMethod :: Generator -> Label -> [Parameter] -> Body -> Body
-loggedMethod g n p b = let l_outfile = "outfile"
-                           v_outfile = var l_outfile 
-  in
-    (
-      block [
-        varDec l_outfile outfile,
-        openFileW v_outfile (litString $ logName g),  
-        printFileStr v_outfile ("function " ++ n ++ "("),
-        printParams p v_outfile,
-        printFileStrLn v_outfile ") called",
-        closeFile v_outfile      
-      ]
-    ) : b
+loggedMethod g n p b =
+  let l_outfile = "outfile"
+      v_outfile = var l_outfile 
+  in ( block [
+    varDec l_outfile outfile,
+    openFileW v_outfile (litString $ logName g),  
+    printFileStr v_outfile ("function " ++ n ++ "("),
+    printParams p v_outfile,
+    printFileStrLn v_outfile ") called",
+    closeFile v_outfile ] )
+    : b
   where
     printParams ps v_outfile = multi $ 
       intersperse (printFileStr v_outfile ", ") $
       map (\x -> printFile v_outfile (paramType x) (paramVal x)) ps
 
-
 ----
 
 loggedAssign :: Generator -> Value -> Value -> Statement
-loggedAssign g a b = let l_outfile = "outfile"
-                         v_outfile = var l_outfile 
-  in
-    multi [
-        I.assign a b,
-        varDec l_outfile outfile,
-        openFileW v_outfile (litString $ logName g),  
-        printFileStr v_outfile ("var '" ++ (valName a) ++ "' assigned to "),
-        printFileLn v_outfile (convType $ varType (valName b) (vMap $ codeSpec g)) b,
-        closeFile v_outfile       
-      ]
+loggedAssign g a b =
+  let l_outfile = "outfile"
+      v_outfile = var l_outfile 
+  in multi [
+    I.assign a b,
+    varDec l_outfile outfile,
+    openFileW v_outfile (litString $ logName g),  
+    printFileStr v_outfile ("var '" ++ (valName a) ++ "' assigned to "),
+    printFileLn v_outfile (convType $ varType (valName b) (vMap $ codeSpec g)) b,
+    closeFile v_outfile ]
       
 -- helpers
     
 getParams :: (CodeEntity c) => Generator -> [c] -> [Parameter]
-getParams g cs = map (\y -> param (codeName y) (convType $ codeType y)) (filter (\x -> not $ member (codeName x) (constMap $ codeSpec g)) cs)
+getParams g cs = map (\y -> param (codeName y) (convType $ codeType y)) 
+  (filter (\x -> not $ member (codeName x) (constMap $ codeSpec g)) cs)
           
 paramType :: Parameter -> StateType
 paramType (StateParam _ s) = s

@@ -30,11 +30,12 @@ import Data.Drasil.Software.Products
 import qualified Drasil.SRS as SRS
 import qualified Drasil.Sections.ReferenceMaterial as RM
 
-import Drasil.GamePhysics.Unitals
-import Drasil.GamePhysics.Concepts
-import Drasil.GamePhysics.TMods
-import Drasil.GamePhysics.IMods
-import Drasil.GamePhysics.DataDefs
+import Drasil.GamePhysics.Unitals (cpSymbols, cpOutputConstraints, inputSymbols,
+  outputSymbols, cpInputConstraints)
+import Drasil.GamePhysics.Concepts (chipmunk, cpAcronyms, twoD)
+import Drasil.GamePhysics.TMods (cpTMods)
+import Drasil.GamePhysics.IMods (iModels)
+import Drasil.GamePhysics.DataDefs (cpDDefs, cpQDefs)
 
 import Drasil.GamePhysics.Modules
 import Drasil.GamePhysics.Changes

@@ -402,18 +402,18 @@ GlassBR is a piece of software used in Civil Engineering to predict whether or
 not a slab of glass will be able to withstand a given explosion without breaking. It
 has two classes of input: glass geometry and blast type. Each of these input 
 classes has a number of fields (glass type, dimensions, TNT equivalent factor, 
-standoff distance, etc.) used as input to the simulation. Also, a tolerable 
-probability of breakage is given by the user.
+standoff distance, etc.) used as input to the simulation. Also, the user must 
+specify what they consider to be the tolerable probability of breakage.
 
-The output of GlassBR is whether or not the glass slab is considered safe. This 
-is based on a probability that is calculated through interpolation being 
-compared to the tolerable probability.
+The output of GlassBR is whether or not the glass slab is considered safe. 
+This is determined by calculating the probability of breakage using 
+interpolation, then that probability is compared to the tolerable probability 
+and a safety evaluation is made.
 
 To understand the Drasil implementation, we will follow one specific piece of 
 knowledge through from requirements to code. We intend to show how this 
 knowledge is captured and used in Drasil to produce our software artifacts 
 (documentation and code).
-
 
 %- bottom up approach to presentation - start with chunks, build up to SRS, traceability
 
@@ -427,11 +427,13 @@ knowledge is captured and used in Drasil to produce our software artifacts
 
 Let us start by taking a look at a data definition for the tolerable stress 
 distribution factor (\jtol{}) from GlassBR. Figure~\ref{Fig_Jtolpdf} 
-shows the Drasil-generated TeX version of the data definition for 
-\jtol{}, however we can also generate the documents in HTML. This 
-figure is part of the requirements for the GlassBR software, and as such, we 
-will eventually need code (like that in Figure~\ref{Fig_JtolPython}) that can be
-used to calculate \jtol{}. We can generate this code as well! Not only 
+shows the Drasil-generated version of the data definition for 
+\jtol{} in TeX format. We can also generate the documents in HTML. The data definition
+is part of the requirements for the GlassBR software, and as such, we 
+will eventually need code that can be
+used to calculate \jtol{}. 
+A python version of this code can be seen in Figure~\ref{Fig_JtolPython})
+We can generate this code as well! Not only 
 that, but thanks to the incorporation of GOOL we can also generate Java, Lua, 
 etc. 
 
@@ -497,7 +499,7 @@ multitude of views, i.e. our artifacts, including the SRS. For a sense of what
 we can generate from this knowledge, see the table of contents for the currently
 generated GlassBR SRS (Figure~\ref{Fig_ToCGlassBRSRS}). Again, our documents can
 be generated in TeX and/or HTML for more flexibility. Both contain automated 
-internal references.
+internal referencing.
 
 \begin{figure}
 \begin{center}

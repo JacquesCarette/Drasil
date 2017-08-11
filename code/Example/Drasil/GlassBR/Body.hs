@@ -1,14 +1,25 @@
 module Drasil.GlassBR.Body where
 import Control.Lens ((^.))
-import Language.Drasil 
+import Language.Drasil
 
 import Data.Drasil.SI_Units (metre, second, kilogram, pascal, newton,
   millimetre)
 import Data.Drasil.Authors (spencerSmith, thulasi, nikitha)
-import Data.Drasil.Concepts.Documentation
-import Data.Drasil.Concepts.Education
-import Data.Drasil.Software.Products
-import Data.Drasil.Concepts.Computation
+import Data.Drasil.Concepts.Documentation (analysis, appendix, aspect, 
+  characteristic, class_, code, condition, constant, constraint, content,
+  datum, definition, description, document, emphasis, endUser, failure, 
+  figure, goal, implementation, information, interface, input_, item, 
+  message, model, nonfunctional, organization, output_, practice, 
+  priority, problem, purpose, quantity, reference, reviewer, section_, 
+  scenario, software, standard, symbol_, system, template, term_, theory, 
+  traceyMatrix, user, value, variable, physicalSystem, datumConstraint, 
+  userInput, assumption, dataDefn, goalStmt, inModel, likelyChg, physSyst,
+  requirement, srs, thModel, dataConst, acroA, acroR, acroNumGen)
+import Data.Drasil.Concepts.Education (secondYear, undergradDegree,
+  civilEng, structuralEng, scndYrCalculus, structuralMechanics)
+import Data.Drasil.Software.Products (sciCompS)
+import Data.Drasil.Concepts.Computation (computerApp, inParam, 
+  computerLiteracy, inValue, inQty)
 import Data.Drasil.Concepts.Physics (distance)
 import Data.Drasil.Concepts.Thermodynamics (degree_')
 import Data.Drasil.Concepts.PhysicalProperties (flexure)
@@ -19,15 +30,18 @@ import Data.Drasil.Concepts.Math (graph, calculation, probability,
   parameter, surface, equation, shape)
 import Data.Drasil.Utils (getS, makeTMatrix, makeListRef, itemRefToSent,
   refFromType, enumSimple, enumBullet, prodUCTbl)
-import Data.Drasil.SentenceStructures
+import Data.Drasil.SentenceStructures (sVersus, sAnd, foldlSP, foldlSent,
+  foldlOptions, foldlSent_, figureLabel, foldlList, showingCxnBw, foldlsC, 
+  sOf, followA, ofThe, sIn, isThe, isExpctdToHv, sOr, underConsidertn, 
+  tAndDWAcc, tAndDOnly, tAndDWSym)
 import Data.Drasil.Concepts.PhysicalProperties (dimension, materialProprty)
 
-import Drasil.Template.MG
-import Drasil.Template.DD
+import Drasil.Template.MG (mgDoc)
+import Drasil.Template.DD (makeDD)
 
 import qualified Drasil.SRS as SRS
-import           Drasil.Sections.ReferenceMaterial
-import           Drasil.DocumentLanguage
+import Drasil.Sections.ReferenceMaterial (intro)
+import Drasil.DocumentLanguage  
 
 import Drasil.GlassBR.Unitals
 import Drasil.GlassBR.Concepts
@@ -41,9 +55,13 @@ import Drasil.GlassBR.References
 import Drasil.GlassBR.Interpolation
 import Drasil.GlassBR.DataDescriptions --FIXME: Redundant import, but doesn't build DataDescriptions.hs file otherwise...
 
-import Drasil.Sections.TraceabilityMandGs
-import Drasil.Sections.Requirements
-import Drasil.Sections.SpecificSystemDescription
+import Drasil.Sections.TraceabilityMandGs (traceGIntro)
+import Drasil.Sections.Requirements (reqF)
+import Drasil.Sections.SpecificSystemDescription (solChSpecF,
+  inDataConstTbl, outDataConstTbl, dataConstraintUncertainty, goalStmtF,
+  physSystDesc, termDefnF, probDescF, specSysDesF)
+
+{--}
 
 this_si :: [UnitDefn]
 this_si = map UU [metre, second, kilogram] ++ map UU [pascal, newton]

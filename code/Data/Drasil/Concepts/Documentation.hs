@@ -9,8 +9,8 @@ import qualified Language.Drasil.NounPhrase as NP
 
 -- acronyms to be used throughout
 -- ex. S "as seen in (A1)" -> S "as seen in" +:+ sParen (acroA "1")
-acroA, acroDD, acroGD, acroGS, acroIM, acroLC, acroPS
-  , acroR, acroT :: Int -> Sentence
+acroA, acroDD, acroGD, acroGS, acroIM, acroLC, acroPS, acroR, 
+  acroT :: Int -> Sentence
 
 acroA  numVar = short assumption  :+: S (show numVar)
 acroDD numVar = short dataDefn    :+: S (show numVar)

@@ -6,11 +6,14 @@ spencerSmith, henryFrankis, nKoothoor, dParnas, daAruliah, gWilson,
   cTitus, kdHuff, cHong, mDavis, rGuy, shdHaddock, imMitchell, mdPlumblet,
   bWaugh, epWhite, pWilson, pcClements, luthfi, alex, nikitha, thulasi,
   brooks, mLightstone, lLai, pjAgerfalk, nKraiem, jRalyte, jBueche,
-  fIncropera, dDewitt, tBergman, aLavine :: Person
+  fIncropera, dDewitt, tBergman, aLavine, jRobertson, sRobertson, 
+  wlBeason, tlKohutek, jmBracci :: Person
 
 pjAgerfalk   = person   "PJ"                        "Agerfalk"
 daAruliah    = personWM "D"         ["A"]           "Aruliah"
+wlBeason     = personWM "W"         ["Lynn"]        "Beason"
 tBergman     = personWM "T"         ["L"]           "Bergman"
+jmBracci     = personWM "Joseph"    ["M"]           "Bracci"
 jBueche      = personWM "J"         ["Frederick"]   "Bueche"
 pcClements   = personWM "P"         ["C"]           "Clements" -- The Modular Structure of Complex Systems ICSE '84
 mDavis       = person   "Matt"                      "Davis"
@@ -23,6 +26,7 @@ cHong        = person   "Chue"                      "Hong"
 kdHuff       = personWM "Kathryn"   ["D"]           "Huff"
 fIncropera   = personWM "F"         ["P"]           "Incropera"
 thulasi      = person   "Thulasi"                   "Jegatheesan"
+tlKohutek    = personWM "Terry"     ["L"]           "Kohutek"
 nKoothoor    = person   "Nirmitha"                  "Koothoor"
 nKraiem      = person   "N"                         "Kraiem"
 nikitha      = person   "Nikitha"                   "Krithnan"
@@ -37,6 +41,8 @@ mdPlumblet   = personWM "Mark"      ["D"]           "Plumblet"
 jRalyte      = person   "J"                         "Ralyte"
   --FIXME: person takes strings but we need an "e" with an accent
   -- S "J. Ralyt" :+: (F Acute 'e')
+jRobertson   = person   "James"                     "Robertson"
+sRobertson   = person   "Suzanne"                   "Robertson"
 spencerSmith = personWM "W"         ["Spencer"]     "Smith"
 cTitus       = person   "C"                         "Titus"
 bWaugh       = person   "Ben"                       "Waugh" -- Best Practices for Scientific Computing 2013

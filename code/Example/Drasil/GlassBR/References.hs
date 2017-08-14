@@ -18,7 +18,7 @@ gbCitations = [koothoor2013, smithLai2005, rbrtsn2012, astm_LR2009, astm_C1036,
 --ref1
 koothoor2013 = MThesis 
   [
-  Author [personWM "N." [] "Koothoor"],
+  Author [nKoothoor],
   Title (S "A document drive approach to certifying scientific computing software"),
   School (S "McMaster University"),
   Place (S "Hamilton", S "Canada"),
@@ -32,8 +32,7 @@ koothoor2013 = MThesis
 --ref2
 smithLai2005 = Article 
   [
-  Author [personWM "W" ["Spencer"] "Smith",
-          personWM "L" [] "Lai"],
+  Author [spencerSmith, lLai],
   Title (S "A new requirements template for scientific computing"),
   Journal (S "Proceedings of the First International Workshop on" +:+
   S "Situational Requirements Engineering Processes - Methods," +:+
@@ -54,10 +53,8 @@ smithLai2005 = Article
 --ref3
 rbrtsn2012 = Article 
   [
-  Author [personWM "J" [] "Robertson",
-           personWM "S" [] "Robertson"],
+  Author [jRobertson, sRobertson],
   Title (S "Volere requirements specification template edition 16"),
-  --URL (S "www.cs.uic.edu/ i442/VolereMaterials/templateArchive16/c Volere template16.pdf"), BROKEN LINK
   URL (S "https://pdfs.semanticscholar.org/cf57/27a59801086cbd3d14e5" :+: 
     S "87e09880561dbe22.pdf"),
   Year (2012)
@@ -68,54 +65,51 @@ rbrtsn2012 = Article
 --ref4
 astm_LR2009 = Misc 
   [
-  Author [mononym "ASTM Standards Committee"],
+  Author [mononym "ASTM E1300-09"],
   Title (S "Standard Practice for Determining Load Resistance of Glass in Buildings"),
+  Publisher (S "ASTM International"),
   Collection (S "Standard E1300-09a"),
   Publisher (S "American Society for Testing and Material (ASTM)"),
-  Year (2009)
+  Year (2009),
+  URL (S "www.astm.org")
   ]
-
---FIXME: Proper category for "Standard E1300-09a"?
 
 ---
 
 --ref5
 astm_C1036 = Misc 
   [
-  Author [mononym "ASTM developed by subcommittee C14.08"],
-  Title (S "Standard specification for flat glass, C1036"),
+  Author [mononym "ASTM C1036-16"],
+  Title (S "Standard specification for Flat Glass"),
+  Publisher (S "ASTM International"),
   Collection (S "Book of standards 15.02"),
   Place (S "West Conshohocken", S "PA"),
-  Year (2016)
+  Year (2016),
+  URL (S "www.astm.org")
   ]
-
---FIXME: Categorize --> S "Book of standards 15.02"
 
 ---
 
 --ref6
 astm_C1048 = Misc 
   [
-  Author [mononym "ASTM developed by subcommittee C14.08"],
-  Title (S "Specification for  heat treated flat glass-Kind" +:+
-    S "HS, kind FT coated and uncoated glass, C1048"),
-  Collection (S "Standard E1300-09a"),
-  Year (2009)
+  Author [mononym "ASTM C1048-04"],
+  Title (S "Specification for Heat-Treated Flat Glass-Kind" +:+
+    S "HS, Kind FT Coated and Uncoated Glass"),
+  Publisher (S "ASTM International"),
+  Place (S "West Conshohocken", S "PA"),
+  Year (2009),
+  URL (S "www.astm.org")
   ]
-
---FIXME: Proper category for "Standard E1300-09a"?
 
 ---
 
 --ref7
-glThick1998 = Article
+glThick1998 = Misc
   [
-  Author [personWM "L" [] "Beason",
-          personWM "T" ["L"] "Kohutek",
-          personWM "J" ["M"] "Bracci"],
+  Author [wlBeason, tlKohutek, jmBracci],
   Title (S "Basis for ASTME E 1300 Annealed Glass Thickness Selection Charts"),
-  Year (1998)
+  Collection (S "ASCE Library"),
+  Date 1 Feb 1998,
+  URL (S "doi.org/10.1061/(ASCE)0733-9445(1998)124:2(215)")
   ]
-
---FIXME: check whether citation format is correct
---FIXME: first listed source in TeX (incorrect alphabetized list)

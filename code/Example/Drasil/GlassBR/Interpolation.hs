@@ -1,10 +1,6 @@
 module Drasil.GlassBR.Interpolation where
 
-import Language.Drasil (FuncDef (..), Mod (ModDef), 
-  makeVC, nounPhraseSP, fasg, funcDef, ffor,fdec,
-  lY, lX, lZ, sub, lK, lJ, lI, lV,
-  Expr (Len, C, (:<=), (:<=), (:<), (:&&), FCall, Index, Append),  
-  Symbol (Atomic),VarChunk, FuncStmt (..), Space (Rational, Vect))
+import Language.Drasil
 
 {--}
 

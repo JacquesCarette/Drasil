@@ -1,8 +1,10 @@
 module Drasil.NoPCM.Body where
 
-import Drasil.NoPCM.DataDesc (inputMod)
-
+import Language.Drasil
+import Data.Drasil.SI_Units
 import Control.Lens ((^.))
+
+import Drasil.NoPCM.DataDesc (inputMod)
 import Drasil.NoPCM.Definitions (ht_trans, srs_swhs)
 
 -- Since NoPCM is a simplified version of SWHS, the file is to be built off
@@ -31,12 +33,10 @@ import Drasil.SWHS.References (ref2, ref3, ref4, ref5, ref6)
 import Drasil.SWHS.Requirements (s5_2)
 import Drasil.SWHS.LikelyChanges (likeChg2, likeChg3, likeChg6)
 
-import Language.Drasil
-
-import Data.Drasil.SI_Units (metre, kilogram, second, centigrade, joule, watt)
-import Data.Drasil.Authors (thulasi)
+import Data.Drasil.People (thulasi)
 import Data.Drasil.Utils (enumSimple, getS, refFromType,
   itemRefToSent, makeTMatrix, itemRefToSent, weave)
+
 import Data.Drasil.Concepts.Documentation
 import Data.Drasil.Concepts.Math (ode, de, unit_, rOfChng, equation)
 import Data.Drasil.Concepts.Software (program)

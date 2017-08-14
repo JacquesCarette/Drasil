@@ -1,16 +1,7 @@
 module Drasil.SWHS.Unitals where
 
-import Language.Drasil (UnitaryChunk, QDefinition, UncertQ, UncertainChunk,
-  ConVar, UnitalChunk, UCWrapper, CQSWrapper,
-  symbol, nounPhraseSP, unitary, physc, sfwrc, term, dcc, cvR, uc',
-  uvc, uqc, uqcNU, cC, cA, cR, cP, cW, cH, cL, cS, cD, cT, sup, sub,
-  lH, lF, lT, lQ, lG, of_, phrase, nounPhrase'', compoundPhrase,
-  compoundPhrase', vec, cV, ucw, cqs,
-  Greek (Phi_L, Eta_L, Tau_L, Delta),
-  Symbol (Atomic, Greek, Concat),
-  Space (Rational, Real),
-  CapitalizationRule (CapFirst, CapWords),
-  Expr (C, Int, Dbl, Index, V, (:<), (:*), (:/), (:>), (:>=), (:<=)))
+import Language.Drasil
+import Control.Lens ((^.))
 
 import Data.Drasil.SI_Units (m_2, second, kilogram, metre, joule,
   centigrade, m_3, specificE)
@@ -25,8 +16,6 @@ import Data.Drasil.Quantities.PhysicalProperties (mass, density, vol)
 import Drasil.SWHS.Concepts (water, coil, phsChgMtrl)
 import Data.Drasil.Units.PhysicalProperties (densityU)
 import Data.Drasil.Utils(mkDataDef)
-
-import Control.Lens ((^.))
 
 swhsSymbols :: [CQSWrapper]
 swhsSymbols = (map cqs swhsUnits) ++ (map cqs swhsUnitless) ++ (map cqs swhsConstrained)

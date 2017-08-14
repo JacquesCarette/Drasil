@@ -13,7 +13,7 @@ import Drasil.Template.DD
 import Language.Drasil
 
 import Data.Drasil.SI_Units (si_units)
-import Data.Drasil.Authors (spencerSmith)
+import Data.Drasil.People (spencerSmith)
 import Data.Drasil.Concepts.Documentation (srs)
 import Data.Drasil.Modules
 

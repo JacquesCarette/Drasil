@@ -1,15 +1,10 @@
 module Drasil.SWHS.References where
 
-import Data.Drasil.Authors (jBueche, fIncropera, dDewitt, tBergman, aLavine,
-  nKoothoor, mLightstone, dParnas, pClements, spencerSmith, lLai,
-  pAgerfalk, nKraiem, jRalyte)
+import Language.Drasil
 
-import Language.Drasil (BibRef,
-  person', personWM', (+:+),
-  Citation (Article, MThesis, Misc),
-  CiteField (Author, Year, Note, Pages, Place, Journal, Title, Issue,
-  School, Volume, Publisher, Edition, Editor),
-  Sentence (S))
+import Data.Drasil.People (jBueche, fIncropera, dDewitt, tBergman, aLavine,
+  nKoothoor, mLightstone, dParnas, pcClements, spencerSmith, lLai,
+  pjAgerfalk, nKraiem, jRalyte)
 
 ----------------------------
 -- Section 9 : References --
@@ -53,7 +48,7 @@ ref4 = Misc [
   Note (S "From Marilyn Lightstone's Personal Notes")]
 
 ref5 = Article [
-  Author [dParnas, pClements],
+  Author [dParnas, pcClements],
   Title (S "A rational design process: How and why to fake it"),
   Journal (S "IEEE Transactions on Software Engineering"),
   Volume 12,
@@ -65,7 +60,7 @@ ref5 = Article [
 ref6 = Article [
   Author [spencerSmith, lLai],
   Title (S "A new requirements template for scientific computing"),
-  Editor [pAgerfalk, nKraiem, jRalyte],
+  Editor [pjAgerfalk, nKraiem, jRalyte],
   Journal (S "Proceedings of the First International Workshop on" +:+
   S "Situational Requirements Engineering Processes - Methods," +:+
   S "Techniques and Tools to Support Situation-Specific Requirements" +:+

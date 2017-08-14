@@ -2,21 +2,15 @@
 {-# LANGUAGE FlexibleContexts #-}
 module Drasil.SWHS.TMods where
 
-import Language.Drasil (Sentence, Relation, Contents, RelationConcept,
-  at_start, unit_symb, sParen, sC, (+:+.), phrase, usymb, makeRC,
-  nounPhraseSP, (+:+), (+.), makeRef, defn,
-  Bound (High, Low),
-  UFunc (Integral),
-  DerivType (Total, Part),
-  Expr (C, FCall, Deriv, (:=), UnaryOp, (:<), Case, (:.), Neg),
-  Sentence (S, (:+:), Sy, E, EmptyS))
+import Language.Drasil
+import Control.Lens ((^.))
 
 import Drasil.DocumentLanguage (mkAssump)
 import Data.Drasil.Concepts.Documentation (system, acroNumGen)
 import Data.Drasil.SI_Units (joule)
 
-import Data.Drasil.Concepts.Thermodynamics hiding (temp, heat_cap_spec,
-  latent_heat, melt_pt, boil_pt, sens_heat, heat_cap_spec)
+import Data.Drasil.Concepts.Thermodynamics (phase_change, thermal_energy,
+  heat_trans, law_cons_energy)
 import Data.Drasil.Concepts.Physics (mech_energy)
 import Data.Drasil.Concepts.Math (equation, rOfChng)
 import Data.Drasil.Quantities.Math (gradient)
@@ -32,8 +26,6 @@ import Drasil.SWHS.Unitals (melt_frac, tau, deltaT, htCap_V, htCap_S,
 import Drasil.SWHS.Concepts (transient)
 import Drasil.SWHS.DataDefs (swhsSymbMapDRef, dd3HtFusion, swhsSymbMapT,
   swhsSymbMapTRef)
-
-import Control.Lens ((^.))
 
 tModels :: [RelationConcept]
 tModels = [t1ConsThermE, t2SensHtE, t3LatHtE]

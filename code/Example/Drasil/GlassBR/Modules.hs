@@ -1,7 +1,6 @@
 module Drasil.GlassBR.Modules where
 
-import Language.Drasil (ModuleChunk, ConceptChunk, Sentence (S),
-  (+:+), phrase, plural, (+:+.), sC)
+import Language.Drasil
 
 import Data.Drasil.Concepts.Software (modInputFormat, modInputParam,
   modInterpDatum)

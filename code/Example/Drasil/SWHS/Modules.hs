@@ -1,8 +1,7 @@
 module Drasil.SWHS.Modules where
 
-import Language.Drasil (ModuleChunk, ConceptChunk,
-  (+:+), phrase, plural, cn', (+:+.), sC, dccWDS, short, makeImpModule,
-  Sentence (S, (:+:)))
+import Language.Drasil
+
 import Drasil.SWHS.Concepts (swhsProg)
 import Data.Drasil.Concepts.Software (modInputParam, modInputVerif,
   modInputFormat)

@@ -1,10 +1,6 @@
 module Drasil.SWHS.Requirements where
 
-import Language.Drasil (Section,
-  sParen, (+:+), phrase, short, sC, plural, (+:), titleize, makeRef,
-  Contents (EqnBlock),
-  Sentence (S, (:+:)),
-  Expr (C, (:=)))
+import Language.Drasil
 
 import Data.Drasil.Concepts.Documentation (acroIM, output_,
   acroR, simulation, quantity, input_, physical, constraint, condition,

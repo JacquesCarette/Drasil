@@ -9,7 +9,6 @@ library
   exposed-modules:
     Language.Drasil,
     Language.Drasil.Code,
-    Data.Drasil.Authors
     Data.Drasil.People
     Data.Drasil.Changes
     Data.Drasil.Citations

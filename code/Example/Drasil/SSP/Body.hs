@@ -5,11 +5,12 @@ import Prelude hiding (sin, cos, tan)
 
 import Language.Drasil
 import Data.Drasil.SI_Units
-import Data.Drasil.Authors
+import Data.Drasil.People
 
 import Drasil.SSP.Assumptions
 import Drasil.SSP.Changes
 import Drasil.SSP.DataDefs
+import Drasil.SSP.DataDesc (sspInputMod)
 import Drasil.SSP.Defs
 import Drasil.SSP.GenDefs
 import Drasil.SSP.Goals
@@ -111,7 +112,7 @@ sspChoices = Choices {
 }  
   
 ssp_code :: CodeSpec
-ssp_code = codeSpec' ssp_si sspChoices
+ssp_code = addModDefs (codeSpec' ssp_si sspChoices) [sspInputMod]
 
 
 -- SYMBOL MAP HELPERS --

@@ -1,7 +1,6 @@
 module Drasil.GlassBR.Concepts where
 
-import Language.Drasil (CI, NamedChunk, ConceptChunk,
-  cn', nounPhraseSP, npnc, commonIdea, compoundNC, pn, dcc')
+import Language.Drasil
 
 import Data.Drasil.Concepts.Documentation (assumption, 
   dataDefn, goalStmt, inModel, likelyChg, notApp, physSyst, 

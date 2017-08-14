@@ -5,12 +5,7 @@ import Drasil.GlassBR.Unitals (is_safe1, is_safe2, demand,
 import Drasil.GlassBR.IMods (calOfCap, calOfDe, probOfBr)
 import Drasil.GlassBR.Concepts (lResistance)
 
-import Language.Drasil (RelationConcept,
-  sParen, sC, (+:+.), phrase, makeRC, nounPhraseSP, (+:+),
-  makeRef, defn, titleize, short,
-  Expr (C, (:=), (:<), (:>)),
-  Sentence (S), VarChunk, symbolMap, 
-  Contents (Definition), DType (Theory))
+import Language.Drasil
 import Control.Lens ((^.))
 
 import Data.Drasil.SentenceStructures (foldlSent, isThe, sAnd)

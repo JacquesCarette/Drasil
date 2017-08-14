@@ -1,8 +1,6 @@
 module Drasil.GlassBR.IMods(iModels, probOfBr, calOfCap, calOfDe) where
 
-import Language.Drasil (sParen, phrase, sC, (+:+.), (+:+), nounPhraseSP,
-  makeRC, plural, equat, defn, exp, 
-  RelationConcept, Sentence (S, E, Quote), Expr (C, (:=), FCall))
+import Language.Drasil
 
 import Data.Drasil.SentenceStructures (foldlSent, isThe, sAnd, sOr)
 import Data.Drasil.Utils (getS)

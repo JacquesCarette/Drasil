@@ -1,10 +1,7 @@
 module Drasil.SWHS.Changes where
 
-import Language.Drasil (NP, UCChunk,
-  npnc, nounPhraseSP, nw, getAcc, (+:+), nounPhrase'',
-  CapitalizationRule (CapFirst,CapWords),
-  LCChunk (LCChunk),
-  Sentence (S, (:+:)))
+import Language.Drasil
+
 import Drasil.SWHS.Modules (mod_ctrl, mod_inputf, mod_inputp, mod_outputf,
   mod_seq, mod_plot, mod_ode, mod_temp, mod_ener, mod_inputv, mod_outputv)
 import Data.Drasil.Concepts.Math (ode)

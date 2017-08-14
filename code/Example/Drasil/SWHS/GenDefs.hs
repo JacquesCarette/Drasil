@@ -2,11 +2,7 @@ module Drasil.SWHS.GenDefs where
 
 import Prelude hiding (sin, cos, tan)
 
-import Language.Drasil (Relation, RelationConcept,
-  unit_symb, phrase, sParen, (+:+.), getUnit, sC, makeRC, nounPhraseSP,
-  Sentence (Sy, S, E),
-  DerivType (Total),
-  Expr (C, (:*), (:-), (:+), (:=), Deriv, FCall))
+import Language.Drasil
 
 import Data.Drasil.SentenceStructures (foldlSent)
 import Data.Drasil.Quantities.PhysicalProperties as QPP (vol, mass)

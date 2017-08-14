@@ -4,46 +4,65 @@ import Control.Lens ((^.))
 import Prelude hiding (sin, cos, tan)
 
 import Language.Drasil
-import Data.Drasil.SI_Units
-import Data.Drasil.People
+import Data.Drasil.SI_Units (metre, degree, newton, pascal)
+import Data.Drasil.People (henryFrankis)
 
-import Drasil.SSP.Assumptions
-import Drasil.SSP.Changes
-import Drasil.SSP.DataDefs
+import Drasil.SSP.Assumptions (sspAssumptions)
+import Drasil.SSP.Changes (likelyChanges, unlikelyChanges)
+import Drasil.SSP.DataDefs (sspDataDefs, resShrDerivation,
+  mobShrDerivation, stfMtrxDerivation)
 import Drasil.SSP.DataDesc (sspInputMod)
-import Drasil.SSP.Defs
-import Drasil.SSP.GenDefs
-import Drasil.SSP.Goals
-import Drasil.SSP.IMods
-import Drasil.SSP.Modules
-import Drasil.SSP.References
-import Drasil.SSP.Reqs
-import Drasil.SSP.Requirements
-import Drasil.SSP.TMods
-import Drasil.SSP.Unitals
+import Drasil.SSP.Defs (ssa, acronyms, slice, slope, soil,
+  crtSlpSrf, soilLyr, morPrice, mtrlPrpty, slpSrf,
+  fs_concept, plnStrn, intrslce, itslPrpty)
+import Drasil.SSP.GenDefs (sspGenDefs)
+import Drasil.SSP.Goals (sspGoals)
+import Drasil.SSP.IMods (instModIntro1, instModIntro2,
+  sspIMods, fctSftyDerivation, nrmShrDerivation,
+  intrSlcDerivation, rigDisDerivation, rigFoSDerivation)
+import Drasil.SSP.Modules (modules)
+import Drasil.SSP.References (sspCitations)
+import Drasil.SSP.Reqs (reqs)
+import Drasil.SSP.Requirements (sspRequirements, sspInputDataTable)
+import Drasil.SSP.TMods (sspTMods)
+import Drasil.SSP.Unitals (sspSymbols, sspInputs, sspOutputs,
+  sspConstrained, index, fs, numbSlices)
 import qualified Drasil.SRS as SRS
 
-import Drasil.Sections.ReferenceMaterial
-import Drasil.DocumentLanguage
+import Drasil.Sections.ReferenceMaterial (intro)
+import Drasil.DocumentLanguage (TSIntro, DocDesc, RefSec(..),
+  RefTab(..), tsymb'', LFunc(..),
+  IntroSub(..), TSIntro(..), TConvention(..),
+  DocSection(..), mkDoc, IntroSec(..))
 import Drasil.Sections.SpecificSystemDescription
-import Drasil.Sections.Requirements
-import Drasil.Sections.GeneralSystDesc
-import Drasil.Sections.AuxiliaryConstants
+import Drasil.Sections.Requirements (reqF, nonFuncReqF)
+import Drasil.Sections.GeneralSystDesc (genSysF)
+import Drasil.Sections.AuxiliaryConstants (valsOfAuxConstantsF)
 
-import Data.Drasil.Concepts.Documentation
-import Data.Drasil.Concepts.Physics
-import Data.Drasil.Concepts.PhysicalProperties
-import Data.Drasil.Concepts.Education
-import Data.Drasil.Concepts.Software
-import Data.Drasil.Concepts.Math hiding (constraint)
+import Data.Drasil.Concepts.Documentation (srs, physics, inModel,
+  value, effect, loss, interest, problem, design, issue,
+  method_, analysis, input_, organization, document,
+  template, analysis, endUser, definition, model, element,
+  property, interest, variable, table_, goalStmt, acroDD, --acroDD should be moved
+  assumption, requirement)
+import Data.Drasil.Concepts.Physics (stress, strain, tension,
+  compression, fbd, force)
+import Data.Drasil.Concepts.PhysicalProperties (mass)
+import Data.Drasil.Concepts.Education (solidMechanics, undergraduate)
+import Data.Drasil.Concepts.Software (program, accuracy,
+  performanceSpd, correctness, understandability,
+  reusability, maintainability)
+import Data.Drasil.Concepts.Math (surface, equation)
 import Data.Drasil.Concepts.SolidMechanics (normForce, shearForce)
-import Data.Drasil.Software.Products
+import Data.Drasil.Software.Products (sciCompS)
 
-import Data.Drasil.Utils
-import Data.Drasil.SentenceStructures
+import Data.Drasil.Utils (symbolMapFun, getS,
+  enumBullet, enumSimple, weave)
+import Data.Drasil.SentenceStructures (sOr,
+  foldlSent, ofThe, sAnd, foldlSP, foldlList)
 
-import Drasil.Template.MG
-import Drasil.Template.DD
+import Drasil.Template.MG (mgDoc)
+import Drasil.Template.DD (makeDD)
 
 --type declarations for sections--
 s3, s4, s5, s6, s7 :: Section
@@ -190,7 +209,7 @@ scpIncl = S "stability analysis of a 2 dimensional" +:+ phrase slope `sC`
   S "composed of homogeneous" +:+ plural soilLyr
 scpEnd  = S "identify the most likely failure" +:+
   phrase surface +:+ S "within the possible" +:+ phrase input_ +:+ 
-  S "range" `sC` S "and find the" +:+ phrase fs_rc +:+ S "for the" +:+
+  S "range" `sC` S "and find the" +:+ phrase fs +:+ S "for the" +:+
   phrase slope +:+ S "as well as displacement of" +:+ phrase soil +:+
   S "that will occur on the" +:+ phrase slope
 

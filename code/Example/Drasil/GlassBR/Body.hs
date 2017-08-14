@@ -2,8 +2,9 @@ module Drasil.GlassBR.Body where
 import Control.Lens ((^.))
 import Language.Drasil
 import qualified Drasil.SRS as SRS
-import Drasil.DocumentLanguage  
 
+import Drasil.DocumentLanguage  
+import Drasil.DocumentLanguage.Definitions
 
 import Drasil.Template.MG (mgDoc)
 import Drasil.Template.DD (makeDD)
@@ -116,12 +117,12 @@ mkSRS = [RefSec (RefProg intro
   ++
   [SSDSec (SSDVerb s6)]
   ++
-  -- [SSDSec (SSDProg 
-  -- [SSDProblem  (PDProg start gLassBR ending [s6_1_1, s6_1_2, s6_1_3])
-  -- , SSDSolChSpec (SCSProg 
-  -- [DDs [Label, Symbol, Units, DefiningEquation, Description (Verbose) (IncludeUnits) (S "Testing")] dataDefns]  
-  -- gbSymbMap)])]
-  -- ++
+  [SSDSec (SSDProg 
+  [SSDProblem  (PDProg start gLassBR ending [s6_1_1, s6_1_2, s6_1_3])
+  , SSDSolChSpec (SCSProg 
+  [DDs [Label, Symbol, Units, DefiningEquation, Description (Verbose) (IncludeUnits) (S "Testing")] dataDefns]  
+  (symbolMap dataDefns))])]
+  ++
   [ReqrmntSec (ReqsVerb s7)]
   ++
   [LCsSec (LCsProg s8_list)]

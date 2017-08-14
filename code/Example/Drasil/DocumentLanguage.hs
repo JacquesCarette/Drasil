@@ -130,14 +130,13 @@ data IntroSub where
 {--}
 
 -- | Stakeholders section
-data StkhldrSec = StkhldrProg CI Sentence {-[StkhldrSub]-} | StkhldrVerb Section
+data StkhldrSec = StkhldrProg CI Sentence | StkhldrVerb Section | StkhldrProg2 [StkhldrSub]
 
 -- | Stakeholders subsections
--- FIXME: Remove since Stk.stakehldrGeneral generates both subsections?
 data StkhldrSub where
   StkhldrSubVerb :: Section -> StkhldrSub
-  Client :: Sentence -> Sentence -> StkhldrSub
-  Cstmr  :: Sentence -> StkhldrSub
+  Client :: (NamedIdea a) => a -> Sentence -> StkhldrSub
+  Cstmr  :: (NamedIdea a) => a -> StkhldrSub
 
 {--}
 
@@ -363,7 +362,12 @@ mkIntroSec si (IntroProg probIntro progDefn l) =
 mkStkhldrSec :: StkhldrSec -> Section
 mkStkhldrSec (StkhldrVerb s) = s
 mkStkhldrSec (StkhldrProg key details) = (Stk.stakehldrGeneral key details) 
---FIXME: WIP "x" --> implement use of StkhldrSub or remove entirely?
+mkStkhldrSec (StkhldrProg2 l) = SRS.stakeholder [Stk.stakeholderIntro] $ foldr (mkSubs) [] l
+  where
+    mkSubs :: StkhldrSub -> [Section] -> [Section]
+    mkSubs (StkhldrSubVerb s) l' = s : l'
+    mkSubs (Client a b) l'       = (Stk.tClientF a b) : l'
+    mkSubs (Cstmr a) l'          = (Stk.tCustomerF a) : l'
 
 mkSSDSec :: SystemInformation -> SSDSec -> Section
 mkSSDSec _ (SSDVerb s) = s

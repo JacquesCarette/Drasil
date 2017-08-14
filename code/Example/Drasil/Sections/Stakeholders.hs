@@ -1,5 +1,8 @@
 module Drasil.Sections.Stakeholders 
   ( stakehldrGeneral
+    , tClientF
+    , tCustomerF
+    , stakeholderIntro
   ) where
 
 import Language.Drasil

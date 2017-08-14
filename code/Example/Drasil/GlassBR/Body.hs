@@ -103,8 +103,8 @@ mkSRS = [RefSec (RefProg intro
     IChar (rdrKnldgbleIn (glBreakage) (blastRisk)) undIR appStanddIR,
     IOrgSec s2_3_intro dataDefn (SRS.dataDefn SRS.missingP []) s2_3_intro_end])]
   ++
-  [StkhldrSec (StkhldrProg (gLassBR) 
-    (S "Entuitive. It is developed by Dr. Manuel Campidelli"))] 
+  [StkhldrSec (StkhldrProg2 [Client (gLassBR) (S "Entuitive. It is developed by Dr. Manuel Campidelli"),
+    Cstmr (gLassBR)])]
   --FIXME: Turn "People -> Sentence"? (so knowledge can be easily pulled out...)
   ++
   [GSDSec (GSDProg [] (s4_1_bullets (endUser) (gLassBR) (secondYear) 

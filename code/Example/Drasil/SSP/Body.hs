@@ -43,7 +43,7 @@ import Data.Drasil.Concepts.Documentation (srs, physics, inModel,
   value, effect, loss, interest, problem, design, issue,
   method_, analysis, input_, organization, document,
   template, analysis, endUser, definition, model, element,
-  property, interest, variable, table_, goalStmt, acroDD, --acroDD should be moved
+  property, interest, variable, table_, goalStmt,
   assumption, requirement)
 import Data.Drasil.Concepts.Physics (stress, strain, tension,
   compression, fbd, force)
@@ -56,9 +56,9 @@ import Data.Drasil.Concepts.Math (surface, equation)
 import Data.Drasil.Concepts.SolidMechanics (normForce, shearForce)
 import Data.Drasil.Software.Products (sciCompS)
 
-import Data.Drasil.Utils (symbolMapFun, getS,
-  enumBullet, enumSimple, weave)
-import Data.Drasil.SentenceStructures (sOr,
+import Data.Drasil.Utils (symbolMapFun,
+  getS, enumBullet, enumSimple, weave)
+import Data.Drasil.SentenceStructures (sOr, acroDD,
   foldlSent, ofThe, sAnd, foldlSP, foldlList)
 
 import Drasil.Template.MG (mgDoc)

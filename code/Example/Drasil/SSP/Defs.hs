@@ -1,7 +1,8 @@
 module Drasil.SSP.Defs where
 
 import Language.Drasil
-import Data.Drasil.Concepts.Documentation
+import Data.Drasil.Concepts.Documentation (assumption, dataDefn, genDefn, goalStmt, inModel, likelyChg, 
+  physSyst, requirement, srs, thModel, typUnc, property, safety)
 
 ----Acronyms-----
 acronyms :: [CI]

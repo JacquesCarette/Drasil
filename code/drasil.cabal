@@ -239,6 +239,7 @@ executable ssp
     , Drasil.SSP.Body
     , Drasil.SSP.Changes
     , Drasil.SSP.DataDefs
+    , Drasil.SSP.DataDesc
     , Drasil.SSP.Defs
     , Drasil.SSP.GenDefs
     , Drasil.SSP.Goals

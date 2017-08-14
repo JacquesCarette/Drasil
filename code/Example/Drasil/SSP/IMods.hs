@@ -4,13 +4,19 @@ import Prelude hiding (tan, product, sin, cos)
 
 import Language.Drasil
 import Drasil.SSP.Unitals
-import Drasil.SSP.Defs
+import Drasil.SSP.Defs (slope, slice, slip,
+  intrslce, ssa, morPrice, crtSlpSrf, factorOfSafety)
 import Data.Drasil.SentenceStructures (foldlSent, isThe)
-import Data.Drasil.Utils
+import Data.Drasil.Utils (getS)
 
 -- Needed for derivations
-import Data.Drasil.Concepts.Documentation
-import Data.Drasil.SentenceStructures
+import Data.Drasil.Concepts.Documentation (analysis,
+  solution, definition, value, assumption, physicalProperty,
+  problem, method_)
+import Data.Drasil.SentenceStructures (andThe,
+  acroA, acroGD, acroDD, sIs, sIn, getTDS,
+  getTandS, ofThe, ofThe', sAnd, sOf,
+  acroIM, acroT, eqN, foldlSP, foldlSent_)
 import Control.Lens ((^.))
 import Data.Drasil.Concepts.Math (equation, surface)
 import Data.Drasil.Concepts.Physics (displacement, force)
@@ -168,10 +174,10 @@ crtSlpId_rel :: Relation
 crtSlpId_rel = (Index (C fs) (V "min")) := (FCall (C minFunction) [C critCoords, V "Input"]) --FIXME: add subscript to fs
 
 crtSlpId_desc :: Sentence
-crtSlpId_desc = foldlSent [S "Given the necessary slope inputs, a minimization",
+crtSlpId_desc = foldlSent [S "Given the necessary", phrase slope, S "inputs, a minimization",
   S "algorithm or function", getS minFunction, S "will identify the", phrase crtSlpSrf,
-  S "of the slope, with the critical slip coordinates", getS critCoords, 
-  S "and the minimum factor of safety FSmin that results"]
+  S "of the", phrase slope `sC` S "with the critical", phrase slip, S "coordinates", getS critCoords, 
+  S "and the minimum", phrase fs, E $ Index (C fs) (V "min"), S "that results"]
 
 -----------
 -- Intro --
@@ -341,7 +347,7 @@ rigDisDerivation = [foldlSP [S "Using the net force-displacement equilibrium",
   ]
 
 rigFoSDerivation = [foldlSP [S "RFEM analysis can also be used to calculate the",
-  phrase fs, S "for the slope. For a slice element", getS index, S "the displacements",
+  phrase fs, S "for the", phrase slope +:+. S "For a slice element", getS index, S "the displacements",
   getS dx_i `sAnd` getS dy_i `sC` S "are solved from the system of", plural equation, 
   S "in" +:+. acroIM 4, S "The", phrase definition, S "of", getS rotatedDispl, S "as", 
   S "rotation" `ofThe` S "displacement vector", getS genDisplace, S "is seen in" +:+.

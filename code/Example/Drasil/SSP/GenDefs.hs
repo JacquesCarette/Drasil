@@ -4,15 +4,19 @@ import Prelude hiding (sin, cos, tan)
 
 import Language.Drasil
 import Drasil.SSP.Unitals
-import Data.Drasil.Concepts.Documentation
-import Drasil.SSP.Defs
-import Data.Drasil.Concepts.PhysicalProperties
-import Data.Drasil.Quantities.Physics
-import Data.Drasil.SentenceStructures
+import Data.Drasil.Concepts.Documentation (element,
+  system, value, variable, definition, model,
+  assumption, property, method_)
+import Drasil.SSP.Defs (slope, slice, intrslce, slpSrf)
+import Data.Drasil.Concepts.PhysicalProperties (mass, len)
+import Data.Drasil.Quantities.Physics (displacement, force)
+import Data.Drasil.SentenceStructures (sAnd, getTandS,
+  isThe, ofThe, foldlSent, acroA, acroDD, acroGD, acroT)
 import Data.Drasil.Concepts.SolidMechanics (normForce, shearForce)
-import Data.Drasil.Quantities.SolidMechanics
-import Data.Drasil.Concepts.Math
-import Data.Drasil.Utils
+import Data.Drasil.Quantities.SolidMechanics (nrmStrss)
+import Data.Drasil.Concepts.Math (surface, angle,
+  matrix, vector, perp, normal)
+import Data.Drasil.Utils (getS)
 import qualified Drasil.SRS as SRS
 
 eqlExpr :: (Expr -> Expr) -> (Expr -> Expr) -> (Expr -> Expr -> Expr) -> Expr
@@ -127,7 +131,7 @@ nmShrR_desc = foldlSent [S "The", phrase assumption, S "for the Morgenstern Pric
   getS normToShear, S "and a predetermined scaling function",
   getS scalFunc `sC` S "that changes", (S "proportionality as a function" `ofThe`
   S "x-ordinate position of the") +:+. phrase intrslce,
-  getS scalFunc, S "is typically either a half-sine along the slip", phrase surface `sC`
+  getS scalFunc, S "is typically either a half-sine along the", phrase slpSrf `sC`
   S "or a constant"]
 
 --
@@ -251,7 +255,7 @@ disVec_desc = foldlSent [at_start' vector, S "describing the", phrase displaceme
   S "where", getS shrDispl `isThe` phrase displacement, S "of the",
   phrase slice, S "parallel to the", phrase slice, S "base, and", 
   getS dy_i `isThe` phrase displacement, S "of the", phrase slice,
-  S "perpendicular to the", phrase slice +:+. S "base", getS rotatedDispl,
+  phrase perp, S "to the", phrase slice +:+. S "base", getS rotatedDispl,
   S "can also be found by rotating", getS genDisplace,
   S "clockwise by the base", phrase angle `sC` getS baseAngle,
   S "through a rotation", phrase matrix, S "as shown"]

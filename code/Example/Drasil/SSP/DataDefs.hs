@@ -4,12 +4,14 @@ import Prelude hiding (cos, sin, tan)
 
 import Language.Drasil
 import Drasil.SSP.Unitals
-import Data.Drasil.Utils
+import Data.Drasil.Utils (getS, mkDataDef)
 import qualified Data.Drasil.Quantities.SolidMechanics as SM
 
 -- Needed for derivations
-import Data.Drasil.Concepts.Documentation
-import Data.Drasil.SentenceStructures
+import Data.Drasil.Concepts.Documentation (definition, element, value)
+import Data.Drasil.SentenceStructures (sAnd, sOf,
+  foldlSP, eqN, isThe, acroDD, acroGD, acroT,
+  ofThe, getTandS, ofThe')
 import Control.Lens ((^.))
 import Data.Drasil.Concepts.Math (equation, angle)
 import Drasil.SSP.GenDefs (eqlExpr, displMtx, rotMtx)
@@ -22,9 +24,6 @@ sspDataDefs :: [QDefinition]
 sspDataDefs = [sliceWght, baseWtrF, surfWtrF, intersliceWtrF, angleA, angleB,
   lengthB, lengthLb, lengthLs, seismicLoadF, surfLoads, intrsliceF, resShearWO, mobShearWO,
   displcmntRxnF, displcmntBasel, netFDsplcmntEqbm, shearStiffness, soilStiffness]
-
-fixmeS :: Sentence
-fixmeS = S "FIXME: add description"
 
 --DD1
 
@@ -223,7 +222,7 @@ resShrDerivation = [foldlSP [S "The", phrase shrResI, S "of a slice is",
   (inxi nrmFSubWat) := eqlExpr cos sin (\x y -> x - inxiM1 intShrForce + inxi intShrForce + y)
   - inxi baseHydroForce,
   
-  foldlSP [S "values" `ofThe'` S "interslice forces", getS intNormForce `sAnd`
+  foldlSP [plural value `ofThe'` S "interslice forces", getS intNormForce `sAnd`
   getS intShrForce, S "in the", phrase equation, S "are unknown, while the other",
   plural value, S "are found from the physical force", plural definition,
   S "of", acroDD 1, S "to" +:+. acroDD 9,
@@ -239,7 +238,7 @@ resShrDerivation = [foldlSP [S "The", phrase shrResI, S "of a slice is",
   
   foldlSP [S "Using", getS nrmFNoIntsl `sC` S "a", phrase shearRNoIntsl,
   shearRNoIntsl ^. defn, S "can be solved for in terms of all known",
-  S "values as done in", eqN 3],
+  phrase value, S "as done in", eqN 3],
   
   EqnBlock $
   inxi shearRNoIntsl := (inxi nrmFNoIntsl) * tan (inxi fricAngle) +

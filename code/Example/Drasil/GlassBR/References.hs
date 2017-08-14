@@ -3,7 +3,7 @@ module Drasil.GlassBR.References (gbCitations) where
 import Language.Drasil
 
 import Data.Drasil.People (nKoothoor, jmBracci, tlKohutek, wlBeason, spencerSmith,
-  lLai, jRobertson, sRobertson)
+  lLai, jRobertson, sRobertson, pjAgerfalk, nKraiem, jRalyte)
 
 {--}
 
@@ -41,9 +41,7 @@ smithLai2005 = Article
   S "Situational Requirements Engineering Processes - Methods," +:+
   S "Techniques and Tools to Support Situation-Specific Requirements" +:+
   S "Engineering Processes, SREP'05"),
-  Editor [personWM "J." [] "Ralyte" {-(extrctStrng (S "Ralyt" :+: (F Acute 'e')))-},
-          personWM "P." [] "Agerfalk",
-          personWM "N." [] "Kraiem"],
+  Editor [pjAgerfalk, nKraiem, jRalyte],
   Place (S "Paris", S "France"),
   Pages (107, 121),
   Note (S "In conjunction with 13th IEEE International Requirements" +:+

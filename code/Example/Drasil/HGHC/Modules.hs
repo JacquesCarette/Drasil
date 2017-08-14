@@ -13,11 +13,8 @@ import Data.Drasil.Concepts.Math
 import Data.Drasil.Concepts.Computation
 import Data.Drasil.SentenceStructures (foldlSent)
 
-self :: NamedChunk
-self = npnc "HGHC" (pn "HGHC")
-
 executable :: NamedChunk
-executable = npnc' (self ^. id) (compoundPhrase (self ^. term) (program ^. term))
+executable = npnc' "HGHC" (compoundPhrase (pn "HGHC") (program ^. term))
   ("HGHC")
 
 -- input param module
@@ -35,7 +32,7 @@ mod_inputp = makeRecord modInputParam
 meth_input :: MethodChunk
 meth_input = makeFileInputMethod
              (nc "read_input" (nounPhraseSP "Reads and stores input from file."))
-             (makeVCObj "params" (cn "input parameters") cP (mod_inputp ^. id))
+             (makeVCObj "params" (cn "input parameters") cP (mod_inputp ^. id)) --FIXME: avoid using id
              "input"
 
 mod_inputf :: ModuleChunk
@@ -91,7 +88,7 @@ main_func =
       typeOut = obj "output_format"
       labelCladThick = cladThick ^. id
       labelCoolFilm = coolFilmCond ^. id
-      labelGapFilm = gapFilmCond ^. id
+      labelGapFilm = gapFilmCond ^. id --FIXME: avoid using id
       labelCladCond = cladCond ^. id
       labelHg = htTransCladFuel ^. id
       labelHc = htTransCladCool ^. id
@@ -99,7 +96,7 @@ main_func =
   [ block
     [ objDecNewVoid' labelParams typeParams,
       objDecNewVoid' labelIn typeIn,
-      valStmt $ objMethodCall (var labelIn) (meth_input ^. id) [var labelParams],
+      valStmt $ objMethodCall (var labelIn) (meth_input ^. id) [var labelParams], --FIXME: avoid using id
       objDecNewVoid' labelCalc typeCalc,
       varDecDef labelHg float
         ( objMethodCall (var labelCalc) ("calc_" ++ labelHg)
@@ -112,7 +109,7 @@ main_func =
             var labelParams $-> var labelCoolFilm,
             var labelParams $-> var labelCladThick ] ),
       objDecNewVoid' labelOut typeOut,
-      valStmt $ objMethodCall (var labelOut) (meth_output ^. id)
+      valStmt $ objMethodCall (var labelOut) (meth_output ^. id) --FIXME: avoid using id
         [ var labelHg,
           var labelHc ]
     ]

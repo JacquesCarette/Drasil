@@ -56,7 +56,10 @@ thisSI = SI {
 }
   
 thisSRS :: DocDesc
-thisSRS = RefSec (RefProg intro [TUnits, tsymb [TSPurpose, SymbConvention [Lit (nw nuclearPhys), Manual (nw fp)]]]) : [Verbatim s3]
+thisSRS = RefSec (RefProg intro 
+  [TUnits, 
+  tsymb [TSPurpose, SymbConvention [Lit (nw nuclearPhys), Manual (nw fp)]]])
+  : [Verbatim s3]
   
 s3 :: Section --, s4 
 s3 = dataDefnF EmptyS (map (Definition hghcSymMap . Data) hghcVars)

@@ -142,7 +142,7 @@ ldfRef = (getS loadDF +:+ S "is the" +:+ phrase loadDF +:+.
 
 pbTolUsr :: Sentence
 pbTolUsr = (getS pb_tol +:+ S "is the tolerable" +:+ phrase probability 
-  +:+. S "entered by the user")
+  +:+ S "entered by the" +:+. phrase user)
 
 jRef :: Sentence
 jRef = (getS stressDistFac +:+ S "is the" +:+ phrase stressDistFac +:+.

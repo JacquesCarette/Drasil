@@ -3,15 +3,15 @@ module Drasil.HGHC.Modules where
 import Language.Drasil
 import Language.Drasil.Code hiding (self)
 import Drasil.HGHC.HeatTransfer
-import Data.Drasil.Concepts.Software
 import Prelude hiding (id)
 import Control.Lens ((^.))
 
 import Data.Drasil.Modules
 import Data.Drasil.Concepts.Documentation
+import Data.Drasil.Concepts.Software
 import Data.Drasil.Concepts.Math
 import Data.Drasil.Concepts.Computation
-import Data.Drasil.SentenceStructures (foldlSent)
+import Data.Drasil.SentenceStructures (foldlSent, sAnd)
 
 executable :: NamedChunk
 executable = npnc' "HGHC" (compoundPhrase (pn "HGHC") (program ^. term))
@@ -20,7 +20,7 @@ executable = npnc' "HGHC" (compoundPhrase (pn "HGHC") (program ^. term))
 -- input param module
 mod_inputp :: ModuleChunk
 mod_inputp = makeRecord modInputParam 
-             (foldlSent [S "The format and", (phrase structure), S "of the", 
+             (foldlSent [S "The format" `sAnd` (phrase structure), S "of the", 
              (phrase input_), (plural parameter)]) --FIXME: Plural?
              executable
              htVars
@@ -65,8 +65,8 @@ meth_output = makeFileOutputMethod (nc "write_output" (
   "output"
 
 mod_outputf_desc :: ConceptChunk
-mod_outputf_desc = mod_outputf_desc_fun (foldlSent [S "input parameters,",
-  S "temperatures, energies, and times when melting starts", S "and stops"])
+mod_outputf_desc = mod_outputf_desc_fun (foldlList [S "input parameters",
+  S "temperatures", S "energies", "times when melting starts" `sAnd` S "stops."])
 
 mod_outputf :: ModuleChunk
 mod_outputf = mod_io_fun executable

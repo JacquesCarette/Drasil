@@ -31,10 +31,12 @@ cladCond     = makeVC "cladCond"     (cnIES "clad conductivity") (lK `sub` lC)
 
 htTransCladCool_eq :: Expr
 htTransCladCool_eq =
-  (2 * (C cladCond) * (C coolFilmCond) / (2 * (C cladCond) + (C cladThick) * (C coolFilmCond)))
+  (2 * (C cladCond) * (C coolFilmCond) / (2 * (C cladCond) + (C cladThick) 
+  * (C coolFilmCond)))
 
 htTransCladFuel_eq :: Expr
-htTransCladFuel_eq = (2 * (C cladCond) * (C gapFilmCond)) / (2 * (C cladCond) + ((C cladThick) * (C gapFilmCond)))
+htTransCladFuel_eq = (2 * (C cladCond) * (C gapFilmCond)) / (2 * (C cladCond)
+  + ((C cladThick) * (C gapFilmCond)))
 
 htTransCladCool :: QDefinition
 htTransCladCool = fromEqn "htTransCladCool" (nounPhraseSP 

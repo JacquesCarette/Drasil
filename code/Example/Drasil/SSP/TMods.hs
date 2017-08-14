@@ -56,11 +56,13 @@ eq_desc = foldlSent [S "For a body in static equilibrium, the net", plural force
   sParen (acroA 8), S "the", getTandS fx `sAnd` getTandS fy,
   S "will be equal to" +:+. E 0, S "All", plural force,
   S "and their", phrase distance, S "from the chosen point of rotation will create a",
-  S "net moment equal to" `sC` E 0, S "also able to be analyzed as a scalar in a 2D problem"]
+  S "net moment equal to" `sC` E 0,
+  S "also able to be analyzed as a scalar in a 2D problem"]
 
 --
 mcShrStrgth :: RelationConcept
-mcShrStrgth = makeRC "mcShrStrgth" (nounPhraseSP "Mohr-Coulumb shear strength")  mcSS_desc mcSS_rel
+mcShrStrgth = makeRC "mcShrStrgth" (nounPhraseSP "Mohr-Coulumb shear strength")
+  mcSS_desc mcSS_rel
 
 mcSS_rel :: Relation
 mcSS_rel = (C shrStress) := ((C normStress) :* (tan (C fricAngle)) :+ (C cohesion))

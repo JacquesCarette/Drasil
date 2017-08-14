@@ -29,7 +29,8 @@ modules = [mod_hw, mod_behav, mod_ctrl, mod_inputf, mod_outputf, mod_genalg,
 
 -- Control module
 mod_ctrl :: ModuleChunk
-mod_ctrl = mod_ctrl_fun (foldlSent_ [S "The internal", plural dataType', S "and", plural algorithm])
+mod_ctrl = mod_ctrl_fun (foldlSent_
+  [S "The internal", plural dataType', S "and", plural algorithm])
   ssa [] [mod_inputf, mod_outputf, mod_genalg]
 
 -- input format module
@@ -207,7 +208,8 @@ mod_sds = mod_seq_fun matlab []
 
 -- random number generator module
 mod_rng :: ModuleChunk
-mod_rng = mod_rng_fun matlab [] (foldlSent [S "Randomly produces numbers between 0 and 1" `sC`
+mod_rng = mod_rng_fun matlab [] (foldlSent [S "Randomly produces numbers between",
+  E 0, S "and", E 1 `sC`
   S "using a chaotic function with an external seed. Used when generating",
   plural slpSrf, S "in the", titleize mod_genalg_desc, titleize module_])
 

@@ -342,7 +342,8 @@ s4_2_3_genDefs = map sspSymMapT sspGenDefs
 -- SECTION 4.2.4 --
 -- Data Definitions is automatically generated in solChSpecF
 s4_2_4_dataDefs = (map sspSymMapD (take 13 sspDataDefs)) ++ resShrDerivation ++
-  [sspSymMapD (sspDataDefs !! 13)] ++ mobShrDerivation ++ map sspSymMapD [sspDataDefs !! 14, sspDataDefs !! 15] ++
+  [sspSymMapD (sspDataDefs !! 13)] ++ mobShrDerivation ++
+  map sspSymMapD [sspDataDefs !! 14, sspDataDefs !! 15] ++
   stfMtrxDerivation ++ (map sspSymMapD (drop 16 sspDataDefs))
   --FIXME: derivations should be with the appropriate DataDef
 

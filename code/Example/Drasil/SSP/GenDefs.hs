@@ -23,8 +23,9 @@ eqlExpr :: (Expr -> Expr) -> (Expr -> Expr) -> (Expr -> Expr -> Expr) -> Expr
 eqlExpr f1_ f2_ _e_ = (inxi slcWght `_e_`
   (inxi surfHydroForce * cos (inxi surfAngle)) +
   (inxi surfLoad) * (cos (inxi impLoadAngle))) * (f1_ (inxi baseAngle)) +
-  (Neg (C earthqkLoadFctr) * (inxi slcWght) - (inxi intNormForce) + (inxiM1 intNormForce) -
-  (inxi watrForce) + (inxiM1 watrForce) + (inxi surfHydroForce) * sin (inxi surfAngle) + 
+  (Neg (C earthqkLoadFctr) * (inxi slcWght) - (inxi intNormForce) +
+  (inxiM1 intNormForce) - (inxi watrForce) + (inxiM1 watrForce) +
+  (inxi surfHydroForce) * sin (inxi surfAngle) + 
   (inxi surfLoad) * (sin (inxi impLoadAngle))) * (f2_ (inxi baseAngle))
 
 ---------------------------
@@ -37,10 +38,12 @@ sspGenDefs = [normForcEq, bsShrFEq, resShr, mobShr,
 
 --
 normForcEq :: RelationConcept
-normForcEq = makeRC "normForcEq" (nounPhraseSP "normal force equilibrium") nmFEq_desc nmFEq_rel
+normForcEq = makeRC "normForcEq" (nounPhraseSP "normal force equilibrium")
+  nmFEq_desc nmFEq_rel
 
 nmFEq_rel :: Relation
-nmFEq_rel = inxi totNrmForce := eqlExpr cos sin (\x y -> x - inxiM1 intShrForce + inxi intShrForce + y)
+nmFEq_rel = inxi totNrmForce := eqlExpr cos sin
+  (\x y -> x - inxiM1 intShrForce + inxi intShrForce + y)
 
 nmFEq_desc :: Sentence
 nmFEq_desc = foldlSent [S "For a", phrase slice, S "of", phrase mass,
@@ -59,10 +62,12 @@ nmFEq_desc = foldlSent [S "For a", phrase slice, S "of", phrase mass,
 
 --
 bsShrFEq :: RelationConcept
-bsShrFEq = makeRC "bsShrFEq" (nounPhraseSP "base shear force equilibrium") bShFEq_desc bShFEq_rel
+bsShrFEq = makeRC "bsShrFEq" (nounPhraseSP "base shear force equilibrium")
+  bShFEq_desc bShFEq_rel
 
 bShFEq_rel :: Relation
-bShFEq_rel = inxi mobShrI := eqlExpr sin cos (\x y -> x - inxiM1 intShrForce + inxi intShrForce + y)
+bShFEq_rel = inxi mobShrI := eqlExpr sin cos
+  (\x y -> x - inxiM1 intShrForce + inxi intShrForce + y)
 
 bShFEq_desc :: Sentence
 bShFEq_desc = foldlSent [S "For a", phrase slice, S "of", phrase mass,
@@ -81,10 +86,12 @@ bShFEq_desc = foldlSent [S "For a", phrase slice, S "of", phrase mass,
 
 --
 shrResEqn :: Expr
-shrResEqn = inxi nrmFSubWat * tan (inxi fricAngle) + inxi cohesion * inxi baseWthX * sec (inxi baseAngle)
+shrResEqn = inxi nrmFSubWat * tan (inxi fricAngle) + inxi cohesion *
+  inxi baseWthX * sec (inxi baseAngle)
 
 resShr :: RelationConcept
-resShr = makeRC "resShr" (nounPhraseSP "resistive shear force") resShr_desc resShr_rel
+resShr = makeRC "resShr" (nounPhraseSP "resistive shear force")
+  resShr_desc resShr_rel
 
 resShr_rel :: Relation
 resShr_rel = inxi shrResI := shrResEqn
@@ -97,7 +104,8 @@ resShr_desc = foldlSent [S "The Mohr-Coulomb resistive shear strength of a",
   S "multiplied by the", getTandS baseLngth, S "of the plane where the",
   phrase normal, S "occurs, where", (E $ C baseLngth := C baseWthX * sec(C baseAngle))
   `sAnd` getS baseWthX, S "is the x width of the base. This accounts for the",
-  phrase nrmFSubWat, E $ C nrmFSubWat := C totNrmForce - C baseHydroForce, S "of a soil from", -- FIXME: add prime to nrmStrss
+  phrase nrmFSubWat, E $ C nrmFSubWat := C totNrmForce - C baseHydroForce,
+  S "of a soil from", -- FIXME: add prime to nrmStrss
   acroT 4, S "where the", phrase nrmStrss, S "is multiplied by the same area to obtain the",
   phrase nrmFSubWat, E $ C nrmStrss * C baseWthX * sec(C baseAngle) * 1 := C nrmFSubWat]
 
@@ -118,7 +126,8 @@ mobShr_desc = foldlSent [
 
 --
 normShrR :: RelationConcept
-normShrR = makeRC "normShrR" (nounPhraseSP "interslice normal/shear relationship") nmShrR_desc nmShrR_rel
+normShrR = makeRC "normShrR" (nounPhraseSP "interslice normal/shear relationship")
+  nmShrR_desc nmShrR_rel
 
 nmShrR_rel :: Relation
 nmShrR_rel = C intShrForce := C normToShear :* C scalFunc :* C intNormForce
@@ -147,7 +156,8 @@ momExpr _e_ = (Neg (inxi intNormForce) :* (inxi sliceHght :- inxi baseWthX :/ 2 
   inxi surfLoad :* sin (inxi impLoadAngle) :* inxi midpntHght)
 
 momentEql :: RelationConcept
-momentEql = makeRC "momentEql" (nounPhraseSP "moment equilibrium") momEql_desc momEql_rel
+momentEql = makeRC "momentEql" (nounPhraseSP "moment equilibrium")
+  momEql_desc momEql_rel
 
 momEql_rel :: Relation
 momEql_rel = (Int 0) := momExpr
@@ -167,34 +177,43 @@ momEql_desc = foldlSent [S "For a", phrase slice, S "of", phrase mass,
 
 --
 netForcex :: RelationConcept
-netForcex = makeRC "netForce" (nounPhraseSP "net x-component force") EmptyS fNetx_rel
+netForcex = makeRC "netForce" (nounPhraseSP "net x-component force")
+  EmptyS fNetx_rel
 
 fNetx_rel :: Relation
-fNetx_rel = inxi fx := (Neg $ inxi watrForceDif) - (C earthqkLoadFctr)*(inxi slcWght)
-  - (inxi baseHydroForce) * sin (inxi baseAngle) + (inxi surfHydroForce) * sin (inxi surfAngle)
+fNetx_rel = inxi fx := (Neg $ inxi watrForceDif) -
+  (C earthqkLoadFctr)*(inxi slcWght)
+  - (inxi baseHydroForce) * sin (inxi baseAngle) +
+  (inxi surfHydroForce) * sin (inxi surfAngle)
   + (inxi surfLoad) * sin (inxi impLoadAngle)
 
 netForcey :: RelationConcept
-netForcey = makeRC "netForce" (nounPhraseSP "net y-component force") fNet_desc fNety_rel
+netForcey = makeRC "netForce" (nounPhraseSP "net y-component force")
+  fNet_desc fNety_rel
 
 fNety_rel :: Relation
-fNety_rel = inxi fy := (Neg $ inxi slcWght) + (inxi baseHydroForce) * cos (inxi baseAngle)
-  - (inxi surfHydroForce) * cos (inxi surfAngle) - (inxi surfLoad) * cos (inxi impLoadAngle)
+fNety_rel = inxi fy := (Neg $ inxi slcWght) +
+  (inxi baseHydroForce) * cos (inxi baseAngle)
+  - (inxi surfHydroForce) * cos (inxi surfAngle) -
+  (inxi surfLoad) * cos (inxi impLoadAngle)
 
 
 fNet_desc :: Sentence
-fNet_desc = foldlSent [S "These equations show the net sum of the", plural force, S "acting on a",
-  phrase slice, S "for the RFEM", phrase model, S "and the", plural force,
+fNet_desc = foldlSent [S "These equations show the net sum of the",
+  plural force, S "acting on a", phrase slice, 
+  S "for the RFEM", phrase model, S "and the", plural force,
   S "that create an applied load on the" +:+. phrase slice, getS fx,
   S "refers to the load in the direction", phrase perp, S "to the",
   S "direction of the", phrase force, S "of gravity for", phrase slice,
-  getS index `sC` S "while", getS fy, S "refers to the load in the direction parallel to the",
-  phrase force, S "of gravity for", phrase slice +:+. getS index,
-  at_start' force, S "are found in the free body diagram of" +:+.
+  getS index `sC` S "while", getS fy, S "refers to the load in the",
+  S "direction parallel to the", phrase force, S "of gravity for", 
+  phrase slice +:+. getS index, at_start' force, 
+  S "are found in the free body diagram of" +:+.
   makeRef (SRS.physSyst SRS.missingP []), S "In this", phrase model, --FIXME: hacked link
   S "the", plural element, S "are not exerting", plural force,
   S "on each other" `sC` S "so the", phrase intrslce, plural force,
-  getS intNormForce, S "and", getS intShrForce, S "are not a part of the" +:+. phrase model, S "Index", getS index, 
+  getS intNormForce, S "and", getS intShrForce, S "are not a part of the"
+  +:+. phrase model, S "Index", getS index, 
   S "refers to", (plural value `ofThe` plural property), S "for",
   phrase slice :+: S "/" :+: plural intrslce, S "following", 
   S "convention in" +:+. makeRef (SRS.physSyst SRS.missingP []), 
@@ -203,10 +222,12 @@ fNet_desc = foldlSent [S "These equations show the net sum of the", plural force
 
 --
 hookesLaw2d :: RelationConcept
-hookesLaw2d = makeRC "hookesLaw2d" (nounPhraseSP "Hooke's law 2D") hooke2d_desc hooke2d_rel
+hookesLaw2d = makeRC "hookesLaw2d" (nounPhraseSP "Hooke's law 2D")
+  hooke2d_desc hooke2d_rel
 
 hooke2d_rel :: Relation
-hooke2d_rel = vec2D (inxi genPressure) (inxi genPressure) := dgnl2x2 (inxi shrStiffIntsl) (inxi nrmStiffBase) * vec2D (inxi dx_i) (inxi dy_i)
+hooke2d_rel = vec2D (inxi genPressure) (inxi genPressure) :=
+  dgnl2x2 (inxi shrStiffIntsl) (inxi nrmStiffBase) * vec2D (inxi dx_i) (inxi dy_i)
 
 hooke2d_desc :: Sentence
 hooke2d_desc = foldlSent [S "A 2D component implementation of Hooke's law as seen in" +:+.
@@ -229,7 +250,8 @@ hooke2d_desc = foldlSent [S "A 2D component implementation of Hooke's law as see
 
 --
 displVect :: RelationConcept
-displVect = makeRC "displVect" (nounPhraseSP "displacement vectors") disVec_desc disVec_rel
+displVect = makeRC "displVect" (nounPhraseSP "displacement vectors")
+  disVec_desc disVec_rel
 
 disVec_rel :: Relation
 disVec_rel = inxi rotatedDispl := vec2D (inxi shrDispl) (inxi nrmDispl) :=

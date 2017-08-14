@@ -28,7 +28,8 @@ genStffness = SM.stffness
 -------------
 -- HELPERS --
 -------------
-fsi, fisi, wiif, wla, smsi :: String
+fixme, fsi, fisi, wiif, wla, smsi :: String
+fixme = "FIXME: missing discription"
 fsi   = "for slice index i"
 fisi  = "for interslice index i"
 wiif  = "without the influence of interslice forces"
@@ -98,13 +99,13 @@ waterWeight = uqc "gamma_w" (cn $ "unit weight of water")
   (sub (Greek Gamma_L) lW) specific_weight Real gtZeroConstr
   (Dbl 9.8) defultUncrt
   
-constant_a  = uqc "a" (cn "constant") "FIXME: missing discription"
+constant_a  = uqc "a" (cn "constant") fixme
   lA metre Real [] (Dbl 0) defultUncrt
   
-constant_A  = uqc "A" (cn "constant") "FIXME: missing discription"
+constant_A  = uqc "A" (cn "constant") fixme
   cA metre Real [] (Dbl 0) defultUncrt
   
-constant_K  = uqc "kappa" (cn "constant") "FIXME: missing discription"
+constant_K  = uqc "kappa" (cn "constant") fixme
   (Greek Kappa_L) pascal Real [] (Dbl 0) defultUncrt
 
 {-Output Variables-} --FIXME: See if there should be typical values
@@ -182,7 +183,8 @@ xi = uc' "x_i" (cn $ "x ordinate") smsi lX metre
 
 critCoords  = uc' "(xcs,ycs)" (cn $ "the set of x and y coordinates")
   "describe the vertices of the critical slip surface"
-  (sCurlyBrSymb (Concat [sub (Atomic "x") (Atomic "cs"), sub (Atomic ",y") (Atomic "cs")])) metre
+  (sCurlyBrSymb (Concat [sub (Atomic "x") (Atomic "cs"),
+  sub (Atomic ",y") (Atomic "cs")])) metre
 
 mobShrI     = uc' "S_i" (cn $ "mobilized shear force")
   fsi
@@ -216,8 +218,8 @@ watrForce    = uc' "H_i" (cn $ "interslice water force") ("exerted in the " ++
   "x-ordinate direction between adjacent slices " ++ fisi)
   (cH) newton
 
-watrForceDif = uc' "dH_i" (cn $ "difference between interslice forces") ("exerted in the " ++
-  "x-ordinate direction between adjacent slices " ++ fisi)
+watrForceDif = uc' "dH_i" (cn $ "difference between interslice forces")
+  ("exerted in the x-ordinate direction between adjacent slices " ++ fisi)
   (Concat [Greek Delta, cH]) newton
 
 intShrForce = uc' "X_i" (cn $ "interslice shear force") 
@@ -229,7 +231,8 @@ baseHydroForce = uc' "U_b,i" (cn $ "base hydrostatic force")
   (sub cU (Atomic "b")) newton
 
 surfHydroForce = uc' "U_t,i" (cn $ "surface hydrostatic force")
-  ("from water pressure acting into the slice from standing water on the slope surface " ++ fsi)
+  ("from water pressure acting into the slice from standing " ++
+  "water on the slope surface " ++ fsi)
   (sub cU (Atomic "t")) newton
 
 totNrmForce = uc' "N_i" (cn $ "normal force") ("total reactive force " ++
@@ -248,10 +251,12 @@ surfLoad    = uc' "Q_i" (cn $ "imposed surface load")
   "a downward force acting into the surface from midpoint of slice i"
   (cQ) newton
 
-baseAngle   = uc' "alpha_i" (cn $ "angle") ("base of the mass relative to the horizontal " ++ fsi)
+baseAngle   = uc' "alpha_i" (cn $ "angle")
+  ("base of the mass relative to the horizontal " ++ fsi)
   (Greek Alpha_L) degree
 
-surfAngle   = uc' "beta_i" (cn $ "angle") ("surface of the mass relative to the horizontal " ++ fsi)
+surfAngle   = uc' "beta_i" (cn $ "angle")
+  ("surface of the mass relative to the horizontal " ++ fsi)
   (Greek Beta_L) degree
 
 impLoadAngle = uc' "omega_i" (cn $ "angle")
@@ -270,7 +275,8 @@ surfLngth   = uc' "l_s,i" (cn $ "length of an interslice surface")
   (sub (Greek Ell) (Atomic "s")) metre
 
 midpntHght  = uc' "h_i" (cn $ "midpoint height")
-  ("distance from the slip base to the slope surface in a vertical line from the midpoint of the slice " ++ fsi)
+  ("distance from the slip base to the slope surface in a vertical " ++
+  "line from the midpoint of the slice " ++ fsi)
   (lH) metre
 
 momntOfBdy  = uc' "M" (cn $ "moment of a body") ("assumed 2D allowing a scalar")
@@ -330,28 +336,35 @@ elmPrllDispl = uc' "dn_i" (cn $ "displacement")
 porePressure = uc' "mu" (cn "pore pressure") ("from water within the soil")
   (Greek Mu_L) pascal
 
-rotatedDispl = uc' "varepsilon_i" (cn "displacement") ("in rotated coordinate system")
+rotatedDispl = uc' "varepsilon_i" (cn "displacement")
+  ("in rotated coordinate system")
   (Greek Epsilon_V) metre
   
-shrStress    = uc' "tau_i" (cn "resistive shear stress") ("acting on the base of a slice")
+shrStress    = uc' "tau_i" (cn "resistive shear stress")
+  ("acting on the base of a slice")
   (Greek Tau_L) pascal
   
-mobStress    = uc' "s_i" (cn "mobilized shear stress") ("acting on the base of a slice")
+mobStress    = uc' "s_i" (cn "mobilized shear stress")
+  ("acting on the base of a slice")
   (lS) pascal
 
-sliceHght    = uc' "z_i" (cn "center of slice height") ("the distance from the lowest part " ++
-  "of the slice to the height of the centers of slice") (lZ) metre
+sliceHght    = uc' "z_i" (cn "center of slice height")
+  ("the distance from the lowest part " ++
+  "of the slice to the height of the centers of slice")
+  (lZ) metre
 
-normFunc     = uc' "C1_i" (cn "interslice normal force function") ("FIXME: missing discription")
+normFunc     = uc' "C1_i" (cn "interslice normal force function")
+  (fixme)
   (Concat [cC, Atomic "1"]) momentOfForceU
   
-shearFunc    = uc' "C2_i" (cn "interslice shear force function") ("FIXME: missing discription")
+shearFunc    = uc' "C2_i" (cn "interslice shear force function")
+  (fixme)
   (Concat [cC, Atomic "2"]) momentOfForceU
 
-fx = uc' "fx" (cn "x-component of the net force") "FIXME: missing discription"
+fx = uc' "fx" (cn "x-component of the net force") fixme
   (sub cF lX) newton
 
-fy = uc' "fy" (cn "y-component of the net force") "FIXME: missing discription"
+fy = uc' "fy" (cn "y-component of the net force") fixme
   (sub cF lY) newton
   
 ----------------------
@@ -365,20 +378,25 @@ sspUnitless = [earthqkLoadFctr, normToShear,scalFunc,
 earthqkLoadFctr, normToShear, scalFunc,
   numbSlices, minFunction, fsloc, index, varblU, varblV :: ConVar
 
-earthqkLoadFctr = cvR (dcc "K_c" (nounPhraseSP $ "earthquake load factor") ("proportionality " ++
-  "factor of force that weight pushes outwards; caused by seismic earth movements")) (sub cK lC)
+earthqkLoadFctr = cvR (dcc "K_c" (nounPhraseSP $ "earthquake load factor")
+  ("proportionality factor of force that " ++
+  "weight pushes outwards; caused by seismic earth movements"))
+  (sub cK lC)
 
 normToShear = cvR (dcc "lambda" (nounPhraseSP $ "interslice normal/shear force ratio")
   ("applied to all interslices")) (Greek Lambda_L)
 
-scalFunc    = cvR (dcc "f_i" (nounPhraseSP $ "scaling function") ("magnitude of interslice " ++
-  "forces as a function of the x coordinate" ++ fisi ++ "; can be constant or a half-sine"))
+scalFunc    = cvR (dcc "f_i" (nounPhraseSP $ "scaling function")
+  ("magnitude of interslice forces as a function " ++
+  "of the x coordinate" ++ fisi ++ "; can be constant or a half-sine"))
   (lF)
 
-numbSlices  = cvRs (dcc "n" (nounPhraseSP "number of slices") "the slip mass has been divided into")
+numbSlices  = cvRs (dcc "n" (nounPhraseSP "number of slices")
+  "the slip mass has been divided into")
   lN Natural
 
-minFunction = cvR (dcc "Upsilon" (nounPhraseSP "function") ("generic minimization function or algorithm"))
+minFunction = cvR (dcc "Upsilon" (nounPhraseSP "function")
+  ("generic minimization function or algorithm"))
   (Greek Upsilon)
 
 fsloc       = cvR (dcc "FS_loci" (nounPhraseSP "local factor of safety") fsi)
@@ -395,8 +413,8 @@ varblV = cvRs (dcc "varblV" (nounPhraseSP "local index")
   ("used as a bound variable index in calculations"))
   lV Natural
 
-index       = cvRs (dcc "index" (nounPhraseSP "index") ("used to show a quantity " ++
-  "applies to only one slice")) lI Natural
+index       = cvRs (dcc "index" (nounPhraseSP "index")
+  ("used to show a quantity applies to only one slice")) lI Natural
 
 --FIXME: possibly move to Language/Drasil/Expr.hs
 indx1 :: (SymbolForm a) => a -> Expr

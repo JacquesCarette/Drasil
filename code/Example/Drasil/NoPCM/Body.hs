@@ -37,27 +37,48 @@ import Data.Drasil.People (thulasi)
 import Data.Drasil.Utils (enumSimple, getS, refFromType,
   itemRefToSent, makeTMatrix, itemRefToSent, weave)
 
-import Data.Drasil.Concepts.Documentation
+import Data.Drasil.Concepts.Documentation (datumConstraint, inModel,
+  requirement, section_, traceyGraph, item, assumption, dataDefn,
+  likelyChg, genDefn, thModel, traceyMatrix, model, acroNumGen,
+  acroIM, output_, quantity, input_, physicalConstraint, condition,
+  property, variable, description, acroGD, symbol_, uncertainty,
+  information, uncertCol, value, column, softwareConstraint, goalStmt,
+  physSyst, problem, definition, srs, content, reference, document,
+  goal, purpose, typUnc)
 import Data.Drasil.Concepts.Math (ode, de, unit_, rOfChng, equation)
 import Data.Drasil.Concepts.Software (program)
 import Data.Drasil.Concepts.Thermodynamics (ener_src, thermal_analysis, temp,
   thermal_energy, ht_trans_theo, heat, melt_pt, boil_pt, heat_trans, ht_flux,
   heat_cap_spec, thermal_conduction)
-import qualified Data.Drasil.Quantities.Thermodynamics as QT
+import qualified Data.Drasil.Quantities.Thermodynamics as QT (temp,
+  heat_cap_spec, ht_flux)
 import Data.Drasil.Quantities.Physics (time, energy)
 import Data.Drasil.Quantities.PhysicalProperties (vol, mass, density)
 import Data.Drasil.Quantities.Math (uNormalVect, surface, gradient)
 import Data.Drasil.Software.Products (compPro)
 
 import Drasil.Sections.ReferenceMaterial (intro)
-import qualified Drasil.SRS as SRS
-import Drasil.DocumentLanguage
-import Drasil.Sections.SpecificSystemDescription
-import Drasil.Sections.Requirements
-import Drasil.Sections.TraceabilityMandGs
-import Drasil.Sections.AuxiliaryConstants
+import qualified Drasil.SRS as SRS (funcReq, likeChg, probDesc, goalStmt,
+  inModel, missingP)
+import Drasil.DocumentLanguage (DocDesc,
+  tsymb, mkRequirement, mkLklyChnk, mkAssump, mkDoc,
+  TSIntro (SymbOrder, SymbConvention, TSPurpose),
+  DocSection (Verbatim, Bibliography, IntroSec, RefSec),
+  RefTab (TAandA, TUnits),
+  RefSec (RefProg),
+  IntroSec (IntroProg),
+  IntroSub (IOrgSec, IScope, IChar, IPurpose),
+  Literature (Lit, Doc'))
 
-import Data.Drasil.SentenceStructures
+import Drasil.Sections.SpecificSystemDescription (inDataConstTbl,
+  outDataConstTbl, solChSpecF, dataConstraintUncertainty, physSystDesc,
+  termDefnF, specSysDesF)
+import Drasil.Sections.Requirements (reqF)
+import Drasil.Sections.TraceabilityMandGs (traceGIntro, traceMGF)
+import Drasil.Sections.AuxiliaryConstants (valsOfAuxConstantsF)
+
+import Data.Drasil.SentenceStructures (showingCxnBw, foldlSent_, sAnd,
+  foldlList, isThe, sOf, ofThe, foldlSPCol, foldlSent, foldlSP)
 
 
 -- This defines the standard units used throughout the document

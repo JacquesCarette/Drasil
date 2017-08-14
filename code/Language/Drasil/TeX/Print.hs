@@ -249,8 +249,8 @@ pow x y = p_expr x ++ "^" ++ brace (p_expr y)
 
 cases :: [(Expr,Expr)] -> String
 cases []     = error "Attempt to create case expression without cases"
-cases (p:[]) = p_expr (fst p) ++ ", & " ++ p_expr (snd p)
-cases (p:ps) = p_expr (fst p) ++ ", & " ++ p_expr (snd p) ++ "\\\\\n" ++ cases ps
+cases (p:[]) = (needMultlined $ fst p) ++ ", & " ++ p_expr (snd p)
+cases (p:ps) = cases [p] ++ "\\\\\n" ++ cases ps
 -----------------------------------------------------------------
 ------------------ TABLE PRINTING---------------------------
 -----------------------------------------------------------------

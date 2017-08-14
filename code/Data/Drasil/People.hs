@@ -32,7 +32,7 @@ spencerSmith = personWM "W"         ["Spencer"]     "Smith"
 
 -- short versions for now
 luthfi, alex, nikitha, thulasi, brooks, mLightstone, lLai,
-pAgerfalk, nKraiem, jRalyte :: Person
+  pAgerfalk, nKraiem, jRalyte :: Person
 luthfi      = person "Luthfi"     "Mawarid"
 alex        = person "Alex"       "Halliwushka"
 nikitha     = person "Nikitha"    "Krithnan"

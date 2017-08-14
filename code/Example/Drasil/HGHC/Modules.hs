@@ -11,7 +11,7 @@ import Data.Drasil.Concepts.Documentation
 import Data.Drasil.Concepts.Software
 import Data.Drasil.Concepts.Math
 import Data.Drasil.Concepts.Computation
-import Data.Drasil.SentenceStructures (foldlSent, sAnd)
+import Data.Drasil.SentenceStructures (foldlSent, foldlList, sAnd)
 
 executable :: NamedChunk
 executable = npnc' "HGHC" (compoundPhrase (pn "HGHC") (program ^. term))
@@ -66,7 +66,7 @@ meth_output = makeFileOutputMethod (nc "write_output" (
 
 mod_outputf_desc :: ConceptChunk
 mod_outputf_desc = mod_outputf_desc_fun (foldlList [S "input parameters",
-  S "temperatures", S "energies", "times when melting starts" `sAnd` S "stops."])
+  S "temperatures", S "energies", S "times when melting starts" `sAnd` S "stops."])
 
 mod_outputf :: ModuleChunk
 mod_outputf = mod_io_fun executable

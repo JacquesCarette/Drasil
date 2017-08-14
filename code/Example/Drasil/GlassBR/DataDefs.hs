@@ -15,7 +15,7 @@ import Data.Drasil.Utils (getS, mkDataDef', mkDataDef)
 import Data.Drasil.SentenceStructures (sAnd)
 import Data.Drasil.Concepts.PhysicalProperties (dimension)
 import Data.Drasil.Concepts.Math (probability, parameter, calculation)
-import Data.Drasil.Concepts.Documentation (datum)
+import Data.Drasil.Concepts.Documentation (datum, user)
 
 ----------------------
 -- DATA DEFINITIONS --
@@ -53,7 +53,7 @@ hFromt_helper :: Double -> Double -> (Expr, Relation)
 hFromt_helper result condition = ((Dbl result), (C nom_thick) := Dbl condition)
 
 hFromt :: QDefinition
-hFromt = mkDataDef act_thick hFromt_eq
+hFromt = mkDataDef' act_thick hFromt_eq (hMin)
 
 --DD3--
 
@@ -109,7 +109,7 @@ tolPre_eq :: Expr
 tolPre_eq = FCall (C tolLoad) [C sdf_tol, (C plate_len) / (C plate_width)]
 
 tolPre :: QDefinition
-tolPre = mkDataDef tolLoad tolPre_eq
+tolPre = mkDataDef' tolLoad tolPre_eq (qHtTlExtra)
 
 --DD9--
 

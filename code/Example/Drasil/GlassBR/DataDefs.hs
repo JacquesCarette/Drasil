@@ -1,4 +1,6 @@
-module Drasil.GlassBR.DataDefs where
+module Drasil.GlassBR.DataDefs (dataDefns, gbQDefns, 
+  risk, hFromt, loadDF, strDisFac, nonFL, glaTyFac, dimLL, tolPre,
+  tolStrDisFac) where
 
 import Language.Drasil
 

@@ -1,4 +1,4 @@
-module Drasil.GlassBR.Interpolation where
+module Drasil.GlassBR.Interpolation where --whole file is used
 
 import Language.Drasil
 

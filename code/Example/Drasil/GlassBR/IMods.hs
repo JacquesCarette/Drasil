@@ -1,4 +1,4 @@
-module Drasil.GlassBR.IMods(iModels, probOfBr, calOfCap, calOfDe) where
+module Drasil.GlassBR.IMods (iModels, probOfBr, calOfCap, calOfDe) where
 
 import Language.Drasil
 

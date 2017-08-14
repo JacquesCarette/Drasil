@@ -1,4 +1,4 @@
-module Drasil.GlassBR.Changes(likelyChanges, unlikelyChanges) where
+module Drasil.GlassBR.Changes (likelyChanges, unlikelyChanges) where
 
 import Language.Drasil
 

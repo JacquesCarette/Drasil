@@ -1,4 +1,4 @@
-module Drasil.GlassBR.Units (sFlawPU) where
+module Drasil.GlassBR.Units where --whole file is used
 
 import Language.Drasil
 import Data.Drasil.SI_Units

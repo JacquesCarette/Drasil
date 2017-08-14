@@ -1,4 +1,4 @@
-module Drasil.GlassBR.Modules where
+module Drasil.GlassBR.Modules where --whole file is used
 
 import Language.Drasil
 

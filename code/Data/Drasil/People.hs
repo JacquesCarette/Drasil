@@ -6,15 +6,19 @@ spencerSmith, henryFrankis, nKoothoor, dParnas, daAruliah, gWilson,
   cTitus, kdHuff, cHong, mDavis, rGuy, shdHaddock, imMitchell, mdPlumblet,
   bWaugh, epWhite, pWilson, pcClements, dDewitt, tBergman, aLavine,
   jBueche, fIncropera :: Person
+aLavine      = personWM "A"         ["S"]           "Lavine"
 bWaugh       = person   "Ben"                       "Waugh" -- Best Practices for Scientific Computing 2013
 cHong        = person   "Chue"                      "Hong"
 cTitus       = person   "C"                         "Titus"
 daAruliah    = personWM "D"         ["A"]           "Aruliah"
+dDewitt      = personWM "D"         ["P"]           "Dewitt"
 dParnas      = personWM "David"     ["L"]           "Parnas"
 epWhite      = personWM "Ethan"     ["P"]           "White" -- Best Practices for Scientific Computing 2013
+fIncropera   = personWM "F"         ["P"]           "Incropera"
 gWilson      = person   "Greg"                      "Wilson"
 henryFrankis = person   "Henry"                     "Frankis"
 imMitchell   = personWM "Ian"       ["M"]           "Mitchell"
+jBueche      = personWM "J"         ["Frederick"]   "Bueche"
 kdHuff       = personWM "Kathryn"   ["D"]           "Huff"
 mDavis       = person   "Matt"                      "Davis"
 mdPlumblet   = personWM "Mark"      ["D"]           "Plumblet"
@@ -23,13 +27,8 @@ pcClements   = personWM "P"         ["C"]           "Clements" -- The Modular St
 pWilson      = person   "Paul"                      "Wilson" -- Best Practices for Scientific Computing 2013
 rGuy         = personWM "Richard"   ["T"]           "Guy"
 shdHaddock   = personWM "Steven"    ["H","D"]       "Haddock"
-spencerSmith = personWM "W"         ["Spencer"]     "Smith"
-aLavine      = personWM "A"         ["S"]           "Lavine"
 tBergman     = personWM "T"         ["L"]           "Bergman"
-dDewitt      = personWM "D"         ["P"]           "Dewitt"
-fIncropera   = personWM "F"         ["P"]           "Incropera"
-jBueche      = personWM "J"         ["Frederick"]   "Bueche"
-
+spencerSmith = personWM "W"         ["Spencer"]     "Smith"
 
 -- short versions for now
 luthfi, alex, nikitha, thulasi, brooks, mLightstone, lLai,

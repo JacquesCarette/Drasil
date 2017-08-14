@@ -2,15 +2,16 @@ module Drasil.SSP.Assumptions where
 
 import Language.Drasil
 
-import Drasil.SSP.Defs
-import Drasil.SSP.Unitals
+import Drasil.SSP.Defs (slpSrf, slopeSrf, slope,
+  mtrlPrpty, soil, soilLyr, soilPrpty, intrslce, slice)
+import Drasil.SSP.Unitals (coords, normToShear, scalFunc, fs)
 
-import Data.Drasil.Utils
-import Data.Drasil.SentenceStructures
+import Data.Drasil.Utils (getS)
+import Data.Drasil.SentenceStructures (ofThe, ofThe', getTandS)
 
 import Data.Drasil.Concepts.Documentation (condition)
-import Data.Drasil.Concepts.Physics
-import Data.Drasil.Concepts.Math
+import Data.Drasil.Concepts.Physics (force, stress, strain)
+import Data.Drasil.Concepts.Math (surface, unit_)
 import Data.Drasil.Concepts.SolidMechanics (shearForce)
 
 sspAssumptions :: [Sentence]

@@ -560,10 +560,12 @@ states that energy must be conserved:
 E_W = \int_{0}^{t} h_C A_C (T_C - T_W(t)) dt - \int_{0}^{t} h_P A_P (T_W(t) - T_P(t)) dt
 \end{equation*}
 
-This is trivial for a human to check, and writing code to automatically check it 
-during the software execution is also very simple. However, it is still 
-time-consuming and should it ever need to change, it would require developers to 
-make a number of modifications to many artifacts in the future.
+\wss{We need to define the terms in this equation.}  This is trivial for a human
+to check, and writing code to automatically check it during the software
+execution is also very simple. However, it is still time-consuming and should it
+ever need to change, such as if there is a change in the assumption that the
+tank is a perfect insulator, it would require developers to make a number of
+modifications to many artifacts in the future.
 
 \begin{table} 
 \centering

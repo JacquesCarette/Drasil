@@ -222,13 +222,13 @@ is_safe2      = vc "is_safe2"        (nounPhraseSP $ "true when load resistance"
   ++ " (capacity) is greater than load (demand)")
   (Concat [Atomic "is", Special UScore, Atomic "safe2"]) Boolean
 
-lDurFac       = vc'' (loadDurFactor) (Atomic "LDF")
+lDurFac       = vc'' (loadDurFactor) (Atomic "LDF") Real
 
-loadSF        = vc'' (lShareFac) (Atomic "LSF")
+loadSF        = vc'' (lShareFac) (Atomic "LSF") Real
 
-lRe           = vc'' (lResistance) (Atomic "LR")
+lRe           = vc'' (lResistance) (Atomic "LR") Real
 
-nonFactorL    = vc'' (nonFactoredL) (Atomic "NFL")
+nonFactorL    = vc'' (nonFactoredL) (Atomic "NFL") Real
 
 risk_fun      = makeVC "risk_fun"    (nounPhraseSP "risk of failure") cB
 

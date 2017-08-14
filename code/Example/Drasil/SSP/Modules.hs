@@ -3,16 +3,22 @@ module Drasil.SSP.Modules where
 import Language.Drasil
 
 import Data.Drasil.Modules (mod_hw, mod_behav, mod_sw,
-  mod_ctrl_fun, mod_io_fun, mod_seq_fun, mod_rng_fun, mod_plot_fun, mod_outputf_desc_fun)
-import Data.Drasil.SentenceStructures
+  mod_ctrl_fun, mod_io_fun, mod_seq_fun, mod_rng_fun,
+  mod_plot_fun, mod_outputf_desc_fun)
+import Data.Drasil.SentenceStructures (ofGiv, ofGiv',
+  ofThe, foldlList, foldlSent, foldlSent_)
 
-import Data.Drasil.Concepts.Math
-import Data.Drasil.Concepts.Documentation
-import Data.Drasil.Concepts.Computation
-import Data.Drasil.Software.Products
+import Data.Drasil.Concepts.Math (surface, vector)
+import Data.Drasil.Concepts.Documentation (property,
+  method_, module_, analysis, input_, element)
+import Data.Drasil.Concepts.Computation (algorithm,
+  outDatum, inDatum, dataType')
+import Data.Drasil.Software.Products (matlab)
 
-import Drasil.SSP.Unitals
-import Drasil.SSP.Defs
+import Drasil.SSP.Unitals (waterWeight, fs, sspInputs)
+import Drasil.SSP.Defs (rgFnElm, soil, morPrice, slice,
+  slip, slope, slopeSrf, slpSrf, crtSlpSrf, intrslce,
+  ssa, soilLyr, soilPrpty)
 
 modules :: [ModuleChunk]
 modules = [mod_hw, mod_behav, mod_ctrl, mod_inputf, mod_outputf, mod_genalg,
@@ -35,7 +41,7 @@ mod_inputf_desc = dccWDS "mod_inputf_desc" (cn' "input format")
   S "coordinates for each layer. Each layer's", plural soilPrpty, S "of",
   (foldlList $ map phrase sspInputs),
   S "are stored in", plural vector, S "of" +:+. plural soilPrpty,
-  S "If a piezometric", phrase surface_, S "exists in the", phrase slope,
+  S "If a piezometric", phrase surface, S "exists in the", phrase slope,
   S "it's coordinates and the", phrase waterWeight, S "are also",
   S "included in the" +:+. phrase input_, S "Lastly an expected range for",
   S "the entrance and exit points of the", phrase crtSlpSrf, S "are inputted"])

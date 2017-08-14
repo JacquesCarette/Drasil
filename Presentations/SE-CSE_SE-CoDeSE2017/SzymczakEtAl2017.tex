@@ -559,8 +559,22 @@ states that energy must be conserved:
 \begin{equation*}
 E_W = \int_{0}^{t} h_C A_C (T_C - T_W(t)) dt - \int_{0}^{t} h_P A_P (T_W(t) - T_P(t)) dt
 \end{equation*}
+%\wss{We need to define the terms in this equation.}  
+Where:
+\begin{itemize}
+	\item $E_W$ is the change in heat energy in the water
+	\item $A_C$ is the heating coil surface area
+	\item $A_P$ is the PCM surface area
+	\item $h_C$ is the convective heat transfer coefficient between coil and 
+	water
+	\item $h_P$ is the convective heat transfer coefficient between PCM and 
+	water 
+	\item $T_C$ is the temperature of the heating coil
+	\item $T_P$ is the temperature of the PCM
+	\item $T_W$ is the temperature of the water
+\end{itemize}
 
-\wss{We need to define the terms in this equation.}  This is trivial for a human
+This is trivial for a human
 to check, and writing code to automatically check it during the software
 execution is also very simple. However, it is still time-consuming and should it
 ever need to change, such as if there is a change in the assumption that the

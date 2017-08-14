@@ -30,7 +30,8 @@
 \newcommand{\jc}[1]{\authornt{magenta}{JC}{#1}} %Jacques
 \newcommand{\spr}[1]{\authornt{green}{SP}{#1}} %Steven
 \newcommand{\jtol}{$J_{\mbox{tol}}$}
-\newcommand{\inlHask}[1]{\lstinline[language=Haskell, frame=single, showstringspaces=false]{#1}}
+\newcommand{\inlHask}[1]{\lstinline[language=Haskell, columns=fixed,
+  basicstyle=\tiny, showstringspaces=false]{#1}}
 % DOI
 %\acmDOI{10.475/123_4}
 
@@ -402,13 +403,13 @@ GlassBR is a piece of software used by structural engineers to predict whether o
 not a slab of glass will be able to withstand a given explosion without
 breaking.  The two classes of input are: glass geometry and blast type. Each of these input 
 classes has a number of fields (glass type, dimensions, TNT equivalent factor, 
-standoff distance, etc.) used as input to the analysis. Also, the user must 
-specify what they consider to be the tolerable probability of breakage.
+standoff distance, etc.) used as input to the analysis. The user must also 
+specify their tolerable probability of breakage.
 
-The output of GlassBR is whether or not the glass slab is considered safe. 
-This is determined by calculating the probability of breakage using 
-interpolation, then that probability is compared to the tolerable probability 
-and a safety evaluation is made.
+The output of GlassBR is whether or not the glass slab is considered safe.  This
+is determined by calculating the probability of breakage, which involves
+interpolation from several tabulated values, then that probability is compared
+to the tolerable probability and a safety evaluation is made.
 
 To understand the Drasil implementation, we will follow one specific piece of 
 knowledge through from requirements to code. We intend to show how this 
@@ -426,13 +427,14 @@ knowledge is captured and used in Drasil to produce our software artifacts
 \end{figure}
 
 Let us start by taking a look at a data definition for the tolerable stress
-distribution factor (\jtol{}) from GlassBR. Figure~\ref{Fig_Jtolpdf} shows
-\jtol{} in pdf format, which was compiled from the Drasil-generated LaTeX
-of the data definition. We can also generate the documents in HTML. The data definition is part
-of the requirements for the GlassBR software, and as such, we will eventually
-need code that can be used to calculate \jtol{}.  A python version of this code
-can be seen in Figure~\ref{Fig_JtolPython}) We can generate this code as well!
-Not only that, but thanks to the incorporation of GOOL we can also generate
+distribution factor (\jtol{}) for GlassBR. Figure~\ref{Fig_Jtolpdf} shows
+\jtol{} in pdf format, which was compiled from the Drasil-generated LaTeX from
+the \jtol{} quantity chunk. We can also generate the documents in HTML. The data
+definition is part of the requirements for the GlassBR software, and as such, we
+will eventually need code that can be used to calculate \jtol{}.  A python
+version of this code can be seen in Figure~\ref{Fig_JtolPython}). From the
+\jtol{} quantity chunk, we can generate this code as well as the documentation!
+Not only that, but thanks to the incorporation of GOOL, we can also generate
 Java, Lua, C\#, etc.
 
 \begin{figure*}
@@ -451,10 +453,13 @@ The source knowledge for generating both the documentation and the code has been
 captured using chunks, as shown in Figure~\ref{Fig_JtolDrasil}. The value of
 \jtol{} is calculated from the expression {\inlHask{tolStrDisFac_eq}}, which is
 part of the {\inlHask{tolStrDisFac}} chunk.  The {\inlHask{tolStrDisFac_eq}} is
-defined using Quantity chunks, like {\inlHask{plate_len}} and {\inlHask{mod_elas}}.
-These chunks themselves have their own definitions, which includes their
-definition, symbol and units.  When the knowledge from \jtol{} is rendered in
-some form, the knowledge from its constituent chunks is also available.
+defined using other quantity chunks, like {\inlHask{plate_len}} and
+{\inlHask{mod_elas}}.  These chunks themselves have their own definitions, which
+includes their definition, symbol and units.  When the knowledge from \jtol{} is
+rendered in some form, the knowledge from its constituent chunks is also
+available.  This means the Description field in Figure~\ref{Fig_Jtolpdf} can be
+generated automatically from the knowledge implicit in equation
+{\inlHask{tolStrDisFac_eq}}.  
 
 \begin{figure*}
 \begin{lstlisting}[language=Haskell, frame=single, showstringspaces=false] 
@@ -478,17 +483,24 @@ tolStrDisFac = mkDataDef sdf_tol tolStrDisFac_eq
 \label{Fig_JtolDrasil}
 \end{figure*}
 
+To facilitate potential future change, Figure~\ref{Fig_JtolDrasil} shows that
+the symbol for \jtol{} is defined as {\inlHask{sub (stressDistFac ^. symbol)
+    (Atomic "tol")}.  This means the symbol for \jtol{} is the symbol for the
+  {\inlHask{stressDistFac}} with the subscript {\inlHask{"tol"}}.  If the symbol
+  for {\inlHask{stressDistFac}} should change from $J$ to some other letter, the
+  change in the base symbol and its variations will automatically be consistent
+  throughout all artifacts.
+
 During the process of translation from the original
 documentation~\cite{SmithJegatheesanAndKelly2016} to the Drasil code, we noticed
-an error in the code and documentation. The formula should not include the unit
-conversion implied bu dividing by 1000 in a number of places. Luckily, with one
-quick change to {\inlHask{tolStrDisFac_eq}} (shown in
+an error in the code and documentation. The formula for \jtol{} should not
+include the unit conversion implied by dividing by 1000 in a number of
+places. Luckily, with one quick change to {\inlHask{tolStrDisFac_eq}} (shown in
 Figure~\ref{Fig_JtolDrasil_fix}), we have corrected the error in our
-knowledge-base. After re-running the generator, our code and documentation
-has now been fixed and remains consistent.  We corrected the error in one place
-(in the knowledge base) and every artifact that depends on that knowledge is
-automatically fixed. \wss{Do we say somewhere that the definitions of the
-  variables in the jtol equation are also available whenever we need them?}
+knowledge-base. After re-running the generator, our code and documentation has
+now been fixed and remains consistent.  With Drasil, we are able to correct an
+error in one place (in the knowledge base) and every artifact that depends on
+that knowledge is automatically fixed.
 
 \begin{figure*}
 \begin{lstlisting}[language=Haskell, frame=single, showstringspaces=false]
@@ -501,13 +513,13 @@ tolStrDisFac_eq = log (log ((1) / ((1) - (C pb_tol))) * ((Grouping ((C plate_len
 \label{Fig_JtolDrasil_fix}
 \end{figure*}
 
-We have similarly captured all of the knowledge pertaining to GlassBR in chunks.
-This knowledge can be assembled and extracted in different ways to produce a 
-multitude of views, i.e. our artifacts, including the SRS. For a sense of what 
-we can generate from this knowledge, see the table of contents for the currently
-generated GlassBR SRS (Figure~\ref{Fig_ToCGlassBRSRS}). Again, our documents can
-be generated in TeX and/or HTML for more flexibility. Both contain automated 
-internal referencing.
+Similarly to the knowledge for \jtol{}, we have captured all of the knowledge
+pertaining to GlassBR in chunks.  This knowledge can be assembled and extracted
+in different ways to produce a multitude of views, i.e. our artifacts, including
+the SRS. For a sense of what we can generate from this knowledge, see the table
+of contents for the currently generated GlassBR SRS
+(Figure~\ref{Fig_ToCGlassBRSRS}). Again, our documents can be generated in TeX
+and/or HTML for more flexibility. Both contain automated internal referencing.
 
 \begin{figure}
 \begin{center}

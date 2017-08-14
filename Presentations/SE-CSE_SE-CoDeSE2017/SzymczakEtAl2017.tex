@@ -30,8 +30,8 @@
 \newcommand{\jc}[1]{\authornt{magenta}{JC}{#1}} %Jacques
 \newcommand{\spr}[1]{\authornt{green}{SP}{#1}} %Steven
 \newcommand{\jtol}{$J_{\mbox{tol}}$}
-\newcommand{\inlHask}[1]{\lstinline[language=Haskell, columns=fixed,
-  basicstyle=\tiny, showstringspaces=false]{#1}}
+\newcommand{\inlHask}[1]{\lstinline[language=Haskell, columns=fullflexible,
+  basicstyle=\ttfamily, showstringspaces=false, breaklines=true]{#1}}
 % DOI
 %\acmDOI{10.475/123_4}
 
@@ -451,8 +451,8 @@ def calc_j_tol(inparams):
 
 The source knowledge for generating both the documentation and the code has been
 captured using chunks, as shown in Figure~\ref{Fig_JtolDrasil}. The value of
-\jtol{} is calculated from the expression {\inlHask{tolStrDisFac_eq}}, which is
-part of the {\inlHask{tolStrDisFac}} chunk.  The {\inlHask{tolStrDisFac_eq}} is
+\jtol{} is calculated from the {\inlHask{tolStrDisFac_eq}} expression, which is
+part of the {\inlHask{tolStrDisFac}} chunk.  The equation ({\inlHask{tolStrDisFac_eq}}) is
 defined using other quantity chunks, like {\inlHask{plate_len}} and
 {\inlHask{mod_elas}}.  These chunks themselves have their own definitions, which
 includes their definition, symbol and units.  When the knowledge from \jtol{} is

@@ -9,11 +9,11 @@ import Data.Drasil.People (thulasi, brooks, spencerSmith)
 import Data.Drasil.Concepts.Documentation (section_, traceyGraph, item,
   assumption, traceyMatrix, thModel, genDefn, dataDefn, inModel, likelyChg,
   dataConst, requirement, input_, solution, output_, corSol, constraint,
-  value, software, column, model, acroIM, acroGD, acroGS, goalStmt,
-  quantity, property, condition, physics, user, physical, datum, system,
-  variable, sysCont, environment, srs, softwareSys, organization, document,
-  problem, content, information, reference, definition, purpose,
-  description, acroNumGen, symbol_, physSyst, typUnc)
+  value, software, column, model, goalStmt, quantity, property, condition, 
+  physics, user, physical, datum, system, variable, sysCont, environment, 
+  srs, softwareSys, organization, document, problem, content, information, 
+  reference, definition, purpose, description, acroNumGen, symbol_, physSyst,
+  typUnc)
 
 import Data.Drasil.Concepts.PhysicalProperties (liquid, solid)
 import qualified Data.Drasil.Concepts.Thermodynamics as CT (boiling,
@@ -84,11 +84,9 @@ import Drasil.Sections.GeneralSystDesc (genSysF)
 
 import Data.Drasil.Utils (enumSimple, weave, getS, itemRefToSent, makeListRef,
   makeTMatrix, refFromType)
-import Data.Drasil.SentenceStructures (showingCxnBw, foldlSent, foldlSent_,
-  foldlSP, foldlSP_, foldlSPCol, foldlsC, isThe, ofThe, ofThe',
-  sAnd, sOf, foldlList)
-
-import Language.Drasil
+import Data.Drasil.SentenceStructures (acroIM, acroGD, acroGS, showingCxnBw,
+  foldlSent, foldlSent_, foldlSP, foldlSP_, foldlSPCol, foldlsC, isThe, ofThe,
+  ofThe', sAnd, sOf, foldlList)
 
 -------------------------------------------------------------------------------
 

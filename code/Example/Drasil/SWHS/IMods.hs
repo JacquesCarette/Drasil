@@ -3,14 +3,13 @@ module Drasil.SWHS.IMods where
 import Language.Drasil
 
 import Drasil.DocumentLanguage (mkAssump)
-import Data.Drasil.Concepts.Documentation (acroT, acroDD)
 
 import Drasil.SWHS.Unitals (t_init_melt, latentE_P, pcm_E, pcm_initMltE,
   temp_melt_P, temp_PCM, htCap_L_P, pcm_mass, htFusion, temp_init, htCap_S_P,
   melt_frac, temp_W, w_mass, w_E, htCap_W, tau_S_P, pcm_SA, tau_L_P, pcm_HTC,
   coil_SA, coil_HTC, eta, tau_W, temp_C)
 import Data.Drasil.Utils (getS, unwrap)
-import Data.Drasil.SentenceStructures (foldlSent, isThe, sAnd, ofThe)
+import Data.Drasil.SentenceStructures (acroT, acroDD, foldlSent, isThe, sAnd, ofThe)
 import Data.Drasil.Quantities.Physics (time, energy)
 import Data.Drasil.Concepts.Math (equation, change)
 import Drasil.SWHS.Concepts (phsChgMtrl, water)

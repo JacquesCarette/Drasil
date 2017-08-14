@@ -20,7 +20,7 @@ import Data.Drasil.Concepts.Documentation (analysis, appendix, aspect,
   scenario, software, standard, symbol_, system, template, term_, theory, 
   traceyMatrix, user, value, variable, physicalSystem, datumConstraint, 
   userInput, assumption, dataDefn, goalStmt, inModel, likelyChg, physSyst,
-  requirement, srs, thModel, dataConst, acroA, acroR, acroNumGen)
+  requirement, srs, thModel, dataConst, acroNumGen)
 import Data.Drasil.Concepts.Education (secondYear, undergradDegree,
   civilEng, structuralEng, scndYrCalculus, structuralMechanics)
 import Data.Drasil.Software.Products (sciCompS)
@@ -36,9 +36,9 @@ import Data.Drasil.Concepts.Math (graph, calculation, probability,
   parameter, surface, equation, shape)
 import Data.Drasil.Utils (getS, makeTMatrix, makeListRef, itemRefToSent,
   refFromType, enumSimple, enumBullet, prodUCTbl)
-import Data.Drasil.SentenceStructures (sVersus, sAnd, foldlSP, foldlSent,
-  foldlOptions, foldlSent_, figureLabel, foldlList, showingCxnBw, foldlsC, 
-  sOf, followA, ofThe, sIn, isThe, isExpctdToHv, sOr, underConsidertn, 
+import Data.Drasil.SentenceStructures (acroA, acroR, sVersus, sAnd, foldlSP,
+  foldlSent, foldlOptions, foldlSent_, figureLabel, foldlList, showingCxnBw,
+  foldlsC, sOf, followA, ofThe, sIn, isThe, isExpctdToHv, sOr, underConsidertn, 
   tAndDWAcc, tAndDOnly, tAndDWSym)
 import Data.Drasil.Concepts.PhysicalProperties (dimension, materialProprty)
 

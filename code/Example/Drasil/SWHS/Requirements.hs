@@ -2,9 +2,8 @@ module Drasil.SWHS.Requirements where
 
 import Language.Drasil
 
-import Data.Drasil.Concepts.Documentation (acroIM, output_,
-  acroR, simulation, quantity, input_, physical, constraint, condition,
-  property)
+import Data.Drasil.Concepts.Documentation (output_, simulation, quantity, 
+  input_, physical, constraint, condition, property)
 import Data.Drasil.Utils (getS)
 import Drasil.DocumentLanguage (mkRequirement)
 import Drasil.Sections.Requirements (nonFuncReqF)
@@ -23,7 +22,8 @@ import Drasil.SWHS.Unitals (t_final_melt, t_init_melt, pcm_E, w_E, temp_PCM,
   pcm_density, diam, tank_length, tank_vol, w_vol, w_mass)
 import Drasil.SWHS.Concepts (phsChgMtrl, tank)
 
-import Data.Drasil.SentenceStructures (foldlSent, sAnd, isThe, foldlSentCol)
+import Data.Drasil.SentenceStructures (acroIM, acroR, foldlSent, sAnd, isThe,
+  foldlSentCol)
 
 
 ------------------------------

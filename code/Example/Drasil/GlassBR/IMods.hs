@@ -2,10 +2,10 @@ module Drasil.GlassBR.IMods(iModels, probOfBr, calOfCap, calOfDe) where
 
 import Language.Drasil
 
-import Data.Drasil.SentenceStructures (foldlSent, isThe, sAnd, sOr)
+import Data.Drasil.SentenceStructures (acroA, foldlSent, isThe, sAnd, sOr)
 import Data.Drasil.Utils (getS)
 import Data.Drasil.Concepts.Math (parameter)
-import Data.Drasil.Concepts.Documentation (acroA, coordinate)
+import Data.Drasil.Concepts.Documentation (coordinate)
 
 import Prelude hiding (exp)
 import Control.Lens ((^.))

@@ -3,8 +3,8 @@ module Drasil.SWHS.Assumptions where
 import Language.Drasil
 import Control.Lens ((^.))
 
-import Data.Drasil.Concepts.Documentation (acroGD, acroIM, system, simulation,
-  model, problem, acroNumGen)
+import Data.Drasil.Concepts.Documentation (system, simulation, model, 
+  problem, acroNumGen)
 import Drasil.DocumentLanguage (mkAssump)
 
 import Drasil.SWHS.DataDefs (dd1HtFluxC, dd2HtFluxP,
@@ -25,7 +25,8 @@ import Data.Drasil.Concepts.PhysicalProperties (solid, liquid, gaseous)
 import Data.Drasil.Concepts.Math (change)
 import Data.Drasil.Concepts.Physics (mech_energy)
 
-import Data.Drasil.SentenceStructures (foldlSent, ofThe, ofThe', sAnd, isThe)
+import Data.Drasil.SentenceStructures (acroGD, acroIM, foldlSent, ofThe, ofThe',
+  sAnd, isThe)
 
 -------------------------
 -- 4.2.1 : Assumptions --

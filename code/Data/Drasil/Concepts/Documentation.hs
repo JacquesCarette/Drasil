@@ -7,22 +7,6 @@ import Data.Drasil.Concepts.Math (graph)
 import Control.Lens ((^.))
 import qualified Language.Drasil.NounPhrase as NP
 
--- acronyms to be used throughout
--- ex. S "as seen in (A1)" -> S "as seen in" +:+ sParen (acroA "1")
-acroA, acroDD, acroGD, acroGS, acroIM, acroLC, acroPS, acroR, 
-  acroT :: Int -> Sentence
-
-acroA  numVar = short assumption  :+: S (show numVar)
-acroDD numVar = short dataDefn    :+: S (show numVar)
-acroGD numVar = short genDefn     :+: S (show numVar)
-acroGS numVar = short goalStmt    :+: S (show numVar)
-acroIM numVar = short inModel     :+: S (show numVar)
-acroLC numVar = short likelyChg   :+: S (show numVar)
-acroPS numVar = short physSyst    :+: S (show numVar)
-acroR  numVar = short requirement :+: S (show numVar)
-acroT  numVar = short thModel     :+: S (show numVar)
-
-
 -- Creates an ordered list of items to be referenced.
 -- Helps with the formatting of HTML documents for the most part.
 -- Takes a list of Contents (e.g. Assumptions, LikelyChanges) and a

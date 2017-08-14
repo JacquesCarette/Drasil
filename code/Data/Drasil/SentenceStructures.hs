@@ -14,6 +14,7 @@ module Data.Drasil.SentenceStructures
   , displayConstrntsAsSet
   , fmtInputConstr, fmtOutputConstr, physC, sfwrC, typUncr, rval
   , extrctStrng
+  , acroA, acroDD, acroGD, acroGS, acroIM, acroLC, acroPS, acroR, acroT
   ) where
 
 import Language.Drasil
@@ -105,6 +106,21 @@ ofGiv' p1 p2 = S "The" +:+ p1 +:+ S "of a given" +:+ p2
 
 toThe :: Sentence -> Sentence -> Sentence
 toThe p1 p2 = p1 +:+ S "to the" +:+ p2
+
+{--Acronyms to be used throughout--}
+-- ex. S "as seen in (A1)" -> S "as seen in" +:+ sParen (acroA "1")
+acroA, acroDD, acroGD, acroGS, acroIM, acroLC, acroPS, acroR, 
+  acroT :: Int -> Sentence
+
+acroA  numVar = short assumption  :+: S (show numVar)
+acroDD numVar = short dataDefn    :+: S (show numVar)
+acroGD numVar = short genDefn     :+: S (show numVar)
+acroGS numVar = short goalStmt    :+: S (show numVar)
+acroIM numVar = short inModel     :+: S (show numVar)
+acroLC numVar = short likelyChg   :+: S (show numVar)
+acroPS numVar = short physSyst    :+: S (show numVar)
+acroR  numVar = short requirement :+: S (show numVar)
+acroT  numVar = short thModel     :+: S (show numVar)
 
 
 {--** Miscellaneous **--}

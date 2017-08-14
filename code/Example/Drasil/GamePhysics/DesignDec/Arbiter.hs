@@ -6,7 +6,7 @@ v_R1, v_R2, v_nMass, v_tMass, v_bounce, v_jnAcc, v_jtAcc, v_jBias,
   v_bias, v_a, v_b, v_id, v_normal, v_count, v_arr, v_elast,
   v_surfaceVal, v_as, v_ab, v_bodyA, v_bodyB, v_threadA, 
   v_threadB, v_contacts, v_handler, v_handlerA,
-  v_hanlderB, v_swapper, v_stamp, v_state, v_points :: VarChunk
+  v_hanlderB, v_swapper, v_stamp, v_state, v_points, v_arb :: VarChunk
 
 v_R1         = makeVC "R1"         (nounPhrase "R1")         (sub (lR) (Atomic "1"))
 v_R2         = makeVC "R2"         (nounPhrase "R2")         (sub (lR) (Atomic "2"))
@@ -38,6 +38,16 @@ v_swapper    = makeVC "swapper"    (nounPhrase "swapper")    (Atomic "swapper")
 v_stamp      = makeVC "stamp"      (nounPhrase "stamp")      (Atomic "stamp")
 v_state      = makeVC "state"      (nounPhrase "state")      (Atomic "state")
 v_points     = makeVC "points"     (nounPhrase "points")     (Atomic "points")
+v_arb        = makeVC "arb"        (nounPhrase "arb")        (Atomic "arb")
 
+--arbiterGetCount, arbiterGetNormal, arbiterIsFirstContact :: funcDef
 
---arbiterIsFirstContact :: FuncDef
+arbiterGetCount = funcDef "arbiterGetCount" [arb] Rational
+  [
+    FRet (FCall (asExpr getCount) [arb])
+  ]
+
+arbiterGetNormal = funcDef "arbiterGetNormal" [arb] Rational
+  [
+    FRet (FCall (asExpr getNormal) [arb])
+  ]

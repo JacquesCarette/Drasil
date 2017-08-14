@@ -1,13 +1,10 @@
 module Drasil.SWHS.Concepts where
 
-import Language.Drasil (CI, NamedChunk, ConceptChunk,
-  (+:+), short, phrase, nounPhrase'', dcc, cn', plural, npnc', term,
-  compoundPhrase', nounPhraseSP, npnc, with', commonIdea, nounPhrase,
-  Sentence (S),
-  CapitalizationRule (CapFirst, CapWords))
+import Language.Drasil
+import Control.Lens ((^.))
+
 import Data.Drasil.Concepts.Software (program)
 import Data.Drasil.Concepts.Math (parameter)
-import Control.Lens ((^.))
 
 ---Acronyms---
 phsChgMtrl,rightSide,progName :: CI

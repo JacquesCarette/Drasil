@@ -4,11 +4,13 @@ import Language.Drasil
 import qualified Drasil.SRS as SRS
 import Drasil.DocumentLanguage  
 
+
 import Drasil.Template.MG (mgDoc)
 import Drasil.Template.DD (makeDD)
 
 import Data.Drasil.SI_Units
-import Data.Drasil.Authors (spencerSmith, thulasi, nikitha)
+import Data.Drasil.People (spencerSmith, thulasi, nikitha)
+
 import Data.Drasil.Concepts.Documentation (analysis, appendix, aspect, 
   characteristic, class_, code, condition, constant, constraint, content,
   datum, definition, description, document, emphasis, endUser, failure, 

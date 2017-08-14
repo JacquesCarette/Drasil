@@ -1,38 +1,10 @@
 module Drasil.SWHS.Body where
 
+import Language.Drasil
+import Data.Drasil.SI_Units
 import Control.Lens ((^.))
 
-import Language.Drasil (CI, ConceptChunk, UnitalChunk, UncertQ,
-  QDefinition, ConVar, NamedChunk, NamedIdea, RelationConcept,
-  Section, Document, Concept, QSWrapper, Person, Block,
-  CodeSpec,
-  _constraints, _constants, _defSequence, _inputs, _outputs, _units,
-  _definitions, _concepts, _namedIdeas, _quants, _authors, _kind, _sys,
-  sC, titleize, titleize', plural, short, makeRef, phrase,
-  sParen, defn, nw, at_start, (+:+), (+:+.), (+:),
-  unit'2Contents, qs, mkTable, for, for'', manyNames,
-  lang, impType, logFile, logging, comments, onSfwrConstraint,
-  onPhysConstraint, inputStructure, codeSpec', addModDefs,
-  UnitDefn (UU),
-  DType (Data, Theory),
-  Contents (Table, Figure, EqnBlock, Enumeration),
-  ItemType (Flat, Nested),
-  ListType (Bullet),
-  SystemInformation (SI),
-  Bound (High, Low),
-  UFunc (Integral),
-  DerivType (Total, Part),
-  Choices (Choices),
-  Structure (Loose), Comments (CommentNone), Logging (LogNone),
-  ConstraintBehaviour (Warning),
-  Lang (Java, CSharp, Cpp, Python),
-  ImplementationType (Program),
-  Expr (C, FCall, UnaryOp, (:=), Deriv, (:.), Neg),
-  Sentence (S, EmptyS, (:+:), Quote, E))
-
-import Data.Drasil.SI_Units (joule, watt, centigrade, second, metre,
-  kilogram)
-import Data.Drasil.Authors (thulasi, brooks, spencerSmith)
+import Data.Drasil.People (thulasi, brooks, spencerSmith)
 
 import Data.Drasil.Concepts.Documentation (section_, traceyGraph, item,
   assumption, traceyMatrix, thModel, genDefn, dataDefn, inModel, likelyChg,

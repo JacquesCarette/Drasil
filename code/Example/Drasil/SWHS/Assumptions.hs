@@ -1,8 +1,8 @@
 module Drasil.SWHS.Assumptions where
 
-import Language.Drasil (Contents,
-  phrase, sC, unit_symb, sSqBr, defn, short, semiCol, (+:+), (+:+.), makeRef,
-  Sentence (S, Sy, (:+:)))
+import Language.Drasil
+import Control.Lens ((^.))
+
 import Data.Drasil.Concepts.Documentation (acroGD, acroIM, system, simulation,
   model, problem, acroNumGen)
 import Drasil.DocumentLanguage (mkAssump)
@@ -26,7 +26,6 @@ import Data.Drasil.Concepts.Math (change)
 import Data.Drasil.Concepts.Physics (mech_energy)
 
 import Data.Drasil.SentenceStructures (foldlSent, ofThe, ofThe', sAnd, isThe)
-import Control.Lens ((^.))
 
 -------------------------
 -- 4.2.1 : Assumptions --

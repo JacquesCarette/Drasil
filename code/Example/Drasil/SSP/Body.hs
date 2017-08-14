@@ -5,7 +5,7 @@ import Prelude hiding (sin, cos, tan)
 
 import Language.Drasil
 import Data.Drasil.SI_Units
-import Data.Drasil.Authors
+import Data.Drasil.People
 
 import Drasil.SSP.Assumptions
 import Drasil.SSP.Changes

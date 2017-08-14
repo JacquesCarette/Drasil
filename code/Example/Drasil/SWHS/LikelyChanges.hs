@@ -1,8 +1,7 @@
 module Drasil.SWHS.LikelyChanges where
 
-import Language.Drasil (Contents,
-  phrase, plural, short, sC, (+:+), makeRef,
-  Sentence (S))
+import Language.Drasil
+
 import Drasil.DocumentLanguage (mkLklyChnk)
 import Data.Drasil.Concepts.Documentation (assumption, value, simulation,
   model)

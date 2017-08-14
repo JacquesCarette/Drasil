@@ -1,11 +1,7 @@
 module Drasil.SWHS.IMods where
 
-import Language.Drasil (Relation, RelationConcept,
-  makeRef, sParen, phrase, sC, short, (+:+.), getUnit, (+:+), nounPhraseSP,
-  makeRC, plural,
-  DerivType (Total),
-  Sentence (EmptyS, S, E, (:+:)),
-  Expr (C, (:-), (:*), (:>), (:<), (:=), Int, FCall, Case, Deriv))
+import Language.Drasil
+
 import Drasil.DocumentLanguage (mkAssump)
 import Data.Drasil.Concepts.Documentation (acroT, acroDD)
 

@@ -1,6 +1,6 @@
 module Drasil.SWHS.Reqs where
 
-import Language.Drasil (ReqChunk (ReqChunk), emptyN)
+import Language.Drasil
 import Drasil.SWHS.Modules (mod_ener, mod_ctrl, mod_outputf, mod_temp,
   mod_plot, mod_outputv, mod_seq, mod_ode, mod_inputv, mod_inputp,
   mod_inputf)

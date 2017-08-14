@@ -4,7 +4,7 @@ module Data.Drasil.Citations (
   ) where
 
 import Language.Drasil --(S,(:+:),(+:+),sC,phrase,F,Accent(..),Citation(..),CiteField(..))
-import Data.Drasil.Authors (spencerSmith, dParnas, nKoothoor)
+import Data.Drasil.People (spencerSmith, dParnas, nKoothoor)
 import Data.Drasil.Software.Products (sciCompS)
 
 ---------------

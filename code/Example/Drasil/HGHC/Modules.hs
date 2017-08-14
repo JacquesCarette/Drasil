@@ -2,15 +2,19 @@ module Drasil.HGHC.Modules where
 
 import Language.Drasil
 import Language.Drasil.Code hiding (self)
-import Drasil.HGHC.HeatTransfer
 import Prelude hiding (id)
 import Control.Lens ((^.))
 
-import Data.Drasil.Modules
-import Data.Drasil.Concepts.Documentation
-import Data.Drasil.Concepts.Software
-import Data.Drasil.Concepts.Math
-import Data.Drasil.Concepts.Computation
+import Drasil.HGHC.HeatTransfer --all of it
+
+import Data.Drasil.Modules (mod_hw, mod_ctrl_fun, mod_io_fun, mod_behav,
+  mod_calc_fun)
+import Data.Drasil.Concepts.Documentation (input_)
+import Data.Drasil.Concepts.Software (modInputFormat, mod_outputf_desc_fun, 
+  modInputParam, program)
+import Data.Drasil.Concepts.Math (parameter)
+import Data.Drasil.Concepts.Computation (structure, inDatum, outDatum, 
+  algorithm)
 import Data.Drasil.SentenceStructures (foldlSent, foldlList, sAnd)
 
 executable :: NamedChunk

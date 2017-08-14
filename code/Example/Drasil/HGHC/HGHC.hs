@@ -1,23 +1,27 @@
 module Drasil.HGHC.HGHC(srsBody, mgBody, misBody, modules) where
 
+import Language.Drasil
+
+import Drasil.DocumentLanguage
+
+import Drasil.Template.DD (makeDD)
+
 import Data.List (intersperse)
 import Control.Lens ((^.))
 
-import Drasil.HGHC.HeatTransfer
-import Drasil.HGHC.Modules
-import Drasil.DocumentLanguage
+import Drasil.HGHC.HeatTransfer (hghcVars, hghcSymMap, fp, htOutputs,
+  htInputs, symbols, nuclearPhys, hghc)
+import Drasil.HGHC.Modules (mod_calc, mod_inputp, mod_inputf,
+  mod_outputf, mod_ctrl)
+
 import Drasil.Sections.ReferenceMaterial (intro)
-
-import Drasil.Template.DD
-
-import Language.Drasil
+import Drasil.Sections.SpecificSystemDescription (dataDefnF)
 
 import Data.Drasil.SI_Units (si_units)
 import Data.Drasil.People (spencerSmith)
 import Data.Drasil.Concepts.Documentation (srs)
-import Data.Drasil.Modules
+import Data.Drasil.Modules (mod_hw, mod_behav)
 
-import Drasil.Sections.SpecificSystemDescription
 
 modules :: [ModuleChunk]
 modules = [mod_calc, mod_hw, mod_inputp, mod_inputf, mod_behav, mod_outputf,

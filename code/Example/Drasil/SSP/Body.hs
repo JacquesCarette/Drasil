@@ -1,7 +1,7 @@
 module Drasil.SSP.Body where
 
 import Control.Lens ((^.))
-import Prelude hiding (id, sin, cos, tan)
+import Prelude hiding (sin, cos, tan)
 
 import Language.Drasil
 import Data.Drasil.SI_Units

@@ -1,6 +1,6 @@
 module Drasil.SSP.DataDefs where
 
-import Prelude hiding (id, cos, sin, tan)
+import Prelude hiding (cos, sin, tan)
 
 import Language.Drasil
 import Drasil.SSP.Unitals

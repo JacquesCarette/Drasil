@@ -3,17 +3,20 @@ module Drasil.SSP.TMods where
 import Prelude hiding (tan)
 
 import Language.Drasil
-import Drasil.SSP.Unitals
-import Drasil.SSP.Defs
-import Data.Drasil.Quantities.SolidMechanics
-import Data.Drasil.SentenceStructures
-import Data.Drasil.Utils
-import Data.Drasil.Quantities.Physics
-import Data.Drasil.Concepts.Documentation
+import Drasil.SSP.Unitals (fs, fx, fy, momntOfBdy,
+  genForce, genDisplace, porePressure, normStress,
+  shrStress, surfHydroForce, fricAngle, cohesion)
+import Drasil.SSP.Defs (slope, factor, factorOfSafety, soil)
+import Data.Drasil.SentenceStructures (ofThe, ofThe',
+  foldlSent, acroA, getTandS, sAnd, sOf)
+import Data.Drasil.Utils (getS)
+import Data.Drasil.Quantities.Physics (force, distance, displacement)
+import Data.Drasil.Concepts.Documentation (safety, model, source)
 import Data.Drasil.Concepts.Math (surface)
+import Data.Drasil.Quantities.SolidMechanics (shearRes, mobShear, stffness)
 import Data.Drasil.Concepts.SolidMechanics (normForce, shearForce)
 import Data.Drasil.Concepts.Physics (linear, stress, friction)
-import Data.Drasil.Quantities.PhysicalProperties
+import Data.Drasil.Quantities.PhysicalProperties (mass)
 
 --------------------------
 --  Theoretical Models  --

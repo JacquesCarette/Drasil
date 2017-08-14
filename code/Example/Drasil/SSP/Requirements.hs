@@ -2,12 +2,15 @@ module Drasil.SSP.Requirements where
 
 import Language.Drasil
 
-import Drasil.SSP.Defs
-import Drasil.SSP.Unitals
+import Drasil.SSP.Defs (slice, slope, slpSrf,
+  crtSlpSrf, morPrice)
+import Drasil.SSP.Unitals (fs, sspInputs, coords)
 
-import Data.Drasil.Utils
-import Data.Drasil.SentenceStructures
-import Data.Drasil.Concepts.Documentation
+import Data.Drasil.Utils (mkInputDatTb)
+import Data.Drasil.SentenceStructures (acroR,
+  ofThe, foldlSent)
+import Data.Drasil.Concepts.Documentation (datum,
+  input_, value, method_, element, requirement)
 import Data.Drasil.Concepts.Computation (inDatum)
 
 sspRequirements :: [Sentence]

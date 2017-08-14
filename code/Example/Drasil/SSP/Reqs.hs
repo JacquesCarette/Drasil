@@ -1,7 +1,10 @@
 module Drasil.SSP.Reqs where
 
 import Language.Drasil
-import Drasil.SSP.Modules
+import Drasil.SSP.Modules (mod_ctrl, mod_genalg,
+  mod_inputf, mod_mp, mod_outputf, mod_plot,
+  mod_rfem, mod_rng, mod_sds, mod_slipslicer,
+  mod_slipweight, mod_kinadm)
 
 reqs :: [ReqChunk]
 reqs = [r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11]

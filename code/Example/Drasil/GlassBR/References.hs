@@ -2,6 +2,9 @@ module Drasil.GlassBR.References (gbCitations) where
 
 import Language.Drasil
 
+import Data.Drasil.People (nKoothoor, jmBracci, tlKohutek, wlBeason, spencerSmith,
+  lLai, jRobertson, sRobertson)
+
 {--}
 
 koothoor2013, smithLai2005, rbrtsn2012, astm_LR2009, astm_C1036, 

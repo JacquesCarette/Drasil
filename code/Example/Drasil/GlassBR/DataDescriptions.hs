@@ -1,8 +1,6 @@
 module Drasil.GlassBR.DataDescriptions where
 
-import Language.Drasil (junkLine, singleton, repeated, singleLine,
-  multiLine, listEntry, junk,
-  DataDesc, Mod (ModData), Ind (WithPattern, WithLine))
+import Language.Drasil
 
 import Drasil.GlassBR.Unitals (plate_len, plate_width, nom_thick,
   glass_type, char_weight, tNT, sdx, sdy, sdz, pb_tol)

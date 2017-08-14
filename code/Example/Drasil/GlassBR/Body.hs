@@ -1,9 +1,13 @@
 module Drasil.GlassBR.Body where
 import Control.Lens ((^.))
 import Language.Drasil
+import qualified Drasil.SRS as SRS
+import Drasil.DocumentLanguage  
 
-import Data.Drasil.SI_Units (metre, second, kilogram, pascal, newton,
-  millimetre)
+import Drasil.Template.MG (mgDoc)
+import Drasil.Template.DD (makeDD)
+
+import Data.Drasil.SI_Units
 import Data.Drasil.Authors (spencerSmith, thulasi, nikitha)
 import Data.Drasil.Concepts.Documentation (analysis, appendix, aspect, 
   characteristic, class_, code, condition, constant, constraint, content,
@@ -36,25 +40,32 @@ import Data.Drasil.SentenceStructures (sVersus, sAnd, foldlSP, foldlSent,
   tAndDWAcc, tAndDOnly, tAndDWSym)
 import Data.Drasil.Concepts.PhysicalProperties (dimension, materialProprty)
 
-import Drasil.Template.MG (mgDoc)
-import Drasil.Template.DD (makeDD)
-
-import qualified Drasil.SRS as SRS
-import Drasil.Sections.ReferenceMaterial (intro)
-import Drasil.DocumentLanguage  
-
-import Drasil.GlassBR.Unitals
-import Drasil.GlassBR.Concepts
-import Drasil.GlassBR.Changes
-import Drasil.GlassBR.Modules
-import Drasil.GlassBR.Reqs
-import Drasil.GlassBR.TMods
-import Drasil.GlassBR.IMods
-import Drasil.GlassBR.DataDefs
-import Drasil.GlassBR.References
-import Drasil.GlassBR.Interpolation
+import Drasil.GlassBR.Unitals (stressDistFac, aspectR, dimlessLoad,
+  lateralLoad, sflawParamM, char_weight, sD, demand, lite, demandq,
+  gbSymbMap, aspectRWithEqn, aspectR, gbSymbMapT, gbSymbMapD, lRe,
+  prob_br, notSafe, safeMessage, is_safe1, is_safe2, plate_width,
+  plate_len, blast, glassTy, gbInputDataConstraints, explosion, lateral, 
+  load_dur, explosion, pb_tol, blast, bomb, blastTy, glassGeo, load,
+  glass_type, nom_thick, sdx, sdy, sdz, tNT, gBRSpecParamVals, 
+  constant_LoadDur, constant_ModElas, constant_M, constant_K, loadTypes,
+  load, glassTypes, probBreak, termsWithAccDefn, termsWithDefsOnly, 
+  gbConstants, gbConstrained, gbOutputs, gbInputs, this_symbols,
+  glBreakage, capacity)
+import Drasil.GlassBR.Concepts (aR, lShareFac, gLassBR, stdOffDist,
+  glaSlab, blastRisk, glass, responseTy, cantilever, beam, plane, edge, 
+  glaPlane, glassBRProg, ptOfExplsn, acronyms)
+import Drasil.GlassBR.Changes (likelyChanges, unlikelyChanges)
+import Drasil.GlassBR.Modules (modules)
+import Drasil.GlassBR.Reqs (reqs)
+import Drasil.GlassBR.TMods (tModels, t1SafetyReq, t2SafetyReq)
+import Drasil.GlassBR.IMods (iModels, calOfCap, calOfDe, probOfBr)
+import Drasil.GlassBR.DataDefs (dataDefns, gbQDefns, hFromt, loadDF,
+  strDisFac, nonFL, dimLL, glaTyFac, tolStrDisFac, tolPre)
+import Drasil.GlassBR.References (gbCitations)
+import Drasil.GlassBR.Interpolation (interpMod)
 import Drasil.GlassBR.DataDescriptions --FIXME: Redundant import, but doesn't build DataDescriptions.hs file otherwise...
 
+import Drasil.Sections.ReferenceMaterial (intro)
 import Drasil.Sections.TraceabilityMandGs (traceGIntro)
 import Drasil.Sections.Requirements (reqF)
 import Drasil.Sections.SpecificSystemDescription (solChSpecF,

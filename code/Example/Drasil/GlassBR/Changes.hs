@@ -1,6 +1,6 @@
 module Drasil.GlassBR.Changes(likelyChanges, unlikelyChanges) where
 
-import Language.Drasil (UCChunk, npnc, nounPhraseSP, nw, LCChunk)
+import Language.Drasil
 
 import Drasil.GlassBR.Modules (mod_inputf, mod_inputp, mod_outputf,
   mod_calc, mod_ctrl, mod_interpd, mod_interp)

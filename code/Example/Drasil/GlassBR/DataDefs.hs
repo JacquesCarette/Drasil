@@ -1,8 +1,6 @@
 module Drasil.GlassBR.DataDefs where
 
-import Language.Drasil (plural, (+:+), (+:+.), sC, phrase, titleize, equat,
-  sParen, square, log, exp, QDefinition, Sentence (S, E), Block (Parallel),
-  Relation, Expr (C, V, FCall, (:>), (:^), Int, Case, Dbl, (:=), Grouping))
+import Language.Drasil
 
 import Prelude hiding (log, exp)
 import Drasil.GlassBR.Unitals (tolLoad, dimlessLoad, gTF, stressDistFac, 

@@ -1,28 +1,16 @@
 module Drasil.GlassBR.Unitals where
 
-import Language.Drasil (Relation, NamedChunk, Contents, 
-  RelationConcept, ConceptChunk, SymbolMap, QSWrapper, VarChunk,
-  ConstrainedChunk, UncertainChunk, ConstrWrapper, UncertainWrapper,
-  UnitaryChunk, QDefinition, UncertQ, UncertainChunk, UnitalChunk,
-  symbol, nounPhraseSP, unitary, physc, sfwrc, term, dcc, uc', uvc,
-  cP, sub, lH, lT, lQ, lG, phrase, compoundNC, cc', cc, getAcc, euclidean,
-  symbolMap, qs, sParen, cn', (+:+), plural, titleize, sC, (+:+.), dccWDS, 
-  makeVC, cJ, cB, vc'', vc, hat, lM, lK, lX, lY, lZ, lD, lB, cvc, cuc, 
-  uqcND, createCnstrnts, nounPhraseSent, lW, lA, uncrtnw, cnstrw, cE,
-  Symbol (Special, Atomic, Concat), Special (UScore), DType (Data, Theory),
-  Space (Boolean, Integer, Rational, Real, String), Sentence (S),
-  Expr (C, Dbl, Grouping, V, (:<), (:>), (:=), (:<=), (:>=), (:^), Neg))
+import Language.Drasil
+import Control.Lens ((^.))
+import Prelude hiding (log, sqrt)
 
 import Drasil.GlassBR.Units (sFlawPU)
 import Drasil.GlassBR.Concepts (annealedGlass, aR, fullyTGlass, glassTypeFac,
   heatSGlass, loadDurFactor, iGlass, lGlass, lResistance, lShareFac, nFL, 
   stdOffDist, glaPlane, responseTy)
 
-import Data.Drasil.SI_Units (kilopascal, metre, second, kilogram,
-  millimetre, pascal)
+import Data.Drasil.SI_Units
 import Data.Drasil.Utils (symbolMapFun, mkDataDef, getS)
-import Control.Lens ((^.))
-import Prelude hiding (log, sqrt)
 import Data.Drasil.SentenceStructures (foldlSent, displayConstrntsAsSet,
   foldlsC, foldlOptions)
 

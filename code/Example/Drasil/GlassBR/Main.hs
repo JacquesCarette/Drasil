@@ -1,6 +1,6 @@
 module Main where
 
-import Language.Drasil(DocType(SRS,MG,Website), Recipe(..), gen, genCode)
+import Language.Drasil
 
 import Drasil.GlassBR.Body (glassBR_srs, glassBR_mg, glassBR_code)
 

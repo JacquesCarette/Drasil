@@ -1,6 +1,6 @@
 module Drasil.GlassBR.Reqs (reqs) where
 
-import Language.Drasil (ReqChunk (ReqChunk), emptyN)
+import Language.Drasil
 
 import Drasil.GlassBR.Modules (mod_inputf, mod_inputp, mod_ctrl,
   mod_inputc, mod_outputf, mod_calc)

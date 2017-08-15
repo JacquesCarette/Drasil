@@ -257,7 +257,7 @@ cases (p:ps) = cases [p] ++ "\\\\\n" ++ cases ps
 
 makeTable :: [[Spec]] -> D -> Bool -> D -> D
 makeTable lls r bool t =
-  pure (text ("\\begin{" ++ ltab ++ "}" ++ (brace . unwords . anyBig) lls ))
+  pure (text ("\\begin{" ++ ltab ++ "}" ++ (brace . unwords . anyBig) lls))
   %% (pure (text "\\toprule"))
   %% makeRows [head lls]
   %% (pure (text "\\midrule"))
@@ -266,11 +266,17 @@ makeTable lls r bool t =
   %% (if bool then caption t else empty)
   %% label r
   %% (pure $ text ("\\end{" ++ ltab ++ "}"))
-  where ltab = "longtabu" --FIXME: add condition to allow table to span multiple pages
+  where ltab = tabType $ anyLong lls
+        tabType True  = ltabu
+        tabType False = ltable
+        ltabu  = "longtabu" --Only needed if "X[l]" is used
+        ltable = "longtable" ++ (if not bool then "*" else "")
         descr True  = "X[l]"
         descr False = "l"
   --returns "X[l]" for columns with long fields
-        anyBig = map (descr . any (\x -> specLength x > 50)) . transpose
+        anyLong = or . map longColumn . transpose
+        anyBig = map (descr . longColumn) . transpose
+        longColumn = any (\x -> specLength x > 50)
 
 -- | determines the length of a Spec
 specLength :: Spec -> Int

@@ -32,7 +32,7 @@ import Data.Drasil.Concepts.Thermodynamics (degree_')
 import Data.Drasil.Concepts.PhysicalProperties (flexure)
 import Data.Drasil.Concepts.Software (correctness, verifiability,
   understandability, reusability, maintainability, portability,
-  performance)
+  performance, errMsg)
 import Data.Drasil.Concepts.Math (graph, calculation, probability,
   parameter, surface, equation, shape)
 import Data.Drasil.Utils (getS, makeTMatrix, makeListRef, itemRefToSent,
@@ -591,7 +591,7 @@ req3Desc = foldlSent [S "The", phrase system, S "shall check the entered",
   plural inValue, S "to ensure that they do not exceed the",
   plural datumConstraint, S "mentioned in" +:+. makeRef
   (SRS.datCon SRS.missingP []), S "If any" `sOf` S "the", plural inParam,
-  S "is out" `sOf` S "bounds, an error", phrase message, S "is displayed"
+  S "is out" `sOf` S "bounds" `sC` S "an", phrase errMsg, S "is displayed"
   `andThe` plural calculation, S "stop"]
 
 req4Desc = foldlSent [titleize output_, S "the", plural inQty,

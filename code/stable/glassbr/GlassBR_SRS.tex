@@ -12,7 +12,6 @@
 \usepackage{caption}
 \usepackage{graphics}
 \bibliography{bibfile}
-\newcommand{\useEps}{\ensuremath{\epsilon{}}}
 \newcounter{assumpnum}
 \newcommand{\atheassumpnum}{A\theassumpnum}
 \newcounter{reqnum}
@@ -71,7 +70,7 @@ ${d_{min}}$ & Minimum value for one of the dimensions of the glass plate & mm
 \\
 $E$ & Modulus of elasticity of glass & Pa
 \\
-$g$ & Glass type $g$ \useEps \{AN, FT, HS\} & Unitless
+$g$ & Glass type $g\in{}\{AN, FT, HS\}$ & Unitless
 \\
 $GTF$ & Glass type factor & Unitless
 \\
@@ -119,7 +118,7 @@ ${SD_{y}}$ & Stand off distance (y-component) & m
 \\
 ${SD_{z}}$ & Stand off distance (z-component) & m
 \\
-$t$ & Nominal thickness $t$ \useEps \{2.5, 2.7, 3.0, 4.0, 5.0, 6.0, 8.0, 10.0, 12.0, 16.0, 19.0, 22.0\} & mm
+$t$ & Nominal thickness $t\in{}\{2.5, 2.7, 3.0, 4.0, 5.0, 6.0, 8.0, 10.0, 12.0, 16.0, 19.0, 22.0\}$ & mm
 \\
 ${t_{d}}$ & Duration of load & s
 \\
@@ -421,7 +420,7 @@ Equation & $h$ = $\frac{1}{1000}\begin{cases}
 21.44, & t=22.0
 \end{cases}$
 \\ \midrule \\
-Description & $h$ is the actual thickness (m)\newline$t$ is the nominal thickness $t$ \useEps \{2.5, 2.7, 3.0, 4.0, 5.0, 6.0, 8.0, 10.0, 12.0, 16.0, 19.0, 22.0\} (mm)
+Description & $h$ is the actual thickness (m)\newline$t$ is the nominal thickness $t\in{}\{2.5, 2.7, 3.0, 4.0, 5.0, 6.0, 8.0, 10.0, 12.0, 16.0, 19.0, 22.0\}$ (mm)
 \\ \bottomrule \end{tabular}
 \end{minipage}\\
 ~\newline
@@ -489,7 +488,7 @@ Equation & $GTF$ = $\begin{cases}
 2, & g=HS
 \end{cases}$
 \\ \midrule \\
-Description & $GTF$ is the glass type factor\newline$g$ is the glass type $g$ \useEps \{AN, FT, HS\}
+Description & $GTF$ is the glass type factor\newline$g$ is the glass type $g\in{}\{AN, FT, HS\}$
 \\ \bottomrule \end{tabular}
 \end{minipage}\\
 ~\newline
@@ -649,9 +648,9 @@ ${SD_{y}}$ & Stand off distance (y-component) & m
 \\
 ${SD_{z}}$ & Stand off distance (z-component) & m
 \\
-$g$ & Glass type $g$ \useEps \{AN, FT, HS\} & Unitless
+$g$ & Glass type $g\in{}\{AN, FT, HS\}$ & Unitless
 \\
-$t$ & Nominal thickness $t$ \useEps \{2.5, 2.7, 3.0, 4.0, 5.0, 6.0, 8.0, 10.0, 12.0, 16.0, 19.0, 22.0\} & mm
+$t$ & Nominal thickness $t\in{}\{2.5, 2.7, 3.0, 4.0, 5.0, 6.0, 8.0, 10.0, 12.0, 16.0, 19.0, 22.0\}$ & mm
 \\
 \bottomrule
 \caption{Required Inputs following R1}

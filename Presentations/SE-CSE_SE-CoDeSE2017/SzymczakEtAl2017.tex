@@ -186,8 +186,9 @@ community in developing high quality software, as it is our duty to ensure the
 reusability, reproducibility, and replicability of our work.
 
 Our team is focused on improving the quality of Scientific Computing Software (SCS).
-We have chosen large, multi-year, multi-developer projects where the end users
-do much of the development as our target scope. For these projects, we pay
+We have chosen large, multi-year, multi-developer projects where quality is
+sufficiently important that \emph{certification} may be sought.  In this 
+domain, the end users do much of the development. For these projects, we pay
 particular attention to improving the qualities of reusability, reproducibility,
 and certifiability. 
 
@@ -198,17 +199,17 @@ software product satisfies accepted, well-defined and measurable criteria''
 by simplifying the creation of the requisite software artifacts (documentation
 and code) and by ensuring that these artifacts are always consistent. Tracking
 down the source of any information contained in our artifacts should be
-trivially easy, yet this is not always the case, since documentation is often
+trivially easy.  This is rarely the case (currently), as documentation is often
 not a high priority.
 
 Improved documentation is often considered too high a cost in terms of time and 
 effort for SCS developers, particularly when dealing with rapid changes in 
-development. However, it is an important aspect of improving overall software 
+requirements. However, it is an important aspect of improving overall software 
 quality. Carver~\cite{CarverEtAl2007} observed that scientists do not view 
-rigid, process-heavy approaches, favourably. Moreover, others have observed that
+rigid process-heavy approaches favourably. Moreover, others have observed that
 SCS developers tend to dislike producing documentation~\cite[p.~373]{Roache1998}.
 
-Previous work by Smith \& Koothoor~\citep{SmithAndKoothoor2016} found 27 errors
+Previous work by Smith \& Koothoor~\citep{SmithAndKoothoor2016} found $27$ errors
 in existing safety related software (nuclear safety analysis software) when
 creating new documentation. Had they attempted to certify the software, most, if
 not all, of these errors would have led to a failure.
@@ -216,33 +217,32 @@ not all, of these errors would have led to a failure.
 Well-maintained documentation provides numerous advantages including:
 \begin{itemize}
 \item Improved software qualities 
-	\begin{itemize}
-	\item Verifiability
-	\item Reusability
-	\item Reproducibility
-	\item etc.
-	\end{itemize}
+    \begin{itemize}
+    \item Verifiability
+    \item Reusability
+    \item Reproducibility
+    \end{itemize}
 
 \item Other improvements (from Parnas~\cite{Parnas2010}):
-	\begin{itemize}
-		\item Easier reuse of old designs
-		\item Better communication about requirements
-		\item More useful design reviews
-	\end{itemize}
+    \begin{itemize}
+        \item Easier reuse of old designs
+        \item Better communication about requirements
+        \item More useful design reviews
+    \end{itemize}
 \end{itemize}
 
 Developers are being made aware of the advantages of 
-documentation~\cite{SmithJegatheesanAndKelly2016}, yet it can still be difficult 
-to ensure it becomes a high priority because documenting software is typically 
+documentation~\cite{SmithJegatheesanAndKelly2016}. Yet it can still be difficult 
+to ensure this becomes a high priority because documenting software is typically 
 felt to be:
 
 \begin{itemize}
-\item Too time consuming
-\item Too difficult to maintain
-\item Not amenable to change
-\item Too tied to the waterfall process
+\item Too time consuming,
+\item Too difficult to maintain,
+\item Not amenable to change,
+\item Too tied to the waterfall process, and
 \item Counterproductive when reporting on each stage of 
-		development~\cite{Roache1998}
+        development~\cite{Roache1998}.
 \end{itemize}
 
 There are also other issues with document-rich, certifiable software 
@@ -250,36 +250,38 @@ development. Namely the vast amount of knowledge duplication across software
 artifacts. Consider a simple piece of software with the following artifacts:
 
 \begin{itemize}
-\item Software Requirements Specification (SRS)
-\item Design Document
-\item Source Code
-\item Tests
+\item Software Requirements Specification (SRS),
+\item Design Document,
+\item Source Code, and
+\item Tests.
 \end{itemize}
 
-Knowledge, such as the functional requirements, from the SRS is duplicated in 
+Knowledge such as the functional requirements from the SRS is duplicated in 
 both the source code and tests. That same knowledge appears in the design 
-document as well, albeit in a transformed state. 
+document as well, albeit in different form. 
 
-Now consider that software certification often requires a great many more 
+Software certification typically requires many more 
 artifacts than the four listed above. Much of the same knowledge, possibly in a
-transformed representation, will appear in 
-all of the artifacts and will need to be maintained. Manually maintaining these 
-artifacts is a lesson in tedium and the time could be better spent elsewhere, if 
+variety of representation, will appear in the artifacts and will need to be
+maintained. Manually maintaining these is a lesson in tedium and the
+time could be better spent elsewhere, if 
 it were easier to deal with automatically.
 
-\subsection*{The Solution?}
+% JC: a section with a single subsection is bad style
+% \subsection*{A Solution?}
 
 How can we enjoy the benefits of documentation, without the usually associated
-drudgery?  Our proposed solution is \textit{Drasil} -- a framework that utilizes
+drudgery?  Our proposed solution is \textit{Drasil} -- a framework that uses
 a knowledge-based approach to software development, as originally proposed in a
 position paper by Szymcak et al~\cite{SzymczakEtAl2016}. The goal of the
 approach is to capture scientific and documentation knowledge in a reusable way,
 then generate the source code and all of the other software artifacts
-(documentation, build files, tests, etc).
+(documentation, build files, tests, etc) by using recipes to weave this
+knowledge into coherent pieces.
 
 Work on Drasil has continued steadily since the original position paper, as
-described below. We begin with a brief overview of the design of the Drasil
-framework in Section~\ref{SecDesign}, then describe the development process that
+described below. We begin with a brief overview of the design of Drasil
+in Section~\ref{SecDesign}, then describe the development process that
 has been adopted in Section~\ref{SecDevProcess}. Following this, we show an example of
 Drasil in action (Section~\ref{SecGlassBR}) and the results we have seen to date
 (Section~\ref{SecQuality}). Finally, we lay out some of the work that still
@@ -289,9 +291,9 @@ needs to be done (Section~\ref{SecFuture}) before concluding.
 
 Drasil's design is based around three main components:
 \begin{enumerate}
-	\item Knowledge capture mechanisms (\textit{Chunks})
-	\item Artifact generation language(s) (\textit{Recipes})
-	\item Knowledge-base (\textit{Data.Drasil})
+    \item Knowledge capture mechanisms (\textit{Chunks})
+    \item Artifact generation language(s) (\textit{Recipes})
+    \item Knowledge-base (\textit{Data.Drasil})
 \end{enumerate}
 
 Chunks are the primary knowledge-capture mechanism. There are many flavours of 
@@ -305,10 +307,10 @@ Figure~\ref{hierarchy} uses a \verb|+1| to indicate when a value may or
 may not be present (Maybe types in Haskell).
 
 \begin{figure}
-	\centering
-	\includegraphics[width=0.5\textwidth]{figures/class_hierarchy.png}
-	\caption{Drasil chunk hierarchy}
-	\label{hierarchy}
+    \centering
+    \includegraphics[width=0.5\textwidth]{figures/class_hierarchy.png}
+    \caption{Drasil chunk hierarchy}
+    \label{hierarchy}
 \end{figure}
 
 We can think of chunks as our building blocks of knowledge; they are the 
@@ -325,9 +327,9 @@ subsections.
 \begin{lstlisting}[language=Haskell, frame=single, showstringspaces=false]
 mkSRS :: DocDesc 
 mkSRS = [RefSec (RefProg intro 
-	[TUnits, 
-	tsymb [TSPurpose, SymbOrder], 
-	TAandA])]
+    [TUnits, 
+    tsymb [TSPurpose, SymbOrder], 
+    TAandA])]
         ...
 \end{lstlisting}
 \caption{The reference material section for an SRS written in Drasil's Document 
@@ -351,9 +353,9 @@ Figure~\ref{ontology} for an example of some of the domains in which we have
 started to capture knowledge.
 
 \begin{figure}
-	\includegraphics[width=.5\textwidth]{figures/ontology.png}
-	\caption{Data.Drasil knowledge domains}
-	\label{ontology}
+    \includegraphics[width=.5\textwidth]{figures/ontology.png}
+    \caption{Data.Drasil knowledge domains}
+    \label{ontology}
 \end{figure}
 
 \section{Development Process for Drasil} \label{SecDevProcess}
@@ -608,16 +610,16 @@ E_W = \int_{0}^{t} h_C A_C (T_C - T_W(t)) dt - \int_{0}^{t} h_P A_P (T_W(t) - T_
 %\wss{We need to define the terms in this equation.}  
 Where:
 \begin{itemize}
-	\item $E_W$ is the change in heat energy in the water
-	\item $A_C$ is the heating coil surface area
-	\item $A_P$ is the PCM surface area
-	\item $h_C$ is the convective heat transfer coefficient between coil and 
-	water
-	\item $h_P$ is the convective heat transfer coefficient between PCM and 
-	water 
-	\item $T_C$ is the temperature of the heating coil
-	\item $T_P$ is the temperature of the PCM
-	\item $T_W$ is the temperature of the water
+    \item $E_W$ is the change in heat energy in the water
+    \item $A_C$ is the heating coil surface area
+    \item $A_P$ is the PCM surface area
+    \item $h_C$ is the convective heat transfer coefficient between coil and 
+    water
+    \item $h_P$ is the convective heat transfer coefficient between PCM and 
+    water 
+    \item $T_C$ is the temperature of the heating coil
+    \item $T_P$ is the temperature of the PCM
+    \item $T_W$ is the temperature of the water
 \end{itemize}
 
 This is trivial for a human to check, and writing code to automatically check it
@@ -633,7 +635,7 @@ developers to make a number of modifications to many artifacts in the future.
 \toprule
 \textbf{Var} & \textbf{Constraints} & \textbf{Typical Value} & \textbf{Uncertainty}\\ \midrule
 $L$ & $L > 0$ & 1.5 m & 10\% \\ 
-$\rho_P$ & $\rho_P > 0$	& 1007 kg/m$^3$	& 10\% \\
+$\rho_P$ & $\rho_P > 0$    & 1007 kg/m$^3$    & 10\% \\
 \bottomrule
 \end{tabular}
 \label{tab:pcm}
@@ -836,8 +838,8 @@ demographic.
 
 We are also continuing work on:
 \begin{itemize}
-	\item Generating new types of software artifacts
-	\item Implementing much larger examples
+    \item Generating new types of software artifacts
+    \item Implementing much larger examples
 \end{itemize}
 
 Thanks to our practical approach to Drasil's design, there will likely be many 

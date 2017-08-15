@@ -7,7 +7,7 @@ import Language.Drasil.Chunk.Eq
 import Language.Drasil.Chunk.Quantity -- for hack
 import Language.Drasil.Chunk.SymbolForm -- for hack
 import Language.Drasil.NounPhrase
-import Language.Drasil.Spec
+import Language.Drasil.Spec hiding (Mod)
 import Language.Drasil.SystemInformation
 import Language.Drasil.Code -- for hack
 import Language.Drasil.Defs -- for hack
@@ -188,9 +188,16 @@ fdec v t = FDec (codevar v) (spaceToCodeType t)
 addModDefs :: CodeSpec -> [Mod] -> CodeSpec
 addModDefs cs@(CodeSpec{ mods = md }) mdnew = cs { mods = md ++ mdnew }
 
+type FunctionListMap = Map.Map String [String]
 
+functionListMap :: [Mod] -> FunctionListMap
+functionListMap = Map.fromList . map mpair
+  where mpair (Mod n f) = (n, map fname f)
+        fname (FCD cd) = codeName cd
+        fname (FDef (FuncDef n _ _ _)) = n
+        fname (FData (FuncData n _)) = n
 
-
+        
 ---- major hacks ----
 modHack :: [(String, [FunctionDecl])]
 modHack = [("ReadTable", [read_z_array_func, read_x_array_func, read_y_array_func])--,

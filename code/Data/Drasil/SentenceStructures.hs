@@ -57,13 +57,13 @@ foldlsC (x:y:xs) = foldle sC sC (x `sC` y) xs
 -- | creates a list of elements seperated by commas, ending in a "_, and _"
 foldlList :: [Sentence] -> Sentence
 foldlList []    = EmptyS
-foldlList [a,b] = a +:+ S "and" +:+ b
+foldlList [a,b] = a `sAnd` b
 foldlList lst   = foldle1 sC (\a b -> a `sC` S "and" +:+ b) lst
 
 -- | creates a list of elements seperated by commas, ending in a "_, or _"
 foldlOptions :: [Sentence] -> Sentence
 foldlOptions []    = EmptyS
-foldlOptions [a,b] = a +:+ S "or" +:+ b
+foldlOptions [a,b] = a `sOr` b
 foldlOptions lst   = foldle1 sC (\a b -> a `sC` S "or" +:+ b) lst
 
 {--** Combinators **--}

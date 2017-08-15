@@ -40,7 +40,7 @@ import Data.Drasil.Utils (getS, makeTMatrix, makeListRef, itemRefToSent,
 import Data.Drasil.SentenceStructures (acroA, acroR, sVersus, sAnd, foldlSP,
   foldlSent, foldlOptions, foldlSent_, figureLabel, foldlList, showingCxnBw,
   foldlsC, sOf, followA, ofThe, sIn, isThe, isExpctdToHv, sOr, underConsidertn,
-  tAndDWAcc, tAndDOnly, tAndDWSym)
+  tAndDWAcc, tAndDOnly, tAndDWSym, andThe)
 import Data.Drasil.Concepts.PhysicalProperties (dimension, materialProprty)
 
 import Drasil.GlassBR.Unitals (stressDistFac, aspectR, dimlessLoad,
@@ -326,7 +326,7 @@ s5_1_table_UC1, s5_1_table_UC2 :: [Sentence]
 
 s5_1_table_UC1 = [titleize user, titleize' characteristic +:+ S "of the"
   +:+ phrase glaSlab `sAnd` S "of the" +:+. phrase blast +:+ S "Details in"
-  +:+ (makeRef (SRS.indPRCase SRS.missingP []))]
+  +:+ makeRef (SRS.indPRCase SRS.missingP [])]
 
 s5_1_table_UC2 = [short gLassBR, S "Whether" `sOr` S "not the" +:+
   phrase glaSlab +:+ S "is safe for the" +:+ S "calculated" +:+ phrase load
@@ -349,7 +349,7 @@ s5_2 mainObj compare1 compare2 factorOfComparison =
   +:+
   short gLassBR, plural output_, S "if the", phrase mainObj,
   S "will be safe by comparing whether", phrase compare1, S "is greater than"
-  +:+. (phrase compare2), (at_start compare1 `isThe` (compare1 ^. defn))
+  +:+. phrase compare2, (at_start compare1 `isThe` (compare1 ^. defn))
   `sAnd` (phrase compare2 `isThe` phrase requirement) +:+.
   (S "which" `isThe` (compare2 ^. defn)), S "The second", phrase condition,
   S "is to check whether the calculated", phrase factorOfComparison,
@@ -451,7 +451,7 @@ assumption1, assumption2, assumption3, assumption4, assumption5, assumption6,
 assumption1 = mkAssump "assumption1"   a1Desc              --glassTyAssumps
 assumption2 = mkAssump "assumption2"   a2Desc              --glassCondition
 assumption3 = mkAssump "assumption3"   a3Desc              --explsnScenario
-assumption4 = mkAssump "assumption4"   (a4Desc (load_dur)) --standardValues
+assumption4 = mkAssump "assumption4"   (a4Desc (load_dur))   --standardValues
 assumption5 = mkAssump "assumption5"   a5Desc              --glassLiteAssmp
 assumption6 = mkAssump "assumption6"   a6Desc              --bndryConditions
 assumption7 = mkAssump "assumption7"   a7Desc              --responseTyAssump
@@ -471,7 +471,7 @@ a1Desc = foldlSent [S "The standard E1300-09a for",
   S "supported on one side acts as a", phrase cantilever]
 
 a2Desc :: Sentence
-a2Desc = foldlSent [S "Following", (sSqBr (S "4 (pg. 1)")) `sC`
+a2Desc = foldlSent [S "Following", (sSqBr (S "4" +:+ sParen (S "pg. 1"))) `sC`
   S "this", phrase practice, S "does not apply to any form of",
   foldlOptions $ map S ["wired", "patterned", "etched", "sandblasted",
   "drilled", "notched", "grooved glass"], S "with", phrase surface `sAnd`
@@ -484,7 +484,7 @@ a3Desc = foldlSent [S "This", phrase system,
 
 a4Desc :: UnitaryChunk -> Sentence
 a4Desc mainIdea = foldlSent [S "The", plural value, S "provided in",
-  (makeRef (SRS.valsOfAuxCons SRS.missingP [])), S "are assumed for the",
+  makeRef (SRS.valsOfAuxCons SRS.missingP []), S "are assumed for the",
   phrase mainIdea, sParen (getS mainIdea) `sC` S "and the",
   plural materialProprty `sOf` foldlList (map getS
   (take 3 assumption4_constants))]
@@ -511,6 +511,8 @@ a8Desc mainConcept = foldlSent [S "With", phrase reference, S "to",
   short gLassBR, S "It is calculated by the" +: phrase equation +:+.
   E (C mainConcept := equat mainConcept), S "Using this" `sC`
   E (C mainConcept := (Dbl 0.27))]
+
+{--Theoretical Models--}
 
 {--Data Definitions--}
 
@@ -590,10 +592,10 @@ req3Desc = foldlSent [S "The", phrase system, S "shall check the entered",
   plural datumConstraint, S "mentioned in" +:+. makeRef
   (SRS.datCon SRS.missingP []), S "If any" `sOf` S "the", plural inParam,
   S "is out" `sOf` S "bounds, an error", phrase message, S "is displayed"
-  `sAnd` S "the", plural calculation, S "stop"]
+  `andThe` plural calculation, S "stop"]
 
 req4Desc = foldlSent [titleize output_, S "the", plural inQty,
-  S "from", acroR 1 `sAnd` S "the known", plural quantity,
+  S "from", acroR 1 `andThe` S "known", plural quantity,
   S "from", acroR 2]
 
 req5Desc cmd = foldlSent_ [S "If", (getS is_safe1) `sAnd` (getS is_safe2),

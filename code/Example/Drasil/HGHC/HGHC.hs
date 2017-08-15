@@ -1,7 +1,6 @@
-module Drasil.HGHC.HGHC(srsBody, mgBody, misBody, modules) where
+module Drasil.HGHC.HGHC (srsBody, mgBody, misBody, modules) where
 
 import Language.Drasil
-
 import Drasil.DocumentLanguage
 
 import Drasil.Template.DD (makeDD)

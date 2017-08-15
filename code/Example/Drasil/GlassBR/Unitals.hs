@@ -30,7 +30,7 @@ mod_elas    = uc' "mod_elas"     (nounPhraseSP "modulus of elasticity of glass")
 gbConstrained :: [ConstrWrapper]
 
 gbConstrained = (map cnstrw gbInputsWUncrtn) ++ 
-  (map cnstrw gbInputsWUnitsUncrtn) ++ (map cnstrw [prob_br])
+  (map cnstrw gbInputsWUnitsUncrtn) ++ [cnstrw prob_br]
 
 plate_len, plate_width, char_weight, standOffDist :: UncertQ
 pb_tol, tNT :: UncertainChunk
@@ -380,29 +380,11 @@ gbSymbMapT term_ = (symbolMapFun gbSymbMap Theory) term_
 gbConstants :: [QDefinition]
 gbConstants = [constant_M, constant_K, constant_ModElas, constant_LoadDur]
 
-constant_M :: QDefinition
-constant_M = mkDataDef sflawParamM sfpMVal
-
-sfpMVal :: Expr
-sfpMVal = (7)
-
-constant_K :: QDefinition
-constant_K = mkDataDef sflawParamK sfpKVal
-
-sfpKVal :: Expr
-sfpKVal = (Grouping (Dbl 2.86)) * (10) :^ (Neg (53))
-
-constant_ModElas :: QDefinition
-constant_ModElas = mkDataDef mod_elas modElasVal
-
-modElasVal :: Expr
-modElasVal = (Grouping (Dbl 7.17)) * (10) :^ (7)
-
-constant_LoadDur :: QDefinition
-constant_LoadDur = mkDataDef load_dur durOfLoadVal
-
-durOfLoadVal :: Expr
-durOfLoadVal = (3)
+constant_M, constant_K, constant_ModElas, constant_LoadDur :: QDefinition
+constant_K       = mkDataDef sflawParamK  $ (Grouping (Dbl 2.86)) * (10 :^ (- 53))
+constant_M       = mkDataDef sflawParamM  $ 7
+constant_ModElas = mkDataDef mod_elas     $ (Grouping (Dbl 7.17)) * (10 :^ 7)
+constant_LoadDur = mkDataDef load_dur     $ 3
 
 --Equations--
 

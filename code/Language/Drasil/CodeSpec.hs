@@ -14,6 +14,8 @@ import Language.Drasil.Defs -- for hack
 import Language.Drasil.Expr -- for hack
 import Language.Drasil.Space -- for hack
 import Language.Drasil.DataDesc
+import Language.Drasil.Chunk.ExprRelat
+import Language.Drasil.ChunkDB
 
 import qualified Data.Map as Map
 import Control.Lens ((^.))
@@ -134,14 +136,33 @@ defaultChoices = Choices {
 type Name = String
 
 -- medium hacks ---
-data Mod = ModDef Name [FuncDef]
-         | ModData Name [DataDesc]
+relToQD :: (ExprRelat c) => SymbolMap -> c -> QDefinition
+relToQD sm r = convertRel sm $ r ^. relat
 
+convertRel :: SymbolMap -> Expr -> QDefinition
+convertRel sm ((C x) := r) = EC (symbLookup x sm) r
+convertRel _ _ = error "Conversion failed"
+
+data Mod = Mod Name [Func]
+     
+data Func = FCD CodeDefinition
+          | FDef FuncDef
+          | FData FuncData
+
+funcQD :: QDefinition -> Func
+funcQD qd = FCD $ qtoc qd
+
+funcData :: Name -> DataDesc -> Func
+funcData n dd = FData $ FuncData n dd 
+
+funcDef :: (Quantity c, SymbolForm c) => Name -> [c] -> Space -> [FuncStmt] -> Func  
+funcDef s i t fs = FDef $ FuncDef s (map codevar i) (spaceToCodeType t) fs 
+     
+data FuncData where
+  FuncData :: Name -> DataDesc -> FuncData
+  
 data FuncDef where
   FuncDef :: Name -> [CodeChunk] -> CodeType -> [FuncStmt] -> FuncDef
-
-funcDef :: (Quantity c, SymbolForm c) => Name -> [c] -> Space -> [FuncStmt] -> FuncDef  
-funcDef s i t fs = FuncDef s (map codevar i) (spaceToCodeType t) fs 
  
 data FuncStmt where
   FAsg :: CodeChunk -> Expr -> FuncStmt
@@ -166,6 +187,9 @@ fdec v t = FDec (codevar v) (spaceToCodeType t)
 
 addModDefs :: CodeSpec -> [Mod] -> CodeSpec
 addModDefs cs@(CodeSpec{ mods = md }) mdnew = cs { mods = md ++ mdnew }
+
+
+
 
 ---- major hacks ----
 modHack :: [(String, [FunctionDecl])]

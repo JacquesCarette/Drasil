@@ -30,11 +30,11 @@ v_y_z_2   = makeVC "y_z_2"   (nounPhraseSP "y_z_2")     (Atomic "y_z_2")
 v_mat     = makeVC "mat"     (nounPhraseSP "mat")       (Atomic "mat")
 v_col     = makeVC "col"     (nounPhraseSP "col")       (Atomic "col")
 
-linInterp :: FuncDef
+linInterp :: Func
 linInterp = funcDef "lin_interp" [v_x_1, v_y_1, v_x_2, v_y_2, v_x] Rational 
   [ FRet $ (((C v_y_2) - (C v_y_1)) / ((C v_x_2) - (C v_x_1))) * ((C v_x) - (C v_x_1)) + (C v_y_1) ]
 
-indInSeq :: FuncDef
+indInSeq :: Func
 indInSeq = funcDef "indInSeq" [v_arr, v_v] Rational 
   [
     ffor (v_i) (C v_i :< Len (C v_arr))
@@ -42,7 +42,7 @@ indInSeq = funcDef "indInSeq" [v_arr, v_v] Rational
     FThrow "Bound error"      
   ]
 
-matrixCol :: FuncDef
+matrixCol :: Func
 matrixCol = funcDef "matrixCol" [v_mat, v_j] Rational 
   [
     fdec v_col (Vect Rational),
@@ -50,7 +50,7 @@ matrixCol = funcDef "matrixCol" [v_mat, v_j] Rational
     FRet (C v_col)
   ]
 
-interpY :: FuncDef
+interpY :: Func
 interpY = funcDef "interpY" [v_x_array, v_y_array, v_z_array, v_x, v_z] Rational 
   [
     fasg v_i (FCall (asExpr indInSeq) [C v_z_array, C v_z]),
@@ -79,7 +79,7 @@ interpY = funcDef "interpY" [v_x_array, v_y_array, v_z_array, v_x, v_z] Rational
                                      C v_z ] )                                  
   ]  
   
-interpZ :: FuncDef
+interpZ :: Func
 interpZ = funcDef "interpZ" [v_x_array, v_y_array, v_z_array, v_x, v_y] Rational 
   [
     ffor v_i (C v_i :< Len ((C v_z_array) - 1)) 
@@ -114,8 +114,9 @@ interpZ = funcDef "interpZ" [v_x_array, v_y_array, v_z_array, v_x, v_y] Rational
   ]
 
 interpMod :: Mod
-interpMod = ModDef "Interpolation" [linInterp, indInSeq, matrixCol, interpY, interpZ]
+interpMod = Mod "Interpolation" $ [linInterp, indInSeq, matrixCol, interpY, interpZ]
 
 -- hack  (more so than the rest of the module!)
-asExpr :: FuncDef -> Expr
-asExpr (FuncDef n _ _ _) = C $ makeVC n (nounPhraseSP n) (Atomic n)
+asExpr :: Func -> Expr
+asExpr (FDef (FuncDef n _ _ _)) = C $ makeVC n (nounPhraseSP n) (Atomic n)
+asExpr _ = error "Should be FuncDef"

@@ -5,10 +5,10 @@ import Drasil.SWHS.Unitals (tank_length, diam, coil_SA, temp_C, w_density,
   htCap_W, coil_HTC, temp_init, tau, time_final, abs_tol, rel_tol, cons_tol)
 
 inputMod :: Mod
-inputMod = ModData "InputFormat" [nopcmInputData]
+inputMod = Mod "InputFormat" [nopcmInputData]
 
-nopcmInputData :: DataDesc
-nopcmInputData =
+nopcmInputData :: Func
+nopcmInputData = funcData "get_inputs" $
   [ junkLine,
     singleton tank_length,
     junkLine,

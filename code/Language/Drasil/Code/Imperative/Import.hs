@@ -9,7 +9,8 @@ import Language.Drasil.Code.CodeGeneration (createCodeFiles, makeCode)
 import Language.Drasil.Chunk.Code
 import Language.Drasil.Expr as E
 import Language.Drasil.Expr.Extract hiding (vars)
-import Language.Drasil.CodeSpec hiding (codeSpec)
+import Language.Drasil.CodeSpec hiding (codeSpec, Mod(..))
+import qualified Language.Drasil.CodeSpec as CS (Mod(..))
 import Language.Drasil.DataDesc
 
 import Prelude hiding (log, exp, return, const)
@@ -126,7 +127,6 @@ genModulesD g = genInputMod g (inputs $ codeSpec g) (cMap $ codeSpec g)
              ++ map (\(FuncMod n d) -> genCalcMod g n d) (fMods $ codeSpec g)
              ++ genOutputMod g (outputs $ codeSpec g)
              ++ map (genModDef g) (mods $ codeSpec g) -- hack
-      --       ++ map (genHacks g) (mods $ codeSpec g) -- hack 
 
 
 ------- INPUT ----------  
@@ -182,123 +182,7 @@ genInputConstraintsD g vars cm =
   in
     publicMethod g methodTypeVoid "input_constraints" [] [ block $
       (map (\x -> ifCond [((?!) (convExpr x), sfwrCBody g x)] noElse) sfwrCs) ++
-      (map (\x -> ifCond [((?!) (convExpr x), physCBody g x)] noElse) physCs) ]
-
-
--- this is really ugly!!    
-genFileInput :: Generator -> DataDesc -> Method
-genFileInput g dd = 
-    publicMethod g methodTypeVoid "tempname" (p_filename : (getParams g $ getInputs dd)) $
-      body $ [
-      varDec l_infile infile,
-      varDec l_line string,
-      listDec' l_lines string 0,
-      listDec' l_linetokens string 0,
-      openFileR v_infile v_filename ] ++ 
-      (concatMap inData dd) ++ [
-      closeFile v_infile ]
-  where inData :: Data -> [Statement]
-        inData (Singleton v) = [getFileInput v_infile (convType $ codeType v) (var $ codeName v)]
-        inData JunkData = [discardFileLine v_infile]
-        inData (Line lp d) = 
-          [ getFileInputLine v_infile v_line,
-            stringSplit v_linetokens v_line d
-          ] ++ lineData lp (litInt 0)
-        inData (Lines lp Nothing d) = 
-          [ getFileInputAll v_infile v_lines,
-            for (varDecDef l_i int (litInt 0)) (v_i ?< v_lines$.listSize) ((&++) v_i)
-              ( body 
-                ( [ stringSplit v_linetokens (v_lines$.(listAccess v_i)) d
-                  ] ++ lineData lp v_i
-                )
-              )
-          ] 
-        inData (Lines lp (Just numLines) d) = 
-          [ for (varDecDef l_i int (litInt 0)) (v_i ?< (litInt numLines)) ((&++) v_i)
-              ( body 
-                ( [ getFileInputLine v_infile v_line,
-                    stringSplit v_linetokens v_line d
-                  ] ++ lineData lp v_i
-                )
-              )
-          ] 
-        ---------------
-        lineData :: LinePattern -> Value -> [Statement]
-        lineData (Straight p) lineNo = patternData p lineNo (litInt 0)        
-        lineData (Repeat p Nothing) lineNo = 
-          [ for (varDecDef l_j int (litInt 0)) (v_j ?< (v_linetokens$.listSize #/ (litInt $ toInteger $ length p))$.(cast int float)) ((&++) v_j)
-              ( body (patternData p lineNo v_j) )
-          ]
-        lineData (Repeat p (Just numPat)) lineNo = 
-          [ for (varDecDef l_j int (litInt 0)) (v_j ?< (litInt numPat)) ((&++) v_j)
-              ( body (patternData p lineNo v_j) )
-          ]   
-        ---------------
-        patternData :: [Entry] -> Value -> Value -> [Statement]
-        patternData d lineNo patNo = 
-          let l = toInteger $ length d
-          in  concatMap (\(x,y) -> entryData x lineNo patNo y) $ zip (map (\z -> (patNo #* (litInt l)) #+ (litInt z)) [0..l-1]) d
-        ---------------
-        entryData :: Value -> Value -> Value -> Entry -> [Statement]
-        entryData tokIndex _ _ (Entry v) = [assign g (var $ codeName v) $
-          (v_linetokens$.(listAccess tokIndex))$.(cast (convType $ codeType v) string)]
-        entryData tokIndex lineNo patNo (ListEntry indx v) =
-          checkIndex indx lineNo patNo (var $ codeName v) (codeType v) ++
-            [ assign g (indexData indx lineNo patNo (var $ codeName v)) $
-              (v_linetokens$.(listAccess tokIndex))$.(cast (listType (codeType v) (toInteger $ length indx)) string)
-            ]
-        entryData _ _ _ JunkEntry = []
-        ---------------
-        indexData :: [Ind] -> Value -> Value -> Value -> Value
-        indexData [] _ _ v = v
-        indexData ((Explicit i):is) l p v = indexData is l p (ObjAccess v (listAccess $ litInt i))
-        indexData (WithLine:is) l p v = indexData is l p (ObjAccess v (listAccess l))
-        indexData (WithPattern:is) l p v = indexData is l p (ObjAccess v (listAccess p))    
-        ---------------
-        checkIndex :: [Ind] -> Value -> Value -> Value -> C.CodeType -> [Statement]
-        checkIndex indx l p v s = checkIndex' indx len l p v (listBase s)
-          where len = toInteger $ length indx
-        checkIndex' [] _ _ _ _ _ = []
-        checkIndex' ((Explicit i):is) n l p v s = 
-          [ while (v$.listSize ?<= (litInt i)) ( body [ valStmt $ v$.(listExtend $ listType' s n) ] ) ]
-          ++ checkIndex' is (n-1) l p (v$.(listAccess $ litInt i)) s
-        checkIndex' ((WithLine):is) n l p v s = 
-          [ while (v$.listSize ?<= l) ( body [ valStmt $ v$.(listExtend $ listType' s n ) ] ) ]
-          ++ checkIndex' is (n-1) l p (v$.(listAccess l)) s
-        checkIndex' ((WithPattern):is) n l p v s =
-          [ while (v$.listSize ?<= p) ( body [ valStmt $ v$.(listExtend $ listType' s n ) ] ) ]
-          ++ checkIndex' is (n-1) l p (v$.(listAccess p)) s
-        ---------------
-        listType :: C.CodeType -> Integer -> I.StateType
-        listType _ 0 = error "No index given"        
-        listType (C.List t) 1 = convType t
-        listType (C.List t) n = listType t (n-1)
-        listType _ _ = error "Not a list type" 
-        ---------------
-        listBase :: C.CodeType -> C.CodeType
-        listBase (C.List t) = listBase t
-        listBase t = t
-        ---------------
-        listType' :: C.CodeType -> Integer -> I.StateType
-        listType' _ 0 = error "No index given"
-        listType' t 1 = convType t
-        listType' t n = listT $ listType' t (n-1)       
-        ---------------
-        l_line = "line"
-        v_line = var l_line
-        l_lines = "lines"
-        v_lines = var l_lines
-        l_linetokens = "linetokens"
-        v_linetokens = var l_linetokens
-        l_infile = "infile"
-        v_infile = var l_infile
-        l_filename = "filename"
-        p_filename = param l_filename string
-        v_filename = var l_filename
-        l_i = "i"
-        v_i = var l_i
-        l_j = "j"
-        v_j = var l_j        
+      (map (\x -> ifCond [((?!) (convExpr x), physCBody g x)] noElse) physCs) ]      
 
         
 -- need Expr -> String to print constraint
@@ -627,12 +511,13 @@ compactCaseUnary op (Case c) = Case (map (\(e, r) -> (op e, r)) c)
 compactCaseUnary op a        = op (compactCase a)
 
 -- medium hacks --
-genModDef :: Generator -> Mod -> Module
-genModDef g (ModDef n fs) = buildModule n [] [] (map (genFuncDef g) fs) []
-genModDef g (ModData n ds) = buildModule n [] [] (map (genFileInput g) ds) []
+genModDef :: Generator -> CS.Mod -> Module
+genModDef g (CS.Mod n fs) = buildModule n [] [] (map (genFunc g) fs) []
 
-genFuncDef :: Generator -> FuncDef -> Method
-genFuncDef g (FuncDef n i o s) = publicMethod g (methodType $ convType o) n (getParams g i) [ block (map (convStmt g) s) ]
+genFunc :: Generator -> Func -> Method
+genFunc g (FDef (FuncDef n i o s)) = publicMethod g (methodType $ convType o) n (getParams g i) [ block (map (convStmt g) s) ]
+genFunc g (FData (FuncData n dd)) = genDataFunc g n dd
+genFunc g (FCD cd) = genCalcFunc g cd
 
 convStmt :: Generator -> FuncStmt -> Statement
 convStmt g (FAsg v e) = assign g (var $ codeName v) (convExpr e)
@@ -648,6 +533,121 @@ convStmt _ (FContinue) = continue
 convStmt _ (FVal e) = valStmt $ convExpr e
 convStmt _ (FDec v (C.List t)) = listDec' (codeName v) (convType t) 0
 convStmt _ (FDec v t) = varDec (codeName v) (convType t)
+
+-- this is really ugly!!    
+genDataFunc :: Generator -> Name -> DataDesc -> Method
+genDataFunc g name dd = 
+    publicMethod g methodTypeVoid name (p_filename : (getParams g $ getInputs dd)) $
+      body $ [
+      varDec l_infile infile,
+      varDec l_line string,
+      listDec' l_lines string 0,
+      listDec' l_linetokens string 0,
+      openFileR v_infile v_filename ] ++ 
+      (concatMap inData dd) ++ [
+      closeFile v_infile ]
+  where inData :: Data -> [Statement]
+        inData (Singleton v) = [getFileInput v_infile (convType $ codeType v) (var $ codeName v)]
+        inData JunkData = [discardFileLine v_infile]
+        inData (Line lp d) = 
+          [ getFileInputLine v_infile v_line,
+            stringSplit v_linetokens v_line d
+          ] ++ lineData lp (litInt 0)
+        inData (Lines lp Nothing d) = 
+          [ getFileInputAll v_infile v_lines,
+            for (varDecDef l_i int (litInt 0)) (v_i ?< v_lines$.listSize) ((&++) v_i)
+              ( body 
+                ( [ stringSplit v_linetokens (v_lines$.(listAccess v_i)) d
+                  ] ++ lineData lp v_i
+                )
+              )
+          ] 
+        inData (Lines lp (Just numLines) d) = 
+          [ for (varDecDef l_i int (litInt 0)) (v_i ?< (litInt numLines)) ((&++) v_i)
+              ( body 
+                ( [ getFileInputLine v_infile v_line,
+                    stringSplit v_linetokens v_line d
+                  ] ++ lineData lp v_i
+                )
+              )
+          ] 
+        ---------------
+        lineData :: LinePattern -> Value -> [Statement]
+        lineData (Straight p) lineNo = patternData p lineNo (litInt 0)        
+        lineData (Repeat p Nothing) lineNo = 
+          [ for (varDecDef l_j int (litInt 0)) (v_j ?< (v_linetokens$.listSize #/ (litInt $ toInteger $ length p))$.(cast int float)) ((&++) v_j)
+              ( body (patternData p lineNo v_j) )
+          ]
+        lineData (Repeat p (Just numPat)) lineNo = 
+          [ for (varDecDef l_j int (litInt 0)) (v_j ?< (litInt numPat)) ((&++) v_j)
+              ( body (patternData p lineNo v_j) )
+          ]   
+        ---------------
+        patternData :: [Entry] -> Value -> Value -> [Statement]
+        patternData d lineNo patNo = 
+          let l = toInteger $ length d
+          in  concatMap (\(x,y) -> entryData x lineNo patNo y) $ zip (map (\z -> (patNo #* (litInt l)) #+ (litInt z)) [0..l-1]) d
+        ---------------
+        entryData :: Value -> Value -> Value -> Entry -> [Statement]
+        entryData tokIndex _ _ (Entry v) = [assign g (var $ codeName v) $
+          (v_linetokens$.(listAccess tokIndex))$.(cast (convType $ codeType v) string)]
+        entryData tokIndex lineNo patNo (ListEntry indx v) =
+          checkIndex indx lineNo patNo (var $ codeName v) (codeType v) ++
+            [ assign g (indexData indx lineNo patNo (var $ codeName v)) $
+              (v_linetokens$.(listAccess tokIndex))$.(cast (listType (codeType v) (toInteger $ length indx)) string)
+            ]
+        entryData _ _ _ JunkEntry = []
+        ---------------
+        indexData :: [Ind] -> Value -> Value -> Value -> Value
+        indexData [] _ _ v = v
+        indexData ((Explicit i):is) l p v = indexData is l p (ObjAccess v (listAccess $ litInt i))
+        indexData (WithLine:is) l p v = indexData is l p (ObjAccess v (listAccess l))
+        indexData (WithPattern:is) l p v = indexData is l p (ObjAccess v (listAccess p))    
+        ---------------
+        checkIndex :: [Ind] -> Value -> Value -> Value -> C.CodeType -> [Statement]
+        checkIndex indx l p v s = checkIndex' indx len l p v (listBase s)
+          where len = toInteger $ length indx
+        checkIndex' [] _ _ _ _ _ = []
+        checkIndex' ((Explicit i):is) n l p v s = 
+          [ while (v$.listSize ?<= (litInt i)) ( body [ valStmt $ v$.(listExtend $ listType' s n) ] ) ]
+          ++ checkIndex' is (n-1) l p (v$.(listAccess $ litInt i)) s
+        checkIndex' ((WithLine):is) n l p v s = 
+          [ while (v$.listSize ?<= l) ( body [ valStmt $ v$.(listExtend $ listType' s n ) ] ) ]
+          ++ checkIndex' is (n-1) l p (v$.(listAccess l)) s
+        checkIndex' ((WithPattern):is) n l p v s =
+          [ while (v$.listSize ?<= p) ( body [ valStmt $ v$.(listExtend $ listType' s n ) ] ) ]
+          ++ checkIndex' is (n-1) l p (v$.(listAccess p)) s
+        ---------------
+        listType :: C.CodeType -> Integer -> I.StateType
+        listType _ 0 = error "No index given"        
+        listType (C.List t) 1 = convType t
+        listType (C.List t) n = listType t (n-1)
+        listType _ _ = error "Not a list type" 
+        ---------------
+        listBase :: C.CodeType -> C.CodeType
+        listBase (C.List t) = listBase t
+        listBase t = t
+        ---------------
+        listType' :: C.CodeType -> Integer -> I.StateType
+        listType' _ 0 = error "No index given"
+        listType' t 1 = convType t
+        listType' t n = listT $ listType' t (n-1)       
+        ---------------
+        l_line = "line"
+        v_line = var l_line
+        l_lines = "lines"
+        v_lines = var l_lines
+        l_linetokens = "linetokens"
+        v_linetokens = var l_linetokens
+        l_infile = "infile"
+        v_infile = var l_infile
+        l_filename = "filename"
+        p_filename = param l_filename string
+        v_filename = var l_filename
+        l_i = "i"
+        v_i = var l_i
+        l_j = "j"
+        v_j = var l_j  
 
 -- major hacks --
 genHacks :: Generator -> (String, [Method]) -> Module

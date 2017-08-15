@@ -8,10 +8,10 @@ import Drasil.SWHS.Unitals (tank_length, diam, pcm_vol, pcm_SA, pcm_density,
     abs_tol, rel_tol, cons_tol)
 
 swhsInputMod :: Mod
-swhsInputMod = ModData "InputFormat" [swhsInputData]
+swhsInputMod = Mod "InputFormat" [swhsInputData]
 
-swhsInputData :: DataDesc
-swhsInputData =
+swhsInputData :: Func
+swhsInputData = funcData "get_inputs" $
   [ junkLine, -- 1
     singleton tank_length,
     junkLine, -- 3

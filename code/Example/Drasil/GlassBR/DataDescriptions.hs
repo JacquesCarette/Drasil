@@ -8,25 +8,25 @@ import Drasil.GlassBR.Interpolation (v_z_array, v_x_array, v_y_array)
 
 --from TSD.txt:
 
-read_table :: DataDesc
-read_table = 
+read_table :: Func
+read_table = funcData "read_table" $
   [ singleLine (repeated [junk, listEntry [WithPattern] v_z_array]) ',',
     multiLine (repeated [listEntry [WithLine, WithPattern] v_x_array, 
                          listEntry [WithLine, WithPattern] v_y_array]) ','
   ]
   
 readTableMod :: Mod
-readTableMod = ModData "ReadTable" [read_table]
+readTableMod = Mod "ReadTable" [read_table]
 
 -----
 
 --from defaultInput.txt:
 
 inputMod :: Mod
-inputMod = ModData "InputFormat" [glassInputData]
+inputMod = Mod "InputFormat" [glassInputData]
 
-glassInputData :: DataDesc
-glassInputData = 
+glassInputData :: Func
+glassInputData = funcData "get_input" $
   [ junkLine,
     singleton plate_len, singleton plate_width, singleton nom_thick,
     junkLine,

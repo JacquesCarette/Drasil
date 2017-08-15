@@ -125,7 +125,7 @@ glassSystInfo = SI {
   _quants      = this_symbols,
   _concepts    = ([] :: [CQSWrapper]),
   _namedIdeas  = acronyms,
-  _definitions = dataDefns,
+  _definitions = dataDefns ++ (map (relToQD gbSymbMap) iModels) ++ (map (relToQD gbSymbMap) tModels),
   _inputs      = map qs gbInputs,
   _outputs     = map qs gbOutputs,
   _defSequence = (gbQDefns :: [Block QDefinition]),
@@ -143,8 +143,9 @@ glassChoices = Choices {
   comments = CommentNone,    -- CommentNone, CommentFunc
   onSfwrConstraint = Warning,  -- Warning, Exception
   onPhysConstraint = Warning,  -- Warning, Exception
-  inputStructure = Loose    -- Loose, AsClass
+  inputStructure = AsClass    -- Loose, AsClass
 }
+
 
 glassBR_code :: CodeSpec
 glassBR_code = addModDefs (codeSpec' glassSystInfo glassChoices) 

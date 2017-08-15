@@ -5,10 +5,10 @@ import Language.Drasil
   --poissnsRatio, fricAngle, dryWeight, satWeight, waterWeight)
 
 sspInputMod :: Mod
-sspInputMod = ModData "InputFormat" [sspInputData]
+sspInputMod = Mod "InputFormat" [sspInputData]
 
-sspInputData :: DataDesc
-sspInputData = [ {- --FIXME: unfinished. Needs more inputs? Needs way to think of (x,y) as two seperate things
+sspInputData :: Func
+sspInputData = funcData "get_inputs" $ [ {- --FIXME: unfinished. Needs more inputs? Needs way to think of (x,y) as two seperate things
   --number of layers, layer direction
   multiLine (straight $ map (listEntry [WithPattern]) [
   fricAngle, cohesion, dryWeight, satWeight, elasticMod, poissnsRatio

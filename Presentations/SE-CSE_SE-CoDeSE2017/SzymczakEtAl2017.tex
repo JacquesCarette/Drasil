@@ -253,7 +253,7 @@ to ensure it becomes a high priority because documenting software is typically
 felt to be:
 
 \begin{itemize}
-\item Too long \spr{This sounds grammatically incorrect -- perhaps ``Too time consuming"?}
+\item Too time consuming
 \item Too difficult to maintain
 \item Not amenable to change
 \item Too tied to the waterfall process
@@ -479,30 +479,35 @@ version of this code can be seen in Figure~\ref{Fig_JtolPython}). From the
 Not only that, but thanks to the incorporation of GOOL, we can also generate
 Java, Lua, C\#, etc.
 
-% \begin{figure*}
-% \begin{lstlisting}[language=python, frame=single, showstringspaces=false]
-% def calc_j_tol(inparams):
-    % j_tol = math.log((math.log(1.0/(1.0 - inparams.pbtol))) * ((((inparams.a / 1000.0) * 
-      % (inparams.b / 1000.0)) ** (inparams.m - 1.0)) / ((inparams.k * (((inparams.E * 1000.0) * 
-      % ((inparams.h / 1000.0) ** 2.0)) ** inparams.m)) * inparams.ldf))) 
-    % return j_tol
-% \end{lstlisting}
-% \caption{Python code to Calculate \jtol{}}
-% \label{Fig_JtolPython}
-% \end{figure*}
+ \begin{figure*}
+ \begin{lstlisting}[language=python, frame=single, showstringspaces=false]
+ def calc_j_tol(inparams):
+     j_tol = math.log((math.log(1.0/(1.0 - inparams.pbtol))) * 
+       ((((inparams.a / 1000.0) * (inparams.b / 1000.0)) ** (inparams.m - 1.0)) / 
+       ((inparams.k * (((inparams.E * 1000.0) * 
+       ((inparams.h / 1000.0) ** 2.0)) ** inparams.m)) * inparams.ldf))) 
+     return j_tol
+ \end{lstlisting}
+ \caption{Python code to Calculate \jtol{}}
+ \label{Fig_JtolPython}
+ \end{figure*}
 
-\spr{In reference to Figure 5:  The code that was here was the output of the manually written GOOL code.  I switched it to 
-what is currently being generated (I assume this is supposed to be the generated code?  If not
-I left the original version commented out).}
-\begin{figure*}
-\begin{lstlisting}[language=python, frame=single, showstringspaces=false]
-def J_tol(inParams, h, LDF):
-    return math.log((math.log(1 / (1 - inParams.P_btol))) * (((inParams.a * inParams.b) ** 
-    (Constants.m - 1)) / (Constants.k * (((Constants.E * (h ** 2)) ** Constants.m) * LDF))))
-\end{lstlisting}
-\caption{Python code to Calculate \jtol{}}
-\label{Fig_JtolPython}
-\end{figure*}
+%\spr{In reference to Figure 5:  The code that was here was the output of the 
+%manually written GOOL code.  I switched it to 
+%what is currently being generated (I assume this is supposed to be the generated 
+%code?  If not
+%I left the original version commented out).}
+%\ds{It was meant to be the incorrect (due to unit conversion using 1000*) code, 
+%whether manually written or generated. We did not refer to it as ``generated" code.}
+%\begin{figure*}
+%\begin{lstlisting}[language=python, frame=single, showstringspaces=false]
+%def J_tol(inParams, h, LDF):
+%    return math.log((math.log(1 / (1 - inParams.P_btol))) * (((inParams.a * inParams.b) ** 
+%    (Constants.m - 1)) / (Constants.k * (((Constants.E * (h ** 2)) ** Constants.m) * LDF))))
+%\end{lstlisting}
+%\caption{Python code to Calculate \jtol{}}
+%\label{Fig_JtolPython}
+%\end{figure*}
 
 
 The source knowledge for generating both the documentation and the code has been
@@ -659,11 +664,11 @@ well as typical values. Capturing this information
 delivers a wider array of advantages, including:
 
 \begin{itemize}
-\item Generate guards against invalid input automatically
-\item Generate certain test cases automatically
-\item Generate views suitable for inspection
-\item Warn the user if they choose a value that is order(s) of magnitude different than 
-the typical value
+\item Generating guards against invalid input automatically
+\item Generating certain test cases automatically
+\item Generating views suitable for inspection
+\item Warning the user if they choose a value that is order(s) of magnitude different 
+than the typical value
 \end{itemize}
 We can also see that it is extremely easy to trace changes and verify that they 
 are correct, thanks to our one-source, generative approach. We can produce 
@@ -824,10 +829,16 @@ classify design and implementation choices in a reusable manner and will
 allow us to progress with the generation of design documents, which are 
 currently difficult to produce in Drasil.
 
-\spr{If you want to add more to this section, you could mention automated 
-verification.  Unit test generation isn't far away after generation is reliably working.  
-Also, we can start adding options to insert checks and guards into the generated
-code -- this ties into the design language.}
+The language of design will also facilitate more robust automated test case 
+generation. By utilizing the captured design decisions, we will have a deeper 
+knowledge of specific choices being made in our generated code. For example, in 
+GlassBR, we will know which interpolation algorithm to use, and we will be able 
+to generate test cases relevant to said algorithm.
+
+%\spr{If you want to add more to this section, you could mention automated 
+%verification.  Unit test generation isn't far away after generation is reliably working.  
+%Also, we can start adding options to insert checks and guards into the generated
+%code -- this ties into the design language.}
 
 Another large feature that will be a necessity in the long-run, but has thus 
 far been relegated to the back-burner, is a much more user-friendly syntax, or 
@@ -845,7 +856,7 @@ We are also continuing work on:
 	\item Implementing much larger examples
 \end{itemize}
 
-Thanks to our practical-approach to Drasil's design, there will likely be many 
+Thanks to our practical approach to Drasil's design, there will likely be many 
 other minor features to add and changes to make that are not yet entirely clear 
 to us.
 

@@ -167,7 +167,7 @@ p_expr (And a b)  = p_expr a ++ " &and; " ++ p_expr b
 p_expr (Or a b)   = p_expr a ++ " &or; " ++ p_expr b
 p_expr (Impl a b) = p_expr a ++ " &rArr; " ++ p_expr b
 p_expr (Iff a b)  = p_expr a ++ " &hArr; " ++ p_expr b
-p_expr (IsIn  a b) = (concat $ intersperse "," $ map p_expr a) ++ "&thinsp;&isin;&thinsp;"  ++ "{" ++ show b ++ "}"
+p_expr (IsIn  a b) = (concat $ intersperse "," $ map p_expr a) ++ "&thinsp;&isin;&thinsp;"  ++ show b
 p_expr (NotIn a b) = (concat $ intersperse "," $ map p_expr a) ++ "&thinsp;&notin;&thinsp;" ++ show b
 p_expr (State a b) = (concat $ intersperse ", " $ map p_quan a) ++ ": " ++ p_expr b
 

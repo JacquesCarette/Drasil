@@ -21,9 +21,7 @@ import Language.Drasil
 import Data.Drasil.Utils (foldle, foldle1, getS, fmtU, getRVal)
 import Data.Drasil.Concepts.Documentation
 import Data.Drasil.Concepts.Math (equation)
-import Data.List (intersperse, concat)
 import Control.Lens ((^.))
-import Language.Drasil.Spec(sCurlyBr)
 --import Language.Drasil.Space (Space (..))
 
 {--** Sentence Folding **--}
@@ -197,8 +195,7 @@ eqN n = phrase equation +:+ sParen (S $ show n)
 
 --Produces a sentence that displays the constraints in a {}.
 displayConstrntsAsSet :: SymbolForm a => a -> [String] -> Sentence
-displayConstrntsAsSet sym listOfVals = E $ [C sym] `IsIn` (Obj (concat $ intersperse ", " listOfVals))
---displayConstrntsAsSet ch listOfVals = getS ch +:+ (G Epsilon_L) +:+ (sCurlyBr (foldlsC (map S listOfVals)))
+displayConstrntsAsSet sym listOfVals = E $ [C sym] `IsIn` (DiscreteS listOfVals)
 
 extrctStrng :: Sentence -> String
 extrctStrng (S strng) = strng

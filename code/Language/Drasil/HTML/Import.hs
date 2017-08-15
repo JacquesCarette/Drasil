@@ -127,10 +127,9 @@ set String   = H.String
 set Radians  = H.Radians
 set (Vect a) = H.Vect (set a)
 set (Obj a)  = H.Obj a
---set (Discrete a)  = H.Discrete (set a)
---set (DiscreteI a) = H.DiscreteI a
---set (DiscreteD a) = H.DiscreteD a
---set (DiscreteS a) = H.DiscreteS a
+set (DiscreteI a) = H.DiscreteI a
+set (DiscreteD a) = H.DiscreteD a
+set (DiscreteS a) = H.DiscreteS a
 
 -- | Helper function for translating Integrals (from 'UFunc')
 integral :: UFunc -> (H.Function, H.Expr)

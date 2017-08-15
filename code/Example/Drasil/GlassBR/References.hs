@@ -70,7 +70,6 @@ astm_LR2009 = Misc
   Title (S "Standard Practice for Determining Load Resistance of Glass in Buildings"),
   Publisher (S "ASTM International"),
   Collection (S "Standard E1300-09a"),
-  Publisher (S "American Society for Testing and Material (ASTM)"),
   Year (2009),
   URL (S "www.astm.org")
   ]

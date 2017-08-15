@@ -1,6 +1,8 @@
 {-# Language GADTs #-}
 module Language.Drasil.HTML.AST where
 
+import Data.List (intersperse)
+
 import Language.Drasil.Expr (Variable)
 import Language.Drasil.Symbol (Symbol)
 import Language.Drasil.Spec (USymb, RefType)
@@ -75,10 +77,9 @@ data Set = Integer
          | Radians
          | Vect Set
          | Obj String
-         | Discrete Set
-         -- DiscreteI [Int]
-         -- DiscreteD [Double]
-         -- DiscreteS [String]
+         | DiscreteI [Int]
+         | DiscreteD [Double]
+         | DiscreteS [String]
 
 data Quantifier = Forall Expr | Exists Expr
 
@@ -173,10 +174,9 @@ instance Show Set where
   show Radians  = "rad"
   show (Vect a) = "V" ++ show a
   show (Obj a)  = a
-  show (Discrete a)  = "{" ++ show a ++ "}"
-  --show (DiscreteI a)  = "{" ++ (foldl (++) "" . intersperse ", " . map show) a ++ "}"
-  --show (DiscreteD a)  = "{" ++ (foldl (++) "" . intersperse ", " . map show) a ++ "}"
-  --show (DiscreteS a) = "{" ++ (foldl (++) "" . intersperse ", ") a ++ "}"
+  show (DiscreteI a)  = "{" ++ (concat $ intersperse ", " (map show a)) ++ "}"
+  show (DiscreteD a)  = "{" ++ (concat $ intersperse ", " (map show a)) ++ "}"
+  show (DiscreteS a)  = "{" ++ (concat $ intersperse ", " a) ++ "}"
   
 type BibRef = [Citation]
 type City   = Spec

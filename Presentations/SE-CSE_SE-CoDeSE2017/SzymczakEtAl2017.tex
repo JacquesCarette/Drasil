@@ -111,9 +111,9 @@ What if building well-documented software was not tedious and unrewarding?  We
 present our Drasil framework's design, development process, and a case study,
 GlassBR, of a piece of scientific software for computing the safety of glass
 panes with respect to explosions. Such software is algorithmically
-straightforward, but as it is used in safety critical applications, correctness
-is important. The setting we are most interested in is when correctness is
-judged via certification.
+straightforward, but, as it is used in safety related applications, correctness
+is important. For Drasil, the context we are most interested in is when correctness is
+necessary to assess for software certification.
 
 We are also interested in the transparency of scientific software development,
 particularly for its reusability and reproducibility. We illustrate Drasil's 
@@ -196,7 +196,7 @@ driven design, code generation, software certification}
 \section{Introduction} \label{SecIntroduction}
 
 Every developer should strive towards creating the highest possible quality 
-software. This is especially true in safety-critical applications where 
+software. This is especially true in safety-related applications where 
 incorrect software could cost lives. As scientists, we should be leading the 
 community in developing high quality software, as it is our duty to ensure the 
 reusability, reproducibility, and replicability of our work.
@@ -211,19 +211,19 @@ We want to streamline the certification process, by simplifying the creation of
 the requisite software artifacts (documentation and code) and by ensuring that these 
 artifacts are always consistent. Tracking down the source of any information 
 contained in our artifacts should be trivially easy, yet this is not always the 
-case as documentation is often not a high priority.
+case, since documentation is often not a high priority.
 
 Improved documentation is often considered too high a cost in terms of time and 
 effort for SCS developers, particularly when dealing with rapid changes in 
 development. However, it is an important aspect of improving overall software 
 quality. Carver~\cite{CarverEtAl2007} observed that scientists do not view 
-rigid, process-heavy approaches, favourably. SCS developers tend to dislike 
-producing documentation~\cite[p.~373]{Roache1998}.
+rigid, process-heavy approaches, favourably. Moreover, others have observed that
+SCS developers tend to dislike producing documentation~\cite[p.~373]{Roache1998}.
 
-Previous work by Smith \& Koothoor~\citep{SmithAndKoothoor2016} found 27 errors 
-in an existing software project when creating new documentation. Had they 
-attempted the certification process, most, if not all, of these errors would 
-have led to a failure.
+Previous work by Smith \& Koothoor~\citep{SmithAndKoothoor2016} found 27 errors
+in existing safety related software (nuclear safety analysis software) when
+creating new documentation. Had they attempted to certify the software, most, if
+not all, of these errors would have led to a failure.
 
 Well-maintained documentation provides numerous advantages including:
 \begin{itemize}
@@ -254,7 +254,7 @@ felt to be:
 \item Not amenable to change
 \item Too tied to the waterfall process
 \item Counterproductive when reporting on each stage of 
-		development~\citep{Roache1998}
+		development~\cite{Roache1998}
 \end{itemize}
 
 There are also other issues with document-rich, certifiable software 
@@ -267,12 +267,14 @@ artifacts. Consider a simple piece of software with the following artifacts:
 \item Source Code
 \item Tests
 \end{itemize}
+
 Knowledge, such as the functional requirements, from the SRS is duplicated in 
 both the source code and tests. That same knowledge appears in the design 
 document as well, albeit in a transformed state. 
 
 Now consider that software certification often requires a great many more 
-artifacts than the four listed above. Much of the same knowledge will appear in 
+artifacts than the four listed above. Much of the same knowledge, possibly in a
+transformed representation, will appear in 
 all of the artifacts and will need to be maintained. Manually maintaining these 
 artifacts is a lesson in tedium and the time could be better spent elsewhere, if 
 it were easier to deal with automatically.

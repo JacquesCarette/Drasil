@@ -1,51 +1,65 @@
 module Data.Drasil.People where
 
-import Language.Drasil (Person, person, personWM)
+import Language.Drasil (Person, person, personWM, personWM', person')
   
 spencerSmith, henryFrankis, nKoothoor, dParnas, daAruliah, gWilson,
   cTitus, kdHuff, cHong, mDavis, rGuy, shdHaddock, imMitchell, mdPlumblet,
   bWaugh, epWhite, pWilson, pcClements, luthfi, alex, nikitha, thulasi,
   brooks, mLightstone, lLai, pjAgerfalk, nKraiem, jRalyte, jBueche,
   fIncropera, dDewitt, tBergman, aLavine, jRobertson, sRobertson, 
-  wlBeason, tlKohutek, jmBracci :: Person
+  wlBeason, tlKohutek, jmBracci, qhQian, dyZhu, cfLee, grChen, dgFredlund,
+  jKrahn, dStolle, yCLi, ymChen, tltZhan, ssLing, pjCleall, pGuo :: Person
 
-pjAgerfalk   = person   "PJ"                        "Agerfalk"
-daAruliah    = personWM "D"         ["A"]           "Aruliah"
-wlBeason     = personWM "W"         ["Lynn"]        "Beason"
-tBergman     = personWM "T"         ["L"]           "Bergman"
-jmBracci     = personWM "Joseph"    ["M"]           "Bracci"
-jBueche      = personWM "J"         ["Frederick"]   "Bueche"
-pcClements   = personWM "P"         ["C"]           "Clements" -- The Modular Structure of Complex Systems ICSE '84
-mDavis       = person   "Matt"                      "Davis"
-dDewitt      = personWM "D"         ["P"]           "Dewitt"
-henryFrankis = person   "Henry"                     "Frankis"
-rGuy         = personWM "Richard"   ["T"]           "Guy"
-shdHaddock   = personWM "Steven"    ["H", "D"]      "Haddock"
-alex         = person   "Alex"                      "Halliwushka"
-cHong        = person   "Chue"                      "Hong"
-kdHuff       = personWM "Kathryn"   ["D"]           "Huff"
-fIncropera   = personWM "F"         ["P"]           "Incropera"
-thulasi      = person   "Thulasi"                   "Jegatheesan"
-tlKohutek    = personWM "Terry"     ["L"]           "Kohutek"
-nKoothoor    = person   "Nirmitha"                  "Koothoor"
-nKraiem      = person   "N"                         "Kraiem"
-nikitha      = person   "Nikitha"                   "Krithnan"
-lLai         = person   "Lei"                       "Lai"
-aLavine      = personWM "A"         ["S"]           "Lavine"
-mLightstone  = person   "Marilyn"                   "Lightstone"
-brooks       = person   "Brooks"                    "MacLachlan"
-luthfi       = person   "Luthfi"                    "Mawarid"
-imMitchell   = personWM "Ian"       ["M"]           "Mitchell"
-dParnas      = personWM "David"     ["L"]           "Parnas"
-mdPlumblet   = personWM "Mark"      ["D"]           "Plumblet"
-jRalyte      = person   "J"                         "Ralyte"
+pjAgerfalk   = person    "PJ"                        "Agerfalk"
+daAruliah    = personWM  "D"         ["A"]           "Aruliah"
+wlBeason     = personWM  "W"         ["Lynn"]        "Beason"
+tBergman     = personWM  "T"         ["L"]           "Bergman"
+jmBracci     = personWM  "Joseph"    ["M"]           "Bracci"
+jBueche      = personWM  "J"         ["Frederick"]   "Bueche"
+grChen       = personWM' "G"         ["R"]           "Chen"
+ymChen       = person'   "Yun-Min"                   "Chen"
+pjCleall     = personWM  "Peter"     ["John"]        "Cleall"
+pcClements   = personWM  "P"         ["C"]           "Clements" -- The Modular Structure of Complex Systems ICSE '84
+mDavis       = person    "Matt"                      "Davis"
+dDewitt      = personWM  "D"         ["P"]           "Dewitt"
+henryFrankis = person    "Henry"                     "Frankis"
+dgFredlund   = personWM  "D"         ["G"]           "Fredlund"
+rGuy         = personWM  "Richard"   ["T"]           "Guy"
+pGuo         = person    "Peijun"                    "Guo"
+shdHaddock   = personWM  "Steven"    ["H", "D"]      "Haddock"
+alex         = person    "Alex"                      "Halliwushka"
+cHong        = person    "Chue"                      "Hong"
+kdHuff       = personWM  "Kathryn"   ["D"]           "Huff"
+fIncropera   = personWM  "F"         ["P"]           "Incropera"
+thulasi      = person    "Thulasi"                   "Jegatheesan"
+tlKohutek    = personWM  "Terry"     ["L"]           "Kohutek"
+nKoothoor    = person    "Nirmitha"                  "Koothoor"
+nKraiem      = person    "N"                         "Kraiem"
+jKrahn       = person    "J"                         "Krahn"
+nikitha      = person    "Nikitha"                   "Krithnan"
+lLai         = person    "Lei"                       "Lai"
+aLavine      = personWM  "A"         ["S"]           "Lavine"
+cfLee        = personWM' "C"         ["F"]           "Lee"
+mLightstone  = person    "Marilyn"                   "Lightstone"
+yCLi         = person'   "Yu-Chao"                   "Li"
+ssLing       = person'   "Sao-Sheng"                 "Ling"
+brooks       = person    "Brooks"                    "MacLachlan"
+luthfi       = person    "Luthfi"                    "Mawarid"
+imMitchell   = personWM  "Ian"       ["M"]           "Mitchell"
+dParnas      = personWM  "David"     ["L"]           "Parnas"
+mdPlumblet   = personWM  "Mark"      ["D"]           "Plumblet"
+qhQian       = personWM' "Q"         ["H"]           "Qian"
+jRalyte      = person    "J"                         "Ralyte"
   --FIXME: person takes strings but we need an "e" with an accent
   -- S "J. Ralyt" :+: (F Acute 'e')
-jRobertson   = person   "James"                     "Robertson"
-sRobertson   = person   "Suzanne"                   "Robertson"
-spencerSmith = personWM "W"         ["Spencer"]     "Smith"
-cTitus       = person   "C"                         "Titus"
-bWaugh       = person   "Ben"                       "Waugh" -- Best Practices for Scientific Computing 2013
-epWhite      = personWM "Ethan"     ["P"]           "White" -- Best Practices for Scientific Computing 2013
-gWilson      = person   "Greg"                      "Wilson"
-pWilson      = person   "Paul"                      "Wilson" -- Best Practices for Scientific Computing 2013
+jRobertson   = person    "James"                     "Robertson"
+sRobertson   = person    "Suzanne"                   "Robertson"
+spencerSmith = personWM  "W"         ["Spencer"]     "Smith"
+dStolle      = person    "Dieter"                    "Stolle"
+cTitus       = person    "C"                         "Titus"
+bWaugh       = person    "Ben"                       "Waugh" -- Best Practices for Scientific Computing 2013
+epWhite      = personWM  "Ethan"     ["P"]           "White" -- Best Practices for Scientific Computing 2013
+gWilson      = person    "Greg"                      "Wilson"
+pWilson      = person    "Paul"                      "Wilson" -- Best Practices for Scientific Computing 2013
+tltZhan      = personWM  "Tony"      ["L","T"]       "Zhan"
+dyZhu        = personWM' "D"         ["Y"]           "Zhu"

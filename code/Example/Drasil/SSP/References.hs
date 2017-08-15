@@ -5,6 +5,8 @@ import Drasil.SSP.Defs (ssa, crtSlpSrf, fs_concept)
 
 import Data.Drasil.Concepts.Documentation (analysis)
 import Data.Drasil.Citations (smith2005, koothoor2013, parnas1986, journalCGJ)
+import Data.Drasil.People (qhQian, dyZhu, cfLee, grChen, dgFredlund,
+  jKrahn, dStolle, yCLi, ymChen, tltZhan, ssLing, pjCleall, pGuo)
 
 sspCitations :: BibRef
 sspCitations = [chen2005, parnas1986, koothoor2013,
@@ -13,10 +15,7 @@ sspCitations = [chen2005, parnas1986, koothoor2013,
 chen2005, fredlund1977, stolle2008, li2010 :: Citation
 --See Language.Drasil.People for all person constructors
 chen2005 = Article $ [
-  Author [personWM' "Q" ["H"] "Qian",
-          personWM' "D" ["Y"] "Zhu",
-          personWM' "C" ["F"] "Lee",
-          personWM' "G" ["R"] "Chen"],
+  Author [qhQian, dyZhu, cfLee, grChen],
   Title $ S "A concise algorithm for computing the" +:+
           phrase fs_concept +:+ S "using the" +:+
           S "morgenstern price method",
@@ -25,8 +24,7 @@ chen2005 = Article $ [
   journalCGJ 42 1
 
 fredlund1977 = Article $ [
-  Author [personWM "D" ["G"] "Fredlund",
-          person "J" "Krahn"],
+  Author [dgFredlund, jKrahn],
   Title $ S "Comparison of slope stability methods of"
           +:+ phrase analysis,
   Date 4 Apr 1977,
@@ -34,8 +32,7 @@ fredlund1977 = Article $ [
   journalCGJ 14 3
 
 stolle2008 = Article $ [
-  Author [person "Dieter" "Stolle",
-          person "Peijun" "Guo"],
+  Author [dStolle, pGuo],
   Title $ S "Limit equilibrum" +:+ phrase ssa +:+
           S "using rigid finite elements",
   Date 20 May 2008,
@@ -43,11 +40,7 @@ stolle2008 = Article $ [
   journalCGJ 45 5
 
 li2010 = Article $ [
-  Author [person' "Yu-Chao" "Li",
-          person' "Yun-Min" "Chen",
-          personWM "Tony" ["L","T"] "Zhan",
-          person' "Sao-Sheng" "Ling",
-          personWM "Peter" ["John"] "Cleall"],
+  Author [yCLi, ymChen, tltZhan, ssLing, pjCleall],
   Title $ S "An efficient approach for locating the" +:+
           phrase crtSlpSrf +:+ S "in" +:+ plural ssa +:+
           S "using a real-coded genetic algorithm",

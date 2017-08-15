@@ -1,4 +1,4 @@
-module Drasil.NoPCM.TMods where
+module Drasil.NoPCM.TMods (t1consThermE) where
 
 import Drasil.NoPCM.Unitals
 

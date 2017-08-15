@@ -253,7 +253,7 @@ to ensure it becomes a high priority because documenting software is typically
 felt to be:
 
 \begin{itemize}
-\item Too long
+\item Too long \spr{This sounds grammatically incorrect -- perhaps ``Too time consuming"?}
 \item Too difficult to maintain
 \item Not amenable to change
 \item Too tied to the waterfall process
@@ -479,17 +479,31 @@ version of this code can be seen in Figure~\ref{Fig_JtolPython}). From the
 Not only that, but thanks to the incorporation of GOOL, we can also generate
 Java, Lua, C\#, etc.
 
+% \begin{figure*}
+% \begin{lstlisting}[language=python, frame=single, showstringspaces=false]
+% def calc_j_tol(inparams):
+    % j_tol = math.log((math.log(1.0/(1.0 - inparams.pbtol))) * ((((inparams.a / 1000.0) * 
+      % (inparams.b / 1000.0)) ** (inparams.m - 1.0)) / ((inparams.k * (((inparams.E * 1000.0) * 
+      % ((inparams.h / 1000.0) ** 2.0)) ** inparams.m)) * inparams.ldf))) 
+    % return j_tol
+% \end{lstlisting}
+% \caption{Python code to Calculate \jtol{}}
+% \label{Fig_JtolPython}
+% \end{figure*}
+
+\spr{In reference to Figure 5:  The code that was here was the output of the manually written GOOL code.  I switched it to 
+what is currently being generated (I assume this is supposed to be the generated code?  If not
+I left the original version commented out).}
 \begin{figure*}
 \begin{lstlisting}[language=python, frame=single, showstringspaces=false]
-def calc_j_tol(inparams):
-    j_tol = math.log((math.log(1.0/(1.0 - inparams.pbtol))) * ((((inparams.a / 1000.0) * 
-      (inparams.b / 1000.0)) ** (inparams.m - 1.0)) / ((inparams.k * (((inparams.E * 1000.0) * 
-      ((inparams.h / 1000.0) ** 2.0)) ** inparams.m)) * inparams.ldf))) 
-    return j_tol
+def J_tol(inParams, h, LDF):
+    return math.log((math.log(1 / (1 - inParams.P_btol))) * (((inParams.a * inParams.b) ** 
+    (Constants.m - 1)) / (Constants.k * (((Constants.E * (h ** 2)) ** Constants.m) * LDF))))
 \end{lstlisting}
 \caption{Python code to Calculate \jtol{}}
 \label{Fig_JtolPython}
 \end{figure*}
+
 
 The source knowledge for generating both the documentation and the code has been
 captured using chunks, as shown in Figure~\ref{Fig_JtolDrasil}. The value of
@@ -809,6 +823,11 @@ the theory knowledge to produce more flexible code. This language allows us to
 classify design and implementation choices in a reusable manner and will 
 allow us to progress with the generation of design documents, which are 
 currently difficult to produce in Drasil.
+
+\spr{If you want to add more to this section, you could mention automated 
+verification.  Unit test generation isn't far away after generation is reliably working.  
+Also, we can start adding options to insert checks and guards into the generated
+code -- this ties into the design language.}
 
 Another large feature that will be a necessity in the long-run, but has thus 
 far been relegated to the back-burner, is a much more user-friendly syntax, or 

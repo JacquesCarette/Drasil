@@ -2,7 +2,9 @@ module Drasil.NoPCM.Definitions where
 
 import Language.Drasil
 
-import Data.Drasil.Concepts.Documentation
+import Data.Drasil.Concepts.Documentation (thModel, srs, physSyst,
+	requirement, inModel, likelyChg, genDefn, goalStmt, assumption,
+	dataDefn)
 import Data.Drasil.Concepts.Math (ode)
 
 --Common Terms

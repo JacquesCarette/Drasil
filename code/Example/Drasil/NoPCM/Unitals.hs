@@ -1,21 +1,18 @@
 module Drasil.NoPCM.Unitals where
 
 import Language.Drasil
+import Data.Drasil.SI_Units
+import Control.Lens ((^.))
 
 import Drasil.NoPCM.Definitions
-
-import Data.Drasil.SI_Units
 import qualified Data.Drasil.Units.Thermodynamics as U
 import Data.Drasil.Quantities.PhysicalProperties
-import Prelude hiding (id)
 import Data.Drasil.Concepts.Documentation
 import Data.Drasil.Quantities.Thermodynamics
 import Data.Drasil.Quantities.Physics (time)
 import Data.Drasil.Concepts.Math (surArea)
 import Data.Drasil.Quantities.Math (diameter)
 import Data.Drasil.Units.PhysicalProperties
-
-import Control.Lens ((^.))
 
 pcmSymbols :: [CQSWrapper]
 pcmSymbols = map cqs pcmUnits

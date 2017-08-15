@@ -5,7 +5,6 @@ import Drasil.NoPCM.Unitals
 import Language.Drasil
 import Data.Drasil.Utils(getS)
 import Data.Drasil.Quantities.PhysicalProperties
-import Prelude hiding (id)
 import Data.Drasil.Quantities.Thermodynamics (temp, heat_cap_spec)
 import Data.Drasil.Quantities.Physics (time)
 import Data.Drasil.Quantities.Math (gradient)

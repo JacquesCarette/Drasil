@@ -40,11 +40,12 @@ import Data.Drasil.Utils (enumSimple, getS, refFromType,
 import Data.Drasil.Concepts.Documentation (datumConstraint, inModel,
   requirement, section_, traceyGraph, item, assumption, dataDefn,
   likelyChg, genDefn, thModel, traceyMatrix, model, acroNumGen,
-  acroIM, output_, quantity, input_, physicalConstraint, condition,
-  property, variable, description, acroGD, symbol_, uncertainty,
+  output_, quantity, input_, physicalConstraint, condition,
+  property, variable, description, symbol_, uncertainty,
   information, uncertCol, value, column, softwareConstraint, goalStmt,
   physSyst, problem, definition, srs, content, reference, document,
   goal, purpose, typUnc)
+
 import Data.Drasil.Concepts.Math (ode, de, unit_, rOfChng, equation)
 import Data.Drasil.Concepts.Software (program)
 import Data.Drasil.Concepts.Thermodynamics (ener_src, thermal_analysis, temp,
@@ -78,7 +79,8 @@ import Drasil.Sections.TraceabilityMandGs (traceGIntro, traceMGF)
 import Drasil.Sections.AuxiliaryConstants (valsOfAuxConstantsF)
 
 import Data.Drasil.SentenceStructures (showingCxnBw, foldlSent_, sAnd,
-  foldlList, isThe, sOf, ofThe, foldlSPCol, foldlSent, foldlSP)
+  foldlList, isThe, sOf, ofThe, foldlSPCol, foldlSent, foldlSP, acroIM,
+  acroGD)
 
 
 -- This defines the standard units used throughout the document

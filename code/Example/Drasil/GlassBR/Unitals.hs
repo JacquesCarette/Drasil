@@ -224,7 +224,7 @@ is_safe2      = vc "is_safe2"        (nounPhraseSP $ "true when load resistance"
 
 lDurFac       = vc'' (loadDurFactor) (Atomic "LDF") Real
 
-loadSF        = vc'' (lShareFac) (Atomic "LSF") Real
+loadSF        = vc'' (lShareFac) (Atomic "LSF") Integer
 
 lRe           = vc'' (lResistance) (Atomic "LR") Real
 

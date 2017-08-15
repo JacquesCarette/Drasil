@@ -251,7 +251,8 @@ undIR = foldlList [phrase scndYrCalculus, phrase structuralMechanics,
   plural computerApp `sIn` phrase civilEng]
 appStanddIR = foldlSent [S "In addition" `sC` plural reviewer,
   S "should be familiar with the applicable", plural standard,
-  S "for constructions using glass from", sSqBr (S "4-6") `sIn`
+  S "for constructions using glass from", 
+  sSqBr (S "4-6" {-astm_LR2009, astm_C1036, astm_C1048-}) `sIn`
   (makeRef (SRS.reference SRS.missingP []))]
 incScoR = foldl (+:+) EmptyS [S "getting all", plural inParam,
   S "related to the", phrase glaSlab `sAnd` S "also the", plural parameter,
@@ -283,10 +284,10 @@ s2_1_intro_p1 typeOf progName gvnVar = foldlSent [S "The main", phrase purpose,
 s2_3_intro_end, s2_3_intro :: Sentence
 s2_3_intro = foldlSent [S "The", phrase organization, S "of this",
   phrase document, S "follows the", phrase template, S "for an", short srs,
-  S "for", phrase sciCompS, S "proposed by" +:+ (sSqBrNum 1)
-  `sAnd` (sSqBrNum 2), sParen (S "in" +:+ (makeRef (SRS.reference SRS.missingP [])))
+  S "for", phrase sciCompS, S "proposed by" +:+ (sSqBrNum 1 {-koothoor2013-})
+  `sAnd` (sSqBrNum 2 {-smithLai2005-}), sParen (S "in" +:+ (makeRef (SRS.reference SRS.missingP [])))
   `sC` S "with some", plural aspect, S "taken from Volere", phrase template,
-  S "16", (sSqBrNum 3)]
+  S "16", (sSqBrNum 3 {-rbrtsn2012-})]
 
 s2_3_intro_end = foldl (+:+) EmptyS [(at_start' $ the dataDefn),
   S "are used to support", (plural definition `ofThe` S "different"),
@@ -383,7 +384,7 @@ s6_1 = probDescF start gLassBR ending [s6_1_1, s6_1_2, s6_1_3]
 {--Terminology and Definitions--}
 
 s6_1_1 = termDefnF (Just (S "All" `sOf` S "the" +:+ plural term_ +:+
-  S "are extracted from" +:+ (sSqBrNum 4) `sIn`
+  S "are extracted from" +:+ (sSqBrNum 4 {-astm_LR2009-}) `sIn`
   (makeRef (SRS.reference SRS.missingP [])))) [s6_1_1_bullets]
 
 {--Physical System Description--}
@@ -471,10 +472,11 @@ a1Desc = foldlSent [S "The standard E1300-09a for",
   S "supported on one side acts as a", phrase cantilever]
 
 a2Desc :: Sentence
-a2Desc = foldlSent [S "Following", (sSqBr (S "4" +:+ sParen (S "pg. 1"))) `sC`
-  S "this", phrase practice, S "does not apply to any form of",
-  foldlOptions $ map S ["wired", "patterned", "etched", "sandblasted",
-  "drilled", "notched", "grooved glass"], S "with", phrase surface `sAnd`
+a2Desc = foldlSent [S "Following", (sSqBr (S "4" {-astm_LR2009-} +:+ sParen 
+  (S "pg. 1"))) `sC` S "this", phrase practice, 
+  S "does not apply to any form of", foldlOptions $ map S ["wired",
+  "patterned", "etched", "sandblasted", "drilled", "notched", "grooved glass"],
+  S "with", phrase surface `sAnd`
   S "edge treatments that alter the glass strength"]
 
 a3Desc :: Sentence

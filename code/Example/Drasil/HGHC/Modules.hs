@@ -1,4 +1,5 @@
-module Drasil.HGHC.Modules where
+module Drasil.HGHC.Modules (mod_calc, mod_inputp, mod_inputf, 
+  mod_outputf, mod_ctrl) where
 
 import Language.Drasil
 import Language.Drasil.Code hiding (self)
@@ -16,6 +17,8 @@ import Data.Drasil.Concepts.Math (parameter)
 import Data.Drasil.Concepts.Computation (structure, inDatum, outDatum, 
   algorithm)
 import Data.Drasil.SentenceStructures (foldlSent, foldlList, sAnd)
+
+{--}
 
 executable :: NamedChunk
 executable = npnc' "HGHC" (compoundPhrase (pn "HGHC") (program ^. term))

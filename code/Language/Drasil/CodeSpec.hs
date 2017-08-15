@@ -9,8 +9,6 @@ import Language.Drasil.Chunk.SymbolForm -- for hack
 import Language.Drasil.NounPhrase
 import Language.Drasil.Spec hiding (Mod)
 import Language.Drasil.SystemInformation
-import Language.Drasil.Code -- for hack
-import Language.Drasil.Defs -- for hack
 import Language.Drasil.Expr -- for hack
 import Language.Drasil.Space -- for hack
 import Language.Drasil.DataDesc
@@ -35,7 +33,6 @@ data CodeSpec = CodeSpec {
   const :: [CodeDefinition],
   choices :: Choices,
   mods :: [Mod]  -- medium hack
-  --mods :: [(String, [FunctionDecl])] -- big hack
 }
 
 type FunctionMap = Map.Map String CodeDefinition
@@ -188,6 +185,7 @@ fdec v t = FDec (codevar v) (spaceToCodeType t)
 addModDefs :: CodeSpec -> [Mod] -> CodeSpec
 addModDefs cs@(CodeSpec{ mods = md }) mdnew = cs { mods = md ++ mdnew }
 
+
 type FunctionListMap = Map.Map String [String]
 
 functionListMap :: [Mod] -> FunctionListMap
@@ -195,11 +193,4 @@ functionListMap = Map.fromList . map mpair
   where mpair (Mod n f) = (n, map fname f)
         fname (FCD cd) = codeName cd
         fname (FDef (FuncDef n _ _ _)) = n
-        fname (FData (FuncData n _)) = n
-
-        
----- major hacks ----
-modHack :: [(String, [FunctionDecl])]
-modHack = [("ReadTable", [read_z_array_func, read_x_array_func, read_y_array_func])--,
-           --("Interpolation", [lin_interp_func, indInSeq_func, matrixCol_func, interpY_func, interpZ_func])
-          ] 
+        fname (FData (FuncData n _)) = n        

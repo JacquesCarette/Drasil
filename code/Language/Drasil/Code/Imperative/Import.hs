@@ -662,13 +662,3 @@ genDataFunc g name dd =
         v_i = var l_i
         l_j = "j"
         v_j = var l_j  
-
--- major hacks --
-genHacks :: Generator -> (String, [Method]) -> Module
-genHacks g (n, m) = buildModule n [] [] (map (genMethodHacks g) m) [] 
-
-genMethodHacks :: Generator -> Method -> Method
-genMethodHacks g (Method l _ _ t ps b) = publicMethod g t l ps b
-genMethodHacks _ (GetMethod _ _) = error "not implemented"
-genMethodHacks _ (SetMethod _ _) = error "not implemented"
-genMethodHacks _ (MainMethod _) = error "not implemented"

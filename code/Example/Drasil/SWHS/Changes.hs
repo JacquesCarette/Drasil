@@ -42,8 +42,8 @@ lc6 = LCChunk (nw $ npnc "outputverification" (nounPhraseSP
 
 lc7 = LCChunk (nw $ npnc "temp" lc7np) [mod_temp]
 
-lc8 = LCChunk (nw $ npnc "energy" (nounPhraseSP
-  "How the energy equations are defined using the input parameters.")) [mod_ener]
+lc8 = LCChunk (nw $ npnc "energy" (nounPhraseSP $ "How the energy" ++
+  "equations are defined using the input parameters.")) [mod_ener]
 
 lc9 = LCChunk (nw $ npnc "control" (nounPhraseSP
   "How the overall control of the calculations is orchestrated.")) [mod_ctrl]

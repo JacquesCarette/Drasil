@@ -16,6 +16,7 @@ import Data.Drasil.Software.Products (matlab)
 import Data.Drasil.Quantities.Thermodynamics (temp)
 import Data.Drasil.Quantities.Physics (energy, time)
 import Data.Drasil.Concepts.Thermodynamics (law_cons_energy, melting)
+import Data.Drasil.SentenceStructures (foldlSent)
 
 modules :: [ModuleChunk]
 modules = [mod_hw, mod_behav, mod_inputf, mod_inputp, mod_inputv, mod_outputf,
@@ -25,7 +26,8 @@ modules = [mod_hw, mod_behav, mod_inputf, mod_inputp, mod_inputv, mod_outputf,
 -- Input Format Module
 mod_inputf :: ModuleChunk
 mod_inputf = mod_io_fun
-  swhsProg [] [mod_hw, mod_inputp, mod_seq] (phrase input_ +:+ plural datum) modInputFormat
+  swhsProg [] [mod_hw, mod_inputp, mod_seq]
+  (phrase input_ +:+ plural datum) modInputFormat
 
 -- Input Parameters Module
 mod_inputp :: ModuleChunk
@@ -40,20 +42,21 @@ mod_inputv = mod_io_fun
 
 -- Output Format Module
 mod_outputf_desc :: ConceptChunk
-mod_outputf_desc = mod_outputf_desc_fun (phrase energy `sC` phrase input_ +:+
-  plural parameter `sC` plural temp `sC` S "and" +:+ plural time +:+ S "when" +:+
-  phrase melting +:+. S "starts and stops")
+mod_outputf_desc = mod_outputf_desc_fun $ foldlSent [phrase energy `sC`
+  phrase input_, plural parameter `sC` plural temp `sC` S "and",
+  plural time, S "when", phrase melting, S "starts and stops"]
 
 mod_outputf :: ModuleChunk
 mod_outputf = mod_io_fun
-  swhsProg [] [mod_hw, mod_inputp, mod_seq] (phrase output_ +:+ plural datum) mod_outputf_desc
+  swhsProg [] [mod_hw, mod_inputp, mod_seq]
+  (phrase output_ +:+ plural datum) mod_outputf_desc
 
 -- Output Verification Module
 mod_outputv_desc :: ConceptChunk
-mod_outputv_desc = dccWDS "mod_outputv_desc" (cn' "output verification") (
-  S "Verifies that the" +:+ phrase output_ +:+ phrase energy +:+
-  S "results follow the" +:+. phrase law_cons_energy +:+
-  S "Throws a warning if the relative error exceeds the error threshold.")
+mod_outputv_desc = dccWDS "mod_outputv_desc" (cn' "output verification") $
+  foldlSent [S "Verifies that the", phrase output_, phrase energy,
+  S "results follow the" +:+. phrase law_cons_energy,
+  S "Throws a warning if the relative error exceeds the error threshold"]
 
 mod_outputv :: ModuleChunk
 mod_outputv = mod_param_fun swhsProg [mod_inputp, mod_seq]
@@ -61,27 +64,30 @@ mod_outputv = mod_param_fun swhsProg [mod_inputp, mod_seq]
 
 -- Temperature ODEs Module
 mod_temp_desc :: ConceptChunk
-mod_temp_desc = dccWDS "mod_temp_desc" (cn' "temperature ODE") (
-  S "Defines the" +:+ (short ode) :+: S "s" --FIXME uses a plural abbreviation?
-  +:+ S "using the" +:+ plural parameter +:+ S "in the" +:+
-  phrase input_ +:+ plural parameter +:+. phrase module_)
+mod_temp_desc = dccWDS "mod_temp_desc" (cn' "temperature ODE") $
+  foldlSent [S "Defines the", short ode :+: S "s",
+  --FIXME uses a plural abbreviation?
+  S "using the", plural parameter, S "in the",
+  phrase input_, plural parameter, phrase module_]
 
 mod_temp :: ModuleChunk
-mod_temp = makeImpModule mod_temp_desc (S "The " :+: (short ode) :+: S "s" +:+
-  S "for solving the" +:+ phrase temp `sC` S "using the" +:+ phrase input_ +:+.
-  plural parameter) swhsProg [] [] [mod_inputp, mod_seq] (Just mod_behav)
+mod_temp = makeImpModule mod_temp_desc (foldlSent [S "The " :+:
+  short ode :+: S "s", S "for solving the", phrase temp `sC`
+  S "using the", phrase input_, plural parameter])
+  swhsProg [] [] [mod_inputp, mod_seq] (Just mod_behav)
 
 -- Energy Equations Module
 mod_ener_desc :: ConceptChunk
-mod_ener_desc = dccWDS "mod_ener_desc" (cn' "energy equation") (
-  S "Defines the" +:+ phrase energy +:+ plural equation +:+ S "using the" +:+
-  plural parameter +:+ S "in the" +:+ phrase input_ +:+ plural parameter +:+.
-  phrase module_)
+mod_ener_desc = dccWDS "mod_ener_desc" (cn' "energy equation") $
+  foldlSent [S "Defines the", phrase energy, plural equation,
+  S "using the", plural parameter, S "in the", phrase input_,
+  plural parameter, phrase module_]
 
 mod_ener :: ModuleChunk
 mod_ener = mod_param_fun swhsProg [mod_inputp, mod_seq]
-  (S "The" +:+ plural equation +:+ S "for solving for the" +:+ plural energy +:+
-  S "using the" +:+ phrase input_ +:+ plural parameter) mod_ener_desc
+  (S "The" +:+ plural equation +:+ S "for solving for the" +:+
+  plural energy +:+ S "using the" +:+ phrase input_ +:+
+  plural parameter) mod_ener_desc
 
 -- Control Module
 mod_ctrl :: ModuleChunk

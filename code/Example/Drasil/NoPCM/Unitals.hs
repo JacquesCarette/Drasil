@@ -3,7 +3,7 @@ module Drasil.NoPCM.Unitals where
 import Language.Drasil
 import Control.Lens ((^.))
 
-import Drasil.NoPCM.Definitions
+import Drasil.NoPCM.Definitions (water, coil, tank)
 import qualified Data.Drasil.Units.Thermodynamics as U
 import Data.Drasil.SI_Units
 import Data.Drasil.Quantities.PhysicalProperties
@@ -24,7 +24,7 @@ pcmConstrained = [coil_SA_con, htCap_W_con, ht_xfer_CW_con, tank_L_con, tank_V_c
   temp_coil_con, time_final_con, temp_init_con, water_dense_con]
 
 coil_SA_con, htCap_W_con, ht_xfer_CW_con, tank_L_con, tank_V_con, 
-  temp_coil_con, time_final_con, temp_init_con, water_dense_con:: ConstrConcept
+  temp_coil_con, time_final_con, temp_init_con, water_dense_con :: ConstrConcept
 
 coil_SA_con = constrained' coil_SA
   [physc $ \c -> c :> (Dbl 0),

@@ -47,9 +47,9 @@ req2 = mkRequirement "req2" $ foldlSentCol [
   acroIM 4 `sC` S "as follows, where", getS w_vol `isThe` phrase w_vol,
   S "and", getS tank_vol `isThe` phrase tank_vol]
 
-s5_1_2_Eqn1 = EqnBlock ((C w_mass) := (C w_vol) * (C w_density) := ((C tank_vol) -
-  (C pcm_vol)) * (C w_density) := (((C diam) / 2) * (C tank_length) -
-  (C pcm_vol)) * (C w_density))
+s5_1_2_Eqn1 = EqnBlock ((C w_mass) := (C w_vol) * (C w_density) :=
+  ((C tank_vol) - (C pcm_vol)) * (C w_density) :=
+  (((C diam) / 2) * (C tank_length) - (C pcm_vol)) * (C w_density))
 
 s5_1_2_Eqn2 = EqnBlock ((C pcm_mass) := (C pcm_vol) * (C pcm_density))
 
@@ -119,7 +119,8 @@ s5_2 :: Section
 s5_2 = nonFuncReqF [performance] [correctness, verifiability,
   understandability, reusability, maintainability]
   (S "This problem is small in size and relatively simple")
-  (S "Any reasonable implementation will be very quick and use minimal storage.")
+  (S "Any reasonable implementation will be very" +:+
+  S "quick and use minimal storage.")
 
 -- The second sentence of the above paragraph is repeated in all examples (not
 -- exactly, but the general idea is). The first sentence is not always

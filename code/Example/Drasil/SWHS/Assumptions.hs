@@ -25,8 +25,8 @@ import Data.Drasil.Concepts.PhysicalProperties (solid, liquid, gaseous)
 import Data.Drasil.Concepts.Math (change)
 import Data.Drasil.Concepts.Physics (mech_energy)
 
-import Data.Drasil.SentenceStructures (acroGD, acroIM, foldlSent, ofThe, ofThe',
-  sAnd, isThe)
+import Data.Drasil.SentenceStructures (acroGD, acroIM, foldlSent, ofThe,
+  ofThe', sAnd, isThe)
 
 -------------------------
 -- 4.2.1 : Assumptions --
@@ -63,7 +63,8 @@ assump3 = mkAssump "assump3" $ foldlSent [
 --
 assump4 = mkAssump "assump4" $ foldlSent [
   S "The", phrase temp_PCM `isThe` S "same throughout the", phrase pcm_vol,
-  sSqBr $ acroGD 2 `sC` swhsSymbMapDRef dd2HtFluxP]--FIXME `sC` makeRef likeChg1]
+  sSqBr $ acroGD 2 `sC`
+  swhsSymbMapDRef dd2HtFluxP]--FIXME `sC` makeRef likeChg1]
 --
 assump5 = mkAssump "assump5" $ foldlSent [
   S "The", phrase w_density `sAnd` phrase pcm_density,

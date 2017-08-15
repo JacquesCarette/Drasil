@@ -306,7 +306,8 @@ s4_1_2 = physSystDesc (short progName) (fig_tank) [s4_1_2_list, fig_tank]
 -- this paragraph can not be abstracted out as is.
 
 s4_1_2_list :: Contents
-s4_1_2_list = enumSimple 1 (short physSyst) $ map foldlSent_ s4_1_2_physSystList
+s4_1_2_list = enumSimple 1 (short physSyst) $
+  map foldlSent_ s4_1_2_physSystList
 
 s4_1_2_physSystList :: [[Sentence]]
 s4_1_2_physSystList = [physSyst1 tank water, physSyst2 coil tank ht_flux_C,
@@ -681,7 +682,7 @@ s7_col_header_t3 = zipWith itemRefToSent
     s7_likelyChgRef)
 
 s7_columns_t3 :: [[String]]
-s7_columns_t3 = [s7_t3_T1, s7_t3_T2, s7_t3_T3, s7_t3_GD1, s7_t3_GD2, s7_t3_DD1, 
+s7_columns_t3 = [s7_t3_T1, s7_t3_T2, s7_t3_T3, s7_t3_GD1, s7_t3_GD2, s7_t3_DD1,
   s7_t3_DD2, s7_t3_DD3, s7_t3_DD4, s7_t3_IM1, s7_t3_IM2, s7_t3_IM3, s7_t3_IM4,
   s7_t3_LC1, s7_t3_LC2, s7_t3_LC3, s7_t3_LC4, s7_t3_LC5, s7_t3_LC6]
 
@@ -740,8 +741,8 @@ s2_intro :: ConceptChunk -> UnitalChunk -> ConceptChunk -> CI -> CI ->
   ConceptChunk -> UnitalChunk -> ConceptChunk -> Sentence
 s2_intro es en sp pcmat pro te lh un = foldlSent [
   S "Due to", foldlList (map S ["increasing cost", "diminishing availability",
-    "negative environmental impact of fossil fuels"]) `sC` S "there is a higher",
-  S "demand for renewable", plural es `sAnd` phrase en +:+. 
+    "negative environmental impact of fossil fuels"]) `sC`
+  S "there is a higher demand for renewable", plural es `sAnd` phrase en +:+.
   S "storage technology", sp ^. defn, sParen (short pcmat), S "use renewable",
   plural es `sAnd` S "provide a novel way of storing" +:+. phrase en,
   at_start sp, S "improve over the traditional",
@@ -799,8 +800,8 @@ s2_2_contents :: ConceptChunk -> ConceptChunk -> Sentence
 s2_2_contents ta tp = foldlSent_ [phrase ta,
   S "of a single", phrase tp]
 
-s2_2_end :: UnitalChunk -> ConceptChunk -> ConceptChunk -> CI -> ConceptChunk ->
-  Sentence
+s2_2_end :: UnitalChunk -> ConceptChunk -> ConceptChunk -> CI ->
+  ConceptChunk -> Sentence
 s2_2_end t te wa pcmat sw = foldlSent_ [S "predict the",
   phrase t `sAnd` phrase te,
   S "histories for the", phrase wa `sAnd` S "the" +:+.
@@ -1070,8 +1071,9 @@ s4_2_3_deriv_5 = EqnBlock
   ((C density) * (C heat_cap_spec) * Deriv Part (C temp) (C time)) vol))
 
 s4_2_3_deriv_6 :: UnitalChunk -> UnitalChunk -> Contents
-s4_2_3_deriv_6 vo vhg = foldlSPCol [S "We consider an arbitrary" +:+. phrase vo, 
-  S "The", phrase vhg, S "is assumed constant. Then (1) can be written as"]
+s4_2_3_deriv_6 vo vhg = foldlSPCol [S "We consider an arbitrary" +:+.
+  phrase vo, S "The", phrase vhg, S "is assumed constant. Then",
+  sParen $ S $ show (1 :: Integer), S "can be written as"]
 
 s4_2_3_deriv_7 = EqnBlock
   ((C ht_flux_in) * (C in_SA) - (C ht_flux_out) *
@@ -1258,8 +1260,9 @@ s4_2_5_d1eqn_list, s4_2_5_d1sent_list, s4_2_5_d2eqn_list,
 
 s4_2_5_d2startPara :: UnitalChunk -> CI -> UnitalChunk -> ConceptChunk ->
   UncertQ -> UnitalChunk -> UncertQ -> UnitalChunk -> UncertQ -> 
-  UnitalChunk -> UncertQ -> UnitalChunk -> UnitalChunk -> Contents -> [Contents]
-s4_2_5_d2startPara en pcmat sh roc ptem vo pvo pma hcsp hfp psa hfo vhg a16 = 
+  UnitalChunk -> UncertQ -> UnitalChunk -> UnitalChunk ->
+  Contents -> [Contents]
+s4_2_5_d2startPara en pcmat sh roc ptem vo pvo pma hcsp hfp psa hfo vhg a16 =
   map foldlSPCol [
 
   [S "Detailed derivation of the", phrase en, S "balance on the",
@@ -1344,14 +1347,15 @@ s4_2_6_T1footer qua sa vo htcm pcmat = foldlSent_ $ map foldlSent [
 
   [sParen (Sp Hash), S "The", plural constraint, S "on the", phrase sa,
   S "are calculated by considering the", phrase sa, S "to", phrase vo +:+.
-  S "ratio", S "The", phrase assumption, S "is that the lowest ratio is 1" `sAnd`
+  S "ratio", S "The", phrase assumption, S "is that the lowest ratio is",
+  (S $ show (1 :: Integer)) `sAnd`
   S "the highest possible is", E (2 / C htcm) `sC` S "where",
   E $ C htcm, S "is the thickness of a", Quote (S "sheet"), S "of" +:+.
   short pcmat, S "A thin sheet has the greatest", phrase sa, S "to",
   phrase vo, S "ratio"],
 
   [sParen (S "**"), S "The", phrase constraint, S "on the maximum", 
-  phrase time, S "at the end of the simulation is the total number of seconds", 
+  phrase time, S "at the end of the simulation is the total number of seconds",
   S "in one day"]
   
   ]

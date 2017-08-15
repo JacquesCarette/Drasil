@@ -9,9 +9,14 @@ import Data.Drasil.Concepts.Math (parameter)
 ---Acronyms---
 phsChgMtrl,rightSide,progName :: CI
 
-phsChgMtrl  = commonIdea "phsChgMtrl" (nounPhrase "phase change material" "phase change materials")           "PCM"
-rightSide   = commonIdea "rightSide"  (nounPhrase "right hand side" "right hand sides")                       "RHS"
-progName    = commonIdea "progName"   (nounPhrase "solar water heating system" "solar water heating systems") "SWHS"
+phsChgMtrl  = commonIdea "phsChgMtrl" (nounPhrase "phase change material"
+  "phase change materials") "PCM"
+
+rightSide   = commonIdea "rightSide"  (nounPhrase "right hand side"
+  "right hand sides") "RHS"
+
+progName    = commonIdea "progName"   (nounPhrase "solar water heating system"
+  "solar water heating systems") "SWHS"
 
 swhsFull :: NamedChunk
 swhsFull    = npnc "swhsFull" (progName `with'` phsChgMtrl)
@@ -37,11 +42,13 @@ discharging = dcc "discharging" (nounPhraseSP "discharging")
 transient = dcc "transient" (nounPhraseSP "transient") "Changing with time"
 
 gauss_div = dcc "gauss_div" (nounPhraseSP "gauss's divergence theorem")
-  "A result that relates the flow of a vector field through a surface to the behavior of the vector field inside the surface"
+  ("A result that relates the flow of a vector field through a surface" ++
+  "to the behavior of the vector field inside the surface")
 --TODO: Physical property.
 
 perfect_insul = dcc "perfect_insul" (nounPhraseSP "perfectly insulated")
-  "Describes the property of a material not allowing heat transfer through its boundaries"
+  ("Describes the property of a material not allowing" ++
+  "heat transfer through its boundaries")
 
 phase_change_material = dcc "pcm" (phsChgMtrl ^. term)
   ("A substance that uses phase changes (such as melting) to absorb or " ++
@@ -68,7 +75,8 @@ swhsProg = npnc' "swhsProg" (nounPhrase'' (short progName +:+
 {- attempt 3-} --failed since short is not type NP -> Sentence
 --swhsProg = compoundNC''' short progName program
 
---Nounphrase'' hack to get nounPhraseSP words to accept nounPhrases instead of strings
+-- Nounphrase'' hack to get nounPhraseSP words to accept
+-- nounPhrases instead of strings
 swhs_pcm = dcc "swhs_pcm" (nounPhrase''
   (plural progName +:+ S "incorporating" +:+ short phsChgMtrl)
   (plural progName +:+ S "incorporating" +:+ short phsChgMtrl)

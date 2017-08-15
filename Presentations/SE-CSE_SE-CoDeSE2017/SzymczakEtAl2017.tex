@@ -207,11 +207,15 @@ do much of the development as our target scope. For these projects, we pay
 particular attention to improving the qualities of reusability, reproducibility,
 and certifiability. 
 
-We want to streamline the certification process, by simplifying the creation of 
-the requisite software artifacts (documentation and code) and by ensuring that these 
-artifacts are always consistent. Tracking down the source of any information 
-contained in our artifacts should be trivially easy, yet this is not always the 
-case, since documentation is often not a high priority.
+The goal for software certification is to: ``...systematically determine, based
+on the principles of science, engineering and measurement theory, whether a
+software product satisfies accepted, well-defined and measurable criteria''
+\cite[p.~12]{HatcliffEtAl2009}.  We aim to streamline the certification process,
+by simplifying the creation of the requisite software artifacts (documentation
+and code) and by ensuring that these artifacts are always consistent. Tracking
+down the source of any information contained in our artifacts should be
+trivially easy, yet this is not always the case, since documentation is often
+not a high priority.
 
 Improved documentation is often considered too high a cost in terms of time and 
 effort for SCS developers, particularly when dealing with rapid changes in 
@@ -589,10 +593,11 @@ we will focus on certifiability, reusability, and reproducibility.
 
 \subsection{Certifiability}
 
-Certifying (or re-certifying) software can be a lengthy and expensive process 
-where a single error can cause the software to fail the certification process. 
-Consider the following equation from our solar water heating example which 
-states that energy must be conserved:
+Certifying (or re-certifying) software can be a lengthy and expensive process
+where a single error can cause the software to fail the certification process.
+Consider the following equation from our solar water heating example which
+states that energy in the water must be conserved between the heating coil and
+water and water and PCM (Phase Change Material):
 
 \begin{equation*}
 E_W = \int_{0}^{t} h_C A_C (T_C - T_W(t)) dt - \int_{0}^{t} h_P A_P (T_W(t) - T_P(t)) dt
@@ -612,12 +617,11 @@ Where:
 	\item $T_W$ is the temperature of the water
 \end{itemize}
 
-This is trivial for a human
-to check, and writing code to automatically check it during the software
-execution is also very simple. However, it is still time-consuming and should it
-ever need to change, such as if there is a change in the assumption that the
-tank is a perfect insulator, it would require developers to make a number of
-modifications to many artifacts in the future.
+This is trivial for a human to check, and writing code to automatically check it
+during the software execution is also very simple. However, it is still
+time-consuming and should it ever need to change, such as if there is a change
+in the assumption that the tank is a perfect insulator, it would require
+developers to make a number of modifications to many artifacts in the future.
 
 \begin{table} 
 \centering
@@ -635,9 +639,9 @@ $\rho_P$ & $\rho_P > 0$	& 1007 kg/m$^3$	& 10\% \\
 Thanks to Drasil's knowledge-capture mechanisms, we can capture the above 
 equation in one place, thus any changes can be made very quickly. Not only 
 that, but sanity checks (such as ensuring constraints on inputs) can also be 
-captured and reused. An example of these sorts of sanity checks can be seen in 
+captured and reused. An example of this sort of sanity checks can be seen in 
 Table~\ref{tab:pcm}. They include hard physical constraints, ex. $L > 0$, as 
-well as typical values. Capturing that information also 
+well as typical values. Capturing this information
 delivers a wider array of advantages, including:
 
 \begin{itemize}
@@ -652,7 +656,9 @@ are correct, thanks to our one-source, generative approach. We can produce
 documents similar to those commonly found in literate programming where we 
 display the equations and code implementations (example: the \jtol{} equation 
 and the python code used to calculate it) side-by-side, allowing a human to 
-quickly verify the code is correct.
+quickly verify the code is correct.  This literate technique proved valued with
+the nuclear safety analysis software mentioned
+earlier~\cite{SmithAndKoothoor2016}.
 
 We have also touched on one of the greatest advantages (implied 
 earlier): \emph{If there is an error somewhere, it is wrong everywhere}. This 
@@ -668,10 +674,20 @@ promise in that respect.
 
 \subsection{Reusability}
 
-Reusability is a core tenet of Drasil's development. This can be seen 
-most obviously in the knowledge-capture mechanisms we have created. These 
-mechanisms facilitate reuse through common knowledge databases for each domain 
-(recall Figure~\ref{ontology}).
+Reusability is a core tenet of Drasil's development. This can be seen most
+obviously in the knowledge-capture mechanisms we have created. These mechanisms
+facilitate reuse through common knowledge databases for each domain (recall
+Figure~\ref{ontology}).  The reuse can occur within a single document, with a
+series of documents, and even between projects.
+
+The value of reuse within a given document is seen in Figure~\ref{Fig_Jtolpdf}
+and Figure~\ref{Fig_ToCGlassBRSRS}.  Information on variables, including their
+definitions, their symbols and their units, is reused in multiple locations
+throughout the requirements document (SRS).  For instance, lists of variables
+appear in the table of symbols, as part of each data definition and as part of
+the instance models.  Maintaining the consistency between these different
+renderings would be very challenging manually, but by reusing the knowledge
+whenever necessary, the documentation is significantly more maintainable.
 
 Consider the following software artifacts typically found in a rational design 
 process for software development~\cite{ParnasAndClements1986}:
@@ -683,7 +699,7 @@ process for software development~\cite{ParnasAndClements1986}:
 \item Test cases
 \end{itemize}
 
-Within these artifacts, there is a lot of duplication of specific knowledge 
+Within these artifacts, there is considerable duplication of specific knowledge 
 related to the software being designed. Knowledge from the SRS will appear, 
 possibly transformed, throughout each of the other artifacts. We seek to 
 de-embed specific knowledge from within any one artifact to easily reuse 
@@ -699,7 +715,7 @@ it throughout them all. This knowledge includes, but is not limited to:
 \end{itemize}
 
 While implementing our case studies in Drasil, we have found this de-embedding 
-process to be invaluable. Previously "dead" information found in the software 
+process to be invaluable. Previously ``dead'' information found in the software 
 artifacts is now captured, reusable, and transformable. For example, an equation 
 such as the one for defining \jtol{} can now be reused across artifacts in 
 whatever form we deem necessary. This could be the equation written 
@@ -711,34 +727,35 @@ Reusing knowledge across artifacts in one software project is already
 incredibly useful, however, we have taken it a step further. Drasil allows us 
 to reuse between projects. We can reuse a family of related models, or reuse 
 pieces of knowledge from a given domain as necessary. Consider the vast number 
-of software that rely on interpolation, or must ensure conservation of thermal 
+of software projects that rely on interpolation, or must ensure conservation of thermal 
 energy. We can capture this knowledge once and reuse it through all of these 
 projects.
 
-We have already begun using knowledge across projects with great results. Our 
-two implementations of the solar water heating systems have a vast amount of 
-overlap in the requisite knowledge, except for the phase change material, which 
-is not present in one of the examples. As such, these two implementation utilize 
-many of the same chunks from our knowledge-base, simply reordered and 
-transformed as necessary. If we find an error in the theory, fixing the source 
-will update both projects simultaneously.
+We have already begun using knowledge across projects with great results. Our
+two implementations of the solar water heating systems (one with PCM and one
+without) have a vast amount of overlap in the requisite knowledge.  The same
+governing equations apply, but in a simplified form when one does not have to
+worry about heat transfer to and phase change of, the PCM. As such, these two
+implementation utilize many of the same chunks from our knowledge-base, simply
+reordered and transformed as necessary. If we find an error in the theory, or
+need to make a change to improve the validity of our calculations, fixing the
+Drasil source will update both projects simultaneously.
 
 \subsection{Reproducibility}
 
-Typically when we refer to reproducibility the emphasis is on reproducing code 
-execution. There are many problems attaining reproducibility at that 
-level~\cite{IonescuAndJansson2013} as there are often undocumented:
-
-\begin{itemize}
-\item Assumptions
-\item Modifications
-\item Hacks
-\end{itemize}
-
-This does not mean that it is impossible to reproduce the execution of some 
-given code, however, what if that code is wrong? Should it not be easier to 
-independently replicate the work of others without relying on the code they've 
-written?
+Typically when we refer to reproducibility, the emphasis is on reproducing the
+calculations from compiled code. The problem is that over time programming
+languages, compilers and operating environments change.  Virtual Machines (VMs)
+can be a significant help here, but VMs do not help when there are problems in
+the original code.  What if our trust in the original code is in doubt?  What if
+we need to reproduce the results not starting from the code, but starting from
+the original theory?  Unfortunately, multiple examples
+exist~\cite{CrickAndHall2014, IonescuAndJansson2013} where results from research
+software could not be independently reproduced, due to a need for local
+knowledge missing from published documents.  Examples of missing knowledge
+includes missing assumptions, missing derivations and undocumented modifications
+to the code.  Should it not be easier to independently replicate the work of
+others without relying on the code that they have written?
 
 We want to replicate not only the execution of the code, but the whole of the 
 software from theory to implementation. Given the appropriate theoretical 
@@ -760,11 +777,27 @@ derivation. This new symbol was never defined and did not appear in the table of
 symbols. When implementing the project in Drasil, however, this error was made 
 obvious almost immediately and was easily fixed.
 
+Previously, the manual checks for verifying documentation have been
+listed~\cite{SmithAndKoothoor2016}:
+\begin{itemize}
+\item check that every symbol is defined
+\item check that every symbol is used at least once
+\item check that every equation either has a derivation, or a citation to its
+  source
+\item check that every general definition, data definition, and assumption is
+  used by at least one other component of the document
+\item check that every line of code either traces back to a description of the
+  numerical algorithm, to a data definition, to an instance model, to an
+  assumption, or to a value from the auxiliary constants table in the SRS.
+\end{itemize}
+Going forward Drasil can be used to automate these checks and provide error or
+warning messages when they are violated.
+
 Overall, Drasil lends itself incredibly well to ensuring reproducibility in a 
 much larger sense than we normally consider. It allows us to focus on the 
 science, (re-)building our projects from the fundamental knowledge instead of 
 relying on a lone developer's code. Drasil also forces all assumptions to be 
-documented, and disallows local hacks as the generated code should never be 
+documented, and disallows local hacks, since the generated code should never be 
 modified by a human, it should only be generated.
 
 \section{Future Work} \label{SecFuture}
@@ -780,7 +813,7 @@ currently difficult to produce in Drasil.
 Another large feature that will be a necessity in the long-run, but has thus 
 far been relegated to the back-burner, is a much more user-friendly syntax, or 
 even a tool to aid in the creation of Drasil projects. Currently, Drasil is 
-fairly arcane to use, even with all of our documentation to date. Yet, with 
+fairly esoteric to use, even with all of our documentation to date. Yet, with 
 each iteration of the language we introduce new, simplifying abstractions, 
 which have already made it easier to use. Our experience with our summer student 
 research assistants is a testament to that. We are aware, however, of the gap 
@@ -808,19 +841,20 @@ We have already seen non-trivial improvements to existing software during its
 re-implementation in our current, working-copy of Drasil. The case studies are 
 now easier to verify, maintain, reuse, and replicate than they were before. 
 There is also far less ambiguity on where certain concepts originated, as 
-everything is captured in one source.
+everything is captured in one source (knowledge base).
 
-Not only do we believe that scientists will be able to create higher quality 
-software while focusing more on the science; they will 
-be able to replicate and reuse each other's work in a far more robust manner 
-than we currently see in practice. We hope Drasil will solve many of the 
-reproducibility problems mentioned by Ionescu and 
-Jansson~\cite{IonescuAndJansson2013}.
+Not only do we believe that scientists will be able to create higher quality
+software while focusing more on the science; they will be able to replicate and
+reuse each other's work in a far more robust manner than we currently see in
+practice. We hope Drasil will solve the current problems with software result
+replicability starting from the theory~\cite{CrickAndHall2014,
+  IonescuAndJansson2013}.
 
 Software (re-)certification will also become a far less daunting task in a
 future with Drasil. With full traceability of information and the ability to 
 generate new document views on-the-fly, we will be able to streamline the 
-process.
+process.  This means that recertification will be significantly less expensive
+than the original certification exercise.
 
 While developing in Drasil does come with a fairly high, up-front investment of 
 effort, we believe the long-term maintainability improvements, along with the 

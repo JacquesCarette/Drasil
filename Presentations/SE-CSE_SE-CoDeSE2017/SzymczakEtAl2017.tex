@@ -196,7 +196,7 @@ on the principles of science, engineering and measurement theory, whether a
 software product satisfies accepted, well-defined and measurable criteria''
 \cite[p.~12]{HatcliffEtAl2009}.  We aim to streamline the certification process,
 by simplifying the creation of the requisite software artifacts (documentation
-and code) and by ensuring that these artifacts are always consistent. Tracking
+and code) and by ensuring these artifacts are always consistent. Tracking
 down the source of any information contained in our artifacts should be
 trivially easy, yet this is not always the case, since documentation is often
 not a high priority.
@@ -209,13 +209,13 @@ rigid, process-heavy approaches, favourably. Moreover, others have observed that
 SCS developers tend to dislike producing documentation~\cite[p.~373]{Roache1998}.
 
 Previous work by Smith \& Koothoor~\citep{SmithAndKoothoor2016} found 27 errors
-in existing safety related software (nuclear safety analysis software) when
+in existing safety-related software (nuclear safety analysis software) when
 creating new documentation. Had they attempted to certify the software, most, if
 not all, of these errors would have led to a failure.
 
 Well-maintained documentation provides numerous advantages including:
 \begin{itemize}
-\item Improved software qualities 
+\item Improved software qualities:
 	\begin{itemize}
 	\item Verifiability
 	\item Reusability
@@ -274,7 +274,7 @@ drudgery?  Our proposed solution is \textit{Drasil} -- a framework that utilizes
 a knowledge-based approach to software development, as originally proposed in a
 position paper by Szymcak et al~\cite{SzymczakEtAl2016}. The goal of the
 approach is to capture scientific and documentation knowledge in a reusable way,
-then generate the source code and all of the other software artifacts
+then generate the source code and all other software artifacts
 (documentation, build files, tests, etc).
 
 Work on Drasil has continued steadily since the original position paper, as
@@ -297,12 +297,13 @@ Drasil's design is based around three main components:
 Chunks are the primary knowledge-capture mechanism. There are many flavours of 
 chunks (as shown in Figure~\ref{hierarchy}). The most basic chunk is simply a 
 piece of data with an id. From there, all other chunks can be created. For 
-example, a \textit{Quantity} is a \textit{NamedIdea} (a chunk containing an id, 
-as well as a term which represents the idea and a potential abbreviation for 
-that term) which also has a \textit{Space} (integer, boolean, vector, etc.), 
-and symbol representation/units (if applicable).  The notation in
-Figure~\ref{hierarchy} uses a \verb|+1| to indicate when a value may or
-may not be present (Maybe types in Haskell).
+example, a \textit{NamedIdea} is a chunk containing an id, a term representing 
+its principle idea, and a potential abbreviation for that term. A 
+\textit{Quantity} is a \textit{NamedIdea} which also has a \textit{Space} 
+(integer, boolean, vector, etc.), and symbol representation/units (if 
+applicable).  The notation in Figure~\ref{hierarchy} uses a \verb|+1| to 
+indicate when a value may or may not be present (implemented using 
+\inlHask{Maybe} types in Haskell).
 
 \begin{figure}
 	\centering
@@ -346,7 +347,7 @@ Finally, there is the knowledge-base for Drasil (located in Data.Drasil). We
 are creating a database of reusable scientific knowledge that can be applied 
 across a number of different applications across multiple domains. As the 
 Drasil framework grows, we hope to continue to expand this database into an 
-ontology of scientific information for a number of disciplines. See 
+ontology of scientific knowledge for a number of disciplines. See 
 Figure~\ref{ontology} for an example of some of the domains in which we have 
 started to capture knowledge.
 
@@ -425,12 +426,12 @@ SCS.
 
 \section{A Practical Example (GlassBR)} \label{SecGlassBR}
 
-GlassBR is a piece of software used by structural engineers to predict whether or 
-not a slab of glass will be able to withstand a given explosion without
-breaking.  The two classes of input are: glass geometry and blast type. Each of these input 
-classes has a number of fields (glass type, dimensions, TNT equivalent factor, 
-standoff distance, etc.) used as input to the analysis. The user must also 
-specify their tolerable probability of breakage.
+GlassBR is a piece of software used by structural engineers to predict whether 
+or not a slab of glass will be able to withstand a given explosion without
+breaking. The two classes of input are: glass geometry and blast type. Each of 
+these input classes has a number of fields (glass type, dimensions, TNT 
+equivalent factor, standoff distance, etc.) used as input to the analysis. The 
+user must also specify their tolerable probability of breakage.
 
 The output of GlassBR is whether or not the glass slab is considered safe.  This
 is determined by calculating the probability of breakage, which involves
@@ -454,11 +455,11 @@ knowledge is captured and used in Drasil to produce our software artifacts
 
 Let us start by taking a look at a data definition for the tolerable stress
 distribution factor (\jtol{}) for GlassBR. Figure~\ref{Fig_Jtolpdf} shows
-\jtol{} in pdf format, which was compiled from the Drasil-generated LaTeX from
+\jtol{} in pdf format, which was compiled from the Drasil-generated LaTeX for
 the \jtol{} quantity chunk. We can also generate the documents in HTML. The data
 definition is part of the requirements for the GlassBR software, and as such, we
 will eventually need code that can be used to calculate \jtol{}.  A python
-version of this code can be seen in Figure~\ref{Fig_JtolPython}). From the
+version of this code can be seen in Figure~\ref{Fig_JtolPython}. From the
 \jtol{} quantity chunk, we can generate this code as well as the documentation!
 Not only that, but thanks to the incorporation of GOOL, we can also generate
 Java, Lua, C\#, etc.
@@ -500,11 +501,11 @@ captured using chunks, as shown in Figure~\ref{Fig_JtolDrasil}. The value of
 part of the {\inlHask{tolStrDisFac}} chunk.  The equation ({\inlHask{tolStrDisFac_eq}}) is
 defined using other quantity chunks, like {\inlHask{plate_len}} and
 {\inlHask{mod_elas}}.  These chunks themselves have their own definitions, which
-includes their definition, symbol and units.  When the knowledge from \jtol{} is
+includes their description, symbol and units.  When the knowledge from \jtol{} is
 rendered in some form, the knowledge from its constituent chunks is also
-available.  This means the Description field in Figure~\ref{Fig_Jtolpdf} can be
-generated automatically from the knowledge implicit in equation
-{\inlHask{tolStrDisFac_eq}}.  
+available.  This means the \emph{Description} field in Figure~\ref{Fig_Jtolpdf} 
+can be generated automatically from the knowledge implicit in the 
+{\inlHask{tolStrDisFac_eq}} equation.
 
 \begin{figure*}
 \begin{lstlisting}[language=Haskell, frame=single, showstringspaces=false] 
@@ -544,7 +545,7 @@ places. Luckily, with one quick change to {\inlHask{tolStrDisFac_eq}} (shown in
 Figure~\ref{Fig_JtolDrasil_fix}), we have corrected the error in our
 knowledge-base. After re-running the generator, our code and documentation has
 now been fixed and remains consistent.  With Drasil, we are able to correct an
-error in one place (in the knowledge base) and every artifact that depends on
+error in one place (in the knowledge-base) and every artifact that depends on
 that knowledge is automatically fixed.
 
 \begin{figure*}
@@ -554,7 +555,7 @@ tolStrDisFac_eq = log (log ((1) / ((1) - (C pb_tol))) * ((Grouping ((C plate_len
   (C plate_width))) :^ ((C sflawParamM) - (1)) / ((C sflawParamK) * 
   (Grouping ((C mod_elas) * (square (C act_thick)))) :^ (C sflawParamM) * (C loadDF))))
 \end{lstlisting}
-\caption{Modified Drasil (Haskell) code for \jtol{}}
+\caption{Modified Drasil (Haskell) code for \jtol{} equation}
 \label{Fig_JtolDrasil_fix}
 \end{figure*}
 
@@ -642,7 +643,7 @@ $\rho_P$ & $\rho_P > 0$	& 1007 kg/m$^3$	& 10\% \\
 Thanks to Drasil's knowledge-capture mechanisms, we can capture the above 
 equation in one place, thus any changes can be made very quickly. Not only 
 that, but sanity checks (such as ensuring constraints on inputs) can also be 
-captured and reused. An example of this sort of sanity checks can be seen in 
+captured and reused. An example of these sorts of sanity checks can be seen in 
 Table~\ref{tab:pcm}. They include hard physical constraints, ex. $L > 0$, as 
 well as typical values. Capturing this information
 delivers a wider array of advantages, including:
@@ -756,9 +757,9 @@ the original theory?  Unfortunately, multiple examples
 exist~\cite{CrickAndHall2014, IonescuAndJansson2013} where results from research
 software could not be independently reproduced, due to a need for local
 knowledge missing from published documents.  Examples of missing knowledge
-includes missing assumptions, missing derivations and undocumented modifications
+includes missing assumptions, derivations, and undocumented modifications
 to the code.  Should it not be easier to independently replicate the work of
-others without relying on the code that they have written?
+others without relying on the code they have written?
 
 We want to replicate not only the execution of the code, but the whole of the 
 software from theory to implementation. Given the appropriate theoretical 
@@ -801,7 +802,7 @@ much larger sense than we normally consider. It allows us to focus on the
 science, (re-)building our projects from the fundamental knowledge instead of 
 relying on a lone developer's code. Drasil also forces all assumptions to be 
 documented, and disallows local hacks, since the generated code should never be 
-modified by a human, it should only be generated.
+modified by a human, it should only be (re-)generated.
 
 \section{Future Work} \label{SecFuture}
 
@@ -826,8 +827,8 @@ to generate test cases relevant to said algorithm.
 
 Another large feature that will be a necessity in the long-run, but has thus 
 far been relegated to the back-burner, is a much more user-friendly syntax, or 
-even a tool to aid in the creation of Drasil projects. Currently, Drasil is 
-fairly esoteric to use, even with all of our documentation to date. Yet, with 
+even a tool to aid in the creation of Drasil projects. Drasil is currently
+fairly esoteric to use, even with all our documentation to date. Yet, with 
 each iteration of the language we introduce new, simplifying abstractions, 
 which have already made it easier to use. Our experience with our summer student 
 research assistants is a testament to that. We are aware, however, of the gap 
@@ -855,7 +856,7 @@ We have already seen non-trivial improvements to existing software during its
 re-implementation in our current, working-copy of Drasil. The case studies are 
 now easier to verify, maintain, reuse, and replicate than they were before. 
 There is also far less ambiguity on where certain concepts originated, as 
-everything is captured in one source (knowledge base).
+everything is captured in one source (the knowledge-base).
 
 Not only do we believe that scientists will be able to create higher quality
 software while focusing more on the science; they will be able to replicate and

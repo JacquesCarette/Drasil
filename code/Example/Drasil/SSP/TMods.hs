@@ -1,4 +1,4 @@
-module Drasil.SSP.TMods where
+module Drasil.SSP.TMods (sspTMods) where
 
 import Prelude hiding (tan)
 

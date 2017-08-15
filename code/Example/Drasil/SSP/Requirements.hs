@@ -1,4 +1,4 @@
-module Drasil.SSP.Requirements where
+module Drasil.SSP.Requirements (sspRequirements, sspInputDataTable) where
 
 import Language.Drasil
 

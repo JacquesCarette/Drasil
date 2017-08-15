@@ -1,4 +1,4 @@
-module Drasil.SSP.DataDefs where
+module Drasil.SSP.DataDefs where --(sspDataDefs) FIXME: weaves derivations in body.hs
 
 import Prelude hiding (cos, sin, tan)
 

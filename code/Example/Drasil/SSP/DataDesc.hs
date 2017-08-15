@@ -1,4 +1,4 @@
-module Drasil.SSP.DataDesc where
+module Drasil.SSP.DataDesc (sspInputMod) where
 
 import Language.Drasil
 --import Drasil.SSP.Unitals (elasticMod, cohesion,

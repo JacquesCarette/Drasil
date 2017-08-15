@@ -1,4 +1,4 @@
-module Drasil.SSP.Assumptions where
+module Drasil.SSP.Assumptions (sspAssumptions) where
 
 import Language.Drasil
 

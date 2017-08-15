@@ -1,4 +1,4 @@
-module Drasil.SSP.Goals where
+module Drasil.SSP.Goals (sspGoals) where
 
 import Language.Drasil
 import Drasil.SSP.Defs (slpSrf, fs_concept, slope, crtSlpSrf)

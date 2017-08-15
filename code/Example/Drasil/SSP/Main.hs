@@ -1,4 +1,4 @@
-module Main where
+module Main (main) where
 
 import Language.Drasil (DocType(SRS,MG,Website),Recipe(Recipe),gen, genCode)
 

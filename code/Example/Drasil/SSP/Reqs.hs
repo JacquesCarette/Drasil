@@ -1,4 +1,4 @@
-module Drasil.SSP.Reqs where
+module Drasil.SSP.Reqs (reqs) where
 
 import Language.Drasil
 import Drasil.SSP.Modules (mod_ctrl, mod_genalg,

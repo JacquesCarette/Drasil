@@ -1,4 +1,4 @@
-module Drasil.SSP.IMods where
+module Drasil.SSP.IMods where --(sspIMods), currently weaves the derivations in body.hs
 
 import Prelude hiding (tan, product, sin, cos)
 

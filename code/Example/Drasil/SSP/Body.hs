@@ -1,4 +1,4 @@
-module Drasil.SSP.Body where
+module Drasil.SSP.Body (ssp_srs, ssp_mg, ssp_code) where
 
 import Control.Lens ((^.))
 import Prelude hiding (sin, cos, tan)

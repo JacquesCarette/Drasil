@@ -1,4 +1,4 @@
-module Drasil.SSP.Unitals where
+module Drasil.SSP.Unitals where --export all of it
 
 import Language.Drasil
 import Data.Drasil.SI_Units (newton, pascal, metre, degree, specific_weight)

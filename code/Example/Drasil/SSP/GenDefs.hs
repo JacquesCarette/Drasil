@@ -1,4 +1,4 @@
-module Drasil.SSP.GenDefs where
+module Drasil.SSP.GenDefs (sspGenDefs, eqlExpr, displMtx, rotMtx, momExpr) where
 
 import Prelude hiding (sin, cos, tan)
 

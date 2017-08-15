@@ -1,4 +1,4 @@
-module Drasil.SSP.References where
+module Drasil.SSP.References (sspCitations) where
 
 import Language.Drasil
 import Drasil.SSP.Defs (ssa, crtSlpSrf, fs_concept)

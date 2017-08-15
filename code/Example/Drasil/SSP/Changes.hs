@@ -1,4 +1,4 @@
-module Drasil.SSP.Changes where
+module Drasil.SSP.Changes (likelyChanges, unlikelyChanges) where
 
 import Language.Drasil
 import Drasil.SSP.Modules (mod_ctrl, mod_genalg,

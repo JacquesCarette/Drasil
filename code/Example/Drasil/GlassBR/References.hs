@@ -2,52 +2,26 @@ module Drasil.GlassBR.References (gbCitations) where
 
 import Language.Drasil
 
-import Data.Drasil.People (nKoothoor, jmBracci, tlKohutek, wlBeason, spencerSmith,
-  lLai, jRobertson, sRobertson, pjAgerfalk, nKraiem, jRalyte)
+import Data.Drasil.People (jmBracci, tlKohutek, wlBeason, jRobertson, sRobertson)
+import Data.Drasil.Citations (koothoor2013, smithLai2005)
 
 {--}
 
-koothoor2013, smithLai2005, rbrtsn2012, astm_LR2009, astm_C1036, 
-  astm_C1048, glThick1998 :: Citation
+rbrtsn2012, astm_LR2009, astm_C1036, astm_C1048, glThick1998 :: Citation
 
 gbCitations :: BibRef
 gbCitations = [koothoor2013, smithLai2005, rbrtsn2012, astm_LR2009, astm_C1036,
   astm_C1048, glThick1998]
 
---FIXME: check for references made within document
-
 ---
 
 --ref1
-koothoor2013 = MThesis 
-  [
-  Author [nKoothoor],
-  Title (S "A document drive approach to certifying scientific computing software"),
-  School (S "McMaster University"),
-  Place (S "Hamilton", S "Canada"),
-  Year (2013)
-  ]
-
---FIXME: Place isn't displayed in TeX?
+--koothoor2013
 
 ---
 
 --ref2
-smithLai2005 = Article 
-  [
-  Author [spencerSmith, lLai],
-  Title (S "A new requirements template for scientific computing"),
-  Journal (S "Proceedings of the First International Workshop on" +:+
-  S "Situational Requirements Engineering Processes - Methods," +:+
-  S "Techniques and Tools to Support Situation-Specific Requirements" +:+
-  S "Engineering Processes, SREP'05"),
-  Editor [pjAgerfalk, nKraiem, jRalyte],
-  Place (S "Paris", S "France"),
-  Pages (107, 121),
-  Note (S "In conjunction with 13th IEEE International Requirements" +:+
-  S "Engineering Conference,"),
-  Year 2005
-  ]
+--smithLai2005
 
 ---
 

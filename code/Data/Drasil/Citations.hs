@@ -1,17 +1,18 @@
 module Data.Drasil.Citations (
-  koothoor2013, parnas1986, smith2005,
+  koothoor2013, parnas1986, smithLai2005,
   journalCGJ
   ) where
 
 import Language.Drasil --(S,(:+:),(+:+),sC,phrase,F,Accent(..),Citation(..),CiteField(..))
-import Data.Drasil.People (spencerSmith, dParnas, nKoothoor)
+import Data.Drasil.People (spencerSmith, dParnas, nKoothoor, lLai,
+  pjAgerfalk, nKraiem, jRalyte, pcClements)
 import Data.Drasil.Software.Products (sciCompS)
 
 ---------------
 -- CITATIONS --
 ---------------
 
-koothoor2013, parnas1986, smith2005 :: Citation
+koothoor2013, parnas1986, smithLai2005 :: Citation
 
 koothoor2013 = MThesis [
   Author [nKoothoor],
@@ -20,10 +21,10 @@ koothoor2013 = MThesis [
   School $ S "McMaster University",
   Place (S "Hamilton", S "Canada"),
   Year 2013]
+--FIXME: Place isn't displayed in TeX?
   
 parnas1986 = Article [
-  Author [dParnas,
-          personWM "Paul"  ["C"] "Clements"],
+  Author [dParnas, pcClements],
   Title $ S "A rational design process:" +:+
           S "How and why to fake it",
   Journal $ S "IEEE Transactions on Software Engineering",
@@ -33,23 +34,21 @@ parnas1986 = Article [
   Year 1986, --February, but day unknown
   Place (S "Washington", S "USA")]
 
-smith2005 = Article [
-  Author [spencerSmith,
-          person "Lei" "Lai"],
-  Title $ S "A new requirements template for" +:+
-          S "scientific computing",
-  Journal $ S "SREP",
-  Pages (107,121),
-  Year 2005,
+smithLai2005 = Article 
+  [
+  Author [spencerSmith, lLai],
+  Title (S "A new requirements template for scientific computing"),
+  Journal (S "Proceedings of the First International Workshop on" +:+
+  S "Situational Requirements Engineering Processes - Methods," +:+
+  S "Techniques and Tools to Support Situation-Specific Requirements" +:+
+  S "Engineering Processes, SREP'05"),
+  Editor [pjAgerfalk, nKraiem, jRalyte],
   Place (S "Paris", S "France"),
-  Note (S "In J. Ralyt" :+: (F Acute 'e') `sC` S "P. Agerfalk, and N. Kraiem" `sC`
-        S "editors, Proceedings of the First International Workshopon" +:+
-        S "Situational Requirements Engineering Processes - Methods," +:+
-        S "Techniques and Tools to Support Situation-Specific Requirements" +:+
-        S "Engineering Processes." +:+
-        --FIXME: The above section is part of the citation but not the note
-        S "In conjunction with 13th IEEE International" +:+.
-        S "Requirements Engineering Conference")]
+  Pages (107, 121),
+  Note (S "In conjunction with 13th IEEE International Requirements" +:+
+  S "Engineering Conference,"),
+  Year 2005
+  ] 
 
 ------------------------
 -- COMMON CITE-FIELDS --

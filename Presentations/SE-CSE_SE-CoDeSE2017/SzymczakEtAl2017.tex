@@ -328,7 +328,7 @@ table of units, table of symbols, and table of abbreviations and acronyms
 subsections.
 
 \begin{figure}
-\begin{lstlisting}[language=Haskell, frame=single, showstringspaces=false]
+\begin{lstlisting}[language=Haskell, frame=single, showstringspaces=false, basicstyle=\small]
 mkSRS :: DocDesc 
 mkSRS = [RefSec (RefProg intro 
     [TUnits, 
@@ -433,7 +433,7 @@ arbitrarily determine the initial scope of Drasil, we let the examples tell us
 what they need. The ``bottom-up'' approach was previously successfully used for
 generating members of the family of Gaussian elimination
 algorithms~\cite{Carette2006}, as well as a generator for geometry
-kernels~\cite{CarElShSmi2011}.
+kernels~\cite{CaretteEtAl2011}.
 
 The idea that scientific software forms a program
 family~\cite{SmithMcCutchanAndCao2007} is helpful for the current work.  We can
@@ -485,7 +485,7 @@ this code as well as the documentation!  Not only that, but thanks to the
 incorporation of GOOL, we can also generate Java, Lua, C\#, etc.
 
  \begin{figure*}
- \begin{lstlisting}[language=python, frame=single, showstringspaces=false]
+ \begin{lstlisting}[language=python, frame=single, showstringspaces=false, basicstyle=\small]
  def calc_j_tol(inparams):
      j_tol = math.log((math.log(1.0/(1.0 - inparams.pbtol))) * 
        ((((inparams.a / 1000.0) * (inparams.b / 1000.0)) ** (inparams.m - 1.0)) / 
@@ -530,7 +530,7 @@ can be generated automatically from the knowledge implicit in the
 % \jc{lots of parens were removed. Some have been removed from the GlassBR source
 % as well, they were not needed.}
 \begin{figure*}
-\begin{lstlisting}[language=Haskell, frame=single, showstringspaces=false] 
+\begin{lstlisting}[language=Haskell, frame=single, showstringspaces=false, basicstyle=\small] 
 stressDistFac = makeVC 
   "stressDistFac" (nounPhraseSP $ "stress distribution" ++ " factor (Function)") cJ
 
@@ -571,7 +571,7 @@ error in one place (in the knowledge-base) and every artifact that depends on
 that knowledge is automatically fixed.
 
 \begin{figure*}
-\begin{lstlisting}[language=Haskell, frame=single, showstringspaces=false]
+\begin{lstlisting}[language=Haskell, frame=single, showstringspaces=false, basicstyle=\small]
 tolStrDisFac_eq :: Expr
 tolStrDisFac_eq = log (log (1 / (1 - C pb_tol)) * ((Grouping (C plate_len * 
   C plate_width)) :^ (C sflawParamM - 1) / (C sflawParamK * 
@@ -905,8 +905,12 @@ advantages are well worth the cost.
 the summer students by name.}
 
 \begin{acks}
+
+Drasil would not have progressed this quickly without the efforts of our summer research assistants: Henry Madej, Aaron Mori, Maryyam Niazi, Nicholas Richardson, and Daniel Scime.
+
 The assistance of McMaster University's Dr.\ Manuel Campidelli, Dr.\ Wael and
 Dr.\ Michael Tait with the GlassBR example is greatly appreciated.
+
 \end{acks}
 
 \bibliographystyle{ACM-Reference-Format}

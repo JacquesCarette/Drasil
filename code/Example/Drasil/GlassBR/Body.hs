@@ -424,7 +424,7 @@ s6_1_3_list_goalStmt1 = [foldlSent [S "Analyze" `sAnd` S "predict whether",
 
 s6_2 = solChSpecF gLassBR (s6_1, (SRS.likeChg SRS.missingP [])) (EmptyS)
  (EmptyS, dataConstraintUncertainty, end)
- (s6_2_1_list, s6_2_2_TMods, [], s6_2_4_DDefns, s6_2_3_IMods,
+ (s6_2_1_list, map gbSymbMapT tModels, [], s6_2_4_DDefns, map gbSymbMapT iModels,
   [s6_2_5_table1, s6_2_5_table2]) []
   where
     end = foldlSent [(makeRef (SRS.valsOfAuxCons SRS.missingP [])),
@@ -510,16 +510,6 @@ a8Desc mainConcept = foldlSent [S "With", phrase reference, S "to",
   short gLassBR, S "It is calculated by the" +: phrase equation +:+.
   E (C mainConcept := equat mainConcept), S "Using this" `sC`
   E (C mainConcept := (Dbl 0.27))]
-
-{--Theoretical Models--}
-
-s6_2_2_TMods :: [Contents]
-s6_2_2_TMods = map gbSymbMapT tModels
-
-{--Instance Models--}
-
-s6_2_3_IMods :: [Contents]
-s6_2_3_IMods = map gbSymbMapT iModels
 
 {--Data Definitions--}
 

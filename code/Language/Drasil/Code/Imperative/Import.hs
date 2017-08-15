@@ -14,7 +14,7 @@ import qualified Language.Drasil.CodeSpec as CS (Mod(..))
 import Language.Drasil.DataDesc
 
 import Prelude hiding (log, exp, return, const)
-import Data.List (intersperse)
+import Data.List (intersperse, (\\))
 import System.Directory
 import Data.Map (member)
 
@@ -50,7 +50,8 @@ data Generator = Generator {
   sfwrCBody :: Expr -> Body,
   physCBody :: Expr -> Body,
   
-  assign :: Value -> Value -> Statement
+  assign :: Value -> Value -> Statement,
+  variable :: String -> Value
 }
 
 generator :: CodeSpec -> Generator -> Generator
@@ -97,8 +98,15 @@ generator spec g =
       sfwrCBody = sfwrConstraintFunc g,
       physCBody = physConstraintFunc g,
       
-      assign = assignFunc g
+      assign = assignFunc g,
+      variable = varFuncD g
     }
+    
+varFuncD :: Generator -> String -> Value
+varFuncD g s 
+  | member s (constMap $ codeSpec g) = extvar "Constants" s
+  | s `elem` (map codeName $ inputs $ codeSpec g) = extvar "inParams" s
+  | otherwise                        = var s  
 
 generateCodeD :: Generator -> IO () 
 generateCodeD g = let s = codeSpec g
@@ -172,7 +180,7 @@ genInputFormatD g ins =
     publicMethod g methodTypeVoid "get_inputs" [ p_filename ] [ block $ [
       varDec l_infile infile,
       openFileR v_infile v_filename ] ++
-      map (\x -> getFileInput v_infile (convType $ codeType x) (var $ codeName x)) ins ++ [
+      map (\x -> getFileInput v_infile (convType $ codeType x) (variable g $ codeName x)) ins ++ [
       closeFile v_infile ] ]
           
 genInputConstraintsD :: Generator -> [CodeChunk] -> ConstraintMap -> Method
@@ -181,8 +189,8 @@ genInputConstraintsD g vars cm =
       physCs = concatMap (\x -> physLookup x cm) vars
   in
     publicMethod g methodTypeVoid "input_constraints" [] [ block $
-      (map (\x -> ifCond [((?!) (convExpr x), sfwrCBody g x)] noElse) sfwrCs) ++
-      (map (\x -> ifCond [((?!) (convExpr x), physCBody g x)] noElse) physCs) ]      
+      (map (\x -> ifCond [((?!) (convExpr g x), sfwrCBody g x)] noElse) sfwrCs) ++
+      (map (\x -> ifCond [((?!) (convExpr g x), physCBody g x)] noElse) physCs) ]      
 
         
 -- need Expr -> String to print constraint
@@ -217,12 +225,12 @@ genCalcFuncD g cdef =
 genCalcBlockD :: Generator -> Expr -> Body
 genCalcBlockD g e
   | containsCase e   = genCaseBlock g $ getCases e
-  | otherwise        = oneLiner $ return $ convExpr e
+  | otherwise        = oneLiner $ return $ convExpr g e
 
 genCaseBlockD :: Generator -> [(Expr,Relation)] -> Body
 genCaseBlockD g cs = oneLiner $ ifCond (genIf cs) noElse
   where genIf :: [(Expr,Relation)] -> [(Value,Body)]
-        genIf = map (\(e,r) -> (convExpr r, genCalcBlock g e))
+        genIf = map (\(e,r) -> (convExpr g r, genCalcBlock g e))
 
 ----- OUTPUT -------
           
@@ -242,7 +250,7 @@ genOutputFormatD g outs =
       openFileW v_outfile v_filename ] ++
       concatMap 
         (\x -> [ printFileStr v_outfile ((codeName x) ++ " = "), 
-                 printFileLn v_outfile (convType $ codeType x) (var $ codeName x)
+                 printFileLn v_outfile (convType $ codeType x) (variable g $ codeName x)
                ] ) outs ++ [
       closeFile v_outfile ] ]         
     
@@ -302,9 +310,15 @@ loggedAssign g a b =
       
 -- helpers
     
-getParams :: (CodeEntity c) => Generator -> [c] -> [Parameter]
-getParams g cs = map (\y -> param (codeName y) (convType $ codeType y)) 
-  (filter (\x -> not $ member (codeName x) (constMap $ codeSpec g)) cs)
+getParams :: Generator -> [CodeChunk] -> [Parameter]
+getParams g cs = 
+  let ins = inputs $ codeSpec g
+      csSubIns = cs \\ ins
+      ps = map (\y -> param (codeName y) (convType $ codeType y)) 
+            (filter (\x -> not $ member (codeName x) (constMap $ codeSpec g)) csSubIns)     
+  in  if length csSubIns < length cs
+      then (param "inParams" (obj "InputParameters")):ps  -- todo:  make general
+      else ps
           
 paramType :: Parameter -> StateType
 paramType (StateParam _ s) = s
@@ -319,7 +333,7 @@ paramName (StateParam l _) = l
 paramName (FuncParam _ _ _) = error "Function param not implemented"   
 
 valName :: Value -> String
-valName (Var n) = n
+valName (Var _ n) = n
 valName (ObjVar o v) = valName o ++ "." ++ valName v
 valName _ = error "Value has no name"
           
@@ -379,51 +393,51 @@ validunop (E.Sec e)          = validExpr e
 validunop (E.Cot e)          = validExpr e
 validunop _                  = False
 
-convExpr :: Expr -> Value
-convExpr (V v)        = litString v  -- V constructor should be removed
-convExpr (Dbl d)      = litFloat d
-convExpr (Int i)      = litInt i
-convExpr (Bln b)      = litBool b
-convExpr (a :/ b)     = (convExpr a) #/ (convExpr b)
-convExpr (a :* b)     = (convExpr a) #* (convExpr b)
-convExpr (a :+ b)     = (convExpr a) #+ (convExpr b)
-convExpr (a :^ b)     = (convExpr a) #^ (convExpr b)
-convExpr (a :- b)     = (convExpr a) #- (convExpr b)
-convExpr (a :. b)     = (convExpr a) #* (convExpr b)
-convExpr (a :&& b)    = (convExpr a) ?&& (convExpr b)
-convExpr (a :|| b)    = (convExpr a) ?|| (convExpr b)
-convExpr (Deriv _ _ _) = error "not implemented"
-convExpr (E.Not e)      = (?!) (convExpr e)
-convExpr (Neg e)      = (#~) (convExpr e)
-convExpr (C c)        = var (codeName (SFCN c))
-convExpr (Index a i)  = (convExpr a)$.(listAccess $ convExpr i)
-convExpr (Len a)      = (convExpr a)$.listSize
-convExpr (Append a v) = (convExpr a)$.(listAppend $ convExpr v)
-convExpr (FCall (C c) x)  = funcApp' (codeName (SFCN c)) (map convExpr x)
-convExpr (FCall _ _)  = error "not implemented"
-convExpr (a := b)     = (convExpr a) ?== (convExpr b)
-convExpr (a :!= b)    = (convExpr a) ?!= (convExpr b)
-convExpr (a :> b)     = (convExpr a) ?> (convExpr b)
-convExpr (a :< b)     = (convExpr a) ?< (convExpr b)
-convExpr (a :<= b)    = (convExpr a) ?<= (convExpr b)
-convExpr (a :>= b)    = (convExpr a) ?>= (convExpr b)
-convExpr (UnaryOp u)  = unop u
-convExpr (Grouping e) = convExpr e
-convExpr (BinaryOp _) = error "not implemented"
-convExpr (Case _)     = error "Case should be dealt with separately"
-convExpr _            = error "not implemented"
+convExpr :: Generator -> Expr -> Value
+convExpr _ (V v)        = litString v  -- V constructor should be removed
+convExpr _ (Dbl d)      = litFloat d
+convExpr _ (Int i)      = litInt i
+convExpr _ (Bln b)      = litBool b
+convExpr g (a :/ b)     = (convExpr g a) #/ (convExpr g b)
+convExpr g (a :* b)     = (convExpr g a) #* (convExpr g b)
+convExpr g (a :+ b)     = (convExpr g a) #+ (convExpr g b)
+convExpr g (a :^ b)     = (convExpr g a) #^ (convExpr g b)
+convExpr g (a :- b)     = (convExpr g a) #- (convExpr g b)
+convExpr g (a :. b)     = (convExpr g a) #* (convExpr g b)
+convExpr g (a :&& b)    = (convExpr g a) ?&& (convExpr g b)
+convExpr g (a :|| b)    = (convExpr g a) ?|| (convExpr g b)
+convExpr _ (Deriv _ _ _) = error "not implemented"
+convExpr g (E.Not e)      = (?!) (convExpr g e)
+convExpr g (Neg e)      = (#~) (convExpr g e)
+convExpr g (C c)        = variable g (codeName (SFCN c))
+convExpr g (Index a i)  = (convExpr g a)$.(listAccess $ convExpr g i)
+convExpr g (Len a)      = (convExpr g a)$.listSize
+convExpr g (Append a v) = (convExpr g a)$.(listAppend $ convExpr g v)
+convExpr g (FCall (C c) x)  = funcApp' (codeName (SFCN c)) (map (convExpr g) x)
+convExpr _ (FCall _ _)  = error "not implemented"
+convExpr g (a := b)     = (convExpr g a) ?== (convExpr g b)
+convExpr g (a :!= b)    = (convExpr g a) ?!= (convExpr g b)
+convExpr g (a :> b)     = (convExpr g a) ?> (convExpr g b)
+convExpr g (a :< b)     = (convExpr g a) ?< (convExpr g b)
+convExpr g (a :<= b)    = (convExpr g a) ?<= (convExpr g b)
+convExpr g (a :>= b)    = (convExpr g a) ?>= (convExpr g b)
+convExpr g (UnaryOp u)  = unop g u
+convExpr g (Grouping e) = convExpr g e
+convExpr _ (BinaryOp _) = error "not implemented"
+convExpr _ (Case _)     = error "Case should be dealt with separately"
+convExpr _ _           = error "not implemented"
 
-unop :: UFunc -> Value
-unop (E.Log e)          = I.log (convExpr e)
-unop (E.Abs e)          = (#|) (convExpr e)
-unop (E.Exp e)          = I.exp (convExpr e)
-unop (E.Sin e)          = I.sin (convExpr e)
-unop (E.Cos e)          = I.cos (convExpr e)
-unop (E.Tan e)          = I.tan (convExpr e)
-unop (E.Csc e)          = I.csc (convExpr e)
-unop (E.Sec e)          = I.sec (convExpr e)
-unop (E.Cot e)          = I.cot (convExpr e)
-unop _                  = error "not implemented"
+unop :: Generator -> UFunc -> Value
+unop g (E.Log e)          = I.log (convExpr g e)
+unop g (E.Abs e)          = (#|) (convExpr g e)
+unop g (E.Exp e)          = I.exp (convExpr g e)
+unop g (E.Sin e)          = I.sin (convExpr g e)
+unop g (E.Cos e)          = I.cos (convExpr g e)
+unop g (E.Tan e)          = I.tan (convExpr g e)
+unop g (E.Csc e)          = I.csc (convExpr g e)
+unop g (E.Sec e)          = I.sec (convExpr g e)
+unop g (E.Cot e)          = I.cot (convExpr g e)
+unop _ _                  = error "not implemented"
 
 
 containsCase :: Expr -> Bool
@@ -520,17 +534,17 @@ genFunc g (FData (FuncData n dd)) = genDataFunc g n dd
 genFunc g (FCD cd) = genCalcFunc g cd
 
 convStmt :: Generator -> FuncStmt -> Statement
-convStmt g (FAsg v e) = assign g (var $ codeName v) (convExpr e)
-convStmt g (FFor v e st) = for (varDecDef (codeName v) int (litInt 0)) (convExpr e) ((&++) (var (codeName v)))
+convStmt g (FAsg v e) = assign g (var $ codeName v) (convExpr g e)
+convStmt g (FFor v e st) = for (varDecDef (codeName v) int (litInt 0)) (convExpr g e) ((&++) (var (codeName v)))
   [ block (map (convStmt g) st) ]
-convStmt g (FWhile e st) = while (convExpr e) [ block (map (convStmt g) st) ]
-convStmt g (FCond e tSt []) = ifCond [(convExpr e, [ block (map (convStmt g) tSt) ])] noElse
-convStmt g (FCond e tSt eSt) = ifCond [(convExpr e, [ block (map (convStmt g) tSt) ])] [ block (map (convStmt g) eSt) ]  
-convStmt _ (FRet e) = return $ convExpr e
+convStmt g (FWhile e st) = while (convExpr g e) [ block (map (convStmt g) st) ]
+convStmt g (FCond e tSt []) = ifCond [(convExpr g e, [ block (map (convStmt g) tSt) ])] noElse
+convStmt g (FCond e tSt eSt) = ifCond [(convExpr g e, [ block (map (convStmt g) tSt) ])] [ block (map (convStmt g) eSt) ]  
+convStmt g (FRet e) = return $ convExpr g e
 convStmt _ (FThrow s) = throw s
 convStmt g (FTry t c) = tryCatch [ block (map (convStmt g) t) ] [ block (map (convStmt g) c) ]
 convStmt _ (FContinue) = continue
-convStmt _ (FVal e) = valStmt $ convExpr e
+convStmt g (FVal e) = valStmt $ convExpr g e
 convStmt _ (FDec v (C.List t)) = listDec' (codeName v) (convType t) 0
 convStmt _ (FDec v t) = varDec (codeName v) (convType t)
 
@@ -547,7 +561,7 @@ genDataFunc g name dd =
       (concatMap inData dd) ++ [
       closeFile v_infile ]
   where inData :: Data -> [Statement]
-        inData (Singleton v) = [getFileInput v_infile (convType $ codeType v) (var $ codeName v)]
+        inData (Singleton v) = [getFileInput v_infile (convType $ codeType v) (variable g $ codeName v)]
         inData JunkData = [discardFileLine v_infile]
         inData (Line lp d) = 
           [ getFileInputLine v_infile v_line,
@@ -589,11 +603,11 @@ genDataFunc g name dd =
           in  concatMap (\(x,y) -> entryData x lineNo patNo y) $ zip (map (\z -> (patNo #* (litInt l)) #+ (litInt z)) [0..l-1]) d
         ---------------
         entryData :: Value -> Value -> Value -> Entry -> [Statement]
-        entryData tokIndex _ _ (Entry v) = [assign g (var $ codeName v) $
+        entryData tokIndex _ _ (Entry v) = [assign g (variable g $ codeName v) $
           (v_linetokens$.(listAccess tokIndex))$.(cast (convType $ codeType v) string)]
         entryData tokIndex lineNo patNo (ListEntry indx v) =
-          checkIndex indx lineNo patNo (var $ codeName v) (codeType v) ++
-            [ assign g (indexData indx lineNo patNo (var $ codeName v)) $
+          checkIndex indx lineNo patNo (variable g $ codeName v) (codeType v) ++
+            [ assign g (indexData indx lineNo patNo (variable g $ codeName v)) $
               (v_linetokens$.(listAccess tokIndex))$.(cast (listType (codeType v) (toInteger $ length indx)) string)
             ]
         entryData _ _ _ JunkEntry = []

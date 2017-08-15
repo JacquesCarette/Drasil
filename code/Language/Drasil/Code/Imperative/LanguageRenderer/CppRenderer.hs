@@ -185,9 +185,9 @@ funcDoc' c (ListSet i v) = dot <> funcAppDoc c "at" [i] <+> equals <+> valueDoc 
 funcDoc' c f = funcDocD c f
 
 iterationDoc' :: Config -> Iteration -> Doc
-iterationDoc' c (ForEach it listVar@(ListVar _ t) b) = iterationDoc c $ For initState guard update $ bodyReplace (Var it) (Var $ "(*" ++ it ++ ")") b
+iterationDoc' c (ForEach it listVar@(ListVar _ t) b) = iterationDoc c $ For initState guard update $ bodyReplace (var it) (var $ "(*" ++ it ++ ")") b
     where initState = DeclState $ VarDecDef it (Iterator t) (listVar $. IterBegin)
-          guard     = binExpr (Var it) NotEqual (listVar $. IterEnd)
+          guard     = binExpr (var it) NotEqual (listVar $. IterEnd)
           update    = (&.++)it
 iterationDoc' c i = iterationDocD c i
 
@@ -251,7 +251,7 @@ printDoc' :: Config -> IOType -> Bool -> StateType -> Value -> Doc
 printDoc' _ _ _ _ (ListVar _ (List _ _)) = error "C++: Printing of nested lists is not yet supported"
 printDoc' c Console newLn _ v@(ListVar _ t) = vcat [
     statementDoc c NoLoop $ printStr "[",
-    statementDoc c NoLoop $ ValState $ FuncApp Nothing "copy" [v $. IterBegin, v $. IterEnd, FuncApp Nothing iter [Var "std::cout", litString ","]],
+    statementDoc c NoLoop $ ValState $ FuncApp Nothing "copy" [v $. IterBegin, v $. IterEnd, FuncApp Nothing iter [var "std::cout", litString ","]],
     statementDoc c Loop $ printLastStr "]"]
     where iter = "std::ostream_iterator<" ++ render(stateType c t Dec) ++ ">"
           printLastStr = if newLn then printStrLn else printStr
@@ -364,12 +364,12 @@ destructor _ n vs =
         deleteLoops = concatMap (\v@(StateVar _ _ _ t _) -> case t of List _ _ -> [v]
                                                                       _  -> []) deleteVars
         i = "i"
-        guard l = Var i ?< (l $. ListSize)
+        guard l = var i ?< (l $. ListSize)
         loopBody l = oneLiner $ FreeState (l $. at i)
         initv = (i &.= litInt 0)
         deleteLoop l = IterState (For initv (guard l) ((&.++)i) (loopBody l))
-        deleteVar (StateVar lbl _ _ (List _ _) _) = deleteLoop (Var lbl)
-        deleteVar (StateVar lbl _ _ _ _) = FreeState $ Var lbl
+        deleteVar (StateVar lbl _ _ (List _ _) _) = deleteLoop (var lbl)
+        deleteVar (StateVar lbl _ _ _ _) = FreeState $ var lbl
         deleteStatements = map deleteVar deleteVars
         loopIndexDec | null deleteLoops = []
                      | otherwise = [varDec i $ Base Integer]

@@ -127,7 +127,7 @@ exceptionDoc' c (TryCatch tryB cb) = vcat [
 
 exprDoc' :: Config -> Expression -> Doc
 exprDoc' c (BinaryExpr v1 Equal v2@(Lit (LitStr _))) = objAccessDoc c v1 $ Func "equals" [v2]
-exprDoc' c (Exists (ObjAccess v (ListAccess i))) = exprDoc c $ BinaryExpr (Var $ render (valueDoc c v) ++ ".length") Greater i
+exprDoc' c (Exists (ObjAccess v (ListAccess i))) = exprDoc c $ BinaryExpr (var $ render (valueDoc c v) ++ ".length") Greater i
 exprDoc' c e = exprDocD'' c e
 
 funcDoc' :: Config -> Function -> Doc

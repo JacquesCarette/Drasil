@@ -80,7 +80,7 @@ release = "release"
 sagaInit = "Init"
 
 super :: Value
-super = Var "super"
+super = var "super"
 
 dash, ptr, str :: Doc
 dash = text "-"
@@ -176,9 +176,9 @@ funcDoc' c f = funcDocD c f
 iterationDoc' :: Config -> Iteration -> Doc
 --the index is declared inside the for statement (e.g. 'for (int i = 0;...)');
 --must compile the resulting files with gcc -std=c99 when doing this
-iterationDoc' c (ForEach i listVar@(ListVar _ _) b) = iterationDoc c $ For initState guard update $ bodyReplace (Var i) (listVar $. at i) b
+iterationDoc' c (ForEach i listVar@(ListVar _ _) b) = iterationDoc c $ For initState guard update $ bodyReplace (var i) (listVar $. at i) b
     where initState = varDecDef i (Base Integer) (litInt 0)
-          guard     = Var i ?< (listVar $. ListSize)
+          guard     = var i ?< (listVar $. ListSize)
           update    = (&.++)i
     -- the following ForEach implementation will only be valid in Objective-C 2.0 or later
     {-vcat [
@@ -238,11 +238,11 @@ classDoc' c ft _ (MainClass n vs fs) = vcat [
 
 objAccessDoc' :: Config -> Value -> Function -> Doc
 objAccessDoc' c v f@(Cast _ _) = objAccessDocD c v f
-objAccessDoc' c v (ListPopulate size t) = iterationDoc c $ For (varDecDef i (Base Integer) (litInt 0)) (Var i ?< size) ((&.++)i) forBody
+objAccessDoc' c v (ListPopulate size t) = iterationDoc c $ For (varDecDef i (Base Integer) (litInt 0)) (var i ?< size) ((&.++)i) forBody
     where i = "i"
           dftVal = case t of Base bt -> defaultValue bt
                              _       -> error $ "ListPopulate does not yet support list type " ++ render (doubleQuotes $ stateType c t Def)
-          forBody = oneLiner $ ValState $ v $. ListAdd (Var i) dftVal
+          forBody = oneLiner $ ValState $ v $. ListAdd (var i) dftVal
 objAccessDoc' c v (Floor) = text "floor" <> parens(valueDoc c v)
 objAccessDoc' c v (Ceiling) = text "ceil" <> parens(valueDoc c v)
 objAccessDoc' c v f = brackets (valueDoc c v <> funcDoc c f)
@@ -287,17 +287,17 @@ methodDoc' c Source _ f@(Method _ _ _ (Construct _) _ b) = vcat [
                 [RetState (Ret Self)]
     ],
     rbrace]
-    where ctorPoolDec = if null b then [] else [varDecDef "pool" (Type "NSAutoreleasePool") $ Var "[[NSAutoreleasePool alloc] init]"]
+    where ctorPoolDec = if null b then [] else [varDecDef "pool" (Type "NSAutoreleasePool") $ var "[[NSAutoreleasePool alloc] init]"]
           ctorIfState = if null b then [] else [CondState (If [(Self, b)] [])]
-          ctorPoolDrain = if null b then [] else [ValState $ ObjAccess (Var "pool") (Func "drain" [])]
+          ctorPoolDrain = if null b then [] else [ValState $ ObjAccess (var "pool") (Func "drain" [])]
 methodDoc' c Source _ f@(Method _ _ _ _ _ b) = vcat [
     transDecLine c f <+> lbrace,
     oneTab $ bodyDoc c b,
     rbrace]
 methodDoc' c ft@(Source) m (MainMethod b) = methodDocD' c ft m $ MainMethod poolB
     where poolB = poolDec ++ b ++ poolDrain
-          poolDec = if null b then [] else oneLiner $ varDecDef "pool" (Type "NSAutoreleasePool") $ Var "[[NSAutoreleasePool alloc] init]"
-          poolDrain = if null b then [] else oneLiner $ ValState $ ObjAccess (Var "pool") (Func "drain" [])
+          poolDec = if null b then [] else oneLiner $ varDecDef "pool" (Type "NSAutoreleasePool") $ var "[[NSAutoreleasePool alloc] init]"
+          poolDrain = if null b then [] else oneLiner $ ValState $ ObjAccess (var "pool") (Func "drain" [])
 methodDoc' c ft m f = methodDocD c ft m f
 
 methodTypeDoc' :: Config -> MethodType -> Doc
@@ -322,7 +322,7 @@ valueDoc' c (ObjAccess v@(ListVar _ t) f@(ListAdd _ e)) = objAccessDoc c v $ fun
 valueDoc' c (ObjAccess v@(ObjVar _ (ListVar _ t)) f@(ListAdd _ e)) = objAccessDoc c v $ funcReplace e (numFrom c t e) f
 valueDoc' c (ObjAccess v@(ListVar _ t) f@(ListSet _ e)) = objAccessDoc c v $ funcReplace e (numFrom c t e) f
 valueDoc' c (ObjAccess v@(ObjVar _ (ListVar _ t)) f@(ListSet _ e)) = objAccessDoc c v $ funcReplace e (numFrom c t e) f
-valueDoc' c (ObjAccess v f@(ListAdd _ e@(Var _))) = vcat [
+valueDoc' c (ObjAccess v f@(ListAdd _ e@(Var _ _))) = vcat [
     objAccessDoc c v f <> endStatement c,
     objAccessDoc c e (Func release [])]
 valueDoc' _ (Self) = text "self"
@@ -349,7 +349,7 @@ destructor _ vs =
     let checkDelPriority s@(StateVar _ _ _ _ del) | del < 2   = []
                                                   | otherwise = [s]
         releaseVars = concatMap checkDelPriority vs
-        releaseStatements = concatMap (\(StateVar lbl _ _ _ _) -> [ValState $ (Var lbl $. Func release [])]) releaseVars
+        releaseStatements = concatMap (\(StateVar lbl _ _ _ _) -> [ValState $ (var lbl $. Func release [])]) releaseVars
         releaseBlock = if null releaseVars then [] else [Block(releaseStatements)]
         deallocBody = releaseBlock ++ (oneLiner $ ValState (super $. Func dealloc []))
     in Method dealloc Public Dynamic Void [] deallocBody
@@ -392,7 +392,7 @@ numFrom c t v = let integer = "Integer" in
               Base Float     -> numWith "Float"
               Base Character -> numWith "Char"
               _              -> v
-    where numWith n = Var $ "[NSNumber numberWith" ++ n ++ ": " ++ render (valueDoc c v) ++ "]"
+    where numWith n = var $ "[NSNumber numberWith" ++ n ++ ": " ++ render (valueDoc c v) ++ "]"
 
 -- | formats a Doc string for the inner part of an Objective-C function call (message)
 innerFuncAppDoc :: Config -> Label -> [Value] -> Doc

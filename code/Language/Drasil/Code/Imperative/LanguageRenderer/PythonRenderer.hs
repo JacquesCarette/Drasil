@@ -136,7 +136,7 @@ exceptionDoc' c (TryCatch tryB catchB) = vcat [
 exprDoc' :: Config -> Expression -> Doc
 exprDoc' c (Exists (ObjAccess v (ListAccess i))) = exprDoc c $ BinaryExpr (v $. ListSize) Greater i
 exprDoc' c e@(Exists (Arg _)) = exprDocD c e
-exprDoc' c (Exists v) = exprDoc c $ BinaryExpr v NotEqual $ Var "None"
+exprDoc' c (Exists v) = exprDoc c $ BinaryExpr v NotEqual $ var "None"
 exprDoc' c e = exprDocD c e
 
 funcDoc' :: Config -> Function -> Doc
@@ -169,7 +169,7 @@ iterationDoc' c (For initv guard update b) = vcat [
     forLabel <+> statementDoc c Loop initv <> semi <+> valueDoc c guard <> semi <+> statementDoc c Loop update,
     oneTab $ bodyDoc c b]
 iterationDoc' c (ForEach i listVar@(ListVar _ _) b) = vcat [
-    (iterForEachLabel c) <+> valueDoc c (Var i) <+> (iterInLabel c) <+> valueDoc c listVar <> colon,
+    (iterForEachLabel c) <+> valueDoc c (var i) <+> (iterInLabel c) <+> valueDoc c listVar <> colon,
     oneTab $ bodyDoc c b]
 iterationDoc' c i = iterationDocD c i
 

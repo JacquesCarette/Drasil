@@ -95,7 +95,7 @@ luatop c ft _ _ = vcat [
           valParam = param val (Type "Value")
           tableFindBody = [Block [forEach v (ListVar "t" (Type "Value")) forBody], Block [return $ litInt (-1)]]
           forBody = oneLiner $ ifCond [(condExpr, oneLiner $ returnVar $ keyLabel v)] noElse
-          condExpr = (Var v) ?== (Var val)
+          condExpr = (var v) ?== (var val)
           --Lua inheritance code from http://lua-users.org/wiki/InheritanceTutorial
           --TODO only include the inheritance function definition if it's used in the body of the code?
           inheritanceFunc = "function " ++ render (inherit c) ++"(baseClass)\n\        
@@ -174,7 +174,7 @@ exceptionDoc' c (TryCatch tryBody catchBody) = vcat [
     text ("local " ++ status ++ ",") <+> text "exc" <+> equals <+> text "pcall(function()",
     oneTab $ bodyDoc c tryBody,
     blockEnd c <> text ")",
-    conditionalDoc c $ If [( (?!)(Var status), catchBody )] noElse]
+    conditionalDoc c $ If [( (?!)(var status), catchBody )] noElse]
     where status = "excstatus"
 
 funcDoc' :: Config -> Function -> Doc
@@ -236,7 +236,7 @@ paramDoc' c p = paramDocD c p
 
 methodDoc' :: Config -> FileType -> Label -> Method -> Doc
 methodDoc' c ft m f@(Method _ _ _ (Construct _) _ b) =
-    let temp = Var "temp"
+    let temp = var "temp"
     in vcat [
         transDecLine c ft m f,
         oneTabbed [

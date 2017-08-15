@@ -108,12 +108,12 @@ goolbody c _ p (Mod _ _ _ _ cs) =
 
 -- code doc functions
 assignDoc' :: Config -> Assignment -> Doc
-assignDoc' c (Assign (Var n) v2) = lbl n <+> text "&.=" <+> valueDoc c v2
-assignDoc' c (Assign v1 (Var n)) = valueDoc c v1 <+> text "&=." <+> lbl n
+assignDoc' c (Assign (Var _ n) v2) = lbl n <+> text "&.=" <+> valueDoc c v2
+assignDoc' c (Assign v1 (Var _ n)) = valueDoc c v1 <+> text "&=." <+> lbl n
 assignDoc' c (Assign v1 v2) = valueDoc c v1 <+> text "&=" <+> valueDoc c v2
-assignDoc' c (PlusEquals (Var n) v2) = lbl n <+> text "&.+=" <+> valueDoc c v2
+assignDoc' c (PlusEquals (Var _ n) v2) = lbl n <+> text "&.+=" <+> valueDoc c v2
 assignDoc' c (PlusEquals v1 v2) = text "AssignState $ PlusEquals" <+> valueDoc c v1 <+> valueDoc c v2
-assignDoc' _ (PlusPlus (Var n)) = text "(&.++)" <> lbl n
+assignDoc' _ (PlusPlus (Var _ n)) = text "(&.++)" <> lbl n
 assignDoc' c (PlusPlus v) = text "AssignState $ PlusPlus" <+> valueDoc c v
 
 binOpDoc' :: BinaryOp -> Doc
@@ -180,7 +180,7 @@ funcDoc' _ (Get n) = text "Get" <+> lbl n
 funcDoc' c (Set n v) = text "Set" <+> lbl n <+> valueDoc c v
 funcDoc' c (IndexOf v) = text "IndexOf" <+> valueDoc c v
 funcDoc' _ ListSize = text "ListSize"
-funcDoc' _ (ListAccess (Var n)) = text "at" <+> lbl n
+funcDoc' _ (ListAccess (Var _ n)) = text "at" <+> lbl n
 funcDoc' c (ListAccess v) = text "ListAccess" <+> valueDoc c v
 funcDoc' c (ListAdd i v) = text "ListAdd" <+> valueDoc c i <+> valueDoc c v
 funcDoc' c (ListAppend v) = text "ListAppend" <+> valueDoc c v
@@ -356,7 +356,8 @@ valueDoc'' c (FuncApp (Just l) n vs) = text "funcApp" <+> text l <+> funcAppDoc 
 valueDoc'' c (FuncApp Nothing n vs) = text "funcApp'" <+> funcAppDoc c n vs
 valueDoc'' _ Self = text "Self"
 valueDoc'' c (StateObj l t vs) = text "StateObj" <+> justDoc l <+> stateType c t Dec <+> hsList (valueDoc c) vs
-valueDoc'' _ (Var v) = text "Var" <+> lbl v
+valueDoc'' _ (Var Nothing v) = text "Var" <+> text "Nothing" <+> lbl v
+valueDoc'' _ (Var (Just l) v) = text "Var" <+> parens (text "Just" <+> lbl l) <+> lbl v 
 valueDoc'' _ (EnumVar v) = text "EnumVar" <+> lbl v
 valueDoc'' c (ListVar v t) = lbl v <+> text "`listOf`" <+> stateType c t Dec
 valueDoc'' _ (Arg i) = text "Arg" <+> int i

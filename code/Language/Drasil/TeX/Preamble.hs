@@ -23,12 +23,12 @@ data Package = AMSMath
              | Tikz
              | Dot2Tex
              | AdjustBox
-             | AMSsymb
-             | Breqn
-             | FileContents
+             | AMSsymb --displays bold math sets (reals, naturals, etc.)
+             | Breqn --line breaks long equations automaticly
+             | FileContents --creates .bib file within .tex file
              | BibLaTeX
-             | Tabu
-             | Mathtools
+             | Tabu --adds auto column width feature for tables 
+             | Mathtools --line breaks for long fractions and cases
              deriving Eq
 
 addPackage :: Package -> D
@@ -59,7 +59,8 @@ data Def = AssumpCounter
          | UCCounter
          | Bibliography
          | UseEps
-         | TabuLine         deriving Eq
+         | TabuLine
+         deriving Eq
 
 addDef :: Def -> D
 addDef AssumpCounter = count "assumpnum" %%
@@ -91,18 +92,18 @@ genPreamble los = let preamble = parseDoc los
 
 parseDoc :: [LayoutObj] -> [Preamble]
 parseDoc los' = [PreP FullPage, PreP HyperRef, PreP AMSMath, PreP AMSsymb,
-  PreP Breqn, PreP FileContents, PreP BibLaTeX, PreD Bibliography, PreD UseEps,
-  PreP Tabu, PreD TabuLine, PreP Mathtools] ++  (nub $ parseDoc' los')
+  PreP Breqn, PreD UseEps, PreD TabuLine, PreP Mathtools]
+  ++ (nub $ parseDoc' los')
   where parseDoc' [] = []
         parseDoc' ((Table _ _ _ _):los) =
-          (PreP LongTable):(PreP BookTabs):(PreP Caption):parseDoc' los
+          (PreP Tabu):(PreP LongTable):(PreP BookTabs):(PreP Caption):parseDoc' los
         parseDoc' ((Section _ _ slos _):los) =
           (parseDoc' slos ++ parseDoc' los)
    --     parseDoc' ((CodeBlock _):los) =
    --       (PreP Listings):parseDoc' los
         parseDoc' ((Definition ps _):los) =
           (concat $ map parseDoc' (map snd ps)) ++
-          (PreP LongTable):(PreP BookTabs):parseDoc' los
+          (PreP Tabu):(PreP LongTable):(PreP BookTabs):parseDoc' los
         parseDoc' ((Figure _ _ _):los) =
           (PreP Graphics):(PreP Caption):parseDoc' los
         parseDoc' ((Module _ _):los) =
@@ -117,8 +118,9 @@ parseDoc los' = [PreP FullPage, PreP HyperRef, PreP AMSMath, PreP AMSsymb,
           (PreD UCCounter):parseDoc' los
         parseDoc' ((Graph _ _ _ _ _):los) =
           (PreP Caption):(PreP Tikz):(PreP Dot2Tex):(PreP AdjustBox):
-          parseDoc' los  {-FIXME: add the two packages bellow if there is a bibliography-}
-        -- parseDoc' ((Bibliography _):los) = (PreP FileContents):(PreP Cite):
-          -- parseDoc' los
+          parseDoc' los
+        parseDoc' ((Bib _):los) =
+          (PreP FileContents):(PreP BibLaTeX):(PreD Bibliography):
+          parseDoc' los
         parseDoc' (_:los) =
           parseDoc' los

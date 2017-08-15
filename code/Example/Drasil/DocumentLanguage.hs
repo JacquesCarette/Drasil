@@ -418,7 +418,6 @@ mkAuxConsSec (AuxConsProg key listOfCons) = (AC.valsOfAuxConstantsF key listOfCo
 -- | Helper for making the bibliography section
 mkBib :: BibRef -> Section
 mkBib bib = section (titleize' reference) [Bib bib] []
-  --FIXME: TeX auto generates this title but HTML needs it
 
 {--}
 

@@ -197,7 +197,7 @@ on the principles of science, engineering and measurement theory, whether a
 software product satisfies accepted, well-defined and measurable criteria''
 \cite[p.~12]{HatcliffEtAl2009}.  We aim to streamline the certification process,
 by simplifying the creation of the requisite software artifacts (documentation
-and code) and by ensuring that these artifacts are always consistent. Tracking
+and code) and by ensuring these artifacts are always consistent. Tracking
 down the source of any information contained in our artifacts should be
 trivially easy.  This is rarely the case (currently), as documentation is often
 not a high priority.
@@ -210,13 +210,13 @@ rigid process-heavy approaches favourably. Moreover, others have observed that
 SCS developers tend to dislike producing documentation~\cite[p.~373]{Roache1998}.
 
 Previous work by Smith \& Koothoor~\citep{SmithAndKoothoor2016} found $27$ errors
-in existing safety related software (nuclear safety analysis software) when
+in existing safety-related software (nuclear safety analysis software) when
 creating new documentation. Had they attempted to certify the software, most, if
 not all, of these errors would have led to a failure.
 
 Well-maintained documentation provides numerous advantages including:
 \begin{itemize}
-\item Improved software qualities 
+\item Improved software qualities:
     \begin{itemize}
     \item Verifiability
     \item Reusability
@@ -275,7 +275,7 @@ drudgery?  Our proposed solution is \textit{Drasil} -- a framework that uses
 a knowledge-based approach to software development, as originally proposed in a
 position paper by Szymcak et al~\cite{SzymczakEtAl2016}. The goal of the
 approach is to capture scientific and documentation knowledge in a reusable way,
-then generate the source code and all of the other software artifacts
+then generate the source code and all other software artifacts
 (documentation, build files, tests, etc) by using recipes to weave this
 knowledge into coherent pieces.
 
@@ -305,7 +305,8 @@ that term; a \textit{Quantity} is a \textit{NamedIdea}
 which also has a \textit{Space} (integer, boolean, vector, etc.), 
 and symbol representation/units (if applicable).  The notation in
 Figure~\ref{hierarchy} uses a \verb|+1| to indicate when a value may or
-may not be present (Maybe types in Haskell).  The id is an internal
+may not be present (implemented using 
+\inlHask{Maybe} types in Haskell)).  The id is an internal
 mechanism that allows us to build a database of chunks, and be able to
 look up information by id. It is not meant to be used externally.
 
@@ -354,7 +355,7 @@ modules in the \lstinline|Data.Drasil| namespace). We
 are creating a database of reusable scientific knowledge that can be applied 
 across a number of different applications across multiple domains. As the 
 Drasil framework grows, we hope to continue to expand this database into an 
-ontology of scientific information for a number of disciplines. See 
+ontology of scientific knowledge for a number of disciplines. See 
 Figure~\ref{ontology} for an example of some of the domains in which we have 
 started to capture knowledge.
 
@@ -520,11 +521,11 @@ captured using chunks, as shown in Figure~\ref{Fig_JtolDrasil}. The value of
 part of the {\inlHask{tolStrDisFac}} chunk.  The equation ({\inlHask{tolStrDisFac_eq}}) is
 defined using other quantity chunks, like {\inlHask{plate_len}} and
 {\inlHask{mod_elas}}.  These chunks themselves have their own definitions, which
-includes their definition, symbol and units.  When the knowledge from \jtol{} is
+includes their description, symbol and units.  When the knowledge from \jtol{} is
 rendered in some form, the knowledge from its constituent chunks is also
-available.  This means the Description field in Figure~\ref{Fig_Jtolpdf} can be
-generated automatically from the knowledge implicit in equation
-{\inlHask{tolStrDisFac_eq}}.  
+available.  This means the \emph{Description} field in Figure~\ref{Fig_Jtolpdf} 
+can be generated automatically from the knowledge implicit in the 
+{\inlHask{tolStrDisFac_eq}} equation.
 
 % \jc{lots of parens were removed. Some have been removed from the GlassBR source
 % as well, they were not needed.}
@@ -566,7 +567,7 @@ places. Luckily, with one quick change to {\inlHask{tolStrDisFac_eq}} (shown in
 Figure~\ref{Fig_JtolDrasil_fix}), we have corrected the error in our
 knowledge-base. After re-running the generator, our code and documentation has
 now been fixed and remains consistent.  With Drasil, we are able to correct an
-error in one place (in the knowledge base) and every artifact that depends on
+error in one place (in the knowledge-base) and every artifact that depends on
 that knowledge is automatically fixed.
 
 \begin{figure*}
@@ -576,7 +577,7 @@ tolStrDisFac_eq = log (log (1 / (1 - C pb_tol)) * ((Grouping (C plate_len *
   C plate_width)) :^ (C sflawParamM - 1) / (C sflawParamK * 
   (Grouping (C mod_elas * square (C act_thick))) :^ (C sflawParamM) * (C loadDF))))
 \end{lstlisting}
-\caption{Modified Drasil (Haskell) code for \jtol{}}
+\caption{Modified Drasil (Haskell) code for \jtol{} equation}
 \label{Fig_JtolDrasil_fix}
 \end{figure*}
 
@@ -664,7 +665,7 @@ $\rho_P$ & $\rho_P > 0$    & 1007 kg/m$^3$    & 10\% \\
 Thanks to Drasil's knowledge-capture mechanisms, we can capture the above 
 equation in one place, thus any changes can be made very quickly. Not only 
 that, but sanity checks (such as ensuring constraints on inputs) can also be 
-captured and reused. An example of this sort of sanity checks can be seen in 
+captured and reused. An example of these sorts of sanity checks can be seen in 
 Table~\ref{tab:pcm}. They include hard physical constraints, ex. $L > 0$, as 
 well as typical values. Capturing this information
 delivers a wider array of advantages, including:
@@ -778,9 +779,9 @@ the original theory?  Unfortunately, multiple examples
 exist~\cite{CrickAndHall2014, IonescuAndJansson2013} where results from research
 software could not be independently reproduced, due to a need for local
 knowledge missing from published documents.  Examples of missing knowledge
-includes missing assumptions, missing derivations and undocumented modifications
+includes missing assumptions, derivations, and undocumented modifications
 to the code.  Should it not be easier to independently replicate the work of
-others without relying on the code that they have written?
+others without relying on the code they have written?
 
 We want to replicate not only the execution of the code, but the whole of the 
 software from theory to implementation. Given the appropriate theoretical 
@@ -823,7 +824,7 @@ much larger sense than we normally consider. It allows us to focus on the
 science, (re-)building our projects from the fundamental knowledge instead of 
 relying on a lone developer's code. Drasil also forces all assumptions to be 
 documented, and disallows local hacks, since the generated code should never be 
-modified by a human, it should only be generated.
+modified by a human, it should only be (re-)generated.
 
 \section{Future Work} \label{SecFuture}
 
@@ -848,8 +849,8 @@ to generate test cases relevant to said algorithm.
 
 Another large feature that will be a necessity in the long-run, but has thus 
 far been relegated to the back-burner, is a much more user-friendly syntax, or 
-even a tool to aid in the creation of Drasil projects. Currently, Drasil is 
-fairly esoteric to use, even with all of our documentation to date. Yet, with 
+even a tool to aid in the creation of Drasil projects. Drasil is currently
+fairly esoteric to use, even with all our documentation to date. Yet, with 
 each iteration of the language we introduce new, simplifying abstractions, 
 which have already made it easier to use. Our experience with our summer student 
 research assistants is a testament to that. We are aware, however, of the gap 
@@ -877,7 +878,7 @@ We have already seen non-trivial improvements to existing software during its
 re-implementation in our current, working-copy of Drasil. The case studies are 
 now easier to verify, maintain, reuse, and replicate than they were before. 
 There is also far less ambiguity on where certain concepts originated, as 
-everything is captured in one source (knowledge base).
+everything is captured in one source (the knowledge-base).
 
 Not only do we believe that scientists will be able to create higher quality
 software while focusing more on the science; they will be able to replicate and

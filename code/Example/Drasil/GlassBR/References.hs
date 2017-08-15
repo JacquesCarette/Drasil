@@ -82,8 +82,7 @@ astm_C1036 = Misc
   [
   Author [mononym "ASTM C1036-16"],
   Title (S "Standard specification for Flat Glass"),
-  Publisher (S "ASTM International"),
-  Collection (S "Book of standards 15.02"),
+  Publisher (S "ASTM International"),  
   Place (S "West Conshohocken", S "PA"),
   Year (2016),
   URL (S "www.astm.org")

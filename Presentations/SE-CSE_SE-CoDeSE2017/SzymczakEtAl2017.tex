@@ -623,13 +623,13 @@ Certifying (or re-certifying) software can be a lengthy and expensive process
 where a single error can cause the software to fail the certification process.
 Consider the following equation from our solar water heating example which
 states that energy in the water must be conserved between the heating coil and
-water and water and PCM (Phase Change Material):
+water, and water and PCM (Phase Change Material):
 
 \begin{equation*}
 E_W = \int_{0}^{t} h_C A_C (T_C - T_W(t)) dt - \int_{0}^{t} h_P A_P (T_W(t) - T_P(t)) dt
 \end{equation*}
 %\wss{We need to define the terms in this equation.}  
-Where:
+\noindent where:
 \begin{itemize}
     \item $E_W$ is the change in heat energy in the water
     \item $A_C$ is the heating coil surface area
@@ -677,17 +677,20 @@ delivers a wider array of advantages, including:
 \item Warning the user if they choose a value that is order(s) of magnitude different 
 than the typical value
 \end{itemize}
-We can also see that it is extremely easy to trace changes and verify that they 
+We can also see that it is straightforward to trace changes and verify that they 
 are correct, thanks to our one-source, generative approach. We can produce 
 documents similar to those commonly found in literate programming where we 
 display the equations and code implementations (example: the \jtol{} equation 
 and the python code used to calculate it) side-by-side, allowing a human to 
-quickly verify the code is correct.  This literate technique proved valued with
+quickly verify the code is correct.  This literate technique proved valuable with
 the nuclear safety analysis software mentioned
 earlier~\cite{SmithAndKoothoor2016}.
 
 We have also touched on one of the greatest advantages (implied 
-earlier): \emph{If there is an error somewhere, it is wrong everywhere}. This 
+earlier): 
+\fbox{If there is an error somewhere, it is wrong everywhere.}
+
+This 
 may seem like a disadvantage, but ensuring every artifact contains the same 
 errors means there is a much greater chance of those errors being spotted. In 
 our experience, many examples of software include code that does not match the 
@@ -897,6 +900,9 @@ While developing in Drasil does come with a fairly high, up-front investment of
 effort, we believe the long-term maintainability improvements, along with the 
 streamlining of verification/certification and the other previously mentioned 
 advantages are well worth the cost.
+
+\jc{Isn't Wael a first name?  Also, I think we should acknowledge all of
+the summer students by name.}
 
 \begin{acks}
 The assistance of McMaster University's Dr.\ Manuel Campidelli, Dr.\ Wael and

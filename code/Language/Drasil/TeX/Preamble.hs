@@ -90,18 +90,19 @@ genPreamble los = let preamble = parseDoc los
 
 parseDoc :: [LayoutObj] -> [Preamble]
 parseDoc los' = [PreP FullPage, PreP HyperRef, PreP AMSMath, PreP AMSsymb,
-  PreP Breqn, PreP FileContents, PreP BibLaTeX, PreD Bibliography,
-  PreP Tabu, PreD TabuLine, PreP Mathtools] ++  (nub $ parseDoc' los')
+  PreP Mathtools, PreP Breqn] ++ (nub $ parseDoc' los')
   where parseDoc' [] = []
         parseDoc' ((Table _ _ _ _):los) =
-          (PreP Tabu):(PreP LongTable):(PreP BookTabs):(PreP Caption):parseDoc' los
+          (PreP Tabu):(PreD TabuLine):(PreP LongTable):(PreP BookTabs):
+          (PreP Caption):parseDoc' los
         parseDoc' ((Section _ _ slos _):los) =
           (parseDoc' slos ++ parseDoc' los)
    --     parseDoc' ((CodeBlock _):los) =
    --       (PreP Listings):parseDoc' los
         parseDoc' ((Definition ps _):los) =
           (concat $ map parseDoc' (map snd ps)) ++
-          (PreP Tabu):(PreP LongTable):(PreP BookTabs):parseDoc' los
+          (PreP Tabu):(PreD TabuLine):(PreP LongTable):(PreP BookTabs):
+          parseDoc' los
         parseDoc' ((Figure _ _ _):los) =
           (PreP Graphics):(PreP Caption):parseDoc' los
         parseDoc' ((Module _ _):los) =

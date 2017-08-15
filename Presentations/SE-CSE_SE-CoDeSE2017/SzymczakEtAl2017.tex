@@ -296,15 +296,18 @@ Drasil's design is based around three main components:
     \item Knowledge-base (\textit{Data.Drasil})
 \end{enumerate}
 
-Chunks are the primary knowledge-capture mechanism. There are many flavours of 
-chunks (as shown in Figure~\ref{hierarchy}). The most basic chunk is simply a 
-piece of data with an id. From there, all other chunks can be created. For 
-example, a \textit{Quantity} is a \textit{NamedIdea} (a chunk containing an id, 
+Chunks are the primary knowledge-capture mechanism. They come in many flavours
+(see Figure~\ref{hierarchy}). The most basic chunk is simply a 
+piece of data with an identifier (id). All other chunks inherit from this
+basic chunk.  For example, a \textit{NamedIdea} is a chunk containing an id, 
 as well as a term which represents the idea and a potential abbreviation for 
-that term) which also has a \textit{Space} (integer, boolean, vector, etc.), 
+that term; a \textit{Quantity} is a \textit{NamedIdea}
+which also has a \textit{Space} (integer, boolean, vector, etc.), 
 and symbol representation/units (if applicable).  The notation in
 Figure~\ref{hierarchy} uses a \verb|+1| to indicate when a value may or
-may not be present (Maybe types in Haskell).
+may not be present (Maybe types in Haskell).  The id is an internal
+mechanism that allows us to build a database of chunks, and be able to
+look up information by id. It is not meant to be used externally.
 
 \begin{figure}
     \centering
@@ -337,14 +340,17 @@ Language}
 \label{recipeLang}
 \end{figure}
 
-The document generation language is highly abstracted, but allows for a fairly
+The document generation language is fairly abstract (it knows about sections,
+and subsections, various kinds of tables, and a variety of material typical
+of SRSes), and allows for a
 high degree of customization. Drasil also contains a code-generation language
 integrating GOOL~\cite{Costabile2012} -- a Generic Object-Oriented Language -- which can
 generate code in a number of different target languages including Python, Lua,
 and C++.  We will discuss code generation in more depth through the example in
 Section~\ref{SecGlassBR}.
 
-Finally, there is the knowledge-base for Drasil (located in Data.Drasil). We 
+Finally, there is the knowledge-base for Drasil (located in a series of
+modules in the \lstinline|Data.Drasil| namespace). We 
 are creating a database of reusable scientific knowledge that can be applied 
 across a number of different applications across multiple domains. As the 
 Drasil framework grows, we hope to continue to expand this database into an 
@@ -360,61 +366,73 @@ started to capture knowledge.
 
 \section{Development Process for Drasil} \label{SecDevProcess}
 
-Drasil is being developed using a practical, example-driven process. There are 
-currently five different examples being developed concurrently within (and 
-driving the development of) Drasil:
+We use an example-driven process -- where the examples are all reimplementations
+of third-party software.  This grounds our efforts, and ensures that we are
+able to reproduce real work rather than just toy examples.
+We currently use five different examples, which are being worked on concurrently,
+to drive the development of Drasil:
 
 \begin{itemize}
 \item Chipmunk2D Game Physics Engine
 \item Solar Water Heating System Incorporating Phase Change Material (PCM)
 \item Solar Water Heating System (No PCM)
-\item Slope Stability Analysis
+\item Slope Stability Analysis (SSP)
 \item Glass Breakage Analysis (GlassBR)
 \end{itemize}
 The original (non-Drasil) documentation for these examples came out of a study
 on Document Driven Design (DDD) for SCS~\cite{SmithJegatheesanAndKelly2016}.
 
-Our practical design approach allows us the flexibility to prototype without 
+Our approach allows us the flexibility to prototype without 
 over-designing. As a new feature becomes necessary to continue the 
 implementation of a given example, only then do we design, test, implement, and 
 re-test it. We occasionally implement features we may need in the future, but 
 only in those instances when it is obvious that we are taking the right 
-approach.
+approach.  Five examples are enough to see ``patterns'' emerging
+in different examples, which drive further design.
 
-The five examples provided an ideal means to bring additional members on to the
-project.  Summer student research assistants joined the project and were
-responsible for completing most of the work on translating the original examples
-into Drasil, and then later transforming the examples, as the Drasil DSLs have
-been extended and refactored.  Through their work, the summer students have
-demonstrated that using Drasil does not require prior knowledge of Haskell and
-code generation techniques.  The student members of the Drasil project cover
-disciplines ranging from Chemical Engineering, Applied Mathematics, Computer
-Science and Software Engineering, with levels of education ranging from first to
-third year. None of the students had prior knowledge of Haskell.
+The five examples have also shown themselves to be an ideal means to bring
+additional members on to the project.  Summer student research assistants
+joined the project and were responsible for completing most of the work on
+translating the original examples into Drasil, and then later transforming the
+examples, as the Drasil DSLs have been extended and refactored.  Through their
+work, the students have demonstrated that using Drasil does not require prior
+knowledge of Haskell and code generation techniques.  These students come from
+a variety of disciplines -- Chemical Engineering, Applied Mathematics, Computer
+Science and Software Engineering, with levels of education ranging from first
+to third year. None of the students had prior knowledge of Haskell.  Yet all
+picked up the ideas quickly, and we able to make very significant contributions.
+Most were already able to make contributions on their second day of work -- and
+some were able to do substantial changes to the infrastructure too.
 
 The current incarnation of the Drasil framework can be found on GitHub at 
 \href{https://github.com/JacquesCarette/literate-scientific-software}
-{https://github.com/JacquesCarette/literate-scientific-software}. We utilize 
-peer-review of code throughout development to correct missteps early on, and 
+{https://github.com/JacquesCarette/literate-scientific-software}. We use code
+peer-reviews throughout the development to correct missteps early on, and 
 keep an up-to-date issue tracker for any bugs, feature requests, or other 
-``to-do'' tasks.
+``to-do'' tasks. This has been an invaluable means of communications, 
+especially when various team members were travelling, or simply working
+asynchronously.
 
-Progressive development of Drasil is achieved by not only looking for new 
-features that must be implemented, but also through a cyclic approach towards 
-improvement. This approach relies on finding new (extractable) patterns in the 
-framework through refactoring, de-embedding and extracting knowledge from the 
-example materials, and reducing knowledge duplication by capturing it in a 
-highly reusable way.
+There are two means for prodding the development of Drasil:  first, the
+usual ``wouldn't it be nice if we had feature X''.  Second, and more
+importantly, a frequent \emph{introspection} of the code, encoding of the
+examples, recipes, etc, to find patterns of use.  This has led to many
+refactorings.  But it has also led us to \emph{de-embed} knowledge from
+recipies and examples into re-usable chunks.  And of course, once patterns
+are found and abstracted, often this reveals new patterns.
 
 By adopting a practical, example-driven, ``bottom-up,'' approach for the
-development of Drasil, we have avoided the problems inherent in a more
+development of Drasil, we have avoided some of the problems inherent in a more
 theoretical, or ``top-down,'' approach.  The size, scope and complexity of SCS
 means that attempting to imagine a priori the DSLs that we would need would be
 exceedingly difficult.  We would invariably leave something out and likely
-provide too simple a framework.  Rather than try to arbitrarily determine the
-initial scope of Drasil, we let the examples tell us what they need. The
-``bottom-up'' approach was previously successfully used for generating members
-of the family of Gaussian elimination algorithms~\cite{Carette2006}.  
+provide too simple a framework -- or spend a huge amount of time designing
+features that turn out not to be needed in practice.  Rather than try to
+arbitrarily determine the initial scope of Drasil, we let the examples tell us
+what they need. The ``bottom-up'' approach was previously successfully used for
+generating members of the family of Gaussian elimination
+algorithms~\cite{Carette2006}, as well as a generator for geometry
+kernels~\cite{CarElShSmi2011}.
 
 The idea that scientific software forms a program
 family~\cite{SmithMcCutchanAndCao2007} is helpful for the current work.  We can
@@ -427,24 +445,23 @@ SCS.
 
 \section{A Practical Example (GlassBR)} \label{SecGlassBR}
 
-GlassBR is a piece of software used by structural engineers to predict whether or 
+GlassBR is software used by structural engineers to predict whether or 
 not a slab of glass will be able to withstand a given explosion without
-breaking.  The two classes of input are: glass geometry and blast type. Each of these input 
-classes has a number of fields (glass type, dimensions, TNT equivalent factor, 
-standoff distance, etc.) used as input to the analysis. The user must also 
-specify their tolerable probability of breakage.
+breaking.  
 
-The output of GlassBR is whether or not the glass slab is considered safe.  This
-is determined by calculating the probability of breakage, which involves
-interpolation from several tabulated values, then that probability is compared
-to the tolerable probability and a safety evaluation is made.
+This software is fairly simple; it has two (structured) inputs, the 
+glass geometry and blast type, and a tolerance (the allowed probability
+of breakage). The first two are comprised of
+a number of fields (glass type, dimensions, TNT equivalent factor, 
+standoff distance, etc.).
 
-To understand the Drasil implementation, we will follow one specific piece of 
-knowledge through from requirements to code. We intend to show how this 
-knowledge is captured and used in Drasil to produce our software artifacts 
-(documentation and code).
+The output of GlassBR is whether or not the glass slab is considered safe,
+determined by calculating the probability of breakage.  This calculution involves
+interpolation from several tabulated values, as some of the quantities have
+as yet not well-accepted model beyond empirical interpolation from experiments.
 
-%- bottom up approach to presentation - start with chunks, build up to SRS, traceability
+We will follow one specific piece of knowledge through from requirements to
+code, as a means to illustrate the use of Drasil.
 
 \begin{figure}
 \begin{center}
@@ -456,14 +473,15 @@ knowledge is captured and used in Drasil to produce our software artifacts
 
 Let us start by taking a look at a data definition for the tolerable stress
 distribution factor (\jtol{}) for GlassBR. Figure~\ref{Fig_Jtolpdf} shows
-\jtol{} in pdf format, which was compiled from the Drasil-generated LaTeX from
-the \jtol{} quantity chunk. We can also generate the documents in HTML. The data
-definition is part of the requirements for the GlassBR software, and as such, we
-will eventually need code that can be used to calculate \jtol{}.  A python
-version of this code can be seen in Figure~\ref{Fig_JtolPython}). From the
-\jtol{} quantity chunk, we can generate this code as well as the documentation!
-Not only that, but thanks to the incorporation of GOOL, we can also generate
-Java, Lua, C\#, etc.
+\jtol{} as rendered by \texttt{pdflatex}, from the Drasil-generated LaTeX 
+which came from the \jtol{} quantity chunk. We can also generate the documents
+in HTML. The data definition is part of the requirements for the GlassBR
+software.  As this requirement is in the form of a (solved) equation, it is
+straightforward to generate code to
+calculate \jtol{} from this.  A python version of this code can be seen in
+Figure~\ref{Fig_JtolPython}). From the \jtol{} quantity chunk, we can generate
+this code as well as the documentation!  Not only that, but thanks to the
+incorporation of GOOL, we can also generate Java, Lua, C\#, etc.
 
  \begin{figure*}
  \begin{lstlisting}[language=python, frame=single, showstringspaces=false]
@@ -508,20 +526,22 @@ available.  This means the Description field in Figure~\ref{Fig_Jtolpdf} can be
 generated automatically from the knowledge implicit in equation
 {\inlHask{tolStrDisFac_eq}}.  
 
+% \jc{lots of parens were removed. Some have been removed from the GlassBR source
+% as well, they were not needed.}
 \begin{figure*}
 \begin{lstlisting}[language=Haskell, frame=single, showstringspaces=false] 
 stressDistFac = makeVC 
   "stressDistFac" (nounPhraseSP $ "stress distribution" ++ " factor (Function)") cJ
 
 sdf_tol = makeVC 
-  "sdf_tol" (nounPhraseSP $ "stress distribution" ++ " factor (Function) based on Pbtol") 
+  "sdf_tol" (nounPhraseSP $ "stress distribution factor (Function) based on Pbtol") 
   (sub (stressDistFac ^. symbol) (Atomic "tol"))
 
 tolStrDisFac_eq :: Expr
-tolStrDisFac_eq = log (log ((1) / ((1) - (C pb_tol))) * ((Grouping (((C plate_len) / (1000)) * 
-  ((C plate_width) / (1000)))) :^ ((C sflawParamM) - (1)) / ((C sflawParamK) * 
-  (Grouping (Grouping ((C mod_elas) * (1000)) * 
-  (square (Grouping ((C act_thick) / (1000)))))) :^ (C sflawParamM) * (C loadDF))))
+tolStrDisFac_eq = log (log (1 / (1 - C pb_tol)) * ((Grouping ((C plate_len / 1000) * 
+  (C plate_width) / 1000)) :^ (C sflawParamM - 1) / (C sflawParamK * 
+  (Grouping (Grouping (C mod_elas * 1000) * 
+  (square (Grouping (C act_thic) / 1000))))) :^ (C sflawParamM) * (C loadDF))))
 
 tolStrDisFac :: QDefinition
 tolStrDisFac = mkDataDef sdf_tol tolStrDisFac_eq
@@ -552,9 +572,9 @@ that knowledge is automatically fixed.
 \begin{figure*}
 \begin{lstlisting}[language=Haskell, frame=single, showstringspaces=false]
 tolStrDisFac_eq :: Expr
-tolStrDisFac_eq = log (log ((1) / ((1) - (C pb_tol))) * ((Grouping ((C plate_len) * 
-  (C plate_width))) :^ ((C sflawParamM) - (1)) / ((C sflawParamK) * 
-  (Grouping ((C mod_elas) * (square (C act_thick)))) :^ (C sflawParamM) * (C loadDF))))
+tolStrDisFac_eq = log (log (1 / (1 - C pb_tol)) * ((Grouping (C plate_len * 
+  C plate_width)) :^ (C sflawParamM - 1) / (C sflawParamK * 
+  (Grouping (C mod_elas * square (C act_thick))) :^ (C sflawParamM) * (C loadDF))))
 \end{lstlisting}
 \caption{Modified Drasil (Haskell) code for \jtol{}}
 \label{Fig_JtolDrasil_fix}

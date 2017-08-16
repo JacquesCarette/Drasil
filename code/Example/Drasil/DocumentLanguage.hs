@@ -130,7 +130,7 @@ data IntroSub where
 {--}
 
 -- | Stakeholders section
-data StkhldrSec = StkhldrProg CI Sentence | StkhldrVerb Section | StkhldrProg2 [StkhldrSub]
+data StkhldrSec = StkhldrProg CI Sentence | StkhldrProg2 [StkhldrSub] | StkhldrVerb Section
 
 -- | Stakeholders subsections
 data StkhldrSub where
@@ -140,12 +140,25 @@ data StkhldrSub where
 
 {--}
 
-data GSDSec = GSDVerb Section | GSDProg [Section] Contents [Contents] [Section]
+data GSDSec = GSDVerb Section 
+            | GSDProg [Section] Contents [Contents] [Section]
+            | GSDProg2 [GSDSub]
+
+data GSDSub where
+  GSDSubVerb :: Section -> GSDSub
+  UsrChars   :: [Contents] -> GSDSub
+  SystCons   :: [Contents] -> [Section] -> GSDSub
 
 -- | Helper for making the 'General System Description' section
 mkGSDSec :: GSDSec -> Section
 mkGSDSec (GSDVerb s) = s
 mkGSDSec (GSDProg a b c d) = GSD.genSysF a b c d
+mkGSDSec (GSDProg2 l) = SRS.genSysDes [GSD.genSysIntro] $ foldr (mkSubs) [] l
+   where
+     mkSubs :: GSDSub -> [Section] -> [Section]
+     mkSubs (GSDSubVerb s) l' = s : l'
+     mkSubs (UsrChars a) l'   = (GSD.usrCharsF a) : l'
+     mkSubs (SystCons a b) l' = (GSD.systCon a b) : l'
 
 {--}
 

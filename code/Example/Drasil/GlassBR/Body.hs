@@ -95,9 +95,9 @@ mkSRS = RefSec (RefProg intro [TUnits, tsymb [TSPurpose, SymbOrder], TAandA]) :
   StkhldrSec (StkhldrProg2 [Client gLassBR (S "Entuitive. It is developed by Dr. Manuel Campidelli"),
     Cstmr gLassBR]) :
   --FIXME: Turn "People -> Sentence"? (so knowledge can be easily pulled out...)
-  GSDSec (GSDProg [] (s4_1_bullets endUser gLassBR secondYear
-    undergradDegree civilEng structuralEng glBreakage blastRisk)
-    [] []) :
+  GSDSec (GSDProg2 [UsrChars [s4_1_bullets endUser gLassBR secondYear
+    undergradDegree civilEng structuralEng glBreakage blastRisk], 
+    SystCons [] []]) :
   ScpOfProjSec (ScpOfProjProg (short gLassBR) (s5_1_table) (s5_2 (glaSlab)
     (capacity) (demandq) (probability))) :
   SSDSec (SSDVerb s6) :
@@ -300,6 +300,7 @@ s2_3_intro_end = foldl (+:+) EmptyS [(at_start' $ the dataDefn),
 {--GENERAL SYSTEM DESCRIPTION--}
 
 {--User Characteristics--}
+
 s4_1_bullets :: (NamedIdea n1, NamedIdea n, NamedIdea n2, NamedIdea n3,
   NamedIdea n4, NamedIdea n5, NamedIdea c, NamedIdea n6) =>
   n6 -> c -> n5 -> n4 -> n3 -> n2 -> n1 -> n -> Contents
@@ -311,8 +312,6 @@ s4_1_bullets intendedIndvdl progName yr degreeType prog1 prog2 undrstd1 undrstd2
   rdrKnldgbleIn (undrstd1) (undrstd2)), foldlSent [phrase intendedIndvdl
   `isExpctdToHv` S "basic", phrase computerLiteracy, S "to handle the",
   phrase software]]
-
---
 
 {--System Constraints--}
 

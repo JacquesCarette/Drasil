@@ -120,7 +120,7 @@ ssmcLFEqn = ((C earthqkLoadFctr) * (inxi slcWght))
 --DD8
 
 surfLoads :: QDefinition
-surfLoads = mkDataDef surfLoad surfLEqn --FIXEME: is this data definition nessisary?
+surfLoads = mkDataDef surfLoad surfLEqn --FIXEME: is this data definition necessary?
 
 surfLEqn :: Expr
 surfLEqn = (inxi surfLoad) * (inxi impLoadAngle) --FIXME: should be split into two DataDefs
@@ -292,17 +292,17 @@ stfMtrxDerivation = [foldlSP [S "Using the force-displacement relationship of",
   
   EqnBlock $ inxi shrStiffIntsl := dgnl2x2 (inxi shrStiffIntsl) (inxi nrmStiffBase),
   
-  foldlSP [S "For interslice surfaces the stiffness constants and displacements",
+  foldlSP [S "For interslice surfaces the stiffness constants" `sAnd` S "displacements",
   S "refer to an unrotated coordinate system" `sC` getS genDisplace, S "of" +:+.
   acroGD 9, S "The interslice elements are left in their standard coordinate system" `sC`
   S "and therefore are described by the same", phrase equation, S "from" +:+. acroGD 8,
   S "Seen as", getS shrStiffIntsl, S "in" +:+. acroDD 12, isElMx shrStiffIntsl "shear" `sC` --FIXEME: add matrix symbols?
   S "and", isElMx nrmStiffIntsl "normal" `sC` S "calculated as in", acroDD 14],
   
-  foldlSP [S "For basal surfaces the stiffness constants and displacements refer",
+  foldlSP [S "For basal surfaces the stiffness constants" `sAnd` S "displacements refer",
   S "to a system rotated for the base angle alpha" +:+. sParen (acroDD 5),
-  S "To analyze the effect of force-displacement relationships occurring on both basal",
-  S "and interslice surfaces of an", phrase element, getS index, S "they must reference", 
+  S "To analyze the effect of force-displacement relationships occurring on both basal"
+  `sAnd` S "interslice surfaces of an", phrase element, getS index, S "they must reference", 
   S "the same coordinate system. The basal stiffness matrix must be rotated", 
   S "counter clockwise to align with" +:+. (phrase angle `ofThe` S "basal surface"),
   S "The base stiffness counter clockwise rotation is applied in", eqN 7,

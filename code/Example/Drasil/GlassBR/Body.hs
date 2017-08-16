@@ -10,7 +10,7 @@ import Drasil.Template.MG (mgDoc)
 import Drasil.Template.DD (makeDD)
 
 import Data.Drasil.SI_Units
-import Data.Drasil.People (spencerSmith, thulasi, nikitha)
+import Data.Drasil.People (spencerSmith, thulasi, nikitha, mCampidelli)
 
 import Data.Drasil.Concepts.Documentation (analysis, appendix, aspect,
   characteristic, class_, code, condition, constant, constraint, content,
@@ -91,9 +91,10 @@ mkSRS = RefSec (RefProg intro [TUnits, tsymb [TSPurpose, SymbOrder], TAandA]) :
      IScope incScoR endScoR,
      IChar (rdrKnldgbleIn glBreakage blastRisk) undIR appStanddIR,
      IOrgSec s2_3_intro dataDefn (SRS.dataDefn SRS.missingP []) s2_3_intro_end]) :
-  StkhldrSec (StkhldrProg2 [Client gLassBR (S "Entuitive. It is developed by Dr. Manuel Campidelli"),
-    Cstmr gLassBR]) :
-  --FIXME: Turn "People -> Sentence"? (so knowledge can be easily pulled out...)
+  StkhldrSec 
+    (StkhldrProg2 
+      [Client gLassBR (S "Entuitive. It is developed by Dr." +:+ name mCampidelli),
+      Cstmr gLassBR]) :
   GSDSec (GSDProg2 [UsrChars [s4_1_bullets endUser gLassBR secondYear
     undergradDegree civilEng structuralEng glBreakage blastRisk], 
     SystCons [] []]) :
@@ -585,7 +586,7 @@ req2Desc = foldlSent [S "The", phrase system,
      short lShareFac `followA` 5]))
 -}
 --FIXME:should constants, LDF, and LSF have some sort of field that holds
--- the assumption(s) that're being followed?
+-- the assumption(s) that're being followed? (Issue #349)
 
 req3Desc = foldlSent [S "The", phrase system, S "shall check the entered",
   plural inValue, S "to ensure that they do not exceed the",

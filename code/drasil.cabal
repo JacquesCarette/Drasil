@@ -14,6 +14,7 @@ library
     Data.Drasil.Citations
     Data.Drasil.Modules
     Data.Drasil.Plurals
+    Data.Drasil.Constraints
     Data.Drasil.SentenceStructures
     Data.Drasil.SI_Units
     Data.Drasil.Utils

@@ -49,7 +49,7 @@ fcSfty_desc = foldlSent [S "Equation for the", titleize fs `isThe` S "ratio",
   S "between resistive and mobile shear of the slip surface. The sum of values",
   S "from each slice is taken to find the total resistive and mobile shear for",
   S "the slip surface. The constants", getS shrResC, S "and", getS mobShrC, 
-  S "convert the resistive and mobile shear without the inluence of", --FIXME: have these constents defined somewhere else
+  S "convert the resistive and mobile shear without the inluence of", --FIXME: have these constants defined somewhere else
   S "interslice forces, to a calculation considering the interslice forces"]
 
 --

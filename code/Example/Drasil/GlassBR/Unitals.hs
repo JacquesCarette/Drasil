@@ -10,6 +10,7 @@ import Drasil.GlassBR.Concepts (annealedGlass, aR, fullyTGlass, glassTypeFac,
   stdOffDist, glaPlane, responseTy)
 
 import Data.Drasil.SI_Units
+import Data.Drasil.Constraints
 import Data.Drasil.Utils (symbolMapFun, mkDataDef, getS)
 import Data.Drasil.SentenceStructures (foldlSent, displayConstrntsAsSet,
   foldlsC, foldlOptions)
@@ -64,7 +65,7 @@ gbInputDataConstraints = (map uncrtnw gbInputsWUnitsUncrtn) ++
 
 plate_len = uqcND "plate_len" (nounPhraseSP "plate length (long dimension)")
   lA metre Real 
-  [ physc $ \c -> c :> (Dbl 0),
+  [ gtZeroConstr,
     physc $ \c -> (c / (C plate_width)) :> (Dbl 1),
     sfwrc $ \c -> (C dim_min) :<= c,
     sfwrc $ \c -> c :<= (C dim_max),
@@ -72,7 +73,7 @@ plate_len = uqcND "plate_len" (nounPhraseSP "plate length (long dimension)")
 
 plate_width = uqcND "plate_width" (nounPhraseSP "plate width (short dimension)")
   lB metre Real
-  [ physc $ \c -> c :> (Dbl 0),
+  [ gtZeroConstr,
     physc $ \c -> c :< (C plate_len),
     sfwrc $ \c -> (C dim_min) :<= c,
     sfwrc $ \c -> c :<= (C dim_max),
@@ -80,7 +81,7 @@ plate_width = uqcND "plate_width" (nounPhraseSP "plate width (short dimension)")
 
 pb_tol = uvc "pb_tol" (nounPhraseSP "tolerable probability of breakage") 
   (sub cP (Atomic "btol")) Real
-  [ physc $ \c -> (Dbl 0) :< c ,
+  [ gtZeroConstr,
     physc $ \c -> c :< (Dbl 1) ] (Dbl 0.008) (0.001)
 
 char_weight = uqcND "char_weight" (nounPhraseSP "charge weight") 
@@ -91,11 +92,11 @@ char_weight = uqcND "char_weight" (nounPhraseSP "charge weight")
 
 tNT = uvc "tNT" (nounPhraseSP "TNT equivalent factor")
   (Atomic "TNT") Integer
-  [ physc $ \c -> c :> (Dbl 0) ] (1) defaultUncrt
+  [ gtZeroConstr ] (1) defaultUncrt
 
 standOffDist = uqcND "standOffDist" (nounPhraseSP "stand off distance") 
   (Atomic "SD") metre Real
-  [ physc $ \c -> c :> (Dbl 0),
+  [ gtZeroConstr,
     sfwrc $ \c -> (C sd_min) :< c,
     sfwrc $ \c -> c :< (C sd_max) ] (Dbl 45) defaultUncrt
 --FIXME: ^ incorporate definition in here?
@@ -255,7 +256,6 @@ aspectRatio, glBreakage, lite, glassTy, annealedGl, fTemperedGl, hStrengthGl,
   sD, blast, blastTy, glassGeo, capacity, demandq, safeMessage, notSafe, bomb,
   explosion :: ConceptChunk
 
---FIXME: Why are there multiple copies of aspect ratio, glass type factor, etc.?
 annealedGl    = cc annealedGlass
   ("A flat, monolithic, glass lite which has uniform thickness where the " ++
     "residual surface stresses are almost zero, as defined in [5]." {-astm_C1036-})

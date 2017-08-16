@@ -1,13 +1,15 @@
 module Drasil.SSP.Unitals where --export all of it
 
 import Language.Drasil
+import Control.Lens ((^.))
+
 import Data.Drasil.SI_Units (newton, pascal, metre, degree, specific_weight)
 import Data.Drasil.Units.SolidMechanics (stiffness3D)
 import Data.Drasil.Quantities.Physics as QP (force, pressure)
 import Data.Drasil.Quantities.SolidMechanics as SM (nrmStrss, elastMod, poissnsR, stffness)
 import Data.Drasil.Units.Physics (momentOfForceU)
 import Drasil.SSP.Defs (fs_concept)
-import Control.Lens ((^.))
+import Data.Drasil.Constraints
 
 sspSymbols :: [CQSWrapper]
 sspSymbols = (map cqs sspInputs) ++ (map cqs sspOutputs) ++
@@ -50,9 +52,6 @@ sspInputs  = [elasticMod, cohesion, poissnsRatio, fricAngle, dryWeight,
 sspOutputs :: [ConstrConcept]
 sspOutputs = [fs, coords, dx_i, dy_i]
 
-gtZeroConstr :: [Constraint] --FIXME: move this somewhere in Data?
-gtZeroConstr = [physc $ (:<) (Int 0)]
-
 monotonicIn :: [Constraint]  --FIXME: Move this?
 monotonicIn = [physc $ \c ->
   State [Forall c, Forall $ [C index] `IsIn` Natural]
@@ -69,11 +68,11 @@ fs, coords, dx_i, dy_i :: ConstrConcept
 {-Intput Variables-}
 --FIXME: add (x,y) when we can index or make related unitals
 
-elasticMod = uq (constrained' SM.elastMod gtZeroConstr (Dbl 15000)) defultUncrt
+elasticMod = uq (constrained' SM.elastMod [gtZeroConstr] (Dbl 15000)) defultUncrt
 
 cohesion     = uqc "c'" (cn $ "effective cohesion")
   "internal pressure that sticks particles of soil together"
-  (prime $ Atomic "c") pascal Real gtZeroConstr (Dbl 10) defultUncrt
+  (prime $ Atomic "c") pascal Real [gtZeroConstr] (Dbl 10) defultUncrt
 
 poissnsRatio = uq (constrained' SM.poissnsR
   [physc $ \c -> (Int 0) :< c :< (Int 1)] (Dbl 0.4)) defultUncrt
@@ -86,17 +85,17 @@ fricAngle    = uqc "varphi'" (cn $ "effective angle of friction")
 
 dryWeight   = uqc "gamma" (cn $ "dry unit weight")
   "The weight of a dry soil/ground layer divided by the volume of the layer."
-  (Greek Gamma_L) specific_weight Real gtZeroConstr
+  (Greek Gamma_L) specific_weight Real [gtZeroConstr]
   (Dbl 20) defultUncrt
 
 satWeight   = uqc "gamma_sat" (cn $ "saturated unit weight")
   "The weight of saturated soil/ground layer divided by the volume of the layer."
-  (sub (Greek Gamma_L) (Atomic "Sat")) specific_weight Real gtZeroConstr
+  (sub (Greek Gamma_L) (Atomic "Sat")) specific_weight Real [gtZeroConstr]
   (Dbl 20) defultUncrt
 
 waterWeight = uqc "gamma_w" (cn $ "unit weight of water")
   "The weight of one cubic meter of water."
-  (sub (Greek Gamma_L) lW) specific_weight Real gtZeroConstr
+  (sub (Greek Gamma_L) lW) specific_weight Real [gtZeroConstr]
   (Dbl 9.8) defultUncrt
   
 constant_a  = uqc "a" (cn "constant") fixme
@@ -109,7 +108,7 @@ constant_K  = uqc "kappa" (cn "constant") fixme
   (Greek Kappa_L) pascal Real [] (Dbl 0) defultUncrt
 
 {-Output Variables-} --FIXME: See if there should be typical values
-fs          = constrained' (cvR fs_concept (Atomic "FS")) gtZeroConstr (Dbl 1)
+fs          = constrained' (cvR fs_concept (Atomic "FS")) [gtZeroConstr] (Dbl 1)
 
 coords      = cuc' "(x,y)"
   (cn $ "cartesian position coordinates" )

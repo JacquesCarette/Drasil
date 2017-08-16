@@ -8,14 +8,16 @@ spencerSmith, henryFrankis, nKoothoor, dParnas, daAruliah, gWilson,
   brooks, mLightstone, lLai, pjAgerfalk, nKraiem, jRalyte, jBueche,
   fIncropera, dDewitt, tBergman, aLavine, jRobertson, sRobertson, 
   wlBeason, tlKohutek, jmBracci, qhQian, dyZhu, cfLee, grChen, dgFredlund,
-  jKrahn, dStolle, yCLi, ymChen, tltZhan, ssLing, pjCleall, pGuo :: Person
-
+  jKrahn, dStolle, yCLi, ymChen, tltZhan, ssLing, pjCleall, pGuo,
+  mCampidelli :: Person
+  
 pjAgerfalk   = person    "PJ"                        "Agerfalk"
 daAruliah    = personWM  "D"         ["A"]           "Aruliah"
 wlBeason     = personWM  "W"         ["Lynn"]        "Beason"
 tBergman     = personWM  "T"         ["L"]           "Bergman"
 jmBracci     = personWM  "Joseph"    ["M"]           "Bracci"
 jBueche      = personWM  "J"         ["Frederick"]   "Bueche"
+mCampidelli  = person    "Manuel"                    "Campidelli"
 grChen       = personWM' "G"         ["R"]           "Chen"
 ymChen       = person'   "Yun-Min"                   "Chen"
 pjCleall     = personWM  "Peter"     ["John"]        "Cleall"

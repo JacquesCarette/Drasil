@@ -459,7 +459,7 @@ a number of fields (glass type, dimensions, TNT equivalent factor,
 standoff distance, etc.).
 
 The output of GlassBR is whether or not the glass slab is considered safe,
-determined by calculating the probability of breakage.  This calculution involves
+determined by calculating the probability of breakage.  This calculation involves
 interpolation from several tabulated values, as some of the quantities have
 as yet not well-accepted model beyond empirical interpolation from experiments.
 
@@ -477,7 +477,7 @@ code, as a means to illustrate the use of Drasil.
 Let us start by taking a look at a data definition for the tolerable stress
 distribution factor (\jtol{}) for GlassBR. Figure~\ref{Fig_Jtolpdf} shows
 \jtol{} as rendered by \texttt{pdflatex}, from the Drasil-generated LaTeX 
-which came from the \jtol{} quantity chunk. We can also generate the documents
+that came from the \jtol{} quantity chunk. We can also generate the documents
 in HTML. The data definition is part of the requirements for the GlassBR
 software.  As this requirement is in the form of a (solved) equation, it is
 straightforward to generate code to
@@ -515,7 +515,6 @@ def calc_j_tol(inparams):
 %\caption{Python code to Calculate \jtol{}}
 %\label{Fig_JtolPython}
 %\end{figure*}
-
 
 The source knowledge for generating both the documentation and the code has been
 captured using chunks, as shown in Figure~\ref{Fig_JtolDrasil}. The value of
@@ -584,7 +583,14 @@ tolStrDisFac_eq = log (log (1 / (1 - C pb_tol)) * ((Grouping (C plate_len *
 \end{figure*}
 
 Similarly to the knowledge for \jtol{}, we have captured all of the knowledge
-pertaining to GlassBR in chunks. Many of the chunks pertaining to documentation concepts were previously captured in our knowledge-base, under Data.Drasil.Concepts.Documentation, and are being reused in the GlassBR implementation. Figure~\ref{Fig_docConcepts} shows a number of these chunks. The chunks shown are all \textit{NamedChunks}, an instance of the \textit{NamedIdea} class, which have been constructed using other, smaller chunks of knowledge. In the case of \inlHask{prpsOfDoc}, we have used a special combinator, `\inlHask{of_}', for increased readability.
+pertaining to GlassBR in chunks. Many of the chunks pertaining to documentation
+concepts were previously captured in our knowledge-base, under
+Data.Drasil.Concepts.Documentation, and are being reused in the GlassBR
+implementation. Figure~\ref{Fig_docConcepts} shows a number of these chunks. The
+chunks shown are all \textit{NamedChunks}, an instance of the \textit{NamedIdea}
+class, which have been constructed using other, smaller chunks of knowledge. In
+the case of \inlHask{prpsOfDoc}, we have used a special combinator,
+`\inlHask{of_}', for increased readability.
 
 \begin{figure}%[p]
 \begin{lstlisting}[frame=single, showstringspaces=false, basicstyle=\small, upquote=false]
@@ -604,12 +610,16 @@ prpsOfDoc = npnc "prpsOfDoc"
 \label{Fig_docConcepts}
 \end{figure}
 
-The knowledge used by GlassBR can be assembled and extracted
-in different ways to produce a multitude of views, i.e. our artifacts, including
-the SRS. For a sense of what we can generate from this knowledge, see the table
-of contents for the currently generated GlassBR SRS
-(Figure~\ref{Fig_ToCGlassBRSRS}). Again, our documents can be generated in TeX
-and/or HTML for more flexibility. Both contain automated internal referencing.
+The knowledge used by GlassBR can be assembled and extracted in different ways
+to produce a multitude of views, i.e. our artifacts, including the SRS. For a
+sense of what we can generate from this knowledge, see the table of contents for
+the currently generated GlassBR SRS (Figure~\ref{Fig_ToCGlassBRSRS}). The SRS
+template for GlassBR, and the other four examples, follows that from Smith and
+Lai~\cite{SmithAndLai2005}, although a different recipe could be used to
+generate an alternate view of the requirements.  For instance, the requirements
+documentation generated for some audiences could provide less detail on equation
+derivations.  Again, our documents can be generated in TeX and/or HTML for more
+flexibility. Both contain automated internal referencing.
 
 \begin{figure}
 \begin{center}

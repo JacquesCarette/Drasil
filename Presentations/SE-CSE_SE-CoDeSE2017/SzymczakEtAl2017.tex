@@ -484,7 +484,8 @@ straightforward to generate code to
 calculate \jtol{} from this.  A python version of this code can be seen in
 Figure~\ref{Fig_JtolPython}). From the \jtol{} quantity chunk, we can generate
 this code as well as the documentation!  Not only that, but thanks to the
-incorporation of GOOL, we can also generate Java, Lua, C\#, etc.
+incorporation of GOOL, we can also generate Java, Lua, C\#, etc. We present
+the generated C\# code for reference in Figure~\ref{Fig_JtolCS}.
 
  \begin{figure*}
  \begin{lstlisting}[language=python, frame=single, showstringspaces=false, basicstyle=\small]
@@ -498,6 +499,21 @@ def calc_j_tol(inparams):
  \caption{Python code to Calculate \jtol{}}
  \label{Fig_JtolPython}
  \end{figure*}
+ 
+\ds{We have options for C\#, Java, C++, and Python gen'd code.}
+\begin{figure*}
+\begin{lstlisting}[frame=single, showstringspaces=false, basicstyle=\small]
+public static double J_tol(InputParameters inParams, double h, double LDF) {
+    return Math.Log((Math.Log(1 / (1 - inParams.P_btol))) * 
+        ((Math.Pow(inParams.a / 1000 * inParams.b / 1000, Constants.m - 1)) / 
+        (Constants.k * ((Math.Pow(Constants.E * 1000 * (Math.Pow(h, 2)), Constants.m)) * LDF))));
+}
+ \end{lstlisting}
+ \caption{Generated C\# code to Calculate \jtol{}}
+ \label{Fig_JtolCS}
+ \end{figure*}
+ 
+
 
 %\spr{In reference to Figure 5:  The code that was here was the output of the 
 %manually written GOOL code.  I switched it to 

@@ -132,7 +132,7 @@ generateCodeD g = let s = codeSpec g
 genModulesD :: Generator -> [Module]
 genModulesD g = genInputMod g (inputs $ codeSpec g) (cMap $ codeSpec g)
              ++ [genConstMod g]
-             ++ map (\(FuncMod n d) -> genCalcMod g n d) (fMods $ codeSpec g)
+            -- ++ map (\(FuncMod n d) -> genCalcMod g n d) (fMods $ codeSpec g)
              ++ genOutputMod g (outputs $ codeSpec g)
              ++ map (genModDef g) (mods $ codeSpec g) -- hack
 
@@ -525,8 +525,8 @@ compactCaseUnary op (Case c) = Case (map (\(e, r) -> (op e, r)) c)
 compactCaseUnary op a        = op (compactCase a)
 
 -- medium hacks --
-genModDef :: Generator -> CS.Mod -> Module
-genModDef g (CS.Mod n fs) = buildModule n [] [] (map (genFunc g) fs) []
+genModDef :: Generator -> DMod -> Module
+genModDef g (DMod libs (CS.Mod n fs)) = buildModule n libs [] (map (genFunc g) fs) []
 
 genFunc :: Generator -> Func -> Method
 genFunc g (FDef (FuncDef n i o s)) = publicMethod g (methodType $ convType o) n (getParams g i) [ block (map (convStmt g) s) ]

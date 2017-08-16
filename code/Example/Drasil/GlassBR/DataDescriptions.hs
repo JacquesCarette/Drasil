@@ -16,14 +16,14 @@ read_table = funcData "read_table" $
   ]
   
 readTableMod :: Mod
-readTableMod = Mod "ReadTable" [read_table]
+readTableMod = packmod "ReadTable" [read_table]
 
 -----
 
 --from defaultInput.txt:
 
 inputMod :: Mod
-inputMod = Mod "InputFormat" [glassInputData]
+inputMod = packmod "InputFormat" [glassInputData]
 
 glassInputData :: Func
 glassInputData = funcData "get_input" $

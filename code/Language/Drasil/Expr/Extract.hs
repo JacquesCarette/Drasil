@@ -124,6 +124,9 @@ codevars (NotIn a _)  = nub (concat $ map codevars a)
 codevars (State a b)  = nub ((concat $ map (codevars . quant) a) ++ codevars b)
 codevars (Matrix a)   = nub (concat $ map (concat . map codevars) a)
 codevars (Index a i)  = nub (codevars a ++ codevars i)
+codevars (Len a)      = nub (codevars a)
+codevars (Append a b) = nub (codevars a ++ codevars b) 
+
 
 -- | Helper function for vars and dep, gets the Expr portion of a UFunc
 unpack :: UFunc -> Expr

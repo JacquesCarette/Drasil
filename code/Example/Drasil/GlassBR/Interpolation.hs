@@ -5,30 +5,30 @@ import Language.Drasil
 {--}
 
 v_y_2, v_y_1, v_x_2, v_x_1, v_x :: VarChunk
-v_y_1  = makeVC "y_1"    (nounPhraseSP "y1")   (sub (lY) (Atomic "1"))
-v_y_2  = makeVC "y_2"    (nounPhraseSP "y2")   (sub (lY) (Atomic "2"))
-v_x_1  = makeVC "x_1"    (nounPhraseSP "x1")   (sub (lX) (Atomic "1"))
-v_x_2  = makeVC "x_2"    (nounPhraseSP "x2")   (sub (lX) (Atomic "2"))
-v_x    = makeVC "x"      (nounPhraseSP "x")    lX -- = params.wtnt from mainFun.py
+v_y_1  = makeVC "v_y_1"    (nounPhraseSP "y1")   (sub (lY) (Atomic "1"))
+v_y_2  = makeVC "v_y_2"    (nounPhraseSP "y2")   (sub (lY) (Atomic "2"))
+v_x_1  = makeVC "v_x_1"    (nounPhraseSP "x1")   (sub (lX) (Atomic "1"))
+v_x_2  = makeVC "v_x_2"    (nounPhraseSP "x2")   (sub (lX) (Atomic "2"))
+v_x    = makeVC "v_x"      (nounPhraseSP "x")    lX -- = params.wtnt from mainFun.py
 
 v_v, v_x_z_1, v_y_z_1, v_x_z_2, v_y_z_2, v_mat, v_col,
   v_i, v_j, v_k, v_z, v_z_array, v_y_array, v_x_array, v_y, v_arr :: VarChunk
-v_v       = makeVC "v"          (nounPhraseSP "v")       lV
-v_i       = makeVC "i"          (nounPhraseSP "i")       lI
-v_j       = makeVC "j"          (nounPhraseSP "j")       lJ
-v_k       = makeVC "k"          (nounPhraseSP "k")       lK
-v_z       = makeVC "z"          (nounPhraseSP "z")       lZ
-v_z_array = vc "z_array" (nounPhraseSP "z_array") (sub (lZ) (Atomic "array")) (Vect Real)
-v_y_array = vc "y_array" (nounPhraseSP "y_array") (sub (lY) (Atomic "array")) (Vect $ Vect Real)
-v_x_array = vc "x_array" (nounPhraseSP "x_array") (sub (lX) (Atomic "array")) (Vect $ Vect Real)
-v_y       = makeVC "y"          (nounPhraseSP "y")       lY
-v_arr     = makeVC "arr"        (nounPhraseSP "arr")     (Atomic "arr") --FIXME: temporary variable for indInSeq?
-v_x_z_1   = makeVC "x_z_1"   (nounPhraseSP "x_z_1")     (Atomic "x_z_1")
-v_y_z_1   = makeVC "y_z_1"   (nounPhraseSP "y_z_1")     (Atomic "y_z_1")
-v_x_z_2   = makeVC "x_z_2"   (nounPhraseSP "x_z_2")     (Atomic "x_z_2")
-v_y_z_2   = makeVC "y_z_2"   (nounPhraseSP "y_z_2")     (Atomic "y_z_2")
-v_mat     = makeVC "mat"     (nounPhraseSP "mat")       (Atomic "mat")
-v_col     = makeVC "col"     (nounPhraseSP "col")       (Atomic "col")
+v_v       = makeVC "v_v"          (nounPhraseSP "v")       lV
+v_i       = makeVC "v_i"          (nounPhraseSP "i")       lI
+v_j       = makeVC "v_j"          (nounPhraseSP "j")       lJ
+v_k       = makeVC "v_k"          (nounPhraseSP "k")       lK
+v_z       = makeVC "v_z"          (nounPhraseSP "z")       lZ
+v_z_array = vc "v_z_array" (nounPhraseSP "z_array") (sub (lZ) (Atomic "array")) (Vect Real)
+v_y_array = vc "v_y_array" (nounPhraseSP "y_array") (sub (lY) (Atomic "array")) (Vect $ Vect Real)
+v_x_array = vc "v_x_array" (nounPhraseSP "x_array") (sub (lX) (Atomic "array")) (Vect $ Vect Real)
+v_y       = makeVC "v_y"          (nounPhraseSP "y")       lY
+v_arr     = makeVC "v_arr"        (nounPhraseSP "arr")     (Atomic "arr") --FIXME: temporary variable for indInSeq?
+v_x_z_1   = makeVC "v_x_z_1"   (nounPhraseSP "x_z_1")     (Atomic "x_z_1")
+v_y_z_1   = makeVC "v_y_z_1"   (nounPhraseSP "y_z_1")     (Atomic "y_z_1")
+v_x_z_2   = makeVC "v_x_z_2"   (nounPhraseSP "x_z_2")     (Atomic "x_z_2")
+v_y_z_2   = makeVC "v_y_z_2"   (nounPhraseSP "y_z_2")     (Atomic "y_z_2")
+v_mat     = makeVC "v_mat"     (nounPhraseSP "mat")       (Atomic "mat")
+v_col     = makeVC "v_col"     (nounPhraseSP "col")       (Atomic "col")
 
 linInterp :: Func
 linInterp = funcDef "lin_interp" [v_x_1, v_y_1, v_x_2, v_y_2, v_x] Rational 
@@ -114,7 +114,7 @@ interpZ = funcDef "interpZ" [v_x_array, v_y_array, v_z_array, v_x, v_y] Rational
   ]
 
 interpMod :: Mod
-interpMod = Mod "Interpolation" $ [linInterp, indInSeq, matrixCol, interpY, interpZ]
+interpMod = packmod "Interpolation" $ [linInterp, indInSeq, matrixCol, interpY, interpZ]
 
 -- hack  (more so than the rest of the module!)
 asExpr :: Func -> Expr

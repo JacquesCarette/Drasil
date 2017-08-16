@@ -131,7 +131,7 @@ sspChoices = Choices {
 }  
   
 ssp_code :: CodeSpec
-ssp_code = addModDefs (codeSpec' ssp_si sspChoices) [sspInputMod]
+ssp_code = codeSpec' ssp_si sspChoices [sspInputMod]
 
 
 -- SYMBOL MAP HELPERS --

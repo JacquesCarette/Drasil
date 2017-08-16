@@ -402,17 +402,18 @@ work, the students have demonstrated that using Drasil does not require prior
 knowledge of Haskell and code generation techniques.  These students come from
 a variety of disciplines -- Chemical Engineering, Applied Mathematics, Computer
 Science and Software Engineering, with levels of education ranging from first
-to third year. None of the students had prior knowledge of Haskell.  Yet all
-picked up the ideas quickly, and we able to make very significant contributions.
-Most were already able to make contributions on their second day of work -- and
-some were able to do substantial changes to the infrastructure too.
+to third year of an undergraduate program. None of the students had prior 
+knowledge of Haskell. Yet all picked up the ideas quickly, and were able to make 
+very significant contributions. Most were already able to make contributions on 
+their second day of work -- and some were able to do substantial changes to the 
+infrastructure too.
 
 The current incarnation of the Drasil framework can be found on GitHub at 
 \href{https://github.com/JacquesCarette/literate-scientific-software}
 {https://github.com/JacquesCarette/literate-scientific-software}. We use code
 peer-reviews throughout the development to correct missteps early on, and 
 keep an up-to-date issue tracker for any bugs, feature requests, or other 
-``to-do'' tasks. This has been an invaluable means of communications, 
+``to-do'' tasks. This has been an invaluable means of communication, 
 especially when various team members were travelling, or simply working
 asynchronously.
 
@@ -427,7 +428,7 @@ are found and abstracted, often this reveals new patterns.
 By adopting a practical, example-driven, ``bottom-up,'' approach for the
 development of Drasil, we have avoided some of the problems inherent in a more
 theoretical, or ``top-down,'' approach.  The size, scope and complexity of SCS
-means that attempting to imagine a priori the DSLs that we would need would be
+means that attempting to imagine a priori the DSLs we would need would be
 exceedingly difficult.  We would invariably leave something out and likely
 provide too simple a framework -- or spend a huge amount of time designing
 features that turn out not to be needed in practice.  Rather than try to
@@ -461,7 +462,7 @@ standoff distance, etc.).
 The output of GlassBR is whether or not the glass slab is considered safe,
 determined by calculating the probability of breakage.  This calculation involves
 interpolation from several tabulated values, as some of the quantities have
-as yet not well-accepted model beyond empirical interpolation from experiments.
+as yet not well-accepted models beyond empirical interpolation from experiments.
 
 We will follow one specific piece of knowledge through from requirements to
 code, as a means to illustrate the use of Drasil.
@@ -476,7 +477,7 @@ code, as a means to illustrate the use of Drasil.
 
 Let us start by taking a look at a data definition for the tolerable stress
 distribution factor (\jtol{}) for GlassBR. Figure~\ref{Fig_Jtolpdf} shows
-\jtol{} as rendered by \texttt{pdflatex}, from the Drasil-generated LaTeX 
+\jtol{} as rendered by \texttt{pdflatex}, from the Drasil-generated \LaTeX 
 that came from the \jtol{} quantity chunk. We can also generate the documents
 in HTML. The data definition is part of the requirements for the GlassBR
 software.  As this requirement is in the form of a (solved) equation, it is
@@ -955,10 +956,14 @@ advantages are well worth the cost.
 
 \begin{acks}
 
-Drasil would not have progressed this quickly without the efforts of our summer research assistants: Henry Madej, Aaron Mori, Maryyam Niazi, Nicholas Richardson, and Daniel Scime.
+Drasil would not have progressed this quickly without the efforts of our
+summer research assistants: Henry Madej, Aaron Mori, Maryyam Niazi,
+Nicholas Richardson, and Daniel Scime.
 
-The assistance of McMaster University's Dr.\ Manuel Campidelli, Dr.\ Wael El-Dakhakhni and
-Dr.\ Michael Tait with the GlassBR example is greatly appreciated.
+The assistance of McMaster University's Dr.\ Manuel Campidelli, Dr.\ Wael 
+El-Dakhakhni, and Dr.\ Michael Tait with the GlassBR example is
+greatly appreciated.
+
 
 \end{acks}
 

@@ -53,7 +53,7 @@ import Drasil.GlassBR.Unitals (stressDistFac, aspectR, dimlessLoad,
   constant_LoadDur, constant_ModElas, constant_M, constant_K, loadTypes,
   load, glassTypes, probBreak, termsWithAccDefn, termsWithDefsOnly,
   gbConstants, gbConstrained, gbOutputs, gbInputs, this_symbols,
-  glBreakage, capacity)
+  glBreakage, capacity, constant_LoadDF)
 import Drasil.GlassBR.Concepts (aR, lShareFac, gLassBR, stdOffDist,
   glaSlab, blastRisk, glass, responseTy, cantilever, beam, plane, edge,
   glaPlane, glassBRProg, ptOfExplsn, acronyms)
@@ -62,7 +62,7 @@ import Drasil.GlassBR.Modules (modules)
 import Drasil.GlassBR.Reqs (reqs)
 import Drasil.GlassBR.TMods (tModels, t1SafetyReq, t2SafetyReq)
 import Drasil.GlassBR.IMods (iModels, calOfCap, calOfDe, probOfBr)
-import Drasil.GlassBR.DataDefs (dataDefns, gbQDefns, hFromt, loadDF,
+import Drasil.GlassBR.DataDefs (dataDefns, gbQDefns, hFromt,
   strDisFac, nonFL, dimLL, glaTyFac, tolStrDisFac, tolPre)
 import Drasil.GlassBR.References (gbCitations)
 import Drasil.GlassBR.Interpolation (interpMod)
@@ -225,7 +225,7 @@ requiredInputs = (map qs [plate_len, plate_width, char_weight])
   ++ (map qs [glass_type, nom_thick])
 
 s7_1_req6_pulledList :: [QDefinition]
-s7_1_req6_pulledList = [loadDF, nonFL, glaTyFac, dimLL, tolPre,
+s7_1_req6_pulledList = [nonFL, glaTyFac, dimLL, tolPre,
   tolStrDisFac, strDisFac, hFromt]
 
 --Used in "Non-Functional Requirements" Section--
@@ -458,7 +458,7 @@ assumption4 = mkAssump "assumption4"   (a4Desc (load_dur))   --standardValues
 assumption5 = mkAssump "assumption5"   a5Desc              --glassLiteAssmp
 assumption6 = mkAssump "assumption6"   a6Desc              --bndryConditions
 assumption7 = mkAssump "assumption7"   a7Desc              --responseTyAssump
-assumption8 = mkAssump "assumption8"   (a8Desc (loadDF))   --ldfConstant
+assumption8 = mkAssump "assumption8"   (a8Desc (constant_LoadDF))   --ldfConstant
 
 a1Desc :: Sentence
 a1Desc = foldlSent [S "The standard E1300-09a for",
@@ -574,7 +574,7 @@ s7_1_req1Table = Table
 req2Desc = foldlSent [S "The", phrase system,
   S "shall set the known", plural value +: S "as follows",
   foldlList [(foldlsC (map getS assumption4_constants) `followA` 4),
-  ((getS loadDF) `followA` 8), (short lShareFac `followA` 5)]]
+  ((getS constant_LoadDF) `followA` 8), (short lShareFac `followA` 5)]]
 
 --ItemType
 {-s7_1_req2 = (Nested (S "The" +:+ phrase system +:+
@@ -699,7 +699,7 @@ s9_theorysRef = map (refFromType Theory gbSymbMap) tModels
 s9_instaModel = ["IM1", "IM2", "IM3"]
 s9_instaModelRef = map (refFromType Theory gbSymbMap) iModels
 
-s9_dataDef =  ["DD1", "DD2", "DD3", "DD4", "DD5", "DD6", "DD7", "DD8", "DD9"]
+s9_dataDef =  ["DD1", "DD2", "DD3", "DD4", "DD5", "DD6", "DD7", "DD8"]
 s9_dataDefRef = map (refFromType Data gbSymbMap) dataDefns
 
 s9_data  = ["Data Constraints"]

@@ -1,5 +1,5 @@
 module Drasil.GlassBR.DataDefs (dataDefns, gbQDefns, 
-  risk, hFromt, loadDF, strDisFac, nonFL, glaTyFac, dimLL, tolPre,
+  risk, hFromt, strDisFac, nonFL, glaTyFac, dimLL, tolPre,
   tolStrDisFac) where
 
 import Language.Drasil
@@ -22,11 +22,11 @@ import Data.Drasil.Concepts.Documentation (datum, user)
 ----------------------
 
 dataDefns :: [QDefinition]
-dataDefns = [risk, hFromt, loadDF, strDisFac, nonFL, glaTyFac, dimLL, tolPre,
+dataDefns = [risk, hFromt, strDisFac, nonFL, glaTyFac, dimLL, tolPre,
   tolStrDisFac]
 
 gbQDefns :: [Block QDefinition]
-gbQDefns = [Parallel hFromt {-DD2-} [loadDF {-DD3-}, glaTyFac {-DD6-}]] ++ --can be calculated on their own
+gbQDefns = [Parallel hFromt {-DD2-} [glaTyFac {-DD6-}]] ++ --can be calculated on their own
   map (\x -> Parallel x []) [dimLL {-DD7-}, strDisFac {-DD4-}, risk {-DD1-},
   tolStrDisFac {-DD9-}, tolPre {-DD8-}, nonFL {-DD5-}] 
 
@@ -38,7 +38,7 @@ risk_eq :: Expr
 risk_eq = ((C sflawParamK) / (Grouping ((C plate_len) *
   (C plate_width))) :^ ((C sflawParamM) - 1) *
   (Grouping (C mod_elas) * (square (Grouping (C act_thick))))
-  :^ (C sflawParamM) * (C loadDF) * (exp (C stressDistFac)))
+  :^ (C sflawParamM) * (C lDurFac) * (exp (C stressDistFac)))
 
 risk :: QDefinition
 risk = mkDataDef' risk_fun risk_eq (aGrtrThanB +:+ hRef +:+ ldfRef +:+ jRef)
@@ -57,11 +57,11 @@ hFromt = mkDataDef' act_thick hFromt_eq (hMin)
 
 --DD3--
 
-loadDF_eq :: Expr 
-loadDF_eq = (Grouping ((C load_dur) / (60))) :^ ((C sflawParamM) / (16))
+-- loadDF_eq :: Expr 
+-- loadDF_eq = (Grouping ((C load_dur) / (60))) :^ ((C sflawParamM) / (16))
 
-loadDF :: QDefinition
-loadDF = mkDataDef lDurFac loadDF_eq
+-- loadDF :: QDefinition
+-- loadDF = mkDataDef lDurFac loadDF_eq
 
 --DD4--
 
@@ -119,7 +119,7 @@ tolStrDisFac_eq = log (log ((1) / ((1) - (C pb_tol)))
   ((C sflawParamM) - (1)) / ((C sflawParamK) *
   (Grouping (Grouping ((C mod_elas) *
   (square (Grouping (C act_thick))))) :^ 
-  (C sflawParamM) * (C loadDF))))))
+  (C sflawParamM) * (C lDurFac))))))
 
 tolStrDisFac :: QDefinition
 tolStrDisFac = mkDataDef' sdf_tol tolStrDisFac_eq 
@@ -137,7 +137,7 @@ hRef = (getS nom_thick +:+ S "is the true thickness" `sC`
   S "which is based on the nominal thicknesses" +:+. S "as shown in DD2")
 
 ldfRef :: Sentence
-ldfRef = (getS loadDF +:+ S "is the" +:+ phrase loadDF +:+. 
+ldfRef = (getS lDurFac +:+ S "is the" +:+ phrase lDurFac +:+. 
   S "as defined by DD3")
 
 pbTolUsr :: Sentence

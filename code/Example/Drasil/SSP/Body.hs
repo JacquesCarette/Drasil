@@ -1,10 +1,10 @@
 module Drasil.SSP.Body (ssp_srs, ssp_mg, ssp_code) where
 
+import Language.Drasil
+import Data.Drasil.SI_Units
 import Control.Lens ((^.))
 import Prelude hiding (sin, cos, tan)
 
-import Language.Drasil
-import Data.Drasil.SI_Units (metre, degree, newton, pascal)
 import Data.Drasil.People (henryFrankis)
 
 import Drasil.SSP.Assumptions (sspAssumptions)
@@ -27,14 +27,17 @@ import Drasil.SSP.Requirements (sspRequirements, sspInputDataTable)
 import Drasil.SSP.TMods (sspTMods)
 import Drasil.SSP.Unitals (sspSymbols, sspInputs, sspOutputs,
   sspConstrained, index, fs, numbSlices)
-import qualified Drasil.SRS as SRS
+import qualified Drasil.SRS as SRS (physSyst, funcReq, likeChg, inModel,
+  missingP)
 
 import Drasil.Sections.ReferenceMaterial (intro)
 import Drasil.DocumentLanguage (TSIntro, DocDesc, RefSec(..),
   RefTab(..), tsymb'', LFunc(..),
   IntroSub(..), TSIntro(..), TConvention(..),
   DocSection(..), mkDoc, IntroSec(..))
-import Drasil.Sections.SpecificSystemDescription
+import Drasil.Sections.SpecificSystemDescription (inDataConstTbl,
+  outDataConstTbl, dataConstraintUncertainty, goalStmtF, termDefnF,
+  probDescF, solChSpecF, specSysDesF)
 import Drasil.Sections.Requirements (reqF, nonFuncReqF)
 import Drasil.Sections.GeneralSystDesc (genSysF)
 import Drasil.Sections.AuxiliaryConstants (valsOfAuxConstantsF)
@@ -59,7 +62,7 @@ import Data.Drasil.Software.Products (sciCompS)
 import Data.Drasil.Utils (symbolMapFun,
   getS, enumBullet, enumSimple, weave)
 import Data.Drasil.SentenceStructures (sOr, acroDD,
-  foldlSent, ofThe, sAnd, foldlSP, foldlList)
+  foldlSent, ofThe, sAnd, foldlSP, foldlList, foldlSent_)
 
 import Drasil.Template.MG (mgDoc)
 import Drasil.Template.DD (makeDD)
@@ -153,10 +156,10 @@ sspSymMapD = symbolMapFun sspSymMap Data
 -- SECTION 1.2 --
 --automatically generated in mkSRS using the intro below
 
-s1_2_intro = [TSPurpose, TypogConvention [Verb $
-  plural value +:+ S "with a subscript" +:+ getS index +:+ S "implies that the"
-  +:+ phrase value +:+ S "will be taken at and analyzed at a" +:+ phrase slice
-  `sOr` phrase slice +:+ S "interface composing the total slip" +:+ phrase mass]]
+s1_2_intro = [TSPurpose, TypogConvention [Verb $ foldlSent_
+  [plural value, S "with a subscript", getS index, S "implies that the",
+  phrase value, S "will be taken at and analyzed at a", phrase slice
+  `sOr` phrase slice, S "interface composing the total slip", phrase mass]]]
 
 -- SECTION 1.3 --
 --automatically generated in mkSRS
@@ -166,27 +169,31 @@ startIntro, kSent :: Sentence
 startIntro = foldlSent [S "A", phrase slope, S "of geological",
   phrase mass `sC` S "composed of", phrase soil, S "and rock, is subject", 
   S "to the influence of gravity on the" +:+. phrase mass, S "For an unstable",
-  phrase slope +:+. S "this can cause instability in the form of soil/rock movement",
-  S "The", plural effect, S "of soil/rock movement can range from inconvenient to",
-  S "seriously hazardous, resulting in signifcant life and economic" +:+. plural loss,
-  at_start slope, S "stability is of", phrase interest, S "both when analyzing", 
-  S "natural", plural slope `sC` S "and when designing an excavated" +:+. 
-  phrase slope, at_start ssa, S "is", (S "assessment" `ofThe` S "safety of a"),
-  phrase slope `sC` S "identifying the", phrase surface,
-  S "most likely to experience slip" `sAnd` S "an index of its relative stability", 
-  S "known as the", phrase fs]
+  phrase slope, S "this can cause instability in the form" +:+.
+  S "of soil/rock movement", S "The", plural effect,
+  S "of soil/rock movement can range from inconvenient to",
+  S "seriously hazardous, resulting in signifcant life and economic" +:+.
+  plural loss, at_start slope, S "stability is of", phrase interest,
+  S "both when analyzing natural", plural slope `sC`
+  S "and when designing an excavated" +:+.  phrase slope, at_start ssa,
+  S "is", (S "assessment" `ofThe` S "safety of a" +:+ phrase slope) `sC`
+  S "identifying the", phrase surface,
+  S "most likely to experience slip" `sAnd`
+  S "an index of its relative stability known as the", phrase fs]
+
 kSent = keySent ssa
 
 keySent :: (NamedIdea a) => a -> Sentence
-keySent pname = S "a" +:+ phrase pname +:+. phrase problem +:+ S "The developed"
-  +:+ phrase program +:+ S "will be referred to as the" +:+ introduceAbb pname +:+
-  phrase program
+keySent pname = foldlSent_ [S "a", phrase pname +:+. phrase problem,
+  S "The developed", phrase program, S "will be referred to as the",
+  introduceAbb pname, phrase program]
   
 -- SECTION 2.1 --
 -- Purpose of Document automatically generated in introductionF
 prpsOfDoc_p1 :: Sentence
 prpsOfDoc_p1 = purposeDoc ssa crtSlpSrf fs how introduces analysizes
-  where how = S "assessing the stability of a" +:+ phrase slope +:+ phrase design
+  where how = S "assessing the stability of a" +:+ phrase slope +:+
+          phrase design
         introduces = phrase slope +:+ S "stability" +:+ plural issue
         analysizes = S "safe" +:+ phrase slope
 
@@ -214,7 +221,7 @@ scpEnd  = S "identify the most likely failure" +:+
   S "that will occur on the" +:+ phrase slope
 
 -- SECTION 2.3 --
--- Characteristics of the Intended Reader automatically generated in introductionF
+-- Characteristics of the Intended Reader generated in introductionF
 
 -- SECTION 2.4 --
 -- Organization automatically generated in introductionF
@@ -231,7 +238,9 @@ orgSecEnd   = S "The" +:+ plural inModel +:+ S "provide the set of" +:+
 s3 = genSysF [] userCharIntro [] []
 
 -- SECTION 3.1 --
--- User Characteristics automatically generated in genSysF with the userContraints intro below
+-- User Characteristics automatically generated in genSysF with the
+-- userContraints intro below
+
 userCharIntro :: Contents
 userCharIntro = userChar ssa [S "Calculus", titleize physics]
   [phrase soil, plural mtrlPrpty]
@@ -248,14 +257,14 @@ userChar pname understandings familiarities = foldlSP [
 
 -- SECTION 4 --
 s4 = specSysDesF end [s4_1, s4_2]
-  where end = plural definition +:+ S "and finally the" +:+ plural inModel +:+
-         S "that" +:+ phrase model +:+ S "the" +:+ phrase slope
+  where end = foldlSent_ [plural definition, S "and finally the",
+          plural inModel, S "that", phrase model, S "the", phrase slope]
 
 -- SECTION 4.1 --
 s4_1 = probDescF EmptyS ssa ending [s4_1_1, s4_1_2, s4_1_3]
-  where ending = S "evaluate the" +:+ phrase fs +:+ S "of a" +:+
-          phrase's slope +:+ phrase slpSrf +:+ S "and to calculate the" +:+
-          S "displacement that the" +:+ phrase slope +:+ S "will experience"
+  where ending = foldlSent_ [S "evaluate the", phrase fs, S "of a",
+          phrase's slope, phrase slpSrf, S "and to calculate the",
+          S "displacement that the", phrase slope, S "will experience"]
 
 -- SECTION 4.1.1 --
 s4_1_1 = termDefnF Nothing [s4_1_1_list]
@@ -272,7 +281,8 @@ s4_1_1_list = Enumeration $ Simple $
 s4_1_2 = SRS.physSyst
   [s4_1_2_p1, s4_1_2_bullets, s4_1_2_p2, fig_indexconv, fig_forceacting] []
 
-s4_1_2_p1 = physSystIntro slope how intrslce slice (S "slice base") fig_indexconv
+s4_1_2_p1 = physSystIntro slope how intrslce slice (S "slice base")
+  fig_indexconv
   where how = S "as a series of" +:+ phrase slice +:+. plural element
 
 physSystIntro :: (NamedIdea a, NamedIdea b, NamedIdea c, LayoutObj d) =>
@@ -284,26 +294,28 @@ physSystIntro what how p1 p2 p3 indexref = foldlSP [
   p3 +:+. plural property, S "The index convention for referencing which",
   phrase p1 `sOr` phrase p2, S "is being used is shown in", makeRef indexref]
 
-s4_1_2_bullets = enumBullet [
-  (at_start' itslPrpty +:+ S "convention is noted by j. The end" +:+
-    plural itslPrpty +:+ S "are usually not of" +:+ phrase interest `sC`
-    S "therefore use the" +:+ plural itslPrpty +:+ S "from" +:+ 
-    (E $ 1 :<= C index :<= (C numbSlices) :- 1)),
-  (at_start slice +:+ plural property +:+. S "convention is noted by"
-  +:+ getS index)
-  ]
+s4_1_2_bullets = enumBullet $ map foldlSent_ [
+
+  [at_start' itslPrpty, S "convention is noted by j. The end",
+  plural itslPrpty, S "are usually not of", phrase interest `sC`
+  S "therefore use the", plural itslPrpty, S "from", 
+  (E $ 1 :<= C index :<= (C numbSlices) :- 1)],
+
+  [at_start slice, plural property +:+. S "convention is noted by",
+  getS index]]
 
 s4_1_2_p2 = foldlSP [S "A", phrase fbd, S "of the", plural force,
-  S "acting on the", phrase slice, S "is displayed in", makeRef fig_forceacting]
+  S "acting on the", phrase slice, S "is displayed in",
+  makeRef fig_forceacting]
 
 fig_indexconv :: Contents
-fig_indexconv = Figure (S "Index convention for numbering" +:+
-  phrase slice `sAnd` phrase intrslce +:+
-  phrase force +:+ plural variable) "IndexConvention.png"
+fig_indexconv = Figure (foldlSent_ [S "Index convention for numbering",
+  phrase slice `sAnd` phrase intrslce,
+  phrase force, plural variable]) "IndexConvention.png"
 
 fig_forceacting :: Contents
-fig_forceacting = Figure (at_start' force +:+ S "acting on a" +:+ (phrase slice))
-  "ForceDiagram.png"
+fig_forceacting = Figure (at_start' force +:+ S "acting on a" +:+
+  phrase slice) "ForceDiagram.png"
 
 -- SECTION 4.1.3 --
 s4_1_3 = goalStmtF (map (\(x, y) -> x `ofThe` y) [
@@ -315,12 +327,14 @@ s4_1_3 = goalStmtF (map (\(x, y) -> x `ofThe` y) [
 goals_list = enumSimple 1 (short goalStmt) sspGoals
 
 -- SECTION 4.2 --
-s4_2 = solChSpecF ssa (s4_1, s6) ddEnding (EmptyS, dataConstraintUncertainty, EmptyS)
+s4_2 = solChSpecF ssa (s4_1, s6) ddEnding
+  (EmptyS, dataConstraintUncertainty, EmptyS)
   ([s4_2_1_list], s4_2_2_tmods, s4_2_3_genDefs, s4_2_4_dataDefs, 
   instModIntro1:instModIntro2:s4_2_5_IMods, [s4_2_6Table2, s4_2_6Table3]) []
+
   where ddEnding = foldlSent [at_start' definition, acroDD 1, S "to", acroDD 8,
-          S "are the", phrase force, plural variable, S "that can be solved by",
-          S "direct analysis of given" +:+. plural input_, S "The", 
+          S "are the", phrase force, plural variable, S "that can be solved",
+          S "by direct analysis of given" +:+. plural input_, S "The", 
           phrase intrslce, S "forces", acroDD 9, S "are", phrase force,
           plural variable, S "that must be written in terms of", acroDD 1, 
           S "to", acroDD 8, S "to solve"]
@@ -348,7 +362,8 @@ s4_2_4_dataDefs = (map sspSymMapD (take 13 sspDataDefs)) ++ resShrDerivation ++
   --FIXME: derivations should be with the appropriate DataDef
 
 -- SECTION 4.2.5 --
--- Instance Models is automatically generated in solChSpecF using the paragraphs below
+-- Instance Models is automatically generated in solChSpecF
+-- using the paragraphs below
 
 s4_2_5_IMods = concat $ weave [map (\x -> [sspSymMapT x]) sspIMods,
   [fctSftyDerivation, nrmShrDerivation, intrSlcDerivation,
@@ -356,16 +371,20 @@ s4_2_5_IMods = concat $ weave [map (\x -> [sspSymMapT x]) sspIMods,
   --FIXME: derivations should be with the appropriate IMod
 
 -- SECTION 4.2.6 --
--- Data Constraints is automatically generated in solChSpecF using the tables below
+-- Data Constraints is automatically generated in solChSpecF
+-- using the tables below
+
 {-
 {-input data-}
 noTypicalVal, vertConvention :: Sentence
 noTypicalVal   = short notApp
-vertConvention = S "Consecutive vertexes have increasing x" +:+. plural value +:+
-  S "The start and end vertices of all layers go to the same x" +:+. plural value --Monotonicly increasing?
+vertConvention = S "Consecutive vertexes have increasing x" +:+.
+  plural value +:+ S "The start and end vertices of all layers" +:+
+  S "go to the same x" +:+. plural value --Monotonicly increasing?
 
 verticesConst :: Sentence -> [Sentence]
-verticesConst vertexType = [vertVar vertexType, vertConvention, noTypicalVal, noTypicalVal, noTypicalVal]
+verticesConst vertexType = [vertVar vertexType, vertConvention,
+  noTypicalVal, noTypicalVal, noTypicalVal]
 
 waterVert, slipVert, slopeVert :: [Sentence]
 waterVert = verticesConst $ S "water" +:+ phrase table_
@@ -373,6 +392,7 @@ slipVert  = verticesConst $ phrase slip
 slopeVert = verticesConst $ phrase slope
 -}
 {-input and output tables-}
+
 s4_2_6Table2, s4_2_6Table3 :: Contents
 s4_2_6Table2 = inDataConstTbl sspInputs --FIXME: issue #295
 s4_2_6Table3 = outDataConstTbl sspOutputs

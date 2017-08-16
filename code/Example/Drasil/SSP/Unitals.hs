@@ -6,7 +6,8 @@ import Control.Lens ((^.))
 import Data.Drasil.SI_Units (newton, pascal, metre, degree, specific_weight)
 import Data.Drasil.Units.SolidMechanics (stiffness3D)
 import Data.Drasil.Quantities.Physics as QP (force, pressure)
-import Data.Drasil.Quantities.SolidMechanics as SM (nrmStrss, elastMod, poissnsR, stffness)
+import Data.Drasil.Quantities.SolidMechanics as SM (nrmStrss, elastMod,
+  poissnsR, stffness)
 import Data.Drasil.Units.Physics (momentOfForceU)
 import Drasil.SSP.Defs (fs_concept)
 import Data.Drasil.Constraints
@@ -23,7 +24,8 @@ SM.mobShear, SM.shearRes <- currently not used
 SM.poissnsR, SM.elastMod <- Used to make UncertQ
 -}
 normStress  = SM.nrmStrss
-genForce = uc QP.force cF newton --must import from Concept.Physics since force is a vector otherwise
+genForce = uc QP.force cF newton --must import from Concept.Physics
+                                 --since force is a vector otherwise
 genPressure = QP.pressure
 genStffness = SM.stffness
 

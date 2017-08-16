@@ -378,15 +378,15 @@ gbSymbMapT term_ = (symbolMapFun gbSymbMap Theory) term_
 --Constants--
 
 gbConstants :: [QDefinition]
-gbConstants = [constant_M, constant_K, constant_ModElas, constant_LoadDur, constant_LoadDF]
+gbConstants = [constant_M, constant_K, constant_ModElas, constant_LoadDur, constant_LoadDF, constant_LoadSF]
 
-constant_M, constant_K, constant_ModElas, constant_LoadDur, constant_LoadDF :: QDefinition
+constant_M, constant_K, constant_ModElas, constant_LoadDur, constant_LoadDF, constant_LoadSF :: QDefinition
 constant_K       = mkDataDef sflawParamK  $ (Grouping (Dbl 2.86)) * (10 :^ (- 53))
 constant_M       = mkDataDef sflawParamM  $ 7
 constant_ModElas = mkDataDef mod_elas     $ (Grouping (Dbl 7.17)) * (10 :^ 7)
 constant_LoadDur = mkDataDef load_dur     $ 3
 constant_LoadDF  = mkDataDef lDurFac      $ (Grouping ((C load_dur) / (60))) :^ ((C sflawParamM) / (16))
-
+constant_LoadSF  = mkDataDef loadSF       $ 1
 --Equations--
 
 sdWithEqn :: QDefinition

@@ -53,7 +53,7 @@ import Drasil.GlassBR.Unitals (stressDistFac, aspectR, dimlessLoad,
   constant_LoadDur, constant_ModElas, constant_M, constant_K, loadTypes,
   load, glassTypes, probBreak, termsWithAccDefn, termsWithDefsOnly,
   gbConstants, gbConstrained, gbOutputs, gbInputs, this_symbols,
-  glBreakage, capacity, constant_LoadDF)
+  glBreakage, capacity, constant_LoadDF, constant_LoadSF)
 import Drasil.GlassBR.Concepts (aR, lShareFac, gLassBR, stdOffDist,
   glaSlab, blastRisk, glass, responseTy, cantilever, beam, plane, edge,
   glaPlane, glassBRProg, ptOfExplsn, acronyms)
@@ -204,7 +204,7 @@ s6_1_3_list = enumSimple 1 (short goalStmt) s6_1_3_list_goalStmt1
 --Used in "Assumptions" Section--
 assumption4_constants :: [QDefinition]
 assumption4_constants = [constant_M, constant_K, constant_ModElas,
-  constant_LoadDur]
+  constant_LoadDur, constant_LoadDF, constant_LoadSF]
 
 --Used in "Traceability Matrices and Graphs" Section--
 traceyMatrices, traceyGraphs :: [Contents]

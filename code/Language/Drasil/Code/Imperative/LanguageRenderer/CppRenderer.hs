@@ -103,7 +103,7 @@ cpptop c Header _ (Mod n l _ _ _) = vcat $
     usingNameSpace c "std" (Just $ render (list c Dynamic)),
     usingNameSpace c "std" (Just "ifstream"),
     usingNameSpace c "std" (Just "ofstream")]
-cpptop c Source p m@(Mod n l _ _ _) = vcat $ [          --TODO remove includes if they aren't used
+cpptop c Source _ m@(Mod n l _ _ _) = vcat $ [          --TODO remove includes if they aren't used
     if notMainModule m 
       then include c ("\"" ++ n ++ cppHeaderExt ++ "\"")
       else empty,
@@ -122,7 +122,6 @@ cpptop c Source p m@(Mod n l _ _ _) = vcat $ [          --TODO remove includes i
     include c "<limits>",
     include c $ "<" ++ render (list c Dynamic) ++ ">",
     blank,
-    usingNameSpace c p Nothing,
     usingNameSpace c "std" (Just "string"),
     usingNameSpace c "std" (Just $ render (list c Dynamic)),
     usingNameSpace c "std" (Just "ifstream"),
@@ -131,14 +130,12 @@ cpptop c Source p m@(Mod n l _ _ _) = vcat $ [          --TODO remove includes i
 cppbody :: Config -> FileType -> Label -> Module -> Doc
 cppbody c f@(Header) p (Mod _ _ _ fs cs) =
     vcat [
-    package c p <+> lbrace,
-    oneTabbed [
-        clsDecListDoc c cs,
-        blank,
-        vibmap (classDoc c f p) cs,
-        blank,
-        functionListDoc c f p fs],
-    rbrace]
+      clsDecListDoc c cs,
+      blank,
+      vibmap (classDoc c f p) cs,
+      blank,
+      functionListDoc c f p fs
+    ]
 cppbody c f@(Source) p (Mod _ _ _ fs cs) =
    vcat [
      vibmap (classDoc c f p) cs,
@@ -382,11 +379,8 @@ transDecLine c (Header) _ (Method n _ _ t ps _) | isDtor n = text n <> parens (p
                                                 | otherwise = methodTypeDoc c t <+> ({- listRef <> -} text n <> parens (paramListDoc c ps) <> endStatement c)
   --  where listRef = case t of (MState (List _ _)) -> text "&"
     --                          _           -> empty
-transDecLine c (Source) m (Method n _ _ t ps _) = ttype <+> ({- listRef <> -} text m <> doubleColon <> text n <> parens (paramListDoc c ps))
-    where doubleColon = if null m then empty else colon <> colon
-         -- listRef = case t of (MState (List _ _)) -> text "&"
-           --                   _           -> empty
-          ttype | isDtor n = empty
+transDecLine c (Source) _ (Method n _ _ t ps _) = ttype <+> ({- listRef <> -} text n <> parens (paramListDoc c ps))
+    where ttype | isDtor n = empty
                 | otherwise = methodTypeDoc c t
 transDecLine c ft m f = transDecLine c ft m $ convertToMethod f
 

@@ -43,7 +43,7 @@ defaultUncrt = 0.1
 
 gbInputs :: [QSWrapper]
 gbInputs = (map qs gbInputsWUnitsUncrtn) ++ (map qs gbInputsWUncrtn) ++ 
-  (map qs gbInputsNoUncrtn)
+  (map qs gbInputsNoUncrtn) ++ map qs [sdx, sdy, sdz]
 
 --inputs with units and uncertainties
 gbInputsWUnitsUncrtn :: [UncertQ]

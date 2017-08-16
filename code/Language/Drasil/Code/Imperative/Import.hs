@@ -203,7 +203,9 @@ constrExc _ _ = oneLiner $ throw "InputError"
 ---- CONST ----
 
 genConstModD :: Generator -> Module
-genConstModD g = buildModule "Constants" [] [] [] [genConstClassD g]
+genConstModD g = buildModule "Constants" [] 
+  (map (\x -> VarDecDef (codeName x) (convType $ codeType x) (convExpr g $ codeEquat x)) (const $ codeSpec g))
+  [] [{- genConstClassD g -}]
 
 genConstClassD :: Generator -> Class
 genConstClassD g = pubClass "Constants" Nothing genVars []
@@ -402,6 +404,7 @@ convExpr g (a :/ b)     = (convExpr g a) #/ (convExpr g b)
 convExpr g (a :* b)     = (convExpr g a) #* (convExpr g b)
 convExpr g (a :+ b)     = (convExpr g a) #+ (convExpr g b)
 convExpr g (a :^ b)     = (convExpr g a) #^ (convExpr g b)
+convExpr g (0 :- b)     = (convExpr g (Neg b))
 convExpr g (a :- b)     = (convExpr g a) #- (convExpr g b)
 convExpr g (a :. b)     = (convExpr g a) #* (convExpr g b)
 convExpr g (a :&& b)    = (convExpr g a) ?&& (convExpr g b)
@@ -526,7 +529,7 @@ compactCaseUnary op a        = op (compactCase a)
 
 -- medium hacks --
 genModDef :: Generator -> DMod -> Module
-genModDef g (DMod libs (CS.Mod n fs)) = buildModule n libs [] (map (genFunc g) fs) []
+genModDef g (DMod ls (CS.Mod n fs)) = buildModule n ls [] (map (genFunc g) fs) []
 
 genFunc :: Generator -> Func -> Method
 genFunc g (FDef (FuncDef n i o s)) = publicMethod g (methodType $ convType o) n (getParams g i) [ block (map (convStmt g) s) ]

@@ -346,6 +346,7 @@ executable chipmunkdocs
     , Drasil.GamePhysics.TMods
     , Drasil.GamePhysics.Unitals
     , Drasil.GamePhysics.IMods
+    , Drasil.GamePhysics.References
     , Drasil.Sections.SpecificSystemDescription
     , Drasil.Sections.SolutionCharacterSpec
     , Drasil.Sections.GeneralSystDesc

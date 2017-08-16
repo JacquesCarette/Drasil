@@ -204,10 +204,11 @@ fdec v t = FDec (codevar v) (spaceToCodeType t)
 type ModExportMap = Map.Map String String
 
 modExportMap :: [Mod] -> [CodeChunk] -> [CodeDefinition] -> ModExportMap
-modExportMap ms ins consts = Map.fromList $ concatMap mpair ms
+modExportMap ms ins _ = Map.fromList $ concatMap mpair ms
   where mpair (Mod n fs) = map fname fs `zip` repeat n
                         ++ map codeName ins `zip` repeat "InputParameters"
-                        ++ map codeName consts `zip` repeat "Constants"
+                     --   ++ map codeName consts `zip` repeat "Constants"
+                     -- inlining constants for now
           
 getModDep :: ModExportMap -> Mod -> DMod
 getModDep mem m@(Mod name funcs) = 

@@ -17,6 +17,8 @@ import Prelude hiding (log, exp, return, const)
 import Data.List (intersperse, (\\))
 import System.Directory
 import Data.Map (member)
+import qualified Data.Map as Map (lookup)
+import Data.Maybe (maybe)
 
 data Generator = Generator { 
   generateCode :: IO (),
@@ -104,7 +106,8 @@ generator spec g =
     
 varFuncD :: Generator -> String -> Value
 varFuncD g s 
-  | member s (constMap $ codeSpec g) = extvar "Constants" s
+  | member s (constMap $ codeSpec g) = 
+      maybe (error "impossible") (convExpr g . codeEquat) (Map.lookup s (constMap $ codeSpec g)) --extvar "Constants" s
   | s `elem` (map codeName $ inputs $ codeSpec g) = (var "inParams")$->(var s)
   | otherwise                        = var s  
 
@@ -131,7 +134,7 @@ generateCodeD g = let s = codeSpec g
         
 genModulesD :: Generator -> [Module]
 genModulesD g = genInputMod g (inputs $ codeSpec g) (cMap $ codeSpec g)
-             ++ [genConstMod g]
+            -- ++ [genConstMod g]    inlining for now
             -- ++ map (\(FuncMod n d) -> genCalcMod g n d) (fMods $ codeSpec g)
              ++ genOutputMod g (outputs $ codeSpec g)
              ++ map (genModDef g) (mods $ codeSpec g) -- hack

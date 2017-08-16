@@ -3,8 +3,9 @@ module Drasil.SWHS.References where
 import Language.Drasil
 
 import Data.Drasil.People (jBueche, fIncropera, dDewitt, tBergman, aLavine,
-  nKoothoor, mLightstone, dParnas, pcClements, spencerSmith, lLai,
-  pjAgerfalk, nKraiem, jRalyte)
+  mLightstone)
+
+import Data.Drasil.Citations (koothoor2013, parnas1986, smithLai2005)
 
 ----------------------------
 -- Section 9 : References --
@@ -33,13 +34,7 @@ ref2 = Article [
   Place (S "Hoboken", S "New Jersey"),
   Year 2007]
 
-ref3 = MThesis [
-  Author [nKoothoor],
-  Title (S "A document drive approach to certifying" +:+
-  S "scientific computing software"),
-  School (S "McMaster University"),
-  Place (S "Hamilton", S "Canada"),
-  Year 2013]
+ref3 = koothoor2013
 
 ref4 = Misc [
   Author [mLightstone],
@@ -47,26 +42,6 @@ ref4 = Misc [
   Year 2012,
   Note (S "From Marilyn Lightstone's Personal Notes")]
 
-ref5 = Article [
-  Author [dParnas, pcClements],
-  Title (S "A rational design process: How and why to fake it"),
-  Journal (S "IEEE Transactions on Software Engineering"),
-  Volume 12,
-  Issue 2,
-  Pages (251, 257),
-  Place (S "Washington", S "USA"),
-  Year 1986]
+ref5 = parnas1986
 
-ref6 = Article [
-  Author [spencerSmith, lLai],
-  Title (S "A new requirements template for scientific computing"),
-  Editor [pjAgerfalk, nKraiem, jRalyte],
-  Journal (S "Proceedings of the First International Workshop on" +:+
-  S "Situational Requirements Engineering Processes - Methods," +:+
-  S "Techniques and Tools to Support Situation-Specific Requirements" +:+
-  S "Engineering Processes, SREP'05"),
-  Pages (107, 121),
-  Place (S "Paris", S "France"),
-  Year 2005,
-  Note (S "In conjunction with 13th IEEE International Requirements" +:+
-  S "Engineering Conference")]
+ref6 = smithLai2005

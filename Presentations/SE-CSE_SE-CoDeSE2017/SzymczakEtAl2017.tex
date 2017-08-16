@@ -706,8 +706,8 @@ delivers a wider array of advantages, including:
 \item Generating guards against invalid input automatically
 \item Generating certain test cases automatically
 \item Generating views suitable for inspection
-\item Warning the user if they choose a value that is order(s) of magnitude different 
-than the typical value
+\item Warning the user if they choose a value that is order(s) of magnitude
+  different than the typical value
 \end{itemize}
 We can also see that it is straightforward to trace changes and verify that they 
 are correct, thanks to our one-source, generative approach. We can produce 
@@ -726,7 +726,7 @@ This
 may seem like a disadvantage, but ensuring every artifact contains the same 
 errors means there is a much greater chance of those errors being spotted. In 
 our experience, many examples of software include code that does not match the 
-design (due to hacks, last-minute changes, etc.), and an error which would 
+design (due to hacks, last-minute changes, etc.), and an error that would 
 hamper certification efforts can fly under the radar. 
 
 For (re-)certification purposes, we want to be able to find any and all errors, 
@@ -795,12 +795,13 @@ projects.
 We have already begun using knowledge across projects with great results. Our
 two implementations of the solar water heating systems (one with PCM and one
 without) have a vast amount of overlap in the requisite knowledge.  The same
-governing equations apply, but in a simplified form when one does not have to
-worry about heat transfer to and phase change of, the PCM. As such, these two
-implementation utilize many of the same chunks from our knowledge-base, simply
-reordered and transformed as necessary. If we find an error in the theory, or
-need to make a change to improve the validity of our calculations, fixing the
-Drasil source will update both projects simultaneously.
+governing equations, such as conservation of thermal energy, apply, but in a
+simplified form when one does not have to worry about heat transfer to and phase
+change of, the PCM. As such, these two implementation utilize many of the same
+chunks from our knowledge-base, simply reordered and transformed as
+necessary. If we find an error in the theory, or need to make a change to
+improve the validity of our calculations, fixing the Drasil source will update
+both projects (and any other members of the program family) simultaneously.  
 
 \subsection{Reproducibility}
 
@@ -816,7 +817,7 @@ software could not be independently reproduced, due to a need for local
 knowledge missing from published documents.  Examples of missing knowledge
 includes missing assumptions, derivations, and undocumented modifications
 to the code.  Should it not be easier to independently replicate the work of
-others without relying on the code they have written?
+others, without relying on the code they have written?
 
 We want to replicate not only the execution of the code, but the whole of the 
 software from theory to implementation. Given the appropriate theoretical 

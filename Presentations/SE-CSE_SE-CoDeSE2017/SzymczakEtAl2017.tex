@@ -287,6 +287,7 @@ Drasil in action (Section~\ref{SecGlassBR}) and the results we have seen to date
 (Section~\ref{SecQuality}). Finally, we lay out some of the work that still
 needs to be done (Section~\ref{SecFuture}) before concluding.
 
+\newpage
 \section{Design of Drasil} \label{SecDesign}
 
 Drasil's design is based around three main components:
@@ -486,12 +487,12 @@ incorporation of GOOL, we can also generate Java, Lua, C\#, etc.
 
  \begin{figure*}
  \begin{lstlisting}[language=python, frame=single, showstringspaces=false, basicstyle=\small]
- def calc_j_tol(inparams):
-     j_tol = math.log((math.log(1.0/(1.0 - inparams.pbtol))) * 
-       ((((inparams.a / 1000.0) * (inparams.b / 1000.0)) ** (inparams.m - 1.0)) / 
-       ((inparams.k * (((inparams.E * 1000.0) * 
-       ((inparams.h / 1000.0) ** 2.0)) ** inparams.m)) * inparams.ldf))) 
-     return j_tol
+def calc_j_tol(inparams):
+  j_tol = math.log((math.log(1.0/(1.0 - inparams.pbtol))) * 
+     ((((inparams.a / 1000.0) * (inparams.b / 1000.0)) ** (inparams.m - 1.0)) / 
+     ((inparams.k * (((inparams.E * 1000.0) * 
+     ((inparams.h / 1000.0) ** 2.0)) ** inparams.m)) * inparams.ldf))) 
+  return j_tol
  \end{lstlisting}
  \caption{Python code to Calculate \jtol{}}
  \label{Fig_JtolPython}
@@ -582,7 +583,27 @@ tolStrDisFac_eq = log (log (1 / (1 - C pb_tol)) * ((Grouping (C plate_len *
 \end{figure*}
 
 Similarly to the knowledge for \jtol{}, we have captured all of the knowledge
-pertaining to GlassBR in chunks.  This knowledge can be assembled and extracted
+pertaining to GlassBR in chunks. Many of the chunks pertaining to documentation concepts were previously captured in our knowledge-base, under Data.Drasil.Concepts.Documentation, and are being reused in the GlassBR implementation. Figure~\ref{Fig_docConcepts} shows a number of these chunks. The chunks shown are all \textit{NamedChunks}, an instance of the \textit{NamedIdea} class, which have been constructed using other, smaller chunks of knowledge. In the case of \inlHask{prpsOfDoc}, we have used a special combinator, `\inlHask{of_}', for increased readability.
+
+\begin{figure}%[p]
+\begin{lstlisting}[frame=single, showstringspaces=false, basicstyle=\small, upquote=false]
+physicalConstraint = compoundNC physical constraint
+physicalProperty   = compoundNC physical property
+physicalSystem     = compoundNC physical system
+problemDescription = compoundNC problem description
+productUC          = compoundNC product_ useCase
+safetyReq          = compoundNC safety requirement_
+softwareConstraint = compoundNC software constraint
+...
+prpsOfDoc = npnc "prpsOfDoc" 
+    (purpose `of_` document)
+
+\end{lstlisting}
+\caption{An excerpt of Documentation Concept chunks}
+\label{Fig_docConcepts}
+\end{figure}
+
+The knowledge used by GlassBR can be assembled and extracted
 in different ways to produce a multitude of views, i.e. our artifacts, including
 the SRS. For a sense of what we can generate from this knowledge, see the table
 of contents for the currently generated GlassBR SRS
@@ -901,14 +922,14 @@ effort, we believe the long-term maintainability improvements, along with the
 streamlining of verification/certification and the other previously mentioned 
 advantages are well worth the cost.
 
-\jc{Isn't Wael a first name?  Also, I think we should acknowledge all of
-the summer students by name.}
+%\jc{Isn't Wael a first name?  Also, I think we should acknowledge all of
+%the summer students by name.}
 
 \begin{acks}
 
 Drasil would not have progressed this quickly without the efforts of our summer research assistants: Henry Madej, Aaron Mori, Maryyam Niazi, Nicholas Richardson, and Daniel Scime.
 
-The assistance of McMaster University's Dr.\ Manuel Campidelli, Dr.\ Wael and
+The assistance of McMaster University's Dr.\ Manuel Campidelli, Dr.\ Wael El-Dakhakhni and
 Dr.\ Michael Tait with the GlassBR example is greatly appreciated.
 
 \end{acks}

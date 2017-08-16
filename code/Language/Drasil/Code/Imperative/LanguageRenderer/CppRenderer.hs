@@ -279,6 +279,7 @@ valueDoc' c v@(Arg _) = valueDocD' c v
 --valueDoc' c Input = inputFunc c <> dot <> text "ignore()"
 --valueDoc' c (InputFile v) = valueDoc c v <> dot <> text "ignore()"
 valueDoc' c (StateObj _ t vs) = stateType c t Def <> parens (callFuncParamList c vs)
+valueDoc' _ (Var _ v) = text v
 valueDoc' c v = valueDocD c v
 
 inputDoc' :: Config -> IOType -> StateType -> Maybe Value -> Doc

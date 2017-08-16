@@ -105,7 +105,7 @@ generator spec g =
 varFuncD :: Generator -> String -> Value
 varFuncD g s 
   | member s (constMap $ codeSpec g) = extvar "Constants" s
-  | s `elem` (map codeName $ inputs $ codeSpec g) = extvar "inParams" s
+  | s `elem` (map codeName $ inputs $ codeSpec g) = (var "inParams")$->(var s)
   | otherwise                        = var s  
 
 generateCodeD :: Generator -> IO () 

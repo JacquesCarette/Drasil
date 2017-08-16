@@ -16,12 +16,12 @@ import Data.Drasil.Concepts.Documentation (analysis, appendix, aspect,
   characteristic, class_, code, condition, constant, constraint, content,
   datum, definition, description, document, emphasis, endUser, failure,
   figure, goal, implementation, information, interface, input_, item,
-  message, model, nonfunctional, organization, output_, practice,
-  priority, problem, purpose, quantity, reference, reviewer, section_,
-  scenario, software, standard, symbol_, system, template, term_, theory,
-  traceyMatrix, user, value, variable, physicalSystem, datumConstraint,
-  userInput, assumption, dataDefn, goalStmt, inModel, likelyChg, physSyst,
-  requirement, srs, thModel, dataConst, acroNumGen)
+  message, model, organization, output_, practice, problem, purpose, 
+  quantity, reference, reviewer, section_, scenario, software, standard,
+  symbol_, system, template, term_, theory, traceyMatrix, user, value, 
+  variable, physicalSystem, datumConstraint, userInput, assumption, dataDefn, 
+  goalStmt, inModel, likelyChg, physSyst, requirement, srs, thModel, 
+  dataConst, acroNumGen)
 import Data.Drasil.Concepts.Education (secondYear, undergradDegree,
   civilEng, structuralEng, scndYrCalculus, structuralMechanics)
 import Data.Drasil.Software.Products (sciCompS)
@@ -70,7 +70,6 @@ import Drasil.GlassBR.DataDescriptions --FIXME: Redundant import, but doesn't bu
 
 import Drasil.Sections.ReferenceMaterial (intro)
 import Drasil.Sections.TraceabilityMandGs (traceGIntro)
-import Drasil.Sections.Requirements (reqF)
 import Drasil.Sections.SpecificSystemDescription (solChSpecF,
   inDataConstTbl, outDataConstTbl, dataConstraintUncertainty, goalStmtF,
   physSystDesc, termDefnF, probDescF, specSysDesF)
@@ -107,7 +106,12 @@ mkSRS = RefSec (RefProg intro [TUnits, tsymb [TSPurpose, SymbOrder], TAandA]) :
     [DDs [Label, Symbol, Units, DefiningEquation,
           Description Verbose IncludeUnits (S "Testing")] dataDefns]
     (symbolMap dataDefns))]) :
-  ReqrmntSec (ReqsVerb s7) :
+  ReqrmntSec (ReqsProg [
+    FReqsSub s7_1_list, 
+    NonFReqsSub [performance] (gBRpriorityNFReqs)
+    (S "This problem is small in size and relatively simple")
+    (S "Any reasonable" +:+ phrase implementation +:+.
+    (S "will be very quick" `sAnd` S "use minimal storage"))]) :
   LCsSec (LCsProg s8_list) :
   TraceabilitySec
   (TraceabilityProg traceyMatrices [s9_table1Desc, s9_table2Desc, s9_table3Desc]
@@ -158,11 +162,11 @@ glassBR_mg :: Document
 glassBR_mg = mgDoc glassBRProg (for'' titleize phrase)
   (manyNames [spencerSmith, thulasi]) mgBod
 
-s6, s6_1, s6_1_1, s6_1_2, s6_1_3, s6_2, s7, s7_1, s7_2 :: Section
+s6, s6_1, s6_1_1, s6_1_2, s6_1_3, s6_2 :: Section
 
 s5_1_table,
   s6_1_2_list, s6_2_intro, s6_2_5_table1,
-  s6_2_5_table2, s7_2_intro, s9_table1,
+  s6_2_5_table2, s9_table1,
   s9_table2, s9_table3, s12_intro,
   fig_glassbr, fig_2, fig_3, fig_4, fig_5,
   fig_6 :: Contents
@@ -532,11 +536,7 @@ s6_2_5_intro2 = foldlSent [makeRef s6_2_5_table2, S "shows the",
 
 {--REQUIREMENTS--}
 
-s7 = reqF [s7_1, s7_2]
-
 {--Functional Requirements--}
-
-s7_1 = SRS.funcReq (s7_1_list) []
 
 s7_1_list = (acroNumGen s7_1_listOfReqs 1) ++ s7_1_req6 ++ [s7_1_req1Table]
 
@@ -628,17 +628,6 @@ s7_1_req6 = [(Enumeration $ Simple $ [(acroR 6, Nested (titleize output_ +:+
 
 {--Nonfunctional Requirements--}
 
-s7_2 = SRS.nonfuncReq [s7_2_intro] []
-
-s7_2_intro = foldlSP [
-  S "Given the small size" `sC` S "and relative simplicity," `sOf` S "this",
-  phrase problem `sC` phrase performance, S "is not a" +:+. phrase priority,
-  S "Any reasonable", phrase implementation +:+.
-  (S "will be very quick" `sAnd` S "use minimal storage"),
-  S "Rather than", phrase performance `sC` S "the", phrase priority,
-  phrase nonfunctional, short requirement :+:
-  S "s are", foldlList (map phrase gBRpriorityNFReqs)]
-
 {--LIKELY CHANGES--}
 
 s8_list :: [Contents]
@@ -717,7 +706,7 @@ s9_data  = ["Data Constraints"]
 s9_dataRef = [makeRef (SRS.datCon SRS.missingP [])]
 
 s9_funcReq = ["R1", "R2", "R3", "R4", "R5", "R6"]
-s9_funcReqRef = makeListRef s9_funcReq s7_1
+s9_funcReqRef = makeListRef s9_funcReq (SRS.funcReq SRS.missingP [])
 
 s9_assump = ["A1", "A2", "A3", "A4", "A5", "A6", "A7", "A8"]
 s9_assumpRef = makeListRef s9_assump (SRS.assump SRS.missingP [])

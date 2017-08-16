@@ -144,6 +144,7 @@ executable tiny
     , Drasil.Sections.TableOfAbbAndAcronyms
     , Drasil.Sections.ScopeOfTheProject
     , Drasil.Sections.TraceabilityMandGs
+    , Drasil.Sections.Requirements
     , Drasil.Sections.GeneralSystDesc
     , Drasil.DocumentLanguage
     , Drasil.DocumentLanguage.Chunk.GenDefn

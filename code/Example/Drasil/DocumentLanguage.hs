@@ -23,6 +23,7 @@ import qualified Drasil.Sections.AuxiliaryConstants as AC
 import qualified Drasil.Sections.ScopeOfTheProject as SotP
 import qualified Drasil.Sections.TraceabilityMandGs as TMG
 import qualified Drasil.Sections.GeneralSystDesc as GSD
+import qualified Drasil.Sections.Requirements as R
 
 import Data.Drasil.Concepts.Documentation (refmat, tOfSymb, reference)
 
@@ -204,11 +205,22 @@ data SCSSub where
 
 {--}
 
-data ReqrmntSec   = ReqsVerb Section
+data ReqrmntSec = ReqsVerb Section | ReqsProg [ReqsSub]
+
+data ReqsSub where
+  ReqsSubVerb :: Section -> ReqsSub
+  FReqsSub :: [Contents] -> ReqsSub
+  NonFReqsSub :: (Concept c) => [c] -> [c] -> Sentence -> Sentence -> ReqsSub
 
 -- | Helper for making the 'Requirements' section
 mkReqrmntSec :: ReqrmntSec -> Section
 mkReqrmntSec (ReqsVerb s) = s
+mkReqrmntSec (ReqsProg l) = R.reqF $ foldr (mkSubs) [] l
+   where
+     mkSubs :: ReqsSub -> [Section] -> [Section]
+     mkSubs (ReqsSubVerb s) l' = s : l'
+     mkSubs (FReqsSub a) l'   = (R.fReqF a) : l'
+     mkSubs (NonFReqsSub a b c d) l' = (R.nonFuncReqF a b c d) : l'
 
 {--}
 

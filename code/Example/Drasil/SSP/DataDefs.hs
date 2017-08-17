@@ -384,7 +384,7 @@ stfMtrxDerivation = [
   
   EqnBlock $ vec2D (inxi genPressure) (inxi genPressure) :=
   inxi shrStiffBase * C rotatedDispl := --FIXME: add more symbols?
-  kiStar * rotMtx * displMtx := kiPrime * displMtx ,
+  kiStar * rotMtx * displMtx := kiPrime * displMtx,
   
   foldlSP [S "The new effective base stiffness matrix", getS shrStiffBase,
   --FIXME: add symbol?

@@ -35,7 +35,8 @@ itslPrpty = compoundNC intrslce property
 slopeSrf  = compoundNC slope surface
 soilLyr   = compoundNC soil (npnc "layer" (cn' "layer"))
 
-crtSlpSrf, plnStrn, fs_concept :: ConceptChunk --FIXME: move to Concepts/soldMechanics.hs? They are too specific though
+crtSlpSrf, plnStrn, fs_concept :: ConceptChunk
+--FIXME: move to Concepts/soldMechanics.hs? They are too specific though
 plnStrn = dcc "plane strain" (cn' "plane strain") 
   ("The resultant stresses in one of the directions of a " ++
   "3 dimensional material can be approximated as 0. Results " ++
@@ -50,10 +51,13 @@ crtSlpSrf = dccWDS "critical slip surface" (cn' "critical slip surface")
 
 fs_concept = dcc "FS" factorOfSafety
   "The global stability of a surface in a slope"
--- OLD DEFN: Stability metric. How likely a slip surface is to experience failure through slipping.
+-- OLD DEFN: Stability metric. How likely a slip surface is to
+-- experience failure through slipping.
 
 --
-factor :: NamedChunk --FIXME: this is here becuase this phrase is used in datadefs and instance models
-factor = npnc "factor" (cn' "factor") -- possible use this everywhere (fs, fs_rc, fs_concept...)
+factor :: NamedChunk --FIXME: this is here becuase this phrase is
+                     --used in datadefs and instance models
+factor = npnc "factor" (cn' "factor") -- possible use this everywhere
+                                      -- (fs, fs_rc, fs_concept...)
 factorOfSafety :: NP
 factorOfSafety = factor `of_''` safety

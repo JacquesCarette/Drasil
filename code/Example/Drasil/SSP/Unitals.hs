@@ -10,7 +10,7 @@ import Data.Drasil.Quantities.SolidMechanics as SM (nrmStrss, elastMod,
   poissnsR, stffness)
 import Data.Drasil.Units.Physics (momentOfForceU)
 import Drasil.SSP.Defs (fs_concept)
-import Data.Drasil.Constraints
+import Data.Drasil.Constraints (gtZeroConstr)
 
 sspSymbols :: [CQSWrapper]
 sspSymbols = (map cqs sspInputs) ++ (map cqs sspOutputs) ++

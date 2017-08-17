@@ -36,8 +36,8 @@ data Generator = Generator {
   
   genCalcMod :: String -> [CodeDefinition] -> Module,
   genCalcFunc :: CodeDefinition -> Method,
-  genCalcBlock :: Expr -> Body,
-  genCaseBlock :: [(Expr,Relation)] -> Body,  
+  --genCalcBlock :: Expr -> Body,
+  --genCaseBlock :: [(Expr,Relation)] -> Body,  
 
   genOutputMod :: [CodeChunk] -> [Module],
   genOutputFormat :: [CodeChunk] -> Method,
@@ -84,8 +84,8 @@ generator spec g =
       
       genCalcMod = genCalcModD g,
       genCalcFunc = genCalcFuncD g,
-      genCalcBlock = genCalcBlockD g,
-      genCaseBlock = genCaseBlockD g,  
+      --genCalcBlock = genCalcBlockD g,
+      --genCaseBlock = genCaseBlockD g,  
  
       genOutputMod = genOutputModD g,
       genOutputFormat = genOutputFormatD g,
@@ -144,10 +144,10 @@ genModulesD g = genInputMod g
 
 genInputModClass :: Generator -> [Module]
 genInputModClass g = 
-  in  [ buildModule "InputParameters" [] [] [] [(genInputClass g)],
-        buildModule "DerivedValues" [] [] [genInputDerived g] [],
-        buildModule "InputConstraints" [] [] [genInputConstraints g] []
-      ]
+  [ buildModule "InputParameters" [] [] [] [(genInputClass g)],
+    buildModule "DerivedValues" [] [] [genInputDerived g] [],
+    buildModule "InputConstraints" [] [] [genInputConstraints g] []
+  ]
 
 genInputModNoClass :: Generator -> [Module]
 genInputModNoClass g =
@@ -174,7 +174,7 @@ genInputClassD g =
       ]
     )  
   where ins          = inputs $ codeSpec g
-        cm           = cMap $ codeSpec g
+        --cm           = cMap $ codeSpec g
         vars         = map (var . codeName) ins
         vals         = map (defaultValue' . convType . codeType) ins        
         genInputVars = 
@@ -182,7 +182,7 @@ genInputClassD g =
 
 genInputFormatD :: Generator -> Method
 genInputFormatD g = 
-  let ins = inputs $ codeSpec g
+  let ins = extInputs $ codeSpec g
       l_infile = "infile"
       v_infile = var l_infile
       l_filename = "filename"
@@ -207,7 +207,10 @@ genInputConstraintsD g =
       (map (\x -> ifCond [((?!) (convExpr g x), physCBody g x)] noElse) physCs) ]      
 
 genInputDerived :: Generator -> Method
-genInputDerived g = publicMethod g methodTypeVoid "" [] []
+genInputDerived g = 
+  let dvals = derivedInputs $ codeSpec g
+  in  publicMethod g methodTypeVoid "derived_values" (getParams g $ map codevar dvals) 
+        (concatMap (\x -> genCalcBlock g CalcAssign (codeName x) (codeEquat x)) dvals)
       
 -- need Expr -> String to print constraint
 constrWarn :: Generator -> Expr -> Body
@@ -238,17 +241,20 @@ genCalcFuncD g cdef =
     (methodType $ convType (codeType cdef)) 
     (codeName cdef)
     (getParams g (codevars $ codeEquat cdef)) 
-    (genCalcBlock g $ codeEquat cdef)
+    (genCalcBlock g CalcReturn (codeName cdef) (codeEquat cdef))
 
-genCalcBlockD :: Generator -> Expr -> Body
-genCalcBlockD g e
-  | containsCase e   = genCaseBlock g $ getCases e
+data CalcType = CalcAssign | CalcReturn deriving Eq
+
+genCalcBlock :: Generator -> CalcType -> String -> Expr -> Body
+genCalcBlock g t v e
+  | containsCase e   = genCaseBlock g t v $ getCases e
+  | t == CalcAssign  = oneLiner $ assign g (variable g v) (convExpr g e)
   | otherwise        = oneLiner $ return $ convExpr g e
 
-genCaseBlockD :: Generator -> [(Expr,Relation)] -> Body
-genCaseBlockD g cs = oneLiner $ ifCond (genIf cs) noElse
+genCaseBlock :: Generator -> CalcType -> String -> [(Expr,Relation)] -> Body
+genCaseBlock g t v cs = oneLiner $ ifCond (genIf cs) noElse
   where genIf :: [(Expr,Relation)] -> [(Value,Body)]
-        genIf = map (\(e,r) -> (convExpr g r, genCalcBlock g e))
+        genIf = map (\(e,r) -> (convExpr g r, genCalcBlock g t v e))
 
 ----- OUTPUT -------
           
@@ -444,7 +450,7 @@ convExpr g (UnaryOp u)  = unop g u
 convExpr g (Grouping e) = convExpr g e
 convExpr _ (BinaryOp _) = error "not implemented"
 convExpr _ (Case _)     = error "Case should be dealt with separately"
-convExpr _ _           = error "not implemented"
+convExpr _ _ = error "not implemented"
 
 unop :: Generator -> UFunc -> Value
 unop g (E.Log e)          = I.log (convExpr g e)

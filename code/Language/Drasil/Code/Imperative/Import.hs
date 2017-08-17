@@ -431,7 +431,7 @@ convExpr g (a :- b)     = (convExpr g a) #- (convExpr g b)
 convExpr g (a :. b)     = (convExpr g a) #* (convExpr g b)
 convExpr g (a :&& b)    = (convExpr g a) ?&& (convExpr g b)
 convExpr g (a :|| b)    = (convExpr g a) ?|| (convExpr g b)
-convExpr _ (Deriv _ _ _) = error "not implemented"
+convExpr _ (Deriv _ _ _) = litString "**convExpr :: Deriv unimplemented**"
 convExpr g (E.Not e)      = (?!) (convExpr g e)
 convExpr g (Neg e)      = (#~) (convExpr g e)
 convExpr g (C c)        = variable g (codeName (SFCN c))
@@ -439,7 +439,7 @@ convExpr g (Index a i)  = (convExpr g a)$.(listAccess $ convExpr g i)
 convExpr g (Len a)      = (convExpr g a)$.listSize
 convExpr g (Append a v) = (convExpr g a)$.(listAppend $ convExpr g v)
 convExpr g (FCall (C c) x)  = funcApp' (codeName (SFCN c)) (map (convExpr g) x)
-convExpr _ (FCall _ _)  = error "not implemented"
+convExpr _ (FCall _ _)  = litString "**convExpr :: BinaryOp unimplemented**"
 convExpr g (a := b)     = (convExpr g a) ?== (convExpr g b)
 convExpr g (a :!= b)    = (convExpr g a) ?!= (convExpr g b)
 convExpr g (a :> b)     = (convExpr g a) ?> (convExpr g b)
@@ -448,9 +448,9 @@ convExpr g (a :<= b)    = (convExpr g a) ?<= (convExpr g b)
 convExpr g (a :>= b)    = (convExpr g a) ?>= (convExpr g b)
 convExpr g (UnaryOp u)  = unop g u
 convExpr g (Grouping e) = convExpr g e
-convExpr _ (BinaryOp _) = error "not implemented"
-convExpr _ (Case _)     = error "Case should be dealt with separately"
-convExpr _ _ = error "not implemented"
+convExpr _ (BinaryOp _) = litString "**convExpr :: BinaryOp unimplemented**"
+convExpr _ (Case _)     = error "**convExpr :: Case should be dealt with separately**"
+convExpr _ _           = litString "**convExpr :: ? unimplemented**"
 
 unop :: Generator -> UFunc -> Value
 unop g (E.Log e)          = I.log (convExpr g e)

@@ -1,4 +1,4 @@
-module Drasil.GamePhysics.DataDefs where
+module Drasil.GamePhysics.DataDefs (cpDDefs, cpQDefs) where
 
 import Drasil.GamePhysics.Unitals
 

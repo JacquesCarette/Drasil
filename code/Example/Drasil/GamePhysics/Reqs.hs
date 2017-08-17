@@ -1,4 +1,4 @@
-module Drasil.GamePhysics.Reqs where
+module Drasil.GamePhysics.Reqs (reqs) where
 
 import Language.Drasil
 import Drasil.GamePhysics.Modules

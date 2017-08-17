@@ -1,4 +1,4 @@
-module Drasil.GamePhysics.Concepts where
+module Drasil.GamePhysics.Concepts (centreMass, twoD, chipmunk, cpAcronyms) where
 
 import Language.Drasil
 import Data.Drasil.Concepts.Documentation

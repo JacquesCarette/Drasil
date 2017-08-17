@@ -1,4 +1,4 @@
-module Drasil.GamePhysics.IMods where
+module Drasil.GamePhysics.IMods (iModels) where
 
 import Language.Drasil
 import Data.Drasil.Utils (foldle1, fmtU, getS)

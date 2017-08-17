@@ -198,8 +198,8 @@ s6_1_3_list :: Contents
 s6_1_3_list = enumSimple 1 (short goalStmt) s6_1_3_list_goalStmt1
 
 --Used in "Assumptions" Section--
-assumption4_constants :: [QDefinition]
-assumption4_constants = [constant_M, constant_K, constant_ModElas,
+assumptionConstants :: [QDefinition]
+assumptionConstants = [constant_M, constant_K, constant_ModElas,
   constant_LoadDur, constant_LoadDF, constant_LoadSF]
 
 --Used in "Traceability Matrices and Graphs" Section--
@@ -212,7 +212,7 @@ solChSpecSubsections = [thModel, inModel, dataDefn, dataConst]
 
 --Used in "Values of Auxiliary Constants" Section--
 auxiliaryConstants :: [QDefinition]
-auxiliaryConstants = assumption4_constants ++ gBRSpecParamVals
+auxiliaryConstants = assumptionConstants ++ gBRSpecParamVals
 
 --Used in "Functional Requirements" Section--
 requiredInputs :: [QSWrapper]
@@ -482,7 +482,7 @@ a4Desc mainIdea = foldlSent [S "The", plural value, S "provided in",
   makeRef (SRS.valsOfAuxCons SRS.missingP []), S "are assumed for the",
   phrase mainIdea, sParen (getS mainIdea) `sC` S "and the",
   plural materialProprty `sOf` foldlList (map getS
-  (take 3 assumption4_constants))]
+  (take 3 assumptionConstants))]
 
 a5Desc :: Sentence
 a5Desc = foldlSent [at_start glass, S "under consideration",
@@ -561,14 +561,14 @@ s7_1_req1Table = Table
 
 req2Desc = foldlSent [S "The", phrase system,
   S "shall set the known", plural value +: S "as follows",
-  foldlList [(foldlsC (map getS assumption4_constants) `followA` 4),
+  foldlList [(foldlsC (map getS (take 4 assumptionConstants)) `followA` 4),
   ((getS constant_LoadDF) `followA` 8), (short lShareFac `followA` 5)]]
 
 --ItemType
 {-s7_1_req2 = (Nested (S "The" +:+ phrase system +:+
    S "shall set the known" +:+ plural value +: S "as follows")
     (Bullet $ map Flat
-     [foldlsC (map getS assumption4_constants) `followA` 4,
+     [foldlsC (map getS (take 4 assumptionConstants)) `followA` 4,
      (getS loadDF) `followA` 8,
      short lShareFac `followA` 5]))
 -}
@@ -642,7 +642,7 @@ lc1Desc mainConcept = foldlSent [acroA 3 `sDash` S "The",
 
 lc2Desc = foldlSent [acroA 4 `sC` (acroA 8 `sDash`
   S "Currently the"), plural value, S "for",
-  foldlList (map getS (take 3 assumption4_constants)),
+  foldlList (map getS (take 3 assumptionConstants)),
   S "are assumed to be the same for all" +:+. phrase glass,
   S "In the future these", plural value, S "can be changed to",
   phrase variable, plural input_]

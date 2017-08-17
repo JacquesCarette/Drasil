@@ -589,20 +589,20 @@ Description & $q$ or demand, is the 3 second duration equivalent pressure obtain
 Table~\ref{Table:Tabl2:InpuVari} shows the data constraints on the input variables. The column of physical constraints gives the physical limitations on the range of values that can be taken by the variable. The constraints are conservative, to give the user of the model the flexibility to experiment with unusual situations. The column of typical values is intended to provide a feel for a common scenario. The uncertainty column provides an estimate of the confidence with which the physical quantities can be measured. This information would be part of the input if one were performing an uncertainty quantification exercise. Table 3 (Table~\ref{Table:Tabl3:SpecParaValu}) gives the values of the specification parameters used in Table~\ref{Table:Tabl2:InpuVari}. $AR_{max}$ refers to the maximum aspect ratio for the plate of glass.
 \begin{longtable}{l l l l l}
 \toprule
-Var & Physical Constraints & Software Constraints & Typical Value & Typical Uncertainty
+Var & Physical Constraints & Software Constraints & Typical Value & TU
 \\
 \midrule
-$a$ & $a>0.0$ and $\frac{a}{b}>1.0$ & ${d_{min}}\leq{}a$, $a\leq{}{d_{max}}$, and $\frac{a}{b}<{AR_{max}}$ & $1.5$ m & 0.1
+$a$ & $0<a$ and $\frac{a}{b}>1.0$ & ${d_{min}}\leq{}a$, $a\leq{}{d_{max}}$, and $\frac{a}{b}<{AR_{max}}$ & $1.5$ m & 0.1
 \\
-$b$ & $b>0.0$ and $b<a$ & ${d_{min}}\leq{}b$, $b\leq{}{d_{max}}$, and $\frac{a}{b}<{AR_{max}}$ & $1.2$ m & 0.1
+$b$ & $0<b$ and $b<a$ & ${d_{min}}\leq{}b$, $b\leq{}{d_{max}}$, and $\frac{a}{b}<{AR_{max}}$ & $1.2$ m & 0.1
 \\
-$SD$ & $SD>0.0$ & ${SD_{min}}<SD$ and $SD<{SD_{max}}$ & $45.0$ m & 0.1
+$SD$ & $0<SD$ & ${SD_{min}}<SD$ and $SD<{SD_{max}}$ & $45.0$ m & 0.1
 \\
 $w$ & $w\geq{}0.0$ & ${w_{max}}\leq{}w$ and $w\leq{}{w_{min}}$ & $42.0$ kg & 0.1
 \\
-${P_{btol}}$ & $0.0<{P_{btol}}$ and ${P_{btol}}<1.0$ & None & $0.008$ & 1.0e-3
+${P_{btol}}$ & $0<{P_{btol}}$ and ${P_{btol}}<1.0$ & None & $0.008$ & 1.0e-3
 \\
-$TNT$ & $TNT>0.0$ & None & $1$ & 0.1
+$TNT$ & $0<TNT$ & None & $1$ & 0.1
 \\
 \bottomrule
 \caption{Input Data Constraints}
@@ -852,6 +852,10 @@ $k$ & surface flaw parameter & $\left(2.86\right)10^{-53}$ & $\frac{\text{m}^{12
 $E$ & modulus of elasticity of glass & $\left(7.17\right)10^{7}$ & Pa
 \\
 ${t_{d}}$ & duration of load & $3$ & s
+\\
+$LDF$ & load duration factor & $\left(\frac{{t_{d}}}{60}\right)^{\frac{m}{16}}$ & Unitless
+\\
+$LSF$ & load share factor & $1$ & Unitless
 \\
 ${d_{max}}$ & maximum value for one of the dimensions of the glass plate & $0.1$ & mm
 \\

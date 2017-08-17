@@ -44,7 +44,7 @@ defaultUncrt = 0.1
 
 gbInputs :: [QSWrapper]
 gbInputs = (map qs gbInputsWUnitsUncrtn) ++ (map qs gbInputsWUncrtn) ++ 
-  (map qs gbInputsNoUncrtn) ++ map qs [sdx, sdy, sdz]
+  (map qs gbInputsNoUncrtn) ++ map qs sdVector
 
 --inputs with units and uncertainties
 gbInputsWUnitsUncrtn :: [UncertQ]
@@ -165,8 +165,8 @@ sd_max     = mkDataDef (unitary "sd_max"
 {--}
 
 glassBRSymbols :: [UnitaryChunk]
-glassBRSymbols = [act_thick, sflawParamK, sflawParamM, demand, sdx, sdy, sdz,
-  load_dur, eqTNTWeight]
+glassBRSymbols = [act_thick, sflawParamK, sflawParamM, demand, load_dur,
+  eqTNTWeight]
 
 act_thick, sflawParamK, sflawParamM, demand, sdx, sdy, sdz, load_dur,
   eqTNTWeight :: UnitaryChunk

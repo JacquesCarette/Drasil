@@ -443,11 +443,13 @@ s6_2_1_list :: [Contents]
 s6_2_1_list = acroNumGen assumptions 1
 
 assumptions :: [Contents]
-assumptions = fst (foldr (\s (ls, n) -> ((mkAssump ("assumption" ++ show n) s) : ls, n+1)) 
- ([],1::Integer)
- [a1Desc, a2Desc, a3Desc, a4Desc load_dur, a5Desc, a6Desc, a7Desc, a8Desc constant_LoadDF])
+assumptions = fst (foldr (\s (ls, n) -> ((mkAssump ("assumption" ++ show n) s) : ls, n-1))
+ ([], (length assumptionDescs)::Int) assumptionDescs)
 -- These correspond to glassTyAssumps, glassCondition, explsnScenario,
 -- standardValues, glassLiteAssmp, bndryConditions, responseTyAssump, ldfConstant
+
+assumptionDescs :: [Sentence]
+assumptionDescs = [a1Desc, a2Desc, a3Desc, a4Desc load_dur, a5Desc, a6Desc, a7Desc, a8Desc constant_LoadDF]
 
 a1Desc :: Sentence
 a1Desc = foldlSent [S "The standard E1300-09a for",

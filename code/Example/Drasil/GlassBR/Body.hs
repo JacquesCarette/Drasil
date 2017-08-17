@@ -712,27 +712,25 @@ s9_row_header_t1 = zipWith itemRefToSent s9_row_t1 (s9_theorysRef ++
 s9_columns_t1 :: [[String]]
 s9_columns_t1 = [s9_t1_T1, s9_t1_T2, s9_t1_IM1, s9_t1_IM2, s9_t1_IM3,
   s9_t1_DD1, s9_t1_DD2, s9_t1_DD3, s9_t1_DD4, s9_t1_DD5, s9_t1_DD6, s9_t1_DD7,
-  s9_t1_DD8, s9_t1_DD9]
+  s9_t1_DD8]
 
 s9_t1_T1, s9_t1_T2, s9_t1_IM1, s9_t1_IM2, s9_t1_IM3, s9_t1_DD1, s9_t1_DD2,
-  s9_t1_DD3, s9_t1_DD4, s9_t1_DD5, s9_t1_DD6, s9_t1_DD7, s9_t1_DD8,
-  s9_t1_DD9 :: [String]
+  s9_t1_DD3, s9_t1_DD4, s9_t1_DD5, s9_t1_DD6, s9_t1_DD7, s9_t1_DD8 :: [String]
 
 -- list of each item that "this" item requires for traceability matrix
 s9_t1_T1  = ["T2", "IM1"]
 s9_t1_T2  = ["T1", "IM2", "IM3"]
-s9_t1_IM1 = ["DD1", "DD2", "DD3", "DD4"]
-s9_t1_IM2 = ["DD5", "DD6"]
+s9_t1_IM1 = ["DD1", "DD2", "DD3"]
+s9_t1_IM2 = ["DD4", "DD5"]
 s9_t1_IM3 = []
 s9_t1_DD1 = []
 s9_t1_DD2 = []
-s9_t1_DD3 = []
-s9_t1_DD4 = ["DD7"]
-s9_t1_DD5 = ["DD2", "DD8"]
-s9_t1_DD6 = []
-s9_t1_DD7 = ["IM3", "DD2", "DD6"]
-s9_t1_DD8 = ["DD9"]
-s9_t1_DD9 = ["DD2", "DD3"]
+s9_t1_DD3 = ["DD6"]
+s9_t1_DD4 = ["DD2", "DD6"]
+s9_t1_DD5 = []
+s9_t1_DD6 = ["IM3", "DD2", "DD5"]
+s9_t1_DD7 = ["DD8"]
+s9_t1_DD8 = ["DD2"]
 
 s9_table1 = Table (EmptyS:s9_row_header_t1)
   (makeTMatrix s9_row_header_t1 s9_columns_t1 s9_row_t1)
@@ -761,8 +759,7 @@ s9_t2_r2 = []
 s9_t2_r3 = ["Data Constraints"]
 s9_t2_r4 = ["R1", "R2"]
 s9_t2_r5 = ["T1", "T2"]
-s9_t2_r6 = ["IM1", "IM2", "IM3", "DD2", "DD3", "DD4", "DD5", "DD6", "DD7",
-  "DD8", "DD9"]
+s9_t2_r6 = ["IM1", "IM2", "IM3", "DD2", "DD3", "DD4", "DD5", "DD6", "DD7", "DD8"]
 
 s9_table2 = Table (EmptyS:s9_row_header_t2)
   (makeTMatrix s9_col_header_t2 s9_columns_t2 s9_row_t2)
@@ -783,12 +780,12 @@ s9_col_header_t3 = s9_row_header_t1 ++ (zipWith itemRefToSent
 s9_columns_t3 :: [[String]]
 s9_columns_t3 = [s9_t3_T1, s9_t3_T2, s9_t3_IM1, s9_t3_IM2, s9_t3_IM3, s9_t3_DD1,
   s9_t3_DD2, s9_t3_DD3, s9_t3_DD4, s9_t3_DD5, s9_t3_DD6, s9_t3_DD7, s9_t3_DD8,
-  s9_t3_DD9, s9_t3_lc1, s9_t3_lc2, s9_t3_lc3, s9_t3_lc4, s9_t3_lc5, s9_t3_r1,
-  s9_t3_r2, s9_t3_r3, s9_t3_r4, s9_t3_r5, s9_t3_r6]
+  s9_t3_lc1, s9_t3_lc2, s9_t3_lc3, s9_t3_lc4, s9_t3_lc5, s9_t3_r1, s9_t3_r2,
+  s9_t3_r3, s9_t3_r4, s9_t3_r5, s9_t3_r6]
 
 s9_t3_T1, s9_t3_T2, s9_t3_IM1, s9_t3_IM2, s9_t3_IM3, s9_t3_DD1, s9_t3_DD2,
   s9_t3_DD3, s9_t3_DD4, s9_t3_DD5, s9_t3_DD6, s9_t3_DD7, s9_t3_DD8,
-  s9_t3_DD9, s9_t3_lc1, s9_t3_lc2, s9_t3_lc3, s9_t3_lc4, s9_t3_lc5, s9_t3_r1,
+  s9_t3_lc1, s9_t3_lc2, s9_t3_lc3, s9_t3_lc4, s9_t3_lc5, s9_t3_r1,
   s9_t3_r2, s9_t3_r3, s9_t3_r4, s9_t3_r5, s9_t3_r6 :: [String]
 
 -- list of each item that "this" item requires for traceability matrix
@@ -799,13 +796,12 @@ s9_t3_IM2 = ["A1", "A2", "A5"]
 s9_t3_IM3 = []
 s9_t3_DD1 = []
 s9_t3_DD2 = []
-s9_t3_DD3 = ["A4", "A8"]
-s9_t3_DD4 = []
-s9_t3_DD5 = ["A4"]
-s9_t3_DD6 = []
-s9_t3_DD7 = ["A5"]
-s9_t3_DD8 = []
-s9_t3_DD9 = ["A4"]
+s9_t3_DD3 = []
+s9_t3_DD4 = ["A4"]
+s9_t3_DD5 = []
+s9_t3_DD6 = ["A5"]
+s9_t3_DD7 = []
+s9_t3_DD8 = ["A4"]
 s9_t3_lc1 = ["A3"]
 s9_t3_lc2 = ["A4", "A8"]
 s9_t3_lc3 = ["A5"]

@@ -7,6 +7,8 @@
 -- instead.
 module Drasil.DocumentLanguage where
 
+import Drasil.DocumentLanguage.Definitions
+
 import Language.Drasil
 
 import Control.Lens ((^.))
@@ -14,7 +16,6 @@ import Control.Lens ((^.))
 import Drasil.Sections.TableOfUnits (table_of_units)
 import Drasil.Sections.TableOfSymbols (table)
 import Drasil.Sections.TableOfAbbAndAcronyms (table_of_abb_and_acronyms)
-import Drasil.DocumentLanguage.Definitions
 import qualified Drasil.SRS as SRS
 import qualified Drasil.Sections.Introduction as Intro
 import qualified Drasil.Sections.SpecificSystemDescription as SSD
@@ -150,25 +151,9 @@ data GSDSub where
   UsrChars   :: [Contents] -> GSDSub
   SystCons   :: [Contents] -> [Section] -> GSDSub
 
--- | Helper for making the 'General System Description' section
-mkGSDSec :: GSDSec -> Section
-mkGSDSec (GSDVerb s) = s
-mkGSDSec (GSDProg a b c d) = GSD.genSysF a b c d
-mkGSDSec (GSDProg2 l) = SRS.genSysDes [GSD.genSysIntro] $ foldr (mkSubs) [] l
-   where
-     mkSubs :: GSDSub -> [Section] -> [Section]
-     mkSubs (GSDSubVerb s) l' = s : l'
-     mkSubs (UsrChars a) l'   = (GSD.usrCharsF a) : l'
-     mkSubs (SystCons a b) l' = (GSD.systCon a b) : l'
-
 {--}
 
 data ScpOfProjSec = ScpOfProjVerb Section | ScpOfProjProg Sentence Contents Contents
-
--- | Helper for making the 'Scope of the Project' section
-mkScpOfProjSec :: ScpOfProjSec -> Section
-mkScpOfProjSec (ScpOfProjVerb s) = s
-mkScpOfProjSec (ScpOfProjProg a b c) = SotP.scopeOfTheProjF a b c
 
 {--}
 
@@ -212,38 +197,22 @@ data ReqsSub where
   FReqsSub :: [Contents] -> ReqsSub
   NonFReqsSub :: (Concept c) => [c] -> [c] -> Sentence -> Sentence -> ReqsSub
 
--- | Helper for making the 'Requirements' section
-mkReqrmntSec :: ReqrmntSec -> Section
-mkReqrmntSec (ReqsVerb s) = s
-mkReqrmntSec (ReqsProg l) = R.reqF $ foldr (mkSubs) [] l
-   where
-     mkSubs :: ReqsSub -> [Section] -> [Section]
-     mkSubs (ReqsSubVerb s) l' = s : l'
-     mkSubs (FReqsSub a) l'   = (R.fReqF a) : l'
-     mkSubs (NonFReqsSub a b c d) l' = (R.nonFuncReqF a b c d) : l'
-
 {--}
 
 data LCsSec = LCsVerb Section | LCsProg [Contents]
-
--- | Helper for making the 'LikelyChanges' section
-mkLCsSec :: LCsSec -> Section
-mkLCsSec (LCsVerb s) = s
-mkLCsSec (LCsProg c) = SRS.likeChg c []
 
 {--}
 
 data TraceabilitySec = TraceabilityVerb Section | TraceabilityProg [Contents] [Sentence] [Contents] [Section]
 
--- | Helper for making the 'Traceability Matrices and Graphs' section
-mkTraceabilitySec :: TraceabilitySec -> Section
-mkTraceabilitySec (TraceabilityVerb s) = s
-mkTraceabilitySec (TraceabilityProg a b c d) = TMG.traceMGF a b c d
-
 {--}
 
 -- | Values of Auxiliary Constants section
 data AuxConstntSec = AuxConsProg CI [QDefinition] | AuxConsVerb Section
+
+{--}
+
+data AppndxSec = AppndxVerb Section | AppndxProg [Contents]
 
 {--}
 
@@ -384,6 +353,7 @@ mkIntroSec si (IntroProg probIntro progDefn l) =
     mkSubIntro _ (IOrgSec i b s t) l' = Intro.orgSec i b s t : l'
     -- FIXME: s should be "looked up" using "b" once we have all sections being generated
 
+-- | Helper for making the 'Stakeholders' section
 mkStkhldrSec :: StkhldrSec -> Section
 mkStkhldrSec (StkhldrVerb s) = s
 mkStkhldrSec (StkhldrProg key details) = (Stk.stakehldrGeneral key details) 
@@ -391,9 +361,27 @@ mkStkhldrSec (StkhldrProg2 l) = SRS.stakeholder [Stk.stakeholderIntro] $ foldr (
   where
     mkSubs :: StkhldrSub -> [Section] -> [Section]
     mkSubs (StkhldrSubVerb s) l' = s : l'
-    mkSubs (Client a b) l'       = (Stk.tClientF a b) : l'
-    mkSubs (Cstmr a) l'          = (Stk.tCustomerF a) : l'
+    mkSubs (Client kWrd details) l' = (Stk.tClientF kWrd details) : l'
+    mkSubs (Cstmr kWrd) l'          = (Stk.tCustomerF kWrd) : l'
 
+-- | Helper for making the 'General System Description' section
+mkGSDSec :: GSDSec -> Section
+mkGSDSec (GSDVerb s) = s
+mkGSDSec (GSDProg cntxt uI cnstrnts systSubSec) = GSD.genSysF cntxt uI cnstrnts systSubSec
+mkGSDSec (GSDProg2 l) = SRS.genSysDes [GSD.genSysIntro] $ foldr (mkSubs) [] l
+   where
+     mkSubs :: GSDSub -> [Section] -> [Section]
+     mkSubs (GSDSubVerb s) l' = s : l'
+     mkSubs (UsrChars intro) l'   = (GSD.usrCharsF intro) : l'
+     mkSubs (SystCons cntnts subsec) l' = (GSD.systCon cntnts subsec) : l'
+
+-- | Helper for making the 'Scope of the Project' section
+mkScpOfProjSec :: ScpOfProjSec -> Section
+mkScpOfProjSec (ScpOfProjVerb s) = s
+mkScpOfProjSec (ScpOfProjProg kWrd uCTCntnts indCases) = 
+  SotP.scopeOfTheProjF kWrd uCTCntnts indCases
+
+-- | Helper for making the 'Specific System Description' section
 mkSSDSec :: SystemInformation -> SSDSec -> Section
 mkSSDSec _ (SSDVerb s) = s
 mkSSDSec si (SSDProg l) = 
@@ -406,7 +394,8 @@ mkSSDSec si (SSDProg l) =
 
 mkSSDProb :: SystemInformation -> ProblemDescription -> Section
 mkSSDProb _ (PDVerb s) = s
-mkSSDProb _ (PDProg a b c d) = SSD.probDescF a b c d
+mkSSDProb _ (PDProg start progName end subSec) = 
+  SSD.probDescF start progName end subSec
 
 mkSolChSpec :: SystemInformation -> SolChSpec -> Section
 mkSolChSpec _ (SCSVerb s) = s
@@ -432,6 +421,34 @@ mkSolChSpec si (SCSProg l m) =
     -- then error out if necessary.
 
 {--}
+
+-- | Helper for making the 'Requirements' section
+mkReqrmntSec :: ReqrmntSec -> Section
+mkReqrmntSec (ReqsVerb s) = s
+mkReqrmntSec (ReqsProg l) = R.reqF $ foldr (mkSubs) [] l
+  where
+    mkSubs :: ReqsSub -> [Section] -> [Section]
+    mkSubs (ReqsSubVerb s) l' = s : l'
+    mkSubs (FReqsSub reqs) l'   = (R.fReqF reqs) : l'
+    mkSubs (NonFReqsSub noPrrty prrty rsn explain) l' = 
+      (R.nonFuncReqF noPrrty prrty rsn explain) : l'
+
+{--}
+ 
+-- | Helper for making the 'LikelyChanges' section
+mkLCsSec :: LCsSec -> Section
+mkLCsSec (LCsVerb s) = s
+mkLCsSec (LCsProg c) = SRS.likeChg c []
+
+{--}
+
+-- | Helper for making the 'Traceability Matrices and Graphs' section
+mkTraceabilitySec :: TraceabilitySec -> Section
+mkTraceabilitySec (TraceabilityVerb s) = s
+mkTraceabilitySec (TraceabilityProg refs trailing otherContents subSec) = 
+  TMG.traceMGF refs trailing otherContents subSec
+
+{--}
   
 -- | Helper for making the 'Values of Auxiliary Constants' section
 mkAuxConsSec :: AuxConstntSec -> Section
@@ -445,8 +462,6 @@ mkBib :: BibRef -> Section
 mkBib bib = section (titleize' reference) [Bib bib] []
 
 {--}
-
-data AppndxSec = AppndxVerb Section | AppndxProg [Contents]
 
 -- | Helper for making the 'Appendix' section
 mkAppndxSec :: AppndxSec -> Section

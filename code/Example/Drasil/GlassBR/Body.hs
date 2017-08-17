@@ -4,7 +4,6 @@ import Language.Drasil
 import qualified Drasil.SRS as SRS
 
 import Drasil.DocumentLanguage
-import Drasil.DocumentLanguage.Definitions
 
 import Drasil.Template.MG (mgDoc)
 import Drasil.Template.DD (makeDD)
@@ -48,7 +47,7 @@ import Drasil.GlassBR.Unitals (stressDistFac, aspectR, dimlessLoad,
   gbSymbMap, aspectRWithEqn, aspectR, gbSymbMapT, gbSymbMapD, lRe,
   prob_br, notSafe, safeMessage, is_safe1, is_safe2, plate_width,
   plate_len, blast, glassTy, gbInputDataConstraints, explosion, lateral,
-  load_dur, explosion, pb_tol, blast, bomb, blastTy, glassGeo, load,
+  load_dur, explosion, pb_tol, blast, bomb, blastTy, glassGeo,
   glass_type, nom_thick, sdx, sdy, sdz, tNT, gBRSpecParamVals,
   constant_LoadDur, constant_ModElas, constant_M, constant_K, loadTypes,
   load, glassTypes, probBreak, termsWithAccDefn, termsWithDefsOnly,
@@ -75,9 +74,6 @@ import Drasil.Sections.SpecificSystemDescription (solChSpecF,
   physSystDesc, termDefnF, probDescF, specSysDesF)
 
 {--}
-
-this_si :: [UnitDefn]
-this_si = map UU [metre, second, kilogram] ++ map UU [pascal, newton]
 
 glassBR_srs :: Document
 glassBR_srs = mkDoc mkSRS (for'' titleize phrase) glassSystInfo
@@ -115,7 +111,7 @@ mkSRS = RefSec (RefProg intro [TUnits, tsymb [TSPurpose, SymbOrder], TAandA]) :
     (S "will be very quick" `sAnd` S "use minimal storage"))]) :
   LCsSec (LCsProg s8_list) :
   TraceabilitySec
-  (TraceabilityProg traceyMatrices [s9_table1Desc, s9_table2Desc, s9_table3Desc]
+    (TraceabilityProg traceyMatrices [s9_table1Desc, s9_table2Desc, s9_table3Desc]
     (traceyMatrices ++ s9_intro2 ++ traceyGraphs) []) :
   AuxConstntSec (AuxConsProg gLassBR auxiliaryConstants) :
   Bibliography gbCitations :
@@ -126,14 +122,14 @@ glassSystInfo = SI {
   _sys         = glassBRProg,
   _kind        = srs,
   _authors     = [nikitha, spencerSmith],
-  _units       = this_si,
+  _units       = map UU [metre, second, kilogram] ++ map UU [pascal, newton],
   _quants      = this_symbols,
   _concepts    = ([] :: [CQSWrapper]),
   _namedIdeas  = acronyms,
   _definitions = dataDefns ++ (map (relToQD gbSymbMap) iModels) ++ (map (relToQD gbSymbMap) tModels),
   _inputs      = map qs gbInputs,
   _outputs     = map qs gbOutputs,
-  _defSequence = (gbQDefns :: [Block QDefinition]),
+  _defSequence = gbQDefns,
   _constraints = gbConstrained,
   _constants   = gbConstants
 }
@@ -150,7 +146,6 @@ glassChoices = Choices {
   onPhysConstraint = Warning,  -- Warning, Exception
   inputStructure = AsClass    -- Loose, AsClass
 }
-
 
 glassBR_code :: CodeSpec
 glassBR_code = codeSpec' glassSystInfo glassChoices [interpMod, inputMod, readTableMod]
@@ -185,7 +180,7 @@ s6_1_1_bullets = Enumeration $ (Number $
   ++
   map tAndDWAcc termsWithAccDefn
   ++
-  [tAndDWSym (probBreak) (prob_br)])
+  [tAndDWSym probBreak prob_br])
    --FIXME: merge? Needs 2 arguments because there is no instance for (SymbolForm ConceptChunk)...
 
 s6_1_1_bullets_glTySubSec, s6_1_1_bullets_loadSubSec :: [ItemType]
@@ -427,9 +422,10 @@ s6_1_3_list_goalStmt1 = [foldlSent [S "Analyze" `sAnd` S "predict whether",
 
 {--SOLUTION CHARACTERISTICS SPECIFICATION--}
 
-s6_2 = solChSpecF gLassBR (s6_1, (SRS.likeChg SRS.missingP [])) (EmptyS)
+s6_2 = solChSpecF gLassBR (s6_1, (SRS.likeChg SRS.missingP [])) EmptyS
  (EmptyS, dataConstraintUncertainty, end)
- (s6_2_1_list, map gbSymbMapT tModels, [], s6_2_4_DDefns, map gbSymbMapT iModels,
+ (s6_2_1_list, map gbSymbMapT tModels, [], map gbSymbMapD dataDefns,
+  map gbSymbMapT iModels,
   [s6_2_5_table1, s6_2_5_table2]) []
   where
     end = foldlSent [(makeRef (SRS.valsOfAuxCons SRS.missingP [])),
@@ -447,19 +443,11 @@ s6_2_1_list :: [Contents]
 s6_2_1_list = acroNumGen assumptions 1
 
 assumptions :: [Contents]
-assumptions = [assumption1, assumption2, assumption3, assumption4, assumption5,
-  assumption6, assumption7, assumption8]
-
-assumption1, assumption2, assumption3, assumption4, assumption5, assumption6,
-  assumption7, assumption8 :: Contents
-assumption1 = mkAssump "assumption1"   a1Desc              --glassTyAssumps
-assumption2 = mkAssump "assumption2"   a2Desc              --glassCondition
-assumption3 = mkAssump "assumption3"   a3Desc              --explsnScenario
-assumption4 = mkAssump "assumption4"   (a4Desc (load_dur))   --standardValues
-assumption5 = mkAssump "assumption5"   a5Desc              --glassLiteAssmp
-assumption6 = mkAssump "assumption6"   a6Desc              --bndryConditions
-assumption7 = mkAssump "assumption7"   a7Desc              --responseTyAssump
-assumption8 = mkAssump "assumption8"   (a8Desc (constant_LoadDF))   --ldfConstant
+assumptions = fst (foldr (\s (ls, n) -> ((mkAssump ("assumption" ++ show n) s) : ls, n+1)) 
+ ([],1::Integer)
+ [a1Desc, a2Desc, a3Desc, a4Desc load_dur, a5Desc, a6Desc, a7Desc, a8Desc constant_LoadDF])
+-- These correspond to glassTyAssumps, glassCondition, explsnScenario,
+-- standardValues, glassLiteAssmp, bndryConditions, responseTyAssump, ldfConstant
 
 a1Desc :: Sentence
 a1Desc = foldlSent [S "The standard E1300-09a for",
@@ -521,9 +509,6 @@ a8Desc mainConcept = foldlSent [S "With", phrase reference, S "to",
 
 {--Data Definitions--}
 
-s6_2_4_DDefns ::[Contents]
-s6_2_4_DDefns = map gbSymbMapD dataDefns
-
 {--Data Constraints--}
 
 {-input and output tables-}
@@ -568,8 +553,8 @@ s7_1_req1Table :: Contents
 s7_1_req1Table = Table
   [at_start symbol_, at_start description, S "Units"]
   (mkTable
-  [(\ch -> (\(Just t) -> (getS t)) (getSymb ch)),
-   (at_start), unit'2Contents] requiredInputs)
+  [(\ch -> (\(Just t) -> getS t) (getSymb ch)),
+   at_start, unit'2Contents] requiredInputs)
   (S "Required Inputs following R1") True
 
 req2Desc = foldlSent [S "The", phrase system,
@@ -607,18 +592,16 @@ req5Desc cmd = foldlSent_ [S "If", (getS is_safe1) `sAnd` (getS is_safe2),
   S "the", phrase message, Quote (notSafe ^. defn)]
 
 testing :: [QSWrapper]
-testing = qs prob_br : qs lRe : qs demand : []
+testing = qs prob_br : qs lRe : qs demand : [] -- all different types!
 testing1 :: [RelationConcept]
 testing1 = [probOfBr, calOfCap, calOfDe]
-tempHelper :: t1 -> t -> (t1, t)
-tempHelper a b = (a, b)
 --FIXME: rename or find better implementation?
 
 s7_1_req6 = [(Enumeration $ Simple $ [(acroR 6, Nested (titleize output_ +:+
   S "the following" +: plural quantity)
   (Bullet $
     map (\(a, d) -> Flat $ (at_start a) +:+ sParen (getS a) +:+
-    sParen (makeRef (gbSymbMapT d))) (zipWith tempHelper (map qs testing) testing1)
+    sParen (makeRef (gbSymbMapT d))) (zip testing testing1)
     ++
     map (\d -> Flat $ (at_start d) +:+ sParen (getS d) +:+
     sParen (makeRef (gbSymbMapD d))) s7_1_req6_pulledList
@@ -763,8 +746,8 @@ s9_row_header_t2, s9_col_header_t2 :: [Sentence]
 s9_row_header_t2 = s9_row_header_t1 ++
   (zipWith itemRefToSent (s9_data ++ s9_funcReq) (s9_dataRef ++ s9_funcReqRef))
 
-s9_col_header_t2 = map (\(x, y) -> S x +:+ sParen (S "in" +:+ y))
-  (zip s9_funcReq s9_funcReqRef)
+s9_col_header_t2 = zipWith (\x y -> (S x) +:+ (sParen (S "in" +:+ y)))
+  s9_funcReq s9_funcReqRef
 
 s9_t2_r1, s9_t2_r2, s9_t2_r3, s9_t2_r4, s9_t2_r5,
   s9_t2_r6 :: [String]

@@ -62,12 +62,14 @@ chipmunkSRS' = mkDoc mkSRS for' chipmunkSysInfo
 
 mkSRS :: DocDesc 
 mkSRS = RefSec (RefProg RM.intro [TUnits, tsymb tableOfSymbols, TAandA]) :
-  IntroSec (IntroProg para1_s2_intro (short chipmunk) 
+  IntroSec (
+    IntroProg para1_s2_intro (short chipmunk) 
   [IPurpose (para1_s2_1_intro), 
-  IScope s2_2_intro_p1 s2_2_intro_p2, 
-  IChar (S "rigid body dynamics") (phrase highSchoolCalculus) (EmptyS), 
-  IOrgSec s2_4_intro inModel s4_2 EmptyS]) :
-  (map Verbatim [s3, s4, s5, s6, s7, s8, s9]) {--(Bibliography cpCitations)--}
+   IScope s2_2_intro_p1 s2_2_intro_p2, 
+   IChar (S "rigid body dynamics") (phrase highSchoolCalculus) (EmptyS), 
+   IOrgSec s2_4_intro inModel s4_2 EmptyS]) :
+  (map Verbatim [s3, s4, s5, s6, s7, s8, s9]) ++ 
+  ([Bibliography cpCitations])
     where tableOfSymbols = [TSPurpose, TypogConvention[Vector Bold], SymbOrder]
 
     --FIXME: Need to be able to print defn for gravitational constant.

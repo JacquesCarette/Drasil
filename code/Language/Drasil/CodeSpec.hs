@@ -231,3 +231,7 @@ fname :: Func -> Name
 fname (FCD cd) = codeName cd
 fname (FDef (FuncDef n _ _ _)) = n
 fname (FData (FuncData n _)) = n 
+
+
+getDerivedInputs :: [CodeDefinition] -> [CodeChunk] -> [CodeDefinition]
+getDerivedInputs a b = a

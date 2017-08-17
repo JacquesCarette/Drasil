@@ -27,10 +27,10 @@ data Generator = Generator {
   
   codeSpec :: CodeSpec,
   
-  genInputMod :: [CodeChunk] -> ConstraintMap -> [Module],
-  genInputClass :: [CodeChunk] -> ConstraintMap -> Class,
-  genInputFormat :: [CodeChunk] -> Method,
-  genInputConstraints :: [CodeChunk] -> ConstraintMap -> Method,
+  genInputMod :: [Module],
+  genInputClass :: Class,
+  genInputFormat :: Method,
+  genInputConstraints :: Method,
   
   genConstMod :: Module,
   
@@ -133,7 +133,7 @@ generateCodeD g = let s = codeSpec g
         getDir Python = "python"
         
 genModulesD :: Generator -> [Module]
-genModulesD g = genInputMod g (inputs $ codeSpec g) (cMap $ codeSpec g)
+genModulesD g = genInputMod g
             -- ++ [genConstMod g]    inlining for now
             -- ++ map (\(FuncMod n d) -> genCalcMod g n d) (fMods $ codeSpec g)
              ++ genOutputMod g (outputs $ codeSpec g)
@@ -142,39 +142,48 @@ genModulesD g = genInputMod g (inputs $ codeSpec g) (cMap $ codeSpec g)
 
 ------- INPUT ----------  
 
-genInputModClass :: Generator -> [CodeChunk] -> ConstraintMap -> [Module]
-genInputModClass g ins cm = [buildModule "InputParameters" [] [] [] [(genInputClass g ins cm)]]
+genInputModClass :: Generator -> [Module]
+genInputModClass g = 
+  in  [ buildModule "InputParameters" [] [] [] [(genInputClass g)],
+        buildModule "DerivedValues" [] [] [genInputDerived g] [],
+        buildModule "InputConstraints" [] [] [genInputConstraints g] []
+      ]
 
-genInputModNoClass :: Generator -> [CodeChunk] -> ConstraintMap -> [Module]
-genInputModNoClass g ins cm = [
-    buildModule "InputParameters" [] 
-    (map (\x -> VarDecDef (codeName x) (convType $ codeType x) (defaultValue' $ convType $ codeType x)) ins) 
-    [genInputFormat g ins, genInputConstraints g ins cm] 
-    []
-  ]
+genInputModNoClass :: Generator -> [Module]
+genInputModNoClass g =
+  let ins = inputs $ codeSpec g
+  in  [ buildModule "InputParameters" [] 
+          (map (\x -> VarDecDef (codeName x) (convType $ codeType x) (defaultValue' $ convType $ codeType x)) ins) 
+          [{-genInputFormat g ins,-}genInputDerived g, genInputConstraints g] 
+          []
+      ]
 
-genInputClassD :: Generator -> [CodeChunk] -> ConstraintMap -> Class
-genInputClassD g ins cm = pubClass
-  "InputParameters"
-  Nothing
-  genInputVars
-  ( 
-    [ constructor 
-        "InputParameters" 
-        []
-        [zipBlockWith (assign g) vars vals],
-      genInputFormat g ins,
-      genInputConstraints g ins cm
-    ]
-  )  
-  where vars         = map (var . codeName) ins
+genInputClassD :: Generator -> Class
+genInputClassD g =
+  pubClass
+    "InputParameters"
+    Nothing
+    genInputVars
+    ( 
+      [ constructor 
+          "InputParameters" 
+          []
+          [zipBlockWith (assign g) vars vals]--,
+          -- genInputFormat g ins,
+          -- genInputConstraints g ins cm
+      ]
+    )  
+  where ins          = inputs $ codeSpec g
+        cm           = cMap $ codeSpec g
+        vars         = map (var . codeName) ins
         vals         = map (defaultValue' . convType . codeType) ins        
         genInputVars = 
           map (\x -> pubMVar 0 (convType $ codeType x) (codeName x)) ins
 
-genInputFormatD :: Generator -> [CodeChunk] -> Method
-genInputFormatD g ins = 
-  let l_infile = "infile"
+genInputFormatD :: Generator -> Method
+genInputFormatD g = 
+  let ins = inputs $ codeSpec g
+      l_infile = "infile"
       v_infile = var l_infile
       l_filename = "filename"
       p_filename = param l_filename string
@@ -186,16 +195,20 @@ genInputFormatD g ins =
       map (\x -> getFileInput v_infile (convType $ codeType x) (variable g $ codeName x)) ins ++ [
       closeFile v_infile ] ]
           
-genInputConstraintsD :: Generator -> [CodeChunk] -> ConstraintMap -> Method
-genInputConstraintsD g vars cm = 
-  let sfwrCs = concatMap (\x -> sfwrLookup x cm) vars 
+genInputConstraintsD :: Generator -> Method
+genInputConstraintsD g = 
+  let vars   = inputs $ codeSpec g
+      cm     = cMap $ codeSpec g
+      sfwrCs = concatMap (\x -> sfwrLookup x cm) vars 
       physCs = concatMap (\x -> physLookup x cm) vars
   in
     publicMethod g methodTypeVoid "input_constraints" [] [ block $
       (map (\x -> ifCond [((?!) (convExpr g x), sfwrCBody g x)] noElse) sfwrCs) ++
       (map (\x -> ifCond [((?!) (convExpr g x), physCBody g x)] noElse) physCs) ]      
 
-        
+genInputDerived :: Generator -> Method
+genInputDerived g = publicMethod g methodTypeVoid "" [] []
+      
 -- need Expr -> String to print constraint
 constrWarn :: Generator -> Expr -> Body
 constrWarn _ _ = oneLiner $ printStrLn "Warning: constraint violated"

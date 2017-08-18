@@ -44,7 +44,7 @@ defaultUncrt = 0.1
 
 gbInputs :: [QSWrapper]
 gbInputs = (map qs gbInputsWUnitsUncrtn) ++ (map qs gbInputsWUncrtn) ++ 
-  (map qs gbInputsNoUncrtn) ++ map qs [sdx, sdy, sdz]
+  (map qs gbInputsNoUncrtn) ++ map qs sdVector
 
 --inputs with units and uncertainties
 gbInputsWUnitsUncrtn :: [UncertQ]
@@ -165,8 +165,8 @@ sd_max     = mkDataDef (unitary "sd_max"
 {--}
 
 glassBRSymbols :: [UnitaryChunk]
-glassBRSymbols = [act_thick, sflawParamK, sflawParamM, demand, sdx, sdy, sdz,
-  load_dur, eqTNTWeight]
+glassBRSymbols = [act_thick, sflawParamK, sflawParamM, demand, load_dur,
+  eqTNTWeight]
 
 act_thick, sflawParamK, sflawParamM, demand, sdx, sdy, sdz, load_dur,
   eqTNTWeight :: UnitaryChunk
@@ -381,7 +381,7 @@ gbConstants :: [QDefinition]
 gbConstants = [constant_M, constant_K, constant_ModElas, constant_LoadDur, constant_LoadDF, constant_LoadSF]
 
 constant_M, constant_K, constant_ModElas, constant_LoadDur, constant_LoadDF, constant_LoadSF :: QDefinition
-constant_K       = mkDataDef sflawParamK  $ (Grouping (Dbl 2.86)) * (10 :^ (- 53))
+constant_K       = mkDataDef sflawParamK  $ (Grouping (Dbl 2.86)) * (10 :^ (Neg 53))
 constant_M       = mkDataDef sflawParamM  $ 7
 constant_ModElas = mkDataDef mod_elas     $ (Grouping (Dbl 7.17)) * (10 :^ 7)
 constant_LoadDur = mkDataDef load_dur     $ 3

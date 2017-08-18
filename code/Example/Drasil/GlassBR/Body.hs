@@ -10,7 +10,6 @@ import Drasil.Template.DD (makeDD)
 
 import Data.Drasil.SI_Units
 import Data.Drasil.People (spencerSmith, thulasi, nikitha, mCampidelli)
-
 import Data.Drasil.Concepts.Documentation (analysis, appendix, aspect,
   characteristic, class_, code, condition, constant, constraint, content,
   datum, definition, description, document, emphasis, endUser, failure,
@@ -198,8 +197,8 @@ s6_1_3_list :: Contents
 s6_1_3_list = enumSimple 1 (short goalStmt) s6_1_3_list_goalStmt1
 
 --Used in "Assumptions" Section--
-assumption4_constants :: [QDefinition]
-assumption4_constants = [constant_M, constant_K, constant_ModElas,
+assumptionConstants :: [QDefinition]
+assumptionConstants = [constant_M, constant_K, constant_ModElas,
   constant_LoadDur, constant_LoadDF, constant_LoadSF]
 
 --Used in "Traceability Matrices and Graphs" Section--
@@ -212,7 +211,7 @@ solChSpecSubsections = [thModel, inModel, dataDefn, dataConst]
 
 --Used in "Values of Auxiliary Constants" Section--
 auxiliaryConstants :: [QDefinition]
-auxiliaryConstants = assumption4_constants ++ gBRSpecParamVals
+auxiliaryConstants = assumptionConstants ++ gBRSpecParamVals
 
 --Used in "Functional Requirements" Section--
 requiredInputs :: [QSWrapper]
@@ -443,11 +442,13 @@ s6_2_1_list :: [Contents]
 s6_2_1_list = acroNumGen assumptions 1
 
 assumptions :: [Contents]
-assumptions = fst (foldr (\s (ls, n) -> ((mkAssump ("assumption" ++ show n) s) : ls, n+1)) 
- ([],1::Integer)
- [a1Desc, a2Desc, a3Desc, a4Desc load_dur, a5Desc, a6Desc, a7Desc, a8Desc constant_LoadDF])
+assumptions = fst (foldr (\s (ls, n) -> ((mkAssump ("assumption" ++ show n) s) : ls, n-1))
+ ([], (length assumptionDescs)::Int) assumptionDescs)
 -- These correspond to glassTyAssumps, glassCondition, explsnScenario,
 -- standardValues, glassLiteAssmp, bndryConditions, responseTyAssump, ldfConstant
+
+assumptionDescs :: [Sentence]
+assumptionDescs = [a1Desc, a2Desc, a3Desc, a4Desc load_dur, a5Desc, a6Desc, a7Desc, a8Desc constant_LoadDF]
 
 a1Desc :: Sentence
 a1Desc = foldlSent [S "The standard E1300-09a for",
@@ -480,7 +481,7 @@ a4Desc mainIdea = foldlSent [S "The", plural value, S "provided in",
   makeRef (SRS.valsOfAuxCons SRS.missingP []), S "are assumed for the",
   phrase mainIdea, sParen (getS mainIdea) `sC` S "and the",
   plural materialProprty `sOf` foldlList (map getS
-  (take 3 assumption4_constants))]
+  (take 3 assumptionConstants))]
 
 a5Desc :: Sentence
 a5Desc = foldlSent [at_start glass, S "under consideration",
@@ -559,14 +560,14 @@ s7_1_req1Table = Table
 
 req2Desc = foldlSent [S "The", phrase system,
   S "shall set the known", plural value +: S "as follows",
-  foldlList [(foldlsC (map getS assumption4_constants) `followA` 4),
+  foldlList [(foldlsC (map getS (take 4 assumptionConstants)) `followA` 4),
   ((getS constant_LoadDF) `followA` 8), (short lShareFac `followA` 5)]]
 
 --ItemType
 {-s7_1_req2 = (Nested (S "The" +:+ phrase system +:+
    S "shall set the known" +:+ plural value +: S "as follows")
     (Bullet $ map Flat
-     [foldlsC (map getS assumption4_constants) `followA` 4,
+     [foldlsC (map getS (take 4 assumptionConstants)) `followA` 4,
      (getS loadDF) `followA` 8,
      short lShareFac `followA` 5]))
 -}
@@ -640,7 +641,7 @@ lc1Desc mainConcept = foldlSent [acroA 3 `sDash` S "The",
 
 lc2Desc = foldlSent [acroA 4 `sC` (acroA 8 `sDash`
   S "Currently the"), plural value, S "for",
-  foldlList (map getS (take 3 assumption4_constants)),
+  foldlList (map getS (take 3 assumptionConstants)),
   S "are assumed to be the same for all" +:+. phrase glass,
   S "In the future these", plural value, S "can be changed to",
   phrase variable, plural input_]
@@ -710,27 +711,25 @@ s9_row_header_t1 = zipWith itemRefToSent s9_row_t1 (s9_theorysRef ++
 s9_columns_t1 :: [[String]]
 s9_columns_t1 = [s9_t1_T1, s9_t1_T2, s9_t1_IM1, s9_t1_IM2, s9_t1_IM3,
   s9_t1_DD1, s9_t1_DD2, s9_t1_DD3, s9_t1_DD4, s9_t1_DD5, s9_t1_DD6, s9_t1_DD7,
-  s9_t1_DD8, s9_t1_DD9]
+  s9_t1_DD8]
 
 s9_t1_T1, s9_t1_T2, s9_t1_IM1, s9_t1_IM2, s9_t1_IM3, s9_t1_DD1, s9_t1_DD2,
-  s9_t1_DD3, s9_t1_DD4, s9_t1_DD5, s9_t1_DD6, s9_t1_DD7, s9_t1_DD8,
-  s9_t1_DD9 :: [String]
+  s9_t1_DD3, s9_t1_DD4, s9_t1_DD5, s9_t1_DD6, s9_t1_DD7, s9_t1_DD8 :: [String]
 
 -- list of each item that "this" item requires for traceability matrix
 s9_t1_T1  = ["T2", "IM1"]
 s9_t1_T2  = ["T1", "IM2", "IM3"]
-s9_t1_IM1 = ["DD1", "DD2", "DD3", "DD4"]
-s9_t1_IM2 = ["DD5", "DD6"]
+s9_t1_IM1 = ["DD1", "DD2", "DD3"]
+s9_t1_IM2 = ["DD4", "DD5"]
 s9_t1_IM3 = []
 s9_t1_DD1 = []
 s9_t1_DD2 = []
-s9_t1_DD3 = []
-s9_t1_DD4 = ["DD7"]
-s9_t1_DD5 = ["DD2", "DD8"]
-s9_t1_DD6 = []
-s9_t1_DD7 = ["IM3", "DD2", "DD6"]
-s9_t1_DD8 = ["DD9"]
-s9_t1_DD9 = ["DD2", "DD3"]
+s9_t1_DD3 = ["DD6"]
+s9_t1_DD4 = ["DD2", "DD7"]
+s9_t1_DD5 = []
+s9_t1_DD6 = ["IM3", "DD2", "DD5"]
+s9_t1_DD7 = ["DD8"]
+s9_t1_DD8 = ["DD2"]
 
 s9_table1 = Table (EmptyS:s9_row_header_t1)
   (makeTMatrix s9_row_header_t1 s9_columns_t1 s9_row_t1)
@@ -759,8 +758,7 @@ s9_t2_r2 = []
 s9_t2_r3 = ["Data Constraints"]
 s9_t2_r4 = ["R1", "R2"]
 s9_t2_r5 = ["T1", "T2"]
-s9_t2_r6 = ["IM1", "IM2", "IM3", "DD2", "DD3", "DD4", "DD5", "DD6", "DD7",
-  "DD8", "DD9"]
+s9_t2_r6 = ["IM1", "IM2", "IM3", "DD2", "DD3", "DD4", "DD5", "DD6", "DD7", "DD8"]
 
 s9_table2 = Table (EmptyS:s9_row_header_t2)
   (makeTMatrix s9_col_header_t2 s9_columns_t2 s9_row_t2)
@@ -781,12 +779,12 @@ s9_col_header_t3 = s9_row_header_t1 ++ (zipWith itemRefToSent
 s9_columns_t3 :: [[String]]
 s9_columns_t3 = [s9_t3_T1, s9_t3_T2, s9_t3_IM1, s9_t3_IM2, s9_t3_IM3, s9_t3_DD1,
   s9_t3_DD2, s9_t3_DD3, s9_t3_DD4, s9_t3_DD5, s9_t3_DD6, s9_t3_DD7, s9_t3_DD8,
-  s9_t3_DD9, s9_t3_lc1, s9_t3_lc2, s9_t3_lc3, s9_t3_lc4, s9_t3_lc5, s9_t3_r1,
-  s9_t3_r2, s9_t3_r3, s9_t3_r4, s9_t3_r5, s9_t3_r6]
+  s9_t3_lc1, s9_t3_lc2, s9_t3_lc3, s9_t3_lc4, s9_t3_lc5, s9_t3_r1, s9_t3_r2,
+  s9_t3_r3, s9_t3_r4, s9_t3_r5, s9_t3_r6]
 
 s9_t3_T1, s9_t3_T2, s9_t3_IM1, s9_t3_IM2, s9_t3_IM3, s9_t3_DD1, s9_t3_DD2,
   s9_t3_DD3, s9_t3_DD4, s9_t3_DD5, s9_t3_DD6, s9_t3_DD7, s9_t3_DD8,
-  s9_t3_DD9, s9_t3_lc1, s9_t3_lc2, s9_t3_lc3, s9_t3_lc4, s9_t3_lc5, s9_t3_r1,
+  s9_t3_lc1, s9_t3_lc2, s9_t3_lc3, s9_t3_lc4, s9_t3_lc5, s9_t3_r1,
   s9_t3_r2, s9_t3_r3, s9_t3_r4, s9_t3_r5, s9_t3_r6 :: [String]
 
 -- list of each item that "this" item requires for traceability matrix
@@ -797,13 +795,12 @@ s9_t3_IM2 = ["A1", "A2", "A5"]
 s9_t3_IM3 = []
 s9_t3_DD1 = []
 s9_t3_DD2 = []
-s9_t3_DD3 = ["A4", "A8"]
-s9_t3_DD4 = []
-s9_t3_DD5 = ["A4"]
-s9_t3_DD6 = []
-s9_t3_DD7 = ["A5"]
-s9_t3_DD8 = []
-s9_t3_DD9 = ["A4"]
+s9_t3_DD3 = []
+s9_t3_DD4 = ["A4"]
+s9_t3_DD5 = []
+s9_t3_DD6 = ["A5"]
+s9_t3_DD7 = []
+s9_t3_DD8 = ["A4"]
 s9_t3_lc1 = ["A3"]
 s9_t3_lc2 = ["A4", "A8"]
 s9_t3_lc3 = ["A5"]

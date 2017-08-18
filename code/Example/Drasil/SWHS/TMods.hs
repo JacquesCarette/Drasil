@@ -1,6 +1,7 @@
 {-# OPTIONS -Wall #-}
 {-# LANGUAGE FlexibleContexts #-}
-module Drasil.SWHS.TMods where
+module Drasil.SWHS.TMods (tModels, t1ConsThermE, 
+  s4_2_2_swhsTMods, s4_2_2_T1) where
 
 import Language.Drasil
 import Control.Lens ((^.))

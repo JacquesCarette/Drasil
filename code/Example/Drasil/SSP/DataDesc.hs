@@ -8,8 +8,11 @@ sspInputMod :: Mod
 sspInputMod = Mod "InputFormat" [sspInputData]
 
 sspInputData :: Func
-sspInputData = funcData "get_inputs" $ [ {- --FIXME: unfinished. Needs more inputs? Needs way to think of (x,y) as two seperate things
-  --number of layers, layer direction
+sspInputData = funcData "get_inputs" $ [
+{- --FIXME: unfinished. Needs more inputs? 
+    --Needs way to think of (x,y) as two seperate things
+    --number of layers, layer direction
+    
   multiLine (straight $ map (listEntry [WithPattern]) [
   fricAngle, cohesion, dryWeight, satWeight, elasticMod, poissnsRatio
   ]) ' ',

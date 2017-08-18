@@ -700,6 +700,14 @@ Requirement
 </tr>
 <tr>
 <td>
+SD
+</td>
+<td>
+Stand Off Distance
+</td>
+</tr>
+<tr>
+<td>
 SRS
 </td>
 <td>
@@ -720,6 +728,14 @@ TNT
 </td>
 <td>
 TNT (Trinitrotoluene) Equivalent Factor
+</td>
+</tr>
+<tr>
+<td>
+TU
+</td>
+<td>
+Typical Uncertainty
 </td>
 </tr>
 </table>
@@ -1170,7 +1186,7 @@ Description
 </th>
 <td>
 <p class="paragraph">
-If is_safe1 = True, the glass is considered safe. is_safe1 and is_safe2 (from <a href=#T:t2SafetyReq>this Definition</a>) are either both True or both False. <em>P<sub>b</sub></em> is the probability of breakage, as calculated in <a href=#T:probOfBr>this Definition</a>. <em>P<sub>btol</sub></em> is the tolerable probability of breakage entered by the user.
+If <em>is_safe1</em>, the glass is considered safe. <em>is_safe1</em> and <em>is_safe2</em> (from <a href=#T:t2SafetyReq>T:t2SafetyReq</a>) are either both True or both False. <em>P<sub>b</sub></em> is the probability of breakage, as calculated in <a href=#T:probOfBr>T:probOfBr</a>. <em>P<sub>btol</sub></em> is the tolerable probability of breakage entered by the user.
 </p>
 </td>
 </tr>
@@ -1206,7 +1222,7 @@ Description
 </th>
 <td>
 <p class="paragraph">
-If is_safe2 = True, the glass is considered safe. is_safe1 (from <a href=#T:t1SafetyReq>this Definition</a>) and is_safe2 are either both True or both False. LR is the load resistance (also called capacity), as defined in <a href=#T:calOfCap>this Definition</a>. q (also referred as the Demand) is the 3 second duration equivalent pressure, as defined in <a href=#T:calOfDe>this Definition</a>.
+If <em>is_safe2</em>, the glass is considered safe. <em>is_safe1</em> (from <a href=#T:t1SafetyReq>T:t1SafetyReq</a>) and <em>is_safe2</em> are either both True or both False. LR is the load resistance (also called capacity), as defined in <a href=#T:calOfCap>T:calOfCap</a>. <em>q</em> (also referred as the Demand) is the 3 second duration equivalent pressure, as defined in <a href=#T:calOfDe>T:calOfDe</a>.
 </p>
 </td>
 </tr>
@@ -2365,7 +2381,7 @@ LC5: A7 - The software may be changed to consider more than just flexure of the 
 Traceability Matrices and Graphs
 </h2>
 <p class="paragraph">
-The purpose of the traceability matrices is to provide easy references on what has to be additionally modified if a certain component is changed. Every time a component is changed, the items in the column of that component that are marked with an &quot;X&quot; should be modified as well. <a href=#Table:TracMatrShowtheConnBetwItemofDiffSect>this Table</a> shows the dependencies of theoretical models, instance models, and data definitions with each other. <a href=#Table:TracMatrShowtheConnBetwRequandOtheItem>this Table</a> shows the dependencies of requirements on theoretical models, instance models, data definitions, and data constraints. <a href=#Table:TracMatrShowtheConnBetwAssuandOtheItem>this Table</a> shows the dependencies of theoretical models, instance models, data definitions, likely changes and requirements on the assumptions.
+The purpose of the traceability matrices is to provide easy references on what has to be additionally modified if a certain component is changed. Every time a component is changed, the items in the column of that component that are marked with an &quot;X&quot; should be modified as well. <a href=#Table:TracMatrShowtheConnBetwItemofDiffSect>Table:TracMatrShowtheConnBetwItemofDiffSect</a> shows the dependencies of theoretical models, instance models, and data definitions with each other. <a href=#Table:TracMatrShowtheConnBetwRequandOtheItem>Table:TracMatrShowtheConnBetwRequandOtheItem</a> shows the dependencies of requirements on theoretical models, instance models, data definitions, and data constraints. <a href=#Table:TracMatrShowtheConnBetwAssuandOtheItem>Table:TracMatrShowtheConnBetwAssuandOtheItem</a> shows the dependencies of theoretical models, instance models, data definitions, likely changes and requirements on the assumptions.
 </p>
 <a id="Table:TracMatrShowtheConnBetwItemofDiffSect">
 <table class="table">
@@ -2374,51 +2390,48 @@ The purpose of the traceability matrices is to provide easy references on what h
 
 </th>
 <th>
-T1 (<a href=#T:t1SafetyReq>this Definition</a>)
+T1 (<a href=#T:t1SafetyReq>T:t1SafetyReq</a>)
 </th>
 <th>
-T2 (<a href=#T:t2SafetyReq>this Definition</a>)
+T2 (<a href=#T:t2SafetyReq>T:t2SafetyReq</a>)
 </th>
 <th>
-IM1 (<a href=#T:probOfBr>this Definition</a>)
+IM1 (<a href=#T:probOfBr>T:probOfBr</a>)
 </th>
 <th>
-IM2 (<a href=#T:calOfCap>this Definition</a>)
+IM2 (<a href=#T:calOfCap>T:calOfCap</a>)
 </th>
 <th>
-IM3 (<a href=#T:calOfDe>this Definition</a>)
+IM3 (<a href=#T:calOfDe>T:calOfDe</a>)
 </th>
 <th>
-DD1 (<a href=#DD:risk.fun>this Definition</a>)
+DD1 (<a href=#DD:risk.fun>DD:risk.fun</a>)
 </th>
 <th>
-DD2 (<a href=#DD:act.thick>this Definition</a>)
+DD2 (<a href=#DD:act.thick>DD:act.thick</a>)
 </th>
 <th>
-DD3 (<a href=#DD:loadDurFactor>this Definition</a>)
+DD3 (<a href=#DD:stressDistFac>DD:stressDistFac</a>)
 </th>
 <th>
-DD4 (<a href=#DD:stressDistFac>this Definition</a>)
+DD4 (<a href=#DD:nFL>DD:nFL</a>)
 </th>
 <th>
-DD5 (<a href=#DD:nFL>this Definition</a>)
+DD5 (<a href=#DD:gTF>DD:gTF</a>)
 </th>
 <th>
-DD6 (<a href=#DD:gTF>this Definition</a>)
+DD6 (<a href=#DD:dimlessLoad>DD:dimlessLoad</a>)
 </th>
 <th>
-DD7 (<a href=#DD:dimlessLoad>this Definition</a>)
+DD7 (<a href=#DD:tolLoad>DD:tolLoad</a>)
 </th>
 <th>
-DD8 (<a href=#DD:tolLoad>this Definition</a>)
-</th>
-<th>
-DD9 (<a href=#DD:sdf.tol>this Definition</a>)
+DD8 (<a href=#DD:sdf.tol>DD:sdf.tol</a>)
 </th>
 </tr>
 <tr>
 <td>
-T1 (<a href=#T:t1SafetyReq>this Definition</a>)
+T1 (<a href=#T:t1SafetyReq>T:t1SafetyReq</a>)
 </td>
 <td>
 
@@ -2428,9 +2441,6 @@ X
 </td>
 <td>
 X
-</td>
-<td>
-
 </td>
 <td>
 
@@ -2465,7 +2475,7 @@ X
 </tr>
 <tr>
 <td>
-T2 (<a href=#T:t2SafetyReq>this Definition</a>)
+T2 (<a href=#T:t2SafetyReq>T:t2SafetyReq</a>)
 </td>
 <td>
 X
@@ -2481,9 +2491,6 @@ X
 </td>
 <td>
 X
-</td>
-<td>
-
 </td>
 <td>
 
@@ -2512,7 +2519,7 @@ X
 </tr>
 <tr>
 <td>
-IM1 (<a href=#T:probOfBr>this Definition</a>)
+IM1 (<a href=#T:probOfBr>T:probOfBr</a>)
 </td>
 <td>
 
@@ -2528,9 +2535,6 @@ IM1 (<a href=#T:probOfBr>this Definition</a>)
 </td>
 <td>
 
-</td>
-<td>
-X
 </td>
 <td>
 X
@@ -2559,10 +2563,7 @@ X
 </tr>
 <tr>
 <td>
-IM2 (<a href=#T:calOfCap>this Definition</a>)
-</td>
-<td>
-
+IM2 (<a href=#T:calOfCap>T:calOfCap</a>)
 </td>
 <td>
 
@@ -2606,57 +2607,7 @@ X
 </tr>
 <tr>
 <td>
-IM3 (<a href=#T:calOfDe>this Definition</a>)
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-</tr>
-<tr>
-<td>
-DD1 (<a href=#DD:risk.fun>this Definition</a>)
-</td>
-<td>
-
+IM3 (<a href=#T:calOfDe>T:calOfDe</a>)
 </td>
 <td>
 
@@ -2700,57 +2651,7 @@ DD1 (<a href=#DD:risk.fun>this Definition</a>)
 </tr>
 <tr>
 <td>
-DD2 (<a href=#DD:act.thick>this Definition</a>)
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-</tr>
-<tr>
-<td>
-DD3 (<a href=#DD:loadDurFactor>this Definition</a>)
-</td>
-<td>
-
+DD1 (<a href=#DD:risk.fun>DD:risk.fun</a>)
 </td>
 <td>
 
@@ -2794,10 +2695,51 @@ DD3 (<a href=#DD:loadDurFactor>this Definition</a>)
 </tr>
 <tr>
 <td>
-DD4 (<a href=#DD:stressDistFac>this Definition</a>)
+DD2 (<a href=#DD:act.thick>DD:act.thick</a>)
 </td>
 <td>
 
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+</tr>
+<tr>
+<td>
+DD3 (<a href=#DD:stressDistFac>DD:stressDistFac</a>)
 </td>
 <td>
 
@@ -2841,7 +2783,7 @@ X
 </tr>
 <tr>
 <td>
-DD5 (<a href=#DD:nFL>this Definition</a>)
+DD4 (<a href=#DD:nFL>DD:nFL</a>)
 </td>
 <td>
 
@@ -2874,13 +2816,10 @@ X
 
 </td>
 <td>
-
-</td>
-<td>
-
-</td>
-<td>
 X
+</td>
+<td>
+
 </td>
 <td>
 
@@ -2888,10 +2827,7 @@ X
 </tr>
 <tr>
 <td>
-DD6 (<a href=#DD:gTF>this Definition</a>)
-</td>
-<td>
-
+DD5 (<a href=#DD:gTF>DD:gTF</a>)
 </td>
 <td>
 
@@ -2935,7 +2871,7 @@ DD6 (<a href=#DD:gTF>this Definition</a>)
 </tr>
 <tr>
 <td>
-DD7 (<a href=#DD:dimlessLoad>this Definition</a>)
+DD6 (<a href=#DD:dimlessLoad>DD:dimlessLoad</a>)
 </td>
 <td>
 
@@ -2957,9 +2893,6 @@ X
 </td>
 <td>
 X
-</td>
-<td>
-
 </td>
 <td>
 
@@ -2982,10 +2915,7 @@ X
 </tr>
 <tr>
 <td>
-DD8 (<a href=#DD:tolLoad>this Definition</a>)
-</td>
-<td>
-
+DD7 (<a href=#DD:tolLoad>DD:tolLoad</a>)
 </td>
 <td>
 
@@ -3029,7 +2959,7 @@ X
 </tr>
 <tr>
 <td>
-DD9 (<a href=#DD:sdf.tol>this Definition</a>)
+DD8 (<a href=#DD:sdf.tol>DD:sdf.tol</a>)
 </td>
 <td>
 
@@ -3048,9 +2978,6 @@ DD9 (<a href=#DD:sdf.tol>this Definition</a>)
 </td>
 <td>
 
-</td>
-<td>
-X
 </td>
 <td>
 X
@@ -3086,75 +3013,69 @@ Traceability Matrix Showing the Connections Between Items of Different Sections
 
 </th>
 <th>
-T1 (<a href=#T:t1SafetyReq>this Definition</a>)
+T1 (<a href=#T:t1SafetyReq>T:t1SafetyReq</a>)
 </th>
 <th>
-T2 (<a href=#T:t2SafetyReq>this Definition</a>)
+T2 (<a href=#T:t2SafetyReq>T:t2SafetyReq</a>)
 </th>
 <th>
-IM1 (<a href=#T:probOfBr>this Definition</a>)
+IM1 (<a href=#T:probOfBr>T:probOfBr</a>)
 </th>
 <th>
-IM2 (<a href=#T:calOfCap>this Definition</a>)
+IM2 (<a href=#T:calOfCap>T:calOfCap</a>)
 </th>
 <th>
-IM3 (<a href=#T:calOfDe>this Definition</a>)
+IM3 (<a href=#T:calOfDe>T:calOfDe</a>)
 </th>
 <th>
-DD1 (<a href=#DD:risk.fun>this Definition</a>)
+DD1 (<a href=#DD:risk.fun>DD:risk.fun</a>)
 </th>
 <th>
-DD2 (<a href=#DD:act.thick>this Definition</a>)
+DD2 (<a href=#DD:act.thick>DD:act.thick</a>)
 </th>
 <th>
-DD3 (<a href=#DD:loadDurFactor>this Definition</a>)
+DD3 (<a href=#DD:stressDistFac>DD:stressDistFac</a>)
 </th>
 <th>
-DD4 (<a href=#DD:stressDistFac>this Definition</a>)
+DD4 (<a href=#DD:nFL>DD:nFL</a>)
 </th>
 <th>
-DD5 (<a href=#DD:nFL>this Definition</a>)
+DD5 (<a href=#DD:gTF>DD:gTF</a>)
 </th>
 <th>
-DD6 (<a href=#DD:gTF>this Definition</a>)
+DD6 (<a href=#DD:dimlessLoad>DD:dimlessLoad</a>)
 </th>
 <th>
-DD7 (<a href=#DD:dimlessLoad>this Definition</a>)
+DD7 (<a href=#DD:tolLoad>DD:tolLoad</a>)
 </th>
 <th>
-DD8 (<a href=#DD:tolLoad>this Definition</a>)
+DD8 (<a href=#DD:sdf.tol>DD:sdf.tol</a>)
 </th>
 <th>
-DD9 (<a href=#DD:sdf.tol>this Definition</a>)
+Data Constraints (<a href=#Sec:DataCons>Sec:DataCons</a>)
 </th>
 <th>
-Data Constraints (<a href=#Sec:DataCons>this Section</a>)
+R1 (<a href=#Sec:FuncRequ>Sec:FuncRequ</a>)
 </th>
 <th>
-R1 (<a href=#Sec:FuncRequ>this Section</a>)
+R2 (<a href=#Sec:FuncRequ>Sec:FuncRequ</a>)
 </th>
 <th>
-R2 (<a href=#Sec:FuncRequ>this Section</a>)
+R3 (<a href=#Sec:FuncRequ>Sec:FuncRequ</a>)
 </th>
 <th>
-R3 (<a href=#Sec:FuncRequ>this Section</a>)
+R4 (<a href=#Sec:FuncRequ>Sec:FuncRequ</a>)
 </th>
 <th>
-R4 (<a href=#Sec:FuncRequ>this Section</a>)
+R5 (<a href=#Sec:FuncRequ>Sec:FuncRequ</a>)
 </th>
 <th>
-R5 (<a href=#Sec:FuncRequ>this Section</a>)
-</th>
-<th>
-R6 (<a href=#Sec:FuncRequ>this Section</a>)
+R6 (<a href=#Sec:FuncRequ>Sec:FuncRequ</a>)
 </th>
 </tr>
 <tr>
 <td>
-R1 (in <a href=#Sec:FuncRequ>this Section</a>)
-</td>
-<td>
-
+R1 (in <a href=#Sec:FuncRequ>Sec:FuncRequ</a>)
 </td>
 <td>
 
@@ -3219,10 +3140,7 @@ R1 (in <a href=#Sec:FuncRequ>this Section</a>)
 </tr>
 <tr>
 <td>
-R2 (in <a href=#Sec:FuncRequ>this Section</a>)
-</td>
-<td>
-
+R2 (in <a href=#Sec:FuncRequ>Sec:FuncRequ</a>)
 </td>
 <td>
 
@@ -3287,10 +3205,7 @@ R2 (in <a href=#Sec:FuncRequ>this Section</a>)
 </tr>
 <tr>
 <td>
-R3 (in <a href=#Sec:FuncRequ>this Section</a>)
-</td>
-<td>
-
+R3 (in <a href=#Sec:FuncRequ>Sec:FuncRequ</a>)
 </td>
 <td>
 
@@ -3355,10 +3270,7 @@ X
 </tr>
 <tr>
 <td>
-R4 (in <a href=#Sec:FuncRequ>this Section</a>)
-</td>
-<td>
-
+R4 (in <a href=#Sec:FuncRequ>Sec:FuncRequ</a>)
 </td>
 <td>
 
@@ -3423,16 +3335,13 @@ X
 </tr>
 <tr>
 <td>
-R5 (in <a href=#Sec:FuncRequ>this Section</a>)
+R5 (in <a href=#Sec:FuncRequ>Sec:FuncRequ</a>)
 </td>
 <td>
 X
 </td>
 <td>
 X
-</td>
-<td>
-
 </td>
 <td>
 
@@ -3491,7 +3400,7 @@ X
 </tr>
 <tr>
 <td>
-R6 (in <a href=#Sec:FuncRequ>this Section</a>)
+R6 (in <a href=#Sec:FuncRequ>Sec:FuncRequ</a>)
 </td>
 <td>
 
@@ -3510,9 +3419,6 @@ X
 </td>
 <td>
 
-</td>
-<td>
-X
 </td>
 <td>
 X
@@ -3569,33 +3475,33 @@ Traceability Matrix Showing the Connections Between Requirements and Other Items
 
 </th>
 <th>
-A1 (<a href=#Sec:Assu>this Section</a>)
+A1 (<a href=#Sec:Assu>Sec:Assu</a>)
 </th>
 <th>
-A2 (<a href=#Sec:Assu>this Section</a>)
+A2 (<a href=#Sec:Assu>Sec:Assu</a>)
 </th>
 <th>
-A3 (<a href=#Sec:Assu>this Section</a>)
+A3 (<a href=#Sec:Assu>Sec:Assu</a>)
 </th>
 <th>
-A4 (<a href=#Sec:Assu>this Section</a>)
+A4 (<a href=#Sec:Assu>Sec:Assu</a>)
 </th>
 <th>
-A5 (<a href=#Sec:Assu>this Section</a>)
+A5 (<a href=#Sec:Assu>Sec:Assu</a>)
 </th>
 <th>
-A6 (<a href=#Sec:Assu>this Section</a>)
+A6 (<a href=#Sec:Assu>Sec:Assu</a>)
 </th>
 <th>
-A7 (<a href=#Sec:Assu>this Section</a>)
+A7 (<a href=#Sec:Assu>Sec:Assu</a>)
 </th>
 <th>
-A8 (<a href=#Sec:Assu>this Section</a>)
+A8 (<a href=#Sec:Assu>Sec:Assu</a>)
 </th>
 </tr>
 <tr>
 <td>
-T1 (<a href=#T:t1SafetyReq>this Definition</a>)
+T1 (<a href=#T:t1SafetyReq>T:t1SafetyReq</a>)
 </td>
 <td>
 
@@ -3624,7 +3530,7 @@ T1 (<a href=#T:t1SafetyReq>this Definition</a>)
 </tr>
 <tr>
 <td>
-T2 (<a href=#T:t2SafetyReq>this Definition</a>)
+T2 (<a href=#T:t2SafetyReq>T:t2SafetyReq</a>)
 </td>
 <td>
 
@@ -3653,7 +3559,7 @@ T2 (<a href=#T:t2SafetyReq>this Definition</a>)
 </tr>
 <tr>
 <td>
-IM1 (<a href=#T:probOfBr>this Definition</a>)
+IM1 (<a href=#T:probOfBr>T:probOfBr</a>)
 </td>
 <td>
 
@@ -3682,7 +3588,7 @@ X
 </tr>
 <tr>
 <td>
-IM2 (<a href=#T:calOfCap>this Definition</a>)
+IM2 (<a href=#T:calOfCap>T:calOfCap</a>)
 </td>
 <td>
 X
@@ -3711,7 +3617,7 @@ X
 </tr>
 <tr>
 <td>
-IM3 (<a href=#T:calOfDe>this Definition</a>)
+IM3 (<a href=#T:calOfDe>T:calOfDe</a>)
 </td>
 <td>
 
@@ -3740,7 +3646,7 @@ IM3 (<a href=#T:calOfDe>this Definition</a>)
 </tr>
 <tr>
 <td>
-DD1 (<a href=#DD:risk.fun>this Definition</a>)
+DD1 (<a href=#DD:risk.fun>DD:risk.fun</a>)
 </td>
 <td>
 
@@ -3769,7 +3675,7 @@ DD1 (<a href=#DD:risk.fun>this Definition</a>)
 </tr>
 <tr>
 <td>
-DD2 (<a href=#DD:act.thick>this Definition</a>)
+DD2 (<a href=#DD:act.thick>DD:act.thick</a>)
 </td>
 <td>
 
@@ -3798,36 +3704,7 @@ DD2 (<a href=#DD:act.thick>this Definition</a>)
 </tr>
 <tr>
 <td>
-DD3 (<a href=#DD:loadDurFactor>this Definition</a>)
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-X
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-X
-</td>
-</tr>
-<tr>
-<td>
-DD4 (<a href=#DD:stressDistFac>this Definition</a>)
+DD3 (<a href=#DD:stressDistFac>DD:stressDistFac</a>)
 </td>
 <td>
 
@@ -3856,7 +3733,7 @@ DD4 (<a href=#DD:stressDistFac>this Definition</a>)
 </tr>
 <tr>
 <td>
-DD5 (<a href=#DD:nFL>this Definition</a>)
+DD4 (<a href=#DD:nFL>DD:nFL</a>)
 </td>
 <td>
 
@@ -3885,7 +3762,7 @@ X
 </tr>
 <tr>
 <td>
-DD6 (<a href=#DD:gTF>this Definition</a>)
+DD5 (<a href=#DD:gTF>DD:gTF</a>)
 </td>
 <td>
 
@@ -3914,7 +3791,7 @@ DD6 (<a href=#DD:gTF>this Definition</a>)
 </tr>
 <tr>
 <td>
-DD7 (<a href=#DD:dimlessLoad>this Definition</a>)
+DD6 (<a href=#DD:dimlessLoad>DD:dimlessLoad</a>)
 </td>
 <td>
 
@@ -3943,7 +3820,7 @@ X
 </tr>
 <tr>
 <td>
-DD8 (<a href=#DD:tolLoad>this Definition</a>)
+DD7 (<a href=#DD:tolLoad>DD:tolLoad</a>)
 </td>
 <td>
 
@@ -3972,7 +3849,7 @@ DD8 (<a href=#DD:tolLoad>this Definition</a>)
 </tr>
 <tr>
 <td>
-DD9 (<a href=#DD:sdf.tol>this Definition</a>)
+DD8 (<a href=#DD:sdf.tol>DD:sdf.tol</a>)
 </td>
 <td>
 
@@ -4001,7 +3878,7 @@ X
 </tr>
 <tr>
 <td>
-LC1 (<a href=#Sec:LikeChan>this Section</a>)
+LC1 (<a href=#Sec:LikeChan>Sec:LikeChan</a>)
 </td>
 <td>
 
@@ -4030,7 +3907,7 @@ X
 </tr>
 <tr>
 <td>
-LC2 (<a href=#Sec:LikeChan>this Section</a>)
+LC2 (<a href=#Sec:LikeChan>Sec:LikeChan</a>)
 </td>
 <td>
 
@@ -4059,7 +3936,7 @@ X
 </tr>
 <tr>
 <td>
-LC3 (<a href=#Sec:LikeChan>this Section</a>)
+LC3 (<a href=#Sec:LikeChan>Sec:LikeChan</a>)
 </td>
 <td>
 
@@ -4088,7 +3965,7 @@ X
 </tr>
 <tr>
 <td>
-LC4 (<a href=#Sec:LikeChan>this Section</a>)
+LC4 (<a href=#Sec:LikeChan>Sec:LikeChan</a>)
 </td>
 <td>
 
@@ -4117,7 +3994,7 @@ X
 </tr>
 <tr>
 <td>
-LC5 (<a href=#Sec:LikeChan>this Section</a>)
+LC5 (<a href=#Sec:LikeChan>Sec:LikeChan</a>)
 </td>
 <td>
 
@@ -4146,7 +4023,7 @@ X
 </tr>
 <tr>
 <td>
-R1 (<a href=#Sec:FuncRequ>this Section</a>)
+R1 (<a href=#Sec:FuncRequ>Sec:FuncRequ</a>)
 </td>
 <td>
 
@@ -4175,7 +4052,7 @@ R1 (<a href=#Sec:FuncRequ>this Section</a>)
 </tr>
 <tr>
 <td>
-R2 (<a href=#Sec:FuncRequ>this Section</a>)
+R2 (<a href=#Sec:FuncRequ>Sec:FuncRequ</a>)
 </td>
 <td>
 
@@ -4204,7 +4081,7 @@ X
 </tr>
 <tr>
 <td>
-R3 (<a href=#Sec:FuncRequ>this Section</a>)
+R3 (<a href=#Sec:FuncRequ>Sec:FuncRequ</a>)
 </td>
 <td>
 
@@ -4233,7 +4110,7 @@ R3 (<a href=#Sec:FuncRequ>this Section</a>)
 </tr>
 <tr>
 <td>
-R4 (<a href=#Sec:FuncRequ>this Section</a>)
+R4 (<a href=#Sec:FuncRequ>Sec:FuncRequ</a>)
 </td>
 <td>
 
@@ -4262,7 +4139,7 @@ R4 (<a href=#Sec:FuncRequ>this Section</a>)
 </tr>
 <tr>
 <td>
-R5 (<a href=#Sec:FuncRequ>this Section</a>)
+R5 (<a href=#Sec:FuncRequ>Sec:FuncRequ</a>)
 </td>
 <td>
 
@@ -4291,7 +4168,7 @@ R5 (<a href=#Sec:FuncRequ>this Section</a>)
 </tr>
 <tr>
 <td>
-R6 (<a href=#Sec:FuncRequ>this Section</a>)
+R6 (<a href=#Sec:FuncRequ>Sec:FuncRequ</a>)
 </td>
 <td>
 
@@ -4324,7 +4201,7 @@ Traceability Matrix Showing the Connections Between Assumptions and Other Items
 </p>
 </a>
 <p class="paragraph">
-The purpose of the traceability graphs is also to provide easy references on what has to be additionally modified if a certain component is changed. The arrows in the graphs represent dependencies. The component at the tail of an arrow is depended on by the component at the head of that arrow. Therefore, if a component is changed, the components that it points to should also be changed. <a href=#Figure:Figu2:TracMatrShowtheConnBetwItemofDiffSect>this Figure</a> shows the dependencies of theoretical models, instance models, and data definitions on each other. <a href=#Figure:Figu3:TracMatrShowtheConnBetwRequandOtheItem>this Figure</a> shows the dependencies of requirements on theoretical models, instance models, data definitions, and data constraints. <a href=#Figure:Figu4:TracMatrShowtheConnBetwAssuandOtheItem>this Figure</a> shows the dependencies of theoretical models, instance models, data definitions, requirements, and likely changes on assumptions.
+The purpose of the traceability graphs is also to provide easy references on what has to be additionally modified if a certain component is changed. The arrows in the graphs represent dependencies. The component at the tail of an arrow is depended on by the component at the head of that arrow. Therefore, if a component is changed, the components that it points to should also be changed. <a href=#Figure:Figu2:TracMatrShowtheConnBetwItemofDiffSect>Figure:Figu2:TracMatrShowtheConnBetwItemofDiffSect</a> shows the dependencies of theoretical models, instance models, and data definitions on each other. <a href=#Figure:Figu3:TracMatrShowtheConnBetwRequandOtheItem>Figure:Figu3:TracMatrShowtheConnBetwRequandOtheItem</a> shows the dependencies of requirements on theoretical models, instance models, data definitions, and data constraints. <a href=#Figure:Figu4:TracMatrShowtheConnBetwAssuandOtheItem>Figure:Figu4:TracMatrShowtheConnBetwAssuandOtheItem</a> shows the dependencies of theoretical models, instance models, data definitions, requirements, and likely changes on assumptions.
 </p>
 <p class="paragraph">
 NOTE: Building a tool to automatically generate the graphical representation of the matrix by scanning the labels and reference can be future work.
@@ -4427,6 +4304,48 @@ duration of load
 </td>
 <td>
 s
+</td>
+</tr>
+<tr>
+<td>
+<em>LDF</em>
+</td>
+<td>
+load duration factor
+</td>
+<td>
+(<div class="fraction">
+<span class="fup">
+<em>t<sub>d</sub></em>
+</span>
+<span class="fdn">
+60
+</span>
+</div>)<sup><div class="fraction">
+<span class="fup">
+<em>m</em>
+</span>
+<span class="fdn">
+16
+</span>
+</div></sup>
+</td>
+<td>
+Unitless
+</td>
+</tr>
+<tr>
+<td>
+<em>LSF</em>
+</td>
+<td>
+load share factor
+</td>
+<td>
+1
+</td>
+<td>
+Unitless
 </td>
 </tr>
 <tr>

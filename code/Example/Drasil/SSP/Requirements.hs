@@ -18,18 +18,20 @@ sspRequirements = [readAndStore, generateCSS, testSlipSrf, prepareSlipS,
   calculateFS, rankSlope, generateCSS', repeatFindFS, prepareCSS, 
   calculateFS', displayGraph]
 
-readAndStore, generateCSS, testSlipSrf, prepareSlipS, calculateFS, rankSlope,
-  generateCSS', repeatFindFS, prepareCSS, calculateFS', displayGraph :: Sentence
+readAndStore, generateCSS, testSlipSrf, prepareSlipS,
+  calculateFS, rankSlope, generateCSS', repeatFindFS,
+  prepareCSS, calculateFS', displayGraph :: Sentence
 
-readAndStore = foldlSent [S "Read the", phrase input_, S "file, and store the" +:+.
-  plural datum, S "Necessary", plural inDatum, S "summarized in", 
-  makeRef sspInputDataTable]
+readAndStore = foldlSent [S "Read the", phrase input_,
+  S "file, and store the" +:+. plural datum, S "Necessary",
+  plural inDatum, S "summarized in", makeRef sspInputDataTable]
 
 generateCSS  = foldlSent [S "Generate potential", phrase crtSlpSrf :+:
   S "'s for the", phrase input_, phrase slope]
 
-testSlipSrf  = foldlSent [S "Test the", plural slpSrf, S "to determine if they",
-  S "are physically realizable based on a set of pass or fail criteria"]
+testSlipSrf  = foldlSent [S "Test the", plural slpSrf,
+  S "to determine if they are physically realizable based on",
+  S "a set of pass or fail criteria"]
 
 prepareSlipS = foldlSent [S "Prepare the", plural slpSrf, S "for a", 
   phrase method_, S "of", plural slice, S "or limit equilibrium analysis"]

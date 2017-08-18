@@ -1,4 +1,4 @@
-module Drasil.SWHS.Assumptions where
+module Drasil.SWHS.Assumptions where --all of this file is exported
 
 import Language.Drasil
 import Control.Lens ((^.))

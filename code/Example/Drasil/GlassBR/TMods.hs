@@ -21,13 +21,12 @@ t1SafetyReq = makeRC "t1SafetyReq" (nounPhraseSP "Safety Requirement-1")
   t1descr $ (C is_safe1) := (C prob_br) :< (C pb_tol)
 
 t1descr :: Sentence
-t1descr = 
-  foldlSent [S "If", (getS is_safe1), S ", the glass is" +:+. 
-  S "considered safe", (getS is_safe1) `sAnd` (getS is_safe2),
-  sParen (S "from" +:+ (ref t2SafetyReq)) +:+.
-  S "are either both True or both False",
-  ((getS prob_br) `isThe` (phrase prob_br)) `sC` S "as calculated in" +:+.
-  (ref probOfBr), (getS pb_tol) `isThe` (phrase pb_tol), S "entered by the user"]
+t1descr = tDescr (is_safe1) s ending
+  where 
+    s = (getS is_safe1) `sAnd` (getS is_safe2) +:+ sParen (S "from" +:+ 
+      (ref t2SafetyReq))
+    ending = ((getS prob_br) `isThe` (phrase prob_br)) `sC` S "as calculated in" +:+.
+      (ref probOfBr) +:+ (getS pb_tol) `isThe` (phrase pb_tol) +:+ S "entered by the user"
 
 t2SafetyReq :: RelationConcept
 t2SafetyReq = makeRC "t2SafetyReq" (nounPhraseSP "Safety Requirement-2")
@@ -45,7 +44,7 @@ t2descr = tDescr (is_safe2) s ending
       ref calOfDe
 
 tDescr :: VarChunk -> Sentence -> Sentence -> Sentence
-tDescr main s ending = foldlSent [S "If", getS main, S ", the glass is" +:+.
+tDescr main s ending = foldlSent [S "If", getS main `sC` S "the glass is" +:+.
   S "considered safe", s +:+. S "are either both True or both False", ending]
 
 ref :: RelationConcept -> Sentence

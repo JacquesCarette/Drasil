@@ -1,10 +1,11 @@
 module Drasil.SSP.References (sspCitations) where
 
 import Language.Drasil
-import Drasil.SSP.Defs (ssa, crtSlpSrf, fs_concept)
 
+import Drasil.SSP.Defs (ssa, crtSlpSrf, fs_concept)
 import Data.Drasil.Concepts.Documentation (analysis)
-import Data.Drasil.Citations (smithLai2005, koothoor2013, parnas1986, journalCGJ)
+import Data.Drasil.Citations (smithLai2005, koothoor2013, parnas1986,
+  journalCGJ)
 import Data.Drasil.People (qhQian, dyZhu, cfLee, grChen, dgFredlund,
   jKrahn, dStolle, yCLi, ymChen, tltZhan, ssLing, pjCleall, pGuo)
 

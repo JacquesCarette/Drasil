@@ -1,4 +1,4 @@
-module Drasil.SWHS.Changes where
+module Drasil.SWHS.Changes (likelyChanges, unlikelyChanges) where
 
 import Language.Drasil
 

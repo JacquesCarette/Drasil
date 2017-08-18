@@ -90,34 +90,34 @@ The module design should be as general as possible. However, a general system is
 \label{Sec:ModuHier}
 This section provides an overview of the module design. Modules are summarized in a hierarchy decomposed by secrets in Table~\ref{Table:ModuHier}. The modules listed below, which are leaves in the hierarchy tree, are the modules that will actually be implemented.
 \begin{description}
-\item[\refstepcounter{modnum}\mthemodnum\label{MhwHiding}:]Hardware Hiding Module
+\item[\refstepcounter{modnum}\mthemodnum\label{M:hwHiding}:]Hardware Hiding Module
 \end{description}
 \begin{description}
-\item[\refstepcounter{modnum}\mthemodnum\label{MmodInputFormat}:]Input Format Module
+\item[\refstepcounter{modnum}\mthemodnum\label{M:modInputFormat}:]Input Format Module
 \end{description}
 \begin{description}
-\item[\refstepcounter{modnum}\mthemodnum\label{MmodInputParams}:]Input Parameters Module
+\item[\refstepcounter{modnum}\mthemodnum\label{M:modInputParams}:]Input Parameters Module
 \end{description}
 \begin{description}
-\item[\refstepcounter{modnum}\mthemodnum\label{MmodInputConstraints}:]Input Constraints Module
+\item[\refstepcounter{modnum}\mthemodnum\label{M:modInputConstraints}:]Input Constraints Module
 \end{description}
 \begin{description}
-\item[\refstepcounter{modnum}\mthemodnum\label{Mmodoutputfdesc}:]Output Format Module
+\item[\refstepcounter{modnum}\mthemodnum\label{M:modoutputfdesc}:]Output Format Module
 \end{description}
 \begin{description}
-\item[\refstepcounter{modnum}\mthemodnum\label{MmodDerivedVals}:]Derived Values Module
+\item[\refstepcounter{modnum}\mthemodnum\label{M:modDerivedVals}:]Derived Values Module
 \end{description}
 \begin{description}
-\item[\refstepcounter{modnum}\mthemodnum\label{Mmodcalcdesc}:]Calculations Module
+\item[\refstepcounter{modnum}\mthemodnum\label{M:modcalcdesc}:]Calculations Module
 \end{description}
 \begin{description}
-\item[\refstepcounter{modnum}\mthemodnum\label{MmodControl}:]Control Module
+\item[\refstepcounter{modnum}\mthemodnum\label{M:modControl}:]Control Module
 \end{description}
 \begin{description}
-\item[\refstepcounter{modnum}\mthemodnum\label{MmodInterpData}:]Interpolation Data Module
+\item[\refstepcounter{modnum}\mthemodnum\label{M:modInterpData}:]Interpolation Data Module
 \end{description}
 \begin{description}
-\item[\refstepcounter{modnum}\mthemodnum\label{MmodInterpolation}:]Interpolation Module
+\item[\refstepcounter{modnum}\mthemodnum\label{M:modInterpolation}:]Interpolation Module
 \end{description}
 \begin{longtable}{l l}
 \toprule
@@ -172,14 +172,14 @@ Modules are decomposed according to the principle of ``information hiding" propo
 \item[Services:]Converts the input data into the data structure used by the input parameters module.
 \item[Implemented By:]GlassBR
 \end{description}
-\subsection{Input Parameters Module (M\ref{MmodInputParams})}
+\subsection{Input Parameters Module (M\ref{M:modInputParams})}
 \label{Sec:InpuParaModu()}
 \begin{description}
 \item[Secrets:]The format and structure of the input parameters.
 \item[Services:]Stores the parameters needed for the program, including material properties, processing conditions, and numerical parameters. The values can be read as needed. This module knows how many parameters it stores.
 \item[Implemented By:]GlassBR
 \end{description}
-\subsection{Input Constraints Module (M\ref{MmodInputConstraints})}
+\subsection{Input Constraints Module (M\ref{M:modInputConstraints})}
 \label{Sec:InpuConsModu()}
 \begin{description}
 \item[Secrets:]The constraints on the input data.
@@ -193,14 +193,14 @@ Modules are decomposed according to the principle of ``information hiding" propo
 \item[Services:]Outputs the results of the calculations, including the input parameters, the demand, the capacity, the probability of breakage, and both safety requirements.
 \item[Implemented By:]GlassBR
 \end{description}
-\subsection{Derived Values Module (M\ref{MmodDerivedVals})}
+\subsection{Derived Values Module (M\ref{M:modDerivedVals})}
 \label{Sec:DeriValuModu()}
 \begin{description}
 \item[Secrets:]The transformations from initial inputs to derived quantities.
 \item[Services:]Defines the equations transforming the initial inputs into derived quantities.
 \item[Implemented By:]GlassBR
 \end{description}
-\subsection{Calculations Module (M\ref{Mmodcalcdesc})}
+\subsection{Calculations Module (M\ref{M:modcalcdesc})}
 \label{Sec:CalcModu()}
 \begin{description}
 \item[Secrets:]The equations for predicting the probability of glass breakage, capacity, and demand, using the input parameters.
@@ -214,7 +214,7 @@ Modules are decomposed according to the principle of ``information hiding" propo
 \item[Services:]Provides the main program.
 \item[Implemented By:]GlassBR
 \end{description}
-\subsection{Interpolation Data Module (M\ref{MmodInterpData})}
+\subsection{Interpolation Data Module (M\ref{M:modInterpData})}
 \label{Sec:InteDatuModu()}
 \begin{description}
 \item[Secrets:]The format and structure of the data used for interpolation.
@@ -243,11 +243,11 @@ This section shows two traceability matrices: between the modules and the requir
 Requirement & Modules
 \\
 \midrule
-R1 & M\ref{MhwHiding}, M\ref{MmodInputFormat}, M\ref{MmodInputParams}, M\ref{MmodControl}
+R1 & M\ref{MhwHiding}, M\ref{M:modInputFormat}, M\ref{M:modInputParams}, M\ref{M:modControl}
 \\
-R2 & M\ref{MmodInputFormat}, M\ref{MmodInputParams}
+R2 & M\ref{M:modInputFormat}, M\ref{M:modInputParams}
 \\
-R3 & M\ref{MmodInputConstraints}
+R3 & M\ref{M:modInputConstraints}
 \\
 R4 & M\ref{M:modoutputfdesc}
 \\
@@ -296,21 +296,21 @@ In this section, the uses hierarchy between modules is provided. Parnas said of 
 digraph G {
 graph [sep = 0. esep = 0, nodesep = 0.1, ranksep = 2];
 node [style = "n"];
-"Input Format Module (M\ref{MmodInputFormat})" -> "Hardware Hiding Module (M\ref{MhwHiding})";
-"Input Format Module (M\ref{MmodInputFormat})" -> "Input Parameters Module (M\ref{MmodInputParams})";
-"Input Parameters Module (M\ref{MmodInputParams})" -> "Input Constraints Module (M\ref{MmodInputConstraints})";
-"Output Format Module (M\ref{Mmodoutputfdesc})" -> "Hardware Hiding Module (M\ref{MhwHiding})";
-"Output Format Module (M\ref{Mmodoutputfdesc})" -> "Input Parameters Module (M\ref{MmodInputParams})";
-"Derived Values Module (M\ref{MmodDerivedVals})" -> "Input Parameters Module (M\ref{MmodInputParams})";
-"Calculations Module (M\ref{Mmodcalcdesc})" -> "Input Parameters Module (M\ref{MmodInputParams})";
-"Control Module (M\ref{MmodControl})" -> "Input Format Module (M\ref{MmodInputFormat})";
-"Control Module (M\ref{MmodControl})" -> "Input Parameters Module (M\ref{MmodInputParams})";
-"Control Module (M\ref{MmodControl})" -> "Input Constraints Module (M\ref{MmodInputConstraints})";
-"Control Module (M\ref{MmodControl})" -> "Derived Values Module (M\ref{MmodDerivedVals})";
-"Control Module (M\ref{MmodControl})" -> "Calculations Module (M\ref{Mmodcalcdesc})";
-"Control Module (M\ref{MmodControl})" -> "Interpolation Module (M\ref{MmodInterpolation})";
-"Control Module (M\ref{MmodControl})" -> "Output Format Module (M\ref{Mmodoutputfdesc})";
-"Interpolation Module (M\ref{MmodInterpolation})" -> "Interpolation Data Module (M\ref{MmodInterpData})";
+"Input Format Module (M\ref{M:modInputFormat})" -> "Hardware Hiding Module (M\ref{MhwHiding})";
+"Input Format Module (M\ref{M:modInputFormat})" -> "Input Parameters Module (M\ref{M:modInputParams})";
+"Input Parameters Module (M\ref{M:modInputParams})" -> "Input Constraints Module (M\ref{M:modInputConstraints})";
+"Output Format Module (M\ref{M:modoutputfdesc})" -> "Hardware Hiding Module (M\ref{MhwHiding})";
+"Output Format Module (M\ref{M:modoutputfdesc})" -> "Input Parameters Module (M\ref{M:modInputParams})";
+"Derived Values Module (M\ref{M:modDerivedVals})" -> "Input Parameters Module (M\ref{M:modInputParams})";
+"Calculations Module (M\ref{M:modcalcdesc})" -> "Input Parameters Module (M\ref{M:modInputParams})";
+"Control Module (M\ref{M:modControl})" -> "Input Format Module (M\ref{M:modInputFormat})";
+"Control Module (M\ref{M:modControl})" -> "Input Parameters Module (M\ref{M:modInputParams})";
+"Control Module (M\ref{M:modControl})" -> "Input Constraints Module (M\ref{M:modInputConstraints})";
+"Control Module (M\ref{M:modControl})" -> "Derived Values Module (M\ref{M:modDerivedVals})";
+"Control Module (M\ref{M:modControl})" -> "Calculations Module (M\ref{M:modcalcdesc})";
+"Control Module (M\ref{M:modControl})" -> "Interpolation Module (M\ref{M:modInterpolation})";
+"Control Module (M\ref{M:modControl})" -> "Output Format Module (M\ref{M:modoutputfdesc})";
+"Interpolation Module (M\ref{M:modInterpolation})" -> "Interpolation Data Module (M\ref{M:modInterpData})";
 }
 \end{dot2tex}
 \end{tikzpicture}

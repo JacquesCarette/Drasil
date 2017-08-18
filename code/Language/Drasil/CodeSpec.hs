@@ -18,13 +18,15 @@ import Language.Drasil.Expr.Extract (codevars)
 
 import qualified Data.Map as Map
 import Control.Lens ((^.))
-import Data.List (nub, delete)
+import Data.List (nub, delete, (\\))
 
 import Prelude hiding (const)
 
 data CodeSpec = CodeSpec {
   program :: CodeName,
   inputs :: [CodeChunk],
+  extInputs :: [CodeChunk],
+  derivedInputs :: [CodeDefinition],
   outputs :: [CodeChunk],
   relations :: [CodeDefinition],
   cMap :: ConstraintMap,
@@ -32,7 +34,6 @@ data CodeSpec = CodeSpec {
   vMap :: VarMap,
   eMap :: ModExportMap,
   constMap :: FunctionMap,
-  --fMods :: [FuncMod],
   const :: [CodeDefinition],
   choices :: Choices,
   mods :: [DMod]  -- medium hack
@@ -64,35 +65,29 @@ codeSpec si ms = codeSpec' si defaultChoices ms
 
 codeSpec' :: SystemInformation -> Choices -> [Mod] -> CodeSpec
 codeSpec' (SI {_sys = sys, _quants = q, _definitions = defs, _inputs = ins, _outputs = outs, _constraints = cs, _constants = constants}) ch ms = 
-  let mods' = (packmod "Calculations" $ map funcQD defs):ms 
-      inputs' = map codevar ins
+  let inputs' = map codevar ins
       const' = map qtoc constants
+      defs' = map qtoc defs
+      derived = getDerivedInputs defs' inputs' const'
+      rels = defs' \\ derived
+      mods' = (packmod "Calculations" $ map FCD rels):ms 
       mem   = modExportMap mods' inputs' const'
   in  CodeSpec {
         program = NICN sys,
-        inputs = inputs',
+        inputs = inputs' ++ map codevar derived,
+        extInputs = inputs',
+        derivedInputs = derived,
         outputs = map codevar outs,
-        relations = map qtoc defs,
+        relations = rels,
         cMap = constraintMap cs,
-        fMap = assocToMap $ map qtoc defs,
+        fMap = assocToMap $ rels,
         vMap = assocToMap (map codevar q),
         eMap = mem,
-        constMap = assocToMap $ map qtoc constants,
-       -- fMods = [funcMod "Calculations" defs],
+        constMap = assocToMap $ const',
         const = const',
         choices = ch,
         mods = map (getModDep mem) mods'
       }
-
--- codeSpec'' :: SystemInformation -> [FuncMod] -> Choices -> CodeSpec
--- codeSpec'' si fm ch = 
-  -- let sp = codeSpec' si ch 
-  -- in  sp { fMods = fm }
-
--- data FuncMod = FuncMod String [CodeDefinition]
-
--- funcMod :: String -> [QDefinition] -> FuncMod
--- funcMod n qd = FuncMod n $ map qtoc qd
 
 data Choices = Choices {
   lang :: [Lang],
@@ -196,8 +191,6 @@ ffor v e fs = FFor (codevar v) e fs
 fdec :: (Quantity c, SymbolForm c) => c -> Space -> FuncStmt
 fdec v t = FDec (codevar v) (spaceToCodeType t)
 
--- addModDefs :: CodeSpec -> [Mod] -> CodeSpec
--- addModDefs cs@(CodeSpec{ mods = md }) mdnew = cs { mods = md ++ mdnew }
 
 
 -- name of variable/function maps to module name
@@ -231,3 +224,9 @@ fname :: Func -> Name
 fname (FCD cd) = codeName cd
 fname (FDef (FuncDef n _ _ _)) = n
 fname (FData (FuncData n _)) = n 
+
+
+getDerivedInputs :: [CodeDefinition] -> [CodeChunk] -> [CodeDefinition] -> [CodeDefinition]
+getDerivedInputs defs ins consts =
+  let refSet = ins ++ map codevar consts 
+  in  filter (null . (filter (not . (`elem` refSet))) . codevars . codeEquat) defs

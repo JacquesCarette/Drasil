@@ -1,4 +1,4 @@
-module Drasil.SWHS.DataDefs where
+module Drasil.SWHS.DataDefs where --exports all of it
 
 import Prelude hiding (id)
 

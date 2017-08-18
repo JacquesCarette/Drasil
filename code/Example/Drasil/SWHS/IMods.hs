@@ -1,4 +1,5 @@
-module Drasil.SWHS.IMods where
+module Drasil.SWHS.IMods (s4_2_5_IMods,
+  eBalanceOnWtr, heatEInWtr) where
 
 import Language.Drasil
 

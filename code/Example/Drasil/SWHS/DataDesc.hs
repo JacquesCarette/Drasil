@@ -1,4 +1,4 @@
-module Drasil.SWHS.DataDesc where
+module Drasil.SWHS.DataDesc (swhsInputMod) where
 
 import Language.Drasil
 

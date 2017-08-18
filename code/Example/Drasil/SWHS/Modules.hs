@@ -1,4 +1,4 @@
-module Drasil.SWHS.Modules where
+module Drasil.SWHS.Modules where --all of this file is exported
 
 import Language.Drasil
 

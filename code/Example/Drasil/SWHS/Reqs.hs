@@ -1,4 +1,4 @@
-module Drasil.SWHS.Reqs where
+module Drasil.SWHS.Reqs (reqs) where
 
 import Language.Drasil
 import Drasil.SWHS.Modules (mod_ener, mod_ctrl, mod_outputf, mod_temp,

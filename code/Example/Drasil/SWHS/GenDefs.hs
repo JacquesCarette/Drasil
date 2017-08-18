@@ -1,4 +1,4 @@
-module Drasil.SWHS.GenDefs where
+module Drasil.SWHS.GenDefs (swhsGenDefs) where
 
 import Prelude hiding (sin, cos, tan)
 

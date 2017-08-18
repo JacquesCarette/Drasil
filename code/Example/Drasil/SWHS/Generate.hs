@@ -1,4 +1,4 @@
-module Drasil.SWHS.Generate where
+module Drasil.SWHS.Generate (generate) where
 
 import Language.Drasil
 

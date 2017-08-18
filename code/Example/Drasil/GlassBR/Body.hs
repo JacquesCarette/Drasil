@@ -10,7 +10,6 @@ import Drasil.Template.DD (makeDD)
 
 import Data.Drasil.SI_Units
 import Data.Drasil.People (spencerSmith, thulasi, nikitha, mCampidelli)
-
 import Data.Drasil.Concepts.Documentation (analysis, appendix, aspect,
   characteristic, class_, code, condition, constant, constraint, content,
   datum, definition, description, document, emphasis, endUser, failure,

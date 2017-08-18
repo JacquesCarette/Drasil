@@ -784,7 +784,7 @@ The scope of the requirements includes getting all input parameters related to t
 Characteristics of Intended Reader
 </h3>
 <p class="paragraph">
-Reviewers of this documentation should have a strong knowledge in theory behind glass breakage and blast risk. The reviewers should also have an understanding of second year calculus, structural mechanics, and computer applications in civil engineering.In addition, reviewers should be familiar with the applicable standards for constructions using glass from [4-6] in <a href=#Sec:Refe>this Section</a>. The users of GlassBR can have a lower level of expertise, as explained in <a href=#Sec:UserChar>this Section</a>.
+Reviewers of this documentation should have a strong knowledge in theory behind glass breakage and blast risk. The reviewers should also have an understanding of second year calculus, structural mechanics, and computer applications in civil engineering.In addition, reviewers should be familiar with the applicable standards for constructions using glass from [4-6] in <a href=#Sec:Refe>Sec:Refe</a>. The users of GlassBR can have a lower level of expertise, as explained in <a href=#Sec:UserChar>Sec:UserChar</a>.
 </p>
 </div>
 </a>
@@ -794,7 +794,7 @@ Reviewers of this documentation should have a strong knowledge in theory behind 
 Organization of Document
 </h3>
 <p class="paragraph">
-The organization of this document follows the template for an SRS for scientific computing software proposed by [1] and [2] (in <a href=#Sec:Refe>this Section</a>), with some aspects taken from Volere template 16 [3]. The presentation follows the standard pattern of presenting goals, theories, definitions, and assumptions. For readers that would like a more bottom up approach, they can start reading the data definitions in <a href=#Sec:DataDefi>this Section</a> and trace back to find any additional information they require.
+The organization of this document follows the template for an SRS for scientific computing software proposed by [1] and [2] (in <a href=#Sec:Refe>Sec:Refe</a>), with some aspects taken from Volere template 16 [3]. The presentation follows the standard pattern of presenting goals, theories, definitions, and assumptions. For readers that would like a more bottom up approach, they can start reading the data definitions in <a href=#Sec:DataDefi>Sec:DataDefi</a> and trace back to find any additional information they require.
 </p>
 <p class="paragraph">
 The goal statements are refined to the theoretical models, and the theoretical models to the instance models. The data definitions are used to support the definitions of the different models.
@@ -899,7 +899,7 @@ Input and Output
 User
 </td>
 <td>
-Characteristics of the glass slab and of the blast. Details in <a href=#Sec:IndiProdUseCase>this Section</a>
+Characteristics of the glass slab and of the blast. Details in <a href=#Sec:IndiProdUseCase>Sec:IndiProdUseCase</a>
 </td>
 </tr>
 <tr>
@@ -951,7 +951,7 @@ A system is needed to efficiently and correctly predict the blast risk involved 
 Terminology and Definitions
 </h4>
 <p class="paragraph">
-This subsection provides a list of terms that are used in the subsequent sections and their meaning, with the purpose of reducing ambiguity and making it easier to correctly understand the requirements. All of the terms are extracted from [4] in <a href=#Sec:Refe>this Section</a>.
+This subsection provides a list of terms that are used in the subsequent sections and their meaning, with the purpose of reducing ambiguity and making it easier to correctly understand the requirements. All of the terms are extracted from [4] in <a href=#Sec:Refe>Sec:Refe</a>.
 </p>
 <ol class="list">
 <li>
@@ -1033,7 +1033,7 @@ Probability of breakage (<em>P<sub>b</sub></em>) - The fraction of glass lites o
 Physical System Description
 </h4>
 <p class="paragraph">
-The physical system of GlassBR, as shown in <a href=#Figure:Thephyssyst>this Figure</a>, includes the following elements:
+The physical system of GlassBR, as shown in <a href=#Figure:Thephyssyst>Figure:Thephyssyst</a>, includes the following elements:
 </p>
 <div class="list">
 <p>
@@ -1074,7 +1074,7 @@ GS1: Analyze and predict whether the glass slab under consideration will be able
 Solution Characteristics Specification
 </h3>
 <p class="paragraph">
-The instance models that govern GlassBR are presented in <a href=#Sec:InstMode>this Section</a>. The information to understand the meaning of the instance models and their derivation is also presented, so that the instance models can be verified.
+The instance models that govern GlassBR are presented in <a href=#Sec:InstMode>Sec:InstMode</a>. The information to understand the meaning of the instance models and their derivation is also presented, so that the instance models can be verified.
 </p>
 <a id="Sec:Assu">
 <div class="subsubsection">
@@ -1084,52 +1084,44 @@ Assumptions
 <p class="paragraph">
 This section simplifies the original problem and helps in developing the theoretical model by filling in the missing information for the physical system. The numbers given in the square brackets refer to the Theoretical Models [<a href=#Sec:TheoMode>this Section</a>], Data Definitions [<a href=#Sec:DataDefi>this Section</a>], Instance Models [<a href=#Sec:InstMode>this Section</a>], or Likely Changes [<a href=#Sec:LikeChan>this Section</a>], in which the respective assumption is used.
 </p>
-<div class="list">
-<p>
-A1: The standard E1300-09a for calculation applies only to monolithic, laminated, or insulating glass constructions of rectangular shape with continuous lateral support along one, two, three, or four edges. This practice assumes that (1) the supported glass edges for two, three and four-sided support conditions are simply supported and free to slip in plane; (2) glass supported on two sides acts as a simply supported beam and (3) glass supported on one side acts as a cantilever.
-</p>
-<p>
+<a id="A:assumption1">
+<ul>
+A1: The standard E1300-09a for calculation applies only to monolithic, laminated, or insulating glass constructions of rectangular shape with continuous lateral support along. one, two, three, or four edge This practice assumes that (1) the supported glass edge for two, three and four-sided support conditions are simply supported and free to slip in plane; (2) glass supported on two sides acts as a simply supported beam and (3) glass supported on one side acts as a cantilever.
+</ul>
+</a>
+<a id="A:assumption2">
+<ul>
 A2: Following [4 (pg. 1)], this practice does not apply to any form of wired, patterned, etched, sandblasted, drilled, notched, or grooved glass with surface and edge treatments that alter the glass strength.
-</p>
-<p>
+</ul>
+</a>
+<a id="A:assumption3">
+<ul>
 A3: This system only considers the external explosion scenario for its calculations.
-</p>
-<p>
-A4: Standard values used for calculation in GlassBR are:
-</p>
-</div>
-<a id="">
-<div class="equation">
-m=7
-</div>
+</ul>
 </a>
-<a id="">
-<div class="equation">
-k=(2.86)10<sup>-53</sup>
-</div>
+<a id="A:assumption4">
+<ul>
+A4: The values provided in <a href=#Sec:ValuofAuxiCons>Sec:ValuofAuxiCons</a> are assumed for the duration of load (<em>t<sub>d</sub></em>), and the material properties of <em>m</em>, <em>k</em>, and <em>E</em>.
+</ul>
 </a>
-<a id="">
-<div class="equation">
-E=(7.17)10<sup>7</sup>
-</div>
-</a>
-<a id="">
-<div class="equation">
-<em>t<sub>d</sub></em>=3
-</div>
-</a>
-<div class="list">
-<p>
+<a id="A:assumption5">
+<ul>
 A5: Glass under consideration is assumed to be a single lite. Hence the value of LSF is equal to 1 for all calculations in GlassBR.
-</p>
-<p>
+</ul>
+</a>
+<a id="A:assumption6">
+<ul>
 A6: Boundary conditions for the glass slab is assumed to be 4-sided support for calculations.
-</p>
-<p>
+</ul>
+</a>
+<a id="A:assumption7">
+<ul>
 A7: The response type considered in GlassBR is flexural.
-</p>
-<p>
-A8: With reference to A4 the value of load duration factor (LDF) is a constant in GlassBR. It is calculated by the equation: LDF=(<div class="fraction">
+</ul>
+</a>
+<a id="A:assumption8">
+<ul>
+A8: With reference to A4 the value of load duration factor (<em>LDF</em>) is a constant in GlassBR. It is calculated by the equation: <em>LDF</em> = (<div class="fraction">
 <span class="fup">
 <em>t<sub>d</sub></em>
 </span>
@@ -1144,8 +1136,8 @@ A8: With reference to A4 the value of load duration factor (LDF) is a constant i
 16
 </span>
 </div></sup>. Using this, <em>LDF</em> = 0.27.
-</p>
-</div>
+</ul>
+</a>
 </div>
 </a>
 <a id="Sec:TheoMode">
@@ -1175,7 +1167,7 @@ Equation
 <td>
 <a id="">
 <div class="equation">
-is_safe1=<em>P<sub>b</sub></em>&lt;<em>P<sub>btol</sub></em>
+<em>is_safe1</em> = <em>P<sub>b</sub></em>&thinsp;&lt;&thinsp;<em>P<sub>btol</sub></em>
 </div>
 </a>
 </td>
@@ -1211,7 +1203,7 @@ Equation
 <td>
 <a id="">
 <div class="equation">
-is_safe2=LR&gt;q
+<em>is_safe2</em> = <em>LR</em>&thinsp;&gt;&thinsp;<em>q</em>
 </div>
 </a>
 </td>
@@ -1256,7 +1248,7 @@ Label
 </th>
 <td>
 <p class="paragraph">
-
+Risk of Failure
 </p>
 </td>
 </tr>
@@ -1309,7 +1301,7 @@ Label
 </th>
 <td>
 <p class="paragraph">
-<em>h</em>
+Actual Thickness
 </p>
 </td>
 </tr>
@@ -1337,7 +1329,7 @@ Equation
 <span class="fdn">
 1000
 </span>
-</div><span class="casebr">
+</div>&#8239;<span class="casebr">
 {
 </span>
 <div class="cases">
@@ -1418,66 +1410,6 @@ Description
 </tr>
 </table>
 </a>
-<a id="DD:loadDurFactor">
-<table class="ddefn">
-<tr>
-<th>
-Label
-</th>
-<td>
-<p class="paragraph">
-LDF
-</p>
-</td>
-</tr>
-<tr>
-<th>
-Units
-</th>
-<td>
-<p class="paragraph">
-Unitless
-</p>
-</td>
-</tr>
-<tr>
-<th>
-Equation
-</th>
-<td>
-<a id="">
-<div class="equation">
-<em>LDF</em> = (<div class="fraction">
-<span class="fup">
-<em>t<sub>d</sub></em>
-</span>
-<span class="fdn">
-60
-</span>
-</div>)<sup><div class="fraction">
-<span class="fup">
-<em>m</em>
-</span>
-<span class="fdn">
-16
-</span>
-</div></sup>
-</div>
-</a>
-</td>
-</tr>
-<tr>
-<th>
-Description
-</th>
-<td>
-<p class="paragraph">
-<em>LDF</em> is the load duration factor<br /><em>t<sub>d</sub></em> is the duration of load (s)<br /><em>m</em> is the surface flaw parameter (m<sup>12</sup>/(N<sup>7</sup>))
-</p>
-</td>
-</tr>
-</table>
-</a>
 <a id="DD:stressDistFac">
 <table class="ddefn">
 <tr>
@@ -1486,7 +1418,7 @@ Label
 </th>
 <td>
 <p class="paragraph">
-J
+Stress Distribution Factor (Function)
 </p>
 </td>
 </tr>
@@ -1507,7 +1439,7 @@ Equation
 <td>
 <a id="">
 <div class="equation">
-J = J(<em>q&#770;</em>,<div class="fraction">
+<em>J</em> = <em>J</em>(<em>q&#770;</em>,<div class="fraction">
 <span class="fup">
 <em>a</em>
 </span>
@@ -1539,7 +1471,7 @@ Label
 </th>
 <td>
 <p class="paragraph">
-NFL
+Non-Factored Load
 </p>
 </td>
 </tr>
@@ -1562,10 +1494,10 @@ Equation
 <div class="equation">
 <em>NFL</em> = <div class="fraction">
 <span class="fup">
-<em>q&#770;<sub>tol</sub></em>Eh<sup>4</sup>
+<em>q&#770;<sub>tol</sub></em>&#8239;<em>E</em>&#8239;<em>h</em><sup>4</sup>
 </span>
 <span class="fdn">
-(ab)<sup>2</sup>
+(<em>a</em>&#8239;<em>b</em>)<sup>2</sup>
 </span>
 </div>
 </div>
@@ -1578,7 +1510,7 @@ Description
 </th>
 <td>
 <p class="paragraph">
-<em>NFL</em> is the non-factored load<br /><em><em>q&#770;<sub>tol</sub></em></em> is the tolerable load<br /><em>E</em> is the modulus of elasticity of glass<br /><em>h</em> is the actual thickness<br /><em>a</em> is the plate length (long dimension)<br /><em>b</em> is the plate width (short dimension)
+<em>NFL</em> is the non-factored load<br /><em>q&#770;<sub>tol</sub></em> is the tolerable load<br /><em>E</em> is the modulus of elasticity of glass (Pa)<br /><em>h</em> is the actual thickness (m)<br /><em>a</em> is the plate length (long dimension) (m)<br /><em>b</em> is the plate width (short dimension) (m)
 </p>
 </td>
 </tr>
@@ -1592,7 +1524,7 @@ Label
 </th>
 <td>
 <p class="paragraph">
-GTF
+Glass Type Factor
 </p>
 </td>
 </tr>
@@ -1657,7 +1589,7 @@ Label
 </th>
 <td>
 <p class="paragraph">
-<em>q&#770;</em>
+Dimensionless Load
 </p>
 </td>
 </tr>
@@ -1680,10 +1612,10 @@ Equation
 <div class="equation">
 <em>q&#770;</em> = <div class="fraction">
 <span class="fup">
-q(ab)<sup>2</sup>
+<em>q</em>&#8239;(<em>a</em>&#8239;<em>b</em>)<sup>2</sup>
 </span>
 <span class="fdn">
-Eh<sup>4</sup>*GTF
+<em>E</em>&#8239;<em>h</em><sup>4</sup>&sdot;<em>GTF</em>
 </span>
 </div>
 </div>
@@ -1696,7 +1628,7 @@ Description
 </th>
 <td>
 <p class="paragraph">
-<em>q&#770;</em> is the dimensionless load<br />q is the applied load (demand)<br />a is the plate length (long dimension)<br />b is the plate width (short dimension)<br />E is the modulus of elasticity of glass<br />h is the actual thickness<br />GTF is the glass type factor
+<em>q&#770;</em> is the dimensionless load<br /><em>q</em> is the applied load (demand) (kPa)<br /><em>a</em> is the plate length (long dimension) (m)<br /><em>b</em> is the plate width (short dimension) (m)<br /><em>E</em> is the modulus of elasticity of glass (Pa)<br /><em>h</em> is the actual thickness (m)<br /><em>GTF</em> is the glass type factor
 </p>
 </td>
 </tr>
@@ -1710,7 +1642,7 @@ Label
 </th>
 <td>
 <p class="paragraph">
-<em>q&#770;<sub>tol</sub></em>
+Tolerable Load
 </p>
 </td>
 </tr>
@@ -1731,7 +1663,7 @@ Equation
 <td>
 <a id="">
 <div class="equation">
-<em>q&#770;<sub>tol</sub></em> = <em>q&#770;<sub>tol</sub></em>(J<sub>tol</sub>,<div class="fraction">
+<em>q&#770;<sub>tol</sub></em> = <em>q&#770;<sub>tol</sub></em>(<em>J<sub>tol</sub></em>,<div class="fraction">
 <span class="fup">
 <em>a</em>
 </span>
@@ -1749,7 +1681,7 @@ Description
 </th>
 <td>
 <p class="paragraph">
-<em>q&#770;<sub>tol</sub></em> is the tolerable load<br /><em>q&#770;<sub>tol</sub></em> is the tolerable load<br />J<sub>tol</sub> is the stress distribution factor (Function) based on Pbtol<br />a is the plate length (long dimension)<br />b is the plate width (short dimension)
+<em>q&#770;<sub>tol</sub></em> is the tolerable load<br /><em>J<sub>tol</sub></em> is the stress distribution factor (Function) based on Pbtol<br /><em>a</em> is the plate length (long dimension) (m)<br /><em>b</em> is the plate width (short dimension) (m)
 </p>
 </td>
 </tr>
@@ -1763,7 +1695,7 @@ Label
 </th>
 <td>
 <p class="paragraph">
-J<sub>tol</sub>
+Stress Distribution Factor (Function) Based on Pbtol
 </p>
 </td>
 </tr>
@@ -1844,7 +1776,7 @@ Equation
 <td>
 <a id="">
 <div class="equation">
-<em>P<sub>b</sub></em> = 1 &minus; e<sup>-<em>B</em></sup>
+<em>P<sub>b</sub></em> = 1 &minus; e<sup>&minus;<em>B</em></sup>
 </div>
 </a>
 </td>
@@ -1891,7 +1823,7 @@ Description
 </th>
 <td>
 <p class="paragraph">
-<em>LR</em> is the load resistance, which is also called capacity. <em>NFL</em> is the non-factored load. <em>GTF</em> is the glass type factor. <em>LSF</em> is the load share factor. Follows A2 and A1 (&quot;In development of this procedure, it was assumed that all four edges of the glass are simply supported and free to slip in the plane of the glass. This boundary condition has been shown to be typical of many glass installations&quot;) from [4 (pg. 53)].
+<em>LR</em> is the load resistance, which is also called capacity. <em>NFL</em> is the non-factored load. <em>GTF</em> is the glass type factor. <em>LSF</em> is the load share factor. Follows A2 and A1 (&quot;In the development of this procedure, it was assumed that all four edges of the glass are simply supported and free to slip in the plane of the glass. This boundary condition has been shown to be typical of many glass installations&quot;) from [4 (pg. 53)].
 </p>
 </td>
 </tr>
@@ -1941,7 +1873,7 @@ Description
 Data Constraints
 </h4>
 <p class="paragraph">
-<a href=#Table:InpuDataCons>this Table</a>, and <a href=#Table:OutpDataCons>this Table</a> shows the data constraints on the input and output variables, respectively. The column for physical constraints gives the physical limitations on the range of values that can be taken by the variable. The uncertainty column provides an estimate of the confidence with which the physical quantities can be measured. This information would be part of the input if one were performing an uncertainty quantification exercise. The constraints are conservative, to give the user of the model the flexibility to experiment with unusual situations. The column of typical values is intended to provide a feel for a common scenario. <a href=#Sec:ValuofAuxiCons>this Section</a> gives the values of the specification parameters used in <a href=#Table:InpuDataCons>this Table</a>.. <a href=#Table:OutpDataCons>this Table</a> shows the constraints that must be satisfied by the output.
+<a href=#Table:InpuDataCons>Table:InpuDataCons</a> and <a href=#Table:OutpDataCons>Table:OutpDataCons</a> shows the data constraints on the input and output variables, respectively. The column for physical constraints gives the physical limitations on the range of values that can be taken by the variable. The uncertainty column provides an estimate of the confidence with which the physical quantities can be measured. This information would be part of the input if one were performing an uncertainty quantification exercise. The constraints are conservative, to give the user of the model the flexibility to experiment with unusual situations. The column of typical values is intended to provide a feel for a common scenario. <a href=#Sec:ValuofAuxiCons>Sec:ValuofAuxiCons</a> gives the values of the specification parameters used in <a href=#Table:InpuDataCons>Table:InpuDataCons</a>. <a href=#Table:OutpDataCons>Table:OutpDataCons</a> shows the constraints that must be satisfied by the output.
 </p>
 <a id="Table:InpuDataCons">
 <table class="table">
@@ -1959,49 +1891,15 @@ Software Constraints
 Typical Value
 </th>
 <th>
-Typical Uncertainty
+TU
 </th>
-</tr>
-<tr>
-<td>
-<em>P<sub>btol</sub></em>
-</td>
-<td>
-0.0&thinsp;&lt;&thinsp;<em>P<sub>btol</sub></em> and <em>P<sub>btol</sub></em>&thinsp;&lt;&thinsp;1.0
-</td>
-<td>
-None
-</td>
-<td>
-0.008
-</td>
-<td>
-1.0e-3
-</td>
-</tr>
-<tr>
-<td>
-<em>TNT</em>
-</td>
-<td>
-<em>TNT</em>&thinsp;&gt;&thinsp;0.0
-</td>
-<td>
-None
-</td>
-<td>
-1
-</td>
-<td>
-0.1
-</td>
 </tr>
 <tr>
 <td>
 <em>a</em>
 </td>
 <td>
-<em>a</em>&thinsp;&gt;&thinsp;0.0 and <div class="fraction">
+0&thinsp;&lt;&thinsp;<em>a</em> and <div class="fraction">
 <span class="fup">
 <em>a</em>
 </span>
@@ -2032,7 +1930,7 @@ None
 <em>b</em>
 </td>
 <td>
-<em>b</em>&thinsp;&gt;&thinsp;0.0 and <em>b</em>&thinsp;&lt;&thinsp;<em>a</em>
+0&thinsp;&lt;&thinsp;<em>b</em> and <em>b</em>&thinsp;&lt;&thinsp;<em>a</em>
 </td>
 <td>
 <em>d<sub>min</sub></em>&thinsp;&le;&thinsp;<em>b</em>, <em>b</em>&thinsp;&le;&thinsp;<em>d<sub>max</sub></em>, and <div class="fraction">
@@ -2046,6 +1944,23 @@ None
 </td>
 <td>
 1.2 m
+</td>
+<td>
+0.1
+</td>
+</tr>
+<tr>
+<td>
+<em>SD</em>
+</td>
+<td>
+0&thinsp;&lt;&thinsp;<em>SD</em>
+</td>
+<td>
+<em>SD<sub>min</sub></em>&thinsp;&lt;&thinsp;<em>SD</em> and <em>SD</em>&thinsp;&lt;&thinsp;<em>SD<sub>max</sub></em>
+</td>
+<td>
+45.0 m
 </td>
 <td>
 0.1
@@ -2070,16 +1985,33 @@ None
 </tr>
 <tr>
 <td>
-<em>SD</em>
+<em>P<sub>btol</sub></em>
 </td>
 <td>
-<em>SD</em>&thinsp;&gt;&thinsp;0.0
+0&thinsp;&lt;&thinsp;<em>P<sub>btol</sub></em> and <em>P<sub>btol</sub></em>&thinsp;&lt;&thinsp;1.0
 </td>
 <td>
-<em>SD<sub>min</sub></em>&thinsp;&lt;&thinsp;<em>SD</em> and <em>SD</em>&thinsp;&lt;&thinsp;<em>SD<sub>max</sub></em>
+None
 </td>
 <td>
-45.0 m
+0.008
+</td>
+<td>
+1.0e-3
+</td>
+</tr>
+<tr>
+<td>
+<em>TNT</em>
+</td>
+<td>
+0&thinsp;&lt;&thinsp;<em>TNT</em>
+</td>
+<td>
+None
+</td>
+<td>
+1
 </td>
 <td>
 0.1
@@ -2356,23 +2288,31 @@ Given the small size, and relative simplicity, of this problem, performance is n
 <h2>
 Likely Changes
 </h2>
-<div class="list">
-<p>
+<a id="LC:s8likelychg1">
+<ul>
 LC1: A3 - The system currently only calculates for external blast risk. In the future calculations can be added for the internal blast risk.
-</p>
-<p>
-LC2: A4, A8 - Currently the values for m, k, and E are assumed to be the same for all glass. In the future these values can be changed to variable inputs.
-</p>
-<p>
+</ul>
+</a>
+<a id="LC:s8likelychg2">
+<ul>
+LC2: A4, A8 - Currently the values for <em>m</em>, <em>k</em>, and <em>E</em> are assumed to be the same for all glass. In the future these values can be changed to variable inputs.
+</ul>
+</a>
+<a id="LC:s8likelychg3">
+<ul>
 LC3: A5 - The software may be changed to accommodate more than a single lite.
-</p>
-<p>
+</ul>
+</a>
+<a id="LC:s8likelychg4">
+<ul>
 LC4: A6 - The software may be changed to accommodate more boundary conditions than 4-sided support.
-</p>
-<p>
+</ul>
+</a>
+<a id="LC:s8likelychg5">
+<ul>
 LC5: A7 - The software may be changed to consider more than just flexure of the glass.
-</p>
-</div>
+</ul>
+</a>
 </div>
 </a>
 <a id="Sec:TracMatrandGrap">
@@ -4272,7 +4212,7 @@ m<sup>12</sup>/(N<sup>7</sup>)
 surface flaw parameter
 </td>
 <td>
-(2.86)&#8239;10<sup>-53</sup>
+(2.86)&#8239;10<sup>&minus;53</sup>
 </td>
 <td>
 m<sup>12</sup>/(N<sup>7</sup>)

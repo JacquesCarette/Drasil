@@ -4,20 +4,23 @@
 \hypersetup{bookmarks=true,colorlinks=true,linkcolor=red,citecolor=blue,filecolor=magenta,urlcolor=cyan}
 \usepackage{amsmath}
 \usepackage{amssymb}
+\usepackage{mathtools}
 \usepackage{breqn}
-\usepackage{filecontents}
-\usepackage[backend=bibtex]{biblatex}
+\usepackage{tabu}
 \usepackage{longtable}
 \usepackage{booktabs}
 \usepackage{caption}
 \usepackage{graphics}
-\bibliography{bibfile}
+\usepackage{filecontents}
+\usepackage[backend=bibtex]{biblatex}
+\global\tabulinesep=1mm
 \newcounter{assumpnum}
 \newcommand{\atheassumpnum}{A\theassumpnum}
 \newcounter{reqnum}
 \newcommand{\rthereqnum}{R\thereqnum}
 \newcounter{lcnum}
 \newcommand{\lcthelcnum}{LC\thelcnum}
+\bibliography{bibfile}
 \title{Software Requirements Specification for GlassBR program}
 \author{Nikitha Krithnan and Spencer Smith}
 \begin{document}
@@ -51,7 +54,7 @@ N & force (newton)
 \subsection{Table of Symbols}
 \label{Sec:TablofSymb}
 The table that follows summarizes the symbols used in this document along with their units. The symbols are listed in alphabetical order.
-\begin{longtable*}{l l l}
+\begin{longtabu}{l X[l] l}
 \toprule
 Symbol & Description & Units
 \\
@@ -134,7 +137,7 @@ ${w_{TNT}}$ & Explosive mass in equivalent weight of TNT & kg
 \\
 \bottomrule
 \label{Table:TablofSymb}
-\end{longtable*}
+\end{longtabu}
 \subsection{Abbreviations and Acronyms}
 \label{Sec:AbbrandAcro}
 \begin{longtable*}{l l}
@@ -188,6 +191,8 @@ T & Theoretical Model
 \\
 TNT & TNT (Trinitrotoluene) Equivalent Factor
 \\
+TU & Typical Uncertainty
+\\
 \bottomrule
 \label{Table:AbbrandAcro}
 \end{longtable*}
@@ -236,7 +241,7 @@ There are no system constraints.
 This section presents the scope of the project. It describes the expected use of GlassBR as well as the inputs and outputs of each action. The use cases are input and output, which defines the action of getting the input and displaying the output.
 \subsection{Product Use Case Table}
 \label{Sec:ProdUseCaseTabl}
-\begin{longtable}{l l}
+\begin{longtabu}{l X[l]}
 \toprule
 Actor & Input and Output
 \\
@@ -248,7 +253,7 @@ GlassBR & Whether or not the glass slab is safe for the calculated load and supp
 \bottomrule
 \caption{Use Case Table}
 \label{Table:UseCaseTabl}
-\end{longtable}
+\end{longtabu}
 \subsection{Individual Product Use Cases}
 \label{Sec:IndiProdUseCase}
 The user provides the inputs to GlassBR for use within the analysis. There are two main classes of inputs: glass geometry and blast type. The glass geometry based inputs include the glass type and dimensions of the glass plane. The blast type input includes parameters like weight of charge, TNT equivalent factor and stand off distance from the point of explosion. These parameters describe charge weight and stand off blast. Another input the user gives is the tolerable value of probability of breakage. GlassBR outputs if the glass slab will be safe by comparing whether capacity is greater than demand. Capacity is the the load resistance calculated and demand is the requirement which is the 3 second duration equivalent pressure. The second condition is to check whether the calculated probability (${P_{b}}$) is less than the tolerable probability (${P_{btol}}$) which is obtained from the user as an input. If both conditions return true then it's shown that the glass slab is safe to use, else if both return false then the glass slab is considered unsafe. All the supporting calculated values are also displayed as output.
@@ -426,22 +431,6 @@ Description & $h$ is the actual thickness (m)\newline$t$ is the nominal thicknes
 ~\newline
 \noindent \begin{minipage}{\textwidth}
 \begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
-\toprule \textbf{Refname} & \textbf{DD:loadDurFactor}
-\phantomsection 
-\label{DD:loadDurFactor}
-\\ \midrule \\
-Label & Load Duration Factor
-\\ \midrule \\
-Units & Unitless
-\\ \midrule \\
-Equation & $LDF$ = $\left(\frac{{t_{d}}}{60}\right)^{\frac{m}{16}}$
-\\ \midrule \\
-Description & $LDF$ is the load duration factor\newline${t_{d}}$ is the duration of load (s)\newline$m$ is the surface flaw parameter ($\frac{\text{m}^{12}}{\text{N}^{7}}$)
-\\ \bottomrule \end{tabular}
-\end{minipage}\\
-~\newline
-\noindent \begin{minipage}{\textwidth}
-\begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
 \toprule \textbf{Refname} & \textbf{DD:stressDistFac}
 \phantomsection 
 \label{DD:stressDistFac}
@@ -567,7 +556,7 @@ Label & Calculation of Capacity(LR)
 \\ \midrule \\
 Equation & $LR=NFL\cdot{}GTF\cdot{}LSF$
 \\ \midrule \\
-Description & $LR$ is the load resistance, which is also called capacity. $NFL$ is the non-factored load. $GTF$ is the glass type factor. $LSF$ is the load share factor. Follows A2 and A1 (``In development of this procedure, it was assumed that all four edges of the glass are simply supported and free to slip in the plane of the glass. This boundary condition has been shown to be typical of many glass installations") from [4 (pg. 53)].
+Description & $LR$ is the load resistance, which is also called capacity. $NFL$ is the non-factored load. $GTF$ is the glass type factor. $LSF$ is the load share factor. Follows A2 and A1 (``In the development of this procedure, it was assumed that all four edges of the glass are simply supported and free to slip in the plane of the glass. This boundary condition has been shown to be typical of many glass installations") from [4 (pg. 53)].
 \\ \bottomrule \end{tabular}
 \end{minipage}\\
 ~\newline
@@ -586,7 +575,7 @@ Description & $q$ or demand, is the 3 second duration equivalent pressure obtain
 \end{minipage}\\
 \subsubsection{Data Constraints}
 \label{Sec:DataCons}
-Table~\ref{Table:Tabl2:InpuVari} shows the data constraints on the input variables. The column of physical constraints gives the physical limitations on the range of values that can be taken by the variable. The constraints are conservative, to give the user of the model the flexibility to experiment with unusual situations. The column of typical values is intended to provide a feel for a common scenario. The uncertainty column provides an estimate of the confidence with which the physical quantities can be measured. This information would be part of the input if one were performing an uncertainty quantification exercise. Table 3 (Table~\ref{Table:Tabl3:SpecParaValu}) gives the values of the specification parameters used in Table~\ref{Table:Tabl2:InpuVari}. $AR_{max}$ refers to the maximum aspect ratio for the plate of glass.
+Table~\ref{Table:InpuDataCons} and Table~\ref{Table:OutpDataCons} shows the data constraints on the input and output variables, respectively. The column for physical constraints gives the physical limitations on the range of values that can be taken by the variable. The uncertainty column provides an estimate of the confidence with which the physical quantities can be measured. This information would be part of the input if one were performing an uncertainty quantification exercise. The constraints are conservative, to give the user of the model the flexibility to experiment with unusual situations. The column of typical values is intended to provide a feel for a common scenario. Section~\ref{Sec:ValuofAuxiCons} gives the values of the specification parameters used in Table~\ref{Table:InpuDataCons}. Table~\ref{Table:OutpDataCons} shows the constraints that must be satisfied by the output.
 \begin{longtable}{l l l l l}
 \toprule
 Var & Physical Constraints & Software Constraints & Typical Value & TU
@@ -627,7 +616,7 @@ This section provides the functional requirements, the business tasks that the s
 \begin{itemize}
 \item[R1:]Input the following quantities, which define the glass dimensions, type of glass, tolerable probability of failure and the characteristics of the blast:
 \end{itemize}
-\begin{longtable}{l l l}
+\begin{longtabu}{l X[l] l}
 \toprule
 Symbol & Description & Units
 \\
@@ -655,7 +644,7 @@ $t$ & Nominal thickness $t\in{}\{2.5, 2.7, 3.0, 4.0, 5.0, 6.0, 8.0, 10.0, 12.0, 
 \bottomrule
 \caption{Required Inputs following R1}
 \label{Table:RequInpufollR1}
-\end{longtable}
+\end{longtabu}
 \begin{itemize}
 \item[R2:]The system shall set the known values as follows:
           \begin{enumerate}
@@ -687,13 +676,21 @@ $t$ & Nominal thickness $t\in{}\{2.5, 2.7, 3.0, 4.0, 5.0, 6.0, 8.0, 10.0, 12.0, 
 Given the small size, and relative simplicity, of this problem, performance is not a priority. Any reasonable implementation will be very quick and use minimal storage. Rather than performance, the priority non-functional Rs are correctness, verifiability, understandability, reusability, maintainability, and portability.
 \section{Likely Changes}
 \label{Sec:LikeChan}
-\begin{itemize}
-\item[LC1:]A3 - The system currently only calculates for external blast risk. In the future calculations can be added for the internal blast risk.
-\item[LC2:]A4, A8 - Currently the values for $m$, $k$, and $E$ are assumed to be the same for all glass. In the future these values can be changed to variable inputs.
-\item[LC3:]A5 - The software may be changed to accommodate more than a single lite.
-\item[LC4:]A6 - The software may be changed to accommodate more boundary conditions than 4-sided support.
-\item[LC5:]A7 - The software may be changed to consider more than just flexure of the glass.
-\end{itemize}
+\begin{description}
+\item[\refstepcounter{lcnum}\lcthelcnum\label{LC:s8likelychg1}:]A3 - The system currently only calculates for external blast risk. In the future calculations can be added for the internal blast risk.
+\end{description}
+\begin{description}
+\item[\refstepcounter{lcnum}\lcthelcnum\label{LC:s8likelychg2}:]A4, A8 - Currently the values for $m$, $k$, and $E$ are assumed to be the same for all glass. In the future these values can be changed to variable inputs.
+\end{description}
+\begin{description}
+\item[\refstepcounter{lcnum}\lcthelcnum\label{LC:s8likelychg3}:]A5 - The software may be changed to accommodate more than a single lite.
+\end{description}
+\begin{description}
+\item[\refstepcounter{lcnum}\lcthelcnum\label{LC:s8likelychg4}:]A6 - The software may be changed to accommodate more boundary conditions than 4-sided support.
+\end{description}
+\begin{description}
+\item[\refstepcounter{lcnum}\lcthelcnum\label{LC:s8likelychg5}:]A7 - The software may be changed to consider more than just flexure of the glass.
+\end{description}
 \section{Traceability Matrices and Graphs}
 \label{Sec:TracMatrandGrap}
 The purpose of the traceability matrices is to provide easy references on what has to be additionally modified if a certain component is changed. Every time a component is changed, the items in the column of that component that are marked with an ``X" should be modified as well. Table~\ref{Table:TracMatrShowtheConnBetwItemofDiffSect} shows the dependencies of theoretical models, instance models, and data definitions with each other. Table~\ref{Table:TracMatrShowtheConnBetwRequandOtheItem} shows the dependencies of requirements on theoretical models, instance models, data definitions, and data constraints. Table~\ref{Table:TracMatrShowtheConnBetwAssuandOtheItem} shows the dependencies of theoretical models, instance models, data definitions, likely changes and requirements on the assumptions.
@@ -836,7 +833,7 @@ NOTE: Building a tool to automatically generate the graphical representation of 
 \section{Values of Auxiliary Constants}
 \label{Sec:ValuofAuxiCons}
 This section contains the standard values that are used for calculations in GlassBR.
-\begin{longtable}{l l l l}
+\begin{longtabu}{l X[l] l l}
 \toprule
 Symbol & Description & Value & Unit
 \\
@@ -870,7 +867,7 @@ ${SD_{max}}$ & maximum stand off distance permissible for input & $130.0$ & m
 \bottomrule
 \caption{Auxiliary Constants}
 \label{Table:AuxiCons}
-\end{longtable}
+\end{longtabu}
 \section{References}
 \label{Sec:Refe}
 \begin{itemize}
@@ -894,8 +891,8 @@ This appendix holds the graphs (Figure~\ref{Figure:Figu5:3secoduraequipres()vers
 \begin{figure}
 \begin{center}
 \includegraphics{ASTM_F2248-09_BeasonEtAl.png}
-\caption{Figure 6: Non dimensional lateral load ($\hat{q}$) versus Aspect Ratio ($AR$) versus Stress distribution factor (Function) ($J$)}
-\label{Figure:Figu6:Nondimelateload()versAspeRati()versStredistfact(Fun()}
+\caption{Figure 6: Non dimensional lateral load ($\hat{q}$) versus Aspect Ratio (AR) versus Stress distribution factor (Function) ($J$)}
+\label{Figure:Figu6:Nondimelateload()versAspeRati(AR)versStredistfact(Fun()}
 \end{center}
 \end{figure}
 \end{document}

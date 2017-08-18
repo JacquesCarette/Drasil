@@ -25,7 +25,7 @@ iModels = [probOfBr, calOfCap, calOfDe]
 
 probOfBr :: RelationConcept
 probOfBr = makeRC "probOfBr" (nounPhraseSP "Probability of Glass Breakage")
-  pbdescr $ (C prob_br) := 1 - exp (- C risk)
+  pbdescr $ (C prob_br) := 1 - (exp (Neg (C risk)))
 
 pbdescr :: Sentence
 pbdescr =

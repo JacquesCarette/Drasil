@@ -429,7 +429,7 @@ s6_2 = solChSpecF gLassBR (s6_1, (SRS.likeChg SRS.missingP [])) EmptyS
   where
     end = foldlSent [(makeRef (SRS.valsOfAuxCons SRS.missingP [])),
       S "gives", (plural value `ofThe` S "specification"),
-      plural parameter, S "used in" +:+. (makeRef s6_2_5_table1)]
+      plural parameter, S "used in", (makeRef s6_2_5_table1)]
       +:+ s6_2_5_intro2
 
 s6_2_intro = foldlSP [S "This", phrase section_, S "explains all the",

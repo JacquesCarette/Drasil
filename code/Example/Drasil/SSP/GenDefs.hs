@@ -2,9 +2,16 @@ module Drasil.SSP.GenDefs (sspGenDefs, eqlExpr, displMtx,
   rotMtx, momExpr) where
 
 import Prelude hiding (sin, cos, tan)
-
 import Language.Drasil
-import Drasil.SSP.Unitals
+
+import Drasil.SSP.Unitals (baseAngle, genDisplace, rotatedDispl, dy_i,
+  dx_i, inxi, index, nrmDispl, shrDispl, elmPrllDispl, elmNrmDispl,
+  nrmStiffBase, shrStiffIntsl, genPressure, intShrForce, intNormForce,
+  fy, fx, impLoadAngle, surfLoad, surfHydroForce, baseHydroForce,
+  slcWght, inxiM1, surfAngle, earthqkLoadFctr, watrForceDif, midpntHght,
+  baseWthX, sliceHght, watrForce, scalFunc, xi, normToShear, fs, shrResI,
+  shearFNoIntsl, shrResI, mobShrI, nrmFSubWat, totNrmForce, baseLngth,
+  shrStress, cohesion, fricAngle)
 import Data.Drasil.Concepts.Documentation (element,
   system, value, variable, definition, model,
   assumption, property, method_)
@@ -18,7 +25,7 @@ import Data.Drasil.Quantities.SolidMechanics (nrmStrss)
 import Data.Drasil.Concepts.Math (surface, angle,
   matrix, vector, perp, normal)
 import Data.Drasil.Utils (getS)
-import qualified Drasil.SRS as SRS
+import Drasil.SRS as SRS (physSyst, missingP)
 
 eqlExpr :: (Expr -> Expr) -> (Expr -> Expr) -> (Expr -> Expr -> Expr) -> Expr
 eqlExpr f1_ f2_ _e_ = (inxi slcWght `_e_`

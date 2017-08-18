@@ -1,6 +1,6 @@
 module Main (main) where
 
-import Language.Drasil (DocType(SRS,MG,Website),Recipe(Recipe),gen, genCode)
+import Language.Drasil (DocType(SRS,MG,Website), Recipe(Recipe), gen, genCode)
 
 import Drasil.SSP.Body (ssp_srs, ssp_mg, ssp_code)
 

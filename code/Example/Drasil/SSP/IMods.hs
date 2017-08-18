@@ -2,10 +2,21 @@ module Drasil.SSP.IMods where
 --(sspIMods), currently weaves the derivations in body.hs
 
 import Prelude hiding (tan, product, sin, cos)
-
 import Language.Drasil
-import Drasil.SSP.Unitals
+import Control.Lens ((^.))
+
+import Drasil.SSP.Unitals (inxi, shrStress, baseLngth, sum1toN, mobStress,
+  fs, fsloc, shrDispl, shrStiffBase, genForce, constant_a, fricAngle,
+  normStress, baseWthX, cohesion, poissnsRatio, intNormForce, nrmStiffBase,
+  nrmDispl, dy_i, dx_i, baseAngle, genDisplace, rotatedDispl, index, yi,
+  xi, numbSlices, shrResC, shearRNoIntsl, shearFNoIntsl, inx, mobShrC,
+  inxi, inxiP1, normToShear, scalFunc, intShrForce, wiif, inxiM1, totNrmForce,
+  nrmFSubWat, mobShrI, baseHydroForce, impLoadAngle, surfLoad, surfAngle,
+  surfHydroForce, earthqkLoadFctr, slcWght, midpntHght, watrForce, critCoords,
+  indxn, minFunction, surfLngth, shrStiffIntsl, watrForceDif, effStiffB,
+  effStiffA, nrmStiffIntsl, indx1, normFunc, shearFunc, varblU, varblV)
 import Drasil.SSP.Defs (slope, slice, slip,
+
   intrslce, ssa, morPrice, crtSlpSrf, factorOfSafety)
 import Data.Drasil.SentenceStructures (foldlSent, isThe)
 import Data.Drasil.Utils (getS)
@@ -14,11 +25,9 @@ import Data.Drasil.Utils (getS)
 import Data.Drasil.Concepts.Documentation (analysis,
   solution, definition, value, assumption, physicalProperty,
   problem, method_)
-import Data.Drasil.SentenceStructures (andThe,
-  acroA, acroGD, acroDD, sIs, sIn, getTDS,
-  getTandS, ofThe, ofThe', sAnd, sOf,
-  acroIM, acroT, eqN, foldlSP, foldlSent_)
-import Control.Lens ((^.))
+import Data.Drasil.SentenceStructures (andThe, acroA, acroGD, acroDD,
+  sIs, sIn, getTDS, getTandS, ofThe, ofThe', sAnd, sOf, acroIM, acroT,
+  eqN, foldlSP, foldlSent_)
 import Data.Drasil.Concepts.Math (equation, surface)
 import Data.Drasil.Concepts.Physics (displacement, force)
 import Data.Drasil.Concepts.PhysicalProperties (mass)

@@ -25,7 +25,8 @@ modules = [mod_hw, mod_behav, mod_ctrl, mod_inputf, mod_outputf, mod_genalg,
            mod_kinadm, mod_slipslicer, mod_slipweight, mod_mp, mod_rfem,
            mod_sps, mod_sw, mod_sds, mod_rng, mod_plot]
 
--- HW Hiding Module, Behaviour Hiding Module, and Software Decision Module imported
+-- HW Hiding Module, Behaviour Hiding Module, and
+-- Software Decision Module imported
 
 -- Control module
 mod_ctrl :: ModuleChunk
@@ -112,8 +113,8 @@ mod_slipslicer_desc = dccWDS "mod_slipslicer_desc" (cn' "slip slicer")
 
 mod_slipslicer :: ModuleChunk
 mod_slipslicer = makeImpModule mod_slipslicer_desc
-  (foldlSent [at_start algorithm, S "to determine the coordinates of where the",
-  phrase slpSrf, phrase intrslce, S "nodes occur"])
+  (foldlSent [at_start algorithm, S "to determine the coordinates of",
+  S "where the", phrase slpSrf, phrase intrslce, S "nodes occur"])
   ssa
   []
   []
@@ -167,8 +168,8 @@ mod_rfem_desc = dccWDS "mod_rfem_desc" (cn' "RFEM solver")
 
 mod_rfem :: ModuleChunk
 mod_rfem = makeImpModule mod_rfem_desc
-  (foldlSent [S "The", phrase algorithm, S "to perform a",
-  titleize rgFnElm, titleize method_, phrase analysis, S "of the", phrase slope])
+  (foldlSent [S "The", phrase algorithm, S "to perform a", titleize rgFnElm,
+  titleize method_, phrase analysis, S "of the", phrase slope])
   ssa
   []
   []
@@ -208,8 +209,8 @@ mod_sds = mod_seq_fun matlab []
 
 -- random number generator module
 mod_rng :: ModuleChunk
-mod_rng = mod_rng_fun matlab [] (foldlSent [S "Randomly produces numbers between",
-  E 0, S "and", E 1 `sC`
+mod_rng = mod_rng_fun matlab [] (
+  foldlSent [S "Randomly produces numbers between", E 0, S "and", E 1 `sC`
   S "using a chaotic function with an external seed. Used when generating",
   plural slpSrf, S "in the", titleize mod_genalg_desc, titleize module_])
 

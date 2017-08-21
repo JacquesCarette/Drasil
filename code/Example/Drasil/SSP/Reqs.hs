@@ -1,7 +1,10 @@
-module Drasil.SSP.Reqs where
+module Drasil.SSP.Reqs (reqs) where
 
 import Language.Drasil
-import Drasil.SSP.Modules
+import Drasil.SSP.Modules (mod_ctrl, mod_genalg,
+  mod_inputf, mod_mp, mod_outputf, mod_plot,
+  mod_rfem, mod_rng, mod_sds, mod_slipslicer,
+  mod_slipweight, mod_kinadm)
 
 reqs :: [ReqChunk]
 reqs = [r1,r2,r3,r4,r5,r6,r7,r8,r9,r10,r11]
@@ -19,6 +22,3 @@ r8  = ReqChunk emptyN [mod_genalg, mod_sds]
 r9  = ReqChunk emptyN [mod_ctrl, mod_outputf, mod_slipslicer, mod_sds]
 r10 = ReqChunk emptyN [mod_outputf, mod_mp, mod_rfem, mod_sds]
 r11 = ReqChunk emptyN [mod_outputf, mod_plot]
-
-emptyN :: NWrapper
-emptyN = nw $ npnc "" (cn "")

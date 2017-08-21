@@ -153,3 +153,6 @@ shift a b = UShift a (b ^. usymb)
 -- | Smart constructor for new derived units from existing units.
 new_unit :: String -> USymb -> DerUChunk
 new_unit s u = makeDerU (unitCon s) (USynonym u)
+
+instance Eq UnitDefn where
+  a == b = (a ^. usymb) == (b ^. usymb)

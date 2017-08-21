@@ -21,7 +21,7 @@ module Language.Drasil.Code.Imperative.AST (
     methodType,methodTypeVoid,
     block,body,defaultValue,defaultValue',
     true,false,
-    var, arg, self, svToVar,
+    var, extvar, arg, self, svToVar,
     pubClass,privClass,privMVar,pubMVar,pubGVar,privMethod,pubMethod,constructor,
     mainMethod,
     (?!),(?<),(?<=),(?>),(?>=),(?==),(?!=),(?&&),(?||),
@@ -42,7 +42,7 @@ module Language.Drasil.Code.Imperative.AST (
     addComments,comment,commentDelimit,endCommentDelimit,prefixFirstBlock,
     getterName,setterName,convertToClass,convertToMethod,bodyReplace,funcReplace,valListReplace,
     objDecNew,objDecNewVoid,objDecNew',objDecNewVoid',objMethodCall, objMethodCallVoid, 
-    listSize, listAccess, listAppend, listSlice, stringSplit,
+    listSize, listAccess, listAppend, listSlice, stringSplit, listExtend,
     valStmt,funcApp,funcApp',func,continue,
     toAbsCode, getClassName, buildModule, moduleName, libs, classes, functions, ignoreMain, notMainModule, multi,
     convToClass
@@ -134,7 +134,7 @@ data Value = EnumElement Label Label    --EnumElement enumName elementName
            | ObjAccess Value Function
            | StateObj (Maybe Library) StateType [Value]
            | Self
-           | Var Label
+           | Var (Maybe Library) Label
            | EnumVar Label
            | ObjVar Value Value
            | ListVar Label StateType
@@ -160,6 +160,7 @@ data Function = Func {funcName :: Label, funcParams :: [Value]}
               | ListSet Value Value     --ListSet index value
               | ListPopulate Value StateType --ListPopulate size type : populates the list with a default value for its type. Ignored in languages where it's unnecessary in order to use the ListSet function.  
               | ListAppend Value
+              | ListExtend StateType
               | IterBegin | IterEnd
               | Floor | Ceiling            
     deriving (Eq, Show)
@@ -269,7 +270,10 @@ false :: Value
 false = Lit $ LitBool False
 
 var :: Label -> Value
-var = Var
+var = Var Nothing
+
+extvar :: Library -> Label -> Value
+extvar l v = Var (Just l) v
 
 arg :: Int -> Value
 arg = Arg 
@@ -278,7 +282,7 @@ self :: Value
 self = Self
 
 svToVar :: StateVar -> Value
-svToVar (StateVar n _ _ _ _) = Self $-> Var n
+svToVar (StateVar n _ _ _ _) = Self $-> var n
 
 pubClass :: Label -> Maybe Label -> [StateVar] -> [Method] -> Class
 pubClass n p vs fs = Class n p Public vs fs
@@ -388,11 +392,11 @@ a &= b = assign a b
 
 (&.=) :: Label -> Value -> Statement
 infixr 1 &.=
-a &.= b = assign (Var a) b
+a &.= b = assign (var a) b
 
 (&=.) :: Value -> Label -> Statement
 infixr 1 &=.
-a &=. b = assign a (Var b)
+a &=. b = assign a (var b)
 
 (&-=) :: Value -> Value -> Statement
 infixl 1 &-=
@@ -400,7 +404,7 @@ n &-= v = (n &= (n #- v))
 
 (&.-=) :: Label -> Value -> Statement
 infixl 1 &.-=
-n &.-= v = (n &.= (Var n #- v))
+n &.-= v = (n &.= (var n #- v))
 
 (&+=) :: Value -> Value -> Statement
 infixl 1 &+=
@@ -408,7 +412,7 @@ n &+= v = AssignState $ PlusEquals n v
 
 (&.+=) :: Label -> Value -> Statement
 infixl 1 &.+=
-n &.+= v = AssignState $ PlusEquals (Var n) v
+n &.+= v = AssignState $ PlusEquals (var n) v
 
 (&++) :: Value -> Statement
 infixl 8 &++
@@ -416,7 +420,7 @@ infixl 8 &++
 
 (&.++) :: Label -> Statement
 infixl 8 &.++
-(&.++) l = AssignState $ PlusPlus (Var l)
+(&.++) l = AssignState $ PlusPlus (var l)
 
 (&~-) :: Value -> Statement        --can't use &-- as the operator for this since -- is the comment symbol in Haskell
 infixl 8 &~-
@@ -473,7 +477,7 @@ assign :: Value -> Value -> Statement
 assign a b = AssignState $ Assign a b
 
 at :: Label -> Function
-at = ListAccess . Var
+at = ListAccess . var
 
 binExpr :: Value -> BinaryOp -> Value -> Value
 binExpr v1 op v2 = Expr $ BinaryExpr v1 op v2
@@ -569,6 +573,9 @@ listAccess = ListAccess
 listAppend :: Value -> Function
 listAppend = ListAppend
 
+listExtend :: StateType -> Function
+listExtend = ListExtend
+
 listSlice :: StateType -> Value -> Value -> (Maybe Value) -> (Maybe Value) -> (Maybe Value) -> Statement
 listSlice st v1 v2 b e s = ComplexState $ ListSlice st v1 v2 b e s
 
@@ -585,8 +592,8 @@ params :: [(Label, StateType)] -> [Parameter]
 params = map (\(l,st) -> StateParam l st)
 
 paramToVar :: Parameter -> Value
-paramToVar (StateParam l _) = Var l
-paramToVar (FuncParam l _ _) = Var l
+paramToVar (StateParam l _) = var l
+paramToVar (FuncParam l _ _) = var l
 
 print :: StateType -> Value -> Statement
 print s v = IOState $ Out Console False s v
@@ -660,7 +667,7 @@ return :: Value -> Statement
 return = RetState . Ret
 
 returnVar :: Label -> Statement
-returnVar = return . Var
+returnVar = return . var
 
 switch :: Value -> [(Literal, Body)] -> Body -> Statement
 switch v cs defBody = CondState $ Switch v cs defBody
@@ -763,9 +770,9 @@ convertToClass c = c
 
 convertToMethod :: Method -> Method
 convertToMethod (GetMethod n t) = Method (getterName n) Public Dynamic t [] getBody
-    where getBody = oneLiner $ return (Self$->(Var n))
+    where getBody = oneLiner $ return (Self$->(var n))
 convertToMethod (SetMethod n p@(StateParam pn _)) = Method (setterName n) Public Dynamic Void [p] setBody
-    where setBody = oneLiner $ Self$->(Var n) &=. pn
+    where setBody = oneLiner $ Self$->(var n) &=. pn
 convertToMethod (MainMethod b) = Method "main" Public Static Void [] b
 convertToMethod t = t
 

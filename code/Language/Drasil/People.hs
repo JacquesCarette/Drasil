@@ -2,7 +2,7 @@ module Language.Drasil.People
   ( People, Person(..)
   , person, person', personWM, personWM', mononym
   , HasName
-  , name, manyNames
+  , name, manyNames, nameStr
   , Conv(..) --This is needed to unwrap names for the bibliography
   , lstName, initial
   , rendPersLFM, rendPersLFM', rendPersLFM''
@@ -57,13 +57,17 @@ mononym :: String -> Person
 mononym n = Person "NFN" n [] Mono
 
 class HasName p where
-  name :: p -> Sentence
+  nameStr :: p -> String
 
 instance HasName Person where
-  name (Person _ n _ Mono) = S n
-  name (Person f l ms Western) = S $ concat (intersperse " " $ [f] ++ ms ++ [l])
-  name (Person g s ms Eastern) = S $ concat (intersperse " " $ [s] ++ ms ++ [g])
+  nameStr (Person _ n _ Mono) = isInitial n
+  nameStr (Person f l ms Western) = concat (intersperse " " $
+    [isInitial f] ++ map isInitial ms ++ [isInitial l])
+  nameStr (Person g s ms Eastern) = concat (intersperse " " $
+    [isInitial s] ++ map isInitial ms ++ [isInitial g])
 
+name :: (HasName n) => n -> Sentence
+name = S . nameStr
 -- this is a weirder recursion, so it's ok to do it explicitly
 -- make it work for short lists too, but it shouldn't be used that way!
 -- | Used for rendering lists of names (one or more) to Sentences.

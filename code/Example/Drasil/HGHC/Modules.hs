@@ -1,29 +1,33 @@
-module Drasil.HGHC.Modules where
+module Drasil.HGHC.Modules (mod_calc, mod_inputp, mod_inputf, 
+  mod_outputf, mod_ctrl) where
 
 import Language.Drasil
 import Language.Drasil.Code hiding (self)
-import Drasil.HGHC.HeatTransfer
-import Data.Drasil.Concepts.Software
 import Prelude hiding (id)
 import Control.Lens ((^.))
 
-import Data.Drasil.Modules
-import Data.Drasil.Concepts.Documentation
-import Data.Drasil.Concepts.Math
-import Data.Drasil.Concepts.Computation
-import Data.Drasil.SentenceStructures (foldlSent)
+import Drasil.HGHC.HeatTransfer --all of it
 
-self :: NamedChunk
-self = npnc "HGHC" (pn "HGHC")
+import Data.Drasil.Modules (mod_hw, mod_ctrl_fun, mod_io_fun, mod_behav,
+  mod_calc_fun)
+import Data.Drasil.Concepts.Documentation (input_)
+import Data.Drasil.Concepts.Software (modInputFormat, mod_outputf_desc_fun, 
+  modInputParam, program)
+import Data.Drasil.Concepts.Math (parameter)
+import Data.Drasil.Concepts.Computation (structure, inDatum, outDatum, 
+  algorithm)
+import Data.Drasil.SentenceStructures (foldlSent, foldlList, sAnd)
+
+{--}
 
 executable :: NamedChunk
-executable = npnc' (self ^. id) (compoundPhrase (self ^. term) (program ^. term))
+executable = npnc' "HGHC" (compoundPhrase (pn "HGHC") (program ^. term))
   ("HGHC")
 
 -- input param module
 mod_inputp :: ModuleChunk
 mod_inputp = makeRecord modInputParam 
-             (foldlSent [S "The format and", (phrase structure), S "of the", 
+             (foldlSent [S "The format" `sAnd` (phrase structure), S "of the", 
              (phrase input_), (plural parameter)]) --FIXME: Plural?
              executable
              htVars
@@ -35,7 +39,7 @@ mod_inputp = makeRecord modInputParam
 meth_input :: MethodChunk
 meth_input = makeFileInputMethod
              (nc "read_input" (nounPhraseSP "Reads and stores input from file."))
-             (makeVCObj "params" (cn "input parameters") cP (mod_inputp ^. id))
+             (makeVCObj "params" (cn "input parameters") cP (mod_inputp ^. id)) --FIXME: avoid using id
              "input"
 
 mod_inputf :: ModuleChunk
@@ -68,8 +72,8 @@ meth_output = makeFileOutputMethod (nc "write_output" (
   "output"
 
 mod_outputf_desc :: ConceptChunk
-mod_outputf_desc = mod_outputf_desc_fun (foldlSent [S "input parameters,",
-  S "temperatures, energies, and times when melting starts", S "and stops"])
+mod_outputf_desc = mod_outputf_desc_fun (foldlList [S "input parameters",
+  S "temperatures", S "energies", S "times when melting starts" `sAnd` S "stops."])
 
 mod_outputf :: ModuleChunk
 mod_outputf = mod_io_fun executable
@@ -91,7 +95,7 @@ main_func =
       typeOut = obj "output_format"
       labelCladThick = cladThick ^. id
       labelCoolFilm = coolFilmCond ^. id
-      labelGapFilm = gapFilmCond ^. id
+      labelGapFilm = gapFilmCond ^. id --FIXME: avoid using id
       labelCladCond = cladCond ^. id
       labelHg = htTransCladFuel ^. id
       labelHc = htTransCladCool ^. id
@@ -99,7 +103,7 @@ main_func =
   [ block
     [ objDecNewVoid' labelParams typeParams,
       objDecNewVoid' labelIn typeIn,
-      valStmt $ objMethodCall (var labelIn) (meth_input ^. id) [var labelParams],
+      valStmt $ objMethodCall (var labelIn) (meth_input ^. id) [var labelParams], --FIXME: avoid using id
       objDecNewVoid' labelCalc typeCalc,
       varDecDef labelHg float
         ( objMethodCall (var labelCalc) ("calc_" ++ labelHg)
@@ -112,7 +116,7 @@ main_func =
             var labelParams $-> var labelCoolFilm,
             var labelParams $-> var labelCladThick ] ),
       objDecNewVoid' labelOut typeOut,
-      valStmt $ objMethodCall (var labelOut) (meth_output ^. id)
+      valStmt $ objMethodCall (var labelOut) (meth_output ^. id) --FIXME: avoid using id
         [ var labelHg,
           var labelHc ]
     ]

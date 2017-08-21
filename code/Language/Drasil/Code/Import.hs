@@ -112,10 +112,10 @@ getObjName (S.Obj s)  = makeClassNameValid s
 getObjName _ = error "Must be Obj type"
 
 makeExpr :: E.Expr -> Value
-makeExpr (E.V v)    = Var v
+makeExpr (E.V v)    = var v
 makeExpr (E.Dbl d)  = litFloat d
 makeExpr (E.Int i)  = litInt i
-makeExpr (E.C c)    = Var (c ^. id)
+makeExpr (E.C c)    = var (c ^. id)
 makeExpr (b E.:^ e) = (makeExpr b) #^ (makeExpr e)
 makeExpr (b E.:* e) = (makeExpr b) #* (makeExpr e)
 makeExpr (b E.:/ e) = (makeExpr b) #/ (makeExpr e)
@@ -132,4 +132,4 @@ findClass' n (c:cs) = if (makeClassNameValid n) == className c then c else findC
 
 getClassVars :: Class -> [Value]
 getClassVars (Enum _ _ _) = error "Enum does not have vars"
-getClassVars c = map (\(StateVar l _ _ _ _) -> Var l) (classVars c)
+getClassVars c = map (\(StateVar l _ _ _ _) -> var l) (classVars c)

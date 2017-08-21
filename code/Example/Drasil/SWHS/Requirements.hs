@@ -1,10 +1,9 @@
-module Drasil.SWHS.Requirements where
+module Drasil.SWHS.Requirements where --all of this file is exported
 
 import Language.Drasil
 
-import Data.Drasil.Concepts.Documentation (acroIM, output_,
-  acroR, simulation, quantity, input_, physical, constraint, condition,
-  property)
+import Data.Drasil.Concepts.Documentation (output_, simulation, quantity, 
+  input_, physical, constraint, condition, property)
 import Data.Drasil.Utils (getS)
 import Drasil.DocumentLanguage (mkRequirement)
 import Drasil.Sections.Requirements (nonFuncReqF)
@@ -12,7 +11,8 @@ import Drasil.Sections.Requirements (nonFuncReqF)
 import Data.Drasil.Quantities.PhysicalProperties (mass)
 import Data.Drasil.Quantities.Physics (time, energy)
 
-import qualified Data.Drasil.Concepts.Thermodynamics as CT
+import Data.Drasil.Concepts.Thermodynamics as CT (law_cons_energy,
+  melting)
 import Data.Drasil.Concepts.Software (correctness, verifiability,
   understandability, reusability, maintainability, performance)
 import Data.Drasil.Concepts.Math (parameter)
@@ -22,7 +22,8 @@ import Drasil.SWHS.Unitals (t_final_melt, t_init_melt, pcm_E, w_E, temp_PCM,
   pcm_density, diam, tank_length, tank_vol, w_vol, w_mass)
 import Drasil.SWHS.Concepts (phsChgMtrl, tank)
 
-import Data.Drasil.SentenceStructures (foldlSent, sAnd, isThe, foldlSentCol)
+import Data.Drasil.SentenceStructures (acroIM, acroR, foldlSent, sAnd, isThe,
+  foldlSentCol)
 
 
 ------------------------------
@@ -46,9 +47,9 @@ req2 = mkRequirement "req2" $ foldlSentCol [
   acroIM 4 `sC` S "as follows, where", getS w_vol `isThe` phrase w_vol,
   S "and", getS tank_vol `isThe` phrase tank_vol]
 
-s5_1_2_Eqn1 = EqnBlock ((C w_mass) := (C w_vol) * (C w_density) := ((C tank_vol) -
-  (C pcm_vol)) * (C w_density) := (((C diam) / 2) * (C tank_length) -
-  (C pcm_vol)) * (C w_density))
+s5_1_2_Eqn1 = EqnBlock ((C w_mass) := (C w_vol) * (C w_density) :=
+  ((C tank_vol) - (C pcm_vol)) * (C w_density) :=
+  (((C diam) / 2) * (C tank_length) - (C pcm_vol)) * (C w_density))
 
 s5_1_2_Eqn2 = EqnBlock ((C pcm_mass) := (C pcm_vol) * (C pcm_density))
 
@@ -118,7 +119,8 @@ s5_2 :: Section
 s5_2 = nonFuncReqF [performance] [correctness, verifiability,
   understandability, reusability, maintainability]
   (S "This problem is small in size and relatively simple")
-  (S "Any reasonable implementation will be very quick and use minimal storage.")
+  (S "Any reasonable implementation will be very" +:+
+  S "quick and use minimal storage.")
 
 -- The second sentence of the above paragraph is repeated in all examples (not
 -- exactly, but the general idea is). The first sentence is not always

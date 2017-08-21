@@ -1,33 +1,38 @@
 {-# OPTIONS -Wall #-}
 {-# LANGUAGE FlexibleContexts #-}
-module Drasil.SWHS.TMods where
-
-import Prelude hiding (id)
-
-import Drasil.SWHS.Unitals
-import Drasil.SWHS.Concepts
+module Drasil.SWHS.TMods (tModels, t1ConsThermE, 
+  s4_2_2_swhsTMods, s4_2_2_T1) where
 
 import Language.Drasil
-import Data.Drasil.SI_Units
-import Data.Drasil.Concepts.Documentation
-import Data.Drasil.Concepts.Thermodynamics hiding (temp, heat_cap_spec,
-  latent_heat, melt_pt, boil_pt, sens_heat, heat_cap_spec)
+import Control.Lens ((^.))
+
+import Drasil.DocumentLanguage (mkAssump)
+import Data.Drasil.Concepts.Documentation (system, acroNumGen)
+import Data.Drasil.SI_Units (joule)
+
+import Data.Drasil.Concepts.Thermodynamics (phase_change, thermal_energy,
+  heat_trans, law_cons_energy)
 import Data.Drasil.Concepts.Physics (mech_energy)
 import Data.Drasil.Concepts.Math (equation, rOfChng)
 import Data.Drasil.Quantities.Math (gradient)
-import Data.Drasil.Quantities.Thermodynamics (temp, heat_cap_spec, latent_heat,
-  melt_pt, boil_pt, sens_heat, heat_cap_spec)
-import Data.Drasil.Quantities.PhysicalProperties
+import Data.Drasil.Quantities.Thermodynamics (temp, heat_cap_spec,
+  latent_heat, melt_pt, boil_pt, sens_heat, heat_cap_spec)
+import Data.Drasil.Quantities.PhysicalProperties (mass, density)
 import Data.Drasil.Quantities.Physics (energy, time)
 import Data.Drasil.Utils (getS)
 import Data.Drasil.SentenceStructures (foldlSent, isThe)
-import Drasil.SWHS.DataDefs
 
-import Control.Lens ((^.))
-import Drasil.DocumentLanguage
+import Drasil.SWHS.Unitals (melt_frac, tau, deltaT, htCap_V, htCap_S,
+  htCap_L, vol_ht_gen, thFluxVect)
+import Drasil.SWHS.Concepts (transient)
+import Drasil.SWHS.DataDefs (swhsSymbMapDRef, dd3HtFusion, swhsSymbMapT,
+  swhsSymbMapTRef)
 
 tModels :: [RelationConcept]
-tModels = [t1ConsThermE] ++ [t2SensHtE] ++ [t3LatHtE]
+tModels = [t1ConsThermE, t2SensHtE, t3LatHtE]
+
+s4_2_2_swhsTMods :: [Contents]
+s4_2_2_swhsTMods = acroNumGen (s4_2_2_T1 ++ s4_2_2_T2 ++ s4_2_2_T3) 1
 
 -------------------------
 -- Theoretical Model 1 --
@@ -37,8 +42,8 @@ s4_2_2_T1 :: [Contents]
 s4_2_2_T1 = map swhsSymbMapT [t1ConsThermE]
 
 t1ConsThermE :: RelationConcept
-t1ConsThermE = makeRC "t1ConsThermE" (nounPhraseSP "Conservation of thermal energy")
-  t1descr consThermERel
+t1ConsThermE = makeRC "t1ConsThermE"
+  (nounPhraseSP "Conservation of thermal energy") t1descr consThermERel
 
 consThermERel :: Relation
 consThermERel = (Neg (C gradient)) :. (C thFluxVect) + (C vol_ht_gen) :=
@@ -77,8 +82,8 @@ s4_2_2_T2 :: [Contents]
 s4_2_2_T2 = map swhsSymbMapT [t2SensHtE]
 
 t2SensHtE :: RelationConcept
-t2SensHtE = makeRC "t2SensHtE" (nounPhraseSP "Sensible heat energy")
-  t2descr sensHtEEqn
+t2SensHtE = makeRC "t2SensHtE"
+  (nounPhraseSP "Sensible heat energy") t2descr sensHtEEqn
 
 sensHtEEqn :: Relation
 sensHtEEqn = (C sens_heat) := Case [((C htCap_S) * (C mass) * (C deltaT),
@@ -131,11 +136,13 @@ s4_2_2_T3 :: [Contents]
 s4_2_2_T3 = map swhsSymbMapT [t3LatHtE]
 
 t3LatHtE :: RelationConcept
-t3LatHtE = makeRC "t3LatHtE" (nounPhraseSP "Latent heat energy") t3descr latHtEEqn
+t3LatHtE = makeRC "t3LatHtE"
+  (nounPhraseSP "Latent heat energy") t3descr latHtEEqn
 
 latHtEEqn :: Relation
-latHtEEqn = FCall (C latent_heat) [C time] := UnaryOp (Integral (Just (Low 0),
-  Just (High (C time))) (Deriv Total (FCall (C latent_heat) [C tau]) (C tau)) tau)
+latHtEEqn = FCall (C latent_heat) [C time] := UnaryOp
+  (Integral (Just (Low 0), Just (High (C time)))
+  (Deriv Total (FCall (C latent_heat) [C tau]) (C tau)) tau)
 
 -- Integrals need dTau at end
 -- Deriv is specifically partial derivative... how to do regular derivative?
@@ -146,8 +153,9 @@ t3descr = foldlSent [
   getS latent_heat `isThe` S "change in",
   phrase thermal_energy, sParen (Sy (joule ^. usymb)) `sC`
   phrase latent_heat +:+. phrase energy,
-  E (FCall (C latent_heat) [C time] := UnaryOp (Integral (Just (Low 0),
-  Just (High (C time))) (Deriv Total (FCall (C latent_heat) [C tau]) (C tau)) tau))
+  E (FCall (C latent_heat) [C time] := UnaryOp
+  (Integral (Just (Low 0), Just (High (C time)))
+  (Deriv Total (FCall (C latent_heat) [C tau]) (C tau)) tau))
   `isThe` phrase rOfChng, S "of",
   getS latent_heat, S "with respect",
   S "to", phrase time, getS tau +:+.

@@ -1,4 +1,4 @@
-module Drasil.GamePhysics.TMods where
+module Drasil.GamePhysics.TMods (cpTMods) where
 
 import Drasil.GamePhysics.Unitals
 

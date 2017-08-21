@@ -1,29 +1,37 @@
-module Drasil.SSP.Modules where
+module Drasil.SSP.Modules where --All of it
 
 import Language.Drasil
 
 import Data.Drasil.Modules (mod_hw, mod_behav, mod_sw,
-  mod_ctrl_fun, mod_io_fun, mod_seq_fun, mod_rng_fun, mod_plot_fun, mod_outputf_desc_fun)
-import Data.Drasil.SentenceStructures
+  mod_ctrl_fun, mod_io_fun, mod_seq_fun, mod_rng_fun,
+  mod_plot_fun, mod_outputf_desc_fun)
+import Data.Drasil.SentenceStructures (ofGiv, ofGiv',
+  ofThe, foldlList, foldlSent, foldlSent_)
 
-import Data.Drasil.Concepts.Math
-import Data.Drasil.Concepts.Documentation
-import Data.Drasil.Concepts.Computation
-import Data.Drasil.Software.Products
+import Data.Drasil.Concepts.Math (surface, vector)
+import Data.Drasil.Concepts.Documentation (property,
+  method_, module_, analysis, input_, element)
+import Data.Drasil.Concepts.Computation (algorithm,
+  outDatum, inDatum, dataType')
+import Data.Drasil.Software.Products (matlab)
 
-import Drasil.SSP.Unitals
-import Drasil.SSP.Defs
+import Drasil.SSP.Unitals (waterWeight, fs, sspInputs)
+import Drasil.SSP.Defs (rgFnElm, soil, morPrice, slice,
+  slip, slope, slopeSrf, slpSrf, crtSlpSrf, intrslce,
+  ssa, soilLyr, soilPrpty)
 
 modules :: [ModuleChunk]
 modules = [mod_hw, mod_behav, mod_ctrl, mod_inputf, mod_outputf, mod_genalg,
            mod_kinadm, mod_slipslicer, mod_slipweight, mod_mp, mod_rfem,
            mod_sps, mod_sw, mod_sds, mod_rng, mod_plot]
 
--- HW Hiding Module, Behaviour Hiding Module, and Software Decision Module imported
+-- HW Hiding Module, Behaviour Hiding Module, and
+-- Software Decision Module imported
 
 -- Control module
 mod_ctrl :: ModuleChunk
-mod_ctrl = mod_ctrl_fun (foldlSent_ [S "The internal", plural dataType', S "and", plural algorithm])
+mod_ctrl = mod_ctrl_fun (foldlSent_
+  [S "The internal", plural dataType', S "and", plural algorithm])
   ssa [] [mod_inputf, mod_outputf, mod_genalg]
 
 -- input format module
@@ -35,7 +43,7 @@ mod_inputf_desc = dccWDS "mod_inputf_desc" (cn' "input format")
   S "coordinates for each layer. Each layer's", plural soilPrpty, S "of",
   (foldlList $ map phrase sspInputs),
   S "are stored in", plural vector, S "of" +:+. plural soilPrpty,
-  S "If a piezometric", phrase surface_, S "exists in the", phrase slope,
+  S "If a piezometric", phrase surface, S "exists in the", phrase slope,
   S "it's coordinates and the", phrase waterWeight, S "are also",
   S "included in the" +:+. phrase input_, S "Lastly an expected range for",
   S "the entrance and exit points of the", phrase crtSlpSrf, S "are inputted"])
@@ -105,8 +113,8 @@ mod_slipslicer_desc = dccWDS "mod_slipslicer_desc" (cn' "slip slicer")
 
 mod_slipslicer :: ModuleChunk
 mod_slipslicer = makeImpModule mod_slipslicer_desc
-  (foldlSent [at_start algorithm, S "to determine the coordinates of where the",
-  phrase slpSrf, phrase intrslce, S "nodes occur"])
+  (foldlSent [at_start algorithm, S "to determine the coordinates of",
+  S "where the", phrase slpSrf, phrase intrslce, S "nodes occur"])
   ssa
   []
   []
@@ -160,8 +168,8 @@ mod_rfem_desc = dccWDS "mod_rfem_desc" (cn' "RFEM solver")
 
 mod_rfem :: ModuleChunk
 mod_rfem = makeImpModule mod_rfem_desc
-  (foldlSent [S "The", phrase algorithm, S "to perform a",
-  titleize rgFnElm, titleize method_, phrase analysis, S "of the", phrase slope])
+  (foldlSent [S "The", phrase algorithm, S "to perform a", titleize rgFnElm,
+  titleize method_, phrase analysis, S "of the", phrase slope])
   ssa
   []
   []
@@ -201,7 +209,8 @@ mod_sds = mod_seq_fun matlab []
 
 -- random number generator module
 mod_rng :: ModuleChunk
-mod_rng = mod_rng_fun matlab [] (foldlSent [S "Randomly produces numbers between 0 and 1" `sC`
+mod_rng = mod_rng_fun matlab [] (
+  foldlSent [S "Randomly produces numbers between", E 0, S "and", E 1 `sC`
   S "using a chaotic function with an external seed. Used when generating",
   plural slpSrf, S "in the", titleize mod_genalg_desc, titleize module_])
 

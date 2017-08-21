@@ -7,7 +7,7 @@ import Numeric (showFFloat)
 
 import Language.Drasil.HTML.Import (makeDocument, spec)
 import Language.Drasil.HTML.AST
-import Language.Drasil.Output.Formats (DocType(..))
+import qualified Language.Drasil.Output.Formats as F
 import Language.Drasil.Spec (USymb(..), RefType(..))
 
 import Language.Drasil.HTML.Helpers
@@ -16,14 +16,14 @@ import Language.Drasil.Unicode
 import Language.Drasil.Symbol (Symbol(..), Decoration(..))
 import qualified Language.Drasil.Document as L
 import Language.Drasil.HTML.Monad
-import Language.Drasil.People (People,Person(..),rendPersLFM',rendPersLFM'',Conv(..))
+import Language.Drasil.People (People,Person(..),rendPersLFM',rendPersLFM'',Conv(..),nameStr)
 import Language.Drasil.Config (StyleGuide(..), bibStyleH)
 
 --FIXME? Use Doc in place of Strings for p_spec/title_spec
 
 -- | Generate an HTML document from a Drasil 'Document'
-genHTML :: DocType -> L.Document -> Doc
-genHTML (Website fn) doc = build fn $ makeDocument doc
+genHTML :: F.DocType -> L.Document -> Doc
+genHTML (F.Website fn) doc = build fn $ makeDocument doc
 genHTML _ _ = error "Cannot generate HTML for non-Website doctype"
 
 -- | Build the HTML Document, called by genHTML
@@ -239,12 +239,18 @@ divide n d = p_expr n ++ "/" ++ p_expr d
 
 -- | Helper for properly rendering negation of expressions
 neg :: Expr -> String
-neg a@(Var _) = "-" ++ p_expr a
-neg a@(Dbl _) = "-" ++ p_expr a
-neg a@(Int _) = "-" ++ p_expr a
-neg a@(Sym _) = "-" ++ p_expr a
+neg a@(Var     _) = minus a
+neg a@(Dbl     _) = minus a
+neg a@(Int     _) = minus a
+neg a@(Sym     _) = minus a
+neg a@(Op    _ _) = minus a
+neg a@(Mul   _ _) = minus a
+neg a@(Index _ _) = minus a
 neg   (Neg n) = p_expr n
-neg a         = paren ("-" ++ p_expr a)
+neg a         = "&minus;" ++ paren (p_expr a)
+
+minus :: Expr -> String
+minus e = "&minus;" ++ p_expr e
 
 -- | Helper for properly rendering exponents
 pow :: Expr -> Expr -> String
@@ -408,13 +414,15 @@ renderCite b@(Book      fields) = renderF b fields useStyleBk
 renderCite a@(Article   fields) = renderF a fields useStyleArtcl
 renderCite a@(MThesis   fields) = renderF a fields useStyleBk
 renderCite a@(PhDThesis fields) = renderF a fields useStyleBk
+renderCite a@(Misc      fields) = renderF a fields useStyleBk
+renderCite a@(Online    fields) = renderF a fields useStyleArtcl --rendered similar to articles for some reason
 
 renderF :: Citation -> [CiteField] -> (StyleGuide -> (CiteField -> String)) ->  String
 renderF c fields styl = unwords $
   map (styl bibStyleH) (sort fields) ++ endingField c bibStyleH
 
 endingField :: Citation -> StyleGuide -> [String]
-endingField c MLA = [dot $ show c]
+endingField c MLA = [show c]
 endingField _ _ = []
 
 -- Config helpers --
@@ -438,7 +446,8 @@ bookMLA (Volume     s) = comm $ "vol. " ++ show s
 bookMLA (Publisher  s) = comm $ p_spec s
 bookMLA (Author     p) = dot $ p_spec $ rendPeople' p
 bookMLA (Year       y) = dot $ show y
-bookMLA (Date   d m y) = dot $ unwords [show d, show m, show y]
+bookMLA (Date    d m y) = dot $ unwords [show d, show m, show y]
+bookMLA (URLdate d m y) = "Web. " ++ bookMLA (Date d m y)
 bookMLA (Collection s) = dot $ em $ p_spec s
 bookMLA (Journal    s) = comm $ em $ p_spec s
 bookMLA (Page       n) = dot $ "p. " ++ show n
@@ -448,20 +457,26 @@ bookMLA (Issue      n) = comm $ "no. " ++ show n
 bookMLA (School     s) = comm $ p_spec s
 bookMLA (Thesis     t) = comm $ show t
 bookMLA (URL        s) = dot $ p_spec s
+bookMLA (HowPub     s) = comm $ p_spec s
+bookMLA (Editor     p) = comm $ "Edited by " ++ p_spec (foldlList $ map (S . nameStr) p)
 
 bookAPA :: CiteField -> String --FIXME: year needs to come after author in APA
 bookAPA (Author   p) = needDot $ p_spec (rendPeople rendPersLFM' p) --APA uses initals rather than full name
 bookAPA (Year     y) = dot $ paren $ show y --APA puts "()" around the year
 bookAPA (Date _ _ y) = bookAPA (Year y) --APA doesn't care about the day or month
-bookAPA (Page     n) = dot $ show n
+bookAPA (URLdate d m y) = "Retrieved, " ++ (comm $ unwords [show d, show m, show y])
+bookAPA (Page     n)  = dot $ show n
 bookAPA (Pages (a,b)) = dot $ show a ++ "&ndash;" ++ show b
+bookAPA (Editor   p)  = dot $ p_spec (foldlList $ map (S . nameStr) p) ++ " (Ed.)"
 bookAPA i = bookMLA i --Most items are rendered the same as MLA
 
 bookChicago :: CiteField -> String
 bookChicago (Author   p) = needDot $ p_spec (rendPeople rendPersLFM'' p) --APA uses middle initals rather than full name
 bookChicago (Date _ _ y) = bookChicago (Year y) --APA doesn't care about the day or month
+bookChicago (URLdate d m y) = "accessed " ++ (comm $ unwords [show d, show m, show y])
 bookChicago p@(Page   _) = bookAPA p
 bookChicago p@(Pages  _) = bookAPA p
+bookChicago (Editor   p) = dot $ p_spec (foldlList $ map (S . nameStr) p) ++ toPlural p " ed"
 bookChicago i = bookMLA i --Most items are rendered the same as MLA
 
 -- for article renderings
@@ -525,3 +540,8 @@ rendPersL (Person {_given = f, _surname = l, _middle = ms}) =
 isInitial :: String -> String
 isInitial [x]  = [x,'.']
 isInitial name = name
+
+--adds an 's' if there is more than one person in a list
+toPlural :: People -> String -> String
+toPlural (_:_) str = str ++ "s"
+toPlural _     str = str

@@ -1,4 +1,4 @@
-module Drasil.GamePhysics.IMods where
+module Drasil.GamePhysics.IMods (iModels) where
 
 import Language.Drasil
 import Data.Drasil.Utils (foldle1, fmtU, getS)
@@ -8,7 +8,6 @@ import qualified Data.Drasil.Quantities.Physics as QP (acceleration,
   angularAccel, force, gravitationalAccel, momentOfInertia, angularVelocity, 
   time, impulseS)
 import Drasil.GamePhysics.Unitals
-import Prelude hiding (id)
 
 iModels :: [RelationConcept]
 iModels = [im1, im2, im3]

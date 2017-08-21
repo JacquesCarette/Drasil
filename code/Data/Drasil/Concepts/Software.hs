@@ -7,17 +7,17 @@ import Prelude hiding (id)
 import Control.Lens ((^.))
 
 
-c :: ConceptChunk
-c = dcc "c" (pn "C") "C programming language"
+c, errMsg, physLib, program :: ConceptChunk
 
-physLib :: ConceptChunk
+c       = dcc "c" (pn "C") 
+  "C programming language"
 physLib = dcc "physLib" (cnIES "physics library") 
   ("A programming library which provides functions for modelling physical phenomenon.")
-
-program :: ConceptChunk
 program = dcc "program" (cn' "program")
   ("A series of coded software instructions to control the operation of a " ++
   "computer or other machine.")
+errMsg  = dcc "errMsg" (cn' "error message") ("a message that indicates an incorrect instruction" ++
+  " has been given, or that there is an error resulting from faulty software")
 
 -- Non-functional requirements  
 

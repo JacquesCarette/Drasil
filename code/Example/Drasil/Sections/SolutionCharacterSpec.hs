@@ -433,7 +433,7 @@ assumpIntro :: Contents
 assumpIntro = Paragraph $ foldlSent 
   [S "This", (phrase Doc.section_), S "simplifies the original", 
   (phrase Doc.problem), S "and helps in developing the", (phrase Doc.thModel), 
-  S "by filling in the", S "missing", (phrase Doc.information), S "for the" +:+. 
+  S "by filling in the missing", (phrase Doc.information), S "for the" +:+. 
   (phrase Doc.physicalSystem), S "The numbers given in the square brackets refer to the", 
   foldr1 sC (map refs itemsAndRefs) `sC` S "or", 
   refs (Doc.likelyChg) `sC` S "in which the respective", 
@@ -447,7 +447,7 @@ assumpIntro = Paragraph $ foldlSent
 
 tModIntro :: (NamedIdea a) => a -> Contents
 tModIntro progName = foldlSP [S "This", phrase Doc.section_, S "focuses on",
-  S "the", phrase Doc.general, (plural equation), S "and", (plural law),S "that",
+  S "the", phrase Doc.general, (plural equation) `sAnd` (plural law), S "that",
   short progName, S "is based on"]
 
 -------------------------
@@ -457,9 +457,9 @@ tModIntro progName = foldlSP [S "This", phrase Doc.section_, S "focuses on",
 generalDefinitionIntro :: (LayoutObj t) => [t] -> Contents
 generalDefinitionIntro [] = Paragraph $ S "There are no general definitions."
 generalDefinitionIntro _ = foldlSP [S "This", phrase Doc.section_, 
-  S "collects the", (plural law), S "and", (plural equation), 
-  S "that will be used in", S "deriving the", 
-  plural Doc.dataDefn `sC` S "which in turn are used to", S "build the", 
+  S "collects the", (plural law) `sAnd` (plural equation), 
+  S "that will be used in deriving the", 
+  plural Doc.dataDefn `sC` S "which in turn are used to build the", 
   plural Doc.inModel]
 
 ----------------------
@@ -495,9 +495,8 @@ listofTablesToRefs  [x]    = (makeRef x) +:+ S "shows"
 listofTablesToRefs  [x,y]  = (makeRef x) `sC` S "and" +:+ listofTablesToRefs [y]
 listofTablesToRefs  (x:xs) = (makeRef x) `sC` listofTablesToRefs (xs)
 
-
 ---------------------
--- DATA CONSTRAINT --
+-- DATA CONSTRAINTS --
 ---------------------
 
 -- reference to the input/ ouput tables -> optional middle sentence(s) (use EmptyS if not wanted) -> 
@@ -511,8 +510,8 @@ dataConstraintParagraph tableRef (mid:xs) = Paragraph $
 
 dataConstraintIntroSent :: [Contents] -> Sentence
 dataConstraintIntroSent tableRef = foldlSent [(listofTablesToRefs tableRef), 
-  S "the", plural Doc.datumConstraint, S "on the", phrase Doc.input_, 
-  S "and", phrase Doc.output_ +:+. (plural Doc.variable `sC` S "respectively"), 
+  S "the", plural Doc.datumConstraint, S "on the", phrase Doc.input_
+  `sAnd` phrase Doc.output_ +:+. (plural Doc.variable `sC` S "respectively"), 
   S "The", phrase Doc.column, S "for", phrase Doc.physical, 
   plural Doc.constraint, S "gives the", phrase Doc.physical, 
   plural Doc.limitation, S "on the range of", plural Doc.value, 
@@ -523,7 +522,7 @@ dataConstraintClosingSent trailing = (foldlSent
   [S "The", plural Doc.constraint, S "are conservative, to give", 
   (phrase Doc.user `ofThe` phrase Doc.model), S "the flexibility to", 
   S "experiment with unusual situations. The", phrase Doc.column, 
-  S "of", S "typical", plural Doc.value, 
+  S "of typical", plural Doc.value, 
   S "is intended to provide a feel for a common scenario"])
   +:+ dataConstraintUncertainty +:+ S "FIXME" +:+ (foldl (+:+) EmptyS trailing) 
   --FIXME make uncertainty specificiable 

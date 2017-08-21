@@ -1,4 +1,4 @@
-module Drasil.GamePhysics.DataDefs where
+module Drasil.GamePhysics.DataDefs (cpDDefs, cpQDefs) where
 
 import Drasil.GamePhysics.Unitals
 
@@ -8,8 +8,6 @@ import qualified Data.Drasil.Quantities.Physics as QP (restitutionCoef, time,
   position, linearAccel, linearDisplacement, linearVelocity, impulseS)
 import qualified Data.Drasil.Quantities.Math as QM (orientation)
 import Data.Drasil.Utils (mkDataDef)
-
-import Prelude hiding (id)
 
 ----- Data Definitions -----
 

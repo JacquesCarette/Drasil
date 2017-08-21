@@ -1,9 +1,8 @@
-module Drasil.SSP.Goals where
+module Drasil.SSP.Goals (sspGoals) where
 
 import Language.Drasil
-import Drasil.SSP.Defs
-import Data.Drasil.SentenceStructures
-
+import Drasil.SSP.Defs (slpSrf, fs_concept, slope, crtSlpSrf)
+import Data.Drasil.SentenceStructures (ofThe)
 -----------
 -- Goals --
 -----------

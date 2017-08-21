@@ -1,6 +1,6 @@
-module Drasil.SWHS.Generate where
+module Drasil.SWHS.Generate (generate) where
 
-import Language.Drasil (DocType(SRS,MG,Website), Recipe(..), gen)
+import Language.Drasil
 
 import Drasil.SWHS.Body (swhs_srs', swhs_mg)
 

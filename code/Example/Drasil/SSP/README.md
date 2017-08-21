@@ -2,6 +2,9 @@
 ### Summary of Folder Structure and File Contents
 --------------------------------------------------
 
+Assumptions.hs
+  - A list of assumptions for the SSP example
+
 Body.hs
   - The main document body representation for the SSP example
   
@@ -10,6 +13,9 @@ Changes.hs
 
 DataDefs.hs
   - A list of data definitions for the SSP example
+
+DataDesc.hs
+  - The input data description for the SSP input file
   
 Defs.hs
   - A list of common ideas, named chunks, and concept chunks specific to SSP
@@ -30,10 +36,16 @@ Modules.hs
   
 README.md
   - This file
-  
+
+References.hs
+  - A list of references for the bibliography
+
 Reqs.hs
   - A list of requirement chunks for the SSP example
-  
+
+Requirements.hs
+  - A list of requirements (specifications) for the SSP example
+
 TMods.hs
   - A list of theoretical models for the SSP example
   

@@ -1,13 +1,13 @@
 module Language.Drasil.TeX.AST where
 
+import Data.List (intersperse)
+
 import Language.Drasil.Expr (Variable)
 import Language.Drasil.Symbol (Symbol)
 import Language.Drasil.Unicode (Greek,Special)
 import Language.Drasil.Spec (USymb, RefType)
 import Language.Drasil.Citations (Month(..))
 import Language.Drasil.People (People)
-
---import Data.List (intersperse)
 
 data Expr = Var  Variable
           | Dbl  Double
@@ -69,10 +69,9 @@ data Set = Integer
          | Radians
          | Vect Set
          | Obj String
-         | Discrete Set
-         -- DiscreteI [Int]
-         -- DiscreteD [Double]
-         -- DiscreteS [String]
+         | DiscreteI [Int]
+         | DiscreteD [Double]
+         | DiscreteS [String]
 
 data Quantifier = Forall Expr | Exists Expr
 
@@ -158,10 +157,9 @@ instance Show Set where
   show Radians  = "rad"
   show (Vect a) = "V" ++ show a
   show (Obj a)  = a
-  show (Discrete a)  = "\\{" ++ show a ++ "\\}"
-  --show (DiscreteI a)  = "\\{" ++ (foldl (++) "" . intersperse ", " . map show) a ++ "\\}"
-  --show (DiscreteD a)  = "\\{" ++ (foldl (++) "" . intersperse ", " . map show) a ++ "\\}"
-  --show (DiscreteS a) = "\\{" ++ (foldl (++) "" . intersperse ", ") a ++ "\\}"
+  show (DiscreteI a)  = "\\{" ++ (concat $ intersperse ", " (map show a)) ++ "\\}"
+  show (DiscreteD a)  = "\\{" ++ (concat $ intersperse ", " (map show a)) ++ "\\}"
+  show (DiscreteS a)  = "\\{" ++ (concat $ intersperse ", " a) ++ "\\}"
 
 type BibRef = [Citation]
 type City   = Spec
@@ -169,7 +167,8 @@ type State  = Spec
 
 data Citation = Book [CiteField] | Article [CiteField]
               | MThesis [CiteField] | PhDThesis [CiteField]
-  --add website...
+              | Misc [CiteField] | Online [CiteField]
+
 data CiteField = Author     People
                | Title      Spec
                | Series     Spec
@@ -187,9 +186,14 @@ data CiteField = Author     People
                | Issue      Integer
                | School     Spec
                | URL        Spec
+               | HowPub     Spec
+               | URLdate Integer Month Integer
+               | Editor     People
 
 instance Show Citation where
   show (Book      _) = "book"
   show (Article   _) = "article"
   show (MThesis   _) = "mastersthesis"
   show (PhDThesis _) = "phdthesis"
+  show (Misc      _) = "misc"
+  show (Online    _) = "online"

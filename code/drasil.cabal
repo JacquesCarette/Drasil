@@ -9,13 +9,15 @@ library
   exposed-modules:
     Language.Drasil,
     Language.Drasil.Code,
-    Data.Drasil.Authors
-    Data.Drasil.SI_Units
-    Data.Drasil.Plurals
-    Data.Drasil.Utils
-    Data.Drasil.SentenceStructures
-    Data.Drasil.Modules
+    Data.Drasil.People
     Data.Drasil.Changes
+    Data.Drasil.Citations
+    Data.Drasil.Modules
+    Data.Drasil.Plurals
+    Data.Drasil.Constraints
+    Data.Drasil.SentenceStructures
+    Data.Drasil.SI_Units
+    Data.Drasil.Utils
     Data.Drasil.Concepts.Computation
     Data.Drasil.Concepts.Documentation
     Data.Drasil.Concepts.Thermodynamics
@@ -116,7 +118,6 @@ library
     , Language.Drasil.Make.Print
     , Language.Drasil.Output.Formats
     , Language.Drasil.Printing.Helpers
-    , Language.Drasil.Defs
     , Language.Drasil.DataDesc
 
   Build-Depends:
@@ -142,6 +143,10 @@ executable tiny
     , Drasil.Sections.TableOfSymbols
     , Drasil.Sections.ReferenceMaterial
     , Drasil.Sections.TableOfAbbAndAcronyms
+    , Drasil.Sections.ScopeOfTheProject
+    , Drasil.Sections.TraceabilityMandGs
+    , Drasil.Sections.Requirements
+    , Drasil.Sections.GeneralSystDesc
     , Drasil.DocumentLanguage
     , Drasil.DocumentLanguage.Chunk.GenDefn
     , Drasil.DocumentLanguage.Definitions
@@ -174,12 +179,15 @@ executable nopcm
   other-modules:
       Drasil.NoPCM.Body
     , Drasil.NoPCM.TMods
+    , Drasil.NoPCM.Unitals
     , Drasil.NoPCM.Definitions
+    , Drasil.NoPCM.DataDesc
     , Drasil.NoPCM.Unitals
     , Drasil.SWHS.Assumptions
     , Drasil.SWHS.Body
     , Drasil.SWHS.Concepts
     , Drasil.SWHS.DataDefs
+    , Drasil.SWHS.DataDesc
     , Drasil.SWHS.GenDefs
     , Drasil.SWHS.Changes
     , Drasil.SWHS.LikelyChanges
@@ -194,6 +202,7 @@ executable nopcm
     , Drasil.Sections.ReferenceMaterial
     , Drasil.Sections.AuxiliaryConstants
     , Drasil.Sections.Stakeholders
+    , Drasil.Sections.ScopeOfTheProject
     , Drasil.SRS
     , Drasil.Sections.TableOfAbbAndAcronyms
     , Drasil.DocumentLanguage
@@ -231,6 +240,7 @@ executable ssp
     , Drasil.SSP.Body
     , Drasil.SSP.Changes
     , Drasil.SSP.DataDefs
+    , Drasil.SSP.DataDesc
     , Drasil.SSP.Defs
     , Drasil.SSP.GenDefs
     , Drasil.SSP.Goals
@@ -244,6 +254,8 @@ executable ssp
     , Drasil.Sections.TableOfAbbAndAcronyms
     , Drasil.Sections.TableOfSymbols
     , Drasil.Sections.Stakeholders
+    , Drasil.Sections.ScopeOfTheProject
+    , Drasil.Sections.TraceabilityMandGs
     , Drasil.DocumentLanguage
     , Drasil.DocumentLanguage.Chunk.GenDefn
     , Drasil.DocumentLanguage.Definitions
@@ -334,6 +346,7 @@ executable chipmunkdocs
     , Drasil.GamePhysics.TMods
     , Drasil.GamePhysics.Unitals
     , Drasil.GamePhysics.IMods
+    , Drasil.GamePhysics.References
     , Drasil.Sections.SpecificSystemDescription
     , Drasil.Sections.SolutionCharacterSpec
     , Drasil.Sections.GeneralSystDesc
@@ -343,6 +356,7 @@ executable chipmunkdocs
     , Drasil.Sections.ReferenceMaterial
     , Drasil.Sections.AuxiliaryConstants
     , Drasil.Sections.Stakeholders
+    , Drasil.Sections.ScopeOfTheProject
     , Drasil.SRS
     , Drasil.Sections.TableOfAbbAndAcronyms
     , Drasil.Sections.TableOfSymbols
@@ -376,12 +390,14 @@ executable swhs
     , Drasil.Sections.GeneralSystDesc
     , Drasil.Sections.TraceabilityMandGs
     , Drasil.Sections.ReferenceMaterial
+    , Drasil.Sections.ScopeOfTheProject
     , Drasil.SRS
     , Drasil.SWHS.Assumptions
     , Drasil.SWHS.Body
     , Drasil.SWHS.Changes
     , Drasil.SWHS.Concepts
     , Drasil.SWHS.DataDefs
+    , Drasil.SWHS.DataDesc
     , Drasil.SWHS.GenDefs
     , Drasil.SWHS.Generate
     , Drasil.SWHS.LikelyChanges

@@ -1,22 +1,23 @@
-module Drasil.GlassBR.Concepts where
+module Drasil.GlassBR.Concepts where --whole file is used
 
 import Language.Drasil
-import Data.Drasil.Concepts.Documentation
-import Prelude hiding (id)
 
---FIXME: Figure out why this wasn't used in body (until now with srsDoc)
+import Data.Drasil.Concepts.Documentation (assumption, 
+  dataDefn, goalStmt, inModel, likelyChg, notApp, physSyst, 
+  requirement, srs, thModel, typUnc, response, type_)
+
+{--}
+
 glassBRProg :: ConceptChunk
 glassBRProg = dcc' "glassBRProg" (nounPhraseSP "GlassBR program")
   "The glass safety analysis program" "GlassBR" 
 
 {-Acronyms-}
--- FIXME: Use actual acronyms instead of CCs.
-
 acronyms :: [CI]
 acronyms = [assumption, annealedGlass, aR, dataDefn, fullyTGlass,
   goalStmt, glassTypeFac, heatSGlass, iGlass, inModel, likelyChg, 
-  loadDurFactor, lGlass, notApp, physSyst, 
-  requirement, stdOffDist, srs, thModel, eqTNT]
+  loadDurFactor, lGlass, lResistance, lShareFac, notApp, nFL,
+  physSyst, requirement, stdOffDist, srs, thModel, eqTNT, typUnc]
 
 annealedGlass, aR, fullyTGlass, glassTypeFac, heatSGlass, loadDurFactor,
   iGlass, lGlass, lResistance, lShareFac, eqTNT, gLassBR, stdOffDist, nFL :: CI

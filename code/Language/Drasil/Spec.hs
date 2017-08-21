@@ -120,3 +120,6 @@ sParenDash = \x -> S " (" :+: x :+: S ") - "
 
 sDash :: Sentence -> Sentence -> Sentence
 y `sDash` z = y +:+ S "-" +:+ z
+
+instance Eq USymb where
+  a == b = a == b

@@ -45,79 +45,79 @@ This section lists possible changes to the system. According to the likeliness o
 \label{Sec:LikeChan}
 Likely changes are the source of the information that is to be hidden inside the modules. Ideally, changing one of the likely changes will only require changing the one module that hides the associated decision. The approach adapted here is called design for change.
 \begin{description}
-\item[\refstepcounter{lcnum}\lcthelcnum\label{LChardware}:]The specific hardware on which the software is running.
+\item[\refstepcounter{lcnum}\lcthelcnum\label{LC:hardware}:]The specific hardware on which the software is running.
 \end{description}
 \begin{description}
-\item[\refstepcounter{lcnum}\lcthelcnum\label{LCinput}:]The format of the initial input data.
+\item[\refstepcounter{lcnum}\lcthelcnum\label{LC:input}:]The format of the initial input data.
 \end{description}
 \begin{description}
-\item[\refstepcounter{lcnum}\lcthelcnum\label{LCparameters}:]The format of the input parameters.
+\item[\refstepcounter{lcnum}\lcthelcnum\label{LC:parameters}:]The format of the input parameters.
 \end{description}
 \begin{description}
-\item[\refstepcounter{lcnum}\lcthelcnum\label{LCoutput}:]The format of the final output data.
+\item[\refstepcounter{lcnum}\lcthelcnum\label{LC:output}:]The format of the final output data.
 \end{description}
 \begin{description}
-\item[\refstepcounter{lcnum}\lcthelcnum\label{LCequations}:]How the equations are defined using the input parameters.
+\item[\refstepcounter{lcnum}\lcthelcnum\label{LC:equations}:]How the equations are defined using the input parameters.
 \end{description}
 \begin{description}
-\item[\refstepcounter{lcnum}\lcthelcnum\label{LCcontrol}:]How the overall control of the calculations is orchestrated.
+\item[\refstepcounter{lcnum}\lcthelcnum\label{LC:control}:]How the overall control of the calculations is orchestrated.
 \end{description}
 \begin{description}
-\item[\refstepcounter{lcnum}\lcthelcnum\label{LCinterpd}:]The format of the data used for interpolation.
+\item[\refstepcounter{lcnum}\lcthelcnum\label{LC:interpd}:]The format of the data used for interpolation.
 \end{description}
 \begin{description}
-\item[\refstepcounter{lcnum}\lcthelcnum\label{LCinterp}:]The algorithm used for interpolation.
+\item[\refstepcounter{lcnum}\lcthelcnum\label{LC:interp}:]The algorithm used for interpolation.
 \end{description}
 \subsection{Unlikely Changes}
 \label{Sec:UnliChan}
 The module design should be as general as possible. However, a general system is more complex. Sometimes this complexity is not necessary. Fixing some design decisions at the system architecture stage can simplify the software design. If these decision should later need to be changed, then many parts of the design will potentially need to be modified. Hence, it is not intended that these decisions will be changed.  As an example, the model is assumed to follow the definition in the SRS.  If a new model is used, this will mean a change to the input format, fit parameters module, control, and output format modules.
 \begin{description}
-\item[\refstepcounter{ucnum}\uctheucnum\label{UCIO}:]Input/Output devices (Input: File and/or Keyboard, Output: File, Memory, and/or Screen).
+\item[\refstepcounter{ucnum}\uctheucnum\label{UC:IO}:]Input/Output devices (Input: File and/or Keyboard, Output: File, Memory, and/or Screen).
 \end{description}
 \begin{description}
-\item[\refstepcounter{ucnum}\uctheucnum\label{UCinputsource}:]There will always be a source of input data external to the software.
+\item[\refstepcounter{ucnum}\uctheucnum\label{UC:inputsource}:]There will always be a source of input data external to the software.
 \end{description}
 \begin{description}
-\item[\refstepcounter{ucnum}\uctheucnum\label{UCoutput}:]Output data are displayed to the output device.
+\item[\refstepcounter{ucnum}\uctheucnum\label{UC:output}:]Output data are displayed to the output device.
 \end{description}
 \begin{description}
-\item[\refstepcounter{ucnum}\uctheucnum\label{UCgoal}:]The goal of the system is to predict whether the glass slab under consideration can withstand an explosion of a certain degree.
+\item[\refstepcounter{ucnum}\uctheucnum\label{UC:goal}:]The goal of the system is to predict whether the glass slab under consideration can withstand an explosion of a certain degree.
 \end{description}
 \begin{description}
-\item[\refstepcounter{ucnum}\uctheucnum\label{UCequations}:]The equations for Safety can be defined using parameters defined in the input parameters module.
+\item[\refstepcounter{ucnum}\uctheucnum\label{UC:equations}:]The equations for Safety can be defined using parameters defined in the input parameters module.
 \end{description}
 \section{Module Hierarchy}
 \label{Sec:ModuHier}
 This section provides an overview of the module design. Modules are summarized in a hierarchy decomposed by secrets in Table~\ref{Table:ModuHier}. The modules listed below, which are leaves in the hierarchy tree, are the modules that will actually be implemented.
 \begin{description}
-\item[\refstepcounter{modnum}\mthemodnum\label{MhwHiding}:]Hardware Hiding Module
+\item[\refstepcounter{modnum}\mthemodnum\label{M:hwHiding}:]Hardware Hiding Module
 \end{description}
 \begin{description}
-\item[\refstepcounter{modnum}\mthemodnum\label{MmodInputFormat}:]Input Format Module
+\item[\refstepcounter{modnum}\mthemodnum\label{M:modInputFormat}:]Input Format Module
 \end{description}
 \begin{description}
-\item[\refstepcounter{modnum}\mthemodnum\label{MmodInputParams}:]Input Parameters Module
+\item[\refstepcounter{modnum}\mthemodnum\label{M:modInputParams}:]Input Parameters Module
 \end{description}
 \begin{description}
-\item[\refstepcounter{modnum}\mthemodnum\label{MmodInputConstraints}:]Input Constraints Module
+\item[\refstepcounter{modnum}\mthemodnum\label{M:modInputConstraints}:]Input Constraints Module
 \end{description}
 \begin{description}
-\item[\refstepcounter{modnum}\mthemodnum\label{Mmodoutputfdesc}:]Output Format Module
+\item[\refstepcounter{modnum}\mthemodnum\label{M:modoutputfdesc}:]Output Format Module
 \end{description}
 \begin{description}
-\item[\refstepcounter{modnum}\mthemodnum\label{MmodDerivedVals}:]Derived Values Module
+\item[\refstepcounter{modnum}\mthemodnum\label{M:modDerivedVals}:]Derived Values Module
 \end{description}
 \begin{description}
-\item[\refstepcounter{modnum}\mthemodnum\label{Mmodcalcdesc}:]Calculations Module
+\item[\refstepcounter{modnum}\mthemodnum\label{M:modcalcdesc}:]Calculations Module
 \end{description}
 \begin{description}
-\item[\refstepcounter{modnum}\mthemodnum\label{MmodControl}:]Control Module
+\item[\refstepcounter{modnum}\mthemodnum\label{M:modControl}:]Control Module
 \end{description}
 \begin{description}
-\item[\refstepcounter{modnum}\mthemodnum\label{MmodInterpData}:]Interpolation Data Module
+\item[\refstepcounter{modnum}\mthemodnum\label{M:modInterpData}:]Interpolation Data Module
 \end{description}
 \begin{description}
-\item[\refstepcounter{modnum}\mthemodnum\label{MmodInterpolation}:]Interpolation Module
+\item[\refstepcounter{modnum}\mthemodnum\label{M:modInterpolation}:]Interpolation Module
 \end{description}
 \begin{longtable}{l l}
 \toprule
@@ -151,7 +151,7 @@ Software Decision Module & Interpolation Module
 \section{Module Decomposition}
 \label{Sec:ModuDeco}
 Modules are decomposed according to the principle of ``information hiding" proposed by Parnas. The Secrets field in a module decomposition is a brief statement of the design decision hidden by the module. The Services field specifies what the module will do without documenting how to do it. For each module, a suggestion for the implementing software is given under the Implemented By title. If the entry is OS, this means that the module is provided by the operating system. If the entry is GlassBR, this means that the module is provided by the GlassBR program. Only the leaf modules in the hierarchy have to be implemented. If a dash (--) is shown, this means that the module is not a leaf and will not have to be implemented. Whether or not this module is implemented depends on the programming language selected.
-\subsection{Hardware Hiding Module (M\ref{MhwHiding})}
+\subsection{Hardware Hiding Module (M\ref{M:hwHiding})}
 \label{Sec:HardHidiModu()}
 \begin{description}
 \item[Secrets:]The data structure and algorithm used to implement the virtual hardware.
@@ -165,56 +165,56 @@ Modules are decomposed according to the principle of ``information hiding" propo
 \item[Services:]Includes programs that provide externally visible behaviour of the system as specified in the software requirements specification (SRS) documents. This module serves as a communication layer between the hardware-hiding module and the software decision module. The programs in this module will need to change if there are changes in the SRS.
 \item[Implemented By:]--
 \end{description}
-\subsection{Input Format Module (M\ref{MmodInputFormat})}
+\subsection{Input Format Module (M\ref{M:modInputFormat})}
 \label{Sec:InpuFormModu()}
 \begin{description}
 \item[Secrets:]The format and structure of the input data.
 \item[Services:]Converts the input data into the data structure used by the input parameters module.
 \item[Implemented By:]GlassBR
 \end{description}
-\subsection{Input Parameters Module (M\ref{MmodInputParams})}
+\subsection{Input Parameters Module (M\ref{M:modInputParams})}
 \label{Sec:InpuParaModu()}
 \begin{description}
 \item[Secrets:]The format and structure of the input parameters.
 \item[Services:]Stores the parameters needed for the program, including material properties, processing conditions, and numerical parameters. The values can be read as needed. This module knows how many parameters it stores.
 \item[Implemented By:]GlassBR
 \end{description}
-\subsection{Input Constraints Module (M\ref{MmodInputConstraints})}
+\subsection{Input Constraints Module (M\ref{M:modInputConstraints})}
 \label{Sec:InpuConsModu()}
 \begin{description}
 \item[Secrets:]The constraints on the input data.
 \item[Services:]Defines the constraints on the input data and gives an error if a constraint is violated.
 \item[Implemented By:]GlassBR
 \end{description}
-\subsection{Output Format Module (M\ref{Mmodoutputfdesc})}
+\subsection{Output Format Module (M\ref{M:modoutputfdesc})}
 \label{Sec:OutpFormModu()}
 \begin{description}
 \item[Secrets:]The format and structure of the output data.
 \item[Services:]Outputs the results of the calculations, including the input parameters, the demand, the capacity, the probability of breakage, and both safety requirements.
 \item[Implemented By:]GlassBR
 \end{description}
-\subsection{Derived Values Module (M\ref{MmodDerivedVals})}
+\subsection{Derived Values Module (M\ref{M:modDerivedVals})}
 \label{Sec:DeriValuModu()}
 \begin{description}
 \item[Secrets:]The transformations from initial inputs to derived quantities.
 \item[Services:]Defines the equations transforming the initial inputs into derived quantities.
 \item[Implemented By:]GlassBR
 \end{description}
-\subsection{Calculations Module (M\ref{Mmodcalcdesc})}
+\subsection{Calculations Module (M\ref{M:modcalcdesc})}
 \label{Sec:CalcModu()}
 \begin{description}
 \item[Secrets:]The equations for predicting the probability of glass breakage, capacity, and demand, using the input parameters.
 \item[Services:]Defines the equations for solving for the probability of glass breakage, demand, and capacity using the parameters in the input parameters module.
 \item[Implemented By:]GlassBR
 \end{description}
-\subsection{Control Module (M\ref{MmodControl})}
+\subsection{Control Module (M\ref{M:modControl})}
 \label{Sec:ContModu()}
 \begin{description}
 \item[Secrets:]The algorithm for coordinating the running of the program.
 \item[Services:]Provides the main program.
 \item[Implemented By:]GlassBR
 \end{description}
-\subsection{Interpolation Data Module (M\ref{MmodInterpData})}
+\subsection{Interpolation Data Module (M\ref{M:modInterpData})}
 \label{Sec:InteDatuModu()}
 \begin{description}
 \item[Secrets:]The format and structure of the data used for interpolation.
@@ -228,7 +228,7 @@ Modules are decomposed according to the principle of ``information hiding" propo
 \item[Services:]Includes data structures and algorithms used in the system that do not provide direct interaction with the user.
 \item[Implemented By:]--
 \end{description}
-\subsection{Interpolation Module (M\ref{MmodInterpolation})}
+\subsection{Interpolation Module (M\ref{M:modInterpolation})}
 \label{Sec:InteModu()}
 \begin{description}
 \item[Secrets:]The interpolation algorithm.
@@ -243,17 +243,17 @@ This section shows two traceability matrices: between the modules and the requir
 Requirement & Modules
 \\
 \midrule
-R1 & M\ref{MhwHiding}, M\ref{MmodInputFormat}, M\ref{MmodInputParams}, M\ref{MmodControl}
+R1 & M\ref{MhwHiding}, M\ref{M:modInputFormat}, M\ref{M:modInputParams}, M\ref{M:modControl}
 \\
-R2 & M\ref{MmodInputFormat}, M\ref{MmodInputParams}
+R2 & M\ref{M:modInputFormat}, M\ref{M:modInputParams}
 \\
-R3 & M\ref{MmodInputConstraints}
+R3 & M\ref{M:modInputConstraints}
 \\
-R4 & M\ref{Mmodoutputfdesc}
+R4 & M\ref{M:modoutputfdesc}
 \\
-R5 & M\ref{Mmodoutputfdesc}, M\ref{Mmodcalcdesc}
+R5 & M\ref{M:modoutputfdesc}, M\ref{M:modcalcdesc}
 \\
-R6 & M\ref{Mmodoutputfdesc}
+R6 & M\ref{M:modoutputfdesc}
 \\
 \bottomrule
 \caption{Trace Between Requirements and Modules}
@@ -264,21 +264,21 @@ R6 & M\ref{Mmodoutputfdesc}
 Likely Change & Modules
 \\
 \midrule
-LC\ref{LChardware} & M\ref{MhwHiding}
+LC\ref{LC:hardware} & M\ref{M:hwHiding}
 \\
-LC\ref{LCinput} & M\ref{MmodInputFormat}
+LC\ref{LC:input} & M\ref{M:modInputFormat}
 \\
-LC\ref{LCparameters} & M\ref{MmodInputParams}
+LC\ref{LC:parameters} & M\ref{M:modInputParams}
 \\
-LC\ref{LCoutput} & M\ref{Mmodoutputfdesc}
+LC\ref{LC:output} & M\ref{M:modoutputfdesc}
 \\
-LC\ref{LCequations} & M\ref{Mmodcalcdesc}
+LC\ref{LC:equations} & M\ref{M:modcalcdesc}
 \\
-LC\ref{LCcontrol} & M\ref{MmodControl}
+LC\ref{LC:control} & M\ref{M:modControl}
 \\
-LC\ref{LCinterpd} & M\ref{MmodInterpData}
+LC\ref{LC:interpd} & M\ref{M:modInterpData}
 \\
-LC\ref{LCinterp} & M\ref{MmodInterpolation}
+LC\ref{LC:interp} & M\ref{M:modInterpolation}
 \\
 \bottomrule
 \caption{Trace Between Likely Changes and Modules}
@@ -296,21 +296,21 @@ In this section, the uses hierarchy between modules is provided. Parnas said of 
 digraph G {
 graph [sep = 0. esep = 0, nodesep = 0.1, ranksep = 2];
 node [style = "n"];
-"Input Format Module (M\ref{MmodInputFormat})" -> "Hardware Hiding Module (M\ref{MhwHiding})";
-"Input Format Module (M\ref{MmodInputFormat})" -> "Input Parameters Module (M\ref{MmodInputParams})";
-"Input Parameters Module (M\ref{MmodInputParams})" -> "Input Constraints Module (M\ref{MmodInputConstraints})";
-"Output Format Module (M\ref{Mmodoutputfdesc})" -> "Hardware Hiding Module (M\ref{MhwHiding})";
-"Output Format Module (M\ref{Mmodoutputfdesc})" -> "Input Parameters Module (M\ref{MmodInputParams})";
-"Derived Values Module (M\ref{MmodDerivedVals})" -> "Input Parameters Module (M\ref{MmodInputParams})";
-"Calculations Module (M\ref{Mmodcalcdesc})" -> "Input Parameters Module (M\ref{MmodInputParams})";
-"Control Module (M\ref{MmodControl})" -> "Input Format Module (M\ref{MmodInputFormat})";
-"Control Module (M\ref{MmodControl})" -> "Input Parameters Module (M\ref{MmodInputParams})";
-"Control Module (M\ref{MmodControl})" -> "Input Constraints Module (M\ref{MmodInputConstraints})";
-"Control Module (M\ref{MmodControl})" -> "Derived Values Module (M\ref{MmodDerivedVals})";
-"Control Module (M\ref{MmodControl})" -> "Calculations Module (M\ref{Mmodcalcdesc})";
-"Control Module (M\ref{MmodControl})" -> "Interpolation Module (M\ref{MmodInterpolation})";
-"Control Module (M\ref{MmodControl})" -> "Output Format Module (M\ref{Mmodoutputfdesc})";
-"Interpolation Module (M\ref{MmodInterpolation})" -> "Interpolation Data Module (M\ref{MmodInterpData})";
+"Input Format Module (M\ref{M:modInputFormat})" -> "Hardware Hiding Module (M\ref{MhwHiding})";
+"Input Format Module (M\ref{M:modInputFormat})" -> "Input Parameters Module (M\ref{M:modInputParams})";
+"Input Parameters Module (M\ref{M:modInputParams})" -> "Input Constraints Module (M\ref{M:modInputConstraints})";
+"Output Format Module (M\ref{M:modoutputfdesc})" -> "Hardware Hiding Module (M\ref{MhwHiding})";
+"Output Format Module (M\ref{M:modoutputfdesc})" -> "Input Parameters Module (M\ref{M:modInputParams})";
+"Derived Values Module (M\ref{M:modDerivedVals})" -> "Input Parameters Module (M\ref{M:modInputParams})";
+"Calculations Module (M\ref{M:modcalcdesc})" -> "Input Parameters Module (M\ref{M:modInputParams})";
+"Control Module (M\ref{M:modControl})" -> "Input Format Module (M\ref{M:modInputFormat})";
+"Control Module (M\ref{M:modControl})" -> "Input Parameters Module (M\ref{M:modInputParams})";
+"Control Module (M\ref{M:modControl})" -> "Input Constraints Module (M\ref{M:modInputConstraints})";
+"Control Module (M\ref{M:modControl})" -> "Derived Values Module (M\ref{M:modDerivedVals})";
+"Control Module (M\ref{M:modControl})" -> "Calculations Module (M\ref{M:modcalcdesc})";
+"Control Module (M\ref{M:modControl})" -> "Interpolation Module (M\ref{M:modInterpolation})";
+"Control Module (M\ref{M:modControl})" -> "Output Format Module (M\ref{M:modoutputfdesc})";
+"Interpolation Module (M\ref{M:modInterpolation})" -> "Interpolation Data Module (M\ref{M:modInterpData})";
 }
 \end{dot2tex}
 \end{tikzpicture}

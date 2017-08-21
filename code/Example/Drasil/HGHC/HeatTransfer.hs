@@ -1,8 +1,10 @@
-module Drasil.HGHC.HeatTransfer where
+module Drasil.HGHC.HeatTransfer where --whole file is used
 
 import Language.Drasil
 
 import Data.Drasil.Units.Thermodynamics (heat_transfer_coef)
+
+{--}
 
 hghcSymMap :: SymbolMap
 hghcSymMap = symbolMap symbols
@@ -29,27 +31,27 @@ gapFilmCond  = makeVC "gapFilmCond"  (cn' "initial gap film conductance")
   (lH `sub` lP)
 cladCond     = makeVC "cladCond"     (cnIES "clad conductivity") (lK `sub` lC)
 
-htTransCladCool_eq :: Expr
-htTransCladCool_eq =
-  (2 * (C cladCond) * (C coolFilmCond) / (2 * (C cladCond) + (C cladThick) * (C coolFilmCond)))
+htTransCladCool_eq, htTransCladFuel_eq :: Expr
+htTransCladCool, htTransCladFuel :: QDefinition
 
-htTransCladFuel_eq :: Expr
-htTransCladFuel_eq = (2 * (C cladCond) * (C gapFilmCond)) / (2 * (C cladCond) + ((C cladThick) * (C gapFilmCond)))
-
-htTransCladCool :: QDefinition
 htTransCladCool = fromEqn "htTransCladCool" (nounPhraseSP 
   "convective heat transfer coefficient between clad and coolant")
   EmptyS
   (lH `sub` lC) heat_transfer_coef htTransCladCool_eq
 
-htTransCladFuel :: QDefinition
+htTransCladCool_eq =
+  (2 * (C cladCond) * (C coolFilmCond) / (2 * (C cladCond) + (C cladThick) 
+  * (C coolFilmCond)))
+
 htTransCladFuel = fromEqn "htTransCladFuel" (nounPhraseSP
   "effective heat transfer coefficient between clad and fuel surface")
   EmptyS
   (lH `sub` lG) heat_transfer_coef htTransCladFuel_eq
 
+htTransCladFuel_eq = (2 * (C cladCond) * (C gapFilmCond)) / (2 * (C cladCond)
+  + ((C cladThick) * (C gapFilmCond)))
+
 hghc, nuclearPhys, fp :: NamedChunk
 hghc = npnc "hghc" (cn "tiny")
 nuclearPhys = npnc "nuclearPhys" (nounPhraseSP "nuclear physics")
 fp = npnc "fp" (cn "FP")
-

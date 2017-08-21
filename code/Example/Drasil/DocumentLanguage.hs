@@ -7,6 +7,8 @@
 -- instead.
 module Drasil.DocumentLanguage where
 
+import Drasil.DocumentLanguage.Definitions
+
 import Language.Drasil
 
 import Control.Lens ((^.))
@@ -14,12 +16,15 @@ import Control.Lens ((^.))
 import Drasil.Sections.TableOfUnits (table_of_units)
 import Drasil.Sections.TableOfSymbols (table)
 import Drasil.Sections.TableOfAbbAndAcronyms (table_of_abb_and_acronyms)
-import Drasil.DocumentLanguage.Definitions
 import qualified Drasil.SRS as SRS
 import qualified Drasil.Sections.Introduction as Intro
 import qualified Drasil.Sections.SpecificSystemDescription as SSD
 import qualified Drasil.Sections.Stakeholders as Stk
 import qualified Drasil.Sections.AuxiliaryConstants as AC
+import qualified Drasil.Sections.ScopeOfTheProject as SotP
+import qualified Drasil.Sections.TraceabilityMandGs as TMG
+import qualified Drasil.Sections.GeneralSystDesc as GSD
+import qualified Drasil.Sections.Requirements as R
 
 import Data.Drasil.Concepts.Documentation (refmat, tOfSymb, reference)
 
@@ -40,9 +45,15 @@ data DocSection = Verbatim Section
                 | RefSec RefSec 
                 | IntroSec IntroSec
                 | StkhldrSec StkhldrSec
+                | GSDSec GSDSec
+                | ScpOfProjSec ScpOfProjSec
                 | SSDSec SSDSec
+                | ReqrmntSec ReqrmntSec
+                | LCsSec LCsSec
+                | TraceabilitySec TraceabilitySec
                 | AuxConstntSec AuxConstntSec
                 | Bibliography BibRef
+                | AppndxSec AppndxSec
 
 --FIXME: anything with 'Verb' in it should eventually go
 
@@ -120,6 +131,32 @@ data IntroSub where
 
 {--}
 
+-- | Stakeholders section
+data StkhldrSec = StkhldrProg CI Sentence | StkhldrProg2 [StkhldrSub] | StkhldrVerb Section
+
+-- | Stakeholders subsections
+data StkhldrSub where
+  StkhldrSubVerb :: Section -> StkhldrSub
+  Client :: (NamedIdea a) => a -> Sentence -> StkhldrSub
+  Cstmr  :: (NamedIdea a) => a -> StkhldrSub
+
+{--}
+
+data GSDSec = GSDVerb Section 
+            | GSDProg [Section] Contents [Contents] [Section]
+            | GSDProg2 [GSDSub]
+
+data GSDSub where
+  GSDSubVerb :: Section -> GSDSub
+  UsrChars   :: [Contents] -> GSDSub
+  SystCons   :: [Contents] -> [Section] -> GSDSub
+
+{--}
+
+data ScpOfProjSec = ScpOfProjVerb Section | ScpOfProjProg Sentence Contents Contents
+
+{--}
+
 -- | Specific System Description section . Contains a list of subsections. 
 -- Verbatim sections handled by SSDVerb           
 data SSDSec = SSDProg [SSDSub] | SSDVerb Section
@@ -133,7 +170,7 @@ data SSDSub where
 -- | Problem Description section
 data ProblemDescription where
   PDVerb :: Section -> ProblemDescription
-  -- PDProg :: --TODO
+  PDProg :: (NamedIdea a) => Sentence -> a -> Sentence -> [Section] -> ProblemDescription
   
 -- | Solution Characteristics Specification section
 data SolChSpec where
@@ -142,25 +179,31 @@ data SolChSpec where
   
 -- | Solution Characteristics Specification subsections
 data SCSSub where
-  SCSSubVerb :: Section -> SCSSub
-  -- Assumptions :: --TODO
-  TMs :: Fields -> [TheoryModel] -> SCSSub
-  GDs :: Fields -> [RelationConcept] -> SCSSub
-  DDs :: Fields -> [QDefinition]     -> SCSSub --FIXME: Need DD intro
-  IMs :: Fields -> [RelationConcept] -> SCSSub
-  -- Constraints :: --TODO
+  SCSSubVerb  :: Section -> SCSSub
+  Assumptions :: {-Fields  ->-} Section -> Section -> Section -> Section -> Section -> [Contents] -> SCSSub --FIXME: temporary definition?
+  TMs         :: Fields  -> [TheoryModel] -> SCSSub
+  GDs         :: Fields  -> [RelationConcept] -> SCSSub
+  DDs         :: Fields  -> [QDefinition]     -> SCSSub --FIXME: Need DD intro
+  IMs         :: Fields  -> [RelationConcept] -> SCSSub
+  Constraints :: Sentence -> Sentence -> Sentence -> [Contents] {-Fields  -> [UncertainWrapper] -> [ConstrainedChunk]-} -> SCSSub --FIXME: temporary definition?
+--FIXME: Work in Progress ^
 
 {--}
 
--- | Stakeholders section
-data StkhldrSec = StkhldrProg CI Sentence {-[StkhldrSub]-} | StkhldrVerb Section
+data ReqrmntSec = ReqsVerb Section | ReqsProg [ReqsSub]
 
--- | Stakeholders subsections
--- FIXME: Remove?
-data StkhldrSub where
-  StkhldrSubVerb :: Section -> StkhldrSub
-  Client :: Sentence -> Sentence -> StkhldrSub
-  Cstmr  :: Sentence -> StkhldrSub
+data ReqsSub where
+  ReqsSubVerb :: Section -> ReqsSub
+  FReqsSub :: [Contents] -> ReqsSub
+  NonFReqsSub :: (Concept c) => [c] -> [c] -> Sentence -> Sentence -> ReqsSub
+
+{--}
+
+data LCsSec = LCsVerb Section | LCsProg [Contents]
+
+{--}
+
+data TraceabilitySec = TraceabilityVerb Section | TraceabilityProg [Contents] [Sentence] [Contents] [Section]
 
 {--}
 
@@ -169,14 +212,13 @@ data AuxConstntSec = AuxConsProg CI [QDefinition] | AuxConsVerb Section
 
 {--}
 
--- | Creates a document from a document description and system information
-mkDoc :: DocDesc -> SystemInformation -> Document
-mkDoc l si@(SI {_sys = sys, _kind = kind, _authors = authors}) = Document 
-  (kind `for` sys) (manyNames authors) (mkSections si l)
+data AppndxSec = AppndxVerb Section | AppndxProg [Contents]
 
--- | Similar to 'makeDoc', but for when we want to use the short form for titles.  
-mkDoc' :: DocDesc -> (NWrapper -> NWrapper -> Sentence) -> SystemInformation -> Document
-mkDoc' l comb si@(SI {_sys = sys, _kind = kind, _authors = authors}) = Document 
+{--}
+
+-- | Creates a document from a document description and system information
+mkDoc :: DocDesc -> (NWrapper -> NWrapper -> Sentence) -> SystemInformation -> Document
+mkDoc l comb si@(SI {_sys = sys, _kind = kind, _authors = authors}) = Document 
   ((nw kind) `comb` (nw sys)) (manyNames authors) (mkSections si l)
 
 -- | Helper for creating the document sections
@@ -191,6 +233,13 @@ mkSections si l = foldr doit [] l
     doit (SSDSec ss)         ls = mkSSDSec si ss : ls
     doit (AuxConstntSec acs) ls = mkAuxConsSec acs : ls
     doit (Bibliography bib)  ls = mkBib bib : ls
+    doit (GSDSec gs)         ls = mkGSDSec gs : ls 
+    doit (ScpOfProjSec sop)  ls = mkScpOfProjSec sop : ls
+    doit (ReqrmntSec r)      ls = mkReqrmntSec r : ls
+    doit (LCsSec lc)         ls = mkLCsSec lc : ls
+    doit (TraceabilitySec t) ls = mkTraceabilitySec t : ls
+    doit (AppndxSec a)       ls = mkAppndxSec a : ls
+
 
 -- | Helper for creating the reference section and subsections
 mkRefSec :: SystemInformation -> RefSec -> Section
@@ -206,7 +255,7 @@ mkRefSec si (RefProg c l) = section (titleize refmat) [c] (foldr (mkSubRef si) [
     mkSubRef (SI {_concepts = cccs}) (TSymb' f con) l' = (mkTSymb cccs f con) : l'
     mkSubRef (SI {_quants = v, _concepts = cccs, _namedIdeas = n}) TAandA l' = 
       (table_of_abb_and_acronyms $ 
-      filter (isJust . getA) (map nw v ++ map nw cccs ++ map nw n)) : l'
+      filter (isJust . getA) (map nw cccs ++ map nw n ++ map nw v)) : l'
     mkSubRef _              (TVerb s) l' = s : l'
 
 -- | Helper for creating the table of symbols
@@ -304,23 +353,49 @@ mkIntroSec si (IntroProg probIntro progDefn l) =
     mkSubIntro _ (IOrgSec i b s t) l' = Intro.orgSec i b s t : l'
     -- FIXME: s should be "looked up" using "b" once we have all sections being generated
 
+-- | Helper for making the 'Stakeholders' section
 mkStkhldrSec :: StkhldrSec -> Section
 mkStkhldrSec (StkhldrVerb s) = s
 mkStkhldrSec (StkhldrProg key details) = (Stk.stakehldrGeneral key details) 
---FIXME: WIP "x" --> implement use of StkhldrSub or remove entirely?
+mkStkhldrSec (StkhldrProg2 l) = SRS.stakeholder [Stk.stakeholderIntro] $ foldr (mkSubs) [] l
+  where
+    mkSubs :: StkhldrSub -> [Section] -> [Section]
+    mkSubs (StkhldrSubVerb s) l' = s : l'
+    mkSubs (Client kWrd details) l' = (Stk.tClientF kWrd details) : l'
+    mkSubs (Cstmr kWrd) l'          = (Stk.tCustomerF kWrd) : l'
 
+-- | Helper for making the 'General System Description' section
+mkGSDSec :: GSDSec -> Section
+mkGSDSec (GSDVerb s) = s
+mkGSDSec (GSDProg cntxt uI cnstrnts systSubSec) = GSD.genSysF cntxt uI cnstrnts systSubSec
+mkGSDSec (GSDProg2 l) = SRS.genSysDes [GSD.genSysIntro] $ foldr (mkSubs) [] l
+   where
+     mkSubs :: GSDSub -> [Section] -> [Section]
+     mkSubs (GSDSubVerb s) l' = s : l'
+     mkSubs (UsrChars intro) l'   = (GSD.usrCharsF intro) : l'
+     mkSubs (SystCons cntnts subsec) l' = (GSD.systCon cntnts subsec) : l'
+
+-- | Helper for making the 'Scope of the Project' section
+mkScpOfProjSec :: ScpOfProjSec -> Section
+mkScpOfProjSec (ScpOfProjVerb s) = s
+mkScpOfProjSec (ScpOfProjProg kWrd uCTCntnts indCases) = 
+  SotP.scopeOfTheProjF kWrd uCTCntnts indCases
+
+-- | Helper for making the 'Specific System Description' section
 mkSSDSec :: SystemInformation -> SSDSec -> Section
 mkSSDSec _ (SSDVerb s) = s
 mkSSDSec si (SSDProg l) = 
   SSD.specSysDescr (siSys si) $ foldr (mkSubSSD si) [] l
   where
     mkSubSSD :: SystemInformation -> SSDSub -> [Section] -> [Section]
-    mkSubSSD _ (SSDSubVerb s) l'      = s : l'
+    mkSubSSD _ (SSDSubVerb s) l'        = s : l'
     mkSubSSD sysi (SSDProblem pd) l'    = mkSSDProb sysi pd : l'
     mkSubSSD sysi (SSDSolChSpec scs) l' = mkSolChSpec sysi scs : l'
 
 mkSSDProb :: SystemInformation -> ProblemDescription -> Section
 mkSSDProb _ (PDVerb s) = s
+mkSSDProb _ (PDProg start progName end subSec) = 
+  SSD.probDescF start progName end subSec
 
 mkSolChSpec :: SystemInformation -> SolChSpec -> Section
 mkSolChSpec _ (SCSVerb s) = s
@@ -337,21 +412,63 @@ mkSolChSpec si (SCSProg l m) =
     mkSubSCS _ (GDs _ _) _ = error "GDs not yet implemented"
     mkSubSCS _ (IMs _ _) _ = error "IMs not yet implemented"
       --FIXME: need to keep track of DD intro.
+    mkSubSCS _ (Assumptions r1 r2 r3 r4 r5 o) l' = (SSD.assumpF r1 r2 r3 r4 r5 o) : l'
+    mkSubSCS _ (Constraints a b c d) l' = (SSD.datConF a b c d) : l'
     inModSec = (SRS.inModel [Paragraph EmptyS] []) 
     --FIXME: inModSec should be replaced with a walk
     -- over the SCSProg and generate a relevant intro.
     -- Could start with just a quick check of whether or not IM is included and 
     -- then error out if necessary.
+
+{--}
+
+-- | Helper for making the 'Requirements' section
+mkReqrmntSec :: ReqrmntSec -> Section
+mkReqrmntSec (ReqsVerb s) = s
+mkReqrmntSec (ReqsProg l) = R.reqF $ foldr (mkSubs) [] l
+  where
+    mkSubs :: ReqsSub -> [Section] -> [Section]
+    mkSubs (ReqsSubVerb s) l' = s : l'
+    mkSubs (FReqsSub reqs) l'   = (R.fReqF reqs) : l'
+    mkSubs (NonFReqsSub noPrrty prrty rsn explain) l' = 
+      (R.nonFuncReqF noPrrty prrty rsn explain) : l'
+
+{--}
+ 
+-- | Helper for making the 'LikelyChanges' section
+mkLCsSec :: LCsSec -> Section
+mkLCsSec (LCsVerb s) = s
+mkLCsSec (LCsProg c) = SRS.likeChg c []
+
+{--}
+
+-- | Helper for making the 'Traceability Matrices and Graphs' section
+mkTraceabilitySec :: TraceabilitySec -> Section
+mkTraceabilitySec (TraceabilityVerb s) = s
+mkTraceabilitySec (TraceabilityProg refs trailing otherContents subSec) = 
+  TMG.traceMGF refs trailing otherContents subSec
+
+{--}
   
 -- | Helper for making the 'Values of Auxiliary Constants' section
 mkAuxConsSec :: AuxConstntSec -> Section
 mkAuxConsSec (AuxConsVerb s) = s
 mkAuxConsSec (AuxConsProg key listOfCons) = (AC.valsOfAuxConstantsF key listOfCons)
 
+{--}
+
 -- | Helper for making the bibliography section
 mkBib :: BibRef -> Section
 mkBib bib = section (titleize' reference) [Bib bib] []
-  --FIXME: TeX auto generates this title but HTML needs it
+
+{--}
+
+-- | Helper for making the 'Appendix' section
+mkAppndxSec :: AppndxSec -> Section
+mkAppndxSec (AppndxVerb s)  = s
+mkAppndxSec (AppndxProg cs) = SRS.appendix cs []
+
+{--}
 
 -- Helper
 siSys :: SystemInformation -> NWrapper

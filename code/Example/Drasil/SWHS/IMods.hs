@@ -1,27 +1,33 @@
-module Drasil.SWHS.IMods where
+module Drasil.SWHS.IMods (s4_2_5_IMods,
+  eBalanceOnWtr, heatEInWtr) where
 
 import Language.Drasil
-import Drasil.DocumentLanguage
-import Data.Drasil.Concepts.Documentation
-import Prelude hiding (id)
-import Drasil.SWHS.Unitals
+
+import Drasil.DocumentLanguage (mkAssump)
+
+import Drasil.SWHS.Unitals (t_init_melt, latentE_P, pcm_E, pcm_initMltE,
+  temp_melt_P, temp_PCM, htCap_L_P, pcm_mass, htFusion, temp_init, htCap_S_P,
+  melt_frac, temp_W, w_mass, w_E, htCap_W, tau_S_P, pcm_SA, tau_L_P, pcm_HTC,
+  coil_SA, coil_HTC, eta, tau_W, temp_C)
 import Data.Drasil.Utils (getS, unwrap)
-import Data.Drasil.SentenceStructures (foldlSent, isThe, sAnd, ofThe)
+import Data.Drasil.SentenceStructures (acroT, acroDD, foldlSent, isThe,
+  sAnd, ofThe)
 import Data.Drasil.Quantities.Physics (time, energy)
 import Data.Drasil.Concepts.Math (equation, change)
-import Drasil.SWHS.Concepts
-import Data.Drasil.Concepts.PhysicalProperties
-import Data.Drasil.Concepts.Thermodynamics
+import Drasil.SWHS.Concepts (phsChgMtrl, water)
+import Data.Drasil.Concepts.PhysicalProperties (solid, liquid, mass)
+import Data.Drasil.Concepts.Thermodynamics (boiling, heat, temp, melting,
+  latent_heat, sens_heat, heat_cap_spec, thermal_energy, boil_pt)
 
-swhsInModels :: [RelationConcept]
-swhsInModels = [eBalanceOnWtr, eBalanceOnPCM, heatEInWtr, heatEInPCM]
+s4_2_5_IMods :: [RelationConcept]
+s4_2_5_IMods = [eBalanceOnWtr, eBalanceOnPCM, heatEInWtr, heatEInPCM]
 
 ---------
 -- IM1 --
 ---------
 eBalanceOnWtr :: RelationConcept
-eBalanceOnWtr = makeRC "eBalanceOnWtr" (nounPhraseSP "Energy balance on water to find the temperature of the water")
-  balWtrDesc balWtr_Rel
+eBalanceOnWtr = makeRC "eBalanceOnWtr" (nounPhraseSP $ "Energy balance on" ++
+  "water to find the temperature of the water") balWtrDesc balWtr_Rel
 
 balWtr_Rel :: Relation
 balWtr_Rel = (Deriv Total (C temp_W) (C time)) := (Int 1) / (C tau_W) *
@@ -29,8 +35,9 @@ balWtr_Rel = (Deriv Total (C temp_W) (C time)) := (Int 1) / (C tau_W) *
   (C eta) * ((FCall (C temp_PCM) [C time]) - (FCall (C temp_W) [C time])))
 
 balWtrDesc :: Sentence
-balWtrDesc = foldlSent [(E $ C temp_W) `isThe` phrase temp_W +:+. sParen (unwrap $ getUnit temp_W),
-  (E $ C temp_PCM) `isThe` phrase temp_PCM +:+. sParen (unwrap $ getUnit temp_PCM),
+balWtrDesc = foldlSent [(E $ C temp_W) `isThe` phrase temp_W +:+.
+  sParen (unwrap $ getUnit temp_W), (E $ C temp_PCM) `isThe`
+  phrase temp_PCM +:+. sParen (unwrap $ getUnit temp_PCM),
   (E $ C temp_C) `isThe` phrase temp_C +:+. sParen (unwrap $ getUnit temp_C),
   (E $ C tau_W := (C w_mass * C htCap_W) / (C coil_HTC * C coil_SA)),
   S "is a constant" +:+. sParen (unwrap $ getUnit tau_W),
@@ -42,7 +49,8 @@ balWtrDesc = foldlSent [(E $ C temp_W) `isThe` phrase temp_W +:+. sParen (unwrap
   sParen (unwrap $ getUnit temp_W) `sAnd` (S $ show (100 :: Integer)),
   sParen (unwrap $ getUnit temp_W), S "are the", phrase melting `sAnd`
   plural boil_pt, S "of", phrase water `sC` S "respectively",
-  sParen (makeRef (mkAssump "assump14" EmptyS) `sC` makeRef (mkAssump "assump19" EmptyS))]
+  sParen (makeRef (mkAssump "assump14" EmptyS) `sC`
+  makeRef (mkAssump "assump19" EmptyS))]
 
 
 ---------
@@ -50,30 +58,32 @@ balWtrDesc = foldlSent [(E $ C temp_W) `isThe` phrase temp_W +:+. sParen (unwrap
 ---------
 eBalanceOnPCM :: RelationConcept
 eBalanceOnPCM = makeRC "eBalanceOnPCM" (nounPhraseSP
-  "Energy balance on PCM to find T_p") --FIXME: T_p should be called from symbol
+  "Energy balance on PCM to find T_p")
+  --FIXME: T_p should be called from symbol
   balPCMDesc balPCM_Rel
 
 balPCM_Rel :: Relation
-balPCM_Rel = (Deriv Total (C temp_PCM) (C time)) := Case [case1, case2, case3, case4]
-  where case1 = (((Int 1) / (C tau_S_P)) * ((FCall (C temp_W) [C time]) - (FCall (C temp_PCM) [C time])),
-          (C temp_PCM) :< (C temp_melt_P))
+balPCM_Rel = (Deriv Total (C temp_PCM) (C time)) :=
+  Case [case1, case2, case3, case4]
 
-        case2 = (((Int 1) / (C tau_L_P)) * ((FCall (C temp_W) [C time]) - (FCall (C temp_PCM) [C time])),
-          (C temp_PCM) :> (C temp_melt_P))
+  where case1 = (((Int 1) / (C tau_S_P)) * ((FCall (C temp_W) [C time]) -
+          (FCall (C temp_PCM) [C time])), (C temp_PCM) :< (C temp_melt_P))
 
-        case3 = ((Int 0),
-          (C temp_PCM) := (C temp_melt_P))
+        case2 = (((Int 1) / (C tau_L_P)) * ((FCall (C temp_W) [C time]) -
+          (FCall (C temp_PCM) [C time])), (C temp_PCM) :> (C temp_melt_P))
 
-        case4 = ((Int 0),
-          (Int 0) :< (C melt_frac) :< (Int 1))
+        case3 = ((Int 0), (C temp_PCM) := (C temp_melt_P))
 
+        case4 = ((Int 0), (Int 0) :< (C melt_frac) :< (Int 1))
 
 balPCMDesc :: Sentence
-balPCMDesc = foldlSent [(E $ C temp_W) `isThe` phrase temp_W +:+. sParen (unwrap $ getUnit temp_W),
-  (E $ C temp_PCM) `isThe` phrase temp_PCM +:+. sParen (unwrap $ getUnit temp_PCM),
-  (E $ (C tau_S_P) := ((C pcm_mass) * (C htCap_S_P)) / ((C pcm_HTC) * (C pcm_SA))),
-  S "is a constant" +:+. sParen (unwrap $ getUnit tau_S_P),
-  (E $ (C tau_L_P) := ((C pcm_mass) * (C htCap_L_P)) / ((C pcm_HTC) * (C pcm_SA))),
+balPCMDesc = foldlSent [(E $ C temp_W) `isThe` phrase temp_W +:+.
+  sParen (unwrap $ getUnit temp_W), (E $ C temp_PCM) `isThe`
+  phrase temp_PCM +:+. sParen (unwrap $ getUnit temp_PCM),
+  (E $ (C tau_S_P) := ((C pcm_mass) * (C htCap_S_P)) /
+  ((C pcm_HTC) * (C pcm_SA))), S "is a constant" +:+.
+  sParen (unwrap $ getUnit tau_S_P), (E $ (C tau_L_P) :=
+  ((C pcm_mass) * (C htCap_L_P)) / ((C pcm_HTC) * (C pcm_SA))),
   S "is a constant", sParen (unwrap $ getUnit tau_S_P)]
 
 
@@ -89,20 +99,24 @@ htWtr_Rel = (FCall (C w_E) [C time]) := (C htCap_W) * (C w_mass) *
   ((FCall (C temp_W) [C time]) - C temp_init)
 
 htWtrDesc :: Sentence
-htWtrDesc = foldlSent [S "The above", phrase equation, S "is derived using" +:+. acroT 2, 
-  (getS w_E) `isThe` phrase change, S "in", phrase thermal_energy, S "of the", phrase liquid,
-  phrase water, S "relative to the", phrase energy, S "at the initial", phrase temp,
-  sParen (getS temp_init) +:+. sParen (unwrap $ getUnit pcm_initMltE), (getS htCap_W) `isThe`
+htWtrDesc = foldlSent [S "The above", phrase equation,
+  S "is derived using" +:+. acroT 2, getS w_E `isThe` phrase change,
+  S "in", phrase thermal_energy, S "of the", phrase liquid,
+  phrase water, S "relative to the", phrase energy, S "at the initial",
+  phrase temp, sParen (getS temp_init) +:+.
+  sParen (unwrap $ getUnit pcm_initMltE), (getS htCap_W) `isThe`
   phrase heat_cap_spec, S "of", phrase liquid, phrase water,
   sParen (unwrap $ getUnit htCap_S_P) `sAnd` (getS w_mass)
-  `isThe` phrase mass, S "of the", phrase water +:+. sParen (unwrap $ getUnit w_mass), 
-  S "The", phrase change, S "in", phrase temp, S "is the difference between the",
-  phrase temp, S "at", phrase time, getS time,
-  sParen (unwrap $ getUnit t_init_melt) `sC` (getS temp_W) `sAnd` S "the",
-  phrase temp_init `sC` getS temp_init +:+. sParen (unwrap $ getUnit temp_init),
-  S "This", phrase equation, S "applies as long as",
-  (E $ (Int 0) :< (C temp_W) :< (Int 0)) :+: (unwrap $ getUnit temp_W),
-  sParen (makeRef (mkAssump "assump14" EmptyS) `sC` makeRef (mkAssump "assump19" EmptyS))]
+  `isThe` phrase mass, S "of the", phrase water +:+.
+  sParen (unwrap $ getUnit w_mass), S "The", phrase change, S "in",
+  phrase temp, S "is the difference between the", phrase temp, S "at",
+  phrase time, getS time, sParen (unwrap $ getUnit t_init_melt) `sC`
+  (getS temp_W) `sAnd` S "the", phrase temp_init `sC` getS temp_init +:+.
+  sParen (unwrap $ getUnit temp_init), S "This", phrase equation,
+  S "applies as long as", (E $ (Int 0) :< (C temp_W) :< (Int 0)) :+:
+  (unwrap $ getUnit temp_W),
+  sParen $ makeRef (mkAssump "assump14" EmptyS) `sC`
+  makeRef (mkAssump "assump19" EmptyS)]
 
 ---------
 -- IM4 --
@@ -113,11 +127,12 @@ heatEInPCM = makeRC "heatEInPCM" (nounPhraseSP "Heat energy in the PCM")
 
 htPCM_Rel :: Relation
 htPCM_Rel = C pcm_E := Case [case1, case2, case3, case4]
-  where case1 = (C htCap_S_P * C pcm_mass * ((FCall (C temp_PCM) [C time]) - C temp_init),
-          (C temp_PCM) :< (C temp_melt_P))
+  where case1 = (C htCap_S_P * C pcm_mass * ((FCall (C temp_PCM) [C time]) -
+          C temp_init), (C temp_PCM) :< (C temp_melt_P))
 
-        case2 = (C pcm_initMltE + (C htFusion * C pcm_mass) + (C htCap_L_P * C pcm_mass * ((FCall (C temp_PCM) [C time]) - C temp_melt_P)),
-          (C temp_PCM) :> (C temp_melt_P))
+        case2 = (C pcm_initMltE + (C htFusion * C pcm_mass) +
+          (C htCap_L_P * C pcm_mass * ((FCall (C temp_PCM) [C time]) -
+          C temp_melt_P)), (C temp_PCM) :> (C temp_melt_P))
 
         case3 = (C pcm_initMltE + (FCall (C latentE_P) [C time]),
           (C temp_PCM) := (C temp_melt_P))

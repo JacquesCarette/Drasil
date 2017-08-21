@@ -400,7 +400,7 @@ kg
 Unit outward normal vector for a surface
 </td>
 <td>
-
+Unitless
 </td>
 </tr>
 <tr>
@@ -499,7 +499,7 @@ J
 Surface
 </td>
 <td>
-
+Unitless
 </td>
 </tr>
 <tr>
@@ -708,7 +708,7 @@ m<sup>3</sup>
 ODE parameter
 </td>
 <td>
-
+Unitless
 </td>
 </tr>
 <tr>
@@ -796,7 +796,7 @@ s
 Melt fraction
 </td>
 <td>
-
+Unitless
 </td>
 </tr>
 </table>
@@ -1183,44 +1183,44 @@ Assumptions
 <p class="paragraph">
 This section simplifies the original problem and helps in developing the theoretical model by filling in the missing information for the physical system. The numbers given in the square brackets refer to the Theoretical Models [<a href=#Sec:TheoMode>this Section</a>], General Definitions [<a href=#Sec:GeneDefi>this Section</a>], Data Definitions [<a href=#Sec:DataDefi>this Section</a>], Instance Models [<a href=#Sec:InstMode>this Section</a>], or Likely Changes [<a href=#Sec:LikeChan>this Section</a>], in which the respective assumption is used.
 </p>
-<a id="Aassump1">
+<a id="A:assump1">
 <ul>
 A1: The only form of energy that is relevant for this problem is thermal energy. All other forms of energy, such as mechanical energy, are assumed to be negligible [<a href=#T:t1ConsThermE>this Definition</a>].
 </ul>
 </a>
-<a id="Aassump2">
+<a id="A:assump2">
 <ul>
 A2: All heat transfer coefficients are constant over time [GD1].
 </ul>
 </a>
-<a id="Aassump3">
+<a id="A:assump3">
 <ul>
 A3: The water in the tank is fully mixed, so the temperature of the water is the same throughout the entire tank [GD2, <a href=#DD:ht.flux.P>this Definition</a>].
 </ul>
 </a>
-<a id="Aassump4">
+<a id="A:assump4">
 <ul>
-A4: The temperature of the phase change material is the same throughout the volume of PCM [GD2, <a href=#DD:ht.flux.P>this Definition</a>, <a href=#LClikeChg1>this Likely Change</a>].
+A4: The temperature of the phase change material is the same throughout the volume of PCM [GD2, <a href=#DD:ht.flux.P>this Definition</a>, <a href=#LC:likeChg1>this Likely Change</a>].
 </ul>
 </a>
-<a id="Aassump5">
+<a id="A:assump5">
 <ul>
 A5: The density of water and density of PCM have no spatial variation; that is, they are each constant over their entire volume [GD2].
 </ul>
 </a>
-<a id="Aassump6">
+<a id="A:assump6">
 <ul>
 A6: The specific heat capacity of water, specific heat capacity of PCM as a solid, and specific heat capacity of PCM as a liquid have no spatial variation; that is, they are each constant over their entire volume [GD2].
 </ul>
 </a>
-<a id="Aassump7">
+<a id="A:assump7">
 <ul>
 A7: Newton's law of convective cooling applies between the heating coil and the water [<a href=#DD:ht.flux.C>this Definition</a>].
 </ul>
 </a>
-<a id="Aassump8">
+<a id="A:assump8">
 <ul>
-A8: The temperature of the heating coil is constant over time [<a href=#DD:ht.flux.C>this Definition</a>, <a href=#LClikeChg2>this Likely Change</a>].
+A8: The temperature of the heating coil is constant over time [<a href=#DD:ht.flux.C>this Definition</a>, <a href=#LC:likeChg2>this Likely Change</a>].
 </ul>
 </a>
 <a id="Aassump9">
@@ -1228,59 +1228,59 @@ A8: The temperature of the heating coil is constant over time [<a href=#DD:ht.fl
 A9: The temperature of the heating coil does not vary along its length [<a href=#DD:ht.flux.C>this Definition</a>, <a href=#LClikeChg3>this Likely Change</a>].
 </ul>
 </a>
-<a id="Aassump10">
+<a id="A:assump10">
 <ul>
 A10: Newton's law of convective cooling applies between the water and the PCM [<a href=#DD:ht.flux.P>this Definition</a>].
 </ul>
 </a>
-<a id="Aassump11">
+<a id="A:assump11">
 <ul>
-A11: The model only accounts for charging of the tank, not discharging. The temperature of the water and temperature of the phase change material can only increase, or remain constant; they do not decrease. This implies that the initial temperature [<a href=#Aassump12>this Assumption</a>] is less than (or equal) to the temperature of the heating coil [IM1, <a href=#LClikeChg4>this Likely Change</a>].
+A11: The model only accounts for charging of the tank, not discharging. The temperature of the water and temperature of the phase change material can only increase, or remain constant; they do not decrease. This implies that the initial temperature [<a href=#A:assump12>A:assump12</a>] is less than (or equal) to the temperature of the heating coil [IM1, <a href=#LC:likeChg4>this Likely Change</a>].
 </ul>
 </a>
-<a id="Aassump12">
+<a id="A:assump12">
 <ul>
-A12: The initial temperature of the water and the PCM is the same [IM1, IM2, <a href=#LClikeChg5>this Likely Change</a>].
+A12: The initial temperature of the water and the PCM is the same [IM1, IM2, <a href=#LC:likeChg5>this Likely Change</a>].
 </ul>
 </a>
-<a id="Aassump13">
+<a id="A:assump13">
 <ul>
 A13: The simulation will start with the PCM in a solid state [IM2, IM4].
 </ul>
 </a>
-<a id="Aassump14">
+<a id="A:assump14">
 <ul>
 A14: The operating temperature range of the system is such that the water is always in liquid state. That is, the temperature will not drop below the melting point temperature of water, or rise above its boiling point temperature [IM1, IM3].
 </ul>
 </a>
-<a id="Aassump15">
+<a id="A:assump15">
 <ul>
-A15: The tank is perfectly insulated so that there is no heat loss from the tank [IM1, <a href=#LClikeChg6>this Likely Change</a>].
+A15: The tank is perfectly insulated so that there is no heat loss from the tank [IM1, <a href=#LC:likeChg6>this Likely Change</a>].
 </ul>
 </a>
-<a id="Aassump16">
+<a id="A:assump16">
 <ul>
 A16: No internal heat is generated by either the water or the PCM; therefore, the volumetric heat generation per unit volume is zero [IM1, IM2].
 </ul>
 </a>
-<a id="Aassump17">
+<a id="A:assump17">
 <ul>
 A17: The volume change of the PCM due to melting is negligible [IM2].
 </ul>
 </a>
-<a id="Aassump18">
+<a id="A:assump18">
 <ul>
 A18: The PCM is either in a liquid state or a solid state but not a gaseous state [IM2, IM4].
 </ul>
 </a>
-<a id="Aassump19">
+<a id="A:assump19">
 <ul>
 A19: The pressure in the tank is atmospheric, so the melting point temperature and boiling point temperature are 0&deg;C and 100&deg;C, respectively [IM1, IM3].
 </ul>
 </a>
-<a id="Aassump20">
+<a id="A:assump20">
 <ul>
-A20: When considering the volume of water in the tank, the volume of the heating coil is assumed to be negligible [<a href=#Rreq2>this Requirement</a>].
+A20: When considering the volume of water in the tank, the volume of the heating coil is assumed to be negligible [<a href=#R:req2>this Requirement</a>].
 </ul>
 </a>
 </div>
@@ -1579,7 +1579,7 @@ We consider an arbitrary volume. The volumetric heat generation per unit volume 
 </div>
 </a>
 <p class="paragraph">
-Where <em>q<sub>in</sub></em>, <em>q<sub>out</sub></em>, <em>A<sub>in</sub></em>, and <em>A<sub>out</sub></em> are explained in GD2. Assuming <em>&rho;</em>, <em>C</em> and <em>T</em> are constant over the volume, which is true in our case by Assumptions (<a href=#Aassump3>this Assumption</a>), (<a href=#Aassump4>this Assumption</a>), (<a href=#Aassump5>this Assumption</a>), and (<a href=#Aassump6>this Assumption</a>), we have:
+Where <em>q<sub>in</sub></em>, <em>q<sub>out</sub></em>, <em>A<sub>in</sub></em>, and <em>A<sub>out</sub></em> are explained in GD2. Assuming <em>&rho;</em>, <em>C</em> and <em>T</em> are constant over the volume, which is true in our case by Assumptions (<a href=#A:assump3>this Assumption</a>), (<a href=#A:assump4>this Assumption</a>), (<a href=#A:assump5>this Assumption</a>), and (<a href=#A:assump6>this Assumption</a>), we have:
 </p>
 <a id="">
 <div class="equation">
@@ -1887,7 +1887,7 @@ Description
 <span class="fdn">
 <em>h<sub>C</sub></em><em>A<sub>C</sub></em>
 </span>
-</div> is a constant (dimensionless). The above equation applies as long as the water is in liquid form, 0&thinsp;&lt;&thinsp;<em>T<sub>W</sub></em>&thinsp;&lt;&thinsp;100 (&deg;C) where 0 (&deg;C) and 100 (&deg;C) are the melting and boiling point temperatures of water, respectively (<a href=#Aassump14>this Assumption</a>, <a href=#Aassump19>this Assumption</a>).
+</div> is a constant (dimensionless). The above equation applies as long as the water is in liquid form, 0&thinsp;&lt;&thinsp;<em>T<sub>W</sub></em>&thinsp;&lt;&thinsp;100 (&deg;C) where 0 (&deg;C) and 100 (&deg;C) are the melting and boiling point temperatures of water, respectively (<a href=#A:assump14>this Assumption</a>, <a href=#A:assump19>this Assumption</a>).
 </p>
 </td>
 </tr>
@@ -1897,7 +1897,7 @@ Description
 Derivation of the energy balance on water:
 </p>
 <p class="paragraph">
-To find the rate of change of <em>T<sub>W</sub></em>, we look at the energy balance on water. The volume being considered is the volume of water <em>V<sub>W</sub></em>, which has mass of water <em>m<sub>W</sub></em> and specific heat capacity of water, <em>C<sub>W</sub></em>. <em>q<sub>C</sub></em> represents the heat flux into the water from the coil and <em>q<sub>P</sub></em> represents the heat flux into the PCM from water, over heating coil surface area and phase change material surface area of <em>A<sub>C</sub></em> and <em>A<sub>P</sub></em>, respectively. No heat transfer occurs to the outside of the tank, since it has been assumed to be perfectly insulated (<a href=#Aassump15>this Assumption</a>). Assuming no volumetric heat generation per unit volume (<a href=#Aassump16>this Assumption</a>), <em>g</em> = 0. Therefore, the equation for GD2 can be written as:
+To find the rate of change of <em>T<sub>W</sub></em>, we look at the energy balance on water. The volume being considered is the volume of water <em>V<sub>W</sub></em>, which has mass of water <em>m<sub>W</sub></em> and specific heat capacity of water, <em>C<sub>W</sub></em>. <em>q<sub>C</sub></em> represents the heat flux into the water from the coil and <em>q<sub>P</sub></em> represents the heat flux into the PCM from water, over heating coil surface area and phase change material surface area of <em>A<sub>C</sub></em> and <em>A<sub>P</sub></em>, respectively. No heat transfer occurs to the outside of the tank, since it has been assumed to be perfectly insulated (<a href=#A:assump15>this Assumption</a>). Assuming no volumetric heat generation per unit volume (<a href=#A:assump16>this Assumption</a>), <em>g</em> = 0. Therefore, the equation for GD2 can be written as:
 </p>
 <a id="">
 <div class="equation">
@@ -2198,7 +2198,7 @@ Description
 Detailed derivation of the energy balance on the PCM during sensible heating phase:
 </p>
 <p class="paragraph">
-To find the rate of change of <em>T<sub>P</sub></em>, we look at the energy balance on the PCM. The volume being considered is the volume of PCM, <em>V<sub>P</sub></em>. The derivation that follows is initially for the solid PCM. The mass of phase change material is <em>m<sub>P</sub></em> and the specific heat capacity of PCM as a solid is <em>C<sub>P</sub><sup>S</sup></em>. The heat flux into the PCM from water is <em>q<sub>P</sub></em> over phase change material surface area <em>A<sub>P</sub></em>. There is no heat flux output. Assuming no volumetric heat generation per unit volume (<a href=#Aassump16>this Assumption</a>), <em>g</em>=0, the equation for GD2 can be written as:
+To find the rate of change of <em>T<sub>P</sub></em>, we look at the energy balance on the PCM. The volume being considered is the volume of PCM, <em>V<sub>P</sub></em>. The derivation that follows is initially for the solid PCM. The mass of phase change material is <em>m<sub>P</sub></em> and the specific heat capacity of PCM as a solid is <em>C<sub>P</sub><sup>S</sup></em>. The heat flux into the PCM from water is <em>q<sub>P</sub></em> over phase change material surface area <em>A<sub>P</sub></em>. There is no heat flux output. Assuming no volumetric heat generation per unit volume (<a href=#A:assump16>this Assumption</a>), <em>g</em>=0, the equation for GD2 can be written as:
 </p>
 <a id="">
 <div class="equation">
@@ -2272,13 +2272,13 @@ Setting <em>&tau;<sub>P</sub><sup>S</sup></em>=<em>m<sub>P</sub></em><em>C<sub>P
 </div>
 </a>
 <p class="paragraph">
-Equation (6) applies for the solid PCM. In the case where all of the PCM is melted, the same derivation applies, except that <em>C<sub>P</sub><sup>S</sup></em> is replaced by <em>C<sub>P</sub><sup>L</sup></em>, and thus <em>&tau;<sub>P</sub><sup>S</sup></em> is replaced by <em>&tau;<sub>P</sub><sup>L</sup></em>. Although a small change in surface area would be expected with melting, this is not included, since the volume change of the PCM with melting is assumed to be negligible (<a href=#Aassump17>this Assumption</a>).
+Equation (6) applies for the solid PCM. In the case where all of the PCM is melted, the same derivation applies, except that <em>C<sub>P</sub><sup>S</sup></em> is replaced by <em>C<sub>P</sub><sup>L</sup></em>, and thus <em>&tau;<sub>P</sub><sup>S</sup></em> is replaced by <em>&tau;<sub>P</sub><sup>L</sup></em>. Although a small change in surface area would be expected with melting, this is not included, since the volume change of the PCM with melting is assumed to be negligible (<a href=#A:assump17>this Assumption</a>).
 </p>
 <p class="paragraph">
 In the case where <em>T<sub>P</sub></em>=<em>T<sub>melt</sub><sup>P</sup></em> and not all of the PCM is melted, the temperature of the phase change material does not change. Therefore, in this case d<em>T<sub>P</sub></em>/d<em>t</em>=0.
 </p>
 <p class="paragraph">
-This derivation does not consider the boiling of the PCM, as the PCM is assumed to either be in a solid state or a liquid state (<a href=#Aassump18>this Assumption</a>).
+This derivation does not consider the boiling of the PCM, as the PCM is assumed to either be in a solid state or a liquid state (<a href=#A:assump18>this Assumption</a>).
 </p>
 <a id="T:heatEInWtr">
 <table class="tdefn">
@@ -2310,7 +2310,7 @@ Description
 </th>
 <td>
 <p class="paragraph">
-The above equation is derived using T2. <em>E<sub>W</sub></em> is the change in thermal energy of the liquid water relative to the energy at the initial temperature (<em>T<sub>init</sub></em>) (J). <em>C<sub>W</sub></em> is the specific heat capacity of liquid water (J/(kg&sdot;&deg;C)) and <em>m<sub>W</sub></em> is the mass of the water (kg). The change in temperature is the difference between the temperature at time <em>t</em> (s), <em>T<sub>W</sub></em> and the initial temperature, <em>T<sub>init</sub></em> (&deg;C). This equation applies as long as 0&thinsp;&lt;&thinsp;<em>T<sub>W</sub></em>&thinsp;&lt;&thinsp;0&deg;C (<a href=#Aassump14>this Assumption</a>, <a href=#Aassump19>this Assumption</a>).
+The above equation is derived using T2. <em>E<sub>W</sub></em> is the change in thermal energy of the liquid water relative to the energy at the initial temperature (<em>T<sub>init</sub></em>) (J). <em>C<sub>W</sub></em> is the specific heat capacity of liquid water (J/(kg&sdot;&deg;C)) and <em>m<sub>W</sub></em> is the mass of the water (kg). The change in temperature is the difference between the temperature at time <em>t</em> (s), <em>T<sub>W</sub></em> and the initial temperature, <em>T<sub>init</sub></em> (&deg;C). This equation applies as long as 0&thinsp;&lt;&thinsp;<em>T<sub>W</sub></em>&thinsp;&lt;&thinsp;0&deg;C (<a href=#A:assump14>this Assumption</a>, <a href=#A:assump19>this Assumption</a>).
 </p>
 </td>
 </tr>
@@ -2370,7 +2370,7 @@ Description
 </th>
 <td>
 <p class="paragraph">
-The above equation is derived using T2 and T3. <em>E<sub>P</sub></em> is the change in thermal energy of the PCM relative to the energy at the initial temperature (<em>T<sub>init</sub></em>) J. <em>E<sub>P</sub></em> for the solid PCM is found using T2 for sensible heat ing, with the specific heat capacity of the solid PCM, <em>C<sub>P</sub><sup>S</sup></em> (J/(kg&sdot;&deg;C)) and the change in the PCM temperature from the initial temperature (&deg;C). <em>E<sub>P</sub></em> for the melted PCM (<em>T<sub>P</sub></em>&thinsp;&gt;&thinsp;<em>E<sub>P</sub><sub>melt</sub><sup>init</sup></em>) is found using T2 for sensible heat of the liquid. PCM plus the energy when melting starts, plus the energy required to melt all of the PCM The energy when melting starts is <em>E<sub>P</sub><sub>melt</sub><sup>init</sup></em> (J). The energy required to melt all of the PCM is <em>H<sub>f</sub></em><em>m<sub>P</sub></em> (J) (DD3). the specific heat capacity of the liquid PCM is <em>C<sub>P</sub><sup>L</sup></em> (J/(kg&sdot;&deg;C)) and the change in temperature is <em>T<sub>P</sub></em> &minus; <em>T<sub>melt</sub><sup>P</sup></em> (&deg;C). <em>E<sub>P</sub></em> during melting of the PCM is found using the energy required at the instant melting of the PCM begins, <em>E<sub>P</sub><sub>melt</sub><sup>init</sup></em> plus the latent heat energy added to the PCM, <em>Q<sub>P</sub></em> (J) since the time when melting began <em>t<sub>melt</sub><sup>init</sup></em> (s). The heat energy for boiling of the PCM is not detailed, since the PCM is assumed to either be in a solid or liquid state (<a href=#Aassump18>this Assumption</a>).
+The above equation is derived using T2 and T3. <em>E<sub>P</sub></em> is the change in thermal energy of the PCM relative to the energy at the initial temperature (<em>T<sub>init</sub></em>) J. <em>E<sub>P</sub></em> for the solid PCM is found using T2 for sensible heat ing, with the specific heat capacity of the solid PCM, <em>C<sub>P</sub><sup>S</sup></em> (J/(kg&sdot;&deg;C)) and the change in the PCM temperature from the initial temperature (&deg;C). <em>E<sub>P</sub></em> for the melted PCM (<em>T<sub>P</sub></em>&thinsp;&gt;&thinsp;<em>E<sub>P</sub><sub>melt</sub><sup>init</sup></em>) is found using T2 for sensible heat of the liquid. PCM plus the energy when melting starts, plus the energy required to melt all of the PCM The energy when melting starts is <em>E<sub>P</sub><sub>melt</sub><sup>init</sup></em> (J). The energy required to melt all of the PCM is <em>H<sub>f</sub></em><em>m<sub>P</sub></em> (J) (DD3). the specific heat capacity of the liquid PCM is <em>C<sub>P</sub><sup>L</sup></em> (J/(kg&sdot;&deg;C)) and the change in temperature is <em>T<sub>P</sub></em> &minus; <em>T<sub>melt</sub><sup>P</sup></em> (&deg;C). <em>E<sub>P</sub></em> during melting of the PCM is found using the energy required at the instant melting of the PCM begins, <em>E<sub>P</sub><sub>melt</sub><sup>init</sup></em> plus the latent heat energy added to the PCM, <em>Q<sub>P</sub></em> (J) since the time when melting began <em>t<sub>melt</sub><sup>init</sup></em> (s). The heat energy for boiling of the PCM is not detailed, since the PCM is assumed to either be in a solid or liquid state (<a href=#A:assump18>this Assumption</a>).
 </p>
 </td>
 </tr>
@@ -2384,7 +2384,7 @@ The above equation is derived using T2 and T3. <em>E<sub>P</sub></em> is the cha
 Data Constraints
 </h4>
 <p class="paragraph">
-<a href=#Table:InpuDataCons>this Table</a>, and <a href=#Table:OutpDataCons>this Table</a> shows the data constraints on the input and output variables, respectively. The column for physical constraints gives the physical limitations on the range of values that can be taken by the variable. The uncertainty column provides an estimate of the confidence with which the physical quantities can be measured. This information would be part of the input if one were performing an uncertainty quantification exercise. The constraints are conservative, to give the user of the model the flexibility to experiment with unusual situations. The column of typical values is intended to provide a feel for a common scenario. The column for software constraints restricts the range of inputs to reasonable values. (*) These quantities cannot be equal to zero, or there will be a divide by zero in the model. (+) These quantities cannot be zero, or there would be freezing (<a href=#Aassump13>this Assumption</a>). (#) The constraints on the surface area are calculated by considering the surface area to volume ratio. The assumption is that the lowest ratio is 1 and the highest possible is <div class="fraction">
+<a href=#Table:InpuDataCons>this Table</a>, and <a href=#Table:OutpDataCons>this Table</a> shows the data constraints on the input and output variables, respectively. The column for physical constraints gives the physical limitations on the range of values that can be taken by the variable. The uncertainty column provides an estimate of the confidence with which the physical quantities can be measured. This information would be part of the input if one were performing an uncertainty quantification exercise. The constraints are conservative, to give the user of the model the flexibility to experiment with unusual situations. The column of typical values is intended to provide a feel for a common scenario. The column for software constraints restricts the range of inputs to reasonable values. (*) These quantities cannot be equal to zero, or there will be a divide by zero in the model. (+) These quantities cannot be zero, or there would be freezing (<a href=#A:assump13>this Assumption</a>). (#) The constraints on the surface area are calculated by considering the surface area to volume ratio. The assumption is that the lowest ratio is 1 and the highest possible is <div class="fraction">
 <span class="fup">
 2
 </span>
@@ -2826,7 +2826,7 @@ This section provides the functional requirements, the business tasks that the s
 <h3>
 Functional Requirements
 </h3>
-<a id="Rreq1">
+<a id="R:req1">
 <ul>
 R1: Input the following quantities, which define the tank parameters, material properties and initial conditions:
 </ul>
@@ -3033,7 +3033,7 @@ final time
 </tr>
 </table>
 </a>
-<a id="Rreq2">
+<a id="R:req2">
 <ul>
 R2: Use the inputs in <a href=#Rreq1>this Requirement</a> to find the mass needed for IM1 to IM4, as follows, where <em>V<sub>W</sub></em> is the volume of water and <em>V<sub>tank</sub></em> is the volume of the cylindrical tank:
 </ul>
@@ -3055,47 +3055,47 @@ R2: Use the inputs in <a href=#Rreq1>this Requirement</a> to find the mass neede
 <em>m<sub>P</sub></em> = <em>V<sub>P</sub></em><em>&rho;<sub>P</sub></em>
 </div>
 </a>
-<a id="Rreq3">
+<a id="R:req3">
 <ul>
 R3: Verify that the inputs satisfy the required physical constraints shown in <a href=#Table:TracMatrShowtheConnBetwItemofDiffSect>this Table</a>.
 </ul>
 </a>
-<a id="Rreq4">
+<a id="R:req4">
 <ul>
 R4: Output the input quantities and derived quantities in the following list: the quantities from R1, the masses from R2, <em>&tau;<sub>W</sub></em> (from IM1), <em>&eta;</em> (from IM1), <em>&tau;<sub>P</sub><sup>S</sup></em> (from IM2) and <em>&tau;<sub>P</sub><sup>L</sup></em> (from IM2).
 </ul>
 </a>
-<a id="Rreq5">
+<a id="R:req5">
 <ul>
 R5: Calculate and output the temperature of the water (<em>T<sub>W</sub></em>(<em>t</em>)) over the simulation time (from IM1).
 </ul>
 </a>
-<a id="Rreq6">
+<a id="R:req6">
 <ul>
 R6: Calculate and output the temperature of the phase change material (<em>T<sub>P</sub></em>(<em>t</em>)) over the simulation time (from IM2).
 </ul>
 </a>
-<a id="Rreq7">
+<a id="R:req7">
 <ul>
 R7: Calculate and output the change in heat energy in the water (<em>E<sub>W</sub></em>(<em>t</em>)) over the simulation time (from IM3).
 </ul>
 </a>
-<a id="Rreq8">
+<a id="R:req8">
 <ul>
 R8: Calculate and output the change in heat energy in the PCM (<em>E<sub>P</sub></em>(<em>t</em>)) over the simulation time (from IM4).
 </ul>
 </a>
-<a id="Rreq9">
+<a id="R:req9">
 <ul>
 R9: Verify that the energy outputs (<em>E<sub>W</sub></em>(<em>t</em>) and <em>E<sub>P</sub></em>(<em>t</em>)) follow the law of conservation of energy, as outlined in <a href=#Sec:PropofaCorrSolu>this Section</a>, with relative error no greater than 0.001%.
 </ul>
 </a>
-<a id="Rreq10">
+<a id="R:req10">
 <ul>
 R10: Calculate and output the time at which the PCM begins to melt <em>t<sub>melt</sub><sup>init</sup></em> (from IM2).
 </ul>
 </a>
-<a id="Rreq11">
+<a id="R:req11">
 <ul>
 R11: Calculate and output the time at which the PCM stops melting <em>t<sub>melt</sub><sup>final</sup></em> (from IM2).
 </ul>
@@ -3119,34 +3119,34 @@ This problem is small in size and relatively simple, so performance is not a pri
 <h2>
 Likely Changes
 </h2>
-<a id="LClikeChg1">
+<a id="LC:likeChg1">
 <ul>
-LC1: <a href=#Aassump4>this Assumption</a> - PCM is actually a poor thermal conductor, so the assumption of uniform temperature of the phase change material is not likely.
+LC1: <a href=#A:assump4>this Assumption</a> - PCM is actually a poor thermal conductor, so the assumption of uniform temperature of the phase change material is not likely.
 </ul>
 </a>
-<a id="LClikeChg2">
+<a id="LC:likeChg2">
 <ul>
-LC2: <a href=#Aassump8>this Assumption</a> - The temperature of the heating coil will change over the course of the day, depending on the energy received from the sun.
+LC2: <a href=#A:assump8>this Assumption</a> - The temperature of the heating coil will change over the course of the day, depending on the energy received from the sun.
 </ul>
 </a>
-<a id="LClikeChg3">
+<a id="LC:likeChg3">
 <ul>
-LC3: <a href=#Aassump9>this Assumption</a> - The temperature of the heating coil will actually change along its length as the water within it cools.
+LC3: <a href=#A:assump9>this Assumption</a> - The temperature of the heating coil will actually change along its length as the water within it cools.
 </ul>
 </a>
-<a id="LClikeChg4">
+<a id="LC:likeChg4">
 <ul>
-LC4: <a href=#Aassump11>this Assumption</a> - The model currently only accounts for charging of the tank. A more complete model would also account for discharging of the tank.
+LC4: <a href=#A:assump11>this Assumption</a> - The model currently only accounts for charging of the tank. A more complete model would also account for discharging of the tank.
 </ul>
 </a>
-<a id="LClikeChg5">
+<a id="LC:likeChg5">
 <ul>
-LC5: <a href=#Aassump12>this Assumption</a> - To add more flexibility to the simulation, the initial temperature of the water and the PCM could be allowed to have different values.
+LC5: <a href=#A:assump12>this Assumption</a> - To add more flexibility to the simulation, the initial temperature of the water and the PCM could be allowed to have different values.
 </ul>
 </a>
-<a id="LClikeChg6">
+<a id="LC:likeChg6">
 <ul>
-LC6: <a href=#Aassump15>this Assumption</a> - Any real tank cannot be perfectly insulated and will lose heat.
+LC6: <a href=#A:assump15>this Assumption</a> - Any real tank cannot be perfectly insulated and will lose heat.
 </ul>
 </a>
 </div>

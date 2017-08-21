@@ -1,21 +1,18 @@
 module Drasil.NoPCM.Unitals where
 
 import Language.Drasil
+import Control.Lens ((^.))
 
-import Drasil.NoPCM.Definitions
-
-import Data.Drasil.SI_Units
+import Drasil.NoPCM.Definitions (water, coil, tank)
 import qualified Data.Drasil.Units.Thermodynamics as U
+import Data.Drasil.SI_Units
 import Data.Drasil.Quantities.PhysicalProperties
-import Prelude hiding (id)
 import Data.Drasil.Concepts.Documentation
 import Data.Drasil.Quantities.Thermodynamics
 import Data.Drasil.Quantities.Physics (time)
 import Data.Drasil.Concepts.Math (surArea)
 import Data.Drasil.Quantities.Math (diameter)
 import Data.Drasil.Units.PhysicalProperties
-
-import Control.Lens ((^.))
 
 pcmSymbols :: [CQSWrapper]
 pcmSymbols = map cqs pcmUnits
@@ -27,7 +24,7 @@ pcmConstrained = [coil_SA_con, htCap_W_con, ht_xfer_CW_con, tank_L_con, tank_V_c
   temp_coil_con, time_final_con, temp_init_con, water_dense_con]
 
 coil_SA_con, htCap_W_con, ht_xfer_CW_con, tank_L_con, tank_V_con, 
-  temp_coil_con, time_final_con, temp_init_con, water_dense_con:: ConstrConcept
+  temp_coil_con, time_final_con, temp_init_con, water_dense_con :: ConstrConcept
 
 coil_SA_con = constrained' coil_SA
   [physc $ \c -> c :> (Dbl 0),
@@ -83,19 +80,6 @@ coil_SA     = ucs "coil_SA" (compoundPhrase (nounPhrase'' (phrase coil) (phrase 
               CapFirst CapWords) (nounPhrase'' (phrase surArea) (phrase surArea) 
               CapFirst CapWords)) "Area covered by the outermost layer of the coil" 
               (sub cA cC) m_2 Real
-dummyVar    = ucs "dummyVar" (nounPhraseSP "dummy variable for integration over time")
-              "Binary value representing the presence or absence of integration over time" 
-              (Greek Tau_L) second Boolean
-hIn_SA      = ucs "hIn_SA" (nounPhraseSP "surface area over which heat is transferred in")
-              "Surface area over which thermal energy is transferred into an object" 
-              (sub cA (Atomic "in")) m_2 Real
-hOut_SA     = ucs "hOut_SA" (nounPhraseSP "surface area over which heat is transferred out")
-              "Surface area over which thermal energy is transferred out of an object" 
-              (sub cA (Atomic "out")) m_2 Real
-htCap_Liq   = ucs "htCap_Liq" (nounPhraseSP "specific heat capacity of a liquid")
-              ("The amount of energy required to raise the temperature of a given unit " ++ 
-              "mass of a given liquid by a given amount")
-              (sup cC cL) U.heat_cap_spec Real
 htCap_W     = ucs "htCap_W" (heat_cap_spec `of_` water)
               ("The amount of energy required to raise the temperature of a given unit " ++ 
               "mass of water by a given amount") (sub cC cW)
@@ -113,6 +97,19 @@ ht_flux_out = ucs "ht_flux_out" (nounPhraseSP "heat flux out")
               U.thermal_flux Real
 ht_gen_vol  = ucs "ht_gen_vol" (nounPhraseSP "volumetric heat generation per unit volume")
               "Amount of thermal energy generated per unit volume" lG U.thermal_flux Real
+dummyVar    = ucs "dummyVar" (nounPhraseSP "dummy variable for integration over time")
+              "Binary value representing the presence or absence of integration over time" 
+              (Greek Tau_L) second Boolean
+hIn_SA      = ucs "hIn_SA" (nounPhraseSP "surface area over which heat is transferred in")
+              "Surface area over which thermal energy is transferred into an object" 
+              (sub cA (Atomic "in")) m_2 Real
+hOut_SA     = ucs "hOut_SA" (nounPhraseSP "surface area over which heat is transferred out")
+              "Surface area over which thermal energy is transferred out of an object" 
+              (sub cA (Atomic "out")) m_2 Real
+htCap_Liq   = ucs "htCap_Liq" (nounPhraseSP "specific heat capacity of a liquid")
+              ("The amount of energy required to raise the temperature of a given unit " ++ 
+              "mass of a given liquid by a given amount")
+              (sup cC cL) U.heat_cap_spec Real
 ht_xfer_co  = ucs "ht_xfer_co" (nounPhraseSP "convective heat transfer coefficient")
               ("The proportionality constant between the heat flux and the " ++ 
               "thermodynamic driving force for the flow of thermal energy")

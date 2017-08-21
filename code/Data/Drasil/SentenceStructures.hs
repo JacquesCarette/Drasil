@@ -9,11 +9,12 @@ module Data.Drasil.SentenceStructures
   , maybeChanged, maybeExpanded, maybeWOVerb
   , tAndDWAcc, tAndDWSym, tAndDOnly
   , followA
-  , getTandS
+  , getTandS, getTDS
   , eqN
   , displayConstrntsAsSet
-  , fmtInputConstr, fmtOutputConstr, physC, sfwrC, typUnc, rval
+  , fmtInputConstr, fmtOutputConstr, physC, sfwrC, typUncr, rval
   , extrctStrng
+  , acroA, acroDD, acroGD, acroGS, acroIM, acroLC, acroPS, acroR, acroT
   ) where
 
 import Language.Drasil
@@ -21,7 +22,6 @@ import Data.Drasil.Utils (foldle, foldle1, getS, fmtU, getRVal)
 import Data.Drasil.Concepts.Documentation
 import Data.Drasil.Concepts.Math (equation)
 import Control.Lens ((^.))
-import Language.Drasil.Spec(sCurlyBr)
 
 {--** Sentence Folding **--}
 -- | partial function application of foldle for sentences specifically
@@ -56,13 +56,13 @@ foldlsC (x:y:xs) = foldle sC sC (x `sC` y) xs
 -- | creates a list of elements seperated by commas, ending in a "_, and _"
 foldlList :: [Sentence] -> Sentence
 foldlList []    = EmptyS
-foldlList [a,b] = a +:+ S "and" +:+ b
+foldlList [a,b] = a `sAnd` b
 foldlList lst   = foldle1 sC (\a b -> a `sC` S "and" +:+ b) lst
 
 -- | creates a list of elements seperated by commas, ending in a "_, or _"
 foldlOptions :: [Sentence] -> Sentence
 foldlOptions []    = EmptyS
-foldlOptions [a,b] = a +:+ S "or" +:+ b
+foldlOptions [a,b] = a `sOr` b
 foldlOptions lst   = foldle1 sC (\a b -> a `sC` S "or" +:+ b) lst
 
 {--** Combinators **--}
@@ -105,6 +105,21 @@ ofGiv' p1 p2 = S "The" +:+ p1 +:+ S "of a given" +:+ p2
 
 toThe :: Sentence -> Sentence -> Sentence
 toThe p1 p2 = p1 +:+ S "to the" +:+ p2
+
+{--Acronyms to be used throughout--}
+-- ex. S "as seen in (A1)" -> S "as seen in" +:+ sParen (acroA "1")
+acroA, acroDD, acroGD, acroGS, acroIM, acroLC, acroPS, acroR, 
+  acroT :: Int -> Sentence
+
+acroA  numVar = short assumption  :+: S (show numVar)
+acroDD numVar = short dataDefn    :+: S (show numVar)
+acroGD numVar = short genDefn     :+: S (show numVar)
+acroGS numVar = short goalStmt    :+: S (show numVar)
+acroIM numVar = short inModel     :+: S (show numVar)
+acroLC numVar = short likelyChg   :+: S (show numVar)
+acroPS numVar = short physSyst    :+: S (show numVar)
+acroR  numVar = short requirement :+: S (show numVar)
+acroT  numVar = short thModel     :+: S (show numVar)
 
 
 {--** Miscellaneous **--}
@@ -169,13 +184,17 @@ preceding `followA` num = preceding +:+ S "following" +:+ acroA num
 getTandS :: (SymbolForm a, NamedIdea a) => a -> Sentence
 getTandS a = phrase a +:+ getS a
 
+-- | get term, definition, and symbol
+getTDS :: (SymbolForm a, NamedIdea a, Concept a) => a -> Sentence
+getTDS a = phrase a +:+ (a ^. defn) +:+ getS a
+
 --Ideally this would create a reference to the equation too
 eqN :: Int -> Sentence
 eqN n = phrase equation +:+ sParen (S $ show n)
 
 --Produces a sentence that displays the constraints in a {}.
 displayConstrntsAsSet :: SymbolForm a => a -> [String] -> Sentence
-displayConstrntsAsSet ch listOfVals = getS ch +:+ (G Epsilon_L) +:+ (sCurlyBr (foldlsC (map S listOfVals)))
+displayConstrntsAsSet sym listOfVals = E $ [C sym] `IsIn` (DiscreteS listOfVals)
 
 extrctStrng :: Sentence -> String
 extrctStrng (S strng) = strng
@@ -187,7 +206,7 @@ extrctStrng _ = error "Invalid type extraction"
 -- these are the helper functions for inDataConstTbl
 
 fmtInputConstr :: (UncertainQuantity c, Constrained c, SymbolForm c) => c -> [c] -> [Sentence]
-fmtInputConstr q qlst = [getS q] ++ physC q qlst ++ sfwrC q qlst ++ [fmtU (E $ getRVal q) q] ++ typUnc q qlst
+fmtInputConstr q qlst = [getS q] ++ physC q qlst ++ sfwrC q qlst ++ [fmtU (E $ getRVal q) q] ++ typUncr q qlst
 
 fmtOutputConstr :: (Constrained c, SymbolForm c) => c -> [c] -> [Sentence]
 fmtOutputConstr q qlst = [getS q] ++ physC q qlst ++ sfwrC q qlst
@@ -221,14 +240,14 @@ rval q qlst
   where isRV (Just _) = True
         isRV Nothing  = False
         
-typUnc :: (UncertainQuantity c) => c -> [c] -> [Sentence]
-typUnc q qlst
+typUncr :: (UncertainQuantity c) => c -> [c] -> [Sentence]
+typUncr q qlst
   | null (filter isUn $ map (^. uncert) qlst) = []
   | isUn (q ^. uncert) = [S $ show $ unwU (q ^. uncert)]
   | otherwise = [none]
   where unwU (Just u) = u
-        unwU Nothing  = error $ "Something when wrong with 'typUnc'." ++
-                        "'typUnc' was possibly called by fmtInputConstr or inDataConstTbl."
+        unwU Nothing  = error $ "Something when wrong with 'typUncr'." ++
+                        "'typUncr' was possibly called by fmtInputConstr or inDataConstTbl."
         isUn (Just _) = True
         isUn Nothing  = False
 

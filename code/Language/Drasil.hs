@@ -19,7 +19,7 @@ module Language.Drasil (
   -- Chunk
   , Chunk(..), VarChunk(..), ConceptChunk
   , makeVC, vc, makeVCObj, SymbolForm(..)
-  , dcc, dccWDS, dccWDS', cv, dcc', vc', ccs, cc, cc'
+  , dcc, dccWDS, dccWDS', cv, dcc', vc', vc'', ccs, cc, cc'
   , Quantity(..), QWrapper, qw, ConVar(..), cvR, cvRs
   , Concept(..), cw, CWrapper
   , CommonIdea(..)
@@ -54,7 +54,7 @@ module Language.Drasil (
   , ModuleChunk, makeRecord, makeImpModule, makeImpModuleNoGen, makeUnimpModule
   , imp, hier, field, formatName, method, secret, uses
   -- Chunk.Req
-  , ReqChunk(..)
+  , ReqChunk(..), emptyN
   -- Chunk.LC
   , LCChunk(..)
   -- Chunk.Other
@@ -101,7 +101,8 @@ module Language.Drasil (
   , CodeSpec, codeSpec, codeSpec', Choices(..), ImplementationType(..)
   , Logging(..), ConstraintBehaviour(..), Structure(..), Lang(..), Comments(..)
   , defaultChoices
-  , Mod(..), FuncDef(..), FuncStmt(..), addModDefs, funcDef, fasg, ffor, fdec  -- hacks
+  , Mod(..), packmod, FuncDef(..), FuncStmt(..), funcDef, fasg, ffor, fdec -- hacks
+  , relToQD, funcData, funcQD, Func(..)   -- hacks
   -- DataDesc
   , DataDesc
   , entry, listEntry, junk, singleton, junkLine, singleLine, multiLine
@@ -165,6 +166,6 @@ import Language.Drasil.Misc -- all of it
 import Language.Drasil.Printing.Helpers (capitalize, paren, sqbrac)
 import Language.Drasil.Generate
 import Language.Drasil.People (People, Person, person, HasName(..), manyNames
-                               ,person', personWM, personWM', mononym)
-import Language.Drasil.CodeSpec    
-import Language.Drasil.DataDesc                         
+                               ,person', personWM, personWM', mononym, name)
+import Language.Drasil.CodeSpec
+import Language.Drasil.DataDesc

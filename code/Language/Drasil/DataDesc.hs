@@ -16,7 +16,7 @@ data Entry = Entry DataItem             -- regular entry (float, int, bool, etc)
            | ListEntry [Ind] DataItem   -- index to insert into list
            | JunkEntry                  -- junk should be skipped in input file
 
-data Ind = Explicit Int   -- explicit index
+data Ind = Explicit Integer   -- explicit index
          | WithPattern    -- use current repetition number in repeated pattern
          | WithLine       -- use current line number in multi-line data
            
@@ -25,11 +25,11 @@ type Delim = Char  -- delimiter
 data Data = Singleton DataItem
           | JunkData
           | Line LinePattern Delim
-          | Lines LinePattern (Maybe Int) Delim -- multi-line data
+          | Lines LinePattern (Maybe Integer) Delim -- multi-line data
                                                 -- (Maybe Int) = number of lines, Nothing = unknown so go to end of file  
           
 data LinePattern = Straight [Entry]             -- line of data with no pattern
-                 | Repeat [Entry] (Maybe Int)   -- line of data with repeated pattern
+                 | Repeat [Entry] (Maybe Integer)   -- line of data with repeated pattern
                                                 -- (Maybe Int) = number of repetitions, Nothing = unknown so go to end of line          
 
                                             
@@ -55,7 +55,7 @@ singleLine = Line
 multiLine :: LinePattern -> Delim -> Data
 multiLine l d = Lines l Nothing d 
 
-multiLine' :: LinePattern -> Int -> Delim -> Data
+multiLine' :: LinePattern -> Integer -> Delim -> Data
 multiLine' l i d = Lines l (Just i) d 
 
 straight :: [Entry] -> LinePattern
@@ -64,7 +64,7 @@ straight = Straight
 repeated :: [Entry] -> LinePattern
 repeated e = Repeat e Nothing
 
-repeated' :: [Entry] -> Int -> LinePattern
+repeated' :: [Entry] -> Integer -> LinePattern
 repeated' e i = Repeat e (Just i)
 
 

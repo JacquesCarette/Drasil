@@ -4,7 +4,7 @@ module Language.Drasil.Chunk.Code (
     codevar, qtoc, codeEquat, 
     ConstraintMap, constraintMap, physLookup, sfwrLookup, constraintLookup,
     symbToCodeName, CodeType(..),
-    spaceToCodeType
+    spaceToCodeType, toCodeName
   ) where
 
 import Control.Lens
@@ -154,7 +154,7 @@ specialToCodeName Percent       = "%"
 specialToCodeName CurlyBrOpen   = "{"
 specialToCodeName CurlyBrClose  = "}"
 specialToCodeName SqBrOpen      = "["
-specialToCodeName SqBrClose = "]"
+specialToCodeName SqBrClose     = "]"
 specialToCodeName Hash          = "#" -- TODO: Double check that this is valid for 
                                       -- all of the output langs.
 
@@ -247,10 +247,9 @@ spaceToCodeType S.Char = G.Char
 spaceToCodeType S.String = G.String
 spaceToCodeType (S.Vect s) = G.List (spaceToCodeType s)
 spaceToCodeType (S.Obj n) = G.Object (toCodeName n)
---spaceToCodeType (S.Discrete d) = G.List (spaceToCodeType d)
---spaceToCodeType (S.DiscreteI _) = G.List (spaceToCodeType S.Integer)
---spaceToCodeType (S.DiscreteD _) = G.List (spaceToCodeType S.Rational)
---spaceToCodeType (S.DiscreteS _) = G.List (spaceToCodeType S.String)
+spaceToCodeType (S.DiscreteI _) = G.List (spaceToCodeType S.Integer)
+spaceToCodeType (S.DiscreteD _) = G.List (spaceToCodeType S.Rational)
+spaceToCodeType (S.DiscreteS _) = G.List (spaceToCodeType S.String)
 
 
 -- codeExpr :: Expr -> Expr

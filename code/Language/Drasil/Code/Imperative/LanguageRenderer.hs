@@ -295,9 +295,9 @@ exprDocD' c (BinaryExpr v1 Power v2) = binOpDoc c Power <> parens (valueDoc c v1
 exprDocD' c e = exprDocD c e
 
 exprDocD'' :: Config -> Expression -> Doc
-exprDocD'' c (Exists (ObjAccess v (ListAccess i))) = exprDoc c $ BinaryExpr (Var $ render (valueDoc c v) ++ ".Length") Greater i
-exprDocD'' c (Exists (Arg i)) = exprDoc c $ Exists $ ObjAccess (Var $ render $ argsList c) $ ListAccess $ litInt (fromIntegral i)
-exprDocD'' c (Exists v) = exprDoc c $ BinaryExpr v NotEqual $ Var "null"
+exprDocD'' c (Exists (ObjAccess v (ListAccess i))) = exprDoc c $ BinaryExpr (var $ render (valueDoc c v) ++ ".Length") Greater i
+exprDocD'' c (Exists (Arg i)) = exprDoc c $ Exists $ ObjAccess (var $ render $ argsList c) $ ListAccess $ litInt (fromIntegral i)
+exprDocD'' c (Exists v) = exprDoc c $ BinaryExpr v NotEqual $ var "null"
 exprDocD'' c e = exprDocD' c e
 
 funcAppDocD :: Config -> Label -> [Value] -> Doc
@@ -320,6 +320,7 @@ funcDocD c (ListSet i@(EnumVar _) v) = funcDoc c $ ListSet (i $. cast' Integer I
 funcDocD c (ListSet i@(EnumElement _ _) v) = funcDoc c $ ListSet (i $. cast' Integer Integer) v -- needs fixing (sourceType?)
 funcDocD c (ListSet i v) = brackets (valueDoc c i) <+> equals <+> valueDoc c v
 funcDocD _ (ListPopulate _ _) = empty
+funcDocD _ (ListExtend _) = empty
 funcDocD c (IterBegin) = dot <> funcAppDoc c "begin" []
 funcDocD c (IterEnd) = dot <> funcAppDoc c "end" []
 funcDocD _ Floor = error $
@@ -404,9 +405,9 @@ paramListDocD c ps = himap (text ", ") (paramDoc c) ps
 
 patternDocD :: Config -> Pattern -> Doc
 patternDocD c (State (InitState n s)) = declarationDoc c $ VarDecDef n (Base String) (litString s)
-patternDocD c (State (ChangeState n s)) = assignDoc c $ Assign (Var n) $ litString s
+patternDocD c (State (ChangeState n s)) = assignDoc c $ Assign (var n) $ litString s
 patternDocD _ (State (CheckState n [] _)) = error $ "FSM '" ++ n ++ "': CheckState called with empty case list."
-patternDocD c (State (CheckState n cs defBody)) = conditionalDoc c $ Switch (Var n) cases defBody
+patternDocD c (State (CheckState n cs defBody)) = conditionalDoc c $ Switch (var n) cases defBody
     where cases = map (\(s, b) -> (LitStr s, b)) cs
 patternDocD c (Strategy (RunStrategy n (Strats strats r) v)) =
     case Map.lookup n (Map.fromList strats) of Nothing -> error $ "Strategy '" ++ n ++ "': RunStrategy called on non-existent strategy."
@@ -420,7 +421,7 @@ patternDocD c (Observer (InitObserverList t os)) = declarationDoc c $ ListDecVal
 patternDocD c (Observer (AddObserver t o)) = valueDoc c $ obsList $. ListAdd last o
     where obsList = observerListName `listOf` t
           last = obsList $. ListSize
-patternDocD c (Observer (NotifyObservers t fn ps)) = iterationDoc c $ For initv (Var index ?< (obsList $. ListSize)) ((&.++)index) notify
+patternDocD c (Observer (NotifyObservers t fn ps)) = iterationDoc c $ For initv (var index ?< (obsList $. ListSize)) ((&.++)index) notify
     where obsList = observerListName `listOf` t
           index = "observerIndex"
           initv = varDecDef index (Base Integer) $ litInt 0
@@ -436,7 +437,7 @@ printDocD c io newLn _ v@(ListVar _ t) = vcat [
     where e = genNameFromType t
           printLastStr = if newLn then printStrLn' io else printStr' io
           element = case t of List _ st -> e `listOf` st
-                              _         -> Var e
+                              _         -> var e
 printDocD c Console newLn _ v = printFn <> parens (valueDoc c v)
     where printFn = if newLn then printLnFunc c else printFunc c
 printDocD c (File f) newLn _ v = printFn <> parens (valueDoc c v)
@@ -562,7 +563,7 @@ unOpDocD' Tan = text "math.tan"
 unOpDocD' op = unOpDocD op
 
 valueDocD :: Config -> Value -> Doc
-valueDocD c (Const n) = valueDoc c $ Var n
+valueDocD c (Const n) = valueDoc c $ var n
 valueDocD c (Lit v) = litDoc c v
 valueDocD _ (EnumElement en e) = text en <> dot <> text e
 valueDocD c (FuncApp _ n vs) = funcAppDoc c n vs
@@ -571,9 +572,10 @@ valueDocD c (Expr v) = exprDoc c v
 valueDocD _ Self = text "this"
 valueDocD c (StateObj _ t@(List _ _) vs) = listObj c <+> stateType c t Def <> parens (callFuncParamList c vs)
 valueDocD c (StateObj _ t vs) = new <+> stateType c t Def <> parens (callFuncParamList c vs)
-valueDocD _ (Var v) = text v
-valueDocD c (EnumVar v) = valueDoc c $ Var v
-valueDocD c (ListVar v _) = valueDoc c $ Var v
+valueDocD _ (Var Nothing v) = text v
+valueDocD _ (Var (Just l) v) = text l <> dot <> text v
+valueDocD c (EnumVar v) = valueDoc c $ var v
+valueDocD c (ListVar v _) = valueDoc c $ var v
 valueDocD c (ObjVar v1 v2) = objVarDoc c v1 v2
 valueDocD c (Arg i) = argsList c <> brackets (litDoc c $ LitInt $ fromIntegral i)
 valueDocD c (Global s) = getEnv c s

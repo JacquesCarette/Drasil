@@ -1,6 +1,6 @@
 --------------------------------------------------
 ### Summary of Folder Structure and File Contents
-Last updated: July 7, 2017
+Last updated: August 15, 2017
 --------------------------------------------------
 
 ASTM_F2248-09.png
@@ -24,6 +24,9 @@ Concepts.hs
 DataDefs.hs
   - GlassBR's specific knowledge-base for data definitions.
 
+DataDescriptions.hs
+  - Data descriptions of the input files in GlassBR
+
 IMods.hs
   - GlassBR's specific knowledge-base for instance models.
   
@@ -36,14 +39,17 @@ Main.hs
 Modules.hs
   - A list of modules for GlassBR's design document
   
-Reqs.hs
-  - Contains the requirements needed to create GlassBR's module guide
-
 README.md
   - This file
-  
+
 RTrace.png
   - Requirements traceability graph
+
+References.hs
+  - A list of source citations for GlassBR
+
+Reqs.hs
+  - Contains the requirements needed to create GlassBR's module guide
   
 Reqs.hs
   - A list of requirement chunks for the GlassBR example
@@ -59,3 +65,6 @@ Unitals.hs
 
 Units.hs
   - Derived units specific to GlassBR  
+
+physicalsystimage.png
+  - Figure for the documentation

@@ -1,6 +1,8 @@
 {-# Language GADTs #-}
 module Language.Drasil.HTML.AST where
 
+import Data.List (intersperse)
+
 import Language.Drasil.Expr (Variable)
 import Language.Drasil.Symbol (Symbol)
 import Language.Drasil.Spec (USymb, RefType)
@@ -75,10 +77,9 @@ data Set = Integer
          | Radians
          | Vect Set
          | Obj String
-         | Discrete Set
-         -- DiscreteI [Int]
-         -- DiscreteD [Double]
-         -- DiscreteS [String]
+         | DiscreteI [Int]
+         | DiscreteD [Double]
+         | DiscreteS [String]
 
 data Quantifier = Forall Expr | Exists Expr
 
@@ -173,10 +174,9 @@ instance Show Set where
   show Radians  = "rad"
   show (Vect a) = "V" ++ show a
   show (Obj a)  = a
-  show (Discrete a)  = "{" ++ show a ++ "}"
-  --show (DiscreteI a)  = "{" ++ (foldl (++) "" . intersperse ", " . map show) a ++ "}"
-  --show (DiscreteD a)  = "{" ++ (foldl (++) "" . intersperse ", " . map show) a ++ "}"
-  --show (DiscreteS a) = "{" ++ (foldl (++) "" . intersperse ", ") a ++ "}"
+  show (DiscreteI a)  = "{" ++ (concat $ intersperse ", " (map show a)) ++ "}"
+  show (DiscreteD a)  = "{" ++ (concat $ intersperse ", " (map show a)) ++ "}"
+  show (DiscreteS a)  = "{" ++ (concat $ intersperse ", " a) ++ "}"
   
 type BibRef = [Citation]
 type City   = Spec
@@ -184,7 +184,8 @@ type State  = Spec
 
 data Citation = Book [CiteField] | Article [CiteField]
               | MThesis [CiteField] | PhDThesis [CiteField]
-  --add website...
+              | Misc [CiteField] | Online [CiteField]
+
 data CiteField = Author     People
                | Title      Spec
                | Series     Spec
@@ -203,6 +204,9 @@ data CiteField = Author     People
                | School     Spec
                | Thesis     Thesis
                | URL        Spec
+               | HowPub     Spec
+               | URLdate Integer Month Integer
+               | Editor     People
 
 data Thesis = M | PhD deriving Eq
 
@@ -211,10 +215,12 @@ instance Show Thesis where
   show PhD = "PhD thesis"
 
 instance Show Citation where
-  show (Book      _) = "Print"
-  show (Article   _) = "Print"
-  show (MThesis   _) = "Print"
-  show (PhDThesis _) = "Print"
+  show (Book      _) = "Print."
+  show (Article   _) = "Print."
+  show (MThesis   _) = "Print."
+  show (PhDThesis _) = "Print."
+  show (Misc      _) = ""
+  show (Online    _) = ""
 
 instance Eq CiteField where
   (==) (Author _)     (Author _)     = True
@@ -235,6 +241,9 @@ instance Eq CiteField where
   (==) (School _)     (School _)     = True
   (==) (Thesis _)     (Thesis _)     = True
   (==) (URL _)        (URL _)        = True
+  (==) (HowPub _)     (HowPub _)     = True
+  (==) (URLdate _ _ _) (URLdate _ _ _) = True
+  (==) (Editor _)     (Editor _)     = True
   (==) _ _ = False
 
 instance Ord CiteField where --FIXME: APA has year come directly after Author
@@ -246,6 +255,8 @@ instance Ord CiteField where --FIXME: APA has year come directly after Author
   compare _ (Series     _) = GT
   compare (Collection _) _ = LT
   compare _ (Collection _) = GT
+  compare (Editor     _) _ = LT
+  compare _ (Editor     _) = GT
   compare (Journal    _) _ = LT
   compare _ (Journal    _) = GT
   compare (Volume     _) _ = LT
@@ -260,17 +271,21 @@ instance Ord CiteField where --FIXME: APA has year come directly after Author
   compare _ (Place      _) = GT
   compare (Publisher  _) _ = LT
   compare _ (Publisher  _) = GT
+  compare (HowPub     _) _ = LT
+  compare _ (HowPub     _) = GT
   compare (Issue      _) _ = LT
   compare _ (Issue      _) = GT
-  compare (Year       _) _ = LT
-  compare _ (Year       _) = GT
   compare (Date   _ _ _) _ = LT
   compare _ (Date   _ _ _) = GT
+  compare (Year       _) _ = LT
+  compare _ (Year       _) = GT
+  compare (URL       _) _  = LT
+  compare _ (URL       _)  = GT
   compare (Page       _) _ = LT
   compare _ (Page       _) = GT
   compare (Pages      _) _ = LT
   compare _ (Pages      _) = GT
+  compare (URLdate _ _ _) _ = LT
+  compare _ (URLdate _ _ _) = GT
   compare (Note       _) _ = LT
   compare _ (Note       _) = GT
-  compare (URL       _) _  = LT
-  compare _ (URL       _)  = GT

@@ -1,8 +1,12 @@
-module Drasil.SSP.Changes where
+module Drasil.SSP.Changes (likelyChanges, unlikelyChanges) where
 
 import Language.Drasil
-import Drasil.SSP.Modules
-import Data.Drasil.Changes
+import Drasil.SSP.Modules (mod_ctrl, mod_genalg,
+  mod_inputf, mod_mp, mod_outputf, mod_plot,
+  mod_rfem, mod_rng, mod_sds, mod_slipslicer,
+  mod_slipweight, mod_sps, mod_kinadm)
+import Data.Drasil.Changes (ucIO, ucInputS, ucOutput, 
+  lcArray, lcCtrl, lcHW, lcInputF, lcOutputF, lcPlot, lcRng)
 
 likelyChanges :: [LCChunk]
 likelyChanges = [lc1, lc2, lc3, lc4, lc5, lc6, lc7, lc8, 
@@ -16,7 +20,8 @@ lc1, lc2, lc3, lc4, lc5, lc6, lc7, lc8,
 
 lc1 = lcHW
 
-lc2 = lcCtrl mod_ctrl (nounPhraseSP "The algorithm for the overall operation procedure of the program.")
+lc2 = lcCtrl mod_ctrl (nounPhraseSP $ "The algorithm for the" ++
+  "overall operation procedure of the program.")
 
 lc3 = lcInputF mod_inputf
 

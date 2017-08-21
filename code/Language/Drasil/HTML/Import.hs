@@ -127,10 +127,9 @@ set String   = H.String
 set Radians  = H.Radians
 set (Vect a) = H.Vect (set a)
 set (Obj a)  = H.Obj a
---set (Discrete a)  = H.Discrete (set a)
---set (DiscreteI a) = H.DiscreteI a
---set (DiscreteD a) = H.DiscreteD a
---set (DiscreteS a) = H.DiscreteS a
+set (DiscreteI a) = H.DiscreteI a
+set (DiscreteD a) = H.DiscreteD a
+set (DiscreteS a) = H.DiscreteS a
 
 -- | Helper function for translating Integrals (from 'UFunc')
 integral :: UFunc -> (H.Function, H.Expr)
@@ -245,6 +244,8 @@ layCite (Book      fields) = H.Book      $ map layField fields
 layCite (Article   fields) = H.Article   $ map layField fields
 layCite (MThesis   fields) = H.MThesis   $ H.Thesis H.M   : map layField fields
 layCite (PhDThesis fields) = H.PhDThesis $ H.Thesis H.PhD : map layField fields
+layCite (Misc      fields) = H.Misc      $ map layField fields
+layCite (Online    fields) = H.Online    $ map layField fields
 
 layField :: CiteField -> H.CiteField
 layField (Author     p) = H.Author     p
@@ -257,13 +258,16 @@ layField (Place (c, s)) = H.Place (spec c, spec s)
 layField (Publisher  s) = H.Publisher $ spec s
 layField (Journal    s) = H.Journal   $ spec s
 layField (Year       n) = H.Year       n
-layField (Date   n m y) = H.Date   n m y
+layField (Date    n m y) = H.Date    n m y
+layField (URLdate n m y) = H.URLdate n m y
 layField (Page       n) = H.Page       n
 layField (Pages     ns) = H.Pages     ns
 layField (Note       s) = H.Note       $ spec s
 layField (Issue      n) = H.Issue      n
 layField (School     s) = H.School     $ spec s
 layField (URL        s) = H.URL        $ spec s
+layField (HowPub     s) = H.HowPub     $ spec s
+layField (Editor     p) = H.Editor     p
 
 -- | Translates lists
 makeL :: ListType -> H.ListType

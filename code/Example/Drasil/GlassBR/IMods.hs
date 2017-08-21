@@ -1,15 +1,22 @@
-module Drasil.GlassBR.IMods where
+module Drasil.GlassBR.IMods (iModels, probOfBr, calOfCap, calOfDe) where
 
 import Language.Drasil
-import Data.Drasil.SentenceStructures (foldlSent, isThe, sAnd, sOr)
-import Prelude hiding (id, exp)
-import Control.Lens ((^.))
-import Drasil.GlassBR.Unitals
-import Drasil.GlassBR.DataDefs
-import Drasil.GlassBR.Concepts
-import Data.Drasil.Concepts.Documentation
+
+import Data.Drasil.SentenceStructures (acroA, foldlSent, isThe, sAnd, sOr)
 import Data.Drasil.Utils (getS)
 import Data.Drasil.Concepts.Math (parameter)
+import Data.Drasil.Concepts.Documentation (coordinate)
+
+import Prelude hiding (exp)
+import Control.Lens ((^.))
+
+import Drasil.GlassBR.Unitals (tNT, sdWithEqn, demand, standOffDist, 
+  char_weight, eqTNTWeight, demandq, sdVectorSent, wtntWithEqn, loadSF,
+  lRe, risk_fun, prob_br)
+import Drasil.GlassBR.DataDefs (nonFL, risk, glaTyFac)
+import Drasil.GlassBR.Concepts (lResistance, glassTypeFac, lShareFac)
+
+{--}
 
 iModels :: [RelationConcept]
 iModels = [probOfBr, calOfCap, calOfDe]
@@ -18,10 +25,7 @@ iModels = [probOfBr, calOfCap, calOfDe]
 
 probOfBr :: RelationConcept
 probOfBr = makeRC "probOfBr" (nounPhraseSP "Probability of Glass Breakage")
-  pbdescr pb_rel 
-
-pb_rel :: Relation
-pb_rel = (C prob_br) := 1 - (exp (Neg (C risk)))
+  pbdescr $ (C prob_br) := 1 - (exp (Neg (C risk)))
 
 pbdescr :: Sentence
 pbdescr =
@@ -32,10 +36,7 @@ pbdescr =
 
 calOfCap :: RelationConcept
 calOfCap = makeRC "calOfCap" (nounPhraseSP "Calculation of Capacity(LR)") 
-  capdescr cap_rel
-
-cap_rel :: Relation
-cap_rel = (C lRe) := ((C nonFL)*(C glaTyFac)*(C loadSF)) 
+  capdescr $ (C lRe) := ((C nonFL) * (C glaTyFac) * (C loadSF))
 
 capdescr :: Sentence
 capdescr =
@@ -44,19 +45,17 @@ capdescr =
   (phrase nonFL)) +:+. ((getS glaTyFac) `isThe` (phrase glassTypeFac))
   +:+. ((getS loadSF) `isThe` (phrase lShareFac)), S "Follows",
   (acroA 2) `sAnd` (acroA 1), sParen (Quote 
-  (S "In development of this procedure, it was assumed that" +:+
+  (S "In the development of this procedure, it was assumed that" +:+
   S "all four edges of the glass are simply supported and free to slip" +:+
   S "in the plane of the glass. This boundary condition has been shown" +:+
-  S "to be typical of many glass installations")) +:+ S "from [4 (pg. 53)]"]
+  S "to be typical of many glass installations")) +:+ S "from [4 (pg. 53)]"
+  {-astm_LR2009-}]
 
 {--}
 
 calOfDe :: RelationConcept
 calOfDe = makeRC "calOfDe" (nounPhraseSP "Calculation of Demand(q)") 
-  dedescr de_rel
-
-de_rel :: Relation
-de_rel = (C demand) := FCall (C demand) [C eqTNTWeight, C standOffDist] 
+  dedescr $ (C demand) := FCall (C demand) [C eqTNTWeight, C standOffDist] 
 
 dedescr :: Sentence
 dedescr = 
@@ -71,5 +70,3 @@ dedescr =
   (phrase tNT)), (getS standOffDist) `isThe`
   (phrase standOffDist), S "where", E (equat sdWithEqn), S "where",
   sParen (sdVectorSent), S "are", plural coordinate]
-
-{--}

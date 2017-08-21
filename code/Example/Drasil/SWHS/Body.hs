@@ -1,47 +1,19 @@
 module Drasil.SWHS.Body where
 
+import Language.Drasil
+import Data.Drasil.SI_Units
 import Control.Lens ((^.))
 
-import Language.Drasil (CI, ConceptChunk, UnitalChunk, UncertQ,
-  QDefinition, ConVar, NamedChunk, NamedIdea, RelationConcept,
-  Section, Document, Concept, QSWrapper, Person, Block,
-  BibRef, CodeSpec,
-  _constraints, _constants, _defSequence, _inputs, _outputs, _units,
-  _definitions, _concepts, _namedIdeas, _quants, _authors, _kind, _sys,
-  sC, titleize, titleize', plural, short, makeRef, phrase,
-  sParen, sSqBr, defn, nw, at_start, (+:+), (+:+.), (+:),
-  unit'2Contents, qs, mkTable, for'', manyNames,
-  lang, impType, logFile, logging, comments, onSfwrConstraint,
-  onPhysConstraint, inputStructure, codeSpec',
-  UnitDefn (UU),
-  DType (Data, Theory),
-  Contents (Table, Figure, EqnBlock, Enumeration),
-  ItemType (Flat, Nested),
-  ListType (Bullet),
-  SystemInformation (SI),
-  Bound (High, Low),
-  UFunc (Integral),
-  DerivType (Total, Part),
-  Choices (Choices),
-  Structure (Loose), Comments (CommentNone), Logging (LogNone),
-  ConstraintBehaviour (Warning),
-  Lang (Java, CSharp, Cpp, Python),
-  ImplementationType (Program),
-  Expr (C, FCall, UnaryOp, (:=), Deriv, (:.), Neg),
-  Sentence (S, EmptyS, (:+:), Quote, E))
-
-import Data.Drasil.SI_Units (joule, watt, centigrade, second, metre,
-  kilogram)
-import Data.Drasil.Authors (thulasi, brooks, spencerSmith)
+import Data.Drasil.People (thulasi, brooks, spencerSmith)
 
 import Data.Drasil.Concepts.Documentation (section_, traceyGraph, item,
   assumption, traceyMatrix, thModel, genDefn, dataDefn, inModel, likelyChg,
   dataConst, requirement, input_, solution, output_, corSol, constraint,
-  value, software, column, model, acroIM, acroGD, acroGS, goalStmt,
-  quantity, property, condition, physics, user, physical, datum, system,
-  variable, sysCont, environment, srs, softwareSys, organization, document,
-  problem, content, information, reference, definition, purpose,
-  description, acroNumGen, symbol_, physSyst)
+  value, software, column, model, goalStmt, quantity, property, condition, 
+  physics, user, physical, datum, system, variable, sysCont, environment, 
+  srs, softwareSys, organization, document, problem, content, information, 
+  reference, definition, purpose, description, acroNumGen, symbol_, physSyst,
+  typUnc)
 
 import Data.Drasil.Concepts.PhysicalProperties (liquid, solid)
 import qualified Data.Drasil.Concepts.Thermodynamics as CT (boiling,
@@ -68,42 +40,39 @@ import Drasil.SWHS.Unitals (pcm_SA, temp_W, temp_PCM, pcm_HTC, pcm_E,
 import Drasil.SWHS.Concepts (progName, sWHT, water, rightSide, phsChgMtrl,
   coil, perfect_insul, tank, transient, gauss_div, swhs_pcm,
   phase_change_material, tank_pcm, swhsFull)
-import Drasil.SWHS.TMods (tModels, t1ConsThermE, s4_2_2_T1, s4_2_2_T2,
-  s4_2_2_T3)
-import Drasil.SWHS.IMods (swhsInModels)
+import Drasil.SWHS.TMods (tModels, t1ConsThermE, s4_2_2_swhsTMods)
+import Drasil.SWHS.IMods (s4_2_5_IMods)
 import Drasil.SWHS.DataDefs (swhsSymbMapDRef, swhsSymbMapTRef, swhsDataDefs,
-  swhsSymMap, dd1HtFluxC, dd2HtFluxP, swhsSymbMapT, s4_2_4_DD1, s4_2_4_DD2,
-  s4_2_4_DD3, s4_2_4_DD4)
+  swhsSymMap, dd1HtFluxC, dd2HtFluxP, swhsSymbMapT, s4_2_4_swhsDataDefs)
 import Drasil.SWHS.GenDefs (swhsGenDefs)
 import Drasil.SWHS.Modules (modules)
 import Drasil.SWHS.Changes (likelyChanges, unlikelyChanges)
 import Drasil.SWHS.Reqs (reqs)
 import Drasil.SWHS.References (s9_swhs_citations)
-import Drasil.SWHS.Assumptions (assump1, assump2, assump3, assump4,
-  assump5, assump6, assump7, assump8, assump9, assump10, assump11,
-  assump12, assump13, assump14, assump15, assump16, assump17,
-  assump18, assump19, assump20)
+import Drasil.SWHS.Assumptions (s4_2_1_list, assump3, assump4, assump5,
+  assump6, assump13, assump15, assump16, assump17, assump18)
 import Drasil.SWHS.Requirements (req1, req2, s5_1_2_Eqn1, s5_1_2_Eqn2,
   req3, req4, req5, req6, req7, req8, req9, req10, req11, s5_2)
 import Drasil.SWHS.LikelyChanges (likeChg1, likeChg2, likeChg3, likeChg4,
   likeChg5, likeChg6)
+import Drasil.SWHS.DataDesc (swhsInputMod)
 
-import qualified Drasil.SRS as SRS (reference, inModel, missingP, likeChg,
+import qualified Drasil.SRS as SRS (inModel, missingP, likeChg,
   funcReq, propCorSol, genDefn, dataDefn, thModel, probDesc, goalStmt,
-  sysCont)
+  sysCont, reference)
 
 import Drasil.Template.MG (mgDoc)
 import Drasil.Template.DD (makeDD)
-import Drasil.DocumentLanguage {-(DocDesc, mkDoc, tsymb'',
+import Drasil.DocumentLanguage (DocDesc, mkDoc, tsymb'',
   LFunc (TermExcept),
   Literature (Lit, Doc'),
   TSIntro (SymbOrder, SymbConvention, TSPurpose),
-  DocSection (Verbatim, IntroSec, RefSec), 
+  DocSection (Verbatim, IntroSec, RefSec, Bibliography, AuxConstntSec), 
   IntroSub(IOrgSec, IChar, IScope, IPurpose),
   IntroSec (IntroProg),
   RefTab (TAandA, TUnits),
   RefSec (RefProg),
-  AuxConstntSec (AuxConsProg))-}
+  AuxConstntSec (AuxConsProg))
 
 import Drasil.Sections.ReferenceMaterial (intro)
 import Drasil.Sections.SpecificSystemDescription (inModelF, assumpF,
@@ -114,16 +83,16 @@ import Drasil.Sections.Requirements (reqF)
 import Drasil.Sections.GeneralSystDesc (genSysF)
 
 import Data.Drasil.Utils (enumSimple, weave, getS, itemRefToSent, makeListRef,
-  makeTMatrix, mkRefsList, refFromType)
-import Data.Drasil.SentenceStructures (showingCxnBw, foldlSent, foldlSent_,
-  foldlSP, foldlSP_, foldlSPCol, foldlsC, isThe, ofThe, ofThe',
-  sAnd, sOf, foldlList)
+  makeTMatrix, refFromType)
+import Data.Drasil.SentenceStructures (acroIM, acroGD, acroGS, showingCxnBw,
+  foldlSent, foldlSent_, foldlSP, foldlSP_, foldlSPCol, foldlsC, isThe, ofThe,
+  ofThe', sAnd, sOf, foldlList)
 
 -------------------------------------------------------------------------------
 
 acronyms :: [CI]
 acronyms = [assumption, dataDefn, genDefn, goalStmt, inModel, likelyChg, ode,
-  phsChgMtrl, physSyst, requirement, rightSide, srs, progName, thModel]
+  phsChgMtrl, physSyst, requirement, rightSide, srs, progName, thModel, typUnc]
 
 this_si :: [UnitDefn]
 this_si = map UU [metre, kilogram, second] ++ 
@@ -131,8 +100,8 @@ this_si = map UU [metre, kilogram, second] ++
 
 --Will there be a table of contents?
 
-authors :: Sentence
-authors = manyNames swhsPeople
+swhsAuthors :: Sentence
+swhsAuthors = manyNames swhsPeople
 
 swhs_si :: SystemInformation
 swhs_si = SI {
@@ -193,14 +162,14 @@ swhsChoices = Choices {
 }
 
 swhsCode :: CodeSpec
-swhsCode = codeSpec' swhs_si swhsChoices
+swhsCode = codeSpec' swhs_si swhsChoices [swhsInputMod]
 
 tsymb_intro :: [TSIntro]
 tsymb_intro = [TSPurpose, SymbConvention
   [Lit (nw CT.heat_trans), Doc' (nw progName)], SymbOrder]
 
 swhs_srs' :: Document
-swhs_srs' = mkDoc mkSRS swhs_si
+swhs_srs' = mkDoc mkSRS (for) swhs_si
 
 -- It is sometimes hard to remember to add new sections both here and above.
 
@@ -208,7 +177,7 @@ mgBod :: [Section]
 (mgBod, _) = makeDD likelyChanges unlikelyChanges reqs modules
 
 swhs_mg :: Document
-swhs_mg = mgDoc swhsFull (for'' titleize titleize) authors mgBod
+swhs_mg = mgDoc swhsFull (for'' titleize titleize) swhsAuthors mgBod
 
 
 -- =================================== --
@@ -337,7 +306,8 @@ s4_1_2 = physSystDesc (short progName) (fig_tank) [s4_1_2_list, fig_tank]
 -- this paragraph can not be abstracted out as is.
 
 s4_1_2_list :: Contents
-s4_1_2_list = enumSimple 1 (short physSyst) $ map foldlSent_ s4_1_2_physSystList
+s4_1_2_list = enumSimple 1 (short physSyst) $
+  map foldlSent_ s4_1_2_physSystList
 
 s4_1_2_physSystList :: [[Sentence]]
 s4_1_2_physSystList = [physSyst1 tank water, physSyst2 coil tank ht_flux_C,
@@ -368,9 +338,8 @@ s4_2 :: Section
 s4_2 = solChSpecF progName (s4_1, s6) s4_2_4_intro_end
   (s4_2_6_mid, dataConstraintUncertainty, s4_2_6_T1footer quantity surArea
   vol htTransCoeff_min phsChgMtrl) (s4_2_1_list, 
-  s4_2_2_T1 ++ s4_2_2_T2 ++ s4_2_2_T3, s4_2_3_genDefs ++ s4_2_3_deriv,
-  s4_2_4_DD1 ++ s4_2_4_DD2 ++ s4_2_4_DD3 ++ s4_2_4_DD4, (s4_2_5_IMods),
-  s4_2_6_DataConTables) [s4_2_7]
+  s4_2_2_swhsTMods, s4_2_3_genDefs ++ s4_2_3_deriv,
+  s4_2_4_swhsDataDefs, s4_2_5_IModsWithDerivs, s4_2_6_DataConTables) [s4_2_7]
 
 -------------------------
 -- 4.2.1 : Assumptions --
@@ -382,14 +351,6 @@ s4_2_1 = assumpF
   (SRS.genDefn SRS.missingP [])
   (SRS.dataDefn SRS.missingP [])
   s4_2_5 s6 s4_2_1_list
-
-s4_2_1_list :: [Contents]
-s4_2_1_list = acroNumGen s4_2_1_assump_list 1
-
-s4_2_1_assump_list :: [Contents]
-s4_2_1_assump_list = [assump1, assump2, assump3, assump4, assump5, assump6,
-  assump7, assump8, assump9, assump10, assump11, assump12, assump13, assump14,
-  assump15, assump16, assump17, assump18, assump19, assump20]
 
 -- Again, list structure is same between all examples.
 
@@ -439,11 +400,11 @@ s4_2_5 = inModelF s4_1
   (SRS.dataDefn SRS.missingP [])
   (SRS.thModel SRS.missingP [])
   (SRS.genDefn SRS.missingP [])
-  s4_2_5_IMods
+  s4_2_5_IModsWithDerivs
 
-s4_2_5_IMods :: [Contents]
-s4_2_5_IMods = concat $ weave [s4_2_5_derivations,
-  map (\x -> [swhsSymbMapT x]) swhsInModels]
+s4_2_5_IModsWithDerivs :: [Contents]
+s4_2_5_IModsWithDerivs = concat $ weave [s4_2_5_derivations,
+  map (\x -> [swhsSymbMapT x]) s4_2_5_IMods]
 
 s4_2_5_derivations :: [[Contents]]
 s4_2_5_derivations = [s4_2_5_subpar solution temp_W temp_PCM pcm_E 
@@ -604,7 +565,7 @@ s7_dataRef, s7_funcReqRef, s7_instaModelRef, s7_assumpRef, s7_theoriesRef,
   s7_dataDefRef, s7_likelyChgRef, s7_genDefRef :: [Sentence]
 
 s7_instaModel = ["IM1", "IM2", "IM3", "IM4"]
-s7_instaModelRef = map (refFromType Theory swhsSymMap) swhsInModels
+s7_instaModelRef = map (refFromType Theory swhsSymMap) s4_2_5_IMods
 
 s7_funcReq = ["R1", "R2", "R3", "R4", "R5", "R6", "R7", "R8", "R9", "R10",
   "R11"]
@@ -721,7 +682,7 @@ s7_col_header_t3 = zipWith itemRefToSent
     s7_likelyChgRef)
 
 s7_columns_t3 :: [[String]]
-s7_columns_t3 = [s7_t3_T1, s7_t3_T2, s7_t3_T3, s7_t3_GD1, s7_t3_GD2, s7_t3_DD1, 
+s7_columns_t3 = [s7_t3_T1, s7_t3_T2, s7_t3_T3, s7_t3_GD1, s7_t3_GD2, s7_t3_DD1,
   s7_t3_DD2, s7_t3_DD3, s7_t3_DD4, s7_t3_IM1, s7_t3_IM2, s7_t3_IM3, s7_t3_IM4,
   s7_t3_LC1, s7_t3_LC2, s7_t3_LC3, s7_t3_LC4, s7_t3_LC5, s7_t3_LC6]
 
@@ -780,8 +741,8 @@ s2_intro :: ConceptChunk -> UnitalChunk -> ConceptChunk -> CI -> CI ->
   ConceptChunk -> UnitalChunk -> ConceptChunk -> Sentence
 s2_intro es en sp pcmat pro te lh un = foldlSent [
   S "Due to", foldlList (map S ["increasing cost", "diminishing availability",
-    "negative environmental impact of fossil fuels"]) `sC` S "there is a higher",
-  S "demand for renewable", plural es `sAnd` phrase en +:+. 
+    "negative environmental impact of fossil fuels"]) `sC`
+  S "there is a higher demand for renewable", plural es `sAnd` phrase en +:+.
   S "storage technology", sp ^. defn, sParen (short pcmat), S "use renewable",
   plural es `sAnd` S "provide a novel way of storing" +:+. phrase en,
   at_start sp, S "improve over the traditional",
@@ -839,8 +800,8 @@ s2_2_contents :: ConceptChunk -> ConceptChunk -> Sentence
 s2_2_contents ta tp = foldlSent_ [phrase ta,
   S "of a single", phrase tp]
 
-s2_2_end :: UnitalChunk -> ConceptChunk -> ConceptChunk -> CI -> ConceptChunk ->
-  Sentence
+s2_2_end :: UnitalChunk -> ConceptChunk -> ConceptChunk -> CI ->
+  ConceptChunk -> Sentence
 s2_2_end t te wa pcmat sw = foldlSent_ [S "predict the",
   phrase t `sAnd` phrase te,
   S "histories for the", phrase wa `sAnd` S "the" +:+.
@@ -877,8 +838,8 @@ s2_3_understanding diffeq = foldlSent_ [(plural diffeq) `sC`
 s2_4_intro :: Sentence
 s2_4_intro = foldlSent [S "The", phrase organization, S "of this",
   phrase document, S "follows the template for an", short srs,
-  S "for", phrase sciCompS, S "proposed by [citation]" `sAnd`
-  sSqBr (S "citation")]
+  S "for", phrase sciCompS, S "proposed by", (sSqBrNum 3) `sAnd`
+  (sSqBrNum 6), sParen (makeRef (SRS.reference SRS.missingP []))]
 
 s2_4_trail :: ConceptChunk -> CI -> Sentence
 s2_4_trail sp pro = foldlSent_ [S "The", plural inModel,
@@ -1110,8 +1071,9 @@ s4_2_3_deriv_5 = EqnBlock
   ((C density) * (C heat_cap_spec) * Deriv Part (C temp) (C time)) vol))
 
 s4_2_3_deriv_6 :: UnitalChunk -> UnitalChunk -> Contents
-s4_2_3_deriv_6 vo vhg = foldlSPCol [S "We consider an arbitrary" +:+. phrase vo, 
-  S "The", phrase vhg, S "is assumed constant. Then (1) can be written as"]
+s4_2_3_deriv_6 vo vhg = foldlSPCol [S "We consider an arbitrary" +:+.
+  phrase vo, S "The", phrase vhg, S "is assumed constant. Then",
+  sParen $ S $ show (1 :: Integer), S "can be written as"]
 
 s4_2_3_deriv_7 = EqnBlock
   ((C ht_flux_in) * (C in_SA) - (C ht_flux_out) *
@@ -1298,8 +1260,9 @@ s4_2_5_d1eqn_list, s4_2_5_d1sent_list, s4_2_5_d2eqn_list,
 
 s4_2_5_d2startPara :: UnitalChunk -> CI -> UnitalChunk -> ConceptChunk ->
   UncertQ -> UnitalChunk -> UncertQ -> UnitalChunk -> UncertQ -> 
-  UnitalChunk -> UncertQ -> UnitalChunk -> UnitalChunk -> Contents -> [Contents]
-s4_2_5_d2startPara en pcmat sh roc ptem vo pvo pma hcsp hfp psa hfo vhg a16 = 
+  UnitalChunk -> UncertQ -> UnitalChunk -> UnitalChunk ->
+  Contents -> [Contents]
+s4_2_5_d2startPara en pcmat sh roc ptem vo pvo pma hcsp hfp psa hfo vhg a16 =
   map foldlSPCol [
 
   [S "Detailed derivation of the", phrase en, S "balance on the",
@@ -1382,16 +1345,17 @@ s4_2_6_T1footer qua sa vo htcm pcmat = foldlSent_ $ map foldlSent [
   [sParen (S "+"), S "These", plural qua, S "cannot be zero" `sC`
   S "or there would be freezing", sParen (makeRef assump13)],
 
-  [sParen (S "#"), S "The", plural constraint, S "on the", phrase sa,
+  [sParen (Sp Hash), S "The", plural constraint, S "on the", phrase sa,
   S "are calculated by considering the", phrase sa, S "to", phrase vo +:+.
-  S "ratio", S "The", phrase assumption, S "is that the lowest ratio is 1" `sAnd`
+  S "ratio", S "The", phrase assumption, S "is that the lowest ratio is",
+  (S $ show (1 :: Integer)) `sAnd`
   S "the highest possible is", E (2 / C htcm) `sC` S "where",
   E $ C htcm, S "is the thickness of a", Quote (S "sheet"), S "of" +:+.
   short pcmat, S "A thin sheet has the greatest", phrase sa, S "to",
   phrase vo, S "ratio"],
 
   [sParen (S "**"), S "The", phrase constraint, S "on the maximum", 
-  phrase time, S "at the end of the simulation is the total number of seconds", 
+  phrase time, S "at the end of the simulation is the total number of seconds",
   S "in one day"]
   
   ]

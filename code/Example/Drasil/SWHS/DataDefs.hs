@@ -1,21 +1,20 @@
-module Drasil.SWHS.DataDefs where
+module Drasil.SWHS.DataDefs where --exports all of it
+
+import Prelude hiding (id)
+
+import Language.Drasil
+import Control.Lens ((^.))
 
 import Drasil.SWHS.Unitals (melt_frac, latentE_P, htFusion, pcm_mass,
   temp_W, temp_PCM, ht_flux_P, pcm_HTC, coil_HTC, temp_C, swhsSymbols,
   ht_flux_C)
 
-import Language.Drasil (QDefinition, Contents, RelationConcept, SymbolMap,
-	nounPhraseSP, symbol, id, fromEqn', makeRef, symbolMap,
-	DType (Data, Theory),
-	Sentence (EmptyS),
-	Expr (C, FCall))
+import Data.Drasil.Concepts.Documentation (acroNumGen)
+
 import Data.Drasil.Quantities.Physics (time)
 import Data.Drasil.Quantities.PhysicalProperties (mass)
 import Data.Drasil.Quantities.Thermodynamics (latent_heat)
 import Data.Drasil.Utils (symbolMapFun, mkDataDef)
-import Prelude hiding (id)
-
-import Control.Lens ((^.))
 
 swhsDataDefs :: [QDefinition]
 swhsDataDefs = [dd1HtFluxC, dd2HtFluxP, dd3HtFusion, dd4MeltFrac]
@@ -62,8 +61,8 @@ htFusionEqn :: Expr
 htFusionEqn = (C latent_heat) / (C mass)
 
 dd4MeltFrac :: QDefinition
-dd4MeltFrac = fromEqn' (melt_frac ^. id) (nounPhraseSP "fraction of the PCM that is liquid")
-  EmptyS
+dd4MeltFrac = fromEqn' (melt_frac ^. id) -- FIXME Should (^. id) be used
+  (nounPhraseSP "fraction of the PCM that is liquid") EmptyS
   (melt_frac ^. symbol) melt_frac_eqn
 --FIXME: "Phi is the melt fraction" is produced; 
   --"Phi is the fraction of the PCM that is liquid" is what is supposed to be
@@ -73,6 +72,10 @@ melt_frac_eqn :: Expr
 melt_frac_eqn = (C latentE_P) / ((C htFusion) * (C pcm_mass))
 
 --Need to add units to data definition descriptions
+
+s4_2_4_swhsDataDefs :: [Contents]
+s4_2_4_swhsDataDefs = acroNumGen (s4_2_4_DD1 ++ s4_2_4_DD2 ++
+  s4_2_4_DD3 ++ s4_2_4_DD4) 1
 
 s4_2_4_DD1, s4_2_4_DD2, s4_2_4_DD3, s4_2_4_DD4 :: [Contents]
 s4_2_4_DD1 = map swhsSymbMapD [dd1HtFluxC]

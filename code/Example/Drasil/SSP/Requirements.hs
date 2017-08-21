@@ -1,13 +1,16 @@
-module Drasil.SSP.Requirements where
+module Drasil.SSP.Requirements (sspRequirements, sspInputDataTable) where
 
 import Language.Drasil
 
-import Drasil.SSP.Defs
-import Drasil.SSP.Unitals
+import Drasil.SSP.Defs (slice, slope, slpSrf,
+  crtSlpSrf, morPrice)
+import Drasil.SSP.Unitals (fs, sspInputs, coords)
 
-import Data.Drasil.Utils
-import Data.Drasil.SentenceStructures
-import Data.Drasil.Concepts.Documentation
+import Data.Drasil.Utils (mkInputDatTb)
+import Data.Drasil.SentenceStructures (acroR,
+  ofThe, foldlSent)
+import Data.Drasil.Concepts.Documentation (datum,
+  input_, value, method_, element, requirement)
 import Data.Drasil.Concepts.Computation (inDatum)
 
 sspRequirements :: [Sentence]
@@ -15,18 +18,20 @@ sspRequirements = [readAndStore, generateCSS, testSlipSrf, prepareSlipS,
   calculateFS, rankSlope, generateCSS', repeatFindFS, prepareCSS, 
   calculateFS', displayGraph]
 
-readAndStore, generateCSS, testSlipSrf, prepareSlipS, calculateFS, rankSlope,
-  generateCSS', repeatFindFS, prepareCSS, calculateFS', displayGraph :: Sentence
+readAndStore, generateCSS, testSlipSrf, prepareSlipS,
+  calculateFS, rankSlope, generateCSS', repeatFindFS,
+  prepareCSS, calculateFS', displayGraph :: Sentence
 
-readAndStore = foldlSent [S "Read the", phrase input_, S "file, and store the" +:+.
-  plural datum, S "Necessary", plural inDatum, S "summarized in", 
-  makeRef sspInputDataTable]
+readAndStore = foldlSent [S "Read the", phrase input_,
+  S "file, and store the" +:+. plural datum, S "Necessary",
+  plural inDatum, S "summarized in", makeRef sspInputDataTable]
 
 generateCSS  = foldlSent [S "Generate potential", phrase crtSlpSrf :+:
   S "'s for the", phrase input_, phrase slope]
 
-testSlipSrf  = foldlSent [S "Test the", plural slpSrf, S "to determine if they",
-  S "are physically realizable based on a set of pass or fail criteria"]
+testSlipSrf  = foldlSent [S "Test the", plural slpSrf,
+  S "to determine if they are physically realizable based on",
+  S "a set of pass or fail criteria"]
 
 prepareSlipS = foldlSent [S "Prepare the", plural slpSrf, S "for a", 
   phrase method_, S "of", plural slice, S "or limit equilibrium analysis"]

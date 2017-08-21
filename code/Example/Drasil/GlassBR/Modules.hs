@@ -1,20 +1,26 @@
-module Drasil.GlassBR.Modules where
+module Drasil.GlassBR.Modules where --whole file is used
 
 import Language.Drasil
-import Data.Drasil.Concepts.Software
-import Data.Drasil.Concepts.Math
-import Drasil.GlassBR.Concepts
 
-import Data.Drasil.Modules
-import Data.Drasil.Concepts.Documentation
-import Data.Drasil.Concepts.Computation
-import Drasil.GlassBR.Unitals
+import Data.Drasil.Concepts.Software (modInputFormat, modInputParam,
+  modInterpDatum)
+import Data.Drasil.Concepts.Math (parameter, equation)
+import Data.Drasil.Modules (mod_hw, mod_behav, mod_interp_fun, 
+  mod_io_fun, mod_calc_fun, mod_derivedv_fun, mod_outputf_desc_fun,
+  mod_ctrl_fun, mod_inputc_fun, mod_sw)
+import Data.Drasil.Concepts.Documentation (input_, safetyReq, datum)
+import Data.Drasil.Concepts.Computation (inDatum, algorithm, inParam,
+  outDatum)
 import Data.Drasil.SentenceStructures (foldlList, foldlSent)
+
+import Drasil.GlassBR.Concepts (glassBRProg)
+import Drasil.GlassBR.Unitals (demandq, capacity, prob_br)
 
 
 modules :: [ModuleChunk]
-modules = [mod_hw, mod_behav, mod_inputf, mod_inputp, mod_inputc, mod_outputf,
-   mod_derivedv, mod_calc, mod_ctrl, mod_interpd, mod_sw, mod_interp]
+modules = [mod_hw, mod_behav, mod_inputf, mod_inputp, mod_inputc,
+  mod_outputf, mod_derivedv, mod_calc, mod_ctrl, mod_interpd, mod_sw,
+  mod_interp]
 
 -- input format module
 mod_inputf :: ModuleChunk

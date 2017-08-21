@@ -1,7 +1,7 @@
 module Language.Drasil.TeX.Print where
 
 import Prelude hiding (print)
-import Data.List (intersperse)
+import Data.List (intersperse, transpose)
 import Text.PrettyPrint (text, (<+>))
 import qualified Text.PrettyPrint as TP
 import Data.Maybe (isNothing, fromJust)
@@ -22,7 +22,7 @@ import Language.Drasil.TeX.Preamble
 import Language.Drasil.Symbol (Symbol(..),Decoration(..))
 import qualified Language.Drasil.Document as L
 import Language.Drasil.Unicode (RenderGreek(..), RenderSpecial(..))
-import Language.Drasil.People (People,rendPersLFM,lstName)
+import Language.Drasil.People (People,rendPersLFM,lstName,Person(..),Conv(Mono))
 
 genTeX :: A.DocType -> L.Document -> TP.Doc
 genTeX typ doc = runPrint (build typ $ I.makeDocument doc) Text
@@ -120,7 +120,7 @@ p_expr (Bln b)    = show b
 p_expr (Add x y)  = p_expr x ++ "+" ++ p_expr y
 p_expr (Sub x y)  = p_expr x ++ "-" ++ p_expr y
 p_expr (Mul x y)  = mul x y
-p_expr (Frac n d) = "\\frac{" ++ (p_expr n) ++ "}{" ++ (p_expr d) ++"}"
+p_expr (Frac n d) = "\\frac{" ++ needMultlined n ++ "}{" ++ needMultlined d ++"}"
 p_expr (Div n d)  = divide n d
 p_expr (Pow x y)  = pow x y
 p_expr (Sym s)    = symbol s
@@ -144,9 +144,31 @@ p_expr (And x y)  = p_expr x ++ "\\land{}" ++ p_expr y
 p_expr (Or x y)   = p_expr x ++ "\\lor{}" ++ p_expr y
 p_expr (Impl a b) = p_expr a ++ "\\implies{}" ++ p_expr b
 p_expr (Iff a b)  = p_expr a ++ "\\iff{}" ++ p_expr b
-p_expr (IsIn  a b) = (concat $ intersperse "," $ map p_expr a) ++ "\\in{}"  ++ show b
+p_expr (IsIn  a b) = (concat $ intersperse "," $ map p_expr a) ++ "\\in{}" ++ show b
 p_expr (NotIn a b) = (concat $ intersperse "," $ map p_expr a) ++ "\\notin{}" ++ show b
 p_expr (State a b) = (concat $ intersperse ", " $ map p_quan a) ++ ": " ++ p_expr b
+
+-- | For seeing if long numerators or denominators need to be on multiple lines
+needMultlined :: Expr -> String
+needMultlined x
+  | lngth > 70 = multl $ mklines $ map p_expr $ groupEx $ splitTerms x
+  | otherwise  = p_expr x
+  where lngth     = specLength $ E x
+        multl str = "\\begin{multlined}\n" ++ str ++ "\\end{multlined}\n"
+        mklines   = unlines . intersperse "\\\\+"
+        foldterms = foldl1 Add
+        --FIXME: make multiple splits if needed; don't always split in 2
+        groupEx lst = extrac $ splitAt (length lst `div` 2) lst
+        extrac ([],[]) = []
+        extrac ([],l)  = [foldterms l]
+        extrac (f,[])  = extrac ([],f)
+        extrac (f,l)   = [foldterms f, foldterms l]
+
+splitTerms :: Expr -> [Expr]
+splitTerms (Neg e)   = map Neg $ splitTerms e
+splitTerms (Add a b) = splitTerms a ++ splitTerms b
+splitTerms (Sub a b) = splitTerms a ++ splitTerms (Neg b)
+splitTerms e = [e]
 
 -- | For printing indexes
 p_indx :: Expr -> Expr -> String
@@ -193,6 +215,7 @@ mul x@(Sym (Atomic s)) y = if length s > 1 then p_expr x ++ "\\cdot{}" ++ mulPar
                             p_expr x ++ mulParen y
 mul x y@(Sym (Atomic s)) = if length s > 1 then mulParen x ++ "\\cdot{}" ++ p_expr y else
                             mulParen x ++ p_expr y
+mul x@(Div _ _) y = paren (p_expr x) ++ mulParen y
 mul x y           = mulParen x ++ mulParen y
 
 mulParen :: Expr -> String
@@ -203,8 +226,8 @@ mulParen a = p_expr a
 divide :: Expr -> Expr -> String
 divide n d@(Add _ _) = p_expr n ++ "/" ++ paren (p_expr d)
 divide n d@(Sub _ _) = p_expr n ++ "/" ++ paren (p_expr d)
-divide n@(Add _ _) d = p_expr n ++ "/" ++ paren (p_expr d)
-divide n@(Sub _ _) d = p_expr n ++ "/" ++ paren (p_expr d)
+divide n@(Add _ _) d = paren (p_expr n) ++ "/" ++ p_expr d
+divide n@(Sub _ _) d = paren (p_expr n) ++ "/" ++ p_expr d
 divide n d = p_expr n ++ "/" ++ p_expr d
 
 neg :: Expr -> String
@@ -226,15 +249,15 @@ pow x y = p_expr x ++ "^" ++ brace (p_expr y)
 
 cases :: [(Expr,Expr)] -> String
 cases []     = error "Attempt to create case expression without cases"
-cases (p:[]) = p_expr (fst p) ++ ", & " ++ p_expr (snd p)
-cases (p:ps) = p_expr (fst p) ++ ", & " ++ p_expr (snd p) ++ "\\\\\n" ++ cases ps
+cases (p:[]) = (needMultlined $ fst p) ++ ", & " ++ p_expr (snd p)
+cases (p:ps) = cases [p] ++ "\\\\\n" ++ cases ps
 -----------------------------------------------------------------
 ------------------ TABLE PRINTING---------------------------
 -----------------------------------------------------------------
 
 makeTable :: [[Spec]] -> D -> Bool -> D -> D
 makeTable lls r bool t =
-  pure (text (("\\begin{" ++ ltab ++ "}") ++ brace (header lls)))
+  pure (text ("\\begin{" ++ ltab ++ "}" ++ (brace . unwords . anyBig) lls))
   %% (pure (text "\\toprule"))
   %% makeRows [head lls]
   %% (pure (text "\\midrule"))
@@ -243,9 +266,33 @@ makeTable lls r bool t =
   %% (if bool then caption t else empty)
   %% label r
   %% (pure $ text ("\\end{" ++ ltab ++ "}"))
-  where header l = concat (replicate ((length (head l))-1) "l ") ++ "l"
---                    ++ "p" ++ brace (show tableWidth ++ "cm")
-        ltab = "longtable" ++ (if not bool then "*" else "")
+  where ltab = tabType $ anyLong lls
+        tabType True  = ltabu
+        tabType False = ltable
+        ltabu  = "longtabu" --Only needed if "X[l]" is used
+        ltable = "longtable" ++ (if not bool then "*" else "")
+        descr True  = "X[l]"
+        descr False = "l"
+  --returns "X[l]" for columns with long fields
+        anyLong = or . map longColumn . transpose
+        anyBig = map (descr . longColumn) . transpose
+        longColumn = any (\x -> specLength x > 50)
+
+-- | determines the length of a Spec
+specLength :: Spec -> Int
+specLength (S x)     = length x
+specLength (E x)     = length $ filter (\c -> c `notElem` dontCount) $ p_expr x
+specLength (Sy _)    = 1
+specLength (a :+: b) = specLength a + specLength b
+specLength (a :-: b) = specLength a + specLength b
+specLength (a :^: b) = specLength a + specLength b
+specLength (a :/: b) = specLength a + specLength b
+specLength (G _)     = 1
+specLength (EmptyS)  = 0
+specLength _         = 0 
+
+dontCount :: String
+dontCount = "\\/[]{}()_^$:"
 
 makeRows :: [[Spec]] -> D
 makeRows []     = empty
@@ -505,7 +552,7 @@ bibLines :: String
 bibLines =
   "\\nocite{*}\n" ++ 
   "\\bibstyle{" ++ bibStyleT ++ "}\n" ++ --bibStyle is in Config.hs
-  "\\printbibliography"
+  "\\printbibliography[heading=none]"
 
 mkBibRef :: BibRef -> Spec
 mkBibRef = foldl1 (\x y -> x :+: S "\n\n" :+: y) . map renderCite
@@ -514,8 +561,10 @@ mkBibRef = foldl1 (\x y -> x :+: S "\n\n" :+: y) . map renderCite
 renderCite :: Citation -> Spec
 renderCite c@(Book      fields) = renderF c fields
 renderCite c@(Article   fields) = renderF c fields
-renderCite a@(MThesis   fields) = renderF a fields
-renderCite a@(PhDThesis fields) = renderF a fields
+renderCite c@(MThesis   fields) = renderF c fields
+renderCite c@(PhDThesis fields) = renderF c fields
+renderCite c@(Misc      fields) = renderF c fields
+renderCite c@(Online    fields) = renderF c fields
 
 --Rendering a book--
 renderF :: Citation -> [CiteField] -> Spec
@@ -525,7 +574,12 @@ renderF c fields = S "@":+: S (show c) :+: S "{" :+: S (cite fields) :+: S ",\n"
 
 cite :: [CiteField] -> String
 cite fields = concat $ intersperse "_" $
-  map lstName (getAuthors fields) ++ [show $ getYear fields]
+  map (map addUnder . lstName) (getAuthors fields) ++ [show $ getYear fields]
+
+-- Adds an underscore when there are spaces in the lastname
+addUnder :: Char -> Char
+addUnder ' ' = '_'
+addUnder  x  =  x
 
 getAuthors :: [CiteField] -> People
 getAuthors [] = error "No authors found" --FIXME: return a warning
@@ -545,9 +599,12 @@ showBibTeX (Series     s) = showField "series" s
 showBibTeX (Title      s) = showField "title" s
 showBibTeX (Volume     s) = showField "volume" (S $ show s)
 showBibTeX (Publisher  s) = showField "publisher" s
+showBibTeX (Author p@(Person {_convention=Mono}:_)) = showField "author" (S $ rendPeople p)
+  :+: S ",\n" :+: showField "sortkey" (S $ rendPeople p)
 showBibTeX (Author     p) = showField "author" (S $ rendPeople p)
 showBibTeX (Year       y) = showField "year" (S $ show y)
-showBibTeX (Date   d m y) = showField "year" (S $ unwords [show d, show m, show y])
+showBibTeX (Date    d m y) = showField "year"    (S $ unwords [show d, show m, show y])
+showBibTeX (URLdate d m y) = showField "urldate" (S $ unwords [show d, show m, show y])
 showBibTeX (Collection s) = showField "collection" s
 showBibTeX (Journal    s) = showField "journal" s
 showBibTeX (Page       s) = showField "pages" (S $ show s)
@@ -556,6 +613,8 @@ showBibTeX (Note       s) = showField "note" s
 showBibTeX (Issue      s) = showField "number" (S $ show s)
 showBibTeX (School     s) = showField "school" s
 showBibTeX (URL        s) = showField "url" s
+showBibTeX (HowPub     s) = showField "howpublished" s
+showBibTeX (Editor     p) = showField "editor" (S $ rendPeople p)
 
 showField :: String -> Spec -> Spec
 showField f s = S f :+: S "={" :+: s :+: S "}"

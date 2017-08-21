@@ -103,7 +103,7 @@ cpptop c Header _ (Mod n l _ _ _) = vcat $
     usingNameSpace c "std" (Just $ render (list c Dynamic)),
     usingNameSpace c "std" (Just "ifstream"),
     usingNameSpace c "std" (Just "ofstream")]
-cpptop c Source p m@(Mod n l _ _ _) = vcat $ [          --TODO remove includes if they aren't used
+cpptop c Source _ m@(Mod n l _ _ _) = vcat $ [          --TODO remove includes if they aren't used
     if notMainModule m 
       then include c ("\"" ++ n ++ cppHeaderExt ++ "\"")
       else empty,
@@ -122,7 +122,6 @@ cpptop c Source p m@(Mod n l _ _ _) = vcat $ [          --TODO remove includes i
     include c "<limits>",
     include c $ "<" ++ render (list c Dynamic) ++ ">",
     blank,
-    usingNameSpace c p Nothing,
     usingNameSpace c "std" (Just "string"),
     usingNameSpace c "std" (Just $ render (list c Dynamic)),
     usingNameSpace c "std" (Just "ifstream"),
@@ -131,14 +130,12 @@ cpptop c Source p m@(Mod n l _ _ _) = vcat $ [          --TODO remove includes i
 cppbody :: Config -> FileType -> Label -> Module -> Doc
 cppbody c f@(Header) p (Mod _ _ _ fs cs) =
     vcat [
-    package c p <+> lbrace,
-    oneTabbed [
-        clsDecListDoc c cs,
-        blank,
-        vibmap (classDoc c f p) cs,
-        blank,
-        functionListDoc c f p fs],
-    rbrace]
+      clsDecListDoc c cs,
+      blank,
+      vibmap (classDoc c f p) cs,
+      blank,
+      functionListDoc c f p fs
+    ]
 cppbody c f@(Source) p (Mod _ _ _ fs cs) =
    vcat [
      vibmap (classDoc c f p) cs,
@@ -185,9 +182,9 @@ funcDoc' c (ListSet i v) = dot <> funcAppDoc c "at" [i] <+> equals <+> valueDoc 
 funcDoc' c f = funcDocD c f
 
 iterationDoc' :: Config -> Iteration -> Doc
-iterationDoc' c (ForEach it listVar@(ListVar _ t) b) = iterationDoc c $ For initState guard update $ bodyReplace (Var it) (Var $ "(*" ++ it ++ ")") b
+iterationDoc' c (ForEach it listVar@(ListVar _ t) b) = iterationDoc c $ For initState guard update $ bodyReplace (var it) (var $ "(*" ++ it ++ ")") b
     where initState = DeclState $ VarDecDef it (Iterator t) (listVar $. IterBegin)
-          guard     = binExpr (Var it) NotEqual (listVar $. IterEnd)
+          guard     = binExpr (var it) NotEqual (listVar $. IterEnd)
           update    = (&.++)it
 iterationDoc' c i = iterationDocD c i
 
@@ -251,7 +248,7 @@ printDoc' :: Config -> IOType -> Bool -> StateType -> Value -> Doc
 printDoc' _ _ _ _ (ListVar _ (List _ _)) = error "C++: Printing of nested lists is not yet supported"
 printDoc' c Console newLn _ v@(ListVar _ t) = vcat [
     statementDoc c NoLoop $ printStr "[",
-    statementDoc c NoLoop $ ValState $ FuncApp Nothing "copy" [v $. IterBegin, v $. IterEnd, FuncApp Nothing iter [Var "std::cout", litString ","]],
+    statementDoc c NoLoop $ ValState $ FuncApp Nothing "copy" [v $. IterBegin, v $. IterEnd, FuncApp Nothing iter [var "std::cout", litString ","]],
     statementDoc c Loop $ printLastStr "]"]
     where iter = "std::ostream_iterator<" ++ render(stateType c t Dec) ++ ">"
           printLastStr = if newLn then printStrLn else printStr
@@ -279,6 +276,7 @@ valueDoc' c v@(Arg _) = valueDocD' c v
 --valueDoc' c Input = inputFunc c <> dot <> text "ignore()"
 --valueDoc' c (InputFile v) = valueDoc c v <> dot <> text "ignore()"
 valueDoc' c (StateObj _ t vs) = stateType c t Def <> parens (callFuncParamList c vs)
+valueDoc' _ (Var _ v) = text v
 valueDoc' c v = valueDocD c v
 
 inputDoc' :: Config -> IOType -> StateType -> Maybe Value -> Doc
@@ -364,12 +362,12 @@ destructor _ n vs =
         deleteLoops = concatMap (\v@(StateVar _ _ _ t _) -> case t of List _ _ -> [v]
                                                                       _  -> []) deleteVars
         i = "i"
-        guard l = Var i ?< (l $. ListSize)
+        guard l = var i ?< (l $. ListSize)
         loopBody l = oneLiner $ FreeState (l $. at i)
         initv = (i &.= litInt 0)
         deleteLoop l = IterState (For initv (guard l) ((&.++)i) (loopBody l))
-        deleteVar (StateVar lbl _ _ (List _ _) _) = deleteLoop (Var lbl)
-        deleteVar (StateVar lbl _ _ _ _) = FreeState $ Var lbl
+        deleteVar (StateVar lbl _ _ (List _ _) _) = deleteLoop (var lbl)
+        deleteVar (StateVar lbl _ _ _ _) = FreeState $ var lbl
         deleteStatements = map deleteVar deleteVars
         loopIndexDec | null deleteLoops = []
                      | otherwise = [varDec i $ Base Integer]
@@ -381,11 +379,8 @@ transDecLine c (Header) _ (Method n _ _ t ps _) | isDtor n = text n <> parens (p
                                                 | otherwise = methodTypeDoc c t <+> ({- listRef <> -} text n <> parens (paramListDoc c ps) <> endStatement c)
   --  where listRef = case t of (MState (List _ _)) -> text "&"
     --                          _           -> empty
-transDecLine c (Source) m (Method n _ _ t ps _) = ttype <+> ({- listRef <> -} text m <> doubleColon <> text n <> parens (paramListDoc c ps))
-    where doubleColon = if null m then empty else colon <> colon
-         -- listRef = case t of (MState (List _ _)) -> text "&"
-           --                   _           -> empty
-          ttype | isDtor n = empty
+transDecLine c (Source) _ (Method n _ _ t ps _) = ttype <+> ({- listRef <> -} text n <> parens (paramListDoc c ps))
+    where ttype | isDtor n = empty
                 | otherwise = methodTypeDoc c t
 transDecLine c ft m f = transDecLine c ft m $ convertToMethod f
 

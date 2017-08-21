@@ -1,10 +1,7 @@
-module Drasil.SWHS.Changes where
+module Drasil.SWHS.Changes (likelyChanges, unlikelyChanges) where
 
-import Language.Drasil (NP, UCChunk,
-  npnc, nounPhraseSP, nw, getAcc, (+:+), nounPhrase'',
-  CapitalizationRule (CapFirst,CapWords),
-  LCChunk (LCChunk),
-  Sentence (S, (:+:)))
+import Language.Drasil
+
 import Drasil.SWHS.Modules (mod_ctrl, mod_inputf, mod_inputp, mod_outputf,
   mod_seq, mod_plot, mod_ode, mod_temp, mod_ener, mod_inputv, mod_outputv)
 import Data.Drasil.Concepts.Math (ode)
@@ -45,8 +42,8 @@ lc6 = LCChunk (nw $ npnc "outputverification" (nounPhraseSP
 
 lc7 = LCChunk (nw $ npnc "temp" lc7np) [mod_temp]
 
-lc8 = LCChunk (nw $ npnc "energy" (nounPhraseSP
-  "How the energy equations are defined using the input parameters.")) [mod_ener]
+lc8 = LCChunk (nw $ npnc "energy" (nounPhraseSP $ "How the energy" ++
+  "equations are defined using the input parameters.")) [mod_ener]
 
 lc9 = LCChunk (nw $ npnc "control" (nounPhraseSP
   "How the overall control of the calculations is orchestrated.")) [mod_ctrl]

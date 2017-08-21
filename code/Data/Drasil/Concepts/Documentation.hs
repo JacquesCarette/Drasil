@@ -7,22 +7,6 @@ import Data.Drasil.Concepts.Math (graph)
 import Control.Lens ((^.))
 import qualified Language.Drasil.NounPhrase as NP
 
--- acronyms to be used throughout
--- ex. S "as seen in (A1)" -> S "as seen in" +:+ sParen (acroA "1")
-acroA, acroDD, acroGD, acroGS, acroIM, acroLC, acroPS
-  , acroR, acroT :: Int -> Sentence
-
-acroA  numVar = short assumption  :+: S (show numVar)
-acroDD numVar = short dataDefn    :+: S (show numVar)
-acroGD numVar = short genDefn     :+: S (show numVar)
-acroGS numVar = short goalStmt    :+: S (show numVar)
-acroIM numVar = short inModel     :+: S (show numVar)
-acroLC numVar = short likelyChg   :+: S (show numVar)
-acroPS numVar = short physSyst    :+: S (show numVar)
-acroR  numVar = short requirement :+: S (show numVar)
-acroT  numVar = short thModel     :+: S (show numVar)
-
-
 -- Creates an ordered list of items to be referenced.
 -- Helps with the formatting of HTML documents for the most part.
 -- Takes a list of Contents (e.g. Assumptions, LikelyChanges) and a
@@ -41,7 +25,7 @@ acroNumGen (frst:rst) num = (f frst) : acroNumGen rst (num + 1)
         extrctStrng _ = error "Invalid acronym type"
 
 assumption, dataDefn, genDefn, goalStmt, inModel, likelyChg, unlikelyChg,
-  physSyst, requirement, srs, thModel, mg, desSpec, notApp, dataConst :: CI
+  physSyst, requirement, srs, thModel, mg, desSpec, notApp, dataConst, typUnc :: CI
 
 -------------------------------------------------------------------------------------------------
 -- | CI       |           |    id       |         term                        | abbreviation | --
@@ -60,6 +44,7 @@ requirement = commonIdea "requirement" (cn' "requirement")                      
 thModel     = commonIdea "thModel"     (cn' "theoretical model")                           "T"
 mg          = commonIdea "mg"          (fterms compoundPhrase module_ guide)               "MG"
 notApp      = commonIdea "notApp"      (nounPhraseSP "not applicable")                     "N/A"
+typUnc      = commonIdea "typUnc"      (cn' "typical uncertainty")                         "TU"
 
 srs = commonIdea "srs" 
   (compoundPhrase''' NP.plural (softwareReq ^. term) (specification ^. term))
@@ -69,24 +54,26 @@ srs = commonIdea "srs"
 
 -- concepts relating to the templates and their contents
 
-analysis, appendix, body, characteristic, class_, client, code, column, company, 
-  component, concept, condition, connection, constant, constraint, consumer, content,
-  context, coordinate, customer, datum, decision, definition, dependency, description,
-  design, document, documentation, effect, element, emphasis, endUser, environment,
-  failure, figure, first, functional, game, general, goal, guide, implementation,
-  individual, information, interest, interface, input_, instance_, intReader,
-  introduction, issue, item, loss, label, library, limitation, literacy, material_,
-  message, method_, module_, model, name_, nonfunctional, object, offShelf, open,
-  organization, output_, physics, physical, plan, practice, priority, problem, 
-  product_, project, property, purpose, quantity, realtime, reference, requirement_,
-  response, result, reviewer, safety, scope, second_, section_, scenario, source,
-  simulation, software, solution, specific, specification, stakeholder, standard, 
-  statement, symbol_, system, table_, task, template, term_, terminology, theory,
-  traceyGraph, traceyMatrix, type_, uncertainty, user, useCase, validation, value,
-  variable, video, verification, year :: NamedChunk
+analysis, appendix, aspect, body, characteristic, class_, client, code, column,
+  company, component, concept, condition, connection, constant, constraint, 
+  consumer, content, context, coordinate, customer, datum, decision, definition,
+  dependency, description, design, document, documentation, effect, element,
+  emphasis, endUser, environment, failure, figure, first, functional, game,
+  general, goal, guide, implementation, individual, information, interest, 
+  interface, input_, instance_, intReader, introduction, issue, item, loss,
+  label, library, limitation, literacy, material_, message, method_, module_,
+  model, name_, nonfunctional, object, offShelf, open, organization, output_,
+  physics, physical, plan, practice, priority, problem, product_, project,
+  property, purpose, quantity, realtime, reference, requirement_, response, 
+  result, reviewer, safety, scope, second_, section_, scenario, source,
+  simulation, software, solution, specific, specification, stakeholder,
+  standard, statement, symbol_, system, table_, task, template, term_,
+  terminology, theory, traceyGraph, traceyMatrix, type_, uncertainty, user,
+  useCase, validation, value, variable, video, verification, year :: NamedChunk
 
 analysis        = npnc "analysis"       (cnIS   "analysis"           )
 appendix        = npnc "appendix"       (cnICES "appendix"           )
+aspect          = npnc "aspect"         (cn'    "aspect"             )
 body            = npnc "body"           (cnIES  "body"               )
 characteristic  = npnc "characteristic" (cn'    "characteristic"     )
 class_          = npnc "class"          (cn'''  "class"              )

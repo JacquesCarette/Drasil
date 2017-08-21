@@ -120,10 +120,9 @@ set String   = T.String
 set Radians  = T.Radians
 set (Vect a) = T.Vect (set a)
 set (Obj a)  = T.Obj a
---set (Discrete a) = T.Discrete (set a)
---set (DiscreteI a) = T.DiscreteI a
---set (DiscreteD a) = T.DiscreteD a
---set (DiscreteS a) = T.DiscreteS a
+set (DiscreteI a) = T.DiscreteI a
+set (DiscreteD a) = T.DiscreteD a
+set (DiscreteS a) = T.DiscreteS a
 
 -- | Helper function for translating Integrals (from 'UFunc')
 integral :: UFunc -> (T.Function, T.Expr)
@@ -230,10 +229,12 @@ lay (Bib bib)         = T.Bib $ map layCite bib
 
 -- | For importing bibliography
 layCite :: Citation -> T.Citation
-layCite (Book      fields) = T.Book    $ map layField fields
-layCite (Article   fields) = T.Article $ map layField fields
+layCite (Book      fields) = T.Book      $ map layField fields
+layCite (Article   fields) = T.Article   $ map layField fields
 layCite (MThesis   fields) = T.MThesis   $ map layField fields
 layCite (PhDThesis fields) = T.PhDThesis $ map layField fields
+layCite (Misc      fields) = T.Misc      $ map layField fields
+layCite (Online    fields) = T.Online    $ map layField fields
 
 layField :: CiteField -> T.CiteField
 layField (Author     p) = T.Author     p
@@ -246,13 +247,16 @@ layField (Place (c, s)) = T.Place (spec c, spec s)
 layField (Publisher  s) = T.Publisher $ spec s
 layField (Journal    s) = T.Journal   $ spec s
 layField (Year       n) = T.Year       n
-layField (Date   n m y) = T.Date   n m y
+layField (Date    n m y) = T.Date    n m y
+layField (URLdate n m y) = T.URLdate n m y
 layField (Page       n) = T.Page       n
 layField (Pages     ns) = T.Pages     ns
 layField (Note       s) = T.Note       $ spec s
 layField (Issue      n) = T.Issue      n
 layField (School     s) = T.School     $ spec s
-layField (URL       n)  = T.URL        $ spec n
+layField (URL        n) = T.URL        $ spec n
+layField (HowPub     s) = T.HowPub     $ spec s
+layField (Editor     p) = T.Editor     p
 
 makeL :: ListType -> T.ListType  
 makeL (Bullet bs)      = T.Enum        $ (map item bs)

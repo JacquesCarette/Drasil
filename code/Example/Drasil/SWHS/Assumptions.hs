@@ -1,10 +1,10 @@
-module Drasil.SWHS.Assumptions where
+module Drasil.SWHS.Assumptions where --all of this file is exported
 
-import Language.Drasil (Contents,
-  phrase, sC, unit_symb, sSqBr, defn, short, semiCol, (+:+), (+:+.), makeRef,
-  Sentence (S, Sy, (:+:)))
-import Data.Drasil.Concepts.Documentation (acroGD, acroIM, system, simulation,
-  model, problem)
+import Language.Drasil
+import Control.Lens ((^.))
+
+import Data.Drasil.Concepts.Documentation (system, simulation, model, 
+  problem, acroNumGen)
 import Drasil.DocumentLanguage (mkAssump)
 
 import Drasil.SWHS.DataDefs (dd1HtFluxC, dd2HtFluxP,
@@ -19,18 +19,26 @@ import Data.Drasil.Quantities.PhysicalProperties (vol)
 import Data.Drasil.Quantities.Physics (time, energy)
 import Data.Drasil.Quantities.Thermodynamics (temp, boil_pt, melt_pt)
 
-import qualified Data.Drasil.Concepts.Thermodynamics as CT (heat, melting,
+import Data.Drasil.Concepts.Thermodynamics as CT (heat, melting,
   law_conv_cooling, heat_trans, thermal_energy)
 import Data.Drasil.Concepts.PhysicalProperties (solid, liquid, gaseous)
 import Data.Drasil.Concepts.Math (change)
 import Data.Drasil.Concepts.Physics (mech_energy)
 
-import Data.Drasil.SentenceStructures (foldlSent, ofThe, ofThe', sAnd, isThe)
-import Control.Lens ((^.))
+import Data.Drasil.SentenceStructures (acroGD, acroIM, foldlSent, ofThe,
+  ofThe', sAnd, isThe)
 
 -------------------------
 -- 4.2.1 : Assumptions --
 -------------------------
+
+s4_2_1_list :: [Contents]
+s4_2_1_list = acroNumGen s4_2_1_assump_list 1
+
+s4_2_1_assump_list :: [Contents]
+s4_2_1_assump_list = [assump1, assump2, assump3, assump4, assump5, assump6,
+  assump7, assump8, assump9, assump10, assump11, assump12, assump13, assump14,
+  assump15, assump16, assump17, assump18, assump19, assump20]
 
 assump1, assump2, assump3, assump4, assump5, assump6, assump7,
   assump8, assump9, assump10, assump11, assump12, assump13, assump14,
@@ -55,7 +63,8 @@ assump3 = mkAssump "assump3" $ foldlSent [
 --
 assump4 = mkAssump "assump4" $ foldlSent [
   S "The", phrase temp_PCM `isThe` S "same throughout the", phrase pcm_vol,
-  sSqBr $ acroGD 2 `sC` swhsSymbMapDRef dd2HtFluxP]--FIXME `sC` makeRef likeChg1]
+  sSqBr $ acroGD 2 `sC`
+  swhsSymbMapDRef dd2HtFluxP]--FIXME `sC` makeRef likeChg1]
 --
 assump5 = mkAssump "assump5" $ foldlSent [
   S "The", phrase w_density `sAnd` phrase pcm_density,

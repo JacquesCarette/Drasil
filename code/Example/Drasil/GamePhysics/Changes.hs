@@ -1,8 +1,7 @@
-module Drasil.GamePhysics.Changes where
+module Drasil.GamePhysics.Changes (likelyChanges, unlikelyChanges) where
 
 import Language.Drasil
 import Drasil.GamePhysics.Modules
---import Data.Drasil.Modules
 import Data.Drasil.Changes
 
 likelyChanges :: [LCChunk]

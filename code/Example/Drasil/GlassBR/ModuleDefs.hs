@@ -1,8 +1,46 @@
-module Drasil.GlassBR.Interpolation where --whole file is used
+module Drasil.GlassBR.ModuleDefs where
 
 import Language.Drasil
 
-{--}
+import Drasil.GlassBR.Unitals (plate_len, plate_width, nom_thick,
+  glass_type, char_weight, tNT, sdx, sdy, sdz, pb_tol)
+
+--from TSD.txt:
+
+read_table :: Func
+read_table = funcData "read_table" $
+  [ singleLine (repeated [junk, listEntry [WithPattern] v_z_array]) ',',
+    multiLine (repeated [listEntry [WithLine, WithPattern] v_x_array, 
+                         listEntry [WithLine, WithPattern] v_y_array]) ','
+  ]
+  
+readTableMod :: Mod
+readTableMod = packmod "ReadTable" [read_table]
+
+-----
+
+--from defaultInput.txt:
+
+inputMod :: Mod
+inputMod = packmod "InputFormat" [glassInputData]
+
+glassInputData :: Func
+glassInputData = funcData "get_input" $
+  [ junkLine,
+    singleton plate_len, singleton plate_width, singleton nom_thick,
+    junkLine,
+    singleton glass_type, 
+    junkLine,
+    singleton char_weight, 
+    junkLine, 
+    singleton tNT, 
+    junkLine,
+    singleton sdx, singleton sdy, singleton sdz,
+    junkLine,
+    singleton pb_tol
+  ]
+  
+  
 
 v_y_2, v_y_1, v_x_2, v_x_1, v_x :: VarChunk
 v_y_1  = makeVC "v_y_1"    (nounPhraseSP "y1")   (sub (lY) (Atomic "1"))
@@ -12,7 +50,7 @@ v_x_2  = makeVC "v_x_2"    (nounPhraseSP "x2")   (sub (lX) (Atomic "2"))
 v_x    = makeVC "v_x"      (nounPhraseSP "x")    lX -- = params.wtnt from mainFun.py
 
 v_v, v_x_z_1, v_y_z_1, v_x_z_2, v_y_z_2, v_mat, v_col,
-  v_i, v_j, v_k, v_z, v_z_array, v_y_array, v_x_array, v_y, v_arr :: VarChunk
+  v_i, v_j, v_k, v_z, v_z_array, v_y_array, v_x_array, v_y, v_arr, v_filename :: VarChunk
 v_v       = makeVC "v_v"          (nounPhraseSP "v")       lV
 v_i       = makeVC "v_i"          (nounPhraseSP "i")       lI
 v_j       = makeVC "v_j"          (nounPhraseSP "j")       lJ
@@ -29,6 +67,7 @@ v_x_z_2   = makeVC "v_x_z_2"   (nounPhraseSP "x_z_2")     (Atomic "x_z_2")
 v_y_z_2   = makeVC "v_y_z_2"   (nounPhraseSP "y_z_2")     (Atomic "y_z_2")
 v_mat     = makeVC "v_mat"     (nounPhraseSP "mat")       (Atomic "mat")
 v_col     = makeVC "v_col"     (nounPhraseSP "col")       (Atomic "col")
+v_filename= makeVC "v_filename" (nounPhraseSP "filename") (Atomic "filename")
 
 linInterp :: Func
 linInterp = funcDef "lin_interp" [v_x_1, v_y_1, v_x_2, v_y_2, v_x] Rational 
@@ -51,8 +90,14 @@ matrixCol = funcDef "matrixCol" [v_mat, v_j] Rational
   ]
 
 interpY :: Func
-interpY = funcDef "interpY" [v_x_array, v_y_array, v_z_array, v_x, v_z] Rational 
+interpY = funcDef "interpY" [{-v_x_array, v_y_array, v_z_array,-} v_filename, v_x, v_z] Rational 
   [
+    -- hack
+  fdec v_x_array (Vect $ Vect Rational),
+  fdec v_y_array (Vect $ Vect Rational),
+  fdec v_z_array (Vect Rational),
+  FVal (FCall (asExpr read_table) [C v_filename, C v_z_array, C v_x_array, C v_y_array]),
+  -- endhack
     fasg v_i (FCall (asExpr indInSeq) [C v_z_array, C v_z]),
     fasg v_x_z_1 (FCall (asExpr matrixCol) [C v_x_array, C v_i]),
     fasg v_y_z_1 (FCall (asExpr matrixCol) [C v_y_array, C v_i]),
@@ -80,8 +125,14 @@ interpY = funcDef "interpY" [v_x_array, v_y_array, v_z_array, v_x, v_z] Rational
   ]  
   
 interpZ :: Func
-interpZ = funcDef "interpZ" [v_x_array, v_y_array, v_z_array, v_x, v_y] Rational 
+interpZ = funcDef "interpZ" [{-v_x_array, v_y_array, v_z_array,-} v_filename, v_x, v_y] Rational 
   [
+    -- hack
+  fdec v_x_array (Vect $ Vect Rational),
+  fdec v_y_array (Vect $ Vect Rational),
+  fdec v_z_array (Vect Rational),
+  FVal (FCall (asExpr read_table) [C v_filename, C v_z_array, C v_x_array, C v_y_array]),
+  -- endhack
     ffor v_i (C v_i :< Len ((C v_z_array) - 1)) 
       [
         fasg v_x_z_1 (FCall (asExpr matrixCol) [C v_x_array, C v_i]),
@@ -115,8 +166,3 @@ interpZ = funcDef "interpZ" [v_x_array, v_y_array, v_z_array, v_x, v_y] Rational
 
 interpMod :: Mod
 interpMod = packmod "Interpolation" $ [linInterp, indInSeq, matrixCol, interpY, interpZ]
-
--- hack  (more so than the rest of the module!)
-asExpr :: Func -> Expr
-asExpr (FDef (FuncDef n _ _ _)) = C $ makeVC n (nounPhraseSP n) (Atomic n)
-asExpr _ = error "Should be FuncDef"

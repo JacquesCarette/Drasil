@@ -43,15 +43,16 @@ import Data.Drasil.Concepts.PhysicalProperties (dimension, materialProprty)
 
 import Drasil.GlassBR.Unitals (stressDistFac, aspectR, dimlessLoad,
   lateralLoad, sflawParamM, char_weight, sD, demand, lite, demandq,
-  gbSymbMap, aspectRWithEqn, aspectR, gbSymbMapT, gbSymbMapD, lRe,
+  aspectRWithEqn, aspectR, lRe,
   prob_br, notSafe, safeMessage, is_safe1, is_safe2, plate_width,
   plate_len, blast, glassTy, gbInputDataConstraints, explosion, lateral,
   load_dur, explosion, pb_tol, blast, bomb, blastTy, glassGeo,
   glass_type, nom_thick, sdx, sdy, sdz, tNT, gBRSpecParamVals,
   constant_LoadDur, constant_ModElas, constant_M, constant_K, loadTypes,
   load, glassTypes, probBreak, termsWithAccDefn, termsWithDefsOnly,
-  gbConstants, gbConstrained, gbOutputs, gbInputs, this_symbols,
+  gbConstants, gbConstrained, gbOutputs, gbInputs,
   glBreakage, capacity, constant_LoadDF, constant_LoadSF)
+import Drasil.GlassBR.Symbols
 import Drasil.GlassBR.Concepts (aR, lShareFac, gLassBR, stdOffDist,
   glaSlab, blastRisk, glass, responseTy, cantilever, beam, plane, edge,
   glaPlane, glassBRProg, ptOfExplsn, acronyms)
@@ -63,9 +64,7 @@ import Drasil.GlassBR.IMods (iModels, calOfCap, calOfDe, probOfBr)
 import Drasil.GlassBR.DataDefs (dataDefns, gbQDefns, hFromt,
   strDisFac, nonFL, dimLL, glaTyFac, tolStrDisFac, tolPre)
 import Drasil.GlassBR.References (gbCitations)
-import Drasil.GlassBR.Interpolation (interpMod)
-import Drasil.GlassBR.DataDescriptions --FIXME: Redundant import, but doesn't build DataDescriptions.hs file otherwise...
-
+import Drasil.GlassBR.ModuleDefs
 import Drasil.Sections.ReferenceMaterial (intro)
 import Drasil.Sections.TraceabilityMandGs (traceGIntro)
 import Drasil.Sections.SpecificSystemDescription (solChSpecF,

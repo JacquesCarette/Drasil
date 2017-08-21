@@ -240,7 +240,7 @@ genCalcFuncD g cdef =
   publicMethod g 
     (methodType $ convType (codeType cdef)) 
     (codeName cdef)
-    (getParams g (codevars $ codeEquat cdef)) 
+    (getParams g (codevars' $ codeEquat cdef)) 
     (genCalcBlock g CalcReturn (codeName cdef) (codeEquat cdef))
 
 data CalcType = CalcAssign | CalcReturn deriving Eq

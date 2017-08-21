@@ -357,21 +357,6 @@ specDeLoad    = dcc "specDeLoad"  (nounPhraseSP "specified design load")
 
 {--}
 
-this_symbols :: [QSWrapper]
-this_symbols = (map qs [prob_br] ++ gbInputs ++ (map qs gBRSpecParamVals) ++ 
-  (map qs glassBRSymbolsWithDefns) ++ (map qs glassBRSymbols) ++
-  (map qs glassBRUnitless))
-
-{--}
-
-gbSymbMap :: SymbolMap
-gbSymbMap = symbolMap this_symbols
-
-gbSymbMapD :: QDefinition -> Contents
-gbSymbMapD term_ = (symbolMapFun gbSymbMap Data) term_
-
-gbSymbMapT :: RelationConcept -> Contents
-gbSymbMapT term_ = (symbolMapFun gbSymbMap Theory) term_
 
 {--}
 

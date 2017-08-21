@@ -102,7 +102,7 @@ module Language.Drasil (
   , Logging(..), ConstraintBehaviour(..), Structure(..), Lang(..), Comments(..)
   , defaultChoices
   , Mod(..), packmod, FuncDef(..), FuncStmt(..), funcDef, fasg, ffor, fdec -- hacks
-  , relToQD, funcData, funcQD, Func(..)   -- hacks
+  , relToQD, funcData, funcQD, Func(..), asExpr, asVC   -- hacks
   -- DataDesc
   , DataDesc
   , entry, listEntry, junk, singleton, junkLine, singleLine, multiLine

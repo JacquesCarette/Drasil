@@ -1,5 +1,5 @@
 {-# LANGUAGE RankNTypes #-}
-module Language.Drasil.Expr.Extract(dep, vars, codevars, toVC) where
+module Language.Drasil.Expr.Extract(dep, vars, codevars, codevars', toVC) where
 
 import Data.List (nub)
 import Control.Lens hiding ((:<),(:>))
@@ -126,6 +126,46 @@ codevars (Matrix a)   = nub (concat $ map (concat . map codevars) a)
 codevars (Index a i)  = nub (codevars a ++ codevars i)
 codevars (Len a)      = nub (codevars a)
 codevars (Append a b) = nub (codevars a ++ codevars b) 
+
+
+-- | Get a list of CodeChunks from an equation (no functions)
+codevars' :: Expr -> [CodeChunk]
+codevars' (a :/ b)     = nub (codevars' a ++ codevars' b)
+codevars' (a :* b)     = nub (codevars' a ++ codevars' b)
+codevars' (a :+ b)     = nub (codevars' a ++ codevars' b)
+codevars' (a :^ b)     = nub (codevars' a ++ codevars' b)
+codevars' (a :- b)     = nub (codevars' a ++ codevars' b)
+codevars' (a :. b)     = nub (codevars' a ++ codevars' b)
+codevars' (a :&& b)    = nub (codevars' a ++ codevars' b)
+codevars' (a :|| b)    = nub (codevars' a ++ codevars' b)
+codevars' (Deriv _ a b) = nub (codevars' a ++ codevars' b)
+codevars' (Not e)      = codevars' e
+codevars' (Neg e)      = codevars' e
+codevars' (C c)        = [codevar $ makeVC (c ^. id) (pn "") (c ^. symbol)]
+codevars' (Int _)      = []
+codevars' (Dbl _)      = []
+codevars' (Bln _)      = []
+codevars' (V _)        = []
+codevars' (FCall f x)  = nub (concat $ map (\y -> codevars' y) x)
+codevars' (Case ls)    = nub (concat $ map (codevars' . fst) ls ++ map (codevars' . snd) ls)
+codevars' (a := b)     = nub (codevars' a ++ codevars' b)
+codevars' (a :!= b)    = nub (codevars' a ++ codevars' b)
+codevars' (a :> b)     = nub (codevars' a ++ codevars' b)
+codevars' (a :< b)     = nub (codevars' a ++ codevars' b)
+codevars' (a :<= b)    = nub (codevars' a ++ codevars' b)
+codevars' (a :>= b)    = nub (codevars' a ++ codevars' b)
+codevars' (UnaryOp u)  = codevars' (unpack u)
+codevars' (Grouping e) = codevars' e
+codevars' (BinaryOp b) = nub (concat $ map (\x -> codevars' x) (binop b))
+codevars' (a :=>  b)   = nub (codevars' a ++ codevars' b)
+codevars' (a :<=> b)   = nub (codevars' a ++ codevars' b)
+codevars' (IsIn  a _)  = nub (concat $ map codevars' a)
+codevars' (NotIn a _)  = nub (concat $ map codevars' a)
+codevars' (State a b)  = nub ((concat $ map (codevars' . quant) a) ++ codevars' b)
+codevars' (Matrix a)   = nub (concat $ map (concat . map codevars') a)
+codevars' (Index a i)  = nub (codevars' a ++ codevars' i)
+codevars' (Len a)      = nub (codevars' a)
+codevars' (Append a b) = nub (codevars' a ++ codevars' b) 
 
 
 -- | Helper function for vars and dep, gets the Expr portion of a UFunc

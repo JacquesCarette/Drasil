@@ -7,6 +7,7 @@ import Language.Drasil.Chunk.Eq
 import Language.Drasil.Chunk.Quantity -- for hack
 import Language.Drasil.Chunk.SymbolForm -- for hack
 import Language.Drasil.NounPhrase
+import Language.Drasil.Symbol
 import Language.Drasil.Spec hiding (Mod)
 import Language.Drasil.SystemInformation
 import Language.Drasil.Expr -- for hack
@@ -15,6 +16,7 @@ import Language.Drasil.DataDesc
 import Language.Drasil.Chunk.ExprRelat
 import Language.Drasil.ChunkDB
 import Language.Drasil.Expr.Extract (codevars)
+import Language.Drasil.Chunk.VarChunk
 
 import qualified Data.Map as Map
 import Control.Lens ((^.))
@@ -191,6 +193,13 @@ ffor v e fs = FFor (codevar v) e fs
 fdec :: (Quantity c, SymbolForm c) => c -> Space -> FuncStmt
 fdec v t = FDec (codevar v) (spaceToCodeType t)
 
+asVC :: Func -> VarChunk
+asVC (FDef (FuncDef n _ _ _)) = makeVC n (nounPhraseSP n) (Atomic n)
+asVC (FData (FuncData n _)) = makeVC n (nounPhraseSP n) (Atomic n)
+asVC (FCD cd) = vc' cd (cd ^. symbol) (cd ^. typ)
+
+asExpr :: Func -> Expr
+asExpr f = C $ asVC f
 
 
 -- name of variable/function maps to module name

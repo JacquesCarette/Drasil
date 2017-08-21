@@ -309,7 +309,6 @@ constraintLookup q m = constraintLookup' q m (map getConstraint)
 constraintLookup' :: (Quantity q) => q -> ConstraintMap 
                       -> ([Constraint] -> [(Expr -> Relation)]) -> [Expr]
 constraintLookup' q m f = lookC (Map.lookup (q ^. id) m) (getSymb q)
-  where lookC :: Maybe [Constraint] -> Maybe SF -> [Expr]
-        lookC _ Nothing = error "constrained quantities must have symbol"
-        lookC (Just cs) (Just s) = map (\x -> x (C s)) (f cs)
+  where lookC :: Maybe [Constraint] -> SF -> [Expr]
+        lookC (Just cs) s = map (\x -> x (C s)) (f cs)
         lookC Nothing _ = []

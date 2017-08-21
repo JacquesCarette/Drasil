@@ -25,19 +25,19 @@ class NamedIdea c => Quantity c where
   -- | Provides the 'Language.Drasil.Chunk.SymbolForm.SymbolForm' 
   -- (chunk which contains a symbol) for a quantity 
   -- if it exists, otherwise returns 'Nothing'
-  getSymb  :: c -> Maybe SF
+  getSymb  :: c -> SF
   -- | Provides the units a quantity is measured in, if any, otherwise returns
   -- 'Nothing'
   getUnit  :: c -> Maybe UnitDefn
 
 instance Quantity VarChunk where
-  getSymb    = Just . SF 
+  getSymb    = SF 
   getUnit _  = Nothing
   typ f (VC n s t) = fmap (\x -> VC n s x) (f t)
   
 instance Quantity ConVar where
   typ    f (CV c s t) = fmap (\x -> CV c s x) (f t)
-  getSymb   = Just . SF 
+  getSymb   = SF 
   getUnit _ = Nothing
 
 data QWrapper where

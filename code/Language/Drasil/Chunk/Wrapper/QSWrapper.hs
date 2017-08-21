@@ -39,7 +39,7 @@ instance SymbolForm CQSWrapper where
   symbol = cqslens symbol
   
 instance Quantity CQSWrapper where
-  getSymb = Just . SF
+  getSymb = SF
   getUnit (CQS a) = getUnit a
   typ = cqslens typ
 
@@ -73,7 +73,7 @@ instance SymbolForm QSWrapper where
   symbol = qslens symbol
   
 instance Quantity QSWrapper where
-  getSymb = Just . SF
+  getSymb = SF
   getUnit (QS a) = getUnit a
   typ = qslens typ
 

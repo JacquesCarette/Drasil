@@ -31,7 +31,7 @@ instance NamedIdea UnitaryChunk where
   getA (UC qc _ _ _) = getA qc
 instance Quantity UnitaryChunk where
   typ f (UC named s u t) = fmap (\x -> UC named s u x) (f t)
-  getSymb = Just . SF
+  getSymb = SF
   getUnit = Just . unit
 instance Unitary UnitaryChunk where
   unit (UC _ _ u _) = UU u

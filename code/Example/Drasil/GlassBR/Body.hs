@@ -554,7 +554,7 @@ s7_1_req1Table :: Contents
 s7_1_req1Table = Table
   [at_start symbol_, at_start description, S "Units"]
   (mkTable
-  [(\ch -> (\(Just t) -> getS t) (getSymb ch)),
+  [(\ch -> (\t -> getS t) (getSymb ch)),
    at_start, unit'2Contents] requiredInputs)
   (S "Required Inputs following R1") True
 

@@ -109,6 +109,8 @@ module Language.Drasil (
   , multiLine', straight, repeated, repeated', Ind(..)
   -- Chunk.Theory
   , Theory(..), tc', TheoryChunk, TheoryModel, tm, tw
+  -- Chunk.SymbolForm
+  , SF
 ) where
 
 import Prelude hiding (log, sin, cos, tan, sqrt, id, return, print, break, exp, product)

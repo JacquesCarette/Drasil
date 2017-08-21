@@ -110,7 +110,7 @@ module Language.Drasil (
   -- Chunk.Theory
   , Theory(..), tc', TheoryChunk, TheoryModel, tm, tw
   -- Chunk.SymbolForm
-  , SF
+  , SF, SymbolChunk, sc
 ) where
 
 import Prelude hiding (log, sin, cos, tan, sqrt, id, return, print, break, exp, product)

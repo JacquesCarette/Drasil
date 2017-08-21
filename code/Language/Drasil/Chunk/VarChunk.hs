@@ -16,7 +16,7 @@ import Prelude hiding (id)
   
 -- | VarChunks are Quantities that have symbols, but not units.
 data VarChunk = VC { _ni :: NWrapper
-                   , _vsymb :: Symbol
+                   , _vsymb :: SymbolChunk
                    , _vtyp  :: Space }
 
 instance Eq VarChunk where
@@ -29,9 +29,6 @@ instance NamedIdea VarChunk where
   term = nl term
   getA (VC n _ _) = getA n
 
-instance SymbolForm VarChunk where
-  symbol f (VC n s t) = fmap (\x -> VC n x t) (f s)
-  
 nl :: (forall c. (NamedIdea c) => Simple Lens c a) -> Simple Lens VarChunk a
 nl l f (VC n s t) = fmap (\x -> VC (set l x n) s t) (f (n ^. l))
   
@@ -44,11 +41,11 @@ makeVC i des sym = vc i des sym Real
 
 -- | Creates a VarChunk from an id, term, symbol, and space
 vc :: String -> NP -> Symbol -> Space -> VarChunk
-vc i des sym space = VC (nw $ nc i des) sym space
+vc i des sym space = VC (nw $ nc i des) (sc i sym) space
 
 -- | Creates a VarChunk from a 'NamedIdea', symbol, and space
 vc' :: NamedIdea c => c -> Symbol -> Space -> VarChunk
-vc' n s t = VC (nw n) s t
+vc' n s t = VC (nw n) (sc (n ^. id) s) t
 
 -- | Creates a VarChunk from a 'NamedIdea''s id and term and symbol
 vc'' :: NamedIdea c => c -> Symbol -> Space -> VarChunk
@@ -56,4 +53,4 @@ vc'' n sy space = vc (n ^. id) (n ^. term) sy space
 
 -- | Creates a VarChunk from an id, term, symbol, and 
 makeVCObj :: String -> NP -> Symbol -> String -> VarChunk
-makeVCObj i des sym s = VC (nw $ nc i des) sym (Obj s)
+makeVCObj i des sym s = VC (nw $ nc i des) (sc i sym) (Obj s)

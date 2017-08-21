@@ -11,7 +11,7 @@ import Control.Lens
 
 import Language.Drasil.Chunk.Constrained
 import Language.Drasil.Chunk.Quantity
-import Language.Drasil.Chunk.SymbolForm
+import Language.Drasil.Chunk.SymbolForm hiding (symbol)
 import Language.Drasil.Chunk.NamedIdea
 import Language.Drasil.Chunk.Eq
 import Language.Drasil.Chunk
@@ -24,6 +24,7 @@ import Language.Drasil.Unicode
 import Language.Drasil.Spec
 import Language.Drasil.Symbol
 import Language.Drasil.NounPhrase
+import Language.Drasil.Misc (symbol)
 
 import Data.String.Utils (replace)
 import qualified Data.Map as Map
@@ -37,7 +38,7 @@ class (CodeIdea c, Quantity c) => CodeEntity c where
   codeType      :: c -> CodeType
 
 data CodeName where
-  SFCN :: (SymbolForm c) => c -> CodeName
+  SFCN :: (Quantity c) => c -> CodeName
   NICN :: (NamedIdea c)  => c -> CodeName
   
 instance Chunk CodeName where
@@ -45,7 +46,7 @@ instance Chunk CodeName where
 instance CodeIdea CodeName where
   -- want to take symbol lens from SymbolForm and apply symbToCodeName to it
   -- to make codeName lens for CodeName
-  codeName (SFCN c) = symbToCodeName (c ^. symbol)
+  codeName (SFCN c) = symbToCodeName (symbol c)
   -- want to take term lens from NamedIdea and apply sentenceToCodeName to it
   -- to make codeName lens for CodeName
   codeName (NICN c) = sentenceToCodeName (phrase $ c ^. term)
@@ -169,48 +170,44 @@ toCodeName s =
 
 
 data CodeChunk where
-  CodeChunk :: (Quantity c, SymbolForm c) => c -> CodeChunk
+  CodeChunk :: (Quantity c) => c -> CodeChunk
   
 instance Chunk CodeChunk where
   id = qslens id
 instance NamedIdea CodeChunk where
   term = qslens term
   getA (CodeChunk n) = getA n
-instance SymbolForm CodeChunk where
-  symbol = qslens symbol
 instance Quantity CodeChunk where
   typ = qslens typ
   getSymb (CodeChunk c) = getSymb c
   getUnit (CodeChunk c) = getUnit c
 instance CodeIdea CodeChunk where
-  codeName (CodeChunk c) = symbToCodeName (c ^. symbol)
+  codeName (CodeChunk c) = symbToCodeName (symbol c)
 instance CodeEntity CodeChunk where
   codeType (CodeChunk c) = spaceToCodeType (c ^. typ)
 instance Eq CodeChunk where
   (CodeChunk c1) == (CodeChunk c2) = 
     (c1 ^. id) == (c2 ^. id)
 
-qslens :: (forall c. (Quantity c, SymbolForm c) => Simple Lens c a) 
+qslens :: (forall c. (Quantity c) => Simple Lens c a) 
            -> Simple Lens CodeChunk a
 qslens l f (CodeChunk a) = 
   fmap (\x -> CodeChunk (set l x a)) (f (a ^. l))
   
   
-codevar :: (Quantity c, SymbolForm c) => c -> CodeChunk
+codevar :: (Quantity c) => c -> CodeChunk
 codevar = CodeChunk
   
   
            
 data CodeDefinition where
-  CodeDefinition :: (CodeEntity c, SymbolForm c) => c -> Expr -> CodeDefinition
+  CodeDefinition :: (CodeEntity c) => c -> Expr -> CodeDefinition
   
 instance Chunk CodeDefinition where
   id = qscdlens id
 instance NamedIdea CodeDefinition where
   term = qscdlens term
   getA (CodeDefinition n _) = getA n
-instance SymbolForm CodeDefinition where
-  symbol = qscdlens symbol
 instance Quantity CodeDefinition where
   typ = qscdlens typ
   getSymb (CodeDefinition c _) = getSymb c
@@ -223,7 +220,7 @@ instance Eq CodeDefinition where
   (CodeDefinition c1 _) == (CodeDefinition c2 _) = 
     (c1 ^. id) == (c2 ^. id)
 
-qscdlens :: (forall c. (Quantity c, SymbolForm c) => Simple Lens c a) 
+qscdlens :: (forall c. (Quantity c) => Simple Lens c a) 
             -> Simple Lens CodeDefinition a
 qscdlens l f (CodeDefinition a b) = 
   fmap (\x -> CodeDefinition (set l x a) b) (f (a ^. l)) 

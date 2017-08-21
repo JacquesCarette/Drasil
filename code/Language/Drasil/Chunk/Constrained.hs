@@ -57,7 +57,7 @@ sfwrc = Sfwr
 -- | ConstrainedChunks are 'Symbolic Quantities' 
 -- with 'Constraints' and maybe typical value
 data ConstrainedChunk where
-  ConstrainedChunk :: (Quantity c, SymbolForm c) => c 
+  ConstrainedChunk :: (Quantity c) => c 
                         -> [Constraint] -> Maybe Expr -> ConstrainedChunk
 
 instance Chunk ConstrainedChunk where
@@ -65,8 +65,6 @@ instance Chunk ConstrainedChunk where
 instance NamedIdea ConstrainedChunk where
   term = qslens term
   getA (ConstrainedChunk n _ _) = getA n
-instance SymbolForm ConstrainedChunk where
-  symbol = qslens symbol
 instance Quantity ConstrainedChunk where
   typ = qslens typ
   getSymb (ConstrainedChunk c _ _) = getSymb c
@@ -80,14 +78,14 @@ instance Eq ConstrainedChunk where
   (ConstrainedChunk c1 _ _) == (ConstrainedChunk c2 _ _) = 
     (c1 ^. id) == (c2 ^. id)
 
-qslens :: (forall c. (Quantity c, SymbolForm c) => Simple Lens c a) 
+qslens :: (forall c. (Quantity c) => Simple Lens c a) 
            -> Simple Lens ConstrainedChunk a
 qslens l f (ConstrainedChunk a b c) = 
   fmap (\x -> ConstrainedChunk (set l x a) b c) (f (a ^. l))
   
   
 -- | Creates a constrained chunk from a symbolic quantity
-constrained :: (Quantity c, SymbolForm c) => c 
+constrained :: (Quantity c) => c 
                 -> [Constraint] -> Expr -> ConstrainedChunk
 constrained q cs ex = ConstrainedChunk q cs (Just ex)
   
@@ -108,7 +106,7 @@ cvc i des sym space cs rv =
 -- | ConstrConcepts are 'Conceptual Symbolic Quantities' 
 -- with 'Constraints' and maybe a reasonable value
 data ConstrConcept where
-  ConstrConcept :: (Quantity c, SymbolForm c, Concept c) => c 
+  ConstrConcept :: (Quantity c, Concept c) => c 
                         -> [Constraint] -> Maybe Expr -> ConstrConcept
 
 instance Chunk ConstrConcept where
@@ -116,8 +114,6 @@ instance Chunk ConstrConcept where
 instance NamedIdea ConstrConcept where
   term = cqslens term
   getA (ConstrConcept n _ _) = getA n
-instance SymbolForm ConstrConcept where
-  symbol = cqslens symbol
 instance Quantity ConstrConcept where
   typ = cqslens typ
   getSymb (ConstrConcept c _ _) = getSymb c
@@ -134,16 +130,16 @@ instance Eq ConstrConcept where
   (ConstrConcept c1 _ _) == (ConstrConcept c2 _ _) = 
     (c1 ^. id) == (c2 ^. id)
 
-cqslens :: (forall c. (Quantity c, SymbolForm c, Concept c) => Simple Lens c a)
+cqslens :: (forall c. (Quantity c, Concept c) => Simple Lens c a)
            -> Simple Lens ConstrConcept a
 cqslens l f (ConstrConcept a b c) = 
   fmap (\x -> ConstrConcept (set l x a) b c) (f (a ^. l))
   
-constrained' :: (Quantity c, SymbolForm c, Concept c) => c 
+constrained' :: (Quantity c, Concept c) => c 
                  -> [Constraint] -> Expr -> ConstrConcept
 constrained' q cs rv = ConstrConcept q cs (Just rv)
 
-constrainedNRV' :: (Quantity c, SymbolForm c, Concept c) => c 
+constrainedNRV' :: (Quantity c, Concept c) => c 
                  -> [Constraint] -> ConstrConcept
 constrainedNRV' q cs = ConstrConcept q cs Nothing
   
@@ -154,7 +150,7 @@ cuc' nam trm desc sym un space cs rv =
 
 -- ConstraintWrapper for wrapping anything that is constrained
 data ConstrWrapper where
-  CnstrW :: (Constrained c, SymbolForm c) => c -> ConstrWrapper
+  CnstrW :: (Constrained c) => c -> ConstrWrapper
 
 instance Chunk ConstrWrapper where
   id = cwlens id
@@ -166,18 +162,16 @@ instance Constrained ConstrWrapper where
 instance NamedIdea ConstrWrapper where
   term = cwlens term
   getA (CnstrW a) = getA a
-instance SymbolForm ConstrWrapper where
-  symbol = cwlens symbol
 instance Quantity ConstrWrapper where
   getSymb (CnstrW a) = getSymb a
   getUnit (CnstrW a) = getUnit a
   typ = cwlens typ
 
-cnstrw :: (Constrained c, SymbolForm c) => c -> ConstrWrapper
+cnstrw :: (Constrained c) => c -> ConstrWrapper
 cnstrw = CnstrW
 
 -- do not export
-cwlens :: (forall c. (Constrained c, SymbolForm c) => 
+cwlens :: (forall c. (Constrained c) => 
   Simple Lens c a) -> Simple Lens ConstrWrapper a
 cwlens l f (CnstrW a) = fmap (\x -> CnstrW (set l x a)) (f (a ^. l))
 

@@ -73,12 +73,15 @@ writeDoc _    = error "we can only write TeX/HTML (for now)"
 
 -- | Calls the code generator
 genCode :: CodeSpec -> IO ()
-genCode spec = do 
-  workingDir <- getCurrentDirectory
-  createDirectoryIfMissing False "src"
-  setCurrentDirectory "src"
-  generateCode (fix $ generator spec)
-  setCurrentDirectory workingDir
+genCode spec = 
+  let g = generator spec
+  in
+    do 
+      workingDir <- getCurrentDirectory
+      createDirectoryIfMissing False "src"
+      setCurrentDirectory "src"
+      generateCode g g
+      setCurrentDirectory workingDir
 
 
 -- -- | Calls the code generator using the 'ModuleChunk's

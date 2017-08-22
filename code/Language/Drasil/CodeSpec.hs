@@ -39,7 +39,8 @@ data CodeSpec = CodeSpec {
   constMap :: FunctionMap,
   const :: [CodeDefinition],
   choices :: Choices,
-  mods :: [DMod]  -- medium hack
+  mods :: [Mod],  -- medium hack
+  dMap :: ModDepMap
 }
 
 type FunctionMap = Map.Map String CodeDefinition
@@ -89,7 +90,8 @@ codeSpec' (SI {_sys = sys, _quants = q, _definitions = defs, _inputs = ins, _out
         constMap = assocToMap $ const',
         const = const',
         choices = ch,
-        mods = map (getModDep mem) mods'
+        mods = mods',
+        dMap = modDepMap mem mods'
       }
 
 data Choices = Choices {
@@ -213,10 +215,13 @@ modExportMap ms ins _ = Map.fromList $ concatMap mpair ms
                      --   ++ map codeName consts `zip` repeat "Constants"
                      -- inlining constants for now
           
-getModDep :: ModExportMap -> Mod -> DMod
-getModDep mem m@(Mod name funcs) = 
-  DMod (delete name $ nub $ concatMap getDep (concatMap fdep funcs)) m
-  where getDep n = maybe [] (\x -> [x]) (Map.lookup n mem)        
+type ModDepMap = Map.Map String [String]
+
+modDepMap :: ModExportMap -> [Mod] -> ModDepMap
+modDepMap mem ms = Map.fromList $ map (\(Mod n _) -> n) ms `zip` map getModDep ms 
+  where getModDep (Mod name funcs) = 
+          delete name $ nub $ concatMap getDep (concatMap fdep funcs)
+        getDep n = maybe [] (\x -> [x]) (Map.lookup n mem)        
         fdep (FCD cd) = codeName cd:map codeName (codevars $ codeEquat cd)
         fdep (FDef (FuncDef _ i _ fs)) = map codeName (i ++ concatMap fstdep fs)
         fdep (FData (FuncData _ d)) = map codeName $ getInputs d   

@@ -392,8 +392,8 @@ wtntWithEqn :: QDefinition
 wtntWithEqn = mkDataDef eqTNTWeight wtntCalculation
 
 wtntCalculation :: Relation
-wtntCalculation = (C eqTNTWeight) := (C char_weight) * (C tNT)
-
+--wtntCalculation = (C eqTNTWeight) := (C char_weight) * (C tNT)
+wtntCalculation = (C char_weight) * (C tNT)
 --
 
 aspectRWithEqn :: QDefinition

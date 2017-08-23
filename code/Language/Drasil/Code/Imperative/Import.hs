@@ -143,7 +143,7 @@ generateCodeD g = let s = codeSpec g
         getDir Python = "python"
         
 genModulesD :: Generator -> [Module]
-genModulesD g = genInputMod g g
+genModulesD g = genMain g : genInputMod g g
             -- ++ [genConstMod g]    inlining for now
             -- ++ map (\(FuncMod n d) -> genCalcMod g n d) (fMods $ codeSpec g)
              ++ genOutputMod g g (outputs $ codeSpec g)
@@ -342,9 +342,22 @@ genModule g' n maybeMs maybeCs =
       cs = maybe [] (\x -> x g) maybeCs  
   in  buildModule n ls [] ms cs
 
---genMain 
+  
+genMain :: Generator -> Module
+genMain g = genModule g "Control" (Just $ \x -> [genMainFunc x]) Nothing
 
-
+genMainFunc :: Generator -> FunctionDecl
+genMainFunc g = 
+  let l_filename = "inputfile"
+      v_filename = var "inputfile"
+  in
+    mainMethod $ body $ [
+      varDecDef l_filename string $ arg 0 ,
+      objDecNewVoid "params" "InputParameters" (obj "InputParameters") ,
+      valStmt $ funcApp' "get_input" [v_filename, var "params"] ,     
+      valStmt $ funcApp' "derived_params" [var "params"] ,      
+      valStmt $ funcApp' "check_constraints" [var "params"]
+    ] ++ map (\x -> varDecDef (codeName x) (convType $ codeType x) (fApp g g (codeName x) (map (var . codeName) $ codevars $ codeEquat x)))  (execOrder $ codeSpec g)
 
 
 -----

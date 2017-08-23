@@ -15,29 +15,37 @@ import Language.Drasil.Space -- for hack
 import Language.Drasil.DataDesc
 import Language.Drasil.Chunk.ExprRelat
 import Language.Drasil.ChunkDB
-import Language.Drasil.Expr.Extract (codevars)
+import Language.Drasil.Expr.Extract (codevars, codevars')
 import Language.Drasil.Chunk.VarChunk
 import Language.Drasil.Misc (symbol)
 
 import qualified Data.Map as Map
 import Control.Lens ((^.))
 import Data.List (nub, delete, (\\))
+import Debug.Trace
 
 import Prelude hiding (const)
 
+type Input = CodeChunk
+type Output = CodeChunk
+type Const = CodeDefinition
+type Derived = CodeDefinition
+type Def = CodeDefinition
+
 data CodeSpec = CodeSpec {
   program :: CodeName,
-  inputs :: [CodeChunk],
-  extInputs :: [CodeChunk],
-  derivedInputs :: [CodeDefinition],
-  outputs :: [CodeChunk],
-  relations :: [CodeDefinition],
+  inputs :: [Input],
+  extInputs :: [Input],
+  derivedInputs :: [Derived],
+  outputs :: [Output],
+  relations :: [Def],
+  execOrder :: [Def],
   cMap :: ConstraintMap,
   fMap :: FunctionMap,
   vMap :: VarMap,
   eMap :: ModExportMap,
   constMap :: FunctionMap,
-  const :: [CodeDefinition],
+  const :: [Const],
   choices :: Choices,
   mods :: [Mod],  -- medium hack
   dMap :: ModDepMap
@@ -76,13 +84,16 @@ codeSpec' (SI {_sys = sys, _quants = q, _definitions = defs, _inputs = ins, _out
       rels = defs' \\ derived
       mods' = (packmod "Calculations" $ map FCD rels):ms 
       mem   = modExportMap mods' inputs' const'
+      outs' = map codevar outs
+      allInputs = inputs' ++ map codevar derived
   in  CodeSpec {
         program = NICN sys,
-        inputs = inputs' ++ map codevar derived,
+        inputs = allInputs,
         extInputs = inputs',
         derivedInputs = derived,
-        outputs = map codevar outs,
+        outputs = outs',
         relations = rels,
+        execOrder = getExecOrder rels (allInputs ++ map codevar const') outs',
         cMap = constraintMap cs,
         fMap = assocToMap $ rels,
         vMap = assocToMap (map codevar q),
@@ -208,7 +219,7 @@ asExpr f = C $ asVC f
 -- name of variable/function maps to module name
 type ModExportMap = Map.Map String String
 
-modExportMap :: [Mod] -> [CodeChunk] -> [CodeDefinition] -> ModExportMap
+modExportMap :: [Mod] -> [Input] -> [Const] -> ModExportMap
 modExportMap ms ins _ = Map.fromList $ concatMap mpair ms
   where mpair (Mod n fs) = map fname fs `zip` repeat n
                         ++ map codeName ins `zip` repeat "InputParameters"
@@ -241,7 +252,22 @@ fname (FDef (FuncDef n _ _ _)) = n
 fname (FData (FuncData n _)) = n 
 
 
-getDerivedInputs :: [CodeDefinition] -> [CodeChunk] -> [CodeDefinition] -> [CodeDefinition]
+getDerivedInputs :: [Def] -> [Input] -> [Const] -> [CodeDefinition]
 getDerivedInputs defs ins consts =
   let refSet = ins ++ map codevar consts 
-  in  filter (null . (filter (not . (`elem` refSet))) . codevars . codeEquat) defs
+  in  filter ((`subsetOf` refSet) . codevars . codeEquat) defs
+  
+type Known = CodeChunk
+type Need  = CodeChunk
+
+getExecOrder :: [Def] -> [Known] -> [Need] -> [Def]
+getExecOrder d k' n' = getExecOrder' [] d k' (n' \\ k')
+  where getExecOrder' ord _ _ []   = ord
+        getExecOrder' ord defs k n = 
+          let new  = filter ((`subsetOf` k) . codevars' . codeEquat) defs
+              kNew = k ++ map codevar new
+              nNew = n \\ map codevar new
+          in  traceShow (map codeName kNew) $ getExecOrder' (ord ++ new) (defs \\ new) kNew nNew
+  
+subsetOf :: (Eq a) => [a] -> [a] -> Bool  
+xs `subsetOf` ys = null $ filter (not . (`elem` ys)) xs

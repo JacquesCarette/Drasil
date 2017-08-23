@@ -43,7 +43,7 @@ import Data.Drasil.Concepts.PhysicalProperties (dimension, materialProprty)
 
 import Drasil.GlassBR.Unitals (stressDistFac, aspectR, dimlessLoad,
   lateralLoad, sflawParamM, char_weight, sD, demand, lite, demandq,
-  aspectRWithEqn, aspectR, lRe,
+  aspectRWithEqn, aspectR, lRe, wtntWithEqn,
   prob_br, notSafe, safeMessage, is_safe1, is_safe2, plate_width,
   plate_len, blast, glassTy, gbInputDataConstraints, explosion, lateral,
   load_dur, explosion, pb_tol, blast, bomb, blastTy, glassGeo,
@@ -124,7 +124,10 @@ glassSystInfo = SI {
   _quants      = this_symbols,
   _concepts    = ([] :: [CQSWrapper]),
   _namedIdeas  = acronyms,
-  _definitions = dataDefns ++ (map (relToQD gbSymbMap) iModels) ++ (map (relToQD gbSymbMap) tModels),
+  _definitions = dataDefns ++ (map (relToQD gbSymbMap) iModels) ++ (map (relToQD gbSymbMap) tModels) 
+                  ++ [wtntWithEqn],  -- wtntWithEqn is defined in Unitals but only appears 
+                                     -- in the description of the Calculation of Demand instance model;
+                                     -- should this be included as a Data Definition?
   _inputs      = map qs gbInputs,
   _outputs     = map qs gbOutputs,
   _defSequence = gbQDefns,

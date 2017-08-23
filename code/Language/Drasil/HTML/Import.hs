@@ -11,7 +11,7 @@ import Language.Drasil.Chunk.ExprRelat (relat)
 import Language.Drasil.Chunk.Module
 import Language.Drasil.Chunk.NamedIdea (term, short, getA)
 import Language.Drasil.Chunk.Concept (defn)
-import Language.Drasil.Chunk.SymbolForm (SymbolForm, symbol)
+import qualified Language.Drasil.Chunk.SymbolForm as SF
 import Language.Drasil.Chunk.VarChunk (VarChunk)
 import Language.Drasil.ChunkDB (SymbolMap, getUnitLup)
 
@@ -19,7 +19,7 @@ import Language.Drasil.Expr.Extract
 import Language.Drasil.Config (verboseDDDescription)
 import Language.Drasil.Document
 import Language.Drasil.Symbol
-import Language.Drasil.Misc (unit'2Contents)
+import Language.Drasil.Misc (unit'2Contents, symbol)
 import Language.Drasil.SymbolAlphabet (lD)
 import Language.Drasil.NounPhrase (phrase, titleize)
 import Language.Drasil.Unit (usymb)
@@ -46,7 +46,7 @@ expr (Deriv Part a b) = H.Frac (H.Mul (H.Sym (Special Partial)) (expr a))
                           (H.Mul (H.Sym (Special Partial)) (expr b))
 expr (Deriv Total a b)= H.Frac (H.Mul (H.Sym lD) (expr a)) 
                           (H.Mul (H.Sym lD) (expr b))
-expr (C c)            = H.Sym   (c ^. symbol)
+expr (C c)            = H.Sym   (symbol c)
 expr (FCall f x)      = H.Call (expr f) (map expr x)
 expr (Case ps)        = if length ps < 2 then 
                     error "Attempting to use multi-case expr incorrectly"
@@ -150,7 +150,7 @@ integral (Integral (Nothing, Nothing) e wrtc) =
 integral _ = error "TeX/Import.hs Incorrect use of Integral"
 
 -- | Helper function for translating the differential
-int_wrt :: (SymbolForm c) => c -> H.Expr
+int_wrt :: (SF.SymbolForm c) => c -> H.Expr
 int_wrt wrtc = (expr (Deriv Total (C wrtc) 1))
 
 -- | Helper function for translating operations in expressions 
@@ -311,7 +311,7 @@ missingAcro _ (Just a) = S "<b>":+: a :+: S "</b>"
 -- | Translates the defining equation from a QDefinition to 
 -- HTML's version of Sentence
 buildEqn :: QDefinition -> H.Spec  
-buildEqn c = H.N (c ^. symbol) H.:+: H.S " = " H.:+: H.E (expr (equat c))
+buildEqn c = H.N (symbol c) H.:+: H.S " = " H.:+: H.E (expr (equat c))
 
 -- | Build descriptions in data defs based on required verbosity
 buildDDDescription :: QDefinition -> SymbolMap -> H.Spec
@@ -322,7 +322,7 @@ buildDDDescription c m = descLines
 -- | Helper for building each line of the description of a data def
 descLines :: [VarChunk] -> SymbolMap -> H.Spec  
 descLines []    _   = error "No chunks to describe"
-descLines (vc:[]) m = (H.N (vc ^. symbol) H.:+: 
+descLines (vc:[]) m = (H.N (symbol vc) H.:+: 
   (H.S " is the " H.:+: (spec (phrase $ vc ^. term)) H.:+:
    unWrp (getUnitLup vc m)))
   where unWrp (Just a) = H.S " (" H.:+: H.Sy (a ^. usymb) H.:+: H.S ")"

@@ -13,14 +13,14 @@ import Language.Drasil.Chunk.Eq
 import Language.Drasil.Chunk.ExprRelat (relat)
 import Language.Drasil.Chunk.Module
 import Language.Drasil.Chunk.NamedIdea (term)
-import Language.Drasil.Chunk.SymbolForm (SymbolForm, symbol)
+import Language.Drasil.Chunk.SymbolForm (SymbolForm)
 import Language.Drasil.Chunk.Concept (defn)
 import Language.Drasil.Chunk.VarChunk (VarChunk)
 import Language.Drasil.ChunkDB (SymbolMap, getUnitLup)
 import Language.Drasil.Config (verboseDDDescription, numberedDDEquations, numberedTMEquations)
 import Language.Drasil.Document
 import Language.Drasil.Symbol
-import Language.Drasil.Misc (unit'2Contents)
+import Language.Drasil.Misc (unit'2Contents, symbol)
 import Language.Drasil.SymbolAlphabet
 import Language.Drasil.NounPhrase (phrase, titleize)
 import Language.Drasil.Unit (usymb)

@@ -13,7 +13,7 @@ import Language.Drasil.Chunk.NamedIdea (term, short, getA)
 import Language.Drasil.Chunk.Concept (defn)
 import qualified Language.Drasil.Chunk.SymbolForm as SF
 import Language.Drasil.Chunk.VarChunk (VarChunk)
-import Language.Drasil.ChunkDB (SymbolMap, getUnitLup)
+import Language.Drasil.ChunkDB (SymbolMap, getUnitLup, symbLookup)
 
 import Language.Drasil.Expr.Extract
 import Language.Drasil.Config (verboseDDDescription)
@@ -28,92 +28,92 @@ import Language.Drasil.Citations (Citation(..),CiteField(..))
 import Control.Lens hiding ((:>),(:<),set)
 
 -- | expr translation function from Drasil to HTML 'AST'
-expr :: Expr -> H.Expr
-expr (V v)            = H.Var   v
-expr (Dbl d)          = H.Dbl   d
-expr (Int i)          = H.Int   i
-expr (Bln b)          = H.Bln   b
-expr (a :* b)         = H.Mul   (expr a) (expr b)
-expr (a :+ b)         = H.Add   (expr a) (expr b)
-expr (a :/ b)         = H.Frac  (replace_divs a) (replace_divs b)
-expr (a :^ b)         = H.Pow   (expr a) (expr b)
-expr (a :- b)         = H.Sub   (expr a) (expr b)
-expr (a :. b)         = H.Dot   (expr a) (expr b)
-expr (Neg a)          = H.Neg   (expr a)
-expr (Deriv Part a 1) = H.Mul (H.Sym (Special Partial)) (expr a)
-expr (Deriv Total a 1)= H.Mul (H.Sym lD) (expr a)
-expr (Deriv Part a b) = H.Frac (H.Mul (H.Sym (Special Partial)) (expr a)) 
-                          (H.Mul (H.Sym (Special Partial)) (expr b))
-expr (Deriv Total a b)= H.Frac (H.Mul (H.Sym lD) (expr a)) 
-                          (H.Mul (H.Sym lD) (expr b))
-expr (C c)            = H.Sym   (symbol c)
-expr (FCall f x)      = H.Call (expr f) (map expr x)
-expr (Case ps)        = if length ps < 2 then 
+expr :: Expr -> SymbolMap -> H.Expr
+expr (V v)            _ = H.Var   v
+expr (Dbl d)          _ = H.Dbl   d
+expr (Int i)          _ = H.Int   i
+expr (Bln b)          _ = H.Bln   b
+expr (a :* b)         sm = H.Mul   (expr a sm) (expr b sm)
+expr (a :+ b)         sm = H.Add   (expr a sm) (expr b sm)
+expr (a :/ b)         sm = H.Frac  (replace_divs a sm) (replace_divs b sm)
+expr (a :^ b)         sm = H.Pow   (expr a sm) (expr b sm)
+expr (a :- b)         sm = H.Sub   (expr a sm) (expr b sm)
+expr (a :. b)         sm = H.Dot   (expr a sm) (expr b sm)
+expr (Neg a)          sm = H.Neg   (expr a sm)
+expr (Deriv Part a 1) sm = H.Mul (H.Sym (Special Partial)) (expr a sm)
+expr (Deriv Total a 1)sm = H.Mul (H.Sym lD) (expr a sm)
+expr (Deriv Part a b) sm = H.Frac (H.Mul (H.Sym (Special Partial)) (expr a sm)) 
+                          (H.Mul (H.Sym (Special Partial)) (expr b sm))
+expr (Deriv Total a b)sm = H.Frac (H.Mul (H.Sym lD) (expr a sm)) 
+                          (H.Mul (H.Sym lD) (expr b sm))
+expr (C c)            sm = H.Sym $ (symbol (symbLookup c sm))
+expr (FCall f x)      sm = H.Call (expr f sm) (map (flip expr sm) x)
+expr (Case ps)        sm = if length ps < 2 then 
                     error "Attempting to use multi-case expr incorrectly"
-                    else H.Case (zip (map (expr . fst) ps) (map (rel . snd) ps))
-expr e@(_ := _)       = rel e
-expr e@(_ :!= _)      = rel e
-expr e@(_ :> _)       = rel e
-expr e@(_ :< _)       = rel e
-expr e@(_ :<= _)      = rel e
-expr e@(_ :>= _)      = rel e
-expr (Matrix a)       = H.Mtx $ map (map expr) a
-expr (Index a i)      = H.Index (expr a) (expr i)
-expr (UnaryOp u)      = (\(x,y) -> H.Op x [y]) (ufunc u)
-expr (Grouping e)     = H.Grouping (expr e)
-expr (BinaryOp b)     = (\(x,y) -> H.Op x y) (bfunc b)
-expr (Not a)          = H.Not   (expr a)
-expr (a  :&&  b)      = H.And   (expr a) (expr b)
-expr (a  :||  b)      = H.Or    (expr a) (expr b)
-expr (a  :=>  b)      = H.Impl  (expr a) (expr b)
-expr (a  :<=> b)      = H.Iff   (expr a) (expr b)
-expr (IsIn  a b)      = H.IsIn  (map expr a) (set b)
-expr (NotIn a b)      = H.NotIn (map expr a) (set b)
-expr (State a b)      = H.State (map quan a) (expr b)
-expr (Len _)          = error "Len not yet implemented"
-expr (Append _ _)     = error "Append not yet implemented"
+                    else H.Case (zip (map (flip expr sm . fst) ps) (map (flip rel sm . snd) ps))
+expr e@(_ := _)       sm = rel e sm
+expr e@(_ :!= _)      sm = rel e sm
+expr e@(_ :> _)       sm = rel e sm
+expr e@(_ :< _)       sm = rel e sm 
+expr e@(_ :<= _)      sm = rel e sm 
+expr e@(_ :>= _)      sm = rel e sm 
+expr (Matrix a)       sm = H.Mtx $ map (map (flip expr sm)) a
+expr (Index a i)      sm = H.Index (expr a sm) (expr i sm)
+expr (UnaryOp u)      sm = (\(x,y) -> H.Op x [y]) (ufunc u sm)
+expr (Grouping e)     sm = H.Grouping (expr e sm)
+expr (BinaryOp b)     sm = (\(x,y) -> H.Op x y) (bfunc b sm)
+expr (Not a)          sm = H.Not   (expr a sm)
+expr (a  :&&  b)      sm = H.And   (expr a sm) (expr b sm)
+expr (a  :||  b)      sm = H.Or    (expr a sm) (expr b sm)
+expr (a  :=>  b)      sm = H.Impl  (expr a sm) (expr b sm)
+expr (a  :<=> b)      sm = H.Iff   (expr a sm) (expr b sm)
+expr (IsIn  a b)      sm = H.IsIn  (map (flip expr sm) a) (set b)
+expr (NotIn a b)      sm = H.NotIn (map (flip expr sm) a) (set b)
+expr (State a b)      sm = H.State (map (flip quan sm) a) (expr b sm)
+expr (Len _)           _ = error "Len not yet implemented"
+expr (Append _ _)      _ = error "Append not yet implemented"
 
 -- | Healper for translating Quantifier
-quan :: Quantifier -> H.Quantifier
-quan (Forall e) = H.Forall (expr e)
-quan (Exists e) = H.Exists (expr e)
+quan :: Quantifier -> SymbolMap -> H.Quantifier
+quan (Forall e) sm = H.Forall (expr e sm)
+quan (Exists e) sm = H.Exists (expr e sm)
 
 -- | Helper function for translating 'UFunc's
-ufunc :: UFunc -> (H.Function, H.Expr)
-ufunc (Log e) = (H.Log, expr e)
-ufunc (Summation (Just (s, Low v, High h)) e) = 
-  (H.Summation (Just ((s, expr v), expr h)), (expr e))
-ufunc (Summation Nothing e) = (H.Summation Nothing,(expr e))
-ufunc (Summation _ _) = error "HTML/Import.hs Incorrect use of Summation"
-ufunc (Product (Just (s, Low v, High h)) e) = 
-  (H.Product (Just ((s, expr v), expr h)), expr e)
-ufunc (Product Nothing e) = (H.Product Nothing, (expr e))
-ufunc (Product _ _) = error "HTML/Import.hs Incorrect use of Product"
-ufunc (Abs e) = (H.Abs, expr e)
-ufunc (Norm e) = (H.Norm, expr e)
-ufunc i@(Integral _ _ _) = integral i
-ufunc (Sin e)    = (H.Sin, expr e)
-ufunc (Cos e)    = (H.Cos, expr e)
-ufunc (Tan e)    = (H.Tan, expr e)
-ufunc (Sec e)    = (H.Sec, expr e)
-ufunc (Csc e)    = (H.Csc, expr e)
-ufunc (Cot e)    = (H.Cot, expr e)
-ufunc (Exp e)    = (H.Exp, expr e)
-ufunc (Sqrt e)   = (H.Sqrt, expr e)
+ufunc :: UFunc -> SymbolMap -> (H.Function, H.Expr)
+ufunc (Log e) sm = (H.Log, expr e sm)
+ufunc (Summation (Just (s, Low v, High h)) e) sm = 
+  (H.Summation (Just ((s, expr v sm), expr h sm)), (expr e sm))
+ufunc (Summation Nothing e) sm = (H.Summation Nothing,(expr e sm))
+ufunc (Summation _ _) _ = error "HTML/Import.hs Incorrect use of Summation"
+ufunc (Product (Just (s, Low v, High h)) e) sm = 
+  (H.Product (Just ((s, expr v sm), expr h sm)), expr e sm)
+ufunc (Product Nothing e) sm = (H.Product Nothing, (expr e sm))
+ufunc (Product _ _) _ = error "HTML/Import.hs Incorrect use of Product"
+ufunc (Abs e) sm = (H.Abs, expr e sm)
+ufunc (Norm e) sm = (H.Norm, expr e sm)
+ufunc i@(Integral _ _ _) sm = integral i sm
+ufunc (Sin e)    sm = (H.Sin,  expr e sm)
+ufunc (Cos e)    sm = (H.Cos,  expr e sm)
+ufunc (Tan e)    sm = (H.Tan,  expr e sm)
+ufunc (Sec e)    sm = (H.Sec,  expr e sm)
+ufunc (Csc e)    sm = (H.Csc,  expr e sm)
+ufunc (Cot e)    sm = (H.Cot,  expr e sm)
+ufunc (Exp e)    sm = (H.Exp,  expr e sm)
+ufunc (Sqrt e)   sm = (H.Sqrt, expr e sm)
 
 -- | Helper function for translating 'BiFunc's
-bfunc :: BiFunc -> (H.Function, [H.Expr])
-bfunc (Cross e1 e2) = (H.Cross, map expr [e1,e2])
+bfunc :: BiFunc -> SymbolMap -> (H.Function, [H.Expr])
+bfunc (Cross e1 e2) sm = (H.Cross, map (flip expr sm) [e1,e2])
 
 -- | Helper function for translating 'Relation's
-rel :: Relation -> H.Expr
-rel (a := b) = H.Eq (expr a) (expr b)
-rel (a :!= b)= H.NEq (expr a) (expr b)
-rel (a :< b) = H.Lt (expr a) (expr b)
-rel (a :> b) = H.Gt (expr a) (expr b)
-rel (a :<= b) = H.LEq (expr a) (expr b)
-rel (a :>= b) = H.GEq (expr a) (expr b)
-rel _ = error "Attempting to use non-Relation Expr in relation context."
+rel :: Relation -> SymbolMap -> H.Expr
+rel (a := b)  sm = H.Eq (expr a sm) (expr b sm)
+rel (a :!= b) sm = H.NEq (expr a sm) (expr b sm)
+rel (a :< b)  sm = H.Lt (expr a sm) (expr b sm)
+rel (a :> b)  sm = H.Gt (expr a sm) (expr b sm)
+rel (a :<= b) sm = H.LEq (expr a sm) (expr b sm)
+rel (a :>= b) sm = H.GEq (expr a sm) (expr b sm)
+rel _ _ = error "Attempting to use non-Relation Expr in relation context."
 
 -- | Helper for translating Sets
 set :: Set -> H.Set
@@ -132,51 +132,51 @@ set (DiscreteD a) = H.DiscreteD a
 set (DiscreteS a) = H.DiscreteS a
 
 -- | Helper function for translating Integrals (from 'UFunc')
-integral :: UFunc -> (H.Function, H.Expr)
-integral (Integral (Just (Low v), Just (High h)) e wrtc) = 
-  (H.Integral (Just (expr v), Just (expr h)) (int_wrt wrtc), expr e)
-integral (Integral (Just (High h), Just (Low v)) e wrtc) = 
-  (H.Integral (Just (expr v), Just (expr h)) (int_wrt wrtc), expr e)
-integral (Integral (Just (Low v), Nothing) e wrtc) = 
-  (H.Integral (Just (expr v), Nothing) (int_wrt wrtc), expr e)
-integral (Integral (Nothing, Just (Low v)) e wrtc) = 
-  (H.Integral (Just (expr v), Nothing) (int_wrt wrtc), expr e)
-integral (Integral (Just (High h), Nothing) e wrtc) = 
-  (H.Integral (Nothing, Just (expr h)) (int_wrt wrtc), expr e)
-integral (Integral (Nothing, Just (High h)) e wrtc) = 
-  (H.Integral (Nothing, Just (expr h)) (int_wrt wrtc), expr e)
-integral (Integral (Nothing, Nothing) e wrtc) = 
-  (H.Integral (Nothing, Nothing) (int_wrt wrtc), expr e)
-integral _ = error "TeX/Import.hs Incorrect use of Integral"
+integral :: UFunc -> SymbolMap -> (H.Function, H.Expr)
+integral (Integral (Just (Low v), Just (High h)) e wrtc) sm = 
+  (H.Integral (Just (expr v sm), Just (expr h sm)) (int_wrt wrtc sm), expr e sm)
+integral (Integral (Just (High h), Just (Low v)) e wrtc) sm = 
+  (H.Integral (Just (expr v sm), Just (expr h sm)) (int_wrt wrtc sm), expr e sm)
+integral (Integral (Just (Low v), Nothing) e wrtc) sm = 
+  (H.Integral (Just (expr v sm), Nothing) (int_wrt wrtc sm), expr e sm)
+integral (Integral (Nothing, Just (Low v)) e wrtc) sm = 
+  (H.Integral (Just (expr v sm), Nothing) (int_wrt wrtc sm), expr e sm)
+integral (Integral (Just (High h), Nothing) e wrtc) sm = 
+  (H.Integral (Nothing, Just (expr h sm)) (int_wrt wrtc sm), expr e sm)
+integral (Integral (Nothing, Just (High h)) e wrtc) sm = 
+  (H.Integral (Nothing, Just (expr h sm)) (int_wrt wrtc sm), expr e sm)
+integral (Integral (Nothing, Nothing) e wrtc) sm = 
+  (H.Integral (Nothing, Nothing) (int_wrt wrtc sm), expr e sm)
+integral _ _ = error "TeX/Import.hs Incorrect use of Integral"
 
 -- | Helper function for translating the differential
-int_wrt :: (SF.SymbolForm c) => c -> H.Expr
-int_wrt wrtc = (expr (Deriv Total (C wrtc) 1))
+int_wrt :: (SF.SymbolForm c) => c -> SymbolMap -> H.Expr
+int_wrt wrtc sm = expr (Deriv Total (C wrtc) 1) sm
 
 -- | Helper function for translating operations in expressions 
-replace_divs :: Expr -> H.Expr
-replace_divs (a :/ b) = H.Div (replace_divs a) (replace_divs b)
-replace_divs (a :+ b) = H.Add (replace_divs a) (replace_divs b)
-replace_divs (a :* b) = H.Mul (replace_divs a) (replace_divs b)
-replace_divs (a :^ b) = H.Pow (replace_divs a) (replace_divs b)
-replace_divs (a :- b) = H.Sub (replace_divs a) (replace_divs b)
-replace_divs a        = expr a
+replace_divs :: Expr -> SymbolMap -> H.Expr
+replace_divs (a :/ b) sm = H.Div (replace_divs a sm) (replace_divs b sm)
+replace_divs (a :+ b) sm = H.Add (replace_divs a sm) (replace_divs b sm)
+replace_divs (a :* b) sm = H.Mul (replace_divs a sm) (replace_divs b sm)
+replace_divs (a :^ b) sm = H.Pow (replace_divs a sm) (replace_divs b sm)
+replace_divs (a :- b) sm = H.Sub (replace_divs a sm) (replace_divs b sm)
+replace_divs a        sm = expr a sm
 
 -- | Translates Sentence to the HTML representation of Sentence ('Spec')
-spec :: Sentence -> H.Spec
-spec (S s)     = H.S s
-spec (Sy s)    = H.Sy s
-spec (EmptyS :+: b) = spec b
-spec (a :+: EmptyS) = spec a
-spec (a :+: b) = spec a H.:+: spec b
-spec (G g)     = H.G g
-spec (Sp s)    = H.Sp s
-spec (P s)     = H.N s
-spec (F f s)   = spec $ accent f s
-spec (Ref t r) = H.Ref t (spec r)
-spec (Quote q) = H.S "&quot;" H.:+: spec q H.:+: H.S "&quot;"
-spec EmptyS    = H.EmptyS
-spec (E e)     = H.E $ expr e
+spec :: Sentence -> SymbolMap -> H.Spec
+spec (S s)      _ = H.S s
+spec (Sy s)     _ = H.Sy s
+spec (EmptyS :+: b) sm = spec b sm
+spec (a :+: EmptyS) sm = spec a sm
+spec (a :+: b) sm = spec a sm H.:+: spec b sm
+spec (G g)      _ = H.G g
+spec (Sp s)     _ = H.Sp s
+spec (P s)      _ = H.N s
+spec (F f s)    sm = spec (accent f s) sm
+spec (Ref t r) sm = H.Ref t (spec r sm)
+spec (Quote q) sm = H.S "&quot;" H.:+: spec q sm H.:+: H.S "&quot;"
+spec EmptyS     _ = H.EmptyS
+spec (E e)     sm = H.E $ expr e sm
 
 -- | Helper function for translating accented characters to 
 -- an HTML renderable form.
@@ -192,112 +192,116 @@ decorate Vector s = S "<b>" :+: s :+: S "</b>"
 decorate Prime  s = s :+: S "&prime;"
 
 -- | Translates from Document to the HTML representation of Document
-makeDocument :: Document -> H.Document
-makeDocument (Document title author sections) = 
-  H.Document (spec title) (spec author) (createLayout sections)
+makeDocument :: Document -> SymbolMap -> H.Document
+makeDocument (Document title author sections) sm = 
+  H.Document (spec title sm) (spec author sm) (createLayout sections sm)
 
 -- | Translates from LayoutObj to the HTML representation of LayoutObj
-layout :: Int -> SecCons -> H.LayoutObj
-layout currDepth (Sub s) = sec (currDepth+1) s
-layout _         (Con c) = lay c
+layout :: Int -> SecCons -> SymbolMap -> H.LayoutObj
+layout currDepth (Sub s) sm = sec (currDepth+1) s sm
+layout _         (Con c) sm = lay c sm
 
 -- | Helper function for creating sections as layout objects
-createLayout :: [Section] -> [H.LayoutObj]
-createLayout = map (sec 0)
+createLayout :: [Section] -> SymbolMap -> [H.LayoutObj]
+createLayout secs sm = map (flip (sec 0) sm) secs
 
 -- | Helper function for creating sections at the appropriate depth
-sec :: Int -> Section -> H.LayoutObj
-sec depth x@(Section title contents) = 
+sec :: Int -> Section -> SymbolMap -> H.LayoutObj
+sec depth x@(Section title contents) sm = 
   H.HDiv [(concat $ replicate depth "sub") ++ "section"] 
-  ((H.Header (depth+2) (spec title)):(map (layout depth) contents)) 
-  (spec $ refName x)
+  ((H.Header (depth+2) (spec title sm)):(map (flip (layout depth) sm) contents)) 
+  (spec (refName x) sm)
 
 -- | Translates from Contents to the HTML Representation of LayoutObj.
 -- Called internally by layout.
-lay :: Contents -> H.LayoutObj
-lay x@(Table hdr lls t b)     = H.Table ["table"] 
-  ((map spec hdr) : (map (map spec) lls)) (spec (refName x)) b (spec t)
-lay (Paragraph c)     = H.Paragraph (spec c)
-lay (EqnBlock c)      = H.HDiv ["equation"] [H.Tagless (H.E (expr c))] (H.EmptyS)
---lay (CodeBlock c)     = H.CodeBlock c
-lay x@(Definition m c)  = H.Definition c (makePairs c m) (spec $ refName x)
-lay (Enumeration cs)  = H.List $ makeL cs
-lay x@(Figure c f)    = H.Figure (spec (refName x)) (spec c) f
-lay x@(Module m)      = H.Module (formatName m) (spec $ refName x)
-lay (Graph _ _ _ _)   = H.Paragraph (H.EmptyS)  -- need to implement!
-lay x@(Requirement r)   = H.Requirement (spec (phrase $ r ^. term)) (spec $ refName x) (spec $ short r)
-lay x@(Assumption a)    = H.Assumption (spec (phrase $ a ^. term)) (spec $ refName x) (spec $ short a)
-lay x@(LikelyChange lc) = H.LikelyChange (spec (phrase $ lc ^. term)) (spec $ refName x) (spec $ short lc)
-lay x@(UnlikelyChange uc)  = H.UnlikelyChange (spec (phrase $ uc ^. term)) (spec $ refName x) (spec $ short uc)
-lay (Defnt _ _ _)     = H.Paragraph (H.EmptyS)  -- need to implement!
-lay (GDef)            = H.Paragraph (H.EmptyS)  -- need to implement!
-lay (IMod)            = H.Paragraph (H.EmptyS)  -- need to implement!
-lay (TMod ps rf r)    = H.Definition (Theory r) 
-  (map (\(x,y) -> (x, map lay y)) ps) (spec rf)
-lay (DDef ps rf d)    = H.Definition (Data d)
-  (map (\(x,y) -> (x, map lay y)) ps) (spec rf)
-lay (Bib bib)         = H.Bib $ map layCite bib
+lay :: Contents -> SymbolMap -> H.LayoutObj
+lay x@(Table hdr lls t b) sm = H.Table ["table"] 
+  ((map (flip spec sm) hdr) : (map (map (flip spec sm)) lls)) (spec (refName x) sm) b (spec t sm)
+lay (Paragraph c)       sm = H.Paragraph (spec c sm)
+lay (EqnBlock c)        sm = H.HDiv ["equation"] [H.Tagless (H.E (expr c sm))] (H.EmptyS)
+--lay (CodeBlock c)        = H.CodeBlock c
+lay x@(Definition _ c)  sm = H.Definition c (makePairs c sm) (spec (refName x) sm)
+lay (Enumeration cs)    sm = H.List $ makeL cs sm
+lay x@(Figure c f)      sm = H.Figure (spec (refName x) sm) (spec c sm) f
+lay x@(Module m)        sm = H.Module (formatName m) (spec (refName x) sm)
+lay (Graph _ _ _ _)      _ = H.Paragraph (H.EmptyS)  -- need to implement!
+lay x@(Requirement r)   sm = 
+  H.Requirement (spec (phrase $ r ^. term) sm) (spec (refName x) sm) (spec (short r) sm)
+lay x@(Assumption a)    sm = 
+  H.Assumption (spec (phrase $ a ^. term) sm) (spec (refName x) sm) (spec (short a) sm)
+lay x@(LikelyChange lc) sm = 
+  H.LikelyChange (spec (phrase $ lc ^. term) sm) (spec (refName x) sm) (spec (short lc) sm)
+lay x@(UnlikelyChange uc) sm = 
+  H.UnlikelyChange (spec (phrase $ uc ^. term) sm) (spec (refName x) sm) (spec (short uc) sm)
+lay (Defnt _ _ _)        _ = H.Paragraph (H.EmptyS)  -- need to implement!
+lay (GDef)               _ = H.Paragraph (H.EmptyS)  -- need to implement!
+lay (IMod)               _ = H.Paragraph (H.EmptyS)  -- need to implement!
+lay (TMod ps rf r)      sm = H.Definition (Theory r) 
+  (map (\(x,y) -> (x, map (flip lay sm) y)) ps) (spec rf sm)
+lay (DDef ps rf d)      sm = H.Definition (Data d)
+  (map (\(x,y) -> (x, map (flip lay sm) y)) ps) (spec rf sm)
+lay (Bib bib)           sm = H.Bib $ map (flip layCite sm) bib
 
 -- | For importing bibliography
-layCite :: Citation -> H.Citation
-layCite (Book      fields) = H.Book      $ map layField fields
-layCite (Article   fields) = H.Article   $ map layField fields
-layCite (MThesis   fields) = H.MThesis   $ H.Thesis H.M   : map layField fields
-layCite (PhDThesis fields) = H.PhDThesis $ H.Thesis H.PhD : map layField fields
-layCite (Misc      fields) = H.Misc      $ map layField fields
-layCite (Online    fields) = H.Online    $ map layField fields
+layCite :: Citation -> SymbolMap -> H.Citation
+layCite (Book      fields) sm = H.Book      $ map (flip layField sm) fields
+layCite (Article   fields) sm = H.Article   $ map (flip layField sm) fields
+layCite (MThesis   fields) sm = H.MThesis   $ H.Thesis H.M   : map (flip layField sm) fields
+layCite (PhDThesis fields) sm = H.PhDThesis $ H.Thesis H.PhD : map (flip layField sm) fields
+layCite (Misc      fields) sm = H.Misc      $ map (flip layField sm) fields
+layCite (Online    fields) sm = H.Online    $ map (flip layField sm) fields
 
-layField :: CiteField -> H.CiteField
-layField (Author     p) = H.Author     p
-layField (Title      s) = H.Title      $ spec s
-layField (Series     s) = H.Series     $ spec s
-layField (Collection s) = H.Collection $ spec s
-layField (Volume     n) = H.Volume     n
-layField (Edition    n) = H.Edition    n
-layField (Place (c, s)) = H.Place (spec c, spec s)
-layField (Publisher  s) = H.Publisher $ spec s
-layField (Journal    s) = H.Journal   $ spec s
-layField (Year       n) = H.Year       n
-layField (Date    n m y) = H.Date    n m y
-layField (URLdate n m y) = H.URLdate n m y
-layField (Page       n) = H.Page       n
-layField (Pages     ns) = H.Pages     ns
-layField (Note       s) = H.Note       $ spec s
-layField (Issue      n) = H.Issue      n
-layField (School     s) = H.School     $ spec s
-layField (URL        s) = H.URL        $ spec s
-layField (HowPub     s) = H.HowPub     $ spec s
-layField (Editor     p) = H.Editor     p
+layField :: CiteField -> SymbolMap -> H.CiteField
+layField (Author     p)   _ = H.Author     p
+layField (Title      s)  sm = H.Title      $ spec s sm
+layField (Series     s)  sm = H.Series     $ spec s sm
+layField (Collection s)  sm = H.Collection $ spec s sm
+layField (Volume     n)   _ = H.Volume     n
+layField (Edition    n)   _ = H.Edition    n
+layField (Place (c, s))  sm = H.Place      (spec c sm, spec s sm)
+layField (Publisher  s)  sm = H.Publisher  $ spec s sm
+layField (Journal    s)  sm = H.Journal    $ spec s sm
+layField (Year       n)   _ = H.Year       n
+layField (Date    n m y)  _ = H.Date       n m y
+layField (URLdate n m y)  _ = H.URLdate    n m y
+layField (Page       n)   _ = H.Page       n
+layField (Pages     ns)   _ = H.Pages      ns
+layField (Note       s)  sm = H.Note       $ spec s sm
+layField (Issue      n)   _ = H.Issue      n
+layField (School     s)  sm = H.School     $ spec s sm
+layField (URL        s)  sm = H.URL        $ spec s sm
+layField (HowPub     s)  sm = H.HowPub     $ spec s sm
+layField (Editor     p)   _ = H.Editor     p
 
 -- | Translates lists
-makeL :: ListType -> H.ListType
-makeL (Bullet bs)      = H.Unordered   $ map item bs
-makeL (Number ns)      = H.Ordered     $ map item ns
-makeL (Simple ps)      = H.Simple      $ map (\(x,y) -> (spec x, item y)) ps
-makeL (Desc ps)        = H.Desc        $ map (\(x,y) -> (spec x, item y)) ps
-makeL (Definitions ps) = H.Definitions $ map (\(x,y) -> (spec x, item y)) ps
+makeL :: ListType -> SymbolMap -> H.ListType
+makeL (Bullet bs)      sm = H.Unordered   $ map (flip item sm) bs
+makeL (Number ns)      sm = H.Ordered     $ map (flip item sm) ns
+makeL (Simple ps)      sm = H.Simple      $ map (\(x,y) -> (spec x sm, item y sm)) ps
+makeL (Desc ps)        sm = H.Desc        $ map (\(x,y) -> (spec x sm, item y sm)) ps
+makeL (Definitions ps) sm = H.Definitions $ map (\(x,y) -> (spec x sm, item y sm)) ps
 
 -- | Helper for translating list items
-item :: ItemType -> H.ItemType
-item (Flat i) = H.Flat (spec i)
-item (Nested t s) = H.Nested (spec t) (makeL s)
+item :: ItemType -> SymbolMap -> H.ItemType
+item (Flat i)     sm = H.Flat (spec i sm)
+item (Nested t s) sm = H.Nested (spec t sm) (makeL s sm)
 
 -- | Translates definitions
 -- (Data defs, General defs, Theoretical models, etc.)
 makePairs :: DType -> SymbolMap -> [(String,[H.LayoutObj])]
 makePairs (Data c) m = [
-  ("Number",      [H.Paragraph $ spec $ missingAcro (S "DD") $ getA c]),
-  ("Label",       [H.Paragraph $ spec $ titleize $ c ^. term]),
-  ("Units",       [H.Paragraph $ spec $ unit'2Contents c]),
-  ("Equation",    [H.HDiv ["equation"] [H.Tagless (buildEqn c)] (H.EmptyS)]),
+  ("Number",      [H.Paragraph $ spec (missingAcro (S "DD") $ getA c) m]),
+  ("Label",       [H.Paragraph $ spec (titleize $ c ^. term) m]),
+  ("Units",       [H.Paragraph $ spec (unit'2Contents c) m]),
+  ("Equation",    [H.HDiv ["equation"] [H.Tagless (buildEqn c m)] (H.EmptyS)]),
   ("Description", [H.Paragraph (buildDDDescription c m)])
   ]
-makePairs (Theory c) _ = [
-  ("Number",      [H.Paragraph $ spec $ missingAcro (S "T") $ getA c]),
-  ("Label",       [H.Paragraph $ spec (titleize $ c ^. term)]),
-  ("Equation",    [H.HDiv ["equation"] [H.Tagless (H.E (rel (c ^. relat)))]
+makePairs (Theory c) m = [
+  ("Number",      [H.Paragraph $ spec (missingAcro (S "T") $ getA c) m]),
+  ("Label",       [H.Paragraph $ spec (titleize $ c ^. term) m]),
+  ("Equation",    [H.HDiv ["equation"] [H.Tagless (H.E (rel (c ^. relat) m))]
                   (H.EmptyS)]),
-  ("Description", [H.Paragraph (spec (c ^. defn))])
+  ("Description", [H.Paragraph (spec (c ^. defn) m)])
   ]
 makePairs General  _ = error "Not yet implemented"
 makePairs Instance _ = error "Not yet implemented"
@@ -310,8 +314,8 @@ missingAcro _ (Just a) = S "<b>":+: a :+: S "</b>"
 
 -- | Translates the defining equation from a QDefinition to 
 -- HTML's version of Sentence
-buildEqn :: QDefinition -> H.Spec  
-buildEqn c = H.N (symbol c) H.:+: H.S " = " H.:+: H.E (expr (equat c))
+buildEqn :: QDefinition -> SymbolMap -> H.Spec  
+buildEqn c sm = H.N (symbol c) H.:+: H.S " = " H.:+: H.E (expr (equat c) sm)
 
 -- | Build descriptions in data defs based on required verbosity
 buildDDDescription :: QDefinition -> SymbolMap -> H.Spec
@@ -323,7 +327,7 @@ buildDDDescription c m = descLines
 descLines :: [VarChunk] -> SymbolMap -> H.Spec  
 descLines []    _   = error "No chunks to describe"
 descLines (vc:[]) m = (H.N (symbol vc) H.:+: 
-  (H.S " is the " H.:+: (spec (phrase $ vc ^. term)) H.:+:
+  (H.S " is the " H.:+: (spec (phrase $ vc ^. term) m) H.:+:
    unWrp (getUnitLup vc m)))
   where unWrp (Just a) = H.S " (" H.:+: H.Sy (a ^. usymb) H.:+: H.S ")"
         unWrp Nothing  = H.S ""

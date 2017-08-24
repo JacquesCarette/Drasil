@@ -54,7 +54,8 @@ v_v, v_x_z_1, v_y_z_1, v_x_z_2, v_y_z_2, v_mat, v_col,
 v_v       = makeVC "v_v"          (nounPhraseSP "v")       lV
 v_i       = makeVC "v_i"          (nounPhraseSP "i")       lI
 v_j       = makeVC "v_j"          (nounPhraseSP "j")       lJ
-v_k       = makeVC "v_k"          (nounPhraseSP "k")       lK
+v_k       = makeVC "v_k"          (nounPhraseSP "k")       (Atomic "k_2") -- k breaks things until we start using ids
+                                                                          -- in codegen (after refactor end of August)
 v_z       = makeVC "v_z"          (nounPhraseSP "z")       lZ
 v_z_array = vc "v_z_array" (nounPhraseSP "z_array") (sub (lZ) (Atomic "array")) (Vect Real)
 v_y_array = vc "v_y_array" (nounPhraseSP "y_array") (sub (lY) (Atomic "array")) (Vect $ Vect Real)
@@ -76,7 +77,7 @@ linInterp = funcDef "lin_interp" [v_x_1, v_y_1, v_x_2, v_y_2, v_x] Rational
 indInSeq :: Func
 indInSeq = funcDef "indInSeq" [v_arr, v_v] Rational 
   [
-    ffor (v_i) (C v_i :< Len (C v_arr))
+    ffor (v_i) (C v_i :< (Len (C v_arr) - 1))
       [ FCond (((Index (C v_arr) (C v_i)) :<= (C v_v)) :&& ((C v_v) :<= (Index (C v_arr) ((C v_i) + 1)))) [ FRet $ C v_i ] [] ],
     FThrow "Bound error"      
   ]
@@ -133,7 +134,7 @@ interpZ = funcDef "interpZ" [{-v_x_array, v_y_array, v_z_array,-} v_filename, v_
   fdec v_z_array (Vect Rational),
   FVal (FCall (asExpr read_table) [C v_filename, C v_z_array, C v_x_array, C v_y_array]),
   -- endhack
-    ffor v_i (C v_i :< Len ((C v_z_array) - 1)) 
+    ffor v_i (C v_i :< (Len (C v_z_array) - 1)) 
       [
         fasg v_x_z_1 (FCall (asExpr matrixCol) [C v_x_array, C v_i]),
         fasg v_y_z_1 (FCall (asExpr matrixCol) [C v_y_array, C v_i]),

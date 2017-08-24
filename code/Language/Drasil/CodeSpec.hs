@@ -22,7 +22,6 @@ import Language.Drasil.Misc (symbol)
 import qualified Data.Map as Map
 import Control.Lens ((^.))
 import Data.List (nub, delete, (\\))
-import Debug.Trace
 
 import Prelude hiding (const)
 
@@ -85,7 +84,7 @@ codeSpec' (SI {_sys = sys, _quants = q, _definitions = defs, _inputs = ins, _out
       mods' = (packmod "Calculations" $ map FCD rels):ms 
       mem   = modExportMap mods' inputs' const'
       outs' = map codevar outs
-      allInputs = inputs' ++ map codevar derived
+      allInputs = nub $ inputs' ++ map codevar derived
   in  CodeSpec {
         program = NICN sys,
         inputs = allInputs,
@@ -223,6 +222,10 @@ modExportMap :: [Mod] -> [Input] -> [Const] -> ModExportMap
 modExportMap ms ins _ = Map.fromList $ concatMap mpair ms
   where mpair (Mod n fs) = map fname fs `zip` repeat n
                         ++ map codeName ins `zip` repeat "InputParameters"
+                        ++ [ ("get_input", "InputFormat"),
+                             ("derived_values", "DerivedValues"),
+                             ("input_constraints", "InputConstraints"),
+                             ("write_output", "OutputFormat") ]  -- hardcoded for now
                      --   ++ map codeName consts `zip` repeat "Constants"
                      -- inlining constants for now
           
@@ -230,6 +233,13 @@ type ModDepMap = Map.Map String [String]
 
 modDepMap :: ModExportMap -> [Mod] -> ModDepMap
 modDepMap mem ms = Map.fromList $ map (\(Mod n _) -> n) ms `zip` map getModDep ms 
+                                   ++ [("Control", [ "InputParameters",  
+                                                     "DerivedValues",
+                                                     "InputConstraints",
+                                                     "InputFormat",
+                                                     "OutputFormat",
+                                                     "Calculations" ] )]  -- hardcoded for now
+                                                                          -- will fix later
   where getModDep (Mod name funcs) = 
           delete name $ nub $ concatMap getDep (concatMap fdep funcs)
         getDep n = maybe [] (\x -> [x]) (Map.lookup n mem)        
@@ -267,7 +277,7 @@ getExecOrder d k' n' = getExecOrder' [] d k' (n' \\ k')
           let new  = filter ((`subsetOf` k) . codevars' . codeEquat) defs
               kNew = k ++ map codevar new
               nNew = n \\ map codevar new
-          in  traceShow (map codeName kNew) $ getExecOrder' (ord ++ new) (defs \\ new) kNew nNew
+          in  getExecOrder' (ord ++ new) (defs \\ new) kNew nNew
   
 subsetOf :: (Eq a) => [a] -> [a] -> Bool  
 xs `subsetOf` ys = null $ filter (not . (`elem` ys)) xs

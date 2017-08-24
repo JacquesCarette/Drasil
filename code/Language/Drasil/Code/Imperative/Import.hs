@@ -118,7 +118,9 @@ varFuncD g s
 fAppFuncD :: Generator -> String -> ([Value] -> Value)
 fAppFuncD g s 
   | member s (eMap $ codeSpec g) =
-      maybe (error "impossible") (\x -> funcApp x s) (Map.lookup s (eMap $ codeSpec g))
+      maybe (error "impossible") 
+        (\x -> if x /= currentModule g then funcApp x s else funcApp' s) 
+        (Map.lookup s (eMap $ codeSpec g))
   | otherwise = funcApp' s
 
 generateCodeD :: Generator -> IO () 
@@ -173,7 +175,7 @@ genInputClassD g =
   pubClass
     "InputParameters"
     Nothing
-    genInputVars
+    inputVars
     ( 
       [ constructor 
           "InputParameters" 
@@ -185,10 +187,11 @@ genInputClassD g =
     )  
   where ins          = inputs $ codeSpec g
         --cm           = cMap $ codeSpec g
-        vars         = map (var . codeName) ins
-        vals         = map (defaultValue' . convType . codeType) ins        
-        genInputVars = 
+        inputVars    = 
           map (\x -> pubMVar 0 (convType $ codeType x) (codeName x)) ins
+        vars         = map (svToVar) inputVars
+        vals         = map (defaultValue' . convType . codeType) ins        
+        
 
 genInputFormatD :: Generator -> Method
 genInputFormatD g = 
@@ -212,9 +215,11 @@ genInputConstraintsD g =
       sfwrCs = concatMap (\x -> sfwrLookup x cm) vars 
       physCs = concatMap (\x -> physLookup x cm) vars
   in
-    publicMethod g g methodTypeVoid "input_constraints" [] [ block $
-      (map (\x -> ifCond [((?!) (convExpr g x), sfwrCBody g g x)] noElse) sfwrCs) ++
-      (map (\x -> ifCond [((?!) (convExpr g x), physCBody g g x)] noElse) physCs) ]      
+    publicMethod g g methodTypeVoid "input_constraints" (getParams g $ vars)
+      [ block $
+        (map (\x -> ifCond [((?!) (convExpr g x), sfwrCBody g g x)] noElse) sfwrCs) ++
+        (map (\x -> ifCond [((?!) (convExpr g x), physCBody g g x)] noElse) physCs) 
+      ]      
 
 genInputDerived :: Generator -> Method
 genInputDerived g = 
@@ -275,13 +280,10 @@ genOutputFormatD :: Generator -> [CodeChunk] -> Method
 genOutputFormatD g outs = 
   let l_outfile = "outfile"
       v_outfile = var l_outfile
-      l_filename = "filename"
-      p_filename = param l_filename string
-      v_filename = var l_filename
   in
-    publicMethod g g methodTypeVoid "write_output" (p_filename:getParams g outs) [ block $ [
+    publicMethod g g methodTypeVoid "write_output" (getParams g outs) [ block $ [
       varDec l_outfile outfile,
-      openFileW v_outfile v_filename ] ++
+      openFileW v_outfile (litString "output.txt") ] ++
       concatMap 
         (\x -> [ printFileStr v_outfile ((codeName x) ++ " = "), 
                  printFileLn v_outfile (convType $ codeType x) (variable g g $ codeName x)
@@ -349,15 +351,22 @@ genMain g = genModule g "Control" (Just $ \x -> [genMainFunc x]) Nothing
 genMainFunc :: Generator -> FunctionDecl
 genMainFunc g = 
   let l_filename = "inputfile"
-      v_filename = var "inputfile"
+      v_filename = var l_filename
+      l_params = "inParams"
+      v_params = var l_params
   in
     mainMethod $ body $ [
       varDecDef l_filename string $ arg 0 ,
-      objDecNewVoid "params" "InputParameters" (obj "InputParameters") ,
-      valStmt $ funcApp' "get_input" [v_filename, var "params"] ,     
-      valStmt $ funcApp' "derived_params" [var "params"] ,      
-      valStmt $ funcApp' "check_constraints" [var "params"]
-    ] ++ map (\x -> varDecDef (codeName x) (convType $ codeType x) (fApp g g (codeName x) (map (var . codeName) $ codevars $ codeEquat x)))  (execOrder $ codeSpec g)
+      objDecNewVoid l_params "InputParameters" (obj "InputParameters") ,
+      valStmt $ fApp g g "get_input" [v_filename, v_params] ,     
+      valStmt $ fApp g g "derived_values" [v_params] ,      
+      valStmt $ fApp g g "input_constraints" [v_params]
+    ] ++ map (\x -> varDecDef (codeName x) (convType $ codeType x) 
+                    (fApp g g (codeName x) (getArgs g $ codevars' $ codeEquat x)))
+          (execOrder $ codeSpec g)
+    ++ [
+      valStmt $ fApp g g "write_output" $ getArgs g $ outputs $ codeSpec g
+    ]
 
 
 -----
@@ -386,7 +395,17 @@ getParams g cs =
   in  if length csSubIns < length cs
       then (param "inParams" (obj "InputParameters")):ps  -- todo:  make general
       else ps
-          
+      
+getArgs :: Generator -> [CodeChunk] -> [Value]
+getArgs g cs = 
+  let ins = inputs $ codeSpec g
+      csSubIns = cs \\ ins
+      args = map (var . codeName) 
+            (filter (\x -> not $ member (codeName x) (constMap $ codeSpec g)) csSubIns)     
+  in  if length csSubIns < length cs
+      then (var "inParams"):args  -- todo:  make general
+      else args
+      
 paramType :: Parameter -> StateType
 paramType (StateParam _ s) = s
 paramType (FuncParam _ _ _) = error "Function param not implemented"
@@ -455,6 +474,7 @@ validExpr (Case c)     = foldl (&&) True (map (\(e, r) -> validExpr e && validEx
 validExpr _            = False
 
 validunop :: UFunc -> Bool
+validunop (E.Sqrt e)         = validExpr e
 validunop (E.Log e)          = validExpr e
 validunop (E.Abs e)          = validExpr e
 validunop (E.Exp e)          = validExpr e
@@ -502,6 +522,7 @@ convExpr _ (Case _)     = error "**convExpr :: Case should be dealt with separat
 convExpr _ _           = litString "**convExpr :: ? unimplemented**"
 
 unop :: Generator -> UFunc -> Value
+unop g (E.Sqrt e)         = (#/^) (convExpr g e)
 unop g (E.Log e)          = I.log (convExpr g e)
 unop g (E.Abs e)          = (#|) (convExpr g e)
 unop g (E.Exp e)          = I.exp (convExpr g e)
@@ -539,6 +560,7 @@ containsCase (BinaryOp _) = error "not implemented"
 containsCase _            = False
 
 unopcase :: UFunc -> Bool
+unopcase (E.Sqrt e)         = containsCase e
 unopcase (E.Log e)          = containsCase e
 unopcase (E.Abs e)          = containsCase e
 unopcase (E.Exp e)          = containsCase e
@@ -578,6 +600,7 @@ compactCase (BinaryOp _) = error "not implemented"
 compactCase e            = e
 
 unopcomcase :: UFunc -> Expr
+unopcomcase (E.Sqrt e)  = compactCaseUnary (UnaryOp . E.Sqrt) e
 unopcomcase (E.Log e)   = compactCaseUnary (UnaryOp . E.Log) e
 unopcomcase (E.Abs e)   = compactCaseUnary (UnaryOp . E.Abs) e
 unopcomcase (E.Exp e)   = compactCaseUnary (UnaryOp . E.Exp) e

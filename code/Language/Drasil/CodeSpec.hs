@@ -71,15 +71,15 @@ getStr (P s) = symbToCodeName s
 getStr ((:+:) s1 s2) = getStr s1 ++ getStr s2
 getStr _ = error "Term is not a string" 
 
-codeSpec :: SystemInformation -> [Mod] -> CodeSpec
+codeSpec :: SystemInformation -> [Mod] -> SymbolMap -> CodeSpec
 codeSpec si ms = codeSpec' si defaultChoices ms
 
-codeSpec' :: SystemInformation -> Choices -> [Mod] -> CodeSpec
-codeSpec' (SI {_sys = sys, _quants = q, _definitions = defs, _inputs = ins, _outputs = outs, _constraints = cs, _constants = constants}) ch ms = 
+codeSpec' :: SystemInformation -> Choices -> [Mod] -> SymbolMap -> CodeSpec
+codeSpec' (SI {_sys = sys, _quants = q, _definitions = defs, _inputs = ins, _outputs = outs, _constraints = cs, _constants = constants}) ch ms sm = 
   let inputs' = map codevar ins
       const' = map qtoc constants
       defs' = map qtoc defs
-      derived = getDerivedInputs defs' inputs' const'
+      derived = getDerivedInputs defs' inputs' const' sm
       rels = defs' \\ derived
       mods' = (packmod "Calculations" $ map FCD rels):ms 
       mem   = modExportMap mods' inputs' const'
@@ -92,7 +92,7 @@ codeSpec' (SI {_sys = sys, _quants = q, _definitions = defs, _inputs = ins, _out
         derivedInputs = derived,
         outputs = outs',
         relations = rels,
-        execOrder = getExecOrder rels (allInputs ++ map codevar const') outs',
+        execOrder = getExecOrder rels (allInputs ++ map codevar const') outs' sm,
         cMap = constraintMap cs,
         fMap = assocToMap $ rels,
         vMap = assocToMap (map codevar q),
@@ -101,7 +101,7 @@ codeSpec' (SI {_sys = sys, _quants = q, _definitions = defs, _inputs = ins, _out
         const = const',
         choices = ch,
         mods = mods',
-        dMap = modDepMap mem mods'
+        dMap = modDepMap mem mods' sm
       }
 
 data Choices = Choices {
@@ -231,8 +231,8 @@ modExportMap ms ins _ = Map.fromList $ concatMap mpair ms
           
 type ModDepMap = Map.Map String [String]
 
-modDepMap :: ModExportMap -> [Mod] -> ModDepMap
-modDepMap mem ms = Map.fromList $ map (\(Mod n _) -> n) ms `zip` map getModDep ms 
+modDepMap :: ModExportMap -> [Mod] -> SymbolMap -> ModDepMap
+modDepMap mem ms sm = Map.fromList $ map (\(Mod n _) -> n) ms `zip` map getModDep ms 
                                    ++ [("Control", [ "InputParameters",  
                                                      "DerivedValues",
                                                      "InputConstraints",
@@ -243,17 +243,17 @@ modDepMap mem ms = Map.fromList $ map (\(Mod n _) -> n) ms `zip` map getModDep m
   where getModDep (Mod name funcs) = 
           delete name $ nub $ concatMap getDep (concatMap fdep funcs)
         getDep n = maybe [] (\x -> [x]) (Map.lookup n mem)        
-        fdep (FCD cd) = codeName cd:map codeName (codevars $ codeEquat cd)
+        fdep (FCD cd) = codeName cd:map codeName (codevars (codeEquat cd) sm)
         fdep (FDef (FuncDef _ i _ fs)) = map codeName (i ++ concatMap fstdep fs)
         fdep (FData (FuncData _ d)) = map codeName $ getInputs d   
         fstdep (FDec cc _) = [cc]
-        fstdep (FAsg cc e) = cc:codevars e
-        fstdep (FFor cc e fs) = cc:(codevars e ++ concatMap fstdep fs)
-        fstdep (FWhile e fs) = codevars e ++ concatMap fstdep fs
-        fstdep (FCond e tfs efs) = codevars e ++ concatMap fstdep tfs ++ concatMap fstdep efs
-        fstdep (FRet e) = codevars e
+        fstdep (FAsg cc e) = cc:codevars e sm
+        fstdep (FFor cc e fs) = cc:(codevars e sm ++ concatMap fstdep fs)
+        fstdep (FWhile e fs) = codevars e sm ++ concatMap fstdep fs
+        fstdep (FCond e tfs efs) = codevars e sm ++ concatMap fstdep tfs ++ concatMap fstdep efs
+        fstdep (FRet e) = codevars e sm
         fstdep (FTry tfs cfs) = concatMap fstdep tfs ++ concatMap fstdep cfs
-        fstdep (FVal e) = codevars e
+        fstdep (FVal e) = codevars e sm
         fstdep _ = []
        
 fname :: Func -> Name       
@@ -262,19 +262,19 @@ fname (FDef (FuncDef n _ _ _)) = n
 fname (FData (FuncData n _)) = n 
 
 
-getDerivedInputs :: [Def] -> [Input] -> [Const] -> [CodeDefinition]
-getDerivedInputs defs ins consts =
+getDerivedInputs :: [Def] -> [Input] -> [Const] -> SymbolMap -> [CodeDefinition]
+getDerivedInputs defs ins consts sm =
   let refSet = ins ++ map codevar consts 
-  in  filter ((`subsetOf` refSet) . codevars . codeEquat) defs
+  in  filter ((`subsetOf` refSet) . flip codevars sm . codeEquat) defs
   
 type Known = CodeChunk
 type Need  = CodeChunk
 
-getExecOrder :: [Def] -> [Known] -> [Need] -> [Def]
-getExecOrder d k' n' = getExecOrder' [] d k' (n' \\ k')
+getExecOrder :: [Def] -> [Known] -> [Need] -> SymbolMap -> [Def]
+getExecOrder d k' n' sm = getExecOrder' [] d k' (n' \\ k')
   where getExecOrder' ord _ _ []   = ord
         getExecOrder' ord defs k n = 
-          let new  = filter ((`subsetOf` k) . codevars' . codeEquat) defs
+          let new  = filter ((`subsetOf` k) . flip codevars' sm . codeEquat) defs
               kNew = k ++ map codevar new
               nNew = n \\ map codevar new
           in  getExecOrder' (ord ++ new) (defs \\ new) kNew nNew

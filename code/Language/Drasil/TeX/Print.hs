@@ -23,9 +23,10 @@ import Language.Drasil.Symbol (Symbol(..),Decoration(..))
 import qualified Language.Drasil.Document as L
 import Language.Drasil.Unicode (RenderGreek(..), RenderSpecial(..))
 import Language.Drasil.People (People,rendPersLFM,lstName,Person(..),Conv(Mono))
+import Language.Drasil.ChunkDB (SymbolMap)
 
-genTeX :: A.DocType -> L.Document -> TP.Doc
-genTeX typ doc = runPrint (build typ $ I.makeDocument doc) Text
+genTeX :: A.DocType -> L.Document -> SymbolMap -> TP.Doc
+genTeX typ doc sm = runPrint (build typ $ I.makeDocument doc sm) Text
 
 build :: A.DocType -> Document -> D
 build (A.SRS _) doc   = buildStd doc

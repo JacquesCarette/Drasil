@@ -16,7 +16,7 @@ import Language.Drasil.Chunk.NamedIdea (term)
 import Language.Drasil.Chunk.SymbolForm (SymbolForm)
 import Language.Drasil.Chunk.Concept (defn)
 import Language.Drasil.Chunk.VarChunk (VarChunk)
-import Language.Drasil.ChunkDB (SymbolMap, getUnitLup)
+import Language.Drasil.ChunkDB (SymbolMap, getUnitLup, symbLookup)
 import Language.Drasil.Config (verboseDDDescription, numberedDDEquations, numberedTMEquations)
 import Language.Drasil.Document
 import Language.Drasil.Symbol
@@ -26,87 +26,87 @@ import Language.Drasil.NounPhrase (phrase, titleize)
 import Language.Drasil.Unit (usymb)
 import Language.Drasil.Citations (Citation(..),CiteField(..))
 
-expr :: Expr -> T.Expr
-expr (V v)             = T.Var  v
-expr (Dbl d)           = T.Dbl  d
-expr (Int i)           = T.Int  i
-expr (Bln b)           = T.Bln  b
-expr (a :* b)          = T.Mul  (expr a) (expr b)
-expr (a :+ b)          = T.Add  (expr a) (expr b)
-expr (a :/ b)          = T.Frac (replace_divs a) (replace_divs b)
-expr (a :^ b)          = T.Pow  (expr a) (expr b)
-expr (a :- b)          = T.Sub  (expr a) (expr b)
-expr (a :. b)          = T.Dot  (expr a) (expr b)
-expr (Neg a)           = T.Neg  (expr a)
-expr (C c)             = T.Sym  (c ^. symbol)
-expr (Deriv Part a 1)  = T.Mul (T.Sym (Special Partial)) (expr a)
-expr (Deriv Total a 1) = T.Mul (T.Sym lD) (expr a)
-expr (Deriv Part a b)  = T.Frac (T.Mul (T.Sym (Special Partial)) (expr a))
-                           (T.Mul (T.Sym (Special Partial)) (expr b))
-expr (Deriv Total a b) = T.Frac (T.Mul (T.Sym lD) (expr a))
-                           (T.Mul (T.Sym lD) (expr b))
-expr (FCall f x)       = T.Call (expr f) (map expr x)
-expr (Case ps)         = if length ps < 2 then 
-                    error "Attempting to use multi-case expr incorrectly"
-                    else T.Case (zip (map (expr . fst) ps) (map (rel . snd) ps))
-expr x@(_ := _)        = rel x
-expr x@(_ :!= _)       = rel x
-expr x@(_ :> _)        = rel x
-expr x@(_ :< _)        = rel x
-expr x@(_ :<= _)       = rel x
-expr x@(_ :>= _)       = rel x
-expr (Matrix a)        = T.Mtx $ map (map expr) a
-expr (Index a i)       = T.Index (expr a) (expr i)
-expr (UnaryOp u)       = (\(x,y) -> T.Op x [y]) (ufunc u)
-expr (Grouping e)      = T.Grouping (expr e)
-expr (BinaryOp b)      = (\(x,y) -> T.Op x y) (bfunc b)
-expr (Not a)           = T.Not  (expr a)
-expr (a :&& b)         = T.And  (expr a) (expr b)
-expr (a :|| b)         = T.Or   (expr a) (expr b)
-expr (a  :=>  b)       = T.Impl  (expr a) (expr b)
-expr (a  :<=> b)       = T.Iff   (expr a) (expr b)
-expr (IsIn  a b)       = T.IsIn  (map expr a) (set b)
-expr (NotIn a b)       = T.NotIn (map expr a) (set b)
-expr (State a b)       = T.State (map quan a) (expr b)
+expr :: Expr -> SymbolMap -> T.Expr
+expr (V v)              _ = T.Var  v
+expr (Dbl d)            _ = T.Dbl  d
+expr (Int i)            _ = T.Int  i
+expr (Bln b)            _ = T.Bln  b
+expr (a :* b)          sm = T.Mul  (expr a sm) (expr b sm)
+expr (a :+ b)          sm = T.Add  (expr a sm) (expr b sm)
+expr (a :/ b)          sm = T.Frac (replace_divs a sm) (replace_divs b sm)
+expr (a :^ b)          sm = T.Pow  (expr a sm) (expr b sm)
+expr (a :- b)          sm = T.Sub  (expr a sm) (expr b sm)
+expr (a :. b)          sm = T.Dot  (expr a sm) (expr b sm)
+expr (Neg a)           sm = T.Neg  (expr a sm)
+expr (C c)             sm = T.Sym  (symbol (symbLookup c sm))
+expr (Deriv Part a 1)  sm = T.Mul (T.Sym (Special Partial)) (expr a sm)
+expr (Deriv Total a 1) sm = T.Mul (T.Sym lD) (expr a sm)
+expr (Deriv Part a b)  sm = T.Frac (T.Mul (T.Sym (Special Partial)) (expr a sm))
+                           (T.Mul (T.Sym (Special Partial)) (expr b sm))
+expr (Deriv Total a b) sm = T.Frac (T.Mul (T.Sym lD) (expr a sm))
+                           (T.Mul (T.Sym lD) (expr b sm))
+expr (FCall f x)       sm = T.Call (expr f sm) (map (flip expr sm) x)
+expr (Case ps)         sm = if length ps < 2 then 
+        error "Attempting to use multi-case expr incorrectly"
+        else T.Case (zip (map (flip expr sm . fst) ps) (map (flip rel sm . snd) ps))
+expr x@(_ := _)        sm = rel x sm
+expr x@(_ :!= _)       sm = rel x sm
+expr x@(_ :> _)        sm = rel x sm
+expr x@(_ :< _)        sm = rel x sm
+expr x@(_ :<= _)       sm = rel x sm
+expr x@(_ :>= _)       sm = rel x sm
+expr (Matrix a)        sm = T.Mtx $ map (map (flip expr sm)) a
+expr (Index a i)       sm = T.Index (expr a sm) (expr i sm)
+expr (UnaryOp u)       sm = (\(x,y) -> T.Op x [y]) (ufunc u sm)
+expr (Grouping e)      sm = T.Grouping (expr e sm)
+expr (BinaryOp b)      sm = (\(x,y) -> T.Op x y) (bfunc b sm)
+expr (Not a)           sm = T.Not  (expr a sm)
+expr (a :&& b)         sm = T.And  (expr a sm) (expr b sm)
+expr (a :|| b)         sm = T.Or   (expr a sm) (expr b sm)
+expr (a  :=>  b)       sm = T.Impl  (expr a sm) (expr b sm)
+expr (a  :<=> b)       sm = T.Iff   (expr a sm) (expr b sm)
+expr (IsIn  a b)       sm = T.IsIn  (map (flip expr sm) a) (set b)
+expr (NotIn a b)       sm = T.NotIn (map (flip expr sm) a) (set b)
+expr (State a b)       sm = T.State (map (flip quan sm) a) (expr b sm)
 
 -- | Healper for translating Quantifier
-quan :: Quantifier -> T.Quantifier
-quan (Forall e) = T.Forall (expr e)
-quan (Exists e) = T.Exists (expr e)
+quan :: Quantifier -> SymbolMap -> T.Quantifier
+quan (Forall e) sm = T.Forall (expr e sm)
+quan (Exists e) sm = T.Exists (expr e sm)
 
-ufunc :: UFunc -> (T.Function, T.Expr)
-ufunc (Log e) = (T.Log, expr e)
-ufunc (Summation (Just (s, Low v, High h)) e) = 
-  (T.Summation (Just ((s, expr v), expr h)), expr e)
-ufunc (Summation Nothing e) = (T.Summation Nothing, expr e)
-ufunc (Summation _ _) = error "TeX/Import.hs Incorrect use of Summation"
-ufunc (Abs e) = (T.Abs, expr e)
-ufunc (Norm e) = (T.Norm, expr e)
-ufunc i@(Integral _ _ _) = integral i
-ufunc (Sin e) = (T.Sin, expr e)
-ufunc (Cos e) = (T.Cos, expr e)
-ufunc (Tan e) = (T.Tan, expr e)
-ufunc (Sec e) = (T.Sec, expr e)
-ufunc (Csc e) = (T.Csc, expr e)
-ufunc (Cot e) = (T.Cot, expr e)
-ufunc (Product (Just (s, Low v, High h)) e) = 
-  (T.Product (Just ((s, expr v), expr h)), expr e)
-ufunc (Product Nothing e) = (T.Product Nothing, expr e)
-ufunc (Product _ _) = error "TeX/Import.hs Incorrect use of Product"
-ufunc (Exp e) = (T.Exp, expr e)
-ufunc (Sqrt e) = (T.Sqrt, expr e)
+ufunc :: UFunc -> SymbolMap -> (T.Function, T.Expr)
+ufunc (Log e) sm = (T.Log, expr e sm)
+ufunc (Summation (Just (s, Low v, High h)) e) sm = 
+  (T.Summation (Just ((s, expr v sm), expr h sm)), expr e sm)
+ufunc (Summation Nothing e) sm = (T.Summation Nothing, expr e sm)
+ufunc (Summation _ _) _ = error "TeX/Import.hs Incorrect use of Summation"
+ufunc (Abs e) sm = (T.Abs, expr e sm)
+ufunc (Norm e) sm = (T.Norm, expr e sm)
+ufunc i@(Integral _ _ _) sm = integral i sm
+ufunc (Sin e) sm = (T.Sin, expr e sm)
+ufunc (Cos e) sm = (T.Cos, expr e sm)
+ufunc (Tan e) sm = (T.Tan, expr e sm)
+ufunc (Sec e) sm = (T.Sec, expr e sm)
+ufunc (Csc e) sm = (T.Csc, expr e sm)
+ufunc (Cot e) sm = (T.Cot, expr e sm)
+ufunc (Product (Just (s, Low v, High h)) e) sm = 
+  (T.Product (Just ((s, expr v sm), expr h sm)), expr e sm)
+ufunc (Product Nothing e) sm = (T.Product Nothing, expr e sm)
+ufunc (Product _ _) _ = error "TeX/Import.hs Incorrect use of Product"
+ufunc (Exp e) sm = (T.Exp, expr e sm)
+ufunc (Sqrt e) sm = (T.Sqrt, expr e sm)
 
-bfunc :: BiFunc -> (T.Function, [T.Expr])
-bfunc (Cross e1 e2) = (T.Cross, map expr [e1,e2])
+bfunc :: BiFunc -> SymbolMap -> (T.Function, [T.Expr])
+bfunc (Cross e1 e2) sm = (T.Cross, map (flip expr sm) [e1,e2])
 
-rel :: Relation -> T.Expr
-rel (a := b) = T.Eq (expr a) (expr b)
-rel (a :!= b)= T.NEq (expr a) (expr b)
-rel (a :< b) = T.Lt (expr a) (expr b)
-rel (a :> b) = T.Gt (expr a) (expr b)
-rel (a :<= b) = T.LEq (expr a) (expr b)
-rel (a :>= b) = T.GEq (expr a) (expr b)
-rel _ = error "Attempting to use non-Relation Expr in relation context."
+rel :: Relation -> SymbolMap -> T.Expr
+rel (a := b)  sm = T.Eq (expr a sm) (expr b sm)
+rel (a :!= b) sm = T.NEq (expr a sm) (expr b sm)
+rel (a :< b)  sm = T.Lt (expr a sm) (expr b sm)
+rel (a :> b)  sm = T.Gt (expr a sm) (expr b sm)
+rel (a :<= b) sm = T.LEq (expr a sm) (expr b sm)
+rel (a :>= b) sm = T.GEq (expr a sm) (expr b sm)
+rel _ _ = error "Attempting to use non-Relation Expr in relation context."
 
 -- | Helper for translating Sets
 set :: Set -> T.Set
@@ -125,48 +125,48 @@ set (DiscreteD a) = T.DiscreteD a
 set (DiscreteS a) = T.DiscreteS a
 
 -- | Helper function for translating Integrals (from 'UFunc')
-integral :: UFunc -> (T.Function, T.Expr)
-integral (Integral (Just (Low v), Just (High h)) e wrtc) = 
-  (T.Integral (Just (expr v), Just (expr h)) (int_wrt wrtc), expr e)
-integral (Integral (Just (High h), Just (Low v)) e wrtc) = 
-  (T.Integral (Just (expr v), Just (expr h)) (int_wrt wrtc), expr e)
-integral (Integral (Just (Low v), Nothing) e wrtc) = 
-  (T.Integral (Just (expr v), Nothing) (int_wrt wrtc), expr e)
-integral (Integral (Nothing, Just (Low v)) e wrtc) = 
-  (T.Integral (Just (expr v), Nothing) (int_wrt wrtc), expr e)
-integral (Integral (Just (High h), Nothing) e wrtc) = 
-  (T.Integral (Nothing, Just (expr h)) (int_wrt wrtc), expr e)
-integral (Integral (Nothing, Just (High h)) e wrtc) = 
-  (T.Integral (Nothing, Just (expr h)) (int_wrt wrtc), expr e)
-integral (Integral (Nothing, Nothing) e wrtc) = 
-  (T.Integral (Nothing, Nothing) (int_wrt wrtc), expr e)
-integral _ = error "TeX/Import.hs Incorrect use of Integral"
+integral :: UFunc -> SymbolMap -> (T.Function, T.Expr)
+integral (Integral (Just (Low v), Just (High h)) e wrtc) sm = 
+  (T.Integral (Just (expr v sm), Just (expr h sm)) (int_wrt wrtc sm), expr e sm)
+integral (Integral (Just (High h), Just (Low v)) e wrtc) sm = 
+  (T.Integral (Just (expr v sm), Just (expr h sm)) (int_wrt wrtc sm), expr e sm)
+integral (Integral (Just (Low v), Nothing) e wrtc) sm = 
+  (T.Integral (Just (expr v sm), Nothing) (int_wrt wrtc sm), expr e sm)
+integral (Integral (Nothing, Just (Low v)) e wrtc) sm = 
+  (T.Integral (Just (expr v sm), Nothing) (int_wrt wrtc sm), expr e sm)
+integral (Integral (Just (High h), Nothing) e wrtc) sm = 
+  (T.Integral (Nothing, Just (expr h sm)) (int_wrt wrtc sm), expr e sm)
+integral (Integral (Nothing, Just (High h)) e wrtc) sm = 
+  (T.Integral (Nothing, Just (expr h sm)) (int_wrt wrtc sm), expr e sm)
+integral (Integral (Nothing, Nothing) e wrtc) sm = 
+  (T.Integral (Nothing, Nothing) (int_wrt wrtc sm), expr e sm)
+integral _ _ = error "TeX/Import.hs Incorrect use of Integral"
 
-int_wrt :: (SymbolForm c) => c -> T.Expr
-int_wrt wrtc = (expr (Deriv Total (C wrtc) 1))
+int_wrt :: (SymbolForm c) => c -> SymbolMap -> T.Expr
+int_wrt wrtc sm = expr (Deriv Total (C wrtc) 1) sm
 
-replace_divs :: Expr -> T.Expr
-replace_divs (a :/ b) = T.Div (replace_divs a) (replace_divs b)
-replace_divs (a :+ b) = T.Add (replace_divs a) (replace_divs b)
-replace_divs (a :* b) = T.Mul (replace_divs a) (replace_divs b)
-replace_divs (a :^ b) = T.Pow (replace_divs a) (replace_divs b)
-replace_divs (a :- b) = T.Sub (replace_divs a) (replace_divs b)
-replace_divs a        = expr a
+replace_divs :: Expr -> SymbolMap -> T.Expr
+replace_divs (a :/ b) sm = T.Div (replace_divs a sm) (replace_divs b sm)
+replace_divs (a :+ b) sm = T.Add (replace_divs a sm) (replace_divs b sm)
+replace_divs (a :* b) sm = T.Mul (replace_divs a sm) (replace_divs b sm)
+replace_divs (a :^ b) sm = T.Pow (replace_divs a sm) (replace_divs b sm)
+replace_divs (a :- b) sm = T.Sub (replace_divs a sm) (replace_divs b sm)
+replace_divs a        sm = expr a sm
 
-spec :: Sentence -> T.Spec
-spec (S s)     = T.S s
-spec (Sy s)    = T.Sy s
-spec (EmptyS :+: b) = spec b
-spec (a :+: EmptyS) = spec a
-spec (a :+: b) = spec a T.:+: spec b
-spec (G g)     = T.G g
-spec (Sp s)    = T.Sp s
-spec (F f s)   = spec $ accent f s
-spec (P s)     = T.N s
-spec (Ref t r) = T.Ref t (spec r)
-spec (Quote q) = T.S "``" T.:+: spec q T.:+: T.S "\""
-spec EmptyS    = T.EmptyS
-spec (E e)     = T.E $ expr e
+spec :: Sentence -> SymbolMap -> T.Spec
+spec (S s)      _ = T.S s
+spec (Sy s)     _ = T.Sy s
+spec (EmptyS :+: b) sm = spec b sm
+spec (a :+: EmptyS) sm = spec a sm
+spec (a :+: b) sm = spec a sm T.:+: spec b sm
+spec (G g)      _ = T.G g
+spec (Sp s)     _ = T.Sp s
+spec (F f s)   sm = spec (accent f s) sm
+spec (P s)      _ = T.N s
+spec (Ref t r) sm = T.Ref t (spec r sm)
+spec (Quote q) sm = T.S "``" T.:+: spec q sm T.:+: T.S "\""
+spec EmptyS     _ = T.EmptyS
+spec (E e)     sm = T.E $ expr e sm
 
 decorate :: Decoration -> Sentence -> Sentence
 decorate Hat    s = S "\\hat{" :+: s :+: S "}"
@@ -177,121 +177,121 @@ accent :: Accent -> Char -> Sentence
 accent Grave  s = S $ "\\`{" ++ (s : "}")
 accent Acute  s = S $ "\\'{" ++ (s : "}")
 
-makeDocument :: Document -> T.Document
-makeDocument (Document title author sections) = 
-  T.Document (spec title) (spec author) (createLayout sections)
+makeDocument :: Document -> SymbolMap -> T.Document
+makeDocument (Document title author sections) sm = 
+  T.Document (spec title sm) (spec author sm) (createLayout sections sm)
 
-layout :: Int -> SecCons -> T.LayoutObj
+layout :: Int -> SecCons -> SymbolMap -> T.LayoutObj
 layout currDepth (Sub s) = sec (currDepth+1) s
 layout _         (Con c) = lay c
 
-createLayout :: Sections -> [T.LayoutObj]
-createLayout = map (sec 0)
+createLayout :: Sections -> SymbolMap -> [T.LayoutObj]
+createLayout secs sm = map (flip (sec 0) sm) secs
 
-sec :: Int -> Section -> T.LayoutObj
-sec depth x@(Section title contents) = 
-  T.Section depth (spec title) (map (layout depth) contents) (spec $ refName x)
+sec :: Int -> Section -> SymbolMap -> T.LayoutObj
+sec depth x@(Section title contents) sm = 
+  T.Section depth (spec title sm) (map (flip (layout depth) sm) contents) (spec (refName x) sm)
 
-lay :: Contents -> T.LayoutObj
-lay x@(Table hdr lls t b) 
-  | null lls || length hdr == length (head lls) = T.Table ((map spec hdr) :
-      (map (map spec) lls)) (spec (refName x)) b (spec t)
+lay :: Contents -> SymbolMap -> T.LayoutObj
+lay x@(Table hdr lls t b) sm
+  | null lls || length hdr == length (head lls) = T.Table ((map (flip spec sm) hdr) :
+      (map (map (flip spec sm)) lls)) (spec (refName x) sm) b (spec t sm)
   | otherwise = error $ "Attempting to make table with " ++ show (length hdr) ++
                         " headers, but data contains " ++ 
                         show (length (head lls)) ++ " columns."
-lay (Paragraph c)         = T.Paragraph (spec c)
-lay (EqnBlock c)          = T.EqnBlock (T.E (expr c))
+lay (Paragraph c)         sm = T.Paragraph (spec c sm)
+lay (EqnBlock c)          sm = T.EqnBlock (T.E (expr c sm))
 --lay (CodeBlock c)         = T.CodeBlock c
-lay x@(Definition m c)      = T.Definition (makePairs c m) (spec $ refName x)
-lay (Enumeration cs)      = T.List $ makeL cs
-lay x@(Figure c f)        = T.Figure (spec (refName x)) (spec c) f
-lay x@(Module m)          = T.Module (formatName m) (spec $ refName x)
-lay x@(Requirement r)     = 
-  T.Requirement (spec (phrase (r ^. term))) (spec $ refName x)
-lay x@(Assumption a)      = 
-  T.Assumption (spec (phrase $ a ^. term)) (spec $ refName x)
-lay x@(LikelyChange lc)   = 
-  T.LikelyChange (spec (phrase $ lc ^. term))
-  (spec $ refName x)
-lay x@(UnlikelyChange ucc)= 
-  T.UnlikelyChange (spec (phrase $ ucc ^. term))
-  (spec $ refName x)
-lay x@(Graph ps w h t)    = T.Graph (map (\(y,z) -> (spec y, spec z)) ps)
-                              w h (spec t) (spec $ refName x)
-lay (TMod ps r _)         = T.Definition (map (\(x,y) -> (x, map lay y)) ps)
-  (spec r)
-lay (DDef ps r _)         = T.Definition (map (\(x,y) -> (x, map lay y)) ps)
-  (spec r)
-lay (Defnt _ _ _)     = T.Paragraph (T.EmptyS)  -- need to implement!
-lay (GDef)            = T.Paragraph (T.EmptyS)  -- need to implement!
-lay (IMod)            = T.Paragraph (T.EmptyS)  -- need to implement!
-lay (Bib bib)         = T.Bib $ map layCite bib
+lay x@(Definition _ c)    sm = T.Definition (makePairs c sm) (spec (refName x) sm)
+lay (Enumeration cs)      sm = T.List $ makeL cs sm
+lay x@(Figure c f)        sm = T.Figure (spec (refName x) sm) (spec c sm) f
+lay x@(Module m)          sm = T.Module (formatName m) (spec (refName x) sm)
+lay x@(Requirement r)     sm = 
+  T.Requirement (spec (phrase (r ^. term)) sm) (spec (refName x) sm)
+lay x@(Assumption a)      sm = 
+  T.Assumption (spec (phrase $ a ^. term) sm) (spec (refName x) sm)
+lay x@(LikelyChange lc)   sm = 
+  T.LikelyChange (spec (phrase $ lc ^. term) sm)
+  (spec (refName x) sm)
+lay x@(UnlikelyChange ucc) sm = 
+  T.UnlikelyChange (spec (phrase $ ucc ^. term) sm)
+  (spec (refName x) sm)
+lay x@(Graph ps w h t)    sm = T.Graph (map (\(y,z) -> (spec y sm, spec z sm)) ps)
+                               w h (spec t sm) (spec (refName x) sm)
+lay (TMod ps r _)         sm = T.Definition (map (\(x,y) -> 
+  (x, map (flip lay sm) y)) ps) (spec r sm)
+lay (DDef ps r _)         sm = T.Definition (map (\(x,y) -> 
+  (x, map (flip lay sm) y)) ps) (spec r sm)
+lay (Defnt _ _ _)      _ = T.Paragraph (T.EmptyS)  -- need to implement!
+lay (GDef)             _ = T.Paragraph (T.EmptyS)  -- need to implement!
+lay (IMod)             _ = T.Paragraph (T.EmptyS)  -- need to implement!
+lay (Bib bib)         sm = T.Bib $ map (flip layCite sm) bib
 
 -- | For importing bibliography
-layCite :: Citation -> T.Citation
-layCite (Book      fields) = T.Book      $ map layField fields
-layCite (Article   fields) = T.Article   $ map layField fields
-layCite (MThesis   fields) = T.MThesis   $ map layField fields
-layCite (PhDThesis fields) = T.PhDThesis $ map layField fields
-layCite (Misc      fields) = T.Misc      $ map layField fields
-layCite (Online    fields) = T.Online    $ map layField fields
+layCite :: Citation -> SymbolMap -> T.Citation
+layCite (Book      fields) sm = T.Book      $ map (flip layField sm) fields
+layCite (Article   fields) sm = T.Article   $ map (flip layField sm) fields
+layCite (MThesis   fields) sm = T.MThesis   $ map (flip layField sm) fields
+layCite (PhDThesis fields) sm = T.PhDThesis $ map (flip layField sm) fields
+layCite (Misc      fields) sm = T.Misc      $ map (flip layField sm) fields
+layCite (Online    fields) sm = T.Online    $ map (flip layField sm) fields
 
-layField :: CiteField -> T.CiteField
-layField (Author     p) = T.Author     p
-layField (Title      s) = T.Title      $ spec s
-layField (Series     s) = T.Series     $ spec s
-layField (Collection s) = T.Collection $ spec s
-layField (Volume     n) = T.Volume     n
-layField (Edition    n) = T.Edition    n
-layField (Place (c, s)) = T.Place (spec c, spec s)
-layField (Publisher  s) = T.Publisher $ spec s
-layField (Journal    s) = T.Journal   $ spec s
-layField (Year       n) = T.Year       n
-layField (Date    n m y) = T.Date    n m y
-layField (URLdate n m y) = T.URLdate n m y
-layField (Page       n) = T.Page       n
-layField (Pages     ns) = T.Pages     ns
-layField (Note       s) = T.Note       $ spec s
-layField (Issue      n) = T.Issue      n
-layField (School     s) = T.School     $ spec s
-layField (URL        n) = T.URL        $ spec n
-layField (HowPub     s) = T.HowPub     $ spec s
-layField (Editor     p) = T.Editor     p
+layField :: CiteField -> SymbolMap -> T.CiteField
+layField (Author     p)  _ = T.Author     p
+layField (Title      s) sm = T.Title      $ spec s sm
+layField (Series     s) sm = T.Series     $ spec s sm
+layField (Collection s) sm = T.Collection $ spec s sm
+layField (Volume     n)  _ = T.Volume     n
+layField (Edition    n)  _ = T.Edition    n
+layField (Place (c, s)) sm = T.Place (spec c sm, spec s sm)
+layField (Publisher  s) sm = T.Publisher $ spec s sm
+layField (Journal    s) sm = T.Journal   $ spec s sm
+layField (Year       n)  _ = T.Year       n
+layField (Date    n m y) _ = T.Date    n m y
+layField (URLdate n m y) _ = T.URLdate n m y
+layField (Page       n)  _ = T.Page       n
+layField (Pages     ns)  _ = T.Pages     ns
+layField (Note       s) sm = T.Note       $ spec s sm
+layField (Issue      n)  _ = T.Issue      n
+layField (School     s) sm = T.School     $ spec s sm
+layField (URL        n) sm = T.URL        $ spec n sm
+layField (HowPub     s) sm = T.HowPub     $ spec s sm
+layField (Editor     p)  _ = T.Editor     p
 
-makeL :: ListType -> T.ListType  
-makeL (Bullet bs)      = T.Enum        $ (map item bs)
-makeL (Number ns)      = T.Item        $ (map item ns)
-makeL (Simple ps)      = T.Simple      $ map (\(x,y) -> (spec x, item y)) ps
-makeL (Desc ps)        = T.Desc        $ map (\(x,y) -> (spec x, item y)) ps
-makeL (Definitions ps) = T.Definitions $ map (\(x,y) -> (spec x, item y)) ps
+makeL :: ListType -> SymbolMap -> T.ListType  
+makeL (Bullet bs)      sm = T.Enum        $ (map (flip item sm) bs)
+makeL (Number ns)      sm = T.Item        $ (map (flip item sm) ns)
+makeL (Simple ps)      sm = T.Simple      $ map (\(x,y) -> (spec x sm, item y sm)) ps
+makeL (Desc ps)        sm = T.Desc        $ map (\(x,y) -> (spec x sm, item y sm)) ps
+makeL (Definitions ps) sm = T.Definitions $ map (\(x,y) -> (spec x sm, item y sm)) ps
 
-item :: ItemType -> T.ItemType
-item (Flat i) = T.Flat (spec i)
-item (Nested t s) = T.Nested (spec t) (makeL s) 
+item :: ItemType -> SymbolMap -> T.ItemType
+item (Flat i)     sm = T.Flat   (spec i sm)
+item (Nested t s) sm = T.Nested (spec t sm) (makeL s sm) 
   
 makePairs :: DType -> SymbolMap -> [(String,[T.LayoutObj])]
 makePairs (Data c) m = [
-  ("Label",       [T.Paragraph $ spec (titleize $ c ^. term)]),
-  ("Units",       [T.Paragraph $ spec $ unit'2Contents c]),
-  ("Equation",    [eqnStyleDD $ buildEqn c]),
+  ("Label",       [T.Paragraph $ spec (titleize $ c ^. term) m]),
+  ("Units",       [T.Paragraph $ spec (unit'2Contents c) m]),
+  ("Equation",    [eqnStyleDD $ buildEqn c m]),
   ("Description", [T.Paragraph (buildDDDescription c m)])
   ]
-makePairs (Theory c) _ = [
-  ("Label",       [T.Paragraph $ spec (titleize $ c ^. term)]),
-  ("Equation",    [eqnStyleTM $ T.E (rel (c ^. relat))]),
-  ("Description", [T.Paragraph (spec (c ^. defn))])
+makePairs (Theory c) m = [
+  ("Label",       [T.Paragraph $ spec (titleize $ c ^. term) m]),
+  ("Equation",    [eqnStyleTM $ T.E (rel (c ^. relat) m)]),
+  ("Description", [T.Paragraph (spec (c ^. defn) m)])
   ]
 makePairs General  _ = error "Not yet implemented"
 makePairs Instance _ = error "Not yet implemented"
 makePairs TM _       = error "Not yet implemented"
 makePairs DD _       = error "Not yet implemented"
 
-makeUHPairs :: [(ModuleChunk,[ModuleChunk])] -> [(T.Spec,T.Spec)]
-makeUHPairs []          = []
-makeUHPairs ((m,ms):xs) = (buildPairs m ms) ++ makeUHPairs xs
+makeUHPairs :: [(ModuleChunk,[ModuleChunk])] -> SymbolMap -> [(T.Spec,T.Spec)]
+makeUHPairs []           _ = []
+makeUHPairs ((m,ms):xs) sm = (buildPairs m ms) ++ makeUHPairs xs sm
   where  buildPairs _ []        = []
          buildPairs m1 (m2:ms') = (makeEntry m1, makeEntry m2):buildPairs m1 ms'
-           where  makeEntry m' = (spec $ refName $ Module m') T.:+:
+           where  makeEntry m'  = (spec (refName $ Module m') sm) T.:+:
                                   (T.S "/") T.:+: (T.S $ formatName m')
 
 -- Toggle equation style
@@ -301,8 +301,8 @@ eqnStyleDD = if numberedDDEquations then T.EqnBlock else T.Paragraph
 eqnStyleTM :: T.Contents -> T.LayoutObj
 eqnStyleTM = if numberedTMEquations then T.EqnBlock else T.Paragraph
   
-buildEqn :: QDefinition -> T.Spec  
-buildEqn c = T.N (c ^. symbol) T.:+: T.S " = " T.:+: T.E (expr (equat c))
+buildEqn :: QDefinition -> SymbolMap -> T.Spec  
+buildEqn c sm = T.N (symbol c) T.:+: T.S " = " T.:+: T.E (expr (equat c) sm)
 
 -- Build descriptions in data defs based on required verbosity
 buildDDDescription :: QDefinition -> SymbolMap -> T.Spec
@@ -312,8 +312,8 @@ buildDDDescription c m = descLines
 
 descLines :: [VarChunk] -> SymbolMap -> T.Spec  
 descLines []    _   = error "No chunks to describe"
-descLines (vc:[]) m = (T.N (vc ^. symbol) T.:+: 
-  (T.S " is the " T.:+: (spec (phrase $ vc ^. term)) T.:+:
+descLines (vc:[]) m = (T.N (symbol vc) T.:+: 
+  (T.S " is the " T.:+: (spec (phrase $ vc ^. term) m) T.:+:
    unWrp (getUnitLup vc m)))
   where unWrp (Just a) = T.S " (" T.:+: T.Sy (a ^. usymb) T.:+: T.S ")"
         unWrp Nothing  = T.S ""

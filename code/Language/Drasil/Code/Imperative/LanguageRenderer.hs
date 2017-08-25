@@ -481,8 +481,8 @@ ioDocD c (OpenFile f n m) = statementDoc c NoLoop (valStmt $ objMethodCall f "op
   where modeStr Read = "r"
         modeStr Write = "w"
 ioDocD c (CloseFile f) = statementDoc c NoLoop (valStmt $ objMethodCall f "close" [])
-ioDocD c (Out t newLn s v) = printDoc c t newLn s v <> semi
-ioDocD c (In t s v) = inputDoc c t s v <> semi
+ioDocD c (Out t newLn s v) = printDoc c t newLn s v <> end c NoLoop
+ioDocD c (In t s v) = inputDoc c t s v <> end c NoLoop
 
 inputDocD :: Config -> IOType -> StateType -> Maybe Value -> Doc
 inputDocD _ _ (Base (FileType _)) _ = error "File type is not valid input"

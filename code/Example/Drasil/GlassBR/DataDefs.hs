@@ -39,7 +39,7 @@ gbQDefns = [Parallel hFromt {-DD2-} [glaTyFac {-DD6-}]] ++ --can be calculated o
 risk_eq :: Expr
 risk_eq = ((C sflawParamK) / (Grouping ((C plate_len) *
   (C plate_width))) :^ ((C sflawParamM) - 1) *
-  (Grouping (C mod_elas) * (square (Grouping (C act_thick))))
+  (Grouping (C mod_elas * 1000) * (square (Grouping (C act_thick))))
   :^ (C sflawParamM) * (C lDurFac) * (exp (C stressDistFac)))
 
 risk :: QDefinition
@@ -121,7 +121,7 @@ tolStrDisFac_eq :: Expr
 tolStrDisFac_eq = log (log ((1) / ((1) - (C pb_tol)))
   * ((Grouping ((C plate_len) * (C plate_width)) :^
   ((C sflawParamM) - (1)) / ((C sflawParamK) *
-  (Grouping (Grouping ((C mod_elas) *
+  (Grouping (Grouping ((C mod_elas * 1000) *
   (square (Grouping (C act_thick))))) :^ 
   (C sflawParamM) * (C lDurFac))))))
 

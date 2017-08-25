@@ -87,11 +87,11 @@ pb_tol = uvc "pb_tol" (nounPhraseSP "tolerable probability of breakage")
 char_weight = uqcND "char_weight" (nounPhraseSP "charge weight") 
   lW kilogram Real
   [ physc $ \c -> c :>= (Dbl 0),
-    sfwrc $ \c -> (C cWeightMax) :<= c,
-    sfwrc $ \c -> c :<= (C cWeightMin) ] (Dbl 42) defaultUncrt
+    sfwrc $ \c -> (C cWeightMin) :<= c,
+    sfwrc $ \c -> c :<= (C cWeightMax) ] (Dbl 42) defaultUncrt
 
 tNT = uvc "tNT" (nounPhraseSP "TNT equivalent factor")
-  (Atomic "TNT") Integer
+  (Atomic "TNT") Real
   [ gtZeroConstr ] (1) defaultUncrt
 
 standOffDist = uqcND "standOffDist" (nounPhraseSP "stand off distance") 
@@ -136,11 +136,11 @@ dim_max, dim_min, ar_max, cWeightMax, cWeightMin, sd_min,
 
 dim_max     = mkDataDef (unitary "dim_max"
   (nounPhraseSP "maximum value for one of the dimensions of the glass plate") 
-  (sub lD (Atomic "max")) millimetre Real) (Dbl 0.1)
+  (sub lD (Atomic "max")) millimetre Real) (Dbl 5)
 
 dim_min     = mkDataDef (unitary "dim_min"
   (nounPhraseSP "minimum value for one of the dimensions of the glass plate") 
-  (sub lD (Atomic "min")) millimetre Real) (Dbl 5)
+  (sub lD (Atomic "min")) millimetre Real) (Dbl 0.1)
 
 ar_max     = mkDataDef (vc "ar_max"
   (nounPhraseSP "maximum aspect ratio")
@@ -364,6 +364,7 @@ specDeLoad    = dcc "specDeLoad"  (nounPhraseSP "specified design load")
 
 gbConstants :: [QDefinition]
 gbConstants = [constant_M, constant_K, constant_ModElas, constant_LoadDur, constant_LoadDF, constant_LoadSF]
+                ++ gBRSpecParamVals 
 
 constant_M, constant_K, constant_ModElas, constant_LoadDur, constant_LoadDF, constant_LoadSF :: QDefinition
 constant_K       = mkDataDef sflawParamK  $ (Grouping (Dbl 2.86)) * (10 :^ (Neg 53))
@@ -378,7 +379,7 @@ sdWithEqn :: QDefinition
 sdWithEqn = mkDataDef standOffDist sdCalculation
 
 sdCalculation :: Relation
-sdCalculation = (C standOffDist) := euclidean (map C sdVector)
+sdCalculation = euclidean (map C sdVector)
 
 sdVectorSent :: Sentence
 sdVectorSent = foldlsC (map getS sdVector)
@@ -392,8 +393,8 @@ wtntWithEqn :: QDefinition
 wtntWithEqn = mkDataDef eqTNTWeight wtntCalculation
 
 wtntCalculation :: Relation
-wtntCalculation = (C eqTNTWeight) := (C char_weight) * (C tNT)
-
+--wtntCalculation = (C eqTNTWeight) := (C char_weight) * (C tNT)
+wtntCalculation = (C char_weight) * (C tNT)
 --
 
 aspectRWithEqn :: QDefinition

@@ -56,7 +56,7 @@ printLO (Assumption a l id)      sm = makeRefList (p_spec a sm) (p_spec l sm) (p
 printLO (Requirement r l id)     sm = makeRefList (p_spec r sm) (p_spec l sm) (p_spec id sm)
 printLO (LikelyChange lc l id)   sm = makeRefList (p_spec lc sm) (p_spec l sm) (p_spec id sm)
 printLO (UnlikelyChange uc l id) sm = makeRefList (p_spec uc sm) (p_spec l sm) (p_spec id sm)
-printLO (Bib bib)                sm = printLO (makeBib bib) sm
+printLO (Bib bib)                sm = printLO (makeBib sm bib) sm
 
 
 -- | Called by build, uses 'printLO' to render the layout 
@@ -404,23 +404,23 @@ makeRefList a l i = refwrap l (wrap "ul" [] (text $ i ++ ": " ++ a))
 --HTML bibliography--
 ---------------------
 -- **THE MAIN FUNCTION**
-makeBib :: BibRef -> LayoutObj
-makeBib = listRef . map (Flat . S) . sort . map renderCite
+makeBib :: SymbolMap -> BibRef -> LayoutObj
+makeBib sm = listRef . map (Flat . S) . sort . map (flip renderCite sm)
   where listRef = List . Simple . zip [S $ sqbrac $ show x | x <- [(1 :: Integer)..]]
   --some function to get a numbered list, idealy it wouldn't go from string to Spec
   
 --for when we add other things to reference like website, newspaper
-renderCite :: Citation -> String
-renderCite b@(Book      fields) = renderF b fields useStyleBk
-renderCite a@(Article   fields) = renderF a fields useStyleArtcl
-renderCite a@(MThesis   fields) = renderF a fields useStyleBk
-renderCite a@(PhDThesis fields) = renderF a fields useStyleBk
-renderCite a@(Misc      fields) = renderF a fields useStyleBk
-renderCite a@(Online    fields) = renderF a fields useStyleArtcl --rendered similar to articles for some reason
+renderCite :: Citation -> SymbolMap -> String
+renderCite b@(Book      fields) sm = renderF b fields useStyleBk    sm
+renderCite a@(Article   fields) sm = renderF a fields useStyleArtcl sm
+renderCite a@(MThesis   fields) sm = renderF a fields useStyleBk    sm
+renderCite a@(PhDThesis fields) sm = renderF a fields useStyleBk    sm
+renderCite a@(Misc      fields) sm = renderF a fields useStyleBk    sm
+renderCite a@(Online    fields) sm = renderF a fields useStyleArtcl sm --rendered similar to articles for some reason
 
-renderF :: Citation -> [CiteField] -> (StyleGuide -> (CiteField -> SymbolMap -> String)) ->  String
-renderF c fields styl = unwords $
-  map (styl bibStyleH) (sort fields) ++ endingField c bibStyleH
+renderF :: Citation -> [CiteField] -> (StyleGuide -> (CiteField -> SymbolMap -> String)) -> SymbolMap -> String
+renderF c fields styl sm = unwords $
+  map (flip (styl bibStyleH) sm) (sort fields) ++ endingField c bibStyleH
 
 endingField :: Citation -> StyleGuide -> [String]
 endingField c MLA = [show c]
@@ -440,26 +440,26 @@ useStyleArtcl Chicago = artclChicago
 -- FIXME: move these show functions and use tags, combinators
 bookMLA :: CiteField -> SymbolMap -> String
 bookMLA (Place (city, state)) sm = p_spec (city :+: S ", " :+: state) sm ++ ":"
-bookMLA (Edition    s)  _ = comm $ show s ++ sufxer s ++ " ed."
-bookMLA (Series     s) sm = dot $ em $ p_spec s sm
-bookMLA (Title      s) sm = dot $ em $ p_spec s sm --If there is a series or collection, this should be in quotes, not italics
-bookMLA (Volume     s)  _ = comm $ "vol. " ++ show s
-bookMLA (Publisher  s) sm = comm $ p_spec s sm
-bookMLA (Author     p) sm = dot $ p_spec (rendPeople' p) sm
-bookMLA (Year       y)  _ = dot $ show y
+bookMLA (Edition    s)  _  = comm $ show s ++ sufxer s ++ " ed."
+bookMLA (Series     s) sm  = dot $ em $ p_spec s sm
+bookMLA (Title      s) sm  = dot $ em $ p_spec s sm --If there is a series or collection, this should be in quotes, not italics
+bookMLA (Volume     s)  _  = comm $ "vol. " ++ show s
+bookMLA (Publisher  s) sm  = comm $ p_spec s sm
+bookMLA (Author     p) sm  = dot $ p_spec (rendPeople' p) sm
+bookMLA (Year       y)  _  = dot $ show y
 bookMLA (Date    d m y)  _ = dot $ unwords [show d, show m, show y]
-bookMLA (URLdate d m y)  _ = "Web. " ++ bookMLA (Date d m y)
-bookMLA (Collection s) sm = dot $ em $ p_spec s sm
-bookMLA (Journal    s) sm = comm $ em $ p_spec s sm
-bookMLA (Page       n)  _ = dot $ "p. " ++ show n
-bookMLA (Pages  (a,b))  _ = dot $ "pp. " ++ show a ++ "&ndash;" ++ show b
-bookMLA (Note       s) sm = p_spec s sm
-bookMLA (Issue      n)  _ = comm $ "no. " ++ show n
-bookMLA (School     s) sm = comm $ p_spec s sm
-bookMLA (Thesis     t)  _ = comm $ show t
-bookMLA (URL        s) sm = dot $ p_spec s sm
-bookMLA (HowPub     s) sm = comm $ p_spec s sm
-bookMLA (Editor     p) sm = comm $ "Edited by " ++ p_spec (foldlList $ map (S . nameStr) p) sm
+bookMLA (URLdate d m y) sm = "Web. " ++ bookMLA (Date d m y) sm
+bookMLA (Collection s) sm  = dot $ em $ p_spec s sm
+bookMLA (Journal    s) sm  = comm $ em $ p_spec s sm
+bookMLA (Page       n)  _  = dot $ "p. " ++ show n
+bookMLA (Pages  (a,b))  _  = dot $ "pp. " ++ show a ++ "&ndash;" ++ show b
+bookMLA (Note       s) sm  = p_spec s sm
+bookMLA (Issue      n)  _  = comm $ "no. " ++ show n
+bookMLA (School     s) sm  = comm $ p_spec s sm
+bookMLA (Thesis     t)  _  = comm $ show t
+bookMLA (URL        s) sm  = dot $ p_spec s sm
+bookMLA (HowPub     s) sm  = comm $ p_spec s sm
+bookMLA (Editor     p) sm  = comm $ "Edited by " ++ p_spec (foldlList $ map (S . nameStr) p) sm
 
 bookAPA :: CiteField -> SymbolMap -> String --FIXME: year needs to come after author in APA
 bookAPA (Author   p) sm = needDot $ p_spec (rendPeople rendPersLFM' p) sm --APA uses initals rather than full name
@@ -473,7 +473,7 @@ bookAPA i sm = bookMLA i sm --Most items are rendered the same as MLA
 
 bookChicago :: CiteField -> SymbolMap -> String
 bookChicago (Author   p) sm = needDot $ p_spec (rendPeople rendPersLFM'' p) sm --APA uses middle initals rather than full name
-bookChicago (Date _ _ y)  _ = bookChicago (Year y) --APA doesn't care about the day or month
+bookChicago (Date _ _ y) sm = bookChicago (Year y) sm --APA doesn't care about the day or month
 bookChicago (URLdate d m y)  _ = "accessed " ++ (comm $ unwords [show d, show m, show y])
 bookChicago p@(Page   _) sm = bookAPA p sm
 bookChicago p@(Pages  _) sm = bookAPA p sm
@@ -482,19 +482,19 @@ bookChicago i sm = bookMLA i sm--Most items are rendered the same as MLA
 
 -- for article renderings
 artclMLA :: CiteField -> SymbolMap -> String
-artclMLA (Title s) = quotes $ dot $ p_spec s
+artclMLA (Title s) = quotes . dot . p_spec s
 artclMLA i = bookMLA i
 
 artclAPA :: CiteField -> SymbolMap -> String
-artclAPA (Title  s) = dot $ p_spec s
-artclAPA (Volume n) = em $ show n
-artclAPA (Issue  n) = comm $ paren $ show n
-artclAPA i = bookAPA i
+artclAPA (Title  s) sm = dot $ p_spec s sm
+artclAPA (Volume n)  _ = em $ show n
+artclAPA (Issue  n)  _ = comm $ paren $ show n
+artclAPA i sm = bookAPA i sm
 
 artclChicago :: CiteField -> SymbolMap -> String
 artclChicago i@(Title    _) = artclMLA i
-artclChicago (Volume     n) = comm $ show n
-artclChicago (Issue      n) = "no. " ++ show n
+artclChicago (Volume     n) = \_ -> comm $ show n
+artclChicago (Issue      n) = \_ -> "no. " ++ show n
 artclChicago i@(Year     _) = bookAPA i
 artclChicago i@(Date _ _ _) = bookAPA i
 artclChicago i = bookChicago i

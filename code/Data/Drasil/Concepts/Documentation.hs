@@ -15,7 +15,7 @@ acroNumGen :: [Contents] -> Int -> [Contents]
 acroNumGen [] _ = []
 acroNumGen (frst:rst) num = (f frst) : acroNumGen rst (num + 1)
   where f (Assumption a) = Assumption $ nw $ npnc' (a ^. id) (a ^. term) (extrctStrng (short assumption) ++  (show num))
-        f (Definition sm (Data qdef)) = Definition sm $ Data $ fromEqn'' (qdef ^. id) (qdef ^. term) EmptyS (qdef ^. symbol) (extrctStrng (short dataDefn) ++ (show num)) (getUnit qdef) (qdef ^. relat)
+        f (Definition sm (Data qdef)) = Definition sm $ Data $ fromEqn'' (qdef ^. id) (qdef ^. term) EmptyS (symbol qdef) (extrctStrng (short dataDefn) ++ (show num)) (getUnit qdef) (qdef ^. relat)
         f (Definition sm (Theory rch)) = Definition sm $ Theory $ makeRC' (rch ^. id) (rch ^. term) (rch ^. defn) (extrctStrng (short thModel) ++ (show num)) (rch ^. relat)
         f (Requirement r) = Requirement $ ReqChunk (nw $ npnc' (r ^. id) (r ^. term) (extrctStrng (short requirement) ++ (show num))) []
         f (LikelyChange lch) = LikelyChange $ LCChunk (nw $ npnc' (lch ^. id) (lch ^. term) (extrctStrng (short likelyChg) ++ (show num))) []

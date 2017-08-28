@@ -102,8 +102,8 @@ fmtBF symb [(f,num)]  = E ((C symb) `f` num)
 fmtBF symb ((f,num):xs) = (E ((C symb) `f` num)) +:+ S "and" +:+ (fmtBF symb xs)
 
 -- | gets symbol from chunk
-getS :: (SymbolForm a) => a -> Sentence
-getS s  = P $ s ^. symbol
+getS :: (Quantity a) => a -> Sentence
+getS s  = P $ symbol s
 
 -- | gets a reasonable or typical value from a Constrained chunk
 getRVal :: (Constrained c) => c -> Expr
@@ -190,20 +190,20 @@ symbolMapFun :: SymbolMap -> (a -> DType) -> a -> Contents
 symbolMapFun progSymbMap fun = (Definition progSymbMap . fun)
 
 -- Used to help make Qdefinitions when id, term, and symbol come from the same source
-mkDataDef :: (SymbolForm c, Quantity c) => c -> Expr -> QDefinition
+mkDataDef :: (Quantity c) => c -> Expr -> QDefinition
 mkDataDef cncpt equation = datadef $ getUnit cncpt
   where datadef (Just a) = fromEqn  (cncpt ^. id) (cncpt ^. term) EmptyS
-                           (cncpt ^. symbol) a equation
+                           (symbol cncpt) a equation
         datadef Nothing  = fromEqn' (cncpt ^. id) (cncpt ^. term) EmptyS
-                           (cncpt ^. symbol) equation
+                           (symbol cncpt) equation
 
 -- Same as 'mkDataDef', but with an additional Sentence that can be taken as "extra information"; issue #350
 mkDataDef' :: (SymbolForm c, Quantity c) => c -> Expr -> Sentence -> QDefinition
 mkDataDef' cncpt equation extraInfo = datadef $ getUnit cncpt
   where datadef (Just a) = fromEqn  (cncpt ^. id) (cncpt ^. term) (extraInfo)
-                           (cncpt ^. symbol) a equation
+                           (symbol cncpt) a equation
         datadef Nothing  = fromEqn' (cncpt ^. id) (cncpt ^. term) (extraInfo)
-                           (cncpt ^. symbol) equation
+                           (symbol cncpt) equation
 
 prodUCTbl :: [[Sentence]] -> Contents
 prodUCTbl cases = Table [S "Actor", titleize input_ +:+ S "and" +:+ titleize output_]

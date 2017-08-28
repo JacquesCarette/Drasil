@@ -171,7 +171,7 @@ maybeExpanded a b = likelyFrame a (S "expanded") b
 tAndDWAcc :: Concept s => s -> ItemType
 tAndDWAcc temp = Flat $ ((at_start temp) :+: sParenDash (short temp) :+: (temp ^. defn)) 
 -- term (symbol) - definition
-tAndDWSym :: (Concept s, SymbolForm a) => s -> a -> ItemType
+tAndDWSym :: (Concept s, Quantity a) => s -> a -> ItemType
 tAndDWSym tD sym = Flat $ ((at_start tD) :+: sParenDash (getS sym)) :+: (tD ^. defn)
 -- term - definition
 tAndDOnly :: Concept s => s -> ItemType
@@ -181,11 +181,11 @@ followA :: Sentence -> Int -> Sentence
 preceding `followA` num = preceding +:+ S "following" +:+ acroA num
 
 -- | Used when you want to say a term followed by its symbol. ex. "...using the Force F in..."
-getTandS :: (SymbolForm a, NamedIdea a) => a -> Sentence
+getTandS :: (Quantity a, NamedIdea a) => a -> Sentence
 getTandS a = phrase a +:+ getS a
 
 -- | get term, definition, and symbol
-getTDS :: (SymbolForm a, NamedIdea a, Concept a) => a -> Sentence
+getTDS :: (Quantity a, Concept a) => a -> Sentence
 getTDS a = phrase a +:+ (a ^. defn) +:+ getS a
 
 --Ideally this would create a reference to the equation too

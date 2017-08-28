@@ -7,7 +7,7 @@ import Control.Lens ((^.))
 
 import Drasil.SWHS.Unitals (melt_frac, latentE_P, htFusion, pcm_mass,
   temp_W, temp_PCM, ht_flux_P, pcm_HTC, coil_HTC, temp_C, swhsSymbols,
-  ht_flux_C)
+  swhsSymbolsAll, ht_flux_C)
 
 import Data.Drasil.Concepts.Documentation (acroNumGen)
 
@@ -21,7 +21,7 @@ swhsDataDefs = [dd1HtFluxC, dd2HtFluxP, dd3HtFusion, dd4MeltFrac]
 
 -- SYMBOL MAP HELPERS --
 swhsSymMap :: SymbolMap
-swhsSymMap = symbolMap swhsSymbols
+swhsSymMap = symbolMap swhsSymbolsAll
 
 swhsSymbMapD :: QDefinition -> Contents
 swhsSymbMapD = symbolMapFun swhsSymMap Data

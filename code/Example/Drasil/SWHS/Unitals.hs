@@ -16,10 +16,16 @@ import Data.Drasil.Quantities.PhysicalProperties (mass, density, vol)
 import Drasil.SWHS.Concepts (water, coil, phsChgMtrl)
 import Data.Drasil.Units.PhysicalProperties (densityU)
 import Data.Drasil.Utils(mkDataDef)
+import Data.Drasil.Quantities.Math (gradient)
 
 swhsSymbols :: [CQSWrapper]
 swhsSymbols = (map cqs swhsUnits) ++ (map cqs swhsUnitless) ++
   (map cqs swhsConstrained)
+
+swhsSymbolsAll :: [QWrapper]
+swhsSymbolsAll = (map qs swhsUnits) ++ (map qs swhsUnitless) ++
+  (map qs swhsConstrained) ++ (map qs specParamValList) ++
+  (map qs [htFusion_min, htFusion_max, coil_SA_max] ++ [qs gradient])
 
 -- Symbols with Units --
 

@@ -5,7 +5,6 @@ import Language.Drasil.Chunk.Code
 import Language.Drasil.Chunk.NamedIdea
 import Language.Drasil.Chunk.Eq
 import Language.Drasil.Chunk.Quantity -- for hack
-import Language.Drasil.Chunk.SymbolForm hiding (symbol) -- for hack
 import Language.Drasil.NounPhrase
 import Language.Drasil.Symbol
 import Language.Drasil.Spec hiding (Mod)
@@ -176,7 +175,7 @@ funcQD qd = FCD $ qtoc qd
 funcData :: Name -> DataDesc -> Func
 funcData n dd = FData $ FuncData (toCodeName n) dd 
 
-funcDef :: (Quantity c, SymbolForm c) => Name -> [c] -> Space -> [FuncStmt] -> Func  
+funcDef :: (Quantity c) => Name -> [c] -> Space -> [FuncStmt] -> Func  
 funcDef s i t fs = FDef $ FuncDef (toCodeName s) (map codevar i) (spaceToCodeType t) fs 
      
 data FuncData where
@@ -197,13 +196,13 @@ data FuncStmt where
   FVal :: Expr -> FuncStmt
   FDec :: CodeChunk -> CodeType -> FuncStmt
   
-fasg :: (Quantity c, SymbolForm c) => c -> Expr -> FuncStmt
+fasg :: (Quantity c) => c -> Expr -> FuncStmt
 fasg v e = FAsg (codevar v) e
 
-ffor :: (Quantity c, SymbolForm c) => c -> Expr -> [FuncStmt] -> FuncStmt
+ffor :: (Quantity c) => c -> Expr -> [FuncStmt] -> FuncStmt
 ffor v e fs = FFor (codevar v) e fs
 
-fdec :: (Quantity c, SymbolForm c) => c -> Space -> FuncStmt
+fdec :: (Quantity c) => c -> Space -> FuncStmt
 fdec v t = FDec (codevar v) (spaceToCodeType t)
 
 asVC :: Func -> VarChunk

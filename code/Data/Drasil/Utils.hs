@@ -198,7 +198,7 @@ mkDataDef cncpt equation = datadef $ getUnit cncpt
                            (symbol cncpt) equation
 
 -- Same as 'mkDataDef', but with an additional Sentence that can be taken as "extra information"; issue #350
-mkDataDef' :: (SymbolForm c, Quantity c) => c -> Expr -> Sentence -> QDefinition
+mkDataDef' :: (Quantity c) => c -> Expr -> Sentence -> QDefinition
 mkDataDef' cncpt equation extraInfo = datadef $ getUnit cncpt
   where datadef (Just a) = fromEqn  (cncpt ^. id) (cncpt ^. term) (extraInfo)
                            (symbol cncpt) a equation

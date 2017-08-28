@@ -140,7 +140,7 @@ makeTMatrix :: Eq a => [Sentence] -> [[a]] -> [a] -> [[Sentence]]
 makeTMatrix colName col row = zipSentList [] colName [zipFTable [] x row | x <- col] 
 
 -- | takes a list of wrapped variables and creates an Input Data Table for uses in Functional Requirments
-mkInputDatTb :: (SymbolForm a, Quantity a) => [a] -> Contents
+mkInputDatTb :: (Quantity a) => [a] -> Contents
 mkInputDatTb inputVar = Table [titleize symbol_, titleize unit_, 
   S "Name"]
   (mkTable [getS, fmtU EmptyS, phrase] inputVar) 

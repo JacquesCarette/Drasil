@@ -415,5 +415,5 @@ stfMtrxDerivation = [
   
   ]
 
-isElMx :: (SymbolForm a) => a -> String -> Sentence
+isElMx :: (Quantity a) => a -> String -> Sentence
 isElMx sym kword = getS sym `isThe` S kword +:+ S "element in the matrix"

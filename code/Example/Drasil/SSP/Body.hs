@@ -1,4 +1,4 @@
-module Drasil.SSP.Body (ssp_srs, ssp_mg, ssp_code) where
+module Drasil.SSP.Body (ssp_srs, ssp_mg, ssp_code, sspSymMap) where
 
 import Language.Drasil
 import Data.Drasil.SI_Units
@@ -134,7 +134,7 @@ sspChoices = Choices {
 }  
   
 ssp_code :: CodeSpec
-ssp_code = codeSpec' ssp_si sspChoices [sspInputMod]
+ssp_code = codeSpec' ssp_si sspChoices [sspInputMod] sspSymMap
 
 
 -- SYMBOL MAP HELPERS --

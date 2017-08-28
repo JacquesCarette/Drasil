@@ -150,7 +150,7 @@ glassChoices = Choices {
 }
 
 glassBR_code :: CodeSpec
-glassBR_code = codeSpec' glassSystInfo glassChoices [interpMod, inputMod, readTableMod]
+glassBR_code = codeSpec' glassSystInfo glassChoices [interpMod, inputMod, readTableMod] gbSymbMap
 
 mgBod :: [Section]
 (mgBod, _) = makeDD likelyChanges unlikelyChanges reqs modules
@@ -217,7 +217,7 @@ auxiliaryConstants :: [QDefinition]
 auxiliaryConstants = assumptionConstants ++ gBRSpecParamVals
 
 --Used in "Functional Requirements" Section--
-requiredInputs :: [QSWrapper]
+requiredInputs :: [QWrapper]
 requiredInputs = (map qs [plate_len, plate_width, char_weight])
   ++ (map qs [pb_tol, tNT]) ++ (map qs [sdx, sdy, sdz])
   ++ (map qs [glass_type, nom_thick])
@@ -557,7 +557,7 @@ s7_1_req1Table :: Contents
 s7_1_req1Table = Table
   [at_start symbol_, at_start description, S "Units"]
   (mkTable
-  [(\ch -> (\t -> getS t) (getSymb ch)),
+  [(\ch -> getS ch),
    at_start, unit'2Contents] requiredInputs)
   (S "Required Inputs following R1") True
 
@@ -595,7 +595,7 @@ req5Desc cmd = foldlSent_ [S "If", (getS is_safe1) `sAnd` (getS is_safe2),
   S "If the", phrase condition, S "is false, then", phrase cmd,
   S "the", phrase message, Quote (notSafe ^. defn)]
 
-testing :: [QSWrapper]
+testing :: [QWrapper]
 testing = qs prob_br : qs lRe : qs demand : [] -- all different types!
 testing1 :: [RelationConcept]
 testing1 = [probOfBr, calOfCap, calOfDe]

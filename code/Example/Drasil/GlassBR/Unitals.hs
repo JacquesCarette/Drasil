@@ -11,7 +11,7 @@ import Drasil.GlassBR.Concepts (annealedGlass, aR, fullyTGlass, glassTypeFac,
 
 import Data.Drasil.SI_Units
 import Data.Drasil.Constraints
-import Data.Drasil.Utils (symbolMapFun, mkDataDef, getS)
+import Data.Drasil.Utils (mkDataDef, getS)
 import Data.Drasil.SentenceStructures (foldlSent, displayConstrntsAsSet,
   foldlsC, foldlOptions)
 
@@ -42,7 +42,7 @@ glass_type, nom_thick :: ConstrainedChunk
 defaultUncrt :: Double
 defaultUncrt = 0.1
 
-gbInputs :: [QSWrapper]
+gbInputs :: [QWrapper]
 gbInputs = (map qs gbInputsWUnitsUncrtn) ++ (map qs gbInputsWUncrtn) ++ 
   (map qs gbInputsNoUncrtn) ++ map qs sdVector
 
@@ -115,7 +115,7 @@ glass_type  = cvc "glass_type" (nounPhraseSent $ phrase glassTy +:+
 
 {--}
 
-gbOutputs :: [QSWrapper]
+gbOutputs :: [QWrapper]
 gbOutputs = map qs [is_safe1, is_safe2] ++ map qs [prob_br]
 
 prob_br :: ConstrainedChunk
@@ -148,19 +148,19 @@ ar_max     = mkDataDef (vc "ar_max"
 
 cWeightMax = mkDataDef (unitary "cWeightMax" 
   (nounPhraseSP "maximum permissible input charge weight")
-  (sub (char_weight ^. symbol) (Atomic "max")) kilogram Rational) (Dbl 910)
+  (sub (symbol char_weight) (Atomic "max")) kilogram Rational) (Dbl 910)
 
 cWeightMin = mkDataDef (unitary "cWeightMin"
   (nounPhraseSP "minimum permissible input charge weight")
-  (sub (char_weight ^. symbol) (Atomic "min")) kilogram Rational) (Dbl 4.5)
+  (sub (symbol char_weight) (Atomic "min")) kilogram Rational) (Dbl 4.5)
 
 sd_min     = mkDataDef (unitary "sd_min"
   (nounPhraseSP "minimum stand off distance permissible for input") 
-  (sub (standOffDist ^. symbol) (Atomic "min")) metre Real) (Dbl 6)
+  (sub (symbol standOffDist) (Atomic "min")) metre Real) (Dbl 6)
 
 sd_max     = mkDataDef (unitary "sd_max"
   (nounPhraseSP "maximum stand off distance permissible for input")
-  (sub (standOffDist ^. symbol) (Atomic "max")) metre Real) (Dbl 130)
+  (sub (symbol standOffDist) (Atomic "max")) metre Real) (Dbl 130)
 
 {--}
 
@@ -179,19 +179,19 @@ demand      = unitary "demand"      (nounPhraseSP "applied load (demand)")
 
 eqTNTWeight = unitary "eqTNTWeight" 
   (nounPhraseSP "explosive mass in equivalent weight of TNT")
-  (sub (char_weight ^. symbol) (tNT ^. symbol)) kilogram Real
+  (sub (symbol char_weight) (symbol tNT)) kilogram Real
 
 load_dur    = unitary "load_dur"    (nounPhraseSP "duration of load")
   (sub lT lD) second Real
 
 sdx         = unitary "sdx" (nounPhraseSP "stand off distance (x-component)")
-  (sub (standOffDist ^. symbol) lX) metre Real
+  (sub (symbol standOffDist) lX) metre Real
 
 sdy         = unitary "sdy" (nounPhraseSP "stand off distance (y-component)")
-  (sub (standOffDist ^. symbol) lY) metre Real
+  (sub (symbol standOffDist) lY) metre Real
 
 sdz         = unitary "sdz" (nounPhraseSP "stand off distance (z-component)")
-  (sub (standOffDist ^. symbol) lZ) metre Real
+  (sub (symbol standOffDist) lZ) metre Real
 
 sflawParamK = unitary "sflawParamK" (nounPhraseSP "surface flaw parameter") --parameterize?
   lK sFlawPU Real
@@ -235,13 +235,13 @@ risk_fun      = makeVC "risk_fun"    (nounPhraseSP "risk of failure") cB
 
 sdf_tol       = makeVC "sdf_tol"     (nounPhraseSP $ "stress distribution" ++
   " factor (Function) based on Pbtol") 
-  (sub (stressDistFac ^. symbol) (Atomic "tol"))
+  (sub (symbol stressDistFac) (Atomic "tol"))
 
 stressDistFac = makeVC "stressDistFac" (nounPhraseSP $ "stress distribution" 
   ++ " factor (Function)") cJ
 
 tolLoad       = makeVC "tolLoad"       (nounPhraseSP "tolerable load")
-  (sub (dimlessLoad ^. symbol) (Atomic "tol"))
+  (sub (symbol dimlessLoad) (Atomic "tol"))
 
 
 terms :: [ConceptChunk]

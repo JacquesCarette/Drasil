@@ -5,7 +5,7 @@ import Drasil.GlassBR.Unitals
 import Drasil.GlassBR.ModuleDefs
 import Data.Drasil.Utils (symbolMapFun)
 
-this_symbols :: [QSWrapper]
+this_symbols :: [QWrapper]
 this_symbols = (map qs [prob_br] ++ gbInputs ++ (map qs gBRSpecParamVals) ++ 
   (map qs glassBRSymbolsWithDefns) ++ (map qs glassBRSymbols) ++
   (map qs glassBRUnitless)

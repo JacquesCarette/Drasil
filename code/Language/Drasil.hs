@@ -90,6 +90,7 @@ module Language.Drasil (
   , lA, lB, lC, lD, lE, lF, lG, lH, lI, lJ, lK, lL, lM, lN, lO, lP, lQ, lR, lS, lT, lU, lV, lW, lX, lY, lZ
   -- Misc
   , mkTable, unit'2Contents, getAcc, unit_symb, introduceAbb, phrase, plural, phrase's, plural's
+  , symbol
   -- Printing.Helpers
   , capitalize, paren, sqbrac
   -- Generate

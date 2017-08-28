@@ -165,7 +165,7 @@ nopcm_Choices = Choices {
 }
 
 nopcm_code :: CodeSpec
-nopcm_code = codeSpec' nopcm_si nopcm_Choices [inputMod]
+nopcm_code = codeSpec' nopcm_si nopcm_Choices [inputMod] nopcm_SymbMap
 -- Sub interpolation mod into list when possible              ^
 
 nopcm_srs :: Document
@@ -629,7 +629,7 @@ s4_2_6_table2 = outDataConstTbl s4_2_6_conListOut
 s4_2_6_conListOut :: [UncertQ]
 s4_2_6_conListOut = [temp_W, w_E]
 
-inputVar :: [QSWrapper]
+inputVar :: [QWrapper]
 inputVar = map qs s4_2_6_conListIn 
 
 

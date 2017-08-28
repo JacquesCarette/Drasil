@@ -113,8 +113,8 @@ swhs_si = SI {
   _concepts = (swhsSymbols),
   _namedIdeas = acronyms,
   _definitions = (swhsDataDefs :: [QDefinition]),
-  _inputs = ((map qs swhsInputs) :: [QSWrapper]),
-  _outputs = ((map qs swhsOutputs) :: [QSWrapper]),
+  _inputs = ((map qs swhsInputs) :: [QWrapper]),
+  _outputs = ((map qs swhsOutputs) :: [QWrapper]),
   _defSequence = ([] :: [Block QDefinition]),
   _constraints = (swhsConstrained),
   _constants = []
@@ -162,7 +162,7 @@ swhsChoices = Choices {
 }
 
 swhsCode :: CodeSpec
-swhsCode = codeSpec' swhs_si swhsChoices [swhsInputMod]
+swhsCode = codeSpec' swhs_si swhsChoices [swhsInputMod] swhsSymMap
 
 tsymb_intro :: [TSIntro]
 tsymb_intro = [TSPurpose, SymbConvention

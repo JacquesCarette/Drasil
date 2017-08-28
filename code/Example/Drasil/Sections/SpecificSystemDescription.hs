@@ -247,7 +247,7 @@ inDataConstTbl qlst = Table ([S "Var"] ++ (isPhys $ physC (head qlst) qlst) ++
         isUnc  _  = [short typUnc]
 
 -- Creates the output Data Constraints Table
-outDataConstTbl :: (SymbolForm c, Constrained c) => [c] -> Contents
+outDataConstTbl :: (Quantity c, Constrained c) => [c] -> Contents
 outDataConstTbl qlst = Table ([S "Var"] ++ (isPhys $ physC (head qlst) qlst) ++
   (isSfwr $ sfwrC (head qlst) qlst))
   (map (\x -> fmtOutputConstr x qlst) qlst)

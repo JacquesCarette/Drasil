@@ -14,7 +14,7 @@ table :: (Quantity s) => [s] -> (s -> Sentence) -> Contents
 table ls f = Table 
   [at_start symbol_, at_start description, at_start' CM.unit_]
   (mkTable
-  [(\ch -> (\t -> (getS t)) (getSymb ch)),
+  [(\ch -> (getS ch)),
   f, 
   unit'2Contents]
   ls)

@@ -1,7 +1,7 @@
 {-# OPTIONS -Wall #-}
 {-# LANGUAGE GADTs,Rank2Types #-}
 module Language.Drasil.Chunk.Quantity 
-  ( Quantity(..), QWrapper, qw, qsymb
+  ( Quantity(..), QWrapper, qw, qsymb, qs
   ) where
 
 import Control.Lens
@@ -55,14 +55,23 @@ instance Quantity QWrapper where
   typ = qlens typ
   getSymb (QW a) = getSymb a
   getUnit (QW a) = getUnit a
+  
+instance Eq QWrapper where
+  a == b = (a ^. id) == (b ^. id)
+
+instance Ord QWrapper where
+  compare a b = compare ((getSymb a) ^. symbol) ((getSymb b) ^. symbol)
 
 qlens :: (forall c. (Quantity c) => 
   Simple Lens c a) -> Simple Lens QWrapper a
 qlens l f (QW a) = fmap (\x -> QW (set l x a)) (f (a ^. l))
 
-qw :: Quantity q => q -> QWrapper
+-- | qw and qs do the same thing since SymbolForm was removed as a constraint
+-- on many chunks and Quantity now must have a Symbol.
+qw, qs :: Quantity q => q -> QWrapper
 qw = QW
 
+qs = QW
 -- | Helper function for getting a symbol from a quantity. May want to 
 -- actually call it "symbol" and hide the existing "symbol" function soon.
 qsymb :: Quantity q => q -> Symbol

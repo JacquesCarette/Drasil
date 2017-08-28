@@ -15,7 +15,6 @@ import Language.Drasil.Chunk
 import Language.Drasil.Chunk.NamedIdea
 import Language.Drasil.Chunk.Quantity
 import Language.Drasil.Chunk.Constrained
-import Language.Drasil.Chunk.SymbolForm
 import Language.Drasil.Chunk.Concept
 import Language.Drasil.Unit
 import Language.Drasil.Expr

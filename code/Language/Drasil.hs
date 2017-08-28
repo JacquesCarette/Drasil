@@ -60,7 +60,7 @@ module Language.Drasil (
   -- Chunk.Other
   , AssumpChunk, UCChunk
   --Chunk.Wrapper
-  , cqs, qs, nw, CQSWrapper, QSWrapper, NWrapper
+  , cqs, qs, nw, CQSWrapper, NWrapper
   --Chunk.UWrapper 
   , UWrapper, uw, ucw, UCWrapper
   --Citations

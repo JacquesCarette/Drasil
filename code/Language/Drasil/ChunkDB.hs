@@ -5,8 +5,6 @@ module Language.Drasil.ChunkDB
 
 import Language.Drasil.Chunk
 import Language.Drasil.Chunk.Quantity
-import Language.Drasil.Chunk.SymbolForm
-import Language.Drasil.Chunk.Wrapper.QSWrapper
 import Language.Drasil.Unit
 
 import Control.Lens ((^.))
@@ -14,13 +12,13 @@ import qualified Data.Map as Map
 
 import Prelude hiding (id)
 
-type SymbolMap = Map.Map String QSWrapper
+type SymbolMap = Map.Map String QWrapper
 
-symbolMap :: (SymbolForm c, Quantity c) => [c] -> SymbolMap
+symbolMap :: (Quantity c) => [c] -> SymbolMap
 symbolMap cs = Map.fromList (map (\x -> ((x ^. id), qs x)) cs)
 
 -- | Looks up an id in the symbol table. If nothing is found, an error is thrown
-symbLookup :: (Chunk c) => c -> SymbolMap -> QSWrapper
+symbLookup :: (Chunk c) => c -> SymbolMap -> QWrapper
 symbLookup c m = let lookC = Map.lookup (c ^. id) m in
                  getS lookC
   where getS (Just x) = x

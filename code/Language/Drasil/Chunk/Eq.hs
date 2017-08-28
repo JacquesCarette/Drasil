@@ -7,7 +7,6 @@ import Prelude hiding (id)
 import Language.Drasil.Expr (Expr)
 import Language.Drasil.Chunk
 import Language.Drasil.Chunk.NamedIdea (NamedIdea, term, getA)
-import Language.Drasil.Chunk.SymbolForm (SymbolForm, symbol)
 import Language.Drasil.Chunk.Concept
 import Language.Drasil.Chunk.ConVar
 import Language.Drasil.Chunk.Quantity (Quantity(..))
@@ -17,6 +16,7 @@ import Language.Drasil.Chunk.Unital (ucFromCV)
 import Language.Drasil.Unit (Unit(..))
 import Language.Drasil.Symbol (Symbol)
 import Language.Drasil.Space
+import Language.Drasil.Misc (symbol)
 
 import Language.Drasil.NounPhrase (NP, phrase)
 import Language.Drasil.Spec
@@ -24,7 +24,7 @@ import Language.Drasil.Spec
 -- BEGIN EQCHUNK --
 -- | A QDefinition is a 'Quantity' with a defining equation.
 data QDefinition where
-  EC :: (SymbolForm c, Quantity c) => c -> Expr -> QDefinition
+  EC :: (Quantity c) => c -> Expr -> QDefinition
 
 --Removed named record fields, so we want to not break things for now.
 -- | Returns the defining equation of a 'QDefinition'
@@ -38,9 +38,6 @@ instance Chunk QDefinition where
 instance NamedIdea QDefinition where
   term = ul . term
   getA c = getA $ c ^. ul
-
-instance SymbolForm QDefinition where
-  symbol = ul . symbol
 
 instance Quantity QDefinition where
   typ = ul . typ
@@ -60,13 +57,13 @@ ul :: Simple Lens QDefinition H
 ul f (EC a b) = fmap (\(H x) -> EC x b) (f (H a))
 
 -- or this
-elens :: (forall c. (SymbolForm c, Quantity c) => Simple Lens c a) 
+elens :: (forall c. (Quantity c) => Simple Lens c a) 
   -> Simple Lens H a
 elens l f (H a) = fmap (\x -> H (set l x a)) (f (a ^. l))
 
 -- and especially not this
 data H where
-  H :: (SymbolForm c, Quantity c) => c -> H
+  H :: (Quantity c) => c -> H
 
 instance Chunk H where
   id = elens id
@@ -74,9 +71,6 @@ instance Chunk H where
 instance NamedIdea H where
   term = elens term
   getA (H a) = getA a
-  
-instance SymbolForm H where 
-  symbol = elens symbol
   
 instance Quantity H where
   typ = elens typ
@@ -114,7 +108,7 @@ fromEqn'' nm desc _ symb abb (Just chunk) eqn =
 -- | Returns a 'VarChunk' from a 'QDefinition'.
 -- Currently only used in example /Modules/ which are being reworked.
 getVC :: QDefinition -> VarChunk
-getVC qd = vc (qd ^. id) (qd ^. term) (qd ^. symbol) (qd ^. typ)
+getVC qd = vc (qd ^. id) (qd ^. term) (symbol qd) (qd ^. typ)
 
 instance Eq QDefinition where
   a == b = (a ^. id) == (b ^. id)

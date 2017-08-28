@@ -13,7 +13,6 @@ module Language.Drasil.Chunk.Constrained (
 import Control.Lens (Simple, Lens, (^.), set)
 import Language.Drasil.Expr (Expr(..), Relation, Variable)
 import Language.Drasil.Chunk.Quantity
-import Language.Drasil.Chunk.SymbolForm
 import Language.Drasil.Chunk.NamedIdea
 import Language.Drasil.Chunk.Unitary
 import Language.Drasil.Chunk.VarChunk

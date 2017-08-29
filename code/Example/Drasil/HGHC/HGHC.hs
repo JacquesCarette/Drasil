@@ -6,7 +6,6 @@ import Drasil.DocumentLanguage
 import Drasil.Template.DD (makeDD)
 
 import Data.List (intersperse)
-import Control.Lens ((^.))
 
 import Drasil.HGHC.HeatTransfer (hghcVars, hghcSymMap, fp, htOutputs,
   htInputs, symbols, nuclearPhys, hghc)

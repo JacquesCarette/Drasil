@@ -6,7 +6,6 @@ import Language.Drasil.Chunk.NamedIdea
 import Language.Drasil.Chunk.Quantity
 import Language.Drasil.Chunk.Concept
 import Language.Drasil.Chunk.Eq
-import Language.Drasil.Chunk.SymbolForm
 import Language.Drasil.Chunk.Constrained
 import Language.Drasil.People
 import Language.Drasil.Unit

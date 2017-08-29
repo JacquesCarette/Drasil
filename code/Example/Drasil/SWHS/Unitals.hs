@@ -22,7 +22,7 @@ swhsSymbols :: [CQSWrapper]
 swhsSymbols = (map cqs swhsUnits) ++ (map cqs swhsUnitless) ++
   (map cqs swhsConstrained)
 
-swhsSymbolsAll :: [QWrapper]
+swhsSymbolsAll :: [QWrapper] -- UCWrapper, ConVar, UncertQ, QDefinition, UnitaryChunk, 
 swhsSymbolsAll = (map qs swhsUnits) ++ (map qs swhsUnitless) ++
   (map qs swhsConstrained) ++ (map qs specParamValList) ++
   (map qs [htFusion_min, htFusion_max, coil_SA_max] ++ [qs gradient])
@@ -35,7 +35,7 @@ swhsUnits = map ucw [in_SA, out_SA, heat_cap_spec, htCap_L,
   vol_ht_gen, htTransCoeff, pcm_mass, w_mass, ht_flux, latent_heat,
   thFluxVect, ht_flux_C, ht_flux_in, ht_flux_out, ht_flux_P, latentE_P,
   temp,boil_pt, temp_env, melt_pt, t_init_melt,
-  t_final_melt, vol, tank_vol, w_vol, deltaT,
+  t_final_melt, vol, tank_vol, w_vol, deltaT, temp_diff,
   density, tau, tau_L_P, tau_S_P, tau_W] ++
   map ucw [mass, time] -- ++ [tank_length, diam, coil_SA]
 

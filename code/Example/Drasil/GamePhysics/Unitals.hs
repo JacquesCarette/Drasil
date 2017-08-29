@@ -14,7 +14,9 @@ import Control.Lens((^.))
 -- TABLE OF SYMBOLS --
 ----------------------
 
-cpSymbols, inputSymbols, outputSymbols :: [QWrapper]
+cpSymbols, cpSymbolsAll, inputSymbols, outputSymbols :: [QWrapper]
+
+cpSymbolsAll = cpSymbols ++ inputSymbols ++ outputSymbols
 
 cpSymbols = (map qs cpUnits) ++ 
   (map qs cpUnitless) ++ (map qs cpInputConstraints)
@@ -33,8 +35,11 @@ cpUnits = [QP.acceleration, QP.angularAccel, QP.gravitationalAccel,
   QP.time, QP.angularDisplacement, pos_CM, pos_i, mass_i, mTot, acc_i, vel_i,
   QP.linearDisplacement, QP.linearVelocity, QP.linearAccel, initRelVel, normalLen,
   perpLen_A, perpLen_B, force_i, torque_i, time_c, vel_A, vel_B, mass_A, mass_B,
-  angVel_A, angVel_B]
-    
+  angVel_A, angVel_B, force_1, force_2, mass_1, mass_2, dispUnit, 
+  dispNorm, sqrDist, vel_O, r_OB, massIRigidBody, contDisp_A, contDisp_B, 
+  momtInert_A, momtInert_B, timeT, initTime, collTime, 
+  velTime, momtInert_k, pointOfCollision, contDisp_k, collisionImpulse]
+
 -----------------------
 -- PARAMETRIZED HACK --
 -----------------------
@@ -229,8 +234,8 @@ vel_B       = ucFromCV (velParam "B" cB)                      velU
 vel_O       = ucFromCV (velParam "origin" cO)                 velU
 angVel_A    = ucFromCV (angParam "A" cA)                      angVelU
 angVel_B    = ucFromCV (angParam "B" cB)                      angVelU
-perpLen_A   = ucFromCV (perpParam "A" $ symbol contDisp_A) metre
-perpLen_B   = ucFromCV (perpParam "B" $ symbol contDisp_B) metre
+perpLen_A   = ucFromCV (perpParam "A" $ symbol contDisp_A)    metre
+perpLen_B   = ucFromCV (perpParam "B" $ symbol contDisp_B)    metre
 momtInert_A = ucFromCV (momtParam "A" "A")                    momtInertU
 momtInert_B = ucFromCV (momtParam "B" "B")                    momtInertU
 contDisp_A  = ucFromCV (contParam "A" "A")                    metre

@@ -33,8 +33,8 @@ import Data.Drasil.Software.Products (videoGame, openSource, sciCompS)
 import qualified Drasil.SRS as SRS
 import qualified Drasil.Sections.ReferenceMaterial as RM
 
-import Drasil.GamePhysics.Unitals (cpSymbols, cpOutputConstraints, inputSymbols,
-  outputSymbols, cpInputConstraints)
+import Drasil.GamePhysics.Unitals (cpSymbols, cpSymbolsAll, cpOutputConstraints,
+  inputSymbols, outputSymbols, cpInputConstraints)
 import Drasil.GamePhysics.Concepts (chipmunk, cpAcronyms, twoD)
 import Drasil.GamePhysics.TMods (cpTMods)
 import Drasil.GamePhysics.IMods (iModels)
@@ -103,7 +103,7 @@ mgBod :: [Section]
 (mgBod, _) = makeDD likelyChanges unlikelyChanges reqs modules
 
 cpSymbMap :: SymbolMap
-cpSymbMap = symbolMap cpSymbols
+cpSymbMap = symbolMap cpSymbolsAll
 
 
 chipChoices :: Choices

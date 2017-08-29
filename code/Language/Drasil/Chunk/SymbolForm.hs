@@ -37,6 +37,6 @@ instance Eq SymbolChunk where
 instance SymbolForm SymbolChunk where
   symbol f (SC i s) = fmap (\x -> SC i x) (f s)
 
--- | Smart constructor for "chunk_sym" chunks for symbols
+-- | Smart constructor for chunks for symbols
 sc :: String -> Symbol -> SymbolChunk
-sc i = SC (i ++ "_sym")
+sc = SC

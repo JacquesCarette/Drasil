@@ -203,7 +203,7 @@ sflawParamM = unitary "sflawParamM" (nounPhraseSP "surface flaw parameter") --pa
 
 glassBRUnitless :: [VarChunk]
 glassBRUnitless = [risk_fun, is_safe1, is_safe2, stressDistFac, sdf_tol,
-  dimlessLoad, tolLoad, lRe, loadSF, gTF, lDurFac, nonFactorL]
+  dimlessLoad, tolLoad, lRe, loadSF, gTF, lDurFac, nonFactorL, aspectR]
 
 aspectR, risk_fun, is_safe1, is_safe2, stressDistFac, sdf_tol,
   dimlessLoad, tolLoad, lRe, loadSF, gTF, lDurFac, nonFactorL :: VarChunk

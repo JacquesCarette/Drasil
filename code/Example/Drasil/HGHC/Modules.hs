@@ -51,8 +51,8 @@ mod_inputf = mod_io_fun executable
 
 -- Calc Module
 meth_htTransCladFuel, meth_htTransCladCool :: MethodChunk
-meth_htTransCladFuel = fromEC htTransCladFuel hghcSymMap
-meth_htTransCladCool = fromEC htTransCladCool hghcSymMap
+meth_htTransCladFuel = fromEC htTransCladFuel allSymbols
+meth_htTransCladCool = fromEC htTransCladCool allSymbols
 
 hghc_calcDesc :: Sentence
 hghc_calcDesc = S "Calculates heat transfer coefficients"

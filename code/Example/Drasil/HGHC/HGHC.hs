@@ -1,4 +1,4 @@
-module Drasil.HGHC.HGHC (srsBody, mgBody, misBody, modules, hghcSymMap) where
+module Drasil.HGHC.HGHC (srsBody, mgBody, misBody, modules) where
 
 import Language.Drasil
 import Drasil.DocumentLanguage
@@ -7,7 +7,7 @@ import Drasil.Template.DD (makeDD)
 
 import Data.List (intersperse)
 
-import Drasil.HGHC.HeatTransfer (hghcVars, hghcSymMap, fp, htOutputs,
+import Drasil.HGHC.HeatTransfer (hghcVars, allSymbols, fp, htOutputs,
   htInputs, symbols, nuclearPhys, hghc)
 import Drasil.HGHC.Modules (mod_calc, mod_inputp, mod_inputf,
   mod_outputf, mod_ctrl)
@@ -38,7 +38,7 @@ thisChoices = Choices {
 }
 
 thisCode :: CodeSpec
-thisCode = codeSpec' thisSI thisChoices [] hghcSymMap
+thisCode = codeSpec' thisSI thisChoices []
   
 thisSI :: SystemInformation
 thisSI = SI {
@@ -54,7 +54,8 @@ thisSI = SI {
   _outputs = htOutputs,
   _defSequence = ([] :: [Block QDefinition]),
   _constraints = ([] :: [ConstrainedChunk]),
-  _constants = []
+  _constants = [],
+  _sysinfodb = allSymbols
 }
   
 thisSRS :: DocDesc
@@ -64,7 +65,7 @@ thisSRS = RefSec (RefProg intro
   : [Verbatim s3]
   
 s3 :: Section --, s4 
-s3 = dataDefnF EmptyS (map (Definition hghcSymMap . Data) hghcVars)
+s3 = dataDefnF EmptyS (map (Definition . Data) hghcVars)
   
 srsBody :: Document
 srsBody = mkDoc thisSRS (for) thisSI

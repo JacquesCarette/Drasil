@@ -25,8 +25,8 @@ symbLookup c m = let lookC = Map.lookup (c ^. id) m in
         getS Nothing = error $ "Symbol: " ++ (c ^. id) ++ " not found in SymbolMap"
 
 -- | Gets a unit if it exists, or Nothing.        
-getUnitLup :: (Chunk c) => c -> SymbolMap -> Maybe UnitDefn
-getUnitLup c m = let lookC = symbLookup c m in
+getUnitLup :: HasSymbolTable s => (Chunk c) => c -> s -> Maybe UnitDefn
+getUnitLup c m = let lookC = symbLookup c (m ^. symbolTable) in
                  getUnit lookC
 
 -- | Our chunk databases. Should contain all the maps we will need.

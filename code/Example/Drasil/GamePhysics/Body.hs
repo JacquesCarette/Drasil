@@ -120,7 +120,7 @@ chipChoices = Choices {
 }
 
 chipCode :: CodeSpec
-chipCode = codeSpec' chipmunkSysInfo chipChoices [] everything
+chipCode = codeSpec' chipmunkSysInfo chipChoices []
 
 
 --FIXME: The SRS has been partly switched over to the new docLang, so some of

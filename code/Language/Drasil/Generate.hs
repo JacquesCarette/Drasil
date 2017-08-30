@@ -59,7 +59,7 @@ prntDoc dt body sm = case dt of
                 getExt _    = error "we can only write TeX/HTML (for now)"
 
 -- | Helper for writing the Makefile(s)
-prntMake :: HasSymbolTable s => DocType -> IO ()
+prntMake :: DocType -> IO ()
 prntMake dt =
   do outh <- openFile (show dt ++ "/Makefile") WriteMode
      hPutStrLn outh $ render $ genMake [dt]
@@ -72,9 +72,9 @@ writeDoc HTML = genHTML
 writeDoc _    = error "we can only write TeX/HTML (for now)"
 
 -- | Calls the code generator
-genCode :: HasSymbolTable s => CodeSpec -> s -> IO ()
-genCode spec sm = 
-  let g = generator spec sm
+genCode :: CodeSpec -> IO ()
+genCode spec = 
+  let g = generator spec
   in
     do 
       workingDir <- getCurrentDirectory

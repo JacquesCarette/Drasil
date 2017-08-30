@@ -37,19 +37,19 @@ data InclUnits = IncludeUnits -- In description field (for other symbols)
                
 type VerbatimIntro = Sentence
 
--- | Create a theoretical model using a list of fields to be displayed, a SymbolMap,
+-- | Create a theoretical model using a list of fields to be displayed, a database of symbols,
 -- and a RelationConcept (called automatically by 'SCSSub' program)
-tmodel :: Fields -> SymbolMap -> TheoryModel -> Contents
+tmodel :: HasSymbolTable ctx => Fields -> ctx -> TheoryModel -> Contents
 tmodel fs m t = Defnt TM (foldr (mkTMField t m) [] fs)
   (S $ t ^. id) --FIXME: Generate reference names here
 
--- | Create a data definition using a list of fields, SymbolMap, and a 
+-- | Create a data definition using a list of fields, a database of symbols, and a 
 -- QDefinition (called automatically by 'SCSSub' program)
-ddefn :: Fields -> SymbolMap -> QDefinition -> Contents
+ddefn :: HasSymbolTable ctx => Fields -> ctx -> QDefinition -> Contents
 ddefn fs m d = Defnt DD (foldr (mkQField d m) [] fs) (S "DD:" +:+ S (d ^. id))
 --FIXME: Generate the reference names here
 
-gdefn :: Fields -> SymbolMap -> GenDefn -> Contents
+gdefn :: HasSymbolTable ctx => Fields -> ctx -> GenDefn -> Contents
 gdefn fs m g = Defnt General (foldr (mkGDField g m) [] fs)
   (S $ g ^. id) --FIXME: Generate reference names here
 
@@ -57,7 +57,7 @@ gdefn fs m g = Defnt General (foldr (mkGDField g m) [] fs)
 type ModRow = [(String,[Contents])]
 
 -- | Create the fields for a model from a relation concept (used by tmodel)
-mkTMField :: TheoryModel -> SymbolMap -> Field -> ModRow -> ModRow
+mkTMField :: HasSymbolTable ctx => TheoryModel -> ctx -> Field -> ModRow -> ModRow
 mkTMField t _ l@Label fs  = (show l, (Paragraph $ at_start t):[]) : fs
 mkTMField t _ l@DefiningEquation fs = 
   (show l, (map EqnBlock (map tConToExpr (t ^. invariants)))) : fs
@@ -73,7 +73,7 @@ tConToExpr (Sfwr x) = x 0 --FIXME: HACK
 -- TODO: buildDescription gets list of constraints to expr and ignores 't'.
 
 -- | Create the fields for a definition from a QDefinition (used by ddefn)
-mkQField :: QDefinition -> SymbolMap -> Field -> ModRow -> ModRow
+mkQField :: HasSymbolTable ctx => QDefinition -> ctx -> Field -> ModRow -> ModRow
 mkQField d _ l@Label fs = (show l, (Paragraph $ at_start d):[]) : fs
 mkQField d _ l@Symbol fs = (show l, (Paragraph $ (P $ symbol d)):[]) : fs
 mkQField d _ l@Units fs = (show l, (Paragraph $ (unit'2Contents d)):[]) : fs
@@ -83,7 +83,7 @@ mkQField d m l@(Description v u intro) fs =
 
 -- | Create the description field (if necessary) using the given verbosity and
 -- including or ignoring units for a model / general definition
-buildTMDescription :: Verbosity -> InclUnits -> Expr -> SymbolMap -> [Contents] -> 
+buildTMDescription :: HasSymbolTable ctx => Verbosity -> InclUnits -> Expr -> ctx -> [Contents] -> 
   [Contents]
 buildTMDescription Succinct _ _ _ _ = []
 buildTMDescription Verbose u e m cs = 
@@ -91,13 +91,13 @@ buildTMDescription Verbose u e m cs =
 
 -- | Create the description field (if necessary) using the given verbosity and
 -- including or ignoring units for a data definition
-buildDDescription :: Verbosity -> InclUnits -> QDefinition -> SymbolMap -> 
+buildDDescription :: HasSymbolTable ctx => Verbosity -> InclUnits -> QDefinition -> ctx -> 
   [Contents]
 buildDDescription Succinct u d _ = [Enumeration (Definitions $ (firstPair u d):[])]
 buildDDescription Verbose u d m = [Enumeration (Definitions 
   (firstPair u d : descPairs u (vars (equat d) m)))]
 
-mkGDField :: GenDefn -> SymbolMap -> Field -> ModRow -> ModRow
+mkGDField :: HasSymbolTable ctx => GenDefn -> ctx -> Field -> ModRow -> ModRow
 mkGDField g _ l@Label fs = (show l, (Paragraph $ at_start g):[]) : fs
 mkGDField g _ l@Units fs = 
   let u = gdUnit g in
@@ -108,7 +108,7 @@ mkGDField g m l@(Description v u intro) fs = (show l, Paragraph intro :
   (buildGDDescription v u (g ^. relat) m)) : fs
 mkGDField _ _ l _ = error $ "Label " ++ show l ++ " not supported for gen defs"
 
-buildGDDescription :: Verbosity -> InclUnits -> Expr -> SymbolMap -> [Contents]
+buildGDDescription :: HasSymbolTable ctx => Verbosity -> InclUnits -> Expr -> ctx -> [Contents]
 buildGDDescription Succinct _ _ _ = []
 buildGDDescription Verbose u e m  = 
   Enumeration (Definitions (descPairs u (vars e m))) : []

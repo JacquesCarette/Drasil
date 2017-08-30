@@ -16,7 +16,7 @@ import Language.Drasil.Chunk.NamedIdea (term)
 import Language.Drasil.Chunk.SymbolForm (SymbolForm)
 import Language.Drasil.Chunk.Concept (defn)
 import Language.Drasil.Chunk.VarChunk (VarChunk)
-import Language.Drasil.ChunkDB (getUnitLup, symbLookup)
+import Language.Drasil.ChunkDB (getUnitLup, symbLookup, HasSymbolTable(..))
 import Language.Drasil.Config (verboseDDDescription, numberedDDEquations, numberedTMEquations)
 import Language.Drasil.Document
 import Language.Drasil.Symbol
@@ -38,7 +38,7 @@ expr (a :^ b)          sm = T.Pow  (expr a sm) (expr b sm)
 expr (a :- b)          sm = T.Sub  (expr a sm) (expr b sm)
 expr (a :. b)          sm = T.Dot  (expr a sm) (expr b sm)
 expr (Neg a)           sm = T.Neg  (expr a sm)
-expr (C c)             sm = T.Sym  (symbol (symbLookup c (sm ^. symboltable)))
+expr (C c)             sm = T.Sym  (symbol (symbLookup c (sm ^. symbolTable)))
 expr (Deriv Part a 1)  sm = T.Mul (T.Sym (Special Partial)) (expr a sm)
 expr (Deriv Total a 1) sm = T.Mul (T.Sym lD) (expr a sm)
 expr (Deriv Part a b)  sm = T.Frac (T.Mul (T.Sym (Special Partial)) (expr a sm))
@@ -202,7 +202,7 @@ lay x@(Table hdr lls t b) sm
 lay (Paragraph c)         sm = T.Paragraph (spec c sm)
 lay (EqnBlock c)          sm = T.EqnBlock (T.E (expr c sm))
 --lay (CodeBlock c)         = T.CodeBlock c
-lay x@(Definition _ c)    sm = T.Definition (makePairs c sm) (spec (refName x) sm)
+lay x@(Definition c)      sm = T.Definition (makePairs c sm) (spec (refName x) sm)
 lay (Enumeration cs)      sm = T.List $ makeL cs sm
 lay x@(Figure c f)        sm = T.Figure (spec (refName x) sm) (spec c sm) f
 lay x@(Module m)          sm = T.Module (formatName m) (spec (refName x) sm)

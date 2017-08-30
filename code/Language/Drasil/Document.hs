@@ -9,7 +9,6 @@ import Language.Drasil.Chunk.Other
 import Language.Drasil.Chunk.Req
 import Language.Drasil.Chunk.LC
 import Language.Drasil.Chunk.NamedIdea
-import Language.Drasil.ChunkDB (SymbolMap)
 import Language.Drasil.Spec (Sentence(..), RefType(..), (+:+))
 import Language.Drasil.RefHelpers
 import Language.Drasil.Expr
@@ -45,7 +44,7 @@ data Contents = Table [Sentence] [[Sentence]] Title Bool
                | Paragraph Sentence -- ^ Paragraphs are just sentences.
                | EqnBlock Expr
      --        CodeBlock Code   -- GOOL complicates this.  Removed for now.
-               | Definition SymbolMap DType
+               | Definition DType
                -- ^ Data/General definition or theoretical model. SymbolMap for
                -- looking up variables (currently a hack).
                | Enumeration ListType -- ^ Lists
@@ -108,7 +107,7 @@ instance LayoutObj Contents where
   refName (Paragraph _)           = error "Can't reference paragraphs" --yet
   refName (EqnBlock _)            = error "EqnBlock ref unimplemented"
 --  refName (CodeBlock _)         = error "Codeblock ref unimplemented"
-  refName (Definition _ d)        = getDefName d
+  refName (Definition d)          = getDefName d
   refName (Defnt dt _ r)          = getDefName dt +:+ r
   refName (Enumeration _)         = error "List refs unimplemented"
   refName (Module mc)             = S $ "M:" ++ alphanumOnly (mc ^. id)
@@ -124,9 +123,9 @@ instance LayoutObj Contents where
   refName (DDef _ _ _)            = error "DDef referencing unimplemented"
   rType (Table _ _ _ _)           = Tab
   rType (Figure _ _)              = Fig
-  rType (Definition _ (Data qd))  = Def $ getA qd
-  rType (Definition _ (Theory rc))= Def $ getA rc
-  rType (Definition _ _)          = Def Nothing
+  rType (Definition (Data qd))    = Def $ getA qd
+  rType (Definition (Theory rc))  = Def $ getA rc
+  rType (Definition _)            = Def Nothing
   rType (Defnt _ _ _)             = Def Nothing
   rType (Module _)                = Mod
   rType (Requirement r)           = Req $ getA r

@@ -61,7 +61,6 @@ library
     , Language.Drasil.Unit
     , Language.Drasil.CodeSpec
     , Language.Drasil.Code.Code
-    , Language.Drasil.Code.Import
     , Language.Drasil.Code.Imperative.AST
     , Language.Drasil.Code.Imperative.Import
     , Language.Drasil.Code.Imperative.Helpers

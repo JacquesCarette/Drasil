@@ -175,7 +175,7 @@ data ProblemDescription where
 -- | Solution Characteristics Specification section
 data SolChSpec where
   SCSVerb :: Section -> SolChSpec
-  SCSProg :: [SCSSub] -> SymbolMap -> SolChSpec
+  SCSProg :: [SCSSub] -> SolChSpec
   
 -- | Solution Characteristics Specification subsections
 data SCSSub where

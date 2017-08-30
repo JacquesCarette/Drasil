@@ -14,15 +14,15 @@ import Language.Drasil.Format(Format(TeX, HTML))
 import Language.Drasil.Recipe(Recipe(Recipe))
 import Language.Drasil.Code.Imperative.Import (generator, generateCode)
 import Language.Drasil.CodeSpec
-import Language.Drasil.ChunkDB (SymbolMap)
+import Language.Drasil.ChunkDB (HasSymbolTable(..))
 
 
 -- | Generate a number of artifacts based on a list of recipes.
-gen :: [Recipe] -> SymbolMap -> IO ()
+gen :: HasSymbolTable s => [Recipe] -> s -> IO ()
 gen rl sm = mapM_ (flip prnt sm) rl
 
 -- | Generate the output artifacts (TeX+Makefile or HTML)
-prnt :: Recipe -> SymbolMap -> IO ()
+prnt :: HasSymbolTable s => Recipe -> s -> IO ()
 prnt (Recipe dt@(SRS _) body) sm =
   do prntDoc dt body sm
      prntMake dt
@@ -42,7 +42,7 @@ prnt (Recipe dt@(Website fn) body) sm =
      hClose outh2
 
 -- | Helper for writing the documents (TeX / HTML) to file
-prntDoc :: DocType -> Document -> SymbolMap -> IO ()
+prntDoc :: HasSymbolTable s => DocType -> Document -> s -> IO ()
 prntDoc dt body sm = case dt of
   (SRS fn)     -> prntDoc' dt fn TeX body
   (MG fn)      -> prntDoc' dt fn TeX body
@@ -59,20 +59,20 @@ prntDoc dt body sm = case dt of
                 getExt _    = error "we can only write TeX/HTML (for now)"
 
 -- | Helper for writing the Makefile(s)
-prntMake :: DocType -> IO ()
+prntMake :: HasSymbolTable s => DocType -> IO ()
 prntMake dt =
   do outh <- openFile (show dt ++ "/Makefile") WriteMode
      hPutStrLn outh $ render $ genMake [dt]
      hClose outh
 
 -- | Renders the documents
-writeDoc :: Format -> DocType -> Document -> SymbolMap -> Doc
+writeDoc :: HasSymbolTable s => Format -> DocType -> Document -> s -> Doc
 writeDoc TeX  = genTeX
 writeDoc HTML = genHTML
 writeDoc _    = error "we can only write TeX/HTML (for now)"
 
 -- | Calls the code generator
-genCode :: CodeSpec -> SymbolMap -> IO ()
+genCode :: HasSymbolTable s => CodeSpec -> s -> IO ()
 genCode spec sm = 
   let g = generator spec sm
   in
@@ -85,11 +85,11 @@ genCode spec sm =
 
 
 -- -- | Calls the code generator using the 'ModuleChunk's
--- genCode :: NamedIdea c => c -> [ModuleChunk] -> SymbolMap -> IO ()
+-- genCode :: NamedIdea c => c -> [ModuleChunk] -> s -> IO ()
 -- genCode cc mcs m = prntCode cc (filter generated mcs) m
 
 -- -- | Generate code for all supported languages (will add language selection later)
--- prntCode :: NamedIdea c => c -> [ModuleChunk] -> SymbolMap -> IO ()
+-- prntCode :: NamedIdea c => c -> [ModuleChunk] -> s -> IO ()
 -- prntCode cc mcs m = 
   -- let absCode = toCode cc mcs m
       -- code l  = makeCode l

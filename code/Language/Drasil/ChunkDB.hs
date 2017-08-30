@@ -1,13 +1,13 @@
 module Language.Drasil.ChunkDB 
   ( SymbolMap, symbolMap, symbLookup, getUnitLup 
-  , ChunkDB(..), cdb
+  , ChunkDB(..), cdb, HasSymbolTable
   ) where
 
 import Language.Drasil.Chunk
 import Language.Drasil.Chunk.Quantity
 import Language.Drasil.Unit
 
-import Control.Lens ((^.))
+import Control.Lens ((^.), Simple, Lens)
 import qualified Data.Map as Map
 
 import Prelude hiding (id)
@@ -34,4 +34,7 @@ data ChunkDB = CDB { symbs :: SymbolMap } --TODO: Expand and add more databases
 
 cdb :: SymbolMap -> ChunkDB
 cdb = CDB
+
+class HasSymbolTable s where
+  symbolTable :: Simple Lens c SymbolMap
   

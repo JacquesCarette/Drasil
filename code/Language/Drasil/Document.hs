@@ -9,7 +9,6 @@ import Language.Drasil.Chunk.Other
 import Language.Drasil.Chunk.Req
 import Language.Drasil.Chunk.LC
 import Language.Drasil.Chunk.NamedIdea
-import Language.Drasil.ChunkDB (SymbolMap)
 import Language.Drasil.Spec (Sentence(..), RefType(..), (+:+))
 import Language.Drasil.RefHelpers
 import Language.Drasil.Expr
@@ -45,7 +44,7 @@ data Contents = Table [Sentence] [[Sentence]] Title Bool
                | Paragraph Sentence -- ^ Paragraphs are just sentences.
                | EqnBlock Expr
      --        CodeBlock Code   -- GOOL complicates this.  Removed for now.
-               | Definition SymbolMap DType
+               | Definition DType
                -- ^ Data/General definition or theoretical model. SymbolMap for
                -- looking up variables (currently a hack).
                | Enumeration ListType -- ^ Lists

@@ -190,6 +190,7 @@ funcDoc' _ (IterBegin) = text "IterBegin"
 funcDoc' _ (IterEnd) = text "IterEnd"
 funcDoc' _ Floor = text "Floor"
 funcDoc' _ Ceiling = text "Ceiling"
+funcDoc' c (ListExtend t) = text "ListExtend" <+> stateType c t Dec
 
 iterationDoc' :: Config -> Iteration -> Doc
 iterationDoc' c (For initv cond upd b) = vcat [

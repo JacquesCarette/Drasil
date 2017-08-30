@@ -51,6 +51,8 @@ dep (NotIn a _)   = nub (concat $ map dep a)
 dep (State a b)   = nub ((concat $ map (dep . quant) a) ++ dep b)
 dep (Matrix a)    = nub (concat $ map (concat . map dep) a)
 dep (Index a i)   = nub (dep a ++ dep i)
+dep (Len a)       = nub (dep a)
+dep (Append a b)  = nub (dep a ++ dep b) 
 
 -- | Get a list of VarChunks from an equation in order to print
 vars :: (HasSymbolTable s) => Expr -> s -> [VarChunk]
@@ -88,6 +90,8 @@ vars (NotIn a _)  m = nub (concat $ map (\x -> vars x m) a)
 vars (State a b)  m = nub ((concat $ map (\x -> vars (quant x) m) a) ++ vars b m)
 vars (Matrix a)   m = nub (concat $ map (\x -> concat $ map (\y -> vars y m) x) a)
 vars (Index a i)  m = nub (vars a m ++ vars i m)
+vars (Len a)      m = nub (vars a m)
+vars (Append a b) m = nub (vars a m ++ vars b m) 
 
 -- | Get a list of CodeChunks from an equation
 codevars :: (HasSymbolTable s) => Expr -> s -> [CodeChunk]

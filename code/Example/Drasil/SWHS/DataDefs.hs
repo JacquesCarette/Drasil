@@ -6,7 +6,7 @@ import Language.Drasil
 import Control.Lens ((^.))
 
 import Drasil.SWHS.Unitals (melt_frac, latentE_P, htFusion, pcm_mass,
-  temp_W, temp_PCM, ht_flux_P, pcm_HTC, coil_HTC, temp_C, swhsSymbols,
+  temp_W, temp_PCM, ht_flux_P, pcm_HTC, coil_HTC, temp_C,
   swhsSymbolsAll, ht_flux_C)
 
 import Data.Drasil.Concepts.Documentation (acroNumGen)

@@ -66,20 +66,20 @@ im3 = makeRC "im3" (im3NP) (im3descr +:+ im3leg) im3Rel1
 im3NP :: NP
 im3NP =  nounPhraseSP "Collisions on 2D rigid bodies"
 
-im3Rel1, im3Rel2, im3Rel3, im3Rel4 :: Relation -- FIXME: add proper equation
+im3Rel1 {-, im3Rel2, im3Rel3, im3Rel4 -} :: Relation -- FIXME: add proper equation
 im3Rel1 = (FCall (C vel_A) [C time_c]) := (FCall (C vel_A) [C QP.time]) +
   ((C QP.impulseS) / (C mass_A)) * (C normalVect)
 
-im3Rel2 = (FCall (C vel_B) [C time_c]) := (FCall (C vel_B) [C QP.time]) -
-  ((C QP.impulseS) / (C mass_B)) * (C normalVect)
+--im3Rel2 = (FCall (C vel_B) [C time_c]) := (FCall (C vel_B) [C QP.time]) -
+--  ((C QP.impulseS) / (C mass_B)) * (C normalVect)
 
 
 --fixme: these two need to use cross product and parametrized dispUnit symbol
-im3Rel3 = (FCall (C angVel_A) [C time_c]) := (FCall (C angVel_A) [C QP.time]) +
-  ((C dispUnit) * ((C QP.impulseS) * (C normalVect))) / (C QP.momentOfInertia)
+--im3Rel3 = (FCall (C angVel_A) [C time_c]) := (FCall (C angVel_A) [C QP.time]) +
+--  ((C dispUnit) * ((C QP.impulseS) * (C normalVect))) / (C QP.momentOfInertia)
 
-im3Rel4 = (FCall (C angVel_B) [C time_c]) := (FCall (C angVel_B) [C QP.time]) -
-  ((C dispUnit) * ((C QP.impulseS) * (C normalVect))) / (C QP.momentOfInertia)
+--im3Rel4 = (FCall (C angVel_B) [C time_c]) := (FCall (C angVel_B) [C QP.time]) -
+--  ((C dispUnit) * ((C QP.impulseS) * (C normalVect))) / (C QP.momentOfInertia)
 
 --fixme: need referencing
 im3descr, im3leg :: Sentence

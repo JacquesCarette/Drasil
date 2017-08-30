@@ -36,7 +36,7 @@ data SecItem where
   TMods     :: [RelationConcept] -> SecItem
   IMods     :: [RelationConcept] -> SecItem
   DataDef   :: [QDefinition] -> SecItem
-  GenDef    :: [RelationConcept] -> SecItem
+  --GenDef    :: [RelationConcept] -> SecItem
   ConChunk  :: [ConceptChunk] -> SecItem
   Sent      :: [Sentence] -> SecItem
   UnQuantI  :: [UncertQ] -> SecItem
@@ -220,11 +220,11 @@ pullIMods xs = pullFunc xs getIMods hasIMods
 pullTMods :: [SecItem] -> [RelationConcept]
 pullTMods xs = pullFunc xs getTMods hasTMods
 
-getID :: SubSec -> String
-getID (SectionModel niname _) = niname ^. id
+--getID :: SubSec -> String
+--getID (SectionModel niname _) = niname ^. id
 
-pullSubSec :: (NamedIdea a) => a -> [SubSec] -> Maybe SubSec
-pullSubSec nameid ls = getItem (\x -> (getID x) == (nameid ^. id)) ls
+--pullSubSec :: (NamedIdea a) => a -> [SubSec] -> Maybe SubSec
+--pullSubSec nameid ls = getItem (\x -> (getID x) == (nameid ^. id)) ls
 
 -----------------------
 -- Section Assembler --
@@ -245,6 +245,7 @@ sectionMap progName (SectionModel niname xs)
     [genenralSystemIntro]
   | compareID niname  (Doc.requirement ^. id)              = section (titleize niname)
     [requirementsIntro]
+  | otherwise                                              = error "no matches on section name"
 
 --------------------
 -- Section Render --
@@ -301,7 +302,7 @@ assumptionSect (SectionModel niname xs) = section (titleize' niname)
 
 
 theoreticalModelSect :: (NamedIdea a, HasSymbolTable s) => SubSec -> s -> a -> Section
-theoreticalModelSect (SectionModel niname xs) syMap progName = section
+theoreticalModelSect (SectionModel niname xs) _ progName = section
   (titleize' niname) ((tModIntro progName):theoreticalModels ++ 
   (pullContents xs)) (pullSections xs)
   where theoreticalModels = map symMap $ pullTMods xs
@@ -316,14 +317,14 @@ generalDefinitionSect (SectionModel niname xs) _ = section (titleize' niname)
 
 
 instanceModelSect :: (HasSymbolTable s) => SubSec -> s -> Section
-instanceModelSect (SectionModel niname xs) syMap = section (titleize' niname)
+instanceModelSect (SectionModel niname xs) _ = section (titleize' niname)
   (iModIntro:instanceModels ++ (pullContents xs)) (pullSections xs)
   where symMap         = Definition . Theory
         instanceModels = map symMap $ pullIMods xs
 
 
 dataDefinitionSect :: (HasSymbolTable s) => SubSec -> s -> Section
-dataDefinitionSect (SectionModel niname xs) syMap = section (titleize' niname)
+dataDefinitionSect (SectionModel niname xs) _ = section (titleize' niname)
   (dataIntro:dataDefinitions ++ (pullContents xs)) (pullSections xs)
   where dataIntro       = dataDefinitionIntro $ pullSents xs
         symMap          = Definition . Data

@@ -9,7 +9,7 @@ import Drasil.GlassBR.Unitals (tolLoad, dimlessLoad, gTF, stressDistFac,
   aspectR, aspectRWithEqn, demand, sdf_tol, nom_thick, act_thick, pb_tol,
   plate_width, plate_len, sflawParamM, mod_elas, glass_type, sflawParamK,
   glassTypeFactors, lDurFac, glassTypeAbbrsStr, nonFactorL, 
-  actualThicknesses, nominalThicknesses, load_dur, risk_fun)
+  actualThicknesses, nominalThicknesses, risk_fun)
 
 import Data.Drasil.Utils (getS, mkDataDef', mkDataDef)
 import Data.Drasil.SentenceStructures (sAnd)

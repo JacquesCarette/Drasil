@@ -121,6 +121,7 @@ instance LayoutObj Contents where
   refName (IMod)                  = error "IMod referencing unimplemented"
   refName (GDef)                  = error "GDef referencing unimplemented"
   refName (DDef _ _ _)            = error "DDef referencing unimplemented"
+  refName (Bib _)                 = error "Bib referencing unimplemented"
   rType (Table _ _ _ _)           = Tab
   rType (Figure _ _)              = Fig
   rType (Definition (Data qd))    = Def $ getA qd

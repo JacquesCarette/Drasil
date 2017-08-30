@@ -1,8 +1,8 @@
 module Main (main) where
 
-import Language.Drasil (DocType(SRS,MG,Website), Recipe(Recipe), gen, genCode)
+import Language.Drasil (DocType(SRS,MG,Website), Recipe(Recipe), gen)
 
-import Drasil.SSP.Body (ssp_srs, ssp_mg, ssp_code, sspSymMap)
+import Drasil.SSP.Body (ssp_srs, ssp_mg, sspSymMap)
 
 docs :: [Recipe]
 docs = [Recipe (Website "SSP_SRS") ssp_srs,

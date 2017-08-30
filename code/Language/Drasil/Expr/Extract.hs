@@ -53,7 +53,7 @@ dep (Matrix a)    = nub (concat $ map (concat . map dep) a)
 dep (Index a i)   = nub (dep a ++ dep i)
 
 -- | Get a list of VarChunks from an equation in order to print
-vars :: Expr -> SymbolMap -> [VarChunk]
+vars :: (HasSymbolTable s) => Expr -> s -> [VarChunk]
 vars (a :/ b)     m = nub (vars a m ++ vars b m)
 vars (a :* b)     m = nub (vars a m ++ vars b m)
 vars (a :+ b)     m = nub (vars a m ++ vars b m)
@@ -90,7 +90,7 @@ vars (Matrix a)   m = nub (concat $ map (\x -> concat $ map (\y -> vars y m) x) 
 vars (Index a i)  m = nub (vars a m ++ vars i m)
 
 -- | Get a list of CodeChunks from an equation
-codevars :: Expr -> SymbolMap -> [CodeChunk]
+codevars :: (HasSymbolTable s) => Expr -> s -> [CodeChunk]
 codevars (a :/ b)     sm = nub (codevars a sm ++ codevars b sm)
 codevars (a :* b)     sm = nub (codevars a sm ++ codevars b sm)
 codevars (a :+ b)     sm = nub (codevars a sm ++ codevars b sm)
@@ -102,7 +102,7 @@ codevars (a :|| b)    sm = nub (codevars a sm ++ codevars b sm)
 codevars (Deriv _ a b) sm = nub (codevars a sm ++ codevars b sm)
 codevars (Not e)      sm = codevars e sm
 codevars (Neg e)      sm = codevars e sm
-codevars (C c)        sm = [codevar $ makeVC (c ^. id) (pn "") (symbol (symbLookup c sm))]
+codevars (C c)        sm = [codevar $ makeVC (c ^. id) (pn "") (symbol (symbLookup c (sm ^. symbolTable)))]
 codevars (Int _)      _ = []
 codevars (Dbl _)      _ = []
 codevars (Bln _)      _ = []
@@ -130,7 +130,7 @@ codevars (Append a b) sm = nub (codevars a sm ++ codevars b sm)
 
 
 -- | Get a list of CodeChunks from an equation (no functions)
-codevars' :: Expr -> SymbolMap -> [CodeChunk]
+codevars' :: (HasSymbolTable s) => Expr -> s -> [CodeChunk]
 codevars' (a :/ b)     sm = nub (codevars' a sm ++ codevars' b sm)
 codevars' (a :* b)     sm = nub (codevars' a sm ++ codevars' b sm)
 codevars' (a :+ b)     sm = nub (codevars' a sm ++ codevars' b sm)
@@ -142,7 +142,7 @@ codevars' (a :|| b)    sm = nub (codevars' a sm ++ codevars' b sm)
 codevars' (Deriv _ a b) sm = nub (codevars' a sm ++ codevars' b sm)
 codevars' (Not e)      sm = codevars' e sm 
 codevars' (Neg e)      sm = codevars' e sm 
-codevars' (C c)        sm = [codevar $ makeVC (c ^. id) (pn "") (symbol $ symbLookup c sm)]
+codevars' (C c)        sm = [codevar $ makeVC (c ^. id) (pn "") (symbol $ symbLookup c (sm ^. symbolTable))]
 codevars' (Int _)       _ = []
 codevars' (Dbl _)       _ = []
 codevars' (Bln _)       _ = []
@@ -201,6 +201,6 @@ quant (Exists e) = e
 --   setting to all to rational
 -- | Convert any chunk to a VarChunk as long as it is an instance of SymbolForm.
 -- Again, used for printing equations/descriptions mostly.
-toVC :: (Chunk c) => c -> SymbolMap -> VarChunk
+toVC :: (Chunk c, HasSymbolTable s) => c -> s -> VarChunk
 toVC c m = vc' (lookupC) (symbol lookupC) (Rational)
-  where lookupC = symbLookup c m
+  where lookupC = symbLookup c (m ^. symbolTable)

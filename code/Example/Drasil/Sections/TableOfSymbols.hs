@@ -2,7 +2,6 @@
 module Drasil.Sections.TableOfSymbols 
   (table) where
 
-import Data.Maybe (isJust)
 import Data.Drasil.Utils(getS)
 
 import Language.Drasil
@@ -15,11 +14,10 @@ table :: (Quantity s) => [s] -> (s -> Sentence) -> Contents
 table ls f = Table 
   [at_start symbol_, at_start description, at_start' CM.unit_]
   (mkTable
-  [(\ch -> (\(Just t) -> (getS t)) (getSymb ch)),
+  [(\ch -> (getS ch)),
   f, 
   unit'2Contents]
-  sls)
+  ls)
   (titleize tOfSymb) False
-  where sls = filter (isJust . getSymb) ls --Don't use catMaybes
 
 -- ^. defn

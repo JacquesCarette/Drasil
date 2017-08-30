@@ -75,7 +75,7 @@ tConToExpr (Sfwr x) = x 0 --FIXME: HACK
 -- | Create the fields for a definition from a QDefinition (used by ddefn)
 mkQField :: QDefinition -> SymbolMap -> Field -> ModRow -> ModRow
 mkQField d _ l@Label fs = (show l, (Paragraph $ at_start d):[]) : fs
-mkQField d _ l@Symbol fs = (show l, (Paragraph $ (P $ d ^. symbol)):[]) : fs
+mkQField d _ l@Symbol fs = (show l, (Paragraph $ (P $ symbol d)):[]) : fs
 mkQField d _ l@Units fs = (show l, (Paragraph $ (unit'2Contents d)):[]) : fs
 mkQField d _ l@DefiningEquation fs = (show l, (EqnBlock $ equat d):[]) : fs
 mkQField d m l@(Description v u intro) fs = 
@@ -116,14 +116,14 @@ buildGDDescription Verbose u e m  =
 -- | Used for definitions. The first pair is the symbol of the quantity we are
 -- defining.
 firstPair :: InclUnits -> QDefinition -> ListPair
-firstPair (IgnoreUnits) d  = (P (d ^. symbol), Flat (phrase d))
-firstPair (IncludeUnits) d = (P (d ^. symbol), Flat (phrase d +:+ sParen (unit'2Contents d)))
+firstPair (IgnoreUnits) d  = (P (symbol d), Flat (phrase d))
+firstPair (IncludeUnits) d = (P (symbol d), Flat (phrase d +:+ sParen (unit'2Contents d)))
 
 -- | Create the descriptions for each symbol in the relation/equation
 descPairs :: InclUnits -> [VarChunk] -> [ListPair]
-descPairs IgnoreUnits = map (\x -> (P (x ^. symbol), Flat $ phrase x))
+descPairs IgnoreUnits = map (\x -> (P (symbol x), Flat $ phrase x))
 descPairs IncludeUnits = 
-  map (\x -> ((P (x ^. symbol)), Flat $ phrase x +:+ sParen (unit'2Contents x)))
+  map (\x -> ((P (symbol x)), Flat $ phrase x +:+ sParen (unit'2Contents x)))
   -- FIXME: Need a Units map for looking up units from variables
 
 instance Show Field where

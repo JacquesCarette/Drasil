@@ -9,7 +9,7 @@ import Data.Drasil.Units.Thermodynamics (heat_transfer_coef)
 hghcSymMap :: SymbolMap
 hghcSymMap = symbolMap symbols
 
-symbols :: [QSWrapper]
+symbols :: [QWrapper]
 symbols = map qs hghcVars ++ map qs htVars
 
 hghcVars :: [QDefinition]
@@ -18,7 +18,7 @@ hghcVars = [htTransCladFuel, htTransCladCool]
 htVars :: [VarChunk]
 htVars = [cladThick, coolFilmCond, gapFilmCond, cladCond]
 
-htInputs, htOutputs :: [QSWrapper]
+htInputs, htOutputs :: [QWrapper]
 htInputs = map qs htVars
 htOutputs = map qs hghcVars
 

@@ -171,7 +171,7 @@ maybeExpanded a b = likelyFrame a (S "expanded") b
 tAndDWAcc :: Concept s => s -> ItemType
 tAndDWAcc temp = Flat $ ((at_start temp) :+: sParenDash (short temp) :+: (temp ^. defn)) 
 -- term (symbol) - definition
-tAndDWSym :: (Concept s, SymbolForm a) => s -> a -> ItemType
+tAndDWSym :: (Concept s, Quantity a) => s -> a -> ItemType
 tAndDWSym tD sym = Flat $ ((at_start tD) :+: sParenDash (getS sym)) :+: (tD ^. defn)
 -- term - definition
 tAndDOnly :: Concept s => s -> ItemType
@@ -181,11 +181,11 @@ followA :: Sentence -> Int -> Sentence
 preceding `followA` num = preceding +:+ S "following" +:+ acroA num
 
 -- | Used when you want to say a term followed by its symbol. ex. "...using the Force F in..."
-getTandS :: (SymbolForm a, NamedIdea a) => a -> Sentence
+getTandS :: (Quantity a, NamedIdea a) => a -> Sentence
 getTandS a = phrase a +:+ getS a
 
 -- | get term, definition, and symbol
-getTDS :: (SymbolForm a, NamedIdea a, Concept a) => a -> Sentence
+getTDS :: (Quantity a, Concept a) => a -> Sentence
 getTDS a = phrase a +:+ (a ^. defn) +:+ getS a
 
 --Ideally this would create a reference to the equation too
@@ -193,7 +193,7 @@ eqN :: Int -> Sentence
 eqN n = phrase equation +:+ sParen (S $ show n)
 
 --Produces a sentence that displays the constraints in a {}.
-displayConstrntsAsSet :: SymbolForm a => a -> [String] -> Sentence
+displayConstrntsAsSet :: Quantity a => a -> [String] -> Sentence
 displayConstrntsAsSet sym listOfVals = E $ [C sym] `IsIn` (DiscreteS listOfVals)
 
 extrctStrng :: Sentence -> String
@@ -205,10 +205,10 @@ extrctStrng _ = error "Invalid type extraction"
 -- Start of attempt at intelligent formatter for input constraints
 -- these are the helper functions for inDataConstTbl
 
-fmtInputConstr :: (UncertainQuantity c, Constrained c, SymbolForm c) => c -> [c] -> [Sentence]
+fmtInputConstr :: (UncertainQuantity c, Constrained c, Quantity c) => c -> [c] -> [Sentence]
 fmtInputConstr q qlst = [getS q] ++ physC q qlst ++ sfwrC q qlst ++ [fmtU (E $ getRVal q) q] ++ typUncr q qlst
 
-fmtOutputConstr :: (Constrained c, SymbolForm c) => c -> [c] -> [Sentence]
+fmtOutputConstr :: (Constrained c, Quantity c) => c -> [c] -> [Sentence]
 fmtOutputConstr q qlst = [getS q] ++ physC q qlst ++ sfwrC q qlst
 
 none :: Sentence
@@ -216,7 +216,7 @@ none = S "None"
 
 --These check the entire list of UncertainQuantity and if they are all empty in that field,
 -- return empty list, otherwise return the appropriate thing
-physC :: (Constrained c, SymbolForm c) => c -> [c] -> [Sentence]
+physC :: (Constrained c, Quantity c) => c -> [c] -> [Sentence]
 physC q qlst
   | noPhysC (foldlSent_ $ map fmtPhys qlst) = []
   | noPhysC (fmtPhys q) = [none]
@@ -224,7 +224,7 @@ physC q qlst
   where noPhysC EmptyS = True
         noPhysC _      = False
         
-sfwrC :: (Constrained c, SymbolForm c) => c -> [c] -> [Sentence]
+sfwrC :: (Constrained c, Quantity c) => c -> [c] -> [Sentence]
 sfwrC q qlst
   | noSfwrC (foldlSent_ $ map fmtSfwr qlst) = []
   | noSfwrC (fmtSfwr q) = [none]
@@ -252,13 +252,13 @@ typUncr q qlst
         isUn Nothing  = False
 
 --Formatters for the constraints
-fmtPhys :: (Constrained s, SymbolForm s) => s -> Sentence
+fmtPhys :: (Constrained s, Quantity s) => s -> Sentence
 fmtPhys s = foldlList $ fmtCP $ filter filterP (s ^. constraints)
   where filterP (Phys _) = True
         filterP (Sfwr _) = False
         fmtCP = map (\(Phys f) -> E $ f (C s))
 
-fmtSfwr :: (Constrained s, SymbolForm s) => s -> Sentence
+fmtSfwr :: (Constrained s, Quantity s) => s -> Sentence
 fmtSfwr s = foldlList $ fmtCS $ filter filterS (s ^. constraints)
   where filterS (Phys _) = False
         filterS (Sfwr _) = True

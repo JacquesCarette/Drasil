@@ -11,7 +11,7 @@ import Drasil.GlassBR.Concepts (annealedGlass, aR, fullyTGlass, glassTypeFac,
 
 import Data.Drasil.SI_Units
 import Data.Drasil.Constraints
-import Data.Drasil.Utils (symbolMapFun, mkDataDef, getS)
+import Data.Drasil.Utils (mkDataDef, getS)
 import Data.Drasil.SentenceStructures (foldlSent, displayConstrntsAsSet,
   foldlsC, foldlOptions)
 
@@ -42,7 +42,7 @@ glass_type, nom_thick :: ConstrainedChunk
 defaultUncrt :: Double
 defaultUncrt = 0.1
 
-gbInputs :: [QSWrapper]
+gbInputs :: [QWrapper]
 gbInputs = (map qs gbInputsWUnitsUncrtn) ++ (map qs gbInputsWUncrtn) ++ 
   (map qs gbInputsNoUncrtn) ++ map qs sdVector
 
@@ -87,11 +87,11 @@ pb_tol = uvc "pb_tol" (nounPhraseSP "tolerable probability of breakage")
 char_weight = uqcND "char_weight" (nounPhraseSP "charge weight") 
   lW kilogram Real
   [ physc $ \c -> c :>= (Dbl 0),
-    sfwrc $ \c -> (C cWeightMax) :<= c,
-    sfwrc $ \c -> c :<= (C cWeightMin) ] (Dbl 42) defaultUncrt
+    sfwrc $ \c -> (C cWeightMin) :<= c,
+    sfwrc $ \c -> c :<= (C cWeightMax) ] (Dbl 42) defaultUncrt
 
 tNT = uvc "tNT" (nounPhraseSP "TNT equivalent factor")
-  (Atomic "TNT") Integer
+  (Atomic "TNT") Real
   [ gtZeroConstr ] (1) defaultUncrt
 
 standOffDist = uqcND "standOffDist" (nounPhraseSP "stand off distance") 
@@ -115,7 +115,7 @@ glass_type  = cvc "glass_type" (nounPhraseSent $ phrase glassTy +:+
 
 {--}
 
-gbOutputs :: [QSWrapper]
+gbOutputs :: [QWrapper]
 gbOutputs = map qs [is_safe1, is_safe2] ++ map qs [prob_br]
 
 prob_br :: ConstrainedChunk
@@ -136,11 +136,11 @@ dim_max, dim_min, ar_max, cWeightMax, cWeightMin, sd_min,
 
 dim_max     = mkDataDef (unitary "dim_max"
   (nounPhraseSP "maximum value for one of the dimensions of the glass plate") 
-  (sub lD (Atomic "max")) millimetre Real) (Dbl 0.1)
+  (sub lD (Atomic "max")) millimetre Real) (Dbl 5)
 
 dim_min     = mkDataDef (unitary "dim_min"
   (nounPhraseSP "minimum value for one of the dimensions of the glass plate") 
-  (sub lD (Atomic "min")) millimetre Real) (Dbl 5)
+  (sub lD (Atomic "min")) millimetre Real) (Dbl 0.1)
 
 ar_max     = mkDataDef (vc "ar_max"
   (nounPhraseSP "maximum aspect ratio")
@@ -148,19 +148,19 @@ ar_max     = mkDataDef (vc "ar_max"
 
 cWeightMax = mkDataDef (unitary "cWeightMax" 
   (nounPhraseSP "maximum permissible input charge weight")
-  (sub (char_weight ^. symbol) (Atomic "max")) kilogram Rational) (Dbl 910)
+  (sub (symbol char_weight) (Atomic "max")) kilogram Rational) (Dbl 910)
 
 cWeightMin = mkDataDef (unitary "cWeightMin"
   (nounPhraseSP "minimum permissible input charge weight")
-  (sub (char_weight ^. symbol) (Atomic "min")) kilogram Rational) (Dbl 4.5)
+  (sub (symbol char_weight) (Atomic "min")) kilogram Rational) (Dbl 4.5)
 
 sd_min     = mkDataDef (unitary "sd_min"
   (nounPhraseSP "minimum stand off distance permissible for input") 
-  (sub (standOffDist ^. symbol) (Atomic "min")) metre Real) (Dbl 6)
+  (sub (symbol standOffDist) (Atomic "min")) metre Real) (Dbl 6)
 
 sd_max     = mkDataDef (unitary "sd_max"
   (nounPhraseSP "maximum stand off distance permissible for input")
-  (sub (standOffDist ^. symbol) (Atomic "max")) metre Real) (Dbl 130)
+  (sub (symbol standOffDist) (Atomic "max")) metre Real) (Dbl 130)
 
 {--}
 
@@ -179,19 +179,19 @@ demand      = unitary "demand"      (nounPhraseSP "applied load (demand)")
 
 eqTNTWeight = unitary "eqTNTWeight" 
   (nounPhraseSP "explosive mass in equivalent weight of TNT")
-  (sub (char_weight ^. symbol) (tNT ^. symbol)) kilogram Real
+  (sub (symbol char_weight) (symbol tNT)) kilogram Real
 
 load_dur    = unitary "load_dur"    (nounPhraseSP "duration of load")
   (sub lT lD) second Real
 
 sdx         = unitary "sdx" (nounPhraseSP "stand off distance (x-component)")
-  (sub (standOffDist ^. symbol) lX) metre Real
+  (sub (symbol standOffDist) lX) metre Real
 
 sdy         = unitary "sdy" (nounPhraseSP "stand off distance (y-component)")
-  (sub (standOffDist ^. symbol) lY) metre Real
+  (sub (symbol standOffDist) lY) metre Real
 
 sdz         = unitary "sdz" (nounPhraseSP "stand off distance (z-component)")
-  (sub (standOffDist ^. symbol) lZ) metre Real
+  (sub (symbol standOffDist) lZ) metre Real
 
 sflawParamK = unitary "sflawParamK" (nounPhraseSP "surface flaw parameter") --parameterize?
   lK sFlawPU Real
@@ -203,7 +203,7 @@ sflawParamM = unitary "sflawParamM" (nounPhraseSP "surface flaw parameter") --pa
 
 glassBRUnitless :: [VarChunk]
 glassBRUnitless = [risk_fun, is_safe1, is_safe2, stressDistFac, sdf_tol,
-  dimlessLoad, tolLoad, lRe, loadSF, gTF, lDurFac, nonFactorL]
+  dimlessLoad, tolLoad, lRe, loadSF, gTF, lDurFac, nonFactorL, aspectR]
 
 aspectR, risk_fun, is_safe1, is_safe2, stressDistFac, sdf_tol,
   dimlessLoad, tolLoad, lRe, loadSF, gTF, lDurFac, nonFactorL :: VarChunk
@@ -235,13 +235,13 @@ risk_fun      = makeVC "risk_fun"    (nounPhraseSP "risk of failure") cB
 
 sdf_tol       = makeVC "sdf_tol"     (nounPhraseSP $ "stress distribution" ++
   " factor (Function) based on Pbtol") 
-  (sub (stressDistFac ^. symbol) (Atomic "tol"))
+  (sub (symbol stressDistFac) (Atomic "tol"))
 
 stressDistFac = makeVC "stressDistFac" (nounPhraseSP $ "stress distribution" 
   ++ " factor (Function)") cJ
 
 tolLoad       = makeVC "tolLoad"       (nounPhraseSP "tolerable load")
-  (sub (dimlessLoad ^. symbol) (Atomic "tol"))
+  (sub (symbol dimlessLoad) (Atomic "tol"))
 
 
 terms :: [ConceptChunk]
@@ -357,21 +357,6 @@ specDeLoad    = dcc "specDeLoad"  (nounPhraseSP "specified design load")
 
 {--}
 
-this_symbols :: [QSWrapper]
-this_symbols = (map qs [prob_br] ++ gbInputs ++ (map qs gBRSpecParamVals) ++ 
-  (map qs glassBRSymbolsWithDefns) ++ (map qs glassBRSymbols) ++
-  (map qs glassBRUnitless))
-
-{--}
-
-gbSymbMap :: SymbolMap
-gbSymbMap = symbolMap this_symbols
-
-gbSymbMapD :: QDefinition -> Contents
-gbSymbMapD term_ = (symbolMapFun gbSymbMap Data) term_
-
-gbSymbMapT :: RelationConcept -> Contents
-gbSymbMapT term_ = (symbolMapFun gbSymbMap Theory) term_
 
 {--}
 
@@ -379,6 +364,7 @@ gbSymbMapT term_ = (symbolMapFun gbSymbMap Theory) term_
 
 gbConstants :: [QDefinition]
 gbConstants = [constant_M, constant_K, constant_ModElas, constant_LoadDur, constant_LoadDF, constant_LoadSF]
+                ++ gBRSpecParamVals 
 
 constant_M, constant_K, constant_ModElas, constant_LoadDur, constant_LoadDF, constant_LoadSF :: QDefinition
 constant_K       = mkDataDef sflawParamK  $ (Grouping (Dbl 2.86)) * (10 :^ (Neg 53))
@@ -393,7 +379,7 @@ sdWithEqn :: QDefinition
 sdWithEqn = mkDataDef standOffDist sdCalculation
 
 sdCalculation :: Relation
-sdCalculation = (C standOffDist) := euclidean (map C sdVector)
+sdCalculation = euclidean (map C sdVector)
 
 sdVectorSent :: Sentence
 sdVectorSent = foldlsC (map getS sdVector)
@@ -407,8 +393,8 @@ wtntWithEqn :: QDefinition
 wtntWithEqn = mkDataDef eqTNTWeight wtntCalculation
 
 wtntCalculation :: Relation
-wtntCalculation = (C eqTNTWeight) := (C char_weight) * (C tNT)
-
+--wtntCalculation = (C eqTNTWeight) := (C char_weight) * (C tNT)
+wtntCalculation = (C char_weight) * (C tNT)
 --
 
 aspectRWithEqn :: QDefinition

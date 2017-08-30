@@ -1,4 +1,4 @@
-module Drasil.HGHC.HGHC (srsBody, mgBody, misBody, modules) where
+module Drasil.HGHC.HGHC (srsBody, mgBody, misBody, modules, hghcSymMap) where
 
 import Language.Drasil
 import Drasil.DocumentLanguage
@@ -6,7 +6,6 @@ import Drasil.DocumentLanguage
 import Drasil.Template.DD (makeDD)
 
 import Data.List (intersperse)
-import Control.Lens ((^.))
 
 import Drasil.HGHC.HeatTransfer (hghcVars, hghcSymMap, fp, htOutputs,
   htInputs, symbols, nuclearPhys, hghc)
@@ -39,7 +38,7 @@ thisChoices = Choices {
 }
 
 thisCode :: CodeSpec
-thisCode = codeSpec' thisSI thisChoices []
+thisCode = codeSpec' thisSI thisChoices [] hghcSymMap
   
 thisSI :: SystemInformation
 thisSI = SI {
@@ -79,8 +78,8 @@ mgBody = doc "MG" hghcVars (name spencerSmith) mgSecs
 misBody :: Document
 misBody = doc "MIS" hghcVars (name spencerSmith) misSecs
 
-doc :: SymbolForm s => String -> [s] -> Sentence -> [Section] -> Document
+doc :: Quantity s => String -> [s] -> Sentence -> [Section] -> Document
 doc nam ls author body =
   Document ((S nam +:+ S "for") +:+
-  (foldr1 (+:+) (intersperse (S "and") (map (\x -> P $ x ^. symbol) ls))))
+  (foldr1 (+:+) (intersperse (S "and") (map (\x -> P $ symbol x) ls))))
   author body

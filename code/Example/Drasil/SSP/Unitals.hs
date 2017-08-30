@@ -1,20 +1,19 @@
 module Drasil.SSP.Unitals where --export all of it
 
 import Language.Drasil
-import Control.Lens ((^.))
 
 import Data.Drasil.SI_Units (newton, pascal, metre, degree, specific_weight)
 import Data.Drasil.Units.SolidMechanics (stiffness3D)
 import Data.Drasil.Quantities.Physics as QP (force, pressure)
 import Data.Drasil.Quantities.SolidMechanics as SM (nrmStrss, elastMod,
-  poissnsR, stffness)
+  poissnsR, stffness, mobShear, shearRes)
 import Data.Drasil.Units.Physics (momentOfForceU)
 import Drasil.SSP.Defs (fs_concept)
 import Data.Drasil.Constraints (gtZeroConstr)
 
 sspSymbols :: [CQSWrapper]
 sspSymbols = (map cqs sspInputs) ++ (map cqs sspOutputs) ++
-  (map cqs sspUnits) ++ (map cqs sspUnitless) 
+  (map cqs sspUnits) ++ (map cqs sspUnitless) ++ (map cqs [SM.mobShear, SM.shearRes])
 
 ---------------------------
 -- Imported UnitalChunks --
@@ -422,22 +421,22 @@ index = cvRs (dcc "index" (nounPhraseSP "index")
   ("used to show a quantity applies to only one slice")) lI Natural
 
 --FIXME: possibly move to Language/Drasil/Expr.hs
-indx1 :: (SymbolForm a) => a -> Expr
+indx1 :: (Quantity a) => a -> Expr
 indx1 a = Index (C a) (Int 1)
 
-indxn :: (SymbolForm a) => a -> Expr
+indxn :: (Quantity a) => a -> Expr
 indxn a = Index (C a) (C numbSlices)
 
-inxi, inxiP1, inxiM1 :: SymbolForm e => e -> Expr
+inxi, inxiP1, inxiM1 :: Quantity e => e -> Expr
 inxiP1 e = inx e 1
 inxi   e = inx e 0
 inxiM1 e = inx e (-1)
 
-inx :: SymbolForm e => e -> Integer -> Expr
+inx :: Quantity e => e -> Integer -> Expr
 inx e n 
   | n < 0     = Index (C e) (C index - Int (-n))
   | n == 0    = Index (C e) (C index)
   | otherwise = Index (C e) (C index + Int n)
 
 sum1toN :: Expr -> Expr
-sum1toN = summation (Just (index ^. symbol, Low 1, High $ C numbSlices))
+sum1toN = summation (Just (symbol index, Low 1, High $ C numbSlices))

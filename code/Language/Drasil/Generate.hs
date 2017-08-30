@@ -14,36 +14,36 @@ import Language.Drasil.Format(Format(TeX, HTML))
 import Language.Drasil.Recipe(Recipe(Recipe))
 import Language.Drasil.Code.Imperative.Import (generator, generateCode)
 import Language.Drasil.CodeSpec
-import Data.Function (fix)
+import Language.Drasil.ChunkDB (SymbolMap)
 
 
 -- | Generate a number of artifacts based on a list of recipes.
-gen :: [Recipe] -> IO ()
-gen rl = mapM_ prnt rl
+gen :: [Recipe] -> SymbolMap -> IO ()
+gen rl sm = mapM_ (flip prnt sm) rl
 
 -- | Generate the output artifacts (TeX+Makefile or HTML)
-prnt :: Recipe -> IO ()
-prnt (Recipe dt@(SRS _) body) =
-  do prntDoc dt body
+prnt :: Recipe -> SymbolMap -> IO ()
+prnt (Recipe dt@(SRS _) body) sm =
+  do prntDoc dt body sm
      prntMake dt
-prnt (Recipe dt@(MG _) body) =
-  do prntDoc dt body
+prnt (Recipe dt@(MG _) body) sm =
+  do prntDoc dt body sm
      prntMake dt
 --     prntCode body
-prnt (Recipe dt@(MIS _) body) =
-  do prntDoc dt body
+prnt (Recipe dt@(MIS _) body) sm =
+  do prntDoc dt body sm
      prntMake dt
-prnt (Recipe dt@(LPM _) body) =
-  do prntDoc dt body
-prnt (Recipe dt@(Website fn) body) =
-  do prntDoc dt body
+prnt (Recipe dt@(LPM _) body) sm =
+  do prntDoc dt body sm
+prnt (Recipe dt@(Website fn) body) sm =
+  do prntDoc dt body sm
      outh2 <- openFile ("Website/" ++ fn ++ ".css") WriteMode
      hPutStrLn outh2 $ render (makeCSS body)
      hClose outh2
 
 -- | Helper for writing the documents (TeX / HTML) to file
-prntDoc :: DocType -> Document -> IO ()
-prntDoc dt body = case dt of
+prntDoc :: DocType -> Document -> SymbolMap -> IO ()
+prntDoc dt body sm = case dt of
   (SRS fn)     -> prntDoc' dt fn TeX body
   (MG fn)      -> prntDoc' dt fn TeX body
   (MIS fn)     -> prntDoc' dt fn TeX body
@@ -52,7 +52,7 @@ prntDoc dt body = case dt of
   where prntDoc' dt' fn format body' = do
           createDirectoryIfMissing False $ show dt'
           outh <- openFile (show dt' ++ "/" ++ fn ++ getExt format) WriteMode
-          hPutStrLn outh $ render $ (writeDoc format dt' body')
+          hPutStrLn outh $ render $ (writeDoc format dt' body' sm)
           hClose outh
           where getExt TeX  = ".tex"
                 getExt HTML = ".html"
@@ -66,19 +66,22 @@ prntMake dt =
      hClose outh
 
 -- | Renders the documents
-writeDoc :: Format -> DocType -> Document -> Doc
+writeDoc :: Format -> DocType -> Document -> SymbolMap -> Doc
 writeDoc TeX  = genTeX
 writeDoc HTML = genHTML
 writeDoc _    = error "we can only write TeX/HTML (for now)"
 
 -- | Calls the code generator
-genCode :: CodeSpec -> IO ()
-genCode spec = do 
-  workingDir <- getCurrentDirectory
-  createDirectoryIfMissing False "src"
-  setCurrentDirectory "src"
-  generateCode (fix $ generator spec)
-  setCurrentDirectory workingDir
+genCode :: CodeSpec -> SymbolMap -> IO ()
+genCode spec sm = 
+  let g = generator spec sm
+  in
+    do 
+      workingDir <- getCurrentDirectory
+      createDirectoryIfMissing False "src"
+      setCurrentDirectory "src"
+      generateCode g g
+      setCurrentDirectory workingDir
 
 
 -- -- | Calls the code generator using the 'ModuleChunk's

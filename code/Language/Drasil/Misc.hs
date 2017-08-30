@@ -6,6 +6,7 @@ import Language.Drasil.Chunk.Quantity
 import Language.Drasil.Unit
 import Language.Drasil.Chunk.NamedIdea (NamedIdea, getA, short, term)
 import Language.Drasil.Chunk.Unitary
+import Language.Drasil.Symbol (Symbol)
 import qualified Language.Drasil.NounPhrase as NP
 
 --import Data.List (delete)
@@ -83,6 +84,9 @@ phrase's, plural's :: NamedIdea n => n -> Sentence
 phrase's a = phrase a :+: S "'s"
 -- | Plural possesive function
 plural's a = plural a :+: S "'"
+
+symbol :: Quantity q => q -> Symbol
+symbol = qsymb
 
 
 --------------------- WIP ---------------------

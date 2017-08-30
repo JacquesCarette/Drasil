@@ -9,11 +9,11 @@ import Language.Drasil
 elastMod, mobShear, normForce, nrmStrss, poissnsR, shearForce,
   shearRes, stffness :: ConceptChunk
 
-elastMod   = dccWDS "E" (cn "elastic modulus") 
+elastMod   = dccWDS "elastMod" (cn "elastic modulus") 
   (S "The ratio of the" +:+ phrase stress +:+ 
   S "exerted on a body to the resulting" +:+. phrase strain)
 
-mobShear   = dccWDS "S" (cn "mobilized shear force") 
+mobShear   = dccWDS "mobShear" (cn "mobilized shear force") 
   (S "The amount of shear" +:+ (phrase force) +:+ S "resisted by the body" +:+
   S "when shear" +:+ (phrase stress) +:+ S "is applied.")
 
@@ -25,16 +25,16 @@ nrmStrss   = dccWDS "nrmStrss" (cn "normal stress")
   (S "The" +:+ phrase stress +:+ 
   S "exerted perpendicular to the plain of the object")
   
-poissnsR   = dccWDS "nu" (nounPhraseSP "Poisson's ratio") 
+poissnsR   = dccWDS "poissnsR" (nounPhraseSP "Poisson's ratio") 
   (S "The ratio of perpendicular" +:+ phrase strain +:+ 
   S "to parellel" +:+. phrase strain)
   
-shearRes   = dccWDS "P" (cn "shear resistance") 
+shearRes   = dccWDS "shearRes" (cn "shear resistance") 
   (S "The resulting" +:+ phrase friction +:+ 
   S "caused by a shear" +:+. phrase stress)
   
 shearForce = dccWDS "shearForce" (cn' "shear force")
   (S "A" +:+ phrase force +:+ S "applied parallel to the plane of the material.")
   
-stffness   = dccWDS "K" (cn "stiffness") 
+stffness   = dccWDS "stffness" (cn "stiffness") 
   (S "The extent a body" +:+ S "resists" +:+. phrase strain)

@@ -23,7 +23,7 @@ import Drasil.SWHS.Unitals (w_vol, tank_length, tank_vol, tau_W, temp_W,
   htTransCoeff, temp_env, diam, tank_length, w_vol, ht_flux_C, coil_HTC,
   temp_diff, w_E, tank_length_min, tank_length_max, htTransCoeff_min,
   w_density_min, w_density_max, htCap_W_min, htCap_W_max, coil_HTC_min,
-  coil_HTC_max, time_final_max, sim_time)
+  coil_HTC_max, time_final_max, sim_time, coil_SA_max, eta, swhsSymbolsAll)
 import Drasil.SWHS.DataDefs(swhsSymbMapDRef, swhsSymbMapTRef, dd1HtFluxC,
   s4_2_4_DD1, swhsSymbMapT)
 import Drasil.SWHS.TMods (s4_2_2_T1, t1ConsThermE)
@@ -52,7 +52,7 @@ import Data.Drasil.Concepts.Thermodynamics (ener_src, thermal_analysis, temp,
   thermal_energy, ht_trans_theo, heat, melt_pt, boil_pt, heat_trans, ht_flux,
   heat_cap_spec, thermal_conduction)
 import qualified Data.Drasil.Quantities.Thermodynamics as QT (temp,
-  heat_cap_spec, ht_flux)
+  heat_cap_spec, ht_flux, melt_pt)
 import Data.Drasil.Quantities.Physics (time, energy)
 import Data.Drasil.Quantities.PhysicalProperties (vol, mass, density)
 import Data.Drasil.Quantities.Math (uNormalVect, surface, gradient)
@@ -94,7 +94,16 @@ acronyms = [assumption, dataDefn, genDefn, goalStmt, inModel, likelyChg, ode,
 
 -- This contains the list of symbols used throughout the document
 nopcm_Symbols :: [CQSWrapper]
-nopcm_Symbols = (map cqs nopcm_Units) ++ (map cqs nopcm_Constraints)
+nopcm_Symbols = (map cqs nopcm_Units) ++ (map cqs nopcm_Constraints) ++
+  (map cqs [QT.melt_pt])
+  
+nopcm_SymbolsAll :: [QWrapper] --FIXME: Why is PCM (swhsSymbolsAll) here?
+                               --Can't generate without SWHS-specific symbols like pcm_HTC and pcm_SA
+                               --FOUND LOC OF ERROR: Instance Models
+nopcm_SymbolsAll = (map qs nopcm_Units) ++ (map qs nopcm_Constraints) ++
+  (map qs [QT.melt_pt]) ++ (map qs specParamValList) ++ 
+  (map qs [coil_SA_max]) ++ (map qs [tau_W]) ++ 
+  (map qs [surface, uNormalVect, gradient, eta]) ++ swhsSymbolsAll
 
 nopcm_Units :: [UCWrapper]
 nopcm_Units = map ucw [density, tau, in_SA, out_SA,
@@ -165,14 +174,14 @@ nopcm_Choices = Choices {
 }
 
 nopcm_code :: CodeSpec
-nopcm_code = codeSpec' nopcm_si nopcm_Choices [inputMod]
+nopcm_code = codeSpec' nopcm_si nopcm_Choices [inputMod] nopcm_SymbMap
 -- Sub interpolation mod into list when possible              ^
 
 nopcm_srs :: Document
 nopcm_srs = mkDoc mkSRS (for) nopcm_si
 
 nopcm_SymbMap :: SymbolMap
-nopcm_SymbMap = symbolMap nopcm_Symbols
+nopcm_SymbMap = symbolMap nopcm_SymbolsAll
 
 --------------------------
 --Section 2 : INTRODUCTION
@@ -629,7 +638,7 @@ s4_2_6_table2 = outDataConstTbl s4_2_6_conListOut
 s4_2_6_conListOut :: [UncertQ]
 s4_2_6_conListOut = [temp_W, w_E]
 
-inputVar :: [QSWrapper]
+inputVar :: [QWrapper]
 inputVar = map qs s4_2_6_conListIn 
 
 

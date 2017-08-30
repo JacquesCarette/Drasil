@@ -1,7 +1,7 @@
 {-# OPTIONS -Wall #-}
 {-# LANGUAGE GADTs,Rank2Types #-}
 module Language.Drasil.Chunk.Quantity 
-  ( Quantity(..), QWrapper, qw
+  ( Quantity(..), QWrapper, qw, qsymb, qs
   ) where
 
 import Control.Lens
@@ -11,10 +11,11 @@ import Language.Drasil.Chunk
 import Language.Drasil.Chunk.NamedIdea
 import Language.Drasil.Chunk.VarChunk
 import Language.Drasil.Chunk.ConVar
+import Language.Drasil.Symbol (Symbol)
 
 import Prelude hiding (id)
 
-import Language.Drasil.Chunk.SymbolForm (SF(..))
+import Language.Drasil.Chunk.SymbolForm (SF(..), symbol)
 import Language.Drasil.Unit(UnitDefn)
 
 -- | A Quantity is a 'NamedIdea' with a 'Space' that may have 
@@ -25,19 +26,19 @@ class NamedIdea c => Quantity c where
   -- | Provides the 'Language.Drasil.Chunk.SymbolForm.SymbolForm' 
   -- (chunk which contains a symbol) for a quantity 
   -- if it exists, otherwise returns 'Nothing'
-  getSymb  :: c -> Maybe SF
+  getSymb  :: c -> SF
   -- | Provides the units a quantity is measured in, if any, otherwise returns
   -- 'Nothing'
   getUnit  :: c -> Maybe UnitDefn
 
 instance Quantity VarChunk where
-  getSymb    = Just . SF 
+  getSymb (VC _ s _) = SF s
   getUnit _  = Nothing
   typ f (VC n s t) = fmap (\x -> VC n s x) (f t)
   
 instance Quantity ConVar where
   typ    f (CV c s t) = fmap (\x -> CV c s x) (f t)
-  getSymb   = Just . SF 
+  getSymb   = SF 
   getUnit _ = Nothing
 
 data QWrapper where
@@ -54,10 +55,24 @@ instance Quantity QWrapper where
   typ = qlens typ
   getSymb (QW a) = getSymb a
   getUnit (QW a) = getUnit a
+  
+instance Eq QWrapper where
+  a == b = (a ^. id) == (b ^. id)
+
+instance Ord QWrapper where
+  compare a b = compare ((getSymb a) ^. symbol) ((getSymb b) ^. symbol)
 
 qlens :: (forall c. (Quantity c) => 
   Simple Lens c a) -> Simple Lens QWrapper a
 qlens l f (QW a) = fmap (\x -> QW (set l x a)) (f (a ^. l))
 
-qw :: Quantity q => q -> QWrapper
+-- | qw and qs do the same thing since SymbolForm was removed as a constraint
+-- on many chunks and Quantity now must have a Symbol.
+qw, qs :: Quantity q => q -> QWrapper
 qw = QW
+
+qs = QW
+-- | Helper function for getting a symbol from a quantity. May want to 
+-- actually call it "symbol" and hide the existing "symbol" function soon.
+qsymb :: Quantity q => q -> Symbol
+qsymb q = (getSymb q) ^. symbol

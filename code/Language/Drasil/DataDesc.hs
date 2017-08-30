@@ -4,7 +4,6 @@ module Language.Drasil.DataDesc where
 
 import Language.Drasil.Chunk.Code
 import Language.Drasil.Chunk.Quantity
-import Language.Drasil.Chunk.SymbolForm
 
 import Data.List (nub)
 
@@ -34,16 +33,16 @@ data LinePattern = Straight [Entry]             -- line of data with no pattern
 
                                             
 
-entry :: (Quantity c, SymbolForm c) => c -> Entry
+entry :: (Quantity c) => c -> Entry
 entry c = Entry $ codevar c
 
-listEntry :: (Quantity c, SymbolForm c) => [Ind] -> c -> Entry
+listEntry :: (Quantity c) => [Ind] -> c -> Entry
 listEntry i c = ListEntry i $ codevar c
 
 junk :: Entry
 junk = JunkEntry
 
-singleton :: (Quantity c, SymbolForm c) => c -> Data
+singleton :: (Quantity c) => c -> Data
 singleton c = Singleton $ codevar c
 
 junkLine :: Data

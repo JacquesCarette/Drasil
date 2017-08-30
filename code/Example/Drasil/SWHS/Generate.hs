@@ -3,6 +3,7 @@ module Drasil.SWHS.Generate (generate) where
 import Language.Drasil
 
 import Drasil.SWHS.Body (swhs_srs', swhs_mg)
+import Drasil.SWHS.DataDefs (swhsSymMap)
 
 docs :: [Recipe]
 docs = [Recipe (SRS "SWHS_SRS") swhs_srs',
@@ -11,4 +12,4 @@ docs = [Recipe (SRS "SWHS_SRS") swhs_srs',
        ]
 
 generate :: IO ()
-generate = gen docs
+generate = gen docs swhsSymMap

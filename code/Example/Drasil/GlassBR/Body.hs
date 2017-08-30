@@ -43,15 +43,16 @@ import Data.Drasil.Concepts.PhysicalProperties (dimension, materialProprty)
 
 import Drasil.GlassBR.Unitals (stressDistFac, aspectR, dimlessLoad,
   lateralLoad, sflawParamM, char_weight, sD, demand, lite, demandq,
-  gbSymbMap, aspectRWithEqn, aspectR, gbSymbMapT, gbSymbMapD, lRe,
+  aspectRWithEqn, aspectR, lRe, wtntWithEqn, sdWithEqn,
   prob_br, notSafe, safeMessage, is_safe1, is_safe2, plate_width,
   plate_len, blast, glassTy, gbInputDataConstraints, explosion, lateral,
   load_dur, explosion, pb_tol, blast, bomb, blastTy, glassGeo,
   glass_type, nom_thick, sdx, sdy, sdz, tNT, gBRSpecParamVals,
   constant_LoadDur, constant_ModElas, constant_M, constant_K, loadTypes,
   load, glassTypes, probBreak, termsWithAccDefn, termsWithDefsOnly,
-  gbConstants, gbConstrained, gbOutputs, gbInputs, this_symbols,
+  gbConstants, gbConstrained, gbOutputs, gbInputs,
   glBreakage, capacity, constant_LoadDF, constant_LoadSF)
+import Drasil.GlassBR.Symbols
 import Drasil.GlassBR.Concepts (aR, lShareFac, gLassBR, stdOffDist,
   glaSlab, blastRisk, glass, responseTy, cantilever, beam, plane, edge,
   glaPlane, glassBRProg, ptOfExplsn, acronyms)
@@ -63,9 +64,7 @@ import Drasil.GlassBR.IMods (iModels, calOfCap, calOfDe, probOfBr)
 import Drasil.GlassBR.DataDefs (dataDefns, gbQDefns, hFromt,
   strDisFac, nonFL, dimLL, glaTyFac, tolStrDisFac, tolPre)
 import Drasil.GlassBR.References (gbCitations)
-import Drasil.GlassBR.Interpolation (interpMod)
-import Drasil.GlassBR.DataDescriptions --FIXME: Redundant import, but doesn't build DataDescriptions.hs file otherwise...
-
+import Drasil.GlassBR.ModuleDefs
 import Drasil.Sections.ReferenceMaterial (intro)
 import Drasil.Sections.TraceabilityMandGs (traceGIntro)
 import Drasil.Sections.SpecificSystemDescription (solChSpecF,
@@ -125,7 +124,11 @@ glassSystInfo = SI {
   _quants      = this_symbols,
   _concepts    = ([] :: [CQSWrapper]),
   _namedIdeas  = acronyms,
-  _definitions = dataDefns ++ (map (relToQD gbSymbMap) iModels) ++ (map (relToQD gbSymbMap) tModels),
+  _definitions = dataDefns ++ (map (relToQD gbSymbMap) iModels) ++ (map (relToQD gbSymbMap) tModels) 
+                  ++ [wtntWithEqn, sdWithEqn],  -- wtntWithEqn is defined in Unitals but only appears 
+                                                 -- in the description of the Calculation of Demand instance model;
+                                                 -- should this be included as a Data Definition?
+                                                 -- (same for sdWithEqn)
   _inputs      = map qs gbInputs,
   _outputs     = map qs gbOutputs,
   _defSequence = gbQDefns,
@@ -141,13 +144,13 @@ glassChoices = Choices {
   logFile = "log.txt",
   logging = LogNone,         -- LogNone, LogFunc
   comments = CommentNone,    -- CommentNone, CommentFunc
-  onSfwrConstraint = Warning,  -- Warning, Exception
-  onPhysConstraint = Warning,  -- Warning, Exception
+  onSfwrConstraint = Exception,  -- Warning, Exception
+  onPhysConstraint = Exception,  -- Warning, Exception
   inputStructure = AsClass    -- Loose, AsClass
 }
 
 glassBR_code :: CodeSpec
-glassBR_code = codeSpec' glassSystInfo glassChoices [interpMod, inputMod, readTableMod]
+glassBR_code = codeSpec' glassSystInfo glassChoices [interpMod, inputMod, readTableMod] gbSymbMap
 
 mgBod :: [Section]
 (mgBod, _) = makeDD likelyChanges unlikelyChanges reqs modules
@@ -214,7 +217,7 @@ auxiliaryConstants :: [QDefinition]
 auxiliaryConstants = assumptionConstants ++ gBRSpecParamVals
 
 --Used in "Functional Requirements" Section--
-requiredInputs :: [QSWrapper]
+requiredInputs :: [QWrapper]
 requiredInputs = (map qs [plate_len, plate_width, char_weight])
   ++ (map qs [pb_tol, tNT]) ++ (map qs [sdx, sdy, sdz])
   ++ (map qs [glass_type, nom_thick])
@@ -554,7 +557,7 @@ s7_1_req1Table :: Contents
 s7_1_req1Table = Table
   [at_start symbol_, at_start description, S "Units"]
   (mkTable
-  [(\ch -> (\(Just t) -> getS t) (getSymb ch)),
+  [(\ch -> getS ch),
    at_start, unit'2Contents] requiredInputs)
   (S "Required Inputs following R1") True
 
@@ -592,7 +595,7 @@ req5Desc cmd = foldlSent_ [S "If", (getS is_safe1) `sAnd` (getS is_safe2),
   S "If the", phrase condition, S "is false, then", phrase cmd,
   S "the", phrase message, Quote (notSafe ^. defn)]
 
-testing :: [QSWrapper]
+testing :: [QWrapper]
 testing = qs prob_br : qs lRe : qs demand : [] -- all different types!
 testing1 :: [RelationConcept]
 testing1 = [probOfBr, calOfCap, calOfDe]

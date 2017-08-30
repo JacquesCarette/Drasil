@@ -1,19 +1,20 @@
 {-# LANGUAGE RankNTypes #-}
-module Language.Drasil.Expr.Extract(dep, vars, codevars, toVC) where
+module Language.Drasil.Expr.Extract(dep, vars, codevars, codevars', toVC) where
 
 import Data.List (nub)
 import Control.Lens hiding ((:<),(:>))
 import Prelude hiding (id)
 import Language.Drasil.Expr (Expr(..), UFunc(..), BiFunc(..), Quantifier(..))
-import Language.Drasil.Chunk (id)
+import Language.Drasil.Chunk (Chunk, id)
 import Language.Drasil.Chunk.VarChunk (VarChunk(..), vc', makeVC)
-import Language.Drasil.Chunk.SymbolForm (SymbolForm, symbol)
 import Language.Drasil.Space  -- need this for code generation
 import Language.Drasil.ChunkDB
+import Language.Drasil.Misc (symbol)
 
 import Language.Drasil.NounPhrase -- temporary until Expr can constrain Quantity without circular import
 import Language.Drasil.Chunk.Code
 
+--FIXME: Missing Patterns
 -- | Get dependencies from an equation  
 dep :: Expr -> [String]
 dep (a :/ b)      = nub (dep a ++ dep b)
@@ -89,43 +90,85 @@ vars (Matrix a)   m = nub (concat $ map (\x -> concat $ map (\y -> vars y m) x) 
 vars (Index a i)  m = nub (vars a m ++ vars i m)
 
 -- | Get a list of CodeChunks from an equation
-codevars :: Expr -> [CodeChunk]
-codevars (a :/ b)     = nub (codevars a ++ codevars b)
-codevars (a :* b)     = nub (codevars a ++ codevars b)
-codevars (a :+ b)     = nub (codevars a ++ codevars b)
-codevars (a :^ b)     = nub (codevars a ++ codevars b)
-codevars (a :- b)     = nub (codevars a ++ codevars b)
-codevars (a :. b)     = nub (codevars a ++ codevars b)
-codevars (a :&& b)    = nub (codevars a ++ codevars b)
-codevars (a :|| b)    = nub (codevars a ++ codevars b)
-codevars (Deriv _ a b) = nub (codevars a ++ codevars b)
-codevars (Not e)      = codevars e
-codevars (Neg e)      = codevars e
-codevars (C c)        = [codevar $ makeVC (c ^. id) (pn "") (c ^. symbol)]
-codevars (Int _)      = []
-codevars (Dbl _)      = []
-codevars (Bln _)      = []
-codevars (V _)        = []
-codevars (FCall f x)  = nub (codevars f ++ (concat $ map (\y -> codevars y) x))
-codevars (Case ls)    = nub (concat $ map (codevars . fst) ls ++ map (codevars . snd) ls)
-codevars (a := b)     = nub (codevars a ++ codevars b)
-codevars (a :!= b)    = nub (codevars a ++ codevars b)
-codevars (a :> b)     = nub (codevars a ++ codevars b)
-codevars (a :< b)     = nub (codevars a ++ codevars b)
-codevars (a :<= b)    = nub (codevars a ++ codevars b)
-codevars (a :>= b)    = nub (codevars a ++ codevars b)
-codevars (UnaryOp u)  = codevars (unpack u)
-codevars (Grouping e) = codevars e
-codevars (BinaryOp b) = nub (concat $ map (\x -> codevars x) (binop b))
-codevars (a :=>  b)   = nub (codevars a ++ codevars b)
-codevars (a :<=> b)   = nub (codevars a ++ codevars b)
-codevars (IsIn  a _)  = nub (concat $ map codevars a)
-codevars (NotIn a _)  = nub (concat $ map codevars a)
-codevars (State a b)  = nub ((concat $ map (codevars . quant) a) ++ codevars b)
-codevars (Matrix a)   = nub (concat $ map (concat . map codevars) a)
-codevars (Index a i)  = nub (codevars a ++ codevars i)
-codevars (Len a)      = nub (codevars a)
-codevars (Append a b) = nub (codevars a ++ codevars b) 
+codevars :: Expr -> SymbolMap -> [CodeChunk]
+codevars (a :/ b)     sm = nub (codevars a sm ++ codevars b sm)
+codevars (a :* b)     sm = nub (codevars a sm ++ codevars b sm)
+codevars (a :+ b)     sm = nub (codevars a sm ++ codevars b sm)
+codevars (a :^ b)     sm = nub (codevars a sm ++ codevars b sm)
+codevars (a :- b)     sm = nub (codevars a sm ++ codevars b sm)
+codevars (a :. b)     sm = nub (codevars a sm ++ codevars b sm)
+codevars (a :&& b)    sm = nub (codevars a sm ++ codevars b sm)
+codevars (a :|| b)    sm = nub (codevars a sm ++ codevars b sm)
+codevars (Deriv _ a b) sm = nub (codevars a sm ++ codevars b sm)
+codevars (Not e)      sm = codevars e sm
+codevars (Neg e)      sm = codevars e sm
+codevars (C c)        sm = [codevar $ makeVC (c ^. id) (pn "") (symbol (symbLookup c sm))]
+codevars (Int _)      _ = []
+codevars (Dbl _)      _ = []
+codevars (Bln _)      _ = []
+codevars (V _)        _ = []
+codevars (FCall f x)  sm = nub (codevars f sm ++ (concat $ map (\y -> codevars y sm) x))
+codevars (Case ls)    sm = nub (concat $ map (\x -> codevars (fst x) sm) ls ++ map (\x -> codevars (snd x) sm) ls)
+codevars (a := b)     sm = nub (codevars a sm ++ codevars b sm)
+codevars (a :!= b)    sm = nub (codevars a sm ++ codevars b sm)
+codevars (a :> b)     sm = nub (codevars a sm ++ codevars b sm)
+codevars (a :< b)     sm = nub (codevars a sm ++ codevars b sm)
+codevars (a :<= b)    sm = nub (codevars a sm ++ codevars b sm)
+codevars (a :>= b)    sm = nub (codevars a sm ++ codevars b sm)
+codevars (UnaryOp u)  sm = codevars (unpack u) sm
+codevars (Grouping e) sm = codevars e sm
+codevars (BinaryOp b) sm = nub (concat $ map (\x -> codevars x sm) (binop b))
+codevars (a :=>  b)   sm = nub (codevars a sm ++ codevars b sm)
+codevars (a :<=> b)   sm = nub (codevars a sm ++ codevars b sm)
+codevars (IsIn  a _)  sm = nub (concat $ map (\x -> codevars x sm) a)
+codevars (NotIn a _)  sm = nub (concat $ map (\x -> codevars x sm) a)
+codevars (State a b)  sm = nub ((concat $ map (\x -> codevars (quant x) sm) a) ++ codevars b sm)
+codevars (Matrix a)   sm = nub (concat $ map (concat . map (\x -> codevars x sm)) a)
+codevars (Index a i)  sm = nub (codevars a sm ++ codevars i sm)
+codevars (Len a)      sm = nub (codevars a sm)
+codevars (Append a b) sm = nub (codevars a sm ++ codevars b sm) 
+
+
+-- | Get a list of CodeChunks from an equation (no functions)
+codevars' :: Expr -> SymbolMap -> [CodeChunk]
+codevars' (a :/ b)     sm = nub (codevars' a sm ++ codevars' b sm)
+codevars' (a :* b)     sm = nub (codevars' a sm ++ codevars' b sm)
+codevars' (a :+ b)     sm = nub (codevars' a sm ++ codevars' b sm)
+codevars' (a :^ b)     sm = nub (codevars' a sm ++ codevars' b sm)
+codevars' (a :- b)     sm = nub (codevars' a sm ++ codevars' b sm)
+codevars' (a :. b)     sm = nub (codevars' a sm ++ codevars' b sm)
+codevars' (a :&& b)    sm = nub (codevars' a sm ++ codevars' b sm)
+codevars' (a :|| b)    sm = nub (codevars' a sm ++ codevars' b sm)
+codevars' (Deriv _ a b) sm = nub (codevars' a sm ++ codevars' b sm)
+codevars' (Not e)      sm = codevars' e sm 
+codevars' (Neg e)      sm = codevars' e sm 
+codevars' (C c)        sm = [codevar $ makeVC (c ^. id) (pn "") (symbol $ symbLookup c sm)]
+codevars' (Int _)       _ = []
+codevars' (Dbl _)       _ = []
+codevars' (Bln _)       _ = []
+codevars' (V _)         _ = []
+codevars' (FCall _ x)  sm = nub (concat $ map (\y -> codevars' y sm) x)
+codevars' (Case ls)    sm = nub (concat $ map (\x -> codevars' (fst x) sm) ls ++
+                              map (\y -> codevars' (snd y) sm) ls)
+codevars' (a := b)     sm = nub (codevars' a sm ++ codevars' b sm)
+codevars' (a :!= b)    sm = nub (codevars' a sm ++ codevars' b sm)
+codevars' (a :> b)     sm = nub (codevars' a sm ++ codevars' b sm)
+codevars' (a :< b)     sm = nub (codevars' a sm ++ codevars' b sm)
+codevars' (a :<= b)    sm = nub (codevars' a sm ++ codevars' b sm)
+codevars' (a :>= b)    sm = nub (codevars' a sm ++ codevars' b sm)
+codevars' (UnaryOp u)  sm = codevars' (unpack u) sm
+codevars' (Grouping e) sm = codevars' e sm
+codevars' (BinaryOp b) sm = nub (concat $ map (\x -> codevars' x sm) (binop b))
+codevars' (a :=>  b)   sm = nub (codevars' a sm ++ codevars' b sm)
+codevars' (a :<=> b)   sm = nub (codevars' a sm ++ codevars' b sm)
+codevars' (IsIn  a _)  sm = nub (concat $ map (flip codevars' sm) a)
+codevars' (NotIn a _)  sm = nub (concat $ map (flip codevars' sm) a)
+codevars' (State a b)  sm = nub ((concat $ map (\x -> codevars' (quant x) sm) a) ++
+                              codevars' b sm)
+codevars' (Matrix a)   sm = nub (concat $ map (concat . map (\x -> codevars' x sm)) a)
+codevars' (Index a i)  sm = nub (codevars' a sm ++ codevars' i sm)
+codevars' (Len a)      sm = nub (codevars' a sm)
+codevars' (Append a b) sm = nub (codevars' a sm ++ codevars' b sm) 
 
 
 -- | Helper function for vars and dep, gets the Expr portion of a UFunc
@@ -158,6 +201,6 @@ quant (Exists e) = e
 --   setting to all to rational
 -- | Convert any chunk to a VarChunk as long as it is an instance of SymbolForm.
 -- Again, used for printing equations/descriptions mostly.
-toVC :: (SymbolForm c) => c -> SymbolMap -> VarChunk
-toVC c m = vc' (lookupC) (lookupC ^. symbol) (Rational)
+toVC :: (Chunk c) => c -> SymbolMap -> VarChunk
+toVC c m = vc' (lookupC) (symbol lookupC) (Rational)
   where lookupC = symbLookup c m

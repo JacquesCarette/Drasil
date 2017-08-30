@@ -42,7 +42,7 @@ instance Concept UnitalChunk where
 instance Quantity UnitalChunk where
   typ f (UC named s u t) = fmap (\x -> UC named s u x) (f t)
   typ f ucv@(UCV _ _) = cvl typ f ucv
-  getSymb = Just . SF
+  getSymb = SF
   getUnit = Just . unit
 instance Unitary UnitalChunk where
   unit (UC _ _ u _) = UU u

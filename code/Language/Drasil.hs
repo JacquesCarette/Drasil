@@ -18,7 +18,7 @@ module Language.Drasil (
   , (^:), (/:), (*:), new_unit
   -- Chunk
   , Chunk(..), VarChunk(..), ConceptChunk
-  , makeVC, vc, makeVCObj, SymbolForm(..)
+  , makeVC, vc, makeVCObj, SymbolForm
   , dcc, dccWDS, dccWDS', cv, dcc', vc', vc'', ccs, cc, cc'
   , Quantity(..), QWrapper, qw, ConVar(..), cvR, cvRs
   , Concept(..), cw, CWrapper
@@ -60,7 +60,7 @@ module Language.Drasil (
   -- Chunk.Other
   , AssumpChunk, UCChunk
   --Chunk.Wrapper
-  , cqs, qs, nw, CQSWrapper, QSWrapper, NWrapper
+  , cqs, qs, nw, CQSWrapper, NWrapper
   --Chunk.UWrapper 
   , UWrapper, uw, ucw, UCWrapper
   --Citations
@@ -90,6 +90,7 @@ module Language.Drasil (
   , lA, lB, lC, lD, lE, lF, lG, lH, lI, lJ, lK, lL, lM, lN, lO, lP, lQ, lR, lS, lT, lU, lV, lW, lX, lY, lZ
   -- Misc
   , mkTable, unit'2Contents, getAcc, unit_symb, introduceAbb, phrase, plural, phrase's, plural's
+  , symbol
   -- Printing.Helpers
   , capitalize, paren, sqbrac
   -- Generate
@@ -102,13 +103,15 @@ module Language.Drasil (
   , Logging(..), ConstraintBehaviour(..), Structure(..), Lang(..), Comments(..)
   , defaultChoices
   , Mod(..), packmod, FuncDef(..), FuncStmt(..), funcDef, fasg, ffor, fdec -- hacks
-  , relToQD, funcData, funcQD, Func(..)   -- hacks
+  , relToQD, funcData, funcQD, Func(..), asExpr, asVC   -- hacks
   -- DataDesc
   , DataDesc
   , entry, listEntry, junk, singleton, junkLine, singleLine, multiLine
   , multiLine', straight, repeated, repeated', Ind(..)
   -- Chunk.Theory
   , Theory(..), tc', TheoryChunk, TheoryModel, tm, tw
+  -- Chunk.SymbolForm
+  , SF, SymbolChunk, sc
 ) where
 
 import Prelude hiding (log, sin, cos, tan, sqrt, id, return, print, break, exp, product)
@@ -128,7 +131,7 @@ import Language.Drasil.Unit -- all of it
 import Language.Drasil.Chunk
 import Language.Drasil.Chunk.NamedIdea
 import Language.Drasil.Chunk.Concept
-import Language.Drasil.Chunk.SymbolForm
+import Language.Drasil.Chunk.SymbolForm hiding (symbol)
 import Language.Drasil.Chunk.CommonIdea
 import Language.Drasil.Chunk.VarChunk
 import Language.Drasil.Chunk.Quantity

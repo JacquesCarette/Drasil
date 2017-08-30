@@ -16,6 +16,8 @@ import Drasil.GlassBR.Unitals (tNT, sdWithEqn, demand, standOffDist,
 import Drasil.GlassBR.DataDefs (nonFL, risk, glaTyFac)
 import Drasil.GlassBR.Concepts (lResistance, glassTypeFac, lShareFac)
 
+import Drasil.GlassBR.ModuleDefs
+
 {--}
 
 iModels :: [RelationConcept]
@@ -55,8 +57,9 @@ capdescr =
 
 calOfDe :: RelationConcept
 calOfDe = makeRC "calOfDe" (nounPhraseSP "Calculation of Demand(q)") 
-  dedescr $ (C demand) := FCall (C demand) [C eqTNTWeight, C standOffDist] 
-
+  --dedescr $ (C demand) := FCall (C demand) [C eqTNTWeight, C standOffDist] 
+  dedescr $ (C demand) := FCall (asExpr interpY) [V "TSD.txt", C standOffDist, C eqTNTWeight] 
+  
 dedescr :: Sentence
 dedescr = 
   foldlSent [(getS demand `sOr` phrase demandq) `sC`

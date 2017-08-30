@@ -17,6 +17,8 @@ import Data.Drasil.Concepts.PhysicalProperties (dimension)
 import Data.Drasil.Concepts.Math (probability, parameter, calculation)
 import Data.Drasil.Concepts.Documentation (datum, user)
 
+import Drasil.GlassBR.ModuleDefs -- hack
+
 ----------------------
 -- DATA DEFINITIONS --
 ----------------------
@@ -37,7 +39,7 @@ gbQDefns = [Parallel hFromt {-DD2-} [glaTyFac {-DD6-}]] ++ --can be calculated o
 risk_eq :: Expr
 risk_eq = ((C sflawParamK) / (Grouping ((C plate_len) *
   (C plate_width))) :^ ((C sflawParamM) - 1) *
-  (Grouping (C mod_elas) * (square (Grouping (C act_thick))))
+  (Grouping (C mod_elas * 1000) * (square (Grouping (C act_thick))))
   :^ (C sflawParamM) * (C lDurFac) * (exp (C stressDistFac)))
 
 risk :: QDefinition
@@ -66,9 +68,10 @@ hFromt = mkDataDef' act_thick hFromt_eq (hMin)
 --DD4--
 
 strDisFac_eq :: Expr
-strDisFac_eq = FCall (C stressDistFac) 
-  [C dimlessLoad, (C plate_len) / (C plate_width)]
-
+--strDisFac_eq = FCall (C stressDistFac) 
+  --[C dimlessLoad, (C plate_len) / (C plate_width)]
+strDisFac_eq = FCall (asExpr interpZ) [V "SDF.txt", (C plate_len) / (C plate_width), C dimlessLoad]
+  
 strDisFac :: QDefinition
 strDisFac = mkDataDef' stressDistFac strDisFac_eq
   (jRef2 +:+ qHtRef +:+ aGrtrThanB)
@@ -106,7 +109,8 @@ dimLL = mkDataDef' dimlessLoad dimLL_eq
 --DD8--
 
 tolPre_eq :: Expr
-tolPre_eq = FCall (C tolLoad) [C sdf_tol, (C plate_len) / (C plate_width)]
+--tolPre_eq = FCall (C tolLoad) [C sdf_tol, (C plate_len) / (C plate_width)]
+tolPre_eq = FCall (asExpr interpY) [V "SDF.txt", (C plate_len) / (C plate_width), C sdf_tol]
 
 tolPre :: QDefinition
 tolPre = mkDataDef' tolLoad tolPre_eq (qHtTlExtra)
@@ -117,7 +121,7 @@ tolStrDisFac_eq :: Expr
 tolStrDisFac_eq = log (log ((1) / ((1) - (C pb_tol)))
   * ((Grouping ((C plate_len) * (C plate_width)) :^
   ((C sflawParamM) - (1)) / ((C sflawParamK) *
-  (Grouping (Grouping ((C mod_elas) *
+  (Grouping (Grouping ((C mod_elas * 1000) *
   (square (Grouping (C act_thick))))) :^ 
   (C sflawParamM) * (C lDurFac))))))
 

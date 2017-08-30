@@ -1,5 +1,6 @@
 {-# Language GADTs, Rank2Types #-}
-module Language.Drasil.Chunk.SymbolForm (SymbolForm(..), SF(..)) where
+module Language.Drasil.Chunk.SymbolForm 
+  (SymbolForm(..), SF(..), SymbolChunk, sc) where
 
 import Language.Drasil.Chunk
 import Control.Lens (Simple, Lens, (^.), set)
@@ -23,3 +24,19 @@ instance Eq SF where
 
 sfl :: (forall c. (SymbolForm c) => Simple Lens c a) -> Simple Lens SF a
 sfl l f (SF a) = fmap (\x -> SF (set l x a)) (f (a ^. l))
+
+-- | Symbols should be kept in chunks, so that we can remove the SymbolForm
+-- instance from non-symbols.
+data SymbolChunk = SC String Symbol
+
+instance Chunk SymbolChunk where
+  id f (SC i s) = fmap (\x -> SC x s) (f i)
+instance Eq SymbolChunk where 
+  -- This is the only case where we don't only match ids
+  a == b = ((a ^. id) == (b ^. id)) || ((a ^. symbol) == (b ^. symbol))
+instance SymbolForm SymbolChunk where
+  symbol f (SC i s) = fmap (\x -> SC i x) (f s)
+
+-- | Smart constructor for chunks for symbols
+sc :: String -> Symbol -> SymbolChunk
+sc = SC

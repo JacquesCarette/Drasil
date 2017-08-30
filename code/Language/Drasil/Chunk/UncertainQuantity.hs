@@ -15,7 +15,6 @@ import Language.Drasil.Chunk
 import Language.Drasil.Chunk.NamedIdea
 import Language.Drasil.Chunk.Quantity
 import Language.Drasil.Chunk.Constrained
-import Language.Drasil.Chunk.SymbolForm
 import Language.Drasil.Chunk.Concept
 import Language.Drasil.Unit
 import Language.Drasil.Expr
@@ -36,7 +35,7 @@ class Quantity c => UncertainQuantity c where
 -- UQ takes a constrained chunk, an uncertainty (between 0 and 1), and a typical value
 
 data UncertQ where
-  UQ :: (Quantity c, Constrained c, Concept c, SymbolForm c) => c
+  UQ :: (Quantity c, Constrained c, Concept c) => c
         -> Maybe Double -> UncertQ
   
 instance Eq UncertQ where
@@ -55,24 +54,22 @@ instance UncertainQuantity UncertQ where
 instance Constrained UncertQ where
   constraints = qlens constraints
   reasVal = qlens reasVal
-instance SymbolForm UncertQ where
-  symbol = qlens symbol
 instance Concept UncertQ where
   defn = qlens defn
   cdom = qlens cdom
 
 -- DO NOT Export qlens
-qlens :: (forall c. (Quantity c, Constrained c, Concept c, SymbolForm c) =>
+qlens :: (forall c. (Quantity c, Constrained c, Concept c) =>
   Simple Lens c a) -> Simple Lens UncertQ a
 qlens l f (UQ q u) = fmap (\x -> UQ (set l x q) u) (f (q ^. l))
 
 {-- Constructors --}
 -- | The UncertainQuantity constructor. Requires a Quantity, a percentage, and a typical value
-uq :: (Quantity c, Constrained c, Concept c, SymbolForm c) =>
+uq :: (Quantity c, Constrained c, Concept c) =>
   c -> Double -> UncertQ
 uq q u = UQ q (Just u)
 
-uqNU :: (Quantity c, Constrained c, Concept c, SymbolForm c) =>
+uqNU :: (Quantity c, Constrained c, Concept c) =>
   c -> UncertQ
 uqNU q = UQ q Nothing
 
@@ -99,7 +96,7 @@ uqcND nam trm sym un space cs val uncrt = uq
 {--}
 
 data UncertainChunk where 
-  UCh :: (Quantity c, Constrained c, SymbolForm c) => c
+  UCh :: (Quantity c, Constrained c) => c
         -> Maybe Double -> UncertainChunk
 
 instance Eq UncertainChunk where
@@ -118,17 +115,15 @@ instance UncertainQuantity UncertainChunk where --makes sense?
 instance Constrained UncertainChunk where
   constraints = cLens constraints
   reasVal = cLens reasVal
-instance SymbolForm UncertainChunk where
-  symbol = cLens symbol
 
 -- DO NOT Export cLens
-cLens :: (forall c. (Quantity c, Constrained c, SymbolForm c) =>
+cLens :: (forall c. (Quantity c, Constrained c) =>
   Simple Lens c a) -> Simple Lens UncertainChunk a
 cLens l f (UCh q u) = fmap (\x -> UCh (set l x q) u) (f (q ^. l))
 
 {-- Constructors --}
 -- | The UncertainQuantity constructor. Requires a Quantity, a percentage, and a typical value
-uncrtnChunk :: (Quantity c, Constrained c, SymbolForm c) =>
+uncrtnChunk :: (Quantity c, Constrained c) =>
   c -> Double -> UncertainChunk
 uncrtnChunk q u = UCh q (Just u)
 
@@ -142,7 +137,7 @@ uvc nam trm sym space cs val uncrt = uncrtnChunk
 ---
 -- UncertainWrapper for wrapping anything that is constrained
 data UncertainWrapper where
-  UncrtnW :: (Constrained c, SymbolForm c, UncertainQuantity c) => c -> UncertainWrapper
+  UncrtnW :: (Constrained c, UncertainQuantity c) => c -> UncertainWrapper
 
 instance Chunk UncertainWrapper where
   id = uwlens id
@@ -154,8 +149,6 @@ instance Constrained UncertainWrapper where
 instance NamedIdea UncertainWrapper where
   term = uwlens term
   getA (UncrtnW a) = getA a
-instance SymbolForm UncertainWrapper where
-  symbol = uwlens symbol
 instance Quantity UncertainWrapper where
   getSymb (UncrtnW a) = getSymb a
   getUnit (UncrtnW a) = getUnit a
@@ -163,10 +156,10 @@ instance Quantity UncertainWrapper where
 instance UncertainQuantity UncertainWrapper where
   uncert = uwlens uncert
 
-uncrtnw :: (UncertainQuantity c, SymbolForm c, Constrained c) => c -> UncertainWrapper
+uncrtnw :: (UncertainQuantity c, Constrained c) => c -> UncertainWrapper
 uncrtnw = UncrtnW
 
 -- do not export
-uwlens :: (forall c. (UncertainQuantity c, SymbolForm c, Constrained c) => 
+uwlens :: (forall c. (UncertainQuantity c, Constrained c) => 
   Simple Lens c a) -> Simple Lens UncertainWrapper a
 uwlens l f (UncrtnW a) = fmap (\x -> UncrtnW (set l x a)) (f (a ^. l))

@@ -299,8 +299,8 @@ executable glassbr
     , Drasil.GlassBR.DataDefs
     , Drasil.GlassBR.References
     , Drasil.GlassBR.Units
-    , Drasil.GlassBR.Interpolation
-    , Drasil.GlassBR.DataDescriptions
+    , Drasil.GlassBR.ModuleDefs
+    , Drasil.GlassBR.Symbols
     , Drasil.Sections.SpecificSystemDescription
     , Drasil.Sections.Introduction
     , Drasil.Sections.Requirements

@@ -105,4 +105,4 @@ initial = (\xs -> head xs : ".")
 
 isInitial :: String -> String
 isInitial [x]  = [x,'.']
-isInitial name = name
+isInitial nm = nm

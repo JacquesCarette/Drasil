@@ -19,7 +19,8 @@ import System.Directory
 import Data.Map (member)
 import qualified Data.Map as Map (lookup)
 import Data.Maybe (maybe)
-import Language.Drasil.ChunkDB (symbLookup)
+import Language.Drasil.ChunkDB (symbLookup, HasSymbolTable(..))
+import Control.Lens ((^.))
 
 
 data Generator = Generator { 
@@ -256,7 +257,7 @@ genCalcFuncD g cdef =
   publicMethod g g
     (methodType $ convType (codeType cdef)) 
     (codeName cdef)
-    (getParams g (codevars' $ codeEquat cdef)) 
+    (getParams g (codevars' (codeEquat cdef) $ sysinfodb $ codeSpec g)) 
     (genCalcBlock g CalcReturn (codeName cdef) (codeEquat cdef))
 
 data CalcType = CalcAssign | CalcReturn deriving Eq
@@ -363,7 +364,7 @@ genMainFunc g =
       valStmt $ fApp g g "derived_values" [v_params] ,      
       valStmt $ fApp g g "input_constraints" [v_params]
     ] ++ map (\x -> varDecDef (codeName x) (convType $ codeType x) 
-                    (fApp g g (codeName x) (getArgs g $ codevars' $ codeEquat x)))
+                    (fApp g g (codeName x) (getArgs g $ codevars' (codeEquat x) $ sysinfodb $ codeSpec g)))
           (execOrder $ codeSpec g)
     ++ [
       valStmt $ fApp g g "write_output" $ getArgs g $ outputs $ codeSpec g
@@ -504,11 +505,11 @@ convExpr g (a :|| b)    = (convExpr g a) ?|| (convExpr g b)
 convExpr _ (Deriv _ _ _) = litString "**convExpr :: Deriv unimplemented**"
 convExpr g (E.Not e)      = (?!) (convExpr g e)
 convExpr g (Neg e)      = (#~) (convExpr g e)
-convExpr g (C c)        = variable g g $ codeName $ SFCN $ symbLookup c $ (cdb $ spec g) ^. symbolTable
+convExpr g (C c)        = variable g g $ codeName $ SFCN $ symbLookup c $ (sysinfodb $ codeSpec g) ^. symbolTable
 convExpr g (Index a i)  = (convExpr g a)$.(listAccess $ convExpr g i)
 convExpr g (Len a)      = (convExpr g a)$.listSize
 convExpr g (Append a v) = (convExpr g a)$.(listAppend $ convExpr g v)
-convExpr g (FCall (C c) x)  = fApp g g (codeName (SFCN $ symbLookup c $ (cdb $ spec g) ^. symbolTable)) (map (convExpr g) x)
+convExpr g (FCall (C c) x)  = fApp g g (codeName (SFCN $ symbLookup c $ (sysinfodb $ codeSpec g) ^. symbolTable)) (map (convExpr g) x)
 convExpr _ (FCall _ _)  = litString "**convExpr :: BinaryOp unimplemented**"
 convExpr g (a := b)     = (convExpr g a) ?== (convExpr g b)
 convExpr g (a :!= b)    = (convExpr g a) ?!= (convExpr g b)

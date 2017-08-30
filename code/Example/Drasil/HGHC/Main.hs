@@ -18,4 +18,4 @@ docs = [
 main :: IO ()            
 main = do
   gen docs allSymbols
-  --genCode executable modules hghcSymMap
+  --genCode thisChoices thisCode

@@ -1,4 +1,4 @@
-module Drasil.HGHC.HGHC (srsBody, mgBody, misBody, modules) where
+module Drasil.HGHC.HGHC (srsBody, mgBody, misBody, modules, thisChoices, thisCode) where
 
 import Language.Drasil
 import Drasil.DocumentLanguage

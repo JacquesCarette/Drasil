@@ -12,4 +12,4 @@ docs = [Recipe (SRS "NoPCM_SRS") nopcm_srs,
 main :: IO ()            
 main = do
   gen docs nopcm_SymbMap
-  genCode nopcm_code nopcm_SymbMap
+  genCode nopcm_code

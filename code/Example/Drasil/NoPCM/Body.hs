@@ -158,7 +158,8 @@ nopcm_si = SI {
   _outputs = (map qs [temp_W, w_E]),     --outputs
   _defSequence = [Parallel dd1HtFluxC []],
   _constraints = (nopcm_Constraints),        --constrained
-  _constants = []
+  _constants = [],
+  _sysinfodb = nopcm_SymbMap
 }
 
 nopcm_Choices :: Choices
@@ -174,14 +175,14 @@ nopcm_Choices = Choices {
 }
 
 nopcm_code :: CodeSpec
-nopcm_code = codeSpec' nopcm_si nopcm_Choices [inputMod] nopcm_SymbMap
+nopcm_code = codeSpec' nopcm_si nopcm_Choices [inputMod]
 -- Sub interpolation mod into list when possible              ^
 
 nopcm_srs :: Document
 nopcm_srs = mkDoc mkSRS (for) nopcm_si
 
-nopcm_SymbMap :: SymbolMap
-nopcm_SymbMap = symbolMap nopcm_SymbolsAll
+nopcm_SymbMap :: ChunkDB
+nopcm_SymbMap = cdb nopcm_SymbolsAll
 
 --------------------------
 --Section 2 : INTRODUCTION
@@ -822,7 +823,7 @@ s7_dataRef, s7_funcReqRef, s7_instaModelRef, s7_assumpRef, s7_theoriesRef,
   s7_dataDefRef, s7_likelyChgRef, s7_genDefRef :: [Sentence]
 
 s7_instaModel = ["IM1", "IM2"]
-s7_instaModelRef = map (refFromType Theory nopcm_SymbMap) [eBalanceOnWtr,
+s7_instaModelRef = map (refFromType Theory) [eBalanceOnWtr,
   heatEInWtr]
 
 s7_funcReq = ["R1", "R2", "R3", "R4", "R5", "R6"]
@@ -837,13 +838,13 @@ s7_assump = ["A1", "A2", "A3", "A4", "A5", "A6", "A7", "A8", "A9", "A10",
 s7_assumpRef = map (\x -> acroTest x s4_2_1_list) s4_2_1_list--makeListRef s7_assump (SRS.inModel SRS.missingP [])
 
 s7_theories = ["T1"]
-s7_theoriesRef = map (refFromType Theory nopcm_SymbMap) [t1ConsThermE]
+s7_theoriesRef = map (refFromType Theory) [t1ConsThermE]
 
 s7_genDefs = ["GD1", "GD2"]
-s7_genDefRef = map (refFromType Theory nopcm_SymbMap) swhsGenDefs
+s7_genDefRef = map (refFromType Theory) swhsGenDefs
 
 s7_dataDefs = ["DD1"]
-s7_dataDefRef = map (refFromType Data nopcm_SymbMap) [dd1HtFluxC]
+s7_dataDefRef = map (refFromType Data) [dd1HtFluxC]
 
 s7_likelyChg = ["LC1", "LC2", "LC3", "LC4"]
 s7_likelyChgRef = map (\x -> acroTest x s6_list) s6_list--makeListRef s7_likelyChg s6

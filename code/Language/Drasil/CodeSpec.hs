@@ -71,15 +71,15 @@ getStr (P s) = symbToCodeName s
 getStr ((:+:) s1 s2) = getStr s1 ++ getStr s2
 getStr _ = error "Term is not a string" 
 
-codeSpec :: SystemInformation -> [Mod] -> ChunkDB -> CodeSpec
+codeSpec :: SystemInformation -> [Mod] -> CodeSpec
 codeSpec si ms = codeSpec' si defaultChoices ms
 
-codeSpec' :: SystemInformation -> Choices -> [Mod] -> ChunkDB -> CodeSpec
-codeSpec' (SI {_sys = sys, _quants = q, _definitions = defs, _inputs = ins, _outputs = outs, _constraints = cs, _constants = constants}) ch ms sm = 
+codeSpec' :: SystemInformation -> Choices -> [Mod] -> CodeSpec
+codeSpec' (SI {_sys = sys, _quants = q, _definitions = defs, _inputs = ins, _outputs = outs, _constraints = cs, _constants = constants, _sysinfodb = db}) ch ms = 
   let inputs' = map codevar ins
       const' = map qtoc constants
       defs' = map qtoc defs
-      derived = getDerivedInputs defs' inputs' const' sm
+      derived = getDerivedInputs defs' inputs' const' db
       rels = defs' \\ derived
       mods' = (packmod "Calculations" $ map FCD rels):ms 
       mem   = modExportMap mods' inputs' const'
@@ -92,7 +92,7 @@ codeSpec' (SI {_sys = sys, _quants = q, _definitions = defs, _inputs = ins, _out
         derivedInputs = derived,
         outputs = outs',
         relations = rels,
-        execOrder = getExecOrder rels (allInputs ++ map codevar const') outs' sm,
+        execOrder = getExecOrder rels (allInputs ++ map codevar const') outs' db,
         cMap = constraintMap cs,
         fMap = assocToMap $ rels,
         vMap = assocToMap (map codevar q),
@@ -101,8 +101,8 @@ codeSpec' (SI {_sys = sys, _quants = q, _definitions = defs, _inputs = ins, _out
         const = const',
         choices = ch,
         mods = mods',
-        dMap = modDepMap mem mods' sm,
-        sysinfodb = sm
+        dMap = modDepMap mem mods' db,
+        sysinfodb = db
       }
 
 data Choices = Choices {

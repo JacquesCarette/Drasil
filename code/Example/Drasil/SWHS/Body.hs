@@ -117,7 +117,8 @@ swhs_si = SI {
   _outputs = ((map qs swhsOutputs) :: [QWrapper]),
   _defSequence = ([] :: [Block QDefinition]),
   _constraints = (swhsConstrained),
-  _constants = []
+  _constants = [],
+  _sysinfodb = swhsSymMap
 }
   --Note: The second swhsSymbols here is
     -- Redundant b/c the unitals are not really concepts (yet). There
@@ -162,7 +163,7 @@ swhsChoices = Choices {
 }
 
 swhsCode :: CodeSpec
-swhsCode = codeSpec' swhs_si swhsChoices [swhsInputMod] swhsSymMap
+swhsCode = codeSpec' swhs_si swhsChoices [swhsInputMod]
 
 tsymb_intro :: [TSIntro]
 tsymb_intro = [TSPurpose, SymbConvention
@@ -565,7 +566,7 @@ s7_dataRef, s7_funcReqRef, s7_instaModelRef, s7_assumpRef, s7_theoriesRef,
   s7_dataDefRef, s7_likelyChgRef, s7_genDefRef :: [Sentence]
 
 s7_instaModel = ["IM1", "IM2", "IM3", "IM4"]
-s7_instaModelRef = map (refFromType Theory swhsSymMap) s4_2_5_IMods
+s7_instaModelRef = map (refFromType Theory) s4_2_5_IMods
 
 s7_funcReq = ["R1", "R2", "R3", "R4", "R5", "R6", "R7", "R8", "R9", "R10",
   "R11"]
@@ -579,13 +580,13 @@ s7_assump = ["A1", "A2", "A3", "A4", "A5", "A6", "A7", "A8", "A9", "A10",
 s7_assumpRef = makeListRef s7_assump s4_2_1
 
 s7_theories = ["T1", "T2", "T3"]
-s7_theoriesRef = map (refFromType Theory swhsSymMap) tModels
+s7_theoriesRef = map (refFromType Theory) tModels
 
 s7_genDefs = ["GD1", "GD2"]
-s7_genDefRef = map (refFromType Theory swhsSymMap) swhsGenDefs
+s7_genDefRef = map (refFromType Theory) swhsGenDefs
 
 s7_dataDefs = ["DD1", "DD2", "DD3", "DD4"]
-s7_dataDefRef = map (refFromType Data swhsSymMap) swhsDataDefs
+s7_dataDefRef = map (refFromType Data) swhsDataDefs
 
 s7_likelyChg = ["LC1", "LC2", "LC3", "LC4", "LC5", "LC6"]
 s7_likelyChgRef = makeListRef s7_likelyChg s6

@@ -20,14 +20,14 @@ swhsDataDefs :: [QDefinition]
 swhsDataDefs = [dd1HtFluxC, dd2HtFluxP, dd3HtFusion, dd4MeltFrac]
 
 -- SYMBOL MAP HELPERS --
-swhsSymMap :: SymbolMap
-swhsSymMap = symbolMap swhsSymbolsAll
+swhsSymMap :: ChunkDB
+swhsSymMap = cdb swhsSymbolsAll
 
 swhsSymbMapD :: QDefinition -> Contents
-swhsSymbMapD = symbolMapFun swhsSymMap Data
+swhsSymbMapD = symbolMapFun Data
 
 swhsSymbMapT :: RelationConcept -> Contents
-swhsSymbMapT = symbolMapFun swhsSymMap Theory
+swhsSymbMapT = symbolMapFun Theory
 
 swhsSymbMapDRef :: QDefinition -> Sentence
 swhsSymbMapDRef = makeRef . swhsSymbMapD

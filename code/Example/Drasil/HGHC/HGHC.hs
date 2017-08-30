@@ -38,7 +38,7 @@ thisChoices = Choices {
 }
 
 thisCode :: CodeSpec
-thisCode = codeSpec' thisSI thisChoices []
+thisCode = codeSpec' thisSI []
   
 thisSI :: SystemInformation
 thisSI = SI {

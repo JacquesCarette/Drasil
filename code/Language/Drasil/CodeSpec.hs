@@ -44,7 +44,6 @@ data CodeSpec = CodeSpec {
   eMap :: ModExportMap,
   constMap :: FunctionMap,
   const :: [Const],
-  choices :: Choices,
   mods :: [Mod],  -- medium hack
   dMap :: ModDepMap,
   sysinfodb :: ChunkDB
@@ -72,10 +71,10 @@ getStr ((:+:) s1 s2) = getStr s1 ++ getStr s2
 getStr _ = error "Term is not a string" 
 
 codeSpec :: SystemInformation -> [Mod] -> CodeSpec
-codeSpec si ms = codeSpec' si defaultChoices ms
+codeSpec si ms = codeSpec' si ms
 
-codeSpec' :: SystemInformation -> Choices -> [Mod] -> CodeSpec
-codeSpec' (SI {_sys = sys, _quants = q, _definitions = defs, _inputs = ins, _outputs = outs, _constraints = cs, _constants = constants, _sysinfodb = db}) ch ms = 
+codeSpec' :: SystemInformation -> [Mod] -> CodeSpec
+codeSpec' (SI {_sys = sys, _quants = q, _definitions = defs, _inputs = ins, _outputs = outs, _constraints = cs, _constants = constants, _sysinfodb = db}) ms = 
   let inputs' = map codevar ins
       const' = map qtoc constants
       defs' = map qtoc defs
@@ -99,7 +98,6 @@ codeSpec' (SI {_sys = sys, _quants = q, _definitions = defs, _inputs = ins, _out
         eMap = mem,
         constMap = assocToMap $ const',
         const = const',
-        choices = ch,
         mods = mods',
         dMap = modDepMap mem mods' db,
         sysinfodb = db

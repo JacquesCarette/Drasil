@@ -163,7 +163,7 @@ swhsChoices = Choices {
 }
 
 swhsCode :: CodeSpec
-swhsCode = codeSpec' swhs_si swhsChoices [swhsInputMod]
+swhsCode = codeSpec' swhs_si [swhsInputMod]
 
 tsymb_intro :: [TSIntro]
 tsymb_intro = [TSPurpose, SymbConvention

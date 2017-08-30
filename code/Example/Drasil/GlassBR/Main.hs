@@ -2,7 +2,7 @@ module Main (main) where
 
 import Language.Drasil
 
-import Drasil.GlassBR.Body (glassBR_srs, glassBR_mg, glassBR_code)
+import Drasil.GlassBR.Body (glassBR_srs, glassBR_mg, glassBR_code, glassChoices)
 import Drasil.GlassBR.Symbols (gbSymbMap)
 
 docs :: [Recipe]
@@ -15,4 +15,4 @@ docs =
 main :: IO()
 main = do
   gen docs gbSymbMap
-  genCode glassBR_code
+  genCode glassChoices glassBR_code

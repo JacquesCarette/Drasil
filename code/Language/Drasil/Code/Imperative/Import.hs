@@ -61,10 +61,9 @@ data Generator = Generator {
   currentModule :: String
 }
 
-generator :: CodeSpec -> Generator
-generator spec = 
-  let chs = choices spec
-      sfwrConstraintFunc = case (onSfwrConstraint chs) of Warning   -> constrWarn
+generator :: Choices -> CodeSpec -> Generator
+generator chs spec = 
+  let sfwrConstraintFunc = case (onSfwrConstraint chs) of Warning   -> constrWarn
                                                           Exception -> constrExc
       physConstraintFunc = case (onPhysConstraint chs) of Warning   -> constrWarn
                                                           Exception -> constrExc
@@ -74,7 +73,7 @@ generator spec =
                                                           LogAll    -> loggedAssign
                                                           _         -> (\_ -> I.assign)                                                          
   in Generator {
-      generateCode = generateCodeD,
+      generateCode = generateCodeD chs,
       
       genModules = genModulesD,
       
@@ -95,10 +94,10 @@ generator spec =
       genOutputMod = genOutputModD,
       genOutputFormat = genOutputFormatD,
       
-      logName = logFile $ choices spec,
+      logName = logFile chs,
       
-      publicMethod = genMethodCallD Public Static,
-      privateMethod = genMethodCallD Private Dynamic,
+      publicMethod = genMethodCallD Public Static chs,
+      privateMethod = genMethodCallD Private Dynamic chs,
       
       sfwrCBody = sfwrConstraintFunc,
       physCBody = physConstraintFunc,
@@ -125,9 +124,9 @@ fAppFuncD g s
         (Map.lookup s (eMap $ codeSpec g))
   | otherwise = funcApp' s
 
-generateCodeD :: Generator -> IO () 
-generateCodeD g = let s = codeSpec g
-                      modules = genModules g g
+generateCodeD :: Choices -> Generator -> IO ()
+generateCodeD ch g = let s = codeSpec g
+                         modules = genModules g g
   in do workingDir <- getCurrentDirectory
         mapM_ (\x -> do 
              createDirectoryIfMissing False (getDir x) 
@@ -136,7 +135,7 @@ generateCodeD g = let s = codeSpec g
                (getLabel x)
                (Options Nothing Nothing Nothing (Just "Code")) 
                (toAbsCode (codeName $ program s) modules)
-             setCurrentDirectory workingDir) (lang $ choices s)    
+             setCurrentDirectory workingDir) (lang $ ch)
   where getLabel Cpp = cppLabel
         getLabel CSharp = cSharpLabel
         getLabel Java = javaLabel
@@ -294,11 +293,10 @@ genOutputFormatD g outs =
     
 -----
 
-genMethodCallD :: Scope -> Permanence -> Generator -> MethodType -> Label -> [Parameter] 
+genMethodCallD :: Scope -> Permanence -> Choices -> Generator -> MethodType -> Label -> [Parameter] 
                   -> Body -> Method
-genMethodCallD s pr g t n p b = Method n s pr t p (commBody doComments (loggedBody doLog))
+genMethodCallD s pr ch g t n p b = Method n s pr t p (commBody doComments (loggedBody doLog))
   where
-    ch = choices $ codeSpec g
     doLog = logging ch
     doComments = comments ch
     loggedBody LogFunc = loggedMethod g n p b

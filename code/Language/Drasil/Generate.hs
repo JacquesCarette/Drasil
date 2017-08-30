@@ -72,9 +72,9 @@ writeDoc HTML = genHTML
 writeDoc _    = error "we can only write TeX/HTML (for now)"
 
 -- | Calls the code generator
-genCode :: CodeSpec -> IO ()
-genCode spec = 
-  let g = generator spec
+genCode :: Choices -> CodeSpec -> IO ()
+genCode ch spec = 
+  let g = generator ch spec
   in
     do 
       workingDir <- getCurrentDirectory

@@ -175,7 +175,7 @@ nopcm_Choices = Choices {
 }
 
 nopcm_code :: CodeSpec
-nopcm_code = codeSpec' nopcm_si nopcm_Choices [inputMod]
+nopcm_code = codeSpec' nopcm_si [inputMod]
 -- Sub interpolation mod into list when possible              ^
 
 nopcm_srs :: Document

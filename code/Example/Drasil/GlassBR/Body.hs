@@ -133,7 +133,8 @@ glassSystInfo = SI {
   _outputs     = map qs gbOutputs,
   _defSequence = gbQDefns,
   _constraints = gbConstrained,
-  _constants   = gbConstants
+  _constants   = gbConstants,
+  _sysinfodb   = gbSymbMap
 }
   --FIXME: All named ideas, not just acronyms.
 
@@ -150,7 +151,7 @@ glassChoices = Choices {
 }
 
 glassBR_code :: CodeSpec
-glassBR_code = codeSpec' glassSystInfo glassChoices [interpMod, inputMod, readTableMod] gbSymbMap
+glassBR_code = codeSpec' glassSystInfo glassChoices [interpMod, inputMod, readTableMod]
 
 mgBod :: [Section]
 (mgBod, _) = makeDD likelyChanges unlikelyChanges reqs modules
@@ -682,13 +683,13 @@ s9_theorysRef, s9_instaModelRef, s9_dataDefRef, s9_dataRef, s9_funcReqRef,
   s9_assumpRef, s9_likelyChgRef :: [Sentence]
 
 s9_theorys = ["T1", "T2"]
-s9_theorysRef = map (refFromType Theory gbSymbMap) tModels
+s9_theorysRef = map (refFromType Theory) tModels
 
 s9_instaModel = ["IM1", "IM2", "IM3"]
-s9_instaModelRef = map (refFromType Theory gbSymbMap) iModels
+s9_instaModelRef = map (refFromType Theory) iModels
 
 s9_dataDef =  ["DD1", "DD2", "DD3", "DD4", "DD5", "DD6", "DD7", "DD8"]
-s9_dataDefRef = map (refFromType Data gbSymbMap) dataDefns
+s9_dataDefRef = map (refFromType Data) dataDefns
 
 s9_data  = ["Data Constraints"]
 s9_dataRef = [makeRef (SRS.datCon SRS.missingP [])]

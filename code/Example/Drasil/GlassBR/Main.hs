@@ -15,4 +15,4 @@ docs =
 main :: IO()
 main = do
   gen docs gbSymbMap
-  genCode glassBR_code gbSymbMap
+  genCode glassBR_code

@@ -80,7 +80,7 @@ genCode ch spec =
       workingDir <- getCurrentDirectory
       createDirectoryIfMissing False "src"
       setCurrentDirectory "src"
-      generateCode g g
+      generateCode ch g
       setCurrentDirectory workingDir
 
 

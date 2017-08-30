@@ -1,4 +1,4 @@
-module Language.Drasil.Code.Imperative.Import where
+module Language.Drasil.Code.Imperative.Import(Generator, generator, generateCode) where
 
 import Language.Drasil.Code.Code as C
 import Language.Drasil.Code.Imperative.AST as I hiding ((&=),assign)
@@ -24,8 +24,6 @@ import Control.Lens ((^.))
 
 
 data Generator = Generator { 
-  
-  generateCode :: Generator -> IO (),
   
   genModules :: Generator -> [Module],
   
@@ -73,8 +71,6 @@ generator chs spec =
                                                           LogAll    -> loggedAssign
                                                           _         -> (\_ -> I.assign)                                                          
   in Generator {
-      generateCode = generateCodeD chs,
-      
       genModules = genModulesD,
       
       codeSpec = spec,
@@ -124,9 +120,9 @@ fAppFuncD g s
         (Map.lookup s (eMap $ codeSpec g))
   | otherwise = funcApp' s
 
-generateCodeD :: Choices -> Generator -> IO ()
-generateCodeD ch g = let s = codeSpec g
-                         modules = genModules g g
+generateCode :: Choices -> Generator -> IO ()
+generateCode ch g = let s = codeSpec g
+                        modules = genModules g g
   in do workingDir <- getCurrentDirectory
         mapM_ (\x -> do 
              createDirectoryIfMissing False (getDir x) 
@@ -242,9 +238,11 @@ genConstModD g = buildModule "Constants" []
   (map (\x -> VarDecDef (codeName x) (convType $ codeType x) (convExpr g $ codeEquat x)) (const $ codeSpec g))
   [] [{- genConstClassD g -}]
 
+{-
 genConstClassD :: Generator -> Class
 genConstClassD g = pubClass "Constants" Nothing genVars []
   where genVars = map (\x -> pubGVar 0 (convType $ codeType x) (codeName x)) (const $ codeSpec g)
+-}
     
 ------- CALC ----------    
     

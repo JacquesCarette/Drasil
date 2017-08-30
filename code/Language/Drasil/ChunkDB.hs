@@ -39,5 +39,5 @@ class HasSymbolTable s where
   symbolTable :: Simple Lens s SymbolMap
   
 instance HasSymbolTable ChunkDB where
-  symbolTable f (CDB s) = fmap (\x -> CDB x) (f s)
+  symbolTable f (CDB s) = fmap CDB (f s)
   

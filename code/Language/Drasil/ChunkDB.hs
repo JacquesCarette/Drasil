@@ -1,6 +1,6 @@
 module Language.Drasil.ChunkDB 
   ( SymbolMap, symbolMap, symbLookup, getUnitLup 
-  , ChunkDB(..), cdb, HasSymbolTable
+  , ChunkDB(..), cdb, HasSymbolTable(..)
   ) where
 
 import Language.Drasil.Chunk
@@ -37,4 +37,7 @@ cdb = CDB
 
 class HasSymbolTable s where
   symbolTable :: Simple Lens s SymbolMap
+  
+instance HasSymbolTable ChunkDB where
+  symbolTable f (CDB s) = fmap (\x -> CDB x) (f s)
   

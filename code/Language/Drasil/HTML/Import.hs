@@ -13,7 +13,7 @@ import Language.Drasil.Chunk.NamedIdea (term, short, getA)
 import Language.Drasil.Chunk.Concept (defn)
 import qualified Language.Drasil.Chunk.SymbolForm as SF
 import Language.Drasil.Chunk.VarChunk (VarChunk)
-import Language.Drasil.ChunkDB (SymbolMap, getUnitLup, symbLookup)
+import Language.Drasil.ChunkDB (HasSymbolTable(..), getUnitLup, symbLookup)
 
 import Language.Drasil.Expr.Extract
 import Language.Drasil.Config (verboseDDDescription)
@@ -28,7 +28,7 @@ import Language.Drasil.Citations (Citation(..),CiteField(..))
 import Control.Lens hiding ((:>),(:<),set)
 
 -- | expr translation function from Drasil to HTML 'AST'
-expr :: Expr -> SymbolMap -> H.Expr
+expr :: HasSymbolTable s => Expr -> s -> H.Expr
 expr (V v)            _ = H.Var   v
 expr (Dbl d)          _ = H.Dbl   d
 expr (Int i)          _ = H.Int   i
@@ -46,7 +46,7 @@ expr (Deriv Part a b) sm = H.Frac (H.Mul (H.Sym (Special Partial)) (expr a sm))
                           (H.Mul (H.Sym (Special Partial)) (expr b sm))
 expr (Deriv Total a b)sm = H.Frac (H.Mul (H.Sym lD) (expr a sm)) 
                           (H.Mul (H.Sym lD) (expr b sm))
-expr (C c)            sm = H.Sym $ (symbol (symbLookup c sm))
+expr (C c)            sm = H.Sym $ (symbol (symbLookup c (sm ^. symbolTable)))
 expr (FCall f x)      sm = H.Call (expr f sm) (map (flip expr sm) x)
 expr (Case ps)        sm = if length ps < 2 then 
                     error "Attempting to use multi-case expr incorrectly"
@@ -74,12 +74,12 @@ expr (Len _)           _ = error "Len not yet implemented"
 expr (Append _ _)      _ = error "Append not yet implemented"
 
 -- | Healper for translating Quantifier
-quan :: Quantifier -> SymbolMap -> H.Quantifier
+quan :: HasSymbolTable s => Quantifier -> s -> H.Quantifier
 quan (Forall e) sm = H.Forall (expr e sm)
 quan (Exists e) sm = H.Exists (expr e sm)
 
 -- | Helper function for translating 'UFunc's
-ufunc :: UFunc -> SymbolMap -> (H.Function, H.Expr)
+ufunc :: HasSymbolTable s => UFunc -> s -> (H.Function, H.Expr)
 ufunc (Log e) sm = (H.Log, expr e sm)
 ufunc (Summation (Just (s, Low v, High h)) e) sm = 
   (H.Summation (Just ((s, expr v sm), expr h sm)), (expr e sm))
@@ -102,11 +102,11 @@ ufunc (Exp e)    sm = (H.Exp,  expr e sm)
 ufunc (Sqrt e)   sm = (H.Sqrt, expr e sm)
 
 -- | Helper function for translating 'BiFunc's
-bfunc :: BiFunc -> SymbolMap -> (H.Function, [H.Expr])
+bfunc :: HasSymbolTable s => BiFunc -> s -> (H.Function, [H.Expr])
 bfunc (Cross e1 e2) sm = (H.Cross, map (flip expr sm) [e1,e2])
 
 -- | Helper function for translating 'Relation's
-rel :: Relation -> SymbolMap -> H.Expr
+rel :: HasSymbolTable s => Relation -> s -> H.Expr
 rel (a := b)  sm = H.Eq (expr a sm) (expr b sm)
 rel (a :!= b) sm = H.NEq (expr a sm) (expr b sm)
 rel (a :< b)  sm = H.Lt (expr a sm) (expr b sm)
@@ -132,7 +132,7 @@ set (DiscreteD a) = H.DiscreteD a
 set (DiscreteS a) = H.DiscreteS a
 
 -- | Helper function for translating Integrals (from 'UFunc')
-integral :: UFunc -> SymbolMap -> (H.Function, H.Expr)
+integral :: HasSymbolTable s => UFunc -> s -> (H.Function, H.Expr)
 integral (Integral (Just (Low v), Just (High h)) e wrtc) sm = 
   (H.Integral (Just (expr v sm), Just (expr h sm)) (int_wrt wrtc sm), expr e sm)
 integral (Integral (Just (High h), Just (Low v)) e wrtc) sm = 
@@ -150,11 +150,11 @@ integral (Integral (Nothing, Nothing) e wrtc) sm =
 integral _ _ = error "TeX/Import.hs Incorrect use of Integral"
 
 -- | Helper function for translating the differential
-int_wrt :: (SF.SymbolForm c) => c -> SymbolMap -> H.Expr
+int_wrt :: (SF.SymbolForm c, HasSymbolTable s) => c -> s -> H.Expr
 int_wrt wrtc sm = expr (Deriv Total (C wrtc) 1) sm
 
 -- | Helper function for translating operations in expressions 
-replace_divs :: Expr -> SymbolMap -> H.Expr
+replace_divs :: HasSymbolTable s => Expr -> s -> H.Expr
 replace_divs (a :/ b) sm = H.Div (replace_divs a sm) (replace_divs b sm)
 replace_divs (a :+ b) sm = H.Add (replace_divs a sm) (replace_divs b sm)
 replace_divs (a :* b) sm = H.Mul (replace_divs a sm) (replace_divs b sm)
@@ -163,7 +163,7 @@ replace_divs (a :- b) sm = H.Sub (replace_divs a sm) (replace_divs b sm)
 replace_divs a        sm = expr a sm
 
 -- | Translates Sentence to the HTML representation of Sentence ('Spec')
-spec :: Sentence -> SymbolMap -> H.Spec
+spec :: HasSymbolTable s => Sentence -> s -> H.Spec
 spec (S s)      _ = H.S s
 spec (Sy s)     _ = H.Sy s
 spec (EmptyS :+: b) sm = spec b sm
@@ -192,21 +192,21 @@ decorate Vector s = S "<b>" :+: s :+: S "</b>"
 decorate Prime  s = s :+: S "&prime;"
 
 -- | Translates from Document to the HTML representation of Document
-makeDocument :: Document -> SymbolMap -> H.Document
+makeDocument :: HasSymbolTable s => Document -> s -> H.Document
 makeDocument (Document title author sections) sm = 
   H.Document (spec title sm) (spec author sm) (createLayout sections sm)
 
 -- | Translates from LayoutObj to the HTML representation of LayoutObj
-layout :: Int -> SecCons -> SymbolMap -> H.LayoutObj
+layout :: HasSymbolTable s => Int -> SecCons -> s -> H.LayoutObj
 layout currDepth (Sub s) sm = sec (currDepth+1) s sm
 layout _         (Con c) sm = lay c sm
 
 -- | Helper function for creating sections as layout objects
-createLayout :: [Section] -> SymbolMap -> [H.LayoutObj]
+createLayout :: HasSymbolTable s => [Section] -> s -> [H.LayoutObj]
 createLayout secs sm = map (flip (sec 0) sm) secs
 
 -- | Helper function for creating sections at the appropriate depth
-sec :: Int -> Section -> SymbolMap -> H.LayoutObj
+sec :: HasSymbolTable s => Int -> Section -> s -> H.LayoutObj
 sec depth x@(Section title contents) sm = 
   H.HDiv [(concat $ replicate depth "sub") ++ "section"] 
   ((H.Header (depth+2) (spec title sm)):(map (flip (layout depth) sm) contents)) 
@@ -214,7 +214,7 @@ sec depth x@(Section title contents) sm =
 
 -- | Translates from Contents to the HTML Representation of LayoutObj.
 -- Called internally by layout.
-lay :: Contents -> SymbolMap -> H.LayoutObj
+lay :: HasSymbolTable s => Contents -> s -> H.LayoutObj
 lay x@(Table hdr lls t b) sm = H.Table ["table"] 
   ((map (flip spec sm) hdr) : (map (map (flip spec sm)) lls)) (spec (refName x) sm) b (spec t sm)
 lay (Paragraph c)       sm = H.Paragraph (spec c sm)
@@ -243,7 +243,7 @@ lay (DDef ps rf d)      sm = H.Definition (Data d)
 lay (Bib bib)           sm = H.Bib $ map (flip layCite sm) bib
 
 -- | For importing bibliography
-layCite :: Citation -> SymbolMap -> H.Citation
+layCite :: HasSymbolTable s => Citation -> s -> H.Citation
 layCite (Book      fields) sm = H.Book      $ map (flip layField sm) fields
 layCite (Article   fields) sm = H.Article   $ map (flip layField sm) fields
 layCite (MThesis   fields) sm = H.MThesis   $ H.Thesis H.M   : map (flip layField sm) fields
@@ -251,7 +251,7 @@ layCite (PhDThesis fields) sm = H.PhDThesis $ H.Thesis H.PhD : map (flip layFiel
 layCite (Misc      fields) sm = H.Misc      $ map (flip layField sm) fields
 layCite (Online    fields) sm = H.Online    $ map (flip layField sm) fields
 
-layField :: CiteField -> SymbolMap -> H.CiteField
+layField :: HasSymbolTable s => CiteField -> s -> H.CiteField
 layField (Author     p)   _ = H.Author     p
 layField (Title      s)  sm = H.Title      $ spec s sm
 layField (Series     s)  sm = H.Series     $ spec s sm
@@ -274,7 +274,7 @@ layField (HowPub     s)  sm = H.HowPub     $ spec s sm
 layField (Editor     p)   _ = H.Editor     p
 
 -- | Translates lists
-makeL :: ListType -> SymbolMap -> H.ListType
+makeL :: HasSymbolTable s => ListType -> s -> H.ListType
 makeL (Bullet bs)      sm = H.Unordered   $ map (flip item sm) bs
 makeL (Number ns)      sm = H.Ordered     $ map (flip item sm) ns
 makeL (Simple ps)      sm = H.Simple      $ map (\(x,y) -> (spec x sm, item y sm)) ps
@@ -282,13 +282,13 @@ makeL (Desc ps)        sm = H.Desc        $ map (\(x,y) -> (spec x sm, item y sm
 makeL (Definitions ps) sm = H.Definitions $ map (\(x,y) -> (spec x sm, item y sm)) ps
 
 -- | Helper for translating list items
-item :: ItemType -> SymbolMap -> H.ItemType
+item :: HasSymbolTable s => ItemType -> s -> H.ItemType
 item (Flat i)     sm = H.Flat (spec i sm)
 item (Nested t s) sm = H.Nested (spec t sm) (makeL s sm)
 
 -- | Translates definitions
 -- (Data defs, General defs, Theoretical models, etc.)
-makePairs :: DType -> SymbolMap -> [(String,[H.LayoutObj])]
+makePairs :: HasSymbolTable s => DType -> s -> [(String,[H.LayoutObj])]
 makePairs (Data c) m = [
   ("Number",      [H.Paragraph $ spec (missingAcro (S "DD") $ getA c) m]),
   ("Label",       [H.Paragraph $ spec (titleize $ c ^. term) m]),
@@ -314,17 +314,17 @@ missingAcro _ (Just a) = S "<b>":+: a :+: S "</b>"
 
 -- | Translates the defining equation from a QDefinition to 
 -- HTML's version of Sentence
-buildEqn :: QDefinition -> SymbolMap -> H.Spec  
+buildEqn :: HasSymbolTable s => QDefinition -> s -> H.Spec  
 buildEqn c sm = H.N (symbol c) H.:+: H.S " = " H.:+: H.E (expr (equat c) sm)
 
 -- | Build descriptions in data defs based on required verbosity
-buildDDDescription :: QDefinition -> SymbolMap -> H.Spec
+buildDDDescription :: HasSymbolTable s => QDefinition -> s -> H.Spec
 buildDDDescription c m = descLines 
   (if verboseDDDescription then (vars (getQ c := equat c) m) else []) m
   where getQ (EC a _) = C a
 
 -- | Helper for building each line of the description of a data def
-descLines :: [VarChunk] -> SymbolMap -> H.Spec  
+descLines :: HasSymbolTable s => [VarChunk] -> s -> H.Spec  
 descLines []    _   = error "No chunks to describe"
 descLines (vc:[]) m = (H.N (symbol vc) H.:+: 
   (H.S " is the " H.:+: (spec (phrase $ vc ^. term) m) H.:+:

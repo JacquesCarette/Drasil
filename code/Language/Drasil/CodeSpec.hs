@@ -276,7 +276,9 @@ getExecOrder d k' n' sm = getExecOrder' [] d k' (n' \\ k')
           let new  = filter ((`subsetOf` k) . flip codevars' sm . codeEquat) defs
               kNew = k ++ map codevar new
               nNew = n \\ map codevar new
-          in  getExecOrder' (ord ++ new) (defs \\ new) kNew nNew
+          in  if null new 
+              then error "Cannot find path from inputs to outputs"
+              else getExecOrder' (ord ++ new) (defs \\ new) kNew nNew
   
 subsetOf :: (Eq a) => [a] -> [a] -> Bool  
 xs `subsetOf` ys = null $ filter (not . (`elem` ys)) xs

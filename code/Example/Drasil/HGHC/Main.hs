@@ -2,7 +2,7 @@ module Main (main) where
 
 import Language.Drasil
 
-import Drasil.HGHC.HGHC (srsBody, mgBody, misBody, hghcSymMap{-, modules-})
+import Drasil.HGHC.HGHC (srsBody, mgBody, misBody, allSymbols{-, modules-})
 --import Drasil.HGHC.Modules (executable)
 --import Drasil.HGHC.HeatTransfer (hghcSymMap)
 

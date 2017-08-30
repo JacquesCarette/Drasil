@@ -36,5 +36,5 @@ cdb :: SymbolMap -> ChunkDB
 cdb = CDB
 
 class HasSymbolTable s where
-  symbolTable :: Simple Lens c SymbolMap
+  symbolTable :: Simple Lens s SymbolMap
   

@@ -1,5 +1,5 @@
 module Language.Drasil.ChunkDB 
-  ( SymbolMap, symbolMap, symbLookup, getUnitLup 
+  ( symbolMap, symbLookup, getUnitLup 
   , ChunkDB(..), cdb, HasSymbolTable(..)
   ) where
 

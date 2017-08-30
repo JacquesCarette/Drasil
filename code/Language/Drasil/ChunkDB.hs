@@ -32,8 +32,8 @@ getUnitLup c m = let lookC = symbLookup c (m ^. symbolTable) in
 -- | Our chunk databases. Should contain all the maps we will need.
 data ChunkDB = CDB { symbs :: SymbolMap } --TODO: Expand and add more databases
 
-cdb :: SymbolMap -> ChunkDB
-cdb = CDB
+cdb :: (Quantity c) => [c] -> ChunkDB
+cdb = CDB . symbolMap
 
 class HasSymbolTable s where
   symbolTable :: Simple Lens s SymbolMap

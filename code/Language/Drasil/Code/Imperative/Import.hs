@@ -1,20 +1,20 @@
 module Language.Drasil.Code.Imperative.Import(generator, generateCode) where
 
 import Language.Drasil.Code.Code as C
-import Language.Drasil.Code.Imperative.AST as I hiding ((&=),assign)
+import Language.Drasil.Code.Imperative.AST as I hiding ((&=),assign,State)
 import qualified Language.Drasil.Code.Imperative.AST as I (assign)
 import Language.Drasil.Code.Imperative.LanguageRenderer (Options(..))
 import Language.Drasil.Code.Imperative.Parsers.ConfigParser (pythonLabel, cppLabel, cSharpLabel, javaLabel)
 import Language.Drasil.Code.CodeGeneration (createCodeFiles, makeCode)
 import Language.Drasil.Chunk.Code
-import Language.Drasil.Expr as E
+import Language.Drasil.Expr as E hiding (State)
 import Language.Drasil.Expr.Extract hiding (vars)
 import Language.Drasil.CodeSpec hiding (codeSpec, Mod(..))
 import qualified Language.Drasil.CodeSpec as CS (Mod(..))
 import Language.Drasil.DataDesc
 
 import Prelude hiding (log, exp, return, const)
-import Data.List (intersperse, (\\), nub)
+import Data.List (intersperse, (\\))
 import System.Directory
 import Data.Map (member)
 import qualified Data.Map as Map (lookup)
@@ -24,24 +24,21 @@ import Control.Lens ((^.))
 import Control.Monad (when)
 
 
-data Generator = Generator { 
+-- Private State, used to push these options around the generator
+data State = State { 
   codeSpec :: CodeSpec,
-  
-  genInputMod :: Generator -> [Module],
-  
   logName :: String,
   currentModule :: String,
   
-  publicMethod :: Generator -> MethodType -> Label -> [Parameter] -> Body -> Method,
-  privateMethod :: Generator -> MethodType -> Label -> [Parameter] -> Body -> Method,
+  sfwrCBody :: Expr -> Body,
+  physCBody :: Expr -> Body,
   
-  sfwrCBody :: Generator -> Expr -> Body,
-  physCBody :: Generator -> Expr -> Body,
-  
-  assign :: Generator -> Value -> Value -> Statement
+  genInputMod :: State -> [Module],
+  publicMethod :: State -> MethodType -> Label -> [Parameter] -> Body -> Method,
+  assign :: State -> Value -> Value -> Statement
 }
 
-generator :: Choices -> CodeSpec -> Generator
+generator :: Choices -> CodeSpec -> State
 generator chs spec = 
   let sfwrConstraintFunc = case (onSfwrConstraint chs) of Warning   -> constrWarn
                                                           Exception -> constrExc
@@ -52,7 +49,7 @@ generator chs spec =
       assignFunc =         case (logging chs)          of LogVar    -> loggedAssign
                                                           LogAll    -> loggedAssign
                                                           _         -> (\_ -> I.assign)                                                          
-  in Generator {
+  in State {
       -- constants
       codeSpec = spec,
       -- state
@@ -65,18 +62,17 @@ generator chs spec =
       physCBody = physConstraintFunc,
       assign = assignFunc,
       
-      publicMethod = genMethodCallD Public Static chs,
-      privateMethod = genMethodCallD Private Dynamic chs
+      publicMethod = genMethodCallD Public Static chs
     }
     
-variable :: Generator -> String -> Value
+variable :: State -> String -> Value
 variable g s 
   | member s (constMap $ codeSpec g) = 
       maybe (error "impossible") (convExpr g . codeEquat) (Map.lookup s (constMap $ codeSpec g)) --extvar "Constants" s
   | s `elem` (map codeName $ inputs $ codeSpec g) = (var "inParams")$->(var s)
   | otherwise                        = var s  
   
-fApp :: Generator -> String -> ([Value] -> Value)
+fApp :: State -> String -> ([Value] -> Value)
 fApp g s 
   | member s (eMap $ codeSpec g) =
       maybe (error "impossible") 
@@ -84,7 +80,7 @@ fApp g s
         (Map.lookup s (eMap $ codeSpec g))
   | otherwise = funcApp' s
 
-generateCode :: Choices -> Generator -> IO ()
+generateCode :: Choices -> State -> IO ()
 generateCode ch g = let modules = genModulesD g
   in do workingDir <- getCurrentDirectory
         mapM_ (\x -> do 
@@ -107,7 +103,7 @@ generateCode ch g = let modules = genModulesD g
         getDir Java = "java"
         getDir Python = "python"
         
-genModulesD :: Generator -> [Module]
+genModulesD :: State -> [Module]
 genModulesD g = genMain g : genInputMod g g
             -- ++ [genConstMod g]    inlining for now
             -- ++ map (\(FuncMod n d) -> genCalcMod g n d) (fMods $ codeSpec g)
@@ -117,14 +113,14 @@ genModulesD g = genMain g : genInputMod g g
 
 ------- INPUT ----------  
 
-genInputModClass :: Generator -> [Module]
+genInputModClass :: State -> [Module]
 genInputModClass g = 
   [ genModule g "InputParameters" Nothing (Just $ \x -> [genInputClass x]),
     genModule g "DerivedValues" (Just $ \x -> [genInputDerived x]) Nothing,
     genModule g "InputConstraints" (Just $ \x -> [genInputConstraints x]) Nothing
   ]
 
-genInputModNoClass :: Generator -> [Module]
+genInputModNoClass :: State -> [Module]
 genInputModNoClass g =
   let ins = inputs $ codeSpec g
   in  [ buildModule "InputParameters" [] 
@@ -133,7 +129,7 @@ genInputModNoClass g =
           []
       ]
 
-genInputClass :: Generator -> Class
+genInputClass :: State -> Class
 genInputClass g =
   pubClass
     "InputParameters"
@@ -154,7 +150,7 @@ genInputClass g =
         vals         = map (defaultValue' . convType . codeType) ins        
         
 
-genInputConstraints :: Generator -> Method
+genInputConstraints :: State -> Method
 genInputConstraints g = 
   let vars   = inputs $ codeSpec g
       cm     = cMap $ codeSpec g
@@ -163,42 +159,42 @@ genInputConstraints g =
   in
     publicMethod g g methodTypeVoid "input_constraints" (getParams g $ vars)
       [ block $
-        (map (\x -> ifCond [((?!) (convExpr g x), sfwrCBody g g x)] noElse) sfwrCs) ++
-        (map (\x -> ifCond [((?!) (convExpr g x), physCBody g g x)] noElse) physCs) 
+        (map (\x -> ifCond [((?!) (convExpr g x), sfwrCBody g x)] noElse) sfwrCs) ++
+        (map (\x -> ifCond [((?!) (convExpr g x), physCBody g x)] noElse) physCs) 
       ]      
 
-genInputDerived :: Generator -> Method
+genInputDerived :: State -> Method
 genInputDerived g = 
   let dvals = derivedInputs $ codeSpec g
   in  publicMethod g g methodTypeVoid "derived_values" (getParams g $ map codevar dvals) 
         (concatMap (\x -> genCalcBlock g CalcAssign (codeName x) (codeEquat x)) dvals)
       
 -- need Expr -> String to print constraint
-constrWarn :: Generator -> Expr -> Body
-constrWarn _ _ = oneLiner $ printStrLn "Warning: constraint violated"
+constrWarn :: Expr -> Body
+constrWarn _ = oneLiner $ printStrLn "Warning: constraint violated"
 
-constrExc :: Generator -> Expr -> Body
-constrExc _ _ = oneLiner $ throw "InputError"
+constrExc :: Expr -> Body
+constrExc _ = oneLiner $ throw "InputError"
 
 ---- CONST ----
 
 {-
-genConstMod :: Generator -> Module
+genConstMod :: State -> Module
 genConstMod g = buildModule "Constants" [] 
   (map (\x -> VarDecDef (codeName x) (convType $ codeType x) (convExpr g $ codeEquat x)) (const $ codeSpec g))
   [] [{- genConstClassD g -}]
 
-genConstClassD :: Generator -> Class
+genConstClassD :: State -> Class
 genConstClassD g = pubClass "Constants" Nothing genVars []
   where genVars = map (\x -> pubGVar 0 (convType $ codeType x) (codeName x)) (const $ codeSpec g)
 -}
     
 ------- CALC ----------    
 {-    
-genCalcMod :: Generator -> String -> [CodeDefinition] -> Module
+genCalcMod :: State -> String -> [CodeDefinition] -> Module
 genCalcMod g n defs = buildModule n [] [] (map (genCalcFunc g) (filter (validExpr . codeEquat) defs)) []   
 -}
-genCalcFunc :: Generator -> CodeDefinition -> Method
+genCalcFunc :: State -> CodeDefinition -> Method
 genCalcFunc g cdef = 
   publicMethod g g
     (methodType $ convType (codeType cdef)) 
@@ -208,23 +204,23 @@ genCalcFunc g cdef =
 
 data CalcType = CalcAssign | CalcReturn deriving Eq
 
-genCalcBlock :: Generator -> CalcType -> String -> Expr -> Body
+genCalcBlock :: State -> CalcType -> String -> Expr -> Body
 genCalcBlock g t v e
   | containsCase e   = genCaseBlock g t v $ getCases e
   | t == CalcAssign  = oneLiner $ assign g g (variable g v) (convExpr g e)
   | otherwise        = oneLiner $ return $ convExpr g e
 
-genCaseBlock :: Generator -> CalcType -> String -> [(Expr,Relation)] -> Body
+genCaseBlock :: State -> CalcType -> String -> [(Expr,Relation)] -> Body
 genCaseBlock g t v cs = oneLiner $ ifCond (genIf cs) noElse
   where genIf :: [(Expr,Relation)] -> [(Value,Body)]
         genIf = map (\(e,r) -> (convExpr g r, genCalcBlock g t v e))
 
 ----- OUTPUT -------
           
-genOutputMod :: Generator -> [CodeChunk] -> [Module]
+genOutputMod :: State -> [CodeChunk] -> [Module]
 genOutputMod g outs = [genModule g "OutputFormat" (Just $ \x -> [genOutputFormat x outs]) Nothing]  
     
-genOutputFormat :: Generator -> [CodeChunk] -> Method
+genOutputFormat :: State -> [CodeChunk] -> Method
 genOutputFormat g outs = 
   let l_outfile = "outfile"
       v_outfile = var l_outfile
@@ -240,7 +236,7 @@ genOutputFormat g outs =
     
 -----
 
-genMethodCallD :: Scope -> Permanence -> Choices -> Generator -> MethodType -> Label -> [Parameter] 
+genMethodCallD :: Scope -> Permanence -> Choices -> State -> MethodType -> Label -> [Parameter] 
                   -> Body -> Method
 genMethodCallD s pr ch g t n p b = Method n s pr t p (commBody doComments (loggedBody doLog))
   where
@@ -252,7 +248,7 @@ genMethodCallD s pr ch g t n p b = Method n s pr t p (commBody doComments (logge
     commBody CommentFunc = commMethod g n p
     commBody _           = id
 
-commMethod :: Generator -> Label -> [Parameter] -> Body -> Body
+commMethod :: State -> Label -> [Parameter] -> Body -> Body
 commMethod g n p b = (
   block [
     comment $ "function '" ++ n ++ "': " ++ (funcTerm n (fMap $ codeSpec g)),
@@ -260,7 +256,7 @@ commMethod g n p b = (
       (\x -> comment $ "parameter '" ++ (paramName x) ++ "': " ++ (varTerm (paramName x) (vMap $ codeSpec g))) p    
   ]) : b
     
-loggedMethod :: Generator -> Label -> [Parameter] -> Body -> Body
+loggedMethod :: State -> Label -> [Parameter] -> Body -> Body
 loggedMethod g n p b =
   let l_outfile = "outfile"
       v_outfile = var l_outfile 
@@ -279,10 +275,10 @@ loggedMethod g n p b =
 
 ---- MAIN ---
 
-genModule :: Generator 
+genModule :: State 
                -> Name 
-               -> Maybe (Generator -> [FunctionDecl])
-               -> Maybe (Generator -> [Class])
+               -> Maybe (State -> [FunctionDecl])
+               -> Maybe (State -> [Class])
                -> Module
 genModule g' n maybeMs maybeCs = 
   let g  = g' { currentModule = n }
@@ -292,10 +288,10 @@ genModule g' n maybeMs maybeCs =
   in  buildModule n ls [] ms cs
 
   
-genMain :: Generator -> Module
+genMain :: State -> Module
 genMain g = genModule g "Control" (Just $ \x -> [genMainFunc x]) Nothing
 
-genMainFunc :: Generator -> FunctionDecl
+genMainFunc :: State -> FunctionDecl
 genMainFunc g = 
   let l_filename = "inputfile"
       v_filename = var l_filename
@@ -318,7 +314,7 @@ genMainFunc g =
 
 -----
 
-loggedAssign :: Generator -> Value -> Value -> Statement
+loggedAssign :: State -> Value -> Value -> Statement
 loggedAssign g a b =
   let l_outfile = "outfile"
       v_outfile = var l_outfile 
@@ -333,7 +329,7 @@ loggedAssign g a b =
       
 -- helpers
     
-getParams :: Generator -> [CodeChunk] -> [Parameter]
+getParams :: State -> [CodeChunk] -> [Parameter]
 getParams g cs = 
   let ins = inputs $ codeSpec g
       csSubIns = cs \\ ins
@@ -343,7 +339,7 @@ getParams g cs =
       then (param "inParams" (obj "InputParameters")):ps  -- todo:  make general
       else ps
       
-getArgs :: Generator -> [CodeChunk] -> [Value]
+getArgs :: State -> [CodeChunk] -> [Value]
 getArgs g cs = 
   let ins = inputs $ codeSpec g
       csSubIns = cs \\ ins
@@ -435,7 +431,7 @@ validunop (E.Cot e)          = validExpr e
 validunop _                  = False
 -}
 
-convExpr :: Generator -> Expr -> Value
+convExpr :: State -> Expr -> Value
 convExpr _ (V v)        = litString v  -- V constructor should be removed
 convExpr _ (Dbl d)      = litFloat d
 convExpr _ (Int i)      = litInt i
@@ -470,7 +466,7 @@ convExpr _ (BinaryOp _) = litString "**convExpr :: BinaryOp unimplemented**"
 convExpr _ (Case _)     = error "**convExpr :: Case should be dealt with separately**"
 convExpr _ _           = litString "**convExpr :: ? unimplemented**"
 
-unop :: Generator -> UFunc -> Value
+unop :: State -> UFunc -> Value
 unop g (E.Sqrt e)         = (#/^) (convExpr g e)
 unop g (E.Log e)          = I.log (convExpr g e)
 unop g (E.Abs e)          = (#|) (convExpr g e)
@@ -571,10 +567,10 @@ compactCaseUnary op (Case c) = Case (map (\(e, r) -> (op e, r)) c)
 compactCaseUnary op a        = op (compactCase a)
 
 -- medium hacks --
-genModDef :: Generator -> CS.Mod -> Module
+genModDef :: State -> CS.Mod -> Module
 genModDef g (CS.Mod n fs) = genModule g n (Just $ \x -> map (genFunc x) fs) Nothing
 
-genFunc :: Generator -> Func -> Method
+genFunc :: State -> Func -> Method
 genFunc g (FDef (FuncDef n i o s)) = publicMethod g g (methodType $ convType o) n (getParams g i) 
   [ block $ 
       (map (\x -> varDec (codeName x) (convType $ codeType x))
@@ -584,7 +580,7 @@ genFunc g (FDef (FuncDef n i o s)) = publicMethod g g (methodType $ convType o) 
 genFunc g (FData (FuncData n dd)) = genDataFunc g n dd
 genFunc g (FCD cd) = genCalcFunc g cd
 
-convStmt :: Generator -> FuncStmt -> Statement
+convStmt :: State -> FuncStmt -> Statement
 convStmt g (FAsg v e) = assign g g (var $ codeName v) (convExpr g e)
 convStmt g (FFor v e st) = for (varDecDef (codeName v) int (litInt 0)) (convExpr g e) ((&++) (var (codeName v)))
   [ block (map (convStmt g) st) ]
@@ -600,7 +596,7 @@ convStmt _ (FDec v (C.List t)) = listDec' (codeName v) (convType t) 0
 convStmt _ (FDec v t) = varDec (codeName v) (convType t)
 
 -- this is really ugly!!    
-genDataFunc :: Generator -> Name -> DataDesc -> Method
+genDataFunc :: State -> Name -> DataDesc -> Method
 genDataFunc g name dd = 
     publicMethod g g methodTypeVoid name (p_filename : (getParams g $ getInputs dd)) $
       body $ [

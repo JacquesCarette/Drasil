@@ -1,18 +1,14 @@
 {-# LANGUAGE RankNTypes #-}
-module Language.Drasil.Expr.Extract(dep, vars, codevars, codevars', toVC) where
+module Language.Drasil.Expr.Extract(dep, vars, codevars, codevars') where
 
 import Data.List (nub)
 import Control.Lens hiding ((:<),(:>))
 import Prelude hiding (id)
 import Language.Drasil.Expr (Expr(..), UFunc(..), BiFunc(..), Quantifier(..))
-import Language.Drasil.Chunk (Chunk, id)
-import Language.Drasil.Chunk.VarChunk (VarChunk(..), vc', makeVC)
-import Language.Drasil.Space  -- need this for code generation
+import Language.Drasil.Chunk (id)
 import Language.Drasil.ChunkDB
-import Language.Drasil.Misc (symbol)
-
-import Language.Drasil.NounPhrase -- temporary until Expr can constrain Quantity without circular import
 import Language.Drasil.Chunk.Code
+import Language.Drasil.Chunk.Quantity (QWrapper)
 
 --FIXME: Missing Patterns
 -- | Get dependencies from an equation  
@@ -54,8 +50,8 @@ dep (Index a i)   = nub (dep a ++ dep i)
 dep (Len a)       = nub (dep a)
 dep (Append a b)  = nub (dep a ++ dep b) 
 
--- | Get a list of VarChunks from an equation in order to print
-vars :: (HasSymbolTable s) => Expr -> s -> [VarChunk]
+-- | Get a list of quantities (QWrapper) from an equation in order to print
+vars :: (HasSymbolTable s) => Expr -> s -> [QWrapper]
 vars (a :/ b)     m = nub (vars a m ++ vars b m)
 vars (a :* b)     m = nub (vars a m ++ vars b m)
 vars (a :+ b)     m = nub (vars a m ++ vars b m)
@@ -67,7 +63,7 @@ vars (a :|| b)    m = nub (vars a m ++ vars b m)
 vars (Deriv _ a b) m = nub (vars a m ++ vars b m)
 vars (Not e)      m = vars e m
 vars (Neg e)      m = vars e m
-vars (C c)        m = [toVC c m]
+vars (C c)        m = [symbLookup c $ m ^. symbolTable]
 vars (Int _)      _ = []
 vars (Dbl _)      _ = []
 vars (Bln _)      _ = []
@@ -205,6 +201,6 @@ quant (Exists e) = e
 --   setting to all to rational
 -- | Convert any chunk to a VarChunk as long as it is an instance of SymbolForm.
 -- Again, used for printing equations/descriptions mostly.
-toVC :: (Chunk c, HasSymbolTable s) => c -> s -> VarChunk
-toVC c m = vc' (lookupC) (symbol lookupC) (Rational)
-  where lookupC = symbLookup c (m ^. symbolTable)
+--toVC :: (Chunk c, HasSymbolTable s) => c -> s -> VarChunk
+--toVC c m = vc' (lookupC) (symbol lookupC) (Rational)
+  --where lookupC = symbLookup c (m ^. symbolTable)

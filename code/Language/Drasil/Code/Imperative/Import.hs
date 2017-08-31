@@ -449,11 +449,11 @@ convExpr g (a :|| b)    = (convExpr g a) ?|| (convExpr g b)
 convExpr _ (Deriv _ _ _) = litString "**convExpr :: Deriv unimplemented**"
 convExpr g (E.Not e)      = (?!) (convExpr g e)
 convExpr g (Neg e)      = (#~) (convExpr g e)
-convExpr g (C c)        = variable g $ codeName $ SFCN $ symbLookup c $ (sysinfodb $ codeSpec g) ^. symbolTable
+convExpr g (C c)        = variable g $ codeName $ codevar $ symbLookup c $ (sysinfodb $ codeSpec g) ^. symbolTable
 convExpr g (Index a i)  = (convExpr g a)$.(listAccess $ convExpr g i)
 convExpr g (Len a)      = (convExpr g a)$.listSize
 convExpr g (Append a v) = (convExpr g a)$.(listAppend $ convExpr g v)
-convExpr g (FCall (C c) x)  = fApp g (codeName (SFCN $ symbLookup c $ (sysinfodb $ codeSpec g) ^. symbolTable)) (map (convExpr g) x)
+convExpr g (FCall (C c) x)  = fApp g (codeName (codevar $ symbLookup c $ (sysinfodb $ codeSpec g) ^. symbolTable)) (map (convExpr g) x)
 convExpr _ (FCall _ _)  = litString "**convExpr :: BinaryOp unimplemented**"
 convExpr g (a := b)     = (convExpr g a) ?== (convExpr g b)
 convExpr g (a :!= b)    = (convExpr g a) ?!= (convExpr g b)

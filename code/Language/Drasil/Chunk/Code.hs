@@ -249,31 +249,6 @@ spaceToCodeType (S.DiscreteD _) = G.List (spaceToCodeType S.Rational)
 spaceToCodeType (S.DiscreteS _) = G.List (spaceToCodeType S.String)
 
 
--- codeExpr :: Expr -> Expr
--- codeExpr (a :/ b)     = (codeExpr a) :/ (codeExpr b)
--- codeExpr (a :* b)     = (codeExpr a) :* (codeExpr b)
--- codeExpr (a :+ b)     = (codeExpr a) :+ (codeExpr b)
--- codeExpr (a :^ b)     = (codeExpr a) :^ (codeExpr b)
--- codeExpr (a :- b)     = (codeExpr a) :- (codeExpr b)
--- codeExpr (a :. b)     = (codeExpr a) :. (codeExpr b)
--- codeExpr (a :&& b)    = (codeExpr a) :&& (codeExpr b)
--- codeExpr (a :|| b)    = (codeExpr a) :|| (codeExpr b)
--- codeExpr (Deriv a b c) = Deriv (codeExpr a) (codeExpr b) (codeExpr c)
--- codeExpr (Not e)      = Not (codeExpr e)
--- codeExpr (Neg e)      = Neg (codeExpr e)
--- codeExpr (C c)        = C (SFCN c)
--- codeExpr (FCall f x)  = FCall (codeExpr f) (map codeExpr x)
--- codeExpr (Case ls)    = Case (map (\(x,y) -> (codeExpr x, codeExpr y)) ls)
--- codeExpr (a := b)     = (codeExpr a) := (codeExpr b)
--- codeExpr (a :!= b)    = (codeExpr a) :!= (codeExpr b)
--- codeExpr (a :> b)     = (codeExpr a) :> (codeExpr b)
--- codeExpr (a :< b)     = (codeExpr a) :< (codeExpr b)
--- codeExpr (a :<= b)    = (codeExpr a) :<= (codeExpr b)
--- codeExpr (a :>= b)    = (codeExpr a) :>= (codeExpr b)
--- codeExpr (UnaryOp u)  = codeExpr (unpack u) m
--- codeExpr (Grouping e) = Grouping (codeExpr e)
--- codeExpr (BinaryOp b) = nub (concat $ map (\x -> codeExpr x m) (binop b))
-
 
 type ConstraintMap = Map.Map String [Constraint]
 
@@ -282,12 +257,12 @@ constraintMap cs = Map.fromList (map (\x -> ((x ^. id), (x ^. constraints))) cs)
 
 getPhys :: [Constraint] -> [(Expr -> Relation)]
 getPhys []            = []
-getPhys ((Phys c):cs) = [c] ++ getPhys cs
+getPhys ((Phys c):cs) = c:getPhys cs
 getPhys (_:cs)        = getPhys cs
 
 getSfwr :: [Constraint] -> [(Expr -> Relation)]
 getSfwr []            = []
-getSfwr ((Sfwr c):cs) = [c] ++ getSfwr cs
+getSfwr ((Sfwr c):cs) = c:getSfwr cs
 getSfwr (_:cs)        = getSfwr cs
 
 getConstraint :: Constraint -> (Expr -> Relation)

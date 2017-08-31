@@ -48,7 +48,7 @@ risk = mkDataDef' risk_fun risk_eq (aGrtrThanB +:+ hRef +:+ ldfRef +:+ jRef)
 --DD2--
 
 hFromt_eq :: Relation
-hFromt_eq = (1/1000) * (Case (zipWith hFromt_helper 
+hFromt_eq = ((Dbl 1.0)/(Dbl 1000.0)) * (Case (zipWith hFromt_helper 
   actualThicknesses nominalThicknesses))
 
 hFromt_helper :: Double -> Double -> (Expr, Relation)
@@ -121,7 +121,7 @@ tolStrDisFac_eq :: Expr
 tolStrDisFac_eq = log (log ((1) / ((1) - (C pb_tol)))
   * ((Grouping ((C plate_len) * (C plate_width)) :^
   ((C sflawParamM) - (1)) / ((C sflawParamK) *
-  (Grouping (Grouping ((C mod_elas * 1000) *
+  (Grouping (Grouping ((C mod_elas * 1000.0) *
   (square (Grouping (C act_thick))))) :^ 
   (C sflawParamM) * (C lDurFac))))))
 

@@ -151,12 +151,17 @@ objAccessDoc' c v@(ObjAccess (ListVar _ (EnumType _)) (ListAccess _)) (Cast (Bas
 objAccessDoc' c v Floor = funcAppDoc c "Math.floor" [v]
 objAccessDoc' c v Ceiling = funcAppDoc c "Math.ceil" [v]
 objAccessDoc' c v (Cast (Base Float) (Base String)) = funcAppDoc c "Double.parseDouble" [v]
+objAccessDoc' c v (ListExtend t) = valueDoc c v <> dot <> text "add" <> parens (dftVal)
+    where dftVal = case t of Base bt   -> valueDoc c (defaultValue bt)
+                             List lt t  -> new <+> stateType c (List lt t) Dec <> parens (empty)
+                             _         -> error $ "ListExtend does not yet support list type " ++ render (doubleQuotes $ stateType c t Def)
 objAccessDoc' c v f = objAccessDocD c v f
 
 methodDoc' :: Config -> FileType -> Label -> Method -> Doc
 methodDoc' c _ _ (Method n s p t ps b) = vcat [
-    scopeDoc c s <+> perm p <> methodTypeDoc c t <+> text n <> parens (paramListDoc c ps) <> throwState (checkExceptions b) <+> lbrace,
-    oneTab $ bodyDoc c b,
+    --scopeDoc c s <+> perm p <> methodTypeDoc c t <+> text n <> parens (paramListDoc c ps) <> throwState (checkExceptions b) <+> lbrace,
+    scopeDoc c s <+> perm p <> methodTypeDoc c t <+> text n <> parens (paramListDoc c ps) <+> text "throws Exception" <+> lbrace,
+    oneTab $ bodyDoc c b,  -- all methods throw exception for now,  FIX ME.
     rbrace]
   where perm Dynamic = empty
         perm Static  = text "static "
@@ -183,11 +188,11 @@ ioDoc' c io = ioDocD c io
 
 inputDoc' :: Config -> IOType -> StateType -> Maybe Value -> Doc
 inputDoc' c io _ Nothing = inputFn c io <> dot <> text "next()"
-inputDoc' c io (Base t) (Just v) = valueDoc c v <+> equals <+> inputFn c io <> dot <> typeFunc t
-  where  typeFunc Integer = text "nextInt()"
-         typeFunc Float   = text "nextDouble()"
+inputDoc' c io (Base t) (Just v) = valueDoc c v <+> equals <+> typeFunc t <> parens (inputFn c io <> dot <> text "nextLine()") 
+  where  typeFunc Integer = text "Integer.parseInteger"
+         typeFunc Float   = text "Double.parseDouble"
          typeFunc Boolean = text "nextBoolean()"
-         typeFunc String  = text "next()"
+         typeFunc String  = empty
          typeFunc _       = error "Invalid Java input type"
 inputDoc' c io s v = inputDocD c io s v 
 

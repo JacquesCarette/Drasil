@@ -21,6 +21,7 @@ import qualified Data.Map as Map (lookup)
 import Data.Maybe (maybe)
 import Language.Drasil.ChunkDB (symbLookup, HasSymbolTable(..))
 import Control.Lens ((^.))
+import Control.Monad (when)
 
 
 data Generator = Generator { 
@@ -84,18 +85,20 @@ fApp g s
   | otherwise = funcApp' s
 
 generateCode :: Choices -> Generator -> IO ()
-generateCode ch g = let s = codeSpec g
-                        modules = genModulesD g
+generateCode ch g = let modules = genModulesD g
   in do workingDir <- getCurrentDirectory
         mapM_ (\x -> do 
-             createDirectoryIfMissing False (getDir x) 
+             createDirectoryIfMissing False (getDir x)
              setCurrentDirectory (getDir x)
+             when (x == Java) $ createDirectoryIfMissing False (codeName $ program s)
+             when (x == Java) $ setCurrentDirectory (codeName $ program s)
              createCodeFiles $ makeCode 
                (getLabel x)
                (Options Nothing Nothing Nothing (Just "Code")) 
                (toAbsCode (codeName $ program s) modules)
              setCurrentDirectory workingDir) (lang $ ch)
-  where getLabel Cpp = cppLabel
+  where s = codeSpec g
+        getLabel Cpp = cppLabel
         getLabel CSharp = cSharpLabel
         getLabel Java = javaLabel
         getLabel Python = pythonLabel

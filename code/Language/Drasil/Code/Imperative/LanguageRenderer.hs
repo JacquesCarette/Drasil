@@ -166,6 +166,7 @@ observerListName = "observerList"
 -----------------------------------------------
 
 assignDocD :: Config -> Assignment -> Doc
+assignDocD c (Assign (ObjAccess v (ListAccess n)) v2) = valueDoc c (v$.(ListSet n v2)) 
 assignDocD c (Assign v1 v2) = valueDoc c v1 <+> equals <+> valueDoc c v2
 assignDocD c (PlusEquals v1 v2) = valueDoc c v1 <+> text "+=" <+> valueDoc c v2
 assignDocD c (PlusPlus v) = valueDoc c v  <> text "++"

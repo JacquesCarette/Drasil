@@ -118,6 +118,7 @@ data Lang = Cpp
           | CSharp
           | Java
           | Python
+          deriving Eq
 
 data ImplementationType = Library
                         | Program

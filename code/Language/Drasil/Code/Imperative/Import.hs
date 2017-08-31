@@ -14,7 +14,7 @@ import qualified Language.Drasil.CodeSpec as CS (Mod(..))
 import Language.Drasil.DataDesc
 
 import Prelude hiding (log, exp, return, const)
-import Data.List (intersperse, (\\))
+import Data.List (intersperse, (\\), nub)
 import System.Directory
 import Data.Map (member)
 import qualified Data.Map as Map (lookup)
@@ -572,7 +572,12 @@ genModDef :: Generator -> CS.Mod -> Module
 genModDef g (CS.Mod n fs) = genModule g n (Just $ \x -> map (genFunc x) fs) Nothing
 
 genFunc :: Generator -> Func -> Method
-genFunc g (FDef (FuncDef n i o s)) = publicMethod g g (methodType $ convType o) n (getParams g i) [ block (map (convStmt g) s) ]
+genFunc g (FDef (FuncDef n i o s)) = publicMethod g g (methodType $ convType o) n (getParams g i) 
+  [ block $ 
+      (map (\x -> varDec (codeName x) (convType $ codeType x))
+        (((fstdecl $ sysinfodb $ codeSpec g) s) \\ i)) 
+      ++ (map (convStmt g) s) 
+  ]
 genFunc g (FData (FuncData n dd)) = genDataFunc g n dd
 genFunc g (FCD cd) = genCalcFunc g cd
 

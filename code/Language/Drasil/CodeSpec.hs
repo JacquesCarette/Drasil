@@ -99,7 +99,7 @@ codeSpec' (SI {_sys = sys, _quants = q, _definitions = defs, _inputs = ins, _out
         constMap = assocToMap $ const',
         const = const',
         mods = mods',
-        dMap = modDepMap mem mods' db,
+        dMap = modDepMap db mem mods',
         sysinfodb = db
       }
 
@@ -230,8 +230,8 @@ modExportMap ms ins _ = Map.fromList $ concatMap mpair ms
           
 type ModDepMap = Map.Map String [String]
 
-modDepMap :: HasSymbolTable ctx => ModExportMap -> [Mod] -> ctx -> ModDepMap
-modDepMap mem ms sm = Map.fromList $ map (\(Mod n _) -> n) ms `zip` map getModDep ms 
+modDepMap :: HasSymbolTable ctx => ctx -> ModExportMap -> [Mod] -> ModDepMap
+modDepMap sm mem ms = Map.fromList $ map (\(Mod n _) -> n) ms `zip` map getModDep ms 
                                    ++ [("Control", [ "InputParameters",  
                                                      "DerivedValues",
                                                      "InputConstraints",
@@ -243,17 +243,40 @@ modDepMap mem ms sm = Map.fromList $ map (\(Mod n _) -> n) ms `zip` map getModDe
           delete name $ nub $ concatMap getDep (concatMap fdep funcs)
         getDep n = maybe [] (\x -> [x]) (Map.lookup n mem)        
         fdep (FCD cd) = codeName cd:map codeName (codevars (codeEquat cd) sm)
-        fdep (FDef (FuncDef _ i _ fs)) = map codeName (i ++ concatMap fstdep fs)
+        fdep (FDef (FuncDef _ i _ fs)) = map codeName (i ++ concatMap (fstdep sm) fs)
         fdep (FData (FuncData _ d)) = map codeName $ getInputs d   
-        fstdep (FDec cc _) = [cc]
-        fstdep (FAsg cc e) = cc:codevars e sm
-        fstdep (FFor cc e fs) = cc:(codevars e sm ++ concatMap fstdep fs)
-        fstdep (FWhile e fs) = codevars e sm ++ concatMap fstdep fs
-        fstdep (FCond e tfs efs) = codevars e sm ++ concatMap fstdep tfs ++ concatMap fstdep efs
-        fstdep (FRet e) = codevars e sm
-        fstdep (FTry tfs cfs) = concatMap fstdep tfs ++ concatMap fstdep cfs
-        fstdep (FVal e) = codevars e sm
-        fstdep _ = []
+
+fstdep :: HasSymbolTable ctx => ctx -> FuncStmt -> [CodeChunk]
+fstdep _ (FDec cc _) = [cc]
+fstdep sm (FAsg cc e) = cc:codevars e sm
+fstdep sm (FFor cc e fs) = delete cc $ nub (codevars e sm ++ concatMap (fstdep sm) fs)
+fstdep sm (FWhile e fs) = codevars e sm ++ concatMap (fstdep sm) fs
+fstdep sm (FCond e tfs efs) = codevars e sm ++ concatMap (fstdep sm) tfs ++ concatMap (fstdep sm) efs
+fstdep sm (FRet e) = codevars e sm
+fstdep sm (FTry tfs cfs) = concatMap (fstdep sm) tfs ++ concatMap (fstdep sm) cfs
+fstdep sm (FVal e) = codevars e sm
+fstdep _ _ = []
+
+fstdecl :: HasSymbolTable ctx => ctx -> [FuncStmt] -> [CodeChunk]
+fstdecl ctx fsts = (nub $ concatMap (fstvars ctx) fsts) \\ (nub $ concatMap (declared ctx) fsts) 
+  where
+    fstvars :: HasSymbolTable ctx => ctx -> FuncStmt -> [CodeChunk]
+    fstvars _ (FDec cc _) = [cc]
+    fstvars sm (FAsg cc e) = cc:codevars' e sm
+    fstvars sm (FFor cc e fs) = delete cc $ nub (codevars' e sm ++ concatMap (fstvars sm) fs)
+    fstvars sm (FWhile e fs) = codevars' e sm ++ concatMap (fstvars sm) fs
+    fstvars sm (FCond e tfs efs) = codevars' e sm ++ concatMap (fstvars sm) tfs ++ concatMap (fstvars sm) efs
+    fstvars sm (FRet e) = codevars' e sm
+    fstvars sm (FTry tfs cfs) = concatMap (fstvars sm) tfs ++ concatMap (fstvars sm) cfs
+    fstvars sm (FVal e) = codevars' e sm
+    fstvars _ _ = []
+    declared :: HasSymbolTable ctx => ctx -> FuncStmt -> [CodeChunk]
+    declared _ (FDec cc _) = [cc]
+    declared sm (FFor _ _ fs) = concatMap (declared sm) fs
+    declared sm (FWhile _ fs) = concatMap (declared sm) fs
+    declared sm (FCond _ tfs efs) = concatMap (declared sm) tfs ++ concatMap (declared sm) efs
+    declared sm (FTry tfs cfs) = concatMap (declared sm) tfs ++ concatMap (declared sm) cfs
+    declared _ _ = []
        
 fname :: Func -> Name       
 fname (FCD cd) = codeName cd

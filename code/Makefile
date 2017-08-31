@@ -99,42 +99,24 @@ nopcm_diff: nopcm_build
 	- $(DIFF) ./stable/nopcm/$(NoPCM_PREF)SRS.html ./build/$(NoPCM_DIR)/Website/$(NoPCM_PREF)SRS.html >> $(NoPCM_PREF)log.log 2>&1
   
 swhs_prog: swhs_build
-	- $(DIFF) ./stable/swhs/$(SWHS_PREF)SRS.tex ./build/$(SWHS_DIR)/SRS/$(SWHS_PREF)SRS.tex &> $(SWHS_PREF)log.log
-	- $(DIFF) ./stable/swhs/$(SWHS_PREF)MG.tex ./build/$(SWHS_DIR)/MG/$(SWHS_PREF)MG.tex >> $(SWHS_PREF)log.log 2>&1
-	- $(DIFF) ./stable/swhs/$(SWHS_PREF)SRS.css ./build/$(SWHS_DIR)/Website/$(SWHS_PREF)SRS.css >> $(SWHS_PREF)log.log 2>&1
-	- $(DIFF) ./stable/swhs/$(SWHS_PREF)SRS.html ./build/$(SWHS_DIR)/Website/$(SWHS_PREF)SRS.html >> $(SWHS_PREF)log.log 2>&1
 	
 tiny_prog: tiny_build
-	- $(DIFF) ./stable/tiny/$(TINY_PREF)SRS.tex ./build/$(TINY_DIR)/SRS/$(TINY_PREF)SRS.tex &> $(TINY_PREF)log.log
-	- $(DIFF) ./stable/tiny/$(TINY_PREF)MG.tex ./build/$(TINY_DIR)/MG/$(TINY_PREF)MG.tex >> $(TINY_PREF)log.log 2>&1
-	- $(DIFF) ./stable/tiny/$(TINY_PREF)SRS.css ./build/$(TINY_DIR)/Website/$(TINY_PREF)SRS.css >> $(TINY_PREF)log.log 2>&1
-	- $(DIFF) ./stable/tiny/$(TINY_PREF)SRS.html ./build/$(TINY_DIR)/Website/$(TINY_PREF)SRS.html >> $(TINY_PREF)log.log 2>&1
 	
 ssp_prog: ssp_build
-	- $(DIFF) ./stable/ssp/$(SSP_PREF)SRS.tex ./build/$(SSP_DIR)/SRS/$(SSP_PREF)SRS.tex &> $(SSP_PREF)log.log
-	- $(DIFF) ./stable/ssp/$(SSP_PREF)MG.tex ./build/$(SSP_DIR)/MG/$(SSP_PREF)MG.tex >> $(SSP_PREF)log.log 2>&1
-	- $(DIFF) ./stable/ssp/$(SSP_PREF)SRS.css ./build/$(SSP_DIR)/Website/$(SSP_PREF)SRS.css >> $(SSP_PREF)log.log 2>&1
-	- $(DIFF) ./stable/ssp/$(SSP_PREF)SRS.html ./build/$(SSP_DIR)/Website/$(SSP_PREF)SRS.html >> $(SSP_PREF)log.log 2>&1
 	
 glassbr_prog: glassbr_build
 	test -d ./build/$(GLASS_DIR)/src/python && cp ./datafiles/$(GLASS_DIR)/*.txt ./build/$(GLASS_DIR)/src/python/
+	test -d ./build/$(GLASS_DIR)/src/java && cp ./datafiles/$(GLASS_DIR)/*.txt ./build/$(GLASS_DIR)/src/java
   
 gamephys_prog: gamephys_build
-	- $(DIFF) ./stable/gamephys/$(GAME_PREF)SRS.tex ./build/$(GAME_DIR)/SRS/$(GAME_PREF)SRS.tex &> $(GAME_PREF)log.log
-	- $(DIFF) ./stable/gamephys/$(GAME_PREF)MG.tex ./build/$(GAME_DIR)/MG/$(GAME_PREF)MG.tex >> $(GAME_PREF)log.log 2>&1
-	- $(DIFF) ./stable/gamephys/$(GAME_PREF)SRS.css ./build/$(GAME_DIR)/Website/$(GAME_PREF)SRS.css >> $(GAME_PREF)log.log 2>&1
-	- $(DIFF) ./stable/gamephys/$(GAME_PREF)SRS.html ./build/$(GAME_DIR)/Website/$(GAME_PREF)SRS.html >> $(GAME_PREF)log.log 2>&1
-	
+
 nopcm_prog: nopcm_build
-	- $(DIFF) ./stable/nopcm/$(NoPCM_PREF)SRS.tex ./build/$(NoPCM_DIR)/SRS/$(NoPCM_PREF)SRS.tex &> $(NoPCM_PREF)log.log
-	- $(DIFF) ./stable/nopcm/$(NoPCM_PREF)SRS.css ./build/$(NoPCM_DIR)/Website/$(NoPCM_PREF)SRS.css >> $(NoPCM_PREF)log.log 2>&1
-	- $(DIFF) ./stable/nopcm/$(NoPCM_PREF)SRS.html ./build/$(NoPCM_DIR)/Website/$(NoPCM_PREF)SRS.html >> $(NoPCM_PREF)log.log 2>&1  
-  
+
 docs:
 	stack haddock drasil
 	
 clean: clean_logs
-	rm -r ./build
+	- rm -r ./build
 	
 clean_logs:
-	rm *.log
+	- rm *.log

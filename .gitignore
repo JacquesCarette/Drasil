@@ -25,13 +25,8 @@ Main
 *.vrb
 .DS_Store
 .stack-work
-/code/SRS
-/code/C++/
-/code/MG/
-/code/MIS/
-/code/Website/
 /code/Docs
-/code/src
+/code/build
 *.synctex.gz
 *.pyc
 __pycache__

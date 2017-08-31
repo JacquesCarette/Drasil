@@ -1,3 +1,5 @@
+{-# LANGUAGE GADTs,Rank2Types #-}
+
 module Language.Drasil.Chunk.Method(MethodChunk(..), MethodType(..)
   , ExcType(..), IOType(..), fromEC, makeStdInputMethod, makeFileInputMethod
   , makeFileOutputMethod, makeMainMethod) where
@@ -6,10 +8,10 @@ import Control.Lens (Simple, Lens)
 import Prelude hiding (id)
 import Language.Drasil.Expr
 import Language.Drasil.Chunk
-import Language.Drasil.Chunk.NamedIdea (NamedIdea(..), NamedChunk)
-import Language.Drasil.Chunk.VarChunk (VarChunk)
+import Language.Drasil.Chunk.NamedIdea (NamedIdea(..))
 import Language.Drasil.Chunk.Eq
 import Language.Drasil.Chunk.Wrapper (nw, NWrapper)
+import Language.Drasil.Chunk.Quantity (Quantity(..), qw, QWrapper)
 import Language.Drasil.ChunkDB
 import Language.Drasil.Expr.Extract
 
@@ -19,16 +21,17 @@ import qualified Language.Drasil.Code.Imperative.AST as A
 data MethodChunk = MeC
   { methcc :: NWrapper   -- Name
   , mType :: MethodType  -- Type
-  , input :: [VarChunk]  -- inputs
-  , output :: [VarChunk] -- outputs
+  , input :: [QWrapper]  -- inputs
+  , output :: [QWrapper] -- outputs
   , exc :: [ExcType]     -- exceptions
   }
 
-data MethodType = MCalc QDefinition
-                | MInput IOType VarChunk
-                | MOutput IOType [VarChunk]
-                -- temporary for generating control module
-                | MCustom A.Body
+data MethodType where 
+  MCalc :: QDefinition -> MethodType
+  MInput :: (Quantity q) => IOType -> q -> MethodType
+  MOutput :: (Quantity q) => IOType -> [q] -> MethodType
+  -- temporary for generating control module:
+  MCustom :: A.Body -> MethodType
 
 data IOType = IOStd
             | IOFile String
@@ -56,19 +59,28 @@ fromEC :: HasSymbolTable ctx => QDefinition -> ctx -> MethodChunk
 fromEC ec@(EC a b) m =
   let exc' = if (checkDiv $ b) then [DivByZero] else []
   in  MeC (nw a) (MCalc $ ec) (vars b m)
-      [(toVC a m)] exc'
+      [qw a] exc'
 
-makeStdInputMethod :: VarChunk -> MethodChunk
-makeStdInputMethod vc = MeC (nw vc) (MInput IOStd vc) [] [vc] []
+makeStdInputMethod :: (Quantity q) => q -> MethodChunk
+makeStdInputMethod q' = 
+  let n = nw q
+      q = qw q'
+  in  MeC n (MInput IOStd q) [] [q] []
 
-makeFileInputMethod :: NamedChunk -> VarChunk -> String -> MethodChunk
-makeFileInputMethod cc' vc f = MeC (nw cc') (MInput (IOFile f) vc) [vc] [] []
+makeFileInputMethod :: (Quantity q, NamedIdea n) => n -> q -> String -> MethodChunk
+makeFileInputMethod n' q' f = 
+  let n = nw n'
+      q = qw q'
+  in  MeC n (MInput (IOFile f) q) [q] [] []
 
-makeFileOutputMethod :: NamedChunk -> [VarChunk] -> String -> MethodChunk
-makeFileOutputMethod cc' vcs f = MeC (nw cc') (MOutput (IOFile f) vcs) vcs [] []
+makeFileOutputMethod :: (Quantity q, NamedIdea n) => n -> [q] -> String -> MethodChunk
+makeFileOutputMethod n' qs' f = 
+  let n  = nw n'
+      qs = map qw qs'
+  in  MeC n (MOutput (IOFile f) qs) qs [] []
 
-makeMainMethod :: NamedChunk -> A.Body -> MethodChunk
-makeMainMethod cc' b = MeC (nw cc') (MCustom b) [] [] []
+makeMainMethod :: (NamedIdea n) => n -> A.Body -> MethodChunk
+makeMainMethod n b = MeC (nw n) (MCustom b) [] [] []
 
 -- don't export
 checkDiv :: Expr -> Bool

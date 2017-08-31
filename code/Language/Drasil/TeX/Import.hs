@@ -15,7 +15,7 @@ import Language.Drasil.Chunk.Module
 import Language.Drasil.Chunk.NamedIdea (term)
 import Language.Drasil.Chunk.SymbolForm (SymbolForm)
 import Language.Drasil.Chunk.Concept (defn)
-import Language.Drasil.Chunk.VarChunk (VarChunk)
+import Language.Drasil.Chunk.Quantity (Quantity(..))
 import Language.Drasil.ChunkDB (getUnitLup, symbLookup, HasSymbolTable(..))
 import Language.Drasil.Config (verboseDDDescription, numberedDDEquations, numberedTMEquations)
 import Language.Drasil.Document
@@ -311,7 +311,7 @@ buildDDDescription c m = descLines
   (if verboseDDDescription then (vars (getQ c := equat c) m) else []) m
   where getQ (EC a _) = C a
 
-descLines :: HasSymbolTable ctx => [VarChunk] -> ctx -> T.Spec  
+descLines :: (HasSymbolTable ctx, Quantity q) => [q] -> ctx -> T.Spec  
 descLines []    _   = error "No chunks to describe"
 descLines (vc:[]) m = (T.N (symbol vc) T.:+: 
   (T.S " is the " T.:+: (spec (phrase $ vc ^. term) m) T.:+:

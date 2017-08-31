@@ -120,7 +120,7 @@ firstPair (IgnoreUnits) d  = (P (symbol d), Flat (phrase d))
 firstPair (IncludeUnits) d = (P (symbol d), Flat (phrase d +:+ sParen (unit'2Contents d)))
 
 -- | Create the descriptions for each symbol in the relation/equation
-descPairs :: InclUnits -> [VarChunk] -> [ListPair]
+descPairs :: (Quantity q) => InclUnits -> [q] -> [ListPair]
 descPairs IgnoreUnits = map (\x -> (P (symbol x), Flat $ phrase x))
 descPairs IncludeUnits = 
   map (\x -> ((P (symbol x)), Flat $ phrase x +:+ sParen (unit'2Contents x)))

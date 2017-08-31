@@ -12,7 +12,7 @@ import Language.Drasil.Chunk.Module
 import Language.Drasil.Chunk.NamedIdea (term, short, getA)
 import Language.Drasil.Chunk.Concept (defn)
 import qualified Language.Drasil.Chunk.SymbolForm as SF
-import Language.Drasil.Chunk.VarChunk (VarChunk)
+import Language.Drasil.Chunk.Quantity (Quantity(..))
 import Language.Drasil.ChunkDB (HasSymbolTable(..), getUnitLup, symbLookup)
 
 import Language.Drasil.Expr.Extract
@@ -324,7 +324,7 @@ buildDDDescription c m = descLines
   where getQ (EC a _) = C a
 
 -- | Helper for building each line of the description of a data def
-descLines :: HasSymbolTable s => [VarChunk] -> s -> H.Spec  
+descLines :: (HasSymbolTable s, Quantity q) => [q] -> s -> H.Spec  
 descLines []    _   = error "No chunks to describe"
 descLines (vc:[]) m = (H.N (symbol vc) H.:+: 
   (H.S " is the " H.:+: (spec (phrase $ vc ^. term) m) H.:+:

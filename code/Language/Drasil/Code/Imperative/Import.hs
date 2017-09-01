@@ -33,7 +33,7 @@ data State = State {
   sfwrCBody :: Expr -> Body,
   physCBody :: Expr -> Body,
 
-  genInputMod :: State -> [Module],
+  genInputMod :: Reader State [Module],
   publicMethod :: State -> MethodType -> Label -> [Parameter] -> Body -> Method,
   assign :: State -> Value -> Value -> Statement
 }
@@ -46,7 +46,7 @@ chooseConstr :: ConstraintBehaviour -> Expr -> Body
 chooseConstr Warning   = constrWarn
 chooseConstr Exception = constrExc
 
-chooseInStructure :: Structure -> State -> [Module]
+chooseInStructure :: Structure -> Reader State [Module]
 chooseInStructure Loose   = genInputModNoClass
 chooseInStructure AsClass = genInputModClass
 
@@ -91,12 +91,12 @@ generateCode ch g =
 genModules :: Reader State [Module]
 genModules = do
   g <- ask
-  return $ genMain g : genInputMod g g
-            -- ++ [genConstMod g]    inlining for now
-            -- ++ map (\(FuncMod n d) -> genCalcMod g n d) (fMods $ codeSpec g)
-             ++ genOutputMod g (outputs $ codeSpec g)
-             ++ map (genModDef g) (mods $ codeSpec g) -- hack
-
+  let s = codeSpec g
+  mn     <- genMain
+  inp    <- genInputMod g
+  out    <- genOutputMod $ outputs s
+  moddef <- sequence $ fmap genModDef (mods s) -- hack ?
+  return $ (mn : inp ++ out ++ moddef)
 
 -- private utilities used in generateCode
 getLabel, getDir :: Lang -> String
@@ -109,27 +109,39 @@ getDir CSharp = "csharp"
 getDir Java = "java"
 getDir Python = "python"
 
+liftS :: Reader a b -> Reader a [b]
+liftS = fmap (\x -> [x])
+
 ------- INPUT ----------
 
-genInputModClass :: State -> [Module]
-genInputModClass g =
-  [ genModule g "InputParameters" Nothing (Just $ \x -> [genInputClass x]),
-    genModule g "DerivedValues" (Just $ \x -> [genInputDerived x]) Nothing,
-    genModule g "InputConstraints" (Just $ \x -> [genInputConstraints x]) Nothing
-  ]
+genInputModClass :: Reader State [Module]
+genInputModClass =
+  sequence $ [ genModule "InputParameters" Nothing (Just $ liftS genInputClass),
+               genModule "DerivedValues" (Just $ liftS genInputDerived) Nothing,
+               genModule "InputConstraints" (Just $ liftS genInputConstraints) Nothing
+             ]
 
-genInputModNoClass :: State -> [Module]
-genInputModNoClass g =
+genInputModNoClass :: Reader State [Module]
+genInputModNoClass = do
+  g <- ask
   let ins = inputs $ codeSpec g
-  in  [ buildModule "InputParameters" []
-          (map (\x -> VarDecDef (codeName x) (convType $ codeType x) (defaultValue' $ convType $ codeType x)) ins)
-          [genInputDerived g, genInputConstraints g]
-          []
-      ]
+  inpDer    <- genInputDerived
+  inpConstr <- genInputConstraints
+  return $ [ buildModule "InputParameters" []
+             (map (\x -> VarDecDef (codeName x) (convType $ codeType x) (defaultValue' $ convType $ codeType x)) ins)
+             [inpDer , inpConstr]
+             []
+           ]
 
-genInputClass :: State -> Class
-genInputClass g =
-  pubClass
+genInputClass :: Reader State Class
+genInputClass = do
+  g <- ask
+  let ins          = inputs $ codeSpec g
+      inputVars    =
+          map (\x -> pubMVar 0 (convType $ codeType x) (codeName x)) ins
+      vars         = map svToVar inputVars
+      vals         = map (defaultValue' . convType . codeType) ins
+  return $ pubClass
     "InputParameters"
     Nothing
     inputVars
@@ -140,32 +152,26 @@ genInputClass g =
           [zipBlockWith (assign g g) vars vals]--,
       ]
     )
-  where ins          = inputs $ codeSpec g
-        --cm           = cMap $ codeSpec g
-        inputVars    =
-          map (\x -> pubMVar 0 (convType $ codeType x) (codeName x)) ins
-        vars         = map (svToVar) inputVars
-        vals         = map (defaultValue' . convType . codeType) ins
 
-
-genInputConstraints :: State -> Method
-genInputConstraints g =
+genInputConstraints :: Reader State Method
+genInputConstraints = do
+  g <- ask
   let vars   = inputs $ codeSpec g
       cm     = cMap $ codeSpec g
       sfwrCs = concatMap (\x -> sfwrLookup x cm) vars
       physCs = concatMap (\x -> physLookup x cm) vars
-  in
-    publicMethod g g methodTypeVoid "input_constraints" (getParams g $ vars)
+  return $ publicMethod g g methodTypeVoid "input_constraints" (getParams g $ vars)
       [ block $
         (map (\x -> ifCond [((?!) (convExpr g x), sfwrCBody g x)] noElse) sfwrCs) ++
         (map (\x -> ifCond [((?!) (convExpr g x), physCBody g x)] noElse) physCs)
       ]
 
-genInputDerived :: State -> Method
-genInputDerived g =
+genInputDerived :: Reader State Method
+genInputDerived = do
+  g <- ask
   let dvals = derivedInputs $ codeSpec g
-  in  publicMethod g g methodTypeVoid "derived_values" (getParams g $ map codevar dvals)
-        (concatMap (\x -> genCalcBlock g CalcAssign (codeName x) (codeEquat x)) dvals)
+  return $ publicMethod g g methodTypeVoid "derived_values" (getParams g $ map codevar dvals)
+             (concatMap (\x -> genCalcBlock g CalcAssign (codeName x) (codeEquat x)) dvals)
 
 -- need Expr -> String to print constraint
 constrWarn :: Expr -> Body
@@ -190,11 +196,12 @@ genConstClassD g = pubClass "Constants" Nothing genVars []
 ------- CALC ----------
 {-
 genCalcMod :: State -> String -> [CodeDefinition] -> Module
-genCalcMod g n defs = buildModule n [] [] (map (genCalcFunc g) (filter (validExpr . codeEquat) defs)) []
+genCalcMod g n defs = buildModule n [] [] (map genCalcFunc (filter (validExpr . codeEquat) defs)) []
 -}
-genCalcFunc :: State -> CodeDefinition -> Method
-genCalcFunc g cdef =
-  publicMethod g g
+genCalcFunc :: CodeDefinition -> Reader State Method
+genCalcFunc cdef = do
+  g <- ask
+  return $ publicMethod g g
     (methodType $ convType (codeType cdef))
     (codeName cdef)
     (getParams g (codevars' (codeEquat cdef) $ sysinfodb $ codeSpec g))
@@ -215,15 +222,16 @@ genCaseBlock g t v cs = oneLiner $ ifCond (genIf cs) noElse
 
 ----- OUTPUT -------
 
-genOutputMod :: State -> [CodeChunk] -> [Module]
-genOutputMod g outs = [genModule g "OutputFormat" (Just $ \x -> [genOutputFormat x outs]) Nothing]
+genOutputMod :: [CodeChunk] -> Reader State [Module]
+genOutputMod outs = liftS $ genModule "OutputFormat" (Just $ liftS $ genOutputFormat outs) Nothing
 
-genOutputFormat :: State -> [CodeChunk] -> Method
-genOutputFormat g outs =
+genOutputFormat :: [CodeChunk] -> Reader State Method
+genOutputFormat outs =
   let l_outfile = "outfile"
       v_outfile = var l_outfile
-  in
-    publicMethod g g methodTypeVoid "write_output" (getParams g outs) [ block $ [
+  in do
+    g <- ask
+    return $ publicMethod g g methodTypeVoid "write_output" (getParams g outs) [ block $ [
       varDec l_outfile outfile,
       openFileW v_outfile (litString "output.txt") ] ++
       concatMap
@@ -273,41 +281,40 @@ loggedMethod g n p b =
 
 ---- MAIN ---
 
-genModule :: State
-               -> Name
-               -> Maybe (State -> [FunctionDecl])
-               -> Maybe (State -> [Class])
-               -> Module
-genModule g' n maybeMs maybeCs =
+genModule :: Name
+               -> Maybe (Reader State [FunctionDecl])
+               -> Maybe (Reader State [Class])
+               -> Reader State Module
+genModule n maybeMs maybeCs = do
+  g' <- ask
   let g  = g' { currentModule = n }
       ls = maybe [] id (Map.lookup n (dMap $ codeSpec g))
-      ms = maybe [] (\x -> x g) maybeMs
-      cs = maybe [] (\x -> x g) maybeCs
-  in  buildModule n ls [] ms cs
+  cs <- maybe (return []) id maybeCs
+  ms <- maybe (return []) id maybeMs
+  return $ buildModule n ls [] ms cs
 
 
-genMain :: State -> Module
-genMain g = genModule g "Control" (Just $ \x -> [genMainFunc x]) Nothing
+genMain :: Reader State Module
+genMain = genModule "Control" (Just $ liftS $ genMainFunc) Nothing
 
-genMainFunc :: State -> FunctionDecl
-genMainFunc g =
+genMainFunc :: Reader State FunctionDecl
+genMainFunc =
   let l_filename = "inputfile"
       v_filename = var l_filename
       l_params = "inParams"
       v_params = var l_params
-  in
-    mainMethod $ body $ [
+  in do
+    g <- ask
+    return $ mainMethod $ body $ [
       varDecDef l_filename string $ arg 0 ,
       objDecNewVoid l_params "InputParameters" (obj "InputParameters") ,
       valStmt $ fApp g "get_input" [v_filename, v_params] ,
       valStmt $ fApp g "derived_values" [v_params] ,
       valStmt $ fApp g "input_constraints" [v_params]
-    ] ++ map (\x -> varDecDef (codeName x) (convType $ codeType x)
+      ] ++ map (\x -> varDecDef (codeName x) (convType $ codeType x)
                     (fApp g (codeName x) (getArgs g $ codevars' (codeEquat x) $ sysinfodb $ codeSpec g)))
           (execOrder $ codeSpec g)
-    ++ [
-      valStmt $ fApp g "write_output" $ getArgs g $ outputs $ codeSpec g
-    ]
+      ++ [ valStmt $ fApp g "write_output" $ getArgs g $ outputs $ codeSpec g ]
 
 
 -----
@@ -580,18 +587,20 @@ compactCaseUnary op (Case c) = Case (map (\(e, r) -> (op e, r)) c)
 compactCaseUnary op a        = op (compactCase a)
 
 -- medium hacks --
-genModDef :: State -> CS.Mod -> Module
-genModDef g (CS.Mod n fs) = genModule g n (Just $ \x -> map (genFunc x) fs) Nothing
+genModDef :: CS.Mod -> Reader State Module
+genModDef (CS.Mod n fs) = genModule n (Just $ sequence $ map genFunc fs) Nothing
 
-genFunc :: State -> Func -> Method
-genFunc g (FDef (FuncDef n i o s)) = publicMethod g g (methodType $ convType o) n (getParams g i)
-  [ block $
-      (map (\x -> varDec (codeName x) (convType $ codeType x))
-        (((fstdecl $ sysinfodb $ codeSpec g) s) \\ i))
-      ++ (map (convStmt g) s)
-  ]
-genFunc g (FData (FuncData n dd)) = genDataFunc g n dd
-genFunc g (FCD cd) = genCalcFunc g cd
+genFunc :: Func -> Reader State Method
+genFunc (FDef (FuncDef n i o s)) = do
+  g <- ask
+  return $ publicMethod g g (methodType $ convType o) n (getParams g i)
+    [ block $
+        (map (\x -> varDec (codeName x) (convType $ codeType x))
+          (((fstdecl $ sysinfodb $ codeSpec g) s) \\ i))
+        ++ (map (convStmt g) s)
+    ]
+genFunc (FData (FuncData n dd)) = genDataFunc n dd
+genFunc (FCD cd) = genCalcFunc cd
 
 convStmt :: State -> FuncStmt -> Statement
 convStmt g (FAsg v e) = assign g g (var $ codeName v) (convExpr g e)
@@ -609,68 +618,69 @@ convStmt _ (FDec v (C.List t)) = listDec' (codeName v) (convType t) 0
 convStmt _ (FDec v t) = varDec (codeName v) (convType t)
 
 -- this is really ugly!!
-genDataFunc :: State -> Name -> DataDesc -> Method
-genDataFunc g name dd =
-    publicMethod g g methodTypeVoid name (p_filename : (getParams g $ getInputs dd)) $
+genDataFunc :: Name -> DataDesc -> Reader State Method
+genDataFunc name dd = do
+    g <- ask
+    return $ publicMethod g g methodTypeVoid name (p_filename : (getParams g $ getInputs dd)) $
       body $ [
       varDec l_infile infile,
       varDec l_line string,
       listDec' l_lines string 0,
       listDec' l_linetokens string 0,
       openFileR v_infile v_filename ] ++
-      (concatMap inData dd) ++ [
+      (concatMap (inData g) dd) ++ [
       closeFile v_infile ]
-  where inData :: Data -> [Statement]
-        inData (Singleton v) = [getFileInput v_infile (convType $ codeType v) (variable g $ codeName v)]
-        inData JunkData = [discardFileLine v_infile]
-        inData (Line lp d) =
+  where inData :: State -> Data -> [Statement]
+        inData g (Singleton v) = [getFileInput v_infile (convType $ codeType v) (variable g $ codeName v)]
+        inData _ JunkData = [discardFileLine v_infile]
+        inData g (Line lp d) =
           [ getFileInputLine v_infile v_line,
             stringSplit v_linetokens v_line d
-          ] ++ lineData lp (litInt 0)
-        inData (Lines lp Nothing d) =
+          ] ++ lineData g lp (litInt 0)
+        inData g (Lines lp Nothing d) =
           [ getFileInputAll v_infile v_lines,
             for (varDecDef l_i int (litInt 0)) (v_i ?< v_lines$.listSize) ((&++) v_i)
               ( body
                 ( [ stringSplit v_linetokens (v_lines$.(listAccess v_i)) d
-                  ] ++ lineData lp v_i
+                  ] ++ lineData g lp v_i
                 )
               )
           ]
-        inData (Lines lp (Just numLines) d) =
+        inData g (Lines lp (Just numLines) d) =
           [ for (varDecDef l_i int (litInt 0)) (v_i ?< (litInt numLines)) ((&++) v_i)
               ( body
                 ( [ getFileInputLine v_infile v_line,
                     stringSplit v_linetokens v_line d
-                  ] ++ lineData lp v_i
+                  ] ++ lineData g lp v_i
                 )
               )
           ]
         ---------------
-        lineData :: LinePattern -> Value -> [Statement]
-        lineData (Straight p) lineNo = patternData p lineNo (litInt 0)
-        lineData (Repeat p Nothing) lineNo =
+        lineData :: State -> LinePattern -> Value -> [Statement]
+        lineData g (Straight p) lineNo = patternData g p lineNo (litInt 0)
+        lineData g (Repeat p Nothing) lineNo =
           [ for (varDecDef l_j int (litInt 0)) (v_j ?< (v_linetokens$.listSize #/ (litInt $ toInteger $ length p))$.(cast int float)) ((&++) v_j)
-              ( body (patternData p lineNo v_j) )
+              ( body (patternData g p lineNo v_j) )
           ]
-        lineData (Repeat p (Just numPat)) lineNo =
+        lineData g (Repeat p (Just numPat)) lineNo =
           [ for (varDecDef l_j int (litInt 0)) (v_j ?< (litInt numPat)) ((&++) v_j)
-              ( body (patternData p lineNo v_j) )
+              ( body (patternData g p lineNo v_j) )
           ]
         ---------------
-        patternData :: [Entry] -> Value -> Value -> [Statement]
-        patternData d lineNo patNo =
+        patternData :: State -> [Entry] -> Value -> Value -> [Statement]
+        patternData g d lineNo patNo =
           let l = toInteger $ length d
-          in  concatMap (\(x,y) -> entryData x lineNo patNo y) $ zip (map (\z -> (patNo #* (litInt l)) #+ (litInt z)) [0..l-1]) d
+          in  concatMap (\(x,y) -> entryData g x lineNo patNo y) $ zip (map (\z -> (patNo #* (litInt l)) #+ (litInt z)) [0..l-1]) d
         ---------------
-        entryData :: Value -> Value -> Value -> Entry -> [Statement]
-        entryData tokIndex _ _ (Entry v) = [assign g g (variable g $ codeName v) $
+        entryData :: State -> Value -> Value -> Value -> Entry -> [Statement]
+        entryData g tokIndex _ _ (Entry v) = [assign g g (variable g $ codeName v) $
           (v_linetokens$.(listAccess tokIndex))$.(cast (convType $ codeType v) string)]
-        entryData tokIndex lineNo patNo (ListEntry indx v) =
+        entryData g tokIndex lineNo patNo (ListEntry indx v) =
           checkIndex indx lineNo patNo (variable g $ codeName v) (codeType v) ++
             [ assign g g (indexData indx lineNo patNo (variable g $ codeName v)) $
               (v_linetokens$.(listAccess tokIndex))$.(cast (listType (codeType v) (toInteger $ length indx)) string)
             ]
-        entryData _ _ _ JunkEntry = []
+        entryData _ _ _ _ JunkEntry = []
         ---------------
         indexData :: [Ind] -> Value -> Value -> Value -> Value
         indexData [] _ _ v = v

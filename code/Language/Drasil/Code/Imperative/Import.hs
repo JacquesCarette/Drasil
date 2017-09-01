@@ -1,8 +1,8 @@
 module Language.Drasil.Code.Imperative.Import(generator, generateCode) where
 
 import Language.Drasil.Code.Code as C
-import Language.Drasil.Code.Imperative.AST as I hiding ((&=),assign,State)
-import qualified Language.Drasil.Code.Imperative.AST as I (assign)
+import Language.Drasil.Code.Imperative.AST as I hiding ((&=),assign,State,return)
+import qualified Language.Drasil.Code.Imperative.AST as I (assign,return)
 import Language.Drasil.Code.Imperative.LanguageRenderer (Options(..))
 import Language.Drasil.Code.Imperative.Parsers.ConfigParser (pythonLabel, cppLabel, cSharpLabel, javaLabel)
 import Language.Drasil.Code.CodeGeneration (createCodeFiles, makeCode)
@@ -13,7 +13,7 @@ import Language.Drasil.CodeSpec hiding (codeSpec, Mod(..))
 import qualified Language.Drasil.CodeSpec as CS (Mod(..))
 import Language.Drasil.DataDesc
 
-import Prelude hiding (log, exp, return, const)
+import Prelude hiding (log, exp, const)
 import Data.List (intersperse, (\\))
 import System.Directory
 import Data.Map (member)
@@ -22,7 +22,7 @@ import Data.Maybe (maybe)
 import Language.Drasil.ChunkDB (symbLookup, HasSymbolTable(..))
 import Control.Lens ((^.))
 import Control.Monad (when)
-
+import Control.Monad.Reader (Reader, ask, runReader)
 
 -- Private State, used to push these options around the generator
 data State = State {
@@ -72,51 +72,42 @@ generator chs spec = State {
   publicMethod = genMethodCallD Public Static chs
 }
 
-variable :: State -> String -> Value
-variable g s
-  | member s (constMap $ codeSpec g) =
-      maybe (error "impossible") (convExpr g . codeEquat) (Map.lookup s (constMap $ codeSpec g)) --extvar "Constants" s
-  | s `elem` (map codeName $ inputs $ codeSpec g) = (var "inParams")$->(var s)
-  | otherwise                        = var s
-
-fApp :: State -> String -> ([Value] -> Value)
-fApp g s
-  | member s (eMap $ codeSpec g) =
-      maybe (error "impossible")
-        (\x -> if x /= currentModule g then funcApp x s else funcApp' s)
-        (Map.lookup s (eMap $ codeSpec g))
-  | otherwise = funcApp' s
-
 generateCode :: Choices -> State -> IO ()
-generateCode ch g = let modules = genModulesD g
-  in do workingDir <- getCurrentDirectory
-        mapM_ (\x -> do
-             createDirectoryIfMissing False (getDir x)
-             setCurrentDirectory (getDir x)
-             when (x == Java) $ createDirectoryIfMissing False prog
-             when (x == Java) $ setCurrentDirectory prog
-             createCodeFiles $ makeCode
-               (getLabel x)
-               (Options Nothing Nothing Nothing (Just "Code"))
-               (toAbsCode prog modules)
-             setCurrentDirectory workingDir) (lang $ ch)
+generateCode ch g =
+  do workingDir <- getCurrentDirectory
+     mapM_ (\x -> do
+          createDirectoryIfMissing False (getDir x)
+          setCurrentDirectory (getDir x)
+          when (x == Java) $ createDirectoryIfMissing False prog
+          when (x == Java) $ setCurrentDirectory prog
+          createCodeFiles $ makeCode
+            (getLabel x)
+            (Options Nothing Nothing Nothing (Just "Code"))
+            (toAbsCode prog modules)
+          setCurrentDirectory workingDir) (lang $ ch)
   where prog = codeName $ program $ codeSpec g
-        getLabel Cpp = cppLabel
-        getLabel CSharp = cSharpLabel
-        getLabel Java = javaLabel
-        getLabel Python = pythonLabel
-        getDir Cpp = "cpp"
-        getDir CSharp = "csharp"
-        getDir Java = "java"
-        getDir Python = "python"
+        modules = runReader genModules g
 
-genModulesD :: State -> [Module]
-genModulesD g = genMain g : genInputMod g g
+genModules :: Reader State [Module]
+genModules = do
+  g <- ask
+  return $ genMain g : genInputMod g g
             -- ++ [genConstMod g]    inlining for now
             -- ++ map (\(FuncMod n d) -> genCalcMod g n d) (fMods $ codeSpec g)
              ++ genOutputMod g (outputs $ codeSpec g)
              ++ map (genModDef g) (mods $ codeSpec g) -- hack
 
+
+-- private utilities used in generateCode
+getLabel, getDir :: Lang -> String
+getLabel Cpp = cppLabel
+getLabel CSharp = cSharpLabel
+getLabel Java = javaLabel
+getLabel Python = pythonLabel
+getDir Cpp = "cpp"
+getDir CSharp = "csharp"
+getDir Java = "java"
+getDir Python = "python"
 
 ------- INPUT ----------
 
@@ -215,7 +206,7 @@ genCalcBlock :: State -> CalcType -> String -> Expr -> Body
 genCalcBlock g t v e
   | containsCase e   = genCaseBlock g t v $ getCases e
   | t == CalcAssign  = oneLiner $ assign g g (variable g v) (convExpr g e)
-  | otherwise        = oneLiner $ return $ convExpr g e
+  | otherwise        = oneLiner $ I.return $ convExpr g e
 
 genCaseBlock :: State -> CalcType -> String -> [(Expr,Relation)] -> Body
 genCaseBlock g t v cs = oneLiner $ ifCond (genIf cs) noElse
@@ -335,6 +326,21 @@ loggedAssign g a b =
     closeFile v_outfile ]
 
 -- helpers
+
+variable :: State -> String -> Value
+variable g s
+  | member s (constMap $ codeSpec g) =
+      maybe (error "impossible") (convExpr g . codeEquat) (Map.lookup s (constMap $ codeSpec g)) --extvar "Constants" s
+  | s `elem` (map codeName $ inputs $ codeSpec g) = (var "inParams")$->(var s)
+  | otherwise                        = var s
+
+fApp :: State -> String -> ([Value] -> Value)
+fApp g s
+  | member s (eMap $ codeSpec g) =
+      maybe (error "impossible")
+        (\x -> if x /= currentModule g then funcApp x s else funcApp' s)
+        (Map.lookup s (eMap $ codeSpec g))
+  | otherwise = funcApp' s
 
 getParams :: State -> [CodeChunk] -> [Parameter]
 getParams g cs =
@@ -594,7 +600,7 @@ convStmt g (FFor v e st) = for (varDecDef (codeName v) int (litInt 0)) (convExpr
 convStmt g (FWhile e st) = while (convExpr g e) [ block (map (convStmt g) st) ]
 convStmt g (FCond e tSt []) = ifCond [(convExpr g e, [ block (map (convStmt g) tSt) ])] noElse
 convStmt g (FCond e tSt eSt) = ifCond [(convExpr g e, [ block (map (convStmt g) tSt) ])] [ block (map (convStmt g) eSt) ]
-convStmt g (FRet e) = return $ convExpr g e
+convStmt g (FRet e) = I.return $ convExpr g e
 convStmt _ (FThrow s) = throw s
 convStmt g (FTry t c) = tryCatch [ block (map (convStmt g) t) ] [ block (map (convStmt g) c) ]
 convStmt _ (FContinue) = continue

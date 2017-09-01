@@ -160,7 +160,8 @@ genInputConstraints = do
       cm     = cMap $ codeSpec g
       sfwrCs = concatMap (\x -> sfwrLookup x cm) vars
       physCs = concatMap (\x -> physLookup x cm) vars
-  publicMethod g methodTypeVoid "input_constraints" (getParams g $ vars)
+  parms <- getParams vars
+  publicMethod g methodTypeVoid "input_constraints" parms
       (return $ [ block $
         (map (\x -> ifCond [((?!) (convExpr g x), sfwrCBody g x)] noElse) sfwrCs) ++
         (map (\x -> ifCond [((?!) (convExpr g x), physCBody g x)] noElse) physCs)
@@ -170,8 +171,9 @@ genInputDerived :: Reader State Method
 genInputDerived = do
   g <- ask
   let dvals = derivedInputs $ codeSpec g
-  publicMethod g methodTypeVoid "derived_values" (getParams g $ map codevar dvals)
-             (return $ concatMap (\x -> genCalcBlock g CalcAssign (codeName x) (codeEquat x)) dvals)
+  parms <- getParams $ map codevar dvals
+  publicMethod g methodTypeVoid "derived_values" parms
+      (return $ concatMap (\x -> runReader (genCalcBlock CalcAssign (codeName x) (codeEquat x)) g) dvals)
 
 -- need Expr -> String to print constraint
 constrWarn :: Expr -> Body
@@ -201,24 +203,29 @@ genCalcMod n defs = buildModule n [] [] (map genCalcFunc (filter (validExpr . co
 genCalcFunc :: CodeDefinition -> Reader State Method
 genCalcFunc cdef = do
   g <- ask
+  parms <- getParams (codevars' (codeEquat cdef) $ sysinfodb $ codeSpec g)
   publicMethod g
     (methodType $ convType (codeType cdef))
     (codeName cdef)
-    (getParams g (codevars' (codeEquat cdef) $ sysinfodb $ codeSpec g))
-    (return $ genCalcBlock g CalcReturn (codeName cdef) (codeEquat cdef))
+    parms
+    (genCalcBlock CalcReturn (codeName cdef) (codeEquat cdef))
 
 data CalcType = CalcAssign | CalcReturn deriving Eq
 
-genCalcBlock :: State -> CalcType -> String -> Expr -> Body
-genCalcBlock g t v e
-  | containsCase e   = genCaseBlock g t v $ getCases e
-  | t == CalcAssign  = oneLiner $ runReader (assign g (variable g v) (convExpr g e)) g
-  | otherwise        = oneLiner $ I.return $ convExpr g e
+genCalcBlock :: CalcType -> String -> Expr -> Reader State Body
+genCalcBlock t' v' e' = do
+  g <- ask
+  return $ doit g t' v' e'
+    where
+    doit g t v e
+      | containsCase e   = genCaseBlock g t v $ getCases e
+      | t == CalcAssign  = oneLiner $ runReader (assign g (variable g v) (convExpr g e)) g
+      | otherwise        = oneLiner $ I.return $ convExpr g e
 
 genCaseBlock :: State -> CalcType -> String -> [(Expr,Relation)] -> Body
 genCaseBlock g t v cs = oneLiner $ ifCond (genIf cs) noElse
   where genIf :: [(Expr,Relation)] -> [(Value,Body)]
-        genIf = map (\(e,r) -> (convExpr g r, genCalcBlock g t v e))
+        genIf = map (\(e,r) -> (convExpr g r, runReader (genCalcBlock t v e) g))
 
 ----- OUTPUT -------
 
@@ -231,7 +238,8 @@ genOutputFormat outs =
       v_outfile = var l_outfile
   in do
     g <- ask
-    publicMethod g methodTypeVoid "write_output" (getParams g outs) (return [ block $ [
+    parms <- getParams outs
+    publicMethod g methodTypeVoid "write_output" parms (return [ block $ [
       varDec l_outfile outfile,
       openFileW v_outfile (litString "output.txt") ] ++
       concatMap
@@ -312,6 +320,8 @@ genMainFunc =
       v_params = var l_params
   in do
     g <- ask
+    let args1 x = getArgs $ codevars' (codeEquat x) $ sysinfodb $ codeSpec g
+    args2 <- getArgs $ outputs $ codeSpec g
     return $ mainMethod $ body $ [
       varDecDef l_filename string $ arg 0 ,
       objDecNewVoid l_params "InputParameters" (obj "InputParameters") ,
@@ -319,9 +329,9 @@ genMainFunc =
       valStmt $ fApp g "derived_values" [v_params] ,
       valStmt $ fApp g "input_constraints" [v_params]
       ] ++ map (\x -> varDecDef (codeName x) (convType $ codeType x)
-                    (fApp g (codeName x) (getArgs g $ codevars' (codeEquat x) $ sysinfodb $ codeSpec g)))
+                    (fApp g (codeName x) (runReader (args1 x) g)))
           (execOrder $ codeSpec g)
-      ++ [ valStmt $ fApp g "write_output" $ getArgs g $ outputs $ codeSpec g ]
+      ++ [ valStmt $ fApp g "write_output" args2 ]
 
 
 -----
@@ -358,25 +368,27 @@ fApp g s
         (Map.lookup s (eMap $ codeSpec g))
   | otherwise = funcApp' s
 
-getParams :: State -> [CodeChunk] -> [Parameter]
-getParams g cs =
+getParams :: [CodeChunk] -> Reader State [Parameter]
+getParams cs = do
+  g <- ask
   let ins = inputs $ codeSpec g
       csSubIns = cs \\ ins
       ps = map (\y -> param (codeName y) (convType $ codeType y))
             (filter (\x -> not $ member (codeName x) (constMap $ codeSpec g)) csSubIns)
-  in  if length csSubIns < length cs
-      then (param "inParams" (obj "InputParameters")):ps  -- todo:  make general
-      else ps
+  return $ if length csSubIns < length cs
+           then (param "inParams" (obj "InputParameters")):ps  -- todo:  make general
+           else ps
 
-getArgs :: State -> [CodeChunk] -> [Value]
-getArgs g cs =
+getArgs :: [CodeChunk] -> Reader State [Value]
+getArgs cs = do
+  g <- ask
   let ins = inputs $ codeSpec g
       csSubIns = cs \\ ins
       args = map (var . codeName)
             (filter (\x -> not $ member (codeName x) (constMap $ codeSpec g)) csSubIns)
-  in  if length csSubIns < length cs
-      then (var "inParams"):args  -- todo:  make general
-      else args
+  return $ if length csSubIns < length cs
+           then (var "inParams"):args  -- todo:  make general
+           else args
 
 paramType :: Parameter -> StateType
 paramType (StateParam _ s) = s
@@ -602,7 +614,8 @@ genModDef (CS.Mod n fs) = genModule n (Just $ sequence $ map genFunc fs) Nothing
 genFunc :: Func -> Reader State Method
 genFunc (FDef (FuncDef n i o s)) = do
   g <- ask
-  publicMethod g (methodType $ convType o) n (getParams g i)
+  parms <- getParams i
+  publicMethod g (methodType $ convType o) n parms
     (return [ block $
         (map (\x -> varDec (codeName x) (convType $ codeType x))
           (((fstdecl $ sysinfodb $ codeSpec g) s) \\ i))
@@ -630,7 +643,8 @@ convStmt _ (FDec v t) = varDec (codeName v) (convType t)
 genDataFunc :: Name -> DataDesc -> Reader State Method
 genDataFunc name dd = do
     g <- ask
-    publicMethod g methodTypeVoid name (p_filename : (getParams g $ getInputs dd)) $
+    parms <- getParams $ getInputs dd
+    publicMethod g methodTypeVoid name (p_filename : parms) $
       return $ body $ [
       varDec l_infile infile,
       varDec l_line string,

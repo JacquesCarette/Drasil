@@ -30,12 +30,11 @@ data State = State {
   inStruct :: Structure,
   logName :: String,
   logKind :: Logging,
+  commented :: Comments,
   currentModule :: String,
 
   sfwrCBody :: Expr -> Body,
-  physCBody :: Expr -> Body,
-
-  publicMethod :: MethodType -> Label -> [Parameter] -> Reader State Body -> Reader State Method
+  physCBody :: Expr -> Body
 }
 
 -- function to choose how to deal with
@@ -61,21 +60,25 @@ generator chs spec = State {
   codeSpec = spec,
   inStruct = inputStructure chs,
   logKind  = logging chs,
+  commented = comments chs,
   -- state
   currentModule = "",
 
   -- next depend on chs
   logName = logFile chs,
   sfwrCBody = chooseConstr $ onSfwrConstraint chs,
-  physCBody = chooseConstr $ onPhysConstraint chs,
-
-  publicMethod = genMethodCall Public Static chs
+  physCBody = chooseConstr $ onPhysConstraint chs
 }
 
 assign :: Value -> Value -> Reader State Statement
 assign x y = do
   g <- ask
   chooseLogging (logKind g) x y
+
+publicMethod :: MethodType -> Label -> [Parameter] -> Reader State Body -> Reader State Method
+publicMethod mt l pl u = do
+  g <- ask
+  genMethodCall Public Static (commented g) (logKind g) mt l pl u
 
 generateCode :: Choices -> State -> IO ()
 generateCode ch g =
@@ -166,7 +169,7 @@ genInputConstraints = do
       sfwrCs = concatMap (\x -> sfwrLookup x cm) vars
       physCs = concatMap (\x -> physLookup x cm) vars
   parms <- getParams vars
-  publicMethod g methodTypeVoid "input_constraints" parms
+  publicMethod methodTypeVoid "input_constraints" parms
       (return $ [ block $
         (map (\x -> ifCond [((?!) (convExpr g x), sfwrCBody g x)] noElse) sfwrCs) ++
         (map (\x -> ifCond [((?!) (convExpr g x), physCBody g x)] noElse) physCs)
@@ -177,7 +180,7 @@ genInputDerived = do
   g <- ask
   let dvals = derivedInputs $ codeSpec g
   parms <- getParams $ map codevar dvals
-  publicMethod g methodTypeVoid "derived_values" parms
+  publicMethod methodTypeVoid "derived_values" parms
       (return $ concatMap (\x -> runReader (genCalcBlock CalcAssign (codeName x) (codeEquat x)) g) dvals)
 
 -- need Expr -> String to print constraint
@@ -209,7 +212,7 @@ genCalcFunc :: CodeDefinition -> Reader State Method
 genCalcFunc cdef = do
   g <- ask
   parms <- getParams (codevars' (codeEquat cdef) $ sysinfodb $ codeSpec g)
-  publicMethod g
+  publicMethod
     (methodType $ convType (codeType cdef))
     (codeName cdef)
     parms
@@ -220,17 +223,18 @@ data CalcType = CalcAssign | CalcReturn deriving Eq
 genCalcBlock :: CalcType -> String -> Expr -> Reader State Body
 genCalcBlock t' v' e' = do
   g <- ask
-  return $ doit g t' v' e'
+  doit g t' v' e'
     where
     doit g t v e
-      | containsCase e   = genCaseBlock g t v $ getCases e
-      | t == CalcAssign  = oneLiner $ runReader (assign (variable g v) (convExpr g e)) g
-      | otherwise        = oneLiner $ I.return $ convExpr g e
+      | containsCase e   = genCaseBlock t v $ getCases e
+      | t == CalcAssign  = fmap oneLiner $ assign (variable g v) (convExpr g e)
+      | otherwise        = return $ oneLiner $ I.return $ convExpr g e
 
-genCaseBlock :: State -> CalcType -> String -> [(Expr,Relation)] -> Body
-genCaseBlock g t v cs = oneLiner $ ifCond (genIf cs) noElse
-  where genIf :: [(Expr,Relation)] -> [(Value,Body)]
-        genIf = map (\(e,r) -> (convExpr g r, runReader (genCalcBlock t v e) g))
+genCaseBlock :: CalcType -> String -> [(Expr,Relation)] -> Reader State Body
+genCaseBlock t v cs = do
+  g <- ask
+  let genIf = map (\(e,r) -> (convExpr g r, runReader (genCalcBlock t v e) g))
+  return $ oneLiner $ ifCond (genIf cs) noElse
 
 ----- OUTPUT -------
 
@@ -244,7 +248,7 @@ genOutputFormat outs =
   in do
     g <- ask
     parms <- getParams outs
-    publicMethod g methodTypeVoid "write_output" parms (return [ block $ [
+    publicMethod methodTypeVoid "write_output" parms (return [ block $ [
       varDec l_outfile outfile,
       openFileW v_outfile (litString "output.txt") ] ++
       concatMap
@@ -255,12 +259,10 @@ genOutputFormat outs =
 
 -----
 
-genMethodCall :: Scope -> Permanence -> Choices -> MethodType -> Label -> [Parameter]
+genMethodCall :: Scope -> Permanence -> Comments -> Logging -> MethodType -> Label -> [Parameter]
                   -> Reader State Body -> Reader State Method
-genMethodCall s pr ch t n p b = do
-  let doLog = logging ch
-      doComments = comments ch
-      loggedBody LogFunc = loggedMethod n p b
+genMethodCall s pr doComments doLog t n p b = do
+  let loggedBody LogFunc = loggedMethod n p b
       loggedBody LogAll  = loggedMethod n p b
       loggedBody _       = b
       commBody CommentFunc = commMethod n p
@@ -624,7 +626,7 @@ genFunc :: Func -> Reader State Method
 genFunc (FDef (FuncDef n i o s)) = do
   g <- ask
   parms <- getParams i
-  publicMethod g (methodType $ convType o) n parms
+  publicMethod (methodType $ convType o) n parms
     (return [ block $
         (map (\x -> varDec (codeName x) (convType $ codeType x))
           (((fstdecl $ sysinfodb $ codeSpec g) s) \\ i))
@@ -653,7 +655,7 @@ genDataFunc :: Name -> DataDesc -> Reader State Method
 genDataFunc name dd = do
     g <- ask
     parms <- getParams $ getInputs dd
-    publicMethod g methodTypeVoid name (p_filename : parms) $
+    publicMethod methodTypeVoid name (p_filename : parms) $
       return $ body $ [
       varDec l_infile infile,
       varDec l_line string,

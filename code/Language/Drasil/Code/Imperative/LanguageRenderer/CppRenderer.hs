@@ -63,7 +63,7 @@ cppConfig options c =
         objVarDoc = objVarDoc' c, paramDoc = paramDoc' c, paramListDoc = paramListDocD c, patternDoc = patternDocD c, printDoc = printDoc' c, retDoc = retDocD c, scopeDoc = scopeDocD,
         stateDoc = stateDocD c, stateListDoc = stateListDocD c, statementDoc = statementDocD c, methodDoc = methodDoc' c,
         methodListDoc = methodListDoc' c, methodTypeDoc = methodTypeDocD c, unOpDoc = unOpDocD, valueDoc = valueDoc' c,
-        functionDoc = methodDoc' c, functionListDoc = functionListDocD c,
+        functionDoc = functionDoc' c, functionListDoc = functionListDocD c,
         ioDoc = ioDoc' c,inputDoc = inputDoc' c,
         complexDoc = complexDoc' c,
         getEnv = \_ -> error "Cpp does not implement getEnv (yet)"
@@ -233,6 +233,10 @@ objAccessDoc' c v (IndexOf vr) = funcAppDoc c "find" [v $. IterBegin, v $. IterE
 objAccessDoc' c v   (Floor) = funcAppDoc c "floor" [v]
 objAccessDoc' c v   (Ceiling) = funcAppDoc c "ceil" [v]
 objAccessDoc' c v (Cast (Base Float) (Base String)) = funcAppDoc c "std::stod" [v]
+objAccessDoc' c v (ListExtend t) = valueDoc c v <> dot <> text "push_back" <> parens (dftVal)
+    where dftVal = case t of Base bt   -> valueDoc c (defaultValue bt)
+                             List lt t  -> stateType c (List lt t) Dec <> parens (empty)
+                             _         -> error $ "ListExtend does not yet support list type " ++ render (doubleQuotes $ stateType c t Def)
 objAccessDoc' c v f = objAccessDocD c v f
 
 objVarDoc' :: Config -> Value -> Value -> Doc
@@ -266,6 +270,14 @@ methodDoc' c ft@(Source) m f@(Method _ _ _ _ _ b) = vcat [
 methodDoc' c ft@(Source) m f@(MainMethod _) = methodDocD' c ft m f
 methodDoc' c ft m f = methodDocD c ft m f
 
+functionDoc' :: Config -> FileType -> Label -> Method -> Doc
+functionDoc' c Header _ (Method n _ _ t ps _) = methodTypeDoc c t <+> text n <> parens (paramListDoc c ps) <> endStatement c
+functionDoc' c Source _ (Method n _ _ t ps b) = vcat [
+    methodTypeDoc c t <+> text n <> parens (paramListDoc c ps) <+> lbrace,
+    oneTab $ bodyDoc c b,
+    rbrace]
+functionDoc' c ft m f = methodDoc c ft m f
+
 methodListDoc' :: Config -> FileType -> Label -> [Method] -> Doc
 methodListDoc' c f@(Header) m fs = vmap (methodDoc c f m) fs
 methodListDoc' c f m fs = methodListDocD c f m fs
@@ -281,12 +293,15 @@ valueDoc' c v = valueDocD c v
 
 inputDoc' :: Config -> IOType -> StateType -> Maybe Value -> Doc
 inputDoc' _ _ (Base (FileType _)) _ = error "File type is not valid input"
-inputDoc' c io _ Nothing = inputFn c io <> dot <> text "ignore(std::numeric_limits<streamsize>::max(), ' ')"
-inputDoc' c io (Base _) (Just v) = inputFn c io <+> text ">>" <+> valueDoc c v
+inputDoc' c io _ Nothing = inputFn c io <> dot <> text "ignore(std::numeric_limits<std::streamsize>::max(), ' ')"
+inputDoc' c io (Base _) (Just v) = vcat [
+    inputFn c io <+> text ">>" <+> valueDoc c v <> semi,
+    inputFn c io <> dot <> text "ignore(std::numeric_limits<std::streamsize>::max(), '\\n')" 
+  ]
 inputDoc' c io s v = inputDocD c io s v 
 
 complexDoc' :: Config -> Complex -> Doc
-complexDoc' c (ReadLine f Nothing)  = valueDoc c f <> dot <> text "ignore(std::numeric_limits<streamsize>::max(), '\\n')" <> semi
+complexDoc' c (ReadLine f Nothing)  = valueDoc c f <> dot <> text "ignore(std::numeric_limits<std::streamsize>::max(), '\\n')" <> semi
 complexDoc' c (ReadLine f (Just v)) = statementDoc c NoLoop (valStmt $ funcApp' "std::getline" [f, v])
 complexDoc' c (ReadAll f v) = let l_line = "nextLine"
                                   v_line = var "nextLine" 
@@ -331,6 +346,7 @@ complexDoc' c (StringSplit vnew s d) =    let l_ss = "ss"
     blockStart c,
     oneTab $ bodyDoc c [ 
       block [
+        valStmt $ vnew$.(Func "clear" []),
         DeclState $ VarDec l_ss (Type "std::stringstream"),
         valStmt $ objMethodCall v_ss "str" [s],
         varDec l_word string,
@@ -379,8 +395,9 @@ transDecLine c (Header) _ (Method n _ _ t ps _) | isDtor n = text n <> parens (p
                                                 | otherwise = methodTypeDoc c t <+> ({- listRef <> -} text n <> parens (paramListDoc c ps) <> endStatement c)
   --  where listRef = case t of (MState (List _ _)) -> text "&"
     --                          _           -> empty
-transDecLine c (Source) _ (Method n _ _ t ps _) = ttype <+> ({- listRef <> -} text n <> parens (paramListDoc c ps))
-    where ttype | isDtor n = empty
+transDecLine c (Source) m (Method n _ _ t ps _) = ttype <+> ({- listRef <> -} text m <> doubleColon <> text n <> parens (paramListDoc c ps))
+    where doubleColon = if null m then empty else colon <> colon
+          ttype | isDtor n = empty
                 | otherwise = methodTypeDoc c t
 transDecLine c ft m f = transDecLine c ft m $ convertToMethod f
 

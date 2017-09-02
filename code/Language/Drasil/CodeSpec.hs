@@ -76,11 +76,10 @@ codeSpec si ms = codeSpec' si ms
 codeSpec' :: SystemInformation -> [Mod] -> CodeSpec
 codeSpec' (SI {_sys = sys, _quants = q, _definitions = defs, _inputs = ins, _outputs = outs, _constraints = cs, _constants = constants, _sysinfodb = db}) ms = 
   let inputs' = map codevar ins
-      const' = map qtoc constants
-      defs' = map qtoc defs
-      derived = getDerivedInputs defs' inputs' const' db
-      rels = defs' \\ derived
-      mods' = (packmod "Calculations" $ map FCD rels):ms 
+      const' = map qtov constants
+      derived = map qtov $ getDerivedInputs defs inputs' const' db
+      rels = (map qtoc defs) \\ derived
+      mods' = prefixFunctions $ (packmod "Calculations" $ map FCD rels):ms 
       mem   = modExportMap mods' inputs' const'
       outs' = map codevar outs
       allInputs = nub $ inputs' ++ map codevar derived
@@ -238,7 +237,9 @@ modDepMap sm mem ms = Map.fromList $ map (\(Mod n _) -> n) ms `zip` map getModDe
                                                      "InputConstraints",
                                                      "InputFormat",
                                                      "OutputFormat",
-                                                     "Calculations" ] )]  -- hardcoded for now
+                                                     "Calculations" ] ),
+                                       ("DerivedValues", [ "InputParameters" ] ),
+                                       ("InputConstraints", [ "InputParameters" ] )]  -- hardcoded for now
                                                                           -- will fix later
   where getModDep (Mod name funcs) = 
           delete name $ nub $ concatMap getDep (concatMap fdep funcs)
@@ -284,11 +285,17 @@ fname (FCD cd) = codeName cd
 fname (FDef (FuncDef n _ _ _)) = n
 fname (FData (FuncData n _)) = n 
 
+prefixFunctions :: [Mod] -> [Mod]
+prefixFunctions = map (\(Mod nm fs) -> Mod nm $ map pfunc fs)
+  where pfunc f@(FCD _) = f
+        pfunc (FData (FuncData n dd)) = FData (FuncData (funcPrefix ++ n) dd)
+        pfunc (FDef (FuncDef n a t f)) = FDef (FuncDef (funcPrefix ++ n) a t f)
 
-getDerivedInputs :: HasSymbolTable ctx => [Def] -> [Input] -> [Const] -> ctx -> [CodeDefinition]
+
+getDerivedInputs :: HasSymbolTable ctx => [QDefinition] -> [Input] -> [Const] -> ctx -> [QDefinition]
 getDerivedInputs defs ins consts sm =
   let refSet = ins ++ map codevar consts 
-  in  filter ((`subsetOf` refSet) . flip codevars sm . codeEquat) defs
+  in  filter ((`subsetOf` refSet) . flip codevars sm . equat) defs
   
 type Known = CodeChunk
 type Need  = CodeChunk

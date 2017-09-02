@@ -14,7 +14,7 @@ import qualified Language.Drasil.CodeSpec as CS (Mod(..))
 import Language.Drasil.DataDesc
 
 import Prelude hiding (log, exp, const)
-import Data.List (intersperse, (\\))
+import Data.List (intersperse, (\\), stripPrefix)
 import System.Directory
 import Data.Map (member)
 import qualified Data.Map as Map (lookup)
@@ -325,10 +325,10 @@ genMainFunc =
     return $ mainMethod $ body $ [
       varDecDef l_filename string $ arg 0 ,
       objDecNewVoid l_params "InputParameters" (obj "InputParameters") ,
-      valStmt $ fApp g "get_input" [v_filename, v_params] ,
+      valStmt $ fApp g (funcPrefix ++ "get_input") [v_filename, v_params] ,
       valStmt $ fApp g "derived_values" [v_params] ,
       valStmt $ fApp g "input_constraints" [v_params]
-      ] ++ map (\x -> varDecDef (codeName x) (convType $ codeType x)
+      ] ++ map (\x -> varDecDef (nopfx $ codeName x) (convType $ codeType x)
                     (fApp g (codeName x) (runReader (args1 x) g)))
           (execOrder $ codeSpec g)
       ++ [ valStmt $ fApp g "write_output" args2 ]
@@ -353,13 +353,16 @@ loggedAssign a b =
 
 -- helpers
 
+nopfx :: String -> String
+nopfx s = maybe s id (stripPrefix funcPrefix s)
+
 variable :: State -> String -> Value
 variable g s
   | member s (constMap $ codeSpec g) =
       maybe (error "impossible") (convExpr g . codeEquat) (Map.lookup s (constMap $ codeSpec g)) --extvar "Constants" s
   | s `elem` (map codeName $ inputs $ codeSpec g) = (var "inParams")$->(var s)
   | otherwise                        = var s
-
+  
 fApp :: State -> String -> ([Value] -> Value)
 fApp g s
   | member s (eMap $ codeSpec g) =
@@ -493,7 +496,7 @@ convExpr g (C c)        = variable g $ codeName $ codevar $ symbLookup c $ (sysi
 convExpr g (Index a i)  = (convExpr g a)$.(listAccess $ convExpr g i)
 convExpr g (Len a)      = (convExpr g a)$.listSize
 convExpr g (Append a v) = (convExpr g a)$.(listAppend $ convExpr g v)
-convExpr g (FCall (C c) x)  = fApp g (codeName (codevar $ symbLookup c $ (sysinfodb $ codeSpec g) ^. symbolTable)) (map (convExpr g) x)
+convExpr g (FCall (C c) x)  = fApp g (codeName (codefunc $ symbLookup c $ (sysinfodb $ codeSpec g) ^. symbolTable)) (map (convExpr g) x)
 convExpr _ (FCall _ _)  = litString "**convExpr :: BinaryOp unimplemented**"
 convExpr g (a := b)     = (convExpr g a) ?== (convExpr g b)
 convExpr g (a :!= b)    = (convExpr g a) ?!= (convExpr g b)

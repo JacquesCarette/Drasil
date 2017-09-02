@@ -107,6 +107,7 @@ codevars (Int _)      _ = []
 codevars (Dbl _)      _ = []
 codevars (Bln _)      _ = []
 codevars (V _)        _ = []
+codevars (FCall (C c) x)  sm = nub ((codefunc $ symbLookup c (sm ^. symbolTable)) : (concat $ map (\y -> codevars y sm) x))
 codevars (FCall f x)  sm = nub (codevars f sm ++ (concat $ map (\y -> codevars y sm) x))
 codevars (Case ls)    sm = nub (concat $ map (\x -> codevars (fst x) sm) ls ++ map (\x -> codevars (snd x) sm) ls)
 codevars (a := b)     sm = nub (codevars a sm ++ codevars b sm)

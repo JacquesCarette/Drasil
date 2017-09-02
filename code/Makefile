@@ -106,7 +106,9 @@ ssp_prog: ssp_build
 	
 glassbr_prog: glassbr_build
 	test -d ./build/$(GLASS_DIR)/src/python && cp ./datafiles/$(GLASS_DIR)/*.txt ./build/$(GLASS_DIR)/src/python/
-	test -d ./build/$(GLASS_DIR)/src/java && cp ./datafiles/$(GLASS_DIR)/*.txt ./build/$(GLASS_DIR)/src/java
+	test -d ./build/$(GLASS_DIR)/src/java && cp ./datafiles/$(GLASS_DIR)/*.txt ./build/$(GLASS_DIR)/src/java/
+	test -d ./build/$(GLASS_DIR)/src/csharp && cp ./datafiles/$(GLASS_DIR)/*.txt ./build/$(GLASS_DIR)/src/csharp/
+	test -d ./build/$(GLASS_DIR)/src/cpp && cp ./datafiles/$(GLASS_DIR)/*.txt ./build/$(GLASS_DIR)/src/cpp/
   
 gamephys_prog: gamephys_build
 

@@ -512,24 +512,24 @@ convExpr g (a :> b)     = (convExpr g a) ?> (convExpr g b)
 convExpr g (a :< b)     = (convExpr g a) ?< (convExpr g b)
 convExpr g (a :<= b)    = (convExpr g a) ?<= (convExpr g b)
 convExpr g (a :>= b)    = (convExpr g a) ?>= (convExpr g b)
-convExpr g (UnaryOp u)  = unop g u
+convExpr g (UnaryOp u)  = runReader (unop u) g
 convExpr g (Grouping e) = convExpr g e
 convExpr _ (BinaryOp _) = litString "**convExpr :: BinaryOp unimplemented**"
 convExpr _ (Case _)     = error "**convExpr :: Case should be dealt with separately**"
 convExpr _ _           = litString "**convExpr :: ? unimplemented**"
 
-unop :: State -> UFunc -> Value
-unop g (E.Sqrt e)         = (#/^) (convExpr g e)
-unop g (E.Log e)          = I.log (convExpr g e)
-unop g (E.Abs e)          = (#|) (convExpr g e)
-unop g (E.Exp e)          = I.exp (convExpr g e)
-unop g (E.Sin e)          = I.sin (convExpr g e)
-unop g (E.Cos e)          = I.cos (convExpr g e)
-unop g (E.Tan e)          = I.tan (convExpr g e)
-unop g (E.Csc e)          = I.csc (convExpr g e)
-unop g (E.Sec e)          = I.sec (convExpr g e)
-unop g (E.Cot e)          = I.cot (convExpr g e)
-unop _ _                  = error "not implemented"
+unop :: UFunc -> Reader State Value
+unop (E.Sqrt e)         = ask >>= \g -> return $ (#/^) (convExpr g e)
+unop (E.Log e)          = ask >>= \g -> return $ I.log (convExpr g e)
+unop (E.Abs e)          = ask >>= \g -> return $ (#|) (convExpr g e)
+unop (E.Exp e)          = ask >>= \g -> return $ I.exp (convExpr g e)
+unop (E.Sin e)          = ask >>= \g -> return $ I.sin (convExpr g e)
+unop (E.Cos e)          = ask >>= \g -> return $ I.cos (convExpr g e)
+unop (E.Tan e)          = ask >>= \g -> return $ I.tan (convExpr g e)
+unop (E.Csc e)          = ask >>= \g -> return $ I.csc (convExpr g e)
+unop (E.Sec e)          = ask >>= \g -> return $ I.sec (convExpr g e)
+unop (E.Cot e)          = ask >>= \g -> return $ I.cot (convExpr g e)
+unop _                  = error "not implemented"
 
 
 containsCase :: Expr -> Bool

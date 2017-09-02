@@ -22,7 +22,7 @@ import Data.Maybe (maybe)
 import Language.Drasil.ChunkDB (symbLookup, HasSymbolTable(..))
 import Control.Lens ((^.))
 import Control.Monad (when)
-import Control.Monad.Reader (Reader, ask, runReader)
+import Control.Monad.Reader (Reader, ask, runReader, withReader)
 
 -- Private State, used to push these options around the generator
 data State = State {
@@ -301,11 +301,11 @@ genModule :: Name
                -> Maybe (Reader State [Class])
                -> Reader State Module
 genModule n maybeMs maybeCs = do
-  g' <- ask
-  let g  = g' { currentModule = n }
-      ls = maybe [] id (Map.lookup n (dMap $ codeSpec g))
-  cs <- maybe (return []) id maybeCs
-  ms <- maybe (return []) id maybeMs
+  g <- ask
+  let ls = maybe [] id (Map.lookup n (dMap $ codeSpec g))
+      updateState = withReader (\s -> s { currentModule = n })
+  cs <- maybe (return []) updateState maybeCs
+  ms <- maybe (return []) updateState maybeMs
   return $ buildModule n ls [] ms cs
 
 

@@ -480,6 +480,7 @@ convExpr _ (V v)        = litString v  -- V constructor should be removed
 convExpr _ (Dbl d)      = litFloat d
 convExpr _ (Int i)      = litInt i
 convExpr _ (Bln b)      = litBool b
+convExpr _ ((Int a) :/ (Int b)) = (litFloat $ fromIntegral a) #/ (litFloat $ fromIntegral b) -- hack to deal with integer division
 convExpr g (a :/ b)     = (convExpr g a) #/ (convExpr g b)
 convExpr g (a :* b)     = (convExpr g a) #* (convExpr g b)
 convExpr g (a :+ b)     = (convExpr g a) #+ (convExpr g b)

@@ -27,15 +27,15 @@ import Control.Monad.Reader (Reader, ask, runReader, withReader)
 -- Private State, used to push these options around the generator
 data State = State {
   codeSpec :: CodeSpec,
+  inStruct :: Structure,
   logName :: String,
+  logKind :: Logging,
   currentModule :: String,
 
   sfwrCBody :: Expr -> Body,
   physCBody :: Expr -> Body,
 
-  genInputMod :: Reader State [Module],
-  publicMethod :: MethodType -> Label -> [Parameter] -> Reader State Body -> Reader State Method,
-  assign :: Value -> Value -> Reader State Statement
+  publicMethod :: MethodType -> Label -> [Parameter] -> Reader State Body -> Reader State Method
 }
 
 -- function to choose how to deal with
@@ -59,18 +59,23 @@ generator :: Choices -> CodeSpec -> State
 generator chs spec = State {
   -- constants
   codeSpec = spec,
+  inStruct = inputStructure chs,
+  logKind  = logging chs,
   -- state
   currentModule = "",
 
   -- next depend on chs
   logName = logFile chs,
-  genInputMod = chooseInStructure $ inputStructure chs,
   sfwrCBody = chooseConstr $ onSfwrConstraint chs,
   physCBody = chooseConstr $ onPhysConstraint chs,
-  assign = chooseLogging $ logging chs,
 
   publicMethod = genMethodCall Public Static chs
 }
+
+assign :: Value -> Value -> Reader State Statement
+assign x y = do
+  g <- ask
+  chooseLogging (logKind g) x y
 
 generateCode :: Choices -> State -> IO ()
 generateCode ch g =
@@ -93,7 +98,7 @@ genModules = do
   g <- ask
   let s = codeSpec g
   mn     <- genMain
-  inp    <- genInputMod g
+  inp    <- chooseInStructure $ inStruct g
   out    <- genOutputMod $ outputs s
   moddef <- sequence $ fmap genModDef (mods s) -- hack ?
   return $ (mn : inp ++ out ++ moddef)
@@ -149,7 +154,7 @@ genInputClass = do
       [ constructor
           "InputParameters"
           []
-          [zipBlockWith (\x y -> runReader (assign g x y) g) vars vals]--,
+          [zipBlockWith (\x y -> runReader (assign x y) g) vars vals]--,
       ]
     )
 
@@ -219,7 +224,7 @@ genCalcBlock t' v' e' = do
     where
     doit g t v e
       | containsCase e   = genCaseBlock g t v $ getCases e
-      | t == CalcAssign  = oneLiner $ runReader (assign g (variable g v) (convExpr g e)) g
+      | t == CalcAssign  = oneLiner $ runReader (assign (variable g v) (convExpr g e)) g
       | otherwise        = oneLiner $ I.return $ convExpr g e
 
 genCaseBlock :: State -> CalcType -> String -> [(Expr,Relation)] -> Body
@@ -629,7 +634,7 @@ genFunc (FData (FuncData n dd)) = genDataFunc n dd
 genFunc (FCD cd) = genCalcFunc cd
 
 convStmt :: State -> FuncStmt -> Statement
-convStmt g (FAsg v e) = runReader (assign g (var $ codeName v) (convExpr g e)) g
+convStmt g (FAsg v e) = runReader (assign (var $ codeName v) (convExpr g e)) g
 convStmt g (FFor v e st) = for (varDecDef (codeName v) int (litInt 0)) (convExpr g e) ((&++) (var (codeName v)))
   [ block (map (convStmt g) st) ]
 convStmt g (FWhile e st) = while (convExpr g e) [ block (map (convStmt g) st) ]
@@ -700,11 +705,11 @@ genDataFunc name dd = do
           in  concatMap (\(x,y) -> entryData g x lineNo patNo y) $ zip (map (\z -> (patNo #* (litInt l)) #+ (litInt z)) [0..l-1]) d
         ---------------
         entryData :: State -> Value -> Value -> Value -> Entry -> [Statement]
-        entryData g tokIndex _ _ (Entry v) = [runReader (assign g (variable g $ codeName v) $
+        entryData g tokIndex _ _ (Entry v) = [runReader (assign (variable g $ codeName v) $
           (v_linetokens$.(listAccess tokIndex))$.(cast (convType $ codeType v) string)) g]
         entryData g tokIndex lineNo patNo (ListEntry indx v) =
           checkIndex indx lineNo patNo (variable g $ codeName v) (codeType v) ++
-            [ runReader (assign g (indexData indx lineNo patNo (variable g $ codeName v)) $
+            [ runReader (assign (indexData indx lineNo patNo (variable g $ codeName v)) $
               (v_linetokens$.(listAccess tokIndex))$.(cast (listType (codeType v) (toInteger $ length indx)) string)
               ) g
             ]

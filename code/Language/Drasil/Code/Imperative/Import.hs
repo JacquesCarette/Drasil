@@ -225,9 +225,10 @@ genCalcBlock t' v' e' = do
   g <- ask
   doit g t' v' e'
     where
+    doit :: State -> CalcType -> String -> Expr -> Reader State Body
     doit g t v e
       | containsCase e   = genCaseBlock t v $ getCases e
-      | t == CalcAssign  = fmap oneLiner $ assign (variable g v) (convExpr g e)
+      | t == CalcAssign  = fmap oneLiner $ do { vv <- variable v ; assign vv (convExpr g e)}
       | otherwise        = return $ oneLiner $ I.return $ convExpr g e
 
 genCaseBlock :: CalcType -> String -> [(Expr,Relation)] -> Reader State Body
@@ -253,7 +254,7 @@ genOutputFormat outs =
       openFileW v_outfile (litString "output.txt") ] ++
       concatMap
         (\x -> [ printFileStr v_outfile ((codeName x) ++ " = "),
-                 printFileLn v_outfile (convType $ codeType x) (variable g $ codeName x)
+                 printFileLn v_outfile (convType $ codeType x) (runReader (variable $ codeName x) g)
                ] ) outs ++ [
       closeFile v_outfile ] ])
 
@@ -363,12 +364,16 @@ loggedAssign a b =
 nopfx :: String -> String
 nopfx s = maybe s id (stripPrefix funcPrefix s)
 
-variable :: State -> String -> Value
-variable g s
-  | member s (constMap $ codeSpec g) =
+variable :: String -> Reader State Value
+variable s' = do
+  g <- ask
+  return $ doit g s'
+    where
+    doit :: State -> String -> Value
+    doit g s | member s (constMap $ codeSpec g) =
       maybe (error "impossible") (convExpr g . codeEquat) (Map.lookup s (constMap $ codeSpec g)) --extvar "Constants" s
-  | s `elem` (map codeName $ inputs $ codeSpec g) = (var "inParams")$->(var s)
-  | otherwise                        = var s
+             | s `elem` (map codeName $ inputs $ codeSpec g) = (var "inParams")$->(var s)
+             | otherwise                        = var s
   
 fApp :: State -> String -> ([Value] -> Value)
 fApp g s
@@ -500,7 +505,7 @@ convExpr g (a :|| b)    = (convExpr g a) ?|| (convExpr g b)
 convExpr _ (Deriv _ _ _) = litString "**convExpr :: Deriv unimplemented**"
 convExpr g (E.Not e)      = (?!) (convExpr g e)
 convExpr g (Neg e)      = (#~) (convExpr g e)
-convExpr g (C c)        = variable g $ codeName $ codevar $ symbLookup c $ (sysinfodb $ codeSpec g) ^. symbolTable
+convExpr g (C c)        = runReader (variable $ codeName $ codevar $ symbLookup c $ (sysinfodb $ codeSpec g) ^. symbolTable) g
 convExpr g (Index a i)  = (convExpr g a)$.(listAccess $ convExpr g i)
 convExpr g (Len a)      = (convExpr g a)$.listSize
 convExpr g (Append a v) = (convExpr g a)$.(listAppend $ convExpr g v)
@@ -626,29 +631,48 @@ genFunc :: Func -> Reader State Method
 genFunc (FDef (FuncDef n i o s)) = do
   g <- ask
   parms <- getParams i
+  stmts <- mapM convStmt s
   publicMethod (methodType $ convType o) n parms
     (return [ block $
         (map (\x -> varDec (codeName x) (convType $ codeType x))
           (((fstdecl $ sysinfodb $ codeSpec g) s) \\ i))
-        ++ (map (convStmt g) s)
+        ++ stmts
     ])
 genFunc (FData (FuncData n dd)) = genDataFunc n dd
 genFunc (FCD cd) = genCalcFunc cd
 
-convStmt :: State -> FuncStmt -> Statement
-convStmt g (FAsg v e) = runReader (assign (var $ codeName v) (convExpr g e)) g
-convStmt g (FFor v e st) = for (varDecDef (codeName v) int (litInt 0)) (convExpr g e) ((&++) (var (codeName v)))
-  [ block (map (convStmt g) st) ]
-convStmt g (FWhile e st) = while (convExpr g e) [ block (map (convStmt g) st) ]
-convStmt g (FCond e tSt []) = ifCond [(convExpr g e, [ block (map (convStmt g) tSt) ])] noElse
-convStmt g (FCond e tSt eSt) = ifCond [(convExpr g e, [ block (map (convStmt g) tSt) ])] [ block (map (convStmt g) eSt) ]
-convStmt g (FRet e) = I.return $ convExpr g e
-convStmt _ (FThrow s) = throw s
-convStmt g (FTry t c) = tryCatch [ block (map (convStmt g) t) ] [ block (map (convStmt g) c) ]
-convStmt _ (FContinue) = continue
-convStmt g (FVal e) = valStmt $ convExpr g e
-convStmt _ (FDec v (C.List t)) = listDec' (codeName v) (convType t) 0
-convStmt _ (FDec v t) = varDec (codeName v) (convType t)
+convStmt :: FuncStmt -> Reader State Statement
+convStmt (FAsg v e) = do
+  g <- ask
+  assign (var $ codeName v) (convExpr g e)
+convStmt (FFor v e st) = do
+  g <- ask
+  stmts <- mapM convStmt st
+  return $ for (varDecDef (codeName v) int (litInt 0)) (convExpr g e) ((&++) (var (codeName v)))
+               [ block stmts ]
+convStmt (FWhile e st) = do
+  g <- ask 
+  stmts <- mapM convStmt st
+  return $ while (convExpr g e) [ block stmts ]
+convStmt (FCond e tSt []) = do
+  g <- ask
+  stmts <- mapM convStmt tSt
+  return $ ifCond [(convExpr g e, [ block stmts ])] noElse
+convStmt (FCond e tSt eSt) = do
+  g <- ask
+  stmt1 <- mapM convStmt tSt
+  stmt2 <- mapM convStmt eSt
+  return $ ifCond [(convExpr g e, [ block stmt1 ])] [ block stmt2 ]
+convStmt (FRet e) = ask >>= \g -> return $ I.return $ convExpr g e
+convStmt (FThrow s) = return $ throw s
+convStmt (FTry t c) = do
+  stmt1 <- mapM convStmt t
+  stmt2 <- mapM convStmt c
+  return $ tryCatch [ block stmt1 ] [ block stmt2 ]
+convStmt (FContinue) = return continue
+convStmt (FVal e) = ask >>= \g -> return $ valStmt $ convExpr g e
+convStmt (FDec v (C.List t)) = return $ listDec' (codeName v) (convType t) 0
+convStmt (FDec v t) = return $ varDec (codeName v) (convType t)
 
 -- this is really ugly!!
 genDataFunc :: Name -> DataDesc -> Reader State Method
@@ -665,7 +689,7 @@ genDataFunc name dd = do
       (concatMap (inData g) dd) ++ [
       closeFile v_infile ]
   where inData :: State -> Data -> [Statement]
-        inData g (Singleton v) = [getFileInput v_infile (convType $ codeType v) (variable g $ codeName v)]
+        inData g (Singleton v) = [getFileInput v_infile (convType $ codeType v) (runReader (variable $ codeName v) g)]
         inData _ JunkData = [discardFileLine v_infile]
         inData g (Line lp d) =
           [ getFileInputLine v_infile v_line,
@@ -704,18 +728,19 @@ genDataFunc name dd = do
         patternData :: State -> [Entry] -> Value -> Value -> [Statement]
         patternData g d lineNo patNo =
           let l = toInteger $ length d
-          in  concatMap (\(x,y) -> entryData g x lineNo patNo y) $ zip (map (\z -> (patNo #* (litInt l)) #+ (litInt z)) [0..l-1]) d
+          in  concatMap (\(x,y) -> runReader (entryData x lineNo patNo y) g) $ zip (map (\z -> (patNo #* (litInt l)) #+ (litInt z)) [0..l-1]) d
         ---------------
-        entryData :: State -> Value -> Value -> Value -> Entry -> [Statement]
-        entryData g tokIndex _ _ (Entry v) = [runReader (assign (variable g $ codeName v) $
-          (v_linetokens$.(listAccess tokIndex))$.(cast (convType $ codeType v) string)) g]
-        entryData g tokIndex lineNo patNo (ListEntry indx v) =
-          checkIndex indx lineNo patNo (variable g $ codeName v) (codeType v) ++
-            [ runReader (assign (indexData indx lineNo patNo (variable g $ codeName v)) $
-              (v_linetokens$.(listAccess tokIndex))$.(cast (listType (codeType v) (toInteger $ length indx)) string)
-              ) g
-            ]
-        entryData _ _ _ _ JunkEntry = []
+        entryData :: Value -> Value -> Value -> Entry -> Reader State [Statement]
+        entryData tokIndex _ _ (Entry v) = do
+          vv <- variable $ codeName v
+          a <- assign vv $ (v_linetokens$.(listAccess tokIndex))$. (cast (convType $ codeType v) string)
+          return [a]
+        entryData tokIndex lineNo patNo (ListEntry indx v) = do
+          vv <- variable $ codeName v
+          a <- assign (indexData indx lineNo patNo vv) $
+                (v_linetokens$.(listAccess tokIndex))$.(cast (listType (codeType v) (toInteger $ length indx)) string)
+          return $ checkIndex indx lineNo patNo vv (codeType v) ++ [ a ]
+        entryData _ _ _ JunkEntry = return []
         ---------------
         indexData :: [Ind] -> Value -> Value -> Value -> Value
         indexData [] _ _ v = v

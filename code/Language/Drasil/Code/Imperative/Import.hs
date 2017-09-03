@@ -698,13 +698,13 @@ genDataFunc name dd = do
         inData g (Line lp d) =
           [ getFileInputLine v_infile v_line,
             stringSplit v_linetokens v_line d
-          ] ++ lineData g lp (litInt 0)
+          ] ++ (runReader (lineData lp (litInt 0)) g)
         inData g (Lines lp Nothing d) =
           [ getFileInputAll v_infile v_lines,
             for (varDecDef l_i int (litInt 0)) (v_i ?< v_lines$.listSize) ((&++) v_i)
               ( body
                 ( [ stringSplit v_linetokens (v_lines$.(listAccess v_i)) d
-                  ] ++ lineData g lp v_i
+                  ] ++ (runReader (lineData lp v_i) g)
                 )
               )
           ]
@@ -713,21 +713,23 @@ genDataFunc name dd = do
               ( body
                 ( [ getFileInputLine v_infile v_line,
                     stringSplit v_linetokens v_line d
-                  ] ++ lineData g lp v_i
+                  ] ++ (runReader (lineData lp v_i) g)
                 )
               )
           ]
         ---------------
-        lineData :: State -> LinePattern -> Value -> [Statement]
-        lineData g (Straight p) lineNo = runReader (patternData p lineNo (litInt 0)) g
-        lineData g (Repeat p Nothing) lineNo =
-          [ for (varDecDef l_j int (litInt 0)) (v_j ?< (v_linetokens$.listSize #/ (litInt $ toInteger $ length p))$.(cast int float)) ((&++) v_j)
-              ( body (runReader (patternData p lineNo v_j) g) )
-          ]
-        lineData g (Repeat p (Just numPat)) lineNo =
-          [ for (varDecDef l_j int (litInt 0)) (v_j ?< (litInt numPat)) ((&++) v_j)
-              ( body (runReader (patternData p lineNo v_j) g) )
-          ]
+        lineData :: LinePattern -> Value -> Reader State [Statement]
+        lineData (Straight p) lineNo = patternData p lineNo (litInt 0)
+        lineData (Repeat p Nothing) lineNo = do
+          pat <- patternData p lineNo v_j
+          return [ for (varDecDef l_j int (litInt 0)) (v_j ?< (v_linetokens$.listSize #/ (litInt $ toInteger $ length p))$.(cast int float)) ((&++) v_j)
+              ( body pat )
+            ]
+        lineData (Repeat p (Just numPat)) lineNo = do
+          pat <- patternData p lineNo v_j
+          return [ for (varDecDef l_j int (litInt 0)) (v_j ?< (litInt numPat)) ((&++) v_j)
+              ( body pat )
+            ]
         ---------------
         patternData :: [Entry] -> Value -> Value -> Reader State [Statement]
         patternData d lineNo patNo = do

@@ -21,7 +21,7 @@ import qualified Data.Map as Map (lookup)
 import Data.Maybe (maybe)
 import Language.Drasil.ChunkDB (symbLookup, HasSymbolTable(..))
 import Control.Lens ((^.))
-import Control.Monad (when,liftM2)
+import Control.Monad (when,liftM2,zipWithM)
 import Control.Monad.Reader (Reader, ask, runReader, withReader)
 
 -- Private State, used to push these options around the generator
@@ -149,17 +149,9 @@ genInputClass = do
           map (\x -> pubMVar 0 (convType $ codeType x) (codeName x)) ins
       vars         = map svToVar inputVars
       vals         = map (defaultValue' . convType . codeType) ins
-  return $ pubClass
-    "InputParameters"
-    Nothing
-    inputVars
-    (
-      [ constructor
-          "InputParameters"
-          []
-          [zipBlockWith (\x y -> runReader (assign x y) g) vars vals]--,
-      ]
-    )
+  asgs <- zipWithM assign vars vals
+  return $ pubClass "InputParameters" Nothing inputVars
+    [ constructor "InputParameters" [] [block asgs] ]
 
 genInputConstraints :: Reader State Method
 genInputConstraints = do
@@ -179,8 +171,9 @@ genInputDerived = do
   g <- ask
   let dvals = derivedInputs $ codeSpec g
   parms <- getParams $ map codevar dvals
+  inps <- mapM (\x -> genCalcBlock CalcAssign (codeName x) (codeEquat x)) dvals
   publicMethod methodTypeVoid "derived_values" parms
-      (return $ concatMap (\x -> runReader (genCalcBlock CalcAssign (codeName x) (codeEquat x)) g) dvals)
+      (return $ concat inps)
 
 -- need Expr -> String to print constraint
 constrWarn :: Expr -> Body
@@ -726,20 +719,21 @@ genDataFunc name dd = do
           ]
         ---------------
         lineData :: State -> LinePattern -> Value -> [Statement]
-        lineData g (Straight p) lineNo = patternData g p lineNo (litInt 0)
+        lineData g (Straight p) lineNo = runReader (patternData p lineNo (litInt 0)) g
         lineData g (Repeat p Nothing) lineNo =
           [ for (varDecDef l_j int (litInt 0)) (v_j ?< (v_linetokens$.listSize #/ (litInt $ toInteger $ length p))$.(cast int float)) ((&++) v_j)
-              ( body (patternData g p lineNo v_j) )
+              ( body (runReader (patternData p lineNo v_j) g) )
           ]
         lineData g (Repeat p (Just numPat)) lineNo =
           [ for (varDecDef l_j int (litInt 0)) (v_j ?< (litInt numPat)) ((&++) v_j)
-              ( body (patternData g p lineNo v_j) )
+              ( body (runReader (patternData p lineNo v_j) g) )
           ]
         ---------------
-        patternData :: State -> [Entry] -> Value -> Value -> [Statement]
-        patternData g d lineNo patNo =
+        patternData :: [Entry] -> Value -> Value -> Reader State [Statement]
+        patternData d lineNo patNo = do
           let l = toInteger $ length d
-          in  concatMap (\(x,y) -> runReader (entryData x lineNo patNo y) g) $ zip (map (\z -> (patNo #* (litInt l)) #+ (litInt z)) [0..l-1]) d
+          ent <- mapM (\(x,y) -> entryData x lineNo patNo y) $ zip (map (\z -> (patNo #* (litInt l)) #+ (litInt z)) [0..l-1]) d
+          return $ concat ent
         ---------------
         entryData :: Value -> Value -> Value -> Entry -> Reader State [Statement]
         entryData tokIndex _ _ (Entry v) = do

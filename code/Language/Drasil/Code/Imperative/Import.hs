@@ -21,7 +21,7 @@ import qualified Data.Map as Map (lookup)
 import Data.Maybe (maybe)
 import Language.Drasil.ChunkDB (symbLookup, HasSymbolTable(..))
 import Control.Lens ((^.))
-import Control.Monad (when)
+import Control.Monad (when,liftM2)
 import Control.Monad.Reader (Reader, ask, runReader, withReader)
 
 -- Private State, used to push these options around the generator
@@ -169,11 +169,10 @@ genInputConstraints = do
       sfwrCs = concatMap (\x -> sfwrLookup x cm) vars
       physCs = concatMap (\x -> physLookup x cm) vars
   parms <- getParams vars
+  sf <- mapM (\x -> do { e <- convExpr x; return $ ifCond [((?!) e, sfwrCBody g x)] noElse}) sfwrCs
+  hw <- mapM (\x -> do { e <- convExpr x; return $ ifCond [((?!) e, physCBody g x)] noElse}) physCs
   publicMethod methodTypeVoid "input_constraints" parms
-      (return $ [ block $
-        (map (\x -> ifCond [((?!) (convExpr g x), sfwrCBody g x)] noElse) sfwrCs) ++
-        (map (\x -> ifCond [((?!) (convExpr g x), physCBody g x)] noElse) physCs)
-      ])
+      (return $ [ block $ sf ++ hw ])
 
 genInputDerived :: Reader State Method
 genInputDerived = do
@@ -195,7 +194,7 @@ constrExc _ = oneLiner $ throw "InputError"
 {-
 genConstMod :: Reader State Module
 genConstMod = buildModule "Constants" []
-  (map (\x -> VarDecDef (codeName x) (convType $ codeType x) (convExpr g $ codeEquat x)) (const $ codeSpec g))
+  (map (\x -> VarDecDef (codeName x) (convType $ codeType x) (convExpr $ codeEquat x)) (const $ codeSpec g))
   [] [{- genConstClassD g -}]
 
 genConstClassD :: Reader State Class
@@ -222,20 +221,18 @@ data CalcType = CalcAssign | CalcReturn deriving Eq
 
 genCalcBlock :: CalcType -> String -> Expr -> Reader State Body
 genCalcBlock t' v' e' = do
-  g <- ask
-  doit g t' v' e'
+  doit t' v' e'
     where
-    doit :: State -> CalcType -> String -> Expr -> Reader State Body
-    doit g t v e
+    doit :: CalcType -> String -> Expr -> Reader State Body
+    doit t v e
       | containsCase e   = genCaseBlock t v $ getCases e
-      | t == CalcAssign  = fmap oneLiner $ do { vv <- variable v ; assign vv (convExpr g e)}
-      | otherwise        = return $ oneLiner $ I.return $ convExpr g e
+      | t == CalcAssign  = fmap oneLiner $ do { vv <- variable v; ee <- convExpr e; assign vv ee}
+      | otherwise        = fmap (oneLiner . I.return) $ convExpr e
 
 genCaseBlock :: CalcType -> String -> [(Expr,Relation)] -> Reader State Body
 genCaseBlock t v cs = do
-  g <- ask
-  let genIf = map (\(e,r) -> (convExpr g r, runReader (genCalcBlock t v e) g))
-  return $ oneLiner $ ifCond (genIf cs) noElse
+  ifs <- mapM (\(e,r) -> liftM2 (,) (convExpr e) (genCalcBlock t v r)) cs
+  return $ oneLiner $ ifCond ifs noElse
 
 ----- OUTPUT -------
 
@@ -371,13 +368,13 @@ nopfx s = maybe s id (stripPrefix funcPrefix s)
 variable :: String -> Reader State Value
 variable s' = do
   g <- ask
-  return $ doit g s'
+  doit g s'
     where
-    doit :: State -> String -> Value
+    doit :: State -> String -> Reader State Value
     doit g s | member s (constMap $ codeSpec g) =
-      maybe (error "impossible") (convExpr g . codeEquat) (Map.lookup s (constMap $ codeSpec g)) --extvar "Constants" s
-             | s `elem` (map codeName $ inputs $ codeSpec g) = (var "inParams")$->(var s)
-             | otherwise                        = var s
+      maybe (error "impossible") (convExpr . codeEquat) (Map.lookup s (constMap $ codeSpec g)) --extvar "Constants" s
+             | s `elem` (map codeName $ inputs $ codeSpec g) = return $ (var "inParams")$->(var s)
+             | otherwise                        = return $ var s
   
 fApp :: String -> [Value] -> Reader State Value
 fApp s' vl' = do
@@ -495,54 +492,60 @@ validunop (E.Cot e)          = validExpr e
 validunop _                  = False
 -}
 
-convExpr :: State -> Expr -> Value
-convExpr _ (V v)        = litString v  -- V constructor should be removed
-convExpr _ (Dbl d)      = litFloat d
-convExpr _ (Int i)      = litInt i
-convExpr _ (Bln b)      = litBool b
-convExpr _ ((Int a) :/ (Int b)) = (litFloat $ fromIntegral a) #/ (litFloat $ fromIntegral b) -- hack to deal with integer division
-convExpr g (a :/ b)     = (convExpr g a) #/ (convExpr g b)
-convExpr g (a :* b)     = (convExpr g a) #* (convExpr g b)
-convExpr g (a :+ b)     = (convExpr g a) #+ (convExpr g b)
-convExpr g (a :^ b)     = (convExpr g a) #^ (convExpr g b)
-convExpr g (0 :- b)     = (convExpr g (Neg b))
-convExpr g (a :- b)     = (convExpr g a) #- (convExpr g b)
-convExpr g (a :. b)     = (convExpr g a) #* (convExpr g b)
-convExpr g (a :&& b)    = (convExpr g a) ?&& (convExpr g b)
-convExpr g (a :|| b)    = (convExpr g a) ?|| (convExpr g b)
-convExpr _ (Deriv _ _ _) = litString "**convExpr :: Deriv unimplemented**"
-convExpr g (E.Not e)      = (?!) (convExpr g e)
-convExpr g (Neg e)      = (#~) (convExpr g e)
-convExpr g (C c)        = runReader (variable $ codeName $ codevar $ symbLookup c $ (sysinfodb $ codeSpec g) ^. symbolTable) g
-convExpr g (Index a i)  = (convExpr g a)$.(listAccess $ convExpr g i)
-convExpr g (Len a)      = (convExpr g a)$.listSize
-convExpr g (Append a v) = (convExpr g a)$.(listAppend $ convExpr g v)
-convExpr g (FCall (C c) x)  = runReader (fApp (codeName (codefunc $ symbLookup c $ (sysinfodb $ codeSpec g) ^. symbolTable)) (map (convExpr g) x)) g
-convExpr _ (FCall _ _)  = litString "**convExpr :: BinaryOp unimplemented**"
-convExpr g (a := b)     = (convExpr g a) ?== (convExpr g b)
-convExpr g (a :!= b)    = (convExpr g a) ?!= (convExpr g b)
-convExpr g (a :> b)     = (convExpr g a) ?> (convExpr g b)
-convExpr g (a :< b)     = (convExpr g a) ?< (convExpr g b)
-convExpr g (a :<= b)    = (convExpr g a) ?<= (convExpr g b)
-convExpr g (a :>= b)    = (convExpr g a) ?>= (convExpr g b)
-convExpr g (UnaryOp u)  = runReader (unop u) g
-convExpr g (Grouping e) = convExpr g e
-convExpr _ (BinaryOp _) = litString "**convExpr :: BinaryOp unimplemented**"
-convExpr _ (Case _)     = error "**convExpr :: Case should be dealt with separately**"
-convExpr _ _           = litString "**convExpr :: ? unimplemented**"
+convExpr :: Expr -> Reader State Value
+convExpr (V v)        = return $ litString v  -- V constructor should be removed
+convExpr (Dbl d)      = return $ litFloat d
+convExpr (Int i)      = return $ litInt i
+convExpr (Bln b)      = return $ litBool b
+convExpr ((Int a) :/ (Int b)) = return $ (litFloat $ fromIntegral a) #/ (litFloat $ fromIntegral b) -- hack to deal with integer division
+convExpr (a :/ b)     = liftM2 (#/) (convExpr a) (convExpr b)
+convExpr (a :* b)     = liftM2 (#*)  (convExpr a) (convExpr b)
+convExpr (a :+ b)     = liftM2 (#+)  (convExpr a) (convExpr b)
+convExpr (a :^ b)     = liftM2 (#^)  (convExpr a) (convExpr b)
+convExpr (0 :- b)     = convExpr (Neg b)
+convExpr (a :- b)     = liftM2 (#-)  (convExpr a) (convExpr b)
+convExpr (a :. b)     = liftM2 (#*)  (convExpr a) (convExpr b)
+convExpr (a :&& b)    = liftM2 (?&&) (convExpr a) (convExpr b)
+convExpr (a :|| b)    = liftM2 (?||) (convExpr a) (convExpr b)
+convExpr (Deriv _ _ _) = return $ litString "**convExpr :: Deriv unimplemented**"
+convExpr (E.Not e)      = fmap (?!) (convExpr e)
+convExpr (Neg e)      = fmap (#~) (convExpr e)
+convExpr (C c)        = do
+  g <- ask
+  variable $ codeName $ codevar $ symbLookup c $ (sysinfodb $ codeSpec g) ^. symbolTable
+convExpr (Index a i)  = liftM2 (\x y -> x$.(listAccess y)) (convExpr a) (convExpr i)
+convExpr (Len a)      = fmap ($.listSize) (convExpr a)
+convExpr (Append a v) = liftM2 (\x y -> x$.(listAppend y)) (convExpr a) (convExpr v)
+convExpr (FCall (C c) x)  = do
+  g <- ask
+  let info = sysinfodb $ codeSpec g
+  args <- mapM convExpr x
+  fApp (codeName (codefunc $ symbLookup c $ info ^. symbolTable)) args
+convExpr (FCall _ _)  = return $ litString "**convExpr :: BinaryOp unimplemented**"
+convExpr (a := b)     = liftM2 (?==) (convExpr a) (convExpr b)
+convExpr (a :!= b)    = liftM2 (?!=) (convExpr a) (convExpr b)
+convExpr (a :> b)     = liftM2 (?>)  (convExpr a) (convExpr b)
+convExpr (a :< b)     = liftM2 (?<)  (convExpr a) (convExpr b)
+convExpr (a :<= b)    = liftM2 (?<=) (convExpr a) (convExpr b)
+convExpr (a :>= b)    = liftM2 (?>=) (convExpr a) (convExpr b)
+convExpr (UnaryOp u)  = unop u
+convExpr (Grouping e) = convExpr e
+convExpr (BinaryOp _) = return $ litString "**convExpr :: BinaryOp unimplemented**"
+convExpr (Case _)     = error "**convExpr :: Case should be dealt with separately**"
+convExpr _           = return $ litString "**convExpr :: ? unimplemented**"
 
 unop :: UFunc -> Reader State Value
-unop (E.Sqrt e)         = ask >>= \g -> return $ (#/^) (convExpr g e)
-unop (E.Log e)          = ask >>= \g -> return $ I.log (convExpr g e)
-unop (E.Abs e)          = ask >>= \g -> return $ (#|) (convExpr g e)
-unop (E.Exp e)          = ask >>= \g -> return $ I.exp (convExpr g e)
-unop (E.Sin e)          = ask >>= \g -> return $ I.sin (convExpr g e)
-unop (E.Cos e)          = ask >>= \g -> return $ I.cos (convExpr g e)
-unop (E.Tan e)          = ask >>= \g -> return $ I.tan (convExpr g e)
-unop (E.Csc e)          = ask >>= \g -> return $ I.csc (convExpr g e)
-unop (E.Sec e)          = ask >>= \g -> return $ I.sec (convExpr g e)
-unop (E.Cot e)          = ask >>= \g -> return $ I.cot (convExpr g e)
-unop _                  = error "not implemented"
+unop (E.Sqrt e)  = fmap (#/^) (convExpr e)
+unop (E.Log e)   = fmap I.log (convExpr e)
+unop (E.Abs e)   = fmap (#|)  (convExpr e)
+unop (E.Exp e)   = fmap I.exp (convExpr e)
+unop (E.Sin e)   = fmap I.sin (convExpr e)
+unop (E.Cos e)   = fmap I.cos (convExpr e)
+unop (E.Tan e)   = fmap I.tan (convExpr e)
+unop (E.Csc e)   = fmap I.csc (convExpr e)
+unop (E.Sec e)   = fmap I.sec (convExpr e)
+unop (E.Cot e)   = fmap I.cot (convExpr e)
+unop _           = error "not implemented"
 
 
 containsCase :: Expr -> Bool
@@ -651,34 +654,34 @@ genFunc (FCD cd) = genCalcFunc cd
 
 convStmt :: FuncStmt -> Reader State Statement
 convStmt (FAsg v e) = do
-  g <- ask
-  assign (var $ codeName v) (convExpr g e)
+  e' <- convExpr e
+  assign (var $ codeName v) e'
 convStmt (FFor v e st) = do
-  g <- ask
   stmts <- mapM convStmt st
-  return $ for (varDecDef (codeName v) int (litInt 0)) (convExpr g e) ((&++) (var (codeName v)))
+  e' <- convExpr e
+  return $ for (varDecDef (codeName v) int (litInt 0)) e' ((&++) (var (codeName v)))
                [ block stmts ]
 convStmt (FWhile e st) = do
-  g <- ask 
   stmts <- mapM convStmt st
-  return $ while (convExpr g e) [ block stmts ]
+  e' <- convExpr e
+  return $ while e' [ block stmts ]
 convStmt (FCond e tSt []) = do
-  g <- ask
   stmts <- mapM convStmt tSt
-  return $ ifCond [(convExpr g e, [ block stmts ])] noElse
+  e' <- convExpr e
+  return $ ifCond [(e', [ block stmts ])] noElse
 convStmt (FCond e tSt eSt) = do
-  g <- ask
   stmt1 <- mapM convStmt tSt
   stmt2 <- mapM convStmt eSt
-  return $ ifCond [(convExpr g e, [ block stmt1 ])] [ block stmt2 ]
-convStmt (FRet e) = ask >>= \g -> return $ I.return $ convExpr g e
+  e' <- convExpr e
+  return $ ifCond [(e', [ block stmt1 ])] [ block stmt2 ]
+convStmt (FRet e) = fmap I.return (convExpr e)
 convStmt (FThrow s) = return $ throw s
 convStmt (FTry t c) = do
   stmt1 <- mapM convStmt t
   stmt2 <- mapM convStmt c
   return $ tryCatch [ block stmt1 ] [ block stmt2 ]
 convStmt (FContinue) = return continue
-convStmt (FVal e) = ask >>= \g -> return $ valStmt $ convExpr g e
+convStmt (FVal e) = fmap valStmt $ convExpr e
 convStmt (FDec v (C.List t)) = return $ listDec' (codeName v) (convType t) 0
 convStmt (FDec v t) = return $ varDec (codeName v) (convType t)
 

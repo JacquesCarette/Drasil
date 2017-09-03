@@ -681,8 +681,8 @@ convStmt (FDec v t) = return $ varDec (codeName v) (convType t)
 -- this is really ugly!!
 genDataFunc :: Name -> DataDesc -> Reader State Method
 genDataFunc name dd = do
-    g <- ask
     parms <- getParams $ getInputs dd
+    inD <- mapM inData dd
     publicMethod methodTypeVoid name (p_filename : parms) $
       return $ body $ [
       varDec l_infile infile,
@@ -690,33 +690,32 @@ genDataFunc name dd = do
       listDec' l_lines string 0,
       listDec' l_linetokens string 0,
       openFileR v_infile v_filename ] ++
-      (concatMap (inData g) dd) ++ [
+      (concat inD) ++ [
       closeFile v_infile ]
-  where inData :: State -> Data -> [Statement]
-        inData g (Singleton v) = [getFileInput v_infile (convType $ codeType v) (runReader (variable $ codeName v) g)]
-        inData _ JunkData = [discardFileLine v_infile]
-        inData g (Line lp d) =
-          [ getFileInputLine v_infile v_line,
-            stringSplit v_linetokens v_line d
-          ] ++ (runReader (lineData lp (litInt 0)) g)
-        inData g (Lines lp Nothing d) =
-          [ getFileInputAll v_infile v_lines,
-            for (varDecDef l_i int (litInt 0)) (v_i ?< v_lines$.listSize) ((&++) v_i)
-              ( body
-                ( [ stringSplit v_linetokens (v_lines$.(listAccess v_i)) d
-                  ] ++ (runReader (lineData lp v_i) g)
-                )
-              )
-          ]
-        inData g (Lines lp (Just numLines) d) =
-          [ for (varDecDef l_i int (litInt 0)) (v_i ?< (litInt numLines)) ((&++) v_i)
+  where inData :: Data -> Reader State [Statement]
+        inData (Singleton v) = do
+          vv <- variable $ codeName v
+          return [getFileInput v_infile (convType $ codeType v) vv]
+        inData JunkData = return [discardFileLine v_infile]
+        inData (Line lp d) = do
+          ln <- lineData lp (litInt 0)
+          return $ [ getFileInputLine v_infile v_line, stringSplit v_linetokens v_line d ] ++ ln
+        inData (Lines lp Nothing d) = do
+          ln <- lineData lp v_i
+          return $ [ getFileInputAll v_infile v_lines,
+              for (varDecDef l_i int (litInt 0)) (v_i ?< v_lines$.listSize) ((&++) v_i)
+                ( body ( [ stringSplit v_linetokens (v_lines$.(listAccess v_i)) d ] ++ ln))
+            ]
+        inData (Lines lp (Just numLines) d) = do
+          ln <- lineData lp v_i
+          return $ [ for (varDecDef l_i int (litInt 0)) (v_i ?< (litInt numLines)) ((&++) v_i)
               ( body
                 ( [ getFileInputLine v_infile v_line,
                     stringSplit v_linetokens v_line d
-                  ] ++ (runReader (lineData lp v_i) g)
+                  ] ++ ln
                 )
               )
-          ]
+            ]
         ---------------
         lineData :: LinePattern -> Value -> Reader State [Statement]
         lineData (Straight p) lineNo = patternData p lineNo (litInt 0)

@@ -330,17 +330,21 @@ genMainFunc =
     g <- ask
     let args1 x = getArgs $ codevars' (codeEquat x) $ sysinfodb $ codeSpec g
     args2 <- getArgs $ outputs $ codeSpec g
+    gi <- fApp (funcPrefix ++ "get_input") [v_filename, v_params]
+    dv <- fApp "derived_values" [v_params]
+    ic <- fApp "input_constraints" [v_params]
+    varDef <- mapM (\x -> do
+      args <- args1 x
+      cn <- fApp (codeName x) args
+      return $ varDecDef (nopfx $ codeName x) (convType $ codeType x) cn) (execOrder $ codeSpec g)
+    wo <- fApp "write_output" args2
     return $ mainMethod $ body $ [
       varDecDef l_filename string $ arg 0 ,
       objDecNewVoid l_params "InputParameters" (obj "InputParameters") ,
-      valStmt $ fApp g (funcPrefix ++ "get_input") [v_filename, v_params] ,
-      valStmt $ fApp g "derived_values" [v_params] ,
-      valStmt $ fApp g "input_constraints" [v_params]
-      ] ++ map (\x -> varDecDef (nopfx $ codeName x) (convType $ codeType x)
-                    (fApp g (codeName x) (runReader (args1 x) g)))
-          (execOrder $ codeSpec g)
-      ++ [ valStmt $ fApp g "write_output" args2 ]
-
+      valStmt gi,
+      valStmt dv,
+      valStmt ic
+      ] ++ varDef ++ [ valStmt wo ]
 
 -----
 
@@ -375,13 +379,17 @@ variable s' = do
              | s `elem` (map codeName $ inputs $ codeSpec g) = (var "inParams")$->(var s)
              | otherwise                        = var s
   
-fApp :: State -> String -> ([Value] -> Value)
-fApp g s
-  | member s (eMap $ codeSpec g) =
+fApp :: String -> [Value] -> Reader State Value
+fApp s' vl' = do
+  g <- ask
+  return $ doit g s' vl'
+  where
+    doit :: State -> String -> [Value] -> Value
+    doit g s vl | member s (eMap $ codeSpec g) =
       maybe (error "impossible")
-        (\x -> if x /= currentModule g then funcApp x s else funcApp' s)
+        (\x -> if x /= currentModule g then funcApp x s vl else funcApp' s vl)
         (Map.lookup s (eMap $ codeSpec g))
-  | otherwise = funcApp' s
+                | otherwise = funcApp' s vl
 
 getParams :: [CodeChunk] -> Reader State [Parameter]
 getParams cs = do
@@ -509,7 +517,7 @@ convExpr g (C c)        = runReader (variable $ codeName $ codevar $ symbLookup 
 convExpr g (Index a i)  = (convExpr g a)$.(listAccess $ convExpr g i)
 convExpr g (Len a)      = (convExpr g a)$.listSize
 convExpr g (Append a v) = (convExpr g a)$.(listAppend $ convExpr g v)
-convExpr g (FCall (C c) x)  = fApp g (codeName (codefunc $ symbLookup c $ (sysinfodb $ codeSpec g) ^. symbolTable)) (map (convExpr g) x)
+convExpr g (FCall (C c) x)  = runReader (fApp (codeName (codefunc $ symbLookup c $ (sysinfodb $ codeSpec g) ^. symbolTable)) (map (convExpr g) x)) g
 convExpr _ (FCall _ _)  = litString "**convExpr :: BinaryOp unimplemented**"
 convExpr g (a := b)     = (convExpr g a) ?== (convExpr g b)
 convExpr g (a :!= b)    = (convExpr g a) ?!= (convExpr g b)

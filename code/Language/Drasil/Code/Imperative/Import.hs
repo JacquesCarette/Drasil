@@ -237,16 +237,16 @@ genOutputFormat outs =
   let l_outfile = "outfile"
       v_outfile = var l_outfile
   in do
-    g <- ask
     parms <- getParams outs
+    outp <- mapM (\x -> do
+        v <- variable $ codeName x
+        return [ printFileStr v_outfile ((codeName x) ++ " = "),
+                 printFileLn v_outfile (convType $ codeType x) v
+               ] ) outs
     publicMethod methodTypeVoid "write_output" parms (return [ block $ [
       varDec l_outfile outfile,
       openFileW v_outfile (litString "output.txt") ] ++
-      concatMap
-        (\x -> [ printFileStr v_outfile ((codeName x) ++ " = "),
-                 printFileLn v_outfile (convType $ codeType x) (runReader (variable $ codeName x) g)
-               ] ) outs ++ [
-      closeFile v_outfile ] ])
+      concat outp ++ [ closeFile v_outfile ] ])
 
 -----
 
@@ -361,25 +361,25 @@ nopfx s = maybe s id (stripPrefix funcPrefix s)
 variable :: String -> Reader State Value
 variable s' = do
   g <- ask
-  doit g s'
-    where
-    doit :: State -> String -> Reader State Value
-    doit g s | member s (constMap $ codeSpec g) =
-      maybe (error "impossible") (convExpr . codeEquat) (Map.lookup s (constMap $ codeSpec g)) --extvar "Constants" s
-             | s `elem` (map codeName $ inputs $ codeSpec g) = return $ (var "inParams")$->(var s)
+  let cs = codeSpec g
+      mm = constMap cs
+      doit :: String -> Reader State Value
+      doit s | member s mm =
+        maybe (error "impossible") (convExpr . codeEquat) (Map.lookup s mm) --extvar "Constants" s
+             | s `elem` (map codeName $ inputs cs) = return $ (var "inParams")$->(var s)
              | otherwise                        = return $ var s
+  doit s'
   
 fApp :: String -> [Value] -> Reader State Value
 fApp s' vl' = do
   g <- ask
-  return $ doit g s' vl'
-  where
-    doit :: State -> String -> [Value] -> Value
-    doit g s vl | member s (eMap $ codeSpec g) =
-      maybe (error "impossible")
-        (\x -> if x /= currentModule g then funcApp x s vl else funcApp' s vl)
-        (Map.lookup s (eMap $ codeSpec g))
+  let doit :: String -> [Value] -> Value
+      doit s vl | member s (eMap $ codeSpec g) =
+        maybe (error "impossible")
+          (\x -> if x /= currentModule g then funcApp x s vl else funcApp' s vl)
+          (Map.lookup s (eMap $ codeSpec g))
                 | otherwise = funcApp' s vl
+  return $ doit s' vl'
 
 getParams :: [CodeChunk] -> Reader State [Parameter]
 getParams cs = do
@@ -435,55 +435,6 @@ convType C.String = string
 convType (C.List t) = listT $ convType t
 convType (C.Object n) = obj n
 convType _ = error "No type conversion"
-
-{-
--- Some Expr can't be converted to code yet...
--- rather than stop execution with failure,
--- just check ahead of time and don't try to convert for now
-validExpr :: Expr -> Bool
-validExpr (V _)        = True
-validExpr (Dbl _)      = True
-validExpr (Int _)      = True
-validExpr (Bln _)      = True
-validExpr (a :/ b)     = (validExpr a) && (validExpr b)
-validExpr (a :* b)     = (validExpr a) && (validExpr b)
-validExpr (a :+ b)     = (validExpr a) && (validExpr b)
-validExpr (a :^ b)     = (validExpr a) && (validExpr b)
-validExpr (a :- b)     = (validExpr a) && (validExpr b)
-validExpr (a :. b)     = (validExpr a) && (validExpr b)
-validExpr (a :&& b)    = (validExpr a) && (validExpr b)
-validExpr (a :|| b)    = (validExpr a) && (validExpr b)
-validExpr (Deriv _ _ _) = False
-validExpr (E.Not e)      = validExpr e
-validExpr (Neg e)      = validExpr e
-validExpr (C _)        = True
-validExpr (FCall (C _) x)  = foldl (&&) True (map validExpr x)
-validExpr (FCall _ _)  = False
-validExpr (a := b)     = (validExpr a) && (validExpr b)
-validExpr (a :!= b)    = (validExpr a) && (validExpr b)
-validExpr (a :> b)     = (validExpr a) && (validExpr b)
-validExpr (a :< b)     = (validExpr a) && (validExpr b)
-validExpr (a :<= b)    = (validExpr a) && (validExpr b)
-validExpr (a :>= b)    = (validExpr a) && (validExpr b)
-validExpr (UnaryOp u)  = validunop u
-validExpr (Grouping e) = validExpr e
-validExpr (BinaryOp _) = False
-validExpr (Case c)     = foldl (&&) True (map (\(e, r) -> validExpr e && validExpr r) c)
-validExpr _            = False
-
-validunop :: UFunc -> Bool
-validunop (E.Sqrt e)         = validExpr e
-validunop (E.Log e)          = validExpr e
-validunop (E.Abs e)          = validExpr e
-validunop (E.Exp e)          = validExpr e
-validunop (E.Sin e)          = validExpr e
-validunop (E.Cos e)          = validExpr e
-validunop (E.Tan e)          = validExpr e
-validunop (E.Csc e)          = validExpr e
-validunop (E.Sec e)          = validExpr e
-validunop (E.Cot e)          = validExpr e
-validunop _                  = False
--}
 
 convExpr :: Expr -> Reader State Value
 convExpr (V v)        = return $ litString v  -- V constructor should be removed

@@ -95,7 +95,7 @@ symbol = qsymb
 -- eliminates units found in both list and combines the remainder to create the
 -- units of the equation. WORK IN PROGRESS
 
--- inferUnit :: Relation -> SymbolMap -> Maybe UnitDefn
+-- inferUnit :: HasSymbolTable ctx => Relation -> ctx -> Maybe UnitDefn
 -- inferUnit rel () = combine $ eliminate ([], []) $ convert symbtab $ findUnit rel ([], [])
   -- where combine (num, den) = 
           -- | 
@@ -121,7 +121,7 @@ symbol = qsymb
 -- analyze a True (num, den) = findUnit a (num, den)
 -- analyze a False (num, den) = findUnit a (den, num)
 
--- convert :: SymbolMap -> ([SF], [SF]) -> ([Maybe UnitDefn], [Maybe UnitDefn])
+-- convert :: HasSymbolTable ctx => ctx -> ([SF], [SF]) -> ([Maybe UnitDefn], [Maybe UnitDefn])
 -- convert (num, den) = combine ((reorder (map (\x -> getUnitLup x symbtab) num)) ([], []), reorder (map (\x -> getUnitLup x symbtab) den) ([], []))
 -- where reorder [] lst = lst
       -- reorder (frst:rst) lst = reorder rst (divide frst lst)

@@ -2,9 +2,8 @@ module Main (main) where
 
 import Language.Drasil
 
-import Drasil.HGHC.HGHC (srsBody, mgBody, misBody, hghcSymMap{-, modules-})
---import Drasil.HGHC.Modules (executable)
---import Drasil.HGHC.HeatTransfer (hghcSymMap)
+import Drasil.HGHC.HGHC (srsBody, mgBody, misBody {-, modules-})
+import Drasil.HGHC.HeatTransfer (allSymbols)
 
 docs :: [Recipe]
 docs = [
@@ -18,5 +17,5 @@ docs = [
 
 main :: IO ()            
 main = do
-  gen docs hghcSymMap
-  --genCode executable modules hghcSymMap
+  gen docs allSymbols
+  --genCode thisChoices thisCode

@@ -30,9 +30,9 @@ ctrOfMassEqn = (UnaryOp (Summation Nothing
 
 --FIXME: Why do QDefinitions only have term and not defn? They should have both!
 --FIXME: HACK - Adding fixme defn for now, since NP can't (currently) incorporate sentence.
-fixme :: NP
-fixme = nounPhraseSP $ "FIXME: THIS HACK NEEDS TO BE UPDATED TO A NOUNPHRASE, " ++
-  "SEE Drasil.GamePhysics.DataDefs for more info"
+--fixme :: NP
+--fixme = nounPhraseSP $ "FIXME: THIS HACK NEEDS TO BE UPDATED TO A NOUNPHRASE, " ++
+--  "SEE Drasil.GamePhysics.DataDefs for more info"
 {-
 linDispQDef :: Sentence
 linDispQDef = foldl (+:+) (EmptyS) def

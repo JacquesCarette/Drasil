@@ -15,8 +15,8 @@ import Language.Drasil.Chunk.Module
 import Language.Drasil.Chunk.NamedIdea (term)
 import Language.Drasil.Chunk.SymbolForm (SymbolForm)
 import Language.Drasil.Chunk.Concept (defn)
-import Language.Drasil.Chunk.VarChunk (VarChunk)
-import Language.Drasil.ChunkDB (SymbolMap, getUnitLup, symbLookup)
+import Language.Drasil.Chunk.Quantity (Quantity(..))
+import Language.Drasil.ChunkDB (getUnitLup, symbLookup, HasSymbolTable(..))
 import Language.Drasil.Config (verboseDDDescription, numberedDDEquations, numberedTMEquations)
 import Language.Drasil.Document
 import Language.Drasil.Symbol
@@ -26,7 +26,7 @@ import Language.Drasil.NounPhrase (phrase, titleize)
 import Language.Drasil.Unit (usymb)
 import Language.Drasil.Citations (Citation(..),CiteField(..))
 
-expr :: Expr -> SymbolMap -> T.Expr
+expr :: HasSymbolTable ctx => Expr -> ctx -> T.Expr
 expr (V v)              _ = T.Var  v
 expr (Dbl d)            _ = T.Dbl  d
 expr (Int i)            _ = T.Int  i
@@ -38,7 +38,7 @@ expr (a :^ b)          sm = T.Pow  (expr a sm) (expr b sm)
 expr (a :- b)          sm = T.Sub  (expr a sm) (expr b sm)
 expr (a :. b)          sm = T.Dot  (expr a sm) (expr b sm)
 expr (Neg a)           sm = T.Neg  (expr a sm)
-expr (C c)             sm = T.Sym  (symbol (symbLookup c sm))
+expr (C c)             sm = T.Sym  (symbol (symbLookup c (sm ^. symbolTable)))
 expr (Deriv Part a 1)  sm = T.Mul (T.Sym (Special Partial)) (expr a sm)
 expr (Deriv Total a 1) sm = T.Mul (T.Sym lD) (expr a sm)
 expr (Deriv Part a b)  sm = T.Frac (T.Mul (T.Sym (Special Partial)) (expr a sm))
@@ -68,13 +68,14 @@ expr (a  :<=> b)       sm = T.Iff   (expr a sm) (expr b sm)
 expr (IsIn  a b)       sm = T.IsIn  (map (flip expr sm) a) (set b)
 expr (NotIn a b)       sm = T.NotIn (map (flip expr sm) a) (set b)
 expr (State a b)       sm = T.State (map (flip quan sm) a) (expr b sm)
+expr _                 _  = error "Expression unimplemented in TeX"
 
 -- | Healper for translating Quantifier
-quan :: Quantifier -> SymbolMap -> T.Quantifier
+quan :: HasSymbolTable ctx => Quantifier -> ctx -> T.Quantifier
 quan (Forall e) sm = T.Forall (expr e sm)
 quan (Exists e) sm = T.Exists (expr e sm)
 
-ufunc :: UFunc -> SymbolMap -> (T.Function, T.Expr)
+ufunc :: HasSymbolTable ctx => UFunc -> ctx -> (T.Function, T.Expr)
 ufunc (Log e) sm = (T.Log, expr e sm)
 ufunc (Summation (Just (s, Low v, High h)) e) sm = 
   (T.Summation (Just ((s, expr v sm), expr h sm)), expr e sm)
@@ -96,10 +97,10 @@ ufunc (Product _ _) _ = error "TeX/Import.hs Incorrect use of Product"
 ufunc (Exp e) sm = (T.Exp, expr e sm)
 ufunc (Sqrt e) sm = (T.Sqrt, expr e sm)
 
-bfunc :: BiFunc -> SymbolMap -> (T.Function, [T.Expr])
+bfunc :: HasSymbolTable ctx => BiFunc -> ctx -> (T.Function, [T.Expr])
 bfunc (Cross e1 e2) sm = (T.Cross, map (flip expr sm) [e1,e2])
 
-rel :: Relation -> SymbolMap -> T.Expr
+rel :: HasSymbolTable ctx => Relation -> ctx -> T.Expr
 rel (a := b)  sm = T.Eq (expr a sm) (expr b sm)
 rel (a :!= b) sm = T.NEq (expr a sm) (expr b sm)
 rel (a :< b)  sm = T.Lt (expr a sm) (expr b sm)
@@ -125,7 +126,7 @@ set (DiscreteD a) = T.DiscreteD a
 set (DiscreteS a) = T.DiscreteS a
 
 -- | Helper function for translating Integrals (from 'UFunc')
-integral :: UFunc -> SymbolMap -> (T.Function, T.Expr)
+integral :: HasSymbolTable ctx => UFunc -> ctx -> (T.Function, T.Expr)
 integral (Integral (Just (Low v), Just (High h)) e wrtc) sm = 
   (T.Integral (Just (expr v sm), Just (expr h sm)) (int_wrt wrtc sm), expr e sm)
 integral (Integral (Just (High h), Just (Low v)) e wrtc) sm = 
@@ -142,10 +143,10 @@ integral (Integral (Nothing, Nothing) e wrtc) sm =
   (T.Integral (Nothing, Nothing) (int_wrt wrtc sm), expr e sm)
 integral _ _ = error "TeX/Import.hs Incorrect use of Integral"
 
-int_wrt :: (SymbolForm c) => c -> SymbolMap -> T.Expr
+int_wrt :: (SymbolForm c, HasSymbolTable ctx) => c -> ctx -> T.Expr
 int_wrt wrtc sm = expr (Deriv Total (C wrtc) 1) sm
 
-replace_divs :: Expr -> SymbolMap -> T.Expr
+replace_divs :: HasSymbolTable ctx => Expr -> ctx -> T.Expr
 replace_divs (a :/ b) sm = T.Div (replace_divs a sm) (replace_divs b sm)
 replace_divs (a :+ b) sm = T.Add (replace_divs a sm) (replace_divs b sm)
 replace_divs (a :* b) sm = T.Mul (replace_divs a sm) (replace_divs b sm)
@@ -153,7 +154,7 @@ replace_divs (a :^ b) sm = T.Pow (replace_divs a sm) (replace_divs b sm)
 replace_divs (a :- b) sm = T.Sub (replace_divs a sm) (replace_divs b sm)
 replace_divs a        sm = expr a sm
 
-spec :: Sentence -> SymbolMap -> T.Spec
+spec :: HasSymbolTable ctx => Sentence -> ctx -> T.Spec
 spec (S s)      _ = T.S s
 spec (Sy s)     _ = T.Sy s
 spec (EmptyS :+: b) sm = spec b sm
@@ -177,22 +178,22 @@ accent :: Accent -> Char -> Sentence
 accent Grave  s = S $ "\\`{" ++ (s : "}")
 accent Acute  s = S $ "\\'{" ++ (s : "}")
 
-makeDocument :: Document -> SymbolMap -> T.Document
+makeDocument :: HasSymbolTable ctx => Document -> ctx -> T.Document
 makeDocument (Document title author sections) sm = 
   T.Document (spec title sm) (spec author sm) (createLayout sections sm)
 
-layout :: Int -> SecCons -> SymbolMap -> T.LayoutObj
+layout :: HasSymbolTable ctx => Int -> SecCons -> ctx -> T.LayoutObj
 layout currDepth (Sub s) = sec (currDepth+1) s
 layout _         (Con c) = lay c
 
-createLayout :: Sections -> SymbolMap -> [T.LayoutObj]
+createLayout :: HasSymbolTable ctx => Sections -> ctx -> [T.LayoutObj]
 createLayout secs sm = map (flip (sec 0) sm) secs
 
-sec :: Int -> Section -> SymbolMap -> T.LayoutObj
+sec :: HasSymbolTable ctx => Int -> Section -> ctx -> T.LayoutObj
 sec depth x@(Section title contents) sm = 
   T.Section depth (spec title sm) (map (flip (layout depth) sm) contents) (spec (refName x) sm)
 
-lay :: Contents -> SymbolMap -> T.LayoutObj
+lay :: HasSymbolTable ctx => Contents -> ctx -> T.LayoutObj
 lay x@(Table hdr lls t b) sm
   | null lls || length hdr == length (head lls) = T.Table ((map (flip spec sm) hdr) :
       (map (map (flip spec sm)) lls)) (spec (refName x) sm) b (spec t sm)
@@ -202,7 +203,7 @@ lay x@(Table hdr lls t b) sm
 lay (Paragraph c)         sm = T.Paragraph (spec c sm)
 lay (EqnBlock c)          sm = T.EqnBlock (T.E (expr c sm))
 --lay (CodeBlock c)         = T.CodeBlock c
-lay x@(Definition _ c)    sm = T.Definition (makePairs c sm) (spec (refName x) sm)
+lay x@(Definition c)      sm = T.Definition (makePairs c sm) (spec (refName x) sm)
 lay (Enumeration cs)      sm = T.List $ makeL cs sm
 lay x@(Figure c f)        sm = T.Figure (spec (refName x) sm) (spec c sm) f
 lay x@(Module m)          sm = T.Module (formatName m) (spec (refName x) sm)
@@ -228,7 +229,7 @@ lay (IMod)             _ = T.Paragraph (T.EmptyS)  -- need to implement!
 lay (Bib bib)         sm = T.Bib $ map (flip layCite sm) bib
 
 -- | For importing bibliography
-layCite :: Citation -> SymbolMap -> T.Citation
+layCite :: HasSymbolTable ctx => Citation -> ctx -> T.Citation
 layCite (Book      fields) sm = T.Book      $ map (flip layField sm) fields
 layCite (Article   fields) sm = T.Article   $ map (flip layField sm) fields
 layCite (MThesis   fields) sm = T.MThesis   $ map (flip layField sm) fields
@@ -236,7 +237,7 @@ layCite (PhDThesis fields) sm = T.PhDThesis $ map (flip layField sm) fields
 layCite (Misc      fields) sm = T.Misc      $ map (flip layField sm) fields
 layCite (Online    fields) sm = T.Online    $ map (flip layField sm) fields
 
-layField :: CiteField -> SymbolMap -> T.CiteField
+layField :: HasSymbolTable ctx => CiteField -> ctx -> T.CiteField
 layField (Author     p)  _ = T.Author     p
 layField (Title      s) sm = T.Title      $ spec s sm
 layField (Series     s) sm = T.Series     $ spec s sm
@@ -258,18 +259,18 @@ layField (URL        n) sm = T.URL        $ spec n sm
 layField (HowPub     s) sm = T.HowPub     $ spec s sm
 layField (Editor     p)  _ = T.Editor     p
 
-makeL :: ListType -> SymbolMap -> T.ListType  
+makeL :: HasSymbolTable ctx => ListType -> ctx -> T.ListType  
 makeL (Bullet bs)      sm = T.Enum        $ (map (flip item sm) bs)
 makeL (Number ns)      sm = T.Item        $ (map (flip item sm) ns)
 makeL (Simple ps)      sm = T.Simple      $ map (\(x,y) -> (spec x sm, item y sm)) ps
 makeL (Desc ps)        sm = T.Desc        $ map (\(x,y) -> (spec x sm, item y sm)) ps
 makeL (Definitions ps) sm = T.Definitions $ map (\(x,y) -> (spec x sm, item y sm)) ps
 
-item :: ItemType -> SymbolMap -> T.ItemType
+item :: HasSymbolTable ctx => ItemType -> ctx -> T.ItemType
 item (Flat i)     sm = T.Flat   (spec i sm)
 item (Nested t s) sm = T.Nested (spec t sm) (makeL s sm) 
   
-makePairs :: DType -> SymbolMap -> [(String,[T.LayoutObj])]
+makePairs :: HasSymbolTable ctx => DType -> ctx -> [(String,[T.LayoutObj])]
 makePairs (Data c) m = [
   ("Label",       [T.Paragraph $ spec (titleize $ c ^. term) m]),
   ("Units",       [T.Paragraph $ spec (unit'2Contents c) m]),
@@ -286,7 +287,7 @@ makePairs Instance _ = error "Not yet implemented"
 makePairs TM _       = error "Not yet implemented"
 makePairs DD _       = error "Not yet implemented"
 
-makeUHPairs :: [(ModuleChunk,[ModuleChunk])] -> SymbolMap -> [(T.Spec,T.Spec)]
+makeUHPairs :: HasSymbolTable ctx => [(ModuleChunk,[ModuleChunk])] -> ctx -> [(T.Spec,T.Spec)]
 makeUHPairs []           _ = []
 makeUHPairs ((m,ms):xs) sm = (buildPairs m ms) ++ makeUHPairs xs sm
   where  buildPairs _ []        = []
@@ -301,16 +302,16 @@ eqnStyleDD = if numberedDDEquations then T.EqnBlock else T.Paragraph
 eqnStyleTM :: T.Contents -> T.LayoutObj
 eqnStyleTM = if numberedTMEquations then T.EqnBlock else T.Paragraph
   
-buildEqn :: QDefinition -> SymbolMap -> T.Spec  
+buildEqn :: HasSymbolTable ctx => QDefinition -> ctx -> T.Spec  
 buildEqn c sm = T.N (symbol c) T.:+: T.S " = " T.:+: T.E (expr (equat c) sm)
 
 -- Build descriptions in data defs based on required verbosity
-buildDDDescription :: QDefinition -> SymbolMap -> T.Spec
+buildDDDescription :: HasSymbolTable ctx => QDefinition -> ctx -> T.Spec
 buildDDDescription c m = descLines 
   (if verboseDDDescription then (vars (getQ c := equat c) m) else []) m
   where getQ (EC a _) = C a
 
-descLines :: [VarChunk] -> SymbolMap -> T.Spec  
+descLines :: (HasSymbolTable ctx, Quantity q) => [q] -> ctx -> T.Spec  
 descLines []    _   = error "No chunks to describe"
 descLines (vc:[]) m = (T.N (symbol vc) T.:+: 
   (T.S " is the " T.:+: (spec (phrase $ vc ^. term) m) T.:+:

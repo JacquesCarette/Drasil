@@ -175,7 +175,7 @@ data ProblemDescription where
 -- | Solution Characteristics Specification section
 data SolChSpec where
   SCSVerb :: Section -> SolChSpec
-  SCSProg :: [SCSSub] -> SymbolMap -> SolChSpec
+  SCSProg :: [SCSSub] -> SolChSpec
   
 -- | Solution Characteristics Specification subsections
 data SCSSub where
@@ -399,16 +399,16 @@ mkSSDProb _ (PDProg start progName end subSec) =
 
 mkSolChSpec :: SystemInformation -> SolChSpec -> Section
 mkSolChSpec _ (SCSVerb s) = s
-mkSolChSpec si (SCSProg l m) = 
+mkSolChSpec si (SCSProg l) = 
   SRS.solCharSpec [SSD.solutionCharSpecIntro (siSys si) inModSec] $ 
     foldr (mkSubSCS si) [] l
   where
     mkSubSCS :: SystemInformation -> SCSSub -> [Section] -> [Section]
     mkSubSCS _ (SCSSubVerb s) l' = s : l'
     mkSubSCS si' (TMs fields ts) l' = 
-      SSD.thModF (siSys si') (map (tmodel fields m) ts) : l'
-    mkSubSCS _ (DDs fields ds) l' =
-      SSD.dataDefnF EmptyS (map (ddefn fields m) ds) : l'
+      SSD.thModF (siSys si') (map (tmodel fields (_sysinfodb si')) ts) : l'
+    mkSubSCS si' (DDs fields ds) l' =
+      SSD.dataDefnF EmptyS (map (ddefn fields (_sysinfodb si')) ds) : l'
     mkSubSCS _ (GDs _ _) _ = error "GDs not yet implemented"
     mkSubSCS _ (IMs _ _) _ = error "IMs not yet implemented"
       --FIXME: need to keep track of DD intro.

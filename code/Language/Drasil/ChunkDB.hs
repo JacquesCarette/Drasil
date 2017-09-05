@@ -1,13 +1,13 @@
 module Language.Drasil.ChunkDB 
-  ( SymbolMap, symbolMap, symbLookup, getUnitLup 
-  , ChunkDB(..), cdb
+  ( symbolMap, symbLookup, getUnitLup 
+  , ChunkDB(..), cdb, HasSymbolTable(..)
   ) where
 
 import Language.Drasil.Chunk
 import Language.Drasil.Chunk.Quantity
 import Language.Drasil.Unit
 
-import Control.Lens ((^.))
+import Control.Lens ((^.), Simple, Lens)
 import qualified Data.Map as Map
 
 import Prelude hiding (id)
@@ -25,13 +25,19 @@ symbLookup c m = let lookC = Map.lookup (c ^. id) m in
         getS Nothing = error $ "Symbol: " ++ (c ^. id) ++ " not found in SymbolMap"
 
 -- | Gets a unit if it exists, or Nothing.        
-getUnitLup :: (Chunk c) => c -> SymbolMap -> Maybe UnitDefn
-getUnitLup c m = let lookC = symbLookup c m in
+getUnitLup :: HasSymbolTable s => (Chunk c) => c -> s -> Maybe UnitDefn
+getUnitLup c m = let lookC = symbLookup c (m ^. symbolTable) in
                  getUnit lookC
 
 -- | Our chunk databases. Should contain all the maps we will need.
 data ChunkDB = CDB { symbs :: SymbolMap } --TODO: Expand and add more databases
 
-cdb :: SymbolMap -> ChunkDB
-cdb = CDB
+cdb :: (Quantity c) => [c] -> ChunkDB
+cdb = CDB . symbolMap
+
+class HasSymbolTable s where
+  symbolTable :: Simple Lens s SymbolMap
+  
+instance HasSymbolTable ChunkDB where
+  symbolTable f (CDB s) = fmap CDB (f s)
   

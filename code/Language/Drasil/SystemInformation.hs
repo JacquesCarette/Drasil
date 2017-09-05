@@ -7,6 +7,7 @@ import Language.Drasil.Chunk.Quantity
 import Language.Drasil.Chunk.Concept
 import Language.Drasil.Chunk.Eq
 import Language.Drasil.Chunk.Constrained
+import Language.Drasil.ChunkDB (ChunkDB)
 import Language.Drasil.People
 import Language.Drasil.Unit
 
@@ -35,7 +36,8 @@ data SystemInformation where
   _outputs :: [i],
   _defSequence :: [Block QDefinition],
   _constraints :: [j], --TODO: Add SymbolMap OR enough info to gen SymbolMap
-  _constants :: [QDefinition]
+  _constants :: [QDefinition],
+  _sysinfodb :: ChunkDB
   } -> SystemInformation
   
 -- | for listing QDefs in SystemInformation

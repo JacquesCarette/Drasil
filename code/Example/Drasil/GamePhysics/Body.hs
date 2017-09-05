@@ -33,7 +33,7 @@ import Data.Drasil.Software.Products (videoGame, openSource, sciCompS)
 import qualified Drasil.SRS as SRS
 import qualified Drasil.Sections.ReferenceMaterial as RM
 
-import Drasil.GamePhysics.Unitals (cpSymbols, cpSymbolsAll, cpOutputConstraints,
+import Drasil.GamePhysics.Unitals (cpSymbolsAll, cpOutputConstraints,
   inputSymbols, outputSymbols, cpInputConstraints)
 import Drasil.GamePhysics.Concepts (chipmunk, cpAcronyms, twoD)
 import Drasil.GamePhysics.TMods (cpTMods)
@@ -88,7 +88,8 @@ chipmunkSysInfo = SI {
   _outputs = (outputSymbols), 
   _defSequence = (cpQDefs), 
   _constraints = cpInputConstraints,
-  _constants = []
+  _constants = [],
+  _sysinfodb = everything
 }
 
 --FIXME: All named ideas, not just acronyms.
@@ -102,8 +103,8 @@ chipmunkMG = mgDoc chipmunk (for'' titleize short) auths mgBod
 mgBod :: [Section]
 (mgBod, _) = makeDD likelyChanges unlikelyChanges reqs modules
 
-cpSymbMap :: SymbolMap
-cpSymbMap = symbolMap cpSymbolsAll
+everything :: ChunkDB
+everything = cdb cpSymbolsAll
 
 
 chipChoices :: Choices
@@ -119,7 +120,7 @@ chipChoices = Choices {
 }
 
 chipCode :: CodeSpec
-chipCode = codeSpec' chipmunkSysInfo chipChoices [] cpSymbMap
+chipCode = codeSpec' chipmunkSysInfo []
 
 
 --FIXME: The SRS has been partly switched over to the new docLang, so some of
@@ -204,7 +205,7 @@ s2_4_intro = foldlSent
 --------------------------------------------
 
 s3 :: Section
-s3 = assembler chipmunk cpSymbMap generalSystemDescriptionSect
+s3 = assembler chipmunk everything generalSystemDescriptionSect
   [userCharacteristicSect, systemConstraintSect]
 
 generalSystemDescriptionSect :: SubSec
@@ -247,7 +248,7 @@ s4 = specSysDescr physLib [s4_1, s4_2]
 s4_1 :: Section
 s4_1_intro :: Sentence
 
-s4_1 = assembler chipmunk cpSymbMap problemDescriptionSect [termAndDefSect, 
+s4_1 = assembler chipmunk everything problemDescriptionSect [termAndDefSect, 
   goalStatementSect]
 
 problemDescriptionSect :: SubSec
@@ -350,7 +351,7 @@ s4_1_2_list = enumSimple 1 (getAcc goalStmt) s4_1_2_list'
 --------------------------------------------------
 
 s4_2 :: Section
-s4_2 = assembler chipmunk cpSymbMap scsSect [assumSec, tModSec, genDefSec,
+s4_2 = assembler chipmunk everything scsSect [assumSec, tModSec, genDefSec,
   iModSec, dataDefSec, dataConSec]
 
 assumSec, tModSec, genDefSec, iModSec, dataDefSec, dataConSec, scsSect :: SubSec
@@ -638,13 +639,13 @@ s8_instaModelRef, s8_assumpRef, s8_funcReqRef, s8_goalstmtRef,
   s8_dataRef :: [Sentence]
 
 s8_instaModel = ["IM1", "IM2", "IM3"]
-s8_instaModelRef = map (refFromType Theory cpSymbMap) iModels
+s8_instaModelRef = map (refFromType Theory) iModels
 
 s8_theoryModel = ["T1", "T2", "T3", "T4", "T5"]
-s8_theoryModelRef = map (refFromType Theory cpSymbMap) cpTMods
+s8_theoryModelRef = map (refFromType Theory) cpTMods
 
 s8_dataDef = ["DD1","DD2","DD3","DD4","DD5","DD6","DD7","DD8"]
-s8_dataDefRef = map (refFromType Data cpSymbMap) cpDDefs
+s8_dataDefRef = map (refFromType Data) cpDDefs
 
 s8_assump = ["A1", "A2", "A3", "A4", "A5", "A6", "A7"]
 s8_assumpRef = makeListRef s4_2_1_list_a s4_1

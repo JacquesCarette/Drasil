@@ -22,7 +22,7 @@ import Language.Drasil
 import Data.Drasil.Concepts.Math (equation, law)
 import Data.Drasil.Concepts.Computation
 import Data.Drasil.Concepts.Software (program)
-import Data.Drasil.Utils (foldle, symbolMapFun)
+import Data.Drasil.Utils (foldle)
 import Data.Drasil.SentenceStructures
 import qualified Data.Drasil.Concepts.Documentation as Doc
 import Data.List (find)
@@ -36,7 +36,7 @@ data SecItem where
   TMods     :: [RelationConcept] -> SecItem
   IMods     :: [RelationConcept] -> SecItem
   DataDef   :: [QDefinition] -> SecItem
-  GenDef    :: [RelationConcept] -> SecItem
+  --GenDef    :: [RelationConcept] -> SecItem
   ConChunk  :: [ConceptChunk] -> SecItem
   Sent      :: [Sentence] -> SecItem
   UnQuantI  :: [UncertQ] -> SecItem
@@ -220,17 +220,17 @@ pullIMods xs = pullFunc xs getIMods hasIMods
 pullTMods :: [SecItem] -> [RelationConcept]
 pullTMods xs = pullFunc xs getTMods hasTMods
 
-getID :: SubSec -> String
-getID (SectionModel niname _) = niname ^. id
+--getID :: SubSec -> String
+--getID (SectionModel niname _) = niname ^. id
 
-pullSubSec :: (NamedIdea a) => a -> [SubSec] -> Maybe SubSec
-pullSubSec nameid ls = getItem (\x -> (getID x) == (nameid ^. id)) ls
+--pullSubSec :: (NamedIdea a) => a -> [SubSec] -> Maybe SubSec
+--pullSubSec nameid ls = getItem (\x -> (getID x) == (nameid ^. id)) ls
 
 -----------------------
 -- Section Assembler --
 -----------------------
 
-assembler :: NamedIdea c => c -> SymbolMap -> SubSec -> [SubSec] -> Section
+assembler :: (NamedIdea c, HasSymbolTable s) => c -> s -> SubSec -> [SubSec] -> Section
 assembler progName symMap thisSection subsecs = 
   (sectionMap progName thisSection) subsections
   where subsections = map (render progName symMap) subsecs 
@@ -245,12 +245,13 @@ sectionMap progName (SectionModel niname xs)
     [genenralSystemIntro]
   | compareID niname  (Doc.requirement ^. id)              = section (titleize niname)
     [requirementsIntro]
+  | otherwise                                              = error "no matches on section name"
 
 --------------------
 -- Section Render --
 --------------------
 
-render :: (NamedIdea c) => c -> SymbolMap -> SubSec -> Section
+render :: (NamedIdea c, HasSymbolTable s) => c -> s -> SubSec -> Section
 render progName symMap item@(SectionModel niname _)
   | compareID niname (Doc.assumption ^. id)       = assumptionSect        item
   | compareID niname (Doc.thModel ^. id)          = theoreticalModelSect  item symMap progName
@@ -300,33 +301,33 @@ assumptionSect (SectionModel niname xs) = section (titleize' niname)
   (assumpIntro:(pullContents xs)) (pullSections xs)
 
 
-theoreticalModelSect :: (NamedIdea a) => SubSec -> SymbolMap -> a -> Section
-theoreticalModelSect (SectionModel niname xs) syMap progName = section
+theoreticalModelSect :: (NamedIdea a, HasSymbolTable s) => SubSec -> s -> a -> Section
+theoreticalModelSect (SectionModel niname xs) _ progName = section
   (titleize' niname) ((tModIntro progName):theoreticalModels ++ 
   (pullContents xs)) (pullSections xs)
   where theoreticalModels = map symMap $ pullTMods xs
-        symMap            = symbolMapFun syMap Theory
+        symMap            = Definition . Theory
 
 
-generalDefinitionSect :: SubSec -> SymbolMap -> Section
+generalDefinitionSect :: (HasSymbolTable s) => SubSec -> s -> Section
 generalDefinitionSect (SectionModel niname xs) _ = section (titleize' niname)
   (generalDefsIntro:contents) (pullSections xs)
   where generalDefsIntro = generalDefinitionIntro contents
         contents         = (pullContents xs)
 
 
-instanceModelSect :: SubSec -> SymbolMap -> Section
-instanceModelSect (SectionModel niname xs) syMap = section (titleize' niname)
+instanceModelSect :: (HasSymbolTable s) => SubSec -> s -> Section
+instanceModelSect (SectionModel niname xs) _ = section (titleize' niname)
   (iModIntro:instanceModels ++ (pullContents xs)) (pullSections xs)
-  where symMap         = symbolMapFun syMap Theory
+  where symMap         = Definition . Theory
         instanceModels = map symMap $ pullIMods xs
 
 
-dataDefinitionSect :: SubSec -> SymbolMap -> Section
-dataDefinitionSect (SectionModel niname xs) syMap = section (titleize' niname)
+dataDefinitionSect :: (HasSymbolTable s) => SubSec -> s -> Section
+dataDefinitionSect (SectionModel niname xs) _ = section (titleize' niname)
   (dataIntro:dataDefinitions ++ (pullContents xs)) (pullSections xs)
   where dataIntro       = dataDefinitionIntro $ pullSents xs
-        symMap          = (symbolMapFun (syMap) Data)
+        symMap          = Definition . Data
         dataDefinitions = map symMap $ pullDDefs xs
 
 

@@ -288,4 +288,5 @@ instance Ord CiteField where --FIXME: APA has year come directly after Author
   compare (URLdate _ _ _) _ = LT
   compare _ (URLdate _ _ _) = GT
   compare (Note       _) _ = LT
-  compare _ (Note       _) = GT
+  --compare _ (Note       _) = GT
+  

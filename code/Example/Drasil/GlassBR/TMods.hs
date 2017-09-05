@@ -1,7 +1,7 @@
 module Drasil.GlassBR.TMods (tModels, t1SafetyReq, t2SafetyReq) where
 
 import Drasil.GlassBR.Unitals (is_safe1, is_safe2, demand, 
-  glassBRSymbols, demandq, lRe, pb_tol, prob_br)
+  demandq, lRe, pb_tol, prob_br)
 import Drasil.GlassBR.IMods (calOfCap, calOfDe, probOfBr)
 import Drasil.GlassBR.Concepts (lResistance)
 
@@ -35,8 +35,8 @@ t2SafetyReq = makeRC "t2SafetyReq" (nounPhraseSP "Safety Requirement-2")
 t2descr :: Sentence
 t2descr = tDescr (is_safe2) s ending
   where 
-    s = ((getS is_safe1) +:+ sParen (S "from" +:+ (makeRef ((Definition
-      (symbolMap glassBRSymbols) . Theory) t1SafetyReq))) `sAnd` (getS is_safe2))
+    s = ((getS is_safe1) +:+ sParen (S "from" +:+ (makeRef ((Definition . Theory) 
+        t1SafetyReq))) `sAnd` (getS is_safe2))
     ending = (short lResistance) `isThe` (phrase lResistance) +:+ 
       sParen (S "also called capacity") `sC` S "as defined in" +:+. 
       (ref calOfCap) +:+ (getS demand) +:+ sParen (S "also referred as the" +:+ 
@@ -48,4 +48,4 @@ tDescr main s ending = foldlSent [S "If", getS main `sC` S "the glass is" +:+.
   S "considered safe", s +:+. S "are either both True or both False", ending]
 
 ref :: RelationConcept -> Sentence
-ref = makeRef . (Definition (symbolMap glassBRSymbols) . Theory)
+ref = makeRef . (Definition . Theory)

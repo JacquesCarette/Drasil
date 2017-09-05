@@ -99,7 +99,8 @@ ssp_si = SI {
   _outputs = (map qs sspOutputs),
   _defSequence = [Parallel (head sspDataDefs) (tail sspDataDefs)],
   _constraints = sspConstrained,
-  _constants = []
+  _constants = [],
+  _sysinfodb = sspSymMap
 }
 
 mkSRS :: DocDesc
@@ -134,18 +135,18 @@ sspChoices = Choices {
 }  
   
 ssp_code :: CodeSpec
-ssp_code = codeSpec' ssp_si sspChoices [sspInputMod] sspSymMap
+ssp_code = codeSpec' ssp_si [sspInputMod]
 
 
 -- SYMBOL MAP HELPERS --
-sspSymMap :: SymbolMap
-sspSymMap = symbolMap sspSymbols
+sspSymMap :: ChunkDB
+sspSymMap = cdb sspSymbols
 
 sspSymMapT :: RelationConcept -> Contents
-sspSymMapT = symbolMapFun sspSymMap Theory
+sspSymMapT = symbolMapFun Theory
 
 sspSymMapD :: QDefinition -> Contents
-sspSymMapD = symbolMapFun sspSymMap Data
+sspSymMapD = symbolMapFun Data
 
 -- SECTION 1 --
 --automatically generated in mkSRS -

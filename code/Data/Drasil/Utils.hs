@@ -32,7 +32,7 @@ import Control.Lens ((^.))
 import Language.Drasil {-(Sentence(Sy, P, EmptyS, S, (:+:), E), (+:+),
   ItemType(Flat), sParen, sSqBr, Contents(Definition, Enumeration), 
   makeRef, DType, Section, ListType(Simple, Bullet), getUnit, Quantity,
-  symbol, SymbolForm, SymbolMap, symbolMap, UnitDefn, usymb, Chunk, Expr(..),
+  symbol, SymbolForm, symbolMap, UnitDefn, usymb, Chunk, Expr(..),
   phrase, titleize, titleize', mkTable, Contents(Table), fromEqn, fromEqn', 
   UnitalChunk, QDefinition, term, id, unit, ucw)-}
 import Data.Drasil.Concepts.Documentation
@@ -153,8 +153,8 @@ itemRefToSent :: String -> Sentence -> Sentence
 itemRefToSent a b = S a +:+ sParen b
 
 -- | refFromType takes a function and returns a reference sentence
-refFromType :: (a -> DType) -> SymbolMap -> a -> Sentence
-refFromType f m = (makeRef . Definition m . f)
+refFromType :: (a -> DType) -> a -> Sentence
+refFromType f = (makeRef . Definition . f)
 
 -- | makeListRef takes a list and a reference and generates references to 
 --   match the length of the list
@@ -186,8 +186,8 @@ unwrap Nothing  = EmptyS
 
 -- Using symbolMap from Extract
 --FIXME: Not sure what type d should be
-symbolMapFun :: SymbolMap -> (a -> DType) -> a -> Contents
-symbolMapFun progSymbMap fun = (Definition progSymbMap . fun)
+symbolMapFun :: (a -> DType) -> a -> Contents
+symbolMapFun fun = (Definition . fun)
 
 -- Used to help make Qdefinitions when id, term, and symbol come from the same source
 mkDataDef :: (Quantity c) => c -> Expr -> QDefinition

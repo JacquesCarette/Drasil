@@ -1,10 +1,10 @@
 {-# LANGUAGE GADTs, Rank2Types #-}
 module Language.Drasil.Chunk.Code (
     CodeIdea(..), CodeEntity(..), CodeName(..), CodeChunk(..), CodeDefinition(..),
-    codevar, qtoc, codeEquat, 
+    codevar, codefunc, qtoc, qtov, codeEquat, 
     ConstraintMap, constraintMap, physLookup, sfwrLookup, constraintLookup,
     symbToCodeName, CodeType(..),
-    spaceToCodeType, toCodeName
+    spaceToCodeType, toCodeName, funcPrefix
   ) where
 
 import Control.Lens
@@ -28,6 +28,7 @@ import Language.Drasil.Misc (symbol)
 
 import Data.String.Utils (replace)
 import qualified Data.Map as Map
+
 import Prelude hiding (id)
 
 -- not using lenses for now
@@ -169,35 +170,47 @@ toCodeName s =
            varNameReplace l old = replace old "_" l
 
 
+funcPrefix :: String
+funcPrefix = "func_"
+           
 data CodeChunk where
-  CodeChunk :: (Quantity c) => c -> CodeChunk
+  CodeVar :: (Quantity c) => c -> CodeChunk
+  CodeFunc :: (Quantity c) => c -> CodeChunk
   
 instance Chunk CodeChunk where
   id = qslens id
 instance NamedIdea CodeChunk where
   term = qslens term
-  getA (CodeChunk n) = getA n
+  getA (CodeVar n) = getA n
+  getA (CodeFunc n) = getA n
 instance Quantity CodeChunk where
   typ = qslens typ
-  getSymb (CodeChunk c) = getSymb c
-  getUnit (CodeChunk c) = getUnit c
+  getSymb (CodeVar c) = getSymb c
+  getSymb (CodeFunc c) = getSymb c
+  getUnit (CodeVar c) = getUnit c
+  getUnit (CodeFunc c) = getUnit c
 instance CodeIdea CodeChunk where
-  codeName (CodeChunk c) = symbToCodeName (symbol c)
+  codeName (CodeVar c) = symbToCodeName (symbol c)                  
+  codeName (CodeFunc c) = funcPrefix ++ symbToCodeName (symbol c)
 instance CodeEntity CodeChunk where
-  codeType (CodeChunk c) = spaceToCodeType (c ^. typ)
+  codeType (CodeVar c) = spaceToCodeType (c ^. typ)
+  codeType (CodeFunc c) = spaceToCodeType (c ^. typ)
 instance Eq CodeChunk where
-  (CodeChunk c1) == (CodeChunk c2) = 
+  c1 == c2 = 
     (c1 ^. id) == (c2 ^. id)
 
 qslens :: (forall c. (Quantity c) => Simple Lens c a) 
            -> Simple Lens CodeChunk a
-qslens l f (CodeChunk a) = 
-  fmap (\x -> CodeChunk (set l x a)) (f (a ^. l))
-  
+qslens l f (CodeVar a) = 
+  fmap (\x -> CodeVar (set l x a)) (f (a ^. l))
+qslens l f (CodeFunc a) = 
+  fmap (\x -> CodeFunc (set l x a)) (f (a ^. l))  
   
 codevar :: (Quantity c) => c -> CodeChunk
-codevar = CodeChunk
-  
+codevar = CodeVar
+
+codefunc :: (Quantity c) => c -> CodeChunk
+codefunc = CodeFunc  
   
            
 data CodeDefinition where
@@ -226,7 +239,10 @@ qscdlens l f (CodeDefinition a b) =
   fmap (\x -> CodeDefinition (set l x a) b) (f (a ^. l)) 
   
 qtoc :: QDefinition -> CodeDefinition
-qtoc (EC q e) = CodeDefinition (codevar q) e
+qtoc (EC q e) = CodeDefinition (codefunc q) e
+
+qtov :: QDefinition -> CodeDefinition
+qtov (EC q e) = CodeDefinition (codevar q) e
 
 codeEquat :: CodeDefinition -> Expr
 codeEquat (CodeDefinition _ e) = e 
@@ -249,31 +265,6 @@ spaceToCodeType (S.DiscreteD _) = G.List (spaceToCodeType S.Rational)
 spaceToCodeType (S.DiscreteS _) = G.List (spaceToCodeType S.String)
 
 
--- codeExpr :: Expr -> Expr
--- codeExpr (a :/ b)     = (codeExpr a) :/ (codeExpr b)
--- codeExpr (a :* b)     = (codeExpr a) :* (codeExpr b)
--- codeExpr (a :+ b)     = (codeExpr a) :+ (codeExpr b)
--- codeExpr (a :^ b)     = (codeExpr a) :^ (codeExpr b)
--- codeExpr (a :- b)     = (codeExpr a) :- (codeExpr b)
--- codeExpr (a :. b)     = (codeExpr a) :. (codeExpr b)
--- codeExpr (a :&& b)    = (codeExpr a) :&& (codeExpr b)
--- codeExpr (a :|| b)    = (codeExpr a) :|| (codeExpr b)
--- codeExpr (Deriv a b c) = Deriv (codeExpr a) (codeExpr b) (codeExpr c)
--- codeExpr (Not e)      = Not (codeExpr e)
--- codeExpr (Neg e)      = Neg (codeExpr e)
--- codeExpr (C c)        = C (SFCN c)
--- codeExpr (FCall f x)  = FCall (codeExpr f) (map codeExpr x)
--- codeExpr (Case ls)    = Case (map (\(x,y) -> (codeExpr x, codeExpr y)) ls)
--- codeExpr (a := b)     = (codeExpr a) := (codeExpr b)
--- codeExpr (a :!= b)    = (codeExpr a) :!= (codeExpr b)
--- codeExpr (a :> b)     = (codeExpr a) :> (codeExpr b)
--- codeExpr (a :< b)     = (codeExpr a) :< (codeExpr b)
--- codeExpr (a :<= b)    = (codeExpr a) :<= (codeExpr b)
--- codeExpr (a :>= b)    = (codeExpr a) :>= (codeExpr b)
--- codeExpr (UnaryOp u)  = codeExpr (unpack u) m
--- codeExpr (Grouping e) = Grouping (codeExpr e)
--- codeExpr (BinaryOp b) = nub (concat $ map (\x -> codeExpr x m) (binop b))
-
 
 type ConstraintMap = Map.Map String [Constraint]
 
@@ -282,12 +273,12 @@ constraintMap cs = Map.fromList (map (\x -> ((x ^. id), (x ^. constraints))) cs)
 
 getPhys :: [Constraint] -> [(Expr -> Relation)]
 getPhys []            = []
-getPhys ((Phys c):cs) = [c] ++ getPhys cs
+getPhys ((Phys c):cs) = c:getPhys cs
 getPhys (_:cs)        = getPhys cs
 
 getSfwr :: [Constraint] -> [(Expr -> Relation)]
 getSfwr []            = []
-getSfwr ((Sfwr c):cs) = [c] ++ getSfwr cs
+getSfwr ((Sfwr c):cs) = c:getSfwr cs
 getSfwr (_:cs)        = getSfwr cs
 
 getConstraint :: Constraint -> (Expr -> Relation)

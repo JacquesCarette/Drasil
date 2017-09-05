@@ -52,30 +52,30 @@ v_x    = makeVC "v_x"      (nounPhraseSP "x")    lX -- = params.wtnt from mainFu
 v_v, v_x_z_1, v_y_z_1, v_x_z_2, v_y_z_2, v_mat, v_col,
   v_i, v_j, v_k, v_z, v_z_array, v_y_array, v_x_array, v_y, v_arr, v_filename :: VarChunk
 v_v       = makeVC "v_v"          (nounPhraseSP "v")       lV
-v_i       = makeVC "v_i"          (nounPhraseSP "i")       lI
-v_j       = makeVC "v_j"          (nounPhraseSP "j")       lJ
-v_k       = makeVC "v_k"          (nounPhraseSP "k")       (Atomic "k_2") -- k breaks things until we start using ids
+v_i       = vc "v_i"          (nounPhraseSP "i")       lI  Natural
+v_j       = vc "v_j"          (nounPhraseSP "j")       lJ  Natural
+v_k       = vc "v_k"          (nounPhraseSP "k")       (Atomic "k_2") Natural -- k breaks things until we start using ids
                                                                           -- in codegen (after refactor end of August)
 v_z       = makeVC "v_z"          (nounPhraseSP "z")       lZ
 v_z_array = vc "v_z_array" (nounPhraseSP "z_array") (sub (lZ) (Atomic "array")) (Vect Real)
 v_y_array = vc "v_y_array" (nounPhraseSP "y_array") (sub (lY) (Atomic "array")) (Vect $ Vect Real)
 v_x_array = vc "v_x_array" (nounPhraseSP "x_array") (sub (lX) (Atomic "array")) (Vect $ Vect Real)
 v_y       = makeVC "v_y"          (nounPhraseSP "y")       lY
-v_arr     = makeVC "v_arr"        (nounPhraseSP "arr")     (Atomic "arr") --FIXME: temporary variable for indInSeq?
-v_x_z_1   = makeVC "v_x_z_1"   (nounPhraseSP "x_z_1")     (Atomic "x_z_1")
-v_y_z_1   = makeVC "v_y_z_1"   (nounPhraseSP "y_z_1")     (Atomic "y_z_1")
-v_x_z_2   = makeVC "v_x_z_2"   (nounPhraseSP "x_z_2")     (Atomic "x_z_2")
-v_y_z_2   = makeVC "v_y_z_2"   (nounPhraseSP "y_z_2")     (Atomic "y_z_2")
-v_mat     = makeVC "v_mat"     (nounPhraseSP "mat")       (Atomic "mat")
-v_col     = makeVC "v_col"     (nounPhraseSP "col")       (Atomic "col")
-v_filename= makeVC "v_filename" (nounPhraseSP "filename") (Atomic "filename")
+v_arr     = vc "v_arr"        (nounPhraseSP "arr")     (Atomic "arr") (Vect Real)--FIXME: temporary variable for indInSeq?
+v_x_z_1   = vc "v_x_z_1"   (nounPhraseSP "x_z_1")     (Atomic "x_z_1") (Vect Real)
+v_y_z_1   = vc "v_y_z_1"   (nounPhraseSP "y_z_1")     (Atomic "y_z_1") (Vect Real)
+v_x_z_2   = vc "v_x_z_2"   (nounPhraseSP "x_z_2")     (Atomic "x_z_2") (Vect Real)
+v_y_z_2   = vc "v_y_z_2"   (nounPhraseSP "y_z_2")     (Atomic "y_z_2") (Vect Real)
+v_mat     = vc "v_mat"     (nounPhraseSP "mat")       (Atomic "mat") (Vect $ Vect Real)
+v_col     = vc "v_col"     (nounPhraseSP "col")       (Atomic "col") (Vect Real)
+v_filename= vc "v_filename" (nounPhraseSP "filename") (Atomic "filename") String
 
 linInterp :: Func
-linInterp = funcDef "lin_interp" [v_x_1, v_y_1, v_x_2, v_y_2, v_x] Rational 
+linInterp = funcDef "lin_interp" [v_x_1, v_y_1, v_x_2, v_y_2, v_x] Real 
   [ FRet $ (((C v_y_2) - (C v_y_1)) / ((C v_x_2) - (C v_x_1))) * ((C v_x) - (C v_x_1)) + (C v_y_1) ]
 
 indInSeq :: Func
-indInSeq = funcDef "indInSeq" [v_arr, v_v] Rational 
+indInSeq = funcDef "indInSeq" [v_arr, v_v] Natural 
   [
     ffor (v_i) (C v_i :< (Len (C v_arr) - 1))
       [ FCond (((Index (C v_arr) (C v_i)) :<= (C v_v)) :&& ((C v_v) :<= (Index (C v_arr) ((C v_i) + 1)))) [ FRet $ C v_i ] [] ],
@@ -83,7 +83,7 @@ indInSeq = funcDef "indInSeq" [v_arr, v_v] Rational
   ]
 
 matrixCol :: Func
-matrixCol = funcDef "matrixCol" [v_mat, v_j] Rational 
+matrixCol = funcDef "matrixCol" [v_mat, v_j] (Vect Real) 
   [
     fdec v_col (Vect Rational),
     ffor (v_i) (C v_i :< Len (C v_mat)) [ FVal (Append (C v_col) (Index (Index (C v_mat) (C v_i)) (C v_j))) ],
@@ -91,7 +91,7 @@ matrixCol = funcDef "matrixCol" [v_mat, v_j] Rational
   ]
 
 interpY :: Func
-interpY = funcDef "interpY" [{-v_x_array, v_y_array, v_z_array,-} v_filename, v_x, v_z] Rational 
+interpY = funcDef "interpY" [{-v_x_array, v_y_array, v_z_array,-} v_filename, v_x, v_z] Real
   [
     -- hack
   fdec v_x_array (Vect $ Vect Rational),
@@ -126,7 +126,7 @@ interpY = funcDef "interpY" [{-v_x_array, v_y_array, v_z_array,-} v_filename, v_
   ]  
   
 interpZ :: Func
-interpZ = funcDef "interpZ" [{-v_x_array, v_y_array, v_z_array,-} v_filename, v_x, v_y] Rational 
+interpZ = funcDef "interpZ" [{-v_x_array, v_y_array, v_z_array,-} v_filename, v_x, v_y] Real
   [
     -- hack
   fdec v_x_array (Vect $ Vect Rational),

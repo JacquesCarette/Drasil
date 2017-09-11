@@ -1,0 +1,66 @@
+Lenses  
+  - Neat, but are we really using them to their potential?
+  
+Context(s) 
+  - SymbolMap, etc. and the assoc classes (we can see from the context
+  whether a symboltable,...,etc. exists). Maps ids to requisite fields
+  
+Generator enforces symboltable
+  - no using uncaptured (undefined?) symbs
+
+Chunks - duh
+  - Really get into details?
+    - What do we consider NI, CI, CC, etc.?
+  - Mix and match classes to create more meaningful chunks 
+    (ConstrConcept = Conceptual Quantities)
+
+Gool Integration
+  - Multi-lang code generation
+
+Document.hs
+  - Data type for intermediate-stage document bodies
+
+DocumentLanguage.hs
+  - Language of document(s). A "little" language for writing 
+    artifacts which abstracts away commonalities.
+
+Referencing
+  - Auto-gen of refs; LayoutObj class with refName/rType
+
+Expression language - duh
+  - Needs to be Typed.
+
+NounPhrases and their associated functions (including those in Misc) 
+  - for handling some English language stuff?
+
+People 
+  - ? Is changing conventions interesting?
+  
+Recipe 
+  - Kind of redundant at this point, needs an upgrade
+  
+Spaces 
+  - Current and future - Discrete vs. Continuous
+  
+Sentence
+  - Intermediate repr - How we mix all these different types of information
+Symbol
+  - default ordering, combinations: X vs. X_min vs. X_max (All relate to X
+    and built from it -> if X changes, the others auto change)?
+
+SystemInfo 
+  - Mashup of most (all? not yet) requisite chunks
+
+Language of Units
+  - For building units; Derive from fundamental SI
+  
+Equations / QDefinitions
+  - Quantities with a defining equation (ie. of the form x = some expression)
+  
+ExprRelat
+  - Should be removed if not in use.
+  
+LCChunk / ReqChunk
+  - Doubt its usefulness
+  
+

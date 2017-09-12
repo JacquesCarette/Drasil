@@ -1,0 +1,165 @@
+Knowledge is Power (and Everything Else) 
+  \ds{Possible subtitle1 : Tool-supported Software Engineering}
+  \ds{P2 : Supporting a Knowledge-Centric approach}
+  \ds{P3: Capturing and Operationalizing Knowledge} {For Software Engineering} 
+  \ds{Or something else}
+  
+  
+=================
+Abstract
+=================
+
+=================
+1. Intro
+=================
+ - Massive variance in software quality available today
+  - Small-scale software
+  - One-off scripts
+  - Business software
+  - Large-scale software
+  - Safety-critical certified software
+  
+ - Scientific computing community deals with a subset of those
+  - differing scales of software, one-offs, safety-critical cert. soft.
+  
+ - Quality shouldn't be so wholly dependent on size of team / scale of project
+  - We (as Software Engineers) should be working to bridge the quality gap.
+  - Make it easier to develop maintainable, reusable, and certifiable software.
+  - Bring up re-dev case studies and problems with certification therein /
+    other issues with developing the software with all documentation (time, etc.)
+  - Standard dev models (waterfall) are cumbersome, but faking them is useful \cite
+  
+ - Many software projects (in SC) share the same base knowledge, but are often 
+    reimplemented by lone developers due to a lack of sufficient documentation / 
+    availability of others' software.
+    
+ - What should we do?  
+  - Let's take a different, more robust approach, improving qualities along the way.
+  - We should allow devs to focus on the underlying scientific knowledge as opposed 
+    to the SE/CS stuff.
+  - Use advances made in generation techniques and tools to take advantage
+    of captured/duplicate knowledge, not only from SE, but also from Scientific fields.
+  - ^ forms basis of our knowledge-centric approach.
+  
+=================
+2. Knowledge-Centric SE
+=================
+ - Focus on underlying knowledge
+ - Capture knowledge in a meaningful way
+ - Use it wherever necessary while maintaining full traceability (one-source)
+  - Transform knowledge as necessary for intended artifacts
+  - FIG: Single source -> multiple artifacts; Easy to trace
+ - Expedites prog family generation
+
+-----------------
+2.1 Capturing Knowledge
+-----------------
+ - Many different types of knowledge (theories, expressions, concepts, etc.)
+ - Need to capture all information around a piece of knowledge, even if it may
+    not seem relevant at this point in time.
+ - Captured knowledge is kept in a knowledge-base to be used inter- and intra-project
+ - Essentially building ontologies for specific disciplines over time
+ 
+-----------------
+2.2 Operationalizing Knowledge
+-----------------
+ - Knowledge base can be reused (touched on above)
+ - Use of Recipes -- create artifacts (views) of the knowledge
+  - Transforms knowledge into a relevant form (equations vs. executable code vs.
+    English language descriptions)
+  - Program families can be built quickly -- change decisions for one member to 
+    create another.
+
+=================
+3. Tool Support with Drasil
+=================
+ - For KCSE to be viable, we need a strong support framework.
+ - Brief intro to Drasil
+  - What is it / what can it do? Generate all the things! (Docs / Code)
+  - KC in Drasil
+  - Recipes
+  - Key Components (give brief intro to expand on later -- in 3.2)
+
+-----------------
+3.1 A Grounded Theory - Drasil's development (in a nutshell)
+-----------------
+ - Development following a Grounded Theory (cite terminology?) ie. Practical approach
+ - Go into detail a la SE-CSE paper
+
+-----------------
+3.2 Drasil Today
+-----------------
+\ds{Create subsections for some of these?}
+ - Talk about the design and the neat things from notes.txt
+ - FIG: Chunk class hierarchy
+ - Little languages
+ - Generator
+ - Gool incorporation?
+ - Sentences
+ - Handling some of English's weirdness for generation (NP)
+ - etc.
+
+=================
+4. GlassBR - A Case Study
+=================
+
+ - Introduce case studies and reimplementation stuff
+ - Focus on GlassBR to start (as it is most complete); we will also discuss
+    interesting findings from the other case studies afterwards
+ 
+\ds{Not sure what to show for GlassBR - Want to get really into it}
+-----------------
+4.1 Knowledge {GlassBR Aspect 1}
+-----------------
+ - FIG: SI_Units
+ - FIG: Specific chunks example
+
+-----------------
+4.2 SRS {GlassBR Aspect 2}
+-----------------
+ - FIG: Little language spec of SRS
+  - Walk through some of the generation aspect of the little lang?
+ 
+-----------------
+4.3 Code {GlassBR Aspect 3}
+-----------------
+ - GOOL stuff (might need a hand from Steven here)
+
+=================
+5. Interesting Results from Other Case Studies
+=================
+ - Each case study had some issue arise during reimplementation with Drasil.
+
+-----------------
+5.1 Common issues across projects
+-----------------
+ - Implementing symbol table revealed missing symbols
+ - Tedious (for human) sanity checks are 'free'; happen on every run of generator
+  - Found many errors involving symbols.
+  - Units can be checked to ensure they are consistent
+  - Constraints can be automatically guarded against
+
+-----------------
+5.2 SWHS
+-----------------
+ - Program family (SWHS and NoPCM)
+  - Much of NoPCM is imported (directly!) from SWHS
+ - Found some interesting errors
+  - Implementing symbol table revealed missing symbols;
+  - extraneous PCM symbols in NoPCM due to IM sharing
+
+-----------------
+5.3 SSP
+-----------------
+ - Symbols for quantities changed throughout the documentation
+  - Never noticed by a human! Found almost instantly by Drasil - new Symbols 
+    were undefined.
+
+=================
+6. Future Work
+=================
+
+=================
+7. Conclusion
+=================
+    

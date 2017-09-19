@@ -1,0 +1,182 @@
+% This is LLNCS.DEM the demonstration file of
+% the LaTeX macro package from Springer-Verlag
+% for Lecture Notes in Computer Science,
+% version 2.4 for LaTeX2e as of 16. April 2010
+%
+\documentclass{llncs}
+%
+\usepackage{makeidx}  % allows for indexgeneration
+%
+\begin{document}
+%
+\mainmatter              % start of the contributions
+%
+\title{Knowledge is Power (and Everything Else) \\ 
+Supporting Knowledge-Centric Software Engineering}
+%
+\titlerunning{Knowledge-Centric SE}  % abbreviated title (for running head)
+%                                     also used for the TOC unless
+%                                     \toctitle is used
+%
+\author{Dan~Szymczak\inst{1}\orcidID{0000-0002-9773-0602} \and
+\orcidID{0000-0000-0000-0000} \and
+\orcidID{0000-0000-0000-0000} \and
+\orcidID{0000-0000-0000-0000}}
+%
+\authorrunning{Szymczak et al.} % abbreviated author list (for running head)
+%
+%%%% list of authors for the TOC (use if author list has to be modified)
+%\tocauthor{Ivar Ekeland, Roger Temam, Jeffrey Dean, David Grove,
+%Craig Chambers, Kim B. Bruce, and Elisa Bertino}
+%
+\institute{McMaster University, Hamilton, ON, Canada,\\
+\email{szymczdm@mcmaster.ca}%,\\ WWW home page:
+%\texttt{http://users/\homedir iekeland/web/welcome.html}
+%\and
+%Universit\'{e} de Paris-Sud,
+%Laboratoire d'Analyse Num\'{e}rique, B\^{a}timent 425,\\
+%F-91405 Orsay Cedex, France
+}
+\maketitle              % typeset the title of the contribution
+
+\begin{abstract}
+The abstract should summarize the contents of the paper
+using at least 70 and at most 150 words. It will be set in 9-point
+font size and be inset 1.0 cm from the right and left margins.
+There will be two blank lines before and after the Abstract. \dots
+\keywords{computational geometry, graph theory, Hamilton cycles}
+\end{abstract}
+%
+\section{Introduction}
+
+Software today is developed on varying scales with differing scopes and aims. We see small-scale software, including one-off scripts, designed for a single purpose with a small user-base in mind. Business and large-scale software solutions are being used around the world with a massive user-bases. Safety-critical, certified software is also found globally with a user base in far more specialized fields than business software, yet the user-base are not the only ones affected by the software. Consider nuclear power control or medical imaging systems, they have the potential to affect many more people than those that actually use the software, hence why they must be certified and maintained at the highest quality.
+
+In the Scientific Computing (SC) community, we see the use of software at many scales, with many different quality standards. Regardless of scale, software can, and should, be developed to the highest possible standard. However, the overall quality of many projects, tends to suffer due to external factors including, but not limited to: the size of a development team, budget constraints, and project deadlines.
+  
+It is our view that software quality shouldn't be so wholly dependent on the size of the development team or scale of the project. We (as Software Engineers) should be working to bridge this quality gap by providing tools to facilitate easier creation of maintainable, reusable, and certifiable software. With that in mind, how can we accurately measure the quality of our software?
+
+\subsection{Quality Metrics}
+
+- Finding quality metrics is difficult - similar to finding metrics for productivity. Many have been proposed, but few correlations found after data analysis.%DS (FIND A SOURCE)
+- Let's stay away from ``fuzzy" concepts that we can't quite quantify.
+- Use traceability as a common-sense metric for maintainability.
+- Reuse can be measured through number of projects, though it isn't perfect (ie. highly specialized code may be reusable, but is only used in a small number of highly specialized projects)
+- Certifiability is simple to quantify (theoretically), but costly to test in practice (ie. put your software through the certification process. The number of software certified compared to those developed = our metric.%DS Those put up for certification would be good to check as well, but it skews the metric -- thoughts?)
+
+\subsection{The case for documentation}
+
+- Documentation goes hand in hand with quality -- we can't measure things like traceability without it. 
+
+- Bring up re-dev case studies and problems with certification therein /
+    other issues with developing the software with all documentation (time, etc.)
+- Standard dev models (waterfall) are cumbersome, but faking them is useful \cite{}
+
+- Many software projects (in SC) share the same base knowledge, but are often 
+    reimplemented by lone developers due to a lack of sufficient documentation or 
+    availability of others' software.
+- Knowledge duplication (from textbooks or across software projects) is bad! Stop it! Even if its necessary sometimes due to poor documentation.
+    
+\subsection{Proposed Solution}
+
+- What should we do?  
+  - Let's take a different, more robust approach, with an aim at improving qualities along the way.
+  - We should allow devs to focus on the underlying scientific knowledge as opposed 
+    to the SE/CS stuff.
+  - Use advances made in generation techniques and tools to take advantage
+    of captured/duplicate knowledge, not only from SE, but also from Scientific fields.
+  - \^ forms basis of our knowledge-centric approach.
+
+\section{Knowledge-Centric Software Engineering}
+ - Focus on underlying knowledge
+ - Capture knowledge in a meaningful way
+ - Use it wherever necessary while maintaining full traceability (one-source)
+  - Transform knowledge as necessary for intended artifacts
+  - FIG: Single source -> multiple artifacts; Easy to trace
+ - Expedites prog family generation
+ 
+\subsection{Capturing Knowledge}
+ - Many different types of knowledge (theories, expressions, concepts, etc.)
+ - Need to capture all information around a piece of knowledge, even if it may
+    not seem relevant at this point in time.
+ - Captured knowledge is kept in a knowledge-base to be used inter- and intra-project
+ - Essentially building ontologies for specific disciplines over time
+ 
+\subsection{Operationalizing Knowledge}
+ - Knowledge base can be reused (touched on above)
+ - Use of Recipes -- create artifacts (views) of the knowledge
+  - Transforms knowledge into a relevant form (equations vs. executable code vs.
+    English language descriptions)
+  - Program families can be built quickly -- change decisions for one member to 
+    create another.
+
+\section{Tool Support with Drasil}
+ - For KCSE to be viable, we need a strong support framework.
+ - Brief intro to Drasil
+  - What is it / what can it do? Generate all the things! (Docs / Code)
+  - KC in Drasil
+  - Recipes
+  - Key Components (give brief intro to expand on later -- in 3.2)
+
+\subsection{A Grounded Theory -- Drasil's development}
+ - Development following a Grounded Theory (cite terminology?) ie. Practical approach
+ - Go into detail a la SE-CSE paper
+
+\subsection{Drasil Today}
+ - Talk about the design and the neat things from notes.txt
+ - FIG: Chunk class hierarchy
+ - Little languages
+ - Generator
+ - Gool incorporation?
+ - Sentences
+ - Handling some of English's weirdness for generation (NP)
+ - etc.
+
+\section{GlassBR -- A Case Study}
+ - Introduce case studies and reimplementation stuff
+ - Focus on GlassBR to start (as it is most complete); we will also discuss
+    interesting findings from the other case studies afterwards
+
+\subsection{Knowledge}
+ - FIG: SI\_Units
+ - FIG: Specific chunks example
+
+\subsection{SRS}
+ - FIG: Little language spec of SRS
+  - Walk through some of the generation aspect of the little lang?
+
+\subsection{Code}
+ - GOOL stuff (might need a hand from Steven here)
+
+\section{Interesting Results from Other Case Studies}
+ - Each case study had some issue arise during reimplementation with Drasil.
+ 
+\subsection{Common Across Projects}
+ - Implementing symbol table revealed missing symbols
+ - Tedious (for human) sanity checks are 'free'; happen on every run of generator
+  - Found many errors involving symbols.
+  - Units can be checked to ensure they are consistent
+  - Constraints can be automatically guarded against
+
+\subsection{SWHS}
+ - Program family (SWHS and NoPCM)
+  - Much of NoPCM is imported (directly!) from SWHS
+ - Found some interesting errors
+  - Implementing symbol table revealed missing symbols;
+  - extraneous PCM symbols in NoPCM due to IM sharing
+
+\subsection{SSP}
+ - Symbols for quantities changed throughout the documentation
+  - Never noticed by a human! Found almost instantly by Drasil - new Symbols 
+    were undefined.\nocite{*}
+
+\section{Future Work}
+
+\section{Conclusion}
+
+%
+% ---- Bibliography ----
+%
+\newpage
+\bibliographystyle{splncs03}
+\bibliography{drasil}
+\end{document}

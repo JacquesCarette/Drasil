@@ -100,7 +100,7 @@ module Language.Drasil (
   , personWM', mononym
   -- CodeSpec
   , CodeSpec, codeSpec, codeSpec', Choices(..), ImplementationType(..)
-  , Logging(..), ConstraintBehaviour(..), Structure(..), Lang(..), Comments(..)
+  , Logging(..), ConstraintBehaviour(..), Structure(..), Comments(..)
   , defaultChoices
   , Mod(..), packmod, FuncDef(..), FuncStmt(..), funcDef, fasg, ffor, fdec -- hacks
   , relToQD, funcData, funcQD, Func(..), asExpr, asVC   -- hacks
@@ -112,6 +112,8 @@ module Language.Drasil (
   , Theory(..), tc', TheoryChunk, TheoryModel, tm, tw
   -- Chunk.SymbolForm
   , SF, SymbolChunk, sc
+  -- Code.Imperative.Lang
+  , Lang(..)
 ) where
 
 import Prelude hiding (log, sin, cos, tan, sqrt, id, return, print, break, exp, product)
@@ -172,3 +174,4 @@ import Language.Drasil.People (People, Person, person, HasName(..), manyNames
                                ,person', personWM, personWM', mononym, name)
 import Language.Drasil.CodeSpec
 import Language.Drasil.DataDesc
+import Language.Drasil.Code.Imperative.Lang

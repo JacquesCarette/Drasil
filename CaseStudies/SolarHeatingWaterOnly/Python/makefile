@@ -19,7 +19,7 @@ endif
 
 PY=python
 MAIN_SRC_FILE=main.py
-SRC_FILES=parameters.py load_params.py verify_params.py temperature.py energy.py verify_output.py plot.py output.py
+SRC_FILES=parameters.py load_params.py verify_params.py energy.py verify_output.py plot.py output.py
 INPUT_FILES = $(wildcard *.in)
 OUTPUT_FILES = $(patsubst %.in, %.out, $(INPUT_FILES))
 GRAPH_FILES = $(patsubst %.in, %.png, $(INPUT_FILES))

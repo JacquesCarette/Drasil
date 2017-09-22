@@ -1,31 +1,40 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML'></script>
 <html>
 <head>
 <link rel="stylesheet" type="text/css" href="SRS.css">
 <title>
-SRS for h_g and h_c
+Software Requirements Specification for Tiny
 </title>
 </head>
 <body>
 <div class="title">
 <h1>
-SRS for h<sub>g</sub> and h<sub>c</sub>
+Software Requirements Specification for Tiny
 </h1>
 </div>
 <div class="author">
 <h2>
-Spencer Smith
+W. Spencer Smith
 </h2>
 </div>
-<a id="Sec:ToU">
+<a id="Sec:RefeMate">
 <div class="section">
 <h2>
-Table of Units
+Reference Material
 </h2>
+<p class="paragraph">
+This section records information for easy reference.
+</p>
+<a id="Sec:TablofUnit">
+<div class="subsection">
+<h3>
+Table of Units
+</h3>
 <p class="paragraph">
 The unit system used throughout is SI (Syst&egrave;me International d'Unit&eacute;s). In addition to the basic units, several derived units are also used. For each unit, the table lists the symbol, a description and the SI name.
 </p>
-<a id="Table:ToU">
+<a id="Table:TablofUnit">
 <table class="table">
 <tr>
 <th>
@@ -93,26 +102,10 @@ luminous intensity (candela)
 </tr>
 <tr>
 <td>
-&deg;C
+Bq
 </td>
 <td>
-temperature (centigrade)
-</td>
-</tr>
-<tr>
-<td>
-J
-</td>
-<td>
-energy (joule)
-</td>
-</tr>
-<tr>
-<td>
-W
-</td>
-<td>
-power (watt)
+activity (becquerel)
 </td>
 </tr>
 <tr>
@@ -125,34 +118,66 @@ energy (calorie)
 </tr>
 <tr>
 <td>
-kW
+&deg;C
 </td>
 <td>
-power (kilowatt)
-</td>
-</tr>
-<tr>
-<td>
-Pa
-</td>
-<td>
-pressure (pascal)
+temperature (centigrade)
 </td>
 </tr>
 <tr>
 <td>
-N
+C
 </td>
 <td>
-force (newton)
+electric charge (coulomb)
 </td>
 </tr>
 <tr>
 <td>
-mm
+F
 </td>
 <td>
-length (millimetre)
+capacitance (farad)
+</td>
+</tr>
+<tr>
+<td>
+Gy
+</td>
+<td>
+absorbed dose (gray)
+</td>
+</tr>
+<tr>
+<td>
+H
+</td>
+<td>
+inductance (henry)
+</td>
+</tr>
+<tr>
+<td>
+Hz
+</td>
+<td>
+frequency (hertz)
+</td>
+</tr>
+<tr>
+<td>
+J
+</td>
+<td>
+energy (joule)
+</td>
+</tr>
+<tr>
+<td>
+kat
+</td>
+<td>
+catalytic activity (katal)
 </td>
 </tr>
 <tr>
@@ -165,25 +190,137 @@ pressure (kilopascal)
 </tr>
 <tr>
 <td>
+kW
+</td>
+<td>
+power (kilowatt)
+</td>
+</tr>
+<tr>
+<td>
+lm
+</td>
+<td>
+luminous flux (lumen)
+</td>
+</tr>
+<tr>
+<td>
+lx
+</td>
+<td>
+illuminance (lux)
+</td>
+</tr>
+<tr>
+<td>
+mm
+</td>
+<td>
+length (millimetre)
+</td>
+</tr>
+<tr>
+<td>
+N
+</td>
+<td>
+force (newton)
+</td>
+</tr>
+<tr>
+<td>
+&Omega;
+</td>
+<td>
+resistance (ohm)
+</td>
+</tr>
+<tr>
+<td>
+Pa
+</td>
+<td>
+pressure (pascal)
+</td>
+</tr>
+<tr>
+<td>
 rad
 </td>
 <td>
-angle (radians)
+angle (radian)
+</td>
+</tr>
+<tr>
+<td>
+S
+</td>
+<td>
+conductance (siemens)
+</td>
+</tr>
+<tr>
+<td>
+Sv
+</td>
+<td>
+dose equivalent (sievert)
+</td>
+</tr>
+<tr>
+<td>
+sr
+</td>
+<td>
+solid angle (steradian)
+</td>
+</tr>
+<tr>
+<td>
+T
+</td>
+<td>
+magnetic flux density (tesla)
+</td>
+</tr>
+<tr>
+<td>
+V
+</td>
+<td>
+voltage (volt)
+</td>
+</tr>
+<tr>
+<td>
+W
+</td>
+<td>
+power (watt)
+</td>
+</tr>
+<tr>
+<td>
+Wb
+</td>
+<td>
+magnetic flux (weber)
 </td>
 </tr>
 </table>
 </a>
 </div>
 </a>
-<a id="Sec:ToS">
-<div class="section">
-<h2>
+<a id="Sec:TablofSymb">
+<div class="subsection">
+<h3>
 Table of Symbols
-</h2>
+</h3>
 <p class="paragraph">
-The table that follows summarizes the symbols used in this document along with their units.  The choice of symbols was made with the goal of being consistent with the nuclear physics literature and that used in the FP manual.  The SI units are listed in brackets following the definition of the symbol.
+The table that follows summarizes the symbols used in this document along with their units. The choice of symbols was made to be consistent with the nuclear physics literature and with that used in the FP manual.
 </p>
-<a id="Table:ToS">
+<a id="Table:TablofSymb">
 <table class="table">
 <tr>
 <th>
@@ -198,43 +335,10 @@ Units
 </tr>
 <tr>
 <td>
-h<sub>b</sub>
+<em>h<sub>b</sub></em>
 </td>
 <td>
-initial coolant film conductance
-</td>
-<td>
-
-</td>
-</tr>
-<tr>
-<td>
-h<sub>c</sub>
-</td>
-<td>
-convective heat transfer coefficient between clad and coolant
-</td>
-<td>
-W/(m<sup>2</sup>&deg;C)
-</td>
-</tr>
-<tr>
-<td>
-h<sub>g</sub>
-</td>
-<td>
-effective heat transfer coefficient between clad and fuel surface
-</td>
-<td>
-W/(m<sup>2</sup>&deg;C)
-</td>
-</tr>
-<tr>
-<td>
-h<sub>p</sub>
-</td>
-<td>
-initial gap film conductance
+Initial coolant film conductance
 </td>
 <td>
 
@@ -242,10 +346,32 @@ initial gap film conductance
 </tr>
 <tr>
 <td>
-k<sub>c</sub>
+<em>h<sub>c</sub></em>
 </td>
 <td>
-clad conductivity
+Convective heat transfer coefficient between clad and coolant
+</td>
+<td>
+W/(m<sup>2</sup>&sdot;&deg;C)
+</td>
+</tr>
+<tr>
+<td>
+<em>h<sub>g</sub></em>
+</td>
+<td>
+Effective heat transfer coefficient between clad and fuel surface
+</td>
+<td>
+W/(m<sup>2</sup>&sdot;&deg;C)
+</td>
+</tr>
+<tr>
+<td>
+<em>h<sub>p</sub></em>
+</td>
+<td>
+Initial gap film conductance
 </td>
 <td>
 
@@ -253,10 +379,21 @@ clad conductivity
 </tr>
 <tr>
 <td>
-&tau;<sub>c</sub>
+<em>k<sub>c</sub></em>
 </td>
 <td>
-clad thickness
+Clad conductivity
+</td>
+<td>
+
+</td>
+</tr>
+<tr>
+<td>
+<em>&tau;<sub>c</sub></em>
+</td>
+<td>
+Clad thickness
 </td>
 <td>
 
@@ -266,20 +403,35 @@ clad thickness
 </a>
 </div>
 </a>
-<a id="Sec:DD">
+</div>
+</a>
+<a id="Sec:DataDefi">
 <div class="section">
 <h2>
 Data Definitions
 </h2>
+<p class="paragraph">
+This section collects and defines all the data needed to build the instance models.
+</p>
 <a id="DD:htTransCladFuel">
 <table class="ddefn">
+<tr>
+<th>
+Number
+</th>
+<td>
+<p class="paragraph">
+<b>DD</b>
+</p>
+</td>
+</tr>
 <tr>
 <th>
 Label
 </th>
 <td>
 <p class="paragraph">
-h<sub>g</sub>
+Effective Heat Transfer Coefficient Between Clad and Fuel Surface
 </p>
 </td>
 </tr>
@@ -289,7 +441,7 @@ Units
 </th>
 <td>
 <p class="paragraph">
-W/(m<sup>2</sup>&deg;C)
+W/(m<sup>2</sup>&sdot;&deg;C)
 </p>
 </td>
 </tr>
@@ -300,12 +452,12 @@ Equation
 <td>
 <a id="">
 <div class="equation">
-h<sub>g</sub> = <div class="fraction">
+<em>h<sub>g</sub></em> = <div class="fraction">
 <span class="fup">
-2k<sub>c</sub>h<sub>p</sub>
+2&#8239;<em>k<sub>c</sub></em>&#8239;<em>h<sub>p</sub></em>
 </span>
 <span class="fdn">
-2k<sub>c</sub>+&tau;<sub>c</sub>h<sub>p</sub>
+2&#8239;<em>k<sub>c</sub></em> &plus; <em>&tau;<sub>c</sub></em>&#8239;<em>h<sub>p</sub></em>
 </span>
 </div>
 </div>
@@ -318,7 +470,7 @@ Description
 </th>
 <td>
 <p class="paragraph">
-h<sub>g</sub> is the effective heat transfer coefficient between clad and fuel surface<br />k<sub>c</sub> is the clad conductivity<br />h<sub>p</sub> is the initial gap film conductance<br />&tau;<sub>c</sub> is the clad thickness
+<em>h<sub>g</sub></em> is the effective heat transfer coefficient between clad and fuel surface (W/(m<sup>2</sup>&sdot;&deg;C))<br /><em>k<sub>c</sub></em> is the clad conductivity<br /><em>h<sub>p</sub></em> is the initial gap film conductance<br /><em>&tau;<sub>c</sub></em> is the clad thickness
 </p>
 </td>
 </tr>
@@ -328,11 +480,21 @@ h<sub>g</sub> is the effective heat transfer coefficient between clad and fuel s
 <table class="ddefn">
 <tr>
 <th>
+Number
+</th>
+<td>
+<p class="paragraph">
+<b>DD</b>
+</p>
+</td>
+</tr>
+<tr>
+<th>
 Label
 </th>
 <td>
 <p class="paragraph">
-h<sub>c</sub>
+Convective Heat Transfer Coefficient Between Clad and Coolant
 </p>
 </td>
 </tr>
@@ -342,7 +504,7 @@ Units
 </th>
 <td>
 <p class="paragraph">
-W/(m<sup>2</sup>&deg;C)
+W/(m<sup>2</sup>&sdot;&deg;C)
 </p>
 </td>
 </tr>
@@ -353,12 +515,12 @@ Equation
 <td>
 <a id="">
 <div class="equation">
-h<sub>c</sub> = <div class="fraction">
+<em>h<sub>c</sub></em> = <div class="fraction">
 <span class="fup">
-2k<sub>c</sub>h<sub>b</sub>
+2&#8239;<em>k<sub>c</sub></em>&#8239;<em>h<sub>b</sub></em>
 </span>
 <span class="fdn">
-2k<sub>c</sub>+&tau;<sub>c</sub>h<sub>b</sub>
+2&#8239;<em>k<sub>c</sub></em> &plus; <em>&tau;<sub>c</sub></em>&#8239;<em>h<sub>b</sub></em>
 </span>
 </div>
 </div>
@@ -371,7 +533,7 @@ Description
 </th>
 <td>
 <p class="paragraph">
-h<sub>c</sub> is the convective heat transfer coefficient between clad and coolant<br />k<sub>c</sub> is the clad conductivity<br />h<sub>b</sub> is the initial coolant film conductance<br />&tau;<sub>c</sub> is the clad thickness
+<em>h<sub>c</sub></em> is the convective heat transfer coefficient between clad and coolant (W/(m<sup>2</sup>&sdot;&deg;C))<br /><em>k<sub>c</sub></em> is the clad conductivity<br /><em>h<sub>b</sub></em> is the initial coolant film conductance<br /><em>&tau;<sub>c</sub></em> is the clad thickness
 </p>
 </td>
 </tr>

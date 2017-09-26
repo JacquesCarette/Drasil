@@ -252,7 +252,7 @@ N
 Scaling Function: magnitude of interslice forces as a function of the x coordinatefor interslice index i; can be constant or a half-sine
 </td>
 <td>
-Unitless
+
 </td>
 </tr>
 <tr>
@@ -263,7 +263,7 @@ Unitless
 Factor of Safety: The global stability of a surface in a slope
 </td>
 <td>
-Unitless
+
 </td>
 </tr>
 <tr>
@@ -274,7 +274,7 @@ Unitless
 Local Factor of Safety: for slice index i
 </td>
 <td>
-Unitless
+
 </td>
 </tr>
 <tr>
@@ -318,7 +318,7 @@ m
 Index: used to show a quantity applies to only one slice
 </td>
 <td>
-Unitless
+
 </td>
 </tr>
 <tr>
@@ -384,7 +384,7 @@ Pa/m
 Earthquake Load Factor: proportionality factor of force that weight pushes outwards; caused by seismic earth movements
 </td>
 <td>
-Unitless
+
 </td>
 </tr>
 <tr>
@@ -472,7 +472,7 @@ N
 Number of Slices: the slip mass has been divided into
 </td>
 <td>
-Unitless
+
 </td>
 </tr>
 <tr>
@@ -593,7 +593,7 @@ N
 Local Index: used as a bound variable index in calculations
 </td>
 <td>
-Unitless
+
 </td>
 </tr>
 <tr>
@@ -604,7 +604,7 @@ Unitless
 Local Index: used as a bound variable index in calculations
 </td>
 <td>
-Unitless
+
 </td>
 </tr>
 <tr>
@@ -879,7 +879,7 @@ Pa
 Interslice Normal/shear Force Ratio: applied to all interslices
 </td>
 <td>
-Unitless
+
 </td>
 </tr>
 <tr>
@@ -901,7 +901,7 @@ Pa
 Poisson's Ratio: The ratio of perpendicular strain to parellel strain.
 </td>
 <td>
-Unitless
+
 </td>
 </tr>
 <tr>
@@ -934,7 +934,7 @@ Pa
 Function: generic minimization function or algorithm
 </td>
 <td>
-Unitless
+
 </td>
 </tr>
 <tr>
@@ -1108,6 +1108,14 @@ T
 </td>
 <td>
 Theoretical Model
+</td>
+</tr>
+<tr>
+<td>
+TU
+</td>
+<td>
+Typical Uncertainty
 </td>
 </tr>
 </table>
@@ -1650,7 +1658,7 @@ Equation
 <td>
 <a id="">
 <div class="equation">
-<em>N</em><sub><em>i</em></sub> = (<em>W</em><sub><em>i</em></sub> &minus; <em>X</em><sub><em>i</em>&minus;1</sub> &plus; <em>X</em><sub><em>i</em></sub> &plus; <em>U<sub>t</sub></em><sub>,<em>i</em></sub>&#8239;cos(<em>&beta;</em><sub><em>i</em></sub>) &plus; <em>Q</em><sub><em>i</em></sub>&#8239;cos(<em>&omega;</em><sub><em>i</em></sub>))&#8239;cos(<em>&alpha;</em><sub><em>i</em></sub>) &plus; (-<em>K<sub>c</sub></em>&#8239;<em>W</em><sub><em>i</em></sub> &minus; <em>E</em><sub><em>i</em></sub> &plus; <em>E</em><sub><em>i</em>&minus;1</sub> &minus; <em>H</em><sub><em>i</em></sub> &plus; <em>H</em><sub><em>i</em>&minus;1</sub> &plus; <em>U<sub>t</sub></em><sub>,<em>i</em></sub>&#8239;sin(<em>&beta;</em><sub><em>i</em></sub>) &plus; <em>Q</em><sub><em>i</em></sub>&#8239;sin(<em>&omega;</em><sub><em>i</em></sub>))&#8239;sin(<em>&alpha;</em><sub><em>i</em></sub>)
+<em>N</em><sub><em>i</em></sub> = (<em>W</em><sub><em>i</em></sub> &minus; <em>X</em><sub><em>i</em>&minus;1</sub> &plus; <em>X</em><sub><em>i</em></sub> &plus; <em>U<sub>t</sub></em><sub>,<em>i</em></sub>&#8239;cos(<em>&beta;</em><sub><em>i</em></sub>) &plus; <em>Q</em><sub><em>i</em></sub>&#8239;cos(<em>&omega;</em><sub><em>i</em></sub>))&#8239;cos(<em>&alpha;</em><sub><em>i</em></sub>) &plus; (&minus;<em>K<sub>c</sub></em>&#8239;<em>W</em><sub><em>i</em></sub> &minus; <em>E</em><sub><em>i</em></sub> &plus; <em>E</em><sub><em>i</em>&minus;1</sub> &minus; <em>H</em><sub><em>i</em></sub> &plus; <em>H</em><sub><em>i</em>&minus;1</sub> &plus; <em>U<sub>t</sub></em><sub>,<em>i</em></sub>&#8239;sin(<em>&beta;</em><sub><em>i</em></sub>) &plus; <em>Q</em><sub><em>i</em></sub>&#8239;sin(<em>&omega;</em><sub><em>i</em></sub>))&#8239;sin(<em>&alpha;</em><sub><em>i</em></sub>)
 </div>
 </a>
 </td>
@@ -1696,7 +1704,7 @@ Equation
 <td>
 <a id="">
 <div class="equation">
-<em>S</em><sub><em>i</em></sub> = (<em>W</em><sub><em>i</em></sub> &minus; <em>X</em><sub><em>i</em>&minus;1</sub> &plus; <em>X</em><sub><em>i</em></sub> &plus; <em>U<sub>t</sub></em><sub>,<em>i</em></sub>&#8239;cos(<em>&beta;</em><sub><em>i</em></sub>) &plus; <em>Q</em><sub><em>i</em></sub>&#8239;cos(<em>&omega;</em><sub><em>i</em></sub>))&#8239;sin(<em>&alpha;</em><sub><em>i</em></sub>) &plus; (-<em>K<sub>c</sub></em>&#8239;<em>W</em><sub><em>i</em></sub> &minus; <em>E</em><sub><em>i</em></sub> &plus; <em>E</em><sub><em>i</em>&minus;1</sub> &minus; <em>H</em><sub><em>i</em></sub> &plus; <em>H</em><sub><em>i</em>&minus;1</sub> &plus; <em>U<sub>t</sub></em><sub>,<em>i</em></sub>&#8239;sin(<em>&beta;</em><sub><em>i</em></sub>) &plus; <em>Q</em><sub><em>i</em></sub>&#8239;sin(<em>&omega;</em><sub><em>i</em></sub>))&#8239;cos(<em>&alpha;</em><sub><em>i</em></sub>)
+<em>S</em><sub><em>i</em></sub> = (<em>W</em><sub><em>i</em></sub> &minus; <em>X</em><sub><em>i</em>&minus;1</sub> &plus; <em>X</em><sub><em>i</em></sub> &plus; <em>U<sub>t</sub></em><sub>,<em>i</em></sub>&#8239;cos(<em>&beta;</em><sub><em>i</em></sub>) &plus; <em>Q</em><sub><em>i</em></sub>&#8239;cos(<em>&omega;</em><sub><em>i</em></sub>))&#8239;sin(<em>&alpha;</em><sub><em>i</em></sub>) &plus; (&minus;<em>K<sub>c</sub></em>&#8239;<em>W</em><sub><em>i</em></sub> &minus; <em>E</em><sub><em>i</em></sub> &plus; <em>E</em><sub><em>i</em>&minus;1</sub> &minus; <em>H</em><sub><em>i</em></sub> &plus; <em>H</em><sub><em>i</em>&minus;1</sub> &plus; <em>U<sub>t</sub></em><sub>,<em>i</em></sub>&#8239;sin(<em>&beta;</em><sub><em>i</em></sub>) &plus; <em>Q</em><sub><em>i</em></sub>&#8239;sin(<em>&omega;</em><sub><em>i</em></sub>))&#8239;cos(<em>&alpha;</em><sub><em>i</em></sub>)
 </div>
 </a>
 </td>
@@ -1894,7 +1902,7 @@ Equation
 <td>
 <a id="">
 <div class="equation">
-0 = (-<em>E</em><sub><em>i</em></sub>)&#8239;(<em>z</em><sub><em>i</em></sub> &minus; <div class="fraction">
+0 = &minus;<em>E</em><sub><em>i</em></sub>&#8239;(<em>z</em><sub><em>i</em></sub> &minus; <div class="fraction">
 <span class="fup">
 <em>b</em><sub><em>i</em></sub>
 </span>
@@ -1982,7 +1990,7 @@ Equation
 <td>
 <a id="">
 <div class="equation">
-<em>F<sub>x</sub></em><sub>,<em>i</em></sub> = (-<em>&Delta;H</em><sub><em>i</em></sub>) &minus; <em>K<sub>c</sub></em>&#8239;<em>W</em><sub><em>i</em></sub> &minus; <em>U<sub>b</sub></em><sub>,<em>i</em></sub>&#8239;sin(<em>&alpha;</em><sub><em>i</em></sub>) &plus; <em>U<sub>t</sub></em><sub>,<em>i</em></sub>&#8239;sin(<em>&beta;</em><sub><em>i</em></sub>) &plus; <em>Q</em><sub><em>i</em></sub>&#8239;sin(<em>&omega;</em><sub><em>i</em></sub>)
+<em>F<sub>x</sub></em><sub>,<em>i</em></sub> = &minus;<em>&Delta;H</em><sub><em>i</em></sub> &minus; <em>K<sub>c</sub></em>&#8239;<em>W</em><sub><em>i</em></sub> &minus; <em>U<sub>b</sub></em><sub>,<em>i</em></sub>&#8239;sin(<em>&alpha;</em><sub><em>i</em></sub>) &plus; <em>U<sub>t</sub></em><sub>,<em>i</em></sub>&#8239;sin(<em>&beta;</em><sub><em>i</em></sub>) &plus; <em>Q</em><sub><em>i</em></sub>&#8239;sin(<em>&omega;</em><sub><em>i</em></sub>)
 </div>
 </a>
 </td>
@@ -2028,7 +2036,7 @@ Equation
 <td>
 <a id="">
 <div class="equation">
-<em>F<sub>y</sub></em><sub>,<em>i</em></sub> = (-<em>W</em><sub><em>i</em></sub>) &plus; <em>U<sub>b</sub></em><sub>,<em>i</em></sub>&#8239;cos(<em>&alpha;</em><sub><em>i</em></sub>) &minus; <em>U<sub>t</sub></em><sub>,<em>i</em></sub>&#8239;cos(<em>&beta;</em><sub><em>i</em></sub>) &minus; <em>Q</em><sub><em>i</em></sub>&#8239;cos(<em>&omega;</em><sub><em>i</em></sub>)
+<em>F<sub>y</sub></em><sub>,<em>i</em></sub> = &minus;<em>W</em><sub><em>i</em></sub> &plus; <em>U<sub>b</sub></em><sub>,<em>i</em></sub>&#8239;cos(<em>&alpha;</em><sub><em>i</em></sub>) &minus; <em>U<sub>t</sub></em><sub>,<em>i</em></sub>&#8239;cos(<em>&beta;</em><sub><em>i</em></sub>) &minus; <em>Q</em><sub><em>i</em></sub>&#8239;cos(<em>&omega;</em><sub><em>i</em></sub>)
 </div>
 </a>
 </td>
@@ -2134,10 +2142,10 @@ Equation
 <tr><td><em>&delta;v</em><sub><em>i</em></sub></td></tr>
 </table> = <table class="matrix">
 <tr><td>cos(<em>&alpha;</em><sub><em>i</em></sub>)</td><td>sin(<em>&alpha;</em><sub><em>i</em></sub>)</td></tr>
-<tr><td>(-sin(<em>&alpha;</em><sub><em>i</em></sub>))</td><td>cos(<em>&alpha;</em><sub><em>i</em></sub>)</td></tr>
+<tr><td>&minus;sin(<em>&alpha;</em><sub><em>i</em></sub>)</td><td>cos(<em>&alpha;</em><sub><em>i</em></sub>)</td></tr>
 </table>&#8239;<em>&delta;</em><sub><em>i</em></sub> = <table class="matrix">
 <tr><td>cos(<em>&alpha;</em><sub><em>i</em></sub>)</td><td>sin(<em>&alpha;</em><sub><em>i</em></sub>)</td></tr>
-<tr><td>(-sin(<em>&alpha;</em><sub><em>i</em></sub>))</td><td>cos(<em>&alpha;</em><sub><em>i</em></sub>)</td></tr>
+<tr><td>&minus;sin(<em>&alpha;</em><sub><em>i</em></sub>)</td><td>cos(<em>&alpha;</em><sub><em>i</em></sub>)</td></tr>
 </table>&#8239;<table class="matrix">
 <tr><td><em>&delta;x</em><sub><em>i</em></sub></td></tr>
 <tr><td><em>&delta;y</em><sub><em>i</em></sub></td></tr>
@@ -2973,7 +2981,7 @@ Equation
 <td>
 <a id="">
 <div class="equation">
-<em>R</em> = ((<em>W</em><sub><em>i</em></sub> &plus; <em>U<sub>t</sub></em><sub>,<em>i</em></sub>&#8239;cos(<em>&beta;</em><sub><em>i</em></sub>) &plus; <em>Q</em><sub><em>i</em></sub>&#8239;cos(<em>&omega;</em><sub><em>i</em></sub>))&#8239;cos(<em>&alpha;</em><sub><em>i</em></sub>) &plus; (-<em>K<sub>c</sub></em>&#8239;<em>W</em><sub><em>i</em></sub> &minus; <em>&Delta;H</em><sub><em>i</em></sub> &plus; <em>U<sub>t</sub></em><sub>,<em>i</em></sub>&#8239;sin(<em>&beta;</em><sub><em>i</em></sub>) &plus; <em>Q</em><sub><em>i</em></sub>&#8239;sin(<em>&omega;</em><sub><em>i</em></sub>))&#8239;sin(<em>&alpha;</em><sub><em>i</em></sub>) &minus; <em>U<sub>b</sub></em><sub>,<em>i</em></sub>)&#8239;tan(<em>&phiv;&prime;</em><sub><em>i</em></sub>) &plus; <em>c&prime;</em><sub><em>i</em></sub>&#8239;<em>b</em><sub><em>i</em></sub>&#8239;sec(<em>&alpha;</em><sub><em>i</em></sub>)
+<em>R</em> = ((<em>W</em><sub><em>i</em></sub> &plus; <em>U<sub>t</sub></em><sub>,<em>i</em></sub>&#8239;cos(<em>&beta;</em><sub><em>i</em></sub>) &plus; <em>Q</em><sub><em>i</em></sub>&#8239;cos(<em>&omega;</em><sub><em>i</em></sub>))&#8239;cos(<em>&alpha;</em><sub><em>i</em></sub>) &plus; (&minus;<em>K<sub>c</sub></em>&#8239;<em>W</em><sub><em>i</em></sub> &minus; <em>&Delta;H</em><sub><em>i</em></sub> &plus; <em>U<sub>t</sub></em><sub>,<em>i</em></sub>&#8239;sin(<em>&beta;</em><sub><em>i</em></sub>) &plus; <em>Q</em><sub><em>i</em></sub>&#8239;sin(<em>&omega;</em><sub><em>i</em></sub>))&#8239;sin(<em>&alpha;</em><sub><em>i</em></sub>) &minus; <em>U<sub>b</sub></em><sub>,<em>i</em></sub>)&#8239;tan(<em>&phiv;&prime;</em><sub><em>i</em></sub>) &plus; <em>c&prime;</em><sub><em>i</em></sub>&#8239;<em>b</em><sub><em>i</em></sub>&#8239;sec(<em>&alpha;</em><sub><em>i</em></sub>)
 </div>
 </a>
 </td>
@@ -2995,7 +3003,7 @@ The resistive shear force of a slice is defined as <em>P</em> in GD3. The effect
 </p>
 <a id="">
 <div class="equation">
-<em>N&prime;</em><sub><em>i</em></sub> = (<em>W</em><sub><em>i</em></sub> &minus; <em>X</em><sub><em>i</em>&minus;1</sub> &plus; <em>X</em><sub><em>i</em></sub> &plus; <em>U<sub>t</sub></em><sub>,<em>i</em></sub>&#8239;cos(<em>&beta;</em><sub><em>i</em></sub>) &plus; <em>Q</em><sub><em>i</em></sub>&#8239;cos(<em>&omega;</em><sub><em>i</em></sub>))&#8239;cos(<em>&alpha;</em><sub><em>i</em></sub>) &plus; (-<em>K<sub>c</sub></em>&#8239;<em>W</em><sub><em>i</em></sub> &minus; <em>E</em><sub><em>i</em></sub> &plus; <em>E</em><sub><em>i</em>&minus;1</sub> &minus; <em>H</em><sub><em>i</em></sub> &plus; <em>H</em><sub><em>i</em>&minus;1</sub> &plus; <em>U<sub>t</sub></em><sub>,<em>i</em></sub>&#8239;sin(<em>&beta;</em><sub><em>i</em></sub>) &plus; <em>Q</em><sub><em>i</em></sub>&#8239;sin(<em>&omega;</em><sub><em>i</em></sub>))&#8239;sin(<em>&alpha;</em><sub><em>i</em></sub>) &minus; <em>U<sub>b</sub></em><sub>,<em>i</em></sub>
+<em>N&prime;</em><sub><em>i</em></sub> = (<em>W</em><sub><em>i</em></sub> &minus; <em>X</em><sub><em>i</em>&minus;1</sub> &plus; <em>X</em><sub><em>i</em></sub> &plus; <em>U<sub>t</sub></em><sub>,<em>i</em></sub>&#8239;cos(<em>&beta;</em><sub><em>i</em></sub>) &plus; <em>Q</em><sub><em>i</em></sub>&#8239;cos(<em>&omega;</em><sub><em>i</em></sub>))&#8239;cos(<em>&alpha;</em><sub><em>i</em></sub>) &plus; (&minus;<em>K<sub>c</sub></em>&#8239;<em>W</em><sub><em>i</em></sub> &minus; <em>E</em><sub><em>i</em></sub> &plus; <em>E</em><sub><em>i</em>&minus;1</sub> &minus; <em>H</em><sub><em>i</em></sub> &plus; <em>H</em><sub><em>i</em>&minus;1</sub> &plus; <em>U<sub>t</sub></em><sub>,<em>i</em></sub>&#8239;sin(<em>&beta;</em><sub><em>i</em></sub>) &plus; <em>Q</em><sub><em>i</em></sub>&#8239;sin(<em>&omega;</em><sub><em>i</em></sub>))&#8239;sin(<em>&alpha;</em><sub><em>i</em></sub>) &minus; <em>U<sub>b</sub></em><sub>,<em>i</em></sub>
 </div>
 </a>
 <p class="paragraph">
@@ -3003,7 +3011,7 @@ The values of the interslice forces <em>E</em> and <em>X</em> in the equation ar
 </p>
 <a id="">
 <div class="equation">
-<em>N*</em><sub><em>i</em></sub> = (<em>W</em><sub><em>i</em></sub> &plus; <em>U<sub>t</sub></em><sub>,<em>i</em></sub>&#8239;cos(<em>&beta;</em><sub><em>i</em></sub>) &plus; <em>Q</em><sub><em>i</em></sub>&#8239;cos(<em>&omega;</em><sub><em>i</em></sub>))&#8239;cos(<em>&alpha;</em><sub><em>i</em></sub>) &plus; (-<em>K<sub>c</sub></em>&#8239;<em>W</em><sub><em>i</em></sub> &minus; <em>H</em><sub><em>i</em></sub> &plus; <em>H</em><sub><em>i</em>&minus;1</sub> &plus; <em>U<sub>t</sub></em><sub>,<em>i</em></sub>&#8239;sin(<em>&beta;</em><sub><em>i</em></sub>) &plus; <em>Q</em><sub><em>i</em></sub>&#8239;sin(<em>&omega;</em><sub><em>i</em></sub>))&#8239;sin(<em>&alpha;</em><sub><em>i</em></sub>) &minus; <em>U<sub>b</sub></em><sub>,<em>i</em></sub>
+<em>N*</em><sub><em>i</em></sub> = (<em>W</em><sub><em>i</em></sub> &plus; <em>U<sub>t</sub></em><sub>,<em>i</em></sub>&#8239;cos(<em>&beta;</em><sub><em>i</em></sub>) &plus; <em>Q</em><sub><em>i</em></sub>&#8239;cos(<em>&omega;</em><sub><em>i</em></sub>))&#8239;cos(<em>&alpha;</em><sub><em>i</em></sub>) &plus; (&minus;<em>K<sub>c</sub></em>&#8239;<em>W</em><sub><em>i</em></sub> &minus; <em>H</em><sub><em>i</em></sub> &plus; <em>H</em><sub><em>i</em>&minus;1</sub> &plus; <em>U<sub>t</sub></em><sub>,<em>i</em></sub>&#8239;sin(<em>&beta;</em><sub><em>i</em></sub>) &plus; <em>Q</em><sub><em>i</em></sub>&#8239;sin(<em>&omega;</em><sub><em>i</em></sub>))&#8239;sin(<em>&alpha;</em><sub><em>i</em></sub>) &minus; <em>U<sub>b</sub></em><sub>,<em>i</em></sub>
 </div>
 </a>
 <p class="paragraph">
@@ -3011,7 +3019,7 @@ Using <em>N*</em>, a resistive shear force without the influence of interslice f
 </p>
 <a id="">
 <div class="equation">
-<em>R</em><sub><em>i</em></sub> = <em>N*</em><sub><em>i</em></sub>&#8239;tan(<em>&phiv;&prime;</em><sub><em>i</em></sub>) &plus; <em>c&prime;</em><sub><em>i</em></sub>&#8239;<em>b</em><sub><em>i</em></sub>&#8239;sec(<em>&alpha;</em><sub><em>i</em></sub>) = ((<em>W</em><sub><em>i</em></sub> &plus; <em>U<sub>t</sub></em><sub>,<em>i</em></sub>&#8239;cos(<em>&beta;</em><sub><em>i</em></sub>) &plus; <em>Q</em><sub><em>i</em></sub>&#8239;cos(<em>&omega;</em><sub><em>i</em></sub>))&#8239;cos(<em>&alpha;</em><sub><em>i</em></sub>) &plus; (-<em>K<sub>c</sub></em>&#8239;<em>W</em><sub><em>i</em></sub> &minus; <em>&Delta;H</em><sub><em>i</em></sub> &plus; <em>U<sub>t</sub></em><sub>,<em>i</em></sub>&#8239;sin(<em>&beta;</em><sub><em>i</em></sub>) &plus; <em>Q</em><sub><em>i</em></sub>&#8239;sin(<em>&omega;</em><sub><em>i</em></sub>))&#8239;sin(<em>&alpha;</em><sub><em>i</em></sub>) &minus; <em>U<sub>b</sub></em><sub>,<em>i</em></sub>)&#8239;tan(<em>&phiv;&prime;</em><sub><em>i</em></sub>) &plus; <em>c&prime;</em><sub><em>i</em></sub>&#8239;<em>b</em><sub><em>i</em></sub>&#8239;sec(<em>&alpha;</em><sub><em>i</em></sub>)
+<em>R</em><sub><em>i</em></sub> = <em>N*</em><sub><em>i</em></sub>&#8239;tan(<em>&phiv;&prime;</em><sub><em>i</em></sub>) &plus; <em>c&prime;</em><sub><em>i</em></sub>&#8239;<em>b</em><sub><em>i</em></sub>&#8239;sec(<em>&alpha;</em><sub><em>i</em></sub>) = ((<em>W</em><sub><em>i</em></sub> &plus; <em>U<sub>t</sub></em><sub>,<em>i</em></sub>&#8239;cos(<em>&beta;</em><sub><em>i</em></sub>) &plus; <em>Q</em><sub><em>i</em></sub>&#8239;cos(<em>&omega;</em><sub><em>i</em></sub>))&#8239;cos(<em>&alpha;</em><sub><em>i</em></sub>) &plus; (&minus;<em>K<sub>c</sub></em>&#8239;<em>W</em><sub><em>i</em></sub> &minus; <em>&Delta;H</em><sub><em>i</em></sub> &plus; <em>U<sub>t</sub></em><sub>,<em>i</em></sub>&#8239;sin(<em>&beta;</em><sub><em>i</em></sub>) &plus; <em>Q</em><sub><em>i</em></sub>&#8239;sin(<em>&omega;</em><sub><em>i</em></sub>))&#8239;sin(<em>&alpha;</em><sub><em>i</em></sub>) &minus; <em>U<sub>b</sub></em><sub>,<em>i</em></sub>)&#8239;tan(<em>&phiv;&prime;</em><sub><em>i</em></sub>) &plus; <em>c&prime;</em><sub><em>i</em></sub>&#8239;<em>b</em><sub><em>i</em></sub>&#8239;sec(<em>&alpha;</em><sub><em>i</em></sub>)
 </div>
 </a>
 <a id="DD:T.i">
@@ -3053,7 +3061,7 @@ Equation
 <td>
 <a id="">
 <div class="equation">
-<em>T</em> = (<em>W</em><sub><em>i</em></sub> &plus; <em>U<sub>t</sub></em><sub>,<em>i</em></sub>&#8239;cos(<em>&beta;</em><sub><em>i</em></sub>) &plus; <em>Q</em><sub><em>i</em></sub>&#8239;cos(<em>&omega;</em><sub><em>i</em></sub>))&#8239;sin(<em>&alpha;</em><sub><em>i</em></sub>) &minus; (-<em>K<sub>c</sub></em>&#8239;<em>W</em><sub><em>i</em></sub> &minus; <em>&Delta;H</em><sub><em>i</em></sub> &plus; <em>U<sub>t</sub></em><sub>,<em>i</em></sub>&#8239;sin(<em>&beta;</em><sub><em>i</em></sub>) &plus; <em>Q</em><sub><em>i</em></sub>&#8239;sin(<em>&omega;</em><sub><em>i</em></sub>))&#8239;cos(<em>&alpha;</em><sub><em>i</em></sub>)
+<em>T</em> = (<em>W</em><sub><em>i</em></sub> &plus; <em>U<sub>t</sub></em><sub>,<em>i</em></sub>&#8239;cos(<em>&beta;</em><sub><em>i</em></sub>) &plus; <em>Q</em><sub><em>i</em></sub>&#8239;cos(<em>&omega;</em><sub><em>i</em></sub>))&#8239;sin(<em>&alpha;</em><sub><em>i</em></sub>) &minus; (&minus;<em>K<sub>c</sub></em>&#8239;<em>W</em><sub><em>i</em></sub> &minus; <em>&Delta;H</em><sub><em>i</em></sub> &plus; <em>U<sub>t</sub></em><sub>,<em>i</em></sub>&#8239;sin(<em>&beta;</em><sub><em>i</em></sub>) &plus; <em>Q</em><sub><em>i</em></sub>&#8239;sin(<em>&omega;</em><sub><em>i</em></sub>))&#8239;cos(<em>&alpha;</em><sub><em>i</em></sub>)
 </div>
 </a>
 </td>
@@ -3075,7 +3083,7 @@ The mobilized shear force acting on a slice is defined as <em>S</em> from the fo
 </p>
 <a id="">
 <div class="equation">
-<em>S</em><sub><em>i</em></sub> = (<em>W</em><sub><em>i</em></sub> &minus; <em>X</em><sub><em>i</em>&minus;1</sub> &plus; <em>X</em><sub><em>i</em></sub> &plus; <em>U<sub>t</sub></em><sub>,<em>i</em></sub>&#8239;cos(<em>&beta;</em><sub><em>i</em></sub>) &plus; <em>Q</em><sub><em>i</em></sub>&#8239;cos(<em>&omega;</em><sub><em>i</em></sub>))&#8239;sin(<em>&alpha;</em><sub><em>i</em></sub>) &plus; (-<em>K<sub>c</sub></em>&#8239;<em>W</em><sub><em>i</em></sub> &minus; <em>E</em><sub><em>i</em></sub> &plus; <em>E</em><sub><em>i</em>&minus;1</sub> &minus; <em>H</em><sub><em>i</em></sub> &plus; <em>H</em><sub><em>i</em>&minus;1</sub> &plus; <em>U<sub>t</sub></em><sub>,<em>i</em></sub>&#8239;sin(<em>&beta;</em><sub><em>i</em></sub>) &plus; <em>Q</em><sub><em>i</em></sub>&#8239;sin(<em>&omega;</em><sub><em>i</em></sub>))&#8239;cos(<em>&alpha;</em><sub><em>i</em></sub>)
+<em>S</em><sub><em>i</em></sub> = (<em>W</em><sub><em>i</em></sub> &minus; <em>X</em><sub><em>i</em>&minus;1</sub> &plus; <em>X</em><sub><em>i</em></sub> &plus; <em>U<sub>t</sub></em><sub>,<em>i</em></sub>&#8239;cos(<em>&beta;</em><sub><em>i</em></sub>) &plus; <em>Q</em><sub><em>i</em></sub>&#8239;cos(<em>&omega;</em><sub><em>i</em></sub>))&#8239;sin(<em>&alpha;</em><sub><em>i</em></sub>) &plus; (&minus;<em>K<sub>c</sub></em>&#8239;<em>W</em><sub><em>i</em></sub> &minus; <em>E</em><sub><em>i</em></sub> &plus; <em>E</em><sub><em>i</em>&minus;1</sub> &minus; <em>H</em><sub><em>i</em></sub> &plus; <em>H</em><sub><em>i</em>&minus;1</sub> &plus; <em>U<sub>t</sub></em><sub>,<em>i</em></sub>&#8239;sin(<em>&beta;</em><sub><em>i</em></sub>) &plus; <em>Q</em><sub><em>i</em></sub>&#8239;sin(<em>&omega;</em><sub><em>i</em></sub>))&#8239;cos(<em>&alpha;</em><sub><em>i</em></sub>)
 </div>
 </a>
 <p class="paragraph">
@@ -3083,7 +3091,7 @@ The equation is unsolvable, containing the unknown interslice normal force <em>E
 </p>
 <a id="">
 <div class="equation">
-<em>T</em><sub><em>i</em></sub> = (<em>W</em><sub><em>i</em></sub> &plus; <em>U<sub>t</sub></em><sub>,<em>i</em></sub>&#8239;cos(<em>&beta;</em><sub><em>i</em></sub>) &plus; <em>Q</em><sub><em>i</em></sub>&#8239;cos(<em>&omega;</em><sub><em>i</em></sub>))&#8239;sin(<em>&alpha;</em><sub><em>i</em></sub>) &minus; (-<em>K<sub>c</sub></em>&#8239;<em>W</em><sub><em>i</em></sub> &minus; <em>&Delta;H</em><sub><em>i</em></sub> &plus; <em>U<sub>t</sub></em><sub>,<em>i</em></sub>&#8239;sin(<em>&beta;</em><sub><em>i</em></sub>) &plus; <em>Q</em><sub><em>i</em></sub>&#8239;sin(<em>&omega;</em><sub><em>i</em></sub>))&#8239;cos(<em>&alpha;</em><sub><em>i</em></sub>)
+<em>T</em><sub><em>i</em></sub> = (<em>W</em><sub><em>i</em></sub> &plus; <em>U<sub>t</sub></em><sub>,<em>i</em></sub>&#8239;cos(<em>&beta;</em><sub><em>i</em></sub>) &plus; <em>Q</em><sub><em>i</em></sub>&#8239;cos(<em>&omega;</em><sub><em>i</em></sub>))&#8239;sin(<em>&alpha;</em><sub><em>i</em></sub>) &minus; (&minus;<em>K<sub>c</sub></em>&#8239;<em>W</em><sub><em>i</em></sub> &minus; <em>&Delta;H</em><sub><em>i</em></sub> &plus; <em>U<sub>t</sub></em><sub>,<em>i</em></sub>&#8239;sin(<em>&beta;</em><sub><em>i</em></sub>) &plus; <em>Q</em><sub><em>i</em></sub>&#8239;sin(<em>&omega;</em><sub><em>i</em></sub>))&#8239;cos(<em>&alpha;</em><sub><em>i</em></sub>)
 </div>
 </a>
 <p class="paragraph">
@@ -3233,10 +3241,10 @@ For basal surfaces the stiffness constants and displacements refer to a system r
 <a id="">
 <div class="equation">
 <em>K<sub>st</sub></em><sub>,<em>i</em></sub> = <table class="matrix">
-<tr><td>cos(<em>&alpha;</em><sub><em>i</em></sub>)</td><td>(-sin(<em>&alpha;</em><sub><em>i</em></sub>))</td></tr>
+<tr><td>cos(<em>&alpha;</em><sub><em>i</em></sub>)</td><td>&minus;sin(<em>&alpha;</em><sub><em>i</em></sub>)</td></tr>
 <tr><td>sin(<em>&alpha;</em><sub><em>i</em></sub>)</td><td>cos(<em>&alpha;</em><sub><em>i</em></sub>)</td></tr>
 </table>&#8239;<em>K<sub>st</sub></em><sub>,<em>i</em></sub> = <table class="matrix">
-<tr><td><em>K<sub>bt</sub></em><sub>,<em>i</em></sub>&#8239;cos(<em>&alpha;</em><sub><em>i</em></sub>)</td><td>(-<em>K<sub>bn</sub></em><sub>,<em>i</em></sub>&#8239;sin(<em>&alpha;</em><sub><em>i</em></sub>))</td></tr>
+<tr><td><em>K<sub>bt</sub></em><sub>,<em>i</em></sub>&#8239;cos(<em>&alpha;</em><sub><em>i</em></sub>)</td><td>&minus;<em>K<sub>bn</sub></em><sub>,<em>i</em></sub>&#8239;sin(<em>&alpha;</em><sub><em>i</em></sub>)</td></tr>
 <tr><td><em>K<sub>bt</sub></em><sub>,<em>i</em></sub>&#8239;sin(<em>&alpha;</em><sub><em>i</em></sub>)</td><td><em>K<sub>bn</sub></em><sub>,<em>i</em></sub>&#8239;cos(<em>&alpha;</em><sub><em>i</em></sub>)</td></tr>
 </table>
 </div>
@@ -3250,11 +3258,11 @@ The Hooke's law force displacement relationship of GD8 applied to the base also 
 <tr><td><em>p</em><sub><em>i</em></sub></td></tr>
 <tr><td><em>p</em><sub><em>i</em></sub></td></tr>
 </table> = <em>K<sub>bt</sub></em><sub>,<em>i</em></sub>&#8239;<em>&epsilon;</em> = <table class="matrix">
-<tr><td><em>K<sub>bt</sub></em><sub>,<em>i</em></sub>&#8239;cos(<em>&alpha;</em><sub><em>i</em></sub>)</td><td>(-<em>K<sub>bn</sub></em><sub>,<em>i</em></sub>&#8239;sin(<em>&alpha;</em><sub><em>i</em></sub>))</td></tr>
+<tr><td><em>K<sub>bt</sub></em><sub>,<em>i</em></sub>&#8239;cos(<em>&alpha;</em><sub><em>i</em></sub>)</td><td>&minus;<em>K<sub>bn</sub></em><sub>,<em>i</em></sub>&#8239;sin(<em>&alpha;</em><sub><em>i</em></sub>)</td></tr>
 <tr><td><em>K<sub>bt</sub></em><sub>,<em>i</em></sub>&#8239;sin(<em>&alpha;</em><sub><em>i</em></sub>)</td><td><em>K<sub>bn</sub></em><sub>,<em>i</em></sub>&#8239;cos(<em>&alpha;</em><sub><em>i</em></sub>)</td></tr>
 </table>&#8239;<table class="matrix">
 <tr><td>cos(<em>&alpha;</em><sub><em>i</em></sub>)</td><td>sin(<em>&alpha;</em><sub><em>i</em></sub>)</td></tr>
-<tr><td>(-sin(<em>&alpha;</em><sub><em>i</em></sub>))</td><td>cos(<em>&alpha;</em><sub><em>i</em></sub>)</td></tr>
+<tr><td>&minus;sin(<em>&alpha;</em><sub><em>i</em></sub>)</td><td>cos(<em>&alpha;</em><sub><em>i</em></sub>)</td></tr>
 </table>&#8239;<table class="matrix">
 <tr><td><em>&delta;x</em><sub><em>i</em></sub></td></tr>
 <tr><td><em>&delta;y</em><sub><em>i</em></sub></td></tr>
@@ -3333,7 +3341,7 @@ Equation
 <td>
 <a id="">
 <div class="equation">
-<em>F</em> = (-<em>&#8467;<sub>s</sub></em><sub>,<em>i</em>&minus;1</sub>)&#8239;<em>K<sub>sn</sub></em><sub>,<em>i</em>&minus;1</sub>&#8239;<em>&delta;</em><sub><em>i</em>&minus;1</sub> &plus; (<em>&#8467;<sub>s</sub></em><sub>,<em>i</em>&minus;1</sub>&#8239;<em>K<sub>sn</sub></em><sub>,<em>i</em>&minus;1</sub> &plus; <em>&#8467;<sub>b</sub></em><sub>,<em>i</em></sub>&#8239;<em>K<sub>bn</sub></em><sub>,<em>i</em></sub> &plus; <em>&#8467;<sub>s</sub></em><sub>,<em>i</em></sub>&#8239;<em>K<sub>sn</sub></em><sub>,<em>i</em></sub>)&#8239;<em>&delta;</em><sub><em>i</em></sub> &minus; <em>&#8467;<sub>s</sub></em><sub>,<em>i</em></sub>&#8239;<em>K<sub>sn</sub></em><sub>,<em>i</em></sub>&#8239;<em>&delta;</em><sub><em>i</em>&plus;1</sub>
+<em>F</em> = &minus;<em>&#8467;<sub>s</sub></em><sub>,<em>i</em>&minus;1</sub>&#8239;<em>K<sub>sn</sub></em><sub>,<em>i</em>&minus;1</sub>&#8239;<em>&delta;</em><sub><em>i</em>&minus;1</sub> &plus; (<em>&#8467;<sub>s</sub></em><sub>,<em>i</em>&minus;1</sub>&#8239;<em>K<sub>sn</sub></em><sub>,<em>i</em>&minus;1</sub> &plus; <em>&#8467;<sub>b</sub></em><sub>,<em>i</em></sub>&#8239;<em>K<sub>bn</sub></em><sub>,<em>i</em></sub> &plus; <em>&#8467;<sub>s</sub></em><sub>,<em>i</em></sub>&#8239;<em>K<sub>sn</sub></em><sub>,<em>i</em></sub>)&#8239;<em>&delta;</em><sub><em>i</em></sub> &minus; <em>&#8467;<sub>s</sub></em><sub>,<em>i</em></sub>&#8239;<em>K<sub>sn</sub></em><sub>,<em>i</em></sub>&#8239;<em>&delta;</em><sub><em>i</em>&plus;1</sub>
 </div>
 </a>
 </td>
@@ -3758,7 +3766,7 @@ Description
 </th>
 <td>
 <p class="paragraph">
-<em>&lambda;</em> is the magnitude ratio between shear and normal forces at the interslice interfaces as the assumption of the Morgenstern Price method in GD5 The inclination function f determines the relative magnitude ratio between the different interslices, while <em>&lambda;</em> determines the magnitude. <em>&lambda;</em> uses the sum of interslice normal and shear forces taken from each interslice.
+<em>&lambda;</em> is the magnitude ratio between shear and normal forces at the interslice interfaces as the assumption of the Morgenstern Price method in GD5 The inclination function <em>f</em> determines the relative magnitude ratio between the different interslices, while <em>&lambda;</em> determines the magnitude. <em>&lambda;</em> uses the sum of interslice normal and shear forces taken from each interslice.
 </p>
 </td>
 </tr>
@@ -3769,7 +3777,7 @@ Taking the last static equation of T2 with the moment equilibrium of GD6 about t
 </p>
 <a id="">
 <div class="equation">
-0 = (-<em>E</em><sub><em>i</em></sub>)&#8239;(<em>z</em><sub><em>i</em></sub> &minus; <div class="fraction">
+0 = &minus;<em>E</em><sub><em>i</em></sub>&#8239;(<em>z</em><sub><em>i</em></sub> &minus; <div class="fraction">
 <span class="fup">
 <em>b</em><sub><em>i</em></sub>
 </span>
@@ -3821,7 +3829,7 @@ The equation in terms of <em>&lambda;</em> leads to equation (14).
 <div class="equation">
 <em>&lambda;</em> = <div class="fraction">
 <span class="fup">
-(-<em>E</em><sub><em>i</em></sub>)&#8239;(<em>z</em><sub><em>i</em></sub> &minus; (<em>b</em><sub><em>i</em></sub>/2)tan(<em>&alpha;</em><sub><em>i</em></sub>)) &plus; <em>E</em><sub><em>i</em>&minus;1</sub>&#8239;(<em>z</em><sub><em>i</em>&minus;1</sub> &minus; (<em>b</em><sub><em>i</em></sub>/2)tan(<em>&alpha;</em><sub><em>i</em></sub>)) &minus; <em>H</em><sub><em>i</em></sub>&#8239;(<em>z</em><sub><em>i</em></sub> &minus; (<em>b</em><sub><em>i</em></sub>/2)tan(<em>&alpha;</em><sub><em>i</em></sub>)) &plus; <em>H</em><sub><em>i</em>&minus;1</sub>&#8239;(<em>z</em><sub><em>i</em>&minus;1</sub> &minus; (<em>b</em><sub><em>i</em></sub>/2)tan(<em>&alpha;</em><sub><em>i</em></sub>)) &plus; <em>K<sub>c</sub></em>&#8239;<em>W</em><sub><em>i</em></sub>&#8239;<em>h</em><sub><em>i</em></sub>/2 &minus; <em>U<sub>t</sub></em><sub>,<em>i</em></sub>&#8239;sin(<em>&beta;</em><sub><em>i</em></sub>)&#8239;<em>h</em><sub><em>i</em></sub> &minus; <em>Q</em><sub><em>i</em></sub>&#8239;sin(<em>&omega;</em><sub><em>i</em></sub>)&#8239;<em>h</em><sub><em>i</em></sub>
+&minus;<em>E</em><sub><em>i</em></sub>&#8239;(<em>z</em><sub><em>i</em></sub> &minus; (<em>b</em><sub><em>i</em></sub>/2)tan(<em>&alpha;</em><sub><em>i</em></sub>)) &plus; <em>E</em><sub><em>i</em>&minus;1</sub>&#8239;(<em>z</em><sub><em>i</em>&minus;1</sub> &minus; (<em>b</em><sub><em>i</em></sub>/2)tan(<em>&alpha;</em><sub><em>i</em></sub>)) &minus; <em>H</em><sub><em>i</em></sub>&#8239;(<em>z</em><sub><em>i</em></sub> &minus; (<em>b</em><sub><em>i</em></sub>/2)tan(<em>&alpha;</em><sub><em>i</em></sub>)) &plus; <em>H</em><sub><em>i</em>&minus;1</sub>&#8239;(<em>z</em><sub><em>i</em>&minus;1</sub> &minus; (<em>b</em><sub><em>i</em></sub>/2)tan(<em>&alpha;</em><sub><em>i</em></sub>)) &plus; <em>K<sub>c</sub></em>&#8239;<em>W</em><sub><em>i</em></sub>&#8239;<em>h</em><sub><em>i</em></sub>/2 &minus; <em>U<sub>t</sub></em><sub>,<em>i</em></sub>&#8239;sin(<em>&beta;</em><sub><em>i</em></sub>)&#8239;<em>h</em><sub><em>i</em></sub> &minus; <em>Q</em><sub><em>i</em></sub>&#8239;sin(<em>&omega;</em><sub><em>i</em></sub>)&#8239;<em>h</em><sub><em>i</em></sub>
 </span>
 <span class="fdn">
 (<em>b</em><sub><em>i</em></sub>/2)(<em>E</em><sub><em>i</em></sub>&#8239;<em>f</em><sub><em>i</em></sub> &plus; <em>E</em><sub><em>i</em>&minus;1</sub>&#8239;<em>f</em><sub><em>i</em>&minus;1</sub>)
@@ -3939,7 +3947,7 @@ Taking the normal force equilibrium of GD1 with the effective stress definition 
 </p>
 <a id="">
 <div class="equation">
-<em>N&prime;</em><sub><em>i</em></sub> = (<em>W</em><sub><em>i</em></sub> &minus; <em>&lambda;</em>&#8239;<em>f</em><sub><em>i</em>&minus;1</sub>&#8239;<em>E</em><sub><em>i</em>&minus;1</sub> &plus; <em>&lambda;</em>&#8239;<em>f</em><sub><em>i</em></sub>&#8239;<em>E</em><sub><em>i</em></sub> &plus; <em>U<sub>t</sub></em><sub>,<em>i</em></sub>&#8239;cos(<em>&beta;</em><sub><em>i</em></sub>) &plus; <em>Q</em><sub><em>i</em></sub>&#8239;cos(<em>&omega;</em><sub><em>i</em></sub>))&#8239;cos(<em>&alpha;</em><sub><em>i</em></sub>) &plus; (-<em>K<sub>c</sub></em>&#8239;<em>W</em><sub><em>i</em></sub> &minus; <em>E</em><sub><em>i</em></sub> &plus; <em>E</em><sub><em>i</em>&minus;1</sub> &minus; <em>H</em><sub><em>i</em></sub> &plus; <em>H</em><sub><em>i</em>&minus;1</sub> &plus; <em>U<sub>t</sub></em><sub>,<em>i</em></sub>&#8239;sin(<em>&beta;</em><sub><em>i</em></sub>) &plus; <em>Q</em><sub><em>i</em></sub>&#8239;sin(<em>&omega;</em><sub><em>i</em></sub>))&#8239;sin(<em>&alpha;</em><sub><em>i</em></sub>) &minus; <em>U<sub>b</sub></em><sub>,<em>i</em></sub>
+<em>N&prime;</em><sub><em>i</em></sub> = (<em>W</em><sub><em>i</em></sub> &minus; <em>&lambda;</em>&#8239;<em>f</em><sub><em>i</em>&minus;1</sub>&#8239;<em>E</em><sub><em>i</em>&minus;1</sub> &plus; <em>&lambda;</em>&#8239;<em>f</em><sub><em>i</em></sub>&#8239;<em>E</em><sub><em>i</em></sub> &plus; <em>U<sub>t</sub></em><sub>,<em>i</em></sub>&#8239;cos(<em>&beta;</em><sub><em>i</em></sub>) &plus; <em>Q</em><sub><em>i</em></sub>&#8239;cos(<em>&omega;</em><sub><em>i</em></sub>))&#8239;cos(<em>&alpha;</em><sub><em>i</em></sub>) &plus; (&minus;<em>K<sub>c</sub></em>&#8239;<em>W</em><sub><em>i</em></sub> &minus; <em>E</em><sub><em>i</em></sub> &plus; <em>E</em><sub><em>i</em>&minus;1</sub> &minus; <em>H</em><sub><em>i</em></sub> &plus; <em>H</em><sub><em>i</em>&minus;1</sub> &plus; <em>U<sub>t</sub></em><sub>,<em>i</em></sub>&#8239;sin(<em>&beta;</em><sub><em>i</em></sub>) &plus; <em>Q</em><sub><em>i</em></sub>&#8239;sin(<em>&omega;</em><sub><em>i</em></sub>))&#8239;sin(<em>&alpha;</em><sub><em>i</em></sub>) &minus; <em>U<sub>b</sub></em><sub>,<em>i</em></sub>
 </div>
 </a>
 <p class="paragraph">
@@ -3954,7 +3962,7 @@ Taking the base shear force equilibrium of GD2 with the definition of mobilized 
 <span class="fdn">
 <em>FS</em>
 </span>
-</div> = (<em>W</em><sub><em>i</em></sub> &minus; <em>&lambda;</em>&#8239;<em>f</em><sub><em>i</em>&minus;1</sub>&#8239;<em>E</em><sub><em>i</em>&minus;1</sub> &plus; <em>&lambda;</em>&#8239;<em>f</em><sub><em>i</em></sub>&#8239;<em>E</em><sub><em>i</em></sub> &plus; <em>U<sub>t</sub></em><sub>,<em>i</em></sub>&#8239;cos(<em>&beta;</em><sub><em>i</em></sub>) &plus; <em>Q</em><sub><em>i</em></sub>&#8239;cos(<em>&omega;</em><sub><em>i</em></sub>))&#8239;sin(<em>&alpha;</em><sub><em>i</em></sub>) &plus; (-<em>K<sub>c</sub></em>&#8239;<em>W</em><sub><em>i</em></sub> &minus; <em>E</em><sub><em>i</em></sub> &plus; <em>E</em><sub><em>i</em>&minus;1</sub> &minus; <em>H</em><sub><em>i</em></sub> &plus; <em>H</em><sub><em>i</em>&minus;1</sub> &plus; <em>U<sub>t</sub></em><sub>,<em>i</em></sub>&#8239;sin(<em>&beta;</em><sub><em>i</em></sub>) &plus; <em>Q</em><sub><em>i</em></sub>&#8239;sin(<em>&omega;</em><sub><em>i</em></sub>))&#8239;cos(<em>&alpha;</em><sub><em>i</em></sub>)
+</div> = (<em>W</em><sub><em>i</em></sub> &minus; <em>&lambda;</em>&#8239;<em>f</em><sub><em>i</em>&minus;1</sub>&#8239;<em>E</em><sub><em>i</em>&minus;1</sub> &plus; <em>&lambda;</em>&#8239;<em>f</em><sub><em>i</em></sub>&#8239;<em>E</em><sub><em>i</em></sub> &plus; <em>U<sub>t</sub></em><sub>,<em>i</em></sub>&#8239;cos(<em>&beta;</em><sub><em>i</em></sub>) &plus; <em>Q</em><sub><em>i</em></sub>&#8239;cos(<em>&omega;</em><sub><em>i</em></sub>))&#8239;sin(<em>&alpha;</em><sub><em>i</em></sub>) &plus; (&minus;<em>K<sub>c</sub></em>&#8239;<em>W</em><sub><em>i</em></sub> &minus; <em>E</em><sub><em>i</em></sub> &plus; <em>E</em><sub><em>i</em>&minus;1</sub> &minus; <em>H</em><sub><em>i</em></sub> &plus; <em>H</em><sub><em>i</em>&minus;1</sub> &plus; <em>U<sub>t</sub></em><sub>,<em>i</em></sub>&#8239;sin(<em>&beta;</em><sub><em>i</em></sub>) &plus; <em>Q</em><sub><em>i</em></sub>&#8239;sin(<em>&omega;</em><sub><em>i</em></sub>))&#8239;cos(<em>&alpha;</em><sub><em>i</em></sub>)
 </div>
 </a>
 <p class="paragraph">
@@ -4022,7 +4030,7 @@ Equation
 <td>
 <a id="">
 <div class="equation">
-(-<em>&Delta;H</em><sub><em>i</em></sub>) &minus; <em>K<sub>c</sub></em>&#8239;<em>W</em><sub><em>i</em></sub> &minus; <em>U<sub>b</sub></em><sub>,<em>i</em></sub>&#8239;sin(<em>&alpha;</em><sub><em>i</em></sub>) &plus; <em>U<sub>t</sub></em><sub>,<em>i</em></sub>&#8239;sin(<em>&beta;</em><sub><em>i</em></sub>) &plus; <em>Q</em><sub><em>i</em></sub>&#8239;sin(<em>&omega;</em><sub><em>i</em></sub>) = <em>&delta;x</em><sub><em>i</em>&minus;1</sub>&#8239;(-<em>&#8467;<sub>s</sub></em><sub>,<em>i</em>&minus;1</sub>)&#8239;<em>K<sub>sn</sub></em><sub>,<em>i</em>&minus;1</sub> &plus; <em>&delta;x</em><sub><em>i</em></sub>&#8239;((-<em>&#8467;<sub>s</sub></em><sub>,<em>i</em>&minus;1</sub>)&#8239;<em>K<sub>sn</sub></em><sub>,<em>i</em>&minus;1</sub> &plus; <em>&#8467;<sub>s</sub></em><sub>,<em>i</em></sub>&#8239;<em>K<sub>sn</sub></em><sub>,<em>i</em></sub> &plus; <em>&#8467;<sub>b</sub></em><sub>,<em>i</em></sub>&#8239;<em>K<sub>bA</sub></em><sub>,<em>i</em></sub>) &plus; <em>&delta;x</em><sub><em>i</em>&plus;1</sub>&#8239;(-<em>&#8467;<sub>s</sub></em><sub>,<em>i</em></sub>)&#8239;<em>K<sub>sn</sub></em><sub>,<em>i</em></sub> &plus; <em>&delta;y</em><sub><em>i</em></sub>&#8239;(-<em>&#8467;<sub>b</sub></em><sub>,<em>i</em></sub>)&#8239;<em>K<sub>bB</sub></em><sub>,<em>i</em></sub> = (-<em>W</em><sub><em>i</em></sub>) &minus; <em>U<sub>b</sub></em><sub>,<em>i</em></sub>&#8239;cos(<em>&alpha;</em><sub><em>i</em></sub>) &plus; <em>U<sub>t</sub></em><sub>,<em>i</em></sub>&#8239;cos(<em>&beta;</em><sub><em>i</em></sub>) &plus; <em>Q</em><sub><em>i</em></sub>&#8239;cos(<em>&omega;</em><sub><em>i</em></sub>) = <em>&delta;y</em><sub><em>i</em>&minus;1</sub>&#8239;(-<em>&#8467;<sub>s</sub></em><sub>,<em>i</em>&minus;1</sub>)&#8239;<em>K<sub>st</sub></em><sub>,<em>i</em>&minus;1</sub> &plus; <em>&delta;y</em><sub><em>i</em></sub>&#8239;((-<em>&#8467;<sub>s</sub></em><sub>,<em>i</em>&minus;1</sub>)&#8239;<em>K<sub>st</sub></em><sub>,<em>i</em>&minus;1</sub> &plus; <em>&#8467;<sub>s</sub></em><sub>,<em>i</em></sub>&#8239;<em>K<sub>sn</sub></em><sub>,<em>i</em></sub> &plus; <em>&#8467;<sub>b</sub></em><sub>,<em>i</em></sub>&#8239;<em>K<sub>bA</sub></em><sub>,<em>i</em></sub>) &plus; <em>&delta;y</em><sub><em>i</em>&plus;1</sub>&#8239;(-<em>&#8467;<sub>s</sub></em><sub>,<em>i</em></sub>)&#8239;<em>K<sub>st</sub></em><sub>,<em>i</em></sub> &plus; <em>&delta;x</em><sub><em>i</em></sub>&#8239;(-<em>&#8467;<sub>b</sub></em><sub>,<em>i</em></sub>)&#8239;<em>K<sub>bB</sub></em><sub>,<em>i</em></sub>
+&minus;<em>&Delta;H</em><sub><em>i</em></sub> &minus; <em>K<sub>c</sub></em>&#8239;<em>W</em><sub><em>i</em></sub> &minus; <em>U<sub>b</sub></em><sub>,<em>i</em></sub>&#8239;sin(<em>&alpha;</em><sub><em>i</em></sub>) &plus; <em>U<sub>t</sub></em><sub>,<em>i</em></sub>&#8239;sin(<em>&beta;</em><sub><em>i</em></sub>) &plus; <em>Q</em><sub><em>i</em></sub>&#8239;sin(<em>&omega;</em><sub><em>i</em></sub>) = <em>&delta;x</em><sub><em>i</em>&minus;1</sub>&#8239;&minus;<em>&#8467;<sub>s</sub></em><sub>,<em>i</em>&minus;1</sub>&#8239;<em>K<sub>sn</sub></em><sub>,<em>i</em>&minus;1</sub> &plus; <em>&delta;x</em><sub><em>i</em></sub>&#8239;(&minus;<em>&#8467;<sub>s</sub></em><sub>,<em>i</em>&minus;1</sub>&#8239;<em>K<sub>sn</sub></em><sub>,<em>i</em>&minus;1</sub> &plus; <em>&#8467;<sub>s</sub></em><sub>,<em>i</em></sub>&#8239;<em>K<sub>sn</sub></em><sub>,<em>i</em></sub> &plus; <em>&#8467;<sub>b</sub></em><sub>,<em>i</em></sub>&#8239;<em>K<sub>bA</sub></em><sub>,<em>i</em></sub>) &plus; <em>&delta;x</em><sub><em>i</em>&plus;1</sub>&#8239;&minus;<em>&#8467;<sub>s</sub></em><sub>,<em>i</em></sub>&#8239;<em>K<sub>sn</sub></em><sub>,<em>i</em></sub> &plus; <em>&delta;y</em><sub><em>i</em></sub>&#8239;&minus;<em>&#8467;<sub>b</sub></em><sub>,<em>i</em></sub>&#8239;<em>K<sub>bB</sub></em><sub>,<em>i</em></sub> = &minus;<em>W</em><sub><em>i</em></sub> &minus; <em>U<sub>b</sub></em><sub>,<em>i</em></sub>&#8239;cos(<em>&alpha;</em><sub><em>i</em></sub>) &plus; <em>U<sub>t</sub></em><sub>,<em>i</em></sub>&#8239;cos(<em>&beta;</em><sub><em>i</em></sub>) &plus; <em>Q</em><sub><em>i</em></sub>&#8239;cos(<em>&omega;</em><sub><em>i</em></sub>) = <em>&delta;y</em><sub><em>i</em>&minus;1</sub>&#8239;&minus;<em>&#8467;<sub>s</sub></em><sub>,<em>i</em>&minus;1</sub>&#8239;<em>K<sub>st</sub></em><sub>,<em>i</em>&minus;1</sub> &plus; <em>&delta;y</em><sub><em>i</em></sub>&#8239;(&minus;<em>&#8467;<sub>s</sub></em><sub>,<em>i</em>&minus;1</sub>&#8239;<em>K<sub>st</sub></em><sub>,<em>i</em>&minus;1</sub> &plus; <em>&#8467;<sub>s</sub></em><sub>,<em>i</em></sub>&#8239;<em>K<sub>sn</sub></em><sub>,<em>i</em></sub> &plus; <em>&#8467;<sub>b</sub></em><sub>,<em>i</em></sub>&#8239;<em>K<sub>bA</sub></em><sub>,<em>i</em></sub>) &plus; <em>&delta;y</em><sub><em>i</em>&plus;1</sub>&#8239;&minus;<em>&#8467;<sub>s</sub></em><sub>,<em>i</em></sub>&#8239;<em>K<sub>st</sub></em><sub>,<em>i</em></sub> &plus; <em>&delta;x</em><sub><em>i</em></sub>&#8239;&minus;<em>&#8467;<sub>b</sub></em><sub>,<em>i</em></sub>&#8239;<em>K<sub>bB</sub></em><sub>,<em>i</em></sub>
 </div>
 </a>
 </td>
@@ -4044,7 +4052,7 @@ Using the net force-displacement equilibrium equation of a slice from DD13 with 
 </p>
 <a id="">
 <div class="equation">
-(-<em>&Delta;H</em><sub><em>i</em></sub>) &minus; <em>K<sub>c</sub></em>&#8239;<em>W</em><sub><em>i</em></sub> &minus; <em>U<sub>b</sub></em><sub>,<em>i</em></sub>&#8239;sin(<em>&alpha;</em><sub><em>i</em></sub>) &plus; <em>U<sub>t</sub></em><sub>,<em>i</em></sub>&#8239;sin(<em>&beta;</em><sub><em>i</em></sub>) &plus; <em>Q</em><sub><em>i</em></sub>&#8239;sin(<em>&omega;</em><sub><em>i</em></sub>) = <em>&delta;x</em><sub><em>i</em>&minus;1</sub>&#8239;(-<em>&#8467;<sub>s</sub></em><sub>,<em>i</em>&minus;1</sub>)&#8239;<em>K<sub>sn</sub></em><sub>,<em>i</em>&minus;1</sub> &plus; <em>&delta;x</em><sub><em>i</em></sub>&#8239;((-<em>&#8467;<sub>s</sub></em><sub>,<em>i</em>&minus;1</sub>)&#8239;<em>K<sub>sn</sub></em><sub>,<em>i</em>&minus;1</sub> &plus; <em>&#8467;<sub>s</sub></em><sub>,<em>i</em></sub>&#8239;<em>K<sub>sn</sub></em><sub>,<em>i</em></sub> &plus; <em>&#8467;<sub>b</sub></em><sub>,<em>i</em></sub>&#8239;<em>K<sub>bA</sub></em><sub>,<em>i</em></sub>) &plus; <em>&delta;x</em><sub><em>i</em>&plus;1</sub>&#8239;(-<em>&#8467;<sub>s</sub></em><sub>,<em>i</em></sub>)&#8239;<em>K<sub>sn</sub></em><sub>,<em>i</em></sub> &plus; <em>&delta;y</em><sub><em>i</em></sub>&#8239;(-<em>&#8467;<sub>b</sub></em><sub>,<em>i</em></sub>)&#8239;<em>K<sub>bB</sub></em><sub>,<em>i</em></sub> = (-<em>W</em><sub><em>i</em></sub>) &minus; <em>U<sub>b</sub></em><sub>,<em>i</em></sub>&#8239;cos(<em>&alpha;</em><sub><em>i</em></sub>) &plus; <em>U<sub>t</sub></em><sub>,<em>i</em></sub>&#8239;cos(<em>&beta;</em><sub><em>i</em></sub>) &plus; <em>Q</em><sub><em>i</em></sub>&#8239;cos(<em>&omega;</em><sub><em>i</em></sub>) = <em>&delta;y</em><sub><em>i</em>&minus;1</sub>&#8239;(-<em>&#8467;<sub>s</sub></em><sub>,<em>i</em>&minus;1</sub>)&#8239;<em>K<sub>st</sub></em><sub>,<em>i</em>&minus;1</sub> &plus; <em>&delta;y</em><sub><em>i</em></sub>&#8239;((-<em>&#8467;<sub>s</sub></em><sub>,<em>i</em>&minus;1</sub>)&#8239;<em>K<sub>st</sub></em><sub>,<em>i</em>&minus;1</sub> &plus; <em>&#8467;<sub>s</sub></em><sub>,<em>i</em></sub>&#8239;<em>K<sub>sn</sub></em><sub>,<em>i</em></sub> &plus; <em>&#8467;<sub>b</sub></em><sub>,<em>i</em></sub>&#8239;<em>K<sub>bA</sub></em><sub>,<em>i</em></sub>) &plus; <em>&delta;y</em><sub><em>i</em>&plus;1</sub>&#8239;(-<em>&#8467;<sub>s</sub></em><sub>,<em>i</em></sub>)&#8239;<em>K<sub>st</sub></em><sub>,<em>i</em></sub> &plus; <em>&delta;x</em><sub><em>i</em></sub>&#8239;(-<em>&#8467;<sub>b</sub></em><sub>,<em>i</em></sub>)&#8239;<em>K<sub>bB</sub></em><sub>,<em>i</em></sub>
+&minus;<em>&Delta;H</em><sub><em>i</em></sub> &minus; <em>K<sub>c</sub></em>&#8239;<em>W</em><sub><em>i</em></sub> &minus; <em>U<sub>b</sub></em><sub>,<em>i</em></sub>&#8239;sin(<em>&alpha;</em><sub><em>i</em></sub>) &plus; <em>U<sub>t</sub></em><sub>,<em>i</em></sub>&#8239;sin(<em>&beta;</em><sub><em>i</em></sub>) &plus; <em>Q</em><sub><em>i</em></sub>&#8239;sin(<em>&omega;</em><sub><em>i</em></sub>) = <em>&delta;x</em><sub><em>i</em>&minus;1</sub>&#8239;&minus;<em>&#8467;<sub>s</sub></em><sub>,<em>i</em>&minus;1</sub>&#8239;<em>K<sub>sn</sub></em><sub>,<em>i</em>&minus;1</sub> &plus; <em>&delta;x</em><sub><em>i</em></sub>&#8239;(&minus;<em>&#8467;<sub>s</sub></em><sub>,<em>i</em>&minus;1</sub>&#8239;<em>K<sub>sn</sub></em><sub>,<em>i</em>&minus;1</sub> &plus; <em>&#8467;<sub>s</sub></em><sub>,<em>i</em></sub>&#8239;<em>K<sub>sn</sub></em><sub>,<em>i</em></sub> &plus; <em>&#8467;<sub>b</sub></em><sub>,<em>i</em></sub>&#8239;<em>K<sub>bA</sub></em><sub>,<em>i</em></sub>) &plus; <em>&delta;x</em><sub><em>i</em>&plus;1</sub>&#8239;&minus;<em>&#8467;<sub>s</sub></em><sub>,<em>i</em></sub>&#8239;<em>K<sub>sn</sub></em><sub>,<em>i</em></sub> &plus; <em>&delta;y</em><sub><em>i</em></sub>&#8239;&minus;<em>&#8467;<sub>b</sub></em><sub>,<em>i</em></sub>&#8239;<em>K<sub>bB</sub></em><sub>,<em>i</em></sub> = &minus;<em>W</em><sub><em>i</em></sub> &minus; <em>U<sub>b</sub></em><sub>,<em>i</em></sub>&#8239;cos(<em>&alpha;</em><sub><em>i</em></sub>) &plus; <em>U<sub>t</sub></em><sub>,<em>i</em></sub>&#8239;cos(<em>&beta;</em><sub><em>i</em></sub>) &plus; <em>Q</em><sub><em>i</em></sub>&#8239;cos(<em>&omega;</em><sub><em>i</em></sub>) = <em>&delta;y</em><sub><em>i</em>&minus;1</sub>&#8239;&minus;<em>&#8467;<sub>s</sub></em><sub>,<em>i</em>&minus;1</sub>&#8239;<em>K<sub>st</sub></em><sub>,<em>i</em>&minus;1</sub> &plus; <em>&delta;y</em><sub><em>i</em></sub>&#8239;(&minus;<em>&#8467;<sub>s</sub></em><sub>,<em>i</em>&minus;1</sub>&#8239;<em>K<sub>st</sub></em><sub>,<em>i</em>&minus;1</sub> &plus; <em>&#8467;<sub>s</sub></em><sub>,<em>i</em></sub>&#8239;<em>K<sub>sn</sub></em><sub>,<em>i</em></sub> &plus; <em>&#8467;<sub>b</sub></em><sub>,<em>i</em></sub>&#8239;<em>K<sub>bA</sub></em><sub>,<em>i</em></sub>) &plus; <em>&delta;y</em><sub><em>i</em>&plus;1</sub>&#8239;&minus;<em>&#8467;<sub>s</sub></em><sub>,<em>i</em></sub>&#8239;<em>K<sub>st</sub></em><sub>,<em>i</em></sub> &plus; <em>&delta;x</em><sub><em>i</em></sub>&#8239;&minus;<em>&#8467;<sub>b</sub></em><sub>,<em>i</em></sub>&#8239;<em>K<sub>bB</sub></em><sub>,<em>i</em></sub>
 </div>
 </a>
 <p class="paragraph">
@@ -4128,7 +4136,7 @@ RFEM analysis can also be used to calculate the factor of safety for the slope. 
 </a>
 <a id="">
 <div class="equation">
-<em>&delta;v</em><sub><em>i</em></sub> = (-sin(<em>&alpha;</em><sub><em>i</em></sub>))&#8239;<em>&delta;x</em><sub><em>i</em></sub> &plus; sin(<em>&alpha;</em><sub><em>i</em></sub>)&#8239;<em>&delta;y</em><sub><em>i</em></sub>
+<em>&delta;v</em><sub><em>i</em></sub> = &minus;sin(<em>&alpha;</em><sub><em>i</em></sub>)&#8239;<em>&delta;x</em><sub><em>i</em></sub> &plus; sin(<em>&alpha;</em><sub><em>i</em></sub>)&#8239;<em>&delta;y</em><sub><em>i</em></sub>
 </div>
 </a>
 <p class="paragraph">
@@ -4284,7 +4292,7 @@ Description
 </th>
 <td>
 <p class="paragraph">
-Given the necessary slope inputs, a minimization algorithm or function <em>&Upsilon;</em> will identify the critical slip surface of the slope, with the critical slip coordinates <em>{x<sub>cs</sub>,y<sub>cs</sub>}</em> and the minimum factor of safety FSmin that results.
+Given the necessary slope inputs, a minimization algorithm or function <em>&Upsilon;</em> will identify the critical slip surface of the slope, with the critical slip coordinates <em>{x<sub>cs</sub>,y<sub>cs</sub>}</em> and the minimum factor of safety <em>FS</em><sub><em>min</em></sub> that results.
 </p>
 </td>
 </tr>
@@ -4313,7 +4321,7 @@ Physical Constraints
 Typical Value
 </th>
 <th>
-Typical Uncertainty
+TU
 </th>
 </tr>
 <tr>
@@ -4745,13 +4753,13 @@ References
 [2]: Koothoor, Nirmitha. <em>A document drive approach to certifying scientific computing software</em>. Master's thesis, McMaster University, Hamilton, Canada: 2013. Print.
 </p>
 <p>
-[3]: Parnas, David L. and Clements, Paul C. "A rational design process: How and why to fake it." <em>IEEE Transactions on Software Engineering</em>, vol. 12, Washington, USA: no. 2, 1986. pp. 251&ndash;257. Print.
+[3]: Parnas, David L. and Clements, P. C. "A rational design process: How and why to fake it." <em>IEEE Transactions on Software Engineering</em>, vol. 12, Washington, USA: no. 2, 1986. pp. 251&ndash;257. Print.
 </p>
 <p>
 [4]: Qian, Q. H., Zhu, D. Y., Lee, C. F., and Chen, G. R. "A concise algorithm for computing the factor of safety using the morgenstern price method." <em>Canadian Geotechnical Journal</em>, vol. 42, no. 1, 19 February 2005. pp. 272&ndash;278. Print.
 </p>
 <p>
-[5]: Smith, W. Spencer and Lai, Lei. "A new requirements template for scientific computing." <em>SREP</em>, Paris, France: 2005. pp. 107&ndash;121. In J. Ralyt&eacute;, P. Agerfalk, and N. Kraiem, editors, Proceedings of the First International Workshopon Situational Requirements Engineering Processes - Methods, Techniques and Tools to Support Situation-Specific Requirements Engineering Processes. In conjunction with 13th IEEE International Requirements Engineering Conference. Print.
+[5]: Smith, W. Spencer and Lai, Lei. "A new requirements template for scientific computing." Edited by PJ Agerfalk, N. Kraiem, and J. Ralyte, <em>Proceedings of the First International Workshop on Situational Requirements Engineering Processes - Methods, Techniques and Tools to Support Situation-Specific Requirements Engineering Processes, SREP'05</em>, Paris, France: 2005. pp. 107&ndash;121. In conjunction with 13th IEEE International Requirements Engineering Conference, Print.
 </p>
 <p>
 [6]: Stolle, Dieter and Guo, Peijun. "Limit equilibrum slope stability analysis using rigid finite elements." <em>Canadian Geotechnical Journal</em>, vol. 45, no. 5, 20 May 2008. pp. 653&ndash;662. Print.

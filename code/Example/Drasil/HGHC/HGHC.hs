@@ -2,6 +2,7 @@ module Drasil.HGHC.HGHC (srsBody, mgBody, misBody, modules, thisChoices, thisCod
 
 import Language.Drasil
 import Drasil.DocumentLanguage
+-- import Drasil.DocumentLanguage.Definitions --Needed for SCS Section DDs
 
 import Drasil.Template.DD (makeDD)
 
@@ -61,8 +62,12 @@ thisSI = SI {
 thisSRS :: DocDesc
 thisSRS = RefSec (RefProg intro 
   [TUnits, 
-  tsymb [TSPurpose, SymbConvention [Lit (nw nuclearPhys), Manual (nw fp)]]])
-  : [Verbatim s3]
+  tsymb [TSPurpose, SymbConvention [Lit (nw nuclearPhys), Manual (nw fp)]]]) : 
+--  SSDSec ( SSDProg [ SSDSolChSpec 
+--  (SCSProg [DDs [Label, Symbol, Units, DefiningEquation,
+--  Description Verbose IncludeUnits (S "")] hghcVars ]) ] ) :
+-- Above Data Defs not yet implemented.
+  [Verbatim s3]
   
 s3 :: Section --, s4 
 s3 = dataDefnF EmptyS (map (Definition . Data) hghcVars)

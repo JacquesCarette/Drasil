@@ -4,9 +4,16 @@
 \hypersetup{bookmarks=true,colorlinks=true,linkcolor=red,citecolor=blue,filecolor=magenta,urlcolor=cyan}
 \usepackage{amsmath}
 \usepackage{amssymb}
+\usepackage{mathtools}
+\usepackage{breqn}
+\usepackage{tabu}
 \usepackage{longtable}
 \usepackage{booktabs}
 \usepackage{caption}
+\usepackage{filecontents}
+\usepackage[backend=bibtex]{biblatex}
+\global\tabulinesep=1mm
+\bibliography{bibfile}
 \title{Software Requirements Specification for Chipmunk2D}
 \author{Alex Halliwushka and Luthfi Mawarid}
 \begin{document}
@@ -40,20 +47,24 @@ rad & angle (radian)
 \subsection{Table of Symbols}
 \label{Sec:TablofSymb}
 The table that follows summarizes the symbols used in this document along with their units. Throughout the document, symbols in bold will represent vectors, and scalars otherwise. The symbols are listed in alphabetical order.
-\begin{longtable*}{l l l}
+\begin{longtabu}{l X[l] l}
 \toprule
 Symbol & Description & Units
 \\
 \midrule
 $\mathbf{a}$ & Acceleration & $\frac{\text{m}}{\text{s}^{2}}$
 \\
-$\mathbf{a}_{i}$ & The I-Th Body's Acceleration & $\frac{\text{m}}{\text{s}^{2}}$
+${\mathbf{a}_{i}}$ & The I-Th Body's Acceleration & $\frac{\text{m}}{\text{s}^{2}}$
 \\
 $\mathbf{a}(t)$ & Linear Acceleration & $\frac{\text{m}}{\text{s}^{2}}$
 \\
 $C_{R}$ & Coefficient of restitution & 
 \\
 $\mathbf{F}$ & Force Applied to the I-Th Body at Time T & N
+\\
+${\mathbf{F}_{1}}$ & Force exerted by the first body (on another body) & N
+\\
+${\mathbf{F}_{2}}$ & Force exerted by the second body (on another body) & N
 \\
 $\mathbf{F}$ & Force & N
 \\
@@ -62,6 +73,12 @@ $g$ & Gravitational acceleration & $\frac{\text{m}}{\text{s}^{2}}$
 $G$ & Gravitational constant & $\frac{\text{m}^{3}}{(\text{kg}\text{s}^{2})}$
 \\
 $\mathbf{\hat{i}}$ & Horizontal Unit Vector & m
+\\
+${\mathbf{I}_{A}}$ & Moment of Inertia Of Rigid Body A & kg$\text{m}^{2}$
+\\
+${\mathbf{I}_{B}}$ & Moment of Inertia Of Rigid Body B & kg$\text{m}^{2}$
+\\
+${\mathbf{I}_{k}}$ & Moment of Inertia Of the K-Th Rigid Body & kg$\text{m}^{2}$
 \\
 $\mathbf{I}$ & Moment of inertia & kg$\text{m}^{2}$
 \\
@@ -73,13 +90,19 @@ $\mathbf{\hat{j}}$ & Vertical Unit Vector & m
 \\
 $L$ & Length & m
 \\
-$m_{A}$ & Mass Of Rigid Body A & kg
+${m_{1}}$ & Mass of the first body & kg
 \\
-$m_{B}$ & Mass Of Rigid Body B & kg
+${m_{2}}$ & Mass of the second body & kg
 \\
-$m_{i}$ & Mass Of the I-Th Particle & kg
+${m_{A}}$ & Mass Of Rigid Body A & kg
+\\
+${m_{B}}$ & Mass Of Rigid Body B & kg
+\\
+${m_{i}}$ & Mass Of the I-Th Particle & kg
 \\
 $M$ & Total Mass of the Rigid Body & kg
+\\
+${m_{i}}$ & Mass Of the I-Th Rigid Body & kg
 \\
 $m$ & Mass & kg
 \\
@@ -87,9 +110,11 @@ $\mathbf{n}$ & Collision Normal Vector & m
 \\
 $n$ & Number of particles in a rigid body & 
 \\
-$\mathbf{p}_{CM}$ & The mass-weighted average position of a rigid body's particles & m
+${\mathbf{p}_{CM}}$ & The mass-weighted average position of a rigid body's particles & m
 \\
-$\mathbf{p}_{i}$ & Position Vector of the I-Th Particle & m
+${\mathbf{p}_{i}}$ & Position Vector of the I-Th Particle & m
+\\
+$P$ & Point of collision & m
 \\
 $\mathbf{p}$ & Position & m
 \\
@@ -97,19 +122,39 @@ $r$ & Distance & m
 \\
 $\mathbf{r}$ & Displacement & m
 \\
+$\mathbf{\hat{r}}$ & Displacement unit vector & m
+\\
+${\mathbf{r}_{AP}}$ & Displacement vector between the centre of mass of rigid body A and contact point P & m
+\\
+${\mathbf{r}_{BP}}$ & Displacement vector between the centre of mass of rigid body B and contact point P & m
+\\
+${\mathbf{r}_{kP}}$ & Displacement vector between the centre of mass of rigid body k and contact point P & m
+\\
+${\mathbf{r}_{OB}}$ & Displacement vector between the origin and point B & m
+\\
 $\mathbf{r}(t)$ & Linear Displacement & m
 \\
 $t$ & Time & s
 \\
-$t_{c}$ & Denotes the time at collision & s
+${t_{c}}$ & Denotes the time at collision & s
 \\
-$\mathbf{v}_{i}^{AB}$ & Relative Velocity Between Rigid Bodies of A and B & $\frac{\text{m}}{\text{s}}$
+$t$ & Point in time & s
 \\
-$\mathbf{v}_{A}$ & Velocity At Point A & $\frac{\text{m}}{\text{s}}$
+${t_{0}}$ & Denotes the initial time & s
 \\
-$\mathbf{v}_{B}$ & Velocity At Point B & $\frac{\text{m}}{\text{s}}$
+${t_{c}}$ & Denotes the time at collision & s
 \\
-$\mathbf{v}_{i}$ & Velocity Of the I-Th Body's Velocity & $\frac{\text{m}}{\text{s}}$
+${t_{c}}$ & I-th body's velocity & s
+\\
+${{\mathbf{v}_{i}}^{AB}}$ & Relative Velocity Between Rigid Bodies of A and B & $\frac{\text{m}}{\text{s}}$
+\\
+${\mathbf{v}_{A}}$ & Velocity At Point A & $\frac{\text{m}}{\text{s}}$
+\\
+${\mathbf{v}_{B}}$ & Velocity At Point B & $\frac{\text{m}}{\text{s}}$
+\\
+${\mathbf{v}_{i}}$ & Velocity Of the I-Th Body's Velocity & $\frac{\text{m}}{\text{s}}$
+\\
+${\mathbf{v}_{O}}$ & Velocity At Point Origin & $\frac{\text{m}}{\text{s}}$
 \\
 $\mathbf{v}$ & Velocity & $\frac{\text{m}}{\text{s}}$
 \\
@@ -117,29 +162,33 @@ $\mathbf{v}(t)$ & Linear Velocity & $\frac{\text{m}}{\text{s}}$
 \\
 $||\mathbf{n}||$ & Length of the Normal Vector & m
 \\
-$||\mathbf{r}_{AP}*\mathbf{n}||$ & Length of the Perpendicular Vector To the Contact Displacement Vector of Rigid Body A & m
+$||{\mathbf{r}_{AP}}*\mathbf{n}||$ & Length of the Perpendicular Vector To the Contact Displacement Vector of Rigid Body A & m
 \\
-$||\mathbf{r}_{BP}*\mathbf{n}||$ & Length of the Perpendicular Vector To the Contact Displacement Vector of Rigid Body B & m
+$||{\mathbf{r}_{BP}}*\mathbf{n}||$ & Length of the Perpendicular Vector To the Contact Displacement Vector of Rigid Body B & m
+\\
+$||\mathbf{r}||$ & Euclidean norm of the displacement & m
+\\
+${||\mathbf{r}||^{2}}$ & Squared distance & $\text{m}^{2}$
 \\
 $\alpha{}$ & Angular Acceleration & $\frac{\text{rad}}{\text{s}^{2}}$
 \\
 $\theta{}$ & Angular Displacement & rad
 \\
-$\tau{}_{i}$ & Is the torque applied to the i-th body & Nm
+${\tau{}_{i}}$ & Is the torque applied to the i-th body & Nm
 \\
 $\tau{}$ & Torque & Nm
 \\
 $\phi{}$ & Orientation & rad
 \\
-$\omega{}_{A}$ & Is the A Body's Angular Velocity & $\frac{\text{rad}}{\text{s}}$
+${\omega{}_{A}}$ & Is the A Body's Angular Velocity & $\frac{\text{rad}}{\text{s}}$
 \\
-$\omega{}_{B}$ & Is the B Body's Angular Velocity & $\frac{\text{rad}}{\text{s}}$
+${\omega{}_{B}}$ & Is the B Body's Angular Velocity & $\frac{\text{rad}}{\text{s}}$
 \\
 $\omega{}$ & Angular Velocity & $\frac{\text{rad}}{\text{s}}$
 \\
 \bottomrule
 \label{Table:TablofSymb}
-\end{longtable*}
+\end{longtabu}
 \subsection{Abbreviations and Acronyms}
 \label{Sec:AbbrandAcro}
 \begin{longtable*}{l l}
@@ -177,11 +226,11 @@ T & Theoretical Model
 \section{Introduction}
 \label{Sec:Intr}
 Due to the rising cost of developing video games, developers are looking for ways to save time and money for their projects. Using an open source physics library that is reliable and free will cut down development costs and lead to better quality products.
-The following section provides an overview of the Software Requirements Specification (SRS) for Chipmunk2D, an open source 2D rigid body physics library. This section explains the purpose of this document, the scope of the system, and the organization of the document.
+The following section provides an overview of the Software Requirements Specification (SRS) for Chipmunk2D. This section explains the purpose of this document, the scope of the system, the organization of the document, and the characteristics of the intended reader.
 \subsection{Purpose of Document}
 \label{Sec:PurpofDocu}
-This document descibes the modeling of an open source 2D rigid body physics library used for games. The theoretical models andgoal statements used in Chipmunk2D are provided. This document is intended to be used as a reference to provide all necessary information to understand and verify the model.
-This document will be used as a starting point for subsequent development phases, including writing the design specification and the software verification and validation plan. The design document will show how the requirements are to be realized, including decisions on the numerical algorithms and programming environment. The verification and validation plan will show the steps that will be used to increase confidence in the software documentation and the implementation. Although the SRS fits in a series of documents that follow the so-called waterfall model, the actual development process is not constrained in any way. Even when the waterfall model is not followed, as Parnas and Clements point out, the most logical way to present the documentation is still to &quot;fake&quot; a rational design process.
+This document descibes the modeling of an open source 2D rigid body physics library used for games. The theoretical models and goal statements used in Chipmunk2D are provided. This document is intended to be used as a reference to provide all necessary information to understand and verify the model.
+This document will be used as a starting point for subsequent development phases, including writing the design specification and the software verification and validation plan. The design document will show how the requirements are to be realized, including decisions on the numerical algorithms and programming environment. The verification and validation plan will show the steps that will be used to increase confidence in the software documentation and the implementation. Although the SRS fits in a series of documents that follow the so-called waterfall model, the actual development process is not constrained in any way. Even when the waterfall model is not followed, as Parnas and Clements point out, the most logical way to present the documentation is still to ``fake" a rational design process.
 \subsection{Scope of Requirements}
 \label{Sec:ScopofRequ}
 The scope of the requirements includes the physical simulation of 2D rigid bodies acted on by forces. Given the appropriate inputs, the code for Chipmunk2D is intended to simulate how these rigid bodies interact with one another.
@@ -209,7 +258,7 @@ This section first presents the problem description, which gives a high-level vi
 Creating a gaming physics library is a difficult task. Games need physics libraries that simulate objects acting under various physical conditions, while simultaneously being fast and efficient enough to work in soft real-time during the game. Developing a physics library from scratch takes a long period of time and is very costly, presenting barriers of entry which make it difficult for game developers to include physics in their products. There are a few free, open source and high quality physics libraries available to be used for consumer products (Section~\ref{Sec:Off-Solu}). By creating a simple, lightweight, fast and portable 2D rigid body physics library, game development will be more accessible to the masses and higher quality products will be produced.
 \subsubsection{Terminology and Definitions}
 \label{Sec:TermandDefi}
-This subsection provides a list of terms that are used in the subsequent sections and their meaning, with the purpose of reducing ambiguity and making it easier to correctly understand the requirements:
+This subsection provides a list of terms that are used in the subsequent sections and their meaning, with the purpose of reducing ambiguity and making it easier to correctly understand the requirements
 \begin{enumerate}
 \item{Rigid body: A solid body in which deformation is neglected.}
 \item{Elasticity: Ratio of the relative velocities of two colliding objects after and before a collision.}
@@ -219,6 +268,7 @@ This subsection provides a list of terms that are used in the subsequent section
 \end{enumerate}
 \subsubsection{Goal Statements}
 \label{Sec:GoalStat}
+Given the inputs, the goal statements are:
 \begin{itemize}
 \item[GS1:]Given the physical properties, initial positions and velocities, and forces applied on a set of rigid bodies, determine their new positions and velocities over a period of time.
 \item[GS2:]Given the physical properties, initial orientations and angular velocities, and forces applied on a set of rigid bodies, determine their new orientations and angular velocities over a period of time.
@@ -249,7 +299,7 @@ This section focuses on the general equations and laws that Chipmunk2D is based 
 \phantomsection 
 \label{T:t1NewtonSL}
 \\ \midrule \\
-Label & Newton's second law of motion
+Label & Newton's Second Law of Motion
 \\ \midrule \\
 Equation & $\mathbf{F}=m\mathbf{a}$
 \\ \midrule \\
@@ -263,11 +313,11 @@ Description & The net force $\mathbf{F}$ (N) on a rigid body is proportional to 
 \phantomsection 
 \label{T:t2NewtonTL}
 \\ \midrule \\
-Label & Newton's third law of motion
+Label & Newton's Third Law of Motion
 \\ \midrule \\
 Equation & $\mathbf{F}_{1}=-\mathbf{F}_{2}$
 \\ \midrule \\
-Description & Every action has an equal and opposite reaction. In other words, the force $\mathbf{F}_{1}$ (N) exerted on the second rigid body by the first is equal in magnitude and in the opposite direction to the force $\mathbf{F}_{2}$ (N) exerted on the first rigid body by the second.
+Description & Every action has an equal and opposite reaction. In other words, the force ${\mathbf{F}_{1}}$ (N) exerted on the second rigid body by the first is equal in magnitude and in the opposite direction to the force ${\mathbf{F}_{2}}$ (N) exerted on the first rigid body by the second.
 \\ \bottomrule \end{tabular}
 \end{minipage}\\
 ~\newline
@@ -277,11 +327,11 @@ Description & Every action has an equal and opposite reaction. In other words, t
 \phantomsection 
 \label{T:t3NewtonLUG}
 \\ \midrule \\
-Label & Newton's law of universal gravitation
+Label & Newton's Law of Universal Gravitation
 \\ \midrule \\
 Equation & $\mathbf{F}=G\frac{m_{1}m_{2}}{||\mathbf{r}||^{2}}\mathbf{\hat{r}}=G\frac{m_{1}m_{2}}{||\mathbf{r}||^{2}}\frac{\mathbf{r}}{||\mathbf{r}||}$
 \\ \midrule \\
-Description & Two rigid bodies in the universe attract each other with a force $\mathbf{F}$ (N) that is directly proportional to the product of their masses, $m_{1}$ and $m_{2}$ (kg), and inversely proportional to the squared distance $||\mathbf{r}||^{2}$ ($\text{m}^{2}$) between them. The vector $\mathbf{r}$ (m) is the displacement between the centres of the rigid bodies and $||\mathbf{r}||$ (m) represents the Euclidean norm of the displacement, or absolute distance between the two. $\mathbf{\hat{r}}$ denotes the displacement unit vector, equivalent to the displacement divided by the Euclidean norm of the displacement, as shown above. Finally, $G$ is the gravitational constant (6.673 * 10E-11) ($\frac{\text{m}^{3}}{(\text{kg}\text{s}^{2})}$).
+Description & Two rigid bodies in the universe attract each other with a force $\mathbf{F}$ (N) that is directly proportional to the product of their masses, ${m_{1}}$ and ${m_{2}}$ (kg), and inversely proportional to the squared distance ${||\mathbf{r}||^{2}}$ ($\text{m}^{2}$) between them. The vector $\mathbf{r}$ (m) is the displacement between the centres of the rigid bodies and $||\mathbf{r}||$ (m) represents the Euclidean norm of the displacement, or absolute distance between the two. $\mathbf{\hat{r}}$ denotes the displacement unit vector, equivalent to the displacement divided by the Euclidean norm of the displacement, as shown above. Finally, $G$ is the gravitational constant (6.673 * 10E-11) ($\frac{\text{m}^{3}}{(\text{kg}\text{s}^{2})}$).
 \\ \bottomrule \end{tabular}
 \end{minipage}\\
 ~\newline
@@ -291,11 +341,11 @@ Description & Two rigid bodies in the universe attract each other with a force $
 \phantomsection 
 \label{T:t4ChaslesThm}
 \\ \midrule \\
-Label & Chasles' theorem
+Label & Chasles' Theorem
 \\ \midrule \\
 Equation & $\mathbf{v}_{B}=\mathbf{v}_{O}+\omega{}\mathbf{r}_{OB}$
 \\ \midrule \\
-Description & The linear velocity $\mathbf{v}_{B}$ ($\frac{\text{m}}{\text{s}}$) of any point B in a rigid body is the sum of the linear velocity $\mathbf{v}_{O}$ ($\frac{\text{m}}{\text{s}}$) of the rigid body at the origin (axis of rotation) and the resultant vector from the cross product of the rigid body's angular velocity $\omega{}$ ($\frac{\text{rad}}{\text{s}}$) and the displacement vector between the origin and point B, $\mathbf{r}_{OB}$ (m).
+Description & The linear velocity ${\mathbf{v}_{B}}$ ($\frac{\text{m}}{\text{s}}$) of any point B in a rigid body is the sum of the linear velocity ${\mathbf{v}_{O}}$ ($\frac{\text{m}}{\text{s}}$) of the rigid body at the origin (axis of rotation) and the resultant vector from the cross product of the rigid body's angular velocity $\omega{}$ ($\frac{\text{rad}}{\text{s}}$) and the displacement vector between the origin and point B, ${\mathbf{r}_{OB}}$ (m).
 \\ \bottomrule \end{tabular}
 \end{minipage}\\
 ~\newline
@@ -305,7 +355,7 @@ Description & The linear velocity $\mathbf{v}_{B}$ ($\frac{\text{m}}{\text{s}}$)
 \phantomsection 
 \label{T:t5NewtonSLR}
 \\ \midrule \\
-Label & Newton's second law for rotational motion
+Label & Newton's Second Law for Rotational Motion
 \\ \midrule \\
 Equation & $\tau{}=\mathbf{I}\alpha{}$
 \\ \midrule \\
@@ -314,10 +364,55 @@ Description & The net torque $\tau{}$ (Nm) on a rigid body is proportional to it
 \end{minipage}\\
 \subsubsection{General Definitions}
 \label{Sec:GeneDefi}
-This section collects the laws and equations that will be used in deriving the data definitions, which in turn will be used to build the instance models.
+There are no general definitions.
+\subsubsection{Instance Models}
+\label{Sec:InstMode}
+This section transforms the problem defined in FIXME REF into one which is expressed in mathematical terms. It uses concrete symbols defined in FIXME REF to replace the abstract symbols in the models identified in FIXME REF and FIXME REF.
+~\newline
+\noindent \begin{minipage}{\textwidth}
+\begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
+\toprule \textbf{Refname} & \textbf{T:im1}
+\phantomsection 
+\label{T:im1}
+\\ \midrule \\
+Label & Force on the Translational Motion of a Set of 2d Rigid Bodies
+\\ \midrule \\
+Equation & ${\mathbf{a}_{i}}=\frac{d{\mathbf{v}_{i}}\left(t\right)}{dt}=g+\frac{\mathbf{F}\left(t\right)}{{m_{i}}}$
+\\ \midrule \\
+Description & The above equation expresses the total acceleration of the rigid body (A1, A2) i as the sum of gravitational acceleration (GD3) and acceleration due to applied force Fi(t) (T1). The resultant outputs are then obtained from this equation using DD2, DD3 and DD4. It is currently assumed that there is no damping (A6) or constraints (A7) involved. ${m_{i}}$ is the mass of the i-th rigid body (kg). $g$ is the gravitational acceleration ($\frac{\text{m}}{\text{s}^{2}}$). $t$ is the point in time (s). ${t_{0}}$ is the denotes the initial time (s). ${\mathbf{p}_{CM}}$ is the the mass-weighted average position of a rigid body's particles (m). $\mathbf{a}$ is the acceleration ($\frac{\text{m}}{\text{s}^{2}}$). $\mathbf{v}$ is the velocity ($\frac{\text{m}}{\text{s}}$). $\mathbf{F}$ is the force applied to the i-th body at time t (N).
+\\ \bottomrule \end{tabular}
+\end{minipage}\\
+~\newline
+\noindent \begin{minipage}{\textwidth}
+\begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
+\toprule \textbf{Refname} & \textbf{T:im2}
+\phantomsection 
+\label{T:im2}
+\\ \midrule \\
+Label & Force on the Rotational Motion of a Set of 2D Rigid Body
+\\ \midrule \\
+Equation & $\alpha{}=\frac{d\omega{}\left(t\right)}{dt}=\frac{{\tau{}_{i}}\left(t\right)}{\mathbf{I}}$
+\\ \midrule \\
+Description & The above equation for the total angular acceleration of the rigid body (A1, A2) i is derived from T5, and the resultant outputs are then obtained from this equation using DD5, DD6 and DD7. It is currently assumed that there is no damping (A6) or constraints (A7) involved. ${m_{i}}$ is the mass of the i-th rigid body (kg). $g$ is the gravitational acceleration ($\frac{\text{m}}{\text{s}^{2}}$). $t$ is the point in time (s). ${t_{0}}$ is the denotes the initial time (s). $\phi{}$ is the orientation (rad). $\omega{}$ is the angular velocity ($\frac{\text{rad}}{\text{s}}$). $\alpha{}$ is the angular acceleration ($\frac{\text{rad}}{\text{s}^{2}}$). ${\tau{}_{i}}$ is the is the torque applied to the i-th body (Nm). ${\mathbf{I}_{k}}$ is the moment of inertia of the k-th rigid body (kg$\text{m}^{2}$).
+\\ \bottomrule \end{tabular}
+\end{minipage}\\
+~\newline
+\noindent \begin{minipage}{\textwidth}
+\begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
+\toprule \textbf{Refname} & \textbf{T:im3}
+\phantomsection 
+\label{T:im3}
+\\ \midrule \\
+Label & Collisions on 2D Rigid Bodies
+\\ \midrule \\
+Equation & $\mathbf{v}\left({t_{c}}\right)=\mathbf{v}\left(t\right)+\frac{j}{m}\mathbf{n}$
+\\ \midrule \\
+Description & This instance model is based on our assumptions regarding rigid body (A1, A2) collisions (A5). Again, this does not take damping (A6) or constraints (A7) into account. ${m_{i}}$ is the mass of the i-th rigid body (kg). ${\mathbf{I}_{k}}$ is the moment of inertia of the k-th rigid body (kg$\text{m}^{2}$). $t$ is the point in time (s). ${t_{0}}$ is the denotes the initial time (s). ${t_{c}}$ is the denotes the time at collision (s). ${\mathbf{p}_{CM}}$ is the the mass-weighted average position of a rigid body's particles (m). $\mathbf{v}$ is the velocity ($\frac{\text{m}}{\text{s}}$). $\phi{}$ is the orientation (rad). $\omega{}$ is the angular velocity ($\frac{\text{rad}}{\text{s}}$). $\mathbf{n}$ is the collision normal vector (m). $j$ is the collision impulse (scalar) (Ns). $P$ is the point of collision (m). ${\mathbf{r}_{kP}}$ is the displacement vector between the centre of mass of rigid body k and contact point P (m).
+\\ \bottomrule \end{tabular}
+\end{minipage}\\
 \subsubsection{Data Definitions}
 \label{Sec:DataDefi}
-This section collects and defines all the data needed to build the Instance Models. The dimension of each quantity is also given.
+This section collects and defines all the data needed to build the instance models. The dimension of each quantity is also given.
 ~\newline
 \noindent \begin{minipage}{\textwidth}
 \begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
@@ -325,13 +420,13 @@ This section collects and defines all the data needed to build the Instance Mode
 \phantomsection 
 \label{DD:p.CM}
 \\ \midrule \\
-Label & $\mathbf{p}_{CM}$
+Label & The Mass-Weighted Average Position of a Rigid Body's Particles
 \\ \midrule \\
 Units & m
 \\ \midrule \\
-Equation & $\mathbf{p}_{CM}$ = $\frac{\sum{m_{i}\mathbf{p}_{i}}}{M}$
+Equation & ${\mathbf{p}_{CM}}$ = $\frac{\displaystyle\sum{\left[{m_{i}}{\mathbf{p}_{i}}\right]}}{M}$
 \\ \midrule \\
-Description & $\mathbf{p}_{CM}$ is the the mass-weighted average position of a rigid body's particles\newline$m_{i}$ is the mass of the i-th particle\newline$\mathbf{p}_{i}$ is the position vector of the i-th particle\newline$M$ is the total mass of the rigid body
+Description & ${\mathbf{p}_{CM}}$ is the the mass-weighted average position of a rigid body's particles (m)\newline${m_{i}}$ is the mass of the i-th particle (kg)\newline${\mathbf{p}_{i}}$ is the position vector of the i-th particle (m)\newline$M$ is the total mass of the rigid body (kg)
 \\ \bottomrule \end{tabular}
 \end{minipage}\\
 ~\newline
@@ -341,11 +436,11 @@ Description & $\mathbf{p}_{CM}$ is the the mass-weighted average position of a r
 \phantomsection 
 \label{DD:linearDisplacement}
 \\ \midrule \\
-Label & $\mathbf{r}(t)$
+Label & Linear Displacement
 \\ \midrule \\
 Units & m
 \\ \midrule \\
-Equation & $\mathbf{r}(t)$ = $\frac{d\mathbf{p}(t)}{dt}$
+Equation & $\mathbf{r}(t)$ = $\frac{d\mathbf{p}\left(t\right)}{dt}$
 \\ \midrule \\
 Description & $\mathbf{r}(t)$ is the linear displacement of a rigid body as a function of time $t$ (s), also equal to the derivative of its linear position with respect to time $t$\newline$\mathbf{p}$ is the position\newline$t$ is the time
 \\ \bottomrule \end{tabular}
@@ -357,11 +452,11 @@ Description & $\mathbf{r}(t)$ is the linear displacement of a rigid body as a fu
 \phantomsection 
 \label{DD:linearVelocity}
 \\ \midrule \\
-Label & $\mathbf{v}(t)$
+Label & Linear Velocity
 \\ \midrule \\
 Units & $\frac{\text{m}}{\text{s}}$
 \\ \midrule \\
-Equation & $\mathbf{v}(t)$ = $\frac{d\mathbf{r}(t)}{dt}$
+Equation & $\mathbf{v}(t)$ = $\frac{d\mathbf{r}\left(t\right)}{dt}$
 \\ \midrule \\
 Description & $\mathbf{v}(t)$ is the linear velocity of a rigid body as a function of time $t$ (s), also equal to the derivative of its linear velocity with respect to time $t$\newline$\mathbf{r}$ is the displacement\newline$t$ is the time
 \\ \bottomrule \end{tabular}
@@ -373,11 +468,11 @@ Description & $\mathbf{v}(t)$ is the linear velocity of a rigid body as a functi
 \phantomsection 
 \label{DD:linearAcceleration}
 \\ \midrule \\
-Label & $\mathbf{a}(t)$
+Label & Linear Acceleration
 \\ \midrule \\
 Units & $\frac{\text{m}}{\text{s}^{2}}$
 \\ \midrule \\
-Equation & $\mathbf{a}(t)$ = $\frac{d\mathbf{v}(t)}{dt}$
+Equation & $\mathbf{a}(t)$ = $\frac{d\mathbf{v}\left(t\right)}{dt}$
 \\ \midrule \\
 Description & $\mathbf{a}(t)$ is the linear acceleration of a rigid body as a function of time $t$ (s), also equal to the derivative of its linear acceleration with respect to time $t$\newline$\mathbf{v}$ is the velocity\newline$t$ is the time
 \\ \bottomrule \end{tabular}
@@ -389,11 +484,11 @@ Description & $\mathbf{a}(t)$ is the linear acceleration of a rigid body as a fu
 \phantomsection 
 \label{DD:angularDisplacement}
 \\ \midrule \\
-Label & $\theta{}(t)$
+Label & Angular Displacement
 \\ \midrule \\
 Units & rad
 \\ \midrule \\
-Equation & $\theta{}(t)$ = $\frac{d\phi{}(t)}{dt}$
+Equation & $\theta{}$ = $\frac{d\phi{}\left(t\right)}{dt}$
 \\ \midrule \\
 Description & $\theta{}(t)$ is the angular displacement of a rigid body as a function of time $t$ (s), also equal to the derivative of its orientation with respect to time $t$\newline$\phi{}$ is the orientation\newline$t$ is the time
 \\ \bottomrule \end{tabular}
@@ -405,13 +500,13 @@ Description & $\theta{}(t)$ is the angular displacement of a rigid body as a fun
 \phantomsection 
 \label{DD:angularVelocity}
 \\ \midrule \\
-Label & $\omega{}$
+Label & Angular Velocity
 \\ \midrule \\
 Units & $\frac{\text{rad}}{\text{s}}$
 \\ \midrule \\
 Equation & $\omega{}$ = $\frac{d\theta{}\left(t\right)}{dt}$
 \\ \midrule \\
-Description & $\omega{}$ is the angular velocity\newline$\theta{}$ is the angular displacement\newline$t$ is the time
+Description & $\omega{}$ is the angular velocity ($\frac{\text{rad}}{\text{s}}$)\newline$\theta{}$ is the angular displacement (rad)\newline$t$ is the time (s)
 \\ \bottomrule \end{tabular}
 \end{minipage}\\
 ~\newline
@@ -421,7 +516,7 @@ Description & $\omega{}$ is the angular velocity\newline$\theta{}$ is the angula
 \phantomsection 
 \label{DD:angularAcceleration}
 \\ \midrule \\
-Label & $\alpha{}$
+Label & Angular Acceleration
 \\ \midrule \\
 Units & $\frac{\text{rad}}{\text{s}^{2}}$
 \\ \midrule \\
@@ -437,7 +532,7 @@ Description & $\alpha{}(t)$ is the angular acceleration of a rigid body as a fun
 \phantomsection 
 \label{DD:impulseS}
 \\ \midrule \\
-Label & $j$
+Label & Impulse (scalar)
 \\ \midrule \\
 Units & Ns
 \\ \midrule \\
@@ -496,36 +591,36 @@ Description & This instance model is based on our assumptions regarding rigid bo
 Table~\ref{Table:Tabl1:InpuVari} and Table~\ref{Table:Tabl2:OutpVari} show the data constraints on the input and output variables, respectively. The column for physical constraints gives the physical limitations on the range of values that can be taken by the variable. The constraints are conservative, to give the user of the model the flexibility to experiment with unusual situations. The column of typical values is intended to provide a feel for a common scenario. The uncertainty column provides an estimate of the confidence with which the physical quantities can be measured. This information would be part of the input if one were performing an uncertainty quantification exercise.
 \begin{longtable}{l l l}
 \toprule
-Var & Physical Constraints & Typical Value
+Var & Physical Constraints & Typical Value & TU
 \\
 \midrule
-$L$ & $L$ is G/E to 0 & 44.2 m
+$L$ & $L\geq{}0.0$ & $44.2$ m & 0.1
 \\
-$m$ & $m$ is greater than 0 & 56.2 kg
+$m$ & $m\geq{}0.0$ & $56.2$ kg & 0.1
 \\
-$\mathbf{I}$ & $\mathbf{I}$ is G/E to 0 & 74.5 kg$\text{m}^{2}$
+$\mathbf{I}$ & $\mathbf{I}\geq{}0.0$ & $74.5$ kg$\text{m}^{2}$ & 0.1
 \\
 $g$ & None & 9.8 $\frac{\text{m}}{\text{s}^{2}}$
 \\
 $\mathbf{p}$ & None & (0.412, 0.502) m
 \\
-$\mathbf{v}$ & None & 2.51 $\frac{\text{m}}{\text{s}}$
-\\
-$C_{R}$ & $C_{R}$ G/E to 0 and $C_{R}$ less than 1 & 0.8
-\\
 $\phi{}$ & $\phi{}$ G/E to 0 and $\phi{}$ less than 2pi & pi/2 rad
 \\
-$\omega{}$ & None & 2.1 $\frac{\text{rad}}{\text{s}}$
+$\mathbf{v}$ & None & $2.51$ $\frac{\text{m}}{\text{s}}$ & 0.1
 \\
-$\mathbf{F}$ & None & 98.1 N
+$\omega{}$ & None & $2.1$ $\frac{\text{rad}}{\text{s}}$ & 0.1
 \\
-$\tau{}$ & None & 200 Nm
+$\mathbf{F}$ & None & $98.1$ N & 0.1
+\\
+$\tau{}$ & None & $200.0$ Nm & 0.1
+\\
+${C_{R}}$ & ${C_{R}}\geq{}0.0$ and ${C_{R}}\leq{}1.0$ & $0.8$ & 0.1
 \\
 \bottomrule
-\caption{Table 1: Input Variables}
-\label{Table:Tabl1:InpuVari}
+\caption{Input Data Constraints}
+\label{Table:InpuDataCons}
 \end{longtable}
-\begin{longtable}{l l}
+\begin{longtable}{l}
 \toprule
 Var & Physical Constraints
 \\
@@ -539,8 +634,8 @@ $\phi{}$ & $\phi{}$ G/E to 0 and $\phi{}$ less than 2pi
 $\omega{}$ & None
 \\
 \bottomrule
-\caption{Table 2: Output Variables}
-\label{Table:Tabl2:OutpVari}
+\caption{Output Data Constraints}
+\label{Table:OutpDataCons}
 \end{longtable}
 \section{Requirements}
 \label{Sec:Requ}
@@ -551,25 +646,25 @@ This section provides the functional requirements, the business tasks that the s
 \item[R1:]Create a space for all of the rigid bodies in the physical simulation to interact in.
 \item[R2:]Input the initial masses, velocities, orientations, angular velocities of, and forces applied on rigid bodies.
 \item[R3:]Input the surface properties of the bodies, such as friction or elasticity.
-\item[R4:]Verify that the inputs satisfy the required physical constraints from Table~\ref{Table:Tabl1:InpuVari}
+\item[R4:]Verify that the inputs satisfy the required physical constraints from Table~\ref{Table:InpuDataCons}
 \item[R5:]Determine the positions and velocities over a period of time of the 2D rigid bodies acted upon by a force.
 \item[R6:]Determine the orientations and angular velocities over a period of time of the 2D rigid bodies.
 \item[R7:]Determine if any of the rigid bodies in the space have collided.
 \item[R8:]Determine the positions and velocities over a period of time of the 2D rigid bodies that have undergone a collision.
 \end{itemize}
-\subsection{Non-functional Requirements}
+\subsection{Non-Functional Requirements}
 \label{Sec:Non-Requ}
 Games are resource intensive, so performance is a high priority. Other non-functional requirements that are a priority are: correctness, understandability, portability, reliability, and maintainability.
 \section{Likely Changes}
 \label{Sec:LikeChan}
 This section lists the likely changes to be made to the physics game library.
 \begin{itemize}
-\item[LC1:]The internal ODE-solving algorithm used by the library may change in the future.
+\item[LC1:]The internal ODE-solving algorithm used by the library may be changed in the future.
 \item[LC2:]The library may be expanded to deal with edge-to-edge and vertex-to-vertex collisions.
 \item[LC3:]The library may be expanded to include motion with damping.
 \item[LC4:]The library may be expanded to include joints and constraints.
 \end{itemize}
-\section{Off-the-Shelf Solutions}
+\section{Off-The-Shelf Solutions}
 \label{Sec:Off-Solu}
 As mentioned in Section~\ref{Sec:ProbDesc}, there already exist free open source game physics libraries. Similar 2D physics libraries are:
 \begin{enumerate}
@@ -584,7 +679,7 @@ Free open source 3D game physics libraries include:
 \end{enumerate}
 \section{Traceability Matrices and Graphs}
 \label{Sec:TracMatrandGrap}
-The purpose of traceability matrices is to provide easy references on what has to be additionally modified if a certain component is changed. Every time a component is changed, the items in the column of that component that are marked with an "X" should be modified as well. Table~\ref{Table:TracMatrShowtheConnBetwRequ()GoalStat()andOtheItem} shows the dependencies of goal statements, requirements, instance models, and data constraints with each other. Table~\ref{Table:TracMatrShowtheConnBetwAssu()andOtheItem} shows the dependencies of theoretical models, general definitions, data definitions, and instance models on the assumptions. Finally, Table~\ref{Table:TracMatrShowtheConnBetwItemandOtheSect} shows the dependencies of the theoretical models, general definitions, data definitions, and instance models on each other.
+The purpose of the traceability matrices is to provide easy references on what has to be additionally modified if a certain component is changed. Every time a component is changed, the items in the column of that component that are marked with an "X" should be modified as well. Table~\ref{Table:TracMatrShowtheConnBetwRequ()GoalStat()andOtheItem} shows the dependencies of goal statements, requirements, instance models, and data constraints with each other. Table~\ref{Table:TracMatrShowtheConnBetwAssu()andOtheItem} shows the dependencies of theoretical models, general definitions, data definitions, and instance models on the assumptions. Finally, Table~\ref{Table:TracMatrShowtheConnBetwItemandOtheSect} shows the dependencies of the theoretical models, general definitions, data definitions, and instance models on each other.
 \begin{longtable}{l l l l l l l l}
 \toprule
  & IM1 (\hyperref[T:im1]{Definition~T:im1}) & IM2 (\hyperref[T:im2]{Definition~T:im2}) & IM3 (\hyperref[T:im3]{Definition~T:im3}) & R1 (Section~\ref{Sec:FuncRequ}) & R4 (Section~\ref{Sec:FuncRequ}) & R7 (Section~\ref{Sec:FuncRequ}) & Data Constraints (Section~\ref{Sec:DataCons})
@@ -736,18 +831,69 @@ IM3 (\hyperref[T:im3]{Definition~T:im3}) &  &  &  &  &  & X & X &  &  &  & X & X
 \caption{Traceability Matrix Showing the Connections Between Items and Other Sections}
 \label{Table:TracMatrShowtheConnBetwItemandOtheSect}
 \end{longtable}
+\section{Values of Auxiliary Constants}
+\label{Sec:ValuofAuxiCons}
+There are no auxiliary constants.
 \section{References}
 \label{Sec:Refe}
-\begin{itemize}
-\item[[1]:]David L. Parnas. Designing Software for Ease of Extension and Contraction. ICSE '78: Proceedings of the 3rd international conference on Software engineering, 264-277, 1978
-\item[[2]:]Greg Wilson and D.A. Aruliah and C. Titus Brown and Neil P. Chue Hong and Matt Davis and Richard T. Guy and Steven H.D. Haddock and Kathryn D. Huff and Ian M. Mitchell and Mark D. Plumblet and Ben Waugh and Ethan P. White and Paul Wilson. Best Practices for Scientific Computing, 2013
-\item[[3]:]David L. Parnas. On the Criteria To Be Used in Decomposing Systems into Modules. Comm. ACM, vol. 15, no. 2, pp. 1053-1058, 1972
-\item[[4]:]D. L. Parnas and P. C. Clements and D. M. Weiss. The Modular Structure of Complex Systems. ICSE '84: Proceedings of the 7th international conference on Software engineering, 408-417, 1984
-\item[[5]:]David L. Parnas and P.C. Clements. A Rational Design Process: How and Why to Fake it. IEEE Transactions on Software Engineering, 251-257, 1986
-\item[[6]:]Nirmitha Koothoor. A document drive approach to certifying scientific computing software. Master's thesis, McMaster University, Hamilton, Ontario, Canada, 2013.
-\item[[7]:]David L. Parnas and P.C. Clements. A rational design process: How and why to fake it. IEEE Transactions on Software Engineering, 12(2):251-257, February 1986.
-\item[[8]:]W. Spencer Smith and Lei Lai. A new requirements template for scientific computing. In J. Ralyt\'{e}, P. Agerfalk, and N. Kraiem, editors, Proceedings of the First International Workshopon Situational Requirements Engineering Processes - Methods, Techniques and Tools to Support Situation-Specific Requirements Engineering Processes, SREP'05, pages 107-121, Paris, France, 2005. In conjunction with 13th IEEE International Requirements Engineering Conference.
-\item[[9]:]J. Frederick Bueche. Introduction to Physics for Scientists Fourth Edition. 1986
-\item[[10]:]Marilyn Lightstone. Derivation of Tank/PCM Model. 2012
-\end{itemize}
+\begin{filecontents*}{bibfile.bib}
+@article{Parnas_1978,
+author={Parnas, David L.},
+title={Designing Software for Ease of Extension and Contraction.},
+journal={ICSE '78: Proceedings of the 3rd international conference on Software engineering},
+pages={264-277},
+year={1978}}
+
+@article{Wilson_Aruliah_Titus_Chue_Hong_Davis_Guy_Haddock_Huff_Mitchell_Plumblet_Waugh_White_Wilson_2013,
+author={Wilson, Greg and Aruliah, D. A. and Titus, C. and Chue Hong, Neil P. and Davis, Matt and Guy, Richard T. and Haddock, Steven H. D. and Huff, Kathryn D. and Mitchell, Ian M. and Plumblet, Mark D. and Waugh, Ben and White, Ethan P. and Wilson, Paul},
+title={Best Practices for Scientific Computing, 2013},
+year={2013}}
+
+@article{Parnas_1972,
+author={Parnas, David L.},
+title={On the Criteria To Be Used in Decomposing Systems into Modules},
+journal={Communications of the ACM},
+pages={1053-1058},
+year={1972}}
+
+@article{Parnas_Clements_Wiess_1984,
+author={Parnas, David L. and Clements, P. C. and Wiess, },
+title={The Modular Structure of Complex Systems},
+journal={ICSE '84: Proceedings of the 7th international conference on Software engineering},
+pages={408-417},
+year={1984}}
+
+@article{Parnas_Clements_1986,
+author={Parnas, David L. and Clements, P. C.},
+title={A Rational Design Process: How and Why to Fake it},
+journal={IEEE Transactions on Software Engineering},
+pages={251-257},
+year={1986}}
+
+@mastersthesis{Koothoor_2013,
+author={Koothoor, Nirmitha},
+title={A document drive approach to certifying scientific computing software},
+school={McMaster University},
+place={Hamilton, Canada},
+year={2013}}
+
+@article{Smith_Lai_2005,
+author={Smith, W. Spencer and Lai, Lei},
+title={A new requirements template for scientific computing},
+journal={Proceedings of the First International Workshop on Situational Requirements Engineering Processes - Methods, Techniques and Tools to Support Situation-Specific Requirements Engineering Processes, SREP'05},
+editor={Agerfalk, PJ and Kraiem, N. and Ralyte, J.},
+place={Paris, France},
+pages={107-121},
+note={In conjunction with 13th IEEE International Requirements Engineering Conference,},
+year={2005}}
+
+@misc{Bueche_1986,
+author={Bueche, J. Frederick},
+title={Introduction to Physics for Scientists, Fourth Edition},
+publisher={Mcgraw-Hill College},
+year={1986}}
+\end{filecontents*}
+\nocite{*}
+\bibstyle{ieeetr}
+\printbibliography[heading=none]
 \end{document}

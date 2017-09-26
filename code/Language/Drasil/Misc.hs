@@ -39,6 +39,9 @@ mkTable fl (c:cl) = map ($ c) fl : mkTable fl cl
 unit'2Contents :: Quantity u => u -> Sentence
 unit'2Contents x = maybe (S "Unitless") (\y -> Sy (y ^. usymb)) (getUnit x)
 
+unitHidingUnitless :: Quantity u => u -> Sentence
+unitHidingUnitless x = maybe (S "") (\y -> Sy (y ^. usymb)) (getUnit x)
+
 -- | Unwrap the /maybe/ abbreviation/acronym for a chunk. 
 -- Only to be used on chunks that definitely __have__ an abbreviation.
 getAcc :: (NamedIdea c) => c -> Sentence

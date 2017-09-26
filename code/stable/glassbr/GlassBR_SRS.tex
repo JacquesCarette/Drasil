@@ -22,7 +22,7 @@
 \newcommand{\lcthelcnum}{LC\thelcnum}
 \bibliography{bibfile}
 \title{Software Requirements Specification for GlassBR program}
-\author{Nikitha Krithnan and Spencer Smith}
+\author{Nikitha Krithnan and W. Spencer Smith}
 \begin{document}
 \maketitle
 \tableofcontents
@@ -394,7 +394,7 @@ Units & Unitless
 \\ \midrule \\
 Equation & $B$ = $\frac{k}{\left(ab\right)^{m-1}}\left(\left(E\right)\left(h\right)^{2}\right)^{m}\cdot{}LDFe^{J}$
 \\ \midrule \\
-Description & $B$ is the risk of failure\newline$k$ is the surface flaw parameter\newline$a$ is the plate length (long dimension)\newline$b$ is the plate width (short dimension)\newline$m$ is the surface flaw parameter\newline$E$ is the modulus of elasticity of glass\newline$h$ is the actual thickness\newline$LDF$ is the load duration factor\newline$J$ is the stress distribution factor (Function)
+Description & $B$ is the risk of failure\newline$k$ is the surface flaw parameter ($\frac{\text{m}^{12}}{\text{N}^{7}}$)\newline$a$ is the plate length (long dimension) (m)\newline$b$ is the plate width (short dimension) (m)\newline$m$ is the surface flaw parameter ($\frac{\text{m}^{12}}{\text{N}^{7}}$)\newline$E$ is the modulus of elasticity of glass (Pa)\newline$h$ is the actual thickness (m)\newline$LDF$ is the load duration factor\newline$J$ is the stress distribution factor (Function)
 \\ \midrule \\
 Source & [7]
 \\ \bottomrule \end{tabular}
@@ -530,7 +530,7 @@ Description & ${J_{tol}}$ is the stress distribution factor (Function) based on 
 \end{minipage}\\
 \subsubsection{Instance Models}
 \label{Sec:InstMode}
-This section transforms the problem defined in Section~\ref{Sec:ProbDesc} into one which is expressed in mathematical terms. It uses concrete symbols defined in Section~\ref{Sec:DataDefi} to replace the abstract symbols in the models identified in Section~\ref{Sec:TheoMode}.
+This section transforms the problem defined in Section~\ref{Sec:ProbDesc} into one which is expressed in mathematical terms. It uses concrete symbols defined in Section~\ref{Sec:DataDefi} to replace the abstract symbols in the models identified in Section~\ref{Sec:TheoMode} and Section~\ref{Sec:GeneDefi}.
 ~\newline
 \noindent \begin{minipage}{\textwidth}
 \begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
@@ -587,7 +587,7 @@ $b$ & $0<b$ and $b<a$ & ${d_{min}}\leq{}b$, $b\leq{}{d_{max}}$, and $\frac{a}{b}
 \\
 $SD$ & $0<SD$ & ${SD_{min}}<SD$ and $SD<{SD_{max}}$ & $45.0$ m & 0.1
 \\
-$w$ & $w\geq{}0.0$ & ${w_{max}}\leq{}w$ and $w\leq{}{w_{min}}$ & $42.0$ kg & 0.1
+$w$ & $w\geq{}0.0$ & ${w_{min}}\leq{}w$ and $w\leq{}{w_{max}}$ & $42.0$ kg & 0.1
 \\
 ${P_{btol}}$ & $0<{P_{btol}}$ and ${P_{btol}}<1.0$ & None & $0.008$ & 1.0e-3
 \\
@@ -613,8 +613,36 @@ ${P_{b}}$ & $0.0<{P_{b}}$ and ${P_{b}}<1.0$
 This section provides the functional requirements, the business tasks that the software is expected to complete, and the non-functional requirements, the qualities that the software is expected to exhibit.
 \subsection{Functional Requirements}
 \label{Sec:FuncRequ}
+\begin{description}
+\item[\refstepcounter{reqnum}\rthereqnum\label{R:s71req1}:]Input the quantities from Table~\ref{Table:RequInpufollR1}, which define the glass dimensions, type of glass, tolerable probability of failure and the characteristics of the blast Note: $a$ and $b$ will be input in terms of millimetres and will be converted to the equivalent value in metres.
+\end{description}
+\begin{description}
+\item[\refstepcounter{reqnum}\rthereqnum\label{R:s71req2}:]The system shall set the known values as follows: $m$, $k$, $E$, ${t_{d}}$ following A4, $LDF$ following A8, and LSF following A5.
+\end{description}
+\begin{description}
+\item[\refstepcounter{reqnum}\rthereqnum\label{R:s71req3}:]The system shall check the entered input values to ensure that they do not exceed the data constraints mentioned in Section~\ref{Sec:DataCons}. If any of the input parameters is out of bounds, an error message is displayed and the calculations stop.
+\end{description}
+\begin{description}
+\item[\refstepcounter{reqnum}\rthereqnum\label{R:s71req4}:]Output the input quantities from R1 and the known quantities from R2.
+\end{description}
+\begin{description}
+\item[\refstepcounter{reqnum}\rthereqnum\label{R:s71req5}:]If $is\_safe1$ and $is\_safe2$ (from \hyperref[T:t1SafetyReq]{Definition~T:t1SafetyReq} and \hyperref[T:t2SafetyReq]{Definition~T:t2SafetyReq}) are true, output the message ``For the given input parameters, the glass is considered safe." If the condition is false, then output the message ``For the given input parameters, the glass is NOT considered safe."
+\end{description}
 \begin{itemize}
-\item[R1:]Input the following quantities, which define the glass dimensions, type of glass, tolerable probability of failure and the characteristics of the blast:
+\item[R6:]Output the following quantities:
+          \begin{enumerate}
+          \item{Probability of breakage (${P_{b}}$) (\hyperref[T:probOfBr]{Definition~T:probOfBr})}
+          \item{Load resistance ($LR$) (\hyperref[T:calOfCap]{Definition~T:calOfCap})}
+          \item{Applied load (demand) ($q$) (\hyperref[T:calOfDe]{Definition~T:calOfDe})}
+          \item{Non-factored load ($NFL$) (\hyperref[DD:nFL]{Definition~DD:nFL})}
+          \item{Glass type factor ($GTF$) (\hyperref[DD:gTF]{Definition~DD:gTF})}
+          \item{Dimensionless load ($\hat{q}$) (\hyperref[DD:dimlessLoad]{Definition~DD:dimlessLoad})}
+          \item{Tolerable load (${\hat{q}_{tol}}$) (\hyperref[DD:tolLoad]{Definition~DD:tolLoad})}
+          \item{Stress distribution factor (Function) based on Pbtol (${J_{tol}}$) (\hyperref[DD:sdf.tol]{Definition~DD:sdf.tol})}
+          \item{Stress distribution factor (Function) ($J$) (\hyperref[DD:stressDistFac]{Definition~DD:stressDistFac})}
+          \item{Actual thickness ($h$) (\hyperref[DD:act.thick]{Definition~DD:act.thick})}
+          \item{Aspect Ratio ($AR$) $AR=\frac{a}{b}$}
+          \end{enumerate}
 \end{itemize}
 \begin{longtabu}{l X[l] l}
 \toprule
@@ -645,35 +673,9 @@ $t$ & Nominal thickness $t\in{}\{2.5, 2.7, 3.0, 4.0, 5.0, 6.0, 8.0, 10.0, 12.0, 
 \caption{Required Inputs following R1}
 \label{Table:RequInpufollR1}
 \end{longtabu}
-\begin{itemize}
-\item[R2:]The system shall set the known values as follows:
-          \begin{enumerate}
-          \item{$m$, $k$, $E$, $t_{d}$ following A4}
-          \item{$LDF$ following A8}
-          \item{$LSF$ following A5}
-          \end{enumerate}
-\item[R3:]The system shall check the entered input values to ensure that they do not exceed the data constraints mentioned in Section~\ref{Sec:DataCons}. If any of the input parameters is out of bounds, an error message is displayed and the calculations stop.
-\item[R4:]Output the input quantities from R1 and the known quantities from R2.
-\item[R5:]If $is\_safe1$ and $is\_safe2$ (from \hyperref[T:t1SafetyReq]{Definition~T:t1SafetyReq} and \hyperref[T:t2SafetyReq]{Definition~T:t2SafetyReq}) are true, output the message ``For the given input parameters, the glass is considered safe." If the condition is false, then output the message ``For the given input parameters, the glass is NOT considered safe."
-\item[R6:]Output the following quantities:
-          \begin{enumerate}
-          \item{Probability of breakage ($P_{b}$) (\hyperref[T:probOfBr]{Definition~T:probOfBr})}
-          \item{Load Resistance ($LR$) (\hyperref[T:CoC]{Definition~T:CoC})}
-          \item{Applied load (demand) ($q$) (\hyperref[T:calOfDe]{Definition~T:calOfDe})}
-          \item{Actual thickness ($h$) (\hyperref[DD:act.thick]{Definition~DD:act.thick})}
-          \item{Load Duration Factor ($LDF$) (\hyperref[DD:lDurFac]{Definition~DD:lDurFac})}
-          \item{Stress distribution factor (Function) ($J$) (\hyperref[DD:stressDistFac]{Definition~DD:stressDistFac})}
-          \item{Non-Factored Load ($NFL$) (\hyperref[DD:nonFactorL]{Definition~DD:nonFactorL})}
-          \item{Glass Type Factor ($GTF$) (\hyperref[DD:glassTypeFac]{Definition~DD:glassTypeFac})}
-          \item{Dimensionless load ($\hat{q}$) (\hyperref[DD:dimlessLoad]{Definition~DD:dimlessLoad})}
-          \item{Tolerable load ($\hat{q}_{tol}$) (\hyperref[DD:tolLoad]{Definition~DD:tolLoad})}
-          \item{Stress distribution factor (Function) based on Pbtol ($J_{tol}$) (\hyperref[DD:sdf.tol]{Definition~DD:sdf.tol})}
-          \item{Aspect Ratio ($AR$)}
-          \end{enumerate}
-\end{itemize}
 \subsection{Non-Functional Requirements}
 \label{Sec:Non-Requ}
-Given the small size, and relative simplicity, of this problem, performance is not a priority. Any reasonable implementation will be very quick and use minimal storage. Rather than performance, the priority non-functional Rs are correctness, verifiability, understandability, reusability, maintainability, and portability.
+This problem is small in size and relatively simple, so performance is not a priority. Any reasonable implementation will be very quick and use minimal storage. Rather than performance, the non-functional requirement priorities are correctness, verifiability, understandability, reusability, maintainability, and portability.
 \section{Likely Changes}
 \label{Sec:LikeChan}
 \begin{description}
@@ -850,9 +852,9 @@ $LDF$ & load duration factor & $\left(\frac{{t_{d}}}{60}\right)^{\frac{m}{16}}$ 
 \\
 $LSF$ & load share factor & $1$ & Unitless
 \\
-${d_{max}}$ & maximum value for one of the dimensions of the glass plate & $0.1$ & mm
+${d_{max}}$ & maximum value for one of the dimensions of the glass plate & $5.0$ & mm
 \\
-${d_{min}}$ & minimum value for one of the dimensions of the glass plate & $5.0$ & mm
+${d_{min}}$ & minimum value for one of the dimensions of the glass plate & $0.1$ & mm
 \\
 ${AR_{max}}$ & maximum aspect ratio & $5.0$ & Unitless
 \\
@@ -870,14 +872,67 @@ ${SD_{max}}$ & maximum stand off distance permissible for input & $130.0$ & m
 \end{longtabu}
 \section{References}
 \label{Sec:Refe}
-\begin{itemize}
-\item[{[}1{]}:]N. Koothoor, ``A document drive approach to certifying scientific computing software," Master's thesis, McMaster University, Hamilton, Ontario, Canada, 2013.
-\item[{[}2{]}:]W. S. Smith and L. Lai, ``A new requirements template for scientific computing," in Proceedings of the First International Workshop on Situational Requirements Engineering Processes - Methods, Techniques and Tools to Support Situation-Specific Requirements Engineering Processes, SREP'05 (J.Ralyt\'{e}, P.Agerfalk, and N.Kraiem, eds.), (Paris, France), pp. 107-121, In conjunction with 13th IEEE International Requirements Engineering Conference, 2005.
-\item[{[}3{]}:]J. Robertson and S. Robertson, ``Volere requirements specification template edition 16." ``www.cs.uic.edu/ i442/VolereMaterials/templateArchive16/c Volere template16.pdf", 2012.
-\item[{[}4{]}:]ASTM Standards Committee, ``Standard practice for determining load resistance of glass in buildings," Standard E1300-09a, American Society for Testing and Material (ASTM), 2009.
-\item[{[}5{]}:]ASTM, developed by subcommittee C1408, Book of standards 15.02, ``Standard specification for flat glass, C1036."
-\item[{[}6{]}:]ASTM, developed by subcommittee C14.08, Book of standards 15.02, ``Specification for heat treated flat glass-Kind HS, kind FT coated and uncoated glass, C1048."
-\end{itemize}
+\begin{filecontents*}{bibfile.bib}
+@mastersthesis{Koothoor_2013,
+author={Koothoor, Nirmitha},
+title={A document drive approach to certifying scientific computing software},
+school={McMaster University},
+place={Hamilton, Canada},
+year={2013}}
+
+@article{Smith_Lai_2005,
+author={Smith, W. Spencer and Lai, Lei},
+title={A new requirements template for scientific computing},
+journal={Proceedings of the First International Workshop on Situational Requirements Engineering Processes - Methods, Techniques and Tools to Support Situation-Specific Requirements Engineering Processes, SREP'05},
+editor={Agerfalk, PJ and Kraiem, N. and Ralyte, J.},
+place={Paris, France},
+pages={107-121},
+note={In conjunction with 13th IEEE International Requirements Engineering Conference,},
+year={2005}}
+
+@article{Robertson_Robertson_2012,
+author={Robertson, James and Robertson, Suzanne},
+title={Volere requirements specification template edition 16},
+url={https://pdfs.semanticscholar.org/cf57/27a59801086cbd3d14e587e09880561dbe22.pdf},
+year={2012}}
+
+@misc{ASTM_E1300-09_2009,
+author={ASTM E1300-09},
+sortkey={ASTM E1300-09},
+title={Standard Practice for Determining Load Resistance of Glass in Buildings},
+publisher={ASTM International},
+collection={Standard E1300-09a},
+year={2009},
+url={www.astm.org}}
+
+@misc{ASTM_C1036-16_2016,
+author={ASTM C1036-16},
+sortkey={ASTM C1036-16},
+title={Standard specification for Flat Glass},
+publisher={ASTM International},
+place={West Conshohocken, PA},
+year={2016},
+url={www.astm.org}}
+
+@misc{ASTM_C1048-04_2009,
+author={ASTM C1048-04},
+sortkey={ASTM C1048-04},
+title={Specification for Heat-Treated Flat Glass-Kind HS, Kind FT Coated and Uncoated Glass},
+publisher={ASTM International},
+place={West Conshohocken, PA},
+year={2009},
+url={www.astm.org}}
+
+@misc{Beason_Kohutek_Bracci_1998,
+author={Beason, W. Lynn and Kohutek, Terry L. and Bracci, Joseph M.},
+title={Basis for ASTME E 1300 Annealed Glass Thickness Selection Charts},
+collection={ASCE Library},
+year={1 February 1998},
+url={doi.org/10.1061/(ASCE)0733-9445(1998)124:2(215)}}
+\end{filecontents*}
+\nocite{*}
+\bibstyle{ieeetr}
+\printbibliography[heading=none]
 \section{Appendix}
 \label{Sec:Appe}
 This appendix holds the graphs (Figure~\ref{Figure:Figu5:3secoduraequipres()versStanoffdist(SD)versCharweig()} and Figure~\ref{Figure:Figu6:Nondimelateload()versAspeRati(AR)versStredistfact(Fun()}) used for interpolating values needed in the models.

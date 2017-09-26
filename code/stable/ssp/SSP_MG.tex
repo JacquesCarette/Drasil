@@ -4,9 +4,11 @@
 \hypersetup{bookmarks=true,colorlinks=true,linkcolor=red,citecolor=blue,filecolor=magenta,urlcolor=cyan}
 \usepackage{amsmath}
 \usepackage{amssymb}
+\usepackage{mathtools}
 \usepackage{breqn}
 \usepackage{filecontents}
 \usepackage[backend=bibtex]{biblatex}
+\usepackage{tabu}
 \usepackage{longtable}
 \usepackage{booktabs}
 \usepackage{caption}
@@ -21,6 +23,7 @@
 \newcommand{\uctheucnum}{UC\theucnum}
 \newcounter{modnum}
 \newcommand{\mthemodnum}{M\themodnum}
+\global\tabulinesep=1mm
 \title{Module Guide for Slope Stability Analysis}
 \author{Henry Frankis}
 \begin{document}
@@ -289,7 +292,7 @@ Modules are decomposed according to the principle of ``information hiding" propo
 \label{Sec:RandNumbGeneModu()}
 \begin{description}
 \item[Secrets:]Pseudo-random number generation algorithm.
-\item[Services:]Randomly produces numbers between 0 and 1, using a chaotic function with an external seed. Used when generating slip surfaces in the Genetic Algorithm Module.
+\item[Services:]Randomly produces numbers between $0$ and $1$, using a chaotic function with an external seed. Used when generating slip surfaces in the Genetic Algorithm Module.
 \item[Implemented By:]MATLAB
 \end{description}
 \subsection{Plotting Module (M\ref{M:modplotdesc})}

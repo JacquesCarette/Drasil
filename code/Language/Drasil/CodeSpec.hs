@@ -17,6 +17,7 @@ import Language.Drasil.ChunkDB
 import Language.Drasil.Expr.Extract (codevars, codevars')
 import Language.Drasil.Chunk.VarChunk
 import Language.Drasil.Misc (symbol)
+import Language.Drasil.Code.Imperative.Lang
 
 import qualified Data.Map as Map
 import Control.Lens ((^.))
@@ -112,12 +113,6 @@ data Choices = Choices {
   onPhysConstraint :: ConstraintBehaviour,
   inputStructure :: Structure
 }
-
-data Lang = Cpp
-          | CSharp
-          | Java
-          | Python
-          deriving Eq
 
 data ImplementationType = Library
                         | Program

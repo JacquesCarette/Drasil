@@ -3,17 +3,25 @@
 \usepackage{hyperref}
 \hypersetup{bookmarks=true,colorlinks=true,linkcolor=red,citecolor=blue,filecolor=magenta,urlcolor=cyan}
 \usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{mathtools}
+\usepackage{breqn}
+\usepackage{tabu}
 \usepackage{longtable}
 \usepackage{booktabs}
 \usepackage{caption}
-\title{SRS for $h_{g}$ and $h_{c}$}
-\author{Spencer Smith}
+\global\tabulinesep=1mm
+\title{Software Requirements Specification for Tiny}
+\author{W. Spencer Smith}
 \begin{document}
 \maketitle
 \tableofcontents
 \newpage
-\section{Table of Units}
-\label{Sec:ToU}
+\section{Reference Material}
+\label{Sec:RefeMate}
+This section records information for easy reference.
+\subsection{Table of Units}
+\label{Sec:TablofUnit}
 The unit system used throughout is SI (Syst\`{e}me International d'Unit\'{e}s). In addition to the basic units, several derived units are also used. For each unit, the table lists the symbol, a description and the SI name.
 \begin{longtable*}{l l}
 \toprule
@@ -34,54 +42,87 @@ A & electric current (ampere)
 \\
 cd & luminous intensity (candela)
 \\
-${}^{\circ}C$ & temperature (centigrade)
-\\
-J & energy (joule)
-\\
-W & power (watt)
+Bq & activity (becquerel)
 \\
 cal & energy (calorie)
 \\
-kW & power (kilowatt)
+${}^{\circ}C$ & temperature (centigrade)
 \\
-Pa & pressure (pascal)
+C & electric charge (coulomb)
 \\
-N & force (newton)
+F & capacitance (farad)
 \\
-mm & length (millimetre)
+Gy & absorbed dose (gray)
+\\
+H & inductance (henry)
+\\
+Hz & frequency (hertz)
+\\
+J & energy (joule)
+\\
+kat & catalytic activity (katal)
 \\
 kPa & pressure (kilopascal)
 \\
-rad & angle (radians)
+kW & power (kilowatt)
+\\
+lm & luminous flux (lumen)
+\\
+lx & illuminance (lux)
+\\
+mm & length (millimetre)
+\\
+N & force (newton)
+\\
+$\Omega{}$ & resistance (ohm)
+\\
+Pa & pressure (pascal)
+\\
+rad & angle (radian)
+\\
+S & conductance (siemens)
+\\
+Sv & dose equivalent (sievert)
+\\
+sr & solid angle (steradian)
+\\
+T & magnetic flux density (tesla)
+\\
+V & voltage (volt)
+\\
+W & power (watt)
+\\
+Wb & magnetic flux (weber)
 \\
 \bottomrule
-\label{Table:ToU}
+\label{Table:TablofUnit}
 \end{longtable*}
-\section{Table of Symbols}
-\label{Sec:ToS}
-The table that follows summarizes the symbols used in this document along with their units.  The choice of symbols was made with the goal of being consistent with the nuclear physics literature and that used in the FP manual.  The SI units are listed in brackets following the definition of the symbol.
-\begin{longtable*}{l l l}
+\subsection{Table of Symbols}
+\label{Sec:TablofSymb}
+The table that follows summarizes the symbols used in this document along with their units. The choice of symbols was made to be consistent with the nuclear physics literature and with that used in the FP manual.
+\begin{longtabu}{l X[l] l}
 \toprule
 Symbol & Description & Units
 \\
 \midrule
-$h_{b}$ & initial coolant film conductance & 
+${h_{b}}$ & Initial coolant film conductance & 
 \\
-$h_{c}$ & convective heat transfer coefficient between clad and coolant & $\frac{\text{W}}{(\text{m}^{2}{}^{\circ}C)}$
+${h_{c}}$ & Convective heat transfer coefficient between clad and coolant & $\frac{\text{W}}{(\text{m}^{2}{}^{\circ}C)}$
 \\
-$h_{g}$ & effective heat transfer coefficient between clad and fuel surface & $\frac{\text{W}}{(\text{m}^{2}{}^{\circ}C)}$
+${h_{g}}$ & Effective heat transfer coefficient between clad and fuel surface & $\frac{\text{W}}{(\text{m}^{2}{}^{\circ}C)}$
 \\
-$h_{p}$ & initial gap film conductance & 
+${h_{p}}$ & Initial gap film conductance & 
 \\
-$k_{c}$ & clad conductivity & 
+${k_{c}}$ & Clad conductivity & 
 \\
-$\tau{}_{c}$ & clad thickness & 
+${\tau{}_{c}}$ & Clad thickness & 
 \\
 \bottomrule
-\label{Table:ToS}
-\end{longtable*}
+\label{Table:TablofSymb}
+\end{longtabu}
 \section{Data Definitions}
-\label{Sec:DD}
+\label{Sec:DataDefi}
+This section collects and defines all the data needed to build the instance models.
 ~\newline
 \noindent \begin{minipage}{\textwidth}
 \begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
@@ -89,13 +130,13 @@ $\tau{}_{c}$ & clad thickness &
 \phantomsection 
 \label{DD:htTransCladFuel}
 \\ \midrule \\
-Label & $h_{g}$
+Label & Effective Heat Transfer Coefficient Between Clad and Fuel Surface
 \\ \midrule \\
 Units & $\frac{\text{W}}{(\text{m}^{2}{}^{\circ}C)}$
 \\ \midrule \\
-Equation & $h_{g}$ = $\frac{2k_{c}h_{p}}{2k_{c}+\tau{}_{c}h_{p}}$
+Equation & ${h_{g}}$ = $\frac{2{k_{c}}{h_{p}}}{2{k_{c}}+{\tau{}_{c}}{h_{p}}}$
 \\ \midrule \\
-Description & $h_{g}$ is the effective heat transfer coefficient between clad and fuel surface\newline$k_{c}$ is the clad conductivity\newline$h_{p}$ is the initial gap film conductance\newline$\tau{}_{c}$ is the clad thickness
+Description & ${h_{g}}$ is the effective heat transfer coefficient between clad and fuel surface ($\frac{\text{W}}{(\text{m}^{2}{}^{\circ}C)}$)\newline${k_{c}}$ is the clad conductivity\newline${h_{p}}$ is the initial gap film conductance\newline${\tau{}_{c}}$ is the clad thickness
 \\ \bottomrule \end{tabular}
 \end{minipage}\\
 ~\newline
@@ -105,13 +146,13 @@ Description & $h_{g}$ is the effective heat transfer coefficient between clad an
 \phantomsection 
 \label{DD:htTransCladCool}
 \\ \midrule \\
-Label & $h_{c}$
+Label & Convective Heat Transfer Coefficient Between Clad and Coolant
 \\ \midrule \\
 Units & $\frac{\text{W}}{(\text{m}^{2}{}^{\circ}C)}$
 \\ \midrule \\
-Equation & $h_{c}$ = $\frac{2k_{c}h_{b}}{2k_{c}+\tau{}_{c}h_{b}}$
+Equation & ${h_{c}}$ = $\frac{2{k_{c}}{h_{b}}}{2{k_{c}}+{\tau{}_{c}}{h_{b}}}$
 \\ \midrule \\
-Description & $h_{c}$ is the convective heat transfer coefficient between clad and coolant\newline$k_{c}$ is the clad conductivity\newline$h_{b}$ is the initial coolant film conductance\newline$\tau{}_{c}$ is the clad thickness
+Description & ${h_{c}}$ is the convective heat transfer coefficient between clad and coolant ($\frac{\text{W}}{(\text{m}^{2}{}^{\circ}C)}$)\newline${k_{c}}$ is the clad conductivity\newline${h_{b}}$ is the initial coolant film conductance\newline${\tau{}_{c}}$ is the clad thickness
 \\ \bottomrule \end{tabular}
 \end{minipage}\\
 \end{document}

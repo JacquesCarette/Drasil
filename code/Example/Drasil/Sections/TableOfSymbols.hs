@@ -16,7 +16,7 @@ table ls f = Table
   (mkTable
   [(\ch -> (getS ch)),
   f, 
-  unit'2Contents]
+  unitHidingUnitless]
   ls)
   (titleize tOfSymb) False
 

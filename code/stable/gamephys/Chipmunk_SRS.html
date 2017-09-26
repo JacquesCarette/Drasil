@@ -166,6 +166,28 @@ N
 </tr>
 <tr>
 <td>
+<em><b>F</b><sub>1</sub></em>
+</td>
+<td>
+Force exerted by the first body (on another body)
+</td>
+<td>
+N
+</td>
+</tr>
+<tr>
+<td>
+<em><b>F</b><sub>2</sub></em>
+</td>
+<td>
+Force exerted by the second body (on another body)
+</td>
+<td>
+N
+</td>
+</tr>
+<tr>
+<td>
 <em><b>F</b></em>
 </td>
 <td>
@@ -206,6 +228,39 @@ Horizontal Unit Vector
 </td>
 <td>
 m
+</td>
+</tr>
+<tr>
+<td>
+<em><b>I</b><sub>A</sub></em>
+</td>
+<td>
+Moment of Inertia Of Rigid Body A
+</td>
+<td>
+kg&sdot;m<sup>2</sup>
+</td>
+</tr>
+<tr>
+<td>
+<em><b>I</b><sub>B</sub></em>
+</td>
+<td>
+Moment of Inertia Of Rigid Body B
+</td>
+<td>
+kg&sdot;m<sup>2</sup>
+</td>
+</tr>
+<tr>
+<td>
+<em><b>I</b><sub>k</sub></em>
+</td>
+<td>
+Moment of Inertia Of the K-Th Rigid Body
+</td>
+<td>
+kg&sdot;m<sup>2</sup>
 </td>
 </tr>
 <tr>
@@ -261,6 +316,28 @@ Length
 </td>
 <td>
 m
+</td>
+</tr>
+<tr>
+<td>
+<em>m<sub>1</sub></em>
+</td>
+<td>
+Mass of the first body
+</td>
+<td>
+kg
+</td>
+</tr>
+<tr>
+<td>
+<em>m<sub>2</sub></em>
+</td>
+<td>
+Mass of the second body
+</td>
+<td>
+kg
 </td>
 </tr>
 <tr>
@@ -364,6 +441,17 @@ m
 </tr>
 <tr>
 <td>
+<em>P</em>
+</td>
+<td>
+Point of collision
+</td>
+<td>
+m
+</td>
+</tr>
+<tr>
+<td>
 <em><b>p</b></em>
 </td>
 <td>
@@ -397,6 +485,61 @@ m
 </tr>
 <tr>
 <td>
+<em><b>r&#770;</b></em>
+</td>
+<td>
+Displacement unit vector
+</td>
+<td>
+m
+</td>
+</tr>
+<tr>
+<td>
+<em><b>r</b><sub>AP</sub></em>
+</td>
+<td>
+Displacement vector between the centre of mass of rigid body A and contact point P
+</td>
+<td>
+m
+</td>
+</tr>
+<tr>
+<td>
+<em><b>r</b><sub>BP</sub></em>
+</td>
+<td>
+Displacement vector between the centre of mass of rigid body B and contact point P
+</td>
+<td>
+m
+</td>
+</tr>
+<tr>
+<td>
+<em><b>r</b><sub>kP</sub></em>
+</td>
+<td>
+Displacement vector between the centre of mass of rigid body k and contact point P
+</td>
+<td>
+m
+</td>
+</tr>
+<tr>
+<td>
+<em><b>r</b><sub>OB</sub></em>
+</td>
+<td>
+Displacement vector between the origin and point B
+</td>
+<td>
+m
+</td>
+</tr>
+<tr>
+<td>
 <em><b>r</b>(t)</em>
 </td>
 <td>
@@ -419,10 +562,32 @@ s
 </tr>
 <tr>
 <td>
+<em>t<sub>0</sub></em>
+</td>
+<td>
+Denotes the initial time
+</td>
+<td>
+s
+</td>
+</tr>
+<tr>
+<td>
 <em>t<sub>c</sub></em>
 </td>
 <td>
 Denotes the time at collision
+</td>
+<td>
+s
+</td>
+</tr>
+<tr>
+<td>
+<em>t<sub>c</sub></em>
+</td>
+<td>
+I-th body's velocity
 </td>
 <td>
 s
@@ -467,6 +632,17 @@ m/s
 </td>
 <td>
 Velocity Of the I-Th Body's Velocity
+</td>
+<td>
+m/s
+</td>
+</tr>
+<tr>
+<td>
+<em><b>v</b><sub>O</sub></em>
+</td>
+<td>
+Velocity At Point Origin
 </td>
 <td>
 m/s
@@ -525,6 +701,28 @@ Length of the Perpendicular Vector To the Contact Displacement Vector of Rigid B
 </td>
 <td>
 m
+</td>
+</tr>
+<tr>
+<td>
+<em>||<b>r</b>||</em>
+</td>
+<td>
+Euclidean norm of the displacement
+</td>
+<td>
+m
+</td>
+</tr>
+<tr>
+<td>
+<em>||<b>r</b>||<sup>2</sup></em>
+</td>
+<td>
+Squared distance
+</td>
+<td>
+m<sup>2</sup>
 </td>
 </tr>
 <tr>
@@ -776,7 +974,7 @@ The scope of the requirements includes the physical simulation of 2D rigid bodie
 Characteristics of Intended Reader
 </h3>
 <p class="paragraph">
-Reviewers of this documentation should have a strong knowledge in rigid body dynamics. The reviewers should also have an understanding of high school calculus. The users of Chipmunk2D can have a lower level of expertise, as explained in <a href=#Sec:UserChar>this Section</a>.
+Reviewers of this documentation should have a strong knowledge in rigid body dynamics. The reviewers should also have an understanding of high school calculus. The users of Chipmunk2D can have a lower level of expertise, as explained in <a href=#Sec:UserChar>Sec:UserChar</a>.
 </p>
 </div>
 </a>
@@ -786,7 +984,7 @@ Reviewers of this documentation should have a strong knowledge in rigid body dyn
 Organization of Document
 </h3>
 <p class="paragraph">
-The organization of this document follows the template for an SRS for scientific computing software proposed by [1] and [2]. The presentation follows the standard pattern of presenting goals, theories, definitions, and assumptions. For readers that would like a more bottom up approach, they can start reading the instance models in <a href=#Sec:SoluCharSpec>this Section</a> and trace back to find any additional information they require.
+The organization of this document follows the template for an SRS for scientific computing software proposed by [1] and [2]. The presentation follows the standard pattern of presenting goals, theories, definitions, and assumptions. For readers that would like a more bottom up approach, they can start reading the instance models in <a href=#Sec:SoluCharSpec>Sec:SoluCharSpec</a> and trace back to find any additional information they require.
 </p>
 <p class="paragraph">
 The goal statements are refined to the theoretical models, and the theoretical models to the instance models.
@@ -839,7 +1037,7 @@ This section first presents the problem description, which gives a high-level vi
 Problem Description
 </h3>
 <p class="paragraph">
-Creating a gaming physics library is a difficult task. Games need physics libraries that simulate objects acting under various physical conditions, while simultaneously being fast and efficient enough to work in soft real-time during the game. Developing a physics library from scratch takes a long period of time and is very costly, presenting barriers of entry which make it difficult for game developers to include physics in their products. There are a few free, open source and high quality physics libraries available to be used for consumer products (<a href=#Sec:Off-Solu>this Section</a>). By creating a simple, lightweight, fast and portable 2D rigid body physics library, game development will be more accessible to the masses and higher quality products will be produced.
+Creating a gaming physics library is a difficult task. Games need physics libraries that simulate objects acting under various physical conditions, while simultaneously being fast and efficient enough to work in soft real-time during the game. Developing a physics library from scratch takes a long period of time and is very costly, presenting barriers of entry which make it difficult for game developers to include physics in their products. There are a few free, open source and high quality physics libraries available to be used for consumer products (<a href=#Sec:Off-Solu>Sec:Off-Solu</a>). By creating a simple, lightweight, fast and portable 2D rigid body physics library, game development will be more accessible to the masses and higher quality products will be produced.
 </p>
 <a id="Sec:TermandDefi">
 <div class="subsubsection">
@@ -951,7 +1149,7 @@ Label
 </th>
 <td>
 <p class="paragraph">
-Newton's second law of motion
+Newton's Second Law of Motion
 </p>
 </td>
 </tr>
@@ -962,7 +1160,7 @@ Equation
 <td>
 <a id="">
 <div class="equation">
-<em><b>F</b></em> = <em>m</em><em><b>a</b></em>
+<em><b>F</b></em> = <em>m</em>&#8239;<em><b>a</b></em>
 </div>
 </a>
 </td>
@@ -987,7 +1185,7 @@ Label
 </th>
 <td>
 <p class="paragraph">
-Newton's third law of motion
+Newton's Third Law of Motion
 </p>
 </td>
 </tr>
@@ -1023,7 +1221,7 @@ Label
 </th>
 <td>
 <p class="paragraph">
-Newton's law of universal gravitation
+Newton's Law of Universal Gravitation
 </p>
 </td>
 </tr>
@@ -1034,21 +1232,21 @@ Equation
 <td>
 <a id="">
 <div class="equation">
-<em><b>F</b></em> = <em>G</em><div class="fraction">
+<em><b>F</b></em> = <em>G</em>&#8239;<div class="fraction">
 <span class="fup">
 <em>m<sub>1</sub></em><em>m<sub>2</sub></em>
 </span>
 <span class="fdn">
 <em>||<b>r</b>||</em><sup>2</sup>
 </span>
-</div><em><b>r&#770;</b></em> = <em>G</em><div class="fraction">
+</div>&#8239;<em><b>r&#770;</b></em> = <em>G</em>&#8239;<div class="fraction">
 <span class="fup">
 <em>m<sub>1</sub></em><em>m<sub>2</sub></em>
 </span>
 <span class="fdn">
 <em>||<b>r</b>||</em><sup>2</sup>
 </span>
-</div><div class="fraction">
+</div>&#8239;<div class="fraction">
 <span class="fup">
 <em><b>r</b></em>
 </span>
@@ -1066,7 +1264,7 @@ Description
 </th>
 <td>
 <p class="paragraph">
-Two rigid bodies in the universe attract each other with a force <em><b>F</b></em> (N) that is directly proportional to the product of their masses, <em>m<sub>1</sub></em> and <em>m<sub>2</sub></em> (kg), and inversely proportional to the squared distance <em>||<b>r</b>||<sup>2</sup></em> (m<sup>2</sup>) between them. The vector <em><b>r</b></em> (m) is the displacement between the centres of the rigid bodies and <em>||<b>r</b>||</em> (m) represents the euclidean normal of displacement, or absolute distance between the two. <em><b>r&#770;</b></em> denotes the displacement unit vector, equivalent to the displacement divided by the euclidean normal of displacement, as shown above. Finally, <em>G</em> is the gravitational constant (6.673 * 10E-11) (m<sup>3</sup>/(kg&sdot;s<sup>2</sup>)).
+Two rigid bodies in the universe attract each other with a force <em><b>F</b></em> (N) that is directly proportional to the product of their masses, <em>m<sub>1</sub></em> and <em>m<sub>2</sub></em> (kg), and inversely proportional to the squared distance <em>||<b>r</b>||<sup>2</sup></em> (m<sup>2</sup>) between them. The vector <em><b>r</b></em> (m) is the displacement between the centres of the rigid bodies and <em>||<b>r</b>||</em> (m) represents the Euclidean norm of the displacement, or absolute distance between the two. <em><b>r&#770;</b></em> denotes the displacement unit vector, equivalent to the displacement divided by the Euclidean norm of the displacement, as shown above. Finally, <em>G</em> is the gravitational constant (6.673 * 10E-11) (m<sup>3</sup>/(kg&sdot;s<sup>2</sup>)).
 </p>
 </td>
 </tr>
@@ -1080,7 +1278,7 @@ Label
 </th>
 <td>
 <p class="paragraph">
-Chasles' theorem
+Chasles' Theorem
 </p>
 </td>
 </tr>
@@ -1116,7 +1314,7 @@ Label
 </th>
 <td>
 <p class="paragraph">
-Newton's second law for rotational motion
+Newton's Second Law for Rotational Motion
 </p>
 </td>
 </tr>
@@ -1127,7 +1325,7 @@ Equation
 <td>
 <a id="">
 <div class="equation">
-<em>&tau;</em> = <em><b>I</b></em><em>&alpha;</em>
+<em>&tau;</em> = <em><b>I</b></em>&#8239;<em>&alpha;</em>
 </div>
 </a>
 </td>
@@ -1172,7 +1370,7 @@ Label
 </th>
 <td>
 <p class="paragraph">
-Force on the translational motion of a set of 2d rigid bodies
+Force on the Translational Motion of a Set of 2d Rigid Bodies
 </p>
 </td>
 </tr>
@@ -1185,10 +1383,10 @@ Equation
 <div class="equation">
 <em><b>a</b><sub>i</sub></em> = <div class="fraction">
 <span class="fup">
-<em>d</em><em><b>v</b><sub>i</sub></em>(<em>t</em>)
+<em>d</em>&#8239;<em><b>v</b><sub>i</sub></em>(<em>t</em>)
 </span>
 <span class="fdn">
-<em>d</em><em>t</em>
+<em>d</em>&#8239;<em>t</em>
 </span>
 </div> = <em>g</em> &plus; <div class="fraction">
 <span class="fup">
@@ -1222,7 +1420,7 @@ Label
 </th>
 <td>
 <p class="paragraph">
-Force on the rotational motion of a set of 2D rigid body
+Force on the Rotational Motion of a Set of 2D Rigid Body
 </p>
 </td>
 </tr>
@@ -1235,10 +1433,10 @@ Equation
 <div class="equation">
 <em>&alpha;</em> = <div class="fraction">
 <span class="fup">
-<em>d</em><em>&omega;</em>(<em>t</em>)
+<em>d</em>&#8239;<em>&omega;</em>(<em>t</em>)
 </span>
 <span class="fdn">
-<em>d</em><em>t</em>
+<em>d</em>&#8239;<em>t</em>
 </span>
 </div> = <div class="fraction">
 <span class="fup">
@@ -1272,7 +1470,7 @@ Label
 </th>
 <td>
 <p class="paragraph">
-Collisions on 2D rigid bodies
+Collisions on 2D Rigid Bodies
 </p>
 </td>
 </tr>
@@ -1290,7 +1488,7 @@ Equation
 <span class="fdn">
 <em>m<sub>A</sub></em>
 </span>
-</div><em><b>n</b></em>
+</div>&#8239;<em><b>n</b></em>
 </div>
 </a>
 </td>
@@ -1325,7 +1523,7 @@ Label
 </th>
 <td>
 <p class="paragraph">
-<em><b>p</b><sub>CM</sub></em>
+The Mass-Weighted Average Position of a Rigid Body's Particles
 </p>
 </td>
 </tr>
@@ -1348,7 +1546,7 @@ Equation
 <div class="equation">
 <em><b>p</b><sub>CM</sub></em> = <div class="fraction">
 <span class="fup">
-&sum;(<em>m<sub>i</sub></em><em><b>p</b><sub>i</sub></em>)
+<span class="symb">&sum;</span>(<em>m<sub>i</sub></em>&#8239;<em><b>p</b><sub>i</sub></em>)
 </span>
 <span class="fdn">
 <em>M</em>
@@ -1364,7 +1562,7 @@ Description
 </th>
 <td>
 <p class="paragraph">
-<em><b>p</b><sub>CM</sub></em> is the the mass-weighted average position of a rigid body's particles<br /><em>m<sub>i</sub></em> is the mass of the i-th particle<br /><em><b>p</b><sub>i</sub></em> is the position vector of the i-th particle<br /><em>M</em> is the total mass of the rigid body
+<em><b>p</b><sub>CM</sub></em> is the the mass-weighted average position of a rigid body's particles (m)<br /><em>m<sub>i</sub></em> is the mass of the i-th particle (kg)<br /><em><b>p</b><sub>i</sub></em> is the position vector of the i-th particle (m)<br /><em>M</em> is the total mass of the rigid body (kg)
 </p>
 </td>
 </tr>
@@ -1378,7 +1576,7 @@ Label
 </th>
 <td>
 <p class="paragraph">
-<em><b>r</b>(t)</em>
+Linear Displacement
 </p>
 </td>
 </tr>
@@ -1401,10 +1599,10 @@ Equation
 <div class="equation">
 <em><b>r</b>(t)</em> = <div class="fraction">
 <span class="fup">
-<em>d</em><em><b>p</b></em>(<em>t</em>)
+<em>d</em>&#8239;<em><b>p</b></em>(<em>t</em>)
 </span>
 <span class="fdn">
-<em>d</em><em>t</em>
+<em>d</em>&#8239;<em>t</em>
 </span>
 </div>
 </div>
@@ -1417,7 +1615,7 @@ Description
 </th>
 <td>
 <p class="paragraph">
-<em><b>r</b>(t)</em> is the linear displacement<br /><em><b>p</b></em> is the position<br /><em>t</em> is the time
+<em><b>r</b>(t)</em> is the linear displacement (m)<br /><em><b>p</b></em> is the position (m)<br /><em>t</em> is the time (s)
 </p>
 </td>
 </tr>
@@ -1431,7 +1629,7 @@ Label
 </th>
 <td>
 <p class="paragraph">
-<em><b>v</b>(t)</em>
+Linear Velocity
 </p>
 </td>
 </tr>
@@ -1454,10 +1652,10 @@ Equation
 <div class="equation">
 <em><b>v</b>(t)</em> = <div class="fraction">
 <span class="fup">
-<em>d</em><em><b>r</b></em>(<em>t</em>)
+<em>d</em>&#8239;<em><b>r</b></em>(<em>t</em>)
 </span>
 <span class="fdn">
-<em>d</em><em>t</em>
+<em>d</em>&#8239;<em>t</em>
 </span>
 </div>
 </div>
@@ -1470,7 +1668,7 @@ Description
 </th>
 <td>
 <p class="paragraph">
-<em><b>v</b>(t)</em> is the linear velocity<br /><em><b>r</b></em> is the displacement<br /><em>t</em> is the time
+<em><b>v</b>(t)</em> is the linear velocity (m/s)<br /><em><b>r</b></em> is the displacement (m)<br /><em>t</em> is the time (s)
 </p>
 </td>
 </tr>
@@ -1484,7 +1682,7 @@ Label
 </th>
 <td>
 <p class="paragraph">
-<em><b>a</b>(t)</em>
+Linear Acceleration
 </p>
 </td>
 </tr>
@@ -1507,10 +1705,10 @@ Equation
 <div class="equation">
 <em><b>a</b>(t)</em> = <div class="fraction">
 <span class="fup">
-<em>d</em><em><b>v</b></em>(<em>t</em>)
+<em>d</em>&#8239;<em><b>v</b></em>(<em>t</em>)
 </span>
 <span class="fdn">
-<em>d</em><em>t</em>
+<em>d</em>&#8239;<em>t</em>
 </span>
 </div>
 </div>
@@ -1523,7 +1721,7 @@ Description
 </th>
 <td>
 <p class="paragraph">
-<em><b>a</b>(t)</em> is the linear acceleration<br /><em><b>v</b></em> is the velocity<br /><em>t</em> is the time
+<em><b>a</b>(t)</em> is the linear acceleration (m/(s<sup>2</sup>))<br /><em><b>v</b></em> is the velocity (m/s)<br /><em>t</em> is the time (s)
 </p>
 </td>
 </tr>
@@ -1537,7 +1735,7 @@ Label
 </th>
 <td>
 <p class="paragraph">
-<em>&theta;</em>
+Angular Displacement
 </p>
 </td>
 </tr>
@@ -1560,10 +1758,10 @@ Equation
 <div class="equation">
 <em>&theta;</em> = <div class="fraction">
 <span class="fup">
-<em>d</em><em>&phi;</em>(<em>t</em>)
+<em>d</em>&#8239;<em>&phi;</em>(<em>t</em>)
 </span>
 <span class="fdn">
-<em>d</em><em>t</em>
+<em>d</em>&#8239;<em>t</em>
 </span>
 </div>
 </div>
@@ -1576,7 +1774,7 @@ Description
 </th>
 <td>
 <p class="paragraph">
-<em>&theta;</em> is the angular displacement<br /><em>&phi;</em> is the orientation<br /><em>t</em> is the time
+<em>&theta;</em> is the angular displacement (rad)<br /><em>&phi;</em> is the orientation (rad)<br /><em>t</em> is the time (s)
 </p>
 </td>
 </tr>
@@ -1590,7 +1788,7 @@ Label
 </th>
 <td>
 <p class="paragraph">
-<em>&omega;</em>
+Angular Velocity
 </p>
 </td>
 </tr>
@@ -1613,10 +1811,10 @@ Equation
 <div class="equation">
 <em>&omega;</em> = <div class="fraction">
 <span class="fup">
-<em>d</em><em>&theta;</em>(<em>t</em>)
+<em>d</em>&#8239;<em>&theta;</em>(<em>t</em>)
 </span>
 <span class="fdn">
-<em>d</em><em>t</em>
+<em>d</em>&#8239;<em>t</em>
 </span>
 </div>
 </div>
@@ -1629,7 +1827,7 @@ Description
 </th>
 <td>
 <p class="paragraph">
-<em>&omega;</em> is the angular velocity<br /><em>&theta;</em> is the angular displacement<br /><em>t</em> is the time
+<em>&omega;</em> is the angular velocity (rad/s)<br /><em>&theta;</em> is the angular displacement (rad)<br /><em>t</em> is the time (s)
 </p>
 </td>
 </tr>
@@ -1643,7 +1841,7 @@ Label
 </th>
 <td>
 <p class="paragraph">
-<em>&alpha;</em>
+Angular Acceleration
 </p>
 </td>
 </tr>
@@ -1666,10 +1864,10 @@ Equation
 <div class="equation">
 <em>&alpha;</em> = <div class="fraction">
 <span class="fup">
-<em>d</em><em>&omega;</em>(<em>t</em>)
+<em>d</em>&#8239;<em>&omega;</em>(<em>t</em>)
 </span>
 <span class="fdn">
-<em>d</em><em>t</em>
+<em>d</em>&#8239;<em>t</em>
 </span>
 </div>
 </div>
@@ -1682,7 +1880,7 @@ Description
 </th>
 <td>
 <p class="paragraph">
-<em>&alpha;</em> is the angular acceleration<br /><em>&omega;</em> is the angular velocity<br /><em>t</em> is the time
+<em>&alpha;</em> is the angular acceleration (rad/(s<sup>2</sup>))<br /><em>&omega;</em> is the angular velocity (rad/s)<br /><em>t</em> is the time (s)
 </p>
 </td>
 </tr>
@@ -1696,7 +1894,7 @@ Label
 </th>
 <td>
 <p class="paragraph">
-<em>j</em>
+Impulse (scalar)
 </p>
 </td>
 </tr>
@@ -1719,7 +1917,7 @@ Equation
 <div class="equation">
 <em>j</em> = <div class="fraction">
 <span class="fup">
-(-1 &plus; <em>C<sub>R</sub></em>)<em><b>v</b><sub>i</sub><sup>AB</sup></em>&sdot;<em><b>n</b></em>
+&minus;(1 &plus; <em>C<sub>R</sub></em>)&#8239;<em><b>v</b><sub>i</sub><sup>AB</sup></em>&sdot;<em><b>n</b></em>
 </span>
 <span class="fdn">
 (1/<em>m<sub>A</sub></em> &plus; 1/<em>m<sub>B</sub></em>)<em>||<b>n</b>||</em><sup>2</sup> &plus; <em>||<b>r</b><sub>AP</sub>*<b>n</b>||</em><sup>2</sup>/<em><b>I</b><sub>A</sub></em> &plus; <em>||<b>r</b><sub>BP</sub>*<b>n</b>||</em><sup>2</sup>/<em><b>I</b><sub>B</sub></em>
@@ -1735,7 +1933,7 @@ Description
 </th>
 <td>
 <p class="paragraph">
-<em>j</em> is the impulse (scalar)<br /><em>C<sub>R</sub></em> is the coefficient of restitution<br /><em><b>v</b><sub>i</sub><sup>AB</sup></em> is the relative velocity between rigid bodies of A and B<br /><em><b>n</b></em> is the collision normal vector<br /><em>m</em> is the mass<br /><em>||<b>n</b>||</em> is the length of the normal vector<br /><em>||<b>r</b><sub>AP</sub>*<b>n</b>||</em> is the length of the perpendicular vector to the contact displacement vector of rigid body A<br /><em><b>I</b></em> is the moment of inertia<br /><em>||<b>r</b><sub>BP</sub>*<b>n</b>||</em> is the length of the perpendicular vector to the contact displacement vector of rigid body B
+<em>j</em> is the impulse (scalar) (N&sdot;s)<br /><em>C<sub>R</sub></em> is the coefficient of restitution<br /><em><b>v</b><sub>i</sub><sup>AB</sup></em> is the relative velocity between rigid bodies of A and B (m/s)<br /><em><b>n</b></em> is the collision normal vector (m)<br /><em>m</em> is the mass (kg)<br /><em>||<b>n</b>||</em> is the length of the normal vector (m)<br /><em>||<b>r</b><sub>AP</sub>*<b>n</b>||</em> is the length of the perpendicular vector to the contact displacement vector of rigid body A (m)<br /><em><b>I</b></em> is the moment of inertia (kg&sdot;m<sup>2</sup>)<br /><em>||<b>r</b><sub>BP</sub>*<b>n</b>||</em> is the length of the perpendicular vector to the contact displacement vector of rigid body B (m)
 </p>
 </td>
 </tr>
@@ -1764,7 +1962,7 @@ Physical Constraints
 Typical Value
 </th>
 <th>
-Typical Uncertainty
+TU
 </th>
 </tr>
 <tr>
@@ -1988,7 +2186,7 @@ R2: Input the initial masses, velocities, orientations, angular velocities of, a
 R3: Input the surface properties of the bodies such as friction or elasticity.
 </p>
 <p>
-R4: Verify that the inputs satisfy the required physical constraints from <a href=#Sec:SoluCharSpec>this Section</a>.
+R4: Verify that the inputs satisfy the required physical constraints from <a href=#Sec:SoluCharSpec>Sec:SoluCharSpec</a>.
 </p>
 <p>
 R5: Determine the positions and velocities over a period of time of the 2D rigid bodies acted upon by a force.
@@ -2047,7 +2245,7 @@ LC4: The library may be expanded to include joints and constraints.
 Off-The-Shelf Solutions
 </h2>
 <p class="paragraph">
-As mentioned in <a href=#Sec:ProbDesc>this Section</a>, there already exist free open source game physics libraries. Similar 2D physics libraries are:
+As mentioned in <a href=#Sec:ProbDesc>Sec:ProbDesc</a>, there already exist free open source game physics libraries. Similar 2D physics libraries are:
 </p>
 <ul class="list">
 <li>
@@ -2088,30 +2286,30 @@ The purpose of the traceability matrices is to provide easy references on what h
 
 </th>
 <th>
-IM1 (<a href=#T:im1>this Definition</a>)
+IM1 (<a href=#T:im1>T:im1</a>)
 </th>
 <th>
-IM2 (<a href=#T:im2>this Definition</a>)
+IM2 (<a href=#T:im2>T:im2</a>)
 </th>
 <th>
-IM3 (<a href=#T:im3>this Definition</a>)
+IM3 (<a href=#T:im3>T:im3</a>)
 </th>
 <th>
-R1 (<a href=#Sec:FuncRequ>this Section</a>)
+R1 (<a href=#Sec:FuncRequ>Sec:FuncRequ</a>)
 </th>
 <th>
-R4 (<a href=#Sec:FuncRequ>this Section</a>)
+R4 (<a href=#Sec:FuncRequ>Sec:FuncRequ</a>)
 </th>
 <th>
-R7 (<a href=#Sec:FuncRequ>this Section</a>)
+R7 (<a href=#Sec:FuncRequ>Sec:FuncRequ</a>)
 </th>
 <th>
-Data Constraints (<a href=#Sec:SoluCharSpec>this Section</a>)
+Data Constraints (<a href=#Sec:SoluCharSpec>Sec:SoluCharSpec</a>)
 </th>
 </tr>
 <tr>
 <td>
-GS1 (<a href=#Sec:ProbDesc>this Section</a>)
+GS1 (<a href=#Sec:ProbDesc>Sec:ProbDesc</a>)
 </td>
 <td>
 X
@@ -2137,7 +2335,7 @@ X
 </tr>
 <tr>
 <td>
-GS2 (<a href=#Sec:ProbDesc>this Section</a>)
+GS2 (<a href=#Sec:ProbDesc>Sec:ProbDesc</a>)
 </td>
 <td>
 
@@ -2163,7 +2361,7 @@ X
 </tr>
 <tr>
 <td>
-GS3 (<a href=#Sec:ProbDesc>this Section</a>)
+GS3 (<a href=#Sec:ProbDesc>Sec:ProbDesc</a>)
 </td>
 <td>
 
@@ -2189,7 +2387,7 @@ X
 </tr>
 <tr>
 <td>
-GS4 (<a href=#Sec:ProbDesc>this Section</a>)
+GS4 (<a href=#Sec:ProbDesc>Sec:ProbDesc</a>)
 </td>
 <td>
 
@@ -2215,7 +2413,7 @@ X
 </tr>
 <tr>
 <td>
-R1 (<a href=#Sec:FuncRequ>this Section</a>)
+R1 (<a href=#Sec:FuncRequ>Sec:FuncRequ</a>)
 </td>
 <td>
 
@@ -2241,7 +2439,7 @@ R1 (<a href=#Sec:FuncRequ>this Section</a>)
 </tr>
 <tr>
 <td>
-R2 (<a href=#Sec:FuncRequ>this Section</a>)
+R2 (<a href=#Sec:FuncRequ>Sec:FuncRequ</a>)
 </td>
 <td>
 X
@@ -2267,7 +2465,7 @@ X
 </tr>
 <tr>
 <td>
-R3 (<a href=#Sec:FuncRequ>this Section</a>)
+R3 (<a href=#Sec:FuncRequ>Sec:FuncRequ</a>)
 </td>
 <td>
 
@@ -2293,7 +2491,7 @@ X
 </tr>
 <tr>
 <td>
-R4 (<a href=#Sec:FuncRequ>this Section</a>)
+R4 (<a href=#Sec:FuncRequ>Sec:FuncRequ</a>)
 </td>
 <td>
 
@@ -2319,7 +2517,7 @@ X
 </tr>
 <tr>
 <td>
-R5 (<a href=#Sec:FuncRequ>this Section</a>)
+R5 (<a href=#Sec:FuncRequ>Sec:FuncRequ</a>)
 </td>
 <td>
 X
@@ -2345,7 +2543,7 @@ X
 </tr>
 <tr>
 <td>
-R6 (<a href=#Sec:FuncRequ>this Section</a>)
+R6 (<a href=#Sec:FuncRequ>Sec:FuncRequ</a>)
 </td>
 <td>
 
@@ -2371,7 +2569,7 @@ X
 </tr>
 <tr>
 <td>
-R7 (<a href=#Sec:FuncRequ>this Section</a>)
+R7 (<a href=#Sec:FuncRequ>Sec:FuncRequ</a>)
 </td>
 <td>
 
@@ -2397,7 +2595,7 @@ X
 </tr>
 <tr>
 <td>
-R8 (<a href=#Sec:FuncRequ>this Section</a>)
+R8 (<a href=#Sec:FuncRequ>Sec:FuncRequ</a>)
 </td>
 <td>
 
@@ -2423,7 +2621,7 @@ X
 </tr>
 </table>
 <p class="caption">
-Traceability Matrix Showing the Connections Between Requirements (<a href=#Sec:Requ>this Section</a>), Goal Statements (<a href=#Sec:ProbDesc>this Section</a>) and Other Items
+Traceability Matrix Showing the Connections Between Requirements (<a href=#Sec:Requ>Sec:Requ</a>), Goal Statements (<a href=#Sec:ProbDesc>Sec:ProbDesc</a>) and Other Items
 </p>
 </a>
 <a id="Table:TracMatrShowtheConnBetwAssu()andOtheItem">
@@ -2433,30 +2631,30 @@ Traceability Matrix Showing the Connections Between Requirements (<a href=#Sec:R
 
 </th>
 <th>
-A1 (<a href=#Sec:ProbDesc>this Section</a>)
+A1 (<a href=#Sec:ProbDesc>Sec:ProbDesc</a>)
 </th>
 <th>
-A2 (<a href=#Sec:ProbDesc>this Section</a>)
+A2 (<a href=#Sec:ProbDesc>Sec:ProbDesc</a>)
 </th>
 <th>
-A3 (<a href=#Sec:ProbDesc>this Section</a>)
+A3 (<a href=#Sec:ProbDesc>Sec:ProbDesc</a>)
 </th>
 <th>
-A4 (<a href=#Sec:ProbDesc>this Section</a>)
+A4 (<a href=#Sec:ProbDesc>Sec:ProbDesc</a>)
 </th>
 <th>
-A5 (<a href=#Sec:ProbDesc>this Section</a>)
+A5 (<a href=#Sec:ProbDesc>Sec:ProbDesc</a>)
 </th>
 <th>
-A6 (<a href=#Sec:ProbDesc>this Section</a>)
+A6 (<a href=#Sec:ProbDesc>Sec:ProbDesc</a>)
 </th>
 <th>
-A7 (<a href=#Sec:ProbDesc>this Section</a>)
+A7 (<a href=#Sec:ProbDesc>Sec:ProbDesc</a>)
 </th>
 </tr>
 <tr>
 <td>
-T1 (<a href=#T:t1NewtonSL>this Definition</a>)
+T1 (<a href=#T:t1NewtonSL>T:t1NewtonSL</a>)
 </td>
 <td>
 
@@ -2482,7 +2680,7 @@ T1 (<a href=#T:t1NewtonSL>this Definition</a>)
 </tr>
 <tr>
 <td>
-T2 (<a href=#T:t2NewtonTL>this Definition</a>)
+T2 (<a href=#T:t2NewtonTL>T:t2NewtonTL</a>)
 </td>
 <td>
 
@@ -2508,7 +2706,7 @@ T2 (<a href=#T:t2NewtonTL>this Definition</a>)
 </tr>
 <tr>
 <td>
-T3 (<a href=#T:t3NewtonLUG>this Definition</a>)
+T3 (<a href=#T:t3NewtonLUG>T:t3NewtonLUG</a>)
 </td>
 <td>
 
@@ -2534,7 +2732,7 @@ T3 (<a href=#T:t3NewtonLUG>this Definition</a>)
 </tr>
 <tr>
 <td>
-T4 (<a href=#T:t4ChaslesThm>this Definition</a>)
+T4 (<a href=#T:t4ChaslesThm>T:t4ChaslesThm</a>)
 </td>
 <td>
 X
@@ -2560,7 +2758,7 @@ X
 </tr>
 <tr>
 <td>
-T5 (<a href=#T:t5NewtonSLR>this Definition</a>)
+T5 (<a href=#T:t5NewtonSLR>T:t5NewtonSLR</a>)
 </td>
 <td>
 
@@ -2586,7 +2784,7 @@ T5 (<a href=#T:t5NewtonSLR>this Definition</a>)
 </tr>
 <tr>
 <td>
-GD1 (<a href=#Sec:SoluCharSpec>this Section</a>)
+GD1 (<a href=#Sec:SoluCharSpec>Sec:SoluCharSpec</a>)
 </td>
 <td>
 
@@ -2612,7 +2810,7 @@ GD1 (<a href=#Sec:SoluCharSpec>this Section</a>)
 </tr>
 <tr>
 <td>
-GD2 (<a href=#Sec:SoluCharSpec>this Section</a>)
+GD2 (<a href=#Sec:SoluCharSpec>Sec:SoluCharSpec</a>)
 </td>
 <td>
 
@@ -2638,7 +2836,7 @@ GD2 (<a href=#Sec:SoluCharSpec>this Section</a>)
 </tr>
 <tr>
 <td>
-GD3 (<a href=#Sec:SoluCharSpec>this Section</a>)
+GD3 (<a href=#Sec:SoluCharSpec>Sec:SoluCharSpec</a>)
 </td>
 <td>
 
@@ -2664,7 +2862,7 @@ X
 </tr>
 <tr>
 <td>
-GD4 (<a href=#Sec:SoluCharSpec>this Section</a>)
+GD4 (<a href=#Sec:SoluCharSpec>Sec:SoluCharSpec</a>)
 </td>
 <td>
 
@@ -2690,7 +2888,7 @@ GD4 (<a href=#Sec:SoluCharSpec>this Section</a>)
 </tr>
 <tr>
 <td>
-GD5 (<a href=#Sec:SoluCharSpec>this Section</a>)
+GD5 (<a href=#Sec:SoluCharSpec>Sec:SoluCharSpec</a>)
 </td>
 <td>
 
@@ -2716,7 +2914,7 @@ GD5 (<a href=#Sec:SoluCharSpec>this Section</a>)
 </tr>
 <tr>
 <td>
-GD6 (<a href=#Sec:SoluCharSpec>this Section</a>)
+GD6 (<a href=#Sec:SoluCharSpec>Sec:SoluCharSpec</a>)
 </td>
 <td>
 
@@ -2742,7 +2940,7 @@ GD6 (<a href=#Sec:SoluCharSpec>this Section</a>)
 </tr>
 <tr>
 <td>
-GD7 (<a href=#Sec:SoluCharSpec>this Section</a>)
+GD7 (<a href=#Sec:SoluCharSpec>Sec:SoluCharSpec</a>)
 </td>
 <td>
 
@@ -2768,7 +2966,7 @@ GD7 (<a href=#Sec:SoluCharSpec>this Section</a>)
 </tr>
 <tr>
 <td>
-DD1 (<a href=#DD:p.CM>this Definition</a>)
+DD1 (<a href=#DD:p.CM>DD:p.CM</a>)
 </td>
 <td>
 X
@@ -2794,7 +2992,7 @@ X
 </tr>
 <tr>
 <td>
-DD2 (<a href=#DD:linearDisplacement>this Definition</a>)
+DD2 (<a href=#DD:linearDisplacement>DD:linearDisplacement</a>)
 </td>
 <td>
 X
@@ -2820,7 +3018,7 @@ X
 </tr>
 <tr>
 <td>
-DD3 (<a href=#DD:linearVelocity>this Definition</a>)
+DD3 (<a href=#DD:linearVelocity>DD:linearVelocity</a>)
 </td>
 <td>
 X
@@ -2846,7 +3044,7 @@ X
 </tr>
 <tr>
 <td>
-DD4 (<a href=#DD:linearAcceleration>this Definition</a>)
+DD4 (<a href=#DD:linearAcceleration>DD:linearAcceleration</a>)
 </td>
 <td>
 X
@@ -2872,7 +3070,7 @@ X
 </tr>
 <tr>
 <td>
-DD5 (<a href=#DD:angularDisplacement>this Definition</a>)
+DD5 (<a href=#DD:angularDisplacement>DD:angularDisplacement</a>)
 </td>
 <td>
 X
@@ -2898,7 +3096,7 @@ X
 </tr>
 <tr>
 <td>
-DD6 (<a href=#DD:angularVelocity>this Definition</a>)
+DD6 (<a href=#DD:angularVelocity>DD:angularVelocity</a>)
 </td>
 <td>
 X
@@ -2924,7 +3122,7 @@ X
 </tr>
 <tr>
 <td>
-DD7 (<a href=#DD:angularAcceleration>this Definition</a>)
+DD7 (<a href=#DD:angularAcceleration>DD:angularAcceleration</a>)
 </td>
 <td>
 X
@@ -2950,7 +3148,7 @@ X
 </tr>
 <tr>
 <td>
-DD8 (<a href=#DD:impulseS>this Definition</a>)
+DD8 (<a href=#DD:impulseS>DD:impulseS</a>)
 </td>
 <td>
 X
@@ -2976,7 +3174,7 @@ X
 </tr>
 <tr>
 <td>
-IM1 (<a href=#T:im1>this Definition</a>)
+IM1 (<a href=#T:im1>T:im1</a>)
 </td>
 <td>
 X
@@ -3002,7 +3200,7 @@ X
 </tr>
 <tr>
 <td>
-IM2 (<a href=#T:im2>this Definition</a>)
+IM2 (<a href=#T:im2>T:im2</a>)
 </td>
 <td>
 X
@@ -3028,7 +3226,7 @@ X
 </tr>
 <tr>
 <td>
-IM3 (<a href=#T:im3>this Definition</a>)
+IM3 (<a href=#T:im3>T:im3</a>)
 </td>
 <td>
 X
@@ -3054,7 +3252,7 @@ X
 </tr>
 <tr>
 <td>
-LC1 (<a href=#Sec:LikeChan>this Section</a>)
+LC1 (<a href=#Sec:LikeChan>Sec:LikeChan</a>)
 </td>
 <td>
 
@@ -3080,7 +3278,7 @@ LC1 (<a href=#Sec:LikeChan>this Section</a>)
 </tr>
 <tr>
 <td>
-LC2 (<a href=#Sec:LikeChan>this Section</a>)
+LC2 (<a href=#Sec:LikeChan>Sec:LikeChan</a>)
 </td>
 <td>
 
@@ -3106,7 +3304,7 @@ X
 </tr>
 <tr>
 <td>
-LC3 (<a href=#Sec:LikeChan>this Section</a>)
+LC3 (<a href=#Sec:LikeChan>Sec:LikeChan</a>)
 </td>
 <td>
 
@@ -3132,7 +3330,7 @@ X
 </tr>
 <tr>
 <td>
-LC4 (<a href=#Sec:LikeChan>this Section</a>)
+LC4 (<a href=#Sec:LikeChan>Sec:LikeChan</a>)
 </td>
 <td>
 
@@ -3158,7 +3356,7 @@ X
 </tr>
 </table>
 <p class="caption">
-Traceability Matrix Showing the Connections Between Assumptions (<a href=#Sec:ProbDesc>this Section</a>) and Other Items
+Traceability Matrix Showing the Connections Between Assumptions (<a href=#Sec:ProbDesc>Sec:ProbDesc</a>) and Other Items
 </p>
 </a>
 <a id="Table:TracMatrShowtheConnBetwItemandOtheSect">
@@ -3168,78 +3366,78 @@ Traceability Matrix Showing the Connections Between Assumptions (<a href=#Sec:Pr
 
 </th>
 <th>
-T1 (<a href=#T:t1NewtonSL>this Definition</a>)
+T1 (<a href=#T:t1NewtonSL>T:t1NewtonSL</a>)
 </th>
 <th>
-T2 (<a href=#T:t2NewtonTL>this Definition</a>)
+T2 (<a href=#T:t2NewtonTL>T:t2NewtonTL</a>)
 </th>
 <th>
-T3 (<a href=#T:t3NewtonLUG>this Definition</a>)
+T3 (<a href=#T:t3NewtonLUG>T:t3NewtonLUG</a>)
 </th>
 <th>
-T4 (<a href=#T:t4ChaslesThm>this Definition</a>)
+T4 (<a href=#T:t4ChaslesThm>T:t4ChaslesThm</a>)
 </th>
 <th>
-T5 (<a href=#T:t5NewtonSLR>this Definition</a>)
+T5 (<a href=#T:t5NewtonSLR>T:t5NewtonSLR</a>)
 </th>
 <th>
-GD1 (<a href=#Sec:SoluCharSpec>this Section</a>)
+GD1 (<a href=#Sec:SoluCharSpec>Sec:SoluCharSpec</a>)
 </th>
 <th>
-GD2 (<a href=#Sec:SoluCharSpec>this Section</a>)
+GD2 (<a href=#Sec:SoluCharSpec>Sec:SoluCharSpec</a>)
 </th>
 <th>
-GD3 (<a href=#Sec:SoluCharSpec>this Section</a>)
+GD3 (<a href=#Sec:SoluCharSpec>Sec:SoluCharSpec</a>)
 </th>
 <th>
-GD4 (<a href=#Sec:SoluCharSpec>this Section</a>)
+GD4 (<a href=#Sec:SoluCharSpec>Sec:SoluCharSpec</a>)
 </th>
 <th>
-GD5 (<a href=#Sec:SoluCharSpec>this Section</a>)
+GD5 (<a href=#Sec:SoluCharSpec>Sec:SoluCharSpec</a>)
 </th>
 <th>
-GD6 (<a href=#Sec:SoluCharSpec>this Section</a>)
+GD6 (<a href=#Sec:SoluCharSpec>Sec:SoluCharSpec</a>)
 </th>
 <th>
-GD7 (<a href=#Sec:SoluCharSpec>this Section</a>)
+GD7 (<a href=#Sec:SoluCharSpec>Sec:SoluCharSpec</a>)
 </th>
 <th>
-DD1 (<a href=#DD:p.CM>this Definition</a>)
+DD1 (<a href=#DD:p.CM>DD:p.CM</a>)
 </th>
 <th>
-DD2 (<a href=#DD:linearDisplacement>this Definition</a>)
+DD2 (<a href=#DD:linearDisplacement>DD:linearDisplacement</a>)
 </th>
 <th>
-DD3 (<a href=#DD:linearVelocity>this Definition</a>)
+DD3 (<a href=#DD:linearVelocity>DD:linearVelocity</a>)
 </th>
 <th>
-DD4 (<a href=#DD:linearAcceleration>this Definition</a>)
+DD4 (<a href=#DD:linearAcceleration>DD:linearAcceleration</a>)
 </th>
 <th>
-DD5 (<a href=#DD:angularDisplacement>this Definition</a>)
+DD5 (<a href=#DD:angularDisplacement>DD:angularDisplacement</a>)
 </th>
 <th>
-DD6 (<a href=#DD:angularVelocity>this Definition</a>)
+DD6 (<a href=#DD:angularVelocity>DD:angularVelocity</a>)
 </th>
 <th>
-DD7 (<a href=#DD:angularAcceleration>this Definition</a>)
+DD7 (<a href=#DD:angularAcceleration>DD:angularAcceleration</a>)
 </th>
 <th>
-DD8 (<a href=#DD:impulseS>this Definition</a>)
+DD8 (<a href=#DD:impulseS>DD:impulseS</a>)
 </th>
 <th>
-IM1 (<a href=#T:im1>this Definition</a>)
+IM1 (<a href=#T:im1>T:im1</a>)
 </th>
 <th>
-IM2 (<a href=#T:im2>this Definition</a>)
+IM2 (<a href=#T:im2>T:im2</a>)
 </th>
 <th>
-IM3 (<a href=#T:im3>this Definition</a>)
+IM3 (<a href=#T:im3>T:im3</a>)
 </th>
 </tr>
 <tr>
 <td>
-T1 (<a href=#T:t1NewtonSL>this Definition</a>)
+T1 (<a href=#T:t1NewtonSL>T:t1NewtonSL</a>)
 </td>
 <td>
 
@@ -3313,7 +3511,7 @@ T1 (<a href=#T:t1NewtonSL>this Definition</a>)
 </tr>
 <tr>
 <td>
-T2 (<a href=#T:t2NewtonTL>this Definition</a>)
+T2 (<a href=#T:t2NewtonTL>T:t2NewtonTL</a>)
 </td>
 <td>
 
@@ -3387,7 +3585,7 @@ T2 (<a href=#T:t2NewtonTL>this Definition</a>)
 </tr>
 <tr>
 <td>
-T3 (<a href=#T:t3NewtonLUG>this Definition</a>)
+T3 (<a href=#T:t3NewtonLUG>T:t3NewtonLUG</a>)
 </td>
 <td>
 
@@ -3461,7 +3659,7 @@ T3 (<a href=#T:t3NewtonLUG>this Definition</a>)
 </tr>
 <tr>
 <td>
-T4 (<a href=#T:t4ChaslesThm>this Definition</a>)
+T4 (<a href=#T:t4ChaslesThm>T:t4ChaslesThm</a>)
 </td>
 <td>
 
@@ -3535,7 +3733,7 @@ T4 (<a href=#T:t4ChaslesThm>this Definition</a>)
 </tr>
 <tr>
 <td>
-T5 (<a href=#T:t5NewtonSLR>this Definition</a>)
+T5 (<a href=#T:t5NewtonSLR>T:t5NewtonSLR</a>)
 </td>
 <td>
 
@@ -3609,7 +3807,7 @@ X
 </tr>
 <tr>
 <td>
-GD1 (<a href=#Sec:SoluCharSpec>this Section</a>)
+GD1 (<a href=#Sec:SoluCharSpec>Sec:SoluCharSpec</a>)
 </td>
 <td>
 X
@@ -3683,7 +3881,7 @@ X
 </tr>
 <tr>
 <td>
-GD2 (<a href=#Sec:SoluCharSpec>this Section</a>)
+GD2 (<a href=#Sec:SoluCharSpec>Sec:SoluCharSpec</a>)
 </td>
 <td>
 
@@ -3757,7 +3955,7 @@ X
 </tr>
 <tr>
 <td>
-GD3 (<a href=#Sec:SoluCharSpec>this Section</a>)
+GD3 (<a href=#Sec:SoluCharSpec>Sec:SoluCharSpec</a>)
 </td>
 <td>
 X
@@ -3831,7 +4029,7 @@ X
 </tr>
 <tr>
 <td>
-GD4 (<a href=#Sec:SoluCharSpec>this Section</a>)
+GD4 (<a href=#Sec:SoluCharSpec>Sec:SoluCharSpec</a>)
 </td>
 <td>
 
@@ -3905,7 +4103,7 @@ GD4 (<a href=#Sec:SoluCharSpec>this Section</a>)
 </tr>
 <tr>
 <td>
-GD5 (<a href=#Sec:SoluCharSpec>this Section</a>)
+GD5 (<a href=#Sec:SoluCharSpec>Sec:SoluCharSpec</a>)
 </td>
 <td>
 
@@ -3979,7 +4177,7 @@ X
 </tr>
 <tr>
 <td>
-GD6 (<a href=#Sec:SoluCharSpec>this Section</a>)
+GD6 (<a href=#Sec:SoluCharSpec>Sec:SoluCharSpec</a>)
 </td>
 <td>
 
@@ -4053,7 +4251,7 @@ GD6 (<a href=#Sec:SoluCharSpec>this Section</a>)
 </tr>
 <tr>
 <td>
-GD7 (<a href=#Sec:SoluCharSpec>this Section</a>)
+GD7 (<a href=#Sec:SoluCharSpec>Sec:SoluCharSpec</a>)
 </td>
 <td>
 
@@ -4127,7 +4325,7 @@ GD7 (<a href=#Sec:SoluCharSpec>this Section</a>)
 </tr>
 <tr>
 <td>
-DD1 (<a href=#DD:p.CM>this Definition</a>)
+DD1 (<a href=#DD:p.CM>DD:p.CM</a>)
 </td>
 <td>
 
@@ -4201,7 +4399,7 @@ DD1 (<a href=#DD:p.CM>this Definition</a>)
 </tr>
 <tr>
 <td>
-DD2 (<a href=#DD:linearDisplacement>this Definition</a>)
+DD2 (<a href=#DD:linearDisplacement>DD:linearDisplacement</a>)
 </td>
 <td>
 
@@ -4275,7 +4473,7 @@ DD2 (<a href=#DD:linearDisplacement>this Definition</a>)
 </tr>
 <tr>
 <td>
-DD3 (<a href=#DD:linearVelocity>this Definition</a>)
+DD3 (<a href=#DD:linearVelocity>DD:linearVelocity</a>)
 </td>
 <td>
 
@@ -4349,7 +4547,7 @@ DD3 (<a href=#DD:linearVelocity>this Definition</a>)
 </tr>
 <tr>
 <td>
-DD4 (<a href=#DD:linearAcceleration>this Definition</a>)
+DD4 (<a href=#DD:linearAcceleration>DD:linearAcceleration</a>)
 </td>
 <td>
 
@@ -4423,7 +4621,7 @@ DD4 (<a href=#DD:linearAcceleration>this Definition</a>)
 </tr>
 <tr>
 <td>
-DD5 (<a href=#DD:angularDisplacement>this Definition</a>)
+DD5 (<a href=#DD:angularDisplacement>DD:angularDisplacement</a>)
 </td>
 <td>
 
@@ -4497,7 +4695,7 @@ DD5 (<a href=#DD:angularDisplacement>this Definition</a>)
 </tr>
 <tr>
 <td>
-DD6 (<a href=#DD:angularVelocity>this Definition</a>)
+DD6 (<a href=#DD:angularVelocity>DD:angularVelocity</a>)
 </td>
 <td>
 
@@ -4571,7 +4769,7 @@ DD6 (<a href=#DD:angularVelocity>this Definition</a>)
 </tr>
 <tr>
 <td>
-DD7 (<a href=#DD:angularAcceleration>this Definition</a>)
+DD7 (<a href=#DD:angularAcceleration>DD:angularAcceleration</a>)
 </td>
 <td>
 
@@ -4645,7 +4843,7 @@ DD7 (<a href=#DD:angularAcceleration>this Definition</a>)
 </tr>
 <tr>
 <td>
-DD8 (<a href=#DD:impulseS>this Definition</a>)
+DD8 (<a href=#DD:impulseS>DD:impulseS</a>)
 </td>
 <td>
 
@@ -4719,7 +4917,7 @@ X
 </tr>
 <tr>
 <td>
-IM1 (<a href=#T:im1>this Definition</a>)
+IM1 (<a href=#T:im1>T:im1</a>)
 </td>
 <td>
 X
@@ -4793,7 +4991,7 @@ X
 </tr>
 <tr>
 <td>
-IM2 (<a href=#T:im2>this Definition</a>)
+IM2 (<a href=#T:im2>T:im2</a>)
 </td>
 <td>
 
@@ -4867,7 +5065,7 @@ X
 </tr>
 <tr>
 <td>
-IM3 (<a href=#T:im3>this Definition</a>)
+IM3 (<a href=#T:im3>T:im3</a>)
 </td>
 <td>
 
@@ -4963,34 +5161,28 @@ References
 </h2>
 <div class="list">
 <p>
-[1]: David L. Parnas. Designing Software for Ease of Extension and Contraction. ICSE '78: Proceedings of the 3rd international conference on Software engineering, 264-277, 1978
+[1]: Bueche, J. Frederick. <em>Introduction to Physics for Scientists, Fourth Edition</em>. Mcgraw-Hill College, 1986. 
 </p>
 <p>
-[2]: Greg Wilson and D.A. Aruliah and C. Titus Brown and Neil P. Chue Hong and Matt Davis and Richard T. Guy and Steven H.D. Haddock and Kathryn D. Huff and Ian M. Mitchell and Mark D. Plumblet and Ben Waugh and Ethan P. White and Paul Wilson. Best Practices for Scientific Computing, 2013
+[2]: Koothoor, Nirmitha. <em>A document drive approach to certifying scientific computing software</em>. Master's thesis, McMaster University, Hamilton, Canada: 2013. Print.
 </p>
 <p>
-[3]: David L. Parnas. On the Criteria To Be Used in Decomposing Systems into Modules. Comm. ACM, vol. 15, no. 2, pp. 1053-1058, 1972
+[3]: Parnas, David L. "Designing Software for Ease of Extension and Contraction.." <em>ICSE '78: Proceedings of the 3rd international conference on Software engineering</em>, 1978. pp. 264&ndash;277. Print.
 </p>
 <p>
-[4]: D. L. Parnas and P. C. Clements and D. M. Weiss. The Modular Structure of Complex Systems. ICSE '84: Proceedings of the 7th international conference on Software engineering, 408-417, 1984
+[4]: Parnas, David L. "On the Criteria To Be Used in Decomposing Systems into Modules." <em>Communications of the ACM</em>, 1972. pp. 1053&ndash;1058. Print.
 </p>
 <p>
-[5]: David L. Parnas and P.C. Clements. A Rational Design Process: How and Why to Fake it. IEEE Transactions on Software Engineering, 251-257, 1986
+[5]: Parnas, David L. and Clements, P. C. "A Rational Design Process: How and Why to Fake it." <em>IEEE Transactions on Software Engineering</em>, 1986. pp. 251&ndash;257. Print.
 </p>
 <p>
-[6]: Nirmitha Koothoor. A document drive approach to certifying scientific computing software. Master's thesis, McMaster University, Hamilton, Ontario, Canada, 2013.
+[6]: Parnas, David L., Clements, P. C., and Wiess, . "The Modular Structure of Complex Systems." <em>ICSE '84: Proceedings of the 7th international conference on Software engineering</em>, 1984. pp. 408&ndash;417. Print.
 </p>
 <p>
-[7]: David L. Parnas and P.C. Clements. A rational design process: How and why to fake it. IEEE Transactions on Software Engineering, 12(2):251-257, February 1986.
+[7]: Smith, W. Spencer and Lai, Lei. "A new requirements template for scientific computing." Edited by PJ Agerfalk, N. Kraiem, and J. Ralyte, <em>Proceedings of the First International Workshop on Situational Requirements Engineering Processes - Methods, Techniques and Tools to Support Situation-Specific Requirements Engineering Processes, SREP'05</em>, Paris, France: 2005. pp. 107&ndash;121. In conjunction with 13th IEEE International Requirements Engineering Conference, Print.
 </p>
 <p>
-[8]: W. Spencer Smith and Lei Lai. A new requirements template for scientific computing. In J. Ralyt&eacute;, P. Agerfalk, and N. Kraiem, editors, Proceedings of the First International Workshopon Situational Requirements Engineering Processes - Methods, Techniques and Tools to Support Situation-Specific Requirements Engineering Processes, SREP'05, pages 107-121, Paris, France, 2005. In conjunction with 13th IEEE International Requirements Engineering Conference.
-</p>
-<p>
-[9]: J. Frederick Bueche. Introduction to Physics for Scientists Fourth Edition. 1986
-</p>
-<p>
-[10]: Marilyn Lightstone. Derivation of Tank/PCM Model. 2012
+[8]: Wilson, Greg, Aruliah, D. A., Titus, C., Chue Hong, Neil P., Davis, Matt, Guy, Richard T., Haddock, Steven H. D., Huff, Kathryn D., Mitchell, Ian M., Plumblet, Mark D., Waugh, Ben, White, Ethan P., and Wilson, Paul. "Best Practices for Scientific Computing, 2013." 2013. Print.
 </p>
 </div>
 </div>

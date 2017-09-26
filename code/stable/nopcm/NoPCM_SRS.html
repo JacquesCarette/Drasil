@@ -595,6 +595,14 @@ T
 Theoretical Model
 </td>
 </tr>
+<tr>
+<td>
+TU
+</td>
+<td>
+Typical Uncertainty
+</td>
+</tr>
 </table>
 </a>
 </div>
@@ -651,7 +659,7 @@ Reviewers of this documentation should have a strong knowledge in heat transfer 
 Organization of Document
 </h3>
 <p class="paragraph">
-The organization of this document follows the template for an SRS for scientific computing software proposed by [citation] and [citation]. The presentation follows the standard pattern of presenting goals, theories, definitions, and assumptions. For readers that would like a more bottom up approach, they can start reading the instance models in <a href=#Sec:InstMode>Sec:InstMode</a> and trace back to find any additional information they require.
+The organization of this document follows the template for an SRS for scientific computing software proposed by [3] and [6] (<a href=#Sec:Refe>Sec:Refe</a>). The presentation follows the standard pattern of presenting goals, theories, definitions, and assumptions. For readers that would like a more bottom up approach, they can start reading the instance models in <a href=#Sec:InstMode>Sec:InstMode</a> and trace back to find any additional information they require.
 </p>
 <p class="paragraph">
 The goal statements are refined to the theoretical models, and the theoretical models to the instance models. The instance model (<a href=#Sec:InstMode>Sec:InstMode</a>) to be solved is referred to as IM1. The instance model provides the Ordinary Differential Equation (ODE) that model the solar water heating system. SWHS solves this ODE.
@@ -758,7 +766,7 @@ SWHS is a computer program developed to investigate the heating of water in a so
 Terminology and Definitions
 </h4>
 <p class="paragraph">
-This subsection provides a list of terms that are used in the subsequent sections and their meaning, with the purpose of reducing ambiguity and making it easier to correctly understand the requirements:
+This subsection provides a list of terms that are used in the subsequent sections and their meaning, with the purpose of reducing ambiguity and making it easier to correctly understand the requirements.
 </p>
 <ul class="list">
 <li>
@@ -945,7 +953,7 @@ Equation
 <td>
 <a id="">
 <div class="equation">
--<em>&nabla;</em>&sdot;<em><b>q</b></em> &plus; <em>g</em> = <em>&rho;</em>&#8239;<em>C</em>&#8239;<div class="fraction">
+&minus;<em>&nabla;</em>&sdot;<em><b>q</b></em> &plus; <em>g</em> = <em>&rho;</em>&#8239;<em>C</em>&#8239;<div class="fraction">
 <span class="fup">
 <em>&part;</em>&#8239;<em>T</em>
 </span>
@@ -1086,7 +1094,7 @@ Integrating <a href=#T:t1ConsThermE>T:t1ConsThermE</a> over a volume (<em>V</em>
 </p>
 <a id="">
 <div class="equation">
-(-<span class="symb">&int;</span><sub><em>V</em> </sub>(<em>&nabla;</em>&sdot;<em><b>q</b></em><em>d</em>&#8239;<em>V</em>)) &plus; <span class="symb">&int;</span><sub><em>V</em> </sub>(<em>g</em><em>d</em>&#8239;<em>V</em>) = <span class="symb">&int;</span><sub><em>V</em> </sub>(<em>&rho;</em>&#8239;<em>C</em>&#8239;<div class="fraction">
+&minus;<span class="symb">&int;</span><sub><em>V</em> </sub>(<em>&nabla;</em>&sdot;<em><b>q</b></em><em>d</em>&#8239;<em>V</em>) &plus; <span class="symb">&int;</span><sub><em>V</em> </sub>(<em>g</em><em>d</em>&#8239;<em>V</em>) = <span class="symb">&int;</span><sub><em>V</em> </sub>(<em>&rho;</em>&#8239;<em>C</em>&#8239;<div class="fraction">
 <span class="fup">
 <em>&part;</em>&#8239;<em>T</em>
 </span>
@@ -1101,7 +1109,7 @@ Applying Gauss's Divergence Theorem to the first term over the surface <em>S</em
 </p>
 <a id="">
 <div class="equation">
-(-<span class="symb">&int;</span><sub><em>S</em> </sub>(<em><b>q</b></em>&sdot;<em><b>n&#770;</b></em><em>d</em>&#8239;<em>S</em>)) &plus; <span class="symb">&int;</span><sub><em>V</em> </sub>(<em>g</em><em>d</em>&#8239;<em>V</em>) = <span class="symb">&int;</span><sub><em>V</em> </sub>(<em>&rho;</em>&#8239;<em>C</em>&#8239;<div class="fraction">
+&minus;<span class="symb">&int;</span><sub><em>S</em> </sub>(<em><b>q</b></em>&sdot;<em><b>n&#770;</b></em><em>d</em>&#8239;<em>S</em>) &plus; <span class="symb">&int;</span><sub><em>V</em> </sub>(<em>g</em><em>d</em>&#8239;<em>V</em>) = <span class="symb">&int;</span><sub><em>V</em> </sub>(<em>&rho;</em>&#8239;<em>C</em>&#8239;<div class="fraction">
 <span class="fup">
 <em>&part;</em>&#8239;<em>T</em>
 </span>
@@ -1455,7 +1463,7 @@ Software Constraints
 Typical Value
 </th>
 <th>
-Typical Uncertainty
+TU
 </th>
 </tr>
 <tr>
@@ -3080,16 +3088,16 @@ References
 [1]: Incropera, F. P., Dewitt, D. P., Bergman, T. L., and Lavine, A. S. "Fundamentals of Heat and Mass Transfer." 6th. ed., Hoboken, New Jersey: John Wiley and Sons, 2007. Print.
 </p>
 <p>
-[2]: Marilyn, Lightstone. "Derivation of tank/pcm model." 2012. From Marilyn Lightstone's Personal Notes Print.
+[2]: Koothoor, Nirmitha. <em>A document drive approach to certifying scientific computing software</em>. Master's thesis, McMaster University, Hamilton, Canada: 2013. Print.
 </p>
 <p>
-[3]: Nirmitha, Koothoor. <em>A document drive approach to certifying scientific computing software</em>. Master's thesis, McMaster University, Hamilton, Canada: 2013. Print.
+[3]: Lightstone, Marilyn. <em>Derivation of tank/pcm model</em>. 2012. From Marilyn Lightstone's Personal Notes 
 </p>
 <p>
 [4]: Parnas, David L. and Clements, P. C. "A rational design process: How and why to fake it." <em>IEEE Transactions on Software Engineering</em>, vol. 12, Washington, USA: no. 2, 1986. pp. 251&ndash;257. Print.
 </p>
 <p>
-[5]: Smith, W. Spencer and Lei, Lai. "A new requirements template for scientific computing." <em>Proceedings of the First International Workshop on Situational Requirements Engineering Processes - Methods, Techniques and Tools to Support Situation-Specific Requirements Engineering Processes, SREP'05</em>, Paris, France: 2005. pp. 107&ndash;121. In J. Ralyt&eacute;, P. Agerfalk, and N. Kraiem, editors In conjunction with 13th IEEE International Requirements Engineering Conference Print.
+[5]: Smith, W. Spencer and Lai, Lei. "A new requirements template for scientific computing." Edited by PJ Agerfalk, N. Kraiem, and J. Ralyte, <em>Proceedings of the First International Workshop on Situational Requirements Engineering Processes - Methods, Techniques and Tools to Support Situation-Specific Requirements Engineering Processes, SREP'05</em>, Paris, France: 2005. pp. 107&ndash;121. In conjunction with 13th IEEE International Requirements Engineering Conference, Print.
 </p>
 </div>
 </div>

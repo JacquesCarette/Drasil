@@ -15,7 +15,7 @@ Software Requirements Specification for GlassBR program
 </div>
 <div class="author">
 <h2>
-Nikitha Krithnan and Spencer Smith
+Nikitha Krithnan and W. Spencer Smith
 </h2>
 </div>
 <a id="Sec:RefeMate">
@@ -1082,7 +1082,7 @@ The instance models that govern GlassBR are presented in <a href=#Sec:InstMode>S
 Assumptions
 </h4>
 <p class="paragraph">
-This section simplifies the original problem and helps in developing the theoretical model by filling in the missing information for the physical system. The numbers given in the square brackets refer to the Theoretical Models [<a href=#Sec:TheoMode>this Section</a>], Data Definitions [<a href=#Sec:DataDefi>this Section</a>], Instance Models [<a href=#Sec:InstMode>this Section</a>], or Likely Changes [<a href=#Sec:LikeChan>this Section</a>], in which the respective assumption is used.
+This section simplifies the original problem and helps in developing the theoretical model by filling in the missing information for the physical system. The numbers given in the square brackets refer to the Theoretical Models [<a href=#Sec:TheoMode>Sec:TheoMode</a>], General Definitions [<a href=#Sec:GeneDefi>Sec:GeneDefi</a>], Data Definitions [<a href=#Sec:DataDefi>Sec:DataDefi</a>], Instance Models [<a href=#Sec:InstMode>Sec:InstMode</a>], or Likely Changes [<a href=#Sec:LikeChan>Sec:LikeChan</a>], in which the respective assumption is used.
 </p>
 <a id="A:assumption1">
 <ul>
@@ -1755,7 +1755,7 @@ Description
 Instance Models
 </h4>
 <p class="paragraph">
-This section transforms the problem defined in <a href=#Sec:ProbDesc>this Section</a> into one which is expressed in mathematical terms. It uses concrete symbols defined in <a href=#Sec:DataDefi>this Section</a> to replace the abstract symbols in the models identified in <a href=#Sec:TheoMode>this Section</a>.
+This section transforms the problem defined in <a href=#Sec:ProbDesc>Sec:ProbDesc</a> into one which is expressed in mathematical terms. It uses concrete symbols defined in <a href=#Sec:DataDefi>Sec:DataDefi</a> to replace the abstract symbols in the models identified in <a href=#Sec:TheoMode>Sec:TheoMode</a> and <a href=#Sec:GeneDefi>Sec:GeneDefi</a>.
 </p>
 <a id="T:probOfBr">
 <table class="tdefn">
@@ -1974,7 +1974,7 @@ TU
 <em>w</em>&thinsp;&ge;&thinsp;0.0
 </td>
 <td>
-<em>w<sub>max</sub></em>&thinsp;&le;&thinsp;<em>w</em> and <em>w</em>&thinsp;&le;&thinsp;<em>w<sub>min</sub></em>
+<em>w<sub>min</sub></em>&thinsp;&le;&thinsp;<em>w</em> and <em>w</em>&thinsp;&le;&thinsp;<em>w<sub>max</sub></em>
 </td>
 <td>
 42.0 kg
@@ -2064,9 +2064,76 @@ This section provides the functional requirements, the business tasks that the s
 <h3>
 Functional Requirements
 </h3>
+<a id="R:s71req1">
+<ul>
+R1: Input the quantities from <a href=#Table:RequInpufollR1>Table:RequInpufollR1</a>, which define the glass dimensions, type of glass, tolerable probability of failure and the characteristics of the blast Note: <em>a</em> and <em>b</em> will be input in terms of millimetres and will be converted to the equivalent value in metres.
+</ul>
+</a>
+<a id="R:s71req2">
+<ul>
+R2: The system shall set the known values as follows: <em>m</em>, <em>k</em>, <em>E</em>, <em>t<sub>d</sub></em> following A4, <em>LDF</em> following A8, and LSF following A5.
+</ul>
+</a>
+<a id="R:s71req3">
+<ul>
+R3: The system shall check the entered input values to ensure that they do not exceed the data constraints mentioned in <a href=#Sec:DataCons>Sec:DataCons</a>. If any of the input parameters is out of bounds, an error message is displayed and the calculations stop.
+</ul>
+</a>
+<a id="R:s71req4">
+<ul>
+R4: Output the input quantities from R1 and the known quantities from R2.
+</ul>
+</a>
+<a id="R:s71req5">
+<ul>
+R5: If <em>is_safe1</em> and <em>is_safe2</em> (from <a href=#T:t1SafetyReq>T:t1SafetyReq</a> and <a href=#T:t2SafetyReq>T:t2SafetyReq</a>) are true, output the message &quot;For the given input parameters, the glass is considered safe.&quot; If the condition is false, then output the message &quot;For the given input parameters, the glass is NOT considered safe.&quot;
+</ul>
+</a>
 <div class="list">
 <p>
-R1: Input the following quantities, which define the glass dimensions, type of glass, tolerable probability of failure and the characteristics of the blast:
+R6: Output the following quantities:
+    <ul class="list">
+    <li>
+    Probability of breakage (<em>P<sub>b</sub></em>) (<a href=#T:probOfBr>T:probOfBr</a>)
+    </li>
+    <li>
+    Load resistance (<em>LR</em>) (<a href=#T:calOfCap>T:calOfCap</a>)
+    </li>
+    <li>
+    Applied load (demand) (<em>q</em>) (<a href=#T:calOfDe>T:calOfDe</a>)
+    </li>
+    <li>
+    Non-factored load (<em>NFL</em>) (<a href=#DD:nFL>DD:nFL</a>)
+    </li>
+    <li>
+    Glass type factor (<em>GTF</em>) (<a href=#DD:gTF>DD:gTF</a>)
+    </li>
+    <li>
+    Dimensionless load (<em>q&#770;</em>) (<a href=#DD:dimlessLoad>DD:dimlessLoad</a>)
+    </li>
+    <li>
+    Tolerable load (<em>q&#770;<sub>tol</sub></em>) (<a href=#DD:tolLoad>DD:tolLoad</a>)
+    </li>
+    <li>
+    Stress distribution factor (Function) based on Pbtol (<em>J<sub>tol</sub></em>) (<a href=#DD:sdf.tol>DD:sdf.tol</a>)
+    </li>
+    <li>
+    Stress distribution factor (Function) (<em>J</em>) (<a href=#DD:stressDistFac>DD:stressDistFac</a>)
+    </li>
+    <li>
+    Actual thickness (<em>h</em>) (<a href=#DD:act.thick>DD:act.thick</a>)
+    </li>
+    <li>
+    Aspect Ratio (<em>AR</em>) <em>AR</em> = <div class="fraction">
+<span class="fup">
+<em>a</em>
+</span>
+<span class="fdn">
+<em>b</em>
+</span>
+</div>
+    </li>
+    </ul>
 </p>
 </div>
 <a id="Table:RequInpufollR1">
@@ -2199,85 +2266,13 @@ Required Inputs following R1
 </a>
 </div>
 </a>
-<div class="list">
-<p>
-R2: The system shall set the known values as follows:
-    <ul class="list">
-    <li>
-    m, k, E, <em>t<sub>d</sub></em> following A4
-    </li>
-    <li>
-    LDF following A8
-    </li>
-    <li>
-    LSF following A5
-    </li>
-    </ul>
-</p>
-</div>
-<div class="list">
-<p>
-R3: The system shall check the entered input values to ensure that they do not exceed the data constraints mentioned in <a href=#Sec:DataCons>this Section</a>. If any of the input parameters is out of bounds, an error message is displayed and the calculations stop.
-</p>
-<p>
-R4: Output the input quantities from R1 and the known quantities from R2.
-</p>
-<p>
-R5: If is_safe1 and is_safe2 (from <a href=#T:t1SafetyReq>this Definition</a> and <a href=#T:t2SafetyReq>this Definition</a>) are true, output the message &quot;For the given input parameters, the glass is considered safe.&quot; If the condition is false, then output the message &quot;For the given input parameters, the glass is NOT considered safe.&quot;
-</p>
-</div>
-<div class="list">
-<p>
-R6: Output the following quantities:
-    <ul class="list">
-    <li>
-    Probability of breakage (<em>P<sub>b</sub></em>) (<a href=#T:probOfBr>this Definition</a>)
-    </li>
-    <li>
-    Load Resistance (LR) (<a href=#T:calOfCap>this Definition</a>)
-    </li>
-    <li>
-    Applied load (demand) (q) (<a href=#T:calOfDe>this Definition</a>)
-    </li>
-    <li>
-    Actual thickness (h) (<a href=#DD:act.thick>this Definition</a>)
-    </li>
-    <li>
-    Load Duration Factor (LDF) (<a href=#DD:lDurFac>this Definition</a>)
-    </li>
-    <li>
-    Stress distribution factor (Function) (J) (<a href=#DD:stressDistFac>this Definition</a>)
-    </li>
-    <li>
-    Non-Factored Load (NFL) (<a href=#DD:nonFactorL>this Definition</a>)
-    </li>
-    <li>
-    Glass Type Factor (GTF) (<a href=#DD:glassTypeFac>this Definition</a>)
-    </li>
-    <li>
-    Dimensionless load (<em>q&#770;</em>) (<a href=#DD:dimlessLoad>this Definition</a>)
-    </li>
-    <li>
-    Tolerable load (<em>q&#770;<sub>tol</sub></em>) (<a href=#DD:tolLoad>this Definition</a>)
-    </li>
-    <li>
-    Stress distribution factor (Function) based on Pbtol (J<sub>tol</sub>) (<a href=#DD:sdf.tol>this Definition</a>)
-    </li>
-    <li>
-    Aspect Ratio (AR)
-    </li>
-    </ul>
-</p>
-</div>
-</div>
-</a>
 <a id="Sec:Non-Requ">
 <div class="subsection">
 <h3>
 Non-Functional Requirements
 </h3>
 <p class="paragraph">
-Given the small size, and relative simplicity, of this problem, performance is not a priority. Any reasonable implementation will be very quick and use minimal storage. Rather than performance, the priority non-functional Rs are correctness, verifiability, understandability, reusability, maintainability, and portability.
+This problem is small in size and relatively simple, so performance is not a priority. Any reasonable implementation will be very quick and use minimal storage. Rather than performance, the non-functional requirement priorities are correctness, verifiability, understandability, reusability, maintainability, and portability.
 </p>
 </div>
 </a>
@@ -4296,7 +4291,7 @@ Unitless
 maximum value for one of the dimensions of the glass plate
 </td>
 <td>
-0.1
+5.0
 </td>
 <td>
 mm
@@ -4310,7 +4305,7 @@ mm
 minimum value for one of the dimensions of the glass plate
 </td>
 <td>
-5.0
+0.1
 </td>
 <td>
 mm
@@ -4400,22 +4395,25 @@ References
 </h2>
 <div class="list">
 <p>
-[1]: N. Koothoor, &quot;A document drive approach to certifying scientific computing software,&quot; Master's thesis, McMaster University, Hamilton, Ontario, Canada, 2013.
+[1]: ASTM C1036-16. <em>Standard specification for Flat Glass</em>. West Conshohocken, PA: ASTM International, 2016. www.astm.org. 
 </p>
 <p>
-[2]: W. S. Smith and L. Lai, &quot;A new requirements template for scientific computing,&quot; in Proceedings of the First International Workshop on Situational Requirements Engineering Processes - Methods, Techniques and Tools to Support Situation-Specific Requirements Engineering Processes, SREP'05 (J.Ralyt&eacute;, P.Agerfalk, and N.Kraiem, eds.), (Paris, France), pp. 107-121, In conjunction with 13th IEEE International Requirements Engineering Conference, 2005.
+[2]: ASTM C1048-04. <em>Specification for Heat-Treated Flat Glass-Kind HS, Kind FT Coated and Uncoated Glass</em>. West Conshohocken, PA: ASTM International, 2009. www.astm.org. 
 </p>
 <p>
-[3]: J. Robertson and S. Robertson, &quot;Volere requirements specification template edition 16.&quot; &quot;www.cs.uic.edu/ i442/VolereMaterials/templateArchive16/c Volere template16.pdf&quot;, 2012.
+[3]: ASTM E1300-09. <em>Standard Practice for Determining Load Resistance of Glass in Buildings</em>. <em>Standard E1300-09a</em>. ASTM International, 2009. www.astm.org. 
 </p>
 <p>
-[4]: ASTM Standards Committee, &quot;Standard practice for determining load resistance of glass in buildings,&quot; Standard E1300-09a, American Society for Testing and Material (ASTM), 2009.
+[4]: Beason, W. Lynn, Kohutek, Terry L., and Bracci, Joseph M. <em>Basis for ASTME E 1300 Annealed Glass Thickness Selection Charts</em>. <em>ASCE Library</em>. 1 February 1998. doi.org/10.1061/(ASCE)0733-9445(1998)124:2(215). 
 </p>
 <p>
-[5]: ASTM, developed by subcommittee C1408, Book of standards 15.02, &quot;Standard specification for flat glass, C1036.&quot;
+[5]: Koothoor, Nirmitha. <em>A document drive approach to certifying scientific computing software</em>. Master's thesis, McMaster University, Hamilton, Canada: 2013. Print.
 </p>
 <p>
-[6]: ASTM, developed by subcommittee C14.08, Book of standards 15.02, &quot;Specification for heat treated flat glass-Kind HS, kind FT coated and uncoated glass, C1048.&quot;
+[6]: Robertson, James and Robertson, Suzanne. "Volere requirements specification template edition 16." 2012. https://pdfs.semanticscholar.org/cf57/27a59801086cbd3d14e587e09880561dbe22.pdf. Print.
+</p>
+<p>
+[7]: Smith, W. Spencer and Lai, Lei. "A new requirements template for scientific computing." Edited by PJ Agerfalk, N. Kraiem, and J. Ralyte, <em>Proceedings of the First International Workshop on Situational Requirements Engineering Processes - Methods, Techniques and Tools to Support Situation-Specific Requirements Engineering Processes, SREP'05</em>, Paris, France: 2005. pp. 107&ndash;121. In conjunction with 13th IEEE International Requirements Engineering Conference, Print.
 </p>
 </div>
 </div>
@@ -4426,7 +4424,7 @@ References
 Appendix
 </h2>
 <p class="paragraph">
-This appendix holds the graphs (<a href=#Figure:Figu5:3secoduraequipres()versStanoffdist(SD)versCharweig()>this Figure</a> and <a href=#Figure:Figu6:Nondimelateload()versAspeRati(AR)versStredistfact(Fun()>this Figure</a>) used for interpolating values needed in the models.
+This appendix holds the graphs (<a href=#Figure:Figu5:3secoduraequipres()versStanoffdist(SD)versCharweig()>Figure:Figu5:3secoduraequipres()versStanoffdist(SD)versCharweig()</a> and <a href=#Figure:Figu6:Nondimelateload()versAspeRati(AR)versStredistfact(Fun()>Figure:Figu6:Nondimelateload()versAspeRati(AR)versStredistfact(Fun()</a>) used for interpolating values needed in the models.
 </p>
 <a id="Figure:Figu5:3secoduraequipres()versStanoffdist(SD)versCharweig()">
 <img class="figure" src="ASTM_F2248-09.png" alt="Figure 5: 3 second duration equivalent pressure (<em>q</em>) versus Stand off distance (SD) versus Charge weight (<em>m</em>)"></img>

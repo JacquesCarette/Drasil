@@ -100,7 +100,7 @@ usepackage      = command "usepackage"
 -- changed to command "newcounter" from command "count" (I assume this was
 -- what was intended?)
 count           = command "newcounter"
-includegraphics = command "includegraphics"
+includegraphics = command1o "includegraphics" (Just "width=\\textwidth")
 
 author, caption, item, label, title :: D -> D
 author          = commandD "author"

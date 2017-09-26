@@ -330,7 +330,7 @@ spec (E ex)      = toMath $ pure $ text $ p_expr ex
 spec (a :-: s)   = toMath $ subscript (spec a) (spec s)
 spec (a :^: s)   = toMath $ superscript (spec a) (spec s)
 spec (a :/: s)   = toMath $ fraction (spec a) (spec s)
-spec (S s)       = pure $ text s
+spec (S s)       = pure $ text (concatMap escapeChars s)
 spec (N s)       = toMath $ pure $ text $ symbol s
 spec (Sy s)      = p_unit s
 spec (G g)       = pure $ text $ unPL $ greek g
@@ -345,6 +345,10 @@ spec (Ref t@(LC _) r) = lcref (show t) (spec r)
 spec (Ref t@UC r) = ucref (show t) (spec r)
 spec (Ref t r)   = ref (show t) (spec r)
 spec EmptyS      = empty
+
+escapeChars :: Char -> String
+escapeChars '_' = "\\_"
+escapeChars c = c : []
 
 symbol_needs :: Symbol -> MathContext
 symbol_needs (Atomic _)          = Text

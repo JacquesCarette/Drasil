@@ -73,6 +73,9 @@ import Drasil.Sections.SpecificSystemDescription (solChSpecF,
 
 {--}
 
+resourcePath :: String
+resourcePath = "../../../datafiles/GlassBR/"
+
 glassBR_srs :: Document
 glassBR_srs = mkDoc mkSRS (for'' titleize phrase) glassSystInfo
 
@@ -392,7 +395,7 @@ s6_1_1 = termDefnF (Just (S "All" `sOf` S "the" +:+ plural term_ +:+
 
 s6_1_2 = physSystDesc (short gLassBR) (fig_glassbr) [s6_1_2_list, fig_glassbr]
 
-fig_glassbr = Figure (at_start $ the physicalSystem) "physicalsystimage.png"
+fig_glassbr = Figure (at_start $ the physicalSystem) (resourcePath ++ "physicalsystimage.png")
 
 s6_1_2_list = enumSimple 1 (short physSyst) s6_1_2_list_physys
 
@@ -833,15 +836,15 @@ s9_intro2 = traceGIntro traceyGraphs
 
 fig_2 = figureLabel 2 (traceyMatrix)
   (titleize' item +:+ S "of Different" +:+ titleize' section_)
-  ("Trace.png")
+  (resourcePath ++ "Trace.png")
 
 fig_3 = figureLabel 3 (traceyMatrix)
   (titleize' requirement `sAnd` S "Other" +:+ titleize' item)
-  ("RTrace.png")
+  (resourcePath ++ "RTrace.png")
 
 fig_4 = figureLabel 4 (traceyMatrix)
   (titleize' assumption `sAnd` S "Other" +:+ titleize' item)
-  ("ATrace.png")
+  (resourcePath ++ "ATrace.png")
 
 {--VALUES OF AUXILIARY CONSTANTS--}
 
@@ -857,13 +860,13 @@ s12_intro = foldlSP [
 fig_5 = Figure (titleize figure +: S "5" +:+ (demandq ^. defn) +:+
   sParen (getS demand) `sVersus` at_start sD +:+ sParen (getAcc stdOffDist)
   `sVersus` at_start char_weight +:+ sParen (getS sflawParamM))
-  "ASTM_F2248-09.png"
+  (resourcePath ++ "ASTM_F2248-09.png")
 
 fig_6 = Figure (titleize figure +: S "6" +:+ S "Non dimensional" +:+
   phrase lateralLoad +:+ sParen (getS dimlessLoad)
   `sVersus` titleize aspectR +:+ sParen (getAcc aR)
   `sVersus` at_start stressDistFac +:+ sParen (getS stressDistFac))
-  "ASTM_F2248-09_BeasonEtAl.png"
+  (resourcePath ++ "ASTM_F2248-09_BeasonEtAl.png")
 
 blstRskInvWGlassSlab :: Sentence
 blstRskInvWGlassSlab = phrase blastRisk +:+ S "involved with the" +:+

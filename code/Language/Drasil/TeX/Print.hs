@@ -578,13 +578,14 @@ renderF c fields = S "@":+: S (show c) :+: S "{" :+: S (cite fields) :+: S ",\n"
 --renderBook _ = error "Tried to render a non-book using renderBook." 
 
 cite :: [CiteField] -> String
-cite fields = concat $ intersperse "_" $
-  map (map addUnder . lstName) (getAuthors fields) ++ [show $ getYear fields]
+cite fields = concat $
+  map (rmSpace . lstName) (getAuthors fields) ++ [show $ getYear fields]
 
--- Adds an underscore when there are spaces in the lastname
-addUnder :: Char -> Char
-addUnder ' ' = '_'
-addUnder  x  =  x
+-- Remove spaces
+rmSpace :: [Char] -> [Char]
+rmSpace [] = []
+rmSpace (' ':xs) = rmSpace xs
+rmSpace (x:xs)   = x : rmSpace xs
 
 getAuthors :: [CiteField] -> People
 getAuthors [] = error "No authors found" --FIXME: return a warning

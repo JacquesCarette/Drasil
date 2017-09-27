@@ -39,14 +39,17 @@ glassInputData = funcData "get_input" $
     junkLine,
     singleton pb_tol
   ]
+
   
-  
+one, two :: Symbol
+one = Atomic "1"
+two = Atomic "2"  
 
 v_y_2, v_y_1, v_x_2, v_x_1, v_x :: VarChunk
-v_y_1  = makeVC "v_y_1"    (nounPhraseSP "y1")   (sub (lY) (Atomic "1"))
-v_y_2  = makeVC "v_y_2"    (nounPhraseSP "y2")   (sub (lY) (Atomic "2"))
-v_x_1  = makeVC "v_x_1"    (nounPhraseSP "x1")   (sub (lX) (Atomic "1"))
-v_x_2  = makeVC "v_x_2"    (nounPhraseSP "x2")   (sub (lX) (Atomic "2"))
+v_y_1  = makeVC "v_y_1"    (nounPhraseSP "y1")   (sub lY one)
+v_y_2  = makeVC "v_y_2"    (nounPhraseSP "y2")   (sub lY two)
+v_x_1  = makeVC "v_x_1"    (nounPhraseSP "x1")   (sub lX one)
+v_x_2  = makeVC "v_x_2"    (nounPhraseSP "x2")   (sub lX two)
 v_x    = makeVC "v_x"      (nounPhraseSP "x")    lX -- = params.wtnt from mainFun.py
 
 v_v, v_x_z_1, v_y_z_1, v_x_z_2, v_y_z_2, v_mat, v_col,
@@ -54,18 +57,18 @@ v_v, v_x_z_1, v_y_z_1, v_x_z_2, v_y_z_2, v_mat, v_col,
 v_v       = makeVC "v_v"          (nounPhraseSP "v")       lV
 v_i       = vc "v_i"          (nounPhraseSP "i")       lI  Natural
 v_j       = vc "v_j"          (nounPhraseSP "j")       lJ  Natural
-v_k       = vc "v_k"          (nounPhraseSP "k")       (Atomic "k_2") Natural -- k breaks things until we start using ids
+v_k       = vc "v_k"          (nounPhraseSP "k")       (sub lK two) Natural -- k breaks things until we start using ids
                                                                           -- in codegen (after refactor end of August)
 v_z       = makeVC "v_z"          (nounPhraseSP "z")       lZ
-v_z_array = vc "v_z_array" (nounPhraseSP "z_array") (sub (lZ) (Atomic "array")) (Vect Real)
-v_y_array = vc "v_y_array" (nounPhraseSP "y_array") (sub (lY) (Atomic "array")) (Vect $ Vect Real)
-v_x_array = vc "v_x_array" (nounPhraseSP "x_array") (sub (lX) (Atomic "array")) (Vect $ Vect Real)
+v_z_array = vc "v_z_array" (nounPhraseSP "z_array") (sub lZ (Atomic "array")) (Vect Real)
+v_y_array = vc "v_y_array" (nounPhraseSP "y_array") (sub lY (Atomic "array")) (Vect $ Vect Real)
+v_x_array = vc "v_x_array" (nounPhraseSP "x_array") (sub lX (Atomic "array")) (Vect $ Vect Real)
 v_y       = makeVC "v_y"          (nounPhraseSP "y")       lY
 v_arr     = vc "v_arr"        (nounPhraseSP "arr")     (Atomic "arr") (Vect Real)--FIXME: temporary variable for indInSeq?
-v_x_z_1   = vc "v_x_z_1"   (nounPhraseSP "x_z_1")     (Atomic "x_z_1") (Vect Real)
-v_y_z_1   = vc "v_y_z_1"   (nounPhraseSP "y_z_1")     (Atomic "y_z_1") (Vect Real)
-v_x_z_2   = vc "v_x_z_2"   (nounPhraseSP "x_z_2")     (Atomic "x_z_2") (Vect Real)
-v_y_z_2   = vc "v_y_z_2"   (nounPhraseSP "y_z_2")     (Atomic "y_z_2") (Vect Real)
+v_x_z_1   = vc "v_x_z_1"   (nounPhraseSP "x_z_1")     (sub lX (sub lZ one)) (Vect Real)
+v_y_z_1   = vc "v_y_z_1"   (nounPhraseSP "y_z_1")     (sub lY (sub lZ one)) (Vect Real)
+v_x_z_2   = vc "v_x_z_2"   (nounPhraseSP "x_z_2")     (sub lX (sub lZ two)) (Vect Real)
+v_y_z_2   = vc "v_y_z_2"   (nounPhraseSP "y_z_2")     (sub lY (sub lZ two)) (Vect Real)
 v_mat     = vc "v_mat"     (nounPhraseSP "mat")       (Atomic "mat") (Vect $ Vect Real)
 v_col     = vc "v_col"     (nounPhraseSP "col")       (Atomic "col") (Vect Real)
 v_filename= vc "v_filename" (nounPhraseSP "filename") (Atomic "filename") String

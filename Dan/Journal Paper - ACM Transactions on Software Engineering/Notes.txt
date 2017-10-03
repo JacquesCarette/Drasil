@@ -1,0 +1,39 @@
+Story: Generate all the things!
+Subplot - No silver bullet
+		- Why did we reduce to SC? -> Certification, Context, etc.
+    - Why is it hard to generate all the things?
+		
+Context: Important to have lots of redundancy of information to be worthwhile.
+Think of whole domain instead of a single program family.
+  - One program family will not get enough payoff
+  - One domain (in a knowledge redundancy context) greatly benefits.
+
+Why SC?
+  Most software requiring certification is SC.
+  Redundant knowledge must be readily identifiable and/or nameable
+  Mature domain with well-established theory
+  Weiss Paper -> Lots of justifications
+  
+Reusability generally refers to routines; really reusable routines are over-engineered.
+
+Why is it hard to generate all the things?
+  Example of all the things.
+  Natural language, human-readable vs. machine-readable
+  Assumptions, context, etc.
+  
+There are 2 kinds of professional engineering: the routine (day-to-day) and specialized (novel).
+  \ds{JC has a source that uses better terminology. Find it}
+  -routine software = massive engineering (requires a LOT of knowledge)
+  -specialized = building generators, etc. Massive engineering tasks to make novel tasks easier.
+  -We make routine software easier by facilitating the knowledge reuse through Drasil
+  
+Other people working to solve similar problems:
+  - Problem solving environments
+  - Compendia
+  - Literate programming
+The difference? We generate ALL the things; solving the same problem, but thinking bigger (domain-level).
+
+What else is different?
+  - Knowledge we have must be useful for the machine as well as the human! -> Much higher bar for "do you have the right knowledge"
+  - Knowledge identification/capture/definition no longer only a social process (a la Universities, conferences, journals, etc), must be operationalizable.
+  

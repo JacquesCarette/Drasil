@@ -6,12 +6,21 @@ import Data.Drasil.Concepts.Documentation (assumption,
   dataDefn, goalStmt, inModel, likelyChg, notApp, physSyst, 
   requirement, srs, thModel, typUnc, response, type_)
 
+import Control.Lens ((^.))
 {--}
 
 specnProg :: ConceptChunk
 specnProg = dcc' "speciationProg" (nounPhraseSP "Speciation Diagram Generator program")
   "The speciation diagram generator program" "Speciation" 
 
+{-Acronyms-}
+acronyms = [assumption, dataDefn, goalStmt, inModel, likelyChg, notApp, 
+  physSyst, requirement, srs, thModel, typUnc, specgen]
+
+specgen :: CI
+
+specgen      = commonIdea "specgen"  (specnProg ^. term)   "SpecGen"  
+  
 {-Acronyms-}
 {- acronyms :: [CI]
 acronyms = [assumption, annealedGlass, aR, dataDefn, fullyTGlass,

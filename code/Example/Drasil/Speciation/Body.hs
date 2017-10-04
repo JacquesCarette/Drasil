@@ -94,6 +94,8 @@ mkSRS = RefSec (RefProg intro [TUnits, tsymb [TSPurpose, SymbOrder], TAandA]) :
           StkhldrProg2 
           [ Client specgen (S "Dr." +:+ name scottSmith),
             Cstmr specgen ] ) :
+        GSDSec (
+          GSDProg2 [ UsrChars [s4_1_bullets], SystCons [] [] ] ) :
         []
   
   
@@ -153,6 +155,8 @@ specnSystInfo = SI {
 }
   --FIXME: All named ideas, not just acronyms.
 
+{-- INTRO --}  
+  
 startIntro :: Sentence
 startIntro = foldlSent [
   at_start $ the software, S "described in", 
@@ -165,7 +169,6 @@ scope1 = S "collecting all" +:+ plural inParam
   +:+ S "that describe a chemical system"
 scope2 = S "use the" +:+ plural datum 
   +:+ S "to produce a speciation diagram in the pH range 0 to 14"
-
  
 s2_1_intro_p1 :: Sentence
 s2_1_intro_p1 = foldlSent [S "The main", phrase purpose,
@@ -194,8 +197,18 @@ s2_3_intro = foldlSent [S "The", phrase organization, S "of this",
 s2_3_intro_end = foldl (+:+) EmptyS [(at_start' $ the dataDefn),
   S "are used to support", (plural definition `ofThe` S "different"),
   plural model]
+ 
+
+{-- GENERAL SYSTEM DESCRIPTION --}
+ 
+s4_1_bullets :: Contents
+s4_1_bullets = enumBullet [ foldlSent [ (phrase endUser `sOf` short specgen)
+  `isExpctdToHv` S "an understanding of chemical equilibria in" +:+.
+  S "aqueous systems", (at_start endUser)
+  `isExpctdToHv` S "basic", phrase computerLiteracy, S "to handle the",
+  phrase software ] ]
   
-  {-
+{-
 
 s6, s6_1, s6_1_1, s6_1_2, s6_1_3, s6_2 :: Section
 
@@ -269,72 +282,9 @@ gBRpriorityNFReqs = [correctness, verifiability, understandability,
   reusability, maintainability, portability]
 
 --------------------------------------------------------------------------------
-
-{--INTRODUCTION--}
-
-startIntro :: NamedChunk -> Sentence -> CI -> Sentence
-startIntro prgm sfwrPredicts progName = foldlSent [
-  at_start prgm, S "is helpful to efficiently" `sAnd` S "correctly predict the"
-  +:+. sfwrPredicts, underConsidertn blast,
-  S "The", phrase prgm `sC` S "herein called", short progName,
-  S "aims to predict the", sfwrPredicts, S "using an intuitive",
-  phrase interface]
-
-rdrKnldgbleIn :: (NamedIdea n, NamedIdea n1) => n1 -> n -> Sentence
-rdrKnldgbleIn undrstd1 undrstd2 = (phrase theory +:+ S "behind" +:+
-  phrase undrstd1 `sAnd` phrase undrstd2)
-
-undIR, appStanddIR, incScoR, endScoR :: Sentence
-undIR = foldlList [phrase scndYrCalculus, phrase structuralMechanics,
-  plural computerApp `sIn` phrase civilEng]
-appStanddIR = foldlSent [S "In addition" `sC` plural reviewer,
-  S "should be familiar with the applicable", plural standard,
-  S "for constructions using glass from", 
-  sSqBr (S "4-6" {-astm_LR2009, astm_C1036, astm_C1048-}) `sIn`
-  (makeRef (SRS.reference SRS.missingP []))]
-incScoR = foldl (+:+) EmptyS [S "getting all", plural inParam,
-  S "related to the", phrase glaSlab `sAnd` S "also the", plural parameter,
-  S "related to", phrase blastTy]
-endScoR = foldl (+:+) EmptyS [S "use the", plural datum `sAnd`
-  S "predict whether the", phrase glaSlab, S "is safe to use" `sOr`
-  S "not"]
-
-{--Purpose of Document--}
-
-s2_1_intro_p1 :: NamedChunk -> CI -> NamedChunk -> Sentence
-s2_1_intro_p1 typeOf progName gvnVar = foldlSent [S "The main", phrase purpose,
-  S "of this", phrase typeOf, S "is to predict whether a given", phrase gvnVar,
-  S "is likely to resist a specified" +:+. phrase blast, S "The", plural goal
-  `sAnd` plural thModel, S "used in the", short progName, phrase code,
-  S "are provided" `sC` S "with an", phrase emphasis,
-  S "on explicitly identifying", (plural assumption) `sAnd` S "unambiguous" +:+.
-  plural definition, S "This", phrase typeOf, S "is intended to be used as a",
-  phrase reference, S "to provide all", phrase information,
-  S "necessary to understand" `sAnd` S "verify the" +:+. phrase analysis,
-  S "The", short srs, S "is abstract because the", plural content, S "say what",
-  phrase problem, S "is being solved" `sC` S "but not how to solve it"]
-  --FIXME: Last sentence is also present in SWHS and NoPCM... pull out?
-
-{--Scope of Requirements--}
-
-{--Organization of Document--}
-
-s2_3_intro_end, s2_3_intro :: Sentence
-s2_3_intro = foldlSent [S "The", phrase organization, S "of this",
-  phrase document, S "follows the", phrase template, S "for an", short srs,
-  S "for", phrase sciCompS, S "proposed by" +:+ (sSqBrNum 1 {-koothoor2013-})
-  `sAnd` (sSqBrNum 2 {-smithLai2005-}), sParen (S "in" +:+ (makeRef (SRS.reference SRS.missingP [])))
-  `sC` S "with some", plural aspect, S "taken from Volere", phrase template,
-  S "16", (sSqBrNum 3 {-rbrtsn2012-})]
-
-s2_3_intro_end = foldl (+:+) EmptyS [(at_start' $ the dataDefn),
-  S "are used to support", (plural definition `ofThe` S "different"),
-  plural model]
-
-{--STAKEHOLDERS--}
-
-{--The Client--}
-{--The Customer--}
+UsrChars [s4_1_bullets endUser gLassBR secondYear
+    undergradDegree civilEng structuralEng glBreakage blastRisk], 
+    SystCons [] []]
 
 {--GENERAL SYSTEM DESCRIPTION--}
 
@@ -344,11 +294,11 @@ s4_1_bullets :: (NamedIdea n1, NamedIdea n, NamedIdea n2, NamedIdea n3,
   NamedIdea n4, NamedIdea n5, NamedIdea c, NamedIdea n6) =>
   n6 -> c -> n5 -> n4 -> n3 -> n2 -> n1 -> n -> Contents
 s4_1_bullets intendedIndvdl progName yr degreeType prog1 prog2 undrstd1 undrstd2
-  = enumBullet [foldlSent [(phrase intendedIndvdl `sOf` short progName)
+  = enumBullet [foldlSent [(phrase endUser `sOf` short specgen)
   `isExpctdToHv` S "completed at least", (S "equivalent" `ofThe` (phrase yr)),
   S "of an", phrase degreeType `sIn` phrase prog1 `sOr` phrase prog2],
   (phrase intendedIndvdl `isExpctdToHv` S "an understanding of" +:+.
-  rdrKnldgbleIn (undrstd1) (undrstd2)), foldlSent [phrase intendedIndvdl
+  rdrKnldgbleIn (undrstd1) (undrstd2)), foldlSent [phrase endUser
   `isExpctdToHv` S "basic", phrase computerLiteracy, S "to handle the",
   phrase software]]
 

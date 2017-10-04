@@ -9,7 +9,7 @@ spencerSmith, henryFrankis, nKoothoor, dParnas, daAruliah, gWilson,
   fIncropera, dDewitt, tBergman, aLavine, jRobertson, sRobertson, 
   wlBeason, tlKohutek, jmBracci, qhQian, dyZhu, cfLee, grChen, dgFredlund,
   jKrahn, dStolle, yCLi, ymChen, tltZhan, ssLing, pjCleall, pGuo,
-  mCampidelli,   dmWiess, sPalmer :: Person
+  mCampidelli,   dmWiess, sPalmer, scottSmith :: Person
   
 pjAgerfalk   = person    "PJ"                        "Agerfalk"
 daAruliah    = personWM  "D"         ["A"]           "Aruliah"
@@ -57,6 +57,7 @@ jRalyte      = person    "J"                         "Ralyte"
   -- S "J. Ralyt" :+: (F Acute 'e')
 jRobertson   = person    "James"                     "Robertson"
 sRobertson   = person    "Suzanne"                   "Robertson"
+scottSmith   = person    "Scott"                     "Smith"
 spencerSmith = personWM  "W"         ["Spencer"]     "Smith"
 dStolle      = person    "Dieter"                    "Stolle"
 cTitus       = person    "C"                         "Titus"

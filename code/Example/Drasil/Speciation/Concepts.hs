@@ -11,7 +11,7 @@ import Control.Lens ((^.))
 
 specnProg :: ConceptChunk
 specnProg = dcc' "speciationProg" (nounPhraseSP "Speciation Diagram Generator program")
-  "The speciation diagram generator program" "Speciation" 
+  "The speciation diagram generator program" "SpecGen" 
 
 {-Acronyms-}
 acronyms = [assumption, dataDefn, goalStmt, inModel, likelyChg, notApp, 

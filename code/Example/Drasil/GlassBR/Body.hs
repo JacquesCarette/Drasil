@@ -19,7 +19,7 @@ import Data.Drasil.Concepts.Documentation (analysis, appendix, aspect,
   symbol_, system, template, term_, theory, traceyMatrix, user, value, 
   variable, physicalSystem, datumConstraint, userInput, assumption, dataDefn, 
   goalStmt, inModel, likelyChg, physSyst, requirement, srs, thModel, 
-  dataConst, acroNumGen)
+  dataConst, acroNumGen, company)
 import Data.Drasil.Concepts.Education (secondYear, undergradDegree,
   civilEng, structuralEng, scndYrCalculus, structuralMechanics)
 import Data.Drasil.Software.Products (sciCompS)
@@ -90,7 +90,8 @@ mkSRS = RefSec (RefProg intro [TUnits, tsymb [TSPurpose, SymbOrder], TAandA]) :
      IOrgSec s2_3_intro dataDefn (SRS.dataDefn SRS.missingP []) s2_3_intro_end]) :
   StkhldrSec 
     (StkhldrProg2 
-      [Client gLassBR (S "Entuitive. It is developed by Dr." +:+ name mCampidelli),
+      [Client gLassBR (S "a" +:+ phrase company 
+        +:+ S "named Entuitive. It is developed by Dr." +:+ name mCampidelli),
       Cstmr gLassBR]) :
   GSDSec (GSDProg2 [UsrChars [s4_1_bullets endUser gLassBR secondYear
     undergradDegree civilEng structuralEng glBreakage blastRisk], 

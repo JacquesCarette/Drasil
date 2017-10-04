@@ -9,7 +9,7 @@ spencerSmith, henryFrankis, nKoothoor, dParnas, daAruliah, gWilson,
   fIncropera, dDewitt, tBergman, aLavine, jRobertson, sRobertson, 
   wlBeason, tlKohutek, jmBracci, qhQian, dyZhu, cfLee, grChen, dgFredlund,
   jKrahn, dStolle, yCLi, ymChen, tltZhan, ssLing, pjCleall, pGuo,
-  mCampidelli,   dmWiess :: Person
+  mCampidelli,   dmWiess, sPalmer :: Person
   
 pjAgerfalk   = person    "PJ"                        "Agerfalk"
 daAruliah    = personWM  "D"         ["A"]           "Aruliah"
@@ -48,6 +48,7 @@ ssLing       = person'   "Sao-Sheng"                 "Ling"
 brooks       = person    "Brooks"                    "MacLachlan"
 luthfi       = person    "Luthfi"                    "Mawarid"
 imMitchell   = personWM  "Ian"       ["M"]           "Mitchell"
+sPalmer      = person    "Steven"                    "Palmer"
 dParnas      = personWM  "David"     ["L"]           "Parnas"
 mdPlumblet   = personWM  "Mark"      ["D"]           "Plumblet"
 qhQian       = personWM' "Q"         ["H"]           "Qian"

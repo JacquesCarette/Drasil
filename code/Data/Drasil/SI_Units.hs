@@ -15,7 +15,7 @@ fundamentals = [metre, kilogram, second, kelvin, mole, ampere, candela]
 
 derived :: [DerUChunk]
 derived = [becquerel, calorie, centigrade, coulomb, farad, gray, henry, hertz, joule,
-  katal, kilopascal, kilowatt, lumen, lux,  millimetre, newton, ohm,
+  katal, kilopascal, kilowatt, litre, lumen, lux,  millimetre, newton, ohm,
   pascal, radian, siemens, sievert, steradian, tesla, volt, watt, weber]
 
 si_units :: [UnitDefn]
@@ -51,7 +51,7 @@ m_3 = new_unit "cubic metres"    $ metre ^: 3
 -- And now for the ones with 'common' names
 
 becquerel, calorie, centigrade, coulomb, farad, gray, henry, hertz, joule,
-  katal, kilopascal, kilowatt, lumen, lux,  millimetre, newton, ohm,
+  katal, kilopascal, kilowatt, litre, lumen, lux,  millimetre, newton, ohm,
   pascal, radian, siemens, sievert, steradian, tesla, volt, watt, weber :: DerUChunk
 
 becquerel = derUC' "becquerel" 
@@ -93,6 +93,9 @@ kilopascal = derUC' "kilopascal"
 
 kilowatt = derUC' "kilowatt" 
   "kilowatt" "power" (Concat [Atomic "k", Atomic "W"]) (scale 1000 watt)
+  
+litre = derUC' "litre"
+  "litre" "volume" (Atomic "L") (scale (1/1000) m_3)
 
 lumen = derUC' "lumen" 
   "lumen" "luminous flux" (Atomic "lm") (USynonym (candela *: steradian))

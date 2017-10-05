@@ -1,0 +1,38 @@
+Notes on using Drasil while implementing Speciation Diagram Generator
+  
+General
+  - takes much longer to write documents (at least SRS) than just using LaTeX
+  - the glassBR Body.hs is actually very hard to decipher
+    - every sentence has been made into a local combinator that is only used once
+
+Example.Drasil.DocumentLanguage
+  - the combinators here are not intuitive to use
+  - figuring out what the arguments actually are takes a lot of effort
+    - especially when it's something like Sentence -> Sentence -> Sentence -> Section
+    - what are the sentences supposed to be?  
+    - need to dig deeper to find out, but it leads to more massive combinators
+      - e.g.  Example.Drasil.Sections.Introduction
+              line 52:  
+                introductionF :: (NamedIdea a, NamedIdea b) => 
+                                 a -> (Sentence, Sentence) -> Sentence -> (Sentence, Sentence) -> 
+                                 (Sentence, Sentence, Sentence) -> (Sentence, b, Section, Sentence) -> Section
+  - too rigid
+    - usually use stock sentences where some part of sentence is supplied
+      but if one of those sentences isn't required/applicable, no way to leave it out
+    - some were easy to fix using pattern matching with EmptyS
+  - ends up being easier to just use the verbatim constructors and supply your own
+    manually written section contents
+
+Data.Drasil
+  - identifying captured knowledge in sentences, finding it in Data.Drasil, and
+    replacing it with the chunk (or capturing new knowledge) very slow
+  - makes every sentence take several minutes to write
+
+
+Things I didn't get to but thought about:
+  - need to express chemical equations
+    - should this be done with Expr?  requires new Space for chemical species?
+    - species have associated state, charge
+  - frequently need to refer to physical properties of chemical species
+    - concentration, activity, partial pressure, etc.
+    - not feasible to define a separate symbol for each property of each species

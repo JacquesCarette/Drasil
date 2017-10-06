@@ -1192,7 +1192,7 @@ Label
 </th>
 <td>
 <p class="paragraph">
-Heat Flux Into the Water from the Coil
+Heat Flux Into the Water From the Coil
 </p>
 </td>
 </tr>
@@ -1258,7 +1258,7 @@ Label
 </th>
 <td>
 <p class="paragraph">
-Energy balance on Water to find the Temperature of the Water
+Energy Balance on Water to Find the Temperature of the Water
 </p>
 </td>
 </tr>
@@ -1283,7 +1283,7 @@ Equation
 <span class="fdn">
 <em>&tau;<sub>W</sub></em>
 </span>
-</div>&#8239;(<em>T<sub>C</sub></em> &minus; <em>T<sub>W</sub></em>(<em>t</em>) &plus; <em>&eta;</em>&#8239;(<em>T<sub>P</sub></em>(<em>t</em>) &minus; <em>T<sub>W</sub></em>(<em>t</em>)))
+</div>&#8239;(<em>T<sub>C</sub></em> &minus; <em>T<sub>W</sub></em>(<em>t</em>))
 </div>
 </a>
 </td>
@@ -1294,21 +1294,14 @@ Description
 </th>
 <td>
 <p class="paragraph">
-<em>T<sub>W</sub></em> is the temperature of the water (&deg;C). <em>T<sub>P</sub></em> is the temperature of the phase change material (&deg;C). <em>T<sub>C</sub></em> is the temperature of the heating coil (&deg;C). <em>&tau;<sub>W</sub></em> = <div class="fraction">
+<em>T<sub>W</sub></em> is the temperature of the water (&deg;C). <em>T<sub>C</sub></em> is the temperature of the heating coil (&deg;C). <em>&tau;<sub>W</sub></em> = <div class="fraction">
 <span class="fup">
 <em>m<sub>W</sub></em>&#8239;<em>C<sub>W</sub></em>
 </span>
 <span class="fdn">
 <em>h<sub>C</sub></em>&#8239;<em>A<sub>C</sub></em>
 </span>
-</div> is a constant (s). <em>&eta;</em> = <div class="fraction">
-<span class="fup">
-<em>h<sub>P</sub></em>&#8239;<em>A<sub>P</sub></em>
-</span>
-<span class="fdn">
-<em>h<sub>C</sub></em>&#8239;<em>A<sub>C</sub></em>
-</span>
-</div> is a constant (dimensionless). The above equation applies as long as the water is in liquid form, 0&thinsp;&lt;&thinsp;<em>T<sub>W</sub></em>&thinsp;&lt;&thinsp;100 (&deg;C) where 0 (&deg;C) and 100 (&deg;C) are the melting and boiling point temperatures of water, respectively (<a href=#A:assump14>A:assump14</a>, <a href=#A:assump19>A:assump19</a>).
+</div> is a constant (s). The above equation applies as long as the water is in liquid form, 0&thinsp;&lt;&thinsp;<em>T<sub>W</sub></em>&thinsp;&lt;&thinsp;100 (&deg;C) where 0 (&deg;C) and 100 (&deg;C) are the melting and boiling point temperatures of water, respectively (<a href=#A:assump10>A:assump10</a>).
 </p>
 </td>
 </tr>
@@ -1526,7 +1519,7 @@ TU
 <em>A<sub>C</sub></em>
 </td>
 <td>
-<em>A<sub>C</sub></em>&thinsp;&gt;&thinsp;0 (*)
+<em>A<sub>C</sub></em>&thinsp;&gt;&thinsp;0
 </td>
 <td>
 <em>A<sub>C</sub></em>&thinsp;&le;&thinsp;<em>A<sub>C</sub><sup>max</sup></em>
@@ -1543,7 +1536,7 @@ TU
 <em>T<sub>C</sub></em>
 </td>
 <td>
-0&thinsp;&lt;&thinsp;<em>T<sub>C</sub></em>&thinsp;&lt;&thinsp;100 (+)
+0&thinsp;&lt;&thinsp;<em>T<sub>C</sub></em>&thinsp;&lt;&thinsp;100
 </td>
 <td>
 None
@@ -1611,7 +1604,7 @@ None
 <em>T<sub>init</sub></em>
 </td>
 <td>
-0&thinsp;&lt;&thinsp;<em>T<sub>init</sub></em>&thinsp;&lt;&thinsp;<em>T<sub>melt</sub></em>
+0&thinsp;&lt;&thinsp;<em>T<sub>init</sub></em>&thinsp;&lt;&thinsp;100
 </td>
 <td>
 None

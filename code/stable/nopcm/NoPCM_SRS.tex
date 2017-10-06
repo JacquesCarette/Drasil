@@ -192,7 +192,7 @@ This section provides general information about the system, identifies the inter
 Figure~\ref{Figure::SystCont} shows the system context. A circle represents an external entity outside the software, the user in this case. A rectangle represents the software system itself (SWHS). Arrows are used to show the data flow between the system and its environment.
 \begin{figure}
 \begin{center}
-\includegraphics{SystemContextFigure.png}
+\includegraphics[width=\textwidth]{SystemContextFigure.png}
 \caption{Figure~\ref{Figure::SystCont}: System Context}
 \label{Figure::SystCont}
 \end{center}
@@ -241,7 +241,7 @@ The physical system of SWHS, as shown in Figure~\ref{Figure:Solawateheattankwith
 \end{itemize}
 \begin{figure}
 \begin{center}
-\includegraphics{TankWaterOnly.png}
+\includegraphics[width=\textwidth]{TankWaterOnly.png}
 \caption{Solar water heating tank, with heat flux from heating coil of ${q_{C}}$}
 \label{Figure:Solawateheattankwithheatfluxfromheatcoilof}
 \end{center}
@@ -380,7 +380,7 @@ This section collects and defines all the data needed to build the instance mode
 \phantomsection 
 \label{DD:ht.flux.C}
 \\ \midrule \\
-Label & Heat Flux into the Water from the Coil
+Label & Heat Flux Into the Water From the Coil
 \\ \midrule \\
 Units & $\frac{\text{W}}{\text{m}^{2}}$
 \\ \midrule \\
@@ -399,11 +399,11 @@ This section transforms the problem defined in Section~\ref{Sec:ProbDesc} into o
 \phantomsection 
 \label{T:eBalanceOnWtr}
 \\ \midrule \\
-Label & Energy Balance on Water to find the Temperature of the Water
+Label & Energy Balance on Water to Find the Temperature of the Water
 \\ \midrule \\
-Equation & $\frac{d{T_{W}}}{dt}=\frac{1}{{\tau{}_{W}}}\left({T_{C}}-{T_{W}}\left(t\right)+\eta{}\left({T_{P}}\left(t\right)-{T_{W}}\left(t\right)\right)\right)$
+Equation & $\frac{d{T_{W}}}{dt}=\frac{1}{{\tau{}_{W}}}\left({T_{C}}-{T_{W}}\left(t\right)\right)$
 \\ \midrule \\
-Description & ${T_{W}}$ is the temperature of the water (${}^{\circ}C$). ${T_{P}}$ is the temperature of the phase change material (${}^{\circ}C$). ${T_{C}}$ is the temperature of the heating coil (${}^{\circ}C$). ${\tau{}_{W}}=\frac{{m_{W}}{C_{W}}}{{h_{C}}{A_{C}}}$ is a constant (s). $\eta{}=\frac{{h_{P}}{A_{P}}}{{h_{C}}{A_{C}}}$ is a constant (dimensionless). The above equation applies as long as the water is in liquid form, $0<{T_{W}}<100$ (${}^{\circ}C$) where 0 (${}^{\circ}C$) and 100 (${}^{\circ}C$) are the melting and boiling point temperatures of water, respectively (A\ref{A:assump14}, A\ref{A:assump19}).
+Description & ${T_{W}}$ is the temperature of the water (${}^{\circ}C$). ${T_{C}}$ is the temperature of the heating coil (${}^{\circ}C$). ${\tau{}_{W}}=\frac{{m_{W}}{C_{W}}}{{h_{C}}{A_{C}}}$ is a constant (s). The above equation applies as long as the water is in liquid form, $0<{T_{W}}<100$ (${}^{\circ}C$) where 0 (${}^{\circ}C$) and 100 (${}^{\circ}C$) are the melting and boiling point temperatures of water, respectively (A\ref{A:assump10}).
 \\ \bottomrule \end{tabular}
 \end{minipage}\\
 Derivation of the energy balance on water:
@@ -459,7 +459,7 @@ ${C_{W}}$ & ${C_{W}}>0$ & ${{C_{W}}^{min}}<{C_{W}}<{{C_{W}}^{max}}$ & $4186.0$ $
 \\
 ${h_{C}}$ & ${h_{C}}>0$ & ${{h_{C}}^{min}}\leq{}{h_{C}}\leq{}{{h_{C}}^{max}}$ & $1000.0$ $\frac{\text{W}}{(\text{m}^{2}{}^{\circ}C)}$ & 0.1
 \\
-${T_{init}}$ & $0<{T_{init}}<{T_{melt}}$ & None & $40.0$ ${}^{\circ}C$ & 0.1
+${T_{init}}$ & $0<{T_{init}}<100$ & None & $40.0$ ${}^{\circ}C$ & 0.1
 \\
 ${t_{final}}$ & ${t_{final}}>0$ & ${t_{final}}<{{t_{final}}^{max}}$ & $50000.0$ s & 0.1
 \\
@@ -631,14 +631,14 @@ The purpose of the traceability graphs is also to provide easy references on wha
 NOTE: Building a tool to automatically generate the graphical representation of the matrix by scanning the labels and reference can be future work.
 \begin{figure}
 \begin{center}
-\includegraphics{ATrace.png}
+\includegraphics[width=\textwidth]{ATrace.png}
 \caption{Traceability Graph Showing the Connections Between Items of Different Sections}
 \label{Figure:TracGrapShowtheConnBetwItemofDiffSect}
 \end{center}
 \end{figure}
 \begin{figure}
 \begin{center}
-\includegraphics{RTrace.png}
+\includegraphics[width=\textwidth]{RTrace.png}
 \caption{Traceability Graph Showing the Connections Between Requirements, Instance Models, and Data Constraints}
 \label{Figure:TracGrapShowtheConnBetwRequInstModeandDataCons}
 \end{center}
@@ -678,7 +678,7 @@ ${{t_{final}}^{max}}$ & maximum final time & $86400$ & s
 \section{References}
 \label{Sec:Refe}
 \begin{filecontents*}{bibfile.bib}
-@article{Incropera_Dewitt_Bergman_Lavine_2007,
+@article{IncroperaDewittBergmanLavine2007,
 author={Incropera, F. P. and Dewitt, D. P. and Bergman, T. L. and Lavine, A. S.},
 title={Fundamentals of Heat and Mass Transfer},
 edition={6th.},
@@ -686,20 +686,20 @@ publisher={John Wiley and Sons},
 place={Hoboken, New Jersey},
 year={2007}}
 
-@mastersthesis{Koothoor_2013,
+@mastersthesis{Koothoor2013,
 author={Koothoor, Nirmitha},
 title={A document drive approach to certifying scientific computing software},
 school={McMaster University},
 place={Hamilton, Canada},
 year={2013}}
 
-@misc{Lightstone_2012,
+@misc{Lightstone2012,
 author={Lightstone, Marilyn},
 title={Derivation of tank/pcm model},
 year={2012},
 note={From Marilyn Lightstone's Personal Notes}}
 
-@article{Parnas_Clements_1986,
+@article{ParnasClements1986,
 author={Parnas, David L. and Clements, P. C.},
 title={A rational design process: How and why to fake it},
 journal={IEEE Transactions on Software Engineering},
@@ -709,17 +709,17 @@ pages={251-257},
 year={1986},
 place={Washington, USA}}
 
-@article{Smith_Lai_2005,
+@article{SmithLai2005,
 author={Smith, W. Spencer and Lai, Lei},
 title={A new requirements template for scientific computing},
 journal={Proceedings of the First International Workshop on Situational Requirements Engineering Processes - Methods, Techniques and Tools to Support Situation-Specific Requirements Engineering Processes, SREP'05},
 editor={Agerfalk, PJ and Kraiem, N. and Ralyte, J.},
 place={Paris, France},
 pages={107-121},
-note={In conjunction with 13th IEEE International Requirements Engineering Conference},
+note={In conjunction with 13th IEEE International Requirements Engineering Conference,},
 year={2005}}
 \end{filecontents*}
 \nocite{*}
 \bibstyle{ieeetr}
-\printbibliography
+\printbibliography[heading=none]
 \end{document}

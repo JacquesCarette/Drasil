@@ -178,11 +178,10 @@ executable nopcm
   main-is: Drasil/NoPCM/Main.hs
   other-modules:
       Drasil.NoPCM.Body
-    , Drasil.NoPCM.TMods
     , Drasil.NoPCM.Unitals
     , Drasil.NoPCM.Definitions
     , Drasil.NoPCM.DataDesc
-    , Drasil.NoPCM.Unitals
+    , Drasil.NoPCM.IMods
     , Drasil.SWHS.Assumptions
     , Drasil.SWHS.Body
     , Drasil.SWHS.Concepts

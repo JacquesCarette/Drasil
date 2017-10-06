@@ -50,7 +50,7 @@ nwtnCooling_desc = foldlSent [at_start law_conv_cooling +:+.
 
 --
 rocTempSimp :: RelationConcept
-rocTempSimp = makeRC "rocTempSimp" (nounPhraseSP $ "Simplified rate" ++
+rocTempSimp = makeRC "rocTempSimp" (nounPhraseSP $ "Simplified rate " ++
   "of change of temperature") rocTempSimp_desc rocTempSimp_rel
 
 rocTempSimp_rel :: Relation

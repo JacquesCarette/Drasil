@@ -21,7 +21,7 @@ import Drasil.SWHS.Unitals (w_vol, tank_length, tank_vol, tau_W, temp_W,
   w_mass, diam, coil_SA, temp_C, w_density, htCap_W, time_final,
   in_SA, out_SA, vol_ht_gen, thFluxVect, ht_flux_in, ht_flux_out, tau, htCap_L,
   htTransCoeff, temp_env, diam, tank_length, w_vol, ht_flux_C, coil_HTC,
-  temp_diff, w_E, tank_length_min, tank_length_max, htTransCoeff_min,
+  deltaT, w_E, tank_length_min, tank_length_max, htTransCoeff_min,
   w_density_min, w_density_max, htCap_W_min, htCap_W_max, coil_HTC_min,
   coil_HTC_max, time_final_max, sim_time, coil_SA_max, eta)
 import Drasil.SWHS.DataDefs(swhsSymbMapDRef, swhsSymbMapTRef, dd1HtFluxC,
@@ -110,7 +110,7 @@ nopcm_Units :: [UCWrapper]
 nopcm_Units = map ucw [density, tau, in_SA, out_SA,
   htCap_L, QT.ht_flux, ht_flux_in, ht_flux_out, vol_ht_gen,
   htTransCoeff, mass, tank_vol, QT.temp, QT.heat_cap_spec,
-  temp_diff, temp_env, thFluxVect, time, ht_flux_C,
+  deltaT, temp_env, thFluxVect, time, ht_flux_C,
   vol, w_mass, w_vol]
 
 nopcm_Constraints :: [UncertQ]

@@ -100,7 +100,7 @@ effS_desc :: Sentence --FIXME: these are not normStress but they are sigma.
                       -- Add a prime. Symbol inconsistency 
 effS_desc = foldlSent [getS normStress, S "is the total", phrase stress,
   S "a soil", phrase mass,
-  S "needs to maintain itself as a rigid collection. of particles",
+  S "needs to maintain itself as a rigid collection of particles.",
   phrase source `ofThe'` phrase stress,
   S "can be provided by the soil skeleton", getS normStress `sC`
   S "or by the pore pressure from water within the soil" +:+.

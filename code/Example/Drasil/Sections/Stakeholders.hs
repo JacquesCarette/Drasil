@@ -25,7 +25,7 @@ tClientF kWord details = SRS.theClient [clientIntro kWord details] []
 
 clientIntro :: (NamedIdea a) => a -> Sentence -> Contents
 clientIntro kWord  details = foldlSP [(at_start $ the client),
-  S "for", (short kWord), S "is a", (phrase company), S "named" +:+. details,
+  S "for", (short kWord), S "is" +:+. details,
   (at_start $ the client), S "has the final say on acceptance of the", 
   (phrase product_)]
 

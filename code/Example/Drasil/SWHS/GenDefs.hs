@@ -9,7 +9,7 @@ import Data.Drasil.Quantities.PhysicalProperties as QPP (vol, mass)
 import Data.Drasil.Quantities.Thermodynamics as QT (ht_flux, heat_cap_spec,
   temp)
 import Data.Drasil.Quantities.Physics as QP (time)
-import Drasil.SWHS.Unitals (vol_ht_gen, temp_diff, temp_env, pcm_SA,
+import Drasil.SWHS.Unitals (vol_ht_gen, deltaT, temp_env, pcm_SA,
   out_SA, in_SA, ht_flux_in, ht_flux_out, htTransCoeff, thFluxVect)
 import Data.Drasil.SentenceStructures (isThe, sAnd)
 import Data.Drasil.Utils (getS, unwrap)
@@ -30,7 +30,7 @@ nwtnCooling = makeRC "nwtnCooling" (nounPhraseSP "Newton's law of cooling")
 
 nwtnCooling_rel :: Relation
 nwtnCooling_rel = FCall (C thFluxVect) [C QP.time] := C htTransCoeff :*
-  FCall (C temp_diff) [C QP.time]
+  FCall (C deltaT) [C QP.time]
 
 nwtnCooling_desc :: Sentence
 nwtnCooling_desc = foldlSent [at_start law_conv_cooling +:+.
@@ -43,14 +43,14 @@ nwtnCooling_desc = foldlSent [at_start law_conv_cooling +:+.
   getS htTransCoeff `isThe` S "heat transfer coefficient" `sC`
   S "assumed independant of", getS QT.temp, sParen (acroA 2) +:+.
   sParen (Sy $ unit_symb htTransCoeff),
-  E (FCall (C temp_diff) [C QP.time] := FCall (C temp) [C QP.time] :-
+  E (FCall (C deltaT) [C QP.time] := FCall (C temp) [C QP.time] :-
   FCall (C temp_env) [C QP.time]) `isThe` S "time-dependant thermal gradient",
   S "between the environment and the object",
-  sParen (Sy $ unit_symb temp_diff)]
+  sParen (Sy $ unit_symb deltaT)]
 
 --
 rocTempSimp :: RelationConcept
-rocTempSimp = makeRC "rocTempSimp" (nounPhraseSP $ "Simplified rate" ++
+rocTempSimp = makeRC "rocTempSimp" (nounPhraseSP $ "Simplified rate " ++
   "of change of temperature") rocTempSimp_desc rocTempSimp_rel
 
 rocTempSimp_rel :: Relation

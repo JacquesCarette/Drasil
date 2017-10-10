@@ -254,7 +254,7 @@ This section provides general information about the system, identifies the inter
 Figure~\ref{Figure::SystCont} shows the system context. A circle represents an external entity outside the software, the user in this case. A rectangle represents the software system itself (SWHS). Arrows are used to show the data flow between the system and its environment.
 \begin{figure}
 \begin{center}
-\includegraphics{SystemContextFigure.png}
+\includegraphics[width=\textwidth]{SystemContextFigure.png}
 \caption{Figure~\ref{Figure::SystCont}: System Context}
 \label{Figure::SystCont}
 \end{center}
@@ -305,7 +305,7 @@ The physical system of SWHS, as shown in Figure~\ref{Figure:Solawateheattankwith
 \end{itemize}
 \begin{figure}
 \begin{center}
-\includegraphics{Tank.png}
+\includegraphics[width=\textwidth]{Tank.png}
 \caption{Solar water heating tank, with heat flux into the water from the coil of ${q_{C}}$ and heat flux into the PCM from water of ${q_{P}}$}
 \label{Figure:SolawateheattankwithheatfluxintothewatefromthecoilofandheatfluxintothePCMfromwateof}
 \end{center}
@@ -335,7 +335,7 @@ This section simplifies the original problem and helps in developing the theoret
 \item[\refstepcounter{assumpnum}\atheassumpnum\label{A:assump3}:]The water in the tank is fully mixed, so the temperature of the water is the same throughout the entire tank {[}GD2, \hyperref[DD:ht.flux.P]{Definition~DD:ht.flux.P}{]}.
 \end{description}
 \begin{description}
-\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:assump4}:]The temperature of the phase change material is the same throughout the volume of PCM {[}GD2, \hyperref[DD:ht.flux.P]{Definition~DD:ht.flux.P}, LC\ref{LClikeChg1}{]}.
+\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:assump4}:]The temperature of the phase change material is the same throughout the volume of PCM {[}GD2, \hyperref[DD:ht.flux.P]{Definition~DD:ht.flux.P}{]}.
 \end{description}
 \begin{description}
 \item[\refstepcounter{assumpnum}\atheassumpnum\label{A:assump5}:]The density of water and density of PCM have no spatial variation; that is, they are each constant over their entire volume {[}GD2{]}.
@@ -347,19 +347,19 @@ This section simplifies the original problem and helps in developing the theoret
 \item[\refstepcounter{assumpnum}\atheassumpnum\label{A:assump7}:]Newton's law of convective cooling applies between the heating coil and the water {[}\hyperref[DD:ht.flux.C]{Definition~DD:ht.flux.C}{]}.
 \end{description}
 \begin{description}
-\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:assump8}:]The temperature of the heating coil is constant over time {[}\hyperref[DD:ht.flux.C]{Definition~DD:ht.flux.C}, LC\ref{LClikeChg2}{]}.
+\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:assump8}:]The temperature of the heating coil is constant over time {[}\hyperref[DD:ht.flux.C]{Definition~DD:ht.flux.C}{]}.
 \end{description}
 \begin{description}
-\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:assump9}:]The temperature of the heating coil does not vary along its length {[}\hyperref[DD:ht.flux.C]{Definition~DD:ht.flux.C}, LC\ref{LClikeChg3}{]}.
+\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:assump9}:]The temperature of the heating coil does not vary along its length {[}\hyperref[DD:ht.flux.C]{Definition~DD:ht.flux.C}{]}.
 \end{description}
 \begin{description}
 \item[\refstepcounter{assumpnum}\atheassumpnum\label{A:assump10}:]Newton's law of convective cooling applies between the water and the PCM {[}\hyperref[DD:ht.flux.P]{Definition~DD:ht.flux.P}{]}.
 \end{description}
 \begin{description}
-\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:assump11}:]The model only accounts for charging of the tank, not discharging. The temperature of the water and temperature of the phase change material can only increase, or remain constant; they do not decrease. This implies that the initial temperature {[}A\ref{A:assump12}{]} is less than (or equal) to the temperature of the heating coil {[}IM1, LC\ref{LClikeChg4}{]}.
+\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:assump11}:]The model only accounts for charging of the tank, not discharging. The temperature of the water and temperature of the phase change material can only increase, or remain constant; they do not decrease. This implies that the initial temperature {[}A\ref{A:assump12}{]} is less than (or equal) to the temperature of the heating coil {[}IM1{]}.
 \end{description}
 \begin{description}
-\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:assump12}:]The initial temperature of the water and the PCM is the same {[}IM1, IM2, LC\ref{LClikeChg5}{]}.
+\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:assump12}:]The initial temperature of the water and the PCM is the same {[}IM1, IM2{]}.
 \end{description}
 \begin{description}
 \item[\refstepcounter{assumpnum}\atheassumpnum\label{A:assump13}:]The simulation will start with the PCM in a solid state {[}IM2, IM4{]}.
@@ -368,7 +368,7 @@ This section simplifies the original problem and helps in developing the theoret
 \item[\refstepcounter{assumpnum}\atheassumpnum\label{A:assump14}:]The operating temperature range of the system is such that the water is always in liquid state. That is, the temperature will not drop below the melting point temperature of water, or rise above its boiling point temperature {[}IM1, IM3{]}.
 \end{description}
 \begin{description}
-\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:assump15}:]The tank is perfectly insulated so that there is no heat loss from the tank {[}IM1, LC\ref{LClikeChg6}{]}.
+\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:assump15}:]The tank is perfectly insulated so that there is no heat loss from the tank {[}IM1{]}.
 \end{description}
 \begin{description}
 \item[\refstepcounter{assumpnum}\atheassumpnum\label{A:assump16}:]No internal heat is generated by either the water or the PCM; therefore, the volumetric heat generation per unit volume is zero {[}IM1, IM2{]}.
@@ -383,7 +383,7 @@ This section simplifies the original problem and helps in developing the theoret
 \item[\refstepcounter{assumpnum}\atheassumpnum\label{A:assump19}:]The pressure in the tank is atmospheric, so the melting point temperature and boiling point temperature are 0${}^{\circ}C$ and 100${}^{\circ}C$, respectively {[}IM1, IM3{]}.
 \end{description}
 \begin{description}
-\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:assump20}:]When considering the volume of water in the tank, the volume of the heating coil is assumed to be negligible {[}R\ref{Rreq2}{]}.
+\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:assump20}:]When considering the volume of water in the tank, the volume of the heating coil is assumed to be negligible.
 \end{description}
 \subsubsection{Theoretical Models}
 \label{Sec:TheoMode}
@@ -564,7 +564,7 @@ The goals GS1 to GS4 are solved by IM1 to IM4. The solutions for IM1 and IM2 are
 \phantomsection 
 \label{T:eBalanceOnWtr}
 \\ \midrule \\
-Label & Energy Balance On Water to Find the Temperature of the Water
+Label & Energy Balance on Water to Find the Temperature of the Water
 \\ \midrule \\
 Equation & $\frac{d{T_{W}}}{dt}=\frac{1}{{\tau{}_{W}}}\left({T_{C}}-{T_{W}}\left(t\right)+\eta{}\left({T_{P}}\left(t\right)-{T_{W}}\left(t\right)\right)\right)$
 \\ \midrule \\
@@ -607,7 +607,7 @@ Finally, factoring out $\frac{1}{{\tau{}_{W}}}$, we are left with the governing 
 \phantomsection 
 \label{T:eBalanceOnPCM}
 \\ \midrule \\
-Label & Energy Balance on PCM to Find T_p
+Label & Energy Balance on PCM to Find T\_p
 \\ \midrule \\
 Equation & $\frac{d{T_{P}}}{dt}=\begin{cases}
 \frac{1}{{{\tau{}_{P}}^{S}}}\left({T_{W}}\left(t\right)-{T_{P}}\left(t\right)\right), & {T_{P}}<{{T_{melt}}^{P}}\\
@@ -806,7 +806,7 @@ ${t_{final}}$ & s & final time
 {m_{P}}={V_{P}}{\rho{}_{P}}
 \end{dmath}
 \begin{description}
-\item[\refstepcounter{reqnum}\rthereqnum\label{R:req3}:]Verify that the inputs satisfy the required physical constraints shown in Table~\ref{Table:TracMatrShowtheConnBetwItemofDiffSect}.
+\item[\refstepcounter{reqnum}\rthereqnum\label{R:req3}:]Verify that the inputs satisfy the required physical constraints.
 \end{description}
 \begin{description}
 \item[\refstepcounter{reqnum}\rthereqnum\label{R:req4}:]Output the input quantities and derived quantities in the following list: the quantities from R1, the masses from R2, ${\tau{}_{W}}$ (from IM1), $\eta{}$ (from IM1), ${{\tau{}_{P}}^{S}}$ (from IM2) and ${{\tau{}_{P}}^{L}}$ (from IM2).
@@ -824,7 +824,7 @@ ${t_{final}}$ & s & final time
 \item[\refstepcounter{reqnum}\rthereqnum\label{R:req8}:]Calculate and output the change in heat energy in the PCM (${E_{P}}$($t$)) over the simulation time (from IM4).
 \end{description}
 \begin{description}
-\item[\refstepcounter{reqnum}\rthereqnum\label{R:req9}:]Verify that the energy outputs ($E_{W}$($t$) and $E_{P}$($t$)) follow the law of conservation of energy, as outlined in Section~\ref{Sec:PropofaCorrSolu}, with relative error no greater than 0.001%.
+\item[\refstepcounter{reqnum}\rthereqnum\label{R:req9}:]Verify that the energy outputs (${E_{W}}$($t$) and ${E_{P}}$($t$)) follow the law of conservation of energy with relative error no greater than 0.001%.
 \end{description}
 \begin{description}
 \item[\refstepcounter{reqnum}\rthereqnum\label{R:req10}:]Calculate and output the time at which the PCM begins to melt ${{t_{melt}}^{init}}$ (from IM2).
@@ -983,14 +983,14 @@ The purpose of the traceability graphs is also to provide easy references on wha
 NOTE: Building a tool to automatically generate the graphical representation of the matrix by scanning the labels and reference can be future work.
 \begin{figure}
 \begin{center}
-\includegraphics{ATrace.png}
+\includegraphics[width=\textwidth]{ATrace.png}
 \caption{Traceability Graph Showing the Connections Between Items of Different Sections}
 \label{Figure:TracGrapShowtheConnBetwItemofDiffSect}
 \end{center}
 \end{figure}
 \begin{figure}
 \begin{center}
-\includegraphics{RTrace.png}
+\includegraphics[width=\textwidth]{RTrace.png}
 \caption{Traceability Graph Showing the Connections Between Instance Models, Requirements, and Data Constraints}
 \label{Figure:TracGrapShowtheConnBetwInstModeRequandDataCons}
 \end{center}
@@ -1046,7 +1046,7 @@ ${{t_{final}}^{max}}$ & maximum final time & $86400$ & s
 \section{References}
 \label{Sec:Refe}
 \begin{filecontents*}{bibfile.bib}
-@article{Bueche_1986,
+@article{Bueche1986,
 author={Bueche, J. Frederick},
 title={Introduction to Physics for Scientists},
 edition={4nd.},
@@ -1054,7 +1054,7 @@ publisher={McGraw Hill},
 place={New York City, New York},
 year={1986}}
 
-@article{Incropera_Dewitt_Bergman_Lavine_2007,
+@article{IncroperaDewittBergmanLavine2007,
 author={Incropera, F. P. and Dewitt, D. P. and Bergman, T. L. and Lavine, A. S.},
 title={Fundamentals of Heat and Mass Transfer},
 edition={6th.},
@@ -1062,20 +1062,20 @@ publisher={John Wiley and Sons},
 place={Hoboken, New Jersey},
 year={2007}}
 
-@mastersthesis{Koothoor_2013,
+@mastersthesis{Koothoor2013,
 author={Koothoor, Nirmitha},
 title={A document drive approach to certifying scientific computing software},
 school={McMaster University},
 place={Hamilton, Canada},
 year={2013}}
 
-@misc{Lightstone_2012,
+@misc{Lightstone2012,
 author={Lightstone, Marilyn},
 title={Derivation of tank/pcm model},
 year={2012},
 note={From Marilyn Lightstone's Personal Notes}}
 
-@article{Parnas_Clements_1986,
+@article{ParnasClements1986,
 author={Parnas, David L. and Clements, P. C.},
 title={A rational design process: How and why to fake it},
 journal={IEEE Transactions on Software Engineering},
@@ -1085,7 +1085,7 @@ pages={251-257},
 year={1986},
 place={Washington, USA}}
 
-@article{Smith_Lai_2005,
+@article{SmithLai2005,
 author={Smith, W. Spencer and Lai, Lei},
 title={A new requirements template for scientific computing},
 journal={Proceedings of the First International Workshop on Situational Requirements Engineering Processes - Methods, Techniques and Tools to Support Situation-Specific Requirements Engineering Processes, SREP'05},

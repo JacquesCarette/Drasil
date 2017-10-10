@@ -20,7 +20,7 @@ lc1, lc2, lc3, lc4, lc5, lc6, lc7, lc8,
 
 lc1 = lcHW
 
-lc2 = lcCtrl mod_ctrl (nounPhraseSP $ "The algorithm for the" ++
+lc2 = lcCtrl mod_ctrl (nounPhraseSP $ "The algorithm for the " ++
   "overall operation procedure of the program.")
 
 lc3 = lcInputF mod_inputf

@@ -55,8 +55,8 @@ s5_1_2_Eqn2 = EqnBlock ((C pcm_mass) := (C pcm_vol) * (C pcm_density))
 
 req3 = mkRequirement "req3" $ foldlSent [
   S "Verify that the", plural input_, S "satisfy the required",
-  phrase physical, plural constraint, S "shown in"]
-  --FIXME , makeRef s7_table1]
+  phrase physical, plural constraint {-, S "shown in"
+  --FIXME , makeRef s7_table1-}]
 --
 req4 = mkRequirement "req4" $ foldlSent [
   titleize output_, S "the", phrase input_, plural quantity `sAnd`
@@ -91,10 +91,10 @@ req8 = mkRequirement "req8" $ foldlSent [
 req9 = mkRequirement "req9" $ foldlSent [
   S "Verify that the", phrase energy, plural output_,
   sParen (getS w_E :+: sParen (getS time) `sAnd` getS pcm_E :+:
-  sParen (getS time)), S "follow the", phrase CT.law_cons_energy `sC`
+  sParen (getS time)), S "follow the", phrase CT.law_cons_energy, {-`sC`
   S "as outlined in"
-  --FIXME , makeRef s4_2_7
-  `sC` S "with relative error", S "no greater than 0.001%"]
+  --FIXME , makeRef s4_2_7 `sC` -} 
+  S "with relative error no greater than 0.001%"]
 --
 req10 = mkRequirement "req10" $ foldlSent [
   S "Calculate and", phrase output_, S "the", phrase time,

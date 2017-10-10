@@ -178,11 +178,10 @@ executable nopcm
   main-is: Drasil/NoPCM/Main.hs
   other-modules:
       Drasil.NoPCM.Body
-    , Drasil.NoPCM.TMods
     , Drasil.NoPCM.Unitals
     , Drasil.NoPCM.Definitions
     , Drasil.NoPCM.DataDesc
-    , Drasil.NoPCM.Unitals
+    , Drasil.NoPCM.IMods
     , Drasil.SWHS.Assumptions
     , Drasil.SWHS.Body
     , Drasil.SWHS.Concepts
@@ -429,6 +428,51 @@ executable swhs
   default-language: Haskell2010
   ghc-options:      -Wall
 
+executable speciation
+  hs-source-dirs: Example
+  main-is: Drasil/Speciation/Main.hs
+  other-modules:
+      Drasil.DocumentLanguage
+    , Drasil.DocumentLanguage.Chunk.GenDefn
+    , Drasil.DocumentLanguage.Definitions
+    , Drasil.Speciation.Body
+    , Drasil.Speciation.Concepts
+    , Drasil.Speciation.Unitals
+    , Drasil.Speciation.TMods
+    , Drasil.Speciation.IMods
+    , Drasil.Speciation.DataDefs
+    , Drasil.Speciation.References
+    , Drasil.Speciation.Units
+    , Drasil.Speciation.Symbols
+    , Drasil.Sections.SpecificSystemDescription
+    , Drasil.Sections.Introduction
+    , Drasil.Sections.Requirements
+    , Drasil.Sections.GeneralSystDesc
+    , Drasil.Sections.TraceabilityMandGs
+    , Drasil.Sections.AuxiliaryConstants
+    , Drasil.Sections.Stakeholders
+    , Drasil.Sections.ScopeOfTheProject
+    , Drasil.Sections.ReferenceMaterial
+    , Drasil.SRS
+    , Drasil.Sections.TableOfAbbAndAcronyms
+    , Drasil.Sections.TableOfSymbols
+    , Drasil.Sections.TableOfUnits
+    , Drasil.Template.DD
+    , Drasil.Template.Helpers
+    , Drasil.Template.MG
+    , Drasil.Template.MIS
+  Build-Depends:
+    base >= 4.7,
+    lens >= 4.12,
+    containers >= 0.5.5.1,
+    pretty >= 1.1.1.1,
+    mtl >= 2.2.1,
+    directory >= 1.2.6.2,
+    split >= 0.2.3.1,
+    drasil >= 0.0.6
+  default-language: Haskell2010
+  ghc-options:      -Wall
+  
 source-repository head
   type:     git
   location: git://github.com/JacquesCarette/literate-scientific-software.git

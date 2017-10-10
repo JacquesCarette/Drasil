@@ -6,14 +6,14 @@ import Data.Drasil.SI_Units (newton, pascal, metre, degree, specific_weight)
 import Data.Drasil.Units.SolidMechanics (stiffness3D)
 import Data.Drasil.Quantities.Physics as QP (force, pressure)
 import Data.Drasil.Quantities.SolidMechanics as SM (nrmStrss, elastMod,
-  poissnsR, stffness, mobShear, shearRes)
+  poissnsR, stffness)
 import Data.Drasil.Units.Physics (momentOfForceU)
 import Drasil.SSP.Defs (fs_concept)
 import Data.Drasil.Constraints (gtZeroConstr)
 
 sspSymbols :: [CQSWrapper]
 sspSymbols = (map cqs sspInputs) ++ (map cqs sspOutputs) ++
-  (map cqs sspUnits) ++ (map cqs sspUnitless) ++ (map cqs [SM.mobShear, SM.shearRes])
+  (map cqs sspUnits) ++ (map cqs sspUnitless)
 
 ---------------------------
 -- Imported UnitalChunks --
@@ -91,7 +91,7 @@ dryWeight = uqc "gamma" (cn $ "dry unit weight")
   (Dbl 20) defultUncrt
 
 satWeight = uqc "gamma_sat" (cn $ "saturated unit weight")
-  ("The weight of saturated soil/ground" ++
+  ("The weight of saturated soil/ground " ++
   "layer divided by the volume of the layer.")
   (sub (Greek Gamma_L) (Atomic "Sat")) specific_weight Real [gtZeroConstr]
   (Dbl 20) defultUncrt
@@ -189,14 +189,20 @@ critCoords = uc' "(xcs,ycs)" (cn $ "the set of x and y coordinates")
   (sCurlyBrSymb (Concat [sub (Atomic "x") (Atomic "cs"),
   sub (Atomic ",y") (Atomic "cs")])) metre
 
-mobShrI = uc' "S_i" (cn $ "mobilized shear force")
+mobShrI = uc' "mobShear" (cn $ "mobilized shear force")
   fsi
-  (cS) newton
+  (cS) newton --FIXME: DUE TO ID THIS WILL SHARE THE SAME SYMBOL AS CSM.mobShear
+              -- This is fine for now, as they are the same concept, but when this
+              -- symbol is used, it is usually indexed at i. That is handled in
+              -- Expr.
 
-shrResI = uc' "P_i" (cn $ "resistive shear force") ("Mohr Coulomb " ++
+shrResI = uc' "shearRes" (cn $ "resistive shear force") ("Mohr Coulomb " ++
   "frictional force that describes the limit of mobilized shear force the " ++
   "slice i can withstand before failure")
-  (cP) newton
+  (cP) newton --FIXME: DUE TO ID THIS WILL SHARE THE SAME SYMBOL AS CSM.shearRes
+              -- This is fine for now, as they are the same concept, but when this
+              -- symbol is used, it is usually indexed at i. That is handled in
+              -- Expr.
   
 mobShrC = uc' "Psi" (cn $ "constant") ("converts mobile shear " ++ 
   wiif ++ ", to a calculation considering the interslice forces")
@@ -273,7 +279,7 @@ baseLngth = uc' "l_b,i" (cn $ "total base length of a slice") fsi
   (sub (Greek Ell) (Atomic "b")) metre
 
 surfLngth = uc' "l_s,i" (cn $ "length of an interslice surface")
-  ("from slip base to slope surface in a vertical" ++
+  ("from slip base to slope surface in a vertical " ++
   "line from an interslice vertex " ++ fisi)
   (sub (Greek Ell) (Atomic "s")) metre
 

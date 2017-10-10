@@ -415,7 +415,7 @@ rigDisDerivation = [
   
   foldlSP [S "Using the known input assumption of", acroA 2 `sC`
   S "the force variable", plural definition, S "of", acroDD 1, S "to",
-  acroDD 8, S "on left side" `ofThe` plural equation,
+  acroDD 8, S "on", S "left side" `ofThe` plural equation,
   S "can be solved for. The only unknown in the variables to solve",
   S "for the stiffness values from", acroDD 14 +:+. 
   S "is the displacements", S "Therefore taking the", phrase equation, 
@@ -432,11 +432,11 @@ rigDisDerivation = [
 
 rigFoSDerivation = [
   foldlSP [S "RFEM analysis can also be used to calculate the",
-  phrase fs, S "for the", phrase slope +:+. S "For a slice element",
+  phrase fs, S "for the" +:+. phrase slope, S "For a slice element",
   getS index, S "the displacements", getS dx_i `sAnd` getS dy_i `sC` 
   S "are solved from the system of", plural equation, S "in" +:+.
   acroIM 4, S "The", phrase definition, S "of", getS rotatedDispl,
-  S "as rotation" `ofThe` S "displacement vector", getS genDisplace,
+  S "as", S "rotation" `ofThe` S "displacement vector", getS genDisplace,
   S "is seen in" +:+. acroGD 9, S "This is used to find",
   plural displacement `ofThe` S "slice parallel to", S "base" `ofThe`
   S "slice", getS shrDispl `sIn` eqN 24, S "and normal to", 

@@ -1208,7 +1208,7 @@ A3: The water in the tank is fully mixed, so the temperature of the water is the
 </a>
 <a id="A:assump4">
 <ul>
-A4: The temperature of the phase change material is the same throughout the volume of PCM [GD2, <a href=#DD:ht.flux.P>this Definition</a>, <a href=#LC:likeChg1>this Likely Change</a>].
+A4: The temperature of the phase change material is the same throughout the volume of PCM [GD2, <a href=#DD:ht.flux.P>DD:ht.flux.P</a>].
 </ul>
 </a>
 <a id="A:assump5">
@@ -1228,12 +1228,12 @@ A7: Newton's law of convective cooling applies between the heating coil and the 
 </a>
 <a id="A:assump8">
 <ul>
-A8: The temperature of the heating coil is constant over time [<a href=#DD:ht.flux.C>this Definition</a>, <a href=#LC:likeChg2>this Likely Change</a>].
+A8: The temperature of the heating coil is constant over time [<a href=#DD:ht.flux.C>DD:ht.flux.C</a>].
 </ul>
 </a>
 <a id="A:assump9">
 <ul>
-A9: The temperature of the heating coil does not vary along its length [<a href=#DD:ht.flux.C>this Definition</a>, <a href=#LClikeChg3>this Likely Change</a>].
+A9: The temperature of the heating coil does not vary along its length [<a href=#DD:ht.flux.C>DD:ht.flux.C</a>].
 </ul>
 </a>
 <a id="A:assump10">
@@ -1243,12 +1243,12 @@ A10: Newton's law of convective cooling applies between the water and the PCM [<
 </a>
 <a id="A:assump11">
 <ul>
-A11: The model only accounts for charging of the tank, not discharging. The temperature of the water and temperature of the phase change material can only increase, or remain constant; they do not decrease. This implies that the initial temperature [<a href=#A:assump12>A:assump12</a>] is less than (or equal) to the temperature of the heating coil [IM1, <a href=#LC:likeChg4>this Likely Change</a>].
+A11: The model only accounts for charging of the tank, not discharging. The temperature of the water and temperature of the phase change material can only increase, or remain constant; they do not decrease. This implies that the initial temperature [<a href=#A:assump12>A:assump12</a>] is less than (or equal) to the temperature of the heating coil [IM1].
 </ul>
 </a>
 <a id="A:assump12">
 <ul>
-A12: The initial temperature of the water and the PCM is the same [IM1, IM2, <a href=#LC:likeChg5>this Likely Change</a>].
+A12: The initial temperature of the water and the PCM is the same [IM1, IM2].
 </ul>
 </a>
 <a id="A:assump13">
@@ -1263,7 +1263,7 @@ A14: The operating temperature range of the system is such that the water is alw
 </a>
 <a id="A:assump15">
 <ul>
-A15: The tank is perfectly insulated so that there is no heat loss from the tank [IM1, <a href=#LC:likeChg6>this Likely Change</a>].
+A15: The tank is perfectly insulated so that there is no heat loss from the tank [IM1].
 </ul>
 </a>
 <a id="A:assump16">
@@ -1288,7 +1288,7 @@ A19: The pressure in the tank is atmospheric, so the melting point temperature a
 </a>
 <a id="A:assump20">
 <ul>
-A20: When considering the volume of water in the tank, the volume of the heating coil is assumed to be negligible [<a href=#R:req2>this Requirement</a>].
+A20: When considering the volume of water in the tank, the volume of the heating coil is assumed to be negligible.
 </ul>
 </a>
 </div>
@@ -1303,6 +1303,16 @@ This section focuses on the general equations and laws that SWHS is based on.
 </p>
 <a id="T:t1ConsThermE">
 <table class="tdefn">
+<tr>
+<th>
+Number
+</th>
+<td>
+<p class="paragraph">
+<b>T1</b>
+</p>
+</td>
+</tr>
 <tr>
 <th>
 Label
@@ -1346,6 +1356,16 @@ The above equation gives the law of conservation of energy for transient heat tr
 </a>
 <a id="T:t2SensHtE">
 <table class="tdefn">
+<tr>
+<th>
+Number
+</th>
+<td>
+<p class="paragraph">
+<b>T2</b>
+</p>
+</td>
+</tr>
 <tr>
 <th>
 Label
@@ -1401,6 +1421,16 @@ Description
 </a>
 <a id="T:t3LatHtE">
 <table class="tdefn">
+<tr>
+<th>
+Number
+</th>
+<td>
+<p class="paragraph">
+<b>T3</b>
+</p>
+</td>
+</tr>
 <tr>
 <th>
 Label
@@ -1471,6 +1501,16 @@ This section collects the laws and equations that will be used in deriving the d
 <table class="tdefn">
 <tr>
 <th>
+Number
+</th>
+<td>
+<p class="paragraph">
+<b>T</b>
+</p>
+</td>
+</tr>
+<tr>
+<th>
 Label
 </th>
 <td>
@@ -1505,6 +1545,16 @@ Newton's law of cooling describes convective cooling from a surface. The law is 
 </a>
 <a id="T:rocTempSimp">
 <table class="tdefn">
+<tr>
+<th>
+Number
+</th>
+<td>
+<p class="paragraph">
+<b>T</b>
+</p>
+</td>
+</tr>
 <tr>
 <th>
 Label
@@ -1638,6 +1688,16 @@ This section collects and defines all the data needed to build the instance mode
 <table class="ddefn">
 <tr>
 <th>
+Number
+</th>
+<td>
+<p class="paragraph">
+<b>DD1</b>
+</p>
+</td>
+</tr>
+<tr>
+<th>
 Label
 </th>
 <td>
@@ -1684,6 +1744,16 @@ Description
 <table class="ddefn">
 <tr>
 <th>
+Number
+</th>
+<td>
+<p class="paragraph">
+<b>DD2</b>
+</p>
+</td>
+</tr>
+<tr>
+<th>
 Label
 </th>
 <td>
@@ -1728,6 +1798,16 @@ Description
 </a>
 <a id="DD:htFusion">
 <table class="ddefn">
+<tr>
+<th>
+Number
+</th>
+<td>
+<p class="paragraph">
+<b>DD3</b>
+</p>
+</td>
+</tr>
 <tr>
 <th>
 Label
@@ -1781,6 +1861,16 @@ Description
 </a>
 <a id="DD:melt.frac">
 <table class="ddefn">
+<tr>
+<th>
+Number
+</th>
+<td>
+<p class="paragraph">
+<b>DD4</b>
+</p>
+</td>
+</tr>
 <tr>
 <th>
 Label
@@ -1849,11 +1939,21 @@ The goals GS1 to GS4 are solved by IM1 to IM4. The solutions for IM1 and IM2 are
 <table class="tdefn">
 <tr>
 <th>
+Number
+</th>
+<td>
+<p class="paragraph">
+<b>T</b>
+</p>
+</td>
+</tr>
+<tr>
+<th>
 Label
 </th>
 <td>
 <p class="paragraph">
-Energy Balance On Water to Find the Temperature of the Water
+Energy Balance on Water to Find the Temperature of the Water
 </p>
 </td>
 </tr>
@@ -2119,6 +2219,16 @@ Finally, factoring out <div class="fraction">
 <table class="tdefn">
 <tr>
 <th>
+Number
+</th>
+<td>
+<p class="paragraph">
+<b>T</b>
+</p>
+</td>
+</tr>
+<tr>
+<th>
 Label
 </th>
 <td>
@@ -2300,6 +2410,16 @@ This derivation does not consider the boiling of the PCM, as the PCM is assumed 
 <table class="tdefn">
 <tr>
 <th>
+Number
+</th>
+<td>
+<p class="paragraph">
+<b>T</b>
+</p>
+</td>
+</tr>
+<tr>
+<th>
 Label
 </th>
 <td>
@@ -2334,6 +2454,16 @@ The above equation is derived using T2. <em>E<sub>W</sub></em> is the change in 
 </a>
 <a id="T:heatEInPCM">
 <table class="tdefn">
+<tr>
+<th>
+Number
+</th>
+<td>
+<p class="paragraph">
+<b>T</b>
+</p>
+</td>
+</tr>
 <tr>
 <th>
 Label
@@ -3085,7 +3215,7 @@ R2: Use the inputs in <a href=#R:req1>R:req1</a> to find the mass needed for IM1
 </a>
 <a id="R:req3">
 <ul>
-R3: Verify that the inputs satisfy the required physical constraints shown in <a href=#Table:TracMatrShowtheConnBetwItemofDiffSect>this Table</a>.
+R3: Verify that the inputs satisfy the required physical constraints.
 </ul>
 </a>
 <a id="R:req4">
@@ -3115,7 +3245,7 @@ R8: Calculate and output the change in heat energy in the PCM (<em>E<sub>P</sub>
 </a>
 <a id="R:req9">
 <ul>
-R9: Verify that the energy outputs (<em>E<sub>W</sub></em>(<em>t</em>) and <em>E<sub>P</sub></em>(<em>t</em>)) follow the law of conservation of energy, as outlined in <a href=#Sec:PropofaCorrSolu>this Section</a>, with relative error no greater than 0.001%.
+R9: Verify that the energy outputs (<em>E<sub>W</sub></em>(<em>t</em>) and <em>E<sub>P</sub></em>(<em>t</em>)) follow the law of conservation of energy with relative error no greater than 0.001%.
 </ul>
 </a>
 <a id="R:req10">

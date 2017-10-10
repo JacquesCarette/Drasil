@@ -277,7 +277,7 @@ resShrDerivation = [
   
   foldlSP [S "Using", getS nrmFNoIntsl `sC` S "a", phrase shearRNoIntsl,
   shearRNoIntsl ^. defn, S "can be solved for in terms of all known",
-  phrase value, S "as done in", eqN 3],
+  plural value, S "as done in", eqN 3],
   
   EqnBlock $
   inxi shearRNoIntsl := (inxi nrmFNoIntsl) * tan (inxi fricAngle) +

@@ -1,15 +1,12 @@
-module Drasil.GlassBR.Body where
+module Drasil.Speciation.Body where
 import Control.Lens ((^.))
 import Language.Drasil
 import qualified Drasil.SRS as SRS
 
 import Drasil.DocumentLanguage
 
-import Drasil.Template.MG (mgDoc)
-import Drasil.Template.DD (makeDD)
-
 import Data.Drasil.SI_Units
-import Data.Drasil.People (spencerSmith, thulasi, nikitha, mCampidelli)
+import Data.Drasil.People (sPalmer, scottSmith)
 import Data.Drasil.Concepts.Documentation (analysis, appendix, aspect,
   characteristic, class_, code, condition, constant, constraint, content,
   datum, definition, description, document, emphasis, endUser, failure,
@@ -19,9 +16,8 @@ import Data.Drasil.Concepts.Documentation (analysis, appendix, aspect,
   symbol_, system, template, term_, theory, traceyMatrix, user, value, 
   variable, physicalSystem, datumConstraint, userInput, assumption, dataDefn, 
   goalStmt, inModel, likelyChg, physSyst, requirement, srs, thModel, 
-  dataConst, acroNumGen, company)
-import Data.Drasil.Concepts.Education (secondYear, undergradDegree,
-  civilEng, structuralEng, scndYrCalculus, structuralMechanics)
+  dataConst, acroNumGen, product_)
+import Data.Drasil.Concepts.Education (frstYr, undergraduate, physChem)
 import Data.Drasil.Software.Products (sciCompS)
 import Data.Drasil.Concepts.Computation (computerApp, inParam,
   computerLiteracy, inValue, inQty)
@@ -41,6 +37,10 @@ import Data.Drasil.SentenceStructures (acroA, acroR, sVersus, sAnd, foldlSP,
   tAndDWAcc, tAndDOnly, tAndDWSym, andThe)
 import Data.Drasil.Concepts.PhysicalProperties (dimension, materialProprty)
 
+import Drasil.Speciation.Symbols
+import Drasil.Speciation.Concepts
+
+{-
 import Drasil.GlassBR.Unitals (stressDistFac, aspectR, dimlessLoad,
   lateralLoad, sflawParamM, char_weight, sD, demand, lite, demandq,
   aspectRWithEqn, aspectR, lRe, wtntWithEqn, sdWithEqn,
@@ -65,6 +65,8 @@ import Drasil.GlassBR.DataDefs (dataDefns, gbQDefns, hFromt,
   strDisFac, nonFL, dimLL, glaTyFac, tolStrDisFac, tolPre)
 import Drasil.GlassBR.References (gbCitations)
 import Drasil.GlassBR.ModuleDefs
+-}
+
 import Drasil.Sections.ReferenceMaterial (intro)
 import Drasil.Sections.TraceabilityMandGs (traceGIntro)
 import Drasil.Sections.SpecificSystemDescription (solChSpecF,
@@ -74,14 +76,30 @@ import Drasil.Sections.SpecificSystemDescription (solChSpecF,
 {--}
 
 resourcePath :: String
-resourcePath = "../../../datafiles/GlassBR/"
+resourcePath = "../../../datafiles/Speciation/"
 
-glassBR_srs :: Document
-glassBR_srs = mkDoc mkSRS (for'' titleize phrase) glassSystInfo
+specn_srs :: Document
+specn_srs = mkDoc mkSRS (for'' titleize phrase) specnSystInfo
 
 mkSRS :: DocDesc
 mkSRS = RefSec (RefProg intro [TUnits, tsymb [TSPurpose, SymbOrder], TAandA]) :
-  IntroSec (
+        IntroSec (
+          IntroProg startIntro
+          (short specgen)
+          [ IPurpose s2_1_intro_p1,
+            IScope scope1 scope2,
+            IOrgSec s2_3_intro dataDefn (SRS.dataDefn SRS.missingP []) s2_3_intro_end,
+            IChar EmptyS (phrase frstYr +:+ phrase undergraduate +:+ phrase physChem) EmptyS ] ) :
+        StkhldrSec ( 
+          StkhldrProg2 
+          [ Client specgen (S "Dr." +:+ name scottSmith),
+            Cstmr specgen ] ) :
+        GSDSec (
+          GSDProg2 [ UsrChars [s4_1_bullets], SystCons [] [] ] ) :
+        []
+  
+  
+  {- IntroSec (
     IntroProg (startIntro software blstRskInvWGlassSlab gLassBR)
       (short gLassBR)
     [IPurpose (s2_1_intro_p1 document gLassBR glaSlab),
@@ -90,8 +108,7 @@ mkSRS = RefSec (RefProg intro [TUnits, tsymb [TSPurpose, SymbOrder], TAandA]) :
      IOrgSec s2_3_intro dataDefn (SRS.dataDefn SRS.missingP []) s2_3_intro_end]) :
   StkhldrSec 
     (StkhldrProg2 
-      [Client gLassBR (S "a" +:+ phrase company 
-        +:+ S "named Entuitive. It is developed by Dr." +:+ name mCampidelli),
+      [Client gLassBR (S "Entuitive. It is developed by Dr." +:+ name mCampidelli),
       Cstmr gLassBR]) :
   GSDSec (GSDProg2 [UsrChars [s4_1_bullets endUser gLassBR secondYear
     undergradDegree civilEng structuralEng glBreakage blastRisk], 
@@ -117,53 +134,81 @@ mkSRS = RefSec (RefProg intro [TUnits, tsymb [TSPurpose, SymbOrder], TAandA]) :
     (traceyMatrices ++ s9_intro2 ++ traceyGraphs) []) :
   AuxConstntSec (AuxConsProg gLassBR auxiliaryConstants) :
   Bibliography gbCitations :
-  AppndxSec (AppndxProg [s12_intro, fig_5, fig_6]) : []
+  AppndxSec (AppndxProg [s12_intro, fig_5, fig_6]) : [] -}
 
-glassSystInfo :: SystemInformation
-glassSystInfo = SI {
-  _sys         = glassBRProg,
+specnSystInfo :: SystemInformation
+specnSystInfo = SI {
+  _sys         = specnProg,
   _kind        = srs,
-  _authors     = [nikitha, spencerSmith],
+  _authors     = [sPalmer],
   _units       = map UU [metre, second, kilogram] ++ map UU [pascal, newton],
-  _quants      = this_symbols,
-  _concepts    = ([] :: [CQSWrapper]),
+  _quants      = specnSymbols,
+  _concepts    = [] :: [CQSWrapper],
   _namedIdeas  = acronyms,
-  _definitions = dataDefns ++ (map (relToQD gbSymbMap) iModels) ++ (map (relToQD gbSymbMap) tModels) 
-                  ++ [wtntWithEqn, sdWithEqn],  -- wtntWithEqn is defined in Unitals but only appears 
-                                                 -- in the description of the Calculation of Demand instance model;
-                                                 -- should this be included as a Data Definition?
-                                                 -- (same for sdWithEqn)
-  _inputs      = map qs gbInputs,
-  _outputs     = map qs gbOutputs,
-  _defSequence = gbQDefns,
-  _constraints = gbConstrained,
-  _constants   = gbConstants,
-  _sysinfodb   = gbSymbMap
+  _definitions = [],
+  _inputs      = [] :: [QWrapper],
+  _outputs     = [] :: [QWrapper],
+  _defSequence = [],
+  _constraints = [] :: [ConstrainedChunk],
+  _constants   = [],
+  _sysinfodb   = specnSymbMap
 }
   --FIXME: All named ideas, not just acronyms.
 
-glassChoices :: Choices
-glassChoices = Choices {
-  lang = [Python, Cpp, CSharp, Java],
-  impType = Program,
-  logFile = "log.txt",
-  logging = LogNone,         -- LogNone, LogFunc
-  comments = CommentNone,    -- CommentNone, CommentFunc
-  onSfwrConstraint = Exception,  -- Warning, Exception
-  onPhysConstraint = Exception,  -- Warning, Exception
-  inputStructure = AsClass    -- Loose, AsClass
-}
+{-- INTRO --}  
+  
+startIntro :: Sentence
+startIntro = foldlSent [
+  at_start $ the software, S "described in", 
+  (phrase $ this document) `sC` S "herein called",
+  short specgen `sC` S "aims to generate speciation diagrams"
+  +:+ S "for aqueous chemical systems" ]
+  
+scope1, scope2 :: Sentence  
+scope1 = S "collecting all" +:+ plural inParam
+  +:+ S "that describe a chemical system"
+scope2 = S "use the" +:+ plural datum 
+  +:+ S "to produce a speciation diagram in the pH range 0 to 14"
+ 
+s2_1_intro_p1 :: Sentence
+s2_1_intro_p1 = foldlSent [S "The main", phrase purpose,
+  S "of", phrase $ this document, S "is to describe", (plural $ the $ requirement),
+  S "of", phrase $ a_ software, phrase product_, S "that will" 
+  +:+ S "produce a speciation diagram given a set of chemical reactions and element"
+  +:+. S "totals that define a chemical system as inputs", S "The", plural goal
+  `sAnd` plural thModel, S "used in the", short specgen, phrase code,
+  S "are provided" `sC` S "with an", phrase emphasis,
+  S "on explicitly identifying", (plural assumption) `sAnd` S "unambiguous" +:+.
+  plural definition, S "This", phrase document, S "is intended to be used as a",
+  phrase reference, S "to provide all", phrase information,
+  S "necessary to understand" `sAnd` S "verify the transformation of inputs"
+  +:+. S "to outputs",
+  S "The", short srs, S "is abstract:", plural $ the content, S "describe",
+  phrase $ the problem, S "being solved" `sC` S "but not how to solve it"]
 
-glassBR_code :: CodeSpec
-glassBR_code = codeSpec' glassSystInfo [interpMod, inputMod, readTableMod]
+s2_3_intro_end, s2_3_intro :: Sentence
+s2_3_intro = foldlSent [S "The", phrase organization, S "of this",
+  phrase document, S "follows the", phrase template, S "for an", short srs,
+  S "for", phrase sciCompS, S "proposed by" +:+ (sSqBrNum 1 {-koothoor2013-})
+  `sAnd` (sSqBrNum 2 {-smithLai2005-}), sParen (S "in" +:+ (makeRef (SRS.reference SRS.missingP [])))
+  `sC` S "with some", plural aspect, S "taken from Volere", phrase template,
+  S "16", (sSqBrNum 3 {-rbrtsn2012-})]
 
-mgBod :: [Section]
-(mgBod, _) = makeDD likelyChanges unlikelyChanges reqs modules
+s2_3_intro_end = foldl (+:+) EmptyS [(at_start' $ the dataDefn),
+  S "are used to support", (plural definition `ofThe` S "different"),
+  plural model]
+ 
 
-  -- MG authors embedded here (on purpose).  FIXME properly
-glassBR_mg :: Document
-glassBR_mg = mgDoc glassBRProg (for'' titleize phrase)
-  (manyNames [spencerSmith, thulasi]) mgBod
+{-- GENERAL SYSTEM DESCRIPTION --}
+ 
+s4_1_bullets :: Contents
+s4_1_bullets = enumBullet [ foldlSent [ (phrase endUser `sOf` short specgen)
+  `isExpctdToHv` S "an understanding of chemical equilibria in" +:+.
+  S "aqueous systems", (at_start endUser)
+  `isExpctdToHv` S "basic", phrase computerLiteracy, S "to handle the",
+  phrase software ] ]
+  
+{-
 
 s6, s6_1, s6_1_1, s6_1_2, s6_1_3, s6_2 :: Section
 
@@ -237,72 +282,9 @@ gBRpriorityNFReqs = [correctness, verifiability, understandability,
   reusability, maintainability, portability]
 
 --------------------------------------------------------------------------------
-
-{--INTRODUCTION--}
-
-startIntro :: NamedChunk -> Sentence -> CI -> Sentence
-startIntro prgm sfwrPredicts progName = foldlSent [
-  at_start prgm, S "is helpful to efficiently" `sAnd` S "correctly predict the"
-  +:+. sfwrPredicts, underConsidertn blast,
-  S "The", phrase prgm `sC` S "herein called", short progName,
-  S "aims to predict the", sfwrPredicts, S "using an intuitive",
-  phrase interface]
-
-rdrKnldgbleIn :: (NamedIdea n, NamedIdea n1) => n1 -> n -> Sentence
-rdrKnldgbleIn undrstd1 undrstd2 = (phrase theory +:+ S "behind" +:+
-  phrase undrstd1 `sAnd` phrase undrstd2)
-
-undIR, appStanddIR, incScoR, endScoR :: Sentence
-undIR = foldlList [phrase scndYrCalculus, phrase structuralMechanics,
-  plural computerApp `sIn` phrase civilEng]
-appStanddIR = foldlSent [S "In addition" `sC` plural reviewer,
-  S "should be familiar with the applicable", plural standard,
-  S "for constructions using glass from", 
-  sSqBr (S "4-6" {-astm_LR2009, astm_C1036, astm_C1048-}) `sIn`
-  (makeRef (SRS.reference SRS.missingP []))]
-incScoR = foldl (+:+) EmptyS [S "getting all", plural inParam,
-  S "related to the", phrase glaSlab `sAnd` S "also the", plural parameter,
-  S "related to", phrase blastTy]
-endScoR = foldl (+:+) EmptyS [S "use the", plural datum `sAnd`
-  S "predict whether the", phrase glaSlab, S "is safe to use" `sOr`
-  S "not"]
-
-{--Purpose of Document--}
-
-s2_1_intro_p1 :: NamedChunk -> CI -> NamedChunk -> Sentence
-s2_1_intro_p1 typeOf progName gvnVar = foldlSent [S "The main", phrase purpose,
-  S "of this", phrase typeOf, S "is to predict whether a given", phrase gvnVar,
-  S "is likely to resist a specified" +:+. phrase blast, S "The", plural goal
-  `sAnd` plural thModel, S "used in the", short progName, phrase code,
-  S "are provided" `sC` S "with an", phrase emphasis,
-  S "on explicitly identifying", (plural assumption) `sAnd` S "unambiguous" +:+.
-  plural definition, S "This", phrase typeOf, S "is intended to be used as a",
-  phrase reference, S "to provide all", phrase information,
-  S "necessary to understand" `sAnd` S "verify the" +:+. phrase analysis,
-  S "The", short srs, S "is abstract because the", plural content, S "say what",
-  phrase problem, S "is being solved" `sC` S "but not how to solve it"]
-  --FIXME: Last sentence is also present in SWHS and NoPCM... pull out?
-
-{--Scope of Requirements--}
-
-{--Organization of Document--}
-
-s2_3_intro_end, s2_3_intro :: Sentence
-s2_3_intro = foldlSent [S "The", phrase organization, S "of this",
-  phrase document, S "follows the", phrase template, S "for an", short srs,
-  S "for", phrase sciCompS, S "proposed by" +:+ (sSqBrNum 1 {-koothoor2013-})
-  `sAnd` (sSqBrNum 2 {-smithLai2005-}), sParen (S "in" +:+ (makeRef (SRS.reference SRS.missingP [])))
-  `sC` S "with some", plural aspect, S "taken from Volere", phrase template,
-  S "16", (sSqBrNum 3 {-rbrtsn2012-})]
-
-s2_3_intro_end = foldl (+:+) EmptyS [(at_start' $ the dataDefn),
-  S "are used to support", (plural definition `ofThe` S "different"),
-  plural model]
-
-{--STAKEHOLDERS--}
-
-{--The Client--}
-{--The Customer--}
+UsrChars [s4_1_bullets endUser gLassBR secondYear
+    undergradDegree civilEng structuralEng glBreakage blastRisk], 
+    SystCons [] []]
 
 {--GENERAL SYSTEM DESCRIPTION--}
 
@@ -312,11 +294,11 @@ s4_1_bullets :: (NamedIdea n1, NamedIdea n, NamedIdea n2, NamedIdea n3,
   NamedIdea n4, NamedIdea n5, NamedIdea c, NamedIdea n6) =>
   n6 -> c -> n5 -> n4 -> n3 -> n2 -> n1 -> n -> Contents
 s4_1_bullets intendedIndvdl progName yr degreeType prog1 prog2 undrstd1 undrstd2
-  = enumBullet [foldlSent [(phrase intendedIndvdl `sOf` short progName)
+  = enumBullet [foldlSent [(phrase endUser `sOf` short specgen)
   `isExpctdToHv` S "completed at least", (S "equivalent" `ofThe` (phrase yr)),
   S "of an", phrase degreeType `sIn` phrase prog1 `sOr` phrase prog2],
   (phrase intendedIndvdl `isExpctdToHv` S "an understanding of" +:+.
-  rdrKnldgbleIn (undrstd1) (undrstd2)), foldlSent [phrase intendedIndvdl
+  rdrKnldgbleIn (undrstd1) (undrstd2)), foldlSent [phrase endUser
   `isExpctdToHv` S "basic", phrase computerLiteracy, S "to handle the",
   phrase software]]
 
@@ -872,3 +854,4 @@ fig_6 = Figure (titleize figure +: S "6" +:+ S "Non dimensional" +:+
 blstRskInvWGlassSlab :: Sentence
 blstRskInvWGlassSlab = phrase blastRisk +:+ S "involved with the" +:+
   phrase glaSlab
+-}

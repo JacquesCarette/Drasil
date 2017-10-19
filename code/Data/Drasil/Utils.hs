@@ -13,7 +13,7 @@ module Data.Drasil.Utils
   , enumBullet
   , mkRefsList
   , mkInputDatTb
-  , getS
+  , getS, getES, getCS
   , getRVal
   , addPercent
   , weave
@@ -102,8 +102,12 @@ fmtBF symb [(f,num)]  = E ((C symb) `f` num)
 fmtBF symb ((f,num):xs) = (E ((C symb) `f` num)) +:+ S "and" +:+ (fmtBF symb xs)
 
 -- | gets symbol from chunk
-getS :: (Quantity a) => a -> Sentence
-getS s  = P $ symbol s
+getS :: (Quantity a) => Stage -> a -> Sentence
+getS st = P . symbol st
+
+getES, getCS :: Quantity q => q -> Sentence
+getES = getS Equational
+getCS = getS Implementation
 
 -- | gets a reasonable or typical value from a Constrained chunk
 getRVal :: (Constrained c) => c -> Expr
@@ -143,7 +147,7 @@ makeTMatrix colName col row = zipSentList [] colName [zipFTable [] x row | x <- 
 mkInputDatTb :: (Quantity a) => [a] -> Contents
 mkInputDatTb inputVar = Table [titleize symbol_, titleize unit_, 
   S "Name"]
-  (mkTable [getS, fmtU EmptyS, phrase] inputVar) 
+  (mkTable [getS Equational, fmtU EmptyS, phrase] inputVar) 
   (S "Required" +:+ titleize' input_) True
 
 -- | makes sentences from an item and its reference 
@@ -193,17 +197,17 @@ symbolMapFun fun = (Definition . fun)
 mkDataDef :: (Quantity c) => c -> Expr -> QDefinition
 mkDataDef cncpt equation = datadef $ getUnit cncpt
   where datadef (Just a) = fromEqn  (cncpt ^. id) (cncpt ^. term) EmptyS
-                           (symbol cncpt) a equation
+                           (eqSymb cncpt) a equation
         datadef Nothing  = fromEqn' (cncpt ^. id) (cncpt ^. term) EmptyS
-                           (symbol cncpt) equation
+                           (eqSymb cncpt) equation
 
 -- Same as 'mkDataDef', but with an additional Sentence that can be taken as "extra information"; issue #350
 mkDataDef' :: (Quantity c) => c -> Expr -> Sentence -> QDefinition
 mkDataDef' cncpt equation extraInfo = datadef $ getUnit cncpt
   where datadef (Just a) = fromEqn  (cncpt ^. id) (cncpt ^. term) (extraInfo)
-                           (symbol cncpt) a equation
+                           (eqSymb cncpt) a equation
         datadef Nothing  = fromEqn' (cncpt ^. id) (cncpt ^. term) (extraInfo)
-                           (symbol cncpt) equation
+                           (eqSymb cncpt) equation
 
 prodUCTbl :: [[Sentence]] -> Contents
 prodUCTbl cases = Table [S "Actor", titleize input_ +:+ S "and" +:+ titleize output_]

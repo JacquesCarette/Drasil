@@ -60,7 +60,7 @@ import Data.Drasil.Concepts.SolidMechanics (normForce, shearForce)
 import Data.Drasil.Software.Products (sciCompS)
 
 import Data.Drasil.Utils (symbolMapFun,
-  getS, enumBullet, enumSimple, weave)
+  getES, enumBullet, enumSimple, weave)
 import Data.Drasil.SentenceStructures (sOr, acroDD,
   foldlSent, ofThe, sAnd, foldlSP, foldlList, foldlSent_)
 
@@ -158,7 +158,7 @@ sspSymMapD = symbolMapFun Data
 --automatically generated in mkSRS using the intro below
 
 s1_2_intro = [TSPurpose, TypogConvention [Verb $ foldlSent_
-  [plural value, S "with a subscript", getS index, S "implies that the",
+  [plural value, S "with a subscript", getES index, S "implies that the",
   phrase value, S "will be taken at and analyzed at a", phrase slice
   `sOr` phrase slice, S "interface composing the total slip", phrase mass]]]
 
@@ -303,7 +303,7 @@ s4_1_2_bullets = enumBullet $ map foldlSent_ [
   (E $ 1 :<= C index :<= (C numbSlices) :- 1)],
 
   [at_start slice, plural property +:+. S "convention is noted by",
-  getS index]]
+  getES index]]
 
 s4_1_2_p2 = foldlSP [S "A", phrase fbd, S "of the", plural force,
   S "acting on the", phrase slice, S "is displayed in",

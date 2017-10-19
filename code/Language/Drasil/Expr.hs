@@ -6,7 +6,6 @@ module Language.Drasil.Expr where
 import GHC.Real (Ratio(..)) -- why not Data.Ratio?
 import Prelude hiding (id, sqrt)
 import Language.Drasil.Chunk (Chunk(..))
-import Language.Drasil.Chunk.SymbolForm (SymbolForm)
 import Language.Drasil.Symbol
 import Language.Drasil.Space (Space(..))
 
@@ -173,10 +172,11 @@ data UFunc where
   Product :: (Maybe (Symbol, Bound, Bound)) -> Expr -> UFunc
   Abs :: Expr -> UFunc -- Absolute value
   Norm :: Expr -> UFunc -- Norm
-  Integral :: (SymbolForm c) => 
-    ((Maybe Bound), (Maybe Bound)) -> Expr -> c -> UFunc
+  Integral :: ((Maybe Bound), (Maybe Bound)) -> Expr -> Expr -> UFunc
     -- Integral (low,high) Bounds (if any), then (expression to integrate) 
     -- and finally which chunk (variable) we are integrating with respect to.
+    -- FIXME: The chunk/var wrt is currently Expr because Quantity (requisite)
+    -- causes cyclic imports
   Sin    :: Expr -> UFunc
   Cos    :: Expr -> UFunc
   Tan    :: Expr -> UFunc

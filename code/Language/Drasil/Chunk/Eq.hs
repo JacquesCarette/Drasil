@@ -11,12 +11,11 @@ import Language.Drasil.Chunk.Concept
 import Language.Drasil.Chunk.ConVar
 import Language.Drasil.Chunk.Quantity (Quantity(..))
 import Language.Drasil.Chunk.ExprRelat
-import Language.Drasil.Chunk.VarChunk (VarChunk, vc)
+import Language.Drasil.Chunk.VarChunk (VarChunk, vcSt)
 import Language.Drasil.Chunk.Unital (ucFromCV)
 import Language.Drasil.Unit (Unit(..))
 import Language.Drasil.Symbol (Symbol)
 import Language.Drasil.Space
-import Language.Drasil.Misc (symbol)
 
 import Language.Drasil.NounPhrase (NP, phrase)
 import Language.Drasil.Spec
@@ -41,8 +40,9 @@ instance NamedIdea QDefinition where
 
 instance Quantity QDefinition where
   typ = ul . typ
-  getSymb (EC a _) = getSymb a
-  getUnit (EC a _) = getUnit a
+  getSymb s (EC a _)  = getSymb s a
+  getUnit (EC a _)    = getUnit a
+  getStagedS (EC a _) = getStagedS a
   -- DO SOMETHING
   
 instance ExprRelat QDefinition where
@@ -74,8 +74,9 @@ instance NamedIdea H where
   
 instance Quantity H where
   typ = elens typ
-  getSymb (H c) = getSymb c
-  getUnit (H c) = getUnit c
+  getSymb s  (H c) = getSymb s c
+  getUnit    (H c) = getUnit c
+  getStagedS (H c) = getStagedS c
   
 -- useful: to be used for equations with units
 --FIXME: Space hack
@@ -108,7 +109,7 @@ fromEqn'' nm desc _ symb abb (Just chunk) eqn =
 -- | Returns a 'VarChunk' from a 'QDefinition'.
 -- Currently only used in example /Modules/ which are being reworked.
 getVC :: QDefinition -> VarChunk
-getVC qd = vc (qd ^. id) (qd ^. term) (symbol qd) (qd ^. typ)
+getVC qd = vcSt (qd ^. id) (qd ^. term) (getStagedS qd) (qd ^. typ)
 
 instance Eq QDefinition where
   a == b = (a ^. id) == (b ^. id)

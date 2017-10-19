@@ -11,7 +11,7 @@ import Drasil.GlassBR.Concepts (annealedGlass, aR, fullyTGlass, glassTypeFac,
 
 import Data.Drasil.SI_Units
 import Data.Drasil.Constraints
-import Data.Drasil.Utils (mkDataDef, getS)
+import Data.Drasil.Utils (mkDataDef, getES)
 import Data.Drasil.SentenceStructures (foldlSent, displayConstrntsAsSet,
   foldlsC, foldlOptions)
 
@@ -148,19 +148,19 @@ ar_max     = mkDataDef (vc "ar_max"
 
 cWeightMax = mkDataDef (unitary "cWeightMax" 
   (nounPhraseSP "maximum permissible input charge weight")
-  (sub (symbol char_weight) (Atomic "max")) kilogram Rational) (Dbl 910)
+  (sub (eqSymb char_weight) (Atomic "max")) kilogram Rational) (Dbl 910)
 
 cWeightMin = mkDataDef (unitary "cWeightMin"
   (nounPhraseSP "minimum permissible input charge weight")
-  (sub (symbol char_weight) (Atomic "min")) kilogram Rational) (Dbl 4.5)
+  (sub (eqSymb char_weight) (Atomic "min")) kilogram Rational) (Dbl 4.5)
 
 sd_min     = mkDataDef (unitary "sd_min"
   (nounPhraseSP "minimum stand off distance permissible for input") 
-  (sub (symbol standOffDist) (Atomic "min")) metre Real) (Dbl 6)
+  (sub (eqSymb standOffDist) (Atomic "min")) metre Real) (Dbl 6)
 
 sd_max     = mkDataDef (unitary "sd_max"
   (nounPhraseSP "maximum stand off distance permissible for input")
-  (sub (symbol standOffDist) (Atomic "max")) metre Real) (Dbl 130)
+  (sub (eqSymb standOffDist) (Atomic "max")) metre Real) (Dbl 130)
 
 {--}
 
@@ -179,19 +179,19 @@ demand      = unitary "demand"      (nounPhraseSP "applied load (demand)")
 
 eqTNTWeight = unitary "eqTNTWeight" 
   (nounPhraseSP "explosive mass in equivalent weight of TNT")
-  (sub (symbol char_weight) (symbol tNT)) kilogram Real
+  (sub (eqSymb char_weight) (eqSymb tNT)) kilogram Real
 
 load_dur    = unitary "load_dur"    (nounPhraseSP "duration of load")
   (sub lT lD) second Real
 
 sdx         = unitary "sdx" (nounPhraseSP "stand off distance (x-component)")
-  (sub (symbol standOffDist) lX) metre Real
+  (sub (eqSymb standOffDist) lX) metre Real
 
 sdy         = unitary "sdy" (nounPhraseSP "stand off distance (y-component)")
-  (sub (symbol standOffDist) lY) metre Real
+  (sub (eqSymb standOffDist) lY) metre Real
 
 sdz         = unitary "sdz" (nounPhraseSP "stand off distance (z-component)")
-  (sub (symbol standOffDist) lZ) metre Real
+  (sub (eqSymb standOffDist) lZ) metre Real
 
 sflawParamK = unitary "sflawParamK" (nounPhraseSP "surface flaw parameter") --parameterize?
   lK sFlawPU Real
@@ -235,13 +235,13 @@ risk_fun      = makeVC "risk_fun"    (nounPhraseSP "risk of failure") cB
 
 sdf_tol       = makeVC "sdf_tol"     (nounPhraseSP $ "stress distribution" ++
   " factor (Function) based on Pbtol") 
-  (sub (symbol stressDistFac) (Atomic "tol"))
+  (sub (eqSymb stressDistFac) (Atomic "tol"))
 
 stressDistFac = makeVC "stressDistFac" (nounPhraseSP $ "stress distribution" 
   ++ " factor (Function)") cJ
 
 tolLoad       = makeVC "tolLoad"       (nounPhraseSP "tolerable load")
-  (sub (symbol dimlessLoad) (Atomic "tol"))
+  (sub (eqSymb dimlessLoad) (Atomic "tol"))
 
 
 terms :: [ConceptChunk]
@@ -382,7 +382,7 @@ sdCalculation :: Relation
 sdCalculation = euclidean (map C sdVector)
 
 sdVectorSent :: Sentence
-sdVectorSent = foldlsC (map getS sdVector)
+sdVectorSent = foldlsC (map (getES) sdVector)
 
 sdVector :: [UnitaryChunk]
 sdVector = [sdx, sdy, sdz]

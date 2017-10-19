@@ -309,6 +309,17 @@ m
 </tr>
 <tr>
 <td>
+<em>j</em>
+</td>
+<td>
+Collision Impulse (scalar)
+</td>
+<td>
+N&sdot;s
+</td>
+</tr>
+<tr>
+<td>
 <em>L</em>
 </td>
 <td>
@@ -367,7 +378,18 @@ kg
 <em>m<sub>i</sub></em>
 </td>
 <td>
-Mass Of the I-Th Particle
+Mass Of the I-Th Rigid Body
+</td>
+<td>
+kg
+</td>
+</tr>
+<tr>
+<td>
+<em>m<sub>j</sub></em>
+</td>
+<td>
+Mass Of the J-Th Particle
 </td>
 <td>
 kg
@@ -430,10 +452,10 @@ m
 </tr>
 <tr>
 <td>
-<em><b>p</b><sub>i</sub></em>
+<em><b>p</b><sub>j</sub></em>
 </td>
 <td>
-Position Vector of the I-Th Particle
+Position Vector of the J-Th Particle
 </td>
 <td>
 m
@@ -562,17 +584,6 @@ s
 </tr>
 <tr>
 <td>
-<em>t<sub>0</sub></em>
-</td>
-<td>
-Denotes the initial time
-</td>
-<td>
-s
-</td>
-</tr>
-<tr>
-<td>
 <em>t<sub>c</sub></em>
 </td>
 <td>
@@ -584,10 +595,21 @@ s
 </tr>
 <tr>
 <td>
-<em>t<sub>c</sub></em>
+<em>t</em>
 </td>
 <td>
-I-th body's velocity
+Point in time
+</td>
+<td>
+s
+</td>
+</tr>
+<tr>
+<td>
+<em>t<sub>0</sub></em>
+</td>
+<td>
+Denotes the initial time
 </td>
 <td>
 s
@@ -1098,7 +1120,7 @@ GS4: Given the physical properties, initial positions, orientations, linear velo
 Solution Characteristics Specifications
 </h3>
 <p class="paragraph">
-This section transforms the problem defined in Section 4.1 into one which is expressed in mathematical terms. It uses concrete symbols defined in Section 4.2.4 to replace the abstract symbols in the models identified in Section 4.2.2 and Section 4.2.3.
+The instance models that govern Chipmunk2D are presented in FIXME REF to IModSection. The information to understand the meaning of the instance models and their derivation is also presented, so that the instance models can be verified.
 </p>
 <a id="Sec:Assu">
 <div class="subsubsection">
@@ -1145,6 +1167,16 @@ This section focuses on the general equations and laws that Chipmunk2D is based 
 <table class="tdefn">
 <tr>
 <th>
+Number
+</th>
+<td>
+<p class="paragraph">
+<b>T</b>
+</p>
+</td>
+</tr>
+<tr>
+<th>
 Label
 </th>
 <td>
@@ -1181,6 +1213,16 @@ The net force <em><b>F</b></em> (N) on a rigid body is proportional to the accel
 <table class="tdefn">
 <tr>
 <th>
+Number
+</th>
+<td>
+<p class="paragraph">
+<b>T</b>
+</p>
+</td>
+</tr>
+<tr>
+<th>
 Label
 </th>
 <td>
@@ -1196,7 +1238,7 @@ Equation
 <td>
 <a id="">
 <div class="equation">
-<em><b>F</b><sub>1</sub></em> = -<em><b>F</b><sub>2</sub></em>
+<em><b>F</b><sub>1</sub></em> = &minus;<em><b>F</b><sub>2</sub></em>
 </div>
 </a>
 </td>
@@ -1217,6 +1259,16 @@ Every action has an equal and opposite reaction. In other words, the force <em><
 <table class="tdefn">
 <tr>
 <th>
+Number
+</th>
+<td>
+<p class="paragraph">
+<b>T</b>
+</p>
+</td>
+</tr>
+<tr>
+<th>
 Label
 </th>
 <td>
@@ -1234,14 +1286,14 @@ Equation
 <div class="equation">
 <em><b>F</b></em> = <em>G</em>&#8239;<div class="fraction">
 <span class="fup">
-<em>m<sub>1</sub></em><em>m<sub>2</sub></em>
+<em>m<sub>1</sub></em>&#8239;<em>m<sub>2</sub></em>
 </span>
 <span class="fdn">
 <em>||<b>r</b>||</em><sup>2</sup>
 </span>
 </div>&#8239;<em><b>r&#770;</b></em> = <em>G</em>&#8239;<div class="fraction">
 <span class="fup">
-<em>m<sub>1</sub></em><em>m<sub>2</sub></em>
+<em>m<sub>1</sub></em>&#8239;<em>m<sub>2</sub></em>
 </span>
 <span class="fdn">
 <em>||<b>r</b>||</em><sup>2</sup>
@@ -1272,6 +1324,16 @@ Two rigid bodies in the universe attract each other with a force <em><b>F</b></e
 </a>
 <a id="T:t4ChaslesThm">
 <table class="tdefn">
+<tr>
+<th>
+Number
+</th>
+<td>
+<p class="paragraph">
+<b>T</b>
+</p>
+</td>
+</tr>
 <tr>
 <th>
 Label
@@ -1308,6 +1370,16 @@ The linear velocity <em><b>v</b><sub>B</sub></em> (m/s) of any point B in a rigi
 </a>
 <a id="T:t5NewtonSLR">
 <table class="tdefn">
+<tr>
+<th>
+Number
+</th>
+<td>
+<p class="paragraph">
+<b>T</b>
+</p>
+</td>
+</tr>
 <tr>
 <th>
 Label
@@ -1360,10 +1432,20 @@ There are no general definitions.
 Instance Models
 </h4>
 <p class="paragraph">
-This section collects and defines all the data needed to build the Instance Models. The dimension of each quantity is also given.
+This section transforms the problem defined in FIXME REF into one which is expressed in mathematical terms. It uses concrete symbols defined in FIXME REF to replace the abstract symbols in the models identified in FIXME REF and FIXME REF.
 </p>
 <a id="T:im1">
 <table class="tdefn">
+<tr>
+<th>
+Number
+</th>
+<td>
+<p class="paragraph">
+<b>T</b>
+</p>
+</td>
+</tr>
 <tr>
 <th>
 Label
@@ -1393,7 +1475,7 @@ Equation
 <em><b>F</b></em>(<em>t</em>)
 </span>
 <span class="fdn">
-<em>m<sub>i</sub></em>
+<em>m<sub>j</sub></em>
 </span>
 </div>
 </div>
@@ -1414,6 +1496,16 @@ The above equation expresses the total acceleration of the rigid body (A1, A2) i
 </a>
 <a id="T:im2">
 <table class="tdefn">
+<tr>
+<th>
+Number
+</th>
+<td>
+<p class="paragraph">
+<b>T</b>
+</p>
+</td>
+</tr>
 <tr>
 <th>
 Label
@@ -1464,6 +1556,16 @@ The above equation for the total angular acceleration of the rigid body (A1, A2)
 </a>
 <a id="T:im3">
 <table class="tdefn">
+<tr>
+<th>
+Number
+</th>
+<td>
+<p class="paragraph">
+<b>T</b>
+</p>
+</td>
+</tr>
 <tr>
 <th>
 Label
@@ -1519,6 +1621,16 @@ This section collects and defines all the data needed to build the instance mode
 <table class="ddefn">
 <tr>
 <th>
+Number
+</th>
+<td>
+<p class="paragraph">
+<b>DD</b>
+</p>
+</td>
+</tr>
+<tr>
+<th>
 Label
 </th>
 <td>
@@ -1546,7 +1658,7 @@ Equation
 <div class="equation">
 <em><b>p</b><sub>CM</sub></em> = <div class="fraction">
 <span class="fup">
-<span class="symb">&sum;</span>(<em>m<sub>i</sub></em>&#8239;<em><b>p</b><sub>i</sub></em>)
+<span class="symb">&sum;</span>(<em>m<sub>j</sub></em>&#8239;<em><b>p</b><sub>j</sub></em>)
 </span>
 <span class="fdn">
 <em>M</em>
@@ -1562,7 +1674,7 @@ Description
 </th>
 <td>
 <p class="paragraph">
-<em><b>p</b><sub>CM</sub></em> is the the mass-weighted average position of a rigid body's particles (m)<br /><em>m<sub>i</sub></em> is the mass of the i-th particle (kg)<br /><em><b>p</b><sub>i</sub></em> is the position vector of the i-th particle (m)<br /><em>M</em> is the total mass of the rigid body (kg)
+<em><b>p</b><sub>CM</sub></em> is the the mass-weighted average position of a rigid body's particles (m)<br /><em>m<sub>j</sub></em> is the mass of the j-th particle (kg)<br /><em><b>p</b><sub>j</sub></em> is the position vector of the j-th particle (m)<br /><em>M</em> is the total mass of the rigid body (kg)
 </p>
 </td>
 </tr>
@@ -1570,6 +1682,16 @@ Description
 </a>
 <a id="DD:linearDisplacement">
 <table class="ddefn">
+<tr>
+<th>
+Number
+</th>
+<td>
+<p class="paragraph">
+<b>DD</b>
+</p>
+</td>
+</tr>
 <tr>
 <th>
 Label
@@ -1625,6 +1747,16 @@ Description
 <table class="ddefn">
 <tr>
 <th>
+Number
+</th>
+<td>
+<p class="paragraph">
+<b>DD</b>
+</p>
+</td>
+</tr>
+<tr>
+<th>
 Label
 </th>
 <td>
@@ -1676,6 +1808,16 @@ Description
 </a>
 <a id="DD:linearAcceleration">
 <table class="ddefn">
+<tr>
+<th>
+Number
+</th>
+<td>
+<p class="paragraph">
+<b>DD</b>
+</p>
+</td>
+</tr>
 <tr>
 <th>
 Label
@@ -1731,6 +1873,16 @@ Description
 <table class="ddefn">
 <tr>
 <th>
+Number
+</th>
+<td>
+<p class="paragraph">
+<b>DD</b>
+</p>
+</td>
+</tr>
+<tr>
+<th>
 Label
 </th>
 <td>
@@ -1782,6 +1934,16 @@ Description
 </a>
 <a id="DD:angularVelocity">
 <table class="ddefn">
+<tr>
+<th>
+Number
+</th>
+<td>
+<p class="paragraph">
+<b>DD</b>
+</p>
+</td>
+</tr>
 <tr>
 <th>
 Label
@@ -1837,6 +1999,16 @@ Description
 <table class="ddefn">
 <tr>
 <th>
+Number
+</th>
+<td>
+<p class="paragraph">
+<b>DD</b>
+</p>
+</td>
+</tr>
+<tr>
+<th>
 Label
 </th>
 <td>
@@ -1890,6 +2062,16 @@ Description
 <table class="ddefn">
 <tr>
 <th>
+Number
+</th>
+<td>
+<p class="paragraph">
+<b>DD</b>
+</p>
+</td>
+</tr>
+<tr>
+<th>
 Label
 </th>
 <td>
@@ -1920,7 +2102,7 @@ Equation
 &minus;(1 &plus; <em>C<sub>R</sub></em>)&#8239;<em><b>v</b><sub>i</sub><sup>AB</sup></em>&sdot;<em><b>n</b></em>
 </span>
 <span class="fdn">
-(1/<em>m<sub>A</sub></em> &plus; 1/<em>m<sub>B</sub></em>)<em>||<b>n</b>||</em><sup>2</sup> &plus; <em>||<b>r</b><sub>AP</sub>*<b>n</b>||</em><sup>2</sup>/<em><b>I</b><sub>A</sub></em> &plus; <em>||<b>r</b><sub>BP</sub>*<b>n</b>||</em><sup>2</sup>/<em><b>I</b><sub>B</sub></em>
+(1/<em>m<sub>A</sub></em> &plus; 1/<em>m<sub>B</sub></em>)&#8239;<em>||<b>n</b>||</em><sup>2</sup> &plus; <em>||<b>r</b><sub>AP</sub>*<b>n</b>||</em><sup>2</sup>/<em><b>I</b><sub>A</sub></em> &plus; <em>||<b>r</b><sub>BP</sub>*<b>n</b>||</em><sup>2</sup>/<em><b>I</b><sub>B</sub></em>
 </span>
 </div>
 </div>
@@ -1933,7 +2115,7 @@ Description
 </th>
 <td>
 <p class="paragraph">
-<em>j</em> is the impulse (scalar) (N&sdot;s)<br /><em>C<sub>R</sub></em> is the coefficient of restitution<br /><em><b>v</b><sub>i</sub><sup>AB</sup></em> is the relative velocity between rigid bodies of A and B (m/s)<br /><em><b>n</b></em> is the collision normal vector (m)<br /><em>m</em> is the mass (kg)<br /><em>||<b>n</b>||</em> is the length of the normal vector (m)<br /><em>||<b>r</b><sub>AP</sub>*<b>n</b>||</em> is the length of the perpendicular vector to the contact displacement vector of rigid body A (m)<br /><em><b>I</b></em> is the moment of inertia (kg&sdot;m<sup>2</sup>)<br /><em>||<b>r</b><sub>BP</sub>*<b>n</b>||</em> is the length of the perpendicular vector to the contact displacement vector of rigid body B (m)
+<em>j</em> is the impulse (scalar) (N&sdot;s)<br /><em>C<sub>R</sub></em> is the coefficient of restitution<br /><em><b>v</b><sub>i</sub><sup>AB</sup></em> is the relative velocity between rigid bodies of A and B (m/s)<br /><em><b>n</b></em> is the collision normal vector (m)<br /><em>m<sub>A</sub></em> is the mass of rigid body A (kg)<br /><em>m<sub>B</sub></em> is the mass of rigid body B (kg)<br /><em>||<b>n</b>||</em> is the length of the normal vector (m)<br /><em>||<b>r</b><sub>AP</sub>*<b>n</b>||</em> is the length of the perpendicular vector to the contact displacement vector of rigid body A (m)<br /><em><b>I</b><sub>A</sub></em> is the moment of inertia of rigid body A (kg&sdot;m<sup>2</sup>)<br /><em>||<b>r</b><sub>BP</sub>*<b>n</b>||</em> is the length of the perpendicular vector to the contact displacement vector of rigid body B (m)<br /><em><b>I</b><sub>B</sub></em> is the moment of inertia of rigid body B (kg&sdot;m<sup>2</sup>)
 </p>
 </td>
 </tr>
@@ -1947,7 +2129,7 @@ Description
 Data Constraints
 </h4>
 <p class="paragraph">
-the data constraints on the input and output variables, respectively. The column for physical constraints gives the physical limitations on the range of values that can be taken by the variable. The constraints are conservative, to give the user of the model the flexibility to experiment with unusual situations. The column of typical values is intended to provide a feel for a common scenario. The uncertainty column provides an estimate of the confidence with which the physical quantities can be measured. This information would be part of the input if one were performing an uncertainty quantification exercise.
+the data constraints on the input and output variables, respectively. The column for physical constraints gives the physical limitations on the range of values that can be taken by the variable. The constraints are conservative, to give the user of the model the flexibility to experiment with unusual situations. The column of typical values is intended to provide a feel for a common scenario. The uncertainty column provides an estimate of the confidence with which the physical quantities can be measured. This information would be part of the input if one were performing an uncertainty quantification exercise. FIXME
 </p>
 <a id="Table:InpuDataCons">
 <table class="table">
@@ -2277,7 +2459,7 @@ Newton Game Dynamics: http://newtondynamics.com/
 Traceability Matrices and Graphs
 </h2>
 <p class="paragraph">
-The purpose of the traceability matrices is to provide easy references on what has to be additionally modified if a certain component is changed. Every time a component is changed, the items in the column of that component that are marked with an &quot;X&quot; should be modified as well. <a href=#Table:TracMatrShowtheConnBetwRequ()GoalStat()andOtheItem>this Table</a> shows the dependencies of goal statements, requirements, instance models, and data constraints with each other. <a href=#Table:TracMatrShowtheConnBetwAssu()andOtheItem>this Table</a> shows the dependencies of theoretical models, general definitions, data definitions, instance models, and on the assumptions. <a href=#Table:TracMatrShowtheConnBetwItemandOtheSect>this Table</a> shows the dependencies of theoretical models, general definitions, data definitions, and instance models on each other.
+The purpose of the traceability matrices is to provide easy references on what has to be additionally modified if a certain component is changed. Every time a component is changed, the items in the column of that component that are marked with an &quot;X&quot; should be modified as well. <a href=#Table:TracMatrShowtheConnBetwRequ()GoalStat()andOtheItem>Table:TracMatrShowtheConnBetwRequ()GoalStat()andOtheItem</a> shows the dependencies of goal statements, requirements, instance models, and data constraints with each other. <a href=#Table:TracMatrShowtheConnBetwAssu()andOtheItem>Table:TracMatrShowtheConnBetwAssu()andOtheItem</a> shows the dependencies of theoretical models, general definitions, data definitions, instance models, and on the assumptions. <a href=#Table:TracMatrShowtheConnBetwItemandOtheSect>Table:TracMatrShowtheConnBetwItemandOtheSect</a> shows the dependencies of theoretical models, general definitions, data definitions, and instance models on each other.
 </p>
 <a id="Table:TracMatrShowtheConnBetwRequ()GoalStat()andOtheItem">
 <table class="table">

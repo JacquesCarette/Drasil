@@ -16,7 +16,7 @@ import Prelude hiding (id)
   
 -- | VarChunks are Quantities that have symbols, but not units.
 data VarChunk = VC { _ni :: NWrapper
-                   , _vsymb :: SymbolChunk
+                   , _vsymb :: StagedSymbolChunk
                    , _vtyp  :: Space }
 
 instance Eq VarChunk where
@@ -41,11 +41,14 @@ makeVC i des sym = vc i des sym Real
 
 -- | Creates a VarChunk from an id, term, symbol, and space
 vc :: String -> NP -> Symbol -> Space -> VarChunk
-vc i des sym space = VC (nw $ nc i des) (sc i sym) space
+vc i des sym space = VC (nw $ nc i des) (ssc' i sym) space
+
+vcSt :: String -> NP -> StagedSymbolChunk -> Space -> VarChunk
+vcSt i des sym space = VC (nw $ nc i des) sym space
 
 -- | Creates a VarChunk from a 'NamedIdea', symbol, and space
 vc' :: NamedIdea c => c -> Symbol -> Space -> VarChunk
-vc' n s t = VC (nw n) (sc (n ^. id) s) t
+vc' n s t = VC (nw n) (ssc' (n ^. id) s) t
 
 -- | Creates a VarChunk from a 'NamedIdea''s id and term and symbol
 vc'' :: NamedIdea c => c -> Symbol -> Space -> VarChunk
@@ -53,4 +56,4 @@ vc'' n sy space = vc (n ^. id) (n ^. term) sy space
 
 -- | Creates a VarChunk from an id, term, symbol, and 
 makeVCObj :: String -> NP -> Symbol -> String -> VarChunk
-makeVCObj i des sym s = VC (nw $ nc i des) (sc i sym) (Obj s)
+makeVCObj i des sym s = VC (nw $ nc i des) (ssc' i sym) (Obj s)

@@ -1,7 +1,7 @@
 module Drasil.GamePhysics.IMods (iModels) where
 
 import Language.Drasil
-import Data.Drasil.Utils (foldle1, fmtU, getS)
+import Data.Drasil.Utils (foldle1, fmtU, getES)
 import Data.Drasil.SentenceStructures (foldlSent)
 import qualified Data.Drasil.Concepts.Physics as CP (rigidBody)
 import qualified Data.Drasil.Quantities.Physics as QP (acceleration,
@@ -94,8 +94,8 @@ im3descr = foldlSent [S "This instance model is based on our assumptions",
   S "P is the point of collision (m)"
 --}
 
-defList :: (Quantity a, SymbolForm a) => a -> Sentence
-defList thing = foldlSent [(getS thing), S "is the", (phrase thing), sParen (fmtU EmptyS thing)]
+defList :: (Quantity a) => a -> Sentence
+defList thing = foldlSent [(getES thing), S "is the", (phrase thing), sParen (fmtU EmptyS thing)]
 
 im3leg = foldle1 (+:+) (+:+) $ map defList im3legTerms
   

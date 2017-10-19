@@ -9,7 +9,7 @@ import Drasil.SSP.Unitals (fs, fx, fy, momntOfBdy,
 import Drasil.SSP.Defs (slope, factor, factorOfSafety, soil)
 import Data.Drasil.SentenceStructures (ofThe, ofThe',
   foldlSent, acroA, getTandS, sAnd, sOf)
-import Data.Drasil.Utils (getS)
+import Data.Drasil.Utils (getES)
 import Data.Drasil.Quantities.Physics (force, distance, displacement)
 import Data.Drasil.Concepts.Documentation (safety, model, source)
 import Data.Drasil.Concepts.Math (surface)
@@ -36,10 +36,10 @@ fs_rel = (C fs) := (C shearRes) / (C mobShear)
 fs_desc :: Sentence
 fs_desc = foldlSent [
   S "The stability metric of the", phrase slope `sC` S "known as the",
-  phrase factor `sOf` phrase safety, sParen (getS fs) `sC`
+  phrase factor `sOf` phrase safety, sParen (getES fs) `sC`
   S "is determined by", S "ratio" `ofThe` phrase shearForce,
-  S "at the base of the", phrase slope, sParen (getS mobShear) `sC`
-  S "and the resistive shear", sParen (getS shearRes)]
+  S "at the base of the", phrase slope, sParen (getES mobShear) `sC`
+  S "and the resistive shear", sParen (getES shearRes)]
 
 --
   
@@ -76,16 +76,16 @@ mcSS_desc = foldlSent [S "For a", phrase soil, S "under", phrase stress,
   S "can experience while remaining rigid, analogous to",
   S "a maximum" +:+. phrase normForce, S "In this", phrase model, S "the",
   getTandS shrStress, S "is proportional to the product of the",
-  phrase normStress, S "on the plane", getS normStress,
+  phrase normStress, S "on the plane", getES normStress,
   S "with it's static", phrase friction, S "in the angular form" +:+.
   (E $ tan (C fricAngle) := C surfHydroForce),
   --FIXME: sould say U_s but there is no way to say that yet
-  S "The", getS shrStress, S "versus", getS normStress,
+  S "The", getES shrStress, S "versus", getES normStress,
   S "relationship is not truly",
   phrase linear `sC` S "but assuming the effective", phrase normForce,
   S "is strong enough it can be approximated with a", phrase linear,
-  S "fit", sParen (acroA 9), S "where the cohesion", getS cohesion,
-  S "represents the", getS shrStress, S "intercept of the fitted line"]
+  S "fit", sParen (acroA 9), S "where the cohesion", getES cohesion,
+  S "represents the", getES shrStress, S "intercept of the fitted line"]
 
 --
 
@@ -98,17 +98,17 @@ effS_rel = (C normStress) := (C normStress) :- (C porePressure)
 
 effS_desc :: Sentence --FIXME: these are not normStress but they are sigma.
                       -- Add a prime. Symbol inconsistency 
-effS_desc = foldlSent [getS normStress, S "is the total", phrase stress,
+effS_desc = foldlSent [getES normStress, S "is the total", phrase stress,
   S "a soil", phrase mass,
   S "needs to maintain itself as a rigid collection of particles.",
   phrase source `ofThe'` phrase stress,
-  S "can be provided by the soil skeleton", getS normStress `sC`
+  S "can be provided by the soil skeleton", getES normStress `sC`
   S "or by the pore pressure from water within the soil" +:+.
-  getS porePressure, S "The", phrase stress,
+  getES porePressure, S "The", phrase stress,
   S "from the soil skeleton is known as the effective",
-  phrase stress, getS normStress, S "and is the difference between the",
-  S "total", phrase stress, getS normStress, S "and the pore",
-  phrase stress, getS porePressure]
+  phrase stress, getES normStress, S "and is the difference between the",
+  S "total", phrase stress, getES normStress, S "and the pore",
+  phrase stress, getES porePressure]
 
 --
 hookesLaw :: RelationConcept
@@ -119,8 +119,8 @@ hksLw_rel :: Relation
 hksLw_rel = (C genForce) := (C stffness) :* (C genDisplace)
 
 hksLw_desc :: Sentence
-hksLw_desc = foldlSent [S "Description Stiffness", getS stffness, S "is the",
+hksLw_desc = foldlSent [S "Description Stiffness", getES stffness, S "is the",
   S "resistance a body others to deformation by", phrase displacement,
-  getS genDisplace, S "when subject to a", phrase force, getS genForce `sC`
+  getES genDisplace, S "when subject to a", phrase force, getES genForce `sC`
   S "along the same direction. A body with high stiffness will experience",
   S "little deformation when subject to a", phrase force]

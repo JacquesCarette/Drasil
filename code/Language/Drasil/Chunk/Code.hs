@@ -47,7 +47,7 @@ instance Chunk CodeName where
 instance CodeIdea CodeName where
   -- want to take symbol lens from SymbolForm and apply symbToCodeName to it
   -- to make codeName lens for CodeName
-  codeName (SFCN c) = symbToCodeName (symbol c)
+  codeName (SFCN c) = symbToCodeName (symbol Implementation c)
   -- want to take term lens from NamedIdea and apply sentenceToCodeName to it
   -- to make codeName lens for CodeName
   codeName (NICN c) = sentenceToCodeName (phrase $ c ^. term)
@@ -185,13 +185,15 @@ instance NamedIdea CodeChunk where
   getA (CodeFunc n) = getA n
 instance Quantity CodeChunk where
   typ = qslens typ
-  getSymb (CodeVar c) = getSymb c
-  getSymb (CodeFunc c) = getSymb c
-  getUnit (CodeVar c) = getUnit c
-  getUnit (CodeFunc c) = getUnit c
+  getSymb s (CodeVar c)   = getSymb s c
+  getSymb s (CodeFunc c)  = getSymb s c
+  getUnit (CodeVar c)     = getUnit c
+  getUnit (CodeFunc c)    = getUnit c
+  getStagedS (CodeVar c)  = getStagedS c
+  getStagedS (CodeFunc c) = getStagedS c
 instance CodeIdea CodeChunk where
-  codeName (CodeVar c) = symbToCodeName (symbol c)                  
-  codeName (CodeFunc c) = funcPrefix ++ symbToCodeName (symbol c)
+  codeName (CodeVar c) = symbToCodeName (symbol Implementation c)
+  codeName (CodeFunc c) = funcPrefix ++ symbToCodeName (symbol Implementation c)
 instance CodeEntity CodeChunk where
   codeType (CodeVar c) = spaceToCodeType (c ^. typ)
   codeType (CodeFunc c) = spaceToCodeType (c ^. typ)
@@ -223,8 +225,9 @@ instance NamedIdea CodeDefinition where
   getA (CodeDefinition n _) = getA n
 instance Quantity CodeDefinition where
   typ = qscdlens typ
-  getSymb (CodeDefinition c _) = getSymb c
-  getUnit (CodeDefinition c _) = getUnit c
+  getSymb s (CodeDefinition c _)  = getSymb s c
+  getUnit (CodeDefinition c _)    = getUnit c
+  getStagedS (CodeDefinition c _) = getStagedS c
 instance CodeIdea CodeDefinition where
   codeName (CodeDefinition c _) = codeName c
 instance CodeEntity CodeDefinition where
@@ -296,7 +299,8 @@ constraintLookup q m = constraintLookup' q m (map getConstraint)
 
 constraintLookup' :: (Quantity q) => q -> ConstraintMap 
                       -> ([Constraint] -> [(Expr -> Relation)]) -> [Expr]
-constraintLookup' q m f = lookC (Map.lookup (q ^. id) m) (getSymb q)
+constraintLookup' q m f = 
+  lookC (Map.lookup (q ^. id) m) (getSymb Implementation q)
   where lookC :: Maybe [Constraint] -> SF -> [Expr]
         lookC (Just cs) s = map (\x -> x (C s)) (f cs)
         lookC Nothing _ = []

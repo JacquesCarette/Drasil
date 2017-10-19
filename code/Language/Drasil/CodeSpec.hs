@@ -16,7 +16,7 @@ import Language.Drasil.Chunk.ExprRelat
 import Language.Drasil.ChunkDB
 import Language.Drasil.Expr.Extract (codevars, codevars')
 import Language.Drasil.Chunk.VarChunk
-import Language.Drasil.Misc (symbol)
+import Language.Drasil.Misc (codeSymb)
 import Language.Drasil.Code.Imperative.Lang
 
 import qualified Data.Map as Map
@@ -203,7 +203,7 @@ fdec v t = FDec (codevar v) (spaceToCodeType t)
 asVC :: Func -> VarChunk
 asVC (FDef (FuncDef n _ _ _)) = makeVC n (nounPhraseSP n) (Atomic n)
 asVC (FData (FuncData n _)) = makeVC n (nounPhraseSP n) (Atomic n)
-asVC (FCD cd) = vc' cd (symbol cd) (cd ^. typ)
+asVC (FCD cd) = vc' cd (codeSymb cd) (cd ^. typ)
 
 asExpr :: Func -> Expr
 asExpr f = C $ asVC f

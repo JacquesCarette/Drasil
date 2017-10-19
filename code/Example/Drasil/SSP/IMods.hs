@@ -19,7 +19,7 @@ import Drasil.SSP.Defs (slope, slice, slip,
 
   intrslce, ssa, morPrice, crtSlpSrf, factorOfSafety)
 import Data.Drasil.SentenceStructures (foldlSent, isThe)
-import Data.Drasil.Utils (getS)
+import Data.Drasil.Utils (getES)
 
 -- Needed for derivations
 import Data.Drasil.Concepts.Documentation (analysis,
@@ -61,7 +61,7 @@ fcSfty_desc = foldlSent [S "Equation for the", titleize fs `isThe` S "ratio",
   S "between resistive and mobile shear of the slip surface.",
   S "The sum of values from each slice is taken to find the total",
   S "resistive and mobile shear for the slip surface. The constants",
-  getS shrResC, S "and", getS mobShrC, S "convert the resistive and",
+  getES shrResC, S "and", getES mobShrC, S "convert the resistive and",
   S "mobile shear without the inluence of",
   --FIXME: have these constants defined somewhere else
   S "interslice forces, to a calculation considering the interslice forces"]
@@ -98,13 +98,13 @@ nrmShrF_rel = (inxi normFunc) := Case [case1,case2,case3]:=
           (C numbSlices - Int 1)), C index := (C numbSlices))
 
 nrmShrF_desc :: Sentence
-nrmShrF_desc = foldlSent [getS normToShear `isThe` S "magnitude ratio",
+nrmShrF_desc = foldlSent [getES normToShear `isThe` S "magnitude ratio",
   S "between shear and normal forces at the interslice interfaces as the", 
   S "assumption of the Morgenstern Price method in", acroGD 5,
-  S "The inclination function", getS scalFunc,
+  S "The inclination function", getES scalFunc,
   S "determines the relative magnitude ratio between the",
-  S "different interslices, while", getS normToShear, S "determines the" +:+.
-  S "magnitude", getS normToShear, S "uses the sum of interslice normal",
+  S "different interslices, while", getES normToShear, S "determines the" +:+.
+  S "magnitude", getES normToShear, S "uses the sum of interslice normal",
   S "and shear forces taken from each interslice"]
 
 --
@@ -124,9 +124,9 @@ sliceFs_rel = inxi intNormForce := Case [
 
 sliceFs_desc :: Sentence
 sliceFs_desc = foldlSent [S "The value of the interslice normal force",
-  getS intNormForce, S "at interface", getS index +:+. S "The net force"
+  getES intNormForce, S "at interface", getES index +:+. S "The net force"
   `isThe` S "weight",
-  S "of the slices adjacent to interface", getS index,
+  S "of the slices adjacent to interface", getES index,
   S "exert horizontally on each other"]
 
 --
@@ -156,22 +156,22 @@ fDisEq_desc :: Sentence
 fDisEq_desc = foldlSent [
   S "There is one set of force displacement equilibrium equations",
   S "in the x and y directions for each element. System of equations",
-  S "solved for displacements (", (getS dx_i), S "and", (getS dy_i), S ")",
-  (getS watrForceDif), S "=",
-  (getS watrForce) `isThe` S "net hydrostatic force across a slice.", 
-  (getS earthqkLoadFctr) `isThe` S "earthquake load factor.",
-  (getS slcWght) `isThe` S "weight of the slice.",
-  (getS baseHydroForce)  `isThe` S "pore water pressure acting on the",
+  S "solved for displacements (", (getES dx_i), S "and", (getES dy_i), S ")",
+  (getES watrForceDif), S "=",
+  (getES watrForce) `isThe` S "net hydrostatic force across a slice.", 
+  (getES earthqkLoadFctr) `isThe` S "earthquake load factor.",
+  (getES slcWght) `isThe` S "weight of the slice.",
+  (getES baseHydroForce)  `isThe` S "pore water pressure acting on the",
   S "slice base.",
-  (getS surfHydroForce) `isThe` S "pore water pressure acting on the",
+  (getES surfHydroForce) `isThe` S "pore water pressure acting on the",
   S "slice surface.",
-  (getS baseAngle) `isThe` S "angle of the base with the horizontal.",
-  (getS surfAngle) `isThe` S "angle of the surface with the horizontal.",
-  (getS dx_i) `isThe` S "x displacement of slice i.",
-  (getS dy_i) `isThe` S "y displacement of slice i.",
-  (getS surfLngth) `isThe` S "length of the interslice surface i.",
-  (getS baseLngth) `isThe` S "length of the base surface i.",
-  (getS shrStiffIntsl) `isThe` S "interslice shear stiffness at surface i.",
+  (getES baseAngle) `isThe` S "angle of the base with the horizontal.",
+  (getES surfAngle) `isThe` S "angle of the surface with the horizontal.",
+  (getES dx_i) `isThe` S "x displacement of slice i.",
+  (getES dy_i) `isThe` S "y displacement of slice i.",
+  (getES surfLngth) `isThe` S "length of the interslice surface i.",
+  (getES baseLngth) `isThe` S "length of the base surface i.",
+  (getES shrStiffIntsl) `isThe` S "interslice shear stiffness at surface i.",
   S " Kst,i-1" `isThe` S "interslice normal stiffness at surface i.",
   S "KbA,i, and KbB,i", S "are the base stiffness values for slice i"]
 
@@ -195,15 +195,15 @@ fosFracSum = sum1toN
 
 rfemFoS_desc :: Sentence
 rfemFoS_desc = foldlSent [
-  (getS fsloc) `isThe` S "factor of safety for slice i.",
-  (getS fs) `isThe` S "factor of safety for the entire slip surface.",
-  (getS cohesion) `isThe` S "cohesion of slice i's base.",
-  (getS fricAngle) `isThe` (phrase fricAngle), S "of slice i's base.",
-  (getS nrmDispl) `isThe` S "normal displacement of slice i.",
-  (getS shrDispl) `isThe` S "shear displacement of slice i.",
-  (getS shrStiffBase) `isThe` S "length of the base of slice i.",
-  (getS nrmStiffBase) `isThe` S "base normal stiffness at surface i.",
-  (getS numbSlices) `isThe` S "number of slices in the slip surface"]
+  (getES fsloc) `isThe` S "factor of safety for slice i.",
+  (getES fs) `isThe` S "factor of safety for the entire slip surface.",
+  (getES cohesion) `isThe` S "cohesion of slice i's base.",
+  (getES fricAngle) `isThe` (phrase fricAngle), S "of slice i's base.",
+  (getES nrmDispl) `isThe` S "normal displacement of slice i.",
+  (getES shrDispl) `isThe` S "shear displacement of slice i.",
+  (getES shrStiffBase) `isThe` S "length of the base of slice i.",
+  (getES nrmStiffBase) `isThe` S "base normal stiffness at surface i.",
+  (getES numbSlices) `isThe` S "number of slices in the slip surface"]
 
 --
 crtSlpId :: RelationConcept
@@ -217,9 +217,9 @@ crtSlpId_rel = (Index (C fs) (V "min")) :=
 
 crtSlpId_desc :: Sentence
 crtSlpId_desc = foldlSent [S "Given the necessary", phrase slope,
-  S "inputs, a minimization", S "algorithm or function", getS minFunction,
+  S "inputs, a minimization", S "algorithm or function", getES minFunction,
   S "will identify the", phrase crtSlpSrf, S "of the", phrase slope `sC`
-  S "with the critical", phrase slip, S "coordinates", getS critCoords, 
+  S "with the critical", phrase slip, S "coordinates", getES critCoords, 
   S "and the minimum", phrase fs, E $ Index (C fs) (V "min"), S "that results"]
 
 -----------
@@ -246,11 +246,11 @@ instModIntro1 = foldlSP [S "The", titleize morPrice,
 
 instModIntro2 = foldlSP [
   plural value `ofThe'` (phrase intrslce +:+ phrase totNrmForce),
-  getS intNormForce, S "the", getTandS normToShear `sC`
-  S "and the", titleize fs, (sParen $ getS fs) `sC` S "are unknown.",
+  getES intNormForce, S "the", getTandS normToShear `sC`
+  S "and the", titleize fs, (sParen $ getES fs) `sC` S "are unknown.",
   at_start' equation, S "for the unknowns are written in terms of only the",
   plural value, S "in", acroDD 1, S "to", acroDD 9 `sC` S "the", plural value,
-  S "of", getS shearRNoIntsl `sC` S "and", getS shearFNoIntsl, S "in",
+  S "of", getES shearRNoIntsl `sC` S "and", getES shearFNoIntsl, S "in",
   acroDD 10, S "and", acroDD 11 `sC` S "and each",
   S "other. The relationships between the unknowns are non linear" `sC`
   S "and therefore explicit", plural equation, S "cannot be derived and an",
@@ -281,7 +281,7 @@ boundaryCon = foldlSent_ [S "applying the boundary condition that",
   E (indxn intNormForce), S "are equal to", E $ Int 0]
 
 fUnknowns :: Contents
-fUnknowns = foldlSP [S "The constants", getS mobShrC `sAnd` getS shrResC, 
+fUnknowns = foldlSP [S "The constants", getES mobShrC `sAnd` getES shrResC, 
   S "described in", eqN 20 `sAnd` eqN 19,
   S "are functions of the unknowns: the", getTandS normToShear,
   sParen (acroIM 2) `andThe` getTandS fs, sParen (acroIM 1)]
@@ -298,7 +298,7 @@ nrmShrDerivation = [
   (inxi intNormForce * inxi scalFunc + inxiM1 intNormForce *
   inxiM1 scalFunc)) :+ y),
   
-  foldlSP [S "The", phrase equation, S "in terms of", getS normToShear,
+  foldlSP [S "The", phrase equation, S "in terms of", getES normToShear,
   S "leads to", eqN 14],
   
   EqnBlock $
@@ -307,7 +307,7 @@ nrmShrDerivation = [
   inxiM1 intNormForce * inxiM1 scalFunc)),
   
   foldlSP [S "Taking a summation of each slice, and", boundaryCon `sC`
-  S "a general", phrase equation, S "for the constant", getS normToShear,
+  S "a general", phrase equation, S "for the constant", getES normToShear,
   S "is developed in", eqN 15 `sC` S "also found in", acroIM 2],
   --NOTE: "Taking this with that and the assumption of _
   --to get equation #" pattern
@@ -323,7 +323,7 @@ nrmShrDerivation = [
   (inxi baseWthX * (inxi intNormForce * inxi scalFunc +
   inxiM1 intNormForce * inxiM1 scalFunc)),
   
-  foldlSP [eqN 15, S "for", getS normToShear `sC`
+  foldlSP [eqN 15, S "for", getES normToShear `sC`
   S "is a function of the unknown", getTandS intNormForce, acroIM 3]
 
   ]
@@ -360,7 +360,7 @@ intrSlcDerivation = [
   eqlExpr sin cos (\x y -> x - C normToShear * inxiM1 scalFunc *
   inxiM1 intNormForce + C normToShear * inxi scalFunc * inxi intNormForce + y),
   
-  foldlSP [S "Substituting the", phrase equation, S "for", getS nrmFSubWat,
+  foldlSP [S "Substituting the", phrase equation, S "for", getES nrmFSubWat,
   S "from", eqN 16, S "into", eqN 17, S "and rearranging results in", eqN 18],
 
   EqnBlock $
@@ -373,9 +373,9 @@ intrSlcDerivation = [
   (inxiM1 scalFunc) * sin (inxi baseAngle) - cos (inxi baseAngle)) *
   (C fs)) + (C fs) * (inxi shearFNoIntsl) - (inxi shearRNoIntsl),
   
-  foldlSP [S "Where", getS shearRNoIntsl `sAnd` getS shearFNoIntsl,
+  foldlSP [S "Where", getES shearRNoIntsl `sAnd` getES shearFNoIntsl,
   S "are the resistive and mobile shear of the slice" `sC`
-  S wiif, getS intNormForce `sAnd` getS intShrForce `sC`
+  S wiif, getES intNormForce `sAnd` getES intShrForce `sC`
   S "as defined in", acroDD 10 `sAnd` acroDD 11,
   S "Making use of the constants, and with full", plural equation, 
   S "found below in", eqN 19 `sAnd` eqN 20, S "respectively, then", eqN 18, 
@@ -407,9 +407,9 @@ rigDisDerivation = [
   `ofThe` S "stiffness matrices", S "from", acroDD 12, S "and the force", 
   plural definition, S "from", acroGD 7 , S "a broken down force displacement",
   S "equilibrium", phrase equation +:+. S "can be derived", eqN 22,
-  S "gives the broken down", phrase equation, S "in the", getS xi,
+  S "gives the broken down", phrase equation, S "in the", getES xi,
   S "direction" `sC` S "and", eqN 23, S "gives the broken down",
-  phrase equation, S "in the", getS yi, S "direction"],
+  phrase equation, S "in the", getES yi, S "direction"],
 
   EqnBlock fDisEq_rel,
   
@@ -421,7 +421,7 @@ rigDisDerivation = [
   S "is the displacements", S "Therefore taking the", phrase equation, 
   S "from each slice a set of", E $ 2 * C numbSlices, plural equation
   `sC` S "with", E $ 2 * C numbSlices, S "unknown displacements in the", 
-  getS xi `sAnd` getS yi, S "directions of each slice can be derived.",
+  getES xi `sAnd` getES yi, S "directions of each slice can be derived.",
   S "Solutions for the displacements of each slice can then be found.",
   S "The use of displacement in", phrase definition `ofThe`
   S "stiffness values makes the", phrase equation, S "implicit, which means",
@@ -433,14 +433,14 @@ rigDisDerivation = [
 rigFoSDerivation = [
   foldlSP [S "RFEM analysis can also be used to calculate the",
   phrase fs, S "for the" +:+. phrase slope, S "For a slice element",
-  getS index, S "the displacements", getS dx_i `sAnd` getS dy_i `sC` 
+  getES index, S "the displacements", getES dx_i `sAnd` getES dy_i `sC` 
   S "are solved from the system of", plural equation, S "in" +:+.
-  acroIM 4, S "The", phrase definition, S "of", getS rotatedDispl,
-  S "as", S "rotation" `ofThe` S "displacement vector", getS genDisplace,
+  acroIM 4, S "The", phrase definition, S "of", getES rotatedDispl,
+  S "as", S "rotation" `ofThe` S "displacement vector", getES genDisplace,
   S "is seen in" +:+. acroGD 9, S "This is used to find",
   plural displacement `ofThe` S "slice parallel to", S "base" `ofThe`
-  S "slice", getS shrDispl `sIn` eqN 24, S "and normal to", 
-  S "base" `ofThe` S "slice", getS nrmDispl, S "in", eqN 25],
+  S "slice", getES shrDispl `sIn` eqN 24, S "and normal to", 
+  S "base" `ofThe` S "slice", getES nrmDispl, S "in", eqN 25],
   
   EqnBlock $ inxi shrDispl := cos(inxi baseAngle) * inxi dx_i +
   sin(inxi baseAngle) * inxi dy_i,
@@ -450,11 +450,11 @@ rigFoSDerivation = [
   
   foldlSP [S "With the", phrase definition, S "of normal stiffness from",
   acroDD 14, --FIXME: grab nrmStiffBase's term name?
-  S "to find", S "normal stiffness" `ofThe` S "base", getS nrmStiffBase,
+  S "to find", S "normal stiffness" `ofThe` S "base", getES nrmStiffBase,
   S "and the now known base displacement perpendicular to the surface",
-  getS nrmDispl, S "from", eqN 25, S "the normal base stress",
+  getES nrmDispl, S "from", eqN 25, S "the normal base stress",
   S "can be calculated from the force-displacement relationship of" +:+.
-  acroT 5, S "Stress", getS normStress `sIs` S "used in place of",
+  acroT 5, S "Stress", getES normStress `sIs` S "used in place of",
   getTandS genForce, --FIXME: use getTandS
   S "as the stiffness hasn't been normalized for" +:+.
   (S "length" `ofThe` S "base"), S "Results" `sIn` eqN 26],
@@ -474,10 +474,10 @@ rigFoSDerivation = [
   
   foldlSP [S "Previously", phrase value `ofThe` getTandS shrStiffBase,
   S "as seen in", eqN 28, S "was unsolvable because the", getTandS normStress,
-  S "was unknown. With the", phrase definition, S "of", getS normStress,
+  S "was unknown. With the", phrase definition, S "of", getES normStress,
   S "from", eqN 26, S "and the", phrase definition,
-  S "of displacement shear to the base", getS shrDispl, S "from",
-  eqN 25 `sC` S "the value of", getS shrStiffBase, S "becomes solvable"],
+  S "of displacement shear to the base", getES shrDispl, S "from",
+  eqN 25 `sC` S "the value of", getES shrStiffBase, S "becomes solvable"],
   
   EqnBlock $
   inxi shrStiffBase := inxi intNormForce / (2 * (1 + inxi poissnsRatio)) *
@@ -486,12 +486,12 @@ rigFoSDerivation = [
   (abs (inxi shrDispl) + C constant_a),
   
   foldlSP [S "With", getTandS shrStiffBase, S "calculated in", eqN 28,
-  S "and shear displacement", getS shrDispl, S "calculated in", eqN 24,
+  S "and shear displacement", getES shrDispl, S "calculated in", eqN 24,
   --FIXME: grab term too once we have a displacement modifier
   S "values now known the", phrase shrStress, shrStress ^. defn,
-  getS shrStress, S "can be calculated using", acroT 5 `sC`
-  S "as done in" +:+. eqN 29, S "Again, stress", getS shrStress,
-  S "is used in place of force", getS genForce, --FIXME: grab term
+  getES shrStress, S "can be calculated using", acroT 5 `sC`
+  S "as done in" +:+. eqN 29, S "Again, stress", getES shrStress,
+  S "is used in place of force", getES genForce, --FIXME: grab term
   S "as the stiffness has not been normalized for",
   S "length" `ofThe` S "base"],
   
@@ -502,7 +502,7 @@ rigFoSDerivation = [
   S "acting on the base. Using the", phrase definition, titleize fs,
   phrase equation, S "from", acroT 1 `sC` S "with the", 
   plural definition, S "of resistive shear strength of a slice",
-  getS mobStress, S "from", eqN 27, S "and", getTandS shrStress,
+  getES mobStress, S "from", eqN 27, S "and", getTandS shrStress,
   S "from", eqN 29, S "the", getTandS fsloc,
   S "can be found from as seen in", eqN 30 `sAnd` acroIM 5],
   

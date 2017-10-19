@@ -11,7 +11,7 @@ import Drasil.GlassBR.Unitals (tolLoad, dimlessLoad, gTF, stressDistFac,
   glassTypeFactors, lDurFac, glassTypeAbbrsStr, nonFactorL, 
   actualThicknesses, nominalThicknesses, risk_fun)
 
-import Data.Drasil.Utils (getS, mkDataDef', mkDataDef)
+import Data.Drasil.Utils (getES, mkDataDef', mkDataDef)
 import Data.Drasil.SentenceStructures (sAnd)
 import Data.Drasil.Concepts.PhysicalProperties (dimension)
 import Data.Drasil.Concepts.Math (probability, parameter, calculation)
@@ -132,50 +132,50 @@ tolStrDisFac = mkDataDef' sdf_tol tolStrDisFac_eq
 --Issue #350
 
 aGrtrThanB :: Sentence
-aGrtrThanB = ((getS plate_len) `sC` (getS plate_width) +:+ S "are" +:+ 
-  plural dimension +:+ S "of the plate" `sC` S "where" +:+. 
+aGrtrThanB = ((getES plate_len) `sC` (getES plate_width) +:+ 
+  S "are" +:+ plural dimension +:+ S "of the plate" `sC` S "where" +:+. 
   sParen (E (C plate_len :> C plate_width)))
 
 hRef :: Sentence
-hRef = (getS nom_thick +:+ S "is the true thickness" `sC` 
+hRef = (getES nom_thick +:+ S "is the true thickness" `sC` 
   S "which is based on the nominal thicknesses" +:+. S "as shown in DD2")
 
 ldfRef :: Sentence
-ldfRef = (getS lDurFac +:+ S "is the" +:+ phrase lDurFac +:+. 
+ldfRef = (getES lDurFac +:+ S "is the" +:+ phrase lDurFac +:+. 
   S "as defined by DD3")
 
 pbTolUsr :: Sentence
-pbTolUsr = (getS pb_tol +:+ S "is the tolerable" +:+ phrase probability 
+pbTolUsr = (getES pb_tol +:+ S "is the tolerable" +:+ phrase probability 
   +:+ S "entered by the" +:+. phrase user)
 
 jRef :: Sentence
-jRef = (getS stressDistFac +:+ S "is the" +:+ phrase stressDistFac +:+.
+jRef = (getES stressDistFac +:+ S "is the" +:+ phrase stressDistFac +:+.
   S ", as defined in DD4")
 
 hMin :: Sentence
-hMin = (getS nom_thick +:+ S "is a function that maps from the nominal thickness"
-  +:+ sParen (getS act_thick) +:+. S "to the minimum thickness")
+hMin = (getES nom_thick +:+ S "is a function that maps from the nominal thickness"
+  +:+ sParen (getES act_thick) +:+. S "to the minimum thickness")
 
 qHtTlExtra :: Sentence
-qHtTlExtra = (getS tolLoad +:+ S "is the tolerable pressure which is obtained from Figure 7 using" 
-  +:+ getS sdf_tol `sAnd` phrase aspectR +:+ sParen (E (equat aspectRWithEqn)) +:+
+qHtTlExtra = (getES tolLoad +:+ S "is the tolerable pressure which is obtained from Figure 7 using" 
+  +:+ getES sdf_tol `sAnd` phrase aspectR +:+ sParen (E (equat aspectRWithEqn)) +:+
   S "as" +:+ plural parameter +:+. S "using interpolation" +:+ titleize calculation +:+
-  S "of" +:+ getS sdf_tol +:+. S "is defined in DD9")
+  S "of" +:+ getES sdf_tol +:+. S "is defined in DD9")
 
 qHtTlTolRef :: Sentence
-qHtTlTolRef = (getS tolLoad +:+. S "is the tolerable pressure defined in DD8")
+qHtTlTolRef = (getES tolLoad +:+. S "is the tolerable pressure defined in DD8")
 
 qRef :: Sentence
-qRef = (getS demand +:+. S "is the 3 second equivalent pressure, as given in IM3")
+qRef = (getES demand +:+. S "is the 3 second equivalent pressure, as given in IM3")
 
 gtfRef :: Sentence
-gtfRef = (getS gTF +:+ S "is the" +:+. (phrase gTF `sC` S "as given by DD6"))
+gtfRef = (getES gTF +:+ S "is the" +:+. (phrase gTF `sC` S "as given by DD6"))
 
 qHtRef :: Sentence
-qHtRef = (getS dimlessLoad +:+ S "is the" +:+ phrase dimlessLoad +:+.
+qHtRef = (getES dimlessLoad +:+ S "is the" +:+ phrase dimlessLoad +:+.
   S "defined in DD7")
 
 jRef2 :: Sentence
-jRef2 = (getS stressDistFac +:+ S "is the" +:+ phrase stressDistFac `sC` 
+jRef2 = (getES stressDistFac +:+ S "is the" +:+ phrase stressDistFac `sC` 
   S "which is obtained by" +:+ S "interpolating from" +:+ plural datum +:+. 
   S "shown in Figure 7")

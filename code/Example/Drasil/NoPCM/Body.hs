@@ -36,7 +36,7 @@ import Drasil.SWHS.Requirements (s5_2)
 import Drasil.SWHS.LikelyChanges (likeChg2, likeChg3, likeChg6)
 
 import Data.Drasil.People (thulasi)
-import Data.Drasil.Utils (enumSimple, getS, refFromType,
+import Data.Drasil.Utils (enumSimple, getES, refFromType,
   itemRefToSent, makeTMatrix, itemRefToSent, weave)
 
 import Data.Drasil.Concepts.Documentation (datumConstraint, inModel,
@@ -350,7 +350,7 @@ s4_1_2 = physSystDesc (getAcc progName) fig_tank
 
 fig_tank :: Contents
 fig_tank = Figure (at_start sWHT `sC` S "with" +:+ phrase ht_flux +:+
-  S "from" +:+ phrase coil `sOf` getS ht_flux_C)
+  S "from" +:+ phrase coil `sOf` getES ht_flux_C)
   "TankWaterOnly.png"
 
 s4_1_2_list :: Contents
@@ -496,15 +496,15 @@ s4_2_3_description = map foldlSPCol [
 s4_2_3_desc1 :: RelationConcept -> UnitalChunk -> [Sentence]
 s4_2_3_desc1 t1C vo =
   [S "Integrating", swhsSymbMapTRef t1C,
-  S "over a", phrase vo, sParen (getS vo) `sC` S "we have"]
+  S "over a", phrase vo, sParen (getES vo) `sC` S "we have"]
 
 s4_2_3_desc2 :: ConceptChunk -> ConVar -> UnitalChunk -> UnitalChunk ->
   ConVar -> ConceptChunk -> [Sentence]
 s4_2_3_desc2 gd su vo tfv unv un =
   [S "Applying", titleize gd, S "to the first term over",
-  (phrase su +:+ getS su `ofThe` phrase vo) `sC` S "with",
-  getS tfv, S "as the", phrase tfv, S "for the",
-  phrase su `sAnd` getS unv, S "as a", phrase un,
+  (phrase su +:+ getES su `ofThe` phrase vo) `sC` S "with",
+  getES tfv, S "as the", phrase tfv, S "for the",
+  phrase su `sAnd` getES unv, S "as a", phrase un,
   S "outward", phrase unv, S "for a", phrase su]
 
 s4_2_3_desc3 :: UnitalChunk -> UnitalChunk -> [Sentence]
@@ -514,35 +514,35 @@ s4_2_3_desc3 vo vhg = [S "We consider an arbitrary" +:+. phrase vo, S "The",
 s4_2_3_desc4 :: UnitalChunk -> UnitalChunk -> UnitalChunk -> UnitalChunk ->
   UnitalChunk -> UnitalChunk -> UnitalChunk -> UnitalChunk ->
   [Contents] -> [Sentence]
-s4_2_3_desc4 hfi hfo iS oS den hcs te vo assumps = [S "Where", getS hfi `sC`
-  getS hfo `sC` getS iS `sC` S "and", getS oS, S "are explained in" +:+.
-  acroGD 2, S "Assuming", getS den `sC` getS hcs `sAnd` getS te,
+s4_2_3_desc4 hfi hfo iS oS den hcs te vo assumps = [S "Where", getES hfi `sC`
+  getES hfo `sC` getES iS `sC` S "and", getES oS, S "are explained in" +:+.
+  acroGD 2, S "Assuming", getES den `sC` getES hcs `sAnd` getES te,
   S "are constant over the", phrase vo `sC` S "which is true in our case by",
   titleize' assumption, (foldlList $ (map (\d -> sParen (acroTest d s4_2_1_list)))
   assumps) `sC` S "we have"]
 
 s4_2_3_desc5 :: UnitalChunk -> UnitalChunk -> UnitalChunk -> [Sentence]
-s4_2_3_desc5 den ma vo = [S "Using the fact that", getS den :+: S "=" :+:
-  getS ma :+: S "/" :+: getS vo `sC` S "(2) can be written as"]
+s4_2_3_desc5 den ma vo = [S "Using the fact that", getES den :+: S "=" :+:
+  getES ma :+: S "/" :+: getES vo `sC` S "(2) can be written as"]
 
 s4_2_3_eq1, s4_2_3_eq2, s4_2_3_eq3, s4_2_3_eq4, s4_2_3_eq5 :: Expr
 
 s4_2_3_eq1 = (Neg (UnaryOp (Integral (Just (Low (C vol)), Nothing)
-  ((C gradient) :. (C thFluxVect)) vol))) + UnaryOp
-  (Integral (Just (Low (C vol)), Nothing) (C vol_ht_gen) vol) :=
+  ((C gradient) :. (C thFluxVect)) (C vol)))) + UnaryOp
+  (Integral (Just (Low (C vol)), Nothing) (C vol_ht_gen) (C vol)) :=
   UnaryOp (Integral (Just (Low (C vol)), Nothing) ((C density)
-  * (C QT.heat_cap_spec) * Deriv Part (C QT.temp) (C time)) vol)
+  * (C QT.heat_cap_spec) * Deriv Part (C QT.temp) (C time)) (C vol))
 
 s4_2_3_eq2 = (Neg (UnaryOp (Integral (Just (Low (C surface)),
-  Nothing) ((C thFluxVect) :. (C uNormalVect)) surface))) +
+  Nothing) ((C thFluxVect) :. (C uNormalVect)) (C surface)))) +
   (UnaryOp (Integral (Just (Low (C vol)), Nothing) (C vol_ht_gen)
-  vol)) := UnaryOp (Integral (Just (Low (C vol)), Nothing)
-  ((C density) * (C QT.heat_cap_spec) * Deriv Part (C QT.temp) (C time)) vol)
+  (C vol))) := UnaryOp (Integral (Just (Low (C vol)), Nothing)
+  ((C density) * (C QT.heat_cap_spec) * Deriv Part (C QT.temp) (C time)) (C vol))
 
 s4_2_3_eq3 = (C ht_flux_in) * (C in_SA) - (C ht_flux_out) *
   (C out_SA) + (C vol_ht_gen) * (C vol) := UnaryOp (Integral
   (Just (Low (C vol)), Nothing) ((C density) * (C QT.heat_cap_spec) *
-  Deriv Part (C QT.temp) (C time)) vol)
+  Deriv Part (C QT.temp) (C time)) (C vol))
 
 s4_2_3_eq4 = (C density) * (C QT.heat_cap_spec) * (C vol) * Deriv Total
   (C QT.temp) (C time) := (C ht_flux_in) * (C in_SA) - (C ht_flux_out) *
@@ -574,13 +574,13 @@ s4_2_5_desc1 :: ConceptChunk -> UncertQ -> UnitalChunk -> ConceptChunk ->
   UncertQ -> ConceptChunk -> UnitalChunk -> UncertQ -> ConceptChunk ->
   ConceptChunk -> Contents -> UnitalChunk -> Contents -> [Sentence]
 s4_2_5_desc1 roc temw en wa vo wv ma wm hcw ht hfc csa ta purin a11 vhg a12 =
-  [S "To find the", phrase roc `sOf` getS temw `sC`
+  [S "To find the", phrase roc `sOf` getES temw `sC`
   S "we look at the", phrase en, S "balance on" +:+.
   phrase wa, S "The", phrase vo, S "being considered" `isThe`
-  phrase wv, getS wv `sC` S "which has", phrase ma +:+.
-  (getS wm `sAnd` (phrase hcw `sC` getS hcw)),
-  at_start ht, S "occurs in the water from the coil as", (getS hfc
-  `sC` S "over area") +:+. getS csa, S "No",
+  phrase wv, getES wv `sC` S "which has", phrase ma +:+.
+  (getES wm `sAnd` (phrase hcw `sC` getES hcw)),
+  at_start ht, S "occurs in the water from the coil as", (getES hfc
+  `sC` S "over area") +:+. getES csa, S "No",
   phrase ht, S "occurs to", (S "outside" `ofThe`
   phrase ta) `sC` S "since it has been assumed to be",
   phrase purin +:+. sParen (acroTest a11 s4_2_1_list), S "Assuming no",
@@ -593,13 +593,13 @@ s4_2_5_desc2 d1hf = [S "Using", swhsSymbMapDRef d1hf `sC`
   S "this can be written as"]
 
 s4_2_5_desc3 :: UnitalChunk -> UncertQ -> [Sentence]
-s4_2_5_desc3 wm hcw = [S "Dividing (3) by", getS wm :+: getS hcw `sC`
+s4_2_5_desc3 wm hcw = [S "Dividing (3) by", getES wm :+: getES hcw `sC`
   S "we obtain"]
 
 s4_2_5_desc4 :: UnitalChunk -> UnitalChunk -> UncertQ -> UncertQ ->
   UncertQ -> [Sentence]
-s4_2_5_desc4 temw wm hcw chtc csa = [S "Setting", (getS temw :+: S "=" :+:
-  getS wm :+: getS hcw :+: S "/" :+: getS chtc :+: getS csa)
+s4_2_5_desc4 temw wm hcw chtc csa = [S "Setting", (getES temw :+: S "=" :+:
+  getES wm :+: getES hcw :+: S "/" :+: getES chtc :+: getES csa)
   `sC` titleize equation, S "(4) can be written in its final form as"]
 
 s4_2_5_equation :: [Contents]
@@ -666,7 +666,7 @@ s5_1_list_items = [
 
   Table [titleize symbol_, titleize unit_, titleize description]
   (mkTable
-  [getS,
+  [getES,
   unit'2Contents,
   phrase] inputVar)
   (titleize input_ +:+ titleize variable +:+ titleize requirement) False,
@@ -684,23 +684,23 @@ s5_1_list_items = [
 
   -- [S "Use the", plural input_, S "in", acroR 1, S "to find the",
   -- phrase mass, S "needed for", acroIM 1, S "to", acroIM 4 `sC`
-  -- S "as follows, where", getS w_vol `isThe` phrase w_vol,
-  -- S "and" +: (getS tank_vol `isThe` phrase tank_vol)],
+  -- S "as follows, where", getES w_vol `isThe` phrase w_vol,
+  -- S "and" +: (getES tank_vol `isThe` phrase tank_vol)],
 
   -- [S "Verify that the", plural input_, S "satisfy the required",
   -- phrase physicalConstraint, S "shown in" +:+. makeRef s4_2_6_table1],
 
   -- [titleize' output_, S "and", plural input_, plural quantity, S "and derived",
   -- plural quantity, S "in the following list: the", plural quantity, S "from",
-  -- (acroR 1) `sC` S "the", phrase mass, S "from", acroR 2, S "and", getS tau_W +:+.
+  -- (acroR 1) `sC` S "the", phrase mass, S "from", acroR 2, S "and", getES tau_W +:+.
   -- sParen(S "from" +:+ acroIM 1)],
 
   -- [S "Calculate and output the", phrase temp, S "of the", phrase water,
-  -- sParen (getS temp_W :+: sParen (getS time)), S "over the", phrase simulation +:+.
+  -- sParen (getES temp_W :+: sParen (getES time)), S "over the", phrase simulation +:+.
   -- phrase time],
 
   -- [S "Calculate and", phrase output_, S "the", phrase w_E,
-  -- sParen (getS w_E :+: sParen (getS time)), S "over the",
+  -- sParen (getES w_E :+: sParen (getES time)), S "over the",
   -- phrase simulation, phrase time +:+. sParen (S "from" +:+ acroIM 3)]
   -- ]
 
@@ -718,8 +718,8 @@ req2 = mkRequirement "req2" $
   S "Use the" +:+ plural input_ +:+ S "in" +:+
   acroTest req1 s5_1_list_words_num +:+ S "to find the" +:+ phrase mass +:+
   S "needed for" +:+ acroIM 1 +:+ S "to" +:+ acroIM 2 `sC`
-  S "as follows, where" +:+ getS w_vol `isThe` phrase w_vol +:+
-  S "and" +: (getS tank_vol `isThe` phrase tank_vol)
+  S "as follows, where" +:+ getES w_vol `isThe` phrase w_vol +:+
+  S "and" +: (getES tank_vol `isThe` phrase tank_vol)
 req3 = mkRequirement "req3" $
   S "Verify that the" +:+ plural input_ +:+ S "satisfy the required"
   +:+ phrase physicalConstraint +:+ S "shown in" +:+. makeRef s4_2_6_table1
@@ -728,14 +728,14 @@ req4 = mkRequirement "req4" $
   +:+ S "and derived" +:+ plural quantity +:+ S "in the following list: the" +:+
   plural quantity +:+ S "from" +:+ (acroTest req1 s5_1_list_words_num) `sC`
   S "the" +:+ phrase mass +:+ S "from" +:+ acroTest req2 s5_1_list_words_num
-  `sAnd` getS tau_W +:+. sParen(S "from" +:+ acroIM 1)
+  `sAnd` getES tau_W +:+. sParen(S "from" +:+ acroIM 1)
 req5 = mkRequirement "req5" $
   S "Calculate and output the" +:+ phrase temp_W +:+
-  sParen (getS temp_W :+: sParen (getS time)) +:+ S "over the" +:+
+  sParen (getES temp_W :+: sParen (getES time)) +:+ S "over the" +:+
   phrase sim_time
 req6 = mkRequirement "req6" $
   S "Calculate and" +:+ phrase output_ +:+ S "the" +:+ phrase w_E
-  +:+ sParen (getS w_E :+: sParen (getS time)) +:+ S "over the" +:+
+  +:+ sParen (getES w_E :+: sParen (getES time)) +:+ S "over the" +:+
   phrase sim_time +:+. sParen (S "from" +:+ acroIM 3)
 
 -------------------------------------------

@@ -111,7 +111,7 @@ module Language.Drasil (
   -- Chunk.Theory
   , Theory(..), tc', TheoryChunk, TheoryModel, tm, tw
   -- Chunk.SymbolForm
-  , SF, SymbolChunk, sc
+  , SF, SymbolChunk, sc, ssc, ssc', Stage(..), StagedSymbolChunk, eqSymb, codeSymb
   -- Code.Imperative.Lang
   , Lang(..)
 ) where

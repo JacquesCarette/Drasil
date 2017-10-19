@@ -6,7 +6,7 @@ import Drasil.SSP.Defs (slpSrf, slopeSrf, slope,
   mtrlPrpty, soil, soilLyr, soilPrpty, intrslce, slice)
 import Drasil.SSP.Unitals (coords, normToShear, scalFunc, fs)
 
-import Data.Drasil.Utils (getS)
+import Data.Drasil.Utils (getES)
 import Data.Drasil.SentenceStructures (ofThe, ofThe', getTandS, foldlSent)
 
 import Data.Drasil.Concepts.Documentation (condition)
@@ -23,7 +23,7 @@ monotonicF, slopeG, homogeneousL, isotropicP, linearS,
 
 monotonicF = foldlSent [S "The", phrase slpSrf,
   S "is concave with respect to", S "the" +:+. phrase slopeSrf,
-  ((getS coords +:+ S "coordinates") `ofThe'` S "failure"),
+  ((getES coords +:+ S "coordinates") `ofThe'` S "failure"),
   phrase surface, S "follow a monotonic function"]
 
 slopeG = foldlSent [S "geometry" `ofThe'` phrase slope `sC` S "and",
@@ -39,8 +39,8 @@ isotropicP = foldlSent [at_start' soilLyr, S "are treated as if they have",
 
 linearS = foldlSent [at_start intrslce, S "normal and", plural shearForce,
   S "have a linear relationship, proportional to a constant",
-  sParen (getS normToShear), S "and an", phrase intrslce, phrase force,
-  S "function", sParen (getS scalFunc), S "depending on x position"]
+  sParen (getES normToShear), S "and an", phrase intrslce, phrase force,
+  S "function", sParen (getES scalFunc), S "depending on x position"]
 
 linearF = foldlSent [at_start slice, S "to base normal and",
   plural shearForce, S "have", S "a linear relationship, dependent on the",

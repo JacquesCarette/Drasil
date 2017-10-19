@@ -87,5 +87,5 @@ misBody = doc "MIS" hghcVars (name spencerSmith) misSecs
 doc :: Quantity s => String -> [s] -> Sentence -> [Section] -> Document
 doc nam ls author body =
   Document ((S nam +:+ S "for") +:+
-  (foldr1 (+:+) (intersperse (S "and") (map (\x -> P $ symbol x) ls))))
+  (foldr1 (+:+) (intersperse (S "and") (map (\x -> P $ eqSymb x) ls))))
   author body

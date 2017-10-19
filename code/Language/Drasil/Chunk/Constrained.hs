@@ -66,8 +66,9 @@ instance NamedIdea ConstrainedChunk where
   getA (ConstrainedChunk n _ _) = getA n
 instance Quantity ConstrainedChunk where
   typ = qslens typ
-  getSymb (ConstrainedChunk c _ _) = getSymb c
+  getSymb s (ConstrainedChunk c _ _) = getSymb s c
   getUnit (ConstrainedChunk c _ _) = getUnit c
+  getStagedS (ConstrainedChunk c _ _) = getStagedS c
 instance Constrained ConstrainedChunk where
   constraints f (ConstrainedChunk a b c) = 
     fmap (\x -> ConstrainedChunk a x c) (f b)
@@ -115,8 +116,9 @@ instance NamedIdea ConstrConcept where
   getA (ConstrConcept n _ _) = getA n
 instance Quantity ConstrConcept where
   typ = cqslens typ
-  getSymb (ConstrConcept c _ _) = getSymb c
+  getSymb s (ConstrConcept c _ _) = getSymb s c
   getUnit (ConstrConcept c _ _) = getUnit c
+  getStagedS (ConstrConcept c _ _) = getStagedS c
 instance Concept ConstrConcept where
   defn = cqslens defn
   cdom = cqslens cdom
@@ -162,9 +164,10 @@ instance NamedIdea ConstrWrapper where
   term = cwlens term
   getA (CnstrW a) = getA a
 instance Quantity ConstrWrapper where
-  getSymb (CnstrW a) = getSymb a
+  getSymb s (CnstrW a) = getSymb s a
   getUnit (CnstrW a) = getUnit a
   typ = cwlens typ
+  getStagedS (CnstrW a) = getStagedS a
 
 cnstrw :: (Constrained c) => c -> ConstrWrapper
 cnstrw = CnstrW

@@ -13,14 +13,13 @@ import Language.Drasil.Chunk.Eq
 import Language.Drasil.Chunk.ExprRelat (relat)
 import Language.Drasil.Chunk.Module
 import Language.Drasil.Chunk.NamedIdea (term)
-import Language.Drasil.Chunk.SymbolForm (SymbolForm)
 import Language.Drasil.Chunk.Concept (defn)
 import Language.Drasil.Chunk.Quantity (Quantity(..))
 import Language.Drasil.ChunkDB (getUnitLup, symbLookup, HasSymbolTable(..))
 import Language.Drasil.Config (verboseDDDescription, numberedDDEquations, numberedTMEquations)
 import Language.Drasil.Document
 import Language.Drasil.Symbol
-import Language.Drasil.Misc (unit'2Contents, symbol)
+import Language.Drasil.Misc (unit'2Contents, eqSymb)
 import Language.Drasil.SymbolAlphabet
 import Language.Drasil.NounPhrase (phrase, titleize)
 import Language.Drasil.Unit (usymb)
@@ -38,7 +37,8 @@ expr (a :^ b)          sm = T.Pow  (expr a sm) (expr b sm)
 expr (a :- b)          sm = T.Sub  (expr a sm) (expr b sm)
 expr (a :. b)          sm = T.Dot  (expr a sm) (expr b sm)
 expr (Neg a)           sm = T.Neg  (expr a sm)
-expr (C c)             sm = T.Sym  (symbol (symbLookup c (sm ^. symbolTable)))
+expr (C c)             sm = -- FIXME: Add Stage for Context
+  T.Sym  (eqSymb (symbLookup c (sm ^. symbolTable)))
 expr (Deriv Part a 1)  sm = T.Mul (T.Sym (Special Partial)) (expr a sm)
 expr (Deriv Total a 1) sm = T.Mul (T.Sym lD) (expr a sm)
 expr (Deriv Part a b)  sm = T.Frac (T.Mul (T.Sym (Special Partial)) (expr a sm))
@@ -143,8 +143,8 @@ integral (Integral (Nothing, Nothing) e wrtc) sm =
   (T.Integral (Nothing, Nothing) (int_wrt wrtc sm), expr e sm)
 integral _ _ = error "TeX/Import.hs Incorrect use of Integral"
 
-int_wrt :: (SymbolForm c, HasSymbolTable ctx) => c -> ctx -> T.Expr
-int_wrt wrtc sm = expr (Deriv Total (C wrtc) 1) sm
+int_wrt :: HasSymbolTable ctx => Expr -> ctx -> T.Expr
+int_wrt wrtc sm = expr (Deriv Total wrtc 1) sm
 
 replace_divs :: HasSymbolTable ctx => Expr -> ctx -> T.Expr
 replace_divs (a :/ b) sm = T.Div (replace_divs a sm) (replace_divs b sm)
@@ -303,7 +303,8 @@ eqnStyleTM :: T.Contents -> T.LayoutObj
 eqnStyleTM = if numberedTMEquations then T.EqnBlock else T.Paragraph
   
 buildEqn :: HasSymbolTable ctx => QDefinition -> ctx -> T.Spec  
-buildEqn c sm = T.N (symbol c) T.:+: T.S " = " T.:+: T.E (expr (equat c) sm)
+buildEqn c sm = T.N (eqSymb c) T.:+: T.S " = " T.:+: 
+  T.E (expr (equat c) sm)
 
 -- Build descriptions in data defs based on required verbosity
 buildDDDescription :: HasSymbolTable ctx => QDefinition -> ctx -> T.Spec
@@ -313,7 +314,7 @@ buildDDDescription c m = descLines
 
 descLines :: (HasSymbolTable ctx, Quantity q) => [q] -> ctx -> T.Spec  
 descLines []    _   = error "No chunks to describe"
-descLines (vc:[]) m = (T.N (symbol vc) T.:+: 
+descLines (vc:[]) m = (T.N (eqSymb vc) T.:+: 
   (T.S " is the " T.:+: (spec (phrase $ vc ^. term) m) T.:+:
    unWrp (getUnitLup vc m)))
   where unWrp (Just a) = T.S " (" T.:+: T.Sy (a ^. usymb) T.:+: T.S ")"

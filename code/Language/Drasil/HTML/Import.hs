@@ -11,15 +11,13 @@ import Language.Drasil.Chunk.ExprRelat (relat)
 import Language.Drasil.Chunk.Module
 import Language.Drasil.Chunk.NamedIdea (term, short, getA)
 import Language.Drasil.Chunk.Concept (defn)
-import qualified Language.Drasil.Chunk.SymbolForm as SF
 import Language.Drasil.Chunk.Quantity (Quantity(..))
 import Language.Drasil.ChunkDB (HasSymbolTable(..), getUnitLup, symbLookup)
-
 import Language.Drasil.Expr.Extract
 import Language.Drasil.Config (verboseDDDescription)
 import Language.Drasil.Document
 import Language.Drasil.Symbol
-import Language.Drasil.Misc (unit'2Contents, symbol)
+import Language.Drasil.Misc (unit'2Contents, eqSymb)
 import Language.Drasil.SymbolAlphabet (lD)
 import Language.Drasil.NounPhrase (phrase, titleize)
 import Language.Drasil.Unit (usymb)
@@ -46,7 +44,8 @@ expr (Deriv Part a b) sm = H.Frac (H.Mul (H.Sym (Special Partial)) (expr a sm))
                           (H.Mul (H.Sym (Special Partial)) (expr b sm))
 expr (Deriv Total a b)sm = H.Frac (H.Mul (H.Sym lD) (expr a sm)) 
                           (H.Mul (H.Sym lD) (expr b sm))
-expr (C c)            sm = H.Sym $ (symbol (symbLookup c (sm ^. symbolTable)))
+expr (C c)            sm = -- FIXME: Add Stage for Context
+  H.Sym $ (eqSymb (symbLookup c (sm ^. symbolTable)))
 expr (FCall f x)      sm = H.Call (expr f sm) (map (flip expr sm) x)
 expr (Case ps)        sm = if length ps < 2 then 
                     error "Attempting to use multi-case expr incorrectly"
@@ -150,8 +149,8 @@ integral (Integral (Nothing, Nothing) e wrtc) sm =
 integral _ _ = error "TeX/Import.hs Incorrect use of Integral"
 
 -- | Helper function for translating the differential
-int_wrt :: (SF.SymbolForm c, HasSymbolTable s) => c -> s -> H.Expr
-int_wrt wrtc sm = expr (Deriv Total (C wrtc) 1) sm
+int_wrt :: (HasSymbolTable s) => Expr -> s -> H.Expr
+int_wrt wrtc sm = expr (Deriv Total wrtc 1) sm
 
 -- | Helper function for translating operations in expressions 
 replace_divs :: HasSymbolTable s => Expr -> s -> H.Expr
@@ -315,7 +314,8 @@ missingAcro _ (Just a) = S "<b>":+: a :+: S "</b>"
 -- | Translates the defining equation from a QDefinition to 
 -- HTML's version of Sentence
 buildEqn :: HasSymbolTable s => QDefinition -> s -> H.Spec  
-buildEqn c sm = H.N (symbol c) H.:+: H.S " = " H.:+: H.E (expr (equat c) sm)
+buildEqn c sm = H.N (eqSymb c) H.:+: H.S " = " H.:+: 
+  H.E (expr (equat c) sm)
 
 -- | Build descriptions in data defs based on required verbosity
 buildDDDescription :: HasSymbolTable s => QDefinition -> s -> H.Spec
@@ -326,7 +326,7 @@ buildDDDescription c m = descLines
 -- | Helper for building each line of the description of a data def
 descLines :: (HasSymbolTable s, Quantity q) => [q] -> s -> H.Spec  
 descLines []    _   = error "No chunks to describe"
-descLines (vc:[]) m = (H.N (symbol vc) H.:+: 
+descLines (vc:[]) m = (H.N (eqSymb vc) H.:+: 
   (H.S " is the " H.:+: (spec (phrase $ vc ^. term) m) H.:+:
    unWrp (getUnitLup vc m)))
   where unWrp (Just a) = H.S " (" H.:+: H.Sy (a ^. usymb) H.:+: H.S ")"

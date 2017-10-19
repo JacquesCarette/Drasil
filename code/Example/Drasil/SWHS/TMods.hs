@@ -19,7 +19,7 @@ import Data.Drasil.Quantities.Thermodynamics (temp, heat_cap_spec,
   latent_heat, melt_pt, boil_pt, sens_heat, heat_cap_spec)
 import Data.Drasil.Quantities.PhysicalProperties (mass, density)
 import Data.Drasil.Quantities.Physics (energy, time)
-import Data.Drasil.Utils (getS)
+import Data.Drasil.Utils (getES)
 import Data.Drasil.SentenceStructures (foldlSent, isThe)
 
 import Drasil.SWHS.Unitals (melt_frac, tau, deltaT, htCap_V, htCap_S,
@@ -55,17 +55,17 @@ t1descr = foldlSent [
   phrase law_cons_energy, S "for",
   phrase transient, phrase heat_trans,
   S "in a material of", phrase heat_cap_spec,
-  getS heat_cap_spec, sParen (Sy (unit_symb heat_cap_spec)),
+  getES heat_cap_spec, sParen (Sy (unit_symb heat_cap_spec)),
   S "and", phrase density `sC`
-  getS density, sParen (Sy (unit_symb density)) `sC`
-  S "where", getS thFluxVect `isThe`
+  getES density, sParen (Sy (unit_symb density)) `sC`
+  S "where", getES thFluxVect `isThe`
   phrase thFluxVect, sParen (Sy (unit_symb thFluxVect)) `sC`
-  getS vol_ht_gen `isThe`
+  getES vol_ht_gen `isThe`
   phrase vol_ht_gen, sParen (Sy (unit_symb vol_ht_gen)) `sC`
-  getS temp `isThe`
+  getES temp `isThe`
   phrase temp, sParen (Sy (unit_symb temp)) `sC`
-  getS time, S "is", phrase time,
-  sParen (Sy (unit_symb time)) `sC` S "and", getS gradient,
+  getES time, S "is", phrase time,
+  sParen (Sy (unit_symb time)) `sC` S "and", getES gradient,
   S "is the" +:+. (gradient ^. defn), S "For this", phrase equation,
   S "to apply" `sC` S "other forms of", phrase energy `sC` S "such as",
   phrase mech_energy `sC`
@@ -98,24 +98,24 @@ sensHtEEqn = (C sens_heat) := Case [((C htCap_S) * (C mass) * (C deltaT),
 -- were implemented incorrectly.
 t2descr :: Sentence
 t2descr = foldlSent [
-  getS sens_heat `isThe` S "change in",
+  getES sens_heat `isThe` S "change in",
   phrase sens_heat, phrase energy +:+. sParen (Sy (joule ^. usymb)),
-  getS htCap_S `sC` getS htCap_L `sC` getS htCap_V, S "are the",
+  getES htCap_S `sC` getES htCap_L `sC` getES htCap_V, S "are the",
   phrase htCap_S `sC` phrase htCap_L `sC` S "and", phrase htCap_V `sC`
   S "respectively" +:+. sParen (Sy (unit_symb heat_cap_spec)),
-  getS mass `isThe` phrase mass +:+. sParen (Sy (unit_symb mass)),
-  getS temp `isThe` phrase temp,
-  sParen (Sy (unit_symb temp)) `sC` S "and", getS deltaT `isThe`
+  getES mass `isThe` phrase mass +:+. sParen (Sy (unit_symb mass)),
+  getES temp `isThe` phrase temp,
+  sParen (Sy (unit_symb temp)) `sC` S "and", getES deltaT `isThe`
   phrase deltaT +:+. sParen (Sy (unit_symb deltaT)),
-  getS melt_pt, S "and", getS boil_pt,
+  getES melt_pt, S "and", getES boil_pt,
   S "are the", phrase melt_pt, S "and", phrase boil_pt `sC`
   S "respectively" +:+. sParen (Sy (unit_symb temp)),
   at_start sens_heat :+: S "ing occurs as long as the material does",
   S "not reach a", phrase temp, S "where a" +:+
   phrase phase_change, S "occurs. A",
   phrase phase_change, S "occurs if",
-  getS temp :+: S "=" :+: getS boil_pt,
-  S "or", getS temp :+: S "=" +. getS melt_pt,
+  getES temp :+: S "=" :+: getES boil_pt,
+  S "or", getES temp :+: S "=" +. getES melt_pt,
   S "If this" `isThe` S "case, refer to",
   swhsSymbMapTRef t3LatHtE `sC`
   at_start latent_heat, phrase energy]
@@ -142,7 +142,7 @@ t3LatHtE = makeRC "t3LatHtE"
 latHtEEqn :: Relation
 latHtEEqn = FCall (C latent_heat) [C time] := UnaryOp
   (Integral (Just (Low 0), Just (High (C time)))
-  (Deriv Total (FCall (C latent_heat) [C tau]) (C tau)) tau)
+  (Deriv Total (FCall (C latent_heat) [C tau]) (C tau)) (C tau))
 
 -- Integrals need dTau at end
 -- Deriv is specifically partial derivative... how to do regular derivative?
@@ -150,23 +150,23 @@ latHtEEqn = FCall (C latent_heat) [C time] := UnaryOp
 
 t3descr :: Sentence
 t3descr = foldlSent [
-  getS latent_heat `isThe` S "change in",
+  getES latent_heat `isThe` S "change in",
   phrase thermal_energy, sParen (Sy (joule ^. usymb)) `sC`
   phrase latent_heat +:+. phrase energy,
   E (FCall (C latent_heat) [C time] := UnaryOp
   (Integral (Just (Low 0), Just (High (C time)))
-  (Deriv Total (FCall (C latent_heat) [C tau]) (C tau)) tau))
+  (Deriv Total (FCall (C latent_heat) [C tau]) (C tau)) (C tau)))
   `isThe` phrase rOfChng, S "of",
-  getS latent_heat, S "with respect",
-  S "to", phrase time, getS tau +:+.
-  sParen (Sy (unit_symb tau)), getS time `isThe`
+  getES latent_heat, S "with respect",
+  S "to", phrase time, getES tau +:+.
+  sParen (Sy (unit_symb tau)), getES time `isThe`
   phrase time, sParen (Sy (unit_symb time)),
   S "elapsed, as long as the",
   phrase phase_change, S "is not complete. The status of",
   S "the", phrase phase_change,
   S "depends on the", phrase melt_frac `sC`
   swhsSymbMapDRef dd3HtFusion :+: S ".",
-  getS melt_pt, S "and", getS boil_pt, S "are the",
+  getES melt_pt, S "and", getES boil_pt, S "are the",
   phrase melt_pt, S "and", phrase boil_pt `sC`
   S "respectively" +:+. sParen (Sy (unit_symb temp)),
   at_start latent_heat :+: S "ing stops when all material has",

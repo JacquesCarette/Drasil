@@ -9,7 +9,7 @@ import Drasil.SWHS.Unitals (t_init_melt, latentE_P, pcm_E, pcm_initMltE,
   temp_melt_P, temp_PCM, htCap_L_P, pcm_mass, htFusion, temp_init, htCap_S_P,
   melt_frac, temp_W, w_mass, w_E, htCap_W, tau_S_P, pcm_SA, tau_L_P, pcm_HTC,
   coil_SA, coil_HTC, eta, tau_W, temp_C)
-import Data.Drasil.Utils (getS, unwrap)
+import Data.Drasil.Utils (getES, unwrap)
 import Data.Drasil.SentenceStructures (acroT, acroDD, foldlSent, isThe,
   sAnd, ofThe)
 import Data.Drasil.Quantities.Physics (time, energy)
@@ -100,18 +100,18 @@ htWtr_Rel = (FCall (C w_E) [C time]) := (C htCap_W) * (C w_mass) *
 
 htWtrDesc :: Sentence
 htWtrDesc = foldlSent [S "The above", phrase equation,
-  S "is derived using" +:+. acroT 2, getS w_E `isThe` phrase change,
+  S "is derived using" +:+. acroT 2, getES w_E `isThe` phrase change,
   S "in", phrase thermal_energy, S "of the", phrase liquid,
   phrase water, S "relative to the", phrase energy, S "at the initial",
-  phrase temp, sParen (getS temp_init) +:+.
-  sParen (unwrap $ getUnit pcm_initMltE), (getS htCap_W) `isThe`
+  phrase temp, sParen (getES temp_init) +:+.
+  sParen (unwrap $ getUnit pcm_initMltE), (getES htCap_W) `isThe`
   phrase heat_cap_spec, S "of", phrase liquid, phrase water,
-  sParen (unwrap $ getUnit htCap_S_P) `sAnd` (getS w_mass)
+  sParen (unwrap $ getUnit htCap_S_P) `sAnd` (getES w_mass)
   `isThe` phrase mass, S "of the", phrase water +:+.
   sParen (unwrap $ getUnit w_mass), S "The", phrase change, S "in",
   phrase temp, S "is the difference between the", phrase temp, S "at",
-  phrase time, getS time, sParen (unwrap $ getUnit t_init_melt) `sC`
-  (getS temp_W) `sAnd` S "the", phrase temp_init `sC` getS temp_init +:+.
+  phrase time, getES time, sParen (unwrap $ getUnit t_init_melt) `sC`
+  (getES temp_W) `sAnd` S "the", phrase temp_init `sC` getES temp_init +:+.
   sParen (unwrap $ getUnit temp_init), S "This", phrase equation,
   S "applies as long as", (E $ (Int 0) :< (C temp_W) :< (Int 0)) :+:
   (unwrap $ getUnit temp_W),
@@ -142,36 +142,36 @@ htPCM_Rel = C pcm_E := Case [case1, case2, case3, case4]
 
 htPCMDesc :: Sentence
 htPCMDesc = foldlSent [S "The above", phrase equation,
-  S "is derived using" +:+. (acroT 2 `sAnd` acroT 3), getS pcm_E `isThe`
+  S "is derived using" +:+. (acroT 2 `sAnd` acroT 3), getES pcm_E `isThe`
   phrase change, S "in", phrase thermal_energy, S "of the", short phsChgMtrl,
   S "relative to the", phrase energy, S "at the", phrase temp_init,
-  sParen (getS temp_init) +:+. (unwrap $ getUnit pcm_initMltE), getS pcm_E,
+  sParen (getES temp_init) +:+. (unwrap $ getUnit pcm_initMltE), getES pcm_E,
   S "for the", phrase solid, short phsChgMtrl, S "is found using", acroT 2,
   S "for", phrase sens_heat, S "ing, with", phrase heat_cap_spec `ofThe`
-  phrase solid, short phsChgMtrl `sC` getS htCap_S_P,
+  phrase solid, short phsChgMtrl `sC` getES htCap_S_P,
   sParen (unwrap $ getUnit htCap_S_P), S "and the", phrase change, S "in the",
   short phsChgMtrl, phrase temp, S "from the", phrase temp_init +:+.
-  sParen (unwrap $ getUnit temp_init), getS pcm_E, S "for the melted",
+  sParen (unwrap $ getUnit temp_init), getES pcm_E, S "for the melted",
   short phsChgMtrl, sParen (E (C temp_PCM :> C pcm_initMltE)),
   S "is found using", acroT 2, S "for", phrase sens_heat, S "of the" +:+.
   phrase liquid, short phsChgMtrl, S "plus the", phrase energy, S "when",
   phrase melting, S "starts, plus the", phrase energy,
   S "required to melt all of the", short phsChgMtrl, S "The", phrase energy,
-  S "when", phrase melting, S "starts is", getS pcm_initMltE +:+.
+  S "when", phrase melting, S "starts is", getES pcm_initMltE +:+.
   sParen (unwrap $ getUnit pcm_initMltE), S "The", phrase energy,
   S "required to melt all of the", short phsChgMtrl, S "is",
   E (C htFusion :* C pcm_mass), sParen (unwrap $ getUnit pcm_initMltE) +:+.
   sParen (acroDD 3), phrase heat_cap_spec `ofThe` phrase liquid,
-  short phsChgMtrl, S "is", getS htCap_L_P,
+  short phsChgMtrl, S "is", getES htCap_L_P,
   sParen (unwrap $ getUnit htCap_L_P) `sAnd` S "the", phrase change, S "in",
   phrase temp, S "is", E (C temp_PCM :- C temp_melt_P) +:+.
-  sParen (unwrap $ getUnit temp_melt_P), getS pcm_E, S "during",
+  sParen (unwrap $ getUnit temp_melt_P), getES pcm_E, S "during",
   phrase melting, S "of the", short phsChgMtrl, S "is found using the", 
   phrase energy, S "required at", S "instant" +:+ phrase melting `ofThe`
-  short phsChgMtrl, S "begins" `sC` getS pcm_initMltE, S "plus the",
+  short phsChgMtrl, S "begins" `sC` getES pcm_initMltE, S "plus the",
   phrase latent_heat, phrase energy, S "added to the", short phsChgMtrl `sC`
-  getS latentE_P, sParen (unwrap $ getUnit latentE_P), S "since the",
-  phrase time, S "when", phrase melting, S "began", getS t_init_melt +:+.
+  getES latentE_P, sParen (unwrap $ getUnit latentE_P), S "since the",
+  phrase time, S "when", phrase melting, S "began", getES t_init_melt +:+.
   sParen (unwrap $ getUnit t_init_melt), S "The", phrase heat, phrase energy,
   S "for", phrase boiling, S "of the", short phsChgMtrl,
   S "is not detailed" `sC` S "since the", short phsChgMtrl,

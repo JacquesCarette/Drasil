@@ -82,7 +82,7 @@ import Drasil.Sections.TraceabilityMandGs (traceMGF, traceGIntro)
 import Drasil.Sections.Requirements (reqF)
 import Drasil.Sections.GeneralSystDesc (genSysF)
 
-import Data.Drasil.Utils (enumSimple, weave, getS, itemRefToSent, makeListRef,
+import Data.Drasil.Utils (enumSimple, weave, getES, itemRefToSent, makeListRef,
   makeTMatrix, refFromType)
 import Data.Drasil.SentenceStructures (acroIM, acroGD, acroGS, showingCxnBw,
   foldlSent, foldlSent_, foldlSP, foldlSP_, foldlSPCol, foldlsC, isThe, ofThe,
@@ -519,7 +519,7 @@ s5_1_list = (acroNumGen [req1] 1) ++ [s5_1_1_Table] ++ (acroNumGen [req2] 2) ++
 s5_1_1_Table :: Contents
 s5_1_1_Table = (Table [titleize symbol_, titleize unit_, titleize description]
   (mkTable
-  [getS,
+  [getES,
   --(\ch -> Sy (unit_symb ch)),
   unit'2Contents,
   phrase] (map qs inputConstraints))
@@ -980,11 +980,11 @@ physSyst1 ta wa = [at_start ta, S "containing" +:+. phrase wa]
 --
 physSyst2 :: ConceptChunk -> ConceptChunk -> UnitalChunk -> [Sentence]
 physSyst2 co ta hfc = [at_start co, S "at bottom of" +:+. phrase ta,
-  sParen (getS hfc +:+ S "represents the" +:+. phrase hfc)]
+  sParen (getES hfc +:+ S "represents the" +:+. phrase hfc)]
 --
 physSyst3 :: CI -> ConceptChunk -> UnitalChunk -> [Sentence]
 physSyst3 pcmat ta hfp = [short pcmat, S "suspended in" +:+. phrase ta,
-  sParen (getS hfp +:+ S "represents the" +:+. phrase hfp)]
+  sParen (getES hfp +:+ S "represents the" +:+. phrase hfp)]
 
 -- Structure of list would be same between examples but content is completely
 -- different
@@ -992,7 +992,7 @@ physSyst3 pcmat ta hfp = [short pcmat, S "suspended in" +:+. phrase ta,
 fig_tank :: Contents
 fig_tank = Figure (
   foldlSent_ [at_start sWHT `sC` S "with", phrase ht_flux_C, S "of",
-  getS ht_flux_C `sAnd` phrase ht_flux_P, S "of", getS ht_flux_P])
+  getES ht_flux_C `sAnd` phrase ht_flux_P, S "of", getES ht_flux_P])
   "Tank.png"
 
 -----------------------------
@@ -1046,30 +1046,30 @@ s4_2_3_deriv_1 roc tem = foldlSPCol [S "Detailed derivation of simplified",
 
 s4_2_3_deriv_2 :: RelationConcept -> UnitalChunk -> Contents
 s4_2_3_deriv_2 t1ct vo = foldlSPCol [S "Integrating", swhsSymbMapTRef t1ct,
-  S "over a", phrase vo, sParen (getS vo) `sC` S "we have"]
+  S "over a", phrase vo, sParen (getES vo) `sC` S "we have"]
 
 s4_2_3_deriv_3 = EqnBlock
   ((Neg (UnaryOp (Integral (Just (Low (C vol)), Nothing)
-  ((C gradient) :. (C thFluxVect)) vol))) +
+  ((C gradient) :. (C thFluxVect)) (C vol)))) +
   UnaryOp (Integral (Just (Low (C vol)), Nothing)
-  (C vol_ht_gen) vol) :=
+  (C vol_ht_gen) (C vol)) :=
   UnaryOp (Integral (Just (Low (C vol)), Nothing) ((C density)
-  * (C heat_cap_spec) * Deriv Part (C temp) (C time)) vol))
+  * (C heat_cap_spec) * Deriv Part (C temp) (C time)) (C vol)))
 
 s4_2_3_deriv_4 :: ConceptChunk -> ConVar -> UnitalChunk -> UnitalChunk ->
   ConVar -> ConceptChunk -> Contents
 s4_2_3_deriv_4 gd su vo tfv unv un = foldlSPCol [S "Applying", titleize gd,
-  S "to the first term over", (phrase su +:+ getS su `ofThe` phrase vo) `sC`
-  S "with", getS tfv, S "as the", phrase tfv, S "for the",
-  phrase surface `sAnd` getS unv, S "as a", phrase un,
+  S "to the first term over", (phrase su +:+ getES su `ofThe` phrase vo) `sC`
+  S "with", getES tfv, S "as the", phrase tfv, S "for the",
+  phrase surface `sAnd` getES unv, S "as a", phrase un,
   S "outward", phrase unv, S "for a", phrase su]
 
 s4_2_3_deriv_5 = EqnBlock
   ((Neg (UnaryOp (Integral (Just (Low (C surface)),
-  Nothing) ((C thFluxVect) :. (C uNormalVect)) surface))) +
+  Nothing) ((C thFluxVect) :. (C uNormalVect)) (C surface)))) +
   (UnaryOp (Integral (Just (Low (C vol)), Nothing) (C vol_ht_gen)
-  vol)) := UnaryOp (Integral (Just (Low (C vol)), Nothing)
-  ((C density) * (C heat_cap_spec) * Deriv Part (C temp) (C time)) vol))
+  (C vol))) := UnaryOp (Integral (Just (Low (C vol)), Nothing)
+  ((C density) * (C heat_cap_spec) * Deriv Part (C temp) (C time)) (C vol)))
 
 s4_2_3_deriv_6 :: UnitalChunk -> UnitalChunk -> Contents
 s4_2_3_deriv_6 vo vhg = foldlSPCol [S "We consider an arbitrary" +:+.
@@ -1080,15 +1080,15 @@ s4_2_3_deriv_7 = EqnBlock
   ((C ht_flux_in) * (C in_SA) - (C ht_flux_out) *
   (C out_SA) + (C vol_ht_gen) * (C vol) := UnaryOp (Integral
   (Just (Low (C vol)), Nothing) ((C density) * (C heat_cap_spec) *
-  Deriv Part (C temp) (C time)) vol))
+  Deriv Part (C temp) (C time)) (C vol)))
 
 s4_2_3_deriv_8 :: UnitalChunk -> UnitalChunk -> UnitalChunk -> UnitalChunk ->
   UnitalChunk -> UnitalChunk -> UnitalChunk -> UnitalChunk -> CI -> Contents ->
   Contents -> Contents -> Contents -> Contents
 s4_2_3_deriv_8 hfi hfo isa osa den hcs tem vo assu a3 a4 a5 a6 = foldlSPCol 
-  [S "Where", foldlList (map getS [hfi, hfo, isa, osa]), 
-  S "are explained in" +:+. acroGD 2, S "Assuming", getS den `sC` getS hcs
-  `sAnd` getS tem, S "are constant over the", phrase vo `sC` S "which is true",
+  [S "Where", foldlList (map getES [hfi, hfo, isa, osa]), 
+  S "are explained in" +:+. acroGD 2, S "Assuming", getES den `sC` getES hcs
+  `sAnd` getES tem, S "are constant over the", phrase vo `sC` S "which is true",
   S "in our case by", titleize' assu, 
   foldlList (map (\c -> sParen (makeRef c)) [a3, a4, a5, a6]) `sC` S "we have"]
 
@@ -1098,8 +1098,8 @@ s4_2_3_deriv_9 = EqnBlock
   (C out_SA) + (C vol_ht_gen) * (C vol))
 
 s4_2_3_deriv_10 :: UnitalChunk -> UnitalChunk -> UnitalChunk -> Contents
-s4_2_3_deriv_10 den ma vo = foldlSPCol [S "Using the fact that", getS den :+:
-  S "=" :+: getS ma :+: S "/" :+: getS vo `sC` S "(2) can be written as"]
+s4_2_3_deriv_10 den ma vo = foldlSPCol [S "Using the fact that", getES den :+:
+  S "=" :+: getES ma :+: S "/" :+: getES vo `sC` S "(2) can be written as"]
 
 s4_2_3_deriv_11 = EqnBlock
   ((C mass) * (C heat_cap_spec) * Deriv Total (C temp)
@@ -1127,7 +1127,7 @@ s4_2_5_subpar :: NamedChunk -> UncertQ -> UncertQ -> UncertQ -> ConceptChunk
 s4_2_5_subpar sol temw tempcm epcm pc = [foldlSP [S "The goals", acroGS 1,
   S "to", acroGS 4, S "are solved by", acroIM 1, S "to" +:+. acroIM 4,
   S "The", plural sol, S "for", acroIM 1 `sAnd` acroIM 2, 
-  S "are coupled since the", phrase sol, S "for", getS temw `sAnd` getS tempcm
+  S "are coupled since the", phrase sol, S "for", getES temw `sAnd` getES tempcm
   +:+. S "depend on one another", acroIM 3, S "can be solved once", acroIM 1, 
   S "has been solved. The", phrase sol `sOf` acroIM 2 `sAnd` acroIM 4, 
   S "are also coupled, since the", phrase tempcm `sAnd` phrase epcm, 
@@ -1142,15 +1142,15 @@ s4_2_5_d1sent_1 :: ConceptChunk -> UncertQ -> UnitalChunk -> ConceptChunk ->
   UnitalChunk -> UncertQ -> UncertQ -> ConceptChunk -> ConceptChunk -> 
   ConceptChunk -> UnitalChunk -> Contents -> Contents -> [Sentence]
 s4_2_5_d1sent_1 roc temw en wa vo wvo wma hcw hfc hfp csa psa ht ta purin vhg
-  a15 a16 = [S "To find the", phrase roc, S "of", getS temw `sC`
+  a15 a16 = [S "To find the", phrase roc, S "of", getES temw `sC`
   S "we look at the", phrase en, S "balance on" +:+.
   phrase wa, S "The", phrase vo, S "being considered" `isThe`
-  phrase wvo, getS wvo `sC` S "which has", phrase wma +:+.
-  (getS wma `sAnd` phrase hcw `sC` getS hcw),
-  getS hfc, S "represents the", phrase hfc `sAnd`
-  getS hfp, S "represents the", phrase hfp `sC`
+  phrase wvo, getES wvo `sC` S "which has", phrase wma +:+.
+  (getES wma `sAnd` phrase hcw `sC` getES hcw),
+  getES hfc, S "represents the", phrase hfc `sAnd`
+  getES hfp, S "represents the", phrase hfp `sC`
   S "over", phrase csa `sAnd` phrase psa, S "of",
-  getS csa `sAnd` getS psa `sC` S "respectively. No",
+  getES csa `sAnd` getES psa `sC` S "respectively. No",
   phrase ht, S "occurs to", (S "outside" `ofThe`
   phrase ta) `sC` S "since it has been assumed to be",
   phrase purin +:+. sParen (makeRef a15), S "Assuming no",
@@ -1161,11 +1161,11 @@ s4_2_5_d1sent_1 roc temw en wa vo wvo wma hcw hfc hfp csa psa ht ta purin vhg
 s4_2_5_d1sent_2 :: QDefinition -> QDefinition -> UnitalChunk ->
   UnitalChunk -> [Sentence]
 s4_2_5_d1sent_2 d1hf d2hf hfc hfp = [S "Using", swhsSymbMapDRef d1hf `sAnd`
-  swhsSymbMapDRef d2hf, S "for", getS hfc `sAnd`
-  getS hfp, S "respectively, this can be written as"]
+  swhsSymbMapDRef d2hf, S "for", getES hfc `sAnd`
+  getES hfp, S "respectively, this can be written as"]
 
 s4_2_5_d1sent_3 :: UnitalChunk -> UncertQ -> [Sentence]
-s4_2_5_d1sent_3 wm hcw = [S "Dividing (3) by", getS wm :+: getS hcw `sC`
+s4_2_5_d1sent_3 wm hcw = [S "Dividing (3) by", getES wm :+: getES hcw `sC`
   S "we obtain"]
 
 s4_2_5_d1sent_4 :: CI -> UncertQ -> UncertQ -> [Sentence]
@@ -1173,8 +1173,8 @@ s4_2_5_d1sent_4 rs chtc csa = [S "Factoring the negative sign out of",
   S "second term" `ofThe` short rs,
   S "of", titleize equation,
   S "(4) and multiplying it by",
-  getS chtc :+: getS csa :+: S "/" :+:
-  getS chtc :+: getS csa, S "yields"]
+  getES chtc :+: getES csa :+: S "/" :+:
+  getES chtc :+: getES csa, S "yields"]
 
 s4_2_5_d1sent_5 :: [Sentence]
 s4_2_5_d1sent_5 = [S "Which simplifies to"]
@@ -1231,15 +1231,15 @@ s4_2_5_d_eqn7 = (Deriv Total (C temp_W) (C time) := (1 / (C tau_W)) *
 
 s4_2_5_d2sent_1 :: QDefinition -> UnitalChunk -> [Sentence]
 s4_2_5_d2sent_1 d2hfp hfp = [S "Using", swhsSymbMapDRef d2hfp, S "for", 
-  getS hfp `sC` S "this", phrase equation, S "can be written as"]
+  getES hfp `sC` S "this", phrase equation, S "can be written as"]
 
 s4_2_5_d2sent_2 :: [Sentence]
-s4_2_5_d2sent_2 = [S "Dividing by", getS pcm_mass :+: getS htCap_S_P,
+s4_2_5_d2sent_2 = [S "Dividing by", getES pcm_mass :+: getES htCap_S_P,
   S "we obtain"]
 
 s4_2_5_d2sent_3 :: [Sentence]
-s4_2_5_d2sent_3 = [S "Setting", getS tau_S_P :+: S "=" :+: getS pcm_mass :+: 
-  getS htCap_S_P :+: S "/" :+: getS pcm_HTC :+: getS pcm_SA `sC`
+s4_2_5_d2sent_3 = [S "Setting", getES tau_S_P :+: S "=" :+: getES pcm_mass :+: 
+  getES htCap_S_P :+: S "/" :+: getES pcm_HTC :+: getES pcm_SA `sC`
   S "this can be written as"]
 
 s4_2_5_d2eqn1, s4_2_5_d2eqn2, s4_2_5_d2eqn3, s4_2_5_d2eqn4 :: Expr
@@ -1269,17 +1269,17 @@ s4_2_5_d2startPara en pcmat sh roc ptem vo pvo pma hcsp hfp psa hfo vhg a16 =
   [S "Detailed derivation of the", phrase en, S "balance on the",
   short pcmat, S "during", phrase sh :+: S "ing phase"],
 
-  [S "To find the", phrase roc, S "of", getS ptem `sC`
+  [S "To find the", phrase roc, S "of", getES ptem `sC`
   S "we look at the", phrase en, S "balance on the" +:+.
   short pcmat, S "The", phrase vo,
-  S "being considered is the" +:+. (phrase pvo `sC` getS pvo),
+  S "being considered is the" +:+. (phrase pvo `sC` getES pvo),
   S "The derivation that follows is initially for the",
   phrase solid +:+. short pcmat, S "The", phrase pma, S "is",
-  getS pma `sAnd` S "the", phrase hcsp, S "is" +:+. getS hcsp,
-  S "The", phrase hfp, S "is", getS hfp, S "over",
-  phrase psa +:+. getS psa, S "There is no" +:+. phrase hfo,
+  getES pma `sAnd` S "the", phrase hcsp, S "is" +:+. getES hcsp,
+  S "The", phrase hfp, S "is", getES hfp, S "over",
+  phrase psa +:+. getES psa, S "There is no" +:+. phrase hfo,
   S "Assuming no", phrase vhg, sParen (makeRef a16) `sC`
-  getS vhg :+: S "=0, the", phrase equation, S "for", acroGD 2,
+  getES vhg :+: S "=0, the", phrase equation, S "for", acroGD 2,
   S "can be written as"]
 
   ]
@@ -1294,20 +1294,20 @@ s4_2_5_d2endPara pcmat hcsp hclp tsp tlp sur mel vo ptem tmp boi so li = map
   S "(6) applies for the", phrase solid +:+. short pcmat,
   S "In the case where all of the", short pcmat,
   S "is melted, the same derivation applies, except that",
-  getS hcsp, S "is replaced by", getS hclp `sC`
-  S "and thus", getS tsp, S "is replaced by" +:+.
-  getS tlp, S "Although a small change in", phrase sur,
+  getES hcsp, S "is replaced by", getES hclp `sC`
+  S "and thus", getES tsp, S "is replaced by" +:+.
+  getES tlp, S "Although a small change in", phrase sur,
   S "area would be expected with", phrase mel `sC`
   S "this is not included, since",
   (phrase vo +:+ S "change" `ofThe` short pcmat),
   S "with", phrase mel,
   S "is assumed to be negligible", sParen (makeRef assump17)],
 
-  [S "In the case where", getS ptem :+: S "=" :+:
-  getS tmp `sAnd` S "not all of the", short pcmat,
+  [S "In the case where", getES ptem :+: S "=" :+:
+  getES tmp `sAnd` S "not all of the", short pcmat,
   S "is melted, the", phrase ptem +:+. S "does not change",
-  S "Therefore, in this case d" :+: getS ptem :+: S "/d" :+:
-  getS time :+: S "=0"],
+  S "Therefore, in this case d" :+: getES ptem :+: S "/d" :+:
+  getES time :+: S "=0"],
 
   [S "This derivation does not consider",
   (phrase boi `ofThe` short pcmat) `sC` S "as the", short pcmat,
@@ -1393,9 +1393,9 @@ s4_2_7_deriv_2 :: Contents
 s4_2_7_deriv_2 = EqnBlock
   ((C w_E) := UnaryOp (Integral (Just (Low 0), Just (High (C time)))
   ((C coil_HTC) * (C coil_SA) * ((C temp_C) - FCall (C temp_W)
-  [C time])) time) - UnaryOp (Integral (Just (Low 0), Just (High (C time)))
+  [C time])) (C time)) - UnaryOp (Integral (Just (Low 0), Just (High (C time)))
   ((C pcm_HTC) * (C pcm_SA) * ((FCall (C temp_W) [C time]) -
-  (FCall (C temp_PCM) [C time]))) time))
+  (FCall (C temp_PCM) [C time]))) (C time)))
 
 s4_2_7_deriv_3 :: UncertQ -> UnitalChunk -> CI -> ConceptChunk -> Contents
 s4_2_7_deriv_3 epcm en pcmat wa =
@@ -1407,7 +1407,7 @@ s4_2_7_deriv_4 :: Contents
 s4_2_7_deriv_4 = EqnBlock
   ((C pcm_E) := UnaryOp (Integral (Just (Low 0), Just (High (C time)))
   ((C pcm_HTC) * (C pcm_SA) * ((FCall (C temp_W) [C time]) - (FCall
-  (C temp_PCM) [C time]))) time))
+  (C temp_PCM) [C time]))) (C time)))
 
 s4_2_7_deriv_5 :: ConceptChunk -> CI -> CI -> Contents
 s4_2_7_deriv_5 eq pro rs = foldlSP [titleize' eq, S "(FIXME: Equation 7)" 

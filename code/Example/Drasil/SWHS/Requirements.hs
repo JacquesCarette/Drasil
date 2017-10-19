@@ -4,7 +4,7 @@ import Language.Drasil
 
 import Data.Drasil.Concepts.Documentation (output_, simulation, quantity, 
   input_, physical, constraint, condition, property)
-import Data.Drasil.Utils (getS)
+import Data.Drasil.Utils (getES)
 import Drasil.DocumentLanguage (mkRequirement)
 import Drasil.Sections.Requirements (nonFuncReqF)
 
@@ -44,8 +44,8 @@ req1 = mkRequirement "req1" $ foldlSentCol [
 req2 = mkRequirement "req2" $ foldlSentCol [
   S "Use the", plural input_, S "in", makeRef req1,
   S "to find the", phrase mass, S "needed for", acroIM 1, S "to",
-  acroIM 4 `sC` S "as follows, where", getS w_vol `isThe` phrase w_vol,
-  S "and", getS tank_vol `isThe` phrase tank_vol]
+  acroIM 4 `sC` S "as follows, where", getES w_vol `isThe` phrase w_vol,
+  S "and", getES tank_vol `isThe` phrase tank_vol]
 
 s5_1_2_Eqn1 = EqnBlock ((C w_mass) := (C w_vol) * (C w_density) :=
   ((C tank_vol) - (C pcm_vol)) * (C w_density) :=
@@ -62,36 +62,36 @@ req4 = mkRequirement "req4" $ foldlSent [
   titleize output_, S "the", phrase input_, plural quantity `sAnd`
   S "derived", plural quantity +: S "in the following list",
   S "the", plural quantity, S "from", acroR 1 `sC` S "the",
-  plural mass, S "from", acroR 2 `sC` getS tau_W,
-  sParen (S "from" +:+ acroIM 1) `sC` getS eta,
-  sParen (S "from" +:+ acroIM 1) `sC` getS tau_S_P,
-  sParen (S "from" +:+ acroIM 2) `sAnd` getS tau_L_P,
+  plural mass, S "from", acroR 2 `sC` getES tau_W,
+  sParen (S "from" +:+ acroIM 1) `sC` getES eta,
+  sParen (S "from" +:+ acroIM 1) `sC` getES tau_S_P,
+  sParen (S "from" +:+ acroIM 2) `sAnd` getES tau_L_P,
   sParen (S "from" +:+ acroIM 2)]
 --
 req5 = mkRequirement "req5" $ foldlSent [
   S "Calculate and", phrase output_, S "the", phrase temp_W,
-  sParen(getS temp_W :+: sParen (getS time)), S "over the",
+  sParen(getES temp_W :+: sParen (getES time)), S "over the",
   phrase simulation, phrase time, sParen (S "from" +:+ acroIM 1)]
 --
 req6 = mkRequirement "req6" $ foldlSent [
   S "Calculate and", phrase output_, S "the", phrase temp_PCM,
-  sParen (getS temp_PCM :+: sParen (getS time)), S "over the",
+  sParen (getES temp_PCM :+: sParen (getES time)), S "over the",
   phrase simulation, phrase time, sParen (S "from" +:+ acroIM 2)]
 --
 req7 = mkRequirement "req7" $ foldlSent [
   S "Calculate and", phrase output_, S "the", phrase w_E,
-  sParen (getS w_E :+: sParen (getS time)), S "over the",
+  sParen (getES w_E :+: sParen (getES time)), S "over the",
   phrase simulation, phrase time, sParen (S "from" +:+ acroIM 3)]
 --
 req8 = mkRequirement "req8" $ foldlSent [
   S "Calculate and", phrase output_, S "the", phrase pcm_E,
-  sParen (getS pcm_E :+: sParen (getS time)), S "over the",
+  sParen (getES pcm_E :+: sParen (getES time)), S "over the",
   phrase simulation, phrase time, sParen (S "from" +:+ acroIM 4)]
 --
 req9 = mkRequirement "req9" $ foldlSent [
   S "Verify that the", phrase energy, plural output_,
-  sParen (getS w_E :+: sParen (getS time) `sAnd` getS pcm_E :+:
-  sParen (getS time)), S "follow the", phrase CT.law_cons_energy, {-`sC`
+  sParen (getES w_E :+: sParen (getES time) `sAnd` getES pcm_E :+:
+  sParen (getES time)), S "follow the", phrase CT.law_cons_energy, {-`sC`
   S "as outlined in"
   --FIXME , makeRef s4_2_7 `sC` -} 
   S "with relative error no greater than 0.001%"]
@@ -99,12 +99,12 @@ req9 = mkRequirement "req9" $ foldlSent [
 req10 = mkRequirement "req10" $ foldlSent [
   S "Calculate and", phrase output_, S "the", phrase time,
   S "at which the", short phsChgMtrl, S "begins to melt",
-  getS t_init_melt, sParen (S "from" +:+ acroIM 2)]
+  getES t_init_melt, sParen (S "from" +:+ acroIM 2)]
 --
 req11 = mkRequirement "req11" $ foldlSent [
   S "Calculate and", phrase output_, S "the", phrase time,
   S "at which the", short phsChgMtrl, S "stops", phrase CT.melting,
-  getS t_final_melt, sParen (S "from" +:+ acroIM 2)]
+  getES t_final_melt, sParen (S "from" +:+ acroIM 2)]
 
 -- List structure same between all examples
 

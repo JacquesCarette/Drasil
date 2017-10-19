@@ -18,7 +18,7 @@ module Data.Drasil.SentenceStructures
   ) where
 
 import Language.Drasil
-import Data.Drasil.Utils (foldle, foldle1, getS, fmtU, getRVal)
+import Data.Drasil.Utils (foldle, foldle1, getES, fmtU, getRVal)
 import Data.Drasil.Concepts.Documentation
 import Data.Drasil.Concepts.Math (equation)
 import Control.Lens ((^.))
@@ -172,7 +172,8 @@ tAndDWAcc :: Concept s => s -> ItemType
 tAndDWAcc temp = Flat $ ((at_start temp) :+: sParenDash (short temp) :+: (temp ^. defn)) 
 -- term (symbol) - definition
 tAndDWSym :: (Concept s, Quantity a) => s -> a -> ItemType
-tAndDWSym tD sym = Flat $ ((at_start tD) :+: sParenDash (getS sym)) :+: (tD ^. defn)
+tAndDWSym tD sym = Flat $ ((at_start tD) :+: 
+  sParenDash (getES sym)) :+: (tD ^. defn)
 -- term - definition
 tAndDOnly :: Concept s => s -> ItemType
 tAndDOnly chunk  = Flat $ ((at_start chunk) +:+ S "- ") :+: (chunk ^. defn)
@@ -182,11 +183,11 @@ preceding `followA` num = preceding +:+ S "following" +:+ acroA num
 
 -- | Used when you want to say a term followed by its symbol. ex. "...using the Force F in..."
 getTandS :: (Quantity a, NamedIdea a) => a -> Sentence
-getTandS a = phrase a +:+ getS a
+getTandS a = phrase a +:+ getES a
 
 -- | get term, definition, and symbol
 getTDS :: (Quantity a, Concept a) => a -> Sentence
-getTDS a = phrase a +:+ (a ^. defn) +:+ getS a
+getTDS a = phrase a +:+ (a ^. defn) +:+ getES a
 
 --Ideally this would create a reference to the equation too
 eqN :: Int -> Sentence
@@ -206,10 +207,10 @@ extrctStrng _ = error "Invalid type extraction"
 -- these are the helper functions for inDataConstTbl
 
 fmtInputConstr :: (UncertainQuantity c, Constrained c, Quantity c) => c -> [c] -> [Sentence]
-fmtInputConstr q qlst = [getS q] ++ physC q qlst ++ sfwrC q qlst ++ [fmtU (E $ getRVal q) q] ++ typUncr q qlst
+fmtInputConstr q qlst = [getES q] ++ physC q qlst ++ sfwrC q qlst ++ [fmtU (E $ getRVal q) q] ++ typUncr q qlst
 
 fmtOutputConstr :: (Constrained c, Quantity c) => c -> [c] -> [Sentence]
-fmtOutputConstr q qlst = [getS q] ++ physC q qlst ++ sfwrC q qlst
+fmtOutputConstr q qlst = [getES q] ++ physC q qlst ++ sfwrC q qlst
 
 none :: Sentence
 none = S "None"

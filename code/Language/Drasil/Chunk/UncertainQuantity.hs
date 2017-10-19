@@ -47,8 +47,9 @@ instance NamedIdea UncertQ where
   getA (UQ q _) = getA q
 instance Quantity UncertQ where
   typ = qlens typ
-  getSymb (UQ q _) = getSymb q
-  getUnit (UQ q _) = getUnit q
+  getSymb s  (UQ q _) = getSymb s q
+  getUnit    (UQ q _) = getUnit q
+  getStagedS (UQ q _) = getStagedS q
 instance UncertainQuantity UncertQ where
   uncert f (UQ a b) = fmap (\x -> UQ a x) (f b)
 instance Constrained UncertQ where
@@ -108,8 +109,9 @@ instance NamedIdea UncertainChunk where
   getA (UCh n _) = getA n
 instance Quantity UncertainChunk where
   typ = cLens typ
-  getSymb (UCh c _) = getSymb c
-  getUnit (UCh c _) = getUnit c
+  getSymb s  (UCh c _) = getSymb s c
+  getUnit    (UCh c _) = getUnit c
+  getStagedS (UCh c _) = getStagedS c
 instance UncertainQuantity UncertainChunk where --makes sense?
   uncert f (UCh a b) = fmap (\x -> UCh a x) (f b)
 instance Constrained UncertainChunk where
@@ -150,8 +152,9 @@ instance NamedIdea UncertainWrapper where
   term = uwlens term
   getA (UncrtnW a) = getA a
 instance Quantity UncertainWrapper where
-  getSymb (UncrtnW a) = getSymb a
-  getUnit (UncrtnW a) = getUnit a
+  getSymb s  (UncrtnW a) = getSymb s a
+  getUnit    (UncrtnW a) = getUnit a
+  getStagedS (UncrtnW a) = getStagedS a
   typ = uwlens typ
 instance UncertainQuantity UncertainWrapper where
   uncert = uwlens uncert

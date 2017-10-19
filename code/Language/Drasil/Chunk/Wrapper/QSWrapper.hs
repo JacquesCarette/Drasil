@@ -24,7 +24,8 @@ instance Eq CQSWrapper where
   a == b = (a ^. id) == (b ^. id)
   
 instance Ord CQSWrapper where
-  compare a b = compare ((getSymb a) ^. symbol) ((getSymb b) ^. symbol)
+  compare a b = -- FIXME: Ordering hack. Should be context-dependent
+    compare ((getSymb Equational a) ^. symbol) ((getSymb Equational b) ^. symbol)
   
 instance NamedIdea CQSWrapper where
   term = cqslens term
@@ -35,9 +36,10 @@ instance Concept CQSWrapper where
   cdom = cqslens cdom
   
 instance Quantity CQSWrapper where
-  getSymb (CQS a) = getSymb a
+  getSymb s (CQS a) = getSymb s a
   getUnit (CQS a) = getUnit a
   typ = cqslens typ
+  getStagedS (CQS a) = getStagedS a
 
 -- | Constructor for CQSWrapper. Similar to 
 -- 'Language.Drasil.Chunk.Wrapper.NWrapper' in its use

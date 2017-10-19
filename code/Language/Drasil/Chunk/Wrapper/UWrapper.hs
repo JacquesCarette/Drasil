@@ -18,16 +18,17 @@ import Prelude hiding (id)
 
 -- | Unitary Wrapper
 data UWrapper where
-  UW :: (Unitary c, SymbolForm c) => c -> UWrapper
+  UW :: (Unitary c) => c -> UWrapper
   
-ulens :: (forall c. (Unitary c, SymbolForm c) => 
+ulens :: (forall c. (Unitary c) => 
   Simple Lens c a) -> Simple Lens UWrapper a
 ulens l f (UW a) = fmap (\x -> UW (set l x a)) (f (a ^. l))
 
 instance Eq UWrapper where
   a == b = (a ^. id) == (b ^. id)
 instance Ord UWrapper where
-  compare a b = compare (a ^. symbol) (b ^. symbol)
+  compare a b = -- FIXME: Ordering hack. Should be context-dependent
+    compare ((getSymb Equational a) ^. symbol) ((getSymb Equational b) ^. symbol)
 
 instance Chunk UWrapper where
   id = ulens id
@@ -36,30 +37,30 @@ instance NamedIdea UWrapper where
   getA (UW a) = getA a
 instance Quantity UWrapper where
   typ = ulens typ
-  getSymb (UW a) = getSymb a
-  getUnit (UW a) = getUnit a
+  getSymb s  (UW a) = getSymb s a
+  getUnit    (UW a) = getUnit a
+  getStagedS (UW a) = getStagedS a
 instance Unitary UWrapper where
   unit (UW a) = unit a
-instance SymbolForm UWrapper where
-  symbol = ulens symbol
   
 -- | Constructor for Unital Wrappers. Similar to 
 -- 'Language.Drasil.Chunk.Wrapper.NWrapper' in its use
-uw :: (Unitary c, SymbolForm c) => c -> UWrapper
+uw :: (Unitary c) => c -> UWrapper
 uw = UW
 
 -- | Unitary __and__ Concept Wrapper
 data UCWrapper where
-  UCW :: (Unitary c, SymbolForm c, Concept c) => c -> UCWrapper
+  UCW :: (Unitary c, Concept c) => c -> UCWrapper
   
-uclens :: (forall c. (Unitary c, SymbolForm c, Concept c) => 
+uclens :: (forall c. (Unitary c, Concept c) => 
   Simple Lens c a) -> Simple Lens UCWrapper a
 uclens l f (UCW a) = fmap (\x -> UCW (set l x a)) (f (a ^. l))
 
 instance Eq UCWrapper where
   a == b = (a ^. id) == (b ^. id)
 instance Ord UCWrapper where
-  compare a b = compare (a ^. symbol) (b ^. symbol)
+  compare a b = -- FIXME: Ordering hack. Should be context-dependent
+    compare ((getSymb Equational a) ^. symbol) ((getSymb Equational b) ^. symbol)
 
 instance Chunk UCWrapper where
   id = uclens id
@@ -68,18 +69,17 @@ instance NamedIdea UCWrapper where
   getA (UCW a) = getA a
 instance Quantity UCWrapper where
   typ = uclens typ
-  getSymb (UCW a) = getSymb a
-  getUnit (UCW a) = getUnit a
+  getSymb s  (UCW a) = getSymb s a
+  getUnit    (UCW a) = getUnit a
+  getStagedS (UCW a) = getStagedS a
 instance Unitary UCWrapper where
   unit (UCW a) = unit a
-instance SymbolForm UCWrapper where
-  symbol = uclens symbol
 instance Concept UCWrapper where
   defn = uclens defn
   cdom = uclens cdom
   
 -- | Constructor for Unital Wrappers. Similar to 
 -- 'Language.Drasil.Chunk.Wrapper.NWrapper' in its use
-ucw :: (Unitary c, SymbolForm c, Concept c) => c -> UCWrapper
+ucw :: (Unitary c, Concept c) => c -> UCWrapper
 ucw = UCW
 

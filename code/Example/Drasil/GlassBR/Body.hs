@@ -33,7 +33,7 @@ import Data.Drasil.Concepts.Software (correctness, verifiability,
   performance, errMsg)
 import Data.Drasil.Concepts.Math (graph, calculation, probability,
   parameter, surface, equation, shape)
-import Data.Drasil.Utils (getS, makeTMatrix, makeListRef, itemRefToSent,
+import Data.Drasil.Utils (getES, makeTMatrix, makeListRef, itemRefToSent,
   refFromType, enumSimple, enumBullet, prodUCTbl)
 import Data.Drasil.SentenceStructures (acroA, acroR, sVersus, sAnd, foldlSP,
   foldlSent, foldlOptions, foldlSent_, figureLabel, foldlList, showingCxnBw,
@@ -359,8 +359,8 @@ s5_2 mainObj compare1 compare2 factorOfComparison =
   `sAnd` (phrase compare2 `isThe` phrase requirement) +:+.
   (S "which" `isThe` (compare2 ^. defn)), S "The second", phrase condition,
   S "is to check whether the calculated", phrase factorOfComparison,
-  sParen (getS prob_br), S "is less than the tolerable",
-  phrase factorOfComparison, sParen (getS pb_tol),
+  sParen (getES prob_br), S "is less than the tolerable",
+  phrase factorOfComparison, sParen (getES pb_tol),
   S "which is obtained from the", phrase user, S "as an" +:+. phrase input_,
   S "If both", plural condition, S "return true then it's shown that the",
   phrase mainObj, S "is safe to use" `sC`
@@ -487,8 +487,8 @@ a3Desc = foldlSent [S "This", phrase system,
 a4Desc :: UnitaryChunk -> Sentence
 a4Desc mainIdea = foldlSent [S "The", plural value, S "provided in",
   makeRef (SRS.valsOfAuxCons SRS.missingP []), S "are assumed for the",
-  phrase mainIdea, sParen (getS mainIdea) `sC` S "and the",
-  plural materialProprty `sOf` foldlList (map getS
+  phrase mainIdea, sParen (getES mainIdea) `sC` S "and the",
+  plural materialProprty `sOf` foldlList (map getES
   (take 3 assumptionConstants))]
 
 a5Desc :: Sentence
@@ -509,7 +509,7 @@ a7Desc = foldlSent [S "The", phrase responseTy, S "considered in",
 a8Desc :: QDefinition -> Sentence
 a8Desc mainConcept = foldlSent [S "With", phrase reference, S "to",
   acroA 4, S "the", phrase value `sOf` phrase mainConcept,
-  sParen (getS mainConcept), S "is a", phrase constant, S "in" +:+.
+  sParen (getES mainConcept), S "is a", phrase constant, S "in" +:+.
   short gLassBR, S "It is calculated by the" +: phrase equation +:+.
   E (C mainConcept := equat mainConcept), S "Using this" `sC`
   E (C mainConcept := (Dbl 0.27))]
@@ -554,7 +554,7 @@ req1Desc = foldlSent [at_start input_, S "the", plural quantity, S "from",
   plural dimension `sC` (glassTy ^. defn) `sC` S "tolerable",
   phrase probability `sOf` phrase failure, S "and",
   (plural characteristic `ofThe` phrase blast), S "Note:",
-  getS plate_len `sAnd` getS plate_width,
+  getES plate_len `sAnd` getES plate_width,
   S "will be input in terms of", plural millimetre `sAnd`
   S "will be converted to the equivalent value in", plural metre]
 
@@ -562,14 +562,14 @@ s7_1_req1Table :: Contents
 s7_1_req1Table = Table
   [at_start symbol_, at_start description, S "Units"]
   (mkTable
-  [(\ch -> getS ch),
+  [getES,
    at_start, unit'2Contents] requiredInputs)
   (S "Required Inputs following R1") True
 
 req2Desc = foldlSent [S "The", phrase system,
   S "shall set the known", plural value +: S "as follows",
-  foldlList [(foldlsC (map getS (take 4 assumptionConstants)) `followA` 4),
-  ((getS constant_LoadDF) `followA` 8), (short lShareFac `followA` 5)]]
+  foldlList [(foldlsC (map getES (take 4 assumptionConstants)) `followA` 4),
+  ((getES constant_LoadDF) `followA` 8), (short lShareFac `followA` 5)]]
 
 --ItemType
 {-s7_1_req2 = (Nested (S "The" +:+ phrase system +:+
@@ -593,7 +593,7 @@ req4Desc = foldlSent [titleize output_, S "the", plural inQty,
   S "from", acroR 1 `andThe` S "known", plural quantity,
   S "from", acroR 2]
 
-req5Desc cmd = foldlSent_ [S "If", (getS is_safe1) `sAnd` (getS is_safe2),
+req5Desc cmd = foldlSent_ [S "If", (getES is_safe1) `sAnd` (getES is_safe2),
   sParen (S "from" +:+ (makeRef (gbSymbMapT t1SafetyReq))
   `sAnd` (makeRef (gbSymbMapT t2SafetyReq))), S "are true" `sC`
   phrase cmd, S "the", phrase message, Quote (safeMessage ^. defn),
@@ -609,13 +609,13 @@ testing1 = [probOfBr, calOfCap, calOfDe]
 s7_1_req6 = [(Enumeration $ Simple $ [(acroR 6, Nested (titleize output_ +:+
   S "the following" +: plural quantity)
   (Bullet $
-    map (\(a, d) -> Flat $ (at_start a) +:+ sParen (getS a) +:+
+    map (\(a, d) -> Flat $ (at_start a) +:+ sParen (getES a) +:+
     sParen (makeRef (gbSymbMapT d))) (zip testing testing1)
     ++
-    map (\d -> Flat $ (at_start d) +:+ sParen (getS d) +:+
+    map (\d -> Flat $ (at_start d) +:+ sParen (getES d) +:+
     sParen (makeRef (gbSymbMapD d))) s7_1_req6_pulledList
     ++
-    [Flat $ (titleize aspectR) +:+ sParen (getS aspectR) +:+
+    [Flat $ (titleize aspectR) +:+ sParen (getES aspectR) +:+
     E (equat aspectRWithEqn)]
     ))])]
 
@@ -649,7 +649,7 @@ lc1Desc mainConcept = foldlSent [acroA 3 `sDash` S "The",
 
 lc2Desc = foldlSent [acroA 4 `sC` (acroA 8 `sDash`
   S "Currently the"), plural value, S "for",
-  foldlList (map getS (take 3 assumptionConstants)),
+  foldlList (map getES (take 3 assumptionConstants)),
   S "are assumed to be the same for all" +:+. phrase glass,
   S "In the future these", plural value, S "can be changed to",
   phrase variable, plural input_]
@@ -859,14 +859,14 @@ s12_intro = foldlSP [
   S "used for interpolating", plural value, S "needed in the", plural model]
 
 fig_5 = Figure (titleize figure +: S "5" +:+ (demandq ^. defn) +:+
-  sParen (getS demand) `sVersus` at_start sD +:+ sParen (getAcc stdOffDist)
-  `sVersus` at_start char_weight +:+ sParen (getS sflawParamM))
+  sParen (getES demand) `sVersus` at_start sD +:+ sParen (getAcc stdOffDist)
+  `sVersus` at_start char_weight +:+ sParen (getES sflawParamM))
   (resourcePath ++ "ASTM_F2248-09.png")
 
 fig_6 = Figure (titleize figure +: S "6" +:+ S "Non dimensional" +:+
-  phrase lateralLoad +:+ sParen (getS dimlessLoad)
+  phrase lateralLoad +:+ sParen (getES dimlessLoad)
   `sVersus` titleize aspectR +:+ sParen (getAcc aR)
-  `sVersus` at_start stressDistFac +:+ sParen (getS stressDistFac))
+  `sVersus` at_start stressDistFac +:+ sParen (getES stressDistFac))
   (resourcePath ++ "ASTM_F2248-09_BeasonEtAl.png")
 
 blstRskInvWGlassSlab :: Sentence

@@ -3,7 +3,7 @@ module Drasil.GlassBR.IMods (iModels, probOfBr, calOfCap, calOfDe) where
 import Language.Drasil
 
 import Data.Drasil.SentenceStructures (acroA, foldlSent, isThe, sAnd, sOr)
-import Data.Drasil.Utils (getS)
+import Data.Drasil.Utils (getES)
 import Data.Drasil.Concepts.Math (parameter)
 import Data.Drasil.Concepts.Documentation (coordinate)
 
@@ -31,8 +31,8 @@ probOfBr = makeRC "probOfBr" (nounPhraseSP "Probability of Glass Breakage")
 
 pbdescr :: Sentence
 pbdescr =
-  foldlSent [(getS prob_br) `isThe` (S "calculated" +:+. (phrase prob_br)),
-  (getS risk_fun) `isThe` (phrase risk)]
+  foldlSent [(getES prob_br) `isThe` (S "calculated" +:+. (phrase prob_br)),
+  (getES risk_fun) `isThe` (phrase risk)]
 
 {--}
 
@@ -42,10 +42,10 @@ calOfCap = makeRC "calOfCap" (nounPhraseSP "Calculation of Capacity(LR)")
 
 capdescr :: Sentence
 capdescr =
-  foldlSent [(getS lRe) `isThe` (phrase lResistance) `sC`
-  S "which" +:+. S "is also called capacity" +:+. ((getS nonFL) `isThe`
-  (phrase nonFL)) +:+. ((getS glaTyFac) `isThe` (phrase glassTypeFac))
-  +:+. ((getS loadSF) `isThe` (phrase lShareFac)), S "Follows",
+  foldlSent [(getES lRe) `isThe` (phrase lResistance) `sC`
+  S "which" +:+. S "is also called capacity" +:+. ((getES nonFL) `isThe`
+  (phrase nonFL)) +:+. ((getES glaTyFac) `isThe` (phrase glassTypeFac))
+  +:+. ((getES loadSF) `isThe` (phrase lShareFac)), S "Follows",
   (acroA 2) `sAnd` (acroA 1), sParen (Quote 
   (S "In the development of this procedure, it was assumed that" +:+
   S "all four edges of the glass are simply supported and free to slip" +:+
@@ -62,14 +62,14 @@ calOfDe = makeRC "calOfDe" (nounPhraseSP "Calculation of Demand(q)")
   
 dedescr :: Sentence
 dedescr = 
-  foldlSent [(getS demand `sOr` phrase demandq) `sC`
+  foldlSent [(getES demand `sOr` phrase demandq) `sC`
   S "is the", (demandq ^. defn), 
   S "obtained from Figure 2 by interpolation using", --use MakeRef? Issue #216
-  (phrase standOffDist), sParen (getS standOffDist) `sAnd`
-  (getS eqTNTWeight), S "as" +:+. plural parameter, 
-  (getS eqTNTWeight), S "is defined as" +:+.
-  E (equat wtntWithEqn) +:+. ((getS char_weight) `isThe`
-  (phrase char_weight)) +:+. ((getS tNT) `isThe`
-  (phrase tNT)), (getS standOffDist) `isThe`
+  (phrase standOffDist), sParen (getES standOffDist) `sAnd`
+  (getES eqTNTWeight), S "as" +:+. plural parameter, 
+  (getES eqTNTWeight), S "is defined as" +:+.
+  E (equat wtntWithEqn) +:+. ((getES char_weight) `isThe`
+  (phrase char_weight)) +:+. ((getES tNT) `isThe`
+  (phrase tNT)), (getES standOffDist) `isThe`
   (phrase standOffDist), S "where", E (equat sdWithEqn), S "where",
   sParen (sdVectorSent), S "are", plural coordinate]

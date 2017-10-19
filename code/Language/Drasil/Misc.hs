@@ -3,6 +3,7 @@ module Language.Drasil.Misc where
 import Language.Drasil.Spec
 --import Language.Drasil.Expr
 import Language.Drasil.Chunk.Quantity
+import Language.Drasil.Chunk.SymbolForm (Stage(..))
 import Language.Drasil.Unit
 import Language.Drasil.Chunk.NamedIdea (NamedIdea, getA, short, term)
 import Language.Drasil.Chunk.Unitary
@@ -88,8 +89,14 @@ phrase's a = phrase a :+: S "'s"
 -- | Plural possesive function
 plural's a = plural a :+: S "'"
 
-symbol :: Quantity q => q -> Symbol
+symbol :: Quantity q => Stage -> q -> Symbol
 symbol = qsymb
+
+eqSymb :: Quantity q => q -> Symbol
+eqSymb = symbol Equational
+
+codeSymb :: Quantity q => q -> Symbol
+codeSymb = symbol Implementation
 
 
 --------------------- WIP ---------------------

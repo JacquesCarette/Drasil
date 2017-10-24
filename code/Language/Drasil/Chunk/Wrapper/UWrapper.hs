@@ -12,7 +12,7 @@ import Language.Drasil.Chunk
 import Language.Drasil.Chunk.NamedIdea
 import Language.Drasil.Chunk.Concept
 import Language.Drasil.Chunk.SymbolForm
-import Language.Drasil.Chunk.Quantity
+import qualified Language.Drasil.Chunk.Quantity as Q
 import Language.Drasil.Chunk.Unitary
 import Prelude hiding (id)
 
@@ -28,18 +28,18 @@ instance Eq UWrapper where
   a == b = (a ^. id) == (b ^. id)
 instance Ord UWrapper where
   compare a b = -- FIXME: Ordering hack. Should be context-dependent
-    compare ((getSymb Equational a) ^. symbol) ((getSymb Equational b) ^. symbol)
+    compare ((Q.getSymb Equational a) ^. symbol) ((Q.getSymb Equational b) ^. symbol)
 
 instance Chunk UWrapper where
   id = ulens id
 instance NamedIdea UWrapper where
   term = ulens term
   getA (UW a) = getA a
-instance Quantity UWrapper where
-  typ = ulens typ
-  getSymb s  (UW a) = getSymb s a
-  getUnit    (UW a) = getUnit a
-  getStagedS (UW a) = getStagedS a
+instance Q.Quantity UWrapper where
+  typ = ulens Q.typ
+  getSymb s  (UW a) = Q.getSymb s a
+  getUnit    (UW a) = Q.getUnit a
+  getStagedS (UW a) = Q.getStagedS a
 instance Unitary UWrapper where
   unit (UW a) = unit a
   
@@ -60,18 +60,18 @@ instance Eq UCWrapper where
   a == b = (a ^. id) == (b ^. id)
 instance Ord UCWrapper where
   compare a b = -- FIXME: Ordering hack. Should be context-dependent
-    compare ((getSymb Equational a) ^. symbol) ((getSymb Equational b) ^. symbol)
+    compare ((Q.getSymb Equational a) ^. symbol) ((Q.getSymb Equational b) ^. symbol)
 
 instance Chunk UCWrapper where
   id = uclens id
 instance NamedIdea UCWrapper where
   term = uclens term
   getA (UCW a) = getA a
-instance Quantity UCWrapper where
-  typ = uclens typ
-  getSymb s  (UCW a) = getSymb s a
-  getUnit    (UCW a) = getUnit a
-  getStagedS (UCW a) = getStagedS a
+instance Q.Quantity UCWrapper where
+  typ = uclens Q.typ
+  getSymb s  (UCW a) = Q.getSymb s a
+  getUnit    (UCW a) = Q.getUnit a
+  getStagedS (UCW a) = Q.getStagedS a
 instance Unitary UCWrapper where
   unit (UCW a) = unit a
 instance Concept UCWrapper where

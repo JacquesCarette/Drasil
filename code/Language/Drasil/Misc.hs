@@ -89,15 +89,6 @@ phrase's a = phrase a :+: S "'s"
 -- | Plural possesive function
 plural's a = plural a :+: S "'"
 
-symbol :: Quantity q => Stage -> q -> Symbol
-symbol = qsymb
-
-eqSymb :: Quantity q => q -> Symbol
-eqSymb = symbol Equational
-
-codeSymb :: Quantity q => q -> Symbol
-codeSymb = symbol Implementation
-
 
 --------------------- WIP ---------------------
 -- Function used to derive the unit of an equation. Takes a Relation, sorts the

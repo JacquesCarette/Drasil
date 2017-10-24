@@ -1,7 +1,7 @@
 {-# OPTIONS -Wall #-}
 {-# LANGUAGE GADTs,Rank2Types #-}
 module Language.Drasil.Chunk.Quantity 
-  ( Quantity(..), QWrapper, qw, qsymb, qs
+  ( Quantity(..), QWrapper, qw, symbol, eqSymb, codeSymb, qs
   ) where
 
 import Control.Lens
@@ -15,7 +15,7 @@ import Language.Drasil.Symbol (Symbol)
 
 import Prelude hiding (id)
 
-import Language.Drasil.Chunk.SymbolForm (SF(..), symbol, Stage(..)
+import qualified Language.Drasil.Chunk.SymbolForm as SF (SF(..), symbol, Stage(..)
                                         , getSymbForStage, StagedSymbolChunk)
 import Language.Drasil.Unit(UnitDefn)
 
@@ -27,22 +27,22 @@ class NamedIdea c => Quantity c where
   -- | Provides the 'Language.Drasil.Chunk.SymbolForm.SymbolForm' 
   -- (chunk which contains a symbol) for a quantity for a particular stage of 
   -- generation
-  getSymb  :: Stage -> c -> SF
+  getSymb  :: SF.Stage -> c -> SF.SF
   -- | Provides the units a quantity is measured in, if any, otherwise returns
   -- 'Nothing'
   getUnit  :: c -> Maybe UnitDefn
   -- | Provides the StagedSymbolChunk corresponding to a quantity
-  getStagedS :: c -> StagedSymbolChunk
+  getStagedS :: c -> SF.StagedSymbolChunk
 
 instance Quantity VarChunk where
-  getSymb st (VC _ s _) = SF $ getSymbForStage st s 
+  getSymb st (VC _ s _) = SF.SF $ SF.getSymbForStage st s 
   getUnit _  = Nothing
   typ f (VC n s t) = fmap (\x -> VC n s x) (f t)
   getStagedS (VC _ s _) = s
   
 instance Quantity ConVar where
   typ    f (CV c s t) = fmap (\x -> CV c s x) (f t)
-  getSymb st (CV _ s _) = SF $ getSymbForStage st s
+  getSymb st (CV _ s _) = SF.SF $ SF.getSymbForStage st s
   getUnit _ = Nothing
   getStagedS (CV _ s _) = s
 
@@ -67,7 +67,7 @@ instance Eq QWrapper where
 
 instance Ord QWrapper where
   compare a b = -- FIXME: Ordering hack. Should be context-dependent
-    compare ((getSymb Equational a) ^. symbol) ((getSymb Equational b) ^. symbol)
+    compare ((getSymb SF.Equational a) ^. SF.symbol) ((getSymb SF.Equational b) ^. SF.symbol)
 
 qlens :: (forall c. (Quantity c) => 
   Simple Lens c a) -> Simple Lens QWrapper a
@@ -79,7 +79,15 @@ qw, qs :: Quantity q => q -> QWrapper
 qw = QW
 
 qs = QW
--- | Helper function for getting a symbol from a quantity. May want to 
--- actually call it "symbol" and hide the existing "symbol" function soon.
-qsymb :: Quantity q => Stage -> q -> Symbol
-qsymb s q = (getSymb s q) ^. symbol
+
+-- | Helper function for getting a symbol at a given stage from a quantity.
+symbol :: Quantity q => SF.Stage -> q -> Symbol
+symbol s q = (getSymb s q) ^. SF.symbol
+
+-- | Helper function for getting a symbol in the Equational Stage
+eqSymb :: Quantity q => q -> Symbol
+eqSymb = symbol SF.Equational
+
+-- | Helper function for getting a symbol in the Implementation Stage
+codeSymb :: Quantity q => q -> Symbol
+codeSymb = symbol SF.Implementation

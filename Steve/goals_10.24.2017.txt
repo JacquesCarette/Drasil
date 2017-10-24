@@ -1,0 +1,16 @@
+Next short-term steps:
+
+1.  Add external library call to GOOL AST
+  1.1 add lib calls to GOOL + implement lib call syntax in the renderers -- can use simple GOOL code with library calls for testing  (1 wk?) 
+  1.2 make it work for generated swhs functions  (1 wk?) 
+  
+2.  Generate python code for swhs (1 wks?)
+
+3.  Add makefile generation to codegen  
+  3.1 fix the makefile AST  (1 wk?) 
+  3.2 add function to generate program makefile when code is generated  (2 day?) 
+  3.3 extend function to generate library makefile  (2 day?) 
+  
+4.  Generate c++, c#, java code for swhs  (1 wk?)
+
+  

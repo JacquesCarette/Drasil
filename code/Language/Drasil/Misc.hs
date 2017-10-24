@@ -3,11 +3,9 @@ module Language.Drasil.Misc where
 import Language.Drasil.Spec
 --import Language.Drasil.Expr
 import Language.Drasil.Chunk.Quantity
-import Language.Drasil.Chunk.SymbolForm (Stage(..))
 import Language.Drasil.Unit
 import Language.Drasil.Chunk.NamedIdea (NamedIdea, getA, short, term)
 import Language.Drasil.Chunk.Unitary
-import Language.Drasil.Symbol (Symbol)
 import qualified Language.Drasil.NounPhrase as NP
 
 --import Data.List (delete)

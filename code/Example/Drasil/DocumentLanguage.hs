@@ -251,7 +251,7 @@ mkRefSec si (RefProg c l) = section (titleize refmat) [c] (foldr (mkSubRef si) [
     mkSubRef (SI {_units = u}) (TUnits' con) l' = table_of_units u (tuIntro con) : l'
     mkSubRef (SI {_quants = v}) (TSymb con) l' = 
       (Section (titleize tOfSymb) 
-      (map Con [tsIntro con, (table Equational (sort $ nub v) at_start)])) : l'
+      (map Con [tsIntro con, (table Equational (sort $ filter (hasStageSymbol Equational . getStagedS) (nub v)) at_start)])) : l'
     mkSubRef (SI {_concepts = cccs}) (TSymb' f con) l' = (mkTSymb cccs f con) : l'
     mkSubRef (SI {_quants = v, _concepts = cccs, _namedIdeas = n}) TAandA l' = 
       (table_of_abb_and_acronyms $ 
@@ -262,7 +262,7 @@ mkRefSec si (RefProg c l) = section (titleize refmat) [c] (foldr (mkSubRef si) [
 mkTSymb :: (Quantity e, Concept e, Ord e) => 
   [e] -> LFunc -> [TSIntro] -> Section
 mkTSymb v f c = Section (titleize tOfSymb) (map Con [tsIntro c, 
-  table Equational (sort $nub v) (lf f)])
+  table Equational (sort $ filter (hasStageSymbol Equational . getStagedS) (nub v)) (lf f)])
   where lf Term = at_start
         lf Defn = (^. defn)
         lf (TermExcept cs) = (\x -> if (x ^. id) `elem` (map (^. id) cs) then

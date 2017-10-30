@@ -68,9 +68,9 @@ hFromt = mkDataDef' act_thick hFromt_eq (hMin)
 --DD4--
 
 strDisFac_eq :: Expr
---strDisFac_eq = FCall (C stressDistFac) 
-  --[C dimlessLoad, (C plate_len) / (C plate_width)]
-strDisFac_eq = FCall (asExpr interpZ) [V "SDF.txt", (C plate_len) / (C plate_width), C dimlessLoad]
+strDisFac_eq = FCall (C stressDistFac) 
+  [C dimlessLoad, (C plate_len) / (C plate_width)]
+--strDisFac_eq = FCall (asExpr interpZ) [V "SDF.txt", (C plate_len) / (C plate_width), C dimlessLoad]
   
 strDisFac :: QDefinition
 strDisFac = mkDataDef' stressDistFac strDisFac_eq
@@ -109,8 +109,8 @@ dimLL = mkDataDef' dimlessLoad dimLL_eq
 --DD8--
 
 tolPre_eq :: Expr
---tolPre_eq = FCall (C tolLoad) [C sdf_tol, (C plate_len) / (C plate_width)]
-tolPre_eq = FCall (asExpr interpY) [V "SDF.txt", (C plate_len) / (C plate_width), C sdf_tol]
+tolPre_eq = FCall (C tolLoad) [C sdf_tol, (C plate_len) / (C plate_width)]
+--tolPre_eq = FCall (asExpr interpY) [V "SDF.txt", (C plate_len) / (C plate_width), C sdf_tol]
 
 tolPre :: QDefinition
 tolPre = mkDataDef' tolLoad tolPre_eq (qHtTlExtra)

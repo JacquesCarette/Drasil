@@ -1,7 +1,8 @@
 {-# Language GADTs, Rank2Types #-}
 module Language.Drasil.Chunk.SymbolForm 
   (SymbolForm(..), SF(..), SymbolChunk, sc, ssc
-  , Stage(..), ssc', StagedSymbolChunk, getSymbForStage) where
+  , Stage(..), ssc', StagedSymbolChunk, getSymbForStage, ssc''
+  , hasStageSymbol) where
 
 import Language.Drasil.Chunk
 import Control.Lens (Simple, Lens, (^.), set)
@@ -67,7 +68,9 @@ ssc' :: String -> Symbol -> StagedSymbolChunk
 ssc' i s = SSC i (Map.fromList [(Equational, symC), (Implementation, symC)])
   where symC = sc i s
 
-
+ssc'' :: String -> [(Stage, Symbol)] -> StagedSymbolChunk
+ssc'' i ss = SSC i (Map.fromList ss')
+  where ss' = map (\(a,b) -> (a, sc i b)) ss
 -- FIXME: More fine-grained stages.
 -- | Stages correspond to what we're trying to look up. They range from abstract
 -- to concrete.                  
@@ -83,6 +86,9 @@ data Stage = Equational -- AKA Theoretical / Abstract-design
 instance Show Stage where
   show Equational     = "Theoretical stage"
   show Implementation = "Implementation Stage"
+
+hasStageSymbol :: Stage -> StagedSymbolChunk -> Bool
+hasStageSymbol st (SSC _ sm) = Map.member st sm
   
 getSymbForStage :: Stage -> StagedSymbolChunk -> SymbolChunk
 getSymbForStage st (SSC i sm) = let lookC = Map.lookup st sm in

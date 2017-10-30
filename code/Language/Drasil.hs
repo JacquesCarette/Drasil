@@ -18,7 +18,7 @@ module Language.Drasil (
   , (^:), (/:), (*:), new_unit
   -- Chunk
   , Chunk(..), VarChunk(..), ConceptChunk
-  , makeVC, vc, makeVCObj, SymbolForm
+  , makeVC, makeVC', vc, makeVCObj, SymbolForm
   , dcc, dccWDS, dccWDS', cv, dcc', vc', vc'', ccs, cc, cc'
   , Quantity(..), QWrapper, qw, ConVar(..), cvR, cvRs
   , Concept(..), cw, CWrapper
@@ -112,6 +112,7 @@ module Language.Drasil (
   , Theory(..), tc', TheoryChunk, TheoryModel, tm, tw
   -- Chunk.SymbolForm
   , SF, SymbolChunk, sc, ssc, ssc', Stage(..), StagedSymbolChunk, eqSymb, codeSymb
+  , ssc'', hasStageSymbol
   -- Code.Imperative.Lang
   , Lang(..)
 ) where

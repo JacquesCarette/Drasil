@@ -23,8 +23,8 @@ dd1CtrOfMass :: QDefinition
 dd1CtrOfMass = mkDataDef pos_CM ctrOfMassEqn
 
 ctrOfMassEqn :: Expr
-ctrOfMassEqn = (UnaryOp (Summation Nothing
-  ((C mass_i) * (C pos_i)))) / (C mTot)
+ctrOfMassEqn = (summation Nothing
+  ((C mass_i) * (C pos_i))) / (C mTot)
 
 -- DD2 : Linear displacement --
 

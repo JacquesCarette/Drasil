@@ -1049,12 +1049,12 @@ s4_2_3_deriv_2 t1ct vo = foldlSPCol [S "Integrating", swhsSymbMapTRef t1ct,
   S "over a", phrase vo, sParen (getES vo) `sC` S "we have"]
 
 s4_2_3_deriv_3 = EqnBlock
-  ((Neg (UnaryOp (Integral (Just (Low (C vol)), Nothing)
-  ((C gradient) :. (C thFluxVect)) (C vol)))) +
-  UnaryOp (Integral (Just (Low (C vol)), Nothing)
-  (C vol_ht_gen) (C vol)) :=
-  UnaryOp (Integral (Just (Low (C vol)), Nothing) ((C density)
-  * (C heat_cap_spec) * Deriv Part (C temp) (C time)) (C vol)))
+  ((Neg (integral (Just (Low (C vol)), Nothing)
+  ((C gradient) :. (C thFluxVect)) vol)) +
+  (integral (Just (Low (C vol)), Nothing)
+  (C vol_ht_gen) vol) :=
+  (integral (Just (Low (C vol)), Nothing) ((C density)
+  * (C heat_cap_spec) * Deriv Part (C temp) (C time)) vol))
 
 s4_2_3_deriv_4 :: ConceptChunk -> ConVar -> UnitalChunk -> UnitalChunk ->
   ConVar -> ConceptChunk -> Contents
@@ -1065,11 +1065,11 @@ s4_2_3_deriv_4 gd su vo tfv unv un = foldlSPCol [S "Applying", titleize gd,
   S "outward", phrase unv, S "for a", phrase su]
 
 s4_2_3_deriv_5 = EqnBlock
-  ((Neg (UnaryOp (Integral (Just (Low (C surface)),
-  Nothing) ((C thFluxVect) :. (C uNormalVect)) (C surface)))) +
-  (UnaryOp (Integral (Just (Low (C vol)), Nothing) (C vol_ht_gen)
-  (C vol))) := UnaryOp (Integral (Just (Low (C vol)), Nothing)
-  ((C density) * (C heat_cap_spec) * Deriv Part (C temp) (C time)) (C vol)))
+  ((Neg (integral (Just (Low (C surface)),
+  Nothing) ((C thFluxVect) :. (C uNormalVect)) surface)) +
+  (integral (Just (Low (C vol)), Nothing) (C vol_ht_gen) vol) := 
+  (integral (Just (Low (C vol)), Nothing)
+  ((C density) * (C heat_cap_spec) * Deriv Part (C temp) (C time)) vol))
 
 s4_2_3_deriv_6 :: UnitalChunk -> UnitalChunk -> Contents
 s4_2_3_deriv_6 vo vhg = foldlSPCol [S "We consider an arbitrary" +:+.
@@ -1078,9 +1078,9 @@ s4_2_3_deriv_6 vo vhg = foldlSPCol [S "We consider an arbitrary" +:+.
 
 s4_2_3_deriv_7 = EqnBlock
   ((C ht_flux_in) * (C in_SA) - (C ht_flux_out) *
-  (C out_SA) + (C vol_ht_gen) * (C vol) := UnaryOp (Integral
-  (Just (Low (C vol)), Nothing) ((C density) * (C heat_cap_spec) *
-  Deriv Part (C temp) (C time)) (C vol)))
+  (C out_SA) + (C vol_ht_gen) * (C vol) := 
+  (integral (Just (Low (C vol)), Nothing) ((C density) * (C heat_cap_spec) *
+  Deriv Part (C temp) (C time)) vol))
 
 s4_2_3_deriv_8 :: UnitalChunk -> UnitalChunk -> UnitalChunk -> UnitalChunk ->
   UnitalChunk -> UnitalChunk -> UnitalChunk -> UnitalChunk -> CI -> Contents ->
@@ -1391,11 +1391,11 @@ s4_2_7_deriv_1 lce ewat en co pcmat d1hfc d2hfp su ht  =
 
 s4_2_7_deriv_2 :: Contents
 s4_2_7_deriv_2 = EqnBlock
-  ((C w_E) := UnaryOp (Integral (Just (Low 0), Just (High (C time)))
+  ((C w_E) := (integral (Just (Low 0), Just (High (C time)))
   ((C coil_HTC) * (C coil_SA) * ((C temp_C) - FCall (C temp_W)
-  [C time])) (C time)) - UnaryOp (Integral (Just (Low 0), Just (High (C time)))
+  [C time])) time) - (integral (Just (Low 0), Just (High (C time)))
   ((C pcm_HTC) * (C pcm_SA) * ((FCall (C temp_W) [C time]) -
-  (FCall (C temp_PCM) [C time]))) (C time)))
+  (FCall (C temp_PCM) [C time]))) time))
 
 s4_2_7_deriv_3 :: UncertQ -> UnitalChunk -> CI -> ConceptChunk -> Contents
 s4_2_7_deriv_3 epcm en pcmat wa =
@@ -1405,9 +1405,9 @@ s4_2_7_deriv_3 epcm en pcmat wa =
 
 s4_2_7_deriv_4 :: Contents
 s4_2_7_deriv_4 = EqnBlock
-  ((C pcm_E) := UnaryOp (Integral (Just (Low 0), Just (High (C time)))
+  ((C pcm_E) := (integral (Just (Low 0), Just (High (C time)))
   ((C pcm_HTC) * (C pcm_SA) * ((FCall (C temp_W) [C time]) - (FCall
-  (C temp_PCM) [C time]))) (C time)))
+  (C temp_PCM) [C time]))) time))
 
 s4_2_7_deriv_5 :: ConceptChunk -> CI -> CI -> Contents
 s4_2_7_deriv_5 eq pro rs = foldlSP [titleize' eq, S "(FIXME: Equation 7)" 

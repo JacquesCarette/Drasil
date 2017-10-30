@@ -200,9 +200,9 @@ fdec :: (Quantity c) => c -> Space -> FuncStmt
 fdec v t = FDec (codevar v) (spaceToCodeType t)
 
 asVC :: Func -> VarChunk
-asVC (FDef (FuncDef n _ _ _)) = makeVC n (nounPhraseSP n) (Atomic n)
-asVC (FData (FuncData n _)) = makeVC n (nounPhraseSP n) (Atomic n)
-asVC (FCD cd) = vc' cd (codeSymb cd) (cd ^. typ)
+asVC (FDef (FuncDef n _ _ _)) = makeVC' n (nounPhraseSP n) (Atomic n)
+asVC (FData (FuncData n _)) = makeVC' n (nounPhraseSP n) (Atomic n)
+asVC (FCD cd) = codeVC cd (codeSymb cd) (cd ^. typ)
 
 asExpr :: Func -> Expr
 asExpr f = C $ asVC f

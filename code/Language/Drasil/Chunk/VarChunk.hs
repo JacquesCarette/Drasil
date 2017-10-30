@@ -40,8 +40,10 @@ makeVC :: String -> NP -> Symbol -> VarChunk
 makeVC i des sym = vc i des sym Real
 
 makeVC' :: String -> NP -> Symbol -> VarChunk
-makeVC' i des sym = vcSt i des (ssc'' i [(Implementation, sym)]) Real
+makeVC' i des sym = makeVC'' i des sym Real
 
+makeVC'' :: String -> NP -> Symbol -> Space -> VarChunk
+makeVC'' i des sym typ = vcSt i des (ssc'' i [(Implementation, sym)]) typ
 -- | Creates a VarChunk from an id, term, symbol, and space
 vc :: String -> NP -> Symbol -> Space -> VarChunk
 vc i des sym space = VC (nw $ nc i des) (ssc' i sym) space

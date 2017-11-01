@@ -70,6 +70,6 @@ script:
 
 notifications:
   email:
-    - szymczak@mcmaster.ca
+    - szymczdm@mcmaster.ca
   on_success: change
   on_failure: always

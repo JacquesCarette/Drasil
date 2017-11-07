@@ -65,7 +65,7 @@ nopcm_build: build
   
 swhs_diff: swhs_build
 	- $(DIFF) ./stable/swhs/$(SWHS_PREF)SRS.tex ./build/$(SWHS_DIR)/SRS/$(SWHS_PREF)SRS.tex &> $(SWHS_PREF)log.log
-	- $(DIFF) ./stable/swhs/$(SWHS_PREF)MG.tex ./build/$(SWHS_DIR)/MG/$(SWHS_PREF)MG.tex >> $(SWHS_PREF)log.log 2>&1
+#	- $(DIFF) ./stable/swhs/$(SWHS_PREF)MG.tex ./build/$(SWHS_DIR)/MG/$(SWHS_PREF)MG.tex >> $(SWHS_PREF)log.log 2>&1
 	- $(DIFF) ./stable/swhs/$(SWHS_PREF)SRS.css ./build/$(SWHS_DIR)/Website/$(SWHS_PREF)SRS.css >> $(SWHS_PREF)log.log 2>&1
 	- $(DIFF) ./stable/swhs/$(SWHS_PREF)SRS.html ./build/$(SWHS_DIR)/Website/$(SWHS_PREF)SRS.html >> $(SWHS_PREF)log.log 2>&1
 	
@@ -83,7 +83,7 @@ ssp_diff: ssp_build
 	
 glassbr_diff: glassbr_build
 	- $(DIFF) ./stable/glassbr/$(GLASS_PREF)SRS.tex ./build/$(GLASS_DIR)/SRS/$(GLASS_PREF)SRS.tex &> $(GLASS_PREF)log.log
-	- $(DIFF) ./stable/glassbr/$(GLASS_PREF)MG.tex ./build/$(GLASS_DIR)/MG/$(GLASS_PREF)MG.tex >> $(GLASS_PREF)log.log 2>&1
+#	- $(DIFF) ./stable/glassbr/$(GLASS_PREF)MG.tex ./build/$(GLASS_DIR)/MG/$(GLASS_PREF)MG.tex >> $(GLASS_PREF)log.log 2>&1
 	- $(DIFF) ./stable/glassbr/$(GLASS_PREF)SRS.css ./build/$(GLASS_DIR)/Website/$(GLASS_PREF)SRS.css >> $(GLASS_PREF)log.log 2>&1
 	- $(DIFF) ./stable/glassbr/$(GLASS_PREF)SRS.html ./build/$(GLASS_DIR)/Website/$(GLASS_PREF)SRS.html >> $(GLASS_PREF)log.log 2>&1
 	

@@ -34,32 +34,32 @@ build:
 	mkdir build  
   
 swhs_build: build
-	stack build :$(SWHS_EXE)
+	stack $(stackArgs) build :$(SWHS_EXE)
 	mkdir -p build/$(SWHS_DIR)
 	cd build/$(SWHS_DIR) && stack exec $(SWHS_EXE)
   
 tiny_build: build
-	stack build :$(TINY_EXE)
+	stack $(stackArgs) build :$(TINY_EXE)
 	mkdir -p build/$(TINY_DIR)
 	cd build/$(TINY_DIR) && stack exec $(TINY_EXE)  
   
 ssp_build: build
-	stack build :$(SSP_EXE)
+	stack $(stackArgs) build :$(SSP_EXE)
 	mkdir -p build/$(SSP_DIR)
 	cd build/$(SSP_DIR) && stack exec $(SSP_EXE) 
   
 glassbr_build: build
-	stack build :$(GLASS_EXE)
+	stack $(stackArgs) build :$(GLASS_EXE)
 	mkdir -p build/$(GLASS_DIR)
 	cd build/$(GLASS_DIR) && stack exec $(GLASS_EXE) 
   
 gamephys_build: build
-	stack build :$(GAME_EXE)
+	stack $(stackArgs) build :$(GAME_EXE)
 	mkdir -p build/$(GAME_DIR)
 	cd build/$(GAME_DIR) && stack exec $(GAME_EXE) 
   
 nopcm_build: build
-	stack build :$(NoPCM_EXE)
+	stack $(stackArgs) build :$(NoPCM_EXE)
 	mkdir -p build/$(NoPCM_DIR)
 	cd build/$(NoPCM_DIR) && stack exec $(NoPCM_EXE) 
   

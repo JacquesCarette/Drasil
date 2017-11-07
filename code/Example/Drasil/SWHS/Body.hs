@@ -39,15 +39,12 @@ import Drasil.SWHS.Unitals (pcm_SA, temp_W, temp_PCM, pcm_HTC, pcm_E,
   w_vol, swhsConstrained, swhsOutputs, swhsInputs, swhsSymbols)
 import Drasil.SWHS.Concepts (progName, sWHT, water, rightSide, phsChgMtrl,
   coil, perfect_insul, tank, transient, gauss_div, swhs_pcm,
-  phase_change_material, tank_pcm, swhsFull)
+  phase_change_material, tank_pcm)
 import Drasil.SWHS.TMods (tModels, t1ConsThermE, s4_2_2_swhsTMods)
 import Drasil.SWHS.IMods (s4_2_5_IMods)
 import Drasil.SWHS.DataDefs (swhsSymbMapDRef, swhsSymbMapTRef, swhsDataDefs,
   swhsSymMap, dd1HtFluxC, dd2HtFluxP, swhsSymbMapT, s4_2_4_swhsDataDefs)
 import Drasil.SWHS.GenDefs (swhsGenDefs)
-import Drasil.SWHS.Modules (modules)
-import Drasil.SWHS.Changes (likelyChanges, unlikelyChanges)
-import Drasil.SWHS.Reqs (reqs)
 import Drasil.SWHS.References (s9_swhs_citations)
 import Drasil.SWHS.Assumptions (s4_2_1_list, assump3, assump4, assump5,
   assump6, assump13, assump15, assump16, assump17, assump18)
@@ -61,8 +58,6 @@ import qualified Drasil.SRS as SRS (inModel, missingP, likeChg,
   funcReq, propCorSol, genDefn, dataDefn, thModel, probDesc, goalStmt,
   sysCont, reference)
 
-import Drasil.Template.MG (mgDoc)
-import Drasil.Template.DD (makeDD)
 import Drasil.DocumentLanguage (DocDesc, mkDoc, tsymb'',
   LFunc (TermExcept),
   Literature (Lit, Doc'),
@@ -173,13 +168,6 @@ swhs_srs' :: Document
 swhs_srs' = mkDoc mkSRS (for) swhs_si
 
 -- It is sometimes hard to remember to add new sections both here and above.
-
-mgBod :: [Section]
-(mgBod, _) = makeDD likelyChanges unlikelyChanges reqs modules
-
-swhs_mg :: Document
-swhs_mg = mgDoc swhsFull (for'' titleize titleize) swhsAuthors mgBod
-
 
 -- =================================== --
 -- SOFTWARE REQUIREMENTS SPECIFICATION --

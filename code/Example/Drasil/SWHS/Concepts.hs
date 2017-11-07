@@ -28,7 +28,7 @@ swhsFull    = npnc "swhsFull" (progName `with'` phsChgMtrl)
 charging, coil, discharging, gauss_div,
   perfect_insul, phase_change_material, swhs_pcm, tank,
   tank_pcm, transient, water, sWHT, tank_para :: ConceptChunk
-swhsProg :: NamedChunk
+
 
  
 charging = dcc "charging" (nounPhraseSP "charging") "charging of the tank"
@@ -57,23 +57,6 @@ phase_change_material = dcc "pcm" (phsChgMtrl ^. term)
 tank_para = dcc "tank_para" (compoundPhrase' (tank ^. term)
   (parameter ^. term))
   "Values associated with the tank"
-     
---FIXME: Temporarily have to manually create the compound phrase, because it
---uses acronym and a sentence.
-
-
-{- attempt 1-}
---swhsProg = npnc' "swhsProg" (nounPhrase''
---  (compoundNPNC'' short phrase progName (program))
---  (short progName +:+ (phrase $ program))
---  CapFirst CapWords) "SWHS"
-{- attempt 2-}
-
-swhsProg = npnc' "swhsProg" (nounPhrase'' (short progName +:+
-  phrase program) (short progName +:+ phrase program)
-  CapFirst CapWords) "SWHS"
-{- attempt 3-} --failed since short is not type NP -> Sentence
---swhsProg = compoundNC''' short progName program
 
 -- Nounphrase'' hack to get nounPhraseSP words to accept
 -- nounPhrases instead of strings

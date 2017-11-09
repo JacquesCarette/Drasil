@@ -64,6 +64,7 @@ import Drasil.Sections.TraceabilityMandGs (traceGIntro)
 import Drasil.Sections.SpecificSystemDescription (solChSpecF,
   inDataConstTbl, outDataConstTbl, dataConstraintUncertainty, goalStmtF,
   physSystDesc, termDefnF, probDescF, specSysDesF)
+import Drasil.DocumentLanguage.Definitions
 
 {--}
 
@@ -92,13 +93,12 @@ mkSRS = RefSec (RefProg intro [TUnits, tsymb [TSPurpose, SymbOrder], TAandA]) :
     SystCons [] []]) :
   ScpOfProjSec (ScpOfProjProg (short gLassBR) (s5_1_table) (s5_2 (glaSlab)
     (capacity) (demandq) (probability))) :
-  SSDSec (SSDVerb s6) :
-  {-SSDSec (SSDProg
+  --SSDSec (SSDVerb s6) :
+  SSDSec (SSDProg
     [SSDProblem  (PDProg start gLassBR ending [s6_1_1, s6_1_2, s6_1_3])
     , SSDSolChSpec (SCSProg
     [DDs [Label, Symbol, Units, DefiningEquation,
-          Description Verbose IncludeUnits (S "Testing")] dataDefns]
-    (symbolMap dataDefns))]) :-}
+          Description Verbose IncludeUnits (S "Testing")] dataDefns])]) :
   ReqrmntSec (ReqsProg [
     FReqsSub s7_1_list, 
     NonFReqsSub [performance] (gBRpriorityNFReqs)

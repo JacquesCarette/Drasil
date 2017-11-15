@@ -14,6 +14,13 @@ Drasil is used to generate *all* requisite software artifacts from a common
 These recipes allow us to specify which pieces of knowledge should be used in
 which artifacts, how to transform them, and more.
 
+Drasil is being designed and implemented using a grounded theory approach.  To
+determine what is needed and make the design general, we are concurrently
+implementing six examples (case studies) in Drasil.  (The specific examples are
+listed below under "Building specific examples.")  These examples were first
+written using a typical "manual" approach.  The full files for the case studies
+are available at [here](https://github.com/smiths/caseStudies).
+
 For more information on Drasil, please read 
 [this paper](https://github.com/JacquesCarette/literate-scientific-software/blob/master/Dan/ICSE%20Workshop%20-%20SE4Science/ICSE_LiterateFrameworkForSCSoftware_LSS.pdf)
 or take a look at 
@@ -53,9 +60,6 @@ in ./code/ for more information.
 --------------------------------------------------
 ### Summary of Folder Structure and File Contents
 --------------------------------------------------
-
-**Case Studies**
-  - Manually produced code/documentation for the Chipmunk2D, GlassBR, and SWHS examples
 
 **Chipmunk2D-master**
   - A copy of the Chipmunk2D engine

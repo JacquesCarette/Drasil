@@ -57,8 +57,8 @@ capdescr =
 
 calOfDe :: RelationConcept
 calOfDe = makeRC "calOfDe" (nounPhraseSP "Calculation of Demand(q)") 
-  --dedescr $ (C demand) := FCall (C demand) [C eqTNTWeight, C standOffDist] 
-  dedescr $ (C demand) := FCall (asExpr interpY) [V "TSD.txt", C standOffDist, C eqTNTWeight] 
+  dedescr $ (C demand) := FCall (C demand) [C eqTNTWeight, C standOffDist] 
+  --dedescr $ (C demand) := FCall (asExpr interpY) [V "TSD.txt", C standOffDist, C eqTNTWeight] 
   
 dedescr :: Sentence
 dedescr = 

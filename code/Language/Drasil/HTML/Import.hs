@@ -11,13 +11,13 @@ import Language.Drasil.Chunk.ExprRelat (relat)
 import Language.Drasil.Chunk.Module
 import Language.Drasil.Chunk.NamedIdea (term, short, getA)
 import Language.Drasil.Chunk.Concept (defn)
-import Language.Drasil.Chunk.Quantity (Quantity(..))
+import Language.Drasil.Chunk.Quantity (Quantity(..), eqSymb)
 import Language.Drasil.ChunkDB (HasSymbolTable(..), getUnitLup, symbLookup)
 import Language.Drasil.Expr.Extract
 import Language.Drasil.Config (verboseDDDescription)
 import Language.Drasil.Document
 import Language.Drasil.Symbol
-import Language.Drasil.Misc (unit'2Contents, eqSymb)
+import Language.Drasil.Misc (unit'2Contents)
 import Language.Drasil.SymbolAlphabet (lD)
 import Language.Drasil.NounPhrase (phrase, titleize)
 import Language.Drasil.Unit (usymb)
@@ -232,7 +232,9 @@ lay x@(LikelyChange lc) sm =
   H.LikelyChange (spec (phrase $ lc ^. term) sm) (spec (refName x) sm) (spec (short lc) sm)
 lay x@(UnlikelyChange uc) sm = 
   H.UnlikelyChange (spec (phrase $ uc ^. term) sm) (spec (refName x) sm) (spec (short uc) sm)
-lay (Defnt _ _ _)        _ = H.Paragraph (H.EmptyS)  -- need to implement!
+lay (Defnt dtyp pairs rn) sm = H.Definition dtyp (layPairs pairs) (spec rn sm)
+  where layPairs = map (\(x,y) -> (x, (map (\z -> lay z sm) y)))
+lay (Defnt _ _ _)        _ = error "lay Defnt undefined at HTML/Import.hs" -- need to implement!
 lay (GDef)               _ = H.Paragraph (H.EmptyS)  -- need to implement!
 lay (IMod)               _ = H.Paragraph (H.EmptyS)  -- need to implement!
 lay (TMod ps rf r)      sm = H.Definition (Theory r) 

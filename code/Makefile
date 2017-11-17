@@ -34,38 +34,38 @@ build:
 	mkdir build  
   
 swhs_build: build
-	stack build :$(SWHS_EXE)
+	stack $(stackArgs) build :$(SWHS_EXE)
 	mkdir -p build/$(SWHS_DIR)
 	cd build/$(SWHS_DIR) && stack exec $(SWHS_EXE)
   
 tiny_build: build
-	stack build :$(TINY_EXE)
+	stack $(stackArgs) build :$(TINY_EXE)
 	mkdir -p build/$(TINY_DIR)
 	cd build/$(TINY_DIR) && stack exec $(TINY_EXE)  
   
 ssp_build: build
-	stack build :$(SSP_EXE)
+	stack $(stackArgs) build :$(SSP_EXE)
 	mkdir -p build/$(SSP_DIR)
 	cd build/$(SSP_DIR) && stack exec $(SSP_EXE) 
   
 glassbr_build: build
-	stack build :$(GLASS_EXE)
+	stack $(stackArgs) build :$(GLASS_EXE)
 	mkdir -p build/$(GLASS_DIR)
 	cd build/$(GLASS_DIR) && stack exec $(GLASS_EXE) 
   
 gamephys_build: build
-	stack build :$(GAME_EXE)
+	stack $(stackArgs) build :$(GAME_EXE)
 	mkdir -p build/$(GAME_DIR)
 	cd build/$(GAME_DIR) && stack exec $(GAME_EXE) 
   
 nopcm_build: build
-	stack build :$(NoPCM_EXE)
+	stack $(stackArgs) build :$(NoPCM_EXE)
 	mkdir -p build/$(NoPCM_DIR)
 	cd build/$(NoPCM_DIR) && stack exec $(NoPCM_EXE) 
   
 swhs_diff: swhs_build
 	- $(DIFF) ./stable/swhs/$(SWHS_PREF)SRS.tex ./build/$(SWHS_DIR)/SRS/$(SWHS_PREF)SRS.tex &> $(SWHS_PREF)log.log
-	- $(DIFF) ./stable/swhs/$(SWHS_PREF)MG.tex ./build/$(SWHS_DIR)/MG/$(SWHS_PREF)MG.tex >> $(SWHS_PREF)log.log 2>&1
+#	- $(DIFF) ./stable/swhs/$(SWHS_PREF)MG.tex ./build/$(SWHS_DIR)/MG/$(SWHS_PREF)MG.tex >> $(SWHS_PREF)log.log 2>&1
 	- $(DIFF) ./stable/swhs/$(SWHS_PREF)SRS.css ./build/$(SWHS_DIR)/Website/$(SWHS_PREF)SRS.css >> $(SWHS_PREF)log.log 2>&1
 	- $(DIFF) ./stable/swhs/$(SWHS_PREF)SRS.html ./build/$(SWHS_DIR)/Website/$(SWHS_PREF)SRS.html >> $(SWHS_PREF)log.log 2>&1
 	
@@ -83,7 +83,7 @@ ssp_diff: ssp_build
 	
 glassbr_diff: glassbr_build
 	- $(DIFF) ./stable/glassbr/$(GLASS_PREF)SRS.tex ./build/$(GLASS_DIR)/SRS/$(GLASS_PREF)SRS.tex &> $(GLASS_PREF)log.log
-	- $(DIFF) ./stable/glassbr/$(GLASS_PREF)MG.tex ./build/$(GLASS_DIR)/MG/$(GLASS_PREF)MG.tex >> $(GLASS_PREF)log.log 2>&1
+#	- $(DIFF) ./stable/glassbr/$(GLASS_PREF)MG.tex ./build/$(GLASS_DIR)/MG/$(GLASS_PREF)MG.tex >> $(GLASS_PREF)log.log 2>&1
 	- $(DIFF) ./stable/glassbr/$(GLASS_PREF)SRS.css ./build/$(GLASS_DIR)/Website/$(GLASS_PREF)SRS.css >> $(GLASS_PREF)log.log 2>&1
 	- $(DIFF) ./stable/glassbr/$(GLASS_PREF)SRS.html ./build/$(GLASS_DIR)/Website/$(GLASS_PREF)SRS.html >> $(GLASS_PREF)log.log 2>&1
 	
@@ -115,7 +115,7 @@ gamephys_prog: gamephys_build
 nopcm_prog: nopcm_build
 
 docs:
-	stack haddock drasil
+	stack haddock drasil $(haddockArgs)
 	
 clean: clean_logs
 	- rm -r ./build

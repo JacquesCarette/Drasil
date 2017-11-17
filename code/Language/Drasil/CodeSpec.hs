@@ -4,7 +4,7 @@ module Language.Drasil.CodeSpec where
 import Language.Drasil.Chunk.Code
 import Language.Drasil.Chunk.NamedIdea
 import Language.Drasil.Chunk.Eq
-import Language.Drasil.Chunk.Quantity -- for hack
+import Language.Drasil.Chunk.Quantity -- for hack and codeSymb
 import Language.Drasil.NounPhrase
 import Language.Drasil.Symbol
 import Language.Drasil.Spec hiding (Mod)
@@ -16,7 +16,6 @@ import Language.Drasil.Chunk.ExprRelat
 import Language.Drasil.ChunkDB
 import Language.Drasil.Expr.Extract (codevars, codevars')
 import Language.Drasil.Chunk.VarChunk
-import Language.Drasil.Misc (codeSymb)
 import Language.Drasil.Code.Imperative.Lang
 
 import qualified Data.Map as Map
@@ -201,9 +200,9 @@ fdec :: (Quantity c) => c -> Space -> FuncStmt
 fdec v t = FDec (codevar v) (spaceToCodeType t)
 
 asVC :: Func -> VarChunk
-asVC (FDef (FuncDef n _ _ _)) = makeVC n (nounPhraseSP n) (Atomic n)
-asVC (FData (FuncData n _)) = makeVC n (nounPhraseSP n) (Atomic n)
-asVC (FCD cd) = vc' cd (codeSymb cd) (cd ^. typ)
+asVC (FDef (FuncDef n _ _ _)) = makeVC' n (nounPhraseSP n) (Atomic n)
+asVC (FData (FuncData n _)) = makeVC' n (nounPhraseSP n) (Atomic n)
+asVC (FCD cd) = codeVC cd (codeSymb cd) (cd ^. typ)
 
 asExpr :: Func -> Expr
 asExpr f = C $ asVC f

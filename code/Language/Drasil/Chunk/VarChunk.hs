@@ -39,6 +39,11 @@ nl l f (VC n s t) = fmap (\x -> VC (set l x n) s t) (f (n ^. l))
 makeVC :: String -> NP -> Symbol -> VarChunk
 makeVC i des sym = vc i des sym Real
 
+makeVC' :: String -> NP -> Symbol -> VarChunk
+makeVC' i des sym = makeVC'' i des sym Real
+
+makeVC'' :: String -> NP -> Symbol -> Space -> VarChunk
+makeVC'' i des sym typ = vcSt i des (ssc'' i [(Implementation, sym)]) typ
 -- | Creates a VarChunk from an id, term, symbol, and space
 vc :: String -> NP -> Symbol -> Space -> VarChunk
 vc i des sym space = VC (nw $ nc i des) (ssc' i sym) space
@@ -49,6 +54,9 @@ vcSt i des sym space = VC (nw $ nc i des) sym space
 -- | Creates a VarChunk from a 'NamedIdea', symbol, and space
 vc' :: NamedIdea c => c -> Symbol -> Space -> VarChunk
 vc' n s t = VC (nw n) (ssc' (n ^. id) s) t
+
+codeVC :: NamedIdea c => c -> Symbol -> Space -> VarChunk
+codeVC  n s t = VC (nw n) (ssc'' (n ^. id) [(Implementation,s)]) t
 
 -- | Creates a VarChunk from a 'NamedIdea''s id and term and symbol
 vc'' :: NamedIdea c => c -> Symbol -> Space -> VarChunk

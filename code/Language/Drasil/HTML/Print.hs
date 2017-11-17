@@ -298,7 +298,7 @@ makeDefn dt ps l sm = refwrap l $ wrap "table" [dtag dt] (makeDRows ps sm)
         dtag (L.General)  = "gdefn"
         dtag (L.Instance) = error "Not yet implemented"
         dtag (L.TM) = error "Not yet implemented"
-        dtag (L.DD) = error "Not yet implemented"
+        dtag (L.DD) = "ddefn"
 
 -- | Helper for making the definition table rows
 makeDRows :: HasSymbolTable s => [(String,[LayoutObj])] -> s -> Doc

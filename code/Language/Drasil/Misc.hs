@@ -3,11 +3,9 @@ module Language.Drasil.Misc where
 import Language.Drasil.Spec
 --import Language.Drasil.Expr
 import Language.Drasil.Chunk.Quantity
-import Language.Drasil.Chunk.SymbolForm (Stage(..))
 import Language.Drasil.Unit
 import Language.Drasil.Chunk.NamedIdea (NamedIdea, getA, short, term)
 import Language.Drasil.Chunk.Unitary
-import Language.Drasil.Symbol (Symbol)
 import qualified Language.Drasil.NounPhrase as NP
 
 --import Data.List (delete)
@@ -89,59 +87,51 @@ phrase's a = phrase a :+: S "'s"
 -- | Plural possesive function
 plural's a = plural a :+: S "'"
 
-symbol :: Quantity q => Stage -> q -> Symbol
-symbol = qsymb
-
-eqSymb :: Quantity q => q -> Symbol
-eqSymb = symbol Equational
-
-codeSymb :: Quantity q => q -> Symbol
-codeSymb = symbol Implementation
-
-
+{-
 --------------------- WIP ---------------------
--- Function used to derive the unit of an equation. Takes a Relation, sorts the
--- respective values into lists of units found in the numerator and denominator,
--- eliminates units found in both list and combines the remainder to create the
--- units of the equation. WORK IN PROGRESS
+Function used to derive the unit of an equation. Takes a Relation, sorts the
+respective values into lists of units found in the numerator and denominator,
+eliminates units found in both list and combines the remainder to create the
+units of the equation. WORK IN PROGRESS
 
--- inferUnit :: HasSymbolTable ctx => Relation -> ctx -> Maybe UnitDefn
--- inferUnit rel () = combine $ eliminate ([], []) $ convert symbtab $ findUnit rel ([], [])
-  -- where combine (num, den) = 
-          -- | 
-          -- | otherwise = combine 
+inferUnit :: HasSymbolTable ctx => Relation -> ctx -> Maybe UnitDefn
+inferUnit rel () = combine $ eliminate ([], []) $ convert symbtab $ findUnit rel ([], [])
+  where combine (num, den) = 
+          | 
+          | otherwise = combine 
 
--- findUnit :: Relation -> ([SF], [SF]) -> ([SF], [SF])
--- findUnit (_ :+ a) ([], []) = analyze a True ([], [])
--- findUnit (_ :- a) ([], []) = analyze a True ([], [])
--- findUnit (a :* b) frac = findUnit a (analyze b True frac)
--- findUnit (a :/ b) frac = findUnit a (analyze b False frac)
--- findUnit (a :^ b) frac = error "Exponential not yet implemented"
--- findUnit (_ :+ _) frac = frac
--- findUnit (_ :- _) frac = frac
--- findUnit (_ := _) frac = frac
+findUnit :: Relation -> ([SF], [SF]) -> ([SF], [SF])
+findUnit (_ :+ a) ([], []) = analyze a True ([], [])
+findUnit (_ :- a) ([], []) = analyze a True ([], [])
+findUnit (a :* b) frac = findUnit a (analyze b True frac)
+findUnit (a :/ b) frac = findUnit a (analyze b False frac)
+findUnit (a :^ b) frac = error "Exponential not yet implemented"
+findUnit (_ :+ _) frac = frac
+findUnit (_ :- _) frac = frac
+findUnit (_ := _) frac = frac
 
--- analyze :: Expr -> Bool -> ([SF], [SF]) -> ([SF], [SF])
--- analyze (Deriv _ (C a) (C b)) True (num, den) = (((SF a) ^. id):num, ((SF b) ^. id):den)
--- analyze (Deriv _ (C a) (C b)) False (num, den) = (((SF b) ^. id):num, ((SF a) ^. id):den)
--- analyze (FCall (C a) _) True (num, den) = (((SF a) ^. id):num, den)
--- analyze (FCall (C a) _) False (num, den) = (num, ((SF a) ^. id):den)
--- analyze (C a) True (num, den) = (((SF a) ^. id):num, den)
--- analyze (C b) False (num, den) = (num, ((SF b) ^. id):den)
--- analyze a True (num, den) = findUnit a (num, den)
--- analyze a False (num, den) = findUnit a (den, num)
+analyze :: Expr -> Bool -> ([SF], [SF]) -> ([SF], [SF])
+analyze (Deriv _ (C a) (C b)) True (num, den) = (((SF a) ^. id):num, ((SF b) ^. id):den)
+analyze (Deriv _ (C a) (C b)) False (num, den) = (((SF b) ^. id):num, ((SF a) ^. id):den)
+analyze (FCall (C a) _) True (num, den) = (((SF a) ^. id):num, den)
+analyze (FCall (C a) _) False (num, den) = (num, ((SF a) ^. id):den)
+analyze (C a) True (num, den) = (((SF a) ^. id):num, den)
+analyze (C b) False (num, den) = (num, ((SF b) ^. id):den)
+analyze a True (num, den) = findUnit a (num, den)
+analyze a False (num, den) = findUnit a (den, num)
 
--- convert :: HasSymbolTable ctx => ctx -> ([SF], [SF]) -> ([Maybe UnitDefn], [Maybe UnitDefn])
--- convert (num, den) = combine ((reorder (map (\x -> getUnitLup x symbtab) num)) ([], []), reorder (map (\x -> getUnitLup x symbtab) den) ([], []))
--- where reorder [] lst = lst
-      -- reorder (frst:rst) lst = reorder rst (divide frst lst)
-      -- divide (UPow a int) x@(val1, val2) = error "Exponential not yet implemented"
-      -- divide (UDiv a b) lst = 
-      -- divide (UProd a b) x@(val1, val2) =
-      -- combine ((num1, den1), (num2, den2)) = (num1 ++ den2, den1 ++ num2)
+convert :: HasSymbolTable ctx => ctx -> ([SF], [SF]) -> ([Maybe UnitDefn], [Maybe UnitDefn])
+convert (num, den) = combine ((reorder (map (\x -> getUnitLup x symbtab) num)) ([], []), reorder (map (\x -> getUnitLup x symbtab) den) ([], []))
+where reorder [] lst = lst
+      reorder (frst:rst) lst = reorder rst (divide frst lst)
+      divide (UPow a int) x@(val1, val2) = error "Exponential not yet implemented"
+      divide (UDiv a b) lst = 
+      divide (UProd a b) x@(val1, val2) =
+      combine ((num1, den1), (num2, den2)) = (num1 ++ den2, den1 ++ num2)
 
--- eliminate :: [Maybe UnitDefn] -> ([Maybe UnitDefn], [Maybe UnitDefn]) -> ([Maybe UnitDefn], [Maybe UnitDefn])
--- eliminate lst ([], den) = (lst, den)
--- eliminate lst (frst:rst, den)
-  -- | delete frst den == den = eliminate (frst:lst) (rst, den)
-  -- | delete frst den /= den = eliminate lst (rst, delete frst den)
+eliminate :: [Maybe UnitDefn] -> ([Maybe UnitDefn], [Maybe UnitDefn]) -> ([Maybe UnitDefn], [Maybe UnitDefn])
+eliminate lst ([], den) = (lst, den)
+eliminate lst (frst:rst, den)
+  | delete frst den == den = eliminate (frst:lst) (rst, den)
+  | delete frst den /= den = eliminate lst (rst, delete frst den)
+-}

@@ -5,11 +5,8 @@ import qualified Drasil.SRS as SRS
 
 import Drasil.DocumentLanguage
 
-import Drasil.Template.MG (mgDoc)
-import Drasil.Template.DD (makeDD)
-
 import Data.Drasil.SI_Units
-import Data.Drasil.People (spencerSmith, thulasi, nikitha, mCampidelli)
+import Data.Drasil.People (spencerSmith, nikitha, mCampidelli)
 import Data.Drasil.Concepts.Documentation (analysis, appendix, aspect,
   characteristic, class_, code, condition, constant, constraint, content,
   datum, definition, description, document, emphasis, endUser, failure,
@@ -56,9 +53,6 @@ import Drasil.GlassBR.Symbols
 import Drasil.GlassBR.Concepts (aR, lShareFac, gLassBR, stdOffDist,
   glaSlab, blastRisk, glass, responseTy, cantilever, beam, plane, edge,
   glaPlane, glassBRProg, ptOfExplsn, acronyms)
-import Drasil.GlassBR.Changes (likelyChanges, unlikelyChanges)
-import Drasil.GlassBR.Modules (modules)
-import Drasil.GlassBR.Reqs (reqs)
 import Drasil.GlassBR.TMods (tModels, t1SafetyReq, t2SafetyReq)
 import Drasil.GlassBR.IMods (iModels, calOfCap, calOfDe, probOfBr)
 import Drasil.GlassBR.DataDefs (dataDefns, gbQDefns, hFromt,
@@ -70,6 +64,7 @@ import Drasil.Sections.TraceabilityMandGs (traceGIntro)
 import Drasil.Sections.SpecificSystemDescription (solChSpecF,
   inDataConstTbl, outDataConstTbl, dataConstraintUncertainty, goalStmtF,
   physSystDesc, termDefnF, probDescF, specSysDesF)
+import Drasil.DocumentLanguage.Definitions
 
 {--}
 
@@ -98,13 +93,12 @@ mkSRS = RefSec (RefProg intro [TUnits, tsymb [TSPurpose, SymbOrder], TAandA]) :
     SystCons [] []]) :
   ScpOfProjSec (ScpOfProjProg (short gLassBR) (s5_1_table) (s5_2 (glaSlab)
     (capacity) (demandq) (probability))) :
-  SSDSec (SSDVerb s6) :
-  {-SSDSec (SSDProg
+  --SSDSec (SSDVerb s6) :
+  SSDSec (SSDProg
     [SSDProblem  (PDProg start gLassBR ending [s6_1_1, s6_1_2, s6_1_3])
     , SSDSolChSpec (SCSProg
     [DDs [Label, Symbol, Units, DefiningEquation,
-          Description Verbose IncludeUnits (S "Testing")] dataDefns]
-    (symbolMap dataDefns))]) :-}
+          Description Verbose IncludeUnits (S "Testing")] dataDefns])]) :
   ReqrmntSec (ReqsProg [
     FReqsSub s7_1_list, 
     NonFReqsSub [performance] (gBRpriorityNFReqs)
@@ -157,13 +151,13 @@ glassChoices = Choices {
 glassBR_code :: CodeSpec
 glassBR_code = codeSpec' glassSystInfo [interpMod, inputMod, readTableMod]
 
-mgBod :: [Section]
-(mgBod, _) = makeDD likelyChanges unlikelyChanges reqs modules
+--mgBod :: [Section]
+--(mgBod, _) = makeDD likelyChanges unlikelyChanges reqs modules
 
   -- MG authors embedded here (on purpose).  FIXME properly
-glassBR_mg :: Document
-glassBR_mg = mgDoc glassBRProg (for'' titleize phrase)
-  (manyNames [spencerSmith, thulasi]) mgBod
+--glassBR_mg :: Document
+--glassBR_mg = mgDoc glassBRProg (for'' titleize phrase)
+--  (manyNames [spencerSmith, thulasi]) mgBod
 
 s6, s6_1, s6_1_1, s6_1_2, s6_1_3, s6_2 :: Section
 

@@ -17,7 +17,7 @@ table st ls f = Table
   [getS st,
   f, 
   unitHidingUnitless]
-  ls)
+  (filter (hasStageSymbol st . getStagedS) ls))
   (titleize tOfSymb) False
 
 -- ^. defn

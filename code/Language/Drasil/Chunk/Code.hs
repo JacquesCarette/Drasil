@@ -24,7 +24,6 @@ import Language.Drasil.Unicode
 import Language.Drasil.Spec
 import Language.Drasil.Symbol
 import Language.Drasil.NounPhrase
-import Language.Drasil.Misc (symbol)
 
 import Data.String.Utils (replace)
 import qualified Data.Map as Map

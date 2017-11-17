@@ -140,9 +140,9 @@ t3LatHtE = makeRC "t3LatHtE"
   (nounPhraseSP "Latent heat energy") t3descr latHtEEqn
 
 latHtEEqn :: Relation
-latHtEEqn = FCall (C latent_heat) [C time] := UnaryOp
-  (Integral (Just (Low 0), Just (High (C time)))
-  (Deriv Total (FCall (C latent_heat) [C tau]) (C tau)) (C tau))
+latHtEEqn = FCall (C latent_heat) [C time] := 
+  (integral (Just (Low 0), Just (High (C time)))
+  (Deriv Total (FCall (C latent_heat) [C tau]) (C tau)) tau)
 
 -- Integrals need dTau at end
 -- Deriv is specifically partial derivative... how to do regular derivative?
@@ -153,9 +153,9 @@ t3descr = foldlSent [
   getES latent_heat `isThe` S "change in",
   phrase thermal_energy, sParen (Sy (joule ^. usymb)) `sC`
   phrase latent_heat +:+. phrase energy,
-  E (FCall (C latent_heat) [C time] := UnaryOp
-  (Integral (Just (Low 0), Just (High (C time)))
-  (Deriv Total (FCall (C latent_heat) [C tau]) (C tau)) (C tau)))
+  E (FCall (C latent_heat) [C time] := 
+  (integral (Just (Low 0), Just (High (C time)))
+  (Deriv Total (FCall (C latent_heat) [C tau]) (C tau)) tau))
   `isThe` phrase rOfChng, S "of",
   getES latent_heat, S "with respect",
   S "to", phrase time, getES tau +:+.

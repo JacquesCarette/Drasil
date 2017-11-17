@@ -7,9 +7,9 @@ module Language.Drasil (
   -- Recipe
   , Recipe(..)
   -- Expr
-  , Expr(..), Relation, UFunc(..), BiFunc(..), Bound(..), DerivType(..), Set, Quantifier(..)
+  , Expr(..), Relation, BiFunc(..), Bound(..), DerivType(..), Set, Quantifier(..)
   , log, abs, sin, cos, tan, sec, csc, cot, exp, sqrt, square, euclidean, ChunkDB(..), cdb, HasSymbolTable(..), symbolMap, vars
-  , summation, product, cross, m2x2, vec2D, dgnl2x2
+  , summation, product, cross, m2x2, vec2D, dgnl2x2, integral
   -- all the stuff from Unicode
   , Greek(..), Special(..)
   -- Unit
@@ -18,8 +18,8 @@ module Language.Drasil (
   , (^:), (/:), (*:), new_unit
   -- Chunk
   , Chunk(..), VarChunk(..), ConceptChunk
-  , makeVC, vc, makeVCObj, SymbolForm
-  , dcc, dccWDS, dccWDS', cv, dcc', vc', vc'', ccs, cc, cc'
+  , makeVC, makeVC', vc, makeVCObj, SymbolForm
+  , dcc, dccWDS, dccWDS', cv, dcc', vc', vc'', ccs, cc, cc', makeVC''
   , Quantity(..), QWrapper, qw, ConVar(..), cvR, cvRs
   , Concept(..), cw, CWrapper
   , CommonIdea(..)
@@ -112,16 +112,17 @@ module Language.Drasil (
   , Theory(..), tc', TheoryChunk, TheoryModel, tm, tw
   -- Chunk.SymbolForm
   , SF, SymbolChunk, sc, ssc, ssc', Stage(..), StagedSymbolChunk, eqSymb, codeSymb
+  , ssc'', hasStageSymbol
   -- Code.Imperative.Lang
   , Lang(..)
 ) where
 
 import Prelude hiding (log, sin, cos, tan, sqrt, id, return, print, break, exp, product)
 import Language.Drasil.SystemInformation
-import Language.Drasil.Expr (Expr(..), Relation, UFunc(..), BiFunc(..), 
+import Language.Drasil.Expr (Expr(..), Relation, BiFunc(..), 
           Bound(..),DerivType(..), Set, Quantifier(..))
 import Language.Drasil.Expr.Math (log, sin, cos, tan, sqrt, square, sec, csc, cot, exp,
-          summation, product, cross, m2x2, vec2D, dgnl2x2, euclidean)
+          summation, product, cross, m2x2, vec2D, dgnl2x2, euclidean, integral)
 import Language.Drasil.Expr.Extract (vars)
 import Language.Drasil.Output.Formats (DocType(SRS,MG,MIS,LPM,Website))
 import Language.Drasil.Document (LayoutObj(..), Document(..), DType(..)

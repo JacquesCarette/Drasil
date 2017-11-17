@@ -115,7 +115,7 @@ gamephys_prog: gamephys_build
 nopcm_prog: nopcm_build
 
 docs:
-	stack haddock drasil
+	stack haddock drasil $(haddockArgs)
 	
 clean: clean_logs
 	- rm -r ./build

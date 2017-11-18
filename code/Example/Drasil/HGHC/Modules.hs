@@ -19,6 +19,8 @@ import Data.Drasil.Concepts.Computation (structure, inDatum, outDatum,
 import Data.Drasil.SentenceStructures (foldlSent, foldlList, sAnd)
 
 {--}
+import Drasil.Body (allSymbols) -- FIXME: REMOVE IF TRYING TO BUILD OLDSTYLE MG
+
 
 executable :: NamedChunk
 executable = npnc' "HGHC" (compoundPhrase (pn "HGHC") (program ^. term))

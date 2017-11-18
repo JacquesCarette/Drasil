@@ -6,9 +6,6 @@ import Data.Drasil.Units.Thermodynamics (heat_transfer_coef)
 
 {--}
 
-allSymbols :: ChunkDB
-allSymbols = cdb symbols
-
 symbols :: [QWrapper]
 symbols = map qs hghcVars ++ map qs htVars
 

@@ -1,17 +1,10 @@
-module Drasil.HGHC.HGHC (srsBody, mgBody, misBody, modules, thisChoices, thisCode) where
+module Drasil.HGHC.HGHC (srsBody, thisChoices, thisCode, allSymbols) where
 
 import Language.Drasil
 import Drasil.DocumentLanguage
--- import Drasil.DocumentLanguage.Definitions --Needed for SCS Section DDs
 
-import Drasil.Template.DD (makeDD)
-
-import Data.List (intersperse)
-
-import Drasil.HGHC.HeatTransfer (hghcVars, allSymbols, fp, htOutputs,
+import Drasil.HGHC.HeatTransfer (hghcVars, fp, htOutputs,
   htInputs, symbols, nuclearPhys, hghc)
-import Drasil.HGHC.Modules (mod_calc, mod_inputp, mod_inputf,
-  mod_outputf, mod_ctrl)
 
 import Drasil.Sections.ReferenceMaterial (intro)
 import Drasil.Sections.SpecificSystemDescription (dataDefnF)
@@ -19,12 +12,6 @@ import Drasil.Sections.SpecificSystemDescription (dataDefnF)
 import Data.Drasil.SI_Units (si_units)
 import Data.Drasil.People (spencerSmith)
 import Data.Drasil.Concepts.Documentation (srs)
-import Data.Drasil.Modules (mod_hw, mod_behav)
-
-
-modules :: [ModuleChunk]
-modules = [mod_calc, mod_hw, mod_inputp, mod_inputf, mod_behav, mod_outputf,
-  mod_ctrl]
 
 thisChoices :: Choices
 thisChoices = Choices {
@@ -49,7 +36,6 @@ thisSI = SI {
   _units = si_units,  
   _quants = symbols,
   _concepts = ([] :: [UCWrapper]),
-  _namedIdeas = ([] :: [CI]), 
   _definitions = hghcVars,
   _inputs = htInputs,
   _outputs = htOutputs,
@@ -58,6 +44,9 @@ thisSI = SI {
   _constants = [],
   _sysinfodb = allSymbols
 }
+
+allSymbols :: ChunkDB
+allSymbols = cdb symbols (map nw symbols)
   
 thisSRS :: DocDesc
 thisSRS = RefSec (RefProg intro 
@@ -74,18 +63,3 @@ s3 = dataDefnF EmptyS (map (Definition . Data) hghcVars)
   
 srsBody :: Document
 srsBody = mkDoc thisSRS (for) thisSI
-
-mgSecs, misSecs :: [Section]
-(mgSecs, misSecs) = makeDD [] [] [] modules
-  
-mgBody :: Document
-mgBody = doc "MG" hghcVars (name spencerSmith) mgSecs
-
-misBody :: Document
-misBody = doc "MIS" hghcVars (name spencerSmith) misSecs
-
-doc :: Quantity s => String -> [s] -> Sentence -> [Section] -> Document
-doc nam ls author body =
-  Document ((S nam +:+ S "for") +:+
-  (foldr1 (+:+) (intersperse (S "and") (map (\x -> P $ eqSymb x) ls))))
-  author body

@@ -82,7 +82,6 @@ chipmunkSysInfo = SI {
   _units = chipUnits,
   _quants = cpSymbolsAll, 
   _concepts = ([] :: [CQSWrapper]), 
-  _namedIdeas = cpAcronyms, 
   _definitions = (cpDDefs), 
   _inputs = (inputSymbols), 
   _outputs = (outputSymbols), 
@@ -104,7 +103,7 @@ mgBod :: [Section]
 (mgBod, _) = makeDD likelyChanges unlikelyChanges reqs modules
 
 everything :: ChunkDB
-everything = cdb cpSymbolsAll
+everything = cdb cpSymbolsAll (map nw cpSymbolsAll ++ map nw cpAcronyms)
 
 
 chipChoices :: Choices

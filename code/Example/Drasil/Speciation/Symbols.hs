@@ -8,9 +8,6 @@ import Data.Drasil.Utils (symbolMapFun)
 specnSymbols :: [QWrapper]
 specnSymbols = []
 
-specnSymbMap :: ChunkDB
-specnSymbMap = cdb specnSymbols
-
 {- (map qs [prob_br] ++ gbInputs ++ (map qs gBRSpecParamVals) ++ 
   (map qs glassBRSymbolsWithDefns) ++ (map qs glassBRSymbols) ++
   (map qs glassBRUnitless) ++ (map qs gbInputDataConstraints)

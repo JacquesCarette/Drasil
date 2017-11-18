@@ -2,8 +2,7 @@ module Main (main) where
 
 import Language.Drasil
 
-import Drasil.Speciation.Body (specn_srs)
-import Drasil.Speciation.Symbols (specnSymbMap)
+import Drasil.Speciation.Body (specn_srs, specnSymbMap)
 
 docs :: [Recipe]
 docs = 

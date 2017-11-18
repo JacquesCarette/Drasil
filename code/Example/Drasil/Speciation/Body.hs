@@ -144,7 +144,6 @@ specnSystInfo = SI {
   _units       = map UU [metre, second, kilogram] ++ map UU [pascal, newton],
   _quants      = specnSymbols,
   _concepts    = [] :: [CQSWrapper],
-  _namedIdeas  = acronyms,
   _definitions = [],
   _inputs      = [] :: [QWrapper],
   _outputs     = [] :: [QWrapper],
@@ -153,8 +152,10 @@ specnSystInfo = SI {
   _constants   = [],
   _sysinfodb   = specnSymbMap
 }
-  --FIXME: All named ideas, not just acronyms.
 
+specnSymbMap :: ChunkDB
+specnSymbMap = cdb specnSymbols (map nw acronyms ++ map nw specnSymbols) --FIXME: fill this in with the namedideas
+  
 {-- INTRO --}  
   
 startIntro :: Sentence

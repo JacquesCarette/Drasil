@@ -36,14 +36,14 @@ import Drasil.SWHS.Unitals (pcm_SA, temp_W, temp_PCM, pcm_HTC, pcm_E,
   out_SA, ht_flux_out, ht_flux_in, in_SA, thFluxVect, time_final,
   specParamValList, w_density, temp_init, htCap_L_P, htFusion, pcm_density,
   temp_melt_P, pcm_vol, diam, tau_L_P, tank_length, htTransCoeff_min,
-  w_vol, swhsConstrained, swhsOutputs, swhsInputs, swhsSymbols)
+  w_vol, swhsConstrained, swhsOutputs, swhsInputs, swhsSymbols, swhsSymbolsAll)
 import Drasil.SWHS.Concepts (progName, sWHT, water, rightSide, phsChgMtrl,
   coil, perfect_insul, tank, transient, gauss_div, swhs_pcm,
   phase_change_material, tank_pcm)
 import Drasil.SWHS.TMods (tModels, t1ConsThermE, s4_2_2_swhsTMods)
 import Drasil.SWHS.IMods (s4_2_5_IMods)
 import Drasil.SWHS.DataDefs (swhsSymbMapDRef, swhsSymbMapTRef, swhsDataDefs,
-  swhsSymMap, dd1HtFluxC, dd2HtFluxP, swhsSymbMapT, s4_2_4_swhsDataDefs)
+  dd1HtFluxC, dd2HtFluxP, swhsSymbMapT, s4_2_4_swhsDataDefs)
 import Drasil.SWHS.GenDefs (swhsGenDefs)
 import Drasil.SWHS.References (s9_swhs_citations)
 import Drasil.SWHS.Assumptions (s4_2_1_list, assump3, assump4, assump5,
@@ -106,7 +106,6 @@ swhs_si = SI {
   _units = this_si,
   _quants = swhsSymbols,
   _concepts = (swhsSymbols),
-  _namedIdeas = acronyms,
   _definitions = (swhsDataDefs :: [QDefinition]),
   _inputs = ((map qs swhsInputs) :: [QWrapper]),
   _outputs = ((map qs swhsOutputs) :: [QWrapper]),
@@ -115,6 +114,10 @@ swhs_si = SI {
   _constants = [],
   _sysinfodb = swhsSymMap
 }
+
+swhsSymMap :: ChunkDB
+swhsSymMap = cdb swhsSymbolsAll (map nw swhsSymbols ++ map nw acronyms)
+
   --Note: The second swhsSymbols here is
     -- Redundant b/c the unitals are not really concepts (yet). There
     -- Will still likely be a better way to do this.

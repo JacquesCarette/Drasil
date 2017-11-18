@@ -3,7 +3,6 @@ module Drasil.SWHS.Concepts where --all of this file is exported
 import Language.Drasil
 import Control.Lens ((^.))
 
-import Data.Drasil.Concepts.Software (program)
 import Data.Drasil.Concepts.Math (parameter)
 
 ---Acronyms---
@@ -15,7 +14,7 @@ phsChgMtrl  = commonIdea "phsChgMtrl" (nounPhrase "phase change material"
 rightSide   = commonIdea "rightSide"  (nounPhrase "right hand side"
   "right hand sides") "RHS"
 
-progName    = commonIdea "progName"   (nounPhrase "solar water heating system"
+progName    = commonIdea "swhsName"   (nounPhrase "solar water heating system"
   "solar water heating systems") "SWHS"
 
 swhsFull :: NamedChunk

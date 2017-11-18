@@ -20,9 +20,6 @@ swhsDataDefs :: [QDefinition]
 swhsDataDefs = [dd1HtFluxC, dd2HtFluxP, dd3HtFusion, dd4MeltFrac]
 
 -- SYMBOL MAP HELPERS --
-swhsSymMap :: ChunkDB
-swhsSymMap = cdb swhsSymbolsAll
-
 swhsSymbMapD :: QDefinition -> Contents
 swhsSymbMapD = symbolMapFun Data
 

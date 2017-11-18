@@ -153,7 +153,6 @@ nopcm_si = SI {
   _units = this_si,
   _quants = nopcm_Symbols,
   _concepts = (nopcm_Symbols),
-  _namedIdeas = acronyms,
   _definitions = [dd1HtFluxC],          --dataDefs
   _inputs = (map qs nopcm_Constraints), --inputs
   _outputs = (map qs [temp_W, w_E]),     --outputs
@@ -183,7 +182,7 @@ nopcm_srs :: Document
 nopcm_srs = mkDoc mkSRS (for) nopcm_si
 
 nopcm_SymbMap :: ChunkDB
-nopcm_SymbMap = cdb nopcm_SymbolsAll
+nopcm_SymbMap = cdb nopcm_SymbolsAll (map nw nopcm_Symbols ++ map nw acronyms)
 
 --------------------------
 --Section 2 : INTRODUCTION

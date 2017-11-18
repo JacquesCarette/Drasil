@@ -2,6 +2,8 @@
 module Drasil.Sections.TableOfAbbAndAcronyms
   ( table_of_abb_and_acronyms ) where
 
+import Data.Maybe
+
 import Language.Drasil
 import Data.Drasil.Concepts.Documentation
 
@@ -15,8 +17,9 @@ table_of_abb_and_acronyms ls = Section (S "Abbreviations and Acronyms")
 --FIXME? Should it be "Description" or "Term" or something else?
 -- | The actual table creation function.
 table :: (NamedIdea s) => [s] -> Contents
-table ls = Table (map (at_start) [symbol_, description]) (mkTable
+table ls = let chunks = filter (isJust . getA) ls in
+  Table (map (at_start) [symbol_, description]) (mkTable
   [(\ch -> getAcc ch) , 
    (\ch -> titleize ch)]
-  ls)
+  chunks)
   (S "Abbreviations and Acronyms") False

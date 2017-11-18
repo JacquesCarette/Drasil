@@ -71,7 +71,7 @@ swhs_diff: swhs_build
 	
 tiny_diff: tiny_build
 	- $(DIFF) ./stable/tiny/$(TINY_PREF)SRS.tex ./build/$(TINY_DIR)/SRS/$(TINY_PREF)SRS.tex &> $(TINY_PREF)log.log
-	- $(DIFF) ./stable/tiny/$(TINY_PREF)MG.tex ./build/$(TINY_DIR)/MG/$(TINY_PREF)MG.tex >> $(TINY_PREF)log.log 2>&1
+#	- $(DIFF) ./stable/tiny/$(TINY_PREF)MG.tex ./build/$(TINY_DIR)/MG/$(TINY_PREF)MG.tex >> $(TINY_PREF)log.log 2>&1
 	- $(DIFF) ./stable/tiny/$(TINY_PREF)SRS.css ./build/$(TINY_DIR)/Website/$(TINY_PREF)SRS.css >> $(TINY_PREF)log.log 2>&1
 	- $(DIFF) ./stable/tiny/$(TINY_PREF)SRS.html ./build/$(TINY_DIR)/Website/$(TINY_PREF)SRS.html >> $(TINY_PREF)log.log 2>&1
 	

@@ -8,6 +8,7 @@ NoPCM_PREF="NoPCM_"
 log="log.log"
 #
 errors="no"
+exitval=0
 #
 if [ -s $SWHS_PREF$log ]; then
   echo "-------------------------------------------"
@@ -15,6 +16,7 @@ if [ -s $SWHS_PREF$log ]; then
   echo "- BETWEEN GENERATED AND STABLE OUTPUT FOUND"
   echo "-------------------------------------------"
   errors="yes"
+  exitval=1
 fi
 
 if [ -s $TINY_PREF$log ]; then
@@ -23,6 +25,7 @@ if [ -s $TINY_PREF$log ]; then
   echo "- BETWEEN GENERATED AND STABLE OUTPUT FOUND"
   echo "-------------------------------------------"
   errors="yes"
+  exitval=1
 fi
 
 if [ -s $SSP_PREF$log ]; then
@@ -31,6 +34,7 @@ if [ -s $SSP_PREF$log ]; then
   echo "- BETWEEN GENERATED AND STABLE OUTPUT FOUND"
   echo "-------------------------------------------"
   errors="yes"
+  exitval=1
 fi
 
 if [ -s $GLASS_PREF$log ]; then
@@ -55,6 +59,7 @@ if [ -s $NoPCM_PREF$log ]; then
   echo "- BETWEEN GENERATED AND STABLE OUTPUT FOUND"
   echo "-------------------------------------------"
   errors="yes"
+  exitval=1
 fi
 
 if [ "$errors" = "no" ]; then
@@ -67,3 +72,5 @@ else
   echo "-             MORE DETAILS                -"
   echo "-------------------------------------------"
 fi
+
+exit $exitval

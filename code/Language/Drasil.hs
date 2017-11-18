@@ -9,7 +9,7 @@ module Language.Drasil (
   -- Expr
   , Expr(..), Relation, BiFunc(..), Bound(..), DerivType(..), Set, Quantifier(..)
   , log, abs, sin, cos, tan, sec, csc, cot, exp, sqrt, square, euclidean, ChunkDB(..), cdb, HasSymbolTable(..), symbolMap, vars
-  , summation, product, cross, m2x2, vec2D, dgnl2x2, integral
+  , summation, product, cross, m2x2, vec2D, dgnl2x2, integral, termLookup, elements, termTable
   -- all the stuff from Unicode
   , Greek(..), Special(..)
   -- Unit

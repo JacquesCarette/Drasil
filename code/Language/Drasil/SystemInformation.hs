@@ -21,7 +21,7 @@ data SystemInformation where
 -- FIXME: b shouldn't need to be a NounPhrase, this will be fixed after
 -- NP is built into NamedIdea.
  SI :: (NamedIdea a, NamedIdea b, HasName c, Unit d,
-  Quantity e, Ord e, Ord f, Quantity f, Concept f, NamedIdea g, 
+  Quantity e, Ord e, Ord f, Quantity f, Concept f,
   Quantity h, Quantity i,
   Constrained j) => {
   _sys :: a,
@@ -30,7 +30,6 @@ data SystemInformation where
   _units :: [d],
   _quants :: [e],
   _concepts :: [f],
-  _namedIdeas :: [g],
   _definitions :: [QDefinition],
   _inputs :: [h],
   _outputs :: [i],

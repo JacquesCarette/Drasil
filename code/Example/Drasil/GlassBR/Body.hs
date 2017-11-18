@@ -68,6 +68,9 @@ import Drasil.DocumentLanguage.Definitions
 
 {--}
 
+gbSymbMap :: ChunkDB
+gbSymbMap = cdb this_symbols (map nw acronyms ++ map nw this_symbols)
+
 resourcePath :: String
 resourcePath = "../../../datafiles/GlassBR/"
 
@@ -121,7 +124,6 @@ glassSystInfo = SI {
   _units       = map UU [metre, second, kilogram] ++ map UU [pascal, newton],
   _quants      = this_symbols,
   _concepts    = ([] :: [CQSWrapper]),
-  _namedIdeas  = acronyms,
   _definitions = dataDefns ++ (map (relToQD gbSymbMap) iModels) ++ (map (relToQD gbSymbMap) tModels) 
                   ++ [wtntWithEqn, sdWithEqn],  -- wtntWithEqn is defined in Unitals but only appears 
                                                  -- in the description of the Calculation of Demand instance model;

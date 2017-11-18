@@ -18,9 +18,6 @@ this_symbols = map qs [prob_br] ++ gbInputs ++ (map qs gBRSpecParamVals) ++
 
 {--}
 
-gbSymbMap :: ChunkDB
-gbSymbMap = cdb this_symbols
-
 gbSymbMapD :: QDefinition -> Contents
 gbSymbMapD term_ = (symbolMapFun Data) term_
 

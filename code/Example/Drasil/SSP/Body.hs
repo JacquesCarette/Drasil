@@ -93,7 +93,6 @@ ssp_si = SI {
   _units = this_si,
   _quants = sspSymbols,
   _concepts = (sspSymbols),
-  _namedIdeas = acronyms,
   _definitions = sspDataDefs,
   _inputs = (map qs sspInputs),
   _outputs = (map qs sspOutputs),
@@ -140,7 +139,7 @@ ssp_code = codeSpec' ssp_si [sspInputMod]
 
 -- SYMBOL MAP HELPERS --
 sspSymMap :: ChunkDB
-sspSymMap = cdb sspSymbols
+sspSymMap = cdb sspSymbols (map nw sspSymbols ++ map nw acronyms)
 
 sspSymMapT :: RelationConcept -> Contents
 sspSymMapT = symbolMapFun Theory

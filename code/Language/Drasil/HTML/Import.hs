@@ -234,7 +234,6 @@ lay x@(UnlikelyChange uc) sm =
   H.UnlikelyChange (spec (phrase $ uc ^. term) sm) (spec (refName x) sm) (spec (short uc) sm)
 lay (Defnt dtyp pairs rn) sm = H.Definition dtyp (layPairs pairs) (spec rn sm)
   where layPairs = map (\(x,y) -> (x, (map (\z -> lay z sm) y)))
-lay (Defnt _ _ _)        _ = error "lay Defnt undefined at HTML/Import.hs" -- need to implement!
 lay (GDef)               _ = H.Paragraph (H.EmptyS)  -- need to implement!
 lay (IMod)               _ = H.Paragraph (H.EmptyS)  -- need to implement!
 lay (TMod ps rf r)      sm = H.Definition (Theory r) 

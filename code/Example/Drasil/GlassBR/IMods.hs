@@ -16,8 +16,6 @@ import Drasil.GlassBR.Unitals (tNT, sdWithEqn, demand, standOffDist,
 import Drasil.GlassBR.DataDefs (nonFL, risk, glaTyFac)
 import Drasil.GlassBR.Concepts (lResistance, glassTypeFac, lShareFac)
 
-import Drasil.GlassBR.ModuleDefs
-
 {--}
 
 iModels :: [RelationConcept]

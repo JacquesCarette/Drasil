@@ -29,7 +29,6 @@ expr :: HasSymbolTable ctx => Expr -> ctx -> T.Expr
 expr (V v)              _ = T.Var  v
 expr (Dbl d)            _ = T.Dbl  d
 expr (Int i)            _ = T.Int  i
-expr (Bln b)            _ = T.Bln  b
 expr (a :* b)          sm = T.Mul  (expr a sm) (expr b sm)
 expr (a :+ b)          sm = T.Add  (expr a sm) (expr b sm)
 expr (a :/ b)          sm = T.Frac (replace_divs a sm) (replace_divs b sm)

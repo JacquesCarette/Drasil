@@ -27,7 +27,6 @@ data Expr where
   V        :: Variable -> Expr
   Dbl      :: Double -> Expr
   Int      :: Integer -> Expr
-  Bln      :: Bool -> Expr
   (:^)     :: Expr -> Expr -> Expr -- Power operator
   (:*)     :: Expr -> Expr -> Expr -- Multiplication
   (:/)     :: Expr -> Expr -> Expr -- Division
@@ -115,7 +114,6 @@ instance Eq Expr where
   V a == V b                   =  a == b
   Dbl a == Dbl b               =  a == b
   Int a == Int b               =  a == b
-  Bln a == Bln b               =  a == b
   (:^) a b == (:^) c d         =  a == c && b == d
   (:*) a b == (:*) c d         =  a == c && b == d || a == d && b == c
   (:/) a b == (:/) c d         =  a == c && b == d

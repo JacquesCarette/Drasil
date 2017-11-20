@@ -441,7 +441,6 @@ convExpr :: Expr -> Reader State Value
 convExpr (V v)        = return $ litString v  -- V constructor should be removed
 convExpr (Dbl d)      = return $ litFloat d
 convExpr (Int i)      = return $ litInt i
-convExpr (Bln b)      = return $ litBool b
 convExpr ((Int a) :/ (Int b)) = return $ (litFloat $ fromIntegral a) #/ (litFloat $ fromIntegral b) -- hack to deal with integer division
 convExpr (a :/ b)     = liftM2 (#/) (convExpr a) (convExpr b)
 convExpr (a :* b)     = liftM2 (#*)  (convExpr a) (convExpr b)

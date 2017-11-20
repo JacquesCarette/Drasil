@@ -30,7 +30,6 @@ expr :: HasSymbolTable s => Expr -> s -> H.Expr
 expr (V v)            _ = H.Var   v
 expr (Dbl d)          _ = H.Dbl   d
 expr (Int i)          _ = H.Int   i
-expr (Bln b)          _ = H.Bln   b
 expr (a :* b)         sm = H.Mul   (expr a sm) (expr b sm)
 expr (a :+ b)         sm = H.Add   (expr a sm) (expr b sm)
 expr (a :/ b)         sm = H.Frac  (replace_divs a sm) (replace_divs b sm)

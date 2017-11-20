@@ -61,9 +61,6 @@ in ./code/ for more information.
 ### Summary of Folder Structure and File Contents
 --------------------------------------------------
 
-**Chipmunk2D-master**
-  - A copy of the Chipmunk2D engine
-  
 **Dan**
   - Subdirectory for Dan Szymczak's work. Mostly papers and presentations
   

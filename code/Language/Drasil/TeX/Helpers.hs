@@ -7,6 +7,7 @@ import Control.Applicative (pure)
 import Language.Drasil.Config (numberedSections, hyperSettings)
 import qualified Language.Drasil.Printing.Helpers as H
 import Language.Drasil.TeX.Monad
+import Language.Drasil.Document (MaxWidthPercent)
 
 -----------------------------------------------------------------------------
 -- Infrastructre for defining commands, environments, etc.
@@ -95,12 +96,17 @@ ucref _ x = (pure $ text "UC\\ref") <> br x
 -----------------------------------------------------------------------------
 -- Now create standard LaTeX stuff
 
-usepackage, count, includegraphics :: String -> D
+usepackage, count :: String -> D
 usepackage      = command "usepackage"
 -- changed to command "newcounter" from command "count" (I assume this was
 -- what was intended?)
 count           = command "newcounter"
-includegraphics = command1o "includegraphics" (Just "width=\\textwidth")
+
+includegraphics :: MaxWidthPercent -> String -> D
+includegraphics 100 = command1o "includegraphics" 
+  (Just $ "width=\\textwidth")
+includegraphics wp = command1o "includegraphics" 
+  (Just $ "width=" ++ show (wp / 100) ++ "\\textwidth")
 
 author, caption, item, label, title :: D -> D
 author          = commandD "author"

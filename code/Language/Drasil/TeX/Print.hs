@@ -64,7 +64,7 @@ lo (Table rows r bl t)     = toText $ makeTable rows (spec r) bl (spec t)
 --lo (CodeBlock c)           = code $ pure $ printCode c
 lo (Definition ssPs l)     = toText $ makeDefn ssPs $ spec l
 lo (List l)                = toText $ makeList l
-lo (Figure r c f)          = toText $ makeFigure (spec r) (spec c) f
+lo (Figure r c f wp)       = toText $ makeFigure (spec r) (spec c) f wp
 lo (Module n l)            = toText $ makeModule n $ spec l
 lo (Requirement n l)       = toText $ makeReq (spec n) (spec l)
 lo (Assumption n l)        = toText $ makeAssump (spec n) (spec l)
@@ -445,11 +445,11 @@ def_item ((x,y):zs) = item (spec (x :+: S " is the " :+: d_item y)) : def_item z
 ------------------ FIGURE PRINTING--------------------------
 -----------------------------------------------------------------
 
-makeFigure :: D -> D -> String -> D
-makeFigure r c f =
+makeFigure :: D -> D -> String -> L.MaxWidthPercent -> D
+makeFigure r c f wp =
   figure (center (
   vcat [
-    includegraphics f,
+    includegraphics wp f,
     caption c,
     label r
   ] ) )

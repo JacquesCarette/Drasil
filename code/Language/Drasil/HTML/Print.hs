@@ -50,7 +50,7 @@ printLO (Table ts rows r b t)    sm = makeTable ts rows (p_spec r sm) b (p_spec 
 printLO (Definition dt ssPs l)   sm = makeDefn dt ssPs (p_spec l sm) sm
 printLO (Header n contents)      sm = h n $ text (p_spec contents sm)
 printLO (List t)                 sm = makeList t sm
-printLO (Figure r c f)           sm = makeFigure (p_spec r sm) (p_spec c sm) f
+printLO (Figure r c f wp)        sm = makeFigure (p_spec r sm) (p_spec c sm) f wp
 printLO (Module m l)             sm = makeModule m (p_spec l sm)
 printLO (Assumption a l id)      sm = makeRefList (p_spec a sm) (p_spec l sm) (p_spec id sm)
 printLO (Requirement r l id)     sm = makeRefList (p_spec r sm) (p_spec l sm) (p_spec id sm)
@@ -333,8 +333,8 @@ p_item (Nested s l) sm = vcat [text (p_spec s sm),makeList l sm]
 ------------------BEGIN FIGURE PRINTING--------------------------
 -----------------------------------------------------------------
 -- | Renders figures in HTML
-makeFigure :: String -> String -> String -> Doc
-makeFigure r c f = refwrap r (image f c $$ caption c)
+makeFigure :: String -> String -> String -> L.MaxWidthPercent -> Doc
+makeFigure r c f wp = refwrap r (image f c wp $$ caption c)
 
 -----------------------------------------------------------------
 ------------------BEGIN EXPR OP PRINTING-------------------------

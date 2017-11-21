@@ -7,7 +7,7 @@ import Language.Drasil.Expr (Variable)
 import Language.Drasil.Symbol (Symbol)
 import Language.Drasil.Spec (USymb, RefType)
 import Language.Drasil.Unicode (Greek, Special)
-import Language.Drasil.Document (DType (..))
+import Language.Drasil.Document (DType (..), MaxWidthPercent)
 import Language.Drasil.Citations (Month(..))
 import Language.Drasil.People (People)
 
@@ -122,7 +122,7 @@ data LayoutObj = Table Tags [[Spec]] Label Bool Caption
              --  CodeBlock Code
                | Definition DType [(String,[LayoutObj])] Label
                | List ListType
-               | Figure Label Caption Filepath
+               | Figure Label Caption Filepath MaxWidthPercent
                | Module String Label
                | Assumption Contents Label Label
                | LikelyChange Contents Label Label

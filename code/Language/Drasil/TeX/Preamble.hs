@@ -103,7 +103,7 @@ parseDoc los' = [PreP FullPage, PreP HyperRef, PreP AMSMath, PreP AMSsymb,
           (concat $ map parseDoc' (map snd ps)) ++
           (PreP Tabu):(PreD TabuLine):(PreP LongTable):(PreP BookTabs):
           parseDoc' los
-        parseDoc' ((Figure _ _ _):los) =
+        parseDoc' ((Figure _ _ _ _):los) =
           (PreP Graphics):(PreP Caption):parseDoc' los
         parseDoc' ((Module _ _):los) =
           (PreD ModCounter):parseDoc' los

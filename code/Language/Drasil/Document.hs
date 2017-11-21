@@ -48,7 +48,7 @@ data Contents = Table [Sentence] [[Sentence]] Title Bool
                -- ^ Data/General definition or theoretical model. SymbolMap for
                -- looking up variables (currently a hack).
                | Enumeration ListType -- ^ Lists
-               | Figure Label Filepath -- ^ Should use relative file path.
+               | Figure Label Filepath MaxWidthPercent -- ^ Should use relative file path.
                | Module ModuleChunk
                | Requirement ReqChunk
                | Assumption AssumpChunk
@@ -71,6 +71,12 @@ data Contents = Table [Sentence] [[Sentence]] Title Bool
                -------- END TMOD/DDEF/etc. ----------------
 type Identifier = String
 type RefName = Sentence
+
+-- | MaxWidthPercent should be kept in the range 1-100. 
+-- Values outside this range may have unexpected results.
+-- Used for specifying max figure width as
+-- pagewidth*MaxWidthPercent/100.
+type MaxWidthPercent = Float
 
 data ListType = Bullet [ItemType] -- ^ Bulleted list
               | Number [ItemType] -- ^ Enumerated List
@@ -103,7 +109,7 @@ instance LayoutObj Section where
 
 instance LayoutObj Contents where
   refName (Table _ _ l _)         = S "Table:" :+: inferName l
-  refName (Figure l _)            = S "Figure:" :+: inferName l
+  refName (Figure l _ _)            = S "Figure:" :+: inferName l
   refName (Paragraph _)           = error "Can't reference paragraphs" --yet
   refName (EqnBlock _)            = error "EqnBlock ref unimplemented"
 --  refName (CodeBlock _)         = error "Codeblock ref unimplemented"
@@ -123,7 +129,7 @@ instance LayoutObj Contents where
   refName (DDef _ _ _)            = error "DDef referencing unimplemented"
   refName (Bib _)                 = error "Bib referencing unimplemented"
   rType (Table _ _ _ _)           = Tab
-  rType (Figure _ _)              = Fig
+  rType (Figure _ _ _)              = Fig
   rType (Definition (Data qd))    = Def $ getA qd
   rType (Definition (Theory rc))  = Def $ getA rc
   rType (Definition _)            = Def Nothing
@@ -158,3 +164,11 @@ getDefName _          = error "Unimplemented definition type reference"
 -- (ie. paragraphs, tables, etc.) and a list of subsections.
 section :: Sentence -> [Contents] -> [Section] -> Section
 section title intro secs = Section title (map Con intro ++ map Sub secs)
+
+-- | Figure smart constructor. Assumes 100% of page width as max width.
+fig :: Label -> Filepath -> Contents
+fig l f = Figure l f 100
+
+-- | Figure smart constructor for customized max widths.
+figWithWidth :: Label -> Filepath -> MaxWidthPercent -> Contents
+figWithWidth = Figure

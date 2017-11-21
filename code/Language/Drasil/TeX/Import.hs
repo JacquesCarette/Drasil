@@ -203,7 +203,7 @@ lay (EqnBlock c)          sm = T.EqnBlock (T.E (expr c sm))
 --lay (CodeBlock c)         = T.CodeBlock c
 lay x@(Definition c)      sm = T.Definition (makePairs c sm) (spec (refName x) sm)
 lay (Enumeration cs)      sm = T.List $ makeL cs sm
-lay x@(Figure c f)        sm = T.Figure (spec (refName x) sm) (spec c sm) f
+lay x@(Figure c f wp)     sm = T.Figure (spec (refName x) sm) (spec c sm) f wp
 lay x@(Module m)          sm = T.Module (formatName m) (spec (refName x) sm)
 lay x@(Requirement r)     sm = 
   T.Requirement (spec (phrase (r ^. term)) sm) (spec (refName x) sm)

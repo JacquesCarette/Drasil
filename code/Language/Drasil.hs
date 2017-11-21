@@ -78,7 +78,7 @@ module Language.Drasil (
   -- Document
   , LayoutObj(..), Document(..), DType(..), Section(..), Contents(..)
   , SecCons(..), ListType(..), ItemType(..), ListPair
-  , section
+  , section, fig, figWithWidth
   -- Reference
   , makeRef, acroTest
   -- Space
@@ -126,7 +126,8 @@ import Language.Drasil.Expr.Math (log, sin, cos, tan, sqrt, square, sec, csc, co
 import Language.Drasil.Expr.Extract (vars)
 import Language.Drasil.Output.Formats (DocType(SRS,MG,MIS,LPM,Website))
 import Language.Drasil.Document (LayoutObj(..), Document(..), DType(..)
-  , Section(..), Contents(..), SecCons(..), ListType(..), ItemType(..), section
+  , Section(..), Contents(..), SecCons(..), ListType(..), ItemType(..)
+  , section, fig, figWithWidth
   , ListPair)
 import Language.Drasil.Recipe (Recipe(..))
 import Language.Drasil.Unicode -- all of it

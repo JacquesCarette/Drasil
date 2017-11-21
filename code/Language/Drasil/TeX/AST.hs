@@ -8,6 +8,7 @@ import Language.Drasil.Unicode (Greek,Special)
 import Language.Drasil.Spec (USymb, RefType)
 import Language.Drasil.Citations (Month(..))
 import Language.Drasil.People (People)
+import Language.Drasil.Document (MaxWidthPercent)
 
 data Expr = Var  Variable
           | Dbl  Double
@@ -110,7 +111,7 @@ data LayoutObj = Table [[Spec]] Label Bool Title
              --  | CodeBlock Code
                | Definition [(String,[LayoutObj])] Label
                | List ListType
-               | Figure Label Caption Filepath
+               | Figure Label Caption Filepath MaxWidthPercent
                | Module String Label
                | Requirement Contents Label
                | Assumption Contents Label

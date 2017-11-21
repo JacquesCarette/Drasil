@@ -4,7 +4,7 @@ module Language.Drasil.HTML.Helpers where
 import Text.PrettyPrint
 import Data.List (intersperse)
 
-import Language.Drasil.Document (Document)
+import Language.Drasil.Document (Document, MaxWidthPercent)
 import Language.Drasil.HTML.AST (Expr)
 
 
@@ -58,9 +58,12 @@ reflink :: String -> String -> String
 reflink ref txt = "<a href=#" ++ ref ++ ">" ++ txt ++ "</a>"
 
 -- | Helper for setting up figures
-image :: String -> String -> Doc
-image f c = 
+image :: String -> String -> MaxWidthPercent -> Doc
+image f c 100 = 
   text $ "<img class=\"figure\" src=\"" ++ f ++ "\" alt=\"" ++ c ++ "\"></img>"
+image f c wp =
+  text $ "<img class=\"figure\" src=\"" ++ f ++ "\" alt=\"" ++ c ++ "\"" ++
+  "style=\"max-width: " ++ show (wp / 100) ++ "%;\"></img>"
 
 sub,sup,em :: String -> String  
 -- | Subscript tag
@@ -163,7 +166,7 @@ makeCSS _ = vcat [
     text "  white-space: -o-pre-wrap;",
     text "  background: #faf8f0;}"],
   text ".list {text-align: left;}",
-  text ".figure {max-width: 800px;}",
+  text ".figure {max-width: 100%;}",
   vcat [
     text ".matrix {",
     text "  position: relative;",

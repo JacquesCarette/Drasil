@@ -877,7 +877,7 @@ s3_1_contents pro = foldlSP [makeRef sys_context_fig, S "shows the" +:+.
   S "its", phrase environment]
 
 sys_context_fig :: Contents
-sys_context_fig = Figure (foldlSent_
+sys_context_fig = fig (foldlSent_
   [makeRef sys_context_fig +: EmptyS, titleize sysCont])
   "SystemContextFigure.png"
 
@@ -981,7 +981,7 @@ physSyst3 pcmat ta hfp = [short pcmat, S "suspended in" +:+. phrase ta,
 -- different
 
 fig_tank :: Contents
-fig_tank = Figure (
+fig_tank = fig (
   foldlSent_ [at_start sWHT `sC` S "with", phrase ht_flux_C, S "of",
   getES ht_flux_C `sAnd` phrase ht_flux_P, S "of", getES ht_flux_P])
   "Tank.png"
@@ -1473,11 +1473,11 @@ s7_intro2 = traceGIntro [s7_fig1, s7_fig2]
   foldlSent_ [foldlList $ map plural renameList2, S "on each other"]]
 
 s7_fig1 :: Contents
-s7_fig1 = Figure (showingCxnBw traceyGraph (titleize' item +:+
+s7_fig1 = fig (showingCxnBw traceyGraph (titleize' item +:+
   S "of Different" +:+ titleize' section_)) "ATrace.png"
 
 s7_fig2 :: Contents
-s7_fig2 = Figure (showingCxnBw traceyGraph (foldlList $ map titleize' 
+s7_fig2 = fig (showingCxnBw traceyGraph (foldlList $ map titleize' 
   renameList2)) "RTrace.png"
 
 -------------------------------------------------

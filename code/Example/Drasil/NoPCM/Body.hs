@@ -348,7 +348,7 @@ s4_1_2 = physSystDesc (getAcc progName) fig_tank
   [s4_1_2_list, fig_tank]
 
 fig_tank :: Contents
-fig_tank = Figure (at_start sWHT `sC` S "with" +:+ phrase ht_flux +:+
+fig_tank = fig (at_start sWHT `sC` S "with" +:+ phrase ht_flux +:+
   S "from" +:+ phrase coil `sOf` getES ht_flux_C)
   "TankWaterOnly.png"
 
@@ -972,11 +972,11 @@ s7_intro2 = traceGIntro [s7_fig1, s7_fig2]
   S "and", plural datumConstraint, S "on each other"]]
 
 s7_fig1 :: Contents
-s7_fig1 = Figure (showingCxnBw traceyGraph (titleize' item +:+
+s7_fig1 = fig (showingCxnBw traceyGraph (titleize' item +:+
   S "of Different" +:+ titleize' section_)) "ATrace.png"
 
 s7_fig2 :: Contents
-s7_fig2 = Figure (showingCxnBw traceyGraph (titleize' requirement `sC`
+s7_fig2 = fig (showingCxnBw traceyGraph (titleize' requirement `sC`
   titleize' inModel `sC` S "and" +:+ titleize' datumConstraint)) "RTrace.png"
 
   -- Using the SWHS graphs as place holders until ones can be generated for NoPCM 

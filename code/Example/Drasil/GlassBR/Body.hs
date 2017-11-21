@@ -392,7 +392,7 @@ s6_1_1 = termDefnF (Just (S "All" `sOf` S "the" +:+ plural term_ +:+
 
 s6_1_2 = physSystDesc (short gLassBR) (fig_glassbr) [s6_1_2_list, fig_glassbr]
 
-fig_glassbr = Figure (at_start $ the physicalSystem) (resourcePath ++ "physicalsystimage.png")
+fig_glassbr = fig (at_start $ the physicalSystem) (resourcePath ++ "physicalsystimage.png")
 
 s6_1_2_list = enumSimple 1 (short physSyst) s6_1_2_list_physys
 
@@ -854,12 +854,12 @@ s12_intro = foldlSP [
   sParen ((makeRef fig_5) `sAnd` (makeRef fig_6)),
   S "used for interpolating", plural value, S "needed in the", plural model]
 
-fig_5 = Figure (titleize figure +: S "5" +:+ (demandq ^. defn) +:+
+fig_5 = fig (titleize figure +: S "5" +:+ (demandq ^. defn) +:+
   sParen (getES demand) `sVersus` at_start sD +:+ sParen (getAcc stdOffDist)
   `sVersus` at_start char_weight +:+ sParen (getES sflawParamM))
   (resourcePath ++ "ASTM_F2248-09.png")
 
-fig_6 = Figure (titleize figure +: S "6" +:+ S "Non dimensional" +:+
+fig_6 = fig (titleize figure +: S "6" +:+ S "Non dimensional" +:+
   phrase lateralLoad +:+ sParen (getES dimlessLoad)
   `sVersus` titleize aspectR +:+ sParen (getAcc aR)
   `sVersus` at_start stressDistFac +:+ sParen (getES stressDistFac))

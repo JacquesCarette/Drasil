@@ -309,12 +309,12 @@ s4_1_2_p2 = foldlSP [S "A", phrase fbd, S "of the", plural force,
   makeRef fig_forceacting]
 
 fig_indexconv :: Contents
-fig_indexconv = Figure (foldlSent_ [S "Index convention for numbering",
+fig_indexconv = fig (foldlSent_ [S "Index convention for numbering",
   phrase slice `sAnd` phrase intrslce,
   phrase force, plural variable]) "IndexConvention.png"
 
 fig_forceacting :: Contents
-fig_forceacting = Figure (at_start' force +:+ S "acting on a" +:+
+fig_forceacting = fig (at_start' force +:+ S "acting on a" +:+
   phrase slice) "ForceDiagram.png"
 
 -- SECTION 4.1.3 --

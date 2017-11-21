@@ -64,7 +64,7 @@ expr (a :&& b)         sm = T.And  (expr a sm) (expr b sm)
 expr (a :|| b)         sm = T.Or   (expr a sm) (expr b sm)
 expr (a  :=>  b)       sm = T.Impl  (expr a sm) (expr b sm)
 expr (a  :<=> b)       sm = T.Iff   (expr a sm) (expr b sm)
-expr (IsIn  a b)       sm = T.IsIn  (map (flip expr sm) a) (set b)
+expr (IsIn  a b)       sm = T.IsIn  (expr a sm) (set b)
 expr (State a b)       sm = T.State (map (flip quan sm) a) (expr b sm)
 expr _                 _  = error "Expression unimplemented in TeX"
 

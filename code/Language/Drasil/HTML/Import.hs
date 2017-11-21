@@ -65,7 +65,7 @@ expr (a  :&&  b)      sm = H.And   (expr a sm) (expr b sm)
 expr (a  :||  b)      sm = H.Or    (expr a sm) (expr b sm)
 expr (a  :=>  b)      sm = H.Impl  (expr a sm) (expr b sm)
 expr (a  :<=> b)      sm = H.Iff   (expr a sm) (expr b sm)
-expr (IsIn  a b)      sm = H.IsIn  (map (flip expr sm) a) (set b)
+expr (IsIn  a b)      sm = H.IsIn  (expr a sm) (set b)
 expr (State a b)      sm = H.State (map (flip quan sm) a) (expr b sm)
 expr (Len _)           _ = error "Len not yet implemented"
 expr (Append _ _)      _ = error "Append not yet implemented"

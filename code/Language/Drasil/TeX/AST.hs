@@ -35,8 +35,7 @@ data Expr = Var  Variable
           | Case [(Expr,Expr)]
           | Op Function [Expr]
           | Grouping Expr
-          | IsIn  [Expr] Set
-          | NotIn [Expr] Set
+          | IsIn  Expr Set
           | State [Quantifier] Expr
           | Impl Expr Expr
           | Iff  Expr Expr

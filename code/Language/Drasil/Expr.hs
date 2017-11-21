@@ -62,9 +62,9 @@ data Expr where
   (:&&)    :: Expr -> Expr -> Expr -- logical and
   (:||)    :: Expr -> Expr -> Expr -- logical or
   Not      :: Expr -> Expr -- logical not
-  IsIn  :: [Expr] -> Set -> Expr --	element of
+  IsIn  :: Expr -> Set -> Expr --	element of
   State :: [Quantifier] -> Expr -> Expr
-    --ex. State [(Forall $ [V "x"] `IsIn` Reals), V "x" :> Int 1] (V "x" :^ Int 2 :> V "x")
+    --ex. State [(Forall $ V "x" `IsIn` Reals), V "x" :> Int 1] (V "x" :^ Int 2 :> V "x")
     -- => forall x in R, x>1: x^2 > x
   (:=>)  :: Expr -> Expr -> Expr -- implies, &rArr; \implies
   (:<=>) :: Expr -> Expr -> Expr -- if and only if, &hArr; \iff

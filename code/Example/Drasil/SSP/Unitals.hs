@@ -55,7 +55,7 @@ sspOutputs = [fs, coords, dx_i, dy_i]
 
 monotonicIn :: [Constraint]  --FIXME: Move this?
 monotonicIn = [physc $ \c ->
-  State [Forall c, Forall $ [C index] `IsIn` Natural]
+  State [Forall c, Forall $ C index `IsIn` Natural]
   (inx xi 0 :< inx xi 1 :=> inx yi 0 :< inx yi 1)]
 
 defultUncrt :: Double

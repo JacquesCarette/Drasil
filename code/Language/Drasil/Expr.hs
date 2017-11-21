@@ -1,9 +1,8 @@
-{-# OPTIONS -Wall #-} 
 {-# LANGUAGE GADTs #-}
 -- | The Drasil Expression language
 module Language.Drasil.Expr where
 
-import GHC.Real (Ratio(..)) -- why not Data.Ratio?
+import Data.Ratio (numerator,denominator)
 import Prelude hiding (id, sqrt)
 import Language.Drasil.Chunk (Chunk(..))
 import Language.Drasil.Symbol
@@ -41,7 +40,7 @@ data Expr where
   FCall    :: Expr -> [Expr] -> Expr -- F(x) is (FCall F [x]) or similar
                                   -- FCall accepts a list of params
                                   -- F(x,y) would be (FCall F [x,y]) or sim.
-  Case     :: [(Expr,Relation)] -> Expr -- For multi-case expressions, 
+  Case     :: [(Expr,Relation)] -> Expr -- For multi-case expressions,
                                      -- each pair represents one case
   Matrix   :: [[Expr]] -> Expr
   Index    :: Expr -> Expr -> Expr  -- for accessing elements of sequence/list/vect etc.
@@ -74,7 +73,7 @@ data Expr where
 
 type Set = Space
 {- --import from space?
-           Integer 
+           Integer
          | Rational
          | Real
          | Natural
@@ -83,7 +82,7 @@ type Set = Space
          | String
          | Radians
          | Vect Set
-         | Obj String-} 
+         | Obj String-}
 
 data Quantifier = Forall Expr | Exists Expr deriving Eq -- &forall; \forall -- &exist; \exists
 {-
@@ -96,7 +95,7 @@ monotoniclyIncr xy = Forall [xy `IsIn` MkSet "R^2"] (V "x_1" :< V "x_2"  :=>  V 
 type Variable = String
 
 data DerivType = Part
-               | Total  
+               | Total
   deriving Eq
 
 instance Num Expr where
@@ -105,7 +104,7 @@ instance Num Expr where
   a - b = a :- b
   fromInteger a = Int a
   abs = UnaryOp . Abs
-  
+
   -- this is a Num wart
   signum _ = error "should not use signum in expressions"
 
@@ -144,25 +143,26 @@ instance Eq Expr where
 
 instance Fractional Expr where
   a / b = a :/ b
-  fromRational (a :% b) = (fromInteger a :/ fromInteger b)
+  fromRational r = (fromInteger $ numerator   r) :/
+                   (fromInteger $ denominator r)
 
-  
---Known math functions. 
+
+--Known math functions.
 -- TODO: Move the below to a separate file somehow. How to go about it?
 
 data Bound where
   Low :: Expr -> Bound -- Starting value
   High :: Expr -> Bound -- Upper bound, could be a symbol (n), or a value.
-  
+
 -- | Binary Functions
 data BiFunc where
   Cross :: Expr -> Expr -> BiFunc --Cross Product: HTML &#10799;
   -- Cross product of two expressions
-  
+
 -- | Unary functions
-data UFunc where 
+data UFunc where
   Log :: Expr -> UFunc
-  Summation :: (Maybe (Symbol, Bound, Bound)) -> Expr -> UFunc 
+  Summation :: (Maybe (Symbol, Bound, Bound)) -> Expr -> UFunc
     -- Sum (maybe (index,starting point, ending point)) (sum expression)
     -- where index is used in the sum (i.e. 'i') with a low and high bound
     -- OR Nothing for the first term.
@@ -171,7 +171,7 @@ data UFunc where
   Abs :: Expr -> UFunc -- Absolute value
   Norm :: Expr -> UFunc -- Norm
   Integral :: ((Maybe Bound), (Maybe Bound)) -> Expr -> Expr -> UFunc
-    -- Integral (low,high) Bounds (if any), then (expression to integrate) 
+    -- Integral (low,high) Bounds (if any), then (expression to integrate)
     -- and finally which chunk (variable) we are integrating with respect to.
     -- FIXME: The chunk/var wrt is currently Expr because Quantity (requisite)
     -- causes cyclic imports

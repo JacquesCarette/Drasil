@@ -63,7 +63,6 @@ data Expr where
   (:||)    :: Expr -> Expr -> Expr -- logical or
   Not      :: Expr -> Expr -- logical not
   IsIn  :: [Expr] -> Set -> Expr --	element of
-  NotIn :: [Expr] -> Set -> Expr -- not a member of
   State :: [Quantifier] -> Expr -> Expr
     --ex. State [(Forall $ [V "x"] `IsIn` Reals), V "x" :> Int 1] (V "x" :^ Int 2 :> V "x")
     -- => forall x in R, x>1: x^2 > x
@@ -137,7 +136,6 @@ instance Eq Expr where
   (:=>) a b  == (:=>) c d      =  a == c && b == d
   (:<=>) a b == (:<=>) c d     =  a == c && b == d || a == d && b == c
   IsIn  a b  == IsIn  c d      =  a == c && b == d
-  NotIn a b  == NotIn c d      =  a == c && b == d
   State a b  == State c d      =  a == c && b == d
   _ == _                       =  False
 

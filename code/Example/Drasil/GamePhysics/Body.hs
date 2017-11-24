@@ -1,7 +1,5 @@
 module Drasil.GamePhysics.Body where
 
-import Drasil.Template.MG 
-import Drasil.Template.DD
 import Control.Lens ((^.))
 import Language.Drasil
 import Data.Drasil.SI_Units
@@ -39,10 +37,6 @@ import Drasil.GamePhysics.Concepts (chipmunk, cpAcronyms, twoD)
 import Drasil.GamePhysics.TMods (cpTMods)
 import Drasil.GamePhysics.IMods (iModels)
 import Drasil.GamePhysics.DataDefs (cpDDefs, cpQDefs)
-
-import Drasil.GamePhysics.Modules (modules)
-import Drasil.GamePhysics.Changes (unlikelyChanges, likelyChanges)
-import Drasil.GamePhysics.Reqs (reqs)
 
 import Drasil.DocumentLanguage 
 import Drasil.Sections.SpecificSystemDescription (specSysDescr)
@@ -95,12 +89,6 @@ chipmunkSysInfo = SI {
 
 chipUnits :: [UnitDefn]
 chipUnits = map UU [metre, kilogram, second] ++ map UU [newton, radian]
-
-chipmunkMG :: Document
-chipmunkMG = mgDoc chipmunk (for'' titleize short) auths mgBod
-
-mgBod :: [Section]
-(mgBod, _) = makeDD likelyChanges unlikelyChanges reqs modules
 
 everything :: ChunkDB
 everything = cdb cpSymbolsAll (map nw cpSymbolsAll ++ map nw cpAcronyms)

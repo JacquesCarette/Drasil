@@ -139,7 +139,6 @@ executable tiny
   other-modules:
       Drasil.HGHC.HGHC
     , Drasil.HGHC.HeatTransfer
-    , Drasil.HGHC.Modules
     , Drasil.Sections.TableOfSymbols
     , Drasil.Sections.ReferenceMaterial
     , Drasil.Sections.TableOfAbbAndAcronyms
@@ -241,9 +240,7 @@ executable ssp
     , Drasil.SSP.GenDefs
     , Drasil.SSP.Goals
     , Drasil.SSP.IMods
-    , Drasil.SSP.Modules
     , Drasil.SSP.References
-    , Drasil.SSP.Reqs
     , Drasil.SSP.Requirements
     , Drasil.SSP.TMods
     , Drasil.SSP.Unitals
@@ -334,8 +331,6 @@ executable chipmunkdocs
     , Drasil.GamePhysics.Changes
     , Drasil.GamePhysics.Concepts
     , Drasil.GamePhysics.DataDefs
-    , Drasil.GamePhysics.Modules
-    , Drasil.GamePhysics.Reqs
     , Drasil.GamePhysics.TMods
     , Drasil.GamePhysics.Unitals
     , Drasil.GamePhysics.IMods

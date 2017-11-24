@@ -77,7 +77,7 @@ tiny_diff: tiny_build
 	
 ssp_diff: ssp_build
 	- $(DIFF) ./stable/ssp/$(SSP_PREF)SRS.tex ./build/$(SSP_DIR)/SRS/$(SSP_PREF)SRS.tex &> $(SSP_PREF)log.log
-	- $(DIFF) ./stable/ssp/$(SSP_PREF)MG.tex ./build/$(SSP_DIR)/MG/$(SSP_PREF)MG.tex >> $(SSP_PREF)log.log 2>&1
+#	- $(DIFF) ./stable/ssp/$(SSP_PREF)MG.tex ./build/$(SSP_DIR)/MG/$(SSP_PREF)MG.tex >> $(SSP_PREF)log.log 2>&1
 	- $(DIFF) ./stable/ssp/$(SSP_PREF)SRS.css ./build/$(SSP_DIR)/Website/$(SSP_PREF)SRS.css >> $(SSP_PREF)log.log 2>&1
 	- $(DIFF) ./stable/ssp/$(SSP_PREF)SRS.html ./build/$(SSP_DIR)/Website/$(SSP_PREF)SRS.html >> $(SSP_PREF)log.log 2>&1
 	
@@ -89,7 +89,7 @@ glassbr_diff: glassbr_build
 	
 gamephys_diff: gamephys_build
 	- $(DIFF) ./stable/gamephys/$(GAME_PREF)SRS.tex ./build/$(GAME_DIR)/SRS/$(GAME_PREF)SRS.tex &> $(GAME_PREF)log.log
-	- $(DIFF) ./stable/gamephys/$(GAME_PREF)MG.tex ./build/$(GAME_DIR)/MG/$(GAME_PREF)MG.tex >> $(GAME_PREF)log.log 2>&1
+#	- $(DIFF) ./stable/gamephys/$(GAME_PREF)MG.tex ./build/$(GAME_DIR)/MG/$(GAME_PREF)MG.tex >> $(GAME_PREF)log.log 2>&1
 	- $(DIFF) ./stable/gamephys/$(GAME_PREF)SRS.css ./build/$(GAME_DIR)/Website/$(GAME_PREF)SRS.css >> $(GAME_PREF)log.log 2>&1
 	- $(DIFF) ./stable/gamephys/$(GAME_PREF)SRS.html ./build/$(GAME_DIR)/Website/$(GAME_PREF)SRS.html >> $(GAME_PREF)log.log 2>&1
 	

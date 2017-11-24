@@ -1,14 +1,12 @@
 module Main where
 
-import Language.Drasil (DocType(SRS, MG, Website), Recipe(..), gen)
+import Language.Drasil (DocType(SRS, Website), Recipe(..), gen)
 
-import Drasil.GamePhysics.Body (chipmunkSRS', chipmunkMG, everything)
+import Drasil.GamePhysics.Body (chipmunkSRS', everything)
 
 docs :: [Recipe]
 docs = [Recipe (SRS "Chipmunk_SRS") chipmunkSRS',
-        Recipe (Website "Chipmunk_SRS") chipmunkSRS',
-        -- Recipe (Website "Chipmunk_MG") chipmunkMG,
-        Recipe (MG "Chipmunk_MG") chipmunkMG
+        Recipe (Website "Chipmunk_SRS") chipmunkSRS'
        ]
 
 main :: IO ()

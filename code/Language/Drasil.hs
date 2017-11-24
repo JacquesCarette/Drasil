@@ -54,7 +54,7 @@ module Language.Drasil (
   , ModuleChunk, makeRecord, makeImpModule, makeImpModuleNoGen, makeUnimpModule
   , imp, hier, field, formatName, method, secret, uses
   -- Chunk.Req
-  , ReqChunk(..), emptyN
+  , ReqChunk(..)
   -- Chunk.LC
   , LCChunk(..)
   -- Chunk.Other

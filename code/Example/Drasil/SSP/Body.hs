@@ -1,4 +1,4 @@
-module Drasil.SSP.Body (ssp_srs, ssp_mg, ssp_code, sspSymMap) where
+module Drasil.SSP.Body (ssp_srs, ssp_code, sspSymMap) where
 
 import Language.Drasil
 import Data.Drasil.SI_Units
@@ -8,7 +8,6 @@ import Prelude hiding (sin, cos, tan)
 import Data.Drasil.People (henryFrankis)
 
 import Drasil.SSP.Assumptions (sspAssumptions)
-import Drasil.SSP.Changes (likelyChanges, unlikelyChanges)
 import Drasil.SSP.DataDefs (sspDataDefs, resShrDerivation,
   mobShrDerivation, stfMtrxDerivation)
 import Drasil.SSP.DataDesc (sspInputMod)
@@ -20,9 +19,7 @@ import Drasil.SSP.Goals (sspGoals)
 import Drasil.SSP.IMods (instModIntro1, instModIntro2,
   sspIMods, fctSftyDerivation, nrmShrDerivation,
   intrSlcDerivation, rigDisDerivation, rigFoSDerivation)
-import Drasil.SSP.Modules (modules)
 import Drasil.SSP.References (sspCitations)
-import Drasil.SSP.Reqs (reqs)
 import Drasil.SSP.Requirements (sspRequirements, sspInputDataTable)
 import Drasil.SSP.TMods (sspTMods)
 import Drasil.SSP.Unitals (sspSymbols, sspInputs, sspOutputs,
@@ -63,9 +60,6 @@ import Data.Drasil.Utils (symbolMapFun,
   getES, enumBullet, enumSimple, weave)
 import Data.Drasil.SentenceStructures (sOr, acroDD,
   foldlSent, ofThe, sAnd, foldlSP, foldlList, foldlSent_)
-
-import Drasil.Template.MG (mgDoc)
-import Drasil.Template.DD (makeDD)
 
 --type declarations for sections--
 s3, s4, s5, s6, s7 :: Section
@@ -114,12 +108,8 @@ mkSRS = RefSec (RefProg intro
     --FIXME: issue #235
   map Verbatim [s3, s4, s5, s6, s7] ++ [Bibliography sspCitations]
   
-ssp_srs, ssp_mg :: Document
+ssp_srs :: Document
 ssp_srs = mkDoc mkSRS (for) ssp_si
-ssp_mg = mgDoc ssa (for'' titleize titleize) (name henryFrankis) mgBod
-
-mgBod :: [Section]
-(mgBod, _) = makeDD likelyChanges unlikelyChanges reqs modules
 
 sspChoices :: Choices
 sspChoices = Choices {

@@ -8,7 +8,7 @@ import Language.Drasil.Unicode (Greek,Special)
 import Language.Drasil.Spec (USymb, RefType)
 import Language.Drasil.Citations (Month(..))
 import Language.Drasil.People (People)
-import Language.Drasil.Document (MaxWidthPercent)
+import Language.Drasil.Document (MaxWidthPercent, DType)
 
 data Expr = Var  Variable
           | Dbl  Double
@@ -118,6 +118,7 @@ data LayoutObj = Table [[Spec]] Label Bool Title
                | UnlikelyChange Contents Label
                | Graph [(Spec, Spec)] (Maybe Width) (Maybe Height) Caption Label
                | Bib BibRef
+               | Defnt DType [(String,[LayoutObj])] Label -- To replace Definition eventually
                
 data ListType = Item [ItemType]
               | Enum [ItemType]

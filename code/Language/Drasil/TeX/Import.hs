@@ -217,7 +217,8 @@ lay (TMod ps r _)         sm = T.Definition (map (\(x,y) ->
   (x, map (flip lay sm) y)) ps) (spec r sm)
 lay (DDef ps r _)         sm = T.Definition (map (\(x,y) -> 
   (x, map (flip lay sm) y)) ps) (spec r sm)
-lay (Defnt _ _ _)      _ = T.Paragraph (T.EmptyS)  -- need to implement!
+lay (Defnt dtyp pairs rn) sm = T.Defnt dtyp (layPairs pairs) (spec rn sm)
+  where layPairs = map (\(x,y) -> (x, (map (\z -> lay z sm) y))) 
 lay (GDef)             _ = T.Paragraph (T.EmptyS)  -- need to implement!
 lay (IMod)             _ = T.Paragraph (T.EmptyS)  -- need to implement!
 lay (Bib bib)         sm = T.Bib $ map (flip layCite sm) bib

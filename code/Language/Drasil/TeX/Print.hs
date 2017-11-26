@@ -63,6 +63,7 @@ lo (EqnBlock contents)     = makeEquation contents
 lo (Table rows r bl t)     = toText $ makeTable rows (spec r) bl (spec t)
 --lo (CodeBlock c)           = code $ pure $ printCode c
 lo (Definition ssPs l)     = toText $ makeDefn ssPs $ spec l
+lo (Defnt _ ssPs l)        = toText $ makeDefn ssPs $ spec l
 lo (List l)                = toText $ makeList l
 lo (Figure r c f wp)       = toText $ makeFigure (spec r) (spec c) f wp
 lo (Module n l)            = toText $ makeModule n $ spec l

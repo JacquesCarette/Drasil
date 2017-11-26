@@ -25,8 +25,10 @@ data Field = Label
            | Symbol
            | Units
            | DefiningEquation
-           | Description Verbosity InclUnits VerbatimIntro
-           -- --| Sources --TODO
+           | Description Verbosity InclUnits
+           -- --| Sources --TODO: Use Attribute? Or add new lens? 
+              --  I think attribute would make most sense, as sources can and
+              -- will be modified across applications; the underlying knowledge won't.
            -- --| RefBy --TODO
            
 data Verbosity = Verbose  -- Full Descriptions
@@ -34,19 +36,21 @@ data Verbosity = Verbose  -- Full Descriptions
 
 data InclUnits = IncludeUnits -- In description field (for other symbols)
                | IgnoreUnits
-               
+
+-- FIXME: Will need to couple specialized intros with the chunks they belong to.
+-- Sounds like an attribute for Definitions/Models.
 type VerbatimIntro = Sentence
 
 -- | Create a theoretical model using a list of fields to be displayed, a database of symbols,
 -- and a RelationConcept (called automatically by 'SCSSub' program)
 tmodel :: HasSymbolTable ctx => Fields -> ctx -> TheoryModel -> Contents
 tmodel fs m t = Defnt TM (foldr (mkTMField t m) [] fs)
-  (S $ t ^. id) --FIXME: Generate reference names here
+  (S "T:" :+: S (t ^. id)) --FIXME: Generate reference names here
 
 -- | Create a data definition using a list of fields, a database of symbols, and a 
 -- QDefinition (called automatically by 'SCSSub' program)
 ddefn :: HasSymbolTable ctx => Fields -> ctx -> QDefinition -> Contents
-ddefn fs m d = Defnt DD (foldr (mkQField d m) [] fs) (S "DD:" +:+ S (d ^. id))
+ddefn fs m d = Defnt DD (foldr (mkQField d m) [] fs) (S "DD:" :+: S (d ^. id))
 --FIXME: Generate the reference names here
 
 gdefn :: HasSymbolTable ctx => Fields -> ctx -> GenDefn -> Contents
@@ -61,7 +65,7 @@ mkTMField :: HasSymbolTable ctx => TheoryModel -> ctx -> Field -> ModRow -> ModR
 mkTMField t _ l@Label fs  = (show l, (Paragraph $ at_start t):[]) : fs
 mkTMField t _ l@DefiningEquation fs = 
   (show l, (map EqnBlock (map tConToExpr (t ^. invariants)))) : fs
-mkTMField t m l@(Description v u intro) fs = (show l, Paragraph intro : 
+mkTMField t m l@(Description v u) fs = (show l,  
   foldr (\x -> buildTMDescription v u x m) [] (map tConToExpr (t ^. invariants))) : fs
 mkTMField _ _ label _ = error $ "Label " ++ show label ++ " not supported " ++
   "for theory models"
@@ -78,8 +82,8 @@ mkQField d _ l@Label fs = (show l, (Paragraph $ at_start d):[]) : fs
 mkQField d _ l@Symbol fs = (show l, (Paragraph $ (P $ eqSymb d)):[]) : fs
 mkQField d _ l@Units fs = (show l, (Paragraph $ (unit'2Contents d)):[]) : fs
 mkQField d _ l@DefiningEquation fs = (show l, (EqnBlock $ equat d):[]) : fs
-mkQField d m l@(Description v u intro) fs = 
-  (show l, Paragraph intro : buildDDescription v u d m) : fs
+mkQField d m l@(Description v u) fs = 
+  (show l, buildDDescription v u d m) : fs
 
 -- | Create the description field (if necessary) using the given verbosity and
 -- including or ignoring units for a model / general definition
@@ -104,7 +108,7 @@ mkGDField g _ l@Units fs =
     case u of Nothing   -> fs
               Just udef -> (show l, (Paragraph $ Sy (udef ^. usymb)):[]) : fs
 mkGDField g _ l@DefiningEquation fs = (show l, (EqnBlock (g ^. relat)):[]) : fs
-mkGDField g m l@(Description v u intro) fs = (show l, Paragraph intro : 
+mkGDField g m l@(Description v u) fs = (show l, 
   (buildGDDescription v u (g ^. relat) m)) : fs
 mkGDField _ _ l _ = error $ "Label " ++ show l ++ " not supported for gen defs"
 
@@ -131,6 +135,6 @@ instance Show Field where
   show Symbol = "Symbol"
   show Units = "Units"
   show DefiningEquation = "Equation"
-  show (Description _ _ _) = "Description"
+  show (Description _ _) = "Description"
   -- show Sources = "Sources"
   -- show RefBy = "RefBy"

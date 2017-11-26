@@ -101,7 +101,7 @@ mkSRS = RefSec (RefProg intro [TUnits, tsymb [TSPurpose, SymbOrder], TAandA]) :
     [SSDProblem  (PDProg start gLassBR ending [s6_1_1, s6_1_2, s6_1_3])
     , SSDSolChSpec (SCSProg
     [DDs [Label, Symbol, Units, DefiningEquation,
-          Description Verbose IncludeUnits (S "Testing")] dataDefns])]) :
+          Description Verbose IncludeUnits] dataDefns])]) :
   ReqrmntSec (ReqsProg [
     FReqsSub s7_1_list, 
     NonFReqsSub [performance] (gBRpriorityNFReqs)

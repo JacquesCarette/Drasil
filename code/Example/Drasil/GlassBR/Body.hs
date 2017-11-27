@@ -100,8 +100,7 @@ mkSRS = RefSec (RefProg intro [TUnits, tsymb [TSPurpose, SymbOrder], TAandA]) :
   SSDSec (SSDProg
     [SSDProblem  (PDProg start gLassBR ending [s6_1_1, s6_1_2, s6_1_3])
     , SSDSolChSpec (SCSProg
-    [ TMs [ Label, Symbol, Units, DefiningEquation
-          , Description Verbose IncludeUnits] [t1IsSafe]
+    [ TMs [ Label, DefiningEquation, Description Verbose IncludeUnits] [t1IsSafe]
     , DDs [Label, Symbol, Units, DefiningEquation,
           Description Verbose IncludeUnits] dataDefns])]) :
   ReqrmntSec (ReqsProg [

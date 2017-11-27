@@ -64,17 +64,15 @@ type ModRow = [(String,[Contents])]
 mkTMField :: HasSymbolTable ctx => TheoryModel -> ctx -> Field -> ModRow -> ModRow
 mkTMField t _ l@Label fs  = (show l, (Paragraph $ at_start t):[]) : fs
 mkTMField t _ l@DefiningEquation fs = 
-  (show l, (map EqnBlock 
-  (map (\x -> tConToExpr x (C t)) (t ^. invariants)))) : fs
+  (show l, (map EqnBlock (map tConToExpr (t ^. invariants)))) : fs
 mkTMField t m l@(Description v u) fs = (show l,  
-  foldr (\x -> buildTMDescription v u x m) [] 
-  (map (\x -> tConToExpr x (C t)) (t ^. invariants))) : fs
+  foldr (\x -> buildTMDescription v u x m) [] (map tConToExpr (t ^. invariants))) : fs
 mkTMField _ _ label _ = error $ "Label " ++ show label ++ " not supported " ++
   "for theory models"
 
-tConToExpr :: Constraint -> Expr -> Expr
-tConToExpr (Phys x) = x --FIXME: HACK
-tConToExpr (Sfwr x) = x --FIXME: HACK
+tConToExpr :: Constraint -> Expr
+tConToExpr (Phys x) = x 0 --FIXME: HACK
+tConToExpr (Sfwr x) = x 0 --FIXME: HACK
 
 -- TODO: buildDescription gets list of constraints to expr and ignores 't'.
 

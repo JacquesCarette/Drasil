@@ -295,7 +295,7 @@ makeDefn dt ps l sm = refwrap l $ wrap "table" [dtag dt] (makeDRows ps sm)
   where dtag (L.Data _)   = "ddefn"
         dtag (L.Theory _) = "tdefn"
         dtag (L.General)  = "gdefn"
-        dtag (L.Instance) = error "Not yet implemented?"
+        dtag (L.Instance) = error "Not yet implemented"
         dtag (L.TM) = "tdefn"
         dtag (L.DD) = "ddefn"
 

@@ -63,6 +63,8 @@ module Language.Drasil (
   , cqs, qs, nw, CQSWrapper, NWrapper
   --Chunk.UWrapper 
   , UWrapper, uw, ucw, UCWrapper
+    -- Chunks w/ Attributes
+  , Attribute(..), Attributes, attributes
   --Citations
   , BibRef, City, State, Citation(..), CiteField(..), Month(..), getAuthors, getYear
   -- Spec
@@ -133,6 +135,7 @@ import Language.Drasil.Recipe (Recipe(..))
 import Language.Drasil.Unicode -- all of it
 import Language.Drasil.Unit -- all of it
 import Language.Drasil.Chunk
+import Language.Drasil.Chunk.Attribute
 import Language.Drasil.Chunk.NamedIdea
 import Language.Drasil.Chunk.Concept
 import Language.Drasil.Chunk.SymbolForm hiding (symbol)

@@ -26,10 +26,10 @@ data Field = Label
            | Units
            | DefiningEquation
            | Description Verbosity InclUnits
-           -- --| Sources --TODO: Use Attribute? Or add new lens? 
+           | Source --TODO: Use Attribute? Or add new lens? 
               --  I think attribute would make most sense, as sources can and
               -- will be modified across applications; the underlying knowledge won't.
-           -- --| RefBy --TODO
+           | RefBy --TODO: Fill in the field.
            
 data Verbosity = Verbose  -- Full Descriptions
                | Succinct -- Simple Description (do not redefine other symbols)
@@ -67,6 +67,8 @@ mkTMField t _ l@DefiningEquation fs =
   (show l, (map EqnBlock (map tConToExpr (t ^. invariants)))) : fs
 mkTMField t m l@(Description v u) fs = (show l,  
   foldr (\x -> buildTMDescription v u x m) [] (map tConToExpr (t ^. invariants))) : fs
+mkTMField _ _ l@(RefBy) fs = (show l, fixme) : fs --FIXME: fill this in
+mkTMField _ _ l@(Source) fs = (show l, fixme) : fs --FIXME: fill this in
 mkTMField _ _ label _ = error $ "Label " ++ show label ++ " not supported " ++
   "for theory models"
 
@@ -85,6 +87,8 @@ mkQField d _ l@Units fs = (show l, (Paragraph $ (unit'2Contents d)):[]) : fs
 mkQField d _ l@DefiningEquation fs = (show l, (EqnBlock $ equat d):[]) : fs
 mkQField d m l@(Description v u) fs = 
   (show l, buildDDescription v u d m) : fs
+mkQField _ _ l@(RefBy) fs = (show l, fixme) : fs --FIXME: fill this in
+mkQField _ _ l@(Source) fs = (show l, fixme) : fs --FIXME: fill this in
 
 -- | Create the description field (if necessary) using the given verbosity and
 -- including or ignoring units for a model / general definition
@@ -138,4 +142,9 @@ instance Show Field where
   show DefiningEquation = "Equation"
   show (Description _ _) = "Description"
   -- show Sources = "Sources"
-  -- show RefBy = "RefBy"
+  show RefBy = "RefBy"
+  show Source = "Source"
+
+fixme :: [Contents]
+fixme = [Paragraph $ S "FIXME: This needs to be filled in"]
+  

@@ -53,7 +53,7 @@ import Drasil.GlassBR.Symbols
 import Drasil.GlassBR.Concepts (aR, lShareFac, gLassBR, stdOffDist,
   glaSlab, blastRisk, glass, responseTy, cantilever, beam, plane, edge,
   glaPlane, glassBRProg, ptOfExplsn, acronyms)
-import Drasil.GlassBR.TMods (tModels, t1SafetyReq, t2SafetyReq)
+import Drasil.GlassBR.TMods (tModels, t1SafetyReq, t2SafetyReq,t1IsSafe)
 import Drasil.GlassBR.IMods (iModels, calOfCap, calOfDe, probOfBr)
 import Drasil.GlassBR.DataDefs (dataDefns, gbQDefns, hFromt,
   strDisFac, nonFL, dimLL, glaTyFac, tolStrDisFac, tolPre)
@@ -96,11 +96,13 @@ mkSRS = RefSec (RefProg intro [TUnits, tsymb [TSPurpose, SymbOrder], TAandA]) :
     SystCons [] []]) :
   ScpOfProjSec (ScpOfProjProg (short gLassBR) (s5_1_table) (s5_2 (glaSlab)
     (capacity) (demandq) (probability))) :
-  {- SSDSec (SSDVerb s6) : -}
+  {-SSDSec (SSDVerb s6) : -}
   SSDSec (SSDProg
     [SSDProblem  (PDProg start gLassBR ending [s6_1_1, s6_1_2, s6_1_3])
     , SSDSolChSpec (SCSProg
-    [DDs [Label, Symbol, Units, DefiningEquation,
+    [ TMs [ Label, Symbol, Units, DefiningEquation
+          , Description Verbose IncludeUnits] [t1IsSafe]
+    , DDs [Label, Symbol, Units, DefiningEquation,
           Description Verbose IncludeUnits] dataDefns])]) :
   ReqrmntSec (ReqsProg [
     FReqsSub s7_1_list, 

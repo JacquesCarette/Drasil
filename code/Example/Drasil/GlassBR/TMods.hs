@@ -1,4 +1,4 @@
-module Drasil.GlassBR.TMods (tModels, t1SafetyReq, t2SafetyReq) where
+module Drasil.GlassBR.TMods (tModels, t1SafetyReq, t2SafetyReq,t1IsSafe) where
 
 import Drasil.GlassBR.Unitals (is_safe1, is_safe2, demand, 
   demandq, lRe, pb_tol, prob_br)
@@ -15,6 +15,13 @@ import Data.Drasil.Utils (getES)
 
 tModels :: [RelationConcept]
 tModels = [t1SafetyReq, t2SafetyReq]
+
+-- FIXME: This is a hack to see if TheoryModel printing will work. This chunk
+-- needs to be updated properly.
+t1IsSafe :: TheoryModel
+t1IsSafe = tm (cw t1SafetyReq) 
+  (tc' "isSafe" [qw is_safe1, qw prob_br, qw pb_tol] ([] :: [CWrapper])
+  [] [Phys (\a -> a := (C prob_br) :< (C pb_tol))] [])
 
 t1SafetyReq :: RelationConcept
 t1SafetyReq = makeRC "t1SafetyReq" (nounPhraseSP "Safety Requirement-1")

@@ -46,6 +46,7 @@ class Quantity c => Constrained c where
 data Constraint where
   Phys :: (Expr -> Relation) -> Constraint
   Sfwr :: (Expr -> Relation) -> Constraint
+  Invariant :: Relation -> Constraint -- Used by Theories (to start).
   
 physc :: (Expr -> Relation) -> Constraint
 physc = Phys

@@ -73,6 +73,7 @@ mkTMField _ _ label _ = error $ "Label " ++ show label ++ " not supported " ++
 tConToExpr :: Constraint -> Expr
 tConToExpr (Phys x) = x 0 --FIXME: HACK
 tConToExpr (Sfwr x) = x 0 --FIXME: HACK
+tConToExpr (Invariant x) = x
 
 -- TODO: buildDescription gets list of constraints to expr and ignores 't'.
 

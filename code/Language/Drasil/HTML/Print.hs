@@ -16,9 +16,10 @@ import Language.Drasil.Unicode
 import Language.Drasil.Symbol (Symbol(..), Decoration(..))
 import qualified Language.Drasil.Document as L
 import Language.Drasil.HTML.Monad
-import Language.Drasil.People (People,Person(..),rendPersLFM',rendPersLFM'',Conv(..),nameStr)
+import Language.Drasil.People (People,Person(..),rendPersLFM',rendPersLFM'',Conv(..),nameStr,rendPersLFM, isInitial)
 import Language.Drasil.Config (StyleGuide(..), bibStyleH)
 import Language.Drasil.ChunkDB (HasSymbolTable(..))
+import Language.Drasil.Spec (Sentence, sC, (+:+))
 
 --FIXME? Use Doc in place of Strings for p_spec/title_spec
 
@@ -444,7 +445,7 @@ bookMLA (Series     s) sm  = dot $ em $ p_spec s sm
 bookMLA (Title      s) sm  = dot $ em $ p_spec s sm --If there is a series or collection, this should be in quotes, not italics
 bookMLA (Volume     s)  _  = comm $ "vol. " ++ show s
 bookMLA (Publisher  s) sm  = comm $ p_spec s sm
-bookMLA (Author     p) sm  = dot $ p_spec (rendPeople' p) sm
+bookMLA (Author     p) sm  = dot $ p_spec (rendPeople' sm p) sm
 bookMLA (Year       y)  _  = dot $ show y
 bookMLA (Date    d m y)  _ = dot $ unwords [show d, show m, show y]
 bookMLA (URLdate d m y) sm = "Web. " ++ bookMLA (Date d m y) sm
@@ -458,25 +459,25 @@ bookMLA (School     s) sm  = comm $ p_spec s sm
 bookMLA (Thesis     t)  _  = comm $ show t
 bookMLA (URL        s) sm  = dot $ p_spec s sm
 bookMLA (HowPub     s) sm  = comm $ p_spec s sm
-bookMLA (Editor     p) sm  = comm $ "Edited by " ++ p_spec (foldlList $ map (S . nameStr) p) sm
+bookMLA (Editor     p) sm  = comm $ "Edited by " ++ p_spec (foldlList (map (flip spec sm . nameStr) p)) sm
 
 bookAPA :: HasSymbolTable s => CiteField -> s -> String --FIXME: year needs to come after author in APA
-bookAPA (Author   p) sm = needDot $ p_spec (rendPeople rendPersLFM' p) sm --APA uses initals rather than full name
+bookAPA (Author   p) sm = needDot $ p_spec (rendPeople sm rendPersLFM' p) sm --APA uses initals rather than full name
 bookAPA (Year     y)  _ = dot $ paren $ show y --APA puts "()" around the year
 bookAPA (Date _ _ y) sm = bookAPA (Year y) sm --APA doesn't care about the day or month
 bookAPA (URLdate d m y)  _ = "Retrieved, " ++ (comm $ unwords [show d, show m, show y])
 bookAPA (Page     n)   _ = dot $ show n
 bookAPA (Pages (a,b))  _ = dot $ show a ++ "&ndash;" ++ show b
-bookAPA (Editor   p)  sm = dot $ p_spec (foldlList $ map (S . nameStr) p) sm ++ " (Ed.)"
+bookAPA (Editor   p)  sm = dot $ p_spec (foldlList $ map ( flip spec sm . nameStr) p) sm ++ " (Ed.)"
 bookAPA i sm = bookMLA i sm --Most items are rendered the same as MLA
 
 bookChicago :: HasSymbolTable s => CiteField -> s -> String
-bookChicago (Author   p) sm = needDot $ p_spec (rendPeople rendPersLFM'' p) sm --APA uses middle initals rather than full name
+bookChicago (Author   p) sm = needDot $ p_spec (rendPeople sm rendPersLFM'' p) sm --APA uses middle initals rather than full name
 bookChicago (Date _ _ y) sm = bookChicago (Year y) sm --APA doesn't care about the day or month
 bookChicago (URLdate d m y)  _ = "accessed " ++ (comm $ unwords [show d, show m, show y])
 bookChicago p@(Page   _) sm = bookAPA p sm
 bookChicago p@(Pages  _) sm = bookAPA p sm
-bookChicago (Editor   p) sm = dot $ p_spec (foldlList $ map (S . nameStr) p) sm ++ toPlural p " ed"
+bookChicago (Editor   p) sm = dot $ p_spec (foldlList $ map (flip spec sm . nameStr) p) sm ++ toPlural p " ed"
 bookChicago i sm = bookMLA i sm--Most items are rendered the same as MLA
 
 -- for article renderings
@@ -500,13 +501,13 @@ artclChicago i = bookChicago i
 
 -- PEOPLE RENDERING --
 
-rendPeople :: (Person -> String) -> People -> Spec
-rendPeople _ []  = S "N.a." -- "No authors given"
-rendPeople f people = foldlList $ map (S . f) people --foldlList is in SentenceStructures.hs
+rendPeople :: HasSymbolTable s => s -> (Person -> Sentence) -> People -> Spec
+rendPeople _ _ []  = S "N.a." -- "No authors given"
+rendPeople sm f people = foldlList $ map (flip spec sm . f) people --foldlList is in SentenceStructures.hs
 
-rendPeople' :: People -> Spec
-rendPeople' []  = S "N.a." -- "No authors given"
-rendPeople' people = foldlList $ map (S . rendPers) (init people) ++ [S $ rendPersL $ last people]
+rendPeople' :: HasSymbolTable s => s -> People -> Spec
+rendPeople' _ []  = S "N.a." -- "No authors given"
+rendPeople' sm people = foldlList $ map (flip spec sm . rendPers) (init people) ++  [spec (rendPersL $ last people) sm] 
 
 foldlList :: [Spec] -> Spec
 foldlList []    = EmptyS
@@ -524,22 +525,20 @@ needDot str = dotIt $ last str
   where dotIt '.' = str
         dotIt _   = dot str
 -- LFM is Last, First Middle
-rendPers :: Person -> String
-rendPers (Person {_surname = n, _convention = Mono}) = isInitial n
-rendPers (Person {_given = f, _surname = l, _middle = ms}) =
-  isInitial l ++ ", " ++ unwords (isInitial f: map isInitial ms)
+rendPers :: Person -> Sentence
+rendPers = rendPersLFM
 
 -- To render the last person's name
-rendPersL :: Person -> String
+rendPersL :: Person -> Sentence
 rendPersL (Person {_surname = n, _convention = Mono}) = n
 rendPersL (Person {_given = f, _surname = l, _middle = []}) =
-  isInitial l ++ ", " ++ isInitial f
+  isInitial l `sC` isInitial f
 rendPersL (Person {_given = f, _surname = l, _middle = ms}) =
-  isInitial l ++ ", " ++ unwords ([isInitial f] ++ map isInitial (init ms) ++ [last ms])
+  isInitial l `sC` foldr1 (+:+) ([isInitial f] ++ map isInitial (init ms) ++ [last ms])
 
-isInitial :: String -> String
-isInitial [x]  = [x,'.']
-isInitial name = name
+-- isInitial :: String -> String
+-- isInitial [x]  = [x,'.']
+-- isInitial name = name
 
 --adds an 's' if there is more than one person in a list
 toPlural :: People -> String -> String

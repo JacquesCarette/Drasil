@@ -4,7 +4,7 @@ module Language.Drasil.People
   , HasName
   , name, manyNames, nameStr
   , Conv(..) --This is needed to unwrap names for the bibliography
-  , lstName, initial
+  , lstName, initial, isInitial
   , rendPersLFM, rendPersLFM', rendPersLFM''
   ) where
 

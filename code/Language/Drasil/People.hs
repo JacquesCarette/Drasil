@@ -61,9 +61,9 @@ class HasName p where
 
 instance HasName Person where
   nameStr (Person _ n _ Mono) =  isInitial n
-  nameStr (Person f l ms Western) = foldr1 (+:+) (
+  nameStr (Person f l ms Western) = foldr (+:+) EmptyS (
     [isInitial f] ++ map isInitial ms ++ [isInitial l])
-  nameStr (Person g s ms Eastern) = foldr1 (+:+) (
+  nameStr (Person g s ms Eastern) = foldr (+:+) EmptyS (
     [isInitial s] ++ map isInitial ms ++ [isInitial g])
 
 name :: (HasName n) => n -> Sentence
@@ -86,26 +86,29 @@ lstName (Person {_surname = l}) = l
 rendPersLFM :: Person -> Sentence
 rendPersLFM (Person {_surname = n, _convention = Mono}) = n
 rendPersLFM (Person {_given = f, _surname = l, _middle = ms}) =
-  (isInitial l) `sC` (isInitial f) +:+ foldr1 (+:+) ms
+  (isInitial l) `sC` (isInitial f) +:+ foldr (+:+) EmptyS (map isInitial ms)
 
 -- LFM' is Last, F. M.
 rendPersLFM' :: Person -> Sentence
 rendPersLFM' (Person {_surname = n, _convention = Mono}) = n
 rendPersLFM' (Person {_given = f, _surname = l, _middle = ms}) =
-  (isInitial l) `sC` S ((unwords . map initial) (f:ms))
+  (isInitial l) `sC` foldr (+:+) EmptyS (map (initial) (f:ms))
 
 -- LFM'' is Last, First M.
 rendPersLFM'' :: Person -> Sentence
 rendPersLFM'' (Person {_surname = n, _convention = Mono}) = n
 rendPersLFM'' (Person {_given = f, _surname = l, _middle = ms}) =
-  (isInitial l) `sC` (isInitial f) +:+ S (unwords (map initial ms))
+  (isInitial l) `sC` foldr1 (+:+) (isInitial f : (map (initial) ms))
 
-initial :: Sentence -> String
-initial (a :+: _) = initial a
-initial (S s) = (head s : ".")
+initial :: Sentence -> Sentence
+initial (EmptyS :+: b) = initial b
+initial (a :+: b) = initial a
+initial (S s) = S $ (head s : ".")
 initial _ = error "Cannot get initials for this name"
 
 
 isInitial :: Sentence -> Sentence
-isInitial (S [x])  = S $ [x,'.']
+isInitial (EmptyS :+: b) = isInitial b
+isInitial (a :+: _) = isInitial a
+isInitial (S [x])   = S [x,'.']
 isInitial nm = nm

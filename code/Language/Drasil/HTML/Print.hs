@@ -8,7 +8,7 @@ import Numeric (showFFloat)
 import Language.Drasil.HTML.Import (makeDocument, spec)
 import Language.Drasil.HTML.AST
 import qualified Language.Drasil.Output.Formats as F
-import Language.Drasil.Spec (USymb(..), RefType(..))
+import Language.Drasil.Spec (USymb(..), RefType(..), Sentence, sC, (+:+))
 
 import Language.Drasil.HTML.Helpers
 import Language.Drasil.Printing.Helpers
@@ -19,7 +19,6 @@ import Language.Drasil.HTML.Monad
 import Language.Drasil.People (People,Person(..),rendPersLFM',rendPersLFM'',Conv(..),nameStr,rendPersLFM, isInitial)
 import Language.Drasil.Config (StyleGuide(..), bibStyleH)
 import Language.Drasil.ChunkDB (HasSymbolTable(..))
-import Language.Drasil.Spec (Sentence, sC, (+:+))
 
 --FIXME? Use Doc in place of Strings for p_spec/title_spec
 
@@ -534,7 +533,7 @@ rendPersL (Person {_surname = n, _convention = Mono}) = n
 rendPersL (Person {_given = f, _surname = l, _middle = []}) =
   isInitial l `sC` isInitial f
 rendPersL (Person {_given = f, _surname = l, _middle = ms}) =
-  isInitial l `sC` foldr1 (+:+) ([isInitial f] ++ map isInitial (init ms) ++ [last ms])
+  isInitial l `sC` foldr1 (+:+) ([isInitial f] ++ map (isInitial) (init ms) ++ [last ms])
 
 -- isInitial :: String -> String
 -- isInitial [x]  = [x,'.']

@@ -12,7 +12,7 @@ import Control.Applicative (pure)
 import Language.Drasil.TeX.AST
 import qualified Language.Drasil.TeX.Import as I
 import qualified Language.Drasil.Output.Formats as A
-import Language.Drasil.Spec (USymb(..), RefType(..))
+import qualified Language.Drasil.Spec as LS
 import Language.Drasil.Config (lpmTeXParams, colAwidth, colBwidth,
               LPMParams(..),bibStyleT,bibFname)
 import Language.Drasil.Printing.Helpers hiding (paren, sqbrac)
@@ -26,53 +26,53 @@ import Language.Drasil.People (People,rendPersLFM,lstName,Person(..),Conv(Mono))
 import Language.Drasil.ChunkDB (HasSymbolTable)
 
 genTeX :: HasSymbolTable ctx => A.DocType -> L.Document -> ctx -> TP.Doc
-genTeX typ doc sm = runPrint (build typ $ I.makeDocument doc sm) Text
+genTeX typ doc sm = runPrint (build sm typ $ I.makeDocument doc sm) Text
 
-build :: A.DocType -> Document -> D
-build (A.SRS _) doc   = buildStd doc
-build (A.MG _) doc    = buildStd doc
-build (A.MIS _) doc   = buildStd doc
-build (A.LPM _) doc   = buildLPM lpmTeXParams doc
-build (A.Website _) _ = error "Cannot use TeX to typeset Website" --Can't happen
+build :: HasSymbolTable s => s -> A.DocType -> Document -> D
+build sm (A.SRS _) doc   = buildStd sm doc
+build sm (A.MG _) doc    = buildStd sm doc
+build sm (A.MIS _) doc   = buildStd sm doc
+build sm (A.LPM _) doc   = buildLPM sm lpmTeXParams doc
+build _ (A.Website _) _ = error "Cannot use TeX to typeset Website" --Can't happen
 
-buildStd :: Document -> D
-buildStd (Document t a c) =
+buildStd :: HasSymbolTable s => s -> Document -> D
+buildStd sm (Document t a c) =
   genPreamble c %%
   title (spec t) %%
   author (spec a) %%
-  document (maketitle %% maketoc %% newpage %% print c)
+  document (maketitle %% maketoc %% newpage %% print sm c)
 
-buildLPM :: LPMParams -> Document -> D
-buildLPM  (LPMParams (A.DocClass sb b1) (A.UsePackages ps) (A.ExDoc f n))
+buildLPM :: HasSymbolTable s => s -> LPMParams -> Document -> D
+buildLPM sm (LPMParams (A.DocClass sb b1) (A.UsePackages ps) (A.ExDoc f n))
           (Document t a c) =
   docclass sb b1 %%
   listpackages ps %%
   exdoc f n %%
   title (spec t) %%
   author (spec a) %%
-  document (maketitle %% print c)
+  document (maketitle %% print sm c)
 
 listpackages :: [String] -> D
 listpackages lp = foldr (%%) empty $ map usepackage lp
 
 -- clean until here; lo needs its sub-functions fixed first though
-lo :: LayoutObj -> D
-lo (Section d t con l)     = sec d (spec t) %% label (spec l) %% print con
-lo (Paragraph contents)    = toText $ spec contents
-lo (EqnBlock contents)     = makeEquation contents
-lo (Table rows r bl t)     = toText $ makeTable rows (spec r) bl (spec t)
---lo (CodeBlock c)           = code $ pure $ printCode c
-lo (Definition ssPs l)     = toText $ makeDefn ssPs $ spec l
-lo (Defnt _ ssPs l)        = toText $ makeDefn ssPs $ spec l
-lo (List l)                = toText $ makeList l
-lo (Figure r c f wp)       = toText $ makeFigure (spec r) (spec c) f wp
-lo (Module n l)            = toText $ makeModule n $ spec l
-lo (Requirement n l)       = toText $ makeReq (spec n) (spec l)
-lo (Assumption n l)        = toText $ makeAssump (spec n) (spec l)
-lo (LikelyChange n l)      = toText $ makeLC (spec n) (spec l)
-lo (UnlikelyChange n l)    = toText $ makeUC (spec n) (spec l)
-lo (Bib bib)               = toText $ makeBib bib
-lo (Graph ps w h c l)      = toText $ makeGraph
+lo :: HasSymbolTable s => LayoutObj -> s -> D
+lo (Section d t con l)  sm  = sec d (spec t) %% label (spec l) %% print sm con
+lo (Paragraph contents) _  = toText $ spec contents
+lo (EqnBlock contents)  _  = makeEquation contents
+lo (Table rows r bl t)  _  = toText $ makeTable rows (spec r) bl (spec t)
+--lo (CodeBlock c)         = code $ pure $ printCode c
+lo (Definition ssPs l) sm  = toText $ makeDefn sm ssPs $ spec l
+lo (Defnt _ ssPs l)    sm  = toText $ makeDefn sm ssPs $ spec l
+lo (List l)             _  = toText $ makeList l
+lo (Figure r c f wp)    _  = toText $ makeFigure (spec r) (spec c) f wp
+lo (Module n l)         _  = toText $ makeModule n $ spec l
+lo (Requirement n l)    _  = toText $ makeReq (spec n) (spec l)
+lo (Assumption n l)     _  = toText $ makeAssump (spec n) (spec l)
+lo (LikelyChange n l)   _  = toText $ makeLC (spec n) (spec l)
+lo (UnlikelyChange n l) _  = toText $ makeUC (spec n) (spec l)
+lo (Bib bib)            sm = toText $ makeBib sm bib
+lo (Graph ps w h c l)   _  = toText $ makeGraph
                                (map (\(a,b) -> (spec a, spec b)) ps)
                                (if isNothing w
                                   then (pure $ text "")
@@ -87,8 +87,8 @@ lo (Graph ps w h c l)      = toText $ makeGraph
                                (spec c) (spec l)
 
 
-print :: [LayoutObj] -> D
-print l = foldr ($+$) empty $ map lo l
+print :: HasSymbolTable s => s -> [LayoutObj] -> D
+print sm l = foldr ($+$) empty $ map (flip lo sm) l
 
 ------------------ Symbol ----------------------------
 symbol :: Symbol -> String
@@ -336,13 +336,13 @@ spec (Sy s)      = p_unit s
 spec (G g)       = pure $ text $ unPL $ greek g
 spec (Sp s)      = pure $ text $ unPL $ special s
 spec HARDNL      = pure $ text $ "\\newline"
-spec (Ref t@Sect r) = sref (show t) (spec r)
-spec (Ref t@(Def _) r) = hyperref (show t) (spec r)
-spec (Ref t@Mod r) = mref (show t) (spec r)
-spec (Ref t@(Req _) r) = rref (show t) (spec r)
-spec (Ref t@(Assump _) r) = aref (show t) (spec r)
-spec (Ref t@(LC _) r) = lcref (show t) (spec r)
-spec (Ref t@UC r) = ucref (show t) (spec r)
+spec (Ref t@LS.Sect r) = sref (show t) (spec r)
+spec (Ref t@(LS.Def _) r) = hyperref (show t) (spec r)
+spec (Ref t@LS.Mod r) = mref (show t) (spec r)
+spec (Ref t@(LS.Req _) r) = rref (show t) (spec r)
+spec (Ref t@(LS.Assump _) r) = aref (show t) (spec r)
+spec (Ref t@(LS.LC _) r) = lcref (show t) (spec r)
+spec (Ref t@LS.UC r) = ucref (show t) (spec r)
 spec (Ref t r)   = ref (show t) (spec r)
 spec EmptyS      = empty
 
@@ -359,25 +359,25 @@ symbol_needs (Concat (s:_))      = symbol_needs s
 symbol_needs (Corners _ _ _ _ _) = Math
 symbol_needs (Atop _ _)          = Math
 
-p_unit :: USymb -> D
-p_unit (UName n) =
+p_unit :: LS.USymb -> D
+p_unit (LS.UName n) =
   let cn = symbol_needs n in
   switch (const cn) (pure $ text $ symbol n)
-p_unit (UProd l) = foldr (<>) empty (map p_unit l)
-p_unit (UPow n p) = toMath $ superscript (p_unit n) (pure $ text $ show p)
-p_unit (UDiv n d) = toMath $
+p_unit (LS.UProd l) = foldr (<>) empty (map p_unit l)
+p_unit (LS.UPow n p) = toMath $ superscript (p_unit n) (pure $ text $ show p)
+p_unit (LS.UDiv n d) = toMath $
   case d of -- 4 possible cases, 2 need parentheses, 2 don't
-    UProd _  -> fraction (p_unit n) (parens $ p_unit d)
-    UDiv _ _ -> fraction (p_unit n) (parens $ p_unit d)
+    LS.UProd _  -> fraction (p_unit n) (parens $ p_unit d)
+    LS.UDiv _ _ -> fraction (p_unit n) (parens $ p_unit d)
     _        -> fraction (p_unit n) (p_unit d)
 
 -----------------------------------------------------------------
 ------------------ DATA DEFINITION PRINTING-----------------
 -----------------------------------------------------------------
 
-makeDefn :: [(String,[LayoutObj])] -> D -> D
-makeDefn [] _ = error "Empty definition"
-makeDefn ps l = beginDefn %% makeDefTable ps l %% endDefn
+makeDefn :: HasSymbolTable s => s -> [(String,[LayoutObj])] -> D -> D
+makeDefn _  [] _ = error "Empty definition"
+makeDefn sm ps l = beginDefn %% makeDefTable sm ps l %% endDefn
 
 beginDefn :: D
 beginDefn = (pure $ text "~") <> newline
@@ -386,23 +386,23 @@ beginDefn = (pure $ text "~") <> newline
 endDefn :: D
 endDefn = pure $ text "\\end{minipage}" TP.<> dbs
 
-makeDefTable :: [(String,[LayoutObj])] -> D -> D
-makeDefTable [] _ = error "Trying to make empty Data Defn"
-makeDefTable ps l = vcat [
+makeDefTable :: HasSymbolTable s => s -> [(String,[LayoutObj])] -> D -> D
+makeDefTable _ [] _ = error "Trying to make empty Data Defn"
+makeDefTable sm ps l = vcat [
   pure $ text $ "\\begin{tabular}{p{"++show colAwidth++"\\textwidth} p{"++show colBwidth++"\\textwidth}}",
   (pure $ text "\\toprule \\textbf{Refname} & \\textbf{") <> l <> (pure $ text "}"),
   (pure $ text "\\phantomsection "), label l,
-  makeDRows ps,
+  makeDRows sm ps,
   pure $ dbs <+> text ("\\bottomrule \\end{tabular}")
   ]
 
-makeDRows :: [(String,[LayoutObj])] -> D
-makeDRows []         = error "No fields to create Defn table"
-makeDRows ((f,d):[]) = dBoilerplate %% (pure $ text (f ++ " & ")) <>
-  (vcat $ map lo d)
-makeDRows ((f,d):ps) = dBoilerplate %% (pure $ text (f ++ " & ")) <> 
-  (vcat $ map lo d)
-                       %% makeDRows ps
+makeDRows :: HasSymbolTable s => s -> [(String,[LayoutObj])] -> D
+makeDRows _  []         = error "No fields to create Defn table"
+makeDRows sm ((f,d):[]) = dBoilerplate %% (pure $ text (f ++ " & ")) <>
+  (vcat $ map (flip lo sm) d)
+makeDRows sm ((f,d):ps) = dBoilerplate %% (pure $ text (f ++ " & ")) <> 
+  (vcat $ map (flip lo sm) d)
+                       %% makeDRows sm ps
 dBoilerplate :: D
 dBoilerplate = pure $ dbs <+> text "\\midrule" <+> dbs
 
@@ -546,10 +546,10 @@ makeGraph ps w h c l =
 -- Bibliography Printing --
 ---------------------------
 -- **THE MAIN FUNCTION** --
-makeBib :: BibRef -> D
-makeBib bib = spec $
+makeBib :: HasSymbolTable s => s -> BibRef -> D
+makeBib sm bib = spec $
   S ("\\begin{filecontents*}{"++bibFname++".bib}\n") :+: --bibFname is in Config.hs
-  mkBibRef bib :+:
+  mkBibRef sm bib :+:
   S "\n\\end{filecontents*}\n" :+:
   S bibLines
 
@@ -559,33 +559,40 @@ bibLines =
   "\\bibstyle{" ++ bibStyleT ++ "}\n" ++ --bibStyle is in Config.hs
   "\\printbibliography[heading=none]"
 
-mkBibRef :: BibRef -> Spec
-mkBibRef = foldl1 (\x y -> x :+: S "\n\n" :+: y) . map renderCite
+mkBibRef :: HasSymbolTable s => s -> BibRef -> Spec
+mkBibRef sm = foldl1 (\x y -> x :+: S "\n\n" :+: y) . map (renderCite sm)
 
 --for when we add other things to reference like website, newspaper
-renderCite :: Citation -> Spec
-renderCite c@(Book      fields) = renderF c fields
-renderCite c@(Article   fields) = renderF c fields
-renderCite c@(MThesis   fields) = renderF c fields
-renderCite c@(PhDThesis fields) = renderF c fields
-renderCite c@(Misc      fields) = renderF c fields
-renderCite c@(Online    fields) = renderF c fields
+renderCite :: HasSymbolTable s => s -> Citation -> Spec
+renderCite sm c@(Book      fields) = renderF sm c fields
+renderCite sm c@(Article   fields) = renderF sm c fields
+renderCite sm c@(MThesis   fields) = renderF sm c fields
+renderCite sm c@(PhDThesis fields) = renderF sm c fields
+renderCite sm c@(Misc      fields) = renderF sm c fields
+renderCite sm c@(Online    fields) = renderF sm c fields
 
 --Rendering a book--
-renderF :: Citation -> [CiteField] -> Spec
-renderF c fields = S "@":+: S (show c) :+: S "{" :+: S (cite fields) :+: S ",\n" :+:
-  (foldl1 (:+:) . intersperse (S ",\n") . map showBibTeX) fields :+: S "}"
+renderF :: HasSymbolTable s => s -> Citation -> [CiteField] -> Spec
+renderF sm c fields = 
+  S "@":+: S (show c) :+: S "{" :+: (cite sm fields) :+: S ",\n" :+: 
+  (foldl1 (:+:) . intersperse (S ",\n") . map (showBibTeX sm)) fields :+: S "}"
 --renderBook _ = error "Tried to render a non-book using renderBook." 
 
-cite :: [CiteField] -> String
-cite fields = concat $
-  map (rmSpace . lstName) (getAuthors fields) ++ [show $ getYear fields]
+cite :: HasSymbolTable s => s -> [CiteField] -> Spec
+cite sm fields = foldr1 (:+:) $
+  map (flip I.spec sm . rmSpace . lstName) (getAuthors fields) ++ [S $ show $ getYear fields]
 
 -- Remove spaces
-rmSpace :: [Char] -> [Char]
-rmSpace [] = []
-rmSpace (' ':xs) = rmSpace xs
-rmSpace (x:xs)   = x : rmSpace xs
+rmSpace :: LS.Sentence -> LS.Sentence
+rmSpace (a LS.:+: b) = rmSpace a LS.:+: rmSpace b
+rmSpace (LS.S x) = LS.S $ rmSpaceChar x
+rmSpace y = y
+
+rmSpaceChar :: [Char] -> [Char]
+rmSpaceChar [] = []
+rmSpaceChar (' ':xs) = rmSpaceChar xs
+rmSpaceChar (x:xs)   = x : rmSpaceChar xs
+
 
 getAuthors :: [CiteField] -> People
 getAuthors [] = error "No authors found" --FIXME: return a warning
@@ -598,33 +605,35 @@ getYear ((Year year):_) = year
 getYear ((Date _ _ year):_) = year
 getYear (_:xs) = getYear xs
 
-showBibTeX :: CiteField -> Spec
-showBibTeX (Place (city, state)) = showField "place" (city :+: S ", " :+: state)
-showBibTeX (Edition    s) = showField "edition" (S $ show s ++ sufxer s)
-showBibTeX (Series     s) = showField "series" s
-showBibTeX (Title      s) = showField "title" s
-showBibTeX (Volume     s) = showField "volume" (S $ show s)
-showBibTeX (Publisher  s) = showField "publisher" s
-showBibTeX (Author p@(Person {_convention=Mono}:_)) = showField "author" (S $ rendPeople p)
-  :+: S ",\n" :+: showField "sortkey" (S $ rendPeople p)
-showBibTeX (Author     p) = showField "author" (S $ rendPeople p)
-showBibTeX (Year       y) = showField "year" (S $ show y)
-showBibTeX (Date    d m y) = showField "year"    (S $ unwords [show d, show m, show y])
-showBibTeX (URLdate d m y) = showField "urldate" (S $ unwords [show d, show m, show y])
-showBibTeX (Collection s) = showField "collection" s
-showBibTeX (Journal    s) = showField "journal" s
-showBibTeX (Page       s) = showField "pages" (S $ show s)
-showBibTeX (Pages (a, b)) = showField "pages" (S $ show a ++ "-" ++ show b)
-showBibTeX (Note       s) = showField "note" s
-showBibTeX (Issue      s) = showField "number" (S $ show s)
-showBibTeX (School     s) = showField "school" s
-showBibTeX (URL        s) = showField "url" s
-showBibTeX (HowPub     s) = showField "howpublished" s
-showBibTeX (Editor     p) = showField "editor" (S $ rendPeople p)
+showBibTeX :: HasSymbolTable s => s -> CiteField -> Spec
+showBibTeX _ (Place (city, state)) = showField "place" (city :+: S ", " :+: state)
+showBibTeX _ (Edition    s) = showField "edition" (S $ show s ++ sufxer s)
+showBibTeX _ (Series     s) = showField "series" s
+showBibTeX _ (Title      s) = showField "title" s
+showBibTeX _ (Volume     s) = showField "volume" (S $ show s)
+showBibTeX _ (Publisher  s) = showField "publisher" s
+showBibTeX sm (Author p@(Person {_convention=Mono}:_)) = showField "author" 
+  (I.spec (rendPeople p) sm) :+: S ",\n" :+: 
+  showField "sortkey" (I.spec (rendPeople p) sm)
+showBibTeX sm (Author    p) = showField "author" (I.spec (rendPeople p) sm)
+showBibTeX _ (Year       y) = showField "year" (S $ show y)
+showBibTeX _ (Date   d m y) = showField "year"    (S $ unwords [show d, show m, show y])
+showBibTeX _ (URLdate d m y) = showField "urldate" (S $ unwords [show d, show m, show y])
+showBibTeX _ (Collection s) = showField "collection" s
+showBibTeX _ (Journal    s) = showField "journal" s
+showBibTeX _ (Page       s) = showField "pages" (S $ show s)
+showBibTeX _ (Pages (a, b)) = showField "pages" (S $ show a ++ "-" ++ show b)
+showBibTeX _ (Note       s) = showField "note" s
+showBibTeX _ (Issue      s) = showField "number" (S $ show s)
+showBibTeX _ (School     s) = showField "school" s
+showBibTeX _ (URL        s) = showField "url" s
+showBibTeX _ (HowPub     s) = showField "howpublished" s
+showBibTeX sm (Editor     p) = showField "editor" (I.spec (rendPeople p) sm)
 
 showField :: String -> Spec -> Spec
 showField f s = S f :+: S "={" :+: s :+: S "}"
 
-rendPeople :: People -> String
-rendPeople []  = "N.a." -- "No authors given"
-rendPeople people = foldl1 (\x y -> x ++ " and " ++ y) $ map rendPersLFM people
+rendPeople :: People -> LS.Sentence
+rendPeople []  = LS.S "N.a." -- "No authors given"
+rendPeople people =
+  foldl1 (\x y -> x LS.+:+ LS.S "and" LS.+:+ y) $ map rendPersLFM people

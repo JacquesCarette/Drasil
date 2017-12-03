@@ -64,7 +64,6 @@ import Drasil.Sections.TraceabilityMandGs (traceGIntro)
 import Drasil.Sections.SpecificSystemDescription (solChSpecF,
   inDataConstTbl, outDataConstTbl, dataConstraintUncertainty, goalStmtF,
   physSystDesc, termDefnF, probDescF, specSysDesF)
-import Drasil.DocumentLanguage.Definitions
 
 {--}
 
@@ -507,8 +506,8 @@ a8Desc mainConcept = foldlSent [S "With", phrase reference, S "to",
   acroA 4, S "the", phrase value `sOf` phrase mainConcept,
   sParen (getES mainConcept), S "is a", phrase constant, S "in" +:+.
   short gLassBR, S "It is calculated by the" +: phrase equation +:+.
-  E (C mainConcept := equat mainConcept), S "Using this" `sC`
-  E (C mainConcept := (Dbl 0.27))]
+  E (C mainConcept $= equat mainConcept), S "Using this" `sC`
+  E (C mainConcept $= (Dbl 0.27))]
 
 {--Theoretical Models--}
 

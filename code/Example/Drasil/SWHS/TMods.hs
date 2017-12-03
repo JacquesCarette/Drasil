@@ -46,7 +46,7 @@ t1ConsThermE = makeRC "t1ConsThermE"
   (nounPhraseSP "Conservation of thermal energy") t1descr consThermERel
 
 consThermERel :: Relation
-consThermERel = (Neg (C gradient)) :. (C thFluxVect) + (C vol_ht_gen) :=
+consThermERel = (Neg (C gradient)) :. (C thFluxVect) + (C vol_ht_gen) $=
   (C density) * (C heat_cap_spec) * (Deriv Part (C temp) (C time))
 
 t1descr :: Sentence
@@ -86,7 +86,7 @@ t2SensHtE = makeRC "t2SensHtE"
   (nounPhraseSP "Sensible heat energy") t2descr sensHtEEqn
 
 sensHtEEqn :: Relation
-sensHtEEqn = (C sens_heat) := Case [((C htCap_S) * (C mass) * (C deltaT),
+sensHtEEqn = (C sens_heat) $= Case [((C htCap_S) * (C mass) * (C deltaT),
   ((C temp) :< (C melt_pt))), ((C htCap_L) *
   (C mass) * (C deltaT), ((C melt_pt) :< (C temp) :<
   (C boil_pt))), ((C htCap_V) * (C mass) *
@@ -140,7 +140,7 @@ t3LatHtE = makeRC "t3LatHtE"
   (nounPhraseSP "Latent heat energy") t3descr latHtEEqn
 
 latHtEEqn :: Relation
-latHtEEqn = FCall (C latent_heat) [C time] := 
+latHtEEqn = FCall (C latent_heat) [C time] $= 
   (integral (Just (Low 0), Just (High (C time)))
   (Deriv Total (FCall (C latent_heat) [C tau]) (C tau)) tau)
 
@@ -153,7 +153,7 @@ t3descr = foldlSent [
   getES latent_heat `isThe` S "change in",
   phrase thermal_energy, sParen (Sy (joule ^. usymb)) `sC`
   phrase latent_heat +:+. phrase energy,
-  E (FCall (C latent_heat) [C time] := 
+  E (FCall (C latent_heat) [C time] $= 
   (integral (Just (Low 0), Just (High (C time)))
   (Deriv Total (FCall (C latent_heat) [C tau]) (C tau)) tau))
   `isThe` phrase rOfChng, S "of",

@@ -3,7 +3,7 @@ module Language.Drasil.TeX.Import where
 import Control.Lens hiding ((:>),(:<),set)
 import Prelude hiding (id)
 import Language.Drasil.Expr (Expr(..), Relation, UFunc(..), BiFunc(..),
-                             Bound(..),DerivType(..), Set, Quantifier(..))
+                             Bound(..),DerivType(..), Set, Quantifier(..), ($=))
 import Language.Drasil.Space (Space(..))
 import Language.Drasil.Expr.Extract
 import Language.Drasil.Spec
@@ -48,7 +48,7 @@ expr (FCall f x)       sm = T.Call (expr f sm) (map (flip expr sm) x)
 expr (Case ps)         sm = if length ps < 2 then 
         error "Attempting to use multi-case expr incorrectly"
         else T.Case (zip (map (flip expr sm . fst) ps) (map (flip rel sm . snd) ps))
-expr x@(_ := _)        sm = rel x sm
+expr x@(EEquals _ _)        sm = rel x sm
 expr x@(_ :!= _)       sm = rel x sm
 expr x@(_ :> _)        sm = rel x sm
 expr x@(_ :< _)        sm = rel x sm
@@ -99,7 +99,7 @@ bfunc :: HasSymbolTable ctx => BiFunc -> ctx -> (T.Function, [T.Expr])
 bfunc (Cross e1 e2) sm = (T.Cross, map (flip expr sm) [e1,e2])
 
 rel :: HasSymbolTable ctx => Relation -> ctx -> T.Expr
-rel (a := b)  sm = T.Eq (expr a sm) (expr b sm)
+rel (EEquals a b)  sm = T.Eq (expr a sm) (expr b sm)
 rel (a :!= b) sm = T.NEq (expr a sm) (expr b sm)
 rel (a :< b)  sm = T.Lt (expr a sm) (expr b sm)
 rel (a :> b)  sm = T.Gt (expr a sm) (expr b sm)
@@ -307,7 +307,7 @@ buildEqn c sm = T.N (eqSymb c) T.:+: T.S " = " T.:+:
 -- Build descriptions in data defs based on required verbosity
 buildDDDescription :: HasSymbolTable ctx => QDefinition -> ctx -> T.Spec
 buildDDDescription c m = descLines 
-  (if verboseDDDescription then (vars (getQ c := equat c) m) else []) m
+  (if verboseDDDescription then (vars (getQ c $= equat c) m) else []) m
   where getQ (EC a _) = C a
 
 descLines :: (HasSymbolTable ctx, Quantity q) => [q] -> ctx -> T.Spec  

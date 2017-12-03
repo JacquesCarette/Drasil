@@ -20,7 +20,8 @@ infixl 7 :*
 infixl 7 :/
 infixl 6 :+
 infixl 6 :-
-infixr 4 :=
+infixr 4 $=
+
 -- | Drasil Expressions
 data Expr where
   V        :: Variable -> Expr
@@ -52,7 +53,7 @@ data Expr where
   Grouping :: Expr -> Expr
   BinaryOp :: BiFunc -> Expr
   -- Operator :: Func   -> [Expr] -> Expr
-  (:=)  :: Expr -> Expr -> Expr
+  EEquals  :: Expr -> Expr -> Expr
   (:!=) :: Expr -> Expr -> Expr
   (:<)  :: Expr -> Expr -> Expr
   (:>)  :: Expr -> Expr -> Expr
@@ -69,6 +70,9 @@ data Expr where
   (:=>)  :: Expr -> Expr -> Expr -- implies, &rArr; \implies
   (:<=>) :: Expr -> Expr -> Expr -- if and only if, &hArr; \iff
   --Monotonic :: Maybe Direction -> Expr -> Expr --like this? or defined as below (see monotoniclyIncr)
+
+($=) :: Expr -> Expr -> Expr
+($=) = EEquals
 
 type Set = Space
 {- --import from space?
@@ -124,7 +128,7 @@ instance Eq Expr where
   C a == C b                   =  (a ^. id) == (b ^. id)
   FCall a b == FCall c d       =  a == c && b == d
   Case a == Case b             =  a == b
-  (:=)  a b == (:=)  c d       =  a == c && b == d || a == d && b == c
+  EEquals  a b == EEquals  c d       =  a == c && b == d || a == d && b == c
   (:!=) a b == (:!=) c d       =  a == c && b == d || a == d && b == c
   (:<)  a b == (:<)  c d       =  a == c && b == d
   (:>)  a b == (:>)  c d       =  a == c && b == d

@@ -30,7 +30,7 @@ dep (Dbl _)       = []
 dep (V _)         = []
 dep (FCall f x)   = nub (dep f ++ (concat $ map dep x))
 dep (Case ls)     = nub (concat $ map (dep . fst) ls ++ map (dep . snd) ls)
-dep (a := b)      = nub (dep a ++ dep b)
+dep (EEquals a b)      = nub (dep a ++ dep b)
 dep (a :!= b)     = nub (dep a ++ dep b)
 dep (a :< b)      = nub (dep a ++ dep b)
 dep (a :> b)      = nub (dep a ++ dep b)
@@ -67,7 +67,7 @@ vars (Dbl _)      _ = []
 vars (V _)        _ = []
 vars (FCall f x)  m = nub (vars f m ++ (concat $ map (\y -> vars y m) x))
 vars (Case ls)    m = nub (concat $ map (\x -> vars (fst x) m) ls ++ map (\x -> vars (snd x) m) ls)
-vars (a := b)     m = nub (vars a m ++ vars b m)
+vars (EEquals a b)     m = nub (vars a m ++ vars b m)
 vars (a :!= b)    m = nub (vars a m ++ vars b m)
 vars (a :> b)     m = nub (vars a m ++ vars b m)
 vars (a :< b)     m = nub (vars a m ++ vars b m)
@@ -105,7 +105,7 @@ codevars (V _)        _ = []
 codevars (FCall (C c) x)  sm = nub ((codefunc $ symbLookup c (sm ^. symbolTable)) : (concat $ map (\y -> codevars y sm) x))
 codevars (FCall f x)  sm = nub (codevars f sm ++ (concat $ map (\y -> codevars y sm) x))
 codevars (Case ls)    sm = nub (concat $ map (\x -> codevars (fst x) sm) ls ++ map (\x -> codevars (snd x) sm) ls)
-codevars (a := b)     sm = nub (codevars a sm ++ codevars b sm)
+codevars (EEquals a b)     sm = nub (codevars a sm ++ codevars b sm)
 codevars (a :!= b)    sm = nub (codevars a sm ++ codevars b sm)
 codevars (a :> b)     sm = nub (codevars a sm ++ codevars b sm)
 codevars (a :< b)     sm = nub (codevars a sm ++ codevars b sm)
@@ -144,7 +144,7 @@ codevars' (V _)         _ = []
 codevars' (FCall _ x)  sm = nub (concat $ map (\y -> codevars' y sm) x)
 codevars' (Case ls)    sm = nub (concat $ map (\x -> codevars' (fst x) sm) ls ++
                               map (\y -> codevars' (snd y) sm) ls)
-codevars' (a := b)     sm = nub (codevars' a sm ++ codevars' b sm)
+codevars' (EEquals a b)     sm = nub (codevars' a sm ++ codevars' b sm)
 codevars' (a :!= b)    sm = nub (codevars' a sm ++ codevars' b sm)
 codevars' (a :> b)     sm = nub (codevars' a sm ++ codevars' b sm)
 codevars' (a :< b)     sm = nub (codevars' a sm ++ codevars' b sm)

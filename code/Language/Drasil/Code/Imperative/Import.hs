@@ -466,7 +466,7 @@ convExpr (FCall (C c) x)  = do
   args <- mapM convExpr x
   fApp (codeName (codefunc $ symbLookup c $ info ^. symbolTable)) args
 convExpr (FCall _ _)  = return $ litString "**convExpr :: BinaryOp unimplemented**"
-convExpr (a := b)     = liftM2 (?==) (convExpr a) (convExpr b)
+convExpr (EEquals a b)     = liftM2 (?==) (convExpr a) (convExpr b)
 convExpr (a :!= b)    = liftM2 (?!=) (convExpr a) (convExpr b)
 convExpr (a :> b)     = liftM2 (?>)  (convExpr a) (convExpr b)
 convExpr (a :< b)     = liftM2 (?<)  (convExpr a) (convExpr b)
@@ -505,7 +505,7 @@ containsCase (a :|| b)    = (containsCase a) || (containsCase b)
 containsCase (Deriv _ _ _) = error "not implemented"
 containsCase (E.Not e)      = containsCase e
 containsCase (Neg e)      = containsCase e
-containsCase (a := b)     = (containsCase a) || (containsCase b)
+containsCase (EEquals a b)     = (containsCase a) || (containsCase b)
 containsCase (a :!= b)    = (containsCase a) || (containsCase b)
 containsCase (a :> b)     = (containsCase a) || (containsCase b)
 containsCase (a :< b)     = (containsCase a) || (containsCase b)
@@ -545,7 +545,7 @@ compactCase (a :|| b)    = compactCaseBinary (:||) a b
 compactCase (Deriv _ _ _) = error "not implemented"
 compactCase (E.Not e)    = compactCaseUnary E.Not e
 compactCase (Neg e)      = compactCaseUnary Neg e
-compactCase (a := b)     = compactCaseBinary (:=) a b
+compactCase (EEquals a b)     = compactCaseBinary ($=) a b
 compactCase (a :!= b)    = compactCaseBinary (:!=) a b
 compactCase (a :> b)     = compactCaseBinary (:>) a b
 compactCase (a :< b)     = compactCaseBinary (:<) a b

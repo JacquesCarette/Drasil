@@ -1,7 +1,7 @@
 module Language.Drasil.HTML.Import where
 import Prelude hiding (id)
 import Language.Drasil.Expr (Expr(..), Relation, UFunc(..), BiFunc(..),
-                             Bound(..),DerivType(..), Set, Quantifier(..))
+                             Bound(..),DerivType(..), Set, Quantifier(..), ($=))
 import Language.Drasil.Space (Space(..))
 import Language.Drasil.Spec
 import qualified Language.Drasil.HTML.AST as H
@@ -49,7 +49,7 @@ expr (FCall f x)      sm = H.Call (expr f sm) (map (flip expr sm) x)
 expr (Case ps)        sm = if length ps < 2 then 
                     error "Attempting to use multi-case expr incorrectly"
                     else H.Case (zip (map (flip expr sm . fst) ps) (map (flip rel sm . snd) ps))
-expr e@(_ := _)       sm = rel e sm
+expr e@(EEquals _ _)  sm = rel e sm
 expr e@(_ :!= _)      sm = rel e sm
 expr e@(_ :> _)       sm = rel e sm
 expr e@(_ :< _)       sm = rel e sm 
@@ -104,7 +104,7 @@ bfunc (Cross e1 e2) sm = (H.Cross, map (flip expr sm) [e1,e2])
 
 -- | Helper function for translating 'Relation's
 rel :: HasSymbolTable s => Relation -> s -> H.Expr
-rel (a := b)  sm = H.Eq (expr a sm) (expr b sm)
+rel (EEquals a b)  sm = H.Eq (expr a sm) (expr b sm)
 rel (a :!= b) sm = H.NEq (expr a sm) (expr b sm)
 rel (a :< b)  sm = H.Lt (expr a sm) (expr b sm)
 rel (a :> b)  sm = H.Gt (expr a sm) (expr b sm)
@@ -319,7 +319,7 @@ buildEqn c sm = H.N (eqSymb c) H.:+: H.S " = " H.:+:
 -- | Build descriptions in data defs based on required verbosity
 buildDDDescription :: HasSymbolTable s => QDefinition -> s -> H.Spec
 buildDDDescription c m = descLines 
-  (if verboseDDDescription then (vars (getQ c := equat c) m) else []) m
+  (if verboseDDDescription then (vars (getQ c $= equat c) m) else []) m
   where getQ (EC a _) = C a
 
 -- | Helper for building each line of the description of a data def

@@ -401,7 +401,7 @@ aspectRWithEqn :: QDefinition
 aspectRWithEqn = mkDataDef aspectR aspectRCalculation
 
 aspectRCalculation :: Relation
-aspectRCalculation = (C aspectR) := (C plate_len)/(C plate_width)
+aspectRCalculation = (C aspectR) $= (C plate_len)/(C plate_width)
 
 --
 --Pulled to be used in "Terms And Definitions" Section--

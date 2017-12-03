@@ -240,6 +240,7 @@ executable ssp
     , Drasil.SSP.GenDefs
     , Drasil.SSP.Goals
     , Drasil.SSP.IMods
+    , Drasil.SSP.Modules
     , Drasil.SSP.References
     , Drasil.SSP.Requirements
     , Drasil.SSP.TMods
@@ -331,6 +332,7 @@ executable chipmunkdocs
     , Drasil.GamePhysics.Changes
     , Drasil.GamePhysics.Concepts
     , Drasil.GamePhysics.DataDefs
+    , Drasil.GamePhysics.Modules
     , Drasil.GamePhysics.TMods
     , Drasil.GamePhysics.Unitals
     , Drasil.GamePhysics.IMods

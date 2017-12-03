@@ -56,7 +56,7 @@ sspOutputs = [fs, coords, dx_i, dy_i]
 monotonicIn :: [Constraint]  --FIXME: Move this?
 monotonicIn = [physc $ \c ->
   State [Forall c, Forall $ C index `IsIn` Natural]
-  (inx xi 0 :< inx xi 1 :=> inx yi 0 :< inx yi 1)]
+  (inx xi 0 $< inx xi 1 :=> inx yi 0 $< inx yi 1)]
 
 defultUncrt :: Double
 defultUncrt = 0.1
@@ -77,12 +77,12 @@ cohesion = uqc "c'" (cn $ "effective cohesion")
   (prime $ Atomic "c") pascal Real [gtZeroConstr] (Dbl 10) defultUncrt
 
 poissnsRatio = uq (constrained' SM.poissnsR
-  [physc $ \c -> (Int 0) :< c :< (Int 1)] (Dbl 0.4)) defultUncrt
+  [physc $ \c -> (Int 0) $< c $< (Int 1)] (Dbl 0.4)) defultUncrt
 
 fricAngle = uqc "varphi'" (cn $ "effective angle of friction")
   ("The angle of inclination with respect to the horizontal axis of " ++
   "the Mohr-Coulomb shear resistance line") --http://www.geotechdata.info
-  (prime $ Greek Phi_V) degree Real [physc $ \c -> (Int 0) :< c :< (Int 90)]
+  (prime $ Greek Phi_V) degree Real [physc $ \c -> (Int 0) $< c $< (Int 90)]
   (Dbl 25) defultUncrt
 
 dryWeight = uqc "gamma" (cn $ "dry unit weight")

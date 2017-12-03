@@ -48,12 +48,12 @@ expr (FCall f x)       sm = T.Call (expr f sm) (map (flip expr sm) x)
 expr (Case ps)         sm = if length ps < 2 then 
         error "Attempting to use multi-case expr incorrectly"
         else T.Case (zip (map (flip expr sm . fst) ps) (map (flip rel sm . snd) ps))
-expr x@(EEquals _ _)        sm = rel x sm
-expr x@(_ :!= _)       sm = rel x sm
-expr x@(_ :> _)        sm = rel x sm
-expr x@(_ :< _)        sm = rel x sm
-expr x@(_ :<= _)       sm = rel x sm
-expr x@(_ :>= _)       sm = rel x sm
+expr x@(EEquals _ _)    sm = rel x sm
+expr x@(ENEquals _ _)   sm = rel x sm
+expr x@(EGreater _ _)   sm = rel x sm
+expr x@(ELess _ _)      sm = rel x sm
+expr x@(ELessEq _ _)    sm = rel x sm
+expr x@(EGreaterEq _ _) sm = rel x sm
 expr (Matrix a)        sm = T.Mtx $ map (map (flip expr sm)) a
 expr (Index a i)       sm = T.Index (expr a sm) (expr i sm)
 expr (UnaryOp u)       sm = (\(x,y) -> T.Op x [y]) (ufunc u sm)
@@ -99,12 +99,12 @@ bfunc :: HasSymbolTable ctx => BiFunc -> ctx -> (T.Function, [T.Expr])
 bfunc (Cross e1 e2) sm = (T.Cross, map (flip expr sm) [e1,e2])
 
 rel :: HasSymbolTable ctx => Relation -> ctx -> T.Expr
-rel (EEquals a b)  sm = T.Eq (expr a sm) (expr b sm)
-rel (a :!= b) sm = T.NEq (expr a sm) (expr b sm)
-rel (a :< b)  sm = T.Lt (expr a sm) (expr b sm)
-rel (a :> b)  sm = T.Gt (expr a sm) (expr b sm)
-rel (a :<= b) sm = T.LEq (expr a sm) (expr b sm)
-rel (a :>= b) sm = T.GEq (expr a sm) (expr b sm)
+rel (EEquals a b)    sm = T.Eq  (expr a sm) (expr b sm)
+rel (ENEquals a b)   sm = T.NEq (expr a sm) (expr b sm)
+rel (ELess a b)      sm = T.Lt  (expr a sm) (expr b sm)
+rel (EGreater a b)   sm = T.Gt  (expr a sm) (expr b sm)
+rel (ELessEq a b)    sm = T.LEq (expr a sm) (expr b sm)
+rel (EGreaterEq a b) sm = T.GEq (expr a sm) (expr b sm)
 rel _ _ = error "Attempting to use non-Relation Expr in relation context."
 
 -- | Helper for translating Sets

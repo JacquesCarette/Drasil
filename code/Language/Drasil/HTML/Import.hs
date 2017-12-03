@@ -49,26 +49,26 @@ expr (FCall f x)      sm = H.Call (expr f sm) (map (flip expr sm) x)
 expr (Case ps)        sm = if length ps < 2 then 
                     error "Attempting to use multi-case expr incorrectly"
                     else H.Case (zip (map (flip expr sm . fst) ps) (map (flip rel sm . snd) ps))
-expr e@(EEquals _ _)  sm = rel e sm
-expr e@(_ :!= _)      sm = rel e sm
-expr e@(_ :> _)       sm = rel e sm
-expr e@(_ :< _)       sm = rel e sm 
-expr e@(_ :<= _)      sm = rel e sm 
-expr e@(_ :>= _)      sm = rel e sm 
-expr (Matrix a)       sm = H.Mtx $ map (map (flip expr sm)) a
-expr (Index a i)      sm = H.Index (expr a sm) (expr i sm)
-expr (UnaryOp u)      sm = (\(x,y) -> H.Op x [y]) (ufunc u sm)
-expr (Grouping e)     sm = H.Grouping (expr e sm)
-expr (BinaryOp b)     sm = (\(x,y) -> H.Op x y) (bfunc b sm)
-expr (Not a)          sm = H.Not   (expr a sm)
-expr (a  :&&  b)      sm = H.And   (expr a sm) (expr b sm)
-expr (a  :||  b)      sm = H.Or    (expr a sm) (expr b sm)
-expr (a  :=>  b)      sm = H.Impl  (expr a sm) (expr b sm)
-expr (a  :<=> b)      sm = H.Iff   (expr a sm) (expr b sm)
-expr (IsIn  a b)      sm = H.IsIn  (expr a sm) (set b)
-expr (State a b)      sm = H.State (map (flip quan sm) a) (expr b sm)
-expr (Len _)           _ = error "Len not yet implemented"
-expr (Append _ _)      _ = error "Append not yet implemented"
+expr e@(EEquals _ _)    sm = rel e sm
+expr e@(ENEquals _ _)   sm = rel e sm
+expr e@(EGreater _ _)   sm = rel e sm
+expr e@(ELess _ _)      sm = rel e sm 
+expr e@(ELessEq _ _)    sm = rel e sm 
+expr e@(EGreaterEq _ _) sm = rel e sm 
+expr (Matrix a)         sm = H.Mtx $ map (map (flip expr sm)) a
+expr (Index a i)        sm = H.Index (expr a sm) (expr i sm)
+expr (UnaryOp u)        sm = (\(x,y) -> H.Op x [y]) (ufunc u sm)
+expr (Grouping e)       sm = H.Grouping (expr e sm)
+expr (BinaryOp b)       sm = (\(x,y) -> H.Op x y) (bfunc b sm)
+expr (Not a)            sm = H.Not   (expr a sm)
+expr (a  :&&  b)        sm = H.And   (expr a sm) (expr b sm)
+expr (a  :||  b)        sm = H.Or    (expr a sm) (expr b sm)
+expr (a  :=>  b)        sm = H.Impl  (expr a sm) (expr b sm)
+expr (a  :<=> b)        sm = H.Iff   (expr a sm) (expr b sm)
+expr (IsIn  a b)        sm = H.IsIn  (expr a sm) (set b)
+expr (State a b)        sm = H.State (map (flip quan sm) a) (expr b sm)
+expr (Len _)             _ = error "Len not yet implemented"
+expr (Append _ _)        _ = error "Append not yet implemented"
 
 -- | Healper for translating Quantifier
 quan :: HasSymbolTable s => Quantifier -> s -> H.Quantifier
@@ -104,12 +104,12 @@ bfunc (Cross e1 e2) sm = (H.Cross, map (flip expr sm) [e1,e2])
 
 -- | Helper function for translating 'Relation's
 rel :: HasSymbolTable s => Relation -> s -> H.Expr
-rel (EEquals a b)  sm = H.Eq (expr a sm) (expr b sm)
-rel (a :!= b) sm = H.NEq (expr a sm) (expr b sm)
-rel (a :< b)  sm = H.Lt (expr a sm) (expr b sm)
-rel (a :> b)  sm = H.Gt (expr a sm) (expr b sm)
-rel (a :<= b) sm = H.LEq (expr a sm) (expr b sm)
-rel (a :>= b) sm = H.GEq (expr a sm) (expr b sm)
+rel (EEquals a b)    sm = H.Eq  (expr a sm) (expr b sm)
+rel (ENEquals a b)   sm = H.NEq (expr a sm) (expr b sm)
+rel (ELess a b)      sm = H.Lt  (expr a sm) (expr b sm)
+rel (EGreater a b)   sm = H.Gt  (expr a sm) (expr b sm)
+rel (ELessEq a b)    sm = H.LEq (expr a sm) (expr b sm)
+rel (EGreaterEq a b) sm = H.GEq (expr a sm) (expr b sm)
 rel _ _ = error "Attempting to use non-Relation Expr in relation context."
 
 -- | Helper for translating Sets

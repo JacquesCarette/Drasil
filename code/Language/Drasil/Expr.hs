@@ -53,12 +53,12 @@ data Expr where
   Grouping :: Expr -> Expr
   BinaryOp :: BiFunc -> Expr
   -- Operator :: Func   -> [Expr] -> Expr
-  EEquals  :: Expr -> Expr -> Expr
-  (:!=) :: Expr -> Expr -> Expr
-  (:<)  :: Expr -> Expr -> Expr
-  (:>)  :: Expr -> Expr -> Expr
-  (:<=) :: Expr -> Expr -> Expr
-  (:>=) :: Expr -> Expr -> Expr
+  EEquals    :: Expr -> Expr -> Expr
+  ENEquals   :: Expr -> Expr -> Expr
+  ELess      :: Expr -> Expr -> Expr
+  EGreater   :: Expr -> Expr -> Expr
+  ELessEq    :: Expr -> Expr -> Expr
+  EGreaterEq :: Expr -> Expr -> Expr
   -- start of logic Expr
   (:&&)    :: Expr -> Expr -> Expr -- logical and
   (:||)    :: Expr -> Expr -> Expr -- logical or
@@ -71,8 +71,13 @@ data Expr where
   (:<=>) :: Expr -> Expr -> Expr -- if and only if, &hArr; \iff
   --Monotonic :: Maybe Direction -> Expr -> Expr --like this? or defined as below (see monotoniclyIncr)
 
-($=) :: Expr -> Expr -> Expr
-($=) = EEquals
+($=), ($!=), ($<), ($>), ($<=), ($>=) :: Expr -> Expr -> Expr
+($=)  = EEquals
+($!=) = ENEquals
+($<)  = ELess
+($>)  = EGreater
+($<=) = ELessEq
+($>=) = EGreaterEq
 
 type Set = Space
 {- --import from space?
@@ -128,12 +133,12 @@ instance Eq Expr where
   C a == C b                   =  (a ^. id) == (b ^. id)
   FCall a b == FCall c d       =  a == c && b == d
   Case a == Case b             =  a == b
-  EEquals  a b == EEquals  c d       =  a == c && b == d || a == d && b == c
-  (:!=) a b == (:!=) c d       =  a == c && b == d || a == d && b == c
-  (:<)  a b == (:<)  c d       =  a == c && b == d
-  (:>)  a b == (:>)  c d       =  a == c && b == d
-  (:<=) a b == (:<=) c d       =  a == c && b == d
-  (:>=) a b == (:>=) c d       =  a == c && b == d
+  EEquals  a b == EEquals  c d      =  a == c && b == d || a == d && b == c
+  ENEquals a b == ENEquals c d      =  a == c && b == d || a == d && b == c
+  ELess  a b == ELess  c d          =  a == c && b == d
+  EGreater  a b == EGreater  c d    =  a == c && b == d
+  ELessEq a b == ELessEq c d        =  a == c && b == d
+  EGreaterEq a b == EGreaterEq c d  =  a == c && b == d
   --Logic
   (:&&) a b  == (:&&) c d      =  a == c && b == d || a == d && b == c
   (:||) a b  == (:||) c d      =  a == c && b == d || a == d && b == c

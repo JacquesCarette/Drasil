@@ -32,7 +32,7 @@ balWtrDesc = foldlSent [(E $ C temp_W) `isThe` phrase temp_W +:+.
   (E $ C tau_W $= (C w_mass * C htCap_W) / (C coil_HTC * C coil_SA)),
   S "is a constant" +:+. sParen (unwrap $ getUnit tau_W),
   S "The above", phrase equation, S "applies as long as the", phrase water,
-  S "is in", phrase liquid, S "form" `sC` (E $ Int 0 :< C temp_W :< (Int 100)),
+  S "is in", phrase liquid, S "form" `sC` (E $ Int 0 $< C temp_W $< (Int 100)),
   sParen (unwrap $ getUnit temp_W), S "where", S $ show (0 :: Integer),
   sParen (unwrap $ getUnit temp_W) `sAnd` (S $ show (100 :: Integer)),
   sParen (unwrap $ getUnit temp_W), S "are the", phrase melting `sAnd`

@@ -18,7 +18,7 @@ tModels = [t1SafetyReq, t2SafetyReq]
 
 t1SafetyReq :: RelationConcept
 t1SafetyReq = makeRC "t1SafetyReq" (nounPhraseSP "Safety Requirement-1")
-  t1descr $ (C is_safe1) $= (C prob_br) :< (C pb_tol)
+  t1descr $ (C is_safe1) $= (C prob_br) $< (C pb_tol)
 
 t1descr :: Sentence
 t1descr = tDescr (is_safe1) s ending
@@ -30,7 +30,7 @@ t1descr = tDescr (is_safe1) s ending
 
 t2SafetyReq :: RelationConcept
 t2SafetyReq = makeRC "t2SafetyReq" (nounPhraseSP "Safety Requirement-2")
-  t2descr $ (C is_safe2) $= (C lRe) :> (C demand)
+  t2descr $ (C is_safe2) $= (C lRe) $> (C demand)
 
 t2descr :: Sentence
 t2descr = tDescr (is_safe2) s ending

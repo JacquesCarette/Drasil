@@ -132,7 +132,7 @@ tolStrDisFac = mkDataDef' sdf_tol tolStrDisFac_eq
 aGrtrThanB :: Sentence
 aGrtrThanB = ((getES plate_len) `sC` (getES plate_width) +:+ 
   S "are" +:+ plural dimension +:+ S "of the plate" `sC` S "where" +:+. 
-  sParen (E (C plate_len :> C plate_width)))
+  sParen (E (C plate_len $> C plate_width)))
 
 hRef :: Sentence
 hRef = (getES nom_thick +:+ S "is the true thickness" `sC` 

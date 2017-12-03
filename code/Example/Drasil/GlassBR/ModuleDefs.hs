@@ -80,8 +80,8 @@ linInterp = funcDef "lin_interp" [v_x_1, v_y_1, v_x_2, v_y_2, v_x] Real
 indInSeq :: Func
 indInSeq = funcDef "indInSeq" [v_arr, v_v] Natural 
   [
-    ffor (v_i) (C v_i :< (Len (C v_arr) - 1))
-      [ FCond (((Index (C v_arr) (C v_i)) :<= (C v_v)) :&& ((C v_v) :<= (Index (C v_arr) ((C v_i) + 1)))) [ FRet $ C v_i ] [] ],
+    ffor (v_i) (C v_i $< (Len (C v_arr) - 1))
+      [ FCond (((Index (C v_arr) (C v_i)) $<= (C v_v)) :&& ((C v_v) $<= (Index (C v_arr) ((C v_i) + 1)))) [ FRet $ C v_i ] [] ],
     FThrow "Bound error"      
   ]
 
@@ -89,7 +89,7 @@ matrixCol :: Func
 matrixCol = funcDef "matrixCol" [v_mat, v_j] (Vect Real) 
   [
     fdec v_col (Vect Rational),
-    ffor (v_i) (C v_i :< Len (C v_mat)) [ FVal (Append (C v_col) (Index (Index (C v_mat) (C v_i)) (C v_j))) ],
+    ffor (v_i) (C v_i $< Len (C v_mat)) [ FVal (Append (C v_col) (Index (Index (C v_mat) (C v_i)) (C v_j))) ],
     FRet (C v_col)
   ]
 
@@ -137,7 +137,7 @@ interpZ = funcDef "interpZ" [{-v_x_array, v_y_array, v_z_array,-} v_filename, v_
   fdec v_z_array (Vect Rational),
   FVal (FCall (asExpr read_table) [C v_filename, C v_z_array, C v_x_array, C v_y_array]),
   -- endhack
-    ffor v_i (C v_i :< (Len (C v_z_array) - 1)) 
+    ffor v_i (C v_i $< (Len (C v_z_array) - 1)) 
       [
         fasg v_x_z_1 (FCall (asExpr matrixCol) [C v_x_array, C v_i]),
         fasg v_y_z_1 (FCall (asExpr matrixCol) [C v_y_array, C v_i]),
@@ -157,7 +157,7 @@ interpZ = funcDef "interpZ" [{-v_x_array, v_y_array, v_z_array,-} v_filename, v_
                                                Index (C v_x_z_2) ((C v_k) + 1), 
                                                Index (C v_y_z_2) ((C v_k) + 1),
                                                C v_x ]),
-        FCond ((C v_y_1 :<= C v_y) :&& (C v_y :<= C v_y_2))
+        FCond ((C v_y_1 $<= C v_y) :&& (C v_y $<= C v_y_2))
           [ FRet (FCall (asExpr linInterp) [ C v_y_1,
                                              Index (C v_z_array) (C v_i),
                                              C v_y_2,

@@ -465,13 +465,13 @@ convExpr (FCall (C c) x)  = do
   let info = sysinfodb $ codeSpec g
   args <- mapM convExpr x
   fApp (codeName (codefunc $ symbLookup c $ info ^. symbolTable)) args
-convExpr (FCall _ _)  = return $ litString "**convExpr :: BinaryOp unimplemented**"
-convExpr (EEquals a b)     = liftM2 (?==) (convExpr a) (convExpr b)
-convExpr (a :!= b)    = liftM2 (?!=) (convExpr a) (convExpr b)
-convExpr (a :> b)     = liftM2 (?>)  (convExpr a) (convExpr b)
-convExpr (a :< b)     = liftM2 (?<)  (convExpr a) (convExpr b)
-convExpr (a :<= b)    = liftM2 (?<=) (convExpr a) (convExpr b)
-convExpr (a :>= b)    = liftM2 (?>=) (convExpr a) (convExpr b)
+convExpr (FCall _ _)  = return $ litString "**convExpr :: FCall unimplemented**"
+convExpr (EEquals a b)    = liftM2 (?==) (convExpr a) (convExpr b)
+convExpr (ENEquals a b)   = liftM2 (?!=) (convExpr a) (convExpr b)
+convExpr (EGreater a b)   = liftM2 (?>)  (convExpr a) (convExpr b)
+convExpr (ELess a b)      = liftM2 (?<)  (convExpr a) (convExpr b)
+convExpr (ELessEq a b)    = liftM2 (?<=) (convExpr a) (convExpr b)
+convExpr (EGreaterEq a b) = liftM2 (?>=) (convExpr a) (convExpr b)
 convExpr (UnaryOp u)  = unop u
 convExpr (Grouping e) = convExpr e
 convExpr (BinaryOp _) = return $ litString "**convExpr :: BinaryOp unimplemented**"
@@ -503,14 +503,14 @@ containsCase (a :. b)     = (containsCase a) || (containsCase b)
 containsCase (a :&& b)    = (containsCase a) || (containsCase b)
 containsCase (a :|| b)    = (containsCase a) || (containsCase b)
 containsCase (Deriv _ _ _) = error "not implemented"
-containsCase (E.Not e)      = containsCase e
-containsCase (Neg e)      = containsCase e
-containsCase (EEquals a b)     = (containsCase a) || (containsCase b)
-containsCase (a :!= b)    = (containsCase a) || (containsCase b)
-containsCase (a :> b)     = (containsCase a) || (containsCase b)
-containsCase (a :< b)     = (containsCase a) || (containsCase b)
-containsCase (a :<= b)    = (containsCase a) || (containsCase b)
-containsCase (a :>= b)    = (containsCase a) || (containsCase b)
+containsCase (E.Not e)     = containsCase e
+containsCase (Neg e)       = containsCase e
+containsCase (EEquals a b)    = (containsCase a) || (containsCase b)
+containsCase (ENEquals a b)   = (containsCase a) || (containsCase b)
+containsCase (EGreater a b)   = (containsCase a) || (containsCase b)
+containsCase (ELess a b)      = (containsCase a) || (containsCase b)
+containsCase (ELessEq a b)    = (containsCase a) || (containsCase b)
+containsCase (EGreaterEq a b) = (containsCase a) || (containsCase b)
 containsCase (UnaryOp u)  = unopcase u
 containsCase (Grouping e) = containsCase e
 containsCase (BinaryOp _) = error "not implemented"
@@ -545,12 +545,12 @@ compactCase (a :|| b)    = compactCaseBinary (:||) a b
 compactCase (Deriv _ _ _) = error "not implemented"
 compactCase (E.Not e)    = compactCaseUnary E.Not e
 compactCase (Neg e)      = compactCaseUnary Neg e
-compactCase (EEquals a b)     = compactCaseBinary ($=) a b
-compactCase (a :!= b)    = compactCaseBinary (:!=) a b
-compactCase (a :> b)     = compactCaseBinary (:>) a b
-compactCase (a :< b)     = compactCaseBinary (:<) a b
-compactCase (a :<= b)    = compactCaseBinary (:<=) a b
-compactCase (a :>= b)    = compactCaseBinary (:>=) a b
+compactCase (EEquals a b)    = compactCaseBinary ($=) a b
+compactCase (ENEquals a b)   = compactCaseBinary ($!=) a b
+compactCase (EGreater a b)   = compactCaseBinary ($>) a b
+compactCase (ELess a b)      = compactCaseBinary ($<) a b
+compactCase (ELessEq a b)    = compactCaseBinary ($<=) a b
+compactCase (EGreaterEq a b) = compactCaseBinary ($>=) a b
 compactCase (UnaryOp u)  = unopcomcase u
 compactCase (Grouping e) = compactCaseUnary Grouping e
 compactCase (BinaryOp _) = error "not implemented"

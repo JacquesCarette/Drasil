@@ -77,7 +77,7 @@ nrmShrF_rel = (inxi normFunc) $= Case [case1,case2,case3] $=
   (indx1 baseWthX * indx1 scalFunc * indx1 intNormForce, C index $= Int 1),
   (inxi baseWthX * (inxi scalFunc * inxi intNormForce +
     inx scalFunc (-1) * inx intNormForce (-1)),
-    Int 2 :<= C index :<= (C numbSlices :- Int 1)),
+    Int 2 $<= C index $<= (C numbSlices :- Int 1)),
   (indxn baseWthX * Index (C intNormForce) (C numbSlices - Int 1) *
     Index (C watrForce) (C numbSlices - Int 1), C index $= Int 1)
   ]
@@ -91,7 +91,7 @@ nrmShrF_rel = (inxi normFunc) $= Case [case1,case2,case3] $=
           (C midpntHght) * (C earthqkLoadFctr * inxi slcWght -
           Int 2 * inxi surfHydroForce * sin (inxi surfAngle) -
           Int 2 * inxi surfLoad * cos (inxi impLoadAngle)),
-          Int 2 :<= C index :<= ((C numbSlices) - (Int 1)))
+          Int 2 $<= C index $<= ((C numbSlices) - (Int 1)))
         case3 = ((indxn baseWthX)*(Index (C intNormForce)
           (C numbSlices - Int 1) + Index (C watrForce)
           (C numbSlices - Int 1)) * tan (Index (C baseAngle)
@@ -118,7 +118,7 @@ sliceFs_rel = inxi intNormForce $= Case [
     C index $= (Int 1)),
   ((inx mobShrC (-1) * inx intNormForce (-1) +
     C fs * inxi shearFNoIntsl - inxi shearRNoIntsl) / inxi shrResC,
-    (Int 2) :<= C index :<= ((C numbSlices) :- (Int 1))),
+    (Int 2) $<= C index $<= ((C numbSlices) :- (Int 1))),
   ((Int 0), C index $= (Int 0) :|| C index $= C numbSlices)]  
   -- FIXME: Use index i as part of condition
 
@@ -387,7 +387,7 @@ intrSlcDerivation = [
   ((C normToShear)*(inxi scalFunc) * sin (inxi baseAngle) -
   cos (inxi baseAngle)) * (C fs),
   -- FIXME: index everything here and add "Where i is the local
-  -- slice of mass for 1 :<= i :<= n-1"
+  -- slice of mass for 1 $<= i $<= n-1"
   EqnBlock $
   (inxi mobShrC) $= ((C normToShear)*(inxi scalFunc) *
   cos (inxiP1 baseAngle) - sin (inxiP1 baseAngle)) *

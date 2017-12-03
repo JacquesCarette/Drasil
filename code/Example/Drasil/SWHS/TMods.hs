@@ -87,10 +87,10 @@ t2SensHtE = makeRC "t2SensHtE"
 
 sensHtEEqn :: Relation
 sensHtEEqn = (C sens_heat) $= Case [((C htCap_S) * (C mass) * (C deltaT),
-  ((C temp) :< (C melt_pt))), ((C htCap_L) *
-  (C mass) * (C deltaT), ((C melt_pt) :< (C temp) :<
+  ((C temp) $< (C melt_pt))), ((C htCap_L) *
+  (C mass) * (C deltaT), ((C melt_pt) $< (C temp) $<
   (C boil_pt))), ((C htCap_V) * (C mass) *
-  (C deltaT), ((C boil_pt) :< (C temp)))]
+  (C deltaT), ((C boil_pt) $< (C temp)))]
 
 --When to call with C? When to call with U, S, Sy, etc? Sometimes confusing.
 

@@ -45,14 +45,14 @@ sliceWght = mkDataDef slcWght slcWgtEqn
 slcWgtEqn :: Expr
 slcWgtEqn = (inxi baseWthX) * (Case [case1,case2,case3])
   where case1 = (((inxi slopeHght)-(inxi slipHght ))*(C satWeight),
-          (inxi waterHght) :>= (inxi slopeHght))
+          (inxi waterHght) $>= (inxi slopeHght))
 
         case2 = (((inxi slopeHght)-(inxi waterHght))*(C dryWeight) +
           ((inxi waterHght)-(inxi slipHght))*(C satWeight),
-          (inxi slopeHght) :> (inxi waterHght) :> (inxi slipHght))
+          (inxi slopeHght) $> (inxi waterHght) $> (inxi slipHght))
 
         case3 = (((inxi slopeHght)-(inxi slipHght ))*(C dryWeight),
-          (inxi waterHght) :<= (inxi slipHght))
+          (inxi waterHght) $<= (inxi slipHght))
 
 --DD2
 
@@ -62,9 +62,9 @@ baseWtrF = mkDataDef baseHydroForce bsWtrFEqn
 bsWtrFEqn :: Expr
 bsWtrFEqn = (inxi baseLngth)*(Case [case1,case2])
   where case1 = (((inxi waterHght)-(inxi slipHght))*(C waterWeight),
-          (inxi waterHght) :> (inxi slipHght))
+          (inxi waterHght) $> (inxi slipHght))
 
-        case2 = (Int 0, (inxi waterHght) :<= (inxi slipHght))
+        case2 = (Int 0, (inxi waterHght) $<= (inxi slipHght))
 
 --DD3
 
@@ -74,9 +74,9 @@ surfWtrF = mkDataDef surfHydroForce surfWtrFEqn
 surfWtrFEqn :: Expr
 surfWtrFEqn = (inxi surfLngth)*(Case [case1,case2])
   where case1 = (((inxi waterHght)-(inxi slopeHght))*(C waterWeight),
-          (inxi waterHght) :> (inxi slopeHght))
+          (inxi waterHght) $> (inxi slopeHght))
 
-        case2 = (Int 0, (inxi waterHght) :<= (inxi slopeHght))
+        case2 = (Int 0, (inxi waterHght) $<= (inxi slopeHght))
 
 --DD4
 
@@ -87,12 +87,12 @@ intersliceWtrFEqn :: Expr
 intersliceWtrFEqn = Case [case1,case2,case3]
   where case1 = (((inxi slopeHght)-(inxi slipHght )):^ 2 :/ 2  *
           (C satWeight) + ((inxi waterHght)-(inxi slopeHght)):^ 2 *
-          (C satWeight), (inxi waterHght) :>= (inxi slopeHght))
+          (C satWeight), (inxi waterHght) $>= (inxi slopeHght))
 
         case2 = (((inxi waterHght)-(inxi slipHght )):^ 2 :/ 2  * (C satWeight),
-                (inxi slopeHght) :> (inxi waterHght) :> (inxi slipHght))
+                (inxi slopeHght) $> (inxi waterHght) $> (inxi slipHght))
 
-        case3 = (Int 0,(inxi waterHght) :<= (inxi slipHght))
+        case3 = (Int 0,(inxi waterHght) $<= (inxi slipHght))
 
 --DD5
 
@@ -232,10 +232,10 @@ soilStiffness = mkDataDef nrmStiffBase soilStiffnessEqn
 
 soilStiffnessEqn :: Expr
 soilStiffnessEqn = (Case [case1,case2])
-  where case1 = (block, (C SM.poissnsR) :< 0)
+  where case1 = (block, (C SM.poissnsR) $< 0)
 
         case2 = ((Dbl 0.01) * block + (C constant_K) / ((C nrmDispl)+
-          (C constant_A)), (C SM.poissnsR) :>= 0)
+          (C constant_A)), (C SM.poissnsR) $>= 0)
 
         block = (C intNormForce)*(1 - (C SM.poissnsR))/
           ((1 + (C SM.poissnsR)) * (1 - 2 :*(C SM.poissnsR) + (C baseWthX)))

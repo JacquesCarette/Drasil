@@ -42,7 +42,8 @@ data Expr = Var   Variable
           | Op Function [Expr]
           | Grouping Expr
           | IsIn  Expr Set
-          | State [Quantifier] Expr
+          | Forall Symbol Expr
+          | Exists Symbol Expr
           | Impl Expr Expr
           | Iff  Expr Expr
           | Mtx [[Expr]]
@@ -80,7 +81,6 @@ data Set = Integer
          | DiscreteD [Double]
          | DiscreteS [String]
 
-data Quantifier = Forall Expr | Exists Expr
 
 -- | Internal HTML version of Sentence 
 -- (for converting 'Language.Drasil.Spec.Sentence')

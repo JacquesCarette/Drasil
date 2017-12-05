@@ -4,7 +4,7 @@ module Language.Drasil.Expr.Extract(dep, vars, codevars, codevars') where
 import Data.List (nub)
 import Control.Lens hiding ((:<),(:>))
 import Prelude hiding (id)
-import Language.Drasil.Expr (Expr(..), UFunc(..), BiFunc(..), Quantifier(..))
+import Language.Drasil.Expr (Expr(..), UFunc(..), BiFunc(..))
 import Language.Drasil.Chunk (id)
 import Language.Drasil.ChunkDB
 import Language.Drasil.Chunk.Code
@@ -42,7 +42,8 @@ dep (BinaryOp b)  = nub (concat $ map dep (binop b))
 dep (a :=>  b)    = nub (dep a ++ dep b)
 dep (a :<=> b)    = nub (dep a ++ dep b)
 dep (IsIn  a _)   = nub (dep a)
-dep (State a b)   = nub ((concat $ map (dep . quant) a) ++ dep b)
+dep (ForAll _ b)  = nub (dep b)
+dep (Exists _ b)  = nub (dep b)
 dep (Matrix a)    = nub (concat $ map (concat . map dep) a)
 dep (Index a i)   = nub (dep a ++ dep i)
 dep (Len a)       = nub (dep a)
@@ -79,7 +80,8 @@ vars (BinaryOp b) m = nub (concat $ map (\x -> vars x m) (binop b))
 vars (a :=>  b)   m = nub (vars a m ++ vars b m)
 vars (a :<=> b)   m = nub (vars a m ++ vars b m)
 vars (IsIn  a _)  m = nub (vars a m)
-vars (State a b)  m = nub ((concat $ map (\x -> vars (quant x) m) a) ++ vars b m)
+vars (ForAll _ b)  m = nub $ vars b m
+vars (Exists _ b)  m = nub $ vars b m
 vars (Matrix a)   m = nub (concat $ map (\x -> concat $ map (\y -> vars y m) x) a)
 vars (Index a i)  m = nub (vars a m ++ vars i m)
 vars (Len a)      m = nub (vars a m)
@@ -117,7 +119,8 @@ codevars (BinaryOp b) sm = nub (concat $ map (\x -> codevars x sm) (binop b))
 codevars (a :=>  b)   sm = nub (codevars a sm ++ codevars b sm)
 codevars (a :<=> b)   sm = nub (codevars a sm ++ codevars b sm)
 codevars (IsIn  a _)  sm = nub (codevars a sm)
-codevars (State a b)  sm = nub ((concat $ map (\x -> codevars (quant x) sm) a) ++ codevars b sm)
+codevars (ForAll _ b) sm = nub $ codevars b sm
+codevars (Exists _ b) sm = nub $ codevars b sm
 codevars (Matrix a)   sm = nub (concat $ map (concat . map (\x -> codevars x sm)) a)
 codevars (Index a i)  sm = nub (codevars a sm ++ codevars i sm)
 codevars (Len a)      sm = nub (codevars a sm)
@@ -156,8 +159,8 @@ codevars' (BinaryOp b) sm = nub (concat $ map (\x -> codevars' x sm) (binop b))
 codevars' (a :=>  b)   sm = nub (codevars' a sm ++ codevars' b sm)
 codevars' (a :<=> b)   sm = nub (codevars' a sm ++ codevars' b sm)
 codevars' (IsIn  a _)  sm = nub (codevars' a sm)
-codevars' (State a b)  sm = nub ((concat $ map (\x -> codevars' (quant x) sm) a) ++
-                              codevars' b sm)
+codevars' (ForAll _ b)  sm = nub $ codevars' b sm
+codevars' (Exists _ b)  sm = nub $ codevars' b sm
 codevars' (Matrix a)   sm = nub (concat $ map (concat . map (\x -> codevars' x sm)) a)
 codevars' (Index a i)  sm = nub (codevars' a sm ++ codevars' i sm)
 codevars' (Len a)      sm = nub (codevars' a sm)
@@ -184,11 +187,6 @@ unpack (Sqrt e) = e
 -- | Helper function for vars and dep, gets Exprs from binary operations.
 binop :: BiFunc -> [Expr]
 binop (Cross e f) = [e,f]
-
--- | Helper function for vars and dep, gets Exprs from Quantifier
-quant :: Quantifier -> Expr
-quant (Forall e) = e
-quant (Exists e) = e
 
 -- Steven edit:  need this to have a type for code generation
 --   setting to all to rational

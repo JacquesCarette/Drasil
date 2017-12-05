@@ -8,7 +8,7 @@ import Language.Drasil.Code.Imperative.Parsers.ConfigParser (pythonLabel, cppLab
 import Language.Drasil.Code.Imperative.Lang
 import Language.Drasil.Code.CodeGeneration (createCodeFiles, makeCode)
 import Language.Drasil.Chunk.Code
-import Language.Drasil.Expr as E hiding (State)
+import Language.Drasil.Expr as E
 import Language.Drasil.Expr.Extract hiding (vars)
 import Language.Drasil.CodeSpec hiding (codeSpec, Mod(..))
 import qualified Language.Drasil.CodeSpec as CS (Mod(..))

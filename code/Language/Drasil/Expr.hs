@@ -63,13 +63,13 @@ data Expr where
   (:&&)    :: Expr -> Expr -> Expr -- logical and
   (:||)    :: Expr -> Expr -> Expr -- logical or
   Not      :: Expr -> Expr -- logical not
+
   IsIn  :: Expr -> Set -> Expr --	element of
-  State :: [Quantifier] -> Expr -> Expr
-    --ex. State [(Forall $ V "x" `IsIn` Reals), V "x" :> Int 1] (V "x" :^ Int 2 :> V "x")
-    -- => forall x in R, x>1: x^2 > x
+
+  ForAll   :: Symbol -> Expr -> Expr
+  Exists   :: Symbol -> Expr -> Expr
   (:=>)  :: Expr -> Expr -> Expr -- implies, &rArr; \implies
   (:<=>) :: Expr -> Expr -> Expr -- if and only if, &hArr; \iff
-  --Monotonic :: Maybe Direction -> Expr -> Expr --like this? or defined as below (see monotoniclyIncr)
 
 ($=), ($!=), ($<), ($>), ($<=), ($>=) :: Expr -> Expr -> Expr
 ($=)  = EEquals
@@ -92,7 +92,6 @@ type Set = Space
          | Vect Set
          | Obj String-}
 
-data Quantifier = Forall Expr | Exists Expr deriving Eq -- &forall; \forall -- &exist; \exists
 {-
 data Direction = Increasing
                | Decreasing
@@ -145,7 +144,8 @@ instance Eq Expr where
   (:=>) a b  == (:=>) c d      =  a == c && b == d
   (:<=>) a b == (:<=>) c d     =  a == c && b == d || a == d && b == c
   IsIn  a b  == IsIn  c d      =  a == c && b == d
-  State a b  == State c d      =  a == c && b == d
+  ForAll a b == ForAll c d     =  a == c && b == d -- not quite right...
+  Exists a b == Exists c d     =  a == c && b == d -- not quite right...
   _ == _                       =  False
 
 instance Fractional Expr where

@@ -3,7 +3,7 @@ module Language.Drasil.TeX.Import where
 import Control.Lens hiding ((:>),(:<),set)
 import Prelude hiding (id)
 import Language.Drasil.Expr (Expr(..), Relation, UFunc(..), BiFunc(..),
-                             Bound(..),DerivType(..), Set, Quantifier(..), ($=))
+                             Bound(..),DerivType(..), Set, ($=))
 import Language.Drasil.Space (Space(..))
 import Language.Drasil.Expr.Extract
 import Language.Drasil.Spec
@@ -65,13 +65,9 @@ expr (a :|| b)         sm = T.Or   (expr a sm) (expr b sm)
 expr (a  :=>  b)       sm = T.Impl  (expr a sm) (expr b sm)
 expr (a  :<=> b)       sm = T.Iff   (expr a sm) (expr b sm)
 expr (IsIn  a b)       sm = T.IsIn  (expr a sm) (set b)
-expr (State a b)       sm = T.State (map (flip quan sm) a) (expr b sm)
+expr (ForAll a b)      sm = T.Forall a (expr b sm)
+expr (Exists a b)      sm = T.Exists a (expr b sm)
 expr _                 _  = error "Expression unimplemented in TeX"
-
--- | Healper for translating Quantifier
-quan :: HasSymbolTable ctx => Quantifier -> ctx -> T.Quantifier
-quan (Forall e) sm = T.Forall (expr e sm)
-quan (Exists e) sm = T.Exists (expr e sm)
 
 ufunc :: HasSymbolTable ctx => UFunc -> ctx -> (T.Function, T.Expr)
 ufunc (Log e) sm = (T.Log, expr e sm)

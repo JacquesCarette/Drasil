@@ -1,7 +1,7 @@
 module Language.Drasil.HTML.Import where
 import Prelude hiding (id)
 import Language.Drasil.Expr (Expr(..), Relation, UFunc(..), BiFunc(..),
-                             Bound(..),DerivType(..), Set, Quantifier(..), ($=))
+                             Bound(..),DerivType(..), Set, ($=))
 import Language.Drasil.Space (Space(..))
 import Language.Drasil.Spec
 import qualified Language.Drasil.HTML.AST as H
@@ -66,14 +66,10 @@ expr (a  :||  b)        sm = H.Or    (expr a sm) (expr b sm)
 expr (a  :=>  b)        sm = H.Impl  (expr a sm) (expr b sm)
 expr (a  :<=> b)        sm = H.Iff   (expr a sm) (expr b sm)
 expr (IsIn  a b)        sm = H.IsIn  (expr a sm) (set b)
-expr (State a b)        sm = H.State (map (flip quan sm) a) (expr b sm)
+expr (ForAll a b)       sm = H.Forall a (expr b sm)
+expr (Exists a b)       sm = H.Exists a (expr b sm)
 expr (Len _)             _ = error "Len not yet implemented"
 expr (Append _ _)        _ = error "Append not yet implemented"
-
--- | Healper for translating Quantifier
-quan :: HasSymbolTable s => Quantifier -> s -> H.Quantifier
-quan (Forall e) sm = H.Forall (expr e sm)
-quan (Exists e) sm = H.Exists (expr e sm)
 
 -- | Helper function for translating 'UFunc's
 ufunc :: HasSymbolTable s => UFunc -> s -> (H.Function, H.Expr)

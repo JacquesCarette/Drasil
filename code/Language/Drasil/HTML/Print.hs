@@ -169,7 +169,10 @@ p_expr (Or a b)   = p_expr a ++ " &or; " ++ p_expr b
 p_expr (Impl a b) = p_expr a ++ " &rArr; " ++ p_expr b
 p_expr (Iff a b)  = p_expr a ++ " &hArr; " ++ p_expr b
 p_expr (IsIn  a b) = p_expr a ++ "&thinsp;&isin;&thinsp;"  ++ show b
-p_expr (State a b) = (concat $ intersperse ", " $ map p_quan a) ++ ": " ++ p_expr b
+-- p_expr (State a b) = (concat $ intersperse ", " $ map p_quan a) ++ ": " ++ p_expr b
+p_expr (Forall v e) = "&forall;" ++ symbol v ++ "&thinsp; :" ++ paren (p_expr e)
+p_expr (Exists v e) = "&exist;"  ++ symbol v ++ "&thinsp; :" ++ paren (p_expr e)
+
 
 -- | For printing indexes
 p_indx :: Expr -> Expr -> String
@@ -198,11 +201,6 @@ p_in :: [Expr] -> String
 p_in [] = ""
 p_in [x] = "<td>" ++ p_expr x ++ "</td>"
 p_in (x:xs) = p_in [x] ++ p_in xs
-
--- | Helper for rendering Quantifier statements
-p_quan :: Quantifier -> String
-p_quan (Forall e) = "&forall;" ++ p_expr e
-p_quan (Exists e) = "&exist;"  ++ p_expr e
 
 -- | Helper for properly rendering multiplication of expressions
 mul :: Expr -> Expr -> String

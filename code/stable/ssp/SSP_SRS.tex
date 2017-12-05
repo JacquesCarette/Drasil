@@ -1227,14 +1227,14 @@ $\kappa{}$ & None & $0.0$ Pa & 0.1
 \caption{Input Data Constraints}
 \label{Table:InpuDataCons}
 \end{longtable}
-\begin{longtable}{l l}
+\begin{longtabu}{l X[l]}
 \toprule
 Var & Physical Constraints
 \\
 \midrule
 $FS$ & $0<FS$
 \\
-$(x,y)$ & $\forall{}(x,y), \forall{}i\in{}\mathbb{N}: x_{i}<x_{i+1}\implies{}y_{i}<y_{i+1}$
+$(x,y)$ & $\forall{} i:\ i\in{}\mathbb{N}\implies{}\left(x_{i}<x_{i+1}\implies{}y_{i}<y_{i+1}\right)$
 \\
 $\delta{}x$ & None
 \\
@@ -1243,7 +1243,7 @@ $\delta{}y$ & None
 \bottomrule
 \caption{Output Data Constraints}
 \label{Table:OutpDataCons}
-\end{longtable}
+\end{longtabu}
 \section{Requirements}
 \label{Sec:Requ}
 This section provides the functional requirements, the business tasks that the software is expected to complete, and the non-functional requirements, the qualities that the software is expected to exhibit.

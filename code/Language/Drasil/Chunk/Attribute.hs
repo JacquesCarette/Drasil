@@ -1,5 +1,8 @@
 {-# LANGUAGE GADTs,Rank2Types #-}
-module Language.Drasil.Chunk.Attribute where
+module Language.Drasil.Chunk.Attribute 
+  ( Attribute(..), Attributes, HasAttributes(..)
+  , AttribQDef(..)
+  ) where
 
 import Control.Lens (Simple, Lens, (^.))
 import Language.Drasil.Spec (Sentence)
@@ -27,6 +30,9 @@ data Attribute = Rationale Sentence
 class Chunk c => HasAttributes c where
   attributes :: Simple Lens c Attributes
 
+-- | A QDefinition (Quantity) with attributes is an 'AttribQDef'
+-- This is a temporary data structure to be used until attributes are fully
+-- functional, then it will be fused with QDefinition
 data AttribQDef where
   AQD :: QDefinition -> Attributes -> AttribQDef
   
@@ -46,6 +52,7 @@ instance Eq AttribQDef where
 instance HasAttributes AttribQDef where
   attributes f (AQD a b) = fmap (\x -> AQD a x) (f b)
   
+-- DO NOT EXPORT
 qdl :: Simple Lens AttribQDef QDefinition
 qdl f (AQD a b) = fmap (\x -> AQD x b) (f a)
 

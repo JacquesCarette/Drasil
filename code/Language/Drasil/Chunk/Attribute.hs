@@ -1,9 +1,12 @@
 {-# LANGUAGE GADTs,Rank2Types #-}
 module Language.Drasil.Chunk.Attribute where
 
-import Control.Lens (Simple, Lens, (^.), set)
+import Control.Lens (Simple, Lens, (^.))
 import Language.Drasil.Spec (Sentence)
 import Language.Drasil.Chunk
+import Language.Drasil.Chunk.Eq (QDefinition)
+import Language.Drasil.Chunk.NamedIdea (NamedIdea, term, getA)
+import Language.Drasil.Chunk.Quantity (Quantity, typ, getStagedS, getSymb, getUnit)
 import Language.Drasil.Document (Contents)
 
 
@@ -23,5 +26,27 @@ data Attribute = Rationale Sentence
 -- | Any chunk with 'Attributes' is part of the 'HasAttributes' class.
 class Chunk c => HasAttributes c where
   attributes :: Simple Lens c Attributes
+
+data AttribQDef where
+  AQD :: QDefinition -> Attributes -> AttribQDef
+  
+instance Chunk AttribQDef where
+  id = qdl . id
+instance NamedIdea AttribQDef where
+  term = qdl . term
+  getA (AQD q _) = getA q
+instance Quantity AttribQDef where
+  typ = qdl . typ
+  getSymb s (AQD q _) = getSymb s q
+  getStagedS (AQD q _) = getStagedS q
+  getUnit (AQD q _) = getUnit q
+instance Eq AttribQDef where
+  a == b = (a ^. id) == (b ^. id)
+
+instance HasAttributes AttribQDef where
+  attributes f (AQD a b) = fmap (\x -> AQD a x) (f b)
+  
+qdl :: Simple Lens AttribQDef QDefinition
+qdl f (AQD a b) = fmap (\x -> AQD x b) (f a)
 
 

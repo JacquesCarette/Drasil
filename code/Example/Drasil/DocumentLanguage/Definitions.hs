@@ -49,7 +49,7 @@ tmodel fs m t = Defnt TM (foldr (mkTMField t m) [] fs)
 
 -- | Create a data definition using a list of fields, a database of symbols, and a 
 -- QDefinition (called automatically by 'SCSSub' program)
-ddefn :: HasSymbolTable ctx => Fields -> ctx -> QDefinition -> Contents
+ddefn :: HasSymbolTable ctx => Fields -> ctx -> AttribQDef -> Contents
 ddefn fs m d = Defnt DD (foldr (mkQField d m) [] fs) (S "DD:" :+: S (d ^. id))
 --FIXME: Generate the reference names here
 
@@ -80,15 +80,15 @@ tConToExpr (Invariant x) = x
 -- TODO: buildDescription gets list of constraints to expr and ignores 't'.
 
 -- | Create the fields for a definition from a QDefinition (used by ddefn)
-mkQField :: HasSymbolTable ctx => QDefinition -> ctx -> Field -> ModRow -> ModRow
+mkQField :: HasSymbolTable ctx => AttribQDef -> ctx -> Field -> ModRow -> ModRow
 mkQField d _ l@Label fs = (show l, (Paragraph $ at_start d):[]) : fs
 mkQField d _ l@Symbol fs = (show l, (Paragraph $ (P $ eqSymb d)):[]) : fs
 mkQField d _ l@Units fs = (show l, (Paragraph $ (unit'2Contents d)):[]) : fs
-mkQField d _ l@DefiningEquation fs = (show l, (EqnBlock $ equat d):[]) : fs
+mkQField d _ l@DefiningEquation fs = (show l, (EqnBlock $ equat (qdef d)):[]) : fs
 mkQField d m l@(Description v u) fs = 
-  (show l, buildDDescription v u d m) : fs
+  (show l, buildDDescription v u (qdef d) m) : fs
 mkQField _ _ l@(RefBy) fs = (show l, fixme) : fs --FIXME: fill this in
-mkQField _ _ l@(Source) fs = (show l, fixme) : fs --FIXME: fill this in
+mkQField d _ l@(Source) fs = (show l, [Paragraph $ getSource d]) : fs 
 
 -- | Create the description field (if necessary) using the given verbosity and
 -- including or ignoring units for a model / general definition

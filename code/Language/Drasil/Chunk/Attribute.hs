@@ -1,11 +1,11 @@
 {-# LANGUAGE GADTs,Rank2Types #-}
 module Language.Drasil.Chunk.Attribute 
   ( Attribute(..), Attributes, HasAttributes(..)
-  , AttribQDef(..)
+  , AttribQDef(..), qdef, getSource
   ) where
 
 import Control.Lens (Simple, Lens, (^.))
-import Language.Drasil.Spec (Sentence)
+import Language.Drasil.Spec (Sentence(EmptyS))
 import Language.Drasil.Chunk
 import Language.Drasil.Chunk.Eq (QDefinition)
 import Language.Drasil.Chunk.NamedIdea (NamedIdea, term, getA)
@@ -25,6 +25,18 @@ data Attribute = Rationale Sentence
                | SourceRef Sentence -- Source to reference for this knowledge chunk
                | Derivation Contents -- Makes sense for now (derivations are just document sections at the moment), but we may need to create a new
                -- representation for it in the future.
+
+-- Should this get only the first one or all potential sources?
+-- Should we change the source ref to have a list (to keep things clean in case
+--    of multiple sources)?
+-- | Get the source reference from the attributes (if it exists)
+getSource :: HasAttributes c => c -> Sentence
+getSource c = sourceRef $ c ^. attributes
+
+sourceRef :: Attributes -> Sentence
+sourceRef [] = EmptyS
+sourceRef ((SourceRef x):_) = x
+sourceRef (_:xs) = sourceRef xs
 
 -- | Any chunk with 'Attributes' is part of the 'HasAttributes' class.
 class Chunk c => HasAttributes c where
@@ -56,4 +68,5 @@ instance HasAttributes AttribQDef where
 qdl :: Simple Lens AttribQDef QDefinition
 qdl f (AQD a b) = fmap (\x -> AQD x b) (f a)
 
-
+qdef :: AttribQDef -> QDefinition
+qdef (AQD q _) = q

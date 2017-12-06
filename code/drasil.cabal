@@ -313,10 +313,8 @@ executable chipmunkdocs
     , Drasil.DocumentLanguage.Chunk.GenDefn
     , Drasil.DocumentLanguage.Definitions
     , Drasil.GamePhysics.Body
-    , Drasil.GamePhysics.Changes
     , Drasil.GamePhysics.Concepts
     , Drasil.GamePhysics.DataDefs
-    , Drasil.GamePhysics.Modules
     , Drasil.GamePhysics.TMods
     , Drasil.GamePhysics.Unitals
     , Drasil.GamePhysics.IMods

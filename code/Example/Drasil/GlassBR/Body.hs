@@ -152,13 +152,6 @@ glassChoices = Choices {
 glassBR_code :: CodeSpec
 glassBR_code = codeSpec' glassSystInfo [interpMod, inputMod, readTableMod]
 
---mgBod :: [Section]
---(mgBod, _) = makeDD likelyChanges unlikelyChanges reqs modules
-
-  -- MG authors embedded here (on purpose).  FIXME properly
---glassBR_mg :: Document
---glassBR_mg = mgDoc glassBRProg (for'' titleize phrase)
---  (manyNames [spencerSmith, thulasi]) mgBod
 
 s6, s6_1, s6_1_1, s6_1_2, s6_1_3, s6_2 :: Section
 

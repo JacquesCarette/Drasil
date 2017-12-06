@@ -151,10 +151,6 @@ executable tiny
     , Drasil.DocumentLanguage.Definitions
     , Drasil.Sections.AuxiliaryConstants
     , Drasil.Sections.TableOfUnits
-    , Drasil.Template.DD
-    , Drasil.Template.Helpers
-    , Drasil.Template.MG
-    , Drasil.Template.MIS
     , Drasil.Sections.SpecificSystemDescription
     , Drasil.Sections.SolutionCharacterSpec
     , Drasil.Sections.Stakeholders
@@ -209,10 +205,6 @@ executable nopcm
     , Drasil.Sections.GeneralSystDesc
     , Drasil.Sections.TableOfSymbols
     , Drasil.Sections.TableOfUnits
-    , Drasil.Template.DD
-    , Drasil.Template.Helpers
-    , Drasil.Template.MG
-    , Drasil.Template.MIS
   Build-Depends:
     base >= 4.7,
     lens >= 4.12,
@@ -255,10 +247,6 @@ executable ssp
     , Drasil.DocumentLanguage.Definitions
     , Drasil.Sections.TableOfUnits
     , Drasil.Sections.AuxiliaryConstants
-    , Drasil.Template.DD
-    , Drasil.Template.Helpers
-    , Drasil.Template.MG
-    , Drasil.Template.MIS
     , Drasil.Sections.SpecificSystemDescription
     , Drasil.Sections.Introduction
     , Drasil.Sections.Requirements
@@ -305,10 +293,6 @@ executable glassbr
     , Drasil.Sections.TableOfAbbAndAcronyms
     , Drasil.Sections.TableOfSymbols
     , Drasil.Sections.TableOfUnits
-    , Drasil.Template.DD
-    , Drasil.Template.Helpers
-    , Drasil.Template.MG
-    , Drasil.Template.MIS
   Build-Depends:
     base >= 4.7,
     lens >= 4.12,
@@ -351,10 +335,6 @@ executable chipmunkdocs
     , Drasil.Sections.TableOfAbbAndAcronyms
     , Drasil.Sections.TableOfSymbols
     , Drasil.Sections.TableOfUnits
-    , Drasil.Template.DD
-    , Drasil.Template.Helpers
-    , Drasil.Template.MG
-    , Drasil.Template.MIS
   Build-Depends:
     base >= 4.7,
     lens >= 4.12,
@@ -400,10 +380,6 @@ executable swhs
     , Drasil.Sections.TableOfUnits
     , Drasil.Sections.AuxiliaryConstants
     , Drasil.Sections.Stakeholders
-    , Drasil.Template.DD
-    , Drasil.Template.Helpers
-    , Drasil.Template.MG
-    , Drasil.Template.MIS
   Build-Depends:
     base >= 4.7,
     lens >= 4.12,
@@ -445,10 +421,6 @@ executable speciation
     , Drasil.Sections.TableOfAbbAndAcronyms
     , Drasil.Sections.TableOfSymbols
     , Drasil.Sections.TableOfUnits
-    , Drasil.Template.DD
-    , Drasil.Template.Helpers
-    , Drasil.Template.MG
-    , Drasil.Template.MIS
   Build-Depends:
     base >= 4.7,
     lens >= 4.12,

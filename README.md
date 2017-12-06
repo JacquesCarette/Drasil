@@ -70,9 +70,6 @@ in ./code/ for more information.
 **Presentations**
   - Presentations on LSS/Drasil
   
-**RecipeForSCSoftDev**
-  - Paper *A Recipe for Scientific Computing Software Development*
-  
 **RelatedCode**
   - Contains the *Generic Object Oriented Language* (GOOL) code.
   

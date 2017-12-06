@@ -76,9 +76,6 @@ in ./code/ for more information.
 **SRS_LPM_Example**
   - SRS for a fuel pin (more comprehensive than HGHC)
   
-**SampleEngCalcReport**
-  - A sample Engineering Calculation Report
-  
 **Steve**
   - Steven Palmer's work
   

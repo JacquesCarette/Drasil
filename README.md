@@ -1,13 +1,16 @@
-literate-scientific-software - The Drasil Framework
+The Drasil Framework
 ====================================================
 
-Repository for working on both literate software and families of scientific software
+Generate all the Things!
 
 ## What is Drasil?
 
-Drasil is a framework for literate scientific software development. The main goals
-are to reduce knowledge duplication and improve reusability, maintainability,
-verifiability, traceability, and other software qualities.
+Drasil is a framework for generating all of the software artifacts from
+a stable knowledge base, focusing currently on scientific software. The main goals
+are to reduce knowledge duplication and improve traceability. We also are
+extreme in our drive to reuse everything.  We hope that
+maintainability, verifiability, traceability, and other software qualities will 
+also be improved as a side-effect of our methods.
 
 Drasil is used to generate *all* requisite software artifacts from a common 
 *knowledge-base* using *recipes* written in a Domain-Specific Language (DSL).
@@ -19,10 +22,10 @@ determine what is needed and make the design general, we are concurrently
 implementing six examples (case studies) in Drasil.  (The specific examples are
 listed below under "Building specific examples.")  These examples were first
 written using a typical "manual" approach.  The full files for the case studies
-are available at [here](https://github.com/smiths/caseStudies).
+are available in [a separate case studies repo](https://github.com/smiths/caseStudies).
 
 For more information on Drasil, please read 
-[this paper](https://github.com/JacquesCarette/literate-scientific-software/blob/master/Dan/ICSE%20Workshop%20-%20SE4Science/ICSE_LiterateFrameworkForSCSoftware_LSS.pdf)
+[our position ppaper](https://github.com/JacquesCarette/literate-scientific-software/blob/master/Dan/ICSE%20Workshop%20-%20SE4Science/ICSE_LiterateFrameworkForSCSoftware_LSS.pdf)
 or take a look at 
 our [poster](https://github.com/JacquesCarette/literate-scientific-software/blob/master/Dan/CAS%20Poster%20Competition/Poster/DrasilPoster.pdf).
 
@@ -69,9 +72,6 @@ in ./code/ for more information.
   
 **Presentations**
   - Presentations on LSS/Drasil
-  
-**RecipeForSCSoftDev**
-  - Paper *A Recipe for Scientific Computing Software Development*
   
 **RelatedCode**
   - Contains the *Generic Object Oriented Language* (GOOL) code.

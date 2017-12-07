@@ -1,7 +1,7 @@
 {-# LANGUAGE GADTs,Rank2Types #-}
 module Language.Drasil.Chunk.Attribute 
   ( Attribute(..), Attributes, HasAttributes(..)
-  , AttribQDef(..), qdef, getSource
+  , AttribQDef, qdef, getSource, aqd
   ) where
 
 import Control.Lens (Simple, Lens, (^.))
@@ -23,6 +23,7 @@ type Attributes = [Attribute]
 -- at a given model/definition/etc.
 data Attribute = Rationale Sentence
                | SourceRef Sentence -- Source to reference for this knowledge chunk
+                                    -- FIXME: Allow URLs/Citations here
                | Derivation Contents -- Makes sense for now (derivations are just document sections at the moment), but we may need to create a new
                -- representation for it in the future.
 
@@ -64,9 +65,12 @@ instance Eq AttribQDef where
 instance HasAttributes AttribQDef where
   attributes f (AQD a b) = fmap (\x -> AQD a x) (f b)
   
+qdef :: AttribQDef -> QDefinition
+qdef (AQD q _) = q
+
+aqd :: QDefinition -> Attributes -> AttribQDef
+aqd = AQD
+
 -- DO NOT EXPORT
 qdl :: Simple Lens AttribQDef QDefinition
 qdl f (AQD a b) = fmap (\x -> AQD x b) (f a)
-
-qdef :: AttribQDef -> QDefinition
-qdef (AQD q _) = q

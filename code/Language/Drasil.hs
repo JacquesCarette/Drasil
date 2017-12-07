@@ -64,7 +64,7 @@ module Language.Drasil (
   --Chunk.UWrapper 
   , UWrapper, uw, ucw, UCWrapper
   -- Chunks w/ Attributes
-  , Attribute(..), Attributes, attributes, AttribQDef(..), qdef, getSource
+  , Attribute(..), Attributes, attributes, AttribQDef, qdef, getSource, aqd
   --Citations
   , BibRef, City, State, Citation(..), CiteField(..), Month(..), getAuthors, getYear
   -- Spec

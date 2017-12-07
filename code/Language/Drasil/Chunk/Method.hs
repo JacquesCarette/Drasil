@@ -56,9 +56,9 @@ cl f (MeC a b c d e) = fmap (\x -> MeC x b c d e) (f a)
 
 --FIXME? Added a hack (pattern match) to make the modified EqChunk work
 fromEC :: HasSymbolTable ctx => QDefinition -> ctx -> MethodChunk
-fromEC ec@(EC a b) m =
+fromEC qd@(EC a b _) m =
   let exc' = if (checkDiv $ b) then [DivByZero] else []
-  in  MeC (nw a) (MCalc $ ec) (vars b m)
+  in  MeC (nw a) (MCalc $ qd) (vars b m)
       [qw a] exc'
 
 makeStdInputMethod :: (Quantity q) => q -> MethodChunk

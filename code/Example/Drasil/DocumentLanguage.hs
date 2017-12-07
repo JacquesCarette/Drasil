@@ -183,7 +183,7 @@ data SCSSub where
   Assumptions :: {-Fields  ->-} Section -> Section -> Section -> Section -> Section -> [Contents] -> SCSSub --FIXME: temporary definition?
   TMs         :: Fields  -> [TheoryModel] -> SCSSub
   GDs         :: Fields  -> [RelationConcept] -> SCSSub
-  DDs         :: Fields  -> [AttribQDef]     -> SCSSub --FIXME: Need DD intro
+  DDs         :: Fields  -> [QDefinition]     -> SCSSub --FIXME: Need DD intro
   IMs         :: Fields  -> [RelationConcept] -> SCSSub
   Constraints :: Sentence -> Sentence -> Sentence -> [Contents] {-Fields  -> [UncertainWrapper] -> [ConstrainedChunk]-} -> SCSSub --FIXME: temporary definition?
 --FIXME: Work in Progress ^

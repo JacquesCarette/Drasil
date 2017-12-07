@@ -241,10 +241,10 @@ qscdlens l f (CodeDefinition a b) =
   fmap (\x -> CodeDefinition (set l x a) b) (f (a ^. l)) 
   
 qtoc :: QDefinition -> CodeDefinition
-qtoc (EC q e) = CodeDefinition (codefunc q) e
+qtoc (EC q e _) = CodeDefinition (codefunc q) e
 
 qtov :: QDefinition -> CodeDefinition
-qtov (EC q e) = CodeDefinition (codevar q) e
+qtov (EC q e _) = CodeDefinition (codevar q) e
 
 codeEquat :: CodeDefinition -> Expr
 codeEquat (CodeDefinition _ e) = e 

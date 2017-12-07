@@ -320,7 +320,7 @@ buildEqn c sm = H.N (eqSymb c) H.:+: H.S " = " H.:+:
 buildDDDescription :: HasSymbolTable s => QDefinition -> s -> H.Spec
 buildDDDescription c m = descLines 
   (if verboseDDDescription then (vars (getQ c := equat c) m) else []) m
-  where getQ (EC a _) = C a
+  where getQ (EC a _ _) = C a
 
 -- | Helper for building each line of the description of a data def
 descLines :: (HasSymbolTable s, Quantity q) => [q] -> s -> H.Spec  

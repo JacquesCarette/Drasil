@@ -64,7 +64,7 @@ module Language.Drasil (
   --Chunk.UWrapper 
   , UWrapper, uw, ucw, UCWrapper
   -- Chunks w/ Attributes
-  , Attribute(..), Attributes, attributes, AttribQDef, qdef, getSource, aqd
+  , Attribute(..), Attributes, attributes, getSource, aqd -- TODO: Remove aqd
   --Citations
   , BibRef, City, State, Citation(..), CiteField(..), Month(..), getAuthors, getYear
   -- Spec
@@ -145,7 +145,7 @@ import Language.Drasil.Chunk.Quantity
 import Language.Drasil.Chunk.UncertainQuantity
 import Language.Drasil.Chunk.ConVar
 import Language.Drasil.Chunk.ExprRelat
-import Language.Drasil.Chunk.Eq (QDefinition(..), fromEqn, fromEqn', fromEqn'', getVC, equat)
+import Language.Drasil.Chunk.Eq (QDefinition(..), fromEqn, fromEqn', fromEqn'', getVC, equat, aqd)
 import Language.Drasil.Chunk.Constrained
 import Language.Drasil.Chunk.Theory
 import Language.Drasil.Chunk.Unital(UnitalChunk(..), makeUCWDS, ucFromCV

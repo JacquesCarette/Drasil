@@ -1,11 +1,13 @@
 {-# LANGUAGE GADTs, Rank2Types #-}
 module Language.Drasil.Chunk.Eq 
-  (QDefinition(..), fromEqn, fromEqn', fromEqn'', equat, getVC) where
+  (QDefinition(..), fromEqn, fromEqn', fromEqn'', equat, getVC
+  , ec, ec', aqd) where
 
 import Control.Lens (Simple, Lens, set, (^.))
 import Prelude hiding (id)
 import Language.Drasil.Expr (Expr)
 import Language.Drasil.Chunk
+import Language.Drasil.Chunk.Attribute
 import Language.Drasil.Chunk.NamedIdea (NamedIdea, term, getA)
 import Language.Drasil.Chunk.Concept
 import Language.Drasil.Chunk.ConVar
@@ -23,12 +25,12 @@ import Language.Drasil.Spec
 -- BEGIN EQCHUNK --
 -- | A QDefinition is a 'Quantity' with a defining equation.
 data QDefinition where
-  EC :: (Quantity c) => c -> Expr -> QDefinition
+  EC :: (Quantity c) => c -> Expr -> Attributes -> QDefinition
 
 --Removed named record fields, so we want to not break things for now.
 -- | Returns the defining equation of a 'QDefinition'
 equat :: QDefinition -> Expr 
-equat (EC _ b) = b
+equat (EC _ b _) = b
   
 -- this works because UnitalChunk is a Chunk
 instance Chunk QDefinition where
@@ -40,13 +42,16 @@ instance NamedIdea QDefinition where
 
 instance Quantity QDefinition where
   typ = ul . typ
-  getSymb s (EC a _)  = getSymb s a
-  getUnit (EC a _)    = getUnit a
-  getStagedS (EC a _) = getStagedS a
+  getSymb s (EC a _ _)  = getSymb s a
+  getUnit (EC a _ _)    = getUnit a
+  getStagedS (EC a _ _) = getStagedS a
   -- DO SOMETHING
   
 instance ExprRelat QDefinition where
-  relat f (EC a b) = fmap (\x -> EC a x) (f b)
+  relat f (EC a b c) = fmap (\x -> EC a x c) (f b)
+  
+instance HasAttributes QDefinition where
+  attributes f (EC a b c) = fmap (\x -> EC a b x) (f c)
   
 {-instance Unit' QDefinition where
   unit' = ul . unit'-}
@@ -54,7 +59,7 @@ instance ExprRelat QDefinition where
 
 -- don't export this
 ul :: Simple Lens QDefinition H
-ul f (EC a b) = fmap (\(H x) -> EC x b) (f (H a))
+ul f (EC a b c) = fmap (\(H x) -> EC x b c) (f (H a))
 
 -- or this
 elens :: (forall c. (Quantity c) => Simple Lens c a) 
@@ -87,7 +92,8 @@ instance Quantity H where
 -- unit, and defining equation.
 fromEqn :: Unit u => String -> NP -> Sentence -> Symbol -> u -> Expr -> QDefinition
 fromEqn nm desc _ symb chunk eqn = 
-  EC (ucFromCV (cv (dccWDS nm (desc) (phrase desc)) symb Rational) chunk) eqn
+  EC (ucFromCV (cv (dccWDS nm (desc) (phrase desc)) symb Rational) chunk) eqn 
+    ([] :: Attributes)
   --EC (ucFromCV (cv (dccWDS nm (desc) (phrase desc +:+ extra)) symb Rational) chunk) eqn
 
 -- and without
@@ -95,21 +101,38 @@ fromEqn nm desc _ symb chunk eqn =
 -- | Same as fromEqn, but has no units.
 fromEqn' :: String -> NP -> Sentence -> Symbol -> Expr -> QDefinition
 fromEqn' nm desc _ symb eqn = 
-  EC (cv (dccWDS nm desc (phrase desc)) symb Rational) eqn
+  EC (cv (dccWDS nm desc (phrase desc)) symb Rational) eqn ([] :: Attributes)
   --EC (cv (dccWDS nm desc (phrase desc +:+ extra)) symb Rational) eqn
 
 -- | Create a 'QDefinition' with an id, noun phrase (term), symbol,
 -- abbreviation, unit, and defining equation.
 fromEqn'' :: (Unit u) => String -> NP -> Sentence -> Symbol -> String -> Maybe u -> Expr -> QDefinition
 fromEqn'' nm desc _ symb abb Nothing eqn = 
-  EC (cv (dccWDS' nm (desc) (phrase desc) abb) symb Rational) eqn
+  EC (cv (dccWDS' nm (desc) (phrase desc) abb) symb Rational) eqn ([] :: Attributes)
 fromEqn'' nm desc _ symb abb (Just chunk) eqn = 
   EC (ucFromCV (cv (dccWDS' nm (desc) (phrase desc) abb) symb Rational) chunk) eqn
+    ([] :: Attributes)
+
+-- | Smart constructor for QDefinitions. Requires a quantity, its defining 
+-- equation, and a list of attributes
+ec :: Quantity c => c -> Expr -> Attributes -> QDefinition
+ec = EC 
+
+-- | Smart constructor for QDefinitions. Requires a quantity and its defining
+-- equation. Assumes no attributes.
+ec' :: Quantity c => c -> Expr -> QDefinition
+ec' e c = ec e c ([] :: Attributes)
   
 -- | Returns a 'VarChunk' from a 'QDefinition'.
 -- Currently only used in example /Modules/ which are being reworked.
 getVC :: QDefinition -> VarChunk
 getVC qd = vcSt (qd ^. id) (qd ^. term) (getStagedS qd) (qd ^. typ)
+
+-- | For testing ONLY. Once all the chunks are updated for attributes this
+-- should be removed and the other constructors should be updated to include
+-- attributes
+aqd :: QDefinition -> Attributes -> QDefinition
+aqd (EC a b c) d = ec a b d
 
 instance Eq QDefinition where
   a == b = (a ^. id) == (b ^. id)

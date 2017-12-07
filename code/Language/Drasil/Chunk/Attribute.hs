@@ -1,17 +1,13 @@
 {-# LANGUAGE GADTs,Rank2Types #-}
 module Language.Drasil.Chunk.Attribute 
   ( Attribute(..), Attributes, HasAttributes(..)
-  , AttribQDef, qdef, getSource, aqd
+  , getSource
   ) where
 
 import Control.Lens (Simple, Lens, (^.))
 import Language.Drasil.Spec (Sentence(EmptyS))
 import Language.Drasil.Chunk
-import Language.Drasil.Chunk.Eq (QDefinition)
-import Language.Drasil.Chunk.NamedIdea (NamedIdea, term, getA)
-import Language.Drasil.Chunk.Quantity (Quantity, typ, getStagedS, getSymb, getUnit)
-import Language.Drasil.Document (Contents)
-
+import Language.Drasil.Chunk.Attribute.Derivation
 
 import Prelude hiding (id)
 
@@ -24,8 +20,9 @@ type Attributes = [Attribute]
 data Attribute = Rationale Sentence
                | SourceRef Sentence -- Source to reference for this knowledge chunk
                                     -- FIXME: Allow URLs/Citations here
-               | Derivation Contents -- Makes sense for now (derivations are just document sections at the moment), but we may need to create a new
+               | D Derivation -- Makes sense for now (derivations are just document sections at the moment), but we may need to create a new
                -- representation for it in the future.
+               -- To collapse Attributes into QDefinitions, can't use Contents
 
 -- Should this get only the first one or all potential sources?
 -- Should we change the source ref to have a list (to keep things clean in case
@@ -46,6 +43,7 @@ class Chunk c => HasAttributes c where
 -- | A QDefinition (Quantity) with attributes is an 'AttribQDef'
 -- This is a temporary data structure to be used until attributes are fully
 -- functional, then it will be fused with QDefinition
+{-
 data AttribQDef where
   AQD :: QDefinition -> Attributes -> AttribQDef
   
@@ -74,3 +72,4 @@ aqd = AQD
 -- DO NOT EXPORT
 qdl :: Simple Lens AttribQDef QDefinition
 qdl f (AQD a b) = fmap (\x -> AQD x b) (f a)
+-}

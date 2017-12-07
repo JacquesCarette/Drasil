@@ -132,7 +132,7 @@ glassSystInfo = SI {
   _units       = map UU [metre, second, kilogram] ++ map UU [pascal, newton],
   _quants      = this_symbols,
   _concepts    = ([] :: [CQSWrapper]),
-  _definitions = (map qdef dataDefns) ++ (map (relToQD gbSymbMap) iModels) ++ (map (relToQD gbSymbMap) tModels) 
+  _definitions = dataDefns ++ (map (relToQD gbSymbMap) iModels) ++ (map (relToQD gbSymbMap) tModels) 
                   ++ [wtntWithEqn, sdWithEqn],  -- wtntWithEqn is defined in Unitals but only appears 
                                                  -- in the description of the Calculation of Demand instance model;
                                                  -- should this be included as a Data Definition?
@@ -232,7 +232,7 @@ requiredInputs = (map qs [plate_len, plate_width, char_weight])
   ++ (map qs [glass_type, nom_thick])
 
 s7_1_req6_pulledList :: [QDefinition]
-s7_1_req6_pulledList = map qdef [nonFL, glaTyFac, dimLL, tolPre,
+s7_1_req6_pulledList = [nonFL, glaTyFac, dimLL, tolPre,
   tolStrDisFac, strDisFac, hFromt]
 
 --Used in "Non-Functional Requirements" Section--
@@ -435,7 +435,7 @@ s6_1_3_list_goalStmt1 = [foldlSent [S "Analyze" `sAnd` S "predict whether",
 
 s6_2 = solChSpecF gLassBR (s6_1, (SRS.likeChg SRS.missingP [])) EmptyS
  (EmptyS, dataConstraintUncertainty, end)
- (s6_2_1_list, map gbSymbMapT tModels, [], map gbSymbMapD (map qdef dataDefns),
+ (s6_2_1_list, map gbSymbMapT tModels, [], map gbSymbMapD dataDefns,
   map gbSymbMapT iModels,
   [s6_2_5_table1, s6_2_5_table2]) []
   where
@@ -697,7 +697,7 @@ s9_instaModel = ["IM1", "IM2", "IM3"]
 s9_instaModelRef = map (refFromType Theory) iModels
 
 s9_dataDef =  ["DD1", "DD2", "DD3", "DD4", "DD5", "DD6", "DD7", "DD8"]
-s9_dataDefRef = map (refFromType Data) (map qdef dataDefns)
+s9_dataDefRef = map (refFromType Data) dataDefns
 
 s9_data  = ["Data Constraints"]
 s9_dataRef = [makeRef (SRS.datCon SRS.missingP [])]

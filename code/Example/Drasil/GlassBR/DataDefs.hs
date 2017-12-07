@@ -21,13 +21,13 @@ import Data.Drasil.Concepts.Documentation (datum, user)
 -- DATA DEFINITIONS --
 ----------------------
 
-dataDefns :: [AttribQDef]
+dataDefns :: [QDefinition]
 dataDefns = [risk, hFromt, strDisFac, nonFL, glaTyFac, dimLL, tolPre,
   tolStrDisFac]
 
 gbQDefns :: [Block QDefinition]
-gbQDefns = [Parallel (qdef hFromt) {-DD2-} [qdef glaTyFac {-DD6-}]] ++ --can be calculated on their own
-  map (\x -> Parallel (qdef x) []) [dimLL {-DD7-}, strDisFac {-DD4-}, risk {-DD1-},
+gbQDefns = [Parallel hFromt {-DD2-} [glaTyFac {-DD6-}]] ++ --can be calculated on their own
+  map (\x -> Parallel x []) [dimLL {-DD7-}, strDisFac {-DD4-}, risk {-DD1-},
   tolStrDisFac {-DD9-}, tolPre {-DD8-}, nonFL {-DD5-}] 
 
 --DD1--
@@ -40,7 +40,7 @@ risk_eq = ((C sflawParamK) / (Grouping ((C plate_len) *
   (Grouping (C mod_elas * 1000) * (square (Grouping (C act_thick))))
   :^ (C sflawParamM) * (C lDurFac) * (exp (C stressDistFac)))
 
-risk :: AttribQDef
+risk :: QDefinition
 risk = aqd (mkDataDef' risk_fun risk_eq (aGrtrThanB +:+ hRef +:+ ldfRef +:+ jRef))
   [SourceRef $ S "[4]"]
 
@@ -53,7 +53,7 @@ hFromt_eq = (1/1000) * (Case (zipWith hFromt_helper
 hFromt_helper :: Double -> Double -> (Expr, Relation)
 hFromt_helper result condition = ((Dbl result), (C nom_thick) := Dbl condition)
 
-hFromt :: AttribQDef
+hFromt :: QDefinition
 hFromt = aqd (mkDataDef' act_thick hFromt_eq (hMin)) ([] :: Attributes)
 
 --DD3--
@@ -71,7 +71,7 @@ strDisFac_eq = FCall (C stressDistFac)
   [C dimlessLoad, (C plate_len) / (C plate_width)]
 --strDisFac_eq = FCall (asExpr interpZ) [V "SDF.txt", (C plate_len) / (C plate_width), C dimlessLoad]
   
-strDisFac :: AttribQDef
+strDisFac :: QDefinition
 strDisFac = aqd (mkDataDef' stressDistFac strDisFac_eq
   (jRef2 +:+ qHtRef +:+ aGrtrThanB)) ([] :: Attributes)
 
@@ -81,7 +81,7 @@ nonFL_eq :: Expr
 nonFL_eq = ((C tolLoad) * (C mod_elas) * (C act_thick) :^ (4)) /
   (square (Grouping ((C plate_len) * (C plate_width))))
 
-nonFL :: AttribQDef
+nonFL :: QDefinition
 nonFL = aqd (mkDataDef' nonFactorL nonFL_eq (aGrtrThanB +:+ hRef +:+ qHtTlTolRef))
   ([] :: Attributes)
 
@@ -93,7 +93,7 @@ glaTyFac_eq = (Case (zipWith glaTyFac_helper glassTypeFactors glassTypeAbbrsStr)
 glaTyFac_helper :: Integer -> String -> (Expr, Relation)
 glaTyFac_helper result condition = (Int result, (C glass_type) := V condition)
 
-glaTyFac :: AttribQDef
+glaTyFac :: QDefinition
 glaTyFac = aqd (mkDataDef gTF glaTyFac_eq) ([] :: Attributes)
 
 --DD7--
@@ -102,7 +102,7 @@ dimLL_eq :: Expr
 dimLL_eq = ((C demand) * (square (Grouping ((C plate_len) * (C plate_width)))))
   / ((C mod_elas) * ((C act_thick) :^ (4)) * (C gTF))
 
-dimLL :: AttribQDef
+dimLL :: QDefinition
 dimLL = aqd (mkDataDef' dimlessLoad dimLL_eq 
   (qRef +:+ aGrtrThanB +:+ hRef +:+ gtfRef)) ([] :: Attributes)
 
@@ -112,7 +112,7 @@ tolPre_eq :: Expr
 tolPre_eq = FCall (C tolLoad) [C sdf_tol, (C plate_len) / (C plate_width)]
 --tolPre_eq = FCall (asExpr interpY) [V "SDF.txt", (C plate_len) / (C plate_width), C sdf_tol]
 
-tolPre :: AttribQDef
+tolPre :: QDefinition
 tolPre = aqd (mkDataDef' tolLoad tolPre_eq (qHtTlExtra)) ([] :: Attributes)
 
 --DD9--
@@ -125,7 +125,7 @@ tolStrDisFac_eq = log (log ((1) / ((1) - (C pb_tol)))
   (square (Grouping (C act_thick))))) :^ 
   (C sflawParamM) * (C lDurFac))))))
 
-tolStrDisFac :: AttribQDef
+tolStrDisFac :: QDefinition
 tolStrDisFac = aqd (mkDataDef' sdf_tol tolStrDisFac_eq
   (aGrtrThanB +:+ hRef +:+ ldfRef +:+ pbTolUsr)) ([] :: Attributes)
 

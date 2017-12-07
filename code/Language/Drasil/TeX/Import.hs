@@ -309,7 +309,7 @@ buildEqn c sm = T.N (eqSymb c) T.:+: T.S " = " T.:+:
 buildDDDescription :: HasSymbolTable ctx => QDefinition -> ctx -> T.Spec
 buildDDDescription c m = descLines 
   (if verboseDDDescription then (vars (getQ c := equat c) m) else []) m
-  where getQ (EC a _) = C a
+  where getQ (EC a _ _) = C a
 
 descLines :: (HasSymbolTable ctx, Quantity q) => [q] -> ctx -> T.Spec  
 descLines []    _   = error "No chunks to describe"

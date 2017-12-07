@@ -21,13 +21,13 @@ import Data.Drasil.Concepts.Documentation (datum, user)
 -- DATA DEFINITIONS --
 ----------------------
 
-dataDefns :: [QDefinition]
+dataDefns :: [AttribQDef]
 dataDefns = [risk, hFromt, strDisFac, nonFL, glaTyFac, dimLL, tolPre,
   tolStrDisFac]
 
 gbQDefns :: [Block QDefinition]
-gbQDefns = [Parallel hFromt {-DD2-} [glaTyFac {-DD6-}]] ++ --can be calculated on their own
-  map (\x -> Parallel x []) [dimLL {-DD7-}, strDisFac {-DD4-}, risk {-DD1-},
+gbQDefns = [Parallel (qdef hFromt) {-DD2-} [qdef glaTyFac {-DD6-}]] ++ --can be calculated on their own
+  map (\x -> Parallel (qdef x) []) [dimLL {-DD7-}, strDisFac {-DD4-}, risk {-DD1-},
   tolStrDisFac {-DD9-}, tolPre {-DD8-}, nonFL {-DD5-}] 
 
 --DD1--
@@ -40,8 +40,9 @@ risk_eq = ((C sflawParamK) / (Grouping ((C plate_len) *
   (Grouping (C mod_elas * 1000) * (square (Grouping (C act_thick))))
   :^ (C sflawParamM) * (C lDurFac) * (exp (C stressDistFac)))
 
-risk :: QDefinition
-risk = mkDataDef' risk_fun risk_eq (aGrtrThanB +:+ hRef +:+ ldfRef +:+ jRef)
+risk :: AttribQDef
+risk = aqd (mkDataDef' risk_fun risk_eq (aGrtrThanB +:+ hRef +:+ ldfRef +:+ jRef))
+  [SourceRef $ S "[4]"]
 
 --DD2--
 
@@ -52,8 +53,8 @@ hFromt_eq = (1/1000) * (Case (zipWith hFromt_helper
 hFromt_helper :: Double -> Double -> (Expr, Relation)
 hFromt_helper result condition = ((Dbl result), (C nom_thick) := Dbl condition)
 
-hFromt :: QDefinition
-hFromt = mkDataDef' act_thick hFromt_eq (hMin)
+hFromt :: AttribQDef
+hFromt = aqd (mkDataDef' act_thick hFromt_eq (hMin)) ([] :: Attributes)
 
 --DD3--
 
@@ -70,9 +71,9 @@ strDisFac_eq = FCall (C stressDistFac)
   [C dimlessLoad, (C plate_len) / (C plate_width)]
 --strDisFac_eq = FCall (asExpr interpZ) [V "SDF.txt", (C plate_len) / (C plate_width), C dimlessLoad]
   
-strDisFac :: QDefinition
-strDisFac = mkDataDef' stressDistFac strDisFac_eq
-  (jRef2 +:+ qHtRef +:+ aGrtrThanB)
+strDisFac :: AttribQDef
+strDisFac = aqd (mkDataDef' stressDistFac strDisFac_eq
+  (jRef2 +:+ qHtRef +:+ aGrtrThanB)) ([] :: Attributes)
 
 --DD5--
 
@@ -80,8 +81,9 @@ nonFL_eq :: Expr
 nonFL_eq = ((C tolLoad) * (C mod_elas) * (C act_thick) :^ (4)) /
   (square (Grouping ((C plate_len) * (C plate_width))))
 
-nonFL :: QDefinition
-nonFL = mkDataDef' nonFactorL nonFL_eq (aGrtrThanB +:+ hRef +:+ qHtTlTolRef)
+nonFL :: AttribQDef
+nonFL = aqd (mkDataDef' nonFactorL nonFL_eq (aGrtrThanB +:+ hRef +:+ qHtTlTolRef))
+  ([] :: Attributes)
 
 --DD6--
 
@@ -91,8 +93,8 @@ glaTyFac_eq = (Case (zipWith glaTyFac_helper glassTypeFactors glassTypeAbbrsStr)
 glaTyFac_helper :: Integer -> String -> (Expr, Relation)
 glaTyFac_helper result condition = (Int result, (C glass_type) := V condition)
 
-glaTyFac :: QDefinition
-glaTyFac = mkDataDef gTF glaTyFac_eq
+glaTyFac :: AttribQDef
+glaTyFac = aqd (mkDataDef gTF glaTyFac_eq) ([] :: Attributes)
 
 --DD7--
 
@@ -100,9 +102,9 @@ dimLL_eq :: Expr
 dimLL_eq = ((C demand) * (square (Grouping ((C plate_len) * (C plate_width)))))
   / ((C mod_elas) * ((C act_thick) :^ (4)) * (C gTF))
 
-dimLL :: QDefinition
-dimLL = mkDataDef' dimlessLoad dimLL_eq 
-  (qRef +:+ aGrtrThanB +:+ hRef +:+ gtfRef)
+dimLL :: AttribQDef
+dimLL = aqd (mkDataDef' dimlessLoad dimLL_eq 
+  (qRef +:+ aGrtrThanB +:+ hRef +:+ gtfRef)) ([] :: Attributes)
 
 --DD8--
 
@@ -110,8 +112,8 @@ tolPre_eq :: Expr
 tolPre_eq = FCall (C tolLoad) [C sdf_tol, (C plate_len) / (C plate_width)]
 --tolPre_eq = FCall (asExpr interpY) [V "SDF.txt", (C plate_len) / (C plate_width), C sdf_tol]
 
-tolPre :: QDefinition
-tolPre = mkDataDef' tolLoad tolPre_eq (qHtTlExtra)
+tolPre :: AttribQDef
+tolPre = aqd (mkDataDef' tolLoad tolPre_eq (qHtTlExtra)) ([] :: Attributes)
 
 --DD9--
 
@@ -123,9 +125,9 @@ tolStrDisFac_eq = log (log ((1) / ((1) - (C pb_tol)))
   (square (Grouping (C act_thick))))) :^ 
   (C sflawParamM) * (C lDurFac))))))
 
-tolStrDisFac :: QDefinition
-tolStrDisFac = mkDataDef' sdf_tol tolStrDisFac_eq 
-  (aGrtrThanB +:+ hRef +:+ ldfRef +:+ pbTolUsr)
+tolStrDisFac :: AttribQDef
+tolStrDisFac = aqd (mkDataDef' sdf_tol tolStrDisFac_eq
+  (aGrtrThanB +:+ hRef +:+ ldfRef +:+ pbTolUsr)) ([] :: Attributes)
 
 --Issue #350
 

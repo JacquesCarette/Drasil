@@ -115,6 +115,8 @@ mkGDField g _ l@Units fs =
 mkGDField g _ l@DefiningEquation fs = (show l, (EqnBlock (g ^. relat)):[]) : fs
 mkGDField g m l@(Description v u) fs = (show l, 
   (buildGDDescription v u (g ^. relat) m)) : fs
+mkGDField _ _ l@(RefBy) fs = (show l, fixme) : fs --FIXME: fill this in
+mkGDField g _ l@(Source) fs = (show l, [Paragraph $ getSource g]) : fs 
 mkGDField _ _ l _ = error $ "Label " ++ show l ++ " not supported for gen defs"
 
 buildGDDescription :: HasSymbolTable ctx => Verbosity -> InclUnits -> Expr -> ctx -> [Contents]

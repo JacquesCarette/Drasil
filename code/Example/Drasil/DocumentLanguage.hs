@@ -8,6 +8,7 @@
 module Drasil.DocumentLanguage where
 
 import Drasil.DocumentLanguage.Definitions
+import Drasil.DocumentLanguage.Chunk.GenDefn
 
 import Language.Drasil
 
@@ -182,12 +183,13 @@ data SCSSub where
   SCSSubVerb  :: Section -> SCSSub
   Assumptions :: {-Fields  ->-} Section -> Section -> Section -> Section -> Section -> [Contents] -> SCSSub --FIXME: temporary definition?
   TMs         :: Fields  -> [TheoryModel] -> SCSSub
-  GDs         :: Fields  -> [RelationConcept] -> SCSSub
+  GDs         :: Fields  -> [GenDefn] -> DerivationDisplay -> SCSSub
   DDs         :: Fields  -> [QDefinition]     -> SCSSub --FIXME: Need DD intro
   IMs         :: Fields  -> [RelationConcept] -> SCSSub
   Constraints :: Sentence -> Sentence -> Sentence -> [Contents] {-Fields  -> [UncertainWrapper] -> [ConstrainedChunk]-} -> SCSSub --FIXME: temporary definition?
 --FIXME: Work in Progress ^
-
+data DerivationDisplay = ShowDerivation
+                       | HideDerivation
 {--}
 
 data ReqrmntSec = ReqsVerb Section | ReqsProg [ReqsSub]
@@ -410,7 +412,7 @@ mkSolChSpec si (SCSProg l) =
       SSD.thModF (siSys si') (map (tmodel fields (_sysinfodb si')) ts) : l'
     mkSubSCS si' (DDs fields ds) l' =
       SSD.dataDefnF EmptyS (map (ddefn fields (_sysinfodb si')) ds) : l'
-    mkSubSCS _ (GDs _ _) _ = error "GDs not yet implemented"
+    mkSubSCS _ (GDs _ _ _) _ = error "GDs not yet implemented"
     mkSubSCS _ (IMs _ _) _ = error "IMs not yet implemented"
       --FIXME: need to keep track of DD intro.
     mkSubSCS _ (Assumptions r1 r2 r3 r4 r5 o) l' = (SSD.assumpF r1 r2 r3 r4 r5 o) : l'

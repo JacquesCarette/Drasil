@@ -1,4 +1,4 @@
-module Drasil.SWHS.GenDefs (swhsGenDefs) where
+module Drasil.SWHS.GenDefs (swhsGenDefs, nwtnCooling, rocTempSimp) where
 
 import Prelude hiding (sin, cos, tan)
 

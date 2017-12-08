@@ -6,6 +6,7 @@ import Control.Lens ((^.))
 
 import Drasil.NoPCM.DataDesc (inputMod)
 import Drasil.NoPCM.Definitions (ht_trans, srs_swhs)
+import Drasil.NoPCM.GenDefs (roc_temp_simp_deriv)
 
 -- Since NoPCM is a simplified version of SWHS, the file is to be built off
 -- of the SWHS libraries.  If the source for something cannot be found in
@@ -27,7 +28,7 @@ import Drasil.SWHS.Unitals (w_vol, tank_length, tank_vol, tau_W, temp_W,
 import Drasil.SWHS.DataDefs(swhsSymbMapDRef, swhsSymbMapTRef, dd1HtFluxC,
   s4_2_4_DD1, swhsSymbMapT)
 import Drasil.SWHS.TMods (s4_2_2_T1, t1ConsThermE)
-import Drasil.SWHS.GenDefs (swhsGenDefs)
+import Drasil.SWHS.GenDefs (swhsGenDefs, nwtnCooling, rocTempSimp)
 import Drasil.SWHS.IMods (heatEInWtr)
 import Drasil.NoPCM.IMods (eBalanceOnWtr)
 import Drasil.NoPCM.Unitals (temp_init)
@@ -48,7 +49,7 @@ import Data.Drasil.Concepts.Documentation (datumConstraint, inModel,
   physSyst, problem, definition, srs, content, reference, document,
   goal, purpose, typUnc)
 
-import Data.Drasil.Concepts.Math (ode, de, unit_, rOfChng, equation)
+import qualified Data.Drasil.Concepts.Math as M
 import Data.Drasil.Concepts.Software (program)
 import Data.Drasil.Concepts.Thermodynamics (ener_src, thermal_analysis, temp,
   thermal_energy, ht_trans_theo, heat, melt_pt, boil_pt, heat_trans, ht_flux,
@@ -63,7 +64,7 @@ import Data.Drasil.Software.Products (compPro)
 import Drasil.Sections.ReferenceMaterial (intro)
 import qualified Drasil.SRS as SRS (funcReq, likeChg, probDesc, goalStmt,
   inModel, missingP)
-import Drasil.DocumentLanguage (DocDesc,
+import Drasil.DocumentLanguage {-(DocDesc,
   tsymb, mkRequirement, mkLklyChnk, mkAssump, mkDoc,
   TSIntro (SymbOrder, SymbConvention, TSPurpose),
   DocSection (Verbatim, Bibliography, IntroSec, RefSec),
@@ -71,8 +72,10 @@ import Drasil.DocumentLanguage (DocDesc,
   RefSec (RefProg),
   IntroSec (IntroProg),
   IntroSub (IOrgSec, IScope, IChar, IPurpose),
-  Literature (Lit, Doc'))
-
+  Literature (Lit, Doc'))-}
+import Drasil.DocumentLanguage.Definitions
+import Drasil.DocumentLanguage.Chunk.GenDefn
+  
 import Drasil.Sections.SpecificSystemDescription (inDataConstTbl,
   outDataConstTbl, solChSpecF, dataConstraintUncertainty, physSystDesc,
   termDefnF, specSysDesF)
@@ -83,7 +86,7 @@ import Drasil.Sections.AuxiliaryConstants (valsOfAuxConstantsF)
 import Data.Drasil.SentenceStructures (showingCxnBw, foldlSent_, sAnd,
   foldlList, isThe, sOf, ofThe, foldlSPCol, foldlSent, foldlSP, acroIM,
   acroGD)
-
+import Data.Drasil.Units.Thermodynamics (thermal_flux)
 
 -- This defines the standard units used throughout the document
 this_si :: [UnitDefn]
@@ -91,7 +94,7 @@ this_si = map UU [metre, kilogram, second] ++ map UU [centigrade, joule, watt]
 
 -- This defines the list of acronyms that are used throughout the document
 acronyms :: [CI]
-acronyms = [assumption, dataDefn, genDefn, goalStmt, inModel, likelyChg, ode,
+acronyms = [assumption, dataDefn, genDefn, goalStmt, inModel, likelyChg, M.ode,
             physSyst, requirement, srs, progName, thModel, typUnc]
 
 -- This contains the list of symbols used throughout the document
@@ -140,10 +143,21 @@ mkSRS = RefSec (RefProg intro
   [IPurpose (s2_1 progName),
   IScope (s2_2_start thermal_analysis sWHT) (s2_2_end temp thermal_energy
     water),
-  IChar (s2_3_knowlegde ht_trans_theo) (s2_3_understanding de) EmptyS,
+  IChar (s2_3_knowlegde ht_trans_theo) (s2_3_understanding M.de) EmptyS,
   IOrgSec s2_4_intro inModel (SRS.inModel SRS.missingP [])
-  (s2_4_end inModel ode progName)]) : map Verbatim [s3, s4, s5, s6, s7, s8] ++
+  (s2_4_end inModel M.ode progName)]) : 
+  Verbatim s3:
+  SSDSec (SSDProg [SSDSubVerb s4_1, 
+    SSDSolChSpec (SCSProg [
+      (GDs [Label, Units, DefiningEquation
+           , Description Verbose IncludeUnits
+           , Source, RefBy] generalDefinitions ShowDerivation)])]) : --Testing General Definitions.
+  map Verbatim [s5, s6, s7, s8] ++
   [Bibliography s9_refList]
+
+generalDefinitions :: [GenDefn]
+generalDefinitions = [gd nwtnCooling (Just thermal_flux) ([] :: Attributes),
+  gd rocTempSimp (Nothing :: Maybe DerUChunk) [D roc_temp_simp_deriv]]
 
 nopcm_si :: SystemInformation
 nopcm_si = SI {
@@ -322,7 +336,7 @@ s2_4_end im od pro = foldlSent_ [S "The", phrase im,
 s4 = specSysDesF (words_ sWHT) [s4_1, s4_2]
   where
   words_ sw = (plural definition `sAnd` S "finally the" +:+
-    phrase inModel +:+ sParen (getAcc ode) +:+
+    phrase inModel +:+ sParen (getAcc M.ode) +:+
     S "that" +:+ plural model +:+ S "the" +:+ phrase sw)
 
 -----------------------------------
@@ -375,7 +389,7 @@ s4_1_3_list temw we = enumSimple 1 (short goalStmt) [
   
 s4_2 = solChSpecF progName (s4_1, s6) s4_2_4_intro_end (mid,
   dataConstraintUncertainty, end) (s4_2_1_list, acroNumGen s4_2_2_T1 1,
-  s4_2_3_paragraph rOfChng temp, acroNumGen s4_2_4_DD1 1,
+  s4_2_3_paragraph M.rOfChng temp, acroNumGen s4_2_4_DD1 1,
   [swhsSymbMapT eBalanceOnWtr] ++ (s4_2_5_d1startPara energy water) ++
   s4_2_5_paragraph ++ [swhsSymbMapT heatEInWtr], [s4_2_6_table1, s4_2_6_table2])
   []
@@ -486,7 +500,7 @@ s4_2_3_paragraph roc te = (map swhsSymbMapT swhsGenDefs) ++ [foldlSPCol
 s4_2_3_description :: [Contents]
 s4_2_3_description = map foldlSPCol [
   s4_2_3_desc1 t1ConsThermE vol,
-  s4_2_3_desc2 gauss_div surface vol thFluxVect uNormalVect unit_,
+  s4_2_3_desc2 gauss_div surface vol thFluxVect uNormalVect M.unit_,
   s4_2_3_desc3 vol vol_ht_gen,
   s4_2_3_desc4 ht_flux_in ht_flux_out in_SA out_SA density QT.heat_cap_spec
     QT.temp vol [assump3, assump4, assump5],
@@ -561,7 +575,7 @@ s4_2_5_paragraph = weave [s4_2_5_description, s4_2_5_equation]
 --TODO: Implement physical properties of a substance
 s4_2_5_description :: [Contents]
 s4_2_5_description = map foldlSPCol
-  [s4_2_5_desc1 rOfChng temp_W energy water vol w_vol mass w_mass htCap_W
+  [s4_2_5_desc1 M.rOfChng temp_W energy water vol w_vol mass w_mass htCap_W
     heat_trans ht_flux_C coil_SA tank perfect_insul assump15 vol_ht_gen
     assump12,
   s4_2_5_desc2 dd1HtFluxC,
@@ -584,7 +598,7 @@ s4_2_5_desc1 roc temw en wa vo wv ma wm hcw ht hfc csa ta purin a11 vhg a12 =
   phrase ta) `sC` S "since it has been assumed to be",
   phrase purin +:+. sParen (acroTest a11 s4_2_1_list), S "Assuming no",
   phrase vhg +:+. (sParen (acroTest a12 s4_2_1_list) `sC`
-  E (C vhg := Int 0)), S "Therefore, the", phrase equation, S "for",
+  E (C vhg := Int 0)), S "Therefore, the", phrase M.equation, S "for",
   acroGD 2, S "can be written as"]
 
 s4_2_5_desc2 :: QDefinition -> [Sentence]
@@ -599,7 +613,7 @@ s4_2_5_desc4 :: UnitalChunk -> UnitalChunk -> UncertQ -> UncertQ ->
   UncertQ -> [Sentence]
 s4_2_5_desc4 temw wm hcw chtc csa = [S "Setting", (getES temw :+: S "=" :+:
   getES wm :+: getES hcw :+: S "/" :+: getES chtc :+: getES csa)
-  `sC` titleize equation, S "(4) can be written in its final form as"]
+  `sC` titleize M.equation, S "(4) can be written in its final form as"]
 
 s4_2_5_equation :: [Contents]
 s4_2_5_equation = map EqnBlock [s4_2_5_eq1, s4_2_5_eq2, s4_2_5_eq3, s4_2_5_eq4]
@@ -663,7 +677,7 @@ s5_1_list = weave [s5_1_list_words_num, s5_1_list_items]
 s5_1_list_items :: [Contents]
 s5_1_list_items = [
 
-  Table [titleize symbol_, titleize unit_, titleize description]
+  Table [titleize symbol_, titleize M.unit_, titleize description]
   (mkTable
   [getES,
   unit'2Contents,

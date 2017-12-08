@@ -97,19 +97,18 @@ mkSRS = RefSec (RefProg intro [TUnits, tsymb [TSPurpose, SymbOrder], TAandA]) :
   ScpOfProjSec (ScpOfProjProg (short gLassBR) (s5_1_table) (s5_2 (glaSlab)
     (capacity) (demandq) (probability))) :
   {-SSDSec (SSDVerb s6) : -}
-  SSDSec (SSDProg
-    [SSDProblem  (PDProg start gLassBR ending [s6_1_1, s6_1_2, s6_1_3])
-    , SSDSolChSpec (SCSProg
-    [ TMs [ Label
-          , DefiningEquation
-          , Description Verbose IncludeUnits
-          , Source, RefBy ] [t1IsSafe]
-    , DDs [Label
-          , Symbol
-          , Units
-          , DefiningEquation
-          , Description Verbose IncludeUnits
-          , Source, RefBy] dataDefns])]) :
+  SSDSec 
+    (SSDProg
+      [SSDProblem  (PDProg start gLassBR ending [s6_1_1, s6_1_2, s6_1_3])
+      , SSDSolChSpec 
+        (SCSProg
+          [ TMs ([Label, DefiningEquation] ++ stdFields) [t1IsSafe]
+{-          , GDs ([ Label, Units] ++ stdFields) [] -} -- No Gen Defs for GlassBR
+          , DDs ([Label, Symbol, Units] ++ stdFields) dataDefns
+          ]
+        )
+      ]
+    ) :
   ReqrmntSec (ReqsProg [
     FReqsSub s7_1_list, 
     NonFReqsSub [performance] (gBRpriorityNFReqs)
@@ -123,6 +122,9 @@ mkSRS = RefSec (RefProg intro [TUnits, tsymb [TSPurpose, SymbOrder], TAandA]) :
   AuxConstntSec (AuxConsProg gLassBR auxiliaryConstants) :
   Bibliography gbCitations :
   AppndxSec (AppndxProg [s12_intro, fig_5, fig_6]) : []
+  
+stdFields :: Fields
+stdFields = [DefiningEquation, Description Verbose IncludeUnits, Source, RefBy]
 
 glassSystInfo :: SystemInformation
 glassSystInfo = SI {

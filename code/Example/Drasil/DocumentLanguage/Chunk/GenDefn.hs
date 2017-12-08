@@ -11,25 +11,29 @@ import Prelude hiding (id)
 
 -- | A GenDefn is a RelationConcept that may have units
 data GenDefn where
-  GD ::  RelationConcept -> Maybe UnitDefn -> GenDefn
+  GD ::  RelationConcept -> Maybe UnitDefn -> Attributes -> GenDefn
   
 instance Chunk GenDefn where
   id = rcl id
 instance NamedIdea GenDefn where
   term = rcl term
-  getA (GD a _) = getA a
+  getA (GD a _ _) = getA a
 instance Concept GenDefn where
   defn = rcl defn
   cdom = rcl cdom
 instance ExprRelat GenDefn where
   relat = rcl relat
-
+instance HasAttributes GenDefn where
+  attributes f (GD a b c) = fmap (\x -> GD a b x) (f c)
 
 rcl :: Simple Lens RelationConcept a -> Simple Lens GenDefn a
-rcl l f (GD a b) = fmap (\x -> GD (set l x a) b) (f (a ^. l))
+rcl l f (GD a b c) = fmap (\x -> GD (set l x a) b c) (f (a ^. l))
 
 gdUnit :: GenDefn -> Maybe UnitDefn
-gdUnit (GD _ u) = u
+gdUnit (GD _ u _) = u
 
-gd :: RelationConcept -> Maybe UnitDefn -> GenDefn
-gd = GD
+gd :: Unit u => RelationConcept -> Maybe u -> Attributes -> GenDefn
+gd r (Just u) ats = GD r (Just (uu u)) ats
+gd r Nothing ats = GD r Nothing ats
+
+

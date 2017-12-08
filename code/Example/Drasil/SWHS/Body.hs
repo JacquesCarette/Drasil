@@ -1,6 +1,6 @@
 module Drasil.SWHS.Body where
 
-import Language.Drasil
+import Language.Drasil hiding (de)
 import Data.Drasil.SI_Units
 import Control.Lens ((^.))
 

@@ -7,7 +7,7 @@ module Language.Drasil.Unit (
   , from_udefn, makeDerU, unitCon
   , (^:), (/:), (*:), new_unit
   , scale, shift
-  , derUC, derUC', derUC'', uu
+  , derUC, derUC', derUC'', unitWrapper
   ) where
 
 import Prelude hiding (id)
@@ -157,5 +157,5 @@ new_unit s u = makeDerU (unitCon s) (USynonym u)
 instance Eq UnitDefn where
   a == b = (a ^. usymb) == (b ^. usymb)
   
-uu :: Unit u => u -> UnitDefn
-uu = UU
+unitWrapper :: Unit u => u -> UnitDefn
+unitWrapper = UU

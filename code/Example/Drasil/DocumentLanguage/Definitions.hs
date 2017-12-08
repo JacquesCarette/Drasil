@@ -58,12 +58,11 @@ gdefn fs m g = Defnt General (foldr (mkGDField g m) [] fs)
   (S $ g ^. id) --FIXME: Generate reference names here
   
 gdDerivation :: GenDefn -> [Contents]
-gdDerivation g = makeDerivationContents $ getDerivation g
+gdDerivation g = map makeDerivationContents (getDerivation g)
 
-makeDerivationContents :: Derivation -> [Contents]
-makeDerivationContents []          = []
-makeDerivationContents ((DE e):xs) = EqnBlock e  : makeDerivationContents xs
-makeDerivationContents ((DS s):xs) = Paragraph s : makeDerivationContents xs
+makeDerivationContents :: DerWrapper -> Contents
+makeDerivationContents (DE e) = EqnBlock e
+makeDerivationContents (DS s) = Paragraph s
 
 -- | Synonym for easy reading. Model rows are just 'String',['Contents'] pairs
 type ModRow = [(String,[Contents])]

@@ -33,7 +33,7 @@ gdUnit :: GenDefn -> Maybe UnitDefn
 gdUnit (GD _ u _) = u
 
 gd :: Unit u => RelationConcept -> Maybe u -> Attributes -> GenDefn
-gd r (Just u) ats = GD r (Just (uu u)) ats
+gd r (Just u) ats = GD r (Just (unitWrapper u)) ats
 gd r Nothing ats = GD r Nothing ats
 
 

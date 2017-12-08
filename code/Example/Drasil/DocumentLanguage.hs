@@ -410,9 +410,10 @@ mkSolChSpec si (SCSProg l) =
     mkSubSCS _ (SCSSubVerb s) l' = s : l'
     mkSubSCS si' (TMs fields ts) l' = 
       SSD.thModF (siSys si') (map (tmodel fields (_sysinfodb si')) ts) : l'
-    mkSubSCS si' (DDs fields ds) l' =
-      SSD.dataDefnF EmptyS (map (ddefn fields (_sysinfodb si')) ds) : l'
-    mkSubSCS _ (GDs _ _ _) _ = error "GDs not yet implemented"
+    mkSubSCS si' (DDs fields dds) l' =
+      SSD.dataDefnF EmptyS (map (ddefn fields (_sysinfodb si')) dds) : l'
+    mkSubSCS si' (GDs fields gs _) l' = 
+      SSD.genDefnF (map (gdefn fields (_sysinfodb si')) gs) : l'
     mkSubSCS _ (IMs _ _) _ = error "IMs not yet implemented"
       --FIXME: need to keep track of DD intro.
     mkSubSCS _ (Assumptions r1 r2 r3 r4 r5 o) l' = (SSD.assumpF r1 r2 r3 r4 r5 o) : l'

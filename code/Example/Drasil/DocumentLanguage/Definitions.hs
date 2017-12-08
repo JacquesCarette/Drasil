@@ -6,7 +6,7 @@ module Drasil.DocumentLanguage.Definitions
   , Verbosity(..)
   , tmodel
   , ddefn
-  , gdefn
+  , gdefn, gdDerivation
   , InclUnits(..)
   )where
 
@@ -56,6 +56,14 @@ ddefn fs m d = Defnt DD (foldr (mkQField d m) [] fs) (S "DD:" :+: S (d ^. id))
 gdefn :: HasSymbolTable ctx => Fields -> ctx -> GenDefn -> Contents
 gdefn fs m g = Defnt General (foldr (mkGDField g m) [] fs)
   (S $ g ^. id) --FIXME: Generate reference names here
+  
+gdDerivation :: GenDefn -> [Contents]
+gdDerivation g = makeDerivationContents $ getDerivation g
+
+makeDerivationContents :: Derivation -> [Contents]
+makeDerivationContents []          = []
+makeDerivationContents ((DE e):xs) = EqnBlock e  : makeDerivationContents xs
+makeDerivationContents ((DS s):xs) = Paragraph s : makeDerivationContents xs
 
 -- | Synonym for easy reading. Model rows are just 'String',['Contents'] pairs
 type ModRow = [(String,[Contents])]

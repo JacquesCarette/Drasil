@@ -412,6 +412,8 @@ mkSolChSpec si (SCSProg l) =
       SSD.thModF (siSys si') (map (tmodel fields (_sysinfodb si')) ts) : l'
     mkSubSCS si' (DDs fields dds) l' =
       SSD.dataDefnF EmptyS (map (ddefn fields (_sysinfodb si')) dds) : l'
+    mkSubSCS si' (GDs fields gs ShowDerivation) l' = 
+      SSD.genDefnF (concat (map (\x -> gdefn fields (_sysinfodb si') x : gdDerivation x) gs)) : l'
     mkSubSCS si' (GDs fields gs _) l' = 
       SSD.genDefnF (map (gdefn fields (_sysinfodb si')) gs) : l'
     mkSubSCS _ (IMs _ _) _ = error "IMs not yet implemented"

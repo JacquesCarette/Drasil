@@ -11,3 +11,9 @@ data DerWrapper = DE Expr
 -- They are rendered in order as paragraphs and equation blocks to display
 -- the derivation.
 type Derivation = [DerWrapper]
+
+de :: Expr -> DerWrapper
+de = DE
+
+ds :: Sentence -> DerWrapper
+ds = DS

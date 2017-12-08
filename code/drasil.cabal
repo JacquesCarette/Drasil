@@ -183,6 +183,7 @@ executable nopcm
     , Drasil.NoPCM.Definitions
     , Drasil.NoPCM.DataDesc
     , Drasil.NoPCM.IMods
+    , Drasil.NoPCM.GenDefs
     , Drasil.SWHS.Assumptions
     , Drasil.SWHS.Body
     , Drasil.SWHS.Concepts

@@ -1,7 +1,7 @@
 {-# LANGUAGE GADTs,Rank2Types #-}
 module Language.Drasil.Chunk.Attribute 
   ( Attribute(..), Attributes, HasAttributes(..)
-  , getSource
+  , getSource, getDerivation
   ) where
 
 import Control.Lens (Simple, Lens, (^.))
@@ -32,9 +32,17 @@ getSource :: HasAttributes c => c -> Sentence
 getSource c = sourceRef $ c ^. attributes
 
 sourceRef :: Attributes -> Sentence
-sourceRef [] = EmptyS
+sourceRef []                = EmptyS
 sourceRef ((SourceRef x):_) = x
-sourceRef (_:xs) = sourceRef xs
+sourceRef (_:xs)            = sourceRef xs
+
+getDerivation :: HasAttributes c => c -> Derivation
+getDerivation c = derivation $ c ^. attributes
+
+derivation :: Attributes -> Derivation
+derivation []          = []
+derivation ((D der):_) = der
+derivation (_:xs)      = derivation xs
 
 -- | Any chunk with 'Attributes' is part of the 'HasAttributes' class.
 class Chunk c => HasAttributes c where

@@ -147,7 +147,9 @@ p_expr (Or x y)   = p_expr x ++ "\\lor{}" ++ p_expr y
 p_expr (Impl a b) = p_expr a ++ "\\implies{}" ++ p_expr b
 p_expr (Iff a b)  = p_expr a ++ "\\iff{}" ++ p_expr b
 p_expr (IsIn  a b) = p_expr a ++ "\\in{}" ++ show b
-p_expr (State a b) = (concat $ intersperse ", " $ map p_quan a) ++ ": " ++ p_expr b
+
+p_expr (Forall v e) = "\\forall{} " ++ symbol v ++ ":\\ " ++ p_expr e
+p_expr (Exists v e) = "\\exists{} " ++ symbol v ++ ":\\ " ++ p_expr e
 
 -- | For seeing if long numerators or denominators need to be on multiple lines
 needMultlined :: Expr -> String
@@ -201,10 +203,6 @@ p_in [] = ""
 p_in [x] = p_expr x
 p_in (x:xs) = p_in [x] ++ " & " ++ p_in xs
 
--- | Helper for rendering Quantifier statements
-p_quan :: Quantifier -> String
-p_quan (Forall e) = "\\forall{}" ++ p_expr e
-p_quan (Exists e) = "\\exists{}" ++ p_expr e
 
 -- | Helper for properly rendering multiplication of expressions
 mul :: Expr -> Expr -> String

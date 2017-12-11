@@ -21,7 +21,7 @@ import Drasil.SWHS.Concepts (progName, water, gauss_div, sWHT, tank, coil,
 import Drasil.SWHS.Unitals (w_vol, tank_length, tank_vol, tau_W, temp_W,
   w_mass, diam, coil_SA, temp_C, w_density, htCap_W, time_final,
   in_SA, out_SA, vol_ht_gen, thFluxVect, ht_flux_in, ht_flux_out, tau, htCap_L,
-  htTransCoeff, temp_env, diam, tank_length, w_vol, ht_flux_C, coil_HTC,
+  htTransCoeff, temp_env, diam, tank_length, ht_flux_C, coil_HTC,
   deltaT, w_E, tank_length_min, tank_length_max, htTransCoeff_min,
   w_density_min, w_density_max, htCap_W_min, htCap_W_max, coil_HTC_min,
   coil_HTC_max, time_final_max, sim_time, coil_SA_max, eta)
@@ -542,27 +542,27 @@ s4_2_3_eq1, s4_2_3_eq2, s4_2_3_eq3, s4_2_3_eq4, s4_2_3_eq5 :: Expr
 
 s4_2_3_eq1 = (Neg (integral (Just (Low (C vol)), Nothing)
   ((C gradient) :. (C thFluxVect)) vol)) + 
-  (integral (Just (Low (C vol)), Nothing) (C vol_ht_gen) vol) :=
+  (integral (Just (Low (C vol)), Nothing) (C vol_ht_gen) vol) $=
   (integral (Just (Low (C vol)), Nothing) ((C density)
   * (C QT.heat_cap_spec) * Deriv Part (C QT.temp) (C time)) vol)
 
 s4_2_3_eq2 = (Neg (integral (Just (Low (C surface)),
   Nothing) ((C thFluxVect) :. (C uNormalVect)) surface)) +
-  (integral (Just (Low (C vol)), Nothing) (C vol_ht_gen) vol) := 
+  (integral (Just (Low (C vol)), Nothing) (C vol_ht_gen) vol) $= 
   (integral (Just (Low (C vol)), Nothing)
   ((C density) * (C QT.heat_cap_spec) * Deriv Part (C QT.temp) (C time)) vol)
 
 s4_2_3_eq3 = (C ht_flux_in) * (C in_SA) - (C ht_flux_out) *
-  (C out_SA) + (C vol_ht_gen) * (C vol) := (integral
+  (C out_SA) + (C vol_ht_gen) * (C vol) $= (integral
   (Just (Low (C vol)), Nothing) ((C density) * (C QT.heat_cap_spec) *
   Deriv Part (C QT.temp) (C time)) vol)
 
 s4_2_3_eq4 = (C density) * (C QT.heat_cap_spec) * (C vol) * Deriv Total
-  (C QT.temp) (C time) := (C ht_flux_in) * (C in_SA) - (C ht_flux_out) *
+  (C QT.temp) (C time) $= (C ht_flux_in) * (C in_SA) - (C ht_flux_out) *
   (C out_SA) + (C vol_ht_gen) * (C vol)
 
 s4_2_3_eq5 = (C mass) * (C QT.heat_cap_spec) * Deriv Total (C QT.temp)
-  (C time) := (C ht_flux_in) * (C in_SA) - (C ht_flux_out)
+  (C time) $= (C ht_flux_in) * (C in_SA) - (C ht_flux_out)
   * (C out_SA) + (C vol_ht_gen) * (C vol)
 
 s4_2_3_equation :: [Contents]
@@ -598,7 +598,7 @@ s4_2_5_desc1 roc temw en wa vo wv ma wm hcw ht hfc csa ta purin a11 vhg a12 =
   phrase ta) `sC` S "since it has been assumed to be",
   phrase purin +:+. sParen (acroTest a11 s4_2_1_list), S "Assuming no",
   phrase vhg +:+. (sParen (acroTest a12 s4_2_1_list) `sC`
-  E (C vhg := Int 0)), S "Therefore, the", phrase M.equation, S "for",
+  E (C vhg $= Int 0)), S "Therefore, the", phrase M.equation, S "for",
   acroGD 2, S "can be written as"]
 
 s4_2_5_desc2 :: QDefinition -> [Sentence]
@@ -620,17 +620,17 @@ s4_2_5_equation = map EqnBlock [s4_2_5_eq1, s4_2_5_eq2, s4_2_5_eq3, s4_2_5_eq4]
 
 s4_2_5_eq1, s4_2_5_eq2, s4_2_5_eq3, s4_2_5_eq4 ::Expr
 
-s4_2_5_eq1 = (C w_mass) * (C htCap_W) * Deriv Total (C temp_W) (C time) :=
+s4_2_5_eq1 = (C w_mass) * (C htCap_W) * Deriv Total (C temp_W) (C time) $=
   (C ht_flux_C) * (C coil_SA)
  
-s4_2_5_eq2 = (C w_mass) * (C htCap_W) * Deriv Total (C temp_W) (C time) :=
+s4_2_5_eq2 = (C w_mass) * (C htCap_W) * Deriv Total (C temp_W) (C time) $=
   (C coil_HTC) * (C coil_SA) * ((C temp_C) - (C temp_W))
 
-s4_2_5_eq3 = Deriv Total (C temp_W) (C time) := ((C coil_HTC) *
+s4_2_5_eq3 = Deriv Total (C temp_W) (C time) $= ((C coil_HTC) *
   (C coil_SA)) / ((C w_mass) * (C htCap_W)) * ((C temp_C) -
   (C temp_W))
 
-s4_2_5_eq4 = Deriv Total (C temp_W) (C time) := (1 / (C tau_W)) *
+s4_2_5_eq4 = Deriv Total (C temp_W) (C time) $= (1 / (C tau_W)) *
   ((C temp_C) - (C temp_W))
 
 s4_2_6_table1 :: Contents
@@ -684,7 +684,7 @@ s5_1_list_items = [
   phrase] inputVar)
   (titleize input_ +:+ titleize variable +:+ titleize requirement) False,
 
-  EqnBlock ((C w_mass) := (C w_vol) * (C w_density) :=
+  EqnBlock ((C w_mass) $= (C w_vol) * (C w_density) $=
   (((C diam) / 2) * (C tank_length) * (C w_density)))
   ]
 

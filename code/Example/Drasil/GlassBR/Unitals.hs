@@ -66,29 +66,29 @@ gbInputDataConstraints = (map uncrtnw gbInputsWUnitsUncrtn) ++
 plate_len = uqcND "plate_len" (nounPhraseSP "plate length (long dimension)")
   lA metre Real 
   [ gtZeroConstr,
-    physc $ \c -> (c / (C plate_width)) :> (Dbl 1),
-    sfwrc $ \c -> (C dim_min) :<= c,
-    sfwrc $ \c -> c :<= (C dim_max),
-    sfwrc $ \c -> (c / (C plate_width)) :< (C ar_max) ] (Dbl 1.5) defaultUncrt
+    physc $ \c -> (c / (C plate_width)) $> (Dbl 1),
+    sfwrc $ \c -> (C dim_min) $<= c,
+    sfwrc $ \c -> c $<= (C dim_max),
+    sfwrc $ \c -> (c / (C plate_width)) $< (C ar_max) ] (Dbl 1.5) defaultUncrt
 
 plate_width = uqcND "plate_width" (nounPhraseSP "plate width (short dimension)")
   lB metre Real
   [ gtZeroConstr,
-    physc $ \c -> c :< (C plate_len),
-    sfwrc $ \c -> (C dim_min) :<= c,
-    sfwrc $ \c -> c :<= (C dim_max),
-    sfwrc $ \c -> ((C plate_len) / c) :< (C ar_max) ] (Dbl 1.2) defaultUncrt
+    physc $ \c -> c $< (C plate_len),
+    sfwrc $ \c -> (C dim_min) $<= c,
+    sfwrc $ \c -> c $<= (C dim_max),
+    sfwrc $ \c -> ((C plate_len) / c) $< (C ar_max) ] (Dbl 1.2) defaultUncrt
 
 pb_tol = uvc "pb_tol" (nounPhraseSP "tolerable probability of breakage") 
   (sub cP (Atomic "btol")) Real
   [ gtZeroConstr,
-    physc $ \c -> c :< (Dbl 1) ] (Dbl 0.008) (0.001)
+    physc $ \c -> c $< (Dbl 1) ] (Dbl 0.008) (0.001)
 
 char_weight = uqcND "char_weight" (nounPhraseSP "charge weight") 
   lW kilogram Real
-  [ physc $ \c -> c :>= (Dbl 0),
-    sfwrc $ \c -> (C cWeightMin) :<= c,
-    sfwrc $ \c -> c :<= (C cWeightMax) ] (Dbl 42) defaultUncrt
+  [ physc $ \c -> c $>= (Dbl 0),
+    sfwrc $ \c -> (C cWeightMin) $<= c,
+    sfwrc $ \c -> c $<= (C cWeightMax) ] (Dbl 42) defaultUncrt
 
 tNT = uvc "tNT" (nounPhraseSP "TNT equivalent factor")
   (Atomic "TNT") Real
@@ -97,8 +97,8 @@ tNT = uvc "tNT" (nounPhraseSP "TNT equivalent factor")
 standOffDist = uqcND "standOffDist" (nounPhraseSP "stand off distance") 
   (Atomic "SD") metre Real
   [ gtZeroConstr,
-    sfwrc $ \c -> (C sd_min) :< c,
-    sfwrc $ \c -> c :< (C sd_max) ] (Dbl 45) defaultUncrt
+    sfwrc $ \c -> (C sd_min) $< c,
+    sfwrc $ \c -> c $< (C sd_max) ] (Dbl 45) defaultUncrt
 --FIXME: ^ incorporate definition in here?
 
 --FIXME: Issue #309
@@ -121,8 +121,8 @@ gbOutputs = map qs [is_safe1, is_safe2] ++ map qs [prob_br]
 prob_br :: ConstrainedChunk
 prob_br = cvc "prob_br" (nounPhraseSP "probability of breakage")
   (sub cP lB) Rational
-  [ physc $ \c -> (Dbl 0) :< c,
-    physc $ \c -> c :< (Dbl 1) ] (Dbl 0.4)
+  [ physc $ \c -> (Dbl 0) $< c,
+    physc $ \c -> c $< (Dbl 1) ] (Dbl 0.4)
   --FIXME: no typical value!
 
 {--}
@@ -401,7 +401,7 @@ aspectRWithEqn :: QDefinition
 aspectRWithEqn = mkDataDef aspectR aspectRCalculation
 
 aspectRCalculation :: Relation
-aspectRCalculation = (C aspectR) := (C plate_len)/(C plate_width)
+aspectRCalculation = (C aspectR) $= (C plate_len)/(C plate_width)
 
 --
 --Pulled to be used in "Terms And Definitions" Section--

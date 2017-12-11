@@ -31,7 +31,7 @@ fs_rc :: RelationConcept
 fs_rc = makeRC "fs_rc" factorOfSafety fs_desc fs_rel
 
 fs_rel :: Relation
-fs_rel = (C fs) := (C shearRes) / (C mobShear)
+fs_rel = (C fs) $= (C shearRes) / (C mobShear)
 
 fs_desc :: Sentence
 fs_desc = foldlSent [
@@ -47,7 +47,7 @@ equilibrium :: RelationConcept
 equilibrium = makeRC "equilibrium" (nounPhraseSP "equilibrium") eq_desc eq_rel
 
 eq_rel :: Relation
-eq_rel = foldr (:=) 0 (map summ [fx, fy, momntOfBdy])
+eq_rel = foldr ($=) 0 (map summ [fx, fy, momntOfBdy])
   where summ = summation Nothing . C
 
 eq_desc :: Sentence
@@ -65,7 +65,7 @@ mcShrStrgth = makeRC "mcShrStrgth" (nounPhraseSP "Mohr-Coulumb shear strength")
   mcSS_desc mcSS_rel
 
 mcSS_rel :: Relation
-mcSS_rel = (C shrStress) := ((C normStress) :*
+mcSS_rel = (C shrStress) $= ((C normStress) :*
   (tan (C fricAngle)) :+ (C cohesion))
 
 mcSS_desc :: Sentence
@@ -78,7 +78,7 @@ mcSS_desc = foldlSent [S "For a", phrase soil, S "under", phrase stress,
   getTandS shrStress, S "is proportional to the product of the",
   phrase normStress, S "on the plane", getES normStress,
   S "with it's static", phrase friction, S "in the angular form" +:+.
-  (E $ tan (C fricAngle) := C surfHydroForce),
+  (E $ tan (C fricAngle) $= C surfHydroForce),
   --FIXME: sould say U_s but there is no way to say that yet
   S "The", getES shrStress, S "versus", getES normStress,
   S "relationship is not truly",
@@ -94,7 +94,7 @@ effStress = makeRC "effStress"
   (nounPhraseSP "effective stress") effS_desc effS_rel
 
 effS_rel :: Relation
-effS_rel = (C normStress) := (C normStress) :- (C porePressure)
+effS_rel = (C normStress) $= (C normStress) :- (C porePressure)
 
 effS_desc :: Sentence --FIXME: these are not normStress but they are sigma.
                       -- Add a prime. Symbol inconsistency 
@@ -116,7 +116,7 @@ hookesLaw = makeRC "hookesLaw"
   (nounPhraseSP "Hooke's law") hksLw_desc hksLw_rel
 
 hksLw_rel :: Relation
-hksLw_rel = (C genForce) := (C stffness) :* (C genDisplace)
+hksLw_rel = (C genForce) $= (C stffness) :* (C genDisplace)
 
 hksLw_desc :: Sentence
 hksLw_desc = foldlSent [S "Description Stiffness", getES stffness, S "is the",

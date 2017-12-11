@@ -3,7 +3,7 @@ module Language.Drasil.TeX.Import where
 import Control.Lens hiding ((:>),(:<),set)
 import Prelude hiding (id)
 import Language.Drasil.Expr (Expr(..), Relation, UFunc(..), BiFunc(..),
-                             Bound(..),DerivType(..), Set, Quantifier(..))
+                             Bound(..),DerivType(..), Set, ($=))
 import Language.Drasil.Space (Space(..))
 import Language.Drasil.Expr.Extract
 import Language.Drasil.Spec
@@ -48,12 +48,12 @@ expr (FCall f x)       sm = T.Call (expr f sm) (map (flip expr sm) x)
 expr (Case ps)         sm = if length ps < 2 then 
         error "Attempting to use multi-case expr incorrectly"
         else T.Case (zip (map (flip expr sm . fst) ps) (map (flip rel sm . snd) ps))
-expr x@(_ := _)        sm = rel x sm
-expr x@(_ :!= _)       sm = rel x sm
-expr x@(_ :> _)        sm = rel x sm
-expr x@(_ :< _)        sm = rel x sm
-expr x@(_ :<= _)       sm = rel x sm
-expr x@(_ :>= _)       sm = rel x sm
+expr x@(EEquals _ _)    sm = rel x sm
+expr x@(ENEquals _ _)   sm = rel x sm
+expr x@(EGreater _ _)   sm = rel x sm
+expr x@(ELess _ _)      sm = rel x sm
+expr x@(ELessEq _ _)    sm = rel x sm
+expr x@(EGreaterEq _ _) sm = rel x sm
 expr (Matrix a)        sm = T.Mtx $ map (map (flip expr sm)) a
 expr (Index a i)       sm = T.Index (expr a sm) (expr i sm)
 expr (UnaryOp u)       sm = (\(x,y) -> T.Op x [y]) (ufunc u sm)
@@ -65,13 +65,9 @@ expr (a :|| b)         sm = T.Or   (expr a sm) (expr b sm)
 expr (a  :=>  b)       sm = T.Impl  (expr a sm) (expr b sm)
 expr (a  :<=> b)       sm = T.Iff   (expr a sm) (expr b sm)
 expr (IsIn  a b)       sm = T.IsIn  (expr a sm) (set b)
-expr (State a b)       sm = T.State (map (flip quan sm) a) (expr b sm)
+expr (ForAll a b)      sm = T.Forall a (expr b sm)
+expr (Exists a b)      sm = T.Exists a (expr b sm)
 expr _                 _  = error "Expression unimplemented in TeX"
-
--- | Healper for translating Quantifier
-quan :: HasSymbolTable ctx => Quantifier -> ctx -> T.Quantifier
-quan (Forall e) sm = T.Forall (expr e sm)
-quan (Exists e) sm = T.Exists (expr e sm)
 
 ufunc :: HasSymbolTable ctx => UFunc -> ctx -> (T.Function, T.Expr)
 ufunc (Log e) sm = (T.Log, expr e sm)
@@ -99,12 +95,12 @@ bfunc :: HasSymbolTable ctx => BiFunc -> ctx -> (T.Function, [T.Expr])
 bfunc (Cross e1 e2) sm = (T.Cross, map (flip expr sm) [e1,e2])
 
 rel :: HasSymbolTable ctx => Relation -> ctx -> T.Expr
-rel (a := b)  sm = T.Eq (expr a sm) (expr b sm)
-rel (a :!= b) sm = T.NEq (expr a sm) (expr b sm)
-rel (a :< b)  sm = T.Lt (expr a sm) (expr b sm)
-rel (a :> b)  sm = T.Gt (expr a sm) (expr b sm)
-rel (a :<= b) sm = T.LEq (expr a sm) (expr b sm)
-rel (a :>= b) sm = T.GEq (expr a sm) (expr b sm)
+rel (EEquals a b)    sm = T.Eq  (expr a sm) (expr b sm)
+rel (ENEquals a b)   sm = T.NEq (expr a sm) (expr b sm)
+rel (ELess a b)      sm = T.Lt  (expr a sm) (expr b sm)
+rel (EGreater a b)   sm = T.Gt  (expr a sm) (expr b sm)
+rel (ELessEq a b)    sm = T.LEq (expr a sm) (expr b sm)
+rel (EGreaterEq a b) sm = T.GEq (expr a sm) (expr b sm)
 rel _ _ = error "Attempting to use non-Relation Expr in relation context."
 
 -- | Helper for translating Sets
@@ -308,7 +304,7 @@ buildEqn c sm = T.N (eqSymb c) T.:+: T.S " = " T.:+:
 -- Build descriptions in data defs based on required verbosity
 buildDDDescription :: HasSymbolTable ctx => QDefinition -> ctx -> T.Spec
 buildDDDescription c m = descLines 
-  (if verboseDDDescription then (vars (getQ c := equat c) m) else []) m
+  (if verboseDDDescription then (vars (getQ c $= equat c) m) else []) m
   where getQ (EC a _ _) = C a
 
 descLines :: (HasSymbolTable ctx, Quantity q) => [q] -> ctx -> T.Spec  

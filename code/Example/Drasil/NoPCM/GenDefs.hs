@@ -87,27 +87,27 @@ s4_2_3_eq1, s4_2_3_eq2, s4_2_3_eq3, s4_2_3_eq4, s4_2_3_eq5 :: Expr
 
 s4_2_3_eq1 = (Neg (integral (Just (Low (C vol)), Nothing)
   ((C gradient) :. (C thFluxVect)) vol)) + 
-  (integral (Just (Low (C vol)), Nothing) (C vol_ht_gen) vol) :=
+  (integral (Just (Low (C vol)), Nothing) (C vol_ht_gen) vol) $=
   (integral (Just (Low (C vol)), Nothing) ((C density)
   * (C QT.heat_cap_spec) * Deriv Part (C QT.temp) (C time)) vol)
 
 s4_2_3_eq2 = (Neg (integral (Just (Low (C surface)),
   Nothing) ((C thFluxVect) :. (C uNormalVect)) surface)) +
-  (integral (Just (Low (C vol)), Nothing) (C vol_ht_gen) vol) := 
+  (integral (Just (Low (C vol)), Nothing) (C vol_ht_gen) vol) $= 
   (integral (Just (Low (C vol)), Nothing)
   ((C density) * (C QT.heat_cap_spec) * Deriv Part (C QT.temp) (C time)) vol)
 
 s4_2_3_eq3 = (C ht_flux_in) * (C in_SA) - (C ht_flux_out) *
-  (C out_SA) + (C vol_ht_gen) * (C vol) := (integral
+  (C out_SA) + (C vol_ht_gen) * (C vol) $= (integral
   (Just (Low (C vol)), Nothing) ((C density) * (C QT.heat_cap_spec) *
   Deriv Part (C QT.temp) (C time)) vol)
 
 s4_2_3_eq4 = (C density) * (C QT.heat_cap_spec) * (C vol) * Deriv Total
-  (C QT.temp) (C time) := (C ht_flux_in) * (C in_SA) - (C ht_flux_out) *
+  (C QT.temp) (C time) $= (C ht_flux_in) * (C in_SA) - (C ht_flux_out) *
   (C out_SA) + (C vol_ht_gen) * (C vol)
 
 s4_2_3_eq5 = (C mass) * (C QT.heat_cap_spec) * Deriv Total (C QT.temp)
-  (C time) := (C ht_flux_in) * (C in_SA) - (C ht_flux_out)
+  (C time) $= (C ht_flux_in) * (C in_SA) - (C ht_flux_out)
   * (C out_SA) + (C vol_ht_gen) * (C vol)
 
 roc_temp_simp_deriv_eqns :: [Expr]

@@ -25,7 +25,7 @@ t1NewtonSL = makeRC "t1NewtonSL" (nounPhraseSP "Newton's second law of motion")
   t1descr newtonSLRel
 
 newtonSLRel :: Relation
-newtonSLRel = (C QP.force) := (C QPP.mass) * (C QP.acceleration)
+newtonSLRel = (C QP.force) $= (C QPP.mass) * (C QP.acceleration)
 
 t1descr :: Sentence
 t1descr = foldlSent [S "The net", (phrase QP.force), (getES QP.force), 
@@ -45,7 +45,7 @@ t2NewtonTL = makeRC "t2NewtonTL" (nounPhraseSP "Newton's third law of motion")
   t2descr newtonTLRel
 
 newtonTLRel :: Relation
-newtonTLRel = (C force_1) := (Neg (C force_2))
+newtonTLRel = (C force_1) $= (Neg (C force_2))
 
 t2descr :: Sentence
 t2descr = foldlSent [S "Every action has an equal and opposite reaction. In other",
@@ -63,9 +63,9 @@ t3NewtonLUG = makeRC "t3NewtonLUG"
   (nounPhraseSP "Newton's law of universal gravitation") t3descr newtonLUGRel
 
 newtonLUGRel :: Relation
-newtonLUGRel = (C QP.force) :=
+newtonLUGRel = (C QP.force) $=
   (C QP.gravitationalConst) * ((C mass_1) * (C mass_2) /
-  ((C dispNorm) :^ (fromInteger 2))) * (C dispUnit) :=
+  ((C dispNorm) :^ (fromInteger 2))) * (C dispUnit) $=
   (C QP.gravitationalConst) * ((C mass_1) * (C mass_2) /
   ((C dispNorm) :^ (fromInteger 2))) * ((C QP.displacement) / (C dispNorm))
 
@@ -106,7 +106,7 @@ t4ChaslesThm = makeRC "t4ChaslesThm" (nounPhraseSP "Chasles' theorem")
 
 -- Need the cross product symbol - third term should be a cross product.
 chaslesRel :: Relation
-chaslesRel = (C vel_B) := (C vel_O) + (cross (C  QP.angularVelocity) (C r_OB))
+chaslesRel = (C vel_B) $= (C vel_O) + (cross (C  QP.angularVelocity) (C r_OB))
 
 -- B should ideally be italicized in 'point B' (line 202).
 t4descr :: Sentence
@@ -130,7 +130,7 @@ t5NewtonSLR = makeRC "t5NewtonSLR"
   (nounPhraseSP "Newton's second law for rotational motion") t5descr newtonSLRRel
 
 newtonSLRRel :: Relation
-newtonSLRRel = (C  QP.torque) := (C QP.momentOfInertia) * (C QP.angularAccel)
+newtonSLRRel = (C  QP.torque) $= (C QP.momentOfInertia) * (C QP.angularAccel)
 
 -- Need reference to A2 (line 236) -- can't reference specific assumptions
 -- without referencing the entire section or dividing each bullet into its own

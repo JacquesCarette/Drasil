@@ -6,7 +6,7 @@ module Drasil.DocumentLanguage.Definitions
   , Verbosity(..)
   , tmodel
   , ddefn
-  , gdefn, gdDerivation
+  , gdefn, derivation
   , InclUnits(..)
   )where
 
@@ -26,6 +26,8 @@ data Field = Label
            | Units
            | DefiningEquation
            | Description Verbosity InclUnits
+           | Input
+           | Output
            | Source --TODO: Use Attribute? Or add new lens? 
               --  I think attribute would make most sense, as sources can and
               -- will be modified across applications; the underlying knowledge won't.
@@ -57,8 +59,8 @@ gdefn :: HasSymbolTable ctx => Fields -> ctx -> GenDefn -> Contents
 gdefn fs m g = Defnt General (foldr (mkGDField g m) [] fs)
   (S $ g ^. id) --FIXME: Generate reference names here
   
-gdDerivation :: GenDefn -> [Contents]
-gdDerivation g = map makeDerivationContents (getDerivation g)
+derivation :: HasAttributes c => c -> [Contents]
+derivation g = map makeDerivationContents (getDerivation g)
 
 makeDerivationContents :: DerWrapper -> Contents
 makeDerivationContents (DE e) = EqnBlock e
@@ -96,6 +98,8 @@ mkQField d m l@(Description v u) fs =
   (show l, buildDDescription v u d m) : fs
 mkQField _ _ l@(RefBy) fs = (show l, fixme) : fs --FIXME: fill this in
 mkQField d _ l@(Source) fs = (show l, [Paragraph $ getSource d]) : fs 
+mkQField _ _ label _ = error $ "Label " ++ show label ++ " not supported " ++
+  "for data definitions"
 
 -- | Create the description field (if necessary) using the given verbosity and
 -- including or ignoring units for a model / general definition

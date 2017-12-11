@@ -25,7 +25,7 @@ iModels = [probOfBr, calOfCap, calOfDe]
 
 probOfBr :: RelationConcept
 probOfBr = makeRC "probOfBr" (nounPhraseSP "Probability of Glass Breakage")
-  pbdescr $ (C prob_br) := 1 - (exp (Neg (C risk)))
+  pbdescr $ (C prob_br) $= 1 - (exp (Neg (C risk)))
 
 pbdescr :: Sentence
 pbdescr =
@@ -36,7 +36,7 @@ pbdescr =
 
 calOfCap :: RelationConcept
 calOfCap = makeRC "calOfCap" (nounPhraseSP "Calculation of Capacity(LR)") 
-  capdescr $ (C lRe) := ((C nonFL) * (C glaTyFac) * (C loadSF))
+  capdescr $ (C lRe) $= ((C nonFL) * (C glaTyFac) * (C loadSF))
 
 capdescr :: Sentence
 capdescr =
@@ -55,8 +55,8 @@ capdescr =
 
 calOfDe :: RelationConcept
 calOfDe = makeRC "calOfDe" (nounPhraseSP "Calculation of Demand(q)") 
-  dedescr $ (C demand) := FCall (C demand) [C eqTNTWeight, C standOffDist] 
-  --dedescr $ (C demand) := FCall (asExpr interpY) [V "TSD.txt", C standOffDist, C eqTNTWeight] 
+  dedescr $ (C demand) $= FCall (C demand) [C eqTNTWeight, C standOffDist] 
+  --dedescr $ (C demand) $= FCall (asExpr interpY) [V "TSD.txt", C standOffDist, C eqTNTWeight] 
   
 dedescr :: Sentence
 dedescr = 

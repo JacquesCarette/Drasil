@@ -45,14 +45,14 @@ sliceWght = mkDataDef slcWght slcWgtEqn
 slcWgtEqn :: Expr
 slcWgtEqn = (inxi baseWthX) * (Case [case1,case2,case3])
   where case1 = (((inxi slopeHght)-(inxi slipHght ))*(C satWeight),
-          (inxi waterHght) :>= (inxi slopeHght))
+          (inxi waterHght) $>= (inxi slopeHght))
 
         case2 = (((inxi slopeHght)-(inxi waterHght))*(C dryWeight) +
           ((inxi waterHght)-(inxi slipHght))*(C satWeight),
-          (inxi slopeHght) :> (inxi waterHght) :> (inxi slipHght))
+          (inxi slopeHght) $> (inxi waterHght) $> (inxi slipHght))
 
         case3 = (((inxi slopeHght)-(inxi slipHght ))*(C dryWeight),
-          (inxi waterHght) :<= (inxi slipHght))
+          (inxi waterHght) $<= (inxi slipHght))
 
 --DD2
 
@@ -62,9 +62,9 @@ baseWtrF = mkDataDef baseHydroForce bsWtrFEqn
 bsWtrFEqn :: Expr
 bsWtrFEqn = (inxi baseLngth)*(Case [case1,case2])
   where case1 = (((inxi waterHght)-(inxi slipHght))*(C waterWeight),
-          (inxi waterHght) :> (inxi slipHght))
+          (inxi waterHght) $> (inxi slipHght))
 
-        case2 = (Int 0, (inxi waterHght) :<= (inxi slipHght))
+        case2 = (Int 0, (inxi waterHght) $<= (inxi slipHght))
 
 --DD3
 
@@ -74,9 +74,9 @@ surfWtrF = mkDataDef surfHydroForce surfWtrFEqn
 surfWtrFEqn :: Expr
 surfWtrFEqn = (inxi surfLngth)*(Case [case1,case2])
   where case1 = (((inxi waterHght)-(inxi slopeHght))*(C waterWeight),
-          (inxi waterHght) :> (inxi slopeHght))
+          (inxi waterHght) $> (inxi slopeHght))
 
-        case2 = (Int 0, (inxi waterHght) :<= (inxi slopeHght))
+        case2 = (Int 0, (inxi waterHght) $<= (inxi slopeHght))
 
 --DD4
 
@@ -87,12 +87,12 @@ intersliceWtrFEqn :: Expr
 intersliceWtrFEqn = Case [case1,case2,case3]
   where case1 = (((inxi slopeHght)-(inxi slipHght )):^ 2 :/ 2  *
           (C satWeight) + ((inxi waterHght)-(inxi slopeHght)):^ 2 *
-          (C satWeight), (inxi waterHght) :>= (inxi slopeHght))
+          (C satWeight), (inxi waterHght) $>= (inxi slopeHght))
 
         case2 = (((inxi waterHght)-(inxi slipHght )):^ 2 :/ 2  * (C satWeight),
-                (inxi slopeHght) :> (inxi waterHght) :> (inxi slipHght))
+                (inxi slopeHght) $> (inxi waterHght) $> (inxi slipHght))
 
-        case3 = (Int 0,(inxi waterHght) :<= (inxi slipHght))
+        case3 = (Int 0,(inxi waterHght) $<= (inxi slipHght))
 
 --DD5
 
@@ -232,10 +232,10 @@ soilStiffness = mkDataDef nrmStiffBase soilStiffnessEqn
 
 soilStiffnessEqn :: Expr
 soilStiffnessEqn = (Case [case1,case2])
-  where case1 = (block, (C SM.poissnsR) :< 0)
+  where case1 = (block, (C SM.poissnsR) $< 0)
 
         case2 = ((Dbl 0.01) * block + (C constant_K) / ((C nrmDispl)+
-          (C constant_A)), (C SM.poissnsR) :>= 0)
+          (C constant_A)), (C SM.poissnsR) $>= 0)
 
         block = (C intNormForce)*(1 - (C SM.poissnsR))/
           ((1 + (C SM.poissnsR)) * (1 - 2 :*(C SM.poissnsR) + (C baseWthX)))
@@ -256,7 +256,7 @@ resShrDerivation = [
   S "of a slice from", acroGD 2 `sC` S "using the", getTandS nrmFSubWat,
   S "of", acroT 4, S "shown in", eqN 1],
   
-  EqnBlock $ (inxi nrmFSubWat) := eqlExpr cos sin (\x y -> x -
+  EqnBlock $ (inxi nrmFSubWat) $= eqlExpr cos sin (\x y -> x -
   inxiM1 intShrForce + inxi intShrForce + y) - inxi baseHydroForce,
   
   foldlSP [plural value `ofThe'` S "interslice forces",
@@ -268,7 +268,7 @@ resShrDerivation = [
   S "to obtain a solvable value as done for", getES nrmFNoIntsl, S "in", eqN 2],
 
   EqnBlock $
-  (inxi nrmFNoIntsl) := (((inxi slcWght) + (inxi surfHydroForce) *
+  (inxi nrmFNoIntsl) $= (((inxi slcWght) + (inxi surfHydroForce) *
   (cos (inxi surfAngle)) + (inxi surfLoad) * (cos (inxi impLoadAngle))) *
   (cos (inxi baseAngle)) + (Neg (C earthqkLoadFctr) * (inxi slcWght) -
   (inxi watrForce) + (inxiM1 watrForce) + (inxi surfHydroForce) *
@@ -280,8 +280,8 @@ resShrDerivation = [
   plural value, S "as done in", eqN 3],
   
   EqnBlock $
-  inxi shearRNoIntsl := (inxi nrmFNoIntsl) * tan (inxi fricAngle) +
-  (inxi cohesion) * (inxi baseWthX) * sec (inxi baseAngle) :=
+  inxi shearRNoIntsl $= (inxi nrmFNoIntsl) * tan (inxi fricAngle) +
+  (inxi cohesion) * (inxi baseWthX) * sec (inxi baseAngle) $=
   (((inxi slcWght) + (inxi surfHydroForce) * (cos (inxi surfAngle)) +
   (inxi surfLoad) * (cos (inxi impLoadAngle))) * (cos (inxi baseAngle)) +
   (Neg (C earthqkLoadFctr) * (inxi slcWght) - (inxi watrForceDif) +
@@ -299,7 +299,7 @@ mobShrDerivation = [
   getES mobShrI, S "from the force equilibrium in", acroGD 2 `sC`
   S "also shown in", eqN 4],
   
-  EqnBlock $ inxi mobShrI := eqlExpr sin cos
+  EqnBlock $ inxi mobShrI $= eqlExpr sin cos
     (\x y -> x - inxiM1 intShrForce + inxi intShrForce + y),
   
   foldlSP [S "The", phrase equation, S "is unsolvable, containing the unknown",
@@ -308,7 +308,7 @@ mobShrDerivation = [
   getTandS shearFNoIntsl `sC` S "as done in", eqN 5],
   
   EqnBlock $
-  inxi shearFNoIntsl := ((inxi slcWght) :+ (inxi surfHydroForce) :*
+  inxi shearFNoIntsl $= ((inxi slcWght) :+ (inxi surfHydroForce) :*
   (cos (inxi surfAngle)) :+ (inxi surfLoad) :* (cos (inxi impLoadAngle))) :*
   (sin (inxi baseAngle)) :- (Neg (C earthqkLoadFctr) :* (inxi slcWght) :-
   (inxi watrForceDif) :+ (inxi surfHydroForce) :* sin (inxi surfAngle) :+
@@ -341,7 +341,7 @@ stfMtrxDerivation = [
   acroGD 8, S "to define stiffness matrix", getES shrStiffIntsl `sC`
   S "as seen in", eqN 6],
   
-  EqnBlock $ inxi shrStiffIntsl :=
+  EqnBlock $ inxi shrStiffIntsl $=
   dgnl2x2 (inxi shrStiffIntsl) (inxi nrmStiffBase),
   
   foldlSP [S "For interslice surfaces the stiffness constants" `sAnd`
@@ -364,10 +364,10 @@ stfMtrxDerivation = [
   S "The base stiffness counter clockwise rotation is applied in", eqN 7,
   S "to the new matrix", getES nrmFNoIntsl],
   
-  EqnBlock $ inxi shrStiffIntsl :=
+  EqnBlock $ inxi shrStiffIntsl $=
   m2x2 (cos(inxi baseAngle)) (Neg $ sin(inxi baseAngle))
   (sin(inxi baseAngle)) (cos(inxi baseAngle)) *
-  inxi shrStiffIntsl := kiStar,
+  inxi shrStiffIntsl $= kiStar,
   
   foldlSP [S "The Hooke's law force displacement relationship of", acroGD 8,
   S "applied to the base also references a displacement vector",
@@ -382,9 +382,9 @@ stfMtrxDerivation = [
   `sC` S "a basal force displacement relationship in the same coordinate",
   S "system as the interslice relationship can be derived as done in", eqN 8],
   
-  EqnBlock $ vec2D (inxi genPressure) (inxi genPressure) :=
-  inxi shrStiffBase * C rotatedDispl := --FIXME: add more symbols?
-  kiStar * rotMtx * displMtx := kiPrime * displMtx,
+  EqnBlock $ vec2D (inxi genPressure) (inxi genPressure) $=
+  inxi shrStiffBase * C rotatedDispl $= --FIXME: add more symbols?
+  kiStar * rotMtx * displMtx $= kiPrime * displMtx,
   
   foldlSP [S "The new effective base stiffness matrix", getES shrStiffBase,
   --FIXME: add symbol?
@@ -396,15 +396,15 @@ stfMtrxDerivation = [
   getES effStiffA `sAnd` getES effStiffB `sC` S "defined in", eqN 10 `sAnd`
   eqN 11, S "respectively"],
   
-  EqnBlock $ inxi shrStiffBase := kiPrime
-  := m2x2 (inxi effStiffA) (inxi effStiffB) (inxi effStiffB) (inxi effStiffA),
+  EqnBlock $ inxi shrStiffBase $= kiPrime
+  $= m2x2 (inxi effStiffA) (inxi effStiffB) (inxi effStiffB) (inxi effStiffA),
   
   EqnBlock $
-  (inxi effStiffA) := (inxi shrStiffBase) * (cos (inxi baseAngle)) :^ 2 :+
+  (inxi effStiffA) $= (inxi shrStiffBase) * (cos (inxi baseAngle)) :^ 2 :+
   (inxi nrmStiffBase) * (sin (inxi baseAngle)) :^ 2,
   
   EqnBlock $
-  (inxi effStiffB) := ((inxi shrStiffBase)-(inxi nrmStiffBase)) *
+  (inxi effStiffB) $= ((inxi shrStiffBase)-(inxi nrmStiffBase)) *
   (sin (inxi baseAngle)) * (cos (inxi baseAngle)),
   
   foldlSP [S "A force-displacement relationship for an element", getES index,

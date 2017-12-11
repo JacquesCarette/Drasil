@@ -184,7 +184,7 @@ data SCSSub where
   Assumptions :: {-Fields  ->-} Section -> Section -> Section -> Section -> Section -> [Contents] -> SCSSub --FIXME: temporary definition?
   TMs         :: Fields  -> [TheoryModel] -> SCSSub
   GDs         :: Fields  -> [GenDefn] -> DerivationDisplay -> SCSSub
-  DDs         :: Fields  -> [QDefinition]     -> SCSSub --FIXME: Need DD intro
+  DDs         :: Fields  -> [QDefinition] -> DerivationDisplay -> SCSSub --FIXME: Need DD intro
   IMs         :: Fields  -> [RelationConcept] -> SCSSub
   Constraints :: Sentence -> Sentence -> Sentence -> [Contents] {-Fields  -> [UncertainWrapper] -> [ConstrainedChunk]-} -> SCSSub --FIXME: temporary definition?
 --FIXME: Work in Progress ^
@@ -408,12 +408,18 @@ mkSolChSpec si (SCSProg l) =
   where
     mkSubSCS :: SystemInformation -> SCSSub -> [Section] -> [Section]
     mkSubSCS _ (SCSSubVerb s) l' = s : l'
+    mkSubSCS _ (TMs _ []) _   = error "There are no Theoretical Models"
+    mkSubSCS _ (GDs _ [] _) l' = SSD.genDefnF [] : l'
+    mkSubSCS _ (DDs _ [] _) _ = error "There are no Data Definitions"
+    mkSubSCS _ (IMs _ []) _   = error "There are no Instance Models"
     mkSubSCS si' (TMs fields ts) l' = 
       SSD.thModF (siSys si') (map (tmodel fields (_sysinfodb si')) ts) : l'
-    mkSubSCS si' (DDs fields dds) l' =
+    mkSubSCS si' (DDs fields dds ShowDerivation) l' =
+      SSD.dataDefnF EmptyS (concat (map (\x -> ddefn fields (_sysinfodb si') x : derivation x) dds)) : l'
+    mkSubSCS si' (DDs fields dds _) l' =
       SSD.dataDefnF EmptyS (map (ddefn fields (_sysinfodb si')) dds) : l'
     mkSubSCS si' (GDs fields gs ShowDerivation) l' = 
-      SSD.genDefnF (concat (map (\x -> gdefn fields (_sysinfodb si') x : gdDerivation x) gs)) : l'
+      SSD.genDefnF (concat (map (\x -> gdefn fields (_sysinfodb si') x : derivation x) gs)) : l'
     mkSubSCS si' (GDs fields gs _) l' = 
       SSD.genDefnF (map (gdefn fields (_sysinfodb si')) gs) : l'
     mkSubSCS _ (IMs _ _) _ = error "IMs not yet implemented"

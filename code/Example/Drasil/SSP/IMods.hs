@@ -48,7 +48,7 @@ fctSfty = makeRC "fctSfty" factorOfSafety fcSfty_desc fcSfty_rel
 --       last occurence should have index n
 --       similar case with shearFNoIntsl
 fcSfty_rel :: Relation
-fcSfty_rel = C fs := sumOp shearRNoIntsl / sumOp shearFNoIntsl
+fcSfty_rel = C fs $= sumOp shearRNoIntsl / sumOp shearFNoIntsl
   where prodOp = product (Just (lU, Low $ C index, High $
           C numbSlices - Int 1))
           (Index (C mobShrC) (C varblU) / Index (C shrResC) (C varblU))
@@ -72,30 +72,30 @@ nrmShrFor = makeRC "nrmShrFor" (nounPhraseSP "normal/shear force ratio")
   nrmShrF_desc nrmShrF_rel
 
 nrmShrF_rel :: Relation
-nrmShrF_rel = (inxi normFunc) := Case [case1,case2,case3]:=
-  inxi shearFunc := Case [
-  (indx1 baseWthX * indx1 scalFunc * indx1 intNormForce, C index := Int 1),
+nrmShrF_rel = (inxi normFunc) $= Case [case1,case2,case3] $=
+  inxi shearFunc $= Case [
+  (indx1 baseWthX * indx1 scalFunc * indx1 intNormForce, C index $= Int 1),
   (inxi baseWthX * (inxi scalFunc * inxi intNormForce +
     inx scalFunc (-1) * inx intNormForce (-1)),
-    Int 2 :<= C index :<= (C numbSlices :- Int 1)),
+    Int 2 $<= C index $<= (C numbSlices :- Int 1)),
   (indxn baseWthX * Index (C intNormForce) (C numbSlices - Int 1) *
-    Index (C watrForce) (C numbSlices - Int 1), C index := Int 1)
+    Index (C watrForce) (C numbSlices - Int 1), C index $= Int 1)
   ]
-  := --FIXME: move to seperate instance model
-  C normToShear := sum1toN (inxi normFunc) / sum1toN (inxi shearFunc)
+  $= --FIXME: move to seperate instance model
+  C normToShear $= sum1toN (inxi normFunc) / sum1toN (inxi shearFunc)
   where case1 = ((indx1 baseWthX)*((indx1 intNormForce)+(indx1 watrForce)) *
-          tan (indx1 baseAngle), C index := Int 1)
+          tan (indx1 baseAngle), C index $= Int 1)
         case2 = ((inxi baseWthX)*(Grouping (inxi intNormForce +
           inx intNormForce (-1))+ Grouping (inxi watrForce +
           inx watrForce (-1))) * tan (inxi baseAngle)+
           (C midpntHght) * (C earthqkLoadFctr * inxi slcWght -
           Int 2 * inxi surfHydroForce * sin (inxi surfAngle) -
           Int 2 * inxi surfLoad * cos (inxi impLoadAngle)),
-          Int 2 :<= C index :<= ((C numbSlices) - (Int 1)))
+          Int 2 $<= C index $<= ((C numbSlices) - (Int 1)))
         case3 = ((indxn baseWthX)*(Index (C intNormForce)
           (C numbSlices - Int 1) + Index (C watrForce)
           (C numbSlices - Int 1)) * tan (Index (C baseAngle)
-          (C numbSlices - Int 1)), C index := (C numbSlices))
+          (C numbSlices - Int 1)), C index $= (C numbSlices))
 
 nrmShrF_desc :: Sentence
 nrmShrF_desc = foldlSent [getES normToShear `isThe` S "magnitude ratio",
@@ -113,13 +113,13 @@ intsliceFs = makeRC "intsliceFs" (nounPhraseSP "interslice forces")
   sliceFs_desc sliceFs_rel
 
 sliceFs_rel :: Relation
-sliceFs_rel = inxi intNormForce := Case [
+sliceFs_rel = inxi intNormForce $= Case [
   (((C fs) * indx1 shearFNoIntsl - indx1 shearRNoIntsl) / indx1 shrResC,
-    C index := (Int 1)),
+    C index $= (Int 1)),
   ((inx mobShrC (-1) * inx intNormForce (-1) +
     C fs * inxi shearFNoIntsl - inxi shearRNoIntsl) / inxi shrResC,
-    (Int 2) :<= C index :<= ((C numbSlices) :- (Int 1))),
-  ((Int 0), C index := (Int 0) :|| C index := C numbSlices)]  
+    (Int 2) $<= C index $<= ((C numbSlices) :- (Int 1))),
+  ((Int 0), C index $= (Int 0) :|| C index $= C numbSlices)]  
   -- FIXME: Use index i as part of condition
 
 sliceFs_desc :: Sentence
@@ -138,15 +138,15 @@ fDisEq_rel :: Relation --FIXME: split into two IMOD
 fDisEq_rel = Neg (inxi watrForceDif) - (C earthqkLoadFctr)*(inxi slcWght) -
   (inxi baseHydroForce)*(sin(inxi baseAngle)) +
   (inxi surfHydroForce)*sin(inxi surfAngle) + (inxi surfLoad) *
-  sin(inxi impLoadAngle) := inx  dx_i (-1) * (Neg (inx surfLngth (-1)) *
+  sin(inxi impLoadAngle) $= inx  dx_i (-1) * (Neg (inx surfLngth (-1)) *
   inx nrmStiffIntsl (-1)) + inxi dx_i * (Neg (inx surfLngth (-1)) *
   inx nrmStiffIntsl (-1) +
   inxi surfLngth * inxi nrmStiffIntsl + inxi baseLngth * inxi effStiffA) +
   inx  dx_i 1 * (Neg (inxi surfLngth) * inxi nrmStiffIntsl) +
-  inxi dy_i * (Neg (inxi baseLngth) * inxi effStiffB) :=
+  inxi dy_i * (Neg (inxi baseLngth) * inxi effStiffB) $=
   Neg (inxi slcWght) - (inxi baseHydroForce)*(cos(inxi baseAngle)) +
   (inxi surfHydroForce)*cos(inxi surfAngle) + (inxi surfLoad) *
-  cos(inxi impLoadAngle) := inx  dy_i (-1) * (Neg (inx surfLngth (-1)) *
+  cos(inxi impLoadAngle) $= inx  dy_i (-1) * (Neg (inx surfLngth (-1)) *
   inx shrStiffIntsl (-1)) + inxi dy_i * (Neg (inx surfLngth (-1)) *
   inx shrStiffIntsl (-1) + inxi surfLngth * inxi nrmStiffIntsl +
   inxi baseLngth * inxi effStiffA) + inx  dy_i 1 * (Neg (inxi surfLngth) *
@@ -181,7 +181,7 @@ rfemFoS = makeRC "rfemFoS" (nounPhraseSP "RFEM factor of safety")
   rfemFoS_desc rfemFoS_rel
 
 rfemFoS_rel :: Relation
-rfemFoS_rel = (inxi fsloc) := fosFracLoc := fosFracSum
+rfemFoS_rel = (inxi fsloc) $= fosFracLoc $= fosFracSum
 
 fosFracLoc :: Expr
 fosFracLoc = (inxi cohesion - inxi nrmStiffBase * inxi nrmDispl *
@@ -211,7 +211,7 @@ crtSlpId = makeRC "crtSlpId" (nounPhraseSP "critical slip identification")
   crtSlpId_desc crtSlpId_rel
 
 crtSlpId_rel :: Relation
-crtSlpId_rel = (Index (C fs) (V "min")) :=
+crtSlpId_rel = (Index (C fs) (V "min")) $=
   (FCall (C minFunction) [C critCoords, V "Input"])
   --FIXME: add subscript to fs
 
@@ -293,7 +293,7 @@ nrmShrDerivation = [
   S "about", (S "midpoint" `ofThe` S "base") `sAnd` S "the",
   phrase assumption, S "of", acroGD 5, S "results in", eqN 13],
   
-  EqnBlock $ Int 0 :=
+  EqnBlock $ Int 0 $=
   momExpr (\ x y -> x :- (C normToShear * (inxi baseWthX / Int 2) * 
   (inxi intNormForce * inxi scalFunc + inxiM1 intNormForce *
   inxiM1 scalFunc)) :+ y),
@@ -302,7 +302,7 @@ nrmShrDerivation = [
   S "leads to", eqN 14],
   
   EqnBlock $
-  C normToShear := momExpr (+)
+  C normToShear $= momExpr (+)
   / ((inxi baseWthX / Int 2) * (inxi intNormForce * inxi scalFunc +
   inxiM1 intNormForce * inxiM1 scalFunc)),
   
@@ -313,7 +313,7 @@ nrmShrDerivation = [
   --to get equation #" pattern
   
   EqnBlock $
-  inxi normToShear := sum1toN
+  inxi normToShear $= sum1toN
   (inxi baseWthX * (Grouping (inxi intNormForce + inxiM1 intNormForce) +
   Grouping (inxi watrForce + inxiM1 watrForce)) * tan(inxi baseAngle) +
   inxi midpntHght * (C earthqkLoadFctr * inxi slcWght -
@@ -334,12 +334,12 @@ intrSlcDerivation = [
   S "with the", S "effective stress", phrase definition, S "from", acroT 4,
   -- NOTE: "Taking this with that and the assumption of _
   -- to get equation #" pattern
-  S "that", E (inxi totNrmForce := inxi nrmFSubWat - inxi baseHydroForce) `sC`
+  S "that", E (inxi totNrmForce $= inxi nrmFSubWat - inxi baseHydroForce) `sC`
   S "and the assumption of", acroGD 5, S "the equilibrium", phrase equation, 
   S "can be rewritten as", eqN 16],
   
   EqnBlock $
-  inxi nrmFSubWat := eqlExpr cos sin (\x y -> x -
+  inxi nrmFSubWat $= eqlExpr cos sin (\x y -> x -
   C normToShear * inxiM1 scalFunc * inxiM1 intNormForce + 
   C normToShear * inxi scalFunc * inxi intNormForce + y)
   - (inxi baseHydroForce),
@@ -355,7 +355,7 @@ intrSlcDerivation = [
   
   EqnBlock $
   ((inxi totNrmForce) * tan (inxi fricAngle) + (inxi cohesion) *
-  (inxi baseWthX) * sec (inxi baseAngle)) / (C fs) :=
+  (inxi baseWthX) * sec (inxi baseAngle)) / (C fs) $=
   --FIXME: pull the left side of this from GD4
   eqlExpr sin cos (\x y -> x - C normToShear * inxiM1 scalFunc *
   inxiM1 intNormForce + C normToShear * inxi scalFunc * inxi intNormForce + y),
@@ -367,7 +367,7 @@ intrSlcDerivation = [
   (inxi intNormForce) * (((C normToShear)*(inxi scalFunc) *
   cos (inxi baseAngle) - sin (inxi baseAngle)) * tan (inxi fricAngle) -
   ((C normToShear)*(inxi scalFunc) * sin (inxi baseAngle) -
-  cos (inxi baseAngle)) * (C fs)) := (inxiM1 intNormForce) *
+  cos (inxi baseAngle)) * (C fs)) $= (inxiM1 intNormForce) *
   (((C normToShear)*(inxiM1 scalFunc) * cos (inxi baseAngle)
   - sin (inxi baseAngle)) * tan (inxi fricAngle) - ((C normToShear) *
   (inxiM1 scalFunc) * sin (inxi baseAngle) - cos (inxi baseAngle)) *
@@ -382,20 +382,20 @@ intrSlcDerivation = [
   S "can be simplified to", eqN 21 `sC` S "also seen in", acroIM 3],
   
   EqnBlock $
-  (inxi shrResC) := ((C normToShear)*(inxi scalFunc) * cos (inxi baseAngle) -
+  (inxi shrResC) $= ((C normToShear)*(inxi scalFunc) * cos (inxi baseAngle) -
   sin (inxi baseAngle)) * tan (inxi fricAngle) -
   ((C normToShear)*(inxi scalFunc) * sin (inxi baseAngle) -
   cos (inxi baseAngle)) * (C fs),
   -- FIXME: index everything here and add "Where i is the local
-  -- slice of mass for 1 :<= i :<= n-1"
+  -- slice of mass for 1 $<= i $<= n-1"
   EqnBlock $
-  (inxi mobShrC) := ((C normToShear)*(inxi scalFunc) *
+  (inxi mobShrC) $= ((C normToShear)*(inxi scalFunc) *
   cos (inxiP1 baseAngle) - sin (inxiP1 baseAngle)) *
   tan (inxi fricAngle) - ((C normToShear)*(inxi scalFunc) *
   sin (inxiP1 baseAngle) - cos (inxiP1 baseAngle)) * (C fs),
   
   EqnBlock $
-  (inxi intNormForce) := (inx mobShrC (-1) * inx intNormForce (-1) +
+  (inxi intNormForce) $= (inx mobShrC (-1) * inx intNormForce (-1) +
   C fs * inxi shearFNoIntsl - inxi shearRNoIntsl) / inxi shrResC,
   
   fUnknowns]
@@ -442,10 +442,10 @@ rigFoSDerivation = [
   S "slice", getES shrDispl `sIn` eqN 24, S "and normal to", 
   S "base" `ofThe` S "slice", getES nrmDispl, S "in", eqN 25],
   
-  EqnBlock $ inxi shrDispl := cos(inxi baseAngle) * inxi dx_i +
+  EqnBlock $ inxi shrDispl $= cos(inxi baseAngle) * inxi dx_i +
   sin(inxi baseAngle) * inxi dy_i,
 
-  EqnBlock $ inxi nrmDispl := Neg (sin(inxi baseAngle)) * inxi dx_i +
+  EqnBlock $ inxi nrmDispl $= Neg (sin(inxi baseAngle)) * inxi dx_i +
     sin(inxi baseAngle) * inxi dy_i,
   
   foldlSP [S "With the", phrase definition, S "of normal stiffness from",
@@ -461,7 +461,7 @@ rigFoSDerivation = [
   --FIXME: grammar
 
   EqnBlock $
-  inxi normStress := inxi nrmStiffBase * inxi nrmDispl, --FIXME: index
+  inxi normStress $= inxi nrmStiffBase * inxi nrmDispl, --FIXME: index
   
   foldlSP [S "The resistive shear to calculate the", getTandS fs,
   S "is found from the Mohr Coulomb resistive strength of soil in", acroT 3,
@@ -469,7 +469,7 @@ rigFoSDerivation = [
   (S "resistive shear" `ofThe` S "slice"), S "can be calculated from", eqN 27],
   
   EqnBlock $
-  inxi mobStress := inxi cohesion - inxi normStress * tan(inxi fricAngle),
+  inxi mobStress $= inxi cohesion - inxi normStress * tan(inxi fricAngle),
   --FIXME: index and prime
   
   foldlSP [S "Previously", phrase value `ofThe` getTandS shrStiffBase,
@@ -480,7 +480,7 @@ rigFoSDerivation = [
   eqN 25 `sC` S "the value of", getES shrStiffBase, S "becomes solvable"],
   
   EqnBlock $
-  inxi shrStiffBase := inxi intNormForce / (2 * (1 + inxi poissnsRatio)) *
+  inxi shrStiffBase $= inxi intNormForce / (2 * (1 + inxi poissnsRatio)) *
   (Dbl 0.1 / inxi baseWthX) +
   (inxi cohesion - inxi normStress * tan(inxi fricAngle)) /
   (abs (inxi shrDispl) + C constant_a),
@@ -496,7 +496,7 @@ rigFoSDerivation = [
   S "length" `ofThe` S "base"],
   
   EqnBlock $
-  inxi shrStress := inxi shrStiffBase * inxi shrDispl,
+  inxi shrStress $= inxi shrStiffBase * inxi shrDispl,
   
   foldlSP [S "The", getTDS shrStress, S "acts as the mobile shear",
   S "acting on the base. Using the", phrase definition, titleize fs,
@@ -507,7 +507,7 @@ rigFoSDerivation = [
   S "can be found from as seen in", eqN 30 `sAnd` acroIM 5],
   
   EqnBlock $
-  C fsloc := inxi mobStress / inxi shrStress := fosFracLoc,
+  C fsloc $= inxi mobStress / inxi shrStress $= fosFracLoc,
   
   foldlSP [S "The global", titleize fs, S "is then", S "ratio" `ofThe`
   S "summation of the resistive and mobile shears for each slice" `sC`
@@ -515,6 +515,6 @@ rigFoSDerivation = [
   S "Shown in", eqN 31 `sAnd` acroIM 5],
   
   EqnBlock $
-  (C fs) := sum1toN (inxi baseLngth * inxi mobStress) /
-  sum1toN (inxi baseLngth * inxi shrStress) := fosFracSum
+  (C fs) $= sum1toN (inxi baseLngth * inxi mobStress) /
+  sum1toN (inxi baseLngth * inxi shrStress) $= fosFracSum
   ]

@@ -4,6 +4,7 @@ import Language.Drasil
 import qualified Drasil.SRS as SRS
 
 import Drasil.DocumentLanguage
+import Drasil.DocumentLanguage.Definitions
 
 import Data.Drasil.SI_Units
 import Data.Drasil.People (spencerSmith, nikitha, mCampidelli)
@@ -64,7 +65,6 @@ import Drasil.Sections.TraceabilityMandGs (traceGIntro)
 import Drasil.Sections.SpecificSystemDescription (solChSpecF,
   inDataConstTbl, outDataConstTbl, dataConstraintUncertainty, goalStmtF,
   physSystDesc, termDefnF, probDescF, specSysDesF)
-import Drasil.DocumentLanguage.Definitions
 
 {--}
 
@@ -102,9 +102,9 @@ mkSRS = RefSec (RefProg intro [TUnits, tsymb [TSPurpose, SymbOrder], TAandA]) :
       [SSDProblem  (PDProg start gLassBR ending [s6_1_1, s6_1_2, s6_1_3])
       , SSDSolChSpec 
         (SCSProg
-          [ TMs ([Label, DefiningEquation] ++ stdFields) [t1IsSafe]
-{-          , GDs ([ Label, Units] ++ stdFields) [] -} -- No Gen Defs for GlassBR
-          , DDs ([Label, Symbol, Units] ++ stdFields) dataDefns
+          [ TMs ([Label] ++ stdFields) [t1IsSafe]
+          , GDs [] [] HideDerivation -- No Gen Defs for GlassBR
+          , DDs ([Label, Symbol, Units] ++ stdFields) dataDefns ShowDerivation
           ]
         )
       ]
@@ -517,8 +517,8 @@ a8Desc mainConcept = foldlSent [S "With", phrase reference, S "to",
   acroA 4, S "the", phrase value `sOf` phrase mainConcept,
   sParen (getES mainConcept), S "is a", phrase constant, S "in" +:+.
   short gLassBR, S "It is calculated by the" +: phrase equation +:+.
-  E (C mainConcept := equat mainConcept), S "Using this" `sC`
-  E (C mainConcept := (Dbl 0.27))]
+  E (C mainConcept $= equat mainConcept), S "Using this" `sC`
+  E (C mainConcept $= (Dbl 0.27))]
 
 {--Theoretical Models--}
 

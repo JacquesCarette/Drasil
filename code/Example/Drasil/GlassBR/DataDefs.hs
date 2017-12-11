@@ -51,7 +51,7 @@ hFromt_eq = (1/1000) * (Case (zipWith hFromt_helper
   actualThicknesses nominalThicknesses))
 
 hFromt_helper :: Double -> Double -> (Expr, Relation)
-hFromt_helper result condition = ((Dbl result), (C nom_thick) := Dbl condition)
+hFromt_helper result condition = ((Dbl result), (C nom_thick) $= Dbl condition)
 
 hFromt :: QDefinition
 hFromt = aqd (mkDataDef' act_thick hFromt_eq (hMin)) ([] :: Attributes)
@@ -91,7 +91,7 @@ glaTyFac_eq :: Expr
 glaTyFac_eq = (Case (zipWith glaTyFac_helper glassTypeFactors glassTypeAbbrsStr))
 
 glaTyFac_helper :: Integer -> String -> (Expr, Relation)
-glaTyFac_helper result condition = (Int result, (C glass_type) := V condition)
+glaTyFac_helper result condition = (Int result, (C glass_type) $= V condition)
 
 glaTyFac :: QDefinition
 glaTyFac = aqd (mkDataDef gTF glaTyFac_eq) ([] :: Attributes)
@@ -134,7 +134,7 @@ tolStrDisFac = aqd (mkDataDef' sdf_tol tolStrDisFac_eq
 aGrtrThanB :: Sentence
 aGrtrThanB = ((getES plate_len) `sC` (getES plate_width) +:+ 
   S "are" +:+ plural dimension +:+ S "of the plate" `sC` S "where" +:+. 
-  sParen (E (C plate_len :> C plate_width)))
+  sParen (E (C plate_len $> C plate_width)))
 
 hRef :: Sentence
 hRef = (getES nom_thick +:+ S "is the true thickness" `sC` 

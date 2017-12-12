@@ -8,7 +8,6 @@ import qualified Language.Drasil.HTML.AST as H
 import Language.Drasil.Unicode (Special(Partial))
 import Language.Drasil.Chunk.Eq
 import Language.Drasil.Chunk.ExprRelat (relat)
-import Language.Drasil.Chunk.Module
 import Language.Drasil.Chunk.NamedIdea (term, short, getA)
 import Language.Drasil.Chunk.Concept (defn)
 import Language.Drasil.Chunk.Quantity (Quantity(..), eqSymb)
@@ -216,7 +215,6 @@ lay (EqnBlock c)        sm = H.HDiv ["equation"] [H.Tagless (H.E (expr c sm))] (
 lay x@(Definition c)    sm = H.Definition c (makePairs c sm) (spec (refName x) sm)
 lay (Enumeration cs)    sm = H.List $ makeL cs sm
 lay x@(Figure c f wp)   sm = H.Figure (spec (refName x) sm) (spec c sm) f wp
-lay x@(Module m)        sm = H.Module (formatName m) (spec (refName x) sm)
 lay (Graph _ _ _ _)      _ = H.Paragraph (H.EmptyS)  -- need to implement!
 lay x@(Requirement r)   sm = 
   H.Requirement (spec (phrase $ r ^. term) sm) (spec (refName x) sm) (spec (short r) sm)

@@ -66,7 +66,6 @@ lo (Definition ssPs l)     = toText $ makeDefn ssPs $ spec l
 lo (Defnt _ ssPs l)        = toText $ makeDefn ssPs $ spec l
 lo (List l)                = toText $ makeList l
 lo (Figure r c f wp)       = toText $ makeFigure (spec r) (spec c) f wp
-lo (Module n l)            = toText $ makeModule n $ spec l
 lo (Requirement n l)       = toText $ makeReq (spec n) (spec l)
 lo (Assumption n l)        = toText $ makeAssump (spec n) (spec l)
 lo (LikelyChange n l)      = toText $ makeLC (spec n) (spec l)

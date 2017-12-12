@@ -10,7 +10,6 @@ library
     Language.Drasil,
     Language.Drasil.Code,
     Data.Drasil.People
-    Data.Drasil.Changes
     Data.Drasil.Citations
     Data.Drasil.Modules
     Data.Drasil.Plurals
@@ -93,8 +92,6 @@ library
     , Language.Drasil.Chunk.Constrained
     , Language.Drasil.Chunk.Eq
     , Language.Drasil.Chunk.ExprRelat
-    , Language.Drasil.Chunk.Method
-    , Language.Drasil.Chunk.Module
     , Language.Drasil.Chunk.NamedIdea
     , Language.Drasil.Chunk.Quantity
     , Language.Drasil.Chunk.Relation

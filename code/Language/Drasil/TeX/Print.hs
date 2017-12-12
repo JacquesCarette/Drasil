@@ -357,6 +357,7 @@ symbol_needs (Corners _ _ _ _ _) = Math
 symbol_needs (Atop _ _)          = Math
 
 p_unit :: USymb -> D
+p_unit (UName (Concat s)) = foldl (<>) empty $ map (p_unit . UName) s
 p_unit (UName n) =
   let cn = symbol_needs n in
   switch (const cn) (pure $ text $ symbol n)

@@ -4,8 +4,6 @@ import Language.Drasil.Document
 import Language.Drasil.Spec
 import Control.Lens ((^.))
 
-import Language.Drasil.Chunk.Req
-import Language.Drasil.Chunk.LC
 --import Language.Drasil.Chunk.Relation
 --import Language.Drasil.Chunk.Eq
 
@@ -35,10 +33,10 @@ find itm@(Definition (Theory comp1)) (frst@(Definition (Theory comp2)):lst)
   | (comp1 ^. id) == (comp2 ^. id) = frst
   | otherwise = find itm lst
 find itm@(Requirement comp1) (frst@(Requirement comp2):lst)
-  | ((rNI comp1) ^. id) == ((rNI comp2) ^. id) = frst
+  | (comp1 ^. id) == (comp2 ^. id) = frst
   | otherwise = find itm lst
 find itm@(LikelyChange comp1) (frst@(LikelyChange comp2):lst)
-  | ((lcCC comp1) ^. id) == ((lcCC comp2) ^. id) = frst
+  | (comp1 ^. id) == (comp2 ^. id) = frst
   | otherwise = find itm lst
 find itm@(UnlikelyChange comp1) (frst@(UnlikelyChange comp2):lst)
   | (comp1 ^. id) == (comp2 ^. id) = frst

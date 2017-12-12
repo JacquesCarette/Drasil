@@ -93,14 +93,11 @@ library
     , Language.Drasil.Chunk.Constrained
     , Language.Drasil.Chunk.Eq
     , Language.Drasil.Chunk.ExprRelat
-    , Language.Drasil.Chunk.LC
     , Language.Drasil.Chunk.Method
     , Language.Drasil.Chunk.Module
     , Language.Drasil.Chunk.NamedIdea
-    , Language.Drasil.Chunk.Other
     , Language.Drasil.Chunk.Quantity
     , Language.Drasil.Chunk.Relation
-    , Language.Drasil.Chunk.Req
     , Language.Drasil.Chunk.SymbolForm
     , Language.Drasil.Chunk.Theory
     , Language.Drasil.Chunk.UncertainQuantity

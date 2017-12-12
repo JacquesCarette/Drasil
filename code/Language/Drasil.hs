@@ -54,12 +54,6 @@ module Language.Drasil (
   -- Chunk.Module
   , ModuleChunk, makeRecord, makeImpModule, makeImpModuleNoGen, makeUnimpModule
   , imp, hier, field, formatName, method, secret, uses
-  -- Chunk.Req
-  , ReqChunk(..)
-  -- Chunk.LC
-  , LCChunk(..)
-  -- Chunk.Other
-  , AssumpChunk, UCChunk
   --Chunk.Wrapper
   , cqs, qs, nw, CQSWrapper, NWrapper
   --Chunk.UWrapper 
@@ -152,11 +146,8 @@ import Language.Drasil.Chunk.Unital(UnitalChunk(..), makeUCWDS, ucFromCV
 import Language.Drasil.Chunk.Unitary
 import Language.Drasil.Chunk.Relation(NamedRelation, makeNR, RelationConcept, 
                                       makeRC, makeRC')
-import Language.Drasil.Chunk.Req
-import Language.Drasil.Chunk.LC
 import Language.Drasil.Chunk.Method
 import Language.Drasil.Chunk.Module
-import Language.Drasil.Chunk.Other
 import Language.Drasil.Chunk.Wrapper
 import Language.Drasil.Chunk.Wrapper.QSWrapper
 import Language.Drasil.Chunk.Wrapper.UWrapper

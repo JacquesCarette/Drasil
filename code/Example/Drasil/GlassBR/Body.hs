@@ -137,18 +137,6 @@ glassSystInfo = SI {
 }
   --FIXME: All named ideas, not just acronyms.
 
-glassChoices :: Choices
-glassChoices = Choices {
-  lang = [Python, Cpp, CSharp, Java],
-  impType = Program,
-  logFile = "log.txt",
-  logging = LogNone,         -- LogNone, LogFunc
-  comments = CommentNone,    -- CommentNone, CommentFunc
-  onSfwrConstraint = Exception,  -- Warning, Exception
-  onPhysConstraint = Exception,  -- Warning, Exception
-  inputStructure = AsClass    -- Loose, AsClass
-}
-
 glassBR_code :: CodeSpec
 glassBR_code = codeSpec' glassSystInfo [interpMod, inputMod, readTableMod]
 

@@ -110,18 +110,6 @@ mkSRS = RefSec (RefProg intro
   
 ssp_srs :: Document
 ssp_srs = mkDoc mkSRS (for) ssp_si
-
-sspChoices :: Choices
-sspChoices = Choices {
-  lang = [Python, Cpp, CSharp, Java],
-  impType = Program,
-  logFile = "log.txt",
-  logging = LogNone,         -- LogNone, LogFunc
-  comments = CommentNone,    -- CommentNone, CommentFunc
-  onSfwrConstraint = Warning,  -- Warning, Exception
-  onPhysConstraint = Warning,  -- Warning, Exception
-  inputStructure = Loose    -- Loose, AsClass
-}  
   
 ssp_code :: CodeSpec
 ssp_code = codeSpec' ssp_si [sspInputMod]

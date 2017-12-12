@@ -148,18 +148,6 @@ mkSRS = [RefSec (RefProg intro
   [AuxConstntSec (AuxConsProg progName specParamValList)] ++
   [Bibliography s9_swhs_citations]
 
-swhsChoices :: Choices
-swhsChoices = Choices {
-  lang = [Python, Cpp, CSharp, Java],
-  impType = Program,
-  logFile = "log.txt",
-  logging = LogNone,         -- LogNone, LogFunc
-  comments = CommentNone,    -- CommentNone, CommentFunc
-  onSfwrConstraint = Warning,  -- Warning, Exception
-  onPhysConstraint = Warning,  -- Warning, Exception
-  inputStructure = Loose    -- Loose, AsClass
-}
-
 swhsCode :: CodeSpec
 swhsCode = codeSpec' swhs_si [swhsInputMod]
 

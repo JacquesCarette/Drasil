@@ -1,4 +1,4 @@
-module Drasil.GlassBR.IMods (iModels, probOfBr, calOfCap, calOfDe) where
+module Drasil.GlassBR.IMods (iModels, probOfBr, calOfCap, calOfDe, probOfBreak) where
 
 import Language.Drasil
 
@@ -15,11 +15,16 @@ import Drasil.GlassBR.Unitals (tNT, sdWithEqn, demand, standOffDist,
   lRe, risk_fun, prob_br)
 import Drasil.GlassBR.DataDefs (nonFL, risk, glaTyFac)
 import Drasil.GlassBR.Concepts (lResistance, glassTypeFac, lShareFac)
-
+import Drasil.DocumentLanguage.Chunk.InstanceModel
 {--}
 
 iModels :: [RelationConcept]
 iModels = [probOfBr, calOfCap, calOfDe]
+
+{--}
+
+probOfBreak :: InstanceModel
+probOfBreak = im probOfBr [qw risk] [] [qw prob_br] [] []
 
 {--}
 

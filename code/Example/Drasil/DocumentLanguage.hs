@@ -9,6 +9,7 @@ module Drasil.DocumentLanguage where
 
 import Drasil.DocumentLanguage.Definitions
 import Drasil.DocumentLanguage.Chunk.GenDefn
+import Drasil.DocumentLanguage.Chunk.InstanceModel
 
 import Language.Drasil
 
@@ -185,7 +186,7 @@ data SCSSub where
   TMs         :: Fields  -> [TheoryModel] -> SCSSub
   GDs         :: Fields  -> [GenDefn] -> DerivationDisplay -> SCSSub
   DDs         :: Fields  -> [QDefinition] -> DerivationDisplay -> SCSSub --FIXME: Need DD intro
-  IMs         :: Fields  -> [RelationConcept] -> SCSSub
+  IMs         :: Fields  -> [InstanceModel] -> SCSSub
   Constraints :: Sentence -> Sentence -> Sentence -> [Contents] {-Fields  -> [UncertainWrapper] -> [ConstrainedChunk]-} -> SCSSub --FIXME: temporary definition?
 --FIXME: Work in Progress ^
 data DerivationDisplay = ShowDerivation
@@ -414,7 +415,7 @@ mkSolChSpec si (SCSProg l) =
     mkSubSCS _ (IMs _ []) _   = error "There are no Instance Models"
     mkSubSCS si' (TMs fields ts) l' = 
       SSD.thModF (siSys si') (map (tmodel fields (_sysinfodb si')) ts) : l'
-    mkSubSCS si' (DDs fields dds ShowDerivation) l' =
+    mkSubSCS si' (DDs fields dds ShowDerivation) l' = --FIXME: need to keep track of DD intro.
       SSD.dataDefnF EmptyS (concat (map (\x -> ddefn fields (_sysinfodb si') x : derivation x) dds)) : l'
     mkSubSCS si' (DDs fields dds _) l' =
       SSD.dataDefnF EmptyS (map (ddefn fields (_sysinfodb si')) dds) : l'
@@ -422,8 +423,8 @@ mkSolChSpec si (SCSProg l) =
       SSD.genDefnF (concat (map (\x -> gdefn fields (_sysinfodb si') x : derivation x) gs)) : l'
     mkSubSCS si' (GDs fields gs _) l' = 
       SSD.genDefnF (map (gdefn fields (_sysinfodb si')) gs) : l'
-    mkSubSCS _ (IMs _ _) _ = error "IMs not yet implemented"
-      --FIXME: need to keep track of DD intro.
+    mkSubSCS si' (IMs fields ims) l' = SRS.inModel 
+      (map (instanceModel fields (_sysinfodb si')) ims) [] : l'
     mkSubSCS _ (Assumptions r1 r2 r3 r4 r5 o) l' = (SSD.assumpF r1 r2 r3 r4 r5 o) : l'
     mkSubSCS _ (Constraints a b c d) l' = (SSD.datConF a b c d) : l'
     inModSec = (SRS.inModel [Paragraph EmptyS] []) 

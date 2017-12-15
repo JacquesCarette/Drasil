@@ -90,11 +90,11 @@ data ItemType = Flat Sentence -- ^ Standard singular item
 -- | Types of definitions
 data DType = Data QDefinition -- ^ QDefinition is the chunk with the defining 
                               -- equation used to generate the Data Definition
-           | General -- ^ Not implemented as of yet
+           | General
            | Theory RelationConcept -- ^ Theoretical models use a relation as
                                     -- their definition
            | Instance
-           | TM -- Are TM and DD needed given that Theory and Data exist?
+           | TM
            | DD
 
 -- | Every layout object has a reference name (for intra-document referencing)

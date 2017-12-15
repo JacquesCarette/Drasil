@@ -7,11 +7,14 @@ module Drasil.DocumentLanguage.Definitions
   , tmodel
   , ddefn
   , gdefn, derivation
+  , instanceModel
   , InclUnits(..)
   )where
 
 import Language.Drasil
 import Drasil.DocumentLanguage.Chunk.GenDefn
+import Drasil.DocumentLanguage.Chunk.InstanceModel
+import Data.Drasil.Utils (foldle)
 
 import Control.Lens ((^.))
 
@@ -28,8 +31,7 @@ data Field = Label
            | Description Verbosity InclUnits
            | Input
            | Output
-           | Source --TODO: Use Attribute? Or add new lens? 
-              --  I think attribute would make most sense, as sources can and
+           | Source --  I think using attribute makes most sense, as sources can and
               -- will be modified across applications; the underlying knowledge won't.
            | RefBy --TODO: Fill in the field.
            
@@ -55,13 +57,25 @@ ddefn :: HasSymbolTable ctx => Fields -> ctx -> QDefinition -> Contents
 ddefn fs m d = Defnt DD (foldr (mkQField d m) [] fs) (S "DD:" :+: S (d ^. id))
 --FIXME: Generate the reference names here
 
+-- | Create a general definition using a list of fields, database of symbols,
+-- and a 'GenDefn' (general definition) chunk (called automatically by 'SCSSub'
+-- program)
 gdefn :: HasSymbolTable ctx => Fields -> ctx -> GenDefn -> Contents
 gdefn fs m g = Defnt General (foldr (mkGDField g m) [] fs)
   (S $ g ^. id) --FIXME: Generate reference names here
-  
+
+-- | Create an instance model using a list of fields, database of symbols,
+-- and an 'InstanceModel' chunk (called automatically by 'SCSSub' program)
+instanceModel :: HasSymbolTable ctx => Fields -> ctx -> InstanceModel -> Contents
+instanceModel fs m i = Defnt Instance (foldr (mkIMField i m) [] fs) (S $ i ^. id)
+
+-- | Create a derivation from a chunk's attributes. This follows the TM, DD, GD,
+-- or IM definition automatically (called automatically by 'SCSSub' program)
 derivation :: HasAttributes c => c -> [Contents]
 derivation g = map makeDerivationContents (getDerivation g)
 
+-- | Helper function for creating the layout objects 
+-- (paragraphs and equation blocks) for a derivation.
 makeDerivationContents :: DerWrapper -> Contents
 makeDerivationContents (DE e) = EqnBlock e
 makeDerivationContents (DS s) = Paragraph s
@@ -75,7 +89,7 @@ mkTMField t _ l@Label fs  = (show l, (Paragraph $ at_start t):[]) : fs
 mkTMField t _ l@DefiningEquation fs = 
   (show l, (map EqnBlock (map tConToExpr (t ^. invariants)))) : fs
 mkTMField t m l@(Description v u) fs = (show l,  
-  foldr (\x -> buildTMDescription v u x m) [] (map tConToExpr (t ^. invariants))) : fs
+  foldr (\x -> buildDescription v u x m) [] (map tConToExpr (t ^. invariants))) : fs
 mkTMField _ _ l@(RefBy) fs = (show l, fixme) : fs --FIXME: fill this in
 mkTMField _ _ l@(Source) fs = (show l, fixme) : fs --FIXME: fill this in
 mkTMField _ _ label _ = error $ "Label " ++ show label ++ " not supported " ++
@@ -103,10 +117,10 @@ mkQField _ _ label _ = error $ "Label " ++ show label ++ " not supported " ++
 
 -- | Create the description field (if necessary) using the given verbosity and
 -- including or ignoring units for a model / general definition
-buildTMDescription :: HasSymbolTable ctx => Verbosity -> InclUnits -> Expr -> ctx -> [Contents] -> 
+buildDescription :: HasSymbolTable ctx => Verbosity -> InclUnits -> Expr -> ctx -> [Contents] -> 
   [Contents]
-buildTMDescription Succinct _ _ _ _ = []
-buildTMDescription Verbose u e m cs = 
+buildDescription Succinct _ _ _ _ = []
+buildDescription Verbose u e m cs = 
   Enumeration (Definitions (descPairs u (vars e m))) : cs
 
 -- | Create the description field (if necessary) using the given verbosity and
@@ -117,6 +131,7 @@ buildDDescription Succinct u d _ = [Enumeration (Definitions $ (firstPair u d):[
 buildDDescription Verbose u d m = [Enumeration (Definitions 
   (firstPair u d : descPairs u (vars (equat d) m)))]
 
+-- | Create the fields for a general definition from a 'GenDefn' chunk.
 mkGDField :: HasSymbolTable ctx => GenDefn -> ctx -> Field -> ModRow -> ModRow
 mkGDField g _ l@Label fs = (show l, (Paragraph $ at_start g):[]) : fs
 mkGDField g _ l@Units fs = 
@@ -125,15 +140,24 @@ mkGDField g _ l@Units fs =
               Just udef -> (show l, (Paragraph $ Sy (udef ^. usymb)):[]) : fs
 mkGDField g _ l@DefiningEquation fs = (show l, (EqnBlock (g ^. relat)):[]) : fs
 mkGDField g m l@(Description v u) fs = (show l, 
-  (buildGDDescription v u (g ^. relat) m)) : fs
+  (buildDescription v u (g ^. relat) m) []) : fs
 mkGDField _ _ l@(RefBy) fs = (show l, fixme) : fs --FIXME: fill this in
 mkGDField g _ l@(Source) fs = (show l, [Paragraph $ getSource g]) : fs 
 mkGDField _ _ l _ = error $ "Label " ++ show l ++ " not supported for gen defs"
 
-buildGDDescription :: HasSymbolTable ctx => Verbosity -> InclUnits -> Expr -> ctx -> [Contents]
-buildGDDescription Succinct _ _ _ = []
-buildGDDescription Verbose u e m  = 
-  Enumeration (Definitions (descPairs u (vars e m))) : []
+-- | Create the fields for an instance model from an 'InstanceModel' chunk
+mkIMField :: HasSymbolTable ctx => InstanceModel -> ctx -> Field -> ModRow -> ModRow
+mkIMField i _ l@Label fs  = (show l, (Paragraph $ at_start i):[]) : fs
+mkIMField i _ l@DefiningEquation fs = 
+  (show l, (EqnBlock (i ^. relat)):[]) : fs
+mkIMField i m l@(Description v u) fs = (show l,  
+  foldr (\x -> buildDescription v u x m) [] [i ^. relat]) : fs
+mkIMField _ _ l@(RefBy) fs = (show l, fixme) : fs --FIXME: fill this in
+mkIMField i _ l@(Source) fs = (show l, [Paragraph $ getSource i]) : fs --FIXME: fill this in
+mkIMField i m l@(Output) fs = (show l, [Paragraph $ foldle (sC) (+:+.) EmptyS (map (P . symbol Equational) (outputs i))]) : fs
+mkIMField i m l@(Input) fs = (show l, [Paragraph $ foldle (sC) (+:+.) EmptyS (map (P . symbol Equational) (inputs i))]) : fs
+mkIMField _ _ label _ = error $ "Label " ++ show label ++ " not supported " ++
+  "for instance models"
 
 -- | Used for definitions. The first pair is the symbol of the quantity we are
 -- defining.
@@ -149,14 +173,15 @@ descPairs IncludeUnits =
   -- FIXME: Need a Units map for looking up units from variables
 
 instance Show Field where
-  show Label = "Label"
+  show Label  = "Label"
   show Symbol = "Symbol"
-  show Units = "Units"
-  show DefiningEquation = "Equation"
+  show Units  = "Units"
+  show DefiningEquation  = "Equation"
   show (Description _ _) = "Description"
-  -- show Sources = "Sources"
-  show RefBy = "RefBy"
+  show RefBy  = "RefBy"
   show Source = "Source"
+  show Input  = "Input"
+  show Output = "Output"
 
 fixme :: [Contents]
 fixme = [Paragraph $ S "FIXME: This needs to be filled in"]

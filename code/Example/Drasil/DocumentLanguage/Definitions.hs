@@ -64,12 +64,12 @@ ddefn fs m d = Defnt DD (foldr (mkQField d m) [] fs) (S "DD:" :+: S (d ^. id))
 -- program)
 gdefn :: HasSymbolTable ctx => Fields -> ctx -> GenDefn -> Contents
 gdefn fs m g = Defnt General (foldr (mkGDField g m) [] fs)
-  (S $ g ^. id) --FIXME: Generate reference names here
+  (S "GD:" :+: S (g ^. id)) --FIXME: Generate reference names here
 
 -- | Create an instance model using a list of fields, database of symbols,
 -- and an 'InstanceModel' chunk (called automatically by 'SCSSub' program)
 instanceModel :: HasSymbolTable ctx => Fields -> ctx -> InstanceModel -> Contents
-instanceModel fs m i = Defnt Instance (foldr (mkIMField i m) [] fs) (S $ i ^. id)
+instanceModel fs m i = Defnt Instance (foldr (mkIMField i m) [] fs) (S "IM:" :+: S (i ^. id))
 
 -- | Create a derivation from a chunk's attributes. This follows the TM, DD, GD,
 -- or IM definition automatically (called automatically by 'SCSSub' program)

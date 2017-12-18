@@ -46,7 +46,11 @@ class Quantity c => Constrained c where
 data Constraint where
   Phys :: (Expr -> Relation) -> Constraint
   Sfwr :: (Expr -> Relation) -> Constraint
-  Invariant :: Relation -> Constraint -- Used by Theories (to start).
+  Invariant  :: Relation -> Constraint -- Used by Theories (to start).
+  AssumedCon :: Relation -> Constraint -- Constraints that come from assumptions
+                                       -- as opposed to theory invariants.
+                                       -- This might be an artificial distinction
+                                       -- as they may be "the same"
   
 physc :: (Expr -> Relation) -> Constraint
 physc = Phys

@@ -186,7 +186,7 @@ data SCSSub where
   TMs         :: Fields  -> [TheoryModel] -> SCSSub
   GDs         :: Fields  -> [GenDefn] -> DerivationDisplay -> SCSSub
   DDs         :: Fields  -> [QDefinition] -> DerivationDisplay -> SCSSub --FIXME: Need DD intro
-  IMs         :: Fields  -> [InstanceModel] -> SCSSub
+  IMs         :: Fields  -> [InstanceModel] -> DerivationDisplay -> SCSSub
   Constraints :: Sentence -> Sentence -> Sentence -> [Contents] {-Fields  -> [UncertainWrapper] -> [ConstrainedChunk]-} -> SCSSub --FIXME: temporary definition?
 --FIXME: Work in Progress ^
 data DerivationDisplay = ShowDerivation
@@ -412,7 +412,7 @@ mkSolChSpec si (SCSProg l) =
     mkSubSCS _ (TMs _ []) _   = error "There are no Theoretical Models"
     mkSubSCS _ (GDs _ [] _) l' = SSD.genDefnF [] : l'
     mkSubSCS _ (DDs _ [] _) _ = error "There are no Data Definitions"
-    mkSubSCS _ (IMs _ []) _   = error "There are no Instance Models"
+    mkSubSCS _ (IMs _ [] _) _   = error "There are no Instance Models"
     mkSubSCS si' (TMs fields ts) l' = 
       SSD.thModF (siSys si') (map (tmodel fields (_sysinfodb si')) ts) : l'
     mkSubSCS si' (DDs fields dds ShowDerivation) l' = --FIXME: need to keep track of DD intro.
@@ -423,7 +423,9 @@ mkSolChSpec si (SCSProg l) =
       SSD.genDefnF (concat (map (\x -> gdefn fields (_sysinfodb si') x : derivation x) gs)) : l'
     mkSubSCS si' (GDs fields gs _) l' = 
       SSD.genDefnF (map (gdefn fields (_sysinfodb si')) gs) : l'
-    mkSubSCS si' (IMs fields ims) l' = SRS.inModel 
+    mkSubSCS si' (IMs fields ims ShowDerivation) l' = 
+      SRS.inModel (concat (map (\x -> instanceModel fields (_sysinfodb si') x : derivation x) ims)) [] : l'
+    mkSubSCS si' (IMs fields ims _) l' = SRS.inModel 
       (map (instanceModel fields (_sysinfodb si')) ims) [] : l'
     mkSubSCS _ (Assumptions r1 r2 r3 r4 r5 o) l' = (SSD.assumpF r1 r2 r3 r4 r5 o) : l'
     mkSubSCS _ (Constraints a b c d) l' = (SSD.datConF a b c d) : l'
@@ -432,7 +434,7 @@ mkSolChSpec si (SCSProg l) =
     -- over the SCSProg and generate a relevant intro.
     -- Could start with just a quick check of whether or not IM is included and 
     -- then error out if necessary.
-
+    
 {--}
 
 -- | Helper for making the 'Requirements' section

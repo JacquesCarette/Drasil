@@ -31,6 +31,8 @@ data Field = Label
            | Description Verbosity InclUnits
            | Input
            | Output
+           | InConstraints
+           | OutConstraints
            | Source --  I think using attribute makes most sense, as sources can and
               -- will be modified across applications; the underlying knowledge won't.
            | RefBy --TODO: Fill in the field.
@@ -87,18 +89,19 @@ type ModRow = [(String,[Contents])]
 mkTMField :: HasSymbolTable ctx => TheoryModel -> ctx -> Field -> ModRow -> ModRow
 mkTMField t _ l@Label fs  = (show l, (Paragraph $ at_start t):[]) : fs
 mkTMField t _ l@DefiningEquation fs = 
-  (show l, (map EqnBlock (map tConToExpr (t ^. invariants)))) : fs
+  (show l, (map EqnBlock (map conToExpr (t ^. invariants)))) : fs
 mkTMField t m l@(Description v u) fs = (show l,  
-  foldr (\x -> buildDescription v u x m) [] (map tConToExpr (t ^. invariants))) : fs
+  foldr (\x -> buildDescription v u x m) [] (map conToExpr (t ^. invariants))) : fs
 mkTMField _ _ l@(RefBy) fs = (show l, fixme) : fs --FIXME: fill this in
 mkTMField _ _ l@(Source) fs = (show l, fixme) : fs --FIXME: fill this in
 mkTMField _ _ label _ = error $ "Label " ++ show label ++ " not supported " ++
   "for theory models"
 
-tConToExpr :: Constraint -> Expr
-tConToExpr (Phys x) = x 0 --FIXME: HACK
-tConToExpr (Sfwr x) = x 0 --FIXME: HACK
-tConToExpr (Invariant x) = x
+conToExpr :: Constraint -> Expr
+conToExpr (Phys x) = x 0 --FIXME: HACK
+conToExpr (Sfwr x) = x 0 --FIXME: HACK
+conToExpr (Invariant x) = x
+conToExpr (AssumedCon x) = x
 
 -- TODO: buildDescription gets list of constraints to expr and ignores 't'.
 
@@ -154,11 +157,15 @@ mkIMField i m l@(Description v u) fs = (show l,
   foldr (\x -> buildDescription v u x m) [] [i ^. relat]) : fs
 mkIMField _ _ l@(RefBy) fs = (show l, fixme) : fs --FIXME: fill this in
 mkIMField i _ l@(Source) fs = (show l, [Paragraph $ getSource i]) : fs --FIXME: fill this in
-mkIMField i m l@(Output) fs = (show l, [Paragraph $ foldle (sC) (+:+.) EmptyS (map (P . symbol Equational) (outputs i))]) : fs
-mkIMField i m l@(Input) fs = (show l, [Paragraph $ foldle (sC) (+:+.) EmptyS (map (P . symbol Equational) (inputs i))]) : fs
+mkIMField i _ l@(Output) fs = (show l, [Paragraph $ foldle (sC) (+:+.) EmptyS (map (P . symbol Equational) (outputs i))]) : fs
+mkIMField i _ l@(Input) fs = (show l, [Paragraph $ foldle (sC) (+:+.) EmptyS (map (P . symbol Equational) (inputs i))]) : fs
+mkIMField i _ l@(InConstraints) fs  = (show l,  
+  foldr ((:) . EqnBlock) [] (map conToExpr (inCons i))) : fs
+mkIMField i _ l@(OutConstraints) fs = (show l,  
+  foldr ((:) . EqnBlock) [] (map conToExpr (outCons i))) : fs
 mkIMField _ _ label _ = error $ "Label " ++ show label ++ " not supported " ++
   "for instance models"
-
+  
 -- | Used for definitions. The first pair is the symbol of the quantity we are
 -- defining.
 firstPair :: InclUnits -> QDefinition -> ListPair
@@ -173,15 +180,17 @@ descPairs IncludeUnits =
   -- FIXME: Need a Units map for looking up units from variables
 
 instance Show Field where
-  show Label  = "Label"
-  show Symbol = "Symbol"
-  show Units  = "Units"
+  show Label             = "Label"
+  show Symbol            = "Symbol"
+  show Units             = "Units"
+  show RefBy             = "RefBy"
+  show Source            = "Source"
+  show Input             = "Input"
+  show Output            = "Output"
+  show InConstraints     = "Input Constraints"
+  show OutConstraints    = "Output Constraints"
   show DefiningEquation  = "Equation"
   show (Description _ _) = "Description"
-  show RefBy  = "RefBy"
-  show Source = "Source"
-  show Input  = "Input"
-  show Output = "Output"
 
 fixme :: [Contents]
 fixme = [Paragraph $ S "FIXME: This needs to be filled in"]

@@ -498,13 +498,13 @@ mkAssumpCustom :: String -> Sentence -> String -> Contents
 mkAssumpCustom i desc enid = Assumption $ nw $ npnc' i (nounPhraseSent desc) enid
 
 mkRequirement :: String -> Sentence -> Contents
-mkRequirement i desc = Requirement $ ReqChunk (nw $ npnc i $ nounPhraseSent desc) []
+mkRequirement i desc = Requirement $ nw $ npnc i $ nounPhraseSent desc
 
 mkRequirementCustom :: String -> Sentence -> String -> Contents
-mkRequirementCustom i desc enid = Requirement $ ReqChunk (nw $ npnc' i (nounPhraseSent desc) enid) []
+mkRequirementCustom i desc enid = Requirement $ nw $ npnc' i (nounPhraseSent desc) enid
 
 mkLklyChnk :: String -> Sentence -> Contents
-mkLklyChnk i desc = LikelyChange $ LCChunk (nw $ npnc i $ nounPhraseSent desc) []
+mkLklyChnk i desc = LikelyChange $ nw $ npnc i $ nounPhraseSent desc
 
 mkLklyChnkCustom :: String -> Sentence -> String -> Contents
-mkLklyChnkCustom i desc enid = LikelyChange $ LCChunk (nw $ npnc' i (nounPhraseSent desc) enid) []
+mkLklyChnkCustom i desc enid = LikelyChange $ nw $ npnc' i (nounPhraseSent desc) enid

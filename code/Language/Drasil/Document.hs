@@ -4,11 +4,8 @@ import Prelude hiding (id)
 import Language.Drasil.Chunk (id)
 import Language.Drasil.Chunk.Eq
 import Language.Drasil.Chunk.Relation
-import Language.Drasil.Chunk.Module
-import Language.Drasil.Chunk.Other
-import Language.Drasil.Chunk.Req
-import Language.Drasil.Chunk.LC
 import Language.Drasil.Chunk.NamedIdea
+import Language.Drasil.Chunk.Wrapper
 import Language.Drasil.Spec (Sentence(..), RefType(..), (+:+))
 import Language.Drasil.RefHelpers
 import Language.Drasil.Expr
@@ -49,11 +46,10 @@ data Contents = Table [Sentence] [[Sentence]] Title Bool
                -- looking up variables (currently a hack).
                | Enumeration ListType -- ^ Lists
                | Figure Label Filepath MaxWidthPercent -- ^ Should use relative file path.
-               | Module ModuleChunk
-               | Requirement ReqChunk
-               | Assumption AssumpChunk
-               | LikelyChange LCChunk
-               | UnlikelyChange UCChunk
+               | Requirement NWrapper
+               | Assumption NWrapper
+               | LikelyChange NWrapper
+               | UnlikelyChange NWrapper
                | Bib BibRef
      --        UsesHierarchy [(ModuleChunk,[ModuleChunk])]
                | Graph [(Sentence, Sentence)] (Maybe Width) (Maybe Height) Label
@@ -116,7 +112,6 @@ instance LayoutObj Contents where
   refName (Definition d)          = getDefName d
   refName (Defnt dt _ r)          = getDefName dt +:+ r
   refName (Enumeration _)         = error "List refs unimplemented"
-  refName (Module mc)             = S $ "M:" ++ alphanumOnly (mc ^. id)
   refName (Requirement rc)        = S $ "R:" ++ alphanumOnly (rc ^. id)
   refName (Assumption ac)         = S $ "A:" ++ alphanumOnly (ac ^. id)
   refName (LikelyChange lcc)      = S $ "LC:" ++ alphanumOnly (lcc ^. id)
@@ -134,7 +129,6 @@ instance LayoutObj Contents where
   rType (Definition (Theory rc))  = Def $ getA rc
   rType (Definition _)            = Def Nothing
   rType (Defnt _ _ _)             = Def Nothing
-  rType (Module _)                = Mod
   rType (Requirement r)           = Req $ getA r
   rType (Assumption a)            = Assump $ getA a
   rType (LikelyChange lc)         = LC $ getA lc

@@ -54,7 +54,7 @@ addPackage Mathtools = usepackage "mathtools"
 
 data Def = AssumpCounter
          | LCCounter
-         | ModCounter
+         -- | ModCounter
          | ReqCounter
          | UCCounter
          | Bibliography
@@ -66,8 +66,8 @@ addDef AssumpCounter = count "assumpnum" %%
                        comm "atheassumpnum" "A\\theassumpnum" Nothing
 addDef LCCounter     = count "lcnum" %%
                        comm "lcthelcnum" "LC\\thelcnum" Nothing
-addDef ModCounter    = count "modnum" %%
-                       comm "mthemodnum" "M\\themodnum" Nothing
+-- addDef ModCounter    = count "modnum" %%
+                       -- comm "mthemodnum" "M\\themodnum" Nothing
 addDef ReqCounter    = count "reqnum" %%
                        comm "rthereqnum" "R\\thereqnum" Nothing
 addDef UCCounter     = count "ucnum" %%
@@ -105,8 +105,6 @@ parseDoc los' = [PreP FullPage, PreP HyperRef, PreP AMSMath, PreP AMSsymb,
           parseDoc' los
         parseDoc' ((Figure _ _ _ _):los) =
           (PreP Graphics):(PreP Caption):parseDoc' los
-        parseDoc' ((Module _ _):los) =
-          (PreD ModCounter):parseDoc' los
         parseDoc' ((Requirement _ _):los) =
           (PreD ReqCounter):parseDoc' los
         parseDoc' ((Assumption _ _):los) =

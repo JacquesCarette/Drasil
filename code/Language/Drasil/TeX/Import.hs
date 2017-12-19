@@ -11,7 +11,6 @@ import qualified Language.Drasil.TeX.AST as T
 import Language.Drasil.Unicode (Special(Partial))
 import Language.Drasil.Chunk.Eq
 import Language.Drasil.Chunk.ExprRelat (relat)
-import Language.Drasil.Chunk.Module
 import Language.Drasil.Chunk.NamedIdea (term)
 import Language.Drasil.Chunk.Concept (defn)
 import Language.Drasil.Chunk.Quantity (Quantity(..), eqSymb)
@@ -200,7 +199,6 @@ lay (EqnBlock c)          sm = T.EqnBlock (T.E (expr c sm))
 lay x@(Definition c)      sm = T.Definition (makePairs c sm) (spec (refName x) sm)
 lay (Enumeration cs)      sm = T.List $ makeL cs sm
 lay x@(Figure c f wp)     sm = T.Figure (spec (refName x) sm) (spec c sm) f wp
-lay x@(Module m)          sm = T.Module (formatName m) (spec (refName x) sm)
 lay x@(Requirement r)     sm = 
   T.Requirement (spec (phrase (r ^. term)) sm) (spec (refName x) sm)
 lay x@(Assumption a)      sm = 
@@ -282,13 +280,6 @@ makePairs Instance _ = error "Not yet implemented"
 makePairs TM _       = error "Not yet implemented"
 makePairs DD _       = error "Not yet implemented"
 
-makeUHPairs :: HasSymbolTable ctx => [(ModuleChunk,[ModuleChunk])] -> ctx -> [(T.Spec,T.Spec)]
-makeUHPairs []           _ = []
-makeUHPairs ((m,ms):xs) sm = (buildPairs m ms) ++ makeUHPairs xs sm
-  where  buildPairs _ []        = []
-         buildPairs m1 (m2:ms') = (makeEntry m1, makeEntry m2):buildPairs m1 ms'
-           where  makeEntry m'  = (spec (refName $ Module m') sm) T.:+:
-                                  (T.S "/") T.:+: (T.S $ formatName m')
 
 -- Toggle equation style
 eqnStyleDD :: T.Contents -> T.LayoutObj

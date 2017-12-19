@@ -66,7 +66,6 @@ lo (Definition ssPs l) sm  = toText $ makeDefn sm ssPs $ spec l
 lo (Defnt _ ssPs l)    sm  = toText $ makeDefn sm ssPs $ spec l
 lo (List l)             _  = toText $ makeList l
 lo (Figure r c f wp)    _  = toText $ makeFigure (spec r) (spec c) f wp
-lo (Module n l)         _  = toText $ makeModule n $ spec l
 lo (Requirement n l)    _  = toText $ makeReq (spec n) (spec l)
 lo (Assumption n l)     _  = toText $ makeAssump (spec n) (spec l)
 lo (LikelyChange n l)   _  = toText $ makeLC (spec n) (spec l)
@@ -358,6 +357,7 @@ symbol_needs (Corners _ _ _ _ _) = Math
 symbol_needs (Atop _ _)          = Math
 
 p_unit :: LS.USymb -> D
+p_unit (LS.UName (Concat s)) = foldl (<>) empty $ map (p_unit . LS.UName) s
 p_unit (LS.UName n) =
   let cn = symbol_needs n in
   switch (const cn) (pure $ text $ symbol n)

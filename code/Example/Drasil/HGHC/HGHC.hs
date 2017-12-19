@@ -1,4 +1,4 @@
-module Drasil.HGHC.HGHC (srsBody, thisChoices, thisCode, allSymbols) where
+module Drasil.HGHC.HGHC (srsBody, thisCode, allSymbols) where
 
 import Language.Drasil
 import Drasil.DocumentLanguage
@@ -12,18 +12,6 @@ import Drasil.Sections.SpecificSystemDescription (dataDefnF)
 import Data.Drasil.SI_Units (si_units)
 import Data.Drasil.People (spencerSmith)
 import Data.Drasil.Concepts.Documentation (srs)
-
-thisChoices :: Choices
-thisChoices = Choices {
-  lang             = [Python, Cpp, CSharp, Java],
-  impType          = Program,
-  logFile          = "log.txt",
-  logging          = LogNone,
-  comments         = CommentNone, 
-  onSfwrConstraint = Warning,
-  onPhysConstraint = Warning,
-  inputStructure   = AsClass
-}
 
 thisCode :: CodeSpec
 thisCode = codeSpec' thisSI []

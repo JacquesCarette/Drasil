@@ -51,7 +51,6 @@ printLO (Definition dt ssPs l)   sm = makeDefn dt ssPs (p_spec l sm) sm
 printLO (Header n contents)      sm = h n $ text (p_spec contents sm)
 printLO (List t)                 sm = makeList t sm
 printLO (Figure r c f wp)        sm = makeFigure (p_spec r sm) (p_spec c sm) f wp
-printLO (Module m l)             sm = makeModule m (p_spec l sm)
 printLO (Assumption a l id)      sm = makeRefList (p_spec a sm) (p_spec l sm) (p_spec id sm)
 printLO (Requirement r l id)     sm = makeRefList (p_spec r sm) (p_spec l sm) (p_spec id sm)
 printLO (LikelyChange lc l id)   sm = makeRefList (p_spec lc sm) (p_spec l sm) (p_spec id sm)

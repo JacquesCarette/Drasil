@@ -10,9 +10,7 @@ library
     Language.Drasil,
     Language.Drasil.Code,
     Data.Drasil.People
-    Data.Drasil.Changes
     Data.Drasil.Citations
-    Data.Drasil.Modules
     Data.Drasil.Plurals
     Data.Drasil.Constraints
     Data.Drasil.SentenceStructures
@@ -95,14 +93,9 @@ library
     , Language.Drasil.Chunk.Constrained
     , Language.Drasil.Chunk.Eq
     , Language.Drasil.Chunk.ExprRelat
-    , Language.Drasil.Chunk.LC
-    , Language.Drasil.Chunk.Method
-    , Language.Drasil.Chunk.Module
     , Language.Drasil.Chunk.NamedIdea
-    , Language.Drasil.Chunk.Other
     , Language.Drasil.Chunk.Quantity
     , Language.Drasil.Chunk.Relation
-    , Language.Drasil.Chunk.Req
     , Language.Drasil.Chunk.SymbolForm
     , Language.Drasil.Chunk.Theory
     , Language.Drasil.Chunk.UncertainQuantity
@@ -154,10 +147,6 @@ executable tiny
     , Drasil.DocumentLanguage.Definitions
     , Drasil.Sections.AuxiliaryConstants
     , Drasil.Sections.TableOfUnits
-    , Drasil.Template.DD
-    , Drasil.Template.Helpers
-    , Drasil.Template.MG
-    , Drasil.Template.MIS
     , Drasil.Sections.SpecificSystemDescription
     , Drasil.Sections.SolutionCharacterSpec
     , Drasil.Sections.Stakeholders
@@ -214,10 +203,6 @@ executable nopcm
     , Drasil.Sections.GeneralSystDesc
     , Drasil.Sections.TableOfSymbols
     , Drasil.Sections.TableOfUnits
-    , Drasil.Template.DD
-    , Drasil.Template.Helpers
-    , Drasil.Template.MG
-    , Drasil.Template.MIS
   Build-Depends:
     base >= 4.7,
     lens >= 4.12,
@@ -238,14 +223,12 @@ executable ssp
     , Drasil.SRS
     , Drasil.SSP.Assumptions
     , Drasil.SSP.Body
-    , Drasil.SSP.Changes
     , Drasil.SSP.DataDefs
     , Drasil.SSP.DataDesc
     , Drasil.SSP.Defs
     , Drasil.SSP.GenDefs
     , Drasil.SSP.Goals
     , Drasil.SSP.IMods
-    , Drasil.SSP.Modules
     , Drasil.SSP.References
     , Drasil.SSP.Requirements
     , Drasil.SSP.TMods
@@ -261,10 +244,6 @@ executable ssp
     , Drasil.DocumentLanguage.Definitions
     , Drasil.Sections.TableOfUnits
     , Drasil.Sections.AuxiliaryConstants
-    , Drasil.Template.DD
-    , Drasil.Template.Helpers
-    , Drasil.Template.MG
-    , Drasil.Template.MIS
     , Drasil.Sections.SpecificSystemDescription
     , Drasil.Sections.Introduction
     , Drasil.Sections.Requirements
@@ -312,10 +291,6 @@ executable glassbr
     , Drasil.Sections.TableOfAbbAndAcronyms
     , Drasil.Sections.TableOfSymbols
     , Drasil.Sections.TableOfUnits
-    , Drasil.Template.DD
-    , Drasil.Template.Helpers
-    , Drasil.Template.MG
-    , Drasil.Template.MIS
   Build-Depends:
     base >= 4.7,
     lens >= 4.12,
@@ -337,10 +312,8 @@ executable chipmunkdocs
     , Drasil.DocumentLanguage.Chunk.InstanceModel
     , Drasil.DocumentLanguage.Definitions
     , Drasil.GamePhysics.Body
-    , Drasil.GamePhysics.Changes
     , Drasil.GamePhysics.Concepts
     , Drasil.GamePhysics.DataDefs
-    , Drasil.GamePhysics.Modules
     , Drasil.GamePhysics.TMods
     , Drasil.GamePhysics.Unitals
     , Drasil.GamePhysics.IMods
@@ -359,10 +332,6 @@ executable chipmunkdocs
     , Drasil.Sections.TableOfAbbAndAcronyms
     , Drasil.Sections.TableOfSymbols
     , Drasil.Sections.TableOfUnits
-    , Drasil.Template.DD
-    , Drasil.Template.Helpers
-    , Drasil.Template.MG
-    , Drasil.Template.MIS
   Build-Depends:
     base >= 4.7,
     lens >= 4.12,
@@ -409,10 +378,6 @@ executable swhs
     , Drasil.Sections.TableOfUnits
     , Drasil.Sections.AuxiliaryConstants
     , Drasil.Sections.Stakeholders
-    , Drasil.Template.DD
-    , Drasil.Template.Helpers
-    , Drasil.Template.MG
-    , Drasil.Template.MIS
   Build-Depends:
     base >= 4.7,
     lens >= 4.12,
@@ -455,10 +420,6 @@ executable speciation
     , Drasil.Sections.TableOfAbbAndAcronyms
     , Drasil.Sections.TableOfSymbols
     , Drasil.Sections.TableOfUnits
-    , Drasil.Template.DD
-    , Drasil.Template.Helpers
-    , Drasil.Template.MG
-    , Drasil.Template.MIS
   Build-Depends:
     base >= 4.7,
     lens >= 4.12,

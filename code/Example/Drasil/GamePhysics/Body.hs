@@ -93,19 +93,6 @@ chipUnits = map UU [metre, kilogram, second] ++ map UU [newton, radian]
 everything :: ChunkDB
 everything = cdb cpSymbolsAll (map nw cpSymbolsAll ++ map nw cpAcronyms)
 
-
-chipChoices :: Choices
-chipChoices = Choices {
-  lang             = [Python, Cpp, CSharp, Java],
-  impType          = Library,
-  logFile          = "log.txt",
-  logging          = LogNone,
-  comments         = CommentNone,
-  onSfwrConstraint = Warning,
-  onPhysConstraint = Warning,
-  inputStructure   = Loose
-}
-
 chipCode :: CodeSpec
 chipCode = codeSpec' chipmunkSysInfo []
 

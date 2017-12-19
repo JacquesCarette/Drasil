@@ -176,18 +176,6 @@ nopcm_si = SI {
   _sysinfodb = nopcm_SymbMap
 }
 
-nopcm_Choices :: Choices
-nopcm_Choices = Choices {
-  lang = [Python, Cpp, CSharp, Java],
-  impType = Program,
-  logFile = "log.txt",
-  logging = LogNone,         -- LogNone, LogFunc
-  comments = CommentNone,    -- CommentNone, CommentFunc
-  onSfwrConstraint = Warning,  -- Warning, Exception
-  onPhysConstraint = Warning,  -- Warning, Exception
-  inputStructure = Loose    -- Loose, AsClass
-}
-
 nopcm_code :: CodeSpec
 nopcm_code = codeSpec' nopcm_si [inputMod]
 -- Sub interpolation mod into list when possible              ^

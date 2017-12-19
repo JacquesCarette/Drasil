@@ -123,7 +123,6 @@ data LayoutObj = Table Tags [[Spec]] Label Bool Caption
                | Definition DType [(String,[LayoutObj])] Label
                | List ListType
                | Figure Label Caption Filepath MaxWidthPercent
-               | Module String Label
                | Assumption Contents Label Label
                | LikelyChange Contents Label Label
                | UnlikelyChange Contents Label Label

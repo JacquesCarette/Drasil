@@ -1,40 +1,21 @@
 module Drasil.NoPCM.GenDefs (roc_temp_simp_deriv) where
 
 import Language.Drasil
-import Drasil.SWHS.TMods (s4_2_2_T1, t1ConsThermE)
+import Drasil.SWHS.TMods (t1ConsThermE)
 import Data.Drasil.Quantities.PhysicalProperties (vol, mass, density)
-import Data.Drasil.Concepts.Math (ode, unit_, rOfChng, equation)
-import Data.Drasil.Concepts.Thermodynamics (ener_src, thermal_analysis, temp,
-  thermal_energy, ht_trans_theo, heat, melt_pt, boil_pt, heat_trans, ht_flux,
-  heat_cap_spec, thermal_conduction)
+import Data.Drasil.Concepts.Math (unit_, rOfChng)
+import Data.Drasil.Concepts.Thermodynamics (temp)
 import qualified Data.Drasil.Quantities.Thermodynamics as QT (temp,
-  heat_cap_spec, ht_flux)
-import Drasil.SWHS.Concepts (progName, water, gauss_div, sWHT, tank, coil,
-  transient, perfect_insul, tank_para)
+  heat_cap_spec)
+import Drasil.SWHS.Concepts (gauss_div)
 import Data.Drasil.Quantities.Math (uNormalVect, surface, gradient)
-import Drasil.SWHS.Unitals (w_vol, tank_length, tank_vol, tau_W, temp_W,
-  w_mass, diam, coil_SA, temp_C, w_density, htCap_W, time_final,
-  in_SA, out_SA, vol_ht_gen, thFluxVect, ht_flux_in, ht_flux_out, tau, htCap_L,
-  htTransCoeff, temp_env, diam, tank_length, w_vol, ht_flux_C, coil_HTC,
-  deltaT, w_E, tank_length_min, tank_length_max, htTransCoeff_min,
-  w_density_min, w_density_max, htCap_W_min, htCap_W_max, coil_HTC_min,
-  coil_HTC_max, time_final_max, sim_time, coil_SA_max, eta)
-import Data.Drasil.Utils (enumSimple, getES, refFromType,
-  itemRefToSent, makeTMatrix, itemRefToSent, weave)
-import Data.Drasil.SentenceStructures (showingCxnBw, foldlSent_, sAnd,
-  foldlList, isThe, sOf, ofThe, foldlSPCol, foldlSent, foldlSP, acroIM,
-  acroGD, foldlSentCol)
-import Data.Drasil.Concepts.Documentation (datumConstraint, inModel,
-  requirement, section_, traceyGraph, item, assumption, dataDefn,
-  likelyChg, genDefn, thModel, traceyMatrix, model, acroNumGen,
-  output_, quantity, input_, physicalConstraint, condition,
-  property, variable, description, symbol_, uncertainty,
-  information, uncertCol, value, column, softwareConstraint, goalStmt,
-  physSyst, problem, definition, srs, content, reference, document,
-  goal, purpose, typUnc)
-import Data.Drasil.Quantities.Physics (time, energy)
-import Drasil.SWHS.DataDefs(swhsSymbMapDRef, swhsSymbMapTRef, dd1HtFluxC,
-  s4_2_4_DD1, swhsSymbMapT)
+import Drasil.SWHS.Unitals (in_SA, out_SA, vol_ht_gen, thFluxVect, ht_flux_in, 
+                            ht_flux_out)
+import Data.Drasil.Utils (getES, weave)
+import Data.Drasil.SentenceStructures (sAnd, foldlList, ofThe, acroGD, foldlSentCol)
+import Data.Drasil.Concepts.Documentation (assumption)
+import Data.Drasil.Quantities.Physics (time)
+import Drasil.SWHS.DataDefs(swhsSymbMapTRef)
 
 roc_temp_simp_deriv :: Derivation
 roc_temp_simp_deriv =

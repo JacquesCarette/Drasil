@@ -132,7 +132,7 @@ getVC qd = vcSt (qd ^. id) (qd ^. term) (getStagedS qd) (qd ^. typ)
 -- should be removed and the other constructors should be updated to include
 -- attributes
 aqd :: QDefinition -> Attributes -> QDefinition
-aqd (EC a b c) d = ec a b d
+aqd (EC a b _) d = ec a b d
 
 instance Eq QDefinition where
   a == b = (a ^. id) == (b ^. id)

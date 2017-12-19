@@ -256,11 +256,11 @@ typUncr q qlst
 fmtPhys :: (Constrained s, Quantity s) => s -> Sentence
 fmtPhys s = foldlList $ fmtCP $ filter filterP (s ^. constraints)
   where filterP (Phys _) = True
-        filterP (Sfwr _) = False
+        filterP _ = False
         fmtCP = map (\(Phys f) -> E $ f (C s))
 
 fmtSfwr :: (Constrained s, Quantity s) => s -> Sentence
 fmtSfwr s = foldlList $ fmtCS $ filter filterS (s ^. constraints)
-  where filterS (Phys _) = False
-        filterS (Sfwr _) = True
+  where filterS (Sfwr _) = True
+        filterS _ = False
         fmtCS = map (\(Sfwr f) -> E $ f (C s))

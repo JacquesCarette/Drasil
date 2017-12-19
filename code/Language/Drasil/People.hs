@@ -9,7 +9,6 @@ module Language.Drasil.People
   ) where
 
 import Language.Drasil.Spec (Sentence(S, EmptyS, (:+:)),(+:+), sC)
-import Data.List
 
 -- | A person can have a given name, middle name(s), and surname, as well
 -- as the naming convention they use.
@@ -102,7 +101,7 @@ rendPersLFM'' (Person {_given = f, _surname = l, _middle = ms}) =
 
 initial :: Sentence -> Sentence
 initial (EmptyS :+: b) = initial b
-initial (a :+: b) = initial a
+initial (a :+: _) = initial a
 initial (S s) = S $ (head s : ".")
 initial _ = error "Cannot get initials for this name"
 

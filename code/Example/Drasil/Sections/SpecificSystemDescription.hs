@@ -79,10 +79,10 @@ termDefnF end otherContents = SRS.termAndDefn ((intro):otherContents) []
 
 --general introduction for Physical System Description
 physSystDesc :: Sentence -> Contents -> [Contents] -> Section
-physSystDesc progName fig otherContents = SRS.physSyst ((intro):otherContents) []
+physSystDesc progName fg otherContents = SRS.physSyst ((intro):otherContents) []
   where intro = Paragraph $ foldle (+:+) (+:) (EmptyS)
                 [S "The", (phrase physicalSystem), S "of", progName `sC`
-                S "as shown in", (makeRef fig) `sC` S "includes the following", 
+                S "as shown in", (makeRef fg) `sC` S "includes the following", 
                 plural element]
 
 --List all the given inputs. Might be possible to use ofThe combinator from utils.hs

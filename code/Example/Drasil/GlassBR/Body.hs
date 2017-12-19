@@ -5,6 +5,7 @@ import qualified Drasil.SRS as SRS
 
 import Drasil.DocumentLanguage
 import Drasil.DocumentLanguage.Definitions
+import Drasil.DocumentLanguage.Chunk.InstanceModel (imQD, InstanceModel)
 
 import Data.Drasil.SI_Units
 import Data.Drasil.People (spencerSmith, nikitha, mCampidelli)
@@ -57,7 +58,7 @@ import Drasil.GlassBR.Concepts (aR, lShareFac, gLassBR, stdOffDist,
 import Drasil.GlassBR.TMods (tModels, t1SafetyReq, t2SafetyReq,t1IsSafe)
 import Drasil.GlassBR.IMods (iModels, calOfCap, calOfDe, probOfBr, probOfBreak)
 import Drasil.GlassBR.DataDefs (dataDefns, gbQDefns, hFromt,
-  strDisFac, nonFL, dimLL, glaTyFac, tolStrDisFac, tolPre)
+  strDisFac, nonFL, dimLL, glaTyFac, tolStrDisFac, tolPre, risk)
 import Drasil.GlassBR.References (gbCitations)
 import Drasil.GlassBR.ModuleDefs
 import Drasil.Sections.ReferenceMaterial (intro)
@@ -105,7 +106,7 @@ mkSRS = RefSec (RefProg intro [TUnits, tsymb [TSPurpose, SymbOrder], TAandA]) :
           [ TMs ([Label] ++ stdFields) [t1IsSafe]
           , GDs [] [] HideDerivation -- No Gen Defs for GlassBR
           , DDs ([Label, Symbol, Units] ++ stdFields) dataDefns ShowDerivation
-          , IMs ([Label, Input, Output, InConstraints, OutConstraints] ++ stdFields) [probOfBreak] HideDerivation
+          , IMs ([Label, Input, Output, InConstraints, OutConstraints] ++ stdFields) [probOfBreak, testIMFromQD] HideDerivation
           ]
         )
       ]
@@ -149,6 +150,9 @@ glassSystInfo = SI {
 }
   --FIXME: All named ideas, not just acronyms.
 
+testIMFromQD :: InstanceModel
+testIMFromQD = imQD gbSymbMap risk EmptyS [] [] []
+  
 glassChoices :: Choices
 glassChoices = Choices {
   lang = [Python, Cpp, CSharp, Java],

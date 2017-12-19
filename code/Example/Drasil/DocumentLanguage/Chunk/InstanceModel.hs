@@ -1,7 +1,7 @@
 {-# Language Rank2Types #-}
 module Drasil.DocumentLanguage.Chunk.InstanceModel 
   ( InstanceModel
-  , inCons, outCons, outputs, inputs, im
+  , inCons, outCons, outputs, inputs, im, imQD
   )where
 
 import Language.Drasil
@@ -43,6 +43,11 @@ instance HasAttributes InstanceModel where
 im :: RelationConcept -> Inputs -> InputConstraints -> Outputs -> 
   OutputConstraints -> Attributes -> InstanceModel
 im = IM
+
+-- | Smart constructor for instance model from qdefinition 
+-- (Sentence is the "concept" definition for the relation concept)
+imQD :: HasSymbolTable ctx => ctx -> QDefinition -> Sentence -> InputConstraints -> OutputConstraints -> Attributes -> InstanceModel
+imQD ctx qd dfn incon ocon att = IM (makeRC (qd ^. id) (qd ^. term) dfn (C qd $= (equat qd))) (vars (equat qd) ctx) incon [qw qd] ocon att
 
 -- DO NOT EXPORT BELOW THIS LINE --
   

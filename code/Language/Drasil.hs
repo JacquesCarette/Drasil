@@ -7,7 +7,7 @@ module Language.Drasil (
   -- Recipe
   , Recipe(..)
   -- Expr
-  , Expr(..), Relation, BiFunc(..), Bound(..), DerivType(..), Set
+  , Expr(..), Relation, BiFunc(..), Bound(..), DerivType(..)
   , ($=), ($<), ($<=), ($>), ($>=)
   , log, abs, sin, cos, tan, sec, csc, cot, exp, sqrt, square, euclidean, ChunkDB(..), cdb, HasSymbolTable(..), symbolMap, vars
   , summation, product, cross, m2x2, vec2D, dgnl2x2, integral, termLookup, elements, termTable
@@ -109,7 +109,7 @@ module Language.Drasil (
 import Prelude hiding (log, sin, cos, tan, sqrt, id, return, print, break, exp, product)
 import Language.Drasil.SystemInformation
 import Language.Drasil.Expr (Expr(..), Relation, BiFunc(..), 
-          Bound(..),DerivType(..), Set,
+          Bound(..),DerivType(..),
           ($=), ($<), ($<=), ($>), ($>=))
 import Language.Drasil.Expr.Math (log, sin, cos, tan, sqrt, square, sec, csc, cot, exp,
           summation, product, cross, m2x2, vec2D, dgnl2x2, euclidean, integral)

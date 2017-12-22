@@ -64,7 +64,7 @@ data Expr where
   (:||)    :: Expr -> Expr -> Expr -- logical or
   Not      :: Expr -> Expr -- logical not
 
-  IsIn  :: Expr -> Set -> Expr --	element of
+  IsIn  :: Expr -> Space -> Expr --	element of
 
   ForAll   :: Symbol -> Expr -> Expr
   Exists   :: Symbol -> Expr -> Expr
@@ -79,26 +79,6 @@ data Expr where
 ($<=) = ELessEq
 ($>=) = EGreaterEq
 
-type Set = Space
-{- --import from space?
-           Integer
-         | Rational
-         | Real
-         | Natural
-         | Boolean
-         | Char
-         | String
-         | Radians
-         | Vect Set
-         | Obj String-}
-
-{-
-data Direction = Increasing
-               | Decreasing
-
-monotoniclyIncr :: Expr -> Expr --Needs indexing, squaring of sets
-monotoniclyIncr xy = Forall [xy `IsIn` MkSet "R^2"] (V "x_1" :< V "x_2"  :=>  V "y_1" :< V "y_2")
--}
 type Variable = String
 
 data DerivType = Part

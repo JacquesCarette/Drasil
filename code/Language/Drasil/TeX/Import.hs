@@ -3,7 +3,7 @@ module Language.Drasil.TeX.Import where
 import Control.Lens hiding ((:>),(:<),set)
 import Prelude hiding (id)
 import Language.Drasil.Expr (Expr(..), Relation, UFunc(..), BiFunc(..),
-                             Bound(..),DerivType(..), Set, ($=))
+                             Bound(..),DerivType(..), ($=))
 import Language.Drasil.Space (Space(..))
 import Language.Drasil.Expr.Extract
 import Language.Drasil.Spec
@@ -102,8 +102,8 @@ rel (ELessEq a b)    sm = T.LEq (expr a sm) (expr b sm)
 rel (EGreaterEq a b) sm = T.GEq (expr a sm) (expr b sm)
 rel _ _ = error "Attempting to use non-Relation Expr in relation context."
 
--- | Helper for translating Sets
-set :: Set -> T.Set
+-- | Helper for translating Spaces
+set :: Space -> T.Set
 set Integer  = T.Integer
 set Rational = T.Rational
 set Real     = T.Real

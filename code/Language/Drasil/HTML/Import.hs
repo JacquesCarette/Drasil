@@ -1,7 +1,7 @@
 module Language.Drasil.HTML.Import where
 import Prelude hiding (id)
 import Language.Drasil.Expr (Expr(..), Relation, UFunc(..), BiFunc(..),
-                             Bound(..),DerivType(..), Set, ($=))
+                             Bound(..),DerivType(..), ($=))
 import Language.Drasil.Space (Space(..))
 import Language.Drasil.Spec
 import qualified Language.Drasil.HTML.AST as H
@@ -107,8 +107,8 @@ rel (ELessEq a b)    sm = H.LEq (expr a sm) (expr b sm)
 rel (EGreaterEq a b) sm = H.GEq (expr a sm) (expr b sm)
 rel _ _ = error "Attempting to use non-Relation Expr in relation context."
 
--- | Helper for translating Sets
-set :: Set -> H.Set
+-- | Helper for translating Spaces
+set :: Space -> H.Set
 set Integer  = H.Integer
 set Rational = H.Rational
 set Real     = H.Real

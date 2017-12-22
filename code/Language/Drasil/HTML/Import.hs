@@ -1,7 +1,7 @@
 module Language.Drasil.HTML.Import where
 import Prelude hiding (id)
 import Language.Drasil.Expr (Expr(..), Relation, UFunc(..), BiFunc(..),
-                             Bound(..),DerivType(..), ($=))
+                             Bound(..),DerivType(..), EOperator(..), ($=))
 import Language.Drasil.Space (Space(..))
 import Language.Drasil.Spec
 import qualified Language.Drasil.HTML.AST as H
@@ -56,9 +56,10 @@ expr e@(ELessEq _ _)    sm = rel e sm
 expr e@(EGreaterEq _ _) sm = rel e sm 
 expr (Matrix a)         sm = H.Mtx $ map (map (flip expr sm)) a
 expr (Index a i)        sm = H.Index (expr a sm) (expr i sm)
-expr (UnaryOp u)        sm = (\(x,y) -> H.Op x [y]) (ufunc u sm)
+expr (UnaryOp u)        sm = (\(x,y) -> H.Op x [y]) $ ufunc u sm
 expr (Grouping e)       sm = H.Grouping (expr e sm)
 expr (BinaryOp b)       sm = (\(x,y) -> H.Op x y) (bfunc b sm)
+expr (EOp o)            sm = (\(x,y) -> H.Op x [y]) $ eop o sm
 expr (Not a)            sm = H.Not   (expr a sm)
 expr (a  :&&  b)        sm = H.And   (expr a sm) (expr b sm)
 expr (a  :||  b)        sm = H.Or    (expr a sm) (expr b sm)
@@ -72,18 +73,9 @@ expr (Append _ _)        _ = error "Append not yet implemented"
 
 -- | Helper function for translating 'UFunc's
 ufunc :: HasSymbolTable s => UFunc -> s -> (H.Function, H.Expr)
-ufunc (Log e) sm = (H.Log, expr e sm)
-ufunc (Summation (Just (s, Low v, High h)) e) sm = 
-  (H.Summation (Just ((s, expr v sm), expr h sm)), (expr e sm))
-ufunc (Summation Nothing e) sm = (H.Summation Nothing,(expr e sm))
-ufunc (Summation _ _) _ = error "HTML/Import.hs Incorrect use of Summation"
-ufunc (Product (Just (s, Low v, High h)) e) sm = 
-  (H.Product (Just ((s, expr v sm), expr h sm)), expr e sm)
-ufunc (Product Nothing e) sm = (H.Product Nothing, (expr e sm))
-ufunc (Product _ _) _ = error "HTML/Import.hs Incorrect use of Product"
 ufunc (Abs e) sm = (H.Abs, expr e sm)
 ufunc (Norm e) sm = (H.Norm, expr e sm)
-ufunc i@(Integral _ _ _) sm = integral i sm
+ufunc (Log e) sm = (H.Log, expr e sm)
 ufunc (Sin e)    sm = (H.Sin,  expr e sm)
 ufunc (Cos e)    sm = (H.Cos,  expr e sm)
 ufunc (Tan e)    sm = (H.Tan,  expr e sm)
@@ -96,6 +88,33 @@ ufunc (Sqrt e)   sm = (H.Sqrt, expr e sm)
 -- | Helper function for translating 'BiFunc's
 bfunc :: HasSymbolTable s => BiFunc -> s -> (H.Function, [H.Expr])
 bfunc (Cross e1 e2) sm = (H.Cross, map (flip expr sm) [e1,e2])
+
+-- | Helper function for translating 'EOperator's
+eop :: HasSymbolTable s => EOperator -> s -> (H.Function, H.Expr)
+eop (Summation (Just (s, Low v, High h)) e) sm = 
+  (H.Summation (Just ((s, expr v sm), expr h sm)), (expr e sm))
+eop (Summation Nothing e) sm = (H.Summation Nothing,(expr e sm))
+eop (Summation _ _) _ = error "HTML/Import.hs Incorrect use of Summation"
+eop (Product (Just (s, Low v, High h)) e) sm = 
+  (H.Product (Just ((s, expr v sm), expr h sm)), expr e sm)
+eop (Product Nothing e) sm = (H.Product Nothing, (expr e sm))
+eop (Product _ _) _ = error "HTML/Import.hs Incorrect use of Product"
+eop (Integral (Just (Low v), Just (High h)) e wrtc) sm = 
+  (H.Integral (Just (expr v sm), Just (expr h sm)) (int_wrt wrtc sm), expr e sm)
+eop (Integral (Just (High h), Just (Low v)) e wrtc) sm = 
+  (H.Integral (Just (expr v sm), Just (expr h sm)) (int_wrt wrtc sm), expr e sm)
+eop (Integral (Just (Low v), Nothing) e wrtc) sm = 
+  (H.Integral (Just (expr v sm), Nothing) (int_wrt wrtc sm), expr e sm)
+eop (Integral (Nothing, Just (Low v)) e wrtc) sm = 
+  (H.Integral (Just (expr v sm), Nothing) (int_wrt wrtc sm), expr e sm)
+eop (Integral (Just (High h), Nothing) e wrtc) sm = 
+  (H.Integral (Nothing, Just (expr h sm)) (int_wrt wrtc sm), expr e sm)
+eop (Integral (Nothing, Just (High h)) e wrtc) sm = 
+  (H.Integral (Nothing, Just (expr h sm)) (int_wrt wrtc sm), expr e sm)
+eop (Integral (Nothing, Nothing) e wrtc) sm = 
+  (H.Integral (Nothing, Nothing) (int_wrt wrtc sm), expr e sm)
+eop (Integral (_, _) _ _) _ = error  "HTML/Import.hs Incorrect use of Integral"
+
 
 -- | Helper function for translating 'Relation's
 rel :: HasSymbolTable s => Relation -> s -> H.Expr
@@ -122,24 +141,6 @@ set (Obj a)  = H.Obj a
 set (DiscreteI a) = H.DiscreteI a
 set (DiscreteD a) = H.DiscreteD a
 set (DiscreteS a) = H.DiscreteS a
-
--- | Helper function for translating Integrals (from 'UFunc')
-integral :: HasSymbolTable s => UFunc -> s -> (H.Function, H.Expr)
-integral (Integral (Just (Low v), Just (High h)) e wrtc) sm = 
-  (H.Integral (Just (expr v sm), Just (expr h sm)) (int_wrt wrtc sm), expr e sm)
-integral (Integral (Just (High h), Just (Low v)) e wrtc) sm = 
-  (H.Integral (Just (expr v sm), Just (expr h sm)) (int_wrt wrtc sm), expr e sm)
-integral (Integral (Just (Low v), Nothing) e wrtc) sm = 
-  (H.Integral (Just (expr v sm), Nothing) (int_wrt wrtc sm), expr e sm)
-integral (Integral (Nothing, Just (Low v)) e wrtc) sm = 
-  (H.Integral (Just (expr v sm), Nothing) (int_wrt wrtc sm), expr e sm)
-integral (Integral (Just (High h), Nothing) e wrtc) sm = 
-  (H.Integral (Nothing, Just (expr h sm)) (int_wrt wrtc sm), expr e sm)
-integral (Integral (Nothing, Just (High h)) e wrtc) sm = 
-  (H.Integral (Nothing, Just (expr h sm)) (int_wrt wrtc sm), expr e sm)
-integral (Integral (Nothing, Nothing) e wrtc) sm = 
-  (H.Integral (Nothing, Nothing) (int_wrt wrtc sm), expr e sm)
-integral _ _ = error "TeX/Import.hs Incorrect use of Integral"
 
 -- | Helper function for translating the differential
 int_wrt :: (HasSymbolTable s) => Expr -> s -> H.Expr

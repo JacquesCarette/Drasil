@@ -43,12 +43,12 @@ exp = UnaryOp . Exp
 
 -- | Smart constructor for the summation and product operators
 summation, product :: (Maybe (Symbol, Bound, Bound)) -> Expr -> Expr
-summation bounds expr = UnaryOp $ Summation bounds expr
-product   bounds expr = UnaryOp $ Product   bounds expr
+summation bounds expr = EOp $ Summation bounds expr
+product   bounds expr = EOp $ Product   bounds expr
 
 -- | Smart constructor for integrals
 integral :: (Quantity c) => ((Maybe Bound), (Maybe Bound)) -> Expr -> c -> Expr
-integral bounds expr wrt = UnaryOp $ Integral bounds expr (C wrt)
+integral bounds expr wrt = EOp $ Integral bounds expr (C wrt)
 
 -- | Euclidean function : takes a vector and returns the sqrt of the sum-of-squares
 euclidean :: [Expr] -> Expr

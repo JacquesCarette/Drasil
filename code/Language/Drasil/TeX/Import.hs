@@ -3,7 +3,7 @@ module Language.Drasil.TeX.Import where
 import Control.Lens hiding ((:>),(:<),set)
 import Prelude hiding (id)
 import Language.Drasil.Expr (Expr(..), Relation, UFunc(..), BiFunc(..),
-                             Bound(..),DerivType(..), ($=))
+                             Bound(..),DerivType(..), EOperator(..), ($=))
 import Language.Drasil.Space (Space(..))
 import Language.Drasil.Expr.Extract
 import Language.Drasil.Spec
@@ -58,6 +58,7 @@ expr (Index a i)       sm = T.Index (expr a sm) (expr i sm)
 expr (UnaryOp u)       sm = (\(x,y) -> T.Op x [y]) (ufunc u sm)
 expr (Grouping e)      sm = T.Grouping (expr e sm)
 expr (BinaryOp b)      sm = (\(x,y) -> T.Op x y) (bfunc b sm)
+expr (EOp o)           sm = (\(x,y) -> T.Op x [y]) (eop o sm)
 expr (Not a)           sm = T.Not  (expr a sm)
 expr (a :&& b)         sm = T.And  (expr a sm) (expr b sm)
 expr (a :|| b)         sm = T.Or   (expr a sm) (expr b sm)
@@ -70,28 +71,44 @@ expr _                 _  = error "Expression unimplemented in TeX"
 
 ufunc :: HasSymbolTable ctx => UFunc -> ctx -> (T.Function, T.Expr)
 ufunc (Log e) sm = (T.Log, expr e sm)
-ufunc (Summation (Just (s, Low v, High h)) e) sm = 
-  (T.Summation (Just ((s, expr v sm), expr h sm)), expr e sm)
-ufunc (Summation Nothing e) sm = (T.Summation Nothing, expr e sm)
-ufunc (Summation _ _) _ = error "TeX/Import.hs Incorrect use of Summation"
 ufunc (Abs e) sm = (T.Abs, expr e sm)
 ufunc (Norm e) sm = (T.Norm, expr e sm)
-ufunc i@(Integral _ _ _) sm = integral i sm
 ufunc (Sin e) sm = (T.Sin, expr e sm)
 ufunc (Cos e) sm = (T.Cos, expr e sm)
 ufunc (Tan e) sm = (T.Tan, expr e sm)
 ufunc (Sec e) sm = (T.Sec, expr e sm)
 ufunc (Csc e) sm = (T.Csc, expr e sm)
 ufunc (Cot e) sm = (T.Cot, expr e sm)
-ufunc (Product (Just (s, Low v, High h)) e) sm = 
-  (T.Product (Just ((s, expr v sm), expr h sm)), expr e sm)
-ufunc (Product Nothing e) sm = (T.Product Nothing, expr e sm)
-ufunc (Product _ _) _ = error "TeX/Import.hs Incorrect use of Product"
 ufunc (Exp e) sm = (T.Exp, expr e sm)
 ufunc (Sqrt e) sm = (T.Sqrt, expr e sm)
 
 bfunc :: HasSymbolTable ctx => BiFunc -> ctx -> (T.Function, [T.Expr])
 bfunc (Cross e1 e2) sm = (T.Cross, map (flip expr sm) [e1,e2])
+
+eop :: HasSymbolTable ctx => EOperator -> ctx -> (T.Function, T.Expr)
+eop (Summation (Just (s, Low v, High h)) e) sm = 
+  (T.Summation (Just ((s, expr v sm), expr h sm)), expr e sm)
+eop (Summation Nothing e) sm = (T.Summation Nothing, expr e sm)
+eop (Summation _ _) _ = error "TeX/Import.hs Incorrect use of Summation"
+eop (Product (Just (s, Low v, High h)) e) sm = 
+  (T.Product (Just ((s, expr v sm), expr h sm)), expr e sm)
+eop (Product Nothing e) sm = (T.Product Nothing, expr e sm)
+eop (Product _ _) _ = error "TeX/Import.hs Incorrect use of Product"
+eop (Integral (Just (Low v), Just (High h)) e wrtc) sm = 
+  (T.Integral (Just (expr v sm), Just (expr h sm)) (int_wrt wrtc sm), expr e sm)
+eop (Integral (Just (High h), Just (Low v)) e wrtc) sm = 
+  (T.Integral (Just (expr v sm), Just (expr h sm)) (int_wrt wrtc sm), expr e sm)
+eop (Integral (Just (Low v), Nothing) e wrtc) sm = 
+  (T.Integral (Just (expr v sm), Nothing) (int_wrt wrtc sm), expr e sm)
+eop (Integral (Nothing, Just (Low v)) e wrtc) sm = 
+  (T.Integral (Just (expr v sm), Nothing) (int_wrt wrtc sm), expr e sm)
+eop (Integral (Just (High h), Nothing) e wrtc) sm = 
+  (T.Integral (Nothing, Just (expr h sm)) (int_wrt wrtc sm), expr e sm)
+eop (Integral (Nothing, Just (High h)) e wrtc) sm = 
+  (T.Integral (Nothing, Just (expr h sm)) (int_wrt wrtc sm), expr e sm)
+eop (Integral (Nothing, Nothing) e wrtc) sm = 
+  (T.Integral (Nothing, Nothing) (int_wrt wrtc sm), expr e sm)
+eop (Integral (_, _) _ _) _ = error "TeX/Import.hs Incorrect use of Integral"
 
 rel :: HasSymbolTable ctx => Relation -> ctx -> T.Expr
 rel (EEquals a b)    sm = T.Eq  (expr a sm) (expr b sm)
@@ -117,24 +134,6 @@ set (Obj a)  = T.Obj a
 set (DiscreteI a) = T.DiscreteI a
 set (DiscreteD a) = T.DiscreteD a
 set (DiscreteS a) = T.DiscreteS a
-
--- | Helper function for translating Integrals (from 'UFunc')
-integral :: HasSymbolTable ctx => UFunc -> ctx -> (T.Function, T.Expr)
-integral (Integral (Just (Low v), Just (High h)) e wrtc) sm = 
-  (T.Integral (Just (expr v sm), Just (expr h sm)) (int_wrt wrtc sm), expr e sm)
-integral (Integral (Just (High h), Just (Low v)) e wrtc) sm = 
-  (T.Integral (Just (expr v sm), Just (expr h sm)) (int_wrt wrtc sm), expr e sm)
-integral (Integral (Just (Low v), Nothing) e wrtc) sm = 
-  (T.Integral (Just (expr v sm), Nothing) (int_wrt wrtc sm), expr e sm)
-integral (Integral (Nothing, Just (Low v)) e wrtc) sm = 
-  (T.Integral (Just (expr v sm), Nothing) (int_wrt wrtc sm), expr e sm)
-integral (Integral (Just (High h), Nothing) e wrtc) sm = 
-  (T.Integral (Nothing, Just (expr h sm)) (int_wrt wrtc sm), expr e sm)
-integral (Integral (Nothing, Just (High h)) e wrtc) sm = 
-  (T.Integral (Nothing, Just (expr h sm)) (int_wrt wrtc sm), expr e sm)
-integral (Integral (Nothing, Nothing) e wrtc) sm = 
-  (T.Integral (Nothing, Nothing) (int_wrt wrtc sm), expr e sm)
-integral _ _ = error "TeX/Import.hs Incorrect use of Integral"
 
 int_wrt :: HasSymbolTable ctx => Expr -> ctx -> T.Expr
 int_wrt wrtc sm = expr (Deriv Total wrtc 1) sm

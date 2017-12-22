@@ -49,10 +49,10 @@ data Expr where
   Len      :: Expr -> Expr          -- length
   Append   :: Expr -> Expr -> Expr  -- need this for now since types don't reach generation
                                     -- can probably just use addition between list types for this later
-  UnaryOp  :: UFunc -> Expr
   Grouping :: Expr -> Expr
+  UnaryOp  :: UFunc -> Expr
   BinaryOp :: BiFunc -> Expr
-  -- Operator :: Func   -> [Expr] -> Expr
+  EOp :: EOperator -> Expr
   EEquals    :: Expr -> Expr -> Expr
   ENEquals   :: Expr -> Expr -> Expr
   ELess      :: Expr -> Expr -> Expr
@@ -146,19 +146,22 @@ data BiFunc where
   Cross :: Expr -> Expr -> BiFunc --Cross Product: HTML &#10799;
   -- Cross product of two expressions
 
--- | Unary functions
-data UFunc where
-  Summation :: (Maybe (Symbol, Bound, Bound)) -> Expr -> UFunc
+-- | Operators
+data EOperator where
+  Summation :: (Maybe (Symbol, Bound, Bound)) -> Expr -> EOperator
     -- Sum (maybe (index,starting point, ending point)) (sum expression)
     -- where index is used in the sum (i.e. 'i') with a low and high bound
     -- OR Nothing for the first term.
     -- Expr is the expression we are summing over
-  Product :: (Maybe (Symbol, Bound, Bound)) -> Expr -> UFunc
-  Integral :: ((Maybe Bound), (Maybe Bound)) -> Expr -> Expr -> UFunc
+  Product :: (Maybe (Symbol, Bound, Bound)) -> Expr -> EOperator
+  Integral :: ((Maybe Bound), (Maybe Bound)) -> Expr -> Expr -> EOperator
     -- Integral (low,high) Bounds (if any), then (expression to integrate)
     -- and finally which chunk (variable) we are integrating with respect to.
     -- FIXME: The chunk/var wrt is currently Expr because Quantity (requisite)
     -- causes cyclic imports
+
+-- | Unary functions
+data UFunc where
   Norm   :: Expr -> UFunc -- Norm
   Abs    :: Expr -> UFunc -- Absolute value
   Log    :: Expr -> UFunc

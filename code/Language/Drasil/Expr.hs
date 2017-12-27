@@ -173,3 +173,26 @@ data UFunc where
   Cot    :: Expr -> UFunc
   Exp    :: Expr -> UFunc
   Sqrt   :: Expr -> UFunc
+
+-- | Domain Description. A 'Domain' is the extent of a variable that
+-- ranges over a particular Space. So a |DomainDesc| contains
+-- a variable, a Space and a "description of a subspace".
+-- Except that the kinds of descriptions we want for different kinds of
+-- spaces really are quite different. So we will internalize the |Space|
+-- into the description. Which means that only some |Space|s will be
+-- represented, as needed.
+-- [Later when we move to GADTs, some of this can be unified]
+data DomainDesc where
+  RealDD :: Variable -> RealInterval -> DomainDesc
+
+data Inclusive a where
+  Inc :: a -> Inclusive a
+  Exc :: a -> Inclusive a
+
+-- | RealInterval. A |RealInterval| is a subset of |Real| (as a |Space|).
+-- These come in different flavours.
+-- For now, embed |Expr| for the bounds, but that will change as well.
+data RealInterval where
+  Bounded :: Inclusive Expr -> Inclusive Expr -> RealInterval  -- (x .. y)
+  UpTo :: Inclusive Expr -> RealInterval -- (-infinity .. x)
+  UpFrom :: Inclusive Expr -> RealInterval -- (x .. infinity)

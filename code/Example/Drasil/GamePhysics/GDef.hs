@@ -1,3 +1,9 @@
+-- %%%%%%%%%%%%%%%%%%%%%%%%%%
+-- WARNING
+-- File not actually used in drasil.cabal for GamePhysics
+-- so it is not actually 'plugged in'.  The definitions in here
+-- may not type check anyore!
+-- %%%%%%%%%%%%%%%%%%%%%%%%%%
 module Drasil.GamePhysics.GDefs (cpGDefs) where
 
 import Drasil.GamePhysics.Unitals

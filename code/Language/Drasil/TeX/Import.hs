@@ -3,7 +3,7 @@ module Language.Drasil.TeX.Import where
 import Control.Lens hiding ((:>),(:<),set)
 import Prelude hiding (id)
 import Language.Drasil.Expr (Expr(..), Relation, UFunc(..), BiFunc(..),
-                             Bound(..),DerivType(..), EOperator(..), ($=))
+    Bound(..),DerivType(..), EOperator(..), ($=), RealRange(..), DomainDesc(..))
 import Language.Drasil.Space (Space(..))
 import Language.Drasil.Expr.Extract
 import Language.Drasil.Spec
@@ -94,21 +94,10 @@ eop (Product (Just (s, Low v, High h)) e) sm =
   (T.Product (Just ((s, expr v sm), expr h sm)), expr e sm)
 eop (Product Nothing e) sm = (T.Product Nothing, expr e sm)
 eop (Product _ _) _ = error "TeX/Import.hs Incorrect use of Product"
-eop (Integral (Just (Low v), Just (High h)) e wrtc) sm = 
-  (T.Integral (Just (expr v sm), Just (expr h sm)) (int_wrt wrtc sm), expr e sm)
-eop (Integral (Just (High h), Just (Low v)) e wrtc) sm = 
-  (T.Integral (Just (expr v sm), Just (expr h sm)) (int_wrt wrtc sm), expr e sm)
-eop (Integral (Just (Low v), Nothing) e wrtc) sm = 
-  (T.Integral (Just (expr v sm), Nothing) (int_wrt wrtc sm), expr e sm)
-eop (Integral (Nothing, Just (Low v)) e wrtc) sm = 
-  (T.Integral (Just (expr v sm), Nothing) (int_wrt wrtc sm), expr e sm)
-eop (Integral (Just (High h), Nothing) e wrtc) sm = 
-  (T.Integral (Nothing, Just (expr h sm)) (int_wrt wrtc sm), expr e sm)
-eop (Integral (Nothing, Just (High h)) e wrtc) sm = 
-  (T.Integral (Nothing, Just (expr h sm)) (int_wrt wrtc sm), expr e sm)
-eop (Integral (Nothing, Nothing) e wrtc) sm = 
-  (T.Integral (Nothing, Nothing) (int_wrt wrtc sm), expr e sm)
-eop (Integral (_, _) _ _) _ = error "TeX/Import.hs Incorrect use of Integral"
+eop (Integral (RealDD v (BoundedR l h)) e) sm = 
+  (T.Integral (Just (expr l sm), Just (expr h sm)) (int_wrt v sm), expr e sm)
+eop (Integral (All v) e) sm = 
+  (T.Integral (Just (expr v sm), Nothing) (int_wrt v sm), expr e sm)
 
 rel :: HasSymbolTable ctx => Relation -> ctx -> T.Expr
 rel (EEquals a b)    sm = T.Eq  (expr a sm) (expr b sm)

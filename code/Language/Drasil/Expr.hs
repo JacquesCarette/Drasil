@@ -154,7 +154,7 @@ data EOperator where
     -- OR Nothing for the first term.
     -- Expr is the expression we are summing over
   Product :: (Maybe (Symbol, Bound, Bound)) -> Expr -> EOperator
-  Integral :: ((Maybe Bound), (Maybe Bound)) -> Expr -> Expr -> EOperator
+  Integral :: DomainDesc -> Expr -> EOperator
     -- Integral (low,high) Bounds (if any), then (expression to integrate)
     -- and finally which chunk (variable) we are integrating with respect to.
     -- FIXME: The chunk/var wrt is currently Expr because Quantity (requisite)
@@ -181,9 +181,12 @@ data UFunc where
 -- spaces really are quite different. So we will internalize the |Space|
 -- into the description. Which means that only some |Space|s will be
 -- represented, as needed.
+-- Right now, use |Expr| instead of |Variable| for the first
+-- argument, FIXME.
 -- [Later when we move to GADTs, some of this can be unified]
 data DomainDesc where
-  RealDD :: Variable -> RealInterval -> DomainDesc
+  RealDD :: Expr -> RealRange -> DomainDesc
+  All :: Expr -> DomainDesc
 
 data Inclusive a where
   Inc :: a -> Inclusive a
@@ -196,3 +199,7 @@ data RealInterval where
   Bounded :: Inclusive Expr -> Inclusive Expr -> RealInterval  -- (x .. y)
   UpTo :: Inclusive Expr -> RealInterval -- (-infinity .. x)
   UpFrom :: Inclusive Expr -> RealInterval -- (x .. infinity)
+
+-- | RealRange is a specialized version of |RealInterval| to simplify
+-- integration, summation, etc, where the |Inclusive| would just be noise.
+data RealRange = BoundedR Expr Expr

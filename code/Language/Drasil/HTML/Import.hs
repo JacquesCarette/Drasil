@@ -1,7 +1,7 @@
 module Language.Drasil.HTML.Import where
 import Prelude hiding (id)
 import Language.Drasil.Expr (Expr(..), Relation, UFunc(..), BiFunc(..),
-                             Bound(..),DerivType(..), EOperator(..), ($=))
+    Bound(..),DerivType(..), EOperator(..), ($=), DomainDesc(..), RealRange(..))
 import Language.Drasil.Space (Space(..))
 import Language.Drasil.Spec
 import qualified Language.Drasil.HTML.AST as H
@@ -99,6 +99,11 @@ eop (Product (Just (s, Low v, High h)) e) sm =
   (H.Product (Just ((s, expr v sm), expr h sm)), expr e sm)
 eop (Product Nothing e) sm = (H.Product Nothing, (expr e sm))
 eop (Product _ _) _ = error "HTML/Import.hs Incorrect use of Product"
+eop (Integral (RealDD v (BoundedR l h)) e) sm = 
+  (H.Integral (Just (expr l sm), Just (expr h sm)) (int_wrt v sm), expr e sm)
+eop (Integral (All v) e) sm = 
+  (H.Integral (Just (expr v sm), Nothing) (int_wrt v sm), expr e sm)
+{-
 eop (Integral (Just (Low v), Just (High h)) e wrtc) sm = 
   (H.Integral (Just (expr v sm), Just (expr h sm)) (int_wrt wrtc sm), expr e sm)
 eop (Integral (Just (High h), Just (Low v)) e wrtc) sm = 
@@ -114,6 +119,7 @@ eop (Integral (Nothing, Just (High h)) e wrtc) sm =
 eop (Integral (Nothing, Nothing) e wrtc) sm = 
   (H.Integral (Nothing, Nothing) (int_wrt wrtc sm), expr e sm)
 eop (Integral (_, _) _ _) _ = error  "HTML/Import.hs Incorrect use of Integral"
+-}
 
 
 -- | Helper function for translating 'Relation's

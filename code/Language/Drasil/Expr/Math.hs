@@ -3,7 +3,6 @@ module Language.Drasil.Expr.Math where
 import Prelude hiding (id, sqrt)
 import Language.Drasil.Symbol
 import Language.Drasil.Expr
-import Language.Drasil.Chunk.Quantity
 
 -- | Smart constructor to take the log of an expression
 log :: Expr -> Expr
@@ -47,8 +46,11 @@ summation bounds expr = EOp $ Summation bounds expr
 product   bounds expr = EOp $ Product   bounds expr
 
 -- | Smart constructor for integrals
-integral :: (Quantity c) => ((Maybe Bound), (Maybe Bound)) -> Expr -> c -> Expr
-integral bounds expr wrt = EOp $ Integral bounds expr (C wrt)
+defint :: Expr -> Expr -> Expr -> Expr -> Expr
+int_all :: Expr -> Expr -> Expr
+
+defint v low high e = EOp $ Integral (RealDD v (BoundedR low high)) e
+int_all v e = EOp $ Integral (All v) e
 
 -- | Euclidean function : takes a vector and returns the sqrt of the sum-of-squares
 euclidean :: [Expr] -> Expr

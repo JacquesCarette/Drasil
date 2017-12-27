@@ -188,7 +188,7 @@ unpack (Sqrt e) = e
 unpackop :: EOperator -> Expr
 unpackop (Summation _ e) = e
 unpackop (Product _ e) = e
-unpackop (Integral _ e _) = e
+unpackop (Integral _ e) = e
 
 -- | Helper function for vars and dep, gets Exprs from binary operations.
 binop :: BiFunc -> [Expr]

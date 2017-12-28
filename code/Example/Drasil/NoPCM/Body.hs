@@ -147,11 +147,12 @@ mkSRS = RefSec (RefProg intro
   IOrgSec s2_4_intro inModel (SRS.inModel SRS.missingP [])
   (s2_4_end inModel M.ode progName)]) : 
   Verbatim s3:
-  SSDSec (SSDProg [SSDSubVerb s4_1, 
+  {-SSDSec (SSDProg [SSDSubVerb s4_1, 
     SSDSolChSpec (SCSProg [
       (GDs [Label, Units, DefiningEquation
            , Description Verbose IncludeUnits
-           , Source, RefBy] generalDefinitions ShowDerivation)])]) : --Testing General Definitions.
+           , Source, RefBy] generalDefinitions ShowDerivation)])]) : --Testing General Definitions.-}
+  Verbatim s4: -- Comment this out and the above in for testing GDs.
   map Verbatim [s5, s6, s7, s8] ++
   [Bibliography s9_refList]
 

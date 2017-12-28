@@ -25,9 +25,9 @@ written using a typical "manual" approach.  The full files for the case studies
 are available in [a separate case studies repo](https://github.com/smiths/caseStudies).
 
 For more information on Drasil, please read 
-[our position ppaper](https://github.com/JacquesCarette/literate-scientific-software/blob/master/Dan/ICSE%20Workshop%20-%20SE4Science/ICSE_LiterateFrameworkForSCSoftware_LSS.pdf)
+[our position paper](https://github.com/JacquesCarette/Drasil/blob/master/Dan/ICSE%20Workshop%20-%20SE4Science/ICSE_LiterateFrameworkForSCSoftware_LSS.pdf)
 or take a look at 
-our [poster](https://github.com/JacquesCarette/literate-scientific-software/blob/master/Dan/CAS%20Poster%20Competition/Poster/DrasilPoster.pdf).
+our [poster](https://github.com/JacquesCarette/Drasil/blob/master/Dan/CAS%20Poster%20Competition/Poster/DrasilPoster.pdf).
 
 ## Quick Start
 
@@ -57,7 +57,7 @@ After building, you can find the executables for the examples in the relevant su
 
 You can run `make docs` from the ./code folder to build the documentation.
 
-See the [README](https://github.com/JacquesCarette/literate-scientific-software/tree/master/code#building-up-to-date-documentation) 
+See the [README](https://github.com/JacquesCarette/Drasil/tree/master/code#building-up-to-date-documentation) 
 in ./code/ for more information.
 
 --------------------------------------------------

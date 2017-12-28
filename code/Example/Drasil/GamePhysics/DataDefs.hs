@@ -22,9 +22,9 @@ cpQDefs = map (\x -> Parallel x []) cpDDefs
 dd1CtrOfMass :: QDefinition
 dd1CtrOfMass = mkDataDef pos_CM ctrOfMassEqn
 
+-- FIXME (Atomic "i") is a horrible hack
 ctrOfMassEqn :: Expr
-ctrOfMassEqn = (summation Nothing
-  ((C mass_i) * (C pos_i))) / (C mTot)
+ctrOfMassEqn = (sum_all (Atomic "i") ((C mass_i) * (C pos_i))) / (C mTot)
 
 -- DD2 : Linear displacement --
 

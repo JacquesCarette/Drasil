@@ -103,8 +103,8 @@ t_symbol (Corners [] [] [] [x] s) = t_symbol s ++ "_" ++ t_symbol x
 t_symbol (Corners [] [] [x] [] s) = t_symbol s ++ "^" ++ t_symbol x
 t_symbol s                        = symbol s
 
--- | Adds emphises to symbols by defult. Use symbolNoEm for no emphises.
---   Units do not need emphises for example.
+-- | Adds emphasis to symbols by default. Use symbolNoEm for no <em>
+--   Units do not need this, for example.
 symbol :: Symbol -> String
 symbol s = em $ symbolNoEm s
 
@@ -344,7 +344,8 @@ p_op (Summation _) _ = error "Something went wrong with a summation"
 p_op f@(Product bs) (x:[]) = lrgOp f bs ++ paren (p_expr x)
 p_op (Product _) _ = error "Something went wrong with a product"
 p_op f@(Integral bs wrtc) (x:[]) = intg f bs
-  {-show f ++ makeIBound bs-} ++ paren (p_expr x ++ p_expr wrtc)
+  {-show f ++ makeIBound bs-} 
+  ++ paren (p_expr x ++ (symbol (Atomic "d") ++ "&#8239;" ++ symbol wrtc))
 p_op (Integral _ _) _  = error "Something went wrong with an integral" 
 p_op Abs (x:[]) = "|" ++ p_expr x ++ "|"
 p_op Abs _ = error "Abs should only take one expr."

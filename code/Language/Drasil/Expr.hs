@@ -49,10 +49,10 @@ data Expr where
   Len      :: Expr -> Expr          -- length
   Append   :: Expr -> Expr -> Expr  -- need this for now since types don't reach generation
                                     -- can probably just use addition between list types for this later
-  UnaryOp  :: UFunc -> Expr
   Grouping :: Expr -> Expr
+  UnaryOp  :: UFunc -> Expr
   BinaryOp :: BiFunc -> Expr
-  -- Operator :: Func   -> [Expr] -> Expr
+  EOp :: EOperator -> Expr
   EEquals    :: Expr -> Expr -> Expr
   ENEquals   :: Expr -> Expr -> Expr
   ELess      :: Expr -> Expr -> Expr
@@ -64,7 +64,7 @@ data Expr where
   (:||)    :: Expr -> Expr -> Expr -- logical or
   Not      :: Expr -> Expr -- logical not
 
-  IsIn  :: Expr -> Set -> Expr --	element of
+  IsIn  :: Expr -> Space -> Expr --	element of
 
   ForAll   :: Symbol -> Expr -> Expr
   Exists   :: Symbol -> Expr -> Expr
@@ -79,26 +79,6 @@ data Expr where
 ($<=) = ELessEq
 ($>=) = EGreaterEq
 
-type Set = Space
-{- --import from space?
-           Integer
-         | Rational
-         | Real
-         | Natural
-         | Boolean
-         | Char
-         | String
-         | Radians
-         | Vect Set
-         | Obj String-}
-
-{-
-data Direction = Increasing
-               | Decreasing
-
-monotoniclyIncr :: Expr -> Expr --Needs indexing, squaring of sets
-monotoniclyIncr xy = Forall [xy `IsIn` MkSet "R^2"] (V "x_1" :< V "x_2"  :=>  V "y_1" :< V "y_2")
--}
 type Variable = String
 
 data DerivType = Part
@@ -157,28 +137,21 @@ instance Fractional Expr where
 --Known math functions.
 -- TODO: Move the below to a separate file somehow. How to go about it?
 
-data Bound where
-  Low :: Expr -> Bound -- Starting value
-  High :: Expr -> Bound -- Upper bound, could be a symbol (n), or a value.
-
 -- | Binary Functions
 data BiFunc where
   Cross :: Expr -> Expr -> BiFunc --Cross Product: HTML &#10799;
   -- Cross product of two expressions
 
+-- | Operators
+-- All operators take a |DomainDesc| and a variable
+-- FIXME: the Variable should not be an |Expr|
+data EOperator where
+  Summation :: DomainDesc -> Expr -> EOperator
+  Product :: DomainDesc -> Expr -> EOperator
+  Integral :: DomainDesc -> Expr -> EOperator
+
 -- | Unary functions
 data UFunc where
-  Summation :: (Maybe (Symbol, Bound, Bound)) -> Expr -> UFunc
-    -- Sum (maybe (index,starting point, ending point)) (sum expression)
-    -- where index is used in the sum (i.e. 'i') with a low and high bound
-    -- OR Nothing for the first term.
-    -- Expr is the expression we are summing over
-  Product :: (Maybe (Symbol, Bound, Bound)) -> Expr -> UFunc
-  Integral :: ((Maybe Bound), (Maybe Bound)) -> Expr -> Expr -> UFunc
-    -- Integral (low,high) Bounds (if any), then (expression to integrate)
-    -- and finally which chunk (variable) we are integrating with respect to.
-    -- FIXME: The chunk/var wrt is currently Expr because Quantity (requisite)
-    -- causes cyclic imports
   Norm   :: Expr -> UFunc -- Norm
   Abs    :: Expr -> UFunc -- Absolute value
   Log    :: Expr -> UFunc
@@ -190,3 +163,33 @@ data UFunc where
   Cot    :: Expr -> UFunc
   Exp    :: Expr -> UFunc
   Sqrt   :: Expr -> UFunc
+
+-- | Domain Description. A 'Domain' is the extent of a variable that
+-- ranges over a particular Space. So a |DomainDesc| contains
+-- a variable, a Space and a "description of a subspace".
+-- Except that the kinds of descriptions we want for different kinds of
+-- spaces really are quite different. So we will internalize the |Space|
+-- into the description. Which means that only some |Space|s will be
+-- represented, as needed.
+-- [Later when we move to GADTs, some of this can be unified]
+-- We use a phantom type in |RealRange| as a proxy for now
+data DomainDesc where
+  RealDD :: Symbol -> RealRange Double -> DomainDesc
+  IntegerDD :: Symbol -> RealRange Integer -> DomainDesc
+  All :: Symbol -> DomainDesc
+
+data Inclusive a where
+  Inc :: a -> Inclusive a
+  Exc :: a -> Inclusive a
+
+-- | RealInterval. A |RealInterval| is a subset of |Real| (as a |Space|).
+-- These come in different flavours.
+-- For now, embed |Expr| for the bounds, but that will change as well.
+data RealInterval where
+  Bounded :: Inclusive Expr -> Inclusive Expr -> RealInterval  -- (x .. y)
+  UpTo :: Inclusive Expr -> RealInterval -- (-infinity .. x)
+  UpFrom :: Inclusive Expr -> RealInterval -- (x .. infinity)
+
+-- | RealRange is a specialized version of |RealInterval| to simplify
+-- integration, summation, etc, where the |Inclusive| would just be noise.
+data RealRange a = BoundedR Expr Expr

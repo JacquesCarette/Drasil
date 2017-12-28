@@ -7,10 +7,11 @@ module Language.Drasil (
   -- Recipe
   , Recipe(..)
   -- Expr
-  , Expr(..), Relation, BiFunc(..), Bound(..), DerivType(..), Set
+  , Expr(..), Relation, BiFunc(..), DerivType(..)
   , ($=), ($<), ($<=), ($>), ($>=)
   , log, abs, sin, cos, tan, sec, csc, cot, exp, sqrt, square, euclidean, ChunkDB(..), cdb, HasSymbolTable(..), symbolMap, vars
-  , summation, product, cross, m2x2, vec2D, dgnl2x2, integral, termLookup, elements, termTable
+  , sum_all, defsum, prod_all, defprod, defint, int_all
+  , cross, m2x2, vec2D, dgnl2x2, termLookup, elements, termTable
   -- all the stuff from Unicode
   , Greek(..), Special(..)
   -- Unit
@@ -38,6 +39,8 @@ module Language.Drasil (
   , createCnstrnts
   -- Chunk.Eq
   , QDefinition(..), fromEqn, fromEqn', fromEqn'', getVC, equat
+  -- Chunk.Quantity
+  , symbol
   -- Chunk.UncertainQuantity
   , UncertainQuantity(..), UncertainChunk(..), UncertQ, uq, uqNU, uqc, uqcNU, uqcND, uncrtnChunk, uvc
   , UncertainWrapper(..), uncrtnw
@@ -82,7 +85,6 @@ module Language.Drasil (
   , lA, lB, lC, lD, lE, lF, lG, lH, lI, lJ, lK, lL, lM, lN, lO, lP, lQ, lR, lS, lT, lU, lV, lW, lX, lY, lZ
   -- Misc
   , mkTable, unit'2Contents, getAcc, unit_symb, introduceAbb, phrase, plural, phrase's, plural's, unitHidingUnitless
-  , symbol
   -- Printing.Helpers
   , capitalize, paren, sqbrac
   -- Generate
@@ -103,19 +105,19 @@ module Language.Drasil (
   -- Chunk.Theory
   , Theory(..), tc', TheoryChunk, TheoryModel, tm, tw
   -- Chunk.SymbolForm
-  , SF, SymbolChunk, sc, ssc, ssc', Stage(..), StagedSymbolChunk, eqSymb, codeSymb
-  , ssc'', hasStageSymbol
+  , SF, SymbolChunk, sc, ssc, ssc', Stage(Equational,Implementation), StagedSymbolChunk
+  , eqSymb, codeSymb , ssc'', hasStageSymbol
   -- Code.Imperative.Lang
   , Lang(..)
 ) where
 
 import Prelude hiding (log, sin, cos, tan, sqrt, id, return, print, break, exp, product)
 import Language.Drasil.SystemInformation
-import Language.Drasil.Expr (Expr(..), Relation, BiFunc(..), 
-          Bound(..),DerivType(..), Set,
+import Language.Drasil.Expr (Expr(..), Relation, BiFunc(..), DerivType(..),
           ($=), ($<), ($<=), ($>), ($>=))
 import Language.Drasil.Expr.Math (log, sin, cos, tan, sqrt, square, sec, csc, cot, exp,
-          summation, product, cross, m2x2, vec2D, dgnl2x2, euclidean, integral)
+          sum_all, defsum, prod_all, defprod,
+          cross, m2x2, vec2D, dgnl2x2, euclidean, defint, int_all)
 import Language.Drasil.Expr.Extract (vars)
 import Language.Drasil.Output.Formats (DocType(SRS,MG,MIS,LPM,Website))
 import Language.Drasil.Document (LayoutObj(..), Document(..), DType(..)

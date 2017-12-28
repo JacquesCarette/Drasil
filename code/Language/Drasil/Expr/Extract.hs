@@ -4,7 +4,7 @@ module Language.Drasil.Expr.Extract(dep, vars, codevars, codevars') where
 import Data.List (nub)
 import Control.Lens hiding ((:<),(:>))
 import Prelude hiding (id)
-import Language.Drasil.Expr (Expr(..), UFunc(..), BiFunc(..))
+import Language.Drasil.Expr (Expr(..), UFunc(..), BiFunc(..), EOperator(..))
 import Language.Drasil.Chunk (id)
 import Language.Drasil.ChunkDB
 import Language.Drasil.Chunk.Code
@@ -39,6 +39,7 @@ dep (ELessEq a b)      = nub (dep a ++ dep b)
 dep (UnaryOp u)   = dep (unpack u)
 dep (Grouping e)  = dep e
 dep (BinaryOp b)  = nub (concat $ map dep (binop b))
+dep (EOp o)       = dep (unpackop o)
 dep (a :=>  b)    = nub (dep a ++ dep b)
 dep (a :<=> b)    = nub (dep a ++ dep b)
 dep (IsIn  a _)   = nub (dep a)
@@ -77,6 +78,7 @@ vars (EGreaterEq a b)    m = nub (vars a m ++ vars b m)
 vars (UnaryOp u)  m = vars (unpack u) m
 vars (Grouping e) m = vars e m
 vars (BinaryOp b) m = nub (concat $ map (\x -> vars x m) (binop b))
+vars (EOp o) m = vars (unpackop o) m
 vars (a :=>  b)   m = nub (vars a m ++ vars b m)
 vars (a :<=> b)   m = nub (vars a m ++ vars b m)
 vars (IsIn  a _)  m = nub (vars a m)
@@ -116,6 +118,7 @@ codevars (EGreaterEq a b)    sm = nub (codevars a sm ++ codevars b sm)
 codevars (UnaryOp u)  sm = codevars (unpack u) sm
 codevars (Grouping e) sm = codevars e sm
 codevars (BinaryOp b) sm = nub (concat $ map (\x -> codevars x sm) (binop b))
+codevars (EOp o)  sm = codevars (unpackop o) sm
 codevars (a :=>  b)   sm = nub (codevars a sm ++ codevars b sm)
 codevars (a :<=> b)   sm = nub (codevars a sm ++ codevars b sm)
 codevars (IsIn  a _)  sm = nub (codevars a sm)
@@ -156,6 +159,7 @@ codevars' (EGreaterEq a b)    sm = nub (codevars' a sm ++ codevars' b sm)
 codevars' (UnaryOp u)  sm = codevars' (unpack u) sm
 codevars' (Grouping e) sm = codevars' e sm
 codevars' (BinaryOp b) sm = nub (concat $ map (\x -> codevars' x sm) (binop b))
+codevars' (EOp o)      sm = codevars' (unpackop o) sm
 codevars' (a :=>  b)   sm = nub (codevars' a sm ++ codevars' b sm)
 codevars' (a :<=> b)   sm = nub (codevars' a sm ++ codevars' b sm)
 codevars' (IsIn  a _)  sm = nub (codevars' a sm)
@@ -170,19 +174,21 @@ codevars' (Append a b) sm = nub (codevars' a sm ++ codevars' b sm)
 -- | Helper function for vars and dep, gets the Expr portion of a UFunc
 unpack :: UFunc -> Expr
 unpack (Log e) = e
-unpack (Summation _ e) = e
 unpack (Abs e) = e
 unpack (Norm e) = e
-unpack (Integral _ e _) = e
 unpack (Sin e) = e
 unpack (Cos e) = e
 unpack (Tan e) = e
 unpack (Sec e) = e
 unpack (Csc e) = e
 unpack (Cot e) = e
-unpack (Product _ e) = e
 unpack (Exp e) = e
 unpack (Sqrt e) = e
+
+unpackop :: EOperator -> Expr
+unpackop (Summation _ e) = e
+unpackop (Product _ e) = e
+unpackop (Integral _ e) = e
 
 -- | Helper function for vars and dep, gets Exprs from binary operations.
 binop :: BiFunc -> [Expr]

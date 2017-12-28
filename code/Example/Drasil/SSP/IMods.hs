@@ -49,11 +49,9 @@ fctSfty = makeRC "fctSfty" factorOfSafety fcSfty_desc fcSfty_rel
 --       similar case with shearFNoIntsl
 fcSfty_rel :: Relation
 fcSfty_rel = C fs $= sumOp shearRNoIntsl / sumOp shearFNoIntsl
-  where prodOp = product (Just (lU, Low $ C index, High $
-          C numbSlices - Int 1))
+  where prodOp = defprod lU (C index) (C numbSlices - Int 1)
           (Index (C mobShrC) (C varblU) / Index (C shrResC) (C varblU))
-        sumOp sym = summation (Just (lV, Low $ Int 1, High $
-          C numbSlices - Int 1))
+        sumOp sym = defsum lV 1 (C numbSlices - Int 1)
           (Index (C sym) (C varblV) :* prodOp) + Index (C sym) (C numbSlices)
 
 fcSfty_desc :: Sentence

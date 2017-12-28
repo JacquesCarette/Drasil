@@ -462,7 +462,7 @@ p_op f@(Summation bs) (x:[]) = show f ++ makeBound bs ++ brace (sqbrac (p_expr x
 p_op (Summation _) _ = error "Something went wrong with a summation"
 p_op f@(Product bs) (x:[]) = show f ++ makeBound bs ++ brace (p_expr x)
 p_op f@(Integral bs wrtc) (x:[]) = show f ++ makeIBound bs ++ 
-  brace (p_expr x ++ p_expr wrtc)
+  brace (p_expr x ++ "d" ++ symbol wrtc) -- HACK alert.
 p_op (Integral _ _) _  = error "Something went wrong with an integral"
 p_op Abs (x:[]) = "|" ++ p_expr x ++ "|"
 p_op Abs _ = error "Abs should only take one expr."

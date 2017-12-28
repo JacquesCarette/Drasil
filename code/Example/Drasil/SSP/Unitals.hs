@@ -445,4 +445,4 @@ inx e n
   | otherwise = Index (C e) (C index + Int n)
 
 sum1toN :: Expr -> Expr
-sum1toN = summation (Just (eqSymb index, Low 1, High $ C numbSlices))
+sum1toN = defsum (eqSymb index) 1 (C numbSlices)

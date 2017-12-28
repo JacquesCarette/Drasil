@@ -529,22 +529,19 @@ s4_2_3_desc5 den ma vo = [S "Using the fact that", getES den :+: S "=" :+:
 
 s4_2_3_eq1, s4_2_3_eq2, s4_2_3_eq3, s4_2_3_eq4, s4_2_3_eq5 :: Expr
 
-s4_2_3_eq1 = (Neg (integral (Just (Low (C vol)), Nothing)
-  ((C gradient) :. (C thFluxVect)) vol)) + 
-  (integral (Just (Low (C vol)), Nothing) (C vol_ht_gen) vol) $=
-  (integral (Just (Low (C vol)), Nothing) ((C density)
-  * (C QT.heat_cap_spec) * Deriv Part (C QT.temp) (C time)) vol)
+s4_2_3_eq1 = (Neg (int_all (eqSymb vol) ((C gradient) :. (C thFluxVect)))) + 
+  (int_all (eqSymb vol) (C vol_ht_gen)) $=
+  (int_all (eqSymb vol) ((C density)
+  * (C QT.heat_cap_spec) * Deriv Part (C QT.temp) (C time)))
 
-s4_2_3_eq2 = (Neg (integral (Just (Low (C surface)),
-  Nothing) ((C thFluxVect) :. (C uNormalVect)) surface)) +
-  (integral (Just (Low (C vol)), Nothing) (C vol_ht_gen) vol) $= 
-  (integral (Just (Low (C vol)), Nothing)
-  ((C density) * (C QT.heat_cap_spec) * Deriv Part (C QT.temp) (C time)) vol)
+s4_2_3_eq2 = (Neg (int_all (eqSymb surface) ((C thFluxVect) :. (C uNormalVect)))) +
+  (int_all (eqSymb vol) (C vol_ht_gen)) $= 
+  (int_all (eqSymb vol)
+  ((C density) * (C QT.heat_cap_spec) * Deriv Part (C QT.temp) (C time)))
 
 s4_2_3_eq3 = (C ht_flux_in) * (C in_SA) - (C ht_flux_out) *
-  (C out_SA) + (C vol_ht_gen) * (C vol) $= (integral
-  (Just (Low (C vol)), Nothing) ((C density) * (C QT.heat_cap_spec) *
-  Deriv Part (C QT.temp) (C time)) vol)
+  (C out_SA) + (C vol_ht_gen) * (C vol) $= 
+  (int_all (eqSymb vol) ((C density) * (C QT.heat_cap_spec) * Deriv Part (C QT.temp) (C time)))
 
 s4_2_3_eq4 = (C density) * (C QT.heat_cap_spec) * (C vol) * Deriv Total
   (C QT.temp) (C time) $= (C ht_flux_in) * (C in_SA) - (C ht_flux_out) *

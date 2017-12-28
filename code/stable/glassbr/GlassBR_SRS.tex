@@ -61,11 +61,13 @@ Symbol & Description & Units
 \midrule
 $a$ & Plate length (long dimension) & m
 \\
-${AR_{max}}$ & Maximum aspect ratio & Unitless
+${AR_{max}}$ & Maximum aspect ratio & 
+\\
+$AR$ & Aspect ratio & 
 \\
 $b$ & Plate width (short dimension) & m
 \\
-$B$ & Risk of failure & Unitless
+$B$ & Risk of failure & 
 \\
 ${d_{max}}$ & Maximum value for one of the dimensions of the glass plate & mm
 \\
@@ -73,41 +75,41 @@ ${d_{min}}$ & Minimum value for one of the dimensions of the glass plate & mm
 \\
 $E$ & Modulus of elasticity of glass & Pa
 \\
-$g$ & Glass type $g\in{}\{AN, FT, HS\}$ & Unitless
+$g$ & Glass type $g\in{}\{AN, FT, HS\}$ & 
 \\
-$GTF$ & Glass type factor & Unitless
+$GTF$ & Glass type factor & 
 \\
 $h$ & Actual thickness & m
 \\
-$is\_safe1$ & True when calculated probability is less than tolerable probability & Unitless
+$is\_safe1$ & True when calculated probability is less than tolerable probability & 
 \\
-$is\_safe2$ & True when load resistance (capacity) is greater than load (demand) & Unitless
+$is\_safe2$ & True when load resistance (capacity) is greater than load (demand) & 
 \\
-$J$ & Stress distribution factor (Function) & Unitless
+$J$ & Stress distribution factor (Function) & 
 \\
-${J_{tol}}$ & Stress distribution factor (Function) based on Pbtol & Unitless
+${J_{tol}}$ & Stress distribution factor (Function) based on Pbtol & 
 \\
 $k$ & Surface flaw parameter & $\frac{\text{m}^{12}}{\text{N}^{7}}$
 \\
-$LDF$ & Load duration factor & Unitless
+$LDF$ & Load duration factor & 
 \\
-$LR$ & Load resistance & Unitless
+$LR$ & Load resistance & 
 \\
-$LSF$ & Load share factor & Unitless
+$LSF$ & Load share factor & 
 \\
 $m$ & Surface flaw parameter & $\frac{\text{m}^{12}}{\text{N}^{7}}$
 \\
-$NFL$ & Non-factored load & Unitless
+$NFL$ & Non-factored load & 
 \\
-${P_{b}}$ & Probability of breakage & Unitless
+${P_{b}}$ & Probability of breakage & 
 \\
-${P_{btol}}$ & Tolerable probability of breakage & Unitless
+${P_{btol}}$ & Tolerable probability of breakage & 
 \\
 $q$ & Applied load (demand) & kPa
 \\
-$\hat{q}$ & Dimensionless load & Unitless
+$\hat{q}$ & Dimensionless load & 
 \\
-${\hat{q}_{tol}}$ & Tolerable load & Unitless
+${\hat{q}_{tol}}$ & Tolerable load & 
 \\
 $SD$ & Stand off distance & m
 \\
@@ -125,7 +127,7 @@ $t$ & Nominal thickness $t\in{}\{2.5, 2.7, 3.0, 4.0, 5.0, 6.0, 8.0, 10.0, 12.0, 
 \\
 ${t_{d}}$ & Duration of load & s
 \\
-$TNT$ & TNT equivalent factor & Unitless
+$TNT$ & TNT equivalent factor & 
 \\
 $w$ & Charge weight & kg
 \\
@@ -303,7 +305,7 @@ The physical system of GlassBR, as shown in Figure~\ref{Figure:Thephyssyst}, inc
 \end{itemize}
 \begin{figure}
 \begin{center}
-\includegraphics{physicalsystimage.png}
+\includegraphics[width=\textwidth]{../../../datafiles/GlassBR/physicalsystimage.png}
 \caption{The physical system}
 \label{Figure:Thephyssyst}
 \end{center}
@@ -813,21 +815,21 @@ The purpose of the traceability graphs is also to provide easy references on wha
 NOTE: Building a tool to automatically generate the graphical representation of the matrix by scanning the labels and reference can be future work.
 \begin{figure}
 \begin{center}
-\includegraphics{Trace.png}
+\includegraphics[width=\textwidth]{../../../datafiles/GlassBR/Trace.png}
 \caption{Figure 2: Traceability Matrix Showing the Connections Between Items of Different Sections}
 \label{Figure:Figu2:TracMatrShowtheConnBetwItemofDiffSect}
 \end{center}
 \end{figure}
 \begin{figure}
 \begin{center}
-\includegraphics{RTrace.png}
+\includegraphics[width=\textwidth]{../../../datafiles/GlassBR/RTrace.png}
 \caption{Figure 3: Traceability Matrix Showing the Connections Between Requirements and Other Items}
 \label{Figure:Figu3:TracMatrShowtheConnBetwRequandOtheItem}
 \end{center}
 \end{figure}
 \begin{figure}
 \begin{center}
-\includegraphics{ATrace.png}
+\includegraphics[width=\textwidth]{../../../datafiles/GlassBR/ATrace.png}
 \caption{Figure 4: Traceability Matrix Showing the Connections Between Assumptions and Other Items}
 \label{Figure:Figu4:TracMatrShowtheConnBetwAssuandOtheItem}
 \end{center}
@@ -873,14 +875,14 @@ ${SD_{max}}$ & maximum stand off distance permissible for input & $130.0$ & m
 \section{References}
 \label{Sec:Refe}
 \begin{filecontents*}{bibfile.bib}
-@mastersthesis{Koothoor_2013,
+@mastersthesis{Koothoor2013,
 author={Koothoor, Nirmitha},
 title={A document drive approach to certifying scientific computing software},
 school={McMaster University},
 place={Hamilton, Canada},
 year={2013}}
 
-@article{Smith_Lai_2005,
+@article{SmithLai2005,
 author={Smith, W. Spencer and Lai, Lei},
 title={A new requirements template for scientific computing},
 journal={Proceedings of the First International Workshop on Situational Requirements Engineering Processes - Methods, Techniques and Tools to Support Situation-Specific Requirements Engineering Processes, SREP'05},
@@ -890,13 +892,13 @@ pages={107-121},
 note={In conjunction with 13th IEEE International Requirements Engineering Conference,},
 year={2005}}
 
-@article{Robertson_Robertson_2012,
+@article{RobertsonRobertson2012,
 author={Robertson, James and Robertson, Suzanne},
 title={Volere requirements specification template edition 16},
 url={https://pdfs.semanticscholar.org/cf57/27a59801086cbd3d14e587e09880561dbe22.pdf},
 year={2012}}
 
-@misc{ASTM_E1300-09_2009,
+@misc{ASTME1300-092009,
 author={ASTM E1300-09},
 sortkey={ASTM E1300-09},
 title={Standard Practice for Determining Load Resistance of Glass in Buildings},
@@ -905,7 +907,7 @@ collection={Standard E1300-09a},
 year={2009},
 url={www.astm.org}}
 
-@misc{ASTM_C1036-16_2016,
+@misc{ASTMC1036-162016,
 author={ASTM C1036-16},
 sortkey={ASTM C1036-16},
 title={Standard specification for Flat Glass},
@@ -914,7 +916,7 @@ place={West Conshohocken, PA},
 year={2016},
 url={www.astm.org}}
 
-@misc{ASTM_C1048-04_2009,
+@misc{ASTMC1048-042009,
 author={ASTM C1048-04},
 sortkey={ASTM C1048-04},
 title={Specification for Heat-Treated Flat Glass-Kind HS, Kind FT Coated and Uncoated Glass},
@@ -923,7 +925,7 @@ place={West Conshohocken, PA},
 year={2009},
 url={www.astm.org}}
 
-@misc{Beason_Kohutek_Bracci_1998,
+@misc{BeasonKohutekBracci1998,
 author={Beason, W. Lynn and Kohutek, Terry L. and Bracci, Joseph M.},
 title={Basis for ASTME E 1300 Annealed Glass Thickness Selection Charts},
 collection={ASCE Library},
@@ -938,14 +940,14 @@ url={doi.org/10.1061/(ASCE)0733-9445(1998)124:2(215)}}
 This appendix holds the graphs (Figure~\ref{Figure:Figu5:3secoduraequipres()versStanoffdist(SD)versCharweig()} and Figure~\ref{Figure:Figu6:Nondimelateload()versAspeRati(AR)versStredistfact(Fun()}) used for interpolating values needed in the models.
 \begin{figure}
 \begin{center}
-\includegraphics{ASTM_F2248-09.png}
+\includegraphics[width=\textwidth]{../../../datafiles/GlassBR/ASTM_F2248-09.png}
 \caption{Figure 5: 3 second duration equivalent pressure ($q$) versus Stand off distance (SD) versus Charge weight ($m$)}
 \label{Figure:Figu5:3secoduraequipres()versStanoffdist(SD)versCharweig()}
 \end{center}
 \end{figure}
 \begin{figure}
 \begin{center}
-\includegraphics{ASTM_F2248-09_BeasonEtAl.png}
+\includegraphics[width=\textwidth]{../../../datafiles/GlassBR/ASTM_F2248-09_BeasonEtAl.png}
 \caption{Figure 6: Non dimensional lateral load ($\hat{q}$) versus Aspect Ratio (AR) versus Stress distribution factor (Function) ($J$)}
 \label{Figure:Figu6:Nondimelateload()versAspeRati(AR)versStredistfact(Fun()}
 \end{center}

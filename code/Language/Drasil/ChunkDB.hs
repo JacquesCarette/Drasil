@@ -7,7 +7,7 @@ import Language.Drasil.Chunk
 import Language.Drasil.Chunk.Quantity
 import Language.Drasil.Chunk.NamedIdea
 import Language.Drasil.Chunk.Wrapper
--- import Language.Drasil.Chunk.Concept 
+import Language.Drasil.Chunk.Concept 
 import Language.Drasil.Unit
 
 import Control.Lens ((^.), Simple, Lens)
@@ -24,7 +24,7 @@ import Prelude hiding (id)
 -- symbols and their units.
 type SymbolMap  = Map.Map String QWrapper
 
--- type ConceptMap = Map.Map String CWrapper
+type ConceptMap = Map.Map String CWrapper
 
 -- | Again a bit of a misnomer as it's really a map of all NamedIdeas.
 -- Until these are built through automated means, there will
@@ -40,10 +40,8 @@ symbolMap cs = Map.fromList (map (\x -> ((x ^. id), qs x)) cs)
 termMap :: (NamedIdea c) => [c] -> TermMap
 termMap ts = Map.fromList (map (\x -> ((x ^. id), nw x)) ts)
 
-{-
 conceptMap :: (Concept c) => [c] -> ConceptMap
 conceptMap cs = Map.fromList (map (\x -> ((x ^. id), cw x)) cs)
--}
 
 -- | Get all the elements of one of our tables
 elements :: Map.Map k a -> [a]
@@ -69,28 +67,27 @@ termLookup c m = let lookC = Map.lookup (c ^. id) m in
 
 -- | Our chunk databases. Should contain all the maps we will need.
 data ChunkDB = CDB { symbs :: SymbolMap
-                   , terms :: TermMap {-
-                   , defs  :: ConceptMap -} } --TODO: Expand and add more databases
+                   , terms :: TermMap 
+                   , defs  :: ConceptMap } --TODO: Expand and add more databases
 
-cdb :: (Quantity q, NamedIdea t {-, Concept c -}) => [q] -> [t] {- -> [c] -} -> ChunkDB
-cdb s t {- c  -} = CDB (symbolMap s) (termMap t) {- (conceptMap c) -}
+cdb :: (Quantity q, NamedIdea t, Concept c) => [q] -> [t] -> [c] -> ChunkDB
+cdb s t c = CDB (symbolMap s) (termMap t) (conceptMap c)
 
 class HasSymbolTable s where
   symbolTable :: Simple Lens s SymbolMap
 
 instance HasSymbolTable ChunkDB where
-  symbolTable f (CDB s t {-c -}) = fmap (\x -> CDB x t {-c -}) (f s)
+  symbolTable f (CDB s t c) = fmap (\x -> CDB x t c) (f s)
 
 class HasTermTable s where
   termTable :: Simple Lens s TermMap
   
 instance HasTermTable ChunkDB where
-  termTable f (CDB s t) = fmap (\x -> CDB s x) (f t)
+  termTable f (CDB s t c) = fmap (\x -> CDB s x c) (f t)
 
-{-
 class HasDefinitionTable s where
   defTable :: Simple Lens s ConceptMap
 
 instance HasDefinitionTable ChunkDB where
-  defTable f (CDB s c) = fmap (\x -> CDB s x) (f c)
--}
+  defTable f (CDB s t c) = fmap (\x -> CDB s t x) (f c)
+

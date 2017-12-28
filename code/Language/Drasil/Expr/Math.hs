@@ -40,17 +40,19 @@ cot = UnaryOp . Cot
 exp :: Expr -> Expr
 exp = UnaryOp . Exp
 
--- | Smart constructor for the summation and product operators
-summation, product :: (Maybe (Symbol, Bound, Bound)) -> Expr -> Expr
-summation bounds expr = EOp $ Summation bounds expr
-product   bounds expr = EOp $ Product   bounds expr
+-- | Smart constructor for the summation, product, and integrals
 
--- | Smart constructor for integrals
-defint :: Expr -> Expr -> Expr -> Expr -> Expr
-int_all :: Expr -> Expr -> Expr
+defint, defsum, defprod :: Symbol -> Expr -> Expr -> Expr -> Expr
+int_all, sum_all, prod_all :: Symbol -> Expr -> Expr
 
 defint v low high e = EOp $ Integral (RealDD v (BoundedR low high)) e
 int_all v e = EOp $ Integral (All v) e
+
+defsum v low high e = EOp $ Summation (IntegerDD v (BoundedR low high)) e
+sum_all v e = EOp $ Summation (All v) e
+
+defprod v low high e = EOp $ Product (IntegerDD v (BoundedR low high)) e
+prod_all v e = EOp $ Product (All v) e
 
 -- | Euclidean function : takes a vector and returns the sqrt of the sum-of-squares
 euclidean :: [Expr] -> Expr

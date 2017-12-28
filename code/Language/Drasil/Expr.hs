@@ -137,28 +137,18 @@ instance Fractional Expr where
 --Known math functions.
 -- TODO: Move the below to a separate file somehow. How to go about it?
 
-data Bound where
-  Low :: Expr -> Bound -- Starting value
-  High :: Expr -> Bound -- Upper bound, could be a symbol (n), or a value.
-
 -- | Binary Functions
 data BiFunc where
   Cross :: Expr -> Expr -> BiFunc --Cross Product: HTML &#10799;
   -- Cross product of two expressions
 
 -- | Operators
+-- All operators take a |DomainDesc| and a variable
+-- FIXME: the Variable should not be an |Expr|
 data EOperator where
-  Summation :: (Maybe (Symbol, Bound, Bound)) -> Expr -> EOperator
-    -- Sum (maybe (index,starting point, ending point)) (sum expression)
-    -- where index is used in the sum (i.e. 'i') with a low and high bound
-    -- OR Nothing for the first term.
-    -- Expr is the expression we are summing over
-  Product :: (Maybe (Symbol, Bound, Bound)) -> Expr -> EOperator
+  Summation :: DomainDesc -> Expr -> EOperator
+  Product :: DomainDesc -> Expr -> EOperator
   Integral :: DomainDesc -> Expr -> EOperator
-    -- Integral (low,high) Bounds (if any), then (expression to integrate)
-    -- and finally which chunk (variable) we are integrating with respect to.
-    -- FIXME: The chunk/var wrt is currently Expr because Quantity (requisite)
-    -- causes cyclic imports
 
 -- | Unary functions
 data UFunc where
@@ -181,12 +171,12 @@ data UFunc where
 -- spaces really are quite different. So we will internalize the |Space|
 -- into the description. Which means that only some |Space|s will be
 -- represented, as needed.
--- Right now, use |Expr| instead of |Variable| for the first
--- argument, FIXME.
 -- [Later when we move to GADTs, some of this can be unified]
+-- We use a phantom type in |RealRange| as a proxy for now
 data DomainDesc where
-  RealDD :: Expr -> RealRange -> DomainDesc
-  All :: Expr -> DomainDesc
+  RealDD :: Symbol -> RealRange Double -> DomainDesc
+  IntegerDD :: Symbol -> RealRange Integer -> DomainDesc
+  All :: Symbol -> DomainDesc
 
 data Inclusive a where
   Inc :: a -> Inclusive a
@@ -202,4 +192,4 @@ data RealInterval where
 
 -- | RealRange is a specialized version of |RealInterval| to simplify
 -- integration, summation, etc, where the |Inclusive| would just be noise.
-data RealRange = BoundedR Expr Expr
+data RealRange a = BoundedR Expr Expr

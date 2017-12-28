@@ -46,9 +46,10 @@ fs_desc = foldlSent [
 equilibrium :: RelationConcept
 equilibrium = makeRC "equilibrium" (nounPhraseSP "equilibrium") eq_desc eq_rel
 
+-- FIXME: Atomic "i" is a hack.  But we need to sum over something!
 eq_rel :: Relation
 eq_rel = foldr ($=) 0 (map summ [fx, fy, momntOfBdy])
-  where summ = summation Nothing . C
+  where summ = sum_all (Atomic "i") . C
 
 eq_desc :: Sentence
 eq_desc = foldlSent [S "For a body in static equilibrium, the net",

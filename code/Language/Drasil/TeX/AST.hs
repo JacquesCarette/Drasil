@@ -49,7 +49,7 @@ data Function = Log
            | Product (Maybe ((Symbol, Expr),Expr))
            | Abs
            | Norm
-           | Integral ((Maybe Expr),(Maybe Expr)) Expr
+           | Integral ((Maybe Expr),(Maybe Expr)) Symbol
            | Sin
            | Cos
            | Tan

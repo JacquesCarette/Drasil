@@ -1,7 +1,7 @@
 module Language.Drasil.HTML.Import where
 import Prelude hiding (id)
 import Language.Drasil.Expr (Expr(..), Relation, UFunc(..), BiFunc(..),
-    Bound(..),DerivType(..), EOperator(..), ($=), DomainDesc(..), RealRange(..))
+    DerivType(..), EOperator(..), ($=), DomainDesc(..), RealRange(..))
 import Language.Drasil.Space (Space(..))
 import Language.Drasil.Spec
 import qualified Language.Drasil.HTML.AST as H
@@ -91,35 +91,20 @@ bfunc (Cross e1 e2) sm = (H.Cross, map (flip expr sm) [e1,e2])
 
 -- | Helper function for translating 'EOperator's
 eop :: HasSymbolTable s => EOperator -> s -> (H.Function, H.Expr)
-eop (Summation (Just (s, Low v, High h)) e) sm = 
-  (H.Summation (Just ((s, expr v sm), expr h sm)), (expr e sm))
-eop (Summation Nothing e) sm = (H.Summation Nothing,(expr e sm))
-eop (Summation _ _) _ = error "HTML/Import.hs Incorrect use of Summation"
-eop (Product (Just (s, Low v, High h)) e) sm = 
-  (H.Product (Just ((s, expr v sm), expr h sm)), expr e sm)
-eop (Product Nothing e) sm = (H.Product Nothing, (expr e sm))
-eop (Product _ _) _ = error "HTML/Import.hs Incorrect use of Product"
+eop (Summation (IntegerDD v (BoundedR l h)) e) sm =
+  (H.Summation (Just ((v, expr l sm), expr h sm)), (expr e sm))
+eop (Summation (All _) e) sm = (H.Summation Nothing,(expr e sm))
+eop (Summation(RealDD _ _) _) _ = error "HTML/Import.hs Summation cannot be over Real"
+eop (Product (IntegerDD v (BoundedR l h)) e) sm = 
+  (H.Product (Just ((v, expr l sm), expr h sm)), expr e sm)
+eop (Product (All _) e) sm = (H.Product Nothing, (expr e sm))
+eop (Product (RealDD _ _) _) _ = error "HTML/Import.hs Product cannot be over Real"
 eop (Integral (RealDD v (BoundedR l h)) e) sm = 
-  (H.Integral (Just (expr l sm), Just (expr h sm)) (int_wrt v sm), expr e sm)
+  (H.Integral (Just (expr l sm), Just (expr h sm)) v, expr e sm)
 eop (Integral (All v) e) sm = 
-  (H.Integral (Just (expr v sm), Nothing) (int_wrt v sm), expr e sm)
-{-
-eop (Integral (Just (Low v), Just (High h)) e wrtc) sm = 
-  (H.Integral (Just (expr v sm), Just (expr h sm)) (int_wrt wrtc sm), expr e sm)
-eop (Integral (Just (High h), Just (Low v)) e wrtc) sm = 
-  (H.Integral (Just (expr v sm), Just (expr h sm)) (int_wrt wrtc sm), expr e sm)
-eop (Integral (Just (Low v), Nothing) e wrtc) sm = 
-  (H.Integral (Just (expr v sm), Nothing) (int_wrt wrtc sm), expr e sm)
-eop (Integral (Nothing, Just (Low v)) e wrtc) sm = 
-  (H.Integral (Just (expr v sm), Nothing) (int_wrt wrtc sm), expr e sm)
-eop (Integral (Just (High h), Nothing) e wrtc) sm = 
-  (H.Integral (Nothing, Just (expr h sm)) (int_wrt wrtc sm), expr e sm)
-eop (Integral (Nothing, Just (High h)) e wrtc) sm = 
-  (H.Integral (Nothing, Just (expr h sm)) (int_wrt wrtc sm), expr e sm)
-eop (Integral (Nothing, Nothing) e wrtc) sm = 
-  (H.Integral (Nothing, Nothing) (int_wrt wrtc sm), expr e sm)
-eop (Integral (_, _) _ _) _ = error  "HTML/Import.hs Incorrect use of Integral"
--}
+  (H.Integral (Just (H.Sym v), Nothing) v, expr e sm)
+eop (Integral (IntegerDD _ _) _) _ = 
+  error "HTML/Import.hs Integral cannot be over Integers"
 
 
 -- | Helper function for translating 'Relation's
@@ -149,8 +134,8 @@ set (DiscreteD a) = H.DiscreteD a
 set (DiscreteS a) = H.DiscreteS a
 
 -- | Helper function for translating the differential
-int_wrt :: (HasSymbolTable s) => Expr -> s -> H.Expr
-int_wrt wrtc sm = expr (Deriv Total wrtc 1) sm
+int_wrt :: Symbol -> H.Expr
+int_wrt wrtc = H.Mul (H.Sym lD) (H.Sym wrtc)
 
 -- | Helper function for translating operations in expressions 
 replace_divs :: HasSymbolTable s => Expr -> s -> H.Expr

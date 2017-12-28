@@ -1028,9 +1028,9 @@ s4_2_3_deriv_2 t1ct vo = foldlSPCol [S "Integrating", swhsSymbMapTRef t1ct,
   S "over a", phrase vo, sParen (getES vo) `sC` S "we have"]
 
 s4_2_3_deriv_3 = EqnBlock
-  ((Neg (int_all (C vol) ((C gradient) :. (C thFluxVect)))) +
-  (int_all (C vol) (C vol_ht_gen)) $=
-  (int_all (C vol) ((C density) * (C heat_cap_spec) * Deriv Part (C temp) (C time))))
+  ((Neg (int_all (eqSymb vol) ((C gradient) :. (C thFluxVect)))) +
+  (int_all (eqSymb vol) (C vol_ht_gen)) $=
+  (int_all (eqSymb vol) ((C density) * (C heat_cap_spec) * Deriv Part (C temp) (C time))))
 
 s4_2_3_deriv_4 :: ConceptChunk -> ConVar -> UnitalChunk -> UnitalChunk ->
   ConVar -> ConceptChunk -> Contents
@@ -1041,9 +1041,9 @@ s4_2_3_deriv_4 gd su vo tfv unv un = foldlSPCol [S "Applying", titleize gd,
   S "outward", phrase unv, S "for a", phrase su]
 
 s4_2_3_deriv_5 = EqnBlock
-  ((Neg (int_all (C surface) ((C thFluxVect) :. (C uNormalVect)))) +
-  (int_all (C vol) (C vol_ht_gen)) $= 
-  (int_all (C vol) ((C density) * (C heat_cap_spec) * Deriv Part (C temp) (C time))))
+  ((Neg (int_all (eqSymb surface) ((C thFluxVect) :. (C uNormalVect)))) +
+  (int_all (eqSymb vol) (C vol_ht_gen)) $= 
+  (int_all (eqSymb vol) ((C density) * (C heat_cap_spec) * Deriv Part (C temp) (C time))))
 
 s4_2_3_deriv_6 :: UnitalChunk -> UnitalChunk -> Contents
 s4_2_3_deriv_6 vo vhg = foldlSPCol [S "We consider an arbitrary" +:+.
@@ -1053,7 +1053,7 @@ s4_2_3_deriv_6 vo vhg = foldlSPCol [S "We consider an arbitrary" +:+.
 s4_2_3_deriv_7 = EqnBlock
   ((C ht_flux_in) * (C in_SA) - (C ht_flux_out) *
   (C out_SA) + (C vol_ht_gen) * (C vol) $= 
-  (int_all (C vol) ((C density) * (C heat_cap_spec) * Deriv Part (C temp) (C time))))
+  (int_all (eqSymb vol) ((C density) * (C heat_cap_spec) * Deriv Part (C temp) (C time))))
 
 s4_2_3_deriv_8 :: UnitalChunk -> UnitalChunk -> UnitalChunk -> UnitalChunk ->
   UnitalChunk -> UnitalChunk -> UnitalChunk -> UnitalChunk -> CI -> Contents ->
@@ -1364,9 +1364,9 @@ s4_2_7_deriv_1 lce ewat en co pcmat d1hfc d2hfp su ht  =
 
 s4_2_7_deriv_2 :: Contents
 s4_2_7_deriv_2 = EqnBlock
-  ((C w_E) $= (defint (C time) 0 (C time)
+  ((C w_E) $= (defint (eqSymb time) 0 (C time)
   ((C coil_HTC) * (C coil_SA) * ((C temp_C) - FCall (C temp_W)
-  [C time]))) - (defint (C time) 0 (C time)
+  [C time]))) - (defint (eqSymb time) 0 (C time)
   ((C pcm_HTC) * (C pcm_SA) * ((FCall (C temp_W) [C time]) -
   (FCall (C temp_PCM) [C time])))))
 
@@ -1378,7 +1378,7 @@ s4_2_7_deriv_3 epcm en pcmat wa =
 
 s4_2_7_deriv_4 :: Contents
 s4_2_7_deriv_4 = EqnBlock
-  ((C pcm_E) $= (defint (C time) 0 (C time)
+  ((C pcm_E) $= (defint (eqSymb time) 0 (C time)
   ((C pcm_HTC) * (C pcm_SA) * ((FCall (C temp_W) [C time]) - (FCall
   (C temp_PCM) [C time])))))
 

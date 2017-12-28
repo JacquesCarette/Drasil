@@ -141,7 +141,8 @@ t3LatHtE = makeRC "t3LatHtE"
 
 latHtEEqn :: Relation
 latHtEEqn = FCall (C latent_heat) [C time] $= 
-  defint (C tau) 0 (C time) (Deriv Total (FCall (C latent_heat) [C tau]) (C tau))
+  defint (eqSymb tau) 0 (C time) 
+         (Deriv Total (FCall (C latent_heat) [C tau]) (C tau))
 
 -- Integrals need dTau at end
 -- Deriv is specifically partial derivative... how to do regular derivative?

@@ -3,7 +3,7 @@ module Language.Drasil.TeX.Import where
 import Control.Lens hiding ((:>),(:<),set)
 import Prelude hiding (id)
 import Language.Drasil.Expr (Expr(..), Relation, UFunc(..), BiFunc(..),
-    Bound(..),DerivType(..), EOperator(..), ($=), RealRange(..), DomainDesc(..))
+    DerivType(..), EOperator(..), ($=), RealRange(..), DomainDesc(..))
 import Language.Drasil.Space (Space(..))
 import Language.Drasil.Expr.Extract
 import Language.Drasil.Spec
@@ -86,18 +86,20 @@ bfunc :: HasSymbolTable ctx => BiFunc -> ctx -> (T.Function, [T.Expr])
 bfunc (Cross e1 e2) sm = (T.Cross, map (flip expr sm) [e1,e2])
 
 eop :: HasSymbolTable ctx => EOperator -> ctx -> (T.Function, T.Expr)
-eop (Summation (Just (s, Low v, High h)) e) sm = 
-  (T.Summation (Just ((s, expr v sm), expr h sm)), expr e sm)
-eop (Summation Nothing e) sm = (T.Summation Nothing, expr e sm)
-eop (Summation _ _) _ = error "TeX/Import.hs Incorrect use of Summation"
-eop (Product (Just (s, Low v, High h)) e) sm = 
-  (T.Product (Just ((s, expr v sm), expr h sm)), expr e sm)
-eop (Product Nothing e) sm = (T.Product Nothing, expr e sm)
-eop (Product _ _) _ = error "TeX/Import.hs Incorrect use of Product"
+eop (Summation (IntegerDD v (BoundedR l h)) e) sm =
+  (T.Summation (Just ((v, expr l sm), expr h sm)), (expr e sm))
+eop (Summation (All _) e) sm = (T.Summation Nothing,(expr e sm))
+eop (Summation(RealDD _ _) _) _ = error "TeX/Import.hs Summation cannot be over Real"
+eop (Product (IntegerDD v (BoundedR l h)) e) sm = 
+  (T.Product (Just ((v, expr l sm), expr h sm)), expr e sm)
+eop (Product (All _) e) sm = (T.Product Nothing, (expr e sm))
+eop (Product (RealDD _ _) _) _ = error "TeX/Import.hs Product cannot be over Real"
 eop (Integral (RealDD v (BoundedR l h)) e) sm = 
-  (T.Integral (Just (expr l sm), Just (expr h sm)) (int_wrt v sm), expr e sm)
+  (T.Integral (Just (expr l sm), Just (expr h sm)) v, expr e sm)
 eop (Integral (All v) e) sm = 
-  (T.Integral (Just (expr v sm), Nothing) (int_wrt v sm), expr e sm)
+  (T.Integral (Just (T.Sym v), Nothing) v, expr e sm)
+eop (Integral (IntegerDD _ _) _) _ = 
+  error "TeX/Import.hs Integral cannot be over Integers"
 
 rel :: HasSymbolTable ctx => Relation -> ctx -> T.Expr
 rel (EEquals a b)    sm = T.Eq  (expr a sm) (expr b sm)
@@ -124,8 +126,8 @@ set (DiscreteI a) = T.DiscreteI a
 set (DiscreteD a) = T.DiscreteD a
 set (DiscreteS a) = T.DiscreteS a
 
-int_wrt :: HasSymbolTable ctx => Expr -> ctx -> T.Expr
-int_wrt wrtc sm = expr (Deriv Total wrtc 1) sm
+int_wrt :: Symbol -> T.Expr
+int_wrt wrtc = T.Mul (T.Sym lD) (T.Sym wrtc)
 
 replace_divs :: HasSymbolTable ctx => Expr -> ctx -> T.Expr
 replace_divs (a :/ b) sm = T.Div (replace_divs a sm) (replace_divs b sm)

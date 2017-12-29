@@ -9,9 +9,9 @@ module Language.Drasil (
   -- Expr
   , Expr(..), Relation, BiFunc(..), DerivType(..)
   , ($=), ($<), ($<=), ($>), ($>=)
-  , log, abs, sin, cos, tan, sec, csc, cot, exp, sqrt, square, euclidean, ChunkDB(..), cdb, HasSymbolTable(..), symbolMap, vars
+  , log, abs, sin, cos, tan, sec, csc, cot, exp, sqrt, square, euclidean, vars
   , sum_all, defsum, prod_all, defprod, defint, int_all
-  , cross, m2x2, vec2D, dgnl2x2, termLookup, elements, termTable
+  , cross, m2x2, vec2D, dgnl2x2
   -- all the stuff from Unicode
   , Greek(..), Special(..)
   -- Unit
@@ -109,6 +109,13 @@ module Language.Drasil (
   , eqSymb, codeSymb , ssc'', hasStageSymbol
   -- Code.Imperative.Lang
   , Lang(..)
+  -- ChunkDB
+  , elements
+  , ChunkDB(..), cdb
+  , HasSymbolTable(..), symbolMap, symbLookup, getUnitLup
+  , HasTermTable(..), termLookup, termTable
+  , ConceptMap(..), conceptMap
+  , UnitMap(..), unitMap
 ) where
 
 import Prelude hiding (log, sin, cos, tan, sqrt, id, return, print, break, exp, product)

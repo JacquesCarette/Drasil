@@ -28,8 +28,10 @@ import Prelude hiding (id)
 -- symbols and their units.
 type SymbolMap  = Map.Map String QWrapper
 
+-- | A map of all concepts, normally used for retrieving definitions.
 type ConceptMap = Map.Map String CWrapper
 
+-- | A map of all the units used. Should be restricted to base units/synonyms.
 type UnitMap = Map.Map String UnitDefn
 
 -- | Again a bit of a misnomer as it's really a map of all NamedIdeas.
@@ -46,9 +48,11 @@ symbolMap cs = Map.fromList (map (\x -> ((x ^. id), qs x)) cs)
 termMap :: (NamedIdea c) => [c] -> TermMap
 termMap ts = Map.fromList (map (\x -> ((x ^. id), nw x)) ts)
 
+-- | Smart constructor for a 'ConceptMap'
 conceptMap :: (Concept c) => [c] -> ConceptMap
 conceptMap cs = Map.fromList (map (\x -> ((x ^. id), cw x)) cs)
 
+-- | Smart constructor for a 'UnitMap'
 unitMap :: (Unit u) => [u] -> UnitMap
 unitMap us = Map.fromList (map (\x -> ((x ^. id), unitWrapper x)) us)
 
@@ -67,8 +71,9 @@ symbLookup c m = let lookC = Map.lookup (c ^. id) m in
 getUnitLup :: HasSymbolTable s => (Chunk c) => c -> s -> Maybe UnitDefn
 getUnitLup c m = let lookC = symbLookup c (m ^. symbolTable) in
                  getUnit lookC
-                 
-termLookup :: (Chunk c) => c -> SymbolMap -> QWrapper
+
+-- | Looks up an id in the term table. If nothing is found, an error is thrown
+termLookup :: (Chunk c) => c -> TermMap -> NWrapper
 termLookup c m = let lookC = Map.lookup (c ^. id) m in
                  getT lookC
   where getT (Just x) = x

@@ -250,8 +250,8 @@ mkRefSec _  (RefVerb s) = s
 mkRefSec si (RefProg c l) = section (titleize refmat) [c] (foldr (mkSubRef si) [] l)
   where
     mkSubRef :: SystemInformation -> RefTab -> [Section] -> [Section]
-    mkSubRef (SI {_units = u})  TUnits   l' = table_of_units u (tuIntro defaultTUI) : l'
-    mkSubRef (SI {_units = u}) (TUnits' con) l' = table_of_units u (tuIntro con) : l'
+    mkSubRef (SI {_sysinfodb = db})  TUnits   l' = table_of_units (sort $ elements $ db ^. unitTable) (tuIntro defaultTUI) : l'
+    mkSubRef (SI {_sysinfodb = db}) (TUnits' con) l' = table_of_units (sort $ elements $ db ^. unitTable) (tuIntro con) : l'
     mkSubRef (SI {_quants = v}) (TSymb con) l' = 
       (Section (titleize tOfSymb) 
       (map Con [tsIntro con, (table Equational (sort $ filter (hasStageSymbol Equational . getStagedS) (nub v)) at_start)])) : l'

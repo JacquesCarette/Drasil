@@ -42,6 +42,7 @@ data USymb = UName Symbol
            | UPow USymb Integer -- ^ can be negative, should not be 0
            | UDiv USymb USymb   -- ^ Get proper division (not neg pow)
                                 -- necessary for things like J/(kg*C)
+  deriving (Eq, Ord)
 
 -- | For building references. Defines the possible type of reference.
 data RefType = Tab -- ^ Table
@@ -120,6 +121,3 @@ sParenDash = \x -> S " (" :+: x :+: S ") - "
 
 sDash :: Sentence -> Sentence -> Sentence
 y `sDash` z = y +:+ S "-" +:+ z
-
-instance Eq USymb where
-  a == b = a == b

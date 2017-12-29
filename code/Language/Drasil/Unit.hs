@@ -157,5 +157,8 @@ new_unit s u = makeDerU (unitCon s) (USynonym u)
 instance Eq UnitDefn where
   a == b = (a ^. usymb) == (b ^. usymb)
   
+instance Ord UnitDefn where
+  compare a b = compare (a ^. usymb) (b ^. usymb)
+  
 unitWrapper :: Unit u => u -> UnitDefn
 unitWrapper = UU

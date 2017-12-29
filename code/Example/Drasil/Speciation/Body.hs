@@ -154,7 +154,7 @@ specnSystInfo = SI {
 }
 
 specnSymbMap :: ChunkDB
-specnSymbMap = cdb specnSymbols (map nw acronyms ++ map nw specnSymbols) --FIXME: fill this in with the namedideas
+specnSymbMap = cdb specnSymbols (map nw acronyms ++ map nw specnSymbols) ([] :: [CWrapper]) --FIXME: fill this in with the namedideas and concepts
   
 {-- INTRO --}  
   

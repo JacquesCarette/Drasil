@@ -70,7 +70,7 @@ import Drasil.Sections.SpecificSystemDescription (solChSpecF,
 {--}
 
 gbSymbMap :: ChunkDB
-gbSymbMap = cdb this_symbols (map nw acronyms ++ map nw this_symbols)
+gbSymbMap = cdb this_symbols (map nw acronyms ++ map nw this_symbols) ([] :: [CWrapper])
 
 resourcePath :: String
 resourcePath = "../../../datafiles/GlassBR/"

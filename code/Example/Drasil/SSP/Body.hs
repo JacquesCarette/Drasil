@@ -117,7 +117,7 @@ ssp_code = codeSpec' ssp_si [sspInputMod]
 
 -- SYMBOL MAP HELPERS --
 sspSymMap :: ChunkDB
-sspSymMap = cdb sspSymbols (map nw sspSymbols ++ map nw acronyms)
+sspSymMap = cdb sspSymbols (map nw sspSymbols ++ map nw acronyms) ([] :: [CWrapper]) -- FIXME: Fill in Concepts
 
 sspSymMapT :: RelationConcept -> Contents
 sspSymMapT = symbolMapFun Theory

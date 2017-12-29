@@ -61,13 +61,13 @@ Symbol & Description & Units
 \midrule
 $a$ & Plate length (long dimension) & m
 \\
-${AR_{max}}$ & Maximum aspect ratio & 
+${AR_{max}}$ & Maximum aspect ratio &
 \\
-$AR$ & Aspect ratio & 
+$AR$ & Aspect ratio &
 \\
 $b$ & Plate width (short dimension) & m
 \\
-$B$ & Risk of failure & 
+$B$ & Risk of failure &
 \\
 ${d_{max}}$ & Maximum value for one of the dimensions of the glass plate & mm
 \\
@@ -75,41 +75,41 @@ ${d_{min}}$ & Minimum value for one of the dimensions of the glass plate & mm
 \\
 $E$ & Modulus of elasticity of glass & Pa
 \\
-$g$ & Glass type $g\in{}\{AN, FT, HS\}$ & 
+$g$ & Glass type $g\in{}\{AN, FT, HS\}$ &
 \\
-$GTF$ & Glass type factor & 
+$GTF$ & Glass type factor &
 \\
 $h$ & Actual thickness & m
 \\
-$is\_safe1$ & True when calculated probability is less than tolerable probability & 
+$is\_safe1$ & True when calculated probability is less than tolerable probability &
 \\
-$is\_safe2$ & True when load resistance (capacity) is greater than load (demand) & 
+$is\_safe2$ & True when load resistance (capacity) is greater than load (demand) &
 \\
-$J$ & Stress distribution factor (Function) & 
+$J$ & Stress distribution factor (Function) &
 \\
-${J_{tol}}$ & Stress distribution factor (Function) based on Pbtol & 
+${J_{tol}}$ & Stress distribution factor (Function) based on Pbtol &
 \\
 $k$ & Surface flaw parameter & $\frac{\text{m}^{12}}{\text{N}^{7}}$
 \\
-$LDF$ & Load duration factor & 
+$LDF$ & Load duration factor &
 \\
-$LR$ & Load resistance & 
+$LR$ & Load resistance &
 \\
-$LSF$ & Load share factor & 
+$LSF$ & Load share factor &
 \\
 $m$ & Surface flaw parameter & $\frac{\text{m}^{12}}{\text{N}^{7}}$
 \\
-$NFL$ & Non-factored load & 
+$NFL$ & Non-factored load &
 \\
-${P_{b}}$ & Probability of breakage & 
+${P_{b}}$ & Probability of breakage &
 \\
-${P_{btol}}$ & Tolerable probability of breakage & 
+${P_{btol}}$ & Tolerable probability of breakage &
 \\
 $q$ & Applied load (demand) & kPa
 \\
-$\hat{q}$ & Dimensionless load & 
+$\hat{q}$ & Dimensionless load &
 \\
-${\hat{q}_{tol}}$ & Tolerable load & 
+${\hat{q}_{tol}}$ & Tolerable load &
 \\
 $SD$ & Stand off distance & m
 \\
@@ -127,7 +127,7 @@ $t$ & Nominal thickness $t\in{}\{2.5, 2.7, 3.0, 4.0, 5.0, 6.0, 8.0, 10.0, 12.0, 
 \\
 ${t_{d}}$ & Duration of load & s
 \\
-$TNT$ & TNT equivalent factor & 
+$TNT$ & TNT equivalent factor &
 \\
 $w$ & Charge weight & kg
 \\
@@ -147,11 +147,11 @@ ${w_{TNT}}$ & Explosive mass in equivalent weight of TNT & kg
 Symbol & Description
 \\
 \midrule
-A & Assumption
-\\
 AN & Annealed Glass
 \\
 AR & Aspect Ratio
+\\
+A & Assumption
 \\
 DD & Data Definition
 \\
@@ -353,7 +353,7 @@ This section focuses on the general equations and laws that GlassBR is based on.
 \noindent \begin{minipage}{\textwidth}
 \begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
 \toprule \textbf{Refname} & \textbf{T:t1SafetyReq}
-\phantomsection 
+\phantomsection
 \label{T:t1SafetyReq}
 \\ \midrule \\
 Label & Safety Requirement-1
@@ -367,7 +367,7 @@ Description & If $is\_safe1$, the glass is considered safe. $is\_safe1$ and $is\
 \noindent \begin{minipage}{\textwidth}
 \begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
 \toprule \textbf{Refname} & \textbf{T:t2SafetyReq}
-\phantomsection 
+\phantomsection
 \label{T:t2SafetyReq}
 \\ \midrule \\
 Label & Safety Requirement-2
@@ -387,7 +387,7 @@ This section collects and defines all the data needed to build the instance mode
 \noindent \begin{minipage}{\textwidth}
 \begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
 \toprule \textbf{Refname} & \textbf{DD:risk.fun}
-\phantomsection 
+\phantomsection
 \label{DD:risk.fun}
 \\ \midrule \\
 Label & Risk of Failure
@@ -405,7 +405,7 @@ Source & [7]
 \noindent \begin{minipage}{\textwidth}
 \begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
 \toprule \textbf{Refname} & \textbf{DD:act.thick}
-\phantomsection 
+\phantomsection
 \label{DD:act.thick}
 \\ \midrule \\
 Label & Actual Thickness
@@ -434,7 +434,7 @@ Description & $h$ is the actual thickness (m)\newline$t$ is the nominal thicknes
 \noindent \begin{minipage}{\textwidth}
 \begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
 \toprule \textbf{Refname} & \textbf{DD:stressDistFac}
-\phantomsection 
+\phantomsection
 \label{DD:stressDistFac}
 \\ \midrule \\
 Label & Stress Distribution Factor (Function)
@@ -450,7 +450,7 @@ Description & $J$ is the stress distribution factor (Function)\newline$\hat{q}$ 
 \noindent \begin{minipage}{\textwidth}
 \begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
 \toprule \textbf{Refname} & \textbf{DD:nFL}
-\phantomsection 
+\phantomsection
 \label{DD:nFL}
 \\ \midrule \\
 Label & Non-Factored Load
@@ -466,7 +466,7 @@ Description & $NFL$ is the non-factored load\newline${\hat{q}_{tol}}$ is the tol
 \noindent \begin{minipage}{\textwidth}
 \begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
 \toprule \textbf{Refname} & \textbf{DD:gTF}
-\phantomsection 
+\phantomsection
 \label{DD:gTF}
 \\ \midrule \\
 Label & Glass Type Factor
@@ -486,7 +486,7 @@ Description & $GTF$ is the glass type factor\newline$g$ is the glass type $g\in{
 \noindent \begin{minipage}{\textwidth}
 \begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
 \toprule \textbf{Refname} & \textbf{DD:dimlessLoad}
-\phantomsection 
+\phantomsection
 \label{DD:dimlessLoad}
 \\ \midrule \\
 Label & Dimensionless Load

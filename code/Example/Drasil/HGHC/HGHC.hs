@@ -35,6 +35,7 @@ thisSI = SI {
 
 allSymbols :: ChunkDB
 allSymbols = cdb symbols (map nw symbols) ([] :: [CWrapper]) -- FIXME: Fill in concepts
+  si_units
   
 thisSRS :: DocDesc
 thisSRS = RefSec (RefProg intro 

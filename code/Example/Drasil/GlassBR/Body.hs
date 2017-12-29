@@ -71,6 +71,7 @@ import Drasil.Sections.SpecificSystemDescription (solChSpecF,
 
 gbSymbMap :: ChunkDB
 gbSymbMap = cdb this_symbols (map nw acronyms ++ map nw this_symbols) ([] :: [CWrapper])
+  (map UU [metre, second, kilogram] ++ map UU [pascal, newton])
 
 resourcePath :: String
 resourcePath = "../../../datafiles/GlassBR/"

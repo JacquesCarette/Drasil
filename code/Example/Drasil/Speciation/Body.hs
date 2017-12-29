@@ -155,6 +155,7 @@ specnSystInfo = SI {
 
 specnSymbMap :: ChunkDB
 specnSymbMap = cdb specnSymbols (map nw acronyms ++ map nw specnSymbols) ([] :: [CWrapper]) --FIXME: fill this in with the namedideas and concepts
+  (map UU [metre, second, kilogram] ++ map UU [pascal, newton])
   
 {-- INTRO --}  
   

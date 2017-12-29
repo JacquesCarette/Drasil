@@ -92,6 +92,7 @@ chipUnits = map UU [metre, kilogram, second] ++ map UU [newton, radian]
 
 everything :: ChunkDB
 everything = cdb cpSymbolsAll (map nw cpSymbolsAll ++ map nw cpAcronyms) ([] :: [CWrapper]) -- FIXME: Fill in Concepts
+  chipUnits
 
 chipCode :: CodeSpec
 chipCode = codeSpec' chipmunkSysInfo []

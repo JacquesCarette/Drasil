@@ -22,11 +22,9 @@ module Language.Drasil (
   , Chunk(..), VarChunk(..), ConceptChunk
   , makeVC, makeVC', vc, makeVCObj, SymbolForm
   , dcc, dccWDS, dccWDS', cv, dcc', vc', vc'', ccs, cc, cc', makeVC''
-  , Quantity(..), QWrapper, qw, ConVar(..), cvR, cvRs
   , Concept(..), cw, CWrapper
-  , CommonIdea(..)
-  --, commonidea, CI
-  , commonIdea, CI, commonIdea', commonIdea''
+  -- Chunk.CommonIdea
+  , CommonIdea(..) , commonIdea, CI, getAcc
   -- Chunk.NamedIdea
   , NamedIdea(..), NamedChunk, short, nc, nc', npnc
   , compoundterm, for, for', for'', of_, of_', of_'', of__, of'', compoundNC, compoundNC'
@@ -40,6 +38,7 @@ module Language.Drasil (
   -- Chunk.Eq
   , QDefinition(..), fromEqn, fromEqn', fromEqn'', getVC, equat
   -- Chunk.Quantity
+  , Quantity(..), QWrapper, qw, ConVar(..), cvR, cvRs
   , symbol
   -- Chunk.UncertainQuantity
   , UncertainQuantity(..), UncertainChunk(..), UncertQ, uq, uqNU, uqc, uqcNU, uqcND, uncrtnChunk, uvc
@@ -84,7 +83,7 @@ module Language.Drasil (
   , cA, cB, cC, cD, cE, cF, cG, cH, cI, cJ, cK, cL, cM, cN, cO, cP, cQ, cR, cS, cT, cU, cV, cW, cX, cY, cZ
   , lA, lB, lC, lD, lE, lF, lG, lH, lI, lJ, lK, lL, lM, lN, lO, lP, lQ, lR, lS, lT, lU, lV, lW, lX, lY, lZ
   -- Misc
-  , mkTable, unit'2Contents, getAcc, unit_symb, introduceAbb, phrase, plural, phrase's, plural's, unitHidingUnitless
+  , mkTable, unit'2Contents, unit_symb, introduceAbb, phrase, plural, phrase's, plural's, unitHidingUnitless
   -- Printing.Helpers
   , capitalize, paren, sqbrac
   -- Generate

@@ -19,7 +19,7 @@ table_of_abb_and_acronyms ls = Section (S "Abbreviations and Acronyms")
 table :: (NamedIdea s) => [s] -> Contents
 table ls = let chunks = filter (isJust . getA) ls in
   Table (map (at_start) [symbol_, description]) (mkTable
-  [(\ch -> getAcc ch) , 
+  [(\ch -> maybe (error "should never happen") S (getA ch)) , 
    (\ch -> titleize ch)]
   chunks)
   (S "Abbreviations and Acronyms") False

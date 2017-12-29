@@ -15,16 +15,16 @@ class Chunk c => NamedIdea c where
   -- | Lens to the term (a noun phrase)
   term :: Simple Lens c NP
   -- | Provides (Just abbreviation) or Nothing if it does not exist
-  getA :: c -> Maybe Sentence
+  getA :: c -> Maybe String
   --Get Abbreviation/Acronym? These might need to be separated 
   --depending on contexts, but for now I don't see a problem with it.
 
 -- | Get short form (if it exists), else get term.
 short :: NamedIdea c => c -> Sentence
-short c = maybe (phrase (c ^. term)) (\x -> x) (getA c)
+short c = maybe (phrase (c ^. term)) (\x -> x) (fmap S $ getA c)
 
 -- === DATA TYPES/INSTANCES === --
-data NamedChunk = NC String NP (Maybe Sentence)
+data NamedChunk = NC String NP (Maybe String)
 instance Eq NamedChunk where
   c1 == c2 = (c1 ^. id) == (c2 ^. id)
 instance Chunk NamedChunk where
@@ -40,7 +40,7 @@ nc i des = NC i des Nothing
 
 -- | 'NamedChunk' constructor for NamedChunks with abbreviations
 nc' :: String -> NP -> String -> NamedChunk
-nc' i t acc = NC i t (Just $ S acc)
+nc' i t acc = NC i t (Just acc)
 
 -- | 'NamedChunk' constructor for those without abbreviations
 npnc :: String -> NP -> NamedChunk
@@ -48,7 +48,7 @@ npnc i n = NC i n Nothing
 
 -- | 'NamedChunk' constructor for those with abbreviations
 npnc' :: String -> NP -> String -> NamedChunk
-npnc' i n a = NC i n (Just $ S a)
+npnc' i n a = NC i n (Just a)
 
 ----------------------
 -- various combinators

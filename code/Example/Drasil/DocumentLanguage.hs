@@ -30,8 +30,9 @@ import qualified Drasil.Sections.Requirements as R
 
 import Data.Drasil.Concepts.Documentation (refmat, tOfSymb, reference)
 
-import Data.Maybe (isJust)
-import Data.List (sort, nub)
+import Data.Maybe (isJust,fromJust)
+import Data.List (sort, sortBy, nub)
+import Data.Function (on)
 import Prelude hiding (id)
 
 type System = Sentence
@@ -250,14 +251,18 @@ mkRefSec _  (RefVerb s) = s
 mkRefSec si (RefProg c l) = section (titleize refmat) [c] (foldr (mkSubRef si) [] l)
   where
     mkSubRef :: SystemInformation -> RefTab -> [Section] -> [Section]
-    mkSubRef (SI {_sysinfodb = db})  TUnits   l' = table_of_units (sort $ elements $ db ^. unitTable) (tuIntro defaultTUI) : l'
-    mkSubRef (SI {_sysinfodb = db}) (TUnits' con) l' = table_of_units (sort $ elements $ db ^. unitTable) (tuIntro con) : l'
+    mkSubRef (SI {_sysinfodb = db})  TUnits l' =
+        table_of_units (sort $ elements $ db ^. unitTable) (tuIntro defaultTUI) : l'
+    mkSubRef (SI {_sysinfodb = db}) (TUnits' con) l' =
+        table_of_units (sort $ elements $ db ^. unitTable) (tuIntro con) : l'
     mkSubRef (SI {_quants = v}) (TSymb con) l' = 
       (Section (titleize tOfSymb) 
-      (map Con [tsIntro con, (table Equational (sort $ filter (hasStageSymbol Equational . getStagedS) (nub v)) at_start)])) : l'
+      (map Con [tsIntro con, (table Equational (
+         sortBy (compare `on` eqSymb) $
+         filter (hasStageSymbol Equational . getStagedS) (nub v)) at_start)])) : l'
     mkSubRef (SI {_concepts = cccs}) (TSymb' f con) l' = (mkTSymb cccs f con) : l'
     mkSubRef (SI {_sysinfodb = db}) TAandA l' = 
-      (table_of_abb_and_acronyms $ sort $
+      (table_of_abb_and_acronyms $ sortBy (compare `on` (fromJust . getA)) $
       filter (isJust . getA) (nub $ elements (db ^. termTable))) : l'
     mkSubRef _              (TVerb s) l' = s : l'
 

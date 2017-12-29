@@ -60,10 +60,8 @@ instance Ord Symbol where
       other -> other
   compare (Atop _ a)             b                     = compare a b  
   compare b                      (Atop _ a)            = compare b a
-  compare (Atomic (x:xs))       (Atomic (y:ys))        = 
-    case compare (toLower x) (toLower y) of
-      EQ -> compare xs ys
-      other -> other
+  compare (Atomic x)             (Atomic y)            = 
+    compare (map toLower x) (map toLower y)
   compare (Special a)           (Special b)            = compare a b
   compare (Special _)            _                     = LT
   compare _                     (Special _)            = GT

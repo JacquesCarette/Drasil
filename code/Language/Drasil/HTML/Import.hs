@@ -274,14 +274,14 @@ item (Nested t s) sm = H.Nested (spec t sm) (makeL s sm)
 -- (Data defs, General defs, Theoretical models, etc.)
 makePairs :: HasSymbolTable s => DType -> s -> [(String,[H.LayoutObj])]
 makePairs (Data c) m = [
-  ("Number",      [H.Paragraph $ spec (missingAcro (S "DD") $ getA c) m]),
+  ("Number",      [H.Paragraph $ spec (missingAcro (S "DD") $ fmap S $ getA c) m]),
   ("Label",       [H.Paragraph $ spec (titleize $ c ^. term) m]),
   ("Units",       [H.Paragraph $ spec (unit'2Contents c) m]),
   ("Equation",    [H.HDiv ["equation"] [H.Tagless (buildEqn c m)] (H.EmptyS)]),
   ("Description", [H.Paragraph (buildDDDescription c m)])
   ]
 makePairs (Theory c) m = [
-  ("Number",      [H.Paragraph $ spec (missingAcro (S "T") $ getA c) m]),
+  ("Number",      [H.Paragraph $ spec (missingAcro (S "T") $ fmap S $ getA c) m]),
   ("Label",       [H.Paragraph $ spec (titleize $ c ^. term) m]),
   ("Equation",    [H.HDiv ["equation"] [H.Tagless (H.E (rel (c ^. relat) m))]
                   (H.EmptyS)]),

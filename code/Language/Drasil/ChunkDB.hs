@@ -3,8 +3,8 @@ module Language.Drasil.ChunkDB
   , ChunkDB(..), cdb
   , HasSymbolTable(..), symbolMap, symbLookup, getUnitLup
   , HasTermTable(..), termLookup
-  , ConceptMap(..), conceptMap
-  , UnitMap(..), unitMap
+  , HasDefinitionTable(..), conceptMap
+  , HasUnitTable(..), unitMap
   ) where
 
 import Language.Drasil.Chunk
@@ -78,30 +78,37 @@ termLookup c m = let lookC = Map.lookup (c ^. id) m in
 data ChunkDB = CDB { symbs :: SymbolMap
                    , terms :: TermMap 
                    , defs  :: ConceptMap
-                   , units :: UnitMap} --TODO: Expand and add more databases
+                   , unitDB :: UnitMap} --TODO: Expand and add more databases
 
+-- | Smart constructor for chunk databases. Takes a list of Quantities 
+-- (for SymbolTable), NamedIdeas (for TermTable), Concepts (for DefinitionTable),
+-- and Units (for UnitTable)
 cdb :: (Quantity q, NamedIdea t, Concept c, Unit u) => 
   [q] -> [t] -> [c] -> [u] -> ChunkDB
 cdb s t c u = CDB (symbolMap s) (termMap t) (conceptMap c) (unitMap u)
 
+--- SYMBOL TABLE ---
 class HasSymbolTable s where
   symbolTable :: Simple Lens s SymbolMap
 
 instance HasSymbolTable ChunkDB where
   symbolTable f (CDB s t c u) = fmap (\x -> CDB x t c u) (f s)
 
+--- TERM TABLE ---
 class HasTermTable s where
   termTable :: Simple Lens s TermMap
   
 instance HasTermTable ChunkDB where
   termTable f (CDB s t c u) = fmap (\x -> CDB s x c u) (f t)
 
+--- DEFINITION TABLE ---
 class HasDefinitionTable s where
   defTable :: Simple Lens s ConceptMap
 
 instance HasDefinitionTable ChunkDB where
   defTable f (CDB s t c u) = fmap (\x -> CDB s t x u) (f c)
-  
+
+--- UNIT TABLE ---
 class HasUnitTable s where
   unitTable :: Simple Lens s UnitMap
 

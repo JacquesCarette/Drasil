@@ -112,10 +112,10 @@ module Language.Drasil (
   -- ChunkDB
   , elements
   , ChunkDB(..), cdb
-  , HasSymbolTable(..), symbolMap, symbLookup, getUnitLup
-  , HasTermTable(..), termLookup, termTable
-  , ConceptMap(..), conceptMap
-  , UnitMap(..), unitMap
+  , HasSymbolTable, symbolMap, symbLookup, getUnitLup, symbolTable
+  , HasTermTable, termLookup, termTable
+  , HasDefinitionTable, conceptMap, defTable
+  , HasUnitTable, unitMap, unitTable
 ) where
 
 import Prelude hiding (log, sin, cos, tan, sqrt, id, return, print, break, exp, product)

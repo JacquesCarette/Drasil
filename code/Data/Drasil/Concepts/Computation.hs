@@ -13,14 +13,15 @@ algorithm    = dcc "algorithm" (cn' "algorithm")
 mod_calc_desc :: Sentence -> ConceptChunk
 mod_calc_desc defnFromEx = dccWDS "mod_calc_desc" (cn' "calculation") defnFromEx
 
-application, computer, os, structure :: NamedChunk
+application, computer, structure :: NamedChunk
+os :: CI
 -------------------------------------------------------------------------------
---  NC      |       |      id       |       term               |  abbreviation
+--  NC      |     |      id       |       term               |  abbreviation
 -------------------------------------------------------------------------------
-application  = npnc  "application"    (cn' "application")      
-computer     = npnc  "computer"       (cn' "computer")         
-structure    = npnc  "structure"      (cn' "structure")         
-os           = npnc' "os"             (cn' "operating system")    "OS"
+application  = nc  "application"    (cn' "application")      
+computer     = nc  "computer"       (cn' "computer")         
+structure    = nc  "structure"      (cn' "structure")         
+os           = commonIdea "os"      (cn' "operating system")    "OS"
 
 
 dataStruct, dataStruct', dataType, dataType', 

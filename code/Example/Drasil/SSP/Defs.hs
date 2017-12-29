@@ -17,15 +17,15 @@ ssp = commonIdea "ssp" (cn' "slope stability problem") "SSP"
 
 ----Other Common Phrases----
 soil, material, intrslce, slip, slope, slice, morPrice, rgFnElm :: NamedChunk
-intrslce = npnc "interslice" (cn' "interslice")
-material = npnc "material"   (cn' "material")
-slice    = npnc "slice"      (cn' "slice")
-slip     = npnc "slip"       (cn  "slip") --FIXME: adjective?
-slope    = npnc "slope"      (cn' "slope")
-soil     = npnc "soil"       (cn  "soil")
+intrslce = nc "interslice" (cn' "interslice")
+material = nc "material"   (cn' "material")
+slice    = nc "slice"      (cn' "slice")
+slip     = nc "slip"       (cn  "slip") --FIXME: adjective?
+slope    = nc "slope"      (cn' "slope")
+soil     = nc "soil"       (cn  "soil")
 
-morPrice = npnc "morPrice"   (cn  "morgenstern price")
-rgFnElm  = npnc "rgFnElm"    (cn' "rigid finite element")
+morPrice = nc "morPrice"   (cn  "morgenstern price")
+rgFnElm  = nc "rgFnElm"    (cn' "rigid finite element")
 
 slpSrf, soilPrpty, mtrlPrpty, itslPrpty, slopeSrf, soilLyr :: NamedChunk
 slpSrf    = compoundNC slip surface
@@ -33,7 +33,7 @@ soilPrpty = compoundNC soil     property
 mtrlPrpty = compoundNC material property
 itslPrpty = compoundNC intrslce property
 slopeSrf  = compoundNC slope surface
-soilLyr   = compoundNC soil (npnc "layer" (cn' "layer"))
+soilLyr   = compoundNC soil (nc "layer" (cn' "layer"))
 
 crtSlpSrf, plnStrn, fs_concept :: ConceptChunk
 --FIXME: move to Concepts/soldMechanics.hs? They are too specific though
@@ -57,7 +57,7 @@ fs_concept = dcc "FS" factorOfSafety
 --
 factor :: NamedChunk --FIXME: this is here becuase this phrase is
                      --used in datadefs and instance models
-factor = npnc "factor" (cn' "factor") -- possible use this everywhere
+factor = nc "factor" (cn' "factor") -- possible use this everywhere
                                       -- (fs, fs_rc, fs_concept...)
 factorOfSafety :: NP
 factorOfSafety = factor `of_''` safety

@@ -41,14 +41,3 @@ commonIdea i t a = CI i a t
 
 getAcc :: CI -> Sentence
 getAcc = S . abrv
-
-{-
--- | Similar to commonIdea, except the abbreviation is a Symbol
-commonIdea' :: String -> NP -> Symbol -> CI
-commonIdea' i t sy = CI i (P sy) t 
-
--- | Similar to commonIdea, except the abbreviation can be anything of type 'Sentence'
--- ('Symbol', 'String', 'Greek', etc.)
-commonIdea'' :: String -> NP -> Sentence -> CI
-commonIdea'' i t ab = CI i ab t
--}

@@ -44,15 +44,15 @@ nFL           = commonIdea "nFL"           (nounPhraseSP "non-factored load")   
  
 beam, blastRisk, cantilever, edge, glaPlane, glaSlab, plane,
   glass, ptOfExplsn, responseTy :: NamedChunk
-beam         = npnc "beam"       (nounPhraseSP "beam")
-blastRisk    = npnc "blastRisk"  (nounPhraseSP "blast risk")
-cantilever   = npnc "cantilever" (nounPhraseSP "cantilever")
-edge         = npnc "edge"       (nounPhraseSP "edge")
-glass        = npnc "glass"      (nounPhraseSP "glass")
-glaSlab      = npnc "glaSlab"    (nounPhraseSP "glass slab")
-plane        = npnc "plane"      (nounPhraseSP "plane")
+beam         = nc "beam"       (nounPhraseSP "beam")
+blastRisk    = nc "blastRisk"  (nounPhraseSP "blast risk")
+cantilever   = nc "cantilever" (nounPhraseSP "cantilever")
+edge         = nc "edge"       (nounPhraseSP "edge")
+glass        = nc "glass"      (nounPhraseSP "glass")
+glaSlab      = nc "glaSlab"    (nounPhraseSP "glass slab")
+plane        = nc "plane"      (nounPhraseSP "plane")
 
-ptOfExplsn   = npnc "ptOfExplsn" (cn' "point of explosion")
+ptOfExplsn   = nc "ptOfExplsn" (cn' "point of explosion")
 
 glaPlane     = compoundNC glass plane
 responseTy   = compoundNC response type_

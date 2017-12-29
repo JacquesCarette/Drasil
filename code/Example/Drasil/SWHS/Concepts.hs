@@ -18,7 +18,7 @@ progName    = commonIdea "swhsName"   (nounPhrase "solar water heating system"
   "solar water heating systems") "SWHS"
 
 swhsFull :: NamedChunk
-swhsFull    = npnc "swhsFull" (progName `with'` phsChgMtrl)
+swhsFull    = nc "swhsFull" (progName `with'` phsChgMtrl)
 -- I want to include SI as an acronym, but I can't find a way for the
 -- description to have accents when using dcc.
 

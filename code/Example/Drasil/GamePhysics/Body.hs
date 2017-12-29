@@ -137,7 +137,7 @@ programDescription :: Sentence
 programDescription = foldlSent_ [(phrase openSource), getAcc twoD, 
   (phrase CP.rigidBody), (phrase physLib)]
 
-para1_s2_1_param :: (NamedIdea a) => a -> a -> Sentence -> Sentence ->
+para1_s2_1_param :: (NamedIdea a, NamedIdea b) => a -> b -> Sentence -> Sentence ->
   [Sentence] -> Sentence
 para1_s2_1_param progName typeOf progDescrip appOf listOf = foldlSent 
   [S "This", (phrase typeOf), S "descibes the modeling of an",

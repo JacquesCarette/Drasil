@@ -7,16 +7,16 @@ import Data.Drasil.Concepts.PhysicalProperties
 calculus, civil, degree_, engineering, structural, mechanics,
   undergraduate, highSchool, physical_, chemistry :: NamedChunk
 
-calculus        = npnc "calculus"       (cn   "calculus"     )
-civil           = npnc "civil"          (cn'  "civil"        )--FIXME: Adjective
-degree_         = npnc "degree"         (cn'  "degree"       )
-engineering     = npnc "engineering"    (cn'  "engineering"  )
-mechanics       = npnc "mechanics"      (cn   "mechanics"    )
-structural      = npnc "structural"     (cn'  "structural"   )--FIXME: Adjective
-undergraduate   = npnc "undergraduate"  (cn'  "undergraduate")
-highSchool      = npnc "highSchool"     (cn'  "high school"  )
-chemistry       = npnc "chemistry"      (cn'  "chemistry"    )
-physical_       = npnc "physical"       (cn'  "physical"     )--FIXME: Adjective
+calculus        = nc "calculus"       (cn   "calculus"     )
+civil           = nc "civil"          (cn'  "civil"        )--FIXME: Adjective
+degree_         = nc "degree"         (cn'  "degree"       )
+engineering     = nc "engineering"    (cn'  "engineering"  )
+mechanics       = nc "mechanics"      (cn   "mechanics"    )
+structural      = nc "structural"     (cn'  "structural"   )--FIXME: Adjective
+undergraduate   = nc "undergraduate"  (cn'  "undergraduate")
+highSchool      = nc "highSchool"     (cn'  "high school"  )
+chemistry       = nc "chemistry"      (cn'  "chemistry"    )
+physical_       = nc "physical"       (cn'  "physical"     )--FIXME: Adjective
 
 undergradDegree, scndYrCalculus, solidMechanics, secondYear, structuralEng,
   structuralMechanics, civilEng, highSchoolCalculus, highSchoolPhysics,

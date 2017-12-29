@@ -4,10 +4,11 @@ import Data.Drasil.Concepts.Documentation
 import Data.Drasil.Concepts.Computation (computer)
 import Data.Drasil.Concepts.Software (program)
 
-matlab, sciCompS :: NamedChunk
+matlab :: CI
+sciCompS :: NamedChunk
 
-matlab     = npnc' "matlab"        (pn' "MATLAB programming language")       "MATLAB" 
-sciCompS   = npnc "sciCompS"       (cn' "scientific computing software")
+matlab     = commonIdea "matlab" (pn' "MATLAB programming language")       "MATLAB" 
+sciCompS   = nc "sciCompS"       (cn' "scientific computing software")
 
 videoGame, openSource, compPro :: NamedChunk
 

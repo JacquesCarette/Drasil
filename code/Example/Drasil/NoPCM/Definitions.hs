@@ -10,11 +10,11 @@ import Data.Drasil.Concepts.Math (ode)
 --Common Terms
 coil, tank, water, ht_trans :: NamedChunk
 
-coil        = npnc "coil"           (cn' "coil")
-tank        = npnc "tank"           (cn' "tank")
-water       = npnc "water"          (cn "water")
-ht_trans    = npnc "heat transfer"  (cn "heat transfer") --Not really a nounphase,
-                                                         --just a hack to get RefSec to work
+coil        = nc "coil"           (cn' "coil")
+tank        = nc "tank"           (cn' "tank")
+water       = nc "water"          (cn "water")
+ht_trans    = nc "heat transfer"  (cn "heat transfer") --Not really a nounphase,
+                                                       --just a hack to get RefSec to work
 
 srs_swhs :: ConceptChunk -- Used to make the title of the paper
 srs_swhs = dcc "srs_swhs" (nounPhraseSP 

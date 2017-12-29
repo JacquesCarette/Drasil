@@ -24,31 +24,20 @@ short :: NamedIdea c => c -> Sentence
 short c = maybe (phrase (c ^. term)) (\x -> x) (fmap S $ getA c)
 
 -- === DATA TYPES/INSTANCES === --
-data NamedChunk = NC String NP (Maybe String)
+-- | Note that a |NamedChunk| does not have an acronym/abbreviation
+-- as that's a |CommonIdea|, which has its own representation
+data NamedChunk = NC String NP
 instance Eq NamedChunk where
   c1 == c2 = (c1 ^. id) == (c2 ^. id)
 instance Chunk NamedChunk where
-  id f (NC a b c) = fmap (\x -> NC x b c) (f a)
+  id f (NC a b) = fmap (\x -> NC x b) (f a)
 instance NamedIdea NamedChunk where
-  term f (NC a b c) = fmap (\x -> NC a x c) (f b)
-  getA (NC _ _ c) = c
+  term f (NC a b) = fmap (\x -> NC a x) (f b)
+  getA (NC _ _) = Nothing
   
--- | 'NamedChunk' constructor, takes an id and a term. For NamedChunks
--- without abbreviations
+-- | 'NamedChunk' constructor, takes an id and a term.
 nc :: String -> NP -> NamedChunk
-nc i des = NC i des Nothing
-
--- | 'NamedChunk' constructor for NamedChunks with abbreviations
-nc' :: String -> NP -> String -> NamedChunk
-nc' i t acc = NC i t (Just acc)
-
--- | 'NamedChunk' constructor for those without abbreviations
-npnc :: String -> NP -> NamedChunk
-npnc i n = NC i n Nothing
-
--- | 'NamedChunk' constructor for those with abbreviations
-npnc' :: String -> NP -> String -> NamedChunk
-npnc' i n a = NC i n (Just a)
+nc = NC
 
 ----------------------
 -- various combinators
@@ -178,16 +167,16 @@ andRT f1 f2 t1 t2 = nounPhrase''
   (Replace ((f1 t1) +:+ S "and" +:+ (f2 t2)))
   
 the :: (NamedIdea c) => c -> NamedChunk
-the t = npnc ("the" ++ t ^. id) (nounPhrase'' 
+the t = nc ("the" ++ t ^. id) (nounPhrase'' 
   (S "the" +:+ (phrase $ t ^. term)) (S "the" +:+ (plural $ t ^. term))
   CapFirst CapWords)
 
 theCustom :: (NamedIdea c) => (c -> Sentence) -> c -> NamedChunk
-theCustom f t = npnc ("the" ++ t ^. id) (nounPhrase''(S "the" +:+ (f t)) 
+theCustom f t = nc ("the" ++ t ^. id) (nounPhrase''(S "the" +:+ (f t)) 
   (S "the" +:+ (f t)) CapFirst CapWords)
 
 this :: (NamedIdea c) => c -> NamedChunk
-this t = npnc ("this" ++ t ^. id) (nounPhrase'' 
+this t = nc ("this" ++ t ^. id) (nounPhrase'' 
   (S "this" +:+ (phrase $ t ^. term)) (S "this" +:+ (plural $ t ^. term))
   CapFirst CapWords)
 
@@ -197,7 +186,7 @@ aNP t = nounPhrase''
   CapFirst CapWords  
   
 a_ :: (NamedIdea c) => c -> NamedChunk --Pluralization disallowed
-a_ t = npnc ("a" ++ t ^.id) (nounPhrase'' 
+a_ t = nc ("a" ++ t ^.id) (nounPhrase'' 
   (S "a" +:+ (phrase $ t ^. term)) (S "a" +:+ (phrase $ t ^. term)) 
   CapFirst CapWords)
 

@@ -497,19 +497,19 @@ siSys (SI {_sys = sys}) = nw sys
 --BELOW IS IN THIS FILE TEMPORARILY--
 --Creates Contents using an id and description (passed in as a Sentence).
 mkAssump :: String -> Sentence -> Contents
-mkAssump i desc = Assumption $ nw $ npnc i (nounPhraseSent desc)
+mkAssump i desc = Assumption $ nw $ nc i (nounPhraseSent desc)
 
 mkAssumpCustom :: String -> Sentence -> String -> Contents
-mkAssumpCustom i desc enid = Assumption $ nw $ npnc' i (nounPhraseSent desc) enid
+mkAssumpCustom i desc enid = Assumption $ nw $ commonIdea i (nounPhraseSent desc) enid
 
 mkRequirement :: String -> Sentence -> Contents
-mkRequirement i desc = Requirement $ nw $ npnc i $ nounPhraseSent desc
+mkRequirement i desc = Requirement $ nw $ nc i $ nounPhraseSent desc
 
 mkRequirementCustom :: String -> Sentence -> String -> Contents
-mkRequirementCustom i desc enid = Requirement $ nw $ npnc' i (nounPhraseSent desc) enid
+mkRequirementCustom i desc enid = Requirement $ nw $ commonIdea i (nounPhraseSent desc) enid
 
 mkLklyChnk :: String -> Sentence -> Contents
-mkLklyChnk i desc = LikelyChange $ nw $ npnc i $ nounPhraseSent desc
+mkLklyChnk i desc = LikelyChange $ nw $ nc i $ nounPhraseSent desc
 
 mkLklyChnkCustom :: String -> Sentence -> String -> Contents
-mkLklyChnkCustom i desc enid = LikelyChange $ nw $ npnc' i (nounPhraseSent desc) enid
+mkLklyChnkCustom i desc enid = LikelyChange $ nw $ commonIdea i (nounPhraseSent desc) enid

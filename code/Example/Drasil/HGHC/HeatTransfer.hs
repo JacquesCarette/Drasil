@@ -49,6 +49,6 @@ htTransCladFuel_eq = (2 * (C cladCond) * (C gapFilmCond)) / (2 * (C cladCond)
   + ((C cladThick) * (C gapFilmCond)))
 
 hghc, nuclearPhys, fp :: NamedChunk
-hghc = npnc "hghc" (cn "tiny")
-nuclearPhys = npnc "nuclearPhys" (nounPhraseSP "nuclear physics")
-fp = npnc "fp" (cn "FP")
+hghc = nc "hghc" (cn "tiny")
+nuclearPhys = nc "nuclearPhys" (nounPhraseSP "nuclear physics")
+fp = nc "fp" (cn "FP")

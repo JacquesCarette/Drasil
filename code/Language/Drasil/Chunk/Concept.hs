@@ -6,6 +6,7 @@ module Language.Drasil.Chunk.Concept
 
 import Language.Drasil.Chunk
 import Language.Drasil.Chunk.NamedIdea
+import Language.Drasil.Chunk.CommonIdea (commonIdea)
 
 import Control.Lens (Simple, Lens, (^.), set)
 
@@ -56,7 +57,7 @@ dcc i ter des = CC (nc i ter) (S des) ([] :: [CWrapper])
 
 -- | Identical to 'dcc', but adds an abbreviation (String)
 dcc' :: String -> NP -> String -> String -> ConceptChunk
-dcc' i t d a = CC (nc' i t a) (S d) ([] :: [CWrapper])
+dcc' i t d a = CC (commonIdea i t a) (S d) ([] :: [CWrapper])
 
 -- | Similar to 'dcc', except the definition is a 'Sentence'
 dccWDS :: String -> NP -> Sentence -> ConceptChunk
@@ -65,7 +66,7 @@ dccWDS i t d = CC (nc i t) d ([] :: [CWrapper])
 -- | Similar to 'dcc', except the definition is a 'Sentence' and adds
 -- an abbreviation (String)
 dccWDS' :: String -> NP -> Sentence -> String -> ConceptChunk
-dccWDS' i t d a = CC (nc' i t a) d ([] :: [CWrapper])
+dccWDS' i t d a = CC (commonIdea i t a) d ([] :: [CWrapper])
 
 -- | Constructor for 'ConceptChunk'. Does not allow concept domain tagging.
 cc :: NamedIdea c => c -> String -> ConceptChunk

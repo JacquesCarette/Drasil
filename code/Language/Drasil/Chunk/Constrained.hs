@@ -8,6 +8,7 @@ module Language.Drasil.Chunk.Constrained (
   , physc, sfwrc, constrained, cuc, cvc, constrained', cuc', constrainedNRV'
   , ConstrWrapper(..), cnstrw
   , createCnstrnts
+  , Reason(..), TheoryConstraint(..)
   ) where
 
 import Control.Lens (Simple, Lens, (^.), set)
@@ -46,11 +47,13 @@ class Quantity c => Constrained c where
 data Constraint where
   Phys :: (Expr -> Relation) -> Constraint
   Sfwr :: (Expr -> Relation) -> Constraint
-  Invariant  :: Relation -> Constraint -- Used by Theories (to start).
-  AssumedCon :: Relation -> Constraint -- Constraints that come from assumptions
-                                       -- as opposed to theory invariants.
-                                       -- This might be an artificial distinction
-                                       -- as they may be "the same"
+  
+data Reason = Invariant | AssumedCon          
+data TheoryConstraint = TCon Reason Relation -- AssumedCon are constraints that come from assumptions
+                                             -- as opposed to theory invariants.
+                                             -- This might be an artificial distinction
+                                             -- as they may be "the same"
+
   
 physc :: (Expr -> Relation) -> Constraint
 physc = Phys

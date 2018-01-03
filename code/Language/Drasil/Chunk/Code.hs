@@ -286,8 +286,6 @@ getSfwr (_:cs)        = getSfwr cs
 getConstraint :: Constraint -> (Expr -> Relation)
 getConstraint (Sfwr c) = c
 getConstraint (Phys c) = c
-getConstraint (Invariant x)  = \_ -> x
-getConstraint (AssumedCon x) = \_ -> x
 
 physLookup :: (Quantity q) => q -> ConstraintMap -> [Expr]
 physLookup q m = constraintLookup' q m getPhys

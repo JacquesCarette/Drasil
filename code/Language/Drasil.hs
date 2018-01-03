@@ -35,6 +35,7 @@ module Language.Drasil (
   , physc, sfwrc, constrained, cuc, cvc, constrained', cuc', constrainedNRV'
   , ConstrWrapper(..), cnstrw
   , createCnstrnts
+  , Reason(..), TheoryConstraint(..)
   -- Chunk.Eq
   , QDefinition(..), fromEqn, fromEqn', fromEqn'', getVC, equat
   -- Chunk.Quantity

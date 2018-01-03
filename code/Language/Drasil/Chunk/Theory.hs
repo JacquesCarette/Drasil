@@ -20,14 +20,14 @@ class Theory t where
   quantities :: Simple Lens t [QWrapper]
   operations :: Simple Lens t [CWrapper] -- FIXME: Should not be Concept
   defined_quant :: Simple Lens t [QDefinition]
-  invariants :: Simple Lens t [Constraint]
+  invariants :: Simple Lens t [TheoryConstraint]
   defined_fun :: Simple Lens t [QDefinition]
   
 data SpaceDefn = SpaceDefn -- FIXME: This should be defined.
   
 data TheoryChunk where
   TC :: String -> [TWrapper] -> [SpaceDefn] -> [QWrapper] -> [CWrapper] -> 
-    [QDefinition] -> [Constraint] -> [QDefinition] -> TheoryChunk
+    [QDefinition] -> [TheoryConstraint] -> [QDefinition] -> TheoryChunk
     
 instance Theory TheoryChunk where
   valid_context f (TC c m n o p q r s) = 
@@ -76,12 +76,12 @@ tl :: (forall t. (Theory t) => Simple Lens t a) -> Simple Lens TheoryModel a
 tl l f (TM c t) = fmap (\x -> TM c (set l x t)) (f (t ^. l))
   
 tc :: (Theory t, Quantity q, Concept c) => String -> [t] -> 
-  [SpaceDefn] -> [q] -> [c] -> [QDefinition] -> [Constraint] -> 
+  [SpaceDefn] -> [q] -> [c] -> [QDefinition] -> [TheoryConstraint] -> 
   [QDefinition] -> TheoryChunk
 tc cid t s q c = TC cid (map tw t) s (map qw q) (map cw c)
 
 tc' :: (Quantity q, Concept c) => String -> [q] -> [c] -> [QDefinition] -> 
-  [Constraint] -> [QDefinition] -> TheoryChunk
+  [TheoryConstraint] -> [QDefinition] -> TheoryChunk
 tc' cid q c = tc cid ([] :: [TWrapper]) [] q c
 
 tm :: (Concept c, Theory t) => c -> t -> TheoryModel

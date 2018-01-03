@@ -24,7 +24,7 @@ iModels = [probOfBr, calOfCap, calOfDe]
 {--}
 
 probOfBreak :: InstanceModel
-probOfBreak = im probOfBr [qw risk] [AssumedCon $ C risk $> 0] [qw prob_br] [AssumedCon $ C prob_br $> 0] []
+probOfBreak = im probOfBr [qw risk] [TCon AssumedCon $ C risk $> 0] [qw prob_br] [TCon AssumedCon $ C prob_br $> 0] []
 
 {--}
 

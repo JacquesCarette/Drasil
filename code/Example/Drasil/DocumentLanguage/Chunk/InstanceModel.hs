@@ -13,8 +13,8 @@ import Prelude hiding (id)
 type Inputs = [QWrapper]
 type Outputs = [QWrapper]
 
-type InputConstraints  = [Constraint]
-type OutputConstraints = [Constraint]
+type InputConstraints  = [TheoryConstraint]
+type OutputConstraints = [TheoryConstraint]
 
 -- | An Instance Model is a RelationConcept that may have specific input/output
 -- constraints. It also has attributes (like Derivation, source, etc.)

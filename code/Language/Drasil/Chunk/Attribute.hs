@@ -1,7 +1,7 @@
 {-# LANGUAGE GADTs,Rank2Types #-}
 module Language.Drasil.Chunk.Attribute 
   ( Attribute(..), Attributes, HasAttributes(..)
-  , getSource, getDerivation
+  , getSource, getDerivation, getShortName
   ) where
 
 import Control.Lens (Simple, Lens, (^.))
@@ -18,6 +18,7 @@ type Attributes = [Attribute]
 -- this knowledge, or a derivation to show how we arrived 
 -- at a given model/definition/etc.
 data Attribute = Rationale Sentence
+               | ShortName Sentence
                | SourceRef Sentence -- Source to reference for this knowledge chunk
                                     -- FIXME: Allow URLs/Citations here
                | D Derivation -- Makes sense for now (derivations are just document sections at the moment), but we may need to create a new
@@ -43,6 +44,14 @@ derivation :: Attributes -> Derivation
 derivation []          = []
 derivation ((D der):_) = der
 derivation (_:xs)      = derivation xs
+
+getShortName :: HasAttributes c => c -> Maybe Sentence
+getShortName c = shortName $ c ^. attributes
+
+shortName :: Attributes -> Maybe Sentence
+shortName [] = Nothing
+shortName ((ShortName s):_) = Just s
+shortName (_:xs) = shortName xs
 
 -- | Any chunk with 'Attributes' is part of the 'HasAttributes' class.
 class Chunk c => HasAttributes c where

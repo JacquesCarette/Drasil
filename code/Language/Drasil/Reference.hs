@@ -1,16 +1,48 @@
 module Language.Drasil.Reference where
 
+import Language.Drasil.Chunk (Chunk, id)
+import Language.Drasil.Chunk.AssumpChunk
+import Language.Drasil.Chunk.Attribute (getShortName)
 import Language.Drasil.Document
 import Language.Drasil.Spec
-import Control.Lens ((^.))
+import Control.Lens ((^.), Simple, Lens)
 
---import Language.Drasil.Chunk.Relation
---import Language.Drasil.Chunk.Eq
+import Prelude hiding (id)
+import qualified Data.Map as Map
 
 
 -- | Create References to a given 'LayoutObj'
 makeRef :: (LayoutObj l) => l -> Sentence
 makeRef r = Ref (rType r) (refName r)
+
+-- | Database for internal references.
+data ReferenceDB = RDB {assumpDB :: AssumpMap }
+
+rdb :: AssumpMap -> ReferenceDB
+rdb = RDB
+
+-- | Map for maintaining assumption references. 
+-- The Sentence is the shortname of a given 
+-- assumption, whereas the Int is that reference's number.
+-- Maintains both for easy reference swapping when necessary (or use of number
+-- if no shortname exists)
+type AssumpMap = Map.Map String (AssumpChunk, Int)
+
+assumpMap :: [AssumpChunk] -> AssumpMap
+assumpMap a = Map.fromList $ zip (map (^. id) a) (zip a [1..])
+
+assumpLookup :: Chunk c => c -> AssumpMap -> (AssumpChunk, Int)
+assumpLookup a m = let lookC = Map.lookup (a ^. id) m in
+                   getS lookC
+  where getS (Just x) = x
+        getS Nothing = error $ "Assumption: " ++ (a ^. id) ++ 
+          " referencing information not found in Assumption Map"
+
+class HasAssumpRefs s where
+  assumpRefTable :: Simple Lens s AssumpMap
+  
+instance HasAssumpRefs ReferenceDB where
+  assumpRefTable f (RDB a) = fmap (\x -> RDB x) (f a)
 
 -- This works for passing the correct id to the reference generator for Assumptions,
 -- Requirements and Likely Changes but I question whether we should use it.

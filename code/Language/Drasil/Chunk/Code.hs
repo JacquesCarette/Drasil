@@ -273,20 +273,6 @@ type ConstraintMap = Map.Map String [Constraint]
 constraintMap :: (Constrained c) => [c] -> ConstraintMap
 constraintMap cs = Map.fromList (map (\x -> ((x ^. id), (x ^. constraints))) cs)
 
-getPhys :: [Constraint] -> [(Expr -> Relation)]
-getPhys []            = []
-getPhys ((Phys c):cs) = c:getPhys cs
-getPhys (_:cs)        = getPhys cs
-
-getSfwr :: [Constraint] -> [(Expr -> Relation)]
-getSfwr []            = []
-getSfwr ((Sfwr c):cs) = c:getSfwr cs
-getSfwr (_:cs)        = getSfwr cs
-
-getConstraint :: Constraint -> (Expr -> Relation)
-getConstraint (Sfwr c) = c
-getConstraint (Phys c) = c
-
 physLookup :: (Quantity q) => q -> ConstraintMap -> [Expr]
 physLookup q m = constraintLookup' q m getPhys
 

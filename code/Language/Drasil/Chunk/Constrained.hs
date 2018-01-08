@@ -2,7 +2,8 @@
 
 module Language.Drasil.Chunk.Constrained (
     Constrained(..)
-  , Constraint(..)
+  , Constraint(..), ConstraintOrigin(..), isPhys, isSfwr, getConstraint
+  , getPhys, getSfwr
   , ConstrainedChunk(..)
   , ConstrConcept(..)
   , physc, sfwrc, constrained, cuc, cvc, constrained', cuc', constrainedNRV'
@@ -44,23 +45,38 @@ class Quantity c => Constrained c where
   constraints :: Simple Lens c [Constraint]
   reasVal     :: Simple Lens c (Maybe Expr)
 
-data Constraint where
-  Phys :: (Expr -> Relation) -> Constraint
-  Sfwr :: (Expr -> Relation) -> Constraint
-  
-data Reason = Invariant | AssumedCon          
-data TheoryConstraint = TCon Reason Relation -- AssumedCon are constraints that come from assumptions
-                                             -- as opposed to theory invariants.
-                                             -- This might be an artificial distinction
-                                             -- as they may be "the same"
+data ConstraintOrigin = Physical | Software
 
+data Constraint =
+  Dummy ConstraintOrigin (Expr -> Relation)
   
+data Reason = Invariant | AssumedCon
+data TheoryConstraint = 
+  TCon Reason Relation -- AssumedCon are constraints that come from assumptions
+                       -- as opposed to theory invariants.
+                       -- This might be an artificial distinction as they may be "the same"
+
 physc :: (Expr -> Relation) -> Constraint
-physc = Phys
+physc = Dummy Physical
 
 sfwrc :: (Expr -> Relation) -> Constraint
-sfwrc = Sfwr 
+sfwrc = Dummy Software
  
+isPhys, isSfwr :: Constraint -> Bool
+isPhys (Dummy Physical _) = True
+isPhys (Dummy _ _)        = False
+isSfwr (Dummy Software _) = True
+isSfwr (Dummy _ _)        = False
+
+getConstraint :: Constraint -> (Expr -> Relation)
+getConstraint (Dummy _ c) = c
+
+getPhys :: [Constraint] -> [(Expr -> Relation)]
+getPhys = map getConstraint . filter isPhys 
+
+getSfwr :: [Constraint] -> [(Expr -> Relation)]
+getSfwr = map getConstraint . filter isSfwr
+
 -- | ConstrainedChunks are 'Symbolic Quantities' 
 -- with 'Constraints' and maybe typical value
 data ConstrainedChunk where

@@ -33,6 +33,7 @@ module Language.Drasil (
   -- Chunk.Constrained
   , Constrained(..), ConstrainedChunk(..), Constraint(..), ConstrConcept(..)
   , physc, sfwrc, constrained, cuc, cvc, constrained', cuc', constrainedNRV'
+  , isPhys, isSfwr, getPhys, getSfwr
   , ConstrWrapper(..), cnstrw
   , createCnstrnts
   , Reason(..), TheoryConstraint(..)

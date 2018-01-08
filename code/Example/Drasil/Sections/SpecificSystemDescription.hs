@@ -234,25 +234,26 @@ dataConstraintUncertainty = foldlSent [S "The", phrase uncertainty, phrase colum
 
 -- Creates the input Data Constraints Table
 inDataConstTbl :: (UncertainQuantity c, Constrained c) => [c] -> Contents
-inDataConstTbl qlst = Table ([S "Var"] ++ (isPhys $ physC (head qlst) qlst) ++
-  (isSfwr $ sfwrC (head qlst) qlst) ++ [S "Typical" +:+ titleize value] ++
-  (isUnc $ typUncr (head qlst) qlst))
+inDataConstTbl qlst = Table ([S "Var"] ++ 
+  (addTitle (titleize' physicalConstraint) $ physC (head qlst) qlst) ++
+  (addTitle (titleize' softwareConstraint) $ sfwrC (head qlst) qlst) ++ 
+  [S "Typical" +:+ titleize value] ++
+  (addTitle (short typUnc) $ typUncr (head qlst) qlst))
   (map (\x -> fmtInputConstr x qlst) qlst)
   (S "Input Data Constraints") True
-  where isPhys [] = []
-        isPhys _  = [titleize' physicalConstraint]
-        isSfwr [] = []
-        isSfwr _  = [titleize' softwareConstraint]
-        isUnc  [] = []
-        isUnc  _  = [short typUnc]
 
 -- Creates the output Data Constraints Table
 outDataConstTbl :: (Quantity c, Constrained c) => [c] -> Contents
-outDataConstTbl qlst = Table ([S "Var"] ++ (isPhys $ physC (head qlst) qlst) ++
-  (isSfwr $ sfwrC (head qlst) qlst))
+outDataConstTbl qlst = Table ([S "Var"] ++ 
+  (addTitle (titleize' physicalConstraint) $ physC (head qlst) qlst) ++
+  (addTitle (titleize' softwareConstraint) $ sfwrC (head qlst) qlst))
   (map (\x -> fmtOutputConstr x qlst) qlst)
   (S "Output Data Constraints") True
-  where isPhys [] = []
-        isPhys _  = [titleize' physicalConstraint]
-        isSfwr [] = []
-        isSfwr _  = [titleize' softwareConstraint]
+
+------------------------------------------------------------
+-- Not exported
+
+-- If there's something, add the title (as a singleton list)
+addTitle :: title -> [a] -> [title]
+addTitle _ [] = []
+addTitle t _  = [t]

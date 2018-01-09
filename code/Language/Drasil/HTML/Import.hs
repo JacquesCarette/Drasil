@@ -5,6 +5,8 @@ import Language.Drasil.Expr (Expr(..), Relation, UFunc(..), BiFunc(..),
 import Language.Drasil.Spec
 import qualified Language.Drasil.HTML.AST as H
 import Language.Drasil.Unicode (Special(Partial))
+import Language.Drasil.Chunk.AssumpChunk
+import Language.Drasil.Chunk.Attribute
 import Language.Drasil.Chunk.Eq
 import Language.Drasil.Chunk.ExprRelat (relat)
 import Language.Drasil.Chunk.NamedIdea (term, short, getA)
@@ -20,6 +22,8 @@ import Language.Drasil.SymbolAlphabet (lD)
 import Language.Drasil.NounPhrase (phrase, titleize)
 import Language.Drasil.Unit (usymb)
 import Language.Drasil.Citations (Citation(..),CiteField(..))
+
+import Data.Maybe (fromJust)
 
 import Control.Lens hiding ((:>),(:<),set)
 
@@ -193,8 +197,8 @@ lay x@(Figure c f wp)   sm = H.Figure (spec (refName x) sm) (spec c sm) f wp
 lay (Graph _ _ _ _)      _ = H.Paragraph (H.EmptyS)  -- need to implement!
 lay x@(Requirement r)   sm = 
   H.ALUR H.Requirement (spec (phrase $ r ^. term) sm) (spec (refName x) sm) (spec (short r) sm)
-lay x@(Assumption a)    sm = 
-  H.ALUR H.Assumption (spec (phrase $ a ^. term) sm) (spec (refName x) sm) (spec (short a) sm)
+lay x@(Assumption a)    sm = H.ALUR H.Assumption 
+  (spec (assuming a) sm) (spec (refName x) sm) (spec (fromJust $ getShortName a) sm)
 lay x@(LikelyChange lc) sm = 
   H.ALUR H.LikelyChange (spec (phrase $ lc ^. term) sm) (spec (refName x) sm) (spec (short lc) sm)
 lay x@(UnlikelyChange uc) sm = 

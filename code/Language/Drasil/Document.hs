@@ -2,6 +2,8 @@
 module Language.Drasil.Document where
 import Prelude hiding (id)
 import Language.Drasil.Chunk (id)
+import Language.Drasil.Chunk.AssumpChunk
+import Language.Drasil.Chunk.Attribute (getShortName)
 import Language.Drasil.Chunk.Eq
 import Language.Drasil.Chunk.Relation
 import Language.Drasil.Chunk.NamedIdea
@@ -47,7 +49,7 @@ data Contents = Table [Sentence] [[Sentence]] Title Bool
                | Enumeration ListType -- ^ Lists
                | Figure Label Filepath MaxWidthPercent -- ^ Should use relative file path.
                | Requirement NWrapper
-               | Assumption NWrapper
+               | Assumption AssumpChunk
                | LikelyChange NWrapper
                | UnlikelyChange NWrapper
                | Bib BibRef
@@ -130,7 +132,7 @@ instance LayoutObj Contents where
   rType (Definition _)            = Def Nothing
   rType (Defnt _ _ _)             = Def Nothing
   rType (Requirement r)           = Req $ fmap S $ getA r
-  rType (Assumption a)            = Assump $ fmap S $ getA a
+  rType (Assumption a)            = Assump $ getShortName a
   rType (LikelyChange lc)         = LC $ fmap S $ getA lc
   rType (UnlikelyChange _)        = UC
  -- rType (UsesHierarchy _)       = Fig

@@ -84,6 +84,7 @@ library
     , Language.Drasil.TeX.Print
     , Language.Drasil.TeX.Monad
     , Language.Drasil.TeX.Preamble
+    , Language.Drasil.Chunk.AssumpChunk
     , Language.Drasil.Chunk.Attribute
     , Language.Drasil.Chunk.Attribute.Derivation
     , Language.Drasil.Chunk.Code
@@ -96,6 +97,7 @@ library
     , Language.Drasil.Chunk.NamedIdea
     , Language.Drasil.Chunk.Quantity
     , Language.Drasil.Chunk.Relation
+    , Language.Drasil.Chunk.ReqChunk
     , Language.Drasil.Chunk.SymbolForm
     , Language.Drasil.Chunk.Theory
     , Language.Drasil.Chunk.UncertainQuantity

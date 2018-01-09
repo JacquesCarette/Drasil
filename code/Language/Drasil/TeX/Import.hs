@@ -9,6 +9,7 @@ import Language.Drasil.Expr.Extract
 import Language.Drasil.Spec
 import qualified Language.Drasil.TeX.AST as T
 import Language.Drasil.Unicode (Special(Partial))
+import Language.Drasil.Chunk.AssumpChunk
 import Language.Drasil.Chunk.Eq
 import Language.Drasil.Chunk.ExprRelat (relat)
 import Language.Drasil.Chunk.NamedIdea (term)
@@ -192,7 +193,7 @@ lay x@(Figure c f wp)     sm = T.Figure (spec (refName x) sm) (spec c sm) f wp
 lay x@(Requirement r)     sm = 
   T.Requirement (spec (phrase (r ^. term)) sm) (spec (refName x) sm)
 lay x@(Assumption a)      sm = 
-  T.Assumption (spec (phrase $ a ^. term) sm) (spec (refName x) sm)
+  T.Assumption (spec (assuming a) sm) (spec (refName x) sm)
 lay x@(LikelyChange lc)   sm = 
   T.LikelyChange (spec (phrase $ lc ^. term) sm)
   (spec (refName x) sm)

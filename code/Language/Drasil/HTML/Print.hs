@@ -19,6 +19,7 @@ import Language.Drasil.HTML.Monad
 import Language.Drasil.People (People,Person(..),rendPersLFM',rendPersLFM'',Conv(..),nameStr,rendPersLFM, isInitial)
 import Language.Drasil.Config (StyleGuide(..), bibStyleH)
 import Language.Drasil.ChunkDB (HasSymbolTable(..))
+import Language.Drasil.Space (Space(..))
 
 --FIXME? Use Doc in place of Strings for p_spec/title_spec
 
@@ -167,8 +168,7 @@ p_expr (And a b)  = p_expr a ++ " &and; " ++ p_expr b
 p_expr (Or a b)   = p_expr a ++ " &or; " ++ p_expr b
 p_expr (Impl a b) = p_expr a ++ " &rArr; " ++ p_expr b
 p_expr (Iff a b)  = p_expr a ++ " &hArr; " ++ p_expr b
-p_expr (IsIn  a b) = p_expr a ++ "&thinsp;&isin;&thinsp;"  ++ show b
--- p_expr (State a b) = (concat $ intersperse ", " $ map p_quan a) ++ ": " ++ p_expr b
+p_expr (IsIn  a b) = p_expr a ++ "&thinsp;&isin;&thinsp;"  ++ p_space b
 p_expr (Forall v e) = "&forall;" ++ symbol v ++ "&thinsp; :" ++ paren (p_expr e)
 p_expr (Exists v e) = "&exist;"  ++ symbol v ++ "&thinsp; :" ++ paren (p_expr e)
 
@@ -259,6 +259,21 @@ pow a@(Mul _ _) b = paren (p_expr a) ++ sup (p_expr b)
 pow a@(Pow _ _) b = paren (p_expr a) ++ sup (p_expr b)
 pow a b = p_expr a ++ sup (p_expr b)
 
+p_space :: Space -> String
+p_space Integer  = "&#8484;"
+p_space Rational = "&#8474;"
+p_space Real     = "&#8477;"
+p_space Natural  = "&#8469;"
+p_space Boolean  = "&#120121;"
+p_space Char     = "Char"
+p_space String   = "String"
+p_space Radians  = "rad"
+p_space (Vect a) = "V" ++ p_space a
+p_space (Obj a)  = a
+p_space (DiscreteI a)  = "{" ++ (concat $ intersperse ", " (map show a)) ++ "}"
+p_space (DiscreteD a)  = "{" ++ (concat $ intersperse ", " (map show a)) ++ "}"
+p_space (DiscreteS a)  = "{" ++ (concat $ intersperse ", " a) ++ "}"
+  
 -----------------------------------------------------------------
 ------------------BEGIN TABLE PRINTING---------------------------
 -----------------------------------------------------------------

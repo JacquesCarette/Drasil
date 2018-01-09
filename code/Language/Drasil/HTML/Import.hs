@@ -2,7 +2,6 @@ module Language.Drasil.HTML.Import where
 import Prelude hiding (id)
 import Language.Drasil.Expr (Expr(..), Relation, UFunc(..), BiFunc(..),
     DerivType(..), EOperator(..), ($=), DomainDesc(..), RealRange(..))
-import Language.Drasil.Space (Space(..))
 import Language.Drasil.Spec
 import qualified Language.Drasil.HTML.AST as H
 import Language.Drasil.Unicode (Special(Partial))
@@ -65,7 +64,7 @@ expr (a  :&&  b)        sm = H.And   (expr a sm) (expr b sm)
 expr (a  :||  b)        sm = H.Or    (expr a sm) (expr b sm)
 expr (a  :=>  b)        sm = H.Impl  (expr a sm) (expr b sm)
 expr (a  :<=> b)        sm = H.Iff   (expr a sm) (expr b sm)
-expr (IsIn  a b)        sm = H.IsIn  (expr a sm) (set b)
+expr (IsIn  a b)        sm = H.IsIn  (expr a sm) b
 expr (ForAll a b)       sm = H.Forall a (expr b sm)
 expr (Exists a b)       sm = H.Exists a (expr b sm)
 expr (Len _)             _ = error "Len not yet implemented"
@@ -116,22 +115,6 @@ rel (EGreater a b)   sm = H.Gt  (expr a sm) (expr b sm)
 rel (ELessEq a b)    sm = H.LEq (expr a sm) (expr b sm)
 rel (EGreaterEq a b) sm = H.GEq (expr a sm) (expr b sm)
 rel _ _ = error "Attempting to use non-Relation Expr in relation context."
-
--- | Helper for translating Spaces
-set :: Space -> H.Set
-set Integer  = H.Integer
-set Rational = H.Rational
-set Real     = H.Real
-set Natural  = H.Natural
-set Boolean  = H.Boolean
-set Char     = H.Char
-set String   = H.String
-set Radians  = H.Radians
-set (Vect a) = H.Vect (set a)
-set (Obj a)  = H.Obj a
-set (DiscreteI a) = H.DiscreteI a
-set (DiscreteD a) = H.DiscreteD a
-set (DiscreteS a) = H.DiscreteS a
 
 -- | Helper function for translating the differential
 int_wrt :: Symbol -> H.Expr

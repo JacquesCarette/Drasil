@@ -1,8 +1,6 @@
 {-# Language GADTs #-}
 module Language.Drasil.HTML.AST where
 
-import Data.List (intersperse)
-
 import Language.Drasil.Expr (Variable)
 import Language.Drasil.Symbol (Symbol)
 import Language.Drasil.Spec (USymb, RefType)
@@ -10,8 +8,7 @@ import Language.Drasil.Unicode (Greek, Special)
 import Language.Drasil.Document (DType (..), MaxWidthPercent)
 import Language.Drasil.Citations (Month(..))
 import Language.Drasil.People (People)
-
--- import Data.List (intersperse)
+import Language.Drasil.Space (Space)
 
 -- | Internal HTML version of Expr 
 -- (for converting 'Language.Drasil.Expr.Expr')
@@ -41,7 +38,7 @@ data Expr = Var   Variable
           | Case  [(Expr,Expr)]
           | Op Function [Expr]
           | Grouping Expr
-          | IsIn  Expr Set
+          | IsIn  Expr Space
           | Forall Symbol Expr
           | Exists Symbol Expr
           | Impl Expr Expr
@@ -66,21 +63,6 @@ data Function = Log
            | Product (Maybe ((Symbol, Expr), Expr))
            | Exp
            | Sqrt
-
-data Set = Integer
-         | Rational
-         | Real
-         | Natural
-         | Boolean
-         | Char
-         | String
-         | Radians
-         | Vect Set
-         | Obj String
-         | DiscreteI [Int]
-         | DiscreteD [Double]
-         | DiscreteS [String]
-
 
 -- | Internal HTML version of Sentence 
 -- (for converting 'Language.Drasil.Spec.Sentence')
@@ -160,21 +142,6 @@ instance Show Function where
   show Cross          = "&#10799;"
   show Exp            = "e"
   show Sqrt           = "&radic;"
-  
-instance Show Set where
-  show Integer  = "&#8484;"
-  show Rational = "&#8474;"
-  show Real     = "&#8477;"
-  show Natural  = "&#8469;"
-  show Boolean  = "&#120121;"
-  show Char     = "Char"
-  show String   = "String"
-  show Radians  = "rad"
-  show (Vect a) = "V" ++ show a
-  show (Obj a)  = a
-  show (DiscreteI a)  = "{" ++ (concat $ intersperse ", " (map show a)) ++ "}"
-  show (DiscreteD a)  = "{" ++ (concat $ intersperse ", " (map show a)) ++ "}"
-  show (DiscreteS a)  = "{" ++ (concat $ intersperse ", " a) ++ "}"
   
 type BibRef = [Citation]
 type City   = Spec

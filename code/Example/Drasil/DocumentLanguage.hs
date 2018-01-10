@@ -497,10 +497,7 @@ siSys (SI {_sys = sys}) = nw sys
 --BELOW IS IN THIS FILE TEMPORARILY--
 --Creates Contents using an id and description (passed in as a Sentence).
 mkAssump :: String -> Sentence -> Contents
-mkAssump i desc = Assumption $ nw $ nc i (nounPhraseSent desc)
-
-mkAssumpCustom :: String -> Sentence -> String -> Contents
-mkAssumpCustom i desc enid = Assumption $ nw $ commonIdea i (nounPhraseSent desc) enid
+mkAssump i desc = Assumption $ ac' i desc 
 
 mkRequirement :: String -> Sentence -> Contents
 mkRequirement i desc = Requirement $ nw $ nc i $ nounPhraseSent desc

@@ -9,6 +9,7 @@ import Language.Drasil.Chunk.Eq
 import Language.Drasil.Chunk.Constrained
 import Language.Drasil.ChunkDB (ChunkDB)
 import Language.Drasil.People
+import Language.Drasil.Reference
 import Language.Drasil.Unit
 
 -- | Data structure for holding all of the requisite information about a system
@@ -23,20 +24,21 @@ data SystemInformation where
  SI :: (NamedIdea a, NamedIdea b, HasName c, Unit d,
   Quantity e, Ord e, Ord f, Quantity f, Concept f,
   Quantity h, Quantity i,
-  Constrained j) => {
-  _sys :: a,
-  _kind :: b,
-  _authors :: [c],
-  _units :: [d],
-  _quants :: [e],
-  _concepts :: [f],
-  _definitions :: [QDefinition],
-  _inputs :: [h],
-  _outputs :: [i],
-  _defSequence :: [Block QDefinition],
-  _constraints :: [j], --TODO: Add SymbolMap OR enough info to gen SymbolMap
-  _constants :: [QDefinition],
-  _sysinfodb :: ChunkDB
+  Constrained j) => 
+  { _sys :: a
+  , _kind :: b
+  , _authors :: [c]
+  , _units :: [d]
+  , _quants :: [e]
+  , _concepts :: [f]
+  , _definitions :: [QDefinition]
+  , _inputs :: [h]
+  , _outputs :: [i]
+  , _defSequence :: [Block QDefinition]
+  , _constraints :: [j] --TODO: Add SymbolMap OR enough info to gen SymbolMap
+  , _constants :: [QDefinition]
+  , _sysinfodb :: ChunkDB
+  , _refdb :: ReferenceDB
   } -> SystemInformation
   
 -- | for listing QDefs in SystemInformation

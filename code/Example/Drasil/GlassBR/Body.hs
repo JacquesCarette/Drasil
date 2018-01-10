@@ -147,9 +147,19 @@ glassSystInfo = SI {
   _defSequence = gbQDefns,
   _constraints = gbConstrained,
   _constants   = gbConstants,
-  _sysinfodb   = gbSymbMap
+  _sysinfodb   = gbSymbMap,
+  _refdb       = gbRefDB
 }
   --FIXME: All named ideas, not just acronyms.
+
+gbRefDB :: ReferenceDB
+gbRefDB = rdb $ assumpMap newAssumptions
+
+newAssumptions :: [AssumpChunk] -- For testing
+newAssumptions = map (\(x,y) -> ac' x y) $ zip
+  ["glassTyA", "glassConditionA", "explsnScenarioA", "standardValuesA",
+  "glassLiteA", "bndryConditionsA", "responseTyA", "ldfConstantA"]
+  assumptionDescs
 
 testIMFromQD :: InstanceModel
 testIMFromQD = imQD gbSymbMap risk EmptyS [] [] []

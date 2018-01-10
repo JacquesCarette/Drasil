@@ -96,6 +96,7 @@ type Caption  = Spec
 
 -- | Internal HTML version of LayoutObj 
 -- (for converting 'Language.Drasil.LayoutObj.LayoutObj')
+data ALUR = Assumption | LikelyChange | UnlikelyChange | Requirement
 data LayoutObj = Table Tags [[Spec]] Label Bool Caption
                | Header Int Contents
                | Paragraph Contents
@@ -105,10 +106,7 @@ data LayoutObj = Table Tags [[Spec]] Label Bool Caption
                | Definition DType [(String,[LayoutObj])] Label
                | List ListType
                | Figure Label Caption Filepath MaxWidthPercent
-               | Assumption Contents Label Label
-               | LikelyChange Contents Label Label
-               | UnlikelyChange Contents Label Label
-               | Requirement Contents Label Label
+               | ALUR ALUR Contents Label Label
                | Bib BibRef
                -- Span Tags Contents
                

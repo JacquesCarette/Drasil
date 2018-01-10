@@ -42,21 +42,17 @@ build fn (Document t a c) sm =
   
 -- | Helper for rendering LayoutObjects into HTML
 printLO :: HasSymbolTable s => LayoutObj -> s -> Doc
-printLO (HDiv ts layoutObs l)    sm = refwrap (p_spec l sm) $ 
+printLO (HDiv ts layoutObs l)  sm = refwrap (p_spec l sm) $ 
                                    div_tag ts (vcat (map (flip printLO sm) layoutObs))
-printLO (Paragraph contents)     sm = paragraph $ text (p_spec contents sm)
-printLO (Tagless contents)       sm = text $ p_spec contents sm
-printLO (Table ts rows r b t)    sm = makeTable ts rows (p_spec r sm) b (p_spec t sm) sm
---printLO (CodeBlock c)             = code $ printCode c
-printLO (Definition dt ssPs l)   sm = makeDefn dt ssPs (p_spec l sm) sm
-printLO (Header n contents)      sm = h n $ text (p_spec contents sm)
-printLO (List t)                 sm = makeList t sm
-printLO (Figure r c f wp)        sm = makeFigure (p_spec r sm) (p_spec c sm) f wp
-printLO (Assumption a l id)      sm = makeRefList (p_spec a sm) (p_spec l sm) (p_spec id sm)
-printLO (Requirement r l id)     sm = makeRefList (p_spec r sm) (p_spec l sm) (p_spec id sm)
-printLO (LikelyChange lc l id)   sm = makeRefList (p_spec lc sm) (p_spec l sm) (p_spec id sm)
-printLO (UnlikelyChange uc l id) sm = makeRefList (p_spec uc sm) (p_spec l sm) (p_spec id sm)
-printLO (Bib bib)                sm = printLO (makeBib sm bib) sm
+printLO (Paragraph contents)   sm = paragraph $ text (p_spec contents sm)
+printLO (Tagless contents)     sm = text $ p_spec contents sm
+printLO (Table ts rows r b t)  sm = makeTable ts rows (p_spec r sm) b (p_spec t sm) sm
+printLO (Definition dt ssPs l) sm = makeDefn dt ssPs (p_spec l sm) sm
+printLO (Header n contents)    sm = h n $ text (p_spec contents sm)
+printLO (List t)               sm = makeList t sm
+printLO (Figure r c f wp)      sm = makeFigure (p_spec r sm) (p_spec c sm) f wp
+printLO (ALUR _ x l id)        sm = makeRefList (p_spec x sm) (p_spec l sm) (p_spec id sm)
+printLO (Bib bib)              sm = printLO (makeBib sm bib) sm
 
 
 -- | Called by build, uses 'printLO' to render the layout 

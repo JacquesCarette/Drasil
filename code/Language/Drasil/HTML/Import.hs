@@ -192,13 +192,13 @@ lay (Enumeration cs)    sm = H.List $ makeL cs sm
 lay x@(Figure c f wp)   sm = H.Figure (spec (refName x) sm) (spec c sm) f wp
 lay (Graph _ _ _ _)      _ = H.Paragraph (H.EmptyS)  -- need to implement!
 lay x@(Requirement r)   sm = 
-  H.Requirement (spec (phrase $ r ^. term) sm) (spec (refName x) sm) (spec (short r) sm)
+  H.ALUR H.Requirement (spec (phrase $ r ^. term) sm) (spec (refName x) sm) (spec (short r) sm)
 lay x@(Assumption a)    sm = 
-  H.Assumption (spec (phrase $ a ^. term) sm) (spec (refName x) sm) (spec (short a) sm)
+  H.ALUR H.Assumption (spec (phrase $ a ^. term) sm) (spec (refName x) sm) (spec (short a) sm)
 lay x@(LikelyChange lc) sm = 
-  H.LikelyChange (spec (phrase $ lc ^. term) sm) (spec (refName x) sm) (spec (short lc) sm)
+  H.ALUR H.LikelyChange (spec (phrase $ lc ^. term) sm) (spec (refName x) sm) (spec (short lc) sm)
 lay x@(UnlikelyChange uc) sm = 
-  H.UnlikelyChange (spec (phrase $ uc ^. term) sm) (spec (refName x) sm) (spec (short uc) sm)
+  H.ALUR H.UnlikelyChange (spec (phrase $ uc ^. term) sm) (spec (refName x) sm) (spec (short uc) sm)
 lay (Defnt dtyp pairs rn) sm = H.Definition dtyp (layPairs pairs) (spec rn sm)
   where layPairs = map (\(x,y) -> (x, (map (\z -> lay z sm) y)))
 lay (GDef)               _ = H.Paragraph (H.EmptyS)  -- need to implement!

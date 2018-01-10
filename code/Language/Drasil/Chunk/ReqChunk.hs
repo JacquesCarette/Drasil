@@ -1,5 +1,5 @@
 module Language.Drasil.Chunk.ReqChunk 
-  ( ReqChunk
+  ( ReqChunk, ReqType(..)
   , reqType, requires
   , frc, nfrc
   ) where
@@ -22,6 +22,7 @@ import Prelude hiding (id)
 -- | What type of requirement are we dealing with?
 data ReqType = FR  -- ^ Functional Requirement
              | NFR -- ^ Non-Functional Requirement
+  deriving Eq
 
 -- | Requirement chunk type. Has an id, the type of requirement
 -- (Functional/Non-Functional) from 'ReqType', a sentence describing what is

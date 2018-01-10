@@ -3,28 +3,30 @@ module Language.Drasil.Reference where
 import Language.Drasil.Chunk (Chunk, id)
 import Language.Drasil.Chunk.AssumpChunk
 import Language.Drasil.Chunk.Attribute (getShortName)
+import Language.Drasil.Chunk.ReqChunk
 import Language.Drasil.Document
 import Language.Drasil.Spec
 import Control.Lens ((^.), Simple, Lens)
 
 import Prelude hiding (id)
-import qualified Data.Map as Map
 
+import Data.List (partition)
+import qualified Data.Map as Map
 
 -- | Create References to a given 'LayoutObj'
 makeRef :: (LayoutObj l) => l -> Sentence
 makeRef r = Ref (rType r) (refName r)
 
 -- | Database for internal references.
-data ReferenceDB = RDB {assumpDB :: AssumpMap }
+data ReferenceDB = RDB {assumpDB :: AssumpMap, reqDB :: ReqMap }
 
-rdb :: AssumpMap -> ReferenceDB
+rdb :: AssumpMap -> ReqMap -> ReferenceDB
 rdb = RDB
 
 -- | Map for maintaining assumption references. 
--- The Sentence is the shortname of a given 
--- assumption, whereas the Int is that reference's number.
--- Maintains both for easy reference swapping when necessary (or use of number
+-- The Int is that reference's number.
+-- Maintains access to both num and chunk for easy reference swapping
+-- between number and shortname when necessary (or use of number
 -- if no shortname exists)
 type AssumpMap = Map.Map String (AssumpChunk, Int)
 
@@ -38,17 +40,32 @@ assumpLookup a m = let lookC = Map.lookup (a ^. id) m in
         getS Nothing = error $ "Assumption: " ++ (a ^. id) ++ 
           " referencing information not found in Assumption Map"
 
+type ReqMap = Map.Map String (ReqChunk, Int)
+
+reqMap :: [ReqChunk] -> ReqMap
+reqMap rs = Map.fromList $ zip (map (^. id) (frs ++ nfrs)) ((zip frs [1..]) ++ 
+  (zip nfrs [1..]))
+  where frs  = fst $ partition (isFuncRec . reqType) rs
+        nfrs = snd $ partition (isFuncRec . reqType) rs
+        isFuncRec FR = True
+        isFuncRec _  = False
+
 class HasAssumpRefs s where
   assumpRefTable :: Simple Lens s AssumpMap
   
 instance HasAssumpRefs ReferenceDB where
-  assumpRefTable f (RDB a) = fmap (\x -> RDB x) (f a)
+  assumpRefTable f (RDB a b) = fmap (\x -> RDB x b) (f a)
+  
+class HasReqRefs s where
+  reqRefTable :: Simple Lens s ReqMap
+  
+instance HasReqRefs ReferenceDB where
+  reqRefTable f (RDB a b) = fmap (\x -> RDB a x) (f b)
 
 -- This works for passing the correct id to the reference generator for Assumptions,
 -- Requirements and Likely Changes but I question whether we should use it.
 -- Pass it the item to be referenced and the enumerated list of the respective
 -- contents for that file. Change rType values to implement.
-
 
 acroTest :: Contents -> [Contents] -> Sentence
 acroTest ref reflst = makeRef $ find ref reflst

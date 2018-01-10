@@ -121,6 +121,8 @@ module Language.Drasil (
   , AssumpChunk, assuming, ac, ac'
   -- Referencing
   , ReferenceDB(..), AssumpMap, assumpMap, assumpLookup, rdb, assumpRefTable
+  -- ReqChunk
+  , ReqChunk, ReqType(..), reqType, requires, frc, nfrc
 ) where
 
 import Prelude hiding (log, sin, cos, tan, sqrt, id, return, print, break, exp, product)
@@ -144,23 +146,25 @@ import Language.Drasil.Chunk
 import Language.Drasil.Chunk.AssumpChunk
 import Language.Drasil.Chunk.Attribute
 import Language.Drasil.Chunk.Attribute.Derivation (Derivation, DerWrapper(..), de, ds)
-import Language.Drasil.Chunk.NamedIdea
-import Language.Drasil.Chunk.Concept
-import Language.Drasil.Chunk.SymbolForm hiding (symbol)
 import Language.Drasil.Chunk.CommonIdea
-import Language.Drasil.Chunk.VarChunk
-import Language.Drasil.Chunk.Quantity
-import Language.Drasil.Chunk.UncertainQuantity
-import Language.Drasil.Chunk.ConVar
-import Language.Drasil.Chunk.ExprRelat
-import Language.Drasil.Chunk.Eq (QDefinition(..), fromEqn, fromEqn', fromEqn'', getVC, equat, aqd)
+import Language.Drasil.Chunk.Concept
 import Language.Drasil.Chunk.Constrained
+import Language.Drasil.Chunk.ConVar
+import Language.Drasil.Chunk.Eq (QDefinition(..), fromEqn, fromEqn', fromEqn'', getVC, equat, aqd)
+import Language.Drasil.Chunk.ExprRelat
+import Language.Drasil.Chunk.NamedIdea
+import Language.Drasil.Chunk.Quantity
+import Language.Drasil.Chunk.Relation(NamedRelation, makeNR, RelationConcept, 
+                                      makeRC, makeRC')
+import Language.Drasil.Chunk.ReqChunk(ReqChunk, ReqType(..), reqType, requires
+                                     , frc, nfrc)
+import Language.Drasil.Chunk.SymbolForm hiding (symbol)
 import Language.Drasil.Chunk.Theory
+import Language.Drasil.Chunk.UncertainQuantity
 import Language.Drasil.Chunk.Unital(UnitalChunk(..), makeUCWDS, ucFromCV
                                   , uc, uc', ucs, ucs', ucsWS)
 import Language.Drasil.Chunk.Unitary
-import Language.Drasil.Chunk.Relation(NamedRelation, makeNR, RelationConcept, 
-                                      makeRC, makeRC')
+import Language.Drasil.Chunk.VarChunk
 import Language.Drasil.Chunk.Wrapper
 import Language.Drasil.Chunk.Wrapper.QSWrapper
 import Language.Drasil.Chunk.Wrapper.UWrapper
@@ -172,8 +176,10 @@ import Language.Drasil.Space (Space(..))
 import Language.Drasil.Spec (USymb(..), Sentence(..), Accent(..), 
                               sParen, sParenNum, sSqBr, sSqBrNum, sC, (+:+), (+:+.), (+.), (+:),
                               semiCol, sParenDash, sDash)
-import Language.Drasil.Reference (makeRef, acroTest, ReferenceDB(assumpDB), AssumpMap
-                                 , assumpMap, assumpLookup, assumpRefTable, rdb)
+import Language.Drasil.Reference (makeRef, acroTest, ReferenceDB(assumpDB, reqDB)
+                                 , AssumpMap, assumpMap, assumpLookup
+                                 , assumpRefTable, rdb, reqMap, reqRefTable
+                                 , ReqMap)
 import Language.Drasil.Symbol (Symbol(..), sub, sup, vec, hat, prime, sCurlyBrSymb)
 import Language.Drasil.SymbolAlphabet
 import Language.Drasil.Misc -- all of it

@@ -6,6 +6,7 @@ import Language.Drasil.Chunk.AssumpChunk
 import Language.Drasil.Chunk.Attribute (getShortName)
 import Language.Drasil.Chunk.Eq
 import Language.Drasil.Chunk.Relation
+import Language.Drasil.Chunk.ReqChunk
 import Language.Drasil.Chunk.NamedIdea
 import Language.Drasil.Chunk.Wrapper
 import Language.Drasil.Spec (Sentence(..), RefType(..), (+:+))
@@ -48,7 +49,7 @@ data Contents = Table [Sentence] [[Sentence]] Title Bool
                -- looking up variables (currently a hack).
                | Enumeration ListType -- ^ Lists
                | Figure Label Filepath MaxWidthPercent -- ^ Should use relative file path.
-               | Requirement NWrapper
+               | Requirement ReqChunk
                | Assumption AssumpChunk
                | LikelyChange NWrapper
                | UnlikelyChange NWrapper
@@ -107,7 +108,7 @@ instance LayoutObj Section where
 
 instance LayoutObj Contents where
   refName (Table _ _ l _)         = S "Table:" :+: inferName l
-  refName (Figure l _ _)            = S "Figure:" :+: inferName l
+  refName (Figure l _ _)          = S "Figure:" :+: inferName l
   refName (Paragraph _)           = error "Can't reference paragraphs" --yet
   refName (EqnBlock _)            = error "EqnBlock ref unimplemented"
 --  refName (CodeBlock _)         = error "Codeblock ref unimplemented"
@@ -131,7 +132,7 @@ instance LayoutObj Contents where
   rType (Definition (Theory rc))  = Def $ fmap S $ getA rc
   rType (Definition _)            = Def Nothing
   rType (Defnt _ _ _)             = Def Nothing
-  rType (Requirement r)           = Req $ fmap S $ getA r
+  rType (Requirement r)           = Req $ getShortName r
   rType (Assumption a)            = Assump $ getShortName a
   rType (LikelyChange lc)         = LC $ fmap S $ getA lc
   rType (UnlikelyChange _)        = UC

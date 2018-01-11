@@ -15,6 +15,7 @@ import Language.Drasil.Chunk.ExprRelat (relat)
 import Language.Drasil.Chunk.NamedIdea (term)
 import Language.Drasil.Chunk.Concept (defn)
 import Language.Drasil.Chunk.Quantity (Quantity(..), eqSymb)
+import Language.Drasil.Chunk.ReqChunk (requires)
 import Language.Drasil.ChunkDB (getUnitLup, symbLookup, HasSymbolTable(..))
 import Language.Drasil.Config (verboseDDDescription, numberedDDEquations, numberedTMEquations)
 import Language.Drasil.Document
@@ -191,7 +192,7 @@ lay x@(Definition c)      sm = T.Definition (makePairs c sm) (spec (refName x) s
 lay (Enumeration cs)      sm = T.List $ makeL cs sm
 lay x@(Figure c f wp)     sm = T.Figure (spec (refName x) sm) (spec c sm) f wp
 lay x@(Requirement r)     sm = 
-  T.Requirement (spec (phrase (r ^. term)) sm) (spec (refName x) sm)
+  T.Requirement (spec (requires r) sm) (spec (refName x) sm)
 lay x@(Assumption a)      sm = 
   T.Assumption (spec (assuming a) sm) (spec (refName x) sm)
 lay x@(LikelyChange lc)   sm = 

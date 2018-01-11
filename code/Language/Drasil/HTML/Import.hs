@@ -12,6 +12,7 @@ import Language.Drasil.Chunk.ExprRelat (relat)
 import Language.Drasil.Chunk.NamedIdea (term, short, getA)
 import Language.Drasil.Chunk.Concept (defn)
 import Language.Drasil.Chunk.Quantity (Quantity(..), eqSymb)
+import Language.Drasil.Chunk.ReqChunk (requires)
 import Language.Drasil.ChunkDB (HasSymbolTable(..), getUnitLup, symbLookup)
 import Language.Drasil.Expr.Extract
 import Language.Drasil.Config (verboseDDDescription)
@@ -195,8 +196,8 @@ lay x@(Definition c)    sm = H.Definition c (makePairs c sm) (spec (refName x) s
 lay (Enumeration cs)    sm = H.List $ makeL cs sm
 lay x@(Figure c f wp)   sm = H.Figure (spec (refName x) sm) (spec c sm) f wp
 lay (Graph _ _ _ _)      _ = H.Paragraph (H.EmptyS)  -- need to implement!
-lay x@(Requirement r)   sm = 
-  H.ALUR H.Requirement (spec (phrase $ r ^. term) sm) (spec (refName x) sm) (spec (short r) sm)
+lay x@(Requirement r)   sm = H.ALUR H.Requirement 
+  (spec (requires r) sm) (spec (refName x) sm) (spec (fromJust $ getShortName r) sm)
 lay x@(Assumption a)    sm = H.ALUR H.Assumption 
   (spec (assuming a) sm) (spec (refName x) sm) (spec (fromJust $ getShortName a) sm)
 lay x@(LikelyChange lc) sm = 

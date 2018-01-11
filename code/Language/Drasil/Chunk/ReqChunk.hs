@@ -1,14 +1,14 @@
 module Language.Drasil.Chunk.ReqChunk 
   ( ReqChunk, ReqType(..)
   , reqType, requires
-  , frc, nfrc
+  , frc, nfrc, rc'
   ) where
 
 import Language.Drasil.Chunk
 import Language.Drasil.Chunk.Attribute
 import Language.Drasil.Spec (Sentence)
 
-import Control.Lens ((^.))
+import Control.Lens (set, (^.))
 import Prelude hiding (id)
 
 -- We will likely need to differentiate functional/non-functional reqs
@@ -44,6 +44,9 @@ instance Eq ReqChunk where
 -- | Smart constructor for requirement chunks (should not be exported)
 rc :: String -> ReqType -> Sentence -> Attributes -> ReqChunk
 rc = RC
+
+rc' :: ReqChunk -> Sentence -> ReqChunk
+rc' r s = set attributes ([ShortName s] ++ (r ^. attributes)) r
 
 frc, nfrc :: String -> Sentence -> Attributes -> ReqChunk
 -- | Smart constructor for functional requirement chunks.

@@ -121,8 +121,9 @@ module Language.Drasil (
   , AssumpChunk, assuming, ac, ac'
   -- Referencing
   , ReferenceDB(..), AssumpMap, assumpMap, assumpLookup, rdb, assumpRefTable
+  , reqMap
   -- ReqChunk
-  , ReqChunk, ReqType(..), reqType, requires, frc, nfrc
+  , ReqChunk, ReqType(..), reqType, requires, frc, nfrc, rc'
 ) where
 
 import Prelude hiding (log, sin, cos, tan, sqrt, id, return, print, break, exp, product)
@@ -157,7 +158,7 @@ import Language.Drasil.Chunk.Quantity
 import Language.Drasil.Chunk.Relation(NamedRelation, makeNR, RelationConcept, 
                                       makeRC, makeRC')
 import Language.Drasil.Chunk.ReqChunk(ReqChunk, ReqType(..), reqType, requires
-                                     , frc, nfrc)
+                                     , frc, nfrc, rc')
 import Language.Drasil.Chunk.SymbolForm hiding (symbol)
 import Language.Drasil.Chunk.Theory
 import Language.Drasil.Chunk.UncertainQuantity

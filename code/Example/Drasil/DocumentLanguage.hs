@@ -500,10 +500,7 @@ mkAssump :: String -> Sentence -> Contents
 mkAssump i desc = Assumption $ ac' i desc 
 
 mkRequirement :: String -> Sentence -> Contents
-mkRequirement i desc = Requirement $ frc i desc
-
-mkRequirementCustom :: String -> Sentence -> String -> Contents
-mkRequirementCustom i desc enid = Requirement $ nw $ commonIdea i (nounPhraseSent desc) enid
+mkRequirement i desc = Requirement $ frc i desc []
 
 mkLklyChnk :: String -> Sentence -> Contents
 mkLklyChnk i desc = LikelyChange $ nw $ nc i $ nounPhraseSent desc

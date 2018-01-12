@@ -147,6 +147,7 @@ executable tiny
     , Drasil.DocumentLanguage.Chunk.GenDefn
     , Drasil.DocumentLanguage.Chunk.InstanceModel
     , Drasil.DocumentLanguage.Definitions
+    , Drasil.DocumentLanguage.RefHelpers 
     , Drasil.Sections.AuxiliaryConstants
     , Drasil.Sections.TableOfUnits
     , Drasil.Sections.SpecificSystemDescription
@@ -199,6 +200,7 @@ executable nopcm
     , Drasil.DocumentLanguage.Chunk.GenDefn
     , Drasil.DocumentLanguage.Chunk.InstanceModel
     , Drasil.DocumentLanguage.Definitions
+    , Drasil.DocumentLanguage.RefHelpers
     , Drasil.Sections.SpecificSystemDescription
     , Drasil.Sections.Introduction
     , Drasil.Sections.Requirements
@@ -244,6 +246,7 @@ executable ssp
     , Drasil.DocumentLanguage.Chunk.GenDefn
     , Drasil.DocumentLanguage.Chunk.InstanceModel
     , Drasil.DocumentLanguage.Definitions
+    , Drasil.DocumentLanguage.RefHelpers 
     , Drasil.Sections.TableOfUnits
     , Drasil.Sections.AuxiliaryConstants
     , Drasil.Sections.SpecificSystemDescription
@@ -270,6 +273,7 @@ executable glassbr
     , Drasil.DocumentLanguage.Chunk.GenDefn
     , Drasil.DocumentLanguage.Chunk.InstanceModel
     , Drasil.DocumentLanguage.Definitions
+    , Drasil.DocumentLanguage.RefHelpers 
     , Drasil.GlassBR.Body
     , Drasil.GlassBR.Concepts
     , Drasil.GlassBR.Unitals
@@ -313,6 +317,7 @@ executable chipmunkdocs
     , Drasil.DocumentLanguage.Chunk.GenDefn
     , Drasil.DocumentLanguage.Chunk.InstanceModel
     , Drasil.DocumentLanguage.Definitions
+    , Drasil.DocumentLanguage.RefHelpers 
     , Drasil.GamePhysics.Body
     , Drasil.GamePhysics.Concepts
     , Drasil.GamePhysics.DataDefs
@@ -354,6 +359,7 @@ executable swhs
     , Drasil.DocumentLanguage.Chunk.GenDefn
     , Drasil.DocumentLanguage.Chunk.InstanceModel
     , Drasil.DocumentLanguage.Definitions
+    , Drasil.DocumentLanguage.RefHelpers 
     , Drasil.Sections.SpecificSystemDescription
     , Drasil.Sections.Introduction
     , Drasil.Sections.Requirements

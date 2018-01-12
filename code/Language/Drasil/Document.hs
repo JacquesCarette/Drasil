@@ -99,7 +99,7 @@ data DType = Data QDefinition -- ^ QDefinition is the chunk with the defining
 -- | Every layout object has a reference name (for intra-document referencing)
 -- and a reference type (denoting what type of reference to create)
 class LayoutObj l where
-  refName :: l -> Sentence
+  refName :: l -> Sentence --FIXME: To be deprecated / replaced
   rType   :: l -> RefType
 
 instance LayoutObj Section where

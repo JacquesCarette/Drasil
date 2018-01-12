@@ -121,7 +121,7 @@ module Language.Drasil (
   , AssumpChunk, assuming, ac, ac'
   -- Referencing
   , ReferenceDB(..), AssumpMap, assumpMap, assumpLookup, rdb, assumpRefTable
-  , reqMap
+  , reqMap, HasAssumpRefs, HasReqRefs, reqRefTable
   -- ReqChunk
   , ReqChunk, ReqType(..), reqType, requires, frc, nfrc, rc'
 ) where
@@ -178,9 +178,9 @@ import Language.Drasil.Spec (USymb(..), Sentence(..), Accent(..),
                               sParen, sParenNum, sSqBr, sSqBrNum, sC, (+:+), (+:+.), (+.), (+:),
                               semiCol, sParenDash, sDash)
 import Language.Drasil.Reference (makeRef, acroTest, ReferenceDB(assumpDB, reqDB)
-                                 , AssumpMap, assumpMap, assumpLookup
+                                 , AssumpMap, assumpMap, assumpLookup, HasAssumpRefs
                                  , assumpRefTable, rdb, reqMap, reqRefTable
-                                 , ReqMap)
+                                 , ReqMap, HasReqRefs)
 import Language.Drasil.Symbol (Symbol(..), sub, sup, vec, hat, prime, sCurlyBrSymb)
 import Language.Drasil.SymbolAlphabet
 import Language.Drasil.Misc -- all of it

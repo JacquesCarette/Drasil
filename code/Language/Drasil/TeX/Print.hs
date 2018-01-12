@@ -205,20 +205,12 @@ p_in (x:xs) = p_in [x] ++ " & " ++ p_in xs
 
 -- | Helper for properly rendering multiplication of expressions
 mul :: Expr -> Expr -> String
-mul x y@(Dbl _)   = mulParen x ++ "\\cdot{}" ++ p_expr y
-mul x y@(Int _)   = mulParen x ++ "\\cdot{}" ++ p_expr y
-mul x@(Sym (Concat _)) y = p_expr x ++ "\\cdot{}" ++ mulParen y
-mul x y@(Sym (Concat _)) = mulParen x ++ "\\cdot{}" ++ p_expr y
-mul x@(Sym (Atomic s)) y = if length s > 1 then p_expr x ++ "\\cdot{}" ++ mulParen y else
-                            p_expr x ++ mulParen y
-mul x y@(Sym (Atomic s)) = if length s > 1 then mulParen x ++ "\\cdot{}" ++ p_expr y else
-                            mulParen x ++ p_expr y
-mul x@(Div _ _) y = paren (p_expr x) ++ mulParen y
-mul x y           = mulParen x ++ mulParen y
+mul x y       = mulParen x ++ " " ++ mulParen y
 
 mulParen :: Expr -> String
 mulParen a@(Add _ _) = paren $ p_expr a
 mulParen a@(Sub _ _) = paren $ p_expr a
+mulParen a@(Div _ _) = paren $ p_expr a
 mulParen a = p_expr a
 
 divide :: Expr -> Expr -> String

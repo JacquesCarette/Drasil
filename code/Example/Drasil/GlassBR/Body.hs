@@ -153,7 +153,7 @@ glassSystInfo = SI {
   --FIXME: All named ideas, not just acronyms.
 
 gbRefDB :: ReferenceDB
-gbRefDB = rdb $ assumpMap newAssumptions
+gbRefDB = rdb (assumpMap newAssumptions) (reqMap newReqs)
 
 newAssumptions :: [AssumpChunk] -- For testing
 newAssumptions = map (\(x,y) -> ac' x y) $ zip
@@ -550,6 +550,14 @@ s7_1_req2 = mkRequirement "s7_1_req2" req2Desc
 s7_1_req3 = mkRequirement "s7_1_req3" req3Desc
 s7_1_req4 = mkRequirement "s7_1_req4" req4Desc
 s7_1_req5 = mkRequirement "s7_1_req5" (req5Desc (output_))
+
+newReqs :: [ReqChunk]
+newReqs = map (\(x,y) -> frc x y []) 
+  [ ("r1",req1Desc)
+  , ("r2",req2Desc)
+  , ("r3",req3Desc)
+  , ("r4",req4Desc)
+  , ("r5",req5Desc output_)]
 
 req1Desc = foldlSent [at_start input_, S "the", plural quantity, S "from",
   makeRef s7_1_req1Table `sC` S "which define the", phrase glass,

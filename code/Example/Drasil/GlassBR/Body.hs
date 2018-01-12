@@ -6,6 +6,7 @@ import qualified Drasil.SRS as SRS
 import Drasil.DocumentLanguage
 import Drasil.DocumentLanguage.Definitions
 import Drasil.DocumentLanguage.Chunk.InstanceModel (imQD, InstanceModel)
+import Drasil.DocumentLanguage.RefHelpers 
 
 import Data.Drasil.SI_Units
 import Data.Drasil.People (spencerSmith, nikitha, mCampidelli)
@@ -156,11 +157,13 @@ gbRefDB :: ReferenceDB
 gbRefDB = rdb (assumpMap newAssumptions) (reqMap newReqs)
 
 newAssumptions :: [AssumpChunk] -- For testing
-newAssumptions = map (\(x,y) -> ac' x y) $ zip
-  ["glassTyA", "glassConditionA", "explsnScenarioA", "standardValuesA",
-  "glassLiteA", "bndryConditionsA", "responseTyA", "ldfConstantA"]
-  assumptionDescs
+newAssumptions = map (\(x,y) -> ac' x y) (zip
+  ["glassTyA", "glassConditionA", "explsnScenarioA"] [a1Desc, a2Desc, a3Desc])
+  ++ [newA4] ++ map (\(x,y) -> ac' x y) (zip ["glassLiteA", "bndryConditionsA", "responseTyA", "ldfConstantA"] [a5Desc, a6Desc, a7Desc, a8Desc constant_LoadDF])
 
+newA4 :: AssumpChunk
+newA4 = ac' "standardValuesA" (a4Desc load_dur)
+  
 testIMFromQD :: InstanceModel
 testIMFromQD = imQD gbSymbMap risk EmptyS [] [] []
 glassBR_code :: CodeSpec
@@ -451,8 +454,8 @@ s6_2_intro = foldlSP [S "This", phrase section_, S "explains all the",
 s6_2_1_list :: [Contents]
 s6_2_1_list = acroNumGen assumptions 1
 
-assumptions :: [Contents]
-assumptions = fst (foldr (\s (ls, n) -> ((mkAssump ("assumption" ++ show n) s) : ls, n-1))
+assumptions :: [Contents] -- FIXME: Remove this entirely and use new refs + docLang.
+assumptions = fst (foldr (\s (ls, n) -> ((mkAssump ("A" ++ show n) s) : ls, n-1))
  ([], (length assumptionDescs)::Int) assumptionDescs)
 -- These correspond to glassTyAssumps, glassCondition, explsnScenario,
 -- standardValues, glassLiteAssmp, bndryConditions, responseTyAssump, ldfConstant
@@ -510,9 +513,9 @@ a7Desc = foldlSent [S "The", phrase responseTy, S "considered in",
 
 a8Desc :: QDefinition -> Sentence
 a8Desc mainConcept = foldlSent [S "With", phrase reference, S "to",
-  acroA 4, S "the", phrase value `sOf` phrase mainConcept,
-  sParen (getES mainConcept), S "is a", phrase constant, S "in" +:+.
-  short gLassBR, S "It is calculated by the" +: phrase equation +:+.
+  (refA (_refdb glassSystInfo) newA4), S "the", phrase value `sOf` 
+  phrase mainConcept, sParen (getES mainConcept), S "is a", phrase constant, 
+  S "in" +:+. short gLassBR, S "It is calculated by the" +: phrase equation +:+.
   E (C mainConcept $= equat mainConcept), S "Using this" `sC`
   E (C mainConcept $= (Dbl 0.27))]
 

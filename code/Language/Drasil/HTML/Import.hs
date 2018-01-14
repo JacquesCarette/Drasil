@@ -28,19 +28,21 @@ expr :: HasSymbolTable s => Expr -> s -> H.Expr
 expr (V v)            _ = H.Var   v
 expr (Dbl d)          _ = H.Dbl   d
 expr (Int i)          _ = H.Int   i
-expr (a :* b)         sm = H.Mul   (expr a sm) (expr b sm)
-expr (a :+ b)         sm = H.Add   (expr a sm) (expr b sm)
+expr (a :* b)         sm = H.Assoc H.Mul [expr a sm, expr b sm]
+expr (a :+ b)         sm = H.Assoc H.Add [expr a sm, expr b sm]
+expr (a :&& b)        sm = H.Assoc H.And [expr a sm, expr b sm]
+expr (a :|| b)        sm = H.Assoc H.Or [expr a sm, expr b sm]
 expr (a :/ b)         sm = H.Frac  (replace_divs a sm) (replace_divs b sm)
 expr (a :^ b)         sm = H.Pow   (expr a sm) (expr b sm)
 expr (a :- b)         sm = H.Sub   (expr a sm) (expr b sm)
 expr (a :. b)         sm = H.Dot   (expr a sm) (expr b sm)
 expr (Neg a)          sm = H.Neg   (expr a sm)
-expr (Deriv Part a 1) sm = H.Mul (H.Sym (Special Partial)) (expr a sm)
-expr (Deriv Total a 1)sm = H.Mul (H.Sym lD) (expr a sm)
-expr (Deriv Part a b) sm = H.Frac (H.Mul (H.Sym (Special Partial)) (expr a sm)) 
-                          (H.Mul (H.Sym (Special Partial)) (expr b sm))
-expr (Deriv Total a b)sm = H.Frac (H.Mul (H.Sym lD) (expr a sm)) 
-                          (H.Mul (H.Sym lD) (expr b sm))
+expr (Deriv Part a 1) sm = H.Assoc H.Mul [H.Sym (Special Partial), expr a sm]
+expr (Deriv Total a 1)sm = H.Assoc H.Mul [H.Sym lD, expr a sm]
+expr (Deriv Part a b) sm = H.Frac (H.Assoc H.Mul [H.Sym (Special Partial), expr a sm]) 
+                          (H.Assoc H.Mul [H.Sym (Special Partial), expr b sm])
+expr (Deriv Total a b)sm = H.Frac (H.Assoc H.Mul [H.Sym lD, expr a sm])
+                          (H.Assoc H.Mul [H.Sym lD, expr b sm])
 expr (C c)            sm = -- FIXME: Add Stage for Context
   H.Sym $ (eqSymb (symbLookup c (sm ^. symbolTable)))
 expr (FCall f x)      sm = H.Call (expr f sm) (map (flip expr sm) x)
@@ -60,8 +62,6 @@ expr (Grouping e)       sm = H.Grouping (expr e sm)
 expr (BinaryOp b)       sm = (\(x,y) -> H.Op x y) (bfunc b sm)
 expr (EOp o)            sm = (\(x,y) -> H.Op x [y]) $ eop o sm
 expr (Not a)            sm = H.Not   (expr a sm)
-expr (a  :&&  b)        sm = H.And   (expr a sm) (expr b sm)
-expr (a  :||  b)        sm = H.Or    (expr a sm) (expr b sm)
 expr (a  :=>  b)        sm = H.Impl  (expr a sm) (expr b sm)
 expr (a  :<=> b)        sm = H.Iff   (expr a sm) (expr b sm)
 expr (IsIn  a b)        sm = H.IsIn  (expr a sm) b
@@ -118,13 +118,13 @@ rel _ _ = error "Attempting to use non-Relation Expr in relation context."
 
 -- | Helper function for translating the differential
 int_wrt :: Symbol -> H.Expr
-int_wrt wrtc = H.Mul (H.Sym lD) (H.Sym wrtc)
+int_wrt wrtc = H.Assoc H.Mul [H.Sym lD, H.Sym wrtc]
 
 -- | Helper function for translating operations in expressions 
 replace_divs :: HasSymbolTable s => Expr -> s -> H.Expr
 replace_divs (a :/ b) sm = H.Div (replace_divs a sm) (replace_divs b sm)
-replace_divs (a :+ b) sm = H.Add (replace_divs a sm) (replace_divs b sm)
-replace_divs (a :* b) sm = H.Mul (replace_divs a sm) (replace_divs b sm)
+replace_divs (a :+ b) sm = H.Assoc H.Add [replace_divs a sm, replace_divs b sm]
+replace_divs (a :* b) sm = H.Assoc H.Mul [replace_divs a sm, replace_divs b sm]
 replace_divs (a :^ b) sm = H.Pow (replace_divs a sm) (replace_divs b sm)
 replace_divs (a :- b) sm = H.Sub (replace_divs a sm) (replace_divs b sm)
 replace_divs a        sm = expr a sm

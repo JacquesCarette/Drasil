@@ -12,18 +12,17 @@ import Language.Drasil.Space (Space)
 
 -- | Internal HTML version of Expr 
 -- (for converting 'Language.Drasil.Expr.Expr')
+data Oper = Add | Mul | And | Or
+
 data Expr = Var   Variable
           | Dbl   Double
           | Int   Integer
           | Bln   Bool
-          | Mul   Expr Expr
-          | Add   Expr Expr
+          | Assoc Oper [Expr]
           | Frac  Expr Expr
           | Div   Expr Expr
           | Pow   Expr Expr
           | Sub   Expr Expr
-          | And   Expr Expr
-          | Or    Expr Expr
           | Sym   Symbol
           | Eq    Expr Expr
           | NEq   Expr Expr
@@ -253,3 +252,8 @@ instance Ord CiteField where --FIXME: APA has year come directly after Author
   compare (Note       _) _ = LT
   --compare _ (Note       _) = GT
   
+prec :: Oper -> Int
+prec Mul = 3
+prec Add = 4
+prec And = 11
+prec Or = 12

@@ -138,8 +138,10 @@ p_expr (Dbl d)    = showFFloat Nothing d ""
 p_expr (Int i)    = show i
 p_expr (Sym s)    = symbol s
 p_expr (Bln b)    = show b
-p_expr (Mul a b)  = mul a b
-p_expr (Add a b)  = p_expr a ++ " &plus; " ++ p_expr b
+p_expr (Assoc Mul l) = mul l
+p_expr (Assoc Add l)  = concat $ intersperse " &plus; " $ map p_expr l
+p_expr (Assoc And l)  = concat $ intersperse " &and; " $ map p_expr l
+p_expr (Assoc Or l)   = concat $ intersperse " &or; " $ map p_expr l
 p_expr (Sub a b)  = p_expr a ++ " &minus; " ++ p_expr b
 p_expr (Frac a b) = fraction (p_expr a) (p_expr b) --Found in HTMLHelpers
 p_expr (Div a b)  = divide a b
@@ -160,8 +162,6 @@ p_expr (Mtx a)    = "<table class=\"matrix\">\n" ++ p_matrix a ++ "</table>"
 p_expr (Index a i)= p_indx a i
 --Logic
 p_expr (Not a)    = "&not;" ++ p_expr a
-p_expr (And a b)  = p_expr a ++ " &and; " ++ p_expr b
-p_expr (Or a b)   = p_expr a ++ " &or; " ++ p_expr b
 p_expr (Impl a b) = p_expr a ++ " &rArr; " ++ p_expr b
 p_expr (Iff a b)  = p_expr a ++ " &hArr; " ++ p_expr b
 p_expr (IsIn  a b) = p_expr a ++ "&thinsp;&isin;&thinsp;"  ++ p_space b
@@ -175,16 +175,16 @@ p_indx a@(Sym (Corners [] [] [] [_] _)) i = p_expr a ++ sub (","++ p_sub i)
 p_indx a i = p_expr a ++ sub (p_sub i)
 -- Ensures only simple Expr's get rendered as an index
 p_sub :: Expr -> String
-p_sub e@(Var _)    = p_expr e
-p_sub e@(Dbl _)    = p_expr e
-p_sub e@(Int _)    = p_expr e
-p_sub e@(Sym _)    = p_expr e
-p_sub   (Add a b)  = p_expr a ++ "&plus;"  ++ p_expr b --removed spaces
-p_sub   (Sub a b)  = p_expr a ++ "&minus;" ++ p_expr b
-p_sub e@(Mul _ _)  = p_expr e
-p_sub   (Frac a b) = divide a b --no block division 
-p_sub e@(Div _ _)  = p_expr e
-p_sub _            = error "Tried to Index a non-simple expr in HTML, currently not supported."
+p_sub e@(Var _)        = p_expr e
+p_sub e@(Dbl _)        = p_expr e
+p_sub e@(Int _)        = p_expr e
+p_sub e@(Sym _)        = p_expr e
+p_sub   (Assoc Add l)  = concat $ intersperse "&plus;" $ map p_expr l --removed spaces
+p_sub   (Sub a b)      = p_expr a ++ "&minus;" ++ p_expr b
+p_sub e@(Assoc _ _)    = p_expr e
+p_sub   (Frac a b)     = divide a b --no block division 
+p_sub e@(Div _ _)      = p_expr e
+p_sub _                = error "Tried to Index a non-simple expr in HTML, currently not supported."
 
 -- | For printing Matrix
 p_matrix :: [[Expr]] -> String
@@ -198,46 +198,46 @@ p_in [x] = "<td>" ++ p_expr x ++ "</td>"
 p_in (x:xs) = p_in [x] ++ p_in xs
 
 -- | Helper for properly rendering multiplication of expressions
-mul :: Expr -> Expr -> String
-mul a b         = mulParen a ++ "&#8239;" ++ mulParen b
+mul :: [ Expr ] -> String
+mul = concat . intersperse "&#8239;" . map (add_paren (prec Mul))
 
 -- | Helper for properly rendering parentheses around the multiplier
-mulParen :: Expr -> String
-mulParen a@(Add _ _) = paren $ p_expr a
-mulParen a@(Sub _ _) = paren $ p_expr a
-mulParen a@(Div _ _) = paren $ p_expr a
-mulParen a = p_expr a
+add_paren :: Int -> Expr -> String
+add_paren p a@(Assoc o _) = 
+  if prec o > p then paren $ p_expr a else p_expr a
+add_paren _ a@(Div _ _) = paren $ p_expr a
+add_paren _ a@(Sub _ _) = paren $ p_expr a
+add_paren _ a           = p_expr a
 
 -- | Helper for properly rendering division of expressions
 divide :: Expr -> Expr -> String
-divide n d@(Add _ _) = p_expr n ++ "/" ++ paren (p_expr d)
+divide n d@(Assoc Add _) = p_expr n ++ "/" ++ paren (p_expr d)
 divide n d@(Sub _ _) = p_expr n ++ "/" ++ paren (p_expr d)
-divide n@(Add _ _) d = paren (p_expr n) ++ "/" ++ p_expr d
+divide n@(Assoc Add _) d = paren (p_expr n) ++ "/" ++ p_expr d
 divide n@(Sub _ _) d = paren (p_expr n) ++ "/" ++ p_expr d
 divide n d = p_expr n ++ "/" ++ p_expr d
 
 -- | Helper for properly rendering negation of expressions
 neg :: Expr -> String
-neg a@(Var     _) = minus a
-neg a@(Dbl     _) = minus a
-neg a@(Int     _) = minus a
-neg a@(Sym     _) = minus a
-neg a@(Op    _ _) = minus a
-neg a@(Mul   _ _) = minus a
-neg a@(Index _ _) = minus a
-neg   (Neg n) = p_expr n
-neg a         = "&minus;" ++ paren (p_expr a)
+neg a@(Var     _)   = minus a
+neg a@(Dbl     _)   = minus a
+neg a@(Int     _)   = minus a
+neg a@(Sym     _)   = minus a
+neg a@(Op    _ _)   = minus a
+neg a@(Assoc Mul _) = minus a
+neg a@(Index _ _)   = minus a
+neg a               = "&minus;" ++ paren (p_expr a)
 
 minus :: Expr -> String
 minus e = "&minus;" ++ p_expr e
 
 -- | Helper for properly rendering exponents
 pow :: Expr -> Expr -> String
-pow a@(Add _ _) b = sqbrac (p_expr a) ++ sup (p_expr b)
+pow a@(Assoc Add _) b = sqbrac (p_expr a) ++ sup (p_expr b)
 pow a@(Sub _ _) b = sqbrac (p_expr a) ++ sup (p_expr b)
-pow a@(Frac _ _) b = sqbrac (p_expr a) ++ sup (p_expr b) --Found in HTMLHelpers
+pow a@(Frac _ _) b = sqbrac (p_expr a) ++ sup (p_expr b)
 pow a@(Div _ _) b = paren (p_expr a) ++ sup (p_expr b)
-pow a@(Mul _ _) b = paren (p_expr a) ++ sup (p_expr b)
+pow a@(Assoc Mul _) b = paren (p_expr a) ++ sup (p_expr b)
 pow a@(Pow _ _) b = paren (p_expr a) ++ sup (p_expr b)
 pow a b = p_expr a ++ sup (p_expr b)
 

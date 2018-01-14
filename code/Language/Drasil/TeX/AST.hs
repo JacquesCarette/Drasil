@@ -10,18 +10,17 @@ import Language.Drasil.Citations (Month(..))
 import Language.Drasil.People (People)
 import Language.Drasil.Document (MaxWidthPercent, DType)
 
+data Oper = Add | Mul | And | Or
+
 data Expr = Var  Variable
           | Dbl  Double
           | Int  Integer
           | Bln  Bool
-          | Mul  Expr Expr
-          | Add  Expr Expr
+          | Assoc Oper [Expr]
           | Frac Expr Expr
           | Div  Expr Expr
           | Pow  Expr Expr
           | Sub  Expr Expr
-          | And  Expr Expr
-          | Or   Expr Expr
           | Sym  Symbol
           | Eq   Expr Expr
           | NEq  Expr Expr

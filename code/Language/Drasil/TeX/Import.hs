@@ -28,8 +28,8 @@ expr :: HasSymbolTable ctx => Expr -> ctx -> T.Expr
 expr (V v)              _ = T.Var  v
 expr (Dbl d)            _ = T.Dbl  d
 expr (Int i)            _ = T.Int  i
-expr (a :* b)          sm = T.Mul  (expr a sm) (expr b sm)
-expr (a :+ b)          sm = T.Add  (expr a sm) (expr b sm)
+expr (a :* b)          sm = T.Assoc T.Mul  [expr a sm, expr b sm]
+expr (a :+ b)          sm = T.Assoc T.Add  [expr a sm, expr b sm]
 expr (a :/ b)          sm = T.Frac (replace_divs a sm) (replace_divs b sm)
 expr (a :^ b)          sm = T.Pow  (expr a sm) (expr b sm)
 expr (a :- b)          sm = T.Sub  (expr a sm) (expr b sm)
@@ -37,12 +37,12 @@ expr (a :. b)          sm = T.Dot  (expr a sm) (expr b sm)
 expr (Neg a)           sm = T.Neg  (expr a sm)
 expr (C c)             sm = -- FIXME: Add Stage for Context
   T.Sym  (eqSymb (symbLookup c (sm ^. symbolTable)))
-expr (Deriv Part a 1)  sm = T.Mul (T.Sym (Special Partial)) (expr a sm)
-expr (Deriv Total a 1) sm = T.Mul (T.Sym lD) (expr a sm)
-expr (Deriv Part a b)  sm = T.Frac (T.Mul (T.Sym (Special Partial)) (expr a sm))
-                           (T.Mul (T.Sym (Special Partial)) (expr b sm))
-expr (Deriv Total a b) sm = T.Frac (T.Mul (T.Sym lD) (expr a sm))
-                           (T.Mul (T.Sym lD) (expr b sm))
+expr (Deriv Part a 1)  sm = T.Assoc T.Mul [T.Sym (Special Partial), expr a sm]
+expr (Deriv Total a 1) sm = T.Assoc T.Mul [T.Sym lD, expr a sm]
+expr (Deriv Part a b)  sm = T.Frac (T.Assoc T.Mul [T.Sym (Special Partial), expr a sm])
+                           (T.Assoc T.Mul [T.Sym (Special Partial), expr b sm])
+expr (Deriv Total a b) sm = T.Frac (T.Assoc T.Mul [T.Sym lD, expr a sm])
+                           (T.Assoc T.Mul [T.Sym lD, expr b sm])
 expr (FCall f x)       sm = T.Call (expr f sm) (map (flip expr sm) x)
 expr (Case ps)         sm = if length ps < 2 then 
         error "Attempting to use multi-case expr incorrectly"
@@ -60,8 +60,8 @@ expr (Grouping e)      sm = T.Grouping (expr e sm)
 expr (BinaryOp b)      sm = (\(x,y) -> T.Op x y) (bfunc b sm)
 expr (EOp o)           sm = (\(x,y) -> T.Op x [y]) (eop o sm)
 expr (Not a)           sm = T.Not  (expr a sm)
-expr (a :&& b)         sm = T.And  (expr a sm) (expr b sm)
-expr (a :|| b)         sm = T.Or   (expr a sm) (expr b sm)
+expr (a :&& b)         sm = T.Assoc T.And  [expr a sm, expr b sm]
+expr (a :|| b)         sm = T.Assoc T.Or  [expr a sm, expr b sm]
 expr (a  :=>  b)       sm = T.Impl  (expr a sm) (expr b sm)
 expr (a  :<=> b)       sm = T.Iff   (expr a sm) (expr b sm)
 expr (IsIn  a b)       sm = T.IsIn  (expr a sm) (set b)
@@ -127,12 +127,12 @@ set (DiscreteD a) = T.DiscreteD a
 set (DiscreteS a) = T.DiscreteS a
 
 int_wrt :: Symbol -> T.Expr
-int_wrt wrtc = T.Mul (T.Sym lD) (T.Sym wrtc)
+int_wrt wrtc = T.Assoc T.Mul [T.Sym lD, T.Sym wrtc]
 
 replace_divs :: HasSymbolTable ctx => Expr -> ctx -> T.Expr
 replace_divs (a :/ b) sm = T.Div (replace_divs a sm) (replace_divs b sm)
-replace_divs (a :+ b) sm = T.Add (replace_divs a sm) (replace_divs b sm)
-replace_divs (a :* b) sm = T.Mul (replace_divs a sm) (replace_divs b sm)
+replace_divs (a :* b) sm = T.Assoc T.Mul [replace_divs a sm, replace_divs b sm]
+replace_divs (a :+ b) sm = T.Assoc T.Add [replace_divs a sm, replace_divs b sm]
 replace_divs (a :^ b) sm = T.Pow (replace_divs a sm) (replace_divs b sm)
 replace_divs (a :- b) sm = T.Sub (replace_divs a sm) (replace_divs b sm)
 replace_divs a        sm = expr a sm

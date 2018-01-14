@@ -405,7 +405,7 @@ makeBib sm = listRef . map (Flat . S) . sort . map (flip renderCite sm)
   
 --for when we add other things to reference like website, newspaper
 renderCite :: HasSymbolTable s => Citation -> s -> String
-renderCite b@(Book      fields) sm = renderF b fields useStyleBk    sm
+renderCite a@(Book      fields) sm = renderF a fields useStyleBk    sm
 renderCite a@(Article   fields) sm = renderF a fields useStyleArtcl sm
 renderCite a@(MThesis   fields) sm = renderF a fields useStyleBk    sm
 renderCite a@(PhDThesis fields) sm = renderF a fields useStyleBk    sm

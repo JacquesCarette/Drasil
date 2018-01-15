@@ -138,7 +138,6 @@ p_expr (Var v)    = symbol (Atomic v) --Ensures variables are rendered the same 
 p_expr (Dbl d)    = showFFloat Nothing d ""
 p_expr (Int i)    = show i
 p_expr (Sym s)    = symbol s
-p_expr (Bln b)    = show b
 p_expr (Assoc Mul l) = mul l
 p_expr (Assoc Add l)  = concat $ intersperse " &plus; " $ map p_expr l
 p_expr (Assoc And l)  = concat $ intersperse " &and; " $ map p_expr l

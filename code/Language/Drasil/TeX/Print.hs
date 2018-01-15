@@ -109,7 +109,6 @@ p_expr :: Expr -> String
 p_expr (Var v)    = symbol (Atomic v) --Ensures variables are rendered the same as other symbols
 p_expr (Dbl d)    = showFFloat Nothing d ""
 p_expr (Int i)    = show i
-p_expr (Bln b)    = show b
 p_expr (Assoc Add l)  = concat $ intersperse "+" $ map p_expr l
 p_expr (Assoc Mul l)  = mul l
 p_expr (Sym s)    = symbol s

@@ -11,7 +11,6 @@ data BinOp = Frac | Div | Pow | Sub | Eq | NEq | Lt | Gt | LEq | GEq | Impl | If
 data Expr = Var   Variable
           | Dbl   Double
           | Int   Integer
-          | Bln   Bool
           | Assoc Oper [Expr]
           | BOp   BinOp Expr Expr
           | Sym   Symbol

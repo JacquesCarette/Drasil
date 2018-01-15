@@ -5,24 +5,16 @@ import Language.Drasil.Symbol (Symbol)
 import Language.Drasil.Space (Space)
 
 data Oper = Add | Mul | And | Or
+data BinOp = Frac | Div | Pow | Sub | Eq | NEq | Lt | Gt | LEq | GEq | Impl | Iff | Index
+  | Dot
 
 data Expr = Var   Variable
           | Dbl   Double
           | Int   Integer
           | Bln   Bool
           | Assoc Oper [Expr]
-          | Frac  Expr Expr
-          | Div   Expr Expr
-          | Pow   Expr Expr
-          | Sub   Expr Expr
+          | BOp   BinOp Expr Expr
           | Sym   Symbol
-          | Eq    Expr Expr
-          | NEq   Expr Expr
-          | Lt    Expr Expr
-          | Gt    Expr Expr
-          | LEq   Expr Expr
-          | GEq   Expr Expr
-          | Dot   Expr Expr
           | Not   Expr
           | Neg   Expr
           | Call  Expr [Expr]
@@ -32,10 +24,7 @@ data Expr = Var   Variable
           | IsIn  Expr Space
           | Forall Symbol Expr
           | Exists Symbol Expr
-          | Impl Expr Expr
-          | Iff  Expr Expr
           | Mtx [[Expr]]
-          | Index Expr Expr
           
 data Function = Log
            | Summation (Maybe ((Symbol, Expr),Expr))
@@ -58,3 +47,19 @@ prec Mul = 3
 prec Add = 4
 prec And = 11
 prec Or = 12
+
+prec2 :: BinOp -> Int
+prec2 Frac = 3
+prec2 Div = 3
+prec2 Pow = 2
+prec2 Sub = 4
+prec2 Eq = 9
+prec2 NEq  = 9
+prec2 Lt  = 9
+prec2 Gt  = 9
+prec2 LEq  = 9
+prec2 GEq  = 9
+prec2 Impl = 13
+prec2 Iff = 13
+prec2 Index = 1
+prec2 Dot = 3

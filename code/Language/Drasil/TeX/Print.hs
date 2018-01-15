@@ -121,32 +121,32 @@ p_expr (Dbl d)    = showFFloat Nothing d ""
 p_expr (Int i)    = show i
 p_expr (Bln b)    = show b
 p_expr (Assoc Add l)  = concat $ intersperse "+" $ map p_expr l
-p_expr (Sub x y)  = p_expr x ++ "-" ++ p_expr y
+p_expr (BOp Sub x y)  = p_expr x ++ "-" ++ p_expr y
 p_expr (Assoc Mul l)  = mul l
-p_expr (Frac n d) = "\\frac{" ++ needMultlined n ++ "}{" ++ needMultlined d ++"}"
-p_expr (Div n d)  = divide n d
-p_expr (Pow x y)  = pow x y
+p_expr (BOp Frac n d) = "\\frac{" ++ needMultlined n ++ "}{" ++ needMultlined d ++"}"
+p_expr (BOp Div n d)  = divide n d
+p_expr (BOp Pow x y)  = pow x y
 p_expr (Sym s)    = symbol s
-p_expr (Eq x y)   = p_expr x ++ "=" ++ p_expr y
-p_expr (NEq x y)  = p_expr x ++ "\\neq{}" ++ p_expr y
-p_expr (Lt x y)   = p_expr x ++ "<" ++ p_expr y
-p_expr (Gt x y)   = p_expr x ++ ">" ++ p_expr y
-p_expr (GEq x y)  = p_expr x ++ "\\geq{}" ++ p_expr y
-p_expr (LEq x y)  = p_expr x ++ "\\leq{}" ++ p_expr y
-p_expr (Dot x y)  = p_expr x ++ "\\cdot{}" ++ p_expr y
+p_expr (BOp Eq x y)   = p_expr x ++ "=" ++ p_expr y
+p_expr (BOp NEq x y)  = p_expr x ++ "\\neq{}" ++ p_expr y
+p_expr (BOp Lt x y)   = p_expr x ++ "<" ++ p_expr y
+p_expr (BOp Gt x y)   = p_expr x ++ ">" ++ p_expr y
+p_expr (BOp GEq x y)  = p_expr x ++ "\\geq{}" ++ p_expr y
+p_expr (BOp LEq x y)  = p_expr x ++ "\\leq{}" ++ p_expr y
+p_expr (BOp Dot x y)  = p_expr x ++ "\\cdot{}" ++ p_expr y
 p_expr (Neg x)    = neg x
 p_expr (Call f x) = p_expr f ++ paren (concat $ intersperse "," $ map p_expr x)
 p_expr (Case ps)  = "\\begin{cases}\n" ++ cases ps ++ "\n\\end{cases}"
 p_expr (Op f es)  = p_op f es
 p_expr (Grouping x) = paren (p_expr x)
 p_expr (Mtx a)    = "\\begin{bmatrix}\n" ++ p_matrix a ++ "\n\\end{bmatrix}"
-p_expr (Index a i) = p_indx a i
+p_expr (BOp Index a i) = p_indx a i
 --Logic
 p_expr (Not x)    = "\\neg{}" ++ p_expr x
 p_expr (Assoc And l)  = concat $ intersperse "\\land{}" $ map p_expr l
 p_expr (Assoc Or l)   = concat $ intersperse "\\lor{}" $ map p_expr l
-p_expr (Impl a b) = p_expr a ++ "\\implies{}" ++ p_expr b
-p_expr (Iff a b)  = p_expr a ++ "\\iff{}" ++ p_expr b
+p_expr (BOp Impl a b) = p_expr a ++ "\\implies{}" ++ p_expr b
+p_expr (BOp Iff a b)  = p_expr a ++ "\\iff{}" ++ p_expr b
 p_expr (IsIn  a b) = p_expr a ++ "\\in{}" ++ p_space b
 
 p_expr (Forall v e) = "\\forall{} " ++ symbol v ++ ":\\ " ++ p_expr e
@@ -170,7 +170,7 @@ needMultlined x
 splitTerms :: Expr -> [Expr]
 splitTerms (Neg e)   = map Neg $ splitTerms e
 splitTerms (Assoc Add l) = concat $ map splitTerms l
-splitTerms (Sub a b) = splitTerms a ++ splitTerms (Neg b)
+splitTerms (BOp Sub a b) = splitTerms a ++ splitTerms (Neg b)
 splitTerms e = [e]
 
 -- | For printing indexes
@@ -186,10 +186,10 @@ p_sub e@(Dbl _)    = p_expr e
 p_sub e@(Int _)    = p_expr e
 p_sub e@(Sym _)    = p_expr e
 p_sub e@(Assoc Add _)  = p_expr e
-p_sub e@(Sub _ _)  = p_expr e
+p_sub e@(BOp Sub _ _)  = p_expr e
 p_sub e@(Assoc Mul _)  = p_expr e
-p_sub   (Frac a b) = divide a b --no block division in an index
-p_sub e@(Div _ _)  = p_expr e
+p_sub   (BOp Frac a b) = divide a b --no block division in an index
+p_sub e@(BOp Div _ _)  = p_expr e
 p_sub _            = error "Tried to Index a non-simple expr in LaTeX, currently not supported."
 
 -- | For printing Matrix
@@ -210,15 +210,15 @@ mul = concat . intersperse " " . map mulParen
 
 mulParen :: Expr -> String
 mulParen a@(Assoc Add _) = paren $ p_expr a
-mulParen a@(Sub _ _) = paren $ p_expr a
-mulParen a@(Div _ _) = paren $ p_expr a
+mulParen a@(BOp Sub _ _) = paren $ p_expr a
+mulParen a@(BOp Div _ _) = paren $ p_expr a
 mulParen a = p_expr a
 
 divide :: Expr -> Expr -> String
 divide n d@(Assoc Add _) = p_expr n ++ "/" ++ paren (p_expr d)
-divide n d@(Sub _ _) = p_expr n ++ "/" ++ paren (p_expr d)
+divide n d@(BOp Sub _ _) = p_expr n ++ "/" ++ paren (p_expr d)
 divide n@(Assoc Add _) d = paren (p_expr n) ++ "/" ++ p_expr d
-divide n@(Sub _ _) d = paren (p_expr n) ++ "/" ++ p_expr d
+divide n@(BOp Sub _ _) d = paren (p_expr n) ++ "/" ++ p_expr d
 divide n d = p_expr n ++ "/" ++ p_expr d
 
 neg :: Expr -> String
@@ -231,11 +231,11 @@ neg x         = paren ("-" ++ p_expr x)
 
 pow :: Expr -> Expr -> String
 pow x@(Assoc Add _) y = sqbrac (p_expr x) ++ "^" ++ brace (p_expr y)
-pow x@(Sub _ _) y = sqbrac (p_expr x) ++ "^" ++ brace (p_expr y)
-pow x@(Frac _ _) y = sqbrac (p_expr x) ++ "^" ++ brace (p_expr y)
-pow x@(Div _ _) y = paren (p_expr x) ++ "^" ++ brace (p_expr y)
+pow x@(BOp Sub _ _) y = sqbrac (p_expr x) ++ "^" ++ brace (p_expr y)
+pow x@(BOp Frac _ _) y = sqbrac (p_expr x) ++ "^" ++ brace (p_expr y)
+pow x@(BOp Div _ _) y = paren (p_expr x) ++ "^" ++ brace (p_expr y)
 pow x@(Assoc Mul _) y = paren (p_expr x) ++ "^" ++ brace (p_expr y)
-pow x@(Pow _ _) y = paren (p_expr x) ++ "^" ++ brace (p_expr y)
+pow x@(BOp Pow _ _) y = paren (p_expr x) ++ "^" ++ brace (p_expr y)
 pow x y = p_expr x ++ "^" ++ brace (p_expr y)
 
 cases :: [(Expr,Expr)] -> String

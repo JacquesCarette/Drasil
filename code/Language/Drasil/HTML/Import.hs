@@ -1,6 +1,6 @@
 module Language.Drasil.HTML.Import where
 import Prelude hiding (id)
-import Language.Drasil.Expr (Expr(..), Relation, UFunc(..), BiFunc(..),
+import Language.Drasil.Expr (Expr(..), UFunc(..), BiFunc(..),
     DerivType(..), EOperator(..), ($=), DomainDesc(..), RealRange(..))
 import Language.Drasil.Spec
 import qualified Language.Drasil.Printing.AST as P
@@ -33,38 +33,38 @@ expr (a :* b)         sm = P.Assoc P.Mul [expr a sm, expr b sm]
 expr (a :+ b)         sm = P.Assoc P.Add [expr a sm, expr b sm]
 expr (a :&& b)        sm = P.Assoc P.And [expr a sm, expr b sm]
 expr (a :|| b)        sm = P.Assoc P.Or [expr a sm, expr b sm]
-expr (a :/ b)         sm = P.Frac  (replace_divs a sm) (replace_divs b sm)
-expr (a :^ b)         sm = P.Pow   (expr a sm) (expr b sm)
-expr (a :- b)         sm = P.Sub   (expr a sm) (expr b sm)
-expr (a :. b)         sm = P.Dot   (expr a sm) (expr b sm)
+expr (a :/ b)         sm = P.BOp P.Frac  (replace_divs a sm) (replace_divs b sm)
+expr (a :^ b)         sm = P.BOp P.Pow   (expr a sm) (expr b sm)
+expr (a :- b)         sm = P.BOp P.Sub   (expr a sm) (expr b sm)
+expr (a :. b)         sm = P.BOp P.Dot   (expr a sm) (expr b sm)
 expr (Neg a)          sm = P.Neg   (expr a sm)
 expr (Deriv Part a 1) sm = P.Assoc P.Mul [P.Sym (Special Partial), expr a sm]
 expr (Deriv Total a 1)sm = P.Assoc P.Mul [P.Sym lD, expr a sm]
-expr (Deriv Part a b) sm = P.Frac (P.Assoc P.Mul [P.Sym (Special Partial), expr a sm]) 
+expr (Deriv Part a b) sm = P.BOp P.Frac (P.Assoc P.Mul [P.Sym (Special Partial), expr a sm]) 
                           (P.Assoc P.Mul [P.Sym (Special Partial), expr b sm])
-expr (Deriv Total a b)sm = P.Frac (P.Assoc P.Mul [P.Sym lD, expr a sm])
+expr (Deriv Total a b)sm = P.BOp P.Frac (P.Assoc P.Mul [P.Sym lD, expr a sm])
                           (P.Assoc P.Mul [P.Sym lD, expr b sm])
 expr (C c)            sm = -- FIXME: Add Stage for Context
   P.Sym $ (eqSymb (symbLookup c (sm ^. symbolTable)))
 expr (FCall f x)      sm = P.Call (expr f sm) (map (flip expr sm) x)
 expr (Case ps)        sm = if length ps < 2 then 
                     error "Attempting to use multi-case expr incorrectly"
-                    else P.Case (zip (map (flip expr sm . fst) ps) (map (flip rel sm . snd) ps))
-expr e@(EEquals _ _)    sm = rel e sm
-expr e@(ENEquals _ _)   sm = rel e sm
-expr e@(EGreater _ _)   sm = rel e sm
-expr e@(ELess _ _)      sm = rel e sm 
-expr e@(ELessEq _ _)    sm = rel e sm 
-expr e@(EGreaterEq _ _) sm = rel e sm 
+                    else P.Case (zip (map (flip expr sm . fst) ps) (map (flip expr sm . snd) ps))
+expr (EEquals a b)      sm = P.BOp P.Eq  (expr a sm) (expr b sm)
+expr (ENEquals a b)     sm = P.BOp P.NEq (expr a sm) (expr b sm)
+expr (ELess a b)        sm = P.BOp P.Lt  (expr a sm) (expr b sm)
+expr (EGreater a b)     sm = P.BOp P.Gt  (expr a sm) (expr b sm)
+expr (ELessEq a b)      sm = P.BOp P.LEq (expr a sm) (expr b sm)
+expr (EGreaterEq a b)   sm = P.BOp P.GEq (expr a sm) (expr b sm)
 expr (Matrix a)         sm = P.Mtx $ map (map (flip expr sm)) a
-expr (Index a i)        sm = P.Index (expr a sm) (expr i sm)
+expr (Index a i)        sm = P.BOp P.Index (expr a sm) (expr i sm)
 expr (UnaryOp u)        sm = (\(x,y) -> P.Op x [y]) $ ufunc u sm
 expr (Grouping e)       sm = P.Grouping (expr e sm)
 expr (BinaryOp b)       sm = (\(x,y) -> P.Op x y) (bfunc b sm)
 expr (EOp o)            sm = (\(x,y) -> P.Op x [y]) $ eop o sm
 expr (Not a)            sm = P.Not   (expr a sm)
-expr (a  :=>  b)        sm = P.Impl  (expr a sm) (expr b sm)
-expr (a  :<=> b)        sm = P.Iff   (expr a sm) (expr b sm)
+expr (a  :=>  b)        sm = P.BOp P.Impl  (expr a sm) (expr b sm)
+expr (a  :<=> b)        sm = P.BOp P.Iff   (expr a sm) (expr b sm)
 expr (IsIn  a b)        sm = P.IsIn  (expr a sm) b
 expr (ForAll a b)       sm = P.Forall a (expr b sm)
 expr (Exists a b)       sm = P.Exists a (expr b sm)
@@ -107,27 +107,17 @@ eop (Integral (IntegerDD _ _) _) _ =
   error "HTML/Import.hs Integral cannot be over Integers"
 
 
--- | Helper function for translating 'Relation's
-rel :: HasSymbolTable s => Relation -> s -> P.Expr
-rel (EEquals a b)    sm = P.Eq  (expr a sm) (expr b sm)
-rel (ENEquals a b)   sm = P.NEq (expr a sm) (expr b sm)
-rel (ELess a b)      sm = P.Lt  (expr a sm) (expr b sm)
-rel (EGreater a b)   sm = P.Gt  (expr a sm) (expr b sm)
-rel (ELessEq a b)    sm = P.LEq (expr a sm) (expr b sm)
-rel (EGreaterEq a b) sm = P.GEq (expr a sm) (expr b sm)
-rel _ _ = error "Attempting to use non-Relation Expr in relation context."
-
 -- | Helper function for translating the differential
 int_wrt :: Symbol -> P.Expr
 int_wrt wrtc = P.Assoc P.Mul [P.Sym lD, P.Sym wrtc]
 
 -- | Helper function for translating operations in expressions 
 replace_divs :: HasSymbolTable s => Expr -> s -> P.Expr
-replace_divs (a :/ b) sm = P.Div (replace_divs a sm) (replace_divs b sm)
+replace_divs (a :/ b) sm = P.BOp P.Div (replace_divs a sm) (replace_divs b sm)
 replace_divs (a :+ b) sm = P.Assoc P.Add [replace_divs a sm, replace_divs b sm]
 replace_divs (a :* b) sm = P.Assoc P.Mul [replace_divs a sm, replace_divs b sm]
-replace_divs (a :^ b) sm = P.Pow (replace_divs a sm) (replace_divs b sm)
-replace_divs (a :- b) sm = P.Sub (replace_divs a sm) (replace_divs b sm)
+replace_divs (a :^ b) sm = P.BOp P.Pow (replace_divs a sm) (replace_divs b sm)
+replace_divs (a :- b) sm = P.BOp P.Sub (replace_divs a sm) (replace_divs b sm)
 replace_divs a        sm = expr a sm
 
 -- | Translates Sentence to the HTML representation of Sentence ('Spec')
@@ -267,7 +257,7 @@ makePairs (Data c) m = [
 makePairs (Theory c) m = [
   ("Number",      [H.Paragraph $ spec (missingAcro (S "T") $ fmap S $ getA c) m]),
   ("Label",       [H.Paragraph $ spec (titleize $ c ^. term) m]),
-  ("Equation",    [H.HDiv ["equation"] [H.Tagless (H.E (rel (c ^. relat) m))]
+  ("Equation",    [H.HDiv ["equation"] [H.Tagless (H.E (expr (c ^. relat) m))]
                   (H.EmptyS)]),
   ("Description", [H.Paragraph (spec (c ^. defn) m)])
   ]

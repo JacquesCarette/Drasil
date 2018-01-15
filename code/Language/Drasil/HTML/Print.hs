@@ -6,6 +6,7 @@ import Text.PrettyPrint hiding (render, quotes)
 import Numeric (showFFloat)
 
 import Language.Drasil.HTML.Import (makeDocument, spec)
+import Language.Drasil.Printing.AST
 import Language.Drasil.HTML.AST
 import qualified Language.Drasil.Output.Formats as F
 import Language.Drasil.Spec (USymb(..), RefType(..), Sentence, sC, (+:+))
@@ -91,7 +92,7 @@ p_spec (Ref (Def (Just r)) a)    sm = reflink (p_spec a sm) (p_spec (spec r sm) 
 p_spec (Ref (Assump (Just r)) a) sm = reflink (p_spec a sm) (p_spec (spec r sm) sm)
 p_spec (Ref (Req (Just r)) a)    sm = reflink (p_spec a sm) (p_spec (spec r sm) sm)
 p_spec (Ref (LC (Just r)) a)     sm = reflink (p_spec a sm) (p_spec (spec r sm) sm)
-p_spec (Ref _ a)  sm = reflink (p_spec a sm) (p_spec a sm)--("this " ++ show r)
+p_spec (Ref _ a)  sm = reflink (p_spec a sm) (p_spec a sm)
 p_spec EmptyS      _ = ""
 
 -- | Renders symbols for HTML title
@@ -348,8 +349,8 @@ p_op Abs (x:[]) = "|" ++ p_expr x ++ "|"
 p_op Abs _ = error "Abs should only take one expr."
 p_op Norm (x:[]) = "||" ++ p_expr x ++ "||"
 p_op Norm _ = error "Norm should only take on expression."
-p_op f@(Exp) (x:[]) = show f ++ sup (p_expr x)
-p_op f (x:[]) = show f ++ paren (p_expr x) --Unary ops, this will change once more complicated functions appear.
+p_op f@(Exp) (x:[]) = function f ++ sup (p_expr x)
+p_op f (x:[]) = function f ++ paren (p_expr x) --Unary ops, this will change once more complicated functions appear.
 p_op _ _ = error "Something went wrong with an operation"
 
 
@@ -358,16 +359,16 @@ makeBound :: String -> String
 makeBound s = "<tr><td><span class=\"bound\">" ++ s ++ "</span></td></tr>\n"
 
 lrgOp :: Function -> Maybe ((Symbol, Expr),Expr) -> String
-lrgOp f Nothing = "<span class=\"symb\">" ++ show f ++ "</span>"
+lrgOp f Nothing = "<span class=\"symb\">" ++ function f ++ "</span>"
 lrgOp f (Just ((s,v),hi)) = "<table class=\"operator\">\n" ++ makeBound (p_expr hi) ++
-  "<tr><td><span class=\"symb\">" ++ show f ++ "</span></td></tr>\n" ++
+  "<tr><td><span class=\"symb\">" ++ function f ++ "</span></td></tr>\n" ++
   makeBound (symbol s ++"="++ p_expr v) ++ "</table>"
 
 intg :: Function -> (Maybe Expr, Maybe Expr) -> String
-intg f (Nothing, Nothing) = "<span class=\"symb\">" ++ show f ++ "</span>"
-intg f (Just l, Nothing) = "<span class=\"symb\">" ++ show f ++ "</span>" ++ sub (p_expr l ++ " ")
+intg f (Nothing, Nothing) = "<span class=\"symb\">" ++ function f ++ "</span>"
+intg f (Just l, Nothing) = "<span class=\"symb\">" ++ function f ++ "</span>" ++ sub (p_expr l ++ " ")
 intg f (low,high) = "<table class=\"operator\">\n" ++ pHigh high ++
-  "<tr><td><span class=\"symb\">" ++ show f ++ "</span></td></tr>\n" ++
+  "<tr><td><span class=\"symb\">" ++ function f ++ "</span></td></tr>\n" ++
   pLow low ++ "</table>"
   where pLow Nothing   = ""
         pLow (Just l)  = makeBound (p_expr l)
@@ -380,9 +381,26 @@ makeIBound (Just low, Nothing)   = sub (p_expr low)
 makeIBound (Nothing, Just high)  = sup (p_expr high)
 makeIBound (Nothing, Nothing)    = ""
 
+function :: Function -> String
+function Log            = "log"
+function (Summation _)  = "&sum;"
+function (Product _)    = "&prod;"
+function Abs            = ""
+function Norm           = ""
+function (Integral _ _) = "&int;"
+function Sin            = "sin"
+function Cos            = "cos"
+function Tan            = "tan"
+function Sec            = "sec"
+function Csc            = "csc"
+function Cot            = "cot"
+function Cross          = "&#10799;"
+function Exp            = "e"
+function Sqrt           = "&radic;"
+  
 -- | Helper for rendering binary infix operators, used by 'p_op'
 binfix_op :: Function -> [Expr] -> String
-binfix_op f (x:y:[]) = p_expr x ++ show f ++ p_expr y
+binfix_op f (x:y:[]) = p_expr x ++ function f ++ p_expr y
 binfix_op _ _ = error "Attempting to print binary operate with inappropriate" ++
                    "number of operands (should be 2)"
 

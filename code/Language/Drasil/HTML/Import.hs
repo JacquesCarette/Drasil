@@ -3,6 +3,7 @@ import Prelude hiding (id)
 import Language.Drasil.Expr (Expr(..), Relation, UFunc(..), BiFunc(..),
     DerivType(..), EOperator(..), ($=), DomainDesc(..), RealRange(..))
 import Language.Drasil.Spec
+import qualified Language.Drasil.Printing.AST as P
 import qualified Language.Drasil.HTML.AST as H
 import Language.Drasil.Unicode (Special(Partial))
 import Language.Drasil.Chunk.Eq
@@ -24,109 +25,109 @@ import Language.Drasil.Citations (Citation(..),CiteField(..))
 import Control.Lens hiding ((:>),(:<),set)
 
 -- | expr translation function from Drasil to HTML 'AST'
-expr :: HasSymbolTable s => Expr -> s -> H.Expr
-expr (V v)            _ = H.Var   v
-expr (Dbl d)          _ = H.Dbl   d
-expr (Int i)          _ = H.Int   i
-expr (a :* b)         sm = H.Assoc H.Mul [expr a sm, expr b sm]
-expr (a :+ b)         sm = H.Assoc H.Add [expr a sm, expr b sm]
-expr (a :&& b)        sm = H.Assoc H.And [expr a sm, expr b sm]
-expr (a :|| b)        sm = H.Assoc H.Or [expr a sm, expr b sm]
-expr (a :/ b)         sm = H.Frac  (replace_divs a sm) (replace_divs b sm)
-expr (a :^ b)         sm = H.Pow   (expr a sm) (expr b sm)
-expr (a :- b)         sm = H.Sub   (expr a sm) (expr b sm)
-expr (a :. b)         sm = H.Dot   (expr a sm) (expr b sm)
-expr (Neg a)          sm = H.Neg   (expr a sm)
-expr (Deriv Part a 1) sm = H.Assoc H.Mul [H.Sym (Special Partial), expr a sm]
-expr (Deriv Total a 1)sm = H.Assoc H.Mul [H.Sym lD, expr a sm]
-expr (Deriv Part a b) sm = H.Frac (H.Assoc H.Mul [H.Sym (Special Partial), expr a sm]) 
-                          (H.Assoc H.Mul [H.Sym (Special Partial), expr b sm])
-expr (Deriv Total a b)sm = H.Frac (H.Assoc H.Mul [H.Sym lD, expr a sm])
-                          (H.Assoc H.Mul [H.Sym lD, expr b sm])
+expr :: HasSymbolTable s => Expr -> s -> P.Expr
+expr (V v)            _ = P.Var   v
+expr (Dbl d)          _ = P.Dbl   d
+expr (Int i)          _ = P.Int   i
+expr (a :* b)         sm = P.Assoc P.Mul [expr a sm, expr b sm]
+expr (a :+ b)         sm = P.Assoc P.Add [expr a sm, expr b sm]
+expr (a :&& b)        sm = P.Assoc P.And [expr a sm, expr b sm]
+expr (a :|| b)        sm = P.Assoc P.Or [expr a sm, expr b sm]
+expr (a :/ b)         sm = P.Frac  (replace_divs a sm) (replace_divs b sm)
+expr (a :^ b)         sm = P.Pow   (expr a sm) (expr b sm)
+expr (a :- b)         sm = P.Sub   (expr a sm) (expr b sm)
+expr (a :. b)         sm = P.Dot   (expr a sm) (expr b sm)
+expr (Neg a)          sm = P.Neg   (expr a sm)
+expr (Deriv Part a 1) sm = P.Assoc P.Mul [P.Sym (Special Partial), expr a sm]
+expr (Deriv Total a 1)sm = P.Assoc P.Mul [P.Sym lD, expr a sm]
+expr (Deriv Part a b) sm = P.Frac (P.Assoc P.Mul [P.Sym (Special Partial), expr a sm]) 
+                          (P.Assoc P.Mul [P.Sym (Special Partial), expr b sm])
+expr (Deriv Total a b)sm = P.Frac (P.Assoc P.Mul [P.Sym lD, expr a sm])
+                          (P.Assoc P.Mul [P.Sym lD, expr b sm])
 expr (C c)            sm = -- FIXME: Add Stage for Context
-  H.Sym $ (eqSymb (symbLookup c (sm ^. symbolTable)))
-expr (FCall f x)      sm = H.Call (expr f sm) (map (flip expr sm) x)
+  P.Sym $ (eqSymb (symbLookup c (sm ^. symbolTable)))
+expr (FCall f x)      sm = P.Call (expr f sm) (map (flip expr sm) x)
 expr (Case ps)        sm = if length ps < 2 then 
                     error "Attempting to use multi-case expr incorrectly"
-                    else H.Case (zip (map (flip expr sm . fst) ps) (map (flip rel sm . snd) ps))
+                    else P.Case (zip (map (flip expr sm . fst) ps) (map (flip rel sm . snd) ps))
 expr e@(EEquals _ _)    sm = rel e sm
 expr e@(ENEquals _ _)   sm = rel e sm
 expr e@(EGreater _ _)   sm = rel e sm
 expr e@(ELess _ _)      sm = rel e sm 
 expr e@(ELessEq _ _)    sm = rel e sm 
 expr e@(EGreaterEq _ _) sm = rel e sm 
-expr (Matrix a)         sm = H.Mtx $ map (map (flip expr sm)) a
-expr (Index a i)        sm = H.Index (expr a sm) (expr i sm)
-expr (UnaryOp u)        sm = (\(x,y) -> H.Op x [y]) $ ufunc u sm
-expr (Grouping e)       sm = H.Grouping (expr e sm)
-expr (BinaryOp b)       sm = (\(x,y) -> H.Op x y) (bfunc b sm)
-expr (EOp o)            sm = (\(x,y) -> H.Op x [y]) $ eop o sm
-expr (Not a)            sm = H.Not   (expr a sm)
-expr (a  :=>  b)        sm = H.Impl  (expr a sm) (expr b sm)
-expr (a  :<=> b)        sm = H.Iff   (expr a sm) (expr b sm)
-expr (IsIn  a b)        sm = H.IsIn  (expr a sm) b
-expr (ForAll a b)       sm = H.Forall a (expr b sm)
-expr (Exists a b)       sm = H.Exists a (expr b sm)
+expr (Matrix a)         sm = P.Mtx $ map (map (flip expr sm)) a
+expr (Index a i)        sm = P.Index (expr a sm) (expr i sm)
+expr (UnaryOp u)        sm = (\(x,y) -> P.Op x [y]) $ ufunc u sm
+expr (Grouping e)       sm = P.Grouping (expr e sm)
+expr (BinaryOp b)       sm = (\(x,y) -> P.Op x y) (bfunc b sm)
+expr (EOp o)            sm = (\(x,y) -> P.Op x [y]) $ eop o sm
+expr (Not a)            sm = P.Not   (expr a sm)
+expr (a  :=>  b)        sm = P.Impl  (expr a sm) (expr b sm)
+expr (a  :<=> b)        sm = P.Iff   (expr a sm) (expr b sm)
+expr (IsIn  a b)        sm = P.IsIn  (expr a sm) b
+expr (ForAll a b)       sm = P.Forall a (expr b sm)
+expr (Exists a b)       sm = P.Exists a (expr b sm)
 expr (Len _)             _ = error "Len not yet implemented"
 expr (Append _ _)        _ = error "Append not yet implemented"
 
 -- | Helper function for translating 'UFunc's
-ufunc :: HasSymbolTable s => UFunc -> s -> (H.Function, H.Expr)
-ufunc (Abs e) sm = (H.Abs, expr e sm)
-ufunc (Norm e) sm = (H.Norm, expr e sm)
-ufunc (Log e) sm = (H.Log, expr e sm)
-ufunc (Sin e)    sm = (H.Sin,  expr e sm)
-ufunc (Cos e)    sm = (H.Cos,  expr e sm)
-ufunc (Tan e)    sm = (H.Tan,  expr e sm)
-ufunc (Sec e)    sm = (H.Sec,  expr e sm)
-ufunc (Csc e)    sm = (H.Csc,  expr e sm)
-ufunc (Cot e)    sm = (H.Cot,  expr e sm)
-ufunc (Exp e)    sm = (H.Exp,  expr e sm)
-ufunc (Sqrt e)   sm = (H.Sqrt, expr e sm)
+ufunc :: HasSymbolTable s => UFunc -> s -> (P.Function, P.Expr)
+ufunc (Abs e) sm = (P.Abs, expr e sm)
+ufunc (Norm e) sm = (P.Norm, expr e sm)
+ufunc (Log e) sm = (P.Log, expr e sm)
+ufunc (Sin e)    sm = (P.Sin,  expr e sm)
+ufunc (Cos e)    sm = (P.Cos,  expr e sm)
+ufunc (Tan e)    sm = (P.Tan,  expr e sm)
+ufunc (Sec e)    sm = (P.Sec,  expr e sm)
+ufunc (Csc e)    sm = (P.Csc,  expr e sm)
+ufunc (Cot e)    sm = (P.Cot,  expr e sm)
+ufunc (Exp e)    sm = (P.Exp,  expr e sm)
+ufunc (Sqrt e)   sm = (P.Sqrt, expr e sm)
 
 -- | Helper function for translating 'BiFunc's
-bfunc :: HasSymbolTable s => BiFunc -> s -> (H.Function, [H.Expr])
-bfunc (Cross e1 e2) sm = (H.Cross, map (flip expr sm) [e1,e2])
+bfunc :: HasSymbolTable s => BiFunc -> s -> (P.Function, [P.Expr])
+bfunc (Cross e1 e2) sm = (P.Cross, map (flip expr sm) [e1,e2])
 
 -- | Helper function for translating 'EOperator's
-eop :: HasSymbolTable s => EOperator -> s -> (H.Function, H.Expr)
+eop :: HasSymbolTable s => EOperator -> s -> (P.Function, P.Expr)
 eop (Summation (IntegerDD v (BoundedR l h)) e) sm =
-  (H.Summation (Just ((v, expr l sm), expr h sm)), (expr e sm))
-eop (Summation (All _) e) sm = (H.Summation Nothing,(expr e sm))
+  (P.Summation (Just ((v, expr l sm), expr h sm)), (expr e sm))
+eop (Summation (All _) e) sm = (P.Summation Nothing,(expr e sm))
 eop (Summation(RealDD _ _) _) _ = error "HTML/Import.hs Summation cannot be over Real"
 eop (Product (IntegerDD v (BoundedR l h)) e) sm = 
-  (H.Product (Just ((v, expr l sm), expr h sm)), expr e sm)
-eop (Product (All _) e) sm = (H.Product Nothing, (expr e sm))
+  (P.Product (Just ((v, expr l sm), expr h sm)), expr e sm)
+eop (Product (All _) e) sm = (P.Product Nothing, (expr e sm))
 eop (Product (RealDD _ _) _) _ = error "HTML/Import.hs Product cannot be over Real"
 eop (Integral (RealDD v (BoundedR l h)) e) sm = 
-  (H.Integral (Just (expr l sm), Just (expr h sm)) v, expr e sm)
+  (P.Integral (Just (expr l sm), Just (expr h sm)) v, expr e sm)
 eop (Integral (All v) e) sm = 
-  (H.Integral (Just (H.Sym v), Nothing) v, expr e sm)
+  (P.Integral (Just (P.Sym v), Nothing) v, expr e sm)
 eop (Integral (IntegerDD _ _) _) _ = 
   error "HTML/Import.hs Integral cannot be over Integers"
 
 
 -- | Helper function for translating 'Relation's
-rel :: HasSymbolTable s => Relation -> s -> H.Expr
-rel (EEquals a b)    sm = H.Eq  (expr a sm) (expr b sm)
-rel (ENEquals a b)   sm = H.NEq (expr a sm) (expr b sm)
-rel (ELess a b)      sm = H.Lt  (expr a sm) (expr b sm)
-rel (EGreater a b)   sm = H.Gt  (expr a sm) (expr b sm)
-rel (ELessEq a b)    sm = H.LEq (expr a sm) (expr b sm)
-rel (EGreaterEq a b) sm = H.GEq (expr a sm) (expr b sm)
+rel :: HasSymbolTable s => Relation -> s -> P.Expr
+rel (EEquals a b)    sm = P.Eq  (expr a sm) (expr b sm)
+rel (ENEquals a b)   sm = P.NEq (expr a sm) (expr b sm)
+rel (ELess a b)      sm = P.Lt  (expr a sm) (expr b sm)
+rel (EGreater a b)   sm = P.Gt  (expr a sm) (expr b sm)
+rel (ELessEq a b)    sm = P.LEq (expr a sm) (expr b sm)
+rel (EGreaterEq a b) sm = P.GEq (expr a sm) (expr b sm)
 rel _ _ = error "Attempting to use non-Relation Expr in relation context."
 
 -- | Helper function for translating the differential
-int_wrt :: Symbol -> H.Expr
-int_wrt wrtc = H.Assoc H.Mul [H.Sym lD, H.Sym wrtc]
+int_wrt :: Symbol -> P.Expr
+int_wrt wrtc = P.Assoc P.Mul [P.Sym lD, P.Sym wrtc]
 
 -- | Helper function for translating operations in expressions 
-replace_divs :: HasSymbolTable s => Expr -> s -> H.Expr
-replace_divs (a :/ b) sm = H.Div (replace_divs a sm) (replace_divs b sm)
-replace_divs (a :+ b) sm = H.Assoc H.Add [replace_divs a sm, replace_divs b sm]
-replace_divs (a :* b) sm = H.Assoc H.Mul [replace_divs a sm, replace_divs b sm]
-replace_divs (a :^ b) sm = H.Pow (replace_divs a sm) (replace_divs b sm)
-replace_divs (a :- b) sm = H.Sub (replace_divs a sm) (replace_divs b sm)
+replace_divs :: HasSymbolTable s => Expr -> s -> P.Expr
+replace_divs (a :/ b) sm = P.Div (replace_divs a sm) (replace_divs b sm)
+replace_divs (a :+ b) sm = P.Assoc P.Add [replace_divs a sm, replace_divs b sm]
+replace_divs (a :* b) sm = P.Assoc P.Mul [replace_divs a sm, replace_divs b sm]
+replace_divs (a :^ b) sm = P.Pow (replace_divs a sm) (replace_divs b sm)
+replace_divs (a :- b) sm = P.Sub (replace_divs a sm) (replace_divs b sm)
 replace_divs a        sm = expr a sm
 
 -- | Translates Sentence to the HTML representation of Sentence ('Spec')

@@ -1,67 +1,13 @@
 {-# Language GADTs #-}
 module Language.Drasil.HTML.AST where
 
-import Language.Drasil.Expr (Variable)
 import Language.Drasil.Symbol (Symbol)
 import Language.Drasil.Spec (USymb, RefType)
 import Language.Drasil.Unicode (Greek, Special)
 import Language.Drasil.Document (DType (..), MaxWidthPercent)
 import Language.Drasil.Citations (Month(..))
 import Language.Drasil.People (People)
-import Language.Drasil.Space (Space)
-
--- | Internal HTML version of Expr 
--- (for converting 'Language.Drasil.Expr.Expr')
-data Oper = Add | Mul | And | Or
-
-data Expr = Var   Variable
-          | Dbl   Double
-          | Int   Integer
-          | Bln   Bool
-          | Assoc Oper [Expr]
-          | Frac  Expr Expr
-          | Div   Expr Expr
-          | Pow   Expr Expr
-          | Sub   Expr Expr
-          | Sym   Symbol
-          | Eq    Expr Expr
-          | NEq   Expr Expr
-          | Lt    Expr Expr
-          | Gt    Expr Expr
-          | LEq   Expr Expr
-          | GEq   Expr Expr
-          | Dot   Expr Expr
-          | Not   Expr
-          | Neg   Expr
-          | Call  Expr [Expr]
-          | Case  [(Expr,Expr)]
-          | Op Function [Expr]
-          | Grouping Expr
-          | IsIn  Expr Space
-          | Forall Symbol Expr
-          | Exists Symbol Expr
-          | Impl Expr Expr
-          | Iff  Expr Expr
-          | Mtx [[Expr]]
-          | Index Expr Expr
-          
--- | Internal HTML version of Function 
--- (for converting Functions from 'Language.Drasil.Expr')
-data Function = Log
-           | Summation (Maybe ((Symbol, Expr),Expr))
-           | Abs
-           | Norm
-           | Integral ((Maybe Expr),(Maybe Expr)) Symbol
-           | Sin
-           | Cos
-           | Tan
-           | Sec
-           | Csc
-           | Cot
-           | Cross
-           | Product (Maybe ((Symbol, Expr), Expr))
-           | Exp
-           | Sqrt
+import Language.Drasil.Printing.AST (Expr(..))
 
 -- | Internal HTML version of Sentence 
 -- (for converting 'Language.Drasil.Spec.Sentence')
@@ -123,23 +69,6 @@ instance Show ListType where
   show (Simple _)    = error "Printing Simple list failed, see ASTHTML/PrintHTML"
   show (Definitions _)  = error "Printing list of definitions failed"
 
-instance Show Function where
-  show Log            = "log"
-  show (Summation _)  = "&sum;"
-  show (Product _)    = "&prod;"
-  show Abs            = ""
-  show Norm           = ""
-  show (Integral _ _) = "&int;"
-  show Sin            = "sin"
-  show Cos            = "cos"
-  show Tan            = "tan"
-  show Sec            = "sec"
-  show Csc            = "csc"
-  show Cot            = "cot"
-  show Cross          = "&#10799;"
-  show Exp            = "e"
-  show Sqrt           = "&radic;"
-  
 type BibRef = [Citation]
 type City   = Spec
 type State  = Spec
@@ -251,9 +180,3 @@ instance Ord CiteField where --FIXME: APA has year come directly after Author
   compare _ (URLdate _ _ _) = GT
   compare (Note       _) _ = LT
   --compare _ (Note       _) = GT
-  
-prec :: Oper -> Int
-prec Mul = 3
-prec Add = 4
-prec And = 11
-prec Or = 12

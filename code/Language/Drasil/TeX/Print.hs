@@ -4,7 +4,6 @@ import Prelude hiding (print)
 import Data.List (intersperse, transpose)
 import Text.PrettyPrint (text, (<+>))
 import qualified Text.PrettyPrint as TP
-import Data.Maybe (isNothing, fromJust)
 import Numeric (showFFloat)
 
 import Control.Applicative (pure)
@@ -63,7 +62,6 @@ lo (Section d t con l)  sm  = sec d (spec t) %% label (spec l) %% print sm con
 lo (Paragraph contents) _  = toText $ spec contents
 lo (EqnBlock contents)  _  = makeEquation contents
 lo (Table rows r bl t)  _  = toText $ makeTable rows (spec r) bl (spec t)
---lo (CodeBlock c)         = code $ pure $ printCode c
 lo (Definition ssPs l) sm  = toText $ makeDefn sm ssPs $ spec l
 lo (Defnt _ ssPs l)    sm  = toText $ makeDefn sm ssPs $ spec l
 lo (List l)             _  = toText $ makeList l
@@ -74,18 +72,10 @@ lo (LikelyChange n l)   _  = toText $ makeLC (spec n) (spec l)
 lo (UnlikelyChange n l) _  = toText $ makeUC (spec n) (spec l)
 lo (Bib bib)            sm = toText $ makeBib sm bib
 lo (Graph ps w h c l)   _  = toText $ makeGraph
-                               (map (\(a,b) -> (spec a, spec b)) ps)
-                               (if isNothing w
-                                  then (pure $ text "")
-                                  else (pure $ text $ "text width = " ++
-                                         (show $ fromJust w) ++ "em, ")
-                               )
-                               (if isNothing w
-                                  then (pure $ text "")
-                                  else (pure $ text $ "minimum height = " ++
-                                         (show $ fromJust h) ++ "em, ")
-                               )
-                               (spec c) (spec l)
+  (map (\(a,b) -> (spec a, spec b)) ps)
+  (pure $ text $ maybe "" (\x -> "text width = " ++ show x ++ "em ,") w)
+  (pure $ text $ maybe "" (\x -> "minimum height = " ++ show x ++ "em, ") h)
+  (spec c) (spec l)
 
 
 print :: HasSymbolTable s => s -> [LayoutObj] -> D
@@ -121,36 +111,43 @@ p_expr (Dbl d)    = showFFloat Nothing d ""
 p_expr (Int i)    = show i
 p_expr (Bln b)    = show b
 p_expr (Assoc Add l)  = concat $ intersperse "+" $ map p_expr l
-p_expr (BOp Sub x y)  = p_expr x ++ "-" ++ p_expr y
 p_expr (Assoc Mul l)  = mul l
+p_expr (Sym s)    = symbol s
 p_expr (BOp Frac n d) = "\\frac{" ++ needMultlined n ++ "}{" ++ needMultlined d ++"}"
 p_expr (BOp Div n d)  = divide n d
 p_expr (BOp Pow x y)  = pow x y
-p_expr (Sym s)    = symbol s
-p_expr (BOp Eq x y)   = p_expr x ++ "=" ++ p_expr y
-p_expr (BOp NEq x y)  = p_expr x ++ "\\neq{}" ++ p_expr y
-p_expr (BOp Lt x y)   = p_expr x ++ "<" ++ p_expr y
-p_expr (BOp Gt x y)   = p_expr x ++ ">" ++ p_expr y
-p_expr (BOp GEq x y)  = p_expr x ++ "\\geq{}" ++ p_expr y
-p_expr (BOp LEq x y)  = p_expr x ++ "\\leq{}" ++ p_expr y
-p_expr (BOp Dot x y)  = p_expr x ++ "\\cdot{}" ++ p_expr y
+p_expr (BOp Index a i) = p_indx a i
+p_expr (BOp o x y)    = p_expr x ++ p_bop o ++ p_expr y
 p_expr (Neg x)    = neg x
 p_expr (Call f x) = p_expr f ++ paren (concat $ intersperse "," $ map p_expr x)
 p_expr (Case ps)  = "\\begin{cases}\n" ++ cases ps ++ "\n\\end{cases}"
 p_expr (Op f es)  = p_op f es
 p_expr (Grouping x) = paren (p_expr x)
 p_expr (Mtx a)    = "\\begin{bmatrix}\n" ++ p_matrix a ++ "\n\\end{bmatrix}"
-p_expr (BOp Index a i) = p_indx a i
 --Logic
 p_expr (Not x)    = "\\neg{}" ++ p_expr x
 p_expr (Assoc And l)  = concat $ intersperse "\\land{}" $ map p_expr l
 p_expr (Assoc Or l)   = concat $ intersperse "\\lor{}" $ map p_expr l
-p_expr (BOp Impl a b) = p_expr a ++ "\\implies{}" ++ p_expr b
-p_expr (BOp Iff a b)  = p_expr a ++ "\\iff{}" ++ p_expr b
 p_expr (IsIn  a b) = p_expr a ++ "\\in{}" ++ p_space b
 
 p_expr (Forall v e) = "\\forall{} " ++ symbol v ++ ":\\ " ++ p_expr e
 p_expr (Exists v e) = "\\exists{} " ++ symbol v ++ ":\\ " ++ p_expr e
+
+p_bop :: BinOp -> String
+p_bop Sub = "-"
+p_bop Eq = "="
+p_bop NEq = "\\neq{}"
+p_bop Lt = "<"
+p_bop Gt = ">"
+p_bop GEq = "\\geq{}"
+p_bop LEq = "\\leq{}"
+p_bop Impl = "\\implies{}"
+p_bop Iff = "\\iff{}"
+p_bop Frac = "/"
+p_bop Div = "/"
+p_bop Pow = "^"
+p_bop Dot = "\\cdot{}"
+p_bop Index = error "no printing of Index"
 
 -- | For seeing if long numerators or denominators need to be on multiple lines
 needMultlined :: Expr -> String
@@ -226,7 +223,7 @@ neg x@(Var _) = "-" ++ p_expr x
 neg x@(Dbl _) = "-" ++ p_expr x
 neg x@(Int _) = "-" ++ p_expr x
 neg x@(Sym _) = "-" ++ p_expr x
-neg   (Neg n) = p_expr n
+neg x@(Neg _) = "-" ++ p_expr x
 neg x         = paren ("-" ++ p_expr x)
 
 pow :: Expr -> Expr -> String

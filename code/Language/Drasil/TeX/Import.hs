@@ -4,10 +4,10 @@ import Control.Lens hiding ((:>),(:<),set)
 import Prelude hiding (id)
 import Language.Drasil.Expr (Expr(..), Relation, UFunc(..), BiFunc(..),
     DerivType(..), EOperator(..), ($=), RealRange(..), DomainDesc(..))
-import Language.Drasil.Space (Space(..))
 import Language.Drasil.Expr.Extract
 import Language.Drasil.Spec
 import qualified Language.Drasil.TeX.AST as T
+import qualified Language.Drasil.Printing.AST as P
 import Language.Drasil.Unicode (Special(Partial))
 import Language.Drasil.Chunk.Eq
 import Language.Drasil.Chunk.ExprRelat (relat)
@@ -24,117 +24,101 @@ import Language.Drasil.NounPhrase (phrase, titleize)
 import Language.Drasil.Unit (usymb)
 import Language.Drasil.Citations (Citation(..),CiteField(..))
 
-expr :: HasSymbolTable ctx => Expr -> ctx -> T.Expr
-expr (V v)              _ = T.Var  v
-expr (Dbl d)            _ = T.Dbl  d
-expr (Int i)            _ = T.Int  i
-expr (a :* b)          sm = T.Assoc T.Mul  [expr a sm, expr b sm]
-expr (a :+ b)          sm = T.Assoc T.Add  [expr a sm, expr b sm]
-expr (a :/ b)          sm = T.Frac (replace_divs a sm) (replace_divs b sm)
-expr (a :^ b)          sm = T.Pow  (expr a sm) (expr b sm)
-expr (a :- b)          sm = T.Sub  (expr a sm) (expr b sm)
-expr (a :. b)          sm = T.Dot  (expr a sm) (expr b sm)
-expr (Neg a)           sm = T.Neg  (expr a sm)
+expr :: HasSymbolTable ctx => Expr -> ctx -> P.Expr
+expr (V v)              _ = P.Var  v
+expr (Dbl d)            _ = P.Dbl  d
+expr (Int i)            _ = P.Int  i
+expr (a :* b)          sm = P.Assoc P.Mul  [expr a sm, expr b sm]
+expr (a :+ b)          sm = P.Assoc P.Add  [expr a sm, expr b sm]
+expr (a :/ b)          sm = P.Frac (replace_divs a sm) (replace_divs b sm)
+expr (a :^ b)          sm = P.Pow  (expr a sm) (expr b sm)
+expr (a :- b)          sm = P.Sub  (expr a sm) (expr b sm)
+expr (a :. b)          sm = P.Dot  (expr a sm) (expr b sm)
+expr (Neg a)           sm = P.Neg  (expr a sm)
 expr (C c)             sm = -- FIXME: Add Stage for Context
-  T.Sym  (eqSymb (symbLookup c (sm ^. symbolTable)))
-expr (Deriv Part a 1)  sm = T.Assoc T.Mul [T.Sym (Special Partial), expr a sm]
-expr (Deriv Total a 1) sm = T.Assoc T.Mul [T.Sym lD, expr a sm]
-expr (Deriv Part a b)  sm = T.Frac (T.Assoc T.Mul [T.Sym (Special Partial), expr a sm])
-                           (T.Assoc T.Mul [T.Sym (Special Partial), expr b sm])
-expr (Deriv Total a b) sm = T.Frac (T.Assoc T.Mul [T.Sym lD, expr a sm])
-                           (T.Assoc T.Mul [T.Sym lD, expr b sm])
-expr (FCall f x)       sm = T.Call (expr f sm) (map (flip expr sm) x)
+  P.Sym  (eqSymb (symbLookup c (sm ^. symbolTable)))
+expr (Deriv Part a 1)  sm = P.Assoc P.Mul [P.Sym (Special Partial), expr a sm]
+expr (Deriv Total a 1) sm = P.Assoc P.Mul [P.Sym lD, expr a sm]
+expr (Deriv Part a b)  sm = P.Frac (P.Assoc P.Mul [P.Sym (Special Partial), expr a sm])
+                           (P.Assoc P.Mul [P.Sym (Special Partial), expr b sm])
+expr (Deriv Total a b) sm = P.Frac (P.Assoc P.Mul [P.Sym lD, expr a sm])
+                           (P.Assoc P.Mul [P.Sym lD, expr b sm])
+expr (FCall f x)       sm = P.Call (expr f sm) (map (flip expr sm) x)
 expr (Case ps)         sm = if length ps < 2 then 
         error "Attempting to use multi-case expr incorrectly"
-        else T.Case (zip (map (flip expr sm . fst) ps) (map (flip rel sm . snd) ps))
+        else P.Case (zip (map (flip expr sm . fst) ps) (map (flip rel sm . snd) ps))
 expr x@(EEquals _ _)    sm = rel x sm
 expr x@(ENEquals _ _)   sm = rel x sm
 expr x@(EGreater _ _)   sm = rel x sm
 expr x@(ELess _ _)      sm = rel x sm
 expr x@(ELessEq _ _)    sm = rel x sm
 expr x@(EGreaterEq _ _) sm = rel x sm
-expr (Matrix a)        sm = T.Mtx $ map (map (flip expr sm)) a
-expr (Index a i)       sm = T.Index (expr a sm) (expr i sm)
-expr (UnaryOp u)       sm = (\(x,y) -> T.Op x [y]) (ufunc u sm)
-expr (Grouping e)      sm = T.Grouping (expr e sm)
-expr (BinaryOp b)      sm = (\(x,y) -> T.Op x y) (bfunc b sm)
-expr (EOp o)           sm = (\(x,y) -> T.Op x [y]) (eop o sm)
-expr (Not a)           sm = T.Not  (expr a sm)
-expr (a :&& b)         sm = T.Assoc T.And  [expr a sm, expr b sm]
-expr (a :|| b)         sm = T.Assoc T.Or  [expr a sm, expr b sm]
-expr (a  :=>  b)       sm = T.Impl  (expr a sm) (expr b sm)
-expr (a  :<=> b)       sm = T.Iff   (expr a sm) (expr b sm)
-expr (IsIn  a b)       sm = T.IsIn  (expr a sm) (set b)
-expr (ForAll a b)      sm = T.Forall a (expr b sm)
-expr (Exists a b)      sm = T.Exists a (expr b sm)
+expr (Matrix a)        sm = P.Mtx $ map (map (flip expr sm)) a
+expr (Index a i)       sm = P.Index (expr a sm) (expr i sm)
+expr (UnaryOp u)       sm = (\(x,y) -> P.Op x [y]) (ufunc u sm)
+expr (Grouping e)      sm = P.Grouping (expr e sm)
+expr (BinaryOp b)      sm = (\(x,y) -> P.Op x y) (bfunc b sm)
+expr (EOp o)           sm = (\(x,y) -> P.Op x [y]) (eop o sm)
+expr (Not a)           sm = P.Not  (expr a sm)
+expr (a :&& b)         sm = P.Assoc P.And  [expr a sm, expr b sm]
+expr (a :|| b)         sm = P.Assoc P.Or  [expr a sm, expr b sm]
+expr (a  :=>  b)       sm = P.Impl  (expr a sm) (expr b sm)
+expr (a  :<=> b)       sm = P.Iff   (expr a sm) (expr b sm)
+expr (IsIn  a b)       sm = P.IsIn  (expr a sm) b
+expr (ForAll a b)      sm = P.Forall a (expr b sm)
+expr (Exists a b)      sm = P.Exists a (expr b sm)
 expr _                 _  = error "Expression unimplemented in TeX"
 
-ufunc :: HasSymbolTable ctx => UFunc -> ctx -> (T.Function, T.Expr)
-ufunc (Log e) sm = (T.Log, expr e sm)
-ufunc (Abs e) sm = (T.Abs, expr e sm)
-ufunc (Norm e) sm = (T.Norm, expr e sm)
-ufunc (Sin e) sm = (T.Sin, expr e sm)
-ufunc (Cos e) sm = (T.Cos, expr e sm)
-ufunc (Tan e) sm = (T.Tan, expr e sm)
-ufunc (Sec e) sm = (T.Sec, expr e sm)
-ufunc (Csc e) sm = (T.Csc, expr e sm)
-ufunc (Cot e) sm = (T.Cot, expr e sm)
-ufunc (Exp e) sm = (T.Exp, expr e sm)
-ufunc (Sqrt e) sm = (T.Sqrt, expr e sm)
+ufunc :: HasSymbolTable ctx => UFunc -> ctx -> (P.Function, P.Expr)
+ufunc (Log e) sm = (P.Log, expr e sm)
+ufunc (Abs e) sm = (P.Abs, expr e sm)
+ufunc (Norm e) sm = (P.Norm, expr e sm)
+ufunc (Sin e) sm = (P.Sin, expr e sm)
+ufunc (Cos e) sm = (P.Cos, expr e sm)
+ufunc (Tan e) sm = (P.Tan, expr e sm)
+ufunc (Sec e) sm = (P.Sec, expr e sm)
+ufunc (Csc e) sm = (P.Csc, expr e sm)
+ufunc (Cot e) sm = (P.Cot, expr e sm)
+ufunc (Exp e) sm = (P.Exp, expr e sm)
+ufunc (Sqrt e) sm = (P.Sqrt, expr e sm)
 
-bfunc :: HasSymbolTable ctx => BiFunc -> ctx -> (T.Function, [T.Expr])
-bfunc (Cross e1 e2) sm = (T.Cross, map (flip expr sm) [e1,e2])
+bfunc :: HasSymbolTable ctx => BiFunc -> ctx -> (P.Function, [P.Expr])
+bfunc (Cross e1 e2) sm = (P.Cross, map (flip expr sm) [e1,e2])
 
-eop :: HasSymbolTable ctx => EOperator -> ctx -> (T.Function, T.Expr)
+eop :: HasSymbolTable ctx => EOperator -> ctx -> (P.Function, P.Expr)
 eop (Summation (IntegerDD v (BoundedR l h)) e) sm =
-  (T.Summation (Just ((v, expr l sm), expr h sm)), (expr e sm))
-eop (Summation (All _) e) sm = (T.Summation Nothing,(expr e sm))
+  (P.Summation (Just ((v, expr l sm), expr h sm)), (expr e sm))
+eop (Summation (All _) e) sm = (P.Summation Nothing,(expr e sm))
 eop (Summation(RealDD _ _) _) _ = error "TeX/Import.hs Summation cannot be over Real"
 eop (Product (IntegerDD v (BoundedR l h)) e) sm = 
-  (T.Product (Just ((v, expr l sm), expr h sm)), expr e sm)
-eop (Product (All _) e) sm = (T.Product Nothing, (expr e sm))
+  (P.Product (Just ((v, expr l sm), expr h sm)), expr e sm)
+eop (Product (All _) e) sm = (P.Product Nothing, (expr e sm))
 eop (Product (RealDD _ _) _) _ = error "TeX/Import.hs Product cannot be over Real"
 eop (Integral (RealDD v (BoundedR l h)) e) sm = 
-  (T.Integral (Just (expr l sm), Just (expr h sm)) v, expr e sm)
+  (P.Integral (Just (expr l sm), Just (expr h sm)) v, expr e sm)
 eop (Integral (All v) e) sm = 
-  (T.Integral (Just (T.Sym v), Nothing) v, expr e sm)
+  (P.Integral (Just (P.Sym v), Nothing) v, expr e sm)
 eop (Integral (IntegerDD _ _) _) _ = 
   error "TeX/Import.hs Integral cannot be over Integers"
 
-rel :: HasSymbolTable ctx => Relation -> ctx -> T.Expr
-rel (EEquals a b)    sm = T.Eq  (expr a sm) (expr b sm)
-rel (ENEquals a b)   sm = T.NEq (expr a sm) (expr b sm)
-rel (ELess a b)      sm = T.Lt  (expr a sm) (expr b sm)
-rel (EGreater a b)   sm = T.Gt  (expr a sm) (expr b sm)
-rel (ELessEq a b)    sm = T.LEq (expr a sm) (expr b sm)
-rel (EGreaterEq a b) sm = T.GEq (expr a sm) (expr b sm)
+rel :: HasSymbolTable ctx => Relation -> ctx -> P.Expr
+rel (EEquals a b)    sm = P.Eq  (expr a sm) (expr b sm)
+rel (ENEquals a b)   sm = P.NEq (expr a sm) (expr b sm)
+rel (ELess a b)      sm = P.Lt  (expr a sm) (expr b sm)
+rel (EGreater a b)   sm = P.Gt  (expr a sm) (expr b sm)
+rel (ELessEq a b)    sm = P.LEq (expr a sm) (expr b sm)
+rel (EGreaterEq a b) sm = P.GEq (expr a sm) (expr b sm)
 rel _ _ = error "Attempting to use non-Relation Expr in relation context."
 
--- | Helper for translating Spaces
-set :: Space -> T.Set
-set Integer  = T.Integer
-set Rational = T.Rational
-set Real     = T.Real
-set Natural  = T.Natural
-set Boolean  = T.Boolean
-set Char     = T.Char
-set String   = T.String
-set Radians  = T.Radians
-set (Vect a) = T.Vect (set a)
-set (Obj a)  = T.Obj a
-set (DiscreteI a) = T.DiscreteI a
-set (DiscreteD a) = T.DiscreteD a
-set (DiscreteS a) = T.DiscreteS a
+int_wrt :: Symbol -> P.Expr
+int_wrt wrtc = P.Assoc P.Mul [P.Sym lD, P.Sym wrtc]
 
-int_wrt :: Symbol -> T.Expr
-int_wrt wrtc = T.Assoc T.Mul [T.Sym lD, T.Sym wrtc]
-
-replace_divs :: HasSymbolTable ctx => Expr -> ctx -> T.Expr
-replace_divs (a :/ b) sm = T.Div (replace_divs a sm) (replace_divs b sm)
-replace_divs (a :* b) sm = T.Assoc T.Mul [replace_divs a sm, replace_divs b sm]
-replace_divs (a :+ b) sm = T.Assoc T.Add [replace_divs a sm, replace_divs b sm]
-replace_divs (a :^ b) sm = T.Pow (replace_divs a sm) (replace_divs b sm)
-replace_divs (a :- b) sm = T.Sub (replace_divs a sm) (replace_divs b sm)
+replace_divs :: HasSymbolTable ctx => Expr -> ctx -> P.Expr
+replace_divs (a :/ b) sm = P.Div (replace_divs a sm) (replace_divs b sm)
+replace_divs (a :* b) sm = P.Assoc P.Mul [replace_divs a sm, replace_divs b sm]
+replace_divs (a :+ b) sm = P.Assoc P.Add [replace_divs a sm, replace_divs b sm]
+replace_divs (a :^ b) sm = P.Pow (replace_divs a sm) (replace_divs b sm)
+replace_divs (a :- b) sm = P.Sub (replace_divs a sm) (replace_divs b sm)
 replace_divs a        sm = expr a sm
 
 spec :: HasSymbolTable ctx => Sentence -> ctx -> T.Spec

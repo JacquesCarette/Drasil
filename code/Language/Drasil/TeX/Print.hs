@@ -9,6 +9,7 @@ import Numeric (showFFloat)
 
 import Control.Applicative (pure)
 
+import Language.Drasil.Printing.AST
 import Language.Drasil.TeX.AST
 import qualified Language.Drasil.TeX.Import as I
 import qualified Language.Drasil.Output.Formats as A
@@ -24,6 +25,7 @@ import qualified Language.Drasil.Document as L
 import Language.Drasil.Unicode (RenderGreek(..), RenderSpecial(..))
 import Language.Drasil.People (People,rendPersLFM,lstName,Person(..),Conv(Mono))
 import Language.Drasil.ChunkDB (HasSymbolTable)
+import Language.Drasil.Space (Space(..))
 
 genTeX :: HasSymbolTable ctx => A.DocType -> L.Document -> ctx -> TP.Doc
 genTeX typ doc sm = runPrint (build sm typ $ I.makeDocument doc sm) Text
@@ -145,7 +147,7 @@ p_expr (Assoc And l)  = concat $ intersperse "\\land{}" $ map p_expr l
 p_expr (Assoc Or l)   = concat $ intersperse "\\lor{}" $ map p_expr l
 p_expr (Impl a b) = p_expr a ++ "\\implies{}" ++ p_expr b
 p_expr (Iff a b)  = p_expr a ++ "\\iff{}" ++ p_expr b
-p_expr (IsIn  a b) = p_expr a ++ "\\in{}" ++ show b
+p_expr (IsIn  a b) = p_expr a ++ "\\in{}" ++ p_space b
 
 p_expr (Forall v e) = "\\forall{} " ++ symbol v ++ ":\\ " ++ p_expr e
 p_expr (Exists v e) = "\\exists{} " ++ symbol v ++ ":\\ " ++ p_expr e
@@ -240,6 +242,39 @@ cases :: [(Expr,Expr)] -> String
 cases []     = error "Attempt to create case expression without cases"
 cases (p:[]) = (needMultlined $ fst p) ++ ", & " ++ p_expr (snd p)
 cases (p:ps) = cases [p] ++ "\\\\\n" ++ cases ps
+
+p_space :: Space -> String
+p_space Integer  = "\\mathbb{Z}"
+p_space Rational = "\\mathbb{Q}"
+p_space Real     = "\\mathbb{R}"
+p_space Natural  = "\\mathbb{N}"
+p_space Boolean  = "\\mathbb{B}"
+p_space Char     = "Char"
+p_space String   = "String"
+p_space Radians  = "rad"
+p_space (Vect a) = "V" ++ p_space a
+p_space (Obj a)  = a
+p_space (DiscreteI a)  = "\\{" ++ (concat $ intersperse ", " (map show a)) ++ "\\}"
+p_space (DiscreteD a)  = "\\{" ++ (concat $ intersperse ", " (map show a)) ++ "\\}"
+p_space (DiscreteS a)  = "\\{" ++ (concat $ intersperse ", " a) ++ "\\}"
+
+function :: Function -> String
+function Log            = "\\log"
+function (Summation _)  = "\\displaystyle\\sum"
+function (Product _)    = "\\displaystyle\\prod"
+function Abs            = ""
+function Norm           = ""
+function (Integral _ _) = "\\int"
+function Sin            = "\\sin"
+function Cos            = "\\cos"
+function Tan            = "\\tan"
+function Sec            = "\\sec"
+function Csc            = "\\csc"
+function Cot            = "\\cot"
+function Cross          = "\\times"
+function Exp            = "e"
+function Sqrt           = "\\sqrt"
+
 -----------------------------------------------------------------
 ------------------ TABLE PRINTING---------------------------
 -----------------------------------------------------------------
@@ -449,19 +484,19 @@ makeFigure r c f wp =
 -----------------------------------------------------------------
 p_op :: Function -> [Expr] -> String
 p_op f@(Cross) xs = binfix_op f xs
-p_op f@(Summation bs) (x:[]) = show f ++ makeBound bs ++ brace (sqbrac (p_expr x))
+p_op f@(Summation bs) (x:[]) = function f ++ makeBound bs ++ brace (sqbrac (p_expr x))
 p_op (Summation _) _ = error "Something went wrong with a summation"
-p_op f@(Product bs) (x:[]) = show f ++ makeBound bs ++ brace (p_expr x)
-p_op f@(Integral bs wrtc) (x:[]) = show f ++ makeIBound bs ++ 
+p_op f@(Product bs) (x:[]) = function f ++ makeBound bs ++ brace (p_expr x)
+p_op f@(Integral bs wrtc) (x:[]) = function f ++ makeIBound bs ++ 
   brace (p_expr x ++ "d" ++ symbol wrtc) -- HACK alert.
 p_op (Integral _ _) _  = error "Something went wrong with an integral"
 p_op Abs (x:[]) = "|" ++ p_expr x ++ "|"
 p_op Abs _ = error "Abs should only take one expr."
 p_op Norm (x:[]) = "||" ++ p_expr x ++ "||"
 p_op Norm _ = error "Norm should only take on expression."
-p_op f@(Exp) (x:[]) = show f ++ "^" ++ brace (p_expr x)
-p_op f@(Sqrt) (x:[]) = show f ++ "{" ++ p_expr x ++ "}"
-p_op f (x:[]) = show f ++ paren (p_expr x) --Unary ops, this will change once more complicated functions appear.
+p_op f@(Exp) (x:[]) = function f ++ "^" ++ brace (p_expr x)
+p_op f@(Sqrt) (x:[]) = function f ++ "{" ++ p_expr x ++ "}"
+p_op f (x:[]) = function f ++ paren (p_expr x) --Unary ops, this will change once more complicated functions appear.
 p_op _ _ = error "Something went wrong with an operation"
 
 makeBound :: Maybe ((Symbol, Expr),Expr) -> String
@@ -477,7 +512,7 @@ makeIBound (Nothing, Just high)  = "^" ++ brace (p_expr high)
 makeIBound (Nothing, Nothing)    = ""
 
 binfix_op :: Function -> [Expr] -> String
-binfix_op f (x:y:[]) = p_expr x ++ show f ++ p_expr y
+binfix_op f (x:y:[]) = p_expr x ++ function f ++ p_expr y
 binfix_op _ _ = error "Attempting to print binary operator with inappropriate" ++
                    "number of operands (should be 2)"
 

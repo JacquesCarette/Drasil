@@ -23,6 +23,7 @@ infixl 6 :-
 infixr 4 $=
 
 data Oper = Add | Mul | And | Or
+  deriving (Eq)
 
 -- | Drasil Expressions
 data Expr where
@@ -103,6 +104,7 @@ instance Eq Expr where
   V a == V b                   =  a == b
   Dbl a == Dbl b               =  a == b
   Int a == Int b               =  a == b
+  Assoc o1 l1 == Assoc o2 l2   =  o1 == o2 && l1 == l2
   (:^) a b == (:^) c d         =  a == c && b == d
   (:*) a b == (:*) c d         =  a == c && b == d || a == d && b == c
   (:/) a b == (:/) c d         =  a == c && b == d

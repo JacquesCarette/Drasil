@@ -400,8 +400,8 @@ stfMtrxDerivation = [
   $= m2x2 (inxi effStiffA) (inxi effStiffB) (inxi effStiffB) (inxi effStiffA),
   
   EqnBlock $
-  (inxi effStiffA) $= (inxi shrStiffBase) * (cos (inxi baseAngle)) ^ (fromInteger 2) +
-  (inxi nrmStiffBase) * (sin (inxi baseAngle)) ^ (fromInteger 2),
+  (inxi effStiffA) $= (inxi shrStiffBase) * (cos (inxi baseAngle)) :^ 2 +
+  (inxi nrmStiffBase) * (sin (inxi baseAngle)) :^ 2,
   
   EqnBlock $
   (inxi effStiffB) $= ((inxi shrStiffBase)-(inxi nrmStiffBase)) *

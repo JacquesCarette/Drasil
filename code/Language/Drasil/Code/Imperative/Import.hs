@@ -444,7 +444,10 @@ convExpr (Int i)      = return $ litInt i
 convExpr ((Int a) :/ (Int b)) = return $ (litFloat $ fromIntegral a) #/ (litFloat $ fromIntegral b) -- hack to deal with integer division
 convExpr (a :/ b)     = liftM2 (#/) (convExpr a) (convExpr b)
 convExpr (a :* b)     = liftM2 (#*)  (convExpr a) (convExpr b)
-convExpr (a :+ b)     = liftM2 (#+)  (convExpr a) (convExpr b)
+convExpr (Assoc Add l)  = fmap (foldr1 (#+)) $ sequence $ map convExpr l
+convExpr (Assoc Mul l)  = fmap (foldr1 (#*)) $ sequence $ map convExpr l
+convExpr (Assoc E.And l)  = fmap (foldr1 (?&&)) $ sequence $ map convExpr l
+convExpr (Assoc E.Or l)  = fmap (foldr1 (?||)) $ sequence $ map convExpr l
 convExpr (a :^ b)     = liftM2 (#^)  (convExpr a) (convExpr b)
 convExpr (0 :- b)     = convExpr (Neg b)
 convExpr (a :- b)     = liftM2 (#-)  (convExpr a) (convExpr b)
@@ -476,7 +479,13 @@ convExpr (UnaryOp u)  = unop u
 convExpr (Grouping e) = convExpr e
 convExpr (BinaryOp _) = return $ litString "**convExpr :: BinaryOp unimplemented**"
 convExpr (Case _)     = error "**convExpr :: Case should be dealt with separately**"
-convExpr _           = return $ litString "**convExpr :: ? unimplemented**"
+convExpr (Matrix _)   = error "convExpr: Matrix"
+convExpr (EOp _)      = error "convExpr: EOp"
+convExpr (IsIn _ _)      = error "convExpr: IsIn"
+convExpr (E.ForAll _ _)      = error "convExpr: ForAll"
+convExpr (E.Exists _ _)      = error "convExpr: Exists"
+convExpr (_ :=> _)     = error "convExpr :=>"
+convExpr (_ :<=> _)    = error "convExpr :<=>"
 
 unop :: UFunc -> Reader State Value
 unop (E.Sqrt e)  = fmap (#/^) (convExpr e)
@@ -489,14 +498,14 @@ unop (E.Tan e)   = fmap I.tan (convExpr e)
 unop (E.Csc e)   = fmap I.csc (convExpr e)
 unop (E.Sec e)   = fmap I.sec (convExpr e)
 unop (E.Cot e)   = fmap I.cot (convExpr e)
-unop _           = error "not implemented"
+unop (E.Norm _)  = error "unop: Norm not implemented"
 
 
 containsCase :: Expr -> Bool
 containsCase (Case _) = True
+containsCase (Assoc _ l)  = or $ map containsCase l
 containsCase (a :/ b)     = (containsCase a) || (containsCase b)
 containsCase (a :* b)     = (containsCase a) || (containsCase b)
-containsCase (a :+ b)     = (containsCase a) || (containsCase b)
 containsCase (a :^ b)     = (containsCase a) || (containsCase b)
 containsCase (a :- b)     = (containsCase a) || (containsCase b)
 containsCase (a :. b)     = (containsCase a) || (containsCase b)
@@ -514,7 +523,21 @@ containsCase (EGreaterEq a b) = (containsCase a) || (containsCase b)
 containsCase (UnaryOp u)  = unopcase u
 containsCase (Grouping e) = containsCase e
 containsCase (BinaryOp _) = error "not implemented"
-containsCase _            = False
+containsCase (V _) = False
+containsCase (Dbl _) = False
+containsCase (Int _) = False
+containsCase (C _) = False
+containsCase (FCall _ l) = or $ map containsCase l
+containsCase (Matrix _) = error "Matrix containsCase ??"
+containsCase (Index _ _) = error "Index containsCase ??"
+containsCase (Len k) = containsCase k
+containsCase (Append _ _) = error "Append containsCase ??"
+containsCase (EOp _) = error "EOp containsCase ??"
+containsCase (IsIn _ _) = error "IsIn containsCase ??"
+containsCase (E.ForAll _ _) = error "ForAll containsCase ??"
+containsCase (E.Exists _ _) = error "Exists containsCase ??"
+containsCase (_ :=> _) = error ":=> containsCase"
+containsCase (_ :<=> _) = error ":<=> containsCase"
 
 unopcase :: UFunc -> Bool
 unopcase (E.Sqrt e)         = containsCase e
@@ -534,9 +557,9 @@ getCases (Case a)     = a
 getCases e            = getCases (compactCase e)
 
 compactCase :: Expr -> Expr
+compactCase (Assoc _ _)  = error "compactCase: no longer implemented"
 compactCase (a :/ b)     = compactCaseBinary (:/) a b
 compactCase (a :* b)     = compactCaseBinary (:*) a b
-compactCase (a :+ b)     = compactCaseBinary (:+) a b
 compactCase (a :^ b)     = compactCaseBinary (:^) a b
 compactCase (a :- b)     = compactCaseBinary (:-) a b
 compactCase (a :. b)     = compactCaseBinary (:.) a b
@@ -554,7 +577,23 @@ compactCase (EGreaterEq a b) = compactCaseBinary ($>=) a b
 compactCase (UnaryOp u)  = unopcomcase u
 compactCase (Grouping e) = compactCaseUnary Grouping e
 compactCase (BinaryOp _) = error "not implemented"
-compactCase e            = e
+compactCase x@(V _) = x
+compactCase x@(Dbl _) = x
+compactCase x@(Int _) = x
+compactCase x@(C _) = x
+compactCase (FCall _ _) = error "not implemented"
+compactCase (Case _) = error "not implemented"
+compactCase (Matrix _) = error "not implemented"
+compactCase (Index _ _) = error "not implemented"
+compactCase (Len k) = error "not implemented"
+compactCase (Append _ _) = error "not implemented"
+compactCase (EOp _) = error "not implemented"
+compactCase (IsIn _ _) = error "not implemented"
+compactCase (E.ForAll _ _) = error "not implemented"
+compactCase (E.Exists _ _) = error "not implemented"
+compactCase (_ :=> _) = error "not implemented"
+compactCase (_ :<=> _) = error "not implemented"
+
 
 unopcomcase :: UFunc -> Expr
 unopcomcase (E.Sqrt e)  = compactCaseUnary (UnaryOp . E.Sqrt) e
@@ -567,7 +606,7 @@ unopcomcase (E.Tan e)   = compactCaseUnary (UnaryOp . E.Tan) e
 unopcomcase (E.Sec e)   = compactCaseUnary (UnaryOp . E.Sec) e
 unopcomcase (E.Csc e)   = compactCaseUnary (UnaryOp . E.Csc) e
 unopcomcase (E.Cot e)   = compactCaseUnary (UnaryOp . E.Cot) e
-unopcomcase _           = error "not implemented"
+unopcomcase (E.Norm e)  = compactCaseUnary (UnaryOp . E.Norm) e
 
 compactCaseBinary :: (Expr -> Expr -> Expr) -> Expr -> Expr -> Expr
 compactCaseBinary op (Case c) b = Case (map (\(e, r) -> (e `op` b, r)) c)

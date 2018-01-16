@@ -31,7 +31,6 @@ expr (Dbl d)          _ = P.Dbl   d
 expr (Int i)          _ = P.Int   i
 expr (Assoc op l)     sm = P.Assoc op $ map (\x -> expr x sm) l
 expr (a :* b)         sm = P.Assoc Mul [expr a sm, expr b sm]
-expr (a :+ b)         sm = P.Assoc Add [expr a sm, expr b sm]
 expr (a :&& b)        sm = P.Assoc And [expr a sm, expr b sm]
 expr (a :|| b)        sm = P.Assoc Or [expr a sm, expr b sm]
 expr (a :/ b)         sm = P.BOp P.Frac  (replace_divs a sm) (replace_divs b sm)
@@ -115,7 +114,7 @@ int_wrt wrtc = P.Assoc Mul [P.Sym lD, P.Sym wrtc]
 -- | Helper function for translating operations in expressions 
 replace_divs :: HasSymbolTable s => Expr -> s -> P.Expr
 replace_divs (a :/ b) sm = P.BOp P.Div (replace_divs a sm) (replace_divs b sm)
-replace_divs (a :+ b) sm = P.Assoc Add [replace_divs a sm, replace_divs b sm]
+replace_divs (Assoc Add l) sm = P.Assoc Add $ map (\x -> replace_divs x sm) l
 replace_divs (a :* b) sm = P.Assoc Mul [replace_divs a sm, replace_divs b sm]
 replace_divs (a :^ b) sm = P.BOp P.Pow (replace_divs a sm) (replace_divs b sm)
 replace_divs (a :- b) sm = P.BOp P.Sub (replace_divs a sm) (replace_divs b sm)

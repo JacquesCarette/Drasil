@@ -308,11 +308,11 @@ mobShrDerivation = [
   getTandS shearFNoIntsl `sC` S "as done in", eqN 5],
   
   EqnBlock $
-  inxi shearFNoIntsl $= ((inxi slcWght) :+ (inxi surfHydroForce) :*
-  (cos (inxi surfAngle)) :+ (inxi surfLoad) :* (cos (inxi impLoadAngle))) :*
-  (sin (inxi baseAngle)) :- (Neg (C earthqkLoadFctr) :* (inxi slcWght) :-
-  (inxi watrForceDif) :+ (inxi surfHydroForce) :* sin (inxi surfAngle) :+
-  (inxi surfLoad) :* (sin (inxi impLoadAngle))) :* (cos (inxi baseAngle)),
+  inxi shearFNoIntsl $= ((inxi slcWght) + (inxi surfHydroForce) *
+  (cos (inxi surfAngle)) + (inxi surfLoad) * (cos (inxi impLoadAngle))) *
+  (sin (inxi baseAngle)) - (Neg (C earthqkLoadFctr) * (inxi slcWght) -
+  (inxi watrForceDif) + (inxi surfHydroForce) * sin (inxi surfAngle) +
+  (inxi surfLoad) * (sin (inxi impLoadAngle))) * (cos (inxi baseAngle)),
   
   foldlSP [S "The", plural value, S "of", getES shearRNoIntsl `sAnd`
   getES shearFNoIntsl, S "are now defined completely in terms of the",
@@ -400,8 +400,8 @@ stfMtrxDerivation = [
   $= m2x2 (inxi effStiffA) (inxi effStiffB) (inxi effStiffB) (inxi effStiffA),
   
   EqnBlock $
-  (inxi effStiffA) $= (inxi shrStiffBase) * (cos (inxi baseAngle)) :^ 2 :+
-  (inxi nrmStiffBase) * (sin (inxi baseAngle)) :^ 2,
+  (inxi effStiffA) $= (inxi shrStiffBase) * (cos (inxi baseAngle)) ^ (fromInteger 2) +
+  (inxi nrmStiffBase) * (sin (inxi baseAngle)) ^ (fromInteger 2),
   
   EqnBlock $
   (inxi effStiffB) $= ((inxi shrStiffBase)-(inxi nrmStiffBase)) *

@@ -18,7 +18,7 @@ type Relation = Expr
 infixr 8 :^
 infixl 7 :*
 infixl 7 :/
-infixl 6 :+
+infixl 6 $+
 infixl 6 :-
 infixr 4 $=
 
@@ -34,7 +34,6 @@ data Expr where
   (:^)     :: Expr -> Expr -> Expr -- Power operator
   (:*)     :: Expr -> Expr -> Expr -- Multiplication
   (:/)     :: Expr -> Expr -> Expr -- Division
-  (:+)     :: Expr -> Expr -> Expr -- Addition
   (:-)     :: Expr -> Expr -> Expr -- Subtraction
   (:.)     :: Expr -> Expr -> Expr -- Dot product
   Neg      :: Expr -> Expr -- Negation
@@ -83,6 +82,10 @@ data Expr where
 ($<=) = ELessEq
 ($>=) = EGreaterEq
 
+-- TODO: have $+ flatten nest Adds
+($+) :: Expr -> Expr -> Expr
+($+) x y = Assoc Add [x, y]
+
 type Variable = String
 
 data DerivType = Part
@@ -90,7 +93,7 @@ data DerivType = Part
   deriving Eq
 
 instance Num Expr where
-  a + b = a :+ b
+  a + b = Assoc Add [a, b]
   a * b = a :* b
   a - b = a :- b
   fromInteger a = Int a
@@ -108,7 +111,6 @@ instance Eq Expr where
   (:^) a b == (:^) c d         =  a == c && b == d
   (:*) a b == (:*) c d         =  a == c && b == d || a == d && b == c
   (:/) a b == (:/) c d         =  a == c && b == d
-  (:+) a b == (:+) c d         =  a == c && b == d || a == d && b == c
   (:-) a b == (:-) c d         =  a == c && b == d
   (:.) a b == (:.) c d         =  a == c && b == d || a == d && b == c
   Not a == Not b               =  a == b

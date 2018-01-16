@@ -8,7 +8,7 @@ module Language.Drasil (
   , Recipe(..)
   -- Expr
   , Expr(..), Relation, BiFunc(..), DerivType(..), RealInterval(..)
-  , ($=), ($<), ($<=), ($>), ($>=)
+  , ($=), ($<), ($<=), ($>), ($>=), ($+)
   , log, abs, sin, cos, tan, sec, csc, cot, exp, sqrt, square, euclidean, vars
   , sum_all, defsum, prod_all, defprod, defint, int_all
   , cross, m2x2, vec2D, dgnl2x2
@@ -123,7 +123,7 @@ import Prelude hiding (log, sin, cos, tan, sqrt, id, return, print, break, exp, 
 import Language.Drasil.SystemInformation
 import Language.Drasil.Expr (Expr(..), Relation, BiFunc(..), DerivType(..), 
           RealInterval(..),
-          ($=), ($<), ($<=), ($>), ($>=))
+          ($=), ($<), ($<=), ($>), ($>=), ($+))
 import Language.Drasil.Expr.Math (log, sin, cos, tan, sqrt, square, sec, csc, cot, exp,
           sum_all, defsum, prod_all, defprod,
           cross, m2x2, vec2D, dgnl2x2, euclidean, defint, int_all)

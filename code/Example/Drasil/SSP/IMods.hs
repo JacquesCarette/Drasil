@@ -294,7 +294,7 @@ nrmShrDerivation = [
   EqnBlock $ Int 0 $=
   momExpr (\ x y -> x :- (C normToShear * (inxi baseWthX / Int 2) * 
   (inxi intNormForce * inxi scalFunc + inxiM1 intNormForce *
-  inxiM1 scalFunc)) :+ y),
+  inxiM1 scalFunc)) $+ y),
   
   foldlSP [S "The", phrase equation, S "in terms of", getES normToShear,
   S "leads to", eqN 14],

@@ -1,8 +1,8 @@
 module Language.Drasil.TeX.Import where
 
-import Control.Lens hiding ((:>),(:<),set)
+import Control.Lens ((^.))
 import Prelude hiding (id)
-import Language.Drasil.Expr (Expr(..), UFunc(..), BiFunc(..),
+import Language.Drasil.Expr (Expr(..), UFunc(..), BiFunc(..), Oper(..),
     DerivType(..), EOperator(..), ($=), RealRange(..), DomainDesc(..))
 import Language.Drasil.Expr.Extract
 import Language.Drasil.Spec
@@ -28,6 +28,7 @@ expr :: HasSymbolTable ctx => Expr -> ctx -> P.Expr
 expr (V v)              _ = P.Var  v
 expr (Dbl d)            _ = P.Dbl  d
 expr (Int i)            _ = P.Int  i
+expr (Assoc op l)      sm = P.Assoc (oper op) $ map (\x -> expr x sm) l
 expr (a :* b)          sm = P.Assoc P.Mul  [expr a sm, expr b sm]
 expr (a :+ b)          sm = P.Assoc P.Add  [expr a sm, expr b sm]
 expr (a :/ b)          sm = P.BOp P.Frac (replace_divs a sm) (replace_divs b sm)
@@ -101,6 +102,11 @@ eop (Integral (All v) e) sm =
 eop (Integral (IntegerDD _ _) _) _ = 
   error "TeX/Import.hs Integral cannot be over Integers"
 
+oper :: Oper -> P.Oper
+oper Add = P.Add
+oper Mul = P.Mul
+oper And = P.And
+oper Or  = P.Or
 
 int_wrt :: Symbol -> P.Expr
 int_wrt wrtc = P.Assoc P.Mul [P.Sym lD, P.Sym wrtc]

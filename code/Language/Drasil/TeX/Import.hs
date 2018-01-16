@@ -28,9 +28,9 @@ expr :: HasSymbolTable ctx => Expr -> ctx -> P.Expr
 expr (V v)              _ = P.Var  v
 expr (Dbl d)            _ = P.Dbl  d
 expr (Int i)            _ = P.Int  i
-expr (Assoc op l)      sm = P.Assoc (oper op) $ map (\x -> expr x sm) l
-expr (a :* b)          sm = P.Assoc P.Mul  [expr a sm, expr b sm]
-expr (a :+ b)          sm = P.Assoc P.Add  [expr a sm, expr b sm]
+expr (Assoc op l)      sm = P.Assoc op $ map (\x -> expr x sm) l
+expr (a :* b)          sm = P.Assoc Mul  [expr a sm, expr b sm]
+expr (a :+ b)          sm = P.Assoc Add  [expr a sm, expr b sm]
 expr (a :/ b)          sm = P.BOp P.Frac (replace_divs a sm) (replace_divs b sm)
 expr (a :^ b)          sm = P.BOp P.Pow  (expr a sm) (expr b sm)
 expr (a :- b)          sm = P.BOp P.Sub  (expr a sm) (expr b sm)
@@ -38,12 +38,12 @@ expr (a :. b)          sm = P.BOp P.Dot  (expr a sm) (expr b sm)
 expr (Neg a)           sm = P.Neg  (expr a sm)
 expr (C c)             sm = -- FIXME: Add Stage for Context
   P.Sym  (eqSymb (symbLookup c (sm ^. symbolTable)))
-expr (Deriv Part a 1)  sm = P.Assoc P.Mul [P.Sym (Special Partial), expr a sm]
-expr (Deriv Total a 1) sm = P.Assoc P.Mul [P.Sym lD, expr a sm]
-expr (Deriv Part a b)  sm = P.BOp P.Frac (P.Assoc P.Mul [P.Sym (Special Partial), expr a sm])
-                           (P.Assoc P.Mul [P.Sym (Special Partial), expr b sm])
-expr (Deriv Total a b) sm = P.BOp P.Frac (P.Assoc P.Mul [P.Sym lD, expr a sm])
-                           (P.Assoc P.Mul [P.Sym lD, expr b sm])
+expr (Deriv Part a 1)  sm = P.Assoc Mul [P.Sym (Special Partial), expr a sm]
+expr (Deriv Total a 1) sm = P.Assoc Mul [P.Sym lD, expr a sm]
+expr (Deriv Part a b)  sm = P.BOp P.Frac (P.Assoc Mul [P.Sym (Special Partial), expr a sm])
+                           (P.Assoc Mul [P.Sym (Special Partial), expr b sm])
+expr (Deriv Total a b) sm = P.BOp P.Frac (P.Assoc Mul [P.Sym lD, expr a sm])
+                           (P.Assoc Mul [P.Sym lD, expr b sm])
 expr (FCall f x)       sm = P.Call (expr f sm) (map (flip expr sm) x)
 expr (Case ps)         sm = if length ps < 2 then 
         error "Attempting to use multi-case expr incorrectly"
@@ -61,8 +61,8 @@ expr (Grouping e)      sm = P.Grouping (expr e sm)
 expr (BinaryOp b)      sm = (\(x,y) -> P.Op x y) (bfunc b sm)
 expr (EOp o)           sm = (\(x,y) -> P.Op x [y]) (eop o sm)
 expr (Not a)           sm = P.Not  (expr a sm)
-expr (a :&& b)         sm = P.Assoc P.And  [expr a sm, expr b sm]
-expr (a :|| b)         sm = P.Assoc P.Or  [expr a sm, expr b sm]
+expr (a :&& b)         sm = P.Assoc And  [expr a sm, expr b sm]
+expr (a :|| b)         sm = P.Assoc Or  [expr a sm, expr b sm]
 expr (a  :=>  b)       sm = P.BOp P.Impl  (expr a sm) (expr b sm)
 expr (a  :<=> b)       sm = P.BOp P.Iff   (expr a sm) (expr b sm)
 expr (IsIn  a b)       sm = P.IsIn  (expr a sm) b
@@ -102,19 +102,13 @@ eop (Integral (All v) e) sm =
 eop (Integral (IntegerDD _ _) _) _ = 
   error "TeX/Import.hs Integral cannot be over Integers"
 
-oper :: Oper -> P.Oper
-oper Add = P.Add
-oper Mul = P.Mul
-oper And = P.And
-oper Or  = P.Or
-
 int_wrt :: Symbol -> P.Expr
-int_wrt wrtc = P.Assoc P.Mul [P.Sym lD, P.Sym wrtc]
+int_wrt wrtc = P.Assoc Mul [P.Sym lD, P.Sym wrtc]
 
 replace_divs :: HasSymbolTable ctx => Expr -> ctx -> P.Expr
 replace_divs (a :/ b) sm = P.BOp P.Div (replace_divs a sm) (replace_divs b sm)
-replace_divs (a :* b) sm = P.Assoc P.Mul [replace_divs a sm, replace_divs b sm]
-replace_divs (a :+ b) sm = P.Assoc P.Add [replace_divs a sm, replace_divs b sm]
+replace_divs (a :* b) sm = P.Assoc Mul [replace_divs a sm, replace_divs b sm]
+replace_divs (a :+ b) sm = P.Assoc Add [replace_divs a sm, replace_divs b sm]
 replace_divs (a :^ b) sm = P.BOp P.Pow (replace_divs a sm) (replace_divs b sm)
 replace_divs (a :- b) sm = P.BOp P.Sub (replace_divs a sm) (replace_divs b sm)
 replace_divs a        sm = expr a sm

@@ -23,7 +23,7 @@ class Theory t where
   invariants :: Simple Lens t [TheoryConstraint]
   defined_fun :: Simple Lens t [QDefinition]
   
-data SpaceDefn = SpaceDefn -- FIXME: This should be defined.
+data SpaceDefn -- FIXME: This should be defined.
   
 data TheoryChunk where
   TC :: String -> [TWrapper] -> [SpaceDefn] -> [QWrapper] -> [CWrapper] -> 

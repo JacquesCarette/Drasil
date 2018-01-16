@@ -13,6 +13,7 @@ import Language.Drasil.Chunk.Quantity (QWrapper)
 --FIXME: Missing Patterns
 -- | Get dependencies from an equation  
 dep :: Expr -> [String]
+dep (Assoc _ l)   = nub (concat $ map dep l)
 dep (a :/ b)      = nub (dep a ++ dep b)
 dep (a :* b)      = nub (dep a ++ dep b)
 dep (a :+ b)      = nub (dep a ++ dep b)
@@ -52,6 +53,7 @@ dep (Append a b)  = nub (dep a ++ dep b)
 
 -- | Get a list of quantities (QWrapper) from an equation in order to print
 vars :: (HasSymbolTable s) => Expr -> s -> [QWrapper]
+vars (Assoc _ l)  m = nub $ concat $ map (\x -> vars x m) l
 vars (a :/ b)     m = nub (vars a m ++ vars b m)
 vars (a :* b)     m = nub (vars a m ++ vars b m)
 vars (a :+ b)     m = nub (vars a m ++ vars b m)
@@ -91,6 +93,7 @@ vars (Append a b) m = nub (vars a m ++ vars b m)
 
 -- | Get a list of CodeChunks from an equation
 codevars :: (HasSymbolTable s) => Expr -> s -> [CodeChunk]
+codevars (Assoc _ l)  sm = nub (concat $ map (\x -> codevars x sm) l)
 codevars (a :/ b)     sm = nub (codevars a sm ++ codevars b sm)
 codevars (a :* b)     sm = nub (codevars a sm ++ codevars b sm)
 codevars (a :+ b)     sm = nub (codevars a sm ++ codevars b sm)
@@ -129,9 +132,9 @@ codevars (Index a i)  sm = nub (codevars a sm ++ codevars i sm)
 codevars (Len a)      sm = nub (codevars a sm)
 codevars (Append a b) sm = nub (codevars a sm ++ codevars b sm) 
 
-
 -- | Get a list of CodeChunks from an equation (no functions)
 codevars' :: (HasSymbolTable s) => Expr -> s -> [CodeChunk]
+codevars' (Assoc _ l)  sm = nub (concat $ map (\x -> codevars' x sm) l)
 codevars' (a :/ b)     sm = nub (codevars' a sm ++ codevars' b sm)
 codevars' (a :* b)     sm = nub (codevars' a sm ++ codevars' b sm)
 codevars' (a :+ b)     sm = nub (codevars' a sm ++ codevars' b sm)

@@ -1,6 +1,6 @@
 module Language.Drasil.HTML.Import where
 import Prelude hiding (id)
-import Language.Drasil.Expr (Expr(..), UFunc(..), BiFunc(..),
+import Language.Drasil.Expr (Expr(..), UFunc(..), BiFunc(..), Oper(..),
     DerivType(..), EOperator(..), ($=), DomainDesc(..), RealRange(..))
 import Language.Drasil.Spec
 import qualified Language.Drasil.Printing.AST as P
@@ -22,13 +22,14 @@ import Language.Drasil.NounPhrase (phrase, titleize)
 import Language.Drasil.Unit (usymb)
 import Language.Drasil.Citations (Citation(..),CiteField(..))
 
-import Control.Lens hiding ((:>),(:<),set)
+import Control.Lens ((^.))
 
 -- | expr translation function from Drasil to HTML 'AST'
 expr :: HasSymbolTable s => Expr -> s -> P.Expr
 expr (V v)            _ = P.Var   v
 expr (Dbl d)          _ = P.Dbl   d
 expr (Int i)          _ = P.Int   i
+expr (Assoc op l)     sm = P.Assoc (oper op) $ map (\x -> expr x sm) l
 expr (a :* b)         sm = P.Assoc P.Mul [expr a sm, expr b sm]
 expr (a :+ b)         sm = P.Assoc P.Add [expr a sm, expr b sm]
 expr (a :&& b)        sm = P.Assoc P.And [expr a sm, expr b sm]
@@ -119,6 +120,12 @@ replace_divs (a :* b) sm = P.Assoc P.Mul [replace_divs a sm, replace_divs b sm]
 replace_divs (a :^ b) sm = P.BOp P.Pow (replace_divs a sm) (replace_divs b sm)
 replace_divs (a :- b) sm = P.BOp P.Sub (replace_divs a sm) (replace_divs b sm)
 replace_divs a        sm = expr a sm
+
+oper :: Oper -> P.Oper
+oper Add = P.Add
+oper Mul = P.Mul
+oper And = P.And
+oper Or  = P.Or
 
 -- | Translates Sentence to the HTML representation of Sentence ('Spec')
 spec :: HasSymbolTable s => Sentence -> s -> H.Spec

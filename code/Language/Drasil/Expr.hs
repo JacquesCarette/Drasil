@@ -22,11 +22,14 @@ infixl 6 :+
 infixl 6 :-
 infixr 4 $=
 
+data Oper = Add | Mul | And | Or
+
 -- | Drasil Expressions
 data Expr where
   V        :: Variable -> Expr
   Dbl      :: Double -> Expr
   Int      :: Integer -> Expr
+  Assoc    :: Oper -> [Expr] -> Expr
   (:^)     :: Expr -> Expr -> Expr -- Power operator
   (:*)     :: Expr -> Expr -> Expr -- Multiplication
   (:/)     :: Expr -> Expr -> Expr -- Division

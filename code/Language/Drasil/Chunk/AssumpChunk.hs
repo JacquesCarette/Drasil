@@ -1,13 +1,13 @@
 {-# Language GADTs #-}
 module Language.Drasil.Chunk.AssumpChunk 
-  ( assuming
-  , AssumpChunk
+  ( AssumpChunk(..)
+  , assuming
   , ac, ac'
   ) where
 
 import Language.Drasil.Chunk
 import Language.Drasil.Chunk.Attribute
-import Language.Drasil.Spec (Sentence)
+import Language.Drasil.Spec (Sentence(..), RefName)
 
 import Control.Lens ((^.))
 
@@ -18,21 +18,23 @@ import Prelude hiding (id)
 data AssumpChunk = AC 
                  { _id :: String
                  , assuming :: Sentence
+                 , _refName :: RefName -- HACK for refs?. No spaces/special chars allowed
                  , _as :: Attributes
                  }
 
 instance Chunk AssumpChunk where
-  id f (AC a b c) = fmap (\x -> AC x b c) (f a)
+  id f (AC a b c d) = fmap (\x -> AC x b c d) (f a)
 instance HasAttributes AssumpChunk where
-  attributes f (AC a b c) = fmap (\x -> AC a b x) (f c)
+  attributes f (AC a b c d) = fmap (\x -> AC a b c x) (f d)
 instance Eq AssumpChunk where
   a == b = a ^. id == b ^. id
   
 -- | Smart constructor for Assumption chunks. The second 'Sentence' here is 
 -- a short name (attribute).
-ac :: String -> Sentence -> Sentence -> AssumpChunk
-ac i a s = AC i a [ShortName s]
+ac :: String -> Sentence -> RefName -> AssumpChunk
+ac i a s = AC i a s [ShortName s]
 
--- | Smart constructor for Assumptions lacking a short name.
+-- | Smart constructor for Assumptions lacking a short name. FIXME: Remove this
+-- and make shortnames mandatory.
 ac' :: String -> Sentence -> AssumpChunk
-ac' i a = AC i a []
+ac' i a = AC i a (S i) [ShortName (S i)] -- FIXME: HACK

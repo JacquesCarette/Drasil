@@ -1,12 +1,11 @@
 module Language.Drasil.Chunk.ReqChunk 
-  ( ReqChunk, ReqType(..)
-  , reqType, requires
+  ( ReqChunk(..), ReqType(..)
   , frc, nfrc, rc'
   ) where
 
 import Language.Drasil.Chunk
 import Language.Drasil.Chunk.Attribute
-import Language.Drasil.Spec (Sentence)
+import Language.Drasil.Spec (Sentence, RefName)
 
 import Control.Lens (set, (^.))
 import Prelude hiding (id)
@@ -23,32 +22,37 @@ import Prelude hiding (id)
 data ReqType = FR  -- ^ Functional Requirement
              | NFR -- ^ Non-Functional Requirement
   deriving Eq
+  
+instance Show ReqType where
+  show FR  = "FR"
+  show NFR = "NFR"
 
 -- | Requirement chunk type. Has an id, the type of requirement
 -- (Functional/Non-Functional) from 'ReqType', a sentence describing what is
 -- required (TODO: Change this), and a list of attributes.
 data ReqChunk = RC 
-  { _id      :: String
-  , reqType  :: ReqType 
-  , requires :: Sentence 
-  , _atts    :: Attributes
+  { _id        :: String
+  , reqType    :: ReqType 
+  , requires   :: Sentence
+  , _refName   :: RefName -- HACK for refs?
+  , _atts      :: Attributes
   }
   
 instance Chunk ReqChunk where
-  id f (RC a b c d) = fmap (\x -> RC x b c d) (f a)
+  id f (RC a b c d e) = fmap (\x -> RC x b c d e) (f a)
 instance HasAttributes ReqChunk where
-  attributes f (RC a b c d) = fmap (\x -> RC a b c x) (f d)
+  attributes f (RC a b c d e) = fmap (\x -> RC a b c d x) (f e)
 instance Eq ReqChunk where
   a == b = a ^. id == b ^. id
 
 -- | Smart constructor for requirement chunks (should not be exported)
-rc :: String -> ReqType -> Sentence -> Attributes -> ReqChunk
+rc :: String -> ReqType -> Sentence -> RefName -> Attributes -> ReqChunk
 rc = RC
 
 rc' :: ReqChunk -> Sentence -> ReqChunk
 rc' r s = set attributes ([ShortName s] ++ (r ^. attributes)) r
 
-frc, nfrc :: String -> Sentence -> Attributes -> ReqChunk
+frc, nfrc :: String -> Sentence -> RefName -> Attributes -> ReqChunk
 -- | Smart constructor for functional requirement chunks.
 frc i = rc i FR
 

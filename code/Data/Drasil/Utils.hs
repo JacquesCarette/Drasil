@@ -24,6 +24,7 @@ module Data.Drasil.Utils
   , fterms , fterm
   , mkDataDef, mkDataDef'
   , prodUCTbl
+  , eqUnR
   ) where
 
 import Prelude hiding (id)
@@ -37,6 +38,9 @@ import Language.Drasil {-(Sentence(Sy, P, EmptyS, S, (:+:), E), (+:+),
   UnitalChunk, QDefinition, term, id, unit, ucw)-}
 import Data.Drasil.Concepts.Documentation
 import Data.Drasil.Concepts.Math (unit_)
+
+eqUnR :: Expr -> Contents -- FIXME: Unreferable equations
+eqUnR e = EqnBlock e EmptyS
   
 -- | fold helper functions applies f to all but the last element, applies g to
 -- last element and the accumulator
@@ -148,7 +152,7 @@ mkInputDatTb :: (Quantity a) => [a] -> Contents
 mkInputDatTb inputVar = Table [titleize symbol_, titleize unit_, 
   S "Name"]
   (mkTable [getS Equational, fmtU EmptyS, phrase] inputVar) 
-  (S "Required" +:+ titleize' input_) True
+  (S "Required" +:+ titleize' input_) True (S "inDataTable")
 
 -- | makes sentences from an item and its reference 
 -- a - String title of reference
@@ -212,4 +216,4 @@ mkDataDef' cncpt equation extraInfo = datadef $ getUnit cncpt
 prodUCTbl :: [[Sentence]] -> Contents
 prodUCTbl cases = Table [S "Actor", titleize input_ +:+ S "and" +:+ titleize output_]
   cases
-  (titleize useCaseTable) True
+  (titleize useCaseTable) True (S "useCaseTable")

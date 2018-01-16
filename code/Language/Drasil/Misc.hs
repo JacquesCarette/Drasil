@@ -1,11 +1,9 @@
 module Language.Drasil.Misc where
 
 import Language.Drasil.Spec
---import Language.Drasil.Expr
 import Language.Drasil.Chunk.Quantity
 import Language.Drasil.Unit
 import Language.Drasil.Chunk.NamedIdea (NamedIdea, short, term)
-import Language.Drasil.Chunk.CommonIdea (CommonIdea, abrv)
 import Language.Drasil.Chunk.Unitary
 import qualified Language.Drasil.NounPhrase as NP
 

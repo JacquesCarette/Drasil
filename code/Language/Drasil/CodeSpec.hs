@@ -74,11 +74,11 @@ codeSpec :: SystemInformation -> [Mod] -> CodeSpec
 codeSpec si ms = codeSpec' si ms
 
 codeSpec' :: SystemInformation -> [Mod] -> CodeSpec
-codeSpec' (SI {_sys = sys, _quants = q, _definitions = defs, _inputs = ins, _outputs = outs, _constraints = cs, _constants = constants, _sysinfodb = db}) ms = 
+codeSpec' (SI {_sys = sys, _quants = q, _definitions = defs', _inputs = ins, _outputs = outs, _constraints = cs, _constants = constants, _sysinfodb = db}) ms = 
   let inputs' = map codevar ins
       const' = map qtov constants
-      derived = map qtov $ getDerivedInputs defs inputs' const' db
-      rels = (map qtoc defs) \\ derived
+      derived = map qtov $ getDerivedInputs defs' inputs' const' db
+      rels = (map qtoc defs') \\ derived
       mods' = prefixFunctions $ (packmod "Calculations" $ map FCD rels):ms 
       mem   = modExportMap mods' inputs' const'
       outs' = map codevar outs
@@ -287,9 +287,9 @@ prefixFunctions = map (\(Mod nm fs) -> Mod nm $ map pfunc fs)
 
 
 getDerivedInputs :: HasSymbolTable ctx => [QDefinition] -> [Input] -> [Const] -> ctx -> [QDefinition]
-getDerivedInputs defs ins consts sm =
+getDerivedInputs defs' ins consts sm =
   let refSet = ins ++ map codevar consts 
-  in  filter ((`subsetOf` refSet) . flip codevars sm . equat) defs
+  in  filter ((`subsetOf` refSet) . flip codevars sm . equat) defs'
   
 type Known = CodeChunk
 type Need  = CodeChunk
@@ -297,13 +297,13 @@ type Need  = CodeChunk
 getExecOrder :: HasSymbolTable ctx => [Def] -> [Known] -> [Need] -> ctx -> [Def]
 getExecOrder d k' n' sm = getExecOrder' [] d k' (n' \\ k')
   where getExecOrder' ord _ _ []   = ord
-        getExecOrder' ord defs k n = 
-          let new  = filter ((`subsetOf` k) . flip codevars' sm . codeEquat) defs
+        getExecOrder' ord defs' k n = 
+          let new  = filter ((`subsetOf` k) . flip codevars' sm . codeEquat) defs'
               kNew = k ++ map codevar new
               nNew = n \\ map codevar new
           in  if null new 
               then error "Cannot find path from inputs to outputs"
-              else getExecOrder' (ord ++ new) (defs \\ new) kNew nNew
+              else getExecOrder' (ord ++ new) (defs' \\ new) kNew nNew
   
 subsetOf :: (Eq a) => [a] -> [a] -> Bool  
 xs `subsetOf` ys = null $ filter (not . (`elem` ys)) xs

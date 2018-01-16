@@ -1,28 +1,32 @@
 module Language.Drasil.HTML.Import where
+
 import Prelude hiding (id)
-import Language.Drasil.Expr (Expr(..), Relation, UFunc(..), BiFunc(..),
-    DerivType(..), EOperator(..), ($=), DomainDesc(..), RealRange(..))
-import Language.Drasil.Spec
+
 import qualified Language.Drasil.HTML.AST as H
-import Language.Drasil.Unicode (Special(Partial))
+
 import Language.Drasil.Chunk.AssumpChunk
 import Language.Drasil.Chunk.Attribute
+import Language.Drasil.Chunk.Concept (defn)
 import Language.Drasil.Chunk.Eq
 import Language.Drasil.Chunk.ExprRelat (relat)
 import Language.Drasil.Chunk.NamedIdea (term, short, getA)
-import Language.Drasil.Chunk.Concept (defn)
 import Language.Drasil.Chunk.Quantity (Quantity(..), eqSymb)
 import Language.Drasil.Chunk.ReqChunk (requires)
 import Language.Drasil.ChunkDB (HasSymbolTable(..), getUnitLup, symbLookup)
-import Language.Drasil.Expr.Extract
+import Language.Drasil.Citations (Citation(..),CiteField(..))
 import Language.Drasil.Config (verboseDDDescription)
 import Language.Drasil.Document
-import Language.Drasil.Symbol
+import Language.Drasil.Expr (Expr(..), Relation, UFunc(..), BiFunc(..),
+    DerivType(..), EOperator(..), ($=), DomainDesc(..), RealRange(..))
+import Language.Drasil.Expr.Extract
 import Language.Drasil.Misc (unit'2Contents)
-import Language.Drasil.SymbolAlphabet (lD)
 import Language.Drasil.NounPhrase (phrase, titleize)
+import Language.Drasil.Reference
+import Language.Drasil.Spec
+import Language.Drasil.Symbol
+import Language.Drasil.SymbolAlphabet (lD)
+import Language.Drasil.Unicode (Special(Partial))
 import Language.Drasil.Unit (usymb)
-import Language.Drasil.Citations (Citation(..),CiteField(..))
 
 import Data.Maybe (fromJust)
 
@@ -30,9 +34,9 @@ import Control.Lens hiding ((:>),(:<),set)
 
 -- | expr translation function from Drasil to HTML 'AST'
 expr :: HasSymbolTable s => Expr -> s -> H.Expr
-expr (V v)            _ = H.Var   v
-expr (Dbl d)          _ = H.Dbl   d
-expr (Int i)          _ = H.Int   i
+expr (V v)            _  = H.Var   v
+expr (Dbl d)          _  = H.Dbl   d
+expr (Int i)          _  = H.Int   i
 expr (a :* b)         sm = H.Assoc H.Mul [expr a sm, expr b sm]
 expr (a :+ b)         sm = H.Assoc H.Add [expr a sm, expr b sm]
 expr (a :&& b)        sm = H.Assoc H.And [expr a sm, expr b sm]
@@ -179,7 +183,7 @@ createLayout secs sm = map (flip (sec 0) sm) secs
 
 -- | Helper function for creating sections at the appropriate depth
 sec :: HasSymbolTable s => Int -> Section -> s -> H.LayoutObj
-sec depth x@(Section title contents) sm = 
+sec depth x@(Section title contents _) sm = 
   H.HDiv [(concat $ replicate depth "sub") ++ "section"] 
   ((H.Header (depth+2) (spec title sm)):(map (flip (layout depth) sm) contents)) 
   (spec (refName x) sm)
@@ -187,15 +191,16 @@ sec depth x@(Section title contents) sm =
 -- | Translates from Contents to the HTML Representation of LayoutObj.
 -- Called internally by layout.
 lay :: HasSymbolTable s => Contents -> s -> H.LayoutObj
-lay x@(Table hdr lls t b) sm = H.Table ["table"] 
+lay x@(Table hdr lls t b _) sm = H.Table ["table"] 
   ((map (flip spec sm) hdr) : (map (map (flip spec sm)) lls)) (spec (refName x) sm) b (spec t sm)
 lay (Paragraph c)       sm = H.Paragraph (spec c sm)
-lay (EqnBlock c)        sm = H.HDiv ["equation"] [H.Tagless (H.E (expr c sm))] (H.EmptyS)
+lay (EqnBlock c _)      sm = H.HDiv ["equation"] [H.Tagless (H.E (expr c sm))] (H.EmptyS)
+                              -- FIXME: Make equations referable
 --lay (CodeBlock c)        = H.CodeBlock c
 lay x@(Definition c)    sm = H.Definition c (makePairs c sm) (spec (refName x) sm)
 lay (Enumeration cs)    sm = H.List $ makeL cs sm
-lay x@(Figure c f wp)   sm = H.Figure (spec (refName x) sm) (spec c sm) f wp
-lay (Graph _ _ _ _)      _ = H.Paragraph (H.EmptyS)  -- need to implement!
+lay x@(Figure c f wp _) sm = H.Figure (spec (refName x) sm) (spec c sm) f wp
+lay (Graph _ _ _ _ _)    _ = H.Paragraph (H.EmptyS)  -- FIXME: need to implement!
 lay x@(Requirement r)   sm = H.ALUR H.Requirement 
   (spec (requires r) sm) (spec (refName x) sm) (spec (fromJust $ getShortName r) sm)
 lay x@(Assumption a)    sm = H.ALUR H.Assumption 
@@ -206,12 +211,6 @@ lay x@(UnlikelyChange uc) sm =
   H.ALUR H.UnlikelyChange (spec (phrase $ uc ^. term) sm) (spec (refName x) sm) (spec (short uc) sm)
 lay (Defnt dtyp pairs rn) sm = H.Definition dtyp (layPairs pairs) (spec rn sm)
   where layPairs = map (\(x,y) -> (x, (map (\z -> lay z sm) y)))
-lay (GDef)               _ = H.Paragraph (H.EmptyS)  -- need to implement!
-lay (IMod)               _ = H.Paragraph (H.EmptyS)  -- need to implement!
-lay (TMod ps rf r)      sm = H.Definition (Theory r) 
-  (map (\(x,y) -> (x, map (flip lay sm) y)) ps) (spec rf sm)
-lay (DDef ps rf d)      sm = H.Definition (Data d)
-  (map (\(x,y) -> (x, map (flip lay sm) y)) ps) (spec rf sm)
 lay (Bib bib)           sm = H.Bib $ map (flip layCite sm) bib
 
 -- | For importing bibliography

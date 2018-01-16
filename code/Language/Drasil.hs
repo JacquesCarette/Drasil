@@ -72,7 +72,7 @@ module Language.Drasil (
   , PluralRule(..), compoundPhrase, compoundPhrase', compoundPhrase'', compoundPhrase''', titleize, titleize'
   , nounPhrase'', nounPhraseSP, nounPhraseSent
   -- Document
-  , LayoutObj(..), Document(..), DType(..), Section(..), Contents(..)
+  , Referable(..), Document(..), DType(..), Section(..), Contents(..)
   , SecCons(..), ListType(..), ItemType(..), ListPair
   , section, fig, figWithWidth
   -- Reference
@@ -136,7 +136,7 @@ import Language.Drasil.Expr.Math (log, sin, cos, tan, sqrt, square, sec, csc, co
           cross, m2x2, vec2D, dgnl2x2, euclidean, defint, int_all)
 import Language.Drasil.Expr.Extract (vars)
 import Language.Drasil.Output.Formats (DocType(SRS,MG,MIS,LPM,Website))
-import Language.Drasil.Document (LayoutObj(..), Document(..), DType(..)
+import Language.Drasil.Document (Document(..), DType(..)
   , Section(..), Contents(..), SecCons(..), ListType(..), ItemType(..)
   , section, fig, figWithWidth
   , ListPair)
@@ -180,7 +180,7 @@ import Language.Drasil.Spec (USymb(..), Sentence(..), Accent(..),
 import Language.Drasil.Reference (makeRef, acroTest, ReferenceDB(assumpDB, reqDB)
                                  , AssumpMap, assumpMap, assumpLookup, HasAssumpRefs
                                  , assumpRefTable, rdb, reqMap, reqRefTable
-                                 , ReqMap, HasReqRefs)
+                                 , HasReqRefs, Referable(..))
 import Language.Drasil.Symbol (Symbol(..), sub, sup, vec, hat, prime, sCurlyBrSymb)
 import Language.Drasil.SymbolAlphabet
 import Language.Drasil.Misc -- all of it

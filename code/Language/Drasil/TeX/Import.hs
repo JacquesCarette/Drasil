@@ -2,29 +2,32 @@ module Language.Drasil.TeX.Import where
 
 import Control.Lens hiding ((:>),(:<),set)
 import Prelude hiding (id)
+
+import qualified Language.Drasil.TeX.AST as T
+
 import Language.Drasil.Expr (Expr(..), Relation, UFunc(..), BiFunc(..),
     DerivType(..), EOperator(..), ($=), RealRange(..), DomainDesc(..))
-import Language.Drasil.Space (Space(..))
-import Language.Drasil.Expr.Extract
-import Language.Drasil.Spec
-import qualified Language.Drasil.TeX.AST as T
-import Language.Drasil.Unicode (Special(Partial))
 import Language.Drasil.Chunk.AssumpChunk
+import Language.Drasil.Chunk.Concept (defn)
 import Language.Drasil.Chunk.Eq
 import Language.Drasil.Chunk.ExprRelat (relat)
 import Language.Drasil.Chunk.NamedIdea (term)
-import Language.Drasil.Chunk.Concept (defn)
 import Language.Drasil.Chunk.Quantity (Quantity(..), eqSymb)
 import Language.Drasil.Chunk.ReqChunk (requires)
 import Language.Drasil.ChunkDB (getUnitLup, symbLookup, HasSymbolTable(..))
+import Language.Drasil.Citations (Citation(..),CiteField(..))
 import Language.Drasil.Config (verboseDDDescription, numberedDDEquations, numberedTMEquations)
 import Language.Drasil.Document
-import Language.Drasil.Symbol
+import Language.Drasil.Expr.Extract
 import Language.Drasil.Misc (unit'2Contents)
-import Language.Drasil.SymbolAlphabet
 import Language.Drasil.NounPhrase (phrase, titleize)
+import Language.Drasil.Reference
+import Language.Drasil.Space (Space(..))
+import Language.Drasil.Spec
+import Language.Drasil.Symbol
+import Language.Drasil.SymbolAlphabet
+import Language.Drasil.Unicode (Special(Partial))
 import Language.Drasil.Unit (usymb)
-import Language.Drasil.Citations (Citation(..),CiteField(..))
 
 expr :: HasSymbolTable ctx => Expr -> ctx -> T.Expr
 expr (V v)              _ = T.Var  v
@@ -175,22 +178,22 @@ createLayout :: HasSymbolTable ctx => Sections -> ctx -> [T.LayoutObj]
 createLayout secs sm = map (flip (sec 0) sm) secs
 
 sec :: HasSymbolTable ctx => Int -> Section -> ctx -> T.LayoutObj
-sec depth x@(Section title contents) sm = 
+sec depth x@(Section title contents _) sm = 
   T.Section depth (spec title sm) (map (flip (layout depth) sm) contents) (spec (refName x) sm)
 
 lay :: HasSymbolTable ctx => Contents -> ctx -> T.LayoutObj
-lay x@(Table hdr lls t b) sm
+lay x@(Table hdr lls t b _) sm
   | null lls || length hdr == length (head lls) = T.Table ((map (flip spec sm) hdr) :
       (map (map (flip spec sm)) lls)) (spec (refName x) sm) b (spec t sm)
   | otherwise = error $ "Attempting to make table with " ++ show (length hdr) ++
                         " headers, but data contains " ++ 
                         show (length (head lls)) ++ " columns."
 lay (Paragraph c)         sm = T.Paragraph (spec c sm)
-lay (EqnBlock c)          sm = T.EqnBlock (T.E (expr c sm))
+lay (EqnBlock c _)        sm = T.EqnBlock (T.E (expr c sm)) --FIXME: Make eqn referable
 --lay (CodeBlock c)         = T.CodeBlock c
 lay x@(Definition c)      sm = T.Definition (makePairs c sm) (spec (refName x) sm)
 lay (Enumeration cs)      sm = T.List $ makeL cs sm
-lay x@(Figure c f wp)     sm = T.Figure (spec (refName x) sm) (spec c sm) f wp
+lay x@(Figure c f wp _)   sm = T.Figure (spec (refName x) sm) (spec c sm) f wp
 lay x@(Requirement r)     sm = 
   T.Requirement (spec (requires r) sm) (spec (refName x) sm)
 lay x@(Assumption a)      sm = 
@@ -201,16 +204,10 @@ lay x@(LikelyChange lc)   sm =
 lay x@(UnlikelyChange ucc) sm = 
   T.UnlikelyChange (spec (phrase $ ucc ^. term) sm)
   (spec (refName x) sm)
-lay x@(Graph ps w h t)    sm = T.Graph (map (\(y,z) -> (spec y sm, spec z sm)) ps)
+lay x@(Graph ps w h t _)  sm = T.Graph (map (\(y,z) -> (spec y sm, spec z sm)) ps)
                                w h (spec t sm) (spec (refName x) sm)
-lay (TMod ps r _)         sm = T.Definition (map (\(x,y) -> 
-  (x, map (flip lay sm) y)) ps) (spec r sm)
-lay (DDef ps r _)         sm = T.Definition (map (\(x,y) -> 
-  (x, map (flip lay sm) y)) ps) (spec r sm)
 lay (Defnt dtyp pairs rn) sm = T.Defnt dtyp (layPairs pairs) (spec rn sm)
   where layPairs = map (\(x,y) -> (x, (map (\z -> lay z sm) y))) 
-lay (GDef)             _ = T.Paragraph (T.EmptyS)  -- need to implement!
-lay (IMod)             _ = T.Paragraph (T.EmptyS)  -- need to implement!
 lay (Bib bib)         sm = T.Bib $ map (flip layCite sm) bib
 
 -- | For importing bibliography

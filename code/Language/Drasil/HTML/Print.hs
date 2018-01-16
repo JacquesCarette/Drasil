@@ -8,7 +8,7 @@ import Numeric (showFFloat)
 import Language.Drasil.HTML.Import (makeDocument, spec)
 import Language.Drasil.HTML.AST
 import qualified Language.Drasil.Output.Formats as F
-import Language.Drasil.Spec (USymb(..), RefType(..), Sentence, sC, (+:+))
+import Language.Drasil.Spec (USymb(..), Sentence, sC, (+:+))
 
 import Language.Drasil.HTML.Helpers
 import Language.Drasil.Printing.Helpers
@@ -87,10 +87,6 @@ p_spec (Sy s)      _ = uSymb s
 p_spec (G g)       _ = unPH $ greek g
 p_spec (Sp s)      _ = unPH $ special s
 p_spec HARDNL      _ = "<br />"
-p_spec (Ref (Def (Just r)) a)    sm = reflink (p_spec a sm) (p_spec (spec r sm) sm)
-p_spec (Ref (Assump (Just r)) a) sm = reflink (p_spec a sm) (p_spec (spec r sm) sm)
-p_spec (Ref (Req (Just r)) a)    sm = reflink (p_spec a sm) (p_spec (spec r sm) sm)
-p_spec (Ref (LC (Just r)) a)     sm = reflink (p_spec a sm) (p_spec (spec r sm) sm)
 p_spec (Ref _ a)  sm = reflink (p_spec a sm) (p_spec a sm)--("this " ++ show r)
 p_spec EmptyS      _ = ""
 

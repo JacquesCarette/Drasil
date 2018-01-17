@@ -18,6 +18,6 @@ table st ls f = Table
   f, 
   unitHidingUnitless]
   (filter (hasStageSymbol st . getStagedS) ls))
-  (titleize tOfSymb) False
+  (titleize tOfSymb) False (S "ToS")
 
 -- ^. defn

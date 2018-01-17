@@ -248,7 +248,8 @@ mkSections si l = foldr doit [] l
 -- | Helper for creating the reference section and subsections
 mkRefSec :: SystemInformation -> RefSec -> Section
 mkRefSec _  (RefVerb s) = s
-mkRefSec si (RefProg c l) = section (titleize refmat) [c] (foldr (mkSubRef si) [] l)
+mkRefSec si (RefProg c l) = section (titleize refmat) [c] 
+  (foldr (mkSubRef si) [] l) (S "RefMat")
   where
     mkSubRef :: SystemInformation -> RefTab -> [Section] -> [Section]
     mkSubRef (SI {_sysinfodb = db})  TUnits l' =
@@ -256,10 +257,10 @@ mkRefSec si (RefProg c l) = section (titleize refmat) [c] (foldr (mkSubRef si) [
     mkSubRef (SI {_sysinfodb = db}) (TUnits' con) l' =
         table_of_units (sort $ elements $ db ^. unitTable) (tuIntro con) : l'
     mkSubRef (SI {_quants = v}) (TSymb con) l' = 
-      (Section (titleize tOfSymb) 
-      (map Con [tsIntro con, (table Equational (
-         sortBy (compare `on` eqSymb) $
-         filter (hasStageSymbol Equational . getStagedS) (nub v)) at_start)])) : l'
+      (SRS.tOfSymb
+      [tsIntro con, (table Equational (
+         sortBy (compare `on` eqSymb) $ filter (hasStageSymbol Equational . getStagedS) 
+         (nub v)) at_start)] []) : l'
     mkSubRef (SI {_concepts = cccs}) (TSymb' f con) l' = (mkTSymb cccs f con) : l'
     mkSubRef (SI {_sysinfodb = db}) TAandA l' = 
       (table_of_abb_and_acronyms $ sortBy (compare `on` (fromJust . getA)) $
@@ -269,8 +270,9 @@ mkRefSec si (RefProg c l) = section (titleize refmat) [c] (foldr (mkSubRef si) [
 -- | Helper for creating the table of symbols
 mkTSymb :: (Quantity e, Concept e, Ord e) => 
   [e] -> LFunc -> [TSIntro] -> Section
-mkTSymb v f c = Section (titleize tOfSymb) (map Con [tsIntro c, 
-  table Equational (sort $ filter (hasStageSymbol Equational . getStagedS) (nub v)) (lf f)])
+mkTSymb v f c = SRS.tOfSymb [tsIntro c, 
+  table Equational (sort $ filter (hasStageSymbol Equational . getStagedS) 
+  (nub v)) (lf f)] []
   where lf Term = at_start
         lf Defn = (^. defn)
         lf (TermExcept cs) = (\x -> if (x ^. id) `elem` (map (^. id) cs) then
@@ -479,7 +481,7 @@ mkAuxConsSec (AuxConsProg key listOfCons) = (AC.valsOfAuxConstantsF key listOfCo
 
 -- | Helper for making the bibliography section
 mkBib :: BibRef -> Section
-mkBib bib = section (titleize' reference) [Bib bib] []
+mkBib bib = SRS.reference [Bib bib] []
 
 {--}
 
@@ -500,7 +502,7 @@ mkAssump :: String -> Sentence -> Contents
 mkAssump i desc = Assumption $ ac' i desc 
 
 mkRequirement :: String -> Sentence -> Contents
-mkRequirement i desc = Requirement $ frc i desc []
+mkRequirement i desc = Requirement $ frc i desc (S i) [] --FIXME: HACK - Should have explicit refname
 
 mkLklyChnk :: String -> Sentence -> Contents
 mkLklyChnk i desc = LikelyChange $ nw $ nc i $ nounPhraseSent desc

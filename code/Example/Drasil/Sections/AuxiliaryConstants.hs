@@ -25,4 +25,4 @@ tableOfConstants f = Table
   (mkTable [getES, phrase, (\c -> E $ equat c), unit'2Contents] f)
   (S "Auxiliary Constants")
   True
-
+  (S "TAuxConsts")

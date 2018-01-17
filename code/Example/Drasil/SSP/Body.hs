@@ -264,7 +264,7 @@ s4_1_2_p1 = physSystIntro slope how intrslce slice (S "slice base")
   fig_indexconv
   where how = S "as a series of" +:+ phrase slice +:+. plural element
 
-physSystIntro :: (NamedIdea a, NamedIdea b, NamedIdea c, LayoutObj d) =>
+physSystIntro :: (NamedIdea a, NamedIdea b, NamedIdea c, Referable d) =>
   a -> Sentence -> b -> c -> Sentence -> d -> Contents
 physSystIntro what how p1 p2 p3 indexref = foldlSP [
   at_start analysis, S "of the", phrase what, S "is performed by looking at",
@@ -290,11 +290,11 @@ s4_1_2_p2 = foldlSP [S "A", phrase fbd, S "of the", plural force,
 fig_indexconv :: Contents
 fig_indexconv = fig (foldlSent_ [S "Index convention for numbering",
   phrase slice `sAnd` phrase intrslce,
-  phrase force, plural variable]) "IndexConvention.png"
+  phrase force, plural variable]) "IndexConvention.png" (S "IndexConvention")
 
 fig_forceacting :: Contents
 fig_forceacting = fig (at_start' force +:+ S "acting on a" +:+
-  phrase slice) "ForceDiagram.png"
+  phrase slice) "ForceDiagram.png" (S "ForceDiagram")
 
 -- SECTION 4.1.3 --
 s4_1_3 = goalStmtF (map (\(x, y) -> x `ofThe` y) [

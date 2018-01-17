@@ -16,7 +16,7 @@ import Drasil.SSP.Unitals (shrStiffBase, index, genDisplace, baseAngle, inxi,
 import Drasil.SSP.GenDefs (eqlExpr, displMtx, rotMtx)
 import Drasil.SSP.Defs (intrslce)
 
-import Data.Drasil.Utils (getES, mkDataDef)
+import Data.Drasil.Utils (getES, mkDataDef, eqUnR)
 import Data.Drasil.Quantities.SolidMechanics as SM (poissnsR)
 
 -- Needed for derivations
@@ -256,7 +256,7 @@ resShrDerivation = [
   S "of a slice from", acroGD 2 `sC` S "using the", getTandS nrmFSubWat,
   S "of", acroT 4, S "shown in", eqN 1],
   
-  EqnBlock $ (inxi nrmFSubWat) $= eqlExpr cos sin (\x y -> x -
+  eqUnR $ (inxi nrmFSubWat) $= eqlExpr cos sin (\x y -> x -
   inxiM1 intShrForce + inxi intShrForce + y) - inxi baseHydroForce,
   
   foldlSP [plural value `ofThe'` S "interslice forces",
@@ -267,7 +267,7 @@ resShrDerivation = [
   S "Consider a force equilibrium without the affect of interslice forces" `sC`
   S "to obtain a solvable value as done for", getES nrmFNoIntsl, S "in", eqN 2],
 
-  EqnBlock $
+  eqUnR $
   (inxi nrmFNoIntsl) $= (((inxi slcWght) + (inxi surfHydroForce) *
   (cos (inxi surfAngle)) + (inxi surfLoad) * (cos (inxi impLoadAngle))) *
   (cos (inxi baseAngle)) + (Neg (C earthqkLoadFctr) * (inxi slcWght) -
@@ -279,7 +279,7 @@ resShrDerivation = [
   shearRNoIntsl ^. defn, S "can be solved for in terms of all known",
   plural value, S "as done in", eqN 3],
   
-  EqnBlock $
+  eqUnR $
   inxi shearRNoIntsl $= (inxi nrmFNoIntsl) * tan (inxi fricAngle) +
   (inxi cohesion) * (inxi baseWthX) * sec (inxi baseAngle) $=
   (((inxi slcWght) + (inxi surfHydroForce) * (cos (inxi surfAngle)) +
@@ -299,7 +299,7 @@ mobShrDerivation = [
   getES mobShrI, S "from the force equilibrium in", acroGD 2 `sC`
   S "also shown in", eqN 4],
   
-  EqnBlock $ inxi mobShrI $= eqlExpr sin cos
+  eqUnR $ inxi mobShrI $= eqlExpr sin cos
     (\x y -> x - inxiM1 intShrForce + inxi intShrForce + y),
   
   foldlSP [S "The", phrase equation, S "is unsolvable, containing the unknown",
@@ -307,7 +307,7 @@ mobShrDerivation = [
   S "Consider a force equilibrium", S wiif `sC` S "to obtain the",
   getTandS shearFNoIntsl `sC` S "as done in", eqN 5],
   
-  EqnBlock $
+  eqUnR $
   inxi shearFNoIntsl $= ((inxi slcWght) :+ (inxi surfHydroForce) :*
   (cos (inxi surfAngle)) :+ (inxi surfLoad) :* (cos (inxi impLoadAngle))) :*
   (sin (inxi baseAngle)) :- (Neg (C earthqkLoadFctr) :* (inxi slcWght) :-
@@ -341,7 +341,7 @@ stfMtrxDerivation = [
   acroGD 8, S "to define stiffness matrix", getES shrStiffIntsl `sC`
   S "as seen in", eqN 6],
   
-  EqnBlock $ inxi shrStiffIntsl $=
+  eqUnR $ inxi shrStiffIntsl $=
   dgnl2x2 (inxi shrStiffIntsl) (inxi nrmStiffBase),
   
   foldlSP [S "For interslice surfaces the stiffness constants" `sAnd`
@@ -364,7 +364,7 @@ stfMtrxDerivation = [
   S "The base stiffness counter clockwise rotation is applied in", eqN 7,
   S "to the new matrix", getES nrmFNoIntsl],
   
-  EqnBlock $ inxi shrStiffIntsl $=
+  eqUnR $ inxi shrStiffIntsl $=
   m2x2 (cos(inxi baseAngle)) (Neg $ sin(inxi baseAngle))
   (sin(inxi baseAngle)) (cos(inxi baseAngle)) *
   inxi shrStiffIntsl $= kiStar,
@@ -382,7 +382,7 @@ stfMtrxDerivation = [
   `sC` S "a basal force displacement relationship in the same coordinate",
   S "system as the interslice relationship can be derived as done in", eqN 8],
   
-  EqnBlock $ vec2D (inxi genPressure) (inxi genPressure) $=
+  eqUnR $ vec2D (inxi genPressure) (inxi genPressure) $=
   inxi shrStiffBase * C rotatedDispl $= --FIXME: add more symbols?
   kiStar * rotMtx * displMtx $= kiPrime * displMtx,
   
@@ -396,14 +396,14 @@ stfMtrxDerivation = [
   getES effStiffA `sAnd` getES effStiffB `sC` S "defined in", eqN 10 `sAnd`
   eqN 11, S "respectively"],
   
-  EqnBlock $ inxi shrStiffBase $= kiPrime
+  eqUnR $ inxi shrStiffBase $= kiPrime
   $= m2x2 (inxi effStiffA) (inxi effStiffB) (inxi effStiffB) (inxi effStiffA),
   
-  EqnBlock $
+  eqUnR $
   (inxi effStiffA) $= (inxi shrStiffBase) * (cos (inxi baseAngle)) :^ 2 :+
   (inxi nrmStiffBase) * (sin (inxi baseAngle)) :^ 2,
   
-  EqnBlock $
+  eqUnR $
   (inxi effStiffB) $= ((inxi shrStiffBase)-(inxi nrmStiffBase)) *
   (sin (inxi baseAngle)) * (cos (inxi baseAngle)),
   

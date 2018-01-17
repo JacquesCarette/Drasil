@@ -30,6 +30,8 @@ import Prelude hiding (id)
 import Control.Lens ((^.))
 import Drasil.Sections.SpecificSystemDescription (inDataConstTbl, outDataConstTbl)
 
+import qualified Drasil.SRS as SRS
+
 data SecItem where 
   Cont      :: [Contents] -> SecItem
   Sect      :: [Section] -> SecItem
@@ -236,14 +238,14 @@ assembler progName symMap thisSection subsecs =
   where subsections = map (render progName symMap) subsecs 
 
 sectionMap :: NamedIdea c => c -> SubSec -> [Section] -> Section
-sectionMap progName (SectionModel niname xs)  
-  |  compareID niname (Doc.solutionCharSpec ^. id)         = section (titleize' niname)
+sectionMap progName (SectionModel niname xs)
+  |  compareID niname (Doc.solutionCharSpec ^. id)         = SRS.solCharSpec
     [scsIntro progName]
-  | compareID niname  (Doc.problemDescription ^. id)       = section (titleize niname)
+  | compareID niname  (Doc.problemDescription ^. id)       = SRS.probDesc
     [problemDescriptionIntro progName (pullSents xs)]
-  | compareID niname  (Doc.generalSystemDescription ^. id) = section (titleize niname)
+  | compareID niname  (Doc.generalSystemDescription ^. id) = SRS.genSysDes
     [genenralSystemIntro]
-  | compareID niname  (Doc.requirement ^. id)              = section (titleize niname)
+  | compareID niname  (Doc.requirement ^. id)              = SRS.require
     [requirementsIntro]
   | otherwise                                              = error "no matches on section name"
 
@@ -269,15 +271,16 @@ render progName symMap item@(SectionModel niname _)
 ------------------------------
 
 genericSect :: SubSec -> Section
-genericSect (SectionModel niname xs) = section (pullTitle xs niname)
-  (pullContents xs) (pullSections xs)
+genericSect (SectionModel niname xs) = section (pullTitle xs niname) 
+  (pullContents xs) (pullSections xs) (S (niname ^. id)) -- FIXME: Ref HACK because
+  -- generic sections need a ref name. Should be made explicit elsewhere.
 
 ------------------------------------------------
 -- GENERAL SYSTEM DESCRIPTION SECTION BUILDER --
 ------------------------------------------------
 
 systemConstraintSect :: SubSec -> Section
-systemConstraintSect (SectionModel niname xs) = section (titleize' niname)
+systemConstraintSect (SectionModel niname xs) = SRS.sysCon
   ((systemConstraintIntro (pullSents xs)):(pullContents xs)) (pullSections xs)
 
 -------------------------------------------------
@@ -285,11 +288,11 @@ systemConstraintSect (SectionModel niname xs) = section (titleize' niname)
 -------------------------------------------------
 
 termDefinitionSect :: SubSec -> Section
-termDefinitionSect (SectionModel niname xs) = section (titleize' niname)
+termDefinitionSect (SectionModel niname xs) = SRS.termAndDefn
   ((termDefinitionIntro (pullSents xs)):(pullContents xs)) (pullSections xs)
 
 goalStatementSect :: SubSec -> Section
-goalStatementSect (SectionModel niname xs) = section (titleize' niname)
+goalStatementSect (SectionModel niname xs) = SRS.goalStmt
   ((goalStatementIntro (pullSents xs)):(pullContents xs)) (pullSections xs)
 
 -----------------------------------------------------------
@@ -297,34 +300,34 @@ goalStatementSect (SectionModel niname xs) = section (titleize' niname)
 -----------------------------------------------------------
 
 assumptionSect :: SubSec -> Section
-assumptionSect (SectionModel niname xs) = section (titleize' niname)
+assumptionSect (SectionModel niname xs) = SRS.assump
   (assumpIntro:(pullContents xs)) (pullSections xs)
 
 
 theoreticalModelSect :: (NamedIdea a, HasSymbolTable s) => SubSec -> s -> a -> Section
-theoreticalModelSect (SectionModel niname xs) _ progName = section
-  (titleize' niname) ((tModIntro progName):theoreticalModels ++ 
+theoreticalModelSect (SectionModel niname xs) _ progName = SRS.thModel
+ ((tModIntro progName):theoreticalModels ++ 
   (pullContents xs)) (pullSections xs)
   where theoreticalModels = map symMap $ pullTMods xs
         symMap            = Definition . Theory
 
 
 generalDefinitionSect :: (HasSymbolTable s) => SubSec -> s -> Section
-generalDefinitionSect (SectionModel niname xs) _ = section (titleize' niname)
+generalDefinitionSect (SectionModel niname xs) _ = SRS.genDefn
   (generalDefsIntro:contents) (pullSections xs)
   where generalDefsIntro = generalDefinitionIntro contents
         contents         = (pullContents xs)
 
 
 instanceModelSect :: (HasSymbolTable s) => SubSec -> s -> Section
-instanceModelSect (SectionModel niname xs) _ = section (titleize' niname)
+instanceModelSect (SectionModel niname xs) _ = SRS.inModel
   (iModIntro:instanceModels ++ (pullContents xs)) (pullSections xs)
   where symMap         = Definition . Theory
         instanceModels = map symMap $ pullIMods xs
 
 
 dataDefinitionSect :: (HasSymbolTable s) => SubSec -> s -> Section
-dataDefinitionSect (SectionModel niname xs) _ = section (titleize' niname)
+dataDefinitionSect (SectionModel niname xs) _ = SRS.dataDefn
   (dataIntro:dataDefinitions ++ (pullContents xs)) (pullSections xs)
   where dataIntro       = dataDefinitionIntro $ pullSents xs
         symMap          = Definition . Data
@@ -332,7 +335,7 @@ dataDefinitionSect (SectionModel niname xs) _ = section (titleize' niname)
 
 
 dataConstraintSect :: SubSec -> Section
-dataConstraintSect (SectionModel niname xs) = section (titleize' niname)
+dataConstraintSect (SectionModel niname xs) = SRS.datCon
   ([dataConIntro, inputTable, outputTable] ++ (pullContents xs)) (pullSections xs)
   where dataConIntro = dataConstraintParagraph (pullContents xs) (pullSents xs)
         inputTable  = inDataConstTbl $ pullUQI xs
@@ -455,7 +458,7 @@ tModIntro progName = foldlSP [S "This", phrase Doc.section_, S "focuses on",
 -- GENERAL DEFINITIONS --
 -------------------------
 
-generalDefinitionIntro :: (LayoutObj t) => [t] -> Contents
+generalDefinitionIntro :: (Referable t) => [t] -> Contents
 generalDefinitionIntro [] = Paragraph $ S "There are no general definitions."
 generalDefinitionIntro _ = foldlSP [S "This", phrase Doc.section_, 
   S "collects the", (plural law) `sAnd` (plural equation), 
@@ -490,7 +493,7 @@ iModIntro = foldlSP [S "This", phrase Doc.section_,
 -- makes a list of references to tables takes
 -- l  list of layout objects that can be referenced
 -- outputs a sentence containing references to the layout objects 
-listofTablesToRefs :: LayoutObj l => [l] -> Sentence
+listofTablesToRefs :: Referable l => [l] -> Sentence
 listofTablesToRefs  []     = EmptyS
 listofTablesToRefs  [x]    = (makeRef x) +:+ S "shows"
 listofTablesToRefs  [x,y]  = (makeRef x) `sC` S "and" +:+ listofTablesToRefs [y]

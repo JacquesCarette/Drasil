@@ -402,6 +402,7 @@ s6_1_1 = termDefnF (Just (S "All" `sOf` S "the" +:+ plural term_ +:+
 s6_1_2 = physSystDesc (short gLassBR) (fig_glassbr) [s6_1_2_list, fig_glassbr]
 
 fig_glassbr = fig (at_start $ the physicalSystem) (resourcePath ++ "physicalsystimage.png")
+  (S "physSystImage")
 
 s6_1_2_list = enumSimple 1 (short physSyst) s6_1_2_list_physys
 
@@ -554,8 +555,11 @@ s7_1_req3 = mkRequirement "s7_1_req3" req3Desc
 s7_1_req4 = mkRequirement "s7_1_req4" req4Desc
 s7_1_req5 = mkRequirement "s7_1_req5" (req5Desc (output_))
 
+-- newReqs is ONLY for testing until I get refs working. Then the old reqs should
+-- be converted to reqChunk format with meaningful refnames and this should be
+-- removed.
 newReqs :: [ReqChunk]
-newReqs = map (\(x,y) -> frc x y []) 
+newReqs = map (\(x,y) -> frc x y (S x) []) --FIXME: FRC Hack for referencing
   [ ("r1",req1Desc)
   , ("r2",req2Desc)
   , ("r3",req3Desc)
@@ -577,7 +581,7 @@ s7_1_req1Table = Table
   (mkTable
   [getES,
    at_start, unit'2Contents] requiredInputs)
-  (S "Required Inputs following R1") True
+  (S "Required Inputs following R1") True (S "R1ReqInputs")
 
 req2Desc = foldlSent [S "The", phrase system,
   S "shall set the known", plural value +: S "as follows",
@@ -755,7 +759,7 @@ s9_t1_DD8 = ["DD2"]
 s9_table1 = Table (EmptyS:s9_row_header_t1)
   (makeTMatrix s9_row_header_t1 s9_columns_t1 s9_row_t1)
   (showingCxnBw (traceyMatrix)
-  (titleize' item +:+ S "of Different" +:+ titleize' section_)) True
+  (titleize' item +:+ S "of Different" +:+ titleize' section_)) True (S "TraceyItemSecs")
 
 --
 
@@ -784,7 +788,7 @@ s9_t2_r6 = ["IM1", "IM2", "IM3", "DD2", "DD3", "DD4", "DD5", "DD6", "DD7", "DD8"
 s9_table2 = Table (EmptyS:s9_row_header_t2)
   (makeTMatrix s9_col_header_t2 s9_columns_t2 s9_row_t2)
   (showingCxnBw (traceyMatrix) (titleize' requirement `sAnd` S "Other" +:+
-  titleize' item)) True
+  titleize' item)) True (S "TraceyReqsItems")
 
 --
 
@@ -837,7 +841,7 @@ s9_t3_r6  = []
 s9_table3 = Table (EmptyS:s9_row_header_t3)
   (makeTMatrix s9_col_header_t3 s9_columns_t3 s9_row_t3)
   (showingCxnBw (traceyMatrix) (titleize' assumption `sAnd` S "Other"
-  +:+ titleize' item)) True
+  +:+ titleize' item)) True (S "TraceyAssumpsOthers")
 
 --
 
@@ -850,15 +854,15 @@ s9_intro2 = traceGIntro traceyGraphs
 
 fig_2 = figureLabel 2 (traceyMatrix)
   (titleize' item +:+ S "of Different" +:+ titleize' section_)
-  (resourcePath ++ "Trace.png")
+  (resourcePath ++ "Trace.png") (S "TraceyItemSecs")
 
 fig_3 = figureLabel 3 (traceyMatrix)
   (titleize' requirement `sAnd` S "Other" +:+ titleize' item)
-  (resourcePath ++ "RTrace.png")
+  (resourcePath ++ "RTrace.png") (S "TraceyReqsItems")
 
 fig_4 = figureLabel 4 (traceyMatrix)
   (titleize' assumption `sAnd` S "Other" +:+ titleize' item)
-  (resourcePath ++ "ATrace.png")
+  (resourcePath ++ "ATrace.png") (S "TraceyAssumpsOthers")
 
 {--VALUES OF AUXILIARY CONSTANTS--}
 
@@ -874,13 +878,13 @@ s12_intro = foldlSP [
 fig_5 = fig (titleize figure +: S "5" +:+ (demandq ^. defn) +:+
   sParen (getES demand) `sVersus` at_start sD +:+ sParen (getAcc stdOffDist)
   `sVersus` at_start char_weight +:+ sParen (getES sflawParamM))
-  (resourcePath ++ "ASTM_F2248-09.png")
+  (resourcePath ++ "ASTM_F2248-09.png") (S "demandVSsod")
 
 fig_6 = fig (titleize figure +: S "6" +:+ S "Non dimensional" +:+
   phrase lateralLoad +:+ sParen (getES dimlessLoad)
   `sVersus` titleize aspectR +:+ sParen (getAcc aR)
   `sVersus` at_start stressDistFac +:+ sParen (getES stressDistFac))
-  (resourcePath ++ "ASTM_F2248-09_BeasonEtAl.png")
+  (resourcePath ++ "ASTM_F2248-09_BeasonEtAl.png") (S "dimlessloadVSaspect")
 
 blstRskInvWGlassSlab :: Sentence
 blstRskInvWGlassSlab = phrase blastRisk +:+ S "involved with the" +:+

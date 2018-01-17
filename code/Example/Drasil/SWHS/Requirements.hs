@@ -49,9 +49,9 @@ req2 = mkRequirement "req2" $ foldlSentCol [
 
 s5_1_2_Eqn1 = EqnBlock ((C w_mass) $= (C w_vol) * (C w_density) $=
   ((C tank_vol) - (C pcm_vol)) * (C w_density) $=
-  (((C diam) / 2) * (C tank_length) - (C pcm_vol)) * (C w_density))
+  (((C diam) / 2) * (C tank_length) - (C pcm_vol)) * (C w_density)) EmptyS --FIXME: Referable?
 
-s5_1_2_Eqn2 = EqnBlock ((C pcm_mass) $= (C pcm_vol) * (C pcm_density))
+s5_1_2_Eqn2 = EqnBlock ((C pcm_mass) $= (C pcm_vol) * (C pcm_density)) EmptyS --FIXME: Referable?
 
 req3 = mkRequirement "req3" $ foldlSent [
   S "Verify that the", plural input_, S "satisfy the required",

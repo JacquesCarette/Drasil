@@ -16,7 +16,6 @@ module Drasil.Sections.SpecificSystemDescription
   , inDataConstTbl, outDataConstTbl 
   ) where
 
-import qualified Data.Drasil.Concepts.Documentation as D
 import Language.Drasil
 import Data.Drasil.Concepts.Documentation
 import Data.Drasil.Concepts.Math (equation)
@@ -28,7 +27,7 @@ import qualified Drasil.SRS as SRS
 
 -- | Specific System description section builder. Takes the system and subsections.
 specSysDescr :: (NamedIdea a) => a -> [Section] -> Section
-specSysDescr sys subs = section (titleize D.specificsystemdescription) [intro_ sys] subs
+specSysDescr sys subs = SRS.specSysDes [intro_ sys] subs
 
 -- FIXME: this all should be broken down and mostly generated.
 -- Generates an introduction based on the system.
@@ -154,7 +153,7 @@ thModIntro progName = foldlSP
 genDefnF :: [Contents] -> Section
 genDefnF otherContents = SRS.genDefn (generalDefinitionIntro otherContents:otherContents) []
 
-generalDefinitionIntro :: (LayoutObj t) => [t] -> Contents
+generalDefinitionIntro :: (Referable t) => [t] -> Contents
 generalDefinitionIntro [] = Paragraph $ S "There are no general definitions."
 generalDefinitionIntro _ = foldlSP [S "This", phrase section_, 
   S "collects the", S "laws and", (plural equation), 
@@ -204,7 +203,7 @@ dataConstraintParagraph hasUncertainty tableRef middleSent trailingSent = Paragr
 -- makes a list of references to tables takes
 -- l  list of layout objects that can be referenced
 -- outputs a sentence containing references to the layout objects 
-listofTablesToRefs :: LayoutObj l => [l] -> Sentence
+listofTablesToRefs :: Referable l => [l] -> Sentence
 listofTablesToRefs  []     = EmptyS
 listofTablesToRefs  [x]    = (makeRef x) +:+ S "shows"
 listofTablesToRefs  [x,y]  = (makeRef x) `sC` S "and" +:+ listofTablesToRefs [y]
@@ -240,7 +239,7 @@ inDataConstTbl qlst = Table ([S "Var"] ++
   [S "Typical" +:+ titleize value] ++
   (addTitle (short typUnc) $ typUncr (head qlst) qlst))
   (map (\x -> fmtInputConstr x qlst) qlst)
-  (S "Input Data Constraints") True
+  (S "Input Data Constraints") True (S "InDataConstraints")
 
 -- Creates the output Data Constraints Table
 outDataConstTbl :: (Quantity c, Constrained c) => [c] -> Contents
@@ -248,7 +247,7 @@ outDataConstTbl qlst = Table ([S "Var"] ++
   (addTitle (titleize' physicalConstraint) $ physC (head qlst) qlst) ++
   (addTitle (titleize' softwareConstraint) $ sfwrC (head qlst) qlst))
   (map (\x -> fmtOutputConstr x qlst) qlst)
-  (S "Output Data Constraints") True
+  (S "Output Data Constraints") True (S "OutDataConstraints")
 
 ------------------------------------------------------------
 -- Not exported

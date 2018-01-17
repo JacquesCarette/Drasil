@@ -20,6 +20,11 @@ import Control.Lens ((^.))
 
 import Prelude hiding (id)
 
+-- For equation blocks that cannot be referenced
+-- HACK
+eqUnR :: Expr -> Contents
+eqUnR e = EqnBlock e EmptyS
+
 -- | Synonym for a list of 'Field'
 type Fields = [Field]
 
@@ -79,7 +84,7 @@ derivation g = map makeDerivationContents (getDerivation g)
 -- | Helper function for creating the layout objects 
 -- (paragraphs and equation blocks) for a derivation.
 makeDerivationContents :: DerWrapper -> Contents
-makeDerivationContents (DE e) = EqnBlock e
+makeDerivationContents (DE e) = eqUnR e
 makeDerivationContents (DS s) = Paragraph s
 
 -- | Synonym for easy reading. Model rows are just 'String',['Contents'] pairs
@@ -89,7 +94,8 @@ type ModRow = [(String,[Contents])]
 mkTMField :: HasSymbolTable ctx => TheoryModel -> ctx -> Field -> ModRow -> ModRow
 mkTMField t _ l@Label fs  = (show l, (Paragraph $ at_start t):[]) : fs
 mkTMField t _ l@DefiningEquation fs = 
-  (show l, (map EqnBlock (map tConToExpr (t ^. invariants)))) : fs
+  (show l, (map eqUnR (map tConToExpr (t ^. invariants)))) : fs
+  --FIXME: EqnBlock Ref HACK.
 mkTMField t m l@(Description v u) fs = (show l,  
   foldr (\x -> buildDescription v u x m) [] (map tConToExpr (t ^. invariants))) : fs
 mkTMField _ _ l@(RefBy) fs = (show l, fixme) : fs --FIXME: fill this in
@@ -108,7 +114,7 @@ mkQField :: HasSymbolTable ctx => QDefinition -> ctx -> Field -> ModRow -> ModRo
 mkQField d _ l@Label fs = (show l, (Paragraph $ at_start d):[]) : fs
 mkQField d _ l@Symbol fs = (show l, (Paragraph $ (P $ eqSymb d)):[]) : fs
 mkQField d _ l@Units fs = (show l, (Paragraph $ (unit'2Contents d)):[]) : fs
-mkQField d _ l@DefiningEquation fs = (show l, (EqnBlock $ equat d):[]) : fs
+mkQField d _ l@DefiningEquation fs = (show l, (eqUnR (equat d)):[]) : fs
 mkQField d m l@(Description v u) fs = 
   (show l, buildDDescription v u d m) : fs
 mkQField _ _ l@(RefBy) fs = (show l, fixme) : fs --FIXME: fill this in
@@ -139,7 +145,7 @@ mkGDField g _ l@Units fs =
   let u = gdUnit g in
     case u of Nothing   -> fs
               Just udef -> (show l, (Paragraph $ Sy (udef ^. usymb)):[]) : fs
-mkGDField g _ l@DefiningEquation fs = (show l, (EqnBlock (g ^. relat)):[]) : fs
+mkGDField g _ l@DefiningEquation fs = (show l, (eqUnR (g ^. relat)):[]) : fs
 mkGDField g m l@(Description v u) fs = (show l, 
   (buildDescription v u (g ^. relat) m) []) : fs
 mkGDField _ _ l@(RefBy) fs = (show l, fixme) : fs --FIXME: fill this in
@@ -150,7 +156,7 @@ mkGDField _ _ l _ = error $ "Label " ++ show l ++ " not supported for gen defs"
 mkIMField :: HasSymbolTable ctx => InstanceModel -> ctx -> Field -> ModRow -> ModRow
 mkIMField i _ l@Label fs  = (show l, (Paragraph $ at_start i):[]) : fs
 mkIMField i _ l@DefiningEquation fs = 
-  (show l, (EqnBlock (i ^. relat)):[]) : fs
+  (show l, (eqUnR (i ^. relat)):[]) : fs
 mkIMField i m l@(Description v u) fs = (show l,  
   foldr (\x -> buildDescription v u x m) [] [i ^. relat]) : fs
 mkIMField _ _ l@(RefBy) fs = (show l, fixme) : fs --FIXME: fill this in
@@ -158,9 +164,9 @@ mkIMField i _ l@(Source) fs = (show l, [Paragraph $ getSource i]) : fs --FIXME: 
 mkIMField i _ l@(Output) fs = (show l, [Paragraph $ foldle (sC) (+:+.) EmptyS (map (P . symbol Equational) (outputs i))]) : fs
 mkIMField i _ l@(Input) fs = (show l, [Paragraph $ foldle (sC) (+:+.) EmptyS (map (P . symbol Equational) (inputs i))]) : fs
 mkIMField i _ l@(InConstraints) fs  = (show l,  
-  foldr ((:) . EqnBlock) [] (map tConToExpr (inCons i))) : fs
+  foldr ((:) . eqUnR) [] (map tConToExpr (inCons i))) : fs
 mkIMField i _ l@(OutConstraints) fs = (show l,  
-  foldr ((:) . EqnBlock) [] (map tConToExpr (outCons i))) : fs
+  foldr ((:) . eqUnR) [] (map tConToExpr (outCons i))) : fs
 mkIMField _ _ label _ = error $ "Label " ++ show label ++ " not supported " ++
   "for instance models"
 

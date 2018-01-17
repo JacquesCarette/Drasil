@@ -38,7 +38,7 @@ import Drasil.SWHS.LikelyChanges (likeChg2, likeChg3, likeChg6)
 
 import Data.Drasil.People (thulasi)
 import Data.Drasil.Utils (enumSimple, getES, refFromType,
-  itemRefToSent, makeTMatrix, itemRefToSent, weave)
+  itemRefToSent, makeTMatrix, itemRefToSent, weave, eqUnR)
 
 import Data.Drasil.Concepts.Documentation (datumConstraint, inModel,
   requirement, section_, traceyGraph, item, assumption, dataDefn,
@@ -354,7 +354,7 @@ s4_1_2 = physSystDesc (getAcc progName) fig_tank
 fig_tank :: Contents
 fig_tank = fig (at_start sWHT `sC` S "with" +:+ phrase ht_flux +:+
   S "from" +:+ phrase coil `sOf` getES ht_flux_C)
-  "TankWaterOnly.png"
+  "TankWaterOnly.png" (S "Tank")
 
 s4_1_2_list :: Contents
 s4_1_2_list = enumSimple 1 (short physSyst) $ map foldlSent_
@@ -553,8 +553,8 @@ s4_2_3_eq5 = (C mass) * (C QT.heat_cap_spec) * Deriv Total (C QT.temp)
   * (C out_SA) + (C vol_ht_gen) * (C vol)
 
 s4_2_3_equation :: [Contents]
-s4_2_3_equation = map EqnBlock [s4_2_3_eq1, s4_2_3_eq2, s4_2_3_eq3, s4_2_3_eq4,
-  s4_2_3_eq5]
+s4_2_3_equation = map eqUnR [s4_2_3_eq1, s4_2_3_eq2, s4_2_3_eq3, s4_2_3_eq4,
+  s4_2_3_eq5] 
 
 s4_2_5_paragraph :: [Contents]
 s4_2_5_paragraph = weave [s4_2_5_description, s4_2_5_equation]
@@ -603,7 +603,7 @@ s4_2_5_desc4 temw wm hcw chtc csa = [S "Setting", (getES temw :+: S "=" :+:
   `sC` titleize M.equation, S "(4) can be written in its final form as"]
 
 s4_2_5_equation :: [Contents]
-s4_2_5_equation = map EqnBlock [s4_2_5_eq1, s4_2_5_eq2, s4_2_5_eq3, s4_2_5_eq4]
+s4_2_5_equation = map eqUnR [s4_2_5_eq1, s4_2_5_eq2, s4_2_5_eq3, s4_2_5_eq4]
 
 s4_2_5_eq1, s4_2_5_eq2, s4_2_5_eq3, s4_2_5_eq4 ::Expr
 
@@ -665,13 +665,13 @@ s5_1_list_items :: [Contents]
 s5_1_list_items = [
 
   Table [titleize symbol_, titleize M.unit_, titleize description]
-  (mkTable
-  [getES,
+  (mkTable [getES,
   unit'2Contents,
   phrase] inputVar)
-  (titleize input_ +:+ titleize variable +:+ titleize requirement) False,
+  (titleize input_ +:+ titleize variable +:+ titleize requirement) False
+  (S "fr1list"),
 
-  EqnBlock ((C w_mass) $= (C w_vol) * (C w_density) $=
+  eqUnR ((C w_mass) $= (C w_vol) * (C w_density) $=
   (((C diam) / 2) * (C tank_length) * (C w_density)))
   ]
 
@@ -877,7 +877,7 @@ s7_table1 :: Contents
 s7_table1 = Table (EmptyS:s7_row_header_t1)
   (makeTMatrix (s7_row_header_t1) (s7_columns_t1) (s7_row_t1))
   (showingCxnBw traceyMatrix
-  (titleize' requirement `sAnd` titleize' inModel)) True
+  (titleize' requirement `sAnd` titleize' inModel)) True (S "TraceyRI")
 
 {-Traceability Matrix 2-}
 
@@ -915,7 +915,7 @@ s7_table2 :: Contents
 s7_table2 = Table (EmptyS:s7_row_header_t2)
   (makeTMatrix (s7_col_header_t2) (s7_columns_t2) (s7_row_t2))
   (showingCxnBw traceyMatrix
-  (titleize' requirement `sAnd` titleize' inModel)) True
+  (titleize' requirement `sAnd` titleize' inModel)) True (S "TraceyRIs")
 
 {-Traceability Matrix 3-}
 
@@ -952,7 +952,7 @@ s7_table3 :: Contents
 s7_table3 = Table (EmptyS:s7_row_header_t3)
   (makeTMatrix s7_col_header_t3 s7_columns_t3 s7_row_t3)
   (showingCxnBw traceyMatrix (titleize' assumption `sAnd` S "Other" +:+
-  titleize' item)) True
+  titleize' item)) True (S "TraceyAI")
 
 -- These matrices can probably be generated automatically when enough info is
 -- abstracted out.
@@ -974,11 +974,12 @@ s7_intro2 = traceGIntro [s7_fig1, s7_fig2]
 
 s7_fig1 :: Contents
 s7_fig1 = fig (showingCxnBw traceyGraph (titleize' item +:+
-  S "of Different" +:+ titleize' section_)) "ATrace.png"
+  S "of Different" +:+ titleize' section_)) "ATrace.png" (S "TraceA")
 
 s7_fig2 :: Contents
 s7_fig2 = fig (showingCxnBw traceyGraph (titleize' requirement `sC`
-  titleize' inModel `sC` S "and" +:+ titleize' datumConstraint)) "RTrace.png"
+  titleize' inModel `sC` S "and" +:+ titleize' datumConstraint)) "RTrace.png" 
+  (S "TraceR")
 
   -- Using the SWHS graphs as place holders until ones can be generated for NoPCM 
 

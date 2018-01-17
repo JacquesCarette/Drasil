@@ -78,7 +78,7 @@ import Drasil.Sections.Requirements (reqF)
 import Drasil.Sections.GeneralSystDesc (genSysF)
 
 import Data.Drasil.Utils (enumSimple, weave, getES, itemRefToSent, makeListRef,
-  makeTMatrix, refFromType)
+  makeTMatrix, refFromType, eqUnR)
 import Data.Drasil.SentenceStructures (acroIM, acroGD, acroGS, showingCxnBw,
   foldlSent, foldlSent_, foldlSP, foldlSP_, foldlSPCol, foldlsC, isThe, ofThe,
   ofThe', sAnd, sOf, foldlList)
@@ -395,7 +395,7 @@ s4_2_5_deriv1 :: [Contents]
 s4_2_5_deriv1 = (s4_2_5_d1startPara energy water) ++
   (weave [s4_2_5_d1sent_list, s4_2_5_d1eqn_list])
 
-s4_2_5_d1eqn_list = map EqnBlock [s4_2_5_d_eqn1, s4_2_5_d_eqn2,
+s4_2_5_d1eqn_list = map eqUnR [s4_2_5_d_eqn1, s4_2_5_d_eqn2,
   s4_2_5_d_eqn3, s4_2_5_d_eqn4, s4_2_5_d_eqn5, s4_2_5_d_eqn6, s4_2_5_d_eqn7]
 
 s4_2_5_d1sent_list = map foldlSPCol
@@ -418,7 +418,7 @@ s4_2_5_deriv2 =
 s4_2_5_d2sent_list = map foldlSPCol [s4_2_5_d2sent_1 dd2HtFluxP ht_flux_P,
   s4_2_5_d2sent_2, s4_2_5_d2sent_3]
 
-s4_2_5_d2eqn_list = map (EqnBlock) [s4_2_5_d2eqn1, s4_2_5_d2eqn2,
+s4_2_5_d2eqn_list = map eqUnR [s4_2_5_d2eqn1, s4_2_5_d2eqn2,
   s4_2_5_d2eqn3, s4_2_5_d2eqn4]
 
 ----------------------------
@@ -504,6 +504,7 @@ s5_1_1_Table = (Table [titleize symbol_, titleize unit_, titleize description]
   unit'2Contents,
   phrase] (map qs inputConstraints))
   (titleize input_ +:+ titleize variable +:+ titleize requirement) False)
+  (S "InConstraints")
 
 s5_1_Reqs :: [Contents]
 s5_1_Reqs = [req3, req4, req5, req6, req7, req8, req9, req10, req11]
@@ -647,7 +648,7 @@ s7_table2 :: Contents
 s7_table2 = Table (EmptyS:s7_row_header_t2)
   (makeTMatrix (s7_col_header_t2) (s7_columns_t2) (s7_row_t2))
   (showingCxnBw traceyMatrix
-  (titleize' requirement `sAnd` titleize' inModel)) True
+  (titleize' requirement `sAnd` titleize' inModel)) True (S "Tracey1")
 
 {-Traceability Matrix 3-}
 
@@ -868,7 +869,7 @@ s3_1_contents pro = foldlSP [makeRef sys_context_fig, S "shows the" +:+.
 sys_context_fig :: Contents
 sys_context_fig = fig (foldlSent_
   [makeRef sys_context_fig +: EmptyS, titleize sysCont])
-  "SystemContextFigure.png"
+  "SystemContextFigure.png" (S "SysCon")
 
 s3_1_2_intro :: CI -> NamedChunk -> Contents
 s3_1_2_intro pro us = foldlSPCol [short pro +:+. S "is mostly self-contained",
@@ -973,7 +974,7 @@ fig_tank :: Contents
 fig_tank = fig (
   foldlSent_ [at_start sWHT `sC` S "with", phrase ht_flux_C, S "of",
   getES ht_flux_C `sAnd` phrase ht_flux_P, S "of", getES ht_flux_P])
-  "Tank.png"
+  "Tank.png" (S "Tank")
 
 -----------------------------
 -- 4.1.3 : Goal Statements --
@@ -1028,7 +1029,7 @@ s4_2_3_deriv_2 :: RelationConcept -> UnitalChunk -> Contents
 s4_2_3_deriv_2 t1ct vo = foldlSPCol [S "Integrating", swhsSymbMapTRef t1ct,
   S "over a", phrase vo, sParen (getES vo) `sC` S "we have"]
 
-s4_2_3_deriv_3 = EqnBlock
+s4_2_3_deriv_3 = eqUnR
   ((Neg (int_all (eqSymb vol) ((C gradient) :. (C thFluxVect)))) +
   (int_all (eqSymb vol) (C vol_ht_gen)) $=
   (int_all (eqSymb vol) ((C density) * (C heat_cap_spec) * Deriv Part (C temp) (C time))))
@@ -1041,7 +1042,7 @@ s4_2_3_deriv_4 gd su vo tfv unv un = foldlSPCol [S "Applying", titleize gd,
   phrase surface `sAnd` getES unv, S "as a", phrase un,
   S "outward", phrase unv, S "for a", phrase su]
 
-s4_2_3_deriv_5 = EqnBlock
+s4_2_3_deriv_5 = eqUnR
   ((Neg (int_all (eqSymb surface) ((C thFluxVect) :. (C uNormalVect)))) +
   (int_all (eqSymb vol) (C vol_ht_gen)) $= 
   (int_all (eqSymb vol) ((C density) * (C heat_cap_spec) * Deriv Part (C temp) (C time))))
@@ -1051,7 +1052,7 @@ s4_2_3_deriv_6 vo vhg = foldlSPCol [S "We consider an arbitrary" +:+.
   phrase vo, S "The", phrase vhg, S "is assumed constant. Then",
   sParen $ S $ show (1 :: Integer), S "can be written as"]
 
-s4_2_3_deriv_7 = EqnBlock
+s4_2_3_deriv_7 = eqUnR
   ((C ht_flux_in) * (C in_SA) - (C ht_flux_out) *
   (C out_SA) + (C vol_ht_gen) * (C vol) $= 
   (int_all (eqSymb vol) ((C density) * (C heat_cap_spec) * Deriv Part (C temp) (C time))))
@@ -1066,7 +1067,7 @@ s4_2_3_deriv_8 hfi hfo isa osa den hcs tem vo assu a3 a4 a5 a6 = foldlSPCol
   S "in our case by", titleize' assu, 
   foldlList (map (\c -> sParen (makeRef c)) [a3, a4, a5, a6]) `sC` S "we have"]
 
-s4_2_3_deriv_9 = EqnBlock
+s4_2_3_deriv_9 = eqUnR
   ((C density) * (C heat_cap_spec) * (C vol) * Deriv Total (C temp)
   (C time) $= (C ht_flux_in) * (C in_SA) - (C ht_flux_out) *
   (C out_SA) + (C vol_ht_gen) * (C vol))
@@ -1075,7 +1076,7 @@ s4_2_3_deriv_10 :: UnitalChunk -> UnitalChunk -> UnitalChunk -> Contents
 s4_2_3_deriv_10 den ma vo = foldlSPCol [S "Using the fact that", getES den :+:
   S "=" :+: getES ma :+: S "/" :+: getES vo `sC` S "(2) can be written as"]
 
-s4_2_3_deriv_11 = EqnBlock
+s4_2_3_deriv_11 = eqUnR
   ((C mass) * (C heat_cap_spec) * Deriv Total (C temp)
   (C time) $= (C ht_flux_in) * (C in_SA) - (C ht_flux_out)
   * (C out_SA) + (C vol_ht_gen) * (C vol))
@@ -1364,7 +1365,7 @@ s4_2_7_deriv_1 lce ewat en co pcmat d1hfc d2hfp su ht  =
   S "over the", phrase sim_time `sC` S "as follows"]
 
 s4_2_7_deriv_2 :: Contents
-s4_2_7_deriv_2 = EqnBlock
+s4_2_7_deriv_2 = eqUnR
   ((C w_E) $= (defint (eqSymb time) 0 (C time)
   ((C coil_HTC) * (C coil_SA) * ((C temp_C) - FCall (C temp_W)
   [C time]))) - (defint (eqSymb time) 0 (C time)
@@ -1378,7 +1379,7 @@ s4_2_7_deriv_3 epcm en pcmat wa =
   S "from the" +:+. phrase wa, S "This can be expressed as"]
 
 s4_2_7_deriv_4 :: Contents
-s4_2_7_deriv_4 = EqnBlock
+s4_2_7_deriv_4 = eqUnR
   ((C pcm_E) $= (defint (eqSymb time) 0 (C time)
   ((C pcm_HTC) * (C pcm_SA) * ((FCall (C temp_W) [C time]) - (FCall
   (C temp_PCM) [C time])))))
@@ -1433,13 +1434,13 @@ s7_table1 :: Contents
 s7_table1 = Table (EmptyS:s7_row_header_t1)
   (makeTMatrix (s7_row_header_t1) (s7_columns_t1) (s7_row_t1))
   (showingCxnBw traceyMatrix
-  (titleize' item +:+ S "of Different" +:+ titleize' section_)) True
+  (titleize' item +:+ S "of Different" +:+ titleize' section_)) True (S "Tracey2")
 
 s7_table3 :: Contents
 s7_table3 = Table (EmptyS:s7_row_header_t3)
   (makeTMatrix s7_col_header_t3 s7_columns_t3 s7_row_t3)
   (showingCxnBw traceyMatrix (titleize' assumption `sAnd` S "Other" +:+
-  titleize' item)) True
+  titleize' item)) True (S "Tracey3")
 
 -- These matrices can probably be generated automatically when enough info is
 -- abstracted out.
@@ -1457,11 +1458,11 @@ s7_intro2 = traceGIntro [s7_fig1, s7_fig2]
 
 s7_fig1 :: Contents
 s7_fig1 = fig (showingCxnBw traceyGraph (titleize' item +:+
-  S "of Different" +:+ titleize' section_)) "ATrace.png"
+  S "of Different" +:+ titleize' section_)) "ATrace.png" (S "TraceyA")
 
 s7_fig2 :: Contents
 s7_fig2 = fig (showingCxnBw traceyGraph (foldlList $ map titleize' 
-  renameList2)) "RTrace.png"
+  renameList2)) "RTrace.png" (S "TraceyR")
 
 -------------------------------------------------
 -- Section 8 :  Specification Parameter Values --

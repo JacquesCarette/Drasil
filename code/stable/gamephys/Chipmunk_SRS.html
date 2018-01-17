@@ -18,7 +18,7 @@ Software Requirements Specification for Chipmunk2D
 Alex Halliwushka and Luthfi Mawarid
 </h2>
 </div>
-<a id="Sec:RefeMate">
+<a id="Sec:RefMat">
 <div class="section">
 <h2>
 Reference Material
@@ -26,7 +26,7 @@ Reference Material
 <p class="paragraph">
 This section records information for easy reference.
 </p>
-<a id="Sec:TablofUnit">
+<a id="Sec:ToU">
 <div class="subsection">
 <h3>
 Table of Units
@@ -34,7 +34,7 @@ Table of Units
 <p class="paragraph">
 The unit system used throughout is SI (Syst&egrave;me International d'Unit&eacute;s). In addition to the basic units, several derived units are also used. For each unit, the table lists the symbol, a description and the SI name.
 </p>
-<a id="Table:TablofUnit">
+<a id="Table:ToU">
 <table class="table">
 <tr>
 <th>
@@ -88,7 +88,7 @@ time (second)
 </a>
 </div>
 </a>
-<a id="Sec:TablofSymb">
+<a id="Sec:ToS">
 <div class="subsection">
 <h3>
 Table of Symbols
@@ -96,7 +96,7 @@ Table of Symbols
 <p class="paragraph">
 The table that follows summarizes the symbols used in this document along with their units. Throughout the document, symbols in bold will represent vectors, and scalars otherwise. The symbols are listed in alphabetical order.
 </p>
-<a id="Table:TablofSymb">
+<a id="Table:ToS">
 <table class="table">
 <tr>
 <th>
@@ -839,12 +839,12 @@ rad/s
 </a>
 </div>
 </a>
-<a id="Sec:AbbrandAcro">
+<a id="Sec:TAbbAcc">
 <div class="subsection">
 <h3>
 Abbreviations and Acronyms
 </h3>
-<a id="Table:AbbrandAcro">
+<a id="Table:TAbbAcc">
 <table class="table">
 <tr>
 <th>
@@ -853,6 +853,14 @@ Symbol
 <th>
 Description
 </th>
+</tr>
+<tr>
+<td>
+2D
+</td>
+<td>
+Two-Dimensional
+</td>
 </tr>
 <tr>
 <td>
@@ -868,6 +876,14 @@ CM
 </td>
 <td>
 Centre of Mass
+</td>
+</tr>
+<tr>
+<td>
+Chipmunk2D
+</td>
+<td>
+Chipmunk2D game physics library
 </td>
 </tr>
 <tr>
@@ -942,21 +958,13 @@ T
 Theoretical Model
 </td>
 </tr>
-<tr>
-<td>
-2D
-</td>
-<td>
-Two-Dimensional
-</td>
-</tr>
 </table>
 </a>
 </div>
 </a>
 </div>
 </a>
-<a id="Sec:Intr">
+<a id="Sec:Intro">
 <div class="section">
 <h2>
 Introduction
@@ -967,7 +975,7 @@ Due to the rising cost of developing video games, developers are looking for way
 <p class="paragraph">
 The following section provides an overview of the Software Requirements Specification (SRS) for Chipmunk2D. This section explains the purpose of this document, the scope of the system, the organization of the document, and the characteristics of the intended reader.
 </p>
-<a id="Sec:PurpofDocu">
+<a id="Sec:DocPurpose">
 <div class="subsection">
 <h3>
 Purpose of Document
@@ -980,7 +988,7 @@ This document will be used as a starting point for subsequent development phases
 </p>
 </div>
 </a>
-<a id="Sec:ScopofRequ">
+<a id="Sec:ReqsScope">
 <div class="subsection">
 <h3>
 Scope of Requirements
@@ -990,23 +998,23 @@ The scope of the requirements includes the physical simulation of 2D rigid bodie
 </p>
 </div>
 </a>
-<a id="Sec:CharofInteRead">
+<a id="Sec:ReaderChars">
 <div class="subsection">
 <h3>
 Characteristics of Intended Reader
 </h3>
 <p class="paragraph">
-Reviewers of this documentation should have a strong knowledge in rigid body dynamics. The reviewers should also have an understanding of high school calculus. The users of Chipmunk2D can have a lower level of expertise, as explained in <a href=#Sec:UserChar>Sec:UserChar</a>.
+Reviewers of this documentation should have a strong knowledge in rigid body dynamics. The reviewers should also have an understanding of high school calculus. The users of Chipmunk2D can have a lower level of expertise, as explained in <a href=#Sec:UserChars>Sec:UserChars</a>.
 </p>
 </div>
 </a>
-<a id="Sec:OrgaofDocu">
+<a id="Sec:DocOrg">
 <div class="subsection">
 <h3>
 Organization of Document
 </h3>
 <p class="paragraph">
-The organization of this document follows the template for an SRS for scientific computing software proposed by [1] and [2]. The presentation follows the standard pattern of presenting goals, theories, definitions, and assumptions. For readers that would like a more bottom up approach, they can start reading the instance models in <a href=#Sec:SoluCharSpec>Sec:SoluCharSpec</a> and trace back to find any additional information they require.
+The organization of this document follows the template for an SRS for scientific computing software proposed by [1] and [2]. The presentation follows the standard pattern of presenting goals, theories, definitions, and assumptions. For readers that would like a more bottom up approach, they can start reading the instance models in <a href=#Sec:SolCharSpec>Sec:SolCharSpec</a> and trace back to find any additional information they require.
 </p>
 <p class="paragraph">
 The goal statements are refined to the theoretical models, and the theoretical models to the instance models.
@@ -1015,7 +1023,7 @@ The goal statements are refined to the theoretical models, and the theoretical m
 </a>
 </div>
 </a>
-<a id="Sec:GeneSystDesc">
+<a id="Sec:GenSysDesc">
 <div class="section">
 <h2>
 General System Description
@@ -1023,7 +1031,7 @@ General System Description
 <p class="paragraph">
 This section provides general information about the system, identifies the interfaces between the system and its environment, and describes the user characteristics and the system constraints.
 </p>
-<a id="Sec:UserChar">
+<a id="Sec:usercharacteristic">
 <div class="subsection">
 <h3>
 User Characteristics
@@ -1033,7 +1041,7 @@ The end user of Chipmunk2D should have an understanding of first year programmin
 </p>
 </div>
 </a>
-<a id="Sec:SystCons">
+<a id="Sec:SysConstraints">
 <div class="subsection">
 <h3>
 System Constraints
@@ -1059,9 +1067,9 @@ This section first presents the problem description, which gives a high-level vi
 Problem Description
 </h3>
 <p class="paragraph">
-Creating a gaming physics library is a difficult task. Games need physics libraries that simulate objects acting under various physical conditions, while simultaneously being fast and efficient enough to work in soft real-time during the game. Developing a physics library from scratch takes a long period of time and is very costly, presenting barriers of entry which make it difficult for game developers to include physics in their products. There are a few free, open source and high quality physics libraries available to be used for consumer products (<a href=#Sec:Off-Solu>Sec:Off-Solu</a>). By creating a simple, lightweight, fast and portable 2D rigid body physics library, game development will be more accessible to the masses and higher quality products will be produced.
+Creating a gaming physics library is a difficult task. Games need physics libraries that simulate objects acting under various physical conditions, while simultaneously being fast and efficient enough to work in soft real-time during the game. Developing a physics library from scratch takes a long period of time and is very costly, presenting barriers of entry which make it difficult for game developers to include physics in their products. There are a few free, open source and high quality physics libraries available to be used for consumer products (<a href=#Sec:ExistingSolns>Sec:ExistingSolns</a>). By creating a simple, lightweight, fast and portable 2D rigid body physics library, game development will be more accessible to the masses and higher quality products will be produced.
 </p>
-<a id="Sec:TermandDefi">
+<a id="Sec:TermDefs">
 <div class="subsubsection">
 <h4>
 Terminology and Definitions
@@ -1088,7 +1096,7 @@ Right-handed coordinate system: A coordinate system where the positive z-axis co
 </ul>
 </div>
 </a>
-<a id="Sec:GoalStat">
+<a id="Sec:GoalStmt">
 <div class="subsubsection">
 <h4>
 Goal Statements
@@ -1114,15 +1122,15 @@ GS4: Given the physical properties, initial positions, orientations, linear velo
 </a>
 </div>
 </a>
-<a id="Sec:SoluCharSpec">
+<a id="Sec:SolCharSpec">
 <div class="subsection">
 <h3>
-Solution Characteristics Specifications
+Solution Characteristics Specification
 </h3>
 <p class="paragraph">
 The instance models that govern Chipmunk2D are presented in FIXME REF to IModSection. The information to understand the meaning of the instance models and their derivation is also presented, so that the instance models can be verified.
 </p>
-<a id="Sec:Assu">
+<a id="Sec:Assumps">
 <div class="subsubsection">
 <h4>
 Assumptions
@@ -1155,7 +1163,7 @@ A7: There are no constraints and joints involved throughout the simulation.
 </div>
 </div>
 </a>
-<a id="Sec:TheoMode">
+<a id="Sec:TMs">
 <div class="subsubsection">
 <h4>
 Theoretical Models
@@ -1416,7 +1424,7 @@ The net torque <em>&tau;</em> (N&sdot;m) on a rigid body is proportional to its 
 </a>
 </div>
 </a>
-<a id="Sec:GeneDefi">
+<a id="Sec:GDs">
 <div class="subsubsection">
 <h4>
 General Definitions
@@ -1426,7 +1434,7 @@ There are no general definitions.
 </p>
 </div>
 </a>
-<a id="Sec:InstMode">
+<a id="Sec:IMs">
 <div class="subsubsection">
 <h4>
 Instance Models
@@ -1609,7 +1617,7 @@ This instance model is based on our assumptions regarding rigid body (A1, A2) co
 </a>
 </div>
 </a>
-<a id="Sec:DataDefi">
+<a id="Sec:DDs">
 <div class="subsubsection">
 <h4>
 Data Definitions
@@ -2123,7 +2131,7 @@ Description
 </a>
 </div>
 </a>
-<a id="Sec:DataCons">
+<a id="Sec:DataConstraints">
 <div class="subsubsection">
 <h4>
 Data Constraints
@@ -2131,7 +2139,7 @@ Data Constraints
 <p class="paragraph">
 the data constraints on the input and output variables, respectively. The column for physical constraints gives the physical limitations on the range of values that can be taken by the variable. The constraints are conservative, to give the user of the model the flexibility to experiment with unusual situations. The column of typical values is intended to provide a feel for a common scenario. The uncertainty column provides an estimate of the confidence with which the physical quantities can be measured. This information would be part of the input if one were performing an uncertainty quantification exercise. FIXME
 </p>
-<a id="Table:InpuDataCons">
+<a id="Table:InDataConstraints">
 <table class="table">
 <tr>
 <th>
@@ -2306,7 +2314,7 @@ None
 Input Data Constraints
 </p>
 </a>
-<a id="Table:OutpDataCons">
+<a id="Table:OutDataConstraints">
 <table class="table">
 <tr>
 <th>
@@ -2344,7 +2352,7 @@ Output Data Constraints
 </a>
 </div>
 </a>
-<a id="Sec:Requ">
+<a id="Sec:Requirements">
 <div class="section">
 <h2>
 Requirements
@@ -2352,7 +2360,7 @@ Requirements
 <p class="paragraph">
 This section provides the functional requirements, the business tasks that the software is expected to complete, and the non-functional requirements, the qualities that the software is expected to exhibit.
 </p>
-<a id="Sec:FuncRequ">
+<a id="Sec:FRs">
 <div class="subsection">
 <h3>
 Functional Requirements
@@ -2368,7 +2376,7 @@ R2: Input the initial masses, velocities, orientations, angular velocities of, a
 R3: Input the surface properties of the bodies such as friction or elasticity.
 </p>
 <p>
-R4: Verify that the inputs satisfy the required physical constraints from <a href=#Sec:SoluCharSpec>Sec:SoluCharSpec</a>.
+R4: Verify that the inputs satisfy the required physical constraints from <a href=#Sec:SolCharSpec>Sec:SolCharSpec</a>.
 </p>
 <p>
 R5: Determine the positions and velocities over a period of time of the 2D rigid bodies acted upon by a force.
@@ -2385,7 +2393,7 @@ R8: Determine the positions and velocities over a period of time of the 2D rigid
 </div>
 </div>
 </a>
-<a id="Sec:Non-Requ">
+<a id="Sec:NFRs">
 <div class="subsection">
 <h3>
 Non-Functional Requirements
@@ -2397,7 +2405,7 @@ Games are resource intensive, so performance is a high priority. Other non-funct
 </a>
 </div>
 </a>
-<a id="Sec:LikeChan">
+<a id="Sec:LCs">
 <div class="section">
 <h2>
 Likely Changes
@@ -2421,7 +2429,7 @@ LC4: The library may be expanded to include joints and constraints.
 </div>
 </div>
 </a>
-<a id="Sec:Off-Solu">
+<a id="Sec:ExistingSolns">
 <div class="section">
 <h2>
 Off-The-Shelf Solutions
@@ -2453,15 +2461,15 @@ Newton Game Dynamics: http://newtondynamics.com/
 </ul>
 </div>
 </a>
-<a id="Sec:TracMatrandGrap">
+<a id="Sec:TraceMatrices">
 <div class="section">
 <h2>
 Traceability Matrices and Graphs
 </h2>
 <p class="paragraph">
-The purpose of the traceability matrices is to provide easy references on what has to be additionally modified if a certain component is changed. Every time a component is changed, the items in the column of that component that are marked with an &quot;X&quot; should be modified as well. <a href=#Table:TracMatrShowtheConnBetwRequ()GoalStat()andOtheItem>Table:TracMatrShowtheConnBetwRequ()GoalStat()andOtheItem</a> shows the dependencies of goal statements, requirements, instance models, and data constraints with each other. <a href=#Table:TracMatrShowtheConnBetwAssu()andOtheItem>Table:TracMatrShowtheConnBetwAssu()andOtheItem</a> shows the dependencies of theoretical models, general definitions, data definitions, instance models, and on the assumptions. <a href=#Table:TracMatrShowtheConnBetwItemandOtheSect>Table:TracMatrShowtheConnBetwItemandOtheSect</a> shows the dependencies of theoretical models, general definitions, data definitions, and instance models on each other.
+The purpose of the traceability matrices is to provide easy references on what has to be additionally modified if a certain component is changed. Every time a component is changed, the items in the column of that component that are marked with an &quot;X&quot; should be modified as well. <a href=#Table:TraceyReqGoalsOther>Table:TraceyReqGoalsOther</a> shows the dependencies of goal statements, requirements, instance models, and data constraints with each other. <a href=#Table:TraceyAssumpsOther>Table:TraceyAssumpsOther</a> shows the dependencies of theoretical models, general definitions, data definitions, instance models, and on the assumptions. <a href=#Table:TraceyItemsSecs>Table:TraceyItemsSecs</a> shows the dependencies of theoretical models, general definitions, data definitions, and instance models on each other.
 </p>
-<a id="Table:TracMatrShowtheConnBetwRequ()GoalStat()andOtheItem">
+<a id="Table:TraceyReqGoalsOther">
 <table class="table">
 <tr>
 <th>
@@ -2477,16 +2485,16 @@ IM2 (<a href=#T:im2>T:im2</a>)
 IM3 (<a href=#T:im3>T:im3</a>)
 </th>
 <th>
-R1 (<a href=#Sec:FuncRequ>Sec:FuncRequ</a>)
+R1 (<a href=#Sec:FRs>Sec:FRs</a>)
 </th>
 <th>
-R4 (<a href=#Sec:FuncRequ>Sec:FuncRequ</a>)
+R4 (<a href=#Sec:FRs>Sec:FRs</a>)
 </th>
 <th>
-R7 (<a href=#Sec:FuncRequ>Sec:FuncRequ</a>)
+R7 (<a href=#Sec:FRs>Sec:FRs</a>)
 </th>
 <th>
-Data Constraints (<a href=#Sec:SoluCharSpec>Sec:SoluCharSpec</a>)
+Data Constraints (<a href=#Sec:SolCharSpec>Sec:SolCharSpec</a>)
 </th>
 </tr>
 <tr>
@@ -2595,7 +2603,7 @@ X
 </tr>
 <tr>
 <td>
-R1 (<a href=#Sec:FuncRequ>Sec:FuncRequ</a>)
+R1 (<a href=#Sec:FRs>Sec:FRs</a>)
 </td>
 <td>
 
@@ -2621,7 +2629,7 @@ R1 (<a href=#Sec:FuncRequ>Sec:FuncRequ</a>)
 </tr>
 <tr>
 <td>
-R2 (<a href=#Sec:FuncRequ>Sec:FuncRequ</a>)
+R2 (<a href=#Sec:FRs>Sec:FRs</a>)
 </td>
 <td>
 X
@@ -2647,7 +2655,7 @@ X
 </tr>
 <tr>
 <td>
-R3 (<a href=#Sec:FuncRequ>Sec:FuncRequ</a>)
+R3 (<a href=#Sec:FRs>Sec:FRs</a>)
 </td>
 <td>
 
@@ -2673,7 +2681,7 @@ X
 </tr>
 <tr>
 <td>
-R4 (<a href=#Sec:FuncRequ>Sec:FuncRequ</a>)
+R4 (<a href=#Sec:FRs>Sec:FRs</a>)
 </td>
 <td>
 
@@ -2699,7 +2707,7 @@ X
 </tr>
 <tr>
 <td>
-R5 (<a href=#Sec:FuncRequ>Sec:FuncRequ</a>)
+R5 (<a href=#Sec:FRs>Sec:FRs</a>)
 </td>
 <td>
 X
@@ -2725,7 +2733,7 @@ X
 </tr>
 <tr>
 <td>
-R6 (<a href=#Sec:FuncRequ>Sec:FuncRequ</a>)
+R6 (<a href=#Sec:FRs>Sec:FRs</a>)
 </td>
 <td>
 
@@ -2751,7 +2759,7 @@ X
 </tr>
 <tr>
 <td>
-R7 (<a href=#Sec:FuncRequ>Sec:FuncRequ</a>)
+R7 (<a href=#Sec:FRs>Sec:FRs</a>)
 </td>
 <td>
 
@@ -2777,7 +2785,7 @@ X
 </tr>
 <tr>
 <td>
-R8 (<a href=#Sec:FuncRequ>Sec:FuncRequ</a>)
+R8 (<a href=#Sec:FRs>Sec:FRs</a>)
 </td>
 <td>
 
@@ -2803,10 +2811,10 @@ X
 </tr>
 </table>
 <p class="caption">
-Traceability Matrix Showing the Connections Between Requirements (<a href=#Sec:Requ>Sec:Requ</a>), Goal Statements (<a href=#Sec:ProbDesc>Sec:ProbDesc</a>) and Other Items
+Traceability Matrix Showing the Connections Between Requirements (<a href=#Sec:Requirements>Sec:Requirements</a>), Goal Statements (<a href=#Sec:ProbDesc>Sec:ProbDesc</a>) and Other Items
 </p>
 </a>
-<a id="Table:TracMatrShowtheConnBetwAssu()andOtheItem">
+<a id="Table:TraceyAssumpsOther">
 <table class="table">
 <tr>
 <th>
@@ -2966,7 +2974,7 @@ T5 (<a href=#T:t5NewtonSLR>T:t5NewtonSLR</a>)
 </tr>
 <tr>
 <td>
-GD1 (<a href=#Sec:SoluCharSpec>Sec:SoluCharSpec</a>)
+GD1 (<a href=#Sec:SolCharSpec>Sec:SolCharSpec</a>)
 </td>
 <td>
 
@@ -2992,7 +3000,7 @@ GD1 (<a href=#Sec:SoluCharSpec>Sec:SoluCharSpec</a>)
 </tr>
 <tr>
 <td>
-GD2 (<a href=#Sec:SoluCharSpec>Sec:SoluCharSpec</a>)
+GD2 (<a href=#Sec:SolCharSpec>Sec:SolCharSpec</a>)
 </td>
 <td>
 
@@ -3018,7 +3026,7 @@ GD2 (<a href=#Sec:SoluCharSpec>Sec:SoluCharSpec</a>)
 </tr>
 <tr>
 <td>
-GD3 (<a href=#Sec:SoluCharSpec>Sec:SoluCharSpec</a>)
+GD3 (<a href=#Sec:SolCharSpec>Sec:SolCharSpec</a>)
 </td>
 <td>
 
@@ -3044,7 +3052,7 @@ X
 </tr>
 <tr>
 <td>
-GD4 (<a href=#Sec:SoluCharSpec>Sec:SoluCharSpec</a>)
+GD4 (<a href=#Sec:SolCharSpec>Sec:SolCharSpec</a>)
 </td>
 <td>
 
@@ -3070,7 +3078,7 @@ GD4 (<a href=#Sec:SoluCharSpec>Sec:SoluCharSpec</a>)
 </tr>
 <tr>
 <td>
-GD5 (<a href=#Sec:SoluCharSpec>Sec:SoluCharSpec</a>)
+GD5 (<a href=#Sec:SolCharSpec>Sec:SolCharSpec</a>)
 </td>
 <td>
 
@@ -3096,7 +3104,7 @@ GD5 (<a href=#Sec:SoluCharSpec>Sec:SoluCharSpec</a>)
 </tr>
 <tr>
 <td>
-GD6 (<a href=#Sec:SoluCharSpec>Sec:SoluCharSpec</a>)
+GD6 (<a href=#Sec:SolCharSpec>Sec:SolCharSpec</a>)
 </td>
 <td>
 
@@ -3122,7 +3130,7 @@ GD6 (<a href=#Sec:SoluCharSpec>Sec:SoluCharSpec</a>)
 </tr>
 <tr>
 <td>
-GD7 (<a href=#Sec:SoluCharSpec>Sec:SoluCharSpec</a>)
+GD7 (<a href=#Sec:SolCharSpec>Sec:SolCharSpec</a>)
 </td>
 <td>
 
@@ -3434,7 +3442,7 @@ X
 </tr>
 <tr>
 <td>
-LC1 (<a href=#Sec:LikeChan>Sec:LikeChan</a>)
+LC1 (<a href=#Sec:LCs>Sec:LCs</a>)
 </td>
 <td>
 
@@ -3460,7 +3468,7 @@ LC1 (<a href=#Sec:LikeChan>Sec:LikeChan</a>)
 </tr>
 <tr>
 <td>
-LC2 (<a href=#Sec:LikeChan>Sec:LikeChan</a>)
+LC2 (<a href=#Sec:LCs>Sec:LCs</a>)
 </td>
 <td>
 
@@ -3486,7 +3494,7 @@ X
 </tr>
 <tr>
 <td>
-LC3 (<a href=#Sec:LikeChan>Sec:LikeChan</a>)
+LC3 (<a href=#Sec:LCs>Sec:LCs</a>)
 </td>
 <td>
 
@@ -3512,7 +3520,7 @@ X
 </tr>
 <tr>
 <td>
-LC4 (<a href=#Sec:LikeChan>Sec:LikeChan</a>)
+LC4 (<a href=#Sec:LCs>Sec:LCs</a>)
 </td>
 <td>
 
@@ -3541,7 +3549,7 @@ X
 Traceability Matrix Showing the Connections Between Assumptions (<a href=#Sec:ProbDesc>Sec:ProbDesc</a>) and Other Items
 </p>
 </a>
-<a id="Table:TracMatrShowtheConnBetwItemandOtheSect">
+<a id="Table:TraceyItemsSecs">
 <table class="table">
 <tr>
 <th>
@@ -3563,25 +3571,25 @@ T4 (<a href=#T:t4ChaslesThm>T:t4ChaslesThm</a>)
 T5 (<a href=#T:t5NewtonSLR>T:t5NewtonSLR</a>)
 </th>
 <th>
-GD1 (<a href=#Sec:SoluCharSpec>Sec:SoluCharSpec</a>)
+GD1 (<a href=#Sec:SolCharSpec>Sec:SolCharSpec</a>)
 </th>
 <th>
-GD2 (<a href=#Sec:SoluCharSpec>Sec:SoluCharSpec</a>)
+GD2 (<a href=#Sec:SolCharSpec>Sec:SolCharSpec</a>)
 </th>
 <th>
-GD3 (<a href=#Sec:SoluCharSpec>Sec:SoluCharSpec</a>)
+GD3 (<a href=#Sec:SolCharSpec>Sec:SolCharSpec</a>)
 </th>
 <th>
-GD4 (<a href=#Sec:SoluCharSpec>Sec:SoluCharSpec</a>)
+GD4 (<a href=#Sec:SolCharSpec>Sec:SolCharSpec</a>)
 </th>
 <th>
-GD5 (<a href=#Sec:SoluCharSpec>Sec:SoluCharSpec</a>)
+GD5 (<a href=#Sec:SolCharSpec>Sec:SolCharSpec</a>)
 </th>
 <th>
-GD6 (<a href=#Sec:SoluCharSpec>Sec:SoluCharSpec</a>)
+GD6 (<a href=#Sec:SolCharSpec>Sec:SolCharSpec</a>)
 </th>
 <th>
-GD7 (<a href=#Sec:SoluCharSpec>Sec:SoluCharSpec</a>)
+GD7 (<a href=#Sec:SolCharSpec>Sec:SolCharSpec</a>)
 </th>
 <th>
 DD1 (<a href=#DD:p.CM>DD:p.CM</a>)
@@ -3989,7 +3997,7 @@ X
 </tr>
 <tr>
 <td>
-GD1 (<a href=#Sec:SoluCharSpec>Sec:SoluCharSpec</a>)
+GD1 (<a href=#Sec:SolCharSpec>Sec:SolCharSpec</a>)
 </td>
 <td>
 X
@@ -4063,7 +4071,7 @@ X
 </tr>
 <tr>
 <td>
-GD2 (<a href=#Sec:SoluCharSpec>Sec:SoluCharSpec</a>)
+GD2 (<a href=#Sec:SolCharSpec>Sec:SolCharSpec</a>)
 </td>
 <td>
 
@@ -4137,7 +4145,7 @@ X
 </tr>
 <tr>
 <td>
-GD3 (<a href=#Sec:SoluCharSpec>Sec:SoluCharSpec</a>)
+GD3 (<a href=#Sec:SolCharSpec>Sec:SolCharSpec</a>)
 </td>
 <td>
 X
@@ -4211,7 +4219,7 @@ X
 </tr>
 <tr>
 <td>
-GD4 (<a href=#Sec:SoluCharSpec>Sec:SoluCharSpec</a>)
+GD4 (<a href=#Sec:SolCharSpec>Sec:SolCharSpec</a>)
 </td>
 <td>
 
@@ -4285,7 +4293,7 @@ GD4 (<a href=#Sec:SoluCharSpec>Sec:SoluCharSpec</a>)
 </tr>
 <tr>
 <td>
-GD5 (<a href=#Sec:SoluCharSpec>Sec:SoluCharSpec</a>)
+GD5 (<a href=#Sec:SolCharSpec>Sec:SolCharSpec</a>)
 </td>
 <td>
 
@@ -4359,7 +4367,7 @@ X
 </tr>
 <tr>
 <td>
-GD6 (<a href=#Sec:SoluCharSpec>Sec:SoluCharSpec</a>)
+GD6 (<a href=#Sec:SolCharSpec>Sec:SolCharSpec</a>)
 </td>
 <td>
 
@@ -4433,7 +4441,7 @@ GD6 (<a href=#Sec:SoluCharSpec>Sec:SoluCharSpec</a>)
 </tr>
 <tr>
 <td>
-GD7 (<a href=#Sec:SoluCharSpec>Sec:SoluCharSpec</a>)
+GD7 (<a href=#Sec:SolCharSpec>Sec:SolCharSpec</a>)
 </td>
 <td>
 
@@ -5326,7 +5334,7 @@ Traceability Matrix Showing the Connections Between Items and Other Sections
 </a>
 </div>
 </a>
-<a id="Sec:ValuofAuxiCons">
+<a id="Sec:AuxConstants">
 <div class="section">
 <h2>
 Values of Auxiliary Constants
@@ -5336,7 +5344,7 @@ There are no auxiliary constants.
 </p>
 </div>
 </a>
-<a id="Sec:Refe">
+<a id="Sec:References">
 <div class="section">
 <h2>
 References

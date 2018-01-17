@@ -21,10 +21,10 @@
 \tableofcontents
 \newpage
 \section{Reference Material}
-\label{Sec:RefeMate}
+\label{Sec:RefMat}
 This section records information for easy reference.
 \subsection{Table of Units}
-\label{Sec:TablofUnit}
+\label{Sec:ToU}
 The unit system used throughout is SI (Syst\`{e}me International d'Unit\'{e}s). In addition to the basic units, several derived units are also used. For each unit, the table lists the symbol, a description and the SI name.
 \begin{longtable*}{l l}
 \toprule
@@ -42,10 +42,10 @@ rad & angle (radian)
 s & time (second)
 \\
 \bottomrule
-\label{Table:TablofUnit}
+\label{Table:ToU}
 \end{longtable*}
 \subsection{Table of Symbols}
-\label{Sec:TablofSymb}
+\label{Sec:ToS}
 The table that follows summarizes the symbols used in this document along with their units. Throughout the document, symbols in bold will represent vectors, and scalars otherwise. The symbols are listed in alphabetical order.
 \begin{longtabu}{l X[l] l}
 \toprule
@@ -185,18 +185,22 @@ ${\omega{}_{B}}$ & Is the B Body's Angular Velocity & $\frac{\text{rad}}{\text{s
 $\omega{}$ & Angular Velocity & $\frac{\text{rad}}{\text{s}}$
 \\
 \bottomrule
-\label{Table:TablofSymb}
+\label{Table:ToS}
 \end{longtabu}
 \subsection{Abbreviations and Acronyms}
-\label{Sec:AbbrandAcro}
+\label{Sec:TAbbAcc}
 \begin{longtable*}{l l}
 \toprule
 Symbol & Description
 \\
 \midrule
+2D & Two-Dimensional
+\\
 A & Assumption
 \\
 CM & Centre of Mass
+\\
+Chipmunk2D & Chipmunk2D game physics library
 \\
 DD & Data Definition
 \\
@@ -216,46 +220,44 @@ SRS & Software Requirements Specification
 \\
 T & Theoretical Model
 \\
-2D & Two-Dimensional
-\\
 \bottomrule
-\label{Table:AbbrandAcro}
+\label{Table:TAbbAcc}
 \end{longtable*}
 \section{Introduction}
-\label{Sec:Intr}
+\label{Sec:Intro}
 Due to the rising cost of developing video games, developers are looking for ways to save time and money for their projects. Using an open source physics library that is reliable and free will cut down development costs and lead to better quality products.
 The following section provides an overview of the Software Requirements Specification (SRS) for Chipmunk2D. This section explains the purpose of this document, the scope of the system, the organization of the document, and the characteristics of the intended reader.
 \subsection{Purpose of Document}
-\label{Sec:PurpofDocu}
+\label{Sec:DocPurpose}
 This document descibes the modeling of an open source 2D rigid body physics library used for games. The theoretical models and goal statements used in Chipmunk2D are provided. This document is intended to be used as a reference to provide all necessary information to understand and verify the model.
 This document will be used as a starting point for subsequent development phases, including writing the design specification and the software verification and validation plan. The design document will show how the requirements are to be realized, including decisions on the numerical algorithms and programming environment. The verification and validation plan will show the steps that will be used to increase confidence in the software documentation and the implementation. Although the SRS fits in a series of documents that follow the so-called waterfall model, the actual development process is not constrained in any way. Even when the waterfall model is not followed, as Parnas and Clements point out, the most logical way to present the documentation is still to ``fake" a rational design process.
 \subsection{Scope of Requirements}
-\label{Sec:ScopofRequ}
+\label{Sec:ReqsScope}
 The scope of the requirements includes the physical simulation of 2D rigid bodies acted on by forces. Given the appropriate inputs, the code for Chipmunk2D is intended to simulate how these rigid bodies interact with one another.
 \subsection{Characteristics of Intended Reader}
-\label{Sec:CharofInteRead}
-Reviewers of this documentation should have a strong knowledge in rigid body dynamics. The reviewers should also have an understanding of high school calculus. The users of Chipmunk2D can have a lower level of expertise, as explained in Section~\ref{Sec:UserChar}.
+\label{Sec:ReaderChars}
+Reviewers of this documentation should have a strong knowledge in rigid body dynamics. The reviewers should also have an understanding of high school calculus. The users of Chipmunk2D can have a lower level of expertise, as explained in Section~\ref{Sec:UserChars}.
 \subsection{Organization of Document}
-\label{Sec:OrgaofDocu}
-The organization of this document follows the template for an SRS for scientific computing software proposed by {[}1{]} and {[}2{]}. The presentation follows the standard pattern of presenting goals, theories, definitions, and assumptions. For readers that would like a more bottom up approach, they can start reading the instance models in Section~\ref{Sec:SoluCharSpec} and trace back to find any additional information they require.
+\label{Sec:DocOrg}
+The organization of this document follows the template for an SRS for scientific computing software proposed by {[}1{]} and {[}2{]}. The presentation follows the standard pattern of presenting goals, theories, definitions, and assumptions. For readers that would like a more bottom up approach, they can start reading the instance models in Section~\ref{Sec:SolCharSpec} and trace back to find any additional information they require.
 The goal statements are refined to the theoretical models, and the theoretical models to the instance models.
 \section{General System Description}
-\label{Sec:GeneSystDesc}
+\label{Sec:GenSysDesc}
 This section provides general information about the system, identifies the interfaces between the system and its environment, and describes the user characteristics and the system constraints.
 \subsection{User Characteristics}
-\label{Sec:UserChar}
+\label{Sec:usercharacteristic}
 The end user of Chipmunk2D should have an understanding of first year programming concepts and an understanding of high school physics.
 \subsection{System Constraints}
-\label{Sec:SystCons}
+\label{Sec:SysConstraints}
 There are no system constraints.
 \section{Specific System Description}
 \label{Sec:SpecSystDesc}
 This section first presents the problem description, which gives a high-level view of the problem to be solved. This is followed by the solution characteristics specification, which presents the assumptions, theories, and definitions that are used for the physics library.
 \subsection{Problem Description}
 \label{Sec:ProbDesc}
-Creating a gaming physics library is a difficult task. Games need physics libraries that simulate objects acting under various physical conditions, while simultaneously being fast and efficient enough to work in soft real-time during the game. Developing a physics library from scratch takes a long period of time and is very costly, presenting barriers of entry which make it difficult for game developers to include physics in their products. There are a few free, open source and high quality physics libraries available to be used for consumer products (Section~\ref{Sec:Off-Solu}). By creating a simple, lightweight, fast and portable 2D rigid body physics library, game development will be more accessible to the masses and higher quality products will be produced.
+Creating a gaming physics library is a difficult task. Games need physics libraries that simulate objects acting under various physical conditions, while simultaneously being fast and efficient enough to work in soft real-time during the game. Developing a physics library from scratch takes a long period of time and is very costly, presenting barriers of entry which make it difficult for game developers to include physics in their products. There are a few free, open source and high quality physics libraries available to be used for consumer products (Section~\ref{Sec:ExistingSolns}). By creating a simple, lightweight, fast and portable 2D rigid body physics library, game development will be more accessible to the masses and higher quality products will be produced.
 \subsubsection{Terminology and Definitions}
-\label{Sec:TermandDefi}
+\label{Sec:TermDefs}
 This subsection provides a list of terms that are used in the subsequent sections and their meaning, with the purpose of reducing ambiguity and making it easier to correctly understand the requirements
 \begin{enumerate}
 \item{Rigid body: A solid body in which deformation is neglected.}
@@ -265,7 +267,7 @@ This subsection provides a list of terms that are used in the subsequent section
 \item{Right-handed coordinate system: A coordinate system where the positive z-axis comes out of the screen.}
 \end{enumerate}
 \subsubsection{Goal Statements}
-\label{Sec:GoalStat}
+\label{Sec:GoalStmt}
 Given the inputs, the goal statements are:
 \begin{itemize}
 \item[GS1:]Given the physical properties, initial positions and velocities, and forces applied on a set of rigid bodies, determine their new positions and velocities over a period of time.
@@ -273,11 +275,11 @@ Given the inputs, the goal statements are:
 \item[GS3:]Given the initial positions and velocities of a set of rigid bodies, determine if any of them will collide with one another over a period of time.
 \item[GS4:]Given the physical properties, initial positions, orientations, linear velocities, and angular velocities of a set of rigid bodies, determine the new positions, orientations, linear velocities, and angular velocities over a period of time of the rigid bodies that have undergone a collision.
 \end{itemize}
-\subsection{Solution Characteristics Specifications}
-\label{Sec:SoluCharSpec}
+\subsection{Solution Characteristics Specification}
+\label{Sec:SolCharSpec}
 The instance models that govern Chipmunk2D are presented in FIXME REF to IModSection. The information to understand the meaning of the instance models and their derivation is also presented, so that the instance models can be verified.
 \subsubsection{Assumptions}
-\label{Sec:Assu}
+\label{Sec:Assumps}
 This section simplifies the original problem and helps in developing the theoretical model by filling in the missing information for the physical system. The numbers given in the square brackets refer to the Theoretical Models, General Definitions, Data Definitions, Instance Models, or Likely Changes, in which the respective assumption is used.
 \begin{itemize}
 \item[A1:]All objects are rigid bodies.
@@ -289,7 +291,7 @@ This section simplifies the original problem and helps in developing the theoret
 \item[A7:]There are no constraints and joints involved throughout the simulation.
 \end{itemize}
 \subsubsection{Theoretical Models}
-\label{Sec:TheoMode}
+\label{Sec:TMs}
 This section focuses on the general equations and laws that Chipmunk2D is based on.
 ~\newline
 \noindent \begin{minipage}{\textwidth}
@@ -362,10 +364,10 @@ Description & The net torque $\tau{}$ (Nm) on a rigid body is proportional to it
 \\ \bottomrule \end{tabular}
 \end{minipage}\\
 \subsubsection{General Definitions}
-\label{Sec:GeneDefi}
+\label{Sec:GDs}
 There are no general definitions.
 \subsubsection{Instance Models}
-\label{Sec:InstMode}
+\label{Sec:IMs}
 This section transforms the problem defined in FIXME REF into one which is expressed in mathematical terms. It uses concrete symbols defined in FIXME REF to replace the abstract symbols in the models identified in FIXME REF and FIXME REF.
 ~\newline
 \noindent \begin{minipage}{\textwidth}
@@ -410,7 +412,7 @@ Description & This instance model is based on our assumptions regarding rigid bo
 \\ \bottomrule \end{tabular}
 \end{minipage}\\
 \subsubsection{Data Definitions}
-\label{Sec:DataDefi}
+\label{Sec:DDs}
 This section collects and defines all the data needed to build the instance models. The dimension of each quantity is also given.
 ~\newline
 \noindent \begin{minipage}{\textwidth}
@@ -546,7 +548,7 @@ Description & $j$ is the impulse (scalar) (Ns)\newline${C_{R}}$ is the coefficie
 \\ \bottomrule \end{tabular}
 \end{minipage}\\
 \subsubsection{Data Constraints}
-\label{Sec:DataCons}
+\label{Sec:DataConstraints}
 the data constraints on the input and output variables, respectively. The column for physical constraints gives the physical limitations on the range of values that can be taken by the variable. The constraints are conservative, to give the user of the model the flexibility to experiment with unusual situations. The column of typical values is intended to provide a feel for a common scenario. The uncertainty column provides an estimate of the confidence with which the physical quantities can be measured. This information would be part of the input if one were performing an uncertainty quantification exercise. FIXME
 \begin{longtable}{l l l l}
 \toprule
@@ -577,7 +579,7 @@ ${C_{R}}$ & ${C_{R}}\geq{}0.0$ and ${C_{R}}\leq{}1.0$ & $0.8$ & 0.1
 \\
 \bottomrule
 \caption{Input Data Constraints}
-\label{Table:InpuDataCons}
+\label{Table:InDataConstraints}
 \end{longtable}
 \begin{longtable}{l}
 \toprule
@@ -594,28 +596,28 @@ $\omega{}$
 \\
 \bottomrule
 \caption{Output Data Constraints}
-\label{Table:OutpDataCons}
+\label{Table:OutDataConstraints}
 \end{longtable}
 \section{Requirements}
-\label{Sec:Requ}
+\label{Sec:Requirements}
 This section provides the functional requirements, the business tasks that the software is expected to complete, and the non-functional requirements, the qualities that the software is expected to exhibit.
 \subsection{Functional Requirements}
-\label{Sec:FuncRequ}
+\label{Sec:FRs}
 \begin{itemize}
 \item[R1:]Create a space for all of the rigid bodies in the physical simulation to interact in.
 \item[R2:]Input the initial masses, velocities, orientations, angular velocities of, and forces applied on rigid bodies.
 \item[R3:]Input the surface properties of the bodies such as friction or elasticity.
-\item[R4:]Verify that the inputs satisfy the required physical constraints from Section~\ref{Sec:SoluCharSpec}.
+\item[R4:]Verify that the inputs satisfy the required physical constraints from Section~\ref{Sec:SolCharSpec}.
 \item[R5:]Determine the positions and velocities over a period of time of the 2D rigid bodies acted upon by a force.
 \item[R6:]Determine the orientations and angular velocities over a period of time of the 2D rigid bodies.
 \item[R7:]Determine if any of the rigid bodies in the space have collided.
 \item[R8:]Determine the positions and velocities over a period of time of the 2D rigid bodies that have undergone a collision.
 \end{itemize}
 \subsection{Non-Functional Requirements}
-\label{Sec:Non-Requ}
+\label{Sec:NFRs}
 Games are resource intensive, so performance is a high priority. Other non-functional requirements that are a priority are: correctness, understandability, portability, reliability, and maintainability.
 \section{Likely Changes}
-\label{Sec:LikeChan}
+\label{Sec:LCs}
 This section lists the likely changes to be made to the physics game library.
 \begin{itemize}
 \item[LC1:]The internal ODE-solving algorithm used by the library may be changed in the future.
@@ -624,7 +626,7 @@ This section lists the likely changes to be made to the physics game library.
 \item[LC4:]The library may be expanded to include joints and constraints.
 \end{itemize}
 \section{Off-The-Shelf Solutions}
-\label{Sec:Off-Solu}
+\label{Sec:ExistingSolns}
 As mentioned in Section~\ref{Sec:ProbDesc}, there already exist free open source game physics libraries. Similar 2D physics libraries are:
 \begin{enumerate}
 \item{Box2D: http://box2d.org/}
@@ -637,11 +639,11 @@ Free open source 3D game physics libraries include:
 \item{Newton Game Dynamics: http://newtondynamics.com/}
 \end{enumerate}
 \section{Traceability Matrices and Graphs}
-\label{Sec:TracMatrandGrap}
-The purpose of the traceability matrices is to provide easy references on what has to be additionally modified if a certain component is changed. Every time a component is changed, the items in the column of that component that are marked with an ``X" should be modified as well. Table~\ref{Table:TracMatrShowtheConnBetwRequ()GoalStat()andOtheItem} shows the dependencies of goal statements, requirements, instance models, and data constraints with each other. Table~\ref{Table:TracMatrShowtheConnBetwAssu()andOtheItem} shows the dependencies of theoretical models, general definitions, data definitions, instance models, and on the assumptions. Table~\ref{Table:TracMatrShowtheConnBetwItemandOtheSect} shows the dependencies of theoretical models, general definitions, data definitions, and instance models on each other.
+\label{Sec:TraceMatrices}
+The purpose of the traceability matrices is to provide easy references on what has to be additionally modified if a certain component is changed. Every time a component is changed, the items in the column of that component that are marked with an ``X" should be modified as well. Table~\ref{Table:TraceyReqGoalsOther} shows the dependencies of goal statements, requirements, instance models, and data constraints with each other. Table~\ref{Table:TraceyAssumpsOther} shows the dependencies of theoretical models, general definitions, data definitions, instance models, and on the assumptions. Table~\ref{Table:TraceyItemsSecs} shows the dependencies of theoretical models, general definitions, data definitions, and instance models on each other.
 \begin{longtable}{l l l l l l l l}
 \toprule
- & IM1 (\hyperref[T:im1]{Definition~T:im1}) & IM2 (\hyperref[T:im2]{Definition~T:im2}) & IM3 (\hyperref[T:im3]{Definition~T:im3}) & R1 (Section~\ref{Sec:FuncRequ}) & R4 (Section~\ref{Sec:FuncRequ}) & R7 (Section~\ref{Sec:FuncRequ}) & Data Constraints (Section~\ref{Sec:SoluCharSpec})
+ & IM1 (\hyperref[T:im1]{Definition~T:im1}) & IM2 (\hyperref[T:im2]{Definition~T:im2}) & IM3 (\hyperref[T:im3]{Definition~T:im3}) & R1 (Section~\ref{Sec:FRs}) & R4 (Section~\ref{Sec:FRs}) & R7 (Section~\ref{Sec:FRs}) & Data Constraints (Section~\ref{Sec:SolCharSpec})
 \\
 \midrule
 GS1 (Section~\ref{Sec:ProbDesc}) & X &  &  &  &  &  & 
@@ -652,25 +654,25 @@ GS3 (Section~\ref{Sec:ProbDesc}) &  &  & X &  &  &  &
 \\
 GS4 (Section~\ref{Sec:ProbDesc}) &  &  & X &  &  & X & 
 \\
-R1 (Section~\ref{Sec:FuncRequ}) &  &  &  &  &  &  & 
+R1 (Section~\ref{Sec:FRs}) &  &  &  &  &  &  & 
 \\
-R2 (Section~\ref{Sec:FuncRequ}) & X & X &  &  & X &  & 
+R2 (Section~\ref{Sec:FRs}) & X & X &  &  & X &  & 
 \\
-R3 (Section~\ref{Sec:FuncRequ}) &  &  & X &  & X &  & 
+R3 (Section~\ref{Sec:FRs}) &  &  & X &  & X &  & 
 \\
-R4 (Section~\ref{Sec:FuncRequ}) &  &  &  &  &  &  & X
+R4 (Section~\ref{Sec:FRs}) &  &  &  &  &  &  & X
 \\
-R5 (Section~\ref{Sec:FuncRequ}) & X &  &  &  &  &  & 
+R5 (Section~\ref{Sec:FRs}) & X &  &  &  &  &  & 
 \\
-R6 (Section~\ref{Sec:FuncRequ}) &  & X &  &  &  &  & 
+R6 (Section~\ref{Sec:FRs}) &  & X &  &  &  &  & 
 \\
-R7 (Section~\ref{Sec:FuncRequ}) &  &  &  & X &  &  & 
+R7 (Section~\ref{Sec:FRs}) &  &  &  & X &  &  & 
 \\
-R8 (Section~\ref{Sec:FuncRequ}) &  &  & X &  &  & X & 
+R8 (Section~\ref{Sec:FRs}) &  &  & X &  &  & X & 
 \\
 \bottomrule
-\caption{Traceability Matrix Showing the Connections Between Requirements (Section~\ref{Sec:Requ}), Goal Statements (Section~\ref{Sec:ProbDesc}) and Other Items}
-\label{Table:TracMatrShowtheConnBetwRequ()GoalStat()andOtheItem}
+\caption{Traceability Matrix Showing the Connections Between Requirements (Section~\ref{Sec:Requirements}), Goal Statements (Section~\ref{Sec:ProbDesc}) and Other Items}
+\label{Table:TraceyReqGoalsOther}
 \end{longtable}
 \begin{longtable}{l l l l l l l l}
 \toprule
@@ -687,19 +689,19 @@ T4 (\hyperref[T:t4ChaslesThm]{Definition~T:t4ChaslesThm}) & X &  &  &  &  &  &
 \\
 T5 (\hyperref[T:t5NewtonSLR]{Definition~T:t5NewtonSLR}) &  &  &  &  &  &  & 
 \\
-GD1 (Section~\ref{Sec:SoluCharSpec}) &  &  &  &  &  &  & 
+GD1 (Section~\ref{Sec:SolCharSpec}) &  &  &  &  &  &  & 
 \\
-GD2 (Section~\ref{Sec:SoluCharSpec}) &  &  &  &  &  &  & 
+GD2 (Section~\ref{Sec:SolCharSpec}) &  &  &  &  &  &  & 
 \\
-GD3 (Section~\ref{Sec:SoluCharSpec}) &  & X & X &  &  &  & 
+GD3 (Section~\ref{Sec:SolCharSpec}) &  & X & X &  &  &  & 
 \\
-GD4 (Section~\ref{Sec:SoluCharSpec}) &  &  &  &  &  &  & 
+GD4 (Section~\ref{Sec:SolCharSpec}) &  &  &  &  &  &  & 
 \\
-GD5 (Section~\ref{Sec:SoluCharSpec}) &  &  &  &  &  &  & 
+GD5 (Section~\ref{Sec:SolCharSpec}) &  &  &  &  &  &  & 
 \\
-GD6 (Section~\ref{Sec:SoluCharSpec}) &  &  &  &  &  &  & 
+GD6 (Section~\ref{Sec:SolCharSpec}) &  &  &  &  &  &  & 
 \\
-GD7 (Section~\ref{Sec:SoluCharSpec}) &  &  &  &  &  &  & 
+GD7 (Section~\ref{Sec:SolCharSpec}) &  &  &  &  &  &  & 
 \\
 DD1 (\hyperref[DD:p.CM]{Definition~DD:p.CM}) & X & X &  &  &  &  & 
 \\
@@ -723,21 +725,21 @@ IM2 (\hyperref[T:im2]{Definition~T:im2}) & X & X &  & X &  & X & X
 \\
 IM3 (\hyperref[T:im3]{Definition~T:im3}) & X & X &  &  & X & X & X
 \\
-LC1 (Section~\ref{Sec:LikeChan}) &  &  &  &  &  &  & 
+LC1 (Section~\ref{Sec:LCs}) &  &  &  &  &  &  & 
 \\
-LC2 (Section~\ref{Sec:LikeChan}) &  &  &  &  & X &  & 
+LC2 (Section~\ref{Sec:LCs}) &  &  &  &  & X &  & 
 \\
-LC3 (Section~\ref{Sec:LikeChan}) &  &  &  &  &  & X & 
+LC3 (Section~\ref{Sec:LCs}) &  &  &  &  &  & X & 
 \\
-LC4 (Section~\ref{Sec:LikeChan}) &  &  &  &  &  &  & X
+LC4 (Section~\ref{Sec:LCs}) &  &  &  &  &  &  & X
 \\
 \bottomrule
 \caption{Traceability Matrix Showing the Connections Between Assumptions (Section~\ref{Sec:ProbDesc}) and Other Items}
-\label{Table:TracMatrShowtheConnBetwAssu()andOtheItem}
+\label{Table:TraceyAssumpsOther}
 \end{longtable}
 \begin{longtable}{l l l l l l l l l l l l l l l l l l l l l l l l}
 \toprule
- & T1 (\hyperref[T:t1NewtonSL]{Definition~T:t1NewtonSL}) & T2 (\hyperref[T:t2NewtonTL]{Definition~T:t2NewtonTL}) & T3 (\hyperref[T:t3NewtonLUG]{Definition~T:t3NewtonLUG}) & T4 (\hyperref[T:t4ChaslesThm]{Definition~T:t4ChaslesThm}) & T5 (\hyperref[T:t5NewtonSLR]{Definition~T:t5NewtonSLR}) & GD1 (Section~\ref{Sec:SoluCharSpec}) & GD2 (Section~\ref{Sec:SoluCharSpec}) & GD3 (Section~\ref{Sec:SoluCharSpec}) & GD4 (Section~\ref{Sec:SoluCharSpec}) & GD5 (Section~\ref{Sec:SoluCharSpec}) & GD6 (Section~\ref{Sec:SoluCharSpec}) & GD7 (Section~\ref{Sec:SoluCharSpec}) & DD1 (\hyperref[DD:p.CM]{Definition~DD:p.CM}) & DD2 (\hyperref[DD:linearDisplacement]{Definition~DD:linearDisplacement}) & DD3 (\hyperref[DD:linearVelocity]{Definition~DD:linearVelocity}) & DD4 (\hyperref[DD:linearAcceleration]{Definition~DD:linearAcceleration}) & DD5 (\hyperref[DD:angularDisplacement]{Definition~DD:angularDisplacement}) & DD6 (\hyperref[DD:angularVelocity]{Definition~DD:angularVelocity}) & DD7 (\hyperref[DD:angularAcceleration]{Definition~DD:angularAcceleration}) & DD8 (\hyperref[DD:impulseS]{Definition~DD:impulseS}) & IM1 (\hyperref[T:im1]{Definition~T:im1}) & IM2 (\hyperref[T:im2]{Definition~T:im2}) & IM3 (\hyperref[T:im3]{Definition~T:im3})
+ & T1 (\hyperref[T:t1NewtonSL]{Definition~T:t1NewtonSL}) & T2 (\hyperref[T:t2NewtonTL]{Definition~T:t2NewtonTL}) & T3 (\hyperref[T:t3NewtonLUG]{Definition~T:t3NewtonLUG}) & T4 (\hyperref[T:t4ChaslesThm]{Definition~T:t4ChaslesThm}) & T5 (\hyperref[T:t5NewtonSLR]{Definition~T:t5NewtonSLR}) & GD1 (Section~\ref{Sec:SolCharSpec}) & GD2 (Section~\ref{Sec:SolCharSpec}) & GD3 (Section~\ref{Sec:SolCharSpec}) & GD4 (Section~\ref{Sec:SolCharSpec}) & GD5 (Section~\ref{Sec:SolCharSpec}) & GD6 (Section~\ref{Sec:SolCharSpec}) & GD7 (Section~\ref{Sec:SolCharSpec}) & DD1 (\hyperref[DD:p.CM]{Definition~DD:p.CM}) & DD2 (\hyperref[DD:linearDisplacement]{Definition~DD:linearDisplacement}) & DD3 (\hyperref[DD:linearVelocity]{Definition~DD:linearVelocity}) & DD4 (\hyperref[DD:linearAcceleration]{Definition~DD:linearAcceleration}) & DD5 (\hyperref[DD:angularDisplacement]{Definition~DD:angularDisplacement}) & DD6 (\hyperref[DD:angularVelocity]{Definition~DD:angularVelocity}) & DD7 (\hyperref[DD:angularAcceleration]{Definition~DD:angularAcceleration}) & DD8 (\hyperref[DD:impulseS]{Definition~DD:impulseS}) & IM1 (\hyperref[T:im1]{Definition~T:im1}) & IM2 (\hyperref[T:im2]{Definition~T:im2}) & IM3 (\hyperref[T:im3]{Definition~T:im3})
 \\
 \midrule
 T1 (\hyperref[T:t1NewtonSL]{Definition~T:t1NewtonSL}) &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
@@ -750,19 +752,19 @@ T4 (\hyperref[T:t4ChaslesThm]{Definition~T:t4ChaslesThm}) &  &  &  &  &  &  &  &
 \\
 T5 (\hyperref[T:t5NewtonSLR]{Definition~T:t5NewtonSLR}) &  &  &  &  &  &  &  &  &  &  & X & X &  &  &  &  &  &  &  &  &  &  & 
 \\
-GD1 (Section~\ref{Sec:SoluCharSpec}) & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+GD1 (Section~\ref{Sec:SolCharSpec}) & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-GD2 (Section~\ref{Sec:SoluCharSpec}) &  & X &  &  &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+GD2 (Section~\ref{Sec:SolCharSpec}) &  & X &  &  &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-GD3 (Section~\ref{Sec:SoluCharSpec}) & X &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+GD3 (Section~\ref{Sec:SolCharSpec}) & X &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-GD4 (Section~\ref{Sec:SoluCharSpec}) &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+GD4 (Section~\ref{Sec:SolCharSpec}) &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-GD5 (Section~\ref{Sec:SoluCharSpec}) &  &  &  &  &  &  &  &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+GD5 (Section~\ref{Sec:SolCharSpec}) &  &  &  &  &  &  &  &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-GD6 (Section~\ref{Sec:SoluCharSpec}) &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+GD6 (Section~\ref{Sec:SolCharSpec}) &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-GD7 (Section~\ref{Sec:SoluCharSpec}) &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+GD7 (Section~\ref{Sec:SolCharSpec}) &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
 DD1 (\hyperref[DD:p.CM]{Definition~DD:p.CM}) &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
@@ -788,13 +790,13 @@ IM3 (\hyperref[T:im3]{Definition~T:im3}) &  &  &  &  &  & X & X &  &  &  & X & X
 \\
 \bottomrule
 \caption{Traceability Matrix Showing the Connections Between Items and Other Sections}
-\label{Table:TracMatrShowtheConnBetwItemandOtheSect}
+\label{Table:TraceyItemsSecs}
 \end{longtable}
 \section{Values of Auxiliary Constants}
-\label{Sec:ValuofAuxiCons}
+\label{Sec:AuxConstants}
 There are no auxiliary constants.
 \section{References}
-\label{Sec:Refe}
+\label{Sec:References}
 \begin{filecontents*}{bibfile.bib}
 @article{Parnas1978,
 author={Parnas, David L.},

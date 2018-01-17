@@ -18,7 +18,7 @@ Software Requirements Specification for Slope Stability Analysis
 Henry Frankis
 </h2>
 </div>
-<a id="Sec:RefeMate">
+<a id="Sec:RefMat">
 <div class="section">
 <h2>
 Reference Material
@@ -26,7 +26,7 @@ Reference Material
 <p class="paragraph">
 This section records information for easy reference.
 </p>
-<a id="Sec:TablofUnit">
+<a id="Sec:ToU">
 <div class="subsection">
 <h3>
 Table of Units
@@ -34,7 +34,7 @@ Table of Units
 <p class="paragraph">
 The unit system used throughout is SI (Syst&egrave;me International d'Unit&eacute;s). In addition to the basic units, several derived units are also used. For each unit, the table lists the symbol, a description and the SI name.
 </p>
-<a id="Table:TablofUnit">
+<a id="Table:ToU">
 <table class="table">
 <tr>
 <th>
@@ -80,7 +80,7 @@ pressure (pascal)
 </a>
 </div>
 </a>
-<a id="Sec:TablofSymb">
+<a id="Sec:ToS">
 <div class="subsection">
 <h3>
 Table of Symbols
@@ -88,7 +88,7 @@ Table of Symbols
 <p class="paragraph">
 The table that follows summarizes the symbols used in this document along with their units. Throughout the document, values with a subscript <em>i</em> implies that the value will be taken at and analyzed at a slice or slice interface composing the total slip mass.
 </p>
-<a id="Table:TablofSymb">
+<a id="Table:ToS">
 <table class="table">
 <tr>
 <th>
@@ -1007,12 +1007,12 @@ m
 </a>
 </div>
 </a>
-<a id="Sec:AbbrandAcro">
+<a id="Sec:TAbbAcc">
 <div class="subsection">
 <h3>
 Abbreviations and Acronyms
 </h3>
-<a id="Table:AbbrandAcro">
+<a id="Table:TAbbAcc">
 <table class="table">
 <tr>
 <th>
@@ -1124,7 +1124,7 @@ Typical Uncertainty
 </a>
 </div>
 </a>
-<a id="Sec:Intr">
+<a id="Sec:Intro">
 <div class="section">
 <h2>
 Introduction
@@ -1135,7 +1135,7 @@ A slope of geological mass, composed of soil and rock, is subject to the influen
 <p class="paragraph">
 The following section provides an overview of the Software Requirements Specification (SRS) for a slope stability analysis problem. The developed program will be referred to as the Slope Stability Analysis (SSA) program. This section explains the purpose of this document, the scope of the system, the organization of the document, and the characteristics of the intended reader.
 </p>
-<a id="Sec:PurpofDocu">
+<a id="Sec:DocPurpose">
 <div class="subsection">
 <h3>
 Purpose of Document
@@ -1148,7 +1148,7 @@ This document will be used as a starting point for subsequent development phases
 </p>
 </div>
 </a>
-<a id="Sec:ScopofRequ">
+<a id="Sec:ReqsScope">
 <div class="subsection">
 <h3>
 Scope of Requirements
@@ -1158,23 +1158,23 @@ The scope of the requirements includes stability analysis of a 2 dimensional slo
 </p>
 </div>
 </a>
-<a id="Sec:CharofInteRead">
+<a id="Sec:ReaderChars">
 <div class="subsection">
 <h3>
 Characteristics of Intended Reader
 </h3>
 <p class="paragraph">
-Reviewers of this documentation should have a strong knowledge in solid mechanics. The reviewers should also have an understanding of undergraduate level 4 physics. The users of SSA can have a lower level of expertise, as explained in <a href=#Sec:UserChar>Sec:UserChar</a>.
+Reviewers of this documentation should have a strong knowledge in solid mechanics. The reviewers should also have an understanding of undergraduate level 4 physics. The users of SSA can have a lower level of expertise, as explained in <a href=#Sec:UserChars>Sec:UserChars</a>.
 </p>
 </div>
 </a>
-<a id="Sec:OrgaofDocu">
+<a id="Sec:DocOrg">
 <div class="subsection">
 <h3>
 Organization of Document
 </h3>
 <p class="paragraph">
-The organization of this document follows the template for an SRS for scientific computing software proposed by Koothoor as well as Smith and Lai. The presentation follows the standard pattern of presenting goals, theories, definitions, and assumptions. For readers that would like a more bottom up approach, they can start reading the instance models in <a href=#Sec:InstMode>Sec:InstMode</a> and trace back to find any additional information they require.
+The organization of this document follows the template for an SRS for scientific computing software proposed by Koothoor as well as Smith and Lai. The presentation follows the standard pattern of presenting goals, theories, definitions, and assumptions. For readers that would like a more bottom up approach, they can start reading the instance models in <a href=#Sec:IMs>Sec:IMs</a> and trace back to find any additional information they require.
 </p>
 <p class="paragraph">
 The goal statements are refined to the theoretical models, and the theoretical models to the instance models. The instance models provide the set of algebraic equations that must be solved iteratively to perform a Morgenstern Price Analysis.
@@ -1183,7 +1183,7 @@ The goal statements are refined to the theoretical models, and the theoretical m
 </a>
 </div>
 </a>
-<a id="Sec:GeneSystDesc">
+<a id="Sec:GenSysDesc">
 <div class="section">
 <h2>
 General System Description
@@ -1191,7 +1191,7 @@ General System Description
 <p class="paragraph">
 This section provides general information about the system, identifies the interfaces between the system and its environment, and describes the user characteristics and the system constraints.
 </p>
-<a id="Sec:UserChar">
+<a id="Sec:UserChars">
 <div class="subsection">
 <h3>
 User Characteristics
@@ -1201,7 +1201,7 @@ The end user of SSA should have an understanding of undergraduate Level 1 Calcul
 </p>
 </div>
 </a>
-<a id="Sec:SystCons">
+<a id="Sec:SysConstraints">
 <div class="subsection">
 <h3>
 System Constraints
@@ -1229,7 +1229,7 @@ Problem Description
 <p class="paragraph">
 SSA is a computer program developed to evaluate the factor of safety of a slope's slip surface and to calculate the displacement that the slope will experience.
 </p>
-<a id="Sec:TermandDefi">
+<a id="Sec:TermDefs">
 <div class="subsubsection">
 <h4>
 Terminology and Definitions
@@ -1268,13 +1268,13 @@ Plane Strain: The resultant stresses in one of the directions of a 3 dimensional
 </div>
 </div>
 </a>
-<a id="Sec:PhysSystDesc">
+<a id="Sec:PhysSyst">
 <div class="subsubsection">
 <h4>
 Physical System Description
 </h4>
 <p class="paragraph">
-Analysis of the slope is performed by looking at properties of the slope as a series of slice elements. Some properties are interslice properties, and some are slice or slice base properties. The index convention for referencing which interslice or slice is being used is shown in <a href=#Figure:Indeconvfornumbslicandinteforcvaris>Figure:Indeconvfornumbslicandinteforcvaris</a>.
+Analysis of the slope is performed by looking at properties of the slope as a series of slice elements. Some properties are interslice properties, and some are slice or slice base properties. The index convention for referencing which interslice or slice is being used is shown in <a href=#Figure:IndexConvention>Figure:IndexConvention</a>.
 </p>
 <ul class="list">
 <li>
@@ -1285,15 +1285,15 @@ Slice properties convention is noted by. <em>i</em>
 </li>
 </ul>
 <p class="paragraph">
-A free body diagram of the forces acting on the slice is displayed in <a href=#Figure:Forcactionaslic>Figure:Forcactionaslic</a>.
+A free body diagram of the forces acting on the slice is displayed in <a href=#Figure:ForceDiagram>Figure:ForceDiagram</a>.
 </p>
-<a id="Figure:Indeconvfornumbslicandinteforcvaris">
+<a id="Figure:IndexConvention">
 <img class="figure" src="IndexConvention.png" alt="Index convention for numbering slice and interslice force variables"></img>
 <p class="caption">
 Index convention for numbering slice and interslice force variables
 </p>
 </a>
-<a id="Figure:Forcactionaslic">
+<a id="Figure:ForceDiagram">
 <img class="figure" src="ForceDiagram.png" alt="Forces acting on a slice"></img>
 <p class="caption">
 Forces acting on a slice
@@ -1301,7 +1301,7 @@ Forces acting on a slice
 </a>
 </div>
 </a>
-<a id="Sec:GoalStat">
+<a id="Sec:GoalStmt">
 <div class="subsubsection">
 <h4>
 Goal Statements
@@ -1324,21 +1324,21 @@ GS3: Determine the displacement of the slope.
 </a>
 </div>
 </a>
-<a id="Sec:SoluCharSpec">
+<a id="Sec:SolCharSpec">
 <div class="subsection">
 <h3>
 Solution Characteristics Specification
 </h3>
 <p class="paragraph">
-The instance models that govern SSA are presented in <a href=#Sec:InstMode>Sec:InstMode</a>. The information to understand the meaning of the instance models and their derivation is also presented, so that the instance models can be verified.
+The instance models that govern SSA are presented in <a href=#Sec:IMs>Sec:IMs</a>. The information to understand the meaning of the instance models and their derivation is also presented, so that the instance models can be verified.
 </p>
-<a id="Sec:Assu">
+<a id="Sec:Assumps">
 <div class="subsubsection">
 <h4>
 Assumptions
 </h4>
 <p class="paragraph">
-This section simplifies the original problem and helps in developing the theoretical model by filling in the missing information for the physical system. The numbers given in the square brackets refer to the Theoretical Models [<a href=#Sec:TheoMode>Sec:TheoMode</a>], General Definitions [<a href=#Sec:GeneDefi>Sec:GeneDefi</a>], Data Definitions [<a href=#Sec:DataDefi>Sec:DataDefi</a>], Instance Models [<a href=#Sec:InstMode>Sec:InstMode</a>], or Likely Changes [<a href=#Sec:LikeChan>Sec:LikeChan</a>], in which the respective assumption is used.
+This section simplifies the original problem and helps in developing the theoretical model by filling in the missing information for the physical system. The numbers given in the square brackets refer to the Theoretical Models [<a href=#Sec:TMs>Sec:TMs</a>], General Definitions [<a href=#Sec:GDs>Sec:GDs</a>], Data Definitions [<a href=#Sec:DDs>Sec:DDs</a>], Instance Models [<a href=#Sec:IMs>Sec:IMs</a>], or Likely Changes [<a href=#Sec:LCs>Sec:LCs</a>], in which the respective assumption is used.
 </p>
 <div class="list">
 <p>
@@ -1374,7 +1374,7 @@ A10: The surface and base of a slice between interslice nodes are approximated a
 </div>
 </div>
 </a>
-<a id="Sec:TheoMode">
+<a id="Sec:TMs">
 <div class="subsubsection">
 <h4>
 Theoretical Models
@@ -1621,7 +1621,7 @@ Description Stiffness <em>K</em> is the resistance a body others to deformation 
 </a>
 </div>
 </a>
-<a id="Sec:GeneDefi">
+<a id="Sec:GDs">
 <div class="subsubsection">
 <h4>
 General Definitions
@@ -1669,7 +1669,7 @@ Description
 </th>
 <td>
 <p class="paragraph">
-For a slice of mass in the slope the force equilibrium to satisfy T2 in the direction perpendicular to the base surface of the slice. Rearranged to solve for the normal force of the surface <em>N</em>. Force equilibrium is derived from the free body diagram of <a href=#Sec:PhysSystDesc>Sec:PhysSystDesc</a> Index i refers to the values of the properties for slice/interslices following convention in <a href=#Sec:PhysSystDesc>Sec:PhysSystDesc</a>. Force variable definitions can be found in DD1 to DD9.
+For a slice of mass in the slope the force equilibrium to satisfy T2 in the direction perpendicular to the base surface of the slice. Rearranged to solve for the normal force of the surface <em>N</em>. Force equilibrium is derived from the free body diagram of <a href=#Sec:PhysSyst>Sec:PhysSyst</a> Index i refers to the values of the properties for slice/interslices following convention in <a href=#Sec:PhysSyst>Sec:PhysSyst</a>. Force variable definitions can be found in DD1 to DD9.
 </p>
 </td>
 </tr>
@@ -1715,7 +1715,7 @@ Description
 </th>
 <td>
 <p class="paragraph">
-For a slice of mass in the slope the force equilibrium to satisfy T2 in the direction parallel to the base surface of the slice. Rearranged to solve for the shear force on the base <em>S</em>. Force equilibrium is derived from the free body diagram of <a href=#Sec:PhysSystDesc>Sec:PhysSystDesc</a> Index <em>i</em> refers to the values of the properties for slice/interslices following convention in <a href=#Sec:PhysSystDesc>Sec:PhysSystDesc</a>. Force variable definitions can be found in DD1 to DD9.
+For a slice of mass in the slope the force equilibrium to satisfy T2 in the direction parallel to the base surface of the slice. Rearranged to solve for the shear force on the base <em>S</em>. Force equilibrium is derived from the free body diagram of <a href=#Sec:PhysSyst>Sec:PhysSyst</a> Index <em>i</em> refers to the values of the properties for slice/interslices following convention in <a href=#Sec:PhysSyst>Sec:PhysSyst</a>. Force variable definitions can be found in DD1 to DD9.
 </p>
 </td>
 </tr>
@@ -1955,7 +1955,7 @@ Description
 </th>
 <td>
 <p class="paragraph">
-For a slice of mass in the slope the moment equilibrium to satisfy T2 in the direction perpendicular to the base surface of the slice. Moment equilibrium is derived from the free body diagram of <a href=#Sec:PhysSystDesc>Sec:PhysSystDesc</a>. Index i refers to the values of the properties for slice/interslices following convention in <a href=#Sec:PhysSystDesc>Sec:PhysSystDesc</a>. Variable definitions can be found in DD1 to DD9.
+For a slice of mass in the slope the moment equilibrium to satisfy T2 in the direction perpendicular to the base surface of the slice. Moment equilibrium is derived from the free body diagram of <a href=#Sec:PhysSyst>Sec:PhysSyst</a>. Index i refers to the values of the properties for slice/interslices following convention in <a href=#Sec:PhysSyst>Sec:PhysSyst</a>. Variable definitions can be found in DD1 to DD9.
 </p>
 </td>
 </tr>
@@ -2047,7 +2047,7 @@ Description
 </th>
 <td>
 <p class="paragraph">
-These equations show the net sum of the forces acting on a slice for the RFEM model and the forces that create an applied load on the slice. <em>F<sub>x</sub></em> refers to the load in the direction perpendicular to the direction of the force of gravity for slice <em>i</em>, while <em>F<sub>y</sub></em> refers to the load in the direction parallel to the force of gravity for slice <em>i</em>. Forces are found in the free body diagram of <a href=#Sec:PhysSystDesc>Sec:PhysSystDesc</a>. In this model the elements are not exerting forces on each other, so the interslice forces <em>E</em> and <em>X</em> are not a part of the model. Index <em>i</em> refers to the values of the properties for slice/interslices following convention in <a href=#Sec:PhysSystDesc>Sec:PhysSystDesc</a>. Force variable definitions can be found in DD1 to DD8.
+These equations show the net sum of the forces acting on a slice for the RFEM model and the forces that create an applied load on the slice. <em>F<sub>x</sub></em> refers to the load in the direction perpendicular to the direction of the force of gravity for slice <em>i</em>, while <em>F<sub>y</sub></em> refers to the load in the direction parallel to the force of gravity for slice <em>i</em>. Forces are found in the free body diagram of <a href=#Sec:PhysSyst>Sec:PhysSyst</a>. In this model the elements are not exerting forces on each other, so the interslice forces <em>E</em> and <em>X</em> are not a part of the model. Index <em>i</em> refers to the values of the properties for slice/interslices following convention in <a href=#Sec:PhysSyst>Sec:PhysSyst</a>. Force variable definitions can be found in DD1 to DD8.
 </p>
 </td>
 </tr>
@@ -2168,7 +2168,7 @@ Vectors describing the displacement of slice <em>i</em>. <em>&delta;</em> is the
 </a>
 </div>
 </a>
-<a id="Sec:DataDefi">
+<a id="Sec:DDs">
 <div class="subsubsection">
 <h4>
 Data Definitions
@@ -3528,13 +3528,13 @@ Description
 </a>
 </div>
 </a>
-<a id="Sec:InstMode">
+<a id="Sec:IMs">
 <div class="subsubsection">
 <h4>
 Instance Models
 </h4>
 <p class="paragraph">
-This section transforms the problem defined in <a href=#Sec:ProbDesc>Sec:ProbDesc</a> into one which is expressed in mathematical terms. It uses concrete symbols defined in <a href=#Sec:DataDefi>Sec:DataDefi</a> to replace the abstract symbols in the models identified in <a href=#Sec:TheoMode>Sec:TheoMode</a> and <a href=#Sec:GeneDefi>Sec:GeneDefi</a>.
+This section transforms the problem defined in <a href=#Sec:ProbDesc>Sec:ProbDesc</a> into one which is expressed in mathematical terms. It uses concrete symbols defined in <a href=#Sec:DDs>Sec:DDs</a> to replace the abstract symbols in the models identified in <a href=#Sec:TMs>Sec:TMs</a> and <a href=#Sec:GDs>Sec:GDs</a>.
 </p>
 <p class="paragraph">
 The Morgenstern Price method is a vertical slice, limit equilibrium slope stability analysis method. Analysis is performed by breaking the assumed failure surface into a series of vertical slices of mass. Static equilibrium analysis using two force equilibrium, and one moment equation as in T2. The problem is statically indeterminate with only these 3 equations and one constitutive equation (the Mohr Coulomb shear strength of T3) so the assumption of GD5 is used. Solving for force equilibrium allows definitions of all forces in terms of the physical properties of DD1 to DD9, as done in DD10, DD11.
@@ -4300,15 +4300,15 @@ Given the necessary slope inputs, a minimization algorithm or function <em>&Upsi
 </a>
 </div>
 </a>
-<a id="Sec:DataCons">
+<a id="Sec:DataConstraints">
 <div class="subsubsection">
 <h4>
 Data Constraints
 </h4>
 <p class="paragraph">
-<a href=#Table:InpuDataCons>Table:InpuDataCons</a>, and <a href=#Table:OutpDataCons>Table:OutpDataCons</a> shows the data constraints on the input and output variables, respectively. The column for physical constraints gives the physical limitations on the range of values that can be taken by the variable. The uncertainty column provides an estimate of the confidence with which the physical quantities can be measured. This information would be part of the input if one were performing an uncertainty quantification exercise. The constraints are conservative, to give the user of the model the flexibility to experiment with unusual situations. The column of typical values is intended to provide a feel for a common scenario.
+<a href=#Table:InDataConstraints>Table:InDataConstraints</a>, and <a href=#Table:OutDataConstraints>Table:OutDataConstraints</a> shows the data constraints on the input and output variables, respectively. The column for physical constraints gives the physical limitations on the range of values that can be taken by the variable. The uncertainty column provides an estimate of the confidence with which the physical quantities can be measured. This information would be part of the input if one were performing an uncertainty quantification exercise. The constraints are conservative, to give the user of the model the flexibility to experiment with unusual situations. The column of typical values is intended to provide a feel for a common scenario.
 </p>
-<a id="Table:InpuDataCons">
+<a id="Table:InDataConstraints">
 <table class="table">
 <tr>
 <th>
@@ -4469,7 +4469,7 @@ None
 Input Data Constraints
 </p>
 </a>
-<a id="Table:OutpDataCons">
+<a id="Table:OutDataConstraints">
 <table class="table">
 <tr>
 <th>
@@ -4522,7 +4522,7 @@ Output Data Constraints
 </a>
 </div>
 </a>
-<a id="Sec:Requ">
+<a id="Sec:Requirements">
 <div class="section">
 <h2>
 Requirements
@@ -4530,14 +4530,14 @@ Requirements
 <p class="paragraph">
 This section provides the functional requirements, the business tasks that the software is expected to complete, and the non-functional requirements, the qualities that the software is expected to exhibit.
 </p>
-<a id="Sec:FuncRequ">
+<a id="Sec:FRs">
 <div class="subsection">
 <h3>
 Functional Requirements
 </h3>
 <div class="list">
 <p>
-R1: Read the input file, and store the data. Necessary input data summarized in <a href=#Table:RequInpu>Table:RequInpu</a>.
+R1: Read the input file, and store the data. Necessary input data summarized in <a href=#Table:inDataTable>Table:inDataTable</a>.
 </p>
 <p>
 R2: Generate potential critical slip surface's for the input slope.
@@ -4570,7 +4570,7 @@ R10: Calculate the factor of safety of the critical slip surface using the Morge
 R11: Display the critical slip surface and the slice element displacements graphically. Give the values of the factors of safety calculated by the Morgenstern Price method.
 </p>
 </div>
-<a id="Table:RequInpu">
+<a id="Table:inDataTable">
 <table class="table">
 <tr>
 <th>
@@ -4711,7 +4711,7 @@ Required Inputs
 </a>
 </div>
 </a>
-<a id="Sec:Non-Requ">
+<a id="Sec:NFRs">
 <div class="subsection">
 <h3>
 Non-Functional Requirements
@@ -4723,14 +4723,14 @@ SSA is intended to be an educational tool, so accuracy and performance are not p
 </a>
 </div>
 </a>
-<a id="Sec:LikeChan">
+<a id="Sec:LCs">
 <div class="section">
 <h2>
 Likely Changes
 </h2>
 </div>
 </a>
-<a id="Sec:ValuofAuxiCons">
+<a id="Sec:AuxConstants">
 <div class="section">
 <h2>
 Values of Auxiliary Constants
@@ -4740,7 +4740,7 @@ There are no auxiliary constants.
 </p>
 </div>
 </a>
-<a id="Sec:Refe">
+<a id="Sec:References">
 <div class="section">
 <h2>
 References

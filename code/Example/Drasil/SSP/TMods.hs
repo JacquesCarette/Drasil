@@ -66,8 +66,7 @@ mcShrStrgth = makeRC "mcShrStrgth" (nounPhraseSP "Mohr-Coulumb shear strength")
   mcSS_desc mcSS_rel
 
 mcSS_rel :: Relation
-mcSS_rel = (C shrStress) $= ((C normStress) :*
-  (tan (C fricAngle)) $+ (C cohesion))
+mcSS_rel = (C shrStress) $= ((C normStress) :* (tan (C fricAngle)) + (C cohesion))
 
 mcSS_desc :: Sentence
 mcSS_desc = foldlSent [S "For a", phrase soil, S "under", phrase stress,

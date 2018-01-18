@@ -18,7 +18,6 @@ type Relation = Expr
 infixr 8 :^
 infixl 7 :*
 infixl 7 :/
-infixl 6 $+
 infixl 6 :-
 infixr 4 $=
 
@@ -82,16 +81,13 @@ data Expr where
 ($<=) = ELessEq
 ($>=) = EGreaterEq
 
--- TODO: have $+ flatten nest Adds
-($+) :: Expr -> Expr -> Expr
-($+) x y = Assoc Add [x, y]
-
 type Variable = String
 
 data DerivType = Part
                | Total
   deriving Eq
 
+-- TODO: have $+ flatten nest Adds
 instance Num Expr where
   a + b = Assoc Add [a, b]
   a * b = a :* b

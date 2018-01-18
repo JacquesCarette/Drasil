@@ -159,10 +159,10 @@ nmShrR_desc = foldlSent [S "The", phrase assumption,
 --
 momExpr :: (Expr -> Expr -> Expr) -> Expr
 momExpr _e_ = (Neg (inxi intNormForce) :* (inxi sliceHght :-
-  inxi baseWthX :/ 2 :*  tan (inxi baseAngle)) $+ inxiM1 intNormForce :*
+  inxi baseWthX :/ 2 :*  tan (inxi baseAngle)) + inxiM1 intNormForce :*
   (inxiM1 sliceHght :- inxi baseWthX :/ 2 :* tan (inxi baseAngle)) :-
   inxi watrForce :* (inxi sliceHght :- inxi baseWthX :/ 2 :*
-  tan (inxi baseAngle)) $+ inxiM1 watrForce :* (inxiM1 sliceHght :-
+  tan (inxi baseAngle)) + inxiM1 watrForce :* (inxiM1 sliceHght :-
   inxi baseWthX :/ 2 :* tan (inxi baseAngle))) `_e_`
   (C earthqkLoadFctr :* inxi slcWght :* inxi midpntHght :/ 2 :-
   inxi surfHydroForce :* sin (inxi surfAngle) :* inxi midpntHght :-
@@ -174,7 +174,7 @@ momentEql = makeRC "momentEql" (nounPhraseSP "moment equilibrium")
 
 momEql_rel :: Relation
 momEql_rel = (Int 0) $= momExpr (\ x y -> x :-
-  (inxi baseWthX :/ 2 :* (inxi intShrForce $+ inxiM1 intShrForce)) $+ y)
+  (inxi baseWthX :/ 2 :* (inxi intShrForce + inxiM1 intShrForce)) + y)
 
 momEql_desc :: Sentence
 momEql_desc = foldlSent [S "For a", phrase slice, S "of", phrase mass,

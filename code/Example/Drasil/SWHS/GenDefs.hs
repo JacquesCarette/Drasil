@@ -56,7 +56,7 @@ rocTempSimp = makeRC "rocTempSimp" (nounPhraseSP $ "Simplified rate " ++
 rocTempSimp_rel :: Relation
 rocTempSimp_rel = (C QPP.mass) :* (C QT.heat_cap_spec) :*
   Deriv Total (C QT.temp) (C QP.time) $= C ht_flux_in :* C in_SA :-
-  C ht_flux_out :* C out_SA $+ C vol_ht_gen :* C QPP.vol
+  C ht_flux_out :* C out_SA + C vol_ht_gen :* C QPP.vol
 
 rocTempSimp_desc :: Sentence
 rocTempSimp_desc = foldlSent [S "The basic", phrase equation,

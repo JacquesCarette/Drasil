@@ -23,7 +23,7 @@ import Prelude hiding (id)
 -- For equation blocks that cannot be referenced
 -- HACK
 eqUnR :: Expr -> Contents
-eqUnR e = EqnBlock e EmptyS
+eqUnR e = EqnBlock e ""
 
 -- | Synonym for a list of 'Field'
 type Fields = [Field]
@@ -56,12 +56,12 @@ type VerbatimIntro = Sentence
 -- and a RelationConcept (called automatically by 'SCSSub' program)
 tmodel :: HasSymbolTable ctx => Fields -> ctx -> TheoryModel -> Contents
 tmodel fs m t = Defnt TM (foldr (mkTMField t m) [] fs)
-  (S "T:" :+: S (t ^. id)) --FIXME: Generate reference names here
+  ("T:" ++ (t ^. id)) --FIXME: Generate reference names here
 
 -- | Create a data definition using a list of fields, a database of symbols, and a 
 -- QDefinition (called automatically by 'SCSSub' program)
 ddefn :: HasSymbolTable ctx => Fields -> ctx -> QDefinition -> Contents
-ddefn fs m d = Defnt DD (foldr (mkQField d m) [] fs) (S "DD:" :+: S (d ^. id))
+ddefn fs m d = Defnt DD (foldr (mkQField d m) [] fs) ("DD:" ++ (d ^. id))
 --FIXME: Generate the reference names here
 
 -- | Create a general definition using a list of fields, database of symbols,
@@ -69,12 +69,12 @@ ddefn fs m d = Defnt DD (foldr (mkQField d m) [] fs) (S "DD:" :+: S (d ^. id))
 -- program)
 gdefn :: HasSymbolTable ctx => Fields -> ctx -> GenDefn -> Contents
 gdefn fs m g = Defnt General (foldr (mkGDField g m) [] fs)
-  (S "GD:" :+: S (g ^. id)) --FIXME: Generate reference names here
+  ("GD:" ++ (g ^. id)) --FIXME: Generate reference names here
 
 -- | Create an instance model using a list of fields, database of symbols,
 -- and an 'InstanceModel' chunk (called automatically by 'SCSSub' program)
 instanceModel :: HasSymbolTable ctx => Fields -> ctx -> InstanceModel -> Contents
-instanceModel fs m i = Defnt Instance (foldr (mkIMField i m) [] fs) (S "IM:" :+: S (i ^. id))
+instanceModel fs m i = Defnt Instance (foldr (mkIMField i m) [] fs) ("IM:" ++ (i ^. id))
 
 -- | Create a derivation from a chunk's attributes. This follows the TM, DD, GD,
 -- or IM definition automatically (called automatically by 'SCSSub' program)

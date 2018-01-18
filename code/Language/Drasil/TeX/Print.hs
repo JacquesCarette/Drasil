@@ -305,7 +305,7 @@ needs (N _)     = Math
 needs (G _)     = Math
 needs (Sp _)    = Math
 needs HARDNL    = Text
-needs (Ref _ _) = Text
+needs (Ref _ _ _) = Text
 needs (EmptyS)  = Text  
 
 -- print all Spec through here
@@ -325,14 +325,14 @@ spec (Sy s)      = p_unit s
 spec (G g)       = pure $ text $ unPL $ greek g
 spec (Sp s)      = pure $ text $ unPL $ special s
 spec HARDNL      = pure $ text $ "\\newline"
-spec (Ref t@LS.Sect r) = sref (show t) (spec r)
-spec (Ref t@LS.Def r) = hyperref (show t) (spec r)
-spec (Ref t@LS.Mod r) = mref (show t) (spec r)
-spec (Ref t@LS.Req r) = rref (show t) (spec r)
-spec (Ref t@LS.Assump r) = aref (show t) (spec r)
-spec (Ref t@LS.LC r) = lcref (show t) (spec r)
-spec (Ref t@LS.UC r) = ucref (show t) (spec r)
-spec (Ref t r)   = ref (show t) (spec r)
+spec (Ref t@LS.Sect r _) = sref (show t) (spec r)
+spec (Ref t@LS.Def r _) = hyperref (show t) (spec r)
+spec (Ref t@LS.Mod r _) = mref (show t) (spec r)
+spec (Ref t@LS.Req r _) = rref (show t) (spec r)
+spec (Ref t@LS.Assump r _) = aref (show t) (spec r)
+spec (Ref t@LS.LC r _) = lcref (show t) (spec r)
+spec (Ref t@LS.UC r _) = ucref (show t) (spec r)
+spec (Ref t r _)   = ref (show t) (spec r)
 spec EmptyS      = empty
 
 escapeChars :: Char -> String

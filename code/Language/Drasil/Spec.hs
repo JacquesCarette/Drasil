@@ -7,6 +7,7 @@ import Language.Drasil.Symbol
 import Language.Drasil.Expr
 
 type RefName = Sentence
+type RefAdd  = String
 
 -- | For writing accented characters
 data Accent = Grave | Acute deriving Eq
@@ -27,7 +28,7 @@ data Sentence where
   P     :: Symbol -> Sentence
   F     :: Accent -> Char -> Sentence  -- Special formatting for certain special
                                        -- chars
-  Ref   :: RefType -> Sentence -> Sentence  -- Needs helper func to create Ref
+  Ref   :: RefType -> RefAdd -> RefName -> Sentence  -- Needs helper func to create Ref
                                     -- See Reference.hs
   Quote :: Sentence -> Sentence     -- Adds quotation marks around a sentence
                                     
@@ -56,7 +57,8 @@ data RefType = Tab    -- ^ Table
              | Assump -- ^ Assumption
              | LC     -- ^ Likely Change
              | UC     -- ^ Unlikely Change
-
+             | EqnB   -- ^ Equation Block
+             
 instance Show RefType where
   show Tab    = "Table"
   show Fig    = "Figure"

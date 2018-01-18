@@ -152,7 +152,7 @@ spec (G g)      _ = T.G g
 spec (Sp s)     _ = T.Sp s
 spec (F f s)   sm = spec (accent f s) sm
 spec (P s)      _ = T.N s
-spec (Ref t r) sm = T.Ref t (spec r sm)
+spec (Ref t r n) sm = T.Ref t (T.S r) (spec n sm)
 spec (Quote q) sm = T.S "``" T.:+: spec q sm T.:+: T.S "\""
 spec EmptyS     _ = T.EmptyS
 spec (E e)     sm = T.E $ expr e sm
@@ -206,7 +206,7 @@ lay x@(UnlikelyChange ucc) sm =
   (spec (refName x) sm)
 lay x@(Graph ps w h t _)  sm = T.Graph (map (\(y,z) -> (spec y sm, spec z sm)) ps)
                                w h (spec t sm) (spec (refName x) sm)
-lay (Defnt dtyp pairs rn) sm = T.Defnt dtyp (layPairs pairs) (spec rn sm)
+lay (Defnt dtyp pairs rn) sm = T.Defnt dtyp (layPairs pairs) (T.S rn)
   where layPairs = map (\(x,y) -> (x, (map (\z -> lay z sm) y))) 
 lay (Bib bib)         sm = T.Bib $ map (flip layCite sm) bib
 

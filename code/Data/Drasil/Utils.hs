@@ -40,7 +40,7 @@ import Data.Drasil.Concepts.Documentation
 import Data.Drasil.Concepts.Math (unit_)
 
 eqUnR :: Expr -> Contents -- FIXME: Unreferable equations
-eqUnR e = EqnBlock e EmptyS
+eqUnR e = EqnBlock e ""
   
 -- | fold helper functions applies f to all but the last element, applies g to
 -- last element and the accumulator
@@ -152,7 +152,7 @@ mkInputDatTb :: (Quantity a) => [a] -> Contents
 mkInputDatTb inputVar = Table [titleize symbol_, titleize unit_, 
   S "Name"]
   (mkTable [getS Equational, fmtU EmptyS, phrase] inputVar) 
-  (S "Required" +:+ titleize' input_) True (S "inDataTable")
+  (S "Required" +:+ titleize' input_) True "inDataTable"
 
 -- | makes sentences from an item and its reference 
 -- a - String title of reference
@@ -216,4 +216,4 @@ mkDataDef' cncpt equation extraInfo = datadef $ getUnit cncpt
 prodUCTbl :: [[Sentence]] -> Contents
 prodUCTbl cases = Table [S "Actor", titleize input_ +:+ S "and" +:+ titleize output_]
   cases
-  (titleize useCaseTable) True (S "useCaseTable")
+  (titleize useCaseTable) True "useCaseTable"

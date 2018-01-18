@@ -15,7 +15,7 @@ import qualified Data.Map as Map
 
 -- | Create References to a given 'LayoutObj'
 makeRef :: (Referable l) => l -> Sentence
-makeRef r = Ref (rType r) (refName r)
+makeRef r = Ref (rType r) (refAdd r) (refName r)
 
 -- | Database for internal references.
 data ReferenceDB = RDB {assumpDB :: AssumpMap, reqDB :: ReqMap }
@@ -62,28 +62,33 @@ instance HasReqRefs ReferenceDB where
   reqRefTable f (RDB a b) = fmap (\x -> RDB a x) (f b)
   
 class Referable s where
-  refName :: s -> RefName -- Sentence (see Spec for details)
-  rType :: s -> RefType
+  refName :: s -> RefName -- Sentence; The text to be displayed for the link.
+  refAdd  :: s -> String  -- The reference address (what we're linking to).
+                            -- Should be string with no spaces/special chars.
+  rType   :: s -> RefType -- The reference type (referencing namespace?)
   
 instance Referable AssumpChunk where
-  refName (AC _ _ sn _) = (S "A:") :+: sn
+  refName x@(AC _ _ sn _) = sn
+  refAdd x = "A:" ++ (x ^. id)
   rType _   = Assump
   
 instance Referable ReqChunk where
-  refName (RC _ rt _ sn _) = S (show rt ++ ":") :+: sn
+  refName (RC _ _ _ sn _) = sn
+  refAdd r@(RC _ rt _ _ _) = show rt ++ ":" ++ (r ^. id)
   rType _ = Req
   
 instance Referable Section where
-  refName (Section _ _ r) = S "Sec:" :+: r
+  refName (Section t _ _) = t
+  refAdd (Section _ _ r) = "Sec:" ++ r
   rType _ = Sect
 
 instance Referable Contents where
-  refName (Table _ _ _ _ r)       = S "Table:" :+: r
-  refName (Figure _ _ _ r)        = S "Figure:" :+: r
-  refName (Graph _ _ _ _ r)       = S "Figure:" :+: r
-  refName (EqnBlock _ r)          = S "Equation:" :+: r
+  refName (Table _ _ _ _ r)       = S "Table:" :+: S r
+  refName (Figure _ _ _ r)        = S "Figure:" :+: S r
+  refName (Graph _ _ _ _ r)       = S "Figure:" :+: S r
+  refName (EqnBlock _ r)          = S "Equation:" :+: S r
   refName (Definition d)          = getDefName d
-  refName (Defnt dt _ r)          = getDefName dt +:+ r
+  refName (Defnt dt _ r)          = getDefName dt :+: S r
   refName (Requirement rc)        = refName rc
   refName (Assumption ca)         = refName ca
   refName (LikelyChange lcc)      = S $ "LC:" ++ repUnd (lcc ^. id)--refName lcc
@@ -99,11 +104,16 @@ instance Referable Contents where
   rType (Defnt _ _ _)             = Def
   rType (Requirement r)           = rType r
   rType (Assumption a)            = rType a
-  rType (LikelyChange _)         = LC --rType lc
-  rType (UnlikelyChange _)       = UC --rType uc
+  rType (LikelyChange _)          = LC --rType lc
+  rType (UnlikelyChange _)        = UC --rType uc
   rType (Graph _ _ _ _ _)         = Fig
+  rType (EqnBlock _ _)            = EqnB
   rType _                         = 
     error "Attempting to reference unimplemented reference type"
+  refAdd _ = "Placeholder"
+
+rShow :: Referable a => a -> Sentence   
+rShow = S . show . rType
 
 -- | Automatically create the label for a definition
 getDefName :: DType -> Sentence

@@ -6,7 +6,7 @@ import Language.Drasil.Chunk.Eq
 import Language.Drasil.Chunk.Relation
 import Language.Drasil.Chunk.ReqChunk
 import Language.Drasil.Chunk.Wrapper
-import Language.Drasil.Spec (Sentence(..), RefName)
+import Language.Drasil.Spec (Sentence(..), RefName, RefAdd)
 import Language.Drasil.Expr
 import Language.Drasil.Citations
 
@@ -31,29 +31,29 @@ data SecCons = Sub Section
              | Con Contents
 
 -- | Sections have a title ('Sentence') and a list of contents ('SecCons')
-data Section = Section Title [SecCons] RefName
+data Section = Section Title [SecCons] RefAdd
 
 -- | Types of layout objects we deal with explicitly
-data Contents = Table [Sentence] [[Sentence]] Title Bool RefName
+data Contents = Table [Sentence] [[Sentence]] Title Bool RefAdd
   -- ^ table has: header-row data(rows) label/caption showlabel?
                | Paragraph Sentence -- ^ Paragraphs are just sentences.
-               | EqnBlock Expr RefName
+               | EqnBlock Expr RefAdd
      --        CodeBlock Code   -- GOOL complicates this.  Removed for now.
                | Definition DType
                | Enumeration ListType -- ^ Lists
-               | Figure Label Filepath MaxWidthPercent RefName-- ^ Should use relative file path.
+               | Figure Label Filepath MaxWidthPercent RefAdd-- ^ Should use relative file path.
                | Requirement ReqChunk
                | Assumption AssumpChunk
                | LikelyChange NWrapper
                | UnlikelyChange NWrapper
                | Bib BibRef
      --        UsesHierarchy [(ModuleChunk,[ModuleChunk])]
-               | Graph [(Sentence, Sentence)] (Maybe Width) (Maybe Height) Label RefName
+               | Graph [(Sentence, Sentence)] (Maybe Width) (Maybe Height) Label RefAdd
                -- ^ TODO: Fill this one in.
                ------NEW TMOD/DDEF/IM/GD BEGINS HERE------
                ---- FIXME: The above Definition will need to be removed ----
                --------------------------------------------
-               | Defnt DType [(Identifier, [Contents])] RefName
+               | Defnt DType [(Identifier, [Contents])] RefAdd
 type Identifier = String
 
 -- | MaxWidthPercent should be kept in the range 1-100. 
@@ -89,13 +89,13 @@ data DType = Data QDefinition -- ^ QDefinition is the chunk with the defining
 
 -- | Smart constructor for creating Sections with introductory contents
 -- (ie. paragraphs, tables, etc.) and a list of subsections.
-section :: Sentence -> [Contents] -> [Section] -> RefName -> Section
+section :: Sentence -> [Contents] -> [Section] -> RefAdd -> Section
 section title intro secs = Section title (map Con intro ++ map Sub secs)
 
 -- | Figure smart constructor. Assumes 100% of page width as max width.
-fig :: Label -> Filepath -> RefName -> Contents
+fig :: Label -> Filepath -> RefAdd -> Contents
 fig l f = Figure l f 100
 
 -- | Figure smart constructor for customized max widths.
-figWithWidth :: Label -> Filepath -> MaxWidthPercent -> RefName -> Contents
+figWithWidth :: Label -> Filepath -> MaxWidthPercent -> RefAdd -> Contents
 figWithWidth = Figure

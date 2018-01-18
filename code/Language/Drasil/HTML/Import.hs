@@ -149,7 +149,7 @@ spec (G g)      _ = H.G g
 spec (Sp s)     _ = H.Sp s
 spec (P s)      _ = H.N s
 spec (F f s)    sm = spec (accent f s) sm
-spec (Ref t r) sm = H.Ref t (spec r sm)
+spec (Ref t r n) sm = H.Ref r (spec n sm)
 spec (Quote q) sm = H.S "&quot;" H.:+: spec q sm H.:+: H.S "&quot;"
 spec EmptyS     _ = H.EmptyS
 spec (E e)     sm = H.E $ expr e sm
@@ -209,7 +209,7 @@ lay x@(LikelyChange lc) sm =
   H.ALUR H.LikelyChange (spec (phrase $ lc ^. term) sm) (spec (refName x) sm) (spec (short lc) sm)
 lay x@(UnlikelyChange uc) sm = 
   H.ALUR H.UnlikelyChange (spec (phrase $ uc ^. term) sm) (spec (refName x) sm) (spec (short uc) sm)
-lay (Defnt dtyp pairs rn) sm = H.Definition dtyp (layPairs pairs) (spec rn sm)
+lay (Defnt dtyp pairs rn) sm = H.Definition dtyp (layPairs pairs) (H.S rn)
   where layPairs = map (\(x,y) -> (x, (map (\z -> lay z sm) y)))
 lay (Bib bib)           sm = H.Bib $ map (flip layCite sm) bib
 

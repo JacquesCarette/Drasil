@@ -272,7 +272,7 @@ render progName symMap item@(SectionModel niname _)
 
 genericSect :: SubSec -> Section
 genericSect (SectionModel niname xs) = section (pullTitle xs niname) 
-  (pullContents xs) (pullSections xs) (S (niname ^. id)) -- FIXME: Ref HACK because
+  (pullContents xs) (pullSections xs) ((niname ^. id)) -- FIXME: Ref HACK because
   -- generic sections need a ref name. Should be made explicit elsewhere.
 
 ------------------------------------------------

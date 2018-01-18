@@ -129,7 +129,7 @@ tableShows ref trailing = (makeRef ref) +:+ S "shows the" +:+
 
 -- | Function that creates (a label for) a figure
 --FIXME: Is `figureLabel` defined in the correct file?
-figureLabel :: NamedIdea c => Int -> c -> Sentence -> [Char]-> Sentence ->Contents
+figureLabel :: NamedIdea c => Int -> c -> Sentence -> [Char]-> String ->Contents
 figureLabel num traceyMG contents filePath rn = Figure (titleize figure +: 
   (S (show num)) +:+ (showingCxnBw (traceyMG) (contents))) filePath 100 rn
 

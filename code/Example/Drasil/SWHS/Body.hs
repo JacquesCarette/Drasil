@@ -504,7 +504,7 @@ s5_1_1_Table = (Table [titleize symbol_, titleize unit_, titleize description]
   unit'2Contents,
   phrase] (map qs inputConstraints))
   (titleize input_ +:+ titleize variable +:+ titleize requirement) False)
-  (S "InConstraints")
+  "InConstraints"
 
 s5_1_Reqs :: [Contents]
 s5_1_Reqs = [req3, req4, req5, req6, req7, req8, req9, req10, req11]
@@ -648,7 +648,7 @@ s7_table2 :: Contents
 s7_table2 = Table (EmptyS:s7_row_header_t2)
   (makeTMatrix (s7_col_header_t2) (s7_columns_t2) (s7_row_t2))
   (showingCxnBw traceyMatrix
-  (titleize' requirement `sAnd` titleize' inModel)) True (S "Tracey1")
+  (titleize' requirement `sAnd` titleize' inModel)) True "Tracey1"
 
 {-Traceability Matrix 3-}
 
@@ -869,7 +869,7 @@ s3_1_contents pro = foldlSP [makeRef sys_context_fig, S "shows the" +:+.
 sys_context_fig :: Contents
 sys_context_fig = fig (foldlSent_
   [makeRef sys_context_fig +: EmptyS, titleize sysCont])
-  "SystemContextFigure.png" (S "SysCon")
+  "SystemContextFigure.png" "SysCon"
 
 s3_1_2_intro :: CI -> NamedChunk -> Contents
 s3_1_2_intro pro us = foldlSPCol [short pro +:+. S "is mostly self-contained",
@@ -974,7 +974,7 @@ fig_tank :: Contents
 fig_tank = fig (
   foldlSent_ [at_start sWHT `sC` S "with", phrase ht_flux_C, S "of",
   getES ht_flux_C `sAnd` phrase ht_flux_P, S "of", getES ht_flux_P])
-  "Tank.png" (S "Tank")
+  "Tank.png" "Tank"
 
 -----------------------------
 -- 4.1.3 : Goal Statements --
@@ -1434,13 +1434,13 @@ s7_table1 :: Contents
 s7_table1 = Table (EmptyS:s7_row_header_t1)
   (makeTMatrix (s7_row_header_t1) (s7_columns_t1) (s7_row_t1))
   (showingCxnBw traceyMatrix
-  (titleize' item +:+ S "of Different" +:+ titleize' section_)) True (S "Tracey2")
+  (titleize' item +:+ S "of Different" +:+ titleize' section_)) True "Tracey2"
 
 s7_table3 :: Contents
 s7_table3 = Table (EmptyS:s7_row_header_t3)
   (makeTMatrix s7_col_header_t3 s7_columns_t3 s7_row_t3)
   (showingCxnBw traceyMatrix (titleize' assumption `sAnd` S "Other" +:+
-  titleize' item)) True (S "Tracey3")
+  titleize' item)) True "Tracey3"
 
 -- These matrices can probably be generated automatically when enough info is
 -- abstracted out.
@@ -1458,11 +1458,11 @@ s7_intro2 = traceGIntro [s7_fig1, s7_fig2]
 
 s7_fig1 :: Contents
 s7_fig1 = fig (showingCxnBw traceyGraph (titleize' item +:+
-  S "of Different" +:+ titleize' section_)) "ATrace.png" (S "TraceyA")
+  S "of Different" +:+ titleize' section_)) "ATrace.png" "TraceyA"
 
 s7_fig2 :: Contents
 s7_fig2 = fig (showingCxnBw traceyGraph (foldlList $ map titleize' 
-  renameList2)) "RTrace.png" (S "TraceyR")
+  renameList2)) "RTrace.png" "TraceyR"
 
 -------------------------------------------------
 -- Section 8 :  Specification Parameter Values --

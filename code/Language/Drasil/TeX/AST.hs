@@ -85,7 +85,7 @@ data Spec = E Expr
           | N Symbol
           | G Greek
           | Sp Special
-          | Ref RefType Spec
+          | Ref RefType Spec Spec
           | EmptyS
           | HARDNL        -- newline. Temp fix for multi-line descriptions; 
                           -- May move to a new LayoutObj, but only exists in TeX

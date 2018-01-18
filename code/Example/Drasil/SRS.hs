@@ -34,57 +34,57 @@ intro, prpsOfDoc, scpOfReq, charOfIR, orgOfDoc, stakeholder, theCustomer, theCli
   genDefn, inModel, dataDefn, datCon, propCorSol, require, nonfuncReq, funcReq, likeChg, traceyMandG, tOfSymb,
   appendix, reference, offShelfSol, valsOfAuxCons :: [Contents] -> [Section] -> Section
 
-intro       cs ss = section (titleize Doc.introduction) cs ss (S "Intro")
-prpsOfDoc   cs ss = section (titleize Doc.prpsOfDoc) cs ss (S "DocPurpose")
-scpOfReq    cs ss = section (titleize Doc.scpOfReq)  cs ss (S "ReqsScope")
-charOfIR    cs ss = section (titleize' Doc.charOfIR) cs ss (S "ReaderChars")
-orgOfDoc    cs ss = section (titleize Doc.orgOfDoc)  cs ss (S "DocOrg")
+intro       cs ss = section (titleize Doc.introduction) cs ss "Intro"
+prpsOfDoc   cs ss = section (titleize Doc.prpsOfDoc) cs ss "DocPurpose"
+scpOfReq    cs ss = section (titleize Doc.scpOfReq)  cs ss "ReqsScope"
+charOfIR    cs ss = section (titleize' Doc.charOfIR) cs ss "ReaderChars"
+orgOfDoc    cs ss = section (titleize Doc.orgOfDoc)  cs ss "DocOrg"
 
-stakeholder cs ss = section (titleize' Doc.stakeholder) cs ss (S "Stakeholder")
-theCustomer cs ss = section (titleize $ the Doc.customer) cs ss (S "Customer")
-theClient   cs ss = section (titleize $ the Doc.client) cs ss (S "Client")
+stakeholder cs ss = section (titleize' Doc.stakeholder) cs ss "Stakeholder"
+theCustomer cs ss = section (titleize $ the Doc.customer) cs ss "Customer"
+theClient   cs ss = section (titleize $ the Doc.client) cs ss "Client"
 
-genSysDes   cs ss = section (titleize Doc.generalSystemDescription) cs ss (S "GenSysDesc")
-sysCont     cs ss = section (titleize Doc.sysCont)              cs ss  (S "SysContext")
-userChar    cs ss = section (titleize' Doc.userCharacteristic)  cs ss  (S "UserChars")
-sysCon      cs ss = section (titleize' Doc.systemConstraint)    cs ss  (S "SysConstraints")
+genSysDes   cs ss = section (titleize Doc.generalSystemDescription) cs ss "GenSysDesc"
+sysCont     cs ss = section (titleize Doc.sysCont)              cs ss  "SysContext"
+userChar    cs ss = section (titleize' Doc.userCharacteristic)  cs ss  "UserChars"
+sysCon      cs ss = section (titleize' Doc.systemConstraint)    cs ss  "SysConstraints"
 
-scpOfTheProj cs ss = section (at_start (Doc.scpOfTheProj titleize)) cs ss (S "ProjScope")
-prodUCTable cs ss = section (titleize Doc.prodUCTable)      cs ss      (S "UseCaseTable")
-indPRCase   cs ss = section (titleize' Doc.indPRCase)       cs ss      (S "IndividualProdUC")
+scpOfTheProj cs ss = section (at_start (Doc.scpOfTheProj titleize)) cs ss "ProjScope"
+prodUCTable cs ss = section (titleize Doc.prodUCTable)      cs ss      "UseCaseTable"
+indPRCase   cs ss = section (titleize' Doc.indPRCase)       cs ss      "IndividualProdUC"
 
-specSysDes  cs ss = section (titleize Doc.specificsystemdescription) cs ss (S "SpecSystDesc")
-probDesc    cs ss = section (titleize Doc.problemDescription) cs ss (S "ProbDesc")
-termAndDefn cs ss = section (titleize' Doc.termAndDef)        cs ss (S "TermDefs")
-termogy     cs ss = section (titleize Doc.terminology)        cs ss (S "Terminology")
-physSyst    cs ss = section (titleize Doc.physSyst)           cs ss (S "PhysSyst")
-goalStmt    cs ss = section (titleize' Doc.goalStmt)          cs ss (S "GoalStmt")
-solCharSpec cs ss = section (titleize Doc.solutionCharSpec)   cs ss (S "SolCharSpec")
-assump      cs ss = section (titleize' Doc.assumption)        cs ss (S "Assumps")
-thModel     cs ss = section (titleize' Doc.thModel)           cs ss (S "TMs")
-genDefn     cs ss = section (titleize' Doc.genDefn)           cs ss (S "GDs")
-inModel     cs ss = section (titleize' Doc.inModel)           cs ss (S "IMs")
-dataDefn    cs ss = section (titleize' Doc.dataDefn)          cs ss (S "DDs")
-datCon      cs ss = section (titleize' Doc.datumConstraint)   cs ss (S "DataConstraints")
+specSysDes  cs ss = section (titleize Doc.specificsystemdescription) cs ss "SpecSystDesc"
+probDesc    cs ss = section (titleize Doc.problemDescription) cs ss "ProbDesc"
+termAndDefn cs ss = section (titleize' Doc.termAndDef)        cs ss "TermDefs"
+termogy     cs ss = section (titleize Doc.terminology)        cs ss "Terminology"
+physSyst    cs ss = section (titleize Doc.physSyst)           cs ss "PhysSyst"
+goalStmt    cs ss = section (titleize' Doc.goalStmt)          cs ss "GoalStmt"
+solCharSpec cs ss = section (titleize Doc.solutionCharSpec)   cs ss "SolCharSpec"
+assump      cs ss = section (titleize' Doc.assumption)        cs ss "Assumps"
+thModel     cs ss = section (titleize' Doc.thModel)           cs ss "TMs"
+genDefn     cs ss = section (titleize' Doc.genDefn)           cs ss "GDs"
+inModel     cs ss = section (titleize' Doc.inModel)           cs ss "IMs"
+dataDefn    cs ss = section (titleize' Doc.dataDefn)          cs ss "DDs"
+datCon      cs ss = section (titleize' Doc.datumConstraint)   cs ss "DataConstraints"
 
-propCorSol  cs ss = section (titleize' Doc.propOfCorSol)      cs ss (S "CorSolProps")
+propCorSol  cs ss = section (titleize' Doc.propOfCorSol)      cs ss "CorSolProps"
 
-require     cs ss = section (titleize' Doc.requirement) cs ss (S "Requirements")
-nonfuncReq  cs ss = section (titleize' Doc.nonfunctionalRequirement) cs ss (S "NFRs")
-funcReq     cs ss = section (titleize' Doc.functionalRequirement) cs ss   (S "FRs")
+require     cs ss = section (titleize' Doc.requirement)      cs ss "Requirements"
+nonfuncReq  cs ss = section (titleize' Doc.nonfunctionalRequirement) cs ss "NFRs"
+funcReq     cs ss = section (titleize' Doc.functionalRequirement) cs ss "FRs"
 
-likeChg     cs ss = section (titleize' Doc.likelyChg)  cs ss      (S "LCs")
+likeChg     cs ss = section (titleize' Doc.likelyChg)        cs ss "LCs"
 
-traceyMandG cs ss = section (titleize' Doc.traceyMandG)   cs ss   (S "TraceMatrices")
+traceyMandG cs ss = section (titleize' Doc.traceyMandG)      cs ss "TraceMatrices"
 
-valsOfAuxCons cs ss = section (titleize Doc.consVals)   cs ss     (S "AuxConstants")
+valsOfAuxCons cs ss = section (titleize Doc.consVals)        cs ss "AuxConstants"
 
-appendix    cs ss = section (titleize Doc.appendix)    cs ss      (S "Appendix")
+appendix    cs ss = section (titleize Doc.appendix)          cs ss "Appendix"
 
-reference   cs ss = section (titleize' Doc.reference)    cs ss    (S "References")
-offShelfSol cs ss = section (titleize' Doc.offShelfSolution) cs ss (S "ExistingSolns")
+reference   cs ss = section (titleize' Doc.reference)        cs ss "References"
+offShelfSol cs ss = section (titleize' Doc.offShelfSolution) cs ss "ExistingSolns"
 
-tOfSymb cs ss = section (titleize Doc.tOfSymb) cs ss (S "ToS")
+tOfSymb cs ss = section (titleize Doc.tOfSymb) cs ss "ToS"
 
 --
 missingP :: [Contents]

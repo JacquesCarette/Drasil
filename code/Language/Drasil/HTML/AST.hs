@@ -3,7 +3,7 @@ module Language.Drasil.HTML.AST where
 
 import Language.Drasil.Expr (Variable)
 import Language.Drasil.Symbol (Symbol)
-import Language.Drasil.Spec (USymb, RefType)
+import Language.Drasil.Spec (USymb, RefAdd)
 import Language.Drasil.Unicode (Greek, Special)
 import Language.Drasil.Document (DType (..), MaxWidthPercent)
 import Language.Drasil.Citations (Month(..))
@@ -78,7 +78,7 @@ data Spec where
   G :: Greek -> Spec 
   Sp :: Special -> Spec
   HARDNL :: Spec
-  Ref :: RefType -> Spec -> Spec
+  Ref :: RefAdd -> Spec -> Spec
   EmptyS :: Spec
 
 -- | Internal HTML version of Document

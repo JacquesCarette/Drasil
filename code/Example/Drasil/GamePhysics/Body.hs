@@ -676,7 +676,7 @@ s8_table1 = Table (EmptyS:(s8_row_header_t1))
   (makeTMatrix s8_col_header_t1 s8_columns_t1 s8_row_t1)
   (showingCxnBw (traceyMatrix) (titleize' requirement +:+ sParen (makeRef s5)
   `sC` (titleize' goalStmt) +:+ sParen (makeRef s4_1) `sAnd` S "Other" +:+
-  titleize' item)) True (S "TraceyReqGoalsOther")
+  titleize' item)) True "TraceyReqGoalsOther"
 
 s8_columns_t2 :: [[String]]
 s8_columns_t2 = [t1_t2, t2_t2, t3_t2, t4_t2, t5_t2, gD1_t2, gD2_t2, gD3_t2,
@@ -731,7 +731,7 @@ s8_table2 :: Contents
 s8_table2 = Table (EmptyS:s8_row_header_t2)
   (makeTMatrix s8_col_header_t2 s8_columns_t2 s8_row_t2) 
   (showingCxnBw (traceyMatrix) (titleize' assumption +:+ sParen (makeRef s4_1) 
-  `sAnd` S "Other" +:+ titleize' item)) True (S "TraceyAssumpsOther")
+  `sAnd` S "Other" +:+ titleize' item)) True "TraceyAssumpsOther"
 
 
 s8_columns_t3 :: [[String]]
@@ -781,7 +781,7 @@ s8_table3 :: Contents
 s8_table3 = Table (EmptyS:s8_row_header_t3)
   (makeTMatrix s8_col_header_t3 s8_columns_t3 s8_row_t3)
   (showingCxnBw (traceyMatrix) (titleize' item `sAnd` 
-  S "Other" +:+ titleize' section_)) True (S "TraceyItemsSecs")
+  S "Other" +:+ titleize' section_)) True "TraceyItemsSecs"
 
 -----------------------------------
 -- VALUES OF AUXILIARY CONSTANTS --

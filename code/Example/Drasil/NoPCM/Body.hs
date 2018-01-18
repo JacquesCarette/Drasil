@@ -354,7 +354,7 @@ s4_1_2 = physSystDesc (getAcc progName) fig_tank
 fig_tank :: Contents
 fig_tank = fig (at_start sWHT `sC` S "with" +:+ phrase ht_flux +:+
   S "from" +:+ phrase coil `sOf` getES ht_flux_C)
-  "TankWaterOnly.png" (S "Tank")
+  "TankWaterOnly.png" "Tank"
 
 s4_1_2_list :: Contents
 s4_1_2_list = enumSimple 1 (short physSyst) $ map foldlSent_
@@ -668,8 +668,7 @@ s5_1_list_items = [
   (mkTable [getES,
   unit'2Contents,
   phrase] inputVar)
-  (titleize input_ +:+ titleize variable +:+ titleize requirement) False
-  (S "fr1list"),
+  (titleize input_ +:+ titleize variable +:+ titleize requirement) False "fr1list",
 
   eqUnR ((C w_mass) $= (C w_vol) * (C w_density) $=
   (((C diam) / 2) * (C tank_length) * (C w_density)))
@@ -877,7 +876,7 @@ s7_table1 :: Contents
 s7_table1 = Table (EmptyS:s7_row_header_t1)
   (makeTMatrix (s7_row_header_t1) (s7_columns_t1) (s7_row_t1))
   (showingCxnBw traceyMatrix
-  (titleize' requirement `sAnd` titleize' inModel)) True (S "TraceyRI")
+  (titleize' requirement `sAnd` titleize' inModel)) True "TraceyRI"
 
 {-Traceability Matrix 2-}
 
@@ -915,7 +914,7 @@ s7_table2 :: Contents
 s7_table2 = Table (EmptyS:s7_row_header_t2)
   (makeTMatrix (s7_col_header_t2) (s7_columns_t2) (s7_row_t2))
   (showingCxnBw traceyMatrix
-  (titleize' requirement `sAnd` titleize' inModel)) True (S "TraceyRIs")
+  (titleize' requirement `sAnd` titleize' inModel)) True "TraceyRIs"
 
 {-Traceability Matrix 3-}
 
@@ -952,7 +951,7 @@ s7_table3 :: Contents
 s7_table3 = Table (EmptyS:s7_row_header_t3)
   (makeTMatrix s7_col_header_t3 s7_columns_t3 s7_row_t3)
   (showingCxnBw traceyMatrix (titleize' assumption `sAnd` S "Other" +:+
-  titleize' item)) True (S "TraceyAI")
+  titleize' item)) True "TraceyAI"
 
 -- These matrices can probably be generated automatically when enough info is
 -- abstracted out.
@@ -974,12 +973,12 @@ s7_intro2 = traceGIntro [s7_fig1, s7_fig2]
 
 s7_fig1 :: Contents
 s7_fig1 = fig (showingCxnBw traceyGraph (titleize' item +:+
-  S "of Different" +:+ titleize' section_)) "ATrace.png" (S "TraceA")
+  S "of Different" +:+ titleize' section_)) "ATrace.png" "TraceA"
 
 s7_fig2 :: Contents
 s7_fig2 = fig (showingCxnBw traceyGraph (titleize' requirement `sC`
   titleize' inModel `sC` S "and" +:+ titleize' datumConstraint)) "RTrace.png" 
-  (S "TraceR")
+  "TraceR"
 
   -- Using the SWHS graphs as place holders until ones can be generated for NoPCM 
 

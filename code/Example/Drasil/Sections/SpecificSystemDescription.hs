@@ -239,7 +239,7 @@ inDataConstTbl qlst = Table ([S "Var"] ++
   [S "Typical" +:+ titleize value] ++
   (addTitle (short typUnc) $ typUncr (head qlst) qlst))
   (map (\x -> fmtInputConstr x qlst) qlst)
-  (S "Input Data Constraints") True (S "InDataConstraints")
+  (S "Input Data Constraints") True "InDataConstraints"
 
 -- Creates the output Data Constraints Table
 outDataConstTbl :: (Quantity c, Constrained c) => [c] -> Contents
@@ -247,7 +247,7 @@ outDataConstTbl qlst = Table ([S "Var"] ++
   (addTitle (titleize' physicalConstraint) $ physC (head qlst) qlst) ++
   (addTitle (titleize' softwareConstraint) $ sfwrC (head qlst) qlst))
   (map (\x -> fmtOutputConstr x qlst) qlst)
-  (S "Output Data Constraints") True (S "OutDataConstraints")
+  (S "Output Data Constraints") True "OutDataConstraints"
 
 ------------------------------------------------------------
 -- Not exported

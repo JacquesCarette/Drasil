@@ -260,46 +260,46 @@ The instance models that govern SWHS are presented in Section~\ref{Sec:IMs}. The
 \label{Sec:Assumps}
 This section simplifies the original problem and helps in developing the theoretical model by filling in the missing information for the physical system. The numbers given in the square brackets refer to the Theoretical Models {[}Section~\ref{Sec:TMs}{]}, General Definitions {[}Section~\ref{Sec:GDs}{]}, Data Definitions {[}Section~\ref{Sec:DDs}{]}, Instance Models {[}Section~\ref{Sec:IMs}{]}, or Likely Changes {[}Section~\ref{Sec:LCs}{]}, in which the respective assumption is used.
 \begin{description}
-\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:A1}:]The only form of energy that is relevant for this problem is thermal energy. All other forms of energy, such as mechanical energy, are assumed to be negligible {[}\hyperref[T:t1ConsThermE]{Definition~T:t1ConsThermE}{]}.
+\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:assump1}:]The only form of energy that is relevant for this problem is thermal energy. All other forms of energy, such as mechanical energy, are assumed to be negligible {[}\hyperref[T:t1ConsThermE]{Definition~T:t1ConsThermE}{]}.
 \end{description}
 \begin{description}
-\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:A2}:]All heat transfer coefficients are constant over time {[}GD1{]}.
+\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:assump2}:]All heat transfer coefficients are constant over time {[}GD1{]}.
 \end{description}
 \begin{description}
-\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:A3}:]The water in the tank is fully mixed, so the temperature of the water is the same throughout the entire tank {[}GD2{]}.
+\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:assump3}:]The water in the tank is fully mixed, so the temperature of the water is the same throughout the entire tank {[}GD2{]}.
 \end{description}
 \begin{description}
-\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:A4}:]The density of water has no spatial variation; that is, it is constant over their entire volume {[}GD2, LC\ref{LC:likeChg2}{]}.
+\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:assump4}:]The density of water has no spatial variation; that is, it is constant over their entire volume {[}GD2, LC\ref{LC:likeChg2}{]}.
 \end{description}
 \begin{description}
-\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:A5}:]The specific heat capacity of water has no spatial variation; that is, it is constant over its entire volume {[}GD2{]}.
+\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:assump5}:]The specific heat capacity of water has no spatial variation; that is, it is constant over its entire volume {[}GD2{]}.
 \end{description}
 \begin{description}
-\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:A6}:]Newton's law of convective cooling applies between the heating coil and the water {[}\hyperref[DD:ht.flux.C]{Definition~DD:ht.flux.C}{]}.
+\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:assump7}:]Newton's law of convective cooling applies between the heating coil and the water {[}\hyperref[DD:ht.flux.C]{Definition~DD:ht.flux.C}{]}.
 \end{description}
 \begin{description}
-\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:A7}:]The temperature of the heating coil is constant over time {[}\hyperref[DD:ht.flux.C]{Definition~DD:ht.flux.C}{]}.
+\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:assump8}:]The temperature of the heating coil is constant over time {[}\hyperref[DD:ht.flux.C]{Definition~DD:ht.flux.C}{]}.
 \end{description}
 \begin{description}
-\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:A8}:]The temperature of the heating coil does not vary along its length {[}\hyperref[DD:ht.flux.C]{Definition~DD:ht.flux.C}{]}.
+\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:assump9}:]The temperature of the heating coil does not vary along its length {[}\hyperref[DD:ht.flux.C]{Definition~DD:ht.flux.C}{]}.
 \end{description}
 \begin{description}
-\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:A9}:]The model only accounts for charging of the tank, not discharging. The temperature of the water can only increase, or remain constant; it cannot decrease. This implies that the initial temperature is less than (or equal to) the temperature of the heating coil {[}IM1, LC\ref{LC:likeChg3}{]}.
+\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:assump9\_npnc}:]The model only accounts for charging of the tank, not discharging. The temperature of the water can only increase, or remain constant; it cannot decrease. This implies that the initial temperature is less than (or equal to) the temperature of the heating coil {[}IM1, LC\ref{LC:likeChg3}{]}.
 \end{description}
 \begin{description}
-\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:A10}:]The operating temperature range of the system is such that the water is always in liquid state. That is, the temperature will not drop below the melting point temperature of water, or rise above its boiling point temperature {[}IM1, IM3{]}.
+\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:assump14}:]The operating temperature range of the system is such that the water is always in liquid state. That is, the temperature will not drop below the melting point temperature of water, or rise above its boiling point temperature {[}IM1, IM3{]}.
 \end{description}
 \begin{description}
-\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:A11}:]The tank is perfectly insulated so that there is no heat loss from the tank {[}IM1{]}.
+\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:assump15}:]The tank is perfectly insulated so that there is no heat loss from the tank {[}IM1{]}.
 \end{description}
 \begin{description}
-\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:A12}:]No internal heat is generated by the water; therefore, the volumetric heat generation per unit volume is zero {[}IM1{]}.
+\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:assump12}:]No internal heat is generated by the water; therefore, the volumetric heat generation per unit volume is zero {[}IM1{]}.
 \end{description}
 \begin{description}
-\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:A13}:]The pressure in the tank is atmospheric, so the melting point temperature and boiling point temperature are 0${}^{\circ}$C and 100${}^{\circ}$C, respectively {[}IM1, IM2{]}.
+\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:assump13}:]The pressure in the tank is atmospheric, so the melting point temperature and boiling point temperature are 0${}^{\circ}$C and 100${}^{\circ}$C, respectively {[}IM1, IM2{]}.
 \end{description}
 \begin{description}
-\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:A14}:]When considering the volume of water in the tank, the volume of the heating coil is assumed to be negligible.
+\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:assump20}:]When considering the volume of water in the tank, the volume of the heating coil is assumed to be negligible.
 \end{description}
 \subsubsection{Theoretical Models}
 \label{Sec:TMs}
@@ -362,7 +362,7 @@ We consider an arbitrary volume. The volumetric heat generation per unit volume 
 \begin{dmath}
 {q_{in}} {A_{in}}-{q_{out}} {A_{out}}+g V=\int_{V}{\rho{} C \frac{\partial{} T}{\partial{} t}dV}
 \end{dmath}
-Where ${q_{in}}$, ${q_{out}}$, ${A_{in}}$, and ${A_{out}}$ are explained in GD2. Assuming $\rho{}$, $C$ and $T$ are constant over the volume, which is true in our case by Assumptions (A\ref{A:A3}), (A\ref{A:A4}), and (A\ref{A:A5}), we have:
+Where ${q_{in}}$, ${q_{out}}$, ${A_{in}}$, and ${A_{out}}$ are explained in GD2. Assuming $\rho{}$, $C$ and $T$ are constant over the volume, which is true in our case by Assumptions (A\ref{A:assump3}), (A\ref{A:assump4}), and (A\ref{A:assump5}), we have:
 \begin{dmath}
 \rho{} C V \frac{d T}{d t}={q_{in}} {A_{in}}-{q_{out}} {A_{out}}+g V
 \end{dmath}
@@ -407,7 +407,7 @@ Description & ${T_{W}}$ is the temperature of the water (${}^{\circ}$C). ${T_{C}
 \\ \bottomrule \end{tabular}
 \end{minipage}\\
 Derivation of the energy balance on water:
-To find the rate of change of ${T_{W}}$, we look at the energy balance on water. The volume being considered is the volume of water ${V_{W}}$, which has mass ${m_{W}}$ and specific heat capacity of water, ${C_{W}}$. Heat transfer occurs in the water from the coil as ${q_{C}}$, over area ${A_{C}}$. No heat transfer occurs to the outside of the tank, since it has been assumed to be perfectly insulated (A\ref{A:A11}). Assuming no volumetric heat generation per unit volume (A\ref{A:A12}), $g=0$. Therefore, the equation for GD2 can be written as:
+To find the rate of change of ${T_{W}}$, we look at the energy balance on water. The volume being considered is the volume of water ${V_{W}}$, which has mass ${m_{W}}$ and specific heat capacity of water, ${C_{W}}$. Heat transfer occurs in the water from the coil as ${q_{C}}$, over area ${A_{C}}$. No heat transfer occurs to the outside of the tank, since it has been assumed to be perfectly insulated (A\ref{A:assump15}). Assuming no volumetric heat generation per unit volume (A\ref{A:assump12}), $g=0$. Therefore, the equation for GD2 can be written as:
 \begin{dmath}
 {m_{W}} {C_{W}} \frac{d {T_{W}}}{d t}={q_{C}} {A_{C}}
 \end{dmath}
@@ -544,7 +544,7 @@ This problem is small in size and relatively simple, so performance is not a pri
 \item[\refstepcounter{lcnum}\lcthelcnum\label{LC:likeChg3}:]A\ref{A:assump9} - The temperature of the heating coil will actually change along its length as the water within it cools.
 \end{description}
 \begin{description}
-\item[\refstepcounter{lcnum}\lcthelcnum\label{LC:likeChg3}:]A\ref{A:A9}- The model currently only accounts for charging of the tank. A more complete model would also account for discharging of the tank.
+\item[\refstepcounter{lcnum}\lcthelcnum\label{LC:likeChg3}:]A\ref{A:assump9\_npnc}- The model currently only accounts for charging of the tank. A more complete model would also account for discharging of the tank.
 \end{description}
 \begin{description}
 \item[\refstepcounter{lcnum}\lcthelcnum\label{LC:likeChg6}:]A\ref{A:assump15} - Any real tank cannot be perfectly insulated and will lose heat.
@@ -600,7 +600,7 @@ R6 (R\ref{FR:req6}) &  & X &  &  &  &  &  &  &
 \end{longtable}
 \begin{longtable}{l l l l l l l l l l l l l l l}
 \toprule
- & A1 (A\ref{A:A1}) & A2 (A\ref{A:A2}) & A3 (A\ref{A:A3}) & A4 (A\ref{A:A4}) & A5 (A\ref{A:A5}) & A6 (A\ref{A:A6}) & A7 (A\ref{A:A7}) & A8 (A\ref{A:A8}) & A9 (A\ref{A:A9}) & A10 (A\ref{A:A10}) & A11 (A\ref{A:A11}) & A12 (A\ref{A:A12}) & A13 (A\ref{A:A13}) & A14 (A\ref{A:A14})
+ & A1 (A\ref{A:assump1}) & A2 (A\ref{A:assump2}) & A3 (A\ref{A:assump3}) & A4 (A\ref{A:assump4}) & A5 (A\ref{A:assump5}) & A6 (A\ref{A:assump7}) & A7 (A\ref{A:assump8}) & A8 (A\ref{A:assump9}) & A9 (A\ref{A:assump9\_npnc}) & A10 (A\ref{A:assump14}) & A11 (A\ref{A:assump15}) & A12 (A\ref{A:assump12}) & A13 (A\ref{A:assump13}) & A14 (A\ref{A:assump20})
 \\
 \midrule
 T1 (\hyperref[T:t1ConsThermE]{Definition~T:t1ConsThermE}) & X &  &  &  &  &  &  &  &  &  &  &  &  & 

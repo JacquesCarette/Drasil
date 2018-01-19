@@ -87,7 +87,7 @@ p_spec (Sy s)      _ = uSymb s
 p_spec (G g)       _ = unPH $ greek g
 p_spec (Sp s)      _ = unPH $ special s
 p_spec HARDNL      _ = "<br />"
-p_spec r@(Ref _ a)  sm = reflink (p_spec a sm) (p_spec a sm)
+p_spec (Ref r a)  sm = reflink r (p_spec a sm)
 p_spec EmptyS      _ = ""
 
 -- | Renders symbols for HTML title

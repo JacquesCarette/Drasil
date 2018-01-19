@@ -795,7 +795,7 @@ The scope of the requirements includes getting all input parameters related to t
 Characteristics of Intended Reader
 </h3>
 <p class="paragraph">
-Reviewers of this documentation should have a strong knowledge in theory behind glass breakage and blast risk. The reviewers should also have an understanding of second year calculus, structural mechanics, and computer applications in civil engineering.In addition, reviewers should be familiar with the applicable standards for constructions using glass from [4-6] in <a href=#Sec:References>Sec:References</a>. The users of GlassBR can have a lower level of expertise, as explained in <a href=#Sec:UserChars>Sec:UserChars</a>.
+Reviewers of this documentation should have a strong knowledge in theory behind glass breakage and blast risk. The reviewers should also have an understanding of second year calculus, structural mechanics, and computer applications in civil engineering.In addition, reviewers should be familiar with the applicable standards for constructions using glass from [4-6] in <a href=#Sec:References>References</a>. The users of GlassBR can have a lower level of expertise, as explained in <a href=#Sec:UserChars>User Characteristics</a>.
 </p>
 </div>
 </a>
@@ -805,7 +805,7 @@ Reviewers of this documentation should have a strong knowledge in theory behind 
 Organization of Document
 </h3>
 <p class="paragraph">
-The organization of this document follows the template for an SRS for scientific computing software proposed by [1] and [2] (in <a href=#Sec:References>Sec:References</a>), with some aspects taken from Volere template 16 [3]. The presentation follows the standard pattern of presenting goals, theories, definitions, and assumptions. For readers that would like a more bottom up approach, they can start reading the data definitions in <a href=#Sec:DDs>Sec:DDs</a> and trace back to find any additional information they require.
+The organization of this document follows the template for an SRS for scientific computing software proposed by [1] and [2] (in <a href=#Sec:References>References</a>), with some aspects taken from Volere template 16 [3]. The presentation follows the standard pattern of presenting goals, theories, definitions, and assumptions. For readers that would like a more bottom up approach, they can start reading the data definitions in <a href=#Sec:DDs>Data Definitions</a> and trace back to find any additional information they require.
 </p>
 <p class="paragraph">
 The goal statements are refined to the theoretical models, and the theoretical models to the instance models. The data definitions are used to support the definitions of the different models.
@@ -910,7 +910,7 @@ Input and Output
 User
 </td>
 <td>
-Characteristics of the glass slab and of the blast. Details in <a href=#Sec:IndividualProdUC>Sec:IndividualProdUC</a>
+Characteristics of the glass slab and of the blast. Details in <a href=#Sec:IndividualProdUC>Individual Product Use Cases</a>
 </td>
 </tr>
 <tr>
@@ -962,7 +962,7 @@ A system is needed to efficiently and correctly predict the blast risk involved 
 Terminology and Definitions
 </h4>
 <p class="paragraph">
-This subsection provides a list of terms that are used in the subsequent sections and their meaning, with the purpose of reducing ambiguity and making it easier to correctly understand the requirements. All of the terms are extracted from [4] in <a href=#Sec:References>Sec:References</a>.
+This subsection provides a list of terms that are used in the subsequent sections and their meaning, with the purpose of reducing ambiguity and making it easier to correctly understand the requirements. All of the terms are extracted from [4] in <a href=#Sec:References>References</a>.
 </p>
 <ol class="list">
 <li>
@@ -1085,7 +1085,7 @@ GS1: Analyze and predict whether the glass slab under consideration will be able
 Solution Characteristics Specification
 </h3>
 <p class="paragraph">
-The instance models that govern GlassBR are presented in <a href=#Sec:IMs>Sec:IMs</a>. The information to understand the meaning of the instance models and their derivation is also presented, so that the instance models can be verified.
+The instance models that govern GlassBR are presented in <a href=#Sec:IMs>Instance Models</a>. The information to understand the meaning of the instance models and their derivation is also presented, so that the instance models can be verified.
 </p>
 <a id="Sec:Assumps">
 <div class="subsubsection">
@@ -1093,7 +1093,7 @@ The instance models that govern GlassBR are presented in <a href=#Sec:IMs>Sec:IM
 Assumptions
 </h4>
 <p class="paragraph">
-This section simplifies the original problem and helps in developing the theoretical model by filling in the missing information for the physical system. The numbers given in the square brackets refer to the Theoretical Models [<a href=#Sec:TMs>Sec:TMs</a>], General Definitions [<a href=#Sec:GDs>Sec:GDs</a>], Data Definitions [<a href=#Sec:DDs>Sec:DDs</a>], Instance Models [<a href=#Sec:IMs>Sec:IMs</a>], or Likely Changes [<a href=#Sec:LCs>Sec:LCs</a>], in which the respective assumption is used.
+This section simplifies the original problem and helps in developing the theoretical model by filling in the missing information for the physical system. The numbers given in the square brackets refer to the Theoretical Models [<a href=#Sec:TMs>Theoretical Models</a>], General Definitions [<a href=#Sec:GDs>General Definitions</a>], Data Definitions [<a href=#Sec:DDs>Data Definitions</a>], Instance Models [<a href=#Sec:IMs>Instance Models</a>], or Likely Changes [<a href=#Sec:LCs>Likely Changes</a>], in which the respective assumption is used.
 </p>
 <a id="A:A1">
 <ul>
@@ -1112,7 +1112,7 @@ A3: This system only considers the external explosion scenario for its calculati
 </a>
 <a id="A:A4">
 <ul>
-A4: The values provided in <a href=#Sec:AuxConstants>Sec:AuxConstants</a> are assumed for the duration of load (<em>t<sub>d</sub></em>), and the material properties of <em>m</em>, <em>k</em>, and <em>E</em>.
+A4: The values provided in <a href=#Sec:AuxConstants>Values of Auxiliary Constants</a> are assumed for the duration of load (<em>t<sub>d</sub></em>), and the material properties of <em>m</em>, <em>k</em>, and <em>E</em>.
 </ul>
 </a>
 <a id="A:A5">
@@ -1132,7 +1132,7 @@ A7: The response type considered in GlassBR is flexural.
 </a>
 <a id="A:A8">
 <ul>
-A8: With reference to <a href=#A:A4>A:A4</a> the value of load duration factor (<em>LDF</em>) is a constant in GlassBR. It is calculated by the equation: <em>LDF</em> = (<div class="fraction">
+A8: With reference to <a href=#A:standardValuesA>A4</a> the value of load duration factor (<em>LDF</em>) is a constant in GlassBR. It is calculated by the equation: <em>LDF</em> = (<div class="fraction">
 <span class="fup">
 <em>t<sub>d</sub></em>
 </span>
@@ -1766,7 +1766,7 @@ Description
 Instance Models
 </h4>
 <p class="paragraph">
-This section transforms the problem defined in <a href=#Sec:ProbDesc>Sec:ProbDesc</a> into one which is expressed in mathematical terms. It uses concrete symbols defined in <a href=#Sec:DDs>Sec:DDs</a> to replace the abstract symbols in the models identified in <a href=#Sec:TMs>Sec:TMs</a> and <a href=#Sec:GDs>Sec:GDs</a>.
+This section transforms the problem defined in <a href=#Sec:ProbDesc>Problem Description</a> into one which is expressed in mathematical terms. It uses concrete symbols defined in <a href=#Sec:DDs>Data Definitions</a> to replace the abstract symbols in the models identified in <a href=#Sec:TMs>Theoretical Models</a> and <a href=#Sec:GDs>General Definitions</a>.
 </p>
 <a id="T:probOfBr">
 <table class="tdefn">
@@ -1884,7 +1884,7 @@ Description
 Data Constraints
 </h4>
 <p class="paragraph">
-<a href=#Table:InDataConstraints>Table:InDataConstraints</a>, and <a href=#Table:OutDataConstraints>Table:OutDataConstraints</a> shows the data constraints on the input and output variables, respectively. The column for physical constraints gives the physical limitations on the range of values that can be taken by the variable. The uncertainty column provides an estimate of the confidence with which the physical quantities can be measured. This information would be part of the input if one were performing an uncertainty quantification exercise. The constraints are conservative, to give the user of the model the flexibility to experiment with unusual situations. The column of typical values is intended to provide a feel for a common scenario. <a href=#Sec:AuxConstants>Sec:AuxConstants</a> gives the values of the specification parameters used in <a href=#Table:InDataConstraints>Table:InDataConstraints</a>. <a href=#Table:OutDataConstraints>Table:OutDataConstraints</a> shows the constraints that must be satisfied by the output.
+<a href=#Table:InDataConstraints>Table:InDataConstraints</a>, and <a href=#Table:OutDataConstraints>Table:OutDataConstraints</a> shows the data constraints on the input and output variables, respectively. The column for physical constraints gives the physical limitations on the range of values that can be taken by the variable. The uncertainty column provides an estimate of the confidence with which the physical quantities can be measured. This information would be part of the input if one were performing an uncertainty quantification exercise. The constraints are conservative, to give the user of the model the flexibility to experiment with unusual situations. The column of typical values is intended to provide a feel for a common scenario. <a href=#Sec:AuxConstants>Values of Auxiliary Constants</a> gives the values of the specification parameters used in <a href=#Table:InDataConstraints>Table:InDataConstraints</a>. <a href=#Table:OutDataConstraints>Table:OutDataConstraints</a> shows the constraints that must be satisfied by the output.
 </p>
 <a id="Table:InDataConstraints">
 <table class="table">
@@ -2080,22 +2080,22 @@ Functional Requirements
 R1: Input the quantities from <a href=#Table:R1ReqInputs>Table:R1ReqInputs</a>, which define the glass dimensions, type of glass, tolerable probability of failure and the characteristics of the blast Note: <em>a</em> and <em>b</em> will be input in terms of millimetres and will be converted to the equivalent value in metres.
 </ul>
 </a>
-<a id="R:s71req2">
+<a id="FR:s7_1_req2">
 <ul>
 R2: The system shall set the known values as follows: <em>m</em>, <em>k</em>, <em>E</em>, <em>t<sub>d</sub></em> following A4, <em>LDF</em> following A8, and LSF following A5.
 </ul>
 </a>
-<a id="R:s71req3">
+<a id="FR:s7_1_req3">
 <ul>
-R3: The system shall check the entered input values to ensure that they do not exceed the data constraints mentioned in <a href=#Sec:DataCons>Sec:DataCons</a>. If any of the input parameters is out of bounds, an error message is displayed and the calculations stop.
+R3: The system shall check the entered input values to ensure that they do not exceed the data constraints mentioned in <a href=#Sec:DataConstraints>Data Constraints</a>. If any of the input parameters is out of bounds, an error message is displayed and the calculations stop.
 </ul>
 </a>
-<a id="R:s71req4">
+<a id="FR:s7_1_req4">
 <ul>
 R4: Output the input quantities from R1 and the known quantities from R2.
 </ul>
 </a>
-<a id="R:s71req5">
+<a id="FR:s7_1_req5">
 <ul>
 R5: If <em>is_safe1</em> and <em>is_safe2</em> (from <a href=#T:t1SafetyReq>T:t1SafetyReq</a> and <a href=#T:t2SafetyReq>T:t2SafetyReq</a>) are true, output the message &quot;For the given input parameters, the glass is considered safe.&quot; If the condition is false, then output the message &quot;For the given input parameters, the glass is NOT considered safe.&quot;
 </ul>
@@ -2294,27 +2294,27 @@ This problem is small in size and relatively simple, so performance is not a pri
 <h2>
 Likely Changes
 </h2>
-<a id="LC:s8likelychg1">
+<a id="LC:s8.likelychg1">
 <ul>
 LC1: A3 - The system currently only calculates for external blast risk. In the future calculations can be added for the internal blast risk.
 </ul>
 </a>
-<a id="LC:s8likelychg2">
+<a id="LC:s8.likelychg2">
 <ul>
 LC2: A4, A8 - Currently the values for <em>m</em>, <em>k</em>, and <em>E</em> are assumed to be the same for all glass. In the future these values can be changed to variable inputs.
 </ul>
 </a>
-<a id="LC:s8likelychg3">
+<a id="LC:s8.likelychg3">
 <ul>
 LC3: A5 - The software may be changed to accommodate more than a single lite.
 </ul>
 </a>
-<a id="LC:s8likelychg4">
+<a id="LC:s8.likelychg4">
 <ul>
 LC4: A6 - The software may be changed to accommodate more boundary conditions than 4-sided support.
 </ul>
 </a>
-<a id="LC:s8likelychg5">
+<a id="LC:s8.likelychg5">
 <ul>
 LC5: A7 - The software may be changed to consider more than just flexure of the glass.
 </ul>
@@ -2998,95 +2998,30 @@ DD7 (<a href=#DD:tolLoad>DD:tolLoad</a>)
 DD8 (<a href=#DD:sdf.tol>DD:sdf.tol</a>)
 </th>
 <th>
-Data Constraints (<a href=#Sec:DataConstraints>Sec:DataConstraints</a>)
+Data Constraints (<a href=#Sec:DataConstraints>Data Constraints</a>)
 </th>
 <th>
-R1 (<a href=#Sec:FRs>Sec:FRs</a>)
+R1 (<a href=#Sec:FRs>Functional Requirements</a>)
 </th>
 <th>
-R2 (<a href=#Sec:FRs>Sec:FRs</a>)
+R2 (<a href=#Sec:FRs>Functional Requirements</a>)
 </th>
 <th>
-R3 (<a href=#Sec:FRs>Sec:FRs</a>)
+R3 (<a href=#Sec:FRs>Functional Requirements</a>)
 </th>
 <th>
-R4 (<a href=#Sec:FRs>Sec:FRs</a>)
+R4 (<a href=#Sec:FRs>Functional Requirements</a>)
 </th>
 <th>
-R5 (<a href=#Sec:FRs>Sec:FRs</a>)
+R5 (<a href=#Sec:FRs>Functional Requirements</a>)
 </th>
 <th>
-R6 (<a href=#Sec:FRs>Sec:FRs</a>)
+R6 (<a href=#Sec:FRs>Functional Requirements</a>)
 </th>
 </tr>
 <tr>
 <td>
-R1 (in <a href=#Sec:FRs>Sec:FRs</a>)
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-</tr>
-<tr>
-<td>
-R2 (in <a href=#Sec:FRs>Sec:FRs</a>)
+R1 (in <a href=#Sec:FRs>Functional Requirements</a>)
 </td>
 <td>
 
@@ -3151,7 +3086,72 @@ R2 (in <a href=#Sec:FRs>Sec:FRs</a>)
 </tr>
 <tr>
 <td>
-R3 (in <a href=#Sec:FRs>Sec:FRs</a>)
+R2 (in <a href=#Sec:FRs>Functional Requirements</a>)
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+</tr>
+<tr>
+<td>
+R3 (in <a href=#Sec:FRs>Functional Requirements</a>)
 </td>
 <td>
 
@@ -3216,7 +3216,7 @@ X
 </tr>
 <tr>
 <td>
-R4 (in <a href=#Sec:FRs>Sec:FRs</a>)
+R4 (in <a href=#Sec:FRs>Functional Requirements</a>)
 </td>
 <td>
 
@@ -3281,7 +3281,7 @@ X
 </tr>
 <tr>
 <td>
-R5 (in <a href=#Sec:FRs>Sec:FRs</a>)
+R5 (in <a href=#Sec:FRs>Functional Requirements</a>)
 </td>
 <td>
 X
@@ -3346,7 +3346,7 @@ X
 </tr>
 <tr>
 <td>
-R6 (in <a href=#Sec:FRs>Sec:FRs</a>)
+R6 (in <a href=#Sec:FRs>Functional Requirements</a>)
 </td>
 <td>
 
@@ -3421,28 +3421,28 @@ Traceability Matrix Showing the Connections Between Requirements and Other Items
 
 </th>
 <th>
-A1 (<a href=#Sec:Assumps>Sec:Assumps</a>)
+A1 (<a href=#Sec:Assumps>Assumptions</a>)
 </th>
 <th>
-A2 (<a href=#Sec:Assumps>Sec:Assumps</a>)
+A2 (<a href=#Sec:Assumps>Assumptions</a>)
 </th>
 <th>
-A3 (<a href=#Sec:Assumps>Sec:Assumps</a>)
+A3 (<a href=#Sec:Assumps>Assumptions</a>)
 </th>
 <th>
-A4 (<a href=#Sec:Assumps>Sec:Assumps</a>)
+A4 (<a href=#Sec:Assumps>Assumptions</a>)
 </th>
 <th>
-A5 (<a href=#Sec:Assumps>Sec:Assumps</a>)
+A5 (<a href=#Sec:Assumps>Assumptions</a>)
 </th>
 <th>
-A6 (<a href=#Sec:Assumps>Sec:Assumps</a>)
+A6 (<a href=#Sec:Assumps>Assumptions</a>)
 </th>
 <th>
-A7 (<a href=#Sec:Assumps>Sec:Assumps</a>)
+A7 (<a href=#Sec:Assumps>Assumptions</a>)
 </th>
 <th>
-A8 (<a href=#Sec:Assumps>Sec:Assumps</a>)
+A8 (<a href=#Sec:Assumps>Assumptions</a>)
 </th>
 </tr>
 <tr>
@@ -3824,7 +3824,7 @@ X
 </tr>
 <tr>
 <td>
-LC1 (<a href=#Sec:LCs>Sec:LCs</a>)
+LC1 (<a href=#Sec:LCs>Likely Changes</a>)
 </td>
 <td>
 
@@ -3853,7 +3853,7 @@ X
 </tr>
 <tr>
 <td>
-LC2 (<a href=#Sec:LCs>Sec:LCs</a>)
+LC2 (<a href=#Sec:LCs>Likely Changes</a>)
 </td>
 <td>
 
@@ -3882,7 +3882,7 @@ X
 </tr>
 <tr>
 <td>
-LC3 (<a href=#Sec:LCs>Sec:LCs</a>)
+LC3 (<a href=#Sec:LCs>Likely Changes</a>)
 </td>
 <td>
 
@@ -3911,7 +3911,7 @@ X
 </tr>
 <tr>
 <td>
-LC4 (<a href=#Sec:LCs>Sec:LCs</a>)
+LC4 (<a href=#Sec:LCs>Likely Changes</a>)
 </td>
 <td>
 
@@ -3940,7 +3940,7 @@ X
 </tr>
 <tr>
 <td>
-LC5 (<a href=#Sec:LCs>Sec:LCs</a>)
+LC5 (<a href=#Sec:LCs>Likely Changes</a>)
 </td>
 <td>
 
@@ -3969,7 +3969,7 @@ X
 </tr>
 <tr>
 <td>
-R1 (<a href=#Sec:FRs>Sec:FRs</a>)
+R1 (<a href=#Sec:FRs>Functional Requirements</a>)
 </td>
 <td>
 
@@ -3998,7 +3998,7 @@ R1 (<a href=#Sec:FRs>Sec:FRs</a>)
 </tr>
 <tr>
 <td>
-R2 (<a href=#Sec:FRs>Sec:FRs</a>)
+R2 (<a href=#Sec:FRs>Functional Requirements</a>)
 </td>
 <td>
 
@@ -4027,7 +4027,7 @@ X
 </tr>
 <tr>
 <td>
-R3 (<a href=#Sec:FRs>Sec:FRs</a>)
+R3 (<a href=#Sec:FRs>Functional Requirements</a>)
 </td>
 <td>
 
@@ -4056,7 +4056,7 @@ R3 (<a href=#Sec:FRs>Sec:FRs</a>)
 </tr>
 <tr>
 <td>
-R4 (<a href=#Sec:FRs>Sec:FRs</a>)
+R4 (<a href=#Sec:FRs>Functional Requirements</a>)
 </td>
 <td>
 
@@ -4085,7 +4085,7 @@ R4 (<a href=#Sec:FRs>Sec:FRs</a>)
 </tr>
 <tr>
 <td>
-R5 (<a href=#Sec:FRs>Sec:FRs</a>)
+R5 (<a href=#Sec:FRs>Functional Requirements</a>)
 </td>
 <td>
 
@@ -4114,7 +4114,7 @@ R5 (<a href=#Sec:FRs>Sec:FRs</a>)
 </tr>
 <tr>
 <td>
-R6 (<a href=#Sec:FRs>Sec:FRs</a>)
+R6 (<a href=#Sec:FRs>Functional Requirements</a>)
 </td>
 <td>
 

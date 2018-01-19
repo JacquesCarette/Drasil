@@ -179,33 +179,33 @@ createLayout secs sm = map (flip (sec 0) sm) secs
 
 sec :: HasSymbolTable ctx => Int -> Section -> ctx -> T.LayoutObj
 sec depth x@(Section title contents _) sm = 
-  T.Section depth (spec title sm) (map (flip (layout depth) sm) contents) (spec (refName x) sm)
+  T.Section depth (spec title sm) (map (flip (layout depth) sm) contents) (T.S (refAdd x))
 
 lay :: HasSymbolTable ctx => Contents -> ctx -> T.LayoutObj
 lay x@(Table hdr lls t b _) sm
   | null lls || length hdr == length (head lls) = T.Table ((map (flip spec sm) hdr) :
-      (map (map (flip spec sm)) lls)) (spec (refName x) sm) b (spec t sm)
+      (map (map (flip spec sm)) lls)) (T.S (refAdd x)) b (spec t sm)
   | otherwise = error $ "Attempting to make table with " ++ show (length hdr) ++
                         " headers, but data contains " ++ 
                         show (length (head lls)) ++ " columns."
 lay (Paragraph c)         sm = T.Paragraph (spec c sm)
 lay (EqnBlock c _)        sm = T.EqnBlock (T.E (expr c sm)) --FIXME: Make eqn referable
 --lay (CodeBlock c)         = T.CodeBlock c
-lay x@(Definition c)      sm = T.Definition (makePairs c sm) (spec (refName x) sm)
+lay x@(Definition c)      sm = T.Definition (makePairs c sm) (T.S (refAdd x))
 lay (Enumeration cs)      sm = T.List $ makeL cs sm
-lay x@(Figure c f wp _)   sm = T.Figure (spec (refName x) sm) (spec c sm) f wp
+lay x@(Figure c f wp _)   sm = T.Figure (T.S (refAdd x)) (spec c sm) f wp
 lay x@(Requirement r)     sm = 
-  T.Requirement (spec (requires r) sm) (spec (refName x) sm)
+  T.Requirement (spec (requires r) sm) (T.S (refAdd x))
 lay x@(Assumption a)      sm = 
-  T.Assumption (spec (assuming a) sm) (spec (refName x) sm)
+  T.Assumption (spec (assuming a) sm) (T.S (refAdd x))
 lay x@(LikelyChange lc)   sm = 
   T.LikelyChange (spec (phrase $ lc ^. term) sm)
-  (spec (refName x) sm)
+  (T.S (refAdd x))
 lay x@(UnlikelyChange ucc) sm = 
   T.UnlikelyChange (spec (phrase $ ucc ^. term) sm)
-  (spec (refName x) sm)
+  (T.S (refAdd x))
 lay x@(Graph ps w h t _)  sm = T.Graph (map (\(y,z) -> (spec y sm, spec z sm)) ps)
-                               w h (spec t sm) (spec (refName x) sm)
+                               w h (spec t sm) (T.S (refAdd x))
 lay (Defnt dtyp pairs rn) sm = T.Defnt dtyp (layPairs pairs) (T.S rn)
   where layPairs = map (\(x,y) -> (x, (map (\z -> lay z sm) y))) 
 lay (Bib bib)         sm = T.Bib $ map (flip layCite sm) bib

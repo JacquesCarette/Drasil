@@ -83,46 +83,59 @@ instance Referable Section where
   rType _ = Sect
 
 instance Referable Contents where
-  refName (Table _ _ _ _ r)       = S "Table:" :+: S r
-  refName (Figure _ _ _ r)        = S "Figure:" :+: S r
-  refName (Graph _ _ _ _ r)       = S "Figure:" :+: S r
-  refName (EqnBlock _ r)          = S "Equation:" :+: S r
-  refName (Definition d)          = getDefName d
-  refName (Defnt dt _ r)          = getDefName dt :+: S r
-  refName (Requirement rc)        = refName rc
-  refName (Assumption ca)         = refName ca
-  refName (LikelyChange lcc)      = S $ "LC:" ++ repUnd (lcc ^. id)--refName lcc
-  refName (UnlikelyChange ucc)    = S $ "UC:" ++ repUnd (ucc ^. id)--refName ucc
-  refName (Enumeration _)         = error "Can't reference lists"
-  refName (Paragraph _)           = error "Can't reference paragraphs"
-  refName (Bib _)                 = error "Bib referencing unimplemented"
-  rType (Table _ _ _ _ _)         = Tab
-  rType (Figure _ _ _ _)          = Fig
-  rType (Definition (Data _))     = Def
-  rType (Definition (Theory _))   = Def
-  rType (Definition _)            = Def
-  rType (Defnt _ _ _)             = Def
-  rType (Requirement r)           = rType r
-  rType (Assumption a)            = rType a
-  rType (LikelyChange _)          = LC --rType lc
-  rType (UnlikelyChange _)        = UC --rType uc
-  rType (Graph _ _ _ _ _)         = Fig
-  rType (EqnBlock _ _)            = EqnB
-  rType _                         = 
+  refName (Table _ _ _ _ r)     = S "Table:" :+: S r
+  refName (Figure _ _ _ r)      = S "Figure:" :+: S r
+  refName (Graph _ _ _ _ r)     = S "Figure:" :+: S r
+  refName (EqnBlock _ r)        = S "Equation:" :+: S r
+  refName (Definition d)        = S $ getDefName d
+  refName (Defnt dt _ r)        = S (getDefName dt) :+: S r
+  refName (Requirement rc)      = refName rc
+  refName (Assumption ca)       = refName ca
+  refName (LikelyChange lcc)    = S $ "LC:" ++ repUnd (lcc ^. id)--refName lcc
+  refName (UnlikelyChange ucc)  = S $ "UC:" ++ repUnd (ucc ^. id)--refName ucc
+  refName (Enumeration _)       = error "Can't reference lists"
+  refName (Paragraph _)         = error "Can't reference paragraphs"
+  refName (Bib _)               = error "Bib referencing unimplemented"
+  rType (Table _ _ _ _ _)       = Tab
+  rType (Figure _ _ _ _)        = Fig
+  rType (Definition (Data _))   = Def
+  rType (Definition (Theory _)) = Def
+  rType (Definition _)          = Def
+  rType (Defnt _ _ _)           = Def
+  rType (Requirement r)         = rType r
+  rType (Assumption a)          = rType a
+  rType (LikelyChange _)        = LC --rType lc
+  rType (UnlikelyChange _)      = UC --rType uc
+  rType (Graph _ _ _ _ _)       = Fig
+  rType (EqnBlock _ _)          = EqnB
+  rType _                       = 
     error "Attempting to reference unimplemented reference type"
+  refAdd (Table _ _ _ _ r)      = "Table:" ++ r
+  refAdd (Figure _ _ _ r)       = "Figure:" ++ r
+  refAdd (Graph _ _ _ _ r)      = "Figure:" ++ r
+  refAdd (EqnBlock _ r)         = "Equation:" ++ r
+  refAdd (Definition d)         = getDefName d
+  refAdd (Defnt dt _ r)         = getDefName dt ++ r
+  refAdd (Requirement rc)       = refAdd rc
+  refAdd (Assumption ca)        = refAdd ca
+  refAdd (LikelyChange lcc)     = "LC:" ++ repUnd (lcc ^. id)--refName lcc
+  refAdd (UnlikelyChange ucc)   = "UC:" ++ repUnd (ucc ^. id)--refName ucc
+  refAdd (Enumeration _)        = error "Can't reference lists"
+  refAdd (Paragraph _)          = error "Can't reference paragraphs"
+  refAdd (Bib _)                = error "Bib referencing unimplemented"
   refAdd _ = "Placeholder"
 
 rShow :: Referable a => a -> Sentence   
 rShow = S . show . rType
 
 -- | Automatically create the label for a definition
-getDefName :: DType -> Sentence
-getDefName (Data c)   = S $ "DD:" ++ (repUnd (c ^. id)) -- FIXME: To be removed
-getDefName (Theory c) = S $ "T:" ++ (repUnd (c ^. id)) -- FIXME: To be removed
-getDefName TM         = S "T:"
-getDefName DD         = S "DD:"
-getDefName Instance   = S "IM:"
-getDefName General    = S "GD:"
+getDefName :: DType -> String
+getDefName (Data c)   = "DD:" ++ (repUnd (c ^. id)) -- FIXME: To be removed
+getDefName (Theory c) = "T:" ++ (repUnd (c ^. id)) -- FIXME: To be removed
+getDefName TM         = "T:"
+getDefName DD         = "DD:"
+getDefName Instance   = "IM:"
+getDefName General    = "GD:"
 
 -- This works for passing the correct id to the reference generator for Assumptions,
 -- Requirements and Likely Changes but I question whether we should use it.

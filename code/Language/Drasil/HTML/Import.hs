@@ -186,29 +186,29 @@ sec :: HasSymbolTable s => Int -> Section -> s -> H.LayoutObj
 sec depth x@(Section title contents _) sm = 
   H.HDiv [(concat $ replicate depth "sub") ++ "section"] 
   ((H.Header (depth+2) (spec title sm)):(map (flip (layout depth) sm) contents)) 
-  (spec (refName x) sm)
+  (H.S (refAdd x))
 
 -- | Translates from Contents to the HTML Representation of LayoutObj.
 -- Called internally by layout.
 lay :: HasSymbolTable s => Contents -> s -> H.LayoutObj
 lay x@(Table hdr lls t b _) sm = H.Table ["table"] 
-  ((map (flip spec sm) hdr) : (map (map (flip spec sm)) lls)) (spec (refName x) sm) b (spec t sm)
+  ((map (flip spec sm) hdr) : (map (map (flip spec sm)) lls)) (H.S (refAdd x)) b (spec t sm)
 lay (Paragraph c)       sm = H.Paragraph (spec c sm)
 lay (EqnBlock c _)      sm = H.HDiv ["equation"] [H.Tagless (H.E (expr c sm))] (H.EmptyS)
                               -- FIXME: Make equations referable
 --lay (CodeBlock c)        = H.CodeBlock c
-lay x@(Definition c)    sm = H.Definition c (makePairs c sm) (spec (refName x) sm)
+lay x@(Definition c)    sm = H.Definition c (makePairs c sm) (H.S (refAdd x))
 lay (Enumeration cs)    sm = H.List $ makeL cs sm
-lay x@(Figure c f wp _) sm = H.Figure (spec (refName x) sm) (spec c sm) f wp
+lay x@(Figure c f wp _) sm = H.Figure (H.S (refAdd x)) (spec c sm) f wp
 lay (Graph _ _ _ _ _)    _ = H.Paragraph (H.EmptyS)  -- FIXME: need to implement!
 lay x@(Requirement r)   sm = H.ALUR H.Requirement 
-  (spec (requires r) sm) (spec (refName x) sm) (spec (fromJust $ getShortName r) sm)
+  (spec (requires r) sm) (H.S (refAdd x)) (spec (fromJust $ getShortName r) sm)
 lay x@(Assumption a)    sm = H.ALUR H.Assumption 
-  (spec (assuming a) sm) (spec (refName x) sm) (spec (fromJust $ getShortName a) sm)
+  (spec (assuming a) sm) (H.S (refAdd x)) (spec (fromJust $ getShortName a) sm)
 lay x@(LikelyChange lc) sm = 
-  H.ALUR H.LikelyChange (spec (phrase $ lc ^. term) sm) (spec (refName x) sm) (spec (short lc) sm)
+  H.ALUR H.LikelyChange (spec (phrase $ lc ^. term) sm) (H.S (refAdd x)) (spec (short lc) sm)
 lay x@(UnlikelyChange uc) sm = 
-  H.ALUR H.UnlikelyChange (spec (phrase $ uc ^. term) sm) (spec (refName x) sm) (spec (short uc) sm)
+  H.ALUR H.UnlikelyChange (spec (phrase $ uc ^. term) sm) (H.S (refAdd x)) (spec (short uc) sm)
 lay (Defnt dtyp pairs rn) sm = H.Definition dtyp (layPairs pairs) (H.S rn)
   where layPairs = map (\(x,y) -> (x, (map (\z -> lay z sm) y)))
 lay (Bib bib)           sm = H.Bib $ map (flip layCite sm) bib

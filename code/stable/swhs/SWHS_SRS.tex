@@ -326,64 +326,64 @@ The instance models that govern SWHS are presented in Section~\ref{Sec:IMs}. The
 \label{Sec:Assumps}
 This section simplifies the original problem and helps in developing the theoretical model by filling in the missing information for the physical system. The numbers given in the square brackets refer to the Theoretical Models {[}Section~\ref{Sec:TMs}{]}, General Definitions {[}Section~\ref{Sec:GDs}{]}, Data Definitions {[}Section~\ref{Sec:DDs}{]}, Instance Models {[}Section~\ref{Sec:IMs}{]}, or Likely Changes {[}Section~\ref{Sec:LCs}{]}, in which the respective assumption is used.
 \begin{description}
-\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:A1}:]The only form of energy that is relevant for this problem is thermal energy. All other forms of energy, such as mechanical energy, are assumed to be negligible {[}\hyperref[T:t1ConsThermE]{Definition~T:t1ConsThermE}{]}.
+\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:assump1}:]The only form of energy that is relevant for this problem is thermal energy. All other forms of energy, such as mechanical energy, are assumed to be negligible {[}\hyperref[T:t1ConsThermE]{Definition~T:t1ConsThermE}{]}.
 \end{description}
 \begin{description}
-\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:A2}:]All heat transfer coefficients are constant over time {[}GD1{]}.
+\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:assump2}:]All heat transfer coefficients are constant over time {[}GD1{]}.
 \end{description}
 \begin{description}
-\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:A3}:]The water in the tank is fully mixed, so the temperature of the water is the same throughout the entire tank {[}GD2, \hyperref[DD:ht.flux.P]{Definition~DD:ht.flux.P}{]}.
+\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:assump3}:]The water in the tank is fully mixed, so the temperature of the water is the same throughout the entire tank {[}GD2, \hyperref[DD:ht.flux.P]{Definition~DD:ht.flux.P}{]}.
 \end{description}
 \begin{description}
-\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:A4}:]The temperature of the phase change material is the same throughout the volume of PCM {[}GD2, \hyperref[DD:ht.flux.P]{Definition~DD:ht.flux.P}{]}.
+\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:assump4}:]The temperature of the phase change material is the same throughout the volume of PCM {[}GD2, \hyperref[DD:ht.flux.P]{Definition~DD:ht.flux.P}{]}.
 \end{description}
 \begin{description}
-\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:A5}:]The density of water and density of PCM have no spatial variation; that is, they are each constant over their entire volume {[}GD2{]}.
+\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:assump5}:]The density of water and density of PCM have no spatial variation; that is, they are each constant over their entire volume {[}GD2{]}.
 \end{description}
 \begin{description}
-\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:A6}:]The specific heat capacity of water, specific heat capacity of PCM as a solid, and specific heat capacity of PCM as a liquid have no spatial variation; that is, they are each constant over their entire volume {[}GD2{]}.
+\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:assump6}:]The specific heat capacity of water, specific heat capacity of PCM as a solid, and specific heat capacity of PCM as a liquid have no spatial variation; that is, they are each constant over their entire volume {[}GD2{]}.
 \end{description}
 \begin{description}
-\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:A7}:]Newton's law of convective cooling applies between the heating coil and the water {[}\hyperref[DD:ht.flux.C]{Definition~DD:ht.flux.C}{]}.
+\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:assump7}:]Newton's law of convective cooling applies between the heating coil and the water {[}\hyperref[DD:ht.flux.C]{Definition~DD:ht.flux.C}{]}.
 \end{description}
 \begin{description}
-\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:A8}:]The temperature of the heating coil is constant over time {[}\hyperref[DD:ht.flux.C]{Definition~DD:ht.flux.C}{]}.
+\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:assump8}:]The temperature of the heating coil is constant over time {[}\hyperref[DD:ht.flux.C]{Definition~DD:ht.flux.C}{]}.
 \end{description}
 \begin{description}
-\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:A9}:]The temperature of the heating coil does not vary along its length {[}\hyperref[DD:ht.flux.C]{Definition~DD:ht.flux.C}{]}.
+\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:assump9}:]The temperature of the heating coil does not vary along its length {[}\hyperref[DD:ht.flux.C]{Definition~DD:ht.flux.C}{]}.
 \end{description}
 \begin{description}
-\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:A10}:]Newton's law of convective cooling applies between the water and the PCM {[}\hyperref[DD:ht.flux.P]{Definition~DD:ht.flux.P}{]}.
+\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:assump10}:]Newton's law of convective cooling applies between the water and the PCM {[}\hyperref[DD:ht.flux.P]{Definition~DD:ht.flux.P}{]}.
 \end{description}
 \begin{description}
-\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:A11}:]The model only accounts for charging of the tank, not discharging. The temperature of the water and temperature of the phase change material can only increase, or remain constant; they do not decrease. This implies that the initial temperature {[}A\ref{A:assump12}{]} is less than (or equal) to the temperature of the heating coil {[}IM1{]}.
+\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:assump11}:]The model only accounts for charging of the tank, not discharging. The temperature of the water and temperature of the phase change material can only increase, or remain constant; they do not decrease. This implies that the initial temperature {[}A\ref{A:assump12}{]} is less than (or equal) to the temperature of the heating coil {[}IM1{]}.
 \end{description}
 \begin{description}
-\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:A12}:]The initial temperature of the water and the PCM is the same {[}IM1, IM2{]}.
+\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:assump12}:]The initial temperature of the water and the PCM is the same {[}IM1, IM2{]}.
 \end{description}
 \begin{description}
-\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:A13}:]The simulation will start with the PCM in a solid state {[}IM2, IM4{]}.
+\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:assump13}:]The simulation will start with the PCM in a solid state {[}IM2, IM4{]}.
 \end{description}
 \begin{description}
-\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:A14}:]The operating temperature range of the system is such that the water is always in liquid state. That is, the temperature will not drop below the melting point temperature of water, or rise above its boiling point temperature {[}IM1, IM3{]}.
+\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:assump14}:]The operating temperature range of the system is such that the water is always in liquid state. That is, the temperature will not drop below the melting point temperature of water, or rise above its boiling point temperature {[}IM1, IM3{]}.
 \end{description}
 \begin{description}
-\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:A15}:]The tank is perfectly insulated so that there is no heat loss from the tank {[}IM1{]}.
+\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:assump15}:]The tank is perfectly insulated so that there is no heat loss from the tank {[}IM1{]}.
 \end{description}
 \begin{description}
-\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:A16}:]No internal heat is generated by either the water or the PCM; therefore, the volumetric heat generation per unit volume is zero {[}IM1, IM2{]}.
+\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:assump16}:]No internal heat is generated by either the water or the PCM; therefore, the volumetric heat generation per unit volume is zero {[}IM1, IM2{]}.
 \end{description}
 \begin{description}
-\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:A17}:]The volume change of the PCM due to melting is negligible {[}IM2{]}.
+\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:assump17}:]The volume change of the PCM due to melting is negligible {[}IM2{]}.
 \end{description}
 \begin{description}
-\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:A18}:]The PCM is either in a liquid state or a solid state but not a gaseous state {[}IM2, IM4{]}.
+\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:assump18}:]The PCM is either in a liquid state or a solid state but not a gaseous state {[}IM2, IM4{]}.
 \end{description}
 \begin{description}
-\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:A19}:]The pressure in the tank is atmospheric, so the melting point temperature and boiling point temperature are 0${}^{\circ}$C and 100${}^{\circ}$C, respectively {[}IM1, IM3{]}.
+\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:assump19}:]The pressure in the tank is atmospheric, so the melting point temperature and boiling point temperature are 0${}^{\circ}$C and 100${}^{\circ}$C, respectively {[}IM1, IM3{]}.
 \end{description}
 \begin{description}
-\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:A20}:]When considering the volume of water in the tank, the volume of the heating coil is assumed to be negligible.
+\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:assump20}:]When considering the volume of water in the tank, the volume of the heating coil is assumed to be negligible.
 \end{description}
 \subsubsection{Theoretical Models}
 \label{Sec:TMs}

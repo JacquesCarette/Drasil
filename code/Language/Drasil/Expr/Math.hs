@@ -67,7 +67,7 @@ cross :: Expr -> Expr -> Expr
 cross e1 e2 = BinaryOp (Cross e1 e2)
 
 square :: Expr -> Expr
-square x = x :^ 2
+square x = x $^ 2
 
 -- some matrix helper functions
 m2x2 :: Expr -> Expr -> Expr -> Expr -> Expr

@@ -30,7 +30,6 @@ expr (Dbl d)            _ = P.Dbl  d
 expr (Int i)            _ = P.Int  i
 expr (Assoc op l)      sm = P.Assoc op $ map (\x -> expr x sm) l
 expr (a :/ b)          sm = P.BOp P.Frac (replace_divs a sm) (replace_divs b sm)
-expr (a :^ b)          sm = P.BOp P.Pow  (expr a sm) (expr b sm)
 expr (a :- b)          sm = P.BOp P.Sub  (expr a sm) (expr b sm)
 expr (a :. b)          sm = P.BOp P.Dot  (expr a sm) (expr b sm)
 expr (Neg a)           sm = P.Neg  (expr a sm)
@@ -56,7 +55,7 @@ expr (EGreaterEq a b)  sm = P.BOp P.GEq (expr a sm) (expr b sm)
 expr (Index a i)       sm = P.BOp P.Index (expr a sm) (expr i sm)
 expr (UnaryOp u)       sm = (\(x,y) -> P.Op x [y]) (ufunc u sm)
 expr (Grouping e)      sm = P.Grouping (expr e sm)
-expr (BinaryOp b)      sm = (\(x,y) -> P.Op x y) (bfunc b sm)
+expr (BinaryOp b)      sm = bfunc b sm
 expr (EOp o)           sm = (\(x,y) -> P.Op x [y]) (eop o sm)
 expr (Not a)           sm = P.Not  (expr a sm)
 expr (a :&& b)         sm = P.Assoc And  [expr a sm, expr b sm]
@@ -81,8 +80,9 @@ ufunc (Cot e) sm = (P.Cot, expr e sm)
 ufunc (Exp e) sm = (P.Exp, expr e sm)
 ufunc (Sqrt e) sm = (P.Sqrt, expr e sm)
 
-bfunc :: HasSymbolTable ctx => BiFunc -> ctx -> (P.Function, [P.Expr])
-bfunc (Cross e1 e2) sm = (P.Cross, map (flip expr sm) [e1,e2])
+bfunc :: HasSymbolTable ctx => BiFunc -> ctx -> P.Expr
+bfunc (Cross e1 e2) sm = P.BOp P.Cross (expr e1 sm) (expr e2 sm)
+bfunc (Power e1 e2) sm = P.BOp P.Pow (expr e1 sm) (expr e2 sm)
 
 eop :: HasSymbolTable ctx => EOperator -> ctx -> (P.Function, P.Expr)
 eop (Summation (IntegerDD v (BoundedR l h)) e) sm =
@@ -106,7 +106,7 @@ int_wrt wrtc = P.Assoc Mul [P.Sym lD, P.Sym wrtc]
 replace_divs :: HasSymbolTable ctx => Expr -> ctx -> P.Expr
 replace_divs (a :/ b) sm = P.BOp P.Div (replace_divs a sm) (replace_divs b sm)
 replace_divs (Assoc op l) sm = P.Assoc op $ map (\x -> replace_divs x sm) l
-replace_divs (a :^ b) sm = P.BOp P.Pow (replace_divs a sm) (replace_divs b sm)
+replace_divs (BinaryOp (Power a b)) sm = P.BOp P.Pow (replace_divs a sm) (replace_divs b sm)
 replace_divs (a :- b) sm = P.BOp P.Sub (replace_divs a sm) (replace_divs b sm)
 replace_divs a        sm = expr a sm
 

@@ -148,6 +148,7 @@ p_bop Div = "/"
 p_bop Pow = "^"
 p_bop Dot = "\\cdot{}"
 p_bop Index = error "no printing of Index"
+p_bop Cross = "\\times"
 
 -- | For seeing if long numerators or denominators need to be on multiple lines
 needMultlined :: Expr -> String
@@ -268,7 +269,6 @@ function Tan            = "\\tan"
 function Sec            = "\\sec"
 function Csc            = "\\csc"
 function Cot            = "\\cot"
-function Cross          = "\\times"
 function Exp            = "e"
 function Sqrt           = "\\sqrt"
 
@@ -480,7 +480,6 @@ makeFigure r c f wp =
 ------------------ EXPR OP PRINTING-------------------------
 -----------------------------------------------------------------
 p_op :: Function -> [Expr] -> String
-p_op f@(Cross) xs = binfix_op f xs
 p_op f@(Summation bs) (x:[]) = function f ++ makeBound bs ++ brace (sqbrac (p_expr x))
 p_op (Summation _) _ = error "Something went wrong with a summation"
 p_op f@(Product bs) (x:[]) = function f ++ makeBound bs ++ brace (p_expr x)
@@ -507,11 +506,6 @@ makeIBound (Just low, Just high) = "_" ++ brace (p_expr low) ++
 makeIBound (Just low, Nothing)   = "_" ++ brace (p_expr low)
 makeIBound (Nothing, Just high)  = "^" ++ brace (p_expr high)
 makeIBound (Nothing, Nothing)    = ""
-
-binfix_op :: Function -> [Expr] -> String
-binfix_op f (x:y:[]) = p_expr x ++ function f ++ p_expr y
-binfix_op _ _ = error "Attempting to print binary operator with inappropriate" ++
-                   "number of operands (should be 2)"
 
 -----------------------------------------------------------------
 ------------------ MODULE PRINTING----------------------------

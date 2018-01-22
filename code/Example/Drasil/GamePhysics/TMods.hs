@@ -65,9 +65,9 @@ t3NewtonLUG = makeRC "t3NewtonLUG"
 newtonLUGRel :: Relation
 newtonLUGRel = (C QP.force) $=
   (C QP.gravitationalConst) * ((C mass_1) * (C mass_2) /
-  ((C dispNorm) :^ (fromInteger 2))) * (C dispUnit) $=
+  ((C dispNorm) $^ (fromInteger 2))) * (C dispUnit) $=
   (C QP.gravitationalConst) * ((C mass_1) * (C mass_2) /
-  ((C dispNorm) :^ (fromInteger 2))) * ((C QP.displacement) / (C dispNorm))
+  ((C dispNorm) $^ (fromInteger 2))) * ((C QP.displacement) / (C dispNorm))
 
 -- Can't include fractions within a sentence (in the part where 'r denotes the
 -- unit displacement vector, equivalent to r/||r||' (line 184)). Changed to a

@@ -154,9 +154,9 @@ dd8impulse = mkDataDef QP.impulseS impulseEqn
 impulseEqn :: Expr
 impulseEqn = ((Neg ((Int 1) + (C QP.restitutionCoef))) * (C initRelVel) :.
   (C normalVect)) / (((((Int 1) / (C mass_A))) + ((Int 1) / (C mass_B))) *
-  ((C normalLen) :^ (Int 2)) +
-  (((C perpLen_A) :^ (Int 2)) / (C momtInert_A)) +
-  (((C perpLen_B) :^ (Int 2))/ (C momtInert_B)))
+  ((C normalLen) $^ (Int 2)) +
+  (((C perpLen_A) $^ (Int 2)) / (C momtInert_A)) +
+  (((C perpLen_B) $^ (Int 2))/ (C momtInert_B)))
 {-
 --NOTE: Removed an extra "the" that was showing up in the output.
 dd8descr :: Sentence

@@ -85,11 +85,11 @@ intersliceWtrF = mkDataDef watrForce intersliceWtrFEqn
 
 intersliceWtrFEqn :: Expr
 intersliceWtrFEqn = Case [case1,case2,case3]
-  where case1 = (((inxi slopeHght)-(inxi slipHght )):^ 2 :/ 2  *
-          (C satWeight) + ((inxi waterHght)-(inxi slopeHght)):^ 2 *
+  where case1 = (((inxi slopeHght)-(inxi slipHght ))$^ 2 :/ 2  *
+          (C satWeight) + ((inxi waterHght)-(inxi slopeHght))$^ 2 *
           (C satWeight), (inxi waterHght) $>= (inxi slopeHght))
 
-        case2 = (((inxi waterHght)-(inxi slipHght )):^ 2 :/ 2  * (C satWeight),
+        case2 = (((inxi waterHght)-(inxi slipHght ))$^ 2 :/ 2  * (C satWeight),
                 (inxi slopeHght) $> (inxi waterHght) $> (inxi slipHght))
 
         case3 = (Int 0,(inxi waterHght) $<= (inxi slipHght))
@@ -327,12 +327,12 @@ kiStar = m2x2 (inxi shrStiffBase * cos(inxi baseAngle))
   
 kiPrime :: Expr
 kiPrime = m2x2
-  (inxi shrStiffBase * cos(inxi baseAngle) :^ 2 + inxi nrmStiffIntsl *
-  sin(inxi baseAngle) :^ 2) ((inxi shrStiffBase - inxi nrmStiffBase) *
+  (inxi shrStiffBase * cos(inxi baseAngle) $^ 2 + inxi nrmStiffIntsl *
+  sin(inxi baseAngle) $^ 2) ((inxi shrStiffBase - inxi nrmStiffBase) *
   sin(inxi baseAngle) * cos(inxi baseAngle)) ((inxi shrStiffBase -
   inxi nrmStiffBase) * sin(inxi baseAngle) * cos(inxi baseAngle))
-  (inxi shrStiffBase * cos(inxi baseAngle) :^ 2 + inxi nrmStiffIntsl *
-  sin(inxi baseAngle) :^ 2)
+  (inxi shrStiffBase * cos(inxi baseAngle) $^ 2 + inxi nrmStiffIntsl *
+  sin(inxi baseAngle) $^ 2)
   
 stfMtrxDerivation :: [Contents]
 stfMtrxDerivation = [
@@ -400,8 +400,8 @@ stfMtrxDerivation = [
   $= m2x2 (inxi effStiffA) (inxi effStiffB) (inxi effStiffB) (inxi effStiffA),
   
   EqnBlock $
-  (inxi effStiffA) $= (inxi shrStiffBase) * (cos (inxi baseAngle)) :^ 2 +
-  (inxi nrmStiffBase) * (sin (inxi baseAngle)) :^ 2,
+  (inxi effStiffA) $= (inxi shrStiffBase) * (cos (inxi baseAngle)) $^ 2 +
+  (inxi nrmStiffBase) * (sin (inxi baseAngle)) $^ 2,
   
   EqnBlock $
   (inxi effStiffB) $= ((inxi shrStiffBase)-(inxi nrmStiffBase)) *

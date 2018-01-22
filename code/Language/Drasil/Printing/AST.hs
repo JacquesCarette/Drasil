@@ -5,7 +5,7 @@ import Language.Drasil.Symbol (Symbol)
 import Language.Drasil.Space (Space)
 
 data BinOp = Frac | Div | Pow | Sub | Eq | NEq | Lt | Gt | LEq | GEq | Impl | Iff | Index
-  | Dot
+  | Dot | Cross
 
 data Expr = Var   Variable
           | Dbl   Double
@@ -35,7 +35,6 @@ data Function = Log
            | Sec
            | Csc
            | Cot
-           | Cross
            | Product (Maybe ((Symbol, Expr), Expr))
            | Exp
            | Sqrt
@@ -61,3 +60,4 @@ prec2 Impl = 13
 prec2 Iff = 13
 prec2 Index = 1
 prec2 Dot = 3
+prec2 Cross = 3

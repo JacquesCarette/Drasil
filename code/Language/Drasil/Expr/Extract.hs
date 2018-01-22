@@ -15,7 +15,6 @@ import Language.Drasil.Chunk.Quantity (QWrapper)
 dep :: Expr -> [String]
 dep (Assoc _ l)   = nub (concat $ map dep l)
 dep (a :/ b)      = nub (dep a ++ dep b)
-dep (a :^ b)      = nub (dep a ++ dep b)
 dep (a :- b)      = nub (dep a ++ dep b)
 dep (a :. b)      = nub (dep a ++ dep b)
 dep (a :&& b)     = nub (dep a ++ dep b)
@@ -53,7 +52,6 @@ dep (Append a b)  = nub (dep a ++ dep b)
 vars :: (HasSymbolTable s) => Expr -> s -> [QWrapper]
 vars (Assoc _ l)  m = nub $ concat $ map (\x -> vars x m) l
 vars (a :/ b)     m = nub (vars a m ++ vars b m)
-vars (a :^ b)     m = nub (vars a m ++ vars b m)
 vars (a :- b)     m = nub (vars a m ++ vars b m)
 vars (a :. b)     m = nub (vars a m ++ vars b m)
 vars (a :&& b)    m = nub (vars a m ++ vars b m)
@@ -91,7 +89,6 @@ vars (Append a b) m = nub (vars a m ++ vars b m)
 codevars :: (HasSymbolTable s) => Expr -> s -> [CodeChunk]
 codevars (Assoc _ l)  sm = nub (concat $ map (\x -> codevars x sm) l)
 codevars (a :/ b)     sm = nub (codevars a sm ++ codevars b sm)
-codevars (a :^ b)     sm = nub (codevars a sm ++ codevars b sm)
 codevars (a :- b)     sm = nub (codevars a sm ++ codevars b sm)
 codevars (a :. b)     sm = nub (codevars a sm ++ codevars b sm)
 codevars (a :&& b)    sm = nub (codevars a sm ++ codevars b sm)
@@ -130,7 +127,6 @@ codevars (Append a b) sm = nub (codevars a sm ++ codevars b sm)
 codevars' :: (HasSymbolTable s) => Expr -> s -> [CodeChunk]
 codevars' (Assoc _ l)  sm = nub (concat $ map (\x -> codevars' x sm) l)
 codevars' (a :/ b)     sm = nub (codevars' a sm ++ codevars' b sm)
-codevars' (a :^ b)     sm = nub (codevars' a sm ++ codevars' b sm)
 codevars' (a :- b)     sm = nub (codevars' a sm ++ codevars' b sm)
 codevars' (a :. b)     sm = nub (codevars' a sm ++ codevars' b sm)
 codevars' (a :&& b)    sm = nub (codevars' a sm ++ codevars' b sm)
@@ -188,6 +184,7 @@ unpackop (Integral _ e) = e
 -- | Helper function for vars and dep, gets Exprs from binary operations.
 binop :: BiFunc -> [Expr]
 binop (Cross e f) = [e,f]
+binop (Power a b) = [a,b]
 
 -- Steven edit:  need this to have a type for code generation
 --   setting to all to rational

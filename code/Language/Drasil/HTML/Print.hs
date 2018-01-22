@@ -154,6 +154,7 @@ p_expr (BOp Gt a b)   = p_expr a ++ "&thinsp;&gt;&thinsp;" ++ p_expr b
 p_expr (BOp LEq a b)  = p_expr a ++ "&thinsp;&le;&thinsp;" ++ p_expr b
 p_expr (BOp GEq a b)  = p_expr a ++ "&thinsp;&ge;&thinsp;" ++ p_expr b
 p_expr (BOp Dot a b)  = p_expr a ++ "&sdot;" ++ p_expr b
+p_expr (BOp Cross a b) = p_expr a ++ "&#10799;" ++ p_expr b
 p_expr (Neg a)    = neg a
 p_expr (Call f x) = p_expr f ++ paren (concat $ intersperse "," $ map p_expr x)
 p_expr (Case ps)  = cases ps (p_expr)
@@ -335,7 +336,6 @@ makeFigure r c f wp = refwrap r (image f c wp $$ caption c)
 -----------------------------------------------------------------
 -- | Renders expression operations/functions. 
 p_op :: Function -> [Expr] -> String
-p_op f@(Cross) xs = binfix_op f xs
 p_op f@(Summation bs) (x:[]) = lrgOp f bs ++ paren (p_expr x)
 p_op (Summation _) _ = error "Something went wrong with a summation"
 p_op f@(Product bs) (x:[]) = lrgOp f bs ++ paren (p_expr x)
@@ -393,16 +393,9 @@ function Tan            = "tan"
 function Sec            = "sec"
 function Csc            = "csc"
 function Cot            = "cot"
-function Cross          = "&#10799;"
 function Exp            = "e"
 function Sqrt           = "&radic;"
   
--- | Helper for rendering binary infix operators, used by 'p_op'
-binfix_op :: Function -> [Expr] -> String
-binfix_op f (x:y:[]) = p_expr x ++ function f ++ p_expr y
-binfix_op _ _ = error "Attempting to print binary operate with inappropriate" ++
-                   "number of operands (should be 2)"
-
 -- | Renders modules
 makeModule :: String -> String -> Doc
 makeModule m l = refwrap l (paragraph $ wrap "b" [] (text m))

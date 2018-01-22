@@ -447,7 +447,6 @@ convExpr (Assoc Add l)  = fmap (foldr1 (#+)) $ sequence $ map convExpr l
 convExpr (Assoc Mul l)  = fmap (foldr1 (#*)) $ sequence $ map convExpr l
 convExpr (Assoc E.And l)  = fmap (foldr1 (?&&)) $ sequence $ map convExpr l
 convExpr (Assoc E.Or l)  = fmap (foldr1 (?||)) $ sequence $ map convExpr l
-convExpr (a :^ b)     = liftM2 (#^)  (convExpr a) (convExpr b)
 convExpr (0 :- b)     = convExpr (Neg b)
 convExpr (a :- b)     = liftM2 (#-)  (convExpr a) (convExpr b)
 convExpr (a :. b)     = liftM2 (#*)  (convExpr a) (convExpr b)

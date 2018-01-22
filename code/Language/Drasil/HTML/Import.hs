@@ -33,7 +33,6 @@ expr (Assoc op l)     sm = P.Assoc op $ map (\x -> expr x sm) l
 expr (a :&& b)        sm = P.Assoc And [expr a sm, expr b sm]
 expr (a :|| b)        sm = P.Assoc Or [expr a sm, expr b sm]
 expr (a :/ b)         sm = P.BOp P.Frac  (replace_divs a sm) (replace_divs b sm)
-expr (a :^ b)         sm = P.BOp P.Pow   (expr a sm) (expr b sm)
 expr (a :- b)         sm = P.BOp P.Sub   (expr a sm) (expr b sm)
 expr (a :. b)         sm = P.BOp P.Dot   (expr a sm) (expr b sm)
 expr (Neg a)          sm = P.Neg   (expr a sm)
@@ -59,7 +58,7 @@ expr (Matrix a)         sm = P.Mtx $ map (map (flip expr sm)) a
 expr (Index a i)        sm = P.BOp P.Index (expr a sm) (expr i sm)
 expr (UnaryOp u)        sm = (\(x,y) -> P.Op x [y]) $ ufunc u sm
 expr (Grouping e)       sm = P.Grouping (expr e sm)
-expr (BinaryOp b)       sm = (\(x,y) -> P.Op x y) (bfunc b sm)
+expr (BinaryOp b)       sm = bfunc b sm
 expr (EOp o)            sm = (\(x,y) -> P.Op x [y]) $ eop o sm
 expr (Not a)            sm = P.Not   (expr a sm)
 expr (a  :=>  b)        sm = P.BOp P.Impl  (expr a sm) (expr b sm)
@@ -85,8 +84,9 @@ ufunc (Exp e)    sm = (P.Exp,  expr e sm)
 ufunc (Sqrt e)   sm = (P.Sqrt, expr e sm)
 
 -- | Helper function for translating 'BiFunc's
-bfunc :: HasSymbolTable s => BiFunc -> s -> (P.Function, [P.Expr])
-bfunc (Cross e1 e2) sm = (P.Cross, map (flip expr sm) [e1,e2])
+bfunc :: HasSymbolTable s => BiFunc -> s -> P.Expr
+bfunc (Cross e1 e2) sm = P.BOp P.Cross (expr e1 sm) (expr e2 sm)
+bfunc (Power a b)   sm = P.BOp P.Pow (expr a sm) (expr b sm)
 
 -- | Helper function for translating 'EOperator's
 eop :: HasSymbolTable s => EOperator -> s -> (P.Function, P.Expr)
@@ -112,11 +112,11 @@ int_wrt wrtc = P.Assoc Mul [P.Sym lD, P.Sym wrtc]
 
 -- | Helper function for translating operations in expressions 
 replace_divs :: HasSymbolTable s => Expr -> s -> P.Expr
-replace_divs (a :/ b) sm = P.BOp P.Div (replace_divs a sm) (replace_divs b sm)
-replace_divs (Assoc op l) sm = P.Assoc op $ map (\x -> replace_divs x sm) l
-replace_divs (a :^ b) sm = P.BOp P.Pow (replace_divs a sm) (replace_divs b sm)
-replace_divs (a :- b) sm = P.BOp P.Sub (replace_divs a sm) (replace_divs b sm)
-replace_divs a        sm = expr a sm
+replace_divs (a :/ b)               sm = P.BOp P.Div (replace_divs a sm) (replace_divs b sm)
+replace_divs (Assoc op l)           sm = P.Assoc op $ map (\x -> replace_divs x sm) l
+replace_divs (BinaryOp (Power a b)) sm = P.BOp P.Pow (replace_divs a sm) (replace_divs b sm)
+replace_divs (a :- b)               sm = P.BOp P.Sub (replace_divs a sm) (replace_divs b sm)
+replace_divs a                      sm = expr a sm
 
 -- | Translates Sentence to the HTML representation of Sentence ('Spec')
 spec :: HasSymbolTable s => Sentence -> s -> H.Spec

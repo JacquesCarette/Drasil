@@ -15,7 +15,7 @@ import Control.Lens ((^.))
 
 type Relation = Expr
 
-infixr 8 :^
+infixr 8 $^
 infixl 7 :/
 infixl 6 :-
 infixr 4 $=
@@ -29,7 +29,6 @@ data Expr where
   Dbl      :: Double -> Expr
   Int      :: Integer -> Expr
   Assoc    :: Oper -> [Expr] -> Expr
-  (:^)     :: Expr -> Expr -> Expr -- Power operator
   (:/)     :: Expr -> Expr -> Expr -- Division
   (:-)     :: Expr -> Expr -> Expr -- Subtraction
   (:.)     :: Expr -> Expr -> Expr -- Dot product
@@ -79,6 +78,9 @@ data Expr where
 ($<=) = ELessEq
 ($>=) = EGreaterEq
 
+($^) :: Expr -> Expr -> Expr
+($^) a b = BinaryOp (Power a b)
+
 type Variable = String
 
 data DerivType = Part
@@ -102,7 +104,6 @@ instance Eq Expr where
   Dbl a == Dbl b               =  a == b
   Int a == Int b               =  a == b
   Assoc o1 l1 == Assoc o2 l2   =  o1 == o2 && l1 == l2
-  (:^) a b == (:^) c d         =  a == c && b == d
   (:/) a b == (:/) c d         =  a == c && b == d
   (:-) a b == (:-) c d         =  a == c && b == d
   (:.) a b == (:.) c d         =  a == c && b == d || a == d && b == c
@@ -126,6 +127,7 @@ instance Eq Expr where
   IsIn  a b  == IsIn  c d      =  a == c && b == d
   ForAll a b == ForAll c d     =  a == c && b == d -- not quite right...
   Exists a b == Exists c d     =  a == c && b == d -- not quite right...
+  BinaryOp a == BinaryOp b     =  a == b
   _ == _                       =  False
 
 instance Fractional Expr where
@@ -138,9 +140,10 @@ instance Fractional Expr where
 -- TODO: Move the below to a separate file somehow. How to go about it?
 
 -- | Binary Functions
-data BiFunc where
-  Cross :: Expr -> Expr -> BiFunc --Cross Product: HTML &#10799;
-  -- Cross product of two expressions
+data BiFunc =
+    Cross Expr Expr -- Cross Product: HTML &#10799;
+  | Power Expr Expr -- Power operator
+  deriving Eq
 
 -- | Operators
 -- All operators take a |DomainDesc| and a variable

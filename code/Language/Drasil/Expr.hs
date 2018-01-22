@@ -16,7 +16,6 @@ import Control.Lens ((^.))
 type Relation = Expr
 
 infixr 8 :^
-infixl 7 :*
 infixl 7 :/
 infixl 6 :-
 infixr 4 $=
@@ -31,7 +30,6 @@ data Expr where
   Int      :: Integer -> Expr
   Assoc    :: Oper -> [Expr] -> Expr
   (:^)     :: Expr -> Expr -> Expr -- Power operator
-  (:*)     :: Expr -> Expr -> Expr -- Multiplication
   (:/)     :: Expr -> Expr -> Expr -- Division
   (:-)     :: Expr -> Expr -> Expr -- Subtraction
   (:.)     :: Expr -> Expr -> Expr -- Dot product
@@ -90,7 +88,7 @@ data DerivType = Part
 -- TODO: have $+ flatten nest Adds
 instance Num Expr where
   a + b = Assoc Add [a, b]
-  a * b = a :* b
+  a * b = Assoc Mul [a, b]
   a - b = a :- b
   fromInteger a = Int a
   abs = UnaryOp . Abs
@@ -105,7 +103,6 @@ instance Eq Expr where
   Int a == Int b               =  a == b
   Assoc o1 l1 == Assoc o2 l2   =  o1 == o2 && l1 == l2
   (:^) a b == (:^) c d         =  a == c && b == d
-  (:*) a b == (:*) c d         =  a == c && b == d || a == d && b == c
   (:/) a b == (:/) c d         =  a == c && b == d
   (:-) a b == (:-) c d         =  a == c && b == d
   (:.) a b == (:.) c d         =  a == c && b == d || a == d && b == c

@@ -580,6 +580,9 @@ valueDocD c (ListVar v _) = valueDoc c $ var v
 valueDocD c (ObjVar v1 v2) = objVarDoc c v1 v2
 valueDocD c (Arg i) = argsList c <> brackets (litDoc c $ LitInt $ fromIntegral i)
 valueDocD c (Global s) = getEnv c s
+valueDocD c (Condi cond te ee) =  -- probably need to add a member to the record for this
+  parens (parens (valueDoc c cond) <+> text "?" <+>
+          valueDoc c te <+> text ":" <+> valueDoc c ee)
 
 valueDocD' :: Config -> Value -> Doc
 valueDocD' c (Arg i) = argsList c <> brackets (litDoc c $ LitInt $ fromIntegral i + 1)

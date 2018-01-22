@@ -170,7 +170,7 @@ resShearWOEqn :: Expr
 resShearWOEqn = (((inxi slcWght) + (inxi surfHydroForce) *
   (cos (inxi surfAngle)) + (inxi surfLoad) * (cos (inxi impLoadAngle))) *
   (cos (inxi baseAngle)) + (Neg (C earthqkLoadFctr) * (inxi slcWght) -
-  (inxi watrForceDif) + (inxi surfHydroForce) :* sin (inxi surfAngle) +
+  (inxi watrForceDif) + (inxi surfHydroForce) * sin (inxi surfAngle) +
   (inxi surfLoad) * (sin (inxi impLoadAngle))) * (sin (inxi baseAngle)) -
   (inxi baseHydroForce)) * tan (inxi fricAngle) + (inxi cohesion) *
   (inxi baseWthX) * sec (inxi baseAngle)
@@ -184,7 +184,7 @@ mobShearWOEqn :: Expr
 mobShearWOEqn = ((inxi slcWght) + (inxi surfHydroForce) *
   (cos (inxi surfAngle)) + (inxi surfLoad) * (cos (inxi impLoadAngle))) *
   (sin (inxi baseAngle)) - (Neg (C earthqkLoadFctr) * (inxi slcWght) -
-  (inxi watrForceDif) + (inxi surfHydroForce) :* sin (inxi surfAngle) +
+  (inxi watrForceDif) + (inxi surfHydroForce) * sin (inxi surfAngle) +
   (inxi surfLoad) * (sin (inxi impLoadAngle))) * (cos (inxi baseAngle))
 
 --DD12
@@ -238,7 +238,7 @@ soilStiffnessEqn = (Case [case1,case2])
           (C constant_A)), (C SM.poissnsR) $>= 0)
 
         block = (C intNormForce)*(1 - (C SM.poissnsR))/
-          ((1 + (C SM.poissnsR)) * (1 - 2 :*(C SM.poissnsR) + (C baseWthX)))
+          ((1 + (C SM.poissnsR)) * (1 - 2 *(C SM.poissnsR) + (C baseWthX)))
 
 -----------------
 -- Derivations --

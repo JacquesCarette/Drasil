@@ -248,7 +248,7 @@ pcm_SA = uqc "pcm_SA"
   (sub cA cP) m_2 Rational
   [physc $ \c -> c $> Int 0,
   sfwrc $ \c -> C pcm_vol $<= c $<=
-  ((Int 2 :/ C htTransCoeff_min) :* C tank_vol)]
+  ((Int 2 :/ C htTransCoeff_min) * C tank_vol)]
   (Dbl 1.2) 0.1
 
 -- Constraint 5

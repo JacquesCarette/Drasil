@@ -66,7 +66,7 @@ mcShrStrgth = makeRC "mcShrStrgth" (nounPhraseSP "Mohr-Coulumb shear strength")
   mcSS_desc mcSS_rel
 
 mcSS_rel :: Relation
-mcSS_rel = (C shrStress) $= ((C normStress) :* (tan (C fricAngle)) + (C cohesion))
+mcSS_rel = (C shrStress) $= ((C normStress) * (tan (C fricAngle)) + (C cohesion))
 
 mcSS_desc :: Sentence
 mcSS_desc = foldlSent [S "For a", phrase soil, S "under", phrase stress,
@@ -116,7 +116,7 @@ hookesLaw = makeRC "hookesLaw"
   (nounPhraseSP "Hooke's law") hksLw_desc hksLw_rel
 
 hksLw_rel :: Relation
-hksLw_rel = (C genForce) $= (C stffness) :* (C genDisplace)
+hksLw_rel = (C genForce) $= (C stffness) * (C genDisplace)
 
 hksLw_desc :: Sentence
 hksLw_desc = foldlSent [S "Description Stiffness", getES stffness, S "is the",

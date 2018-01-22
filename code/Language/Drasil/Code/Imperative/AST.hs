@@ -141,6 +141,7 @@ data Value = EnumElement Label Label    --EnumElement enumName elementName
            | Const Label
            | Global Label -- these are generation-time globals that will be filled-in
            | Arg Int                    --Arg argIndex : get command-line arguments. 
+           | Condi Value Value Value -- inline if-then-else
     deriving (Eq, Show)
 data Literal = LitBool Bool
              | LitInt Integer

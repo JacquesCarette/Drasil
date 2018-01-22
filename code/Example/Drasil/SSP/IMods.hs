@@ -52,7 +52,7 @@ fcSfty_rel = C fs $= sumOp shearRNoIntsl / sumOp shearFNoIntsl
   where prodOp = defprod lU (C index) (C numbSlices - Int 1)
           (Index (C mobShrC) (C varblU) / Index (C shrResC) (C varblU))
         sumOp sym = defsum lV 1 (C numbSlices - Int 1)
-          (Index (C sym) (C varblV) :* prodOp) + Index (C sym) (C numbSlices)
+          (Index (C sym) (C varblV) * prodOp) + Index (C sym) (C numbSlices)
 
 fcSfty_desc :: Sentence
 fcSfty_desc = foldlSent [S "Equation for the", titleize fs `isThe` S "ratio",

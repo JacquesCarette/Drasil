@@ -45,8 +45,7 @@ type ReqMap = Map.Map String (ReqChunk, Int)
 reqMap :: [ReqChunk] -> ReqMap
 reqMap rs = Map.fromList $ zip (map (^. id) (frs ++ nfrs)) ((zip frs [1..]) ++ 
   (zip nfrs [1..]))
-  where frs  = fst $ partition (isFuncRec . reqType) rs
-        nfrs = snd $ partition (isFuncRec . reqType) rs
+  where (frs, nfrs)  = partition (isFuncRec . reqType) rs
         isFuncRec FR = True
         isFuncRec _  = False
 

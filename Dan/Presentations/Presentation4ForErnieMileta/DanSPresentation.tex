@@ -14,12 +14,14 @@
 \usepackage{longtable}
 \usepackage{booktabs}
 \usepackage{qtree}
+\usepackage{multicol}
 
 \usepackage[english]{babel}
 % or whatever
 
 \usepackage[latin1]{inputenc}
 % or whatever
+\usepackage{color}
 
 \usepackage{times}
 %\usepackage[T1]{fontenc}
@@ -236,6 +238,18 @@
 
 \begin{frame}
 
+\frametitle{Recap - Chunks}
+
+\begin{center}
+\includegraphics[width=.8\textwidth]{hierarchy-redesign.png}
+\end{center}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+
 \frametitle{Recap - Generation}
 \begin{center}
 \includegraphics[width=\textwidth]{generate_all_the_things.jpg}
@@ -300,38 +314,6 @@ and more!
 \begin{frame}
 
 \frametitle{What's New}
-\framesubtitle{New Knowledge Capture Mechanisms}
-
-We are able to capture much more information in a `useful' form
-
-\begin{enumerate}
-	\item Theories
-	\item Assumptions
-	\item Requirements
-	\item Instance Models
-\end{enumerate}
-...
-
-\end{frame}
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-\begin{frame}
-
-\frametitle{What's New}
-\framesubtitle{Document Language}
-
-\begin{center}
-\includegraphics[width=\textwidth]{books.jpg}
-\end{center}
-
-\end{frame}
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-\begin{frame}
-
-\frametitle{What's New}
 \framesubtitle{Yuzhi and Devi}
 
 New graduate students as of September 2017.
@@ -349,110 +331,205 @@ New graduate students as of September 2017.
 \begin{frame}
 
 \frametitle{Design Changes}
-\framesubtitle{Chunk Hierarchy -- Old}
+\framesubtitle{New Knowledge Capture Mechanisms}
 
-\large{
-\Tree[.\fbox{Chunk(\textit{name})}
-		[.\fbox{Concept(\textit{description})}
-			[.\fbox{Quantity(\textit{symbol})} ]
-			[.\fbox{Unit(\textit{unit})} ]
-		]
-	]
-}
-\end{frame}
+We are able to capture much more information in a `useful' form
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-\begin{frame}
-
-\frametitle{Design Changes}
-\framesubtitle{Chunk Hierarchy -- New}
-
-\begin{center}
-\includegraphics[width=.8\textwidth]{hierarchy-redesign.png}
-\end{center}
+\begin{enumerate}
+	\item Theories
+	\item Assumptions
+	\item Requirements
+	\item Instance Models
+\end{enumerate}
+...
 
 \end{frame}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\begin{frame}
-
-\frametitle{Design Changes}
-\framesubtitle{Abstraction}
-
-\begin{center}
-\includegraphics[width=\textwidth]{new_design2.pdf}
-\end{center}
-
-\end{frame}
+%\begin{frame}
+%
+%\frametitle{Design Changes}
+%\framesubtitle{Chunk Hierarchy -- Old}
+%
+%\large{
+%\Tree[.\fbox{Chunk(\textit{name})}
+%		[.\fbox{Concept(\textit{description})}
+%			[.\fbox{Quantity(\textit{symbol})} ]
+%			[.\fbox{Unit(\textit{unit})} ]
+%		]
+%	]
+%}
+%\end{frame}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\begin{frame}[fragile]
+%\begin{frame}
+%
+%\frametitle{Design Changes}
+%\framesubtitle{Chunk Hierarchy -- New}
+%
+%\begin{center}
+%\includegraphics[width=.8\textwidth]{hierarchy-redesign.png}
+%\end{center}
+%
+%\end{frame}
 
-\frametitle{Design Changes}
-\framesubtitle{Recipes -- Old}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\begin{lstlisting}[language=Haskell, frame=single, showstringspaces=false, basicstyle=\scriptsize]
-srsBody = Document ((S "SRS for ") :+: 
-    (N $ h_g ^. symbol) :+: 
-    (S " and ") :+: (N $ h_c ^. symbol)) 
-    (S "Spencer Smith") [s1,s2]
-
-s1 = Section (S "Table of Units") 
-    [s1_intro, s1_table]
-
-s1_table = Table [S "Symbol", S "Description"] $ mkTable
-    [(\x -> Sy (x ^. unit)),
-     (\x -> S (x ^. descr))
-    ] si_units
-
-s1_intro = Paragraph (S "Throughout this ...
-\end{lstlisting} 
-\large{\ldots}
-
-\end{frame}
-
+%\begin{frame}
+%
+%\frametitle{Design Changes}
+%\framesubtitle{Abstraction}
+%
+%\begin{center}
+%\includegraphics[width=\textwidth]{new_design2.pdf}
+%\end{center}
+%
+%\end{frame}
+%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \begin{frame}[fragile]
 
 \frametitle{Design Changes}
-\framesubtitle{Recipes -- New}
+\framesubtitle{Document Language -- Old (Recipes)}
 
-\begin{lstlisting}[language=Haskell, frame=single, showstringspaces=false, basicstyle=\scriptsize]
-mkSRS :: DocDesc
-mkSRS = RefSec (RefProg intro [
-	TUnits, 
-	tsymb'' s1_2_intro (TermExcept [norm_vect]),
-	TAandA
-	]) : 
-	map Verbatim [s2, s3, s4, s5, s6, s7]
+\begin{lstlisting}[language=Haskell, frame=single, showstringspaces=false, basicstyle=\scriptsize, escapechar=!]
+!\textcolor{blue}{RefSec}! (RefProg intro [
+  !\textcolor{red}{TUnits}!, 
+  !\textcolor{red}{tsymb''}! s1_2_intro (TermExcept [norm_vect]),
+  !\textcolor{red}{TAandA}!]) : 
+map Verbatim [s2, s3, s4, s5, s6, s7]
 
-swhs_si :: SystemInformation
-swhs_si = SI swhs_pcm srs [thulasi, brooks, spencerSmith] 
-	this_si swhsSymbols (swhsSymbols) acronyms 
+s2 = Section !\ldots{} \ldots{} \ldots{}!
+s3 = Section !\ldots{} \ldots{} \ldots{}!
+s4 = Section !\ldots{} \ldots{} \ldots{}!
+s5 = Section !\ldots{} \ldots{} \ldots{}!
+s6 = Section !\ldots{} \ldots{} \ldots{}!
+s7 = Section !\ldots{} \ldots{} \ldots{}!
 
-swhs_srs' :: Document
-swhs_srs' = mkDoc mkSRS swhs_si
 \end{lstlisting} 
 %%% EASIER TO WORK WITH / Better understanding of what a recipe should be
 \end{frame}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\begin{frame}
+\begin{frame}[fragile]
 
-\frametitle{Interesting Tidbits} %DS Get a better name for this
-\framesubtitle{Results and Findings}
+\frametitle{Design Changes}
+\framesubtitle{Document Language -- New (Recipes)}
 
--- Docs looked at by many people over several years, some errors only now being
-discovered due to stricter (more formalized) approach to defining/documenting
-the problem(s) being solved.
+%DS This is where the section of GlassBR comes into play.
+\begin{lstlisting}[language=Haskell, frame=single, showstringspaces=false, basicstyle=\scriptsize, escapechar=!]
+!\textcolor{blue}{RefSec}! (RefProg intro 
+  [!\textcolor{red}{TUnits}!, !\textcolor{red}{tsymb}! [TSPurpose, SymbOrder], !\textcolor{red}{TAandA}!]) :
+!\textcolor{blue}{IntroSec}! ( IntroProg (startIntro ...) (short gLassBR)
+  [!\textcolor{red}{IPurpose}! (s2_1_intro_p1 document gLassBR glaSlab),
+   !\textcolor{red}{IScope}! incScoR endScoR,
+!\ldots{}!
+!\textcolor{blue}{GSDSec}! (GSDProg2 [!\textcolor{red}{UsrChars}! ...], !\textcolor{red}{SystCons}! [] []]) :
+!\textcolor{blue}{ScpOfProjSec}! (ScpOfProjProg ...) :
+!\textcolor{blue}{SSDSec}! (SSDProg
+  [!\textcolor{red}{SSDProblem}! (PDProg !\ldots{}! [s6_1_1, s6_1_2, s6_1_3])
+  , !\textcolor{red}{SSDSolChSpec}!
+    (SCSProg
+      [ !\textcolor{red}{TMs}! ([Label] ++ stdFields) [t1IsSafe]
+      , !\textcolor{red}{GDs}! [] [] HideDerivation -- No Gen Defs for GlassBR
+      , !\textcolor{red}{DDs}! !\ldots{}! , !\textcolor{red}{IMs}! !\ldots{}! ])]) :
+!\textcolor{blue}{ReqrmntSec}! (ReqsProg [
+  !\textcolor{red}{FReqsSub}! s7_1_list, 
+  !\textcolor{red}{NonFReqsSub}! [performance] (gBRpriorityNFReqs) :
+!\ldots{}!
+!\textcolor{blue}{AuxConstntSec}! (AuxConsProg gLassBR auxiliaryConstants) :
+!\textcolor{blue}{Bibliography}! gbCitations :
+!\textcolor{blue}{AppndxSec}! (AppndxProg [s12_intro, fig_5, fig_6]) : []
+\end{lstlisting}
 
--- Updates to documentation upon finding these changes have been quick and easy
-thanks to tool support from Drasil
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\section[Results]{Results}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}[fragile]
+
+\frametitle{Results}
+\framesubtitle{Document Language -- New (Recipes)}
+
+\{GlassBR\_SRS.html (or .tex)\}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}[fragile]
+
+\frametitle{Results to Date} %DS Get a better name for this
+\framesubtitle{Sanity Checking}
+
+SSP Example (Issue \#348)
+
+\begin{minipage}{.4\linewidth}
+\begin{equation*}
+S_i = \frac{P_i}{FS}
+\end{equation*}
+\end{minipage}%
+\begin{minipage}{.4\linewidth}
+\begin{equation*}
+FS = \frac{S_i}{\tau{}_i}
+\end{equation*}
+\end{minipage}
+
+\vspace{.5cm}Where did $\tau{}_i$ come from?\vspace{.3cm}
+
+Were $S_i$ and $P_i$ swapped?
+
+
+\begin{itemize}
+\item $\tau{}_i$ was not defined anywhere in the documents
+\item Found with Drasil -- undefined symbols throw errors
+\item Equation based on concepts -- symbols automatically retrieved
+\end{itemize}
+
+%Original issue was a bit more complicated, but came down to this.
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}[fragile]
+
+\frametitle{Results to Date} %DS Get a better name for this
+\framesubtitle{Sanity Checking Cont'd}
+
+\begin{itemize}
+\item Stricter (more formalized) approach reveals hidden errors.
+
+\item Fixing these kinds of errors is easy thanks to tool support from Drasil
+\end{itemize}
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}[fragile]
+
+\frametitle{Results to Date} %DS Get a better name for this
+\framesubtitle{Conceptual Inconsistencies}
+
+%% FILL THIS IN %%
+What do our documents ``mean"?
+
+DD vs IM stuff here. Conceptually confused in the documentation. 
+Understandable by a human, but causes unexpected problems when explained to a machine.
+
+\begin{itemize}
+
+\end{itemize}
+
 \end{frame}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -476,6 +553,7 @@ What next?
 \item Abstraction
 \item More examples
 \item More artifacts -- Module Guide
+\item Design Language
 \end{itemize}
 \end{frame}
 

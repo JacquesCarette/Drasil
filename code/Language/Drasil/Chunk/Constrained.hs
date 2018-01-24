@@ -13,7 +13,7 @@ module Language.Drasil.Chunk.Constrained (
   ) where
 
 import Control.Lens (Simple, Lens, (^.), set)
-import Language.Drasil.Expr (Expr(..), Relation, Variable, ($=))
+import Language.Drasil.Expr (Expr(..), Relation, Variable, ($=),($||))
 import Language.Drasil.Chunk.Quantity
 import Language.Drasil.Chunk.NamedIdea
 import Language.Drasil.Chunk.Unitary
@@ -204,8 +204,5 @@ cwlens l f (CnstrW a) = fmap (\x -> CnstrW (set l x a)) (f (a ^. l))
 --Helper Functions--
 --Helper function that takes a chunk and list of possible values to create a list of constraints
 createCnstrnts :: Expr -> [Language.Drasil.Expr.Variable] -> Expr
-createCnstrnts c [x] = (c $= (V x))
-createCnstrnts c [x, y] = (c $= (V x)) :|| (c $= (V y))
-createCnstrnts c (x:y:xs) = createCnstrnts c [x, y] :|| (createCnstrnts c (xs))
-createCnstrnts _ [] = error "Constraint Error"
+createCnstrnts c l = foldr1 ($||) $ map (\x -> c $= V x) l
 --FIXME: in correct file?

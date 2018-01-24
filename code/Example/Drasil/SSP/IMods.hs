@@ -117,7 +117,7 @@ sliceFs_rel = inxi intNormForce $= Case [
   ((inx mobShrC (-1) * inx intNormForce (-1) +
     C fs * inxi shearFNoIntsl - inxi shearRNoIntsl) / inxi shrResC,
     (Int 2) $<= C index $<= ((C numbSlices) :- (Int 1))),
-  ((Int 0), C index $= (Int 0) :|| C index $= C numbSlices)]  
+  ((Int 0), C index $= (Int 0) $|| C index $= C numbSlices)]  
   -- FIXME: Use index i as part of condition
 
 sliceFs_desc :: Sentence

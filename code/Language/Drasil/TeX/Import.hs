@@ -58,8 +58,6 @@ expr (Grouping e)      sm = P.Grouping (expr e sm)
 expr (BinaryOp b)      sm = bfunc b sm
 expr (EOp o)           sm = (\(x,y) -> P.Op x [y]) (eop o sm)
 expr (Not a)           sm = P.Not  (expr a sm)
-expr (a :&& b)         sm = P.Assoc And  [expr a sm, expr b sm]
-expr (a :|| b)         sm = P.Assoc Or  [expr a sm, expr b sm]
 expr (a  :=>  b)       sm = P.BOp P.Impl  (expr a sm) (expr b sm)
 expr (a  :<=> b)       sm = P.BOp P.Iff   (expr a sm) (expr b sm)
 expr (IsIn  a b)       sm = P.IsIn  (expr a sm) b

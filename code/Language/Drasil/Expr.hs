@@ -19,6 +19,8 @@ infixr 8 $^
 infixl 7 :/
 infixl 6 :-
 infixr 4 $=
+infixr 9 $&&
+infixr 9 $||
 
 data Oper = Add | Mul | And | Or
   deriving (Eq)
@@ -59,8 +61,6 @@ data Expr where
   ELessEq    :: Expr -> Expr -> Expr
   EGreaterEq :: Expr -> Expr -> Expr
   -- start of logic Expr
-  (:&&)    :: Expr -> Expr -> Expr -- logical and
-  (:||)    :: Expr -> Expr -> Expr -- logical or
   Not      :: Expr -> Expr -- logical not
 
   IsIn  :: Expr -> Space -> Expr --	element of
@@ -78,8 +78,10 @@ data Expr where
 ($<=) = ELessEq
 ($>=) = EGreaterEq
 
-($^) :: Expr -> Expr -> Expr
+($^), ($&&), ($||) :: Expr -> Expr -> Expr
 ($^) a b = BinaryOp (Power a b)
+a $&& b = Assoc And [a,b]
+a $|| b = Assoc Or  [a,b]
 
 type Variable = String
 
@@ -120,8 +122,6 @@ instance Eq Expr where
   ELessEq a b == ELessEq c d        =  a == c && b == d
   EGreaterEq a b == EGreaterEq c d  =  a == c && b == d
   --Logic
-  (:&&) a b  == (:&&) c d      =  a == c && b == d || a == d && b == c
-  (:||) a b  == (:||) c d      =  a == c && b == d || a == d && b == c
   (:=>) a b  == (:=>) c d      =  a == c && b == d
   (:<=>) a b == (:<=>) c d     =  a == c && b == d || a == d && b == c
   IsIn  a b  == IsIn  c d      =  a == c && b == d

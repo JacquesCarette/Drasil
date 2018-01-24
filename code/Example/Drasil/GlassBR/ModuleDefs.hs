@@ -81,7 +81,7 @@ indInSeq :: Func
 indInSeq = funcDef "indInSeq" [v_arr, v_v] Natural 
   [
     ffor (v_i) (C v_i $< (Len (C v_arr) - 1))
-      [ FCond (((Index (C v_arr) (C v_i)) $<= (C v_v)) :&& ((C v_v) $<= (Index (C v_arr) ((C v_i) + 1)))) [ FRet $ C v_i ] [] ],
+      [ FCond (((Index (C v_arr) (C v_i)) $<= (C v_v)) $&& ((C v_v) $<= (Index (C v_arr) ((C v_i) + 1)))) [ FRet $ C v_i ] [] ],
     FThrow "Bound error"      
   ]
 
@@ -157,7 +157,7 @@ interpZ = funcDef "interpZ" [{-v_x_array, v_y_array, v_z_array,-} v_filename, v_
                                                Index (C v_x_z_2) ((C v_k) + 1), 
                                                Index (C v_y_z_2) ((C v_k) + 1),
                                                C v_x ]),
-        FCond ((C v_y_1 $<= C v_y) :&& (C v_y $<= C v_y_2))
+        FCond ((C v_y_1 $<= C v_y) $&& (C v_y $<= C v_y_2))
           [ FRet (FCall (asExpr linInterp) [ C v_y_1,
                                              Index (C v_z_array) (C v_i),
                                              C v_y_2,

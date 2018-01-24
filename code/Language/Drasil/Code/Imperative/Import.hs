@@ -465,15 +465,9 @@ convExpr (FCall (C c) x)  = do
   args <- mapM convExpr x
   fApp (codeName (codefunc $ symbLookup c $ info ^. symbolTable)) args
 convExpr (FCall _ _)  = return $ litString "**convExpr :: FCall unimplemented**"
-convExpr (EEquals a b)    = liftM2 (?==) (convExpr a) (convExpr b)
-convExpr (ENEquals a b)   = liftM2 (?!=) (convExpr a) (convExpr b)
-convExpr (EGreater a b)   = liftM2 (?>)  (convExpr a) (convExpr b)
-convExpr (ELess a b)      = liftM2 (?<)  (convExpr a) (convExpr b)
-convExpr (ELessEq a b)    = liftM2 (?<=) (convExpr a) (convExpr b)
-convExpr (EGreaterEq a b) = liftM2 (?>=) (convExpr a) (convExpr b)
 convExpr (UnaryOp u)  = unop u
 convExpr (Grouping e) = convExpr e
-convExpr (BinaryOp _) = return $ litString "**convExpr :: BinaryOp unimplemented**"
+convExpr (BinaryOp b) = bfunc b
 convExpr (Case l)     = doit l -- FIXME this is sub-optimal
   where
     doit [] = error "should never happen"
@@ -499,6 +493,16 @@ unop (E.Csc e)   = fmap I.csc (convExpr e)
 unop (E.Sec e)   = fmap I.sec (convExpr e)
 unop (E.Cot e)   = fmap I.cot (convExpr e)
 unop (E.Norm _)  = error "unop: Norm not implemented"
+
+bfunc :: BiFunc -> Reader State Value
+bfunc (EEquals a b)    = liftM2 (?==) (convExpr a) (convExpr b)
+bfunc (ENEquals a b)   = liftM2 (?!=) (convExpr a) (convExpr b)
+bfunc (EGreater a b)   = liftM2 (?>)  (convExpr a) (convExpr b)
+bfunc (ELess a b)      = liftM2 (?<)  (convExpr a) (convExpr b)
+bfunc (ELessEq a b)    = liftM2 (?<=) (convExpr a) (convExpr b)
+bfunc (EGreaterEq a b) = liftM2 (?>=) (convExpr a) (convExpr b)
+bfunc (Cross _ _)      = error "bfunc: Cross not implemented"
+bfunc (E.Power a b)    = liftM2 (#^) (convExpr a) (convExpr b)
 
 -- medium hacks --
 genModDef :: CS.Mod -> Reader State Module

@@ -54,12 +54,6 @@ data Expr where
   UnaryOp  :: UFunc -> Expr
   BinaryOp :: BiFunc -> Expr
   EOp :: EOperator -> Expr
-  EEquals    :: Expr -> Expr -> Expr
-  ENEquals   :: Expr -> Expr -> Expr
-  ELess      :: Expr -> Expr -> Expr
-  EGreater   :: Expr -> Expr -> Expr
-  ELessEq    :: Expr -> Expr -> Expr
-  EGreaterEq :: Expr -> Expr -> Expr
   -- start of logic Expr
   Not      :: Expr -> Expr -- logical not
 
@@ -71,12 +65,12 @@ data Expr where
   (:<=>) :: Expr -> Expr -> Expr -- if and only if, &hArr; \iff
 
 ($=), ($!=), ($<), ($>), ($<=), ($>=) :: Expr -> Expr -> Expr
-($=)  = EEquals
-($!=) = ENEquals
-($<)  = ELess
-($>)  = EGreater
-($<=) = ELessEq
-($>=) = EGreaterEq
+($=)  a b = BinaryOp $ EEquals a b
+($!=) a b = BinaryOp $ ENEquals a b
+($<)  a b = BinaryOp $ ELess a b
+($>)  a b = BinaryOp $ EGreater a b
+($<=) a b = BinaryOp $ ELessEq a b
+($>=) a b = BinaryOp $ EGreaterEq a b
 
 ($^), ($&&), ($||) :: Expr -> Expr -> Expr
 ($^) a b = BinaryOp (Power a b)
@@ -115,12 +109,6 @@ instance Eq Expr where
   C a == C b                   =  (a ^. id) == (b ^. id)
   FCall a b == FCall c d       =  a == c && b == d
   Case a == Case b             =  a == b
-  EEquals  a b == EEquals  c d      =  a == c && b == d || a == d && b == c
-  ENEquals a b == ENEquals c d      =  a == c && b == d || a == d && b == c
-  ELess  a b == ELess  c d          =  a == c && b == d
-  EGreater  a b == EGreater  c d    =  a == c && b == d
-  ELessEq a b == ELessEq c d        =  a == c && b == d
-  EGreaterEq a b == EGreaterEq c d  =  a == c && b == d
   --Logic
   (:=>) a b  == (:=>) c d      =  a == c && b == d
   (:<=>) a b == (:<=>) c d     =  a == c && b == d || a == d && b == c
@@ -143,6 +131,12 @@ instance Fractional Expr where
 data BiFunc =
     Cross Expr Expr -- Cross Product: HTML &#10799;
   | Power Expr Expr -- Power operator
+  | EEquals Expr Expr
+  | ENEquals Expr Expr
+  | ELess Expr Expr
+  | EGreater Expr Expr
+  | ELessEq Expr Expr
+  | EGreaterEq Expr Expr
   deriving Eq
 
 -- | Operators

@@ -149,7 +149,7 @@ relToQD :: (ExprRelat c, HasSymbolTable ctx) => ctx -> c -> QDefinition
 relToQD sm r = convertRel sm $ r ^. relat
 
 convertRel :: HasSymbolTable ctx => ctx -> Expr -> QDefinition
-convertRel sm (EEquals (C x) r) = ec' (symbLookup x (sm ^. symbolTable)) r
+convertRel sm (BinaryOp (EEquals (C x) r)) = ec' (symbLookup x (sm ^. symbolTable)) r
 convertRel _ _ = error "Conversion failed"
 
 data Mod = Mod Name [Func]

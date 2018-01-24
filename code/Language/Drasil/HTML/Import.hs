@@ -46,12 +46,6 @@ expr (FCall f x)      sm = P.Call (expr f sm) (map (flip expr sm) x)
 expr (Case ps)        sm = if length ps < 2 then 
                     error "Attempting to use multi-case expr incorrectly"
                     else P.Case (zip (map (flip expr sm . fst) ps) (map (flip expr sm . snd) ps))
-expr (EEquals a b)      sm = P.BOp P.Eq  (expr a sm) (expr b sm)
-expr (ENEquals a b)     sm = P.BOp P.NEq (expr a sm) (expr b sm)
-expr (ELess a b)        sm = P.BOp P.Lt  (expr a sm) (expr b sm)
-expr (EGreater a b)     sm = P.BOp P.Gt  (expr a sm) (expr b sm)
-expr (ELessEq a b)      sm = P.BOp P.LEq (expr a sm) (expr b sm)
-expr (EGreaterEq a b)   sm = P.BOp P.GEq (expr a sm) (expr b sm)
 expr (Matrix a)         sm = P.Mtx $ map (map (flip expr sm)) a
 expr (Index a i)        sm = P.BOp P.Index (expr a sm) (expr i sm)
 expr (UnaryOp u)        sm = (\(x,y) -> P.Op x [y]) $ ufunc u sm
@@ -83,8 +77,14 @@ ufunc (Sqrt e)   sm = (P.Sqrt, expr e sm)
 
 -- | Helper function for translating 'BiFunc's
 bfunc :: HasSymbolTable s => BiFunc -> s -> P.Expr
-bfunc (Cross e1 e2) sm = P.BOp P.Cross (expr e1 sm) (expr e2 sm)
-bfunc (Power a b)   sm = P.BOp P.Pow (expr a sm) (expr b sm)
+bfunc (Cross e1 e2)      sm = P.BOp P.Cross (expr e1 sm) (expr e2 sm)
+bfunc (Power a b)        sm = P.BOp P.Pow (expr a sm) (expr b sm)
+bfunc (EEquals a b)      sm = P.BOp P.Eq  (expr a sm) (expr b sm)
+bfunc (ENEquals a b)     sm = P.BOp P.NEq (expr a sm) (expr b sm)
+bfunc (ELess a b)        sm = P.BOp P.Lt  (expr a sm) (expr b sm)
+bfunc (EGreater a b)     sm = P.BOp P.Gt  (expr a sm) (expr b sm)
+bfunc (ELessEq a b)      sm = P.BOp P.LEq (expr a sm) (expr b sm)
+bfunc (EGreaterEq a b)   sm = P.BOp P.GEq (expr a sm) (expr b sm)
 
 -- | Helper function for translating 'EOperator's
 eop :: HasSymbolTable s => EOperator -> s -> (P.Function, P.Expr)

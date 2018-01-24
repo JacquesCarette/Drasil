@@ -204,6 +204,19 @@
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
+\begin{frame}[fragile]
+
+\frametitle{Motivation} %DS Get a better name for this
+\framesubtitle{An ``Anonymous'' Quote}
+{\fontsize{8}{10}
+%% FILL THIS IN %%
+\begin{quotation}
+Last year one of a couple vendors presented results after they tried to update an analysis from 40 years ago and because the analysis models are not well documented they resulted in different final conclusions which had the potential to significantly increase operating costs.   I've had to spend the last 3 months going over tracking down the impact of each new assumption in turn and testing them against available information to see how the original results were achieved.  I've found several design features that were credited in the original work but not well explained in one case and assumptions about how the software worked that were misleading in another.  Had this information been better documented a lot of wasted effort could have been avoided.
+\end{quotation}}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 \begin{frame}
 
 \frametitle{Last Time}
@@ -308,6 +321,19 @@ Common Knowledge base expanded! Now includes:
 \item Solid Mechanics
 \end{enumerate}
 and more!
+
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{frame}
+
+\frametitle{What's New}
+\framesubtitle{Continuous Integration}
+
+\begin{center}
+\includegraphics[scale=.72]{CI.jpg}
+\end{center}
 
 \end{frame}
 
@@ -469,7 +495,7 @@ GlassBR\_SRS.html
 
 \begin{frame}[fragile]
 
-\frametitle{Results to Date} %DS Get a better name for this
+\frametitle{Results} %DS Get a better name for this
 \framesubtitle{Sanity Checking}
 
 SSP Example (Issue \#348)
@@ -504,7 +530,7 @@ Were $S_i$ and $P_i$ swapped?
 
 \begin{frame}[fragile]
 
-\frametitle{Results to Date} %DS Get a better name for this
+\frametitle{Results} %DS Get a better name for this
 \framesubtitle{Sanity Checking Cont'd}
 
 \begin{itemize}
@@ -519,18 +545,21 @@ Were $S_i$ and $P_i$ swapped?
 
 \begin{frame}[fragile]
 
-\frametitle{Results to Date} %DS Get a better name for this
+\frametitle{Results} %DS Get a better name for this
 \framesubtitle{Conceptual Inconsistencies}
 
-%% FILL THIS IN %%
-What do our documents ``mean"?
+Manually created artifacts are human-readable.
 
-DD vs IM stuff here. Conceptually confused in the documentation. 
-Understandable by a human, but causes unexpected problems when explained to a machine.
+Problems arise when attempting to explain things to a machine.
 
 \begin{itemize}
-\item Stuff goes here.
+\item What do our artifacts \emph{mean}?
+\item What is each section contributing? %(in an artifact) --> New knowledge (assumps, reqs)? Building off previous towards a solution?
+\item Why do we organize things a given way?
+\item Are models/definitions different? How?
 \end{itemize}
+
+Need to be more rigorous!
 
 \end{frame}
 
@@ -550,12 +579,10 @@ What next?
 \end{Large}
 
 \begin{itemize}
-\item Recipe language %finish implementing
-\item Clean up examples
-\item Abstraction
-\item More examples
-\item More artifacts -- Module Guide
-\item Design Language
+\item Recipe language implementation %finish implementing in examples
+\item More examples (in new domains) % Speciation?
+\item More artifacts  %new recipes -- Module guide
+\item Design Language %Steve
 \end{itemize}
 \end{frame}
 

@@ -43,7 +43,7 @@ nwtnCooling_desc = foldlSent [at_start law_conv_cooling +:+.
   getES htTransCoeff `isThe` S "heat transfer coefficient" `sC`
   S "assumed independant of", getES QT.temp, sParen (acroA 2) +:+.
   sParen (Sy $ unit_symb htTransCoeff),
-  E (FCall (C deltaT) [C QP.time] $= FCall (C temp) [C QP.time] :-
+  E (FCall (C deltaT) [C QP.time] $= FCall (C temp) [C QP.time] -
   FCall (C temp_env) [C QP.time]) `isThe` S "time-dependant thermal gradient",
   S "between the environment and the object",
   sParen (Sy $ unit_symb deltaT)]
@@ -55,7 +55,7 @@ rocTempSimp = makeRC "rocTempSimp" (nounPhraseSP $ "Simplified rate " ++
 
 rocTempSimp_rel :: Relation
 rocTempSimp_rel = (C QPP.mass) * (C QT.heat_cap_spec) *
-  Deriv Total (C QT.temp) (C QP.time) $= C ht_flux_in * C in_SA :-
+  Deriv Total (C QT.temp) (C QP.time) $= C ht_flux_in * C in_SA -
   C ht_flux_out * C out_SA + C vol_ht_gen * C QPP.vol
 
 rocTempSimp_desc :: Sentence

@@ -30,7 +30,6 @@ expr (Dbl d)            _ = P.Dbl  d
 expr (Int i)            _ = P.Int  i
 expr (Assoc op l)      sm = P.Assoc op $ map (\x -> expr x sm) l
 expr (a :/ b)          sm = P.BOp P.Frac (replace_divs sm a) (replace_divs sm b)
-expr (a :- b)          sm = P.BOp P.Sub  (expr a sm) (expr b sm)
 expr (Neg a)           sm = P.Neg  (expr a sm)
 expr (C c)             sm = -- FIXME: Add Stage for Context
   P.Sym  (eqSymb (symbLookup c (sm ^. symbolTable)))
@@ -72,6 +71,7 @@ ufunc (Sqrt e) sm = (P.Sqrt, expr e sm)
 bfunc :: HasSymbolTable ctx => BiFunc -> ctx -> P.Expr
 bfunc (Cross e1 e2)     sm = P.BOp P.Cross (expr e1 sm) (expr e2 sm)
 bfunc (Power e1 e2)     sm = P.BOp P.Pow (expr e1 sm) (expr e2 sm)
+bfunc (Subtract e1 e2)  sm = P.BOp P.Sub (expr e1 sm) (expr e2 sm)
 bfunc (EEquals a b)     sm = P.BOp P.Eq  (expr a sm) (expr b sm)
 bfunc (ENEquals a b)    sm = P.BOp P.NEq (expr a sm) (expr b sm)
 bfunc (ELess a b)       sm = P.BOp P.Lt  (expr a sm) (expr b sm)
@@ -106,7 +106,7 @@ replace_divs :: HasSymbolTable ctx => ctx -> Expr -> P.Expr
 replace_divs sm (a :/ b)     = P.BOp P.Div (replace_divs sm a) (replace_divs sm b)
 replace_divs sm (Assoc op l) = P.Assoc op $ map (\x -> replace_divs sm x) l
 replace_divs sm (BinaryOp (Power a b)) = P.BOp P.Pow (replace_divs sm a) (replace_divs sm b)
-replace_divs sm (a :- b)     = P.BOp P.Sub (replace_divs sm a) (replace_divs sm b)
+replace_divs sm (BinaryOp (Subtract a b)) = P.BOp P.Sub (replace_divs sm a) (replace_divs sm b)
 replace_divs sm a            = expr a sm
 
 spec :: HasSymbolTable ctx => ctx -> Sentence -> T.Spec

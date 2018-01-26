@@ -75,7 +75,7 @@ nrmShrF_rel = (inxi normFunc) $= Case [case1,case2,case3] $=
   (indx1 baseWthX * indx1 scalFunc * indx1 intNormForce, C index $= Int 1),
   (inxi baseWthX * (inxi scalFunc * inxi intNormForce +
     inx scalFunc (-1) * inx intNormForce (-1)),
-    Int 2 $<= C index $<= (C numbSlices :- Int 1)),
+    Int 2 $<= C index $<= (C numbSlices - 1)),
   (indxn baseWthX * Index (C intNormForce) (C numbSlices - Int 1) *
     Index (C watrForce) (C numbSlices - Int 1), C index $= Int 1)
   ]
@@ -116,7 +116,7 @@ sliceFs_rel = inxi intNormForce $= Case [
     C index $= (Int 1)),
   ((inx mobShrC (-1) * inx intNormForce (-1) +
     C fs * inxi shearFNoIntsl - inxi shearRNoIntsl) / inxi shrResC,
-    (Int 2) $<= C index $<= ((C numbSlices) :- (Int 1))),
+    (Int 2) $<= C index $<= ((C numbSlices) - 1)),
   ((Int 0), C index $= (Int 0) $|| C index $= C numbSlices)]  
   -- FIXME: Use index i as part of condition
 
@@ -292,7 +292,7 @@ nrmShrDerivation = [
   phrase assumption, S "of", acroGD 5, S "results in", eqN 13],
   
   EqnBlock $ Int 0 $=
-  momExpr (\ x y -> x :- (C normToShear * (inxi baseWthX / Int 2) * 
+  momExpr (\ x y -> x - (C normToShear * (inxi baseWthX / Int 2) * 
   (inxi intNormForce * inxi scalFunc + inxiM1 intNormForce *
   inxiM1 scalFunc)) + y),
   

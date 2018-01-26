@@ -447,8 +447,6 @@ convExpr (Assoc Add l)  = fmap (foldr1 (#+)) $ sequence $ map convExpr l
 convExpr (Assoc Mul l)  = fmap (foldr1 (#*)) $ sequence $ map convExpr l
 convExpr (Assoc E.And l)  = fmap (foldr1 (?&&)) $ sequence $ map convExpr l
 convExpr (Assoc E.Or l)  = fmap (foldr1 (?||)) $ sequence $ map convExpr l
-convExpr (0 :- b)     = convExpr (Neg b)
-convExpr (a :- b)     = liftM2 (#-)  (convExpr a) (convExpr b)
 convExpr (Deriv _ _ _) = return $ litString "**convExpr :: Deriv unimplemented**"
 convExpr (E.Not e)      = fmap (?!) (convExpr e)
 convExpr (Neg e)      = fmap (#~) (convExpr e)
@@ -500,6 +498,7 @@ bfunc (ELessEq a b)    = liftM2 (?<=) (convExpr a) (convExpr b)
 bfunc (EGreaterEq a b) = liftM2 (?>=) (convExpr a) (convExpr b)
 bfunc (Cross _ _)      = error "bfunc: Cross not implemented"
 bfunc (E.Power a b)    = liftM2 (#^) (convExpr a) (convExpr b)
+bfunc (Subtract a b)   = liftM2 (#-) (convExpr a) (convExpr b)
 bfunc (Implies _ _)    = error "convExpr :=>"
 bfunc (IFF _ _)        = error "convExpr :<=>"
 bfunc (DotProduct _ _) = error "convExpr DotProduct"

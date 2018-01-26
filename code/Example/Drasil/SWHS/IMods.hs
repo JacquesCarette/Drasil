@@ -164,7 +164,7 @@ htPCMDesc = foldlSent [S "The above", phrase equation,
   sParen (acroDD 3), phrase heat_cap_spec `ofThe` phrase liquid,
   short phsChgMtrl, S "is", getES htCap_L_P,
   sParen (unwrap $ getUnit htCap_L_P) `sAnd` S "the", phrase change, S "in",
-  phrase temp, S "is", E (C temp_PCM :- C temp_melt_P) +:+.
+  phrase temp, S "is", E (C temp_PCM - C temp_melt_P) +:+.
   sParen (unwrap $ getUnit temp_melt_P), getES pcm_E, S "during",
   phrase melting, S "of the", short phsChgMtrl, S "is found using the", 
   phrase energy, S "required at", S "instant" +:+ phrase melting `ofThe`

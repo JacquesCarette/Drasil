@@ -94,7 +94,7 @@ effStress = makeRC "effStress"
   (nounPhraseSP "effective stress") effS_desc effS_rel
 
 effS_rel :: Relation
-effS_rel = (C normStress) $= (C normStress) :- (C porePressure)
+effS_rel = (C normStress) $= (C normStress) - (C porePressure)
 
 effS_desc :: Sentence --FIXME: these are not normStress but they are sigma.
                       -- Add a prime. Symbol inconsistency 

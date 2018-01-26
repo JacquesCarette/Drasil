@@ -15,7 +15,6 @@ import Language.Drasil.Chunk.Quantity (QWrapper)
 dep :: Expr -> [String]
 dep (Assoc _ l)   = nub (concat $ map dep l)
 dep (Deriv _ a b) = nub (dep a ++ dep b)
-dep (Not e)       = dep e
 dep (Neg e)       = dep e
 dep (C c)         = [c ^. id]
 dep (Int _)       = []
@@ -39,7 +38,6 @@ dep (Append a b)  = nub (dep a ++ dep b)
 vars :: (HasSymbolTable s) => Expr -> s -> [QWrapper]
 vars (Assoc _ l)  m = nub $ concat $ map (\x -> vars x m) l
 vars (Deriv _ a b) m = nub (vars a m ++ vars b m)
-vars (Not e)      m = vars e m
 vars (Neg e)      m = vars e m
 vars (C c)        m = [symbLookup c $ m ^. symbolTable]
 vars (Int _)      _ = []
@@ -63,7 +61,6 @@ vars (Append a b) m = nub (vars a m ++ vars b m)
 codevars :: (HasSymbolTable s) => Expr -> s -> [CodeChunk]
 codevars (Assoc _ l)  sm = nub (concat $ map (\x -> codevars x sm) l)
 codevars (Deriv _ a b) sm = nub (codevars a sm ++ codevars b sm)
-codevars (Not e)      sm = codevars e sm
 codevars (Neg e)      sm = codevars e sm
 codevars (C c)        sm = [codevar $ symbLookup c (sm ^. symbolTable)]
 codevars (Int _)      _ = []
@@ -88,7 +85,6 @@ codevars (Append a b) sm = nub (codevars a sm ++ codevars b sm)
 codevars' :: (HasSymbolTable s) => Expr -> s -> [CodeChunk]
 codevars' (Assoc _ l)  sm = nub (concat $ map (\x -> codevars' x sm) l)
 codevars' (Deriv _ a b) sm = nub (codevars' a sm ++ codevars' b sm)
-codevars' (Not e)      sm = codevars' e sm 
 codevars' (Neg e)      sm = codevars' e sm 
 codevars' (C c)        sm = [codevar $ symbLookup c (sm ^. symbolTable)]
 codevars' (Int _)       _ = []
@@ -123,6 +119,7 @@ unpack (Csc e) = e
 unpack (Cot e) = e
 unpack (Exp e) = e
 unpack (Sqrt e) = e
+unpack (Not e) = e
 
 unpackop :: EOperator -> Expr
 unpackop (Summation _ e) = e

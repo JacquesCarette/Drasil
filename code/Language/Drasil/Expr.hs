@@ -50,8 +50,6 @@ data Expr where
   UnaryOp  :: UFunc -> Expr
   BinaryOp :: BiFunc -> Expr
   EOp      :: EOperator -> Expr
-  -- start of logic Expr
-  Not      :: Expr -> Expr -- logical not
 
   IsIn  :: Expr -> Space -> Expr --	element of
 
@@ -101,7 +99,6 @@ instance Eq Expr where
   Dbl a == Dbl b               =  a == b
   Int a == Int b               =  a == b
   Assoc o1 l1 == Assoc o2 l2   =  o1 == o2 && l1 == l2
-  Not a == Not b               =  a == b
   Neg a == Neg b               =  a == b
   Deriv t1 a b == Deriv t2 c d =  t1 == t2 && a == c && b == d
   C a == C b                   =  (a ^. id) == (b ^. id)
@@ -161,6 +158,7 @@ data UFunc where
   Cot    :: Expr -> UFunc
   Exp    :: Expr -> UFunc
   Sqrt   :: Expr -> UFunc
+  Not    :: Expr -> UFunc
 
 -- | Domain Description. A 'Domain' is the extent of a variable that
 -- ranges over a particular Space. So a |DomainDesc| contains

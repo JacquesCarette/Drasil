@@ -163,7 +163,6 @@ p_expr (Grouping e) = paren (p_expr e)
 p_expr (Mtx a)    = "<table class=\"matrix\">\n" ++ p_matrix a ++ "</table>"
 p_expr (BOp Index a i)= p_indx a i
 --Logic
-p_expr (Not a)    = "&not;" ++ p_expr a
 p_expr (BOp Impl a b) = p_expr a ++ " &rArr; " ++ p_expr b
 p_expr (BOp Iff a b)  = p_expr a ++ " &hArr; " ++ p_expr b
 p_expr (IsIn  a b) = p_expr a ++ "&thinsp;&isin;&thinsp;"  ++ p_space b
@@ -348,6 +347,7 @@ p_op Abs (x:[]) = "|" ++ p_expr x ++ "|"
 p_op Abs _ = error "Abs should only take one expr."
 p_op Norm (x:[]) = "||" ++ p_expr x ++ "||"
 p_op Norm _ = error "Norm should only take on expression."
+p_op Not (a:[])    = "&not;" ++ p_expr a
 p_op f@(Exp) (x:[]) = function f ++ sup (p_expr x)
 p_op f (x:[]) = function f ++ paren (p_expr x) --Unary ops, this will change once more complicated functions appear.
 p_op _ _ = error "Something went wrong with an operation"
@@ -395,6 +395,7 @@ function Csc            = "csc"
 function Cot            = "cot"
 function Exp            = "e"
 function Sqrt           = "&radic;"
+function Not            = "&not;"
   
 -- | Renders modules
 makeModule :: String -> String -> Doc

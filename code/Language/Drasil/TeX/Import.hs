@@ -48,7 +48,6 @@ expr (UnaryOp u)       sm = (\(x,y) -> P.Op x [y]) (ufunc u sm)
 expr (Grouping e)      sm = P.Grouping (expr e sm)
 expr (BinaryOp b)      sm = bfunc b sm
 expr (EOp o)           sm = (\(x,y) -> P.Op x [y]) (eop o sm)
-expr (Not a)           sm = P.Not  (expr a sm)
 expr (IsIn  a b)       sm = P.IsIn  (expr a sm) b
 expr (ForAll a b)      sm = P.Forall a (expr b sm)
 expr (Exists a b)      sm = P.Exists a (expr b sm)
@@ -66,6 +65,7 @@ ufunc (Csc e) sm = (P.Csc, expr e sm)
 ufunc (Cot e) sm = (P.Cot, expr e sm)
 ufunc (Exp e) sm = (P.Exp, expr e sm)
 ufunc (Sqrt e) sm = (P.Sqrt, expr e sm)
+ufunc (Not a)  sm = (P.Not, expr a sm)
 
 bfunc :: HasSymbolTable ctx => BiFunc -> ctx -> P.Expr
 bfunc (Cross e1 e2)     sm = P.BOp P.Cross (expr e1 sm) (expr e2 sm)

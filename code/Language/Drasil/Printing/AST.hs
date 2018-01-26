@@ -13,7 +13,6 @@ data Expr = Var   Variable
           | Assoc Oper [Expr]
           | BOp   BinOp Expr Expr
           | Sym   Symbol
-          | Not   Expr
           | Neg   Expr
           | Call  Expr [Expr]
           | Case  [(Expr,Expr)]
@@ -38,6 +37,7 @@ data Function = Log
            | Product (Maybe ((Symbol, Expr), Expr))
            | Exp
            | Sqrt
+           | Not
 
 prec :: Oper -> Int
 prec Mul = 3

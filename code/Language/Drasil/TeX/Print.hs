@@ -125,7 +125,6 @@ p_expr (Op f es)  = p_op f es
 p_expr (Grouping x) = paren (p_expr x)
 p_expr (Mtx a)    = "\\begin{bmatrix}\n" ++ p_matrix a ++ "\n\\end{bmatrix}"
 --Logic
-p_expr (Not x)    = "\\neg{}" ++ p_expr x
 p_expr (Assoc And l)  = concat $ intersperse "\\land{}" $ map p_expr l
 p_expr (Assoc Or l)   = concat $ intersperse "\\lor{}" $ map p_expr l
 p_expr (IsIn  a b) = p_expr a ++ "\\in{}" ++ p_space b
@@ -271,6 +270,7 @@ function Csc            = "\\csc"
 function Cot            = "\\cot"
 function Exp            = "e"
 function Sqrt           = "\\sqrt"
+function Not            = "\\neg{}"
 
 -----------------------------------------------------------------
 ------------------ TABLE PRINTING---------------------------

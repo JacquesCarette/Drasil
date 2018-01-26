@@ -133,22 +133,22 @@ forDisEqlb = makeRC "forDisEqlb"
   (nounPhraseSP "force displacement equilibrium") fDisEq_desc fDisEq_rel
 
 fDisEq_rel :: Relation --FIXME: split into two IMOD
-fDisEq_rel = Neg (inxi watrForceDif) - (C earthqkLoadFctr)*(inxi slcWght) -
+fDisEq_rel = negate (inxi watrForceDif) - (C earthqkLoadFctr)*(inxi slcWght) -
   (inxi baseHydroForce)*(sin(inxi baseAngle)) +
   (inxi surfHydroForce)*sin(inxi surfAngle) + (inxi surfLoad) *
-  sin(inxi impLoadAngle) $= inx  dx_i (-1) * (Neg (inx surfLngth (-1)) *
-  inx nrmStiffIntsl (-1)) + inxi dx_i * (Neg (inx surfLngth (-1)) *
+  sin(inxi impLoadAngle) $= inx  dx_i (-1) * (negate (inx surfLngth (-1)) *
+  inx nrmStiffIntsl (-1)) + inxi dx_i * (negate (inx surfLngth (-1)) *
   inx nrmStiffIntsl (-1) +
   inxi surfLngth * inxi nrmStiffIntsl + inxi baseLngth * inxi effStiffA) +
-  inx  dx_i 1 * (Neg (inxi surfLngth) * inxi nrmStiffIntsl) +
-  inxi dy_i * (Neg (inxi baseLngth) * inxi effStiffB) $=
-  Neg (inxi slcWght) - (inxi baseHydroForce)*(cos(inxi baseAngle)) +
+  inx  dx_i 1 * (negate (inxi surfLngth) * inxi nrmStiffIntsl) +
+  inxi dy_i * (negate (inxi baseLngth) * inxi effStiffB) $=
+  negate (inxi slcWght) - (inxi baseHydroForce)*(cos(inxi baseAngle)) +
   (inxi surfHydroForce)*cos(inxi surfAngle) + (inxi surfLoad) *
-  cos(inxi impLoadAngle) $= inx  dy_i (-1) * (Neg (inx surfLngth (-1)) *
-  inx shrStiffIntsl (-1)) + inxi dy_i * (Neg (inx surfLngth (-1)) *
+  cos(inxi impLoadAngle) $= inx  dy_i (-1) * (negate (inx surfLngth (-1)) *
+  inx shrStiffIntsl (-1)) + inxi dy_i * (negate (inx surfLngth (-1)) *
   inx shrStiffIntsl (-1) + inxi surfLngth * inxi nrmStiffIntsl +
-  inxi baseLngth * inxi effStiffA) + inx  dy_i 1 * (Neg (inxi surfLngth) *
-  inxi shrStiffIntsl) + inxi dx_i * (Neg (inxi baseLngth) * inxi effStiffB)
+  inxi baseLngth * inxi effStiffA) + inx  dy_i 1 * (negate (inxi surfLngth) *
+  inxi shrStiffIntsl) + inxi dx_i * (negate (inxi baseLngth) * inxi effStiffB)
 
 fDisEq_desc :: Sentence
 fDisEq_desc = foldlSent [
@@ -443,7 +443,7 @@ rigFoSDerivation = [
   EqnBlock $ inxi shrDispl $= cos(inxi baseAngle) * inxi dx_i +
   sin(inxi baseAngle) * inxi dy_i,
 
-  EqnBlock $ inxi nrmDispl $= Neg (sin(inxi baseAngle)) * inxi dx_i +
+  EqnBlock $ inxi nrmDispl $= negate (sin(inxi baseAngle)) * inxi dx_i +
     sin(inxi baseAngle) * inxi dy_i,
   
   foldlSP [S "With the", phrase definition, S "of normal stiffness from",

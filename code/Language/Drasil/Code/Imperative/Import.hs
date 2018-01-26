@@ -446,7 +446,6 @@ convExpr (Assoc Mul l)  = fmap (foldr1 (#*)) $ sequence $ map convExpr l
 convExpr (Assoc E.And l)  = fmap (foldr1 (?&&)) $ sequence $ map convExpr l
 convExpr (Assoc E.Or l)  = fmap (foldr1 (?||)) $ sequence $ map convExpr l
 convExpr (Deriv _ _ _) = return $ litString "**convExpr :: Deriv unimplemented**"
-convExpr (Neg e)      = fmap (#~) (convExpr e)
 convExpr (C c)        = do
   g <- ask
   variable $ codeName $ codevar $ symbLookup c $ (sysinfodb $ codeSpec g) ^. symbolTable
@@ -486,6 +485,7 @@ unop (E.Sec e)   = fmap I.sec (convExpr e)
 unop (E.Cot e)   = fmap I.cot (convExpr e)
 unop (E.Norm _)  = error "unop: Norm not implemented"
 unop (E.Not e)   = fmap (?!) (convExpr e)
+unop (E.Neg e)   = fmap (#~) (convExpr e)
 
 bfunc :: BiFunc -> Reader State Value
 bfunc (EEquals a b)    = liftM2 (?==) (convExpr a) (convExpr b)

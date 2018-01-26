@@ -155,7 +155,7 @@ p_expr (BOp LEq a b)  = p_expr a ++ "&thinsp;&le;&thinsp;" ++ p_expr b
 p_expr (BOp GEq a b)  = p_expr a ++ "&thinsp;&ge;&thinsp;" ++ p_expr b
 p_expr (BOp Dot a b)  = p_expr a ++ "&sdot;" ++ p_expr b
 p_expr (BOp Cross a b) = p_expr a ++ "&#10799;" ++ p_expr b
-p_expr (Neg a)    = neg a
+p_expr (Op Neg [a])    = neg a
 p_expr (Call f x) = p_expr f ++ paren (concat $ intersperse "," $ map p_expr x)
 p_expr (Case ps)  = cases ps (p_expr)
 p_expr (Op f es)  = p_op f es
@@ -396,6 +396,7 @@ function Cot            = "cot"
 function Exp            = "e"
 function Sqrt           = "&radic;"
 function Not            = "&not;"
+function Neg            = "-" -- but usually not reached...
   
 -- | Renders modules
 makeModule :: String -> String -> Doc

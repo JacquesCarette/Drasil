@@ -45,7 +45,7 @@ t2NewtonTL = makeRC "t2NewtonTL" (nounPhraseSP "Newton's third law of motion")
   t2descr newtonTLRel
 
 newtonTLRel :: Relation
-newtonTLRel = (C force_1) $= (Neg (C force_2))
+newtonTLRel = (C force_1) $= (negate (C force_2))
 
 t2descr :: Sentence
 t2descr = foldlSent [S "Every action has an equal and opposite reaction. In other",

@@ -29,7 +29,6 @@ expr (V v)              _ = P.Var  v
 expr (Dbl d)            _ = P.Dbl  d
 expr (Int i)            _ = P.Int  i
 expr (Assoc op l)      sm = P.Assoc op $ map (\x -> expr x sm) l
-expr (Neg a)           sm = P.Neg  (expr a sm)
 expr (C c)             sm = -- FIXME: Add Stage for Context
   P.Sym  (eqSymb (symbLookup c (sm ^. symbolTable)))
 expr (Deriv Part a 1)  sm = P.Assoc Mul [P.Sym (Special Partial), expr a sm]
@@ -66,6 +65,7 @@ ufunc (Cot e) sm = (P.Cot, expr e sm)
 ufunc (Exp e) sm = (P.Exp, expr e sm)
 ufunc (Sqrt e) sm = (P.Sqrt, expr e sm)
 ufunc (Not a)  sm = (P.Not, expr a sm)
+ufunc (Neg a)  sm = (P.Neg, expr a sm)
 
 bfunc :: HasSymbolTable ctx => BiFunc -> ctx -> P.Expr
 bfunc (Cross e1 e2)     sm = P.BOp P.Cross (expr e1 sm) (expr e2 sm)

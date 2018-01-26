@@ -31,7 +31,7 @@ eqlExpr :: (Expr -> Expr) -> (Expr -> Expr) -> (Expr -> Expr -> Expr) -> Expr
 eqlExpr f1_ f2_ _e_ = (inxi slcWght `_e_`
   (inxi surfHydroForce * cos (inxi surfAngle)) +
   (inxi surfLoad) * (cos (inxi impLoadAngle))) * (f1_ (inxi baseAngle)) +
-  (Neg (C earthqkLoadFctr) * (inxi slcWght) - (inxi intNormForce) +
+  (negate (C earthqkLoadFctr) * (inxi slcWght) - (inxi intNormForce) +
   (inxiM1 intNormForce) - (inxi watrForce) + (inxiM1 watrForce) +
   (inxi surfHydroForce) * sin (inxi surfAngle) + 
   (inxi surfLoad) * (sin (inxi impLoadAngle))) * (f2_ (inxi baseAngle))
@@ -158,7 +158,7 @@ nmShrR_desc = foldlSent [S "The", phrase assumption,
 
 --
 momExpr :: (Expr -> Expr -> Expr) -> Expr
-momExpr _e_ = (Neg (inxi intNormForce) * (inxi sliceHght -
+momExpr _e_ = (negate (inxi intNormForce) * (inxi sliceHght -
   inxi baseWthX / 2 *  tan (inxi baseAngle)) + inxiM1 intNormForce *
   (inxiM1 sliceHght - inxi baseWthX / 2 * tan (inxi baseAngle)) -
   inxi watrForce * (inxi sliceHght - inxi baseWthX / 2 *
@@ -194,7 +194,7 @@ netForcex = makeRC "netForce" (nounPhraseSP "net x-component force")
   EmptyS fNetx_rel
 
 fNetx_rel :: Relation
-fNetx_rel = inxi fx $= (Neg $ inxi watrForceDif) -
+fNetx_rel = inxi fx $= (negate $ inxi watrForceDif) -
   (C earthqkLoadFctr)*(inxi slcWght)
   - (inxi baseHydroForce) * sin (inxi baseAngle) +
   (inxi surfHydroForce) * sin (inxi surfAngle)
@@ -205,7 +205,7 @@ netForcey = makeRC "netForce" (nounPhraseSP "net y-component force")
   fNet_desc fNety_rel
 
 fNety_rel :: Relation
-fNety_rel = inxi fy $= (Neg $ inxi slcWght) +
+fNety_rel = inxi fy $= (negate $ inxi slcWght) +
   (inxi baseHydroForce) * cos (inxi baseAngle)
   - (inxi surfHydroForce) * cos (inxi surfAngle) -
   (inxi surfLoad) * cos (inxi impLoadAngle)
@@ -282,7 +282,7 @@ displMtx = vec2D (inxi dx_i) (inxi dy_i)
 rotMtx :: Expr
 rotMtx = m2x2
   (cos(inxi baseAngle))       (sin(inxi baseAngle))
-  (Neg $ sin(inxi baseAngle)) (cos(inxi baseAngle))
+  (negate $ sin(inxi baseAngle)) (cos(inxi baseAngle))
 
 disVec_desc :: Sentence
 disVec_desc = foldlSent [at_start' vector, S "describing the",

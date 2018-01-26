@@ -30,7 +30,6 @@ expr (V v)            _ = P.Var   v
 expr (Dbl d)          _ = P.Dbl   d
 expr (Int i)          _ = P.Int   i
 expr (Assoc op l)     sm = P.Assoc op $ map (\x -> expr x sm) l
-expr (Neg a)          sm = P.Neg   (expr a sm)
 expr (Deriv Part a 1) sm = P.Assoc Mul [P.Sym (Special Partial), expr a sm]
 expr (Deriv Total a 1)sm = P.Assoc Mul [P.Sym lD, expr a sm]
 expr (Deriv Part a b) sm = P.BOp P.Frac (P.Assoc Mul [P.Sym (Special Partial), expr a sm]) 
@@ -69,6 +68,7 @@ ufunc (Cot e)    sm = (P.Cot,  expr e sm)
 ufunc (Exp e)    sm = (P.Exp,  expr e sm)
 ufunc (Sqrt e)   sm = (P.Sqrt, expr e sm)
 ufunc (Not a)    sm = (P.Not,  expr a sm)
+ufunc (Neg a)    sm = (P.Neg,  expr a sm)
 
 -- | Helper function for translating 'BiFunc's
 bfunc :: HasSymbolTable s => BiFunc -> s -> P.Expr

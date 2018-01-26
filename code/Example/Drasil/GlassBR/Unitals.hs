@@ -367,7 +367,7 @@ gbConstants = [constant_M, constant_K, constant_ModElas, constant_LoadDur, const
                 ++ gBRSpecParamVals 
 
 constant_M, constant_K, constant_ModElas, constant_LoadDur, constant_LoadDF, constant_LoadSF :: QDefinition
-constant_K       = mkDataDef sflawParamK  $ (Grouping (Dbl 2.86)) * (10 $^ (Neg 53))
+constant_K       = mkDataDef sflawParamK  $ (Grouping (Dbl 2.86)) * (10 $^ (negate 53))
 constant_M       = mkDataDef sflawParamM  $ 7
 constant_ModElas = mkDataDef mod_elas     $ (Grouping (Dbl 7.17)) * (10 $^ 7)
 constant_LoadDur = mkDataDef load_dur     $ 3

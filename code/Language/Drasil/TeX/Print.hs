@@ -118,7 +118,7 @@ p_expr (BOp Div n d)  = divide n d
 p_expr (BOp Pow x y)  = pow x y
 p_expr (BOp Index a i) = p_indx a i
 p_expr (BOp o x y)    = p_expr x ++ p_bop o ++ p_expr y
-p_expr (Neg x)    = neg x
+p_expr (Op Neg [x])   = neg x
 p_expr (Call f x) = p_expr f ++ paren (concat $ intersperse "," $ map p_expr x)
 p_expr (Case ps)  = "\\begin{cases}\n" ++ cases ps ++ "\n\\end{cases}"
 p_expr (Op f es)  = p_op f es
@@ -165,9 +165,9 @@ needMultlined x
         extrac (f,l)   = [Assoc Add f, Assoc Add l]
 
 splitTerms :: Expr -> [Expr]
-splitTerms (Neg e)   = map Neg $ splitTerms e
+splitTerms (Op Neg [e])   = map (\x -> Op Neg [x]) $ splitTerms e
 splitTerms (Assoc Add l) = concat $ map splitTerms l
-splitTerms (BOp Sub a b) = splitTerms a ++ splitTerms (Neg b)
+splitTerms (BOp Sub a b) = splitTerms a ++ splitTerms (Op Neg [b])
 splitTerms e = [e]
 
 -- | For printing indexes
@@ -223,7 +223,7 @@ neg x@(Var _) = "-" ++ p_expr x
 neg x@(Dbl _) = "-" ++ p_expr x
 neg x@(Int _) = "-" ++ p_expr x
 neg x@(Sym _) = "-" ++ p_expr x
-neg x@(Neg _) = "-" ++ p_expr x
+-- neg x@(Neg _) = "-" ++ p_expr x
 neg x         = paren ("-" ++ p_expr x)
 
 pow :: Expr -> Expr -> String
@@ -271,6 +271,7 @@ function Cot            = "\\cot"
 function Exp            = "e"
 function Sqrt           = "\\sqrt"
 function Not            = "\\neg{}"
+function Neg            = "-"
 
 -----------------------------------------------------------------
 ------------------ TABLE PRINTING---------------------------

@@ -30,7 +30,6 @@ data Expr where
   Dbl      :: Double -> Expr
   Int      :: Integer -> Expr
   Assoc    :: Oper -> [Expr] -> Expr
-  Neg      :: Expr -> Expr -- Negation
   Deriv    :: DerivType -> Expr -> Expr -> Expr -- Derivative, syntax is:
   -- Type (Partial or total) -> principal part of change -> with respect to
   -- For example: Deriv Part y x1 would be (dy/dx1)*dx1
@@ -88,7 +87,7 @@ instance Num Expr where
   a - b = BinaryOp $ Subtract a b
   fromInteger a = Int a
   abs = UnaryOp . Abs
-  negate = Neg
+  negate = UnaryOp . Neg
 
   -- this is a Num wart
   signum _ = error "should not use signum in expressions"
@@ -99,12 +98,10 @@ instance Eq Expr where
   Dbl a == Dbl b               =  a == b
   Int a == Int b               =  a == b
   Assoc o1 l1 == Assoc o2 l2   =  o1 == o2 && l1 == l2
-  Neg a == Neg b               =  a == b
   Deriv t1 a b == Deriv t2 c d =  t1 == t2 && a == c && b == d
   C a == C b                   =  (a ^. id) == (b ^. id)
   FCall a b == FCall c d       =  a == c && b == d
   Case a == Case b             =  a == b
-  --Logic
   IsIn  a b  == IsIn  c d      =  a == c && b == d
   ForAll a b == ForAll c d     =  a == c && b == d -- not quite right...
   Exists a b == Exists c d     =  a == c && b == d -- not quite right...
@@ -159,6 +156,7 @@ data UFunc where
   Exp    :: Expr -> UFunc
   Sqrt   :: Expr -> UFunc
   Not    :: Expr -> UFunc
+  Neg    :: Expr -> UFunc
 
 -- | Domain Description. A 'Domain' is the extent of a variable that
 -- ranges over a particular Space. So a |DomainDesc| contains

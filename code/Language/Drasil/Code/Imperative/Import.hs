@@ -435,7 +435,7 @@ convType C.Char = char
 convType C.String = string
 convType (C.List t) = listT $ convType t
 convType (C.Object n) = obj n
-convType _ = error "No type conversion"
+convType (C.File) = error "convType: File ?"
 
 convExpr :: Expr -> Reader State Value
 convExpr (V v)        = return $ litString v  -- V constructor should be removed
@@ -478,8 +478,6 @@ convExpr (EOp _)      = error "convExpr: EOp"
 convExpr (IsIn _ _)      = error "convExpr: IsIn"
 convExpr (E.ForAll _ _)      = error "convExpr: ForAll"
 convExpr (E.Exists _ _)      = error "convExpr: Exists"
-convExpr (_ :=> _)     = error "convExpr :=>"
-convExpr (_ :<=> _)    = error "convExpr :<=>"
 
 unop :: UFunc -> Reader State Value
 unop (E.Sqrt e)  = fmap (#/^) (convExpr e)
@@ -503,6 +501,8 @@ bfunc (ELessEq a b)    = liftM2 (?<=) (convExpr a) (convExpr b)
 bfunc (EGreaterEq a b) = liftM2 (?>=) (convExpr a) (convExpr b)
 bfunc (Cross _ _)      = error "bfunc: Cross not implemented"
 bfunc (E.Power a b)    = liftM2 (#^) (convExpr a) (convExpr b)
+bfunc (Implies _ _)    = error "convExpr :=>"
+bfunc (IFF _ _)        = error "convExpr :<=>"
 
 -- medium hacks --
 genModDef :: CS.Mod -> Reader State Module

@@ -53,8 +53,6 @@ expr (Grouping e)       sm = P.Grouping (expr e sm)
 expr (BinaryOp b)       sm = bfunc b sm
 expr (EOp o)            sm = (\(x,y) -> P.Op x [y]) $ eop o sm
 expr (Not a)            sm = P.Not   (expr a sm)
-expr (a  :=>  b)        sm = P.BOp P.Impl  (expr a sm) (expr b sm)
-expr (a  :<=> b)        sm = P.BOp P.Iff   (expr a sm) (expr b sm)
 expr (IsIn  a b)        sm = P.IsIn  (expr a sm) b
 expr (ForAll a b)       sm = P.Forall a (expr b sm)
 expr (Exists a b)       sm = P.Exists a (expr b sm)
@@ -85,6 +83,8 @@ bfunc (ELess a b)        sm = P.BOp P.Lt  (expr a sm) (expr b sm)
 bfunc (EGreater a b)     sm = P.BOp P.Gt  (expr a sm) (expr b sm)
 bfunc (ELessEq a b)      sm = P.BOp P.LEq (expr a sm) (expr b sm)
 bfunc (EGreaterEq a b)   sm = P.BOp P.GEq (expr a sm) (expr b sm)
+bfunc (Implies a b)      sm = P.BOp P.Impl (expr a sm) (expr b sm)
+bfunc (IFF a b)          sm = P.BOp P.Iff  (expr a sm) (expr b sm)
 
 -- | Helper function for translating 'EOperator's
 eop :: HasSymbolTable s => EOperator -> s -> (P.Function, P.Expr)

@@ -61,16 +61,16 @@ data Expr where
 
   ForAll   :: Symbol -> Expr -> Expr
   Exists   :: Symbol -> Expr -> Expr
-  (:=>)  :: Expr -> Expr -> Expr -- implies, &rArr; \implies
-  (:<=>) :: Expr -> Expr -> Expr -- if and only if, &hArr; \iff
 
-($=), ($!=), ($<), ($>), ($<=), ($>=) :: Expr -> Expr -> Expr
+($=), ($!=), ($<), ($>), ($<=), ($>=), ($=>), ($<=>) :: Expr -> Expr -> Expr
 ($=)  a b = BinaryOp $ EEquals a b
 ($!=) a b = BinaryOp $ ENEquals a b
 ($<)  a b = BinaryOp $ ELess a b
 ($>)  a b = BinaryOp $ EGreater a b
 ($<=) a b = BinaryOp $ ELessEq a b
 ($>=) a b = BinaryOp $ EGreaterEq a b
+a $=> b = BinaryOp $ Implies a b
+a $<=> b = BinaryOp $ IFF a b
 
 ($^), ($&&), ($||) :: Expr -> Expr -> Expr
 ($^) a b = BinaryOp (Power a b)
@@ -110,8 +110,6 @@ instance Eq Expr where
   FCall a b == FCall c d       =  a == c && b == d
   Case a == Case b             =  a == b
   --Logic
-  (:=>) a b  == (:=>) c d      =  a == c && b == d
-  (:<=>) a b == (:<=>) c d     =  a == c && b == d || a == d && b == c
   IsIn  a b  == IsIn  c d      =  a == c && b == d
   ForAll a b == ForAll c d     =  a == c && b == d -- not quite right...
   Exists a b == Exists c d     =  a == c && b == d -- not quite right...
@@ -137,6 +135,8 @@ data BiFunc =
   | EGreater Expr Expr
   | ELessEq Expr Expr
   | EGreaterEq Expr Expr
+  | Implies Expr Expr  -- implies, &rArr; \implies
+  | IFF Expr Expr  -- if and only if, &hArr; \iff
   deriving Eq
 
 -- | Operators

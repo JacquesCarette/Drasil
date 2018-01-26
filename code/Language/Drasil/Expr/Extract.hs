@@ -30,8 +30,6 @@ dep (UnaryOp u)   = dep (unpack u)
 dep (Grouping e)  = dep e
 dep (BinaryOp b)  = nub (concat $ map dep (binop b))
 dep (EOp o)       = dep (unpackop o)
-dep (a :=>  b)    = nub (dep a ++ dep b)
-dep (a :<=> b)    = nub (dep a ++ dep b)
 dep (IsIn  a _)   = nub (dep a)
 dep (ForAll _ b)  = nub (dep b)
 dep (Exists _ b)  = nub (dep b)
@@ -59,8 +57,6 @@ vars (UnaryOp u)  m = vars (unpack u) m
 vars (Grouping e) m = vars e m
 vars (BinaryOp b) m = nub (concat $ map (\x -> vars x m) (binop b))
 vars (EOp o) m = vars (unpackop o) m
-vars (a :=>  b)   m = nub (vars a m ++ vars b m)
-vars (a :<=> b)   m = nub (vars a m ++ vars b m)
 vars (IsIn  a _)  m = nub (vars a m)
 vars (ForAll _ b)  m = nub $ vars b m
 vars (Exists _ b)  m = nub $ vars b m
@@ -89,8 +85,6 @@ codevars (UnaryOp u)  sm = codevars (unpack u) sm
 codevars (Grouping e) sm = codevars e sm
 codevars (BinaryOp b) sm = nub (concat $ map (\x -> codevars x sm) (binop b))
 codevars (EOp o)  sm = codevars (unpackop o) sm
-codevars (a :=>  b)   sm = nub (codevars a sm ++ codevars b sm)
-codevars (a :<=> b)   sm = nub (codevars a sm ++ codevars b sm)
 codevars (IsIn  a _)  sm = nub (codevars a sm)
 codevars (ForAll _ b) sm = nub $ codevars b sm
 codevars (Exists _ b) sm = nub $ codevars b sm
@@ -119,8 +113,6 @@ codevars' (UnaryOp u)  sm = codevars' (unpack u) sm
 codevars' (Grouping e) sm = codevars' e sm
 codevars' (BinaryOp b) sm = nub (concat $ map (\x -> codevars' x sm) (binop b))
 codevars' (EOp o)      sm = codevars' (unpackop o) sm
-codevars' (a :=>  b)   sm = nub (codevars' a sm ++ codevars' b sm)
-codevars' (a :<=> b)   sm = nub (codevars' a sm ++ codevars' b sm)
 codevars' (IsIn  a _)  sm = nub (codevars' a sm)
 codevars' (ForAll _ b)  sm = nub $ codevars' b sm
 codevars' (Exists _ b)  sm = nub $ codevars' b sm
@@ -159,6 +151,8 @@ binop (ELess a b) = [a,b]
 binop (EGreater a b) = [a,b]
 binop (ELessEq a b) = [a,b]
 binop (EGreaterEq a b) = [a,b]
+binop (Implies a b) = [a,b]
+binop (IFF a b) = [a,b]
 
 -- Steven edit:  need this to have a type for code generation
 --   setting to all to rational

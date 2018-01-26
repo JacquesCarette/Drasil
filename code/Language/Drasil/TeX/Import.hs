@@ -29,7 +29,6 @@ expr (V v)              _ = P.Var  v
 expr (Dbl d)            _ = P.Dbl  d
 expr (Int i)            _ = P.Int  i
 expr (Assoc op l)      sm = P.Assoc op $ map (\x -> expr x sm) l
-expr (a :/ b)          sm = P.BOp P.Frac (replace_divs sm a) (replace_divs sm b)
 expr (Neg a)           sm = P.Neg  (expr a sm)
 expr (C c)             sm = -- FIXME: Add Stage for Context
   P.Sym  (eqSymb (symbLookup c (sm ^. symbolTable)))
@@ -81,6 +80,7 @@ bfunc (EGreaterEq a b)  sm = P.BOp P.GEq (expr a sm) (expr b sm)
 bfunc (Implies a b)     sm = P.BOp P.Impl (expr a sm) (expr b sm)
 bfunc (IFF a b)         sm = P.BOp P.Iff  (expr a sm) (expr b sm)
 bfunc (DotProduct a b)  sm = P.BOp P.Dot  (expr a sm) (expr b sm)
+bfunc (Divide a b)      sm = P.BOp P.Frac (replace_divs sm a) (replace_divs sm b)
 
 
 eop :: HasSymbolTable ctx => EOperator -> ctx -> (P.Function, P.Expr)
@@ -103,8 +103,8 @@ int_wrt :: Symbol -> P.Expr
 int_wrt wrtc = P.Assoc Mul [P.Sym lD, P.Sym wrtc]
 
 replace_divs :: HasSymbolTable ctx => ctx -> Expr -> P.Expr
-replace_divs sm (a :/ b)     = P.BOp P.Div (replace_divs sm a) (replace_divs sm b)
-replace_divs sm (Assoc op l) = P.Assoc op $ map (\x -> replace_divs sm x) l
+replace_divs sm (BinaryOp (Divide a b)) = P.BOp P.Div (replace_divs sm a) (replace_divs sm b)
+replace_divs sm (Assoc op l) = P.Assoc op $ map (replace_divs sm) l
 replace_divs sm (BinaryOp (Power a b)) = P.BOp P.Pow (replace_divs sm a) (replace_divs sm b)
 replace_divs sm (BinaryOp (Subtract a b)) = P.BOp P.Sub (replace_divs sm a) (replace_divs sm b)
 replace_divs sm a            = expr a sm

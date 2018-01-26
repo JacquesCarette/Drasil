@@ -14,7 +14,6 @@ import Language.Drasil.Chunk.Quantity (QWrapper)
 -- | Get dependencies from an equation  
 dep :: Expr -> [String]
 dep (Assoc _ l)   = nub (concat $ map dep l)
-dep (a :/ b)      = nub (dep a ++ dep b)
 dep (Deriv _ a b) = nub (dep a ++ dep b)
 dep (Not e)       = dep e
 dep (Neg e)       = dep e
@@ -39,7 +38,6 @@ dep (Append a b)  = nub (dep a ++ dep b)
 -- | Get a list of quantities (QWrapper) from an equation in order to print
 vars :: (HasSymbolTable s) => Expr -> s -> [QWrapper]
 vars (Assoc _ l)  m = nub $ concat $ map (\x -> vars x m) l
-vars (a :/ b)     m = nub (vars a m ++ vars b m)
 vars (Deriv _ a b) m = nub (vars a m ++ vars b m)
 vars (Not e)      m = vars e m
 vars (Neg e)      m = vars e m
@@ -64,7 +62,6 @@ vars (Append a b) m = nub (vars a m ++ vars b m)
 -- | Get a list of CodeChunks from an equation
 codevars :: (HasSymbolTable s) => Expr -> s -> [CodeChunk]
 codevars (Assoc _ l)  sm = nub (concat $ map (\x -> codevars x sm) l)
-codevars (a :/ b)     sm = nub (codevars a sm ++ codevars b sm)
 codevars (Deriv _ a b) sm = nub (codevars a sm ++ codevars b sm)
 codevars (Not e)      sm = codevars e sm
 codevars (Neg e)      sm = codevars e sm
@@ -90,7 +87,6 @@ codevars (Append a b) sm = nub (codevars a sm ++ codevars b sm)
 -- | Get a list of CodeChunks from an equation (no functions)
 codevars' :: (HasSymbolTable s) => Expr -> s -> [CodeChunk]
 codevars' (Assoc _ l)  sm = nub (concat $ map (\x -> codevars' x sm) l)
-codevars' (a :/ b)     sm = nub (codevars' a sm ++ codevars' b sm)
 codevars' (Deriv _ a b) sm = nub (codevars' a sm ++ codevars' b sm)
 codevars' (Not e)      sm = codevars' e sm 
 codevars' (Neg e)      sm = codevars' e sm 
@@ -147,6 +143,7 @@ binop (Implies a b) = [a,b]
 binop (IFF a b) = [a,b]
 binop (DotProduct a b) = [a,b]
 binop (Subtract a b) = [a,b]
+binop (Divide a b) = [a,b]
 
 -- Steven edit:  need this to have a type for code generation
 --   setting to all to rational

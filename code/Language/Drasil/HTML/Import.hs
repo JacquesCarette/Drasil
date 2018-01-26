@@ -30,7 +30,6 @@ expr (V v)            _ = P.Var   v
 expr (Dbl d)          _ = P.Dbl   d
 expr (Int i)          _ = P.Int   i
 expr (Assoc op l)     sm = P.Assoc op $ map (\x -> expr x sm) l
-expr (a :/ b)         sm = P.BOp P.Frac  (replace_divs a sm) (replace_divs b sm)
 expr (Neg a)          sm = P.Neg   (expr a sm)
 expr (Deriv Part a 1) sm = P.Assoc Mul [P.Sym (Special Partial), expr a sm]
 expr (Deriv Total a 1)sm = P.Assoc Mul [P.Sym lD, expr a sm]
@@ -85,6 +84,7 @@ bfunc (Implies a b)      sm = P.BOp P.Impl (expr a sm) (expr b sm)
 bfunc (IFF a b)          sm = P.BOp P.Iff  (expr a sm) (expr b sm)
 bfunc (DotProduct a b)   sm = P.BOp P.Dot  (expr a sm) (expr b sm)
 bfunc (Subtract a b)     sm = P.BOp P.Sub  (expr a sm) (expr b sm)
+bfunc (Divide a b)       sm = P.BOp P.Frac (replace_divs a sm) (replace_divs b sm)
 
 -- | Helper function for translating 'EOperator's
 eop :: HasSymbolTable s => EOperator -> s -> (P.Function, P.Expr)
@@ -110,7 +110,7 @@ int_wrt wrtc = P.Assoc Mul [P.Sym lD, P.Sym wrtc]
 
 -- | Helper function for translating operations in expressions 
 replace_divs :: HasSymbolTable s => Expr -> s -> P.Expr
-replace_divs (a :/ b)               sm = P.BOp P.Div (replace_divs a sm) (replace_divs b sm)
+replace_divs (BinaryOp (Divide a b)) sm = P.BOp P.Div (replace_divs a sm) (replace_divs b sm)
 replace_divs (Assoc op l)           sm = P.Assoc op $ map (\x -> replace_divs x sm) l
 replace_divs (BinaryOp (Power a b)) sm = P.BOp P.Pow (replace_divs a sm) (replace_divs b sm)
 replace_divs (BinaryOp (Subtract a b)) sm = P.BOp P.Sub (replace_divs a sm) (replace_divs b sm)

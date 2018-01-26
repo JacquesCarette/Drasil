@@ -85,11 +85,11 @@ intersliceWtrF = mkDataDef watrForce intersliceWtrFEqn
 
 intersliceWtrFEqn :: Expr
 intersliceWtrFEqn = Case [case1,case2,case3]
-  where case1 = (((inxi slopeHght)-(inxi slipHght ))$^ 2 :/ 2  *
+  where case1 = (((inxi slopeHght)-(inxi slipHght ))$^ 2 / 2  *
           (C satWeight) + ((inxi waterHght)-(inxi slopeHght))$^ 2 *
           (C satWeight), (inxi waterHght) $>= (inxi slopeHght))
 
-        case2 = (((inxi waterHght)-(inxi slipHght ))$^ 2 :/ 2  * (C satWeight),
+        case2 = (((inxi waterHght)-(inxi slipHght ))$^ 2 / 2  * (C satWeight),
                 (inxi slopeHght) $> (inxi waterHght) $> (inxi slipHght))
 
         case3 = (Int 0,(inxi waterHght) $<= (inxi slipHght))

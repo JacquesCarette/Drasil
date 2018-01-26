@@ -16,7 +16,7 @@ import Control.Lens ((^.))
 type Relation = Expr
 
 infixr 8 $^
-infixl 7 :/
+infixl 7 $/
 infixr 4 $=
 infixr 9 $&&
 infixr 9 $||
@@ -30,7 +30,6 @@ data Expr where
   Dbl      :: Double -> Expr
   Int      :: Integer -> Expr
   Assoc    :: Oper -> [Expr] -> Expr
-  (:/)     :: Expr -> Expr -> Expr -- Division
   Neg      :: Expr -> Expr -- Negation
   Deriv    :: DerivType -> Expr -> Expr -> Expr -- Derivative, syntax is:
   -- Type (Partial or total) -> principal part of change -> with respect to
@@ -50,7 +49,7 @@ data Expr where
   Grouping :: Expr -> Expr
   UnaryOp  :: UFunc -> Expr
   BinaryOp :: BiFunc -> Expr
-  EOp :: EOperator -> Expr
+  EOp      :: EOperator -> Expr
   -- start of logic Expr
   Not      :: Expr -> Expr -- logical not
 
@@ -59,7 +58,8 @@ data Expr where
   ForAll   :: Symbol -> Expr -> Expr
   Exists   :: Symbol -> Expr -> Expr
 
-($=), ($!=), ($<), ($>), ($<=), ($>=), ($=>), ($<=>), ($.), ($-) :: Expr -> Expr -> Expr
+($=), ($!=), ($<), ($>), ($<=), ($>=), ($=>), ($<=>), ($.), ($-), 
+  ($/) :: Expr -> Expr -> Expr
 ($=)  a b = BinaryOp $ EEquals a b
 ($!=) a b = BinaryOp $ ENEquals a b
 ($<)  a b = BinaryOp $ ELess a b
@@ -70,6 +70,7 @@ a $=> b = BinaryOp $ Implies a b
 a $<=> b = BinaryOp $ IFF a b
 a $. b   = BinaryOp $ DotProduct a b
 a $- b = BinaryOp $ Subtract a b
+a $/ b = BinaryOp $ Divide a b
 
 ($^), ($&&), ($||) :: Expr -> Expr -> Expr
 ($^) a b = BinaryOp (Power a b)
@@ -100,7 +101,6 @@ instance Eq Expr where
   Dbl a == Dbl b               =  a == b
   Int a == Int b               =  a == b
   Assoc o1 l1 == Assoc o2 l2   =  o1 == o2 && l1 == l2
-  (:/) a b == (:/) c d         =  a == c && b == d
   Not a == Not b               =  a == b
   Neg a == Neg b               =  a == b
   Deriv t1 a b == Deriv t2 c d =  t1 == t2 && a == c && b == d
@@ -115,9 +115,9 @@ instance Eq Expr where
   _ == _                       =  False
 
 instance Fractional Expr where
-  a / b = a :/ b
-  fromRational r = (fromInteger $ numerator   r) :/
-                   (fromInteger $ denominator r)
+  a / b = BinaryOp $ Divide a b
+  fromRational r = BinaryOp $ Divide (fromInteger $ numerator   r)
+                                     (fromInteger $ denominator r)
 
 
 --Known math functions.
@@ -137,6 +137,7 @@ data BiFunc =
   | IFF Expr Expr  -- if and only if, &hArr; \iff
   | DotProduct Expr Expr
   | Subtract Expr Expr
+  | Divide Expr Expr
   deriving Eq
 
 -- | Operators

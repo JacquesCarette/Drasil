@@ -227,8 +227,8 @@ tank_length = uqc "tank_length" (nounPhraseSP "length of tank")
 diam = uqc "diam" (nounPhraseSP "diameter of tank")
   "The diameter of the tank" cD metre Rational
   [physc $ \c -> c $> Int 0,
-  sfwrc $ \c -> (c :/ C tank_length_max) $<=
-  (c :/ C tank_length) $<= (c :/ C tank_length_min)] (Dbl 0.412) 0.1
+  sfwrc $ \c -> (c / C tank_length_max) $<=
+  (c / C tank_length) $<= (c / C tank_length_min)] (Dbl 0.412) 0.1
 
 -- Constraint 3
 pcm_vol = uqc "pcm_vol" (nounPhraseSP "volume of PCM")
@@ -248,7 +248,7 @@ pcm_SA = uqc "pcm_SA"
   (sub cA cP) m_2 Rational
   [physc $ \c -> c $> Int 0,
   sfwrc $ \c -> C pcm_vol $<= c $<=
-  ((Int 2 :/ C htTransCoeff_min) * C tank_vol)]
+  ((Int 2 / C htTransCoeff_min) * C tank_vol)]
   (Dbl 1.2) 0.1
 
 -- Constraint 5

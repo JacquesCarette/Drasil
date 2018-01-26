@@ -46,7 +46,7 @@ t1ConsThermE = makeRC "t1ConsThermE"
   (nounPhraseSP "Conservation of thermal energy") t1descr consThermERel
 
 consThermERel :: Relation
-consThermERel = (Neg (C gradient)) :. (C thFluxVect) + (C vol_ht_gen) $=
+consThermERel = (negate (C gradient)) $. (C thFluxVect) + (C vol_ht_gen) $=
   (C density) * (C heat_cap_spec) * (Deriv Part (C temp) (C time))
 
 t1descr :: Sentence

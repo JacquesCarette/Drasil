@@ -32,7 +32,6 @@ expr (Int i)          _ = P.Int   i
 expr (Assoc op l)     sm = P.Assoc op $ map (\x -> expr x sm) l
 expr (a :/ b)         sm = P.BOp P.Frac  (replace_divs a sm) (replace_divs b sm)
 expr (a :- b)         sm = P.BOp P.Sub   (expr a sm) (expr b sm)
-expr (a :. b)         sm = P.BOp P.Dot   (expr a sm) (expr b sm)
 expr (Neg a)          sm = P.Neg   (expr a sm)
 expr (Deriv Part a 1) sm = P.Assoc Mul [P.Sym (Special Partial), expr a sm]
 expr (Deriv Total a 1)sm = P.Assoc Mul [P.Sym lD, expr a sm]
@@ -85,6 +84,7 @@ bfunc (ELessEq a b)      sm = P.BOp P.LEq (expr a sm) (expr b sm)
 bfunc (EGreaterEq a b)   sm = P.BOp P.GEq (expr a sm) (expr b sm)
 bfunc (Implies a b)      sm = P.BOp P.Impl (expr a sm) (expr b sm)
 bfunc (IFF a b)          sm = P.BOp P.Iff  (expr a sm) (expr b sm)
+bfunc (DotProduct a b)   sm = P.BOp P.Dot  (expr a sm) (expr b sm)
 
 -- | Helper function for translating 'EOperator's
 eop :: HasSymbolTable s => EOperator -> s -> (P.Function, P.Expr)

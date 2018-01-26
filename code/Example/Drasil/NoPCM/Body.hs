@@ -530,12 +530,12 @@ s4_2_3_desc5 den ma vo = [S "Using the fact that", getES den :+: S "=" :+:
 
 s4_2_3_eq1, s4_2_3_eq2, s4_2_3_eq3, s4_2_3_eq4, s4_2_3_eq5 :: Expr
 
-s4_2_3_eq1 = (Neg (int_all (eqSymb vol) ((C gradient) :. (C thFluxVect)))) + 
+s4_2_3_eq1 = (negate (int_all (eqSymb vol) ((C gradient) $. (C thFluxVect)))) + 
   (int_all (eqSymb vol) (C vol_ht_gen)) $=
   (int_all (eqSymb vol) ((C density)
   * (C QT.heat_cap_spec) * Deriv Part (C QT.temp) (C time)))
 
-s4_2_3_eq2 = (Neg (int_all (eqSymb surface) ((C thFluxVect) :. (C uNormalVect)))) +
+s4_2_3_eq2 = (negate (int_all (eqSymb surface) ((C thFluxVect) $. (C uNormalVect)))) +
   (int_all (eqSymb vol) (C vol_ht_gen)) $= 
   (int_all (eqSymb vol)
   ((C density) * (C QT.heat_cap_spec) * Deriv Part (C QT.temp) (C time)))

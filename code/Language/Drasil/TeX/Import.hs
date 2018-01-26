@@ -31,7 +31,6 @@ expr (Int i)            _ = P.Int  i
 expr (Assoc op l)      sm = P.Assoc op $ map (\x -> expr x sm) l
 expr (a :/ b)          sm = P.BOp P.Frac (replace_divs sm a) (replace_divs sm b)
 expr (a :- b)          sm = P.BOp P.Sub  (expr a sm) (expr b sm)
-expr (a :. b)          sm = P.BOp P.Dot  (expr a sm) (expr b sm)
 expr (Neg a)           sm = P.Neg  (expr a sm)
 expr (C c)             sm = -- FIXME: Add Stage for Context
   P.Sym  (eqSymb (symbLookup c (sm ^. symbolTable)))
@@ -79,8 +78,9 @@ bfunc (ELess a b)       sm = P.BOp P.Lt  (expr a sm) (expr b sm)
 bfunc (EGreater a b)    sm = P.BOp P.Gt  (expr a sm) (expr b sm)
 bfunc (ELessEq a b)     sm = P.BOp P.LEq (expr a sm) (expr b sm)
 bfunc (EGreaterEq a b)  sm = P.BOp P.GEq (expr a sm) (expr b sm)
-bfunc (Implies a b)     sm = P.BOp P.Impl  (expr a sm) (expr b sm)
-bfunc (IFF a b)         sm = P.BOp P.Iff   (expr a sm) (expr b sm)
+bfunc (Implies a b)     sm = P.BOp P.Impl (expr a sm) (expr b sm)
+bfunc (IFF a b)         sm = P.BOp P.Iff  (expr a sm) (expr b sm)
+bfunc (DotProduct a b)  sm = P.BOp P.Dot  (expr a sm) (expr b sm)
 
 
 eop :: HasSymbolTable ctx => EOperator -> ctx -> (P.Function, P.Expr)

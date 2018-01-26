@@ -152,7 +152,7 @@ dd8impulse = mkDataDef QP.impulseS impulseEqn
 
 -- The last two terms in the denominator should be cross products.
 impulseEqn :: Expr
-impulseEqn = ((Neg ((Int 1) + (C QP.restitutionCoef))) * (C initRelVel) :.
+impulseEqn = ((negate ((Int 1) + (C QP.restitutionCoef))) * (C initRelVel) $.
   (C normalVect)) / (((((Int 1) / (C mass_A))) + ((Int 1) / (C mass_B))) *
   ((C normalLen) $^ (Int 2)) +
   (((C perpLen_A) $^ (Int 2)) / (C momtInert_A)) +

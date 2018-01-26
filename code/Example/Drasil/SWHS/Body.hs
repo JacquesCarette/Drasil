@@ -1029,7 +1029,7 @@ s4_2_3_deriv_2 t1ct vo = foldlSPCol [S "Integrating", swhsSymbMapTRef t1ct,
   S "over a", phrase vo, sParen (getES vo) `sC` S "we have"]
 
 s4_2_3_deriv_3 = EqnBlock
-  ((Neg (int_all (eqSymb vol) ((C gradient) :. (C thFluxVect)))) +
+  ((negate (int_all (eqSymb vol) ((C gradient) $. (C thFluxVect)))) +
   (int_all (eqSymb vol) (C vol_ht_gen)) $=
   (int_all (eqSymb vol) ((C density) * (C heat_cap_spec) * Deriv Part (C temp) (C time))))
 
@@ -1042,7 +1042,7 @@ s4_2_3_deriv_4 gd su vo tfv unv un = foldlSPCol [S "Applying", titleize gd,
   S "outward", phrase unv, S "for a", phrase su]
 
 s4_2_3_deriv_5 = EqnBlock
-  ((Neg (int_all (eqSymb surface) ((C thFluxVect) :. (C uNormalVect)))) +
+  ((negate (int_all (eqSymb surface) ((C thFluxVect) $. (C uNormalVect)))) +
   (int_all (eqSymb vol) (C vol_ht_gen)) $= 
   (int_all (eqSymb vol) ((C density) * (C heat_cap_spec) * Deriv Part (C temp) (C time))))
 

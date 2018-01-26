@@ -33,7 +33,6 @@ data Expr where
   Assoc    :: Oper -> [Expr] -> Expr
   (:/)     :: Expr -> Expr -> Expr -- Division
   (:-)     :: Expr -> Expr -> Expr -- Subtraction
-  (:.)     :: Expr -> Expr -> Expr -- Dot product
   Neg      :: Expr -> Expr -- Negation
   Deriv    :: DerivType -> Expr -> Expr -> Expr -- Derivative, syntax is:
   -- Type (Partial or total) -> principal part of change -> with respect to
@@ -62,7 +61,7 @@ data Expr where
   ForAll   :: Symbol -> Expr -> Expr
   Exists   :: Symbol -> Expr -> Expr
 
-($=), ($!=), ($<), ($>), ($<=), ($>=), ($=>), ($<=>) :: Expr -> Expr -> Expr
+($=), ($!=), ($<), ($>), ($<=), ($>=), ($=>), ($<=>), ($.) :: Expr -> Expr -> Expr
 ($=)  a b = BinaryOp $ EEquals a b
 ($!=) a b = BinaryOp $ ENEquals a b
 ($<)  a b = BinaryOp $ ELess a b
@@ -71,6 +70,7 @@ data Expr where
 ($>=) a b = BinaryOp $ EGreaterEq a b
 a $=> b = BinaryOp $ Implies a b
 a $<=> b = BinaryOp $ IFF a b
+a $. b   = BinaryOp $ DotProduct a b
 
 ($^), ($&&), ($||) :: Expr -> Expr -> Expr
 ($^) a b = BinaryOp (Power a b)
@@ -90,6 +90,7 @@ instance Num Expr where
   a - b = a :- b
   fromInteger a = Int a
   abs = UnaryOp . Abs
+  negate = Neg
 
   -- this is a Num wart
   signum _ = error "should not use signum in expressions"
@@ -102,7 +103,6 @@ instance Eq Expr where
   Assoc o1 l1 == Assoc o2 l2   =  o1 == o2 && l1 == l2
   (:/) a b == (:/) c d         =  a == c && b == d
   (:-) a b == (:-) c d         =  a == c && b == d
-  (:.) a b == (:.) c d         =  a == c && b == d || a == d && b == c
   Not a == Not b               =  a == b
   Neg a == Neg b               =  a == b
   Deriv t1 a b == Deriv t2 c d =  t1 == t2 && a == c && b == d
@@ -137,6 +137,7 @@ data BiFunc =
   | EGreaterEq Expr Expr
   | Implies Expr Expr  -- implies, &rArr; \implies
   | IFF Expr Expr  -- if and only if, &hArr; \iff
+  | DotProduct Expr Expr
   deriving Eq
 
 -- | Operators

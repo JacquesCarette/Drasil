@@ -8,7 +8,7 @@ import Language.Drasil.Code.Imperative.Parsers.ConfigParser (pythonLabel, cppLab
 import Language.Drasil.Code.Imperative.Lang
 import Language.Drasil.Code.CodeGeneration (createCodeFiles, makeCode)
 import Language.Drasil.Chunk.Code
-import Language.Drasil.Expr as E
+import Language.Drasil.Expr as E hiding (($.))
 import Language.Drasil.Expr.Extract hiding (vars)
 import Language.Drasil.CodeSpec hiding (codeSpec, Mod(..))
 import qualified Language.Drasil.CodeSpec as CS (Mod(..))
@@ -449,7 +449,6 @@ convExpr (Assoc E.And l)  = fmap (foldr1 (?&&)) $ sequence $ map convExpr l
 convExpr (Assoc E.Or l)  = fmap (foldr1 (?||)) $ sequence $ map convExpr l
 convExpr (0 :- b)     = convExpr (Neg b)
 convExpr (a :- b)     = liftM2 (#-)  (convExpr a) (convExpr b)
-convExpr (a :. b)     = liftM2 (#*)  (convExpr a) (convExpr b)
 convExpr (Deriv _ _ _) = return $ litString "**convExpr :: Deriv unimplemented**"
 convExpr (E.Not e)      = fmap (?!) (convExpr e)
 convExpr (Neg e)      = fmap (#~) (convExpr e)
@@ -503,6 +502,7 @@ bfunc (Cross _ _)      = error "bfunc: Cross not implemented"
 bfunc (E.Power a b)    = liftM2 (#^) (convExpr a) (convExpr b)
 bfunc (Implies _ _)    = error "convExpr :=>"
 bfunc (IFF _ _)        = error "convExpr :<=>"
+bfunc (DotProduct _ _) = error "convExpr DotProduct"
 
 -- medium hacks --
 genModDef :: CS.Mod -> Reader State Module

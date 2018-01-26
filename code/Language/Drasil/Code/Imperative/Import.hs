@@ -441,8 +441,6 @@ convExpr :: Expr -> Reader State Value
 convExpr (V v)        = return $ litString v  -- V constructor should be removed
 convExpr (Dbl d)      = return $ litFloat d
 convExpr (Int i)      = return $ litInt i
-convExpr ((Int a) :/ (Int b)) = return $ (litFloat $ fromIntegral a) #/ (litFloat $ fromIntegral b) -- hack to deal with integer division
-convExpr (a :/ b)     = liftM2 (#/) (convExpr a) (convExpr b)
 convExpr (Assoc Add l)  = fmap (foldr1 (#+)) $ sequence $ map convExpr l
 convExpr (Assoc Mul l)  = fmap (foldr1 (#*)) $ sequence $ map convExpr l
 convExpr (Assoc E.And l)  = fmap (foldr1 (?&&)) $ sequence $ map convExpr l
@@ -502,6 +500,8 @@ bfunc (Subtract a b)   = liftM2 (#-) (convExpr a) (convExpr b)
 bfunc (Implies _ _)    = error "convExpr :=>"
 bfunc (IFF _ _)        = error "convExpr :<=>"
 bfunc (DotProduct _ _) = error "convExpr DotProduct"
+bfunc (E.Divide (Int a) (Int b)) = return $ (litFloat $ fromIntegral a) #/ (litFloat $ fromIntegral b) -- hack to deal with integer division
+bfunc (E.Divide a b)     = liftM2 (#/) (convExpr a) (convExpr b)
 
 -- medium hacks --
 genModDef :: CS.Mod -> Reader State Module

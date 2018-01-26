@@ -28,7 +28,7 @@ import Language.Drasil.ChunkDB (HasSymbolTable)
 import Language.Drasil.Space (Space(..))
 
 genTeX :: HasSymbolTable ctx => A.DocType -> L.Document -> ctx -> TP.Doc
-genTeX typ doc sm = runPrint (build sm typ $ I.makeDocument doc sm) Text
+genTeX typ doc sm = runPrint (build sm typ $ I.makeDocument sm doc) Text
 
 build :: HasSymbolTable s => s -> A.DocType -> Document -> D
 build sm (A.SRS _) doc   = buildStd sm doc
@@ -595,7 +595,7 @@ renderF sm c fields =
 
 cite :: HasSymbolTable s => s -> [CiteField] -> Spec
 cite sm fields = foldr1 (:+:) $
-  map (flip I.spec sm . rmSpace . lstName) (getAuthors fields) ++ [S $ show $ getYear fields]
+  map (I.spec sm . rmSpace . lstName) (getAuthors fields) ++ [S $ show $ getYear fields]
 
 -- Remove spaces
 rmSpace :: LS.Sentence -> LS.Sentence
@@ -628,9 +628,9 @@ showBibTeX _ (Title      s) = showField "title" s
 showBibTeX _ (Volume     s) = showField "volume" (S $ show s)
 showBibTeX _ (Publisher  s) = showField "publisher" s
 showBibTeX sm (Author p@(Person {_convention=Mono}:_)) = showField "author" 
-  (I.spec (rendPeople p) sm) :+: S ",\n" :+: 
-  showField "sortkey" (I.spec (rendPeople p) sm)
-showBibTeX sm (Author    p) = showField "author" (I.spec (rendPeople p) sm)
+  (I.spec sm (rendPeople p)) :+: S ",\n" :+: 
+  showField "sortkey" (I.spec sm (rendPeople p))
+showBibTeX sm (Author    p) = showField "author" $ I.spec sm (rendPeople p)
 showBibTeX _ (Year       y) = showField "year" (S $ show y)
 showBibTeX _ (Date   d m y) = showField "year"    (S $ unwords [show d, show m, show y])
 showBibTeX _ (URLdate d m y) = showField "urldate" (S $ unwords [show d, show m, show y])
@@ -643,7 +643,7 @@ showBibTeX _ (Issue      s) = showField "number" (S $ show s)
 showBibTeX _ (School     s) = showField "school" s
 showBibTeX _ (URL        s) = showField "url" s
 showBibTeX _ (HowPub     s) = showField "howpublished" s
-showBibTeX sm (Editor     p) = showField "editor" (I.spec (rendPeople p) sm)
+showBibTeX sm (Editor     p) = showField "editor" $ I.spec sm (rendPeople p)
 
 showField :: String -> Spec -> Spec
 showField f s = S f :+: S "={" :+: s :+: S "}"

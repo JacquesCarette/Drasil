@@ -109,20 +109,20 @@ replace_divs (BinaryOp (Power a b)) sm = P.BOp P.Pow (replace_divs a sm) (replac
 replace_divs (a :- b) sm = P.BOp P.Sub (replace_divs a sm) (replace_divs b sm)
 replace_divs a        sm = expr a sm
 
-spec :: HasSymbolTable ctx => Sentence -> ctx -> T.Spec
-spec (S s)      _ = T.S s
-spec (Sy s)     _ = T.Sy s
-spec (EmptyS :+: b) sm = spec b sm
-spec (a :+: EmptyS) sm = spec a sm
-spec (a :+: b) sm = spec a sm T.:+: spec b sm
-spec (G g)      _ = T.G g
-spec (Sp s)     _ = T.Sp s
-spec (F f s)   sm = spec (accent f s) sm
-spec (P s)      _ = T.N s
-spec (Ref t r) sm = T.Ref t (spec r sm)
-spec (Quote q) sm = T.S "``" T.:+: spec q sm T.:+: T.S "\""
-spec EmptyS     _ = T.EmptyS
-spec (E e)     sm = T.E $ expr e sm
+spec :: HasSymbolTable ctx => ctx -> Sentence -> T.Spec
+spec _  (S s)          = T.S s
+spec _  (Sy s)         = T.Sy s
+spec sm (EmptyS :+: b) = spec sm b
+spec sm (a :+: EmptyS) = spec sm a
+spec sm (a :+: b)      = spec sm a T.:+: spec sm b
+spec _  (G g)          = T.G g
+spec _  (Sp s)         = T.Sp s
+spec sm (F f s)        = spec sm (accent f s)
+spec _  (P s)          = T.N s
+spec sm (Ref t r)      = T.Ref t (spec sm r)
+spec sm (Quote q)      = T.S "``" T.:+: spec sm q T.:+: T.S "\""
+spec _  EmptyS         = T.EmptyS
+spec sm (E e)          = T.E $ expr e sm
 
 decorate :: Decoration -> Sentence -> Sentence
 decorate Hat    s = S "\\hat{" :+: s :+: S "}"
@@ -133,51 +133,51 @@ accent :: Accent -> Char -> Sentence
 accent Grave  s = S $ "\\`{" ++ (s : "}")
 accent Acute  s = S $ "\\'{" ++ (s : "}")
 
-makeDocument :: HasSymbolTable ctx => Document -> ctx -> T.Document
-makeDocument (Document title author sections) sm =
-  T.Document (spec title sm) (spec author sm) (createLayout sections sm)
+makeDocument :: HasSymbolTable ctx => ctx -> Document -> T.Document
+makeDocument sm (Document title author sections) =
+  T.Document (spec sm title) (spec sm author) (createLayout sm sections)
 
-layout :: HasSymbolTable ctx => Int -> SecCons -> ctx -> T.LayoutObj
-layout currDepth (Sub s) sm = sec (currDepth+1) s sm
-layout _         (Con c) sm = lay sm c
+layout :: HasSymbolTable ctx => ctx -> Int -> SecCons -> T.LayoutObj
+layout sm currDepth (Sub s) = sec sm (currDepth+1) s
+layout sm _         (Con c) = lay sm c
 
-createLayout :: HasSymbolTable ctx => Sections -> ctx -> [T.LayoutObj]
-createLayout secs sm = map (flip (sec 0) sm) secs
+createLayout :: HasSymbolTable ctx => ctx -> Sections -> [T.LayoutObj]
+createLayout sm = map (sec sm 0)
 
-sec :: HasSymbolTable ctx => Int -> Section -> ctx -> T.LayoutObj
-sec depth x@(Section title contents) sm =
-  T.Section depth (spec title sm) (map (flip (layout depth) sm) contents) (spec (refName x) sm)
+sec :: HasSymbolTable ctx => ctx -> Int -> Section -> T.LayoutObj
+sec sm depth x@(Section title contents) =
+  T.Section depth (spec sm title) (map (layout sm depth) contents) (spec sm (refName x))
 
 lay :: HasSymbolTable ctx => ctx -> Contents -> T.LayoutObj
 lay sm x@(Table hdr lls t b)
-  | null lls || length hdr == length (head lls) = T.Table ((map (flip spec sm) hdr) :
-      (map (map (flip spec sm)) lls)) (spec (refName x) sm) b (spec t sm)
+  | null lls || length hdr == length (head lls) = T.Table ((map (spec sm) hdr) :
+      (map (map (spec sm)) lls)) (spec sm (refName x)) b (spec sm t)
   | otherwise = error $ "Attempting to make table with " ++ show (length hdr) ++
                         " headers, but data contains " ++
                         show (length (head lls)) ++ " columns."
-lay sm (Paragraph c)         = T.Paragraph (spec c sm)
+lay sm (Paragraph c)         = T.Paragraph (spec sm c)
 lay sm (EqnBlock c)          = T.EqnBlock (T.E (expr c sm))
 --lay (CodeBlock c)         = T.CodeBlock c
-lay sm x@(Definition c)      = T.Definition (makePairs sm c) (spec (refName x) sm)
+lay sm x@(Definition c)      = T.Definition (makePairs sm c) (spec sm (refName x))
 lay sm (Enumeration cs)      = T.List $ makeL sm cs
-lay sm x@(Figure c f wp)     = T.Figure (spec (refName x) sm) (spec c sm) f wp
+lay sm x@(Figure c f wp)     = T.Figure (spec sm (refName x)) (spec sm c) f wp
 lay sm x@(Requirement r)     =
-  T.Requirement (spec (phrase (r ^. term)) sm) (spec (refName x) sm)
+  T.Requirement (spec sm (phrase (r ^. term))) (spec sm (refName x))
 lay sm x@(Assumption a)      =
-  T.Assumption (spec (phrase $ a ^. term) sm) (spec (refName x) sm)
+  T.Assumption (spec sm (phrase $ a ^. term)) (spec sm (refName x))
 lay sm x@(LikelyChange lc)   =
-  T.LikelyChange (spec (phrase $ lc ^. term) sm)
-  (spec (refName x) sm)
+  T.LikelyChange (spec sm (phrase $ lc ^. term))
+  (spec sm (refName x))
 lay sm x@(UnlikelyChange ucc) =
-  T.UnlikelyChange (spec (phrase $ ucc ^. term) sm)
-  (spec (refName x) sm)
-lay sm x@(Graph ps w h t)    = T.Graph (map (\(y,z) -> (spec y sm, spec z sm)) ps)
-                               w h (spec t sm) (spec (refName x) sm)
+  T.UnlikelyChange (spec sm (phrase $ ucc ^. term))
+  (spec sm (refName x))
+lay sm x@(Graph ps w h t)    = T.Graph (map (\(y,z) -> (spec sm y, spec sm z)) ps)
+                               w h (spec sm t) (spec sm (refName x))
 lay sm (TMod ps r _)         = T.Definition (map (\(x,y) ->
-  (x, map (lay sm) y)) ps) (spec r sm)
+  (x, map (lay sm) y)) ps) (spec sm r)
 lay sm (DDef ps r _)         = T.Definition (map (\(x,y) ->
-  (x, map (lay sm) y)) ps) (spec r sm)
-lay sm (Defnt dtyp pairs rn) = T.Defnt dtyp (layPairs pairs) (spec rn sm)
+  (x, map (lay sm) y)) ps) (spec sm r)
+lay sm (Defnt dtyp pairs rn) = T.Defnt dtyp (layPairs pairs) (spec sm rn)
   where layPairs = map (\(x,y) -> (x, map (lay sm) y))
 lay _  (GDef)             = T.Paragraph (T.EmptyS)  -- need to implement!
 lay _  (IMod)             = T.Paragraph (T.EmptyS)  -- need to implement!
@@ -194,48 +194,48 @@ layCite sm (Online    fields) = T.Online    $ map (layField sm) fields
 
 layField :: HasSymbolTable ctx => ctx -> CiteField -> T.CiteField
 layField _  (Author     p) = T.Author     p
-layField sm (Title      s) = T.Title      $ spec s sm
-layField sm (Series     s) = T.Series     $ spec s sm
-layField sm (Collection s) = T.Collection $ spec s sm
+layField sm (Title      s) = T.Title      $ spec sm s
+layField sm (Series     s) = T.Series     $ spec sm s
+layField sm (Collection s) = T.Collection $ spec sm s
 layField _  (Volume     n) = T.Volume     n
 layField _  (Edition    n) = T.Edition    n
-layField sm (Place (c, s)) = T.Place (spec c sm, spec s sm)
-layField sm (Publisher  s) = T.Publisher $ spec s sm
-layField sm (Journal    s) = T.Journal   $ spec s sm
+layField sm (Place (c, s)) = T.Place (spec sm c, spec sm s)
+layField sm (Publisher  s) = T.Publisher $ spec sm s
+layField sm (Journal    s) = T.Journal   $ spec sm s
 layField _  (Year       n) = T.Year       n
 layField _  (Date    n m y)= T.Date    n m y
 layField _  (URLdate n m y)= T.URLdate n m y
 layField _  (Page       n) = T.Page       n
 layField _  (Pages     ns) = T.Pages     ns
-layField sm (Note       s) = T.Note       $ spec s sm
+layField sm (Note       s) = T.Note       $ spec sm s
 layField _  (Issue      n) = T.Issue      n
-layField sm (School     s) = T.School     $ spec s sm
-layField sm (URL        n) = T.URL        $ spec n sm
-layField sm (HowPub     s) = T.HowPub     $ spec s sm
+layField sm (School     s) = T.School     $ spec sm s
+layField sm (URL        n) = T.URL        $ spec sm n
+layField sm (HowPub     s) = T.HowPub     $ spec sm s
 layField _  (Editor     p) = T.Editor     p
 
 makeL :: HasSymbolTable ctx => ctx -> ListType -> T.ListType
 makeL sm (Bullet bs)      = T.Enum        $ map (item sm) bs
 makeL sm (Number ns)      = T.Item        $ map (item sm) ns
-makeL sm (Simple ps)      = T.Simple      $ map (\(x,y) -> (spec x sm, item sm y)) ps
-makeL sm (Desc ps)        = T.Desc        $ map (\(x,y) -> (spec x sm, item sm y)) ps
-makeL sm (Definitions ps) = T.Definitions $ map (\(x,y) -> (spec x sm, item sm y)) ps
+makeL sm (Simple ps)      = T.Simple      $ map (\(x,y) -> (spec sm x, item sm y)) ps
+makeL sm (Desc ps)        = T.Desc        $ map (\(x,y) -> (spec sm x, item sm y)) ps
+makeL sm (Definitions ps) = T.Definitions $ map (\(x,y) -> (spec sm x, item sm y)) ps
 
 item :: HasSymbolTable ctx => ctx -> ItemType -> T.ItemType
-item sm (Flat i)     = T.Flat   (spec i sm)
-item sm (Nested t s) = T.Nested (spec t sm) (makeL sm s)
+item sm (Flat i)     = T.Flat   (spec sm i)
+item sm (Nested t s) = T.Nested (spec sm t) (makeL sm s)
 
 makePairs :: HasSymbolTable ctx => ctx -> DType -> [(String,[T.LayoutObj])]
 makePairs m (Data c) = [
-  ("Label",       [T.Paragraph $ spec (titleize $ c ^. term) m]),
-  ("Units",       [T.Paragraph $ spec (unit'2Contents c) m]),
+  ("Label",       [T.Paragraph $ spec m (titleize $ c ^. term)]),
+  ("Units",       [T.Paragraph $ spec m (unit'2Contents c)]),
   ("Equation",    [eqnStyleDD $ buildEqn c m]),
   ("Description", [T.Paragraph (buildDDDescription c m)])
   ]
 makePairs m (Theory c) = [
-  ("Label",       [T.Paragraph $ spec (titleize $ c ^. term) m]),
+  ("Label",       [T.Paragraph $ spec m (titleize $ c ^. term)]),
   ("Equation",    [eqnStyleTM $ T.E (expr (c ^. relat) m)]),
-  ("Description", [T.Paragraph (spec (c ^. defn) m)])
+  ("Description", [T.Paragraph (spec m (c ^. defn))])
   ]
 makePairs _ General  = error "Not yet implemented"
 makePairs _ Instance = error "Not yet implemented"
@@ -263,7 +263,7 @@ buildDDDescription c m = descLines m
 descLines :: (HasSymbolTable ctx, Quantity q) => ctx -> [q] -> T.Spec
 descLines _ []      = error "No chunks to describe"
 descLines m (vc:[]) = (T.N (eqSymb vc) T.:+:
-  (T.S " is the " T.:+: (spec (phrase $ vc ^. term) m) T.:+:
+  (T.S " is the " T.:+: (spec m (phrase $ vc ^. term)) T.:+:
    unWrp (getUnitLup vc m)))
   where unWrp (Just a) = T.S " (" T.:+: T.Sy (a ^. usymb) T.:+: T.S ")"
         unWrp Nothing  = T.S ""

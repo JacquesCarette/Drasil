@@ -29,7 +29,7 @@ expr (V v)              _ = P.Var  v
 expr (Dbl d)            _ = P.Dbl  d
 expr (Int i)            _ = P.Int  i
 expr (Assoc op l)      sm = P.Assoc op $ map (\x -> expr x sm) l
-expr (a :/ b)          sm = P.BOp P.Frac (replace_divs a sm) (replace_divs b sm)
+expr (a :/ b)          sm = P.BOp P.Frac (replace_divs sm a) (replace_divs sm b)
 expr (a :- b)          sm = P.BOp P.Sub  (expr a sm) (expr b sm)
 expr (a :. b)          sm = P.BOp P.Dot  (expr a sm) (expr b sm)
 expr (Neg a)           sm = P.Neg  (expr a sm)
@@ -102,12 +102,12 @@ eop (Integral (IntegerDD _ _) _) _ =
 int_wrt :: Symbol -> P.Expr
 int_wrt wrtc = P.Assoc Mul [P.Sym lD, P.Sym wrtc]
 
-replace_divs :: HasSymbolTable ctx => Expr -> ctx -> P.Expr
-replace_divs (a :/ b) sm = P.BOp P.Div (replace_divs a sm) (replace_divs b sm)
-replace_divs (Assoc op l) sm = P.Assoc op $ map (\x -> replace_divs x sm) l
-replace_divs (BinaryOp (Power a b)) sm = P.BOp P.Pow (replace_divs a sm) (replace_divs b sm)
-replace_divs (a :- b) sm = P.BOp P.Sub (replace_divs a sm) (replace_divs b sm)
-replace_divs a        sm = expr a sm
+replace_divs :: HasSymbolTable ctx => ctx -> Expr -> P.Expr
+replace_divs sm (a :/ b)     = P.BOp P.Div (replace_divs sm a) (replace_divs sm b)
+replace_divs sm (Assoc op l) = P.Assoc op $ map (\x -> replace_divs sm x) l
+replace_divs sm (BinaryOp (Power a b)) = P.BOp P.Pow (replace_divs sm a) (replace_divs sm b)
+replace_divs sm (a :- b)     = P.BOp P.Sub (replace_divs sm a) (replace_divs sm b)
+replace_divs sm a            = expr a sm
 
 spec :: HasSymbolTable ctx => ctx -> Sentence -> T.Spec
 spec _  (S s)          = T.S s

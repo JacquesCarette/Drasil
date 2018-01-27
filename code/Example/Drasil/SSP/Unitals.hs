@@ -55,8 +55,7 @@ sspOutputs = [fs, coords, dx_i, dy_i]
 
 monotonicIn :: [Constraint]  --FIXME: Move this?
 monotonicIn = [physc $ \_ -> -- FIXME: Hack with "index" !
-  ForAll (eqSymb index) (C index `IsIn` Natural $=>
-  Grouping (inx xi 0 $< inx xi 1 $=> inx yi 0 $< inx yi 1))]
+  Grouping (inx xi 0 $< inx xi 1 $=> inx yi 0 $< inx yi 1)]
 
 defultUncrt :: Double
 defultUncrt = 0.1

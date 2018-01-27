@@ -14,7 +14,7 @@ import Language.Drasil.Chunk.Quantity (QWrapper)
 -- | Get dependencies from an equation  
 dep :: Expr -> [String]
 dep (Assoc _ l)   = nub (concat $ map dep l)
-dep (Deriv _ a b) = nub (dep a ++ dep b)
+dep (Deriv _ a b) = nub (b ^. id : dep a)
 dep (C c)         = [c ^. id]
 dep (Int _)       = []
 dep (Dbl _)       = []
@@ -36,7 +36,7 @@ dep (Append a b)  = nub (dep a ++ dep b)
 -- | Get a list of quantities (QWrapper) from an equation in order to print
 vars :: (HasSymbolTable s) => Expr -> s -> [QWrapper]
 vars (Assoc _ l)  m = nub $ concat $ map (\x -> vars x m) l
-vars (Deriv _ a b) m = nub (vars a m ++ vars b m)
+vars (Deriv _ a b) m = nub (vars a m ++ vars (C b) m)
 vars (C c)        m = [symbLookup c $ m ^. symbolTable]
 vars (Int _)      _ = []
 vars (Dbl _)      _ = []
@@ -58,7 +58,7 @@ vars (Append a b) m = nub (vars a m ++ vars b m)
 -- | Get a list of CodeChunks from an equation
 codevars :: (HasSymbolTable s) => Expr -> s -> [CodeChunk]
 codevars (Assoc _ l)  sm = nub (concat $ map (\x -> codevars x sm) l)
-codevars (Deriv _ a b) sm = nub (codevars a sm ++ codevars b sm)
+codevars (Deriv _ a b) sm = nub (codevars a sm ++ codevars (C b) sm)
 codevars (C c)        sm = [codevar $ symbLookup c (sm ^. symbolTable)]
 codevars (Int _)      _ = []
 codevars (Dbl _)      _ = []
@@ -81,7 +81,7 @@ codevars (Append a b) sm = nub (codevars a sm ++ codevars b sm)
 -- | Get a list of CodeChunks from an equation (no functions)
 codevars' :: (HasSymbolTable s) => Expr -> s -> [CodeChunk]
 codevars' (Assoc _ l)  sm = nub (concat $ map (\x -> codevars' x sm) l)
-codevars' (Deriv _ a b) sm = nub (codevars' a sm ++ codevars' b sm)
+codevars' (Deriv _ a b) sm = nub (codevars' a sm ++ codevars' (C b) sm)
 codevars' (C c)        sm = [codevar $ symbLookup c (sm ^. symbolTable)]
 codevars' (Int _)       _ = []
 codevars' (Dbl _)       _ = []

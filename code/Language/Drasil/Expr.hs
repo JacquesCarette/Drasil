@@ -30,9 +30,9 @@ data Expr where
   Dbl      :: Double -> Expr
   Int      :: Integer -> Expr
   Assoc    :: Oper -> [Expr] -> Expr
-  Deriv    :: DerivType -> Expr -> Expr -> Expr -- Derivative, syntax is:
+  Deriv    :: Chunk c => DerivType -> Expr -> c -> Expr -- Derivative, syntax is:
   -- Type (Partial or total) -> principal part of change -> with respect to
-  -- For example: Deriv Part y x1 would be (dy/dx1)*dx1
+  -- For example: Deriv Part y x1 would be (dy/dx1)
   C        :: (Chunk c) => c -> Expr -- Chunk (must have a symbol)
   FCall    :: Expr -> [Expr] -> Expr -- F(x) is (FCall F [x]) or similar
                                   -- FCall accepts a list of params
@@ -98,7 +98,7 @@ instance Eq Expr where
   Dbl a == Dbl b               =  a == b
   Int a == Int b               =  a == b
   Assoc o1 l1 == Assoc o2 l2   =  o1 == o2 && l1 == l2
-  Deriv t1 a b == Deriv t2 c d =  t1 == t2 && a == c && b == d
+  Deriv t1 a b == Deriv t2 c d =  t1 == t2 && a == c && (b ^. id) == (d ^. id)
   C a == C b                   =  (a ^. id) == (b ^. id)
   FCall a b == FCall c d       =  a == c && b == d
   Case a == Case b             =  a == b

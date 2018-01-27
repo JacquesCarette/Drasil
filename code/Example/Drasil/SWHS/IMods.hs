@@ -30,7 +30,7 @@ eBalanceOnWtr = makeRC "eBalanceOnWtr" (nounPhraseSP $ "Energy balance on " ++
   "water to find the temperature of the water") balWtrDesc balWtr_Rel
 
 balWtr_Rel :: Relation
-balWtr_Rel = (Deriv Total (C temp_W) (C time)) $= (Int 1) / (C tau_W) *
+balWtr_Rel = (Deriv Total (C temp_W) time) $= (Int 1) / (C tau_W) *
   (((C temp_C) - (FCall (C temp_W) [C time])) +
   (C eta) * ((FCall (C temp_PCM) [C time]) - (FCall (C temp_W) [C time])))
 
@@ -63,7 +63,7 @@ eBalanceOnPCM = makeRC "eBalanceOnPCM" (nounPhraseSP
   balPCMDesc balPCM_Rel
 
 balPCM_Rel :: Relation
-balPCM_Rel = (Deriv Total (C temp_PCM) (C time)) $=
+balPCM_Rel = (Deriv Total (C temp_PCM) time) $=
   Case [case1, case2, case3, case4]
 
   where case1 = (((Int 1) / (C tau_S_P)) * ((FCall (C temp_W) [C time]) -

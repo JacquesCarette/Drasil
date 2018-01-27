@@ -31,12 +31,10 @@ expr (Int i)            _ = P.Int  i
 expr (Assoc op l)      sm = P.Assoc op $ map (\x -> expr x sm) l
 expr (C c)             sm = -- FIXME: Add Stage for Context
   P.Sym  (eqSymb (symbLookup c (sm ^. symbolTable)))
-expr (Deriv Part a 1)  sm = P.Assoc Mul [P.Sym (Special Partial), expr a sm]
-expr (Deriv Total a 1) sm = P.Assoc Mul [P.Sym lD, expr a sm]
 expr (Deriv Part a b)  sm = P.BOp P.Frac (P.Assoc Mul [P.Sym (Special Partial), expr a sm])
-                           (P.Assoc Mul [P.Sym (Special Partial), expr b sm])
+                           (P.Assoc Mul [P.Sym (Special Partial), expr (C b) sm])
 expr (Deriv Total a b) sm = P.BOp P.Frac (P.Assoc Mul [P.Sym lD, expr a sm])
-                           (P.Assoc Mul [P.Sym lD, expr b sm])
+                           (P.Assoc Mul [P.Sym lD, expr (C b) sm])
 expr (FCall f x)       sm = P.Call (expr f sm) (map (flip expr sm) x)
 expr (Case ps)         sm = if length ps < 2 then
         error "Attempting to use multi-case expr incorrectly"

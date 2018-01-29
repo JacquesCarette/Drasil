@@ -129,9 +129,6 @@ p_expr (Assoc And l)  = concat $ intersperse "\\land{}" $ map p_expr l
 p_expr (Assoc Or l)   = concat $ intersperse "\\lor{}" $ map p_expr l
 p_expr (IsIn  a b) = p_expr a ++ "\\in{}" ++ p_space b
 
-p_expr (Forall v e) = "\\forall{} " ++ symbol v ++ ":\\ " ++ p_expr e
-p_expr (Exists v e) = "\\exists{} " ++ symbol v ++ ":\\ " ++ p_expr e
-
 p_bop :: BinOp -> String
 p_bop Sub = "-"
 p_bop Eq = "="

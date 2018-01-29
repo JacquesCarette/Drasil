@@ -52,9 +52,6 @@ data Expr where
 
   IsIn  :: Expr -> Space -> Expr --	element of
 
-  ForAll   :: Symbol -> Expr -> Expr
-  Exists   :: Symbol -> Expr -> Expr
-
 ($=), ($!=), ($<), ($>), ($<=), ($>=), ($=>), ($<=>), ($.), ($-), 
   ($/) :: Expr -> Expr -> Expr
 ($=)  a b = BinaryOp $ EEquals a b
@@ -103,8 +100,6 @@ instance Eq Expr where
   FCall a b == FCall c d       =  a == c && b == d
   Case a == Case b             =  a == b
   IsIn  a b  == IsIn  c d      =  a == c && b == d
-  ForAll a b == ForAll c d     =  a == c && b == d -- not quite right...
-  Exists a b == Exists c d     =  a == c && b == d -- not quite right...
   BinaryOp a == BinaryOp b     =  a == b
   _ == _                       =  False
 

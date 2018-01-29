@@ -469,8 +469,6 @@ convExpr (Case l)     = doit l -- FIXME this is sub-optimal
 convExpr (Matrix _)   = error "convExpr: Matrix"
 convExpr (EOp _)      = error "convExpr: EOp"
 convExpr (IsIn _ _)      = error "convExpr: IsIn"
-convExpr (E.ForAll _ _)      = error "convExpr: ForAll"
-convExpr (E.Exists _ _)      = error "convExpr: Exists"
 
 unop :: UFunc -> Reader State Value
 unop (E.Sqrt e)  = fmap (#/^) (convExpr e)

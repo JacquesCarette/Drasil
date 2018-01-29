@@ -18,8 +18,6 @@ data Expr = Var   Variable
           | Op Function [Expr]
           | Grouping Expr
           | IsIn  Expr Space
-          | Forall Symbol Expr
-          | Exists Symbol Expr
           | Mtx [[Expr]]
           
 data Function = Log

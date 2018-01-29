@@ -166,8 +166,6 @@ p_expr (BOp Index a i)= p_indx a i
 p_expr (BOp Impl a b) = p_expr a ++ " &rArr; " ++ p_expr b
 p_expr (BOp Iff a b)  = p_expr a ++ " &hArr; " ++ p_expr b
 p_expr (IsIn  a b) = p_expr a ++ "&thinsp;&isin;&thinsp;"  ++ p_space b
-p_expr (Forall v e) = "&forall;" ++ symbol v ++ "&thinsp; :" ++ paren (p_expr e)
-p_expr (Exists v e) = "&exist;"  ++ symbol v ++ "&thinsp; :" ++ paren (p_expr e)
 
 
 -- | For printing indexes

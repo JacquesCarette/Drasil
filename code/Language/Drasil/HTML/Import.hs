@@ -47,8 +47,6 @@ expr (Grouping e)       sm = P.Grouping (expr e sm)
 expr (BinaryOp b)       sm = bfunc b sm
 expr (EOp o)            sm = (\(x,y) -> P.Op x [y]) $ eop o sm
 expr (IsIn  a b)        sm = P.IsIn  (expr a sm) b
-expr (ForAll a b)       sm = P.Forall a (expr b sm)
-expr (Exists a b)       sm = P.Exists a (expr b sm)
 expr (Len _)             _ = error "Len not yet implemented"
 expr (Append _ _)        _ = error "Append not yet implemented"
 

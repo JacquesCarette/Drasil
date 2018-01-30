@@ -62,6 +62,7 @@ ufunc (Exp e) sm = (P.Exp, expr e sm)
 ufunc (Sqrt e) sm = (P.Sqrt, expr e sm)
 ufunc (Not a)  sm = (P.Not, expr a sm)
 ufunc (Neg a)  sm = (P.Neg, expr a sm)
+ufunc (Dim a)  sm = (P.Dim, expr a sm)
 
 bfunc :: HasSymbolTable ctx => BiFunc -> ctx -> P.Expr
 bfunc (Cross e1 e2)     sm = P.BOp P.Cross (expr e1 sm) (expr e2 sm)

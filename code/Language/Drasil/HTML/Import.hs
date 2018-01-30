@@ -47,7 +47,6 @@ expr (Grouping e)       sm = P.Grouping (expr e sm)
 expr (BinaryOp b)       sm = bfunc b sm
 expr (EOp o)            sm = (\(x,y) -> P.Op x [y]) $ eop o sm
 expr (IsIn  a b)        sm = P.IsIn  (expr a sm) b
-expr (Len _)             _ = error "Len not yet implemented"
 expr (Append _ _)        _ = error "Append not yet implemented"
 
 -- | Helper function for translating 'UFunc's
@@ -65,6 +64,7 @@ ufunc (Exp e)    sm = (P.Exp,  expr e sm)
 ufunc (Sqrt e)   sm = (P.Sqrt, expr e sm)
 ufunc (Not a)    sm = (P.Not,  expr a sm)
 ufunc (Neg a)    sm = (P.Neg,  expr a sm)
+ufunc (Dim a)    sm = (P.Dim,  expr a sm)
 
 -- | Helper function for translating 'BiFunc's
 bfunc :: HasSymbolTable s => BiFunc -> s -> P.Expr

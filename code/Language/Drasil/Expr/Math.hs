@@ -40,6 +40,10 @@ cot = UnaryOp . Cot
 exp :: Expr -> Expr
 exp = UnaryOp . Exp
 
+-- | Smart constructor for the dimension of a vector
+dim :: Expr -> Expr
+dim = UnaryOp . Dim
+
 -- | Smart constructor for the summation, product, and integrals
 
 defint, defsum, defprod :: Symbol -> Expr -> Expr -> Expr -> Expr

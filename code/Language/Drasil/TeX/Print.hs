@@ -269,6 +269,7 @@ function Exp            = "e"
 function Sqrt           = "\\sqrt"
 function Not            = "\\neg{}"
 function Neg            = "-"
+function Dim            = error "Dim should not be reachable?"
 
 -----------------------------------------------------------------
 ------------------ TABLE PRINTING---------------------------

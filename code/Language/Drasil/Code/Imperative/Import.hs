@@ -450,7 +450,6 @@ convExpr (C c)        = do
   g <- ask
   variable $ codeName $ codevar $ symbLookup c $ (sysinfodb $ codeSpec g) ^. symbolTable
 convExpr (Index a i)  = liftM2 (\x y -> x$.(listAccess y)) (convExpr a) (convExpr i)
-convExpr (Len a)      = fmap ($.listSize) (convExpr a)
 convExpr (Append a v) = liftM2 (\x y -> x$.(listAppend y)) (convExpr a) (convExpr v)
 convExpr (FCall (C c) x)  = do
   g <- ask
@@ -481,6 +480,7 @@ unop (E.Tan e)   = fmap I.tan (convExpr e)
 unop (E.Csc e)   = fmap I.csc (convExpr e)
 unop (E.Sec e)   = fmap I.sec (convExpr e)
 unop (E.Cot e)   = fmap I.cot (convExpr e)
+unop (E.Dim a)   = fmap ($.listSize) (convExpr a)
 unop (E.Norm _)  = error "unop: Norm not implemented"
 unop (E.Not e)   = fmap (?!) (convExpr e)
 unop (E.Neg e)   = fmap (#~) (convExpr e)

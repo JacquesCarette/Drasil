@@ -42,7 +42,6 @@ data Expr where
   Matrix   :: [[Expr]] -> Expr
   Index    :: Expr -> Expr -> Expr  -- for accessing elements of sequence/list/vect etc.
                                     -- arr[i] is (Index arr i)
-  Len      :: Expr -> Expr          -- length
   Append   :: Expr -> Expr -> Expr  -- need this for now since types don't reach generation
                                     -- can probably just use addition between list types for this later
   Grouping :: Expr -> Expr
@@ -152,6 +151,7 @@ data UFunc where
   Sqrt   :: Expr -> UFunc
   Not    :: Expr -> UFunc
   Neg    :: Expr -> UFunc
+  Dim    :: Expr -> UFunc -- dimension (mostly of a vector)
 
 -- | Domain Description. A 'Domain' is the extent of a variable that
 -- ranges over a particular Space. So a |DomainDesc| contains

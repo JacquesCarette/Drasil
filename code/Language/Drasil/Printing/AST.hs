@@ -36,6 +36,7 @@ data Function = Log
            | Sqrt
            | Not
            | Neg
+           | Dim
 
 prec :: Oper -> Int
 prec Mul = 3

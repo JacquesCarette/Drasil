@@ -89,7 +89,7 @@ matrixCol :: Func
 matrixCol = funcDef "matrixCol" [v_mat, v_j] (Vect Real) 
   [
     fdec v_col (Vect Rational),
-    ffor (v_i) (C v_i $< dim (C v_mat)) [ FVal (Append (C v_col) (Index (Index (C v_mat) (C v_i)) (C v_j))) ],
+    ffor (v_i) (C v_i $< dim (C v_mat)) [ FAppend (C v_col) (Index (Index (C v_mat) (C v_i)) (C v_j)) ],
     FRet (C v_col)
   ]
 
@@ -100,7 +100,7 @@ interpY = funcDef "interpY" [{-v_x_array, v_y_array, v_z_array,-} v_filename, v_
   fdec v_x_array (Vect $ Vect Rational),
   fdec v_y_array (Vect $ Vect Rational),
   fdec v_z_array (Vect Rational),
-  FVal (FCall (asExpr read_table) [C v_filename, C v_z_array, C v_x_array, C v_y_array]),
+  FProcCall read_table [C v_filename, C v_z_array, C v_x_array, C v_y_array],
   -- endhack
     fasg v_i (FCall (asExpr indInSeq) [C v_z_array, C v_z]),
     fasg v_x_z_1 (FCall (asExpr matrixCol) [C v_x_array, C v_i]),
@@ -135,7 +135,7 @@ interpZ = funcDef "interpZ" [{-v_x_array, v_y_array, v_z_array,-} v_filename, v_
   fdec v_x_array (Vect $ Vect Rational),
   fdec v_y_array (Vect $ Vect Rational),
   fdec v_z_array (Vect Rational),
-  FVal (FCall (asExpr read_table) [C v_filename, C v_z_array, C v_x_array, C v_y_array]),
+  FProcCall read_table [C v_filename, C v_z_array, C v_x_array, C v_y_array],
   -- endhack
     ffor v_i (C v_i $< (dim (C v_z_array) - 1)) 
       [

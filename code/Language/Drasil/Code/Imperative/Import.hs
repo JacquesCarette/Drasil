@@ -520,9 +520,7 @@ genFunc (FData (FuncData n dd)) = genDataFunc n dd
 genFunc (FCD cd) = genCalcFunc cd
 
 convStmt :: FuncStmt -> Reader State Statement
-convStmt (FAsg v e) = do
-  e' <- convExpr e
-  assign (var $ codeName v) e'
+convStmt (FAsg v e) = convExpr e >>= assign (var $ codeName v)
 convStmt (FFor v e st) = do
   stmts <- mapM convStmt st
   e' <- convExpr e
@@ -548,9 +546,11 @@ convStmt (FTry t c) = do
   stmt2 <- mapM convStmt c
   return $ tryCatch [ block stmt1 ] [ block stmt2 ]
 convStmt (FContinue) = return continue
-convStmt (FVal e) = fmap valStmt $ convExpr e
 convStmt (FDec v (C.List t)) = return $ listDec' (codeName v) (convType t) 0
 convStmt (FDec v t) = return $ varDec (codeName v) (convType t)
+convStmt (FProcCall n l) = fmap valStmt $ convExpr (FCall (asExpr n) l)
+convStmt (FAppend a b) = fmap valStmt $
+  liftM2 (\x y -> x$.(listAppend y)) (convExpr a) (convExpr b)
 
 -- this is really ugly!!
 genDataFunc :: Name -> DataDesc -> Reader State Method

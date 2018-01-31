@@ -395,6 +395,7 @@ function Exp            = "e"
 function Sqrt           = "&radic;"
 function Not            = "&not;"
 function Neg            = "-" -- but usually not reached...
+function Dim            = "dim" -- hmmm
   
 -- | Renders modules
 makeModule :: String -> String -> Doc

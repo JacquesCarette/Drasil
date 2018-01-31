@@ -450,7 +450,6 @@ convExpr (C c)        = do
   g <- ask
   variable $ codeName $ codevar $ symbLookup c $ (sysinfodb $ codeSpec g) ^. symbolTable
 convExpr (Index a i)  = liftM2 (\x y -> x$.(listAccess y)) (convExpr a) (convExpr i)
-convExpr (Append a v) = liftM2 (\x y -> x$.(listAppend y)) (convExpr a) (convExpr v)
 convExpr (FCall (C c) x)  = do
   g <- ask
   let info = sysinfodb $ codeSpec g

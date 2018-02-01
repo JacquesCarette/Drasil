@@ -7,7 +7,8 @@ module Language.Drasil (
   -- Recipe
   , Recipe(..)
   -- Expr
-  , Expr(..), Relation, BiFunc(..), DerivType(..), RealInterval(..)
+  , Expr(C,V,Int,Dbl,IsIn,Deriv,FCall,Grouping,Case)
+  , Relation, BiFunc(..), DerivType(..), RealInterval(..)
   , ($=), ($<), ($<=), ($>), ($>=), ($^), ($&&), ($||), ($=>), ($<=>), ($.)
   , log, abs, sin, cos, tan, sec, csc, cot, exp, sqrt, square, euclidean, vars
   , dim, idx

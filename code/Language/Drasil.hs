@@ -8,7 +8,7 @@ module Language.Drasil (
   , Recipe(..)
   -- Expr
   , Expr(C,V,Int,Dbl,IsIn,Deriv,FCall,Grouping,Case)
-  , Relation, BiFunc(..), DerivType(..), RealInterval(..)
+  , Relation, DerivType(..), RealInterval(..)
   , ($=), ($<), ($<=), ($>), ($>=), ($^), ($&&), ($||), ($=>), ($<=>), ($.)
   , log, abs, sin, cos, tan, sec, csc, cot, exp, sqrt, square, euclidean, vars
   , dim, idx
@@ -123,7 +123,7 @@ module Language.Drasil (
 
 import Prelude hiding (log, sin, cos, tan, sqrt, id, return, print, break, exp, product)
 import Language.Drasil.SystemInformation
-import Language.Drasil.Expr (Expr(..), Relation, BiFunc(..), DerivType(..), 
+import Language.Drasil.Expr (Expr(..), Relation, DerivType(..), 
           RealInterval(..),
           ($=), ($<), ($<=), ($>), ($>=), ($^), ($&&), ($||), ($=>), ($<=>), ($.))
 import Language.Drasil.Expr.Math (log, sin, cos, tan, sqrt, square, sec, csc, cot, exp,

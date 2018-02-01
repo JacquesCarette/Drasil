@@ -44,6 +44,10 @@ exp = UnaryOp . Exp
 dim :: Expr -> Expr
 dim = UnaryOp . Dim
 
+-- | Smarth constructor for indexing
+idx :: Expr -> Expr -> Expr
+idx s i = BinaryOp $ Index s i
+
 -- | Smart constructor for the summation, product, and integrals
 
 defint, defsum, defprod :: Symbol -> Expr -> Expr -> Expr -> Expr

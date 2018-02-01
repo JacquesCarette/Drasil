@@ -41,7 +41,6 @@ expr (Case ps)        sm = if length ps < 2 then
                     error "Attempting to use multi-case expr incorrectly"
                     else P.Case (zip (map (flip expr sm . fst) ps) (map (flip expr sm . snd) ps))
 expr (Matrix a)         sm = P.Mtx $ map (map (flip expr sm)) a
-expr (Index a i)        sm = P.BOp P.Index (expr a sm) (expr i sm)
 expr (UnaryOp u)        sm = (\(x,y) -> P.Op x [y]) $ ufunc u sm
 expr (Grouping e)       sm = P.Grouping (expr e sm)
 expr (BinaryOp b)       sm = bfunc b sm
@@ -80,6 +79,7 @@ bfunc (IFF a b)          sm = P.BOp P.Iff  (expr a sm) (expr b sm)
 bfunc (DotProduct a b)   sm = P.BOp P.Dot  (expr a sm) (expr b sm)
 bfunc (Subtract a b)     sm = P.BOp P.Sub  (expr a sm) (expr b sm)
 bfunc (Divide a b)       sm = P.BOp P.Frac (replace_divs a sm) (replace_divs b sm)
+bfunc (Index a i)        sm = P.BOp P.Index (expr a sm) (expr i sm)
 
 -- | Helper function for translating 'EOperator's
 eop :: HasSymbolTable s => EOperator -> s -> (P.Function, P.Expr)

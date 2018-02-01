@@ -81,7 +81,7 @@ indInSeq :: Func
 indInSeq = funcDef "indInSeq" [v_arr, v_v] Natural 
   [
     ffor (v_i) (C v_i $< (dim (C v_arr) - 1))
-      [ FCond (((Index (C v_arr) (C v_i)) $<= (C v_v)) $&& ((C v_v) $<= (Index (C v_arr) ((C v_i) + 1)))) [ FRet $ C v_i ] [] ],
+      [ FCond (((idx (C v_arr) (C v_i)) $<= (C v_v)) $&& ((C v_v) $<= (idx (C v_arr) ((C v_i) + 1)))) [ FRet $ C v_i ] [] ],
     FThrow "Bound error"      
   ]
 
@@ -89,7 +89,7 @@ matrixCol :: Func
 matrixCol = funcDef "matrixCol" [v_mat, v_j] (Vect Real) 
   [
     fdec v_col (Vect Rational),
-    ffor (v_i) (C v_i $< dim (C v_mat)) [ FAppend (C v_col) (Index (Index (C v_mat) (C v_i)) (C v_j)) ],
+    ffor (v_i) (C v_i $< dim (C v_mat)) [ FAppend (C v_col) (idx (idx (C v_mat) (C v_i)) (C v_j)) ],
     FRet (C v_col)
   ]
 
@@ -111,19 +111,19 @@ interpY = funcDef "interpY" [{-v_x_array, v_y_array, v_z_array,-} v_filename, v_
       [ fasg v_j (FCall (asExpr indInSeq) [C v_x_z_1, C v_x]),
         fasg v_k (FCall (asExpr indInSeq) [C v_x_z_2, C v_x]) ]
       [ FThrow "Interpolation of y failed" ],
-    fasg v_y_1 (FCall (asExpr linInterp) [ Index (C v_x_z_1) (C v_j), 
-                                           Index (C v_y_z_1) (C v_j),
-                                           Index (C v_x_z_1) ((C v_j) + 1), 
-                                           Index (C v_y_z_1) ((C v_j) + 1),
+    fasg v_y_1 (FCall (asExpr linInterp) [ idx (C v_x_z_1) (C v_j), 
+                                           idx (C v_y_z_1) (C v_j),
+                                           idx (C v_x_z_1) ((C v_j) + 1), 
+                                           idx (C v_y_z_1) ((C v_j) + 1),
                                            C v_x ]),
-    fasg v_y_2 (FCall (asExpr linInterp) [ Index (C v_x_z_2) (C v_k), 
-                                           Index (C v_y_z_2) (C v_k),
-                                           Index (C v_x_z_2) ((C v_k) + 1), 
-                                           Index (C v_y_z_2) ((C v_k) + 1),
+    fasg v_y_2 (FCall (asExpr linInterp) [ idx (C v_x_z_2) (C v_k), 
+                                           idx (C v_y_z_2) (C v_k),
+                                           idx (C v_x_z_2) ((C v_k) + 1), 
+                                           idx (C v_y_z_2) ((C v_k) + 1),
                                            C v_x ]),
-    FRet (FCall (asExpr linInterp) [ Index (C v_z_array) (C v_i),
+    FRet (FCall (asExpr linInterp) [ idx (C v_z_array) (C v_i),
                                      C v_y_1,
-                                     Index (C v_z_array) ((C v_i) + 1),
+                                     idx (C v_z_array) ((C v_i) + 1),
                                      C v_y_2,
                                      C v_z ] )                                  
   ]  
@@ -147,21 +147,21 @@ interpZ = funcDef "interpZ" [{-v_x_array, v_y_array, v_z_array,-} v_filename, v_
           [ fasg v_j (FCall (asExpr indInSeq) [C v_x_z_1, C v_x]),
             fasg v_k (FCall (asExpr indInSeq) [C v_x_z_2, C v_x]) ]
           [ FContinue ],
-        fasg v_y_1 (FCall (asExpr linInterp) [ Index (C v_x_z_1) (C v_j), 
-                                               Index (C v_y_z_1) (C v_j),
-                                               Index (C v_x_z_1) ((C v_j) + 1), 
-                                               Index (C v_y_z_1) ((C v_j) + 1),
+        fasg v_y_1 (FCall (asExpr linInterp) [ idx (C v_x_z_1) (C v_j), 
+                                               idx (C v_y_z_1) (C v_j),
+                                               idx (C v_x_z_1) ((C v_j) + 1), 
+                                               idx (C v_y_z_1) ((C v_j) + 1),
                                                C v_x ]),
-        fasg v_y_2 (FCall (asExpr linInterp) [ Index (C v_x_z_2) (C v_k), 
-                                               Index (C v_y_z_2) (C v_k),
-                                               Index (C v_x_z_2) ((C v_k) + 1), 
-                                               Index (C v_y_z_2) ((C v_k) + 1),
+        fasg v_y_2 (FCall (asExpr linInterp) [ idx (C v_x_z_2) (C v_k), 
+                                               idx (C v_y_z_2) (C v_k),
+                                               idx (C v_x_z_2) ((C v_k) + 1), 
+                                               idx (C v_y_z_2) ((C v_k) + 1),
                                                C v_x ]),
         FCond ((C v_y_1 $<= C v_y) $&& (C v_y $<= C v_y_2))
           [ FRet (FCall (asExpr linInterp) [ C v_y_1,
-                                             Index (C v_z_array) (C v_i),
+                                             idx (C v_z_array) (C v_i),
                                              C v_y_2,
-                                             Index (C v_z_array) ((C v_i) + 1),
+                                             idx (C v_z_array) ((C v_i) + 1),
                                              C v_y ] )  
           ] []                                             
       ],

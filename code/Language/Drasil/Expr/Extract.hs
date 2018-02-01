@@ -27,7 +27,6 @@ dep (BinaryOp b)  = nub (concat $ map dep (binop b))
 dep (EOp o)       = dep (unpackop o)
 dep (IsIn  a _)   = nub (dep a)
 dep (Matrix a)    = nub (concat $ map (concat . map dep) a)
-dep (Index a i)   = nub (dep a ++ dep i)
 
 -- | Get a list of quantities (QWrapper) from an equation in order to print
 vars :: (HasSymbolTable s) => Expr -> s -> [QWrapper]
@@ -45,7 +44,6 @@ vars (BinaryOp b) m = nub (concat $ map (\x -> vars x m) (binop b))
 vars (EOp o) m = vars (unpackop o) m
 vars (IsIn  a _)  m = nub (vars a m)
 vars (Matrix a)   m = nub (concat $ map (\x -> concat $ map (\y -> vars y m) x) a)
-vars (Index a i)  m = nub (vars a m ++ vars i m)
 
 -- | Get a list of CodeChunks from an equation
 codevars :: (HasSymbolTable s) => Expr -> s -> [CodeChunk]
@@ -64,7 +62,6 @@ codevars (BinaryOp b) sm = nub (concat $ map (\x -> codevars x sm) (binop b))
 codevars (EOp o)  sm = codevars (unpackop o) sm
 codevars (IsIn  a _)  sm = nub (codevars a sm)
 codevars (Matrix a)   sm = nub (concat $ map (concat . map (\x -> codevars x sm)) a)
-codevars (Index a i)  sm = nub (codevars a sm ++ codevars i sm)
 
 -- | Get a list of CodeChunks from an equation (no functions)
 codevars' :: (HasSymbolTable s) => Expr -> s -> [CodeChunk]
@@ -83,7 +80,6 @@ codevars' (BinaryOp b) sm = nub (concat $ map (\x -> codevars' x sm) (binop b))
 codevars' (EOp o)      sm = codevars' (unpackop o) sm
 codevars' (IsIn  a _)  sm = nub (codevars' a sm)
 codevars' (Matrix a)   sm = nub (concat $ map (concat . map (\x -> codevars' x sm)) a)
-codevars' (Index a i)  sm = nub (codevars' a sm ++ codevars' i sm)
 
 
 -- | Helper function for vars and dep, gets the Expr portion of a UFunc
@@ -123,6 +119,7 @@ binop (IFF a b) = [a,b]
 binop (DotProduct a b) = [a,b]
 binop (Subtract a b) = [a,b]
 binop (Divide a b) = [a,b]
+binop (Index a b) = [a,b]
 
 -- Steven edit:  need this to have a type for code generation
 --   setting to all to rational

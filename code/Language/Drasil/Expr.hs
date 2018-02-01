@@ -40,14 +40,12 @@ data Expr where
   Case     :: [(Expr,Relation)] -> Expr -- For multi-case expressions,
                                      -- each pair represents one case
   Matrix   :: [[Expr]] -> Expr
-  Index    :: Expr -> Expr -> Expr  -- for accessing elements of sequence/list/vect etc.
-                                    -- arr[i] is (Index arr i)
   Grouping :: Expr -> Expr
   UnaryOp  :: UFunc -> Expr
   BinaryOp :: BiFunc -> Expr
   EOp      :: EOperator -> Expr
 
-  IsIn  :: Expr -> Space -> Expr --	element of
+  IsIn     :: Expr -> Space -> Expr --	element of
 
 ($=), ($!=), ($<), ($>), ($<=), ($>=), ($=>), ($<=>), ($.), ($-), 
   ($/) :: Expr -> Expr -> Expr
@@ -124,6 +122,7 @@ data BiFunc =
   | DotProduct Expr Expr
   | Subtract Expr Expr
   | Divide Expr Expr
+  | Index Expr Expr
   deriving Eq
 
 -- | Operators

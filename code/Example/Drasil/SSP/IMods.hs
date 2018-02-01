@@ -50,9 +50,9 @@ fctSfty = makeRC "fctSfty" factorOfSafety fcSfty_desc fcSfty_rel
 fcSfty_rel :: Relation
 fcSfty_rel = C fs $= sumOp shearRNoIntsl / sumOp shearFNoIntsl
   where prodOp = defprod lU (C index) (C numbSlices - Int 1)
-          (Index (C mobShrC) (C varblU) / Index (C shrResC) (C varblU))
+          (idx (C mobShrC) (C varblU) / idx (C shrResC) (C varblU))
         sumOp sym = defsum lV 1 (C numbSlices - Int 1)
-          (Index (C sym) (C varblV) * prodOp) + Index (C sym) (C numbSlices)
+          (idx (C sym) (C varblV) * prodOp) + idx (C sym) (C numbSlices)
 
 fcSfty_desc :: Sentence
 fcSfty_desc = foldlSent [S "Equation for the", titleize fs `isThe` S "ratio",
@@ -76,8 +76,8 @@ nrmShrF_rel = (inxi normFunc) $= Case [case1,case2,case3] $=
   (inxi baseWthX * (inxi scalFunc * inxi intNormForce +
     inx scalFunc (-1) * inx intNormForce (-1)),
     Int 2 $<= C index $<= (C numbSlices - 1)),
-  (indxn baseWthX * Index (C intNormForce) (C numbSlices - Int 1) *
-    Index (C watrForce) (C numbSlices - Int 1), C index $= Int 1)
+  (indxn baseWthX * idx (C intNormForce) (C numbSlices - Int 1) *
+    idx (C watrForce) (C numbSlices - Int 1), C index $= Int 1)
   ]
   $= --FIXME: move to seperate instance model
   C normToShear $= sum1toN (inxi normFunc) / sum1toN (inxi shearFunc)
@@ -90,9 +90,9 @@ nrmShrF_rel = (inxi normFunc) $= Case [case1,case2,case3] $=
           Int 2 * inxi surfHydroForce * sin (inxi surfAngle) -
           Int 2 * inxi surfLoad * cos (inxi impLoadAngle)),
           Int 2 $<= C index $<= ((C numbSlices) - (Int 1)))
-        case3 = ((indxn baseWthX)*(Index (C intNormForce)
-          (C numbSlices - Int 1) + Index (C watrForce)
-          (C numbSlices - Int 1)) * tan (Index (C baseAngle)
+        case3 = ((indxn baseWthX)*(idx (C intNormForce)
+          (C numbSlices - Int 1) + idx (C watrForce)
+          (C numbSlices - Int 1)) * tan (idx (C baseAngle)
           (C numbSlices - Int 1)), C index $= (C numbSlices))
 
 nrmShrF_desc :: Sentence
@@ -209,7 +209,7 @@ crtSlpId = makeRC "crtSlpId" (nounPhraseSP "critical slip identification")
   crtSlpId_desc crtSlpId_rel
 
 crtSlpId_rel :: Relation
-crtSlpId_rel = (Index (C fs) (V "min")) $=
+crtSlpId_rel = (idx (C fs) (V "min")) $=
   (FCall (C minFunction) [C critCoords, V "Input"])
   --FIXME: add subscript to fs
 
@@ -218,7 +218,7 @@ crtSlpId_desc = foldlSent [S "Given the necessary", phrase slope,
   S "inputs, a minimization", S "algorithm or function", getES minFunction,
   S "will identify the", phrase crtSlpSrf, S "of the", phrase slope `sC`
   S "with the critical", phrase slip, S "coordinates", getES critCoords, 
-  S "and the minimum", phrase fs, E $ Index (C fs) (V "min"), S "that results"]
+  S "and the minimum", phrase fs, E $ idx (C fs) (V "min"), S "that results"]
 
 -----------
 -- Intro --
@@ -275,7 +275,7 @@ fctSftyDerivation = [foldlSP [S "Using", eqN 21, S "from", acroIM 3 `sC`
 boundaryCon :: Sentence
 boundaryCon = foldlSent_ [S "applying the boundary condition that",
   --FIXME: Index
-  E (Index (C intNormForce) (Int 0)) `sAnd`
+  E (idx (C intNormForce) (Int 0)) `sAnd`
   E (indxn intNormForce), S "are equal to", E $ Int 0]
 
 fUnknowns :: Contents

@@ -427,10 +427,10 @@ index = cvRs (dcc "index" (nounPhraseSP "index")
 
 --FIXME: possibly move to Language/Drasil/Expr.hs
 indx1 :: (Quantity a) => a -> Expr
-indx1 a = Index (C a) (Int 1)
+indx1 a = idx (C a) (Int 1)
 
 indxn :: (Quantity a) => a -> Expr
-indxn a = Index (C a) (C numbSlices)
+indxn a = idx (C a) (C numbSlices)
 
 inxi, inxiP1, inxiM1 :: Quantity e => e -> Expr
 inxiP1 e = inx e 1
@@ -439,9 +439,9 @@ inxiM1 e = inx e (-1)
 
 inx :: Quantity e => e -> Integer -> Expr
 inx e n 
-  | n < 0     = Index (C e) (C index - Int (-n))
-  | n == 0    = Index (C e) (C index)
-  | otherwise = Index (C e) (C index + Int n)
+  | n < 0     = idx (C e) (C index - Int (-n))
+  | n == 0    = idx (C e) (C index)
+  | otherwise = idx (C e) (C index + Int n)
 
 sum1toN :: Expr -> Expr
 sum1toN = defsum (eqSymb index) 1 (C numbSlices)

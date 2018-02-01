@@ -449,7 +449,6 @@ convExpr (Deriv _ _ _) = return $ litString "**convExpr :: Deriv unimplemented**
 convExpr (C c)        = do
   g <- ask
   variable $ codeName $ codevar $ symbLookup c $ (sysinfodb $ codeSpec g) ^. symbolTable
-convExpr (Index a i)  = liftM2 (\x y -> x$.(listAccess y)) (convExpr a) (convExpr i)
 convExpr (FCall (C c) x)  = do
   g <- ask
   let info = sysinfodb $ codeSpec g
@@ -498,7 +497,8 @@ bfunc (Implies _ _)    = error "convExpr :=>"
 bfunc (IFF _ _)        = error "convExpr :<=>"
 bfunc (DotProduct _ _) = error "convExpr DotProduct"
 bfunc (E.Divide (Int a) (Int b)) = return $ (litFloat $ fromIntegral a) #/ (litFloat $ fromIntegral b) -- hack to deal with integer division
-bfunc (E.Divide a b)     = liftM2 (#/) (convExpr a) (convExpr b)
+bfunc (E.Divide a b)   = liftM2 (#/) (convExpr a) (convExpr b)
+bfunc (Index a i)      = liftM2 (\x y -> x$.(listAccess y)) (convExpr a) (convExpr i)
 
 -- medium hacks --
 genModDef :: CS.Mod -> Reader State Module

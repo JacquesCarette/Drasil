@@ -124,6 +124,8 @@ module Language.Drasil (
   , reqMap, HasAssumpRefs, HasReqRefs, reqRefTable
   -- ReqChunk
   , ReqChunk, ReqType(..), reqType, requires, frc, nfrc, rc'
+  -- Change
+  , Change, ChngType(..), chngType, chng, lc, ulc, chc'
 ) where
 
 import Prelude hiding (log, sin, cos, tan, sqrt, id, return, print, break, exp, product)
@@ -147,6 +149,7 @@ import Language.Drasil.Chunk
 import Language.Drasil.Chunk.AssumpChunk
 import Language.Drasil.Chunk.Attribute
 import Language.Drasil.Chunk.Attribute.Derivation (Derivation, DerWrapper(..), de, ds)
+import Language.Drasil.Chunk.Change
 import Language.Drasil.Chunk.CommonIdea
 import Language.Drasil.Chunk.Concept
 import Language.Drasil.Chunk.Constrained

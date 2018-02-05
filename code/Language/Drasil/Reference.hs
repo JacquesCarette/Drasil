@@ -2,6 +2,7 @@ module Language.Drasil.Reference where
 
 import Language.Drasil.Chunk (Chunk, id)
 import Language.Drasil.Chunk.AssumpChunk
+import Language.Drasil.Chunk.Change
 import Language.Drasil.Chunk.ReqChunk
 import Language.Drasil.Document
 import Language.Drasil.RefHelpers
@@ -69,18 +70,24 @@ class Referable s where
   
 instance Referable AssumpChunk where
   refName x@(AC _ _ sn _) = sn
-  refAdd x = "A:" ++ (x ^. id)
-  rType _   = Assump
+  refAdd  x               = "A:" ++ (x ^. id)
+  rType   _               = Assump
   
 instance Referable ReqChunk where
-  refName (RC _ _ _ sn _) = sn
-  refAdd r@(RC _ rt _ _ _) = show rt ++ ":" ++ (r ^. id)
-  rType _ = Req
+  refName (RC _ _ _ sn _)   = sn
+  refAdd  r@(RC _ rt _ _ _) = show rt ++ ":" ++ (r ^. id)
+  rType   _                 = Req
+  
+instance Referable Change where
+  refName (ChC _ _ _ sn _)     = sn
+  refAdd r@(ChC _ rt _ _ _)    = show rt ++ ":" ++ (r ^. id)
+  rType (ChC _ Likely _ _ _)   = LC
+  rType (ChC _ Unlikely _ _ _) = UC
   
 instance Referable Section where
   refName (Section t _ _) = t
-  refAdd (Section _ _ r) = "Sec:" ++ r
-  rType _ = Sect
+  refAdd  (Section _ _ r) = "Sec:" ++ r
+  rType   _               = Sect
 
 instance Referable Contents where
   refName (Table _ _ _ _ r)     = S "Table:" :+: S r

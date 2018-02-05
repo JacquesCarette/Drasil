@@ -505,7 +505,5 @@ mkRequirement :: String -> Sentence -> Contents
 mkRequirement i desc = Requirement $ frc i desc (S i) [] --FIXME: HACK - Should have explicit refname
 
 mkLklyChnk :: String -> Sentence -> Contents
-mkLklyChnk i desc = LikelyChange $ nw $ nc i $ nounPhraseSent desc
+mkLklyChnk i desc = LikelyChange $ lc i desc (S i) [] -- FIXME: HACK -- See above
 
-mkLklyChnkCustom :: String -> Sentence -> String -> Contents
-mkLklyChnkCustom i desc enid = LikelyChange $ nw $ commonIdea i (nounPhraseSent desc) enid

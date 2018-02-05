@@ -647,14 +647,6 @@ Likely Change
 </tr>
 <tr>
 <td>
-LDF
-</td>
-<td>
-Load Duration Factor
-</td>
-</tr>
-<tr>
-<td>
 LG
 </td>
 <td>
@@ -663,34 +655,10 @@ Laminated Glass
 </tr>
 <tr>
 <td>
-LR
-</td>
-<td>
-Load Resistance
-</td>
-</tr>
-<tr>
-<td>
-LSF
-</td>
-<td>
-Load Share Factor
-</td>
-</tr>
-<tr>
-<td>
 N/A
 </td>
 <td>
 Not Applicable
-</td>
-</tr>
-<tr>
-<td>
-NFL
-</td>
-<td>
-Non-Factored Load
 </td>
 </tr>
 <tr>
@@ -1163,6 +1131,16 @@ This section focuses on the general equations and laws that GlassBR is based on.
 <table class="tdefn">
 <tr>
 <th>
+Number
+</th>
+<td>
+<p class="paragraph">
+<b>T</b>
+</p>
+</td>
+</tr>
+<tr>
+<th>
 Label
 </th>
 <td>
@@ -1197,6 +1175,16 @@ If <em>is_safe1</em>, the glass is considered safe. <em>is_safe1</em> and <em>is
 </a>
 <a id="T:t2SafetyReq">
 <table class="tdefn">
+<tr>
+<th>
+Number
+</th>
+<td>
+<p class="paragraph">
+<b>T</b>
+</p>
+</td>
+</tr>
 <tr>
 <th>
 Label
@@ -1255,6 +1243,16 @@ This section collects and defines all the data needed to build the instance mode
 <table class="ddefn">
 <tr>
 <th>
+Number
+</th>
+<td>
+<p class="paragraph">
+<b>DD</b>
+</p>
+</td>
+</tr>
+<tr>
+<th>
 Label
 </th>
 <td>
@@ -1287,7 +1285,7 @@ Equation
 <span class="fdn">
 (<em>a</em>&#8239;<em>b</em>)<sup><em>m</em> &minus; 1</sup>
 </span>
-</div>&#8239;((<em>E</em>)&#8239;(<em>h</em>)<sup>2</sup>)<sup><em>m</em></sup>&sdot;<em>LDF</em>&#8239;e<sup><em>J</em></sup>
+</div>&#8239;((<em>E</em>&#8239;1000)&#8239;(<em>h</em>)<sup>2</sup>)<sup><em>m</em></sup>&#8239;<em>LDF</em>&#8239;e<sup><em>J</em></sup>
 </div>
 </a>
 </td>
@@ -1306,6 +1304,16 @@ Description
 </a>
 <a id="DD:act.thick">
 <table class="ddefn">
+<tr>
+<th>
+Number
+</th>
+<td>
+<p class="paragraph">
+<b>DD</b>
+</p>
+</td>
+</tr>
 <tr>
 <th>
 Label
@@ -1425,6 +1433,16 @@ Description
 <table class="ddefn">
 <tr>
 <th>
+Number
+</th>
+<td>
+<p class="paragraph">
+<b>DD</b>
+</p>
+</td>
+</tr>
+<tr>
+<th>
 Label
 </th>
 <td>
@@ -1478,6 +1496,16 @@ Description
 <table class="ddefn">
 <tr>
 <th>
+Number
+</th>
+<td>
+<p class="paragraph">
+<b>DD</b>
+</p>
+</td>
+</tr>
+<tr>
+<th>
 Label
 </th>
 <td>
@@ -1529,6 +1557,16 @@ Description
 </a>
 <a id="DD:gTF">
 <table class="ddefn">
+<tr>
+<th>
+Number
+</th>
+<td>
+<p class="paragraph">
+<b>DD</b>
+</p>
+</td>
+</tr>
 <tr>
 <th>
 Label
@@ -1596,6 +1634,16 @@ Description
 <table class="ddefn">
 <tr>
 <th>
+Number
+</th>
+<td>
+<p class="paragraph">
+<b>DD</b>
+</p>
+</td>
+</tr>
+<tr>
+<th>
 Label
 </th>
 <td>
@@ -1626,7 +1674,7 @@ Equation
 <em>q</em>&#8239;(<em>a</em>&#8239;<em>b</em>)<sup>2</sup>
 </span>
 <span class="fdn">
-<em>E</em>&#8239;<em>h</em><sup>4</sup>&sdot;<em>GTF</em>
+<em>E</em>&#8239;<em>h</em><sup>4</sup>&#8239;<em>GTF</em>
 </span>
 </div>
 </div>
@@ -1647,6 +1695,16 @@ Description
 </a>
 <a id="DD:tolLoad">
 <table class="ddefn">
+<tr>
+<th>
+Number
+</th>
+<td>
+<p class="paragraph">
+<b>DD</b>
+</p>
+</td>
+</tr>
 <tr>
 <th>
 Label
@@ -1702,6 +1760,16 @@ Description
 <table class="ddefn">
 <tr>
 <th>
+Number
+</th>
+<td>
+<p class="paragraph">
+<b>DD</b>
+</p>
+</td>
+</tr>
+<tr>
+<th>
 Label
 </th>
 <td>
@@ -1739,7 +1807,7 @@ Equation
 (<em>a</em>&#8239;<em>b</em>)<sup><em>m</em> &minus; 1</sup>
 </span>
 <span class="fdn">
-<em>k</em>&#8239;((<em>E</em>&#8239;(<em>h</em>)<sup>2</sup>))<sup><em>m</em></sup>&sdot;<em>LDF</em>
+<em>k</em>&#8239;((<em>E</em>&#8239;1000&#8239;(<em>h</em>)<sup>2</sup>))<sup><em>m</em></sup>&#8239;<em>LDF</em>
 </span>
 </div>)
 </div>
@@ -1770,6 +1838,16 @@ This section transforms the problem defined in <a href=#Sec:ProbDesc>Sec:ProbDes
 </p>
 <a id="T:probOfBr">
 <table class="tdefn">
+<tr>
+<th>
+Number
+</th>
+<td>
+<p class="paragraph">
+<b>T</b>
+</p>
+</td>
+</tr>
 <tr>
 <th>
 Label
@@ -1808,6 +1886,16 @@ Description
 <table class="tdefn">
 <tr>
 <th>
+Number
+</th>
+<td>
+<p class="paragraph">
+<b>T</b>
+</p>
+</td>
+</tr>
+<tr>
+<th>
 Label
 </th>
 <td>
@@ -1823,7 +1911,7 @@ Equation
 <td>
 <a id="">
 <div class="equation">
-<em>LR</em> = <em>NFL</em>&sdot;<em>GTF</em>&sdot;<em>LSF</em>
+<em>LR</em> = <em>NFL</em>&#8239;<em>GTF</em>&#8239;<em>LSF</em>
 </div>
 </a>
 </td>
@@ -1842,6 +1930,16 @@ Description
 </a>
 <a id="T:calOfDe">
 <table class="tdefn">
+<tr>
+<th>
+Number
+</th>
+<td>
+<p class="paragraph">
+<b>T</b>
+</p>
+</td>
+</tr>
 <tr>
 <th>
 Label
@@ -1870,7 +1968,7 @@ Description
 </th>
 <td>
 <p class="paragraph">
-<em>q</em> or demand, is the 3 second duration equivalent pressure obtained from Figure 2 by interpolation using stand off distance (<em>SD</em>) and <em>w<sub>TNT</sub></em> as parameters. <em>w<sub>TNT</sub></em> is defined as <em>w<sub>TNT</sub></em> = <em>w</em>&#8239;<em>TNT</em>. <em>w</em> is the charge weight. <em>TNT</em> is the TNT equivalent factor. <em>SD</em> is the stand off distance where <em>SD</em> = &radic;(<em>SD<sub>x</sub></em><sup>2</sup> &plus; <em>SD<sub>y</sub></em><sup>2</sup> &plus; <em>SD<sub>z</sub></em><sup>2</sup>) where (<em>SD<sub>x</sub></em>, <em>SD<sub>y</sub></em>, <em>SD<sub>z</sub></em>) are coordinates.
+<em>q</em> or demand, is the 3 second duration equivalent pressure obtained from Figure 2 by interpolation using stand off distance (<em>SD</em>) and <em>w<sub>TNT</sub></em> as parameters. <em>w<sub>TNT</sub></em> is defined as <em>w</em>&#8239;<em>TNT</em>. <em>w</em> is the charge weight. <em>TNT</em> is the TNT equivalent factor. <em>SD</em> is the stand off distance where &radic;(<em>SD<sub>x</sub></em><sup>2</sup> &plus; <em>SD<sub>y</sub></em><sup>2</sup> &plus; <em>SD<sub>z</sub></em><sup>2</sup>) where (<em>SD<sub>x</sub></em>, <em>SD<sub>y</sub></em>, <em>SD<sub>z</sub></em>) are coordinates.
 </p>
 </td>
 </tr>
@@ -1884,7 +1982,7 @@ Description
 Data Constraints
 </h4>
 <p class="paragraph">
-<a href=#Table:InpuDataCons>Table:InpuDataCons</a> and <a href=#Table:OutpDataCons>Table:OutpDataCons</a> shows the data constraints on the input and output variables, respectively. The column for physical constraints gives the physical limitations on the range of values that can be taken by the variable. The uncertainty column provides an estimate of the confidence with which the physical quantities can be measured. This information would be part of the input if one were performing an uncertainty quantification exercise. The constraints are conservative, to give the user of the model the flexibility to experiment with unusual situations. The column of typical values is intended to provide a feel for a common scenario. <a href=#Sec:ValuofAuxiCons>Sec:ValuofAuxiCons</a> gives the values of the specification parameters used in <a href=#Table:InpuDataCons>Table:InpuDataCons</a>. <a href=#Table:OutpDataCons>Table:OutpDataCons</a> shows the constraints that must be satisfied by the output.
+<a href=#Table:InpuDataCons>Table:InpuDataCons</a>, and <a href=#Table:OutpDataCons>Table:OutpDataCons</a> shows the data constraints on the input and output variables, respectively. The column for physical constraints gives the physical limitations on the range of values that can be taken by the variable. The uncertainty column provides an estimate of the confidence with which the physical quantities can be measured. This information would be part of the input if one were performing an uncertainty quantification exercise. The constraints are conservative, to give the user of the model the flexibility to experiment with unusual situations. The column of typical values is intended to provide a feel for a common scenario. <a href=#Sec:ValuofAuxiCons>Sec:ValuofAuxiCons</a> gives the values of the specification parameters used in <a href=#Table:InpuDataCons>Table:InpuDataCons</a>. <a href=#Table:OutpDataCons>Table:OutpDataCons</a> shows the constraints that must be satisfied by the output.
 </p>
 <a id="Table:InpuDataCons">
 <table class="table">

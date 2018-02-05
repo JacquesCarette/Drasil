@@ -74,7 +74,7 @@ $G$ & Gravitational constant & $\frac{\text{m}^{3}}{(\text{kg}\text{s}^{2})}$
 \\
 $\mathbf{\hat{i}}$ & Horizontal Unit Vector & m
 \\
-${\mathbf{I}_{A}}$ & Moment of Inertia Of Rigid Body A & kg$\text{m}^{2}$
+${\mathbf{I}_{A}}$ & Moment of Inertia Of Rigid Body a & kg$\text{m}^{2}$
 \\
 ${\mathbf{I}_{B}}$ & Moment of Inertia Of Rigid Body B & kg$\text{m}^{2}$
 \\
@@ -96,7 +96,7 @@ ${m_{1}}$ & Mass of the first body & kg
 \\
 ${m_{2}}$ & Mass of the second body & kg
 \\
-${m_{A}}$ & Mass Of Rigid Body A & kg
+${m_{A}}$ & Mass Of Rigid Body a & kg
 \\
 ${m_{B}}$ & Mass Of Rigid Body B & kg
 \\
@@ -144,9 +144,9 @@ $t$ & Point in time & s
 \\
 ${t_{0}}$ & Denotes the initial time & s
 \\
-${{\mathbf{v}_{i}}^{AB}}$ & Relative Velocity Between Rigid Bodies of A and B & $\frac{\text{m}}{\text{s}}$
+${{\mathbf{v}_{i}}^{AB}}$ & Relative Velocity Between Rigid Bodies of a and B & $\frac{\text{m}}{\text{s}}$
 \\
-${\mathbf{v}_{A}}$ & Velocity At Point A & $\frac{\text{m}}{\text{s}}$
+${\mathbf{v}_{A}}$ & Velocity At Point a & $\frac{\text{m}}{\text{s}}$
 \\
 ${\mathbf{v}_{B}}$ & Velocity At Point B & $\frac{\text{m}}{\text{s}}$
 \\
@@ -160,7 +160,7 @@ $\mathbf{v}(t)$ & Linear Velocity & $\frac{\text{m}}{\text{s}}$
 \\
 $||\mathbf{n}||$ & Length of the Normal Vector & m
 \\
-$||{\mathbf{r}_{AP}}*\mathbf{n}||$ & Length of the Perpendicular Vector To the Contact Displacement Vector of Rigid Body A & m
+$||{\mathbf{r}_{AP}}*\mathbf{n}||$ & Length of the Perpendicular Vector To the Contact Displacement Vector of Rigid Body a & m
 \\
 $||{\mathbf{r}_{BP}}*\mathbf{n}||$ & Length of the Perpendicular Vector To the Contact Displacement Vector of Rigid Body B & m
 \\
@@ -178,7 +178,7 @@ $\tau{}$ & Torque & Nm
 \\
 $\phi{}$ & Orientation & rad
 \\
-${\omega{}_{A}}$ & Is the A Body's Angular Velocity & $\frac{\text{rad}}{\text{s}}$
+${\omega{}_{A}}$ & Is the a Body's Angular Velocity & $\frac{\text{rad}}{\text{s}}$
 \\
 ${\omega{}_{B}}$ & Is the B Body's Angular Velocity & $\frac{\text{rad}}{\text{s}}$
 \\
@@ -194,9 +194,13 @@ $\omega{}$ & Angular Velocity & $\frac{\text{rad}}{\text{s}}$
 Symbol & Description
 \\
 \midrule
+2D & Two-Dimensional
+\\
 A & Assumption
 \\
 CM & Centre of Mass
+\\
+Chipmunk2D & Chipmunk2D game physics library
 \\
 DD & Data Definition
 \\
@@ -215,8 +219,6 @@ R & Requirement
 SRS & Software Requirements Specification
 \\
 T & Theoretical Model
-\\
-2D & Two-Dimensional
 \\
 \bottomrule
 \label{Table:AbbrandAcro}
@@ -300,7 +302,7 @@ This section focuses on the general equations and laws that Chipmunk2D is based 
 \\ \midrule \\
 Label & Newton's Second Law of Motion
 \\ \midrule \\
-Equation & $\mathbf{F}=m\mathbf{a}$
+Equation & $\mathbf{F}=m \mathbf{a}$
 \\ \midrule \\
 Description & The net force $\mathbf{F}$ (N) on a rigid body is proportional to the acceleration $\mathbf{a}$ ($\frac{\text{m}}{\text{s}^{2}}$) of the rigid body, where $m$ (kg) denotes the mass of the rigid body as the constant of proportionality.
 \\ \bottomrule \end{tabular}
@@ -328,7 +330,7 @@ Description & Every action has an equal and opposite reaction. In other words, t
 \\ \midrule \\
 Label & Newton's Law of Universal Gravitation
 \\ \midrule \\
-Equation & $\mathbf{F}=G\frac{{m_{1}}{m_{2}}}{||\mathbf{r}||^{2}}\mathbf{\hat{r}}=G\frac{{m_{1}}{m_{2}}}{||\mathbf{r}||^{2}}\frac{\mathbf{r}}{||\mathbf{r}||}$
+Equation & $\mathbf{F}=G \frac{{m_{1}} {m_{2}}}{||\mathbf{r}||^{2}} \mathbf{\hat{r}}=G \frac{{m_{1}} {m_{2}}}{||\mathbf{r}||^{2}} \frac{\mathbf{r}}{||\mathbf{r}||}$
 \\ \midrule \\
 Description & Two rigid bodies in the universe attract each other with a force $\mathbf{F}$ (N) that is directly proportional to the product of their masses, ${m_{1}}$ and ${m_{2}}$ (kg), and inversely proportional to the squared distance ${||\mathbf{r}||^{2}}$ ($\text{m}^{2}$) between them. The vector $\mathbf{r}$ (m) is the displacement between the centres of the rigid bodies and $||\mathbf{r}||$ (m) represents the Euclidean norm of the displacement, or absolute distance between the two. $\mathbf{\hat{r}}$ denotes the displacement unit vector, equivalent to the displacement divided by the Euclidean norm of the displacement, as shown above. Finally, $G$ is the gravitational constant (6.673 * 10E-11) ($\frac{\text{m}^{3}}{(\text{kg}\text{s}^{2})}$).
 \\ \bottomrule \end{tabular}
@@ -356,7 +358,7 @@ Description & The linear velocity ${\mathbf{v}_{B}}$ ($\frac{\text{m}}{\text{s}}
 \\ \midrule \\
 Label & Newton's Second Law for Rotational Motion
 \\ \midrule \\
-Equation & $\tau{}=\mathbf{I}\alpha{}$
+Equation & $\tau{}=\mathbf{I} \alpha{}$
 \\ \midrule \\
 Description & The net torque $\tau{}$ (Nm) on a rigid body is proportional to its angular acceleration $\alpha{}$ ($\frac{\text{rad}}{\text{s}^{2}}$). Here, $\mathbf{I}$ (kg$\text{m}^{2}$) denotes the moment of inertia of the rigid body. We also assume that all rigid bodies involved are two-dimensional (A2).
 \\ \bottomrule \end{tabular}
@@ -376,7 +378,7 @@ This section transforms the problem defined in FIXME REF into one which is expre
 \\ \midrule \\
 Label & Force on the Translational Motion of a Set of 2d Rigid Bodies
 \\ \midrule \\
-Equation & ${\mathbf{a}_{i}}=\frac{d{\mathbf{v}_{i}}\left(t\right)}{dt}=g+\frac{\mathbf{F}\left(t\right)}{{m_{j}}}$
+Equation & ${\mathbf{a}_{i}}=\frac{d {\mathbf{v}_{i}}\left(t\right)}{d t}=g+\frac{\mathbf{F}\left(t\right)}{{m_{j}}}$
 \\ \midrule \\
 Description & The above equation expresses the total acceleration of the rigid body (A1, A2) i as the sum of gravitational acceleration (GD3) and acceleration due to applied force Fi(t) (T1). The resultant outputs are then obtained from this equation using DD2, DD3 and DD4. It is currently assumed that there is no damping (A6) or constraints (A7) involved. ${m_{i}}$ is the mass of the i-th rigid body (kg). $g$ is the gravitational acceleration ($\frac{\text{m}}{\text{s}^{2}}$). $t$ is the point in time (s). ${t_{0}}$ is the denotes the initial time (s). ${\mathbf{p}_{CM}}$ is the the mass-weighted average position of a rigid body's particles (m). $\mathbf{a}$ is the acceleration ($\frac{\text{m}}{\text{s}^{2}}$). $\mathbf{v}$ is the velocity ($\frac{\text{m}}{\text{s}}$). $\mathbf{F}$ is the force applied to the i-th body at time t (N).
 \\ \bottomrule \end{tabular}
@@ -390,7 +392,7 @@ Description & The above equation expresses the total acceleration of the rigid b
 \\ \midrule \\
 Label & Force on the Rotational Motion of a Set of 2D Rigid Body
 \\ \midrule \\
-Equation & $\alpha{}=\frac{d\omega{}\left(t\right)}{dt}=\frac{{\tau{}_{i}}\left(t\right)}{\mathbf{I}}$
+Equation & $\alpha{}=\frac{d \omega{}\left(t\right)}{d t}=\frac{{\tau{}_{i}}\left(t\right)}{\mathbf{I}}$
 \\ \midrule \\
 Description & The above equation for the total angular acceleration of the rigid body (A1, A2) i is derived from T5, and the resultant outputs are then obtained from this equation using DD5, DD6 and DD7. It is currently assumed that there is no damping (A6) or constraints (A7) involved. ${m_{i}}$ is the mass of the i-th rigid body (kg). $g$ is the gravitational acceleration ($\frac{\text{m}}{\text{s}^{2}}$). $t$ is the point in time (s). ${t_{0}}$ is the denotes the initial time (s). $\phi{}$ is the orientation (rad). $\omega{}$ is the angular velocity ($\frac{\text{rad}}{\text{s}}$). $\alpha{}$ is the angular acceleration ($\frac{\text{rad}}{\text{s}^{2}}$). ${\tau{}_{i}}$ is the is the torque applied to the i-th body (Nm). ${\mathbf{I}_{k}}$ is the moment of inertia of the k-th rigid body (kg$\text{m}^{2}$).
 \\ \bottomrule \end{tabular}
@@ -404,7 +406,7 @@ Description & The above equation for the total angular acceleration of the rigid
 \\ \midrule \\
 Label & Collisions on 2D Rigid Bodies
 \\ \midrule \\
-Equation & ${\mathbf{v}_{A}}\left({t_{c}}\right)={\mathbf{v}_{A}}\left(t\right)+\frac{j}{{m_{A}}}\mathbf{n}$
+Equation & ${\mathbf{v}_{A}}\left({t_{c}}\right)={\mathbf{v}_{A}}\left(t\right)+\frac{j}{{m_{A}}} \mathbf{n}$
 \\ \midrule \\
 Description & This instance model is based on our assumptions regarding rigid body (A1, A2) collisions (A5). Again, this does not take damping (A6) or constraints (A7) into account. ${m_{i}}$ is the mass of the i-th rigid body (kg). ${\mathbf{I}_{k}}$ is the moment of inertia of the k-th rigid body (kg$\text{m}^{2}$). $t$ is the point in time (s). ${t_{0}}$ is the denotes the initial time (s). ${t_{c}}$ is the denotes the time at collision (s). ${\mathbf{p}_{CM}}$ is the the mass-weighted average position of a rigid body's particles (m). $\mathbf{v}$ is the velocity ($\frac{\text{m}}{\text{s}}$). $\phi{}$ is the orientation (rad). $\omega{}$ is the angular velocity ($\frac{\text{rad}}{\text{s}}$). $\mathbf{n}$ is the collision normal vector (m). $j$ is the collision impulse (scalar) (Ns). $P$ is the point of collision (m). ${\mathbf{r}_{kP}}$ is the displacement vector between the centre of mass of rigid body k and contact point P (m).
 \\ \bottomrule \end{tabular}
@@ -423,7 +425,7 @@ Label & The Mass-Weighted Average Position of a Rigid Body's Particles
 \\ \midrule \\
 Units & m
 \\ \midrule \\
-Equation & ${\mathbf{p}_{CM}}$ = $\frac{\displaystyle\sum{\left[{m_{j}}{\mathbf{p}_{j}}\right]}}{M}$
+Equation & ${\mathbf{p}_{CM}}$ = $\frac{\displaystyle\sum{\left[{m_{j}} {\mathbf{p}_{j}}\right]}}{M}$
 \\ \midrule \\
 Description & ${\mathbf{p}_{CM}}$ is the the mass-weighted average position of a rigid body's particles (m)\newline${m_{j}}$ is the mass of the j-th particle (kg)\newline${\mathbf{p}_{j}}$ is the position vector of the j-th particle (m)\newline$M$ is the total mass of the rigid body (kg)
 \\ \bottomrule \end{tabular}
@@ -439,7 +441,7 @@ Label & Linear Displacement
 \\ \midrule \\
 Units & m
 \\ \midrule \\
-Equation & $\mathbf{r}(t)$ = $\frac{d\mathbf{p}\left(t\right)}{dt}$
+Equation & $\mathbf{r}(t)$ = $\frac{d \mathbf{p}\left(t\right)}{d t}$
 \\ \midrule \\
 Description & $\mathbf{r}(t)$ is the linear displacement (m)\newline$\mathbf{p}$ is the position (m)\newline$t$ is the time (s)
 \\ \bottomrule \end{tabular}
@@ -455,7 +457,7 @@ Label & Linear Velocity
 \\ \midrule \\
 Units & $\frac{\text{m}}{\text{s}}$
 \\ \midrule \\
-Equation & $\mathbf{v}(t)$ = $\frac{d\mathbf{r}\left(t\right)}{dt}$
+Equation & $\mathbf{v}(t)$ = $\frac{d \mathbf{r}\left(t\right)}{d t}$
 \\ \midrule \\
 Description & $\mathbf{v}(t)$ is the linear velocity ($\frac{\text{m}}{\text{s}}$)\newline$\mathbf{r}$ is the displacement (m)\newline$t$ is the time (s)
 \\ \bottomrule \end{tabular}
@@ -471,7 +473,7 @@ Label & Linear Acceleration
 \\ \midrule \\
 Units & $\frac{\text{m}}{\text{s}^{2}}$
 \\ \midrule \\
-Equation & $\mathbf{a}(t)$ = $\frac{d\mathbf{v}\left(t\right)}{dt}$
+Equation & $\mathbf{a}(t)$ = $\frac{d \mathbf{v}\left(t\right)}{d t}$
 \\ \midrule \\
 Description & $\mathbf{a}(t)$ is the linear acceleration ($\frac{\text{m}}{\text{s}^{2}}$)\newline$\mathbf{v}$ is the velocity ($\frac{\text{m}}{\text{s}}$)\newline$t$ is the time (s)
 \\ \bottomrule \end{tabular}
@@ -487,7 +489,7 @@ Label & Angular Displacement
 \\ \midrule \\
 Units & rad
 \\ \midrule \\
-Equation & $\theta{}$ = $\frac{d\phi{}\left(t\right)}{dt}$
+Equation & $\theta{}$ = $\frac{d \phi{}\left(t\right)}{d t}$
 \\ \midrule \\
 Description & $\theta{}$ is the angular displacement (rad)\newline$\phi{}$ is the orientation (rad)\newline$t$ is the time (s)
 \\ \bottomrule \end{tabular}
@@ -503,7 +505,7 @@ Label & Angular Velocity
 \\ \midrule \\
 Units & $\frac{\text{rad}}{\text{s}}$
 \\ \midrule \\
-Equation & $\omega{}$ = $\frac{d\theta{}\left(t\right)}{dt}$
+Equation & $\omega{}$ = $\frac{d \theta{}\left(t\right)}{d t}$
 \\ \midrule \\
 Description & $\omega{}$ is the angular velocity ($\frac{\text{rad}}{\text{s}}$)\newline$\theta{}$ is the angular displacement (rad)\newline$t$ is the time (s)
 \\ \bottomrule \end{tabular}
@@ -519,7 +521,7 @@ Label & Angular Acceleration
 \\ \midrule \\
 Units & $\frac{\text{rad}}{\text{s}^{2}}$
 \\ \midrule \\
-Equation & $\alpha{}$ = $\frac{d\omega{}\left(t\right)}{dt}$
+Equation & $\alpha{}$ = $\frac{d \omega{}\left(t\right)}{d t}$
 \\ \midrule \\
 Description & $\alpha{}$ is the angular acceleration ($\frac{\text{rad}}{\text{s}^{2}}$)\newline$\omega{}$ is the angular velocity ($\frac{\text{rad}}{\text{s}}$)\newline$t$ is the time (s)
 \\ \bottomrule \end{tabular}
@@ -535,8 +537,8 @@ Label & Impulse (scalar)
 \\ \midrule \\
 Units & Ns
 \\ \midrule \\
-Equation & $j$ = $\frac{\left(-1+{C_{R}}\right){{\mathbf{v}_{i}}^{AB}}\cdot{}\mathbf{n}}{\begin{multlined}
-\left(1/{m_{A}}+1/{m_{B}}\right)||\mathbf{n}||^{2}
+Equation & $j$ = $\frac{\left(-1+{C_{R}}\right) {{\mathbf{v}_{i}}^{AB}}\cdot{}\mathbf{n}}{\begin{multlined}
+\left(1/{m_{A}}+1/{m_{B}}\right) ||\mathbf{n}||^{2}
 \\+
 ||{\mathbf{r}_{AP}}*\mathbf{n}||^{2}/{\mathbf{I}_{A}}+||{\mathbf{r}_{BP}}*\mathbf{n}||^{2}/{\mathbf{I}_{B}}
 \end{multlined}

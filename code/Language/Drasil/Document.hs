@@ -2,6 +2,7 @@
 module Language.Drasil.Document where
 import Prelude hiding (id)
 import Language.Drasil.Chunk.AssumpChunk
+import Language.Drasil.Chunk.Change
 import Language.Drasil.Chunk.Eq
 import Language.Drasil.Chunk.Relation
 import Language.Drasil.Chunk.ReqChunk
@@ -44,8 +45,8 @@ data Contents = Table [Sentence] [[Sentence]] Title Bool RefAdd
                | Figure Label Filepath MaxWidthPercent RefAdd-- ^ Should use relative file path.
                | Requirement ReqChunk
                | Assumption AssumpChunk
-               | LikelyChange NWrapper
-               | UnlikelyChange NWrapper
+               | LikelyChange Change    --TODO: Collapse likely and unlikely?
+               | UnlikelyChange Change
                | Bib BibRef
      --        UsesHierarchy [(ModuleChunk,[ModuleChunk])]
                | Graph [(Sentence, Sentence)] (Maybe Width) (Maybe Height) Label RefAdd

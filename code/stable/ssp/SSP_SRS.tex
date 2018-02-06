@@ -1208,19 +1208,19 @@ Table~\ref{Table:InpuDataCons}, and Table~\ref{Table:OutpDataCons} shows the dat
 Var & Physical Constraints & Typical Value & TU
 \\
 \midrule
-$E$ & $0<E$ & $15000.0$ Pa & 0.1
+$E$ & $E>0$ & $15000.0$ Pa & 0.1
 \\
-$c'$ & $0<c'$ & $10.0$ Pa & 0.1
+$c'$ & $c'>0$ & $10.0$ Pa & 0.1
 \\
 $\nu{}$ & $0<\nu{}<1$ & $0.4$ & 0.1
 \\
 $\varphi{}'$ & $0<\varphi{}'<90$ & $25.0$ ${}^{\circ}$ & 0.1
 \\
-$\gamma{}$ & $0<\gamma{}$ & $20.0$ $\frac{\text{N}}{\text{m}^{3}}$ & 0.1
+$\gamma{}$ & $\gamma{}>0$ & $20.0$ $\frac{\text{N}}{\text{m}^{3}}$ & 0.1
 \\
-${\gamma{}_{Sat}}$ & $0<{\gamma{}_{Sat}}$ & $20.0$ $\frac{\text{N}}{\text{m}^{3}}$ & 0.1
+${\gamma{}_{Sat}}$ & ${\gamma{}_{Sat}}>0$ & $20.0$ $\frac{\text{N}}{\text{m}^{3}}$ & 0.1
 \\
-${\gamma{}_{w}}$ & $0<{\gamma{}_{w}}$ & $9.8$ $\frac{\text{N}}{\text{m}^{3}}$ & 0.1
+${\gamma{}_{w}}$ & ${\gamma{}_{w}}>0$ & $9.8$ $\frac{\text{N}}{\text{m}^{3}}$ & 0.1
 \\
 $a$ & None & $0.0$ m & 0.1
 \\
@@ -1237,9 +1237,9 @@ $\kappa{}$ & None & $0.0$ Pa & 0.1
 Var & Physical Constraints
 \\
 \midrule
-$FS$ & $0<FS$
+$FS$ & $FS>0$
 \\
-$(x,y)$ & $\left(x_{i}<x_{i+1}\implies{}y_{i}<y_{i+1}\right)$
+$(x,y)$ & None
 \\
 $\delta{}x$ & None
 \\

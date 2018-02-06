@@ -311,7 +311,7 @@ w_density = uqc "w_density" (density `of_` water)
   "Mass per unit volume of water"
   (sub (eqSymb density) cW) densityU Rational
   [gtZeroConstr,
-  sfwrc $ Bounded (Inc $ C w_density_min) (Inc $ C w_density_max)] (Dbl 1000) 0.1
+  sfwrc $ Bounded (Exc $ C w_density_min) (Inc $ C w_density_max)] (Dbl 1000) 0.1
   
 -- Constraint 13
 htCap_W = uqc "htCap_W" (heat_cap_spec `of_` water)
@@ -319,7 +319,7 @@ htCap_W = uqc "htCap_W" (heat_cap_spec `of_` water)
     "temperature of a given unit mass of water by a given amount")
   (sub (eqSymb heat_cap_spec) cW) UT.heat_cap_spec Rational
   [gtZeroConstr,
-  sfwrc $ Bounded (Inc $ C htCap_W_min) (Inc $ C htCap_W_max)] (Dbl 4186) 0.1
+  sfwrc $ Bounded (Exc $ C htCap_W_min) (Exc $ C htCap_W_max)] (Dbl 4186) 0.1
   
 -- Constraint 14
 coil_HTC = uqc "coil_HTC" (nounPhraseSP
@@ -352,7 +352,7 @@ time_final = uqc "time_final" (nounPhraseSP "final time")
   "simulation to its conclusion") (sub (eqSymb time) 
   (Atomic "final")) second Rational
   [gtZeroConstr,
-  sfwrc $ UpTo $ Inc $ C time_final_max] (Dbl 50000) 0.1
+  sfwrc $ UpTo $ Exc $ C time_final_max] (Dbl 50000) 0.1
   
   
 -- Output Constraints

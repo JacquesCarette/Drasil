@@ -65,30 +65,25 @@ gbInputDataConstraints = (map uncrtnw gbInputsWUnitsUncrtn) ++
 
 plate_len = uqcND "plate_len" (nounPhraseSP "plate length (long dimension)")
   lA metre Real 
-  [ gtZeroConstr,
-    physc $ \c -> (c / (C plate_width)) $> (Dbl 1),
-    sfwrc $ \c -> (C dim_min) $<= c,
-    sfwrc $ \c -> c $<= (C dim_max),
-    sfwrc $ \c -> (c / (C plate_width)) $< (C ar_max) ] (Dbl 1.5) defaultUncrt
+  [ physc $ UpFrom $ Exc $ C plate_width,
+    sfwrc $ Bounded (Inc $ C dim_min) (Inc $ C dim_max),
+    sfwrc $ UpTo $ Exc $ C ar_max * C plate_width ] (Dbl 1.5) defaultUncrt
 
 plate_width = uqcND "plate_width" (nounPhraseSP "plate width (short dimension)")
   lB metre Real
-  [ gtZeroConstr,
-    physc $ \c -> c $< (C plate_len),
-    sfwrc $ \c -> (C dim_min) $<= c,
-    sfwrc $ \c -> c $<= (C dim_max),
-    sfwrc $ \c -> ((C plate_len) / c) $< (C ar_max) ] (Dbl 1.2) defaultUncrt
+  [ physc $ Bounded (Exc 0) (Exc $ C plate_len),
+    sfwrc $ Bounded (Inc $ C dim_min) (Inc $ C dim_max),
+    sfwrc $ UpTo $ Exc $ C plate_len / C ar_max ] (Dbl 1.2) defaultUncrt
 
 pb_tol = uvc "pb_tol" (nounPhraseSP "tolerable probability of breakage") 
   (sub cP (Atomic "btol")) Real
-  [ gtZeroConstr,
-    physc $ \c -> c $< (Dbl 1) ] (Dbl 0.008) (0.001)
+  [ physc $ Bounded (Exc 0) (Exc 1)] (Dbl 0.008) (0.001)
 
 char_weight = uqcND "char_weight" (nounPhraseSP "charge weight") 
   lW kilogram Real
-  [ physc $ \c -> c $>= (Dbl 0),
-    sfwrc $ \c -> (C cWeightMin) $<= c,
-    sfwrc $ \c -> c $<= (C cWeightMax) ] (Dbl 42) defaultUncrt
+  [ gtZeroConstr,
+    sfwrc $ Bounded (Inc $ C cWeightMin) (Inc $ C cWeightMax)]
+    (Dbl 42) defaultUncrt
 
 tNT = uvc "tNT" (nounPhraseSP "TNT equivalent factor")
   (Atomic "TNT") Real
@@ -97,8 +92,8 @@ tNT = uvc "tNT" (nounPhraseSP "TNT equivalent factor")
 standOffDist = uqcND "standOffDist" (nounPhraseSP "stand off distance") 
   (Atomic "SD") metre Real
   [ gtZeroConstr,
-    sfwrc $ \c -> (C sd_min) $< c,
-    sfwrc $ \c -> c $< (C sd_max) ] (Dbl 45) defaultUncrt
+    sfwrc $ Bounded (Exc $ C sd_min) (Exc $ C sd_max)]
+  (Dbl 45) defaultUncrt
 --FIXME: ^ incorporate definition in here?
 
 --FIXME: Issue #309
@@ -106,12 +101,13 @@ nom_thick = cuc "nom_thick"
   (nounPhraseSent $ S "nominal thickness" +:+ displayConstrntsAsSet 
     nom_thick (map show nominalThicknesses))
   lT millimetre ({-DiscreteD nominalThicknesses-} Rational) 
-  [ physc $ \c -> createCnstrnts c (map show nominalThicknesses) ] (V "8.0") --FIXME: no typical value!
+  [enumc nominalThicknesses] (V "8.0") --FIXME: no typical value!
 
+-- FIXME HACK - V instead of a proper String type
 glass_type  = cvc "glass_type" (nounPhraseSent $ phrase glassTy +:+ 
     displayConstrntsAsSet glass_type glassTypeAbbrsStr)
   lG ({-DiscreteS glassTypeAbbrsStr-} String)
-  [ physc $ \c -> createCnstrnts c glassTypeAbbrsStr] (V "HS") --FIXME: no typical value!
+  [EnumeratedStr Software glassTypeAbbrsStr] (V "HS") --FIXME: no typical value!
 
 {--}
 
@@ -121,8 +117,7 @@ gbOutputs = map qs [is_safe1, is_safe2] ++ map qs [prob_br]
 prob_br :: ConstrainedChunk
 prob_br = cvc "prob_br" (nounPhraseSP "probability of breakage")
   (sub cP lB) Rational
-  [ physc $ \c -> (Dbl 0) $< c,
-    physc $ \c -> c $< (Dbl 1) ] (Dbl 0.4)
+  [ physc $ Bounded (Exc 0) (Exc 1)] (Dbl 0.4)
   --FIXME: no typical value!
 
 {--}

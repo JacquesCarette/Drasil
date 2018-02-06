@@ -8,7 +8,7 @@ module Language.Drasil (
   , Recipe(..)
   -- Expr
   , Expr(C,V,Int,Dbl,IsIn,Deriv,FCall,Grouping,Case)
-  , Relation, DerivType(..), RealInterval(..)
+  , Relation, DerivType(..), RealInterval(..), Inclusive(..)
   , ($=), ($<), ($<=), ($>), ($>=), ($^), ($&&), ($||), ($=>), ($<=>), ($.)
   , log, abs, sin, cos, tan, sec, csc, cot, exp, sqrt, square, euclidean, vars
   , dim, idx
@@ -34,10 +34,10 @@ module Language.Drasil (
   , ofA,theCustom, this
   -- Chunk.Constrained
   , Constrained(..), ConstrainedChunk(..), Constraint(..), ConstrConcept(..)
-  , physc, sfwrc, constrained, cuc, cvc, constrained', cuc', constrainedNRV'
-  , isPhys, isSfwr, getPhys, getSfwr
+  , ConstraintReason(..)
+  , physc, sfwrc, enumc, constrained, cuc, cvc, constrained', cuc', constrainedNRV'
+  , isPhysC, isSfwrC, renderC
   , ConstrWrapper(..), cnstrw
-  , createCnstrnts
   , Reason(..), TheoryConstraint(..)
   -- Chunk.Eq
   , QDefinition(..), fromEqn, fromEqn', fromEqn'', getVC, equat
@@ -124,7 +124,7 @@ module Language.Drasil (
 import Prelude hiding (log, sin, cos, tan, sqrt, id, return, print, break, exp, product)
 import Language.Drasil.SystemInformation
 import Language.Drasil.Expr (Expr(..), Relation, DerivType(..), 
-          RealInterval(..),
+          RealInterval(..), Inclusive(..),
           ($=), ($<), ($<=), ($>), ($>=), ($^), ($&&), ($||), ($=>), ($<=>), ($.))
 import Language.Drasil.Expr.Math (log, sin, cos, tan, sqrt, square, sec, csc, cot, exp,
           dim, idx,

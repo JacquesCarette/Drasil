@@ -19,9 +19,13 @@ makeRef :: (Referable l) => l -> Sentence
 makeRef r = Ref (rType r) (refAdd r) (refName r)
 
 -- | Database for internal references.
-data ReferenceDB = RDB {assumpDB :: AssumpMap, reqDB :: ReqMap }
+data ReferenceDB = RDB 
+  { assumpDB :: AssumpMap
+  , reqDB :: ReqMap
+  , changeDB :: ChangeMap 
+  }
 
-rdb :: AssumpMap -> ReqMap -> ReferenceDB
+rdb :: AssumpMap -> ReqMap -> ChangeMap -> ReferenceDB
 rdb = RDB
 
 -- | Map for maintaining assumption references. 
@@ -50,22 +54,37 @@ reqMap rs = Map.fromList $ zip (map (^. id) (frs ++ nfrs)) ((zip frs [1..]) ++
         isFuncRec FR = True
         isFuncRec _  = False
 
+type ChangeMap = Map.Map String (Change, Int)
+
+changeMap :: [Change] -> ChangeMap
+changeMap cs = Map.fromList $ zip (map (^. id) (lcs ++ ulcs)) 
+  ((zip lcs [1..]) ++ (zip ulcs [1..]))
+  where (lcs, ulcs) = partition (isLikely . chngType) cs
+        isLikely Likely = True
+        isLikely _ = False
+
 class HasAssumpRefs s where
   assumpRefTable :: Simple Lens s AssumpMap
   
 instance HasAssumpRefs ReferenceDB where
-  assumpRefTable f (RDB a b) = fmap (\x -> RDB x b) (f a)
+  assumpRefTable f (RDB a b c) = fmap (\x -> RDB x b c) (f a)
   
 class HasReqRefs s where
   reqRefTable :: Simple Lens s ReqMap
   
 instance HasReqRefs ReferenceDB where
-  reqRefTable f (RDB a b) = fmap (\x -> RDB a x) (f b)
+  reqRefTable f (RDB a b c) = fmap (\x -> RDB a x c) (f b)
+  
+class HasChangeRefs s where
+  changeRefTable :: Simple Lens s ChangeMap
+  
+instance HasChangeRefs ReferenceDB where
+  changeRefTable f (RDB a b c) = fmap (\x -> RDB a b x) (f c)
   
 class Referable s where
   refName :: s -> RefName -- Sentence; The text to be displayed for the link.
   refAdd  :: s -> String  -- The reference address (what we're linking to).
-                            -- Should be string with no spaces/special chars.
+                          -- Should be string with no spaces/special chars.
   rType   :: s -> RefType -- The reference type (referencing namespace?)
   
 instance Referable AssumpChunk where

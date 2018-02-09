@@ -19,9 +19,9 @@ import Drasil.SWHS.DataDefs(swhsSymbMapTRef)
 
 roc_temp_simp_deriv :: Derivation
 roc_temp_simp_deriv =
-  [ds $ S "Detailed derivation of simplified" +:+ phrase rOfChng +:+ S "of" +:+.
+  [S "Detailed derivation of simplified" +:+ phrase rOfChng +:+ S "of" +:+.
     phrase temp] ++
-  (weave [map ds roc_temp_simp_deriv_sentences, map de roc_temp_simp_deriv_eqns])
+  (weave [roc_temp_simp_deriv_sentences, map E roc_temp_simp_deriv_eqns])
 
 roc_temp_simp_deriv_sentences :: [Sentence]
 roc_temp_simp_deriv_sentences = map foldlSentCol [

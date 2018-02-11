@@ -45,7 +45,7 @@ symbolMap :: (Quantity c) => [c] -> SymbolMap
 symbolMap cs = Map.fromList (map (\x -> ((x ^. id), qs x)) cs)
 
 -- | Smart constructor for a 'TermMap'
-termMap :: (NamedIdea c) => [c] -> TermMap
+termMap :: (Idea c) => [c] -> TermMap
 termMap ts = Map.fromList (map (\x -> ((x ^. id), nw x)) ts)
 
 -- | Smart constructor for a 'ConceptMap'
@@ -88,7 +88,7 @@ data ChunkDB = CDB { symbs :: SymbolMap
 -- | Smart constructor for chunk databases. Takes a list of Quantities 
 -- (for SymbolTable), NamedIdeas (for TermTable), Concepts (for DefinitionTable),
 -- and Units (for UnitTable)
-cdb :: (Quantity q, NamedIdea t, Concept c, Unit u) => 
+cdb :: (Quantity q, Idea t, Concept c, Unit u) => 
   [q] -> [t] -> [c] -> [u] -> ChunkDB
 cdb s t c u = CDB (symbolMap s) (termMap t) (conceptMap c) (unitMap u)
 

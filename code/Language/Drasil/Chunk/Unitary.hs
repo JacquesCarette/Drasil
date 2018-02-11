@@ -7,7 +7,7 @@ module Language.Drasil.Chunk.Unitary
 import Control.Lens (Simple, Lens, (^.), set)
 import Prelude hiding (id)
 import Language.Drasil.Chunk (Chunk(..))
-import Language.Drasil.Chunk.NamedIdea (NamedIdea(..), nc)
+import Language.Drasil.Chunk.NamedIdea (NamedIdea(..), nc, Idea(..))
 import Language.Drasil.Chunk.SymbolForm (SF(..), StagedSymbolChunk, ssc'
   , getSymbForStage)
 import Language.Drasil.Chunk.Quantity (Quantity(..))
@@ -23,12 +23,13 @@ class (Quantity c) => Unitary c where
 
 -- | UnitaryChunks are 'Unitary's with 'Symbols'
 data UnitaryChunk where
-  UC :: (NamedIdea c, Unit u) => 
+  UC :: (Idea c, Unit u) => 
     c -> StagedSymbolChunk -> u -> Space -> UnitaryChunk
 instance Chunk UnitaryChunk where
   id = nl id
 instance NamedIdea UnitaryChunk where
   term = nl term
+instance Idea UnitaryChunk where
   getA (UC qc _ _ _) = getA qc
 instance Quantity UnitaryChunk where
   typ f (UC named s u t) = fmap (\x -> UC named s u x) (f t)

@@ -29,6 +29,8 @@ instance Ord CQSWrapper where
   
 instance NamedIdea CQSWrapper where
   term = cqslens term
+
+instance Idea CQSWrapper where
   getA (CQS a) = getA a
   
 instance Concept CQSWrapper where

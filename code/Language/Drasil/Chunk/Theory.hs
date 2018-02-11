@@ -55,6 +55,7 @@ instance Chunk TheoryModel where
   id = cl id
 instance NamedIdea TheoryModel where
   term = cl term
+instance Idea TheoryModel where
   getA (TM c _) = getA c
 instance Concept TheoryModel where
   defn = cl defn

@@ -230,12 +230,12 @@ pullTMods xs = pullFunc xs getTMods hasTMods
 -- Section Assembler --
 -----------------------
 
-assembler :: (NamedIdea c, HasSymbolTable s) => c -> s -> SubSec -> [SubSec] -> Section
+assembler :: (Idea c, HasSymbolTable s) => c -> s -> SubSec -> [SubSec] -> Section
 assembler progName symMap thisSection subsecs = 
   (sectionMap progName thisSection) subsections
   where subsections = map (render progName symMap) subsecs 
 
-sectionMap :: NamedIdea c => c -> SubSec -> [Section] -> Section
+sectionMap :: Idea c => c -> SubSec -> [Section] -> Section
 sectionMap progName (SectionModel niname xs)  
   |  compareID niname (Doc.solutionCharSpec ^. id)         = section (titleize' niname)
     [scsIntro progName]
@@ -251,7 +251,7 @@ sectionMap progName (SectionModel niname xs)
 -- Section Render --
 --------------------
 
-render :: (NamedIdea c, HasSymbolTable s) => c -> s -> SubSec -> Section
+render :: (Idea c, HasSymbolTable s) => c -> s -> SubSec -> Section
 render progName symMap item@(SectionModel niname _)
   | compareID niname (Doc.assumption ^. id)       = assumptionSect        item
   | compareID niname (Doc.thModel ^. id)          = theoreticalModelSect  item symMap progName
@@ -301,7 +301,7 @@ assumptionSect (SectionModel niname xs) = section (titleize' niname)
   (assumpIntro:(pullContents xs)) (pullSections xs)
 
 
-theoreticalModelSect :: (NamedIdea a, HasSymbolTable s) => SubSec -> s -> a -> Section
+theoreticalModelSect :: (Idea a, HasSymbolTable s) => SubSec -> s -> a -> Section
 theoreticalModelSect (SectionModel niname xs) _ progName = section
   (titleize' niname) ((tModIntro progName):theoreticalModels ++ 
   (pullContents xs)) (pullSections xs)
@@ -379,13 +379,13 @@ systemConstraintIntro l = foldlSP l
 -- PROBLEM DESCRIPTION --
 -------------------------
 
-problemDescriptionIntro :: NamedIdea c => c -> [Sentence] -> Contents
+problemDescriptionIntro :: Idea c => c -> [Sentence] -> Contents
 problemDescriptionIntro progName []       = problemDescriptionSent progName
   EmptyS EmptyS
 problemDescriptionIntro _ [x]      = Paragraph x
 problemDescriptionIntro progName (x:y:_) = problemDescriptionSent progName x y
 
-problemDescriptionSent :: NamedIdea c => c -> Sentence -> Sentence -> Contents
+problemDescriptionSent :: Idea c => c -> Sentence -> Sentence -> Contents
 problemDescriptionSent progName start end = foldlSP [start, (short progName), 
   S "is a", (phrase computer), (phrase program), S "developed to", end]
 
@@ -416,7 +416,7 @@ goalStatementIntro inputs = Paragraph $ foldl (+:+) EmptyS [S "Given",
 -- SOLUTION CHARACTERISTIC SPECIFICATION --
 -------------------------------------------
 
-scsIntro :: (NamedIdea c) => c -> Contents
+scsIntro :: (Idea c) => c -> Contents
 scsIntro progName = foldlSP [S "The", plural Doc.inModel, 
   S "that govern", short progName, S "are presented in" +:+. 
   S "FIXME REF to IModSection", S "The", phrase Doc.information, S "to understand", 
@@ -446,7 +446,7 @@ assumpIntro = Paragraph $ foldlSent
 -- THEORETICAL MODELS --
 ------------------------
 
-tModIntro :: (NamedIdea a) => a -> Contents
+tModIntro :: (Idea a) => a -> Contents
 tModIntro progName = foldlSP [S "This", phrase Doc.section_, S "focuses on",
   S "the", phrase Doc.general, (plural equation) `sAnd` (plural law), S "that",
   short progName, S "is based on"]

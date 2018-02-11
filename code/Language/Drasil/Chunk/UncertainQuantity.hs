@@ -44,6 +44,7 @@ instance Chunk UncertQ where
   id = qlens id
 instance NamedIdea UncertQ where
   term = qlens term
+instance Idea UncertQ where
   getA (UQ q _) = getA q
 instance Quantity UncertQ where
   typ = qlens typ
@@ -106,6 +107,7 @@ instance Chunk UncertainChunk where
   id = cLens id
 instance NamedIdea UncertainChunk where
   term = cLens term
+instance Idea UncertainChunk where
   getA (UCh n _) = getA n
 instance Quantity UncertainChunk where
   typ = cLens typ
@@ -150,6 +152,7 @@ instance Constrained UncertainWrapper where
   reasVal = uwlens reasVal
 instance NamedIdea UncertainWrapper where
   term = uwlens term
+instance Idea UncertainWrapper where
   getA (UncrtnW a) = getA a
 instance Quantity UncertainWrapper where
   getSymb s  (UncrtnW a) = getSymb s a

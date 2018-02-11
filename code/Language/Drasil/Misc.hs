@@ -3,7 +3,7 @@ module Language.Drasil.Misc where
 import Language.Drasil.Spec
 import Language.Drasil.Chunk.Quantity
 import Language.Drasil.Unit
-import Language.Drasil.Chunk.NamedIdea (NamedIdea, short, term)
+import Language.Drasil.Chunk.NamedIdea (NamedIdea, Idea, short, term)
 import Language.Drasil.Chunk.Unitary
 import qualified Language.Drasil.NounPhrase as NP
 
@@ -48,7 +48,7 @@ unit_symb c = (unit c) ^. usymb
 -- | Helper for common pattern of introducing the title-case version of a 
 -- noun phrase (from a NamedIdea)
 -- followed by its abbreviation in parentheses.
-introduceAbb :: NamedIdea n => n -> Sentence
+introduceAbb :: Idea n => n -> Sentence
 introduceAbb n = (NP.titleize $ n ^. term) +:+ (sParen (short n))
 
 -- | Helper function for getting the sentence case of a noun phrase from a 

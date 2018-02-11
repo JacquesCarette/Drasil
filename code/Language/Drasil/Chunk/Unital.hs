@@ -13,7 +13,7 @@ module Language.Drasil.Chunk.Unital
 import Control.Lens (Simple, Lens, (^.), set)
 import Prelude hiding (id)
 import Language.Drasil.Chunk (Chunk(..))
-import Language.Drasil.Chunk.NamedIdea (NamedIdea(..))
+import Language.Drasil.Chunk.NamedIdea (NamedIdea(..),Idea(..))
 import Language.Drasil.Chunk.Concept (Concept(..), dcc, dccWDS)
 import Language.Drasil.Chunk.ConVar (ConVar (..))
 import Language.Drasil.Chunk.SymbolForm (SF(..), StagedSymbolChunk, ssc'
@@ -36,6 +36,7 @@ instance Chunk UnitalChunk where
   id = nl id
 instance NamedIdea UnitalChunk where
   term = nl term
+instance Idea UnitalChunk where
   getA (UC qc _ _ _) = getA qc
   getA (UCV cv _ ) = getA cv
 instance Concept UnitalChunk where

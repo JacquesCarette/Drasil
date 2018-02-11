@@ -106,6 +106,7 @@ instance Chunk ConstrainedChunk where
   id = qslens id
 instance NamedIdea ConstrainedChunk where
   term = qslens term
+instance Idea ConstrainedChunk where
   getA (ConstrainedChunk n _ _) = getA n
 instance Quantity ConstrainedChunk where
   typ = qslens typ
@@ -156,6 +157,7 @@ instance Chunk ConstrConcept where
   id = cqslens id
 instance NamedIdea ConstrConcept where
   term = cqslens term
+instance Idea ConstrConcept where
   getA (ConstrConcept n _ _) = getA n
 instance Quantity ConstrConcept where
   typ = cqslens typ
@@ -205,6 +207,7 @@ instance Constrained ConstrWrapper where
   reasVal = cwlens reasVal
 instance NamedIdea ConstrWrapper where
   term = cwlens term
+instance Idea ConstrWrapper where
   getA (CnstrW a) = getA a
 instance Quantity ConstrWrapper where
   getSymb s (CnstrW a) = getSymb s a

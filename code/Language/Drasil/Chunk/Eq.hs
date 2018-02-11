@@ -8,7 +8,7 @@ import Prelude hiding (id)
 import Language.Drasil.Expr (Expr)
 import Language.Drasil.Chunk
 import Language.Drasil.Chunk.Attribute
-import Language.Drasil.Chunk.NamedIdea (NamedIdea, term, getA)
+import Language.Drasil.Chunk.NamedIdea (NamedIdea(..), Idea(..))
 import Language.Drasil.Chunk.Concept
 import Language.Drasil.Chunk.ConVar
 import Language.Drasil.Chunk.Quantity (Quantity(..))
@@ -38,6 +38,8 @@ instance Chunk QDefinition where
 
 instance NamedIdea QDefinition where
   term = ul . term
+
+instance Idea QDefinition where
   getA c = getA $ c ^. ul
 
 instance Quantity QDefinition where
@@ -75,6 +77,8 @@ instance Chunk H where
 
 instance NamedIdea H where
   term = elens term
+
+instance Idea H where
   getA (H a) = getA a
   
 instance Quantity H where

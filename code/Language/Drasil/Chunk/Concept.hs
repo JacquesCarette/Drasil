@@ -15,8 +15,8 @@ import Language.Drasil.Spec
 import Prelude hiding (id)
 import Language.Drasil.NounPhrase
 
--- | Concepts are 'NamedIdea's with definitions
-class NamedIdea c => Concept c where
+-- | Concepts are 'Idea's with definitions
+class Idea c => Concept c where
   -- | defn provides (a 'Lens' to) the definition for a chunk
   defn :: Simple Lens c Sentence
   -- | cdom provides (a 'Lens' to) the concept domain tags for a chunk
@@ -29,8 +29,8 @@ class NamedIdea c => Concept c where
 
 -- | The ConceptChunk datatype is a Concept
 data ConceptChunk where
-  -- CC takes a 'NamedIdea', a definition, and domain tags.
-  CC :: NamedIdea c => c -> Sentence -> [CWrapper] -> ConceptChunk 
+  -- CC takes an 'Idea', a definition, and domain tags.
+  CC :: Idea c => c -> Sentence -> [CWrapper] -> ConceptChunk 
   -- [CWrapper] is a list of the ConceptDomain(s) as Concepts themselves.
   -- It is not exported, see 'cc' and 'ccs' for the exported constructors.
 instance Eq ConceptChunk where
@@ -39,6 +39,7 @@ instance Chunk ConceptChunk where
   id = nl id
 instance NamedIdea ConceptChunk where
   term = nl term
+instance Idea ConceptChunk where
   getA (CC n _ _) = getA n
 instance Concept ConceptChunk where
   defn f (CC n d cd) = fmap (\x -> CC n x cd) (f d)
@@ -69,15 +70,15 @@ dccWDS' :: String -> NP -> Sentence -> String -> ConceptChunk
 dccWDS' i t d a = CC (commonIdea i t a) d ([] :: [CWrapper])
 
 -- | Constructor for 'ConceptChunk'. Does not allow concept domain tagging.
-cc :: NamedIdea c => c -> String -> ConceptChunk
+cc :: Idea c => c -> String -> ConceptChunk
 cc n d = CC n (S d) ([] :: [CWrapper])
 
 -- | Same as cc, except definition is a 'Sentence'
-cc' :: NamedIdea c => c -> Sentence -> ConceptChunk
+cc' :: Idea c => c -> Sentence -> ConceptChunk
 cc' n d = CC n (d) ([] :: [CWrapper])
 
 -- | Constructor for 'ConceptChunk'. Allows explicit tagging.
-ccs :: NamedIdea c => c -> Sentence -> [CWrapper] -> ConceptChunk --Explicit tagging
+ccs :: Idea c => c -> Sentence -> [CWrapper] -> ConceptChunk --Explicit tagging
 ccs = CC
 
 {- Concept Wrapper -}
@@ -90,6 +91,7 @@ instance Chunk CWrapper where
   
 instance NamedIdea CWrapper where
   term = clens term
+instance Idea CWrapper where
   getA (CW a) = getA a
   
 instance Concept CWrapper where

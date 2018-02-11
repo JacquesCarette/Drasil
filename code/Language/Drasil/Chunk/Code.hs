@@ -180,6 +180,7 @@ instance Chunk CodeChunk where
   id = qslens id
 instance NamedIdea CodeChunk where
   term = qslens term
+instance Idea CodeChunk where
   getA (CodeVar n) = getA n
   getA (CodeFunc n) = getA n
 instance Quantity CodeChunk where
@@ -221,6 +222,7 @@ instance Chunk CodeDefinition where
   id = qscdlens id
 instance NamedIdea CodeDefinition where
   term = qscdlens term
+instance Idea CodeDefinition where
   getA (CodeDefinition n _) = getA n
 instance Quantity CodeDefinition where
   typ = qscdlens typ

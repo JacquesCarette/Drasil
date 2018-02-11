@@ -140,8 +140,8 @@ data StkhldrSec = StkhldrProg CI Sentence | StkhldrProg2 [StkhldrSub] | StkhldrV
 -- | Stakeholders subsections
 data StkhldrSub where
   StkhldrSubVerb :: Section -> StkhldrSub
-  Client :: (NamedIdea a) => a -> Sentence -> StkhldrSub
-  Cstmr  :: (NamedIdea a) => a -> StkhldrSub
+  Client :: (Idea a) => a -> Sentence -> StkhldrSub
+  Cstmr  :: (Idea a) => a -> StkhldrSub
 
 {--}
 
@@ -173,7 +173,7 @@ data SSDSub where
 -- | Problem Description section
 data ProblemDescription where
   PDVerb :: Section -> ProblemDescription
-  PDProg :: (NamedIdea a) => Sentence -> a -> Sentence -> [Section] -> ProblemDescription
+  PDProg :: (Idea a) => Sentence -> a -> Sentence -> [Section] -> ProblemDescription
   
 -- | Solution Characteristics Specification section
 data SolChSpec where

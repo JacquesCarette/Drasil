@@ -9,18 +9,21 @@ import Language.Drasil.NounPhrase
 
 import Prelude hiding (id)
 
--- | A NamedIdea is a 'Chunk' (has 'id'), which also has a 'term'
--- and /may/ have an accronym/abbreviation.
+-- | A NamedIdea is a 'term' that we've identified (has an 'id') as 
+-- being worthy of naming.
 class Chunk c => NamedIdea c where
   -- | Lens to the term (a noun phrase)
   term :: Simple Lens c NP
-  -- | Provides (Just abbreviation) or Nothing if it does not exist
+
+-- | An |Idea| is the 'meet' of |NamedIdea| and |CommonIdea|.
+-- In other words, it /may/ have an acronym/abbreviation.
+class NamedIdea c => Idea c where
   getA :: c -> Maybe String
   --Get Abbreviation/Acronym? These might need to be separated 
   --depending on contexts, but for now I don't see a problem with it.
 
 -- | Get short form (if it exists), else get term.
-short :: NamedIdea c => c -> Sentence
+short :: Idea c => c -> Sentence
 short c = maybe (phrase (c ^. term)) (\x -> x) (fmap S $ getA c)
 
 -- === DATA TYPES/INSTANCES === --
@@ -33,6 +36,7 @@ instance Chunk NamedChunk where
   id f (NC a b) = fmap (\x -> NC x b) (f a)
 instance NamedIdea NamedChunk where
   term f (NC a b) = fmap (\x -> NC a x) (f b)
+instance Idea NamedChunk where
   getA (NC _ _) = Nothing
   
 -- | 'NamedChunk' constructor, takes an id and a term.
@@ -82,7 +86,7 @@ for t1 t2 = (titleize $ t1 ^. term) +:+ S "for" +:+ (titleize $ t2 ^. term)
 
 -- | Similar to 'for', but uses titleized version of term 1 with the abbreviation
 -- (if it exists, phrase otherwise) for term 2
-for' :: (NamedIdea c, NamedIdea d) => c -> d -> Sentence
+for' :: (NamedIdea c, Idea d) => c -> d -> Sentence
 for' t1 t2 = (titleize $ t1 ^. term) +:+ S "for" +:+ (short t2)
 
 -- | Similar to 'for', but allows one to specify the function to use on each term

@@ -106,9 +106,9 @@ swhs_si = SI {
   _units = this_si,
   _quants = swhsSymbols,
   _concepts = (swhsSymbols),
-  _definitions = (swhsDataDefs :: [QDefinition]),
-  _inputs = ((map qs swhsInputs) :: [QWrapper]),
-  _outputs = ((map qs swhsOutputs) :: [QWrapper]),
+  _definitions = swhsDataDefs,
+  _inputs = map qw swhsInputs,
+  _outputs = map qw swhsOutputs,
   _defSequence = ([] :: [Block QDefinition]),
   _constraints = (swhsConstrained),
   _constants = [],
@@ -502,7 +502,7 @@ s5_1_1_Table = (Table [titleize symbol_, titleize unit_, titleize description]
   [getES,
   --(\ch -> Sy (unit_symb ch)),
   unit'2Contents,
-  phrase] (map qs inputConstraints))
+  phrase] (map qw inputConstraints))
   (titleize input_ +:+ titleize variable +:+ titleize requirement) False)
   "InConstraints"
 

@@ -23,10 +23,10 @@ swhsSymbols :: [CQSWrapper]
 swhsSymbols = (map cqs swhsUnits) ++ (map cqs swhsUnitless) ++
   (map cqs swhsConstrained)
 
-swhsSymbolsAll :: [QWrapper] -- UCWrapper, ConVar, UncertQ, QDefinition, UnitaryChunk, 
-swhsSymbolsAll = (map qs swhsUnits) ++ (map qs swhsUnitless) ++
-  (map qs swhsConstrained) ++ (map qs specParamValList) ++
-  (map qs [htFusion_min, htFusion_max, coil_SA_max] ++ [qs gradient])
+swhsSymbolsAll :: [QuantityDict]
+swhsSymbolsAll = (map qw swhsUnits) ++ (map qw swhsUnitless) ++
+  (map qw swhsConstrained) ++ (map qw specParamValList) ++
+  (map qw [htFusion_min, htFusion_max, coil_SA_max] ++ [qw gradient])
 
 -- Symbols with Units --
 

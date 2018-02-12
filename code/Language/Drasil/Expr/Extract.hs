@@ -8,7 +8,7 @@ import Language.Drasil.Expr (Expr(..), UFunc(..), BiFunc(..), EOperator(..))
 import Language.Drasil.Chunk (id)
 import Language.Drasil.ChunkDB
 import Language.Drasil.Chunk.Code
-import Language.Drasil.Chunk.Quantity (QWrapper)
+import Language.Drasil.Chunk.Quantity (QuantityDict)
 
 --FIXME: Missing Patterns
 -- | Get dependencies from an equation  
@@ -28,8 +28,8 @@ dep (EOp o)       = dep (unpackop o)
 dep (IsIn  a _)   = nub (dep a)
 dep (Matrix a)    = nub (concat $ map (concat . map dep) a)
 
--- | Get a list of quantities (QWrapper) from an equation in order to print
-vars :: (HasSymbolTable s) => Expr -> s -> [QWrapper]
+-- | Get a list of quantities (QuantityDict) from an equation in order to print
+vars :: (HasSymbolTable s) => Expr -> s -> [QuantityDict]
 vars (Assoc _ l)  m = nub $ concat $ map (\x -> vars x m) l
 vars (Deriv _ a b) m = nub (vars a m ++ vars (C b) m)
 vars (C c)        m = [symbLookup c $ m ^. symbolTable]

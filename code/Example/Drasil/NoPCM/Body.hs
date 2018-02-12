@@ -101,13 +101,13 @@ acronyms = [assumption, dataDefn, genDefn, goalStmt, inModel, likelyChg, M.ode,
 nopcm_Symbols :: [CQSWrapper]
 nopcm_Symbols = (map cqs nopcm_Units) ++ (map cqs nopcm_Constraints)
   
-nopcm_SymbolsAll :: [QWrapper] --FIXME: Why is PCM (swhsSymbolsAll) here?
+nopcm_SymbolsAll :: [QuantityDict] --FIXME: Why is PCM (swhsSymbolsAll) here?
                                --Can't generate without SWHS-specific symbols like pcm_HTC and pcm_SA
                                --FOUND LOC OF ERROR: Instance Models
-nopcm_SymbolsAll = (map qs nopcm_Units) ++ (map qs nopcm_Constraints) ++
-  (map qs specParamValList) ++ 
-  (map qs [coil_SA_max]) ++ (map qs [tau_W]) ++ 
-  (map qs [surface, uNormalVect, gradient, eta])
+nopcm_SymbolsAll = (map qw nopcm_Units) ++ (map qw nopcm_Constraints) ++
+  (map qw specParamValList) ++ 
+  (map qw [coil_SA_max]) ++ (map qw [tau_W]) ++ 
+  (map qw [surface, uNormalVect, gradient, eta])
 
 nopcm_Units :: [UCWrapper]
 nopcm_Units = map ucw [density, tau, in_SA, out_SA,
@@ -169,8 +169,8 @@ nopcm_si = SI {
   _quants = nopcm_Symbols,
   _concepts = (nopcm_Symbols),
   _definitions = [dd1HtFluxC],          --dataDefs
-  _inputs = (map qs nopcm_Constraints), --inputs
-  _outputs = (map qs [temp_W, w_E]),     --outputs
+  _inputs = (map qw nopcm_Constraints), --inputs
+  _outputs = (map qw [temp_W, w_E]),     --outputs
   _defSequence = [Parallel dd1HtFluxC []],
   _constraints = (nopcm_Constraints),        --constrained
   _constants = [],
@@ -640,8 +640,8 @@ s4_2_6_table2 = outDataConstTbl s4_2_6_conListOut
 s4_2_6_conListOut :: [UncertQ]
 s4_2_6_conListOut = [temp_W, w_E]
 
-inputVar :: [QWrapper]
-inputVar = map qs s4_2_6_conListIn 
+inputVar :: [QuantityDict]
+inputVar = map qw s4_2_6_conListIn 
 
 
 

@@ -6,8 +6,8 @@ import Data.Drasil.Units.Thermodynamics (heat_transfer_coef)
 
 {--}
 
-symbols :: [QWrapper]
-symbols = map qs hghcVars ++ map qs htVars
+symbols :: [QuantityDict]
+symbols = map qw hghcVars ++ map qw htVars
 
 hghcVars :: [QDefinition]
 hghcVars = [htTransCladFuel, htTransCladCool]
@@ -15,9 +15,9 @@ hghcVars = [htTransCladFuel, htTransCladCool]
 htVars :: [VarChunk]
 htVars = [cladThick, coolFilmCond, gapFilmCond, cladCond]
 
-htInputs, htOutputs :: [QWrapper]
-htInputs = map qs htVars
-htOutputs = map qs hghcVars
+htInputs, htOutputs :: [QuantityDict]
+htInputs = map qw htVars
+htOutputs = map qw hghcVars
 
 cladThick, coolFilmCond, gapFilmCond, cladCond :: VarChunk
 cladThick    = makeVC "cladThick"    (cn''' "clad thickness")

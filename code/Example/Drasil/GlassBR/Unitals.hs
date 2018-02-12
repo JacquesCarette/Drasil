@@ -42,9 +42,9 @@ glass_type, nom_thick :: ConstrainedChunk
 defaultUncrt :: Double
 defaultUncrt = 0.1
 
-gbInputs :: [QWrapper]
-gbInputs = (map qs gbInputsWUnitsUncrtn) ++ (map qs gbInputsWUncrtn) ++ 
-  (map qs gbInputsNoUncrtn) ++ map qs sdVector
+gbInputs :: [QuantityDict]
+gbInputs = (map qw gbInputsWUnitsUncrtn) ++ (map qw gbInputsWUncrtn) ++ 
+  (map qw gbInputsNoUncrtn) ++ map qw sdVector
 
 --inputs with units and uncertainties
 gbInputsWUnitsUncrtn :: [UncertQ]
@@ -113,8 +113,8 @@ glass_type  = cvc "glass_type" (nounPhraseSent $ phrase glassTy +:+
 
 {--}
 
-gbOutputs :: [QWrapper]
-gbOutputs = map qs [is_safe1, is_safe2] ++ map qs [prob_br]
+gbOutputs :: [QuantityDict]
+gbOutputs = map qw [is_safe1, is_safe2] ++ map qw [prob_br]
 
 prob_br :: ConstrainedChunk
 prob_br = cvc "prob_br" (nounPhraseSP "probability of breakage")

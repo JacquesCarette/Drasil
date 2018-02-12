@@ -43,7 +43,7 @@ module Language.Drasil (
   -- Chunk.Eq
   , QDefinition(..), fromEqn, fromEqn', fromEqn'', getVC, equat
   -- Chunk.Quantity
-  , Quantity(..), QWrapper, qw, ConVar(..), cvR, cvRs
+  , Quantity(..), QuantityDict, qw, ConVar(..), cvR, cvRs
   , symbol
   -- Chunk.UncertainQuantity
   , UncertainQuantity(..), UncertainChunk(..), UncertQ, uq, uqNU, uqc, uqcNU, uqcND, uncrtnChunk, uvc
@@ -56,7 +56,7 @@ module Language.Drasil (
   -- Chunk.Relation
   , NamedRelation, makeNR, RelationConcept, makeRC, makeRC', relat, ExprRelat
   --Chunk.Wrapper.????
-  , cqs, qs, CQSWrapper
+  , cqs, CQSWrapper
   --Chunk.UWrapper 
   , UWrapper, uw, ucw, UCWrapper
   -- Chunks w/ Attributes

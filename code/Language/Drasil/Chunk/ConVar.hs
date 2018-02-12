@@ -1,9 +1,7 @@
 {-# Language GADTs, Rank2Types #-}
 
 module Language.Drasil.Chunk.ConVar
-  ( ConVar(..)
-  , cv
-  , cvR
+  ( ConVar(CV) , cv , cvR
   , cvRs -- Temporary identification for the the creation of a quantity with a certain type of unit.  Will eventually change to cvR.
   ) where
 

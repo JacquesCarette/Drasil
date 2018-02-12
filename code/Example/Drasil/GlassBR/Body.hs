@@ -143,8 +143,8 @@ glassSystInfo = SI {
                                                  -- in the description of the Calculation of Demand instance model;
                                                  -- should this be included as a Data Definition?
                                                  -- (same for sdWithEqn)
-  _inputs      = map qs gbInputs,
-  _outputs     = map qs gbOutputs,
+  _inputs      = map qw gbInputs,
+  _outputs     = map qw gbOutputs,
   _defSequence = gbQDefns,
   _constraints = gbConstrained,
   _constants   = gbConstants,
@@ -227,10 +227,10 @@ auxiliaryConstants :: [QDefinition]
 auxiliaryConstants = assumptionConstants ++ gBRSpecParamVals
 
 --Used in "Functional Requirements" Section--
-requiredInputs :: [QWrapper]
-requiredInputs = (map qs [plate_len, plate_width, char_weight])
-  ++ (map qs [pb_tol, tNT]) ++ (map qs [sdx, sdy, sdz])
-  ++ (map qs [glass_type, nom_thick])
+requiredInputs :: [QuantityDict]
+requiredInputs = (map qw [plate_len, plate_width, char_weight])
+  ++ (map qw [pb_tol, tNT]) ++ (map qw [sdx, sdy, sdz])
+  ++ (map qw [glass_type, nom_thick])
 
 s7_1_req6_pulledList :: [QDefinition]
 s7_1_req6_pulledList = [nonFL, glaTyFac, dimLL, tolPre,
@@ -617,8 +617,8 @@ req5Desc cmd = foldlSent_ [S "If", (getES is_safe1) `sAnd` (getES is_safe2),
   S "If the", phrase condition, S "is false, then", phrase cmd,
   S "the", phrase message, Quote (notSafe ^. defn)]
 
-testing :: [QWrapper]
-testing = qs prob_br : qs lRe : qs demand : [] -- all different types!
+testing :: [QuantityDict]
+testing = qw prob_br : qw lRe : qw demand : [] -- all different types!
 testing1 :: [RelationConcept]
 testing1 = [probOfBr, calOfCap, calOfDe]
 --FIXME: rename or find better implementation?

@@ -58,6 +58,7 @@ data RefType = Tab    -- ^ Table
              | LC     -- ^ Likely Change
              | UC     -- ^ Unlikely Change
              | EqnB   -- ^ Equation Block
+             | Cite   -- ^ Citation
              
 instance Show RefType where
   show Tab    = "Table"
@@ -69,6 +70,7 @@ instance Show RefType where
   show Assump = "Assumption"
   show LC     = "Likely Change"
   show UC     = "Unlikely Change"
+  show Cite   = "Citation"
 
 -- | Helper function for wrapping sentences in parentheses.
 sParen :: Sentence -> Sentence

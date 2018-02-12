@@ -4,6 +4,7 @@ import Language.Drasil.Chunk (Chunk, id)
 import Language.Drasil.Chunk.AssumpChunk
 import Language.Drasil.Chunk.Change
 import Language.Drasil.Chunk.ReqChunk
+import Language.Drasil.Citations
 import Language.Drasil.Document
 import Language.Drasil.RefHelpers
 import Language.Drasil.Spec
@@ -23,10 +24,16 @@ data ReferenceDB = RDB
   { assumpDB :: AssumpMap
   , reqDB :: ReqMap
   , changeDB :: ChangeMap 
+--  , citationDB :: BibMap
   }
 
-rdb :: [AssumpChunk] -> [ReqChunk] -> [Change] -> ReferenceDB
-rdb assumps reqs changes = RDB (assumpMap assumps) (reqMap reqs) (changeMap changes)
+rdb :: [AssumpChunk] -> [ReqChunk] -> [Change] -> --BibRef -> 
+  ReferenceDB
+rdb assumps reqs changes {- citations -} = RDB 
+  (assumpMap assumps)
+  (reqMap reqs)
+  (changeMap changes)
+--  (bibMap citations)
 
 -- | Map for maintaining assumption references. 
 -- The Int is that reference's number.
@@ -45,6 +52,8 @@ assumpLookup a m = let lookC = Map.lookup (a ^. id) m in
         getS Nothing = error $ "Assumption: " ++ (a ^. id) ++ 
           " referencing information not found in Assumption Map"
 
+-- | Map for maintaining requirement references. 
+-- Similar to AssumpMap
 type ReqMap = Map.Map String (ReqChunk, Int)
 
 reqMap :: [ReqChunk] -> ReqMap
@@ -61,6 +70,8 @@ reqLookup r m = let lookC = Map.lookup (r ^. id) m in
         getS Nothing = error $ "Requirement: " ++ (r ^. id) ++ 
           " referencing information not found in Requirement Map"
 
+-- | Map for maintaining change references. 
+-- Similar to AssumpMap
 type ChangeMap = Map.Map String (Change, Int)
 
 changeMap :: [Change] -> ChangeMap
@@ -77,6 +88,14 @@ changeLookup c m = let lookC = Map.lookup (c ^. id) m in
         getS Nothing = error $ "Change: " ++ (c ^. id) ++ 
           " referencing information not found in Change Map"
 
+-- Map for maintaining citation references. 
+-- Similar to AssumpMap.
+-- TODO: Needs chunks before it will work
+-- type BibMap = Map.Map String (Citation, Int)
+
+-- bibMap :: 
+
+-- Classes and instances --
 class HasAssumpRefs s where
   assumpRefTable :: Simple Lens s AssumpMap
   
@@ -121,7 +140,12 @@ instance Referable Section where
   refName (Section t _ _) = t
   refAdd  (Section _ _ r) = "Sec:" ++ r
   rType   _               = Sect
-
+  
+instance Referable Citation where
+  refName c = S "FIXME: Build citation refName"
+  refAdd c = "CITATIONPlaceholder" -- need unique identifier, not enforced by Citations yet
+  rType _ = Cite
+  
 instance Referable Contents where
   refName (Table _ _ _ _ r)     = S "Table:" :+: S r
   refName (Figure _ _ _ r)      = S "Figure:" :+: S r
@@ -135,7 +159,9 @@ instance Referable Contents where
   refName (UnlikelyChange ucc)  = S $ "UC:" ++ repUnd (ucc ^. id)--refName ucc
   refName (Enumeration _)       = error "Can't reference lists"
   refName (Paragraph _)         = error "Can't reference paragraphs"
-  refName (Bib _)               = error "Bib referencing unimplemented"
+  refName (Bib _)               = error $ 
+    "Bibliography list of references cannot be referenced. " ++
+    "You must reference the Section or an individual citation."
   rType (Table _ _ _ _ _)       = Tab
   rType (Figure _ _ _ _)        = Fig
   rType (Definition (Data _))   = Def
@@ -162,11 +188,10 @@ instance Referable Contents where
   refAdd (UnlikelyChange ucc)   = "UC:" ++ repUnd (ucc ^. id)--refName ucc
   refAdd (Enumeration _)        = error "Can't reference lists"
   refAdd (Paragraph _)          = error "Can't reference paragraphs"
-  refAdd (Bib _)                = error "Bib referencing unimplemented"
+  refAdd (Bib _)                = error $ 
+    "Bibliography list of references cannot be referenced. " ++
+    "You must reference the Section or an individual citation."
   refAdd _ = "Placeholder"
-
-rShow :: Referable a => a -> Sentence   
-rShow = S . show . rType
 
 -- | Automatically create the label for a definition
 getDefName :: DType -> String

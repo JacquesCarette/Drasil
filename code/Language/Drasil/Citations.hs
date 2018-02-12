@@ -4,6 +4,10 @@ module Language.Drasil.Citations where
 import Language.Drasil.People
 import Language.Drasil.Spec (Sentence(..))
 
+-- Citations should be overhauled.
+-- Chunk-ify them? It would enforce unique identifiers, and we could make
+-- many fields optional. Would also fix other issues I'm up against now.
+
 type BibRef = [Citation]
 type City   = Sentence
 type State  = Sentence
@@ -27,7 +31,7 @@ data CiteField = Author     People
                | Publisher  Sentence
                | Journal    Sentence
                | Year       Integer
-               | Date Integer Month Integer --date of published
+               | Date Integer Month Integer --date of published: Day Month Year
                | Page       Integer
                | Pages    (Integer, Integer)
                | Note       Sentence --extra text at the end of a citation
@@ -35,7 +39,7 @@ data CiteField = Author     People
                | School     Sentence
                | URL        Sentence
                | HowPub     Sentence --how it was published, when using Misc
-               | URLdate Integer Month Integer --date accessed/viewed
+               | URLdate Integer Month Integer --date accessed/viewed: Day Month Year
                | Editor     People
 
 data Month = Jan
@@ -106,3 +110,8 @@ getY [] = error "No year found"
 getY ((Year year):_) = year
 getY ((Date _ _ year):_) = year
 getY (_:xs) = getY xs
+
+getT :: [CiteField] -> Sentence
+getT [] = error "No title found"
+getT ((Title t):_) = t
+getT (_:fs) = getT fs

@@ -5,7 +5,7 @@
 module New where
 
 --import qualified Data.Function as F
-import Language.Haskell.TH
+--import Language.Haskell.TH
 
 -- base types
 data BooleanT
@@ -23,16 +23,32 @@ data Function
 type Label = String
 
 class Symantics repr where
-    block   :: [repr Statement] -> repr Block
-    assign  :: repr Value -> repr Value -> repr Statement
-    varDec  :: Label -> repr StateType -> repr Statement
+    block   :: (StatementSym reprS) => [reprS Statement] -> repr Block
     
+
+class StateTypeSym repr where
     bool   :: repr StateType
     int    :: repr StateType
     float  :: repr StateType
     char   :: repr StateType
     string :: repr StateType
     
+
+class StatementSym repr where
+    (&=)   :: (ValueSym reprV) => reprV Value -> reprV Value -> repr Statement
+    (&.=)  :: (ValueSym reprV) => Label -> reprV Value -> repr Statement
+    (&=.)  :: (ValueSym reprV) => reprV Value -> Label -> repr Statement
+    (&-=)  :: (ValueSym reprV) => reprV Value -> reprV Value -> repr Statement
+    (&.-=) :: (ValueSym reprV) => Label -> reprV Value -> repr Statement
+    (&+=)  :: (ValueSym reprV) => reprV Value -> reprV Value -> repr Statement
+    (&.+=) :: (ValueSym reprV) => Label -> reprV Value -> repr Statement
+    (&++)  :: (ValueSym reprV) => reprV Value -> repr Statement
+    (&.++) :: Label -> repr Statement
+    (&~-)  :: (ValueSym reprV) => reprV Value -> repr Statement
+    (&.~-) :: Label -> repr Statement
+    
+    assign  :: (ValueSym reprV) => reprV Value -> reprV Value -> repr Statement
+    varDec  :: (StateTypeSym reprST) => Label -> reprST StateType -> repr Statement
 
     
 class ValueSym repr where    
@@ -81,4 +97,5 @@ class ValueSym repr where
     cot :: repr Value -> repr Value
     
     
-class FunctionSym repr where
+--class FunctionSym repr where
+  

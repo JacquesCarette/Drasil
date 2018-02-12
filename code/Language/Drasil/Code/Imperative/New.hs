@@ -8,11 +8,11 @@ module New where
 --import Language.Haskell.TH
 
 -- base types
-data BooleanT
-data IntegerT
-data FloatT 
-data CharacterT 
-data StringT
+--data BooleanT
+--data IntegerT
+--data FloatT 
+--data CharacterT 
+--data StringT
 
 data Block
 data Statement
@@ -130,7 +130,7 @@ class ValueSym repr where
 
      --other operators ($)
     ($->) :: repr Value -> repr Value -> repr Value
-    ($.)  :: repr Value -> repr Function -> repr Value
+    ($.)  :: (FunctionSym reprF) => repr Value -> reprF Function -> repr Value
     ($:)  :: Label -> Label -> repr Value
     
     
@@ -144,5 +144,10 @@ class ValueSym repr where
     cot :: repr Value -> repr Value
     
     
---class FunctionSym repr where
-  
+class FunctionSym repr where
+    func :: (ValueSym reprV) => Label -> [reprV Value] -> repr Function
+    
+    listSize   :: repr Function
+    listAccess :: (ValueSym reprV) => reprV Value -> repr Function
+    listAppend :: (ValueSym reprV) => reprV Value -> repr Function
+    listExtend :: (StateTypeSym reprST) => reprST StateType -> repr Function

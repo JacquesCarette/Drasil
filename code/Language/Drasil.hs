@@ -28,7 +28,8 @@ module Language.Drasil (
   -- Chunk.CommonIdea
   , CommonIdea(..) , commonIdea, CI, getAcc
   -- Chunk.NamedIdea
-  , NamedIdea(..), NamedChunk, Idea(..), short, nc
+  , NamedIdea(..), NamedChunk, Idea(..), short, nc, IdeaDict
+  , nw -- bad name (historical)
   , compoundterm, for, for', for'', of_, of_', of_'', of__, of'', compoundNC, compoundNC'
   , compoundNC'', compoundNC''', with, with', and_, and_', andRT, aNP, the, a_
   , ofA,theCustom, this
@@ -54,8 +55,8 @@ module Language.Drasil (
   , Unitary(..), UnitaryChunk, unitary
   -- Chunk.Relation
   , NamedRelation, makeNR, RelationConcept, makeRC, makeRC', relat, ExprRelat
-  --Chunk.Wrapper
-  , cqs, qs, nw, CQSWrapper, NWrapper
+  --Chunk.Wrapper.????
+  , cqs, qs, CQSWrapper
   --Chunk.UWrapper 
   , UWrapper, uw, ucw, UCWrapper
   -- Chunks w/ Attributes
@@ -159,7 +160,6 @@ import Language.Drasil.Chunk.Unital(UnitalChunk(..), makeUCWDS, ucFromCV
 import Language.Drasil.Chunk.Unitary
 import Language.Drasil.Chunk.Relation(NamedRelation, makeNR, RelationConcept, 
                                       makeRC, makeRC')
-import Language.Drasil.Chunk.Wrapper
 import Language.Drasil.Chunk.Wrapper.QSWrapper
 import Language.Drasil.Chunk.Wrapper.UWrapper
 import Language.Drasil.ChunkDB

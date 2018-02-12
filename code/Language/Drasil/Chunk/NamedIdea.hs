@@ -1,5 +1,9 @@
 {-# LANGUAGE GADTs,Rank2Types #-}
-module Language.Drasil.Chunk.NamedIdea where
+module Language.Drasil.Chunk.NamedIdea (NamedIdea(..), Idea(..),
+  NamedChunk, nc, IdeaDict, compoundterm, short, nw,
+  compoundNC, compoundNC', compoundNC'', compoundNC''',
+  for, for', for'', of_, of_', of_'', of__, of'',
+  with, with', and_, and_', andRT, the, theCustom, this, aNP, a_, ofA) where
 
 import Language.Drasil.Chunk
 import Control.Lens (Simple, Lens, (^.))
@@ -42,6 +46,29 @@ instance Idea NamedChunk where
 -- | 'NamedChunk' constructor, takes an id and a term.
 nc :: String -> NP -> NamedChunk
 nc = NC
+
+-- | |IdeaDict| is the canonical dictionary associated to the |Idea| class
+-- don't export the record accessors
+data IdeaDict = IdeaDict { _nc :: NamedChunk, _mabbr :: Maybe String }
+instance Eq IdeaDict where
+  a == b = a ^. id == b ^. id
+instance Ord IdeaDict where
+  compare a b = compare (a ^. id) (b ^. id) -- FIXME : this is not a good order!
+instance Chunk IdeaDict where
+  id = inc . id
+instance NamedIdea IdeaDict where
+  term = inc . term
+instance Idea IdeaDict where
+  getA (IdeaDict _ b) = b
+  
+inc :: Simple Lens IdeaDict NamedChunk
+inc f (IdeaDict a b) = fmap (\x -> IdeaDict x b) (f a)
+
+-- Historical name: nw comes from 'named wrapped' from when
+-- |NamedIdea| exported |getA| (now in |Idea|). But there are
+-- no more wrappers, instead we have explicit dictionaries.
+nw :: Idea c => c -> IdeaDict
+nw c = IdeaDict (NC (c^.id) (c^.term)) (getA c)
 
 ----------------------
 -- various combinators

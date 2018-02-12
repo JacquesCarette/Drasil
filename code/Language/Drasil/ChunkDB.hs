@@ -10,7 +10,6 @@ module Language.Drasil.ChunkDB
 import Language.Drasil.Chunk
 import Language.Drasil.Chunk.Quantity
 import Language.Drasil.Chunk.NamedIdea
-import Language.Drasil.Chunk.Wrapper
 import Language.Drasil.Chunk.Concept 
 import Language.Drasil.Unit
 
@@ -38,7 +37,7 @@ type UnitMap = Map.Map String UnitDefn
 -- Until these are built through automated means, there will
 -- likely be some 'manual' duplication of terms as this map will contain all
 -- quantities, concepts, etc.
-type TermMap = Map.Map String NWrapper
+type TermMap = Map.Map String IdeaDict
 
 -- | Smart constructor for a 'SymbolMap'
 symbolMap :: (Quantity c) => [c] -> SymbolMap
@@ -73,7 +72,7 @@ getUnitLup c m = let lookC = symbLookup c (m ^. symbolTable) in
                  getUnit lookC
 
 -- | Looks up an id in the term table. If nothing is found, an error is thrown
-termLookup :: (Chunk c) => c -> TermMap -> NWrapper
+termLookup :: (Chunk c) => c -> TermMap -> IdeaDict
 termLookup c m = let lookC = Map.lookup (c ^. id) m in
                  getT lookC
   where getT (Just x) = x

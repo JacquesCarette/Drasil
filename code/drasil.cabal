@@ -102,7 +102,6 @@ library
     , Language.Drasil.Chunk.Unital
     , Language.Drasil.Chunk.Unitary
     , Language.Drasil.Chunk.VarChunk
-    , Language.Drasil.Chunk.Wrapper
     , Language.Drasil.Chunk.Wrapper.QSWrapper
     , Language.Drasil.Chunk.Wrapper.UWrapper
     , Language.Drasil.ChunkDB

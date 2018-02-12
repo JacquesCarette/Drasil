@@ -100,7 +100,7 @@ data Literature = Lit Topic -- ^ literature
                 | Doc' Topic -- ^ existing documentation for (plural of topic)
                 | Manual Topic -- ^ manual
 
-type Topic = NWrapper
+type Topic = IdeaDict
 
 -- | For creating the table of units intro
 data TUIntro = System -- ^ System of units (defaults to SI)
@@ -221,7 +221,7 @@ data AppndxSec = AppndxVerb Section | AppndxProg [Contents]
 {--}
 
 -- | Creates a document from a document description and system information
-mkDoc :: DocDesc -> (NWrapper -> NWrapper -> Sentence) -> SystemInformation -> Document
+mkDoc :: DocDesc -> (IdeaDict -> IdeaDict -> Sentence) -> SystemInformation -> Document
 mkDoc l comb si@(SI {_sys = sys, _kind = kind, _authors = authors}) = Document 
   ((nw kind) `comb` (nw sys)) (manyNames authors) (mkSections si l)
 
@@ -491,7 +491,7 @@ mkAppndxSec (AppndxProg cs) = SRS.appendix cs []
 {--}
 
 -- Helper
-siSys :: SystemInformation -> NWrapper
+siSys :: SystemInformation -> IdeaDict
 siSys (SI {_sys = sys}) = nw sys
 
 --BELOW IS IN THIS FILE TEMPORARILY--

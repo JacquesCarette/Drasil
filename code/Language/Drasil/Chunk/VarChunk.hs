@@ -5,7 +5,6 @@ import Language.Drasil.Chunk
 import Language.Drasil.Chunk.NamedIdea
 import Language.Drasil.Chunk.SymbolForm
 import Control.Lens ((^.), set, Simple, Lens)
-import Language.Drasil.Chunk.Wrapper (NWrapper, nw)
 
 import Language.Drasil.Symbol
 import Language.Drasil.Space
@@ -15,7 +14,7 @@ import Language.Drasil.NounPhrase (NP)
 import Prelude hiding (id)
   
 -- | VarChunks are Quantities that have symbols, but not units.
-data VarChunk = VC { _ni :: NWrapper
+data VarChunk = VC { _ni :: IdeaDict
                    , _vsymb :: StagedSymbolChunk
                    , _vtyp  :: Space }
 

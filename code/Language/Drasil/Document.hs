@@ -5,7 +5,6 @@ import Language.Drasil.Chunk (id)
 import Language.Drasil.Chunk.Eq
 import Language.Drasil.Chunk.Relation
 import Language.Drasil.Chunk.NamedIdea
-import Language.Drasil.Chunk.Wrapper
 import Language.Drasil.Spec (Sentence(..), RefType(..), (+:+))
 import Language.Drasil.RefHelpers
 import Language.Drasil.Expr
@@ -46,10 +45,10 @@ data Contents = Table [Sentence] [[Sentence]] Title Bool
                -- looking up variables (currently a hack).
                | Enumeration ListType -- ^ Lists
                | Figure Label Filepath MaxWidthPercent -- ^ Should use relative file path.
-               | Requirement NWrapper
-               | Assumption NWrapper
-               | LikelyChange NWrapper
-               | UnlikelyChange NWrapper
+               | Requirement IdeaDict
+               | Assumption IdeaDict
+               | LikelyChange IdeaDict
+               | UnlikelyChange IdeaDict
                | Bib BibRef
      --        UsesHierarchy [(ModuleChunk,[ModuleChunk])]
                | Graph [(Sentence, Sentence)] (Maybe Width) (Maybe Height) Label

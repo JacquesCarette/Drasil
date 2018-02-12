@@ -19,6 +19,7 @@ data Statement
 data Value
 data StateType
 data Function
+data IOType
 
 type Label = String
 
@@ -50,6 +51,52 @@ class StatementSym repr where
     assign  :: (ValueSym reprV) => reprV Value -> reprV Value -> repr Statement
     varDec  :: (StateTypeSym reprST) => Label -> reprST StateType -> repr Statement
 
+    print      :: (StateTypeSym reprST, ValueSym reprV) => 
+                    reprST StateType -> reprV Value -> repr Statement
+    printLn    :: (StateTypeSym reprST, ValueSym reprV) =>
+                    reprST StateType -> reprV Value -> repr Statement
+    printStr   :: String -> repr Statement
+    printStrLn :: String -> repr Statement
+    
+    print'      :: (IOSym reprI, StateTypeSym reprST, ValueSym reprV) => 
+                     reprI IOType -> reprST StateType -> reprV Value -> repr Statement
+    printLn'    :: (IOSym reprI, StateTypeSym reprST, ValueSym reprV) => 
+                     reprI IOType -> reprST StateType -> reprV Value -> repr Statement
+    printStr'   :: (IOSym reprI) => reprI IOType -> String -> repr Statement
+    printStrLn' :: (IOSym reprI) => reprI IOType -> String -> repr Statement
+    
+    printFile      :: (StateTypeSym reprST, ValueSym reprV) =>
+                        reprV Value -> reprST StateType -> reprV Value -> repr Statement
+    printFileLn    :: (StateTypeSym reprST, ValueSym reprV) =>
+                        reprV Value -> reprST StateType -> reprV Value -> repr Statement
+    printFileStr   :: (ValueSym reprV) => reprV Value -> String -> repr Statement
+    printFileStrLn :: (ValueSym reprV) => reprV Value -> String -> repr Statement
+
+    getInput         :: (StateTypeSym reprST, ValueSym reprV) =>
+                          reprST StateType -> reprV Value -> repr Statement
+    getFileInput     :: (StateTypeSym reprST, ValueSym reprV) =>
+                          reprV Value -> reprST StateType -> reprV Value -> repr Statement
+    discardFileInput :: (ValueSym reprV) => reprV Value -> repr Statement
+    getFileInputLine :: (ValueSym reprV) => 
+                          reprV Value -> reprV Value -> repr Statement
+    discardFileLine  :: (ValueSym reprV) => reprV Value -> repr Statement
+    getFileInputAll  :: (ValueSym reprV) => 
+                          reprV Value -> reprV Value -> repr Statement
+
+    openFileR :: (ValueSym reprV) => 
+                   reprV Value -> reprV Value -> repr Statement
+    openFileW :: (ValueSym reprV) => 
+                   reprV Value -> reprV Value -> repr Statement
+    closeFile :: (ValueSym reprV) => reprV Value -> repr Statement
+
+    return    :: (ValueSym reprV) => reprV Value -> repr Statement
+    returnVar :: Label -> repr Statement
+
+    
+class IOSym repr where
+    console :: repr IOType
+    file    :: (ValueSym reprV) => reprV Value -> repr IOType
+    
     
 class ValueSym repr where    
     litBool   :: Bool -> repr Value

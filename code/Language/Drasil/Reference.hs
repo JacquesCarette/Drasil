@@ -25,8 +25,8 @@ data ReferenceDB = RDB
   , changeDB :: ChangeMap 
   }
 
-rdb :: AssumpMap -> ReqMap -> ChangeMap -> ReferenceDB
-rdb = RDB
+rdb :: [AssumpChunk] -> [ReqChunk] -> [Change] -> ReferenceDB
+rdb assumps reqs changes = RDB (assumpMap assumps) (reqMap reqs) (changeMap changes)
 
 -- | Map for maintaining assumption references. 
 -- The Int is that reference's number.
@@ -53,6 +53,13 @@ reqMap rs = Map.fromList $ zip (map (^. id) (frs ++ nfrs)) ((zip frs [1..]) ++
   where (frs, nfrs)  = partition (isFuncRec . reqType) rs
         isFuncRec FR = True
         isFuncRec _  = False
+        
+reqLookup :: Chunk c => c -> ReqMap -> (ReqChunk, Int)
+reqLookup r m = let lookC = Map.lookup (r ^. id) m in
+                   getS lookC
+  where getS (Just x) = x
+        getS Nothing = error $ "Requirement: " ++ (r ^. id) ++ 
+          " referencing information not found in Requirement Map"
 
 type ChangeMap = Map.Map String (Change, Int)
 
@@ -62,6 +69,13 @@ changeMap cs = Map.fromList $ zip (map (^. id) (lcs ++ ulcs))
   where (lcs, ulcs) = partition (isLikely . chngType) cs
         isLikely Likely = True
         isLikely _ = False
+        
+changeLookup :: Chunk c => c -> ChangeMap -> (Change, Int)
+changeLookup c m = let lookC = Map.lookup (c ^. id) m in
+                   getS lookC
+  where getS (Just x) = x
+        getS Nothing = error $ "Change: " ++ (c ^. id) ++ 
+          " referencing information not found in Change Map"
 
 class HasAssumpRefs s where
   assumpRefTable :: Simple Lens s AssumpMap

@@ -14,18 +14,18 @@ import Control.Lens((^.))
 -- TABLE OF SYMBOLS --
 ----------------------
 
-cpSymbols, cpSymbolsAll, inputSymbols, outputSymbols :: [QWrapper]
+cpSymbols, cpSymbolsAll, inputSymbols, outputSymbols :: [QuantityDict]
 
 cpSymbolsAll = cpSymbols ++ inputSymbols ++ outputSymbols
 
-cpSymbols = (map qs cpUnits) ++ 
-  (map qs cpUnitless) ++ (map qs cpInputConstraints)
+cpSymbols = (map qw cpUnits) ++ 
+  (map qw cpUnitless) ++ (map qw cpInputConstraints)
 
-inputSymbols = map qs [QP.position, QP.velocity, QP.force, QM.orientation, 
+inputSymbols = map qw [QP.position, QP.velocity, QP.force, QM.orientation, 
   QP.angularVelocity, QP.linearVelocity, QP.gravitationalConst, QPP.mass, 
-  QPP.len, QP.momentOfInertia, QP.torque] ++ [qs QP.restitutionCoef]
+  QPP.len, QP.momentOfInertia, QP.torque] ++ [qw QP.restitutionCoef]
 
-outputSymbols = map qs [QP.position, QP.velocity, QM.orientation, 
+outputSymbols = map qw [QP.position, QP.velocity, QM.orientation, 
   QP.angularVelocity]
 
 

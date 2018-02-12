@@ -25,7 +25,7 @@ import Prelude hiding (id)
 
 -- | A bit of a misnomer as it's really a map of all quantities, for retrieving
 -- symbols and their units.
-type SymbolMap  = Map.Map String QWrapper
+type SymbolMap  = Map.Map String QuantityDict
 
 -- | A map of all concepts, normally used for retrieving definitions.
 type ConceptMap = Map.Map String CWrapper
@@ -41,26 +41,26 @@ type TermMap = Map.Map String IdeaDict
 
 -- | Smart constructor for a 'SymbolMap'
 symbolMap :: (Quantity c) => [c] -> SymbolMap
-symbolMap cs = Map.fromList (map (\x -> ((x ^. id), qs x)) cs)
+symbolMap cs = Map.fromList (map (\x -> (x ^. id, qw x)) cs)
 
 -- | Smart constructor for a 'TermMap'
 termMap :: (Idea c) => [c] -> TermMap
-termMap ts = Map.fromList (map (\x -> ((x ^. id), nw x)) ts)
+termMap ts = Map.fromList (map (\x -> (x ^. id, nw x)) ts)
 
 -- | Smart constructor for a 'ConceptMap'
 conceptMap :: (Concept c) => [c] -> ConceptMap
-conceptMap cs = Map.fromList (map (\x -> ((x ^. id), cw x)) cs)
+conceptMap cs = Map.fromList (map (\x -> (x ^. id, cw x)) cs)
 
 -- | Smart constructor for a 'UnitMap'
 unitMap :: (Unit u) => [u] -> UnitMap
-unitMap us = Map.fromList (map (\x -> ((x ^. id), unitWrapper x)) us)
+unitMap us = Map.fromList (map (\x -> (x ^. id, unitWrapper x)) us)
 
 -- | Get all the elements of one of our tables
 elements :: Map.Map k a -> [a]
 elements m = Map.elems m
 
 -- | Looks up an id in the symbol table. If nothing is found, an error is thrown
-symbLookup :: (Chunk c) => c -> SymbolMap -> QWrapper
+symbLookup :: (Chunk c) => c -> SymbolMap -> QuantityDict
 symbLookup c m = let lookC = Map.lookup (c ^. id) m in
                  getS lookC
   where getS (Just x) = x

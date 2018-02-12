@@ -10,8 +10,8 @@ import Control.Lens (Simple, Lens, (^.), set)
 
 import Prelude hiding (id)
 
-type Inputs = [QWrapper]
-type Outputs = [QWrapper]
+type Inputs = [QuantityDict]
+type Outputs = [QuantityDict]
 
 type InputConstraints  = [TheoryConstraint]
 type OutputConstraints = [TheoryConstraint]

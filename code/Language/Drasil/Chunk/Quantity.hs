@@ -1,7 +1,6 @@
-{-# OPTIONS -Wall #-}
 {-# LANGUAGE GADTs,Rank2Types #-}
 module Language.Drasil.Chunk.Quantity 
-  ( Quantity(..), QWrapper, qw, symbol, eqSymb, codeSymb, qs
+  ( Quantity(..), QuantityDict, qw, symbol, eqSymb, codeSymb,
   ) where
 
 import Control.Lens
@@ -46,41 +45,37 @@ instance Quantity ConVar where
   getUnit _ = Nothing
   getStagedS (CV _ s _) = s
 
-data QWrapper where
-  QW :: (Quantity q) => q -> QWrapper
-  
-instance Chunk QWrapper where
-  id = qlens id
-  
-instance NamedIdea QWrapper where
-  term = qlens term
+data QuantityDict = QD { _id :: IdeaDict, _typ :: Space,
+  _symb :: SF.Stage -> SF.SF,
+  _unit :: Maybe UnitDefn, _stagedS :: SF.StagedSymbolChunk }
 
-instance Idea QWrapper where
-  getA (QW a) = getA a
+instance Chunk QuantityDict where
+  id = qlens . id
   
-instance Quantity QWrapper where
-  typ = qlens typ
-  getSymb s (QW a) = getSymb s a
-  getUnit (QW a) = getUnit a
-  getStagedS (QW a) = getStagedS a
+instance NamedIdea QuantityDict where
+  term = qlens . term
+
+instance Idea QuantityDict where
+  getA  qd = getA (qd ^. qlens)
   
-instance Eq QWrapper where
+instance Quantity QuantityDict where
+  typ f qd = fmap (\x -> qd {_typ = x}) (f (_typ qd))
+  getSymb s qd = _symb qd s
+  getUnit qd = _unit qd
+  getStagedS qd = _stagedS qd
+  
+instance Eq QuantityDict where
   a == b = (a ^. id) == (b ^. id)
 
-instance Ord QWrapper where
+instance Ord QuantityDict where
   compare a b = -- FIXME: Ordering hack. Should be context-dependent
     compare ((getSymb SF.Equational a) ^. SF.symbol) ((getSymb SF.Equational b) ^. SF.symbol)
 
-qlens :: (forall c. (Quantity c) => 
-  Simple Lens c a) -> Simple Lens QWrapper a
-qlens l f (QW a) = fmap (\x -> QW (set l x a)) (f (a ^. l))
+qlens :: Simple Lens QuantityDict IdeaDict
+qlens f qd = fmap (\x -> qd {_id = x}) (f (_id qd))
 
--- | qw and qs do the same thing since SymbolForm was removed as a constraint
--- on many chunks and Quantity now must have a Symbol.
-qw, qs :: Quantity q => q -> QWrapper
-qw = QW
-
-qs = QW
+qw :: Quantity q => q -> QuantityDict
+qw q = QD (nw q) (q^.typ) (\stg -> getSymb stg q) (getUnit q) (getStagedS q)
 
 -- | Helper function for getting a symbol at a given stage from a quantity.
 symbol :: Quantity q => SF.Stage -> q -> Symbol

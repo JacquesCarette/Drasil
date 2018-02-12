@@ -1,78 +1,12 @@
 module Language.Drasil.TeX.AST where
 
-import Data.List (intersperse)
-
-import Language.Drasil.Expr (Variable)
 import Language.Drasil.Symbol (Symbol)
 import Language.Drasil.Unicode (Greek,Special)
 import Language.Drasil.Spec (USymb, RefType)
 import Language.Drasil.Citations (Month(..))
 import Language.Drasil.People (People)
 import Language.Drasil.Document (MaxWidthPercent, DType)
-
-data Expr = Var  Variable
-          | Dbl  Double
-          | Int  Integer
-          | Bln  Bool
-          | Mul  Expr Expr
-          | Add  Expr Expr
-          | Frac Expr Expr
-          | Div  Expr Expr
-          | Pow  Expr Expr
-          | Sub  Expr Expr
-          | And  Expr Expr
-          | Or   Expr Expr
-          | Sym  Symbol
-          | Eq   Expr Expr
-          | NEq  Expr Expr
-          | Lt   Expr Expr
-          | Gt   Expr Expr
-          | LEq   Expr Expr
-          | GEq   Expr Expr
-          | Dot  Expr Expr
-          | Not  Expr 
-          | Neg  Expr
-          | Call Expr [Expr]
-          | Case [(Expr,Expr)]
-          | Op Function [Expr]
-          | Grouping Expr
-          | IsIn  Expr Set
-          | Forall Symbol Expr
-          | Exists Symbol Expr
-          | Impl Expr Expr
-          | Iff  Expr Expr
-          | Mtx [[Expr]]
-          | Index Expr Expr
-          
-data Function = Log
-           | Summation (Maybe ((Symbol, Expr),Expr))
-           | Product (Maybe ((Symbol, Expr),Expr))
-           | Abs
-           | Norm
-           | Integral ((Maybe Expr),(Maybe Expr)) Symbol
-           | Sin
-           | Cos
-           | Tan
-           | Sec
-           | Csc
-           | Cot
-           | Cross
-           | Exp
-           | Sqrt           
-
-data Set = Integer
-         | Rational
-         | Real
-         | Natural
-         | Boolean
-         | Char
-         | String
-         | Radians
-         | Vect Set
-         | Obj String
-         | DiscreteI [Int]
-         | DiscreteD [Double]
-         | DiscreteS [String]
+import Language.Drasil.Printing.AST
 
 infixr 5 :+:
 data Spec = E Expr
@@ -127,38 +61,6 @@ data ListType = Item [ItemType]
 
 data ItemType = Flat Spec
               | Nested Spec ListType
-
-instance Show Function where
-  show Log            = "\\log"
-  show (Summation _)  = "\\displaystyle\\sum"
-  show (Product _)    = "\\displaystyle\\prod"
-  show Abs            = ""
-  show Norm           = ""
-  show (Integral _ _) = "\\int"
-  show Sin            = "\\sin"
-  show Cos            = "\\cos"
-  show Tan            = "\\tan"
-  show Sec            = "\\sec"
-  show Csc            = "\\csc"
-  show Cot            = "\\cot"
-  show Cross          = "\\times"
-  show Exp            = "e"
-  show Sqrt           = "\\sqrt"
-  
-instance Show Set where
-  show Integer  = "\\mathbb{Z}"
-  show Rational = "\\mathbb{Q}"
-  show Real     = "\\mathbb{R}"
-  show Natural  = "\\mathbb{N}"
-  show Boolean  = "\\mathbb{B}"
-  show Char     = "Char"
-  show String   = "String"
-  show Radians  = "rad"
-  show (Vect a) = "V" ++ show a
-  show (Obj a)  = a
-  show (DiscreteI a)  = "\\{" ++ (concat $ intersperse ", " (map show a)) ++ "\\}"
-  show (DiscreteD a)  = "\\{" ++ (concat $ intersperse ", " (map show a)) ++ "\\}"
-  show (DiscreteS a)  = "\\{" ++ (concat $ intersperse ", " a) ++ "\\}"
 
 type BibRef = [Citation]
 type City   = Spec

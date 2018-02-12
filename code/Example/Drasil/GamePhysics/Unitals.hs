@@ -265,7 +265,7 @@ cpInputConstraints = map (\x -> uq x (0.1 :: Double))
   veloCons, angVeloCons, forceCons, torqueCons, restCoefCons]
 
 nonNegativeConstraint :: Constraint -- should be pulled out an put somewhere for generic constraints
-nonNegativeConstraint = physc $ \c -> c $>= (Dbl 0.0)
+nonNegativeConstraint = physc $ UpFrom $ Inc 0
 
 lengthCons     = constrained' QPP.len               [nonNegativeConstraint] (Dbl 44.2)
 massCons       = constrained' QPP.mass              [nonNegativeConstraint] (Dbl 56.2)
@@ -277,8 +277,7 @@ orientCons     = constrained' QM.orientation        [] (V "pi/2") -- physical co
 angVeloCons    = constrained' QP.angularVelocity    [] (Dbl 2.1)
 forceCons      = constrained' QP.force              [] (Dbl 98.1)
 torqueCons     = constrained' QP.torque             [] (Dbl 200)
-restCoefCons   = constrained' QP.restitutionCoef    [nonNegativeConstraint,
-                                                    physc $ \c -> c $<= (Dbl 1.0)] (Dbl 0.8)
+restCoefCons   = constrained' QP.restitutionCoef    [physc $ Bounded (Inc 0) (Inc 1)] (Dbl 0.8)
 
 ---------------------
 -- INSTANCE MODELS --

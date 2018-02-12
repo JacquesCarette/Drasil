@@ -30,7 +30,7 @@ eBalanceOnWtr = makeRC "eBalanceOnWtr" (nounPhraseSP $ "Energy balance on " ++
   "water to find the temperature of the water") balWtrDesc balWtr_Rel
 
 balWtr_Rel :: Relation
-balWtr_Rel = (Deriv Total (C temp_W) (C time)) $= (Int 1) / (C tau_W) *
+balWtr_Rel = (Deriv Total (C temp_W) time) $= (Int 1) / (C tau_W) *
   (((C temp_C) - (FCall (C temp_W) [C time])) +
   (C eta) * ((FCall (C temp_PCM) [C time]) - (FCall (C temp_W) [C time])))
 
@@ -63,7 +63,7 @@ eBalanceOnPCM = makeRC "eBalanceOnPCM" (nounPhraseSP
   balPCMDesc balPCM_Rel
 
 balPCM_Rel :: Relation
-balPCM_Rel = (Deriv Total (C temp_PCM) (C time)) $=
+balPCM_Rel = (Deriv Total (C temp_PCM) time) $=
   Case [case1, case2, case3, case4]
 
   where case1 = (((Int 1) / (C tau_S_P)) * ((FCall (C temp_W) [C time]) -
@@ -160,11 +160,11 @@ htPCMDesc = foldlSent [S "The above", phrase equation,
   S "when", phrase melting, S "starts is", getES pcm_initMltE +:+.
   sParen (unwrap $ getUnit pcm_initMltE), S "The", phrase energy,
   S "required to melt all of the", short phsChgMtrl, S "is",
-  E (C htFusion :* C pcm_mass), sParen (unwrap $ getUnit pcm_initMltE) +:+.
+  E (C htFusion * C pcm_mass), sParen (unwrap $ getUnit pcm_initMltE) +:+.
   sParen (acroDD 3), phrase heat_cap_spec `ofThe` phrase liquid,
   short phsChgMtrl, S "is", getES htCap_L_P,
   sParen (unwrap $ getUnit htCap_L_P) `sAnd` S "the", phrase change, S "in",
-  phrase temp, S "is", E (C temp_PCM :- C temp_melt_P) +:+.
+  phrase temp, S "is", E (C temp_PCM - C temp_melt_P) +:+.
   sParen (unwrap $ getUnit temp_melt_P), getES pcm_E, S "during",
   phrase melting, S "of the", short phsChgMtrl, S "is found using the", 
   phrase energy, S "required at", S "instant" +:+ phrase melting `ofThe`

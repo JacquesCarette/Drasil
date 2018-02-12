@@ -53,10 +53,11 @@ sspInputs = [elasticMod, cohesion, poissnsRatio, fricAngle, dryWeight,
 sspOutputs :: [ConstrConcept]
 sspOutputs = [fs, coords, dx_i, dy_i]
 
+{-
 monotonicIn :: [Constraint]  --FIXME: Move this?
 monotonicIn = [physc $ \_ -> -- FIXME: Hack with "index" !
-  ForAll (eqSymb index) (C index `IsIn` Natural :=>
-  Grouping (inx xi 0 $< inx xi 1 :=> inx yi 0 $< inx yi 1))]
+  (idx xi (C index) $< idx xi (C index + 1) $=> idx yi (C index) $< idx yi (C index + 1))]
+-}
 
 defultUncrt :: Double
 defultUncrt = 0.1
@@ -77,12 +78,12 @@ cohesion = uqc "c'" (cn $ "effective cohesion")
   (prime $ Atomic "c") pascal Real [gtZeroConstr] (Dbl 10) defultUncrt
 
 poissnsRatio = uq (constrained' SM.poissnsR
-  [physc $ \c -> (Int 0) $< c $< (Int 1)] (Dbl 0.4)) defultUncrt
+  [physc $ Bounded (Exc 0) (Exc 1)] (Dbl 0.4)) defultUncrt
 
 fricAngle = uqc "varphi'" (cn $ "effective angle of friction")
   ("The angle of inclination with respect to the horizontal axis of " ++
   "the Mohr-Coulomb shear resistance line") --http://www.geotechdata.info
-  (prime $ Greek Phi_V) degree Real [physc $ \c -> (Int 0) $< c $< (Int 90)]
+  (prime $ Greek Phi_V) degree Real [physc $ Bounded (Exc 0) (Exc 90)]
   (Dbl 25) defultUncrt
 
 dryWeight = uqc "gamma" (cn $ "dry unit weight")
@@ -117,7 +118,7 @@ coords = cuc' "(x,y)"
   (cn $ "cartesian position coordinates" )
   ("y is considered parallel to the direction of the force of " ++
   "gravity and x is considered perpendicular to y")
-  (Atomic "(x,y)") metre Real monotonicIn (Dbl 1)
+  (Atomic "(x,y)") metre Real [] (Dbl 1)
 
 dx_i = cuc' "dx_i" (cn $ "displacement") ("in the x-ordinate direction " ++
   fsi) (Concat [Greek Delta_L, Atomic "x"]) metre Real [] (Dbl 1)
@@ -428,10 +429,10 @@ index = cvRs (dcc "index" (nounPhraseSP "index")
 
 --FIXME: possibly move to Language/Drasil/Expr.hs
 indx1 :: (Quantity a) => a -> Expr
-indx1 a = Index (C a) (Int 1)
+indx1 a = idx (C a) (Int 1)
 
 indxn :: (Quantity a) => a -> Expr
-indxn a = Index (C a) (C numbSlices)
+indxn a = idx (C a) (C numbSlices)
 
 inxi, inxiP1, inxiM1 :: Quantity e => e -> Expr
 inxiP1 e = inx e 1
@@ -440,9 +441,9 @@ inxiM1 e = inx e (-1)
 
 inx :: Quantity e => e -> Integer -> Expr
 inx e n 
-  | n < 0     = Index (C e) (C index - Int (-n))
-  | n == 0    = Index (C e) (C index)
-  | otherwise = Index (C e) (C index + Int n)
+  | n < 0     = idx (C e) (C index - Int (-n))
+  | n == 0    = idx (C e) (C index)
+  | otherwise = idx (C e) (C index + Int n)
 
 sum1toN :: Expr -> Expr
 sum1toN = defsum (eqSymb index) 1 (C numbSlices)

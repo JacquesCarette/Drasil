@@ -16,9 +16,9 @@ import Language.Drasil.Chunk.ExprRelat
 
 import Language.Drasil.NounPhrase (NP)
 
--- | A NamedRelation is just the combination of a 'NamedIdea' with a 'Relation'
+-- | A NamedRelation is just the combination of an 'Idea' with a 'Relation'
 data NamedRelation where 
-  NR :: NamedIdea c => c -> Relation -> NamedRelation
+  NR :: Idea c => c -> Relation -> NamedRelation
 
 -- | Helper for retrieving the NamedIdea from a NamedRelation and wrapping it as
 -- an NWrapper
@@ -30,6 +30,8 @@ instance Chunk NamedRelation where
 
 instance NamedIdea NamedRelation where
   term = cp term
+
+instance Idea NamedRelation where
   getA (NR c _) = getA c
   
 instance ExprRelat NamedRelation where
@@ -43,6 +45,8 @@ instance Chunk RelationConcept where
 
 instance NamedIdea RelationConcept where
   term = rcl term
+
+instance Idea RelationConcept where
   getA (RC c _) = getA c
   
 instance Concept RelationConcept where

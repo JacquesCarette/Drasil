@@ -5,7 +5,6 @@ import Language.Drasil.Chunk
 import Language.Drasil.Chunk.NamedIdea
 import Language.Drasil.Chunk.SymbolForm
 import Control.Lens ((^.), set, Simple, Lens)
-import Language.Drasil.Chunk.Wrapper (NWrapper, nw)
 
 import Language.Drasil.Symbol
 import Language.Drasil.Space
@@ -15,7 +14,7 @@ import Language.Drasil.NounPhrase (NP)
 import Prelude hiding (id)
   
 -- | VarChunks are Quantities that have symbols, but not units.
-data VarChunk = VC { _ni :: NWrapper
+data VarChunk = VC { _ni :: IdeaDict
                    , _vsymb :: StagedSymbolChunk
                    , _vtyp  :: Space }
 
@@ -27,6 +26,8 @@ instance Chunk VarChunk where
 
 instance NamedIdea VarChunk where
   term = nl term
+
+instance Idea VarChunk where
   getA (VC n _ _) = getA n
 
 nl :: (forall c. (NamedIdea c) => Simple Lens c a) -> Simple Lens VarChunk a
@@ -51,17 +52,17 @@ vc i des sym space = VC (nw $ nc i des) (ssc' i sym) space
 vcSt :: String -> NP -> StagedSymbolChunk -> Space -> VarChunk
 vcSt i des sym space = VC (nw $ nc i des) sym space
 
--- | Creates a VarChunk from a 'NamedIdea', symbol, and space
-vc' :: NamedIdea c => c -> Symbol -> Space -> VarChunk
+-- | Creates a VarChunk from an 'Idea', symbol, and space
+vc' :: Idea c => c -> Symbol -> Space -> VarChunk
 vc' n s t = VC (nw n) (ssc' (n ^. id) s) t
 
-codeVC :: NamedIdea c => c -> Symbol -> Space -> VarChunk
+codeVC :: Idea c => c -> Symbol -> Space -> VarChunk
 codeVC  n s t = VC (nw n) (ssc'' (n ^. id) [(Implementation,s)]) t
 
--- | Creates a VarChunk from a 'NamedIdea''s id and term and symbol
-vc'' :: NamedIdea c => c -> Symbol -> Space -> VarChunk
+-- | Creates a VarChunk from an 'Idea''s id and term and symbol
+vc'' :: Idea c => c -> Symbol -> Space -> VarChunk
 vc'' n sy space = vc (n ^. id) (n ^. term) sy space
 
--- | Creates a VarChunk from an id, term, symbol, and 
+-- | Creates a VarChunk from an id, term, symbol, and space
 makeVCObj :: String -> NP -> Symbol -> String -> VarChunk
 makeVCObj i des sym s = VC (nw $ nc i des) (ssc' i sym) (Obj s)

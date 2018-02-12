@@ -1,5 +1,9 @@
 {-# LANGUAGE GADTs,Rank2Types #-}
-module Language.Drasil.Chunk.NamedIdea where
+module Language.Drasil.Chunk.NamedIdea (NamedIdea(..), Idea(..),
+  NamedChunk, nc, IdeaDict, compoundterm, short, nw,
+  compoundNC, compoundNC', compoundNC'', compoundNC''',
+  for, for', for'', of_, of_', of_'', of__, of'',
+  with, with', and_, and_', andRT, the, theCustom, this, aNP, a_, ofA) where
 
 import Language.Drasil.Chunk
 import Control.Lens (Simple, Lens, (^.))
@@ -9,18 +13,21 @@ import Language.Drasil.NounPhrase
 
 import Prelude hiding (id)
 
--- | A NamedIdea is a 'Chunk' (has 'id'), which also has a 'term'
--- and /may/ have an accronym/abbreviation.
+-- | A NamedIdea is a 'term' that we've identified (has an 'id') as 
+-- being worthy of naming.
 class Chunk c => NamedIdea c where
   -- | Lens to the term (a noun phrase)
   term :: Simple Lens c NP
-  -- | Provides (Just abbreviation) or Nothing if it does not exist
+
+-- | An |Idea| is the 'meet' of |NamedIdea| and |CommonIdea|.
+-- In other words, it /may/ have an acronym/abbreviation.
+class NamedIdea c => Idea c where
   getA :: c -> Maybe String
   --Get Abbreviation/Acronym? These might need to be separated 
   --depending on contexts, but for now I don't see a problem with it.
 
 -- | Get short form (if it exists), else get term.
-short :: NamedIdea c => c -> Sentence
+short :: Idea c => c -> Sentence
 short c = maybe (phrase (c ^. term)) (\x -> x) (fmap S $ getA c)
 
 -- === DATA TYPES/INSTANCES === --
@@ -33,11 +40,35 @@ instance Chunk NamedChunk where
   id f (NC a b) = fmap (\x -> NC x b) (f a)
 instance NamedIdea NamedChunk where
   term f (NC a b) = fmap (\x -> NC a x) (f b)
+instance Idea NamedChunk where
   getA (NC _ _) = Nothing
   
 -- | 'NamedChunk' constructor, takes an id and a term.
 nc :: String -> NP -> NamedChunk
 nc = NC
+
+-- | |IdeaDict| is the canonical dictionary associated to the |Idea| class
+-- don't export the record accessors
+data IdeaDict = IdeaDict { _nc :: NamedChunk, _mabbr :: Maybe String }
+instance Eq IdeaDict where
+  a == b = a ^. id == b ^. id
+instance Ord IdeaDict where
+  compare a b = compare (a ^. id) (b ^. id) -- FIXME : this is not a good order!
+instance Chunk IdeaDict where
+  id = inc . id
+instance NamedIdea IdeaDict where
+  term = inc . term
+instance Idea IdeaDict where
+  getA (IdeaDict _ b) = b
+  
+inc :: Simple Lens IdeaDict NamedChunk
+inc f (IdeaDict a b) = fmap (\x -> IdeaDict x b) (f a)
+
+-- Historical name: nw comes from 'named wrapped' from when
+-- |NamedIdea| exported |getA| (now in |Idea|). But there are
+-- no more wrappers, instead we have explicit dictionaries.
+nw :: Idea c => c -> IdeaDict
+nw c = IdeaDict (NC (c^.id) (c^.term)) (getA c)
 
 ----------------------
 -- various combinators
@@ -82,7 +113,7 @@ for t1 t2 = (titleize $ t1 ^. term) +:+ S "for" +:+ (titleize $ t2 ^. term)
 
 -- | Similar to 'for', but uses titleized version of term 1 with the abbreviation
 -- (if it exists, phrase otherwise) for term 2
-for' :: (NamedIdea c, NamedIdea d) => c -> d -> Sentence
+for' :: (NamedIdea c, Idea d) => c -> d -> Sentence
 for' t1 t2 = (titleize $ t1 ^. term) +:+ S "for" +:+ (short t2)
 
 -- | Similar to 'for', but allows one to specify the function to use on each term

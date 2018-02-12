@@ -5,7 +5,9 @@ import Data.List (intersperse, sort)
 import Text.PrettyPrint hiding (render, quotes)
 import Numeric (showFFloat)
 
+import Language.Drasil.Expr (Oper(..))
 import Language.Drasil.HTML.Import (makeDocument, spec)
+import Language.Drasil.Printing.AST
 import Language.Drasil.HTML.AST
 import qualified Language.Drasil.Output.Formats as F
 import Language.Drasil.Spec (USymb(..), Sentence, sC, (+:+))
@@ -133,36 +135,33 @@ p_expr (Var v)    = symbol (Atomic v) --Ensures variables are rendered the same 
 p_expr (Dbl d)    = showFFloat Nothing d ""
 p_expr (Int i)    = show i
 p_expr (Sym s)    = symbol s
-p_expr (Bln b)    = show b
 p_expr (Assoc Mul l) = mul l
 p_expr (Assoc Add l)  = concat $ intersperse " &plus; " $ map p_expr l
 p_expr (Assoc And l)  = concat $ intersperse " &and; " $ map p_expr l
 p_expr (Assoc Or l)   = concat $ intersperse " &or; " $ map p_expr l
-p_expr (Sub a b)  = p_expr a ++ " &minus; " ++ p_expr b
-p_expr (Frac a b) = fraction (p_expr a) (p_expr b) --Found in HTMLHelpers
-p_expr (Div a b)  = divide a b
-p_expr (Pow a b)  = pow a b
-p_expr (Eq a b)   = p_expr a ++ " = " ++ p_expr b
-p_expr (NEq a b)  = p_expr a ++ "&ne;" ++ p_expr b
-p_expr (Lt a b)   = p_expr a ++ "&thinsp;&lt;&thinsp;" ++ p_expr b --thin spaces make these more readable
-p_expr (Gt a b)   = p_expr a ++ "&thinsp;&gt;&thinsp;" ++ p_expr b
-p_expr (LEq a b)  = p_expr a ++ "&thinsp;&le;&thinsp;" ++ p_expr b
-p_expr (GEq a b)  = p_expr a ++ "&thinsp;&ge;&thinsp;" ++ p_expr b
-p_expr (Dot a b)  = p_expr a ++ "&sdot;" ++ p_expr b
-p_expr (Neg a)    = neg a
+p_expr (BOp Sub a b)  = p_expr a ++ " &minus; " ++ p_expr b
+p_expr (BOp Frac a b) = fraction (p_expr a) (p_expr b) --Found in HTMLHelpers
+p_expr (BOp Div a b)  = divide a b
+p_expr (BOp Pow a b)  = pow a b
+p_expr (BOp Eq a b)   = p_expr a ++ " = " ++ p_expr b
+p_expr (BOp NEq a b)  = p_expr a ++ "&ne;" ++ p_expr b
+p_expr (BOp Lt a b)   = p_expr a ++ "&thinsp;&lt;&thinsp;" ++ p_expr b --thin spaces make these more readable
+p_expr (BOp Gt a b)   = p_expr a ++ "&thinsp;&gt;&thinsp;" ++ p_expr b
+p_expr (BOp LEq a b)  = p_expr a ++ "&thinsp;&le;&thinsp;" ++ p_expr b
+p_expr (BOp GEq a b)  = p_expr a ++ "&thinsp;&ge;&thinsp;" ++ p_expr b
+p_expr (BOp Dot a b)  = p_expr a ++ "&sdot;" ++ p_expr b
+p_expr (BOp Cross a b) = p_expr a ++ "&#10799;" ++ p_expr b
+p_expr (Op Neg [a])    = neg a
 p_expr (Call f x) = p_expr f ++ paren (concat $ intersperse "," $ map p_expr x)
 p_expr (Case ps)  = cases ps (p_expr)
 p_expr (Op f es)  = p_op f es
 p_expr (Grouping e) = paren (p_expr e)
 p_expr (Mtx a)    = "<table class=\"matrix\">\n" ++ p_matrix a ++ "</table>"
-p_expr (Index a i)= p_indx a i
+p_expr (BOp Index a i)= p_indx a i
 --Logic
-p_expr (Not a)    = "&not;" ++ p_expr a
-p_expr (Impl a b) = p_expr a ++ " &rArr; " ++ p_expr b
-p_expr (Iff a b)  = p_expr a ++ " &hArr; " ++ p_expr b
+p_expr (BOp Impl a b) = p_expr a ++ " &rArr; " ++ p_expr b
+p_expr (BOp Iff a b)  = p_expr a ++ " &hArr; " ++ p_expr b
 p_expr (IsIn  a b) = p_expr a ++ "&thinsp;&isin;&thinsp;"  ++ p_space b
-p_expr (Forall v e) = "&forall;" ++ symbol v ++ "&thinsp; :" ++ paren (p_expr e)
-p_expr (Exists v e) = "&exist;"  ++ symbol v ++ "&thinsp; :" ++ paren (p_expr e)
 
 
 -- | For printing indexes
@@ -176,10 +175,10 @@ p_sub e@(Dbl _)        = p_expr e
 p_sub e@(Int _)        = p_expr e
 p_sub e@(Sym _)        = p_expr e
 p_sub   (Assoc Add l)  = concat $ intersperse "&plus;" $ map p_expr l --removed spaces
-p_sub   (Sub a b)      = p_expr a ++ "&minus;" ++ p_expr b
+p_sub   (BOp Sub a b)  = p_expr a ++ "&minus;" ++ p_expr b
 p_sub e@(Assoc _ _)    = p_expr e
-p_sub   (Frac a b)     = divide a b --no block division 
-p_sub e@(Div _ _)      = p_expr e
+p_sub   (BOp Frac a b) = divide a b --no block division 
+p_sub e@(BOp Div _ _)  = p_expr e
 p_sub _                = error "Tried to Index a non-simple expr in HTML, currently not supported."
 
 -- | For printing Matrix
@@ -199,29 +198,28 @@ mul = concat . intersperse "&#8239;" . map (add_paren (prec Mul))
 
 -- | Helper for properly rendering parentheses around the multiplier
 add_paren :: Int -> Expr -> String
-add_paren p a@(Assoc o _) = 
-  if prec o > p then paren $ p_expr a else p_expr a
-add_paren _ a@(Div _ _) = paren $ p_expr a
-add_paren _ a@(Sub _ _) = paren $ p_expr a
-add_paren _ a           = p_expr a
+add_paren p a@(Assoc o _)   = if prec o > p then paren $ p_expr a else p_expr a
+add_paren _ a@(BOp Div _ _) = paren $ p_expr a
+add_paren _ a@(BOp Sub _ _) = paren $ p_expr a
+add_paren _ a               = p_expr a
 
 -- | Helper for properly rendering division of expressions
 divide :: Expr -> Expr -> String
 divide n d@(Assoc Add _) = p_expr n ++ "/" ++ paren (p_expr d)
-divide n d@(Sub _ _) = p_expr n ++ "/" ++ paren (p_expr d)
+divide n d@(BOp Sub _ _) = p_expr n ++ "/" ++ paren (p_expr d)
 divide n@(Assoc Add _) d = paren (p_expr n) ++ "/" ++ p_expr d
-divide n@(Sub _ _) d = paren (p_expr n) ++ "/" ++ p_expr d
+divide n@(BOp Sub _ _) d = paren (p_expr n) ++ "/" ++ p_expr d
 divide n d = p_expr n ++ "/" ++ p_expr d
 
 -- | Helper for properly rendering negation of expressions
 neg :: Expr -> String
-neg a@(Var     _)   = minus a
-neg a@(Dbl     _)   = minus a
-neg a@(Int     _)   = minus a
-neg a@(Sym     _)   = minus a
-neg a@(Op    _ _)   = minus a
-neg a@(Assoc Mul _) = minus a
-neg a@(Index _ _)   = minus a
+neg a@(Var     _)     = minus a
+neg a@(Dbl     _)     = minus a
+neg a@(Int     _)     = minus a
+neg a@(Sym     _)     = minus a
+neg a@(Op    _ _)     = minus a
+neg a@(Assoc Mul _)   = minus a
+neg a@(BOp Index _ _) = minus a
 neg a               = "&minus;" ++ paren (p_expr a)
 
 minus :: Expr -> String
@@ -230,11 +228,11 @@ minus e = "&minus;" ++ p_expr e
 -- | Helper for properly rendering exponents
 pow :: Expr -> Expr -> String
 pow a@(Assoc Add _) b = sqbrac (p_expr a) ++ sup (p_expr b)
-pow a@(Sub _ _) b = sqbrac (p_expr a) ++ sup (p_expr b)
-pow a@(Frac _ _) b = sqbrac (p_expr a) ++ sup (p_expr b)
-pow a@(Div _ _) b = paren (p_expr a) ++ sup (p_expr b)
+pow a@(BOp Sub _ _) b = sqbrac (p_expr a) ++ sup (p_expr b)
+pow a@(BOp Frac _ _) b = sqbrac (p_expr a) ++ sup (p_expr b)
+pow a@(BOp Div _ _) b = paren (p_expr a) ++ sup (p_expr b)
 pow a@(Assoc Mul _) b = paren (p_expr a) ++ sup (p_expr b)
-pow a@(Pow _ _) b = paren (p_expr a) ++ sup (p_expr b)
+pow a@(BOp Pow _ _) b = paren (p_expr a) ++ sup (p_expr b)
 pow a b = p_expr a ++ sup (p_expr b)
 
 p_space :: Space -> String
@@ -331,7 +329,6 @@ makeFigure r c f wp = refwrap r (image f c wp $$ caption c)
 -----------------------------------------------------------------
 -- | Renders expression operations/functions. 
 p_op :: Function -> [Expr] -> String
-p_op f@(Cross) xs = binfix_op f xs
 p_op f@(Summation bs) (x:[]) = lrgOp f bs ++ paren (p_expr x)
 p_op (Summation _) _ = error "Something went wrong with a summation"
 p_op f@(Product bs) (x:[]) = lrgOp f bs ++ paren (p_expr x)
@@ -344,8 +341,9 @@ p_op Abs (x:[]) = "|" ++ p_expr x ++ "|"
 p_op Abs _ = error "Abs should only take one expr."
 p_op Norm (x:[]) = "||" ++ p_expr x ++ "||"
 p_op Norm _ = error "Norm should only take on expression."
-p_op f@(Exp) (x:[]) = show f ++ sup (p_expr x)
-p_op f (x:[]) = show f ++ paren (p_expr x) --Unary ops, this will change once more complicated functions appear.
+p_op Not (a:[])    = "&not;" ++ p_expr a
+p_op f@(Exp) (x:[]) = function f ++ sup (p_expr x)
+p_op f (x:[]) = function f ++ paren (p_expr x) --Unary ops, this will change once more complicated functions appear.
 p_op _ _ = error "Something went wrong with an operation"
 
 
@@ -354,16 +352,16 @@ makeBound :: String -> String
 makeBound s = "<tr><td><span class=\"bound\">" ++ s ++ "</span></td></tr>\n"
 
 lrgOp :: Function -> Maybe ((Symbol, Expr),Expr) -> String
-lrgOp f Nothing = "<span class=\"symb\">" ++ show f ++ "</span>"
+lrgOp f Nothing = "<span class=\"symb\">" ++ function f ++ "</span>"
 lrgOp f (Just ((s,v),hi)) = "<table class=\"operator\">\n" ++ makeBound (p_expr hi) ++
-  "<tr><td><span class=\"symb\">" ++ show f ++ "</span></td></tr>\n" ++
+  "<tr><td><span class=\"symb\">" ++ function f ++ "</span></td></tr>\n" ++
   makeBound (symbol s ++"="++ p_expr v) ++ "</table>"
 
 intg :: Function -> (Maybe Expr, Maybe Expr) -> String
-intg f (Nothing, Nothing) = "<span class=\"symb\">" ++ show f ++ "</span>"
-intg f (Just l, Nothing) = "<span class=\"symb\">" ++ show f ++ "</span>" ++ sub (p_expr l ++ " ")
+intg f (Nothing, Nothing) = "<span class=\"symb\">" ++ function f ++ "</span>"
+intg f (Just l, Nothing) = "<span class=\"symb\">" ++ function f ++ "</span>" ++ sub (p_expr l ++ " ")
 intg f (low,high) = "<table class=\"operator\">\n" ++ pHigh high ++
-  "<tr><td><span class=\"symb\">" ++ show f ++ "</span></td></tr>\n" ++
+  "<tr><td><span class=\"symb\">" ++ function f ++ "</span></td></tr>\n" ++
   pLow low ++ "</table>"
   where pLow Nothing   = ""
         pLow (Just l)  = makeBound (p_expr l)
@@ -376,12 +374,25 @@ makeIBound (Just low, Nothing)   = sub (p_expr low)
 makeIBound (Nothing, Just high)  = sup (p_expr high)
 makeIBound (Nothing, Nothing)    = ""
 
--- | Helper for rendering binary infix operators, used by 'p_op'
-binfix_op :: Function -> [Expr] -> String
-binfix_op f (x:y:[]) = p_expr x ++ show f ++ p_expr y
-binfix_op _ _ = error "Attempting to print binary operate with inappropriate" ++
-                   "number of operands (should be 2)"
-
+function :: Function -> String
+function Log            = "log"
+function (Summation _)  = "&sum;"
+function (Product _)    = "&prod;"
+function Abs            = ""
+function Norm           = ""
+function (Integral _ _) = "&int;"
+function Sin            = "sin"
+function Cos            = "cos"
+function Tan            = "tan"
+function Sec            = "sec"
+function Csc            = "csc"
+function Cot            = "cot"
+function Exp            = "e"
+function Sqrt           = "&radic;"
+function Not            = "&not;"
+function Neg            = "-" -- but usually not reached...
+function Dim            = "dim" -- hmmm
+  
 -- | Renders modules
 makeModule :: String -> String -> Doc
 makeModule m l = refwrap l (paragraph $ wrap "b" [] (text m))

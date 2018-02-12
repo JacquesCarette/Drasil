@@ -105,7 +105,6 @@ library
     , Language.Drasil.Chunk.Unital
     , Language.Drasil.Chunk.Unitary
     , Language.Drasil.Chunk.VarChunk
-    , Language.Drasil.Chunk.Wrapper
     , Language.Drasil.Chunk.Wrapper.QSWrapper
     , Language.Drasil.Chunk.Wrapper.UWrapper
     , Language.Drasil.ChunkDB
@@ -116,6 +115,7 @@ library
     , Language.Drasil.Make.Print
     , Language.Drasil.Output.Formats
     , Language.Drasil.Printing.Helpers
+    , Language.Drasil.Printing.AST
     , Language.Drasil.DataDesc
 
   Build-Depends:

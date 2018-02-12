@@ -23,7 +23,7 @@ class Theory t where
   invariants :: Simple Lens t [TheoryConstraint]
   defined_fun :: Simple Lens t [QDefinition]
   
-data SpaceDefn = SpaceDefn -- FIXME: This should be defined.
+data SpaceDefn -- FIXME: This should be defined.
   
 data TheoryChunk where
   TC :: String -> [TWrapper] -> [SpaceDefn] -> [QWrapper] -> [CWrapper] -> 
@@ -55,6 +55,7 @@ instance Chunk TheoryModel where
   id = cl id
 instance NamedIdea TheoryModel where
   term = cl term
+instance Idea TheoryModel where
   getA (TM c _) = getA c
 instance Concept TheoryModel where
   defn = cl defn

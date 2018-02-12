@@ -7,9 +7,11 @@ module Language.Drasil (
   -- Recipe
   , Recipe(..)
   -- Expr
-  , Expr(..), Relation, BiFunc(..), DerivType(..), RealInterval(..)
-  , ($=), ($<), ($<=), ($>), ($>=)
+  , Expr(C,V,Int,Dbl,IsIn,Deriv,FCall,Grouping,Case)
+  , Relation, DerivType(..), RealInterval(..), Inclusive(..)
+  , ($=), ($<), ($<=), ($>), ($>=), ($^), ($&&), ($||), ($=>), ($<=>), ($.)
   , log, abs, sin, cos, tan, sec, csc, cot, exp, sqrt, square, euclidean, vars
+  , dim, idx
   , sum_all, defsum, prod_all, defprod, defint, int_all
   , cross, m2x2, vec2D, dgnl2x2
   -- all the stuff from Unicode
@@ -26,16 +28,17 @@ module Language.Drasil (
   -- Chunk.CommonIdea
   , CommonIdea(..) , commonIdea, CI, getAcc
   -- Chunk.NamedIdea
-  , NamedIdea(..), NamedChunk, short, nc
+  , NamedIdea(..), NamedChunk, Idea(..), short, nc, IdeaDict
+  , nw -- bad name (historical)
   , compoundterm, for, for', for'', of_, of_', of_'', of__, of'', compoundNC, compoundNC'
   , compoundNC'', compoundNC''', with, with', and_, and_', andRT, aNP, the, a_
   , ofA,theCustom, this
   -- Chunk.Constrained
   , Constrained(..), ConstrainedChunk(..), Constraint(..), ConstrConcept(..)
-  , physc, sfwrc, constrained, cuc, cvc, constrained', cuc', constrainedNRV'
-  , isPhys, isSfwr, getPhys, getSfwr
+  , ConstraintReason(..)
+  , physc, sfwrc, enumc, constrained, cuc, cvc, constrained', cuc', constrainedNRV'
+  , isPhysC, isSfwrC, renderC
   , ConstrWrapper(..), cnstrw
-  , createCnstrnts
   , Reason(..), TheoryConstraint(..)
   -- Chunk.Eq
   , QDefinition(..), fromEqn, fromEqn', fromEqn'', getVC, equat
@@ -52,13 +55,13 @@ module Language.Drasil (
   , Unitary(..), UnitaryChunk, unitary
   -- Chunk.Relation
   , NamedRelation, makeNR, RelationConcept, makeRC, makeRC', relat, ExprRelat
-  --Chunk.Wrapper
-  , cqs, qs, nw, CQSWrapper, NWrapper
+  --Chunk.Wrapper.????
+  , cqs, qs, CQSWrapper
   --Chunk.UWrapper 
   , UWrapper, uw, ucw, UCWrapper
   -- Chunks w/ Attributes
   , Attribute(..), Attributes, attributes, getSource, aqd -- TODO: Remove aqd
-  , HasAttributes, Derivation, de, ds, getDerivation, DerWrapper(..), getShortName
+  , HasAttributes, Derivation, getDerivation, getShortName
   --Citations
   , BibRef, City, State, Citation(..), CiteField(..), Month(..), getAuthors, getYear
   -- Spec
@@ -130,10 +133,11 @@ module Language.Drasil (
 
 import Prelude hiding (log, sin, cos, tan, sqrt, id, return, print, break, exp, product)
 import Language.Drasil.SystemInformation
-import Language.Drasil.Expr (Expr(..), Relation, BiFunc(..), DerivType(..), 
-          RealInterval(..),
-          ($=), ($<), ($<=), ($>), ($>=))
+import Language.Drasil.Expr (Expr(..), Relation, DerivType(..), 
+          RealInterval(..), Inclusive(..),
+          ($=), ($<), ($<=), ($>), ($>=), ($^), ($&&), ($||), ($=>), ($<=>), ($.))
 import Language.Drasil.Expr.Math (log, sin, cos, tan, sqrt, square, sec, csc, cot, exp,
+          dim, idx,
           sum_all, defsum, prod_all, defprod,
           cross, m2x2, vec2D, dgnl2x2, euclidean, defint, int_all)
 import Language.Drasil.Expr.Extract (vars)
@@ -148,7 +152,7 @@ import Language.Drasil.Unit -- all of it
 import Language.Drasil.Chunk
 import Language.Drasil.Chunk.AssumpChunk
 import Language.Drasil.Chunk.Attribute
-import Language.Drasil.Chunk.Attribute.Derivation (Derivation, DerWrapper(..), de, ds)
+import Language.Drasil.Chunk.Attribute.Derivation (Derivation)
 import Language.Drasil.Chunk.Change
 import Language.Drasil.Chunk.CommonIdea
 import Language.Drasil.Chunk.Concept
@@ -169,7 +173,6 @@ import Language.Drasil.Chunk.Unital(UnitalChunk(..), makeUCWDS, ucFromCV
                                   , uc, uc', ucs, ucs', ucsWS)
 import Language.Drasil.Chunk.Unitary
 import Language.Drasil.Chunk.VarChunk
-import Language.Drasil.Chunk.Wrapper
 import Language.Drasil.Chunk.Wrapper.QSWrapper
 import Language.Drasil.Chunk.Wrapper.UWrapper
 import Language.Drasil.ChunkDB

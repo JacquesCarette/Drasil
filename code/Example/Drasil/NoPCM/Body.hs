@@ -530,26 +530,26 @@ s4_2_3_desc5 den ma vo = [S "Using the fact that", getES den :+: S "=" :+:
 
 s4_2_3_eq1, s4_2_3_eq2, s4_2_3_eq3, s4_2_3_eq4, s4_2_3_eq5 :: Expr
 
-s4_2_3_eq1 = (Neg (int_all (eqSymb vol) ((C gradient) :. (C thFluxVect)))) + 
+s4_2_3_eq1 = (negate (int_all (eqSymb vol) ((C gradient) $. (C thFluxVect)))) + 
   (int_all (eqSymb vol) (C vol_ht_gen)) $=
   (int_all (eqSymb vol) ((C density)
-  * (C QT.heat_cap_spec) * Deriv Part (C QT.temp) (C time)))
+  * (C QT.heat_cap_spec) * Deriv Part (C QT.temp) time))
 
-s4_2_3_eq2 = (Neg (int_all (eqSymb surface) ((C thFluxVect) :. (C uNormalVect)))) +
+s4_2_3_eq2 = (negate (int_all (eqSymb surface) ((C thFluxVect) $. (C uNormalVect)))) +
   (int_all (eqSymb vol) (C vol_ht_gen)) $= 
   (int_all (eqSymb vol)
-  ((C density) * (C QT.heat_cap_spec) * Deriv Part (C QT.temp) (C time)))
+  ((C density) * (C QT.heat_cap_spec) * Deriv Part (C QT.temp) time))
 
 s4_2_3_eq3 = (C ht_flux_in) * (C in_SA) - (C ht_flux_out) *
   (C out_SA) + (C vol_ht_gen) * (C vol) $= 
-  (int_all (eqSymb vol) ((C density) * (C QT.heat_cap_spec) * Deriv Part (C QT.temp) (C time)))
+  (int_all (eqSymb vol) ((C density) * (C QT.heat_cap_spec) * Deriv Part (C QT.temp) time))
 
 s4_2_3_eq4 = (C density) * (C QT.heat_cap_spec) * (C vol) * Deriv Total
-  (C QT.temp) (C time) $= (C ht_flux_in) * (C in_SA) - (C ht_flux_out) *
+  (C QT.temp) time $= (C ht_flux_in) * (C in_SA) - (C ht_flux_out) *
   (C out_SA) + (C vol_ht_gen) * (C vol)
 
 s4_2_3_eq5 = (C mass) * (C QT.heat_cap_spec) * Deriv Total (C QT.temp)
-  (C time) $= (C ht_flux_in) * (C in_SA) - (C ht_flux_out)
+  time $= (C ht_flux_in) * (C in_SA) - (C ht_flux_out)
   * (C out_SA) + (C vol_ht_gen) * (C vol)
 
 s4_2_3_equation :: [Contents]
@@ -607,17 +607,17 @@ s4_2_5_equation = map eqUnR [s4_2_5_eq1, s4_2_5_eq2, s4_2_5_eq3, s4_2_5_eq4]
 
 s4_2_5_eq1, s4_2_5_eq2, s4_2_5_eq3, s4_2_5_eq4 ::Expr
 
-s4_2_5_eq1 = (C w_mass) * (C htCap_W) * Deriv Total (C temp_W) (C time) $=
+s4_2_5_eq1 = (C w_mass) * (C htCap_W) * Deriv Total (C temp_W) time $=
   (C ht_flux_C) * (C coil_SA)
  
-s4_2_5_eq2 = (C w_mass) * (C htCap_W) * Deriv Total (C temp_W) (C time) $=
+s4_2_5_eq2 = (C w_mass) * (C htCap_W) * Deriv Total (C temp_W) time $=
   (C coil_HTC) * (C coil_SA) * ((C temp_C) - (C temp_W))
 
-s4_2_5_eq3 = Deriv Total (C temp_W) (C time) $= ((C coil_HTC) *
+s4_2_5_eq3 = Deriv Total (C temp_W) time $= ((C coil_HTC) *
   (C coil_SA)) / ((C w_mass) * (C htCap_W)) * ((C temp_C) -
   (C temp_W))
 
-s4_2_5_eq4 = Deriv Total (C temp_W) (C time) $= (1 / (C tau_W)) *
+s4_2_5_eq4 = Deriv Total (C temp_W) time $= (1 / (C tau_W)) *
   ((C temp_C) - (C temp_W))
 
 s4_2_6_table1 :: Contents

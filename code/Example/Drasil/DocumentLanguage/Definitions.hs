@@ -83,9 +83,9 @@ derivation g = map makeDerivationContents (getDerivation g)
 
 -- | Helper function for creating the layout objects 
 -- (paragraphs and equation blocks) for a derivation.
-makeDerivationContents :: DerWrapper -> Contents
-makeDerivationContents (DE e) = eqUnR e
-makeDerivationContents (DS s) = Paragraph s
+makeDerivationContents :: Sentence -> Contents
+makeDerivationContents (E e) = EqnBlock e "" -- HACK -> FIXME: reference-able?
+makeDerivationContents s     = Paragraph s
 
 -- | Synonym for easy reading. Model rows are just 'String',['Contents'] pairs
 type ModRow = [(String,[Contents])]

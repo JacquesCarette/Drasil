@@ -19,9 +19,9 @@ import Drasil.SWHS.DataDefs(swhsSymbMapTRef)
 
 roc_temp_simp_deriv :: Derivation
 roc_temp_simp_deriv =
-  [ds $ S "Detailed derivation of simplified" +:+ phrase rOfChng +:+ S "of" +:+.
+  [S "Detailed derivation of simplified" +:+ phrase rOfChng +:+ S "of" +:+.
     phrase temp] ++
-  (weave [map ds roc_temp_simp_deriv_sentences, map de roc_temp_simp_deriv_eqns])
+  (weave [roc_temp_simp_deriv_sentences, map E roc_temp_simp_deriv_eqns])
 
 roc_temp_simp_deriv_sentences :: [Sentence]
 roc_temp_simp_deriv_sentences = map foldlSentCol [
@@ -66,26 +66,26 @@ s4_2_3_desc5 den ma vo = [S "Using the fact that", getES den :+: S "=" :+:
 
 s4_2_3_eq1, s4_2_3_eq2, s4_2_3_eq3, s4_2_3_eq4, s4_2_3_eq5 :: Expr
 
-s4_2_3_eq1 = (Neg (int_all (eqSymb vol) ((C gradient) :. (C thFluxVect)))) + 
+s4_2_3_eq1 = (negate (int_all (eqSymb vol) ((C gradient) $. (C thFluxVect)))) + 
   (int_all (eqSymb vol) (C vol_ht_gen)) $=
   (int_all (eqSymb vol) ((C density)
-  * (C QT.heat_cap_spec) * Deriv Part (C QT.temp) (C time)))
+  * (C QT.heat_cap_spec) * Deriv Part (C QT.temp) time))
 
-s4_2_3_eq2 = (Neg (int_all (eqSymb surface) ((C thFluxVect) :. (C uNormalVect)))) +
+s4_2_3_eq2 = (negate (int_all (eqSymb surface) ((C thFluxVect) $. (C uNormalVect)))) +
   (int_all (eqSymb vol) (C vol_ht_gen)) $= 
   (int_all (eqSymb vol)
-  ((C density) * (C QT.heat_cap_spec) * Deriv Part (C QT.temp) (C time)))
+  ((C density) * (C QT.heat_cap_spec) * Deriv Part (C QT.temp) time))
 
 s4_2_3_eq3 = (C ht_flux_in) * (C in_SA) - (C ht_flux_out) *
   (C out_SA) + (C vol_ht_gen) * (C vol) $= 
-  (int_all (eqSymb vol) ((C density) * (C QT.heat_cap_spec) * Deriv Part (C QT.temp) (C time)))
+  (int_all (eqSymb vol) ((C density) * (C QT.heat_cap_spec) * Deriv Part (C QT.temp) time))
 
 s4_2_3_eq4 = (C density) * (C QT.heat_cap_spec) * (C vol) * Deriv Total
-  (C QT.temp) (C time) $= (C ht_flux_in) * (C in_SA) - (C ht_flux_out) *
+  (C QT.temp) time $= (C ht_flux_in) * (C in_SA) - (C ht_flux_out) *
   (C out_SA) + (C vol_ht_gen) * (C vol)
 
 s4_2_3_eq5 = (C mass) * (C QT.heat_cap_spec) * Deriv Total (C QT.temp)
-  (C time) $= (C ht_flux_in) * (C in_SA) - (C ht_flux_out)
+  time $= (C ht_flux_in) * (C in_SA) - (C ht_flux_out)
   * (C out_SA) + (C vol_ht_gen) * (C vol)
 
 roc_temp_simp_deriv_eqns :: [Expr]

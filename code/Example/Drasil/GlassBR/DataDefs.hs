@@ -36,9 +36,9 @@ gbQDefns = [Parallel hFromt {-DD2-} [glaTyFac {-DD6-}]] ++ --can be calculated o
 
 risk_eq :: Expr
 risk_eq = ((C sflawParamK) / (Grouping ((C plate_len) *
-  (C plate_width))) :^ ((C sflawParamM) - 1) *
+  (C plate_width))) $^ ((C sflawParamM) - 1) *
   (Grouping (C mod_elas * 1000) * (square (Grouping (C act_thick))))
-  :^ (C sflawParamM) * (C lDurFac) * (exp (C stressDistFac)))
+  $^ (C sflawParamM) * (C lDurFac) * (exp (C stressDistFac)))
 
 risk :: QDefinition
 risk = aqd (mkDataDef' risk_fun risk_eq (aGrtrThanB +:+ hRef +:+ ldfRef +:+ jRef))
@@ -59,7 +59,7 @@ hFromt = aqd (mkDataDef' act_thick hFromt_eq (hMin)) ([] :: Attributes)
 --DD3--
 
 -- loadDF_eq :: Expr 
--- loadDF_eq = (Grouping ((C load_dur) / (60))) :^ ((C sflawParamM) / (16))
+-- loadDF_eq = (Grouping ((C load_dur) / (60))) $^ ((C sflawParamM) / (16))
 
 -- loadDF :: QDefinition
 -- loadDF = mkDataDef lDurFac loadDF_eq
@@ -78,7 +78,7 @@ strDisFac = aqd (mkDataDef' stressDistFac strDisFac_eq
 --DD5--
 
 nonFL_eq :: Expr
-nonFL_eq = ((C tolLoad) * (C mod_elas) * (C act_thick) :^ (4)) /
+nonFL_eq = ((C tolLoad) * (C mod_elas) * (C act_thick) $^ (4)) /
   (square (Grouping ((C plate_len) * (C plate_width))))
 
 nonFL :: QDefinition
@@ -100,7 +100,7 @@ glaTyFac = aqd (mkDataDef gTF glaTyFac_eq) ([] :: Attributes)
 
 dimLL_eq :: Expr
 dimLL_eq = ((C demand) * (square (Grouping ((C plate_len) * (C plate_width)))))
-  / ((C mod_elas) * ((C act_thick) :^ (4)) * (C gTF))
+  / ((C mod_elas) * ((C act_thick) $^ (4)) * (C gTF))
 
 dimLL :: QDefinition
 dimLL = aqd (mkDataDef' dimlessLoad dimLL_eq 
@@ -119,11 +119,10 @@ tolPre = aqd (mkDataDef' tolLoad tolPre_eq (qHtTlExtra)) ([] :: Attributes)
 
 tolStrDisFac_eq :: Expr
 tolStrDisFac_eq = log (log ((1) / ((1) - (C pb_tol)))
-  * ((Grouping ((C plate_len) * (C plate_width)) :^
-  ((C sflawParamM) - (1)) / ((C sflawParamK) *
-  (Grouping (Grouping ((C mod_elas * 1000) *
-  (square (Grouping (C act_thick))))) :^ 
-  (C sflawParamM) * (C lDurFac))))))
+  * ((Grouping ((C plate_len) * (C plate_width)) $^ (C sflawParamM - 1) / 
+    ((C sflawParamK) *
+    (Grouping (Grouping ((C mod_elas * 1000) *
+    (square (Grouping (C act_thick))))) $^ (C sflawParamM) * (C lDurFac))))))
 
 tolStrDisFac :: QDefinition
 tolStrDisFac = aqd (mkDataDef' sdf_tol tolStrDisFac_eq

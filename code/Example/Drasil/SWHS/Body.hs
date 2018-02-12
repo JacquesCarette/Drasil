@@ -1,6 +1,6 @@
 module Drasil.SWHS.Body where
 
-import Language.Drasil hiding (de)
+import Language.Drasil
 import Data.Drasil.SI_Units
 import Control.Lens ((^.))
 
@@ -1030,9 +1030,9 @@ s4_2_3_deriv_2 t1ct vo = foldlSPCol [S "Integrating", swhsSymbMapTRef t1ct,
   S "over a", phrase vo, sParen (getES vo) `sC` S "we have"]
 
 s4_2_3_deriv_3 = eqUnR
-  ((Neg (int_all (eqSymb vol) ((C gradient) :. (C thFluxVect)))) +
+  ((negate (int_all (eqSymb vol) ((C gradient) $. (C thFluxVect)))) +
   (int_all (eqSymb vol) (C vol_ht_gen)) $=
-  (int_all (eqSymb vol) ((C density) * (C heat_cap_spec) * Deriv Part (C temp) (C time))))
+  (int_all (eqSymb vol) ((C density) * (C heat_cap_spec) * Deriv Part (C temp) time)))
 
 s4_2_3_deriv_4 :: ConceptChunk -> ConVar -> UnitalChunk -> UnitalChunk ->
   ConVar -> ConceptChunk -> Contents
@@ -1043,9 +1043,9 @@ s4_2_3_deriv_4 gd su vo tfv unv un = foldlSPCol [S "Applying", titleize gd,
   S "outward", phrase unv, S "for a", phrase su]
 
 s4_2_3_deriv_5 = eqUnR
-  ((Neg (int_all (eqSymb surface) ((C thFluxVect) :. (C uNormalVect)))) +
+  ((negate (int_all (eqSymb surface) ((C thFluxVect) $. (C uNormalVect)))) +
   (int_all (eqSymb vol) (C vol_ht_gen)) $= 
-  (int_all (eqSymb vol) ((C density) * (C heat_cap_spec) * Deriv Part (C temp) (C time))))
+  (int_all (eqSymb vol) ((C density) * (C heat_cap_spec) * Deriv Part (C temp) time)))
 
 s4_2_3_deriv_6 :: UnitalChunk -> UnitalChunk -> Contents
 s4_2_3_deriv_6 vo vhg = foldlSPCol [S "We consider an arbitrary" +:+.
@@ -1055,7 +1055,7 @@ s4_2_3_deriv_6 vo vhg = foldlSPCol [S "We consider an arbitrary" +:+.
 s4_2_3_deriv_7 = eqUnR
   ((C ht_flux_in) * (C in_SA) - (C ht_flux_out) *
   (C out_SA) + (C vol_ht_gen) * (C vol) $= 
-  (int_all (eqSymb vol) ((C density) * (C heat_cap_spec) * Deriv Part (C temp) (C time))))
+  (int_all (eqSymb vol) ((C density) * (C heat_cap_spec) * Deriv Part (C temp) time)))
 
 s4_2_3_deriv_8 :: UnitalChunk -> UnitalChunk -> UnitalChunk -> UnitalChunk ->
   UnitalChunk -> UnitalChunk -> UnitalChunk -> UnitalChunk -> CI -> Contents ->
@@ -1069,7 +1069,7 @@ s4_2_3_deriv_8 hfi hfo isa osa den hcs tem vo assu a3 a4 a5 a6 = foldlSPCol
 
 s4_2_3_deriv_9 = eqUnR
   ((C density) * (C heat_cap_spec) * (C vol) * Deriv Total (C temp)
-  (C time) $= (C ht_flux_in) * (C in_SA) - (C ht_flux_out) *
+  time $= (C ht_flux_in) * (C in_SA) - (C ht_flux_out) *
   (C out_SA) + (C vol_ht_gen) * (C vol))
 
 s4_2_3_deriv_10 :: UnitalChunk -> UnitalChunk -> UnitalChunk -> Contents
@@ -1078,7 +1078,7 @@ s4_2_3_deriv_10 den ma vo = foldlSPCol [S "Using the fact that", getES den :+:
 
 s4_2_3_deriv_11 = eqUnR
   ((C mass) * (C heat_cap_spec) * Deriv Total (C temp)
-  (C time) $= (C ht_flux_in) * (C in_SA) - (C ht_flux_out)
+  time $= (C ht_flux_in) * (C in_SA) - (C ht_flux_out)
   * (C out_SA) + (C vol_ht_gen) * (C vol))
 
 -- Created a unitalChunk for "S"... should I add it to table of symbols?
@@ -1167,35 +1167,35 @@ s4_2_5_d1sent_7 = [S "Finally, factoring out", (E $ 1 / C tau_W) `sC`
 s4_2_5_d_eqn1, s4_2_5_d_eqn2, s4_2_5_d_eqn3, s4_2_5_d_eqn4, s4_2_5_d_eqn5,
   s4_2_5_d_eqn6, s4_2_5_d_eqn7 :: Expr
 
-s4_2_5_d_eqn1 = ((C w_mass) * (C htCap_W) * Deriv Total (C temp_W) (C time) $=
+s4_2_5_d_eqn1 = ((C w_mass) * (C htCap_W) * Deriv Total (C temp_W) time $=
   (C ht_flux_C) * (C coil_SA) - (C ht_flux_P) * (C pcm_SA))
 
-s4_2_5_d_eqn2 = ((C w_mass) * (C htCap_W) * Deriv Total (C temp_W) (C time) $=
+s4_2_5_d_eqn2 = ((C w_mass) * (C htCap_W) * Deriv Total (C temp_W) time $=
   (C coil_HTC) * (C coil_SA) * ((C temp_C) - (C temp_W)) -
   (C pcm_HTC) * (C pcm_SA) * ((C temp_W) - (C temp_PCM)))
 
-s4_2_5_d_eqn3 = (Deriv Total (C temp_W) (C time) $= ((C coil_HTC) *
+s4_2_5_d_eqn3 = (Deriv Total (C temp_W) time $= ((C coil_HTC) *
   (C coil_SA)) / ((C w_mass) * (C htCap_W)) * ((C temp_C) -
   (C temp_W)) - ((C pcm_mass) * (C pcm_SA)) / ((C w_mass) *
   (C htCap_W)) * ((C temp_W) - (C temp_PCM)))
 
-s4_2_5_d_eqn4 = (Deriv Total (C temp_W) (C time) $= ((C coil_HTC) *
+s4_2_5_d_eqn4 = (Deriv Total (C temp_W) time $= ((C coil_HTC) *
   (C coil_SA)) / ((C w_mass) * (C htCap_W)) * ((C temp_C) - (C temp_W)) +
   (((C coil_HTC) * (C coil_SA)) / ((C coil_HTC) * (C coil_SA))) *
   (((C pcm_HTC) * (C pcm_SA)) / ((C w_mass) * (C htCap_W))) *
   ((C temp_PCM) - (C temp_W)))
 
-s4_2_5_d_eqn5 = (Deriv Total (C temp_W) (C time) $= ((C coil_HTC) *
+s4_2_5_d_eqn5 = (Deriv Total (C temp_W) time $= ((C coil_HTC) *
   (C coil_SA)) / ((C w_mass) * (C htCap_W)) * ((C temp_C) - (C temp_W)) +
   (((C pcm_HTC) * (C pcm_SA)) / ((C coil_HTC) * (C coil_SA))) *
   (((C coil_HTC) * (C coil_SA)) / ((C w_mass) * (C htCap_W))) *
   ((C temp_PCM) - (C temp_W)))
 
-s4_2_5_d_eqn6 = (Deriv Total (C temp_W) (C time) $= (1 / (C tau_W)) *
+s4_2_5_d_eqn6 = (Deriv Total (C temp_W) time $= (1 / (C tau_W)) *
   ((C temp_C) - (C temp_W)) + ((C eta) / (C tau_W)) *
   ((C temp_PCM) - (C temp_W)))
 
-s4_2_5_d_eqn7 = (Deriv Total (C temp_W) (C time) $= (1 / (C tau_W)) *
+s4_2_5_d_eqn7 = (Deriv Total (C temp_W) time $= (1 / (C tau_W)) *
   (((C temp_C) - (C temp_W)) + (C eta) * ((C temp_PCM) -
   (C temp_W))))
 
@@ -1220,15 +1220,15 @@ s4_2_5_d2sent_3 = [S "Setting", getES tau_S_P :+: S "=" :+: getES pcm_mass :+:
 s4_2_5_d2eqn1, s4_2_5_d2eqn2, s4_2_5_d2eqn3, s4_2_5_d2eqn4 :: Expr
 
 s4_2_5_d2eqn1 = ((C pcm_mass) * (C htCap_S_P) * Deriv Total (C temp_PCM)
-  (C time) $= (C ht_flux_P) * (C pcm_SA))
+  time $= (C ht_flux_P) * (C pcm_SA))
 
 s4_2_5_d2eqn2 = ((C pcm_mass) * (C htCap_S_P) * Deriv Total (C temp_PCM)
-  (C time) $= (C pcm_HTC) * (C pcm_SA) * ((C temp_W) - (C temp_PCM)))
+  time $= (C pcm_HTC) * (C pcm_SA) * ((C temp_W) - (C temp_PCM)))
 
-s4_2_5_d2eqn3 = (Deriv Total (C temp_PCM) (C time) $= ((C pcm_HTC) *
+s4_2_5_d2eqn3 = (Deriv Total (C temp_PCM) time $= ((C pcm_HTC) *
   (C pcm_SA)) / ((C pcm_mass) * (C htCap_S_P)) * ((C temp_W) - (C temp_PCM)))
 
-s4_2_5_d2eqn4 = (Deriv Total (C temp_PCM) (C time) $= (1 / (C tau_S_P)) *
+s4_2_5_d2eqn4 = (Deriv Total (C temp_PCM) time $= (1 / (C tau_S_P)) *
   ((C temp_W) - (C temp_PCM)))
 
 s4_2_5_d1eqn_list, s4_2_5_d1sent_list, s4_2_5_d2eqn_list, 

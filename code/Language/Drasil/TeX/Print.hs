@@ -4,11 +4,12 @@ import Prelude hiding (print)
 import Data.List (intersperse, transpose)
 import Text.PrettyPrint (text, (<+>))
 import qualified Text.PrettyPrint as TP
-import Data.Maybe (isNothing, fromJust)
 import Numeric (showFFloat)
 
 import Control.Applicative (pure)
 
+import Language.Drasil.Expr (Oper(..))
+import Language.Drasil.Printing.AST
 import Language.Drasil.TeX.AST
 import qualified Language.Drasil.TeX.Import as I
 import qualified Language.Drasil.Output.Formats as A
@@ -24,9 +25,10 @@ import qualified Language.Drasil.Document as L
 import Language.Drasil.Unicode (RenderGreek(..), RenderSpecial(..))
 import Language.Drasil.People (People,rendPersLFM,lstName,Person(..),Conv(Mono))
 import Language.Drasil.ChunkDB (HasSymbolTable)
+import Language.Drasil.Space (Space(..))
 
 genTeX :: HasSymbolTable ctx => A.DocType -> L.Document -> ctx -> TP.Doc
-genTeX typ doc sm = runPrint (build sm typ $ I.makeDocument doc sm) Text
+genTeX typ doc sm = runPrint (build sm typ $ I.makeDocument sm doc) Text
 
 build :: HasSymbolTable s => s -> A.DocType -> Document -> D
 build sm (A.SRS _) doc   = buildStd sm doc
@@ -61,7 +63,6 @@ lo (Section d t con l)  sm  = sec d (spec t) %% label (spec l) %% print sm con
 lo (Paragraph contents) _  = toText $ spec contents
 lo (EqnBlock contents)  _  = makeEquation contents
 lo (Table rows r bl t)  _  = toText $ makeTable rows (spec r) bl (spec t)
---lo (CodeBlock c)         = code $ pure $ printCode c
 lo (Definition ssPs l) sm  = toText $ makeDefn sm ssPs $ spec l
 lo (Defnt _ ssPs l)    sm  = toText $ makeDefn sm ssPs $ spec l
 lo (List l)             _  = toText $ makeList l
@@ -72,18 +73,10 @@ lo (LikelyChange n l)   _  = toText $ makeLC (spec n) (spec l)
 lo (UnlikelyChange n l) _  = toText $ makeUC (spec n) (spec l)
 lo (Bib bib)            sm = toText $ makeBib sm bib
 lo (Graph ps w h c l)   _  = toText $ makeGraph
-                               (map (\(a,b) -> (spec a, spec b)) ps)
-                               (if isNothing w
-                                  then (pure $ text "")
-                                  else (pure $ text $ "text width = " ++
-                                         (show $ fromJust w) ++ "em, ")
-                               )
-                               (if isNothing w
-                                  then (pure $ text "")
-                                  else (pure $ text $ "minimum height = " ++
-                                         (show $ fromJust h) ++ "em, ")
-                               )
-                               (spec c) (spec l)
+  (map (\(a,b) -> (spec a, spec b)) ps)
+  (pure $ text $ maybe "" (\x -> "text width = " ++ show x ++ "em ,") w)
+  (pure $ text $ maybe "" (\x -> "minimum height = " ++ show x ++ "em, ") h)
+  (spec c) (spec l)
 
 
 print :: HasSymbolTable s => s -> [LayoutObj] -> D
@@ -117,38 +110,41 @@ p_expr :: Expr -> String
 p_expr (Var v)    = symbol (Atomic v) --Ensures variables are rendered the same as other symbols
 p_expr (Dbl d)    = showFFloat Nothing d ""
 p_expr (Int i)    = show i
-p_expr (Bln b)    = show b
-p_expr (Add x y)  = p_expr x ++ "+" ++ p_expr y
-p_expr (Sub x y)  = p_expr x ++ "-" ++ p_expr y
-p_expr (Mul x y)  = mul x y
-p_expr (Frac n d) = "\\frac{" ++ needMultlined n ++ "}{" ++ needMultlined d ++"}"
-p_expr (Div n d)  = divide n d
-p_expr (Pow x y)  = pow x y
+p_expr (Assoc Add l)  = concat $ intersperse "+" $ map p_expr l
+p_expr (Assoc Mul l)  = mul l
 p_expr (Sym s)    = symbol s
-p_expr (Eq x y)   = p_expr x ++ "=" ++ p_expr y
-p_expr (NEq x y)  = p_expr x ++ "\\neq{}" ++ p_expr y
-p_expr (Lt x y)   = p_expr x ++ "<" ++ p_expr y
-p_expr (Gt x y)   = p_expr x ++ ">" ++ p_expr y
-p_expr (GEq x y)  = p_expr x ++ "\\geq{}" ++ p_expr y
-p_expr (LEq x y)  = p_expr x ++ "\\leq{}" ++ p_expr y
-p_expr (Dot x y)  = p_expr x ++ "\\cdot{}" ++ p_expr y
-p_expr (Neg x)    = neg x
+p_expr (BOp Frac n d) = "\\frac{" ++ needMultlined n ++ "}{" ++ needMultlined d ++"}"
+p_expr (BOp Div n d)  = divide n d
+p_expr (BOp Pow x y)  = pow x y
+p_expr (BOp Index a i) = p_indx a i
+p_expr (BOp o x y)    = p_expr x ++ p_bop o ++ p_expr y
+p_expr (Op Neg [x])   = neg x
 p_expr (Call f x) = p_expr f ++ paren (concat $ intersperse "," $ map p_expr x)
 p_expr (Case ps)  = "\\begin{cases}\n" ++ cases ps ++ "\n\\end{cases}"
 p_expr (Op f es)  = p_op f es
 p_expr (Grouping x) = paren (p_expr x)
 p_expr (Mtx a)    = "\\begin{bmatrix}\n" ++ p_matrix a ++ "\n\\end{bmatrix}"
-p_expr (Index a i) = p_indx a i
 --Logic
-p_expr (Not x)    = "\\neg{}" ++ p_expr x
-p_expr (And x y)  = p_expr x ++ "\\land{}" ++ p_expr y
-p_expr (Or x y)   = p_expr x ++ "\\lor{}" ++ p_expr y
-p_expr (Impl a b) = p_expr a ++ "\\implies{}" ++ p_expr b
-p_expr (Iff a b)  = p_expr a ++ "\\iff{}" ++ p_expr b
-p_expr (IsIn  a b) = p_expr a ++ "\\in{}" ++ show b
+p_expr (Assoc And l)  = concat $ intersperse "\\land{}" $ map p_expr l
+p_expr (Assoc Or l)   = concat $ intersperse "\\lor{}" $ map p_expr l
+p_expr (IsIn  a b) = p_expr a ++ "\\in{}" ++ p_space b
 
-p_expr (Forall v e) = "\\forall{} " ++ symbol v ++ ":\\ " ++ p_expr e
-p_expr (Exists v e) = "\\exists{} " ++ symbol v ++ ":\\ " ++ p_expr e
+p_bop :: BinOp -> String
+p_bop Sub = "-"
+p_bop Eq = "="
+p_bop NEq = "\\neq{}"
+p_bop Lt = "<"
+p_bop Gt = ">"
+p_bop GEq = "\\geq{}"
+p_bop LEq = "\\leq{}"
+p_bop Impl = "\\implies{}"
+p_bop Iff = "\\iff{}"
+p_bop Frac = "/"
+p_bop Div = "/"
+p_bop Pow = "^"
+p_bop Dot = "\\cdot{}"
+p_bop Index = error "no printing of Index"
+p_bop Cross = "\\times"
 
 -- | For seeing if long numerators or denominators need to be on multiple lines
 needMultlined :: Expr -> String
@@ -158,18 +154,17 @@ needMultlined x
   where lngth     = specLength $ E x
         multl str = "\\begin{multlined}\n" ++ str ++ "\\end{multlined}\n"
         mklines   = unlines . intersperse "\\\\+"
-        foldterms = foldl1 Add
         --FIXME: make multiple splits if needed; don't always split in 2
         groupEx lst = extrac $ splitAt (length lst `div` 2) lst
         extrac ([],[]) = []
-        extrac ([],l)  = [foldterms l]
-        extrac (f,[])  = extrac ([],f)
-        extrac (f,l)   = [foldterms f, foldterms l]
+        extrac ([],l)  = [Assoc Add l]
+        extrac (f,[])  = [Assoc Add f]
+        extrac (f,l)   = [Assoc Add f, Assoc Add l]
 
 splitTerms :: Expr -> [Expr]
-splitTerms (Neg e)   = map Neg $ splitTerms e
-splitTerms (Add a b) = splitTerms a ++ splitTerms b
-splitTerms (Sub a b) = splitTerms a ++ splitTerms (Neg b)
+splitTerms (Op Neg [e])   = map (\x -> Op Neg [x]) $ splitTerms e
+splitTerms (Assoc Add l) = concat $ map splitTerms l
+splitTerms (BOp Sub a b) = splitTerms a ++ splitTerms (Op Neg [b])
 splitTerms e = [e]
 
 -- | For printing indexes
@@ -184,11 +179,11 @@ p_sub e@(Var _)    = p_expr e
 p_sub e@(Dbl _)    = p_expr e
 p_sub e@(Int _)    = p_expr e
 p_sub e@(Sym _)    = p_expr e
-p_sub e@(Add _ _)  = p_expr e
-p_sub e@(Sub _ _)  = p_expr e
-p_sub e@(Mul _ _)  = p_expr e
-p_sub   (Frac a b) = divide a b --no block division in an index
-p_sub e@(Div _ _)  = p_expr e
+p_sub e@(Assoc Add _)  = p_expr e
+p_sub e@(BOp Sub _ _)  = p_expr e
+p_sub e@(Assoc Mul _)  = p_expr e
+p_sub   (BOp Frac a b) = divide a b --no block division in an index
+p_sub e@(BOp Div _ _)  = p_expr e
 p_sub _            = error "Tried to Index a non-simple expr in LaTeX, currently not supported."
 
 -- | For printing Matrix
@@ -204,20 +199,20 @@ p_in (x:xs) = p_in [x] ++ " & " ++ p_in xs
 
 
 -- | Helper for properly rendering multiplication of expressions
-mul :: Expr -> Expr -> String
-mul x y       = mulParen x ++ " " ++ mulParen y
+mul :: [ Expr ] -> String
+mul = concat . intersperse " " . map mulParen
 
 mulParen :: Expr -> String
-mulParen a@(Add _ _) = paren $ p_expr a
-mulParen a@(Sub _ _) = paren $ p_expr a
-mulParen a@(Div _ _) = paren $ p_expr a
+mulParen a@(Assoc Add _) = paren $ p_expr a
+mulParen a@(BOp Sub _ _) = paren $ p_expr a
+mulParen a@(BOp Div _ _) = paren $ p_expr a
 mulParen a = p_expr a
 
 divide :: Expr -> Expr -> String
-divide n d@(Add _ _) = p_expr n ++ "/" ++ paren (p_expr d)
-divide n d@(Sub _ _) = p_expr n ++ "/" ++ paren (p_expr d)
-divide n@(Add _ _) d = paren (p_expr n) ++ "/" ++ p_expr d
-divide n@(Sub _ _) d = paren (p_expr n) ++ "/" ++ p_expr d
+divide n d@(Assoc Add _) = p_expr n ++ "/" ++ paren (p_expr d)
+divide n d@(BOp Sub _ _) = p_expr n ++ "/" ++ paren (p_expr d)
+divide n@(Assoc Add _) d = paren (p_expr n) ++ "/" ++ p_expr d
+divide n@(BOp Sub _ _) d = paren (p_expr n) ++ "/" ++ p_expr d
 divide n d = p_expr n ++ "/" ++ p_expr d
 
 neg :: Expr -> String
@@ -225,22 +220,57 @@ neg x@(Var _) = "-" ++ p_expr x
 neg x@(Dbl _) = "-" ++ p_expr x
 neg x@(Int _) = "-" ++ p_expr x
 neg x@(Sym _) = "-" ++ p_expr x
-neg   (Neg n) = p_expr n
+-- neg x@(Neg _) = "-" ++ p_expr x
 neg x         = paren ("-" ++ p_expr x)
 
 pow :: Expr -> Expr -> String
-pow x@(Add _ _) y = sqbrac (p_expr x) ++ "^" ++ brace (p_expr y)
-pow x@(Sub _ _) y = sqbrac (p_expr x) ++ "^" ++ brace (p_expr y)
-pow x@(Frac _ _) y = sqbrac (p_expr x) ++ "^" ++ brace (p_expr y)
-pow x@(Div _ _) y = paren (p_expr x) ++ "^" ++ brace (p_expr y)
-pow x@(Mul _ _) y = paren (p_expr x) ++ "^" ++ brace (p_expr y)
-pow x@(Pow _ _) y = paren (p_expr x) ++ "^" ++ brace (p_expr y)
+pow x@(Assoc Add _) y = sqbrac (p_expr x) ++ "^" ++ brace (p_expr y)
+pow x@(BOp Sub _ _) y = sqbrac (p_expr x) ++ "^" ++ brace (p_expr y)
+pow x@(BOp Frac _ _) y = sqbrac (p_expr x) ++ "^" ++ brace (p_expr y)
+pow x@(BOp Div _ _) y = paren (p_expr x) ++ "^" ++ brace (p_expr y)
+pow x@(Assoc Mul _) y = paren (p_expr x) ++ "^" ++ brace (p_expr y)
+pow x@(BOp Pow _ _) y = paren (p_expr x) ++ "^" ++ brace (p_expr y)
 pow x y = p_expr x ++ "^" ++ brace (p_expr y)
 
 cases :: [(Expr,Expr)] -> String
 cases []     = error "Attempt to create case expression without cases"
 cases (p:[]) = (needMultlined $ fst p) ++ ", & " ++ p_expr (snd p)
 cases (p:ps) = cases [p] ++ "\\\\\n" ++ cases ps
+
+p_space :: Space -> String
+p_space Integer  = "\\mathbb{Z}"
+p_space Rational = "\\mathbb{Q}"
+p_space Real     = "\\mathbb{R}"
+p_space Natural  = "\\mathbb{N}"
+p_space Boolean  = "\\mathbb{B}"
+p_space Char     = "Char"
+p_space String   = "String"
+p_space Radians  = "rad"
+p_space (Vect a) = "V" ++ p_space a
+p_space (Obj a)  = a
+p_space (DiscreteI a)  = "\\{" ++ (concat $ intersperse ", " (map show a)) ++ "\\}"
+p_space (DiscreteD a)  = "\\{" ++ (concat $ intersperse ", " (map show a)) ++ "\\}"
+p_space (DiscreteS a)  = "\\{" ++ (concat $ intersperse ", " a) ++ "\\}"
+
+function :: Function -> String
+function Log            = "\\log"
+function (Summation _)  = "\\displaystyle\\sum"
+function (Product _)    = "\\displaystyle\\prod"
+function Abs            = ""
+function Norm           = ""
+function (Integral _ _) = "\\int"
+function Sin            = "\\sin"
+function Cos            = "\\cos"
+function Tan            = "\\tan"
+function Sec            = "\\sec"
+function Csc            = "\\csc"
+function Cot            = "\\cot"
+function Exp            = "e"
+function Sqrt           = "\\sqrt"
+function Not            = "\\neg{}"
+function Neg            = "-"
+function Dim            = error "Dim should not be reachable?"
+
 -----------------------------------------------------------------
 ------------------ TABLE PRINTING---------------------------
 -----------------------------------------------------------------
@@ -449,20 +479,19 @@ makeFigure r c f wp =
 ------------------ EXPR OP PRINTING-------------------------
 -----------------------------------------------------------------
 p_op :: Function -> [Expr] -> String
-p_op f@(Cross) xs = binfix_op f xs
-p_op f@(Summation bs) (x:[]) = show f ++ makeBound bs ++ brace (sqbrac (p_expr x))
+p_op f@(Summation bs) (x:[]) = function f ++ makeBound bs ++ brace (sqbrac (p_expr x))
 p_op (Summation _) _ = error "Something went wrong with a summation"
-p_op f@(Product bs) (x:[]) = show f ++ makeBound bs ++ brace (p_expr x)
-p_op f@(Integral bs wrtc) (x:[]) = show f ++ makeIBound bs ++ 
+p_op f@(Product bs) (x:[]) = function f ++ makeBound bs ++ brace (p_expr x)
+p_op f@(Integral bs wrtc) (x:[]) = function f ++ makeIBound bs ++ 
   brace (p_expr x ++ "d" ++ symbol wrtc) -- HACK alert.
 p_op (Integral _ _) _  = error "Something went wrong with an integral"
 p_op Abs (x:[]) = "|" ++ p_expr x ++ "|"
 p_op Abs _ = error "Abs should only take one expr."
 p_op Norm (x:[]) = "||" ++ p_expr x ++ "||"
 p_op Norm _ = error "Norm should only take on expression."
-p_op f@(Exp) (x:[]) = show f ++ "^" ++ brace (p_expr x)
-p_op f@(Sqrt) (x:[]) = show f ++ "{" ++ p_expr x ++ "}"
-p_op f (x:[]) = show f ++ paren (p_expr x) --Unary ops, this will change once more complicated functions appear.
+p_op f@(Exp) (x:[]) = function f ++ "^" ++ brace (p_expr x)
+p_op f@(Sqrt) (x:[]) = function f ++ "{" ++ p_expr x ++ "}"
+p_op f (x:[]) = function f ++ paren (p_expr x) --Unary ops, this will change once more complicated functions appear.
 p_op _ _ = error "Something went wrong with an operation"
 
 makeBound :: Maybe ((Symbol, Expr),Expr) -> String
@@ -476,11 +505,6 @@ makeIBound (Just low, Just high) = "_" ++ brace (p_expr low) ++
 makeIBound (Just low, Nothing)   = "_" ++ brace (p_expr low)
 makeIBound (Nothing, Just high)  = "^" ++ brace (p_expr high)
 makeIBound (Nothing, Nothing)    = ""
-
-binfix_op :: Function -> [Expr] -> String
-binfix_op f (x:y:[]) = p_expr x ++ show f ++ p_expr y
-binfix_op _ _ = error "Attempting to print binary operator with inappropriate" ++
-                   "number of operands (should be 2)"
 
 -----------------------------------------------------------------
 ------------------ MODULE PRINTING----------------------------
@@ -570,7 +594,7 @@ renderF sm c fields =
 
 cite :: HasSymbolTable s => s -> [CiteField] -> Spec
 cite sm fields = foldr1 (:+:) $
-  map (flip I.spec sm . rmSpace . lstName) (getAuthors fields) ++ [S $ show $ getYear fields]
+  map (I.spec sm . rmSpace . lstName) (getAuthors fields) ++ [S $ show $ getYear fields]
 
 -- Remove spaces
 rmSpace :: LS.Sentence -> LS.Sentence
@@ -603,9 +627,9 @@ showBibTeX _ (Title      s) = showField "title" s
 showBibTeX _ (Volume     s) = showField "volume" (S $ show s)
 showBibTeX _ (Publisher  s) = showField "publisher" s
 showBibTeX sm (Author p@(Person {_convention=Mono}:_)) = showField "author" 
-  (I.spec (rendPeople p) sm) :+: S ",\n" :+: 
-  showField "sortkey" (I.spec (rendPeople p) sm)
-showBibTeX sm (Author    p) = showField "author" (I.spec (rendPeople p) sm)
+  (I.spec sm (rendPeople p)) :+: S ",\n" :+: 
+  showField "sortkey" (I.spec sm (rendPeople p))
+showBibTeX sm (Author    p) = showField "author" $ I.spec sm (rendPeople p)
 showBibTeX _ (Year       y) = showField "year" (S $ show y)
 showBibTeX _ (Date   d m y) = showField "year"    (S $ unwords [show d, show m, show y])
 showBibTeX _ (URLdate d m y) = showField "urldate" (S $ unwords [show d, show m, show y])
@@ -618,7 +642,7 @@ showBibTeX _ (Issue      s) = showField "number" (S $ show s)
 showBibTeX _ (School     s) = showField "school" s
 showBibTeX _ (URL        s) = showField "url" s
 showBibTeX _ (HowPub     s) = showField "howpublished" s
-showBibTeX sm (Editor     p) = showField "editor" (I.spec (rendPeople p) sm)
+showBibTeX sm (Editor     p) = showField "editor" $ I.spec sm (rendPeople p)
 
 showField :: String -> Spec -> Spec
 showField f s = S f :+: S "={" :+: s :+: S "}"

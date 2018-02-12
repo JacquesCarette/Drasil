@@ -10,7 +10,6 @@ module Language.Drasil.ChunkDB
 import Language.Drasil.Chunk
 import Language.Drasil.Chunk.Quantity
 import Language.Drasil.Chunk.NamedIdea
-import Language.Drasil.Chunk.Wrapper
 import Language.Drasil.Chunk.Concept 
 import Language.Drasil.Unit
 
@@ -38,14 +37,14 @@ type UnitMap = Map.Map String UnitDefn
 -- Until these are built through automated means, there will
 -- likely be some 'manual' duplication of terms as this map will contain all
 -- quantities, concepts, etc.
-type TermMap = Map.Map String NWrapper
+type TermMap = Map.Map String IdeaDict
 
 -- | Smart constructor for a 'SymbolMap'
 symbolMap :: (Quantity c) => [c] -> SymbolMap
 symbolMap cs = Map.fromList (map (\x -> ((x ^. id), qs x)) cs)
 
 -- | Smart constructor for a 'TermMap'
-termMap :: (NamedIdea c) => [c] -> TermMap
+termMap :: (Idea c) => [c] -> TermMap
 termMap ts = Map.fromList (map (\x -> ((x ^. id), nw x)) ts)
 
 -- | Smart constructor for a 'ConceptMap'
@@ -73,7 +72,7 @@ getUnitLup c m = let lookC = symbLookup c (m ^. symbolTable) in
                  getUnit lookC
 
 -- | Looks up an id in the term table. If nothing is found, an error is thrown
-termLookup :: (Chunk c) => c -> TermMap -> NWrapper
+termLookup :: (Chunk c) => c -> TermMap -> IdeaDict
 termLookup c m = let lookC = Map.lookup (c ^. id) m in
                  getT lookC
   where getT (Just x) = x
@@ -88,7 +87,7 @@ data ChunkDB = CDB { symbs :: SymbolMap
 -- | Smart constructor for chunk databases. Takes a list of Quantities 
 -- (for SymbolTable), NamedIdeas (for TermTable), Concepts (for DefinitionTable),
 -- and Units (for UnitTable)
-cdb :: (Quantity q, NamedIdea t, Concept c, Unit u) => 
+cdb :: (Quantity q, Idea t, Concept c, Unit u) => 
   [q] -> [t] -> [c] -> [u] -> ChunkDB
 cdb s t c u = CDB (symbolMap s) (termMap t) (conceptMap c) (unitMap u)
 

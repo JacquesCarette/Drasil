@@ -100,7 +100,7 @@ data Literature = Lit Topic -- ^ literature
                 | Doc' Topic -- ^ existing documentation for (plural of topic)
                 | Manual Topic -- ^ manual
 
-type Topic = NWrapper
+type Topic = IdeaDict
 
 -- | For creating the table of units intro
 data TUIntro = System -- ^ System of units (defaults to SI)
@@ -140,8 +140,8 @@ data StkhldrSec = StkhldrProg CI Sentence | StkhldrProg2 [StkhldrSub] | StkhldrV
 -- | Stakeholders subsections
 data StkhldrSub where
   StkhldrSubVerb :: Section -> StkhldrSub
-  Client :: (NamedIdea a) => a -> Sentence -> StkhldrSub
-  Cstmr  :: (NamedIdea a) => a -> StkhldrSub
+  Client :: (Idea a) => a -> Sentence -> StkhldrSub
+  Cstmr  :: (Idea a) => a -> StkhldrSub
 
 {--}
 
@@ -173,7 +173,7 @@ data SSDSub where
 -- | Problem Description section
 data ProblemDescription where
   PDVerb :: Section -> ProblemDescription
-  PDProg :: (NamedIdea a) => Sentence -> a -> Sentence -> [Section] -> ProblemDescription
+  PDProg :: (Idea a) => Sentence -> a -> Sentence -> [Section] -> ProblemDescription
   
 -- | Solution Characteristics Specification section
 data SolChSpec where
@@ -221,7 +221,7 @@ data AppndxSec = AppndxVerb Section | AppndxProg [Contents]
 {--}
 
 -- | Creates a document from a document description and system information
-mkDoc :: DocDesc -> (NWrapper -> NWrapper -> Sentence) -> SystemInformation -> Document
+mkDoc :: DocDesc -> (IdeaDict -> IdeaDict -> Sentence) -> SystemInformation -> Document
 mkDoc l comb si@(SI {_sys = sys, _kind = kind, _authors = authors}) = Document 
   ((nw kind) `comb` (nw sys)) (manyNames authors) (mkSections si l)
 
@@ -493,7 +493,7 @@ mkAppndxSec (AppndxProg cs) = SRS.appendix cs []
 {--}
 
 -- Helper
-siSys :: SystemInformation -> NWrapper
+siSys :: SystemInformation -> IdeaDict
 siSys (SI {_sys = sys}) = nw sys
 
 --BELOW IS IN THIS FILE TEMPORARILY--

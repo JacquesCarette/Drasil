@@ -314,7 +314,7 @@ s2_3_intro_end = foldl (+:+) EmptyS [(at_start' $ the dataDefn),
 {--User Characteristics--}
 
 s4_1_bullets :: (NamedIdea n1, NamedIdea n, NamedIdea n2, NamedIdea n3,
-  NamedIdea n4, NamedIdea n5, NamedIdea c, NamedIdea n6) =>
+  NamedIdea n4, NamedIdea n5, Idea c, NamedIdea n6) =>
   n6 -> c -> n5 -> n4 -> n3 -> n2 -> n1 -> n -> Contents
 s4_1_bullets intendedIndvdl progName yr degreeType prog1 prog2 undrstd1 undrstd2
   = enumBullet [foldlSent [(phrase intendedIndvdl `sOf` short progName)

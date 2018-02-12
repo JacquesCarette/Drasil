@@ -29,7 +29,7 @@ nwtnCooling = makeRC "nwtnCooling" (nounPhraseSP "Newton's law of cooling")
   nwtnCooling_desc nwtnCooling_rel
 
 nwtnCooling_rel :: Relation
-nwtnCooling_rel = FCall (C thFluxVect) [C QP.time] $= C htTransCoeff :*
+nwtnCooling_rel = FCall (C thFluxVect) [C QP.time] $= C htTransCoeff *
   FCall (C deltaT) [C QP.time]
 
 nwtnCooling_desc :: Sentence
@@ -43,7 +43,7 @@ nwtnCooling_desc = foldlSent [at_start law_conv_cooling +:+.
   getES htTransCoeff `isThe` S "heat transfer coefficient" `sC`
   S "assumed independant of", getES QT.temp, sParen (acroA 2) +:+.
   sParen (Sy $ unit_symb htTransCoeff),
-  E (FCall (C deltaT) [C QP.time] $= FCall (C temp) [C QP.time] :-
+  E (FCall (C deltaT) [C QP.time] $= FCall (C temp) [C QP.time] -
   FCall (C temp_env) [C QP.time]) `isThe` S "time-dependant thermal gradient",
   S "between the environment and the object",
   sParen (Sy $ unit_symb deltaT)]
@@ -54,9 +54,9 @@ rocTempSimp = makeRC "rocTempSimp" (nounPhraseSP $ "Simplified rate " ++
   "of change of temperature") rocTempSimp_desc rocTempSimp_rel
 
 rocTempSimp_rel :: Relation
-rocTempSimp_rel = (C QPP.mass) :* (C QT.heat_cap_spec) :*
-  Deriv Total (C QT.temp) (C QP.time) $= C ht_flux_in :* C in_SA :-
-  C ht_flux_out :* C out_SA :+ C vol_ht_gen :* C QPP.vol
+rocTempSimp_rel = (C QPP.mass) * (C QT.heat_cap_spec) *
+  Deriv Total (C QT.temp) QP.time $= C ht_flux_in * C in_SA -
+  C ht_flux_out * C out_SA + C vol_ht_gen * C QPP.vol
 
 rocTempSimp_desc :: Sentence
 rocTempSimp_desc = foldlSent [S "The basic", phrase equation,

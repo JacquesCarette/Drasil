@@ -17,6 +17,7 @@ import Drasil.SWHS.Concepts (water, coil, phsChgMtrl)
 import Data.Drasil.Units.PhysicalProperties (densityU)
 import Data.Drasil.Utils(mkDataDef)
 import Data.Drasil.Quantities.Math (gradient)
+import Data.Drasil.Constraints (gtZeroConstr)
 
 swhsSymbols :: [CQSWrapper]
 swhsSymbols = (map cqs swhsUnits) ++ (map cqs swhsUnitless) ++
@@ -219,24 +220,23 @@ tank_length, diam, pcm_vol, pcm_SA, pcm_density, temp_melt_P,
 -- Constraint 1
 tank_length = uqc "tank_length" (nounPhraseSP "length of tank")
   "The length of the tank" cL metre Rational
-  [physc $ \c -> c $> Int 0,
-  sfwrc $ \c -> C tank_length_min $<= c $<= C tank_length_max] (Dbl 1.5)
+  [gtZeroConstr,
+  sfwrc $ Bounded (Inc $ C tank_length_min) (Inc $ C tank_length_max)] (Dbl 1.5)
   0.1
 
 -- Constraint 2
 diam = uqc "diam" (nounPhraseSP "diameter of tank")
   "The diameter of the tank" cD metre Rational
-  [physc $ \c -> c $> Int 0,
-  sfwrc $ \c -> (c :/ C tank_length_max) $<=
-  (c :/ C tank_length) $<= (c :/ C tank_length_min)] (Dbl 0.412) 0.1
+  [gtZeroConstr]
+  (Dbl 0.412) 0.1
 
 -- Constraint 3
 pcm_vol = uqc "pcm_vol" (nounPhraseSP "volume of PCM")
   "The amount of space occupied by a given quantity of phase change material"
   (sub (eqSymb vol) cP) m_3 Rational
-  [physc $ \c -> c $> Int 0,
-  physc $ \c -> c $< C tank_vol,
-  sfwrc $ \c -> c $>= C tank_vol] (Dbl 0.05) 0.1
+  [physc $ Bounded (Exc 0) (Exc $ C tank_vol)]
+  -- FIXME: this made no sense sfwrc $ \c -> c $>= C tank_vol] 
+  (Dbl 0.05) 0.1
   -- needs to add (D,L)*minfract to end of last constraint
 
 -- Constraint 4
@@ -246,17 +246,15 @@ pcm_SA = uqc "pcm_SA"
   CapFirst CapWords))
   "Area covered by the outermost layer of the phase change material"
   (sub cA cP) m_2 Rational
-  [physc $ \c -> c $> Int 0,
-  sfwrc $ \c -> C pcm_vol $<= c $<=
-  ((Int 2 :/ C htTransCoeff_min) :* C tank_vol)]
+  [gtZeroConstr,
+  sfwrc $ Bounded (Inc $ C pcm_vol) (Inc $ (Int 2 / C htTransCoeff_min) * C tank_vol)]
   (Dbl 1.2) 0.1
 
 -- Constraint 5
 pcm_density = uqc "pcm_density" (nounPhraseSP "density of PCM")
   "Mass per unit volume of the phase change material"
   (sub (eqSymb density) cP) densityU Rational
-  [physc $ \c -> c $> Int 0,
-  physc $ \c -> C pcm_density_min $< c $< C pcm_density_max] (Dbl 1007) 0.1
+  [ physc $ Bounded (Exc $ C pcm_density_min) (Exc $ C pcm_density_max)] (Dbl 1007) 0.1
 
 -- Constraint 6
 temp_melt_P = uqc "temp_melt_P"
@@ -264,7 +262,7 @@ temp_melt_P = uqc "temp_melt_P"
   ("Temperature at which the phase change " ++
     "material transitions from a solid to a liquid")
   (sup (sub (eqSymb temp) (Atomic "melt")) cP) centigrade Rational
-  [physc $ \c -> Int 0 $< c $< C temp_C] (Dbl 44.2) 0.1
+  [physc $ Bounded (Exc 0) (Exc $ C temp_C)] (Dbl 44.2) 0.1
 
 -- Constraint 7
 htCap_S_P = uqc "htCap_S_P"
@@ -272,8 +270,8 @@ htCap_S_P = uqc "htCap_S_P"
   ("The amount of energy required to raise the temperature of a " ++
   "given unit mass of solid phase change material by a given amount")
   (sup (sub (eqSymb heat_cap_spec) cP) cS) UT.heat_cap_spec Rational
-  [physc $ \c -> c $> Int 0,
-  sfwrc $ \c -> (Index (c) (V "min")) $< c $< (Index (c) (V "max"))]
+  [gtZeroConstr,
+  sfwrc $ Bounded (Exc $ C htCap_S_P_min) (Exc $ C htCap_S_P_max)]
   (Dbl 1760) 0.1
 
 -- Constraint 8
@@ -282,8 +280,8 @@ htCap_L_P = uqc "htCap_L_P"
   ("The amount of energy required to raise the temperature of a " ++
   "given unit mass of liquid phase change material by a given amount")
   (sup (sub (eqSymb heat_cap_spec) cP) cL) UT.heat_cap_spec Rational
-  [physc $ \c -> c $> Int 0,
-  sfwrc $ \c -> (Index (c) (V "min")) $< c $< (Index (c) (V "max"))]
+  [gtZeroConstr,
+  sfwrc $ Bounded (Exc $ C htCap_L_P_min) (Exc $ C htCap_L_P_max )]
   (Dbl 2270) 0.1
 
 --Constraint 9
@@ -291,37 +289,37 @@ htFusion = uqc "htFusion" (nounPhraseSP "specific latent heat of fusion")
   ("amount of thermal energy required to " ++
   "completely melt a unit mass of a substance")
   (sub cH lF) specificE Rational
-  [physc $ \c -> c $> Int 0,
-  sfwrc $ \c -> C htFusion_min $< c $< C htFusion_max] (Dbl 211600) 0.1
+  [gtZeroConstr,
+  sfwrc $ Bounded (Exc $ C htFusion_min) (Exc $ C htFusion_max)] (Dbl 211600) 0.1
 
 -- Constraint 10
 coil_SA = uqc "coil_SA"
   (compoundPhrase (nounPhrase'' (phrase coil) (phrase coil) CapFirst CapWords)
   (nounPhrase'' (phrase surArea) (phrase surArea) CapFirst CapWords))
   "Area covered by the outermost layer of the coil" (sub cA cC) m_2 Rational
-  [physc $ \c -> c $> Int 0,
-  sfwrc $ \c -> c $<= C coil_SA_max] (Dbl 0.12) 0.1
+  [gtZeroConstr,
+  sfwrc $ UpTo $ Inc $ C coil_SA_max] (Dbl 0.12) 0.1
 
 -- Constraint 11
 temp_C = uqc "temp_C" (nounPhraseSP "temperature of the heating coil")
   "The average kinetic energy of the particles within the coil"
   (sub (eqSymb temp) cC) centigrade Rational
-  [physc $ \c -> Int 0 $< c $< Int 100] (Dbl 50) 0.1
+  [physc $ Bounded (Exc 0) (Exc 100)] (Dbl 50) 0.1
 
 -- Constraint 12
 w_density = uqc "w_density" (density `of_` water)
   "Mass per unit volume of water"
   (sub (eqSymb density) cW) densityU Rational
-  [physc $ \c -> c $> Int 0,
-  sfwrc $ \c -> C w_density_min $< c $<= C w_density_max] (Dbl 1000) 0.1
+  [gtZeroConstr,
+  sfwrc $ Bounded (Exc $ C w_density_min) (Inc $ C w_density_max)] (Dbl 1000) 0.1
   
 -- Constraint 13
 htCap_W = uqc "htCap_W" (heat_cap_spec `of_` water)
   ("The amount of energy required to raise the " ++
     "temperature of a given unit mass of water by a given amount")
   (sub (eqSymb heat_cap_spec) cW) UT.heat_cap_spec Rational
-  [physc $ \c -> c $> Int 0,
-  sfwrc $ \c -> C htCap_W_min $< c $< C htCap_W_max] (Dbl 4186) 0.1
+  [gtZeroConstr,
+  sfwrc $ Bounded (Exc $ C htCap_W_min) (Exc $ C htCap_W_max)] (Dbl 4186) 0.1
   
 -- Constraint 14
 coil_HTC = uqc "coil_HTC" (nounPhraseSP
@@ -330,8 +328,8 @@ coil_HTC = uqc "coil_HTC" (nounPhraseSP
   "the thermal flux from the coil to the surrounding water")
   (sub (eqSymb htTransCoeff) cC)
   UT.heat_transfer_coef Rational
-  [physc $ \c -> c $> Int 0,
-  sfwrc $ \c -> C coil_HTC_min $<= c $<= C coil_HTC_max] (Dbl 1000) 0.1
+  [gtZeroConstr,
+  sfwrc $ Bounded (Inc $ C coil_HTC_min) (Inc $ C coil_HTC_max)] (Dbl 1000) 0.1
   
 -- Constraint 15
 pcm_HTC = uqc "pcm_HTC"
@@ -339,22 +337,22 @@ pcm_HTC = uqc "pcm_HTC"
   ("The convective heat transfer coefficient that models " ++
   "the thermal flux from the phase change material to the surrounding water")
   (sub lH cP) UT.heat_transfer_coef Rational
-  [physc $ \c -> c $> Int 0,
-  sfwrc $ \c -> C pcm_HTC_min $<= c $<= C pcm_HTC_max] (Dbl 1000) 0.1
+  [gtZeroConstr,
+  sfwrc $ Bounded (Inc $ C pcm_HTC_min) (Inc $ C pcm_HTC_max)] (Dbl 1000) 0.1
   
 -- Constraint 16
 temp_init = uqc "temp_init" (nounPhraseSP "initial temperature")
   "The temperature at the beginning of the simulation"
   (sub (eqSymb temp)(Atomic "init")) centigrade Rational
-  [physc $ \c -> 0 $< c $< C melt_pt] (Dbl 40) 0.1
+  [physc $ Bounded (Exc 0) (Exc $ C melt_pt)] (Dbl 40) 0.1
   
 -- Constraint 17
 time_final = uqc "time_final" (nounPhraseSP "final time")
   ("The amount of time elapsed from the beginning of the " ++
   "simulation to its conclusion") (sub (eqSymb time) 
   (Atomic "final")) second Rational
-  [physc $ \c -> c $> Int 0,
-  sfwrc $ \c -> c $< C time_final_max] (Dbl 50000) 0.1
+  [gtZeroConstr,
+  sfwrc $ UpTo $ Exc $ C time_final_max] (Dbl 50000) 0.1
   
   
 -- Output Constraints
@@ -367,7 +365,7 @@ temp_W = uqcNU "temp_W"
   (nounPhraseSP "temperature of the water")
   "The average kinetic energy of the particles within the water" 
   (sub (eqSymb temp) cW) centigrade Rational
-  [physc $ \c -> C temp_init $<= c $<= C temp_C] (Dbl 0)
+  [physc $ Bounded (Inc $ C temp_init) (Inc $ C temp_C)] (Dbl 0)
 
 -- Constraint 19
 temp_PCM = uqcNU "temp_PCM"
@@ -375,19 +373,19 @@ temp_PCM = uqcNU "temp_PCM"
   ("The average kinetic energy of the " ++
     "particles within the phase change material")
   (sub (eqSymb temp) cP) centigrade Rational
-  [physc $ \c -> C temp_init $<= c $<= C temp_C] (Dbl 0)
+  [physc $ Bounded (Inc $ C temp_init) (Inc $ C temp_C)] (Dbl 0)
   
 -- Constraint 20
 w_E = uqcNU "w_E" (nounPhraseSP "change in heat energy in the water")
   "Change in thermal energy within the water" 
   (sub (eqSymb sens_heat) cW) joule Rational
-  [physc $ \c -> c $>= Int 0] (Dbl 0)
+  [physc $ UpFrom $ Inc 0] (Dbl 0)
   
 -- Constraint 21
 pcm_E = uqcNU "pcm_E" (nounPhraseSP "change in heat energy in the PCM")
   "Change in thermal energy within the phase change material" 
   (sub (eqSymb sens_heat) cP) joule Rational
-  [physc $ \c -> c $>= Int 0] (Dbl 0)
+  [physc $ UpFrom $ Inc 0] (Dbl 0)
 
 
 
@@ -399,19 +397,19 @@ abs_tol, rel_tol, cons_tol :: UncertainChunk
 
 abs_tol = uvc "abs_tol" (nounPhraseSP "absolute tolerance") 
   (sub cA (Atomic "tol")) Real
-  [ physc $ \c -> (Dbl 0) $< c ,
-    physc $ \c -> c $< (Dbl 1) ] (Dbl (10.0**(-10))) 0.01
+  [ physc $ Bounded (Exc 0) (Exc 1)] 
+   (Dbl (10.0**(-10))) 0.01
 
 rel_tol = uvc "pb_tol" (nounPhraseSP "relative tolerance") 
   (sub cR (Atomic "tol")) Real
-  [ physc $ \c -> (Dbl 0) $< c ,
-    physc $ \c -> c $< (Dbl 1) ] (Dbl (10.0**(-10))) 0.01
+  [ physc $ Bounded (Exc 0) (Exc 1)] 
+  (Dbl (10.0**(-10))) 0.01
 
 cons_tol = uvc "pb_tol"
   (nounPhraseSP "relative tolerance for conservation of energy") 
   (sub cC (Atomic "tol")) Real
-  [ physc $ \c -> (Dbl 0) $< c ,
-    physc $ \c -> c $< (Dbl 1) ] (Dbl (10.0**(-3))) 0.01
+  [ physc $ Bounded (Exc 0) (Exc 1)] 
+  (Dbl (10.0**(-3))) 0.01
 
 
 

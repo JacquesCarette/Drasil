@@ -34,6 +34,7 @@ instance Chunk UWrapper where
   id = ulens id
 instance NamedIdea UWrapper where
   term = ulens term
+instance Idea UWrapper where
   getA (UW a) = getA a
 instance Q.Quantity UWrapper where
   typ = ulens Q.typ
@@ -66,6 +67,7 @@ instance Chunk UCWrapper where
   id = uclens id
 instance NamedIdea UCWrapper where
   term = uclens term
+instance Idea UCWrapper where
   getA (UCW a) = getA a
 instance Q.Quantity UCWrapper where
   typ = uclens Q.typ

@@ -5,7 +5,7 @@ import Text.PrettyPrint
 import Data.List (intersperse)
 
 import Language.Drasil.Document (Document, MaxWidthPercent)
-import Language.Drasil.HTML.AST (Expr)
+import Language.Drasil.Printing.AST (Expr)
 
 
 html, head_tag, body, title, paragraph, code, tr, th, td :: Doc -> Doc

@@ -15,28 +15,24 @@ import Control.Lens ((^.))
 
 type Relation = Expr
 
-infixr 8 :^
-infixl 7 :*
-infixl 7 :/
-infixl 6 :+
-infixl 6 :-
+infixr 8 $^
+infixl 7 $/
 infixr 4 $=
+infixr 9 $&&
+infixr 9 $||
+
+data Oper = Add | Mul | And | Or
+  deriving (Eq)
 
 -- | Drasil Expressions
 data Expr where
   V        :: Variable -> Expr
   Dbl      :: Double -> Expr
   Int      :: Integer -> Expr
-  (:^)     :: Expr -> Expr -> Expr -- Power operator
-  (:*)     :: Expr -> Expr -> Expr -- Multiplication
-  (:/)     :: Expr -> Expr -> Expr -- Division
-  (:+)     :: Expr -> Expr -> Expr -- Addition
-  (:-)     :: Expr -> Expr -> Expr -- Subtraction
-  (:.)     :: Expr -> Expr -> Expr -- Dot product
-  Neg      :: Expr -> Expr -- Negation
-  Deriv    :: DerivType -> Expr -> Expr -> Expr -- Derivative, syntax is:
+  Assoc    :: Oper -> [Expr] -> Expr
+  Deriv    :: Chunk c => DerivType -> Expr -> c -> Expr -- Derivative, syntax is:
   -- Type (Partial or total) -> principal part of change -> with respect to
-  -- For example: Deriv Part y x1 would be (dy/dx1)*dx1
+  -- For example: Deriv Part y x1 would be (dy/dx1)
   C        :: (Chunk c) => c -> Expr -- Chunk (must have a symbol)
   FCall    :: Expr -> [Expr] -> Expr -- F(x) is (FCall F [x]) or similar
                                   -- FCall accepts a list of params
@@ -44,40 +40,31 @@ data Expr where
   Case     :: [(Expr,Relation)] -> Expr -- For multi-case expressions,
                                      -- each pair represents one case
   Matrix   :: [[Expr]] -> Expr
-  Index    :: Expr -> Expr -> Expr  -- for accessing elements of sequence/list/vect etc.
-                                    -- arr[i] is (Index arr i)
-  Len      :: Expr -> Expr          -- length
-  Append   :: Expr -> Expr -> Expr  -- need this for now since types don't reach generation
-                                    -- can probably just use addition between list types for this later
   Grouping :: Expr -> Expr
   UnaryOp  :: UFunc -> Expr
   BinaryOp :: BiFunc -> Expr
-  EOp :: EOperator -> Expr
-  EEquals    :: Expr -> Expr -> Expr
-  ENEquals   :: Expr -> Expr -> Expr
-  ELess      :: Expr -> Expr -> Expr
-  EGreater   :: Expr -> Expr -> Expr
-  ELessEq    :: Expr -> Expr -> Expr
-  EGreaterEq :: Expr -> Expr -> Expr
-  -- start of logic Expr
-  (:&&)    :: Expr -> Expr -> Expr -- logical and
-  (:||)    :: Expr -> Expr -> Expr -- logical or
-  Not      :: Expr -> Expr -- logical not
+  EOp      :: EOperator -> Expr
 
-  IsIn  :: Expr -> Space -> Expr --	element of
+  IsIn     :: Expr -> Space -> Expr --	element of
 
-  ForAll   :: Symbol -> Expr -> Expr
-  Exists   :: Symbol -> Expr -> Expr
-  (:=>)  :: Expr -> Expr -> Expr -- implies, &rArr; \implies
-  (:<=>) :: Expr -> Expr -> Expr -- if and only if, &hArr; \iff
+($=), ($!=), ($<), ($>), ($<=), ($>=), ($=>), ($<=>), ($.), ($-), 
+  ($/) :: Expr -> Expr -> Expr
+($=)  a b = BinaryOp $ EEquals a b
+($!=) a b = BinaryOp $ ENEquals a b
+($<)  a b = BinaryOp $ ELess a b
+($>)  a b = BinaryOp $ EGreater a b
+($<=) a b = BinaryOp $ ELessEq a b
+($>=) a b = BinaryOp $ EGreaterEq a b
+a $=> b = BinaryOp $ Implies a b
+a $<=> b = BinaryOp $ IFF a b
+a $. b   = BinaryOp $ DotProduct a b
+a $- b = BinaryOp $ Subtract a b
+a $/ b = BinaryOp $ Divide a b
 
-($=), ($!=), ($<), ($>), ($<=), ($>=) :: Expr -> Expr -> Expr
-($=)  = EEquals
-($!=) = ENEquals
-($<)  = ELess
-($>)  = EGreater
-($<=) = ELessEq
-($>=) = EGreaterEq
+($^), ($&&), ($||) :: Expr -> Expr -> Expr
+($^) a b = BinaryOp (Power a b)
+a $&& b = Assoc And [a,b]
+a $|| b = Assoc Or  [a,b]
 
 type Variable = String
 
@@ -85,12 +72,14 @@ data DerivType = Part
                | Total
   deriving Eq
 
+-- TODO: have $+ flatten nest Adds
 instance Num Expr where
-  a + b = a :+ b
-  a * b = a :* b
-  a - b = a :- b
+  a + b = Assoc Add [a, b]
+  a * b = Assoc Mul [a, b]
+  a - b = BinaryOp $ Subtract a b
   fromInteger a = Int a
   abs = UnaryOp . Abs
+  negate = UnaryOp . Neg
 
   -- this is a Num wart
   signum _ = error "should not use signum in expressions"
@@ -100,47 +89,41 @@ instance Eq Expr where
   V a == V b                   =  a == b
   Dbl a == Dbl b               =  a == b
   Int a == Int b               =  a == b
-  (:^) a b == (:^) c d         =  a == c && b == d
-  (:*) a b == (:*) c d         =  a == c && b == d || a == d && b == c
-  (:/) a b == (:/) c d         =  a == c && b == d
-  (:+) a b == (:+) c d         =  a == c && b == d || a == d && b == c
-  (:-) a b == (:-) c d         =  a == c && b == d
-  (:.) a b == (:.) c d         =  a == c && b == d || a == d && b == c
-  Not a == Not b               =  a == b
-  Neg a == Neg b               =  a == b
-  Deriv t1 a b == Deriv t2 c d =  t1 == t2 && a == c && b == d
+  Assoc o1 l1 == Assoc o2 l2   =  o1 == o2 && l1 == l2
+  Deriv t1 a b == Deriv t2 c d =  t1 == t2 && a == c && (b ^. id) == (d ^. id)
   C a == C b                   =  (a ^. id) == (b ^. id)
   FCall a b == FCall c d       =  a == c && b == d
   Case a == Case b             =  a == b
-  EEquals  a b == EEquals  c d      =  a == c && b == d || a == d && b == c
-  ENEquals a b == ENEquals c d      =  a == c && b == d || a == d && b == c
-  ELess  a b == ELess  c d          =  a == c && b == d
-  EGreater  a b == EGreater  c d    =  a == c && b == d
-  ELessEq a b == ELessEq c d        =  a == c && b == d
-  EGreaterEq a b == EGreaterEq c d  =  a == c && b == d
-  --Logic
-  (:&&) a b  == (:&&) c d      =  a == c && b == d || a == d && b == c
-  (:||) a b  == (:||) c d      =  a == c && b == d || a == d && b == c
-  (:=>) a b  == (:=>) c d      =  a == c && b == d
-  (:<=>) a b == (:<=>) c d     =  a == c && b == d || a == d && b == c
   IsIn  a b  == IsIn  c d      =  a == c && b == d
-  ForAll a b == ForAll c d     =  a == c && b == d -- not quite right...
-  Exists a b == Exists c d     =  a == c && b == d -- not quite right...
+  BinaryOp a == BinaryOp b     =  a == b
   _ == _                       =  False
 
 instance Fractional Expr where
-  a / b = a :/ b
-  fromRational r = (fromInteger $ numerator   r) :/
-                   (fromInteger $ denominator r)
+  a / b = BinaryOp $ Divide a b
+  fromRational r = BinaryOp $ Divide (fromInteger $ numerator   r)
+                                     (fromInteger $ denominator r)
 
 
 --Known math functions.
 -- TODO: Move the below to a separate file somehow. How to go about it?
 
 -- | Binary Functions
-data BiFunc where
-  Cross :: Expr -> Expr -> BiFunc --Cross Product: HTML &#10799;
-  -- Cross product of two expressions
+data BiFunc =
+    Cross Expr Expr -- Cross Product: HTML &#10799;
+  | Power Expr Expr -- Power operator
+  | EEquals Expr Expr
+  | ENEquals Expr Expr
+  | ELess Expr Expr
+  | EGreater Expr Expr
+  | ELessEq Expr Expr
+  | EGreaterEq Expr Expr
+  | Implies Expr Expr  -- implies, &rArr; \implies
+  | IFF Expr Expr  -- if and only if, &hArr; \iff
+  | DotProduct Expr Expr
+  | Subtract Expr Expr
+  | Divide Expr Expr
+  | Index Expr Expr
+  deriving Eq
 
 -- | Operators
 -- All operators take a |DomainDesc| and a variable
@@ -163,6 +146,9 @@ data UFunc where
   Cot    :: Expr -> UFunc
   Exp    :: Expr -> UFunc
   Sqrt   :: Expr -> UFunc
+  Not    :: Expr -> UFunc
+  Neg    :: Expr -> UFunc
+  Dim    :: Expr -> UFunc -- dimension (mostly of a vector)
 
 -- | Domain Description. A 'Domain' is the extent of a variable that
 -- ranges over a particular Space. So a |DomainDesc| contains

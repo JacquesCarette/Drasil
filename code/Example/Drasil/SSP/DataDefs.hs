@@ -85,11 +85,11 @@ intersliceWtrF = mkDataDef watrForce intersliceWtrFEqn
 
 intersliceWtrFEqn :: Expr
 intersliceWtrFEqn = Case [case1,case2,case3]
-  where case1 = (((inxi slopeHght)-(inxi slipHght )):^ 2 :/ 2  *
-          (C satWeight) + ((inxi waterHght)-(inxi slopeHght)):^ 2 *
+  where case1 = (((inxi slopeHght)-(inxi slipHght ))$^ 2 / 2  *
+          (C satWeight) + ((inxi waterHght)-(inxi slopeHght))$^ 2 *
           (C satWeight), (inxi waterHght) $>= (inxi slopeHght))
 
-        case2 = (((inxi waterHght)-(inxi slipHght )):^ 2 :/ 2  * (C satWeight),
+        case2 = (((inxi waterHght)-(inxi slipHght ))$^ 2 / 2  * (C satWeight),
                 (inxi slopeHght) $> (inxi waterHght) $> (inxi slipHght))
 
         case3 = (Int 0,(inxi waterHght) $<= (inxi slipHght))
@@ -169,8 +169,8 @@ resShearWO = mkDataDef shearRNoIntsl resShearWOEqn
 resShearWOEqn :: Expr
 resShearWOEqn = (((inxi slcWght) + (inxi surfHydroForce) *
   (cos (inxi surfAngle)) + (inxi surfLoad) * (cos (inxi impLoadAngle))) *
-  (cos (inxi baseAngle)) + (Neg (C earthqkLoadFctr) * (inxi slcWght) -
-  (inxi watrForceDif) + (inxi surfHydroForce) :* sin (inxi surfAngle) +
+  (cos (inxi baseAngle)) + (negate (C earthqkLoadFctr) * (inxi slcWght) -
+  (inxi watrForceDif) + (inxi surfHydroForce) * sin (inxi surfAngle) +
   (inxi surfLoad) * (sin (inxi impLoadAngle))) * (sin (inxi baseAngle)) -
   (inxi baseHydroForce)) * tan (inxi fricAngle) + (inxi cohesion) *
   (inxi baseWthX) * sec (inxi baseAngle)
@@ -183,8 +183,8 @@ mobShearWO = mkDataDef shearFNoIntsl mobShearWOEqn
 mobShearWOEqn :: Expr 
 mobShearWOEqn = ((inxi slcWght) + (inxi surfHydroForce) *
   (cos (inxi surfAngle)) + (inxi surfLoad) * (cos (inxi impLoadAngle))) *
-  (sin (inxi baseAngle)) - (Neg (C earthqkLoadFctr) * (inxi slcWght) -
-  (inxi watrForceDif) + (inxi surfHydroForce) :* sin (inxi surfAngle) +
+  (sin (inxi baseAngle)) - (negate (C earthqkLoadFctr) * (inxi slcWght) -
+  (inxi watrForceDif) + (inxi surfHydroForce) * sin (inxi surfAngle) +
   (inxi surfLoad) * (sin (inxi impLoadAngle))) * (cos (inxi baseAngle))
 
 --DD12
@@ -209,7 +209,7 @@ netFDsplcmntEqbm :: QDefinition
 netFDsplcmntEqbm = mkDataDef genForce netFDsplcmntEqbmEqn
 
 netFDsplcmntEqbmEqn :: Expr
-netFDsplcmntEqbmEqn = Neg (inx surfLngth (-1)) * (inx nrmStiffIntsl (-1)) *
+netFDsplcmntEqbmEqn = negate (inx surfLngth (-1)) * (inx nrmStiffIntsl (-1)) *
   (inx genDisplace (-1)) + (inx surfLngth (-1) * inx nrmStiffIntsl (-1) +
   inx baseLngth 0 * inx nrmStiffBase 0 + inx surfLngth 0 *
   inx nrmStiffIntsl 0) * (inx genDisplace 0) -
@@ -238,7 +238,7 @@ soilStiffnessEqn = (Case [case1,case2])
           (C constant_A)), (C SM.poissnsR) $>= 0)
 
         block = (C intNormForce)*(1 - (C SM.poissnsR))/
-          ((1 + (C SM.poissnsR)) * (1 - 2 :*(C SM.poissnsR) + (C baseWthX)))
+          ((1 + (C SM.poissnsR)) * (1 - 2 *(C SM.poissnsR) + (C baseWthX)))
 
 -----------------
 -- Derivations --
@@ -270,7 +270,7 @@ resShrDerivation = [
   eqUnR $
   (inxi nrmFNoIntsl) $= (((inxi slcWght) + (inxi surfHydroForce) *
   (cos (inxi surfAngle)) + (inxi surfLoad) * (cos (inxi impLoadAngle))) *
-  (cos (inxi baseAngle)) + (Neg (C earthqkLoadFctr) * (inxi slcWght) -
+  (cos (inxi baseAngle)) + (negate (C earthqkLoadFctr) * (inxi slcWght) -
   (inxi watrForce) + (inxiM1 watrForce) + (inxi surfHydroForce) *
   sin (inxi surfAngle) + (inxi surfLoad) * (sin (inxi impLoadAngle))) *
   (sin (inxi baseAngle)) - (inxi baseHydroForce)),
@@ -284,7 +284,7 @@ resShrDerivation = [
   (inxi cohesion) * (inxi baseWthX) * sec (inxi baseAngle) $=
   (((inxi slcWght) + (inxi surfHydroForce) * (cos (inxi surfAngle)) +
   (inxi surfLoad) * (cos (inxi impLoadAngle))) * (cos (inxi baseAngle)) +
-  (Neg (C earthqkLoadFctr) * (inxi slcWght) - (inxi watrForceDif) +
+  (negate (C earthqkLoadFctr) * (inxi slcWght) - (inxi watrForceDif) +
   (inxi surfHydroForce) * sin (inxi surfAngle) + (inxi surfLoad) *
   (sin (inxi impLoadAngle))) * (sin (inxi baseAngle)) -
   (inxi baseHydroForce)) * tan (inxi fricAngle) + (inxi cohesion) *
@@ -308,11 +308,11 @@ mobShrDerivation = [
   getTandS shearFNoIntsl `sC` S "as done in", eqN 5],
   
   eqUnR $
-  inxi shearFNoIntsl $= ((inxi slcWght) :+ (inxi surfHydroForce) :*
-  (cos (inxi surfAngle)) :+ (inxi surfLoad) :* (cos (inxi impLoadAngle))) :*
-  (sin (inxi baseAngle)) :- (Neg (C earthqkLoadFctr) :* (inxi slcWght) :-
-  (inxi watrForceDif) :+ (inxi surfHydroForce) :* sin (inxi surfAngle) :+
-  (inxi surfLoad) :* (sin (inxi impLoadAngle))) :* (cos (inxi baseAngle)),
+  inxi shearFNoIntsl $= ((inxi slcWght) + (inxi surfHydroForce) *
+  (cos (inxi surfAngle)) + (inxi surfLoad) * (cos (inxi impLoadAngle))) *
+  (sin (inxi baseAngle)) - (negate (C earthqkLoadFctr) * (inxi slcWght) -
+  (inxi watrForceDif) + (inxi surfHydroForce) * sin (inxi surfAngle) +
+  (inxi surfLoad) * (sin (inxi impLoadAngle))) * (cos (inxi baseAngle)),
   
   foldlSP [S "The", plural value, S "of", getES shearRNoIntsl `sAnd`
   getES shearFNoIntsl, S "are now defined completely in terms of the",
@@ -322,17 +322,17 @@ mobShrDerivation = [
 
 kiStar :: Expr
 kiStar = m2x2 (inxi shrStiffBase * cos(inxi baseAngle))
-  (Neg $ inxi nrmStiffBase * sin(inxi baseAngle)) (inxi shrStiffBase *
+  (negate $ inxi nrmStiffBase * sin(inxi baseAngle)) (inxi shrStiffBase *
   sin(inxi baseAngle)) (inxi nrmStiffBase * cos(inxi baseAngle))
   
 kiPrime :: Expr
 kiPrime = m2x2
-  (inxi shrStiffBase * cos(inxi baseAngle) :^ 2 + inxi nrmStiffIntsl *
-  sin(inxi baseAngle) :^ 2) ((inxi shrStiffBase - inxi nrmStiffBase) *
+  (inxi shrStiffBase * cos(inxi baseAngle) $^ 2 + inxi nrmStiffIntsl *
+  sin(inxi baseAngle) $^ 2) ((inxi shrStiffBase - inxi nrmStiffBase) *
   sin(inxi baseAngle) * cos(inxi baseAngle)) ((inxi shrStiffBase -
   inxi nrmStiffBase) * sin(inxi baseAngle) * cos(inxi baseAngle))
-  (inxi shrStiffBase * cos(inxi baseAngle) :^ 2 + inxi nrmStiffIntsl *
-  sin(inxi baseAngle) :^ 2)
+  (inxi shrStiffBase * cos(inxi baseAngle) $^ 2 + inxi nrmStiffIntsl *
+  sin(inxi baseAngle) $^ 2)
   
 stfMtrxDerivation :: [Contents]
 stfMtrxDerivation = [
@@ -365,7 +365,7 @@ stfMtrxDerivation = [
   S "to the new matrix", getES nrmFNoIntsl],
   
   eqUnR $ inxi shrStiffIntsl $=
-  m2x2 (cos(inxi baseAngle)) (Neg $ sin(inxi baseAngle))
+  m2x2 (cos(inxi baseAngle)) (negate $ sin(inxi baseAngle))
   (sin(inxi baseAngle)) (cos(inxi baseAngle)) *
   inxi shrStiffIntsl $= kiStar,
   
@@ -400,8 +400,8 @@ stfMtrxDerivation = [
   $= m2x2 (inxi effStiffA) (inxi effStiffB) (inxi effStiffB) (inxi effStiffA),
   
   eqUnR $
-  (inxi effStiffA) $= (inxi shrStiffBase) * (cos (inxi baseAngle)) :^ 2 :+
-  (inxi nrmStiffBase) * (sin (inxi baseAngle)) :^ 2,
+  (inxi effStiffA) $= (inxi shrStiffBase) * (cos (inxi baseAngle)) $^ 2 +
+  (inxi nrmStiffBase) * (sin (inxi baseAngle)) $^ 2,
   
   eqUnR $
   (inxi effStiffB) $= ((inxi shrStiffBase)-(inxi nrmStiffBase)) *

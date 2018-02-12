@@ -162,7 +162,7 @@ startIntro = foldlSent [S "A", phrase slope, S "of geological",
 
 kSent = keySent ssa
 
-keySent :: (NamedIdea a) => a -> Sentence
+keySent :: (Idea a) => a -> Sentence
 keySent pname = foldlSent_ [S "a", phrase pname +:+. phrase problem,
   S "The developed", phrase program, S "will be referred to as the",
   introduceAbb pname, phrase program]
@@ -176,7 +176,7 @@ prpsOfDoc_p1 = purposeDoc ssa crtSlpSrf fs how introduces analysizes
         introduces = phrase slope +:+ S "stability" +:+ plural issue
         analysizes = S "safe" +:+ phrase slope
 
-purposeDoc :: (NamedIdea a, NamedIdea b, NamedIdea c) =>
+purposeDoc :: (Idea a, NamedIdea b, NamedIdea c) =>
               a -> b -> c -> Sentence -> Sentence -> Sentence
               -> Sentence
 purposeDoc pname what calculates how introduces analysizes =
@@ -224,7 +224,7 @@ userCharIntro :: Contents
 userCharIntro = userChar ssa [S "Calculus", titleize physics]
   [phrase soil, plural mtrlPrpty]
 
-userChar :: (NamedIdea a) => a -> [Sentence] -> [Sentence] -> Contents
+userChar :: (Idea a) => a -> [Sentence] -> [Sentence] -> Contents
 userChar pname understandings familiarities = foldlSP [
   S "The", phrase endUser, S "of", short pname,
   S "should have an understanding of undergraduate Level 1",
@@ -278,7 +278,7 @@ s4_1_2_bullets = enumBullet $ map foldlSent_ [
   [at_start' itslPrpty, S "convention is noted by j. The end",
   plural itslPrpty, S "are usually not of", phrase interest `sC`
   S "therefore use the", plural itslPrpty, S "from", 
-  (E $ 1 $<= C index $<= (C numbSlices) :- 1)],
+  (E $ 1 $<= C index $<= (C numbSlices) - 1)],
 
   [at_start slice, plural property +:+. S "convention is noted by",
   getES index]]

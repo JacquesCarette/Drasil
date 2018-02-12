@@ -180,6 +180,7 @@ instance Chunk CodeChunk where
   id = qslens id
 instance NamedIdea CodeChunk where
   term = qslens term
+instance Idea CodeChunk where
   getA (CodeVar n) = getA n
   getA (CodeFunc n) = getA n
 instance Quantity CodeChunk where
@@ -221,6 +222,7 @@ instance Chunk CodeDefinition where
   id = qscdlens id
 instance NamedIdea CodeDefinition where
   term = qscdlens term
+instance Idea CodeDefinition where
   getA (CodeDefinition n _) = getA n
 instance Quantity CodeDefinition where
   typ = qscdlens typ
@@ -249,8 +251,6 @@ qtov (EC q e _) = CodeDefinition (codevar q) e
 codeEquat :: CodeDefinition -> Expr
 codeEquat (CodeDefinition _ e) = e 
 
-
-
 spaceToCodeType :: Space -> CodeType
 spaceToCodeType S.Integer = G.Integer
 spaceToCodeType S.Natural = G.Integer
@@ -266,26 +266,24 @@ spaceToCodeType (S.DiscreteI _) = G.List (spaceToCodeType S.Integer)
 spaceToCodeType (S.DiscreteD _) = G.List (spaceToCodeType S.Rational)
 spaceToCodeType (S.DiscreteS _) = G.List (spaceToCodeType S.String)
 
-
-
 type ConstraintMap = Map.Map String [Constraint]
 
 constraintMap :: (Constrained c) => [c] -> ConstraintMap
 constraintMap cs = Map.fromList (map (\x -> ((x ^. id), (x ^. constraints))) cs)
 
 physLookup :: (Quantity q) => q -> ConstraintMap -> [Expr]
-physLookup q m = constraintLookup' q m getPhys
+physLookup q m = constraintLookup' q m (filter isPhysC)
 
 sfwrLookup :: (Quantity q) => q -> ConstraintMap -> [Expr]
-sfwrLookup q m = constraintLookup' q m getSfwr
+sfwrLookup q m = constraintLookup' q m (filter isPhysC)
 
 constraintLookup :: (Quantity q) => q -> ConstraintMap -> [Expr]
-constraintLookup q m = constraintLookup' q m (map getConstraint)
+constraintLookup q m = constraintLookup' q m (\x -> x)
 
 constraintLookup' :: (Quantity q) => q -> ConstraintMap 
-                      -> ([Constraint] -> [(Expr -> Relation)]) -> [Expr]
-constraintLookup' q m f = 
-  lookC (Map.lookup (q ^. id) m) (getSymb Implementation q)
-  where lookC :: Maybe [Constraint] -> SF -> [Expr]
-        lookC (Just cs) s = map (\x -> x (C s)) (f cs)
+                      -> ([Constraint] -> [Constraint]) -> [Expr]
+constraintLookup' q m filt = 
+  lookC (Map.lookup (q ^. id) m) q
+  where lookC :: Quantity q => Maybe [Constraint] -> q -> [Expr]
+        lookC (Just cs) s = map (\x -> renderC s x) (filt cs)
         lookC Nothing _ = []

@@ -50,9 +50,9 @@ fctSfty = makeRC "fctSfty" factorOfSafety fcSfty_desc fcSfty_rel
 fcSfty_rel :: Relation
 fcSfty_rel = C fs $= sumOp shearRNoIntsl / sumOp shearFNoIntsl
   where prodOp = defprod lU (C index) (C numbSlices - Int 1)
-          (Index (C mobShrC) (C varblU) / Index (C shrResC) (C varblU))
+          (idx (C mobShrC) (C varblU) / idx (C shrResC) (C varblU))
         sumOp sym = defsum lV 1 (C numbSlices - Int 1)
-          (Index (C sym) (C varblV) :* prodOp) + Index (C sym) (C numbSlices)
+          (idx (C sym) (C varblV) * prodOp) + idx (C sym) (C numbSlices)
 
 fcSfty_desc :: Sentence
 fcSfty_desc = foldlSent [S "Equation for the", titleize fs `isThe` S "ratio",
@@ -75,9 +75,9 @@ nrmShrF_rel = (inxi normFunc) $= Case [case1,case2,case3] $=
   (indx1 baseWthX * indx1 scalFunc * indx1 intNormForce, C index $= Int 1),
   (inxi baseWthX * (inxi scalFunc * inxi intNormForce +
     inx scalFunc (-1) * inx intNormForce (-1)),
-    Int 2 $<= C index $<= (C numbSlices :- Int 1)),
-  (indxn baseWthX * Index (C intNormForce) (C numbSlices - Int 1) *
-    Index (C watrForce) (C numbSlices - Int 1), C index $= Int 1)
+    Int 2 $<= C index $<= (C numbSlices - 1)),
+  (indxn baseWthX * idx (C intNormForce) (C numbSlices - Int 1) *
+    idx (C watrForce) (C numbSlices - Int 1), C index $= Int 1)
   ]
   $= --FIXME: move to seperate instance model
   C normToShear $= sum1toN (inxi normFunc) / sum1toN (inxi shearFunc)
@@ -90,9 +90,9 @@ nrmShrF_rel = (inxi normFunc) $= Case [case1,case2,case3] $=
           Int 2 * inxi surfHydroForce * sin (inxi surfAngle) -
           Int 2 * inxi surfLoad * cos (inxi impLoadAngle)),
           Int 2 $<= C index $<= ((C numbSlices) - (Int 1)))
-        case3 = ((indxn baseWthX)*(Index (C intNormForce)
-          (C numbSlices - Int 1) + Index (C watrForce)
-          (C numbSlices - Int 1)) * tan (Index (C baseAngle)
+        case3 = ((indxn baseWthX)*(idx (C intNormForce)
+          (C numbSlices - Int 1) + idx (C watrForce)
+          (C numbSlices - Int 1)) * tan (idx (C baseAngle)
           (C numbSlices - Int 1)), C index $= (C numbSlices))
 
 nrmShrF_desc :: Sentence
@@ -116,8 +116,8 @@ sliceFs_rel = inxi intNormForce $= Case [
     C index $= (Int 1)),
   ((inx mobShrC (-1) * inx intNormForce (-1) +
     C fs * inxi shearFNoIntsl - inxi shearRNoIntsl) / inxi shrResC,
-    (Int 2) $<= C index $<= ((C numbSlices) :- (Int 1))),
-  ((Int 0), C index $= (Int 0) :|| C index $= C numbSlices)]  
+    (Int 2) $<= C index $<= ((C numbSlices) - 1)),
+  ((Int 0), C index $= (Int 0) $|| C index $= C numbSlices)]  
   -- FIXME: Use index i as part of condition
 
 sliceFs_desc :: Sentence
@@ -133,22 +133,22 @@ forDisEqlb = makeRC "forDisEqlb"
   (nounPhraseSP "force displacement equilibrium") fDisEq_desc fDisEq_rel
 
 fDisEq_rel :: Relation --FIXME: split into two IMOD
-fDisEq_rel = Neg (inxi watrForceDif) - (C earthqkLoadFctr)*(inxi slcWght) -
+fDisEq_rel = negate (inxi watrForceDif) - (C earthqkLoadFctr)*(inxi slcWght) -
   (inxi baseHydroForce)*(sin(inxi baseAngle)) +
   (inxi surfHydroForce)*sin(inxi surfAngle) + (inxi surfLoad) *
-  sin(inxi impLoadAngle) $= inx  dx_i (-1) * (Neg (inx surfLngth (-1)) *
-  inx nrmStiffIntsl (-1)) + inxi dx_i * (Neg (inx surfLngth (-1)) *
+  sin(inxi impLoadAngle) $= inx  dx_i (-1) * (negate (inx surfLngth (-1)) *
+  inx nrmStiffIntsl (-1)) + inxi dx_i * (negate (inx surfLngth (-1)) *
   inx nrmStiffIntsl (-1) +
   inxi surfLngth * inxi nrmStiffIntsl + inxi baseLngth * inxi effStiffA) +
-  inx  dx_i 1 * (Neg (inxi surfLngth) * inxi nrmStiffIntsl) +
-  inxi dy_i * (Neg (inxi baseLngth) * inxi effStiffB) $=
-  Neg (inxi slcWght) - (inxi baseHydroForce)*(cos(inxi baseAngle)) +
+  inx  dx_i 1 * (negate (inxi surfLngth) * inxi nrmStiffIntsl) +
+  inxi dy_i * (negate (inxi baseLngth) * inxi effStiffB) $=
+  negate (inxi slcWght) - (inxi baseHydroForce)*(cos(inxi baseAngle)) +
   (inxi surfHydroForce)*cos(inxi surfAngle) + (inxi surfLoad) *
-  cos(inxi impLoadAngle) $= inx  dy_i (-1) * (Neg (inx surfLngth (-1)) *
-  inx shrStiffIntsl (-1)) + inxi dy_i * (Neg (inx surfLngth (-1)) *
+  cos(inxi impLoadAngle) $= inx  dy_i (-1) * (negate (inx surfLngth (-1)) *
+  inx shrStiffIntsl (-1)) + inxi dy_i * (negate (inx surfLngth (-1)) *
   inx shrStiffIntsl (-1) + inxi surfLngth * inxi nrmStiffIntsl +
-  inxi baseLngth * inxi effStiffA) + inx  dy_i 1 * (Neg (inxi surfLngth) *
-  inxi shrStiffIntsl) + inxi dx_i * (Neg (inxi baseLngth) * inxi effStiffB)
+  inxi baseLngth * inxi effStiffA) + inx  dy_i 1 * (negate (inxi surfLngth) *
+  inxi shrStiffIntsl) + inxi dx_i * (negate (inxi baseLngth) * inxi effStiffB)
 
 fDisEq_desc :: Sentence
 fDisEq_desc = foldlSent [
@@ -209,7 +209,7 @@ crtSlpId = makeRC "crtSlpId" (nounPhraseSP "critical slip identification")
   crtSlpId_desc crtSlpId_rel
 
 crtSlpId_rel :: Relation
-crtSlpId_rel = (Index (C fs) (V "min")) $=
+crtSlpId_rel = (idx (C fs) (V "min")) $=
   (FCall (C minFunction) [C critCoords, V "Input"])
   --FIXME: add subscript to fs
 
@@ -218,7 +218,7 @@ crtSlpId_desc = foldlSent [S "Given the necessary", phrase slope,
   S "inputs, a minimization", S "algorithm or function", getES minFunction,
   S "will identify the", phrase crtSlpSrf, S "of the", phrase slope `sC`
   S "with the critical", phrase slip, S "coordinates", getES critCoords, 
-  S "and the minimum", phrase fs, E $ Index (C fs) (V "min"), S "that results"]
+  S "and the minimum", phrase fs, E $ idx (C fs) (V "min"), S "that results"]
 
 -----------
 -- Intro --
@@ -275,7 +275,7 @@ fctSftyDerivation = [foldlSP [S "Using", eqN 21, S "from", acroIM 3 `sC`
 boundaryCon :: Sentence
 boundaryCon = foldlSent_ [S "applying the boundary condition that",
   --FIXME: Index
-  E (Index (C intNormForce) (Int 0)) `sAnd`
+  E (idx (C intNormForce) (Int 0)) `sAnd`
   E (indxn intNormForce), S "are equal to", E $ Int 0]
 
 fUnknowns :: Contents
@@ -292,9 +292,9 @@ nrmShrDerivation = [
   phrase assumption, S "of", acroGD 5, S "results in", eqN 13],
   
   eqUnR $ Int 0 $=
-  momExpr (\ x y -> x :- (C normToShear * (inxi baseWthX / Int 2) * 
+  momExpr (\ x y -> x - (C normToShear * (inxi baseWthX / Int 2) * 
   (inxi intNormForce * inxi scalFunc + inxiM1 intNormForce *
-  inxiM1 scalFunc)) :+ y),
+  inxiM1 scalFunc)) + y),
   
   foldlSP [S "The", phrase equation, S "in terms of", getES normToShear,
   S "leads to", eqN 14],
@@ -443,8 +443,8 @@ rigFoSDerivation = [
   eqUnR $ inxi shrDispl $= cos(inxi baseAngle) * inxi dx_i +
   sin(inxi baseAngle) * inxi dy_i,
 
-  eqUnR $ inxi nrmDispl $= Neg (sin(inxi baseAngle)) * inxi dx_i +
-    sin(inxi baseAngle) * inxi dy_i,
+  EqnBlock (inxi nrmDispl $= negate (sin(inxi baseAngle)) * inxi dx_i +
+    sin(inxi baseAngle) * inxi dy_i) "",
   
   foldlSP [S "With the", phrase definition, S "of normal stiffness from",
   acroDD 14, --FIXME: grab nrmStiffBase's term name?

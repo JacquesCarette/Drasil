@@ -31,6 +31,7 @@ instance Chunk ConVar where
   id = cvl . id
 instance NamedIdea ConVar where
   term = cvl . term
+instance Idea ConVar where
   getA (CV c _ _) = getA c
 instance Concept ConVar where
   defn = cvl . defn

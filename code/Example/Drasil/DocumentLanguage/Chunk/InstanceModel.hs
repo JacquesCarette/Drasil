@@ -30,6 +30,7 @@ instance Chunk InstanceModel where
   id = rcl id
 instance NamedIdea InstanceModel where
   term = rcl term
+instance Idea InstanceModel where
   getA (IM a _ _ _ _ _) = getA a
 instance Concept InstanceModel where
   defn = rcl defn

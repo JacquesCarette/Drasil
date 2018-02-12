@@ -60,7 +60,7 @@ specSysDesIntro l_end = foldlSP
                   eND (False) =  S "and" +:+. plural definition-}
 
 -- give starting sentence(s), the program name, and finish the last sentence
-probDescF :: (NamedIdea a) => Sentence -> a -> Sentence -> [Section] -> Section
+probDescF :: (Idea a) => Sentence -> a -> Sentence -> [Section] -> Section
 probDescF start progName ending subSec = SRS.probDesc [Paragraph intro] subSec
   where intro = foldlSent [start, (short progName), S "is a computer", 
                 (phrase program), S "developed to", ending]
@@ -93,7 +93,7 @@ goalStmtF givenInputs otherContents = SRS.goalStmt (intro:otherContents) []
 -- progName (ex ssp, progName), the two sections, gendef is True if you want general definitions sections, 
 --  ddEndSent is the ending sentence for Data Definitions, this is a 4-tuple of inputs for Data Constraints, 
 --  the last input is a tupple of lists of Sections for each Subsection in order.
-solChSpecF :: (NamedIdea a) => a -> (Section, Section) -> Sentence -> 
+solChSpecF :: (Idea a) => a -> (Section, Section) -> Sentence -> 
   (Sentence, Sentence, Sentence) -> 
   ([Contents], [Contents], [Contents], [Contents], [Contents], [Contents]) -> 
   [Section] -> Section
@@ -109,7 +109,7 @@ solChSpecF progName (probDes, likeChg) ddEndSent (mid, hasUncertainty, trail) (a
         dataConstr   = datConF mid hasUncertainty trail dc
 
 
-solutionCharSpecIntro :: (NamedIdea a) => a -> Section -> Contents
+solutionCharSpecIntro :: (Idea a) => a -> Section -> Contents
 solutionCharSpecIntro progName instModelSection = foldlSP [S "The", plural inModel, 
   S "that govern", short progName, S "are presented in" +:+. 
   makeRef (instModelSection), S "The", phrase information, S "to understand", 
@@ -139,11 +139,11 @@ assumpIntro r1 r2 r3 r4 r5 = Paragraph $ foldlSent
                                 (inModel, r4)]
 
 --wrapper for thModelIntro
-thModF :: (NamedIdea a) => a -> [Contents] -> Section
+thModF :: (Idea a) => a -> [Contents] -> Section
 thModF progName otherContents = SRS.thModel ((thModIntro progName):otherContents) []
 
 -- generalized theoretical model introduction: identifies key word pertaining to topic
-thModIntro :: (NamedIdea a) => a -> Contents
+thModIntro :: (Idea a) => a -> Contents
 thModIntro progName = foldlSP
           [S "This", phrase section_, S "focuses on", 
           S "the", phrase general, (plural equation), S "and", 

@@ -15,7 +15,7 @@ import Prelude hiding (id)
 import Control.Lens (Simple, Lens, set, (^.))
 
 import Language.Drasil.Chunk (Chunk(..))
-import Language.Drasil.Chunk.NamedIdea (NamedIdea(..))
+import Language.Drasil.Chunk.NamedIdea (NamedIdea(..), Idea(..))
 import Language.Drasil.Chunk.Concept (Concept(..), ConceptChunk, dcc)
 import Language.Drasil.NounPhrase
 import Language.Drasil.Spec (USymb(..))
@@ -81,6 +81,8 @@ instance Chunk FundUnit where
 
 instance NamedIdea FundUnit where
   term   = vc . term
+
+instance Idea FundUnit where
   getA c = getA (c ^. vc)
 
 instance Concept FundUnit where
@@ -100,6 +102,7 @@ duc f (DUC a b) = fmap (\x -> DUC x b) (f a)
 instance Chunk     DerUChunk where id  = duc . id
 instance NamedIdea DerUChunk where
   term = duc . term
+instance Idea DerUChunk where
   getA c = getA (c ^. duc)
 instance Concept   DerUChunk where 
   defn = duc . defn
@@ -123,6 +126,7 @@ ulens l f (UU a) = fmap (\x -> UU (set l x a)) (f (a ^. l))
 instance Chunk     UnitDefn where id   = ulens id
 instance NamedIdea UnitDefn where
   term = ulens term
+instance Idea      UnitDefn where
   getA (UU a) = getA a
 instance Concept   UnitDefn where 
   defn = ulens defn

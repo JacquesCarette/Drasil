@@ -40,6 +40,14 @@ cot = UnaryOp . Cot
 exp :: Expr -> Expr
 exp = UnaryOp . Exp
 
+-- | Smart constructor for the dimension of a vector
+dim :: Expr -> Expr
+dim = UnaryOp . Dim
+
+-- | Smarth constructor for indexing
+idx :: Expr -> Expr -> Expr
+idx s i = BinaryOp $ Index s i
+
 -- | Smart constructor for the summation, product, and integrals
 
 defint, defsum, defprod :: Symbol -> Expr -> Expr -> Expr -> Expr
@@ -67,7 +75,7 @@ cross :: Expr -> Expr -> Expr
 cross e1 e2 = BinaryOp (Cross e1 e2)
 
 square :: Expr -> Expr
-square x = x :^ 2
+square x = x $^ 2
 
 -- some matrix helper functions
 m2x2 :: Expr -> Expr -> Expr -> Expr -> Expr

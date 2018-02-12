@@ -19,9 +19,9 @@ import qualified Language.Drasil.Chunk.SymbolForm as SF (SF(..), symbol, Stage(.
                                         , getSymbForStage, StagedSymbolChunk)
 import Language.Drasil.Unit(UnitDefn)
 
--- | A Quantity is a 'NamedIdea' with a 'Space' that may have 
+-- | A Quantity is an 'Idea' with a 'Space' that may have 
 -- a symbol and units
-class NamedIdea c => Quantity c where
+class Idea c => Quantity c where
   -- | Lens to the Space
   typ      :: Simple Lens c Space
   -- | Provides the 'Language.Drasil.Chunk.SymbolForm.SymbolForm' 
@@ -54,6 +54,8 @@ instance Chunk QWrapper where
   
 instance NamedIdea QWrapper where
   term = qlens term
+
+instance Idea QWrapper where
   getA (QW a) = getA a
   
 instance Quantity QWrapper where

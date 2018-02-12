@@ -254,9 +254,7 @@ typUncr q qlst
 
 --Formatters for the constraints
 fmtPhys :: (Constrained s, Quantity s) => s -> Sentence
-fmtPhys s = foldlList $ fmtCP $ getPhys (s ^. constraints)
-  where fmtCP = map (\f -> E $ f (C s))
+fmtPhys s = foldlList $ map (E . renderC s) $ filter isPhysC (s ^. constraints)
 
 fmtSfwr :: (Constrained s, Quantity s) => s -> Sentence
-fmtSfwr s = foldlList $ fmtCS $ getSfwr (s ^. constraints)
-  where fmtCS = map (\f -> E $ f (C s))
+fmtSfwr s = foldlList $ map (E . renderC s) $ filter isSfwrC (s ^. constraints)

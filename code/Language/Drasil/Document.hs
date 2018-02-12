@@ -6,7 +6,6 @@ import Language.Drasil.Chunk.Change
 import Language.Drasil.Chunk.Eq
 import Language.Drasil.Chunk.Relation
 import Language.Drasil.Chunk.ReqChunk
-import Language.Drasil.Chunk.Wrapper
 import Language.Drasil.Spec (Sentence(..), RefName, RefAdd)
 import Language.Drasil.Expr
 import Language.Drasil.Citations

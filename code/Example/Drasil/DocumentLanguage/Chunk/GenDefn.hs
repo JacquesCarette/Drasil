@@ -17,6 +17,7 @@ instance Chunk GenDefn where
   id = rcl id
 instance NamedIdea GenDefn where
   term = rcl term
+instance Idea GenDefn where
   getA (GD a _ _) = getA a
 instance Concept GenDefn where
   defn = rcl defn

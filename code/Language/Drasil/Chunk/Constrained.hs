@@ -2,18 +2,18 @@
 
 module Language.Drasil.Chunk.Constrained (
     Constrained(..)
-  , Constraint(..), ConstraintOrigin(..), isPhys, isSfwr, getConstraint
-  , getPhys, getSfwr
+  , Constraint(..), ConstraintReason(..)
   , ConstrainedChunk(..)
   , ConstrConcept(..)
-  , physc, sfwrc, constrained, cuc, cvc, constrained', cuc', constrainedNRV'
+  , physc, sfwrc, enumc, isPhysC, isSfwrC, renderC
+  , constrained, cuc, cvc, constrained', cuc', constrainedNRV'
   , ConstrWrapper(..), cnstrw
-  , createCnstrnts
   , Reason(..), TheoryConstraint(..)
   ) where
 
 import Control.Lens (Simple, Lens, (^.), set)
-import Language.Drasil.Expr (Expr(..), Relation, Variable, ($=))
+import Language.Drasil.Expr (Expr(..), RealInterval(..), Relation, Inclusive(..),
+  ($<), ($<=), ($>), ($>=))
 import Language.Drasil.Chunk.Quantity
 import Language.Drasil.Chunk.NamedIdea
 import Language.Drasil.Chunk.Unitary
@@ -45,37 +45,56 @@ class Quantity c => Constrained c where
   constraints :: Simple Lens c [Constraint]
   reasVal     :: Simple Lens c (Maybe Expr)
 
-data ConstraintOrigin = Physical | Software
-
-data Constraint =
-  Dummy ConstraintOrigin (Expr -> Relation)
-  
 data Reason = Invariant | AssumedCon
 data TheoryConstraint = 
   TCon Reason Relation -- AssumedCon are constraints that come from assumptions
                        -- as opposed to theory invariants.
                        -- This might be an artificial distinction as they may be "the same"
 
-physc :: (Expr -> Relation) -> Constraint
-physc = Dummy Physical
-
-sfwrc :: (Expr -> Relation) -> Constraint
-sfwrc = Dummy Software
+data ConstraintReason = Physical | Software
+data Constraint where
+  Range          :: ConstraintReason -> RealInterval -> Constraint
+  EnumeratedReal :: ConstraintReason -> [Double]     -> Constraint
+  EnumeratedStr  :: ConstraintReason -> [String]     -> Constraint
  
-isPhys, isSfwr :: Constraint -> Bool
-isPhys (Dummy Physical _) = True
-isPhys (Dummy _ _)        = False
-isSfwr (Dummy Software _) = True
-isSfwr (Dummy _ _)        = False
+-- by default, physical and software constraints are ranges
+physc :: RealInterval -> Constraint
+physc = Range Physical
 
-getConstraint :: Constraint -> (Expr -> Relation)
-getConstraint (Dummy _ c) = c
+sfwrc :: RealInterval -> Constraint
+sfwrc = Range Software
 
-getPhys :: [Constraint] -> [(Expr -> Relation)]
-getPhys = map getConstraint . filter isPhys 
+-- but also for enumeration of values; right now, always physical
+enumc :: [Double] -> Constraint
+enumc = EnumeratedReal Physical
+ 
+-- helpful for filtering for Physical / Software constraints
+isPhysC, isSfwrC :: Constraint -> Bool
+isPhysC (Range Physical _) = True
+isPhysC (EnumeratedReal Physical _) = True
+isPhysC (EnumeratedStr Physical _) = True
+isPhysC _ = False
 
-getSfwr :: [Constraint] -> [(Expr -> Relation)]
-getSfwr = map getConstraint . filter isSfwr
+isSfwrC (Range Software _) = True
+isSfwrC (EnumeratedReal Software _) = True
+isSfwrC (EnumeratedStr Software _) = True
+isSfwrC _ = False
+
+renderC :: Chunk c => c -> Constraint -> Expr
+renderC s (Range _ rr)          = renderRealInt s rr
+renderC s (EnumeratedReal _ rr) = IsIn (C s) (DiscreteD rr)
+renderC s (EnumeratedStr _ rr)  = IsIn (C s) (DiscreteS rr)
+
+-- FIXME: bit of a hack for display purposes here
+renderRealInt :: Chunk c => c -> RealInterval -> Expr
+renderRealInt s (Bounded (Inc a) (Inc b)) = a $<= C s $<= b
+renderRealInt s (Bounded (Inc a) (Exc b)) = a $<= C s $<  b
+renderRealInt s (Bounded (Exc a) (Inc b)) = a $<  C s $<= b
+renderRealInt s (Bounded (Exc a) (Exc b)) = a $<  C s $<  b
+renderRealInt s (UpTo (Inc a))    = C s $<= a
+renderRealInt s (UpTo (Exc a))    = C s $< a
+renderRealInt s (UpFrom (Inc a))  = C s $>= a
+renderRealInt s (UpFrom (Exc a))  = C s $>  a
 
 -- | ConstrainedChunks are 'Symbolic Quantities' 
 -- with 'Constraints' and maybe typical value
@@ -87,6 +106,7 @@ instance Chunk ConstrainedChunk where
   id = qslens id
 instance NamedIdea ConstrainedChunk where
   term = qslens term
+instance Idea ConstrainedChunk where
   getA (ConstrainedChunk n _ _) = getA n
 instance Quantity ConstrainedChunk where
   typ = qslens typ
@@ -137,6 +157,7 @@ instance Chunk ConstrConcept where
   id = cqslens id
 instance NamedIdea ConstrConcept where
   term = cqslens term
+instance Idea ConstrConcept where
   getA (ConstrConcept n _ _) = getA n
 instance Quantity ConstrConcept where
   typ = cqslens typ
@@ -186,6 +207,7 @@ instance Constrained ConstrWrapper where
   reasVal = cwlens reasVal
 instance NamedIdea ConstrWrapper where
   term = cwlens term
+instance Idea ConstrWrapper where
   getA (CnstrW a) = getA a
 instance Quantity ConstrWrapper where
   getSymb s (CnstrW a) = getSymb s a
@@ -200,12 +222,3 @@ cnstrw = CnstrW
 cwlens :: (forall c. (Constrained c) => 
   Simple Lens c a) -> Simple Lens ConstrWrapper a
 cwlens l f (CnstrW a) = fmap (\x -> CnstrW (set l x a)) (f (a ^. l))
-
---Helper Functions--
---Helper function that takes a chunk and list of possible values to create a list of constraints
-createCnstrnts :: Expr -> [Language.Drasil.Expr.Variable] -> Expr
-createCnstrnts c [x] = (c $= (V x))
-createCnstrnts c [x, y] = (c $= (V x)) :|| (c $= (V y))
-createCnstrnts c (x:y:xs) = createCnstrnts c [x, y] :|| (createCnstrnts c (xs))
-createCnstrnts _ [] = error "Constraint Error"
---FIXME: in correct file?

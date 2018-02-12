@@ -66,8 +66,7 @@ mcShrStrgth = makeRC "mcShrStrgth" (nounPhraseSP "Mohr-Coulumb shear strength")
   mcSS_desc mcSS_rel
 
 mcSS_rel :: Relation
-mcSS_rel = (C shrStress) $= ((C normStress) :*
-  (tan (C fricAngle)) :+ (C cohesion))
+mcSS_rel = (C shrStress) $= ((C normStress) * (tan (C fricAngle)) + (C cohesion))
 
 mcSS_desc :: Sentence
 mcSS_desc = foldlSent [S "For a", phrase soil, S "under", phrase stress,
@@ -95,7 +94,7 @@ effStress = makeRC "effStress"
   (nounPhraseSP "effective stress") effS_desc effS_rel
 
 effS_rel :: Relation
-effS_rel = (C normStress) $= (C normStress) :- (C porePressure)
+effS_rel = (C normStress) $= (C normStress) - (C porePressure)
 
 effS_desc :: Sentence --FIXME: these are not normStress but they are sigma.
                       -- Add a prime. Symbol inconsistency 
@@ -117,7 +116,7 @@ hookesLaw = makeRC "hookesLaw"
   (nounPhraseSP "Hooke's law") hksLw_desc hksLw_rel
 
 hksLw_rel :: Relation
-hksLw_rel = (C genForce) $= (C stffness) :* (C genDisplace)
+hksLw_rel = (C genForce) $= (C stffness) * (C genDisplace)
 
 hksLw_desc :: Sentence
 hksLw_desc = foldlSent [S "Description Stiffness", getES stffness, S "is the",

@@ -14,8 +14,8 @@ import Language.Drasil.Chunk.Quantity
 import Control.Lens (Simple, Lens, set, (^.))
 import Prelude hiding (id)
 
-class Theory t where
-  valid_context :: Simple Lens t [TWrapper]
+class Chunk t => Theory t where
+  valid_context :: Simple Lens t [TheoryChunk]
   spaces :: Simple Lens t [SpaceDefn] 
   quantities :: Simple Lens t [QuantityDict]
   operations :: Simple Lens t [ConceptChunk] -- FIXME: Should not be Concept
@@ -26,7 +26,7 @@ class Theory t where
 data SpaceDefn -- FIXME: This should be defined.
   
 data TheoryChunk where
-  TC :: String -> [TWrapper] -> [SpaceDefn] -> [QuantityDict] -> [ConceptChunk] -> 
+  TC :: String -> [TheoryChunk] -> [SpaceDefn] -> [QuantityDict] -> [ConceptChunk] -> 
     [QDefinition] -> [TheoryConstraint] -> [QDefinition] -> TheoryChunk
     
 instance Theory TheoryChunk where
@@ -47,6 +47,10 @@ instance Theory TheoryChunk where
 instance Chunk TheoryChunk where
   id f (TC c t s q o dq inv df) = 
     fmap (\x -> TC x t s q o dq inv df) (f c)
+
+tw :: Theory t => t -> TheoryChunk
+tw t = TC (t ^. id) (t ^. valid_context) (t ^. spaces) (t ^. quantities)
+  (t ^. operations) (t ^. defined_quant) (t ^. invariants) (t ^. defined_fun)
 
 data TheoryModel where
   TM :: (Concept c, Theory t) => c -> t -> TheoryModel
@@ -83,25 +87,7 @@ tc cid t s q c = TC cid (map tw t) s (map qw q) (map cw c)
 
 tc' :: (Quantity q, Concept c) => String -> [q] -> [c] -> [QDefinition] -> 
   [TheoryConstraint] -> [QDefinition] -> TheoryChunk
-tc' cid q c = tc cid ([] :: [TWrapper]) [] q c
+tc' cid q c = tc cid ([] :: [TheoryChunk]) [] q c
 
 tm :: (Concept c, Theory t) => c -> t -> TheoryModel
 tm = TM
-
-data TWrapper where
-  TW :: (Theory t) => t -> TWrapper
-  
-instance Theory TWrapper where
-  valid_context = twl valid_context
-  spaces        = twl spaces
-  quantities    = twl quantities
-  operations    = twl operations
-  defined_quant = twl defined_quant
-  invariants    = twl invariants
-  defined_fun   = twl defined_fun
-  
-twl :: (forall t. (Theory t) => Simple Lens t a) -> Simple Lens TWrapper a
-twl l f (TW t) = fmap (\x -> TW (set l x t)) (f (t ^. l))
-
-tw :: Theory t => t -> TWrapper
-tw = TW

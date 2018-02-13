@@ -20,11 +20,6 @@ import Language.Drasil.NounPhrase (NP)
 data NamedRelation where 
   NR :: Idea c => c -> Relation -> NamedRelation
 
--- | Helper for retrieving the NamedIdea from a NamedRelation and wrapping it as
--- an NWrapper
---namewrap :: NamedRelation -> NWrapper
---namewrap (NR c _) = nw c
-
 instance Chunk NamedRelation where
   id = cp id
 

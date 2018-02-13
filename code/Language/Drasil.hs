@@ -38,7 +38,7 @@ module Language.Drasil (
   , ConstraintReason(..)
   , physc, sfwrc, enumc, constrained, cuc, cvc, constrained', cuc', constrainedNRV'
   , isPhysC, isSfwrC, renderC
-  , ConstrWrapper(..), cnstrw
+  , cnstrw
   , Reason(..), TheoryConstraint(..)
   -- Chunk.Eq
   , QDefinition(..), fromEqn, fromEqn', fromEqn'', getVC, equat

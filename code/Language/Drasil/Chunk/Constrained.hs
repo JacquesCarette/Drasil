@@ -7,7 +7,7 @@ module Language.Drasil.Chunk.Constrained (
   , ConstrConcept(..)
   , physc, sfwrc, enumc, isPhysC, isSfwrC, renderC
   , constrained, cuc, cvc, constrained', cuc', constrainedNRV'
-  , ConstrWrapper(..), cnstrw
+  , cnstrw
   , Reason(..), TheoryConstraint(..)
   ) where
 
@@ -99,51 +99,45 @@ renderRealInt s (UpFrom (Exc a))  = C s $>  a
 -- | ConstrainedChunks are 'Symbolic Quantities' 
 -- with 'Constraints' and maybe typical value
 data ConstrainedChunk where
-  ConstrainedChunk :: (Quantity c) => c 
-                        -> [Constraint] -> Maybe Expr -> ConstrainedChunk
+  ConstrainedChunk :: QuantityDict -> [Constraint] -> Maybe Expr -> ConstrainedChunk
 
 instance Chunk ConstrainedChunk where
-  id = qslens id
+  id = qslens . id
 instance NamedIdea ConstrainedChunk where
-  term = qslens term
+  term = qslens . term
 instance Idea ConstrainedChunk where
   getA (ConstrainedChunk n _ _) = getA n
 instance Quantity ConstrainedChunk where
-  typ = qslens typ
+  typ = qslens . typ
   getSymb s (ConstrainedChunk c _ _) = getSymb s c
   getUnit (ConstrainedChunk c _ _) = getUnit c
   getStagedS (ConstrainedChunk c _ _) = getStagedS c
 instance Constrained ConstrainedChunk where
-  constraints f (ConstrainedChunk a b c) = 
-    fmap (\x -> ConstrainedChunk a x c) (f b)
-  reasVal f (ConstrainedChunk a b c) = 
-    fmap (\x -> ConstrainedChunk a b x) (f c)
+  constraints f (ConstrainedChunk a b c) = fmap (\x -> ConstrainedChunk a x c) (f b)
+  reasVal     f (ConstrainedChunk a b c) = fmap (\x -> ConstrainedChunk a b x) (f c)
 instance Eq ConstrainedChunk where
   (ConstrainedChunk c1 _ _) == (ConstrainedChunk c2 _ _) = 
     (c1 ^. id) == (c2 ^. id)
 
-qslens :: (forall c. (Quantity c) => Simple Lens c a) 
-           -> Simple Lens ConstrainedChunk a
-qslens l f (ConstrainedChunk a b c) = 
-  fmap (\x -> ConstrainedChunk (set l x a) b c) (f (a ^. l))
-  
+qslens :: Simple Lens ConstrainedChunk QuantityDict
+qslens f (ConstrainedChunk a b c) = fmap (\x -> ConstrainedChunk x b c) (f a)
   
 -- | Creates a constrained chunk from a symbolic quantity
 constrained :: (Quantity c) => c 
                 -> [Constraint] -> Expr -> ConstrainedChunk
-constrained q cs ex = ConstrainedChunk q cs (Just ex)
+constrained q cs ex = ConstrainedChunk (qw q) cs (Just ex)
   
 -- | Creates a constrained unitary  
 cuc :: (Unit u) => String -> NP -> Symbol -> u 
                 -> Space -> [Constraint] -> Expr -> ConstrainedChunk
 cuc i t s u space cs rv = 
-  ConstrainedChunk (unitary i t s u space) cs (Just rv)
+  ConstrainedChunk (qw $ unitary i t s u space) cs (Just rv)
 
 -- | Creates a constrained varchunk
 cvc :: String -> NP -> Symbol -> Space 
        -> [Constraint] -> Expr -> ConstrainedChunk
 cvc i des sym space cs rv = 
-  ConstrainedChunk (vc i des sym space) cs (Just rv)
+  ConstrainedChunk (qw $ vc i des sym space) cs (Just rv)
   
   
   
@@ -194,31 +188,5 @@ cuc' :: (Unit u) => String -> NP -> String -> Symbol -> u
 cuc' nam trm desc sym un space cs rv = 
   ConstrConcept (ucs nam trm desc sym un space) cs (Just rv)
 
--- ConstraintWrapper for wrapping anything that is constrained
-data ConstrWrapper where
-  CnstrW :: (Constrained c) => c -> ConstrWrapper
-
-instance Chunk ConstrWrapper where
-  id = cwlens id
-instance Eq ConstrWrapper where
-  a == b = (a ^. id) == (b ^. id)
-instance Constrained ConstrWrapper where
-  constraints = cwlens constraints
-  reasVal = cwlens reasVal
-instance NamedIdea ConstrWrapper where
-  term = cwlens term
-instance Idea ConstrWrapper where
-  getA (CnstrW a) = getA a
-instance Quantity ConstrWrapper where
-  getSymb s (CnstrW a) = getSymb s a
-  getUnit (CnstrW a) = getUnit a
-  typ = cwlens typ
-  getStagedS (CnstrW a) = getStagedS a
-
-cnstrw :: (Constrained c) => c -> ConstrWrapper
-cnstrw = CnstrW
-
--- do not export
-cwlens :: (forall c. (Constrained c) => 
-  Simple Lens c a) -> Simple Lens ConstrWrapper a
-cwlens l f (CnstrW a) = fmap (\x -> CnstrW (set l x a)) (f (a ^. l))
+cnstrw :: Constrained c => c -> ConstrainedChunk
+cnstrw c = ConstrainedChunk (qw c) (c ^. constraints) (c ^. reasVal)

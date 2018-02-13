@@ -90,8 +90,8 @@ acronyms = [assumption, dataDefn, genDefn, goalStmt, inModel, likelyChg, ode,
   phsChgMtrl, physSyst, requirement, rightSide, srs, progName, thModel, typUnc]
 
 this_si :: [UnitDefn]
-this_si = map UU [metre, kilogram, second] ++ 
-  map UU [centigrade, joule, watt]
+this_si = map unitWrapper [metre, kilogram, second] ++ 
+  map unitWrapper [centigrade, joule, watt]
 
 --Will there be a table of contents?
 
@@ -116,7 +116,7 @@ swhs_si = SI {
 }
 
 swhsSymMap :: ChunkDB
-swhsSymMap = cdb swhsSymbolsAll (map nw swhsSymbols ++ map nw acronyms) ([] :: [CWrapper] ) -- FIXME: Fill in Concepts
+swhsSymMap = cdb swhsSymbolsAll (map nw swhsSymbols ++ map nw acronyms) ([] :: [UnitDefn] ) -- FIXME: Fill in Concepts
   this_si
 
   --Note: The second swhsSymbols here is

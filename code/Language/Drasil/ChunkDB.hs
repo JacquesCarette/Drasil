@@ -28,7 +28,7 @@ import Prelude hiding (id)
 type SymbolMap  = Map.Map String QuantityDict
 
 -- | A map of all concepts, normally used for retrieving definitions.
-type ConceptMap = Map.Map String CWrapper
+type ConceptMap = Map.Map String ConceptChunk
 
 -- | A map of all the units used. Should be restricted to base units/synonyms.
 type UnitMap = Map.Map String UnitDefn

@@ -11,7 +11,7 @@ import Language.Drasil.Chunk.NamedIdea (NamedIdea(..), nc, Idea(..))
 import Language.Drasil.Chunk.SymbolForm (SF(..), StagedSymbolChunk, ssc'
   , getSymbForStage)
 import Language.Drasil.Chunk.Quantity (Quantity(..))
-import Language.Drasil.Unit (Unit(..), UnitDefn(..))
+import Language.Drasil.Unit (Unit(..), UnitDefn, unitWrapper)
 import Language.Drasil.Symbol
 import Language.Drasil.Space
 
@@ -37,7 +37,7 @@ instance Quantity UnitaryChunk where
   getUnit = Just . unit
   getStagedS (UC _ s _ _) = s
 instance Unitary UnitaryChunk where
-  unit (UC _ _ u _) = UU u
+  unit (UC _ _ u _) = unitWrapper u
   
 nl :: (forall c. (NamedIdea c) => Simple Lens c a) -> Simple Lens UnitaryChunk a
 nl l f (UC qc s u t) = fmap (\x -> UC (set l x qc) s u t) (f (qc ^. l))

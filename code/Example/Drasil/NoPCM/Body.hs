@@ -90,7 +90,7 @@ import Data.Drasil.Units.Thermodynamics (thermal_flux)
 
 -- This defines the standard units used throughout the document
 this_si :: [UnitDefn]
-this_si = map UU [metre, kilogram, second] ++ map UU [centigrade, joule, watt]
+this_si = map unitWrapper [metre, kilogram, second] ++ map unitWrapper [centigrade, joule, watt]
 
 -- This defines the list of acronyms that are used throughout the document
 acronyms :: [CI]
@@ -185,7 +185,7 @@ nopcm_srs :: Document
 nopcm_srs = mkDoc mkSRS (for) nopcm_si
 
 nopcm_SymbMap :: ChunkDB
-nopcm_SymbMap = cdb nopcm_SymbolsAll (map nw nopcm_Symbols ++ map nw acronyms) ([] :: [CWrapper]) -- FIXME: Fill in Concepts
+nopcm_SymbMap = cdb nopcm_SymbolsAll (map nw nopcm_Symbols ++ map nw acronyms) ([] :: [UnitDefn]) -- FIXME: Fill in Concepts
   this_si
 
 --------------------------

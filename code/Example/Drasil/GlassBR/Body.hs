@@ -70,8 +70,8 @@ import Drasil.Sections.SpecificSystemDescription (solChSpecF,
 {--}
 
 gbSymbMap :: ChunkDB
-gbSymbMap = cdb this_symbols (map nw acronyms ++ map nw this_symbols) ([] :: [CWrapper])
-  (map UU [metre, second, kilogram] ++ map UU [pascal, newton])
+gbSymbMap = cdb this_symbols (map nw acronyms ++ map nw this_symbols) ([] :: [UnitDefn])
+  (map unitWrapper [metre, second, kilogram] ++ map unitWrapper [pascal, newton])
 
 resourcePath :: String
 resourcePath = "../../../datafiles/GlassBR/"
@@ -134,7 +134,7 @@ glassSystInfo = SI {
   _sys         = glassBRProg,
   _kind        = srs,
   _authors     = [nikitha, spencerSmith],
-  _units       = map UU [metre, second, kilogram] ++ map UU [pascal, newton],
+  _units       = map unitWrapper [metre, second, kilogram] ++ map unitWrapper [pascal, newton],
   _quants      = this_symbols,
   _concepts    = ([] :: [CQSWrapper]),
   _definitions = dataDefns ++ (map (relToQD gbSymbMap) iModels) ++ (map (relToQD gbSymbMap) tModels) 

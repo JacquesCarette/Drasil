@@ -1,7 +1,7 @@
 {-# Language GADTs, Rank2Types #-}
 module Language.Drasil.Chunk.Concept 
   ( Concept(..), ConceptChunk, dcc, dcc', dccWDS, dccWDS', cc, cc', ccs
-  , CWrapper, cw
+  , cw
   )where
 
 import Language.Drasil.Chunk
@@ -20,7 +20,7 @@ class Idea c => Concept c where
   -- | defn provides (a 'Lens' to) the definition for a chunk
   defn :: Simple Lens c Sentence
   -- | cdom provides (a 'Lens' to) the concept domain tags for a chunk
-  cdom :: Simple Lens c [CWrapper] 
+  cdom :: Simple Lens c [ConceptChunk] 
   -- ^ /cdom/ should be exported for use by the
   -- Drasil framework, but should not be exported beyond that.
 
@@ -30,8 +30,8 @@ class Idea c => Concept c where
 -- | The ConceptChunk datatype is a Concept
 data ConceptChunk where
   -- CC takes an 'Idea', a definition, and domain tags.
-  CC :: Idea c => c -> Sentence -> [CWrapper] -> ConceptChunk 
-  -- [CWrapper] is a list of the ConceptDomain(s) as Concepts themselves.
+  CC :: Idea c => c -> Sentence -> [ConceptChunk] -> ConceptChunk 
+  -- [ConceptChunk] is a list of the ConceptDomain(s) as Concepts themselves.
   -- It is not exported, see 'cc' and 'ccs' for the exported constructors.
 instance Eq ConceptChunk where
   c1 == c2 = (c1 ^. id) == (c2 ^. id)
@@ -53,61 +53,34 @@ nl l f (CC n d cd) = fmap (\x -> CC (set l x n) d cd) (f (n ^. l))
 dcc :: String -> NP -> String -> ConceptChunk 
 -- | Smart constructor for creating concept chunks given an id, 
 -- 'NounPhrase' ('NP') and definition (as String).
-dcc i ter des = CC (nc i ter) (S des) ([] :: [CWrapper])
+dcc i ter des = CC (nc i ter) (S des) []
 -- ^ Concept domain tagging is not yet implemented in this constructor.
 
 -- | Identical to 'dcc', but adds an abbreviation (String)
 dcc' :: String -> NP -> String -> String -> ConceptChunk
-dcc' i t d a = CC (commonIdea i t a) (S d) ([] :: [CWrapper])
+dcc' i t d a = CC (commonIdea i t a) (S d) []
 
 -- | Similar to 'dcc', except the definition is a 'Sentence'
 dccWDS :: String -> NP -> Sentence -> ConceptChunk
-dccWDS i t d = CC (nc i t) d ([] :: [CWrapper])
+dccWDS i t d = CC (nc i t) d []
 
 -- | Similar to 'dcc', except the definition is a 'Sentence' and adds
 -- an abbreviation (String)
 dccWDS' :: String -> NP -> Sentence -> String -> ConceptChunk
-dccWDS' i t d a = CC (commonIdea i t a) d ([] :: [CWrapper])
+dccWDS' i t d a = CC (commonIdea i t a) d []
 
 -- | Constructor for 'ConceptChunk'. Does not allow concept domain tagging.
 cc :: Idea c => c -> String -> ConceptChunk
-cc n d = CC n (S d) ([] :: [CWrapper])
+cc n d = CC n (S d) []
 
 -- | Same as cc, except definition is a 'Sentence'
 cc' :: Idea c => c -> Sentence -> ConceptChunk
-cc' n d = CC n (d) ([] :: [CWrapper])
+cc' n d = CC n (d) []
 
 -- | Constructor for 'ConceptChunk'. Allows explicit tagging.
-ccs :: Idea c => c -> Sentence -> [CWrapper] -> ConceptChunk --Explicit tagging
+ccs :: Idea c => c -> Sentence -> [ConceptChunk] -> ConceptChunk --Explicit tagging
 ccs = CC
 
-{- Concept Wrapper -}
--- | Wrapper for Concepts
-data CWrapper where
-  CW :: (Concept c) => c -> CWrapper
-  
-instance Chunk CWrapper where
-  id = clens id
-  
-instance NamedIdea CWrapper where
-  term = clens term
-instance Idea CWrapper where
-  getA (CW a) = getA a
-  
-instance Concept CWrapper where
-  defn = clens defn
-  cdom = clens cdom
-
--- | CWrapper constructor. Takes the Concept to be wrapped.
--- Similar to 
--- 'Language.Drasil.Chunk.Wrapper.NWrapper' in its use
-cw :: Concept c => c -> CWrapper
-cw = CW
-
-clens :: (forall c. (Concept c) => 
-  Simple Lens c a) -> Simple Lens CWrapper a
-clens l f (CW a) = fmap (\x -> CW (set l x a)) (f (a ^. l))
-
-instance Eq CWrapper where
- a == b = (a ^. id) == (b ^. id)
-  
+-- | For projecting out to the ConceptChunk data-type
+cw :: Concept c => c -> ConceptChunk
+cw c = CC (nw c) (c ^. defn) (c ^. cdom)

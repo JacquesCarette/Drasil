@@ -17,14 +17,14 @@ module Language.Drasil (
   -- all the stuff from Unicode
   , Greek(..), Special(..)
   -- Unit
-  , Unit(..), UDefn(..), DerUChunk(..), FundUnit(..), UnitDefn(..), unitWrapper
+  , Unit(..), UDefn(..), DerUChunk(..), FundUnit(..), UnitDefn, unitWrapper
   , from_udefn , makeDerU, unitCon
   , (^:), (/:), (*:), new_unit
   -- Chunk
   , Chunk(..), VarChunk(..), ConceptChunk
   , makeVC, makeVC', vc, makeVCObj, SymbolForm
   , dcc, dccWDS, dccWDS', cv, dcc', vc', vc'', ccs, cc, cc', makeVC''
-  , Concept(..), cw, CWrapper
+  , Concept(..), cw
   -- Chunk.CommonIdea
   , CommonIdea(..) , commonIdea, CI, getAcc
   -- Chunk.NamedIdea

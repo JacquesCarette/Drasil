@@ -1,9 +1,9 @@
-{-# Language GADTs, Rank2Types #-}
+{-# Language GADTs, TypeSynonymInstances #-}
 module Language.Drasil.Unit (
     UDefn(..)                   -- languages
   , Unit(..), UnitEq(..)        -- classes
   , FundUnit(..), DerUChunk(..) -- data-structures
-  , UnitDefn(..)                -- wrapper for 'Unit' class
+  , UnitDefn                    -- synonym for FundUnit
   , from_udefn, makeDerU, unitCon
   , (^:), (/:), (*:), new_unit
   , scale, shift
@@ -12,11 +12,11 @@ module Language.Drasil.Unit (
 
 import Prelude hiding (id)
 
-import Control.Lens (Simple, Lens, set, (^.))
+import Control.Lens (Simple, Lens, (^.))
 
 import Language.Drasil.Chunk (Chunk(..))
 import Language.Drasil.Chunk.NamedIdea (NamedIdea(..), Idea(..))
-import Language.Drasil.Chunk.Concept (Concept(..), ConceptChunk, dcc)
+import Language.Drasil.Chunk.Concept (Concept(..), ConceptChunk, dcc, cw)
 import Language.Drasil.NounPhrase
 import Language.Drasil.Spec (USymb(..))
 import Language.Drasil.Symbol
@@ -37,7 +37,6 @@ class Concept u => Unit u where
 
 class UnitEq u where
    uniteq :: Simple Lens u UDefn
-
 
 -- | Can generate a default symbol
 from_udefn :: UDefn -> USymb
@@ -116,22 +115,8 @@ instance UnitEq DerUChunk where
 
 -- | For allowing lists to mix the two, thus forgetting
 -- the definition part
-data UnitDefn where
-  UU :: Unit u => u -> UnitDefn
-
--- don't export
-ulens :: (forall u. Unit u => Simple Lens u a) -> Simple Lens UnitDefn a
-ulens l f (UU a) = fmap (\x -> UU (set l x a)) (f (a ^. l))
-
-instance Chunk     UnitDefn where id   = ulens id
-instance NamedIdea UnitDefn where
-  term = ulens term
-instance Idea      UnitDefn where
-  getA (UU a) = getA a
-instance Concept   UnitDefn where 
-  defn = ulens defn
-  cdom = ulens cdom
-instance Unit      UnitDefn where usymb = ulens usymb
+unitWrapper :: Unit u => u -> FundUnit
+unitWrapper u = UD (cw u) (u ^. usymb)
 
 --- These conveniences go here, because we need the class
 -- | Combinator for raising a unit to a power
@@ -158,11 +143,10 @@ shift a b = UShift a (b ^. usymb)
 new_unit :: String -> USymb -> DerUChunk
 new_unit s u = makeDerU (unitCon s) (USynonym u)
 
+type UnitDefn = FundUnit
+
 instance Eq UnitDefn where
   a == b = (a ^. usymb) == (b ^. usymb)
   
 instance Ord UnitDefn where
   compare a b = compare (a ^. usymb) (b ^. usymb)
-  
-unitWrapper :: Unit u => u -> UnitDefn
-unitWrapper = UU

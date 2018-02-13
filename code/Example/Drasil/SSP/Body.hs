@@ -77,7 +77,7 @@ s4_2_2_tmods, s4_2_3_genDefs, s4_2_4_dataDefs, s4_2_5_IMods :: [Contents]
 
 --Document Setup--
 this_si :: [UnitDefn]
-this_si = map UU [metre, degree] ++ map UU [newton, pascal]
+this_si = map unitWrapper [metre, degree] ++ map unitWrapper [newton, pascal]
 
 ssp_si :: SystemInformation
 ssp_si = SI {
@@ -117,7 +117,7 @@ ssp_code = codeSpec' ssp_si [sspInputMod]
 
 -- SYMBOL MAP HELPERS --
 sspSymMap :: ChunkDB
-sspSymMap = cdb sspSymbols (map nw sspSymbols ++ map nw acronyms) ([] :: [CWrapper]) -- FIXME: Fill in Concepts
+sspSymMap = cdb sspSymbols (map nw sspSymbols ++ map nw acronyms) ([] :: [UnitDefn]) -- FIXME: Fill in Concepts
   this_si
 
 sspSymMapT :: RelationConcept -> Contents

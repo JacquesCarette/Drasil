@@ -20,7 +20,7 @@ tModels = [t1SafetyReq, t2SafetyReq]
 -- needs to be updated properly.
 t1IsSafe :: TheoryModel
 t1IsSafe = tm (cw t1SafetyReq) 
-  (tc' "isSafe" [qw is_safe1, qw prob_br, qw pb_tol] ([] :: [CWrapper])
+  (tc' "isSafe" [qw is_safe1, qw prob_br, qw pb_tol] ([] :: [FundUnit])
   [] [TCon Invariant $ (C is_safe1) $= (C prob_br) $< (C pb_tol)] [])
 
 t1SafetyReq :: RelationConcept

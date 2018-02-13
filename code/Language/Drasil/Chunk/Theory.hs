@@ -18,7 +18,7 @@ class Theory t where
   valid_context :: Simple Lens t [TWrapper]
   spaces :: Simple Lens t [SpaceDefn] 
   quantities :: Simple Lens t [QuantityDict]
-  operations :: Simple Lens t [CWrapper] -- FIXME: Should not be Concept
+  operations :: Simple Lens t [ConceptChunk] -- FIXME: Should not be Concept
   defined_quant :: Simple Lens t [QDefinition]
   invariants :: Simple Lens t [TheoryConstraint]
   defined_fun :: Simple Lens t [QDefinition]
@@ -26,7 +26,7 @@ class Theory t where
 data SpaceDefn -- FIXME: This should be defined.
   
 data TheoryChunk where
-  TC :: String -> [TWrapper] -> [SpaceDefn] -> [QuantityDict] -> [CWrapper] -> 
+  TC :: String -> [TWrapper] -> [SpaceDefn] -> [QuantityDict] -> [ConceptChunk] -> 
     [QDefinition] -> [TheoryConstraint] -> [QDefinition] -> TheoryChunk
     
 instance Theory TheoryChunk where

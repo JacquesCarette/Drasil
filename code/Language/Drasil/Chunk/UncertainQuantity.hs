@@ -8,7 +8,7 @@ module Language.Drasil.Chunk.UncertainQuantity
   , uqc, uqcNU
   , uqcND
   , uncrtnChunk, uvc
-  , UncertainWrapper(..), uncrtnw
+  , uncrtnw
   ) where
   
 import Language.Drasil.Chunk
@@ -138,34 +138,5 @@ uvc :: String -> NP -> Symbol
 uvc nam trm sym space cs val uncrt = uncrtnChunk
   (cvc nam trm sym space cs val) uncrt
 
----
--- UncertainWrapper for wrapping anything that is constrained
-data UncertainWrapper where
-  UncrtnW :: (Constrained c, UncertainQuantity c) => c -> UncertainWrapper
-
-instance Chunk UncertainWrapper where
-  id = uwlens id
-instance Eq UncertainWrapper where
-  a == b = (a ^. id) == (b ^. id)
-instance Constrained UncertainWrapper where
-  constraints = uwlens constraints
-  reasVal = uwlens reasVal
-instance NamedIdea UncertainWrapper where
-  term = uwlens term
-instance Idea UncertainWrapper where
-  getA (UncrtnW a) = getA a
-instance Quantity UncertainWrapper where
-  getSymb s  (UncrtnW a) = getSymb s a
-  getUnit    (UncrtnW a) = getUnit a
-  getStagedS (UncrtnW a) = getStagedS a
-  typ = uwlens typ
-instance UncertainQuantity UncertainWrapper where
-  uncert = uwlens uncert
-
-uncrtnw :: (UncertainQuantity c, Constrained c) => c -> UncertainWrapper
-uncrtnw = UncrtnW
-
--- do not export
-uwlens :: (forall c. (UncertainQuantity c, Constrained c) => 
-  Simple Lens c a) -> Simple Lens UncertainWrapper a
-uwlens l f (UncrtnW a) = fmap (\x -> UncrtnW (set l x a)) (f (a ^. l))
+uncrtnw :: (UncertainQuantity c, Constrained c) => c -> UncertainChunk
+uncrtnw c = UCh c (c ^. uncert)

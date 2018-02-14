@@ -47,7 +47,7 @@ module Language.Drasil (
   , symbol
   -- Chunk.UncertainQuantity
   , UncertainQuantity(..), UncertainChunk(..), UncertQ, uq, uqNU, uqc, uqcNU, uqcND, uncrtnChunk, uvc
-  , UncertainWrapper(..), uncrtnw
+  , uncrtnw
   -- Chunk.Unital
   , UnitalChunk(..), makeUCWDS, ucFromCV
   , uc, uc', ucs, ucs', ucsWS

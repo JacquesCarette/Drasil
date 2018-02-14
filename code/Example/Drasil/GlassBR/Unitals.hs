@@ -58,7 +58,7 @@ gbInputsWUncrtn = [pb_tol, tNT]
 gbInputsNoUncrtn :: [ConstrainedChunk]
 gbInputsNoUncrtn = [glass_type, nom_thick]
 
-gbInputDataConstraints :: [UncertainWrapper]
+gbInputDataConstraints :: [UncertainChunk]
 gbInputDataConstraints = (map uncrtnw gbInputsWUnitsUncrtn) ++ 
   (map uncrtnw gbInputsWUncrtn)
   

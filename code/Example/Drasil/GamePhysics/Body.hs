@@ -58,7 +58,7 @@ mkSRS :: DocDesc
 mkSRS = RefSec (RefProg RM.intro [TUnits, tsymb tableOfSymbols, TAandA]) :
   IntroSec (
     IntroProg para1_introduction_intro (short chipmunk) 
-  [IPurpose (para1_3_intro), /]
+  [IPurpose (para1_purpose_of_document_intro),
    IScope scope_of_requirements_intro_p1 scope_of_requirements_intro_p2, 
    IChar (S "rigid body dynamics") (phrase highSchoolCalculus) (EmptyS), 
    IOrgSec organization_of_documents_intro inModel solution_characteristics_specification EmptyS]) :

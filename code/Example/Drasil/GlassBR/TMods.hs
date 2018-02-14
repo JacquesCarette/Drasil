@@ -1,4 +1,4 @@
-module Drasil.GlassBR.TMods (tModels, t1SafetyReq, t2SafetyReq,t1IsSafe) where
+module Drasil.GlassBR.TMods (tModels, t1SafetyReq, t2SafetyReq,t1IsSafe,t2IsSafe) where
 
 import Drasil.GlassBR.Unitals (is_safe1, is_safe2, demand, 
   demandq, lRe, pb_tol, prob_br)
@@ -38,7 +38,7 @@ t1descr = tDescr (is_safe1) s ending
 
 t2IsSafe :: TheoryModel
 t2IsSafe = tm(cw t2SafetyReq)
-   (tc' "isSafe" [qw is_safe2, qw lRe, qw demand] ([] :: [CWrapper])
+   (tc' "isSafe2" [qw is_safe2, qw lRe, qw demand] ([] :: [CWrapper])
    [] [TCon Invariant $ (C is_safe2) $= (C lRe) $> (C demand)] [])
 
 t2SafetyReq :: RelationConcept

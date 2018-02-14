@@ -109,7 +109,7 @@ module Language.Drasil (
   -- Chunk.Theory
   , Theory(..), tc', TheoryChunk, TheoryModel, tm, tw
   -- Chunk.SymbolForm
-  , SF, SymbolChunk, sc, ssc, ssc', Stage(Equational,Implementation), StagedSymbolChunk
+  , SymbolChunk, sc, ssc, ssc', Stage(Equational,Implementation), StagedSymbolChunk
   , eqSymb, codeSymb , ssc'', hasStageSymbol
   -- Code.Imperative.Lang
   , Lang(..)

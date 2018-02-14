@@ -1,6 +1,6 @@
 {-# LANGUAGE GADTs,Rank2Types #-}
 module Language.Drasil.Chunk.NamedIdea (NamedIdea(..), Idea(..),
-  NamedChunk, nc, IdeaDict, compoundterm, short, nw,
+  NamedChunk, nc, IdeaDict, compoundterm, short, nw, mkIdea,
   compoundNC, compoundNC', compoundNC'', compoundNC''',
   for, for', for'', of_, of_', of_'', of__, of'',
   with, with', and_, and_', andRT, the, theCustom, this, aNP, a_, ofA) where
@@ -63,6 +63,9 @@ instance Idea IdeaDict where
   
 inc :: Simple Lens IdeaDict NamedChunk
 inc f (IdeaDict a b) = fmap (\x -> IdeaDict x b) (f a)
+
+mkIdea :: String -> NP -> Maybe String -> IdeaDict
+mkIdea s np ms = IdeaDict (nc s np) ms
 
 -- Historical name: nw comes from 'named wrapped' from when
 -- |NamedIdea| exported |getA| (now in |Idea|). But there are

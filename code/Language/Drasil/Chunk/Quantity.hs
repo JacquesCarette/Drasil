@@ -1,6 +1,6 @@
 {-# LANGUAGE GADTs,Rank2Types #-}
 module Language.Drasil.Chunk.Quantity 
-  ( Quantity(..), QuantityDict, qw, symbol, eqSymb, codeSymb,
+  ( Quantity(..), QuantityDict, qw, symbol, eqSymb, codeSymb, mkQuant
   ) where
 
 import Control.Lens
@@ -10,23 +10,25 @@ import Language.Drasil.Chunk
 import Language.Drasil.Chunk.NamedIdea
 import Language.Drasil.Chunk.VarChunk
 import Language.Drasil.Chunk.ConVar
+import Language.Drasil.Chunk.SymbolForm (ssc')
 import Language.Drasil.Symbol (Symbol)
+import Language.Drasil.NounPhrase
 
 import Prelude hiding (id)
 
-import qualified Language.Drasil.Chunk.SymbolForm as SF (SF(..), symbol, Stage(..)
-                                        , getSymbForStage, StagedSymbolChunk)
+import qualified Language.Drasil.Chunk.SymbolForm as SF (symbol, Stage(..), sc
+  , SymbolChunk, getSymbForStage, StagedSymbolChunk)
 import Language.Drasil.Unit(UnitDefn)
 
--- | A Quantity is an 'Idea' with a 'Space' that may have 
--- a symbol and units
+-- | A Quantity is an 'Idea' with a 'Space' and a symbol and 
+-- may have units
 class Idea c => Quantity c where
   -- | Lens to the Space
   typ      :: Simple Lens c Space
   -- | Provides the 'Language.Drasil.Chunk.SymbolForm.SymbolForm' 
   -- (chunk which contains a symbol) for a quantity for a particular stage of 
   -- generation
-  getSymb  :: SF.Stage -> c -> SF.SF
+  getSymb  :: SF.Stage -> c -> SF.SymbolChunk
   -- | Provides the units a quantity is measured in, if any, otherwise returns
   -- 'Nothing'
   getUnit  :: c -> Maybe UnitDefn
@@ -34,19 +36,19 @@ class Idea c => Quantity c where
   getStagedS :: c -> SF.StagedSymbolChunk
 
 instance Quantity VarChunk where
-  getSymb st (VC _ s _) = SF.SF $ SF.getSymbForStage st s 
+  getSymb st (VC _ s _) = SF.getSymbForStage st s 
   getUnit _  = Nothing
   typ f (VC n s t) = fmap (\x -> VC n s x) (f t)
   getStagedS (VC _ s _) = s
   
 instance Quantity ConVar where
   typ    f (CV c s t) = fmap (\x -> CV c s x) (f t)
-  getSymb st (CV _ s _) = SF.SF $ SF.getSymbForStage st s
+  getSymb st (CV _ s _) = SF.getSymbForStage st s
   getUnit _ = Nothing
   getStagedS (CV _ s _) = s
 
 data QuantityDict = QD { _id :: IdeaDict, _typ :: Space,
-  _symb :: SF.Stage -> SF.SF,
+  _symb :: SF.Stage -> SF.SymbolChunk,
   _unit :: Maybe UnitDefn, _stagedS :: SF.StagedSymbolChunk }
 
 instance Chunk QuantityDict where
@@ -76,6 +78,9 @@ qlens f qd = fmap (\x -> qd {_id = x}) (f (_id qd))
 
 qw :: Quantity q => q -> QuantityDict
 qw q = QD (nw q) (q^.typ) (\stg -> getSymb stg q) (getUnit q) (getStagedS q)
+
+mkQuant :: String -> NP -> Symbol -> Space -> Maybe UnitDefn -> QuantityDict
+mkQuant i t s sp u = QD (mkIdea i t Nothing) sp (\_ -> SF.sc i s) u (ssc' i s)
 
 -- | Helper function for getting a symbol at a given stage from a quantity.
 symbol :: Quantity q => SF.Stage -> q -> Symbol

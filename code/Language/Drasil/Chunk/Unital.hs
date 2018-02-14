@@ -16,8 +16,7 @@ import Language.Drasil.Chunk (Chunk(..))
 import Language.Drasil.Chunk.NamedIdea (NamedIdea(..),Idea(..))
 import Language.Drasil.Chunk.Concept (Concept(..), dcc, dccWDS)
 import Language.Drasil.Chunk.ConVar (ConVar (..))
-import Language.Drasil.Chunk.SymbolForm (SF(..), StagedSymbolChunk, ssc'
-                                        , getSymbForStage)
+import Language.Drasil.Chunk.SymbolForm (StagedSymbolChunk, ssc', getSymbForStage)
 import Language.Drasil.Chunk.Quantity (Quantity(..))
 import Language.Drasil.Chunk.Unitary (Unitary(..))
 import Language.Drasil.Unit (Unit(..), unitWrapper)
@@ -46,7 +45,7 @@ instance Quantity UnitalChunk where
   typ f (UC named s u t) = fmap (\x -> UC named s u x) (f t)
   typ f ucv@(UCV _ _) = cvl typ f ucv
   getSymb st (UCV c _ ) = getSymb st c
-  getSymb st (UC _ s _ _) = SF $ getSymbForStage st s
+  getSymb st (UC _ s _ _) = getSymbForStage st s
   getUnit = Just . unit
   getStagedS (UCV c _ ) = getStagedS c
   getStagedS (UC _ s _ _) = s

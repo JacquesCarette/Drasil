@@ -128,10 +128,10 @@ constrained :: (Quantity c) => c
 constrained q cs ex = ConstrainedChunk (qw q) cs (Just ex)
   
 -- | Creates a constrained unitary  
-cuc :: (Unit u) => String -> NP -> Symbol -> u 
+cuc :: Unit u => String -> NP -> Symbol -> u
                 -> Space -> [Constraint] -> Expr -> ConstrainedChunk
 cuc i t s u space cs rv = 
-  ConstrainedChunk (qw $ unitary i t s u space) cs (Just rv)
+  ConstrainedChunk (qw $ unitary i t s (unitWrapper u) space) cs (Just rv)
 
 -- | Creates a constrained varchunk
 cvc :: String -> NP -> Symbol -> Space 

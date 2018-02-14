@@ -35,6 +35,12 @@ t1descr = tDescr (is_safe1) s ending
     ending = ((getES prob_br) `isThe` (phrase prob_br)) `sC` S "as calculated in" +:+.
       (ref probOfBr) +:+ (getES pb_tol) `isThe` (phrase pb_tol) +:+ S "entered by the user"
 
+
+t2IsSafe :: TheoryModel
+t2IsSafe = tm(cw t1SafetyReq)
+   (tc' "isSafe" [qw is_safe2, qw lRe, qw demand] ([] :: [CWrapper])
+   [] [TCon Invariant $ (C is_safe2) $= (C lRe) $> (C demand)] [])
+
 t2SafetyReq :: RelationConcept
 t2SafetyReq = makeRC "t2SafetyReq" (nounPhraseSP "Safety Requirement-2")
   t2descr $ (C is_safe2) $= (C lRe) $> (C demand)

@@ -58,7 +58,7 @@ module Language.Drasil (
   --Chunk.DefinedQuantity
   , cqs, DefinedQuantityDict
   --Chunk.UWrapper 
-  , UWrapper, uw, ucw, UCWrapper
+  , ucw, UCWrapper
   -- Chunks w/ Attributes
   , Attribute(..), Attributes, attributes, getSource, aqd -- TODO: Remove aqd
   , HasAttributes, Derivation, getDerivation

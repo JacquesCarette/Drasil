@@ -1,9 +1,7 @@
 {-# LANGUAGE GADTs, Rank2Types #-}
 
 module Language.Drasil.Chunk.Wrapper.UWrapper
-  ( uw
-  , UWrapper
-  , ucw
+  ( ucw
   , UCWrapper
   ) where
 
@@ -15,39 +13,6 @@ import Language.Drasil.Chunk.SymbolForm
 import qualified Language.Drasil.Chunk.Quantity as Q
 import Language.Drasil.Chunk.Unitary
 import Prelude hiding (id)
-
--- | Unitary Wrapper
-data UWrapper where
-  UW :: (Unitary c) => c -> UWrapper
-  
-ulens :: (forall c. (Unitary c) => 
-  Simple Lens c a) -> Simple Lens UWrapper a
-ulens l f (UW a) = fmap (\x -> UW (set l x a)) (f (a ^. l))
-
-instance Eq UWrapper where
-  a == b = (a ^. id) == (b ^. id)
-instance Ord UWrapper where
-  compare a b = -- FIXME: Ordering hack. Should be context-dependent
-    compare ((Q.getSymb Equational a) ^. symbol) ((Q.getSymb Equational b) ^. symbol)
-
-instance Chunk UWrapper where
-  id = ulens id
-instance NamedIdea UWrapper where
-  term = ulens term
-instance Idea UWrapper where
-  getA (UW a) = getA a
-instance Q.Quantity UWrapper where
-  typ = ulens Q.typ
-  getSymb s  (UW a) = Q.getSymb s a
-  getUnit    (UW a) = Q.getUnit a
-  getStagedS (UW a) = Q.getStagedS a
-instance Unitary UWrapper where
-  unit (UW a) = unit a
-  
--- | Constructor for Unital Wrappers. Similar to 
--- 'Language.Drasil.Chunk.Wrapper.NWrapper' in its use
-uw :: (Unitary c) => c -> UWrapper
-uw = UW
 
 -- | Unitary __and__ Concept Wrapper
 data UCWrapper where

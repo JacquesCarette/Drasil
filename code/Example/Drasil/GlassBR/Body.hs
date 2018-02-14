@@ -136,7 +136,7 @@ glassSystInfo = SI {
   _authors     = [nikitha, spencerSmith],
   _units       = map unitWrapper [metre, second, kilogram] ++ map unitWrapper [pascal, newton],
   _quants      = this_symbols,
-  _concepts    = ([] :: [CQSWrapper]),
+  _concepts    = ([] :: [DefinedQuantityDict]),
   _definitions = dataDefns ++ (map (relToQD gbSymbMap) iModels) ++ (map (relToQD gbSymbMap) tModels) 
                   ++ [wtntWithEqn, sdWithEqn],  -- wtntWithEqn is defined in Unitals but only appears 
                                                  -- in the description of the Calculation of Demand instance model;

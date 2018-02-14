@@ -73,7 +73,6 @@ import Drasil.DocumentLanguage {-(DocDesc,
   IntroSec (IntroProg),
   IntroSub (IOrgSec, IScope, IChar, IPurpose),
   Literature (Lit, Doc'))-}
-import Drasil.DocumentLanguage.Definitions
 import Drasil.DocumentLanguage.Chunk.GenDefn
   
 import Drasil.Sections.SpecificSystemDescription (inDataConstTbl,
@@ -98,7 +97,7 @@ acronyms = [assumption, dataDefn, genDefn, goalStmt, inModel, likelyChg, M.ode,
             physSyst, requirement, srs, progName, thModel, typUnc]
 
 -- This contains the list of symbols used throughout the document
-nopcm_Symbols :: [CQSWrapper]
+nopcm_Symbols :: [DefinedQuantityDict]
 nopcm_Symbols = (map cqs nopcm_Units) ++ (map cqs nopcm_Constraints)
   
 nopcm_SymbolsAll :: [QuantityDict] --FIXME: Why is PCM (swhsSymbolsAll) here?

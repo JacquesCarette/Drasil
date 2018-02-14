@@ -91,6 +91,7 @@ library
     , Language.Drasil.Chunk.Concept
     , Language.Drasil.Chunk.ConVar
     , Language.Drasil.Chunk.Constrained
+    , Language.Drasil.Chunk.DefinedQuantity
     , Language.Drasil.Chunk.Eq
     , Language.Drasil.Chunk.ExprRelat
     , Language.Drasil.Chunk.NamedIdea
@@ -102,7 +103,6 @@ library
     , Language.Drasil.Chunk.Unital
     , Language.Drasil.Chunk.Unitary
     , Language.Drasil.Chunk.VarChunk
-    , Language.Drasil.Chunk.Wrapper.QSWrapper
     , Language.Drasil.Chunk.Wrapper.UWrapper
     , Language.Drasil.ChunkDB
     , Language.Drasil.Expr.Extract

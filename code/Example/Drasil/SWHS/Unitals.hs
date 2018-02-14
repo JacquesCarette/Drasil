@@ -19,7 +19,7 @@ import Data.Drasil.Utils(mkDataDef)
 import Data.Drasil.Quantities.Math (gradient)
 import Data.Drasil.Constraints (gtZeroConstr)
 
-swhsSymbols :: [CQSWrapper]
+swhsSymbols :: [DefinedQuantityDict]
 swhsSymbols = (map cqs swhsUnits) ++ (map cqs swhsUnitless) ++
   (map cqs swhsConstrained)
 

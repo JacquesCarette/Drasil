@@ -1,4 +1,4 @@
-{-# Language GADTs, Rank2Types #-}
+{-# Language GADTs, Rank2Types, TemplateHaskell #-}
 module Language.Drasil.Chunk.Concept 
   ( Concept(..), ConceptChunk, dcc, dcc', dccWDS, dccWDS', cc, cc', ccs
   , cw
@@ -6,14 +6,26 @@ module Language.Drasil.Chunk.Concept
 
 import Language.Drasil.Chunk
 import Language.Drasil.Chunk.NamedIdea
-import Language.Drasil.Chunk.CommonIdea (commonIdea)
 
-import Control.Lens (Simple, Lens, (^.), set)
+import Control.Lens (Simple, Lens, Lens', (^.), set, makeLenses)
 
 import Language.Drasil.Spec
 
 import Prelude hiding (id)
 import Language.Drasil.NounPhrase
+
+-- === DATA TYPES === --
+--- ConceptChunk ---  
+
+data DefnAndDomain a = DAD { _defn' :: Sentence, _cdom' :: [a]}
+makeLenses ''DefnAndDomain
+
+-- | The ConceptChunk datatype is a Concept
+-- CC is not exported, nor are _idea and _dad
+data ConceptChunk = CC { _idea :: IdeaDict, _dad :: DefnAndDomain ConceptChunk }
+
+idea :: Lens' ConceptChunk IdeaDict
+idea f (CC a b) = fmap (\x -> CC x b) (f a)
 
 -- | Concepts are 'Idea's with definitions
 class Idea c => Concept c where
@@ -24,63 +36,51 @@ class Idea c => Concept c where
   -- ^ /cdom/ should be exported for use by the
   -- Drasil framework, but should not be exported beyond that.
 
--- === DATA TYPES === --
---- ConceptChunk ---  
-
--- | The ConceptChunk datatype is a Concept
-data ConceptChunk where
-  -- CC takes an 'Idea', a definition, and domain tags.
-  CC :: Idea c => c -> Sentence -> [ConceptChunk] -> ConceptChunk 
-  -- [ConceptChunk] is a list of the ConceptDomain(s) as Concepts themselves.
-  -- It is not exported, see 'cc' and 'ccs' for the exported constructors.
 instance Eq ConceptChunk where
   c1 == c2 = (c1 ^. id) == (c2 ^. id)
 instance Chunk ConceptChunk where
-  id = nl id
+  id = idea . id
 instance NamedIdea ConceptChunk where
-  term = nl term
+  term = idea . term
 instance Idea ConceptChunk where
-  getA (CC n _ _) = getA n
+  getA cc = getA $ (cc ^. idea)
 instance Concept ConceptChunk where
-  defn f (CC n d cd) = fmap (\x -> CC n x cd) (f d)
-  cdom f (CC n d cd) = fmap (\x -> CC n d x) (f cd)
-  
-nl :: (forall c. (NamedIdea c) => Simple Lens c a) -> Simple Lens ConceptChunk a
-nl l f (CC n d cd) = fmap (\x -> CC (set l x n) d cd) (f (n ^. l))
-
+  defn f (CC i dd) = fmap (\x -> CC i (set defn' x dd)) (f (dd ^. defn'))
+  cdom f (CC i dd) = fmap (\x -> CC i (set cdom' x dd)) (f (dd ^. cdom'))
+ 
 --FIXME: Temporary ConceptDomain tag hacking to not break everything. 
  
 dcc :: String -> NP -> String -> ConceptChunk 
 -- | Smart constructor for creating concept chunks given an id, 
 -- 'NounPhrase' ('NP') and definition (as String).
-dcc i ter des = CC (nc i ter) (S des) []
+dcc i ter des = CC (mkIdea i ter Nothing) (DAD (S des) [])
 -- ^ Concept domain tagging is not yet implemented in this constructor.
 
 -- | Identical to 'dcc', but adds an abbreviation (String)
 dcc' :: String -> NP -> String -> String -> ConceptChunk
-dcc' i t d a = CC (commonIdea i t a) (S d) []
+dcc' i t d a = CC (mkIdea i t (Just a)) (DAD (S d) [])
 
 -- | Similar to 'dcc', except the definition is a 'Sentence'
 dccWDS :: String -> NP -> Sentence -> ConceptChunk
-dccWDS i t d = CC (nc i t) d []
+dccWDS i t d = CC (mkIdea i t Nothing) (DAD d [])
 
 -- | Similar to 'dcc', except the definition is a 'Sentence' and adds
 -- an abbreviation (String)
 dccWDS' :: String -> NP -> Sentence -> String -> ConceptChunk
-dccWDS' i t d a = CC (commonIdea i t a) d []
+dccWDS' i t d a = CC (mkIdea i t (Just a)) (DAD d [])
 
 -- | Constructor for 'ConceptChunk'. Does not allow concept domain tagging.
 cc :: Idea c => c -> String -> ConceptChunk
-cc n d = CC n (S d) []
+cc n d = CC (nw n) (DAD (S d) [])
 
 -- | Same as cc, except definition is a 'Sentence'
 cc' :: Idea c => c -> Sentence -> ConceptChunk
-cc' n d = CC n (d) []
+cc' n d = CC (nw n) (DAD d [])
 
 -- | Constructor for 'ConceptChunk'. Allows explicit tagging.
 ccs :: Idea c => c -> Sentence -> [ConceptChunk] -> ConceptChunk --Explicit tagging
-ccs = CC
+ccs n d l = CC (nw n) (DAD d l)
 
 -- | For projecting out to the ConceptChunk data-type
 cw :: Concept c => c -> ConceptChunk
-cw c = CC (nw c) (c ^. defn) (c ^. cdom)
+cw c = CC (nw c) (DAD (c ^. defn) (c ^. cdom))

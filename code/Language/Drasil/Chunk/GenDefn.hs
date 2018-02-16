@@ -1,9 +1,15 @@
 {-# Language GADTs,Rank2Types #-}
-module Drasil.DocumentLanguage.Chunk.GenDefn 
+module Language.Drasil.Chunk.GenDefn 
   ( GenDefn, gd, gdUnit
   ) where
 
-import Language.Drasil
+import Language.Drasil.Unit
+import Language.Drasil.Chunk
+import Language.Drasil.Chunk.Attribute
+import Language.Drasil.Chunk.Concept
+import Language.Drasil.Chunk.ExprRelat
+import Language.Drasil.Chunk.NamedIdea
+import Language.Drasil.Chunk.Relation
 
 import Control.Lens (Simple, Lens, (^.), set)
 

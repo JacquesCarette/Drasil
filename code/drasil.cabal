@@ -94,6 +94,8 @@ library
     , Language.Drasil.Chunk.DefinedQuantity
     , Language.Drasil.Chunk.Eq
     , Language.Drasil.Chunk.ExprRelat
+    , Language.Drasil.Chunk.GenDefn
+    , Language.Drasil.Chunk.InstanceModel
     , Language.Drasil.Chunk.NamedIdea
     , Language.Drasil.Chunk.Quantity
     , Language.Drasil.Chunk.Relation
@@ -142,8 +144,6 @@ executable tiny
     , Drasil.Sections.Requirements
     , Drasil.Sections.GeneralSystDesc
     , Drasil.DocumentLanguage
-    , Drasil.DocumentLanguage.Chunk.GenDefn
-    , Drasil.DocumentLanguage.Chunk.InstanceModel
     , Drasil.DocumentLanguage.Definitions
     , Drasil.Sections.AuxiliaryConstants
     , Drasil.Sections.TableOfUnits
@@ -194,8 +194,6 @@ executable nopcm
     , Drasil.SRS
     , Drasil.Sections.TableOfAbbAndAcronyms
     , Drasil.DocumentLanguage
-    , Drasil.DocumentLanguage.Chunk.GenDefn
-    , Drasil.DocumentLanguage.Chunk.InstanceModel
     , Drasil.DocumentLanguage.Definitions
     , Drasil.Sections.SpecificSystemDescription
     , Drasil.Sections.Introduction
@@ -239,8 +237,6 @@ executable ssp
     , Drasil.Sections.ScopeOfTheProject
     , Drasil.Sections.TraceabilityMandGs
     , Drasil.DocumentLanguage
-    , Drasil.DocumentLanguage.Chunk.GenDefn
-    , Drasil.DocumentLanguage.Chunk.InstanceModel
     , Drasil.DocumentLanguage.Definitions
     , Drasil.Sections.TableOfUnits
     , Drasil.Sections.AuxiliaryConstants
@@ -265,8 +261,6 @@ executable glassbr
   main-is: Drasil/GlassBR/Main.hs
   other-modules:
       Drasil.DocumentLanguage
-    , Drasil.DocumentLanguage.Chunk.GenDefn
-    , Drasil.DocumentLanguage.Chunk.InstanceModel
     , Drasil.DocumentLanguage.Definitions
     , Drasil.GlassBR.Body
     , Drasil.GlassBR.Concepts
@@ -308,8 +302,6 @@ executable chipmunkdocs
   main-is: Drasil/GamePhysics/Main.hs
   other-modules:
       Drasil.DocumentLanguage
-    , Drasil.DocumentLanguage.Chunk.GenDefn
-    , Drasil.DocumentLanguage.Chunk.InstanceModel
     , Drasil.DocumentLanguage.Definitions
     , Drasil.GamePhysics.Body
     , Drasil.GamePhysics.Concepts
@@ -349,8 +341,6 @@ executable swhs
   main-is: Drasil/SWHS/Main.hs
   other-modules:
       Drasil.DocumentLanguage
-    , Drasil.DocumentLanguage.Chunk.GenDefn
-    , Drasil.DocumentLanguage.Chunk.InstanceModel
     , Drasil.DocumentLanguage.Definitions
     , Drasil.Sections.SpecificSystemDescription
     , Drasil.Sections.Introduction

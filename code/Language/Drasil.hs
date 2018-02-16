@@ -121,6 +121,10 @@ module Language.Drasil (
   , HasTermTable, termLookup, termTable
   , HasDefinitionTable, conceptMap, defTable
   , HasUnitTable, unitMap, unitTable
+  -- Chunk.GenDefn
+  , GenDefn, gd, gdUnit
+  -- Chunk.InstanceModel
+  , InstanceModel, inCons, outCons, outputs, inputs, im, imQD
 ) where
 
 import Prelude hiding (log, sin, cos, tan, sqrt, id, return, print, break, exp, product)
@@ -179,6 +183,8 @@ import Language.Drasil.Printing.Helpers (capitalize, paren, sqbrac)
 import Language.Drasil.Generate
 import Language.Drasil.People (People, Person, person, HasName(..), manyNames
                                ,person', personWM, personWM', mononym, name)
-import Language.Drasil.CodeSpec
+import Language.Drasil.CodeSpec hiding (outputs, inputs)
 import Language.Drasil.DataDesc
 import Language.Drasil.Code.Imperative.Lang
+import Language.Drasil.Chunk.InstanceModel
+import Language.Drasil.Chunk.GenDefn 

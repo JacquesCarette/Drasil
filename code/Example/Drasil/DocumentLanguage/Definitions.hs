@@ -12,8 +12,6 @@ module Drasil.DocumentLanguage.Definitions
   )where
 
 import Language.Drasil
-import Drasil.DocumentLanguage.Chunk.GenDefn
-import Drasil.DocumentLanguage.Chunk.InstanceModel
 import Data.Drasil.Utils (foldle)
 
 import Control.Lens ((^.))

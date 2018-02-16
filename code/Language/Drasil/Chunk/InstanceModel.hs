@@ -1,10 +1,23 @@
 {-# Language Rank2Types #-}
-module Drasil.DocumentLanguage.Chunk.InstanceModel 
+module Language.Drasil.Chunk.InstanceModel 
   ( InstanceModel
   , inCons, outCons, outputs, inputs, im, imQD
   )where
 
-import Language.Drasil
+import Language.Drasil.Spec
+import Language.Drasil.Expr
+import Language.Drasil.Expr.Extract
+import Language.Drasil.ChunkDB
+
+import Language.Drasil.Chunk
+import Language.Drasil.Chunk.Attribute
+import Language.Drasil.Chunk.Concept
+import Language.Drasil.Chunk.Constrained
+import Language.Drasil.Chunk.Eq
+import Language.Drasil.Chunk.ExprRelat
+import Language.Drasil.Chunk.NamedIdea
+import Language.Drasil.Chunk.Quantity
+import Language.Drasil.Chunk.Relation
 
 import Control.Lens (Simple, Lens, (^.), set)
 

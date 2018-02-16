@@ -8,8 +8,6 @@
 module Drasil.DocumentLanguage where
 
 import Drasil.DocumentLanguage.Definitions
-import Drasil.DocumentLanguage.Chunk.GenDefn
-import Drasil.DocumentLanguage.Chunk.InstanceModel
 
 import Language.Drasil
 

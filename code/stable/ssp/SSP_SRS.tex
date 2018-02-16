@@ -83,6 +83,8 @@ $FS$ & Factor of Safety: The global stability of a surface in a slope &
 \\
 ${FS_{Loc,i}}$ & Local Factor of Safety: for slice index i & 
 \\
+${FS_{min}}$ & Minimum Factor of Safety: The minimum factor of safety & 
+\\
 $H$ & Interslice Water Force: exerted in the x-ordinate direction between adjacent slices for interslice index i & N
 \\
 $\Delta{}H$ & Difference Between Interslice Forces: exerted in the x-ordinate direction between adjacent slices for interslice index i & N
@@ -1195,9 +1197,9 @@ FS=\frac{\displaystyle\sum_{i=1}^{n}{\left[{\ell{}_{b,i}} s_{i}\right]}}{\displa
 \\ \midrule \\
 Label & Critical Slip Identification
 \\ \midrule \\
-Equation & $FS_{min}=\Upsilon{}\left(\{{x_{cs}}{,y_{cs}}\},Input\right)$
+Equation & ${FS_{min}}=\Upsilon{}\left(\{{x_{cs}}{,y_{cs}}\},Input\right)$
 \\ \midrule \\
-Description & Given the necessary slope inputs, a minimization algorithm or function $\Upsilon{}$ will identify the critical slip surface of the slope, with the critical slip coordinates $\{{x_{cs}}{,y_{cs}}\}$ and the minimum factor of safety $FS_{min}$ that results.
+Description & Given the necessary slope inputs, a minimization algorithm or function $\Upsilon{}$ will identify the critical slip surface of the slope, with the critical slip coordinates $\{{x_{cs}}{,y_{cs}}\}$ and the minimum factor of safety ${FS_{min}}$ that results.
 \\ \bottomrule \end{tabular}
 \end{minipage}\\
 \subsubsection{Data Constraints}

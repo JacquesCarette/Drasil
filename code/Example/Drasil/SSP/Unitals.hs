@@ -114,6 +114,12 @@ constant_K = uqc "kappa" (cn "constant") fixme
 {-Output Variables-} --FIXME: See if there should be typical values
 fs = constrained' (cvR fs_concept (Atomic "FS")) [gtZeroConstr] (Dbl 1)
 
+fs_min :: ConVar -- This is a hack to remove the use of indexing for 'min'.
+fs_min = cvR (dcc "fs_min" (cn "minimum factor of safety") 
+  ("The minimum factor of safety")) (sub (eqSymb fs) (Atomic "min"))
+-- Once things are converted to the new style of instance models, this will
+-- be removed/fixed.
+
 coords = cuc' "(x,y)"
   (cn $ "cartesian position coordinates" )
   ("y is considered parallel to the direction of the force of " ++
@@ -383,7 +389,7 @@ fy = uc' "fy" (cn "y-component of the net force") fixme
 
 sspUnitless :: [ConVar]
 sspUnitless = [earthqkLoadFctr, normToShear,scalFunc,
-  numbSlices, minFunction, fsloc, index, varblU, varblV]
+  numbSlices, minFunction, fsloc, index, varblU, varblV, fs_min]
 
 earthqkLoadFctr, normToShear, scalFunc,
   numbSlices, minFunction, fsloc, index, varblU, varblV :: ConVar

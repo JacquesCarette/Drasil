@@ -113,7 +113,7 @@ getCS = getS Implementation
 getRVal :: (Constrained c) => c -> Expr
 getRVal c = uns (c ^. reasVal)
   where uns (Just e) = e
-        uns Nothing  = (V "WARNING: getRVal found no Expr")
+        uns Nothing  = error $ "getRVal found no Expr for " ++ (c ^. id)
 
 -- | outputs sentence with % attached to it
 addPercent :: Float ->  Sentence

@@ -43,7 +43,7 @@ cv :: ConceptChunk -> Symbol -> Space -> ConVar
 cv c s = CV c (ssc' (c ^. id) s)
 
 --FIXME: Remove this hack
--- | Constructor for 'ConVar' with implied 'Language.Drasil.Space.Rational' 'Space'.
+-- | Constructor for 'ConVar' with implied 'Language.Drasil.Space.Real' 'Space'.
 cvR :: ConceptChunk -> Symbol -> ConVar
 cvR c s = CV c (ssc' (c ^. id) s) Real
 

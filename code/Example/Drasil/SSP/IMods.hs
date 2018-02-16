@@ -6,7 +6,7 @@ import Language.Drasil
 import Control.Lens ((^.))
 
 import Drasil.SSP.Unitals (inxi, shrStress, baseLngth, sum1toN, mobStress,
-  fs, fsloc, shrDispl, shrStiffBase, genForce, constant_a, fricAngle,
+  fs, fs_min, fsloc, shrDispl, shrStiffBase, genForce, constant_a, fricAngle,
   normStress, baseWthX, cohesion, poissnsRatio, intNormForce, nrmStiffBase,
   nrmDispl, dy_i, dx_i, baseAngle, genDisplace, rotatedDispl, index, yi,
   xi, numbSlices, shrResC, shearRNoIntsl, shearFNoIntsl, inx, mobShrC,
@@ -209,7 +209,7 @@ crtSlpId = makeRC "crtSlpId" (nounPhraseSP "critical slip identification")
   crtSlpId_desc crtSlpId_rel
 
 crtSlpId_rel :: Relation
-crtSlpId_rel = (idx (C fs) (V "min")) $=
+crtSlpId_rel = (C fs_min) $=
   (FCall (C minFunction) [C critCoords, V "Input"])
   --FIXME: add subscript to fs
 
@@ -218,7 +218,7 @@ crtSlpId_desc = foldlSent [S "Given the necessary", phrase slope,
   S "inputs, a minimization", S "algorithm or function", getES minFunction,
   S "will identify the", phrase crtSlpSrf, S "of the", phrase slope `sC`
   S "with the critical", phrase slip, S "coordinates", getES critCoords, 
-  S "and the minimum", phrase fs, E $ idx (C fs) (V "min"), S "that results"]
+  S "and the", phrase fs_min, E (C fs_min), S "that results"]
 
 -----------
 -- Intro --

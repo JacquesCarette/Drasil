@@ -56,9 +56,11 @@ instance UncertainQuantity UncertQ where
 instance Constrained UncertQ where
   constraints = qlens constraints
   reasVal = qlens reasVal
-instance Concept UncertQ where
+instance Definition UncertQ where
   defn = qlens defn
+instance ConceptDomain UncertQ where
   cdom = qlens cdom
+instance Concept UncertQ where
 
 -- DO NOT Export qlens
 qlens :: (forall c. (Quantity c, Constrained c, Concept c) =>

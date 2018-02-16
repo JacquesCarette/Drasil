@@ -108,7 +108,7 @@ nopcm_SymbolsAll = (map qw nopcm_Units) ++ (map qw nopcm_Constraints) ++
   (map qw [coil_SA_max]) ++ (map qw [tau_W]) ++ 
   (map qw [surface, uNormalVect, gradient, eta])
 
-nopcm_Units :: [UCWrapper]
+nopcm_Units :: [UnitaryConceptDict]
 nopcm_Units = map ucw [density, tau, in_SA, out_SA,
   htCap_L, QT.ht_flux, ht_flux_in, ht_flux_out, vol_ht_gen,
   htTransCoeff, mass, tank_vol, QT.temp, QT.heat_cap_spec,

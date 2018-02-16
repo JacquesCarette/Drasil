@@ -102,8 +102,8 @@ library
     , Language.Drasil.Chunk.UncertainQuantity
     , Language.Drasil.Chunk.Unital
     , Language.Drasil.Chunk.Unitary
+    , Language.Drasil.Chunk.UnitaryConcept
     , Language.Drasil.Chunk.VarChunk
-    , Language.Drasil.Chunk.Wrapper.UWrapper
     , Language.Drasil.ChunkDB
     , Language.Drasil.Expr.Extract
     , Language.Drasil.Make.AST

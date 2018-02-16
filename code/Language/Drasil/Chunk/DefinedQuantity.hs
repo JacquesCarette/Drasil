@@ -20,25 +20,18 @@ data DefinedQuantityDict = DQD { _quant :: Q.QuantityDict, _con :: ConceptChunk 
 makeLenses ''DefinedQuantityDict
 
 -- but we pick it crom the Quantity.
-instance Chunk DefinedQuantityDict where
-  id = quant . id
-  
-instance Eq DefinedQuantityDict where
-  a == b = (a ^. id) == (b ^. id)
+instance Chunk DefinedQuantityDict where id = quant . id
+instance Eq DefinedQuantityDict where a == b = (a ^. id) == (b ^. id)
   
 instance Ord DefinedQuantityDict where
   compare a b = -- FIXME: Ordering hack. Should be context-dependent
     compare ((Q.getSymb Equational a) ^. symbol) ((Q.getSymb Equational b) ^. symbol)
   
-instance NamedIdea DefinedQuantityDict where
-  term = con . term
-
-instance Idea DefinedQuantityDict where
-  getA (DQD a _) = getA a
-  
+instance NamedIdea DefinedQuantityDict where term = con . term
+instance Idea DefinedQuantityDict where getA (DQD a _) = getA a
+instance Definition DefinedQuantityDict where defn = con . defn
+instance ConceptDomain DefinedQuantityDict where cdom = con . cdom
 instance Concept DefinedQuantityDict where
-  defn = con . defn
-  cdom = con . cdom
   
 instance Q.Quantity DefinedQuantityDict where
   getSymb s (DQD a _) = Q.getSymb s a

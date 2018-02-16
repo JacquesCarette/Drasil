@@ -14,7 +14,7 @@ import Control.Lens (Simple, Lens, (^.), set)
 import Prelude hiding (id)
 import Language.Drasil.Chunk (Chunk(..))
 import Language.Drasil.Chunk.NamedIdea (NamedIdea(..),Idea(..))
-import Language.Drasil.Chunk.Concept (Concept(..), dcc, dccWDS)
+import Language.Drasil.Chunk.Concept (Concept, dcc, dccWDS,Definition(..),ConceptDomain(..))
 import Language.Drasil.Chunk.ConVar (ConVar (..))
 import Language.Drasil.Chunk.SymbolForm (StagedSymbolChunk, ssc', getSymbForStage)
 import Language.Drasil.Chunk.Quantity (Quantity(..))
@@ -38,9 +38,11 @@ instance NamedIdea UnitalChunk where
 instance Idea UnitalChunk where
   getA (UC qc _ _ _) = getA qc
   getA (UCV cv _ ) = getA cv
-instance Concept UnitalChunk where
+instance Definition UnitalChunk where
   defn = nl defn
+instance ConceptDomain UnitalChunk where
   cdom = nl cdom
+instance Concept UnitalChunk where
 instance Quantity UnitalChunk where
   typ f (UC named s u t) = fmap (\x -> UC named s u x) (f t)
   typ f ucv@(UCV _ _) = cvl typ f ucv

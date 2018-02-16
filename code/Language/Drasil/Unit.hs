@@ -16,7 +16,8 @@ import Control.Lens (Simple, Lens, (^.))
 
 import Language.Drasil.Chunk (Chunk(..))
 import Language.Drasil.Chunk.NamedIdea (NamedIdea(..), Idea(..))
-import Language.Drasil.Chunk.Concept (Concept(..), ConceptChunk, dcc, cw)
+import Language.Drasil.Chunk.Concept (Concept,Definition(..), 
+  ConceptDomain(..),ConceptChunk, dcc, cw)
 import Language.Drasil.NounPhrase
 import Language.Drasil.Spec (USymb(..))
 import Language.Drasil.Symbol
@@ -75,21 +76,13 @@ data FundUnit = UD { _vc :: ConceptChunk, _u :: USymb }
 vc :: Simple Lens FundUnit ConceptChunk
 vc f (UD a b) = fmap (\x -> UD x b) (f a)
 
-instance Chunk FundUnit where
-  id = vc . id
-
-instance NamedIdea FundUnit where
-  term   = vc . term
-
-instance Idea FundUnit where
-  getA c = getA (c ^. vc)
-
+instance Chunk FundUnit where id = vc . id
+instance NamedIdea FundUnit where term   = vc . term
+instance Idea FundUnit where getA c = getA (c ^. vc)
+instance Definition FundUnit where defn = vc . defn
+instance ConceptDomain FundUnit where cdom = vc . cdom
 instance Concept FundUnit where
-  defn = vc . defn
-  cdom = vc . cdom
-  
-instance Unit FundUnit where
-  usymb f (UD a b) = fmap (\x -> UD a x) (f b)
+instance Unit FundUnit where usymb f (UD a b) = fmap (\x -> UD a x) (f b)
 
 -- | for defining Derived units
 data DerUChunk = DUC { _uc :: FundUnit, _eq :: UDefn }
@@ -99,13 +92,11 @@ duc :: Simple Lens DerUChunk FundUnit
 duc f (DUC a b) = fmap (\x -> DUC x b) (f a)
 
 instance Chunk     DerUChunk where id  = duc . id
-instance NamedIdea DerUChunk where
-  term = duc . term
-instance Idea DerUChunk where
-  getA c = getA (c ^. duc)
-instance Concept   DerUChunk where 
-  defn = duc . defn
-  cdom = duc . cdom
+instance NamedIdea DerUChunk where term = duc . term
+instance Idea DerUChunk where getA c = getA (c ^. duc)
+instance Definition DerUChunk where defn = duc . defn
+instance ConceptDomain   DerUChunk where cdom = duc . cdom
+instance Concept DerUChunk where
 instance Unit      DerUChunk where usymb  = duc . usymb
 
 instance UnitEq DerUChunk where

@@ -32,9 +32,11 @@ instance NamedIdea InstanceModel where
   term = rcl term
 instance Idea InstanceModel where
   getA (IM a _ _ _ _ _) = getA a
-instance Concept InstanceModel where
+instance Definition InstanceModel where
   defn = rcl defn
+instance ConceptDomain InstanceModel where
   cdom = rcl cdom
+instance Concept InstanceModel where
 instance ExprRelat InstanceModel where
   relat = rcl relat
 instance HasAttributes InstanceModel where

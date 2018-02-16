@@ -24,7 +24,8 @@ module Language.Drasil (
   , Chunk(..), VarChunk(..), ConceptChunk
   , makeVC, makeVC', vc, makeVCObj, SymbolForm
   , dcc, dccWDS, dccWDS', cv, dcc', vc', vc'', ccs, cc, cc', makeVC''
-  , Concept(..), cw
+  -- Chunk.Concept
+  , Concept, cw, Definition(defn), ConceptDomain(cdom)
   -- Chunk.CommonIdea
   , CommonIdea(..) , commonIdea, CI, getAcc
   -- Chunk.NamedIdea
@@ -57,8 +58,8 @@ module Language.Drasil (
   , NamedRelation, makeNR, RelationConcept, makeRC, makeRC', relat, ExprRelat
   --Chunk.DefinedQuantity
   , cqs, DefinedQuantityDict
-  --Chunk.UWrapper 
-  , ucw, UCWrapper
+  -- Chunk.UnitaryConcept
+  , ucw, UnitaryConceptDict
   -- Chunks w/ Attributes
   , Attribute(..), Attributes, attributes, getSource, aqd -- TODO: Remove aqd
   , HasAttributes, Derivation, getDerivation
@@ -161,7 +162,7 @@ import Language.Drasil.Chunk.Unital(UnitalChunk(..), makeUCWDS, ucFromCV
 import Language.Drasil.Chunk.Unitary
 import Language.Drasil.Chunk.Relation(NamedRelation, makeNR, RelationConcept, 
                                       makeRC, makeRC')
-import Language.Drasil.Chunk.Wrapper.UWrapper
+import Language.Drasil.Chunk.UnitaryConcept
 import Language.Drasil.ChunkDB
 import Language.Drasil.Citations
 import Language.Drasil.NounPhrase hiding (at_start, at_start', titleize

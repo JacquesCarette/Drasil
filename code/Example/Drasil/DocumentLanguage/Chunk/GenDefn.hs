@@ -19,9 +19,11 @@ instance NamedIdea GenDefn where
   term = rcl term
 instance Idea GenDefn where
   getA (GD a _ _) = getA a
-instance Concept GenDefn where
+instance Definition GenDefn where
   defn = rcl defn
+instance ConceptDomain GenDefn where
   cdom = rcl cdom
+instance Concept GenDefn where
 instance ExprRelat GenDefn where
   relat = rcl relat
 instance HasAttributes GenDefn where

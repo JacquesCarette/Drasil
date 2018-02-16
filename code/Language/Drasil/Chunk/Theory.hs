@@ -61,9 +61,11 @@ instance NamedIdea TheoryModel where
   term = cl term
 instance Idea TheoryModel where
   getA (TM c _) = getA c
-instance Concept TheoryModel where
+instance Definition TheoryModel where
   defn = cl defn
+instance ConceptDomain TheoryModel where
   cdom = cl cdom
+instance Concept TheoryModel where
 instance Theory TheoryModel where
   valid_context = tl valid_context
   spaces        = tl spaces

@@ -1,13 +1,14 @@
-{-# Language GADTs, Rank2Types, TemplateHaskell #-}
+{-# Language Rank2Types, TemplateHaskell, FlexibleInstances #-}
 module Language.Drasil.Chunk.Concept 
-  ( Concept(..), ConceptChunk, dcc, dcc', dccWDS, dccWDS', cc, cc', ccs
-  , cw
+  ( ConceptChunk, dcc, dcc', dccWDS, dccWDS', cc, cc', ccs
+  , cw, DefnAndDomain(DAD)
+  , Definition(defn), ConceptDomain(cdom), Concept
   )where
 
 import Language.Drasil.Chunk
 import Language.Drasil.Chunk.NamedIdea
 
-import Control.Lens (Simple, Lens, Lens', (^.), set, makeLenses)
+import Control.Lens (Simple, Lens, (^.), makeLenses, view)
 
 import Language.Drasil.Spec
 
@@ -23,30 +24,31 @@ makeLenses ''DefnAndDomain
 -- | The ConceptChunk datatype is a Concept
 -- CC is not exported, nor are _idea and _dad
 data ConceptChunk = CC { _idea :: IdeaDict, _dad :: DefnAndDomain ConceptChunk }
+makeLenses ''ConceptChunk
 
-idea :: Lens' ConceptChunk IdeaDict
-idea f (CC a b) = fmap (\x -> CC x b) (f a)
-
--- | Concepts are 'Idea's with definitions
-class Idea c => Concept c where
+class Definition c where
   -- | defn provides (a 'Lens' to) the definition for a chunk
   defn :: Simple Lens c Sentence
+
+class ConceptDomain c where
   -- | cdom provides (a 'Lens' to) the concept domain tags for a chunk
   cdom :: Simple Lens c [ConceptChunk] 
   -- ^ /cdom/ should be exported for use by the
   -- Drasil framework, but should not be exported beyond that.
 
-instance Eq ConceptChunk where
-  c1 == c2 = (c1 ^. id) == (c2 ^. id)
-instance Chunk ConceptChunk where
-  id = idea . id
-instance NamedIdea ConceptChunk where
-  term = idea . term
-instance Idea ConceptChunk where
-  getA cc = getA $ (cc ^. idea)
+-- | Concepts are 'Idea's with definitions and domains
+class (Idea c, Definition c, ConceptDomain c) => Concept c where
+
+instance Definition (DefnAndDomain a) where defn = defn'
+instance ConceptDomain (DefnAndDomain ConceptChunk) where cdom = cdom'
+
+instance Eq ConceptChunk where c1 == c2 = (c1 ^. id) == (c2 ^. id)
+instance Chunk ConceptChunk where id = idea . id
+instance NamedIdea ConceptChunk where term = idea . term
+instance Idea ConceptChunk where getA = getA . view idea
+instance Definition ConceptChunk where defn = dad . defn'
+instance ConceptDomain ConceptChunk where cdom = dad . cdom'
 instance Concept ConceptChunk where
-  defn f (CC i dd) = fmap (\x -> CC i (set defn' x dd)) (f (dd ^. defn'))
-  cdom f (CC i dd) = fmap (\x -> CC i (set cdom' x dd)) (f (dd ^. cdom'))
  
 --FIXME: Temporary ConceptDomain tag hacking to not break everything. 
  

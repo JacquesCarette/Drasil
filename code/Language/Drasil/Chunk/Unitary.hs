@@ -1,14 +1,14 @@
 {-# LANGUAGE GADTs, Rank2Types, TemplateHaskell #-}
 module Language.Drasil.Chunk.Unitary
   ( UnitaryChunk
-  , unitary
+  , unitary, mkUnitary
   , Unitary(..)) where
 
 import Control.Lens ((^.), makeLenses)
 import Prelude hiding (id)
 import Language.Drasil.Chunk (Chunk(..))
 import Language.Drasil.Chunk.NamedIdea (NamedIdea(..), Idea(..))
-import Language.Drasil.Chunk.Quantity (Quantity(..), QuantityDict, mkQuant)
+import Language.Drasil.Chunk.Quantity (Quantity(..), QuantityDict, mkQuant, qw)
 import Language.Drasil.Unit (Unit, UnitDefn, unitWrapper)
 import Language.Drasil.Symbol
 import Language.Drasil.Space
@@ -42,3 +42,6 @@ instance Unitary UnitaryChunk where
 unitary :: Unit u => String -> NP -> Symbol -> u -> Space -> UnitaryChunk
 unitary i t s u space = UC (mkQuant i t s space (Just uu)) uu
   where uu = unitWrapper u
+
+mkUnitary :: Unitary u => u -> UnitaryChunk
+mkUnitary u = UC (qw u) (unit u)

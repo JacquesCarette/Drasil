@@ -136,7 +136,7 @@ dy_i = cuc' "dy_i" (cn $ "displacement") ("in the y-ordinate direction " ++
 -- START OF UNITALCHUNKS --
 ---------------------------
 
-sspUnits :: [UCWrapper]
+sspUnits :: [UnitaryConceptDict]
 sspUnits = map ucw [normStress, genPressure, normFunc, shearFunc,
   waterHght, slopeHght, slipHght, xi, yi, critCoords, slopeDist, slipDist,
   mobShrI, shrResI, shearFNoIntsl, shearRNoIntsl, slcWght, watrForce,

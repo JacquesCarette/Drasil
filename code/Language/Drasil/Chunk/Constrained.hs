@@ -158,9 +158,11 @@ instance Quantity ConstrConcept where
   getSymb s (ConstrConcept c _ _) = getSymb s c
   getUnit (ConstrConcept c _ _) = getUnit c
   getStagedS (ConstrConcept c _ _) = getStagedS c
-instance Concept ConstrConcept where
+instance Definition ConstrConcept where
   defn = cqslens defn
+instance ConceptDomain ConstrConcept where
   cdom = cqslens cdom
+instance Concept ConstrConcept where
 instance Constrained ConstrConcept where
   constraints f (ConstrConcept a b c) = 
     fmap (\x -> ConstrConcept a x c) (f b)

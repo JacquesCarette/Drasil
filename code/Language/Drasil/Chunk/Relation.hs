@@ -20,36 +20,21 @@ import Language.Drasil.NounPhrase (NP)
 data NamedRelation where 
   NR :: Idea c => c -> Relation -> NamedRelation
 
-instance Chunk NamedRelation where
-  id = cp id
+instance Chunk NamedRelation where id = cp id
+instance NamedIdea NamedRelation where term = cp term
+instance Idea NamedRelation where getA (NR c _) = getA c
+instance ExprRelat NamedRelation where relat f (NR n r) = fmap (\x -> NR n x) (f r)
 
-instance NamedIdea NamedRelation where
-  term = cp term
-
-instance Idea NamedRelation where
-  getA (NR c _) = getA c
-  
-instance ExprRelat NamedRelation where
-  relat f (NR n r) = fmap (\x -> NR n x) (f r)
-  
 data RelationConcept where 
   RC :: Concept c => c -> Relation -> RelationConcept
 
-instance Chunk RelationConcept where
-  id = rcl id
-
-instance NamedIdea RelationConcept where
-  term = rcl term
-
-instance Idea RelationConcept where
-  getA (RC c _) = getA c
-  
+instance Chunk RelationConcept where id = rcl id
+instance NamedIdea RelationConcept where term = rcl term
+instance Idea RelationConcept where getA (RC c _) = getA c
+instance Definition RelationConcept where defn = rcl defn
+instance ConceptDomain RelationConcept where cdom = rcl cdom
 instance Concept RelationConcept where
-  defn = rcl defn
-  cdom = rcl cdom
-
-instance ExprRelat RelationConcept where
-  relat f (RC c r) = fmap (\x -> RC c x) (f r)
+instance ExprRelat RelationConcept where relat f (RC c r) = fmap (\x -> RC c x) (f r)
 
 -- don't export this
 rcl :: (forall c. (Concept c) => Simple Lens c a) -> Simple Lens RelationConcept a

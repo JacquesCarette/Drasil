@@ -65,6 +65,7 @@ module Language.Drasil (
   , HasAttributes, Derivation, getDerivation
   --Citations
   , BibRef, City, State, Citation(..), CiteField(..), Month(..), getAuthors, getYear
+  , CitationKind(..)
   -- Spec
   , USymb(..), Sentence(..), Accent(..), sParen, sParenNum, sSqBr, sSqBrNum
   , (+:+), (+:+.), (+.), sC, (+:), semiCol, sParenDash

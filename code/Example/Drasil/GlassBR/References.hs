@@ -5,28 +5,13 @@ import Language.Drasil
 import Data.Drasil.People (jmBracci, tlKohutek, wlBeason, jRobertson, sRobertson)
 import Data.Drasil.Citations (koothoor2013, smithLai2005)
 
-{--}
-
 rbrtsn2012, astm_LR2009, astm_C1036, astm_C1048, glThick1998 :: Citation
 
 gbCitations :: BibRef
 gbCitations = [koothoor2013, smithLai2005, rbrtsn2012, astm_LR2009, astm_C1036,
   astm_C1048, glThick1998]
 
----
-
---ref1
---koothoor2013
-
----
-
---ref2
---smithLai2005
-
----
-
---ref3
-rbrtsn2012 = Article 
+rbrtsn2012 = Citation Article 
   [
   Author [jRobertson, sRobertson],
   Title (S "Volere requirements specification template edition 16"),
@@ -35,10 +20,7 @@ rbrtsn2012 = Article
   Year (2012)
   ]
 
----
-
---ref4
-astm_LR2009 = Misc 
+astm_LR2009 = Citation Misc 
   [
   Author [mononym "ASTM E1300-09"],
   Title (S "Standard Practice for Determining Load Resistance of Glass in Buildings"),
@@ -48,10 +30,7 @@ astm_LR2009 = Misc
   URL (S "www.astm.org")
   ]
 
----
-
---ref5
-astm_C1036 = Misc 
+astm_C1036 = Citation Misc 
   [
   Author [mononym "ASTM C1036-16"],
   Title (S "Standard specification for Flat Glass"),
@@ -61,10 +40,7 @@ astm_C1036 = Misc
   URL (S "www.astm.org")
   ]
 
----
-
---ref6
-astm_C1048 = Misc 
+astm_C1048 = Citation Misc 
   [
   Author [mononym "ASTM C1048-04"],
   Title (S "Specification for Heat-Treated Flat Glass-Kind" +:+
@@ -75,10 +51,7 @@ astm_C1048 = Misc
   URL (S "www.astm.org")
   ]
 
----
-
---ref7
-glThick1998 = Misc
+glThick1998 = Citation Misc
   [
   Author [wlBeason, tlKohutek, jmBracci],
   Title (S "Basis for ASTME E 1300 Annealed Glass Thickness Selection Charts"),

@@ -7,13 +7,8 @@ type BibRef = [Citation]
 type City   = Sentence
 type State  = Sentence
 
-data Citation =
-    Book      [CiteField]
-  | Article   [CiteField]
-  | MThesis   [CiteField]
-  | PhDThesis [CiteField]
-  | Misc      [CiteField]
-  | Online    [CiteField]
+data CitationKind = Book | Article | MThesis | PhDThesis | Misc | Online
+data Citation = Citation CitationKind [CiteField]
 
 --FIXME: use a 3-tuple for dates?
 data CiteField = Author     People
@@ -80,20 +75,10 @@ ref1 = Book [
 -- Helpers --
 -------------
 getAuthors :: Citation -> People
-getAuthors (Book      fields) = getP fields
-getAuthors (Article   fields) = getP fields
-getAuthors (MThesis   fields) = getP fields
-getAuthors (PhDThesis fields) = getP fields
-getAuthors (Misc      fields) = getP fields
-getAuthors (Online    fields) = getP fields
+getAuthors (Citation _ fields) = getP fields
 
 getYear :: Citation -> Integer
-getYear (Book      fields) = getY fields
-getYear (Article   fields) = getY fields
-getYear (MThesis   fields) = getY fields
-getYear (PhDThesis fields) = getY fields
-getYear (Misc      fields) = getY fields
-getYear (Online    fields) = getY fields
+getYear (Citation _ fields) = getY fields
 
 getP :: [CiteField] -> People
 getP [] = error "No authors found"

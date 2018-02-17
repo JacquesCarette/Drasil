@@ -22,7 +22,7 @@ import Language.Drasil.Misc (unit'2Contents)
 import Language.Drasil.SymbolAlphabet
 import Language.Drasil.NounPhrase (phrase, titleize)
 import Language.Drasil.Unit (usymb)
-import Language.Drasil.Citations (Citation(..),CiteField(..))
+import Language.Drasil.Citations (Citation(..),CiteField(..),CitationKind(..))
 
 expr :: HasSymbolTable ctx => Expr -> ctx -> P.Expr
 expr (V v)              _ = P.Var  v
@@ -181,12 +181,12 @@ lay sm (Bib bib)          = T.Bib $ map (layCite sm) bib
 
 -- | For importing bibliography
 layCite :: HasSymbolTable ctx => ctx -> Citation -> T.Citation
-layCite sm (Book      fields) = T.Book      $ map (layField sm) fields
-layCite sm (Article   fields) = T.Article   $ map (layField sm) fields
-layCite sm (MThesis   fields) = T.MThesis   $ map (layField sm) fields
-layCite sm (PhDThesis fields) = T.PhDThesis $ map (layField sm) fields
-layCite sm (Misc      fields) = T.Misc      $ map (layField sm) fields
-layCite sm (Online    fields) = T.Online    $ map (layField sm) fields
+layCite sm (Citation Book      fields) = T.Book      $ map (layField sm) fields
+layCite sm (Citation Article   fields) = T.Article   $ map (layField sm) fields
+layCite sm (Citation MThesis   fields) = T.MThesis   $ map (layField sm) fields
+layCite sm (Citation PhDThesis fields) = T.PhDThesis $ map (layField sm) fields
+layCite sm (Citation Misc      fields) = T.Misc      $ map (layField sm) fields
+layCite sm (Citation Online    fields) = T.Online    $ map (layField sm) fields
 
 layField :: HasSymbolTable ctx => ctx -> CiteField -> T.CiteField
 layField _  (Author     p) = T.Author     p

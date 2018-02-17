@@ -12,11 +12,11 @@ import Data.Drasil.Citations (koothoor2013, parnas1986, smithLai2005)
 ----------------------------
 
 s9_swhs_citations :: BibRef
-s9_swhs_citations = [ref1, ref2, ref3, ref4, ref5, ref6]
+s9_swhs_citations = [ref1, ref2, ref3, ref4, parnas1986, smithLai2005]
 
-ref1, ref2, ref3, ref4, ref5, ref6 :: Citation
+ref1, ref2, ref3, ref4 :: Citation
 
-ref1 = Article [
+ref1 = Citation Article [
   Author [jBueche],
   Title (S "Introduction to Physics for Scientists"),
   Edition 4,
@@ -24,9 +24,7 @@ ref1 = Article [
   Place (S "New York City", S "New York"),
   Year 1986]
 
-
-
-ref2 = Article [
+ref2 = Citation Article [
   Author [fIncropera, dDewitt, tBergman, aLavine],
   Title (S "Fundamentals of Heat and Mass Transfer"),
   Edition 6,
@@ -36,12 +34,8 @@ ref2 = Article [
 
 ref3 = koothoor2013
 
-ref4 = Misc [
+ref4 = Citation Misc [
   Author [mLightstone],
   Title (S "Derivation of tank/pcm model"),
   Year 2012,
   Note (S "From Marilyn Lightstone's Personal Notes")]
-
-ref5 = parnas1986
-
-ref6 = smithLai2005

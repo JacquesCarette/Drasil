@@ -1,4 +1,3 @@
-{-# LANGUAGE GADTs #-}
 module Language.Drasil.Citations where
 
 import Language.Drasil.People
@@ -8,13 +7,13 @@ type BibRef = [Citation]
 type City   = Sentence
 type State  = Sentence
 
-data Citation where
-  Book      :: [CiteField] -> Citation
-  Article   :: [CiteField] -> Citation
-  MThesis   :: [CiteField] -> Citation
-  PhDThesis :: [CiteField] -> Citation
-  Misc      :: [CiteField] -> Citation
-  Online    :: [CiteField] -> Citation
+data Citation =
+    Book      [CiteField]
+  | Article   [CiteField]
+  | MThesis   [CiteField]
+  | PhDThesis [CiteField]
+  | Misc      [CiteField]
+  | Online    [CiteField]
 
 --FIXME: use a 3-tuple for dates?
 data CiteField = Author     People

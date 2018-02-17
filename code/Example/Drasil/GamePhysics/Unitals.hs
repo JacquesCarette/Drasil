@@ -216,7 +216,7 @@ collisionImpulse = ucFromCV impul impulseU
 force_i = ucFromCV theforce newton
   where theforce = cvR (dccWDS "force_i" (compoundPhrase' 
                 (QP.force ^. term) (cn "applied to the i-th body at time t")) 
-                (phrase QP.force)) (sub (eqSymb QP.force) (Atomic "i"))
+                (phrase QP.force)) (sub (eqSymb QP.force) lI)
 
 force_1     = ucFromCV (forceParam "1" "first")               newton
 force_2     = ucFromCV (forceParam "2" "second")              newton

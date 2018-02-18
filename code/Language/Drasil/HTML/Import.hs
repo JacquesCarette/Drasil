@@ -10,7 +10,8 @@ import Language.Drasil.Chunk.Eq
 import Language.Drasil.Chunk.ExprRelat (relat)
 import Language.Drasil.Chunk.NamedIdea (term, short, getA)
 import Language.Drasil.Chunk.Concept (defn)
-import Language.Drasil.Chunk.Quantity (Quantity(..), eqSymb)
+import Language.Drasil.Chunk.Quantity (Quantity(..))
+import Language.Drasil.Chunk.SymbolForm (eqSymb)
 import Language.Drasil.ChunkDB (HasSymbolTable(..), getUnitLup, symbLookup)
 import Language.Drasil.Expr.Extract
 import Language.Drasil.Config (verboseDDDescription)

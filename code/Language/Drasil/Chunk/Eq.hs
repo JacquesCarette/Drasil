@@ -15,6 +15,7 @@ import Language.Drasil.Chunk.Quantity (Quantity(..),HasSpace(typ))
 import Language.Drasil.Chunk.ExprRelat
 import Language.Drasil.Chunk.VarChunk (VarChunk, vcSt)
 import Language.Drasil.Chunk.Unital (ucFromCV)
+import Language.Drasil.Chunk.SymbolForm (HasSymbol(symbol))
 import Language.Drasil.Unit (Unit(..))
 import Language.Drasil.Symbol (Symbol)
 import Language.Drasil.Space
@@ -22,7 +23,6 @@ import Language.Drasil.Space
 import Language.Drasil.NounPhrase (NP, phrase)
 import Language.Drasil.Spec
 
--- BEGIN EQCHUNK --
 -- | A QDefinition is a 'Quantity' with a defining equation.
 data QDefinition where
   EC :: (Quantity c) => c -> Expr -> Attributes -> QDefinition
@@ -33,33 +33,16 @@ equat :: QDefinition -> Expr
 equat (EC _ b _) = b
   
 -- this works because UnitalChunk is a Chunk
-instance Chunk QDefinition where
-  id = ul . id
-
-instance NamedIdea QDefinition where
-  term = ul . term
-
-instance Idea QDefinition where
-  getA c = getA $ c ^. ul
-
-instance HasSpace QDefinition where
-  typ = ul . typ
-instance Quantity QDefinition where
-  symbol s (EC a _ _)  = symbol s a
-  getUnit (EC a _ _)    = getUnit a
-  getStagedS (EC a _ _) = getStagedS a
-  -- DO SOMETHING
+instance Chunk QDefinition where id = ul . id
+instance NamedIdea QDefinition where term = ul . term
+instance Idea QDefinition where getA c = getA $ c ^. ul
+instance HasSpace QDefinition where typ = ul . typ
+instance HasSymbol QDefinition where symbol s (EC a _ _)  = symbol s a
+instance Quantity QDefinition where getUnit (EC a _ _)   = getUnit a
   
-instance ExprRelat QDefinition where
-  relat f (EC a b c) = fmap (\x -> EC a x c) (f b)
+instance ExprRelat QDefinition where relat f (EC a b c) = fmap (\x -> EC a x c) (f b)
+instance HasAttributes QDefinition where attributes f (EC a b c) = fmap (\x -> EC a b x) (f c)
   
-instance HasAttributes QDefinition where
-  attributes f (EC a b c) = fmap (\x -> EC a b x) (f c)
-  
-{-instance Unit' QDefinition where
-  unit' = ul . unit'-}
--- END EQCHUNK --
-
 -- don't export this
 ul :: Simple Lens QDefinition H
 ul f (EC a b c) = fmap (\(H x) -> EC x b c) (f (H a))
@@ -77,10 +60,8 @@ instance Chunk H where id = elens id
 instance NamedIdea H where term = elens term
 instance Idea H where getA (H a) = getA a
 instance HasSpace H where typ = elens typ
-instance Quantity H where
-  symbol s  (H c) = symbol s c
-  getUnit    (H c) = getUnit c
-  getStagedS (H c) = getStagedS c
+instance HasSymbol H where symbol s  (H c) = symbol s c
+instance Quantity H where getUnit    (H c) = getUnit c
   
 -- useful: to be used for equations with units
 --FIXME: Space hack
@@ -125,7 +106,7 @@ ec' e c = ec e c ([] :: Attributes)
 -- | Returns a 'VarChunk' from a 'QDefinition'.
 -- Currently only used in example /Modules/ which are being reworked.
 getVC :: QDefinition -> VarChunk
-getVC qd = vcSt (qd ^. id) (qd ^. term) (getStagedS qd) (qd ^. typ)
+getVC qd = vcSt (qd ^. id) (qd ^. term) (\s -> symbol s qd) (qd ^. typ)
 
 -- | For testing ONLY. Once all the chunks are updated for attributes this
 -- should be removed and the other constructors should be updated to include

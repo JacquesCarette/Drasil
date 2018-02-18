@@ -1,5 +1,4 @@
 {-# Language GADTs, Rank2Types #-}
-
 module Language.Drasil.Chunk.Constrained (
     Constrained(..)
   , Constraint(..), ConstraintReason(..)
@@ -20,6 +19,7 @@ import Language.Drasil.Chunk.Unitary
 import Language.Drasil.Chunk.VarChunk
 import Language.Drasil.Chunk.Unital (ucs)
 import Language.Drasil.Chunk.Concept
+import Language.Drasil.Chunk.SymbolForm
 import Language.Drasil.Unit
 import Language.Drasil.NounPhrase
 import Language.Drasil.Space
@@ -109,10 +109,10 @@ instance Idea ConstrainedChunk where
   getA (ConstrainedChunk n _ _) = getA n
 instance HasSpace ConstrainedChunk where
   typ = qslens . typ
-instance Quantity ConstrainedChunk where
+instance HasSymbol ConstrainedChunk where
   symbol s (ConstrainedChunk c _ _) = symbol s c
+instance Quantity ConstrainedChunk where
   getUnit (ConstrainedChunk c _ _) = getUnit c
-  getStagedS (ConstrainedChunk c _ _) = getStagedS c
 instance Constrained ConstrainedChunk where
   constraints f (ConstrainedChunk a b c) = fmap (\x -> ConstrainedChunk a x c) (f b)
   reasVal     f (ConstrainedChunk a b c) = fmap (\x -> ConstrainedChunk a b x) (f c)
@@ -148,31 +148,20 @@ data ConstrConcept where
   ConstrConcept :: (Quantity c, Concept c) => c 
                         -> [Constraint] -> Maybe Expr -> ConstrConcept
 
-instance Chunk ConstrConcept where
-  id = cqslens id
-instance NamedIdea ConstrConcept where
-  term = cqslens term
-instance Idea ConstrConcept where
-  getA (ConstrConcept n _ _) = getA n
-instance HasSpace ConstrConcept where
-  typ = cqslens typ
-instance Quantity ConstrConcept where
-  symbol s (ConstrConcept c _ _) = symbol s c
-  getUnit (ConstrConcept c _ _) = getUnit c
-  getStagedS (ConstrConcept c _ _) = getStagedS c
-instance Definition ConstrConcept where
-  defn = cqslens defn
-instance ConceptDomain ConstrConcept where
-  cdom = cqslens cdom
+instance Chunk ConstrConcept where id = cqslens id
+instance NamedIdea ConstrConcept where term = cqslens term
+instance Idea ConstrConcept where getA (ConstrConcept n _ _) = getA n
+instance HasSpace ConstrConcept where typ = cqslens typ
+instance HasSymbol ConstrConcept where symbol s (ConstrConcept c _ _) = symbol s c
+instance Quantity ConstrConcept where getUnit (ConstrConcept c _ _) = getUnit c
+instance Definition ConstrConcept where defn = cqslens defn
+instance ConceptDomain ConstrConcept where cdom = cqslens cdom
 instance Concept ConstrConcept where
 instance Constrained ConstrConcept where
-  constraints f (ConstrConcept a b c) = 
-    fmap (\x -> ConstrConcept a x c) (f b)
-  reasVal f (ConstrConcept a b c) = 
-    fmap (\x -> ConstrConcept a b x) (f c)
+  constraints f (ConstrConcept a b c) = fmap (\x -> ConstrConcept a x c) (f b)
+  reasVal f (ConstrConcept a b c) = fmap (\x -> ConstrConcept a b x) (f c)
 instance Eq ConstrConcept where
-  (ConstrConcept c1 _ _) == (ConstrConcept c2 _ _) = 
-    (c1 ^. id) == (c2 ^. id)
+  (ConstrConcept c1 _ _) == (ConstrConcept c2 _ _) = (c1 ^. id) == (c2 ^. id)
 
 cqslens :: (forall c. (Quantity c, Concept c) => Simple Lens c a)
            -> Simple Lens ConstrConcept a

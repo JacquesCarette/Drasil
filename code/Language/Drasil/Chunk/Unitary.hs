@@ -10,6 +10,7 @@ import Language.Drasil.Chunk (Chunk(..))
 import Language.Drasil.Chunk.NamedIdea (NamedIdea(..), Idea(..))
 import Language.Drasil.Chunk.Quantity (Quantity(..), QuantityDict, mkQuant, qw, 
   HasSpace(typ))
+import Language.Drasil.Chunk.SymbolForm (HasSymbol(symbol))
 import Language.Drasil.Unit (Unit, UnitDefn, unitWrapper)
 import Language.Drasil.Symbol
 import Language.Drasil.Space
@@ -24,20 +25,13 @@ class (Quantity c) => Unitary c where
 data UnitaryChunk = UC { _quant :: QuantityDict, _un :: UnitDefn }
 makeLenses ''UnitaryChunk
 
-instance Chunk UnitaryChunk where
-  id = quant . id
-instance NamedIdea UnitaryChunk where
-  term = quant . term
-instance Idea UnitaryChunk where
-  getA uc = getA $ uc ^. quant
-instance HasSpace UnitaryChunk where
-  typ = quant . typ
-instance Quantity UnitaryChunk where
-  symbol st (UC s _) = symbol st s
-  getUnit = Just . _un
-  getStagedS (UC s _) = getStagedS s
-instance Unitary UnitaryChunk where
-  unit x = x ^. un
+instance Chunk     UnitaryChunk where id = quant . id
+instance NamedIdea UnitaryChunk where term = quant . term
+instance Idea      UnitaryChunk where getA uc = getA $ uc ^. quant
+instance HasSpace  UnitaryChunk where typ = quant . typ
+instance HasSymbol UnitaryChunk where symbol st (UC s _) = symbol st s
+instance Quantity  UnitaryChunk where getUnit = Just . _un
+instance Unitary   UnitaryChunk where unit x = x ^. un
   
 -- Builds the NamedIdea portion of the UnitaryChunk
 -- from a given id and term. Those are the first two arguments

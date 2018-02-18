@@ -16,6 +16,7 @@ import Language.Drasil.Chunk.NamedIdea
 import Language.Drasil.Chunk.Quantity
 import Language.Drasil.Chunk.Constrained
 import Language.Drasil.Chunk.Concept
+import Language.Drasil.Chunk.SymbolForm
 import Language.Drasil.Unit
 import Language.Drasil.Expr
 import Language.Drasil.NounPhrase
@@ -38,29 +39,19 @@ data UncertQ where
   UQ :: (Quantity c, Constrained c, Concept c) => c
         -> Maybe Double -> UncertQ
   
-instance Eq UncertQ where
-  a == b = (a ^. id) == (b ^. id)
-instance Chunk UncertQ where
-  id = qlens id
-instance NamedIdea UncertQ where
-  term = qlens term
-instance Idea UncertQ where
-  getA (UQ q _) = getA q
-instance HasSpace UncertQ where
-  typ = qlens typ
-instance Quantity UncertQ where
-  symbol s  (UQ q _) = symbol s q
-  getUnit    (UQ q _) = getUnit q
-  getStagedS (UQ q _) = getStagedS q
-instance UncertainQuantity UncertQ where
-  uncert f (UQ a b) = fmap (\x -> UQ a x) (f b)
+instance Eq UncertQ where a == b = (a ^. id) == (b ^. id)
+instance Chunk UncertQ where id = qlens id
+instance NamedIdea UncertQ where term = qlens term
+instance Idea UncertQ where getA (UQ q _) = getA q
+instance HasSpace UncertQ where typ = qlens typ
+instance HasSymbol UncertQ where symbol s  (UQ q _) = symbol s q
+instance Quantity UncertQ where getUnit    (UQ q _) = getUnit q
+instance UncertainQuantity UncertQ where uncert f (UQ a b) = fmap (\x -> UQ a x) (f b)
 instance Constrained UncertQ where
   constraints = qlens constraints
   reasVal = qlens reasVal
-instance Definition UncertQ where
-  defn = qlens defn
-instance ConceptDomain UncertQ where
-  cdom = qlens cdom
+instance Definition UncertQ where defn = qlens defn
+instance ConceptDomain UncertQ where cdom = qlens cdom
 instance Concept UncertQ where
 
 -- DO NOT Export qlens
@@ -106,18 +97,12 @@ data UncertainChunk where
 
 instance Eq UncertainChunk where
   (UCh c1 _) == (UCh c2 _) = (c1 ^. id) == (c2 ^. id)
-instance Chunk UncertainChunk where
-  id = cLens id
-instance NamedIdea UncertainChunk where
-  term = cLens term
-instance Idea UncertainChunk where
-  getA (UCh n _) = getA n
-instance HasSpace UncertainChunk where
-  typ = cLens typ
-instance Quantity UncertainChunk where
-  symbol s  (UCh c _) = symbol s c
-  getUnit    (UCh c _) = getUnit c
-  getStagedS (UCh c _) = getStagedS c
+instance Chunk UncertainChunk where id = cLens id
+instance NamedIdea UncertainChunk where term = cLens term
+instance Idea UncertainChunk where getA (UCh n _) = getA n
+instance HasSpace UncertainChunk where typ = cLens typ
+instance HasSymbol UncertainChunk where symbol s  (UCh c _) = symbol s c
+instance Quantity UncertainChunk where getUnit    (UCh c _) = getUnit c
 instance UncertainQuantity UncertainChunk where --makes sense?
   uncert f (UCh a b) = fmap (\x -> UCh a x) (f b)
 instance Constrained UncertainChunk where

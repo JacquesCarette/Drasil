@@ -96,6 +96,7 @@ symbol (Corners [_] [] [] [] _) = error "rendering of ul prescript"
 symbol (Corners [] [_] [] [] _) = error "rendering of ll prescript"
 symbol (Corners _ _ _ _ _)      = error "rendering of Corners (general)"
 symbol (Atop f s) = sFormat f s
+symbol (Empty)    = ""
 
 sFormat :: Decoration -> Symbol -> String
 sFormat Hat    s = "\\hat{" ++ symbol s ++ "}"
@@ -377,6 +378,7 @@ symbol_needs (Concat [])         = Math
 symbol_needs (Concat (s:_))      = symbol_needs s
 symbol_needs (Corners _ _ _ _ _) = Math
 symbol_needs (Atop _ _)          = Math
+symbol_needs Empty               = Curr
 
 p_unit :: LS.USymb -> D
 p_unit (LS.UName (Concat s)) = foldl (<>) empty $ map (p_unit . LS.UName) s

@@ -94,7 +94,7 @@ fmtU :: (Quantity a) => Sentence -> a -> Sentence
 fmtU n u  = n +:+ (unwrap $ getUnit u)
 
 -- | gets symbol from chunk
-getS :: (Quantity a) => Stage -> a -> Sentence
+getS :: (HasSymbol a) => Stage -> a -> Sentence
 getS st = P . symbol st
 
 getES, getCS :: Quantity q => q -> Sentence

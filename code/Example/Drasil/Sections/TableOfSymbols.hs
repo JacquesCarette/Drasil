@@ -13,11 +13,8 @@ import Data.Drasil.Concepts.Documentation
 table :: (Quantity s) => Stage -> [s] -> (s -> Sentence) -> Contents
 table st ls f = Table 
   [at_start symbol_, at_start description, at_start' CM.unit_]
-  (mkTable
-  [getS st,
-  f, 
-  unitHidingUnitless]
-  (filter (hasStageSymbol st . getStagedS) ls))
+  (mkTable [getS st, f, unitHidingUnitless]
+  (filter (\q -> hasStageSymbol q st) ls))
   (titleize tOfSymb) False
 
 -- ^. defn

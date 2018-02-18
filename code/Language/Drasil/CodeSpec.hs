@@ -4,7 +4,8 @@ module Language.Drasil.CodeSpec where
 import Language.Drasil.Chunk.Code
 import Language.Drasil.Chunk.NamedIdea
 import Language.Drasil.Chunk.Eq
-import Language.Drasil.Chunk.Quantity -- for hack and codeSymb
+import Language.Drasil.Chunk.Quantity -- for hack
+import Language.Drasil.Chunk.SymbolForm (codeSymb)
 import Language.Drasil.NounPhrase
 import Language.Drasil.Symbol
 import Language.Drasil.Spec hiding (Mod)

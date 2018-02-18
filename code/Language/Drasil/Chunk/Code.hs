@@ -7,12 +7,13 @@ module Language.Drasil.Chunk.Code (
     spaceToCodeType, toCodeName, funcPrefix
   ) where
 
-import Control.Lens
+import Control.Lens (Lens',(^.),set)
 
 import Language.Drasil.Chunk.Constrained
 import Language.Drasil.Chunk.Quantity
 import Language.Drasil.Chunk.NamedIdea
 import Language.Drasil.Chunk.Eq
+import Language.Drasil.Chunk.SymbolForm
 import Language.Drasil.Chunk
 
 import Language.Drasil.Space as S
@@ -51,16 +52,16 @@ instance Eq CodeName where
   c1 == c2 = 
     (c1 ^. id) == (c2 ^. id)
 
-cnlens :: (forall c. (Chunk c) => Simple Lens c a) 
-           -> Simple Lens CodeName a
+cnlens :: (forall c. (Chunk c) => Lens' c a) 
+           -> Lens' CodeName a
 cnlens l f (SFCN a) = fmap (\x -> SFCN (set l x a)) (f (a ^. l))
 cnlens l f (NICN a) = fmap (\x -> NICN (set l x a)) (f (a ^. l))
---sfcnlens :: (forall c. (SymbolForm c) => Simple Lens c a) 
---             -> Simple Lens CodeName a
+--sfcnlens :: (forall c. (SymbolForm c) => Lens' c a) 
+--             -> Lens' CodeName a
 --sfcnlens l f (SFCN a) = fmap (\x -> SFCN (set l x a)) (f (a ^. l))
 
---nicnlens :: (forall c. (NamedIdea c) => Simple Lens c a) 
---             -> Simple Lens CodeName a
+--nicnlens :: (forall c. (NamedIdea c) => Lens' c a) 
+--             -> Lens' CodeName a
 --nicnlens l f (NICN a) = fmap (\x -> NICN (set l x a)) (f (a ^. l))
   
 
@@ -83,6 +84,7 @@ symbToCodeName (Corners ul ll ur lr b) =
         cright [] = ""
         cright (s:syms) = "_" ++ symbToCodeName s ++ cright syms
 symbToCodeName (Concat sy) = concatMap symbToCodeName sy
+symbToCodeName Empty = ""
 
 decorate :: String -> Decoration -> String
 decorate s Hat = s ++ "_hat"
@@ -182,13 +184,12 @@ instance Idea CodeChunk where
   getA (CodeFunc n) = getA n
 instance HasSpace CodeChunk where
   typ = qslens typ
-instance Quantity CodeChunk where
+instance HasSymbol CodeChunk where
   symbol s (CodeVar c)    = symbol s c
   symbol s (CodeFunc c)   = symbol s c
+instance Quantity CodeChunk where
   getUnit (CodeVar c)     = getUnit c
   getUnit (CodeFunc c)    = getUnit c
-  getStagedS (CodeVar c)  = getStagedS c
-  getStagedS (CodeFunc c) = getStagedS c
 instance CodeIdea CodeChunk where
   codeName (CodeVar c) = symbToCodeName (codeSymb c)
   codeName (CodeFunc c) = funcPrefix ++ symbToCodeName (codeSymb c)
@@ -199,8 +200,8 @@ instance Eq CodeChunk where
   c1 == c2 = 
     (c1 ^. id) == (c2 ^. id)
 
-qslens :: (forall c. (Quantity c) => Simple Lens c a) 
-           -> Simple Lens CodeChunk a
+qslens :: (forall c. (Quantity c) => Lens' c a) 
+           -> Lens' CodeChunk a
 qslens l f (CodeVar a) = 
   fmap (\x -> CodeVar (set l x a)) (f (a ^. l))
 qslens l f (CodeFunc a) = 
@@ -216,28 +217,20 @@ codefunc = CodeFunc
 data CodeDefinition where
   CodeDefinition :: (CodeEntity c) => c -> Expr -> CodeDefinition
   
-instance Chunk CodeDefinition where
-  id = qscdlens id
-instance NamedIdea CodeDefinition where
-  term = qscdlens term
-instance Idea CodeDefinition where
-  getA (CodeDefinition n _) = getA n
-instance HasSpace CodeDefinition where
-  typ = qscdlens typ
-instance Quantity CodeDefinition where
-  symbol s (CodeDefinition c _)  = symbol s c
-  getUnit (CodeDefinition c _)    = getUnit c
-  getStagedS (CodeDefinition c _) = getStagedS c
-instance CodeIdea CodeDefinition where
-  codeName (CodeDefinition c _) = codeName c
-instance CodeEntity CodeDefinition where
-  codeType (CodeDefinition c _) = codeType c
+instance Chunk CodeDefinition where id = qscdlens id
+instance NamedIdea CodeDefinition where term = qscdlens term
+instance Idea CodeDefinition where getA (CodeDefinition n _) = getA n
+instance HasSpace CodeDefinition where typ = qscdlens typ
+instance HasSymbol CodeDefinition where symbol s (CodeDefinition c _)  = symbol s c
+instance Quantity CodeDefinition where getUnit (CodeDefinition c _)    = getUnit c
+instance CodeIdea CodeDefinition where codeName (CodeDefinition c _) = codeName c
+instance CodeEntity CodeDefinition where codeType (CodeDefinition c _) = codeType c
 instance Eq CodeDefinition where
   (CodeDefinition c1 _) == (CodeDefinition c2 _) = 
     (c1 ^. id) == (c2 ^. id)
 
-qscdlens :: (forall c. (Quantity c) => Simple Lens c a) 
-            -> Simple Lens CodeDefinition a
+qscdlens :: (forall c. (Quantity c) => Lens' c a) 
+            -> Lens' CodeDefinition a
 qscdlens l f (CodeDefinition a b) = 
   fmap (\x -> CodeDefinition (set l x a) b) (f (a ^. l)) 
   

@@ -19,6 +19,7 @@ data Decoration = Hat | Vector | Prime deriving (Eq, Ord)
 -- - Greek characters
 -- - Decorated symbols
 -- - Concatenations of symbols, including subscripts and superscripts
+-- - empty! (this is to give this a monoid-like flavour)
 data Symbol where
   Atomic   :: String -> Symbol
   Special  :: Special -> Symbol
@@ -32,7 +33,12 @@ data Symbol where
             --             [2]   [4]
   Concat :: [ Symbol ]  -> Symbol
             -- [s1, s2] -> s1s2
+  Empty  :: Symbol
   deriving Eq
+
+instance Monoid Symbol where
+  mempty = Empty
+  mappend a b = Concat [a , b]
 
 --FIXME? The exact ordering we want may need to be updated, or should we
 --  allow custom?  
@@ -68,6 +74,9 @@ instance Ord Symbol where
   compare (Atomic _)             _                     = LT
   compare  _                    (Atomic _)             = GT
   compare (Greek a)             (Greek b)              = compare a b
+  compare  Empty                 Empty                 = EQ
+  compare  _                     Empty                 = GT
+  compare  Empty                 _                     = LT
 
 -- | Helper for creating a symbol with a superscript on the left side of the symbol.
 -- Arguments: Base symbol, then superscripted symbol.

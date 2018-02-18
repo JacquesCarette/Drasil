@@ -5,8 +5,8 @@ module Language.Drasil.Chunk.ConVar
 
 import Language.Drasil.Chunk
 import Language.Drasil.Chunk.NamedIdea
-import Language.Drasil.Chunk.SymbolForm (StagedSymbolChunk,ssc')
 import Language.Drasil.Chunk.Concept
+import Language.Drasil.Chunk.SymbolForm (Stage,HasSymbol(symbol))
 
 import Control.Lens (Lens', (^.))
 
@@ -18,7 +18,7 @@ import Prelude hiding (id)
 -- | ConVar is a 'Concept' as well as a 'Language.Drasil.Chunk.Quantity'. 
 -- It adds a 'Space' and 'Symbol' to an existing 'ConceptChunk'.
 data ConVar = CV { _con :: ConceptChunk
-                 , _symb :: StagedSymbolChunk
+                 , _symb :: Stage -> Symbol
                  , _typ :: Space }
                      
 instance Eq ConVar where c1 == c2 = (c1 ^. id) == (c2 ^. id)
@@ -27,6 +27,7 @@ instance NamedIdea ConVar where term = cvl . term
 instance Idea ConVar where getA (CV c _ _) = getA c
 instance Definition ConVar where defn = cvl . defn
 instance ConceptDomain ConVar where cdom = cvl . cdom
+instance HasSymbol ConVar where symbol st (CV _ s _) = s st
 instance Concept ConVar where
 
 cvl :: Lens' ConVar ConceptChunk
@@ -34,12 +35,12 @@ cvl f (CV c s t) = fmap (\x -> CV x s t) (f c)
 
 -- | Constructor for 'ConVar' with explicit 'Space'
 cv :: ConceptChunk -> Symbol -> Space -> ConVar
-cv c s = CV c (ssc' (c ^. id) s)
+cv c s = CV c (\_ -> s)
 
 --FIXME: Remove this hack
 -- | Constructor for 'ConVar' with implied 'Language.Drasil.Space.Real' 'Space'.
 cvR :: ConceptChunk -> Symbol -> ConVar
-cvR c s = CV c (ssc' (c ^. id) s) Real
+cvR c s = CV c (\_ -> s) Real
 
 cvRs :: ConceptChunk -> Symbol -> Space -> ConVar
-cvRs c s p = CV c (ssc' (c ^. id) s) p
+cvRs c s p = CV c (\_ -> s) p

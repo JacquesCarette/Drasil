@@ -1,5 +1,5 @@
 module Language.Drasil.Chunk.Quantity 
-  ( Quantity(..), QuantityDict, qw, eqSymb, codeSymb, mkQuant, HasSpace(typ)
+  ( Quantity(..), QuantityDict, qw, mkQuant, HasSpace(typ)
   ) where
 
 import Control.Lens
@@ -9,14 +9,12 @@ import Language.Drasil.Chunk
 import Language.Drasil.Chunk.NamedIdea
 import Language.Drasil.Chunk.VarChunk
 import Language.Drasil.Chunk.ConVar
-import Language.Drasil.Chunk.SymbolForm (ssc')
 import Language.Drasil.Symbol (Symbol)
 import Language.Drasil.NounPhrase
 
 import Prelude hiding (id)
 
-import qualified Language.Drasil.Chunk.SymbolForm as SF (Stage(..)
-  , getSymbForStage, StagedSymbolChunk)
+import Language.Drasil.Chunk.SymbolForm (Stage(..),HasSymbol(..), eqSymb)
 import Language.Drasil.Unit(UnitDefn)
 
 -- | HasSpace is anything which has a Space...
@@ -25,32 +23,23 @@ class HasSpace c where
 
 -- | A Quantity is an 'Idea' with a 'Space' and a symbol and 
 -- may have units
-class (Idea c, HasSpace c) => Quantity c where
-  -- | Provides the Symbol --  for a quantity for a particular stage of generation
-  symbol  :: SF.Stage -> c -> Symbol
+class (Idea c, HasSpace c, HasSymbol c) => Quantity c where
   -- | Provides the units a quantity is measured in, if any, otherwise returns
   -- 'Nothing'
   getUnit  :: c -> Maybe UnitDefn
-  -- | Provides the StagedSymbolChunk corresponding to a quantity
-  getStagedS :: c -> SF.StagedSymbolChunk
 
 instance HasSpace VarChunk where
   typ f (VC n s t) = fmap (\x -> VC n s x) (f t)
 instance Quantity VarChunk where
-  symbol st (VC _ s _) = SF.getSymbForStage st s 
   getUnit _  = Nothing
-  getStagedS (VC _ s _) = s
   
 instance HasSpace ConVar where
   typ    f (CV c s t) = fmap (\x -> CV c s x) (f t)
 instance Quantity ConVar where
-  symbol st (CV _ s _) = SF.getSymbForStage st s
   getUnit _ = Nothing
-  getStagedS (CV _ s _) = s
 
 data QuantityDict = QD { _id :: IdeaDict, _typ :: Space,
-  _symb :: SF.Stage -> Symbol,
-  _unit :: Maybe UnitDefn, _stagedS :: SF.StagedSymbolChunk }
+  _symb :: Stage -> Symbol, _unit :: Maybe UnitDefn}
 
 instance Chunk QuantityDict where
   id = qlens . id
@@ -63,31 +52,23 @@ instance Idea QuantityDict where
   
 instance HasSpace QuantityDict where
   typ f qd = fmap (\x -> qd {_typ = x}) (f (_typ qd))
-instance Quantity QuantityDict where
+instance HasSymbol QuantityDict where
   symbol s qd = _symb qd s
+instance Quantity QuantityDict where
   getUnit qd = _unit qd
-  getStagedS qd = _stagedS qd
   
 instance Eq QuantityDict where
   a == b = (a ^. id) == (b ^. id)
 
 instance Ord QuantityDict where
   compare a b = -- FIXME: Ordering hack. Should be context-dependent
-    compare (symbol SF.Equational a) (symbol SF.Equational b)
+    compare (eqSymb a) (eqSymb b)
 
 qlens :: Simple Lens QuantityDict IdeaDict
 qlens f qd = fmap (\x -> qd {_id = x}) (f (_id qd))
 
 qw :: Quantity q => q -> QuantityDict
-qw q = QD (nw q) (q^.typ) (\stg -> symbol stg q) (getUnit q) (getStagedS q)
+qw q = QD (nw q) (q^.typ) (\stg -> symbol stg q) (getUnit q)
 
 mkQuant :: String -> NP -> Symbol -> Space -> Maybe UnitDefn -> QuantityDict
-mkQuant i t s sp u = QD (mkIdea i t Nothing) sp (\_ -> s) u (ssc' i s)
-
--- | Helper function for getting a symbol in the Equational Stage
-eqSymb :: Quantity q => q -> Symbol
-eqSymb = symbol SF.Equational
-
--- | Helper function for getting a symbol in the Implementation Stage
-codeSymb :: Quantity q => q -> Symbol
-codeSymb = symbol SF.Implementation
+mkQuant i t s sp u = QD (mkIdea i t Nothing) sp (\_ -> s) u

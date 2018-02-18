@@ -11,7 +11,6 @@ import Control.Lens
 
 import Language.Drasil.Chunk.Constrained
 import Language.Drasil.Chunk.Quantity
-import Language.Drasil.Chunk.SymbolForm hiding (symbol)
 import Language.Drasil.Chunk.NamedIdea
 import Language.Drasil.Chunk.Eq
 import Language.Drasil.Chunk
@@ -44,11 +43,9 @@ data CodeName where
 instance Chunk CodeName where
   id = cnlens id
 instance CodeIdea CodeName where
-  -- want to take symbol lens from SymbolForm and apply symbToCodeName to it
-  -- to make codeName lens for CodeName
-  codeName (SFCN c) = symbToCodeName (symbol Implementation c)
+  codeName (SFCN c) = symbToCodeName (codeSymb c)
   -- want to take term lens from NamedIdea and apply sentenceToCodeName to it
-  -- to make codeName lens for CodeName
+  -- to make codeName
   codeName (NICN c) = sentenceToCodeName (phrase $ c ^. term)
 instance Eq CodeName where
   c1 == c2 = 
@@ -186,15 +183,15 @@ instance Idea CodeChunk where
 instance HasSpace CodeChunk where
   typ = qslens typ
 instance Quantity CodeChunk where
-  getSymb s (CodeVar c)   = getSymb s c
-  getSymb s (CodeFunc c)  = getSymb s c
+  symbol s (CodeVar c)    = symbol s c
+  symbol s (CodeFunc c)   = symbol s c
   getUnit (CodeVar c)     = getUnit c
   getUnit (CodeFunc c)    = getUnit c
   getStagedS (CodeVar c)  = getStagedS c
   getStagedS (CodeFunc c) = getStagedS c
 instance CodeIdea CodeChunk where
-  codeName (CodeVar c) = symbToCodeName (symbol Implementation c)
-  codeName (CodeFunc c) = funcPrefix ++ symbToCodeName (symbol Implementation c)
+  codeName (CodeVar c) = symbToCodeName (codeSymb c)
+  codeName (CodeFunc c) = funcPrefix ++ symbToCodeName (codeSymb c)
 instance CodeEntity CodeChunk where
   codeType (CodeVar c) = spaceToCodeType (c ^. typ)
   codeType (CodeFunc c) = spaceToCodeType (c ^. typ)
@@ -228,7 +225,7 @@ instance Idea CodeDefinition where
 instance HasSpace CodeDefinition where
   typ = qscdlens typ
 instance Quantity CodeDefinition where
-  getSymb s (CodeDefinition c _)  = getSymb s c
+  symbol s (CodeDefinition c _)  = symbol s c
   getUnit (CodeDefinition c _)    = getUnit c
   getStagedS (CodeDefinition c _) = getStagedS c
 instance CodeIdea CodeDefinition where

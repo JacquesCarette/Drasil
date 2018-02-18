@@ -45,7 +45,7 @@ instance Idea QDefinition where
 instance HasSpace QDefinition where
   typ = ul . typ
 instance Quantity QDefinition where
-  getSymb s (EC a _ _)  = getSymb s a
+  symbol s (EC a _ _)  = symbol s a
   getUnit (EC a _ _)    = getUnit a
   getStagedS (EC a _ _) = getStagedS a
   -- DO SOMETHING
@@ -73,19 +73,12 @@ elens l f (H a) = fmap (\x -> H (set l x a)) (f (a ^. l))
 data H where
   H :: (Quantity c) => c -> H
 
-instance Chunk H where
-  id = elens id
-
-instance NamedIdea H where
-  term = elens term
-
-instance Idea H where
-  getA (H a) = getA a
-  
-instance HasSpace H where
-  typ = elens typ
+instance Chunk H where id = elens id
+instance NamedIdea H where term = elens term
+instance Idea H where getA (H a) = getA a
+instance HasSpace H where typ = elens typ
 instance Quantity H where
-  getSymb s  (H c) = getSymb s c
+  symbol s  (H c) = symbol s c
   getUnit    (H c) = getUnit c
   getStagedS (H c) = getStagedS c
   

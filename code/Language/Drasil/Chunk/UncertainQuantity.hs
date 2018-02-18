@@ -49,7 +49,7 @@ instance Idea UncertQ where
 instance HasSpace UncertQ where
   typ = qlens typ
 instance Quantity UncertQ where
-  getSymb s  (UQ q _) = getSymb s q
+  symbol s  (UQ q _) = symbol s q
   getUnit    (UQ q _) = getUnit q
   getStagedS (UQ q _) = getStagedS q
 instance UncertainQuantity UncertQ where
@@ -115,7 +115,7 @@ instance Idea UncertainChunk where
 instance HasSpace UncertainChunk where
   typ = cLens typ
 instance Quantity UncertainChunk where
-  getSymb s  (UCh c _) = getSymb s c
+  symbol s  (UCh c _) = symbol s c
   getUnit    (UCh c _) = getUnit c
   getStagedS (UCh c _) = getStagedS c
 instance UncertainQuantity UncertainChunk where --makes sense?

@@ -47,8 +47,8 @@ instance HasSpace UnitalChunk where
   typ f (UC named s u t) = fmap (\x -> UC named s u x) (f t)
   typ f ucv@(UCV _ _) = cvl typ f ucv
 instance Quantity UnitalChunk where
-  getSymb st (UCV c _ ) = getSymb st c
-  getSymb st (UC _ s _ _) = getSymbForStage st s
+  symbol st (UCV c _ ) = symbol st c
+  symbol st (UC _ s _ _) = getSymbForStage st s
   getUnit = Just . unit
   getStagedS (UCV c _ ) = getStagedS c
   getStagedS (UC _ s _ _) = s

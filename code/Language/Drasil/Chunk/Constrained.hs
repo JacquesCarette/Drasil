@@ -110,7 +110,7 @@ instance Idea ConstrainedChunk where
 instance HasSpace ConstrainedChunk where
   typ = qslens . typ
 instance Quantity ConstrainedChunk where
-  getSymb s (ConstrainedChunk c _ _) = getSymb s c
+  symbol s (ConstrainedChunk c _ _) = symbol s c
   getUnit (ConstrainedChunk c _ _) = getUnit c
   getStagedS (ConstrainedChunk c _ _) = getStagedS c
 instance Constrained ConstrainedChunk where
@@ -157,7 +157,7 @@ instance Idea ConstrConcept where
 instance HasSpace ConstrConcept where
   typ = cqslens typ
 instance Quantity ConstrConcept where
-  getSymb s (ConstrConcept c _ _) = getSymb s c
+  symbol s (ConstrConcept c _ _) = symbol s c
   getUnit (ConstrConcept c _ _) = getUnit c
   getStagedS (ConstrConcept c _ _) = getStagedS c
 instance Definition ConstrConcept where

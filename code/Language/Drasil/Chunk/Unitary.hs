@@ -33,7 +33,7 @@ instance Idea UnitaryChunk where
 instance HasSpace UnitaryChunk where
   typ = quant . typ
 instance Quantity UnitaryChunk where
-  getSymb st (UC s _) = getSymb st s
+  symbol st (UC s _) = symbol st s
   getUnit = Just . _un
   getStagedS (UC s _) = getStagedS s
 instance Unitary UnitaryChunk where

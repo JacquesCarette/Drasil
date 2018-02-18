@@ -5,7 +5,7 @@ module Language.Drasil.Chunk.ConVar
 
 import Language.Drasil.Chunk
 import Language.Drasil.Chunk.NamedIdea
-import Language.Drasil.Chunk.SymbolForm
+import Language.Drasil.Chunk.SymbolForm (StagedSymbolChunk,ssc')
 import Language.Drasil.Chunk.Concept
 
 import Control.Lens (Lens', (^.))

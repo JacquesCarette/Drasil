@@ -1,6 +1,5 @@
-{-# LANGUAGE GADTs,Rank2Types #-}
 module Language.Drasil.Chunk.Quantity 
-  ( Quantity(..), QuantityDict, qw, symbol, eqSymb, codeSymb, mkQuant, HasSpace(typ)
+  ( Quantity(..), QuantityDict, qw, eqSymb, codeSymb, mkQuant, HasSpace(typ)
   ) where
 
 import Control.Lens
@@ -28,7 +27,7 @@ class HasSpace c where
 -- may have units
 class (Idea c, HasSpace c) => Quantity c where
   -- | Provides the Symbol --  for a quantity for a particular stage of generation
-  getSymb  :: SF.Stage -> c -> Symbol
+  symbol  :: SF.Stage -> c -> Symbol
   -- | Provides the units a quantity is measured in, if any, otherwise returns
   -- 'Nothing'
   getUnit  :: c -> Maybe UnitDefn
@@ -38,14 +37,14 @@ class (Idea c, HasSpace c) => Quantity c where
 instance HasSpace VarChunk where
   typ f (VC n s t) = fmap (\x -> VC n s x) (f t)
 instance Quantity VarChunk where
-  getSymb st (VC _ s _) = SF.getSymbForStage st s 
+  symbol st (VC _ s _) = SF.getSymbForStage st s 
   getUnit _  = Nothing
   getStagedS (VC _ s _) = s
   
 instance HasSpace ConVar where
   typ    f (CV c s t) = fmap (\x -> CV c s x) (f t)
 instance Quantity ConVar where
-  getSymb st (CV _ s _) = SF.getSymbForStage st s
+  symbol st (CV _ s _) = SF.getSymbForStage st s
   getUnit _ = Nothing
   getStagedS (CV _ s _) = s
 
@@ -65,7 +64,7 @@ instance Idea QuantityDict where
 instance HasSpace QuantityDict where
   typ f qd = fmap (\x -> qd {_typ = x}) (f (_typ qd))
 instance Quantity QuantityDict where
-  getSymb s qd = _symb qd s
+  symbol s qd = _symb qd s
   getUnit qd = _unit qd
   getStagedS qd = _stagedS qd
   
@@ -74,20 +73,16 @@ instance Eq QuantityDict where
 
 instance Ord QuantityDict where
   compare a b = -- FIXME: Ordering hack. Should be context-dependent
-    compare (getSymb SF.Equational a) (getSymb SF.Equational b)
+    compare (symbol SF.Equational a) (symbol SF.Equational b)
 
 qlens :: Simple Lens QuantityDict IdeaDict
 qlens f qd = fmap (\x -> qd {_id = x}) (f (_id qd))
 
 qw :: Quantity q => q -> QuantityDict
-qw q = QD (nw q) (q^.typ) (\stg -> getSymb stg q) (getUnit q) (getStagedS q)
+qw q = QD (nw q) (q^.typ) (\stg -> symbol stg q) (getUnit q) (getStagedS q)
 
 mkQuant :: String -> NP -> Symbol -> Space -> Maybe UnitDefn -> QuantityDict
 mkQuant i t s sp u = QD (mkIdea i t Nothing) sp (\_ -> s) u (ssc' i s)
-
--- | Helper function for getting a symbol at a given stage from a quantity.
-symbol :: Quantity q => SF.Stage -> q -> Symbol
-symbol = getSymb
 
 -- | Helper function for getting a symbol in the Equational Stage
 eqSymb :: Quantity q => q -> Symbol

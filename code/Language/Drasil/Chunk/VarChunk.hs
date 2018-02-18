@@ -25,8 +25,8 @@ instance NamedIdea VarChunk where term = ni . term
 instance Idea      VarChunk where getA = getA . view ni
 
 -- the code generation system needs VC to have a type (for now)
--- Setting all varchunks to have Rational type so it compiles
--- | Creates a VarChunk from an id, term, and symbol. Assumes Rational 'Space'
+-- Setting all varchunks to have Real type so it compiles
+-- | Creates a VarChunk from an id, term, and symbol. Assumes Real 'Space'
 -- Needs to be removed
 makeVC :: String -> NP -> Symbol -> VarChunk
 makeVC i des sym = vc i des sym Real

@@ -1,10 +1,10 @@
-{-# Language GADTs, Rank2Types #-}
+{-# Language TemplateHaskell #-}
 module Language.Drasil.Chunk.VarChunk where
 
 import Language.Drasil.Chunk
 import Language.Drasil.Chunk.NamedIdea
 import Language.Drasil.Chunk.SymbolForm
-import Control.Lens ((^.), set, Simple, Lens)
+import Control.Lens ((^.), makeLenses, view)
 
 import Language.Drasil.Symbol
 import Language.Drasil.Space
@@ -17,22 +17,13 @@ import Prelude hiding (id)
 data VarChunk = VC { _ni :: IdeaDict
                    , _vsymb :: StagedSymbolChunk
                    , _vtyp  :: Space }
+makeLenses ''VarChunk
 
-instance Eq VarChunk where
-  c1 == c2 = (c1 ^. id) == (c2 ^. id)
+instance Eq        VarChunk where c1 == c2 = (c1 ^. id) == (c2 ^. id)
+instance Chunk     VarChunk where id = ni . id
+instance NamedIdea VarChunk where term = ni . term
+instance Idea      VarChunk where getA = getA . view ni
 
-instance Chunk VarChunk where
-  id = nl id
-
-instance NamedIdea VarChunk where
-  term = nl term
-
-instance Idea VarChunk where
-  getA (VC n _ _) = getA n
-
-nl :: (forall c. (NamedIdea c) => Simple Lens c a) -> Simple Lens VarChunk a
-nl l f (VC n s t) = fmap (\x -> VC (set l x n) s t) (f (n ^. l))
-  
 -- the code generation system needs VC to have a type (for now)
 -- Setting all varchunks to have Rational type so it compiles
 -- | Creates a VarChunk from an id, term, and symbol. Assumes Rational 'Space'

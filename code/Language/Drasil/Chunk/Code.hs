@@ -183,8 +183,9 @@ instance NamedIdea CodeChunk where
 instance Idea CodeChunk where
   getA (CodeVar n) = getA n
   getA (CodeFunc n) = getA n
-instance Quantity CodeChunk where
+instance HasSpace CodeChunk where
   typ = qslens typ
+instance Quantity CodeChunk where
   getSymb s (CodeVar c)   = getSymb s c
   getSymb s (CodeFunc c)  = getSymb s c
   getUnit (CodeVar c)     = getUnit c
@@ -224,8 +225,9 @@ instance NamedIdea CodeDefinition where
   term = qscdlens term
 instance Idea CodeDefinition where
   getA (CodeDefinition n _) = getA n
-instance Quantity CodeDefinition where
+instance HasSpace CodeDefinition where
   typ = qscdlens typ
+instance Quantity CodeDefinition where
   getSymb s (CodeDefinition c _)  = getSymb s c
   getUnit (CodeDefinition c _)    = getUnit c
   getStagedS (CodeDefinition c _) = getStagedS c

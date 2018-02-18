@@ -11,7 +11,7 @@ import Language.Drasil.Chunk.Attribute
 import Language.Drasil.Chunk.NamedIdea (NamedIdea(..), Idea(..))
 import Language.Drasil.Chunk.Concept
 import Language.Drasil.Chunk.ConVar
-import Language.Drasil.Chunk.Quantity (Quantity(..))
+import Language.Drasil.Chunk.Quantity (Quantity(..),HasSpace(typ))
 import Language.Drasil.Chunk.ExprRelat
 import Language.Drasil.Chunk.VarChunk (VarChunk, vcSt)
 import Language.Drasil.Chunk.Unital (ucFromCV)
@@ -42,8 +42,9 @@ instance NamedIdea QDefinition where
 instance Idea QDefinition where
   getA c = getA $ c ^. ul
 
-instance Quantity QDefinition where
+instance HasSpace QDefinition where
   typ = ul . typ
+instance Quantity QDefinition where
   getSymb s (EC a _ _)  = getSymb s a
   getUnit (EC a _ _)    = getUnit a
   getStagedS (EC a _ _) = getStagedS a
@@ -81,8 +82,9 @@ instance NamedIdea H where
 instance Idea H where
   getA (H a) = getA a
   
-instance Quantity H where
+instance HasSpace H where
   typ = elens typ
+instance Quantity H where
   getSymb s  (H c) = getSymb s c
   getUnit    (H c) = getUnit c
   getStagedS (H c) = getStagedS c

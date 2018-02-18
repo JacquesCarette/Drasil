@@ -46,8 +46,9 @@ instance NamedIdea UncertQ where
   term = qlens term
 instance Idea UncertQ where
   getA (UQ q _) = getA q
-instance Quantity UncertQ where
+instance HasSpace UncertQ where
   typ = qlens typ
+instance Quantity UncertQ where
   getSymb s  (UQ q _) = getSymb s q
   getUnit    (UQ q _) = getUnit q
   getStagedS (UQ q _) = getStagedS q
@@ -111,8 +112,9 @@ instance NamedIdea UncertainChunk where
   term = cLens term
 instance Idea UncertainChunk where
   getA (UCh n _) = getA n
-instance Quantity UncertainChunk where
+instance HasSpace UncertainChunk where
   typ = cLens typ
+instance Quantity UncertainChunk where
   getSymb s  (UCh c _) = getSymb s c
   getUnit    (UCh c _) = getUnit c
   getStagedS (UCh c _) = getStagedS c

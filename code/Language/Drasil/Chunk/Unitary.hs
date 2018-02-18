@@ -1,4 +1,4 @@
-{-# LANGUAGE GADTs, Rank2Types, TemplateHaskell #-}
+{-# LANGUAGE TemplateHaskell #-}
 module Language.Drasil.Chunk.Unitary
   ( UnitaryChunk
   , unitary, mkUnitary
@@ -8,7 +8,8 @@ import Control.Lens ((^.), makeLenses)
 import Prelude hiding (id)
 import Language.Drasil.Chunk (Chunk(..))
 import Language.Drasil.Chunk.NamedIdea (NamedIdea(..), Idea(..))
-import Language.Drasil.Chunk.Quantity (Quantity(..), QuantityDict, mkQuant, qw)
+import Language.Drasil.Chunk.Quantity (Quantity(..), QuantityDict, mkQuant, qw, 
+  HasSpace(typ))
 import Language.Drasil.Unit (Unit, UnitDefn, unitWrapper)
 import Language.Drasil.Symbol
 import Language.Drasil.Space
@@ -29,8 +30,9 @@ instance NamedIdea UnitaryChunk where
   term = quant . term
 instance Idea UnitaryChunk where
   getA uc = getA $ uc ^. quant
-instance Quantity UnitaryChunk where
+instance HasSpace UnitaryChunk where
   typ = quant . typ
+instance Quantity UnitaryChunk where
   getSymb st (UC s _) = getSymb st s
   getUnit = Just . _un
   getStagedS (UC s _) = getStagedS s

@@ -1,6 +1,6 @@
 {-# LANGUAGE GADTs,Rank2Types #-}
 module Language.Drasil.Chunk.Quantity 
-  ( Quantity(..), QuantityDict, qw, symbol, eqSymb, codeSymb, mkQuant
+  ( Quantity(..), QuantityDict, qw, symbol, eqSymb, codeSymb, mkQuant, HasSpace(typ)
   ) where
 
 import Control.Lens
@@ -20,11 +20,13 @@ import qualified Language.Drasil.Chunk.SymbolForm as SF (Stage(..)
   , getSymbForStage, StagedSymbolChunk)
 import Language.Drasil.Unit(UnitDefn)
 
+-- | HasSpace is anything which has a Space...
+class HasSpace c where
+  typ      :: Simple Lens c Space
+
 -- | A Quantity is an 'Idea' with a 'Space' and a symbol and 
 -- may have units
-class Idea c => Quantity c where
-  -- | Lens to the Space
-  typ      :: Simple Lens c Space
+class (Idea c, HasSpace c) => Quantity c where
   -- | Provides the Symbol --  for a quantity for a particular stage of generation
   getSymb  :: SF.Stage -> c -> Symbol
   -- | Provides the units a quantity is measured in, if any, otherwise returns
@@ -33,14 +35,16 @@ class Idea c => Quantity c where
   -- | Provides the StagedSymbolChunk corresponding to a quantity
   getStagedS :: c -> SF.StagedSymbolChunk
 
+instance HasSpace VarChunk where
+  typ f (VC n s t) = fmap (\x -> VC n s x) (f t)
 instance Quantity VarChunk where
   getSymb st (VC _ s _) = SF.getSymbForStage st s 
   getUnit _  = Nothing
-  typ f (VC n s t) = fmap (\x -> VC n s x) (f t)
   getStagedS (VC _ s _) = s
   
-instance Quantity ConVar where
+instance HasSpace ConVar where
   typ    f (CV c s t) = fmap (\x -> CV c s x) (f t)
+instance Quantity ConVar where
   getSymb st (CV _ s _) = SF.getSymbForStage st s
   getUnit _ = Nothing
   getStagedS (CV _ s _) = s
@@ -58,8 +62,9 @@ instance NamedIdea QuantityDict where
 instance Idea QuantityDict where
   getA  qd = getA (qd ^. qlens)
   
-instance Quantity QuantityDict where
+instance HasSpace QuantityDict where
   typ f qd = fmap (\x -> qd {_typ = x}) (f (_typ qd))
+instance Quantity QuantityDict where
   getSymb s qd = _symb qd s
   getUnit qd = _unit qd
   getStagedS qd = _stagedS qd

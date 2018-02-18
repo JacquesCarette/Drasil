@@ -32,11 +32,10 @@ instance Idea DefinedQuantityDict where getA (DQD a _) = getA a
 instance Definition DefinedQuantityDict where defn = con . defn
 instance ConceptDomain DefinedQuantityDict where cdom = con . cdom
 instance Concept DefinedQuantityDict where
-  
+instance Q.HasSpace DefinedQuantityDict where  typ = quant . Q.typ
 instance Q.Quantity DefinedQuantityDict where
   getSymb s (DQD a _) = Q.getSymb s a
   getUnit (DQD a _) = Q.getUnit a
-  typ = quant . Q.typ
   getStagedS (DQD a _) = Q.getStagedS a
 
 cqs :: (Q.Quantity c, Concept c) => c -> DefinedQuantityDict

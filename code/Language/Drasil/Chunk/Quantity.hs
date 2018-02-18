@@ -16,8 +16,8 @@ import Language.Drasil.NounPhrase
 
 import Prelude hiding (id)
 
-import qualified Language.Drasil.Chunk.SymbolForm as SF (symbol, Stage(..), sc
-  , SymbolChunk, getSymbForStage, StagedSymbolChunk)
+import qualified Language.Drasil.Chunk.SymbolForm as SF (Stage(..)
+  , getSymbForStage, StagedSymbolChunk)
 import Language.Drasil.Unit(UnitDefn)
 
 -- | A Quantity is an 'Idea' with a 'Space' and a symbol and 
@@ -25,10 +25,8 @@ import Language.Drasil.Unit(UnitDefn)
 class Idea c => Quantity c where
   -- | Lens to the Space
   typ      :: Simple Lens c Space
-  -- | Provides the 'Language.Drasil.Chunk.SymbolForm.SymbolForm' 
-  -- (chunk which contains a symbol) for a quantity for a particular stage of 
-  -- generation
-  getSymb  :: SF.Stage -> c -> SF.SymbolChunk
+  -- | Provides the Symbol --  for a quantity for a particular stage of generation
+  getSymb  :: SF.Stage -> c -> Symbol
   -- | Provides the units a quantity is measured in, if any, otherwise returns
   -- 'Nothing'
   getUnit  :: c -> Maybe UnitDefn
@@ -48,7 +46,7 @@ instance Quantity ConVar where
   getStagedS (CV _ s _) = s
 
 data QuantityDict = QD { _id :: IdeaDict, _typ :: Space,
-  _symb :: SF.Stage -> SF.SymbolChunk,
+  _symb :: SF.Stage -> Symbol,
   _unit :: Maybe UnitDefn, _stagedS :: SF.StagedSymbolChunk }
 
 instance Chunk QuantityDict where
@@ -71,7 +69,7 @@ instance Eq QuantityDict where
 
 instance Ord QuantityDict where
   compare a b = -- FIXME: Ordering hack. Should be context-dependent
-    compare ((getSymb SF.Equational a) ^. SF.symbol) ((getSymb SF.Equational b) ^. SF.symbol)
+    compare (getSymb SF.Equational a) (getSymb SF.Equational b)
 
 qlens :: Simple Lens QuantityDict IdeaDict
 qlens f qd = fmap (\x -> qd {_id = x}) (f (_id qd))
@@ -80,11 +78,11 @@ qw :: Quantity q => q -> QuantityDict
 qw q = QD (nw q) (q^.typ) (\stg -> getSymb stg q) (getUnit q) (getStagedS q)
 
 mkQuant :: String -> NP -> Symbol -> Space -> Maybe UnitDefn -> QuantityDict
-mkQuant i t s sp u = QD (mkIdea i t Nothing) sp (\_ -> SF.sc i s) u (ssc' i s)
+mkQuant i t s sp u = QD (mkIdea i t Nothing) sp (\_ -> s) u (ssc' i s)
 
 -- | Helper function for getting a symbol at a given stage from a quantity.
 symbol :: Quantity q => SF.Stage -> q -> Symbol
-symbol s q = (getSymb s q) ^. SF.symbol
+symbol = getSymb
 
 -- | Helper function for getting a symbol in the Equational Stage
 eqSymb :: Quantity q => q -> Symbol

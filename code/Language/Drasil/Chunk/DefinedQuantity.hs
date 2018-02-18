@@ -25,7 +25,7 @@ instance Eq DefinedQuantityDict where a == b = (a ^. id) == (b ^. id)
   
 instance Ord DefinedQuantityDict where
   compare a b = -- FIXME: Ordering hack. Should be context-dependent
-    compare ((Q.getSymb Equational a) ^. symbol) ((Q.getSymb Equational b) ^. symbol)
+    compare (Q.getSymb Equational a) (Q.getSymb Equational b)
   
 instance NamedIdea DefinedQuantityDict where term = con . term
 instance Idea DefinedQuantityDict where getA (DQD a _) = getA a

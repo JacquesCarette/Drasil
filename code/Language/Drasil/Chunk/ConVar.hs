@@ -1,5 +1,3 @@
-{-# Language GADTs, Rank2Types #-}
-
 module Language.Drasil.Chunk.ConVar
   ( ConVar(CV) , cv , cvR
   , cvRs -- Temporary identification for the the creation of a quantity with a certain type of unit.  Will eventually change to cvR.
@@ -10,7 +8,7 @@ import Language.Drasil.Chunk.NamedIdea
 import Language.Drasil.Chunk.SymbolForm
 import Language.Drasil.Chunk.Concept
 
-import Control.Lens (Simple, Lens, (^.))
+import Control.Lens (Lens', (^.))
 
 import Language.Drasil.Symbol
 import Language.Drasil.Space
@@ -31,7 +29,7 @@ instance Definition ConVar where defn = cvl . defn
 instance ConceptDomain ConVar where cdom = cvl . cdom
 instance Concept ConVar where
 
-cvl :: Simple Lens ConVar ConceptChunk
+cvl :: Lens' ConVar ConceptChunk
 cvl f (CV c s t) = fmap (\x -> CV x s t) (f c)
 
 -- | Constructor for 'ConVar' with explicit 'Space'

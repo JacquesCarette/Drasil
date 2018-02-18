@@ -23,7 +23,7 @@ module Language.Drasil (
   -- Chunk
   , Chunk(..), VarChunk(..), ConceptChunk
   , makeVC, makeVC', vc, makeVCObj, SymbolForm
-  , dcc, dccWDS, dccWDS', cv, dcc', vc', vc'', ccs, cc, cc', makeVC''
+  , dcc, dcc', dccWDS, dccWDS', cv, vc', vc'', ccs, cc, cc', makeVC''
   -- Chunk.Concept
   , Concept, cw, Definition(defn), ConceptDomain(cdom)
   -- Chunk.CommonIdea

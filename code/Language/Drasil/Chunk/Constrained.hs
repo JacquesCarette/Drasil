@@ -10,11 +10,11 @@ module Language.Drasil.Chunk.Constrained (
   , Reason(..), TheoryConstraint(..)
   ) where
 
-import Control.Lens (Lens', (^.), makeLenses)
+import Control.Lens (Lens', (^.), makeLenses, view)
 import Language.Drasil.Expr (Expr(..), RealInterval(..), Relation, Inclusive(..),
   ($<), ($<=), ($>), ($>=))
-import Language.Drasil.Chunk.ConVar
 import Language.Drasil.Chunk.Quantity
+import Language.Drasil.Chunk.DefinedQuantity
 import Language.Drasil.Chunk.NamedIdea
 import Language.Drasil.Chunk.Unitary
 import Language.Drasil.Chunk.VarChunk
@@ -94,10 +94,10 @@ makeLenses ''ConstrainedChunk
 
 instance Chunk       ConstrainedChunk where id = qd . id
 instance NamedIdea   ConstrainedChunk where term = qd . term
-instance Idea        ConstrainedChunk where getA (ConstrainedChunk n _ _) = getA n
+instance Idea        ConstrainedChunk where getA = getA . view qd
 instance HasSpace    ConstrainedChunk where typ = qd . typ
 instance HasSymbol   ConstrainedChunk where symbol s (ConstrainedChunk c _ _) = symbol s c
-instance Quantity    ConstrainedChunk where getUnit (ConstrainedChunk c _ _) = getUnit c
+instance Quantity    ConstrainedChunk where getUnit = getUnit . view qd
 instance Constrained ConstrainedChunk where
   constraints = constr
   reasVal     = reasV
@@ -120,34 +120,34 @@ cvc i des sym space cs rv = ConstrainedChunk (qw $ vc i des sym space) cs (Just 
 
 -- | ConstrConcepts are 'Conceptual Symbolic Quantities'
 -- with 'Constraints' and maybe a reasonable value
-data ConstrConcept = ConstrConcept { _convar :: ConVar, 
+data ConstrConcept = ConstrConcept { _defq :: DefinedQuantityDict,
   _constr' :: [Constraint], _reasV' :: Maybe Expr}
 makeLenses ''ConstrConcept
 
-instance Chunk         ConstrConcept where id = convar . id
-instance NamedIdea     ConstrConcept where term = convar . term
-instance Idea          ConstrConcept where getA (ConstrConcept n _ _) = getA n
-instance HasSpace      ConstrConcept where typ = convar . typ
+instance Chunk         ConstrConcept where id = defq . id
+instance NamedIdea     ConstrConcept where term = defq . term
+instance Idea          ConstrConcept where getA = getA . view defq
+instance HasSpace      ConstrConcept where typ = defq . typ
 instance HasSymbol     ConstrConcept where symbol s (ConstrConcept c _ _) = symbol s c
-instance Quantity      ConstrConcept where getUnit (ConstrConcept c _ _) = getUnit c
-instance Definition    ConstrConcept where defn = convar . defn
-instance ConceptDomain ConstrConcept where cdom = convar . cdom
+instance Quantity      ConstrConcept where getUnit = getUnit . view defq
+instance Definition    ConstrConcept where defn = defq . defn
+instance ConceptDomain ConstrConcept where cdom = defq . cdom
 instance Concept       ConstrConcept where
 instance Constrained   ConstrConcept where
   constraints  = constr'
   reasVal      = reasV'
-instance Eq            ConstrConcept where c1 == c2 = (c1 ^.convar.id) == (c2 ^.convar.id)
+instance Eq            ConstrConcept where c1 == c2 = (c1 ^.defq.id) == (c2 ^.defq.id)
 
 constrained' :: (Quantity c, Concept c) => c -> [Constraint] -> Expr -> ConstrConcept
-constrained' q cs rv = ConstrConcept (makeCV q) cs (Just rv)
+constrained' q cs rv = ConstrConcept (cqs q) cs (Just rv)
 
 constrainedNRV' :: (Quantity c, Concept c) => c -> [Constraint] -> ConstrConcept
-constrainedNRV' q cs = ConstrConcept (makeCV q) cs Nothing
+constrainedNRV' q cs = ConstrConcept (cqs q) cs Nothing
 
 cuc' :: (Unit u) => String -> NP -> String -> Symbol -> u
                   -> Space -> [Constraint] -> Expr -> ConstrConcept
 cuc' nam trm desc sym un space cs rv =
-  ConstrConcept (makeCV $ ucs nam trm desc sym un space) cs (Just rv)
+  ConstrConcept (cqs $ ucs nam trm desc sym un space) cs (Just rv)
 
 cnstrw :: Constrained c => c -> ConstrainedChunk
 cnstrw c = ConstrainedChunk (qw c) (c ^. constraints) (c ^. reasVal)

@@ -4,7 +4,7 @@ module Language.Drasil.Chunk.VarChunk where
 import Language.Drasil.Chunk
 import Language.Drasil.Chunk.NamedIdea
 import Language.Drasil.Chunk.SymbolForm (Stage(..), HasSymbol(symbol))
-import Control.Lens ((^.), makeLenses, view)
+import Language.Drasil.Chunk.Quantity (Quantity(getUnit))
 
 import Language.Drasil.Symbol
 import Language.Drasil.Space
@@ -12,6 +12,7 @@ import Language.Drasil.Space
 import Language.Drasil.NounPhrase (NP)
 
 import Prelude hiding (id)
+import Control.Lens ((^.), makeLenses, view)
   
 -- | VarChunks are Quantities that have symbols, but not units.
 data VarChunk = VC { _ni :: IdeaDict
@@ -24,6 +25,9 @@ instance Chunk     VarChunk where id = ni . id
 instance NamedIdea VarChunk where term = ni . term
 instance Idea      VarChunk where getA = getA . view ni
 instance HasSymbol VarChunk where symbol st (VC _ s _) = s st
+instance HasSpace  VarChunk where typ f (VC n s t) = fmap (\x -> VC n s x) (f t)
+instance Quantity  VarChunk where getUnit _  = Nothing
+  
 
 -- the code generation system needs VC to have a type (for now)
 -- Setting all varchunks to have Real type so it compiles
@@ -36,7 +40,7 @@ makeVC' :: String -> NP -> Symbol -> VarChunk
 makeVC' i des sym = makeVC'' i des sym Real
 
 makeVC'' :: String -> NP -> Symbol -> Space -> VarChunk
-makeVC'' i des sym typ = vcSt i des f typ
+makeVC'' i des sym ty = vcSt i des f ty
   where
     f :: Stage -> Symbol
     f Implementation = sym

@@ -7,8 +7,6 @@ import Control.Lens
 import Language.Drasil.Space
 import Language.Drasil.Chunk
 import Language.Drasil.Chunk.NamedIdea
-import Language.Drasil.Chunk.VarChunk
-import Language.Drasil.Chunk.ConVar
 import Language.Drasil.Symbol (Symbol)
 import Language.Drasil.NounPhrase
 
@@ -17,10 +15,6 @@ import Prelude hiding (id)
 import Language.Drasil.Chunk.SymbolForm (Stage(..),HasSymbol(..), eqSymb)
 import Language.Drasil.Unit(UnitDefn)
 
--- | HasSpace is anything which has a Space...
-class HasSpace c where
-  typ      :: Simple Lens c Space
-
 -- | A Quantity is an 'Idea' with a 'Space' and a symbol and 
 -- may have units
 class (Idea c, HasSpace c, HasSymbol c) => Quantity c where
@@ -28,41 +22,19 @@ class (Idea c, HasSpace c, HasSymbol c) => Quantity c where
   -- 'Nothing'
   getUnit  :: c -> Maybe UnitDefn
 
-instance HasSpace VarChunk where
-  typ f (VC n s t) = fmap (\x -> VC n s x) (f t)
-instance Quantity VarChunk where
-  getUnit _  = Nothing
-  
-instance HasSpace ConVar where
-  typ    f (CV c s t) = fmap (\x -> CV c s x) (f t)
-instance Quantity ConVar where
-  getUnit _ = Nothing
-
 data QuantityDict = QD { _id :: IdeaDict, _typ :: Space,
   _symb :: Stage -> Symbol, _unit :: Maybe UnitDefn}
 
-instance Chunk QuantityDict where
-  id = qlens . id
-  
-instance NamedIdea QuantityDict where
-  term = qlens . term
+instance Chunk     QuantityDict where id = qlens . id
+instance NamedIdea QuantityDict where term = qlens . term
+instance Idea      QuantityDict where getA  qd = getA (qd ^. qlens)
+instance HasSpace  QuantityDict where typ f qd = fmap (\x -> qd {_typ = x}) (f (_typ qd))
+instance HasSymbol QuantityDict where symbol s qd = _symb qd s
+instance Quantity  QuantityDict where getUnit qd = _unit qd
+instance Eq        QuantityDict where a == b = (a ^. id) == (b ^. id)
 
-instance Idea QuantityDict where
-  getA  qd = getA (qd ^. qlens)
-  
-instance HasSpace QuantityDict where
-  typ f qd = fmap (\x -> qd {_typ = x}) (f (_typ qd))
-instance HasSymbol QuantityDict where
-  symbol s qd = _symb qd s
-instance Quantity QuantityDict where
-  getUnit qd = _unit qd
-  
-instance Eq QuantityDict where
-  a == b = (a ^. id) == (b ^. id)
-
-instance Ord QuantityDict where
-  compare a b = -- FIXME: Ordering hack. Should be context-dependent
-    compare (eqSymb a) (eqSymb b)
+-- FIXME: Ordering hack. Should be context-dependent
+instance Ord QuantityDict where compare a b = compare (eqSymb a) (eqSymb b)
 
 qlens :: Simple Lens QuantityDict IdeaDict
 qlens f qd = fmap (\x -> qd {_id = x}) (f (_id qd))

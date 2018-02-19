@@ -63,7 +63,25 @@ module Language.Drasil (
   , Attribute(..), Attributes, attributes, getSource, aqd -- TODO: Remove aqd
   , HasAttributes, Derivation, getDerivation, getShortName
   --Citations
-  , BibRef, City, State, Citation(..), CiteField(..), Month(..), getAuthors, getYear
+  , City, State, getAuthors, getYear
+  , Citation, BibRef, CiteField, Month(..)
+    -- CiteFields smart constructors
+      -- People -> CiteField
+  , author, editor
+      -- Sentence -> CiteField
+  , address, bookTitle, howPublished, institution, journal, note
+  , organization, publisher, school, series, title, typeField
+      -- Int -> CiteField
+  , chapter, edition, number, volume, year
+      -- [Int] -> CiteField
+  , pages
+      -- Month -> CiteField
+  , month
+    -- Citation smart constructors
+  , cArticle, cBookA, cBookE, cBooklet
+  , cInBookACP, cInBookECP, cInBookAC, cInBookEC, cInBookAP, cInBookEP
+  , cInCollection, cInProceedings, cManual, cMThesis, cMisc, cPhDThesis
+  , cProceedings, cTechReport, cUnpublished
   -- Spec
   , USymb(..), Sentence(..), Accent(..), sParen, sParenNum, sSqBr, sSqBrNum
   , (+:+), (+:+.), (+.), sC, (+:), semiCol, sParenDash
@@ -155,6 +173,26 @@ import Language.Drasil.Chunk.AssumpChunk
 import Language.Drasil.Chunk.Attribute
 import Language.Drasil.Chunk.Attribute.Derivation (Derivation)
 import Language.Drasil.Chunk.Change
+import Language.Drasil.Chunk.Citation (
+  -- Types
+    Citation, BibRef, CiteField, Month(..)
+    -- CiteFields smart constructors
+      -- People -> CiteField
+  , author, editor
+      -- Sentence -> CiteField
+  , address, bookTitle, howPublished, institution, journal, note
+  , organization, publisher, school, series, title, typeField
+      -- Int -> CiteField
+  , chapter, edition, number, volume, year
+      -- [Int] -> CiteField
+  , pages
+      -- Month -> CiteField
+  , month
+    -- Citation smart constructors
+  , cArticle, cBookA, cBookE, cBooklet
+  , cInBookACP, cInBookECP, cInBookAC, cInBookEC, cInBookAP, cInBookEP
+  , cInCollection, cInProceedings, cManual, cMThesis, cMisc, cPhDThesis
+  , cProceedings, cTechReport, cUnpublished)
 import Language.Drasil.Chunk.CommonIdea
 import Language.Drasil.Chunk.Concept
 import Language.Drasil.Chunk.Constrained
@@ -177,7 +215,6 @@ import Language.Drasil.Chunk.VarChunk
 import Language.Drasil.Chunk.Wrapper.QSWrapper
 import Language.Drasil.Chunk.Wrapper.UWrapper
 import Language.Drasil.ChunkDB
-import Language.Drasil.Citations
 import Language.Drasil.NounPhrase hiding (at_start, at_start', titleize
                                           , titleize', phrase, plural)
 import Language.Drasil.Space (Space(..))
@@ -199,3 +236,5 @@ import Language.Drasil.People (People, Person, person, HasName(..), manyNames
 import Language.Drasil.CodeSpec
 import Language.Drasil.DataDesc
 import Language.Drasil.Code.Imperative.Lang
+
+import Language.Drasil.Citations hiding (BibRef, Citation, CiteField, Month)

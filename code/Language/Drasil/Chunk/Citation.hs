@@ -11,6 +11,8 @@ module Language.Drasil.Chunk.Citation
   , chapter, edition, number, volume, year
       -- [Int] -> CiteField
   , pages
+      -- Month -> CiteField
+  , month
     -- Citation smart constructors
   , cArticle, cBookA, cBookE, cBooklet
   , cInBookACP, cInBookECP, cInBookAC, cInBookEC, cInBookAP, cInBookEP
@@ -270,3 +272,7 @@ year = Year
 -- | Smart field constructor
 pages :: [Int] -> CiteField
 pages = Pages
+
+-- | Smart field constructor
+month :: Month -> CiteField
+month = Month

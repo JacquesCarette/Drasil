@@ -1,7 +1,7 @@
 module Data.Drasil.Concepts.Documentation where
 
 import Prelude hiding (id)
-import Language.Drasil
+import Language.Drasil hiding (organization)
 
 import Data.Drasil.Concepts.Math (graph)
 import Control.Lens ((^.))

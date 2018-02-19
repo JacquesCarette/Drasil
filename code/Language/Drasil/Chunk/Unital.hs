@@ -10,7 +10,7 @@ module Language.Drasil.Chunk.Unital
   , ucsWS
   ) where
 
-import Control.Lens (makeLenses)
+import Control.Lens (makeLenses, view)
 import Prelude hiding (id)
 import Language.Drasil.Chunk (Chunk(..))
 import Language.Drasil.Chunk.NamedIdea (NamedIdea(..),Idea(..))
@@ -39,7 +39,7 @@ instance Concept UnitalChunk where
 instance HasSpace UnitalChunk where typ = con . typ
 instance HasSymbol UnitalChunk where symbol st (UC c _ ) = symbol st c
 instance Quantity UnitalChunk where getUnit = Just . unit
-instance Unitary UnitalChunk where unit (UC _ u) = u
+instance Unitary UnitalChunk where unit = view uni
   
 --{BEGIN HELPER FUNCTIONS}--
 

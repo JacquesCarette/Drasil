@@ -15,7 +15,7 @@ sspCitations = [chen2005, parnas1986, koothoor2013,
 
 chen2005, fredlund1977, stolle2008, li2010 :: Citation
 --See Language.Drasil.People for all person constructors
-chen2005 = Article $ [
+chen2005 = Citation Article $ [
   Author [qhQian, dyZhu, cfLee, grChen],
   Title $ S "A concise algorithm for computing the" +:+
           phrase fs_concept +:+ S "using the" +:+
@@ -24,7 +24,7 @@ chen2005 = Article $ [
   Pages (272,278)] ++
   journalCGJ 42 1
 
-fredlund1977 = Article $ [
+fredlund1977 = Citation Article $ [
   Author [dgFredlund, jKrahn],
   Title $ S "Comparison of slope stability methods of"
           +:+ phrase analysis,
@@ -32,7 +32,7 @@ fredlund1977 = Article $ [
   Pages (429,439)] ++
   journalCGJ 14 3
 
-stolle2008 = Article $ [
+stolle2008 = Citation Article $ [
   Author [dStolle, pGuo],
   Title $ S "Limit equilibrum" +:+ phrase ssa +:+
           S "using rigid finite elements",
@@ -40,7 +40,7 @@ stolle2008 = Article $ [
   Pages (653,662)] ++
   journalCGJ 45 5
 
-li2010 = Article $ [
+li2010 = Citation Article $ [
   Author [yCLi, ymChen, tltZhan, ssLing, pjCleall],
   Title $ S "An efficient approach for locating the" +:+
           phrase crtSlpSrf +:+ S "in" +:+ plural ssa +:+

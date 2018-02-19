@@ -22,8 +22,8 @@ module Language.Drasil (
   , (^:), (/:), (*:), new_unit
   -- Chunk
   , Chunk(..), VarChunk(..), ConceptChunk
-  , makeVC, makeVC', vc, makeVCObj, SymbolForm
-  , dcc, dccWDS, dccWDS', cv, dcc', vc', vc'', ccs, cc, cc', makeVC''
+  , vc, makeVCObj
+  , dcc, dcc', dccWDS, dccWDS', cv, vc', vc'', ccs, cc, cc', implVar
   -- Chunk.Concept
   , Concept, cw, Definition(defn), ConceptDomain(cdom)
   -- Chunk.CommonIdea
@@ -44,8 +44,7 @@ module Language.Drasil (
   -- Chunk.Eq
   , QDefinition(..), fromEqn, fromEqn', fromEqn'', getVC, equat
   -- Chunk.Quantity
-  , Quantity(..), QuantityDict, qw, ConVar(..), cvR, cvRs
-  , symbol
+  , Quantity(..), QuantityDict, qw, ConVar(..)
   -- Chunk.UncertainQuantity
   , UncertainQuantity(..), UncertainChunk(..), UncertQ, uq, uqNU, uqc, uqcNU, uqcND, uncrtnChunk, uvc
   , uncrtnw
@@ -65,6 +64,7 @@ module Language.Drasil (
   , HasAttributes, Derivation, getDerivation
   --Citations
   , BibRef, City, State, Citation(..), CiteField(..), Month(..), getAuthors, getYear
+  , CitationKind(..)
   -- Spec
   , USymb(..), Sentence(..), Accent(..), sParen, sParenNum, sSqBr, sSqBrNum
   , (+:+), (+:+.), (+.), sC, (+:), semiCol, sParenDash
@@ -89,7 +89,8 @@ module Language.Drasil (
   , cA, cB, cC, cD, cE, cF, cG, cH, cI, cJ, cK, cL, cM, cN, cO, cP, cQ, cR, cS, cT, cU, cV, cW, cX, cY, cZ
   , lA, lB, lC, lD, lE, lF, lG, lH, lI, lJ, lK, lL, lM, lN, lO, lP, lQ, lR, lS, lT, lU, lV, lW, lX, lY, lZ
   -- Misc
-  , mkTable, unit'2Contents, unit_symb, introduceAbb, phrase, plural, phrase's, plural's, unitHidingUnitless
+  , mkTable, unit'2Contents, unit_symb, introduceAbb, phrase, plural, phrase's, plural's
+  , unitHidingUnitless
   -- Printing.Helpers
   , capitalize, paren, sqbrac
   -- Generate
@@ -110,8 +111,7 @@ module Language.Drasil (
   -- Chunk.Theory
   , Theory(..), tc', TheoryChunk, TheoryModel, tm, tw
   -- Chunk.SymbolForm
-  , SymbolChunk, sc, ssc, ssc', Stage(Equational,Implementation), StagedSymbolChunk
-  , eqSymb, codeSymb , ssc'', hasStageSymbol
+  , Stage(Equational,Implementation), HasSymbol(symbol), eqSymb, codeSymb, hasStageSymbol
   -- Code.Imperative.Lang
   , Lang(..)
   -- ChunkDB
@@ -150,7 +150,7 @@ import Language.Drasil.Chunk.Attribute
 import Language.Drasil.Chunk.Attribute.Derivation (Derivation)
 import Language.Drasil.Chunk.NamedIdea
 import Language.Drasil.Chunk.Concept
-import Language.Drasil.Chunk.SymbolForm hiding (symbol)
+import Language.Drasil.Chunk.SymbolForm
 import Language.Drasil.Chunk.CommonIdea
 import Language.Drasil.Chunk.VarChunk
 import Language.Drasil.Chunk.Quantity

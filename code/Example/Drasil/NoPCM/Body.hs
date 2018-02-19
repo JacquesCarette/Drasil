@@ -32,13 +32,14 @@ import Drasil.SWHS.GenDefs (swhsGenDefs, nwtnCooling, rocTempSimp)
 import Drasil.SWHS.IMods (heatEInWtr)
 import Drasil.NoPCM.IMods (eBalanceOnWtr)
 import Drasil.NoPCM.Unitals (temp_init)
-import Drasil.SWHS.References (ref2, ref3, ref4, ref5, ref6)
+import Drasil.SWHS.References (ref2, ref3, ref4)
 import Drasil.SWHS.Requirements (s5_2)
 import Drasil.SWHS.LikelyChanges (likeChg2, likeChg3, likeChg6)
 
 import Data.Drasil.People (thulasi)
 import Data.Drasil.Utils (enumSimple, getES, refFromType,
   itemRefToSent, makeTMatrix, itemRefToSent, weave)
+import Data.Drasil.Citations (parnas1986, smithLai2005)
 
 import Data.Drasil.Concepts.Documentation (datumConstraint, inModel,
   requirement, section_, traceyGraph, item, assumption, dataDefn,
@@ -1006,4 +1007,4 @@ s8 = valsOfAuxConstantsF progName specParamValList
 -- s9_refs = mkRefsList 1 $ map foldlsC s9_refList
 
 s9_refList :: BibRef
-s9_refList = [ref2, ref3, ref4, ref5, ref6]
+s9_refList = [ref2, ref3, ref4, parnas1986, smithLai2005]

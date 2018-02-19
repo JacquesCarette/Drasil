@@ -46,32 +46,32 @@ one = Atomic "1"
 two = Atomic "2"  
 
 v_y_2, v_y_1, v_x_2, v_x_1, v_x :: VarChunk
-v_y_1  = makeVC' "v_y_1"    (nounPhraseSP "y1")   (sub lY one)
-v_y_2  = makeVC' "v_y_2"    (nounPhraseSP "y2")   (sub lY two)
-v_x_1  = makeVC' "v_x_1"    (nounPhraseSP "x1")   (sub lX one)
-v_x_2  = makeVC' "v_x_2"    (nounPhraseSP "x2")   (sub lX two)
-v_x    = makeVC' "v_x"      (nounPhraseSP "x")    lX -- = params.wtnt from mainFun.py
+v_y_1  = implVar "v_y_1"    (nounPhraseSP "y1")   (sub lY one) Real
+v_y_2  = implVar "v_y_2"    (nounPhraseSP "y2")   (sub lY two) Real
+v_x_1  = implVar "v_x_1"    (nounPhraseSP "x1")   (sub lX one) Real
+v_x_2  = implVar "v_x_2"    (nounPhraseSP "x2")   (sub lX two) Real
+v_x    = implVar "v_x"      (nounPhraseSP "x")    lX           Real -- = params.wtnt from mainFun.py
 
 v_v, v_x_z_1, v_y_z_1, v_x_z_2, v_y_z_2, v_mat, v_col,
   v_i, v_j, v_k, v_z, v_z_array, v_y_array, v_x_array, v_y, v_arr, v_filename :: VarChunk
-v_v       = makeVC' "v_v"          (nounPhraseSP "v")       lV
-v_i       = makeVC'' "v_i"          (nounPhraseSP "i")       lI  Natural
-v_j       = makeVC'' "v_j"          (nounPhraseSP "j")       lJ  Natural
-v_k       = makeVC'' "v_k"          (nounPhraseSP "k")       (sub lK two) Natural -- k breaks things until we start using ids
+v_v       = implVar "v_v"          (nounPhraseSP "v")       lV  Real
+v_i       = implVar "v_i"          (nounPhraseSP "i")       lI  Natural
+v_j       = implVar "v_j"          (nounPhraseSP "j")       lJ  Natural
+v_k       = implVar "v_k"          (nounPhraseSP "k")       (sub lK two) Natural -- k breaks things until we start using ids
                                                                           -- in codegen (after refactor end of August)
-v_z       = makeVC' "v_z"          (nounPhraseSP "z")       lZ
-v_z_array = makeVC'' "v_z_array" (nounPhraseSP "z_array") (sub lZ (Atomic "array")) (Vect Real)
-v_y_array = makeVC'' "v_y_array" (nounPhraseSP "y_array") (sub lY (Atomic "array")) (Vect $ Vect Real)
-v_x_array = makeVC'' "v_x_array" (nounPhraseSP "x_array") (sub lX (Atomic "array")) (Vect $ Vect Real)
-v_y       = makeVC' "v_y"          (nounPhraseSP "y")       lY
-v_arr     = makeVC'' "v_arr"        (nounPhraseSP "arr")     (Atomic "arr") (Vect Real)--FIXME: temporary variable for indInSeq?
-v_x_z_1   = makeVC'' "v_x_z_1"   (nounPhraseSP "x_z_1")     (sub lX (sub lZ one)) (Vect Real)
-v_y_z_1   = makeVC'' "v_y_z_1"   (nounPhraseSP "y_z_1")     (sub lY (sub lZ one)) (Vect Real)
-v_x_z_2   = makeVC'' "v_x_z_2"   (nounPhraseSP "x_z_2")     (sub lX (sub lZ two)) (Vect Real)
-v_y_z_2   = makeVC'' "v_y_z_2"   (nounPhraseSP "y_z_2")     (sub lY (sub lZ two)) (Vect Real)
-v_mat     = makeVC'' "v_mat"     (nounPhraseSP "mat")       (Atomic "mat") (Vect $ Vect Real)
-v_col     = makeVC'' "v_col"     (nounPhraseSP "col")       (Atomic "col") (Vect Real)
-v_filename= makeVC'' "v_filename" (nounPhraseSP "filename") (Atomic "filename") String
+v_z       = implVar "v_z"          (nounPhraseSP "z")       lZ  Real
+v_z_array = implVar "v_z_array" (nounPhraseSP "z_array") (sub lZ (Atomic "array")) (Vect Real)
+v_y_array = implVar "v_y_array" (nounPhraseSP "y_array") (sub lY (Atomic "array")) (Vect $ Vect Real)
+v_x_array = implVar "v_x_array" (nounPhraseSP "x_array") (sub lX (Atomic "array")) (Vect $ Vect Real)
+v_y       = implVar "v_y"          (nounPhraseSP "y")       lY Real
+v_arr     = implVar "v_arr"        (nounPhraseSP "arr")     (Atomic "arr") (Vect Real)--FIXME: temporary variable for indInSeq?
+v_x_z_1   = implVar "v_x_z_1"   (nounPhraseSP "x_z_1")     (sub lX (sub lZ one)) (Vect Real)
+v_y_z_1   = implVar "v_y_z_1"   (nounPhraseSP "y_z_1")     (sub lY (sub lZ one)) (Vect Real)
+v_x_z_2   = implVar "v_x_z_2"   (nounPhraseSP "x_z_2")     (sub lX (sub lZ two)) (Vect Real)
+v_y_z_2   = implVar "v_y_z_2"   (nounPhraseSP "y_z_2")     (sub lY (sub lZ two)) (Vect Real)
+v_mat     = implVar "v_mat"     (nounPhraseSP "mat")       (Atomic "mat") (Vect $ Vect Real)
+v_col     = implVar "v_col"     (nounPhraseSP "col")       (Atomic "col") (Vect Real)
+v_filename= implVar "v_filename" (nounPhraseSP "filename") (Atomic "filename") String
 
 linInterp :: Func
 linInterp = funcDef "lin_interp" [v_x_1, v_y_1, v_x_2, v_y_2, v_x] Real 

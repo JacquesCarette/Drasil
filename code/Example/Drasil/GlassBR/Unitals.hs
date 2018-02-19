@@ -205,10 +205,10 @@ glassBRUnitless = [risk_fun, is_safe1, is_safe2, stressDistFac, sdf_tol,
 aspectR, risk_fun, is_safe1, is_safe2, stressDistFac, sdf_tol,
   dimlessLoad, tolLoad, lRe, loadSF, gTF, lDurFac, nonFactorL :: VarChunk
 
-aspectR       = makeVC "aspectR"     (aR ^. term) (Atomic "AR")
+aspectR       = vc "aspectR"     (aR ^. term) (Atomic "AR") Real
 
-dimlessLoad   = makeVC "dimlessLoad" (nounPhraseSP "dimensionless load") 
-  (hat lQ)
+dimlessLoad   = vc "dimlessLoad" (nounPhraseSP "dimensionless load")
+  (hat lQ) Real
 
 gTF           = vc "gTF"             (glassTypeFac ^. term) (Atomic "GTF") Integer
 
@@ -228,17 +228,17 @@ lRe           = vc'' (lResistance) (Atomic "LR") Real
 
 nonFactorL    = vc'' (nonFactoredL) (Atomic "NFL") Real
 
-risk_fun      = makeVC "risk_fun"    (nounPhraseSP "risk of failure") cB
+risk_fun      = vc "risk_fun"    (nounPhraseSP "risk of failure") cB Real
 
-sdf_tol       = makeVC "sdf_tol"     (nounPhraseSP $ "stress distribution" ++
+sdf_tol       = vc "sdf_tol"     (nounPhraseSP $ "stress distribution" ++
   " factor (Function) based on Pbtol") 
-  (sub (eqSymb stressDistFac) (Atomic "tol"))
+  (sub (eqSymb stressDistFac) (Atomic "tol")) Real
 
-stressDistFac = makeVC "stressDistFac" (nounPhraseSP $ "stress distribution" 
-  ++ " factor (Function)") cJ
+stressDistFac = vc "stressDistFac" (nounPhraseSP $ "stress distribution" 
+  ++ " factor (Function)") cJ Real
 
-tolLoad       = makeVC "tolLoad"       (nounPhraseSP "tolerable load")
-  (sub (eqSymb dimlessLoad) (Atomic "tol"))
+tolLoad       = vc "tolLoad"       (nounPhraseSP "tolerable load")
+  (sub (eqSymb dimlessLoad) (Atomic "tol")) Real
 
 
 terms :: [ConceptChunk]

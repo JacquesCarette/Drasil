@@ -10,7 +10,8 @@ import Language.Drasil.Chunk.Eq
 import Language.Drasil.Chunk.ExprRelat (relat)
 import Language.Drasil.Chunk.NamedIdea (term, short, getA)
 import Language.Drasil.Chunk.Concept (defn)
-import Language.Drasil.Chunk.Quantity (Quantity(..), eqSymb)
+import Language.Drasil.Chunk.Quantity (Quantity(..))
+import Language.Drasil.Chunk.SymbolForm (eqSymb)
 import Language.Drasil.ChunkDB (HasSymbolTable(..), getUnitLup, symbLookup)
 import Language.Drasil.Expr.Extract
 import Language.Drasil.Config (verboseDDDescription)
@@ -20,7 +21,7 @@ import Language.Drasil.Misc (unit'2Contents)
 import Language.Drasil.SymbolAlphabet (lD)
 import Language.Drasil.NounPhrase (phrase, titleize)
 import Language.Drasil.Unit (usymb)
-import Language.Drasil.Citations (Citation(..),CiteField(..))
+import Language.Drasil.Citations (Citation(..),CiteField(..),CitationKind(..))
 
 import Control.Lens ((^.))
 
@@ -193,12 +194,12 @@ lay (Bib bib)           sm = H.Bib $ map (flip layCite sm) bib
 
 -- | For importing bibliography
 layCite :: HasSymbolTable s => Citation -> s -> H.Citation
-layCite (Book      fields) sm = H.Book      $ map (flip layField sm) fields
-layCite (Article   fields) sm = H.Article   $ map (flip layField sm) fields
-layCite (MThesis   fields) sm = H.MThesis   $ H.Thesis H.M   : map (flip layField sm) fields
-layCite (PhDThesis fields) sm = H.PhDThesis $ H.Thesis H.PhD : map (flip layField sm) fields
-layCite (Misc      fields) sm = H.Misc      $ map (flip layField sm) fields
-layCite (Online    fields) sm = H.Online    $ map (flip layField sm) fields
+layCite (Citation Book      fields) sm = H.Book      $ map (flip layField sm) fields
+layCite (Citation Article   fields) sm = H.Article   $ map (flip layField sm) fields
+layCite (Citation MThesis   fields) sm = H.MThesis   $ H.Thesis H.M   : map (flip layField sm) fields
+layCite (Citation PhDThesis fields) sm = H.PhDThesis $ H.Thesis H.PhD : map (flip layField sm) fields
+layCite (Citation Misc      fields) sm = H.Misc      $ map (flip layField sm) fields
+layCite (Citation Online    fields) sm = H.Online    $ map (flip layField sm) fields
 
 layField :: HasSymbolTable s => CiteField -> s -> H.CiteField
 layField (Author     p)   _ = H.Author     p

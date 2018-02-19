@@ -19,7 +19,6 @@ module Data.Drasil.Utils
   , weave
   , fmtU
   , unwrap
-  , fmtBF
   , symbolMapFun
   , fterms , fterm
   , mkDataDef, mkDataDef'
@@ -94,15 +93,8 @@ fmtUS num units  = num +:+ units
 fmtU :: (Quantity a) => Sentence -> a -> Sentence
 fmtU n u  = n +:+ (unwrap $ getUnit u)
 
--- | takes a chunk and a list of binary operator contraints to make an expression (Sentence)
--- ex. fmtBF x [((:>),0), ((:<),1)] -> x>0 and x<1
-fmtBF ::(SymbolForm a) => a -> [(Expr -> Expr -> Expr, Expr)] -> Sentence
-fmtBF _ []      = S "None"  
-fmtBF symb [(f,num)]  = E ((C symb) `f` num)
-fmtBF symb ((f,num):xs) = (E ((C symb) `f` num)) +:+ S "and" +:+ (fmtBF symb xs)
-
 -- | gets symbol from chunk
-getS :: (Quantity a) => Stage -> a -> Sentence
+getS :: (HasSymbol a) => Stage -> a -> Sentence
 getS st = P . symbol st
 
 getES, getCS :: Quantity q => q -> Sentence

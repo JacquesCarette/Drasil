@@ -190,14 +190,14 @@ swhsUnitless = [uNormalVect, surface, eta, melt_frac]
 
 eta, melt_frac :: ConVar
 
-eta = cvR (dcc "eta" (nounPhraseSP "ODE parameter")
+eta = cv (dcc "eta" (nounPhraseSP "ODE parameter")
   "Derived parameter based on rate of change of temperature of water")
-  (Greek Eta_L)
+  (Greek Eta_L) Real
 
-melt_frac = cvR (dcc "melt_frac" (nounPhraseSP "melt fraction")
+melt_frac = cv (dcc "melt_frac" (nounPhraseSP "melt fraction")
   "Ratio of thermal energy to amount of mass melted")
   --FIXME: Not sure if definition is exactly correct
-  (Greek Phi_L)
+  (Greek Phi_L) Real
 
 -----------------
 -- Constraints --

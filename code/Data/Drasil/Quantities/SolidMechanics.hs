@@ -16,4 +16,4 @@ nrmStrss = uc CSM.nrmStrss (Greek Sigma_L) pascal
 
 poissnsR :: ConVar
 
-poissnsR = cvR CSM.poissnsR (Greek Nu_L)
+poissnsR = cv CSM.poissnsR (Greek Nu_L) Real

@@ -14,7 +14,7 @@ import Data.Drasil.Software.Products (sciCompS)
 
 koothoor2013, parnas1986, smithLai2005 :: Citation
 
-koothoor2013 = MThesis [
+koothoor2013 = Citation MThesis [
   Author [nKoothoor],
   Title $ S "A document drive approach to certifying"
           +:+ phrase sciCompS,
@@ -23,7 +23,7 @@ koothoor2013 = MThesis [
   Year 2013]
 --FIXME: Place isn't displayed in TeX?
   
-parnas1986 = Article [
+parnas1986 = Citation Article [
   Author [dParnas, pcClements],
   Title $ S "A rational design process:" +:+
           S "How and why to fake it",
@@ -34,7 +34,7 @@ parnas1986 = Article [
   Year 1986, --February, but day unknown
   Place (S "Washington", S "USA")]
 
-smithLai2005 = Article 
+smithLai2005 = Citation Article 
   [
   Author [spencerSmith, lLai],
   Title (S "A new requirements template for scientific computing"),

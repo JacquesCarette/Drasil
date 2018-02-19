@@ -257,7 +257,7 @@ mkRefSec si (RefProg c l) = section (titleize refmat) [c] (foldr (mkSubRef si) [
       (Section (titleize tOfSymb) 
       (map Con [tsIntro con, (table Equational (
          sortBy (compare `on` eqSymb) $
-         filter (hasStageSymbol Equational . getStagedS) (nub v)) at_start)])) : l'
+         filter (\q -> hasStageSymbol q Equational) (nub v)) at_start)])) : l'
     mkSubRef (SI {_concepts = cccs}) (TSymb' f con) l' = (mkTSymb cccs f con) : l'
     mkSubRef (SI {_sysinfodb = db}) TAandA l' = 
       (table_of_abb_and_acronyms $ sortBy (compare `on` (fromJust . getA)) $
@@ -268,7 +268,7 @@ mkRefSec si (RefProg c l) = section (titleize refmat) [c] (foldr (mkSubRef si) [
 mkTSymb :: (Quantity e, Concept e, Ord e) => 
   [e] -> LFunc -> [TSIntro] -> Section
 mkTSymb v f c = Section (titleize tOfSymb) (map Con [tsIntro c, 
-  table Equational (sort $ filter (hasStageSymbol Equational . getStagedS) (nub v)) (lf f)])
+  table Equational (sort $ filter (\q -> hasStageSymbol q Equational) (nub v)) (lf f)])
   where lf Term = at_start
         lf Defn = (^. defn)
         lf (TermExcept cs) = (\x -> if (x ^. id) `elem` (map (^. id) cs) then

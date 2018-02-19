@@ -1,4 +1,3 @@
-{-# LANGUAGE GADTs,Rank2Types #-}
 module Language.Drasil.Chunk.NamedIdea (NamedIdea(..), Idea(..),
   NamedChunk, nc, IdeaDict, compoundterm, short, nw, mkIdea,
   compoundNC, compoundNC', compoundNC'', compoundNC''',
@@ -34,14 +33,11 @@ short c = maybe (phrase (c ^. term)) (\x -> x) (fmap S $ getA c)
 -- | Note that a |NamedChunk| does not have an acronym/abbreviation
 -- as that's a |CommonIdea|, which has its own representation
 data NamedChunk = NC String NP
-instance Eq NamedChunk where
-  c1 == c2 = (c1 ^. id) == (c2 ^. id)
-instance Chunk NamedChunk where
-  id f (NC a b) = fmap (\x -> NC x b) (f a)
-instance NamedIdea NamedChunk where
-  term f (NC a b) = fmap (\x -> NC a x) (f b)
-instance Idea NamedChunk where
-  getA (NC _ _) = Nothing
+
+instance Eq        NamedChunk where c1 == c2 = (c1 ^. id) == (c2 ^. id)
+instance Chunk     NamedChunk where id f (NC a b) = fmap (\x -> NC x b) (f a)
+instance NamedIdea NamedChunk where term f (NC a b) = fmap (\x -> NC a x) (f b)
+instance Idea      NamedChunk where getA (NC _ _) = Nothing
   
 -- | 'NamedChunk' constructor, takes an id and a term.
 nc :: String -> NP -> NamedChunk
@@ -50,16 +46,13 @@ nc = NC
 -- | |IdeaDict| is the canonical dictionary associated to the |Idea| class
 -- don't export the record accessors
 data IdeaDict = IdeaDict { _nc :: NamedChunk, _mabbr :: Maybe String }
-instance Eq IdeaDict where
-  a == b = a ^. id == b ^. id
-instance Ord IdeaDict where
-  compare a b = compare (a ^. id) (b ^. id) -- FIXME : this is not a good order!
-instance Chunk IdeaDict where
-  id = inc . id
-instance NamedIdea IdeaDict where
-  term = inc . term
-instance Idea IdeaDict where
-  getA (IdeaDict _ b) = b
+
+instance Eq        IdeaDict where a == b = a ^. id == b ^. id
+-- FIXME : this is not a good order!
+instance Ord       IdeaDict where compare a b = compare (a ^. id) (b ^. id) 
+instance Chunk     IdeaDict where id = inc . id
+instance NamedIdea IdeaDict where term = inc . term
+instance Idea      IdeaDict where getA (IdeaDict _ b) = b
   
 inc :: Simple Lens IdeaDict NamedChunk
 inc f (IdeaDict a b) = fmap (\x -> IdeaDict x b) (f a)
@@ -78,10 +71,8 @@ nw c = IdeaDict (NC (c^.id) (c^.term)) (getA c)
 
 -- | Combinator for combining two 'NamedIdea's into one NamedChunk.
 -- /Does not preserve abbreviations/
-compoundterm :: (NamedIdea c, NamedIdea d) => 
-  c -> d -> NamedChunk
-compoundterm t1 t2 = 
-  nc (t1^.id ++ t2^.id) (compoundPhrase (t1 ^. term) (t2 ^. term))
+compoundterm :: (NamedIdea c, NamedIdea d) => c -> d -> NamedChunk
+compoundterm t1 t2 = nc (t1^.id ++ t2^.id) (compoundPhrase (t1 ^. term) (t2 ^. term))
 
 -- | Combinator for combining two 'NamedChunk's into one.
 -- /Does not preserve abbreviations/

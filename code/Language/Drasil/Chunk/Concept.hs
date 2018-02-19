@@ -1,4 +1,4 @@
-{-# Language Rank2Types, TemplateHaskell, FlexibleInstances #-}
+{-# Language TemplateHaskell, FlexibleInstances #-}
 module Language.Drasil.Chunk.Concept 
   ( ConceptChunk, dcc, dcc', dccWDS, dccWDS', cc, cc', ccs
   , cw, DefnAndDomain(DAD)

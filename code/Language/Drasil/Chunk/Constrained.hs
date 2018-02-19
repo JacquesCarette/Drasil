@@ -1,4 +1,4 @@
-{-# Language GADTs, Rank2Types, TemplateHaskell #-}
+{-# Language GADTs, TemplateHaskell #-}
 module Language.Drasil.Chunk.Constrained (
     Constrained(..)
   , Constraint(..), ConstraintReason(..)
@@ -10,9 +10,10 @@ module Language.Drasil.Chunk.Constrained (
   , Reason(..), TheoryConstraint(..)
   ) where
 
-import Control.Lens (Lens', (^.), set, makeLenses)
+import Control.Lens (Lens', (^.), makeLenses)
 import Language.Drasil.Expr (Expr(..), RealInterval(..), Relation, Inclusive(..),
   ($<), ($<=), ($>), ($>=))
+import Language.Drasil.Chunk.ConVar
 import Language.Drasil.Chunk.Quantity
 import Language.Drasil.Chunk.NamedIdea
 import Language.Drasil.Chunk.Unitary
@@ -35,7 +36,7 @@ class Quantity c => Constrained c where
   reasVal     :: Lens' c (Maybe Expr)
 
 data Reason = Invariant | AssumedCon
-data TheoryConstraint = 
+data TheoryConstraint =
   TCon Reason Relation -- AssumedCon are constraints that come from assumptions
                        -- as opposed to theory invariants.
                        -- This might be an artificial distinction as they may be "the same"
@@ -45,7 +46,7 @@ data Constraint where
   Range          :: ConstraintReason -> RealInterval -> Constraint
   EnumeratedReal :: ConstraintReason -> [Double]     -> Constraint
   EnumeratedStr  :: ConstraintReason -> [String]     -> Constraint
- 
+
 -- by default, physical and software constraints are ranges
 physc :: RealInterval -> Constraint
 physc = Range Physical
@@ -56,7 +57,7 @@ sfwrc = Range Software
 -- but also for enumeration of values; right now, always physical
 enumc :: [Double] -> Constraint
 enumc = EnumeratedReal Physical
- 
+
 -- helpful for filtering for Physical / Software constraints
 isPhysC, isSfwrC :: Constraint -> Bool
 isPhysC (Range Physical _) = True
@@ -85,81 +86,68 @@ renderRealInt s (UpTo (Exc a))    = C s $< a
 renderRealInt s (UpFrom (Inc a))  = C s $>= a
 renderRealInt s (UpFrom (Exc a))  = C s $>  a
 
--- | ConstrainedChunks are 'Symbolic Quantities' 
+-- | ConstrainedChunks are 'Symbolic Quantities'
 -- with 'Constraints' and maybe typical value
 data ConstrainedChunk = ConstrainedChunk {
   _qd :: QuantityDict, _constr :: [Constraint], _reasV :: Maybe Expr}
 makeLenses ''ConstrainedChunk
 
-instance Chunk ConstrainedChunk where id = qd . id
-instance NamedIdea ConstrainedChunk where term = qd . term
-instance Idea ConstrainedChunk where getA (ConstrainedChunk n _ _) = getA n
-instance HasSpace ConstrainedChunk where typ = qd . typ
-instance HasSymbol ConstrainedChunk where symbol s (ConstrainedChunk c _ _) = symbol s c
-instance Quantity ConstrainedChunk where getUnit (ConstrainedChunk c _ _) = getUnit c
+instance Chunk       ConstrainedChunk where id = qd . id
+instance NamedIdea   ConstrainedChunk where term = qd . term
+instance Idea        ConstrainedChunk where getA (ConstrainedChunk n _ _) = getA n
+instance HasSpace    ConstrainedChunk where typ = qd . typ
+instance HasSymbol   ConstrainedChunk where symbol s (ConstrainedChunk c _ _) = symbol s c
+instance Quantity    ConstrainedChunk where getUnit (ConstrainedChunk c _ _) = getUnit c
 instance Constrained ConstrainedChunk where
   constraints = constr
   reasVal     = reasV
-instance Eq ConstrainedChunk where
-  (ConstrainedChunk c1 _ _) == (ConstrainedChunk c2 _ _) = (c1 ^. id) == (c2 ^. id)
+instance Eq          ConstrainedChunk where c1 == c2 = (c1 ^. qd . id) == (c2 ^. qd . id)
 
 -- | Creates a constrained chunk from a symbolic quantity
-constrained :: (Quantity c) => c 
-                -> [Constraint] -> Expr -> ConstrainedChunk
+constrained :: (Quantity c) => c -> [Constraint] -> Expr -> ConstrainedChunk
 constrained q cs ex = ConstrainedChunk (qw q) cs (Just ex)
-  
--- | Creates a constrained unitary  
+
+-- | Creates a constrained unitary
 cuc :: Unit u => String -> NP -> Symbol -> u
                 -> Space -> [Constraint] -> Expr -> ConstrainedChunk
-cuc i t s u space cs rv = 
+cuc i t s u space cs rv =
   ConstrainedChunk (qw $ unitary i t s (unitWrapper u) space) cs (Just rv)
 
 -- | Creates a constrained varchunk
-cvc :: String -> NP -> Symbol -> Space 
-       -> [Constraint] -> Expr -> ConstrainedChunk
-cvc i des sym space cs rv = 
-  ConstrainedChunk (qw $ vc i des sym space) cs (Just rv)
-  
-  
-  
--- | ConstrConcepts are 'Conceptual Symbolic Quantities' 
+cvc :: String -> NP -> Symbol -> Space -> [Constraint] -> Expr -> ConstrainedChunk
+cvc i des sym space cs rv = ConstrainedChunk (qw $ vc i des sym space) cs (Just rv)
+
+
+-- | ConstrConcepts are 'Conceptual Symbolic Quantities'
 -- with 'Constraints' and maybe a reasonable value
-data ConstrConcept where
-  ConstrConcept :: (Quantity c, Concept c) => c 
-                        -> [Constraint] -> Maybe Expr -> ConstrConcept
+data ConstrConcept = ConstrConcept { _convar :: ConVar, 
+  _constr' :: [Constraint], _reasV' :: Maybe Expr}
+makeLenses ''ConstrConcept
 
-instance Chunk ConstrConcept where id = cqslens id
-instance NamedIdea ConstrConcept where term = cqslens term
-instance Idea ConstrConcept where getA (ConstrConcept n _ _) = getA n
-instance HasSpace ConstrConcept where typ = cqslens typ
-instance HasSymbol ConstrConcept where symbol s (ConstrConcept c _ _) = symbol s c
-instance Quantity ConstrConcept where getUnit (ConstrConcept c _ _) = getUnit c
-instance Definition ConstrConcept where defn = cqslens defn
-instance ConceptDomain ConstrConcept where cdom = cqslens cdom
-instance Concept ConstrConcept where
-instance Constrained ConstrConcept where
-  constraints f (ConstrConcept a b c) = fmap (\x -> ConstrConcept a x c) (f b)
-  reasVal f (ConstrConcept a b c) = fmap (\x -> ConstrConcept a b x) (f c)
-instance Eq ConstrConcept where
-  (ConstrConcept c1 _ _) == (ConstrConcept c2 _ _) = (c1 ^. id) == (c2 ^. id)
+instance Chunk         ConstrConcept where id = convar . id
+instance NamedIdea     ConstrConcept where term = convar . term
+instance Idea          ConstrConcept where getA (ConstrConcept n _ _) = getA n
+instance HasSpace      ConstrConcept where typ = convar . typ
+instance HasSymbol     ConstrConcept where symbol s (ConstrConcept c _ _) = symbol s c
+instance Quantity      ConstrConcept where getUnit (ConstrConcept c _ _) = getUnit c
+instance Definition    ConstrConcept where defn = convar . defn
+instance ConceptDomain ConstrConcept where cdom = convar . cdom
+instance Concept       ConstrConcept where
+instance Constrained   ConstrConcept where
+  constraints  = constr'
+  reasVal      = reasV'
+instance Eq            ConstrConcept where c1 == c2 = (c1 ^.convar.id) == (c2 ^.convar.id)
 
-cqslens :: (forall c. (Quantity c, Concept c) => Lens' c a)
-           -> Lens' ConstrConcept a
-cqslens l f (ConstrConcept a b c) = 
-  fmap (\x -> ConstrConcept (set l x a) b c) (f (a ^. l))
-  
-constrained' :: (Quantity c, Concept c) => c 
-                 -> [Constraint] -> Expr -> ConstrConcept
-constrained' q cs rv = ConstrConcept q cs (Just rv)
+constrained' :: (Quantity c, Concept c) => c -> [Constraint] -> Expr -> ConstrConcept
+constrained' q cs rv = ConstrConcept (makeCV q) cs (Just rv)
 
-constrainedNRV' :: (Quantity c, Concept c) => c 
-                 -> [Constraint] -> ConstrConcept
-constrainedNRV' q cs = ConstrConcept q cs Nothing
-  
-cuc' :: (Unit u) => String -> NP -> String -> Symbol -> u 
+constrainedNRV' :: (Quantity c, Concept c) => c -> [Constraint] -> ConstrConcept
+constrainedNRV' q cs = ConstrConcept (makeCV q) cs Nothing
+
+cuc' :: (Unit u) => String -> NP -> String -> Symbol -> u
                   -> Space -> [Constraint] -> Expr -> ConstrConcept
-cuc' nam trm desc sym un space cs rv = 
-  ConstrConcept (ucs nam trm desc sym un space) cs (Just rv)
+cuc' nam trm desc sym un space cs rv =
+  ConstrConcept (makeCV $ ucs nam trm desc sym un space) cs (Just rv)
 
 cnstrw :: Constrained c => c -> ConstrainedChunk
 cnstrw c = ConstrainedChunk (qw c) (c ^. constraints) (c ^. reasVal)

@@ -29,12 +29,9 @@ instance HasSpace  VarChunk where typ f (VC n s t) = fmap (\x -> VC n s x) (f t)
 instance Quantity  VarChunk where getUnit _  = Nothing
   
 
--- the code generation system needs VC to have a type (for now)
--- Setting all varchunks to have Real type so it compiles
--- | Creates a VarChunk from an id, term, and symbol. Assumes Real 'Space'
--- Needs to be removed
-makeVC'' :: String -> NP -> Symbol -> Space -> VarChunk
-makeVC'' i des sym ty = vcSt i des f ty
+-- | implVar makes an variable that is implementation-only
+implVar :: String -> NP -> Symbol -> Space -> VarChunk
+implVar i des sym ty = vcSt i des f ty
   where
     f :: Stage -> Symbol
     f Implementation = sym
@@ -44,6 +41,7 @@ makeVC'' i des sym ty = vcSt i des f ty
 vc :: String -> NP -> Symbol -> Space -> VarChunk
 vc i des sym space = VC (nw $ nc i des) (\_ -> sym) space
 
+-- | Like cv, but creates a VarChunk from something that knows about stages
 vcSt :: String -> NP -> (Stage -> Symbol) -> Space -> VarChunk
 vcSt i des sym space = VC (nw $ nc i des) sym space
 

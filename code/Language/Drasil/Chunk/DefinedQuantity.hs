@@ -1,4 +1,4 @@
-{-# LANGUAGE GADTs, Rank2Types, TemplateHaskell #-}
+{-# LANGUAGE TemplateHaskell #-}
 
 module Language.Drasil.Chunk.DefinedQuantity
   ( cqs, DefinedQuantityDict

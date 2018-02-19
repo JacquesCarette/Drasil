@@ -20,13 +20,13 @@ htInputs = map qw htVars
 htOutputs = map qw hghcVars
 
 cladThick, coolFilmCond, gapFilmCond, cladCond :: VarChunk
-cladThick    = makeVC "cladThick"    (cn''' "clad thickness")
-  ((Greek Tau_L) `sub` lC)
-coolFilmCond = makeVC "coolFilmCond" (cn' "initial coolant film conductance")
-  (lH `sub` lB)
-gapFilmCond  = makeVC "gapFilmCond"  (cn' "initial gap film conductance")
-  (lH `sub` lP)
-cladCond     = makeVC "cladCond"     (cnIES "clad conductivity") (lK `sub` lC)
+cladThick    = vc "cladThick"    (cn''' "clad thickness")
+  ((Greek Tau_L) `sub` lC) Real
+coolFilmCond = vc "coolFilmCond" (cn' "initial coolant film conductance")
+  (lH `sub` lB) Real
+gapFilmCond  = vc "gapFilmCond"  (cn' "initial gap film conductance")
+  (lH `sub` lP) Real
+cladCond     = vc "cladCond"     (cnIES "clad conductivity") (lK `sub` lC) Real
 
 htTransCladCool_eq, htTransCladFuel_eq :: Expr
 htTransCladCool, htTransCladFuel :: QDefinition

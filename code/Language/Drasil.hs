@@ -22,7 +22,7 @@ module Language.Drasil (
   , (^:), (/:), (*:), new_unit
   -- Chunk
   , Chunk(..), VarChunk(..), ConceptChunk
-  , makeVC, makeVC', vc, makeVCObj
+  , makeVC', vc, makeVCObj
   , dcc, dcc', dccWDS, dccWDS', cv, vc', vc'', ccs, cc, cc', makeVC''
   -- Chunk.Concept
   , Concept, cw, Definition(defn), ConceptDomain(cdom)

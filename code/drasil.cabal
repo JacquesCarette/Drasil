@@ -88,6 +88,7 @@ library
     , Language.Drasil.Chunk.Attribute
     , Language.Drasil.Chunk.Attribute.Derivation
     , Language.Drasil.Chunk.Change
+    , Language.Drasil.Chunk.Citation
     , Language.Drasil.Chunk.Code
     , Language.Drasil.Chunk.CommonIdea
     , Language.Drasil.Chunk.Concept

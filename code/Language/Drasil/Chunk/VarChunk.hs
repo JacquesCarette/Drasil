@@ -33,9 +33,6 @@ instance Quantity  VarChunk where getUnit _  = Nothing
 -- Setting all varchunks to have Real type so it compiles
 -- | Creates a VarChunk from an id, term, and symbol. Assumes Real 'Space'
 -- Needs to be removed
-makeVC' :: String -> NP -> Symbol -> VarChunk
-makeVC' i des sym = makeVC'' i des sym Real
-
 makeVC'' :: String -> NP -> Symbol -> Space -> VarChunk
 makeVC'' i des sym ty = vcSt i des f ty
   where

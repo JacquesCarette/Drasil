@@ -1,4 +1,4 @@
-{-# Language GADTs, Rank2Types #-}
+{-# Language GADTs, Rank2Types, TemplateHaskell #-}
 module Language.Drasil.Chunk.Constrained (
     Constrained(..)
   , Constraint(..), ConstraintReason(..)
@@ -10,7 +10,7 @@ module Language.Drasil.Chunk.Constrained (
   , Reason(..), TheoryConstraint(..)
   ) where
 
-import Control.Lens (Simple, Lens, (^.), set)
+import Control.Lens (Lens', (^.), set, makeLenses)
 import Language.Drasil.Expr (Expr(..), RealInterval(..), Relation, Inclusive(..),
   ($<), ($<=), ($>), ($>=))
 import Language.Drasil.Chunk.Quantity
@@ -28,22 +28,11 @@ import Language.Drasil.Chunk
 
 import Prelude hiding (id)
 
-{-
-The lists of Constraints below can be implemented in multiple ways.
-For ease of writing I think having a list of functions that take
-a chunk as an expression would be the easiest to write. 
-ie. [:> 7] or [:> 0, :< C someChunk]
-Then we would infer the chunk.
-This could also be written as [\c -> C c :> 7] which would have a
-slightly different type [c -> Relation], but that is less clear.
--}
-
-
 -- | A Constrained is a 'Quantity' that has value constraints
 -- and maybe reasonable value
 class Quantity c => Constrained c where
-  constraints :: Simple Lens c [Constraint]
-  reasVal     :: Simple Lens c (Maybe Expr)
+  constraints :: Lens' c [Constraint]
+  reasVal     :: Lens' c (Maybe Expr)
 
 data Reason = Invariant | AssumedCon
 data TheoryConstraint = 
@@ -98,31 +87,22 @@ renderRealInt s (UpFrom (Exc a))  = C s $>  a
 
 -- | ConstrainedChunks are 'Symbolic Quantities' 
 -- with 'Constraints' and maybe typical value
-data ConstrainedChunk where
-  ConstrainedChunk :: QuantityDict -> [Constraint] -> Maybe Expr -> ConstrainedChunk
+data ConstrainedChunk = ConstrainedChunk {
+  _qd :: QuantityDict, _constr :: [Constraint], _reasV :: Maybe Expr}
+makeLenses ''ConstrainedChunk
 
-instance Chunk ConstrainedChunk where
-  id = qslens . id
-instance NamedIdea ConstrainedChunk where
-  term = qslens . term
-instance Idea ConstrainedChunk where
-  getA (ConstrainedChunk n _ _) = getA n
-instance HasSpace ConstrainedChunk where
-  typ = qslens . typ
-instance HasSymbol ConstrainedChunk where
-  symbol s (ConstrainedChunk c _ _) = symbol s c
-instance Quantity ConstrainedChunk where
-  getUnit (ConstrainedChunk c _ _) = getUnit c
+instance Chunk ConstrainedChunk where id = qd . id
+instance NamedIdea ConstrainedChunk where term = qd . term
+instance Idea ConstrainedChunk where getA (ConstrainedChunk n _ _) = getA n
+instance HasSpace ConstrainedChunk where typ = qd . typ
+instance HasSymbol ConstrainedChunk where symbol s (ConstrainedChunk c _ _) = symbol s c
+instance Quantity ConstrainedChunk where getUnit (ConstrainedChunk c _ _) = getUnit c
 instance Constrained ConstrainedChunk where
-  constraints f (ConstrainedChunk a b c) = fmap (\x -> ConstrainedChunk a x c) (f b)
-  reasVal     f (ConstrainedChunk a b c) = fmap (\x -> ConstrainedChunk a b x) (f c)
+  constraints = constr
+  reasVal     = reasV
 instance Eq ConstrainedChunk where
-  (ConstrainedChunk c1 _ _) == (ConstrainedChunk c2 _ _) = 
-    (c1 ^. id) == (c2 ^. id)
+  (ConstrainedChunk c1 _ _) == (ConstrainedChunk c2 _ _) = (c1 ^. id) == (c2 ^. id)
 
-qslens :: Simple Lens ConstrainedChunk QuantityDict
-qslens f (ConstrainedChunk a b c) = fmap (\x -> ConstrainedChunk x b c) (f a)
-  
 -- | Creates a constrained chunk from a symbolic quantity
 constrained :: (Quantity c) => c 
                 -> [Constraint] -> Expr -> ConstrainedChunk
@@ -163,8 +143,8 @@ instance Constrained ConstrConcept where
 instance Eq ConstrConcept where
   (ConstrConcept c1 _ _) == (ConstrConcept c2 _ _) = (c1 ^. id) == (c2 ^. id)
 
-cqslens :: (forall c. (Quantity c, Concept c) => Simple Lens c a)
-           -> Simple Lens ConstrConcept a
+cqslens :: (forall c. (Quantity c, Concept c) => Lens' c a)
+           -> Lens' ConstrConcept a
 cqslens l f (ConstrConcept a b c) = 
   fmap (\x -> ConstrConcept (set l x a) b c) (f (a ^. l))
   

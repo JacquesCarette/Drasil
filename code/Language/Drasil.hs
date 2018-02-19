@@ -44,7 +44,7 @@ module Language.Drasil (
   -- Chunk.Eq
   , QDefinition(..), fromEqn, fromEqn', fromEqn'', getVC, equat
   -- Chunk.Quantity
-  , Quantity(..), QuantityDict, qw, ConVar(..), cvR, cvRs
+  , Quantity(..), QuantityDict, qw, ConVar(..)
   -- Chunk.UncertainQuantity
   , UncertainQuantity(..), UncertainChunk(..), UncertQ, uq, uqNU, uqc, uqcNU, uqcND, uncrtnChunk, uvc
   , uncrtnw

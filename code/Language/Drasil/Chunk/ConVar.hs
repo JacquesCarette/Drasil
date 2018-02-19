@@ -1,7 +1,6 @@
 {-# LANGUAGE TemplateHaskell #-}
 module Language.Drasil.Chunk.ConVar
-  ( ConVar(CV) , cv , cvR
-  , cvRs -- Temporary identification for the the creation of a quantity with a certain type of unit.  Will eventually change to cvR.
+  ( ConVar(CV) , cv
   ) where
 
 import Language.Drasil.Chunk
@@ -39,11 +38,3 @@ instance Quantity ConVar where getUnit _ = Nothing
 -- | Constructor for 'ConVar' with explicit 'Space'
 cv :: ConceptChunk -> Symbol -> Space -> ConVar
 cv c s = CV c (\_ -> s)
-
---FIXME: Remove this hack
--- | Constructor for 'ConVar' with implied 'Language.Drasil.Space.Real' 'Space'.
-cvR :: ConceptChunk -> Symbol -> ConVar
-cvR c s = CV c (\_ -> s) Real
-
-cvRs :: ConceptChunk -> Symbol -> Space -> ConVar
-cvRs c s p = CV c (\_ -> s) p

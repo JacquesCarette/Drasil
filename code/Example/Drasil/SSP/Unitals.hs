@@ -112,11 +112,11 @@ constant_K = uqc "kappa" (cn "constant") fixme
   (Greek Kappa_L) pascal Real [] (Dbl 0) defultUncrt
 
 {-Output Variables-} --FIXME: See if there should be typical values
-fs = constrained' (cvR fs_concept (Atomic "FS")) [gtZeroConstr] (Dbl 1)
+fs = constrained' (cv fs_concept (Atomic "FS") Real) [gtZeroConstr] (Dbl 1)
 
 fs_min :: ConVar -- This is a hack to remove the use of indexing for 'min'.
-fs_min = cvR (dcc "fs_min" (cn "minimum factor of safety") 
-  ("The minimum factor of safety")) (sub (eqSymb fs) (Atomic "min"))
+fs_min = cv (dcc "fs_min" (cn "minimum factor of safety") 
+  ("The minimum factor of safety")) (sub (eqSymb fs) (Atomic "min")) Real
 -- Once things are converted to the new style of instance models, this will
 -- be removed/fixed.
 
@@ -394,43 +394,43 @@ sspUnitless = [earthqkLoadFctr, normToShear,scalFunc,
 earthqkLoadFctr, normToShear, scalFunc,
   numbSlices, minFunction, fsloc, index, varblU, varblV :: ConVar
 
-earthqkLoadFctr = cvR (dcc "K_c" (nounPhraseSP $ "earthquake load factor")
+earthqkLoadFctr = cv (dcc "K_c" (nounPhraseSP $ "earthquake load factor")
   ("proportionality factor of force that " ++
   "weight pushes outwards; caused by seismic earth movements"))
-  (sub cK lC)
+  (sub cK lC) Real
 
-normToShear = cvR (dcc "lambda"
+normToShear = cv (dcc "lambda"
   (nounPhraseSP $ "interslice normal/shear force ratio")
-  ("applied to all interslices")) (Greek Lambda_L)
+  ("applied to all interslices")) (Greek Lambda_L) Real
 
-scalFunc = cvR (dcc "f_i" (nounPhraseSP $ "scaling function")
+scalFunc = cv (dcc "f_i" (nounPhraseSP $ "scaling function")
   ("magnitude of interslice forces as a function " ++
   "of the x coordinate" ++ fisi ++ "; can be constant or a half-sine"))
-  (lF)
+  (lF) Real
 
-numbSlices = cvRs (dcc "n" (nounPhraseSP "number of slices")
+numbSlices = cv (dcc "n" (nounPhraseSP "number of slices")
   "the slip mass has been divided into")
   lN Natural
 
-minFunction = cvR (dcc "Upsilon" (nounPhraseSP "function")
+minFunction = cv (dcc "Upsilon" (nounPhraseSP "function")
   ("generic minimization function or algorithm"))
-  (Greek Upsilon)
+  (Greek Upsilon) Real
 
-fsloc = cvR (dcc "FS_loci" (nounPhraseSP "local factor of safety") fsi)
-  (sub (Atomic "FS") (Atomic "Loc,i"))
+fsloc = cv (dcc "FS_loci" (nounPhraseSP "local factor of safety") fsi)
+  (sub (Atomic "FS") (Atomic "Loc,i")) Real
 
 --------------------
 -- Index Function --
 --------------------
 
-varblU = cvRs (dcc "varblU" (nounPhraseSP "local index")
+varblU = cv (dcc "varblU" (nounPhraseSP "local index")
   ("used as a bound variable index in calculations"))
   lU Natural
-varblV = cvRs (dcc "varblV" (nounPhraseSP "local index")
+varblV = cv (dcc "varblV" (nounPhraseSP "local index")
   ("used as a bound variable index in calculations"))
   lV Natural
 
-index = cvRs (dcc "index" (nounPhraseSP "index")
+index = cv (dcc "index" (nounPhraseSP "index")
   ("used to show a quantity applies to only one slice")) lI Natural
 
 --FIXME: possibly move to Language/Drasil/Expr.hs

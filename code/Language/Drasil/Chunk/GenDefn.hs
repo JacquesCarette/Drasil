@@ -1,4 +1,4 @@
-{-# Language GADTs,Rank2Types #-}
+{-# LANGUAGE TemplateHaskell #-}
 module Language.Drasil.Chunk.GenDefn 
   ( GenDefn, gd, gdUnit
   ) where
@@ -11,38 +11,25 @@ import Language.Drasil.Chunk.ExprRelat
 import Language.Drasil.Chunk.NamedIdea
 import Language.Drasil.Chunk.Relation
 
-import Control.Lens (Simple, Lens, (^.), set)
+import Control.Lens (makeLenses, view)
 
 import Prelude hiding (id)
 
 -- | A GenDefn is a RelationConcept that may have units
-data GenDefn where
-  GD ::  RelationConcept -> Maybe UnitDefn -> Attributes -> GenDefn
+data GenDefn = GD {_rc :: RelationConcept, _mud :: Maybe UnitDefn, _att :: Attributes}
+makeLenses ''GenDefn
   
-instance Chunk GenDefn where
-  id = rcl id
-instance NamedIdea GenDefn where
-  term = rcl term
-instance Idea GenDefn where
-  getA (GD a _ _) = getA a
-instance Definition GenDefn where
-  defn = rcl defn
-instance ConceptDomain GenDefn where
-  cdom = rcl cdom
+instance Chunk GenDefn where id = rc . id
+instance NamedIdea GenDefn where term = rc . term
+instance Idea GenDefn where getA = getA . view rc
+instance Definition GenDefn where defn = rc . defn
+instance ConceptDomain GenDefn where cdom = rc . cdom
 instance Concept GenDefn where
-instance ExprRelat GenDefn where
-  relat = rcl relat
-instance HasAttributes GenDefn where
-  attributes f (GD a b c) = fmap (\x -> GD a b x) (f c)
-
-rcl :: Simple Lens RelationConcept a -> Simple Lens GenDefn a
-rcl l f (GD a b c) = fmap (\x -> GD (set l x a) b c) (f (a ^. l))
+instance ExprRelat GenDefn where relat = rc . relat
+instance HasAttributes GenDefn where attributes = att
 
 gdUnit :: GenDefn -> Maybe UnitDefn
-gdUnit (GD _ u _) = u
+gdUnit = view mud
 
 gd :: Unit u => RelationConcept -> Maybe u -> Attributes -> GenDefn
-gd r (Just u) ats = GD r (Just (unitWrapper u)) ats
-gd r Nothing ats = GD r Nothing ats
-
-
+gd r x ats = GD r (fmap unitWrapper x) ats

@@ -48,8 +48,8 @@ import Drasil.SWHS.GenDefs (swhsGenDefs)
 import Drasil.SWHS.References (ref_swhs_citations)
 import Drasil.SWHS.Assumptions (assumps_list, assump3, assump4, assump5,
   assump6, assump13, assump15, assump16, assump17, assump18)
-import Drasil.SWHS.Requirements (req1, req2, s5_1_2_Eqn1, s5_1_2_Eqn2,
-  req3, req4, req5, req6, req7, req8, req9, req10, req11, s5_2)
+import Drasil.SWHS.Requirements (req1, req2, func_req_Eqn1, func_req_Eqn2,
+  req3, req4, req5, req6, req7, req8, req9, req10, req11, non_func_req)
 import Drasil.SWHS.LikelyChanges (likeChg1, likeChg2, likeChg3, likeChg4,
   likeChg5, likeChg6)
 import Drasil.SWHS.DataDesc (swhsInputMod)
@@ -502,7 +502,7 @@ property_of_corr_sol_deriv =
 ------------------------------
 --s5
 req :: Section
-req = reqF [func_req, s5_2]
+req = reqF [func_req, non_func_req]
 
 -----------------------------------
 -- 5.1 : Functional Requirements --
@@ -514,7 +514,7 @@ func_req = SRS.funcReq func_req_list []
 --s5_1_list
 func_req_list :: [Contents]
 func_req_list = (acroNumGen [req1] 1) ++ [func_req_1_Table] ++ (acroNumGen [req2] 2) ++
-  [s5_1_2_Eqn1, s5_1_2_Eqn2] ++ (acroNumGen func_req_Reqs 3) 
+  [func_req_Eqn1, func_req_Eqn2] ++ (acroNumGen func_req_Reqs 3) 
 
 --s5_1_1_Table
 func_req_1_Table :: Contents

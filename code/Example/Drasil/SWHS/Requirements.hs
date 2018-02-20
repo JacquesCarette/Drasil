@@ -33,7 +33,9 @@ import Data.Drasil.SentenceStructures (acroIM, acroR, foldlSent, sAnd, isThe,
 -- 5.1 : Functional Requirements --
 -----------------------------------
 
-req1, req2, s5_1_2_Eqn1, s5_1_2_Eqn2, req3, req4,
+--req1, req2, s5_1_2_Eqn1, s5_1_2_Eqn2, req3, req4,
+--  req5, req6, req7, req8, req9, req10, req11
+req1, req2, func_req_Eqn1, func_req_Eqn2, req3, req4,
   req5, req6, req7, req8, req9, req10, req11 :: Contents
 
 req1 = mkRequirement "req1" $ foldlSentCol [
@@ -47,11 +49,11 @@ req2 = mkRequirement "req2" $ foldlSentCol [
   acroIM 4 `sC` S "as follows, where", getES w_vol `isThe` phrase w_vol,
   S "and", getES tank_vol `isThe` phrase tank_vol]
 
-s5_1_2_Eqn1 = EqnBlock ((C w_mass) $= (C w_vol) * (C w_density) $=
+func_req_Eqn1 = EqnBlock ((C w_mass) $= (C w_vol) * (C w_density) $=
   ((C tank_vol) - (C pcm_vol)) * (C w_density) $=
   (((C diam) / 2) * (C tank_length) - (C pcm_vol)) * (C w_density))
 
-s5_1_2_Eqn2 = EqnBlock ((C pcm_mass) $= (C pcm_vol) * (C pcm_density))
+func_req_Eqn2 = EqnBlock ((C pcm_mass) $= (C pcm_vol) * (C pcm_density))
 
 req3 = mkRequirement "req3" $ foldlSent [
   S "Verify that the", plural input_, S "satisfy the required",
@@ -114,9 +116,9 @@ req11 = mkRequirement "req11" $ foldlSent [
 ---------------------------------------
 -- 5.2 : Non-functional Requirements --
 ---------------------------------------
-
-s5_2 :: Section
-s5_2 = nonFuncReqF [performance] [correctness, verifiability,
+--s5_2
+non_func_req :: Section
+non_func_req = nonFuncReqF [performance] [correctness, verifiability,
   understandability, reusability, maintainability]
   (S "This problem is small in size and relatively simple")
   (S "Any reasonable implementation will be very" +:+

@@ -1,11 +1,13 @@
 module Language.Drasil.Chunk.Citation
   ( -- Types
-    Citation, BibRef, CiteField, Month(..)
+    Citation, BibRef, CiteField(..), Month(..), HP(..)
+    -- Accessors
+  , externRefT, fields
     -- CiteFields smart constructors
       -- People -> CiteField
   , author, editor
       -- Sentence -> CiteField
-  , address, bookTitle, howPublished, institution, journal, note
+  , address, bookTitle, howPublished, howPublishedU, institution, journal, note
   , organization, publisher, school, series, title, typeField
       -- Int -> CiteField
   , chapter, edition, number, volume, year
@@ -35,7 +37,7 @@ data CiteField = Address      Sentence
                | Chapter      Int
                | Edition      Int
                | Editor       People
-               | HowPublished Sentence
+               | HowPublished HP
                | Institution  Sentence
                | Journal      Sentence
                | Month        Month
@@ -50,6 +52,10 @@ data CiteField = Address      Sentence
                | Type         Sentence -- BibTeX "type" field
                | Volume       Int
                | Year         Int
+
+-- | How Published. Necessary for URLs to work properly.             
+data HP = URL Sentence 
+        | Verb Sentence
 
 -- | Month must be of this format.
 data Month = Jan
@@ -82,7 +88,12 @@ instance Show Month where
 -- | All citations require a unique ientifier (String) used by the Drasil chunk.
 -- We will also have an EntryID (String) used for creating reference links.
 -- Finally we will have the reference information (type and fields).
-data Citation = Cite String EntryID ExternRefType [CiteField]
+data Citation = Cite 
+  { _id :: String
+  , _citeID :: EntryID
+  , externRefT :: ExternRefType
+  , fields :: [CiteField] 
+  }
 
 -- | Smart constructor which implicitly uses EntryID as chunk i.
 cite :: EntryID -> ExternRefType -> [CiteField] -> Citation
@@ -244,21 +255,23 @@ author = Author
 editor = Editor
 
 -- | Smart field constructor
-address, bookTitle, howPublished, institution, journal, note, organization,
-  publisher, school, series, title, typeField :: Sentence -> CiteField
+address, bookTitle, howPublished, howPublishedU, institution, journal, note,
+  organization, publisher, school, series, title, 
+  typeField :: Sentence -> CiteField
 
-address      = Address
-bookTitle    = BookTitle
-howPublished = HowPublished
-institution  = Institution
-journal      = Journal
-note         = Note
-organization = Organization
-publisher    = Publisher
-school       = School
-series       = Series
-title        = Title
-typeField    = Type
+address       = Address
+bookTitle     = BookTitle
+howPublished  = HowPublished . Verb
+howPublishedU = HowPublished . URL
+institution   = Institution
+journal       = Journal
+note          = Note
+organization  = Organization
+publisher     = Publisher
+school        = School
+series        = Series
+title         = Title
+typeField     = Type
 
 -- | Smart field constructor
 chapter, edition, number, volume, year :: Int -> CiteField

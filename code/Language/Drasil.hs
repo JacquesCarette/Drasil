@@ -64,12 +64,12 @@ module Language.Drasil (
   , HasAttributes, Derivation, getDerivation, getShortName
   --Citations
   , City, State, getAuthors, getYear
-  , Citation, BibRef, CiteField, Month(..)
+  , Citation, BibRef, CiteField, Month(..), HP
     -- CiteFields smart constructors
       -- People -> CiteField
   , author, editor
       -- Sentence -> CiteField
-  , address, bookTitle, howPublished, institution, journal, note
+  , address, bookTitle, howPublished, howPublishedU, institution, journal, note
   , organization, publisher, school, series, title, typeField
       -- Int -> CiteField
   , chapter, edition, number, volume, year
@@ -175,12 +175,12 @@ import Language.Drasil.Chunk.Attribute.Derivation (Derivation)
 import Language.Drasil.Chunk.Change
 import Language.Drasil.Chunk.Citation (
   -- Types
-    Citation, BibRef, CiteField, Month(..)
+    Citation, BibRef, CiteField, Month(..), HP
     -- CiteFields smart constructors
       -- People -> CiteField
   , author, editor
       -- Sentence -> CiteField
-  , address, bookTitle, howPublished, institution, journal, note
+  , address, bookTitle, howPublished, howPublishedU, institution, journal, note
   , organization, publisher, school, series, title, typeField
       -- Int -> CiteField
   , chapter, edition, number, volume, year

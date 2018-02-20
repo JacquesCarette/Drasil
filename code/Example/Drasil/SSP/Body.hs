@@ -1,6 +1,6 @@
 module Drasil.SSP.Body (ssp_srs, ssp_code, sspSymMap) where
 
-import Language.Drasil
+import Language.Drasil hiding (organization)
 import Data.Drasil.SI_Units
 import Control.Lens ((^.))
 import Prelude hiding (sin, cos, tan)
@@ -106,7 +106,7 @@ mkSRS = RefSec (RefProg intro
       EmptyS
     , IOrgSec orgSecStart inModel (SRS.inModel SRS.missingP []) orgSecEnd]) :
     --FIXME: issue #235
-  map Verbatim [s3, s4, s5, s6, s7] ++ [Bibliography sspCitations]
+  map Verbatim [s3, s4, s5, s6, s7] -- ++ [Bibliography sspCitations]
   
 ssp_srs :: Document
 ssp_srs = mkDoc mkSRS (for) ssp_si

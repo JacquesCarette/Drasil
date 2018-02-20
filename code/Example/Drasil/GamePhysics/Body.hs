@@ -1,7 +1,7 @@
 module Drasil.GamePhysics.Body where
 
 import Control.Lens ((^.))
-import Language.Drasil
+import Language.Drasil hiding (organization)
 import Data.Drasil.SI_Units
 
 import Data.Drasil.People (alex, luthfi)
@@ -62,8 +62,8 @@ mkSRS = RefSec (RefProg RM.intro [TUnits, tsymb tableOfSymbols, TAandA]) :
    IScope s2_2_intro_p1 s2_2_intro_p2, 
    IChar (S "rigid body dynamics") (phrase highSchoolCalculus) (EmptyS), 
    IOrgSec s2_4_intro inModel s4_2 EmptyS]) :
-  (map Verbatim [s3, s4, s5, s6, s7, s8, s9]) ++ 
-  ([Bibliography cpCitations])
+  (map Verbatim [s3, s4, s5, s6, s7, s8, s9]) {- ++ 
+  ([Bibliography cpCitations]) -}
     where tableOfSymbols = [TSPurpose, TypogConvention[Vector Bold], SymbOrder]
 
     --FIXME: Need to be able to print defn for gravitational constant.

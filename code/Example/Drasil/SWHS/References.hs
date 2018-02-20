@@ -16,31 +16,23 @@ s9_swhs_citations = [ref1, ref2, ref3, ref4, ref5, ref6]
 
 ref1, ref2, ref3, ref4, ref5, ref6 :: Citation
 
-ref1 = Article [
-  Author [jBueche],
-  Title (S "Introduction to Physics for Scientists"),
-  Edition 4,
-  Publisher (S "McGraw Hill"),
-  Place (S "New York City", S "New York"),
-  Year 1986]
+ref1 = cBookA "bueche1986" [jBueche]
+  (S "Introduction to Physics for Scientists")
+  (S "McGraw Hill") 1986
+  [edition 4, address (S "New York City, New York")]
 
-
-
-ref2 = Article [
-  Author [fIncropera, dDewitt, tBergman, aLavine],
-  Title (S "Fundamentals of Heat and Mass Transfer"),
-  Edition 6,
-  Publisher (S "John Wiley and Sons"),
-  Place (S "Hoboken", S "New Jersey"),
-  Year 2007]
+ref2 = cBookA "incroperaEtAl2007" [fIncropera, dDewitt, tBergman, aLavine]
+  (S "Fundamentals of Heat and Mass Transfer")
+  (S "John Wiley and Sons") 2007
+  [edition 6, address (S "Hoboken, New Jersey")]
 
 ref3 = koothoor2013
 
-ref4 = Misc [
-  Author [mLightstone],
-  Title (S "Derivation of tank/pcm model"),
-  Year 2012,
-  Note (S "From Marilyn Lightstone's Personal Notes")]
+ref4 = cMisc "lightstone2012" [
+  author [mLightstone],
+  title (S "Derivation of tank/pcm model"),
+  year 2012,
+  note (S "From Marilyn Lightstone's Personal Notes")]
 
 ref5 = parnas1986
 

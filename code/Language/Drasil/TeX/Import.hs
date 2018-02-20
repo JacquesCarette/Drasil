@@ -18,7 +18,7 @@ import Language.Drasil.Chunk.NamedIdea (term)
 import Language.Drasil.Chunk.Quantity (Quantity(..), eqSymb)
 import Language.Drasil.Chunk.ReqChunk (requires)
 import Language.Drasil.ChunkDB (getUnitLup, symbLookup, HasSymbolTable(..))
-import Language.Drasil.Citations (Citation(..),CiteField(..))
+import Language.Drasil.Chunk.Citation (Citation, CiteField(..), HP(..))
 import Language.Drasil.Config (verboseDDDescription, numberedDDEquations, numberedTMEquations)
 import Language.Drasil.Document
 import Language.Drasil.Expr.Extract
@@ -177,42 +177,41 @@ lay sm x@(Graph ps w h t _)   = T.Graph (map (\(y,z) -> (spec sm y, spec sm z)) 
                                w h (spec sm t) (T.S (refAdd x))
 lay sm (Defnt dtyp pairs rn)  = T.Defnt dtyp (layPairs pairs) (T.S rn)
   where layPairs = map (\(x,y) -> (x, map (lay sm) y))
-lay sm (Bib bib)          = T.Bib $ map (layCite sm) bib
+-- lay sm (Bib bib)          = T.Bib $ map (layCite sm) bib
 
 -- | For importing bibliography
-layCite :: HasSymbolTable ctx => ctx -> Citation -> T.Citation
-layCite sm (Book      fields) = T.Book      $ map (layField sm) fields
-layCite sm (Article   fields) = T.Article   $ map (layField sm) fields
-layCite sm (MThesis   fields) = T.MThesis   $ map (layField sm) fields
-layCite sm (PhDThesis fields) = T.PhDThesis $ map (layField sm) fields
-layCite sm (Misc      fields) = T.Misc      $ map (layField sm) fields
-layCite sm (Online    fields) = T.Online    $ map (layField sm) fields
+-- layCite :: HasSymbolTable ctx => ctx -> Citation -> T.Citation
+-- layCite sm (Book      fields) = T.Book      $ map (layField sm) fields
+-- layCite sm (Article   fields) = T.Article   $ map (layField sm) fields
+-- layCite sm (MThesis   fields) = T.MThesis   $ map (layField sm) fields
+-- layCite sm (PhDThesis fields) = T.PhDThesis $ map (layField sm) fields
+-- layCite sm (Misc      fields) = T.Misc      $ map (layField sm) fields
+-- layCite sm (Online    fields) = T.Online    $ map (layField sm) fields
 
 layField :: HasSymbolTable ctx => ctx -> CiteField -> T.CiteField
 layField _  (Author     p) = T.Author     p
 layField sm (Title      s) = T.Title      $ spec sm s
 layField sm (Series     s) = T.Series     $ spec sm s
-layField sm (Collection s) = T.Collection $ spec sm s
-layField _  (Volume     n) = T.Volume     n
-layField _  (Edition    n) = T.Edition    n
-layField sm (Place (c, s)) = T.Place (spec sm c, spec sm s)
+layField sm (BookTitle  s) = T.Collection $ spec sm s
+-- layField _  (Volume     n) = T.Volume     n
+-- layField _  (Edition    n) = T.Edition    n
+-- layField sm (Place (c, s)) = T.Place (spec sm c, spec sm s)
 layField sm (Publisher  s) = T.Publisher $ spec sm s
 layField sm (Journal    s) = T.Journal   $ spec sm s
-layField _  (Year       n) = T.Year       n
-layField _  (Date    n m y)= T.Date    n m y
-layField _  (URLdate n m y)= T.URLdate n m y
-layField _  (Page       n) = T.Page       n
-layField _  (Pages     ns) = T.Pages     ns
+-- layField _  (Year       n) = T.Year       n
+-- layField _  (Date    n m y)= T.Date    n m y
+-- layField _  (Page       n) = T.Page       n
+-- layField _  (Pages     ns) = T.Pages     ns
 layField sm (Note       s) = T.Note       $ spec sm s
-layField _  (Issue      n) = T.Issue      n
+-- layField _  (Issue      n) = T.Issue      n
 layField sm (School     s) = T.School     $ spec sm s
-layField sm (URL        n) = T.URL        $ spec sm n
-layField sm (HowPub     s) = T.HowPub     $ spec sm s
+-- layField sm (URL        n) = T.URL        $ spec sm n
+-- layField sm (HowPub     s) = T.HowPub     $ spec sm s
 layField _  (Editor     p) = T.Editor     p
 
 makeL :: HasSymbolTable ctx => ctx -> ListType -> T.ListType
 makeL sm (Bullet bs)      = T.Enum        $ map (item sm) bs
-makeL sm (Number ns)      = T.Item        $ map (item sm) ns
+makeL sm (Numeric ns)      = T.Item       $ map (item sm) ns
 makeL sm (Simple ps)      = T.Simple      $ map (\(x,y) -> (spec sm x, item sm y)) ps
 makeL sm (Desc ps)        = T.Desc        $ map (\(x,y) -> (spec sm x, item sm y)) ps
 makeL sm (Definitions ps) = T.Definitions $ map (\(x,y) -> (spec sm x, item sm y)) ps

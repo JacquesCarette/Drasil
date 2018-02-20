@@ -153,8 +153,7 @@ mkSRS = RefSec (RefProg intro
            , Description Verbose IncludeUnits
            , Source, RefBy] generalDefinitions ShowDerivation)])]) : --Testing General Definitions.-}
   Verbatim s4: -- Comment this out and the above in for testing GDs.
-  map Verbatim [s5, s6, s7, s8] ++
-  [Bibliography s9_refList]
+  map Verbatim [s5, s6, s7, s8] -- ++ [Bibliography s9_refList]
 
 generalDefinitions :: [GenDefn]
 generalDefinitions = [gd nwtnCooling (Just thermal_flux) ([] :: Attributes),

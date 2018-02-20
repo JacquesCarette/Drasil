@@ -6,9 +6,9 @@ import Language.Drasil.Chunk.Change
 import Language.Drasil.Chunk.Eq
 import Language.Drasil.Chunk.Relation
 import Language.Drasil.Chunk.ReqChunk
-import Language.Drasil.Spec (Sentence(..), RefName, RefAdd)
+import Language.Drasil.Spec (Sentence(..), RefAdd)
 import Language.Drasil.Expr
-import Language.Drasil.Citations
+import Language.Drasil.Chunk.Citation (BibRef)
 
 type Title    = Sentence
 type Author   = Sentence
@@ -63,7 +63,7 @@ type Identifier = String
 type MaxWidthPercent = Float
 
 data ListType = Bullet [ItemType] -- ^ Bulleted list
-              | Number [ItemType] -- ^ Enumerated List
+              | Numeric [ItemType] -- ^ Enumerated List
               | Simple [ListPair] -- ^ Simple list with items denoted by @-@
               | Desc [ListPair] -- ^ Descriptive list, renders as "Title: Item" (see 'ListPair')
               | Definitions [ListPair] -- ^ Renders a list of "@Title@ is the @Item@"

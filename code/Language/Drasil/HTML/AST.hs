@@ -5,11 +5,11 @@ import Language.Drasil.Symbol (Symbol)
 import Language.Drasil.Spec (USymb, RefAdd)
 import Language.Drasil.Unicode (Greek, Special)
 import Language.Drasil.Document (DType (..), MaxWidthPercent)
-import Language.Drasil.Citations (Month(..))
+import Language.Drasil.Chunk.Citation (Month(..))
 import Language.Drasil.People (People)
 import Language.Drasil.Printing.AST (Expr(..))
 
--- | Internal HTML version of Sentence 
+-- | Internal HTML version of Sentence
 -- (for converting 'Language.Drasil.Spec.Sentence')
 infixr 5 :+:
 data Spec where
@@ -21,7 +21,7 @@ data Spec where
   (:/:) :: Spec -> Spec -> Spec -- frac
   Sy :: USymb -> Spec
   N :: Symbol -> Spec
-  G :: Greek -> Spec 
+  G :: Greek -> Spec
   Sp :: Special -> Spec
   HARDNL :: Spec
   Ref :: RefAdd -> Spec -> Spec
@@ -39,7 +39,7 @@ type Label    = Spec
 type Filepath = String
 type Caption  = Spec
 
--- | Internal HTML version of LayoutObj 
+-- | Internal HTML version of LayoutObj
 -- (for converting 'Language.Drasil.LayoutObj.LayoutObj')
 data ALUR = Assumption | LikelyChange | UnlikelyChange | Requirement
 data LayoutObj = Table Tags [[Spec]] Label Bool Caption
@@ -54,7 +54,7 @@ data LayoutObj = Table Tags [[Spec]] Label Bool Caption
                | ALUR ALUR Contents Label Label
                | Bib BibRef
                -- Span Tags Contents
-               
+
 data ListType = Ordered [ItemType] | Unordered [ItemType]
               | Simple      [(Title,ItemType)]
               | Desc        [(Title,ItemType)]
@@ -81,23 +81,26 @@ data CiteField = Author     People
                | Title      Spec
                | Series     Spec
                | Collection Spec
-               | Volume     Integer
-               | Edition    Integer
-               | Place    (City, State) --State can also mean country
+               | Volume     Int
+               | Edition    Int
+               | Place      Spec
                | Publisher  Spec
                | Journal    Spec
-               | Year       Integer
-               | Date Integer Month Integer
-               | Page       Integer
-               | Pages    (Integer, Integer)
+               | Year       Int
+               | Month      Month
+               | Pages      [Int]
                | Note       Spec
-               | Issue      Integer
+               | Issue      Int
                | School     Spec
                | Thesis     Thesis
                | URL        Spec
                | HowPub     Spec
-               | URLdate Integer Month Integer
                | Editor     People
+               | Institution Spec
+               | Organization Spec
+               | Chapter    Int
+               | Type       Spec
+
 
 data Thesis = M | PhD deriving Eq
 
@@ -124,8 +127,8 @@ instance Eq CiteField where
   (==) (Publisher _)  (Publisher _)  = True
   (==) (Journal _)    (Journal _)    = True
   (==) (Year _)       (Year _)       = True
-  (==) (Date _ _ _)   (Date _ _ _)   = True
-  (==) (Page _)       (Page _)       = True
+  -- (==) (Date _ _ _)   (Date _ _ _)   = True
+  -- (==) (Page _)       (Page _)       = True
   (==) (Pages _)      (Pages _)      = True
   (==) (Note _)       (Note _)       = True
   (==) (Issue _)      (Issue _)      = True
@@ -133,7 +136,7 @@ instance Eq CiteField where
   (==) (Thesis _)     (Thesis _)     = True
   (==) (URL _)        (URL _)        = True
   (==) (HowPub _)     (HowPub _)     = True
-  (==) (URLdate _ _ _) (URLdate _ _ _) = True
+  -- (==) (URLdate _ _ _) (URLdate _ _ _) = True
   (==) (Editor _)     (Editor _)     = True
   (==) _ _ = False
 
@@ -166,17 +169,17 @@ instance Ord CiteField where --FIXME: APA has year come directly after Author
   compare _ (HowPub     _) = GT
   compare (Issue      _) _ = LT
   compare _ (Issue      _) = GT
-  compare (Date   _ _ _) _ = LT
-  compare _ (Date   _ _ _) = GT
+  -- compare (Date   _ _ _) _ = LT
+  -- compare _ (Date   _ _ _) = GT
   compare (Year       _) _ = LT
   compare _ (Year       _) = GT
   compare (URL       _) _  = LT
   compare _ (URL       _)  = GT
-  compare (Page       _) _ = LT
-  compare _ (Page       _) = GT
+  -- compare (Page       _) _ = LT
+  -- compare _ (Page       _) = GT
   compare (Pages      _) _ = LT
   compare _ (Pages      _) = GT
-  compare (URLdate _ _ _) _ = LT
-  compare _ (URLdate _ _ _) = GT
+  -- compare (URLdate _ _ _) _ = LT
+  -- compare _ (URLdate _ _ _) = GT
   compare (Note       _) _ = LT
   --compare _ (Note       _) = GT

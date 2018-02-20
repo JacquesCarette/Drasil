@@ -54,7 +54,7 @@ printLO (Header n contents)    sm = h n $ text (p_spec contents sm)
 printLO (List t)               sm = makeList t sm
 printLO (Figure r c f wp)      sm = makeFigure (p_spec r sm) (p_spec c sm) f wp
 printLO (ALUR _ x l id)        sm = makeRefList (p_spec x sm) (p_spec l sm) (p_spec id sm)
-printLO (Bib bib)              sm = printLO (makeBib sm bib) sm
+--printLO (Bib bib)              sm = printLO (makeBib sm bib) sm
 
 
 -- | Called by build, uses 'printLO' to render the layout 
@@ -405,6 +405,7 @@ makeRefList a l i = refwrap l (wrap "ul" [] (text $ i ++ ": " ++ a))
 --HTML bibliography--
 ---------------------
 -- **THE MAIN FUNCTION**
+{-
 makeBib :: HasSymbolTable s => s -> BibRef -> LayoutObj
 makeBib sm = listRef . map (Flat . S) . sort . map (flip renderCite sm)
   where listRef = List . Simple . zip [S $ sqbrac $ show x | x <- [(1 :: Integer)..]]
@@ -545,3 +546,4 @@ rendPersL (Person {_given = f, _surname = l, _middle = ms}) =
 toPlural :: People -> String -> String
 toPlural (_:_) str = str ++ "s"
 toPlural _     str = str
+-}

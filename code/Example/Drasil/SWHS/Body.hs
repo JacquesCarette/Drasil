@@ -1,6 +1,6 @@
 module Drasil.SWHS.Body where
 
-import Language.Drasil
+import Language.Drasil hiding (organization)
 import Data.Drasil.SI_Units
 import Control.Lens ((^.))
 
@@ -146,8 +146,8 @@ mkSRS = [RefSec (RefProg intro
   (s2_4_trail swhs_pcm progName)])] ++
   
   map Verbatim [s3, s4, s5, s6, s7] ++ 
-  [AuxConstntSec (AuxConsProg progName specParamValList)] ++
-  [Bibliography s9_swhs_citations]
+  [AuxConstntSec (AuxConsProg progName specParamValList)] {- ++
+  [Bibliography s9_swhs_citations] -}
 
 swhsCode :: CodeSpec
 swhsCode = codeSpec' swhs_si [swhsInputMod]

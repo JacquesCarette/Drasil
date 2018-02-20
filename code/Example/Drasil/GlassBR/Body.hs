@@ -1,6 +1,6 @@
 module Drasil.GlassBR.Body where
 import Control.Lens ((^.))
-import Language.Drasil
+import Language.Drasil hiding (organization)
 import qualified Drasil.SRS as SRS
 
 import Drasil.DocumentLanguage
@@ -124,7 +124,7 @@ mkSRS = RefSec (RefProg intro [TUnits, tsymb [TSPurpose, SymbOrder], TAandA]) :
     (TraceabilityProg traceyMatrices [s9_table1Desc, s9_table2Desc, s9_table3Desc]
     (traceyMatrices ++ s9_intro2 ++ traceyGraphs) []) :
   AuxConstntSec (AuxConsProg gLassBR auxiliaryConstants) :
-  Bibliography gbCitations :
+  -- Bibliography gbCitations :
   AppndxSec (AppndxProg [s12_intro, fig_5, fig_6]) : []
   
 stdFields :: Fields
@@ -183,7 +183,7 @@ s7_1_list, s9_intro2 :: [Contents]
 
 --------------------------------------------------------------------------------
 s6_1_1_bullets :: Contents
-s6_1_1_bullets = Enumeration $ (Number $
+s6_1_1_bullets = Enumeration $ (Numeric $
   map tAndDOnly termsWithDefsOnly
   ++
   s6_1_1_bullets_glTySubSec

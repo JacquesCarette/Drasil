@@ -1,6 +1,6 @@
 module Data.Drasil.Citations (
   koothoor2013, parnas1986, smithLai2005,
-  journalCGJ
+  jnlCGJ
   ) where
 
 import Language.Drasil --(S,(:+:),(+:+),sC,phrase,F,Accent(..),Citation(..),CiteField(..))
@@ -39,8 +39,5 @@ smithLai2005 = cInProceedings "smithLai2005" [spencerSmith, lLai]
 -- COMMON CITE-FIELDS --
 ------------------------
 
-jnlCGJ :: CiteField
-jnlCGJ = journal $ S "Canadian Geotechnical Journal"
-
-journalCGJ :: Int -> Int -> [CiteField]
-journalCGJ vol issue = [jnlCGJ, volume vol, number issue]
+jnlCGJ :: Sentence
+jnlCGJ = S "Canadian Geotechnical Journal"

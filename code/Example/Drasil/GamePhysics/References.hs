@@ -40,7 +40,6 @@ dParnasPcClements1984 = cInProceedings "dParnasPcClements1984"
   (S "The Modular Structure of Complex Systems")
   (S "ICSE '84: Proceedings of the 7th international conference on Software engineering")
   1984 [pages [408, 417]]
-  ]
 
 {- Duplicates --
 dParnasPcClements1986 = cArticle "dParnasPcClements1986" [dParnas, pcClements],

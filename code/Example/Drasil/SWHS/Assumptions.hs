@@ -31,12 +31,12 @@ import Data.Drasil.SentenceStructures (acroGD, acroIM, foldlSent, ofThe,
 -------------------------
 -- 4.2.1 : Assumptions --
 -------------------------
+--s4_2_1_list
+assumps_list :: [Contents]
+assumps_list = acroNumGen assumps_assump_list 1
 
-s4_2_1_list :: [Contents]
-s4_2_1_list = acroNumGen s4_2_1_assump_list 1
-
-s4_2_1_assump_list :: [Contents]
-s4_2_1_assump_list = [assump1, assump2, assump3, assump4, assump5, assump6,
+assumps_assump_list :: [Contents]
+assumps_assump_list = [assump1, assump2, assump3, assump4, assump5, assump6,
   assump7, assump8, assump9, assump10, assump11, assump12, assump13, assump14,
   assump15, assump16, assump17, assump18, assump19, assump20]
 

@@ -46,7 +46,7 @@ import Drasil.SWHS.DataDefs (swhsSymbMapDRef, swhsSymbMapTRef, swhsDataDefs,
   dd1HtFluxC, dd2HtFluxP, swhsSymbMapT, data_def_swhsDataDefs)
 import Drasil.SWHS.GenDefs (swhsGenDefs)
 import Drasil.SWHS.References (ref_swhs_citations)
-import Drasil.SWHS.Assumptions (s4_2_1_list, assump3, assump4, assump5,
+import Drasil.SWHS.Assumptions (assumps_list, assump3, assump4, assump5,
   assump6, assump13, assump15, assump16, assump17, assump18)
 import Drasil.SWHS.Requirements (req1, req2, s5_1_2_Eqn1, s5_1_2_Eqn2,
   req3, req4, req5, req6, req7, req8, req9, req10, req11, s5_2)
@@ -324,7 +324,7 @@ goal_stmt_list = enumSimple 1 (short goalStmt) $
 sol_charac_spec :: Section
 sol_charac_spec = solChSpecF progName (problem_desc, likely_chng) data_def_intro_end
   (data_constraint_mid, dataConstraintUncertainty, data_constraint_T1footer quantity surArea
-  vol htTransCoeff_min phsChgMtrl) (s4_2_1_list, 
+  vol htTransCoeff_min phsChgMtrl) (assumps_list, 
   theory_model_swhsTMods, sol_charac_genDefs ++ sol_charac_deriv,
   data_def_swhsDataDefs, instnce_model_IModsWithDerivs, data_constraints_DataConTables) [property_of_corr_sol]
 
@@ -337,7 +337,7 @@ assumps = assumpF
   (SRS.thModel SRS.missingP [])
   (SRS.genDefn SRS.missingP [])
   (SRS.dataDefn SRS.missingP [])
-  instnce_model likely_chng s4_2_1_list
+  instnce_model likely_chng assumps_list
 
 -- Again, list structure is same between all examples.
 

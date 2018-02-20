@@ -33,7 +33,7 @@ import Drasil.SWHS.IMods (heatEInWtr)
 import Drasil.NoPCM.IMods (eBalanceOnWtr)
 import Drasil.NoPCM.Unitals (temp_init)
 import Drasil.SWHS.References (ref2, ref3, ref4, ref5, ref6)
-import Drasil.SWHS.Requirements (s5_2)
+import Drasil.SWHS.Requirements (non_func_req)
 import Drasil.SWHS.LikelyChanges (likeChg2, likeChg3, likeChg6)
 
 import Data.Drasil.People (thulasi)
@@ -692,7 +692,7 @@ inputVar = map qs data_constraint_conListIn
 --Section 5 : REQUIREMENTS
 --------------------------
 --s5
-req = reqF [functional_req, s5_2]
+req = reqF [functional_req, non_func_req]
 
 ---------------------------------------
 --Section 5.1 : FUNCTIONAL REQUIREMENTS

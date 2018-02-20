@@ -40,7 +40,7 @@ import Drasil.SWHS.Unitals (pcm_SA, temp_W, temp_PCM, pcm_HTC, pcm_E,
 import Drasil.SWHS.Concepts (progName, sWHT, water, rightSide, phsChgMtrl,
   coil, perfect_insul, tank, transient, gauss_div, swhs_pcm,
   phase_change_material, tank_pcm)
-import Drasil.SWHS.TMods (tModels, t1ConsThermE, s4_2_2_swhsTMods)
+import Drasil.SWHS.TMods (tModels, t1ConsThermE, theory_model_swhsTMods)
 import Drasil.SWHS.IMods (s4_2_5_IMods)
 import Drasil.SWHS.DataDefs (swhsSymbMapDRef, swhsSymbMapTRef, swhsDataDefs,
   dd1HtFluxC, dd2HtFluxP, swhsSymbMapT, s4_2_4_swhsDataDefs)
@@ -325,7 +325,7 @@ sol_charac_spec :: Section
 sol_charac_spec = solChSpecF progName (problem_desc, likely_chng) data_def_intro_end
   (data_constraint_mid, dataConstraintUncertainty, data_constraint_T1footer quantity surArea
   vol htTransCoeff_min phsChgMtrl) (s4_2_1_list, 
-  s4_2_2_swhsTMods, sol_charac_genDefs ++ sol_charac_deriv,
+  theory_model_swhsTMods, sol_charac_genDefs ++ sol_charac_deriv,
   s4_2_4_swhsDataDefs, instnce_model_IModsWithDerivs, data_constraints_DataConTables) [property_of_corr_sol]
 
 -------------------------

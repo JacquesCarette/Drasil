@@ -10,9 +10,9 @@ import Data.Drasil.Citations (koothoor2013, parnas1986, smithLai2005)
 ----------------------------
 -- Section 9 : References --
 ----------------------------
-
-s9_swhs_citations :: BibRef
-s9_swhs_citations = [ref1, ref2, ref3, ref4, ref5, ref6]
+--s9_swhs_citations
+ref_swhs_citations :: BibRef
+ref_swhs_citations = [ref1, ref2, ref3, ref4, ref5, ref6]
 
 ref1, ref2, ref3, ref4, ref5, ref6 :: Citation
 

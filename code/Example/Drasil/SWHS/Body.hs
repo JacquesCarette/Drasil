@@ -45,7 +45,7 @@ import Drasil.SWHS.IMods (insta_model_IMods)
 import Drasil.SWHS.DataDefs (swhsSymbMapDRef, swhsSymbMapTRef, swhsDataDefs,
   dd1HtFluxC, dd2HtFluxP, swhsSymbMapT, data_def_swhsDataDefs)
 import Drasil.SWHS.GenDefs (swhsGenDefs)
-import Drasil.SWHS.References (s9_swhs_citations)
+import Drasil.SWHS.References (ref_swhs_citations)
 import Drasil.SWHS.Assumptions (s4_2_1_list, assump3, assump4, assump5,
   assump6, assump13, assump15, assump16, assump17, assump18)
 import Drasil.SWHS.Requirements (req1, req2, s5_1_2_Eqn1, s5_1_2_Eqn2,
@@ -147,7 +147,7 @@ mkSRS = [RefSec (RefProg intro
   
   map Verbatim [gen_sys_desc, spec_sys_desc, req, likely_chng, trace_matrix_grph] ++ 
     [AuxConstntSec (AuxConsProg progName specParamValList)] ++ 
-    [Bibliography s9_swhs_citations]
+    [Bibliography ref_swhs_citations]
 
 swhsCode :: CodeSpec
 swhsCode = codeSpec' swhs_si [swhsInputMod]

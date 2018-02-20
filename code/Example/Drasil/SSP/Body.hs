@@ -62,18 +62,23 @@ import Data.Drasil.SentenceStructures (sOr, acroDD,
   foldlSent, ofThe, sAnd, foldlSP, foldlList, foldlSent_)
 
 --type declarations for sections--
-s3, s4, s5, s6, s7 :: Section
+-- s3, s4, s5, s6, s7
+gen_sys_desc, spec_sys_desc, req, likely_chg, aux_cons :: Section
 
-s1_2_intro :: [TSIntro]
+--s1_2_intro
+table_of_symbol_intro :: [TSIntro]
 
-s4_1, s4_1_1, s4_1_2,
-  s4_1_3, s4_2, s5_1, s5_2 :: Section
+--s4_1, s4_1_1, s4_1_2,
+--s4_1_3, s4_2, s5_1, s5_2
+problem_desc, termi_defi, phys_sys_desc,
+  goal_stmt, sol_charac_spec, func_req, non_func_req :: Section
 
-s4_1_1_list, s4_1_2_p1, s4_1_2_bullets,
-  s4_1_2_p2, goals_list, s4_2_1_list,
-  s5_1_list :: Contents
+termi_defi_list, phys_sys_desc_p1, phys_sys_desc_bullets,
+  phys_sys_desc_p2, goals_list, assumps_list,
+  func_req_list :: Contents
 
-s4_2_2_tmods, s4_2_3_genDefs, s4_2_4_dataDefs, s4_2_5_IMods :: [Contents]
+--s4_2_2_tmods, s4_2_3_genDefs, s4_2_4_dataDefs, s4_2_5_IMods
+theory_model_tmods, gen_def_genDefs, data_def_dataDefs, insta_model_IMods :: [Contents]
 
 --Document Setup--
 this_si :: [UnitDefn]
@@ -98,7 +103,7 @@ ssp_si = SI {
 
 mkSRS :: DocDesc
 mkSRS = RefSec (RefProg intro
-  [TUnits, tsymb'' s1_2_intro TAD, TAandA]) :
+  [TUnits, tsymb'' table_of_symbol_intro TAD, TAandA]) :
   IntroSec (IntroProg startIntro kSent
     [IPurpose prpsOfDoc_p1, IScope scpIncl scpEnd
     , IChar (phrase solidMechanics) 
@@ -106,7 +111,8 @@ mkSRS = RefSec (RefProg intro
       EmptyS
     , IOrgSec orgSecStart inModel (SRS.inModel SRS.missingP []) orgSecEnd]) :
     --FIXME: issue #235
-  map Verbatim [s3, s4, s5, s6, s7] ++ [Bibliography sspCitations]
+  map Verbatim [gen_sys_desc, spec_sys_desc, req, likely_chg, aux_cons]
+   ++ [Bibliography sspCitations]
   
 ssp_srs :: Document
 ssp_srs = mkDoc mkSRS (for) ssp_si
@@ -135,7 +141,7 @@ sspSymMapD = symbolMapFun Data
 -- SECTION 1.2 --
 --automatically generated in mkSRS using the intro below
 
-s1_2_intro = [TSPurpose, TypogConvention [Verb $ foldlSent_
+table_of_symbol_intro = [TSPurpose, TypogConvention [Verb $ foldlSent_
   [plural value, S "with a subscript", getES index, S "implies that the",
   phrase value, S "will be taken at and analyzed at a", phrase slice
   `sOr` phrase slice, S "interface composing the total slip", phrase mass]]]
@@ -214,7 +220,7 @@ orgSecEnd   = S "The" +:+ plural inModel +:+ S "provide the set of" +:+
   +:+ S "to perform a" +:+ titleize morPrice +:+ titleize analysis
 
 -- SECTION 3 --
-s3 = genSysF [] userCharIntro [] []
+gen_sys_desc = genSysF [] userCharIntro [] []
 
 -- SECTION 3.1 --
 -- User Characteristics automatically generated in genSysF with the
@@ -235,20 +241,20 @@ userChar pname understandings familiarities = foldlSP [
 -- System Constraints automatically generated in genSysF
 
 -- SECTION 4 --
-s4 = specSysDesF end [s4_1, s4_2]
+spec_sys_desc = specSysDesF end [problem_desc, sol_charac_spec]
   where end = foldlSent_ [plural definition, S "and finally the",
           plural inModel, S "that", phrase model, S "the", phrase slope]
 
 -- SECTION 4.1 --
-s4_1 = probDescF EmptyS ssa ending [s4_1_1, s4_1_2, s4_1_3]
+problem_desc = probDescF EmptyS ssa ending [termi_defi, phys_sys_desc, goal_stmt]
   where ending = foldlSent_ [S "evaluate the", phrase fs, S "of a",
           phrase's slope, phrase slpSrf, S "and to calculate the",
           S "displacement that the", phrase slope, S "will experience"]
 
 -- SECTION 4.1.1 --
-s4_1_1 = termDefnF Nothing [s4_1_1_list]
+termi_defi = termDefnF Nothing [termi_defi_list]
 
-s4_1_1_list = Enumeration $ Simple $
+termi_defi_list = Enumeration $ Simple $
   map (\x -> (titleize $ x, Flat $ x ^. defn))
   [fs_concept, crtSlpSrf, stress, strain, normForce,
   shearForce, tension, compression, plnStrn]
@@ -257,10 +263,11 @@ s4_1_1_list = Enumeration $ Simple $
   -- and fs which is in Unitals.hs
 
 -- SECTION 4.1.2 --
-s4_1_2 = SRS.physSyst
-  [s4_1_2_p1, s4_1_2_bullets, s4_1_2_p2, fig_indexconv, fig_forceacting] []
+phys_sys_desc = SRS.physSyst
+  [phys_sys_desc_p1, phys_sys_desc_bullets, phys_sys_desc_p2,
+   fig_indexconv, fig_forceacting] []
 
-s4_1_2_p1 = physSystIntro slope how intrslce slice (S "slice base")
+phys_sys_desc_p1 = physSystIntro slope how intrslce slice (S "slice base")
   fig_indexconv
   where how = S "as a series of" +:+ phrase slice +:+. plural element
 
@@ -273,7 +280,7 @@ physSystIntro what how p1 p2 p3 indexref = foldlSP [
   p3 +:+. plural property, S "The index convention for referencing which",
   phrase p1 `sOr` phrase p2, S "is being used is shown in", makeRef indexref]
 
-s4_1_2_bullets = enumBullet $ map foldlSent_ [
+phys_sys_desc_bullets = enumBullet $ map foldlSent_ [
 
   [at_start' itslPrpty, S "convention is noted by j. The end",
   plural itslPrpty, S "are usually not of", phrase interest `sC`
@@ -283,7 +290,7 @@ s4_1_2_bullets = enumBullet $ map foldlSent_ [
   [at_start slice, plural property +:+. S "convention is noted by",
   getES index]]
 
-s4_1_2_p2 = foldlSP [S "A", phrase fbd, S "of the", plural force,
+phys_sys_desc_p2 = foldlSP [S "A", phrase fbd, S "of the", plural force,
   S "acting on the", phrase slice, S "is displayed in",
   makeRef fig_forceacting]
 
@@ -297,7 +304,7 @@ fig_forceacting = fig (at_start' force +:+ S "acting on a" +:+
   phrase slice) "ForceDiagram.png"
 
 -- SECTION 4.1.3 --
-s4_1_3 = goalStmtF (map (\(x, y) -> x `ofThe` y) [
+goal_stmt = goalStmtF (map (\(x, y) -> x `ofThe` y) [
   (S "geometry", S "water" +:+ phrase table_),
   (S "geometry", S "layers composing the plane of a" +:+ phrase slope),
   (plural mtrlPrpty, S "layers")
@@ -306,10 +313,11 @@ s4_1_3 = goalStmtF (map (\(x, y) -> x `ofThe` y) [
 goals_list = enumSimple 1 (short goalStmt) sspGoals
 
 -- SECTION 4.2 --
-s4_2 = solChSpecF ssa (s4_1, s6) ddEnding
+sol_charac_spec = solChSpecF ssa (problem_desc, likely_chg) ddEnding
   (EmptyS, dataConstraintUncertainty, EmptyS)
-  ([s4_2_1_list], s4_2_2_tmods, s4_2_3_genDefs, s4_2_4_dataDefs, 
-  instModIntro1:instModIntro2:s4_2_5_IMods, [s4_2_6Table2, s4_2_6Table3]) []
+  ([assumps_list], theory_model_tmods, gen_def_genDefs, data_def_dataDefs, 
+  instModIntro1:instModIntro2:insta_model_IMods, [data_constraint_Table2,
+   data_constraint_Table3]) []
 
   where ddEnding = foldlSent [at_start' definition, acroDD 1, S "to", acroDD 8,
           S "are the", phrase force, plural variable, S "that can be solved",
@@ -320,21 +328,21 @@ s4_2 = solChSpecF ssa (s4_1, s6) ddEnding
 
 -- SECTION 4.2.1 --
 -- Assumptions is automatically generated in solChSpecF using the list below
-
-s4_2_1_list = enumSimple 1 (short assumption) sspAssumptions
+--s4_2_1_list
+assumps_list = enumSimple 1 (short assumption) sspAssumptions
 
 -- SECTION 4.2.2 --
 -- TModels is automatically generated in solChSpecF using the tmods below
 
-s4_2_2_tmods = map sspSymMapT sspTMods
+theory_model_tmods = map sspSymMapT sspTMods
 
 -- SECTION 4.2.3 --
 -- General Definitions is automatically generated in solChSpecF
-s4_2_3_genDefs = map sspSymMapT sspGenDefs
+gen_def_genDefs = map sspSymMapT sspGenDefs
 
 -- SECTION 4.2.4 --
 -- Data Definitions is automatically generated in solChSpecF
-s4_2_4_dataDefs = (map sspSymMapD (take 13 sspDataDefs)) ++ resShrDerivation ++
+data_def_dataDefs = (map sspSymMapD (take 13 sspDataDefs)) ++ resShrDerivation ++
   [sspSymMapD (sspDataDefs !! 13)] ++ mobShrDerivation ++
   map sspSymMapD [sspDataDefs !! 14, sspDataDefs !! 15] ++
   stfMtrxDerivation ++ (map sspSymMapD (drop 16 sspDataDefs))
@@ -344,7 +352,7 @@ s4_2_4_dataDefs = (map sspSymMapD (take 13 sspDataDefs)) ++ resShrDerivation ++
 -- Instance Models is automatically generated in solChSpecF
 -- using the paragraphs below
 
-s4_2_5_IMods = concat $ weave [map (\x -> [sspSymMapT x]) sspIMods,
+insta_model_IMods = concat $ weave [map (\x -> [sspSymMapT x]) sspIMods,
   [fctSftyDerivation, nrmShrDerivation, intrSlcDerivation,
   rigDisDerivation, rigFoSDerivation]]
   --FIXME: derivations should be with the appropriate IMod
@@ -371,30 +379,30 @@ slipVert  = verticesConst $ phrase slip
 slopeVert = verticesConst $ phrase slope
 -}
 {-input and output tables-}
-
-s4_2_6Table2, s4_2_6Table3 :: Contents
-s4_2_6Table2 = inDataConstTbl sspInputs --FIXME: issue #295
-s4_2_6Table3 = outDataConstTbl sspOutputs
+--s4_2_6Table2, s4_2_6Table3
+data_constraint_Table2, data_constraint_Table3 :: Contents
+data_constraint_Table2 = inDataConstTbl sspInputs --FIXME: issue #295
+data_constraint_Table3 = outDataConstTbl sspOutputs
 
 -- SECTION 5 --
-s5 = reqF [s5_1, s5_2]
+req = reqF [func_req, non_func_req]
 
 -- SECTION 5.1 --
-s5_1 = SRS.funcReq
-  [s5_1_list, sspInputDataTable] []
+func_req = SRS.funcReq
+  [func_req_list, sspInputDataTable] []
 
-s5_1_list = enumSimple 1 (short requirement) sspRequirements
+func_req_list = enumSimple 1 (short requirement) sspRequirements
 
 -- SECTION 5.2 --
-s5_2 = nonFuncReqF [accuracy, performanceSpd]
+non_func_req = nonFuncReqF [accuracy, performanceSpd]
   [correctness, understandability, reusability, maintainability] r EmptyS
   where r = (short ssa) +:+ S "is intended to be an educational tool"
 
 -- SECTION 6 --
-s6 = SRS.likeChg [] []
+likely_chg = SRS.likeChg [] []
 
 -- SECTION 7 --
-s7 = valsOfAuxConstantsF ssa []
+aux_cons = valsOfAuxConstantsF ssa []
 
 -- References --
 -- automatically generated

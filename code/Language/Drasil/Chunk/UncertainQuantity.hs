@@ -1,4 +1,4 @@
-{-# Language GADTs, Rank2Types #-}
+{-# Language GADTs, Rank2Types, TemplateHaskell #-}
 
 module Language.Drasil.Chunk.UncertainQuantity 
   ( UncertQ
@@ -14,6 +14,7 @@ module Language.Drasil.Chunk.UncertainQuantity
 import Language.Drasil.Chunk
 import Language.Drasil.Chunk.NamedIdea
 import Language.Drasil.Chunk.Quantity
+import Language.Drasil.Chunk.DefinedQuantity (cqs)
 import Language.Drasil.Chunk.Constrained
 import Language.Drasil.Chunk.Concept
 import Language.Drasil.Chunk.SymbolForm
@@ -22,52 +23,44 @@ import Language.Drasil.Expr
 import Language.Drasil.NounPhrase
 import Language.Drasil.Space
 import Language.Drasil.Symbol
-import Control.Lens ((^.), set, Simple, Lens)
+import Control.Lens ((^.), set, Lens', makeLenses)
 
 import Prelude hiding (id)
 
 -- | An UncertainQuantity is just a Quantity with some uncertainty associated to it.
 -- This uncertainty is represented as a decimal value between 0 and 1 (percentage).
 class Quantity c => UncertainQuantity c where
-  uncert :: Simple Lens c (Maybe Double)
+  uncert :: Lens' c (Maybe Double)
 
 {-- | UncertQ is a chunk which is an instance of UncertainQuantity. It takes a 
 -- Quantity and a Double (from 0 to 1) which represents a percentage of uncertainty-}
 -- UQ takes a constrained chunk, an uncertainty (between 0 and 1), and a typical value
 
-data UncertQ where
-  UQ :: (Quantity c, Constrained c, Concept c) => c
-        -> Maybe Double -> UncertQ
+data UncertQ = UQ { _coco :: ConstrConcept, _unc :: Maybe Double }
+makeLenses ''UncertQ
   
 instance Eq UncertQ where a == b = (a ^. id) == (b ^. id)
-instance Chunk UncertQ where id = qlens id
-instance NamedIdea UncertQ where term = qlens term
+instance Chunk UncertQ where id = coco . id
+instance NamedIdea UncertQ where term = coco . term
 instance Idea UncertQ where getA (UQ q _) = getA q
-instance HasSpace UncertQ where typ = qlens typ
+instance HasSpace UncertQ where typ = coco . typ
 instance HasSymbol UncertQ where symbol s  (UQ q _) = symbol s q
 instance Quantity UncertQ where getUnit    (UQ q _) = getUnit q
-instance UncertainQuantity UncertQ where uncert f (UQ a b) = fmap (\x -> UQ a x) (f b)
+instance UncertainQuantity UncertQ where uncert = unc
 instance Constrained UncertQ where
-  constraints = qlens constraints
-  reasVal = qlens reasVal
-instance Definition UncertQ where defn = qlens defn
-instance ConceptDomain UncertQ where cdom = qlens cdom
+  constraints = coco . constraints
+  reasVal = coco . reasVal
+instance Definition UncertQ where defn = coco . defn
+instance ConceptDomain UncertQ where cdom = coco . cdom
 instance Concept UncertQ where
-
--- DO NOT Export qlens
-qlens :: (forall c. (Quantity c, Constrained c, Concept c) =>
-  Simple Lens c a) -> Simple Lens UncertQ a
-qlens l f (UQ q u) = fmap (\x -> UQ (set l x q) u) (f (q ^. l))
 
 {-- Constructors --}
 -- | The UncertainQuantity constructor. Requires a Quantity, a percentage, and a typical value
-uq :: (Quantity c, Constrained c, Concept c) =>
-  c -> Double -> UncertQ
-uq q u = UQ q (Just u)
+uq :: (Quantity c, Constrained c, Concept c) => c -> Double -> UncertQ
+uq q u = UQ (ConstrConcept (cqs q) (q ^. constraints) (q ^. reasVal)) (Just u)
 
-uqNU :: (Quantity c, Constrained c, Concept c) =>
-  c -> UncertQ
-uqNU q = UQ q Nothing
+uqNU :: (Quantity c, Constrained c, Concept c) => c -> UncertQ
+uqNU q = UQ (ConstrConcept (cqs q) (q ^. constraints) (q ^. reasVal)) Nothing
 
 uqc :: (Unit u) => String -> NP -> String -> Symbol -> u 
                 -> Space -> [Constraint]
@@ -111,7 +104,7 @@ instance Constrained UncertainChunk where
 
 -- DO NOT Export cLens
 cLens :: (forall c. (Quantity c, Constrained c) =>
-  Simple Lens c a) -> Simple Lens UncertainChunk a
+  Lens' c a) -> Lens' UncertainChunk a
 cLens l f (UCh q u) = fmap (\x -> UCh (set l x q) u) (f (q ^. l))
 
 {-- Constructors --}

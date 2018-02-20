@@ -1,4 +1,4 @@
-module Drasil.SWHS.IMods (s4_2_5_IMods,
+module Drasil.SWHS.IMods (insta_model_IMods,
   eBalanceOnWtr, heatEInWtr) where
 
 import Language.Drasil
@@ -18,9 +18,9 @@ import Drasil.SWHS.Concepts (phsChgMtrl, water)
 import Data.Drasil.Concepts.PhysicalProperties (solid, liquid, mass)
 import Data.Drasil.Concepts.Thermodynamics (boiling, heat, temp, melting,
   latent_heat, sens_heat, heat_cap_spec, thermal_energy, boil_pt)
-
-s4_2_5_IMods :: [RelationConcept]
-s4_2_5_IMods = [eBalanceOnWtr, eBalanceOnPCM, heatEInWtr, heatEInPCM]
+--s4_2_5_IMods
+insta_model_IMods :: [RelationConcept]
+insta_model_IMods = [eBalanceOnWtr, eBalanceOnPCM, heatEInWtr, heatEInPCM]
 
 ---------
 -- IM1 --

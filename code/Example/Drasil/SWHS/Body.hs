@@ -41,7 +41,7 @@ import Drasil.SWHS.Concepts (progName, sWHT, water, rightSide, phsChgMtrl,
   coil, perfect_insul, tank, transient, gauss_div, swhs_pcm,
   phase_change_material, tank_pcm)
 import Drasil.SWHS.TMods (tModels, t1ConsThermE, theory_model_swhsTMods)
-import Drasil.SWHS.IMods (s4_2_5_IMods)
+import Drasil.SWHS.IMods (insta_model_IMods)
 import Drasil.SWHS.DataDefs (swhsSymbMapDRef, swhsSymbMapTRef, swhsDataDefs,
   dd1HtFluxC, dd2HtFluxP, swhsSymbMapT, s4_2_4_swhsDataDefs)
 import Drasil.SWHS.GenDefs (swhsGenDefs)
@@ -394,7 +394,7 @@ instnce_model = inModelF problem_desc
 --s4_2_5_IModsWithDerivs
 instnce_model_IModsWithDerivs :: [Contents]
 instnce_model_IModsWithDerivs = concat $ weave [instnce_model_derivations,
-  map (\x -> [swhsSymbMapT x]) s4_2_5_IMods]
+  map (\x -> [swhsSymbMapT x]) insta_model_IMods]
 
 --s4_2_5_derivations
 instnce_model_derivations :: [[Contents]]
@@ -578,7 +578,7 @@ trace_matrix_grph_dataRef, trace_matrix_grph_funcReqRef,
    trace_matrix_grph_likelyChgRef, trace_matrix_grph_genDefRef :: [Sentence]
 
 trace_matrix_grph_instaModel = ["IM1", "IM2", "IM3", "IM4"]
-trace_matrix_grph_instaModelRef = map (refFromType Theory) s4_2_5_IMods
+trace_matrix_grph_instaModelRef = map (refFromType Theory) insta_model_IMods
 
 trace_matrix_grph_funcReq = ["R1", "R2", "R3", "R4", "R5", "R6", "R7", "R8", "R9", "R10",
   "R11"]

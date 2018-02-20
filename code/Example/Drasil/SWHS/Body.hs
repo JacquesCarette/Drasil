@@ -43,7 +43,7 @@ import Drasil.SWHS.Concepts (progName, sWHT, water, rightSide, phsChgMtrl,
 import Drasil.SWHS.TMods (tModels, t1ConsThermE, theory_model_swhsTMods)
 import Drasil.SWHS.IMods (insta_model_IMods)
 import Drasil.SWHS.DataDefs (swhsSymbMapDRef, swhsSymbMapTRef, swhsDataDefs,
-  dd1HtFluxC, dd2HtFluxP, swhsSymbMapT, s4_2_4_swhsDataDefs)
+  dd1HtFluxC, dd2HtFluxP, swhsSymbMapT, data_def_swhsDataDefs)
 import Drasil.SWHS.GenDefs (swhsGenDefs)
 import Drasil.SWHS.References (s9_swhs_citations)
 import Drasil.SWHS.Assumptions (s4_2_1_list, assump3, assump4, assump5,
@@ -326,7 +326,7 @@ sol_charac_spec = solChSpecF progName (problem_desc, likely_chng) data_def_intro
   (data_constraint_mid, dataConstraintUncertainty, data_constraint_T1footer quantity surArea
   vol htTransCoeff_min phsChgMtrl) (s4_2_1_list, 
   theory_model_swhsTMods, sol_charac_genDefs ++ sol_charac_deriv,
-  s4_2_4_swhsDataDefs, instnce_model_IModsWithDerivs, data_constraints_DataConTables) [property_of_corr_sol]
+  data_def_swhsDataDefs, instnce_model_IModsWithDerivs, data_constraints_DataConTables) [property_of_corr_sol]
 
 -------------------------
 -- 4.2.1 : Assumptions --

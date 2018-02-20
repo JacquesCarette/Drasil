@@ -68,16 +68,16 @@ melt_frac_eqn :: Expr
 melt_frac_eqn = (C latentE_P) / ((C htFusion) * (C pcm_mass))
 
 --Need to add units to data definition descriptions
+--s4_2_4_
+data_def_swhsDataDefs :: [Contents]
+data_def_swhsDataDefs = acroNumGen (data_def_DD1 ++ data_def_DD2 ++
+  data_def_DD3 ++ data_def_DD4) 1
 
-s4_2_4_swhsDataDefs :: [Contents]
-s4_2_4_swhsDataDefs = acroNumGen (s4_2_4_DD1 ++ s4_2_4_DD2 ++
-  s4_2_4_DD3 ++ s4_2_4_DD4) 1
-
-s4_2_4_DD1, s4_2_4_DD2, s4_2_4_DD3, s4_2_4_DD4 :: [Contents]
-s4_2_4_DD1 = map swhsSymbMapD [dd1HtFluxC]
-s4_2_4_DD2 = map swhsSymbMapD [dd2HtFluxP]
-s4_2_4_DD3 = map swhsSymbMapD [dd3HtFusion]
-s4_2_4_DD4 = map swhsSymbMapD [dd4MeltFrac]
+data_def_DD1, data_def_DD2, data_def_DD3, data_def_DD4 :: [Contents]
+data_def_DD1 = map swhsSymbMapD [dd1HtFluxC]
+data_def_DD2 = map swhsSymbMapD [dd2HtFluxP]
+data_def_DD3 = map swhsSymbMapD [dd3HtFusion]
+data_def_DD4 = map swhsSymbMapD [dd4MeltFrac]
 
 --Symbol appears as "Label"
 --There is no actual label

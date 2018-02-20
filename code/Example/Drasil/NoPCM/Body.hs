@@ -26,7 +26,7 @@ import Drasil.SWHS.Unitals (w_vol, tank_length, tank_vol, tau_W, temp_W,
   w_density_min, w_density_max, htCap_W_min, htCap_W_max, coil_HTC_min,
   coil_HTC_max, time_final_max, sim_time, coil_SA_max, eta)
 import Drasil.SWHS.DataDefs(swhsSymbMapDRef, swhsSymbMapTRef, dd1HtFluxC,
-  s4_2_4_DD1, swhsSymbMapT)
+  data_def_DD1, swhsSymbMapT)
 import Drasil.SWHS.TMods (theory_model_T1, t1ConsThermE)
 import Drasil.SWHS.GenDefs (swhsGenDefs, nwtnCooling, rocTempSimp)
 import Drasil.SWHS.IMods (heatEInWtr)
@@ -392,7 +392,7 @@ goal_stmt_list temw we = enumSimple 1 (short goalStmt) [
 --s4_2  
 sol_charac_spec = solChSpecF progName (prob_des, likely_chg) data_def_intro_end (mid,
   dataConstraintUncertainty, end) (assump_list, acroNumGen theory_model_T1 1,
-  general_def_paragraph M.rOfChng temp, acroNumGen s4_2_4_DD1 1,
+  general_def_paragraph M.rOfChng temp, acroNumGen data_def_DD1 1,
   [swhsSymbMapT eBalanceOnWtr] ++ (insta_model_d1startPara energy water) ++
   intance_model_paragraph ++ [swhsSymbMapT heatEInWtr], [data_constraint_table1, data_constraint_table2])
   []

@@ -13,9 +13,9 @@ import Drasil.NoPCM.GenDefs (roc_temp_simp_deriv)
 -- NoPCM, check SWHS.
 import Drasil.SWHS.Assumptions (assump1, assump2, assump7, assump8, assump9,
   assump14, assump15, assump20)
-import Drasil.SWHS.Body (s2_3_knowlegde, s2_3_understanding, s2_4_intro,
-  s3, physSyst1, physSyst2, s4_2_4_intro_end, s4_2_5_d1startPara,
-  s7_trailing)
+import Drasil.SWHS.Body (charac_of_reader_knowledge, charac_of_reader_understanding, org_of_doc_intro,
+  gen_sys_desc, physSyst1, physSyst2, data_def_intro_end, insta_model_d1startPara,
+  trace_matrix_grph_trailing)
 import Drasil.SWHS.Concepts (progName, water, gauss_div, sWHT, tank, coil,
   transient, perfect_insul, tank_para)
 import Drasil.SWHS.Unitals (w_vol, tank_length, tank_vol, tau_W, temp_W,
@@ -143,10 +143,10 @@ mkSRS = RefSec (RefProg intro
   [IPurpose (purpose_of_doc progName),
   IScope (scp_of_req_start thermal_analysis sWHT) (scp_of_req_end temp thermal_energy
     water),
-  IChar (s2_3_knowlegde ht_trans_theo) (s2_3_understanding M.de) EmptyS,
-  IOrgSec s2_4_intro inModel (SRS.inModel SRS.missingP [])
+  IChar (charac_of_reader_knowledge ht_trans_theo) (charac_of_reader_understanding M.de) EmptyS,
+  IOrgSec org_of_doc_intro inModel (SRS.inModel SRS.missingP [])
   (org_of_doc_end inModel M.ode progName)]) : 
-  Verbatim s3: --Verbatim s3:
+  Verbatim gen_sys_desc: --Verbatim gen_sys_desc:
   ------
   {-SSDSec (SSDProg [SSDSubVerb s4_1, 
     SSDSolChSpec (SCSProg [
@@ -390,10 +390,10 @@ goal_stmt_list temw we = enumSimple 1 (short goalStmt) [
 --Section 4.2 : SOLUTION CHARACTERISTICS SPECIFICATION
 ------------------------------------------------------
 --s4_2  
-sol_charac_spec = solChSpecF progName (prob_des, likely_chg) s4_2_4_intro_end (mid,
+sol_charac_spec = solChSpecF progName (prob_des, likely_chg) data_def_intro_end (mid,
   dataConstraintUncertainty, end) (assump_list, acroNumGen s4_2_2_T1 1,
   general_def_paragraph M.rOfChng temp, acroNumGen s4_2_4_DD1 1,
-  [swhsSymbMapT eBalanceOnWtr] ++ (s4_2_5_d1startPara energy water) ++
+  [swhsSymbMapT eBalanceOnWtr] ++ (insta_model_d1startPara energy water) ++
   intance_model_paragraph ++ [swhsSymbMapT heatEInWtr], [data_constraint_table1, data_constraint_table2])
   []
   where
@@ -860,7 +860,7 @@ likeChg3_npcm = mkLklyChnk "likeChg3" $
 --Section 7:  TRACEABILITY MATRICES AND GRAPHS
 ----------------------------------------------
 --s7
-trace_matrix_grph = traceMGF trace_matrix_grph_refList s7_trailing
+trace_matrix_grph = traceMGF trace_matrix_grph_refList trace_matrix_grph_trailing
   ([trace_matrix_grph_table1, trace_matrix_grph_table2, trace_matrix_grph_table3] ++
   (trace_matrix_grph_intro2) ++ [trace_matrix_grph_fig1, trace_matrix_grph_fig2]) []
 

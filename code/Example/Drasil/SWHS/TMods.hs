@@ -1,7 +1,7 @@
 {-# OPTIONS -Wall #-}
 {-# LANGUAGE FlexibleContexts #-}
 module Drasil.SWHS.TMods (tModels, t1ConsThermE, 
-  s4_2_2_swhsTMods, s4_2_2_T1) where
+  theory_model_swhsTMods, theory_model_T1) where
 
 import Language.Drasil
 import Control.Lens ((^.))
@@ -31,15 +31,17 @@ import Drasil.SWHS.DataDefs (swhsSymbMapDRef, dd3HtFusion, swhsSymbMapT,
 tModels :: [RelationConcept]
 tModels = [t1ConsThermE, t2SensHtE, t3LatHtE]
 
-s4_2_2_swhsTMods :: [Contents]
-s4_2_2_swhsTMods = acroNumGen (s4_2_2_T1 ++ s4_2_2_T2 ++ s4_2_2_T3) 1
+--s4_2_2_swhsTMods
+theory_model_swhsTMods :: [Contents]
+theory_model_swhsTMods = acroNumGen (theory_model_T1 ++ theory_model_T2 
+  ++ theory_model_T3) 1
 
 -------------------------
 -- Theoretical Model 1 --
 -------------------------
-
-s4_2_2_T1 :: [Contents]
-s4_2_2_T1 = map swhsSymbMapT [t1ConsThermE]
+--s4_2_2_T1
+theory_model_T1 :: [Contents]
+theory_model_T1 = map swhsSymbMapT [t1ConsThermE]
 
 t1ConsThermE :: RelationConcept
 t1ConsThermE = makeRC "t1ConsThermE"
@@ -77,9 +79,9 @@ t1descr = foldlSent [
 -------------------------
 -- Theoretical Model 2 --
 -------------------------
-
-s4_2_2_T2 :: [Contents]
-s4_2_2_T2 = map swhsSymbMapT [t2SensHtE]
+--s4_2_2_T2
+theory_model_T2 :: [Contents]
+theory_model_T2 = map swhsSymbMapT [t2SensHtE]
 
 t2SensHtE :: RelationConcept
 t2SensHtE = makeRC "t2SensHtE"
@@ -131,9 +133,9 @@ t2descr = foldlSent [
 -------------------------
 -- Theoretical Model 3 --
 -------------------------
-
-s4_2_2_T3 :: [Contents]
-s4_2_2_T3 = map swhsSymbMapT [t3LatHtE]
+--s4_2_2_T3
+theory_model_T3 :: [Contents]
+theory_model_T3 = map swhsSymbMapT [t3LatHtE]
 
 t3LatHtE :: RelationConcept
 t3LatHtE = makeRC "t3LatHtE"

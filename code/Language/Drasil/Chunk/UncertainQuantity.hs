@@ -1,4 +1,4 @@
-{-# Language GADTs, Rank2Types, TemplateHaskell #-}
+{-# Language TemplateHaskell #-}
 
 module Language.Drasil.Chunk.UncertainQuantity 
   ( UncertQ
@@ -23,7 +23,7 @@ import Language.Drasil.Expr
 import Language.Drasil.NounPhrase
 import Language.Drasil.Space
 import Language.Drasil.Symbol
-import Control.Lens ((^.), set, Lens', makeLenses)
+import Control.Lens ((^.), Lens', makeLenses)
 
 import Prelude hiding (id)
 
@@ -62,8 +62,8 @@ uq q u = UQ (ConstrConcept (cqs q) (q ^. constraints) (q ^. reasVal)) (Just u)
 uqNU :: (Quantity c, Constrained c, Concept c) => c -> UncertQ
 uqNU q = UQ (ConstrConcept (cqs q) (q ^. constraints) (q ^. reasVal)) Nothing
 
-uqc :: (Unit u) => String -> NP -> String -> Symbol -> u 
-                -> Space -> [Constraint]
+-- this is kind of crazy and probably shouldn't be used!
+uqc :: (Unit u) => String -> NP -> String -> Symbol -> u -> Space -> [Constraint]
                 -> Expr -> Double -> UncertQ
 uqc nam trm desc sym un space cs val uncrt = uq
   (cuc' nam trm desc sym un space cs val) uncrt
@@ -72,53 +72,38 @@ uqc nam trm desc sym un space cs val uncrt = uq
 uqcNU :: (Unit u) => String -> NP -> String -> Symbol -> u 
                   -> Space -> [Constraint]
                   -> Expr -> UncertQ
-uqcNU nam trm desc sym un space cs val = uqNU $
-  cuc' nam trm desc sym un space cs val
+uqcNU nam trm desc sym un space cs val = uqNU $ cuc' nam trm desc sym un space cs val
 
---uncertainty quanity constraint no description
-uqcND :: (Unit u) => String -> NP -> Symbol -> u 
-                  -> Space -> [Constraint]
+--uncertainty quantity constraint no description
+uqcND :: (Unit u) => String -> NP -> Symbol -> u -> Space -> [Constraint]
                   -> Expr -> Double -> UncertQ
-uqcND nam trm sym un space cs val uncrt = uq
-  (cuc' nam trm "" sym un space cs val) uncrt
+uqcND nam trm sym un space cs val uncrt = uq (cuc' nam trm "" sym un space cs val) uncrt
 
 {--}
 
-data UncertainChunk where 
-  UCh :: (Quantity c, Constrained c) => c
-        -> Maybe Double -> UncertainChunk
+data UncertainChunk  = UCh { _conc :: ConstrainedChunk, _unc' :: Maybe Double }
+makeLenses ''UncertainChunk
 
-instance Eq UncertainChunk where
-  (UCh c1 _) == (UCh c2 _) = (c1 ^. id) == (c2 ^. id)
-instance Chunk UncertainChunk where id = cLens id
-instance NamedIdea UncertainChunk where term = cLens term
+instance Chunk UncertainChunk where id = conc . id
+instance Eq UncertainChunk where c1 == c2 = (c1 ^. id) == (c2 ^. id)
+instance NamedIdea UncertainChunk where term = conc . term
 instance Idea UncertainChunk where getA (UCh n _) = getA n
-instance HasSpace UncertainChunk where typ = cLens typ
+instance HasSpace UncertainChunk where typ = conc . typ
 instance HasSymbol UncertainChunk where symbol s  (UCh c _) = symbol s c
 instance Quantity UncertainChunk where getUnit    (UCh c _) = getUnit c
-instance UncertainQuantity UncertainChunk where --makes sense?
-  uncert f (UCh a b) = fmap (\x -> UCh a x) (f b)
 instance Constrained UncertainChunk where
-  constraints = cLens constraints
-  reasVal = cLens reasVal
-
--- DO NOT Export cLens
-cLens :: (forall c. (Quantity c, Constrained c) =>
-  Lens' c a) -> Lens' UncertainChunk a
-cLens l f (UCh q u) = fmap (\x -> UCh (set l x q) u) (f (q ^. l))
+  constraints = conc . constraints
+  reasVal = conc . reasVal
+instance UncertainQuantity UncertainChunk where uncert = unc'
 
 {-- Constructors --}
 -- | The UncertainQuantity constructor. Requires a Quantity, a percentage, and a typical value
-uncrtnChunk :: (Quantity c, Constrained c) =>
-  c -> Double -> UncertainChunk
-uncrtnChunk q u = UCh q (Just u)
+uncrtnChunk :: (Quantity c, Constrained c) => c -> Double -> UncertainChunk
+uncrtnChunk q u = UCh (cnstrw q) (Just u)
 
 -- | Creates an uncertain varchunk
-uvc :: String -> NP -> Symbol 
-                -> Space -> [Constraint]
-                -> Expr -> Double -> UncertainChunk
-uvc nam trm sym space cs val uncrt = uncrtnChunk
-  (cvc nam trm sym space cs val) uncrt
+uvc :: String -> NP -> Symbol -> Space -> [Constraint] -> Expr -> Double -> UncertainChunk
+uvc nam trm sym space cs val uncrt = uncrtnChunk (cvc nam trm sym space cs val) uncrt
 
 uncrtnw :: (UncertainQuantity c, Constrained c) => c -> UncertainChunk
-uncrtnw c = UCh c (c ^. uncert)
+uncrtnw c = UCh (cnstrw c) (c ^. uncert)

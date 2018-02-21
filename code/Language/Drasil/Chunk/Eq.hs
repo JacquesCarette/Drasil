@@ -1,4 +1,4 @@
-{-# LANGUAGE GADTs, Rank2Types, TemplateHaskell #-}
+{-# LANGUAGE TemplateHaskell #-}
 module Language.Drasil.Chunk.Eq 
   (QDefinition(..), fromEqn, fromEqn', fromEqn'', equat, getVC
   , ec, ec', aqd) where
@@ -9,8 +9,6 @@ import Language.Drasil.Expr (Expr)
 import Language.Drasil.Chunk
 import Language.Drasil.Chunk.Attribute
 import Language.Drasil.Chunk.NamedIdea (NamedIdea(..), Idea(..))
-import Language.Drasil.Chunk.Concept
-import Language.Drasil.Chunk.ConVar
 import Language.Drasil.Chunk.Quantity (Quantity(getUnit),HasSpace(typ), QuantityDict,
   mkQuant, qw)
 import Language.Drasil.Chunk.ExprRelat
@@ -20,7 +18,7 @@ import Language.Drasil.Unit (Unit(..), unitWrapper)
 import Language.Drasil.Symbol (Symbol)
 import Language.Drasil.Space
 
-import Language.Drasil.NounPhrase (NP, phrase)
+import Language.Drasil.NounPhrase (NP)
 import Language.Drasil.Spec
 
 -- | A QDefinition is a 'Quantity' with a defining equation.
@@ -41,8 +39,6 @@ instance Eq QDefinition where a == b = (a ^. id) == (b ^. id)
   
 -- useful: to be used for equations with units
 --FIXME: Space hack
---TODO: Create a version which doesn't use ConVar, but instead only 
---     NamedIdeas if we decide the "new" unital needs only a named idea
 
 -- | Create a 'QDefinition' with an id, noun phrase, term, symbol,
 -- unit, and defining equation.  And it ignores the term...

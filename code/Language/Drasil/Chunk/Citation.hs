@@ -1,8 +1,8 @@
 module Language.Drasil.Chunk.Citation
   ( -- Types
-    Citation, BibRef, CiteField(..), Month(..), HP(..)
+    Citation, BibRef, CiteField(..), Month(..), HP(..), ExternRefType(..), EntryID
     -- Accessors
-  , externRefT, fields
+  , citeID, externRefT, fields
     -- CiteFields smart constructors
       -- People -> CiteField
   , author, editor
@@ -72,7 +72,7 @@ data Month = Jan
            | Dec deriving (Eq, Ord)
 
 instance Show Month where
-  show Jan = "Janurary"
+  show Jan = "January"
   show Feb = "February"
   show Mar = "March"
   show Apr = "April"
@@ -90,7 +90,7 @@ instance Show Month where
 -- Finally we will have the reference information (type and fields).
 data Citation = Cite 
   { _id :: String
-  , _citeID :: EntryID
+  , citeID :: EntryID
   , externRefT :: ExternRefType
   , fields :: [CiteField] 
   }

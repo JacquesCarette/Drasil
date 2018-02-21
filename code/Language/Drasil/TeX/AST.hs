@@ -3,7 +3,7 @@ module Language.Drasil.TeX.AST where
 import Language.Drasil.Symbol (Symbol)
 import Language.Drasil.Unicode (Greek,Special)
 import Language.Drasil.Spec (USymb, RefType)
-import Language.Drasil.Citations (Month(..))
+import Language.Drasil.Chunk.Citation (Month(..), ExternRefType, EntryID)
 import Language.Drasil.People (People)
 import Language.Drasil.Document (MaxWidthPercent, DType)
 import Language.Drasil.Printing.AST
@@ -66,35 +66,31 @@ type BibRef = [Citation]
 type City   = Spec
 type State  = Spec
 
-data Citation = Book [CiteField] | Article [CiteField]
-              | MThesis [CiteField] | PhDThesis [CiteField]
-              | Misc [CiteField] | Online [CiteField]
+data Citation = Cite EntryID ExternRefType [CiteField]
 
-data CiteField = Author     People
-               | Title      Spec
-               | Series     Spec
-               | Collection Spec
-               | Volume     Integer
-               | Edition    Integer
-               | Place    (City, State) --State can also mean country
-               | Publisher  Spec
-               | Journal    Spec
-               | Year       Integer
-               | Date Integer Month Integer
-               | Page       Integer
-               | Pages    (Integer, Integer)
-               | Note       Spec
-               | Issue      Integer
-               | School     Spec
-               | URL        Spec
-               | HowPub     Spec
-               | URLdate Integer Month Integer
-               | Editor     People
+-- | Fields used in citations.
+data CiteField = Address      Spec
+               | Author       People
+               | BookTitle    Spec -- Used for 'InCollection' references only.
+               | Chapter      Int
+               | Edition      Int
+               | Editor       People
+               | HowPublished HP
+               | Institution  Spec
+               | Journal      Spec
+               | Month        Month
+               | Note         Spec
+               | Number       Int
+               | Organization Spec
+               | Pages        [Int] -- Range of pages (ex1. 1-32; ex2. 7,31,52-55)
+               | Publisher    Spec
+               | School       Spec
+               | Series       Spec
+               | Title        Spec
+               | Type         Spec -- BibTeX "type" field
+               | Volume       Int
+               | Year         Int
 
-instance Show Citation where
-  show (Book      _) = "book"
-  show (Article   _) = "article"
-  show (MThesis   _) = "mastersthesis"
-  show (PhDThesis _) = "phdthesis"
-  show (Misc      _) = "misc"
-  show (Online    _) = "online"
+-- | How Published. Necessary for URLs to work properly.             
+data HP = URL Spec 
+        | Verb Spec

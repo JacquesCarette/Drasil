@@ -26,6 +26,7 @@ import Language.Drasil.Unicode (RenderGreek(..), RenderSpecial(..))
 import Language.Drasil.People (People,rendPersLFM,lstName,Person(..),Conv(Mono))
 import Language.Drasil.ChunkDB (HasSymbolTable)
 import Language.Drasil.Space (Space(..))
+import Language.Drasil.Chunk.Citation (ExternRefType(..), Month(..))
 
 genTeX :: HasSymbolTable ctx => A.DocType -> L.Document -> ctx -> TP.Doc
 genTeX typ doc sm = runPrint (build sm typ $ I.makeDocument sm doc) Text
@@ -309,7 +310,7 @@ specLength (a :^: b) = specLength a + specLength b
 specLength (a :/: b) = specLength a + specLength b
 specLength (G _)     = 1
 specLength (EmptyS)  = 0
-specLength _         = 0 
+specLength _         = 0
 
 dontCount :: String
 dontCount = "\\/[]{}()_^$:"
@@ -336,7 +337,7 @@ needs (G _)     = Math
 needs (Sp _)    = Math
 needs HARDNL    = Text
 needs (Ref _ _ _) = Text
-needs (EmptyS)  = Text  
+needs (EmptyS)  = Text
 
 -- print all Spec through here
 spec :: Spec -> D
@@ -420,7 +421,7 @@ makeDRows :: HasSymbolTable s => s -> [(String,[LayoutObj])] -> D
 makeDRows _  []         = error "No fields to create Defn table"
 makeDRows sm ((f,d):[]) = dBoilerplate %% (pure $ text (f ++ " & ")) <>
   (vcat $ map (flip lo sm) d)
-makeDRows sm ((f,d):ps) = dBoilerplate %% (pure $ text (f ++ " & ")) <> 
+makeDRows sm ((f,d):ps) = dBoilerplate %% (pure $ text (f ++ " & ")) <>
   (vcat $ map (flip lo sm) d)
                        %% makeDRows sm ps
 dBoilerplate :: D
@@ -456,7 +457,7 @@ sim_item [] = [empty]
 sim_item ((x,y):zs) = item' (spec (x :+: S ":")) (sp_item y) : sim_item zs
     where sp_item (Flat s) = spec s
           sp_item (Nested t s) = vcat [spec t, makeList s]
-          
+
 def_item :: [(Spec, ItemType)] -> [D]
 def_item [] = [empty]
 def_item ((x,y):zs) = item (spec (x :+: S " is the " :+: d_item y)) : def_item zs
@@ -482,7 +483,7 @@ p_op :: Function -> [Expr] -> String
 p_op f@(Summation bs) (x:[]) = function f ++ makeBound bs ++ brace (sqbrac (p_expr x))
 p_op (Summation _) _ = error "Something went wrong with a summation"
 p_op f@(Product bs) (x:[]) = function f ++ makeBound bs ++ brace (p_expr x)
-p_op f@(Integral bs wrtc) (x:[]) = function f ++ makeIBound bs ++ 
+p_op f@(Integral bs wrtc) (x:[]) = function f ++ makeIBound bs ++
   brace (p_expr x ++ "d" ++ symbol wrtc) -- HACK alert.
 p_op (Integral _ _) _  = error "Something went wrong with an integral"
 p_op Abs (x:[]) = "|" ++ p_expr x ++ "|"
@@ -500,7 +501,7 @@ makeBound (Just ((s,v),hi)) = "_" ++ brace ((symbol s ++"="++ p_expr v)) ++
 makeBound Nothing = ""
 
 makeIBound :: (Maybe Expr, Maybe Expr) -> String
-makeIBound (Just low, Just high) = "_" ++ brace (p_expr low) ++ 
+makeIBound (Just low, Just high) = "_" ++ brace (p_expr low) ++
                                    "^" ++ brace (p_expr high)
 makeIBound (Just low, Nothing)   = "_" ++ brace (p_expr low)
 makeIBound (Nothing, Just high)  = "^" ++ brace (p_expr high)
@@ -569,32 +570,17 @@ makeBib sm bib = spec $
 
 bibLines :: String
 bibLines =
-  "\\nocite{*}\n" ++ 
+  "\\nocite{*}\n" ++
   "\\bibstyle{" ++ bibStyleT ++ "}\n" ++ --bibStyle is in Config.hs
   "\\printbibliography[heading=none]"
 
 mkBibRef :: HasSymbolTable s => s -> BibRef -> Spec
-mkBibRef sm = foldl1 (\x y -> x :+: S "\n\n" :+: y) . map (renderCite sm)
+mkBibRef sm = foldl1 (\x y -> x :+: S "\n\n" :+: y) . map (renderF sm)
 
---for when we add other things to reference like website, newspaper
-renderCite :: HasSymbolTable s => s -> Citation -> Spec
-renderCite sm c@(Book      fields) = renderF sm c fields
-renderCite sm c@(Article   fields) = renderF sm c fields
-renderCite sm c@(MThesis   fields) = renderF sm c fields
-renderCite sm c@(PhDThesis fields) = renderF sm c fields
-renderCite sm c@(Misc      fields) = renderF sm c fields
-renderCite sm c@(Online    fields) = renderF sm c fields
-
---Rendering a book--
-renderF :: HasSymbolTable s => s -> Citation -> [CiteField] -> Spec
-renderF sm c fields = 
-  S "@":+: S (show c) :+: S "{" :+: (cite sm fields) :+: S ",\n" :+: 
+renderF :: HasSymbolTable s => s -> Citation -> Spec
+renderF sm (Cite cid refType fields) =
+  S (showT refType) :+: S ("{" ++ cid ++ ",\n") :+:
   (foldl1 (:+:) . intersperse (S ",\n") . map (showBibTeX sm)) fields :+: S "}"
---renderBook _ = error "Tried to render a non-book using renderBook." 
-
-cite :: HasSymbolTable s => s -> [CiteField] -> Spec
-cite sm fields = foldr1 (:+:) $
-  map (I.spec sm . rmSpace . lstName) (getAuthors fields) ++ [S $ show $ getYear fields]
 
 -- Remove spaces
 rmSpace :: LS.Sentence -> LS.Sentence
@@ -607,47 +593,88 @@ rmSpaceChar [] = []
 rmSpaceChar (' ':xs) = rmSpaceChar xs
 rmSpaceChar (x:xs)   = x : rmSpaceChar xs
 
-
 getAuthors :: [CiteField] -> People
 getAuthors [] = error "No authors found" --FIXME: return a warning
 getAuthors ((Author people):_) = people
 getAuthors (_:xs) = getAuthors xs
 
-getYear :: [CiteField] -> Integer
+getYear :: [CiteField] -> Int
 getYear [] = error "No year found" --FIXME: return a warning
 getYear ((Year year):_) = year
-getYear ((Date _ _ year):_) = year
 getYear (_:xs) = getYear xs
 
+showT :: ExternRefType -> String
+showT Article       = "@article"
+showT Book          = "@book"
+showT Booklet       = "@booklet"
+showT InBook        = "@inbook"
+showT InCollection  = "@incollection"
+showT InProceedings = "@inproceedings"
+showT Manual        = "@manual"
+showT MThesis       = "@mastersthesis"
+showT Misc          = "@misc"
+showT PhDThesis     = "@phdthesis"
+showT Proceedings   = "@proceedings"
+showT TechReport    = "@techreport"
+showT Unpublished   = "@unpublished"
+
 showBibTeX :: HasSymbolTable s => s -> CiteField -> Spec
-showBibTeX _ (Place (city, state)) = showField "place" (city :+: S ", " :+: state)
-showBibTeX _ (Edition    s) = showField "edition" (S $ show s ++ sufxer s)
-showBibTeX _ (Series     s) = showField "series" s
-showBibTeX _ (Title      s) = showField "title" s
-showBibTeX _ (Volume     s) = showField "volume" (S $ show s)
-showBibTeX _ (Publisher  s) = showField "publisher" s
-showBibTeX sm (Author p@(Person {_convention=Mono}:_)) = showField "author" 
-  (I.spec sm (rendPeople p)) :+: S ",\n" :+: 
-  showField "sortkey" (I.spec sm (rendPeople p))
-showBibTeX sm (Author    p) = showField "author" $ I.spec sm (rendPeople p)
-showBibTeX _ (Year       y) = showField "year" (S $ show y)
-showBibTeX _ (Date   d m y) = showField "year"    (S $ unwords [show d, show m, show y])
-showBibTeX _ (URLdate d m y) = showField "urldate" (S $ unwords [show d, show m, show y])
-showBibTeX _ (Collection s) = showField "collection" s
-showBibTeX _ (Journal    s) = showField "journal" s
-showBibTeX _ (Page       s) = showField "pages" (S $ show s)
-showBibTeX _ (Pages (a, b)) = showField "pages" (S $ show a ++ "-" ++ show b)
-showBibTeX _ (Note       s) = showField "note" s
-showBibTeX _ (Issue      s) = showField "number" (S $ show s)
-showBibTeX _ (School     s) = showField "school" s
-showBibTeX _ (URL        s) = showField "url" s
-showBibTeX _ (HowPub     s) = showField "howpublished" s
-showBibTeX sm (Editor     p) = showField "editor" $ I.spec sm (rendPeople p)
+showBibTeX  _ (Address      s) = showField "address" s
+showBibTeX sm (Author       p) = showField "author" (rendPeople sm p)
+showBibTeX  _ (BookTitle    b) = showField "booktitle" b
+showBibTeX  _ (Chapter      c) = showField "chapter" (wrapS c)
+showBibTeX  _ (Edition      e) = showField "edition" (wrapS e)
+showBibTeX sm (Editor       e) = showField "editor" (rendPeople sm e)
+showBibTeX  _ (Institution  i) = showField "institution" i
+showBibTeX  _ (Journal      j) = showField "journal" j
+showBibTeX  _ (Month        m) = showField "month" (bibTeXMonth m)
+showBibTeX  _ (Note         n) = showField "note" n
+showBibTeX  _ (Number       n) = showField "number" (wrapS n)
+showBibTeX  _ (Organization o) = showField "organization" o
+showBibTeX  _ (Pages        p) = showField "pages" (pages p)
+showBibTeX  _ (Publisher    p) = showField "publisher" p
+showBibTeX  _ (School       s) = showField "school" s
+showBibTeX  _ (Series       s) = showField "series" s
+showBibTeX  _ (Title        t) = showField "title" t
+showBibTeX  _ (Type         t) = showField "type" t
+showBibTeX  _ (Volume       v) = showField "volume" (wrapS v)
+showBibTeX  _ (Year         y) = showField "year" (wrapS y)
+showBibTeX  _ (HowPublished (URL  u)) =
+  showField "howpublished" (S "\\url{" :+: u :+: S "}")
+showBibTeX  _ (HowPublished (Verb v)) = showField "howpublished" v
+
+--showBibTeX sm (Author p@(Person {_convention=Mono}:_)) = showField "author"
+  -- (I.spec sm (rendPeople p)) :+: S ",\n" :+:
+  -- showField "sortkey" (I.spec sm (rendPeople p))
+-- showBibTeX sm (Author    p) = showField "author" $ I.spec sm (rendPeople p)
 
 showField :: String -> Spec -> Spec
 showField f s = S f :+: S "={" :+: s :+: S "}"
 
-rendPeople :: People -> LS.Sentence
-rendPeople []  = LS.S "N.a." -- "No authors given"
-rendPeople people =
+rendPeople :: HasSymbolTable ctx => ctx -> People -> Spec
+rendPeople _ []  = S "N.a." -- "No authors given"
+rendPeople sm people = I.spec sm $
   foldl1 (\x y -> x LS.+:+ LS.S "and" LS.+:+ y) $ map rendPersLFM people
+
+bibTeXMonth :: Month -> Spec
+bibTeXMonth Jan = S "jan"
+bibTeXMonth Feb = S "feb"
+bibTeXMonth Mar = S "mar"
+bibTeXMonth Apr = S "apr"
+bibTeXMonth May = S "may"
+bibTeXMonth Jun = S "jun"
+bibTeXMonth Jul = S "jul"
+bibTeXMonth Aug = S "aug"
+bibTeXMonth Sep = S "sep"
+bibTeXMonth Oct = S "oct"
+bibTeXMonth Nov = S "nov"
+bibTeXMonth Dec = S "dec"
+
+wrapS :: Show a => a -> Spec
+wrapS = S . show
+
+pages :: [Int] -> Spec
+pages []  = error "Empty list of pages"
+pages (x:[]) = wrapS x
+pages (x:x2:[]) = wrapS $ show x ++ "-" ++ show x2
+pages xs = error $ "Too many pages given in reference. Received: " ++ show xs

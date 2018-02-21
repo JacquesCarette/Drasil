@@ -18,18 +18,15 @@ import Language.Drasil.Chunk.NamedIdea (term)
 import Language.Drasil.Chunk.Quantity (Quantity(..), eqSymb)
 import Language.Drasil.Chunk.ReqChunk (requires)
 import Language.Drasil.ChunkDB (getUnitLup, symbLookup, HasSymbolTable(..))
-import Language.Drasil.Chunk.Citation (Citation, CiteField(..), HP(..))
+import Language.Drasil.Chunk.Citation ( Citation, CiteField(..), HP(..)
+                                      , citeID, externRefT, fields)
 import Language.Drasil.Config (verboseDDDescription, numberedDDEquations, numberedTMEquations)
 import Language.Drasil.Document
-import Language.Drasil.Expr.Extract
 import Language.Drasil.Misc (unit'2Contents)
 import Language.Drasil.NounPhrase (phrase, titleize)
 import Language.Drasil.Reference
-import Language.Drasil.Space (Space(..))
-import Language.Drasil.Spec
 import Language.Drasil.Symbol
 import Language.Drasil.SymbolAlphabet
-import Language.Drasil.Unicode (Special(Partial))
 import Language.Drasil.Unit (usymb)
 
 expr :: HasSymbolTable ctx => Expr -> ctx -> P.Expr
@@ -177,37 +174,35 @@ lay sm x@(Graph ps w h t _)   = T.Graph (map (\(y,z) -> (spec sm y, spec sm z)) 
                                w h (spec sm t) (T.S (refAdd x))
 lay sm (Defnt dtyp pairs rn)  = T.Defnt dtyp (layPairs pairs) (T.S rn)
   where layPairs = map (\(x,y) -> (x, map (lay sm) y))
--- lay sm (Bib bib)          = T.Bib $ map (layCite sm) bib
+lay sm (Bib bib)          = T.Bib $ map (layCite sm) bib
 
 -- | For importing bibliography
--- layCite :: HasSymbolTable ctx => ctx -> Citation -> T.Citation
--- layCite sm (Book      fields) = T.Book      $ map (layField sm) fields
--- layCite sm (Article   fields) = T.Article   $ map (layField sm) fields
--- layCite sm (MThesis   fields) = T.MThesis   $ map (layField sm) fields
--- layCite sm (PhDThesis fields) = T.PhDThesis $ map (layField sm) fields
--- layCite sm (Misc      fields) = T.Misc      $ map (layField sm) fields
--- layCite sm (Online    fields) = T.Online    $ map (layField sm) fields
+layCite :: HasSymbolTable ctx => ctx -> Citation -> T.Citation
+layCite sm c = T.Cite (citeID c) (externRefT c) (map (layField sm) (fields c))
 
 layField :: HasSymbolTable ctx => ctx -> CiteField -> T.CiteField
-layField _  (Author     p) = T.Author     p
-layField sm (Title      s) = T.Title      $ spec sm s
-layField sm (Series     s) = T.Series     $ spec sm s
-layField sm (BookTitle  s) = T.Collection $ spec sm s
--- layField _  (Volume     n) = T.Volume     n
--- layField _  (Edition    n) = T.Edition    n
--- layField sm (Place (c, s)) = T.Place (spec sm c, spec sm s)
-layField sm (Publisher  s) = T.Publisher $ spec sm s
-layField sm (Journal    s) = T.Journal   $ spec sm s
--- layField _  (Year       n) = T.Year       n
--- layField _  (Date    n m y)= T.Date    n m y
--- layField _  (Page       n) = T.Page       n
--- layField _  (Pages     ns) = T.Pages     ns
-layField sm (Note       s) = T.Note       $ spec sm s
--- layField _  (Issue      n) = T.Issue      n
-layField sm (School     s) = T.School     $ spec sm s
--- layField sm (URL        n) = T.URL        $ spec sm n
--- layField sm (HowPub     s) = T.HowPub     $ spec sm s
-layField _  (Editor     p) = T.Editor     p
+layField sm (Address      s) = T.Address      $ spec sm s
+layField  _ (Author       p) = T.Author       p
+layField sm (BookTitle    b) = T.BookTitle    $ spec sm b
+layField  _ (Chapter      c) = T.Chapter      c
+layField  _ (Edition      e) = T.Edition      e
+layField  _ (Editor       e) = T.Editor       e
+layField sm (Institution  i) = T.Institution  $ spec sm i
+layField sm (Journal      j) = T.Journal      $ spec sm j
+layField  _ (Month        m) = T.Month        m
+layField sm (Note         n) = T.Note         $ spec sm n
+layField  _ (Number       n) = T.Number       n
+layField sm (Organization o) = T.Organization $ spec sm o
+layField  _ (Pages        p) = T.Pages        p
+layField sm (Publisher    p) = T.Publisher    $ spec sm p
+layField sm (School       s) = T.School       $ spec sm s
+layField sm (Series       s) = T.Series       $ spec sm s
+layField sm (Title        t) = T.Title        $ spec sm t
+layField sm (Type         t) = T.Type         $ spec sm t
+layField  _ (Volume       v) = T.Volume       v
+layField  _ (Year         y) = T.Year         y
+layField sm (HowPublished (URL  u)) = T.HowPublished (T.URL  $ spec sm u)
+layField sm (HowPublished (Verb v)) = T.HowPublished (T.Verb $ spec sm v)
 
 makeL :: HasSymbolTable ctx => ctx -> ListType -> T.ListType
 makeL sm (Bullet bs)      = T.Enum        $ map (item sm) bs

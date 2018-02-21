@@ -4,7 +4,7 @@ import Data.List (nub)
 
 import Language.Drasil.Config (hyperSettings, fontSize,bibFname)
 import Language.Drasil.TeX.Monad
-import Language.Drasil.TeX.AST
+import Language.Drasil.TeX.AST hiding (URL)
 import Language.Drasil.TeX.Helpers
 
 
@@ -29,6 +29,7 @@ data Package = AMSMath
              | BibLaTeX
              | Tabu --adds auto column width feature for tables 
              | Mathtools --line breaks for long fractions and cases
+             | URL
              deriving Eq
 
 addPackage :: Package -> D
@@ -51,6 +52,7 @@ addPackage FileContents = usepackage "filecontents"
 addPackage BibLaTeX  = command1o "usepackage" (Just "backend=bibtex") "biblatex"
 addPackage Tabu      = usepackage "tabu"
 addPackage Mathtools = usepackage "mathtools"
+addPackage URL       = usepackage "url"
 
 data Def = AssumpCounter
          | LCCounter
@@ -117,7 +119,7 @@ parseDoc los' = [PreP FullPage, PreP HyperRef, PreP AMSMath, PreP AMSsymb,
           (PreP Caption):(PreP Tikz):(PreP Dot2Tex):(PreP AdjustBox):
           parseDoc' los
         parseDoc' ((Bib _):los) =
-          (PreP FileContents):(PreP BibLaTeX):(PreD Bibliography):
+          (PreP FileContents):(PreP BibLaTeX):(PreP URL):(PreD Bibliography):
           parseDoc' los
         parseDoc' (_:los) =
           parseDoc' los

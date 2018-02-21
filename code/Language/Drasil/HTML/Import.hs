@@ -266,12 +266,12 @@ missingAcro _ (Just a) = S "<b>":+: a :+: S "</b>"
 -- HTML's version of Sentence
 buildEqn :: HasSymbolTable s => QDefinition -> s -> H.Spec  
 buildEqn c sm = H.N (eqSymb c) H.:+: H.S " = " H.:+: 
-  H.E (expr (equat c) sm)
+  H.E (expr (c^.equat) sm)
 
 -- | Build descriptions in data defs based on required verbosity
 buildDDDescription :: HasSymbolTable s => QDefinition -> s -> H.Spec
 buildDDDescription c m = descLines 
-  (if verboseDDDescription then (vars (getQ c $= equat c) m) else []) m
+  (if verboseDDDescription then (vars (getQ c $= c^.equat) m) else []) m
   where getQ (EC a _ _) = C a
 
 -- | Helper for building each line of the description of a data def

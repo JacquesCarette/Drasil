@@ -249,12 +249,12 @@ eqnStyleTM = if numberedTMEquations then T.EqnBlock else T.Paragraph
 
 buildEqn :: HasSymbolTable ctx => QDefinition -> ctx -> T.Spec
 buildEqn c sm = T.N (eqSymb c) T.:+: T.S " = " T.:+:
-  T.E (expr (equat c) sm)
+  T.E (expr (c^.equat) sm)
 
 -- Build descriptions in data defs based on required verbosity
 buildDDDescription :: HasSymbolTable ctx => QDefinition -> ctx -> T.Spec
 buildDDDescription c m = descLines m
-  (if verboseDDDescription then (vars (getQ c $= equat c) m) else [])
+  (if verboseDDDescription then (vars (getQ c $= c^.equat) m) else [])
   where getQ (EC a _ _) = C a
 
 descLines :: (HasSymbolTable ctx, Quantity q) => ctx -> [q] -> T.Spec

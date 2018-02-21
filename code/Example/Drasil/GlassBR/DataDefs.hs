@@ -17,6 +17,8 @@ import Data.Drasil.Concepts.PhysicalProperties (dimension)
 import Data.Drasil.Concepts.Math (probability, parameter, calculation)
 import Data.Drasil.Concepts.Documentation (datum, user)
 
+import Control.Lens ((^.))
+
 ----------------------
 -- DATA DEFINITIONS --
 ----------------------
@@ -157,7 +159,7 @@ hMin = (getES nom_thick +:+ S "is a function that maps from the nominal thicknes
 
 qHtTlExtra :: Sentence
 qHtTlExtra = (getES tolLoad +:+ S "is the tolerable pressure which is obtained from Figure 7 using" 
-  +:+ getES sdf_tol `sAnd` phrase aspectR +:+ sParen (E (equat aspectRWithEqn)) +:+
+  +:+ getES sdf_tol `sAnd` phrase aspectR +:+ sParen (E $ aspectRWithEqn^.equat) +:+
   S "as" +:+ plural parameter +:+. S "using interpolation" +:+ titleize calculation +:+
   S "of" +:+ getES sdf_tol +:+. S "is defined in DD9")
 

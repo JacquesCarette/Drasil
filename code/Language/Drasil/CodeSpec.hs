@@ -301,7 +301,7 @@ prefixFunctions = map (\(Mod nm fs) -> Mod nm $ map pfunc fs)
 getDerivedInputs :: HasSymbolTable ctx => [QDefinition] -> [Input] -> [Const] -> ctx -> [QDefinition]
 getDerivedInputs defs' ins consts sm =
   let refSet = ins ++ map codevar consts 
-  in  filter ((`subsetOf` refSet) . flip codevars sm . equat) defs'
+  in  filter ((`subsetOf` refSet) . flip codevars sm . (^.equat)) defs'
   
 type Known = CodeChunk
 type Need  = CodeChunk

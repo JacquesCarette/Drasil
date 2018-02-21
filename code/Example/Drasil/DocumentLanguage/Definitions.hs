@@ -106,7 +106,7 @@ mkQField :: HasSymbolTable ctx => QDefinition -> ctx -> Field -> ModRow -> ModRo
 mkQField d _ l@Label fs = (show l, (Paragraph $ at_start d):[]) : fs
 mkQField d _ l@Symbol fs = (show l, (Paragraph $ (P $ eqSymb d)):[]) : fs
 mkQField d _ l@Units fs = (show l, (Paragraph $ (unit'2Contents d)):[]) : fs
-mkQField d _ l@DefiningEquation fs = (show l, (EqnBlock $ equat d):[]) : fs
+mkQField d _ l@DefiningEquation fs = (show l, (EqnBlock $ d^.equat):[]) : fs
 mkQField d m l@(Description v u) fs = 
   (show l, buildDDescription v u d m) : fs
 mkQField _ _ l@(RefBy) fs = (show l, fixme) : fs --FIXME: fill this in
@@ -128,7 +128,7 @@ buildDDescription :: HasSymbolTable ctx => Verbosity -> InclUnits -> QDefinition
   [Contents]
 buildDDescription Succinct u d _ = [Enumeration (Definitions $ (firstPair u d):[])]
 buildDDescription Verbose u d m = [Enumeration (Definitions 
-  (firstPair u d : descPairs u (vars (equat d) m)))]
+  (firstPair u d : descPairs u (vars (d^.equat) m)))]
 
 -- | Create the fields for a general definition from a 'GenDefn' chunk.
 mkGDField :: HasSymbolTable ctx => GenDefn -> ctx -> Field -> ModRow -> ModRow

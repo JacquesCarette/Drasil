@@ -502,7 +502,7 @@ a8Desc mainConcept = foldlSent [S "With", phrase reference, S "to",
   acroA 4, S "the", phrase value `sOf` phrase mainConcept,
   sParen (getES mainConcept), S "is a", phrase constant, S "in" +:+.
   short gLassBR, S "It is calculated by the" +: phrase equation +:+.
-  E (C mainConcept $= equat mainConcept), S "Using this" `sC`
+  E (C mainConcept $= mainConcept^.equat), S "Using this" `sC`
   E (C mainConcept $= (Dbl 0.27))]
 
 {--Theoretical Models--}
@@ -607,7 +607,7 @@ s7_1_req6 = [(Enumeration $ Simple $ [(acroR 6, Nested (titleize output_ +:+
     sParen (makeRef (gbSymbMapD d))) s7_1_req6_pulledList
     ++
     [Flat $ (titleize aspectR) +:+ sParen (getES aspectR) +:+
-    E (equat aspectRWithEqn)]
+    E (aspectRWithEqn^.equat)]
     ))])]
 
 {--Nonfunctional Requirements--}

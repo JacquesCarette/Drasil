@@ -33,10 +33,10 @@ instance HasSymbol UnitaryChunk where symbol st (UC s _) = symbol st s
 instance Quantity  UnitaryChunk where getUnit = Just . _un
 instance Unitary   UnitaryChunk where unit x = x ^. un
   
--- Builds the NamedIdea portion of the UnitaryChunk
--- from a given id and term. Those are the first two arguments
+-- Builds the Quantity part from the id, term, symbol and space.
+-- assumes there's no abbreviation.
 unitary :: Unit u => String -> NP -> Symbol -> u -> Space -> UnitaryChunk
-unitary i t s u space = UC (mkQuant i t s space (Just uu)) uu
+unitary i t s u space = UC (mkQuant i t s space (Just uu) Nothing) uu
   where uu = unitWrapper u
 
 mkUnitary :: Unitary u => u -> UnitaryChunk

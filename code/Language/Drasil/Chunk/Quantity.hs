@@ -42,5 +42,5 @@ qlens f qd = fmap (\x -> qd {_id = x}) (f (_id qd))
 qw :: Quantity q => q -> QuantityDict
 qw q = QD (nw q) (q^.typ) (\stg -> symbol stg q) (getUnit q)
 
-mkQuant :: String -> NP -> Symbol -> Space -> Maybe UnitDefn -> QuantityDict
-mkQuant i t s sp u = QD (mkIdea i t Nothing) sp (\_ -> s) u
+mkQuant :: String -> NP -> Symbol -> Space -> Maybe UnitDefn -> Maybe String -> QuantityDict
+mkQuant i t s sp u ab = QD (mkIdea i t ab) sp (\_ -> s) u

@@ -70,8 +70,8 @@ dedescr =
   (phrase standOffDist), sParen (getES standOffDist) `sAnd`
   (getES eqTNTWeight), S "as" +:+. plural parameter, 
   (getES eqTNTWeight), S "is defined as" +:+.
-  E (equat wtntWithEqn) +:+. ((getES char_weight) `isThe`
+  E (wtntWithEqn^.equat) +:+. ((getES char_weight) `isThe`
   (phrase char_weight)) +:+. ((getES tNT) `isThe`
   (phrase tNT)), (getES standOffDist) `isThe`
-  (phrase standOffDist), S "where", E (equat sdWithEqn), S "where",
+  (phrase standOffDist), S "where", E (sdWithEqn^.equat), S "where",
   sParen (sdVectorSent), S "are", plural coordinate]

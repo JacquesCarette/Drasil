@@ -53,8 +53,8 @@ data CiteField = Address      Sentence
                | Volume       Int
                | Year         Int
 
--- | How Published. Necessary for URLs to work properly.             
-data HP = URL Sentence 
+-- | How Published. Necessary for URLs to work properly.
+data HP = URL Sentence
         | Verb Sentence
 
 -- | Month must be of this format.
@@ -88,11 +88,11 @@ instance Show Month where
 -- | All citations require a unique ientifier (String) used by the Drasil chunk.
 -- We will also have an EntryID (String) used for creating reference links.
 -- Finally we will have the reference information (type and fields).
-data Citation = Cite 
+data Citation = Cite
   { _id :: String
   , citeID :: EntryID
   , externRefT :: ExternRefType
-  , fields :: [CiteField] 
+  , fields :: [CiteField]
   }
 
 -- | Smart constructor which implicitly uses EntryID as chunk i.
@@ -256,7 +256,7 @@ editor = Editor
 
 -- | Smart field constructor
 address, bookTitle, howPublished, howPublishedU, institution, journal, note,
-  organization, publisher, school, series, title, 
+  organization, publisher, school, series, title,
   typeField :: Sentence -> CiteField
 
 address       = Address

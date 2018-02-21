@@ -32,19 +32,19 @@ genHTML _ _ _ = error "Cannot generate HTML for non-Website doctype"
 
 -- | Build the HTML Document, called by genHTML
 build :: HasSymbolTable s => String -> Document -> s -> Doc
-build fn (Document t a c) sm = 
+build fn (Document t a c) sm =
   text ( "<!DOCTYPE html PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\""++
           " \"http://www.w3.org/TR/html4/loose.dtd\">" ++ "\n" ++
           "<script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/"++
-          "2.7.0/MathJax.js?config=TeX-MML-AM_CHTML'></script>") $$ 
+          "2.7.0/MathJax.js?config=TeX-MML-AM_CHTML'></script>") $$
   html (head_tag ((linkCSS fn) $$ (title (text (title_spec t sm)))) $$
   body (article_title (text (p_spec t sm)) $$ author (text (p_spec a sm))
   $$ print c sm
   ))
-  
+
 -- | Helper for rendering LayoutObjects into HTML
 printLO :: HasSymbolTable s => LayoutObj -> s -> Doc
-printLO (HDiv ts layoutObs l)  sm = refwrap (p_spec l sm) $ 
+printLO (HDiv ts layoutObs l)  sm = refwrap (p_spec l sm) $
                                    div_tag ts (vcat (map (flip printLO sm) layoutObs))
 printLO (Paragraph contents)   sm = paragraph $ text (p_spec contents sm)
 printLO (Tagless contents)     sm = text $ p_spec contents sm
@@ -57,7 +57,7 @@ printLO (ALUR _ x l id)        sm = makeRefList (p_spec x sm) (p_spec l sm) (p_s
 --printLO (Bib bib)              sm = printLO (makeBib sm bib) sm
 
 
--- | Called by build, uses 'printLO' to render the layout 
+-- | Called by build, uses 'printLO' to render the layout
 -- objects in Doc format.
 print :: HasSymbolTable s => [LayoutObj] -> s -> Doc
 print l sm = foldr ($$) empty $ map (flip printLO sm) l
@@ -177,7 +177,7 @@ p_sub e@(Sym _)        = p_expr e
 p_sub   (Assoc Add l)  = concat $ intersperse "&plus;" $ map p_expr l --removed spaces
 p_sub   (BOp Sub a b)  = p_expr a ++ "&minus;" ++ p_expr b
 p_sub e@(Assoc _ _)    = p_expr e
-p_sub   (BOp Frac a b) = divide a b --no block division 
+p_sub   (BOp Frac a b) = divide a b --no block division
 p_sub e@(BOp Div _ _)  = p_expr e
 p_sub _                = error "Tried to Index a non-simple expr in HTML, currently not supported."
 
@@ -249,7 +249,7 @@ p_space (Obj a)  = a
 p_space (DiscreteI a)  = "{" ++ (concat $ intersperse ", " (map show a)) ++ "}"
 p_space (DiscreteD a)  = "{" ++ (concat $ intersperse ", " (map show a)) ++ "}"
 p_space (DiscreteS a)  = "{" ++ (concat $ intersperse ", " a) ++ "}"
-  
+
 -----------------------------------------------------------------
 ------------------BEGIN TABLE PRINTING---------------------------
 -----------------------------------------------------------------
@@ -299,7 +299,7 @@ makeDRows ((f,d):ps) sm = tr (th (text f) $$ td (vcat $ map (flip printLO sm) d)
 
 -- | Renders lists
 makeList :: HasSymbolTable s => ListType -> s -> Doc
-makeList (Simple items) sm = div_tag ["list"] 
+makeList (Simple items) sm = div_tag ["list"]
   (vcat $ map (\(b,e) -> wrap "p" [] ((text (p_spec b sm ++ ": ") <> (p_item e sm)))) items)
 makeList (Desc items)   sm = div_tag ["list"]
   (vcat $ map (\(b,e) -> wrap "p" [] ((wrap "b" [] (text (p_spec b sm ++ ": "))
@@ -308,15 +308,15 @@ makeList t@(Ordered items) sm = wrap (show t ++ "l") ["list"] (vcat $ map
   (wrap "li" [] . flip p_item sm) items)
 makeList t@(Unordered items) sm = wrap (show t ++ "l") ["list"] (vcat $ map
   (wrap "li" [] . flip p_item sm) items)
-makeList (Definitions items) sm = div_tag ["list"] 
-  (vcat $ map (\(b,e) -> wrap "p" [] ((text (p_spec b sm ++ " is the") <+> 
+makeList (Definitions items) sm = div_tag ["list"]
+  (vcat $ map (\(b,e) -> wrap "p" [] ((text (p_spec b sm ++ " is the") <+>
   (p_item e sm)))) items)
 
 -- | Helper for rendering list items
-p_item :: HasSymbolTable s => ItemType -> s -> Doc  
+p_item :: HasSymbolTable s => ItemType -> s -> Doc
 p_item (Flat s)     sm = text $ p_spec s sm
 p_item (Nested s l) sm = vcat [text (p_spec s sm),makeList l sm]
-  
+
 -----------------------------------------------------------------
 ------------------BEGIN FIGURE PRINTING--------------------------
 -----------------------------------------------------------------
@@ -327,16 +327,16 @@ makeFigure r c f wp = refwrap r (image f c wp $$ caption c)
 -----------------------------------------------------------------
 ------------------BEGIN EXPR OP PRINTING-------------------------
 -----------------------------------------------------------------
--- | Renders expression operations/functions. 
+-- | Renders expression operations/functions.
 p_op :: Function -> [Expr] -> String
 p_op f@(Summation bs) (x:[]) = lrgOp f bs ++ paren (p_expr x)
 p_op (Summation _) _ = error "Something went wrong with a summation"
 p_op f@(Product bs) (x:[]) = lrgOp f bs ++ paren (p_expr x)
 p_op (Product _) _ = error "Something went wrong with a product"
 p_op f@(Integral bs wrtc) (x:[]) = intg f bs
-  {-show f ++ makeIBound bs-} 
+  {-show f ++ makeIBound bs-}
   ++ paren (p_expr x ++ (symbol (Atomic "d") ++ "&#8239;" ++ symbol wrtc))
-p_op (Integral _ _) _  = error "Something went wrong with an integral" 
+p_op (Integral _ _) _  = error "Something went wrong with an integral"
 p_op Abs (x:[]) = "|" ++ p_expr x ++ "|"
 p_op Abs _ = error "Abs should only take one expr."
 p_op Norm (x:[]) = "||" ++ p_expr x ++ "||"
@@ -392,7 +392,7 @@ function Sqrt           = "&radic;"
 function Not            = "&not;"
 function Neg            = "-" -- but usually not reached...
 function Dim            = "dim" -- hmmm
-  
+
 -- | Renders modules
 makeModule :: String -> String -> Doc
 makeModule m l = refwrap l (paragraph $ wrap "b" [] (text m))
@@ -407,21 +407,21 @@ makeRefList a l i = refwrap l (wrap "ul" [] (text $ i ++ ": " ++ a))
 -- **THE MAIN FUNCTION**
 {-
 makeBib :: HasSymbolTable s => s -> BibRef -> LayoutObj
-makeBib sm = listRef . map (Flat . S) . sort . map (flip renderCite sm)
+makeBib sm = listRef . map (Flat . S) . sort . map (renderCite sm)
   where listRef = List . Simple . zip [S $ sqbrac $ show x | x <- [(1 :: Integer)..]]
   --some function to get a numbered list, idealy it wouldn't go from string to Spec
-  
+
 --for when we add other things to reference like website, newspaper
 renderCite :: HasSymbolTable s => Citation -> s -> String
-renderCite a@(Book      fields) sm = renderF a fields useStyleBk    sm
-renderCite a@(Article   fields) sm = renderF a fields useStyleArtcl sm
-renderCite a@(MThesis   fields) sm = renderF a fields useStyleBk    sm
-renderCite a@(PhDThesis fields) sm = renderF a fields useStyleBk    sm
-renderCite a@(Misc      fields) sm = renderF a fields useStyleBk    sm
-renderCite a@(Online    fields) sm = renderF a fields useStyleArtcl sm --rendered similar to articles for some reason
+renderCite sm a@(Book      fields) = renderF sm a fields useStyleBk
+renderCite sm a@(Article   fields) = renderF sm a fields useStyleArtcl
+renderCite sm a@(MThesis   fields) = renderF sm a fields useStyleBk
+renderCite sm a@(PhDThesis fields) = renderF sm a fields useStyleBk
+renderCite sm a@(Misc      fields) = renderF sm a fields useStyleBk
+renderCite sm a@(Online    fields) = renderF sm a fields useStyleArtcl --rendered similar to articles for some reason
 
-renderF :: HasSymbolTable s => Citation -> [CiteField] -> (StyleGuide -> (CiteField -> s -> String)) -> s -> String
-renderF c fields styl sm = unwords $
+renderF :: HasSymbolTable s => s -> Citation -> [CiteField] -> (StyleGuide -> (CiteField -> s -> String)) -> String
+renderF sm c fields styl = unwords $
   map (flip (styl bibStyleH) sm) (sort fields) ++ endingField c bibStyleH
 
 endingField :: Citation -> StyleGuide -> [String]
@@ -509,7 +509,7 @@ rendPeople sm f people = foldlList $ map (flip spec sm . f) people --foldlList i
 
 rendPeople' :: HasSymbolTable s => s -> People -> Spec
 rendPeople' _ []  = S "N.a." -- "No authors given"
-rendPeople' sm people = foldlList $ map (flip spec sm . rendPers) (init people) ++  [spec (rendPersL $ last people) sm] 
+rendPeople' sm people = foldlList $ map (flip spec sm . rendPers) (init people) ++  [spec (rendPersL $ last people) sm]
 
 foldlList :: [Spec] -> Spec
 foldlList []    = EmptyS

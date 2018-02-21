@@ -21,7 +21,7 @@ data Spec = E Expr
           | Sp Special
           | Ref RefType Spec Spec
           | EmptyS
-          | HARDNL        -- newline. Temp fix for multi-line descriptions; 
+          | HARDNL        -- newline. Temp fix for multi-line descriptions;
                           -- May move to a new LayoutObj, but only exists in TeX
                           -- so it's not really a big deal ATM.
 
@@ -52,7 +52,7 @@ data LayoutObj = Table [[Spec]] Label Bool Title
                | Graph [(Spec, Spec)] (Maybe Width) (Maybe Height) Caption Label
                | Bib BibRef
                | Defnt DType [(String,[LayoutObj])] Label -- To replace Definition eventually
-               
+
 data ListType = Item [ItemType]
               | Enum [ItemType]
               | Simple [(Spec,ItemType)]
@@ -91,6 +91,6 @@ data CiteField = Address      Spec
                | Volume       Int
                | Year         Int
 
--- | How Published. Necessary for URLs to work properly.             
-data HP = URL Spec 
+-- | How Published. Necessary for URLs to work properly.
+data HP = URL Spec
         | Verb Spec

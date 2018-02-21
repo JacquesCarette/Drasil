@@ -5,7 +5,7 @@ import Language.Drasil.Symbol (Symbol)
 import Language.Drasil.Spec (USymb, RefAdd)
 import Language.Drasil.Unicode (Greek, Special)
 import Language.Drasil.Document (DType (..), MaxWidthPercent)
-import Language.Drasil.Chunk.Citation (Month(..))
+import Language.Drasil.Chunk.Citation (Month(..), ExternRefType(..), EntryID)
 import Language.Drasil.People (People)
 import Language.Drasil.Printing.AST (Expr(..))
 
@@ -73,113 +73,100 @@ type BibRef = [Citation]
 type City   = Spec
 type State  = Spec
 
-data Citation = Book [CiteField] | Article [CiteField]
-              | MThesis [CiteField] | PhDThesis [CiteField]
-              | Misc [CiteField] | Online [CiteField]
+data Citation = Cite EntryID ExternRefType [CiteField]
 
-data CiteField = Author     People
-               | Title      Spec
-               | Series     Spec
-               | Collection Spec
-               | Volume     Int
-               | Edition    Int
-               | Place      Spec
-               | Publisher  Spec
-               | Journal    Spec
-               | Year       Int
-               | Month      Month
-               | Pages      [Int]
-               | Note       Spec
-               | Issue      Int
-               | School     Spec
-               | Thesis     Thesis
-               | URL        Spec
-               | HowPub     Spec
-               | Editor     People
-               | Institution Spec
+-- | Fields used in citations.
+data CiteField = Address      Spec
+               | Author       People
+               | BookTitle    Spec -- Used for 'InBookTitle' references only.
+               | Chapter      Int
+               | Edition      Int
+               | Editor       People
+               | HowPublished HP
+               | Institution  Spec
+               | Journal      Spec
+               | Month        Month
+               | Note         Spec
+               | Number       Int
                | Organization Spec
-               | Chapter    Int
-               | Type       Spec
+               | Pages        [Int] -- Range of pages (ex1. 1-32; ex2. 7,31,52-55)
+               | Publisher    Spec
+               | School       Spec
+               | Series       Spec
+               | Title        Spec
+               | Type         Spec -- BibTeX "type" field
+               | Volume       Int
+               | Year         Int
 
-
-data Thesis = M | PhD deriving Eq
-
-instance Show Thesis where
-  show M   = "Master's thesis"
-  show PhD = "PhD thesis"
-
-instance Show Citation where
-  show (Book      _) = "Print."
-  show (Article   _) = "Print."
-  show (MThesis   _) = "Print."
-  show (PhDThesis _) = "Print."
-  show (Misc      _) = ""
-  show (Online    _) = ""
+-- | How Published. Necessary for URLs to work properly.
+data HP = URL Spec
+        | Verb Spec
 
 instance Eq CiteField where
-  (==) (Author _)     (Author _)     = True
-  (==) (Title _)      (Title _)      = True
-  (==) (Series _)     (Series _)     = True
-  (==) (Collection _) (Collection _) = True
-  (==) (Volume _)     (Volume _)     = True
-  (==) (Edition _)    (Edition _)    = True
-  (==) (Place _)      (Place _)      = True
-  (==) (Publisher _)  (Publisher _)  = True
-  (==) (Journal _)    (Journal _)    = True
-  (==) (Year _)       (Year _)       = True
-  -- (==) (Date _ _ _)   (Date _ _ _)   = True
-  -- (==) (Page _)       (Page _)       = True
-  (==) (Pages _)      (Pages _)      = True
-  (==) (Note _)       (Note _)       = True
-  (==) (Issue _)      (Issue _)      = True
-  (==) (School _)     (School _)     = True
-  (==) (Thesis _)     (Thesis _)     = True
-  (==) (URL _)        (URL _)        = True
-  (==) (HowPub _)     (HowPub _)     = True
-  -- (==) (URLdate _ _ _) (URLdate _ _ _) = True
-  (==) (Editor _)     (Editor _)     = True
-  (==) _ _ = False
+  (Address      _) == (Address      _) = True --
+  (Author       _) == (Author       _) = True --
+  (BookTitle    _) == (BookTitle    _) = True --
+  (Chapter      _) == (Chapter      _) = True --
+  (Edition      _) == (Edition      _) = True --
+  (Editor       _) == (Editor       _) = True --
+  (HowPublished _) == (HowPublished _) = True --
+  (Institution  _) == (Institution  _) = True --
+  (Journal      _) == (Journal      _) = True --
+  (Month        _) == (Month        _) = True --
+  (Note         _) == (Note         _) = True --
+  (Number       _) == (Number       _) = True --
+  (Organization _) == (Organization _) = True --
+  (Pages        _) == (Pages        _) = True --
+  (Publisher    _) == (Publisher    _) = True --
+  (School       _) == (School       _) = True --
+  (Series       _) == (Series       _) = True --
+  (Title        _) == (Title        _) = True --
+  (Type         _) == (Type         _) = True --
+  (Volume       _) == (Volume       _) = True --
+  (Year         _) == (Year         _) = True --
+  _                == _                = False
 
-instance Ord CiteField where --FIXME: APA has year come directly after Author
-  compare (Author     _) _ = LT
-  compare _ (Author     _) = GT
-  compare (Title      _) _ = LT
-  compare _ (Title      _) = GT
-  compare (Series     _) _ = LT
-  compare _ (Series     _) = GT
-  compare (Collection _) _ = LT
-  compare _ (Collection _) = GT
-  compare (Editor     _) _ = LT
-  compare _ (Editor     _) = GT
-  compare (Journal    _) _ = LT
-  compare _ (Journal    _) = GT
-  compare (Volume     _) _ = LT
-  compare _ (Volume     _) = GT
-  compare (Edition    _) _ = LT
-  compare _ (Edition    _) = GT
-  compare (Thesis     _) _ = LT
-  compare _ (Thesis     _) = GT
-  compare (School     _) _ = LT
-  compare _ (School     _) = GT
-  compare (Place      _) _ = LT
-  compare _ (Place      _) = GT
-  compare (Publisher  _) _ = LT
-  compare _ (Publisher  _) = GT
-  compare (HowPub     _) _ = LT
-  compare _ (HowPub     _) = GT
-  compare (Issue      _) _ = LT
-  compare _ (Issue      _) = GT
-  -- compare (Date   _ _ _) _ = LT
-  -- compare _ (Date   _ _ _) = GT
-  compare (Year       _) _ = LT
-  compare _ (Year       _) = GT
-  compare (URL       _) _  = LT
-  compare _ (URL       _)  = GT
-  -- compare (Page       _) _ = LT
-  -- compare _ (Page       _) = GT
-  compare (Pages      _) _ = LT
-  compare _ (Pages      _) = GT
-  -- compare (URLdate _ _ _) _ = LT
-  -- compare _ (URLdate _ _ _) = GT
-  compare (Note       _) _ = LT
-  --compare _ (Note       _) = GT
+instance Ord CiteField where
+  compare (Institution _) _ = LT
+  compare _ (Institution _) = GT
+  compare (Organization _) _ = LT
+  compare _ (Organization _) = GT
+  compare (Author _) _ = LT
+  compare _ (Author _) = GT
+  compare (Title _) _ = LT
+  compare _ (Title _) = GT
+  compare (Series _) _ = LT
+  compare _ (Series _) = GT
+  compare (BookTitle _) _ = LT
+  compare _ (BookTitle _) = GT
+  compare (Editor _) _ = LT
+  compare _ (Editor _) = GT
+  compare (Journal _) _ = LT
+  compare _ (Journal _) = GT
+  compare (Volume _) _ = LT
+  compare _ (Volume _) = GT
+  compare (Edition _) _ = LT
+  compare _ (Edition _) = GT
+  compare (School _) _ = LT
+  compare _ (School _) = GT
+  compare (Address _) _ = LT
+  compare _ (Address _) = GT
+  compare (Publisher _) _ = LT
+  compare _ (Publisher _) = GT
+  compare (HowPublished (Verb _)) _ = LT
+  compare _ (HowPublished (Verb _)) = GT
+  compare (Number _) _ = LT
+  compare _ (Number _) = GT
+  compare (Month _) _ = LT
+  compare _ (Month _) = GT
+  compare (Year _) _ = LT
+  compare _ (Year _) = GT
+  compare (HowPublished _) _ = LT
+  compare _ (HowPublished _) = GT
+  compare (Chapter _) _ = LT
+  compare _ (Chapter _) = GT
+  compare (Pages _) _ = LT
+  compare _ (Pages _) = GT
+  compare (Note _) _ = LT
+  compare _ (Note _) = GT
+  compare (Type _) _ = LT

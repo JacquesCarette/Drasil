@@ -17,7 +17,8 @@ import Language.Drasil.Chunk.NamedIdea (term, getA)
 import Language.Drasil.Chunk.Quantity (Quantity(..), eqSymb)
 import Language.Drasil.Chunk.ReqChunk (requires)
 import Language.Drasil.ChunkDB (HasSymbolTable(..), getUnitLup, symbLookup)
-import Language.Drasil.Chunk.Citation (CiteField(..), HP(..))
+import Language.Drasil.Chunk.Citation ( CiteField(..), HP(..), Citation 
+                                      , externRefT, citeID, fields)
 import Language.Drasil.Config (verboseDDDescription)
 import Language.Drasil.Document
 import Language.Drasil.Expr.Extract
@@ -192,40 +193,35 @@ lay x@(UnlikelyChange uc) sm =
   H.ALUR H.UnlikelyChange (spec (chng uc) sm) (H.S (refAdd x)) (spec (fromJust $ getShortName uc) sm)
 lay (Defnt dtyp pairs rn) sm = H.Definition dtyp (layPairs pairs) (H.S rn)
   where layPairs = map (\(x,y) -> (x, (map (\z -> lay z sm) y)))
---lay (Bib bib)           sm = H.Bib $ map (layCite sm) bib
+lay (Bib bib)           sm = H.Bib $ map (layCite sm) bib
 
 -- | For importing bibliography
--- layCite :: HasSymbolTable s => s -> Citation -> H.Citation
--- layCite sm (Book      fields) = H.Book      $ map (flip layField sm) fields
--- layCite sm (Article   fields) = H.Article   $ map (flip layField sm) fields
--- layCite sm (MThesis   fields) = H.MThesis   $ H.Thesis H.M   : map (flip layField sm) fields
--- layCite sm (PhDThesis fields) = H.PhDThesis $ H.Thesis H.PhD : map (flip layField sm) fields
--- layCite sm (Misc      fields) = H.Misc      $ map (flip layField sm) fields
---layCite sm (Online    fields) = H.Online    $ map (flip layField sm) fields
+layCite :: HasSymbolTable s => s -> Citation -> H.Citation
+layCite sm c = H.Cite (citeID c) (externRefT c) (map (layField sm) (fields c))
 
-layField :: HasSymbolTable s => CiteField -> s -> H.CiteField
-layField (Address    s)  sm = H.Place      $ spec s sm
-layField (Author     p)   _ = H.Author     p
-layField (BookTitle  s)  sm = H.Collection $ spec s sm
-layField (Chapter    i)   _ = H.Chapter    i
-layField (Edition    n)   _ = H.Edition    n
-layField (Editor     p)   _ = H.Editor     p
-layField (HowPublished (URL s)) sm  = H.URL  $ spec s sm
-layField (HowPublished (Verb s)) sm = H.HowPub   $ spec s sm
-layField (Institution i) sm = H.Institution $ spec i sm
-layField (Journal    s)  sm = H.Journal    $ spec s sm
-layField (Month      m)   _ = H.Month      m
-layField (Note       s)  sm = H.Note       $ spec s sm
-layField (Number     n)   _ = H.Issue      n
-layField (Organization i) sm = H.Institution $ spec i sm
-layField (Pages     ns)   _ = H.Pages      ns
-layField (Publisher  s)  sm = H.Publisher  $ spec s sm
-layField (School     s)  sm = H.School     $ spec s sm
-layField (Series     s)  sm = H.Series     $ spec s sm
-layField (Title      s)  sm = H.Title      $ spec s sm
-layField (Type       t) sm  = H.Type       $ spec t sm
-layField (Volume     n)   _ = H.Volume     n
-layField (Year       n)   _ = H.Year       n
+layField :: HasSymbolTable s => s -> CiteField -> H.CiteField
+layField sm (Address      s) = H.Address      $ spec s sm
+layField  _ (Author       p) = H.Author       p
+layField sm (BookTitle    s) = H.BookTitle    $ spec s sm
+layField  _ (Chapter      i) = H.Chapter      i
+layField  _ (Edition      n) = H.Edition      n
+layField  _ (Editor       p) = H.Editor       p
+layField sm (Institution  i) = H.Institution  $ spec i sm
+layField sm (Journal      s) = H.Journal      $ spec s sm
+layField  _ (Month        m) = H.Month        m
+layField sm (Note         s) = H.Note         $ spec s sm
+layField  _ (Number       n) = H.Number       n
+layField sm (Organization i) = H.Organization $ spec i sm
+layField  _ (Pages        n) = H.Pages        n
+layField sm (Publisher    s) = H.Publisher    $ spec s sm
+layField sm (School       s) = H.School       $ spec s sm
+layField sm (Series       s) = H.Series       $ spec s sm
+layField sm (Title        s) = H.Title        $ spec s sm
+layField sm (Type         t) = H.Type         $ spec t sm
+layField  _ (Volume       n) = H.Volume       n
+layField  _ (Year         n) = H.Year         n
+layField sm (HowPublished (URL  s)) = H.HowPublished (H.URL  $ spec s sm)
+layField sm (HowPublished (Verb s)) = H.HowPublished (H.Verb $ spec s sm)
 
 -- | Translates lists
 makeL :: HasSymbolTable s => ListType -> s -> H.ListType

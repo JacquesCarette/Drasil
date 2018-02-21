@@ -1,7 +1,6 @@
 {-# LANGUAGE GADTs, Rank2Types #-}
 module Language.Drasil.Chunk.Relation
-  ( NamedRelation(..), RelationConcept(..)
-  , makeNR
+  ( RelationConcept(..)
   , makeRC, makeRC'
   ) where
 
@@ -15,15 +14,6 @@ import Language.Drasil.Spec (Sentence(..))
 import Language.Drasil.Chunk.ExprRelat
 
 import Language.Drasil.NounPhrase (NP)
-
--- | A NamedRelation is just the combination of an 'Idea' with a 'Relation'
-data NamedRelation where 
-  NR :: Idea c => c -> Relation -> NamedRelation
-
-instance Chunk NamedRelation where id = cp id
-instance NamedIdea NamedRelation where term = cp term
-instance Idea NamedRelation where getA (NR c _) = getA c
-instance ExprRelat NamedRelation where relat f (NR n r) = fmap (\x -> NR n x) (f r)
 
 data RelationConcept where 
   RC :: Concept c => c -> Relation -> RelationConcept
@@ -47,14 +37,6 @@ makeRC rID rTerm rDefn rel = RC (dccWDS rID rTerm rDefn) rel
 -- | Create a RelationConcept from a given id, term, defn, abbreviation, and relation.
 makeRC' :: String -> NP -> Sentence -> String -> Relation -> RelationConcept
 makeRC' rID rTerm rDefn rAbb rel = RC (dccWDS' rID rTerm rDefn rAbb) rel
-
--- don't export this
-cp :: (forall c. (NamedIdea c) => Simple Lens c a) -> Simple Lens NamedRelation a
-cp l f (NR a b) = fmap (\x -> NR (set l x a) b) (f (a ^. l))
-
--- | Create a NamedRelation from a given id, term, and relation.
-makeNR :: String -> NP -> Relation -> NamedRelation
-makeNR rID rTerm rel = NR (nc rID rTerm) rel
 
 instance Eq RelationConcept where
   a == b = (a ^. id) == (b ^. id)

@@ -24,14 +24,14 @@ instance Idea RelationConcept where getA (RC c _) = getA c
 instance Definition RelationConcept where defn = conc . defn
 instance ConceptDomain RelationConcept where cdom = conc . cdom
 instance Concept RelationConcept where
-instance ExprRelat RelationConcept where relat f (RC c r) = fmap (\x -> RC c x) (f r)
+instance ExprRelat RelationConcept where relat = rel
 instance Eq RelationConcept where a == b = (a ^. id) == (b ^. id)
 
 -- | Create a RelationConcept from a given id, term, defn, and relation.
 makeRC :: String -> NP -> Sentence -> Relation -> RelationConcept
-makeRC rID rTerm rDefn rel = RC (dccWDS rID rTerm rDefn) rel
+makeRC rID rTerm rDefn = RC (dccWDS rID rTerm rDefn)
 
 -- | Create a RelationConcept from a given id, term, defn, abbreviation, and relation.
 makeRC' :: String -> NP -> Sentence -> String -> Relation -> RelationConcept
-makeRC' rID rTerm rDefn rAbb rel = RC (dccWDS' rID rTerm rDefn rAbb) rel
+makeRC' rID rTerm rDefn rAbb = RC (dccWDS' rID rTerm rDefn rAbb)
 

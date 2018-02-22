@@ -1,5 +1,5 @@
 module Drasil.SWHS.IMods (insta_model_IMods,
-  eBalanceOnWtr, heatEInWtr) where
+  eBalanceOnWtr, heatEInWtr, heatEInWtr_new) where
 
 import Language.Drasil
 
@@ -18,6 +18,7 @@ import Drasil.SWHS.Concepts (phsChgMtrl, water)
 import Data.Drasil.Concepts.PhysicalProperties (solid, liquid, mass)
 import Data.Drasil.Concepts.Thermodynamics (boiling, heat, temp, melting,
   latent_heat, sens_heat, heat_cap_spec, thermal_energy, boil_pt)
+import Drasil.DocumentLanguage.Chunk.InstanceModel
 --s4_2_5_IMods
 insta_model_IMods :: [RelationConcept]
 insta_model_IMods = [eBalanceOnWtr, eBalanceOnPCM, heatEInWtr, heatEInPCM]
@@ -90,6 +91,10 @@ balPCMDesc = foldlSent [(E $ C temp_W) `isThe` phrase temp_W +:+.
 ---------
 -- IM3 --
 ---------
+heatEInWtr_new :: InstanceModel
+heatEInWtr_new = im heatEInWtr [qw htCap_W, qw w_mass, qw temp_W, qw time, qw temp_init] 
+  [TCon AssumedCon $ 0 $< C tau_W $> 100, TCon AssumedCon $ C tau_W $> 0] [qw w_E, qw time] [] []
+
 heatEInWtr :: RelationConcept
 heatEInWtr = makeRC "heatEInWtr" (nounPhraseSP "Heat energy in the water")
   htWtrDesc htWtr_Rel

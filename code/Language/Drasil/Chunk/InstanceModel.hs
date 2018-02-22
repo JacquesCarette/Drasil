@@ -1,7 +1,7 @@
-{-# Language Rank2Types #-}
+{-# Language TemplateHaskell #-}
 module Language.Drasil.Chunk.InstanceModel 
   ( InstanceModel
-  , inCons, outCons, outputs, inputs, im, imQD
+  , inCons, outCons, modelOutputs, modelInputs, im, imQD
   )where
 
 import Language.Drasil.Spec
@@ -19,7 +19,7 @@ import Language.Drasil.Chunk.NamedIdea
 import Language.Drasil.Chunk.Quantity
 import Language.Drasil.Chunk.Relation
 
-import Control.Lens (Simple, Lens, (^.), set)
+import Control.Lens (makeLenses,(^.))
 
 import Prelude hiding (id)
 
@@ -32,28 +32,22 @@ type OutputConstraints = [TheoryConstraint]
 -- | An Instance Model is a RelationConcept that may have specific input/output
 -- constraints. It also has attributes (like Derivation, source, etc.)
 data InstanceModel = IM { _rc :: RelationConcept
-                        , inputs :: Inputs
-                        , inCons :: InputConstraints
-                        , outputs :: Outputs
-                        , outCons :: OutputConstraints
+                        , _modelInputs :: Inputs
+                        , _inCons :: InputConstraints
+                        , _modelOutputs :: Outputs
+                        , _outCons :: OutputConstraints
                         , _attribs :: Attributes 
                         }
+makeLenses ''InstanceModel
   
-instance Chunk InstanceModel where
-  id = rcl id
-instance NamedIdea InstanceModel where
-  term = rcl term
-instance Idea InstanceModel where
-  getA (IM a _ _ _ _ _) = getA a
-instance Definition InstanceModel where
-  defn = rcl defn
-instance ConceptDomain InstanceModel where
-  cdom = rcl cdom
+instance Chunk InstanceModel where id = rc . id
+instance NamedIdea InstanceModel where term = rc . term
+instance Idea InstanceModel where getA (IM a _ _ _ _ _) = getA a
+instance Definition InstanceModel where defn = rc . defn
+instance ConceptDomain InstanceModel where cdom = rc . cdom
 instance Concept InstanceModel where
-instance ExprRelat InstanceModel where
-  relat = rcl relat
-instance HasAttributes InstanceModel where
-  attributes f (IM rc ins inc outs outc attribs) = fmap (\x -> IM rc ins inc outs outc x) (f attribs)
+instance ExprRelat InstanceModel where relat = rc . relat
+instance HasAttributes InstanceModel where attributes = attribs
 
 -- | Smart constructor for instance models
 im :: RelationConcept -> Inputs -> InputConstraints -> Outputs -> 
@@ -62,10 +56,7 @@ im = IM
 
 -- | Smart constructor for instance model from qdefinition 
 -- (Sentence is the "concept" definition for the relation concept)
-imQD :: HasSymbolTable ctx => ctx -> QDefinition -> Sentence -> InputConstraints -> OutputConstraints -> Attributes -> InstanceModel
-imQD ctx qd dfn incon ocon att = IM (makeRC (qd ^. id) (qd ^. term) dfn (C qd $= qd ^. equat)) (vars (qd^.equat) ctx) incon [qw qd] ocon att
-
--- DO NOT EXPORT BELOW THIS LINE --
-  
-rcl :: Simple Lens RelationConcept a -> Simple Lens InstanceModel a
-rcl l f (IM rc ins inc outs outc attribs) = fmap (\x -> IM (set l x rc) ins inc outs outc attribs) (f (rc ^. l))
+imQD :: HasSymbolTable ctx => ctx -> QDefinition -> Sentence -> InputConstraints 
+  -> OutputConstraints -> Attributes -> InstanceModel
+imQD ctx qd dfn incon ocon att = IM (makeRC (qd ^. id) (qd ^. term) dfn 
+  (C qd $= qd ^. equat)) (vars (qd^.equat) ctx) incon [qw qd] ocon att

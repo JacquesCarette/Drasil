@@ -124,7 +124,7 @@ module Language.Drasil (
   -- Chunk.GenDefn
   , GenDefn, gd, gdUnit
   -- Chunk.InstanceModel
-  , InstanceModel, inCons, outCons, outputs, inputs, im, imQD
+  , InstanceModel, inCons, outCons, modelOutputs, modelInputs, im, imQD
 ) where
 
 import Prelude hiding (log, sin, cos, tan, sqrt, id, return, print, break, exp, product)

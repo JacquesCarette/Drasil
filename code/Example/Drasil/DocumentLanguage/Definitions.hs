@@ -153,12 +153,12 @@ mkIMField i m l@(Description v u) fs = (show l,
   foldr (\x -> buildDescription v u x m) [] [i ^. relat]) : fs
 mkIMField _ _ l@(RefBy) fs = (show l, fixme) : fs --FIXME: fill this in
 mkIMField i _ l@(Source) fs = (show l, [Paragraph $ getSource i]) : fs --FIXME: fill this in
-mkIMField i _ l@(Output) fs = (show l, [Paragraph $ foldle (sC) (+:+.) EmptyS (map (P . symbol Equational) (outputs i))]) : fs
-mkIMField i _ l@(Input) fs = (show l, [Paragraph $ foldle (sC) (+:+.) EmptyS (map (P . symbol Equational) (inputs i))]) : fs
+mkIMField i _ l@(Output) fs = (show l, [Paragraph $ foldle (sC) (+:+.) EmptyS (map (P . symbol Equational) (i ^. modelOutputs))]) : fs
+mkIMField i _ l@(Input) fs = (show l, [Paragraph $ foldle (sC) (+:+.) EmptyS (map (P . symbol Equational) (i ^. modelInputs))]) : fs
 mkIMField i _ l@(InConstraints) fs  = (show l,  
-  foldr ((:) . EqnBlock) [] (map tConToExpr (inCons i))) : fs
+  foldr ((:) . EqnBlock) [] (map tConToExpr (i ^. inCons))) : fs
 mkIMField i _ l@(OutConstraints) fs = (show l,  
-  foldr ((:) . EqnBlock) [] (map tConToExpr (outCons i))) : fs
+  foldr ((:) . EqnBlock) [] (map tConToExpr (i ^. outCons))) : fs
 mkIMField _ _ label _ = error $ "Label " ++ show label ++ " not supported " ++
   "for instance models"
 

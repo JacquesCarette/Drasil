@@ -1,4 +1,4 @@
-{-# Language GADTs, Rank2Types #-}
+{-# Language TemplateHaskell #-}
 
 module Language.Drasil.Chunk.Theory 
   ( tc', Theory(..), TheoryChunk, TheoryModel, tm, tw
@@ -11,77 +11,65 @@ import Language.Drasil.Chunk.Eq
 import Language.Drasil.Chunk.NamedIdea
 import Language.Drasil.Chunk.Quantity
 
-import Control.Lens (Simple, Lens, set, (^.))
+import Control.Lens (Lens', (^.), view, makeLenses)
 import Prelude hiding (id)
 
 class Chunk t => Theory t where
-  valid_context :: Simple Lens t [TheoryChunk]
-  spaces :: Simple Lens t [SpaceDefn] 
-  quantities :: Simple Lens t [QuantityDict]
-  operations :: Simple Lens t [ConceptChunk] -- FIXME: Should not be Concept
-  defined_quant :: Simple Lens t [QDefinition]
-  invariants :: Simple Lens t [TheoryConstraint]
-  defined_fun :: Simple Lens t [QDefinition]
+  valid_context :: Lens' t [TheoryChunk]
+  spaces        :: Lens' t [SpaceDefn] 
+  quantities    :: Lens' t [QuantityDict]
+  operations    :: Lens' t [ConceptChunk] -- FIXME: Should not be Concept
+  defined_quant :: Lens' t [QDefinition]
+  invariants    :: Lens' t [TheoryConstraint]
+  defined_fun   :: Lens' t [QDefinition]
   
 data SpaceDefn -- FIXME: This should be defined.
   
-data TheoryChunk where
-  TC :: String -> [TheoryChunk] -> [SpaceDefn] -> [QuantityDict] -> [ConceptChunk] -> 
-    [QDefinition] -> [TheoryConstraint] -> [QDefinition] -> TheoryChunk
-    
+data TheoryChunk = TC {
+  _tid :: String,
+  _vctx :: [TheoryChunk],
+  _spc  :: [SpaceDefn],
+  _quan :: [QuantityDict],
+  _ops  :: [ConceptChunk],
+  _defq :: [QDefinition],
+  _invs :: [TheoryConstraint],
+  _dfun :: [QDefinition] }
+makeLenses ''TheoryChunk
+  
 instance Theory TheoryChunk where
-  valid_context f (TC c m n o p q r s) = 
-    fmap (\x -> TC c x n o p q r s) (f m)
-  spaces f (TC c t s q o dq inv df) = 
-    fmap (\x -> TC c t x q o dq inv df) (f s)
-  quantities f (TC c t s q o dq inv df) = 
-    fmap (\x -> TC c t s x o dq inv df) (f q)
-  operations f (TC c t s q o dq inv df) = 
-    fmap (\x -> TC c t s q x dq inv df) (f o)
-  defined_quant f (TC c t s q o dq inv df) = 
-    fmap (\x -> TC c t s q o x inv df) (f dq)
-  invariants f (TC c t s q o dq inv df) = 
-    fmap (\x -> TC c t s q o dq x df) (f inv)
-  defined_fun f (TC c t s q o dq inv df) = 
-    fmap (\x -> TC c t s q o dq inv x) (f df)
-instance Chunk TheoryChunk where
-  id f (TC c t s q o dq inv df) = 
-    fmap (\x -> TC x t s q o dq inv df) (f c)
+  valid_context = vctx
+  spaces        = spc
+  quantities    = quan
+  operations    = ops
+  defined_quant = defq
+  invariants    = invs
+  defined_fun   = dfun
+
+instance Chunk TheoryChunk where id = tid
 
 tw :: Theory t => t -> TheoryChunk
 tw t = TC (t ^. id) (t ^. valid_context) (t ^. spaces) (t ^. quantities)
   (t ^. operations) (t ^. defined_quant) (t ^. invariants) (t ^. defined_fun)
 
-data TheoryModel where
-  TM :: (Concept c, Theory t) => c -> t -> TheoryModel
+-- use the id of the TheoryModel as the id. FIXME ?
+data TheoryModel = TM {_con :: ConceptChunk, _thy :: TheoryChunk }
+makeLenses ''TheoryModel
   
-instance Chunk TheoryModel where
-  id = cl id
-instance NamedIdea TheoryModel where
-  term = cl term
-instance Idea TheoryModel where
-  getA (TM c _) = getA c
-instance Definition TheoryModel where
-  defn = cl defn
-instance ConceptDomain TheoryModel where
-  cdom = cl cdom
+instance Chunk TheoryModel where id = con . id
+instance NamedIdea TheoryModel where term = con . term
+instance Idea TheoryModel where getA = getA . view con
+instance Definition TheoryModel where defn = con . defn
+instance ConceptDomain TheoryModel where cdom = con . cdom
 instance Concept TheoryModel where
 instance Theory TheoryModel where
-  valid_context = tl valid_context
-  spaces        = tl spaces
-  quantities    = tl quantities
-  operations    = tl operations
-  defined_quant = tl defined_quant
-  invariants    = tl invariants
-  defined_fun   = tl defined_fun
-  
-  
-cl :: (forall c. (Concept c) => Simple Lens c a) -> Simple Lens TheoryModel a
-cl l f (TM c t) = fmap (\x -> TM (set l x c) t) (f (c ^. l))
+  valid_context = thy . valid_context
+  spaces        = thy . spaces
+  quantities    = thy . quantities
+  operations    = thy . operations
+  defined_quant = thy . defined_quant
+  invariants    = thy . invariants
+  defined_fun   = thy . defined_fun
 
-tl :: (forall t. (Theory t) => Simple Lens t a) -> Simple Lens TheoryModel a
-tl l f (TM c t) = fmap (\x -> TM c (set l x t)) (f (t ^. l))
-  
 tc :: (Theory t, Quantity q, Concept c) => String -> [t] -> 
   [SpaceDefn] -> [q] -> [c] -> [QDefinition] -> [TheoryConstraint] -> 
   [QDefinition] -> TheoryChunk
@@ -92,4 +80,4 @@ tc' :: (Quantity q, Concept c) => String -> [q] -> [c] -> [QDefinition] ->
 tc' cid q c = tc cid ([] :: [TheoryChunk]) [] q c
 
 tm :: (Concept c, Theory t) => c -> t -> TheoryModel
-tm = TM
+tm c t = TM (cw c) (tw t)

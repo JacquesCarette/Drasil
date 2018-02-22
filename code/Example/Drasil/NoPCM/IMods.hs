@@ -1,4 +1,4 @@
-module Drasil.NoPCM.IMods (eBalanceOnWtr) where
+module Drasil.NoPCM.IMods (eBalanceOnWtr, eBalanceOnWtr_new) where
 
 import Language.Drasil
 import Drasil.DocumentLanguage (mkAssump)
@@ -13,10 +13,17 @@ import Data.Drasil.Quantities.Physics (time)
 import Data.Drasil.Concepts.Math (equation)
 import Data.Drasil.Concepts.PhysicalProperties (liquid)
 import Data.Drasil.Concepts.Thermodynamics (melting, boil_pt)
-
+import Drasil.DocumentLanguage.Chunk.InstanceModel
 ---------
 -- IM1 --
 ---------
+--im :: RelationConcept -> Inputs -> InputConstraints -> Outputs -> 
+-- OutputConstraints -> Attributes -> InstanceModel
+--Tcon :: Expr -> Constraint
+eBalanceOnWtr_new :: InstanceModel
+eBalanceOnWtr_new = im eBalanceOnWtr [qw tau_W, qw temp_C, qw temp_W, qw time] 
+  [TCon AssumedCon $ 0 $< C tau_W $> 100, TCon AssumedCon $ C tau_W $> 0] [qw temp_W, qw time] [] []
+
 eBalanceOnWtr :: RelationConcept
 eBalanceOnWtr = makeRC "eBalanceOnWtr" (nounPhraseSP $ "Energy balance on " ++
   "water to find the temperature of the water") balWtrDesc balWtr_Rel

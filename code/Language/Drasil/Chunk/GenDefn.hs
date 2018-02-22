@@ -31,5 +31,5 @@ instance HasAttributes GenDefn where attributes = att
 gdUnit :: GenDefn -> Maybe UnitDefn
 gdUnit = view mud
 
-gd :: Unit u => RelationConcept -> Maybe u -> Attributes -> GenDefn
+gd :: IsUnit u => RelationConcept -> Maybe u -> Attributes -> GenDefn
 gd r x ats = GD r (fmap unitWrapper x) ats

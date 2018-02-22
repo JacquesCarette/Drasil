@@ -14,7 +14,7 @@ import Language.Drasil.Chunk.Quantity (Quantity(getUnit),HasSpace(typ), Quantity
 import Language.Drasil.Chunk.ExprRelat
 import Language.Drasil.Chunk.VarChunk (VarChunk, vcSt)
 import Language.Drasil.Chunk.SymbolForm (HasSymbol(symbol))
-import Language.Drasil.Unit (Unit(..), unitWrapper)
+import Language.Drasil.Unit (IsUnit, unitWrapper)
 import Language.Drasil.Symbol (Symbol)
 import Language.Drasil.Space
 
@@ -42,7 +42,7 @@ instance Eq QDefinition where a == b = (a ^. id) == (b ^. id)
 
 -- | Create a 'QDefinition' with an id, noun phrase, term, symbol,
 -- unit, and defining equation.  And it ignores the term...
-fromEqn :: Unit u => String -> NP -> Sentence -> Symbol -> u -> Expr -> QDefinition
+fromEqn :: IsUnit u => String -> NP -> Sentence -> Symbol -> u -> Expr -> QDefinition
 fromEqn nm desc _ symb un eqn = 
   EC (mkQuant nm desc symb Real (Just $ unitWrapper un) Nothing) eqn []
 
@@ -54,7 +54,7 @@ fromEqn' nm desc _ symb eqn = EC (mkQuant nm desc symb Real Nothing Nothing) eqn
 
 -- | Create a 'QDefinition' with an id, noun phrase (term), symbol,
 -- abbreviation, unit, and defining equation.
-fromEqn'' :: (Unit u) => String -> NP -> Sentence -> Symbol -> String -> Maybe u -> Expr -> QDefinition
+fromEqn'' :: (IsUnit u) => String -> NP -> Sentence -> Symbol -> String -> Maybe u -> Expr -> QDefinition
 fromEqn'' nm desc _ symb abbr u eqn = 
   EC (mkQuant nm desc symb Real (fmap unitWrapper u) (Just abbr)) eqn []
 

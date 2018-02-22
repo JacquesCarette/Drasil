@@ -20,7 +20,7 @@ data SystemInformation where
 -- use a lookup of some sort from their internal (Drasil) ids.
 -- FIXME: b shouldn't need to be a NounPhrase, this will be fixed after
 -- NP is built into NamedIdea.
- SI :: (Idea a, Idea b, HasName c, Unit d,
+ SI :: (Idea a, Idea b, HasName c, IsUnit d,
   Quantity e, Ord e, Ord f, Quantity f, Concept f,
   Quantity h, Quantity i,
   Constrained j) => {

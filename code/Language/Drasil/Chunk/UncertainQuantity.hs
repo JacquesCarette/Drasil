@@ -63,19 +63,19 @@ uqNU :: (Quantity c, Constrained c, Concept c) => c -> UncertQ
 uqNU q = UQ (ConstrConcept (cqs q) (q ^. constraints) (q ^. reasVal)) Nothing
 
 -- this is kind of crazy and probably shouldn't be used!
-uqc :: (Unit u) => String -> NP -> String -> Symbol -> u -> Space -> [Constraint]
+uqc :: (IsUnit u) => String -> NP -> String -> Symbol -> u -> Space -> [Constraint]
                 -> Expr -> Double -> UncertQ
 uqc nam trm desc sym un space cs val uncrt = uq
   (cuc' nam trm desc sym un space cs val) uncrt
 
 --uncertainty quanity constraint no uncertainty
-uqcNU :: (Unit u) => String -> NP -> String -> Symbol -> u 
+uqcNU :: (IsUnit u) => String -> NP -> String -> Symbol -> u 
                   -> Space -> [Constraint]
                   -> Expr -> UncertQ
 uqcNU nam trm desc sym un space cs val = uqNU $ cuc' nam trm desc sym un space cs val
 
 --uncertainty quantity constraint no description
-uqcND :: (Unit u) => String -> NP -> Symbol -> u -> Space -> [Constraint]
+uqcND :: (IsUnit u) => String -> NP -> Symbol -> u -> Space -> [Constraint]
                   -> Expr -> Double -> UncertQ
 uqcND nam trm sym un space cs val uncrt = uq (cuc' nam trm "" sym un space cs val) uncrt
 

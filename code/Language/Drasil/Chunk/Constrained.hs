@@ -108,7 +108,7 @@ constrained :: (Quantity c) => c -> [Constraint] -> Expr -> ConstrainedChunk
 constrained q cs ex = ConstrainedChunk (qw q) cs (Just ex)
 
 -- | Creates a constrained unitary
-cuc :: Unit u => String -> NP -> Symbol -> u
+cuc :: IsUnit u => String -> NP -> Symbol -> u
                 -> Space -> [Constraint] -> Expr -> ConstrainedChunk
 cuc i t s u space cs rv =
   ConstrainedChunk (qw $ unitary i t s (unitWrapper u) space) cs (Just rv)
@@ -144,7 +144,7 @@ constrained' q cs rv = ConstrConcept (cqs q) cs (Just rv)
 constrainedNRV' :: (Quantity c, Concept c) => c -> [Constraint] -> ConstrConcept
 constrainedNRV' q cs = ConstrConcept (cqs q) cs Nothing
 
-cuc' :: (Unit u) => String -> NP -> String -> Symbol -> u
+cuc' :: (IsUnit u) => String -> NP -> String -> Symbol -> u
                   -> Space -> [Constraint] -> Expr -> ConstrConcept
 cuc' nam trm desc sym un space cs rv =
   ConstrConcept (cqs $ ucs nam trm desc sym un space) cs (Just rv)

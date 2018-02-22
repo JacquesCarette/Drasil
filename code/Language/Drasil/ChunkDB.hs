@@ -52,7 +52,7 @@ conceptMap :: (Concept c) => [c] -> ConceptMap
 conceptMap cs = Map.fromList (map (\x -> (x ^. id, cw x)) cs)
 
 -- | Smart constructor for a 'UnitMap'
-unitMap :: (Unit u) => [u] -> UnitMap
+unitMap :: (IsUnit u) => [u] -> UnitMap
 unitMap us = Map.fromList (map (\x -> (x ^. id, unitWrapper x)) us)
 
 -- | Get all the elements of one of our tables
@@ -87,7 +87,7 @@ data ChunkDB = CDB { symbs :: SymbolMap
 -- | Smart constructor for chunk databases. Takes a list of Quantities 
 -- (for SymbolTable), NamedIdeas (for TermTable), Concepts (for DefinitionTable),
 -- and Units (for UnitTable)
-cdb :: (Quantity q, Idea t, Concept c, Unit u) => 
+cdb :: (Quantity q, Idea t, Concept c, IsUnit u) => 
   [q] -> [t] -> [c] -> [u] -> ChunkDB
 cdb s t c u = CDB (symbolMap s) (termMap t) (conceptMap c) (unitMap u)
 

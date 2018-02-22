@@ -11,7 +11,7 @@ import Language.Drasil.Chunk.NamedIdea (NamedIdea(..), Idea(..))
 import Language.Drasil.Chunk.Quantity (Quantity(..), QuantityDict, mkQuant, qw, 
   HasSpace(typ))
 import Language.Drasil.Chunk.SymbolForm (HasSymbol(symbol))
-import Language.Drasil.Unit (Unit, UnitDefn, unitWrapper)
+import Language.Drasil.Unit (IsUnit, UnitDefn, unitWrapper)
 import Language.Drasil.Symbol
 import Language.Drasil.Space
 
@@ -35,7 +35,7 @@ instance Unitary   UnitaryChunk where unit x = x ^. un
   
 -- Builds the Quantity part from the id, term, symbol and space.
 -- assumes there's no abbreviation.
-unitary :: Unit u => String -> NP -> Symbol -> u -> Space -> UnitaryChunk
+unitary :: IsUnit u => String -> NP -> Symbol -> u -> Space -> UnitaryChunk
 unitary i t s u space = UC (mkQuant i t s space (Just uu) Nothing) uu
   where uu = unitWrapper u
 

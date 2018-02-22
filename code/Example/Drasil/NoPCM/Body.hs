@@ -29,8 +29,8 @@ import Drasil.SWHS.DataDefs(swhsSymbMapDRef, swhsSymbMapTRef, dd1HtFluxC,
   data_def_DD1, swhsSymbMapT)
 import Drasil.SWHS.TMods (theory_model_T1, t1ConsThermE, t1ConsThermE_new)
 import Drasil.SWHS.GenDefs (swhsGenDefs, nwtnCooling, rocTempSimp)
-import Drasil.SWHS.IMods (heatEInWtr)
-import Drasil.NoPCM.IMods (eBalanceOnWtr)
+import Drasil.SWHS.IMods (heatEInWtr, heatEInWtr_new)
+import Drasil.NoPCM.IMods (eBalanceOnWtr, eBalanceOnWtr_new)
 import Drasil.NoPCM.Unitals (temp_init)
 import Drasil.SWHS.References (ref2, ref3, ref4, ref5, ref6)
 import Drasil.SWHS.Requirements (non_func_req)
@@ -156,6 +156,9 @@ mkSRS = RefSec (RefProg intro
           , GDs [Label, Units, DefiningEquation   ---check glassbr
           , Description Verbose IncludeUnits
           , Source, RefBy] generalDefinitions ShowDerivation
+          , DDs ([Label, Symbol, Units] ++ stdFields) [dd1HtFluxC] ShowDerivation
+          , IMs ([Label, Input, Output, InConstraints, OutConstraints] ++ stdFields)
+           [eBalanceOnWtr_new, heatEInWtr_new] HideDerivation
           ]
         )
       ]

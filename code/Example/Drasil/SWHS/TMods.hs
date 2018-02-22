@@ -1,7 +1,8 @@
 {-# OPTIONS -Wall #-}
 {-# LANGUAGE FlexibleContexts #-}
 module Drasil.SWHS.TMods (tModels, t1ConsThermE, 
-  theory_model_swhsTMods, theory_model_T1) where
+  theory_model_swhsTMods, theory_model_T1,
+  t1ConsThermE_new) where
 
 import Language.Drasil
 import Control.Lens ((^.))
@@ -40,6 +41,14 @@ theory_model_swhsTMods = acroNumGen (theory_model_T1 ++ theory_model_T2
 -- Theoretical Model 1 --
 -------------------------
 --s4_2_2_T1
+------------- New Chunck -----------
+t1ConsThermE_new :: TheoryModel
+t1ConsThermE_new = tm (cw t1ConsThermE)
+  (tc' "ConsThermE_new" [qw thFluxVect, qw gradient, qw vol_ht_gen, 
+    qw density, qw heat_cap_spec, qw temp, qw time] ([] :: [CWrapper])
+  [] [TCon Invariant consThermERel] [])
+
+------------------------------------
 theory_model_T1 :: [Contents]
 theory_model_T1 = map swhsSymbMapT [t1ConsThermE]
 

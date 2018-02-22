@@ -27,7 +27,7 @@ import Drasil.SWHS.Unitals (w_vol, tank_length, tank_vol, tau_W, temp_W,
   coil_HTC_max, time_final_max, sim_time, coil_SA_max, eta)
 import Drasil.SWHS.DataDefs(swhsSymbMapDRef, swhsSymbMapTRef, dd1HtFluxC,
   data_def_DD1, swhsSymbMapT)
-import Drasil.SWHS.TMods (theory_model_T1, t1ConsThermE)
+import Drasil.SWHS.TMods (theory_model_T1, t1ConsThermE, t1ConsThermE_new)
 import Drasil.SWHS.GenDefs (swhsGenDefs, nwtnCooling, rocTempSimp)
 import Drasil.SWHS.IMods (heatEInWtr)
 import Drasil.NoPCM.IMods (eBalanceOnWtr)
@@ -148,15 +148,25 @@ mkSRS = RefSec (RefProg intro
   (org_of_doc_end inModel M.ode progName)]) : 
   Verbatim gen_sys_desc: --Verbatim gen_sys_desc:
   ------
-  {-SSDSec (SSDProg [SSDSubVerb s4_1, 
-    SSDSolChSpec (SCSProg [
-      (GDs [Label, Units, DefiningEquation   ---check glassbr
+  SSDSec 
+    (SSDProg [SSDSubVerb prob_des
+      , SSDSolChSpec 
+        (SCSProg 
+          [ TMs ([Label] ++ stdFields) [t1ConsThermE_new] -- only have the same T1 with SWHS
+          , GDs [Label, Units, DefiningEquation   ---check glassbr
           , Description Verbose IncludeUnits
-           , Source, RefBy] generalDefinitions ShowDerivation)])]) : --Testing General Definitions.-}
+          , Source, RefBy] generalDefinitions ShowDerivation
+          ]
+        )
+      ]
+    ): --Testing General Definitions.-}
+  
   Verbatim spec_sys_des: -- Comment this out and the above in for testing GDs.
   map Verbatim [req, likely_chg, trace_matrix_grph, aux_cons] ++
   [Bibliography ref_refList]
 
+stdFields :: Fields
+stdFields = [DefiningEquation, Description Verbose IncludeUnits, Source, RefBy]
 -- zzzzz  means the generalDefinations have a type of a list of GenDefn zzzzzzz -----
 generalDefinitions :: [GenDefn]
 generalDefinitions = [gd nwtnCooling (Just thermal_flux) ([] :: Attributes),

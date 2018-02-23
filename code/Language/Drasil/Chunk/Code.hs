@@ -1,13 +1,13 @@
-{-# LANGUAGE GADTs, Rank2Types #-}
+{-# LANGUAGE GADTs, Rank2Types, TemplateHaskell #-}
 module Language.Drasil.Chunk.Code (
     CodeIdea(..), CodeEntity(..), CodeName(..), CodeChunk(..), CodeDefinition(..),
-    codevar, codefunc, qtoc, qtov, codeEquat, 
+    codevar, codefunc, qtoc, qtov, codeEquat,
     ConstraintMap, constraintMap, physLookup, sfwrLookup, constraintLookup,
     symbToCodeName, CodeType(..),
     spaceToCodeType, toCodeName, funcPrefix
   ) where
 
-import Control.Lens (Lens',(^.),set)
+import Control.Lens (Lens',(^.),set,makeLenses,view)
 
 import Language.Drasil.Chunk.Constrained
 import Language.Drasil.Chunk.Quantity
@@ -40,7 +40,7 @@ class (CodeIdea c, Quantity c) => CodeEntity c where
 data CodeName where
   SFCN :: (Quantity c) => c -> CodeName
   NICN :: (NamedIdea c)  => c -> CodeName
-  
+
 instance Chunk CodeName where
   id = cnlens id
 instance CodeIdea CodeName where
@@ -48,22 +48,12 @@ instance CodeIdea CodeName where
   -- want to take term lens from NamedIdea and apply sentenceToCodeName to it
   -- to make codeName
   codeName (NICN c) = sentenceToCodeName (phrase $ c ^. term)
-instance Eq CodeName where
-  c1 == c2 = 
-    (c1 ^. id) == (c2 ^. id)
+instance Eq CodeName where c1 == c2 = (c1 ^. id) == (c2 ^. id)
 
-cnlens :: (forall c. (Chunk c) => Lens' c a) 
+cnlens :: (forall c. (Chunk c) => Lens' c a)
            -> Lens' CodeName a
 cnlens l f (SFCN a) = fmap (\x -> SFCN (set l x a)) (f (a ^. l))
 cnlens l f (NICN a) = fmap (\x -> NICN (set l x a)) (f (a ^. l))
---sfcnlens :: (forall c. (SymbolForm c) => Lens' c a) 
---             -> Lens' CodeName a
---sfcnlens l f (SFCN a) = fmap (\x -> SFCN (set l x a)) (f (a ^. l))
-
---nicnlens :: (forall c. (NamedIdea c) => Lens' c a) 
---             -> Lens' CodeName a
---nicnlens l f (NICN a) = fmap (\x -> NICN (set l x a)) (f (a ^. l))
-  
 
 sentenceToCodeName :: Sentence -> String
 sentenceToCodeName (S s) = toCodeName s
@@ -74,7 +64,7 @@ symbToCodeName (Atomic s) = toCodeName s
 symbToCodeName (Special sp) = specialToCodeName sp
 symbToCodeName (Greek g) = greekToCodeName g
 symbToCodeName (Atop d sy) = decorate (symbToCodeName sy) d
-symbToCodeName (Corners ul ll ur lr b) = 
+symbToCodeName (Corners ul ll ur lr b) =
   (cleft ul) ++ (cleft ll) ++ (symbToCodeName b)
     ++ (cright lr) ++ (cright ur)
   where cleft :: [Symbol] -> String
@@ -155,7 +145,7 @@ specialToCodeName CurlyBrOpen   = "{"
 specialToCodeName CurlyBrClose  = "}"
 specialToCodeName SqBrOpen      = "["
 specialToCodeName SqBrClose     = "]"
-specialToCodeName Hash          = "#" -- TODO: Double check that this is valid for 
+specialToCodeName Hash          = "#" -- TODO: Double check that this is valid for
                                       -- all of the output langs.
 
 toCodeName :: String -> String
@@ -170,53 +160,32 @@ toCodeName s =
 
 funcPrefix :: String
 funcPrefix = "func_"
-           
-data CodeChunk where
-  CodeVar :: (Quantity c) => c -> CodeChunk
-  CodeFunc :: (Quantity c) => c -> CodeChunk
-  
-instance Chunk CodeChunk where
-  id = qslens id
-instance NamedIdea CodeChunk where
-  term = qslens term
-instance Idea CodeChunk where
-  getA (CodeVar n) = getA n
-  getA (CodeFunc n) = getA n
-instance HasSpace CodeChunk where
-  typ = qslens typ
-instance HasSymbol CodeChunk where
-  symbol s (CodeVar c)    = symbol s c
-  symbol s (CodeFunc c)   = symbol s c
-instance Quantity CodeChunk where
-  getUnit (CodeVar c)     = getUnit c
-  getUnit (CodeFunc c)    = getUnit c
-instance CodeIdea CodeChunk where
-  codeName (CodeVar c) = symbToCodeName (codeSymb c)
-  codeName (CodeFunc c) = funcPrefix ++ symbToCodeName (codeSymb c)
-instance CodeEntity CodeChunk where
-  codeType (CodeVar c) = spaceToCodeType (c ^. typ)
-  codeType (CodeFunc c) = spaceToCodeType (c ^. typ)
-instance Eq CodeChunk where
-  c1 == c2 = 
-    (c1 ^. id) == (c2 ^. id)
+ 
+data VarOrFunc = Var | Func
+data CodeChunk = CodeC {_qc :: QuantityDict, kind :: VarOrFunc}
+makeLenses ''CodeChunk
 
-qslens :: (forall c. (Quantity c) => Lens' c a) 
-           -> Lens' CodeChunk a
-qslens l f (CodeVar a) = 
-  fmap (\x -> CodeVar (set l x a)) (f (a ^. l))
-qslens l f (CodeFunc a) = 
-  fmap (\x -> CodeFunc (set l x a)) (f (a ^. l))  
-  
+instance Chunk CodeChunk where id = qc . id
+instance NamedIdea CodeChunk where term = qc . term
+instance Idea CodeChunk where getA = getA . view qc
+instance HasSpace CodeChunk where typ = qc . typ
+instance HasSymbol CodeChunk where symbol s c = symbol s (c ^. qc)
+instance Quantity CodeChunk where getUnit = getUnit . view qc
+instance CodeIdea CodeChunk where
+  codeName (CodeC c Var) = symbToCodeName (codeSymb c)
+  codeName (CodeC c Func) = funcPrefix ++ symbToCodeName (codeSymb c)
+instance CodeEntity CodeChunk where codeType c = spaceToCodeType $ c ^. (qc.typ)
+instance Eq CodeChunk where c1 == c2 = (c1 ^. id) == (c2 ^. id)
+
 codevar :: (Quantity c) => c -> CodeChunk
-codevar = CodeVar
+codevar c = CodeC (qw c) Var
 
 codefunc :: (Quantity c) => c -> CodeChunk
-codefunc = CodeFunc  
-  
-           
+codefunc c = CodeC (qw c) Func
+
 data CodeDefinition where
   CodeDefinition :: (CodeEntity c) => c -> Expr -> CodeDefinition
-  
+
 instance Chunk CodeDefinition where id = qscdlens id
 instance NamedIdea CodeDefinition where term = qscdlens term
 instance Idea CodeDefinition where getA (CodeDefinition n _) = getA n
@@ -226,14 +195,14 @@ instance Quantity CodeDefinition where getUnit (CodeDefinition c _)    = getUnit
 instance CodeIdea CodeDefinition where codeName (CodeDefinition c _) = codeName c
 instance CodeEntity CodeDefinition where codeType (CodeDefinition c _) = codeType c
 instance Eq CodeDefinition where
-  (CodeDefinition c1 _) == (CodeDefinition c2 _) = 
+  (CodeDefinition c1 _) == (CodeDefinition c2 _) =
     (c1 ^. id) == (c2 ^. id)
 
-qscdlens :: (forall c. (Quantity c) => Lens' c a) 
+qscdlens :: (forall c. (Quantity c) => Lens' c a)
             -> Lens' CodeDefinition a
-qscdlens l f (CodeDefinition a b) = 
-  fmap (\x -> CodeDefinition (set l x a) b) (f (a ^. l)) 
-  
+qscdlens l f (CodeDefinition a b) =
+  fmap (\x -> CodeDefinition (set l x a) b) (f (a ^. l))
+
 qtoc :: QDefinition -> CodeDefinition
 qtoc (EC q e _) = CodeDefinition (codefunc q) e
 
@@ -241,7 +210,7 @@ qtov :: QDefinition -> CodeDefinition
 qtov (EC q e _) = CodeDefinition (codevar q) e
 
 codeEquat :: CodeDefinition -> Expr
-codeEquat (CodeDefinition _ e) = e 
+codeEquat (CodeDefinition _ e) = e
 
 spaceToCodeType :: Space -> CodeType
 spaceToCodeType S.Integer = G.Integer
@@ -272,9 +241,9 @@ sfwrLookup q m = constraintLookup' q m (filter isPhysC)
 constraintLookup :: (Quantity q) => q -> ConstraintMap -> [Expr]
 constraintLookup q m = constraintLookup' q m (\x -> x)
 
-constraintLookup' :: (Quantity q) => q -> ConstraintMap 
+constraintLookup' :: (Quantity q) => q -> ConstraintMap
                       -> ([Constraint] -> [Constraint]) -> [Expr]
-constraintLookup' q m filt = 
+constraintLookup' q m filt =
   lookC (Map.lookup (q ^. id) m) q
   where lookC :: Quantity q => Maybe [Constraint] -> q -> [Expr]
         lookC (Just cs) s = map (\x -> renderC s x) (filt cs)

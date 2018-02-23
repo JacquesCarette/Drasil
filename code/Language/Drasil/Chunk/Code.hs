@@ -1,6 +1,7 @@
 {-# LANGUAGE GADTs, Rank2Types, TemplateHaskell #-}
 module Language.Drasil.Chunk.Code (
-    CodeIdea(..), CodeName(..), CodeChunk(..), CodeDefinition(..),
+    CodeIdea(..), CodeChunk(..), CodeDefinition(..),
+    programName,
     codeType, codevar, codefunc, qtoc, qtov, codeEquat,
     ConstraintMap, constraintMap, physLookup, sfwrLookup, constraintLookup,
     symbToCodeName, CodeType(..),
@@ -34,20 +35,8 @@ import Prelude hiding (id)
 class (Chunk c) => CodeIdea c where
   codeName      :: c -> String
 
-data CodeName where
-  NICN :: (NamedIdea c)  => c -> CodeName
-
-instance Chunk CodeName where
-  id = cnlens id
-instance CodeIdea CodeName where
-  -- want to take term lens from NamedIdea and apply sentenceToCodeName to it
-  -- to make codeName
-  codeName (NICN c) = sentenceToCodeName (phrase $ c ^. term)
-instance Eq CodeName where c1 == c2 = (c1 ^. id) == (c2 ^. id)
-
-cnlens :: (forall c. (Chunk c) => Lens' c a)
-           -> Lens' CodeName a
-cnlens l f (NICN a) = fmap (\x -> NICN (set l x a)) (f (a ^. l))
+programName :: NamedIdea c => c -> String
+programName c = sentenceToCodeName (phrase $ c ^. term)
 
 sentenceToCodeName :: Sentence -> String
 sentenceToCodeName (S s) = toCodeName s

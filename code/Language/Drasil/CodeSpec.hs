@@ -32,7 +32,7 @@ type Derived = CodeDefinition
 type Def = CodeDefinition
 
 data CodeSpec = CodeSpec {
-  program :: CodeName,
+  program :: IdeaDict,
   inputs :: [Input],
   extInputs :: [Input],
   derivedInputs :: [Derived],
@@ -85,7 +85,7 @@ codeSpec' (SI {_sys = sys, _quants = q, _definitions = defs', _inputs = ins, _ou
       outs' = map codevar outs
       allInputs = nub $ inputs' ++ map codevar derived
   in  CodeSpec {
-        program = NICN sys,
+        program = nw sys,
         inputs = allInputs,
         extInputs = inputs',
         derivedInputs = derived,

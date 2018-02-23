@@ -35,13 +35,11 @@ class (Chunk c) => CodeIdea c where
   codeName      :: c -> String
 
 data CodeName where
-  SFCN :: (Quantity c) => c -> CodeName
   NICN :: (NamedIdea c)  => c -> CodeName
 
 instance Chunk CodeName where
   id = cnlens id
 instance CodeIdea CodeName where
-  codeName (SFCN c) = symbToCodeName (codeSymb c)
   -- want to take term lens from NamedIdea and apply sentenceToCodeName to it
   -- to make codeName
   codeName (NICN c) = sentenceToCodeName (phrase $ c ^. term)
@@ -49,7 +47,6 @@ instance Eq CodeName where c1 == c2 = (c1 ^. id) == (c2 ^. id)
 
 cnlens :: (forall c. (Chunk c) => Lens' c a)
            -> Lens' CodeName a
-cnlens l f (SFCN a) = fmap (\x -> SFCN (set l x a)) (f (a ^. l))
 cnlens l f (NICN a) = fmap (\x -> NICN (set l x a)) (f (a ^. l))
 
 sentenceToCodeName :: Sentence -> String

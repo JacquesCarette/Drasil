@@ -210,7 +210,6 @@ asVC (FCD cd) = codeVC cd (codeSymb cd) (cd ^. typ)
 asExpr :: Func -> Expr
 asExpr f = C $ asVC f
 
-
 -- name of variable/function maps to module name
 type ModExportMap = Map.Map String String
 

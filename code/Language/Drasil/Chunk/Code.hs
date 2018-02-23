@@ -1,7 +1,7 @@
 {-# LANGUAGE GADTs, Rank2Types, TemplateHaskell #-}
 module Language.Drasil.Chunk.Code (
-    CodeIdea(..), CodeEntity(..), CodeName(..), CodeChunk(..), CodeDefinition(..),
-    codevar, codefunc, qtoc, qtov, codeEquat,
+    CodeIdea(..), CodeName(..), CodeChunk(..), CodeDefinition(..),
+    codeType, codevar, codefunc, qtoc, qtov, codeEquat,
     ConstraintMap, constraintMap, physLookup, sfwrLookup, constraintLookup,
     symbToCodeName, CodeType(..),
     spaceToCodeType, toCodeName, funcPrefix
@@ -33,9 +33,6 @@ import Prelude hiding (id)
 -- not using lenses for now
 class (Chunk c) => CodeIdea c where
   codeName      :: c -> String
-
-class (CodeIdea c, Quantity c) => CodeEntity c where
-  codeType      :: c -> CodeType
 
 data CodeName where
   SFCN :: (Quantity c) => c -> CodeName
@@ -174,8 +171,10 @@ instance Quantity CodeChunk where getUnit = getUnit . view qc
 instance CodeIdea CodeChunk where
   codeName (CodeC c Var) = symbToCodeName (codeSymb c)
   codeName (CodeC c Func) = funcPrefix ++ symbToCodeName (codeSymb c)
-instance CodeEntity CodeChunk where codeType c = spaceToCodeType $ c ^. (qc.typ)
 instance Eq CodeChunk where c1 == c2 = (c1 ^. id) == (c2 ^. id)
+
+codeType :: HasSpace c => c -> CodeType
+codeType c = spaceToCodeType $ c ^. typ
 
 codevar :: (Quantity c) => c -> CodeChunk
 codevar c = CodeC (qw c) Var
@@ -184,7 +183,7 @@ codefunc :: (Quantity c) => c -> CodeChunk
 codefunc c = CodeC (qw c) Func
 
 data CodeDefinition where
-  CodeDefinition :: (CodeEntity c) => c -> Expr -> CodeDefinition
+  CodeDefinition :: (Quantity c, CodeIdea c) => c -> Expr -> CodeDefinition
 
 instance Chunk CodeDefinition where id = qscdlens id
 instance NamedIdea CodeDefinition where term = qscdlens term
@@ -193,7 +192,6 @@ instance HasSpace CodeDefinition where typ = qscdlens typ
 instance HasSymbol CodeDefinition where symbol s (CodeDefinition c _)  = symbol s c
 instance Quantity CodeDefinition where getUnit (CodeDefinition c _)    = getUnit c
 instance CodeIdea CodeDefinition where codeName (CodeDefinition c _) = codeName c
-instance CodeEntity CodeDefinition where codeType (CodeDefinition c _) = codeType c
 instance Eq CodeDefinition where
   (CodeDefinition c1 _) == (CodeDefinition c2 _) =
     (c1 ^. id) == (c2 ^. id)

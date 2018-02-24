@@ -1,4 +1,4 @@
-{-# LANGUAGE GADTs, Rank2Types, TemplateHaskell #-}
+{-# LANGUAGE TemplateHaskell #-}
 module Language.Drasil.Chunk.Code (
     CodeIdea(..), CodeChunk(..), CodeDefinition(..),
     programName,
@@ -8,7 +8,7 @@ module Language.Drasil.Chunk.Code (
     spaceToCodeType, toCodeName, funcPrefix
   ) where
 
-import Control.Lens (Lens',(^.),set,makeLenses,view)
+import Control.Lens ((^.),makeLenses,view)
 
 import Language.Drasil.Chunk.Constrained
 import Language.Drasil.Chunk.Quantity
@@ -159,43 +159,6 @@ instance CodeIdea CodeChunk where
   codeName (CodeC c Func) = funcPrefix ++ symbToCodeName (codeSymb c)
 instance Eq CodeChunk where c1 == c2 = (c1 ^. id) == (c2 ^. id)
 
-codeType :: HasSpace c => c -> CodeType
-codeType c = spaceToCodeType $ c ^. typ
-
-codevar :: (Quantity c) => c -> CodeChunk
-codevar c = CodeC (qw c) Var
-
-codefunc :: (Quantity c) => c -> CodeChunk
-codefunc c = CodeC (qw c) Func
-
-data CodeDefinition where
-  CodeDefinition :: (Quantity c, CodeIdea c) => c -> Expr -> CodeDefinition
-
-instance Chunk CodeDefinition where id = qscdlens id
-instance NamedIdea CodeDefinition where term = qscdlens term
-instance Idea CodeDefinition where getA (CodeDefinition n _) = getA n
-instance HasSpace CodeDefinition where typ = qscdlens typ
-instance HasSymbol CodeDefinition where symbol s (CodeDefinition c _)  = symbol s c
-instance Quantity CodeDefinition where getUnit (CodeDefinition c _)    = getUnit c
-instance CodeIdea CodeDefinition where codeName (CodeDefinition c _) = codeName c
-instance Eq CodeDefinition where
-  (CodeDefinition c1 _) == (CodeDefinition c2 _) =
-    (c1 ^. id) == (c2 ^. id)
-
-qscdlens :: (forall c. (Quantity c) => Lens' c a)
-            -> Lens' CodeDefinition a
-qscdlens l f (CodeDefinition a b) =
-  fmap (\x -> CodeDefinition (set l x a) b) (f (a ^. l))
-
-qtoc :: QDefinition -> CodeDefinition
-qtoc (EC q e _) = CodeDefinition (codefunc q) e
-
-qtov :: QDefinition -> CodeDefinition
-qtov (EC q e _) = CodeDefinition (codevar q) e
-
-codeEquat :: CodeDefinition -> Expr
-codeEquat (CodeDefinition _ e) = e
-
 spaceToCodeType :: Space -> CodeType
 spaceToCodeType S.Integer = G.Integer
 spaceToCodeType S.Natural = G.Integer
@@ -210,6 +173,36 @@ spaceToCodeType (S.Obj n) = G.Object (toCodeName n)
 spaceToCodeType (S.DiscreteI _) = G.List (spaceToCodeType S.Integer)
 spaceToCodeType (S.DiscreteD _) = G.List (spaceToCodeType S.Rational)
 spaceToCodeType (S.DiscreteS _) = G.List (spaceToCodeType S.String)
+
+codeType :: HasSpace c => c -> CodeType
+codeType c = spaceToCodeType $ c ^. typ
+
+codevar :: (Quantity c) => c -> CodeChunk
+codevar c = CodeC (qw c) Var
+
+codefunc :: (Quantity c) => c -> CodeChunk
+codefunc c = CodeC (qw c) Func
+
+data CodeDefinition = CD { _quant :: QuantityDict, _ci :: String, _def :: Expr }
+makeLenses ''CodeDefinition
+
+instance Chunk CodeDefinition where id = quant . id
+instance NamedIdea CodeDefinition where term = quant . term
+instance Idea CodeDefinition where getA = getA . view quant
+instance HasSpace CodeDefinition where typ = quant . typ
+instance HasSymbol CodeDefinition where symbol s c = symbol s $ c ^. quant
+instance Quantity CodeDefinition where getUnit = getUnit . view quant
+instance CodeIdea CodeDefinition where codeName = (^. ci)
+instance Eq CodeDefinition where c1 == c2 = (c1 ^. id) == (c2 ^. id)
+
+qtoc :: QDefinition -> CodeDefinition
+qtoc (EC q e _) = CD (qw q) (funcPrefix ++ symbToCodeName (codeSymb q)) e
+
+qtov :: QDefinition -> CodeDefinition
+qtov (EC q e _) = CD (qw q) (symbToCodeName (codeSymb q)) e
+
+codeEquat :: CodeDefinition -> Expr
+codeEquat cd = cd ^. def
 
 type ConstraintMap = Map.Map String [Constraint]
 

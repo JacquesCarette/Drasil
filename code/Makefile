@@ -25,41 +25,39 @@ DIFF = diff --strip-trailing-cr --ignore-all-space
 TESTS = swhs_diff tiny_diff ssp_diff glassbr_diff gamephys_diff nopcm_diff
 PROGS = swhs_prog tiny_prog ssp_prog glassbr_prog gamephys_prog nopcm_prog
 
-test: $(TESTS)
+all: build test
+
+test: $(PROGS) $(TESTS)
 	sh log_check.sh
 
 prog: $(PROGS)
   
-build:
-	mkdir build  
+build: FORCE
+	mkdir -p build  
+	stack build drasil -j2
+FORCE: ;
   
 swhs_build: build
-	stack $(stackArgs) build :$(SWHS_EXE)
 	mkdir -p build/$(SWHS_DIR)
 	cd build/$(SWHS_DIR) && stack exec $(SWHS_EXE)
   
 tiny_build: build
-	stack $(stackArgs) build :$(TINY_EXE)
 	mkdir -p build/$(TINY_DIR)
 	cd build/$(TINY_DIR) && stack exec $(TINY_EXE)  
   
 ssp_build: build
-	stack $(stackArgs) build :$(SSP_EXE)
 	mkdir -p build/$(SSP_DIR)
 	cd build/$(SSP_DIR) && stack exec $(SSP_EXE) 
   
 glassbr_build: build
-	stack $(stackArgs) build :$(GLASS_EXE)
 	mkdir -p build/$(GLASS_DIR)
 	cd build/$(GLASS_DIR) && stack exec $(GLASS_EXE) 
   
 gamephys_build: build
-	stack $(stackArgs) build :$(GAME_EXE)
 	mkdir -p build/$(GAME_DIR)
 	cd build/$(GAME_DIR) && stack exec $(GAME_EXE) 
   
 nopcm_build: build
-	stack $(stackArgs) build :$(NoPCM_EXE)
 	mkdir -p build/$(NoPCM_DIR)
 	cd build/$(NoPCM_DIR) && stack exec $(NoPCM_EXE) 
   

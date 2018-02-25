@@ -1,7 +1,5 @@
 module Drasil.SWHS.DataDefs where --exports all of it
 
-import Prelude hiding (id)
-
 import Language.Drasil
 import Control.Lens ((^.))
 
@@ -57,7 +55,7 @@ htFusionEqn :: Expr
 htFusionEqn = (C latent_heat) / (C mass)
 
 dd4MeltFrac :: QDefinition
-dd4MeltFrac = fromEqn' (melt_frac ^. id) -- FIXME Should (^. id) be used
+dd4MeltFrac = fromEqn' (melt_frac ^. uid) -- FIXME Should (^. id) be used
   (melt_frac ^. term) (S "fraction of the PCM that is liquid")
   (eqSymb melt_frac) melt_frac_eqn
 --FIXME: "Phi is the melt fraction" is produced; 

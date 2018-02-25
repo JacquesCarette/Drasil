@@ -3,9 +3,7 @@ module Data.Drasil.Concepts.Software where
 import Language.Drasil
 import Data.Drasil.Concepts.Documentation (srs)
 import Data.Drasil.SentenceStructures (foldlSent)
-import Prelude hiding (id)
 import Control.Lens ((^.))
-
 
 c, errMsg, physLib, program :: ConceptChunk
 
@@ -36,7 +34,7 @@ maintainability   = dcc "maintainability"   (nounPhraseSP "maintainability")
 performance       = dcc "performance"       (nounPhraseSP "performance")
   "The action or process of carrying out or accomplishing an action, task, or function"
   
-performanceSpd    = dcc (performance ^. id) (nounPhrase'' (phrase performance) (S "speed") CapFirst CapWords)
+performanceSpd    = dcc (performance ^. uid) (nounPhrase'' (phrase performance) (S "speed") CapFirst CapWords)
   "The action or process of carrying out or accomplishing an action, task, or function quickly"
  
 portability       = dcc "portability"       (nounPhraseSP "portability")

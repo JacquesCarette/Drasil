@@ -31,7 +31,6 @@ import Data.Drasil.Concepts.Documentation (refmat, tOfSymb, reference)
 import Data.Maybe (isJust,fromJust)
 import Data.List (sort, sortBy, nub)
 import Data.Function (on)
-import Prelude hiding (id)
 
 type System = Sentence
 type DocKind = Sentence
@@ -271,10 +270,10 @@ mkTSymb v f c = Section (titleize tOfSymb) (map Con [tsIntro c,
   table Equational (sort $ filter (\q -> hasStageSymbol q Equational) (nub v)) (lf f)])
   where lf Term = at_start
         lf Defn = (^. defn)
-        lf (TermExcept cs) = (\x -> if (x ^. id) `elem` (map (^. id) cs) then
-          (x ^. defn) else (at_start x)) --Compare chunk ids, since we don't
+        lf (TermExcept cs) = (\x -> if (x ^. uid) `elem` (map (^. uid) cs) then
+          (x ^. defn) else (at_start x)) --Compare chunk uids, since we don't
           --actually care about the chunks themselves in LFunc.
-        lf (DefnExcept cs) = (\x -> if (x ^. id) `elem` (map (^.id) cs) then
+        lf (DefnExcept cs) = (\x -> if (x ^. uid) `elem` (map (^.uid) cs) then
           (at_start x) else (x ^. defn))
         lf TAD = (\tDef -> titleize tDef :+: S ":" +:+ (tDef ^. defn))
 
@@ -493,7 +492,7 @@ siSys :: SystemInformation -> IdeaDict
 siSys (SI {_sys = sys}) = nw sys
 
 --BELOW IS IN THIS FILE TEMPORARILY--
---Creates Contents using an id and description (passed in as a Sentence).
+--Creates Contents using an uid and description (passed in as a Sentence).
 mkAssump :: String -> Sentence -> Contents
 mkAssump i desc = Assumption $ nw $ nc i (nounPhraseSent desc)
 

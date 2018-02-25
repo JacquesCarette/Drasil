@@ -4,7 +4,6 @@ module Language.Drasil.Chunk.Eq
   , ec, ec', aqd) where
 
 import Control.Lens ((^.), makeLenses)
-import Prelude hiding (id)
 import Language.Drasil.Expr (Expr)
 import Language.Drasil.Chunk
 import Language.Drasil.Chunk.Attribute
@@ -26,7 +25,7 @@ data QDefinition = EC { _qua :: QuantityDict, _equat :: Expr, _att :: Attributes
 makeLenses ''QDefinition
 
 -- this works because UnitalChunk is a Chunk
-instance Chunk QDefinition where id = qua . id
+instance Chunk QDefinition where uid = qua . uid
 instance NamedIdea QDefinition where term = qua . term
 instance Idea QDefinition where getA c = getA $ c ^. qua
 instance HasSpace QDefinition where typ = qua . typ
@@ -35,12 +34,12 @@ instance Quantity QDefinition where getUnit (EC a _ _)   = getUnit a
   
 instance ExprRelat QDefinition where relat = equat
 instance HasAttributes QDefinition where attributes = att
-instance Eq QDefinition where a == b = (a ^. id) == (b ^. id)
+instance Eq QDefinition where a == b = (a ^. uid) == (b ^. uid)
   
 -- useful: to be used for equations with units
 --FIXME: Space hack
 
--- | Create a 'QDefinition' with an id, noun phrase, term, symbol,
+-- | Create a 'QDefinition' with an uid, noun phrase, term, symbol,
 -- unit, and defining equation.  And it ignores the term...
 fromEqn :: IsUnit u => String -> NP -> Sentence -> Symbol -> u -> Expr -> QDefinition
 fromEqn nm desc _ symb un eqn = 
@@ -52,7 +51,7 @@ fromEqn nm desc _ symb un eqn =
 fromEqn' :: String -> NP -> Sentence -> Symbol -> Expr -> QDefinition
 fromEqn' nm desc _ symb eqn = EC (mkQuant nm desc symb Real Nothing Nothing) eqn []
 
--- | Create a 'QDefinition' with an id, noun phrase (term), symbol,
+-- | Create a 'QDefinition' with an uid, noun phrase (term), symbol,
 -- abbreviation, unit, and defining equation.
 fromEqn'' :: (IsUnit u) => String -> NP -> Sentence -> Symbol -> String -> Maybe u -> Expr -> QDefinition
 fromEqn'' nm desc _ symb abbr u eqn = 
@@ -71,7 +70,7 @@ ec' e c = ec e c []
 -- | Returns a 'VarChunk' from a 'QDefinition'.
 -- Currently only used in example /Modules/ which are being reworked.
 getVC :: QDefinition -> VarChunk
-getVC qd = vcSt (qd ^. id) (qd ^. term) (\s -> symbol s qd) (qd ^. typ)
+getVC qd = vcSt (qd ^. uid) (qd ^. term) (\s -> symbol s qd) (qd ^. typ)
 
 -- | For testing ONLY. Once all the chunks are updated for attributes this
 -- should be removed and the other constructors should be updated to include

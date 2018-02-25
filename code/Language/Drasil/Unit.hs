@@ -9,8 +9,6 @@ module Language.Drasil.Unit (
   , derUC, derUC', derUC'', unitWrapper
   ) where
 
-import Prelude hiding (id)
-
 import Control.Lens (Simple, Lens, (^.))
 
 import Language.Drasil.Chunk (Chunk(..))
@@ -79,14 +77,14 @@ data FundUnit = UD { _vc :: ConceptChunk, _u :: USymb }
 vc :: Simple Lens FundUnit ConceptChunk
 vc f (UD a b) = fmap (\x -> UD x b) (f a)
 
-instance Chunk FundUnit where id = vc . id
-instance NamedIdea FundUnit where term   = vc . term
-instance Idea FundUnit where getA c = getA (c ^. vc)
-instance Definition FundUnit where defn = vc . defn
+instance Chunk         FundUnit where uid = vc . uid
+instance NamedIdea     FundUnit where term   = vc . term
+instance Idea          FundUnit where getA c = getA (c ^. vc)
+instance Definition    FundUnit where defn = vc . defn
 instance ConceptDomain FundUnit where cdom = vc . cdom
-instance Concept FundUnit where
+instance Concept       FundUnit where
 instance HasUnitSymbol FundUnit where usymb f (UD a b) = fmap (\x -> UD a x) (f b)
-instance IsUnit FundUnit
+instance IsUnit        FundUnit
 
 -- | for defining Derived units
 data DerUChunk = DUC { _uc :: FundUnit, _eq :: UDefn }
@@ -95,14 +93,14 @@ data DerUChunk = DUC { _uc :: FundUnit, _eq :: UDefn }
 duc :: Simple Lens DerUChunk FundUnit
 duc f (DUC a b) = fmap (\x -> DUC x b) (f a)
 
-instance Chunk     DerUChunk where id  = duc . id
-instance NamedIdea DerUChunk where term = duc . term
-instance Idea DerUChunk where getA c = getA (c ^. duc)
-instance Definition DerUChunk where defn = duc . defn
-instance ConceptDomain   DerUChunk where cdom = duc . cdom
-instance Concept DerUChunk where
-instance HasUnitSymbol      DerUChunk where usymb  = duc . usymb
-instance IsUnit DerUChunk where
+instance Chunk         DerUChunk where uid  = duc . uid
+instance NamedIdea     DerUChunk where term = duc . term
+instance Idea          DerUChunk where getA c = getA (c ^. duc)
+instance Definition    DerUChunk where defn = duc . defn
+instance ConceptDomain DerUChunk where cdom = duc . cdom
+instance Concept       DerUChunk where
+instance HasUnitSymbol DerUChunk where usymb  = duc . usymb
+instance IsUnit        DerUChunk where
 
 instance UnitEq DerUChunk where
   uniteq f (DUC a b) = fmap (\x -> DUC a x) (f b)

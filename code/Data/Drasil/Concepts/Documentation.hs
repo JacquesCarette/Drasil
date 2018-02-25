@@ -1,6 +1,5 @@
 module Data.Drasil.Concepts.Documentation where
 
-import Prelude hiding (id)
 import Language.Drasil
 
 import Data.Drasil.Concepts.Math (graph)
@@ -14,12 +13,12 @@ import qualified Language.Drasil.NounPhrase as NP
 acroNumGen :: [Contents] -> Int -> [Contents]
 acroNumGen [] _ = []
 acroNumGen (frst:rst) num = (f frst) : acroNumGen rst (num + 1)
-  where f (Assumption a) = Assumption $ nw $ commonIdea (a ^. id) (a ^. term) (extrctStrng (short assumption) ++  (show num))
-        f (Definition (Data qdef)) = Definition $ Data $ fromEqn'' (qdef ^. id) (qdef ^. term) EmptyS (eqSymb qdef) (extrctStrng (short dataDefn) ++ (show num)) (getUnit qdef) (qdef ^. relat)
-        f (Definition (Theory rch)) = Definition $ Theory $ makeRC' (rch ^. id) (rch ^. term) (rch ^. defn) (extrctStrng (short thModel) ++ (show num)) (rch ^. relat)
-        f (Requirement r) = Requirement $ nw $ commonIdea (r ^. id) (r ^. term) (extrctStrng (short requirement) ++ (show num))
-        f (LikelyChange lch) = LikelyChange $ nw $ commonIdea (lch ^. id) (lch ^. term) (extrctStrng (short likelyChg) ++ (show num))
-        f (UnlikelyChange uch) = UnlikelyChange $ nw $ commonIdea (uch ^. id) (uch ^. term) (extrctStrng (short unlikelyChg) ++  (show num))
+  where f (Assumption a) = Assumption $ nw $ commonIdea (a ^. uid) (a ^. term) (extrctStrng (short assumption) ++  (show num))
+        f (Definition (Data qdef)) = Definition $ Data $ fromEqn'' (qdef ^. uid) (qdef ^. term) EmptyS (eqSymb qdef) (extrctStrng (short dataDefn) ++ (show num)) (getUnit qdef) (qdef ^. relat)
+        f (Definition (Theory rch)) = Definition $ Theory $ makeRC' (rch ^. uid) (rch ^. term) (rch ^. defn) (extrctStrng (short thModel) ++ (show num)) (rch ^. relat)
+        f (Requirement r) = Requirement $ nw $ commonIdea (r ^. uid) (r ^. term) (extrctStrng (short requirement) ++ (show num))
+        f (LikelyChange lch) = LikelyChange $ nw $ commonIdea (lch ^. uid) (lch ^. term) (extrctStrng (short likelyChg) ++ (show num))
+        f (UnlikelyChange uch) = UnlikelyChange $ nw $ commonIdea (uch ^. uid) (uch ^. term) (extrctStrng (short unlikelyChg) ++  (show num))
         f _ = error "Type not yet implemented"
         extrctStrng (S strng) = strng
         extrctStrng _ = error "Invalid acronym type"
@@ -28,7 +27,7 @@ assumption, dataDefn, genDefn, goalStmt, inModel, likelyChg, unlikelyChg,
   physSyst, requirement, srs, thModel, mg, desSpec, notApp, dataConst, typUnc :: CI
 
 -------------------------------------------------------------------------------------------------
--- | CI       |           |    id       |         term                        | abbreviation | --
+-- | CI       |           |    uid      |         term                        | abbreviation | --
 -------------------------------------------------------------------------------------------------
 assumption  = commonIdea "assumption"  (cn' "assumption")                                  "A"
 dataDefn    = commonIdea "dataDefn"    (cn' "data definition")                             "DD"

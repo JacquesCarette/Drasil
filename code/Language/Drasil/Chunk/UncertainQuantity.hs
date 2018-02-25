@@ -25,8 +25,6 @@ import Language.Drasil.Space
 import Language.Drasil.Symbol
 import Control.Lens ((^.), Lens', makeLenses)
 
-import Prelude hiding (id)
-
 -- | An UncertainQuantity is just a Quantity with some uncertainty associated to it.
 -- This uncertainty is represented as a decimal value between 0 and 1 (percentage).
 class Quantity c => UncertainQuantity c where
@@ -39,8 +37,8 @@ class Quantity c => UncertainQuantity c where
 data UncertQ = UQ { _coco :: ConstrConcept, _unc :: Maybe Double }
 makeLenses ''UncertQ
   
-instance Eq UncertQ where a == b = (a ^. id) == (b ^. id)
-instance Chunk UncertQ where id = coco . id
+instance Eq UncertQ where a == b = (a ^. uid) == (b ^. uid)
+instance Chunk UncertQ where uid = coco . uid
 instance NamedIdea UncertQ where term = coco . term
 instance Idea UncertQ where getA (UQ q _) = getA q
 instance HasSpace UncertQ where typ = coco . typ
@@ -84,8 +82,8 @@ uqcND nam trm sym un space cs val uncrt = uq (cuc' nam trm "" sym un space cs va
 data UncertainChunk  = UCh { _conc :: ConstrainedChunk, _unc' :: Maybe Double }
 makeLenses ''UncertainChunk
 
-instance Chunk UncertainChunk where id = conc . id
-instance Eq UncertainChunk where c1 == c2 = (c1 ^. id) == (c2 ^. id)
+instance Chunk UncertainChunk where uid = conc . uid
+instance Eq UncertainChunk where c1 == c2 = (c1 ^. uid) == (c2 ^. uid)
 instance NamedIdea UncertainChunk where term = conc . term
 instance Idea UncertainChunk where getA (UCh n _) = getA n
 instance HasSpace UncertainChunk where typ = conc . typ

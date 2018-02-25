@@ -5,7 +5,6 @@ module Language.Drasil.Chunk.Unitary
   , Unitary(..)) where
 
 import Control.Lens ((^.), makeLenses)
-import Prelude hiding (id)
 import Language.Drasil.Chunk (Chunk(..))
 import Language.Drasil.Chunk.NamedIdea (NamedIdea(..), Idea(..))
 import Language.Drasil.Chunk.Quantity (Quantity(..), QuantityDict, mkQuant, qw, 
@@ -25,7 +24,7 @@ class (Quantity c) => Unitary c where
 data UnitaryChunk = UC { _quant :: QuantityDict, _un :: UnitDefn }
 makeLenses ''UnitaryChunk
 
-instance Chunk     UnitaryChunk where id = quant . id
+instance Chunk     UnitaryChunk where uid = quant . uid
 instance NamedIdea UnitaryChunk where term = quant . term
 instance Idea      UnitaryChunk where getA uc = getA $ uc ^. quant
 instance HasSpace  UnitaryChunk where typ = quant . typ
@@ -33,7 +32,7 @@ instance HasSymbol UnitaryChunk where symbol st (UC s _) = symbol st s
 instance Quantity  UnitaryChunk where getUnit = Just . _un
 instance Unitary   UnitaryChunk where unit x = x ^. un
   
--- Builds the Quantity part from the id, term, symbol and space.
+-- Builds the Quantity part from the uid, term, symbol and space.
 -- assumes there's no abbreviation.
 unitary :: IsUnit u => String -> NP -> Symbol -> u -> Space -> UnitaryChunk
 unitary i t s u space = UC (mkQuant i t s space (Just uu) Nothing) uu

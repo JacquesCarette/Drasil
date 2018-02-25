@@ -10,8 +10,6 @@ import Control.Lens (Simple, Lens, (^.))
 import Language.Drasil.Spec
 import Language.Drasil.NounPhrase
 
-import Prelude hiding (id)
-
 -- | A NamedIdea is a 'term' that we've identified (has an 'id') as 
 -- being worthy of naming.
 class Chunk c => NamedIdea c where
@@ -34,12 +32,12 @@ short c = maybe (phrase (c ^. term)) (\x -> x) (fmap S $ getA c)
 -- as that's a |CommonIdea|, which has its own representation
 data NamedChunk = NC String NP
 
-instance Eq        NamedChunk where c1 == c2 = (c1 ^. id) == (c2 ^. id)
-instance Chunk     NamedChunk where id f (NC a b) = fmap (\x -> NC x b) (f a)
+instance Eq        NamedChunk where c1 == c2 = (c1 ^. uid) == (c2 ^. uid)
+instance Chunk     NamedChunk where uid f (NC a b) = fmap (\x -> NC x b) (f a)
 instance NamedIdea NamedChunk where term f (NC a b) = fmap (\x -> NC a x) (f b)
 instance Idea      NamedChunk where getA (NC _ _) = Nothing
   
--- | 'NamedChunk' constructor, takes an id and a term.
+-- | 'NamedChunk' constructor, takes an uid and a term.
 nc :: String -> NP -> NamedChunk
 nc = NC
 
@@ -47,10 +45,10 @@ nc = NC
 -- don't export the record accessors
 data IdeaDict = IdeaDict { _nc :: NamedChunk, _mabbr :: Maybe String }
 
-instance Eq        IdeaDict where a == b = a ^. id == b ^. id
+instance Eq        IdeaDict where a == b = a ^. uid == b ^. uid
 -- FIXME : this is not a good order!
-instance Ord       IdeaDict where compare a b = compare (a ^. id) (b ^. id) 
-instance Chunk     IdeaDict where id = inc . id
+instance Ord       IdeaDict where compare a b = compare (a ^. uid) (b ^. uid) 
+instance Chunk     IdeaDict where uid = inc . uid
 instance NamedIdea IdeaDict where term = inc . term
 instance Idea      IdeaDict where getA (IdeaDict _ b) = b
   
@@ -64,7 +62,7 @@ mkIdea s np ms = IdeaDict (nc s np) ms
 -- |NamedIdea| exported |getA| (now in |Idea|). But there are
 -- no more wrappers, instead we have explicit dictionaries.
 nw :: Idea c => c -> IdeaDict
-nw c = IdeaDict (NC (c^.id) (c^.term)) (getA c)
+nw c = IdeaDict (NC (c^.uid) (c^.term)) (getA c)
 
 ----------------------
 -- various combinators
@@ -72,28 +70,28 @@ nw c = IdeaDict (NC (c^.id) (c^.term)) (getA c)
 -- | Combinator for combining two 'NamedIdea's into one NamedChunk.
 -- /Does not preserve abbreviations/
 compoundterm :: (NamedIdea c, NamedIdea d) => c -> d -> NamedChunk
-compoundterm t1 t2 = nc (t1^.id ++ t2^.id) (compoundPhrase (t1 ^. term) (t2 ^. term))
+compoundterm t1 t2 = nc (t1^.uid ++ t2^.uid) (compoundPhrase (t1 ^. term) (t2 ^. term))
 
 -- | Combinator for combining two 'NamedChunk's into one.
 -- /Does not preserve abbreviations/
 compoundNC :: (NamedIdea a, NamedIdea b) => a -> b -> NamedChunk
 compoundNC t1 t2 = nc 
-  (t1^.id ++ t2^.id) (compoundPhrase (t1 ^. term) (t2 ^. term))
+  (t1^.uid ++ t2^.uid) (compoundPhrase (t1 ^. term) (t2 ^. term))
   
 compoundNC' :: (NamedIdea a, NamedIdea b) => a -> b -> NamedChunk
 compoundNC' t1 t2 = nc 
-  (t1^.id ++ t2^.id) (compoundPhrase'' plural plural (t1 ^. term) (t2 ^. term)) 
+  (t1^.uid ++ t2^.uid) (compoundPhrase'' plural plural (t1 ^. term) (t2 ^. term)) 
   
 compoundNC'' :: (NamedIdea a, NamedIdea b) => 
   (NP -> Sentence) -> (NP -> Sentence) -> a -> b -> NamedChunk
 compoundNC'' f1 f2 t1 t2 = nc
-  (t1 ^. id ++ t2 ^. id) (compoundPhrase'' f1 f2 (t1 ^. term) (t2 ^. term))
+  (t1 ^. uid ++ t2 ^. uid) (compoundPhrase'' f1 f2 (t1 ^. term) (t2 ^. term))
 
 -- hack for Solution Characteristics Specification, calling upon plural will pluralize
 -- Characteristics as it is the end of the first term (solutionCharacteristic)
 compoundNC''' :: (NamedIdea a, NamedIdea b) => (NP -> Sentence) -> a -> b -> NamedChunk
 compoundNC''' f1 t1 t2 = nc 
-  (t1^.id ++ t2^.id) (compoundPhrase''' f1 (t1 ^. term) (t2 ^. term))
+  (t1^.uid ++ t2^.uid) (compoundPhrase''' f1 (t1 ^. term) (t2 ^. term))
 
 -- we might want to eventually restrict the use of these via
 -- some kind of type system, which asserts that:
@@ -192,16 +190,16 @@ andRT f1 f2 t1 t2 = nounPhrase''
   (Replace ((f1 t1) +:+ S "and" +:+ (f2 t2)))
   
 the :: (NamedIdea c) => c -> NamedChunk
-the t = nc ("the" ++ t ^. id) (nounPhrase'' 
+the t = nc ("the" ++ t ^. uid) (nounPhrase'' 
   (S "the" +:+ (phrase $ t ^. term)) (S "the" +:+ (plural $ t ^. term))
   CapFirst CapWords)
 
 theCustom :: (NamedIdea c) => (c -> Sentence) -> c -> NamedChunk
-theCustom f t = nc ("the" ++ t ^. id) (nounPhrase''(S "the" +:+ (f t)) 
+theCustom f t = nc ("the" ++ t ^. uid) (nounPhrase''(S "the" +:+ (f t)) 
   (S "the" +:+ (f t)) CapFirst CapWords)
 
 this :: (NamedIdea c) => c -> NamedChunk
-this t = nc ("this" ++ t ^. id) (nounPhrase'' 
+this t = nc ("this" ++ t ^. uid) (nounPhrase'' 
   (S "this" +:+ (phrase $ t ^. term)) (S "this" +:+ (plural $ t ^. term))
   CapFirst CapWords)
 
@@ -211,7 +209,7 @@ aNP t = nounPhrase''
   CapFirst CapWords  
   
 a_ :: (NamedIdea c) => c -> NamedChunk --Pluralization disallowed
-a_ t = nc ("a" ++ t ^.id) (nounPhrase'' 
+a_ t = nc ("a" ++ t ^.uid) (nounPhrase'' 
   (S "a" +:+ (phrase $ t ^. term)) (S "a" +:+ (phrase $ t ^. term)) 
   CapFirst CapWords)
 

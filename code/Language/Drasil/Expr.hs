@@ -3,7 +3,7 @@
 module Language.Drasil.Expr where
 
 import Data.Ratio (numerator,denominator)
-import Prelude hiding (id, sqrt)
+import Prelude hiding (sqrt)
 import Language.Drasil.Chunk (Chunk(..))
 import Language.Drasil.Symbol
 import Language.Drasil.Space (Space(..))
@@ -90,8 +90,8 @@ instance Eq Expr where
   Dbl a == Dbl b               =  a == b
   Int a == Int b               =  a == b
   Assoc o1 l1 == Assoc o2 l2   =  o1 == o2 && l1 == l2
-  Deriv t1 a b == Deriv t2 c d =  t1 == t2 && a == c && (b ^. id) == (d ^. id)
-  C a == C b                   =  (a ^. id) == (b ^. id)
+  Deriv t1 a b == Deriv t2 c d =  t1 == t2 && a == c && (b ^. uid) == (d ^. uid)
+  C a == C b                   =  (a ^. uid) == (b ^. uid)
   FCall a b == FCall c d       =  a == c && b == d
   Case a == Case b             =  a == b
   IsIn  a b  == IsIn  c d      =  a == c && b == d

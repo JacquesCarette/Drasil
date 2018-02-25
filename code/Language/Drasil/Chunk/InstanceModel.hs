@@ -21,8 +21,6 @@ import Language.Drasil.Chunk.Relation
 
 import Control.Lens (makeLenses,(^.))
 
-import Prelude hiding (id)
-
 type Inputs = [QuantityDict]
 type Outputs = [QuantityDict]
 
@@ -40,7 +38,7 @@ data InstanceModel = IM { _rc :: RelationConcept
                         }
 makeLenses ''InstanceModel
   
-instance Chunk InstanceModel where id = rc . id
+instance Chunk InstanceModel where uid = rc . uid
 instance NamedIdea InstanceModel where term = rc . term
 instance Idea InstanceModel where getA (IM a _ _ _ _ _) = getA a
 instance Definition InstanceModel where defn = rc . defn
@@ -58,5 +56,5 @@ im = IM
 -- (Sentence is the "concept" definition for the relation concept)
 imQD :: HasSymbolTable ctx => ctx -> QDefinition -> Sentence -> InputConstraints 
   -> OutputConstraints -> Attributes -> InstanceModel
-imQD ctx qd dfn incon ocon att = IM (makeRC (qd ^. id) (qd ^. term) dfn 
+imQD ctx qd dfn incon ocon att = IM (makeRC (qd ^. uid) (qd ^. term) dfn 
   (C qd $= qd ^. equat)) (vars (qd^.equat) ctx) incon [qw qd] ocon att

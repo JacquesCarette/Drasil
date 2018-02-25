@@ -29,8 +29,6 @@ import Language.Drasil.NounPhrase
 import Data.String.Utils (replace)
 import qualified Data.Map as Map
 
-import Prelude hiding (id)
-
 -- not using lenses for now
 class (Chunk c) => CodeIdea c where
   codeName      :: c -> String
@@ -148,7 +146,7 @@ data VarOrFunc = Var | Func
 data CodeChunk = CodeC {_qc :: QuantityDict, kind :: VarOrFunc}
 makeLenses ''CodeChunk
 
-instance Chunk CodeChunk where id = qc . id
+instance Chunk CodeChunk where uid = qc . uid
 instance NamedIdea CodeChunk where term = qc . term
 instance Idea CodeChunk where getA = getA . view qc
 instance HasSpace CodeChunk where typ = qc . typ
@@ -157,7 +155,7 @@ instance Quantity CodeChunk where getUnit = getUnit . view qc
 instance CodeIdea CodeChunk where
   codeName (CodeC c Var) = symbToCodeName (codeSymb c)
   codeName (CodeC c Func) = funcPrefix ++ symbToCodeName (codeSymb c)
-instance Eq CodeChunk where c1 == c2 = (c1 ^. id) == (c2 ^. id)
+instance Eq CodeChunk where c1 == c2 = (c1 ^. uid) == (c2 ^. uid)
 
 spaceToCodeType :: Space -> CodeType
 spaceToCodeType S.Integer = G.Integer
@@ -185,14 +183,14 @@ codefunc c = CodeC (qw c) Func
 data CodeDefinition = CD { _quant :: QuantityDict, _ci :: String, _def :: Expr }
 makeLenses ''CodeDefinition
 
-instance Chunk CodeDefinition where id = quant . id
+instance Chunk CodeDefinition where uid = quant . uid
 instance NamedIdea CodeDefinition where term = quant . term
 instance Idea CodeDefinition where getA = getA . view quant
 instance HasSpace CodeDefinition where typ = quant . typ
 instance HasSymbol CodeDefinition where symbol s c = symbol s $ c ^. quant
 instance Quantity CodeDefinition where getUnit = getUnit . view quant
 instance CodeIdea CodeDefinition where codeName = (^. ci)
-instance Eq CodeDefinition where c1 == c2 = (c1 ^. id) == (c2 ^. id)
+instance Eq CodeDefinition where c1 == c2 = (c1 ^. uid) == (c2 ^. uid)
 
 qtoc :: QDefinition -> CodeDefinition
 qtoc (EC q e _) = CD (qw q) (funcPrefix ++ symbToCodeName (codeSymb q)) e
@@ -206,7 +204,7 @@ codeEquat cd = cd ^. def
 type ConstraintMap = Map.Map String [Constraint]
 
 constraintMap :: (Constrained c) => [c] -> ConstraintMap
-constraintMap cs = Map.fromList (map (\x -> ((x ^. id), (x ^. constraints))) cs)
+constraintMap cs = Map.fromList (map (\x -> ((x ^. uid), (x ^. constraints))) cs)
 
 physLookup :: (Quantity q) => q -> ConstraintMap -> [Expr]
 physLookup q m = constraintLookup' q m (filter isPhysC)
@@ -220,7 +218,7 @@ constraintLookup q m = constraintLookup' q m (\x -> x)
 constraintLookup' :: (Quantity q) => q -> ConstraintMap
                       -> ([Constraint] -> [Constraint]) -> [Expr]
 constraintLookup' q m filt =
-  lookC (Map.lookup (q ^. id) m) q
+  lookC (Map.lookup (q ^. uid) m) q
   where lookC :: Quantity q => Maybe [Constraint] -> q -> [Expr]
         lookC (Just cs) s = map (\x -> renderC s x) (filt cs)
         lookC Nothing _ = []

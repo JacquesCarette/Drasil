@@ -41,42 +41,42 @@ type TermMap = Map.Map String IdeaDict
 
 -- | Smart constructor for a 'SymbolMap'
 symbolMap :: (Quantity c) => [c] -> SymbolMap
-symbolMap cs = Map.fromList (map (\x -> (x ^. id, qw x)) cs)
+symbolMap cs = Map.fromList (map (\x -> (x ^. uid, qw x)) cs)
 
 -- | Smart constructor for a 'TermMap'
 termMap :: (Idea c) => [c] -> TermMap
-termMap ts = Map.fromList (map (\x -> (x ^. id, nw x)) ts)
+termMap ts = Map.fromList (map (\x -> (x ^. uid, nw x)) ts)
 
 -- | Smart constructor for a 'ConceptMap'
 conceptMap :: (Concept c) => [c] -> ConceptMap
-conceptMap cs = Map.fromList (map (\x -> (x ^. id, cw x)) cs)
+conceptMap cs = Map.fromList (map (\x -> (x ^. uid, cw x)) cs)
 
 -- | Smart constructor for a 'UnitMap'
 unitMap :: (IsUnit u) => [u] -> UnitMap
-unitMap us = Map.fromList (map (\x -> (x ^. id, unitWrapper x)) us)
+unitMap us = Map.fromList (map (\x -> (x ^. uid, unitWrapper x)) us)
 
 -- | Get all the elements of one of our tables
 elements :: Map.Map k a -> [a]
 elements m = Map.elems m
 
--- | Looks up an id in the symbol table. If nothing is found, an error is thrown
+-- | Looks up an uid in the symbol table. If nothing is found, an error is thrown
 symbLookup :: (Chunk c) => c -> SymbolMap -> QuantityDict
-symbLookup c m = let lookC = Map.lookup (c ^. id) m in
+symbLookup c m = let lookC = Map.lookup (c ^. uid) m in
                  getS lookC
   where getS (Just x) = x
-        getS Nothing = error $ "Symbol: " ++ (c ^. id) ++ " not found in SymbolMap"
+        getS Nothing = error $ "Symbol: " ++ (c ^. uid) ++ " not found in SymbolMap"
 
 -- | Gets a unit if it exists, or Nothing.        
 getUnitLup :: HasSymbolTable s => (Chunk c) => c -> s -> Maybe UnitDefn
 getUnitLup c m = let lookC = symbLookup c (m ^. symbolTable) in
                  getUnit lookC
 
--- | Looks up an id in the term table. If nothing is found, an error is thrown
+-- | Looks up an uid in the term table. If nothing is found, an error is thrown
 termLookup :: (Chunk c) => c -> TermMap -> IdeaDict
-termLookup c m = let lookC = Map.lookup (c ^. id) m in
+termLookup c m = let lookC = Map.lookup (c ^. uid) m in
                  getT lookC
   where getT (Just x) = x
-        getT Nothing  = error $ "Term: " ++ (c ^. id) ++ " not found in TermMap"
+        getT Nothing  = error $ "Term: " ++ (c ^. uid) ++ " not found in TermMap"
 
 -- | Our chunk databases. Should contain all the maps we will need.
 data ChunkDB = CDB { symbs :: SymbolMap

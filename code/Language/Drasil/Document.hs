@@ -1,7 +1,6 @@
 -- | Document Description Language
 module Language.Drasil.Document where
-import Prelude hiding (id)
-import Language.Drasil.Chunk (id)
+import Language.Drasil.Chunk (uid)
 import Language.Drasil.Chunk.Eq
 import Language.Drasil.Chunk.Relation
 import Language.Drasil.Chunk.NamedIdea
@@ -111,10 +110,10 @@ instance LayoutObj Contents where
   refName (Definition d)          = getDefName d
   refName (Defnt dt _ r)          = getDefName dt +:+ r
   refName (Enumeration _)         = error "List refs unimplemented"
-  refName (Requirement rc)        = S $ "R:" ++ alphanumOnly (rc ^. id)
-  refName (Assumption ac)         = S $ "A:" ++ alphanumOnly (ac ^. id)
-  refName (LikelyChange lcc)      = S $ "LC:" ++ alphanumOnly (lcc ^. id)
-  refName (UnlikelyChange ucc)    = S $ "UC:" ++ alphanumOnly (ucc ^. id)
+  refName (Requirement rc)        = S $ "R:" ++ alphanumOnly (rc ^. uid)
+  refName (Assumption ac)         = S $ "A:" ++ alphanumOnly (ac ^. uid)
+  refName (LikelyChange lcc)      = S $ "LC:" ++ alphanumOnly (lcc ^. uid)
+  refName (UnlikelyChange ucc)    = S $ "UC:" ++ alphanumOnly (ucc ^. uid)
 --  refName (UsesHierarchy _)     = S $ "Figure:UsesHierarchy"
   refName (Graph _ _ _ l)         = S "Figure:" :+: inferName l
   refName (TMod _ _ _)            = error "TMod referencing unimplemented"
@@ -142,8 +141,8 @@ instance LayoutObj Contents where
   
 -- | Automatically create the label for a definition
 getDefName :: DType -> Sentence
-getDefName (Data c)   = S $ "DD:" ++ (repUnd (c ^. id))
-getDefName (Theory c) = S $ "T:" ++ (repUnd (c ^. id))
+getDefName (Data c)   = S $ "DD:" ++ (repUnd (c ^. uid))
+getDefName (Theory c) = S $ "T:" ++ (repUnd (c ^. uid))
 getDefName TM         = S "T:"
 getDefName DD         = S "DD:"
 getDefName _          = error "Unimplemented definition type reference"

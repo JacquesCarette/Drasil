@@ -1,5 +1,4 @@
 {-# Language GADTs #-}
-
 module Drasil.Sections.SolutionCharacterSpec
   (
   SecItem,
@@ -26,7 +25,6 @@ import Data.Drasil.Utils (foldle)
 import Data.Drasil.SentenceStructures
 import qualified Data.Drasil.Concepts.Documentation as Doc
 import Data.List (find)
-import Prelude hiding (id)
 import Control.Lens ((^.))
 import Drasil.Sections.SpecificSystemDescription (inDataConstTbl, outDataConstTbl)
 
@@ -88,7 +86,7 @@ siUQO xs = UnQuantO xs
 ----------------------
 
 compareID :: (NamedIdea a) => a -> String -> Bool
-compareID c1 c2 = (c1 ^. id) == c2
+compareID c1 c2 = (c1 ^. uid) == c2
 
 -----------------------
 -- CHECK FOR SECITEM --
@@ -221,10 +219,10 @@ pullTMods :: [SecItem] -> [RelationConcept]
 pullTMods xs = pullFunc xs getTMods hasTMods
 
 --getID :: SubSec -> String
---getID (SectionModel niname _) = niname ^. id
+--getID (SectionModel niname _) = niname ^. uid
 
 --pullSubSec :: (NamedIdea a) => a -> [SubSec] -> Maybe SubSec
---pullSubSec nameid ls = getItem (\x -> (getID x) == (nameid ^. id)) ls
+--pullSubSec nameid ls = getItem (\x -> (getID x) == (nameid ^. uid)) ls
 
 -----------------------
 -- Section Assembler --
@@ -237,13 +235,13 @@ assembler progName symMap thisSection subsecs =
 
 sectionMap :: Idea c => c -> SubSec -> [Section] -> Section
 sectionMap progName (SectionModel niname xs)  
-  |  compareID niname (Doc.solutionCharSpec ^. id)         = section (titleize' niname)
+  |  compareID niname (Doc.solutionCharSpec ^. uid)         = section (titleize' niname)
     [scsIntro progName]
-  | compareID niname  (Doc.problemDescription ^. id)       = section (titleize niname)
+  | compareID niname  (Doc.problemDescription ^. uid)       = section (titleize niname)
     [problemDescriptionIntro progName (pullSents xs)]
-  | compareID niname  (Doc.generalSystemDescription ^. id) = section (titleize niname)
+  | compareID niname  (Doc.generalSystemDescription ^. uid) = section (titleize niname)
     [genenralSystemIntro]
-  | compareID niname  (Doc.requirement ^. id)              = section (titleize niname)
+  | compareID niname  (Doc.requirement ^. uid)              = section (titleize niname)
     [requirementsIntro]
   | otherwise                                              = error "no matches on section name"
 
@@ -253,15 +251,15 @@ sectionMap progName (SectionModel niname xs)
 
 render :: (Idea c, HasSymbolTable s) => c -> s -> SubSec -> Section
 render progName symMap item@(SectionModel niname _)
-  | compareID niname (Doc.assumption ^. id)       = assumptionSect        item
-  | compareID niname (Doc.thModel ^. id)          = theoreticalModelSect  item symMap progName
-  | compareID niname (Doc.genDefn ^. id)          = generalDefinitionSect item symMap
-  | compareID niname (Doc.inModel ^. id)          = instanceModelSect     item symMap
-  | compareID niname (Doc.dataDefn ^. id)         = dataDefinitionSect    item symMap
-  | compareID niname (Doc.dataConst ^. id)        = dataConstraintSect    item 
-  | compareID niname (Doc.termAndDef ^. id)       = termDefinitionSect    item
-  | compareID niname (Doc.goalStmt ^. id)         = goalStatementSect     item
-  | compareID niname (Doc.systemConstraint ^. id) = systemConstraintSect  item
+  | compareID niname (Doc.assumption ^. uid)       = assumptionSect        item
+  | compareID niname (Doc.thModel ^. uid)          = theoreticalModelSect  item symMap progName
+  | compareID niname (Doc.genDefn ^. uid)          = generalDefinitionSect item symMap
+  | compareID niname (Doc.inModel ^. uid)          = instanceModelSect     item symMap
+  | compareID niname (Doc.dataDefn ^. uid)         = dataDefinitionSect    item symMap
+  | compareID niname (Doc.dataConst ^. uid)        = dataConstraintSect    item 
+  | compareID niname (Doc.termAndDef ^. uid)       = termDefinitionSect    item
+  | compareID niname (Doc.goalStmt ^. uid)         = goalStatementSect     item
+  | compareID niname (Doc.systemConstraint ^. uid) = systemConstraintSect  item
   | otherwise                                     = genericSect           item
 
 ------------------------------

@@ -11,7 +11,6 @@ module Language.Drasil.Chunk.Unital
   ) where
 
 import Control.Lens (makeLenses, view)
-import Prelude hiding (id)
 import Language.Drasil.Chunk (Chunk(..))
 import Language.Drasil.Chunk.NamedIdea (NamedIdea(..),Idea(..))
 import Language.Drasil.Chunk.Concept (Concept, dcc, dccWDS,Definition(..),ConceptDomain(..), cw)
@@ -30,7 +29,7 @@ import Language.Drasil.NounPhrase (NP)
 data UnitalChunk = UC { _con :: ConVar, _uni :: UnitDefn }
 makeLenses ''UnitalChunk
 
-instance Chunk UnitalChunk where id = con . id
+instance Chunk UnitalChunk where uid = con . uid
 instance NamedIdea UnitalChunk where term = con . term
 instance Idea UnitalChunk where getA (UC qc _) = getA qc
 instance Definition UnitalChunk where defn = con . defn
@@ -55,7 +54,7 @@ ucs' :: (Concept c, IsUnit u) => c -> Symbol -> u -> Space -> UnitalChunk
 ucs' a b c p = UC (cv (cw a) b p) (unitWrapper c)
 
 -- | Same as 'uc', except it builds the Concept portion of the UnitalChunk
--- from a given id, term, and defn. Those are the first three arguments
+-- from a given uid, term, and defn. Those are the first three arguments
 uc' :: (IsUnit u) => String -> NP -> String -> Symbol -> u -> UnitalChunk
 uc' i t d s u = UC (cv (dcc i t d) s Real) (unitWrapper u)
 

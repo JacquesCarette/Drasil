@@ -12,8 +12,6 @@ import Language.Drasil.Chunk.NamedIdea
 import Language.Drasil.Chunk.Quantity
 
 import Control.Lens (Lens', (^.), view, makeLenses)
-import Prelude hiding (id)
-
 class Chunk t => Theory t where
   valid_context :: Lens' t [TheoryChunk]
   spaces        :: Lens' t [SpaceDefn] 
@@ -45,17 +43,17 @@ instance Theory TheoryChunk where
   invariants    = invs
   defined_fun   = dfun
 
-instance Chunk TheoryChunk where id = tid
+instance Chunk TheoryChunk where uid = tid
 
 tw :: Theory t => t -> TheoryChunk
-tw t = TC (t ^. id) (t ^. valid_context) (t ^. spaces) (t ^. quantities)
+tw t = TC (t ^. uid) (t ^. valid_context) (t ^. spaces) (t ^. quantities)
   (t ^. operations) (t ^. defined_quant) (t ^. invariants) (t ^. defined_fun)
 
--- use the id of the TheoryModel as the id. FIXME ?
+-- use the id of the TheoryModel as the uid. FIXME ?
 data TheoryModel = TM {_con :: ConceptChunk, _thy :: TheoryChunk }
 makeLenses ''TheoryModel
   
-instance Chunk TheoryModel where id = con . id
+instance Chunk TheoryModel where uid = con . uid
 instance NamedIdea TheoryModel where term = con . term
 instance Idea TheoryModel where getA = getA . view con
 instance Definition TheoryModel where defn = con . defn

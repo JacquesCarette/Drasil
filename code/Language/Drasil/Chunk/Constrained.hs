@@ -27,8 +27,6 @@ import Language.Drasil.Space
 import Language.Drasil.Symbol
 import Language.Drasil.Chunk
 
-import Prelude hiding (id)
-
 -- | A Constrained is a 'Quantity' that has value constraints
 -- and maybe reasonable value
 class Quantity c => Constrained c where
@@ -92,7 +90,7 @@ data ConstrainedChunk = ConstrainedChunk {
   _qd :: QuantityDict, _constr :: [Constraint], _reasV :: Maybe Expr}
 makeLenses ''ConstrainedChunk
 
-instance Chunk       ConstrainedChunk where id = qd . id
+instance Chunk       ConstrainedChunk where uid = qd . uid
 instance NamedIdea   ConstrainedChunk where term = qd . term
 instance Idea        ConstrainedChunk where getA = getA . view qd
 instance HasSpace    ConstrainedChunk where typ = qd . typ
@@ -101,7 +99,7 @@ instance Quantity    ConstrainedChunk where getUnit = getUnit . view qd
 instance Constrained ConstrainedChunk where
   constraints = constr
   reasVal     = reasV
-instance Eq          ConstrainedChunk where c1 == c2 = (c1 ^. qd . id) == (c2 ^. qd . id)
+instance Eq          ConstrainedChunk where c1 == c2 = (c1 ^. qd . uid) == (c2 ^. qd . uid)
 
 -- | Creates a constrained chunk from a symbolic quantity
 constrained :: (Quantity c) => c -> [Constraint] -> Expr -> ConstrainedChunk
@@ -124,7 +122,7 @@ data ConstrConcept = ConstrConcept { _defq :: DefinedQuantityDict,
   _constr' :: [Constraint], _reasV' :: Maybe Expr}
 makeLenses ''ConstrConcept
 
-instance Chunk         ConstrConcept where id = defq . id
+instance Chunk         ConstrConcept where uid = defq . uid
 instance NamedIdea     ConstrConcept where term = defq . term
 instance Idea          ConstrConcept where getA = getA . view defq
 instance HasSpace      ConstrConcept where typ = defq . typ
@@ -136,7 +134,7 @@ instance Concept       ConstrConcept where
 instance Constrained   ConstrConcept where
   constraints  = constr'
   reasVal      = reasV'
-instance Eq            ConstrConcept where c1 == c2 = (c1 ^.defq.id) == (c2 ^.defq.id)
+instance Eq            ConstrConcept where c1 == c2 = (c1 ^.defq.uid) == (c2 ^.defq.uid)
 
 constrained' :: (Quantity c, Concept c) => c -> [Constraint] -> Expr -> ConstrConcept
 constrained' q cs rv = ConstrConcept (cqs q) cs (Just rv)

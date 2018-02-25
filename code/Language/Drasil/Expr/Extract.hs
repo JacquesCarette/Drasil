@@ -1,11 +1,9 @@
-{-# LANGUAGE RankNTypes #-}
 module Language.Drasil.Expr.Extract(dep, vars, codevars, codevars') where
 
 import Data.List (nub)
 import Control.Lens hiding ((:<),(:>))
-import Prelude hiding (id)
 import Language.Drasil.Expr (Expr(..), UFunc(..), BiFunc(..), EOperator(..))
-import Language.Drasil.Chunk (id)
+import Language.Drasil.Chunk (uid)
 import Language.Drasil.ChunkDB
 import Language.Drasil.Chunk.Code
 import Language.Drasil.Chunk.Quantity (QuantityDict)
@@ -14,8 +12,8 @@ import Language.Drasil.Chunk.Quantity (QuantityDict)
 -- | Get dependencies from an equation  
 dep :: Expr -> [String]
 dep (Assoc _ l)   = nub (concat $ map dep l)
-dep (Deriv _ a b) = nub (b ^. id : dep a)
-dep (C c)         = [c ^. id]
+dep (Deriv _ a b) = nub (b ^. uid : dep a)
+dep (C c)         = [c ^. uid]
 dep (Int _)       = []
 dep (Dbl _)       = []
 dep (V _)         = []

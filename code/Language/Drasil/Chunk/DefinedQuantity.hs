@@ -11,8 +11,6 @@ import Language.Drasil.Chunk.Concept
 import Language.Drasil.Chunk.SymbolForm (eqSymb,HasSymbol(symbol))
 import qualified Language.Drasil.Chunk.Quantity as Q
 
-import Prelude hiding (id)
-
 -- | DefinedQuantity = Concept + Quantity
 -- not really the best as this duplicates |id|.  At least, it should...
 data DefinedQuantityDict = DQD { _quant :: Q.QuantityDict, _con :: ConceptChunk }
@@ -20,8 +18,8 @@ data DefinedQuantityDict = DQD { _quant :: Q.QuantityDict, _con :: ConceptChunk 
 makeLenses ''DefinedQuantityDict
 
 -- but we pick it crom the Quantity.
-instance Chunk DefinedQuantityDict where id = quant . id
-instance Eq DefinedQuantityDict where a == b = (a ^. id) == (b ^. id)
+instance Chunk DefinedQuantityDict where uid = quant . uid
+instance Eq DefinedQuantityDict where a == b = (a ^. uid) == (b ^. uid)
   
 instance Ord DefinedQuantityDict where
   compare a b = -- FIXME: Ordering hack. Should be context-dependent

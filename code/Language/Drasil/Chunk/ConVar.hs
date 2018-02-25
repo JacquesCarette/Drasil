@@ -15,8 +15,6 @@ import Control.Lens ((^.),makeLenses)
 import Language.Drasil.Symbol
 import Language.Drasil.Space
 
-import Prelude hiding (id)
-
 -- | ConVar is a 'Concept' as well as a 'Quantity'. 
 -- It adds a 'Space' and 'Symbol' to an existing 'ConceptChunk'.
 data ConVar = CV { _con :: ConceptChunk
@@ -24,8 +22,8 @@ data ConVar = CV { _con :: ConceptChunk
                  , _spa :: Space }
 makeLenses ''ConVar
                      
-instance Eq ConVar where c1 == c2 = (c1 ^. id) == (c2 ^. id)
-instance Chunk ConVar where id = con . id
+instance Eq ConVar where c1 == c2 = (c1 ^. uid) == (c2 ^. uid)
+instance Chunk ConVar where uid = con . uid
 instance NamedIdea ConVar where term = con . term
 instance Idea ConVar where getA (CV c _ _) = getA c
 instance Definition ConVar where defn = con . defn

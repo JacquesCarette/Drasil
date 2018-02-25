@@ -7,13 +7,10 @@ module Language.Drasil.Chunk.Concept
 
 import Language.Drasil.Chunk
 import Language.Drasil.Chunk.NamedIdea
+import Language.Drasil.Spec
+import Language.Drasil.NounPhrase
 
 import Control.Lens (Simple, Lens, (^.), makeLenses, view)
-
-import Language.Drasil.Spec
-
-import Prelude hiding (id)
-import Language.Drasil.NounPhrase
 
 -- === DATA TYPES === --
 --- ConceptChunk ---  
@@ -42,8 +39,8 @@ class (Idea c, Definition c, ConceptDomain c) => Concept c where
 instance Definition    (DefnAndDomain a) where defn = defn'
 instance ConceptDomain (DefnAndDomain ConceptChunk) where cdom = cdom'
 
-instance Eq            ConceptChunk where c1 == c2 = (c1 ^. id) == (c2 ^. id)
-instance Chunk         ConceptChunk where id = idea . id
+instance Eq            ConceptChunk where c1 == c2 = (c1 ^. uid) == (c2 ^. uid)
+instance Chunk         ConceptChunk where uid = idea . uid
 instance NamedIdea     ConceptChunk where term = idea . term
 instance Idea          ConceptChunk where getA = getA . view idea
 instance Definition    ConceptChunk where defn = dad . defn'

@@ -25,7 +25,6 @@ module Data.Drasil.Utils
   , prodUCTbl
   ) where
 
-import Prelude hiding (id)
 import Data.List
 import Control.Lens ((^.))
 import Language.Drasil {-(Sentence(Sy, P, EmptyS, S, (:+:), E), (+:+),
@@ -33,7 +32,7 @@ import Language.Drasil {-(Sentence(Sy, P, EmptyS, S, (:+:), E), (+:+),
   makeRef, DType, Section, ListType(Simple, Bullet), getUnit, Quantity,
   symbol, SymbolForm, symbolMap, UnitDefn, usymb, Chunk, Expr(..),
   phrase, titleize, titleize', mkTable, Contents(Table), fromEqn, fromEqn', 
-  UnitalChunk, QDefinition, term, id, unit, ucw)-}
+  UnitalChunk, QDefinition, term, uid, unit, ucw)-}
 import Data.Drasil.Concepts.Documentation
 import Data.Drasil.Concepts.Math (unit_)
   
@@ -105,7 +104,7 @@ getCS = getS Implementation
 getRVal :: (Constrained c) => c -> Expr
 getRVal c = uns (c ^. reasVal)
   where uns (Just e) = e
-        uns Nothing  = error $ "getRVal found no Expr for " ++ (c ^. id)
+        uns Nothing  = error $ "getRVal found no Expr for " ++ (c ^. uid)
 
 -- | outputs sentence with % attached to it
 addPercent :: Float ->  Sentence
@@ -185,20 +184,20 @@ unwrap Nothing  = EmptyS
 symbolMapFun :: (a -> DType) -> a -> Contents
 symbolMapFun fun = (Definition . fun)
 
--- Used to help make Qdefinitions when id, term, and symbol come from the same source
+-- Used to help make Qdefinitions when uid, term, and symbol come from the same source
 mkDataDef :: (Quantity c) => c -> Expr -> QDefinition
 mkDataDef cncpt equation = datadef $ getUnit cncpt
-  where datadef (Just a) = fromEqn  (cncpt ^. id) (cncpt ^. term) EmptyS
+  where datadef (Just a) = fromEqn  (cncpt ^. uid) (cncpt ^. term) EmptyS
                            (eqSymb cncpt) a equation
-        datadef Nothing  = fromEqn' (cncpt ^. id) (cncpt ^. term) EmptyS
+        datadef Nothing  = fromEqn' (cncpt ^. uid) (cncpt ^. term) EmptyS
                            (eqSymb cncpt) equation
 
 -- Same as 'mkDataDef', but with an additional Sentence that can be taken as "extra information"; issue #350
 mkDataDef' :: (Quantity c) => c -> Expr -> Sentence -> QDefinition
 mkDataDef' cncpt equation extraInfo = datadef $ getUnit cncpt
-  where datadef (Just a) = fromEqn  (cncpt ^. id) (cncpt ^. term) (extraInfo)
+  where datadef (Just a) = fromEqn  (cncpt ^. uid) (cncpt ^. term) (extraInfo)
                            (eqSymb cncpt) a equation
-        datadef Nothing  = fromEqn' (cncpt ^. id) (cncpt ^. term) (extraInfo)
+        datadef Nothing  = fromEqn' (cncpt ^. uid) (cncpt ^. term) (extraInfo)
                            (eqSymb cncpt) equation
 
 prodUCTbl :: [[Sentence]] -> Contents

@@ -13,19 +13,17 @@ import Language.Drasil.Chunk.Relation
 
 import Control.Lens (makeLenses, view)
 
-import Prelude hiding (id)
-
 -- | A GenDefn is a RelationConcept that may have units
 data GenDefn = GD {_rc :: RelationConcept, _mud :: Maybe UnitDefn, _att :: Attributes}
 makeLenses ''GenDefn
   
-instance Chunk GenDefn where id = rc . id
-instance NamedIdea GenDefn where term = rc . term
-instance Idea GenDefn where getA = getA . view rc
-instance Definition GenDefn where defn = rc . defn
+instance Chunk         GenDefn where uid = rc . uid
+instance NamedIdea     GenDefn where term = rc . term
+instance Idea          GenDefn where getA = getA . view rc
+instance Definition    GenDefn where defn = rc . defn
 instance ConceptDomain GenDefn where cdom = rc . cdom
-instance Concept GenDefn where
-instance ExprRelat GenDefn where relat = rc . relat
+instance Concept       GenDefn where
+instance ExprRelat     GenDefn where relat = rc . relat
 instance HasAttributes GenDefn where attributes = att
 
 gdUnit :: GenDefn -> Maybe UnitDefn

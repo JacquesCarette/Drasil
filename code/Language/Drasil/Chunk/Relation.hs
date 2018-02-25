@@ -5,7 +5,6 @@ module Language.Drasil.Chunk.Relation
   ) where
 
 import Control.Lens (makeLenses, (^.))
-import Prelude hiding (id)
 import Language.Drasil.Expr (Relation)
 import Language.Drasil.Chunk
 import Language.Drasil.Chunk.NamedIdea
@@ -18,14 +17,14 @@ import Language.Drasil.NounPhrase (NP)
 data RelationConcept = RC {_conc :: ConceptChunk, _rel :: Relation }
 makeLenses ''RelationConcept
 
-instance Chunk RelationConcept where id = conc . id
-instance NamedIdea RelationConcept where term = conc . term
-instance Idea RelationConcept where getA (RC c _) = getA c
-instance Definition RelationConcept where defn = conc . defn
+instance Chunk         RelationConcept where uid = conc . uid
+instance NamedIdea     RelationConcept where term = conc . term
+instance Idea          RelationConcept where getA (RC c _) = getA c
+instance Definition    RelationConcept where defn = conc . defn
 instance ConceptDomain RelationConcept where cdom = conc . cdom
-instance Concept RelationConcept where
-instance ExprRelat RelationConcept where relat = rel
-instance Eq RelationConcept where a == b = (a ^. id) == (b ^. id)
+instance Concept       RelationConcept where
+instance ExprRelat     RelationConcept where relat = rel
+instance Eq            RelationConcept where a == b = (a ^. uid) == (b ^. uid)
 
 -- | Create a RelationConcept from a given id, term, defn, and relation.
 makeRC :: String -> NP -> Sentence -> Relation -> RelationConcept

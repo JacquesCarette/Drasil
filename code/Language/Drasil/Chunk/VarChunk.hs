@@ -1,5 +1,5 @@
 {-# Language TemplateHaskell #-}
-module Language.Drasil.Chunk.VarChunk where
+module Language.Drasil.Chunk.VarChunk(VarChunk(VC),implVar,vc,vcSt,vc',codeVC,vc'') where
 
 import Language.Drasil.Chunk
 import Language.Drasil.Chunk.NamedIdea
@@ -24,8 +24,8 @@ instance Eq        VarChunk where c1 == c2 = (c1 ^. id) == (c2 ^. id)
 instance Chunk     VarChunk where id = ni . id
 instance NamedIdea VarChunk where term = ni . term
 instance Idea      VarChunk where getA = getA . view ni
-instance HasSymbol VarChunk where symbol st (VC _ s _) = s st
-instance HasSpace  VarChunk where typ f (VC n s t) = fmap (\x -> VC n s x) (f t)
+instance HasSymbol VarChunk where symbol st x = (x ^. vsymb) st
+instance HasSpace  VarChunk where typ = vtyp
 instance Quantity  VarChunk where getUnit _  = Nothing
   
 
@@ -59,7 +59,3 @@ codeVC  n s t = VC (nw n) f t
 -- | Creates a VarChunk from an 'Idea''s id and term and symbol
 vc'' :: Idea c => c -> Symbol -> Space -> VarChunk
 vc'' n sy space = vc (n ^. id) (n ^. term) sy space
-
--- | Creates a VarChunk from an id, term, symbol, and space
-makeVCObj :: String -> NP -> Symbol -> String -> VarChunk
-makeVCObj i des sym s = VC (nw $ nc i des) (\_ -> sym) (Obj s)

@@ -250,7 +250,6 @@ p_space Char     = "Char"
 p_space String   = "String"
 p_space Radians  = "rad"
 p_space (Vect a) = "V" ++ p_space a
-p_space (Obj a)  = a
 p_space (DiscreteI a)  = "{" ++ (concat $ intersperse ", " (map show a)) ++ "}"
 p_space (DiscreteD a)  = "{" ++ (concat $ intersperse ", " (map show a)) ++ "}"
 p_space (DiscreteS a)  = "{" ++ (concat $ intersperse ", " a) ++ "}"

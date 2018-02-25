@@ -14,7 +14,6 @@ data Space =
   | String
   | Radians
   | Vect Space
-  | Obj String
   | DiscreteI [Int]  --ex. let A = {1, 2, 4, 7}
   | DiscreteD [Double]
   | DiscreteS [String] --ex. let Meal = {"breakfast", "lunch", "dinner"}

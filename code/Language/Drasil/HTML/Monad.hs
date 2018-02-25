@@ -1,17 +1,11 @@
-{-# Language FlexibleInstances, MultiParamTypeClasses #-}
 module Language.Drasil.HTML.Monad where
 
 import Language.Drasil.Unicode
 
 -----------------------------------------------------------------------------
--- | Printing monad
---
+-- | Printing "monad".  Don't need context, so Identity (under another name)
+-- will do just fine.
 
--- first, start with a specific data type
--- note that this is just the Reader Monad for now, but we might need
--- to extend, so start there.
-
--- hack for now
 newtype PrintHTML = PH {unPH :: String}
 
 instance RenderGreek PrintHTML where

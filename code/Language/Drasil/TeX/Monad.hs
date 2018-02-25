@@ -19,9 +19,10 @@ import Language.Drasil.Unicode
 -- note that this is just the Reader Monad for now, but we might need
 -- to extend, so start there.
 
--- there are just two contexts, test and math.  There are multiple ways
--- of getting there: for Text, either being at the top-level or inside \text.
--- for Math, either surrounded by $ or in \begin{equation} .. \end{equation}.
+-- there are two proper contexts, test and math; curr is the 'current' context.
+-- There are multiple ways of getting there: for Text, either being at the top-level 
+-- or inside \text. For Math, either surrounded by $ or 
+-- in \begin{equation} .. \end{equation}.
 -- Curr is when the current context is fine
 data MathContext = Text | Math | Curr deriving Eq
 

@@ -40,7 +40,6 @@ library
     , Language.Drasil.Expr
     , Language.Drasil.Expr.Math
     , Language.Drasil.Chunk
-    , Language.Drasil.Citations
     , Language.Drasil.Config
     , Language.Drasil.Document
     , Language.Drasil.Format

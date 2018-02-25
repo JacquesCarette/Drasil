@@ -4,7 +4,7 @@ import Language.Drasil.Chunk (Chunk, id)
 import Language.Drasil.Chunk.AssumpChunk
 import Language.Drasil.Chunk.Change
 import Language.Drasil.Chunk.ReqChunk
-import Language.Drasil.Citations
+import Language.Drasil.Chunk.Citation
 import Language.Drasil.Document
 import Language.Drasil.RefHelpers
 import Language.Drasil.Spec
@@ -142,8 +142,8 @@ instance Referable Section where
   rType   _               = Sect
   
 instance Referable Citation where
-  refName c = S "FIXME: Build citation refName"
-  refAdd c = "CITATIONPlaceholder" -- need unique identifier, not enforced by Citations yet
+  refName c = S $ citeID c
+  refAdd c = citeID c -- need unique identifier, not enforced by Citations yet
   rType _ = Cite
   
 instance Referable Contents where

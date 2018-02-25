@@ -63,7 +63,6 @@ module Language.Drasil (
   , Attribute(..), Attributes, attributes, getSource, aqd -- TODO: Remove aqd
   , HasAttributes, Derivation, getDerivation, getShortName
   --Citations
-  , City, State, getAuthors, getYear
   , Citation, BibRef, CiteField, Month(..), HP
     -- CiteFields smart constructors
       -- People -> CiteField
@@ -236,5 +235,3 @@ import Language.Drasil.People (People, Person, person, HasName(..), manyNames
 import Language.Drasil.CodeSpec
 import Language.Drasil.DataDesc
 import Language.Drasil.Code.Imperative.Lang
-
-import Language.Drasil.Citations hiding (BibRef, Citation, CiteField, Month)

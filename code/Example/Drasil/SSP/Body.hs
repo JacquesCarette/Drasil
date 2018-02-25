@@ -106,7 +106,7 @@ mkSRS = RefSec (RefProg intro
       EmptyS
     , IOrgSec orgSecStart inModel (SRS.inModel SRS.missingP []) orgSecEnd]) :
     --FIXME: issue #235
-  map Verbatim [s3, s4, s5, s6, s7] -- ++ [Bibliography sspCitations]
+  map Verbatim [s3, s4, s5, s6, s7] ++ [Bibliography sspCitations]
   
 ssp_srs :: Document
 ssp_srs = mkDoc mkSRS (for) ssp_si

@@ -1,4 +1,3 @@
-{-# LANGUAGE GADTs #-}
 -- | Defines output formats for the different documents we can generate
 module Language.Drasil.Output.Formats where
 
@@ -9,14 +8,12 @@ type Filename = String
 data DocType = SRS Filename     --Filename with no extension
              | MG Filename
              | MIS Filename
-             | LPM Filename
              | Website Filename
 
 instance Show DocType where
   show (SRS _) = "SRS"
   show (MG _)  = "MG"
   show (MIS _) = "MIS"
-  show (LPM _) = "LPM"
   show (Website _) = "Website"
              
 -- | LaTeX helper

@@ -1,4 +1,4 @@
-module Language.Drasil.TeX.Print where
+module Language.Drasil.TeX.Print(genTeX) where
 
 import Prelude hiding (print)
 import Data.List (intersperse, transpose)
@@ -14,8 +14,7 @@ import Language.Drasil.TeX.AST
 import qualified Language.Drasil.TeX.Import as I
 import qualified Language.Drasil.Output.Formats as A
 import qualified Language.Drasil.Spec as LS
-import Language.Drasil.Config (lpmTeXParams, colAwidth, colBwidth,
-              LPMParams(..),bibStyleT,bibFname)
+import Language.Drasil.Config (colAwidth, colBwidth, bibStyleT,bibFname)
 import Language.Drasil.Printing.Helpers hiding (paren, sqbrac)
 import Language.Drasil.TeX.Helpers
 import Language.Drasil.TeX.Monad
@@ -34,7 +33,6 @@ build :: HasSymbolTable s => s -> A.DocType -> Document -> D
 build sm (A.SRS _) doc   = buildStd sm doc
 build sm (A.MG _) doc    = buildStd sm doc
 build sm (A.MIS _) doc   = buildStd sm doc
-build sm (A.LPM _) doc   = buildLPM sm lpmTeXParams doc
 build _ (A.Website _) _ = error "Cannot use TeX to typeset Website" --Can't happen
 
 buildStd :: HasSymbolTable s => s -> Document -> D
@@ -43,19 +41,6 @@ buildStd sm (Document t a c) =
   title (spec t) %%
   author (spec a) %%
   document (maketitle %% maketoc %% newpage %% print sm c)
-
-buildLPM :: HasSymbolTable s => s -> LPMParams -> Document -> D
-buildLPM sm (LPMParams (A.DocClass sb b1) (A.UsePackages ps) (A.ExDoc f n))
-          (Document t a c) =
-  docclass sb b1 %%
-  listpackages ps %%
-  exdoc f n %%
-  title (spec t) %%
-  author (spec a) %%
-  document (maketitle %% print sm c)
-
-listpackages :: [String] -> D
-listpackages lp = foldr (%%) empty $ map usepackage lp
 
 -- clean until here; lo needs its sub-functions fixed first though
 lo :: HasSymbolTable s => LayoutObj -> s -> D
@@ -510,10 +495,6 @@ makeIBound (Nothing, Nothing)    = ""
 -----------------------------------------------------------------
 ------------------ MODULE PRINTING----------------------------
 -----------------------------------------------------------------
-
-makeModule :: String -> D -> D
-makeModule n l = description $ item' ((pure $ text ("\\refstepcounter{modnum}"
-  ++ "\\mthemodnum")) <> label l <> (pure $ text ":")) (pure $ text n)
 
 makeReq :: D -> D -> D
 makeReq n l = description $ item' ((pure $ text ("\\refstepcounter{reqnum}"

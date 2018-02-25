@@ -4,7 +4,7 @@ import System.IO
 import Text.PrettyPrint.HughesPJ
 import Prelude hiding (id)
 import System.Directory
-import Language.Drasil.Output.Formats (DocType (SRS,MG,MIS,LPM,Website))
+import Language.Drasil.Output.Formats (DocType (SRS,MG,MIS,Website))
 import Language.Drasil.TeX.Print (genTeX)
 import Language.Drasil.HTML.Print (genHTML)
 import Language.Drasil.HTML.Helpers (makeCSS)
@@ -33,8 +33,6 @@ prnt (Recipe dt@(MG _) body) sm =
 prnt (Recipe dt@(MIS _) body) sm =
   do prntDoc dt body sm
      prntMake dt
-prnt (Recipe dt@(LPM _) body) sm =
-  do prntDoc dt body sm
 prnt (Recipe dt@(Website fn) body) sm =
   do prntDoc dt body sm
      outh2 <- openFile ("Website/" ++ fn ++ ".css") WriteMode
@@ -47,7 +45,6 @@ prntDoc dt body sm = case dt of
   (SRS fn)     -> prntDoc' dt fn TeX body
   (MG fn)      -> prntDoc' dt fn TeX body
   (MIS fn)     -> prntDoc' dt fn TeX body
-  (LPM fn)     -> prntDoc' dt fn TeX body
   (Website fn) -> prntDoc' dt fn HTML body
   where prntDoc' dt' fn format body' = do
           createDirectoryIfMissing False $ show dt'

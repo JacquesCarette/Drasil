@@ -1,7 +1,7 @@
 {- re-export many things to simplify external use -}
 module Language.Drasil (
   -- Output.Formats
-    DocType(SRS,MG,MIS,LPM,Website)
+    DocType(SRS,MG,MIS,Website)
   -- SystemInformation
   , SystemInformation(..), Block(..)
   -- Recipe
@@ -137,7 +137,7 @@ import Language.Drasil.Expr.Math (log, sin, cos, tan, sqrt, square, sec, csc, co
           sum_all, defsum, prod_all, defprod,
           cross, m2x2, vec2D, dgnl2x2, euclidean, defint, int_all)
 import Language.Drasil.Expr.Extract (vars)
-import Language.Drasil.Output.Formats (DocType(SRS,MG,MIS,LPM,Website))
+import Language.Drasil.Output.Formats (DocType(SRS,MG,MIS,Website))
 import Language.Drasil.Document (LayoutObj(..), Document(..), DType(..)
   , Section(..), Contents(..), SecCons(..), ListType(..), ItemType(..)
   , section, fig, figWithWidth

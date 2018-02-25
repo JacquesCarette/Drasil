@@ -13,6 +13,7 @@
 \usepackage{graphics}
 \usepackage{filecontents}
 \usepackage[backend=bibtex]{biblatex}
+\usepackage{url}
 \global\tabulinesep=1mm
 \newcounter{assumpnum}
 \newcommand{\atheassumpnum}{A\theassumpnum}
@@ -865,62 +866,60 @@ ${SD_{max}}$ & maximum stand off distance permissible for input & $130.0$ & m
 \section{References}
 \label{Sec:References}
 \begin{filecontents*}{bibfile.bib}
-@mastersthesis{Koothoor2013,
+@mastersthesis{koothoor2013,
 author={Koothoor, Nirmitha},
 title={A document drive approach to certifying scientific computing software},
 school={McMaster University},
-place={Hamilton, Canada},
-year={2013}}
+year={2013},
+address={Hamilton, ON, Canada}}
 
-@article{SmithLai2005,
+@inproceedings{smithLai2005,
 author={Smith, W. Spencer and Lai, Lei},
 title={A new requirements template for scientific computing},
-journal={Proceedings of the First International Workshop on Situational Requirements Engineering Processes - Methods, Techniques and Tools to Support Situation-Specific Requirements Engineering Processes, SREP'05},
+booktitle={Proceedings of the First International Workshop on Situational Requirements Engineering Processes - Methods, Techniques and Tools to Support Situation-Specific Requirements Engineering Processes, SREP'05},
+year={2005},
 editor={Agerfalk, PJ and Kraiem, N. and Ralyte, J.},
-place={Paris, France},
-pages={107-121},
-note={In conjunction with 13th IEEE International Requirements Engineering Conference,},
-year={2005}}
+address={Paris, France},
+pages={"107-121"},
+note={In conjunction with 13th IEEE International Requirements Engineering Conference,}}
 
-@article{RobertsonRobertson2012,
+@misc{rbrtsn2012,
 author={Robertson, James and Robertson, Suzanne},
 title={Volere requirements specification template edition 16},
-url={https://pdfs.semanticscholar.org/cf57/27a59801086cbd3d14e587e09880561dbe22.pdf},
+howpublished={\url{https://pdfs.semanticscholar.org/cf57/27a59801086cbd3d14e587e09880561dbe22.pdf}},
 year={2012}}
 
-@misc{ASTME1300-092009,
+@misc{astm\_LR2009,
 author={ASTM E1300-09},
-sortkey={ASTM E1300-09},
 title={Standard Practice for Determining Load Resistance of Glass in Buildings},
 publisher={ASTM International},
-collection={Standard E1300-09a},
+booktitle={Standard E1300-09a},
 year={2009},
-url={www.astm.org}}
+howpublished={\url{www.astm.org}}}
 
-@misc{ASTMC1036-162016,
+@misc{astm\_C1036,
 author={ASTM C1036-16},
-sortkey={ASTM C1036-16},
 title={Standard specification for Flat Glass},
 publisher={ASTM International},
-place={West Conshohocken, PA},
+address={West Conshohocken, PA},
 year={2016},
-url={www.astm.org}}
+howpublished={\url{www.astm.org}}}
 
-@misc{ASTMC1048-042009,
+@misc{astm\_C1048,
 author={ASTM C1048-04},
-sortkey={ASTM C1048-04},
 title={Specification for Heat-Treated Flat Glass-Kind HS, Kind FT Coated and Uncoated Glass},
 publisher={ASTM International},
-place={West Conshohocken, PA},
+address={West Conshohocken, PA},
 year={2009},
-url={www.astm.org}}
+howpublished={\url{www.astm.org}}}
 
-@misc{BeasonKohutekBracci1998,
+@misc{glThick1998,
 author={Beason, W. Lynn and Kohutek, Terry L. and Bracci, Joseph M.},
 title={Basis for ASTME E 1300 Annealed Glass Thickness Selection Charts},
-collection={ASCE Library},
-year={1 February 1998},
-url={doi.org/10.1061/(ASCE)0733-9445(1998)124:2(215)}}
+booktitle={ASCE Library},
+month={feb},
+year={1998},
+howpublished={\url{doi.org/10.1061/(ASCE)0733-9445(1998)124:2(215)}}}
 \end{filecontents*}
 \nocite{*}
 \bibstyle{ieeetr}

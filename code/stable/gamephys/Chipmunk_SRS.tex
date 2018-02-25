@@ -12,6 +12,7 @@
 \usepackage{caption}
 \usepackage{filecontents}
 \usepackage[backend=bibtex]{biblatex}
+\usepackage{url}
 \global\tabulinesep=1mm
 \bibliography{bibfile}
 \title{Software Requirements Specification for Chipmunk2D}
@@ -798,57 +799,64 @@ There are no auxiliary constants.
 \section{References}
 \label{Sec:References}
 \begin{filecontents*}{bibfile.bib}
-@article{Parnas1978,
+@inproceedings{parnas1978,
 author={Parnas, David L.},
 title={Designing Software for Ease of Extension and Contraction.},
-journal={ICSE '78: Proceedings of the 3rd international conference on Software engineering},
-pages={264-277},
-year={1978}}
+booktitle={ICSE '78: Proceedings of the 3rd international conference on Software engineering},
+year={1978},
+pages={"264-277"}}
 
-@article{WilsonAruliahTitusChueHongDavisGuyHaddockHuffMitchellPlumbletWaughWhiteWilson2013,
+@article{sciComp2013,
 author={Wilson, Greg and Aruliah, D. A. and Titus, C. and Chue Hong, Neil P. and Davis, Matt and Guy, Richard T. and Haddock, Steven H. D. and Huff, Kathryn D. and Mitchell, Ian M. and Plumblet, Mark D. and Waugh, Ben and White, Ethan P. and Wilson, Paul},
 title={Best Practices for Scientific Computing, 2013},
-year={2013}}
+journal={PLoS Biol},
+year={2013},
+volume={12},
+number={1}}
 
-@article{Parnas1972,
+@article{dParnas1972,
 author={Parnas, David L.},
 title={On the Criteria To Be Used in Decomposing Systems into Modules},
 journal={Communications of the ACM},
-pages={1053-1058},
-year={1972}}
+year={1972},
+pages={"1053-1058"}}
 
-@article{ParnasClementsWiess1984,
+@inproceedings{dParnasPcClements1984,
 author={Parnas, David L. and Clements, P. C. and Wiess, },
 title={The Modular Structure of Complex Systems},
-journal={ICSE '84: Proceedings of the 7th international conference on Software engineering},
-pages={408-417},
-year={1984}}
+booktitle={ICSE '84: Proceedings of the 7th international conference on Software engineering},
+year={1984},
+pages={"408-417"}}
 
-@article{ParnasClements1986,
+@article{parnas1986,
 author={Parnas, David L. and Clements, P. C.},
-title={A Rational Design Process: How and Why to Fake it},
+title={A rational design process: How and why to fake it},
 journal={IEEE Transactions on Software Engineering},
-pages={251-257},
-year={1986}}
+year={1986},
+month={feb},
+volume={12},
+number={2},
+pages={"251-257"},
+address={Washington, USA}}
 
-@mastersthesis{Koothoor2013,
+@mastersthesis{koothoor2013,
 author={Koothoor, Nirmitha},
 title={A document drive approach to certifying scientific computing software},
 school={McMaster University},
-place={Hamilton, Canada},
-year={2013}}
+year={2013},
+address={Hamilton, ON, Canada}}
 
-@article{SmithLai2005,
+@inproceedings{smithLai2005,
 author={Smith, W. Spencer and Lai, Lei},
 title={A new requirements template for scientific computing},
-journal={Proceedings of the First International Workshop on Situational Requirements Engineering Processes - Methods, Techniques and Tools to Support Situation-Specific Requirements Engineering Processes, SREP'05},
+booktitle={Proceedings of the First International Workshop on Situational Requirements Engineering Processes - Methods, Techniques and Tools to Support Situation-Specific Requirements Engineering Processes, SREP'05},
+year={2005},
 editor={Agerfalk, PJ and Kraiem, N. and Ralyte, J.},
-place={Paris, France},
-pages={107-121},
-note={In conjunction with 13th IEEE International Requirements Engineering Conference,},
-year={2005}}
+address={Paris, France},
+pages={"107-121"},
+note={In conjunction with 13th IEEE International Requirements Engineering Conference,}}
 
-@misc{Bueche1986,
+@misc{jfBeucheIntro,
 author={Bueche, J. Frederick},
 title={Introduction to Physics for Scientists, Fourth Edition},
 publisher={Mcgraw-Hill College},

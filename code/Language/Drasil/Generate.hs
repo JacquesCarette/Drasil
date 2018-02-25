@@ -4,7 +4,7 @@ import System.IO
 import Text.PrettyPrint.HughesPJ
 import Prelude hiding (id)
 import System.Directory
-import Language.Drasil.Output.Formats (DocType (SRS,MG,MIS,Website))
+import Language.Drasil.Output.Formats (DocType(SRS,MG,MIS,Website),DocSpec(DocSpec),Filename)
 import Language.Drasil.TeX.Print (genTeX)
 import Language.Drasil.HTML.Print (genHTML)
 import Language.Drasil.HTML.Helpers (makeCSS)
@@ -23,50 +23,43 @@ gen rl sm = mapM_ (flip prnt sm) rl
 
 -- | Generate the output artifacts (TeX+Makefile or HTML)
 prnt :: HasSymbolTable s => Recipe -> s -> IO ()
-prnt (Recipe dt@(SRS _) body) sm =
-  do prntDoc dt body sm
-     prntMake dt
-prnt (Recipe dt@(MG _) body) sm =
-  do prntDoc dt body sm
-     prntMake dt
---     prntCode body
-prnt (Recipe dt@(MIS _) body) sm =
-  do prntDoc dt body sm
-     prntMake dt
-prnt (Recipe dt@(Website fn) body) sm =
+prnt (Recipe dt@(DocSpec Website fn) body) sm =
   do prntDoc dt body sm
      outh2 <- openFile ("Website/" ++ fn ++ ".css") WriteMode
      hPutStrLn outh2 $ render (makeCSS body)
      hClose outh2
+prnt (Recipe dt@(DocSpec _ _) body) sm =
+  do prntDoc dt body sm
+     prntMake dt
 
 -- | Helper for writing the documents (TeX / HTML) to file
-prntDoc :: HasSymbolTable s => DocType -> Document -> s -> IO ()
+prntDoc :: HasSymbolTable s => DocSpec -> Document -> s -> IO ()
 prntDoc dt body sm = case dt of
-  (SRS fn)     -> prntDoc' dt fn TeX body
-  (MG fn)      -> prntDoc' dt fn TeX body
-  (MIS fn)     -> prntDoc' dt fn TeX body
-  (Website fn) -> prntDoc' dt fn HTML body
-  where prntDoc' dt' fn format body' = do
+  (DocSpec SRS _)     -> prntDoc' dt TeX body
+  (DocSpec MG _)      -> prntDoc' dt TeX body
+  (DocSpec MIS _)     -> prntDoc' dt TeX body
+  (DocSpec Website _) -> prntDoc' dt HTML body
+  where prntDoc' (DocSpec dt' fn) format body' = do
           createDirectoryIfMissing False $ show dt'
           outh <- openFile (show dt' ++ "/" ++ fn ++ getExt format) WriteMode
-          hPutStrLn outh $ render $ (writeDoc format dt' body' sm)
+          hPutStrLn outh $ render $ (writeDoc format fn body' sm)
           hClose outh
           where getExt TeX  = ".tex"
                 getExt HTML = ".html"
                 getExt _    = error "we can only write TeX/HTML (for now)"
 
 -- | Helper for writing the Makefile(s)
-prntMake :: DocType -> IO ()
-prntMake dt =
+prntMake :: DocSpec -> IO ()
+prntMake ds@(DocSpec dt _) =
   do outh <- openFile (show dt ++ "/Makefile") WriteMode
-     hPutStrLn outh $ render $ genMake [dt]
+     hPutStrLn outh $ render $ genMake [ds]
      hClose outh
 
 -- | Renders the documents
-writeDoc :: HasSymbolTable s => Format -> DocType -> Document -> s -> Doc
-writeDoc TeX  = genTeX
-writeDoc HTML = genHTML
-writeDoc _    = error "we can only write TeX/HTML (for now)"
+writeDoc :: HasSymbolTable s => Format -> Filename -> Document -> s -> Doc
+writeDoc TeX  _  doc s = genTeX doc s
+writeDoc HTML fn doc s = genHTML fn doc s
+writeDoc _    _  _   _ = error "we can only write TeX/HTML (for now)"
 
 -- | Calls the code generator
 genCode :: Choices -> CodeSpec -> IO ()

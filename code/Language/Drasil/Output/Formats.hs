@@ -1,20 +1,19 @@
 -- | Defines output formats for the different documents we can generate
 module Language.Drasil.Output.Formats where
 
+-- | When choosing your document, you must specify the filename for
+-- the generated output (specified /without/ a file extension)
 type Filename = String
 
--- | When choosing your document type, you must specify the filename for
--- the generated output (specified /without/ a file extension)
-data DocType = SRS Filename     --Filename with no extension
-             | MG Filename
-             | MIS Filename
-             | Website Filename
+data DocType = SRS | MG | MIS | Website
+
+data DocSpec = DocSpec DocType Filename
 
 instance Show DocType where
-  show (SRS _) = "SRS"
-  show (MG _)  = "MG"
-  show (MIS _) = "MIS"
-  show (Website _) = "Website"
+  show SRS      = "SRS"
+  show MG       = "MG"
+  show MIS      = "MIS"
+  show Website  = "Website"
              
 -- | LaTeX helper
 data DocClass = DocClass (Maybe String) String

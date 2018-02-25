@@ -12,7 +12,6 @@ import Language.Drasil.Expr (Oper(..))
 import Language.Drasil.Printing.AST
 import Language.Drasil.TeX.AST
 import qualified Language.Drasil.TeX.Import as I
-import qualified Language.Drasil.Output.Formats as A
 import qualified Language.Drasil.Spec as LS
 import Language.Drasil.Config (colAwidth, colBwidth, bibStyleT,bibFname)
 import Language.Drasil.Printing.Helpers hiding (paren, sqbrac)
@@ -26,14 +25,11 @@ import Language.Drasil.People (People,rendPersLFM,lstName,Person(..),Conv(Mono))
 import Language.Drasil.ChunkDB (HasSymbolTable)
 import Language.Drasil.Space (Space(..))
 
-genTeX :: HasSymbolTable ctx => A.DocType -> L.Document -> ctx -> TP.Doc
-genTeX typ doc sm = runPrint (build sm typ $ I.makeDocument sm doc) Text
+genTeX :: HasSymbolTable ctx => L.Document -> ctx -> TP.Doc
+genTeX doc sm = runPrint (build sm $ I.makeDocument sm doc) Text
 
-build :: HasSymbolTable s => s -> A.DocType -> Document -> D
-build sm (A.SRS _) doc   = buildStd sm doc
-build sm (A.MG _) doc    = buildStd sm doc
-build sm (A.MIS _) doc   = buildStd sm doc
-build _ (A.Website _) _ = error "Cannot use TeX to typeset Website" --Can't happen
+build :: HasSymbolTable s => s -> Document -> D
+build sm doc  = buildStd sm doc
 
 buildStd :: HasSymbolTable s => s -> Document -> D
 buildStd sm (Document t a c) =

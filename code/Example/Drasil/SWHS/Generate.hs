@@ -5,8 +5,8 @@ import Language.Drasil
 import Drasil.SWHS.Body (swhs_srs', swhsSymMap)
 
 docs :: [Recipe]
-docs = [Recipe (SRS "SWHS_SRS") swhs_srs',
-        Recipe (Website "SWHS_SRS") swhs_srs'
+docs = [Recipe (DocSpec SRS "SWHS_SRS") swhs_srs',
+        Recipe (DocSpec Website "SWHS_SRS") swhs_srs'
        ]
        
 swhsChoices :: Choices

@@ -26,9 +26,8 @@ import Language.Drasil.Space (Space(..))
 --FIXME? Use Doc in place of Strings for p_spec/title_spec
 
 -- | Generate an HTML document from a Drasil 'Document'
-genHTML :: HasSymbolTable s => F.DocType -> L.Document -> s -> Doc
-genHTML (F.Website fn) doc sm = build fn (makeDocument doc sm) sm
-genHTML _ _ _ = error "Cannot generate HTML for non-Website doctype"
+genHTML :: HasSymbolTable s => F.Filename -> L.Document -> s -> Doc
+genHTML fn doc sm = build fn (makeDocument doc sm) sm
 
 -- | Build the HTML Document, called by genHTML
 build :: HasSymbolTable s => String -> Document -> s -> Doc

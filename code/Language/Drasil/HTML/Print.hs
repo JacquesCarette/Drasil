@@ -23,6 +23,8 @@ import Language.Drasil.Config (StyleGuide(..), bibStyleH)
 import Language.Drasil.ChunkDB (HasSymbolTable(..))
 import Language.Drasil.Space (Space(..))
 
+import Language.Drasil.Chunk.Citation (ExternRefType(..))
+
 --FIXME? Use Doc in place of Strings for p_spec/title_spec
 
 -- | Generate an HTML document from a Drasil 'Document'
@@ -54,7 +56,7 @@ printLO (Header n contents)    sm = h n $ text (p_spec contents sm)
 printLO (List t)               sm = makeList t sm
 printLO (Figure r c f wp)      sm = makeFigure (p_spec r sm) (p_spec c sm) f wp
 printLO (ALUR _ x l id)        sm = makeRefList (p_spec x sm) (p_spec l sm) (p_spec id sm)
---printLO (Bib bib)              sm = printLO (makeBib sm bib) sm
+printLO (Bib bib)              sm = makeBib sm bib
 
 
 -- | Called by build, uses 'printLO' to render the layout
@@ -405,28 +407,25 @@ makeRefList a l i = refwrap l (wrap "ul" [] (text $ i ++ ": " ++ a))
 --HTML bibliography--
 ---------------------
 -- **THE MAIN FUNCTION**
-{-
-makeBib :: HasSymbolTable s => s -> BibRef -> LayoutObj
-makeBib sm = listRef . map (Flat . S) . sort . map (renderCite sm)
-  where listRef = List . Simple . zip [S $ sqbrac $ show x | x <- [(1 :: Integer)..]]
+
+makeBib :: HasSymbolTable s => s -> BibRef -> Doc
+makeBib sm = vcat . map (\(x,(y,z)) -> makeRefList z y x) . 
+  zip [sqbrac $ show x | x <- ([1..] :: [Int])] . map (renderCite sm)
   --some function to get a numbered list, idealy it wouldn't go from string to Spec
 
 --for when we add other things to reference like website, newspaper
-renderCite :: HasSymbolTable s => Citation -> s -> String
-renderCite sm a@(Book      fields) = renderF sm a fields useStyleBk
-renderCite sm a@(Article   fields) = renderF sm a fields useStyleArtcl
-renderCite sm a@(MThesis   fields) = renderF sm a fields useStyleBk
-renderCite sm a@(PhDThesis fields) = renderF sm a fields useStyleBk
-renderCite sm a@(Misc      fields) = renderF sm a fields useStyleBk
-renderCite sm a@(Online    fields) = renderF sm a fields useStyleArtcl --rendered similar to articles for some reason
+renderCite :: HasSymbolTable s => s -> Citation -> (String, String)
+renderCite sm (Cite e Book cfs) = (e, renderF sm cfs useStyleBk ++ " Print.")
+renderCite sm (Cite e Article cfs) = (e, renderF sm cfs useStyleArtcl ++ " Print.")
+renderCite sm (Cite e MThesis cfs) = (e, renderF sm cfs useStyleBk ++ " Print.")
+renderCite sm (Cite e PhDThesis cfs) = (e, renderF sm cfs useStyleBk ++ " Print.")
+renderCite sm (Cite e Misc cfs) = (e, renderF sm cfs useStyleBk ++ "")
+renderCite sm (Cite e _ cfs) = (e, renderF sm cfs useStyleArtcl ++ "") --FIXME: Properly render these later.
 
-renderF :: HasSymbolTable s => s -> Citation -> [CiteField] -> (StyleGuide -> (CiteField -> s -> String)) -> String
-renderF sm c fields styl = unwords $
-  map (flip (styl bibStyleH) sm) (sort fields) ++ endingField c bibStyleH
+renderF :: HasSymbolTable s => s -> [CiteField] -> (StyleGuide -> (CiteField -> s -> String)) -> String
+renderF sm fields styl = unwords $
+  map (flip (styl bibStyleH) sm) (sort fields) 
 
-endingField :: Citation -> StyleGuide -> [String]
-endingField c MLA = [show c]
-endingField _ _ = []
 
 -- Config helpers --
 useStyleBk :: HasSymbolTable s => StyleGuide -> (CiteField -> s -> String)
@@ -441,7 +440,7 @@ useStyleArtcl Chicago = artclChicago
 
 -- FIXME: move these show functions and use tags, combinators
 bookMLA :: HasSymbolTable s => CiteField -> s -> String
-bookMLA (Place (city, state)) sm = p_spec (city :+: S ", " :+: state) sm ++ ":"
+bookMLA (Address s) sm = p_spec s sm ++ ":"
 bookMLA (Edition    s)  _  = comm $ show s ++ sufxer s ++ " ed."
 bookMLA (Series     s) sm  = dot $ em $ p_spec s sm
 bookMLA (Title      s) sm  = dot $ em $ p_spec s sm --If there is a series or collection, this should be in quotes, not italics
@@ -449,35 +448,43 @@ bookMLA (Volume     s)  _  = comm $ "vol. " ++ show s
 bookMLA (Publisher  s) sm  = comm $ p_spec s sm
 bookMLA (Author     p) sm  = dot $ p_spec (rendPeople' sm p) sm
 bookMLA (Year       y)  _  = dot $ show y
-bookMLA (Date    d m y)  _ = dot $ unwords [show d, show m, show y]
-bookMLA (URLdate d m y) sm = "Web. " ++ bookMLA (Date d m y) sm
-bookMLA (Collection s) sm  = dot $ em $ p_spec s sm
+--bookMLA (Date    d m y)  _ = dot $ unwords [show d, show m, show y]
+--bookMLA (URLdate d m y) sm = "Web. " ++ bookMLA (Date d m y) sm
+bookMLA (BookTitle s) sm  = dot $ em $ p_spec s sm
 bookMLA (Journal    s) sm  = comm $ em $ p_spec s sm
-bookMLA (Page       n)  _  = dot $ "p. " ++ show n
-bookMLA (Pages  (a,b))  _  = dot $ "pp. " ++ show a ++ "&ndash;" ++ show b
+bookMLA (Pages      [n])  _  = dot $ "p. " ++ show n
+bookMLA (Pages  (a:b:[]))  _  = dot $ "pp. " ++ show a ++ "&ndash;" ++ show b
+bookMLA (Pages _) _ = error "Page range specified is empty or has more than two items"
 bookMLA (Note       s) sm  = p_spec s sm
-bookMLA (Issue      n)  _  = comm $ "no. " ++ show n
+bookMLA (Number      n)  _  = comm $ "no. " ++ show n
 bookMLA (School     s) sm  = comm $ p_spec s sm
-bookMLA (Thesis     t)  _  = comm $ show t
-bookMLA (URL        s) sm  = dot $ p_spec s sm
-bookMLA (HowPub     s) sm  = comm $ p_spec s sm
+--bookMLA (Thesis     t)  _  = comm $ show t
+--bookMLA (URL        s) sm  = dot $ p_spec s sm
+bookMLA (HowPublished (Verb s)) sm  = comm $ p_spec s sm
+bookMLA (HowPublished (URL s)) sm = dot $ p_spec s sm
 bookMLA (Editor     p) sm  = comm $ "Edited by " ++ p_spec (foldlList (map (flip spec sm . nameStr) p)) sm
+bookMLA (Chapter _) _ = ""
+bookMLA (Institution i) sm = comm $ p_spec i sm
+bookMLA (Organization i) sm = comm $ p_spec i sm
+bookMLA (Month m) _ = comm $ show m
+bookMLA (Type t) sm = comm $ p_spec t sm
+
 
 bookAPA :: HasSymbolTable s => CiteField -> s -> String --FIXME: year needs to come after author in APA
 bookAPA (Author   p) sm = needDot $ p_spec (rendPeople sm rendPersLFM' p) sm --APA uses initals rather than full name
 bookAPA (Year     y)  _ = dot $ paren $ show y --APA puts "()" around the year
-bookAPA (Date _ _ y) sm = bookAPA (Year y) sm --APA doesn't care about the day or month
-bookAPA (URLdate d m y)  _ = "Retrieved, " ++ (comm $ unwords [show d, show m, show y])
-bookAPA (Page     n)   _ = dot $ show n
-bookAPA (Pages (a,b))  _ = dot $ show a ++ "&ndash;" ++ show b
+--bookAPA (Date _ _ y) sm = bookAPA (Year y) sm --APA doesn't care about the day or month
+--bookAPA (URLdate d m y)  _ = "Retrieved, " ++ (comm $ unwords [show d, show m, show y])
+bookAPA (Pages     [n])   _ = dot $ show n
+bookAPA (Pages (a:b:[]))  _ = dot $ show a ++ "&ndash;" ++ show b
+bookAPA (Pages _) _ = error "Page range specified is empty or has more than two items"
 bookAPA (Editor   p)  sm = dot $ p_spec (foldlList $ map ( flip spec sm . nameStr) p) sm ++ " (Ed.)"
 bookAPA i sm = bookMLA i sm --Most items are rendered the same as MLA
 
 bookChicago :: HasSymbolTable s => CiteField -> s -> String
 bookChicago (Author   p) sm = needDot $ p_spec (rendPeople sm rendPersLFM'' p) sm --APA uses middle initals rather than full name
-bookChicago (Date _ _ y) sm = bookChicago (Year y) sm --APA doesn't care about the day or month
-bookChicago (URLdate d m y)  _ = "accessed " ++ (comm $ unwords [show d, show m, show y])
-bookChicago p@(Page   _) sm = bookAPA p sm
+--bookChicago (Date _ _ y) sm = bookChicago (Year y) sm --APA doesn't care about the day or month
+--bookChicago (URLdate d m y)  _ = "accessed " ++ (comm $ unwords [show d, show m, show y])
 bookChicago p@(Pages  _) sm = bookAPA p sm
 bookChicago (Editor   p) sm = dot $ p_spec (foldlList $ map (flip spec sm . nameStr) p) sm ++ toPlural p " ed"
 bookChicago i sm = bookMLA i sm--Most items are rendered the same as MLA
@@ -490,15 +497,15 @@ artclMLA i = bookMLA i
 artclAPA :: HasSymbolTable s => CiteField -> s -> String
 artclAPA (Title  s) sm = dot $ p_spec s sm
 artclAPA (Volume n)  _ = em $ show n
-artclAPA (Issue  n)  _ = comm $ paren $ show n
+artclAPA (Number  n)  _ = comm $ paren $ show n
 artclAPA i sm = bookAPA i sm
 
 artclChicago :: HasSymbolTable s => CiteField -> s -> String
 artclChicago i@(Title    _) = artclMLA i
 artclChicago (Volume     n) = \_ -> comm $ show n
-artclChicago (Issue      n) = \_ -> "no. " ++ show n
+artclChicago (Number      n) = \_ -> "no. " ++ show n
 artclChicago i@(Year     _) = bookAPA i
-artclChicago i@(Date _ _ _) = bookAPA i
+--artclChicago i@(Date _ _ _) = bookAPA i
 artclChicago i = bookChicago i
 
 -- PEOPLE RENDERING --
@@ -546,4 +553,3 @@ rendPersL (Person {_given = f, _surname = l, _middle = ms}) =
 toPlural :: People -> String -> String
 toPlural (_:_) str = str ++ "s"
 toPlural _     str = str
--}

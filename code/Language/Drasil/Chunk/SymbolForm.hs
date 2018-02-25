@@ -3,8 +3,6 @@ module Language.Drasil.Chunk.SymbolForm
 
 import Language.Drasil.Symbol (Symbol(Empty))
 
-import Prelude hiding (id)
-
 -- | A HasSymbol is anything which has a Symbol
 class HasSymbol c where
   -- | Provides the Symbol --  for a particular stage of generation
@@ -15,11 +13,10 @@ class HasSymbol c where
 -- to concrete.                  
 data Stage = Equational -- AKA Theoretical / Abstract-design
            | Implementation -- AKA Implementation / Detailed-design
-  deriving (Eq, Ord)
 
 {- Note: Keep stages separate from StagedSymbols for lookup purposes, as we may
--- have documents which look up both stages of a symbol and show them 
--- side-by-side or one after another (think LPM). -}
+   have documents which look up both stages of a symbol and show them 
+   side-by-side or one after another. -}
 
 -- | For better error messages.
 instance Show Stage where

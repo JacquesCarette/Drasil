@@ -89,9 +89,9 @@ sFormat Prime  s = symbol s ++ "'"
 -----------------------------------------------------------------
 -- (Since this is all implicitly in Math, leave it as String for now)
 p_expr :: Expr -> String
-p_expr (Var v)    = symbol (Atomic v) --Ensures variables are rendered the same as other symbols
 p_expr (Dbl d)    = showFFloat Nothing d ""
 p_expr (Int i)    = show i
+p_expr (Str s)    = s  -- FIXME this is probably the wrong way to print strings
 p_expr (Assoc Add l)  = concat $ intersperse "+" $ map p_expr l
 p_expr (Assoc Mul l)  = mul l
 p_expr (Sym s)    = symbol s
@@ -157,7 +157,6 @@ p_indx a@(Sym (Greek  _)) i = p_expr a ++"_"++ brace (p_sub i)
 p_indx a                  i = brace (p_expr a) ++"_"++ brace (p_sub i)
 -- Ensures only simple Expr's get rendered as an index
 p_sub :: Expr -> String
-p_sub e@(Var _)    = p_expr e
 p_sub e@(Dbl _)    = p_expr e
 p_sub e@(Int _)    = p_expr e
 p_sub e@(Sym _)    = p_expr e
@@ -198,7 +197,6 @@ divide n@(BOp Sub _ _) d = paren (p_expr n) ++ "/" ++ p_expr d
 divide n d = p_expr n ++ "/" ++ p_expr d
 
 neg :: Expr -> String
-neg x@(Var _) = "-" ++ p_expr x
 neg x@(Dbl _) = "-" ++ p_expr x
 neg x@(Int _) = "-" ++ p_expr x
 neg x@(Sym _) = "-" ++ p_expr x

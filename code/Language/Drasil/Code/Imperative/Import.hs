@@ -438,9 +438,9 @@ convType (C.Object n) = obj n
 convType (C.File) = error "convType: File ?"
 
 convExpr :: Expr -> Reader State Value
-convExpr (V v)        = return $ litString v  -- V constructor should be removed
 convExpr (Dbl d)      = return $ litFloat d
 convExpr (Int i)      = return $ litInt i
+convExpr (Str s)      = return $ litString s
 convExpr (Assoc Add l)  = fmap (foldr1 (#+)) $ sequence $ map convExpr l
 convExpr (Assoc Mul l)  = fmap (foldr1 (#*)) $ sequence $ map convExpr l
 convExpr (Assoc E.And l)  = fmap (foldr1 (?&&)) $ sequence $ map convExpr l

@@ -7,7 +7,7 @@ module Language.Drasil (
   -- Recipe
   , Recipe(..)
   -- Expr
-  , Expr(C,V,Int,Dbl,IsIn,Deriv,FCall,Grouping,Case)
+  , Expr(C,Int,Dbl,Str,IsIn,Deriv,FCall,Grouping,Case)
   , Relation, DerivType(..), RealInterval(..), Inclusive(..)
   , ($=), ($<), ($<=), ($>), ($>=), ($^), ($&&), ($||), ($=>), ($<=>), ($.)
   , log, abs, sin, cos, tan, sec, csc, cot, exp, sqrt, square, euclidean, vars
@@ -44,7 +44,7 @@ module Language.Drasil (
   -- Chunk.Eq
   , QDefinition(..), fromEqn, fromEqn', fromEqn'', getVC, equat
   -- Chunk.Quantity
-  , Quantity(..), QuantityDict, qw, ConVar(..)
+  , Quantity(..), QuantityDict, qw, ConVar(..), mkQuant
   -- Chunk.UncertainQuantity
   , UncertainQuantity(..), UncertainChunk(..), UncertQ, uq, uqNU, uqc, uqcNU, uqcND, uncrtnChunk, uvc
   , uncrtnw

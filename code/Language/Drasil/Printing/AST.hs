@@ -1,15 +1,15 @@
 module Language.Drasil.Printing.AST where
 
-import Language.Drasil.Expr (Variable, Oper(..))
+import Language.Drasil.Expr (Oper(..))
 import Language.Drasil.Symbol (Symbol)
 import Language.Drasil.Space (Space)
 
 data BinOp = Frac | Div | Pow | Sub | Eq | NEq | Lt | Gt | LEq | GEq | Impl | Iff | Index
   | Dot | Cross
 
-data Expr = Var   Variable
-          | Dbl   Double
+data Expr = Dbl   Double
           | Int   Integer
+          | Str   String
           | Assoc Oper [Expr]
           | BOp   BinOp Expr Expr
           | Sym   Symbol

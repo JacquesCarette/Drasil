@@ -16,7 +16,6 @@ import Drasil.SSP.Unitals (inxi, shrStress, baseLngth, sum1toN, mobStress,
   indxn, minFunction, surfLngth, shrStiffIntsl, watrForceDif, effStiffB,
   effStiffA, nrmStiffIntsl, indx1, normFunc, shearFunc, varblU, varblV)
 import Drasil.SSP.Defs (slope, slice, slip,
-
   intrslce, ssa, morPrice, crtSlpSrf, factorOfSafety)
 import Data.Drasil.SentenceStructures (foldlSent, isThe)
 import Data.Drasil.Utils (getES)
@@ -208,9 +207,10 @@ crtSlpId :: RelationConcept
 crtSlpId = makeRC "crtSlpId" (nounPhraseSP "critical slip identification")
   crtSlpId_desc crtSlpId_rel
 
+-- FIXME: horrible hack. This is short an argument... that was never defined!
 crtSlpId_rel :: Relation
 crtSlpId_rel = (C fs_min) $=
-  (FCall (C minFunction) [C critCoords, V "Input"])
+  (FCall (C minFunction) [C critCoords]) -- C inputHack])
   --FIXME: add subscript to fs
 
 crtSlpId_desc :: Sentence

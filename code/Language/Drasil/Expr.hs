@@ -26,9 +26,9 @@ data Oper = Add | Mul | And | Or
 
 -- | Drasil Expressions
 data Expr where
-  V        :: Variable -> Expr
   Dbl      :: Double -> Expr
   Int      :: Integer -> Expr
+  Str      :: String -> Expr
   Assoc    :: Oper -> [Expr] -> Expr
   Deriv    :: Chunk c => DerivType -> Expr -> c -> Expr -- Derivative, syntax is:
   -- Type (Partial or total) -> principal part of change -> with respect to
@@ -86,9 +86,9 @@ instance Num Expr where
 
 
 instance Eq Expr where
-  V a == V b                   =  a == b
   Dbl a == Dbl b               =  a == b
   Int a == Int b               =  a == b
+  Str a == Str b               =  a == b
   Assoc o1 l1 == Assoc o2 l2   =  o1 == o2 && l1 == l2
   Deriv t1 a b == Deriv t2 c d =  t1 == t2 && a == c && (b ^. uid) == (d ^. uid)
   C a == C b                   =  (a ^. uid) == (b ^. uid)

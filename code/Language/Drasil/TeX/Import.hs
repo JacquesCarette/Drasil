@@ -26,9 +26,9 @@ import Language.Drasil.Unit (usymb)
 import Language.Drasil.Citations (Citation(..),CiteField(..),CitationKind(..))
 
 expr :: HasSymbolTable ctx => Expr -> ctx -> P.Expr
-expr (V v)              _ = P.Var  v
 expr (Dbl d)            _ = P.Dbl  d
 expr (Int i)            _ = P.Int  i
+expr (Str s)            _ = P.Str  s
 expr (Assoc op l)      sm = P.Assoc op $ map (\x -> expr x sm) l
 expr (C c)             sm = -- FIXME: Add Stage for Context
   P.Sym  (eqSymb (symbLookup c (sm ^. symbolTable)))

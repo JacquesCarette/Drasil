@@ -93,7 +93,7 @@ glaTyFac_eq :: Expr
 glaTyFac_eq = (Case (zipWith glaTyFac_helper glassTypeFactors glassTypeAbbrsStr))
 
 glaTyFac_helper :: Integer -> String -> (Expr, Relation)
-glaTyFac_helper result condition = (Int result, (C glass_type) $= V condition)
+glaTyFac_helper result condition = (Int result, (C glass_type) $= Str condition)
 
 glaTyFac :: QDefinition
 glaTyFac = aqd (mkDataDef gTF glaTyFac_eq) ([] :: Attributes)

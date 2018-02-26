@@ -27,9 +27,9 @@ import Control.Lens ((^.))
 
 -- | expr translation function from Drasil to HTML 'AST'
 expr :: HasSymbolTable s => Expr -> s -> P.Expr
-expr (V v)            _ = P.Var   v
 expr (Dbl d)          _ = P.Dbl   d
 expr (Int i)          _ = P.Int   i
+expr (Str s)          _ = P.Str   s
 expr (Assoc op l)     sm = P.Assoc op $ map (\x -> expr x sm) l
 expr (Deriv Part a b) sm = P.BOp P.Frac (P.Assoc Mul [P.Sym (Special Partial), expr a sm]) 
                           (P.Assoc Mul [P.Sym (Special Partial), expr (C b) sm])

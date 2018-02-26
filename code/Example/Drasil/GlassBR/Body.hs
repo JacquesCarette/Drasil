@@ -12,11 +12,11 @@ import Data.Drasil.Concepts.Documentation (analysis, appendix, aspect,
   characteristic, class_, code, condition, constant, constraint, content,
   datum, definition, description, document, emphasis, endUser, failure,
   figure, goal, implementation, information, interface, input_, item,
-  message, model, organization, output_, practice, problem, purpose, 
+  message, model, organization, output_, practice, problem, purpose,
   quantity, reference, reviewer, section_, scenario, software, standard,
-  symbol_, system, template, term_, theory, traceyMatrix, user, value, 
-  variable, physicalSystem, datumConstraint, userInput, assumption, dataDefn, 
-  goalStmt, inModel, likelyChg, physSyst, requirement, srs, thModel, 
+  symbol_, system, template, term_, theory, traceyMatrix, user, value,
+  variable, physicalSystem, datumConstraint, userInput, assumption, dataDefn,
+  goalStmt, inModel, likelyChg, physSyst, requirement, srs, thModel,
   dataConst, acroNumGen, company)
 import Data.Drasil.Concepts.Education (secondYear, undergradDegree,
   civilEng, structuralEng, scndYrCalculus, structuralMechanics)
@@ -69,8 +69,9 @@ import Drasil.Sections.SpecificSystemDescription (solChSpecF,
 {--}
 
 gbSymbMap :: ChunkDB
-gbSymbMap = cdb this_symbols (map nw acronyms ++ map nw this_symbols) ([] :: [UnitDefn])
-  (map unitWrapper [metre, second, kilogram] ++ map unitWrapper [pascal, newton])
+gbSymbMap =
+  cdb this_symbols (map nw acronyms ++ map nw this_symbols) ([] :: [ConceptChunk])
+      (map unitWrapper [metre, second, kilogram] ++ map unitWrapper [pascal, newton])
 
 resourcePath :: String
 resourcePath = "../../../datafiles/GlassBR/"
@@ -87,21 +88,21 @@ mkSRS = RefSec (RefProg intro [TUnits, tsymb [TSPurpose, SymbOrder], TAandA]) :
      IScope incScoR endScoR,
      IChar (rdrKnldgbleIn glBreakage blastRisk) undIR appStanddIR,
      IOrgSec s2_3_intro dataDefn (SRS.dataDefn SRS.missingP []) s2_3_intro_end]) :
-  StkhldrSec 
-    (StkhldrProg2 
-      [Client gLassBR (S "a" +:+ phrase company 
+  StkhldrSec
+    (StkhldrProg2
+      [Client gLassBR (S "a" +:+ phrase company
         +:+ S "named Entuitive. It is developed by Dr." +:+ name mCampidelli),
       Cstmr gLassBR]) :
   GSDSec (GSDProg2 [UsrChars [s4_1_bullets endUser gLassBR secondYear
-    undergradDegree civilEng structuralEng glBreakage blastRisk], 
+    undergradDegree civilEng structuralEng glBreakage blastRisk],
     SystCons [] []]) :
   ScpOfProjSec (ScpOfProjProg (short gLassBR) (s5_1_table) (s5_2 (glaSlab)
     (capacity) (demandq) (probability))) :
   SSDSec (SSDVerb s6) : {-
-  SSDSec 
+  SSDSec
     (SSDProg
       [SSDProblem  (PDProg start gLassBR ending [s6_1_1, s6_1_2, s6_1_3])
-      , SSDSolChSpec 
+      , SSDSolChSpec
         (SCSProg
           [ TMs ([Label] ++ stdFields) [t1IsSafe]
           , GDs [] [] HideDerivation -- No Gen Defs for GlassBR
@@ -112,7 +113,7 @@ mkSRS = RefSec (RefProg intro [TUnits, tsymb [TSPurpose, SymbOrder], TAandA]) :
       ]
     ) : -}
   ReqrmntSec (ReqsProg [
-    FReqsSub s7_1_list, 
+    FReqsSub s7_1_list,
     NonFReqsSub [performance] (gBRpriorityNFReqs)
     (S "This problem is small in size and relatively simple")
     (S "Any reasonable" +:+ phrase implementation +:+.
@@ -124,7 +125,7 @@ mkSRS = RefSec (RefProg intro [TUnits, tsymb [TSPurpose, SymbOrder], TAandA]) :
   AuxConstntSec (AuxConsProg gLassBR auxiliaryConstants) :
   Bibliography gbCitations :
   AppndxSec (AppndxProg [s12_intro, fig_5, fig_6]) : []
-  
+ 
 stdFields :: Fields
 stdFields = [DefiningEquation, Description Verbose IncludeUnits, Source, RefBy]
 
@@ -135,9 +136,9 @@ glassSystInfo = SI {
   _authors     = [nikitha, spencerSmith],
   _units       = map unitWrapper [metre, second, kilogram] ++ map unitWrapper [pascal, newton],
   _quants      = this_symbols,
-  _concepts    = ([] :: [DefinedQuantityDict]),
-  _definitions = dataDefns ++ (map (relToQD gbSymbMap) iModels) ++ (map (relToQD gbSymbMap) tModels) 
-                  ++ [wtntWithEqn, sdWithEqn],  -- wtntWithEqn is defined in Unitals but only appears 
+  _concepts    = [] :: [DefinedQuantityDict],
+  _definitions = dataDefns ++ (map (relToQD gbSymbMap) iModels) ++ (map (relToQD gbSymbMap) tModels)
+                  ++ [wtntWithEqn, sdWithEqn],  -- wtntWithEqn is defined in Unitals but only appears
                                                  -- in the description of the Calculation of Demand instance model;
                                                  -- should this be included as a Data Definition?
                                                  -- (same for sdWithEqn)
@@ -248,7 +249,7 @@ undIR = foldlList [phrase scndYrCalculus, phrase structuralMechanics,
   plural computerApp `sIn` phrase civilEng]
 appStanddIR = foldlSent [S "In addition" `sC` plural reviewer,
   S "should be familiar with the applicable", plural standard,
-  S "for constructions using glass from", 
+  S "for constructions using glass from",
   sSqBr (S "4-6" {-astm_LR2009, astm_C1036, astm_C1048-}) `sIn`
   (makeRef (SRS.reference SRS.missingP []))]
 incScoR = foldl (+:+) EmptyS [S "getting all", plural inParam,
@@ -463,8 +464,8 @@ a1Desc = foldlSent [S "The standard E1300-09a for",
   S "supported on one side acts as a", phrase cantilever]
 
 a2Desc :: Sentence
-a2Desc = foldlSent [S "Following", (sSqBr (S "4" {-astm_LR2009-} +:+ sParen 
-  (S "pg. 1"))) `sC` S "this", phrase practice, 
+a2Desc = foldlSent [S "Following", (sSqBr (S "4" {-astm_LR2009-} +:+ sParen
+  (S "pg. 1"))) `sC` S "this", phrase practice,
   S "does not apply to any form of", foldlOptions $ map S ["wired",
   "patterned", "etched", "sandblasted", "drilled", "notched", "grooved glass"],
   S "with", phrase surface `sAnd`

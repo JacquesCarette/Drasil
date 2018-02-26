@@ -2,7 +2,7 @@ module Language.Drasil.HTML.Print where
 
 import Prelude hiding (print, id)
 import Data.List (intersperse, sort)
-import Text.PrettyPrint hiding (render, quotes)
+import Text.PrettyPrint hiding (render, quotes, Str)
 import Numeric (showFFloat)
 
 import Language.Drasil.Expr (Oper(..))
@@ -135,9 +135,9 @@ uSymb (UDiv n d)          = uSymb n ++ "/(" ++ (uSymb d) ++ ")"
 -----------------------------------------------------------------
 -- | Renders expressions in the HTML (called by multiple functions)
 p_expr :: Expr -> String
-p_expr (Var v)    = symbol (Atomic v) --Ensures variables are rendered the same as other symbols
 p_expr (Dbl d)    = showFFloat Nothing d ""
 p_expr (Int i)    = show i
+p_expr (Str s)    = s
 p_expr (Sym s)    = symbol s
 p_expr (Assoc Mul l) = mul l
 p_expr (Assoc Add l)  = concat $ intersperse " &plus; " $ map p_expr l
@@ -174,7 +174,6 @@ p_indx a@(Sym (Corners [] [] [] [_] _)) i = p_expr a ++ sub (","++ p_sub i)
 p_indx a i = p_expr a ++ sub (p_sub i)
 -- Ensures only simple Expr's get rendered as an index
 p_sub :: Expr -> String
-p_sub e@(Var _)        = p_expr e
 p_sub e@(Dbl _)        = p_expr e
 p_sub e@(Int _)        = p_expr e
 p_sub e@(Sym _)        = p_expr e
@@ -217,7 +216,6 @@ divide n d = p_expr n ++ "/" ++ p_expr d
 
 -- | Helper for properly rendering negation of expressions
 neg :: Expr -> String
-neg a@(Var     _)     = minus a
 neg a@(Dbl     _)     = minus a
 neg a@(Int     _)     = minus a
 neg a@(Sym     _)     = minus a

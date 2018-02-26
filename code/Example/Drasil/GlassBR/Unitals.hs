@@ -98,18 +98,17 @@ standOffDist = uqcND "standOffDist" (nounPhraseSP "stand off distance")
   (Dbl 45) defaultUncrt
 --FIXME: ^ incorporate definition in here?
 
---FIXME: Issue #309
 nom_thick = cuc "nom_thick" 
   (nounPhraseSent $ S "nominal thickness" +:+ displayConstrntsAsSet 
     nom_thick (map show nominalThicknesses))
   lT millimetre ({-DiscreteD nominalThicknesses-} Rational) 
-  [enumc nominalThicknesses] (V "8.0") --FIXME: no typical value!
+  [enumc nominalThicknesses] (Int 8)
 
--- FIXME HACK - V instead of a proper String type
+-- FIXME glassTypeAbbrsStr should really not exist...
 glass_type  = cvc "glass_type" (nounPhraseSent $ phrase glassTy +:+ 
     displayConstrntsAsSet glass_type glassTypeAbbrsStr)
   lG ({-DiscreteS glassTypeAbbrsStr-} String)
-  [EnumeratedStr Software glassTypeAbbrsStr] (V "HS") --FIXME: no typical value!
+  [EnumeratedStr Software glassTypeAbbrsStr] (C heatSGlass) --FIXME: no typical value!
 
 {--}
 
@@ -421,16 +420,22 @@ nominalThicknesses = map fst glassThickness
 glassTypeFactors :: [Integer]
 glassTypeFactors = map fst glassType
 
+glassTypeAbbrsStr :: [String]
+glassTypeAbbrsStr = map snd glassType
+
 glassTypeAbbrs :: [Sentence]
 glassTypeAbbrs = map S glassTypeAbbrsStr
 
-glassTypeAbbrsStr :: [String]
-glassTypeAbbrsStr = map snd glassType 
+glassConcepts :: [CI]
+glassConcepts = [annealedGlass, fullyTGlass, heatSGlass]
 
-type GlassType = [(Integer, String)] -- [(Factor, Abbr)]
+-- FIXME: this String is really an awful cheat...
+type GlassType = [(Integer, String)] -- [(Factor, Abbreviation)]
 type GlassThickness = [(Double, Double)] --[(Nominal, Actual)]
 
 glassType :: GlassType
+-- What it should really be:
+-- glassType = [(1, annealedGlass), (4, fullyTGlass), (2, heatSGlass)]
 glassType = [(1, "AN"), (4, "FT"), (2, "HS")]
 
 glassThickness :: GlassThickness

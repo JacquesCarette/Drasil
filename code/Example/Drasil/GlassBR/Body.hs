@@ -154,7 +154,7 @@ glassSystInfo = SI {
   --FIXME: All named ideas, not just acronyms.
 
 gbRefDB :: ReferenceDB
-gbRefDB = rdb newAssumptions newReqs []
+gbRefDB = rdb newAssumptions newReqs [] gbCitations
 
 newAssumptions :: [AssumpChunk] -- For testing
 newAssumptions = map (\(x,y) -> ac' x y) (zip

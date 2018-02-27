@@ -24,16 +24,16 @@ data ReferenceDB = RDB
   { assumpDB :: AssumpMap
   , reqDB :: ReqMap
   , changeDB :: ChangeMap 
---  , citationDB :: BibMap
+  , citationDB :: BibMap
   }
 
-rdb :: [AssumpChunk] -> [ReqChunk] -> [Change] -> --BibRef -> 
+rdb :: [AssumpChunk] -> [ReqChunk] -> [Change] -> BibRef -> 
   ReferenceDB
-rdb assumps reqs changes {- citations -} = RDB 
+rdb assumps reqs changes citations = RDB 
   (assumpMap assumps)
   (reqMap reqs)
   (changeMap changes)
---  (bibMap citations)
+  (bibMap citations)
 
 -- | Map for maintaining assumption references. 
 -- The Int is that reference's number.
@@ -88,31 +88,37 @@ changeLookup c m = let lookC = Map.lookup (c ^. id) m in
         getS Nothing = error $ "Change: " ++ (c ^. id) ++ 
           " referencing information not found in Change Map"
 
--- Map for maintaining citation references. 
+-- | Map for maintaining citation references. 
 -- Similar to AssumpMap.
--- TODO: Needs chunks before it will work
--- type BibMap = Map.Map String (Citation, Int)
+type BibMap = Map.Map String (Citation, Int)
 
--- bibMap :: 
+bibMap :: [Citation] -> BibMap
+bibMap cs = Map.fromList $ zip (map (^. id) cs) (zip cs [1..])
 
 -- Classes and instances --
 class HasAssumpRefs s where
   assumpRefTable :: Simple Lens s AssumpMap
   
 instance HasAssumpRefs ReferenceDB where
-  assumpRefTable f (RDB a b c) = fmap (\x -> RDB x b c) (f a)
+  assumpRefTable f (RDB a b c d) = fmap (\x -> RDB x b c d) (f a)
   
 class HasReqRefs s where
   reqRefTable :: Simple Lens s ReqMap
   
 instance HasReqRefs ReferenceDB where
-  reqRefTable f (RDB a b c) = fmap (\x -> RDB a x c) (f b)
+  reqRefTable f (RDB a b c d) = fmap (\x -> RDB a x c d) (f b)
   
 class HasChangeRefs s where
   changeRefTable :: Simple Lens s ChangeMap
   
 instance HasChangeRefs ReferenceDB where
-  changeRefTable f (RDB a b c) = fmap (\x -> RDB a b x) (f c)
+  changeRefTable f (RDB a b c d) = fmap (\x -> RDB a b x d) (f c)
+  
+class HasCitationRefs s where
+  citationRefTable :: Simple Lens s BibMap
+  
+instance HasCitationRefs ReferenceDB where
+  citationRefTable f (RDB a b c d) = fmap (\x -> RDB a b c x) (f d)
   
 class Referable s where
   refName :: s -> RefName -- Sentence; The text to be displayed for the link.
@@ -143,7 +149,7 @@ instance Referable Section where
   
 instance Referable Citation where
   refName c = S $ citeID c
-  refAdd c = citeID c -- need unique identifier, not enforced by Citations yet
+  refAdd c = citeID c -- citeID should be unique.
   rType _ = Cite
   
 instance Referable Contents where

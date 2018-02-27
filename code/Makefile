@@ -37,7 +37,7 @@ FORCE: ;
 
 build: FORCE
 	mkdir -p build
-	stack build drasil
+	stack build -j2 $(stackArgs) drasil
 
 
 swhs_build: build

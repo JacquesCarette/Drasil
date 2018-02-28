@@ -55,7 +55,7 @@ data DocSection = Verbatim Section
                 | LCsSec LCsSec
                 | TraceabilitySec TraceabilitySec
                 | AuxConstntSec AuxConstntSec
-                | Bibliography BibRef
+                | Bibliography
                 | AppndxSec AppndxSec
 
 --FIXME: anything with 'Verb' in it should eventually go
@@ -236,7 +236,7 @@ mkSections si l = foldr doit [] l
     doit (StkhldrSec sts)    ls = mkStkhldrSec sts : ls
     doit (SSDSec ss)         ls = mkSSDSec si ss : ls
     doit (AuxConstntSec acs) ls = mkAuxConsSec acs : ls
-    doit (Bibliography bib)  ls = mkBib bib : ls
+    doit Bibliography        ls = mkBib (citeDB si) : ls
     doit (GSDSec gs)         ls = mkGSDSec gs : ls 
     doit (ScpOfProjSec sop)  ls = mkScpOfProjSec sop : ls
     doit (ReqrmntSec r)      ls = mkReqrmntSec r : ls

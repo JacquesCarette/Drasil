@@ -93,8 +93,12 @@ ssp_si = SI {
   _defSequence = [Parallel (head sspDataDefs) (tail sspDataDefs)],
   _constraints = sspConstrained,
   _constants = [],
-  _sysinfodb = sspSymMap
+  _sysinfodb = sspSymMap,
+  _refdb = sspRefDB
 }
+
+sspRefDB :: ReferenceDB
+sspRefDB = rdb [] [] [] sspCitations -- FIXME: Convert the rest to new chunk types
 
 mkSRS :: DocDesc
 mkSRS = RefSec (RefProg intro
@@ -106,7 +110,7 @@ mkSRS = RefSec (RefProg intro
       EmptyS
     , IOrgSec orgSecStart inModel (SRS.inModel SRS.missingP []) orgSecEnd]) :
     --FIXME: issue #235
-  map Verbatim [s3, s4, s5, s6, s7] ++ [Bibliography sspCitations]
+  map Verbatim [s3, s4, s5, s6, s7] ++ (Bibliography : [])
   
 ssp_srs :: Document
 ssp_srs = mkDoc mkSRS (for) ssp_si

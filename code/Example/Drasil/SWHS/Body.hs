@@ -112,8 +112,12 @@ swhs_si = SI {
   _defSequence = ([] :: [Block QDefinition]),
   _constraints = (swhsConstrained),
   _constants = [],
-  _sysinfodb = swhsSymMap
+  _sysinfodb = swhsSymMap,
+  _refdb = swhsRefDB
 }
+
+swhsRefDB :: ReferenceDB
+swhsRefDB = rdb [] [] [] s9_swhs_citations
 
 swhsSymMap :: ChunkDB
 swhsSymMap = cdb swhsSymbolsAll (map nw swhsSymbols ++ map nw acronyms) ([] :: [CWrapper] ) -- FIXME: Fill in Concepts
@@ -147,7 +151,7 @@ mkSRS = [RefSec (RefProg intro
   
   map Verbatim [s3, s4, s5, s6, s7] ++ 
   [AuxConstntSec (AuxConsProg progName specParamValList)] ++
-  [Bibliography s9_swhs_citations]
+  (Bibliography : [])
 
 swhsCode :: CodeSpec
 swhsCode = codeSpec' swhs_si [swhsInputMod]

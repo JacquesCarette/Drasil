@@ -124,7 +124,7 @@ mkSRS = RefSec (RefProg intro [TUnits, tsymb [TSPurpose, SymbOrder], TAandA]) :
     (TraceabilityProg traceyMatrices [s9_table1Desc, s9_table2Desc, s9_table3Desc]
     (traceyMatrices ++ s9_intro2 ++ traceyGraphs) []) :
   AuxConstntSec (AuxConsProg gLassBR auxiliaryConstants) :
-  Bibliography gbCitations :
+  Bibliography :
   AppndxSec (AppndxProg [s12_intro, fig_5, fig_6]) : []
   
 stdFields :: Fields

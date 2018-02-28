@@ -63,7 +63,7 @@ mkSRS = RefSec (RefProg RM.intro [TUnits, tsymb tableOfSymbols, TAandA]) :
    IChar (S "rigid body dynamics") (phrase highSchoolCalculus) (EmptyS), 
    IOrgSec s2_4_intro inModel s4_2 EmptyS]) :
   (map Verbatim [s3, s4, s5, s6, s7, s8, s9])  ++ 
-  ([Bibliography cpCitations]) 
+  (Bibliography : []) 
     where tableOfSymbols = [TSPurpose, TypogConvention[Vector Bold], SymbOrder]
 
     --FIXME: Need to be able to print defn for gravitational constant.
@@ -82,8 +82,12 @@ chipmunkSysInfo = SI {
   _defSequence = (cpQDefs), 
   _constraints = cpInputConstraints,
   _constants = [],
-  _sysinfodb = everything
+  _sysinfodb = everything,
+  _refdb = cpRefDB
 }
+
+cpRefDB :: ReferenceDB
+cpRefDB = rdb [] [] [] cpCitations -- FIXME: Convert the rest to new chunk types
 
 --FIXME: All named ideas, not just acronyms.
 

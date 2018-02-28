@@ -2,15 +2,18 @@
 
 module Language.Drasil.SystemInformation where
 
+import Language.Drasil.Chunk.Citation (BibRef)
+import Language.Drasil.Chunk.Concept
+import Language.Drasil.Chunk.Constrained
+import Language.Drasil.Chunk.Eq
 import Language.Drasil.Chunk.NamedIdea
 import Language.Drasil.Chunk.Quantity
-import Language.Drasil.Chunk.Concept
-import Language.Drasil.Chunk.Eq
-import Language.Drasil.Chunk.Constrained
 import Language.Drasil.ChunkDB (ChunkDB)
 import Language.Drasil.People
 import Language.Drasil.Reference
 import Language.Drasil.Unit
+
+import Control.Lens ((^.))
 
 -- | Data structure for holding all of the requisite information about a system
 -- to be used in artefact generation
@@ -44,3 +47,7 @@ data SystemInformation where
 -- | for listing QDefs in SystemInformation
 data Block a = Coupled a a [a]
            | Parallel a [a]
+
+-- | Helper for extracting bibliography
+citeDB :: SystemInformation -> BibRef
+citeDB (SI {_refdb = db}) = citationsFromBibMap (db ^. citationRefTable)

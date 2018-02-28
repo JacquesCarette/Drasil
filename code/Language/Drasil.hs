@@ -3,7 +3,7 @@ module Language.Drasil (
   -- Output.Formats
     DocType(SRS,MG,MIS,LPM,Website)
   -- SystemInformation
-  , SystemInformation(..), Block(..)
+  , SystemInformation(..), Block(..), citeDB
   -- Recipe
   , Recipe(..)
   -- Expr
@@ -140,7 +140,7 @@ module Language.Drasil (
   -- AssumpChunk
   , AssumpChunk, assuming, ac, ac'
   -- Referencing
-  , ReferenceDB(..), AssumpMap, assumpMap, assumpLookup, rdb, assumpRefTable
+  , ReferenceDB(..), AssumpMap, assumpMap, assumpLookup, rdb, assumpRefTable 
   , reqMap, HasAssumpRefs, HasReqRefs, reqRefTable, reqLookup, changeMap
   , HasChangeRefs, changeRefTable, changeLookup
   -- ReqChunk

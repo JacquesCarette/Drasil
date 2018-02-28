@@ -12,7 +12,7 @@ import Control.Lens ((^.), Simple, Lens)
 
 import Prelude hiding (id)
 
-import Data.List (partition)
+import Data.List (partition, sortBy)
 import qualified Data.Map as Map
 
 -- | Create References to a given 'LayoutObj'
@@ -93,7 +93,12 @@ changeLookup c m = let lookC = Map.lookup (c ^. id) m in
 type BibMap = Map.Map String (Citation, Int)
 
 bibMap :: [Citation] -> BibMap
-bibMap cs = Map.fromList $ zip (map (^. id) cs) (zip cs [1..])
+bibMap cs = Map.fromList $ zip (map (^. id) scs) (zip scs [1..])
+  where scs :: [Citation]
+        scs = sortBy citeSort cs
+        -- Sorting is necessary if using elems to pull all the citations
+        -- (as it sorts them and would change the order). 
+        -- We can always change the sorting to whatever makes most sense
 
 -- Classes and instances --
 class HasAssumpRefs s where
@@ -127,9 +132,9 @@ class Referable s where
   rType   :: s -> RefType -- The reference type (referencing namespace?)
   
 instance Referable AssumpChunk where
-  refName x@(AC _ _ sn _) = sn
-  refAdd  x               = "A:" ++ (x ^. id)
-  rType   _               = Assump
+  refName (AC _ _ sn _) = sn
+  refAdd  x             = "A:" ++ (x ^. id)
+  rType   _             = Assump
   
 instance Referable ReqChunk where
   refName (RC _ _ _ sn _)   = sn
@@ -197,7 +202,6 @@ instance Referable Contents where
   refAdd (Bib _)                = error $ 
     "Bibliography list of references cannot be referenced. " ++
     "You must reference the Section or an individual citation."
-  refAdd _ = "Placeholder"
 
 -- | Automatically create the label for a definition
 getDefName :: DType -> String
@@ -207,6 +211,14 @@ getDefName TM         = "T:"
 getDefName DD         = "DD:"
 getDefName Instance   = "IM:"
 getDefName General    = "GD:"
+
+citeSort :: Citation -> Citation -> Ordering
+citeSort x y = compare (x ^. id) (y ^. id)
+
+citationsFromBibMap :: BibMap -> [Citation]
+citationsFromBibMap bm = sortBy citeSort citations
+  where citations :: [Citation]
+        citations = map (\(x,_) -> x) (Map.elems bm)
 
 -- This works for passing the correct id to the reference generator for Assumptions,
 -- Requirements and Likely Changes but I question whether we should use it.

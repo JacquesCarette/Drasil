@@ -148,7 +148,7 @@ mkSRS = RefSec (RefProg intro
   (org_of_doc_end inModel M.ode progName)]) : 
   Verbatim gen_sys_desc: --Verbatim gen_sys_desc:
   ------
-  SSDSec 
+  {-SSDSec 
     (SSDProg [SSDSubVerb prob_des
       , SSDSolChSpec 
         (SCSProg 

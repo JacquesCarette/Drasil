@@ -236,7 +236,7 @@ pcm_vol = uqc "pcm_vol" (nounPhraseSP "volume of PCM")
   (sub (eqSymb vol) cP) m_3 Rational
   [physc $ \c -> c $> Int 0,
   physc $ \c -> c $< C tank_vol,
-  sfwrc $ \c -> c $>= C tank_vol] (Dbl 0.05) 0.1
+  sfwrc $ \c -> c $>= (C frac_min) * (C tank_vol)] (Dbl 0.05) 0.1
   -- needs to add (D,L)*minfract to end of last constraint
 
 -- Constraint 4
@@ -420,17 +420,17 @@ cons_tol = uvc "pb_tol"
 -------------------------
 
 specParamValList :: [QDefinition]
-specParamValList = [tank_length_min, tank_length_max, htTransCoeff_min,
-  pcm_density_min, pcm_density_max, w_density_min, w_density_max,
-  htCap_S_P_min, htCap_S_P_max, htCap_L_P_min, htCap_L_P_max,
-  htCap_W_min, htCap_W_max, coil_HTC_min, coil_HTC_max,
-  pcm_HTC_min, pcm_HTC_max, time_final_max]
+specParamValList = [tank_length_min, tank_length_max, frac_min,
+  htTransCoeff_min, pcm_density_min, pcm_density_max, w_density_min, 
+  w_density_max, htCap_S_P_min, htCap_S_P_max, htCap_L_P_min,
+  htCap_L_P_max, htCap_W_min, htCap_W_max, coil_HTC_min, 
+  coil_HTC_max, pcm_HTC_min, pcm_HTC_max, time_final_max]
 
 tank_length_min, tank_length_max, htTransCoeff_min, pcm_density_min, 
   pcm_density_max, w_density_min, w_density_max, htCap_S_P_min, 
   htCap_S_P_max, htCap_L_P_min, htCap_L_P_max,
   htCap_W_min, htCap_W_max, coil_HTC_min, coil_HTC_max, pcm_HTC_min,
-  pcm_HTC_max, time_final_max :: QDefinition
+  pcm_HTC_max, time_final_max, frac_min :: QDefinition
 
 htFusion_min, htFusion_max, coil_SA_max :: UnitaryChunk
 
@@ -442,6 +442,11 @@ tank_length_min = mkDataDef (unitary "tank_length_min"
 tank_length_max = mkDataDef (unitary "tank_length_max"
   (nounPhraseSP "maximum length of tank")
   (sub (eqSymb tank_length) (Atomic "max")) metre Rational) (Int 50)
+
+-- Used in Constraint 3
+frac_min = mkDataDef (unitary "frac_min"
+  (nounPhraseSP "minimum length of tank")
+  (Atomic "minfract") metre Rational) (Dbl 10e-6)
 
 -- Used in Constraint 4
 htTransCoeff_min = mkDataDef (unitary "htTransCoeff_min"

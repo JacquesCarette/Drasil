@@ -533,26 +533,26 @@ likely_changes_intro = foldlSP [S "This", (phrase section_), S "lists the",
   (plural likelyChg), S "to be made to the", (phrase physics), (phrase game), 
   (phrase library)]
 
-likely_changes_likelyChg_stmt1, likely_changes_likelyChg_stmt2, likely_changes_likelyChg_stmt3, 
-  likely_changes_likelyChg_stmt4 :: Sentence
+likely_changes_likelyChg_LC_solver, likely_changes_likelyChg_LC_collisions, likely_changes_likelyChg_LC_damping, 
+  likely_changes_likelyChg_LC_constraints :: Sentence
 
 --these statements look like they could be parametrized
-likely_changes_likelyChg_stmt1 = (S "internal" +:+ (getAcc CM.ode) :+: 
+likely_changes_likelyChg_LC_solver = (S "internal" +:+ (getAcc CM.ode) :+: 
   S "-solving" +:+ phrase algorithm +:+ S "used by the" +:+
   (phrase library)) `maybeChanged` (S "in the future")
 
-likely_changes_likelyChg_stmt2 = (phrase library) `maybeExpanded`
+likely_changes_likelyChg_LC_collisions = (phrase library) `maybeExpanded`
   (S "to deal with edge-to-edge and vertex-to-vertex" +:+ (plural CP.collision))
 
-likely_changes_likelyChg_stmt3 = (phrase library) `maybeExpanded` (
+likely_changes_likelyChg_LC_damping = (phrase library) `maybeExpanded` (
   S "to include motion with" +:+ (phrase CP.damping))
 
-likely_changes_likelyChg_stmt4 = (phrase library) `maybeExpanded` (S "to include" +:+ 
+likely_changes_likelyChg_LC_constraints = (phrase library) `maybeExpanded` (S "to include" +:+ 
   (plural CP.joint) `sAnd` (plural CM.constraint))
 
 likely_changes_list' :: [Sentence]
-likely_changes_list' = [likely_changes_likelyChg_stmt1, likely_changes_likelyChg_stmt2, likely_changes_likelyChg_stmt3,
-  likely_changes_likelyChg_stmt4]
+likely_changes_list' = [likely_changes_likelyChg_LC_solver, likely_changes_likelyChg_LC_collisions, likely_changes_likelyChg_LC_damping,
+  likely_changes_likelyChg_LC_constraints]
 
 likely_changes_list = enumSimple 1 (getAcc likelyChg) likely_changes_list'
 

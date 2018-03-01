@@ -287,17 +287,17 @@ goalStatementStruct state inputs wrt adjective outputs objct condition1 conditio
         listOfInputs i      = (foldlList $ map plural inputs) `sC` S "and" +:+ i
         listOfOutputs       = (foldlList $ map plural outputs)
 
-goal_statements_stmt1 = goalStatementStruct (plural physicalProperty) 
+goal_statements_G_linear = goalStatementStruct (plural physicalProperty) 
   (take 2 inputSymbols) (plural QP.force) (S "applied on")
   (take 2 outputSymbols) CP.rigidBody 
   (S "their new") EmptyS
 
-goal_statements_stmt2 = goalStatementStruct (plural physicalProperty) 
+goal_statements_G_angular = goalStatementStruct (plural physicalProperty) 
   (drop 3 $ take 5 inputSymbols) (plural QP.force) (S "applied on")
   (drop 3 $ take 5 inputSymbols) CP.rigidBody 
   (S "their new") EmptyS
 
-goal_statements_stmt3 = goalStatementStruct EmptyS
+goal_statements_G_detectCollision = goalStatementStruct EmptyS
   (take 2 inputSymbols) EmptyS (S "of")
   (take 0 inputSymbols) CP.rigidBody
   (S "if any of them will collide with one another") EmptyS
@@ -306,18 +306,18 @@ goalStatement4Inputs :: [UnitalChunk]
 goalStatement4Inputs = [QP.position, QM.orientation, QP.linearVelocity, 
   QP.angularVelocity]
 
-goal_statements_stmt4 = goalStatementStruct (plural physicalProperty)
+goal_statements_G_collision = goalStatementStruct (plural physicalProperty)
   (goalStatement4Inputs) --fixme input symbols
   EmptyS (S "of")
   (goalStatement4Inputs) --fixme input symbols
   CP.rigidBody (S "the new") (S "of the" +:+ (plural CP.rigidBody) +:+ 
   S "that have undergone a" +:+ (phrase CP.collision))
 
-goal_statements_stmt1, goal_statements_stmt2, goal_statements_stmt3, goal_statements_stmt4 :: [Sentence]
+goal_statements_G_linear, goal_statements_G_angular, goal_statements_G_detectCollision, goal_statements_G_collision :: [Sentence]
 
 goal_statements_list' :: [Sentence]
-goal_statements_list' = map (foldlSent) [goal_statements_stmt1, goal_statements_stmt2, goal_statements_stmt3, 
-  goal_statements_stmt4]
+goal_statements_list' = map (foldlSent) [goal_statements_G_linear, goal_statements_G_angular, goal_statements_G_detectCollision, 
+  goal_statements_G_collision]
 
 goal_statements_list = enumSimple 1 (getAcc goalStmt) goal_statements_list'
 

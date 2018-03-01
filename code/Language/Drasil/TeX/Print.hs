@@ -357,13 +357,14 @@ spec (G g)       = pure $ text $ unPL $ greek g
 spec (Sp s)      = pure $ text $ unPL $ special s
 spec HARDNL      = pure $ text $ "\\newline"
 spec (Ref t@LS.Sect r _) = sref (show t) (spec r)
-spec (Ref t@LS.Def r _) = hyperref (show t) (spec r)
-spec (Ref t@LS.Mod r _) = mref (show t) (spec r)
-spec (Ref t@LS.Req r _) = rref (show t) (spec r)
-spec (Ref t@LS.Assump r _) = aref (show t) (spec r)
-spec (Ref t@LS.LC r _) = lcref (show t) (spec r)
-spec (Ref t@LS.UC r _) = ucref (show t) (spec r)
-spec (Ref t r _)   = ref (show t) (spec r)
+spec (Ref t@LS.Def r _)  = hyperref (show t) (spec r)
+spec (Ref LS.Mod r _)    = mref  (spec r)
+spec (Ref LS.Req r _)    = rref  (spec r)
+spec (Ref LS.Assump r _) = aref  (spec r)
+spec (Ref LS.LC r _)     = lcref (spec r)
+spec (Ref LS.UC r _)     = ucref (spec r)
+spec (Ref LS.Cite r _)   = cite  (spec r)
+spec (Ref t r _)         = ref (show t) (spec r)
 spec EmptyS      = empty
 
 escapeChars :: Char -> String

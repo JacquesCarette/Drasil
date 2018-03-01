@@ -166,8 +166,8 @@ instance Referable Contents where
   refName (Defnt dt _ r)        = S (getDefName dt) :+: S r
   refName (Requirement rc)      = refName rc
   refName (Assumption ca)       = refName ca
-  refName (LikelyChange lcc)    = S $ "LC:" ++ repUnd (lcc ^. id)--refName lcc
-  refName (UnlikelyChange ucc)  = S $ "UC:" ++ repUnd (ucc ^. id)--refName ucc
+  refName (LikelyChange lcc)    = refName lcc
+  refName (UnlikelyChange ucc)  = refName ucc
   refName (Enumeration _)       = error "Can't reference lists"
   refName (Paragraph _)         = error "Can't reference paragraphs"
   refName (Bib _)               = error $ 
@@ -195,8 +195,8 @@ instance Referable Contents where
   refAdd (Defnt dt _ r)         = getDefName dt ++ r
   refAdd (Requirement rc)       = refAdd rc
   refAdd (Assumption ca)        = refAdd ca
-  refAdd (LikelyChange lcc)     = "LC:" ++ repUnd (lcc ^. id)--refName lcc
-  refAdd (UnlikelyChange ucc)   = "UC:" ++ repUnd (ucc ^. id)--refName ucc
+  refAdd (LikelyChange lcc)     = refAdd lcc
+  refAdd (UnlikelyChange ucc)   = refAdd ucc
   refAdd (Enumeration _)        = error "Can't reference lists"
   refAdd (Paragraph _)          = error "Can't reference paragraphs"
   refAdd (Bib _)                = error $ 
@@ -205,8 +205,8 @@ instance Referable Contents where
 
 -- | Automatically create the label for a definition
 getDefName :: DType -> String
-getDefName (Data c)   = "DD:" ++ (repUnd (c ^. id)) -- FIXME: To be removed
-getDefName (Theory c) = "T:" ++ (repUnd (c ^. id)) -- FIXME: To be removed
+getDefName (Data c)   = "DD:" ++ (c ^. id) -- FIXME: To be removed
+getDefName (Theory c) = "T:" ++ (c ^. id) -- FIXME: To be removed
 getDefName TM         = "T:"
 getDefName DD         = "DD:"
 getDefName Instance   = "IM:"

@@ -153,7 +153,7 @@ instance Referable Section where
   
 instance Referable Citation where
   refName c = S $ citeID c
-  refAdd c = citeID c -- citeID should be unique.
+  refAdd c = concatMap repUnd $ citeID c -- citeID should be unique.
   rType _ = Cite
   
 instance Referable Contents where

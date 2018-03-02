@@ -1,4 +1,4 @@
-module Drasil.GlassBR.References (gbCitations) where
+module Drasil.GlassBR.References where
 
 import Language.Drasil
 

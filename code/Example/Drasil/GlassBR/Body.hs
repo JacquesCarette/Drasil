@@ -60,13 +60,14 @@ import Drasil.GlassBR.TMods (tModels, t1SafetyReq, t2SafetyReq,t1IsSafe)
 import Drasil.GlassBR.IMods (iModels, calOfCap, calOfDe, probOfBr, probOfBreak)
 import Drasil.GlassBR.DataDefs (dataDefns, gbQDefns, hFromt,
   strDisFac, nonFL, dimLL, glaTyFac, tolStrDisFac, tolPre, risk)
-import Drasil.GlassBR.References (gbCitations)
+import Drasil.GlassBR.References
 import Drasil.GlassBR.ModuleDefs
 import Drasil.Sections.ReferenceMaterial (intro)
 import Drasil.Sections.TraceabilityMandGs (traceGIntro)
 import Drasil.Sections.SpecificSystemDescription (solChSpecF,
   inDataConstTbl, outDataConstTbl, dataConstraintUncertainty, goalStmtF,
   physSystDesc, termDefnF, probDescF, specSysDesF)
+import Data.Drasil.Citations (koothoor2013, smithLai2005)
 
 {--}
 
@@ -295,10 +296,10 @@ s2_1_intro_p1 typeOf progName gvnVar = foldlSent [S "The main", phrase purpose,
 s2_3_intro_end, s2_3_intro :: Sentence
 s2_3_intro = foldlSent [S "The", phrase organization, S "of this",
   phrase document, S "follows the", phrase template, S "for an", short srs,
-  S "for", phrase sciCompS, S "proposed by" +:+ (sSqBrNum 1 {-koothoor2013-})
-  `sAnd` (sSqBrNum 2 {-smithLai2005-}), sParen (S "in" +:+ (makeRef (SRS.reference SRS.missingP [])))
-  `sC` S "with some", plural aspect, S "taken from Volere", phrase template,
-  S "16", (sSqBrNum 3 {-rbrtsn2012-})]
+  S "for", phrase sciCompS, S "proposed by" +:+ makeRef koothoor2013
+  `sAnd` makeRef smithLai2005 `sC` S "with some", 
+  plural aspect, S "taken from Volere", phrase template,
+  S "16", makeRef rbrtsn2012]
 
 s2_3_intro_end = foldl (+:+) EmptyS [(at_start' $ the dataDefn),
   S "are used to support", (plural definition `ofThe` S "different"),

@@ -158,12 +158,17 @@ gbRefDB :: ReferenceDB
 gbRefDB = rdb newAssumptions newReqs [] gbCitations
 
 newAssumptions :: [AssumpChunk] -- For testing
-newAssumptions = map (\(x,y) -> ac' x y) (zip
-  ["glassTyA", "glassConditionA", "explsnScenarioA"] [a1Desc, a2Desc, a3Desc])
-  ++ [newA4] ++ map (\(x,y) -> ac' x y) (zip ["glassLiteA", "bndryConditionsA", "responseTyA", "ldfConstantA"] [a5Desc, a6Desc, a7Desc, a8Desc constant_LoadDF])
+newAssumptions = [newA1, newA2, newA3, newA4, newA5, newA6, newA7, newA8]
 
-newA4 :: AssumpChunk
+newA1, newA2, newA3, newA4, newA5, newA6, newA7, newA8 :: AssumpChunk
+newA1 = ac' "glassTyA" a1Desc
+newA2 = ac' "glassConditionA" a2Desc
+newA3 = ac' "explsnScenarioA"a3Desc
 newA4 = ac' "standardValuesA" (a4Desc load_dur)
+newA5 = ac' "glassLiteA" a5Desc
+newA6 = ac' "bndryConditionsA" a6Desc
+newA7 = ac' "responseTyA" a7Desc
+newA8 = ac' "ldfConstantA" $ a8Desc constant_LoadDF
   
 testIMFromQD :: InstanceModel
 testIMFromQD = imQD gbSymbMap risk EmptyS [] [] []
@@ -479,8 +484,8 @@ a1Desc = foldlSent [S "The standard E1300-09a for",
   S "supported on one side acts as a", phrase cantilever]
 
 a2Desc :: Sentence
-a2Desc = foldlSent [S "Following", (sSqBr (S "4" {-astm_LR2009-} +:+ sParen 
-  (S "pg. 1"))) `sC` S "this", phrase practice, 
+a2Desc = foldlSent [S "Following", makeRef astm_LR2009 +:+ sParen 
+  (S "pg. 1") `sC` S "this", phrase practice, 
   S "does not apply to any form of", foldlOptions $ map S ["wired",
   "patterned", "etched", "sandblasted", "drilled", "notched", "grooved glass"],
   S "with", phrase surface `sAnd`

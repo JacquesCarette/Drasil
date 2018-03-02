@@ -25,8 +25,7 @@ koothoor2013 = Citation MThesis [
   
 parnas1986 = Citation Article [
   Author [dParnas, pcClements],
-  Title $ S "A rational design process:" +:+
-          S "How and why to fake it",
+  Title $ S "A rational design process: How and why to fake it",
   Journal $ S "IEEE Transactions on Software Engineering",
   Volume 12,
   Issue 2,
@@ -55,7 +54,7 @@ smithLai2005 = Citation Article
 ------------------------
 
 jnlCGJ :: CiteField
-jnlCGJ = Journal $ S $ "Canadian Geotechnical Journal"
+jnlCGJ = Journal $ S "Canadian Geotechnical Journal"
 
 journalCGJ :: Integer -> Integer -> [CiteField]
 journalCGJ vol issue = [jnlCGJ, Volume vol, Issue issue]

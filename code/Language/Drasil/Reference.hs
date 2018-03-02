@@ -132,17 +132,17 @@ class Referable s where
   
 instance Referable AssumpChunk where
   refName (AC _ _ sn _) = sn
-  refAdd  x             = "A:" ++ (x ^. id)
+  refAdd  x             = "A:" ++ concatMap repUnd (x ^. id)
   rType   _             = Assump
   
 instance Referable ReqChunk where
   refName (RC _ _ _ sn _)   = sn
-  refAdd  r@(RC _ rt _ _ _) = show rt ++ ":" ++ (r ^. id)
+  refAdd  r@(RC _ rt _ _ _) = show rt ++ ":" ++ concatMap repUnd (r ^. id)
   rType   _                 = Req
   
 instance Referable Change where
   refName (ChC _ _ _ sn _)     = sn
-  refAdd r@(ChC _ rt _ _ _)    = show rt ++ ":" ++ (r ^. id)
+  refAdd r@(ChC _ rt _ _ _)    = show rt ++ ":" ++ concatMap repUnd (r ^. id)
   rType (ChC _ Likely _ _ _)   = LC
   rType (ChC _ Unlikely _ _ _) = UC
   
@@ -204,8 +204,8 @@ instance Referable Contents where
 
 -- | Automatically create the label for a definition
 getDefName :: DType -> String
-getDefName (Data c)   = "DD:" ++ (c ^. id) -- FIXME: To be removed
-getDefName (Theory c) = "T:" ++ (c ^. id) -- FIXME: To be removed
+getDefName (Data c)   = "DD:" ++ concatMap repUnd (c ^. id) -- FIXME: To be removed
+getDefName (Theory c) = "T:" ++ concatMap repUnd (c ^. id) -- FIXME: To be removed
 getDefName TM         = "T:"
 getDefName DD         = "DD:"
 getDefName Instance   = "IM:"
@@ -218,6 +218,10 @@ citationsFromBibMap :: BibMap -> [Citation]
 citationsFromBibMap bm = sortBy citeSort citations
   where citations :: [Citation]
         citations = map (\(x,_) -> x) (Map.elems bm)
+
+repUnd :: Char -> String
+repUnd '_' = "."
+repUnd c = c : []
 
 -- This works for passing the correct id to the reference generator for Assumptions,
 -- Requirements and Likely Changes but I question whether we should use it.

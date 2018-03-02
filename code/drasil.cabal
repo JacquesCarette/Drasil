@@ -48,7 +48,6 @@ library
     , Language.Drasil.NounPhrase
     , Language.Drasil.People
     , Language.Drasil.Recipe
-    , Language.Drasil.RefHelpers
     , Language.Drasil.Reference
     , Language.Drasil.Space
     , Language.Drasil.Spec

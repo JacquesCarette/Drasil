@@ -6,7 +6,6 @@ import Language.Drasil.Chunk.Change
 import Language.Drasil.Chunk.ReqChunk
 import Language.Drasil.Chunk.Citation
 import Language.Drasil.Document
-import Language.Drasil.RefHelpers
 import Language.Drasil.Spec
 import Control.Lens ((^.), Simple, Lens)
 

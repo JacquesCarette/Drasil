@@ -382,5 +382,5 @@ executable swhs
   
 source-repository head
   type:     git
-  location: git://github.com/JacquesCarette/literate-scientific-software.git
+  location: git://github.com/JacquesCarette/Drasil.git
   subdir: code

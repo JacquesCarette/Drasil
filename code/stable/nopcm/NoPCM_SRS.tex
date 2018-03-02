@@ -285,7 +285,7 @@ This section simplifies the original problem and helps in developing the theoret
 \item[\refstepcounter{assumpnum}\atheassumpnum\label{A:assump9}:]The temperature of the heating coil does not vary along its length {[}\hyperref[DD:ht.flux.C]{Definition~DD:ht.flux.C}{]}.
 \end{description}
 \begin{description}
-\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:assump9\_npnc}:]The model only accounts for charging of the tank, not discharging. The temperature of the water can only increase, or remain constant; it cannot decrease. This implies that the initial temperature is less than (or equal to) the temperature of the heating coil {[}IM1, LC\ref{LC:likeChg3}{]}.
+\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:assump9.npnc}:]The model only accounts for charging of the tank, not discharging. The temperature of the water can only increase, or remain constant; it cannot decrease. This implies that the initial temperature is less than (or equal to) the temperature of the heating coil {[}IM1, LC\ref{LC:likeChg3}{]}.
 \end{description}
 \begin{description}
 \item[\refstepcounter{assumpnum}\atheassumpnum\label{A:assump14}:]The operating temperature range of the system is such that the water is always in liquid state. That is, the temperature will not drop below the melting point temperature of water, or rise above its boiling point temperature {[}IM1, IM3{]}.
@@ -545,7 +545,7 @@ This problem is small in size and relatively simple, so performance is not a pri
 \item[\refstepcounter{lcnum}\lcthelcnum\label{LC:likeChg3}:]A\ref{A:assump9} - The temperature of the heating coil will actually change along its length as the water within it cools.
 \end{description}
 \begin{description}
-\item[\refstepcounter{lcnum}\lcthelcnum\label{LC:likeChg3}:]A\ref{A:assump9\_npnc}- The model currently only accounts for charging of the tank. A more complete model would also account for discharging of the tank.
+\item[\refstepcounter{lcnum}\lcthelcnum\label{LC:likeChg3}:]A\ref{A:assump9.npnc}- The model currently only accounts for charging of the tank. A more complete model would also account for discharging of the tank.
 \end{description}
 \begin{description}
 \item[\refstepcounter{lcnum}\lcthelcnum\label{LC:likeChg6}:]A\ref{A:assump15} - Any real tank cannot be perfectly insulated and will lose heat.
@@ -601,7 +601,7 @@ R6 (R\ref{FR:req6}) &  & X &  &  &  &  &  &  &
 \end{longtable}
 \begin{longtable}{l l l l l l l l l l l l l l l}
 \toprule
- & A1 (A\ref{A:assump1}) & A2 (A\ref{A:assump2}) & A3 (A\ref{A:assump3}) & A4 (A\ref{A:assump4}) & A5 (A\ref{A:assump5}) & A6 (A\ref{A:assump7}) & A7 (A\ref{A:assump8}) & A8 (A\ref{A:assump9}) & A9 (A\ref{A:assump9\_npnc}) & A10 (A\ref{A:assump14}) & A11 (A\ref{A:assump15}) & A12 (A\ref{A:assump12}) & A13 (A\ref{A:assump13}) & A14 (A\ref{A:assump20})
+ & A1 (A\ref{A:assump1}) & A2 (A\ref{A:assump2}) & A3 (A\ref{A:assump3}) & A4 (A\ref{A:assump4}) & A5 (A\ref{A:assump5}) & A6 (A\ref{A:assump7}) & A7 (A\ref{A:assump8}) & A8 (A\ref{A:assump9}) & A9 (A\ref{A:assump9.npnc}) & A10 (A\ref{A:assump14}) & A11 (A\ref{A:assump15}) & A12 (A\ref{A:assump12}) & A13 (A\ref{A:assump13}) & A14 (A\ref{A:assump20})
 \\
 \midrule
 T1 (\hyperref[T:t1ConsThermE]{Definition~T:t1ConsThermE}) & X &  &  &  &  &  &  &  &  &  &  &  &  & 

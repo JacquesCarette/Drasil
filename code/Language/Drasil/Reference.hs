@@ -218,6 +218,12 @@ citationsFromBibMap :: BibMap -> [Citation]
 citationsFromBibMap bm = sortBy citeSort citations
   where citations :: [Citation]
         citations = map (\(x,_) -> x) (Map.elems bm)
+        
+assumptionsFromDB :: AssumpMap -> [AssumpChunk]
+assumptionsFromDB am = dropNums $ sortBy numSort assumptions
+  where numSort (_,a) (_,b) = compare a b
+        assumptions = Map.elems am
+        dropNums = map (\(x,_) -> x)
 
 repUnd :: Char -> String
 repUnd '_' = "."

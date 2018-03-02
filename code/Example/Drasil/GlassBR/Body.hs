@@ -100,20 +100,22 @@ mkSRS = RefSec (RefProg intro [TUnits, tsymb [TSPurpose, SymbOrder], TAandA]) :
     SystCons [] []]) :
   ScpOfProjSec (ScpOfProjProg (short gLassBR) (s5_1_table) (s5_2 (glaSlab)
     (capacity) (demandq) (probability))) :
-  SSDSec (SSDVerb s6) : {-
+  SSDSec (SSDVerb s6) : 
   SSDSec 
     (SSDProg
-      [SSDProblem  (PDProg start gLassBR ending [s6_1_1, s6_1_2, s6_1_3])
-      , SSDSolChSpec 
+      --[SSDProblem  (PDProg start gLassBR ending [s6_1_1, s6_1_2, s6_1_3])
+      --, 
+      [ SSDSolChSpec 
         (SCSProg
-          [ TMs ([Label] ++ stdFields) [t1IsSafe]
+          [ Assumptions ]
+          {-[ TMs ([Label] ++ stdFields) [t1IsSafe]
           , GDs [] [] HideDerivation -- No Gen Defs for GlassBR
           , DDs ([Label, Symbol, Units] ++ stdFields) dataDefns ShowDerivation
-          , IMs ([Label, Input, Output, InConstraints, OutConstraints] ++ stdFields) [probOfBreak, testIMFromQD] HideDerivation
-          ]
+          , IMs ([Label, Input, Output, InConstraints, OutConstraints] ++ stdFields) [probOfBreak, testIMFromQD] HideDerivation 
+          ] -}
         )
       ]
-    ) : -}
+    ) : 
   ReqrmntSec (ReqsProg [
     FReqsSub s7_1_list, 
     NonFReqsSub [performance] (gBRpriorityNFReqs)
@@ -459,7 +461,10 @@ s6_2_intro = foldlSP [S "This", phrase section_, S "explains all the",
 {--Assumptions--}
 
 s6_2_1_list :: [Contents]
-s6_2_1_list = acroNumGen assumptions 1
+s6_2_1_list = assumpList newAssumptions
+
+assumpList :: [AssumpChunk] -> [Contents]
+assumpList = map Assumption
 
 assumptions :: [Contents] -- FIXME: Remove this entirely and use new refs + docLang.
 assumptions = fst (foldr (\s (ls, n) -> ((mkAssump ("A" ++ show n) s) : ls, n-1))

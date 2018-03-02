@@ -183,7 +183,7 @@ data SolChSpec where
 -- | Solution Characteristics Specification subsections
 data SCSSub where
   SCSSubVerb  :: Section -> SCSSub
-  Assumptions :: {-Fields  ->-} Section -> Section -> Section -> Section -> Section -> [Contents] -> SCSSub --FIXME: temporary definition?
+  Assumptions :: SCSSub
   TMs         :: Fields  -> [TheoryModel] -> SCSSub
   GDs         :: Fields  -> [GenDefn] -> DerivationDisplay -> SCSSub
   DDs         :: Fields  -> [QDefinition] -> DerivationDisplay -> SCSSub --FIXME: Need DD intro
@@ -434,7 +434,9 @@ mkSolChSpec si (SCSProg l) =
       SRS.inModel (concat (map (\x -> instanceModel fields (_sysinfodb si') x : derivation x) ims)) [] : l'
     mkSubSCS si' (IMs fields ims _) l' = SRS.inModel 
       (map (instanceModel fields (_sysinfodb si')) ims) [] : l'
-    mkSubSCS _ (Assumptions r1 r2 r3 r4 r5 o) l' = (SSD.assumpF r1 r2 r3 r4 r5 o) : l'
+    mkSubSCS (SI {_refdb = db}) Assumptions l' = 
+      (SSD.assumpF tmStub gdStub ddStub imStub lcStub
+      (map Assumption $ assumptionsFromDB (db ^. assumpRefTable))) : l'
     mkSubSCS _ (Constraints a b c d) l' = (SSD.datConF a b c d) : l'
     inModSec = (SRS.inModel [Paragraph EmptyS] []) 
     --FIXME: inModSec should be replaced with a walk
@@ -443,6 +445,14 @@ mkSolChSpec si (SCSProg l) =
     -- then error out if necessary.
     
 {--}
+
+-- | Section stubs for implicit referencing
+tmStub, gdStub, ddStub, imStub, lcStub :: Section
+tmStub = SRS.thModel  [] []
+gdStub = SRS.genDefn  [] []
+ddStub = SRS.dataDefn [] []
+imStub = SRS.inModel  [] []
+lcStub = SRS.likeChg  [] []
 
 -- | Helper for making the 'Requirements' section
 mkReqrmntSec :: ReqrmntSec -> Section

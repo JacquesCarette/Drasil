@@ -140,7 +140,8 @@ module Language.Drasil (
   -- AssumpChunk
   , AssumpChunk, assuming, ac, ac'
   -- Referencing
-  , ReferenceDB(..), AssumpMap, assumpMap, assumpLookup, rdb, assumpRefTable 
+  , ReferenceDB(..), AssumpMap, assumpMap, assumpLookup, assumptionsFromDB
+  , rdb, assumpRefTable 
   , reqMap, HasAssumpRefs, HasReqRefs, reqRefTable, reqLookup, changeMap
   , HasChangeRefs, changeRefTable, changeLookup
   -- ReqChunk
@@ -222,7 +223,8 @@ import Language.Drasil.Spec (USymb(..), Sentence(..), Accent(..),
                               semiCol, sParenDash, sDash)
 import Language.Drasil.Reference (makeRef, acroTest, ReferenceDB(assumpDB, reqDB)
                                  , AssumpMap, assumpMap, assumpLookup, HasAssumpRefs
-                                 , assumpRefTable, rdb, reqMap, reqRefTable, reqLookup
+                                 , assumpRefTable, assumptionsFromDB
+                                 , rdb, reqMap, reqRefTable, reqLookup
                                  , HasReqRefs, Referable(..), changeMap
                                  , HasChangeRefs, changeRefTable, changeLookup)
 import Language.Drasil.Symbol (Symbol(..), sub, sup, vec, hat, prime, sCurlyBrSymb)

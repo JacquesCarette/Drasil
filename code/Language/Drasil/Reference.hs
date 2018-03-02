@@ -180,8 +180,8 @@ instance Referable Contents where
   rType (Defnt _ _ _)           = Def
   rType (Requirement r)         = rType r
   rType (Assumption a)          = rType a
-  rType (LikelyChange _)        = LC --rType lc
-  rType (UnlikelyChange _)      = UC --rType uc
+  rType (LikelyChange l)        = rType l --rType lc
+  rType (UnlikelyChange u)      = rType u --rType uc
   rType (Graph _ _ _ _ _)       = Fig
   rType (EqnBlock _ _)          = EqnB
   rType _                       = 

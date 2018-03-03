@@ -21,7 +21,10 @@ import Language.Drasil
 import Data.Drasil.Utils (foldle, foldle1, getES, fmtU, getRVal)
 import Data.Drasil.Concepts.Documentation
 import Data.Drasil.Concepts.Math (equation)
+
 import Control.Lens ((^.))
+import Data.Monoid (mconcat)
+import Data.List (intersperse)
 
 {--** Sentence Folding **--}
 -- | partial function application of foldle for sentences specifically
@@ -48,10 +51,7 @@ foldlSPCol = Paragraph . foldlSentCol
 
 -- | creates a list of elements seperated by commas, including the last element
 foldlsC :: [Sentence] -> Sentence
-foldlsC []       = EmptyS
-foldlsC [x]      = x
-foldlsC [x,y]    = x `sC` y
-foldlsC (x:y:xs) = foldle sC sC (x `sC` y) xs
+foldlsC = mconcat . intersperse (S ", ")
 
 -- | creates a list of elements seperated by commas, ending in a "_, and _"
 foldlList :: [Sentence] -> Sentence

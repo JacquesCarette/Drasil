@@ -13,7 +13,7 @@ module Data.Drasil.Utils
   , enumBullet
   , mkRefsList
   , mkInputDatTb
-  , getS, getES, getCS
+  , getES
   , getRVal
   , addPercent
   , weave
@@ -92,13 +92,9 @@ fmtUS num units  = num +:+ units
 fmtU :: (Quantity a) => Sentence -> a -> Sentence
 fmtU n u  = n +:+ (unwrap $ getUnit u)
 
--- | gets symbol from chunk
-getS :: (HasSymbol a) => Stage -> a -> Sentence
-getS st = P . symbol st
-
-getES, getCS :: Quantity q => q -> Sentence
-getES = getS Equational
-getCS = getS Implementation
+-- | gets 'presentation' symbol from chunk
+getES :: (HasSymbol a) => a -> Sentence
+getES = P . eqSymb
 
 -- | gets a reasonable or typical value from a Constrained chunk
 getRVal :: (Constrained c) => c -> Expr
@@ -138,7 +134,7 @@ makeTMatrix colName col row = zipSentList [] colName [zipFTable [] x row | x <- 
 mkInputDatTb :: (Quantity a) => [a] -> Contents
 mkInputDatTb inputVar = Table [titleize symbol_, titleize unit_, 
   S "Name"]
-  (mkTable [getS Equational, fmtU EmptyS, phrase] inputVar) 
+  (mkTable [getES , fmtU EmptyS, phrase] inputVar) 
   (S "Required" +:+ titleize' input_) True
 
 -- | makes sentences from an item and its reference 

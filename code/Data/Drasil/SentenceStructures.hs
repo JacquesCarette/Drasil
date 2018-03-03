@@ -13,7 +13,6 @@ module Data.Drasil.SentenceStructures
   , eqN
   , displayConstrntsAsSet
   , fmtInputConstr, fmtOutputConstr, physC, sfwrC, typUncr, rval
-  , extrctStrng
   , acroA, acroDD, acroGD, acroGS, acroIM, acroLC, acroPS, acroR, acroT
   ) where
 
@@ -196,10 +195,6 @@ eqN n = phrase equation +:+ sParen (S $ show n)
 --Produces a sentence that displays the constraints in a {}.
 displayConstrntsAsSet :: Quantity a => a -> [String] -> Sentence
 displayConstrntsAsSet sym listOfVals = E $ (C sym) `IsIn` (DiscreteS listOfVals)
-
-extrctStrng :: Sentence -> String
-extrctStrng (S strng) = strng
-extrctStrng _ = error "Invalid type extraction"
 
 {-BELOW IS TO BE MOVED TO EXAMPLE/DRASIL/SECTIONS-}
 

@@ -81,11 +81,6 @@ fmtCS _ EmptyS EmptyS = S "None"
 fmtCS symb a EmptyS   = symb +:+ a
 fmtCS symb a b        = symb +:+ a +:+ S "and" +:+ symb +:+ b
 
--- | formats numbers with units for tables
-fmtUS :: Sentence -> Sentence -> Sentence
-fmtUS num EmptyS = num
-fmtUS num units  = num +:+ units
-
 -- | takes a amount and adds a unit to it
 -- n - sentenc representing an amount
 -- u - unit we want to attach to amount
@@ -108,7 +103,7 @@ addPercent num = (S (show num) :+: (P (Special Percent)))
 
 -- | makes a list of sentence from sentences
 listConstS :: (Sentence, Sentence, Sentence, Sentence, Sentence) -> [Sentence]
-listConstS (symb, a, b, n, u) = [symb, fmtCS symb a b, fmtUS n u]
+listConstS (symb, a, b, n, u) = [symb, fmtCS symb a b, mappend n u]
 
 -- | appends a sentence to the front of a list of list of sentences
 zipSentList :: [[Sentence]] -> [Sentence] -> [[Sentence]] -> [[Sentence]] 

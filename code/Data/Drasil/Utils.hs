@@ -2,7 +2,6 @@ module Data.Drasil.Utils
   ( foldle
   , foldle1
   , mkEnumAbbrevList
-  , listConstS
   , zipFTable
   , zipSentList
   , makeTMatrix
@@ -74,12 +73,6 @@ mkRefsList s l = Enumeration $ Simple $ zip (enumWithSquBrk s) (map Flat l)
 enumWithSquBrk :: Integer -> [Sentence]
 enumWithSquBrk start = [sSqBr $ S $ show x | x <- [start..]]
 
--- | formats constraints on variables for tables
-fmtCS :: Sentence -> Sentence -> Sentence -> Sentence
-fmtCS _ EmptyS EmptyS = S "None"  
-fmtCS symb a EmptyS   = symb +:+ a
-fmtCS symb a b        = symb +:+ a +:+ S "and" +:+ symb +:+ b
-
 -- | takes a amount and adds a unit to it
 -- n - sentenc representing an amount
 -- u - unit we want to attach to amount
@@ -99,10 +92,6 @@ getRVal c = uns (c ^. reasVal)
 -- | outputs sentence with % attached to it
 addPercent :: Float ->  Sentence
 addPercent num = (S (show num) :+: (P (Special Percent)))
-
--- | makes a list of sentence from sentences
-listConstS :: (Sentence, Sentence, Sentence, Sentence, Sentence) -> [Sentence]
-listConstS (symb, a, b, n, u) = [symb, fmtCS symb a b, mappend n u]
 
 -- | appends a sentence to the front of a list of list of sentences
 zipSentList :: [[Sentence]] -> [Sentence] -> [[Sentence]] -> [[Sentence]] 

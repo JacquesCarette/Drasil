@@ -15,7 +15,6 @@ import Data.Drasil.Utils (getES, weave)
 import Data.Drasil.SentenceStructures (sAnd, foldlList, ofThe, acroGD, foldlSentCol)
 import Data.Drasil.Concepts.Documentation (assumption)
 import Data.Drasil.Quantities.Physics (time)
-import Drasil.SWHS.DataDefs(swhsSymbMapTRef)
 
 roc_temp_simp_deriv :: Derivation
 roc_temp_simp_deriv =
@@ -34,7 +33,7 @@ roc_temp_simp_deriv_sentences = map foldlSentCol [
 
 s4_2_3_desc1 :: RelationConcept -> UnitalChunk -> [Sentence]
 s4_2_3_desc1 t1c vo =
-  [S "Integrating", swhsSymbMapTRef t1c,
+  [S "Integrating", makeRef $ reldefn t1c,
   S "over a", phrase vo, sParen (getES vo) `sC` S "we have"]
 
 s4_2_3_desc2 :: ConceptChunk -> ConVar -> UnitalChunk -> UnitalChunk ->

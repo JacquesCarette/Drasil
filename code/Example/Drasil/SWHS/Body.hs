@@ -42,8 +42,7 @@ import Drasil.SWHS.Concepts (progName, sWHT, water, rightSide, phsChgMtrl,
   phase_change_material, tank_pcm)
 import Drasil.SWHS.TMods (tModels, t1ConsThermE, s4_2_2_swhsTMods)
 import Drasil.SWHS.IMods (s4_2_5_IMods)
-import Drasil.SWHS.DataDefs (swhsSymbMapDRef, swhsSymbMapTRef, swhsDataDefs,
-  dd1HtFluxC, dd2HtFluxP, swhsSymbMapT, s4_2_4_swhsDataDefs)
+import Drasil.SWHS.DataDefs (dd1HtFluxC, dd2HtFluxP, s4_2_4_swhsDataDefs, swhsDataDefs)
 import Drasil.SWHS.GenDefs (swhsGenDefs)
 import Drasil.SWHS.References (s9_swhs_citations)
 import Drasil.SWHS.Assumptions (s4_2_1_list, assump3, assump4, assump5,
@@ -352,7 +351,7 @@ s4_2_1 = assumpF
 -- SECTION 4.2.3 --
 -- General Definitions is automatically generated in solChSpecF
 s4_2_3_genDefs :: [Contents]
-s4_2_3_genDefs = map swhsSymbMapT swhsGenDefs
+s4_2_3_genDefs = map reldefn swhsGenDefs
 
 s4_2_3_deriv :: [Contents]
 s4_2_3_deriv = [s4_2_3_deriv_1 rOfChng temp,
@@ -385,7 +384,7 @@ s4_2_5 = inModelF s4_1
 
 s4_2_5_IModsWithDerivs :: [Contents]
 s4_2_5_IModsWithDerivs = concat $ weave [s4_2_5_derivations,
-  map (\x -> [swhsSymbMapT x]) s4_2_5_IMods]
+  map (\x -> [reldefn x]) s4_2_5_IMods]
 
 s4_2_5_derivations :: [[Contents]]
 s4_2_5_derivations = [s4_2_5_subpar solution temp_W temp_PCM pcm_E 
@@ -1025,7 +1024,7 @@ s4_2_3_deriv_1 roc tem = foldlSPCol [S "Detailed derivation of simplified",
   phrase roc, S "of", phrase tem]
 
 s4_2_3_deriv_2 :: RelationConcept -> UnitalChunk -> Contents
-s4_2_3_deriv_2 t1ct vo = foldlSPCol [S "Integrating", swhsSymbMapTRef t1ct,
+s4_2_3_deriv_2 t1ct vo = foldlSPCol [S "Integrating", makeRef $ reldefn t1ct,
   S "over a", phrase vo, sParen (getES vo) `sC` S "we have"]
 
 s4_2_3_deriv_3 = EqnBlock
@@ -1134,8 +1133,8 @@ s4_2_5_d1sent_1 roc temw en wa vo wvo wma hcw hfc hfp csa psa ht ta purin vhg
 
 s4_2_5_d1sent_2 :: QDefinition -> QDefinition -> UnitalChunk ->
   UnitalChunk -> [Sentence]
-s4_2_5_d1sent_2 d1hf d2hf hfc hfp = [S "Using", swhsSymbMapDRef d1hf `sAnd`
-  swhsSymbMapDRef d2hf, S "for", getES hfc `sAnd`
+s4_2_5_d1sent_2 d1hf d2hf hfc hfp = [S "Using", (makeRef $ datadefn d1hf) `sAnd`
+  (makeRef $ datadefn d2hf), S "for", getES hfc `sAnd`
   getES hfp, S "respectively, this can be written as"]
 
 s4_2_5_d1sent_3 :: UnitalChunk -> UncertQ -> [Sentence]
@@ -1204,7 +1203,7 @@ s4_2_5_d_eqn7 = (Deriv Total (C temp_W) time $= (1 / (C tau_W)) *
 -- Fractions in paragraph?
 
 s4_2_5_d2sent_1 :: QDefinition -> UnitalChunk -> [Sentence]
-s4_2_5_d2sent_1 d2hfp hfp = [S "Using", swhsSymbMapDRef d2hfp, S "for", 
+s4_2_5_d2sent_1 d2hfp hfp = [S "Using", makeRef $ datadefn d2hfp, S "for", 
   getES hfp `sC` S "this", phrase equation, S "can be written as"]
 
 s4_2_5_d2sent_2 :: [Sentence]
@@ -1358,7 +1357,7 @@ s4_2_7_deriv_1 lce ewat en co pcmat d1hfc d2hfp su ht  =
   phrase input_, S "from the", phrase co `sAnd` S "the",
   phrase en, phrase output_, S "to the" +:+. short pcmat,
   S "This can be shown as an", phrase equation, S "by taking",
-  swhsSymbMapDRef d1hfc `sAnd` swhsSymbMapDRef d2hfp `sC`
+  (makeRef $ datadefn d1hfc) `sAnd` (makeRef $ datadefn d2hfp) `sC`
   S "multiplying each by their respective", phrase su,
   S "area of", phrase ht `sC` S "and integrating each",
   S "over the", phrase sim_time `sC` S "as follows"]

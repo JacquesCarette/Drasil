@@ -25,8 +25,7 @@ import Drasil.SWHS.Unitals (w_vol, tank_length, tank_vol, tau_W, temp_W,
   deltaT, w_E, tank_length_min, tank_length_max, htTransCoeff_min,
   w_density_min, w_density_max, htCap_W_min, htCap_W_max, coil_HTC_min,
   coil_HTC_max, time_final_max, sim_time, coil_SA_max, eta)
-import Drasil.SWHS.DataDefs(swhsSymbMapDRef, swhsSymbMapTRef, dd1HtFluxC,
-  s4_2_4_DD1, swhsSymbMapT)
+import Drasil.SWHS.DataDefs(dd1HtFluxC, s4_2_4_DD1)
 import Drasil.SWHS.TMods (s4_2_2_T1, t1ConsThermE)
 import Drasil.SWHS.GenDefs (swhsGenDefs, nwtnCooling, rocTempSimp)
 import Drasil.SWHS.IMods (heatEInWtr)
@@ -265,10 +264,10 @@ s2_3 = charIntRdrF knowledge understanding sWHS EmptyS
   sSqBr (S "5")]-}
 
 s2_4_end :: CI -> CI -> CI -> Sentence
-s2_4_end im od pro = foldlSent_ [S "The", phrase im,
+s2_4_end im_ od pro = foldlSent_ [S "The", phrase im_,
   sParen (makeRef (SRS.inModel SRS.missingP [])),
   S "to be solved is referred to as" +:+. acroIM 1,
-  S "The", phrase im, S "provides the",
+  S "The", phrase im_, S "provides the",
   titleize od, sParen (short od), S "that model the"
   +:+. phrase pro, short pro, S "solves this", short od]
 
@@ -378,9 +377,9 @@ s4_1_3_list temw we = enumSimple 1 (short goalStmt) [
   
 s4_2 = solChSpecF progName (s4_1, s6) s4_2_4_intro_end (mid,
   dataConstraintUncertainty, end) (s4_2_1_list, acroNumGen s4_2_2_T1 1,
-  s4_2_3_paragraph M.rOfChng temp, acroNumGen s4_2_4_DD1 1,
-  [swhsSymbMapT eBalanceOnWtr] ++ (s4_2_5_d1startPara energy water) ++
-  s4_2_5_paragraph ++ [swhsSymbMapT heatEInWtr], [s4_2_6_table1, s4_2_6_table2])
+  s4_2_3_paragraph M.rOfChng temp, acroNumGen [s4_2_4_DD1] 1,
+  [reldefn eBalanceOnWtr] ++ (s4_2_5_d1startPara energy water) ++
+  s4_2_5_paragraph ++ [reldefn heatEInWtr], [s4_2_6_table1, s4_2_6_table2])
   []
   where
   mid = foldlSent [S "The", phrase column, S "for",
@@ -482,7 +481,7 @@ assump13 = mkAssump "assump13"
 
 
 s4_2_3_paragraph :: ConceptChunk -> ConceptChunk -> [Contents]
-s4_2_3_paragraph roc te = (map swhsSymbMapT swhsGenDefs) ++ [foldlSPCol
+s4_2_3_paragraph roc te = (map reldefn swhsGenDefs) ++ [foldlSPCol
   [S "Detailed derivation of simplified", phrase roc, S "of", phrase te]] ++
   (weave [s4_2_3_description, s4_2_3_equation])
 
@@ -497,7 +496,7 @@ s4_2_3_description = map foldlSPCol [
 
 s4_2_3_desc1 :: RelationConcept -> UnitalChunk -> [Sentence]
 s4_2_3_desc1 t1C vo =
-  [S "Integrating", swhsSymbMapTRef t1C,
+  [S "Integrating", makeRef $ reldefn t1C,
   S "over a", phrase vo, sParen (getES vo) `sC` S "we have"]
 
 s4_2_3_desc2 :: ConceptChunk -> ConVar -> UnitalChunk -> UnitalChunk ->
@@ -588,8 +587,7 @@ s4_2_5_desc1 roc temw en wa vo wv ma wm hcw ht hfc csa ta purin a11 vhg a12 =
   acroGD 2, S "can be written as"]
 
 s4_2_5_desc2 :: QDefinition -> [Sentence]
-s4_2_5_desc2 d1hf = [S "Using", swhsSymbMapDRef d1hf `sC`
-  S "this can be written as"]
+s4_2_5_desc2 d1hf = [S "Using", (makeRef $ datadefn d1hf) `sC` S "this can be written as"]
 
 s4_2_5_desc3 :: UnitalChunk -> UncertQ -> [Sentence]
 s4_2_5_desc3 wm hcw = [S "Dividing (3) by", getES wm :+: getES hcw `sC`

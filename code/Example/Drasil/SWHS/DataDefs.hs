@@ -11,23 +11,10 @@ import Data.Drasil.Concepts.Documentation (acroNumGen)
 import Data.Drasil.Quantities.Physics (time)
 import Data.Drasil.Quantities.PhysicalProperties (mass)
 import Data.Drasil.Quantities.Thermodynamics (latent_heat)
-import Data.Drasil.Utils (symbolMapFun, mkDataDef)
+import Data.Drasil.Utils (mkDataDef)
 
 swhsDataDefs :: [QDefinition]
 swhsDataDefs = [dd1HtFluxC, dd2HtFluxP, dd3HtFusion, dd4MeltFrac]
-
--- SYMBOL MAP HELPERS --
-swhsSymbMapD :: QDefinition -> Contents
-swhsSymbMapD = symbolMapFun Data
-
-swhsSymbMapT :: RelationConcept -> Contents
-swhsSymbMapT = symbolMapFun Theory
-
-swhsSymbMapDRef :: QDefinition -> Sentence
-swhsSymbMapDRef = makeRef . swhsSymbMapD
-
-swhsSymbMapTRef :: RelationConcept -> Sentence
-swhsSymbMapTRef = makeRef . swhsSymbMapT
 
 -- FIXME? This section looks strange. Some data defs are created using
 --    terms, some using defns, and some with a brand new description.
@@ -68,14 +55,13 @@ melt_frac_eqn = (C latentE_P) / ((C htFusion) * (C pcm_mass))
 --Need to add units to data definition descriptions
 
 s4_2_4_swhsDataDefs :: [Contents]
-s4_2_4_swhsDataDefs = acroNumGen (s4_2_4_DD1 ++ s4_2_4_DD2 ++
-  s4_2_4_DD3 ++ s4_2_4_DD4) 1
+s4_2_4_swhsDataDefs = acroNumGen [s4_2_4_DD1, s4_2_4_DD2, s4_2_4_DD3, s4_2_4_DD4] 1
 
-s4_2_4_DD1, s4_2_4_DD2, s4_2_4_DD3, s4_2_4_DD4 :: [Contents]
-s4_2_4_DD1 = map swhsSymbMapD [dd1HtFluxC]
-s4_2_4_DD2 = map swhsSymbMapD [dd2HtFluxP]
-s4_2_4_DD3 = map swhsSymbMapD [dd3HtFusion]
-s4_2_4_DD4 = map swhsSymbMapD [dd4MeltFrac]
+s4_2_4_DD1, s4_2_4_DD2, s4_2_4_DD3, s4_2_4_DD4 :: Contents
+s4_2_4_DD1 = datadefn dd1HtFluxC
+s4_2_4_DD2 = datadefn dd2HtFluxP
+s4_2_4_DD3 = datadefn dd3HtFusion
+s4_2_4_DD4 = datadefn dd4MeltFrac
 
 --Symbol appears as "Label"
 --There is no actual label

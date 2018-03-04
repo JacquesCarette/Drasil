@@ -19,7 +19,6 @@ module Data.Drasil.Utils
   , weave
   , fmtU
   , unwrap
-  , symbolMapFun
   , fterms , fterm
   , mkDataDef, mkDataDef'
   , prodUCTbl
@@ -169,11 +168,6 @@ weave = concat . transpose
 unwrap :: (Maybe UnitDefn) -> Sentence
 unwrap (Just a) = Sy (a ^. usymb)
 unwrap Nothing  = EmptyS
-
--- Using symbolMap from Extract
---FIXME: Not sure what type d should be
-symbolMapFun :: (a -> DType) -> a -> Contents
-symbolMapFun fun = Definition . fun
 
 -- Used to help make Qdefinitions when uid, term, and symbol come from the same source
 mkDataDef :: (Quantity c) => c -> Expr -> QDefinition

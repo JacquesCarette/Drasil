@@ -25,8 +25,7 @@ import Data.Drasil.SentenceStructures (foldlSent, isThe)
 import Drasil.SWHS.Unitals (melt_frac, tau, deltaT, htCap_V, htCap_S,
   htCap_L, vol_ht_gen, thFluxVect)
 import Drasil.SWHS.Concepts (transient)
-import Drasil.SWHS.DataDefs (swhsSymbMapDRef, dd3HtFusion, swhsSymbMapT,
-  swhsSymbMapTRef)
+import Drasil.SWHS.DataDefs (dd3HtFusion)
 
 tModels :: [RelationConcept]
 tModels = [t1ConsThermE, t2SensHtE, t3LatHtE]
@@ -39,7 +38,7 @@ s4_2_2_swhsTMods = acroNumGen (s4_2_2_T1 ++ s4_2_2_T2 ++ s4_2_2_T3) 1
 -------------------------
 
 s4_2_2_T1 :: [Contents]
-s4_2_2_T1 = map swhsSymbMapT [t1ConsThermE]
+s4_2_2_T1 = [reldefn t1ConsThermE]
 
 t1ConsThermE :: RelationConcept
 t1ConsThermE = makeRC "t1ConsThermE"
@@ -79,7 +78,7 @@ t1descr = foldlSent [
 -------------------------
 
 s4_2_2_T2 :: [Contents]
-s4_2_2_T2 = map swhsSymbMapT [t2SensHtE]
+s4_2_2_T2 = [reldefn t2SensHtE]
 
 t2SensHtE :: RelationConcept
 t2SensHtE = makeRC "t2SensHtE"
@@ -117,7 +116,7 @@ t2descr = foldlSent [
   getES temp :+: S "=" :+: getES boil_pt,
   S "or", getES temp :+: S "=" +. getES melt_pt,
   S "If this" `isThe` S "case, refer to",
-  swhsSymbMapTRef t3LatHtE `sC`
+  (makeRef $ reldefn t3LatHtE) `sC`
   at_start latent_heat, phrase energy]
  
 
@@ -133,7 +132,7 @@ t2descr = foldlSent [
 -------------------------
 
 s4_2_2_T3 :: [Contents]
-s4_2_2_T3 = map swhsSymbMapT [t3LatHtE]
+s4_2_2_T3 = [reldefn t3LatHtE]
 
 t3LatHtE :: RelationConcept
 t3LatHtE = makeRC "t3LatHtE"
@@ -162,7 +161,7 @@ t3descr = foldlSent [
   phrase phase_change, S "is not complete. The status of",
   S "the", phrase phase_change,
   S "depends on the", phrase melt_frac `sC`
-  swhsSymbMapDRef dd3HtFusion :+: S ".",
+  (makeRef $ datadefn dd3HtFusion) :+: S ".",
   getES melt_pt, S "and", getES boil_pt, S "are the",
   phrase melt_pt, S "and", phrase boil_pt `sC`
   S "respectively" +:+. sParen (Sy (unit_symb temp)),

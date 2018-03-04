@@ -266,9 +266,3 @@ missing = S "..."
 -- @compoundPhrase (t1 ^. term) (t2 ^. term)@
 fterms :: (NamedIdea c, NamedIdea d) => (NP -> NP -> t) -> c -> d -> t
 fterms f a b = f (a ^. term) (b ^. term)
-
---Just to keep the use of (^.) down a bit
--- | Apply a unary function to the term of a named idea, instead of the named
--- idea itself. Ex. @fterm titleize t1@ instead of @titleize $ t1 ^. term@
-fterm :: (NamedIdea c) => (NP -> t) -> c -> t
-fterm f t1 = f $ t1 ^. term

@@ -19,7 +19,7 @@ module Data.Drasil.Utils
   , weave
   , fmtU
   , unwrap
-  , fterms , fterm
+  , fterms
   , mkDataDef, mkDataDef'
   , prodUCTbl
   ) where

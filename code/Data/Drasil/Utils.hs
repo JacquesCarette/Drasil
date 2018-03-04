@@ -152,7 +152,7 @@ makeListRef l r = take (length l) $ repeat $ makeRef r
 
 -- | enumBullet apply Enumeration, Bullet and Flat to a list
 enumBullet ::[Sentence] -> Contents
-enumBullet f = Enumeration $ Bullet $ map (Flat) f
+enumBullet = Enumeration . Bullet . map Flat
 
 -- | enumSimple enumerates a list and applies simple and enumeration to it
 -- s - start index for the enumeration
@@ -163,7 +163,7 @@ enumSimple s t l = Enumeration $ Simple $ mkEnumAbbrevList s t l
 
 -- | interweaves two lists together [[a,b,c],[d,e,f]] -> [a,d,b,e,c,f]
 weave :: [[a]] -> [a]
-weave = (concat . transpose)
+weave = concat . transpose
 
 -- | get a unit symbol if there is one
 unwrap :: (Maybe UnitDefn) -> Sentence
@@ -173,7 +173,7 @@ unwrap Nothing  = EmptyS
 -- Using symbolMap from Extract
 --FIXME: Not sure what type d should be
 symbolMapFun :: (a -> DType) -> a -> Contents
-symbolMapFun fun = (Definition . fun)
+symbolMapFun fun = Definition . fun
 
 -- Used to help make Qdefinitions when uid, term, and symbol come from the same source
 mkDataDef :: (Quantity c) => c -> Expr -> QDefinition

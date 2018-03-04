@@ -423,8 +423,8 @@ s6_1_3_list_goalStmt1 = [foldlSent [S "Analyze" `sAnd` S "predict whether",
 
 s6_2 = solChSpecF gLassBR (s6_1, (SRS.likeChg SRS.missingP [])) EmptyS
  (EmptyS, dataConstraintUncertainty, end)
- (s6_2_1_list, map gbSymbMapT tModels, [], map gbSymbMapD dataDefns,
-  map gbSymbMapT iModels,
+ (s6_2_1_list, map reldefn tModels, [], map datadefn dataDefns,
+  map reldefn iModels,
   [s6_2_5_table1, s6_2_5_table2]) []
   where
     end = foldlSent [(makeRef (SRS.valsOfAuxCons SRS.missingP [])),
@@ -586,8 +586,8 @@ req4Desc = foldlSent [titleize output_, S "the", plural inQty,
   S "from", acroR 2]
 
 req5Desc cmd = foldlSent_ [S "If", (getES is_safe1) `sAnd` (getES is_safe2),
-  sParen (S "from" +:+ (makeRef (gbSymbMapT t1SafetyReq))
-  `sAnd` (makeRef (gbSymbMapT t2SafetyReq))), S "are true" `sC`
+  sParen (S "from" +:+ (makeRef (reldefn t1SafetyReq))
+  `sAnd` (makeRef (reldefn t2SafetyReq))), S "are true" `sC`
   phrase cmd, S "the", phrase message, Quote (safeMessage ^. defn),
   S "If the", phrase condition, S "is false, then", phrase cmd,
   S "the", phrase message, Quote (notSafe ^. defn)]
@@ -602,10 +602,10 @@ s7_1_req6 = [(Enumeration $ Simple $ [(acroR 6, Nested (titleize output_ +:+
   S "the following" +: plural quantity)
   (Bullet $
     map (\(a, d) -> Flat $ (at_start a) +:+ sParen (getES a) +:+
-    sParen (makeRef (gbSymbMapT d))) (zip testing testing1)
+    sParen (makeRef (reldefn d))) (zip testing testing1)
     ++
     map (\d -> Flat $ (at_start d) +:+ sParen (getES d) +:+
-    sParen (makeRef (gbSymbMapD d))) s7_1_req6_pulledList
+    sParen (makeRef (datadefn d))) s7_1_req6_pulledList
     ++
     [Flat $ (titleize aspectR) +:+ sParen (getES aspectR) +:+
     E (aspectRWithEqn^.equat)]

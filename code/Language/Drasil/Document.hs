@@ -164,3 +164,9 @@ fig l f = Figure l f 100
 -- | Figure smart constructor for customized max widths.
 figWithWidth :: Label -> Filepath -> MaxWidthPercent -> Contents
 figWithWidth = Figure
+
+datadefn :: QDefinition -> Contents
+datadefn qd = Definition $ Data qd
+
+reldefn :: RelationConcept -> Contents
+reldefn rc = Definition $ Theory rc

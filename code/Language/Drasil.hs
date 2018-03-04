@@ -79,6 +79,7 @@ module Language.Drasil (
   , LayoutObj(..), Document(..), DType(..), Section(..), Contents(..)
   , SecCons(..), ListType(..), ItemType(..), ListPair
   , section, fig, figWithWidth
+  , datadefn, reldefn
   -- Reference
   , makeRef, acroTest
   -- Space
@@ -141,6 +142,7 @@ import Language.Drasil.Output.Formats (DocType(SRS,MG,MIS,Website),DocSpec(DocSp
 import Language.Drasil.Document (LayoutObj(..), Document(..), DType(..)
   , Section(..), Contents(..), SecCons(..), ListType(..), ItemType(..)
   , section, fig, figWithWidth
+  , datadefn, reldefn
   , ListPair)
 import Language.Drasil.Recipe (Recipe(..))
 import Language.Drasil.Unicode -- all of it

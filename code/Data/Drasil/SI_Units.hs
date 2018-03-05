@@ -1,12 +1,11 @@
 module Data.Drasil.SI_Units where
-import Language.Drasil.Chunk.Concept (dcc)
+import Language.Drasil
+
+-- These are not normally all exported, but need them here. Should probably create
+-- some kind of Language.Drasil.Development module... FIXME
 import Language.Drasil.Unit (HasUnitSymbol(..), UDefn(..), FundUnit(..), DerUChunk(..),
   UnitDefn, new_unit, (^:), (/:), (*:), makeDerU, shift, scale,
   derUC, derUC', derUC'', unitWrapper)
-import Language.Drasil.Unicode (Special(Circle), Greek(Omega))
-import Language.Drasil.Symbol
-import Language.Drasil.Spec (USymb(..))
-import Language.Drasil.NounPhrase
 
 import Control.Lens ((^.))
 

@@ -42,6 +42,11 @@ module Language.Drasil (
   , Reason(..), TheoryConstraint(..)
   -- Chunk.Eq
   , QDefinition(..), fromEqn, fromEqn', fromEqn'', getVC, equat
+  -- Chunk.GenDefn
+  , GenDefn, gd, gdUnit
+  -- Chunk.InstanceModel
+  , InstanceModel
+  , inCons, outCons, imOutputs, imInputs, im, imQD
   -- Chunk.Quantity
   , Quantity(..), QuantityDict, qw, ConVar(..), cvR, cvRs
   , symbol
@@ -199,6 +204,8 @@ import Language.Drasil.Chunk.Constrained
 import Language.Drasil.Chunk.ConVar
 import Language.Drasil.Chunk.Eq (QDefinition(..), fromEqn, fromEqn', fromEqn'', getVC, equat, aqd)
 import Language.Drasil.Chunk.ExprRelat
+import Language.Drasil.Chunk.GenDefn
+import Language.Drasil.Chunk.InstanceModel
 import Language.Drasil.Chunk.NamedIdea
 import Language.Drasil.Chunk.Quantity
 import Language.Drasil.Chunk.Relation(NamedRelation, makeNR, RelationConcept, 

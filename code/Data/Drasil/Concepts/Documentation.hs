@@ -256,10 +256,6 @@ userCharacteristic           = compoundNC user characteristic
 userInput                    = compoundNC user input_
 vavPlan                      = compoundNC vav plan
 
--- extra utilities --
-missing :: Sentence
-missing = S "..."
-
 -- FIXME: fterms is here instead of Utils because of cyclic import
 -- | Apply a binary function to the terms of two named ideas, instead of to the named
 -- ideas themselves. Ex. @fterms compoundPhrase t1 t2@ instead of

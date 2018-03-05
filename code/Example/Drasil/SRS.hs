@@ -86,4 +86,4 @@ offShelfSol = section (titleize' Doc.offShelfSolution)
 
 --
 missingP :: [Contents]
-missingP = [Paragraph Doc.missing]
+missingP = [Paragraph $ S "..."]

@@ -5,7 +5,6 @@ import qualified Drasil.SRS as SRS
 
 import Drasil.DocumentLanguage
 import Drasil.DocumentLanguage.Definitions
-import Drasil.DocumentLanguage.Chunk.InstanceModel (imQD, InstanceModel)
 import Drasil.DocumentLanguage.RefHelpers 
 
 import Data.Drasil.SI_Units

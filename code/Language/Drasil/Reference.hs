@@ -13,6 +13,7 @@ import Prelude hiding (id)
 
 import Data.List (partition, sortBy)
 import qualified Data.Map as Map
+import Data.Function (on)
 
 -- | Create References to a given 'LayoutObj'
 makeRef :: (Referable l) => l -> Sentence
@@ -212,7 +213,7 @@ getDefName Instance   = "IM:"
 getDefName General    = "GD:"
 
 citeSort :: Citation -> Citation -> Ordering
-citeSort x y = compare (x ^. id) (y ^. id)
+citeSort = compare `on` (^. id)
 
 citationsFromBibMap :: BibMap -> [Citation]
 citationsFromBibMap bm = sortBy citeSort citations
@@ -220,10 +221,9 @@ citationsFromBibMap bm = sortBy citeSort citations
         citations = map (\(x,_) -> x) (Map.elems bm)
         
 assumptionsFromDB :: AssumpMap -> [AssumpChunk]
-assumptionsFromDB am = dropNums $ sortBy numSort assumptions
-  where numSort (_,a) (_,b) = compare a b
-        assumptions = Map.elems am
-        dropNums = map (\(x,_) -> x)
+assumptionsFromDB am = dropNums $ sortBy (compare `on` snd) assumptions
+  where assumptions = Map.elems am
+        dropNums = map fst
 
 repUnd :: Char -> String
 repUnd '_' = "."

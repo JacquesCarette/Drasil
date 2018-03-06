@@ -16,26 +16,36 @@ import qualified Data.Map as Map
 import Data.Function (on)
 
 -- | Create References to a given 'LayoutObj'
+-- This should not be exported to the end-user, but should be usable
+-- within the recipe (we want to force reference creation to check if the given
+-- item exists in our database of referable objects.
 makeRef :: (Referable l) => l -> Sentence
-makeRef r = Ref (rType r) (refAdd r) (refName r)
+makeRef r = customRef r (refName r)
+
+-- | Create a reference with a custom 'RefName'
+customRef :: (Referable l) => l -> Sentence -> Sentence
+customRef r n = Ref (rType r) (refAdd r) n
 
 -- | Database for internal references.
-data ReferenceDB = RDB 
+data ReferenceDB = RDB
   { assumpDB :: AssumpMap
   , reqDB :: ReqMap
-  , changeDB :: ChangeMap 
+  , changeDB :: ChangeMap
   , citationDB :: BibMap
   }
+  
+data RefBy = ByName
+           | ByNum -- If applicable
 
-rdb :: [AssumpChunk] -> [ReqChunk] -> [Change] -> BibRef -> 
+rdb :: [AssumpChunk] -> [ReqChunk] -> [Change] -> BibRef ->
   ReferenceDB
-rdb assumps reqs changes citations = RDB 
+rdb assumps reqs changes citations = RDB
   (assumpMap assumps)
   (reqMap reqs)
   (changeMap changes)
   (bibMap citations)
 
--- | Map for maintaining assumption references. 
+-- | Map for maintaining assumption references.
 -- The Int is that reference's number.
 -- Maintains access to both num and chunk for easy reference swapping
 -- between number and shortname when necessary (or use of number
@@ -49,46 +59,46 @@ assumpLookup :: Chunk c => c -> AssumpMap -> (AssumpChunk, Int)
 assumpLookup a m = let lookC = Map.lookup (a ^. id) m in
                    getS lookC
   where getS (Just x) = x
-        getS Nothing = error $ "Assumption: " ++ (a ^. id) ++ 
+        getS Nothing = error $ "Assumption: " ++ (a ^. id) ++
           " referencing information not found in Assumption Map"
 
--- | Map for maintaining requirement references. 
+-- | Map for maintaining requirement references.
 -- Similar to AssumpMap
 type ReqMap = Map.Map String (ReqChunk, Int)
 
 reqMap :: [ReqChunk] -> ReqMap
-reqMap rs = Map.fromList $ zip (map (^. id) (frs ++ nfrs)) ((zip frs [1..]) ++ 
+reqMap rs = Map.fromList $ zip (map (^. id) (frs ++ nfrs)) ((zip frs [1..]) ++
   (zip nfrs [1..]))
   where (frs, nfrs)  = partition (isFuncRec . reqType) rs
         isFuncRec FR = True
         isFuncRec _  = False
-        
+
 reqLookup :: Chunk c => c -> ReqMap -> (ReqChunk, Int)
 reqLookup r m = let lookC = Map.lookup (r ^. id) m in
                    getS lookC
   where getS (Just x) = x
-        getS Nothing = error $ "Requirement: " ++ (r ^. id) ++ 
+        getS Nothing = error $ "Requirement: " ++ (r ^. id) ++
           " referencing information not found in Requirement Map"
 
--- | Map for maintaining change references. 
+-- | Map for maintaining change references.
 -- Similar to AssumpMap
 type ChangeMap = Map.Map String (Change, Int)
 
 changeMap :: [Change] -> ChangeMap
-changeMap cs = Map.fromList $ zip (map (^. id) (lcs ++ ulcs)) 
+changeMap cs = Map.fromList $ zip (map (^. id) (lcs ++ ulcs))
   ((zip lcs [1..]) ++ (zip ulcs [1..]))
   where (lcs, ulcs) = partition (isLikely . chngType) cs
         isLikely Likely = True
         isLikely _ = False
-        
+
 changeLookup :: Chunk c => c -> ChangeMap -> (Change, Int)
 changeLookup c m = let lookC = Map.lookup (c ^. id) m in
                    getS lookC
   where getS (Just x) = x
-        getS Nothing = error $ "Change: " ++ (c ^. id) ++ 
+        getS Nothing = error $ "Change: " ++ (c ^. id) ++
           " referencing information not found in Change Map"
 
--- | Map for maintaining citation references. 
+-- | Map for maintaining citation references.
 -- Similar to AssumpMap.
 type BibMap = Map.Map String (Citation, Int)
 
@@ -97,66 +107,66 @@ bibMap cs = Map.fromList $ zip (map (^. id) scs) (zip scs [1..])
   where scs :: [Citation]
         scs = sortBy citeSort cs
         -- Sorting is necessary if using elems to pull all the citations
-        -- (as it sorts them and would change the order). 
+        -- (as it sorts them and would change the order).
         -- We can always change the sorting to whatever makes most sense
 
 -- Classes and instances --
 class HasAssumpRefs s where
   assumpRefTable :: Simple Lens s AssumpMap
-  
+
 instance HasAssumpRefs ReferenceDB where
   assumpRefTable f (RDB a b c d) = fmap (\x -> RDB x b c d) (f a)
-  
+
 class HasReqRefs s where
   reqRefTable :: Simple Lens s ReqMap
-  
+
 instance HasReqRefs ReferenceDB where
   reqRefTable f (RDB a b c d) = fmap (\x -> RDB a x c d) (f b)
-  
+
 class HasChangeRefs s where
   changeRefTable :: Simple Lens s ChangeMap
-  
+
 instance HasChangeRefs ReferenceDB where
   changeRefTable f (RDB a b c d) = fmap (\x -> RDB a b x d) (f c)
-  
+
 class HasCitationRefs s where
   citationRefTable :: Simple Lens s BibMap
-  
+
 instance HasCitationRefs ReferenceDB where
   citationRefTable f (RDB a b c d) = fmap (\x -> RDB a b c x) (f d)
-  
+
 class Referable s where
   refName :: s -> RefName -- Sentence; The text to be displayed for the link.
   refAdd  :: s -> String  -- The reference address (what we're linking to).
                           -- Should be string with no spaces/special chars.
   rType   :: s -> RefType -- The reference type (referencing namespace?)
-  
+
 instance Referable AssumpChunk where
   refName (AC _ _ sn _) = sn
   refAdd  x             = "A:" ++ concatMap repUnd (x ^. id)
   rType   _             = Assump
-  
+
 instance Referable ReqChunk where
   refName (RC _ _ _ sn _)   = sn
   refAdd  r@(RC _ rt _ _ _) = show rt ++ ":" ++ concatMap repUnd (r ^. id)
   rType   _                 = Req
-  
+
 instance Referable Change where
   refName (ChC _ _ _ sn _)     = sn
   refAdd r@(ChC _ rt _ _ _)    = show rt ++ ":" ++ concatMap repUnd (r ^. id)
   rType (ChC _ Likely _ _ _)   = LC
   rType (ChC _ Unlikely _ _ _) = UC
-  
+
 instance Referable Section where
   refName (Section t _ _) = t
   refAdd  (Section _ _ r) = "Sec:" ++ r
   rType   _               = Sect
-  
+
 instance Referable Citation where
   refName c = S $ citeID c
   refAdd c = concatMap repUnd $ citeID c -- citeID should be unique.
   rType _ = Cite
-  
+
 instance Referable Contents where
   refName (Table _ _ _ _ r)     = S "Table:" :+: S r
   refName (Figure _ _ _ r)      = S "Figure:" :+: S r
@@ -170,7 +180,7 @@ instance Referable Contents where
   refName (UnlikelyChange ucc)  = refName ucc
   refName (Enumeration _)       = error "Can't reference lists"
   refName (Paragraph _)         = error "Can't reference paragraphs"
-  refName (Bib _)               = error $ 
+  refName (Bib _)               = error $
     "Bibliography list of references cannot be referenced. " ++
     "You must reference the Section or an individual citation."
   rType (Table _ _ _ _ _)       = Tab
@@ -185,7 +195,7 @@ instance Referable Contents where
   rType (UnlikelyChange u)      = rType u --rType uc
   rType (Graph _ _ _ _ _)       = Fig
   rType (EqnBlock _ _)          = EqnB
-  rType _                       = 
+  rType _                       =
     error "Attempting to reference unimplemented reference type"
   refAdd (Table _ _ _ _ r)      = "Table:" ++ r
   refAdd (Figure _ _ _ r)       = "Figure:" ++ r
@@ -199,7 +209,7 @@ instance Referable Contents where
   refAdd (UnlikelyChange ucc)   = refAdd ucc
   refAdd (Enumeration _)        = error "Can't reference lists"
   refAdd (Paragraph _)          = error "Can't reference paragraphs"
-  refAdd (Bib _)                = error $ 
+  refAdd (Bib _)                = error $
     "Bibliography list of references cannot be referenced. " ++
     "You must reference the Section or an individual citation."
 
@@ -219,7 +229,7 @@ citationsFromBibMap :: BibMap -> [Citation]
 citationsFromBibMap bm = sortBy citeSort citations
   where citations :: [Citation]
         citations = map (\(x,_) -> x) (Map.elems bm)
-        
+
 assumptionsFromDB :: AssumpMap -> [AssumpChunk]
 assumptionsFromDB am = dropNums $ sortBy (compare `on` snd) assumptions
   where assumptions = Map.elems am

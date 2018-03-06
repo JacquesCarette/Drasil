@@ -62,7 +62,7 @@ module Language.Drasil (
   , NamedRelation, makeNR, RelationConcept, makeRC, makeRC', relat, ExprRelat
   --Chunk.Wrapper.????
   , cqs, CQSWrapper
-  --Chunk.UWrapper 
+  --Chunk.UWrapper
   , UWrapper, uw, ucw, UCWrapper
   -- Chunks w/ Attributes
   , Attribute(..), Attributes, attributes, getSource, aqd -- TODO: Remove aqd
@@ -146,9 +146,9 @@ module Language.Drasil (
   , AssumpChunk, assuming, ac, ac'
   -- Referencing
   , ReferenceDB(..), AssumpMap, assumpMap, assumpLookup, assumptionsFromDB
-  , rdb, assumpRefTable 
+  , rdb, assumpRefTable, customRef
   , reqMap, HasAssumpRefs, HasReqRefs, reqRefTable, reqLookup, changeMap
-  , HasChangeRefs, changeRefTable, changeLookup
+  , HasChangeRefs, changeRefTable, changeLookup, RefBy(..)
   -- ReqChunk
   , ReqChunk, ReqType(..), reqType, requires, frc, nfrc, rc'
   -- Change
@@ -157,7 +157,7 @@ module Language.Drasil (
 
 import Prelude hiding (log, sin, cos, tan, sqrt, id, return, print, break, exp, product)
 import Language.Drasil.SystemInformation
-import Language.Drasil.Expr (Expr(..), Relation, DerivType(..), 
+import Language.Drasil.Expr (Expr(..), Relation, DerivType(..),
           RealInterval(..), Inclusive(..),
           ($=), ($<), ($<=), ($>), ($>=), ($^), ($&&), ($||), ($=>), ($<=>), ($.))
 import Language.Drasil.Expr.Math (log, sin, cos, tan, sqrt, square, sec, csc, cot, exp,
@@ -208,7 +208,7 @@ import Language.Drasil.Chunk.GenDefn
 import Language.Drasil.Chunk.InstanceModel
 import Language.Drasil.Chunk.NamedIdea
 import Language.Drasil.Chunk.Quantity
-import Language.Drasil.Chunk.Relation(NamedRelation, makeNR, RelationConcept, 
+import Language.Drasil.Chunk.Relation(NamedRelation, makeNR, RelationConcept,
                                       makeRC, makeRC')
 import Language.Drasil.Chunk.ReqChunk(ReqChunk, ReqType(..), reqType, requires
                                      , frc, nfrc, rc')
@@ -225,14 +225,14 @@ import Language.Drasil.ChunkDB
 import Language.Drasil.NounPhrase hiding (at_start, at_start', titleize
                                           , titleize', phrase, plural)
 import Language.Drasil.Space (Space(..))
-import Language.Drasil.Spec (USymb(..), Sentence(..), Accent(..), 
+import Language.Drasil.Spec (USymb(..), Sentence(..), Accent(..),
                               sParen, sParenNum, sSqBr, sSqBrNum, sC, (+:+), (+:+.), (+.), (+:),
                               semiCol, sParenDash, sDash)
 import Language.Drasil.Reference (makeRef, acroTest, ReferenceDB(assumpDB, reqDB)
                                  , AssumpMap, assumpMap, assumpLookup, HasAssumpRefs
                                  , assumpRefTable, assumptionsFromDB
-                                 , rdb, reqMap, reqRefTable, reqLookup
-                                 , HasReqRefs, Referable(..), changeMap
+                                 , rdb, reqMap, reqRefTable, reqLookup, RefBy(..)
+                                 , HasReqRefs, Referable(..), changeMap, customRef
                                  , HasChangeRefs, changeRefTable, changeLookup)
 import Language.Drasil.Symbol (Symbol(..), sub, sup, vec, hat, prime, sCurlyBrSymb)
 import Language.Drasil.SymbolAlphabet

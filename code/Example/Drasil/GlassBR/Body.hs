@@ -100,7 +100,7 @@ mkSRS = RefSec (RefProg intro [TUnits, tsymb [TSPurpose, SymbOrder], TAandA]) :
   ScpOfProjSec (ScpOfProjProg (short gLassBR) (s5_1_table) (s5_2 (glaSlab)
     (capacity) (demandq) (probability))) :
   SSDSec (SSDVerb s6) : 
-  SSDSec 
+  {- SSDSec 
     (SSDProg
       --[SSDProblem  (PDProg start gLassBR ending [s6_1_1, s6_1_2, s6_1_3])
       --, 
@@ -114,7 +114,7 @@ mkSRS = RefSec (RefProg intro [TUnits, tsymb [TSPurpose, SymbOrder], TAandA]) :
           ] -}
         )
       ]
-    ) : 
+    ) :  -}
   ReqrmntSec (ReqsProg [
     FReqsSub s7_1_list, 
     NonFReqsSub [performance] (gBRpriorityNFReqs)

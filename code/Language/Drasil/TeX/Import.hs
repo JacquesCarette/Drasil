@@ -79,7 +79,6 @@ bfunc (DotProduct a b)  sm = P.BOp P.Dot  (expr a sm) (expr b sm)
 bfunc (Divide a b)      sm = P.BOp P.Frac (replace_divs sm a) (replace_divs sm b)
 bfunc (Index a i)       sm = P.BOp P.Index (expr a sm) (expr i sm)
 
-
 eop :: HasSymbolTable ctx => EOperator -> ctx -> (P.Function, P.Expr)
 eop (Summation (IntegerDD v (BoundedR l h)) e) sm =
   (P.Summation (Just ((v, expr l sm), expr h sm)), (expr e sm))
@@ -226,8 +225,8 @@ makePairs :: HasSymbolTable ctx => ctx -> DType -> [(String,[T.LayoutObj])]
 makePairs m (Data c) = [
   ("Label",       [T.Paragraph $ spec m (titleize $ c ^. term)]),
   ("Units",       [T.Paragraph $ spec m (unit'2Contents c)]),
-  ("Equation",    [eqnStyleDD $ buildEqn c m]),
-  ("Description", [T.Paragraph (buildDDDescription c m)])
+  ("Equation",    [eqnStyleDD  $ buildEqn m c]),
+  ("Description", [T.Paragraph $ buildDDDescription m c])
   ]
 makePairs m (Theory c) = [
   ("Label",       [T.Paragraph $ spec m (titleize $ c ^. term)]),
@@ -247,21 +246,18 @@ eqnStyleDD = if numberedDDEquations then T.EqnBlock else T.Paragraph
 eqnStyleTM :: T.Contents -> T.LayoutObj
 eqnStyleTM = if numberedTMEquations then T.EqnBlock else T.Paragraph
 
-buildEqn :: HasSymbolTable ctx => QDefinition -> ctx -> T.Spec
-buildEqn c sm = T.N (eqSymb c) T.:+: T.S " = " T.:+:
+buildEqn :: HasSymbolTable ctx => ctx -> QDefinition -> T.Spec
+buildEqn sm c = T.N (eqSymb c) T.:+: T.S " = " T.:+:
   T.E (expr (c^.equat) sm)
 
 -- Build descriptions in data defs based on required verbosity
-buildDDDescription :: HasSymbolTable ctx => QDefinition -> ctx -> T.Spec
-buildDDDescription c m = descLines m
-  (if verboseDDDescription then (vars (getQ c $= c^.equat) m) else [])
-  where getQ (EC a _ _) = C a
+buildDDDescription :: HasSymbolTable ctx => ctx -> QDefinition -> T.Spec
+buildDDDescription m c = descLines m
+  (if verboseDDDescription then vars (C c $= c^.equat) m else [])
 
 descLines :: (HasSymbolTable ctx, Quantity q) => ctx -> [q] -> T.Spec
 descLines _ []      = error "No chunks to describe"
 descLines m (vc:[]) = (T.N (eqSymb vc) T.:+:
   (T.S " is the " T.:+: (spec m (phrase $ vc ^. term)) T.:+:
-   unWrp (getUnitLup vc m)))
-  where unWrp (Just a) = T.S " (" T.:+: T.Sy (a ^. usymb) T.:+: T.S ")"
-        unWrp Nothing  = T.S ""
+   maybe (T.S "") (\a -> T.S " (" T.:+: T.Sy (a ^. usymb) T.:+: T.S ")") (getUnitLup vc m)))
 descLines m (vc:vcs) = descLines m (vc:[]) T.:+: T.HARDNL T.:+: descLines m vcs

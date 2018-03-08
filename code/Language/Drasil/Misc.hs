@@ -7,10 +7,6 @@ import Language.Drasil.Chunk.NamedIdea (NamedIdea, Idea, short, term)
 import Language.Drasil.Chunk.Unitary
 import qualified Language.Drasil.NounPhrase as NP
 
---import Data.List (delete)
---import Language.Drasil.ChunkDB 
---import Language.Drasil.Chunk.SymbolForm
-
 import Control.Lens ((^.))
 
 {- |

@@ -1,6 +1,6 @@
 module Language.Drasil.Printing.AST where
 
-import Language.Drasil.Expr (Oper(..))
+import Language.Drasil.Expr (Oper(..),UFunc)
 import Language.Drasil.Symbol (Symbol)
 import Language.Drasil.Space (Space)
 
@@ -15,28 +15,16 @@ data Expr = Dbl   Double
           | Sym   Symbol
           | Call  Expr [Expr]
           | Case  [(Expr,Expr)]
-          | Op Function [Expr]
+          | UOp   UFunc Expr
           | Grouping Expr
+          | Funct Functional Expr
           | IsIn  Expr Space
           | Mtx [[Expr]]
           
-data Function = Log
-           | Summation (Maybe ((Symbol, Expr),Expr))
-           | Abs
-           | Norm
-           | Integral ((Maybe Expr),(Maybe Expr)) Symbol
-           | Sin
-           | Cos
-           | Tan
-           | Sec
-           | Csc
-           | Cot
-           | Product (Maybe ((Symbol, Expr), Expr))
-           | Exp
-           | Sqrt
-           | Not
-           | Neg
-           | Dim
+data Functional = 
+            Summation (Maybe ((Symbol, Expr),Expr))
+          | Integral ((Maybe Expr),(Maybe Expr)) Symbol
+          | Product (Maybe ((Symbol, Expr), Expr))
 
 prec :: Oper -> Int
 prec Mul = 3

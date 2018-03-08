@@ -5,7 +5,7 @@ import Data.List (intersperse, sort)
 import Text.PrettyPrint hiding (render, quotes, Str)
 import Numeric (showFFloat)
 
-import Language.Drasil.Expr (Oper(..))
+import Language.Drasil.Expr (Oper(..),UFunc(..))
 import Language.Drasil.HTML.Import (makeDocument, spec)
 import Language.Drasil.Printing.AST
 import Language.Drasil.HTML.AST
@@ -155,10 +155,11 @@ p_expr (BOp LEq a b)  = p_expr a ++ "&thinsp;&le;&thinsp;" ++ p_expr b
 p_expr (BOp GEq a b)  = p_expr a ++ "&thinsp;&ge;&thinsp;" ++ p_expr b
 p_expr (BOp Dot a b)  = p_expr a ++ "&sdot;" ++ p_expr b
 p_expr (BOp Cross a b) = p_expr a ++ "&#10799;" ++ p_expr b
-p_expr (Op Neg [a])    = neg a
+p_expr (UOp Neg a)    = neg a
+p_expr (Funct f e)    = p_op f e
 p_expr (Call f x) = p_expr f ++ paren (concat $ intersperse "," $ map p_expr x)
 p_expr (Case ps)  = cases ps (p_expr)
-p_expr (Op f es)  = p_op f es
+p_expr (UOp f es)  = p_uop f es
 p_expr (Grouping e) = paren (p_expr e)
 p_expr (Mtx a)    = "<table class=\"matrix\">\n" ++ p_matrix a ++ "</table>"
 p_expr (BOp Index a i)= p_indx a i
@@ -219,7 +220,8 @@ neg :: Expr -> String
 neg a@(Dbl     _)     = minus a
 neg a@(Int     _)     = minus a
 neg a@(Sym     _)     = minus a
-neg a@(Op    _ _)     = minus a
+neg a@(UOp   _ _)     = minus a
+neg a@(Funct _ _)     = minus a
 neg a@(Assoc Mul _)   = minus a
 neg a@(BOp Index _ _) = minus a
 neg a               = "&minus;" ++ paren (p_expr a)
@@ -329,45 +331,41 @@ makeFigure r c f wp = refwrap r (image f c wp $$ caption c)
 ------------------BEGIN EXPR OP PRINTING-------------------------
 -----------------------------------------------------------------
 -- | Renders expression operations/functions. 
-p_op :: Function -> [Expr] -> String
-p_op f@(Summation bs) (x:[]) = lrgOp f bs ++ paren (p_expr x)
-p_op (Summation _) _ = error "Something went wrong with a summation"
-p_op f@(Product bs) (x:[]) = lrgOp f bs ++ paren (p_expr x)
-p_op (Product _) _ = error "Something went wrong with a product"
-p_op f@(Integral bs wrtc) (x:[]) = intg f bs
-  {-show f ++ makeIBound bs-} 
+p_op :: Functional -> Expr -> String
+p_op (Summation bs) x = lrgOp "&sum;" bs ++ paren (p_expr x)
+p_op (Product bs) x = lrgOp "&prod;" bs ++ paren (p_expr x)
+p_op (Integral bs wrtc) x = intg bs
   ++ paren (p_expr x ++ (symbol (Atomic "d") ++ "&#8239;" ++ symbol wrtc))
-p_op (Integral _ _) _  = error "Something went wrong with an integral" 
-p_op Abs (x:[]) = "|" ++ p_expr x ++ "|"
-p_op Abs _ = error "Abs should only take one expr."
-p_op Norm (x:[]) = "||" ++ p_expr x ++ "||"
-p_op Norm _ = error "Norm should only take on expression."
-p_op Not (a:[])    = "&not;" ++ p_expr a
-p_op f@(Exp) (x:[]) = function f ++ sup (p_expr x)
-p_op f (x:[]) = function f ++ paren (p_expr x) --Unary ops, this will change once more complicated functions appear.
-p_op _ _ = error "Something went wrong with an operation"
+
+p_uop :: UFunc -> Expr -> String
+p_uop Abs x = "|" ++ p_expr x ++ "|"
+p_uop Norm x = "||" ++ p_expr x ++ "||"
+p_uop Not a    = "&not;" ++ p_expr a
+p_uop f@(Exp) x = function f ++ sup (p_expr x)
+p_uop f x = function f ++ paren (p_expr x) --Unary ops, this will change once more complicated functions appear.
 
 
 -- | Helpers for summation/product, used by 'p_op'
 makeBound :: String -> String
 makeBound s = "<tr><td><span class=\"bound\">" ++ s ++ "</span></td></tr>\n"
 
-lrgOp :: Function -> Maybe ((Symbol, Expr),Expr) -> String
-lrgOp f Nothing = "<span class=\"symb\">" ++ function f ++ "</span>"
+lrgOp :: String -> Maybe ((Symbol, Expr),Expr) -> String
+lrgOp f Nothing = "<span class=\"symb\">" ++ f ++ "</span>"
 lrgOp f (Just ((s,v),hi)) = "<table class=\"operator\">\n" ++ makeBound (p_expr hi) ++
-  "<tr><td><span class=\"symb\">" ++ function f ++ "</span></td></tr>\n" ++
+  "<tr><td><span class=\"symb\">" ++ f ++ "</span></td></tr>\n" ++
   makeBound (symbol s ++"="++ p_expr v) ++ "</table>"
 
-intg :: Function -> (Maybe Expr, Maybe Expr) -> String
-intg f (Nothing, Nothing) = "<span class=\"symb\">" ++ function f ++ "</span>"
-intg f (Just l, Nothing) = "<span class=\"symb\">" ++ function f ++ "</span>" ++ sub (p_expr l ++ " ")
-intg f (low,high) = "<table class=\"operator\">\n" ++ pHigh high ++
-  "<tr><td><span class=\"symb\">" ++ function f ++ "</span></td></tr>\n" ++
+intg :: (Maybe Expr, Maybe Expr) -> String
+intg (Nothing, Nothing) = "<span class=\"symb\">&int;</span>"
+intg (Just l, Nothing) = "<span class=\"symb\">&int;</span>" ++ sub (p_expr l ++ " ")
+intg (low,high) = "<table class=\"operator\">\n" ++ pHigh high ++
+  "<tr><td><span class=\"symb\">&int;</span></td></tr>\n" ++
   pLow low ++ "</table>"
   where pLow Nothing   = ""
         pLow (Just l)  = makeBound (p_expr l)
         pHigh Nothing  = ""
         pHigh (Just hi) = makeBound (p_expr hi)
+
 -- | Helper for integration bound creation, used by 'p_op'
 makeIBound :: (Maybe Expr, Maybe Expr) -> String
 makeIBound (Just low, Just high) = sub (p_expr low) ++ sup (p_expr high)
@@ -375,13 +373,10 @@ makeIBound (Just low, Nothing)   = sub (p_expr low)
 makeIBound (Nothing, Just high)  = sup (p_expr high)
 makeIBound (Nothing, Nothing)    = ""
 
-function :: Function -> String
+function :: UFunc -> String
 function Log            = "log"
-function (Summation _)  = "&sum;"
-function (Product _)    = "&prod;"
 function Abs            = ""
 function Norm           = ""
-function (Integral _ _) = "&int;"
 function Sin            = "sin"
 function Cos            = "cos"
 function Tan            = "tan"

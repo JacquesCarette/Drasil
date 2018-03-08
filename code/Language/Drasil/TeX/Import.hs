@@ -2,7 +2,7 @@ module Language.Drasil.TeX.Import where
 
 import Control.Lens ((^.))
 import Prelude hiding (id)
-import Language.Drasil.Expr (Expr(..), UFunc(..), BiFunc(..), Oper(..),
+import Language.Drasil.Expr (Expr(..), BiFunc(..), Oper(..),
     DerivType(..), EOperator(..), ($=), RealRange(..), DomainDesc(..))
 import Language.Drasil.Expr.Extract
 import Language.Drasil.Spec
@@ -41,28 +41,11 @@ expr (Case ps)         sm = if length ps < 2 then
         error "Attempting to use multi-case expr incorrectly"
         else P.Case (zip (map (flip expr sm . fst) ps) (map (flip expr sm . snd) ps))
 expr (Matrix a)        sm = P.Mtx $ map (map (flip expr sm)) a
-expr (UnaryOp o u)     sm = P.Op (ufunc o) [expr u sm]
+expr (UnaryOp o u)     sm = P.UOp o $ expr u sm
+expr (EOp o)           sm = eop o sm
 expr (Grouping e)      sm = P.Grouping (expr e sm)
 expr (BinaryOp b)      sm = bfunc b sm
-expr (EOp o)           sm = (\(x,y) -> P.Op x [y]) (eop o sm)
 expr (IsIn  a b)       sm = P.IsIn  (expr a sm) b
-
--- | Helper function for translating 'UFunc's
-ufunc :: UFunc -> P.Function
-ufunc Abs  = P.Abs
-ufunc Norm = P.Norm
-ufunc Log  = P.Log
-ufunc Sin  = P.Sin
-ufunc Cos  = P.Cos
-ufunc Tan  = P.Tan
-ufunc Sec  = P.Sec
-ufunc Csc  = P.Csc
-ufunc Cot  = P.Cot
-ufunc Exp  = P.Exp
-ufunc Sqrt = P.Sqrt
-ufunc Not  = P.Not
-ufunc Neg  = P.Neg
-ufunc Dim  = P.Dim
 
 bfunc :: HasSymbolTable ctx => BiFunc -> ctx -> P.Expr
 bfunc (Cross e1 e2)     sm = P.BOp P.Cross (expr e1 sm) (expr e2 sm)
@@ -80,19 +63,19 @@ bfunc (DotProduct a b)  sm = P.BOp P.Dot  (expr a sm) (expr b sm)
 bfunc (Divide a b)      sm = P.BOp P.Frac (replace_divs sm a) (replace_divs sm b)
 bfunc (Index a i)       sm = P.BOp P.Index (expr a sm) (expr i sm)
 
-eop :: HasSymbolTable ctx => EOperator -> ctx -> (P.Function, P.Expr)
+eop :: HasSymbolTable ctx => EOperator -> ctx -> P.Expr
 eop (Summation (IntegerDD v (BoundedR l h)) e) sm =
-  (P.Summation (Just ((v, expr l sm), expr h sm)), (expr e sm))
-eop (Summation (All _) e) sm = (P.Summation Nothing,(expr e sm))
+  P.Funct (P.Summation (Just ((v, expr l sm), expr h sm))) (expr e sm)
+eop (Summation (All _) e) sm = P.Funct (P.Summation Nothing) (expr e sm)
 eop (Summation(RealDD _ _) _) _ = error "TeX/Import.hs Summation cannot be over Real"
 eop (Product (IntegerDD v (BoundedR l h)) e) sm =
-  (P.Product (Just ((v, expr l sm), expr h sm)), expr e sm)
-eop (Product (All _) e) sm = (P.Product Nothing, (expr e sm))
+  P.Funct (P.Product (Just ((v, expr l sm), expr h sm))) (expr e sm)
+eop (Product (All _) e) sm = P.Funct (P.Product Nothing) (expr e sm)
 eop (Product (RealDD _ _) _) _ = error "TeX/Import.hs Product cannot be over Real"
 eop (Integral (RealDD v (BoundedR l h)) e) sm =
-  (P.Integral (Just (expr l sm), Just (expr h sm)) v, expr e sm)
+  P.Funct (P.Integral (Just (expr l sm), Just (expr h sm)) v) (expr e sm)
 eop (Integral (All v) e) sm =
-  (P.Integral (Just (P.Sym v), Nothing) v, expr e sm)
+  P.Funct (P.Integral (Just (P.Sym v), Nothing) v) (expr e sm)
 eop (Integral (IntegerDD _ _) _) _ =
   error "TeX/Import.hs Integral cannot be over Integers"
 

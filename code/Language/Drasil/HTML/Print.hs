@@ -45,24 +45,24 @@ build fn (Document t a c) sm =
   ))
 
 -- | Helper for rendering LayoutObjects into HTML
-printLO :: HasSymbolTable s => LayoutObj -> s -> Doc
-printLO (HDiv ts layoutObs l)  sm = refwrap (p_spec l sm) $
-                                   div_tag ts (vcat (map (flip printLO sm) layoutObs))
-printLO (Paragraph contents)   sm = paragraph $ text (p_spec contents sm)
-printLO (Tagless contents)     sm = text $ p_spec contents sm
-printLO (Table ts rows r b t)  sm = makeTable ts rows (p_spec r sm) b (p_spec t sm) sm
-printLO (Definition dt ssPs l) sm = makeDefn dt ssPs (p_spec l sm) sm
-printLO (Header n contents)    sm = h n $ text (p_spec contents sm)
-printLO (List t)               sm = makeList t sm
-printLO (Figure r c f wp)      sm = makeFigure (p_spec r sm) (p_spec c sm) f wp
-printLO (ALUR _ x l id)        sm = makeRefList (p_spec x sm) (p_spec l sm) (p_spec id sm)
-printLO (Bib bib)              sm = makeBib sm bib
+printLO :: HasSymbolTable s => s -> LayoutObj -> Doc
+printLO sm (HDiv ts layoutObs l)  = refwrap (p_spec l sm) $
+                                   div_tag ts (vcat (map (printLO sm) layoutObs))
+printLO sm (Paragraph contents)   = paragraph $ text (p_spec contents sm)
+printLO sm (Tagless contents)     = text $ p_spec contents sm
+printLO sm (Table ts rows r b t)  = makeTable ts rows (p_spec r sm) b (p_spec t sm) sm
+printLO sm (Definition dt ssPs l) = makeDefn dt ssPs (p_spec l sm) sm
+printLO sm (Header n contents)    = h n $ text (p_spec contents sm)
+printLO sm (List t)               = makeList t sm
+printLO sm (Figure r c f wp)      = makeFigure (p_spec r sm) (p_spec c sm) f wp
+printLO sm (ALUR _ x l id)        = makeRefList (p_spec x sm) (p_spec l sm) (p_spec id sm)
+printLO sm (Bib bib)              = makeBib sm bib
 
 
 -- | Called by build, uses 'printLO' to render the layout
 -- objects in Doc format.
 print :: HasSymbolTable s => [LayoutObj] -> s -> Doc
-print l sm = foldr ($$) empty $ map (flip printLO sm) l
+print l sm = foldr ($$) empty $ map (printLO sm) l
 
 -----------------------------------------------------------------
 --------------------BEGIN SPEC PRINTING--------------------------
@@ -292,8 +292,8 @@ makeDefn dt ps l sm = refwrap l $ wrap "table" [dtag dt] (makeDRows ps sm)
 -- | Helper for making the definition table rows
 makeDRows :: HasSymbolTable s => [(String,[LayoutObj])] -> s -> Doc
 makeDRows []          _ = error "No fields to create defn table"
-makeDRows ((f,d):[]) sm = tr (th (text f) $$ td (vcat $ map (flip printLO sm) d))
-makeDRows ((f,d):ps) sm = tr (th (text f) $$ td (vcat $ map (flip printLO sm) d)) $$ makeDRows ps sm
+makeDRows ((f,d):[]) sm = tr (th (text f) $$ td (vcat $ map (printLO sm) d))
+makeDRows ((f,d):ps) sm = tr (th (text f) $$ td (vcat $ map (printLO sm) d)) $$ makeDRows ps sm
 
 -----------------------------------------------------------------
 ------------------BEGIN LIST PRINTING----------------------------

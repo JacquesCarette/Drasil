@@ -26,10 +26,7 @@ import Language.Drasil.ChunkDB (HasSymbolTable)
 import Language.Drasil.Space (Space(..))
 
 genTeX :: HasSymbolTable ctx => L.Document -> ctx -> TP.Doc
-genTeX doc sm = runPrint (build sm $ I.makeDocument sm doc) Text
-
-build :: HasSymbolTable s => s -> Document -> D
-build sm doc  = buildStd sm doc
+genTeX doc sm = runPrint (buildStd sm $ I.makeDocument sm doc) Text
 
 buildStd :: HasSymbolTable s => s -> Document -> D
 buildStd sm (Document t a c) =
@@ -58,7 +55,6 @@ lo (Graph ps w h c l)   _  = toText $ makeGraph
   (pure $ text $ maybe "" (\x -> "text width = " ++ show x ++ "em ,") w)
   (pure $ text $ maybe "" (\x -> "minimum height = " ++ show x ++ "em, ") h)
   (spec c) (spec l)
-
 
 print :: HasSymbolTable s => s -> [LayoutObj] -> D
 print sm l = foldr ($+$) empty $ map (flip lo sm) l
@@ -178,7 +174,6 @@ p_in [] = ""
 p_in [x] = p_expr x
 p_in (x:xs) = p_in [x] ++ " & " ++ p_in xs
 
-
 -- | Helper for properly rendering multiplication of expressions
 mul :: [ Expr ] -> String
 mul = concat . intersperse " " . map mulParen
@@ -200,7 +195,6 @@ neg :: Expr -> String
 neg x@(Dbl _) = "-" ++ p_expr x
 neg x@(Int _) = "-" ++ p_expr x
 neg x@(Sym _) = "-" ++ p_expr x
--- neg x@(Neg _) = "-" ++ p_expr x
 neg x         = paren ("-" ++ p_expr x)
 
 pow :: Expr -> Expr -> String
@@ -421,10 +415,10 @@ makeEquation contents = toEqn (spec contents)
 -----------------------------------------------------------------
 
 makeList :: ListType -> D
-makeList (Simple items) = itemize   $ vcat (sim_item items)
-makeList (Desc items)   = description $ vcat (sim_item items)
-makeList (Item items)   = itemize   $ vcat (map p_item items)
-makeList (Enum items)   = enumerate $ vcat (map p_item items)
+makeList (Simple items)      = itemize     $ vcat (sim_item items)
+makeList (Desc items)        = description $ vcat (sim_item items)
+makeList (Item items)        = itemize     $ vcat (map p_item items)
+makeList (Enum items)        = enumerate   $ vcat (map p_item items)
 makeList (Definitions items) = description $ vcat (def_item items)
 
 p_item :: ItemType -> D
@@ -432,14 +426,12 @@ p_item (Flat s) = item (spec s)
 p_item (Nested t s) = vcat [item (spec t), makeList s]
 
 sim_item :: [(Spec,ItemType)] -> [D]
-sim_item [] = [empty]
-sim_item ((x,y):zs) = item' (spec (x :+: S ":")) (sp_item y) : sim_item zs
-    where sp_item (Flat s) = spec s
-          sp_item (Nested t s) = vcat [spec t, makeList s]
+sim_item = map (\(x,y) -> item' (spec (x :+: S ":")) (sp_item y))
+  where sp_item (Flat s) = spec s
+        sp_item (Nested t s) = vcat [spec t, makeList s]
           
 def_item :: [(Spec, ItemType)] -> [D]
-def_item [] = [empty]
-def_item ((x,y):zs) = item (spec (x :+: S " is the " :+: d_item y)) : def_item zs
+def_item = map (\(x,y) -> item $ spec $ x :+: S " is the " :+: d_item y)
   where d_item (Flat s) = s
         d_item (Nested _ _) = error "Cannot use sublists in definitions"
 -----------------------------------------------------------------
@@ -505,8 +497,6 @@ makeLC n l = description $ item' ((pure $ text ("\\refstepcounter{lcnum}"
 makeUC :: D -> D -> D
 makeUC n l = description $ item' ((pure $ text ("\\refstepcounter{ucnum}"
   ++ "\\uctheucnum")) <> label l <> (pure $ text ":")) n
-
-
 
 makeGraph :: [(D,D)] -> D -> D -> D -> D -> D
 makeGraph ps w h c l =

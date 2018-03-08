@@ -1,6 +1,6 @@
 module Language.Drasil.HTML.Print where
 
-import Prelude hiding (print, id)
+import Prelude hiding (print)
 import Data.List (intersperse, sort)
 import Text.PrettyPrint hiding (render, quotes, Str)
 import Numeric (showFFloat)
@@ -52,7 +52,7 @@ printLO (Definition dt ssPs l) sm = makeDefn dt ssPs (p_spec l sm) sm
 printLO (Header n contents)    sm = h n $ text (p_spec contents sm)
 printLO (List t)               sm = makeList t sm
 printLO (Figure r c f wp)      sm = makeFigure (p_spec r sm) (p_spec c sm) f wp
-printLO (ALUR _ x l id)        sm = makeRefList (p_spec x sm) (p_spec l sm) (p_spec id sm)
+printLO (ALUR _ x l id')       sm = makeRefList (p_spec x sm) (p_spec l sm) (p_spec id' sm)
 printLO (Bib bib)              sm = printLO (makeBib sm bib) sm
 
 
@@ -537,10 +537,6 @@ rendPersL (Person {_given = f, _surname = l, _middle = []}) =
   isInitial l `sC` isInitial f
 rendPersL (Person {_given = f, _surname = l, _middle = ms}) =
   isInitial l `sC` foldr1 (+:+) ([isInitial f] ++ map (isInitial) (init ms) ++ [last ms])
-
--- isInitial :: String -> String
--- isInitial [x]  = [x,'.']
--- isInitial name = name
 
 --adds an 's' if there is more than one person in a list
 toPlural :: People -> String -> String

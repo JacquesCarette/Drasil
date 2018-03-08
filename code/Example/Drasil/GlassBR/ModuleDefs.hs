@@ -75,13 +75,13 @@ v_filename= implVar "v_filename" (nounPhraseSP "filename") (Atomic "filename") S
 
 linInterp :: Func
 linInterp = funcDef "lin_interp" [v_x_1, v_y_1, v_x_2, v_y_2, v_x] Real 
-  [ FRet $ (((C v_y_2) - (C v_y_1)) / ((C v_x_2) - (C v_x_1))) * ((C v_x) - (C v_x_1)) + (C v_y_1) ]
+  [ FRet $ (((sy v_y_2) - (sy v_y_1)) / ((sy v_x_2) - (sy v_x_1))) * ((sy v_x) - (sy v_x_1)) + (sy v_y_1) ]
 
 indInSeq :: Func
 indInSeq = funcDef "indInSeq" [v_arr, v_v] Natural 
   [
-    ffor (v_i) (C v_i $< (dim (C v_arr) - 1))
-      [ FCond (((idx (C v_arr) (C v_i)) $<= (C v_v)) $&& ((C v_v) $<= (idx (C v_arr) ((C v_i) + 1)))) [ FRet $ C v_i ] [] ],
+    ffor (v_i) (sy v_i $< (dim (sy v_arr) - 1))
+      [ FCond (((idx (sy v_arr) (sy v_i)) $<= (sy v_v)) $&& ((sy v_v) $<= (idx (sy v_arr) ((sy v_i) + 1)))) [ FRet $ sy v_i ] [] ],
     FThrow "Bound error"      
   ]
 
@@ -89,8 +89,8 @@ matrixCol :: Func
 matrixCol = funcDef "matrixCol" [v_mat, v_j] (Vect Real) 
   [
     fdec v_col (Vect Rational),
-    ffor (v_i) (C v_i $< dim (C v_mat)) [ FAppend (C v_col) (idx (idx (C v_mat) (C v_i)) (C v_j)) ],
-    FRet (C v_col)
+    ffor (v_i) (sy v_i $< dim (sy v_mat)) [ FAppend (sy v_col) (idx (idx (sy v_mat) (sy v_i)) (sy v_j)) ],
+    FRet (sy v_col)
   ]
 
 interpY :: Func
@@ -100,32 +100,32 @@ interpY = funcDef "interpY" [{-v_x_array, v_y_array, v_z_array,-} v_filename, v_
   fdec v_x_array (Vect $ Vect Rational),
   fdec v_y_array (Vect $ Vect Rational),
   fdec v_z_array (Vect Rational),
-  FProcCall read_table [C v_filename, C v_z_array, C v_x_array, C v_y_array],
+  FProcCall read_table [sy v_filename, sy v_z_array, sy v_x_array, sy v_y_array],
   -- endhack
-    fasg v_i (FCall (asExpr indInSeq) [C v_z_array, C v_z]),
-    fasg v_x_z_1 (FCall (asExpr matrixCol) [C v_x_array, C v_i]),
-    fasg v_y_z_1 (FCall (asExpr matrixCol) [C v_y_array, C v_i]),
-    fasg v_x_z_2 (FCall (asExpr matrixCol) [C v_x_array, (C v_i) + 1]),
-    fasg v_y_z_2 (FCall (asExpr matrixCol) [C v_y_array, (C v_i) + 1]),
+    fasg v_i (FCall (asExpr indInSeq) [sy v_z_array, sy v_z]),
+    fasg v_x_z_1 (FCall (asExpr matrixCol) [sy v_x_array, sy v_i]),
+    fasg v_y_z_1 (FCall (asExpr matrixCol) [sy v_y_array, sy v_i]),
+    fasg v_x_z_2 (FCall (asExpr matrixCol) [sy v_x_array, (sy v_i) + 1]),
+    fasg v_y_z_2 (FCall (asExpr matrixCol) [sy v_y_array, (sy v_i) + 1]),
     FTry 
-      [ fasg v_j (FCall (asExpr indInSeq) [C v_x_z_1, C v_x]),
-        fasg v_k (FCall (asExpr indInSeq) [C v_x_z_2, C v_x]) ]
+      [ fasg v_j (FCall (asExpr indInSeq) [sy v_x_z_1, sy v_x]),
+        fasg v_k (FCall (asExpr indInSeq) [sy v_x_z_2, sy v_x]) ]
       [ FThrow "Interpolation of y failed" ],
-    fasg v_y_1 (FCall (asExpr linInterp) [ idx (C v_x_z_1) (C v_j), 
-                                           idx (C v_y_z_1) (C v_j),
-                                           idx (C v_x_z_1) ((C v_j) + 1), 
-                                           idx (C v_y_z_1) ((C v_j) + 1),
-                                           C v_x ]),
-    fasg v_y_2 (FCall (asExpr linInterp) [ idx (C v_x_z_2) (C v_k), 
-                                           idx (C v_y_z_2) (C v_k),
-                                           idx (C v_x_z_2) ((C v_k) + 1), 
-                                           idx (C v_y_z_2) ((C v_k) + 1),
-                                           C v_x ]),
-    FRet (FCall (asExpr linInterp) [ idx (C v_z_array) (C v_i),
-                                     C v_y_1,
-                                     idx (C v_z_array) ((C v_i) + 1),
-                                     C v_y_2,
-                                     C v_z ] )                                  
+    fasg v_y_1 (FCall (asExpr linInterp) [ idx (sy v_x_z_1) (sy v_j), 
+                                           idx (sy v_y_z_1) (sy v_j),
+                                           idx (sy v_x_z_1) ((sy v_j) + 1), 
+                                           idx (sy v_y_z_1) ((sy v_j) + 1),
+                                           sy v_x ]),
+    fasg v_y_2 (FCall (asExpr linInterp) [ idx (sy v_x_z_2) (sy v_k), 
+                                           idx (sy v_y_z_2) (sy v_k),
+                                           idx (sy v_x_z_2) ((sy v_k) + 1), 
+                                           idx (sy v_y_z_2) ((sy v_k) + 1),
+                                           sy v_x ]),
+    FRet (FCall (asExpr linInterp) [ idx (sy v_z_array) (sy v_i),
+                                     sy v_y_1,
+                                     idx (sy v_z_array) ((sy v_i) + 1),
+                                     sy v_y_2,
+                                     sy v_z ] )                                  
   ]  
   
 interpZ :: Func
@@ -135,34 +135,34 @@ interpZ = funcDef "interpZ" [{-v_x_array, v_y_array, v_z_array,-} v_filename, v_
   fdec v_x_array (Vect $ Vect Rational),
   fdec v_y_array (Vect $ Vect Rational),
   fdec v_z_array (Vect Rational),
-  FProcCall read_table [C v_filename, C v_z_array, C v_x_array, C v_y_array],
+  FProcCall read_table [sy v_filename, sy v_z_array, sy v_x_array, sy v_y_array],
   -- endhack
-    ffor v_i (C v_i $< (dim (C v_z_array) - 1)) 
+    ffor v_i (sy v_i $< (dim (sy v_z_array) - 1)) 
       [
-        fasg v_x_z_1 (FCall (asExpr matrixCol) [C v_x_array, C v_i]),
-        fasg v_y_z_1 (FCall (asExpr matrixCol) [C v_y_array, C v_i]),
-        fasg v_x_z_2 (FCall (asExpr matrixCol) [C v_x_array, (C v_i) + 1]),
-        fasg v_y_z_2 (FCall (asExpr matrixCol) [C v_y_array, (C v_i) + 1]),
+        fasg v_x_z_1 (FCall (asExpr matrixCol) [sy v_x_array, sy v_i]),
+        fasg v_y_z_1 (FCall (asExpr matrixCol) [sy v_y_array, sy v_i]),
+        fasg v_x_z_2 (FCall (asExpr matrixCol) [sy v_x_array, (sy v_i) + 1]),
+        fasg v_y_z_2 (FCall (asExpr matrixCol) [sy v_y_array, (sy v_i) + 1]),
         FTry 
-          [ fasg v_j (FCall (asExpr indInSeq) [C v_x_z_1, C v_x]),
-            fasg v_k (FCall (asExpr indInSeq) [C v_x_z_2, C v_x]) ]
+          [ fasg v_j (FCall (asExpr indInSeq) [sy v_x_z_1, sy v_x]),
+            fasg v_k (FCall (asExpr indInSeq) [sy v_x_z_2, sy v_x]) ]
           [ FContinue ],
-        fasg v_y_1 (FCall (asExpr linInterp) [ idx (C v_x_z_1) (C v_j), 
-                                               idx (C v_y_z_1) (C v_j),
-                                               idx (C v_x_z_1) ((C v_j) + 1), 
-                                               idx (C v_y_z_1) ((C v_j) + 1),
-                                               C v_x ]),
-        fasg v_y_2 (FCall (asExpr linInterp) [ idx (C v_x_z_2) (C v_k), 
-                                               idx (C v_y_z_2) (C v_k),
-                                               idx (C v_x_z_2) ((C v_k) + 1), 
-                                               idx (C v_y_z_2) ((C v_k) + 1),
-                                               C v_x ]),
-        FCond ((C v_y_1 $<= C v_y) $&& (C v_y $<= C v_y_2))
-          [ FRet (FCall (asExpr linInterp) [ C v_y_1,
-                                             idx (C v_z_array) (C v_i),
-                                             C v_y_2,
-                                             idx (C v_z_array) ((C v_i) + 1),
-                                             C v_y ] )  
+        fasg v_y_1 (FCall (asExpr linInterp) [ idx (sy v_x_z_1) (sy v_j), 
+                                               idx (sy v_y_z_1) (sy v_j),
+                                               idx (sy v_x_z_1) ((sy v_j) + 1), 
+                                               idx (sy v_y_z_1) ((sy v_j) + 1),
+                                               sy v_x ]),
+        fasg v_y_2 (FCall (asExpr linInterp) [ idx (sy v_x_z_2) (sy v_k), 
+                                               idx (sy v_y_z_2) (sy v_k),
+                                               idx (sy v_x_z_2) ((sy v_k) + 1), 
+                                               idx (sy v_y_z_2) ((sy v_k) + 1),
+                                               sy v_x ]),
+        FCond ((sy v_y_1 $<= sy v_y) $&& (sy v_y $<= sy v_y_2))
+          [ FRet (FCall (asExpr linInterp) [ sy v_y_1,
+                                             idx (sy v_z_array) (sy v_i),
+                                             sy v_y_2,
+                                             idx (sy v_z_array) ((sy v_i) + 1),
+                                             sy v_y ] )  
           ] []                                             
       ],
     FThrow "Interpolation of z failed"      

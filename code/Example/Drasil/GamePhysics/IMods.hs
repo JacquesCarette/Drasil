@@ -20,8 +20,8 @@ im1NP :: NP
 im1NP =  nounPhraseSP "Force on the translational motion of a set of 2d rigid bodies"
 
 im1Rel :: Relation -- FIXME: add proper equation
-im1Rel = (C acc_i) $= (Deriv Total (FCall (C vel_i) [C QP.time]) QP.time)
-  $= (C QP.gravitationalAccel) + ((FCall (C force_i) [C QP.time]) / (C mass_i))
+im1Rel = (sy acc_i) $= (Deriv Total (FCall (sy vel_i) [sy QP.time]) QP.time)
+  $= (sy QP.gravitationalAccel) + ((FCall (sy force_i) [sy QP.time]) / (sy mass_i))
 
 
 --fixme: need referencing
@@ -45,9 +45,9 @@ im2NP :: NP
 im2NP =  nounPhraseSP "Force on the rotational motion of a set of 2D rigid body"
 
 im2Rel :: Relation
-im2Rel = (C QP.angularAccel) $= Deriv Total
-  (FCall (C QP.angularVelocity) [C QP.time]) QP.time $= 
-     ((FCall (C torque_i) [C QP.time]) / (C QP.momentOfInertia))
+im2Rel = (sy QP.angularAccel) $= Deriv Total
+  (FCall (sy QP.angularVelocity) [sy QP.time]) QP.time $= 
+     ((FCall (sy torque_i) [sy QP.time]) / (sy QP.momentOfInertia))
 
 --fixme: need referencing
 im2descr, im2leg :: Sentence
@@ -67,19 +67,19 @@ im3NP :: NP
 im3NP =  nounPhraseSP "Collisions on 2D rigid bodies"
 
 im3Rel1 {-, im3Rel2, im3Rel3, im3Rel4 -} :: Relation -- FIXME: add proper equation
-im3Rel1 = (FCall (C vel_A) [C time_c]) $= (FCall (C vel_A) [C QP.time]) +
-  ((C QP.impulseS) / (C mass_A)) * (C normalVect)
+im3Rel1 = (FCall (sy vel_A) [sy time_c]) $= (FCall (sy vel_A) [sy QP.time]) +
+  ((sy QP.impulseS) / (sy mass_A)) * (sy normalVect)
 
---im3Rel2 = (FCall (C vel_B) [C time_c]) $= (FCall (C vel_B) [C QP.time]) -
---  ((C QP.impulseS) / (C mass_B)) * (C normalVect)
+--im3Rel2 = (FCall (sy vel_B) [sy time_c]) $= (FCall (sy vel_B) [sy QP.time]) -
+--  ((sy QP.impulseS) / (sy mass_B)) * (sy normalVect)
 
 
 --fixme: these two need to use cross product and parametrized dispUnit symbol
---im3Rel3 = (FCall (C angVel_A) [C time_c]) $= (FCall (C angVel_A) [C QP.time]) +
---  ((C dispUnit) * ((C QP.impulseS) * (C normalVect))) / (C QP.momentOfInertia)
+--im3Rel3 = (FCall (sy angVel_A) [sy time_c]) $= (FCall (sy angVel_A) [sy QP.time]) +
+--  ((sy dispUnit) * ((sy QP.impulseS) * (sy normalVect))) / (sy QP.momentOfInertia)
 
---im3Rel4 = (FCall (C angVel_B) [C time_c]) $= (FCall (C angVel_B) [C QP.time]) -
---  ((C dispUnit) * ((C QP.impulseS) * (C normalVect))) / (C QP.momentOfInertia)
+--im3Rel4 = (FCall (sy angVel_B) [sy time_c]) $= (FCall (sy angVel_B) [sy QP.time]) -
+--  ((sy dispUnit) * ((sy QP.impulseS) * (sy normalVect))) / (sy QP.momentOfInertia)
 
 --fixme: need referencing
 im3descr, im3leg :: Sentence

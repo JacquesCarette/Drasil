@@ -528,27 +528,27 @@ s4_2_3_desc5 den ma vo = [S "Using the fact that", getES den :+: S "=" :+:
 
 s4_2_3_eq1, s4_2_3_eq2, s4_2_3_eq3, s4_2_3_eq4, s4_2_3_eq5 :: Expr
 
-s4_2_3_eq1 = (negate (int_all (eqSymb vol) ((C gradient) $. (C thFluxVect)))) + 
-  (int_all (eqSymb vol) (C vol_ht_gen)) $=
-  (int_all (eqSymb vol) ((C density)
-  * (C QT.heat_cap_spec) * Deriv Part (C QT.temp) time))
+s4_2_3_eq1 = (negate (int_all (eqSymb vol) ((sy gradient) $. (sy thFluxVect)))) + 
+  (int_all (eqSymb vol) (sy vol_ht_gen)) $=
+  (int_all (eqSymb vol) ((sy density)
+  * (sy QT.heat_cap_spec) * Deriv Part (sy QT.temp) time))
 
-s4_2_3_eq2 = (negate (int_all (eqSymb surface) ((C thFluxVect) $. (C uNormalVect)))) +
-  (int_all (eqSymb vol) (C vol_ht_gen)) $= 
+s4_2_3_eq2 = (negate (int_all (eqSymb surface) ((sy thFluxVect) $. (sy uNormalVect)))) +
+  (int_all (eqSymb vol) (sy vol_ht_gen)) $= 
   (int_all (eqSymb vol)
-  ((C density) * (C QT.heat_cap_spec) * Deriv Part (C QT.temp) time))
+  ((sy density) * (sy QT.heat_cap_spec) * Deriv Part (sy QT.temp) time))
 
-s4_2_3_eq3 = (C ht_flux_in) * (C in_SA) - (C ht_flux_out) *
-  (C out_SA) + (C vol_ht_gen) * (C vol) $= 
-  (int_all (eqSymb vol) ((C density) * (C QT.heat_cap_spec) * Deriv Part (C QT.temp) time))
+s4_2_3_eq3 = (sy ht_flux_in) * (sy in_SA) - (sy ht_flux_out) *
+  (sy out_SA) + (sy vol_ht_gen) * (sy vol) $= 
+  (int_all (eqSymb vol) ((sy density) * (sy QT.heat_cap_spec) * Deriv Part (sy QT.temp) time))
 
-s4_2_3_eq4 = (C density) * (C QT.heat_cap_spec) * (C vol) * Deriv Total
-  (C QT.temp) time $= (C ht_flux_in) * (C in_SA) - (C ht_flux_out) *
-  (C out_SA) + (C vol_ht_gen) * (C vol)
+s4_2_3_eq4 = (sy density) * (sy QT.heat_cap_spec) * (sy vol) * Deriv Total
+  (sy QT.temp) time $= (sy ht_flux_in) * (sy in_SA) - (sy ht_flux_out) *
+  (sy out_SA) + (sy vol_ht_gen) * (sy vol)
 
-s4_2_3_eq5 = (C mass) * (C QT.heat_cap_spec) * Deriv Total (C QT.temp)
-  time $= (C ht_flux_in) * (C in_SA) - (C ht_flux_out)
-  * (C out_SA) + (C vol_ht_gen) * (C vol)
+s4_2_3_eq5 = (sy mass) * (sy QT.heat_cap_spec) * Deriv Total (sy QT.temp)
+  time $= (sy ht_flux_in) * (sy in_SA) - (sy ht_flux_out)
+  * (sy out_SA) + (sy vol_ht_gen) * (sy vol)
 
 s4_2_3_equation :: [Contents]
 s4_2_3_equation = map EqnBlock [s4_2_3_eq1, s4_2_3_eq2, s4_2_3_eq3, s4_2_3_eq4,
@@ -583,7 +583,7 @@ s4_2_5_desc1 roc temw en wa vo wv ma wm hcw ht hfc csa ta purin a11 vhg a12 =
   phrase ta) `sC` S "since it has been assumed to be",
   phrase purin +:+. sParen (acroTest a11 s4_2_1_list), S "Assuming no",
   phrase vhg +:+. (sParen (acroTest a12 s4_2_1_list) `sC`
-  E (C vhg $= Int 0)), S "Therefore, the", phrase M.equation, S "for",
+  E (sy vhg $= Int 0)), S "Therefore, the", phrase M.equation, S "for",
   acroGD 2, S "can be written as"]
 
 s4_2_5_desc2 :: QDefinition -> [Sentence]
@@ -604,18 +604,18 @@ s4_2_5_equation = map EqnBlock [s4_2_5_eq1, s4_2_5_eq2, s4_2_5_eq3, s4_2_5_eq4]
 
 s4_2_5_eq1, s4_2_5_eq2, s4_2_5_eq3, s4_2_5_eq4 ::Expr
 
-s4_2_5_eq1 = (C w_mass) * (C htCap_W) * Deriv Total (C temp_W) time $=
-  (C ht_flux_C) * (C coil_SA)
+s4_2_5_eq1 = (sy w_mass) * (sy htCap_W) * Deriv Total (sy temp_W) time $=
+  (sy ht_flux_C) * (sy coil_SA)
  
-s4_2_5_eq2 = (C w_mass) * (C htCap_W) * Deriv Total (C temp_W) time $=
-  (C coil_HTC) * (C coil_SA) * ((C temp_C) - (C temp_W))
+s4_2_5_eq2 = (sy w_mass) * (sy htCap_W) * Deriv Total (sy temp_W) time $=
+  (sy coil_HTC) * (sy coil_SA) * ((sy temp_C) - (sy temp_W))
 
-s4_2_5_eq3 = Deriv Total (C temp_W) time $= ((C coil_HTC) *
-  (C coil_SA)) / ((C w_mass) * (C htCap_W)) * ((C temp_C) -
-  (C temp_W))
+s4_2_5_eq3 = Deriv Total (sy temp_W) time $= ((sy coil_HTC) *
+  (sy coil_SA)) / ((sy w_mass) * (sy htCap_W)) * ((sy temp_C) -
+  (sy temp_W))
 
-s4_2_5_eq4 = Deriv Total (C temp_W) time $= (1 / (C tau_W)) *
-  ((C temp_C) - (C temp_W))
+s4_2_5_eq4 = Deriv Total (sy temp_W) time $= (1 / (sy tau_W)) *
+  ((sy temp_C) - (sy temp_W))
 
 s4_2_6_table1 :: Contents
 s4_2_6_table1 = inDataConstTbl s4_2_6_conListIn
@@ -668,8 +668,8 @@ s5_1_list_items = [
   phrase] inputVar)
   (titleize input_ +:+ titleize variable +:+ titleize requirement) False,
 
-  EqnBlock ((C w_mass) $= (C w_vol) * (C w_density) $=
-  (((C diam) / 2) * (C tank_length) * (C w_density)))
+  EqnBlock ((sy w_mass) $= (sy w_vol) * (sy w_density) $=
+  (((sy diam) / 2) * (sy tank_length) * (sy w_density)))
   ]
 
 -- s5_1_list_words = map (\x -> Enumeration $ Simple [x])

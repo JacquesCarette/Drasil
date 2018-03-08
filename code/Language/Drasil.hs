@@ -7,10 +7,11 @@ module Language.Drasil (
   -- Recipe
   , Recipe(..)
   -- Expr
-  , Expr(C,Int,Dbl,Str,IsIn,Deriv,FCall,Grouping,Case)
+  , Expr(Int,Dbl,Str,IsIn,Deriv,FCall,Grouping,Case)
   , Relation, DerivType(..), RealInterval(..), Inclusive(..)
   , ($=), ($<), ($<=), ($>), ($>=), ($^), ($&&), ($||), ($=>), ($<=>), ($.)
   , log, abs, sin, cos, tan, sec, csc, cot, exp, sqrt, square, euclidean, vars
+  , sy -- old "Chunk" constructor C
   , dim, idx
   , sum_all, defsum, prod_all, defprod, defint, int_all
   , cross, m2x2, vec2D, dgnl2x2
@@ -131,7 +132,7 @@ module Language.Drasil (
 import Prelude hiding (log, sin, cos, tan, sqrt, id, return, print, break, exp, product)
 import Language.Drasil.SystemInformation
 import Language.Drasil.Expr (Expr(..), Relation, DerivType(..), 
-          RealInterval(..), Inclusive(..),
+          RealInterval(..), Inclusive(..), sy,
           ($=), ($<), ($<=), ($>), ($>=), ($^), ($&&), ($||), ($=>), ($<=>), ($.))
 import Language.Drasil.Expr.Math (log, sin, cos, tan, sqrt, square, sec, csc, cot, exp,
           dim, idx,

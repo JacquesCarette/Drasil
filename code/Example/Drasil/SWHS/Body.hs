@@ -1028,9 +1028,9 @@ s4_2_3_deriv_2 t1ct vo = foldlSPCol [S "Integrating", makeRef $ reldefn t1ct,
   S "over a", phrase vo, sParen (getES vo) `sC` S "we have"]
 
 s4_2_3_deriv_3 = EqnBlock
-  ((negate (int_all (eqSymb vol) ((C gradient) $. (C thFluxVect)))) +
-  (int_all (eqSymb vol) (C vol_ht_gen)) $=
-  (int_all (eqSymb vol) ((C density) * (C heat_cap_spec) * Deriv Part (C temp) time)))
+  ((negate (int_all (eqSymb vol) ((sy gradient) $. (sy thFluxVect)))) +
+  (int_all (eqSymb vol) (sy vol_ht_gen)) $=
+  (int_all (eqSymb vol) ((sy density) * (sy heat_cap_spec) * Deriv Part (sy temp) time)))
 
 s4_2_3_deriv_4 :: ConceptChunk -> ConVar -> UnitalChunk -> UnitalChunk ->
   ConVar -> ConceptChunk -> Contents
@@ -1041,9 +1041,9 @@ s4_2_3_deriv_4 gd su vo tfv unv un = foldlSPCol [S "Applying", titleize gd,
   S "outward", phrase unv, S "for a", phrase su]
 
 s4_2_3_deriv_5 = EqnBlock
-  ((negate (int_all (eqSymb surface) ((C thFluxVect) $. (C uNormalVect)))) +
-  (int_all (eqSymb vol) (C vol_ht_gen)) $= 
-  (int_all (eqSymb vol) ((C density) * (C heat_cap_spec) * Deriv Part (C temp) time)))
+  ((negate (int_all (eqSymb surface) ((sy thFluxVect) $. (sy uNormalVect)))) +
+  (int_all (eqSymb vol) (sy vol_ht_gen)) $= 
+  (int_all (eqSymb vol) ((sy density) * (sy heat_cap_spec) * Deriv Part (sy temp) time)))
 
 s4_2_3_deriv_6 :: UnitalChunk -> UnitalChunk -> Contents
 s4_2_3_deriv_6 vo vhg = foldlSPCol [S "We consider an arbitrary" +:+.
@@ -1051,9 +1051,9 @@ s4_2_3_deriv_6 vo vhg = foldlSPCol [S "We consider an arbitrary" +:+.
   sParen $ S $ show (1 :: Integer), S "can be written as"]
 
 s4_2_3_deriv_7 = EqnBlock
-  ((C ht_flux_in) * (C in_SA) - (C ht_flux_out) *
-  (C out_SA) + (C vol_ht_gen) * (C vol) $= 
-  (int_all (eqSymb vol) ((C density) * (C heat_cap_spec) * Deriv Part (C temp) time)))
+  ((sy ht_flux_in) * (sy in_SA) - (sy ht_flux_out) *
+  (sy out_SA) + (sy vol_ht_gen) * (sy vol) $= 
+  (int_all (eqSymb vol) ((sy density) * (sy heat_cap_spec) * Deriv Part (sy temp) time)))
 
 s4_2_3_deriv_8 :: UnitalChunk -> UnitalChunk -> UnitalChunk -> UnitalChunk ->
   UnitalChunk -> UnitalChunk -> UnitalChunk -> UnitalChunk -> CI -> Contents ->
@@ -1066,18 +1066,18 @@ s4_2_3_deriv_8 hfi hfo isa osa den hcs tem vo assu a3 a4 a5 a6 = foldlSPCol
   foldlList (map (\c -> sParen (makeRef c)) [a3, a4, a5, a6]) `sC` S "we have"]
 
 s4_2_3_deriv_9 = EqnBlock
-  ((C density) * (C heat_cap_spec) * (C vol) * Deriv Total (C temp)
-  time $= (C ht_flux_in) * (C in_SA) - (C ht_flux_out) *
-  (C out_SA) + (C vol_ht_gen) * (C vol))
+  ((sy density) * (sy heat_cap_spec) * (sy vol) * Deriv Total (sy temp)
+  time $= (sy ht_flux_in) * (sy in_SA) - (sy ht_flux_out) *
+  (sy out_SA) + (sy vol_ht_gen) * (sy vol))
 
 s4_2_3_deriv_10 :: UnitalChunk -> UnitalChunk -> UnitalChunk -> Contents
 s4_2_3_deriv_10 den ma vo = foldlSPCol [S "Using the fact that", getES den :+:
   S "=" :+: getES ma :+: S "/" :+: getES vo `sC` S "(2) can be written as"]
 
 s4_2_3_deriv_11 = EqnBlock
-  ((C mass) * (C heat_cap_spec) * Deriv Total (C temp)
-  time $= (C ht_flux_in) * (C in_SA) - (C ht_flux_out)
-  * (C out_SA) + (C vol_ht_gen) * (C vol))
+  ((sy mass) * (sy heat_cap_spec) * Deriv Total (sy temp)
+  time $= (sy ht_flux_in) * (sy in_SA) - (sy ht_flux_out)
+  * (sy out_SA) + (sy vol_ht_gen) * (sy vol))
 
 -- Created a unitalChunk for "S"... should I add it to table of symbols?
 -- Add references to above when available (assumptions, GDs)
@@ -1128,7 +1128,7 @@ s4_2_5_d1sent_1 roc temw en wa vo wvo wma hcw hfc hfp csa psa ht ta purin vhg
   phrase ta) `sC` S "since it has been assumed to be",
   phrase purin +:+. sParen (makeRef a15), S "Assuming no",
   phrase vhg +:+. (sParen (makeRef a16) `sC`
-  (E $ C vhg $= 0)), S "Therefore, the", phrase equation, S "for",
+  (E $ sy vhg $= 0)), S "Therefore, the", phrase equation, S "for",
   acroGD 2, S "can be written as"]
 
 s4_2_5_d1sent_2 :: QDefinition -> QDefinition -> UnitalChunk ->
@@ -1154,48 +1154,48 @@ s4_2_5_d1sent_5 = [S "Which simplifies to"]
 
 s4_2_5_d1sent_6 :: [Sentence]
 s4_2_5_d1sent_6 = [S "Setting",
-  (E $ C tau_W $= (C w_mass * C htCap_W) / (C coil_HTC * C coil_SA)) `sAnd`
-  (E $ C eta $= (C pcm_HTC * C pcm_SA) / (C coil_HTC * C coil_SA)) `sC`
+  (E $ sy tau_W $= (sy w_mass * sy htCap_W) / (sy coil_HTC * sy coil_SA)) `sAnd`
+  (E $ sy eta $= (sy pcm_HTC * sy pcm_SA) / (sy coil_HTC * sy coil_SA)) `sC`
   titleize equation, S "(5) can be written as"]
 
 s4_2_5_d1sent_7 :: [Sentence]
-s4_2_5_d1sent_7 = [S "Finally, factoring out", (E $ 1 / C tau_W) `sC` 
+s4_2_5_d1sent_7 = [S "Finally, factoring out", (E $ 1 / sy tau_W) `sC` 
   S "we are left with the governing", short ode, S "for", acroIM 1]
 
 s4_2_5_d_eqn1, s4_2_5_d_eqn2, s4_2_5_d_eqn3, s4_2_5_d_eqn4, s4_2_5_d_eqn5,
   s4_2_5_d_eqn6, s4_2_5_d_eqn7 :: Expr
 
-s4_2_5_d_eqn1 = ((C w_mass) * (C htCap_W) * Deriv Total (C temp_W) time $=
-  (C ht_flux_C) * (C coil_SA) - (C ht_flux_P) * (C pcm_SA))
+s4_2_5_d_eqn1 = ((sy w_mass) * (sy htCap_W) * Deriv Total (sy temp_W) time $=
+  (sy ht_flux_C) * (sy coil_SA) - (sy ht_flux_P) * (sy pcm_SA))
 
-s4_2_5_d_eqn2 = ((C w_mass) * (C htCap_W) * Deriv Total (C temp_W) time $=
-  (C coil_HTC) * (C coil_SA) * ((C temp_C) - (C temp_W)) -
-  (C pcm_HTC) * (C pcm_SA) * ((C temp_W) - (C temp_PCM)))
+s4_2_5_d_eqn2 = ((sy w_mass) * (sy htCap_W) * Deriv Total (sy temp_W) time $=
+  (sy coil_HTC) * (sy coil_SA) * ((sy temp_C) - (sy temp_W)) -
+  (sy pcm_HTC) * (sy pcm_SA) * ((sy temp_W) - (sy temp_PCM)))
 
-s4_2_5_d_eqn3 = (Deriv Total (C temp_W) time $= ((C coil_HTC) *
-  (C coil_SA)) / ((C w_mass) * (C htCap_W)) * ((C temp_C) -
-  (C temp_W)) - ((C pcm_mass) * (C pcm_SA)) / ((C w_mass) *
-  (C htCap_W)) * ((C temp_W) - (C temp_PCM)))
+s4_2_5_d_eqn3 = (Deriv Total (sy temp_W) time $= ((sy coil_HTC) *
+  (sy coil_SA)) / ((sy w_mass) * (sy htCap_W)) * ((sy temp_C) -
+  (sy temp_W)) - ((sy pcm_mass) * (sy pcm_SA)) / ((sy w_mass) *
+  (sy htCap_W)) * ((sy temp_W) - (sy temp_PCM)))
 
-s4_2_5_d_eqn4 = (Deriv Total (C temp_W) time $= ((C coil_HTC) *
-  (C coil_SA)) / ((C w_mass) * (C htCap_W)) * ((C temp_C) - (C temp_W)) +
-  (((C coil_HTC) * (C coil_SA)) / ((C coil_HTC) * (C coil_SA))) *
-  (((C pcm_HTC) * (C pcm_SA)) / ((C w_mass) * (C htCap_W))) *
-  ((C temp_PCM) - (C temp_W)))
+s4_2_5_d_eqn4 = (Deriv Total (sy temp_W) time $= ((sy coil_HTC) *
+  (sy coil_SA)) / ((sy w_mass) * (sy htCap_W)) * ((sy temp_C) - (sy temp_W)) +
+  (((sy coil_HTC) * (sy coil_SA)) / ((sy coil_HTC) * (sy coil_SA))) *
+  (((sy pcm_HTC) * (sy pcm_SA)) / ((sy w_mass) * (sy htCap_W))) *
+  ((sy temp_PCM) - (sy temp_W)))
 
-s4_2_5_d_eqn5 = (Deriv Total (C temp_W) time $= ((C coil_HTC) *
-  (C coil_SA)) / ((C w_mass) * (C htCap_W)) * ((C temp_C) - (C temp_W)) +
-  (((C pcm_HTC) * (C pcm_SA)) / ((C coil_HTC) * (C coil_SA))) *
-  (((C coil_HTC) * (C coil_SA)) / ((C w_mass) * (C htCap_W))) *
-  ((C temp_PCM) - (C temp_W)))
+s4_2_5_d_eqn5 = (Deriv Total (sy temp_W) time $= ((sy coil_HTC) *
+  (sy coil_SA)) / ((sy w_mass) * (sy htCap_W)) * ((sy temp_C) - (sy temp_W)) +
+  (((sy pcm_HTC) * (sy pcm_SA)) / ((sy coil_HTC) * (sy coil_SA))) *
+  (((sy coil_HTC) * (sy coil_SA)) / ((sy w_mass) * (sy htCap_W))) *
+  ((sy temp_PCM) - (sy temp_W)))
 
-s4_2_5_d_eqn6 = (Deriv Total (C temp_W) time $= (1 / (C tau_W)) *
-  ((C temp_C) - (C temp_W)) + ((C eta) / (C tau_W)) *
-  ((C temp_PCM) - (C temp_W)))
+s4_2_5_d_eqn6 = (Deriv Total (sy temp_W) time $= (1 / (sy tau_W)) *
+  ((sy temp_C) - (sy temp_W)) + ((sy eta) / (sy tau_W)) *
+  ((sy temp_PCM) - (sy temp_W)))
 
-s4_2_5_d_eqn7 = (Deriv Total (C temp_W) time $= (1 / (C tau_W)) *
-  (((C temp_C) - (C temp_W)) + (C eta) * ((C temp_PCM) -
-  (C temp_W))))
+s4_2_5_d_eqn7 = (Deriv Total (sy temp_W) time $= (1 / (sy tau_W)) *
+  (((sy temp_C) - (sy temp_W)) + (sy eta) * ((sy temp_PCM) -
+  (sy temp_W))))
 
 -- Should "energy balance" be a concept?
 -- Add IM, GD, A, and EqnBlock references when available
@@ -1217,17 +1217,17 @@ s4_2_5_d2sent_3 = [S "Setting", getES tau_S_P :+: S "=" :+: getES pcm_mass :+:
 
 s4_2_5_d2eqn1, s4_2_5_d2eqn2, s4_2_5_d2eqn3, s4_2_5_d2eqn4 :: Expr
 
-s4_2_5_d2eqn1 = ((C pcm_mass) * (C htCap_S_P) * Deriv Total (C temp_PCM)
-  time $= (C ht_flux_P) * (C pcm_SA))
+s4_2_5_d2eqn1 = ((sy pcm_mass) * (sy htCap_S_P) * Deriv Total (sy temp_PCM)
+  time $= (sy ht_flux_P) * (sy pcm_SA))
 
-s4_2_5_d2eqn2 = ((C pcm_mass) * (C htCap_S_P) * Deriv Total (C temp_PCM)
-  time $= (C pcm_HTC) * (C pcm_SA) * ((C temp_W) - (C temp_PCM)))
+s4_2_5_d2eqn2 = ((sy pcm_mass) * (sy htCap_S_P) * Deriv Total (sy temp_PCM)
+  time $= (sy pcm_HTC) * (sy pcm_SA) * ((sy temp_W) - (sy temp_PCM)))
 
-s4_2_5_d2eqn3 = (Deriv Total (C temp_PCM) time $= ((C pcm_HTC) *
-  (C pcm_SA)) / ((C pcm_mass) * (C htCap_S_P)) * ((C temp_W) - (C temp_PCM)))
+s4_2_5_d2eqn3 = (Deriv Total (sy temp_PCM) time $= ((sy pcm_HTC) *
+  (sy pcm_SA)) / ((sy pcm_mass) * (sy htCap_S_P)) * ((sy temp_W) - (sy temp_PCM)))
 
-s4_2_5_d2eqn4 = (Deriv Total (C temp_PCM) time $= (1 / (C tau_S_P)) *
-  ((C temp_W) - (C temp_PCM)))
+s4_2_5_d2eqn4 = (Deriv Total (sy temp_PCM) time $= (1 / (sy tau_S_P)) *
+  ((sy temp_W) - (sy temp_PCM)))
 
 s4_2_5_d1eqn_list, s4_2_5_d1sent_list, s4_2_5_d2eqn_list, 
   s4_2_5_d2sent_list :: [Contents]
@@ -1323,8 +1323,8 @@ s4_2_6_T1footer qua sa vo htcm pcmat = foldlSent_ $ map foldlSent [
   S "are calculated by considering the", phrase sa, S "to", phrase vo +:+.
   S "ratio", S "The", phrase assumption, S "is that the lowest ratio is",
   (S $ show (1 :: Integer)) `sAnd`
-  S "the highest possible is", E (2 / C htcm) `sC` S "where",
-  E $ C htcm, S "is the thickness of a", Quote (S "sheet"), S "of" +:+.
+  S "the highest possible is", E (2 / sy htcm) `sC` S "where",
+  E $ sy htcm, S "is the thickness of a", Quote (S "sheet"), S "of" +:+.
   short pcmat, S "A thin sheet has the greatest", phrase sa, S "to",
   phrase vo, S "ratio"],
 
@@ -1364,11 +1364,11 @@ s4_2_7_deriv_1 lce ewat en co pcmat d1hfc d2hfp su ht  =
 
 s4_2_7_deriv_2 :: Contents
 s4_2_7_deriv_2 = EqnBlock
-  ((C w_E) $= (defint (eqSymb time) 0 (C time)
-  ((C coil_HTC) * (C coil_SA) * ((C temp_C) - FCall (C temp_W)
-  [C time]))) - (defint (eqSymb time) 0 (C time)
-  ((C pcm_HTC) * (C pcm_SA) * ((FCall (C temp_W) [C time]) -
-  (FCall (C temp_PCM) [C time])))))
+  ((sy w_E) $= (defint (eqSymb time) 0 (sy time)
+  ((sy coil_HTC) * (sy coil_SA) * ((sy temp_C) - FCall (sy temp_W)
+  [sy time]))) - (defint (eqSymb time) 0 (sy time)
+  ((sy pcm_HTC) * (sy pcm_SA) * ((FCall (sy temp_W) [sy time]) -
+  (FCall (sy temp_PCM) [sy time])))))
 
 s4_2_7_deriv_3 :: UncertQ -> UnitalChunk -> CI -> ConceptChunk -> Contents
 s4_2_7_deriv_3 epcm en pcmat wa =
@@ -1378,9 +1378,9 @@ s4_2_7_deriv_3 epcm en pcmat wa =
 
 s4_2_7_deriv_4 :: Contents
 s4_2_7_deriv_4 = EqnBlock
-  ((C pcm_E) $= (defint (eqSymb time) 0 (C time)
-  ((C pcm_HTC) * (C pcm_SA) * ((FCall (C temp_W) [C time]) - (FCall
-  (C temp_PCM) [C time])))))
+  ((sy pcm_E) $= (defint (eqSymb time) 0 (sy time)
+  ((sy pcm_HTC) * (sy pcm_SA) * ((FCall (sy temp_W) [sy time]) - (FCall
+  (sy temp_PCM) [sy time])))))
 
 s4_2_7_deriv_5 :: ConceptChunk -> CI -> CI -> Contents
 s4_2_7_deriv_5 eq pro rs = foldlSP [titleize' eq, S "(FIXME: Equation 7)" 

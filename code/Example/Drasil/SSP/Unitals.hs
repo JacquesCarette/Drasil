@@ -56,7 +56,7 @@ sspOutputs = [fs, coords, dx_i, dy_i]
 {-
 monotonicIn :: [Constraint]  --FIXME: Move this?
 monotonicIn = [physc $ \_ -> -- FIXME: Hack with "index" !
-  (idx xi (C index) $< idx xi (C index + 1) $=> idx yi (C index) $< idx yi (C index + 1))]
+  (idx xi (sy index) $< idx xi (sy index + 1) $=> idx yi (sy index) $< idx yi (sy index + 1))]
 -}
 
 defultUncrt :: Double
@@ -435,10 +435,10 @@ index = cv (dcc "index" (nounPhraseSP "index")
 
 --FIXME: possibly move to Language/Drasil/Expr.hs
 indx1 :: (Quantity a) => a -> Expr
-indx1 a = idx (C a) (Int 1)
+indx1 a = idx (sy a) (Int 1)
 
 indxn :: (Quantity a) => a -> Expr
-indxn a = idx (C a) (C numbSlices)
+indxn a = idx (sy a) (sy numbSlices)
 
 inxi, inxiP1, inxiM1 :: Quantity e => e -> Expr
 inxiP1 e = inx e 1
@@ -447,9 +447,9 @@ inxiM1 e = inx e (-1)
 
 inx :: Quantity e => e -> Integer -> Expr
 inx e n 
-  | n < 0     = idx (C e) (C index - Int (-n))
-  | n == 0    = idx (C e) (C index)
-  | otherwise = idx (C e) (C index + Int n)
+  | n < 0     = idx (sy e) (sy index - Int (-n))
+  | n == 0    = idx (sy e) (sy index)
+  | otherwise = idx (sy e) (sy index + Int n)
 
 sum1toN :: Expr -> Expr
-sum1toN = defsum (eqSymb index) 1 (C numbSlices)
+sum1toN = defsum (eqSymb index) 1 (sy numbSlices)

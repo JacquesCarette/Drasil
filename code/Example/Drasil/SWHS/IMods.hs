@@ -30,21 +30,21 @@ eBalanceOnWtr = makeRC "eBalanceOnWtr" (nounPhraseSP $ "Energy balance on " ++
   "water to find the temperature of the water") balWtrDesc balWtr_Rel
 
 balWtr_Rel :: Relation
-balWtr_Rel = (Deriv Total (C temp_W) time) $= (Int 1) / (C tau_W) *
-  (((C temp_C) - (FCall (C temp_W) [C time])) +
-  (C eta) * ((FCall (C temp_PCM) [C time]) - (FCall (C temp_W) [C time])))
+balWtr_Rel = (Deriv Total (sy temp_W) time) $= (Int 1) / (sy tau_W) *
+  (((sy temp_C) - (FCall (sy temp_W) [sy time])) +
+  (sy eta) * ((FCall (sy temp_PCM) [sy time]) - (FCall (sy temp_W) [sy time])))
 
 balWtrDesc :: Sentence
-balWtrDesc = foldlSent [(E $ C temp_W) `isThe` phrase temp_W +:+.
-  sParen (unwrap $ getUnit temp_W), (E $ C temp_PCM) `isThe`
+balWtrDesc = foldlSent [(E $ sy temp_W) `isThe` phrase temp_W +:+.
+  sParen (unwrap $ getUnit temp_W), (E $ sy temp_PCM) `isThe`
   phrase temp_PCM +:+. sParen (unwrap $ getUnit temp_PCM),
-  (E $ C temp_C) `isThe` phrase temp_C +:+. sParen (unwrap $ getUnit temp_C),
-  (E $ C tau_W $= (C w_mass * C htCap_W) / (C coil_HTC * C coil_SA)),
+  (E $ sy temp_C) `isThe` phrase temp_C +:+. sParen (unwrap $ getUnit temp_C),
+  (E $ sy tau_W $= (sy w_mass * sy htCap_W) / (sy coil_HTC * sy coil_SA)),
   S "is a constant" +:+. sParen (unwrap $ getUnit tau_W),
-  (E $ C eta $= (C pcm_HTC * C pcm_SA) / (C coil_HTC * C coil_SA)),
+  (E $ sy eta $= (sy pcm_HTC * sy pcm_SA) / (sy coil_HTC * sy coil_SA)),
   S "is a constant" +:+. sParen (S "dimensionless"),
   S "The above", phrase equation, S "applies as long as the", phrase water,
-  S "is in", phrase liquid, S "form" `sC` (E $ Int 0 $< C temp_W $< (Int 100)),
+  S "is in", phrase liquid, S "form" `sC` (E $ Int 0 $< sy temp_W $< (Int 100)),
   sParen (unwrap $ getUnit temp_W), S "where", S $ show (0 :: Integer),
   sParen (unwrap $ getUnit temp_W) `sAnd` (S $ show (100 :: Integer)),
   sParen (unwrap $ getUnit temp_W), S "are the", phrase melting `sAnd`
@@ -63,27 +63,27 @@ eBalanceOnPCM = makeRC "eBalanceOnPCM" (nounPhraseSP
   balPCMDesc balPCM_Rel
 
 balPCM_Rel :: Relation
-balPCM_Rel = (Deriv Total (C temp_PCM) time) $=
+balPCM_Rel = (Deriv Total (sy temp_PCM) time) $=
   Case [case1, case2, case3, case4]
 
-  where case1 = (((Int 1) / (C tau_S_P)) * ((FCall (C temp_W) [C time]) -
-          (FCall (C temp_PCM) [C time])), (C temp_PCM) $< (C temp_melt_P))
+  where case1 = (((Int 1) / (sy tau_S_P)) * ((FCall (sy temp_W) [sy time]) -
+          (FCall (sy temp_PCM) [sy time])), (sy temp_PCM) $< (sy temp_melt_P))
 
-        case2 = (((Int 1) / (C tau_L_P)) * ((FCall (C temp_W) [C time]) -
-          (FCall (C temp_PCM) [C time])), (C temp_PCM) $> (C temp_melt_P))
+        case2 = (((Int 1) / (sy tau_L_P)) * ((FCall (sy temp_W) [sy time]) -
+          (FCall (sy temp_PCM) [sy time])), (sy temp_PCM) $> (sy temp_melt_P))
 
-        case3 = ((Int 0), (C temp_PCM) $= (C temp_melt_P))
+        case3 = ((Int 0), (sy temp_PCM) $= (sy temp_melt_P))
 
-        case4 = ((Int 0), (Int 0) $< (C melt_frac) $< (Int 1))
+        case4 = ((Int 0), (Int 0) $< (sy melt_frac) $< (Int 1))
 
 balPCMDesc :: Sentence
-balPCMDesc = foldlSent [(E $ C temp_W) `isThe` phrase temp_W +:+.
-  sParen (unwrap $ getUnit temp_W), (E $ C temp_PCM) `isThe`
+balPCMDesc = foldlSent [(E $ sy temp_W) `isThe` phrase temp_W +:+.
+  sParen (unwrap $ getUnit temp_W), (E $ sy temp_PCM) `isThe`
   phrase temp_PCM +:+. sParen (unwrap $ getUnit temp_PCM),
-  (E $ (C tau_S_P) $= ((C pcm_mass) * (C htCap_S_P)) /
-  ((C pcm_HTC) * (C pcm_SA))), S "is a constant" +:+.
-  sParen (unwrap $ getUnit tau_S_P), (E $ (C tau_L_P) $=
-  ((C pcm_mass) * (C htCap_L_P)) / ((C pcm_HTC) * (C pcm_SA))),
+  (E $ (sy tau_S_P) $= ((sy pcm_mass) * (sy htCap_S_P)) /
+  ((sy pcm_HTC) * (sy pcm_SA))), S "is a constant" +:+.
+  sParen (unwrap $ getUnit tau_S_P), (E $ (sy tau_L_P) $=
+  ((sy pcm_mass) * (sy htCap_L_P)) / ((sy pcm_HTC) * (sy pcm_SA))),
   S "is a constant", sParen (unwrap $ getUnit tau_S_P)]
 
 
@@ -95,8 +95,8 @@ heatEInWtr = makeRC "heatEInWtr" (nounPhraseSP "Heat energy in the water")
   htWtrDesc htWtr_Rel
 
 htWtr_Rel :: Relation
-htWtr_Rel = (FCall (C w_E) [C time]) $= (C htCap_W) * (C w_mass) *
-  ((FCall (C temp_W) [C time]) - C temp_init)
+htWtr_Rel = (FCall (sy w_E) [sy time]) $= (sy htCap_W) * (sy w_mass) *
+  ((FCall (sy temp_W) [sy time]) - sy temp_init)
 
 htWtrDesc :: Sentence
 htWtrDesc = foldlSent [S "The above", phrase equation,
@@ -113,7 +113,7 @@ htWtrDesc = foldlSent [S "The above", phrase equation,
   phrase time, getES time, sParen (unwrap $ getUnit t_init_melt) `sC`
   (getES temp_W) `sAnd` S "the", phrase temp_init `sC` getES temp_init +:+.
   sParen (unwrap $ getUnit temp_init), S "This", phrase equation,
-  S "applies as long as", (E $ (Int 0) $< (C temp_W) $< (Int 0)) :+:
+  S "applies as long as", (E $ (Int 0) $< (sy temp_W) $< (Int 0)) :+:
   (unwrap $ getUnit temp_W),
   sParen $ makeRef (mkAssump "assump14" EmptyS) `sC`
   makeRef (mkAssump "assump19" EmptyS)]
@@ -126,19 +126,19 @@ heatEInPCM = makeRC "heatEInPCM" (nounPhraseSP "Heat energy in the PCM")
   htPCMDesc htPCM_Rel
 
 htPCM_Rel :: Relation
-htPCM_Rel = C pcm_E $= Case [case1, case2, case3, case4]
-  where case1 = (C htCap_S_P * C pcm_mass * ((FCall (C temp_PCM) [C time]) -
-          C temp_init), (C temp_PCM) $< (C temp_melt_P))
+htPCM_Rel = sy pcm_E $= Case [case1, case2, case3, case4]
+  where case1 = (sy htCap_S_P * sy pcm_mass * ((FCall (sy temp_PCM) [sy time]) -
+          sy temp_init), (sy temp_PCM) $< (sy temp_melt_P))
 
-        case2 = (C pcm_initMltE + (C htFusion * C pcm_mass) +
-          (C htCap_L_P * C pcm_mass * ((FCall (C temp_PCM) [C time]) -
-          C temp_melt_P)), (C temp_PCM) $> (C temp_melt_P))
+        case2 = (sy pcm_initMltE + (sy htFusion * sy pcm_mass) +
+          (sy htCap_L_P * sy pcm_mass * ((FCall (sy temp_PCM) [sy time]) -
+          sy temp_melt_P)), (sy temp_PCM) $> (sy temp_melt_P))
 
-        case3 = (C pcm_initMltE + (FCall (C latentE_P) [C time]),
-          (C temp_PCM) $= (C temp_melt_P))
+        case3 = (sy pcm_initMltE + (FCall (sy latentE_P) [sy time]),
+          (sy temp_PCM) $= (sy temp_melt_P))
 
-        case4 = (C pcm_initMltE + (FCall (C latentE_P) [C time]),
-          (Int 0) $< (C melt_frac) $< (Int 1))
+        case4 = (sy pcm_initMltE + (FCall (sy latentE_P) [sy time]),
+          (Int 0) $< (sy melt_frac) $< (Int 1))
 
 htPCMDesc :: Sentence
 htPCMDesc = foldlSent [S "The above", phrase equation,
@@ -152,7 +152,7 @@ htPCMDesc = foldlSent [S "The above", phrase equation,
   sParen (unwrap $ getUnit htCap_S_P), S "and the", phrase change, S "in the",
   short phsChgMtrl, phrase temp, S "from the", phrase temp_init +:+.
   sParen (unwrap $ getUnit temp_init), getES pcm_E, S "for the melted",
-  short phsChgMtrl, sParen (E (C temp_PCM $> C pcm_initMltE)),
+  short phsChgMtrl, sParen (E (sy temp_PCM $> sy pcm_initMltE)),
   S "is found using", acroT 2, S "for", phrase sens_heat, S "of the" +:+.
   phrase liquid, short phsChgMtrl, S "plus the", phrase energy, S "when",
   phrase melting, S "starts, plus the", phrase energy,
@@ -160,11 +160,11 @@ htPCMDesc = foldlSent [S "The above", phrase equation,
   S "when", phrase melting, S "starts is", getES pcm_initMltE +:+.
   sParen (unwrap $ getUnit pcm_initMltE), S "The", phrase energy,
   S "required to melt all of the", short phsChgMtrl, S "is",
-  E (C htFusion * C pcm_mass), sParen (unwrap $ getUnit pcm_initMltE) +:+.
+  E (sy htFusion * sy pcm_mass), sParen (unwrap $ getUnit pcm_initMltE) +:+.
   sParen (acroDD 3), phrase heat_cap_spec `ofThe` phrase liquid,
   short phsChgMtrl, S "is", getES htCap_L_P,
   sParen (unwrap $ getUnit htCap_L_P) `sAnd` S "the", phrase change, S "in",
-  phrase temp, S "is", E (C temp_PCM - C temp_melt_P) +:+.
+  phrase temp, S "is", E (sy temp_PCM - sy temp_melt_P) +:+.
   sParen (unwrap $ getUnit temp_melt_P), getES pcm_E, S "during",
   phrase melting, S "of the", short phsChgMtrl, S "is found using the", 
   phrase energy, S "required at", S "instant" +:+ phrase melting `ofThe`
@@ -181,7 +181,7 @@ htPCMDesc = foldlSent [S "The above", phrase equation,
 
 
 {--varWithDesc :: N c => c -> Sentence
-varWithDesc conceptVar = (E $ C conceptVar) `isThe` phrase conceptVar +:+.
+varWithDesc conceptVar = (E $ sy conceptVar) `isThe` phrase conceptVar +:+.
   sParen (unwrap $ getUnit conceptVar)
 
 --need to create a wrapper

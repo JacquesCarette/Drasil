@@ -66,16 +66,16 @@ gbInputDataConstraints = (map uncrtnw gbInputsWUnitsUncrtn) ++
 plate_len = uqcND "plate_len" (nounPhraseSP "plate length (long dimension)")
   lA metre Real 
   [ gtZeroConstr,
-    physc $ UpFrom $ Exc $ C plate_width,
-    sfwrc $ Bounded (Inc $ C dim_min) (Inc $ C dim_max),
-    sfwrc $ UpTo $ Exc $ C ar_max * C plate_width ] (Dbl 1.5) defaultUncrt
+    physc $ UpFrom $ Exc $ sy plate_width,
+    sfwrc $ Bounded (Inc $ sy dim_min) (Inc $ sy dim_max),
+    sfwrc $ UpTo $ Exc $ sy ar_max * sy plate_width ] (Dbl 1.5) defaultUncrt
 
 plate_width = uqcND "plate_width" (nounPhraseSP "plate width (short dimension)")
   lB metre Real
   [ gtZeroConstr,
-    physc $ Bounded (Exc 0) (Exc $ C plate_len),
-    sfwrc $ Bounded (Inc $ C dim_min) (Inc $ C dim_max),
-    sfwrc $ UpTo $ Exc $ C plate_len / C ar_max ] (Dbl 1.2) defaultUncrt
+    physc $ Bounded (Exc 0) (Exc $ sy plate_len),
+    sfwrc $ Bounded (Inc $ sy dim_min) (Inc $ sy dim_max),
+    sfwrc $ UpTo $ Exc $ sy plate_len / sy ar_max ] (Dbl 1.2) defaultUncrt
 
 pb_tol = uvc "pb_tol" (nounPhraseSP "tolerable probability of breakage") 
   (sub cP (Atomic "btol")) Real
@@ -84,7 +84,7 @@ pb_tol = uvc "pb_tol" (nounPhraseSP "tolerable probability of breakage")
 char_weight = uqcND "char_weight" (nounPhraseSP "charge weight") 
   lW kilogram Real
   [ gtZeroConstr,
-    sfwrc $ Bounded (Inc $ C cWeightMin) (Inc $ C cWeightMax)]
+    sfwrc $ Bounded (Inc $ sy cWeightMin) (Inc $ sy cWeightMax)]
     (Dbl 42) defaultUncrt
 
 tNT = uvc "tNT" (nounPhraseSP "TNT equivalent factor")
@@ -94,7 +94,7 @@ tNT = uvc "tNT" (nounPhraseSP "TNT equivalent factor")
 standOffDist = uqcND "standOffDist" (nounPhraseSP "stand off distance") 
   (Atomic "SD") metre Real
   [ gtZeroConstr,
-    sfwrc $ Bounded (Exc $ C sd_min) (Exc $ C sd_max)]
+    sfwrc $ Bounded (Exc $ sy sd_min) (Exc $ sy sd_max)]
   (Dbl 45) defaultUncrt
 --FIXME: ^ incorporate definition in here?
 
@@ -108,7 +108,7 @@ nom_thick = cuc "nom_thick"
 glass_type  = cvc "glass_type" (nounPhraseSent $ phrase glassTy +:+ 
     displayConstrntsAsSet glass_type glassTypeAbbrsStr)
   lG ({-DiscreteS glassTypeAbbrsStr-} String)
-  [EnumeratedStr Software glassTypeAbbrsStr] (C heatSGlass) --FIXME: no typical value!
+  [EnumeratedStr Software glassTypeAbbrsStr] (sy heatSGlass) --FIXME: no typical value!
 
 {--}
 
@@ -367,7 +367,7 @@ constant_K       = mkDataDef sflawParamK  $ (Grouping (Dbl 2.86)) * (10 $^ (nega
 constant_M       = mkDataDef sflawParamM  $ 7
 constant_ModElas = mkDataDef mod_elas     $ (Grouping (Dbl 7.17)) * (10 $^ 7)
 constant_LoadDur = mkDataDef load_dur     $ 3
-constant_LoadDF  = mkDataDef lDurFac      $ (Grouping ((C load_dur) / (60))) $^ ((C sflawParamM) / (16))
+constant_LoadDF  = mkDataDef lDurFac      $ (Grouping ((sy load_dur) / (60))) $^ ((sy sflawParamM) / (16))
 constant_LoadSF  = mkDataDef loadSF       $ 1
 --Equations--
 
@@ -375,7 +375,7 @@ sdWithEqn :: QDefinition
 sdWithEqn = mkDataDef standOffDist sdCalculation
 
 sdCalculation :: Relation
-sdCalculation = euclidean (map C sdVector)
+sdCalculation = euclidean (map sy sdVector)
 
 sdVectorSent :: Sentence
 sdVectorSent = foldlsC (map (getES) sdVector)
@@ -389,15 +389,15 @@ wtntWithEqn :: QDefinition
 wtntWithEqn = mkDataDef eqTNTWeight wtntCalculation
 
 wtntCalculation :: Relation
---wtntCalculation = (C eqTNTWeight) := (C char_weight) * (C tNT)
-wtntCalculation = (C char_weight) * (C tNT)
+--wtntCalculation = (sy eqTNTWeight) := (sy char_weight) * (sy tNT)
+wtntCalculation = (sy char_weight) * (sy tNT)
 --
 
 aspectRWithEqn :: QDefinition
 aspectRWithEqn = mkDataDef aspectR aspectRCalculation
 
 aspectRCalculation :: Relation
-aspectRCalculation = (C aspectR) $= (C plate_len)/(C plate_width)
+aspectRCalculation = (sy aspectR) $= (sy plate_len)/(sy plate_width)
 
 --
 --Pulled to be used in "Terms And Definitions" Section--

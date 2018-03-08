@@ -24,7 +24,7 @@ dd1HtFluxC :: QDefinition
 dd1HtFluxC = mkDataDef ht_flux_C htFluxCEqn
 
 htFluxCEqn :: Expr
-htFluxCEqn = (C coil_HTC) * ((C temp_C) - FCall (C temp_W) [C time])
+htFluxCEqn = (sy coil_HTC) * ((sy temp_C) - FCall (sy temp_W) [sy time])
 
 --Can't include info in description beyond definition of variables?
 
@@ -32,14 +32,14 @@ dd2HtFluxP :: QDefinition
 dd2HtFluxP = mkDataDef ht_flux_P htFluxPEqn
 
 htFluxPEqn :: Expr
-htFluxPEqn = (C pcm_HTC) * (FCall (C temp_W) [C time] -
-             FCall (C temp_PCM) [C time])
+htFluxPEqn = (sy pcm_HTC) * (FCall (sy temp_W) [sy time] -
+             FCall (sy temp_PCM) [sy time])
 
 dd3HtFusion :: QDefinition
 dd3HtFusion = mkDataDef htFusion htFusionEqn
 
 htFusionEqn :: Expr
-htFusionEqn = (C latent_heat) / (C mass)
+htFusionEqn = (sy latent_heat) / (sy mass)
 
 dd4MeltFrac :: QDefinition
 dd4MeltFrac = fromEqn' (melt_frac ^. uid) -- FIXME Should (^. id) be used
@@ -50,7 +50,7 @@ dd4MeltFrac = fromEqn' (melt_frac ^. uid) -- FIXME Should (^. id) be used
   -- produced according to CaseStudies' original
 
 melt_frac_eqn :: Expr
-melt_frac_eqn = (C latentE_P) / ((C htFusion) * (C pcm_mass))
+melt_frac_eqn = (sy latentE_P) / ((sy htFusion) * (sy pcm_mass))
 
 --Need to add units to data definition descriptions
 

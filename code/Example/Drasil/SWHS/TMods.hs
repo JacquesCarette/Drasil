@@ -45,8 +45,8 @@ t1ConsThermE = makeRC "t1ConsThermE"
   (nounPhraseSP "Conservation of thermal energy") t1descr consThermERel
 
 consThermERel :: Relation
-consThermERel = (negate (C gradient)) $. (C thFluxVect) + (C vol_ht_gen) $=
-  (C density) * (C heat_cap_spec) * (Deriv Part (C temp) time)
+consThermERel = (negate (sy gradient)) $. (sy thFluxVect) + (sy vol_ht_gen) $=
+  (sy density) * (sy heat_cap_spec) * (Deriv Part (sy temp) time)
 
 t1descr :: Sentence
 t1descr = foldlSent [
@@ -85,11 +85,11 @@ t2SensHtE = makeRC "t2SensHtE"
   (nounPhraseSP "Sensible heat energy") t2descr sensHtEEqn
 
 sensHtEEqn :: Relation
-sensHtEEqn = (C sens_heat) $= Case [((C htCap_S) * (C mass) * (C deltaT),
-  ((C temp) $< (C melt_pt))), ((C htCap_L) *
-  (C mass) * (C deltaT), ((C melt_pt) $< (C temp) $<
-  (C boil_pt))), ((C htCap_V) * (C mass) *
-  (C deltaT), ((C boil_pt) $< (C temp)))]
+sensHtEEqn = (sy sens_heat) $= Case [((sy htCap_S) * (sy mass) * (sy deltaT),
+  ((sy temp) $< (sy melt_pt))), ((sy htCap_L) *
+  (sy mass) * (sy deltaT), ((sy melt_pt) $< (sy temp) $<
+  (sy boil_pt))), ((sy htCap_V) * (sy mass) *
+  (sy deltaT), ((sy boil_pt) $< (sy temp)))]
 
 --When to call with C? When to call with U, S, Sy, etc? Sometimes confusing.
 
@@ -139,9 +139,9 @@ t3LatHtE = makeRC "t3LatHtE"
   (nounPhraseSP "Latent heat energy") t3descr latHtEEqn
 
 latHtEEqn :: Relation
-latHtEEqn = FCall (C latent_heat) [C time] $= 
-  defint (eqSymb tau) 0 (C time) 
-         (Deriv Total (FCall (C latent_heat) [C tau]) tau)
+latHtEEqn = FCall (sy latent_heat) [sy time] $= 
+  defint (eqSymb tau) 0 (sy time) 
+         (Deriv Total (FCall (sy latent_heat) [sy tau]) tau)
 
 -- Integrals need dTau at end
 -- Deriv is specifically partial derivative... how to do regular derivative?

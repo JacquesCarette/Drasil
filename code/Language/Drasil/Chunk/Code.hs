@@ -44,7 +44,7 @@ symbToCodeName :: Symbol -> String
 symbToCodeName (Atomic s) = toCodeName s
 symbToCodeName (Special sp) = specialToCodeName sp
 symbToCodeName (Greek g) = greekToCodeName g
-symbToCodeName (Atop d sy) = decorate (symbToCodeName sy) d
+symbToCodeName (Atop d s) = decorate (symbToCodeName s) d
 symbToCodeName (Corners ul ll ur lr b) =
   (cleft ul) ++ (cleft ll) ++ (symbToCodeName b)
     ++ (cright lr) ++ (cright ur)
@@ -54,7 +54,7 @@ symbToCodeName (Corners ul ll ur lr b) =
         cright :: [Symbol] -> String
         cright [] = ""
         cright (s:syms) = "_" ++ symbToCodeName s ++ cright syms
-symbToCodeName (Concat sy) = concatMap symbToCodeName sy
+symbToCodeName (Concat s) = concatMap symbToCodeName s
 symbToCodeName Empty = ""
 
 decorate :: String -> Decoration -> String

@@ -37,16 +37,16 @@ htTransCladCool = fromEqn "htTransCladCool" (nounPhraseSP
   (lH `sub` lC) heat_transfer_coef htTransCladCool_eq
 
 htTransCladCool_eq =
-  (2 * (C cladCond) * (C coolFilmCond) / (2 * (C cladCond) + (C cladThick) 
-  * (C coolFilmCond)))
+  (2 * (sy cladCond) * (sy coolFilmCond) / (2 * (sy cladCond) + (sy cladThick) 
+  * (sy coolFilmCond)))
 
 htTransCladFuel = fromEqn "htTransCladFuel" (nounPhraseSP
   "effective heat transfer coefficient between clad and fuel surface")
   EmptyS
   (lH `sub` lG) heat_transfer_coef htTransCladFuel_eq
 
-htTransCladFuel_eq = (2 * (C cladCond) * (C gapFilmCond)) / (2 * (C cladCond)
-  + ((C cladThick) * (C gapFilmCond)))
+htTransCladFuel_eq = (2 * (sy cladCond) * (sy gapFilmCond)) / (2 * (sy cladCond)
+  + ((sy cladThick) * (sy gapFilmCond)))
 
 hghc, nuclearPhys, fp :: NamedChunk
 hghc = nc "hghc" (cn "tiny")

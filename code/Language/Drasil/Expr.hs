@@ -66,6 +66,9 @@ a $/ b = BinaryOp $ Divide a b
 a $&& b = Assoc And [a,b]
 a $|| b = Assoc Or  [a,b]
 
+sy :: Chunk c => c -> Expr
+sy = C
+
 type Variable = String
 
 data DerivType = Part

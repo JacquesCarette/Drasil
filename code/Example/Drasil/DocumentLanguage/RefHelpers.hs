@@ -2,6 +2,7 @@
 
 module Drasil.DocumentLanguage.RefHelpers
   ( refA, refR, refChng, cite
+  , refAByNum, refRByNum, refChngByNum, citeByNum
   )where
 
 import Language.Drasil
@@ -32,24 +33,47 @@ chunkLookup db tableLens lookupFun chunk =
 
 -- | Smart constructors for assumption referencing by name or by number.
 refA, refAByNum :: ReferenceDB -> AssumpChunk -> Sentence
-refA rdb = refACustom rdb ByName
-refAByNum rdb = refACustom rdb ByNum
+refA rfdb = refACustom rfdb ByName
+refAByNum rfdb = refACustom rfdb ByNum
 
 -- | Reference Assumptions by Name or by Number where applicable
 refACustom :: ReferenceDB -> RefBy -> AssumpChunk -> Sentence
-refACustom adb ByNum a = customRef a (short assumption :+:
-  numLookup adb assumpRefTable assumpLookup a)
-refACustom adb ByName a = makeRef (chunkLookup adb assumpRefTable assumpLookup a)
+refACustom rfdb ByNum  a = customRef a (short assumption :+:
+  numLookup rfdb assumpRefTable assumpLookup a)
+refACustom rfdb ByName a =
+  makeRef (chunkLookup rfdb assumpRefTable assumpLookup a)
+
+-- | Smart constructors for requirement referencing by name or by number.
+refR, refRByNum :: ReferenceDB -> ReqChunk -> Sentence
+refR rfdb = refRCustom rfdb ByName
+refRByNum rfdb = refRCustom rfdb ByNum
 
 -- | Reference Requirements by Name or by Number where applicable
 refRCustom :: ReferenceDB -> RefBy -> ReqChunk -> Sentence
-refRCustom rdb ByNum r = customRef r (S (show (reqType r)) :+:
-  numLookup rdb reqRefTable reqLookup r)
+refRCustom rfdb ByNum  r = customRef r (S (show (reqType r)) :+:
+  numLookup rfdb reqRefTable reqLookup r)
+refRCustom rfdb ByName r = makeRef (chunkLookup rfdb reqRefTable reqLookup r)
+
+-- | Smart constructors for likely/unlikely change referencing by name or by number.
+refChng, refChngByNum :: ReferenceDB -> Change -> Sentence
+refChng rfdb = refChngCustom rfdb ByName
+refChngByNum rfdb = refChngCustom rfdb ByNum
 
 -- | Reference Changes by Name or by Number where applicable
 refChngCustom :: ReferenceDB -> RefBy -> Change -> Sentence
-refChngCustom chdb ByNum c = customRef c (S (show (chngType c)) :+:
+refChngCustom chdb ByNum  c = customRef c (S (show (chngType c)) :+:
   numLookup chdb changeRefTable changeLookup c)
+refChngCustom chdb ByName c =
+  makeRef (chunkLookup chdb changeRefTable changeLookup c)
 
+-- | Smart constructors for citation referencing by name or by number.
+cite, citeByNum :: ReferenceDB -> Citation -> Sentence
+cite rfdb = citeCustom rfdb ByName
+citeByNum rfdb = citeCustom rfdb ByNum
+
+-- | Reference Changes by Name or by Number where applicable
 citeCustom :: ReferenceDB -> RefBy -> Citation -> Sentence
-citeCustom _ _ _ = undefined
+citeCustom rfdb ByNum  c = customRef c
+  (S "[" :+: numLookup rfdb citationRefTable citeLookup c :+: S "]")
+citeCustom rfdb ByName c =
+  makeRef (chunkLookup rfdb citationRefTable citeLookup c)

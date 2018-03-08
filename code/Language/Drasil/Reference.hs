@@ -109,6 +109,13 @@ bibMap cs = Map.fromList $ zip (map (^. id) scs) (zip scs [1..])
         -- Sorting is necessary if using elems to pull all the citations
         -- (as it sorts them and would change the order).
         -- We can always change the sorting to whatever makes most sense
+        
+citeLookup :: Chunk c => c -> BibMap -> (Citation, Int)
+citeLookup c m = let lookC = Map.lookup (c ^. id) m in
+                   getS lookC
+  where getS (Just x) = x
+        getS Nothing = error $ "Change: " ++ (c ^. id) ++
+          " referencing information not found in Change Map"
 
 -- Classes and instances --
 class HasAssumpRefs s where

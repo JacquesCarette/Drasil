@@ -153,6 +153,7 @@ module Language.Drasil (
   , ReqChunk, ReqType(..), reqType, requires, frc, nfrc, rc'
   -- Change
   , Change, ChngType(..), chngType, chng, lc, ulc, chc'
+  , citationRefTable, citeLookup
 ) where
 
 import Prelude hiding (log, sin, cos, tan, sqrt, id, return, print, break, exp, product)
@@ -233,7 +234,8 @@ import Language.Drasil.Reference (makeRef, acroTest, ReferenceDB(assumpDB, reqDB
                                  , assumpRefTable, assumptionsFromDB
                                  , rdb, reqMap, reqRefTable, reqLookup, RefBy(..)
                                  , HasReqRefs, Referable(..), changeMap, customRef
-                                 , HasChangeRefs, changeRefTable, changeLookup)
+                                 , HasChangeRefs, changeRefTable, changeLookup
+                                 , citationRefTable, citeLookup)
 import Language.Drasil.Symbol (Symbol(..), sub, sup, vec, hat, prime, sCurlyBrSymb)
 import Language.Drasil.SymbolAlphabet
 import Language.Drasil.Misc -- all of it

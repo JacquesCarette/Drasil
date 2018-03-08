@@ -9,7 +9,7 @@ import qualified Language.Drasil.HTML.AST as H
 
 import Language.Drasil.Chunk.AssumpChunk
 import Language.Drasil.Chunk.Attribute
-import Language.Drasil.Chunk.Change (chng)
+import Language.Drasil.Chunk.Change (chng, chngType, ChngType(..))
 import Language.Drasil.Chunk.Concept (defn)
 import Language.Drasil.Chunk.Eq
 import Language.Drasil.Chunk.ExprRelat (relat)
@@ -187,10 +187,9 @@ lay x@(Requirement r)   sm = H.ALUR H.Requirement
   (spec (requires r) sm) (H.S (refAdd x)) (spec (fromJust $ getShortName r) sm)
 lay x@(Assumption a)    sm = H.ALUR H.Assumption
   (spec (assuming a) sm) (H.S (refAdd x)) (spec (fromJust $ getShortName a) sm)
-lay x@(LikelyChange lc) sm =
-  H.ALUR H.LikelyChange (spec (chng lc) sm) (H.S (refAdd x)) (spec (fromJust $ getShortName lc) sm)
-lay x@(UnlikelyChange uc) sm =
-  H.ALUR H.UnlikelyChange (spec (chng uc) sm) (H.S (refAdd x)) (spec (fromJust $ getShortName uc) sm)
+lay x@(Change lc) sm = H.ALUR 
+  (if (chngType lc) == Likely then H.LikelyChange else H.UnlikelyChange)
+  (spec (chng lc) sm) (H.S (refAdd x)) (spec (fromJust $ getShortName lc) sm)
 lay (Defnt dtyp pairs rn) sm = H.Definition dtyp (layPairs pairs) (H.S rn)
   where layPairs = map (\(x,y) -> (x, (map (\z -> lay z sm) y)))
 lay (Bib bib)           sm = H.Bib $ map (layCite sm) bib

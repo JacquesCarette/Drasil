@@ -183,8 +183,7 @@ instance Referable Contents where
   refName (Defnt dt _ r)        = S (getDefName dt) :+: S r
   refName (Requirement rc)      = refName rc
   refName (Assumption ca)       = refName ca
-  refName (LikelyChange lcc)    = refName lcc
-  refName (UnlikelyChange ucc)  = refName ucc
+  refName (Change lcc)          = refName lcc
   refName (Enumeration _)       = error "Can't reference lists"
   refName (Paragraph _)         = error "Can't reference paragraphs"
   refName (Bib _)               = error $
@@ -198,8 +197,7 @@ instance Referable Contents where
   rType (Defnt _ _ _)           = Def
   rType (Requirement r)         = rType r
   rType (Assumption a)          = rType a
-  rType (LikelyChange l)        = rType l --rType lc
-  rType (UnlikelyChange u)      = rType u --rType uc
+  rType (Change l)              = rType l --rType lc
   rType (Graph _ _ _ _ _)       = Fig
   rType (EqnBlock _ _)          = EqnB
   rType _                       =
@@ -212,8 +210,7 @@ instance Referable Contents where
   refAdd (Defnt dt _ r)         = getDefName dt ++ r
   refAdd (Requirement rc)       = refAdd rc
   refAdd (Assumption ca)        = refAdd ca
-  refAdd (LikelyChange lcc)     = refAdd lcc
-  refAdd (UnlikelyChange ucc)   = refAdd ucc
+  refAdd (Change lcc)           = refAdd lcc
   refAdd (Enumeration _)        = error "Can't reference lists"
   refAdd (Paragraph _)          = error "Can't reference paragraphs"
   refAdd (Bib _)                = error $
@@ -268,10 +265,7 @@ find itm@(Definition (Theory comp1)) (frst@(Definition (Theory comp2)):lst)
 find itm@(Requirement comp1) (frst@(Requirement comp2):lst)
   | (comp1 ^. id) == (comp2 ^. id) = frst
   | otherwise = find itm lst
-find itm@(LikelyChange comp1) (frst@(LikelyChange comp2):lst)
-  | (comp1 ^. id) == (comp2 ^. id) = frst
-  | otherwise = find itm lst
-find itm@(UnlikelyChange comp1) (frst@(UnlikelyChange comp2):lst)
+find itm@(Change comp1) (frst@(Change comp2):lst)
   | (comp1 ^. id) == (comp2 ^. id) = frst
   | otherwise = find itm lst
 find _ _ = error "Error: Attempting to find unimplemented type"

@@ -6,7 +6,7 @@ import Language.Drasil.Expr (Expr(..), UFunc(..), BiFunc(..), Oper(..),
     DerivType(..), EOperator(..), ($=), RealRange(..), DomainDesc(..))
 import Language.Drasil.Chunk.AssumpChunk
 import Language.Drasil.Expr.Extract
-import Language.Drasil.Chunk.Change (chng)
+import Language.Drasil.Chunk.Change (chng, chngType, ChngType(..))
 import Language.Drasil.Chunk.Concept (defn)
 import Language.Drasil.Spec
 import qualified Language.Drasil.TeX.AST as T
@@ -166,10 +166,8 @@ lay sm x@(Requirement r)      =
   T.Requirement (spec sm (requires r)) (T.S (refAdd x))
 lay sm x@(Assumption a)       =
   T.Assumption (spec sm (assuming a)) (T.S (refAdd x))
-lay sm x@(LikelyChange lc)    =
-  T.LikelyChange (spec sm (chng lc)) (T.S (refAdd x))
-lay sm x@(UnlikelyChange ucc) =
-  T.UnlikelyChange (spec sm (chng ucc)) (T.S (refAdd x))
+lay sm x@(Change lc)    = (if (chngType lc) == Likely then 
+  T.LikelyChange else T.UnlikelyChange) (spec sm (chng lc)) (T.S (refAdd x))
 lay sm x@(Graph ps w h t _)   = T.Graph (map (\(y,z) -> (spec sm y, spec sm z)) ps)
                                w h (spec sm t) (T.S (refAdd x))
 lay sm (Defnt dtyp pairs rn)  = T.Defnt dtyp (layPairs pairs) (T.S rn)

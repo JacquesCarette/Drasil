@@ -44,8 +44,7 @@ data Contents = Table [Sentence] [[Sentence]] Title Bool RefAdd
                | Figure Label Filepath MaxWidthPercent RefAdd-- ^ Should use relative file path.
                | Requirement ReqChunk
                | Assumption AssumpChunk
-               | LikelyChange Change    --TODO: Collapse likely and unlikely?
-               | UnlikelyChange Change
+               | Change Change
                | Bib BibRef
      --        UsesHierarchy [(ModuleChunk,[ModuleChunk])]
                | Graph [(Sentence, Sentence)] (Maybe Width) (Maybe Height) Label RefAdd

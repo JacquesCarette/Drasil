@@ -117,11 +117,3 @@ binop (DotProduct a b) = [a,b]
 binop (Subtract a b) = [a,b]
 binop (Divide a b) = [a,b]
 binop (Index a b) = [a,b]
-
--- Steven edit:  need this to have a type for code generation
---   setting to all to rational
--- | Convert any chunk to a VarChunk as long as it is an instance of SymbolForm.
--- Again, used for printing equations/descriptions mostly.
---toVC :: (Chunk c, HasSymbolTable s) => c -> s -> VarChunk
---toVC c m = vc' (lookupC) (symbol lookupC) (Rational)
-  --where lookupC = symbLookup c (m ^. symbolTable)

@@ -302,10 +302,10 @@ s2_1_intro_p1 typeOf progName gvnVar = foldlSent [S "The main", phrase purpose,
 s2_3_intro_end, s2_3_intro :: Sentence
 s2_3_intro = foldlSent [S "The", phrase organization, S "of this",
   phrase document, S "follows the", phrase template, S "for an", short srs,
-  S "for", phrase sciCompS, S "proposed by" +:+ makeRef koothoor2013
-  `sAnd` makeRef smithLai2005 `sC` S "with some", 
+  S "for", phrase sciCompS, S "proposed by" +:+ cite gbRefDB koothoor2013
+  `sAnd` cite gbRefDB smithLai2005 `sC` S "with some", 
   plural aspect, S "taken from Volere", phrase template,
-  S "16", makeRef rbrtsn2012]
+  S "16", cite gbRefDB rbrtsn2012]
 
 s2_3_intro_end = foldl (+:+) EmptyS [(at_start' $ the dataDefn),
   S "are used to support", (plural definition `ofThe` S "different"),
@@ -488,7 +488,7 @@ a1Desc = foldlSent [S "The standard E1300-09a for",
   S "supported on one side acts as a", phrase cantilever]
 
 a2Desc :: Sentence
-a2Desc = foldlSent [S "Following", makeRef astm_LR2009 +:+ sParen 
+a2Desc = foldlSent [S "Following", cite gbRefDB astm_LR2009 +:+ sParen 
   (S "pg. 1") `sC` S "this", phrase practice, 
   S "does not apply to any form of", foldlOptions $ map S ["wired",
   "patterned", "etched", "sandblasted", "drilled", "notched", "grooved glass"],

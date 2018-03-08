@@ -42,28 +42,28 @@ expr (Case ps)        sm = if length ps < 2 then
                     error "Attempting to use multi-case expr incorrectly"
                     else P.Case (zip (map (flip expr sm . fst) ps) (map (flip expr sm . snd) ps))
 expr (Matrix a)         sm = P.Mtx $ map (map (flip expr sm)) a
-expr (UnaryOp u)        sm = (\(x,y) -> P.Op x [y]) $ ufunc u sm
+expr (UnaryOp o u)      sm = P.Op (ufunc o) [expr u sm]
 expr (Grouping e)       sm = P.Grouping (expr e sm)
 expr (BinaryOp b)       sm = bfunc b sm
 expr (EOp o)            sm = (\(x,y) -> P.Op x [y]) $ eop o sm
 expr (IsIn  a b)        sm = P.IsIn  (expr a sm) b
 
 -- | Helper function for translating 'UFunc's
-ufunc :: HasSymbolTable s => UFunc -> s -> (P.Function, P.Expr)
-ufunc (Abs e) sm = (P.Abs, expr e sm)
-ufunc (Norm e) sm = (P.Norm, expr e sm)
-ufunc (Log e) sm = (P.Log, expr e sm)
-ufunc (Sin e)    sm = (P.Sin,  expr e sm)
-ufunc (Cos e)    sm = (P.Cos,  expr e sm)
-ufunc (Tan e)    sm = (P.Tan,  expr e sm)
-ufunc (Sec e)    sm = (P.Sec,  expr e sm)
-ufunc (Csc e)    sm = (P.Csc,  expr e sm)
-ufunc (Cot e)    sm = (P.Cot,  expr e sm)
-ufunc (Exp e)    sm = (P.Exp,  expr e sm)
-ufunc (Sqrt e)   sm = (P.Sqrt, expr e sm)
-ufunc (Not a)    sm = (P.Not,  expr a sm)
-ufunc (Neg a)    sm = (P.Neg,  expr a sm)
-ufunc (Dim a)    sm = (P.Dim,  expr a sm)
+ufunc :: UFunc -> P.Function
+ufunc Abs  = P.Abs
+ufunc Norm = P.Norm
+ufunc Log  = P.Log
+ufunc Sin  = P.Sin
+ufunc Cos  = P.Cos
+ufunc Tan  = P.Tan
+ufunc Sec  = P.Sec
+ufunc Csc  = P.Csc
+ufunc Cot  = P.Cot
+ufunc Exp  = P.Exp
+ufunc Sqrt = P.Sqrt
+ufunc Not  = P.Not
+ufunc Neg  = P.Neg
+ufunc Dim  = P.Dim
 
 -- | Helper function for translating 'BiFunc's
 bfunc :: HasSymbolTable s => BiFunc -> s -> P.Expr

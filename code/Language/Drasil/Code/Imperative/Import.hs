@@ -454,34 +454,34 @@ convExpr (FCall (C c) x)  = do
   let info = sysinfodb $ codeSpec g
   args <- mapM convExpr x
   fApp (codeName (codefunc $ symbLookup c $ info ^. symbolTable)) args
-convExpr (FCall _ _)  = return $ litString "**convExpr :: FCall unimplemented**"
-convExpr (UnaryOp u)  = unop u
-convExpr (Grouping e) = convExpr e
-convExpr (BinaryOp b) = bfunc b
-convExpr (Case l)     = doit l -- FIXME this is sub-optimal
+convExpr (FCall _ _)   = return $ litString "**convExpr :: FCall unimplemented**"
+convExpr (UnaryOp o u) = fmap (unop o) (convExpr u)
+convExpr (Grouping e)  = convExpr e
+convExpr (BinaryOp b)  = bfunc b
+convExpr (Case l)      = doit l -- FIXME this is sub-optimal
   where
     doit [] = error "should never happen"
     doit [(e,_)] = convExpr e -- should always be the else clause
     doit ((e,cond):xs) = liftM3 Condi (convExpr cond) (convExpr e) (convExpr (Case xs))
-convExpr (Matrix _)   = error "convExpr: Matrix"
-convExpr (EOp _)      = error "convExpr: EOp"
-convExpr (IsIn _ _)      = error "convExpr: IsIn"
+convExpr (Matrix _)    = error "convExpr: Matrix"
+convExpr (EOp _)       = error "convExpr: EOp"
+convExpr (IsIn _ _)    = error "convExpr: IsIn"
 
-unop :: UFunc -> Reader State Value
-unop (E.Sqrt e)  = fmap (#/^) (convExpr e)
-unop (E.Log e)   = fmap I.log (convExpr e)
-unop (E.Abs e)   = fmap (#|)  (convExpr e)
-unop (E.Exp e)   = fmap I.exp (convExpr e)
-unop (E.Sin e)   = fmap I.sin (convExpr e)
-unop (E.Cos e)   = fmap I.cos (convExpr e)
-unop (E.Tan e)   = fmap I.tan (convExpr e)
-unop (E.Csc e)   = fmap I.csc (convExpr e)
-unop (E.Sec e)   = fmap I.sec (convExpr e)
-unop (E.Cot e)   = fmap I.cot (convExpr e)
-unop (E.Dim a)   = fmap ($.listSize) (convExpr a)
-unop (E.Norm _)  = error "unop: Norm not implemented"
-unop (E.Not e)   = fmap (?!) (convExpr e)
-unop (E.Neg e)   = fmap (#~) (convExpr e)
+unop :: UFunc -> (Value -> Value)
+unop E.Sqrt = (#/^)
+unop E.Log  = I.log
+unop E.Abs  = (#|)
+unop E.Exp  = I.exp
+unop E.Sin  = I.sin
+unop E.Cos  = I.cos
+unop E.Tan  = I.tan
+unop E.Csc  = I.csc
+unop E.Sec  = I.sec
+unop E.Cot  = I.cot
+unop E.Dim  = ($.listSize)
+unop E.Norm = error "unop: Norm not implemented"
+unop E.Not  = (?!)
+unop E.Neg  = (#~)
 
 bfunc :: BiFunc -> Reader State Value
 bfunc (EEquals a b)    = liftM2 (?==) (convExpr a) (convExpr b)

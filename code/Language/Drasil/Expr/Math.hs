@@ -6,43 +6,43 @@ import Language.Drasil.Expr
 
 -- | Smart constructor to take the log of an expression
 log :: Expr -> Expr
-log = UnaryOp . Log
+log = UnaryOp Log
 
 -- | Smart constructor to take the square root of an expression
 sqrt :: Expr -> Expr
-sqrt = UnaryOp . Sqrt
+sqrt = UnaryOp Sqrt
 
 -- | Smart constructor to apply sin to an expression
 sin :: Expr -> Expr
-sin = UnaryOp . Sin
+sin = UnaryOp Sin
 
 -- | Smart constructor to apply cos to an expression
 cos :: Expr -> Expr 
-cos = UnaryOp . Cos
+cos = UnaryOp Cos
 
 -- | Smart constructor to apply tan to an expression
 tan :: Expr -> Expr
-tan = UnaryOp . Tan
+tan = UnaryOp Tan
 
 -- | Smart constructor to apply sec to an expression
 sec :: Expr -> Expr 
-sec = UnaryOp . Sec
+sec = UnaryOp Sec
 
 -- | Smart constructor to apply csc to an expression
 csc :: Expr -> Expr
-csc = UnaryOp . Csc
+csc = UnaryOp Csc
 
 -- | Smart constructor to apply cot to an expression
 cot :: Expr -> Expr 
-cot = UnaryOp . Cot
+cot = UnaryOp Cot
 
 -- | Smart constructor for the exponential (base e) function
 exp :: Expr -> Expr
-exp = UnaryOp . Exp
+exp = UnaryOp Exp
 
 -- | Smart constructor for the dimension of a vector
 dim :: Expr -> Expr
-dim = UnaryOp . Dim
+dim = UnaryOp Dim
 
 -- | Smarth constructor for indexing
 idx :: Expr -> Expr -> Expr

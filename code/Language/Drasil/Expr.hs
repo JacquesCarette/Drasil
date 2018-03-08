@@ -41,7 +41,7 @@ data Expr where
                                      -- each pair represents one case
   Matrix   :: [[Expr]] -> Expr
   Grouping :: Expr -> Expr
-  UnaryOp  :: UFunc -> Expr
+  UnaryOp  :: UFunc -> Expr -> Expr
   BinaryOp :: BiFunc -> Expr
   EOp      :: EOperator -> Expr
 
@@ -78,8 +78,8 @@ instance Num Expr where
   a * b = Assoc Mul [a, b]
   a - b = BinaryOp $ Subtract a b
   fromInteger a = Int a
-  abs = UnaryOp . Abs
-  negate = UnaryOp . Neg
+  abs = UnaryOp Abs
+  negate = UnaryOp Neg
 
   -- this is a Num wart
   signum _ = error "should not use signum in expressions"
@@ -134,21 +134,9 @@ data EOperator where
   Integral :: DomainDesc -> Expr -> EOperator
 
 -- | Unary functions
-data UFunc where
-  Norm   :: Expr -> UFunc -- Norm
-  Abs    :: Expr -> UFunc -- Absolute value
-  Log    :: Expr -> UFunc
-  Sin    :: Expr -> UFunc
-  Cos    :: Expr -> UFunc
-  Tan    :: Expr -> UFunc
-  Sec    :: Expr -> UFunc
-  Csc    :: Expr -> UFunc
-  Cot    :: Expr -> UFunc
-  Exp    :: Expr -> UFunc
-  Sqrt   :: Expr -> UFunc
-  Not    :: Expr -> UFunc
-  Neg    :: Expr -> UFunc
-  Dim    :: Expr -> UFunc -- dimension (mostly of a vector)
+data UFunc = Norm | Abs | Log | Sin | Cos | Tan | Sec | Csc | Cot | Exp
+  | Sqrt | Not | Neg | Dim
+
 
 -- | Domain Description. A 'Domain' is the extent of a variable that
 -- ranges over a particular Space. So a |DomainDesc| contains

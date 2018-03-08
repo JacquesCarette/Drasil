@@ -513,5 +513,5 @@ mkRequirement :: String -> Sentence -> Contents
 mkRequirement i desc = Requirement $ frc i desc (S i) [] --FIXME: HACK - Should have explicit refname
 
 mkLklyChnk :: String -> Sentence -> Contents
-mkLklyChnk i desc = LikelyChange $ lc i desc (S i) [] -- FIXME: HACK -- See above
+mkLklyChnk i desc = Change $ lc i desc (S i) [] -- FIXME: HACK -- See above
 

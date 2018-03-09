@@ -8,7 +8,6 @@ import Language.Drasil.Chunk.Attribute
 import Language.Drasil.Spec (Sentence, RefName)
 
 import Control.Lens (set, (^.))
-import Prelude hiding (id)
 
 -- We will likely need to differentiate functional/non-functional reqs
 -- (or whatever we want to call them) for the future when we parse our 
@@ -39,11 +38,11 @@ data ReqChunk = RC
   }
   
 instance Chunk ReqChunk where
-  id f (RC a b c d e) = fmap (\x -> RC x b c d e) (f a)
+  uid f (RC a b c d e) = fmap (\x -> RC x b c d e) (f a)
 instance HasAttributes ReqChunk where
   attributes f (RC a b c d e) = fmap (\x -> RC a b c d x) (f e)
 instance Eq ReqChunk where
-  a == b = a ^. id == b ^. id
+  a == b = a ^. uid == b ^. uid
 
 -- | Smart constructor for requirement chunks (should not be exported)
 rc :: String -> ReqType -> Sentence -> RefName -> Attributes -> ReqChunk

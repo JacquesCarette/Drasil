@@ -4,7 +4,8 @@ module Language.Drasil.CodeSpec where
 import Language.Drasil.Chunk.Code
 import Language.Drasil.Chunk.NamedIdea
 import Language.Drasil.Chunk.Eq
-import Language.Drasil.Chunk.Quantity -- for hack and codeSymb
+import Language.Drasil.Chunk.Quantity -- for hack
+import Language.Drasil.Chunk.SymbolForm (codeSymb)
 import Language.Drasil.NounPhrase
 import Language.Drasil.Symbol
 import Language.Drasil.Spec hiding (Mod)
@@ -31,7 +32,7 @@ type Derived = CodeDefinition
 type Def = CodeDefinition
 
 data CodeSpec = CodeSpec {
-  program :: CodeName,
+  program :: IdeaDict,
   inputs :: [Input],
   extInputs :: [Input],
   derivedInputs :: [Derived],
@@ -84,7 +85,7 @@ codeSpec' (SI {_sys = sys, _quants = q, _definitions = defs', _inputs = ins, _ou
       outs' = map codevar outs
       allInputs = nub $ inputs' ++ map codevar derived
   in  CodeSpec {
-        program = NICN sys,
+        program = nw sys,
         inputs = allInputs,
         extInputs = inputs',
         derivedInputs = derived,
@@ -149,7 +150,7 @@ relToQD :: (ExprRelat c, HasSymbolTable ctx) => ctx -> c -> QDefinition
 relToQD sm r = convertRel sm $ r ^. relat
 
 convertRel :: HasSymbolTable ctx => ctx -> Expr -> QDefinition
-convertRel sm (BinaryOp (EEquals (C x) r)) = ec' (symbLookup x (sm ^. symbolTable)) r
+convertRel sm (BinaryOp Eq (C x) r) = ec' (symbLookup x (sm ^. symbolTable)) r
 convertRel _ _ = error "Conversion failed"
 
 data Mod = Mod Name [Func]
@@ -202,13 +203,12 @@ fdec :: (Quantity c) => c -> Space -> FuncStmt
 fdec v t = FDec (codevar v) (spaceToCodeType t)
 
 asVC :: Func -> VarChunk
-asVC (FDef (FuncDef n _ _ _)) = makeVC' n (nounPhraseSP n) (Atomic n)
-asVC (FData (FuncData n _)) = makeVC' n (nounPhraseSP n) (Atomic n)
+asVC (FDef (FuncDef n _ _ _)) = implVar n (nounPhraseSP n) (Atomic n) Real
+asVC (FData (FuncData n _)) = implVar n (nounPhraseSP n) (Atomic n) Real
 asVC (FCD cd) = codeVC cd (codeSymb cd) (cd ^. typ)
 
 asExpr :: Func -> Expr
 asExpr f = C $ asVC f
-
 
 -- name of variable/function maps to module name
 type ModExportMap = Map.Map String String
@@ -300,7 +300,7 @@ prefixFunctions = map (\(Mod nm fs) -> Mod nm $ map pfunc fs)
 getDerivedInputs :: HasSymbolTable ctx => [QDefinition] -> [Input] -> [Const] -> ctx -> [QDefinition]
 getDerivedInputs defs' ins consts sm =
   let refSet = ins ++ map codevar consts 
-  in  filter ((`subsetOf` refSet) . flip codevars sm . equat) defs'
+  in  filter ((`subsetOf` refSet) . flip codevars sm . (^.equat)) defs'
   
 type Known = CodeChunk
 type Need  = CodeChunk

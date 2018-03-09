@@ -1,20 +1,18 @@
 module Language.Drasil.Make.Import where
 
-import Language.Drasil.Output.Formats (DocType(..))
+import Language.Drasil.Output.Formats (DocSpec(..), DocType(..))
 import Language.Drasil.Make.AST
 
 -- | Creates a Makefile (calls 'makeRules')
-toMake :: [DocType] -> Makefile
+toMake :: [DocSpec] -> Makefile
 toMake rl = M $ makeRules rl
 
--- | Helper for creating make rules for different document types
-makeRules :: [DocType] -> [Rule]
-makeRules [] = []
-makeRules ((SRS fn):rs) =  [(Phony, "srs", [fn ++ ".pdf"]), (TeX, fn, [])]
-                             ++ makeRules rs
-makeRules ((MG fn):rs)  =  [(Phony, "mg", [fn ++ ".pdf"]), (TeX, fn, [])]
-                             ++ makeRules rs
-makeRules ((MIS fn):rs) =  [(Phony, "mis", [fn ++ ".pdf"]), (TeX, fn, [])]
-                             ++ makeRules rs
-makeRules (_:rs)        =  [] ++ makeRules rs
+makeRule :: DocSpec -> [Rule]
+makeRule (DocSpec SRS fn)     = [(Phony, "srs", [fn ++ ".pdf"]), (TeX, fn, [])]
+makeRule (DocSpec MG  fn)     = [(Phony, "mg" , [fn ++ ".pdf"]), (TeX, fn, [])]
+makeRule (DocSpec MIS fn)     = [(Phony, "mis", [fn ++ ".pdf"]), (TeX, fn, [])]
+makeRule (DocSpec Website _)  = []
 
+-- | Helper for creating make rules for different document types
+makeRules :: [DocSpec] -> [Rule]
+makeRules l = concatMap makeRule l

@@ -3,7 +3,7 @@ module Language.Drasil.TeX.AST where
 import Language.Drasil.Symbol (Symbol)
 import Language.Drasil.Unicode (Greek,Special)
 import Language.Drasil.Spec (USymb, RefType)
-import Language.Drasil.Chunk.Citation (Month(..), ExternRefType, EntryID)
+import Language.Drasil.Chunk.Citation (Month(..), CitationKind, EntryID)
 import Language.Drasil.People (People)
 import Language.Drasil.Document (MaxWidthPercent, DType)
 import Language.Drasil.Printing.AST
@@ -66,7 +66,7 @@ type BibRef = [Citation]
 type City   = Spec
 type State  = Spec
 
-data Citation = Cite EntryID ExternRefType [CiteField]
+data Citation = Cite EntryID CitationKind [CiteField]
 
 -- | Fields used in citations.
 data CiteField = Address      Spec

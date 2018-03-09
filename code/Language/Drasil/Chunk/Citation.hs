@@ -1,6 +1,6 @@
 module Language.Drasil.Chunk.Citation
   ( -- Types
-    Citation, BibRef, CiteField(..), Month(..), HP(..), ExternRefType(..), EntryID
+    Citation, BibRef, CiteField(..), Month(..), HP(..), CitationKind(..), EntryID
     -- Accessors
   , citeID, externRefT, fields
     -- CiteFields smart constructors
@@ -22,7 +22,6 @@ module Language.Drasil.Chunk.Citation
   , cProceedings, cTechReport, cUnpublished
   ) where
 
-import Prelude hiding (id)
 import Language.Drasil.People
 import Language.Drasil.Spec (Sentence(..))
 import Language.Drasil.Chunk
@@ -91,33 +90,33 @@ instance Show Month where
 data Citation = Cite
   { _id :: String
   , citeID :: EntryID
-  , externRefT :: ExternRefType
+  , externRefT :: CitationKind
   , fields :: [CiteField]
   }
 
 -- | Smart constructor which implicitly uses EntryID as chunk i.
-cite :: EntryID -> ExternRefType -> [CiteField] -> Citation
+cite :: EntryID -> CitationKind -> [CiteField] -> Citation
 cite i = Cite i i
 
 -- | Citations are chunks.
 instance Chunk Citation where
-  id f (Cite a b c d) = fmap (\x -> Cite x b c d) (f a)
+  uid f (Cite a b c d) = fmap (\x -> Cite x b c d) (f a)
 
 -- | External references come in many flavours. Articles, Books, etc.
 -- (we are using the types available in Bibtex)
-data ExternRefType = Article
-                   | Book
-                   | Booklet
-                   | InBook
-                   | InCollection
-                   | InProceedings
-                   | Manual
-                   | MThesis
-                   | Misc
-                   | PhDThesis
-                   | Proceedings
-                   | TechReport
-                   | Unpublished
+data CitationKind = Article
+                  | Book
+                  | Booklet
+                  | InBook
+                  | InCollection
+                  | InProceedings
+                  | Manual
+                  | MThesis
+                  | Misc
+                  | PhDThesis
+                  | Proceedings
+                  | TechReport
+                  | Unpublished
 
 -- | Article citation requires author(s), title, journal, year.
 -- Optional fields can be: volume, number, pages, month, and note.

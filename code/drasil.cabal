@@ -92,6 +92,7 @@ library
     , Language.Drasil.Chunk.Concept
     , Language.Drasil.Chunk.ConVar
     , Language.Drasil.Chunk.Constrained
+    , Language.Drasil.Chunk.DefinedQuantity
     , Language.Drasil.Chunk.Eq
     , Language.Drasil.Chunk.ExprRelat
     , Language.Drasil.Chunk.GenDefn
@@ -105,9 +106,8 @@ library
     , Language.Drasil.Chunk.UncertainQuantity
     , Language.Drasil.Chunk.Unital
     , Language.Drasil.Chunk.Unitary
+    , Language.Drasil.Chunk.UnitaryConcept
     , Language.Drasil.Chunk.VarChunk
-    , Language.Drasil.Chunk.Wrapper.QSWrapper
-    , Language.Drasil.Chunk.Wrapper.UWrapper
     , Language.Drasil.ChunkDB
     , Language.Drasil.Expr.Extract
     , Language.Drasil.Make.AST
@@ -390,5 +390,5 @@ executable swhs
   
 source-repository head
   type:     git
-  location: git://github.com/JacquesCarette/literate-scientific-software.git
+  location: git://github.com/JacquesCarette/Drasil.git
   subdir: code

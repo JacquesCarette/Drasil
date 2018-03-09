@@ -1,7 +1,7 @@
 module Language.Drasil.HTML.Import where
 
 import Prelude hiding (id)
-import Language.Drasil.Expr (Expr(..), UFunc(..), BiFunc(..), Oper(..),
+import Language.Drasil.Expr (Expr(..), Oper(..), BinOp(..),
     DerivType(..), EOperator(..), ($=), DomainDesc(..), RealRange(..))
 import Language.Drasil.Spec
 import qualified Language.Drasil.Printing.AST as P
@@ -14,7 +14,8 @@ import Language.Drasil.Chunk.Concept (defn)
 import Language.Drasil.Chunk.Eq
 import Language.Drasil.Chunk.ExprRelat (relat)
 import Language.Drasil.Chunk.NamedIdea (term, getA)
-import Language.Drasil.Chunk.Quantity (Quantity(..), eqSymb)
+import Language.Drasil.Chunk.Quantity (Quantity(..))
+import Language.Drasil.Chunk.SymbolForm (eqSymb)
 import Language.Drasil.Chunk.ReqChunk (requires)
 import Language.Drasil.ChunkDB (HasSymbolTable(..), getUnitLup, symbLookup)
 import Language.Drasil.Chunk.Citation ( CiteField(..), HP(..), Citation 
@@ -35,13 +36,13 @@ import Data.Maybe (fromJust)
 
 -- | expr translation function from Drasil to HTML 'AST'
 expr :: HasSymbolTable s => Expr -> s -> P.Expr
-expr (V v)            _ = P.Var   v
 expr (Dbl d)          _ = P.Dbl   d
 expr (Int i)          _ = P.Int   i
+expr (Str s)          _ = P.Str   s
 expr (Assoc op l)     sm = P.Assoc op $ map (\x -> expr x sm) l
-expr (Deriv Part a b) sm = P.BOp P.Frac (P.Assoc Mul [P.Sym (Special Partial), expr a sm])
+expr (Deriv Part a b) sm = P.BOp Frac (P.Assoc Mul [P.Sym (Special Partial), expr a sm])
                           (P.Assoc Mul [P.Sym (Special Partial), expr (C b) sm])
-expr (Deriv Total a b)sm = P.BOp P.Frac (P.Assoc Mul [P.Sym lD, expr a sm])
+expr (Deriv Total a b)sm = P.BOp Frac (P.Assoc Mul [P.Sym lD, expr a sm])
                           (P.Assoc Mul [P.Sym lD, expr (C b) sm])
 expr (C c)            sm = -- FIXME: Add Stage for Context
   P.Sym $ (eqSymb (symbLookup c (sm ^. symbolTable)))
@@ -50,60 +51,27 @@ expr (Case ps)        sm = if length ps < 2 then
                     error "Attempting to use multi-case expr incorrectly"
                     else P.Case (zip (map (flip expr sm . fst) ps) (map (flip expr sm . snd) ps))
 expr (Matrix a)         sm = P.Mtx $ map (map (flip expr sm)) a
-expr (UnaryOp u)        sm = (\(x,y) -> P.Op x [y]) $ ufunc u sm
+expr (UnaryOp o u)      sm = P.UOp o (expr u sm)
 expr (Grouping e)       sm = P.Grouping (expr e sm)
-expr (BinaryOp b)       sm = bfunc b sm
-expr (EOp o)            sm = (\(x,y) -> P.Op x [y]) $ eop o sm
+expr (BinaryOp Div a b)  sm = P.BOp Frac (replace_divs a sm) (replace_divs b sm)
+expr (BinaryOp o a b)   sm = P.BOp o (expr a sm) (expr b sm)
+expr (EOp o)            sm = eop o sm
 expr (IsIn  a b)        sm = P.IsIn  (expr a sm) b
 
--- | Helper function for translating 'UFunc's
-ufunc :: HasSymbolTable s => UFunc -> s -> (P.Function, P.Expr)
-ufunc (Abs e) sm = (P.Abs, expr e sm)
-ufunc (Norm e) sm = (P.Norm, expr e sm)
-ufunc (Log e) sm = (P.Log, expr e sm)
-ufunc (Sin e)    sm = (P.Sin,  expr e sm)
-ufunc (Cos e)    sm = (P.Cos,  expr e sm)
-ufunc (Tan e)    sm = (P.Tan,  expr e sm)
-ufunc (Sec e)    sm = (P.Sec,  expr e sm)
-ufunc (Csc e)    sm = (P.Csc,  expr e sm)
-ufunc (Cot e)    sm = (P.Cot,  expr e sm)
-ufunc (Exp e)    sm = (P.Exp,  expr e sm)
-ufunc (Sqrt e)   sm = (P.Sqrt, expr e sm)
-ufunc (Not a)    sm = (P.Not,  expr a sm)
-ufunc (Neg a)    sm = (P.Neg,  expr a sm)
-ufunc (Dim a)    sm = (P.Dim,  expr a sm)
-
--- | Helper function for translating 'BiFunc's
-bfunc :: HasSymbolTable s => BiFunc -> s -> P.Expr
-bfunc (Cross e1 e2)      sm = P.BOp P.Cross (expr e1 sm) (expr e2 sm)
-bfunc (Power a b)        sm = P.BOp P.Pow (expr a sm) (expr b sm)
-bfunc (EEquals a b)      sm = P.BOp P.Eq  (expr a sm) (expr b sm)
-bfunc (ENEquals a b)     sm = P.BOp P.NEq (expr a sm) (expr b sm)
-bfunc (ELess a b)        sm = P.BOp P.Lt  (expr a sm) (expr b sm)
-bfunc (EGreater a b)     sm = P.BOp P.Gt  (expr a sm) (expr b sm)
-bfunc (ELessEq a b)      sm = P.BOp P.LEq (expr a sm) (expr b sm)
-bfunc (EGreaterEq a b)   sm = P.BOp P.GEq (expr a sm) (expr b sm)
-bfunc (Implies a b)      sm = P.BOp P.Impl (expr a sm) (expr b sm)
-bfunc (IFF a b)          sm = P.BOp P.Iff  (expr a sm) (expr b sm)
-bfunc (DotProduct a b)   sm = P.BOp P.Dot  (expr a sm) (expr b sm)
-bfunc (Subtract a b)     sm = P.BOp P.Sub  (expr a sm) (expr b sm)
-bfunc (Divide a b)       sm = P.BOp P.Frac (replace_divs a sm) (replace_divs b sm)
-bfunc (Index a i)        sm = P.BOp P.Index (expr a sm) (expr i sm)
-
 -- | Helper function for translating 'EOperator's
-eop :: HasSymbolTable s => EOperator -> s -> (P.Function, P.Expr)
+eop :: HasSymbolTable s => EOperator -> s -> P.Expr
 eop (Summation (IntegerDD v (BoundedR l h)) e) sm =
-  (P.Summation (Just ((v, expr l sm), expr h sm)), (expr e sm))
-eop (Summation (All _) e) sm = (P.Summation Nothing,(expr e sm))
+  P.Funct (P.Summation (Just ((v, expr l sm), expr h sm))) (expr e sm)
+eop (Summation (All _) e) sm = P.Funct (P.Summation Nothing) (expr e sm)
 eop (Summation(RealDD _ _) _) _ = error "HTML/Import.hs Summation cannot be over Real"
 eop (Product (IntegerDD v (BoundedR l h)) e) sm =
-  (P.Product (Just ((v, expr l sm), expr h sm)), expr e sm)
-eop (Product (All _) e) sm = (P.Product Nothing, (expr e sm))
+  P.Funct (P.Product (Just ((v, expr l sm), expr h sm))) (expr e sm)
+eop (Product (All _) e) sm = P.Funct (P.Product Nothing) (expr e sm)
 eop (Product (RealDD _ _) _) _ = error "HTML/Import.hs Product cannot be over Real"
 eop (Integral (RealDD v (BoundedR l h)) e) sm =
-  (P.Integral (Just (expr l sm), Just (expr h sm)) v, expr e sm)
+  P.Funct (P.Integral (Just (expr l sm), Just (expr h sm)) v) (expr e sm)
 eop (Integral (All v) e) sm =
-  (P.Integral (Just (P.Sym v), Nothing) v, expr e sm)
+  P.Funct (P.Integral (Just (P.Sym v), Nothing) v) (expr e sm)
 eop (Integral (IntegerDD _ _) _) _ =
   error "HTML/Import.hs Integral cannot be over Integers"
 
@@ -114,11 +82,11 @@ int_wrt wrtc = P.Assoc Mul [P.Sym lD, P.Sym wrtc]
 
 -- | Helper function for translating operations in expressions
 replace_divs :: HasSymbolTable s => Expr -> s -> P.Expr
-replace_divs (BinaryOp (Divide a b)) sm = P.BOp P.Div (replace_divs a sm) (replace_divs b sm)
-replace_divs (Assoc op l)           sm = P.Assoc op $ map (\x -> replace_divs x sm) l
-replace_divs (BinaryOp (Power a b)) sm = P.BOp P.Pow (replace_divs a sm) (replace_divs b sm)
-replace_divs (BinaryOp (Subtract a b)) sm = P.BOp P.Sub (replace_divs a sm) (replace_divs b sm)
-replace_divs a                      sm = expr a sm
+replace_divs (BinaryOp Div a b)  sm = P.BOp Div (replace_divs a sm) (replace_divs b sm)
+replace_divs (Assoc op l)        sm = P.Assoc op $ map (\x -> replace_divs x sm) l
+replace_divs (BinaryOp Pow  a b) sm = P.BOp Pow (replace_divs a sm) (replace_divs b sm)
+replace_divs (BinaryOp Subt a b) sm = P.BOp Subt (replace_divs a sm) (replace_divs b sm)
+replace_divs a                   sm = expr a sm
 
 -- | Translates Sentence to the HTML representation of Sentence ('Spec')
 spec :: HasSymbolTable s => Sentence -> s -> H.Spec
@@ -225,7 +193,7 @@ layField sm (HowPublished (Verb s)) = H.HowPublished (H.Verb $ spec s sm)
 -- | Translates lists
 makeL :: HasSymbolTable s => ListType -> s -> H.ListType
 makeL (Bullet bs)      sm = H.Unordered   $ map (flip item sm) bs
-makeL (Numeric ns)      sm = H.Ordered     $ map (flip item sm) ns
+makeL (Numeric ns)     sm = H.Ordered     $ map (flip item sm) ns
 makeL (Simple ps)      sm = H.Simple      $ map (\(x,y) -> (spec x sm, item y sm)) ps
 makeL (Desc ps)        sm = H.Desc        $ map (\(x,y) -> (spec x sm, item y sm)) ps
 makeL (Definitions ps) sm = H.Definitions $ map (\(x,y) -> (spec x sm, item y sm)) ps
@@ -265,12 +233,12 @@ missingAcro _ (Just a) = S "<b>":+: a :+: S "</b>"
 -- HTML's version of Sentence
 buildEqn :: HasSymbolTable s => QDefinition -> s -> H.Spec
 buildEqn c sm = H.N (eqSymb c) H.:+: H.S " = " H.:+:
-  H.E (expr (equat c) sm)
+  H.E (expr (c^.equat) sm)
 
 -- | Build descriptions in data defs based on required verbosity
 buildDDDescription :: HasSymbolTable s => QDefinition -> s -> H.Spec
 buildDDDescription c m = descLines
-  (if verboseDDDescription then (vars (getQ c $= equat c) m) else []) m
+  (if verboseDDDescription then (vars (getQ c $= c^.equat) m) else []) m
   where getQ (EC a _ _) = C a
 
 -- | Helper for building each line of the description of a data def

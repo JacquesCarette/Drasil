@@ -20,7 +20,7 @@ import Language.Drasil
 import Data.Drasil.Concepts.Documentation
 import Data.Drasil.Concepts.Math (equation)
 import Data.Drasil.Concepts.Software (program)
-import Data.Drasil.Utils (foldle)
+import Data.Drasil.Utils (foldle, getES, fmtU, getRVal)
 import Data.Drasil.SentenceStructures
 import qualified Drasil.SRS as SRS
 
@@ -233,26 +233,24 @@ dataConstraintUncertainty = foldlSent [S "The", phrase uncertainty, phrase colum
 
 -- Creates the input Data Constraints Table
 inDataConstTbl :: (UncertainQuantity c, Constrained c) => [c] -> Contents
-inDataConstTbl qlst = Table ([S "Var"] ++ 
-  (addTitle (titleize' physicalConstraint) $ physC (head qlst) qlst) ++
-  (addTitle (titleize' softwareConstraint) $ sfwrC (head qlst) qlst) ++ 
-  [S "Typical" +:+ titleize value] ++
-  (addTitle (short typUnc) $ typUncr (head qlst) qlst))
-  (map (\x -> fmtInputConstr x qlst) qlst)
-  (S "Input Data Constraints") True "InDataConstraints"
+inDataConstTbl qlst = Table titl cts (S "Input Data Constraints") True "InDataConstraints"
+  where
+   datum = [(S "Var", map getES qlst),
+            (titleize' physicalConstraint, map fmtPhys qlst),
+            (titleize' softwareConstraint, map fmtSfwr qlst),
+            (S "Typical Value", map (\q -> fmtU (E $ getRVal q) q) qlst),
+            (short typUnc, map typUncr qlst)]
+   tbl = mkTableFromColumns datum
+   titl = fst tbl
+   cts = snd tbl
 
 -- Creates the output Data Constraints Table
 outDataConstTbl :: (Quantity c, Constrained c) => [c] -> Contents
-outDataConstTbl qlst = Table ([S "Var"] ++ 
-  (addTitle (titleize' physicalConstraint) $ physC (head qlst) qlst) ++
-  (addTitle (titleize' softwareConstraint) $ sfwrC (head qlst) qlst))
-  (map (\x -> fmtOutputConstr x qlst) qlst)
-  (S "Output Data Constraints") True "OutDataConstraints"
-
-------------------------------------------------------------
--- Not exported
-
--- If there's something, add the title (as a singleton list)
-addTitle :: title -> [a] -> [title]
-addTitle _ [] = []
-addTitle t _  = [t]
+outDataConstTbl qlst = Table titl cts (S "Output Data Constraints") True "OutDataConstraints"
+  where
+   datum = [(S "Var", map getES qlst),
+            (titleize' physicalConstraint, map fmtPhys qlst),
+            (titleize' softwareConstraint, map fmtSfwr qlst)]
+   tbl = mkTableFromColumns datum
+   titl = fst tbl
+   cts = snd tbl

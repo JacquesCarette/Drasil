@@ -1,6 +1,6 @@
 module Main (main) where
 
-import Language.Drasil (DocType(SRS,Website), Recipe(Recipe), gen
+import Language.Drasil (DocType(SRS,Website), DocSpec(DocSpec),Recipe(Recipe), gen
   , Choices(..), ImplementationType(..)
   , Logging(..), ConstraintBehaviour(..), Structure(..), Comments(..)
   , Lang(..))
@@ -8,8 +8,8 @@ import Language.Drasil (DocType(SRS,Website), Recipe(Recipe), gen
 import Drasil.SSP.Body (ssp_srs, sspSymMap)
 
 docs :: [Recipe]
-docs = [Recipe (Website "SSP_SRS") ssp_srs,
-        Recipe (SRS "SSP_SRS") ssp_srs
+docs = [Recipe (DocSpec Website "SSP_SRS") ssp_srs,
+        Recipe (DocSpec SRS "SSP_SRS") ssp_srs
        ]
 
 sspChoices :: Choices

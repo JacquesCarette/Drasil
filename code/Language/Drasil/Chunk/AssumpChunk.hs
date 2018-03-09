@@ -11,8 +11,6 @@ import Language.Drasil.Spec (Sentence(..), RefName)
 
 import Control.Lens ((^.))
 
-import Prelude hiding (id)
-
 -- | Assumption chunk type. Has id, what is being assumed, and attributes.
 -- Presently assumptions are captured as sentences.
 data AssumpChunk = AC 
@@ -23,11 +21,11 @@ data AssumpChunk = AC
                  }
 
 instance Chunk AssumpChunk where
-  id f (AC a b c d) = fmap (\x -> AC x b c d) (f a)
+  uid f (AC a b c d) = fmap (\x -> AC x b c d) (f a)
 instance HasAttributes AssumpChunk where
   attributes f (AC a b c d) = fmap (\x -> AC a b c x) (f d)
 instance Eq AssumpChunk where
-  a == b = a ^. id == b ^. id
+  a == b = a ^. uid == b ^. uid
   
 -- | Smart constructor for Assumption chunks. The second 'Sentence' here is 
 -- a short name (attribute).

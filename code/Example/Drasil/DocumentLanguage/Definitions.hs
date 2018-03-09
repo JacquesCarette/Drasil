@@ -12,16 +12,9 @@ module Drasil.DocumentLanguage.Definitions
   )where
 
 import Language.Drasil
-import Data.Drasil.Utils (foldle)
+import Data.Drasil.Utils (foldle, eqUnR)
 
 import Control.Lens ((^.))
-
-import Prelude hiding (id)
-
--- For equation blocks that cannot be referenced
--- HACK
-eqUnR :: Expr -> Contents
-eqUnR e = EqnBlock e ""
 
 -- | Synonym for a list of 'Field'
 type Fields = [Field]
@@ -54,12 +47,12 @@ type VerbatimIntro = Sentence
 -- and a RelationConcept (called automatically by 'SCSSub' program)
 tmodel :: HasSymbolTable ctx => Fields -> ctx -> TheoryModel -> Contents
 tmodel fs m t = Defnt TM (foldr (mkTMField t m) [] fs)
-  ("T:" ++ (t ^. id)) --FIXME: Generate reference names here
+  ("T:" ++ (t ^. uid)) --FIXME: Generate reference names here
 
 -- | Create a data definition using a list of fields, a database of symbols, and a 
 -- QDefinition (called automatically by 'SCSSub' program)
 ddefn :: HasSymbolTable ctx => Fields -> ctx -> QDefinition -> Contents
-ddefn fs m d = Defnt DD (foldr (mkQField d m) [] fs) ("DD:" ++ (d ^. id))
+ddefn fs m d = Defnt DD (foldr (mkQField d m) [] fs) ("DD:" ++ (d ^. uid))
 --FIXME: Generate the reference names here
 
 -- | Create a general definition using a list of fields, database of symbols,
@@ -67,12 +60,12 @@ ddefn fs m d = Defnt DD (foldr (mkQField d m) [] fs) ("DD:" ++ (d ^. id))
 -- program)
 gdefn :: HasSymbolTable ctx => Fields -> ctx -> GenDefn -> Contents
 gdefn fs m g = Defnt General (foldr (mkGDField g m) [] fs)
-  ("GD:" ++ (g ^. id)) --FIXME: Generate reference names here
+  ("GD:" ++ (g ^. uid)) --FIXME: Generate reference names here
 
 -- | Create an instance model using a list of fields, database of symbols,
 -- and an 'InstanceModel' chunk (called automatically by 'SCSSub' program)
 instanceModel :: HasSymbolTable ctx => Fields -> ctx -> InstanceModel -> Contents
-instanceModel fs m i = Defnt Instance (foldr (mkIMField i m) [] fs) ("IM:" ++ (i ^. id))
+instanceModel fs m i = Defnt Instance (foldr (mkIMField i m) [] fs) ("IM:" ++ (i ^. uid))
 
 -- | Create a derivation from a chunk's attributes. This follows the TM, DD, GD,
 -- or IM definition automatically (called automatically by 'SCSSub' program)
@@ -112,7 +105,7 @@ mkQField :: HasSymbolTable ctx => QDefinition -> ctx -> Field -> ModRow -> ModRo
 mkQField d _ l@Label fs = (show l, (Paragraph $ at_start d):[]) : fs
 mkQField d _ l@Symbol fs = (show l, (Paragraph $ (P $ eqSymb d)):[]) : fs
 mkQField d _ l@Units fs = (show l, (Paragraph $ (unit'2Contents d)):[]) : fs
-mkQField d _ l@DefiningEquation fs = (show l, (eqUnR (equat d)):[]) : fs
+mkQField d _ l@DefiningEquation fs = (show l, (eqUnR $ d ^. equat):[]) : fs
 mkQField d m l@(Description v u) fs = 
   (show l, buildDDescription v u d m) : fs
 mkQField _ _ l@(RefBy) fs = (show l, fixme) : fs --FIXME: fill this in
@@ -134,7 +127,7 @@ buildDDescription :: HasSymbolTable ctx => Verbosity -> InclUnits -> QDefinition
   [Contents]
 buildDDescription Succinct u d _ = [Enumeration (Definitions $ (firstPair u d):[])]
 buildDDescription Verbose u d m = [Enumeration (Definitions 
-  (firstPair u d : descPairs u (vars (equat d) m)))]
+  (firstPair u d : descPairs u (vars (d^.equat) m)))]
 
 -- | Create the fields for a general definition from a 'GenDefn' chunk.
 mkGDField :: HasSymbolTable ctx => GenDefn -> ctx -> Field -> ModRow -> ModRow
@@ -159,12 +152,12 @@ mkIMField i m l@(Description v u) fs = (show l,
   foldr (\x -> buildDescription v u x m) [] [i ^. relat]) : fs
 mkIMField _ _ l@(RefBy) fs = (show l, fixme) : fs --FIXME: fill this in
 mkIMField i _ l@(Source) fs = (show l, [Paragraph $ getSource i]) : fs --FIXME: fill this in
-mkIMField i _ l@(Output) fs = (show l, [Paragraph $ foldle (sC) (+:+.) EmptyS (map (P . symbol Equational) (imOutputs i))]) : fs
-mkIMField i _ l@(Input) fs = (show l, [Paragraph $ foldle (sC) (+:+.) EmptyS (map (P . symbol Equational) (imInputs i))]) : fs
+mkIMField i _ l@(Output) fs = (show l, [Paragraph $ foldle (sC) (+:+.) EmptyS (map (P . symbol Equational) (i ^. imOutputs))]) : fs
+mkIMField i _ l@(Input) fs = (show l, [Paragraph $ foldle (sC) (+:+.) EmptyS (map (P . symbol Equational) (i ^. imInputs))]) : fs
 mkIMField i _ l@(InConstraints) fs  = (show l,  
-  foldr ((:) . eqUnR) [] (map tConToExpr (inCons i))) : fs
+  foldr ((:) . eqUnR) [] (map tConToExpr (i ^. inCons))) : fs
 mkIMField i _ l@(OutConstraints) fs = (show l,  
-  foldr ((:) . eqUnR) [] (map tConToExpr (outCons i))) : fs
+  foldr ((:) . eqUnR) [] (map tConToExpr (i ^. outCons))) : fs
 mkIMField _ _ label _ = error $ "Label " ++ show label ++ " not supported " ++
   "for instance models"
 

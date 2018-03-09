@@ -1,6 +1,6 @@
 module Main (main) where
 
-import Language.Drasil (DocType(SRS,Website),Recipe(..),gen
+import Language.Drasil (DocType(SRS,Website),DocSpec(DocSpec),Recipe(..),gen
   , genCode, Choices(..), ImplementationType(..)
   , Logging(..), ConstraintBehaviour(..), Structure(..), Comments(..)
   , Lang(..))
@@ -8,8 +8,8 @@ import Language.Drasil (DocType(SRS,Website),Recipe(..),gen
 import Drasil.NoPCM.Body (nopcm_srs, nopcm_code, nopcm_SymbMap)
 
 docs :: [Recipe]
-docs = [Recipe (SRS "NoPCM_SRS") nopcm_srs,
-        Recipe (Website "NoPCM_SRS") nopcm_srs
+docs = [Recipe (DocSpec SRS "NoPCM_SRS") nopcm_srs,
+        Recipe (DocSpec Website "NoPCM_SRS") nopcm_srs
        ]
 
 nopcm_Choices :: Choices

@@ -37,6 +37,10 @@ data Sentence where
   EmptyS :: Sentence
   E :: Expr -> Sentence
 
+instance Monoid Sentence where
+  mempty = EmptyS
+  mappend = (:+:)
+
 --Moving this here to avoid cyclic imports
 -- | Language of unit equations, to define a unit relative
 -- to another

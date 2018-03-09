@@ -1,6 +1,6 @@
 -- | Document Description Language
 module Language.Drasil.Document where
-import Prelude hiding (id)
+import Language.Drasil.Chunk (uid)
 import Language.Drasil.Chunk.AssumpChunk
 import Language.Drasil.Chunk.Change
 import Language.Drasil.Chunk.Eq
@@ -98,3 +98,9 @@ fig l f = Figure l f 100
 -- | Figure smart constructor for customized max widths.
 figWithWidth :: Label -> Filepath -> MaxWidthPercent -> RefAdd -> Contents
 figWithWidth = Figure
+
+datadefn :: QDefinition -> Contents
+datadefn qd = Definition $ Data qd
+
+reldefn :: RelationConcept -> Contents
+reldefn rc = Definition $ Theory rc

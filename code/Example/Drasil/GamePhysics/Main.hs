@@ -1,6 +1,6 @@
 module Main where
 
-import Language.Drasil (DocType(SRS, Website), Recipe(..), gen
+import Language.Drasil (DocType(SRS, Website), DocSpec(DocSpec), Recipe(..), gen
   , Choices(..), ImplementationType(..)
   , Logging(..), ConstraintBehaviour(..), Structure(..), Comments(..)
   , Lang(..))
@@ -8,8 +8,8 @@ import Language.Drasil (DocType(SRS, Website), Recipe(..), gen
 import Drasil.GamePhysics.Body (chipmunkSRS', everything)
 
 docs :: [Recipe]
-docs = [Recipe (SRS "Chipmunk_SRS") chipmunkSRS',
-        Recipe (Website "Chipmunk_SRS") chipmunkSRS'
+docs = [Recipe (DocSpec SRS "Chipmunk_SRS") chipmunkSRS',
+        Recipe (DocSpec Website "Chipmunk_SRS") chipmunkSRS'
        ]
 
 chipChoices :: Choices

@@ -94,7 +94,7 @@ generateCode ch g =
             (Options Nothing Nothing Nothing (Just "Code"))
             (toAbsCode prog modules)
           setCurrentDirectory workingDir) (lang $ ch)
-  where prog = codeName $ program $ codeSpec g
+  where prog = programName $ program $ codeSpec g
         modules = runReader genModules g
 
 genModules :: Reader State [Module]
@@ -438,9 +438,9 @@ convType (C.Object n) = obj n
 convType (C.File) = error "convType: File ?"
 
 convExpr :: Expr -> Reader State Value
-convExpr (V v)        = return $ litString v  -- V constructor should be removed
 convExpr (Dbl d)      = return $ litFloat d
 convExpr (Int i)      = return $ litInt i
+convExpr (Str s)      = return $ litString s
 convExpr (Assoc Add l)  = fmap (foldr1 (#+)) $ sequence $ map convExpr l
 convExpr (Assoc Mul l)  = fmap (foldr1 (#*)) $ sequence $ map convExpr l
 convExpr (Assoc E.And l)  = fmap (foldr1 (?&&)) $ sequence $ map convExpr l
@@ -454,51 +454,53 @@ convExpr (FCall (C c) x)  = do
   let info = sysinfodb $ codeSpec g
   args <- mapM convExpr x
   fApp (codeName (codefunc $ symbLookup c $ info ^. symbolTable)) args
-convExpr (FCall _ _)  = return $ litString "**convExpr :: FCall unimplemented**"
-convExpr (UnaryOp u)  = unop u
-convExpr (Grouping e) = convExpr e
-convExpr (BinaryOp b) = bfunc b
-convExpr (Case l)     = doit l -- FIXME this is sub-optimal
+convExpr (FCall _ _)   = return $ litString "**convExpr :: FCall unimplemented**"
+convExpr (UnaryOp o u) = fmap (unop o) (convExpr u)
+convExpr (Grouping e)  = convExpr e
+convExpr (BinaryOp Div (Int a) (Int b)) =
+  return $ (litFloat $ fromIntegral a) #/ (litFloat $ fromIntegral b) -- hack to deal with integer division
+convExpr (BinaryOp o a b)  = liftM2 (bfunc o) (convExpr a) (convExpr b)
+convExpr (Case l)      = doit l -- FIXME this is sub-optimal
   where
     doit [] = error "should never happen"
     doit [(e,_)] = convExpr e -- should always be the else clause
     doit ((e,cond):xs) = liftM3 Condi (convExpr cond) (convExpr e) (convExpr (Case xs))
-convExpr (Matrix _)   = error "convExpr: Matrix"
-convExpr (EOp _)      = error "convExpr: EOp"
-convExpr (IsIn _ _)      = error "convExpr: IsIn"
+convExpr (Matrix _)    = error "convExpr: Matrix"
+convExpr (EOp _)       = error "convExpr: EOp"
+convExpr (IsIn _ _)    = error "convExpr: IsIn"
 
-unop :: UFunc -> Reader State Value
-unop (E.Sqrt e)  = fmap (#/^) (convExpr e)
-unop (E.Log e)   = fmap I.log (convExpr e)
-unop (E.Abs e)   = fmap (#|)  (convExpr e)
-unop (E.Exp e)   = fmap I.exp (convExpr e)
-unop (E.Sin e)   = fmap I.sin (convExpr e)
-unop (E.Cos e)   = fmap I.cos (convExpr e)
-unop (E.Tan e)   = fmap I.tan (convExpr e)
-unop (E.Csc e)   = fmap I.csc (convExpr e)
-unop (E.Sec e)   = fmap I.sec (convExpr e)
-unop (E.Cot e)   = fmap I.cot (convExpr e)
-unop (E.Dim a)   = fmap ($.listSize) (convExpr a)
-unop (E.Norm _)  = error "unop: Norm not implemented"
-unop (E.Not e)   = fmap (?!) (convExpr e)
-unop (E.Neg e)   = fmap (#~) (convExpr e)
+unop :: UFunc -> (Value -> Value)
+unop E.Sqrt = (#/^)
+unop E.Log  = I.log
+unop E.Abs  = (#|)
+unop E.Exp  = I.exp
+unop E.Sin  = I.sin
+unop E.Cos  = I.cos
+unop E.Tan  = I.tan
+unop E.Csc  = I.csc
+unop E.Sec  = I.sec
+unop E.Cot  = I.cot
+unop E.Dim  = ($.listSize)
+unop E.Norm = error "unop: Norm not implemented"
+unop E.Not  = (?!)
+unop E.Neg  = (#~)
 
-bfunc :: BiFunc -> Reader State Value
-bfunc (EEquals a b)    = liftM2 (?==) (convExpr a) (convExpr b)
-bfunc (ENEquals a b)   = liftM2 (?!=) (convExpr a) (convExpr b)
-bfunc (EGreater a b)   = liftM2 (?>)  (convExpr a) (convExpr b)
-bfunc (ELess a b)      = liftM2 (?<)  (convExpr a) (convExpr b)
-bfunc (ELessEq a b)    = liftM2 (?<=) (convExpr a) (convExpr b)
-bfunc (EGreaterEq a b) = liftM2 (?>=) (convExpr a) (convExpr b)
-bfunc (Cross _ _)      = error "bfunc: Cross not implemented"
-bfunc (E.Power a b)    = liftM2 (#^) (convExpr a) (convExpr b)
-bfunc (Subtract a b)   = liftM2 (#-) (convExpr a) (convExpr b)
-bfunc (Implies _ _)    = error "convExpr :=>"
-bfunc (IFF _ _)        = error "convExpr :<=>"
-bfunc (DotProduct _ _) = error "convExpr DotProduct"
-bfunc (E.Divide (Int a) (Int b)) = return $ (litFloat $ fromIntegral a) #/ (litFloat $ fromIntegral b) -- hack to deal with integer division
-bfunc (E.Divide a b)   = liftM2 (#/) (convExpr a) (convExpr b)
-bfunc (Index a i)      = liftM2 (\x y -> x$.(listAccess y)) (convExpr a) (convExpr i)
+bfunc :: BinOp -> (Value -> Value -> Value)
+bfunc Eq    = (?==)
+bfunc NEq   = (?!=)
+bfunc Gt   = (?>)
+bfunc Lt      = (?<)
+bfunc LEq    = (?<=)
+bfunc GEq = (?>=)
+bfunc Cross      = error "bfunc: Cross not implemented"
+bfunc Pow    = (#^)
+bfunc Subt   = (#-)
+bfunc Impl    = error "convExpr :=>"
+bfunc Iff        = error "convExpr :<=>"
+bfunc Dot = error "convExpr DotProduct"
+bfunc Div = (#/)
+bfunc Frac = (#/)
+bfunc Index      = (\x y -> x$.(listAccess y))
 
 -- medium hacks --
 genModDef :: CS.Mod -> Reader State Module

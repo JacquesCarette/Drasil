@@ -22,9 +22,7 @@ data SystemInformation where
 --There should be a way to remove redundant "Quantity" constraint.
 -- I'm thinking for getting concepts that are also quantities, we could
 -- use a lookup of some sort from their internal (Drasil) ids.
--- FIXME: b shouldn't need to be a NounPhrase, this will be fixed after
--- NP is built into NamedIdea.
- SI :: (Idea a, Idea b, HasName c, Unit d,
+ SI :: (Idea a, Idea b, HasName c, IsUnit d,
   Quantity e, Ord e, Ord f, Quantity f, Concept f,
   Quantity h, Quantity i,
   Constrained j) => 

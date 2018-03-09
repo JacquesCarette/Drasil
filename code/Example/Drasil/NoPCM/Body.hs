@@ -25,20 +25,20 @@ import Drasil.SWHS.Unitals (w_vol, tank_length, tank_vol, tau_W, temp_W,
   deltaT, w_E, tank_length_min, tank_length_max, htTransCoeff_min,
   w_density_min, w_density_max, htCap_W_min, htCap_W_max, coil_HTC_min,
   coil_HTC_max, time_final_max, sim_time, coil_SA_max, eta)
-import Drasil.SWHS.DataDefs(swhsSymbMapDRef, swhsSymbMapTRef, dd1HtFluxC,
-  s4_2_4_DD1, swhsSymbMapT)
+import Drasil.SWHS.DataDefs(dd1HtFluxC, s4_2_4_DD1)
 import Drasil.SWHS.TMods (s4_2_2_T1, t1ConsThermE)
 import Drasil.SWHS.GenDefs (swhsGenDefs, nwtnCooling, rocTempSimp)
 import Drasil.SWHS.IMods (heatEInWtr)
 import Drasil.NoPCM.IMods (eBalanceOnWtr)
 import Drasil.NoPCM.Unitals (temp_init)
-import Drasil.SWHS.References (ref2, ref3, ref4, ref5, ref6)
+import Drasil.SWHS.References (ref2, ref3, ref4)
 import Drasil.SWHS.Requirements (s5_2)
 import Drasil.SWHS.LikelyChanges (likeChg2, likeChg3, likeChg6)
 
 import Data.Drasil.People (thulasi)
 import Data.Drasil.Utils (enumSimple, getES, refFromType,
   itemRefToSent, makeTMatrix, itemRefToSent, weave, eqUnR)
+import Data.Drasil.Citations (parnas1986, smithLai2005)
 
 import Data.Drasil.Concepts.Documentation (datumConstraint, inModel,
   requirement, section_, traceyGraph, item, assumption, dataDefn,
@@ -89,7 +89,7 @@ import Data.Drasil.Units.Thermodynamics (thermal_flux)
 
 -- This defines the standard units used throughout the document
 this_si :: [UnitDefn]
-this_si = map UU [metre, kilogram, second] ++ map UU [centigrade, joule, watt]
+this_si = map unitWrapper [metre, kilogram, second] ++ map unitWrapper [centigrade, joule, watt]
 
 -- This defines the list of acronyms that are used throughout the document
 acronyms :: [CI]
@@ -97,7 +97,7 @@ acronyms = [assumption, dataDefn, genDefn, goalStmt, inModel, likelyChg, M.ode,
             physSyst, requirement, srs, progName, thModel, typUnc]
 
 -- This contains the list of symbols used throughout the document
-nopcm_Symbols :: [CQSWrapper]
+nopcm_Symbols :: [DefinedQuantityDict]
 nopcm_Symbols = (map cqs nopcm_Units) ++ (map cqs nopcm_Constraints)
   
 nopcm_SymbolsAll :: [QuantityDict] --FIXME: Why is PCM (swhsSymbolsAll) here?
@@ -108,7 +108,7 @@ nopcm_SymbolsAll = (map qw nopcm_Units) ++ (map qw nopcm_Constraints) ++
   (map qw [coil_SA_max]) ++ (map qw [tau_W]) ++ 
   (map qw [surface, uNormalVect, gradient, eta])
 
-nopcm_Units :: [UCWrapper]
+nopcm_Units :: [UnitaryConceptDict]
 nopcm_Units = map ucw [density, tau, in_SA, out_SA,
   htCap_L, QT.ht_flux, ht_flux_in, ht_flux_out, vol_ht_gen,
   htTransCoeff, mass, tank_vol, QT.temp, QT.heat_cap_spec,
@@ -187,7 +187,7 @@ nopcm_srs :: Document
 nopcm_srs = mkDoc mkSRS (for) nopcm_si
 
 nopcm_SymbMap :: ChunkDB
-nopcm_SymbMap = cdb nopcm_SymbolsAll (map nw nopcm_Symbols ++ map nw acronyms) ([] :: [CWrapper]) -- FIXME: Fill in Concepts
+nopcm_SymbMap = cdb nopcm_SymbolsAll (map nw nopcm_Symbols ++ map nw acronyms) ([] :: [UnitDefn]) -- FIXME: Fill in Concepts
   this_si
 
 --------------------------
@@ -268,10 +268,10 @@ s2_3 = charIntRdrF knowledge understanding sWHS EmptyS
   sSqBr (S "5")]-}
 
 s2_4_end :: CI -> CI -> CI -> Sentence
-s2_4_end im od pro = foldlSent_ [S "The", phrase im,
+s2_4_end im_ od pro = foldlSent_ [S "The", phrase im_,
   sParen (makeRef (SRS.inModel SRS.missingP [])),
   S "to be solved is referred to as" +:+. acroIM 1,
-  S "The", phrase im, S "provides the",
+  S "The", phrase im_, S "provides the",
   titleize od, sParen (short od), S "that model the"
   +:+. phrase pro, short pro, S "solves this", short od]
 
@@ -381,9 +381,9 @@ s4_1_3_list temw we = enumSimple 1 (short goalStmt) [
   
 s4_2 = solChSpecF progName (s4_1, s6) s4_2_4_intro_end (mid,
   dataConstraintUncertainty, end) (s4_2_1_list, acroNumGen s4_2_2_T1 1,
-  s4_2_3_paragraph M.rOfChng temp, acroNumGen s4_2_4_DD1 1,
-  [swhsSymbMapT eBalanceOnWtr] ++ (s4_2_5_d1startPara energy water) ++
-  s4_2_5_paragraph ++ [swhsSymbMapT heatEInWtr], [s4_2_6_table1, s4_2_6_table2])
+  s4_2_3_paragraph M.rOfChng temp, acroNumGen [s4_2_4_DD1] 1,
+  [reldefn eBalanceOnWtr] ++ (s4_2_5_d1startPara energy water) ++
+  s4_2_5_paragraph ++ [reldefn heatEInWtr], [s4_2_6_table1, s4_2_6_table2])
   []
   where
   mid = foldlSent [S "The", phrase column, S "for",
@@ -485,7 +485,7 @@ assump13 = mkAssump "assump13"
 
 
 s4_2_3_paragraph :: ConceptChunk -> ConceptChunk -> [Contents]
-s4_2_3_paragraph roc te = (map swhsSymbMapT swhsGenDefs) ++ [foldlSPCol
+s4_2_3_paragraph roc te = (map reldefn swhsGenDefs) ++ [foldlSPCol
   [S "Detailed derivation of simplified", phrase roc, S "of", phrase te]] ++
   (weave [s4_2_3_description, s4_2_3_equation])
 
@@ -500,7 +500,7 @@ s4_2_3_description = map foldlSPCol [
 
 s4_2_3_desc1 :: RelationConcept -> UnitalChunk -> [Sentence]
 s4_2_3_desc1 t1C vo =
-  [S "Integrating", swhsSymbMapTRef t1C,
+  [S "Integrating", makeRef $ reldefn t1C,
   S "over a", phrase vo, sParen (getES vo) `sC` S "we have"]
 
 s4_2_3_desc2 :: ConceptChunk -> ConVar -> UnitalChunk -> UnitalChunk ->
@@ -532,27 +532,27 @@ s4_2_3_desc5 den ma vo = [S "Using the fact that", getES den :+: S "=" :+:
 
 s4_2_3_eq1, s4_2_3_eq2, s4_2_3_eq3, s4_2_3_eq4, s4_2_3_eq5 :: Expr
 
-s4_2_3_eq1 = (negate (int_all (eqSymb vol) ((C gradient) $. (C thFluxVect)))) + 
-  (int_all (eqSymb vol) (C vol_ht_gen)) $=
-  (int_all (eqSymb vol) ((C density)
-  * (C QT.heat_cap_spec) * Deriv Part (C QT.temp) time))
+s4_2_3_eq1 = (negate (int_all (eqSymb vol) ((sy gradient) $. (sy thFluxVect)))) + 
+  (int_all (eqSymb vol) (sy vol_ht_gen)) $=
+  (int_all (eqSymb vol) ((sy density)
+  * (sy QT.heat_cap_spec) * Deriv Part (sy QT.temp) time))
 
-s4_2_3_eq2 = (negate (int_all (eqSymb surface) ((C thFluxVect) $. (C uNormalVect)))) +
-  (int_all (eqSymb vol) (C vol_ht_gen)) $= 
+s4_2_3_eq2 = (negate (int_all (eqSymb surface) ((sy thFluxVect) $. (sy uNormalVect)))) +
+  (int_all (eqSymb vol) (sy vol_ht_gen)) $= 
   (int_all (eqSymb vol)
-  ((C density) * (C QT.heat_cap_spec) * Deriv Part (C QT.temp) time))
+  ((sy density) * (sy QT.heat_cap_spec) * Deriv Part (sy QT.temp) time))
 
-s4_2_3_eq3 = (C ht_flux_in) * (C in_SA) - (C ht_flux_out) *
-  (C out_SA) + (C vol_ht_gen) * (C vol) $= 
-  (int_all (eqSymb vol) ((C density) * (C QT.heat_cap_spec) * Deriv Part (C QT.temp) time))
+s4_2_3_eq3 = (sy ht_flux_in) * (sy in_SA) - (sy ht_flux_out) *
+  (sy out_SA) + (sy vol_ht_gen) * (sy vol) $= 
+  (int_all (eqSymb vol) ((sy density) * (sy QT.heat_cap_spec) * Deriv Part (sy QT.temp) time))
 
-s4_2_3_eq4 = (C density) * (C QT.heat_cap_spec) * (C vol) * Deriv Total
-  (C QT.temp) time $= (C ht_flux_in) * (C in_SA) - (C ht_flux_out) *
-  (C out_SA) + (C vol_ht_gen) * (C vol)
+s4_2_3_eq4 = (sy density) * (sy QT.heat_cap_spec) * (sy vol) * Deriv Total
+  (sy QT.temp) time $= (sy ht_flux_in) * (sy in_SA) - (sy ht_flux_out) *
+  (sy out_SA) + (sy vol_ht_gen) * (sy vol)
 
-s4_2_3_eq5 = (C mass) * (C QT.heat_cap_spec) * Deriv Total (C QT.temp)
-  time $= (C ht_flux_in) * (C in_SA) - (C ht_flux_out)
-  * (C out_SA) + (C vol_ht_gen) * (C vol)
+s4_2_3_eq5 = (sy mass) * (sy QT.heat_cap_spec) * Deriv Total (sy QT.temp)
+  time $= (sy ht_flux_in) * (sy in_SA) - (sy ht_flux_out)
+  * (sy out_SA) + (sy vol_ht_gen) * (sy vol)
 
 s4_2_3_equation :: [Contents]
 s4_2_3_equation = map eqUnR [s4_2_3_eq1, s4_2_3_eq2, s4_2_3_eq3, s4_2_3_eq4,
@@ -587,12 +587,11 @@ s4_2_5_desc1 roc temw en wa vo wv ma wm hcw ht hfc csa ta purin a11 vhg a12 =
   phrase ta) `sC` S "since it has been assumed to be",
   phrase purin +:+. sParen (acroTest a11 s4_2_1_list), S "Assuming no",
   phrase vhg +:+. (sParen (acroTest a12 s4_2_1_list) `sC`
-  E (C vhg $= Int 0)), S "Therefore, the", phrase M.equation, S "for",
+  E (sy vhg $= Int 0)), S "Therefore, the", phrase M.equation, S "for",
   acroGD 2, S "can be written as"]
 
 s4_2_5_desc2 :: QDefinition -> [Sentence]
-s4_2_5_desc2 d1hf = [S "Using", swhsSymbMapDRef d1hf `sC`
-  S "this can be written as"]
+s4_2_5_desc2 d1hf = [S "Using", (makeRef $ datadefn d1hf) `sC` S "this can be written as"]
 
 s4_2_5_desc3 :: UnitalChunk -> UncertQ -> [Sentence]
 s4_2_5_desc3 wm hcw = [S "Dividing (3) by", getES wm :+: getES hcw `sC`
@@ -609,18 +608,18 @@ s4_2_5_equation = map eqUnR [s4_2_5_eq1, s4_2_5_eq2, s4_2_5_eq3, s4_2_5_eq4]
 
 s4_2_5_eq1, s4_2_5_eq2, s4_2_5_eq3, s4_2_5_eq4 ::Expr
 
-s4_2_5_eq1 = (C w_mass) * (C htCap_W) * Deriv Total (C temp_W) time $=
-  (C ht_flux_C) * (C coil_SA)
+s4_2_5_eq1 = (sy w_mass) * (sy htCap_W) * Deriv Total (sy temp_W) time $=
+  (sy ht_flux_C) * (sy coil_SA)
  
-s4_2_5_eq2 = (C w_mass) * (C htCap_W) * Deriv Total (C temp_W) time $=
-  (C coil_HTC) * (C coil_SA) * ((C temp_C) - (C temp_W))
+s4_2_5_eq2 = (sy w_mass) * (sy htCap_W) * Deriv Total (sy temp_W) time $=
+  (sy coil_HTC) * (sy coil_SA) * ((sy temp_C) - (sy temp_W))
 
-s4_2_5_eq3 = Deriv Total (C temp_W) time $= ((C coil_HTC) *
-  (C coil_SA)) / ((C w_mass) * (C htCap_W)) * ((C temp_C) -
-  (C temp_W))
+s4_2_5_eq3 = Deriv Total (sy temp_W) time $= ((sy coil_HTC) *
+  (sy coil_SA)) / ((sy w_mass) * (sy htCap_W)) * ((sy temp_C) -
+  (sy temp_W))
 
-s4_2_5_eq4 = Deriv Total (C temp_W) time $= (1 / (C tau_W)) *
-  ((C temp_C) - (C temp_W))
+s4_2_5_eq4 = Deriv Total (sy temp_W) time $= (1 / (sy tau_W)) *
+  ((sy temp_C) - (sy temp_W))
 
 s4_2_6_table1 :: Contents
 s4_2_6_table1 = inDataConstTbl s4_2_6_conListIn
@@ -672,8 +671,8 @@ s5_1_list_items = [
   phrase] inputVar)
   (titleize input_ +:+ titleize variable +:+ titleize requirement) False "fr1list",
 
-  eqUnR ((C w_mass) $= (C w_vol) * (C w_density) $=
-  (((C diam) / 2) * (C tank_length) * (C w_density)))
+  eqUnR ((sy w_mass) $= (sy w_vol) * (sy w_density) $=
+  (((sy diam) / 2) * (sy tank_length) * (sy w_density)))
   ]
 
 -- s5_1_list_words = map (\x -> Enumeration $ Simple [x])
@@ -1010,4 +1009,4 @@ s8 = valsOfAuxConstantsF progName specParamValList
 -- s9_refs = mkRefsList 1 $ map foldlsC s9_refList
 
 s9_refList :: BibRef
-s9_refList = [ref2, ref3, ref4, ref5, ref6]
+s9_refList = [ref2, ref3, ref4, parnas1986, smithLai2005]

@@ -6,8 +6,8 @@ import Drasil.HGHC.HGHC (srsBody, allSymbols)
 
 docs :: [Recipe]
 docs = [
-  Recipe (Website "SRS") srsBody,
-  Recipe (SRS "SRS") srsBody --,
+  Recipe (DocSpec Website "SRS") srsBody,
+  Recipe (DocSpec SRS "SRS") srsBody
   ]
 
 thisChoices :: Choices

@@ -1,12 +1,10 @@
-{-# LANGUAGE GADTs,Rank2Types #-}
 module Language.Drasil.Chunk.Attribute 
   ( Attribute(..), Attributes, HasAttributes(..)
   , getSource, getDerivation, getShortName
   ) where
 
-import Control.Lens (Simple, Lens, (^.))
+import Control.Lens (Lens', (^.))
 import Language.Drasil.Spec (Sentence(EmptyS))
-import Language.Drasil.Chunk
 import Language.Drasil.Chunk.Attribute.Derivation
 
 import Prelude hiding (id)
@@ -45,6 +43,10 @@ derivation []          = []
 derivation ((D der):_) = der
 derivation (_:xs)      = derivation xs
 
+-- | Anything with 'Attributes'
+class HasAttributes c where
+  attributes :: Lens' c Attributes
+
 getShortName :: HasAttributes c => c -> Maybe Sentence
 getShortName c = shortName $ c ^. attributes
 
@@ -53,6 +55,3 @@ shortName [] = Nothing
 shortName ((ShortName s):_) = Just s
 shortName (_:xs) = shortName xs
 
--- | Any chunk with 'Attributes' is part of the 'HasAttributes' class.
-class Chunk c => HasAttributes c where
-  attributes :: Simple Lens c Attributes

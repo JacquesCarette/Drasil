@@ -27,7 +27,6 @@ PROGS = swhs_prog tiny_prog ssp_prog glassbr_prog gamephys_prog nopcm_prog
 
 all: build test
 
-
 test: $(PROGS) $(TESTS)
 	sh log_check.sh
 

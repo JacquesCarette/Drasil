@@ -25,8 +25,7 @@ import Data.Drasil.SentenceStructures (foldlSent, isThe)
 import Drasil.SWHS.Unitals (melt_frac, tau, deltaT, htCap_V, htCap_S,
   htCap_L, vol_ht_gen, thFluxVect)
 import Drasil.SWHS.Concepts (transient)
-import Drasil.SWHS.DataDefs (swhsSymbMapDRef, dd3HtFusion, swhsSymbMapT,
-  swhsSymbMapTRef)
+import Drasil.SWHS.DataDefs (dd3HtFusion)
 
 tModels :: [RelationConcept]
 tModels = [t1ConsThermE, t2SensHtE, t3LatHtE]
@@ -39,15 +38,15 @@ s4_2_2_swhsTMods = acroNumGen (s4_2_2_T1 ++ s4_2_2_T2 ++ s4_2_2_T3) 1
 -------------------------
 
 s4_2_2_T1 :: [Contents]
-s4_2_2_T1 = map swhsSymbMapT [t1ConsThermE]
+s4_2_2_T1 = [reldefn t1ConsThermE]
 
 t1ConsThermE :: RelationConcept
 t1ConsThermE = makeRC "t1ConsThermE"
   (nounPhraseSP "Conservation of thermal energy") t1descr consThermERel
 
 consThermERel :: Relation
-consThermERel = (negate (C gradient)) $. (C thFluxVect) + (C vol_ht_gen) $=
-  (C density) * (C heat_cap_spec) * (Deriv Part (C temp) time)
+consThermERel = (negate (sy gradient)) $. (sy thFluxVect) + (sy vol_ht_gen) $=
+  (sy density) * (sy heat_cap_spec) * (Deriv Part (sy temp) time)
 
 t1descr :: Sentence
 t1descr = foldlSent [
@@ -79,18 +78,18 @@ t1descr = foldlSent [
 -------------------------
 
 s4_2_2_T2 :: [Contents]
-s4_2_2_T2 = map swhsSymbMapT [t2SensHtE]
+s4_2_2_T2 = [reldefn t2SensHtE]
 
 t2SensHtE :: RelationConcept
 t2SensHtE = makeRC "t2SensHtE"
   (nounPhraseSP "Sensible heat energy") t2descr sensHtEEqn
 
 sensHtEEqn :: Relation
-sensHtEEqn = (C sens_heat) $= Case [((C htCap_S) * (C mass) * (C deltaT),
-  ((C temp) $< (C melt_pt))), ((C htCap_L) *
-  (C mass) * (C deltaT), ((C melt_pt) $< (C temp) $<
-  (C boil_pt))), ((C htCap_V) * (C mass) *
-  (C deltaT), ((C boil_pt) $< (C temp)))]
+sensHtEEqn = (sy sens_heat) $= Case [((sy htCap_S) * (sy mass) * (sy deltaT),
+  ((sy temp) $< (sy melt_pt))), ((sy htCap_L) *
+  (sy mass) * (sy deltaT), ((sy melt_pt) $< (sy temp) $<
+  (sy boil_pt))), ((sy htCap_V) * (sy mass) *
+  (sy deltaT), ((sy boil_pt) $< (sy temp)))]
 
 --When to call with C? When to call with U, S, Sy, etc? Sometimes confusing.
 
@@ -117,7 +116,7 @@ t2descr = foldlSent [
   getES temp :+: S "=" :+: getES boil_pt,
   S "or", getES temp :+: S "=" +. getES melt_pt,
   S "If this" `isThe` S "case, refer to",
-  swhsSymbMapTRef t3LatHtE `sC`
+  (makeRef $ reldefn t3LatHtE) `sC`
   at_start latent_heat, phrase energy]
  
 
@@ -133,16 +132,16 @@ t2descr = foldlSent [
 -------------------------
 
 s4_2_2_T3 :: [Contents]
-s4_2_2_T3 = map swhsSymbMapT [t3LatHtE]
+s4_2_2_T3 = [reldefn t3LatHtE]
 
 t3LatHtE :: RelationConcept
 t3LatHtE = makeRC "t3LatHtE"
   (nounPhraseSP "Latent heat energy") t3descr latHtEEqn
 
 latHtEEqn :: Relation
-latHtEEqn = FCall (C latent_heat) [C time] $= 
-  defint (eqSymb tau) 0 (C time) 
-         (Deriv Total (FCall (C latent_heat) [C tau]) tau)
+latHtEEqn = FCall (sy latent_heat) [sy time] $= 
+  defint (eqSymb tau) 0 (sy time) 
+         (Deriv Total (FCall (sy latent_heat) [sy tau]) tau)
 
 -- Integrals need dTau at end
 -- Deriv is specifically partial derivative... how to do regular derivative?
@@ -162,7 +161,7 @@ t3descr = foldlSent [
   phrase phase_change, S "is not complete. The status of",
   S "the", phrase phase_change,
   S "depends on the", phrase melt_frac `sC`
-  swhsSymbMapDRef dd3HtFusion :+: S ".",
+  (makeRef $ datadefn dd3HtFusion) :+: S ".",
   getES melt_pt, S "and", getES boil_pt, S "are the",
   phrase melt_pt, S "and", phrase boil_pt `sC`
   S "respectively" +:+. sParen (Sy (unit_symb temp)),

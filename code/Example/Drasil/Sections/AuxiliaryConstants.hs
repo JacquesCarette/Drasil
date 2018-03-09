@@ -7,6 +7,7 @@ import Data.Drasil.SentenceStructures (foldlSP)
 import Data.Drasil.Concepts.Documentation
 import Data.Drasil.Utils(getES)
 import qualified Data.Drasil.Concepts.Math as CM
+import Control.Lens ((^.))
 
 valsOfAuxConstantsF :: (Idea a) => a ->[QDefinition] -> Section
 valsOfAuxConstantsF kWord listOfConstants = (SRS.valsOfAuxCons) (contentGenerator kWord listOfConstants)  []
@@ -22,7 +23,7 @@ intro kWord = foldlSP [S "This section contains the standard values that are use
 tableOfConstants :: [QDefinition] -> Contents
 tableOfConstants f = Table
   [titleize symbol_, titleize description, titleize value, titleize CM.unit_]
-  (mkTable [getES, phrase, (\c -> E $ equat c), unit'2Contents] f)
+  (mkTable [getES, phrase, (\c -> E $ c^.equat), unit'2Contents] f)
   (S "Auxiliary Constants")
   True
   "TAuxConsts"

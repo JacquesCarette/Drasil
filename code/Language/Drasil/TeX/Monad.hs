@@ -19,10 +19,12 @@ import Language.Drasil.Unicode
 -- note that this is just the Reader Monad for now, but we might need
 -- to extend, so start there.
 
--- there are just two contexts, test and math.  There are multiple ways
--- of getting there: for Text, either being at the top-level or inside \text.
--- for Math, either surrounded by $ or in \begin{equation} .. \end{equation}.
-data MathContext = Text | Math deriving Eq
+-- there are two proper contexts, test and math; curr is the 'current' context.
+-- There are multiple ways of getting there: for Text, either being at the top-level 
+-- or inside \text. For Math, either surrounded by $ or 
+-- in \begin{equation} .. \end{equation}.
+-- Curr is when the current context is fine
+data MathContext = Text | Math | Curr deriving Eq
 
 data PrintLaTeX a = PL { runPrint :: MathContext -> a }
 
@@ -57,6 +59,9 @@ switch f (PL g) = PL $ \c -> adjust c (f c) g
     adjust Math Text gen = bstext TP.<> br (gen Text)
     -- we are producing Text, but want some Math embedded
     adjust Text Math gen = dollar TP.<> (gen Math) TP.<> dollar
+    adjust Curr Curr gen = gen Text -- default
+    adjust Curr x gen = gen x
+    adjust x Curr gen = gen x 
 
 toMath, toText :: D -> D
 toMath = switch (const Math)
@@ -93,6 +98,9 @@ hpunctuate x l = PL $ \ctx ->
 lub :: MathContext -> MathContext -> MathContext
 lub Math Math = Math
 lub Text Text = Text
+lub Curr Curr = Curr
+lub Curr x    = x
+lub x    Curr = x
 lub _    _    = Text -- Text is top-most
 
 -----------------

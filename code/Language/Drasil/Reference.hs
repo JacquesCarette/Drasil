@@ -1,6 +1,6 @@
 module Language.Drasil.Reference where
 
-import Language.Drasil.Chunk (Chunk, id)
+import Language.Drasil.Chunk (Chunk, uid)
 import Language.Drasil.Chunk.AssumpChunk
 import Language.Drasil.Chunk.Change
 import Language.Drasil.Chunk.ReqChunk
@@ -8,8 +8,6 @@ import Language.Drasil.Chunk.Citation
 import Language.Drasil.Document
 import Language.Drasil.Spec
 import Control.Lens ((^.), Simple, Lens)
-
-import Prelude hiding (id)
 
 import Data.List (partition, sortBy)
 import qualified Data.Map as Map
@@ -53,13 +51,13 @@ rdb assumps reqs changes citations = RDB
 type AssumpMap = Map.Map String (AssumpChunk, Int)
 
 assumpMap :: [AssumpChunk] -> AssumpMap
-assumpMap a = Map.fromList $ zip (map (^. id) a) (zip a [1..])
+assumpMap a = Map.fromList $ zip (map (^. uid) a) (zip a [1..])
 
 assumpLookup :: Chunk c => c -> AssumpMap -> (AssumpChunk, Int)
-assumpLookup a m = let lookC = Map.lookup (a ^. id) m in
+assumpLookup a m = let lookC = Map.lookup (a ^. uid) m in
                    getS lookC
   where getS (Just x) = x
-        getS Nothing = error $ "Assumption: " ++ (a ^. id) ++
+        getS Nothing = error $ "Assumption: " ++ (a ^. uid) ++
           " referencing information not found in Assumption Map"
 
 -- | Map for maintaining requirement references.
@@ -67,17 +65,17 @@ assumpLookup a m = let lookC = Map.lookup (a ^. id) m in
 type ReqMap = Map.Map String (ReqChunk, Int)
 
 reqMap :: [ReqChunk] -> ReqMap
-reqMap rs = Map.fromList $ zip (map (^. id) (frs ++ nfrs)) ((zip frs [1..]) ++
+reqMap rs = Map.fromList $ zip (map (^. uid) (frs ++ nfrs)) ((zip frs [1..]) ++
   (zip nfrs [1..]))
   where (frs, nfrs)  = partition (isFuncRec . reqType) rs
         isFuncRec FR = True
         isFuncRec _  = False
 
 reqLookup :: Chunk c => c -> ReqMap -> (ReqChunk, Int)
-reqLookup r m = let lookC = Map.lookup (r ^. id) m in
+reqLookup r m = let lookC = Map.lookup (r ^. uid) m in
                    getS lookC
   where getS (Just x) = x
-        getS Nothing = error $ "Requirement: " ++ (r ^. id) ++
+        getS Nothing = error $ "Requirement: " ++ (r ^. uid) ++
           " referencing information not found in Requirement Map"
 
 -- | Map for maintaining change references.
@@ -85,17 +83,17 @@ reqLookup r m = let lookC = Map.lookup (r ^. id) m in
 type ChangeMap = Map.Map String (Change, Int)
 
 changeMap :: [Change] -> ChangeMap
-changeMap cs = Map.fromList $ zip (map (^. id) (lcs ++ ulcs))
+changeMap cs = Map.fromList $ zip (map (^. uid) (lcs ++ ulcs))
   ((zip lcs [1..]) ++ (zip ulcs [1..]))
   where (lcs, ulcs) = partition (isLikely . chngType) cs
         isLikely Likely = True
         isLikely _ = False
 
 changeLookup :: Chunk c => c -> ChangeMap -> (Change, Int)
-changeLookup c m = let lookC = Map.lookup (c ^. id) m in
+changeLookup c m = let lookC = Map.lookup (c ^. uid) m in
                    getS lookC
   where getS (Just x) = x
-        getS Nothing = error $ "Change: " ++ (c ^. id) ++
+        getS Nothing = error $ "Change: " ++ (c ^. uid) ++
           " referencing information not found in Change Map"
 
 -- | Map for maintaining citation references.
@@ -103,7 +101,7 @@ changeLookup c m = let lookC = Map.lookup (c ^. id) m in
 type BibMap = Map.Map String (Citation, Int)
 
 bibMap :: [Citation] -> BibMap
-bibMap cs = Map.fromList $ zip (map (^. id) scs) (zip scs [1..])
+bibMap cs = Map.fromList $ zip (map (^. uid) scs) (zip scs [1..])
   where scs :: [Citation]
         scs = sortBy citeSort cs
         -- Sorting is necessary if using elems to pull all the citations
@@ -111,10 +109,10 @@ bibMap cs = Map.fromList $ zip (map (^. id) scs) (zip scs [1..])
         -- We can always change the sorting to whatever makes most sense
         
 citeLookup :: Chunk c => c -> BibMap -> (Citation, Int)
-citeLookup c m = let lookC = Map.lookup (c ^. id) m in
+citeLookup c m = let lookC = Map.lookup (c ^. uid) m in
                    getS lookC
   where getS (Just x) = x
-        getS Nothing = error $ "Change: " ++ (c ^. id) ++
+        getS Nothing = error $ "Change: " ++ (c ^. uid) ++
           " referencing information not found in Change Map"
 
 -- Classes and instances --
@@ -150,17 +148,17 @@ class Referable s where
 
 instance Referable AssumpChunk where
   refName (AC _ _ sn _) = sn
-  refAdd  x             = "A:" ++ concatMap repUnd (x ^. id)
+  refAdd  x             = "A:" ++ concatMap repUnd (x ^. uid)
   rType   _             = Assump
 
 instance Referable ReqChunk where
   refName (RC _ _ _ sn _)   = sn
-  refAdd  r@(RC _ rt _ _ _) = show rt ++ ":" ++ concatMap repUnd (r ^. id)
+  refAdd  r@(RC _ rt _ _ _) = show rt ++ ":" ++ concatMap repUnd (r ^. uid)
   rType   _                 = Req
 
 instance Referable Change where
   refName (ChC _ _ _ sn _)     = sn
-  refAdd r@(ChC _ rt _ _ _)    = show rt ++ ":" ++ concatMap repUnd (r ^. id)
+  refAdd r@(ChC _ rt _ _ _)    = show rt ++ ":" ++ concatMap repUnd (r ^. uid)
   rType (ChC _ Likely _ _ _)   = LC
   rType (ChC _ Unlikely _ _ _) = UC
 
@@ -219,15 +217,15 @@ instance Referable Contents where
 
 -- | Automatically create the label for a definition
 getDefName :: DType -> String
-getDefName (Data c)   = "DD:" ++ concatMap repUnd (c ^. id) -- FIXME: To be removed
-getDefName (Theory c) = "T:" ++ concatMap repUnd (c ^. id) -- FIXME: To be removed
+getDefName (Data c)   = "DD:" ++ concatMap repUnd (c ^. uid) -- FIXME: To be removed
+getDefName (Theory c) = "T:" ++ concatMap repUnd (c ^. uid) -- FIXME: To be removed
 getDefName TM         = "T:"
 getDefName DD         = "DD:"
 getDefName Instance   = "IM:"
 getDefName General    = "GD:"
 
 citeSort :: Citation -> Citation -> Ordering
-citeSort = compare `on` (^. id)
+citeSort = compare `on` (^. uid)
 
 citationsFromBibMap :: BibMap -> [Citation]
 citationsFromBibMap bm = sortBy citeSort citations
@@ -254,18 +252,18 @@ acroTest ref reflst = makeRef $ find ref reflst
 find :: Contents -> [Contents] -> Contents
 find _ [] = error "This object does not match any of the enumerated objects provided by the list."
 find itm@(Assumption comp1) (frst@(Assumption comp2):lst)
-  | (comp1 ^. id) == (comp2 ^. id) = frst
+  | (comp1 ^. uid) == (comp2 ^. uid) = frst
   | otherwise = find itm lst
 find itm@(Definition (Data comp1)) (frst@(Definition (Data comp2)):lst)
-  | (comp1 ^. id) == (comp2 ^. id) = frst
+  | (comp1 ^. uid) == (comp2 ^. uid) = frst
   | otherwise = find itm lst
 find itm@(Definition (Theory comp1)) (frst@(Definition (Theory comp2)):lst)
-  | (comp1 ^. id) == (comp2 ^. id) = frst
+  | (comp1 ^. uid) == (comp2 ^. uid) = frst
   | otherwise = find itm lst
 find itm@(Requirement comp1) (frst@(Requirement comp2):lst)
-  | (comp1 ^. id) == (comp2 ^. id) = frst
+  | (comp1 ^. uid) == (comp2 ^. uid) = frst
   | otherwise = find itm lst
 find itm@(Change comp1) (frst@(Change comp2):lst)
-  | (comp1 ^. id) == (comp2 ^. id) = frst
+  | (comp1 ^. uid) == (comp2 ^. uid) = frst
   | otherwise = find itm lst
 find _ _ = error "Error: Attempting to find unimplemented type"

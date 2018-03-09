@@ -8,7 +8,6 @@ import Language.Drasil.Chunk.Attribute
 import Language.Drasil.Spec (Sentence, RefName)
 
 import Control.Lens (set, (^.))
-import Prelude hiding (id)
 
 -- FIXME: We need a better way to capture change information. Sentences
 -- are dead information, and larger structures (like Contents) are display-specific.
@@ -35,11 +34,11 @@ data Change = ChC
   }
   
 instance Chunk Change where
-  id f (ChC a b c d e) = fmap (\x -> ChC x b c d e) (f a)
+  uid f (ChC a b c d e) = fmap (\x -> ChC x b c d e) (f a)
 instance HasAttributes Change where
   attributes f (ChC a b c d e) = fmap (\x -> ChC a b c d x) (f e)
 instance Eq Change where
-  a == b = a ^. id == b ^. id
+  a == b = a ^. uid == b ^. uid
 
 -- | Smart constructor for requirement chunks (should not be exported)
 chc :: String -> ChngType -> Sentence -> RefName -> Attributes -> Change

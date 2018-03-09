@@ -23,13 +23,13 @@ iModels = [probOfBr, calOfCap, calOfDe]
 {--}
 
 probOfBreak :: InstanceModel
-probOfBreak = im probOfBr [qw risk] [TCon AssumedCon $ C risk $> 0] [qw prob_br] [TCon AssumedCon $ C prob_br $> 0] []
+probOfBreak = im probOfBr [qw risk] [TCon AssumedCon $ sy risk $> 0] [qw prob_br] [TCon AssumedCon $ sy prob_br $> 0] []
 
 {--}
 
 probOfBr :: RelationConcept
 probOfBr = makeRC "probOfBr" (nounPhraseSP "Probability of Glass Breakage")
-  pbdescr $ (C prob_br) $= 1 - (exp (negate (C risk)))
+  pbdescr $ (sy prob_br) $= 1 - (exp (negate (sy risk)))
 
 pbdescr :: Sentence
 pbdescr =
@@ -40,7 +40,7 @@ pbdescr =
 
 calOfCap :: RelationConcept
 calOfCap = makeRC "calOfCap" (nounPhraseSP "Calculation of Capacity(LR)") 
-  capdescr $ (C lRe) $= ((C nonFL) * (C glaTyFac) * (C loadSF))
+  capdescr $ (sy lRe) $= ((sy nonFL) * (sy glaTyFac) * (sy loadSF))
 
 capdescr :: Sentence
 capdescr =
@@ -59,8 +59,8 @@ capdescr =
 
 calOfDe :: RelationConcept
 calOfDe = makeRC "calOfDe" (nounPhraseSP "Calculation of Demand(q)") 
-  dedescr $ (C demand) $= FCall (C demand) [C eqTNTWeight, C standOffDist] 
-  --dedescr $ (C demand) $= FCall (asExpr interpY) [V "TSD.txt", C standOffDist, C eqTNTWeight] 
+  dedescr $ (sy demand) $= FCall (sy demand) [sy eqTNTWeight, sy standOffDist] 
+  --dedescr $ (C demand) $= FCall (asExpr interpY) [V "TSD.txt", sy standOffDist, sy eqTNTWeight] 
   
 dedescr :: Sentence
 dedescr = 
@@ -70,8 +70,8 @@ dedescr =
   (phrase standOffDist), sParen (getES standOffDist) `sAnd`
   (getES eqTNTWeight), S "as" +:+. plural parameter, 
   (getES eqTNTWeight), S "is defined as" +:+.
-  E (equat wtntWithEqn) +:+. ((getES char_weight) `isThe`
+  E (wtntWithEqn^.equat) +:+. ((getES char_weight) `isThe`
   (phrase char_weight)) +:+. ((getES tNT) `isThe`
   (phrase tNT)), (getES standOffDist) `isThe`
-  (phrase standOffDist), S "where", E (equat sdWithEqn), S "where",
+  (phrase standOffDist), S "where", E (sdWithEqn^.equat), S "where",
   sParen (sdVectorSent), S "are", plural coordinate]

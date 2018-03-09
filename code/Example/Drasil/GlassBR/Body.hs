@@ -13,11 +13,11 @@ import Data.Drasil.Concepts.Documentation (analysis, appendix, aspect,
   characteristic, class_, code, condition, constant, constraint, content,
   datum, definition, description, document, emphasis, endUser, failure,
   figure, goal, implementation, information, interface, input_, item,
-  message, model, organization, output_, practice, problem, purpose, 
+  message, model, organization, output_, practice, problem, purpose,
   quantity, reference, reviewer, section_, scenario, software, standard,
-  symbol_, system, template, term_, theory, traceyMatrix, user, value, 
-  variable, physicalSystem, datumConstraint, userInput, assumption, dataDefn, 
-  goalStmt, inModel, likelyChg, physSyst, requirement, srs, thModel, 
+  symbol_, system, template, term_, theory, traceyMatrix, user, value,
+  variable, physicalSystem, datumConstraint, userInput, assumption, dataDefn,
+  goalStmt, inModel, likelyChg, physSyst, requirement, srs, thModel,
   dataConst, acroNumGen, company)
 import Data.Drasil.Concepts.Education (secondYear, undergradDegree,
   civilEng, structuralEng, scndYrCalculus, structuralMechanics)
@@ -71,8 +71,9 @@ import Data.Drasil.Citations (koothoor2013, smithLai2005)
 {--}
 
 gbSymbMap :: ChunkDB
-gbSymbMap = cdb this_symbols (map nw acronyms ++ map nw this_symbols) ([] :: [CWrapper])
-  (map UU [metre, second, kilogram] ++ map UU [pascal, newton])
+gbSymbMap =
+  cdb this_symbols (map nw acronyms ++ map nw this_symbols) ([] :: [ConceptChunk])
+      (map unitWrapper [metre, second, kilogram] ++ map unitWrapper [pascal, newton])
 
 resourcePath :: String
 resourcePath = "../../../datafiles/GlassBR/"
@@ -89,13 +90,13 @@ mkSRS = RefSec (RefProg intro [TUnits, tsymb [TSPurpose, SymbOrder], TAandA]) :
      IScope incScoR endScoR,
      IChar (rdrKnldgbleIn glBreakage blastRisk) undIR appStanddIR,
      IOrgSec s2_3_intro dataDefn (SRS.dataDefn SRS.missingP []) s2_3_intro_end]) :
-  StkhldrSec 
-    (StkhldrProg2 
-      [Client gLassBR (S "a" +:+ phrase company 
+  StkhldrSec
+    (StkhldrProg2
+      [Client gLassBR (S "a" +:+ phrase company
         +:+ S "named Entuitive. It is developed by Dr." +:+ name mCampidelli),
       Cstmr gLassBR]) :
   GSDSec (GSDProg2 [UsrChars [s4_1_bullets endUser gLassBR secondYear
-    undergradDegree civilEng structuralEng glBreakage blastRisk], 
+    undergradDegree civilEng structuralEng glBreakage blastRisk],
     SystCons [] []]) :
   ScpOfProjSec (ScpOfProjProg (short gLassBR) (s5_1_table) (s5_2 (glaSlab)
     (capacity) (demandq) (probability))) :
@@ -116,7 +117,7 @@ mkSRS = RefSec (RefProg intro [TUnits, tsymb [TSPurpose, SymbOrder], TAandA]) :
       ]
     ) :  -}
   ReqrmntSec (ReqsProg [
-    FReqsSub s7_1_list, 
+    FReqsSub s7_1_list,
     NonFReqsSub [performance] (gBRpriorityNFReqs)
     (S "This problem is small in size and relatively simple")
     (S "Any reasonable" +:+ phrase implementation +:+.
@@ -128,7 +129,7 @@ mkSRS = RefSec (RefProg intro [TUnits, tsymb [TSPurpose, SymbOrder], TAandA]) :
   AuxConstntSec (AuxConsProg gLassBR auxiliaryConstants) :
   Bibliography :
   AppndxSec (AppndxProg [s12_intro, fig_5, fig_6]) : []
-  
+ 
 stdFields :: Fields
 stdFields = [DefiningEquation, Description Verbose IncludeUnits, Source, RefBy]
 
@@ -137,11 +138,11 @@ glassSystInfo = SI {
   _sys         = glassBRProg,
   _kind        = srs,
   _authors     = [nikitha, spencerSmith],
-  _units       = map UU [metre, second, kilogram] ++ map UU [pascal, newton],
+  _units       = map unitWrapper [metre, second, kilogram] ++ map unitWrapper [pascal, newton],
   _quants      = this_symbols,
-  _concepts    = ([] :: [CQSWrapper]),
-  _definitions = dataDefns ++ (map (relToQD gbSymbMap) iModels) ++ (map (relToQD gbSymbMap) tModels) 
-                  ++ [wtntWithEqn, sdWithEqn],  -- wtntWithEqn is defined in Unitals but only appears 
+  _concepts    = [] :: [DefinedQuantityDict],
+  _definitions = dataDefns ++ (map (relToQD gbSymbMap) iModels) ++ (map (relToQD gbSymbMap) tModels)
+                  ++ [wtntWithEqn, sdWithEqn],  -- wtntWithEqn is defined in Unitals but only appears
                                                  -- in the description of the Calculation of Demand instance model;
                                                  -- should this be included as a Data Definition?
                                                  -- (same for sdWithEqn)
@@ -269,7 +270,7 @@ undIR = foldlList [phrase scndYrCalculus, phrase structuralMechanics,
   plural computerApp `sIn` phrase civilEng]
 appStanddIR = foldlSent [S "In addition" `sC` plural reviewer,
   S "should be familiar with the applicable", plural standard,
-  S "for constructions using glass from", 
+  S "for constructions using glass from",
   sSqBr (S "4-6" {-astm_LR2009, astm_C1036, astm_C1048-}) `sIn`
   (makeRef (SRS.reference SRS.missingP []))]
 incScoR = foldl (+:+) EmptyS [S "getting all", plural inParam,
@@ -444,8 +445,8 @@ s6_1_3_list_goalStmt1 = [foldlSent [S "Analyze" `sAnd` S "predict whether",
 
 s6_2 = solChSpecF gLassBR (s6_1, (SRS.likeChg SRS.missingP [])) EmptyS
  (EmptyS, dataConstraintUncertainty, end)
- (s6_2_1_list, map gbSymbMapT tModels, [], map gbSymbMapD dataDefns,
-  map gbSymbMapT iModels,
+ (s6_2_1_list, map reldefn tModels, [], map datadefn dataDefns,
+  map reldefn iModels,
   [s6_2_5_table1, s6_2_5_table2]) []
   where
     end = foldlSent [(makeRef (SRS.valsOfAuxCons SRS.missingP [])),
@@ -527,8 +528,8 @@ a8Desc mainConcept = foldlSent [S "With", phrase reference, S "to",
   (refA (_refdb glassSystInfo) newA4), S "the", phrase value `sOf` 
   phrase mainConcept, sParen (getES mainConcept), S "is a", phrase constant, 
   S "in" +:+. short gLassBR, S "It is calculated by the" +: phrase equation +:+.
-  E (C mainConcept $= equat mainConcept), S "Using this" `sC`
-  E (C mainConcept $= (Dbl 0.27))]
+  E (sy mainConcept $= mainConcept^.equat), S "Using this" `sC`
+  E (sy mainConcept $= (Dbl 0.27))]
 
 {--Theoretical Models--}
 
@@ -621,8 +622,8 @@ req4Desc = foldlSent [titleize output_, S "the", plural inQty,
   S "from", acroR 2]
 
 req5Desc cmd = foldlSent_ [S "If", (getES is_safe1) `sAnd` (getES is_safe2),
-  sParen (S "from" +:+ (makeRef (gbSymbMapT t1SafetyReq))
-  `sAnd` (makeRef (gbSymbMapT t2SafetyReq))), S "are true" `sC`
+  sParen (S "from" +:+ (makeRef (reldefn t1SafetyReq))
+  `sAnd` (makeRef (reldefn t2SafetyReq))), S "are true" `sC`
   phrase cmd, S "the", phrase message, Quote (safeMessage ^. defn),
   S "If the", phrase condition, S "is false, then", phrase cmd,
   S "the", phrase message, Quote (notSafe ^. defn)]
@@ -637,13 +638,13 @@ s7_1_req6 = [(Enumeration $ Simple $ [(acroR 6, Nested (titleize output_ +:+
   S "the following" +: plural quantity)
   (Bullet $
     map (\(a, d) -> Flat $ (at_start a) +:+ sParen (getES a) +:+
-    sParen (makeRef (gbSymbMapT d))) (zip testing testing1)
+    sParen (makeRef (reldefn d))) (zip testing testing1)
     ++
     map (\d -> Flat $ (at_start d) +:+ sParen (getES d) +:+
-    sParen (makeRef (gbSymbMapD d))) s7_1_req6_pulledList
+    sParen (makeRef (datadefn d))) s7_1_req6_pulledList
     ++
     [Flat $ (titleize aspectR) +:+ sParen (getES aspectR) +:+
-    E (equat aspectRWithEqn)]
+    E (aspectRWithEqn^.equat)]
     ))])]
 
 {--Nonfunctional Requirements--}

@@ -88,4 +88,4 @@ tOfSymb cs ss = section (titleize Doc.tOfSymb) cs ss "ToS"
 
 --
 missingP :: [Contents]
-missingP = [Paragraph Doc.missing]
+missingP = [Paragraph $ S "..."]

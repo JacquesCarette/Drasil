@@ -1,4 +1,3 @@
-{-# OPTIONS -Wall #-} 
 -- | Helper functions for printing
 module Language.Drasil.Printing.Helpers where
 

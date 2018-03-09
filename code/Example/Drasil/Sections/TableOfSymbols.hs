@@ -2,8 +2,6 @@
 module Drasil.Sections.TableOfSymbols 
   (table) where
 
-import Data.Drasil.Utils(getS)
-
 import Language.Drasil
 import qualified Data.Drasil.Concepts.Math as CM
 import Data.Drasil.Concepts.Documentation
@@ -13,11 +11,8 @@ import Data.Drasil.Concepts.Documentation
 table :: (Quantity s) => Stage -> [s] -> (s -> Sentence) -> Contents
 table st ls f = Table 
   [at_start symbol_, at_start description, at_start' CM.unit_]
-  (mkTable
-  [getS st,
-  f, 
-  unitHidingUnitless]
-  (filter (hasStageSymbol st . getStagedS) ls))
+  (mkTable [P . symbol st, f, unitHidingUnitless]
+  (filter (\q -> hasStageSymbol q st) ls))
   (titleize tOfSymb) False "ToS"
 
 -- ^. defn

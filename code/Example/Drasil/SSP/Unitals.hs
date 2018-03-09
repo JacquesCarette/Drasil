@@ -11,7 +11,7 @@ import Data.Drasil.Units.Physics (momentOfForceU)
 import Drasil.SSP.Defs (fs_concept)
 import Data.Drasil.Constraints (gtZeroConstr)
 
-sspSymbols :: [CQSWrapper]
+sspSymbols :: [DefinedQuantityDict]
 sspSymbols = (map cqs sspInputs) ++ (map cqs sspOutputs) ++
   (map cqs sspUnits) ++ (map cqs sspUnitless)
 
@@ -43,7 +43,7 @@ smsi  = "refers to either slice i midpoint, or slice interface i"
 -- START OF CONSTRAINEDCHUNKS --
 --------------------------------
 
-sspConstrained :: [ConstrWrapper]
+sspConstrained :: [ConstrainedChunk]
 sspConstrained = map cnstrw sspInputs ++ map cnstrw sspOutputs
 
 sspInputs :: [UncertQ]
@@ -56,7 +56,7 @@ sspOutputs = [fs, coords, dx_i, dy_i]
 {-
 monotonicIn :: [Constraint]  --FIXME: Move this?
 monotonicIn = [physc $ \_ -> -- FIXME: Hack with "index" !
-  (idx xi (C index) $< idx xi (C index + 1) $=> idx yi (C index) $< idx yi (C index + 1))]
+  (idx xi (sy index) $< idx xi (sy index + 1) $=> idx yi (sy index) $< idx yi (sy index + 1))]
 -}
 
 defultUncrt :: Double
@@ -112,7 +112,13 @@ constant_K = uqc "kappa" (cn "constant") fixme
   (Greek Kappa_L) pascal Real [] (Dbl 0) defultUncrt
 
 {-Output Variables-} --FIXME: See if there should be typical values
-fs = constrained' (cvR fs_concept (Atomic "FS")) [gtZeroConstr] (Dbl 1)
+fs = constrained' (cv fs_concept (Atomic "FS") Real) [gtZeroConstr] (Dbl 1)
+
+fs_min :: ConVar -- This is a hack to remove the use of indexing for 'min'.
+fs_min = cv (dcc "fs_min" (cn "minimum factor of safety") 
+  ("The minimum factor of safety")) (sub (eqSymb fs) (Atomic "min")) Real
+-- Once things are converted to the new style of instance models, this will
+-- be removed/fixed.
 
 coords = cuc' "(x,y)"
   (cn $ "cartesian position coordinates" )
@@ -130,7 +136,7 @@ dy_i = cuc' "dy_i" (cn $ "displacement") ("in the y-ordinate direction " ++
 -- START OF UNITALCHUNKS --
 ---------------------------
 
-sspUnits :: [UCWrapper]
+sspUnits :: [UnitaryConceptDict]
 sspUnits = map ucw [normStress, genPressure, normFunc, shearFunc,
   waterHght, slopeHght, slipHght, xi, yi, critCoords, slopeDist, slipDist,
   mobShrI, shrResI, shearFNoIntsl, shearRNoIntsl, slcWght, watrForce,
@@ -383,56 +389,56 @@ fy = uc' "fy" (cn "y-component of the net force") fixme
 
 sspUnitless :: [ConVar]
 sspUnitless = [earthqkLoadFctr, normToShear,scalFunc,
-  numbSlices, minFunction, fsloc, index, varblU, varblV]
+  numbSlices, minFunction, fsloc, index, varblU, varblV, fs_min]
 
 earthqkLoadFctr, normToShear, scalFunc,
   numbSlices, minFunction, fsloc, index, varblU, varblV :: ConVar
 
-earthqkLoadFctr = cvR (dcc "K_c" (nounPhraseSP $ "earthquake load factor")
+earthqkLoadFctr = cv (dcc "K_c" (nounPhraseSP $ "earthquake load factor")
   ("proportionality factor of force that " ++
   "weight pushes outwards; caused by seismic earth movements"))
-  (sub cK lC)
+  (sub cK lC) Real
 
-normToShear = cvR (dcc "lambda"
+normToShear = cv (dcc "lambda"
   (nounPhraseSP $ "interslice normal/shear force ratio")
-  ("applied to all interslices")) (Greek Lambda_L)
+  ("applied to all interslices")) (Greek Lambda_L) Real
 
-scalFunc = cvR (dcc "f_i" (nounPhraseSP $ "scaling function")
+scalFunc = cv (dcc "f_i" (nounPhraseSP $ "scaling function")
   ("magnitude of interslice forces as a function " ++
   "of the x coordinate" ++ fisi ++ "; can be constant or a half-sine"))
-  (lF)
+  (lF) Real
 
-numbSlices = cvRs (dcc "n" (nounPhraseSP "number of slices")
+numbSlices = cv (dcc "n" (nounPhraseSP "number of slices")
   "the slip mass has been divided into")
   lN Natural
 
-minFunction = cvR (dcc "Upsilon" (nounPhraseSP "function")
+minFunction = cv (dcc "Upsilon" (nounPhraseSP "function")
   ("generic minimization function or algorithm"))
-  (Greek Upsilon)
+  (Greek Upsilon) Real
 
-fsloc = cvR (dcc "FS_loci" (nounPhraseSP "local factor of safety") fsi)
-  (sub (Atomic "FS") (Atomic "Loc,i"))
+fsloc = cv (dcc "FS_loci" (nounPhraseSP "local factor of safety") fsi)
+  (sub (Atomic "FS") (Atomic "Loc,i")) Real
 
 --------------------
 -- Index Function --
 --------------------
 
-varblU = cvRs (dcc "varblU" (nounPhraseSP "local index")
+varblU = cv (dcc "varblU" (nounPhraseSP "local index")
   ("used as a bound variable index in calculations"))
   lU Natural
-varblV = cvRs (dcc "varblV" (nounPhraseSP "local index")
+varblV = cv (dcc "varblV" (nounPhraseSP "local index")
   ("used as a bound variable index in calculations"))
   lV Natural
 
-index = cvRs (dcc "index" (nounPhraseSP "index")
+index = cv (dcc "index" (nounPhraseSP "index")
   ("used to show a quantity applies to only one slice")) lI Natural
 
 --FIXME: possibly move to Language/Drasil/Expr.hs
 indx1 :: (Quantity a) => a -> Expr
-indx1 a = idx (C a) (Int 1)
+indx1 a = idx (sy a) (Int 1)
 
 indxn :: (Quantity a) => a -> Expr
-indxn a = idx (C a) (C numbSlices)
+indxn a = idx (sy a) (sy numbSlices)
 
 inxi, inxiP1, inxiM1 :: Quantity e => e -> Expr
 inxiP1 e = inx e 1
@@ -441,9 +447,9 @@ inxiM1 e = inx e (-1)
 
 inx :: Quantity e => e -> Integer -> Expr
 inx e n 
-  | n < 0     = idx (C e) (C index - Int (-n))
-  | n == 0    = idx (C e) (C index)
-  | otherwise = idx (C e) (C index + Int n)
+  | n < 0     = idx (sy e) (sy index - Int (-n))
+  | n == 0    = idx (sy e) (sy index)
+  | otherwise = idx (sy e) (sy index + Int n)
 
 sum1toN :: Expr -> Expr
-sum1toN = defsum (eqSymb index) 1 (C numbSlices)
+sum1toN = defsum (eqSymb index) 1 (sy numbSlices)

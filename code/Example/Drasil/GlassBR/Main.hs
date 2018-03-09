@@ -6,8 +6,8 @@ import Drasil.GlassBR.Body (glassBR_srs, glassBR_code, gbSymbMap)
 
 docs :: [Recipe]
 docs = 
-  [Recipe (SRS "GlassBR_SRS")     glassBR_srs, 
-   Recipe (Website "GlassBR_SRS") glassBR_srs
+  [Recipe (DocSpec SRS "GlassBR_SRS")     glassBR_srs, 
+   Recipe (DocSpec Website "GlassBR_SRS") glassBR_srs
   ]
 
 glassChoices :: Choices

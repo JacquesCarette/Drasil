@@ -29,8 +29,8 @@ nwtnCooling = makeRC "nwtnCooling" (nounPhraseSP "Newton's law of cooling")
   nwtnCooling_desc nwtnCooling_rel
 
 nwtnCooling_rel :: Relation
-nwtnCooling_rel = FCall (C thFluxVect) [C QP.time] $= C htTransCoeff *
-  FCall (C deltaT) [C QP.time]
+nwtnCooling_rel = FCall (sy thFluxVect) [sy QP.time] $= sy htTransCoeff *
+  FCall (sy deltaT) [sy QP.time]
 
 nwtnCooling_desc :: Sentence
 nwtnCooling_desc = foldlSent [at_start law_conv_cooling +:+.
@@ -38,13 +38,13 @@ nwtnCooling_desc = foldlSent [at_start law_conv_cooling +:+.
   S "The law is stated as", S "the", phrase rate,
   S "of heat loss from a body is proportional to the",
   S "difference in", plural temp, S "between the body" +:+.
-  S "and its surroundings", E (FCall (C thFluxVect) [C QP.time]) `isThe`
+  S "and its surroundings", E (FCall (sy thFluxVect) [sy QP.time]) `isThe`
   S "thermal flux" +:+. sParen (Sy $ unit_symb thFluxVect),
   getES htTransCoeff `isThe` S "heat transfer coefficient" `sC`
   S "assumed independant of", getES QT.temp, sParen (acroA 2) +:+.
   sParen (Sy $ unit_symb htTransCoeff),
-  E (FCall (C deltaT) [C QP.time] $= FCall (C temp) [C QP.time] -
-  FCall (C temp_env) [C QP.time]) `isThe` S "time-dependant thermal gradient",
+  E (FCall (sy deltaT) [sy QP.time] $= FCall (sy temp) [sy QP.time] -
+  FCall (sy temp_env) [sy QP.time]) `isThe` S "time-dependant thermal gradient",
   S "between the environment and the object",
   sParen (Sy $ unit_symb deltaT)]
 
@@ -54,9 +54,9 @@ rocTempSimp = makeRC "rocTempSimp" (nounPhraseSP $ "Simplified rate " ++
   "of change of temperature") rocTempSimp_desc rocTempSimp_rel
 
 rocTempSimp_rel :: Relation
-rocTempSimp_rel = (C QPP.mass) * (C QT.heat_cap_spec) *
-  Deriv Total (C QT.temp) QP.time $= C ht_flux_in * C in_SA -
-  C ht_flux_out * C out_SA + C vol_ht_gen * C QPP.vol
+rocTempSimp_rel = (sy QPP.mass) * (sy QT.heat_cap_spec) *
+  Deriv Total (sy QT.temp) QP.time $= sy ht_flux_in * sy in_SA -
+  sy ht_flux_out * sy out_SA + sy vol_ht_gen * sy QPP.vol
 
 rocTempSimp_desc :: Sentence
 rocTempSimp_desc = foldlSent [S "The basic", phrase equation,

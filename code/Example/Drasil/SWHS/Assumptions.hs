@@ -7,8 +7,7 @@ import Data.Drasil.Concepts.Documentation (system, simulation, model,
   problem, acroNumGen)
 import Drasil.DocumentLanguage (mkAssump)
 
-import Drasil.SWHS.DataDefs (dd1HtFluxC, dd2HtFluxP,
-  swhsSymbMapDRef, swhsSymbMapTRef)
+import Drasil.SWHS.DataDefs (dd1HtFluxC, dd2HtFluxP)
 import Drasil.SWHS.Concepts (coil, tank, phsChgMtrl, water, perfect_insul,
   charging, discharging)
 import Drasil.SWHS.Unitals (w_vol, vol_ht_gen, temp_C, temp_init, temp_W,
@@ -49,7 +48,7 @@ assump1 = mkAssump "assump1" $ foldlSent [
   S "relevant for this", phrase problem, S "is" +:+. 
   phrase CT.thermal_energy, S "All other forms of", phrase energy `sC`
   S "such as", phrase mech_energy `sC` S "are assumed to be negligible",
-  sSqBr $ swhsSymbMapTRef t1ConsThermE]
+  sSqBr $ makeRef $ reldefn t1ConsThermE]
 --
 assump2 = mkAssump "assump2" $ foldlSent [
   S "All", phrase CT.heat_trans, S "coefficients are constant over",
@@ -59,12 +58,12 @@ assump3 = mkAssump "assump3" $ foldlSent [
   S "The", phrase water, S "in the", phrase tank,
   S "is fully mixed, so the", phrase temp_W `isThe` 
   S "same throughout the entire", phrase tank,
-  sSqBr $ acroGD 2 `sC` swhsSymbMapDRef dd2HtFluxP]
+  sSqBr $ acroGD 2 `sC` (makeRef $ datadefn dd2HtFluxP)]
 --
 assump4 = mkAssump "assump4" $ foldlSent [
   S "The", phrase temp_PCM `isThe` S "same throughout the", phrase pcm_vol,
   sSqBr $ acroGD 2 `sC`
-  swhsSymbMapDRef dd2HtFluxP]--FIXME `sC` makeRef likeChg1]
+  (makeRef $ datadefn dd2HtFluxP)]--FIXME `sC` makeRef likeChg1]
 --
 assump5 = mkAssump "assump5" $ foldlSent [
   S "The", phrase w_density `sAnd` phrase pcm_density,
@@ -81,20 +80,20 @@ assump6 = mkAssump "assump6" $ foldlSent [
 assump7 = mkAssump "assump7" $ foldlSent [
   CT.law_conv_cooling ^. defn, S "applies between the",
   phrase coil `sAnd` S "the", phrase water,
-  sSqBr $ swhsSymbMapDRef dd1HtFluxC]
+  sSqBr $ makeRef $ datadefn dd1HtFluxC]
 --
 assump8 = mkAssump "assump8" $ foldlSent [
   S "The", phrase temp_C, S "is constant over", phrase time,
-  sSqBr $ swhsSymbMapDRef dd1HtFluxC]--FIXME `sC` makeRef likeChg2]
+  sSqBr $ makeRef $ datadefn dd1HtFluxC]--FIXME `sC` makeRef likeChg2]
 --
 assump9 = mkAssump "assump9" $ foldlSent [
   S "The", phrase temp_C, S "does not vary along its length",
-  sSqBr $ swhsSymbMapDRef dd1HtFluxC]--FIXME `sC` makeRef likeChg3]
+  sSqBr $ makeRef $ datadefn dd1HtFluxC]--FIXME `sC` makeRef likeChg3]
 --
 assump10 = mkAssump "assump10" $ foldlSent [
   CT.law_conv_cooling ^. defn, S "applies between the",
   phrase water `sAnd` S "the", short phsChgMtrl,
-  sSqBr $ swhsSymbMapDRef dd2HtFluxP]
+  sSqBr $ makeRef $ datadefn dd2HtFluxP]
 --
 assump11 = mkAssump "assump11" $ foldlSent [
   S "The", phrase model, S "only accounts for", (charging ^. defn) `sC`

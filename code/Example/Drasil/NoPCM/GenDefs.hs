@@ -15,7 +15,6 @@ import Data.Drasil.Utils (getES, weave)
 import Data.Drasil.SentenceStructures (sAnd, foldlList, ofThe, acroGD, foldlSentCol)
 import Data.Drasil.Concepts.Documentation (assumption)
 import Data.Drasil.Quantities.Physics (time)
-import Drasil.SWHS.DataDefs(swhsSymbMapTRef)
 
 roc_temp_simp_deriv :: Derivation
 roc_temp_simp_deriv =
@@ -34,7 +33,7 @@ roc_temp_simp_deriv_sentences = map foldlSentCol [
 
 s4_2_3_desc1 :: RelationConcept -> UnitalChunk -> [Sentence]
 s4_2_3_desc1 t1c vo =
-  [S "Integrating", swhsSymbMapTRef t1c,
+  [S "Integrating", makeRef $ reldefn t1c,
   S "over a", phrase vo, sParen (getES vo) `sC` S "we have"]
 
 s4_2_3_desc2 :: ConceptChunk -> ConVar -> UnitalChunk -> UnitalChunk ->
@@ -66,27 +65,27 @@ s4_2_3_desc5 den ma vo = [S "Using the fact that", getES den :+: S "=" :+:
 
 s4_2_3_eq1, s4_2_3_eq2, s4_2_3_eq3, s4_2_3_eq4, s4_2_3_eq5 :: Expr
 
-s4_2_3_eq1 = (negate (int_all (eqSymb vol) ((C gradient) $. (C thFluxVect)))) + 
-  (int_all (eqSymb vol) (C vol_ht_gen)) $=
-  (int_all (eqSymb vol) ((C density)
-  * (C QT.heat_cap_spec) * Deriv Part (C QT.temp) time))
+s4_2_3_eq1 = (negate (int_all (eqSymb vol) ((sy gradient) $. (sy thFluxVect)))) + 
+  (int_all (eqSymb vol) (sy vol_ht_gen)) $=
+  (int_all (eqSymb vol) ((sy density)
+  * (sy QT.heat_cap_spec) * Deriv Part (sy QT.temp) time))
 
-s4_2_3_eq2 = (negate (int_all (eqSymb surface) ((C thFluxVect) $. (C uNormalVect)))) +
-  (int_all (eqSymb vol) (C vol_ht_gen)) $= 
+s4_2_3_eq2 = (negate (int_all (eqSymb surface) ((sy thFluxVect) $. (sy uNormalVect)))) +
+  (int_all (eqSymb vol) (sy vol_ht_gen)) $= 
   (int_all (eqSymb vol)
-  ((C density) * (C QT.heat_cap_spec) * Deriv Part (C QT.temp) time))
+  ((sy density) * (sy QT.heat_cap_spec) * Deriv Part (sy QT.temp) time))
 
-s4_2_3_eq3 = (C ht_flux_in) * (C in_SA) - (C ht_flux_out) *
-  (C out_SA) + (C vol_ht_gen) * (C vol) $= 
-  (int_all (eqSymb vol) ((C density) * (C QT.heat_cap_spec) * Deriv Part (C QT.temp) time))
+s4_2_3_eq3 = (sy ht_flux_in) * (sy in_SA) - (sy ht_flux_out) *
+  (sy out_SA) + (sy vol_ht_gen) * (sy vol) $= 
+  (int_all (eqSymb vol) ((sy density) * (sy QT.heat_cap_spec) * Deriv Part (sy QT.temp) time))
 
-s4_2_3_eq4 = (C density) * (C QT.heat_cap_spec) * (C vol) * Deriv Total
-  (C QT.temp) time $= (C ht_flux_in) * (C in_SA) - (C ht_flux_out) *
-  (C out_SA) + (C vol_ht_gen) * (C vol)
+s4_2_3_eq4 = (sy density) * (sy QT.heat_cap_spec) * (sy vol) * Deriv Total
+  (sy QT.temp) time $= (sy ht_flux_in) * (sy in_SA) - (sy ht_flux_out) *
+  (sy out_SA) + (sy vol_ht_gen) * (sy vol)
 
-s4_2_3_eq5 = (C mass) * (C QT.heat_cap_spec) * Deriv Total (C QT.temp)
-  time $= (C ht_flux_in) * (C in_SA) - (C ht_flux_out)
-  * (C out_SA) + (C vol_ht_gen) * (C vol)
+s4_2_3_eq5 = (sy mass) * (sy QT.heat_cap_spec) * Deriv Total (sy QT.temp)
+  time $= (sy ht_flux_in) * (sy in_SA) - (sy ht_flux_out)
+  * (sy out_SA) + (sy vol_ht_gen) * (sy vol)
 
 roc_temp_simp_deriv_eqns :: [Expr]
 roc_temp_simp_deriv_eqns = [s4_2_3_eq1, s4_2_3_eq2, s4_2_3_eq3, s4_2_3_eq4,

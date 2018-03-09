@@ -1,6 +1,6 @@
 module Drasil.HGHC.HGHC (srsBody, thisCode, allSymbols) where
 
-import Language.Drasil
+import Language.Drasil hiding (Manual) -- Citation name conflict. FIXME: Move to different namespace
 import Drasil.DocumentLanguage
 
 import Drasil.HGHC.HeatTransfer (hghcVars, fp, htOutputs,
@@ -23,7 +23,7 @@ thisSI = SI {
   _authors = [spencerSmith],
   _units = si_units,  
   _quants = symbols,
-  _concepts = ([] :: [UCWrapper]),
+  _concepts = ([] :: [UnitaryConceptDict]),
   _definitions = hghcVars,
   _inputs = htInputs,
   _outputs = htOutputs,
@@ -34,7 +34,7 @@ thisSI = SI {
 }
 
 allSymbols :: ChunkDB
-allSymbols = cdb symbols (map nw symbols) ([] :: [CWrapper]) -- FIXME: Fill in concepts
+allSymbols = cdb symbols (map nw symbols) ([] :: [UnitDefn]) -- FIXME: Fill in concepts
   si_units
   
 thisSRS :: DocDesc

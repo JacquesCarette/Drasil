@@ -56,8 +56,7 @@ import Data.Drasil.Concepts.Math (surface, equation)
 import Data.Drasil.Concepts.SolidMechanics (normForce, shearForce)
 import Data.Drasil.Software.Products (sciCompS)
 
-import Data.Drasil.Utils (symbolMapFun,
-  getES, enumBullet, enumSimple, weave)
+import Data.Drasil.Utils (getES, enumBullet, enumSimple, weave)
 import Data.Drasil.SentenceStructures (sOr, acroDD,
   foldlSent, ofThe, sAnd, foldlSP, foldlList, foldlSent_)
 
@@ -77,7 +76,7 @@ s4_2_2_tmods, s4_2_3_genDefs, s4_2_4_dataDefs, s4_2_5_IMods :: [Contents]
 
 --Document Setup--
 this_si :: [UnitDefn]
-this_si = map UU [metre, degree] ++ map UU [newton, pascal]
+this_si = map unitWrapper [metre, degree] ++ map unitWrapper [newton, pascal]
 
 ssp_si :: SystemInformation
 ssp_si = SI {
@@ -121,14 +120,8 @@ ssp_code = codeSpec' ssp_si [sspInputMod]
 
 -- SYMBOL MAP HELPERS --
 sspSymMap :: ChunkDB
-sspSymMap = cdb sspSymbols (map nw sspSymbols ++ map nw acronyms) ([] :: [CWrapper]) -- FIXME: Fill in Concepts
+sspSymMap = cdb sspSymbols (map nw sspSymbols ++ map nw acronyms) ([] :: [UnitDefn]) -- FIXME: Fill in Concepts
   this_si
-
-sspSymMapT :: RelationConcept -> Contents
-sspSymMapT = symbolMapFun Theory
-
-sspSymMapD :: QDefinition -> Contents
-sspSymMapD = symbolMapFun Data
 
 -- SECTION 1 --
 --automatically generated in mkSRS -
@@ -282,7 +275,7 @@ s4_1_2_bullets = enumBullet $ map foldlSent_ [
   [at_start' itslPrpty, S "convention is noted by j. The end",
   plural itslPrpty, S "are usually not of", phrase interest `sC`
   S "therefore use the", plural itslPrpty, S "from", 
-  (E $ 1 $<= C index $<= (C numbSlices) - 1)],
+  (E $ 1 $<= sy index $<= (sy numbSlices) - 1)],
 
   [at_start slice, plural property +:+. S "convention is noted by",
   getES index]]
@@ -330,25 +323,25 @@ s4_2_1_list = enumSimple 1 (short assumption) sspAssumptions
 -- SECTION 4.2.2 --
 -- TModels is automatically generated in solChSpecF using the tmods below
 
-s4_2_2_tmods = map sspSymMapT sspTMods
+s4_2_2_tmods = map reldefn sspTMods
 
 -- SECTION 4.2.3 --
 -- General Definitions is automatically generated in solChSpecF
-s4_2_3_genDefs = map sspSymMapT sspGenDefs
+s4_2_3_genDefs = map reldefn sspGenDefs
 
 -- SECTION 4.2.4 --
 -- Data Definitions is automatically generated in solChSpecF
-s4_2_4_dataDefs = (map sspSymMapD (take 13 sspDataDefs)) ++ resShrDerivation ++
-  [sspSymMapD (sspDataDefs !! 13)] ++ mobShrDerivation ++
-  map sspSymMapD [sspDataDefs !! 14, sspDataDefs !! 15] ++
-  stfMtrxDerivation ++ (map sspSymMapD (drop 16 sspDataDefs))
+s4_2_4_dataDefs = (map datadefn (take 13 sspDataDefs)) ++ resShrDerivation ++
+  [datadefn (sspDataDefs !! 13)] ++ mobShrDerivation ++
+  map datadefn [sspDataDefs !! 14, sspDataDefs !! 15] ++
+  stfMtrxDerivation ++ (map datadefn (drop 16 sspDataDefs))
   --FIXME: derivations should be with the appropriate DataDef
 
 -- SECTION 4.2.5 --
 -- Instance Models is automatically generated in solChSpecF
 -- using the paragraphs below
 
-s4_2_5_IMods = concat $ weave [map (\x -> [sspSymMapT x]) sspIMods,
+s4_2_5_IMods = concat $ weave [map (\x -> [reldefn x]) sspIMods,
   [fctSftyDerivation, nrmShrDerivation, intrSlcDerivation,
   rigDisDerivation, rigFoSDerivation]]
   --FIXME: derivations should be with the appropriate IMod

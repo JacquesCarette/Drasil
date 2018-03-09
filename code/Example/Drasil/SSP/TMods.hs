@@ -31,7 +31,7 @@ fs_rc :: RelationConcept
 fs_rc = makeRC "fs_rc" factorOfSafety fs_desc fs_rel
 
 fs_rel :: Relation
-fs_rel = (C fs) $= (C shearRes) / (C mobShear)
+fs_rel = (sy fs) $= (sy shearRes) / (sy mobShear)
 
 fs_desc :: Sentence
 fs_desc = foldlSent [
@@ -49,7 +49,7 @@ equilibrium = makeRC "equilibrium" (nounPhraseSP "equilibrium") eq_desc eq_rel
 -- FIXME: Atomic "i" is a hack.  But we need to sum over something!
 eq_rel :: Relation
 eq_rel = foldr ($=) 0 (map summ [fx, fy, momntOfBdy])
-  where summ = sum_all (Atomic "i") . C
+  where summ = sum_all (Atomic "i") . sy
 
 eq_desc :: Sentence
 eq_desc = foldlSent [S "For a body in static equilibrium, the net",
@@ -66,7 +66,7 @@ mcShrStrgth = makeRC "mcShrStrgth" (nounPhraseSP "Mohr-Coulumb shear strength")
   mcSS_desc mcSS_rel
 
 mcSS_rel :: Relation
-mcSS_rel = (C shrStress) $= ((C normStress) * (tan (C fricAngle)) + (C cohesion))
+mcSS_rel = (sy shrStress) $= ((sy normStress) * (tan (sy fricAngle)) + (sy cohesion))
 
 mcSS_desc :: Sentence
 mcSS_desc = foldlSent [S "For a", phrase soil, S "under", phrase stress,
@@ -78,7 +78,7 @@ mcSS_desc = foldlSent [S "For a", phrase soil, S "under", phrase stress,
   getTandS shrStress, S "is proportional to the product of the",
   phrase normStress, S "on the plane", getES normStress,
   S "with it's static", phrase friction, S "in the angular form" +:+.
-  (E $ tan (C fricAngle) $= C surfHydroForce),
+  (E $ tan (sy fricAngle) $= sy surfHydroForce),
   --FIXME: sould say U_s but there is no way to say that yet
   S "The", getES shrStress, S "versus", getES normStress,
   S "relationship is not truly",
@@ -94,7 +94,7 @@ effStress = makeRC "effStress"
   (nounPhraseSP "effective stress") effS_desc effS_rel
 
 effS_rel :: Relation
-effS_rel = (C normStress) $= (C normStress) - (C porePressure)
+effS_rel = (sy normStress) $= (sy normStress) - (sy porePressure)
 
 effS_desc :: Sentence --FIXME: these are not normStress but they are sigma.
                       -- Add a prime. Symbol inconsistency 
@@ -116,7 +116,7 @@ hookesLaw = makeRC "hookesLaw"
   (nounPhraseSP "Hooke's law") hksLw_desc hksLw_rel
 
 hksLw_rel :: Relation
-hksLw_rel = (C genForce) $= (C stffness) * (C genDisplace)
+hksLw_rel = (sy genForce) $= (sy stffness) * (sy genDisplace)
 
 hksLw_desc :: Sentence
 hksLw_desc = foldlSent [S "Description Stiffness", getES stffness, S "is the",

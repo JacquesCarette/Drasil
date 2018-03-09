@@ -1,11 +1,11 @@
 module Language.Drasil.HTML.Print where
 
-import Prelude hiding (print, id)
+import Prelude hiding (print)
 import Data.List (intersperse, sort)
-import Text.PrettyPrint hiding (render, quotes)
+import Text.PrettyPrint hiding (render, quotes, Str)
 import Numeric (showFFloat)
 
-import Language.Drasil.Expr (Oper(..))
+import Language.Drasil.Expr (Oper(..),UFunc(..), BinOp(..))
 import Language.Drasil.HTML.Import (makeDocument, spec)
 import Language.Drasil.Printing.AST
 import Language.Drasil.HTML.AST
@@ -23,14 +23,13 @@ import Language.Drasil.Config (StyleGuide(..), bibStyleH)
 import Language.Drasil.ChunkDB (HasSymbolTable(..))
 import Language.Drasil.Space (Space(..))
 
-import Language.Drasil.Chunk.Citation (ExternRefType(..))
+import Language.Drasil.Chunk.Citation (CitationKind(..))
 
 --FIXME? Use Doc in place of Strings for p_spec/title_spec
 
 -- | Generate an HTML document from a Drasil 'Document'
-genHTML :: HasSymbolTable s => F.DocType -> L.Document -> s -> Doc
-genHTML (F.Website fn) doc sm = build fn (makeDocument doc sm) sm
-genHTML _ _ _ = error "Cannot generate HTML for non-Website doctype"
+genHTML :: HasSymbolTable s => F.Filename -> L.Document -> s -> Doc
+genHTML fn doc sm = build fn (makeDocument doc sm) sm
 
 -- | Build the HTML Document, called by genHTML
 build :: HasSymbolTable s => String -> Document -> s -> Doc
@@ -55,7 +54,7 @@ printLO sm (Definition dt ssPs l) = makeDefn dt ssPs (p_spec l sm) sm
 printLO sm (Header n contents)    = h n $ text (p_spec contents sm)
 printLO sm (List t)               = makeList t sm
 printLO sm (Figure r c f wp)      = makeFigure (p_spec r sm) (p_spec c sm) f wp
-printLO sm (ALUR _ x l id)        = makeRefList (p_spec x sm) (p_spec l sm) (p_spec id sm)
+printLO sm (ALUR _ x l i)         = makeRefList (p_spec x sm) (p_spec l sm) (p_spec i sm)
 printLO sm (Bib bib)              = makeBib sm bib
 
 
@@ -120,6 +119,7 @@ symbolNoEm (Corners _ _ _ _ _)      = error "rendering of Corners (general)"
 symbolNoEm (Atop Vector s)       = "<b>" ++ symbolNoEm s ++ "</b>"
 symbolNoEm (Atop Hat s)          = symbolNoEm s ++ "&#770;"
 symbolNoEm (Atop Prime s)        = symbolNoEm s ++ "&prime;"
+symbolNoEm Empty                 = ""
 
 uSymb :: USymb -> String
 uSymb (UName s)           = symbolNoEm s
@@ -133,15 +133,15 @@ uSymb (UDiv n d)          = uSymb n ++ "/(" ++ (uSymb d) ++ ")"
 -----------------------------------------------------------------
 -- | Renders expressions in the HTML (called by multiple functions)
 p_expr :: Expr -> String
-p_expr (Var v)    = symbol (Atomic v) --Ensures variables are rendered the same as other symbols
 p_expr (Dbl d)    = showFFloat Nothing d ""
 p_expr (Int i)    = show i
+p_expr (Str s)    = s
 p_expr (Sym s)    = symbol s
 p_expr (Assoc Mul l) = mul l
 p_expr (Assoc Add l)  = concat $ intersperse " &plus; " $ map p_expr l
 p_expr (Assoc And l)  = concat $ intersperse " &and; " $ map p_expr l
 p_expr (Assoc Or l)   = concat $ intersperse " &or; " $ map p_expr l
-p_expr (BOp Sub a b)  = p_expr a ++ " &minus; " ++ p_expr b
+p_expr (BOp Subt a b)  = p_expr a ++ " &minus; " ++ p_expr b
 p_expr (BOp Frac a b) = fraction (p_expr a) (p_expr b) --Found in HTMLHelpers
 p_expr (BOp Div a b)  = divide a b
 p_expr (BOp Pow a b)  = pow a b
@@ -153,10 +153,11 @@ p_expr (BOp LEq a b)  = p_expr a ++ "&thinsp;&le;&thinsp;" ++ p_expr b
 p_expr (BOp GEq a b)  = p_expr a ++ "&thinsp;&ge;&thinsp;" ++ p_expr b
 p_expr (BOp Dot a b)  = p_expr a ++ "&sdot;" ++ p_expr b
 p_expr (BOp Cross a b) = p_expr a ++ "&#10799;" ++ p_expr b
-p_expr (Op Neg [a])    = neg a
+p_expr (UOp Neg a)    = neg a
+p_expr (Funct f e)    = p_op f e
 p_expr (Call f x) = p_expr f ++ paren (concat $ intersperse "," $ map p_expr x)
 p_expr (Case ps)  = cases ps (p_expr)
-p_expr (Op f es)  = p_op f es
+p_expr (UOp f es)  = p_uop f es
 p_expr (Grouping e) = paren (p_expr e)
 p_expr (Mtx a)    = "<table class=\"matrix\">\n" ++ p_matrix a ++ "</table>"
 p_expr (BOp Index a i)= p_indx a i
@@ -172,12 +173,11 @@ p_indx a@(Sym (Corners [] [] [] [_] _)) i = p_expr a ++ sub (","++ p_sub i)
 p_indx a i = p_expr a ++ sub (p_sub i)
 -- Ensures only simple Expr's get rendered as an index
 p_sub :: Expr -> String
-p_sub e@(Var _)        = p_expr e
 p_sub e@(Dbl _)        = p_expr e
 p_sub e@(Int _)        = p_expr e
 p_sub e@(Sym _)        = p_expr e
 p_sub   (Assoc Add l)  = concat $ intersperse "&plus;" $ map p_expr l --removed spaces
-p_sub   (BOp Sub a b)  = p_expr a ++ "&minus;" ++ p_expr b
+p_sub   (BOp Subt a b) = p_expr a ++ "&minus;" ++ p_expr b
 p_sub e@(Assoc _ _)    = p_expr e
 p_sub   (BOp Frac a b) = divide a b --no block division
 p_sub e@(BOp Div _ _)  = p_expr e
@@ -200,26 +200,26 @@ mul = concat . intersperse "&#8239;" . map (add_paren (prec Mul))
 
 -- | Helper for properly rendering parentheses around the multiplier
 add_paren :: Int -> Expr -> String
-add_paren p a@(Assoc o _)   = if prec o > p then paren $ p_expr a else p_expr a
-add_paren _ a@(BOp Div _ _) = paren $ p_expr a
-add_paren _ a@(BOp Sub _ _) = paren $ p_expr a
-add_paren _ a               = p_expr a
+add_paren p a@(Assoc o _)    = if prec o > p then paren $ p_expr a else p_expr a
+add_paren _ a@(BOp Div _ _)  = paren $ p_expr a
+add_paren _ a@(BOp Subt _ _) = paren $ p_expr a
+add_paren _ a                = p_expr a
 
 -- | Helper for properly rendering division of expressions
 divide :: Expr -> Expr -> String
-divide n d@(Assoc Add _) = p_expr n ++ "/" ++ paren (p_expr d)
-divide n d@(BOp Sub _ _) = p_expr n ++ "/" ++ paren (p_expr d)
-divide n@(Assoc Add _) d = paren (p_expr n) ++ "/" ++ p_expr d
-divide n@(BOp Sub _ _) d = paren (p_expr n) ++ "/" ++ p_expr d
-divide n d = p_expr n ++ "/" ++ p_expr d
+divide n d@(Assoc Add _)   = p_expr n ++ "/" ++ paren (p_expr d)
+divide n d@(BOp Subt _ _)  = p_expr n ++ "/" ++ paren (p_expr d)
+divide n@(Assoc Add _)  d  = paren (p_expr n) ++ "/" ++ p_expr d
+divide n@(BOp Subt _ _) d  = paren (p_expr n) ++ "/" ++ p_expr d
+divide n d                 = p_expr n ++ "/" ++ p_expr d
 
 -- | Helper for properly rendering negation of expressions
 neg :: Expr -> String
-neg a@(Var     _)     = minus a
 neg a@(Dbl     _)     = minus a
 neg a@(Int     _)     = minus a
 neg a@(Sym     _)     = minus a
-neg a@(Op    _ _)     = minus a
+neg a@(UOp   _ _)     = minus a
+neg a@(Funct _ _)     = minus a
 neg a@(Assoc Mul _)   = minus a
 neg a@(BOp Index _ _) = minus a
 neg a               = "&minus;" ++ paren (p_expr a)
@@ -229,13 +229,13 @@ minus e = "&minus;" ++ p_expr e
 
 -- | Helper for properly rendering exponents
 pow :: Expr -> Expr -> String
-pow a@(Assoc Add _) b = sqbrac (p_expr a) ++ sup (p_expr b)
-pow a@(BOp Sub _ _) b = sqbrac (p_expr a) ++ sup (p_expr b)
+pow a@(Assoc Add _)  b = sqbrac (p_expr a) ++ sup (p_expr b)
+pow a@(BOp Subt _ _) b = sqbrac (p_expr a) ++ sup (p_expr b)
 pow a@(BOp Frac _ _) b = sqbrac (p_expr a) ++ sup (p_expr b)
-pow a@(BOp Div _ _) b = paren (p_expr a) ++ sup (p_expr b)
-pow a@(Assoc Mul _) b = paren (p_expr a) ++ sup (p_expr b)
-pow a@(BOp Pow _ _) b = paren (p_expr a) ++ sup (p_expr b)
-pow a b = p_expr a ++ sup (p_expr b)
+pow a@(BOp Div _ _)  b = paren (p_expr a) ++ sup (p_expr b)
+pow a@(Assoc Mul _)  b = paren (p_expr a) ++ sup (p_expr b)
+pow a@(BOp Pow _ _)  b = paren (p_expr a) ++ sup (p_expr b)
+pow a                b = p_expr a ++ sup (p_expr b)
 
 p_space :: Space -> String
 p_space Integer  = "&#8484;"
@@ -247,7 +247,6 @@ p_space Char     = "Char"
 p_space String   = "String"
 p_space Radians  = "rad"
 p_space (Vect a) = "V" ++ p_space a
-p_space (Obj a)  = a
 p_space (DiscreteI a)  = "{" ++ (concat $ intersperse ", " (map show a)) ++ "}"
 p_space (DiscreteD a)  = "{" ++ (concat $ intersperse ", " (map show a)) ++ "}"
 p_space (DiscreteS a)  = "{" ++ (concat $ intersperse ", " a) ++ "}"
@@ -330,45 +329,41 @@ makeFigure r c f wp = refwrap r (image f c wp $$ caption c)
 ------------------BEGIN EXPR OP PRINTING-------------------------
 -----------------------------------------------------------------
 -- | Renders expression operations/functions.
-p_op :: Function -> [Expr] -> String
-p_op f@(Summation bs) (x:[]) = lrgOp f bs ++ paren (p_expr x)
-p_op (Summation _) _ = error "Something went wrong with a summation"
-p_op f@(Product bs) (x:[]) = lrgOp f bs ++ paren (p_expr x)
-p_op (Product _) _ = error "Something went wrong with a product"
-p_op f@(Integral bs wrtc) (x:[]) = intg f bs
-  {-show f ++ makeIBound bs-}
+p_op :: Functional -> Expr -> String
+p_op (Summation bs) x = lrgOp "&sum;" bs ++ paren (p_expr x)
+p_op (Product bs) x = lrgOp "&prod;" bs ++ paren (p_expr x)
+p_op (Integral bs wrtc) x = intg bs
   ++ paren (p_expr x ++ (symbol (Atomic "d") ++ "&#8239;" ++ symbol wrtc))
-p_op (Integral _ _) _  = error "Something went wrong with an integral"
-p_op Abs (x:[]) = "|" ++ p_expr x ++ "|"
-p_op Abs _ = error "Abs should only take one expr."
-p_op Norm (x:[]) = "||" ++ p_expr x ++ "||"
-p_op Norm _ = error "Norm should only take on expression."
-p_op Not (a:[])    = "&not;" ++ p_expr a
-p_op f@(Exp) (x:[]) = function f ++ sup (p_expr x)
-p_op f (x:[]) = function f ++ paren (p_expr x) --Unary ops, this will change once more complicated functions appear.
-p_op _ _ = error "Something went wrong with an operation"
+
+p_uop :: UFunc -> Expr -> String
+p_uop Abs x = "|" ++ p_expr x ++ "|"
+p_uop Norm x = "||" ++ p_expr x ++ "||"
+p_uop Not a    = "&not;" ++ p_expr a
+p_uop f@(Exp) x = function f ++ sup (p_expr x)
+p_uop f x = function f ++ paren (p_expr x) --Unary ops, this will change once more complicated functions appear.
 
 
 -- | Helpers for summation/product, used by 'p_op'
 makeBound :: String -> String
 makeBound s = "<tr><td><span class=\"bound\">" ++ s ++ "</span></td></tr>\n"
 
-lrgOp :: Function -> Maybe ((Symbol, Expr),Expr) -> String
-lrgOp f Nothing = "<span class=\"symb\">" ++ function f ++ "</span>"
+lrgOp :: String -> Maybe ((Symbol, Expr),Expr) -> String
+lrgOp f Nothing = "<span class=\"symb\">" ++ f ++ "</span>"
 lrgOp f (Just ((s,v),hi)) = "<table class=\"operator\">\n" ++ makeBound (p_expr hi) ++
-  "<tr><td><span class=\"symb\">" ++ function f ++ "</span></td></tr>\n" ++
+  "<tr><td><span class=\"symb\">" ++ f ++ "</span></td></tr>\n" ++
   makeBound (symbol s ++"="++ p_expr v) ++ "</table>"
 
-intg :: Function -> (Maybe Expr, Maybe Expr) -> String
-intg f (Nothing, Nothing) = "<span class=\"symb\">" ++ function f ++ "</span>"
-intg f (Just l, Nothing) = "<span class=\"symb\">" ++ function f ++ "</span>" ++ sub (p_expr l ++ " ")
-intg f (low,high) = "<table class=\"operator\">\n" ++ pHigh high ++
-  "<tr><td><span class=\"symb\">" ++ function f ++ "</span></td></tr>\n" ++
+intg :: (Maybe Expr, Maybe Expr) -> String
+intg (Nothing, Nothing) = "<span class=\"symb\">&int;</span>"
+intg (Just l, Nothing) = "<span class=\"symb\">&int;</span>" ++ sub (p_expr l ++ " ")
+intg (low,high) = "<table class=\"operator\">\n" ++ pHigh high ++
+  "<tr><td><span class=\"symb\">&int;</span></td></tr>\n" ++
   pLow low ++ "</table>"
   where pLow Nothing   = ""
         pLow (Just l)  = makeBound (p_expr l)
         pHigh Nothing  = ""
         pHigh (Just hi) = makeBound (p_expr hi)
+
 -- | Helper for integration bound creation, used by 'p_op'
 makeIBound :: (Maybe Expr, Maybe Expr) -> String
 makeIBound (Just low, Just high) = sub (p_expr low) ++ sup (p_expr high)
@@ -376,13 +371,10 @@ makeIBound (Just low, Nothing)   = sub (p_expr low)
 makeIBound (Nothing, Just high)  = sup (p_expr high)
 makeIBound (Nothing, Nothing)    = ""
 
-function :: Function -> String
+function :: UFunc -> String
 function Log            = "log"
-function (Summation _)  = "&sum;"
-function (Product _)    = "&prod;"
 function Abs            = ""
 function Norm           = ""
-function (Integral _ _) = "&int;"
 function Sin            = "sin"
 function Cos            = "cos"
 function Tan            = "tan"
@@ -544,10 +536,6 @@ rendPersL (Person {_given = f, _surname = l, _middle = []}) =
   isInitial l `sC` isInitial f
 rendPersL (Person {_given = f, _surname = l, _middle = ms}) =
   isInitial l `sC` foldr1 (+:+) ([isInitial f] ++ map (isInitial) (init ms) ++ [last ms])
-
--- isInitial :: String -> String
--- isInitial [x]  = [x,'.']
--- isInitial name = name
 
 --adds an 's' if there is more than one person in a list
 toPlural :: People -> String -> String

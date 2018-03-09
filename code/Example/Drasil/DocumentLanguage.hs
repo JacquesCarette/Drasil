@@ -9,9 +9,10 @@ module Drasil.DocumentLanguage where
 
 import Drasil.DocumentLanguage.Definitions
 
-import Language.Drasil
+import Language.Drasil hiding (Manual) -- Citation name conflict. FIXME: Move to different namespace
 
 import Control.Lens ((^.))
+import qualified Data.Map as Map
 
 import Drasil.Sections.TableOfUnits (table_of_units)
 import Drasil.Sections.TableOfSymbols (table)
@@ -31,7 +32,6 @@ import Data.Drasil.Concepts.Documentation (refmat, tOfSymb, reference)
 import Data.Maybe (isJust,fromJust)
 import Data.List (sort, sortBy, nub)
 import Data.Function (on)
-import Prelude hiding (id)
 
 type System = Sentence
 type DocKind = Sentence
@@ -251,32 +251,33 @@ mkRefSec si (RefProg c l) = section (titleize refmat) [c]
   where
     mkSubRef :: SystemInformation -> RefTab -> [Section] -> [Section]
     mkSubRef (SI {_sysinfodb = db})  TUnits l' =
-        table_of_units (sort $ elements $ db ^. unitTable) (tuIntro defaultTUI) : l'
+        table_of_units (sort $ Map.elems $ db ^. unitTable) (tuIntro defaultTUI) : l'
     mkSubRef (SI {_sysinfodb = db}) (TUnits' con) l' =
-        table_of_units (sort $ elements $ db ^. unitTable) (tuIntro con) : l'
+        table_of_units (sort $ Map.elems $ db ^. unitTable) (tuIntro con) : l'
     mkSubRef (SI {_quants = v}) (TSymb con) l' = 
       (SRS.tOfSymb
       [tsIntro con, (table Equational (
-         sortBy (compare `on` eqSymb) $ filter (hasStageSymbol Equational . getStagedS) 
+         sortBy (compare `on` eqSymb) $ 
+         filter (\q -> hasStageSymbol q Equational) 
          (nub v)) at_start)] []) : l'
     mkSubRef (SI {_concepts = cccs}) (TSymb' f con) l' = (mkTSymb cccs f con) : l'
     mkSubRef (SI {_sysinfodb = db}) TAandA l' = 
       (table_of_abb_and_acronyms $ sortBy (compare `on` (fromJust . getA)) $
-      filter (isJust . getA) (nub $ elements (db ^. termTable))) : l'
+      filter (isJust . getA) (nub $ Map.elems (db ^. termTable))) : l'
     mkSubRef _              (TVerb s) l' = s : l'
 
 -- | Helper for creating the table of symbols
 mkTSymb :: (Quantity e, Concept e, Ord e) => 
   [e] -> LFunc -> [TSIntro] -> Section
 mkTSymb v f c = SRS.tOfSymb [tsIntro c, 
-  table Equational (sort $ filter (hasStageSymbol Equational . getStagedS) 
+  table Equational (sort $ filter (\q -> hasStageSymbol q Equational) 
   (nub v)) (lf f)] []
   where lf Term = at_start
         lf Defn = (^. defn)
-        lf (TermExcept cs) = (\x -> if (x ^. id) `elem` (map (^. id) cs) then
-          (x ^. defn) else (at_start x)) --Compare chunk ids, since we don't
+        lf (TermExcept cs) = (\x -> if (x ^. uid) `elem` (map (^. uid) cs) then
+          (x ^. defn) else (at_start x)) --Compare chunk uids, since we don't
           --actually care about the chunks themselves in LFunc.
-        lf (DefnExcept cs) = (\x -> if (x ^. id) `elem` (map (^.id) cs) then
+        lf (DefnExcept cs) = (\x -> if (x ^. uid) `elem` (map (^.uid) cs) then
           (at_start x) else (x ^. defn))
         lf TAD = (\tDef -> titleize tDef :+: S ":" +:+ (tDef ^. defn))
 
@@ -505,7 +506,7 @@ siSys :: SystemInformation -> IdeaDict
 siSys (SI {_sys = sys}) = nw sys
 
 --BELOW IS IN THIS FILE TEMPORARILY--
---Creates Contents using an id and description (passed in as a Sentence).
+--Creates Contents using an uid and description (passed in as a Sentence).
 mkAssump :: String -> Sentence -> Contents
 mkAssump i desc = Assumption $ ac' i desc 
 

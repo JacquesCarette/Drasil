@@ -61,11 +61,11 @@ $\mathbf{a}(t)$ & Linear Acceleration & $\frac{\text{m}}{\text{s}^{2}}$
 \\
 ${C_{R}}$ & Coefficient of restitution & 
 \\
-$\mathbf{F}$ & Force Applied to the I-Th Body at Time T & N
-\\
 ${\mathbf{F}_{1}}$ & Force exerted by the first body (on another body) & N
 \\
 ${\mathbf{F}_{2}}$ & Force exerted by the second body (on another body) & N
+\\
+${\mathbf{F}_{i}}$ & Force Applied to the I-Th Body at Time T & N
 \\
 $\mathbf{F}$ & Force & N
 \\
@@ -172,6 +172,8 @@ ${||\mathbf{r}||^{2}}$ & Squared distance & $\text{m}^{2}$
 $\alpha{}$ & Angular Acceleration & $\frac{\text{rad}}{\text{s}^{2}}$
 \\
 $\theta{}$ & Angular Displacement & rad
+\\
+$\pi{}$ & Pi & 
 \\
 ${\tau{}_{i}}$ & Is the torque applied to the i-th body & Nm
 \\
@@ -379,9 +381,9 @@ This section transforms the problem defined in FIXME REF into one which is expre
 \\ \midrule \\
 Label & Force on the Translational Motion of a Set of 2d Rigid Bodies
 \\ \midrule \\
-Equation & ${\mathbf{a}_{i}}=\frac{d {\mathbf{v}_{i}}\left(t\right)}{d t}=g+\frac{\mathbf{F}\left(t\right)}{{m_{j}}}$
+Equation & ${\mathbf{a}_{i}}=\frac{d {\mathbf{v}_{i}}\left(t\right)}{d t}=g+\frac{{\mathbf{F}_{i}}\left(t\right)}{{m_{j}}}$
 \\ \midrule \\
-Description & The above equation expresses the total acceleration of the rigid body (A1, A2) i as the sum of gravitational acceleration (GD3) and acceleration due to applied force Fi(t) (T1). The resultant outputs are then obtained from this equation using DD2, DD3 and DD4. It is currently assumed that there is no damping (A6) or constraints (A7) involved. ${m_{i}}$ is the mass of the i-th rigid body (kg). $g$ is the gravitational acceleration ($\frac{\text{m}}{\text{s}^{2}}$). $t$ is the point in time (s). ${t_{0}}$ is the denotes the initial time (s). ${\mathbf{p}_{CM}}$ is the the mass-weighted average position of a rigid body's particles (m). $\mathbf{a}$ is the acceleration ($\frac{\text{m}}{\text{s}^{2}}$). $\mathbf{v}$ is the velocity ($\frac{\text{m}}{\text{s}}$). $\mathbf{F}$ is the force applied to the i-th body at time t (N).
+Description & The above equation expresses the total acceleration of the rigid body (A1, A2) i as the sum of gravitational acceleration (GD3) and acceleration due to applied force Fi(t) (T1). The resultant outputs are then obtained from this equation using DD2, DD3 and DD4. It is currently assumed that there is no damping (A6) or constraints (A7) involved. ${m_{i}}$ is the mass of the i-th rigid body (kg). $g$ is the gravitational acceleration ($\frac{\text{m}}{\text{s}^{2}}$). $t$ is the point in time (s). ${t_{0}}$ is the denotes the initial time (s). ${\mathbf{p}_{CM}}$ is the the mass-weighted average position of a rigid body's particles (m). $\mathbf{a}$ is the acceleration ($\frac{\text{m}}{\text{s}^{2}}$). $\mathbf{v}$ is the velocity ($\frac{\text{m}}{\text{s}}$). ${\mathbf{F}_{i}}$ is the force applied to the i-th body at time t (N).
 \\ \bottomrule \end{tabular}
 \end{minipage}\\
 ~\newline
@@ -566,7 +568,7 @@ $G$ & None & $9.8$ $\frac{\text{m}^{3}}{(\text{kg}\text{s}^{2})}$ & 0.1
 \\
 $\mathbf{p}$ & None & $0.412$ m & 0.1
 \\
-$\phi{}$ & None & $pi/2$ rad & 0.1
+$\phi{}$ & None & $\frac{\pi{}}{2}$ rad & 0.1
 \\
 $\mathbf{v}$ & None & $2.51$ $\frac{\text{m}}{\text{s}}$ & 0.1
 \\

@@ -1,22 +1,20 @@
-{-# Language GADTs, Rank2Types #-}
 module Language.Drasil.Unit (
     UDefn(..)                   -- languages
-  , Unit(..), UnitEq(..)        -- classes
+  , IsUnit, UnitEq(..),HasUnitSymbol(..)        -- classes
   , FundUnit(..), DerUChunk(..) -- data-structures
-  , UnitDefn(..)                -- wrapper for 'Unit' class
+  , UnitDefn                    -- synonym for FundUnit
   , from_udefn, makeDerU, unitCon
   , (^:), (/:), (*:), new_unit
   , scale, shift
   , derUC, derUC', derUC'', unitWrapper
   ) where
 
-import Prelude hiding (id)
-
-import Control.Lens (Simple, Lens, set, (^.))
+import Control.Lens (Simple, Lens, (^.))
 
 import Language.Drasil.Chunk (Chunk(..))
 import Language.Drasil.Chunk.NamedIdea (NamedIdea(..), Idea(..))
-import Language.Drasil.Chunk.Concept (Concept(..), ConceptChunk, dcc)
+import Language.Drasil.Chunk.Concept (Concept,Definition(..), 
+  ConceptDomain(..),ConceptChunk, dcc, cw)
 import Language.Drasil.NounPhrase
 import Language.Drasil.Spec (USymb(..))
 import Language.Drasil.Symbol
@@ -31,13 +29,16 @@ data UDefn = USynonym USymb      -- ^ to define straight synonyms
            | UScale Double USymb -- ^ scale, i.e. *
            | UShift Double USymb -- ^ shift, i.e. +
 
--- | Units are concepts
-class Concept u => Unit u where
+-- | Some chunks store a unit symbol
+class HasUnitSymbol u where
    usymb :: Simple Lens u USymb
+
+-- | Units are concepts which store a unit symbol.
+-- They must also be explicitly declared to be instances of IsUnit
+class (Concept u, HasUnitSymbol u) => IsUnit u where
 
 class UnitEq u where
    uniteq :: Simple Lens u UDefn
-
 
 -- | Can generate a default symbol
 from_udefn :: UDefn -> USymb
@@ -76,21 +77,14 @@ data FundUnit = UD { _vc :: ConceptChunk, _u :: USymb }
 vc :: Simple Lens FundUnit ConceptChunk
 vc f (UD a b) = fmap (\x -> UD x b) (f a)
 
-instance Chunk FundUnit where
-  id = vc . id
-
-instance NamedIdea FundUnit where
-  term   = vc . term
-
-instance Idea FundUnit where
-  getA c = getA (c ^. vc)
-
-instance Concept FundUnit where
-  defn = vc . defn
-  cdom = vc . cdom
-  
-instance Unit FundUnit where
-  usymb f (UD a b) = fmap (\x -> UD a x) (f b)
+instance Chunk         FundUnit where uid = vc . uid
+instance NamedIdea     FundUnit where term   = vc . term
+instance Idea          FundUnit where getA c = getA (c ^. vc)
+instance Definition    FundUnit where defn = vc . defn
+instance ConceptDomain FundUnit where cdom = vc . cdom
+instance Concept       FundUnit where
+instance HasUnitSymbol FundUnit where usymb f (UD a b) = fmap (\x -> UD a x) (f b)
+instance IsUnit        FundUnit
 
 -- | for defining Derived units
 data DerUChunk = DUC { _uc :: FundUnit, _eq :: UDefn }
@@ -99,15 +93,14 @@ data DerUChunk = DUC { _uc :: FundUnit, _eq :: UDefn }
 duc :: Simple Lens DerUChunk FundUnit
 duc f (DUC a b) = fmap (\x -> DUC x b) (f a)
 
-instance Chunk     DerUChunk where id  = duc . id
-instance NamedIdea DerUChunk where
-  term = duc . term
-instance Idea DerUChunk where
-  getA c = getA (c ^. duc)
-instance Concept   DerUChunk where 
-  defn = duc . defn
-  cdom = duc . cdom
-instance Unit      DerUChunk where usymb  = duc . usymb
+instance Chunk         DerUChunk where uid  = duc . uid
+instance NamedIdea     DerUChunk where term = duc . term
+instance Idea          DerUChunk where getA c = getA (c ^. duc)
+instance Definition    DerUChunk where defn = duc . defn
+instance ConceptDomain DerUChunk where cdom = duc . cdom
+instance Concept       DerUChunk where
+instance HasUnitSymbol DerUChunk where usymb  = duc . usymb
+instance IsUnit        DerUChunk where
 
 instance UnitEq DerUChunk where
   uniteq f (DUC a b) = fmap (\x -> DUC a x) (f b)
@@ -116,53 +109,35 @@ instance UnitEq DerUChunk where
 
 -- | For allowing lists to mix the two, thus forgetting
 -- the definition part
-data UnitDefn where
-  UU :: Unit u => u -> UnitDefn
-
--- don't export
-ulens :: (forall u. Unit u => Simple Lens u a) -> Simple Lens UnitDefn a
-ulens l f (UU a) = fmap (\x -> UU (set l x a)) (f (a ^. l))
-
-instance Chunk     UnitDefn where id   = ulens id
-instance NamedIdea UnitDefn where
-  term = ulens term
-instance Idea      UnitDefn where
-  getA (UU a) = getA a
-instance Concept   UnitDefn where 
-  defn = ulens defn
-  cdom = ulens cdom
-instance Unit      UnitDefn where usymb = ulens usymb
+unitWrapper :: IsUnit u => u -> FundUnit
+unitWrapper u = UD (cw u) (u ^. usymb)
 
 --- These conveniences go here, because we need the class
 -- | Combinator for raising a unit to a power
-(^:) :: Unit u => u -> Integer -> USymb
+(^:) :: IsUnit u => u -> Integer -> USymb
 u ^: i = UPow (u ^. usymb) i
 
 -- | Combinator for dividing one unit by another
-(/:) :: (Unit u1, Unit u2) => u1 -> u2 -> USymb
+(/:) :: (IsUnit u1, IsUnit u2) => u1 -> u2 -> USymb
 u1 /: u2 = UDiv (u1 ^. usymb) (u2 ^. usymb)
 
 -- | Combinator for multiplying two units together
-(*:) :: (Unit u1, Unit u2) => u1 -> u2 -> USymb
+(*:) :: (IsUnit u1, IsUnit u2) => u1 -> u2 -> USymb
 u1 *: u2 = UProd [(u1 ^. usymb), (u2 ^. usymb)]
 
 -- | Combinator for scaling one unit by some number
-scale :: Unit s => Double -> s -> UDefn
+scale :: IsUnit s => Double -> s -> UDefn
 scale a b = UScale a (b ^. usymb)
 
 -- | Combinator for shifting one unit by some number
-shift :: Unit s => Double -> s -> UDefn
+shift :: IsUnit s => Double -> s -> UDefn
 shift a b = UShift a (b ^. usymb)
 
 -- | Smart constructor for new derived units from existing units.
 new_unit :: String -> USymb -> DerUChunk
 new_unit s u = makeDerU (unitCon s) (USynonym u)
 
-instance Eq UnitDefn where
-  a == b = (a ^. usymb) == (b ^. usymb)
-  
-instance Ord UnitDefn where
-  compare a b = compare (a ^. usymb) (b ^. usymb)
-  
-unitWrapper :: Unit u => u -> UnitDefn
-unitWrapper = UU
+type UnitDefn = FundUnit
+
+instance Eq FundUnit where a == b = (a ^. usymb) == (b ^. usymb)
+instance Ord FundUnit where compare a b = compare (a ^. usymb) (b ^. usymb)

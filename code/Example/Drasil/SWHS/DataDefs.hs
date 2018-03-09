@@ -1,7 +1,5 @@
 module Drasil.SWHS.DataDefs where --exports all of it
 
-import Prelude hiding (id)
-
 import Language.Drasil
 import Control.Lens ((^.))
 
@@ -13,23 +11,10 @@ import Data.Drasil.Concepts.Documentation (acroNumGen)
 import Data.Drasil.Quantities.Physics (time)
 import Data.Drasil.Quantities.PhysicalProperties (mass)
 import Data.Drasil.Quantities.Thermodynamics (latent_heat)
-import Data.Drasil.Utils (symbolMapFun, mkDataDef)
+import Data.Drasil.Utils (mkDataDef)
 
 swhsDataDefs :: [QDefinition]
 swhsDataDefs = [dd1HtFluxC, dd2HtFluxP, dd3HtFusion, dd4MeltFrac]
-
--- SYMBOL MAP HELPERS --
-swhsSymbMapD :: QDefinition -> Contents
-swhsSymbMapD = symbolMapFun Data
-
-swhsSymbMapT :: RelationConcept -> Contents
-swhsSymbMapT = symbolMapFun Theory
-
-swhsSymbMapDRef :: QDefinition -> Sentence
-swhsSymbMapDRef = makeRef . swhsSymbMapD
-
-swhsSymbMapTRef :: RelationConcept -> Sentence
-swhsSymbMapTRef = makeRef . swhsSymbMapT
 
 -- FIXME? This section looks strange. Some data defs are created using
 --    terms, some using defns, and some with a brand new description.
@@ -39,7 +24,7 @@ dd1HtFluxC :: QDefinition
 dd1HtFluxC = mkDataDef ht_flux_C htFluxCEqn
 
 htFluxCEqn :: Expr
-htFluxCEqn = (C coil_HTC) * ((C temp_C) - FCall (C temp_W) [C time])
+htFluxCEqn = (sy coil_HTC) * ((sy temp_C) - FCall (sy temp_W) [sy time])
 
 --Can't include info in description beyond definition of variables?
 
@@ -47,17 +32,17 @@ dd2HtFluxP :: QDefinition
 dd2HtFluxP = mkDataDef ht_flux_P htFluxPEqn
 
 htFluxPEqn :: Expr
-htFluxPEqn = (C pcm_HTC) * (FCall (C temp_W) [C time] -
-             FCall (C temp_PCM) [C time])
+htFluxPEqn = (sy pcm_HTC) * (FCall (sy temp_W) [sy time] -
+             FCall (sy temp_PCM) [sy time])
 
 dd3HtFusion :: QDefinition
 dd3HtFusion = mkDataDef htFusion htFusionEqn
 
 htFusionEqn :: Expr
-htFusionEqn = (C latent_heat) / (C mass)
+htFusionEqn = (sy latent_heat) / (sy mass)
 
 dd4MeltFrac :: QDefinition
-dd4MeltFrac = fromEqn' (melt_frac ^. id) -- FIXME Should (^. id) be used
+dd4MeltFrac = fromEqn' (melt_frac ^. uid) -- FIXME Should (^. id) be used
   (melt_frac ^. term) (S "fraction of the PCM that is liquid")
   (eqSymb melt_frac) melt_frac_eqn
 --FIXME: "Phi is the melt fraction" is produced; 
@@ -65,19 +50,18 @@ dd4MeltFrac = fromEqn' (melt_frac ^. id) -- FIXME Should (^. id) be used
   -- produced according to CaseStudies' original
 
 melt_frac_eqn :: Expr
-melt_frac_eqn = (C latentE_P) / ((C htFusion) * (C pcm_mass))
+melt_frac_eqn = (sy latentE_P) / ((sy htFusion) * (sy pcm_mass))
 
 --Need to add units to data definition descriptions
 
 s4_2_4_swhsDataDefs :: [Contents]
-s4_2_4_swhsDataDefs = acroNumGen (s4_2_4_DD1 ++ s4_2_4_DD2 ++
-  s4_2_4_DD3 ++ s4_2_4_DD4) 1
+s4_2_4_swhsDataDefs = acroNumGen [s4_2_4_DD1, s4_2_4_DD2, s4_2_4_DD3, s4_2_4_DD4] 1
 
-s4_2_4_DD1, s4_2_4_DD2, s4_2_4_DD3, s4_2_4_DD4 :: [Contents]
-s4_2_4_DD1 = map swhsSymbMapD [dd1HtFluxC]
-s4_2_4_DD2 = map swhsSymbMapD [dd2HtFluxP]
-s4_2_4_DD3 = map swhsSymbMapD [dd3HtFusion]
-s4_2_4_DD4 = map swhsSymbMapD [dd4MeltFrac]
+s4_2_4_DD1, s4_2_4_DD2, s4_2_4_DD3, s4_2_4_DD4 :: Contents
+s4_2_4_DD1 = datadefn dd1HtFluxC
+s4_2_4_DD2 = datadefn dd2HtFluxP
+s4_2_4_DD3 = datadefn dd3HtFusion
+s4_2_4_DD4 = datadefn dd4MeltFrac
 
 --Symbol appears as "Label"
 --There is no actual label

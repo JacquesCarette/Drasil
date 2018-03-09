@@ -117,7 +117,7 @@ module Language.Drasil (
   -- Code.Imperative.Lang
   , Lang(..)
   -- ChunkDB
-  , ChunkDB(..), cdb
+  , ChunkDB, cdb
   , HasSymbolTable, symbolMap, symbLookup, getUnitLup, symbolTable
   , HasTermTable, termLookup, termTable
   , HasDefinitionTable, conceptMap, defTable

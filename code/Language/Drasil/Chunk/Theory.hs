@@ -1,5 +1,4 @@
 {-# Language TemplateHaskell #-}
-
 module Language.Drasil.Chunk.Theory 
   ( tc', Theory(..), TheoryChunk, TheoryModel, tm, tw
   )where

@@ -29,21 +29,18 @@ import Language.Drasil.NounPhrase (NP)
 data UnitalChunk = UC { _con :: ConVar, _uni :: UnitDefn }
 makeLenses ''UnitalChunk
 
-instance Chunk UnitalChunk where uid = con . uid
-instance NamedIdea UnitalChunk where term = con . term
-instance Idea UnitalChunk where getA (UC qc _) = getA qc
-instance Definition UnitalChunk where defn = con . defn
+instance Chunk         UnitalChunk where uid = con . uid
+instance NamedIdea     UnitalChunk where term = con . term
+instance Idea          UnitalChunk where getA (UC qc _) = getA qc
+instance Definition    UnitalChunk where defn = con . defn
 instance ConceptDomain UnitalChunk where cdom = con . cdom
-instance Concept UnitalChunk where
-instance HasSpace UnitalChunk where typ = con . typ
-instance HasSymbol UnitalChunk where symbol st (UC c _ ) = symbol st c
-instance Quantity UnitalChunk where getUnit = Just . unit
-instance Unitary UnitalChunk where unit = view uni
+instance Concept       UnitalChunk where
+instance HasSpace      UnitalChunk where typ = con . typ
+instance HasSymbol     UnitalChunk where symbol st (UC c _ ) = symbol st c
+instance Quantity      UnitalChunk where getUnit = Just . unit
+instance Unitary       UnitalChunk where unit = view uni
   
 --{BEGIN HELPER FUNCTIONS}--
-
--- FIXME: Temporarily hacking in the space for UC chunks, these can be fixed
--- with the use of other constructors.
 
 -- | Used to create a UnitalChunk from a 'Concept', 'Symbol', and 'Unit'.
 -- Assumes the 'Space' is Real

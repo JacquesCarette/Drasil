@@ -7,11 +7,7 @@ import Language.Drasil.TeX.Monad
 import Language.Drasil.TeX.AST
 import Language.Drasil.TeX.Helpers
 
-
-data Preamble = PreP Package
-              | PreD Def
-              deriving Eq
-
+-- FIXME: this really shouldn't be in code, it should be data!
 data Package = AMSMath
              | BookTabs
              | Caption
@@ -76,48 +72,33 @@ addDef Bibliography  = command "bibliography" bibFname
 addDef TabuLine      = command0 "global\\tabulinesep=1mm"
 
 genPreamble :: [LayoutObj] -> D
-genPreamble los = let preamble = parseDoc los
+genPreamble los = let (pkgs, defs) = parseDoc los
   in docclass (Just $ (show fontSize) ++ "pt") "article" %%
-     (vcat $ listpackages preamble) %% (vcat $ listdefs preamble)
-  where listpackages :: [Preamble] -> [D]
-        listpackages []            = []
-        listpackages ((PreP p):ps) = addPackage p:listpackages ps
-        listpackages (_:ps)        = listpackages ps
-        listdefs :: [Preamble] -> [D]
-        listdefs []            = []
-        listdefs ((PreD d):ds) = addDef d:listdefs ds
-        listdefs (_:ds)        = listdefs ds
+     (vcat $ map addPackage pkgs) %% (vcat $ map addDef defs)
 
-parseDoc :: [LayoutObj] -> [Preamble]
-parseDoc los' = [PreP FullPage, PreP HyperRef, PreP AMSMath, PreP AMSsymb,
-  PreP Mathtools, PreP Breqn] ++ (nub $ parseDoc' los')
-  where parseDoc' [] = []
-        parseDoc' ((Table _ _ _ _):los) =
-          (PreP Tabu):(PreD TabuLine):(PreP LongTable):(PreP BookTabs):
-          (PreP Caption):parseDoc' los
-        parseDoc' ((Section _ _ slos _):los) =
-          (parseDoc' slos ++ parseDoc' los)
-   --     parseDoc' ((CodeBlock _):los) =
-   --       (PreP Listings):parseDoc' los
-        parseDoc' ((Definition ps _):los) =
-          (concat $ map parseDoc' (map snd ps)) ++
-          (PreP Tabu):(PreD TabuLine):(PreP LongTable):(PreP BookTabs):
-          parseDoc' los
-        parseDoc' ((Figure _ _ _ _):los) =
-          (PreP Graphics):(PreP Caption):parseDoc' los
-        parseDoc' ((Requirement _ _):los) =
-          (PreD ReqCounter):parseDoc' los
-        parseDoc' ((Assumption _ _):los) =
-          (PreD AssumpCounter):parseDoc' los
-        parseDoc' ((LikelyChange _ _):los) =
-          (PreD LCCounter):parseDoc' los
-        parseDoc' ((UnlikelyChange _ _):los) =
-          (PreD UCCounter):parseDoc' los
-        parseDoc' ((Graph _ _ _ _ _):los) =
-          (PreP Caption):(PreP Tikz):(PreP Dot2Tex):(PreP AdjustBox):
-          parseDoc' los
-        parseDoc' ((Bib _):los) =
-          (PreP FileContents):(PreP BibLaTeX):(PreD Bibliography):
-          parseDoc' los
-        parseDoc' (_:los) =
-          parseDoc' los
+parseDoc :: [LayoutObj] -> ([Package], [Def])
+parseDoc los' = ([FullPage, HyperRef, AMSMath, AMSsymb, Mathtools, Breqn] ++ 
+   (nub $ concat $ map fst res), nub $ concat $ map snd res)
+  where 
+    res = map parseDoc' los'
+    parseDoc' :: LayoutObj -> ([Package], [Def])
+    parseDoc' (Table _ _ _ _) = ([Tabu,LongTable,BookTabs,Caption], [TabuLine])
+    parseDoc' (Section _ _ slos _) = 
+      let res1 = map parseDoc' slos in
+      let pp = concat $ map fst res1 in
+      let dd = concat $ map snd res1 in
+      (pp, dd)
+   -- parseDoc' (CodeBlock _) = [Listings],[]
+    parseDoc' (Definition ps _) =
+      let res1 = concat $ map (map parseDoc' . snd) ps in
+      let pp = concat $ map fst res1 in
+      let dd = concat $ map snd res1 in
+      (Tabu:LongTable:BookTabs:pp,TabuLine:dd)
+    parseDoc' (Figure _ _ _ _) = ([Graphics,Caption],[])
+    parseDoc' (Requirement _ _) = ([], [ReqCounter])
+    parseDoc' (Assumption _ _) = ([], [AssumpCounter])
+    parseDoc' (LikelyChange _ _) = ([], [LCCounter])
+    parseDoc' (UnlikelyChange _ _) = ([], [UCCounter])
+    parseDoc' (Graph _ _ _ _ _) = ([Caption,Tikz,Dot2Tex,AdjustBox],[])
+    parseDoc' (Bib _) = ([FileContents,BibLaTeX],[Bibliography])
+    parseDoc' _ = ([], [])-- ignore the rest?

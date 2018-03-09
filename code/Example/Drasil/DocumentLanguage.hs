@@ -12,6 +12,7 @@ import Drasil.DocumentLanguage.Definitions
 import Language.Drasil
 
 import Control.Lens ((^.))
+import qualified Data.Map as Map
 
 import Drasil.Sections.TableOfUnits (table_of_units)
 import Drasil.Sections.TableOfSymbols (table)
@@ -249,9 +250,9 @@ mkRefSec si (RefProg c l) = section (titleize refmat) [c] (foldr (mkSubRef si) [
   where
     mkSubRef :: SystemInformation -> RefTab -> [Section] -> [Section]
     mkSubRef (SI {_sysinfodb = db})  TUnits l' =
-        table_of_units (sort $ elements $ db ^. unitTable) (tuIntro defaultTUI) : l'
+        table_of_units (sort $ Map.elems $ db ^. unitTable) (tuIntro defaultTUI) : l'
     mkSubRef (SI {_sysinfodb = db}) (TUnits' con) l' =
-        table_of_units (sort $ elements $ db ^. unitTable) (tuIntro con) : l'
+        table_of_units (sort $ Map.elems $ db ^. unitTable) (tuIntro con) : l'
     mkSubRef (SI {_quants = v}) (TSymb con) l' = 
       (Section (titleize tOfSymb) 
       (map Con [tsIntro con, (table Equational (
@@ -260,7 +261,7 @@ mkRefSec si (RefProg c l) = section (titleize refmat) [c] (foldr (mkSubRef si) [
     mkSubRef (SI {_concepts = cccs}) (TSymb' f con) l' = (mkTSymb cccs f con) : l'
     mkSubRef (SI {_sysinfodb = db}) TAandA l' = 
       (table_of_abb_and_acronyms $ sortBy (compare `on` (fromJust . getA)) $
-      filter (isJust . getA) (nub $ elements (db ^. termTable))) : l'
+      filter (isJust . getA) (nub $ Map.elems (db ^. termTable))) : l'
     mkSubRef _              (TVerb s) l' = s : l'
 
 -- | Helper for creating the table of symbols

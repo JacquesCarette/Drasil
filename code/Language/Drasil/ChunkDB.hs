@@ -1,6 +1,6 @@
+{-# LANGUAGE TemplateHaskell #-}
 module Language.Drasil.ChunkDB 
-  ( elements
-  , ChunkDB(..), cdb
+  ( ChunkDB, cdb
   , HasSymbolTable(..), symbolMap, symbLookup, getUnitLup
   , HasTermTable(..), termLookup
   , HasDefinitionTable(..), conceptMap
@@ -13,10 +13,8 @@ import Language.Drasil.Chunk.NamedIdea
 import Language.Drasil.Chunk.Concept 
 import Language.Drasil.Unit
 
-import Control.Lens ((^.), Simple, Lens)
+import Control.Lens ((^.), Lens', makeLenses)
 import qualified Data.Map as Map
-
-import Prelude hiding (id)
 
 -- The misnomers below are not actually a bad thing, we want to ensure data can't
 -- be added to a map if it's not coming from a chunk, and there's no point confusing
@@ -41,81 +39,68 @@ type TermMap = Map.Map String IdeaDict
 
 -- | Smart constructor for a 'SymbolMap'
 symbolMap :: (Quantity c) => [c] -> SymbolMap
-symbolMap cs = Map.fromList (map (\x -> (x ^. uid, qw x)) cs)
+symbolMap = Map.fromList . map (\x -> (x ^. uid, qw x))
 
 -- | Smart constructor for a 'TermMap'
 termMap :: (Idea c) => [c] -> TermMap
-termMap ts = Map.fromList (map (\x -> (x ^. uid, nw x)) ts)
+termMap = Map.fromList . map (\x -> (x ^. uid, nw x))
 
 -- | Smart constructor for a 'ConceptMap'
 conceptMap :: (Concept c) => [c] -> ConceptMap
-conceptMap cs = Map.fromList (map (\x -> (x ^. uid, cw x)) cs)
+conceptMap = Map.fromList . map (\x -> (x ^. uid, cw x))
 
 -- | Smart constructor for a 'UnitMap'
 unitMap :: (IsUnit u) => [u] -> UnitMap
-unitMap us = Map.fromList (map (\x -> (x ^. uid, unitWrapper x)) us)
-
--- | Get all the elements of one of our tables
-elements :: Map.Map k a -> [a]
-elements m = Map.elems m
+unitMap = Map.fromList . map (\x -> (x ^. uid, unitWrapper x))
 
 -- | Looks up an uid in the symbol table. If nothing is found, an error is thrown
 symbLookup :: (Chunk c) => c -> SymbolMap -> QuantityDict
-symbLookup c m = let lookC = Map.lookup (c ^. uid) m in
-                 getS lookC
+symbLookup c m = getS $ Map.lookup (c ^. uid) m
   where getS (Just x) = x
         getS Nothing = error $ "Symbol: " ++ (c ^. uid) ++ " not found in SymbolMap"
 
+--- SYMBOL TABLE ---
+class HasSymbolTable s where
+  symbolTable :: Lens' s SymbolMap
+
+--- TERM TABLE ---
+class HasTermTable s where
+  termTable :: Lens' s TermMap
+  
+--- DEFINITION TABLE ---
+class HasDefinitionTable s where
+  defTable :: Lens' s ConceptMap
+
+--- UNIT TABLE ---
+class HasUnitTable s where
+  unitTable :: Lens' s UnitMap
+
 -- | Gets a unit if it exists, or Nothing.        
 getUnitLup :: HasSymbolTable s => (Chunk c) => c -> s -> Maybe UnitDefn
-getUnitLup c m = let lookC = symbLookup c (m ^. symbolTable) in
-                 getUnit lookC
+getUnitLup c m = getUnit $ symbLookup c (m ^. symbolTable)
 
 -- | Looks up an uid in the term table. If nothing is found, an error is thrown
 termLookup :: (Chunk c) => c -> TermMap -> IdeaDict
-termLookup c m = let lookC = Map.lookup (c ^. uid) m in
-                 getT lookC
+termLookup c m = getT $ Map.lookup (c ^. uid) m
   where getT (Just x) = x
         getT Nothing  = error $ "Term: " ++ (c ^. uid) ++ " not found in TermMap"
 
 -- | Our chunk databases. Should contain all the maps we will need.
-data ChunkDB = CDB { symbs :: SymbolMap
-                   , terms :: TermMap 
-                   , defs  :: ConceptMap
-                   , unitDB :: UnitMap} --TODO: Expand and add more databases
+data ChunkDB = CDB { _csymbs :: SymbolMap
+                   , _cterms :: TermMap 
+                   , _cdefs  :: ConceptMap
+                   , _cunitDB :: UnitMap} --TODO: Expand and add more databases
+makeLenses ''ChunkDB
 
 -- | Smart constructor for chunk databases. Takes a list of Quantities 
 -- (for SymbolTable), NamedIdeas (for TermTable), Concepts (for DefinitionTable),
 -- and Units (for UnitTable)
-cdb :: (Quantity q, Idea t, Concept c, IsUnit u) => 
-  [q] -> [t] -> [c] -> [u] -> ChunkDB
+cdb :: (Quantity q, Idea t, Concept c, IsUnit u) => [q] -> [t] -> [c] -> [u] -> ChunkDB
 cdb s t c u = CDB (symbolMap s) (termMap t) (conceptMap c) (unitMap u)
 
---- SYMBOL TABLE ---
-class HasSymbolTable s where
-  symbolTable :: Simple Lens s SymbolMap
-
-instance HasSymbolTable ChunkDB where
-  symbolTable f (CDB s t c u) = fmap (\x -> CDB x t c u) (f s)
-
---- TERM TABLE ---
-class HasTermTable s where
-  termTable :: Simple Lens s TermMap
-  
-instance HasTermTable ChunkDB where
-  termTable f (CDB s t c u) = fmap (\x -> CDB s x c u) (f t)
-
---- DEFINITION TABLE ---
-class HasDefinitionTable s where
-  defTable :: Simple Lens s ConceptMap
-
-instance HasDefinitionTable ChunkDB where
-  defTable f (CDB s t c u) = fmap (\x -> CDB s t x u) (f c)
-
---- UNIT TABLE ---
-class HasUnitTable s where
-  unitTable :: Simple Lens s UnitMap
-
-instance HasUnitTable ChunkDB where
-  unitTable f (CDB s t c u) = fmap (\x -> CDB s t c x) (f u)
+----------------------
+instance HasSymbolTable     ChunkDB where symbolTable = csymbs
+instance HasTermTable       ChunkDB where termTable   = cterms
+instance HasDefinitionTable ChunkDB where defTable    = cdefs
+instance HasUnitTable       ChunkDB where unitTable   = cunitDB
 

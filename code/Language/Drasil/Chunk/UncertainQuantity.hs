@@ -45,19 +45,18 @@ instance HasSpace UncertQ where typ = coco . typ
 instance HasSymbol UncertQ where symbol s  (UQ q _) = symbol s q
 instance Quantity UncertQ where getUnit    (UQ q _) = getUnit q
 instance UncertainQuantity UncertQ where uncert = unc
-instance Constrained UncertQ where
-  constraints = coco . constraints
-  reasVal = coco . reasVal
+instance Constrained UncertQ where constraints = coco . constraints
+instance HasReasVal UncertQ where reasVal = coco . reasVal
 instance Definition UncertQ where defn = coco . defn
 instance ConceptDomain UncertQ where cdom = coco . cdom
 instance Concept UncertQ where
 
 {-- Constructors --}
 -- | The UncertainQuantity constructor. Requires a Quantity, a percentage, and a typical value
-uq :: (Quantity c, Constrained c, Concept c) => c -> Double -> UncertQ
+uq :: (Quantity c, Constrained c, Concept c, HasReasVal c) => c -> Double -> UncertQ
 uq q u = UQ (ConstrConcept (cqs q) (q ^. constraints) (q ^. reasVal)) (Just u)
 
-uqNU :: (Quantity c, Constrained c, Concept c) => c -> UncertQ
+uqNU :: (Quantity c, Constrained c, Concept c, HasReasVal c) => c -> UncertQ
 uqNU q = UQ (ConstrConcept (cqs q) (q ^. constraints) (q ^. reasVal)) Nothing
 
 -- this is kind of crazy and probably shouldn't be used!
@@ -89,18 +88,17 @@ instance Idea UncertainChunk where getA (UCh n _) = getA n
 instance HasSpace UncertainChunk where typ = conc . typ
 instance HasSymbol UncertainChunk where symbol s  (UCh c _) = symbol s c
 instance Quantity UncertainChunk where getUnit    (UCh c _) = getUnit c
-instance Constrained UncertainChunk where
-  constraints = conc . constraints
-  reasVal = conc . reasVal
+instance Constrained UncertainChunk where constraints = conc . constraints
+instance HasReasVal UncertainChunk where reasVal = conc . reasVal
 instance UncertainQuantity UncertainChunk where uncert = unc'
 
 {-- Constructors --}
-uncrtnChunk :: (Quantity c, Constrained c) => c -> Double -> UncertainChunk
+uncrtnChunk :: (Quantity c, Constrained c, HasReasVal c) => c -> Double -> UncertainChunk
 uncrtnChunk q u = UCh (cnstrw q) (Just u)
 
 -- | Creates an uncertain varchunk
 uvc :: String -> NP -> Symbol -> Space -> [Constraint] -> Expr -> Double -> UncertainChunk
 uvc nam trm sym space cs val uncrt = uncrtnChunk (cvc nam trm sym space cs val) uncrt
 
-uncrtnw :: (UncertainQuantity c, Constrained c) => c -> UncertainChunk
+uncrtnw :: (UncertainQuantity c, Constrained c, HasReasVal c) => c -> UncertainChunk
 uncrtnw c = UCh (cnstrw c) (c ^. uncert)

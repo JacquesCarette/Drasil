@@ -84,7 +84,7 @@ getES :: (HasSymbol a) => a -> Sentence
 getES = P . eqSymb
 
 -- | gets a reasonable or typical value from a Constrained chunk
-getRVal :: (Constrained c) => c -> Expr
+getRVal :: (HasReasVal c) => c -> Expr
 getRVal c = uns (c ^. reasVal)
   where uns (Just e) = e
         uns Nothing  = error $ "getRVal found no Expr for " ++ (c ^. uid)

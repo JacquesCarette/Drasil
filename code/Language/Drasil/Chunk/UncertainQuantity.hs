@@ -95,7 +95,6 @@ instance Constrained UncertainChunk where
 instance UncertainQuantity UncertainChunk where uncert = unc'
 
 {-- Constructors --}
--- | The UncertainQuantity constructor. Requires a Quantity, a percentage, and a typical value
 uncrtnChunk :: (Quantity c, Constrained c) => c -> Double -> UncertainChunk
 uncrtnChunk q u = UCh (cnstrw q) (Just u)
 

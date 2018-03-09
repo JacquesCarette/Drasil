@@ -232,7 +232,7 @@ dataConstraintUncertainty = foldlSent [S "The", phrase uncertainty, phrase colum
   phrase uncertainty, S "quantification exercise"]
 
 -- Creates the input Data Constraints Table
-inDataConstTbl :: (UncertainQuantity c, Constrained c) => [c] -> Contents
+inDataConstTbl :: (UncertainQuantity c, Constrained c, HasReasVal c) => [c] -> Contents
 inDataConstTbl qlst = Table titl cts (S "Input Data Constraints") True "InDataConstraints"
   where
    datum = [(S "Var", map getES qlst),

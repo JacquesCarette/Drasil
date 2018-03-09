@@ -1,6 +1,6 @@
 {-# Language GADTs, TemplateHaskell #-}
 module Language.Drasil.Chunk.Constrained (
-    Constrained(..)
+    Constrained(..), HasReasVal(..)
   , Constraint(..), ConstraintReason(..)
   , ConstrainedChunk(..)
   , ConstrConcept(..)
@@ -28,16 +28,17 @@ import Language.Drasil.Symbol
 import Language.Drasil.Chunk
 
 -- | A Constrained is a 'Quantity' that has value constraints
--- and maybe reasonable value
 class Quantity c => Constrained c where
   constraints :: Lens' c [Constraint]
+
+-- | A HasReasVal is a 'Quantity' that could have a reasonable value
+class Quantity c => HasReasVal c where
   reasVal     :: Lens' c (Maybe Expr)
 
+-- AssumedCon are constraints that come from assumptions as opposed to theory invariants.
+-- This might be an artificial distinction as they may be "the same"
 data Reason = Invariant | AssumedCon
-data TheoryConstraint =
-  TCon Reason Relation -- AssumedCon are constraints that come from assumptions
-                       -- as opposed to theory invariants.
-                       -- This might be an artificial distinction as they may be "the same"
+data TheoryConstraint = TCon Reason Relation 
 
 data ConstraintReason = Physical | Software
 data Constraint where
@@ -96,9 +97,8 @@ instance Idea        ConstrainedChunk where getA = getA . view qd
 instance HasSpace    ConstrainedChunk where typ = qd . typ
 instance HasSymbol   ConstrainedChunk where symbol s (ConstrainedChunk c _ _) = symbol s c
 instance Quantity    ConstrainedChunk where getUnit = getUnit . view qd
-instance Constrained ConstrainedChunk where
-  constraints = constr
-  reasVal     = reasV
+instance Constrained ConstrainedChunk where constraints = constr
+instance HasReasVal  ConstrainedChunk where reasVal     = reasV
 instance Eq          ConstrainedChunk where c1 == c2 = (c1 ^. qd . uid) == (c2 ^. qd . uid)
 
 -- | Creates a constrained chunk from a symbolic quantity
@@ -131,9 +131,8 @@ instance Quantity      ConstrConcept where getUnit = getUnit . view defq
 instance Definition    ConstrConcept where defn = defq . defn
 instance ConceptDomain ConstrConcept where cdom = defq . cdom
 instance Concept       ConstrConcept where
-instance Constrained   ConstrConcept where
-  constraints  = constr'
-  reasVal      = reasV'
+instance Constrained   ConstrConcept where constraints  = constr'
+instance HasReasVal    ConstrConcept where reasVal      = reasV'
 instance Eq            ConstrConcept where c1 == c2 = (c1 ^.defq.uid) == (c2 ^.defq.uid)
 
 constrained' :: (Quantity c, Concept c) => c -> [Constraint] -> Expr -> ConstrConcept
@@ -147,5 +146,5 @@ cuc' :: (IsUnit u) => String -> NP -> String -> Symbol -> u
 cuc' nam trm desc sym un space cs rv =
   ConstrConcept (cqs $ ucs nam trm desc sym un space) cs (Just rv)
 
-cnstrw :: Constrained c => c -> ConstrainedChunk
+cnstrw :: (Constrained c, HasReasVal c) => c -> ConstrainedChunk
 cnstrw c = ConstrainedChunk (qw c) (c ^. constraints) (c ^. reasVal)

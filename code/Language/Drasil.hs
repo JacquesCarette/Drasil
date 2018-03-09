@@ -36,7 +36,7 @@ module Language.Drasil (
   , compoundNC'', compoundNC''', with, with', and_, and_', andRT, aNP, the, a_
   , ofA,theCustom, this
   -- Chunk.Constrained
-  , Constrained(..), ConstrainedChunk(..), Constraint(..), ConstrConcept(..)
+  , Constrained(..), HasReasVal(..), ConstrainedChunk(..), Constraint(..), ConstrConcept(..)
   , ConstraintReason(..)
   , physc, sfwrc, enumc, constrained, cuc, cvc, constrained', cuc', constrainedNRV'
   , isPhysC, isSfwrC, renderC

@@ -2,7 +2,7 @@ module Language.Drasil.TeX.Import where
 
 import Control.Lens ((^.))
 import Prelude hiding (id)
-import Language.Drasil.Expr (Expr(..), BiFunc(..), Oper(..),
+import Language.Drasil.Expr (Expr(..), Oper(..), BinOp(..),
     DerivType(..), EOperator(..), ($=), RealRange(..), DomainDesc(..))
 import Language.Drasil.Expr.Extract
 import Language.Drasil.Spec
@@ -32,9 +32,9 @@ expr (Str s)            _ = P.Str  s
 expr (Assoc op l)      sm = P.Assoc op $ map (\x -> expr x sm) l
 expr (C c)             sm = -- FIXME: Add Stage for Context
   P.Sym  (eqSymb (symbLookup c (sm ^. symbolTable)))
-expr (Deriv Part a b)  sm = P.BOp P.Frac (P.Assoc Mul [P.Sym (Special Partial), expr a sm])
+expr (Deriv Part a b)  sm = P.BOp Frac (P.Assoc Mul [P.Sym (Special Partial), expr a sm])
                            (P.Assoc Mul [P.Sym (Special Partial), expr (C b) sm])
-expr (Deriv Total a b) sm = P.BOp P.Frac (P.Assoc Mul [P.Sym lD, expr a sm])
+expr (Deriv Total a b) sm = P.BOp Frac (P.Assoc Mul [P.Sym lD, expr a sm])
                            (P.Assoc Mul [P.Sym lD, expr (C b) sm])
 expr (FCall f x)       sm = P.Call (expr f sm) (map (flip expr sm) x)
 expr (Case ps)         sm = if length ps < 2 then
@@ -44,24 +44,9 @@ expr (Matrix a)        sm = P.Mtx $ map (map (flip expr sm)) a
 expr (UnaryOp o u)     sm = P.UOp o $ expr u sm
 expr (EOp o)           sm = eop o sm
 expr (Grouping e)      sm = P.Grouping (expr e sm)
-expr (BinaryOp b)      sm = bfunc b sm
+expr (BinaryOp Div a b) sm = P.BOp Frac (replace_divs sm a) (replace_divs sm b)
+expr (BinaryOp o a b)  sm = P.BOp o (expr a sm) (expr b sm)
 expr (IsIn  a b)       sm = P.IsIn  (expr a sm) b
-
-bfunc :: HasSymbolTable ctx => BiFunc -> ctx -> P.Expr
-bfunc (Cross e1 e2)     sm = P.BOp P.Cross (expr e1 sm) (expr e2 sm)
-bfunc (Power e1 e2)     sm = P.BOp P.Pow (expr e1 sm) (expr e2 sm)
-bfunc (Subtract e1 e2)  sm = P.BOp P.Sub (expr e1 sm) (expr e2 sm)
-bfunc (EEquals a b)     sm = P.BOp P.Eq  (expr a sm) (expr b sm)
-bfunc (ENEquals a b)    sm = P.BOp P.NEq (expr a sm) (expr b sm)
-bfunc (ELess a b)       sm = P.BOp P.Lt  (expr a sm) (expr b sm)
-bfunc (EGreater a b)    sm = P.BOp P.Gt  (expr a sm) (expr b sm)
-bfunc (ELessEq a b)     sm = P.BOp P.LEq (expr a sm) (expr b sm)
-bfunc (EGreaterEq a b)  sm = P.BOp P.GEq (expr a sm) (expr b sm)
-bfunc (Implies a b)     sm = P.BOp P.Impl (expr a sm) (expr b sm)
-bfunc (IFF a b)         sm = P.BOp P.Iff  (expr a sm) (expr b sm)
-bfunc (DotProduct a b)  sm = P.BOp P.Dot  (expr a sm) (expr b sm)
-bfunc (Divide a b)      sm = P.BOp P.Frac (replace_divs sm a) (replace_divs sm b)
-bfunc (Index a i)       sm = P.BOp P.Index (expr a sm) (expr i sm)
 
 eop :: HasSymbolTable ctx => EOperator -> ctx -> P.Expr
 eop (Summation (IntegerDD v (BoundedR l h)) e) sm =
@@ -83,10 +68,10 @@ int_wrt :: Symbol -> P.Expr
 int_wrt wrtc = P.Assoc Mul [P.Sym lD, P.Sym wrtc]
 
 replace_divs :: HasSymbolTable ctx => ctx -> Expr -> P.Expr
-replace_divs sm (BinaryOp (Divide a b)) = P.BOp P.Div (replace_divs sm a) (replace_divs sm b)
+replace_divs sm (BinaryOp Div a b) = P.BOp Div (replace_divs sm a) (replace_divs sm b)
 replace_divs sm (Assoc op l) = P.Assoc op $ map (replace_divs sm) l
-replace_divs sm (BinaryOp (Power a b)) = P.BOp P.Pow (replace_divs sm a) (replace_divs sm b)
-replace_divs sm (BinaryOp (Subtract a b)) = P.BOp P.Sub (replace_divs sm a) (replace_divs sm b)
+replace_divs sm (BinaryOp Pow a b) = P.BOp Pow (replace_divs sm a) (replace_divs sm b)
+replace_divs sm (BinaryOp Subt a b) = P.BOp Subt (replace_divs sm a) (replace_divs sm b)
 replace_divs sm a            = expr a sm
 
 spec :: HasSymbolTable ctx => ctx -> Sentence -> T.Spec

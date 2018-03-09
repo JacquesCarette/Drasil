@@ -8,7 +8,7 @@ import Numeric (showFFloat)
 
 import Control.Applicative (pure)
 
-import Language.Drasil.Expr (Oper(..),UFunc(..))
+import Language.Drasil.Expr (Oper(..),UFunc(..),BinOp(..))
 import Language.Drasil.Printing.AST
 import Language.Drasil.TeX.AST
 import qualified Language.Drasil.TeX.Import as I
@@ -109,7 +109,7 @@ p_expr (Assoc Or l)   = concat $ intersperse "\\lor{}" $ map p_expr l
 p_expr (IsIn  a b) = p_expr a ++ "\\in{}" ++ p_space b
 
 p_bop :: BinOp -> String
-p_bop Sub = "-"
+p_bop Subt = "-"
 p_bop Eq = "="
 p_bop NEq = "\\neq{}"
 p_bop Lt = "<"
@@ -143,7 +143,7 @@ needMultlined x
 splitTerms :: Expr -> [Expr]
 splitTerms (UOp Neg e) = map (\x -> UOp Neg x) $ splitTerms e
 splitTerms (Assoc Add l) = concat $ map splitTerms l
-splitTerms (BOp Sub a b) = splitTerms a ++ splitTerms (UOp Neg b)
+splitTerms (BOp Subt a b) = splitTerms a ++ splitTerms (UOp Neg b)
 splitTerms e = [e]
 
 -- | For printing indexes
@@ -158,7 +158,7 @@ p_sub e@(Dbl _)    = p_expr e
 p_sub e@(Int _)    = p_expr e
 p_sub e@(Sym _)    = p_expr e
 p_sub e@(Assoc Add _)  = p_expr e
-p_sub e@(BOp Sub _ _)  = p_expr e
+p_sub e@(BOp Subt _ _)  = p_expr e
 p_sub e@(Assoc Mul _)  = p_expr e
 p_sub   (BOp Frac a b) = divide a b --no block division in an index
 p_sub e@(BOp Div _ _)  = p_expr e
@@ -181,15 +181,15 @@ mul = concat . intersperse " " . map mulParen
 
 mulParen :: Expr -> String
 mulParen a@(Assoc Add _) = paren $ p_expr a
-mulParen a@(BOp Sub _ _) = paren $ p_expr a
+mulParen a@(BOp Subt _ _) = paren $ p_expr a
 mulParen a@(BOp Div _ _) = paren $ p_expr a
 mulParen a = p_expr a
 
 divide :: Expr -> Expr -> String
 divide n d@(Assoc Add _) = p_expr n ++ "/" ++ paren (p_expr d)
-divide n d@(BOp Sub _ _) = p_expr n ++ "/" ++ paren (p_expr d)
+divide n d@(BOp Subt _ _) = p_expr n ++ "/" ++ paren (p_expr d)
 divide n@(Assoc Add _) d = paren (p_expr n) ++ "/" ++ p_expr d
-divide n@(BOp Sub _ _) d = paren (p_expr n) ++ "/" ++ p_expr d
+divide n@(BOp Subt _ _) d = paren (p_expr n) ++ "/" ++ p_expr d
 divide n d = p_expr n ++ "/" ++ p_expr d
 
 neg :: Expr -> String
@@ -200,7 +200,7 @@ neg x         = paren ("-" ++ p_expr x)
 
 pow :: Expr -> Expr -> String
 pow x@(Assoc Add _) y = sqbrac (p_expr x) ++ "^" ++ brace (p_expr y)
-pow x@(BOp Sub _ _) y = sqbrac (p_expr x) ++ "^" ++ brace (p_expr y)
+pow x@(BOp Subt _ _) y = sqbrac (p_expr x) ++ "^" ++ brace (p_expr y)
 pow x@(BOp Frac _ _) y = sqbrac (p_expr x) ++ "^" ++ brace (p_expr y)
 pow x@(BOp Div _ _) y = paren (p_expr x) ++ "^" ++ brace (p_expr y)
 pow x@(Assoc Mul _) y = paren (p_expr x) ++ "^" ++ brace (p_expr y)

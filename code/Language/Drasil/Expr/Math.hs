@@ -46,7 +46,7 @@ dim = UnaryOp Dim
 
 -- | Smarth constructor for indexing
 idx :: Expr -> Expr -> Expr
-idx s i = BinaryOp $ Index s i
+idx = BinaryOp Index
 
 -- | Smart constructor for the summation, product, and integrals
 
@@ -72,7 +72,7 @@ sum' x = foldr1 (+) x
   
 -- | Smart constructor to cross product two expressions
 cross :: Expr -> Expr -> Expr
-cross e1 e2 = BinaryOp (Cross e1 e2)
+cross = BinaryOp Cross
 
 square :: Expr -> Expr
 square x = x $^ 2

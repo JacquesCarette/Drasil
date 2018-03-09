@@ -24,6 +24,10 @@ infixr 9 $||
 data Oper = Add | Mul | And | Or
   deriving (Eq)
 
+data BinOp = Frac | Div | Pow | Subt | Eq | NEq | Lt | Gt | LEq | GEq | Impl | Iff | Index
+  | Dot | Cross
+  deriving Eq
+
 -- | Drasil Expressions
 data Expr where
   Dbl      :: Double -> Expr
@@ -42,27 +46,27 @@ data Expr where
   Matrix   :: [[Expr]] -> Expr
   Grouping :: Expr -> Expr
   UnaryOp  :: UFunc -> Expr -> Expr
-  BinaryOp :: BiFunc -> Expr
+  BinaryOp :: BinOp -> Expr -> Expr -> Expr
   EOp      :: EOperator -> Expr
 
   IsIn     :: Expr -> Space -> Expr --	element of
 
 ($=), ($!=), ($<), ($>), ($<=), ($>=), ($=>), ($<=>), ($.), ($-), 
   ($/) :: Expr -> Expr -> Expr
-($=)  a b = BinaryOp $ EEquals a b
-($!=) a b = BinaryOp $ ENEquals a b
-($<)  a b = BinaryOp $ ELess a b
-($>)  a b = BinaryOp $ EGreater a b
-($<=) a b = BinaryOp $ ELessEq a b
-($>=) a b = BinaryOp $ EGreaterEq a b
-a $=> b = BinaryOp $ Implies a b
-a $<=> b = BinaryOp $ IFF a b
-a $. b   = BinaryOp $ DotProduct a b
-a $- b = BinaryOp $ Subtract a b
-a $/ b = BinaryOp $ Divide a b
+($=)  a b = BinaryOp Eq a b
+($!=) a b = BinaryOp NEq a b
+($<)  a b = BinaryOp Lt a b
+($>)  a b = BinaryOp Gt a b
+($<=) a b = BinaryOp LEq a b
+($>=) a b = BinaryOp GEq a b
+a $=> b = BinaryOp Impl a b
+a $<=> b = BinaryOp Iff a b
+a $. b   = BinaryOp Dot a b
+a $- b = BinaryOp Subt a b
+a $/ b = BinaryOp Div a b
 
 ($^), ($&&), ($||) :: Expr -> Expr -> Expr
-($^) a b = BinaryOp (Power a b)
+($^) = BinaryOp Pow
 a $&& b = Assoc And [a,b]
 a $|| b = Assoc Or  [a,b]
 
@@ -79,7 +83,7 @@ data DerivType = Part
 instance Num Expr where
   a + b = Assoc Add [a, b]
   a * b = Assoc Mul [a, b]
-  a - b = BinaryOp $ Subtract a b
+  a - b = BinaryOp Subt a b
   fromInteger a = Int a
   abs = UnaryOp Abs
   negate = UnaryOp Neg
@@ -98,35 +102,17 @@ instance Eq Expr where
   FCall a b == FCall c d       =  a == c && b == d
   Case a == Case b             =  a == b
   IsIn  a b  == IsIn  c d      =  a == c && b == d
-  BinaryOp a == BinaryOp b     =  a == b
+  BinaryOp o a b == BinaryOp p c d =  o == p && a == c && b == d
   _ == _                       =  False
 
 instance Fractional Expr where
-  a / b = BinaryOp $ Divide a b
-  fromRational r = BinaryOp $ Divide (fromInteger $ numerator   r)
-                                     (fromInteger $ denominator r)
+  a / b = BinaryOp Div a b
+  fromRational r = BinaryOp Div (fromInteger $ numerator   r)
+                                (fromInteger $ denominator r)
 
 
 --Known math functions.
 -- TODO: Move the below to a separate file somehow. How to go about it?
-
--- | Binary Functions
-data BiFunc =
-    Cross Expr Expr -- Cross Product: HTML &#10799;
-  | Power Expr Expr -- Power operator
-  | EEquals Expr Expr
-  | ENEquals Expr Expr
-  | ELess Expr Expr
-  | EGreater Expr Expr
-  | ELessEq Expr Expr
-  | EGreaterEq Expr Expr
-  | Implies Expr Expr  -- implies, &rArr; \implies
-  | IFF Expr Expr  -- if and only if, &hArr; \iff
-  | DotProduct Expr Expr
-  | Subtract Expr Expr
-  | Divide Expr Expr
-  | Index Expr Expr
-  deriving Eq
 
 -- | Operators
 -- All operators take a |DomainDesc| and a variable

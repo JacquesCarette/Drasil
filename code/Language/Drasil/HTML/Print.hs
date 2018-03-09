@@ -5,7 +5,7 @@ import Data.List (intersperse, sort)
 import Text.PrettyPrint hiding (render, quotes, Str)
 import Numeric (showFFloat)
 
-import Language.Drasil.Expr (Oper(..),UFunc(..))
+import Language.Drasil.Expr (Oper(..),UFunc(..), BinOp(..))
 import Language.Drasil.HTML.Import (makeDocument, spec)
 import Language.Drasil.Printing.AST
 import Language.Drasil.HTML.AST
@@ -143,7 +143,7 @@ p_expr (Assoc Mul l) = mul l
 p_expr (Assoc Add l)  = concat $ intersperse " &plus; " $ map p_expr l
 p_expr (Assoc And l)  = concat $ intersperse " &and; " $ map p_expr l
 p_expr (Assoc Or l)   = concat $ intersperse " &or; " $ map p_expr l
-p_expr (BOp Sub a b)  = p_expr a ++ " &minus; " ++ p_expr b
+p_expr (BOp Subt a b)  = p_expr a ++ " &minus; " ++ p_expr b
 p_expr (BOp Frac a b) = fraction (p_expr a) (p_expr b) --Found in HTMLHelpers
 p_expr (BOp Div a b)  = divide a b
 p_expr (BOp Pow a b)  = pow a b
@@ -179,7 +179,7 @@ p_sub e@(Dbl _)        = p_expr e
 p_sub e@(Int _)        = p_expr e
 p_sub e@(Sym _)        = p_expr e
 p_sub   (Assoc Add l)  = concat $ intersperse "&plus;" $ map p_expr l --removed spaces
-p_sub   (BOp Sub a b)  = p_expr a ++ "&minus;" ++ p_expr b
+p_sub   (BOp Subt a b) = p_expr a ++ "&minus;" ++ p_expr b
 p_sub e@(Assoc _ _)    = p_expr e
 p_sub   (BOp Frac a b) = divide a b --no block division 
 p_sub e@(BOp Div _ _)  = p_expr e
@@ -202,18 +202,18 @@ mul = concat . intersperse "&#8239;" . map (add_paren (prec Mul))
 
 -- | Helper for properly rendering parentheses around the multiplier
 add_paren :: Int -> Expr -> String
-add_paren p a@(Assoc o _)   = if prec o > p then paren $ p_expr a else p_expr a
-add_paren _ a@(BOp Div _ _) = paren $ p_expr a
-add_paren _ a@(BOp Sub _ _) = paren $ p_expr a
-add_paren _ a               = p_expr a
+add_paren p a@(Assoc o _)    = if prec o > p then paren $ p_expr a else p_expr a
+add_paren _ a@(BOp Div _ _)  = paren $ p_expr a
+add_paren _ a@(BOp Subt _ _) = paren $ p_expr a
+add_paren _ a                = p_expr a
 
 -- | Helper for properly rendering division of expressions
 divide :: Expr -> Expr -> String
-divide n d@(Assoc Add _) = p_expr n ++ "/" ++ paren (p_expr d)
-divide n d@(BOp Sub _ _) = p_expr n ++ "/" ++ paren (p_expr d)
-divide n@(Assoc Add _) d = paren (p_expr n) ++ "/" ++ p_expr d
-divide n@(BOp Sub _ _) d = paren (p_expr n) ++ "/" ++ p_expr d
-divide n d = p_expr n ++ "/" ++ p_expr d
+divide n d@(Assoc Add _)   = p_expr n ++ "/" ++ paren (p_expr d)
+divide n d@(BOp Subt _ _)  = p_expr n ++ "/" ++ paren (p_expr d)
+divide n@(Assoc Add _)  d  = paren (p_expr n) ++ "/" ++ p_expr d
+divide n@(BOp Subt _ _) d  = paren (p_expr n) ++ "/" ++ p_expr d
+divide n d                 = p_expr n ++ "/" ++ p_expr d
 
 -- | Helper for properly rendering negation of expressions
 neg :: Expr -> String
@@ -231,13 +231,13 @@ minus e = "&minus;" ++ p_expr e
 
 -- | Helper for properly rendering exponents
 pow :: Expr -> Expr -> String
-pow a@(Assoc Add _) b = sqbrac (p_expr a) ++ sup (p_expr b)
-pow a@(BOp Sub _ _) b = sqbrac (p_expr a) ++ sup (p_expr b)
+pow a@(Assoc Add _)  b = sqbrac (p_expr a) ++ sup (p_expr b)
+pow a@(BOp Subt _ _) b = sqbrac (p_expr a) ++ sup (p_expr b)
 pow a@(BOp Frac _ _) b = sqbrac (p_expr a) ++ sup (p_expr b)
-pow a@(BOp Div _ _) b = paren (p_expr a) ++ sup (p_expr b)
-pow a@(Assoc Mul _) b = paren (p_expr a) ++ sup (p_expr b)
-pow a@(BOp Pow _ _) b = paren (p_expr a) ++ sup (p_expr b)
-pow a b = p_expr a ++ sup (p_expr b)
+pow a@(BOp Div _ _)  b = paren (p_expr a) ++ sup (p_expr b)
+pow a@(Assoc Mul _)  b = paren (p_expr a) ++ sup (p_expr b)
+pow a@(BOp Pow _ _)  b = paren (p_expr a) ++ sup (p_expr b)
+pow a                b = p_expr a ++ sup (p_expr b)
 
 p_space :: Space -> String
 p_space Integer  = "&#8484;"

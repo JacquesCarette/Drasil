@@ -1,11 +1,8 @@
 module Language.Drasil.Printing.AST where
 
-import Language.Drasil.Expr (Oper(..),UFunc)
+import Language.Drasil.Expr (Oper(..),UFunc,BinOp(..))
 import Language.Drasil.Symbol (Symbol)
 import Language.Drasil.Space (Space)
-
-data BinOp = Frac | Div | Pow | Sub | Eq | NEq | Lt | Gt | LEq | GEq | Impl | Iff | Index
-  | Dot | Cross
 
 data Expr = Dbl   Double
           | Int   Integer
@@ -36,7 +33,7 @@ prec2 :: BinOp -> Int
 prec2 Frac = 3
 prec2 Div = 3
 prec2 Pow = 2
-prec2 Sub = 4
+prec2 Subt = 4
 prec2 Eq = 9
 prec2 NEq  = 9
 prec2 Lt  = 9

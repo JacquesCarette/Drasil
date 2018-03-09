@@ -457,7 +457,9 @@ convExpr (FCall (C c) x)  = do
 convExpr (FCall _ _)   = return $ litString "**convExpr :: FCall unimplemented**"
 convExpr (UnaryOp o u) = fmap (unop o) (convExpr u)
 convExpr (Grouping e)  = convExpr e
-convExpr (BinaryOp b)  = bfunc b
+convExpr (BinaryOp Div (Int a) (Int b)) =
+  return $ (litFloat $ fromIntegral a) #/ (litFloat $ fromIntegral b) -- hack to deal with integer division
+convExpr (BinaryOp o a b)  = liftM2 (bfunc o) (convExpr a) (convExpr b)
 convExpr (Case l)      = doit l -- FIXME this is sub-optimal
   where
     doit [] = error "should never happen"
@@ -483,22 +485,22 @@ unop E.Norm = error "unop: Norm not implemented"
 unop E.Not  = (?!)
 unop E.Neg  = (#~)
 
-bfunc :: BiFunc -> Reader State Value
-bfunc (EEquals a b)    = liftM2 (?==) (convExpr a) (convExpr b)
-bfunc (ENEquals a b)   = liftM2 (?!=) (convExpr a) (convExpr b)
-bfunc (EGreater a b)   = liftM2 (?>)  (convExpr a) (convExpr b)
-bfunc (ELess a b)      = liftM2 (?<)  (convExpr a) (convExpr b)
-bfunc (ELessEq a b)    = liftM2 (?<=) (convExpr a) (convExpr b)
-bfunc (EGreaterEq a b) = liftM2 (?>=) (convExpr a) (convExpr b)
-bfunc (Cross _ _)      = error "bfunc: Cross not implemented"
-bfunc (E.Power a b)    = liftM2 (#^) (convExpr a) (convExpr b)
-bfunc (Subtract a b)   = liftM2 (#-) (convExpr a) (convExpr b)
-bfunc (Implies _ _)    = error "convExpr :=>"
-bfunc (IFF _ _)        = error "convExpr :<=>"
-bfunc (DotProduct _ _) = error "convExpr DotProduct"
-bfunc (E.Divide (Int a) (Int b)) = return $ (litFloat $ fromIntegral a) #/ (litFloat $ fromIntegral b) -- hack to deal with integer division
-bfunc (E.Divide a b)   = liftM2 (#/) (convExpr a) (convExpr b)
-bfunc (Index a i)      = liftM2 (\x y -> x$.(listAccess y)) (convExpr a) (convExpr i)
+bfunc :: BinOp -> (Value -> Value -> Value)
+bfunc Eq    = (?==)
+bfunc NEq   = (?!=)
+bfunc Gt   = (?>)
+bfunc Lt      = (?<)
+bfunc LEq    = (?<=)
+bfunc GEq = (?>=)
+bfunc Cross      = error "bfunc: Cross not implemented"
+bfunc Pow    = (#^)
+bfunc Subt   = (#-)
+bfunc Impl    = error "convExpr :=>"
+bfunc Iff        = error "convExpr :<=>"
+bfunc Dot = error "convExpr DotProduct"
+bfunc Div = (#/)
+bfunc Frac = (#/)
+bfunc Index      = (\x y -> x$.(listAccess y))
 
 -- medium hacks --
 genModDef :: CS.Mod -> Reader State Module

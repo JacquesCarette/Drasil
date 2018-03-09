@@ -138,7 +138,6 @@ toCodeName s =
     where  varNameReplace :: String -> String -> String
            varNameReplace l old = replace old "_" l
 
-
 funcPrefix :: String
 funcPrefix = "func_"
  
@@ -204,7 +203,7 @@ codeEquat cd = cd ^. def
 type ConstraintMap = Map.Map String [Constraint]
 
 constraintMap :: (Constrained c) => [c] -> ConstraintMap
-constraintMap cs = Map.fromList (map (\x -> ((x ^. uid), (x ^. constraints))) cs)
+constraintMap = Map.fromList . map (\x -> ((x ^. uid), (x ^. constraints)))
 
 physLookup :: (Quantity q) => q -> ConstraintMap -> [Expr]
 physLookup q m = constraintLookup' q m (filter isPhysC)
@@ -213,12 +212,9 @@ sfwrLookup :: (Quantity q) => q -> ConstraintMap -> [Expr]
 sfwrLookup q m = constraintLookup' q m (filter isPhysC)
 
 constraintLookup :: (Quantity q) => q -> ConstraintMap -> [Expr]
-constraintLookup q m = constraintLookup' q m (\x -> x)
+constraintLookup q m = constraintLookup' q m id
 
 constraintLookup' :: (Quantity q) => q -> ConstraintMap
                       -> ([Constraint] -> [Constraint]) -> [Expr]
 constraintLookup' q m filt =
-  lookC (Map.lookup (q ^. uid) m) q
-  where lookC :: Quantity q => Maybe [Constraint] -> q -> [Expr]
-        lookC (Just cs) s = map (\x -> renderC s x) (filt cs)
-        lookC Nothing _ = []
+  maybe [] (\cs -> map (renderC q) (filt cs)) (Map.lookup (q ^. uid) m)

@@ -1,6 +1,6 @@
 module Language.Drasil.HTML.Import where
 import Prelude hiding (id)
-import Language.Drasil.Expr (Expr(..), Oper(..), BinOp(..),
+import Language.Drasil.Expr (Expr(..), Oper(..), BinOp(..), sy,
     DerivType(..), EOperator(..), ($=), DomainDesc(..), RealRange(..))
 import Language.Drasil.Spec
 import qualified Language.Drasil.Printing.AST as P
@@ -11,8 +11,8 @@ import Language.Drasil.Chunk.ExprRelat (relat)
 import Language.Drasil.Chunk.NamedIdea (term, short, getA)
 import Language.Drasil.Chunk.Concept (defn)
 import Language.Drasil.Chunk.Quantity (Quantity(..))
-import Language.Drasil.Chunk.SymbolForm (eqSymb)
-import Language.Drasil.ChunkDB (HasSymbolTable(..), getUnitLup, symbLookup)
+import Language.Drasil.Chunk.SymbolForm (eqSymb,Stage(Equational))
+import Language.Drasil.ChunkDB (HasSymbolTable(..), getUnitLup)
 import Language.Drasil.Expr.Extract
 import Language.Drasil.Config (verboseDDDescription)
 import Language.Drasil.Document
@@ -32,11 +32,10 @@ expr (Int i)          _ = P.Int   i
 expr (Str s)          _ = P.Str   s
 expr (Assoc op l)     sm = P.Assoc op $ map (\x -> expr x sm) l
 expr (Deriv Part a b) sm = P.BOp Frac (P.Assoc Mul [P.Sym (Special Partial), expr a sm]) 
-                          (P.Assoc Mul [P.Sym (Special Partial), expr (C b) sm])
+                          (P.Assoc Mul [P.Sym (Special Partial), P.Sym $ snd b Equational])
 expr (Deriv Total a b)sm = P.BOp Frac (P.Assoc Mul [P.Sym lD, expr a sm])
-                          (P.Assoc Mul [P.Sym lD, expr (C b) sm])
-expr (C c)            sm = -- FIXME: Add Stage for Context
-  P.Sym $ (eqSymb (symbLookup c (sm ^. symbolTable)))
+                          (P.Assoc Mul [P.Sym lD, P.Sym $ snd b Equational])
+expr (C _ s)          _  = P.Sym $ s Equational -- FIXME
 expr (FCall f x)      sm = P.Call (expr f sm) (map (flip expr sm) x)
 expr (Case ps)        sm = if length ps < 2 then 
                     error "Attempting to use multi-case expr incorrectly"
@@ -240,7 +239,7 @@ buildEqn c sm = P.N (eqSymb c) P.:+: P.S " = " P.:+:
 buildDDDescription :: HasSymbolTable s => QDefinition -> s -> P.Spec
 buildDDDescription c m = descLines 
   (if verboseDDDescription then (vars (getQ c $= c^.equat) m) else []) m
-  where getQ (EC a _ _) = C a
+  where getQ (EC a _ _) = sy a
 
 -- | Helper for building each line of the description of a data def
 descLines :: (HasSymbolTable s, Quantity q) => [q] -> s -> P.Spec  

@@ -68,22 +68,22 @@ s4_2_3_eq1, s4_2_3_eq2, s4_2_3_eq3, s4_2_3_eq4, s4_2_3_eq5 :: Expr
 s4_2_3_eq1 = (negate (int_all (eqSymb vol) ((sy gradient) $. (sy thFluxVect)))) + 
   (int_all (eqSymb vol) (sy vol_ht_gen)) $=
   (int_all (eqSymb vol) ((sy density)
-  * (sy QT.heat_cap_spec) * Deriv Part (sy QT.temp) time))
+  * (sy QT.heat_cap_spec) * pderiv (sy QT.temp) time))
 
 s4_2_3_eq2 = (negate (int_all (eqSymb surface) ((sy thFluxVect) $. (sy uNormalVect)))) +
   (int_all (eqSymb vol) (sy vol_ht_gen)) $= 
   (int_all (eqSymb vol)
-  ((sy density) * (sy QT.heat_cap_spec) * Deriv Part (sy QT.temp) time))
+  ((sy density) * (sy QT.heat_cap_spec) * pderiv (sy QT.temp) time))
 
 s4_2_3_eq3 = (sy ht_flux_in) * (sy in_SA) - (sy ht_flux_out) *
   (sy out_SA) + (sy vol_ht_gen) * (sy vol) $= 
-  (int_all (eqSymb vol) ((sy density) * (sy QT.heat_cap_spec) * Deriv Part (sy QT.temp) time))
+  (int_all (eqSymb vol) ((sy density) * (sy QT.heat_cap_spec) * pderiv (sy QT.temp) time))
 
-s4_2_3_eq4 = (sy density) * (sy QT.heat_cap_spec) * (sy vol) * Deriv Total
+s4_2_3_eq4 = (sy density) * (sy QT.heat_cap_spec) * (sy vol) * deriv
   (sy QT.temp) time $= (sy ht_flux_in) * (sy in_SA) - (sy ht_flux_out) *
   (sy out_SA) + (sy vol_ht_gen) * (sy vol)
 
-s4_2_3_eq5 = (sy mass) * (sy QT.heat_cap_spec) * Deriv Total (sy QT.temp)
+s4_2_3_eq5 = (sy mass) * (sy QT.heat_cap_spec) * deriv (sy QT.temp)
   time $= (sy ht_flux_in) * (sy in_SA) - (sy ht_flux_out)
   * (sy out_SA) + (sy vol_ht_gen) * (sy vol)
 

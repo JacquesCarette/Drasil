@@ -46,7 +46,7 @@ t1ConsThermE = makeRC "t1ConsThermE"
 
 consThermERel :: Relation
 consThermERel = (negate (sy gradient)) $. (sy thFluxVect) + (sy vol_ht_gen) $=
-  (sy density) * (sy heat_cap_spec) * (Deriv Part (sy temp) time)
+  (sy density) * (sy heat_cap_spec) * (pderiv (sy temp) time)
 
 t1descr :: Sentence
 t1descr = foldlSent [
@@ -141,11 +141,9 @@ t3LatHtE = makeRC "t3LatHtE"
 latHtEEqn :: Relation
 latHtEEqn = FCall (sy latent_heat) [sy time] $= 
   defint (eqSymb tau) 0 (sy time) 
-         (Deriv Total (FCall (sy latent_heat) [sy tau]) tau)
+         (deriv (FCall (sy latent_heat) [sy tau]) tau)
 
 -- Integrals need dTau at end
--- Deriv is specifically partial derivative... how to do regular derivative?
--- How to have conditions on a single equation
 
 t3descr :: Sentence
 t3descr = foldlSent [

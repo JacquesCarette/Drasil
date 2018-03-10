@@ -57,4 +57,4 @@ im = IM
 imQD :: HasSymbolTable ctx => ctx -> QDefinition -> Sentence -> InputConstraints 
   -> OutputConstraints -> Attributes -> InstanceModel
 imQD ctx qd dfn incon ocon att = IM (makeRC (qd ^. uid) (qd ^. term) dfn 
-  (C qd $= qd ^. equat)) (vars (qd^.equat) ctx) incon [qw qd] ocon att
+  (sy qd $= qd ^. equat)) (vars (qd^.equat) ctx) incon [qw qd] ocon att

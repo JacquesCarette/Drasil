@@ -55,7 +55,7 @@ rocTempSimp = makeRC "rocTempSimp" (nounPhraseSP $ "Simplified rate " ++
 
 rocTempSimp_rel :: Relation
 rocTempSimp_rel = (sy QPP.mass) * (sy QT.heat_cap_spec) *
-  Deriv Total (sy QT.temp) QP.time $= sy ht_flux_in * sy in_SA -
+  deriv (sy QT.temp) QP.time $= sy ht_flux_in * sy in_SA -
   sy ht_flux_out * sy out_SA + sy vol_ht_gen * sy QPP.vol
 
 rocTempSimp_desc :: Sentence

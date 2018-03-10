@@ -105,10 +105,10 @@ nom_thick = cuc "nom_thick"
   [enumc nominalThicknesses] (Int 8)
 
 -- FIXME glassTypeAbbrsStr should really not exist...
-glass_type  = cvc "glass_type" (nounPhraseSent $ phrase glassTy +:+ 
+glass_type  = cvc' "glass_type" (nounPhraseSent $ phrase glassTy +:+ 
     displayConstrntsAsSet glass_type glassTypeAbbrsStr)
   lG ({-DiscreteS glassTypeAbbrsStr-} String)
-  [EnumeratedStr Software glassTypeAbbrsStr] (sy heatSGlass) --FIXME: no typical value!
+  [EnumeratedStr Software glassTypeAbbrsStr]
 
 {--}
 

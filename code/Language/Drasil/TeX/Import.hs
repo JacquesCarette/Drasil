@@ -2,7 +2,7 @@ module Language.Drasil.TeX.Import where
 
 import Control.Lens ((^.))
 import Prelude hiding (id)
-import Language.Drasil.Expr (Expr(..), Oper(..), BinOp(..),
+import Language.Drasil.Expr (Expr(..), Oper(..), BinOp(..), sy,
     DerivType(..), EOperator(..), ($=), RealRange(..), DomainDesc(..))
 import Language.Drasil.Expr.Extract
 import Language.Drasil.Spec
@@ -14,8 +14,8 @@ import Language.Drasil.Chunk.ExprRelat (relat)
 import Language.Drasil.Chunk.NamedIdea (term)
 import Language.Drasil.Chunk.Concept (defn)
 import Language.Drasil.Chunk.Quantity (Quantity(..))
-import Language.Drasil.Chunk.SymbolForm (eqSymb)
-import Language.Drasil.ChunkDB (getUnitLup, symbLookup, HasSymbolTable(..))
+import Language.Drasil.Chunk.SymbolForm (eqSymb,Stage(Equational))
+import Language.Drasil.ChunkDB (getUnitLup, HasSymbolTable(..))
 import Language.Drasil.Config (verboseDDDescription, numberedDDEquations, numberedTMEquations)
 import Language.Drasil.Document
 import Language.Drasil.Symbol
@@ -30,12 +30,11 @@ expr (Dbl d)            _ = P.Dbl  d
 expr (Int i)            _ = P.Int  i
 expr (Str s)            _ = P.Str  s
 expr (Assoc op l)      sm = P.Assoc op $ map (\x -> expr x sm) l
-expr (C c)             sm = -- FIXME: Add Stage for Context
-  P.Sym  (eqSymb (symbLookup c (sm ^. symbolTable)))
+expr (C _ s)           _  = P.Sym $ s Equational -- FIXME: Add Stage for Context
 expr (Deriv Part a b)  sm = P.BOp Frac (P.Assoc Mul [P.Sym (Special Partial), expr a sm])
-                           (P.Assoc Mul [P.Sym (Special Partial), expr (C b) sm])
+                           (P.Assoc Mul [P.Sym (Special Partial), P.Sym $ snd b Equational])
 expr (Deriv Total a b) sm = P.BOp Frac (P.Assoc Mul [P.Sym lD, expr a sm])
-                           (P.Assoc Mul [P.Sym lD, expr (C b) sm])
+                           (P.Assoc Mul [P.Sym lD, P.Sym $ snd b Equational])
 expr (FCall f x)       sm = P.Call (expr f sm) (map (flip expr sm) x)
 expr (Case ps)         sm = if length ps < 2 then
         error "Attempting to use multi-case expr incorrectly"
@@ -222,7 +221,7 @@ buildEqn sm c = P.N (eqSymb c) P.:+: P.S " = " P.:+:
 -- Build descriptions in data defs based on required verbosity
 buildDDDescription :: HasSymbolTable ctx => ctx -> QDefinition -> P.Spec
 buildDDDescription m c = descLines m
-  (if verboseDDDescription then vars (C c $= c^.equat) m else [])
+  (if verboseDDDescription then vars (sy c $= c^.equat) m else [])
 
 descLines :: (HasSymbolTable ctx, Quantity q) => ctx -> [q] -> P.Spec
 descLines _ []      = error "No chunks to describe"

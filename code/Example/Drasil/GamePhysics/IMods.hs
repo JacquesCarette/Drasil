@@ -20,7 +20,7 @@ im1NP :: NP
 im1NP =  nounPhraseSP "Force on the translational motion of a set of 2d rigid bodies"
 
 im1Rel :: Relation -- FIXME: add proper equation
-im1Rel = (sy acc_i) $= (Deriv Total (FCall (sy vel_i) [sy QP.time]) QP.time)
+im1Rel = (sy acc_i) $= (deriv (FCall (sy vel_i) [sy QP.time]) QP.time)
   $= (sy QP.gravitationalAccel) + ((FCall (sy force_i) [sy QP.time]) / (sy mass_i))
 
 
@@ -45,7 +45,7 @@ im2NP :: NP
 im2NP =  nounPhraseSP "Force on the rotational motion of a set of 2D rigid body"
 
 im2Rel :: Relation
-im2Rel = (sy QP.angularAccel) $= Deriv Total
+im2Rel = (sy QP.angularAccel) $= deriv
   (FCall (sy QP.angularVelocity) [sy QP.time]) QP.time $= 
      ((FCall (sy torque_i) [sy QP.time]) / (sy QP.momentOfInertia))
 

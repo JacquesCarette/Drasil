@@ -1,4 +1,3 @@
-{-# OPTIONS -Wall #-} 
 module Language.Drasil.HTML.Helpers where
 
 import Text.PrettyPrint
@@ -6,7 +5,6 @@ import Data.List (intersperse)
 
 import Language.Drasil.Document (Document, MaxWidthPercent)
 import Language.Drasil.Printing.AST (Expr)
-
 
 html, head_tag, body, title, paragraph, code, tr, th, td :: Doc -> Doc
 -- | HTML tag wrapper
@@ -39,7 +37,7 @@ h n       | n < 0 = error "Illegal header (too small)"
 wrap :: String -> [String] -> Doc -> Doc
 wrap s [] = \x -> 
   let tb c = text $ "<" ++ c ++ ">"
-  in vcat [tb s, x, tb $ "/"++s]
+  in vcat [tb s, x, tb $ '/':s]
 wrap s ts = \x ->
   let tb c = text $ "<" ++c++ " class=\""++(foldr1 (++) (intersperse " " ts))++"\">"
   in let te c = text $ "</" ++ c ++ ">"
@@ -51,7 +49,7 @@ caption t = wrap "p" ["caption"] (text t)
 
 -- | Helper for setting up references
 refwrap :: String -> Doc -> Doc
-refwrap r = \x -> vcat [text ("<a id=\"" ++ r ++ "\">"), x, text "</a>"]
+refwrap r x = vcat [text ("<a id=\"" ++ r ++ "\">"), x, text "</a>"]
 
 -- | Helper for setting up links to references
 reflink :: String -> String -> String

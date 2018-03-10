@@ -1,29 +1,9 @@
 module Language.Drasil.TeX.AST where
 
-import Language.Drasil.Symbol (Symbol)
-import Language.Drasil.Unicode (Greek,Special)
-import Language.Drasil.Spec (USymb, RefType)
 import Language.Drasil.Citations (Month(..))
 import Language.Drasil.People (People)
 import Language.Drasil.Document (MaxWidthPercent, DType)
 import Language.Drasil.Printing.AST
-
-infixr 5 :+:
-data Spec = E Expr
-          | S String
-          | Spec :+: Spec -- concat
-          | Spec :^: Spec -- superscript
-          | Spec :-: Spec -- subscript
-          | Spec :/: Spec -- frac
-          | Sy USymb
-          | N Symbol
-          | G Greek
-          | Sp Special
-          | Ref RefType Spec
-          | EmptyS
-          | HARDNL        -- newline. Temp fix for multi-line descriptions; 
-                          -- May move to a new LayoutObj, but only exists in TeX
-                          -- so it's not really a big deal ATM.
 
 data Document = Document Title Author [LayoutObj]
 type Title    = Spec

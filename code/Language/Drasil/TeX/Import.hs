@@ -74,20 +74,20 @@ replace_divs sm (BinaryOp Pow a b) = P.BOp Pow (replace_divs sm a) (replace_divs
 replace_divs sm (BinaryOp Subt a b) = P.BOp Subt (replace_divs sm a) (replace_divs sm b)
 replace_divs sm a            = expr a sm
 
-spec :: HasSymbolTable ctx => ctx -> Sentence -> T.Spec
-spec _  (S s)          = T.S s
-spec _  (Sy s)         = T.Sy s
+spec :: HasSymbolTable ctx => ctx -> Sentence -> P.Spec
+spec _  (S s)          = P.S s
+spec _  (Sy s)         = P.Sy s
 spec sm (EmptyS :+: b) = spec sm b
 spec sm (a :+: EmptyS) = spec sm a
-spec sm (a :+: b)      = spec sm a T.:+: spec sm b
-spec _  (G g)          = T.G g
-spec _  (Sp s)         = T.Sp s
+spec sm (a :+: b)      = spec sm a P.:+: spec sm b
+spec _  (G g)          = P.G g
+spec _  (Sp s)         = P.Sp s
 spec sm (F f s)        = spec sm (accent f s)
-spec _  (P s)          = T.N s
-spec sm (Ref t r)      = T.Ref t (spec sm r)
-spec sm (Quote q)      = T.S "``" T.:+: spec sm q T.:+: T.S "\""
-spec _  EmptyS         = T.EmptyS
-spec sm (E e)          = T.E $ expr e sm
+spec _  (P s)          = P.N s
+spec sm (Ref t r)      = P.Ref t (spec sm r)
+spec sm (Quote q)      = P.S "``" P.:+: spec sm q P.:+: P.S "\""
+spec _  EmptyS         = P.EmptyS
+spec sm (E e)          = P.E $ expr e sm
 
 decorate :: Decoration -> Sentence -> Sentence
 decorate Hat    s = S "\\hat{" :+: s :+: S "}"
@@ -121,7 +121,7 @@ lay sm x@(Table hdr lls t b)
                         " headers, but data contains " ++
                         show (length (head lls)) ++ " columns."
 lay sm (Paragraph c)         = T.Paragraph (spec sm c)
-lay sm (EqnBlock c)          = T.EqnBlock (T.E (expr c sm))
+lay sm (EqnBlock c)          = T.EqnBlock (P.E (expr c sm))
 --lay (CodeBlock c)         = T.CodeBlock c
 lay sm x@(Definition c)      = T.Definition (makePairs sm c) (spec sm (refName x))
 lay sm (Enumeration cs)      = T.List $ makeL sm cs
@@ -144,8 +144,8 @@ lay sm (DDef ps r _)         = T.Definition (map (\(x,y) ->
   (x, map (lay sm) y)) ps) (spec sm r)
 lay sm (Defnt dtyp pairs rn) = T.Defnt dtyp (layPairs pairs) (spec sm rn)
   where layPairs = map (\(x,y) -> (x, map (lay sm) y))
-lay _  (GDef)             = T.Paragraph (T.EmptyS)  -- need to implement!
-lay _  (IMod)             = T.Paragraph (T.EmptyS)  -- need to implement!
+lay _  (GDef)             = T.Paragraph (P.EmptyS)  -- need to implement!
+lay _  (IMod)             = T.Paragraph (P.EmptyS)  -- need to implement!
 lay sm (Bib bib)          = T.Bib $ map (layCite sm) bib
 
 -- | For importing bibliography
@@ -199,7 +199,7 @@ makePairs m (Data c) = [
   ]
 makePairs m (Theory c) = [
   ("Label",       [T.Paragraph $ spec m (titleize $ c ^. term)]),
-  ("Equation",    [eqnStyleTM $ T.E (expr (c ^. relat) m)]),
+  ("Equation",    [eqnStyleTM $ P.E (expr (c ^. relat) m)]),
   ("Description", [T.Paragraph (spec m (c ^. defn))])
   ]
 makePairs _ General  = error "Not yet implemented"
@@ -215,18 +215,18 @@ eqnStyleDD = if numberedDDEquations then T.EqnBlock else T.Paragraph
 eqnStyleTM :: T.Contents -> T.LayoutObj
 eqnStyleTM = if numberedTMEquations then T.EqnBlock else T.Paragraph
 
-buildEqn :: HasSymbolTable ctx => ctx -> QDefinition -> T.Spec
-buildEqn sm c = T.N (eqSymb c) T.:+: T.S " = " T.:+:
-  T.E (expr (c^.equat) sm)
+buildEqn :: HasSymbolTable ctx => ctx -> QDefinition -> P.Spec
+buildEqn sm c = P.N (eqSymb c) P.:+: P.S " = " P.:+:
+  P.E (expr (c^.equat) sm)
 
 -- Build descriptions in data defs based on required verbosity
-buildDDDescription :: HasSymbolTable ctx => ctx -> QDefinition -> T.Spec
+buildDDDescription :: HasSymbolTable ctx => ctx -> QDefinition -> P.Spec
 buildDDDescription m c = descLines m
   (if verboseDDDescription then vars (C c $= c^.equat) m else [])
 
-descLines :: (HasSymbolTable ctx, Quantity q) => ctx -> [q] -> T.Spec
+descLines :: (HasSymbolTable ctx, Quantity q) => ctx -> [q] -> P.Spec
 descLines _ []      = error "No chunks to describe"
-descLines m (vc:[]) = (T.N (eqSymb vc) T.:+:
-  (T.S " is the " T.:+: (spec m (phrase $ vc ^. term)) T.:+:
-   maybe (T.S "") (\a -> T.S " (" T.:+: T.Sy (a ^. usymb) T.:+: T.S ")") (getUnitLup vc m)))
-descLines m (vc:vcs) = descLines m (vc:[]) T.:+: T.HARDNL T.:+: descLines m vcs
+descLines m (vc:[]) = (P.N (eqSymb vc) P.:+:
+  (P.S " is the " P.:+: (spec m (phrase $ vc ^. term)) P.:+:
+   maybe (P.S "") (\a -> P.S " (" P.:+: P.Sy (a ^. usymb) P.:+: P.S ")") (getUnitLup vc m)))
+descLines m (vc:vcs) = descLines m (vc:[]) P.:+: P.HARDNL P.:+: descLines m vcs

@@ -80,20 +80,20 @@ replace_divs (BinaryOp Subt a b) sm = P.BOp Subt (replace_divs a sm) (replace_di
 replace_divs a                   sm = expr a sm
 
 -- | Translates Sentence to the HTML representation of Sentence ('Spec')
-spec :: HasSymbolTable s => Sentence -> s -> H.Spec
-spec (S s)      _ = H.S s
-spec (Sy s)     _ = H.Sy s
+spec :: HasSymbolTable s => Sentence -> s -> P.Spec
+spec (S s)      _ = P.S s
+spec (Sy s)     _ = P.Sy s
 spec (EmptyS :+: b) sm = spec b sm
 spec (a :+: EmptyS) sm = spec a sm
-spec (a :+: b) sm = spec a sm H.:+: spec b sm
-spec (G g)      _ = H.G g
-spec (Sp s)     _ = H.Sp s
-spec (P s)      _ = H.N s
+spec (a :+: b) sm = spec a sm P.:+: spec b sm
+spec (G g)      _ = P.G g
+spec (Sp s)     _ = P.Sp s
+spec (P s)      _ = P.N s
 spec (F f s)    sm = spec (accent f s) sm
-spec (Ref t r) sm = H.Ref t (spec r sm)
-spec (Quote q) sm = H.S "&quot;" H.:+: spec q sm H.:+: H.S "&quot;"
-spec EmptyS     _ = H.EmptyS
-spec (E e)     sm = H.E $ expr e sm
+spec (Ref t r) sm = P.Ref t (spec r sm)
+spec (Quote q) sm = P.S "&quot;" P.:+: spec q sm P.:+: P.S "&quot;"
+spec EmptyS     _ = P.EmptyS
+spec (E e)     sm = P.E $ expr e sm
 
 -- | Helper function for translating accented characters to 
 -- an HTML renderable form.
@@ -135,12 +135,12 @@ lay :: HasSymbolTable s => Contents -> s -> H.LayoutObj
 lay x@(Table hdr lls t b) sm = H.Table ["table"] 
   ((map (flip spec sm) hdr) : (map (map (flip spec sm)) lls)) (spec (refName x) sm) b (spec t sm)
 lay (Paragraph c)       sm = H.Paragraph (spec c sm)
-lay (EqnBlock c)        sm = H.HDiv ["equation"] [H.Tagless (H.E (expr c sm))] (H.EmptyS)
+lay (EqnBlock c)        sm = H.HDiv ["equation"] [H.Tagless (P.E (expr c sm))] (P.EmptyS)
 --lay (CodeBlock c)        = H.CodeBlock c
 lay x@(Definition c)    sm = H.Definition c (makePairs c sm) (spec (refName x) sm)
 lay (Enumeration cs)    sm = H.List $ makeL cs sm
 lay x@(Figure c f wp)   sm = H.Figure (spec (refName x) sm) (spec c sm) f wp
-lay (Graph _ _ _ _)      _ = H.Paragraph (H.EmptyS)  -- need to implement!
+lay (Graph _ _ _ _)      _ = H.Paragraph (P.EmptyS)  -- need to implement!
 lay x@(Requirement r)   sm = 
   H.ALUR H.Requirement (spec (phrase $ r ^. term) sm) (spec (refName x) sm) (spec (short r) sm)
 lay x@(Assumption a)    sm = 
@@ -151,8 +151,8 @@ lay x@(UnlikelyChange uc) sm =
   H.ALUR H.UnlikelyChange (spec (phrase $ uc ^. term) sm) (spec (refName x) sm) (spec (short uc) sm)
 lay (Defnt dtyp pairs rn) sm = H.Definition dtyp (layPairs pairs) (spec rn sm)
   where layPairs = map (\(x,y) -> (x, (map (\z -> lay z sm) y)))
-lay (GDef)               _ = H.Paragraph (H.EmptyS)  -- need to implement!
-lay (IMod)               _ = H.Paragraph (H.EmptyS)  -- need to implement!
+lay (GDef)               _ = H.Paragraph (P.EmptyS)  -- need to implement!
+lay (IMod)               _ = H.Paragraph (P.EmptyS)  -- need to implement!
 lay (TMod ps rf r)      sm = H.Definition (Theory r) 
   (map (\(x,y) -> (x, map (flip lay sm) y)) ps) (spec rf sm)
 lay (DDef ps rf d)      sm = H.Definition (Data d)
@@ -210,14 +210,14 @@ makePairs (Data c) m = [
   ("Number",      [H.Paragraph $ spec (missingAcro (S "DD") $ fmap S $ getA c) m]),
   ("Label",       [H.Paragraph $ spec (titleize $ c ^. term) m]),
   ("Units",       [H.Paragraph $ spec (unit'2Contents c) m]),
-  ("Equation",    [H.HDiv ["equation"] [H.Tagless (buildEqn c m)] (H.EmptyS)]),
+  ("Equation",    [H.HDiv ["equation"] [H.Tagless (buildEqn c m)] (P.EmptyS)]),
   ("Description", [H.Paragraph (buildDDDescription c m)])
   ]
 makePairs (Theory c) m = [
   ("Number",      [H.Paragraph $ spec (missingAcro (S "T") $ fmap S $ getA c) m]),
   ("Label",       [H.Paragraph $ spec (titleize $ c ^. term) m]),
-  ("Equation",    [H.HDiv ["equation"] [H.Tagless (H.E (expr (c ^. relat) m))]
-                  (H.EmptyS)]),
+  ("Equation",    [H.HDiv ["equation"] [H.Tagless (P.E (expr (c ^. relat) m))]
+                  (P.EmptyS)]),
   ("Description", [H.Paragraph (spec (c ^. defn) m)])
   ]
 makePairs General  _ = error "Not yet implemented"
@@ -231,22 +231,22 @@ missingAcro _ (Just a) = S "<b>":+: a :+: S "</b>"
 
 -- | Translates the defining equation from a QDefinition to 
 -- HTML's version of Sentence
-buildEqn :: HasSymbolTable s => QDefinition -> s -> H.Spec  
-buildEqn c sm = H.N (eqSymb c) H.:+: H.S " = " H.:+: 
-  H.E (expr (c^.equat) sm)
+buildEqn :: HasSymbolTable s => QDefinition -> s -> P.Spec  
+buildEqn c sm = P.N (eqSymb c) P.:+: P.S " = " P.:+: 
+  P.E (expr (c^.equat) sm)
 
 -- | Build descriptions in data defs based on required verbosity
-buildDDDescription :: HasSymbolTable s => QDefinition -> s -> H.Spec
+buildDDDescription :: HasSymbolTable s => QDefinition -> s -> P.Spec
 buildDDDescription c m = descLines 
   (if verboseDDDescription then (vars (getQ c $= c^.equat) m) else []) m
   where getQ (EC a _ _) = C a
 
 -- | Helper for building each line of the description of a data def
-descLines :: (HasSymbolTable s, Quantity q) => [q] -> s -> H.Spec  
+descLines :: (HasSymbolTable s, Quantity q) => [q] -> s -> P.Spec  
 descLines []    _   = error "No chunks to describe"
-descLines (vc:[]) m = (H.N (eqSymb vc) H.:+: 
-  (H.S " is the " H.:+: (spec (phrase $ vc ^. term) m) H.:+:
+descLines (vc:[]) m = (P.N (eqSymb vc) P.:+: 
+  (P.S " is the " P.:+: (spec (phrase $ vc ^. term) m) P.:+:
    unWrp (getUnitLup vc m)))
-  where unWrp (Just a) = H.S " (" H.:+: H.Sy (a ^. usymb) H.:+: H.S ")"
-        unWrp Nothing  = H.S ""
-descLines (vc:vcs) m = descLines (vc:[]) m H.:+: H.HARDNL H.:+: descLines vcs m
+  where unWrp (Just a) = P.S " (" P.:+: P.Sy (a ^. usymb) P.:+: P.S ")"
+        unWrp Nothing  = P.S ""
+descLines (vc:vcs) m = descLines (vc:[]) m P.:+: P.HARDNL P.:+: descLines vcs m

@@ -3,6 +3,8 @@ module Language.Drasil.Printing.AST where
 import Language.Drasil.Expr (Oper(..),UFunc,BinOp(..))
 import Language.Drasil.Symbol (Symbol)
 import Language.Drasil.Space (Space)
+import Language.Drasil.Spec (USymb, RefType)
+import Language.Drasil.Unicode (Greek, Special)
 
 data Expr = Dbl   Double
           | Int   Integer
@@ -45,3 +47,22 @@ prec2 Iff = 13
 prec2 Index = 1
 prec2 Dot = 3
 prec2 Cross = 3
+
+infixr 5 :+:
+
+data Spec = E Expr
+          | S String
+          | Spec :+: Spec -- concat
+          | Spec :^: Spec -- superscript
+          | Spec :-: Spec -- subscript
+          | Spec :/: Spec -- frac
+          | Sy USymb
+          | N Symbol
+          | G Greek
+          | Sp Special
+          | Ref RefType Spec
+          | EmptyS
+          | HARDNL        -- newline. Temp fix for multi-line descriptions; 
+                          -- May move to a new LayoutObj, but only exists in TeX
+                          -- so it's not really a big deal ATM.
+

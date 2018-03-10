@@ -18,7 +18,6 @@ data LayoutObj = Table [[Spec]] Label Bool Title
                | Section Depth Title [LayoutObj] Label
                | Paragraph Contents
                | EqnBlock Contents
-             --  | CodeBlock Code
                | Definition [(String,[LayoutObj])] Label
                | List ListType
                | Figure Label Caption Filepath MaxWidthPercent

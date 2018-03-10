@@ -1,4 +1,3 @@
-{-# Language GADTs #-}
 module Language.Drasil.HTML.AST where
 
 import Language.Drasil.Document (DType (..), MaxWidthPercent)

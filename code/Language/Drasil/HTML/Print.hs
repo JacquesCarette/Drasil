@@ -307,9 +307,9 @@ makeList (Simple items) sm = div_tag ["list"]
 makeList (Desc items)   sm = div_tag ["list"]
   (vcat $ map (\(b,e) -> wrap "p" [] ((wrap "b" [] (text (p_spec b sm ++ ": "))
    <> (p_item e sm)))) items)
-makeList t@(Ordered items) sm = wrap (show t ++ "l") ["list"] (vcat $ map
+makeList (Ordered items) sm = wrap "ol" ["list"] (vcat $ map
   (wrap "li" [] . flip p_item sm) items)
-makeList t@(Unordered items) sm = wrap (show t ++ "l") ["list"] (vcat $ map
+makeList (Unordered items) sm = wrap "ul" ["list"] (vcat $ map
   (wrap "li" [] . flip p_item sm) items)
 makeList (Definitions items) sm = div_tag ["list"] 
   (vcat $ map (\(b,e) -> wrap "p" [] ((text (p_spec b sm ++ " is the") <+> 
@@ -420,8 +420,13 @@ renderF c fields styl sm = unwords $
   map (flip (styl bibStyleH) sm) (sort fields) ++ endingField c bibStyleH
 
 endingField :: Citation -> StyleGuide -> [String]
-endingField c MLA = [show c]
-endingField _ _ = []
+endingField (Book      _) MLA = ["Print."]
+endingField (Article   _) MLA = ["Print."]
+endingField (MThesis   _) MLA = ["Print."]
+endingField (PhDThesis _) MLA = ["Print."]
+endingField (Misc      _) MLA = [""]
+endingField (Online    _) MLA = [""]
+endingField _             _   = []
 
 -- Config helpers --
 useStyleBk :: HasSymbolTable s => StyleGuide -> (CiteField -> s -> String)
@@ -453,7 +458,8 @@ bookMLA (Pages  (a,b))  _  = dot $ "pp. " ++ show a ++ "&ndash;" ++ show b
 bookMLA (Note       s) sm  = p_spec s sm
 bookMLA (Issue      n)  _  = comm $ "no. " ++ show n
 bookMLA (School     s) sm  = comm $ p_spec s sm
-bookMLA (Thesis     t)  _  = comm $ show t
+bookMLA (Thesis   M  )  _  = comm "Master's thesis"
+bookMLA (Thesis   PhD)  _  = comm "PhD thesis"
 bookMLA (URL        s) sm  = dot $ p_spec s sm
 bookMLA (HowPub     s) sm  = comm $ p_spec s sm
 bookMLA (Editor     p) sm  = comm $ "Edited by " ++ p_spec (foldlList (map (flip spec sm . nameStr) p)) sm

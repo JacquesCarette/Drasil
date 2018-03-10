@@ -41,13 +41,6 @@ data ListType = Ordered [ItemType] | Unordered [ItemType]
 
 data ItemType = Flat Spec | Nested Spec ListType
 
-instance Show ListType where
-  show (Ordered _)   = "o"
-  show (Unordered _) = "u"
-  show (Desc _)      = error "Printing descriptive list failed"
-  show (Simple _)    = error "Printing Simple list failed, see ASTHTML/PrintHTML"
-  show (Definitions _)  = error "Printing list of definitions failed"
-
 type BibRef = [Citation]
 type City   = Spec
 type State  = Spec
@@ -78,19 +71,7 @@ data CiteField = Author     People
                | URLdate Integer Month Integer
                | Editor     People
 
-data Thesis = M | PhD deriving Eq
-
-instance Show Thesis where
-  show M   = "Master's thesis"
-  show PhD = "PhD thesis"
-
-instance Show Citation where
-  show (Book      _) = "Print."
-  show (Article   _) = "Print."
-  show (MThesis   _) = "Print."
-  show (PhDThesis _) = "Print."
-  show (Misc      _) = ""
-  show (Online    _) = ""
+data Thesis = M | PhD
 
 instance Eq CiteField where
   (==) (Author _)     (Author _)     = True

@@ -1,7 +1,7 @@
 module Language.Drasil.HTML.Print where
 
 import Prelude hiding (print)
-import Data.List (intersperse, sort)
+import Data.List (intersperse, sort, sortBy)
 import Text.PrettyPrint hiding (render, quotes, Str)
 import Numeric (showFFloat)
 
@@ -415,9 +415,52 @@ renderCite a@(PhDThesis fields) sm = renderF a fields useStyleBk    sm
 renderCite a@(Misc      fields) sm = renderF a fields useStyleBk    sm
 renderCite a@(Online    fields) sm = renderF a fields useStyleArtcl sm --rendered similar to articles for some reason
 
+compCiteField :: CiteField -> CiteField -> Ordering
+compCiteField (Author     _) _ = LT
+compCiteField _ (Author     _) = GT
+compCiteField (Title      _) _ = LT
+compCiteField _ (Title      _) = GT
+compCiteField (Series     _) _ = LT
+compCiteField _ (Series     _) = GT
+compCiteField (Collection _) _ = LT
+compCiteField _ (Collection _) = GT
+compCiteField (Editor     _) _ = LT
+compCiteField _ (Editor     _) = GT
+compCiteField (Journal    _) _ = LT
+compCiteField _ (Journal    _) = GT
+compCiteField (Volume     _) _ = LT
+compCiteField _ (Volume     _) = GT
+compCiteField (Edition    _) _ = LT
+compCiteField _ (Edition    _) = GT
+compCiteField (Thesis     _) _ = LT
+compCiteField _ (Thesis     _) = GT
+compCiteField (School     _) _ = LT
+compCiteField _ (School     _) = GT
+compCiteField (Place      _) _ = LT
+compCiteField _ (Place      _) = GT
+compCiteField (Publisher  _) _ = LT
+compCiteField _ (Publisher  _) = GT
+compCiteField (HowPub     _) _ = LT
+compCiteField _ (HowPub     _) = GT
+compCiteField (Issue      _) _ = LT
+compCiteField _ (Issue      _) = GT
+compCiteField (Date   _ _ _) _ = LT
+compCiteField _ (Date   _ _ _) = GT
+compCiteField (Year       _) _ = LT
+compCiteField _ (Year       _) = GT
+compCiteField (URL       _) _  = LT
+compCiteField _ (URL       _)  = GT
+compCiteField (Page       _) _ = LT
+compCiteField _ (Page       _) = GT
+compCiteField (Pages      _) _ = LT
+compCiteField _ (Pages      _) = GT
+compCiteField (URLdate _ _ _) _ = LT
+compCiteField _ (URLdate _ _ _) = GT
+compCiteField (Note       _) _ = LT
+
 renderF :: HasSymbolTable s => Citation -> [CiteField] -> (StyleGuide -> (CiteField -> s -> String)) -> s -> String
 renderF c fields styl sm = unwords $
-  map (flip (styl bibStyleH) sm) (sort fields) ++ endingField c bibStyleH
+  map (flip (styl bibStyleH) sm) (sortBy compCiteField fields) ++ endingField c bibStyleH
 
 endingField :: Citation -> StyleGuide -> [String]
 endingField (Book      _) MLA = ["Print."]

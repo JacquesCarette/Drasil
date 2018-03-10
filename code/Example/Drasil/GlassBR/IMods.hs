@@ -1,4 +1,4 @@
-module Drasil.GlassBR.IMods (iModels, probOfBr, calOfCap, calOfDe, probOfBreak) where
+module Drasil.GlassBR.IMods (iModels, probOfBr, calOfCap, calOfDe, probOfBreak, calofCapacity, calofDemand) where
 
 import Language.Drasil
 
@@ -39,6 +39,11 @@ pbdescr =
 
 {--}
 
+calofCapacity :: InstanceModel
+calofCapacity = im calOfCap [qw nonFL, qw glaTyFac, qw loadSF] [TCon AssumedCon $ C nonFL $> 0, TCon AssumedCon $ C glaTyFac $> 0, TCon AssumedCon $ C loadSF $> 0] [qw lRe] [] [] 
+
+
+{--}
 calOfCap :: RelationConcept
 calOfCap = makeRC "calOfCap" (nounPhraseSP "Calculation of Capacity(LR)") 
   capdescr $ (C lRe) $= ((C nonFL) * (C glaTyFac) * (C loadSF))
@@ -57,6 +62,11 @@ capdescr =
   {-astm_LR2009-}]
 
 {--}
+
+calofDemand :: InstanceModel
+calofDemand = im calOfDe [qw demand, qw eqTNTWeight, qw standOffDist] [TCon AssumedCon $ C demand $> 0, TCon AssumedCon $ C eqTNTWeight $> 0, TCon AssumedCon $ C standOffDist $> 0] [qw demand] [] [] 
+
+
 
 calOfDe :: RelationConcept
 calOfDe = makeRC "calOfDe" (nounPhraseSP "Calculation of Demand(q)") 

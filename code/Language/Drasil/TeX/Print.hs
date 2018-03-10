@@ -551,10 +551,18 @@ renderCite sm c@(PhDThesis fields) = renderF sm c fields
 renderCite sm c@(Misc      fields) = renderF sm c fields
 renderCite sm c@(Online    fields) = renderF sm c fields
 
+renderKind :: Citation -> String
+renderKind (Book      _) = "book"
+renderKind (Article   _) = "article"
+renderKind (MThesis   _) = "mastersthesis"
+renderKind (PhDThesis _) = "phdthesis"
+renderKind (Misc      _) = "misc"
+renderKind (Online    _) = "online"
+
 --Rendering a book--
 renderF :: HasSymbolTable s => s -> Citation -> [CiteField] -> Spec
 renderF sm c fields = 
-  S "@":+: S (show c) :+: S "{" :+: (cite sm fields) :+: S ",\n" :+: 
+  S "@":+: S (renderKind c) :+: S "{" :+: (cite sm fields) :+: S ",\n" :+: 
   (foldl1 (:+:) . intersperse (S ",\n") . map (showBibTeX sm)) fields :+: S "}"
 --renderBook _ = error "Tried to render a non-book using renderBook." 
 

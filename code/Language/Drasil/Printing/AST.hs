@@ -5,6 +5,8 @@ import Language.Drasil.Symbol (Symbol)
 import Language.Drasil.Space (Space)
 import Language.Drasil.Spec (USymb, RefType)
 import Language.Drasil.Unicode (Greek, Special)
+import Language.Drasil.People (People)
+import Language.Drasil.Citations (Month)
 
 data Expr = Dbl   Double
           | Int   Integer
@@ -66,3 +68,26 @@ data Spec = E Expr
                           -- May move to a new LayoutObj, but only exists in TeX
                           -- so it's not really a big deal ATM.
 
+type City   = Spec
+type State  = Spec
+
+data CiteField = Author     People
+               | Title      Spec
+               | Series     Spec
+               | Collection Spec
+               | Volume     Integer
+               | Edition    Integer
+               | Place    (City, State) --State can also mean country
+               | Publisher  Spec
+               | Journal    Spec
+               | Year       Integer
+               | Date Integer Month Integer
+               | Page       Integer
+               | Pages    (Integer, Integer)
+               | Note       Spec
+               | Issue      Integer
+               | School     Spec
+               | URL        Spec
+               | HowPub     Spec
+               | URLdate Integer Month Integer
+               | Editor     People

@@ -160,35 +160,36 @@ lay (DDef ps rf d)      sm = H.Definition (Data d)
 lay (Bib bib)           sm = H.Bib $ map (flip layCite sm) bib
 
 -- | For importing bibliography
+-- Slight hack: for theses, make that the Journal
 layCite :: HasSymbolTable s => Citation -> s -> H.Citation
 layCite (Citation Book      fields) sm = H.Book      $ map (flip layField sm) fields
 layCite (Citation Article   fields) sm = H.Article   $ map (flip layField sm) fields
-layCite (Citation MThesis   fields) sm = H.MThesis   $ H.Thesis H.M   : map (flip layField sm) fields
-layCite (Citation PhDThesis fields) sm = H.PhDThesis $ H.Thesis H.PhD : map (flip layField sm) fields
+layCite (Citation MThesis   fields) sm = H.MThesis   $ P.HowPub (P.S "Master's thesis") : map (flip layField sm) fields
+layCite (Citation PhDThesis fields) sm = H.PhDThesis $ P.HowPub (P.S "PhD thesis") : map (flip layField sm) fields
 layCite (Citation Misc      fields) sm = H.Misc      $ map (flip layField sm) fields
 layCite (Citation Online    fields) sm = H.Online    $ map (flip layField sm) fields
 
-layField :: HasSymbolTable s => CiteField -> s -> H.CiteField
-layField (Author     p)   _ = H.Author     p
-layField (Title      s)  sm = H.Title      $ spec s sm
-layField (Series     s)  sm = H.Series     $ spec s sm
-layField (Collection s)  sm = H.Collection $ spec s sm
-layField (Volume     n)   _ = H.Volume     n
-layField (Edition    n)   _ = H.Edition    n
-layField (Place (c, s))  sm = H.Place      (spec c sm, spec s sm)
-layField (Publisher  s)  sm = H.Publisher  $ spec s sm
-layField (Journal    s)  sm = H.Journal    $ spec s sm
-layField (Year       n)   _ = H.Year       n
-layField (Date    n m y)  _ = H.Date       n m y
-layField (URLdate n m y)  _ = H.URLdate    n m y
-layField (Page       n)   _ = H.Page       n
-layField (Pages     ns)   _ = H.Pages      ns
-layField (Note       s)  sm = H.Note       $ spec s sm
-layField (Issue      n)   _ = H.Issue      n
-layField (School     s)  sm = H.School     $ spec s sm
-layField (URL        s)  sm = H.URL        $ spec s sm
-layField (HowPub     s)  sm = H.HowPub     $ spec s sm
-layField (Editor     p)   _ = H.Editor     p
+layField :: HasSymbolTable s => CiteField -> s -> P.CiteField
+layField (Author     p)   _ = P.Author     p
+layField (Title      s)  sm = P.Title      $ spec s sm
+layField (Series     s)  sm = P.Series     $ spec s sm
+layField (Collection s)  sm = P.Collection $ spec s sm
+layField (Volume     n)   _ = P.Volume     n
+layField (Edition    n)   _ = P.Edition    n
+layField (Place (c, s))  sm = P.Place      (spec c sm, spec s sm)
+layField (Publisher  s)  sm = P.Publisher  $ spec s sm
+layField (Journal    s)  sm = P.Journal    $ spec s sm
+layField (Year       n)   _ = P.Year       n
+layField (Date    n m y)  _ = P.Date       n m y
+layField (URLdate n m y)  _ = P.URLdate    n m y
+layField (Page       n)   _ = P.Page       n
+layField (Pages     ns)   _ = P.Pages      ns
+layField (Note       s)  sm = P.Note       $ spec s sm
+layField (Issue      n)   _ = P.Issue      n
+layField (School     s)  sm = P.School     $ spec s sm
+layField (URL        s)  sm = P.URL        $ spec s sm
+layField (HowPub     s)  sm = P.HowPub     $ spec s sm
+layField (Editor     p)   _ = P.Editor     p
 
 -- | Translates lists
 makeL :: HasSymbolTable s => ListType -> s -> H.ListType

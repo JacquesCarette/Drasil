@@ -2,8 +2,6 @@
 module Language.Drasil.HTML.AST where
 
 import Language.Drasil.Document (DType (..), MaxWidthPercent)
-import Language.Drasil.Citations (Month(..))
-import Language.Drasil.People (People)
 import Language.Drasil.Printing.AST
 
 -- | Internal HTML version of Document
@@ -42,33 +40,7 @@ data ListType = Ordered [ItemType] | Unordered [ItemType]
 data ItemType = Flat Spec | Nested Spec ListType
 
 type BibRef = [Citation]
-type City   = Spec
-type State  = Spec
 
 data Citation = Book [CiteField] | Article [CiteField]
               | MThesis [CiteField] | PhDThesis [CiteField]
               | Misc [CiteField] | Online [CiteField]
-
-data CiteField = Author     People
-               | Title      Spec
-               | Series     Spec
-               | Collection Spec
-               | Volume     Integer
-               | Edition    Integer
-               | Place    (City, State) --State can also mean country
-               | Publisher  Spec
-               | Journal    Spec
-               | Year       Integer
-               | Date Integer Month Integer
-               | Page       Integer
-               | Pages    (Integer, Integer)
-               | Note       Spec
-               | Issue      Integer
-               | School     Spec
-               | Thesis     Thesis
-               | URL        Spec
-               | HowPub     Spec
-               | URLdate Integer Month Integer
-               | Editor     People
-
-data Thesis = M | PhD

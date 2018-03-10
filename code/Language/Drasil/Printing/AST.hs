@@ -67,6 +67,22 @@ data Spec = E Expr
           | HARDNL        -- newline. Temp fix for multi-line descriptions; 
                           -- May move to a new LayoutObj, but only exists in TeX
                           -- so it's not really a big deal ATM.
+type Title    = Spec
+
+data ListType = Ordered [ItemType] 
+              | Unordered [ItemType]
+              | Simple      [(Title,ItemType)]
+              | Desc        [(Title,ItemType)]
+              | Definitions  [(Title,ItemType)]
+
+data ItemType = Flat Spec
+              | Nested Spec ListType
+
+type BibRef = [Citation]
+
+data Citation = Book [CiteField] | Article [CiteField]
+              | MThesis [CiteField] | PhDThesis [CiteField]
+              | Misc [CiteField] | Online [CiteField]
 
 type City   = Spec
 type State  = Spec

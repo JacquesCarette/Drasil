@@ -4,7 +4,6 @@ import Language.Drasil.Document (MaxWidthPercent, DType)
 import Language.Drasil.Printing.AST
 
 data Document = Document Title Author [LayoutObj]
-type Title    = Spec
 type Author   = Spec
 type Contents = Spec
 type Items    = [LayoutObj]
@@ -30,22 +29,3 @@ data LayoutObj = Table [[Spec]] Label Bool Title
                | Graph [(Spec, Spec)] (Maybe Width) (Maybe Height) Caption Label
                | Bib BibRef
                | Defnt DType [(String,[LayoutObj])] Label -- To replace Definition eventually
-               
-data ListType = Item [ItemType]
-              | Enum [ItemType]
-              | Simple [(Spec,ItemType)]
-              | Desc [(Spec,ItemType)]
-              | Definitions [(Spec, ItemType)]
-
-data ItemType = Flat Spec
-              | Nested Spec ListType
-
-type BibRef = [Citation]
-type City   = Spec
-type State  = Spec
-
-data Citation = Book [CiteField] | Article [CiteField]
-              | MThesis [CiteField] | PhDThesis [CiteField]
-              | Misc [CiteField] | Online [CiteField]
-
-

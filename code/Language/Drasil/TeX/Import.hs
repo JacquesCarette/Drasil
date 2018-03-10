@@ -149,13 +149,13 @@ lay _  (IMod)             = T.Paragraph (P.EmptyS)  -- need to implement!
 lay sm (Bib bib)          = T.Bib $ map (layCite sm) bib
 
 -- | For importing bibliography
-layCite :: HasSymbolTable ctx => ctx -> Citation -> T.Citation
-layCite sm (Citation Book      fields) = T.Book      $ map (layField sm) fields
-layCite sm (Citation Article   fields) = T.Article   $ map (layField sm) fields
-layCite sm (Citation MThesis   fields) = T.MThesis   $ map (layField sm) fields
-layCite sm (Citation PhDThesis fields) = T.PhDThesis $ map (layField sm) fields
-layCite sm (Citation Misc      fields) = T.Misc      $ map (layField sm) fields
-layCite sm (Citation Online    fields) = T.Online    $ map (layField sm) fields
+layCite :: HasSymbolTable ctx => ctx -> Citation -> P.Citation
+layCite sm (Citation Book      fields) = P.Book      $ map (layField sm) fields
+layCite sm (Citation Article   fields) = P.Article   $ map (layField sm) fields
+layCite sm (Citation MThesis   fields) = P.MThesis   $ map (layField sm) fields
+layCite sm (Citation PhDThesis fields) = P.PhDThesis $ map (layField sm) fields
+layCite sm (Citation Misc      fields) = P.Misc      $ map (layField sm) fields
+layCite sm (Citation Online    fields) = P.Online    $ map (layField sm) fields
 
 layField :: HasSymbolTable ctx => ctx -> CiteField -> P.CiteField
 layField _  (Author     p) = P.Author     p
@@ -179,16 +179,16 @@ layField sm (URL        n) = P.URL        $ spec sm n
 layField sm (HowPub     s) = P.HowPub     $ spec sm s
 layField _  (Editor     p) = P.Editor     p
 
-makeL :: HasSymbolTable ctx => ctx -> ListType -> T.ListType
-makeL sm (Bullet bs)      = T.Enum        $ map (item sm) bs
-makeL sm (Number ns)      = T.Item        $ map (item sm) ns
-makeL sm (Simple ps)      = T.Simple      $ map (\(x,y) -> (spec sm x, item sm y)) ps
-makeL sm (Desc ps)        = T.Desc        $ map (\(x,y) -> (spec sm x, item sm y)) ps
-makeL sm (Definitions ps) = T.Definitions $ map (\(x,y) -> (spec sm x, item sm y)) ps
+makeL :: HasSymbolTable ctx => ctx -> ListType -> P.ListType
+makeL sm (Bullet bs)      = P.Ordered     $ map (item sm) bs
+makeL sm (Number ns)      = P.Unordered   $ map (item sm) ns
+makeL sm (Simple ps)      = P.Simple      $ map (\(x,y) -> (spec sm x, item sm y)) ps
+makeL sm (Desc ps)        = P.Desc        $ map (\(x,y) -> (spec sm x, item sm y)) ps
+makeL sm (Definitions ps) = P.Definitions $ map (\(x,y) -> (spec sm x, item sm y)) ps
 
-item :: HasSymbolTable ctx => ctx -> ItemType -> T.ItemType
-item sm (Flat i)     = T.Flat   (spec sm i)
-item sm (Nested t s) = T.Nested (spec sm t) (makeL sm s)
+item :: HasSymbolTable ctx => ctx -> ItemType -> P.ItemType
+item sm (Flat i)     = P.Flat   (spec sm i)
+item sm (Nested t s) = P.Nested (spec sm t) (makeL sm s)
 
 makePairs :: HasSymbolTable ctx => ctx -> DType -> [(String,[T.LayoutObj])]
 makePairs m (Data c) = [

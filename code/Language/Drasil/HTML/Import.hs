@@ -161,13 +161,13 @@ lay (Bib bib)           sm = H.Bib $ map (flip layCite sm) bib
 
 -- | For importing bibliography
 -- Slight hack: for theses, make that the Journal
-layCite :: HasSymbolTable s => Citation -> s -> H.Citation
-layCite (Citation Book      fields) sm = H.Book      $ map (flip layField sm) fields
-layCite (Citation Article   fields) sm = H.Article   $ map (flip layField sm) fields
-layCite (Citation MThesis   fields) sm = H.MThesis   $ P.HowPub (P.S "Master's thesis") : map (flip layField sm) fields
-layCite (Citation PhDThesis fields) sm = H.PhDThesis $ P.HowPub (P.S "PhD thesis") : map (flip layField sm) fields
-layCite (Citation Misc      fields) sm = H.Misc      $ map (flip layField sm) fields
-layCite (Citation Online    fields) sm = H.Online    $ map (flip layField sm) fields
+layCite :: HasSymbolTable s => Citation -> s -> P.Citation
+layCite (Citation Book      fields) sm = P.Book      $ map (flip layField sm) fields
+layCite (Citation Article   fields) sm = P.Article   $ map (flip layField sm) fields
+layCite (Citation MThesis   fields) sm = P.MThesis   $ P.HowPub (P.S "Master's thesis") : map (flip layField sm) fields
+layCite (Citation PhDThesis fields) sm = P.PhDThesis $ P.HowPub (P.S "PhD thesis") : map (flip layField sm) fields
+layCite (Citation Misc      fields) sm = P.Misc      $ map (flip layField sm) fields
+layCite (Citation Online    fields) sm = P.Online    $ map (flip layField sm) fields
 
 layField :: HasSymbolTable s => CiteField -> s -> P.CiteField
 layField (Author     p)   _ = P.Author     p
@@ -192,17 +192,17 @@ layField (HowPub     s)  sm = P.HowPub     $ spec s sm
 layField (Editor     p)   _ = P.Editor     p
 
 -- | Translates lists
-makeL :: HasSymbolTable s => ListType -> s -> H.ListType
-makeL (Bullet bs)      sm = H.Unordered   $ map (flip item sm) bs
-makeL (Number ns)      sm = H.Ordered     $ map (flip item sm) ns
-makeL (Simple ps)      sm = H.Simple      $ map (\(x,y) -> (spec x sm, item y sm)) ps
-makeL (Desc ps)        sm = H.Desc        $ map (\(x,y) -> (spec x sm, item y sm)) ps
-makeL (Definitions ps) sm = H.Definitions $ map (\(x,y) -> (spec x sm, item y sm)) ps
+makeL :: HasSymbolTable s => ListType -> s -> P.ListType
+makeL (Bullet bs)      sm = P.Unordered   $ map (flip item sm) bs
+makeL (Number ns)      sm = P.Ordered     $ map (flip item sm) ns
+makeL (Simple ps)      sm = P.Simple      $ map (\(x,y) -> (spec x sm, item y sm)) ps
+makeL (Desc ps)        sm = P.Desc        $ map (\(x,y) -> (spec x sm, item y sm)) ps
+makeL (Definitions ps) sm = P.Definitions $ map (\(x,y) -> (spec x sm, item y sm)) ps
 
 -- | Helper for translating list items
-item :: HasSymbolTable s => ItemType -> s -> H.ItemType
-item (Flat i)     sm = H.Flat (spec i sm)
-item (Nested t s) sm = H.Nested (spec t sm) (makeL s sm)
+item :: HasSymbolTable s => ItemType -> s -> P.ItemType
+item (Flat i)     sm = P.Flat (spec i sm)
+item (Nested t s) sm = P.Nested (spec t sm) (makeL s sm)
 
 -- | Translates definitions
 -- (Data defs, General defs, Theoretical models, etc.)

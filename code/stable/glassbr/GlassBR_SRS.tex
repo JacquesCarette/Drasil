@@ -337,7 +337,7 @@ This section simplifies the original problem and helps in developing the theoret
 \item[\refstepcounter{assumpnum}\atheassumpnum\label{A:responseTyA}:]The response type considered in GlassBR is flexural.
 \end{description}
 \begin{description}
-\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:ldfConstantA}:]With reference to A\ref{A:standardValuesA} the value of load duration factor ($LDF$) is a constant in GlassBR. It is calculated by the equation: $LDF=\left(\frac{{t_{d}}}{60}\right)^{\frac{m}{16}}$. Using this, $LDF=0.27$.
+\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:ldfConstantA}:]With reference to A\ref{A:standardValuesA} the value of load duration factor ($LDF$) is a constant in GlassBR. It is calculated by the equation: $LDF=\left[\frac{{t_{d}}}{60}\right]^{\frac{m}{16}}$. Using this, $LDF=0.27$.
 \end{description}
 \subsubsection{Theoretical Models}
 \label{Sec:TMs}
@@ -835,13 +835,13 @@ Symbol & Description & Value & Unit
 \midrule
 $m$ & surface flaw parameter & $7$ & $\frac{\text{m}^{12}}{\text{N}^{7}}$
 \\
-$k$ & surface flaw parameter & $\left(2.86\right) 10^{-53}$ & $\frac{\text{m}^{12}}{\text{N}^{7}}$
+$k$ & surface flaw parameter & $2.86 10^{-53}$ & $\frac{\text{m}^{12}}{\text{N}^{7}}$
 \\
-$E$ & modulus of elasticity of glass & $\left(7.17\right) 10^{7}$ & Pa
+$E$ & modulus of elasticity of glass & $7.17 10^{7}$ & Pa
 \\
 ${t_{d}}$ & duration of load & $3$ & s
 \\
-$LDF$ & load duration factor & $\left(\frac{{t_{d}}}{60}\right)^{\frac{m}{16}}$ & Unitless
+$LDF$ & load duration factor & $\left[\frac{{t_{d}}}{60}\right]^{\frac{m}{16}}$ & Unitless
 \\
 $LSF$ & load share factor & $1$ & Unitless
 \\

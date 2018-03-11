@@ -158,6 +158,8 @@ module Language.Drasil (
   -- Change
   , Change, ChngType(..), chngType, chng, lc, ulc, chc'
   , citationRefTable, citeLookup
+  -- Goal
+  , Goal, goal, gs, gs'
 ) where
 
 import Prelude hiding (log, sin, cos, tan, sqrt, id, return, print, break, exp, product)
@@ -212,6 +214,7 @@ import Language.Drasil.Chunk.DefinedQuantity
 import Language.Drasil.Chunk.Eq (QDefinition(..), fromEqn, fromEqn', fromEqn'', getVC, equat, aqd)
 import Language.Drasil.Chunk.ExprRelat
 import Language.Drasil.Chunk.GenDefn
+import Language.Drasil.Chunk.Goal (Goal, goal, gs, gs')
 import Language.Drasil.Chunk.InstanceModel
 import Language.Drasil.Chunk.NamedIdea
 import Language.Drasil.Chunk.Quantity

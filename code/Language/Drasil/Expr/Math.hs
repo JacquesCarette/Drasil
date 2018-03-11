@@ -3,6 +3,7 @@ module Language.Drasil.Expr.Math where
 import Prelude hiding (sqrt)
 import Language.Drasil.Symbol
 import Language.Drasil.Expr
+import Language.Drasil.Space (Space)
 
 -- | Smart constructor to take the log of an expression
 log :: Expr -> Expr
@@ -57,6 +58,12 @@ dbl = Dbl
 
 str :: String -> Expr
 str = Str
+
+-- | Smart constructor for set membership
+-- FIXME: first argument really ought to be restricted to a
+-- 'variable', as IsIn should only be used as a type proxy
+isin :: Expr -> Space -> Expr
+isin = IsIn
 
 -- | Smart constructor for the summation, product, and integrals
 defint, defsum, defprod :: Symbol -> Expr -> Expr -> Expr -> Expr

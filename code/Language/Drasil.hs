@@ -7,14 +7,14 @@ module Language.Drasil (
   -- Recipe
   , Recipe(..)
   -- Expr
-  , Expr(IsIn,FCall,Grouping,Case)
+  , Expr(FCall,Grouping,Case)
   , Relation, DerivType(..), RealInterval(..), Inclusive(..)
   , ($=), ($<), ($<=), ($>), ($>=), ($^), ($&&), ($||), ($=>), ($<=>), ($.)
   , sy -- old "Chunk" constructor C
   , deriv, pderiv
   -- Expr.Math
   , log, abs, sin, cos, tan, sec, csc, cot, exp, sqrt, square, euclidean, vars
-  , dim, idx, int, dbl, str
+  , dim, idx, int, dbl, str, isin
   , sum_all, defsum, prod_all, defprod, defint, int_all
   , cross, m2x2, vec2D, dgnl2x2
   -- all the stuff from Unicode
@@ -166,7 +166,7 @@ import Language.Drasil.Expr (Expr(..), Relation, DerivType(..),
           RealInterval(..), Inclusive(..), sy, deriv, pderiv,
           ($=), ($<), ($<=), ($>), ($>=), ($^), ($&&), ($||), ($=>), ($<=>), ($.))
 import Language.Drasil.Expr.Math (log, sin, cos, tan, sqrt, square, sec, csc, cot, exp,
-          dim, idx, int, dbl, str,
+          dim, idx, int, dbl, str, isin,
           sum_all, defsum, prod_all, defprod,
           cross, m2x2, vec2D, dgnl2x2, euclidean, defint, int_all)
 import Language.Drasil.Expr.Extract (vars)

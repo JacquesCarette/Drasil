@@ -195,7 +195,7 @@ eqN n = phrase equation +:+ sParen (S $ show n)
 
 --Produces a sentence that displays the constraints in a {}.
 displayConstrntsAsSet :: Quantity a => a -> [String] -> Sentence
-displayConstrntsAsSet sym listOfVals = E $ (sy sym) `IsIn` (DiscreteS listOfVals)
+displayConstrntsAsSet sym listOfVals = E $ (sy sym) `isin` (DiscreteS listOfVals)
 
 {-BELOW IS TO BE MOVED TO EXAMPLE/DRASIL/SECTIONS-}
 

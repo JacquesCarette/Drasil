@@ -1,6 +1,6 @@
 module Drasil.SSP.Body (ssp_srs, ssp_code, sspSymMap) where
 
-import Language.Drasil
+import Language.Drasil hiding (organization)
 import Data.Drasil.SI_Units
 import Control.Lens ((^.))
 import Prelude hiding (sin, cos, tan)
@@ -92,8 +92,12 @@ ssp_si = SI {
   _defSequence = [Parallel (head sspDataDefs) (tail sspDataDefs)],
   _constraints = sspConstrained,
   _constants = [],
-  _sysinfodb = sspSymMap
+  _sysinfodb = sspSymMap,
+  _refdb = sspRefDB
 }
+
+sspRefDB :: ReferenceDB
+sspRefDB = rdb [] [] [] sspCitations -- FIXME: Convert the rest to new chunk types
 
 mkSRS :: DocDesc
 mkSRS = RefSec (RefProg intro
@@ -105,7 +109,7 @@ mkSRS = RefSec (RefProg intro
       EmptyS
     , IOrgSec orgSecStart inModel (SRS.inModel SRS.missingP []) orgSecEnd]) :
     --FIXME: issue #235
-  map Verbatim [s3, s4, s5, s6, s7] ++ [Bibliography sspCitations]
+  map Verbatim [s3, s4, s5, s6, s7] ++ (Bibliography : [])
   
 ssp_srs :: Document
 ssp_srs = mkDoc mkSRS (for) ssp_si
@@ -257,7 +261,7 @@ s4_1_2_p1 = physSystIntro slope how intrslce slice (S "slice base")
   fig_indexconv
   where how = S "as a series of" +:+ phrase slice +:+. plural element
 
-physSystIntro :: (NamedIdea a, NamedIdea b, NamedIdea c, LayoutObj d) =>
+physSystIntro :: (NamedIdea a, NamedIdea b, NamedIdea c, Referable d) =>
   a -> Sentence -> b -> c -> Sentence -> d -> Contents
 physSystIntro what how p1 p2 p3 indexref = foldlSP [
   at_start analysis, S "of the", phrase what, S "is performed by looking at",
@@ -283,11 +287,11 @@ s4_1_2_p2 = foldlSP [S "A", phrase fbd, S "of the", plural force,
 fig_indexconv :: Contents
 fig_indexconv = fig (foldlSent_ [S "Index convention for numbering",
   phrase slice `sAnd` phrase intrslce,
-  phrase force, plural variable]) "IndexConvention.png"
+  phrase force, plural variable]) "IndexConvention.png" "IndexConvention"
 
 fig_forceacting :: Contents
 fig_forceacting = fig (at_start' force +:+ S "acting on a" +:+
-  phrase slice) "ForceDiagram.png"
+  phrase slice) "ForceDiagram.png" "ForceDiagram"
 
 -- SECTION 4.1.3 --
 s4_1_3 = goalStmtF (map (\(x, y) -> x `ofThe` y) [

@@ -11,7 +11,7 @@ import Language.Drasil
 import qualified Drasil.SRS as SRS
 import Data.Drasil.SentenceStructures (ofThe, ofThe',
   foldlList, foldlsC, refineChain, foldlSP)
-import Data.Drasil.Concepts.Documentation
+import Data.Drasil.Concepts.Documentation as Doc
 import Data.Drasil.Concepts.Computation (algorithm)
 
 
@@ -42,7 +42,7 @@ developmentProcessParagraph = foldlSP [S "This", phrase document,
 introductionSubsections :: Sentence
 introductionSubsections = foldlList (map (\(x,y) -> x `ofThe` y) 
   [(phrase scope, phrase system), 
-  (phrase organization, phrase document), 
+  (phrase Doc.organization, phrase document), 
   (plural characteristic, phrase intReader)])
 
 -------------------------
@@ -125,7 +125,7 @@ intReaderIntro topic1 topic2 progName stdrd sectionRef =
   stdrd, S "The", (plural user), S "of", (short progName),
   S "can have a lower level of expertise, as explained in", (makeRef sectionRef)]]
 
--- | Organization of the document section constructor.  => Sentence -> c -> Section -> Sentence -> Section
+-- | Doc.organization of the document section constructor.  => Sentence -> c -> Section -> Sentence -> Section
 orgSec :: NamedIdea c => Sentence -> c -> Section -> Sentence -> Section
 orgSec i b s t = SRS.orgOfDoc (orgIntro i b s t) []
 

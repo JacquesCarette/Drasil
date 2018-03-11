@@ -4,7 +4,10 @@ import Control.Lens ((^.))
 import Prelude hiding (id)
 import Language.Drasil.Expr (Expr(..), Oper(..), BinOp(..), sy,
     DerivType(..), EOperator(..), ($=), RealRange(..), DomainDesc(..))
+import Language.Drasil.Chunk.AssumpChunk
 import Language.Drasil.Expr.Extract
+import Language.Drasil.Chunk.Change (chng, chngType, ChngType(..))
+import Language.Drasil.Chunk.Concept (defn)
 import Language.Drasil.Spec
 import qualified Language.Drasil.TeX.AST as T
 import qualified Language.Drasil.Printing.AST as P
@@ -12,18 +15,20 @@ import Language.Drasil.Unicode (Special(Partial))
 import Language.Drasil.Chunk.Eq
 import Language.Drasil.Chunk.ExprRelat (relat)
 import Language.Drasil.Chunk.NamedIdea (term)
-import Language.Drasil.Chunk.Concept (defn)
 import Language.Drasil.Chunk.Quantity (Quantity(..))
 import Language.Drasil.Chunk.SymbolForm (eqSymb,Stage(Equational))
 import Language.Drasil.ChunkDB (getUnitLup, HasSymbolTable(..))
+import Language.Drasil.Chunk.ReqChunk (requires)
+import Language.Drasil.Chunk.Citation ( Citation, CiteField(..), HP(..)
+                                      , citeID, externRefT, fields)
 import Language.Drasil.Config (verboseDDDescription, numberedDDEquations, numberedTMEquations)
 import Language.Drasil.Document
-import Language.Drasil.Symbol
 import Language.Drasil.Misc (unit'2Contents)
-import Language.Drasil.SymbolAlphabet
 import Language.Drasil.NounPhrase (phrase, titleize)
+import Language.Drasil.Reference
+import Language.Drasil.Symbol
+import Language.Drasil.SymbolAlphabet
 import Language.Drasil.Unit (usymb)
-import Language.Drasil.Citations (Citation(..),CiteField(..),CitationKind(..))
 
 expr :: HasSymbolTable ctx => Expr -> ctx -> P.Expr
 expr (Dbl d)            _ = P.Dbl  d
@@ -83,7 +88,7 @@ spec _  (G g)          = P.G g
 spec _  (Sp s)         = P.Sp s
 spec sm (F f s)        = spec sm (accent f s)
 spec _  (P s)          = P.N s
-spec sm (Ref t r)      = P.Ref t (spec sm r)
+spec sm (Ref t r n)    = P.Ref t r (P.S r)
 spec sm (Quote q)      = P.S "``" P.:+: spec sm q P.:+: P.S "\""
 spec _  EmptyS         = P.EmptyS
 spec sm (E e)          = P.E $ expr e sm
@@ -109,78 +114,65 @@ createLayout :: HasSymbolTable ctx => ctx -> Sections -> [T.LayoutObj]
 createLayout sm = map (sec sm 0)
 
 sec :: HasSymbolTable ctx => ctx -> Int -> Section -> T.LayoutObj
-sec sm depth x@(Section title contents) =
-  T.Section depth (spec sm title) (map (layout sm depth) contents) (spec sm (refName x))
+sec sm depth x@(Section title contents _) =
+  T.Section depth (spec sm title) (map (layout sm depth) contents) (P.S (refAdd x))
 
 lay :: HasSymbolTable ctx => ctx -> Contents -> T.LayoutObj
-lay sm x@(Table hdr lls t b)
+lay sm x@(Table hdr lls t b _)
   | null lls || length hdr == length (head lls) = T.Table ((map (spec sm) hdr) :
-      (map (map (spec sm)) lls)) (spec sm (refName x)) b (spec sm t)
+      (map (map (spec sm)) lls)) (P.S (refAdd x)) b (spec sm t)
   | otherwise = error $ "Attempting to make table with " ++ show (length hdr) ++
                         " headers, but data contains " ++
                         show (length (head lls)) ++ " columns."
 lay sm (Paragraph c)         = T.Paragraph (spec sm c)
-lay sm (EqnBlock c)          = T.EqnBlock (P.E (expr c sm))
+lay sm (EqnBlock c _)        = T.EqnBlock (P.E (expr c sm))
 --lay (CodeBlock c)         = T.CodeBlock c
-lay sm x@(Definition c)      = T.Definition (makePairs sm c) (spec sm (refName x))
-lay sm (Enumeration cs)      = T.List $ makeL sm cs
-lay sm x@(Figure c f wp)     = T.Figure (spec sm (refName x)) (spec sm c) f wp
-lay sm x@(Requirement r)     =
-  T.Requirement (spec sm (phrase (r ^. term))) (spec sm (refName x))
-lay sm x@(Assumption a)      =
-  T.Assumption (spec sm (phrase $ a ^. term)) (spec sm (refName x))
-lay sm x@(LikelyChange lc)   =
-  T.LikelyChange (spec sm (phrase $ lc ^. term))
-  (spec sm (refName x))
-lay sm x@(UnlikelyChange ucc) =
-  T.UnlikelyChange (spec sm (phrase $ ucc ^. term))
-  (spec sm (refName x))
-lay sm x@(Graph ps w h t)    = T.Graph (map (\(y,z) -> (spec sm y, spec sm z)) ps)
-                               w h (spec sm t) (spec sm (refName x))
-lay sm (TMod ps r _)         = T.Definition (map (\(x,y) ->
-  (x, map (lay sm) y)) ps) (spec sm r)
-lay sm (DDef ps r _)         = T.Definition (map (\(x,y) ->
-  (x, map (lay sm) y)) ps) (spec sm r)
-lay sm (Defnt dtyp pairs rn) = T.Defnt dtyp (layPairs pairs) (spec sm rn)
+lay sm x@(Definition c)       = T.Definition (makePairs sm c) (P.S (refAdd x))
+lay sm (Enumeration cs)       = T.List $ makeL sm cs
+lay sm x@(Figure c f wp _)    = T.Figure (P.S (refAdd x)) (spec sm c) f wp
+lay sm x@(Requirement r)      =
+  T.Requirement (spec sm (requires r)) (P.S (refAdd x))
+lay sm x@(Assumption a)       =
+  T.Assumption (spec sm (assuming a)) (P.S (refAdd x))
+lay sm x@(Change lc)    = (if (chngType lc) == Likely then 
+  T.LikelyChange else T.UnlikelyChange) (spec sm (chng lc)) (P.S (refAdd x))
+lay sm x@(Graph ps w h t _)   = T.Graph (map (\(y,z) -> (spec sm y, spec sm z)) ps)
+                               w h (spec sm t) (P.S (refAdd x))
+lay sm (Defnt dtyp pairs rn)  = T.Defnt dtyp (layPairs pairs) (P.S rn)
   where layPairs = map (\(x,y) -> (x, map (lay sm) y))
-lay _  (GDef)             = T.Paragraph (P.EmptyS)  -- need to implement!
-lay _  (IMod)             = T.Paragraph (P.EmptyS)  -- need to implement!
 lay sm (Bib bib)          = T.Bib $ map (layCite sm) bib
 
 -- | For importing bibliography
 layCite :: HasSymbolTable ctx => ctx -> Citation -> P.Citation
-layCite sm (Citation Book      fields) = P.Book      $ map (layField sm) fields
-layCite sm (Citation Article   fields) = P.Article   $ map (layField sm) fields
-layCite sm (Citation MThesis   fields) = P.MThesis   $ map (layField sm) fields
-layCite sm (Citation PhDThesis fields) = P.PhDThesis $ map (layField sm) fields
-layCite sm (Citation Misc      fields) = P.Misc      $ map (layField sm) fields
-layCite sm (Citation Online    fields) = P.Online    $ map (layField sm) fields
+layCite sm c = P.Cite (citeID c) (externRefT c) (map (layField sm) (fields c))
 
 layField :: HasSymbolTable ctx => ctx -> CiteField -> P.CiteField
-layField _  (Author     p) = P.Author     p
-layField sm (Title      s) = P.Title      $ spec sm s
-layField sm (Series     s) = P.Series     $ spec sm s
-layField sm (Collection s) = P.Collection $ spec sm s
-layField _  (Volume     n) = P.Volume     n
-layField _  (Edition    n) = P.Edition    n
-layField sm (Place (c, s)) = P.Place (spec sm c, spec sm s)
-layField sm (Publisher  s) = P.Publisher $ spec sm s
-layField sm (Journal    s) = P.Journal   $ spec sm s
-layField _  (Year       n) = P.Year       n
-layField _  (Date    n m y)= P.Date    n m y
-layField _  (URLdate n m y)= P.URLdate n m y
-layField _  (Page       n) = P.Page       n
-layField _  (Pages     ns) = P.Pages     ns
-layField sm (Note       s) = P.Note       $ spec sm s
-layField _  (Issue      n) = P.Issue      n
-layField sm (School     s) = P.School     $ spec sm s
-layField sm (URL        n) = P.URL        $ spec sm n
-layField sm (HowPub     s) = P.HowPub     $ spec sm s
-layField _  (Editor     p) = P.Editor     p
+layField sm (Address      s) = P.Address      $ spec sm s
+layField  _ (Author       p) = P.Author       p
+layField sm (BookTitle    b) = P.BookTitle    $ spec sm b
+layField  _ (Chapter      c) = P.Chapter      c
+layField  _ (Edition      e) = P.Edition      e
+layField  _ (Editor       e) = P.Editor       e
+layField sm (Institution  i) = P.Institution  $ spec sm i
+layField sm (Journal      j) = P.Journal      $ spec sm j
+layField  _ (Month        m) = P.Month        m
+layField sm (Note         n) = P.Note         $ spec sm n
+layField  _ (Number       n) = P.Number       n
+layField sm (Organization o) = P.Organization $ spec sm o
+layField  _ (Pages        p) = P.Pages        p
+layField sm (Publisher    p) = P.Publisher    $ spec sm p
+layField sm (School       s) = P.School       $ spec sm s
+layField sm (Series       s) = P.Series       $ spec sm s
+layField sm (Title        t) = P.Title        $ spec sm t
+layField sm (Type         t) = P.Type         $ spec sm t
+layField  _ (Volume       v) = P.Volume       v
+layField  _ (Year         y) = P.Year         y
+layField sm (HowPublished (URL  u)) = P.HowPublished (P.URL  $ spec sm u)
+layField sm (HowPublished (Verb v)) = P.HowPublished (P.Verb $ spec sm v)
 
 makeL :: HasSymbolTable ctx => ctx -> ListType -> P.ListType
 makeL sm (Bullet bs)      = P.Ordered     $ map (item sm) bs
-makeL sm (Number ns)      = P.Unordered   $ map (item sm) ns
+makeL sm (Numeric ns)     = P.Unordered   $ map (item sm) ns
 makeL sm (Simple ps)      = P.Simple      $ map (\(x,y) -> (spec sm x, item sm y)) ps
 makeL sm (Desc ps)        = P.Desc        $ map (\(x,y) -> (spec sm x, item sm y)) ps
 makeL sm (Definitions ps) = P.Definitions $ map (\(x,y) -> (spec sm x, item sm y)) ps

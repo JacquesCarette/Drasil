@@ -4,7 +4,7 @@ import Language.Drasil
 
 import Data.Drasil.Concepts.Documentation (output_, simulation, quantity, 
   input_, physical, constraint, condition, property)
-import Data.Drasil.Utils (getES)
+import Data.Drasil.Utils (getES, eqUnR)
 import Drasil.DocumentLanguage (mkRequirement)
 import Drasil.Sections.Requirements (nonFuncReqF)
 
@@ -47,11 +47,11 @@ req2 = mkRequirement "req2" $ foldlSentCol [
   acroIM 4 `sC` S "as follows, where", getES w_vol `isThe` phrase w_vol,
   S "and", getES tank_vol `isThe` phrase tank_vol]
 
-s5_1_2_Eqn1 = EqnBlock ((sy w_mass) $= (sy w_vol) * (sy w_density) $=
+s5_1_2_Eqn1 = eqUnR ((sy w_mass) $= (sy w_vol) * (sy w_density) $=
   ((sy tank_vol) - (sy pcm_vol)) * (sy w_density) $=
-  (((sy diam) / 2) * (sy tank_length) - (sy pcm_vol)) * (sy w_density))
+  (((sy diam) / 2) * (sy tank_length) - (sy pcm_vol)) * (sy w_density)) -- FIXME: Ref Hack
 
-s5_1_2_Eqn2 = EqnBlock ((sy pcm_mass) $= (sy pcm_vol) * (sy pcm_density))
+s5_1_2_Eqn2 = eqUnR ((sy pcm_mass) $= (sy pcm_vol) * (sy pcm_density)) -- FIXME: Ref Hack
 
 req3 = mkRequirement "req3" $ foldlSent [
   S "Verify that the", plural input_, S "satisfy the required",

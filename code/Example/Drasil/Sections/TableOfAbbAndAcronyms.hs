@@ -11,7 +11,7 @@ import Data.Drasil.Concepts.Documentation
 -- given list of abbreviated chunks
 table_of_abb_and_acronyms :: (Ord s, Idea s) => [s] -> Section
 table_of_abb_and_acronyms ls = Section (S "Abbreviations and Acronyms") 
-  [Con (table ls)]
+  [Con (table ls)] "TAbbAcc"
 
 --FIXME? Should it be called Symbol or something like Abbreviation/Acronym?
 --FIXME? Should it be "Description" or "Term" or something else?
@@ -22,4 +22,4 @@ table ls = let chunks = filter (isJust . getA) ls in
   [(\ch -> maybe (error "should never happen") S (getA ch)) , 
    (\ch -> titleize ch)]
   chunks)
-  (S "Abbreviations and Acronyms") False
+  (S "Abbreviations and Acronyms") False "TAbbAcc"

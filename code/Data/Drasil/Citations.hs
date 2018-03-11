@@ -1,6 +1,6 @@
 module Data.Drasil.Citations (
   koothoor2013, parnas1986, smithLai2005,
-  journalCGJ
+  jnlCGJ
   ) where
 
 import Language.Drasil --(S,(:+:),(+:+),sC,phrase,F,Accent(..),Citation(..),CiteField(..))
@@ -14,47 +14,30 @@ import Data.Drasil.Software.Products (sciCompS)
 
 koothoor2013, parnas1986, smithLai2005 :: Citation
 
-koothoor2013 = Citation MThesis [
-  Author [nKoothoor],
-  Title $ S "A document drive approach to certifying"
-          +:+ phrase sciCompS,
-  School $ S "McMaster University",
-  Place (S "Hamilton", S "Canada"),
-  Year 2013]
---FIXME: Place isn't displayed in TeX?
+koothoor2013 = 
+  cMThesis "koothoor2013" [nKoothoor] 
+  (S "A document drive approach to certifying" +:+ phrase sciCompS)
+  (S "McMaster University") 2013 [address (S "Hamilton, ON, Canada")]
   
-parnas1986 = Citation Article [
-  Author [dParnas, pcClements],
-  Title $ S "A rational design process: How and why to fake it",
-  Journal $ S "IEEE Transactions on Software Engineering",
-  Volume 12,
-  Issue 2,
-  Pages (251,257),
-  Year 1986, --February, but day unknown
-  Place (S "Washington", S "USA")]
+parnas1986 = cArticle "parnas1986" [dParnas, pcClements] 
+  (S "A rational design process: How and why to fake it")
+  (S "IEEE Transactions on Software Engineering") 1986
+  [month Feb, volume 12, number 2, pages [251,257], address (S "Washington, USA")]
 
-smithLai2005 = Citation Article 
-  [
-  Author [spencerSmith, lLai],
-  Title (S "A new requirements template for scientific computing"),
-  Journal (S "Proceedings of the First International Workshop on" +:+
+smithLai2005 = cInProceedings "smithLai2005" [spencerSmith, lLai]
+  (S "A new requirements template for scientific computing")
+  (S "Proceedings of the First International Workshop on" +:+
   S "Situational Requirements Engineering Processes - Methods," +:+
   S "Techniques and Tools to Support Situation-Specific Requirements" +:+
-  S "Engineering Processes, SREP'05"),
-  Editor [pjAgerfalk, nKraiem, jRalyte],
-  Place (S "Paris", S "France"),
-  Pages (107, 121),
-  Note (S "In conjunction with 13th IEEE International Requirements" +:+
-  S "Engineering Conference,"),
-  Year 2005
-  ] 
+  S "Engineering Processes, SREP'05") 2005
+  [ editor [pjAgerfalk, nKraiem, jRalyte], address (S "Paris, France")
+  , pages [107,121], 
+  note (S "In conjunction with 13th IEEE International Requirements" +:+
+  S "Engineering Conference,")] 
 
 ------------------------
 -- COMMON CITE-FIELDS --
 ------------------------
 
-jnlCGJ :: CiteField
-jnlCGJ = Journal $ S "Canadian Geotechnical Journal"
-
-journalCGJ :: Integer -> Integer -> [CiteField]
-journalCGJ vol issue = [jnlCGJ, Volume vol, Issue issue]
+jnlCGJ :: Sentence
+jnlCGJ = S "Canadian Geotechnical Journal"

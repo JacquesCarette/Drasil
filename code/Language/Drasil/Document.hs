@@ -1,14 +1,14 @@
 -- | Document Description Language
 module Language.Drasil.Document where
-import Language.Drasil.Chunk (uid)
+
+import Language.Drasil.Chunk.AssumpChunk
+import Language.Drasil.Chunk.Change
 import Language.Drasil.Chunk.Eq
 import Language.Drasil.Chunk.Relation
-import Language.Drasil.Chunk.NamedIdea
-import Language.Drasil.Spec (Sentence(..), RefType(..), (+:+))
-import Language.Drasil.RefHelpers
+import Language.Drasil.Chunk.ReqChunk
+import Language.Drasil.Spec (Sentence(..), RefAdd)
 import Language.Drasil.Expr
-import Language.Drasil.Citations
-import Control.Lens ((^.))
+import Language.Drasil.Chunk.Citation (BibRef)
 
 type Title    = Sentence
 type Author   = Sentence
@@ -31,40 +31,29 @@ data SecCons = Sub Section
              | Con Contents
 
 -- | Sections have a title ('Sentence') and a list of contents ('SecCons')
-data Section = Section Title [SecCons]
+data Section = Section Title [SecCons] RefAdd
 
 -- | Types of layout objects we deal with explicitly
-data Contents = Table [Sentence] [[Sentence]] Title Bool
+data Contents = Table [Sentence] [[Sentence]] Title Bool RefAdd
   -- ^ table has: header-row data(rows) label/caption showlabel?
                | Paragraph Sentence -- ^ Paragraphs are just sentences.
-               | EqnBlock Expr
+               | EqnBlock Expr RefAdd
      --        CodeBlock Code   -- GOOL complicates this.  Removed for now.
                | Definition DType
-               -- ^ Data/General definition or theoretical model. SymbolMap for
-               -- looking up variables (currently a hack).
                | Enumeration ListType -- ^ Lists
-               | Figure Label Filepath MaxWidthPercent -- ^ Should use relative file path.
-               | Requirement IdeaDict
-               | Assumption IdeaDict
-               | LikelyChange IdeaDict
-               | UnlikelyChange IdeaDict
+               | Figure Label Filepath MaxWidthPercent RefAdd-- ^ Should use relative file path.
+               | Requirement ReqChunk
+               | Assumption AssumpChunk
+               | Change Change
                | Bib BibRef
      --        UsesHierarchy [(ModuleChunk,[ModuleChunk])]
-               | Graph [(Sentence, Sentence)] (Maybe Width) (Maybe Height) Label
+               | Graph [(Sentence, Sentence)] (Maybe Width) (Maybe Height) Label RefAdd
                -- ^ TODO: Fill this one in.
                ------NEW TMOD/DDEF/IM/GD BEGINS HERE------
                ---- FIXME: The above Definition will need to be removed ----
-               ---- FIXME: The below TMod, GDef, IMod, and DDef will need to be
-               --- consolidated into one type (similar to deprecated Definition)
                --------------------------------------------
-               | Defnt DType [(Identifier, [Contents])] RefName
-               | TMod [(Identifier,[Contents])] RefName RelationConcept -- Ex. (Label, Paragraph $ phrase thing) and Reference name
-               | GDef
-               | IMod
-               | DDef [(Identifier,[Contents])] RefName QDefinition --Similar to TMod
-               -------- END TMOD/DDEF/etc. ----------------
+               | Defnt DType [(Identifier, [Contents])] RefAdd
 type Identifier = String
-type RefName = Sentence
 
 -- | MaxWidthPercent should be kept in the range 1-100. 
 -- Values outside this range may have unexpected results.
@@ -73,14 +62,15 @@ type RefName = Sentence
 type MaxWidthPercent = Float
 
 data ListType = Bullet [ItemType] -- ^ Bulleted list
-              | Number [ItemType] -- ^ Enumerated List
+              | Numeric [ItemType] -- ^ Enumerated List
               | Simple [ListPair] -- ^ Simple list with items denoted by @-@
               | Desc [ListPair] -- ^ Descriptive list, renders as "Title: Item" (see 'ListPair')
               | Definitions [ListPair] -- ^ Renders a list of "@Title@ is the @Item@"
          
 data ItemType = Flat Sentence -- ^ Standard singular item
               | Nested Header ListType -- ^ Nest a list as an item
-               
+
+--FIXME: Remove Data and Theory from below.
 -- | Types of definitions
 data DType = Data QDefinition -- ^ QDefinition is the chunk with the defining 
                               -- equation used to generate the Data Definition
@@ -91,62 +81,6 @@ data DType = Data QDefinition -- ^ QDefinition is the chunk with the defining
            | TM
            | DD
 
--- | Every layout object has a reference name (for intra-document referencing)
--- and a reference type (denoting what type of reference to create)
-class LayoutObj l where
-  refName :: l -> Sentence
-  rType   :: l -> RefType
-
-instance LayoutObj Section where
-  refName (Section t _) = S "Sec:" :+: inferName t
-  rType _ = Sect
-
-instance LayoutObj Contents where
-  refName (Table _ _ l _)         = S "Table:" :+: inferName l
-  refName (Figure l _ _)            = S "Figure:" :+: inferName l
-  refName (Paragraph _)           = error "Can't reference paragraphs" --yet
-  refName (EqnBlock _)            = error "EqnBlock ref unimplemented"
---  refName (CodeBlock _)         = error "Codeblock ref unimplemented"
-  refName (Definition d)          = getDefName d
-  refName (Defnt dt _ r)          = getDefName dt +:+ r
-  refName (Enumeration _)         = error "List refs unimplemented"
-  refName (Requirement rc)        = S $ "R:" ++ alphanumOnly (rc ^. uid)
-  refName (Assumption ac)         = S $ "A:" ++ alphanumOnly (ac ^. uid)
-  refName (LikelyChange lcc)      = S $ "LC:" ++ alphanumOnly (lcc ^. uid)
-  refName (UnlikelyChange ucc)    = S $ "UC:" ++ alphanumOnly (ucc ^. uid)
---  refName (UsesHierarchy _)     = S $ "Figure:UsesHierarchy"
-  refName (Graph _ _ _ l)         = S "Figure:" :+: inferName l
-  refName (TMod _ _ _)            = error "TMod referencing unimplemented"
-  refName (IMod)                  = error "IMod referencing unimplemented"
-  refName (GDef)                  = error "GDef referencing unimplemented"
-  refName (DDef _ _ _)            = error "DDef referencing unimplemented"
-  refName (Bib _)                 = error "Bib referencing unimplemented"
-  rType (Table _ _ _ _)           = Tab
-  rType (Figure _ _ _)              = Fig
-  rType (Definition (Data qd))    = Def $ fmap S $ getA qd
-  rType (Definition (Theory rc))  = Def $ fmap S $ getA rc
-  rType (Definition _)            = Def Nothing
-  rType (Defnt _ _ _)             = Def Nothing
-  rType (Requirement r)           = Req $ fmap S $ getA r
-  rType (Assumption a)            = Assump $ fmap S $ getA a
-  rType (LikelyChange lc)         = LC $ fmap S $ getA lc
-  rType (UnlikelyChange _)        = UC
- -- rType (UsesHierarchy _)       = Fig
-  rType (Graph _ _ _ _)           = Fig
-  rType (TMod _ _ _)              = Def Nothing
-  rType (IMod)                    = Def Nothing
-  rType (GDef)                    = Def Nothing
-  rType (DDef _ _ _)              = Def Nothing
-  rType _                         = error "Attempting to reference unimplemented reference type"
-  
--- | Automatically create the label for a definition
-getDefName :: DType -> Sentence
-getDefName (Data c)   = S $ "DD:" ++ (repUnd (c ^. uid))
-getDefName (Theory c) = S $ "T:" ++ (repUnd (c ^. uid))
-getDefName TM         = S "T:"
-getDefName DD         = S "DD:"
-getDefName _          = error "Unimplemented definition type reference"
-
 ---------------------------------------------------------------------------
 -- smart constructors and combinators for making instances of the above
 -- data types.  Over time, the types should no longer be exported, and 
@@ -154,15 +88,15 @@ getDefName _          = error "Unimplemented definition type reference"
 
 -- | Smart constructor for creating Sections with introductory contents
 -- (ie. paragraphs, tables, etc.) and a list of subsections.
-section :: Sentence -> [Contents] -> [Section] -> Section
+section :: Sentence -> [Contents] -> [Section] -> RefAdd -> Section
 section title intro secs = Section title (map Con intro ++ map Sub secs)
 
 -- | Figure smart constructor. Assumes 100% of page width as max width.
-fig :: Label -> Filepath -> Contents
+fig :: Label -> Filepath -> RefAdd -> Contents
 fig l f = Figure l f 100
 
 -- | Figure smart constructor for customized max widths.
-figWithWidth :: Label -> Filepath -> MaxWidthPercent -> Contents
+figWithWidth :: Label -> Filepath -> MaxWidthPercent -> RefAdd -> Contents
 figWithWidth = Figure
 
 datadefn :: QDefinition -> Contents

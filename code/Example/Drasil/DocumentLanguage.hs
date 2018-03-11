@@ -9,7 +9,7 @@ module Drasil.DocumentLanguage where
 
 import Drasil.DocumentLanguage.Definitions
 
-import Language.Drasil
+import Language.Drasil hiding (Manual) -- Citation name conflict. FIXME: Move to different namespace
 
 import Control.Lens ((^.))
 import qualified Data.Map as Map
@@ -53,7 +53,7 @@ data DocSection = Verbatim Section
                 | LCsSec LCsSec
                 | TraceabilitySec TraceabilitySec
                 | AuxConstntSec AuxConstntSec
-                | Bibliography BibRef
+                | Bibliography
                 | AppndxSec AppndxSec
 
 --FIXME: anything with 'Verb' in it should eventually go
@@ -181,7 +181,7 @@ data SolChSpec where
 -- | Solution Characteristics Specification subsections
 data SCSSub where
   SCSSubVerb  :: Section -> SCSSub
-  Assumptions :: {-Fields  ->-} Section -> Section -> Section -> Section -> Section -> [Contents] -> SCSSub --FIXME: temporary definition?
+  Assumptions :: SCSSub
   TMs         :: Fields  -> [TheoryModel] -> SCSSub
   GDs         :: Fields  -> [GenDefn] -> DerivationDisplay -> SCSSub
   DDs         :: Fields  -> [QDefinition] -> DerivationDisplay -> SCSSub --FIXME: Need DD intro
@@ -234,7 +234,7 @@ mkSections si l = foldr doit [] l
     doit (StkhldrSec sts)    ls = mkStkhldrSec sts : ls
     doit (SSDSec ss)         ls = mkSSDSec si ss : ls
     doit (AuxConstntSec acs) ls = mkAuxConsSec acs : ls
-    doit (Bibliography bib)  ls = mkBib bib : ls
+    doit Bibliography        ls = mkBib (citeDB si) : ls
     doit (GSDSec gs)         ls = mkGSDSec gs : ls 
     doit (ScpOfProjSec sop)  ls = mkScpOfProjSec sop : ls
     doit (ReqrmntSec r)      ls = mkReqrmntSec r : ls
@@ -246,7 +246,8 @@ mkSections si l = foldr doit [] l
 -- | Helper for creating the reference section and subsections
 mkRefSec :: SystemInformation -> RefSec -> Section
 mkRefSec _  (RefVerb s) = s
-mkRefSec si (RefProg c l) = section (titleize refmat) [c] (foldr (mkSubRef si) [] l)
+mkRefSec si (RefProg c l) = section (titleize refmat) [c] 
+  (foldr (mkSubRef si) [] l) "RefMat"
   where
     mkSubRef :: SystemInformation -> RefTab -> [Section] -> [Section]
     mkSubRef (SI {_sysinfodb = db})  TUnits l' =
@@ -254,10 +255,11 @@ mkRefSec si (RefProg c l) = section (titleize refmat) [c] (foldr (mkSubRef si) [
     mkSubRef (SI {_sysinfodb = db}) (TUnits' con) l' =
         table_of_units (sort $ Map.elems $ db ^. unitTable) (tuIntro con) : l'
     mkSubRef (SI {_quants = v}) (TSymb con) l' = 
-      (Section (titleize tOfSymb) 
-      (map Con [tsIntro con, (table Equational (
-         sortBy (compare `on` eqSymb) $
-         filter (\q -> hasStageSymbol q Equational) (nub v)) at_start)])) : l'
+      (SRS.tOfSymb
+      [tsIntro con, (table Equational (
+         sortBy (compare `on` eqSymb) $ 
+         filter (\q -> hasStageSymbol q Equational) 
+         (nub v)) at_start)] []) : l'
     mkSubRef (SI {_concepts = cccs}) (TSymb' f con) l' = (mkTSymb cccs f con) : l'
     mkSubRef (SI {_sysinfodb = db}) TAandA l' = 
       (table_of_abb_and_acronyms $ sortBy (compare `on` (fromJust . getA)) $
@@ -267,8 +269,9 @@ mkRefSec si (RefProg c l) = section (titleize refmat) [c] (foldr (mkSubRef si) [
 -- | Helper for creating the table of symbols
 mkTSymb :: (Quantity e, Concept e, Ord e) => 
   [e] -> LFunc -> [TSIntro] -> Section
-mkTSymb v f c = Section (titleize tOfSymb) (map Con [tsIntro c, 
-  table Equational (sort $ filter (\q -> hasStageSymbol q Equational) (nub v)) (lf f)])
+mkTSymb v f c = SRS.tOfSymb [tsIntro c, 
+  table Equational (sort $ filter (\q -> hasStageSymbol q Equational) 
+  (nub v)) (lf f)] []
   where lf Term = at_start
         lf Defn = (^. defn)
         lf (TermExcept cs) = (\x -> if (x ^. uid) `elem` (map (^. uid) cs) then
@@ -430,7 +433,9 @@ mkSolChSpec si (SCSProg l) =
       SRS.inModel (concat (map (\x -> instanceModel fields (_sysinfodb si') x : derivation x) ims)) [] : l'
     mkSubSCS si' (IMs fields ims _) l' = SRS.inModel 
       (map (instanceModel fields (_sysinfodb si')) ims) [] : l'
-    mkSubSCS _ (Assumptions r1 r2 r3 r4 r5 o) l' = (SSD.assumpF r1 r2 r3 r4 r5 o) : l'
+    mkSubSCS (SI {_refdb = db}) Assumptions l' = 
+      (SSD.assumpF tmStub gdStub ddStub imStub lcStub
+      (map Assumption $ assumptionsFromDB (db ^. assumpRefTable))) : l'
     mkSubSCS _ (Constraints a b c d) l' = (SSD.datConF a b c d) : l'
     inModSec = (SRS.inModel [Paragraph EmptyS] []) 
     --FIXME: inModSec should be replaced with a walk
@@ -439,6 +444,14 @@ mkSolChSpec si (SCSProg l) =
     -- then error out if necessary.
     
 {--}
+
+-- | Section stubs for implicit referencing
+tmStub, gdStub, ddStub, imStub, lcStub :: Section
+tmStub = SRS.thModel  [] []
+gdStub = SRS.genDefn  [] []
+ddStub = SRS.dataDefn [] []
+imStub = SRS.inModel  [] []
+lcStub = SRS.likeChg  [] []
 
 -- | Helper for making the 'Requirements' section
 mkReqrmntSec :: ReqrmntSec -> Section
@@ -477,7 +490,7 @@ mkAuxConsSec (AuxConsProg key listOfCons) = (AC.valsOfAuxConstantsF key listOfCo
 
 -- | Helper for making the bibliography section
 mkBib :: BibRef -> Section
-mkBib bib = section (titleize' reference) [Bib bib] []
+mkBib bib = SRS.reference [Bib bib] []
 
 {--}
 
@@ -495,19 +508,11 @@ siSys (SI {_sys = sys}) = nw sys
 --BELOW IS IN THIS FILE TEMPORARILY--
 --Creates Contents using an uid and description (passed in as a Sentence).
 mkAssump :: String -> Sentence -> Contents
-mkAssump i desc = Assumption $ nw $ nc i (nounPhraseSent desc)
-
-mkAssumpCustom :: String -> Sentence -> String -> Contents
-mkAssumpCustom i desc enid = Assumption $ nw $ commonIdea i (nounPhraseSent desc) enid
+mkAssump i desc = Assumption $ ac' i desc 
 
 mkRequirement :: String -> Sentence -> Contents
-mkRequirement i desc = Requirement $ nw $ nc i $ nounPhraseSent desc
-
-mkRequirementCustom :: String -> Sentence -> String -> Contents
-mkRequirementCustom i desc enid = Requirement $ nw $ commonIdea i (nounPhraseSent desc) enid
+mkRequirement i desc = Requirement $ frc i desc (S i) [] --FIXME: HACK - Should have explicit refname
 
 mkLklyChnk :: String -> Sentence -> Contents
-mkLklyChnk i desc = LikelyChange $ nw $ nc i $ nounPhraseSent desc
+mkLklyChnk i desc = Change $ lc i desc (S i) [] -- FIXME: HACK -- See above
 
-mkLklyChnkCustom :: String -> Sentence -> String -> Contents
-mkLklyChnkCustom i desc enid = LikelyChange $ nw $ commonIdea i (nounPhraseSent desc) enid

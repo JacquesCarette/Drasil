@@ -4,7 +4,7 @@ import Data.List (nub)
 
 import Language.Drasil.Config (hyperSettings, fontSize,bibFname)
 import Language.Drasil.TeX.Monad
-import Language.Drasil.TeX.AST
+import Language.Drasil.TeX.AST hiding (URL)
 import Language.Drasil.TeX.Helpers
 
 -- FIXME: this really shouldn't be in code, it should be data!
@@ -25,6 +25,7 @@ data Package = AMSMath
              | BibLaTeX
              | Tabu --adds auto column width feature for tables 
              | Mathtools --line breaks for long fractions and cases
+             | URL
              deriving Eq
 
 addPackage :: Package -> D
@@ -47,6 +48,7 @@ addPackage FileContents = usepackage "filecontents"
 addPackage BibLaTeX  = command1o "usepackage" (Just "backend=bibtex") "biblatex"
 addPackage Tabu      = usepackage "tabu"
 addPackage Mathtools = usepackage "mathtools"
+addPackage URL       = usepackage "url"
 
 data Def = AssumpCounter
          | LCCounter
@@ -100,5 +102,5 @@ parseDoc los' = ([FullPage, HyperRef, AMSMath, AMSsymb, Mathtools, Breqn] ++
     parseDoc' (LikelyChange _ _) = ([], [LCCounter])
     parseDoc' (UnlikelyChange _ _) = ([], [UCCounter])
     parseDoc' (Graph _ _ _ _ _) = ([Caption,Tikz,Dot2Tex,AdjustBox],[])
-    parseDoc' (Bib _) = ([FileContents,BibLaTeX],[Bibliography])
+    parseDoc' (Bib _) = ([FileContents,BibLaTeX,URL],[Bibliography])
     parseDoc' _ = ([], [])-- ignore the rest?

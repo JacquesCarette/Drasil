@@ -6,6 +6,9 @@ import Language.Drasil.Unicode (Greek,Special,Special(CurlyBrOpen,CurlyBrClose,S
 import Language.Drasil.Symbol
 import Language.Drasil.Expr
 
+type RefName = Sentence
+type RefAdd  = String
+
 -- | For writing accented characters
 data Accent = Grave | Acute deriving Eq
 
@@ -25,7 +28,7 @@ data Sentence where
   P     :: Symbol -> Sentence
   F     :: Accent -> Char -> Sentence  -- Special formatting for certain special
                                        -- chars
-  Ref   :: RefType -> Sentence -> Sentence  -- Needs helper func to create Ref
+  Ref   :: RefType -> RefAdd -> RefName -> Sentence  -- Needs helper func to create Ref
                                     -- See Reference.hs
   Quote :: Sentence -> Sentence     -- Adds quotation marks around a sentence
                                     
@@ -49,30 +52,29 @@ data USymb = UName Symbol
   deriving (Eq, Ord)
 
 -- | For building references. Defines the possible type of reference.
-data RefType = Tab -- ^ Table
-             | Fig -- ^ Figure
-             | Sect -- ^ Section
-             | Def (Maybe Sentence)-- ^ Definition (includes theoretical models)
-             | Mod -- ^ Module
-             | Req (Maybe Sentence)-- ^ Requirement
-             | Assump (Maybe Sentence)-- ^ Assumption
-             | LC (Maybe Sentence)-- ^ Likely Change
-             | UC -- ^ Unlikely Change
-
+data RefType = Tab    -- ^ Table
+             | Fig    -- ^ Figure
+             | Sect   -- ^ Section
+             | Def    -- ^ Definition (includes theoretical models)
+             | Mod    -- ^ Module
+             | Req    -- ^ Requirement
+             | Assump -- ^ Assumption
+             | LC     -- ^ Likely Change
+             | UC     -- ^ Unlikely Change
+             | EqnB   -- ^ Equation Block
+             | Cite   -- ^ Citation
+             
 instance Show RefType where
-  show Tab = "Table"
-  show Fig = "Figure"
-  show Sect = "Section"
-  show Mod = "Module"
-  -- show (Req (S r)) = r
-  -- show (Assump (S a)) = a
-  -- show (LC (S lc)) = lc
-  show (Def Nothing) = "Definition"
-  show (Req Nothing) = "Requirement"
-  show (Assump Nothing) = "Assumption"
-  show (LC Nothing) = "Likely Change"
-  show UC = "Unlikely Change"
-  show _ = error "Type not recognized"
+  show Tab    = "Table"
+  show Fig    = "Figure"
+  show Sect   = "Section"
+  show Mod    = "Module"
+  show Def    = "Definition"
+  show Req    = "Requirement"
+  show Assump = "Assumption"
+  show LC     = "Likely Change"
+  show UC     = "Unlikely Change"
+  show Cite   = "Citation"
 
 -- | Helper function for wrapping sentences in parentheses.
 sParen :: Sentence -> Sentence

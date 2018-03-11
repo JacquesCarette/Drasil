@@ -1,3 +1,4 @@
+{-# Language GADTs #-}
 module Language.Drasil.HTML.AST where
 
 import Language.Drasil.Document (DType (..), MaxWidthPercent)
@@ -20,6 +21,7 @@ data LayoutObj = Table Tags [[Spec]] Label Bool Caption
                | Paragraph Contents
                | HDiv Tags [LayoutObj] Label
                | Tagless Contents
+             --  CodeBlock Code
                | Definition DType [(String,[LayoutObj])] Label
                | List ListType
                | Figure Label Caption Filepath MaxWidthPercent

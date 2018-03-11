@@ -9,7 +9,8 @@ import Data.Drasil.Concepts.Documentation
 
 -- | Table of units section builder. Takes a list of units and an introduction
 table_of_units :: IsUnit s => [s] -> Contents -> Section
-table_of_units u intro = Section (S "Table of Units") [Con intro, Con (unit_table u)]
+table_of_units u intro = Section (S "Table of Units") [Con intro, Con (unit_table u)] 
+  "ToU"
 
 -- | Creates the actual table of units from a list of units
 unit_table :: IsUnit s => [s] -> Contents
@@ -18,5 +19,5 @@ unit_table u = Table
   [(\x -> Sy (x ^. usymb)),
    (\x -> (x ^. defn) +:+ sParen (phrase x))
   ] u)
-  (S "Table of Units") False
+  (S "Table of Units") False "ToU"
 

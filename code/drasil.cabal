@@ -40,7 +40,6 @@ library
     , Language.Drasil.Expr
     , Language.Drasil.Expr.Math
     , Language.Drasil.Chunk
-    , Language.Drasil.Citations
     , Language.Drasil.Config
     , Language.Drasil.Document
     , Language.Drasil.Format
@@ -49,7 +48,6 @@ library
     , Language.Drasil.NounPhrase
     , Language.Drasil.People
     , Language.Drasil.Recipe
-    , Language.Drasil.RefHelpers
     , Language.Drasil.Reference
     , Language.Drasil.Space
     , Language.Drasil.Spec
@@ -84,8 +82,11 @@ library
     , Language.Drasil.TeX.Print
     , Language.Drasil.TeX.Monad
     , Language.Drasil.TeX.Preamble
+    , Language.Drasil.Chunk.AssumpChunk
     , Language.Drasil.Chunk.Attribute
     , Language.Drasil.Chunk.Attribute.Derivation
+    , Language.Drasil.Chunk.Change
+    , Language.Drasil.Chunk.Citation
     , Language.Drasil.Chunk.Code
     , Language.Drasil.Chunk.CommonIdea
     , Language.Drasil.Chunk.Concept
@@ -99,6 +100,7 @@ library
     , Language.Drasil.Chunk.NamedIdea
     , Language.Drasil.Chunk.Quantity
     , Language.Drasil.Chunk.Relation
+    , Language.Drasil.Chunk.ReqChunk
     , Language.Drasil.Chunk.SymbolForm
     , Language.Drasil.Chunk.Theory
     , Language.Drasil.Chunk.UncertainQuantity
@@ -145,6 +147,7 @@ executable tiny
     , Drasil.Sections.GeneralSystDesc
     , Drasil.DocumentLanguage
     , Drasil.DocumentLanguage.Definitions
+    , Drasil.DocumentLanguage.RefHelpers 
     , Drasil.Sections.AuxiliaryConstants
     , Drasil.Sections.TableOfUnits
     , Drasil.Sections.SpecificSystemDescription
@@ -195,6 +198,7 @@ executable nopcm
     , Drasil.Sections.TableOfAbbAndAcronyms
     , Drasil.DocumentLanguage
     , Drasil.DocumentLanguage.Definitions
+    , Drasil.DocumentLanguage.RefHelpers
     , Drasil.Sections.SpecificSystemDescription
     , Drasil.Sections.Introduction
     , Drasil.Sections.Requirements
@@ -238,6 +242,7 @@ executable ssp
     , Drasil.Sections.TraceabilityMandGs
     , Drasil.DocumentLanguage
     , Drasil.DocumentLanguage.Definitions
+    , Drasil.DocumentLanguage.RefHelpers 
     , Drasil.Sections.TableOfUnits
     , Drasil.Sections.AuxiliaryConstants
     , Drasil.Sections.SpecificSystemDescription
@@ -262,6 +267,7 @@ executable glassbr
   other-modules:
       Drasil.DocumentLanguage
     , Drasil.DocumentLanguage.Definitions
+    , Drasil.DocumentLanguage.RefHelpers 
     , Drasil.GlassBR.Body
     , Drasil.GlassBR.Concepts
     , Drasil.GlassBR.Unitals
@@ -303,6 +309,7 @@ executable chipmunkdocs
   other-modules:
       Drasil.DocumentLanguage
     , Drasil.DocumentLanguage.Definitions
+    , Drasil.DocumentLanguage.RefHelpers 
     , Drasil.GamePhysics.Body
     , Drasil.GamePhysics.Concepts
     , Drasil.GamePhysics.DataDefs
@@ -342,6 +349,7 @@ executable swhs
   other-modules:
       Drasil.DocumentLanguage
     , Drasil.DocumentLanguage.Definitions
+    , Drasil.DocumentLanguage.RefHelpers 
     , Drasil.Sections.SpecificSystemDescription
     , Drasil.Sections.Introduction
     , Drasil.Sections.Requirements

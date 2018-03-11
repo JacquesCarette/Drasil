@@ -13,6 +13,7 @@
 \usepackage{graphics}
 \usepackage{filecontents}
 \usepackage[backend=bibtex]{biblatex}
+\usepackage{url}
 \global\tabulinesep=1mm
 \newcounter{assumpnum}
 \newcommand{\atheassumpnum}{A\theassumpnum}
@@ -28,10 +29,10 @@
 \tableofcontents
 \newpage
 \section{Reference Material}
-\label{Sec:RefeMate}
+\label{Sec:RefMat}
 This section records information for easy reference.
 \subsection{Table of Units}
-\label{Sec:TablofUnit}
+\label{Sec:ToU}
 The unit system used throughout is SI (Syst\`{e}me International d'Unit\'{e}s). In addition to the basic units, several derived units are also used. For each unit, the table lists the symbol, a description and the SI name.
 \begin{longtable*}{l l}
 \toprule
@@ -51,10 +52,10 @@ s & time (second)
 W & power (watt)
 \\
 \bottomrule
-\label{Table:TablofUnit}
+\label{Table:ToU}
 \end{longtable*}
 \subsection{Table of Symbols}
-\label{Sec:TablofSymb}
+\label{Sec:ToS}
 The table that follows summarizes the symbols used in this document along with their units. The choice of symbols was made to be consistent with the heat transfer literature and with existing documentation for solar water heating systems. The symbols are listed in alphabetical order.
 \begin{longtabu}{l X[l] l}
 \toprule
@@ -128,10 +129,10 @@ ${\rho{}_{W}}$ & Density of water & $\frac{\text{kg}}{\text{m}^{3}}$
 $\tau{}$ & Dummy variable for integration over time & s
 \\
 \bottomrule
-\label{Table:TablofSymb}
+\label{Table:ToS}
 \end{longtabu}
 \subsection{Abbreviations and Acronyms}
-\label{Sec:AbbrandAcro}
+\label{Sec:TAbbAcc}
 \begin{longtable*}{l l}
 \toprule
 Symbol & Description
@@ -164,37 +165,37 @@ T & Theoretical Model
 TU & Typical Uncertainty
 \\
 \bottomrule
-\label{Table:AbbrandAcro}
+\label{Table:TAbbAcc}
 \end{longtable*}
 \section{Introduction}
-\label{Sec:Intr}
+\label{Sec:Intro}
 Due to increasing cost, diminishing availability, and negative environmental impact of fossil fuels, there is a higher demand for renewable energy sources and energy storage technology. Solar water heating systems provide a novel way of storing energy.
 The following section provides an overview of the Software Requirements Specification (SRS) for solar water heating systems. The developed program will be referred to as Solar Water Heating System (SWHS). This section explains the purpose of this document, the scope of the system, the organization of the document, and the characteristics of the intended reader.
 \subsection{Purpose of Document}
-\label{Sec:PurpofDocu}
+\label{Sec:DocPurpose}
 The main purpose of this document is to describe the modelling of solar water heating system. The goals and theoretical models used in the SWHS code are provided, with an emphasis on explicitly identifying assumptions and unambiguous definitions. This document is intended to be used as a reference to provide ad hoc access to all information necessary to understand and verify the model. The SRS is abstract because the contents say what problem is being solved, but do not say how to solve it.
 This document will be used as a starting point for subsequent development phases, including writing the design specification and the software verification and validation plan. The design document will show how the requirements are to be realized, including decisions on the numerical algorithms and programming environment. The verification and validation plan will show the steps that will be used to increase confidence in the software documentation and the implementation. Although the SRS fits in a series of documents that follow the so-called waterfall model, the actual development process is not constrained in any way. Even when the waterfall model is not followed, as Parnas and Clements point out, the most logical way to present the documentation is still to ``fake" a rational design process.
 \subsection{Scope of Requirements}
-\label{Sec:ScopofRequ}
+\label{Sec:ReqsScope}
 The scope of the requirements includes thermal analysis of a single solar water heating tank. Given the appropriate inputs, the code for Solar Water Heating Systems is intended to predict the temperature and thermal energy histories for the water.
 \subsection{Characteristics of Intended Reader}
-\label{Sec:CharofInteRead}
-Reviewers of this documentation should have a strong knowledge in heat transfer theory. A third or fourth year Mechanical Engineering course on this topic is recommended. The reviewers should also have an understanding of differential equations, as typically covered in first and second year Calculus courses. The users of Solar Water Heating Systems can have a lower level of expertise, as explained in Section~\ref{Sec:UserChar}.
+\label{Sec:ReaderChars}
+Reviewers of this documentation should have a strong knowledge in heat transfer theory. A third or fourth year Mechanical Engineering course on this topic is recommended. The reviewers should also have an understanding of differential equations, as typically covered in first and second year Calculus courses. The users of Solar Water Heating Systems can have a lower level of expertise, as explained in Section~\ref{Sec:UserChars}.
 \subsection{Organization of Document}
-\label{Sec:OrgaofDocu}
-The organization of this document follows the template for an SRS for scientific computing software proposed by {[}3{]} and {[}6{]} (Section~\ref{Sec:Refe}). The presentation follows the standard pattern of presenting goals, theories, definitions, and assumptions. For readers that would like a more bottom up approach, they can start reading the instance models in Section~\ref{Sec:InstMode} and trace back to find any additional information they require.
-The goal statements are refined to the theoretical models, and the theoretical models to the instance models. The instance model (Section~\ref{Sec:InstMode}) to be solved is referred to as IM1. The instance model provides the Ordinary Differential Equation (ODE) that model the solar water heating system. SWHS solves this ODE.
+\label{Sec:DocOrg}
+The organization of this document follows the template for an SRS for scientific computing software proposed by {[}3{]} and {[}6{]} (Section~\ref{Sec:References}). The presentation follows the standard pattern of presenting goals, theories, definitions, and assumptions. For readers that would like a more bottom up approach, they can start reading the instance models in Section~\ref{Sec:IMs} and trace back to find any additional information they require.
+The goal statements are refined to the theoretical models, and the theoretical models to the instance models. The instance model (Section~\ref{Sec:IMs}) to be solved is referred to as IM1. The instance model provides the Ordinary Differential Equation (ODE) that model the solar water heating system. SWHS solves this ODE.
 \section{General System Description}
-\label{Sec:GeneSystDesc}
+\label{Sec:GenSysDesc}
 This section provides general information about the system, identifies the interfaces between the system and its environment, and describes the user characteristics and the system constraints.
 \subsection{System Context}
-\label{Sec:SystCont}
-Figure~\ref{Figure::SystCont} shows the system context. A circle represents an external entity outside the software, the user in this case. A rectangle represents the software system itself (SWHS). Arrows are used to show the data flow between the system and its environment.
+\label{Sec:SysContext}
+Figure~\ref{Figure:SysCon} shows the system context. A circle represents an external entity outside the software, the user in this case. A rectangle represents the software system itself (SWHS). Arrows are used to show the data flow between the system and its environment.
 \begin{figure}
 \begin{center}
 \includegraphics[width=\textwidth]{SystemContextFigure.png}
-\caption{Figure~\ref{Figure::SystCont}: System Context}
-\label{Figure::SystCont}
+\caption{Figure~\ref{Figure:SysCon}: System Context}
+\label{Figure:SysCon}
 \end{center}
 \end{figure}
 SWHS is mostly self-contained. The only external interaction is through the user interface. The responsibilities of the user and the system are as follows:
@@ -212,10 +213,10 @@ SWHS is mostly self-contained. The only external interaction is through the user
 \end{enumerate}
 \end{enumerate}
 \subsection{User Characteristics}
-\label{Sec:UserChar}
+\label{Sec:UserChars}
 The end user of SWHS should have an understanding of undergraduate Level 1 Calculus and Physics.
 \subsection{System Constraints}
-\label{Sec:SystCons}
+\label{Sec:SysConstraints}
 There are no system constraints.
 \section{Specific System Description}
 \label{Sec:SpecSystDesc}
@@ -224,7 +225,7 @@ This section first presents the problem description, which gives a high-level vi
 \label{Sec:ProbDesc}
 SWHS is a computer program developed to investigate the heating of water in a solar water heating tank.
 \subsubsection{Terminology and Definitions}
-\label{Sec:TermandDefi}
+\label{Sec:TermDefs}
 This subsection provides a list of terms that are used in the subsequent sections and their meaning, with the purpose of reducing ambiguity and making it easier to correctly understand the requirements.
 \begin{enumerate}
 \item{Heat flux: The rate of thermal energy transfer through a given surface per unit time}
@@ -233,8 +234,8 @@ This subsection provides a list of terms that are used in the subsequent section
 \item{Transient: Changing with time}
 \end{enumerate}
 \subsubsection{Physical System Description}
-\label{Sec:PhysSystDesc}
-The physical system of SWHS, as shown in Figure~\ref{Figure:Solawateheattankwithheatfluxfromheatcoilof}, includes the following elements:
+\label{Sec:PhysSyst}
+The physical system of SWHS, as shown in Figure~\ref{Figure:Tank}, includes the following elements:
 \begin{itemize}
 \item[PS1:]Tank containing water.
 \item[PS2:]Heating coil at bottom of tank. (${q_{C}}$ represents the heat flux into the water from the coil.)
@@ -243,22 +244,22 @@ The physical system of SWHS, as shown in Figure~\ref{Figure:Solawateheattankwith
 \begin{center}
 \includegraphics[width=\textwidth]{TankWaterOnly.png}
 \caption{Solar water heating tank, with heat flux from heating coil of ${q_{C}}$}
-\label{Figure:Solawateheattankwithheatfluxfromheatcoilof}
+\label{Figure:Tank}
 \end{center}
 \end{figure}
 \subsubsection{Goal Statements}
-\label{Sec:GoalStat}
+\label{Sec:GoalStmt}
 Given the temperature of the heating coil, initial temperature of the water, and material properties, the goal statement are:
 \begin{itemize}
 \item[GS1:]predict the temperature of the water over time
 \item[GS2:]predict the change in heat energy in the water over time
 \end{itemize}
 \subsection{Solution Characteristics Specification}
-\label{Sec:SoluCharSpec}
-The instance models that govern SWHS are presented in Section~\ref{Sec:InstMode}. The information to understand the meaning of the instance models and their derivation is also presented, so that the instance models can be verified.
+\label{Sec:SolCharSpec}
+The instance models that govern SWHS are presented in Section~\ref{Sec:IMs}. The information to understand the meaning of the instance models and their derivation is also presented, so that the instance models can be verified.
 \subsubsection{Assumptions}
-\label{Sec:Assu}
-This section simplifies the original problem and helps in developing the theoretical model by filling in the missing information for the physical system. The numbers given in the square brackets refer to the Theoretical Models {[}Section~\ref{Sec:TheoMode}{]}, General Definitions {[}Section~\ref{Sec:GeneDefi}{]}, Data Definitions {[}Section~\ref{Sec:DataDefi}{]}, Instance Models {[}Section~\ref{Sec:InstMode}{]}, or Likely Changes {[}Section~\ref{Sec:LikeChan}{]}, in which the respective assumption is used.
+\label{Sec:Assumps}
+This section simplifies the original problem and helps in developing the theoretical model by filling in the missing information for the physical system. The numbers given in the square brackets refer to the Theoretical Models {[}Section~\ref{Sec:TMs}{]}, General Definitions {[}Section~\ref{Sec:GDs}{]}, Data Definitions {[}Section~\ref{Sec:DDs}{]}, Instance Models {[}Section~\ref{Sec:IMs}{]}, or Likely Changes {[}Section~\ref{Sec:LCs}{]}, in which the respective assumption is used.
 \begin{description}
 \item[\refstepcounter{assumpnum}\atheassumpnum\label{A:assump1}:]The only form of energy that is relevant for this problem is thermal energy. All other forms of energy, such as mechanical energy, are assumed to be negligible {[}\hyperref[T:t1ConsThermE]{Definition~T:t1ConsThermE}{]}.
 \end{description}
@@ -284,7 +285,7 @@ This section simplifies the original problem and helps in developing the theoret
 \item[\refstepcounter{assumpnum}\atheassumpnum\label{A:assump9}:]The temperature of the heating coil does not vary along its length {[}\hyperref[DD:ht.flux.C]{Definition~DD:ht.flux.C}{]}.
 \end{description}
 \begin{description}
-\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:assump9npnc}:]The model only accounts for charging of the tank, not discharging. The temperature of the water can only increase, or remain constant; it cannot decrease. This implies that the initial temperature is less than (or equal to) the temperature of the heating coil {[}IM1, LC\ref{LC:likeChg3}{]}.
+\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:assump9.npnc}:]The model only accounts for charging of the tank, not discharging. The temperature of the water can only increase, or remain constant; it cannot decrease. This implies that the initial temperature is less than (or equal to) the temperature of the heating coil {[}IM1, LC\ref{LC:likeChg3}{]}.
 \end{description}
 \begin{description}
 \item[\refstepcounter{assumpnum}\atheassumpnum\label{A:assump14}:]The operating temperature range of the system is such that the water is always in liquid state. That is, the temperature will not drop below the melting point temperature of water, or rise above its boiling point temperature {[}IM1, IM3{]}.
@@ -302,7 +303,7 @@ This section simplifies the original problem and helps in developing the theoret
 \item[\refstepcounter{assumpnum}\atheassumpnum\label{A:assump20}:]When considering the volume of water in the tank, the volume of the heating coil is assumed to be negligible.
 \end{description}
 \subsubsection{Theoretical Models}
-\label{Sec:TheoMode}
+\label{Sec:TMs}
 This section focuses on the general equations and laws that SWHS is based on.
 ~\newline
 \noindent \begin{minipage}{\textwidth}
@@ -319,7 +320,7 @@ Description & The above equation gives the law of conservation of energy for tra
 \\ \bottomrule \end{tabular}
 \end{minipage}\\
 \subsubsection{General Definitions}
-\label{Sec:GeneDefi}
+\label{Sec:GDs}
 This section collects the laws and equations that will be used in deriving the data definitions, which in turn are used to build the instance models.
 ~\newline
 \noindent \begin{minipage}{\textwidth}
@@ -371,7 +372,7 @@ Using the fact that $\rho{}$=$m$/$V$, (2) can be written as:
 m C \frac{d T}{d t}={q_{in}} {A_{in}}-{q_{out}} {A_{out}}+g V
 \end{dmath}
 \subsubsection{Data Definitions}
-\label{Sec:DataDefi}
+\label{Sec:DDs}
 This section collects and defines all the data needed to build the instance models. The dimension of each quantity is also given.
 ~\newline
 \noindent \begin{minipage}{\textwidth}
@@ -390,8 +391,8 @@ Description & ${q_{C}}$ is the heat flux into the water from the coil ($\frac{\t
 \\ \bottomrule \end{tabular}
 \end{minipage}\\
 \subsubsection{Instance Models}
-\label{Sec:InstMode}
-This section transforms the problem defined in Section~\ref{Sec:ProbDesc} into one which is expressed in mathematical terms. It uses concrete symbols defined in Section~\ref{Sec:DataDefi} to replace the abstract symbols in the models identified in Section~\ref{Sec:TheoMode} and Section~\ref{Sec:GeneDefi}.
+\label{Sec:IMs}
+This section transforms the problem defined in Section~\ref{Sec:ProbDesc} into one which is expressed in mathematical terms. It uses concrete symbols defined in Section~\ref{Sec:DDs} to replace the abstract symbols in the models identified in Section~\ref{Sec:TMs} and Section~\ref{Sec:GDs}.
 ~\newline
 \noindent \begin{minipage}{\textwidth}
 \begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
@@ -438,8 +439,8 @@ Description & The above equation is derived using T2. ${E_{W}}$ is the change in
 \\ \bottomrule \end{tabular}
 \end{minipage}\\
 \subsubsection{Data Constraints}
-\label{Sec:DataCons}
-Table~\ref{Table:InpuDataCons}, and Table~\ref{Table:OutpDataCons} shows the data constraints on the input and output variables, respectively. The column for physical constraints gives the physical limitations on the range of values that can be taken by the variable. The uncertainty column provides an estimate of the confidence with which the physical quantities can be measured. This information would be part of the input if one were performing an uncertainty quantification exercise. The constraints are conservative, to give the user of the model the flexibility to experiment with unusual situations. The column of typical values is intended to provide a feel for a common scenario. The column for software constraints restricts the range of inputs to reasonable values. The uncertainty column provides an estimate of the confidence with which the physical quantities can be measured. This information would be part of the input if one were performing an uncertainty quantification exercise.
+\label{Sec:DataConstraints}
+Table~\ref{Table:InDataConstraints}, and Table~\ref{Table:OutDataConstraints} shows the data constraints on the input and output variables, respectively. The column for physical constraints gives the physical limitations on the range of values that can be taken by the variable. The uncertainty column provides an estimate of the confidence with which the physical quantities can be measured. This information would be part of the input if one were performing an uncertainty quantification exercise. The constraints are conservative, to give the user of the model the flexibility to experiment with unusual situations. The column of typical values is intended to provide a feel for a common scenario. The column for software constraints restricts the range of inputs to reasonable values. The uncertainty column provides an estimate of the confidence with which the physical quantities can be measured. This information would be part of the input if one were performing an uncertainty quantification exercise.
 \begin{longtable}{l l l l l}
 \toprule
 Var & Physical Constraints & Software Constraints & Typical Value & TU
@@ -465,7 +466,7 @@ ${t_{final}}$ & ${t_{final}}>0$ & ${t_{final}}<{{t_{final}}^{max}}$ & $50000.0$ 
 \\
 \bottomrule
 \caption{Input Data Constraints}
-\label{Table:InpuDataCons}
+\label{Table:InDataConstraints}
 \end{longtable}
 \begin{longtable}{l l}
 \toprule
@@ -478,15 +479,15 @@ ${E_{W}}$ & ${E_{W}}\geq{}0$
 \\
 \bottomrule
 \caption{Output Data Constraints}
-\label{Table:OutpDataCons}
+\label{Table:OutDataConstraints}
 \end{longtable}
 \section{Requirements}
-\label{Sec:Requ}
+\label{Sec:Requirements}
 This section provides the functional requirements, the business tasks that the software is expected to complete, and the non-functional requirements, the qualities that the software is expected to exhibit.
 \subsection{Functional Requirements}
-\label{Sec:FuncRequ}
+\label{Sec:FRs}
 \begin{description}
-\item[\refstepcounter{reqnum}\rthereqnum\label{R:req1}:]Input the following quantities, which define the tank parameters, material properties and initial conditions:
+\item[\refstepcounter{reqnum}\rthereqnum\label{FR:req1}:]Input the following quantities, which define the tank parameters, material properties and initial conditions:
 \end{description}
 \begin{longtabu}{l l X[l]}
 \toprule
@@ -512,31 +513,31 @@ ${T_{init}}$ & ${}^{\circ}$C & initial temperature
 ${t_{final}}$ & s & final time
 \\
 \bottomrule
-\label{Table:InpuVariRequ}
+\label{Table:fr1list}
 \end{longtabu}
 \begin{description}
-\item[\refstepcounter{reqnum}\rthereqnum\label{R:req2}:]Use the inputs in R\ref{R:req1} to find the mass needed for IM1 to IM2, as follows, where ${V_{W}}$ is the volume of water and ${V_{tank}}$ is the volume of the cylindrical tank:
+\item[\refstepcounter{reqnum}\rthereqnum\label{FR:req2}:]Use the inputs in R\ref{FR:req1} to find the mass needed for IM1 to IM2, as follows, where ${V_{W}}$ is the volume of water and ${V_{tank}}$ is the volume of the cylindrical tank:
 \end{description}
 \begin{dmath}
 {m_{W}}={V_{W}} {\rho{}_{W}}=\frac{D}{2} L {\rho{}_{W}}
 \end{dmath}
 \begin{description}
-\item[\refstepcounter{reqnum}\rthereqnum\label{R:req3}:]Verify that the inputs satisfy the required physical constraint shown in Table~\ref{Table:InpuDataCons}.
+\item[\refstepcounter{reqnum}\rthereqnum\label{FR:req3}:]Verify that the inputs satisfy the required physical constraint shown in Table~\ref{Table:InDataConstraints}.
 \end{description}
 \begin{description}
-\item[\refstepcounter{reqnum}\rthereqnum\label{R:req4}:]Outputs and inputs quantities and derived quantities in the following list: the quantities from R\ref{R:req1}, the mass from R\ref{R:req2} and ${\tau{}_{W}}$ (from IM1).
+\item[\refstepcounter{reqnum}\rthereqnum\label{FR:req4}:]Outputs and inputs quantities and derived quantities in the following list: the quantities from R\ref{FR:req1}, the mass from R\ref{FR:req2} and ${\tau{}_{W}}$ (from IM1).
 \end{description}
 \begin{description}
-\item[\refstepcounter{reqnum}\rthereqnum\label{R:req5}:]Calculate and output the temperature of the water (${T_{W}}$($t$)) over the simulation time
+\item[\refstepcounter{reqnum}\rthereqnum\label{FR:req5}:]Calculate and output the temperature of the water (${T_{W}}$($t$)) over the simulation time
 \end{description}
 \begin{description}
-\item[\refstepcounter{reqnum}\rthereqnum\label{R:req6}:]Calculate and output the change in heat energy in the water (${E_{W}}$($t$)) over the simulation time (from IM3).
+\item[\refstepcounter{reqnum}\rthereqnum\label{FR:req6}:]Calculate and output the change in heat energy in the water (${E_{W}}$($t$)) over the simulation time (from IM3).
 \end{description}
 \subsection{Non-Functional Requirements}
-\label{Sec:Non-Requ}
+\label{Sec:NFRs}
 This problem is small in size and relatively simple, so performance is not a priority. Any reasonable implementation will be very quick and use minimal storage. Rather than performance, the non-functional requirement priorities are correctness, verifiability, understandability, reusability, and maintainability.
 \section{Likely Changes}
-\label{Sec:LikeChan}
+\label{Sec:LCs}
 \begin{description}
 \item[\refstepcounter{lcnum}\lcthelcnum\label{LC:likeChg2}:]A\ref{A:assump8} - The temperature of the heating coil will change over the course of the day, depending on the energy received from the sun.
 \end{description}
@@ -544,14 +545,14 @@ This problem is small in size and relatively simple, so performance is not a pri
 \item[\refstepcounter{lcnum}\lcthelcnum\label{LC:likeChg3}:]A\ref{A:assump9} - The temperature of the heating coil will actually change along its length as the water within it cools.
 \end{description}
 \begin{description}
-\item[\refstepcounter{lcnum}\lcthelcnum\label{LC:likeChg3}:]A\ref{A:assump9npnc}- The model currently only accounts for charging of the tank. A more complete model would also account for discharging of the tank.
+\item[\refstepcounter{lcnum}\lcthelcnum\label{LC:likeChg3}:]A\ref{A:assump9.npnc}- The model currently only accounts for charging of the tank. A more complete model would also account for discharging of the tank.
 \end{description}
 \begin{description}
 \item[\refstepcounter{lcnum}\lcthelcnum\label{LC:likeChg6}:]A\ref{A:assump15} - Any real tank cannot be perfectly insulated and will lose heat.
 \end{description}
 \section{Traceability Matrices and Graphs}
-\label{Sec:TracMatrandGrap}
-The purpose of the traceability matrices is to provide easy references on what has to be additionally modified if a certain component is changed. Every time a component is changed, the items in the column of that component that are marked with an ``X" should be modified as well. Table~\ref{Table:TracMatrShowtheConnBetwRequandInstMode} shows the dependencies of theoretical models, general definitions, data definitions, and instance models with each other. Table~\ref{Table:TracMatrShowtheConnBetwRequandInstMode} shows the dependencies of instance models, requirements, and data constraints on each other. Table~\ref{Table:TracMatrShowtheConnBetwAssuandOtheItem} shows the dependencies of theoretical models, general definitions, data definitions, instance models, and likely changes on the assumptions.
+\label{Sec:TraceMatrices}
+The purpose of the traceability matrices is to provide easy references on what has to be additionally modified if a certain component is changed. Every time a component is changed, the items in the column of that component that are marked with an ``X" should be modified as well. Table~\ref{Table:TraceyRI} shows the dependencies of theoretical models, general definitions, data definitions, and instance models with each other. Table~\ref{Table:TraceyRIs} shows the dependencies of instance models, requirements, and data constraints on each other. Table~\ref{Table:TraceyAI} shows the dependencies of theoretical models, general definitions, data definitions, instance models, and likely changes on the assumptions.
 \begin{longtable}{l l l l l l l}
 \toprule
  & T1 (\hyperref[T:t1ConsThermE]{Definition~T:t1ConsThermE}) & GD1 (\hyperref[T:nwtnCooling]{Definition~T:nwtnCooling}) & GD2 (\hyperref[T:rocTempSimp]{Definition~T:rocTempSimp}) & DD1 (\hyperref[DD:ht.flux.C]{Definition~DD:ht.flux.C}) & IM1 (\hyperref[T:eBalanceOnWtr]{Definition~T:eBalanceOnWtr}) & IM2 (\hyperref[T:heatEInWtr]{Definition~T:heatEInWtr})
@@ -571,36 +572,36 @@ IM2 (\hyperref[T:heatEInWtr]{Definition~T:heatEInWtr}) &  &  &  &  &  &
 \\
 \bottomrule
 \caption{Traceability Matrix Showing the Connections Between Requirements and Instance Models}
-\label{Table:TracMatrShowtheConnBetwRequandInstMode}
+\label{Table:TraceyRI}
 \end{longtable}
 \begin{longtable}{l l l l l l l l l l}
 \toprule
- & IM1 (\hyperref[T:eBalanceOnWtr]{Definition~T:eBalanceOnWtr}) & IM2 (\hyperref[T:heatEInWtr]{Definition~T:heatEInWtr}) & Data Constraints (Table~\ref{Table:InpuDataCons}) & R1 (R\ref{R:req1}) & R2 (R\ref{R:req2}) & R3 (R\ref{R:req3}) & R4 (R\ref{R:req4}) & R5 (R\ref{R:req5}) & R6 (R\ref{R:req6})
+ & IM1 (\hyperref[T:eBalanceOnWtr]{Definition~T:eBalanceOnWtr}) & IM2 (\hyperref[T:heatEInWtr]{Definition~T:heatEInWtr}) & Data Constraints (Table~\ref{Table:InDataConstraints}) & R1 (R\ref{FR:req1}) & R2 (R\ref{FR:req2}) & R3 (R\ref{FR:req3}) & R4 (R\ref{FR:req4}) & R5 (R\ref{FR:req5}) & R6 (R\ref{FR:req6})
 \\
 \midrule
 IM1 (\hyperref[T:eBalanceOnWtr]{Definition~T:eBalanceOnWtr}) &  &  &  &  &  &  &  &  & 
 \\
 IM2 (\hyperref[T:heatEInWtr]{Definition~T:heatEInWtr}) &  &  &  &  &  &  &  &  & 
 \\
-R1 (R\ref{R:req1}) &  &  &  &  &  &  &  &  & 
+R1 (R\ref{FR:req1}) &  &  &  &  &  &  &  &  & 
 \\
-R2 (R\ref{R:req2}) &  &  &  & X &  &  &  &  & 
+R2 (R\ref{FR:req2}) &  &  &  & X &  &  &  &  & 
 \\
-R3 (R\ref{R:req3}) &  &  & X &  &  &  &  &  & 
+R3 (R\ref{FR:req3}) &  &  & X &  &  &  &  &  & 
 \\
-R4 (R\ref{R:req4}) &  &  &  & X & X &  &  &  & 
+R4 (R\ref{FR:req4}) &  &  &  & X & X &  &  &  & 
 \\
-R5 (R\ref{R:req5}) & X &  &  &  &  &  &  &  & 
+R5 (R\ref{FR:req5}) & X &  &  &  &  &  &  &  & 
 \\
-R6 (R\ref{R:req6}) &  & X &  &  &  &  &  &  & 
+R6 (R\ref{FR:req6}) &  & X &  &  &  &  &  &  & 
 \\
 \bottomrule
 \caption{Traceability Matrix Showing the Connections Between Requirements and Instance Models}
-\label{Table:TracMatrShowtheConnBetwRequandInstMode}
+\label{Table:TraceyRIs}
 \end{longtable}
 \begin{longtable}{l l l l l l l l l l l l l l l}
 \toprule
- & A1 (A\ref{A:assump1}) & A2 (A\ref{A:assump2}) & A3 (A\ref{A:assump3}) & A4 (A\ref{A:assump4}) & A5 (A\ref{A:assump5}) & A6 (A\ref{A:assump7}) & A7 (A\ref{A:assump8}) & A8 (A\ref{A:assump9}) & A9 (A\ref{A:assump9npnc}) & A10 (A\ref{A:assump14}) & A11 (A\ref{A:assump15}) & A12 (A\ref{A:assump12}) & A13 (A\ref{A:assump13}) & A14 (A\ref{A:assump20})
+ & A1 (A\ref{A:assump1}) & A2 (A\ref{A:assump2}) & A3 (A\ref{A:assump3}) & A4 (A\ref{A:assump4}) & A5 (A\ref{A:assump5}) & A6 (A\ref{A:assump7}) & A7 (A\ref{A:assump8}) & A8 (A\ref{A:assump9}) & A9 (A\ref{A:assump9.npnc}) & A10 (A\ref{A:assump14}) & A11 (A\ref{A:assump15}) & A12 (A\ref{A:assump12}) & A13 (A\ref{A:assump13}) & A14 (A\ref{A:assump20})
 \\
 \midrule
 T1 (\hyperref[T:t1ConsThermE]{Definition~T:t1ConsThermE}) & X &  &  &  &  &  &  &  &  &  &  &  &  & 
@@ -625,26 +626,26 @@ LC4 (LC\ref{LC:likeChg6}) &  &  &  &  &  &  &  &  &  &  & X &  &  &
 \\
 \bottomrule
 \caption{Traceability Matrix Showing the Connections Between Assumptions and Other Items}
-\label{Table:TracMatrShowtheConnBetwAssuandOtheItem}
+\label{Table:TraceyAI}
 \end{longtable}
-The purpose of the traceability graphs is also to provide easy references on what has to be additionally modified if a certain component is changed. The arrows in the graphs represent dependencies. The component at the tail of an arrow is depended on by the component at the head of that arrow. Therefore, if a component is changed, the components that it points to should also be changed. Figure~\ref{Figure:TracGrapShowtheConnBetwItemofDiffSect} shows the dependencies of theoretical models, general definitions, data definitions, instance models, likely changes, and assumptions on each other. Figure~\ref{Figure:TracGrapShowtheConnBetwRequInstModeandDataCons} shows the dependencies of instance models, requirements, and data constraints on each other.
+The purpose of the traceability graphs is also to provide easy references on what has to be additionally modified if a certain component is changed. The arrows in the graphs represent dependencies. The component at the tail of an arrow is depended on by the component at the head of that arrow. Therefore, if a component is changed, the components that it points to should also be changed. Figure~\ref{Figure:TraceA} shows the dependencies of theoretical models, general definitions, data definitions, instance models, likely changes, and assumptions on each other. Figure~\ref{Figure:TraceR} shows the dependencies of instance models, requirements, and data constraints on each other.
 NOTE: Building a tool to automatically generate the graphical representation of the matrix by scanning the labels and reference can be future work.
 \begin{figure}
 \begin{center}
 \includegraphics[width=\textwidth]{ATrace.png}
 \caption{Traceability Graph Showing the Connections Between Items of Different Sections}
-\label{Figure:TracGrapShowtheConnBetwItemofDiffSect}
+\label{Figure:TraceA}
 \end{center}
 \end{figure}
 \begin{figure}
 \begin{center}
 \includegraphics[width=\textwidth]{RTrace.png}
 \caption{Traceability Graph Showing the Connections Between Requirements, Instance Models, and Data Constraints}
-\label{Figure:TracGrapShowtheConnBetwRequInstModeandDataCons}
+\label{Figure:TraceR}
 \end{center}
 \end{figure}
 \section{Values of Auxiliary Constants}
-\label{Sec:ValuofAuxiCons}
+\label{Sec:AuxConstants}
 This section contains the standard values that are used for calculations in SWHS.
 \begin{longtabu}{l X[l] l l}
 \toprule
@@ -673,51 +674,52 @@ ${{t_{final}}^{max}}$ & maximum final time & $86400$ & s
 \\
 \bottomrule
 \caption{Auxiliary Constants}
-\label{Table:AuxiCons}
+\label{Table:TAuxConsts}
 \end{longtabu}
 \section{References}
-\label{Sec:Refe}
+\label{Sec:References}
 \begin{filecontents*}{bibfile.bib}
-@article{IncroperaDewittBergmanLavine2007,
+@book{incroperaEtAl2007,
 author={Incropera, F. P. and Dewitt, D. P. and Bergman, T. L. and Lavine, A. S.},
 title={Fundamentals of Heat and Mass Transfer},
-edition={6th.},
 publisher={John Wiley and Sons},
-place={Hoboken, New Jersey},
-year={2007}}
+year={2007},
+edition={6},
+address={Hoboken, New Jersey}}
 
-@mastersthesis{Koothoor2013,
+@mastersthesis{koothoor2013,
 author={Koothoor, Nirmitha},
 title={A document drive approach to certifying scientific computing software},
 school={McMaster University},
-place={Hamilton, Canada},
-year={2013}}
+year={2013},
+address={Hamilton, ON, Canada}}
 
-@misc{Lightstone2012,
+@misc{lightstone2012,
 author={Lightstone, Marilyn},
 title={Derivation of tank/pcm model},
 year={2012},
 note={From Marilyn Lightstone's Personal Notes}}
 
-@article{ParnasClements1986,
+@article{parnas1986,
 author={Parnas, David L. and Clements, P. C.},
 title={A rational design process: How and why to fake it},
 journal={IEEE Transactions on Software Engineering},
+year={1986},
+month={feb},
 volume={12},
 number={2},
-pages={251-257},
-year={1986},
-place={Washington, USA}}
+pages={"251-257"},
+address={Washington, USA}}
 
-@article{SmithLai2005,
+@inproceedings{smithLai2005,
 author={Smith, W. Spencer and Lai, Lei},
 title={A new requirements template for scientific computing},
-journal={Proceedings of the First International Workshop on Situational Requirements Engineering Processes - Methods, Techniques and Tools to Support Situation-Specific Requirements Engineering Processes, SREP'05},
+booktitle={Proceedings of the First International Workshop on Situational Requirements Engineering Processes - Methods, Techniques and Tools to Support Situation-Specific Requirements Engineering Processes, SREP'05},
+year={2005},
 editor={Agerfalk, PJ and Kraiem, N. and Ralyte, J.},
-place={Paris, France},
-pages={107-121},
-note={In conjunction with 13th IEEE International Requirements Engineering Conference,},
-year={2005}}
+address={Paris, France},
+pages={"107-121"},
+note={In conjunction with 13th IEEE International Requirements Engineering Conference,}}
 \end{filecontents*}
 \nocite{*}
 \bibstyle{ieeetr}

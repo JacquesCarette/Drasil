@@ -3,7 +3,7 @@ module Language.Drasil (
   -- Output.Formats
     DocType(SRS,MG,MIS,Website), DocSpec(DocSpec)
   -- SystemInformation
-  , SystemInformation(..), Block(..)
+  , SystemInformation(..), Block(..), citeDB
   -- Recipe
   , Recipe(..)
   -- Expr
@@ -46,6 +46,11 @@ module Language.Drasil (
   , Reason(..), TheoryConstraint(..)
   -- Chunk.Eq
   , QDefinition(..), fromEqn, fromEqn', fromEqn'', getVC, equat
+  -- Chunk.GenDefn
+  , GenDefn, gd, gdUnit
+  -- Chunk.InstanceModel
+  , InstanceModel
+  , inCons, outCons, imOutputs, imInputs, im, imQD
   -- Chunk.Quantity
   , Quantity(..), QuantityDict, qw, ConVar(..), mkQuant
   -- Chunk.UncertainQuantity
@@ -64,9 +69,26 @@ module Language.Drasil (
   , ucw, UnitaryConceptDict
   -- Chunks w/ Attributes
   , Attribute(..), Attributes, attributes, getSource, aqd -- TODO: Remove aqd
-  , HasAttributes, Derivation, getDerivation
+  , HasAttributes, Derivation, getDerivation, getShortName
   --Citations
-  , BibRef, City, State, Citation(..), CiteField(..), Month(..), getAuthors, getYear
+  , Citation, BibRef, CiteField, Month(..), HP
+    -- CiteFields smart constructors
+      -- People -> CiteField
+  , author, editor
+      -- Sentence -> CiteField
+  , address, bookTitle, howPublished, howPublishedU, institution, journal, note
+  , organization, publisher, school, series, title, typeField
+      -- Int -> CiteField
+  , chapter, edition, number, volume, year
+      -- [Int] -> CiteField
+  , pages
+      -- Month -> CiteField
+  , month
+    -- Citation smart constructors
+  , cArticle, cBookA, cBookE, cBooklet
+  , cInBookACP, cInBookECP, cInBookAC, cInBookEC, cInBookAP, cInBookEP
+  , cInCollection, cInProceedings, cManual, cMThesis, cMisc, cPhDThesis
+  , cProceedings, cTechReport, cUnpublished
   , CitationKind(..)
   -- Spec
   , USymb(..), Sentence(..), Accent(..), sParen, sParenNum, sSqBr, sSqBrNum
@@ -79,7 +101,7 @@ module Language.Drasil (
   , PluralRule(..), compoundPhrase, compoundPhrase', compoundPhrase'', compoundPhrase''', titleize, titleize'
   , nounPhrase'', nounPhraseSP, nounPhraseSent
   -- Document
-  , LayoutObj(..), Document(..), DType(..), Section(..), Contents(..)
+  , Referable(..), Document(..), DType(..), Section(..), Contents(..)
   , SecCons(..), ListType(..), ItemType(..), ListPair
   , section, fig, figWithWidth
   , datadefn, reldefn
@@ -124,15 +146,23 @@ module Language.Drasil (
   , HasTermTable, termLookup, termTable
   , HasDefinitionTable, conceptMap, defTable
   , HasUnitTable, unitMap, unitTable
-  -- Chunk.GenDefn
-  , GenDefn, gd, gdUnit
-  -- Chunk.InstanceModel
-  , InstanceModel, inCons, outCons, modelOutputs, modelInputs, im, imQD
+  -- AssumpChunk
+  , AssumpChunk, assuming, ac, ac'
+  -- Referencing
+  , ReferenceDB(..), AssumpMap, assumpMap, assumpLookup, assumptionsFromDB
+  , rdb, assumpRefTable, customRef
+  , reqMap, HasAssumpRefs, HasReqRefs, reqRefTable, reqLookup, changeMap
+  , HasChangeRefs, changeRefTable, changeLookup, RefBy(..)
+  -- ReqChunk
+  , ReqChunk, ReqType(..), reqType, requires, frc, nfrc, rc'
+  -- Change
+  , Change, ChngType(..), chngType, chng, lc, ulc, chc'
+  , citationRefTable, citeLookup
 ) where
 
 import Prelude hiding (log, sin, cos, tan, sqrt, id, return, print, break, exp, product)
 import Language.Drasil.SystemInformation
-import Language.Drasil.Expr (Expr(..), Relation, DerivType(..), 
+import Language.Drasil.Expr (Expr(..), Relation, DerivType(..),
           RealInterval(..), Inclusive(..), sy, deriv, pderiv,
           ($=), ($<), ($<=), ($>), ($>=), ($^), ($&&), ($||), ($=>), ($<=>), ($.))
 import Language.Drasil.Expr.Math (log, sin, cos, tan, sqrt, square, sec, csc, cot, exp,
@@ -141,7 +171,7 @@ import Language.Drasil.Expr.Math (log, sin, cos, tan, sqrt, square, sec, csc, co
           cross, m2x2, vec2D, dgnl2x2, euclidean, defint, int_all)
 import Language.Drasil.Expr.Extract (vars)
 import Language.Drasil.Output.Formats (DocType(SRS,MG,MIS,Website),DocSpec(DocSpec))
-import Language.Drasil.Document (LayoutObj(..), Document(..), DType(..)
+import Language.Drasil.Document (Document(..), DType(..)
   , Section(..), Contents(..), SecCons(..), ListType(..), ItemType(..)
   , section, fig, figWithWidth
   , datadefn, reldefn
@@ -150,35 +180,67 @@ import Language.Drasil.Recipe (Recipe(..))
 import Language.Drasil.Unicode -- all of it
 import Language.Drasil.Unit -- all of it
 import Language.Drasil.Chunk
+import Language.Drasil.Chunk.AssumpChunk
 import Language.Drasil.Chunk.Attribute
 import Language.Drasil.Chunk.Attribute.Derivation (Derivation)
-import Language.Drasil.Chunk.NamedIdea
-import Language.Drasil.Chunk.Concept
-import Language.Drasil.Chunk.SymbolForm
+import Language.Drasil.Chunk.Change
+import Language.Drasil.Chunk.Citation (
+  -- Types
+    Citation, BibRef, CiteField, Month(..), HP, CitationKind(..)
+    -- CiteFields smart constructors
+      -- People -> CiteField
+  , author, editor
+      -- Sentence -> CiteField
+  , address, bookTitle, howPublished, howPublishedU, institution, journal, note
+  , organization, publisher, school, series, title, typeField
+      -- Int -> CiteField
+  , chapter, edition, number, volume, year
+      -- [Int] -> CiteField
+  , pages
+      -- Month -> CiteField
+  , month
+    -- Citation smart constructors
+  , cArticle, cBookA, cBookE, cBooklet
+  , cInBookACP, cInBookECP, cInBookAC, cInBookEC, cInBookAP, cInBookEP
+  , cInCollection, cInProceedings, cManual, cMThesis, cMisc, cPhDThesis
+  , cProceedings, cTechReport, cUnpublished)
 import Language.Drasil.Chunk.CommonIdea
-import Language.Drasil.Chunk.VarChunk
-import Language.Drasil.Chunk.Quantity
-import Language.Drasil.Chunk.DefinedQuantity
-import Language.Drasil.Chunk.UncertainQuantity
-import Language.Drasil.Chunk.ConVar
-import Language.Drasil.Chunk.ExprRelat
-import Language.Drasil.Chunk.Eq (QDefinition(..), fromEqn, fromEqn', fromEqn'', getVC, equat, aqd)
+import Language.Drasil.Chunk.Concept
 import Language.Drasil.Chunk.Constrained
+import Language.Drasil.Chunk.ConVar
+import Language.Drasil.Chunk.DefinedQuantity
+import Language.Drasil.Chunk.Eq (QDefinition(..), fromEqn, fromEqn', fromEqn'', getVC, equat, aqd)
+import Language.Drasil.Chunk.ExprRelat
+import Language.Drasil.Chunk.GenDefn
+import Language.Drasil.Chunk.InstanceModel
+import Language.Drasil.Chunk.NamedIdea
+import Language.Drasil.Chunk.Quantity
+import Language.Drasil.Chunk.Relation(RelationConcept, makeRC, makeRC')
+import Language.Drasil.Chunk.ReqChunk(ReqChunk, ReqType(..), reqType, requires
+                                     , frc, nfrc, rc')
+import Language.Drasil.Chunk.SymbolForm (HasSymbol(symbol), Stage(..)
+                                        , eqSymb, codeSymb, hasStageSymbol)
 import Language.Drasil.Chunk.Theory
+import Language.Drasil.Chunk.UncertainQuantity
 import Language.Drasil.Chunk.Unital(UnitalChunk(..), makeUCWDS, ucFromCV
                                   , uc, uc', ucs, ucs', ucsWS)
 import Language.Drasil.Chunk.Unitary
-import Language.Drasil.Chunk.Relation(RelationConcept, makeRC, makeRC')
 import Language.Drasil.Chunk.UnitaryConcept
+import Language.Drasil.Chunk.VarChunk
 import Language.Drasil.ChunkDB
-import Language.Drasil.Citations
 import Language.Drasil.NounPhrase hiding (at_start, at_start', titleize
                                           , titleize', phrase, plural)
 import Language.Drasil.Space (Space(..))
-import Language.Drasil.Spec (USymb(..), Sentence(..), Accent(..), 
+import Language.Drasil.Spec (USymb(..), Sentence(..), Accent(..),
                               sParen, sParenNum, sSqBr, sSqBrNum, sC, (+:+), (+:+.), (+.), (+:),
                               semiCol, sParenDash, sDash)
-import Language.Drasil.Reference (makeRef, acroTest)
+import Language.Drasil.Reference (makeRef, acroTest, ReferenceDB(assumpDB, reqDB)
+                                 , AssumpMap, assumpMap, assumpLookup, HasAssumpRefs
+                                 , assumpRefTable, assumptionsFromDB
+                                 , rdb, reqMap, reqRefTable, reqLookup, RefBy(..)
+                                 , HasReqRefs, Referable(..), changeMap, customRef
+                                 , HasChangeRefs, changeRefTable, changeLookup
+                                 , citationRefTable, citeLookup)
 import Language.Drasil.Symbol (Symbol(..), sub, sup, vec, hat, prime, sCurlyBrSymb)
 import Language.Drasil.SymbolAlphabet
 import Language.Drasil.Misc -- all of it
@@ -189,5 +251,3 @@ import Language.Drasil.People (People, Person, person, HasName(..), manyNames
 import Language.Drasil.CodeSpec hiding (outputs, inputs)
 import Language.Drasil.DataDesc
 import Language.Drasil.Code.Imperative.Lang
-import Language.Drasil.Chunk.InstanceModel
-import Language.Drasil.Chunk.GenDefn 

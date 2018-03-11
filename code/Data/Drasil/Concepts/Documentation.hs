@@ -1,6 +1,6 @@
 module Data.Drasil.Concepts.Documentation where
 
-import Language.Drasil
+import Language.Drasil hiding (organization)
 
 import Data.Drasil.Concepts.Math (graph)
 import Control.Lens ((^.))
@@ -13,12 +13,12 @@ import qualified Language.Drasil.NounPhrase as NP
 acroNumGen :: [Contents] -> Int -> [Contents]
 acroNumGen [] _ = []
 acroNumGen (frst:rst) num = (f frst) : acroNumGen rst (num + 1)
-  where f (Assumption a) = Assumption $ nw $ commonIdea (a ^. uid) (a ^. term) (extrctStrng (short assumption) ++  (show num))
+  where f (Assumption a) = Assumption $ ac (a ^. uid) (assuming a) (S $ extrctStrng (short assumption) ++  (show num))
         f (Definition (Data qdef)) = Definition $ Data $ fromEqn'' (qdef ^. uid) (qdef ^. term) EmptyS (eqSymb qdef) (extrctStrng (short dataDefn) ++ (show num)) (getUnit qdef) (qdef ^. relat)
         f (Definition (Theory rch)) = Definition $ Theory $ makeRC' (rch ^. uid) (rch ^. term) (rch ^. defn) (extrctStrng (short thModel) ++ (show num)) (rch ^. relat)
-        f (Requirement r) = Requirement $ nw $ commonIdea (r ^. uid) (r ^. term) (extrctStrng (short requirement) ++ (show num))
-        f (LikelyChange lch) = LikelyChange $ nw $ commonIdea (lch ^. uid) (lch ^. term) (extrctStrng (short likelyChg) ++ (show num))
-        f (UnlikelyChange uch) = UnlikelyChange $ nw $ commonIdea (uch ^. uid) (uch ^. term) (extrctStrng (short unlikelyChg) ++  (show num))
+        f (Requirement r) = Requirement $ rc' r (S $ extrctStrng (short requirement) ++ (show num))
+        f (Change lch) = Change $ chc' lch (S $ extrctStrng (short likelyChg) ++ (show num))
+        {- f (UnlikelyChange uch) = UnlikelyChange $ chc' uch (S $ extrctStrng (short unlikelyChg) ++  (show num)) -}
         f _ = error "Type not yet implemented"
         extrctStrng (S strng) = strng
         extrctStrng _ = error "Invalid acronym type"

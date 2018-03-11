@@ -13,6 +13,7 @@
 \usepackage{graphics}
 \usepackage{filecontents}
 \usepackage[backend=bibtex]{biblatex}
+\usepackage{url}
 \global\tabulinesep=1mm
 \newcounter{assumpnum}
 \newcommand{\atheassumpnum}{A\theassumpnum}
@@ -28,10 +29,10 @@
 \tableofcontents
 \newpage
 \section{Reference Material}
-\label{Sec:RefeMate}
+\label{Sec:RefMat}
 This section records information for easy reference.
 \subsection{Table of Units}
-\label{Sec:TablofUnit}
+\label{Sec:ToU}
 The unit system used throughout is SI (Syst\`{e}me International d'Unit\'{e}s). In addition to the basic units, several derived units are also used. For each unit, the table lists the symbol, a description and the SI name.
 \begin{longtable*}{l l}
 \toprule
@@ -49,10 +50,10 @@ Pa & pressure (pascal)
 s & time (second)
 \\
 \bottomrule
-\label{Table:TablofUnit}
+\label{Table:ToU}
 \end{longtable*}
 \subsection{Table of Symbols}
-\label{Sec:TablofSymb}
+\label{Sec:ToS}
 The table that follows summarizes the symbols used in this document along with their units. The symbols are listed in alphabetical order.
 \begin{longtabu}{l X[l] l}
 \toprule
@@ -138,10 +139,10 @@ ${w_{min}}$ & Minimum permissible input charge weight & kg
 ${w_{TNT}}$ & Explosive mass in equivalent weight of TNT & kg
 \\
 \bottomrule
-\label{Table:TablofSymb}
+\label{Table:ToS}
 \end{longtabu}
 \subsection{Abbreviations and Acronyms}
-\label{Sec:AbbrandAcro}
+\label{Sec:TAbbAcc}
 \begin{longtable*}{l l}
 \toprule
 Symbol & Description
@@ -188,68 +189,68 @@ TNT & TNT (Trinitrotoluene) Equivalent Factor
 TU & Typical Uncertainty
 \\
 \bottomrule
-\label{Table:AbbrandAcro}
+\label{Table:TAbbAcc}
 \end{longtable*}
 \section{Introduction}
-\label{Sec:Intr}
+\label{Sec:Intro}
 Software is helpful to efficiently and correctly predict the blast risk involved with the glass slab. The blast under consideration is any kind of man-made explosion. The software, herein called GlassBR aims to predict the blast risk involved with the glass slab using an intuitive interface.
 The following section provides an overview of the Software Requirements Specification (SRS) for GlassBR. This section explains the purpose of this document, the scope of the system, the organization of the document, and the characteristics of the intended reader.
 \subsection{Purpose of Document}
-\label{Sec:PurpofDocu}
+\label{Sec:DocPurpose}
 The main purpose of this document is to predict whether a given glass slab is likely to resist a specified blast. The goals and theoretical models used in the GlassBR code are provided, with an emphasis on explicitly identifying assumptions and unambiguous definitions. This document is intended to be used as a reference to provide all information necessary to understand and verify the analysis. The SRS is abstract because the contents say what problem is being solved, but not how to solve it.
 This document will be used as a starting point for subsequent development phases, including writing the design specification and the software verification and validation plan. The design document will show how the requirements are to be realized, including decisions on the numerical algorithms and programming environment. The verification and validation plan will show the steps that will be used to increase confidence in the software documentation and the implementation. Although the SRS fits in a series of documents that follow the so-called waterfall model, the actual development process is not constrained in any way. Even when the waterfall model is not followed, as Parnas and Clements point out, the most logical way to present the documentation is still to ``fake" a rational design process.
 \subsection{Scope of Requirements}
-\label{Sec:ScopofRequ}
+\label{Sec:ReqsScope}
 The scope of the requirements includes getting all input parameters related to the glass slab and also the parameters related to blast type. Given the appropriate inputs, the code for GlassBR is intended to use the data and predict whether the glass slab is safe to use or not.
 \subsection{Characteristics of Intended Reader}
-\label{Sec:CharofInteRead}
-Reviewers of this documentation should have a strong knowledge in theory behind glass breakage and blast risk. The reviewers should also have an understanding of second year calculus, structural mechanics, and computer applications in civil engineering.In addition, reviewers should be familiar with the applicable standards for constructions using glass from {[}4-6{]} in Section~\ref{Sec:Refe}. The users of GlassBR can have a lower level of expertise, as explained in Section~\ref{Sec:UserChar}.
+\label{Sec:ReaderChars}
+Reviewers of this documentation should have a strong knowledge in theory behind glass breakage and blast risk. The reviewers should also have an understanding of second year calculus, structural mechanics, and computer applications in civil engineering.In addition, reviewers should be familiar with the applicable standards for constructions using glass from {[}4-6{]} in Section~\ref{Sec:References}. The users of GlassBR can have a lower level of expertise, as explained in Section~\ref{Sec:UserChars}.
 \subsection{Organization of Document}
-\label{Sec:OrgaofDocu}
-The organization of this document follows the template for an SRS for scientific computing software proposed by {[}1{]} and {[}2{]} (in Section~\ref{Sec:Refe}), with some aspects taken from Volere template 16 {[}3{]}. The presentation follows the standard pattern of presenting goals, theories, definitions, and assumptions. For readers that would like a more bottom up approach, they can start reading the data definitions in Section~\ref{Sec:DataDefi} and trace back to find any additional information they require.
+\label{Sec:DocOrg}
+The organization of this document follows the template for an SRS for scientific computing software proposed by \cite{koothoor2013} and \cite{smithLai2005}, with some aspects taken from Volere template 16 \cite{rbrtsn2012}. The presentation follows the standard pattern of presenting goals, theories, definitions, and assumptions. For readers that would like a more bottom up approach, they can start reading the data definitions in Section~\ref{Sec:DDs} and trace back to find any additional information they require.
 The goal statements are refined to the theoretical models, and the theoretical models to the instance models. The data definitions are used to support the definitions of the different models.
 \section{Stakeholders}
-\label{Sec:Stak}
+\label{Sec:Stakeholder}
 This section describes the Stakeholders: the people who have an interest in the product.
 \subsection{The Client}
-\label{Sec:TheClie}
+\label{Sec:Client}
 The client for GlassBR is a company named Entuitive. It is developed by Dr. Manuel Campidelli. The client has the final say on acceptance of the product.
 \subsection{The Customer}
-\label{Sec:TheCust}
+\label{Sec:Customer}
 The customers are the end user of GlassBR.
 \section{General System Description}
-\label{Sec:GeneSystDesc}
+\label{Sec:GenSysDesc}
 This section provides general information about the system, identifies the interfaces between the system and its environment, and describes the user characteristics and the system constraints.
 \subsection{User Characteristics}
-\label{Sec:UserChar}
+\label{Sec:UserChars}
 \begin{enumerate}
 \item{The end user of GlassBR is expected to have completed at least the equivalent of the second year of an undergraduate degree in civil engineering or structural engineering.}
 \item{The end user is expected to have an understanding of theory behind glass breakage and blast risk.}
 \item{The end user is expected to have basic computer literacy to handle the software.}
 \end{enumerate}
 \subsection{System Constraints}
-\label{Sec:SystCons}
+\label{Sec:SysConstraints}
 There are no system constraints.
 \section{Scope of the Project}
-\label{Sec:ScopoftheProj}
+\label{Sec:ProjScope}
 This section presents the scope of the project. It describes the expected use of GlassBR as well as the inputs and outputs of each action. The use cases are input and output, which defines the action of getting the input and displaying the output.
 \subsection{Product Use Case Table}
-\label{Sec:ProdUseCaseTabl}
+\label{Sec:UseCaseTable}
 \begin{longtabu}{l X[l]}
 \toprule
 Actor & Input and Output
 \\
 \midrule
-User & Characteristics of the glass slab and of the blast. Details in Section~\ref{Sec:IndiProdUseCase}
+User & Characteristics of the glass slab and of the blast. Details in Section~\ref{Sec:IndividualProdUC}
 \\
 GlassBR & Whether or not the glass slab is safe for the calculated load and supporting calculated values
 \\
 \bottomrule
 \caption{Use Case Table}
-\label{Table:UseCaseTabl}
+\label{Table:useCaseTable}
 \end{longtabu}
 \subsection{Individual Product Use Cases}
-\label{Sec:IndiProdUseCase}
+\label{Sec:IndividualProdUC}
 The user provides the inputs to GlassBR for use within the analysis. There are two main classes of inputs: glass geometry and blast type. The glass geometry based inputs include the glass type and dimensions of the glass plane. The blast type input includes parameters like weight of charge, TNT equivalent factor and stand off distance from the point of explosion. These parameters describe charge weight and stand off blast. Another input the user gives is the tolerable value of probability of breakage. GlassBR outputs if the glass slab will be safe by comparing whether capacity is greater than demand. Capacity is the the load resistance calculated and demand is the requirement which is the 3 second duration equivalent pressure. The second condition is to check whether the calculated probability (${P_{b}}$) is less than the tolerable probability (${P_{btol}}$) which is obtained from the user as an input. If both conditions return true then it's shown that the glass slab is safe to use, else if both return false then the glass slab is considered unsafe. All the supporting calculated values are also displayed as output.
 \section{Specific System Description}
 \label{Sec:SpecSystDesc}
@@ -258,8 +259,8 @@ This section first presents the problem description, which gives a high-level vi
 \label{Sec:ProbDesc}
 A system is needed to efficiently and correctly predict the blast risk involved with the glass. GlassBR is a computer program developed to interpret the inputs to give out the outputs which predicts whether the glass slab can withstand the blast under the conditions.
 \subsubsection{Terminology and Definitions}
-\label{Sec:TermandDefi}
-This subsection provides a list of terms that are used in the subsequent sections and their meaning, with the purpose of reducing ambiguity and making it easier to correctly understand the requirements. All of the terms are extracted from {[}4{]} in Section~\ref{Sec:Refe}.
+\label{Sec:TermDefs}
+This subsection provides a list of terms that are used in the subsequent sections and their meaning, with the purpose of reducing ambiguity and making it easier to correctly understand the requirements. All of the terms are extracted from {[}4{]} in Section~\ref{Sec:References}.
 \begin{itemize}
 \item{Glass breakage - The fracture or breakage of any lite or ply in monolithic, laminated, or insulating glass.}
 \item{Lateral - Perpendicular to the glass surface.}
@@ -289,8 +290,8 @@ This subsection provides a list of terms that are used in the subsequent section
 \item{Probability of breakage (${P_{b}}$) - The fraction of glass lites or plies that would break at the first occurrence of a specified load and duration, typically expressed in lites per 1000.}
 \end{itemize}
 \subsubsection{Physical System Description}
-\label{Sec:PhysSystDesc}
-The physical system of GlassBR, as shown in Figure~\ref{Figure:Thephyssyst}, includes the following elements:
+\label{Sec:PhysSyst}
+The physical system of GlassBR, as shown in Figure~\ref{Figure:physSystImage}, includes the following elements:
 \begin{itemize}
 \item[PS1:]Glass slab
 \item[PS2:]The point of explosion. Where the bomb, or any kind of man-made explosion, is located. The stand off distance is the distance between the point of explosion and the glass.
@@ -299,47 +300,47 @@ The physical system of GlassBR, as shown in Figure~\ref{Figure:Thephyssyst}, inc
 \begin{center}
 \includegraphics[width=\textwidth]{../../../datafiles/GlassBR/physicalsystimage.png}
 \caption{The physical system}
-\label{Figure:Thephyssyst}
+\label{Figure:physSystImage}
 \end{center}
 \end{figure}
 \subsubsection{Goal Statements}
-\label{Sec:GoalStat}
+\label{Sec:GoalStmt}
 Given the dimensions of the glass plane, glass type, the characteristics of the explosion, and the tolerable probability of breakage, the goal statements are:
 \begin{itemize}
 \item[GS1:]Analyze and predict whether the glass slab under consideration will be able to withstand the explosion of a certain degree which is calculated based on user input.
 \end{itemize}
 \subsection{Solution Characteristics Specification}
-\label{Sec:SoluCharSpec}
-The instance models that govern GlassBR are presented in Section~\ref{Sec:InstMode}. The information to understand the meaning of the instance models and their derivation is also presented, so that the instance models can be verified.
+\label{Sec:SolCharSpec}
+The instance models that govern GlassBR are presented in Section~\ref{Sec:IMs}. The information to understand the meaning of the instance models and their derivation is also presented, so that the instance models can be verified.
 \subsubsection{Assumptions}
-\label{Sec:Assu}
-This section simplifies the original problem and helps in developing the theoretical model by filling in the missing information for the physical system. The numbers given in the square brackets refer to the Theoretical Models {[}Section~\ref{Sec:TheoMode}{]}, General Definitions {[}Section~\ref{Sec:GeneDefi}{]}, Data Definitions {[}Section~\ref{Sec:DataDefi}{]}, Instance Models {[}Section~\ref{Sec:InstMode}{]}, or Likely Changes {[}Section~\ref{Sec:LikeChan}{]}, in which the respective assumption is used.
+\label{Sec:Assumps}
+This section simplifies the original problem and helps in developing the theoretical model by filling in the missing information for the physical system. The numbers given in the square brackets refer to the Theoretical Models {[}Section~\ref{Sec:TMs}{]}, General Definitions {[}Section~\ref{Sec:GDs}{]}, Data Definitions {[}Section~\ref{Sec:DDs}{]}, Instance Models {[}Section~\ref{Sec:IMs}{]}, or Likely Changes {[}Section~\ref{Sec:LCs}{]}, in which the respective assumption is used.
 \begin{description}
-\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:assumption1}:]The standard E1300-09a for calculation applies only to monolithic, laminated, or insulating glass constructions of rectangular shape with continuous lateral support along. one, two, three, or four edge This practice assumes that (1) the supported glass edge for two, three and four-sided support conditions are simply supported and free to slip in plane; (2) glass supported on two sides acts as a simply supported beam and (3) glass supported on one side acts as a cantilever.
+\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:glassTyA}:]The standard E1300-09a for calculation applies only to monolithic, laminated, or insulating glass constructions of rectangular shape with continuous lateral support along. one, two, three, or four edge This practice assumes that (1) the supported glass edge for two, three and four-sided support conditions are simply supported and free to slip in plane; (2) glass supported on two sides acts as a simply supported beam and (3) glass supported on one side acts as a cantilever.
 \end{description}
 \begin{description}
-\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:assumption2}:]Following {[}4 (pg. 1){]}, this practice does not apply to any form of wired, patterned, etched, sandblasted, drilled, notched, or grooved glass with surface and edge treatments that alter the glass strength.
+\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:glassConditionA}:]Following \cite{astm.LR2009} (pg. 1), this practice does not apply to any form of wired, patterned, etched, sandblasted, drilled, notched, or grooved glass with surface and edge treatments that alter the glass strength.
 \end{description}
 \begin{description}
-\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:assumption3}:]This system only considers the external explosion scenario for its calculations.
+\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:explsnScenarioA}:]This system only considers the external explosion scenario for its calculations.
 \end{description}
 \begin{description}
-\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:assumption4}:]The values provided in Section~\ref{Sec:ValuofAuxiCons} are assumed for the duration of load (${t_{d}}$), and the material properties of $m$, $k$, and $E$.
+\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:standardValuesA}:]The values provided in Section~\ref{Sec:AuxConstants} are assumed for the duration of load (${t_{d}}$), and the material properties of $m$, $k$, and $E$.
 \end{description}
 \begin{description}
-\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:assumption5}:]Glass under consideration is assumed to be a single lite. Hence the value of LSF is equal to 1 for all calculations in GlassBR.
+\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:glassLiteA}:]Glass under consideration is assumed to be a single lite. Hence the value of LSF is equal to 1 for all calculations in GlassBR.
 \end{description}
 \begin{description}
-\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:assumption6}:]Boundary conditions for the glass slab is assumed to be 4-sided support for calculations.
+\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:bndryConditionsA}:]Boundary conditions for the glass slab is assumed to be 4-sided support for calculations.
 \end{description}
 \begin{description}
-\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:assumption7}:]The response type considered in GlassBR is flexural.
+\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:responseTyA}:]The response type considered in GlassBR is flexural.
 \end{description}
 \begin{description}
-\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:assumption8}:]With reference to A4 the value of load duration factor ($LDF$) is a constant in GlassBR. It is calculated by the equation: $LDF=\left(\frac{{t_{d}}}{60}\right)^{\frac{m}{16}}$. Using this, $LDF=0.27$.
+\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:ldfConstantA}:]With reference to A\ref{A:standardValuesA} the value of load duration factor ($LDF$) is a constant in GlassBR. It is calculated by the equation: $LDF=\left(\frac{{t_{d}}}{60}\right)^{\frac{m}{16}}$. Using this, $LDF=0.27$.
 \end{description}
 \subsubsection{Theoretical Models}
-\label{Sec:TheoMode}
+\label{Sec:TMs}
 This section focuses on the general equations and laws that GlassBR is based on.
 ~\newline
 \noindent \begin{minipage}{\textwidth}
@@ -370,10 +371,10 @@ Description & If $is\_safe2$, the glass is considered safe. $is\_safe1$ (from \h
 \\ \bottomrule \end{tabular}
 \end{minipage}\\
 \subsubsection{General Definitions}
-\label{Sec:GeneDefi}
+\label{Sec:GDs}
 There are no general definitions.
 \subsubsection{Data Definitions}
-\label{Sec:DataDefi}
+\label{Sec:DDs}
 This section collects and defines all the data needed to build the instance models.
 ~\newline
 \noindent \begin{minipage}{\textwidth}
@@ -521,8 +522,8 @@ Description & ${J_{tol}}$ is the stress distribution factor (Function) based on 
 \\ \bottomrule \end{tabular}
 \end{minipage}\\
 \subsubsection{Instance Models}
-\label{Sec:InstMode}
-This section transforms the problem defined in Section~\ref{Sec:ProbDesc} into one which is expressed in mathematical terms. It uses concrete symbols defined in Section~\ref{Sec:DataDefi} to replace the abstract symbols in the models identified in Section~\ref{Sec:TheoMode} and Section~\ref{Sec:GeneDefi}.
+\label{Sec:IMs}
+This section transforms the problem defined in Section~\ref{Sec:ProbDesc} into one which is expressed in mathematical terms. It uses concrete symbols defined in Section~\ref{Sec:DDs} to replace the abstract symbols in the models identified in Section~\ref{Sec:TMs} and Section~\ref{Sec:GDs}.
 ~\newline
 \noindent \begin{minipage}{\textwidth}
 \begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
@@ -566,8 +567,8 @@ Description & $q$ or demand, is the 3 second duration equivalent pressure obtain
 \\ \bottomrule \end{tabular}
 \end{minipage}\\
 \subsubsection{Data Constraints}
-\label{Sec:DataCons}
-Table~\ref{Table:InpuDataCons}, and Table~\ref{Table:OutpDataCons} shows the data constraints on the input and output variables, respectively. The column for physical constraints gives the physical limitations on the range of values that can be taken by the variable. The uncertainty column provides an estimate of the confidence with which the physical quantities can be measured. This information would be part of the input if one were performing an uncertainty quantification exercise. The constraints are conservative, to give the user of the model the flexibility to experiment with unusual situations. The column of typical values is intended to provide a feel for a common scenario. Section~\ref{Sec:ValuofAuxiCons} gives the values of the specification parameters used in Table~\ref{Table:InpuDataCons}. Table~\ref{Table:OutpDataCons} shows the constraints that must be satisfied by the output.
+\label{Sec:DataConstraints}
+Table~\ref{Table:InDataConstraints}, and Table~\ref{Table:OutDataConstraints} shows the data constraints on the input and output variables, respectively. The column for physical constraints gives the physical limitations on the range of values that can be taken by the variable. The uncertainty column provides an estimate of the confidence with which the physical quantities can be measured. This information would be part of the input if one were performing an uncertainty quantification exercise. The constraints are conservative, to give the user of the model the flexibility to experiment with unusual situations. The column of typical values is intended to provide a feel for a common scenario. Section~\ref{Sec:AuxConstants} gives the values of the specification parameters used in Table~\ref{Table:InDataConstraints}. Table~\ref{Table:OutDataConstraints} shows the constraints that must be satisfied by the output.
 \begin{longtable}{l l l l l}
 \toprule
 Var & Physical Constraints & Software Constraints & Typical Value & TU
@@ -587,7 +588,7 @@ $TNT$ & $TNT>0$ & None & $1$ & 0.1
 \\
 \bottomrule
 \caption{Input Data Constraints}
-\label{Table:InpuDataCons}
+\label{Table:InDataConstraints}
 \end{longtable}
 \begin{longtable}{l l}
 \toprule
@@ -598,27 +599,27 @@ ${P_{b}}$ & $0<{P_{b}}<1$
 \\
 \bottomrule
 \caption{Output Data Constraints}
-\label{Table:OutpDataCons}
+\label{Table:OutDataConstraints}
 \end{longtable}
 \section{Requirements}
-\label{Sec:Requ}
+\label{Sec:Requirements}
 This section provides the functional requirements, the business tasks that the software is expected to complete, and the non-functional requirements, the qualities that the software is expected to exhibit.
 \subsection{Functional Requirements}
-\label{Sec:FuncRequ}
+\label{Sec:FRs}
 \begin{description}
-\item[\refstepcounter{reqnum}\rthereqnum\label{R:s71req1}:]Input the quantities from Table~\ref{Table:RequInpufollR1}, which define the glass dimensions, type of glass, tolerable probability of failure and the characteristics of the blast Note: $a$ and $b$ will be input in terms of millimetres and will be converted to the equivalent value in metres.
+\item[\refstepcounter{reqnum}\rthereqnum\label{FR:s7.1.req1}:]Input the quantities from Table~\ref{Table:R1ReqInputs}, which define the glass dimensions, type of glass, tolerable probability of failure and the characteristics of the blast Note: $a$ and $b$ will be input in terms of millimetres and will be converted to the equivalent value in metres.
 \end{description}
 \begin{description}
-\item[\refstepcounter{reqnum}\rthereqnum\label{R:s71req2}:]The system shall set the known values as follows: $m$, $k$, $E$, ${t_{d}}$ following A4, $LDF$ following A8, and LSF following A5.
+\item[\refstepcounter{reqnum}\rthereqnum\label{FR:s7.1.req2}:]The system shall set the known values as follows: $m$, $k$, $E$, ${t_{d}}$ following A4, $LDF$ following A8, and LSF following A5.
 \end{description}
 \begin{description}
-\item[\refstepcounter{reqnum}\rthereqnum\label{R:s71req3}:]The system shall check the entered input values to ensure that they do not exceed the data constraints mentioned in Section~\ref{Sec:DataCons}. If any of the input parameters is out of bounds, an error message is displayed and the calculations stop.
+\item[\refstepcounter{reqnum}\rthereqnum\label{FR:s7.1.req3}:]The system shall check the entered input values to ensure that they do not exceed the data constraints mentioned in Section~\ref{Sec:DataConstraints}. If any of the input parameters is out of bounds, an error message is displayed and the calculations stop.
 \end{description}
 \begin{description}
-\item[\refstepcounter{reqnum}\rthereqnum\label{R:s71req4}:]Output the input quantities from R1 and the known quantities from R2.
+\item[\refstepcounter{reqnum}\rthereqnum\label{FR:s7.1.req4}:]Output the input quantities from R1 and the known quantities from R2.
 \end{description}
 \begin{description}
-\item[\refstepcounter{reqnum}\rthereqnum\label{R:s71req5}:]If $is\_safe1$ and $is\_safe2$ (from \hyperref[T:t1SafetyReq]{Definition~T:t1SafetyReq} and \hyperref[T:t2SafetyReq]{Definition~T:t2SafetyReq}) are true, output the message ``For the given input parameters, the glass is considered safe." If the condition is false, then output the message ``For the given input parameters, the glass is NOT considered safe."
+\item[\refstepcounter{reqnum}\rthereqnum\label{FR:s7.1.req5}:]If $is\_safe1$ and $is\_safe2$ (from \hyperref[T:t1SafetyReq]{Definition~T:t1SafetyReq} and \hyperref[T:t2SafetyReq]{Definition~T:t2SafetyReq}) are true, output the message ``For the given input parameters, the glass is considered safe." If the condition is false, then output the message ``For the given input parameters, the glass is NOT considered safe."
 \end{description}
 \begin{itemize}
 \item[R6:]Output the following quantities:
@@ -663,31 +664,31 @@ $t$ & Nominal thickness $t\in{}\{2.5, 2.7, 3.0, 4.0, 5.0, 6.0, 8.0, 10.0, 12.0, 
 \\
 \bottomrule
 \caption{Required Inputs following R1}
-\label{Table:RequInpufollR1}
+\label{Table:R1ReqInputs}
 \end{longtabu}
 \subsection{Non-Functional Requirements}
-\label{Sec:Non-Requ}
+\label{Sec:NFRs}
 This problem is small in size and relatively simple, so performance is not a priority. Any reasonable implementation will be very quick and use minimal storage. Rather than performance, the non-functional requirement priorities are correctness, verifiability, understandability, reusability, maintainability, and portability.
 \section{Likely Changes}
-\label{Sec:LikeChan}
+\label{Sec:LCs}
 \begin{description}
-\item[\refstepcounter{lcnum}\lcthelcnum\label{LC:s8likelychg1}:]A3 - The system currently only calculates for external blast risk. In the future calculations can be added for the internal blast risk.
+\item[\refstepcounter{lcnum}\lcthelcnum\label{LC:s8.likelychg1}:]A3 - The system currently only calculates for external blast risk. In the future calculations can be added for the internal blast risk.
 \end{description}
 \begin{description}
-\item[\refstepcounter{lcnum}\lcthelcnum\label{LC:s8likelychg2}:]A4, A8 - Currently the values for $m$, $k$, and $E$ are assumed to be the same for all glass. In the future these values can be changed to variable inputs.
+\item[\refstepcounter{lcnum}\lcthelcnum\label{LC:s8.likelychg2}:]A4, A8 - Currently the values for $m$, $k$, and $E$ are assumed to be the same for all glass. In the future these values can be changed to variable inputs.
 \end{description}
 \begin{description}
-\item[\refstepcounter{lcnum}\lcthelcnum\label{LC:s8likelychg3}:]A5 - The software may be changed to accommodate more than a single lite.
+\item[\refstepcounter{lcnum}\lcthelcnum\label{LC:s8.likelychg3}:]A5 - The software may be changed to accommodate more than a single lite.
 \end{description}
 \begin{description}
-\item[\refstepcounter{lcnum}\lcthelcnum\label{LC:s8likelychg4}:]A6 - The software may be changed to accommodate more boundary conditions than 4-sided support.
+\item[\refstepcounter{lcnum}\lcthelcnum\label{LC:s8.likelychg4}:]A6 - The software may be changed to accommodate more boundary conditions than 4-sided support.
 \end{description}
 \begin{description}
-\item[\refstepcounter{lcnum}\lcthelcnum\label{LC:s8likelychg5}:]A7 - The software may be changed to consider more than just flexure of the glass.
+\item[\refstepcounter{lcnum}\lcthelcnum\label{LC:s8.likelychg5}:]A7 - The software may be changed to consider more than just flexure of the glass.
 \end{description}
 \section{Traceability Matrices and Graphs}
-\label{Sec:TracMatrandGrap}
-The purpose of the traceability matrices is to provide easy references on what has to be additionally modified if a certain component is changed. Every time a component is changed, the items in the column of that component that are marked with an ``X" should be modified as well. Table~\ref{Table:TracMatrShowtheConnBetwItemofDiffSect} shows the dependencies of theoretical models, instance models, and data definitions with each other. Table~\ref{Table:TracMatrShowtheConnBetwRequandOtheItem} shows the dependencies of requirements on theoretical models, instance models, data definitions, and data constraints. Table~\ref{Table:TracMatrShowtheConnBetwAssuandOtheItem} shows the dependencies of theoretical models, instance models, data definitions, likely changes and requirements on the assumptions.
+\label{Sec:TraceMatrices}
+The purpose of the traceability matrices is to provide easy references on what has to be additionally modified if a certain component is changed. Every time a component is changed, the items in the column of that component that are marked with an ``X" should be modified as well. Table~\ref{Table:TraceyItemSecs} shows the dependencies of theoretical models, instance models, and data definitions with each other. Table~\ref{Table:TraceyReqsItems} shows the dependencies of requirements on theoretical models, instance models, data definitions, and data constraints. Table~\ref{Table:TraceyAssumpsOthers} shows the dependencies of theoretical models, instance models, data definitions, likely changes and requirements on the assumptions.
 \begin{longtable}{l l l l l l l l l l l l l l}
 \toprule
  & T1 (\hyperref[T:t1SafetyReq]{Definition~T:t1SafetyReq}) & T2 (\hyperref[T:t2SafetyReq]{Definition~T:t2SafetyReq}) & IM1 (\hyperref[T:probOfBr]{Definition~T:probOfBr}) & IM2 (\hyperref[T:calOfCap]{Definition~T:calOfCap}) & IM3 (\hyperref[T:calOfDe]{Definition~T:calOfDe}) & DD1 (\hyperref[DD:risk.fun]{Definition~DD:risk.fun}) & DD2 (\hyperref[DD:act.thick]{Definition~DD:act.thick}) & DD3 (\hyperref[DD:stressDistFac]{Definition~DD:stressDistFac}) & DD4 (\hyperref[DD:nFL]{Definition~DD:nFL}) & DD5 (\hyperref[DD:gTF]{Definition~DD:gTF}) & DD6 (\hyperref[DD:dimlessLoad]{Definition~DD:dimlessLoad}) & DD7 (\hyperref[DD:tolLoad]{Definition~DD:tolLoad}) & DD8 (\hyperref[DD:sdf.tol]{Definition~DD:sdf.tol})
@@ -721,32 +722,32 @@ DD8 (\hyperref[DD:sdf.tol]{Definition~DD:sdf.tol}) &  &  &  &  &  &  & X &  &  &
 \\
 \bottomrule
 \caption{Traceability Matrix Showing the Connections Between Items of Different Sections}
-\label{Table:TracMatrShowtheConnBetwItemofDiffSect}
+\label{Table:TraceyItemSecs}
 \end{longtable}
 \begin{longtable}{l l l l l l l l l l l l l l l l l l l l l}
 \toprule
- & T1 (\hyperref[T:t1SafetyReq]{Definition~T:t1SafetyReq}) & T2 (\hyperref[T:t2SafetyReq]{Definition~T:t2SafetyReq}) & IM1 (\hyperref[T:probOfBr]{Definition~T:probOfBr}) & IM2 (\hyperref[T:calOfCap]{Definition~T:calOfCap}) & IM3 (\hyperref[T:calOfDe]{Definition~T:calOfDe}) & DD1 (\hyperref[DD:risk.fun]{Definition~DD:risk.fun}) & DD2 (\hyperref[DD:act.thick]{Definition~DD:act.thick}) & DD3 (\hyperref[DD:stressDistFac]{Definition~DD:stressDistFac}) & DD4 (\hyperref[DD:nFL]{Definition~DD:nFL}) & DD5 (\hyperref[DD:gTF]{Definition~DD:gTF}) & DD6 (\hyperref[DD:dimlessLoad]{Definition~DD:dimlessLoad}) & DD7 (\hyperref[DD:tolLoad]{Definition~DD:tolLoad}) & DD8 (\hyperref[DD:sdf.tol]{Definition~DD:sdf.tol}) & Data Constraints (Section~\ref{Sec:DataCons}) & R1 (Section~\ref{Sec:FuncRequ}) & R2 (Section~\ref{Sec:FuncRequ}) & R3 (Section~\ref{Sec:FuncRequ}) & R4 (Section~\ref{Sec:FuncRequ}) & R5 (Section~\ref{Sec:FuncRequ}) & R6 (Section~\ref{Sec:FuncRequ})
+ & T1 (\hyperref[T:t1SafetyReq]{Definition~T:t1SafetyReq}) & T2 (\hyperref[T:t2SafetyReq]{Definition~T:t2SafetyReq}) & IM1 (\hyperref[T:probOfBr]{Definition~T:probOfBr}) & IM2 (\hyperref[T:calOfCap]{Definition~T:calOfCap}) & IM3 (\hyperref[T:calOfDe]{Definition~T:calOfDe}) & DD1 (\hyperref[DD:risk.fun]{Definition~DD:risk.fun}) & DD2 (\hyperref[DD:act.thick]{Definition~DD:act.thick}) & DD3 (\hyperref[DD:stressDistFac]{Definition~DD:stressDistFac}) & DD4 (\hyperref[DD:nFL]{Definition~DD:nFL}) & DD5 (\hyperref[DD:gTF]{Definition~DD:gTF}) & DD6 (\hyperref[DD:dimlessLoad]{Definition~DD:dimlessLoad}) & DD7 (\hyperref[DD:tolLoad]{Definition~DD:tolLoad}) & DD8 (\hyperref[DD:sdf.tol]{Definition~DD:sdf.tol}) & Data Constraints (Section~\ref{Sec:DataConstraints}) & R1 (Section~\ref{Sec:FRs}) & R2 (Section~\ref{Sec:FRs}) & R3 (Section~\ref{Sec:FRs}) & R4 (Section~\ref{Sec:FRs}) & R5 (Section~\ref{Sec:FRs}) & R6 (Section~\ref{Sec:FRs})
 \\
 \midrule
-R1 (in Section~\ref{Sec:FuncRequ}) &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+R1 (in Section~\ref{Sec:FRs}) &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-R2 (in Section~\ref{Sec:FuncRequ}) &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+R2 (in Section~\ref{Sec:FRs}) &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-R3 (in Section~\ref{Sec:FuncRequ}) &  &  &  &  &  &  &  &  &  &  &  &  &  & X &  &  &  &  &  & 
+R3 (in Section~\ref{Sec:FRs}) &  &  &  &  &  &  &  &  &  &  &  &  &  & X &  &  &  &  &  & 
 \\
-R4 (in Section~\ref{Sec:FuncRequ}) &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X & X &  &  &  & 
+R4 (in Section~\ref{Sec:FRs}) &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X & X &  &  &  & 
 \\
-R5 (in Section~\ref{Sec:FuncRequ}) & X & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+R5 (in Section~\ref{Sec:FRs}) & X & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-R6 (in Section~\ref{Sec:FuncRequ}) &  &  & X & X & X &  & X & X & X & X & X & X & X &  &  &  &  &  &  & 
+R6 (in Section~\ref{Sec:FRs}) &  &  & X & X & X &  & X & X & X & X & X & X & X &  &  &  &  &  &  & 
 \\
 \bottomrule
 \caption{Traceability Matrix Showing the Connections Between Requirements and Other Items}
-\label{Table:TracMatrShowtheConnBetwRequandOtheItem}
+\label{Table:TraceyReqsItems}
 \end{longtable}
 \begin{longtable}{l l l l l l l l l}
 \toprule
- & A1 (Section~\ref{Sec:Assu}) & A2 (Section~\ref{Sec:Assu}) & A3 (Section~\ref{Sec:Assu}) & A4 (Section~\ref{Sec:Assu}) & A5 (Section~\ref{Sec:Assu}) & A6 (Section~\ref{Sec:Assu}) & A7 (Section~\ref{Sec:Assu}) & A8 (Section~\ref{Sec:Assu})
+ & A1 (Section~\ref{Sec:Assumps}) & A2 (Section~\ref{Sec:Assumps}) & A3 (Section~\ref{Sec:Assumps}) & A4 (Section~\ref{Sec:Assumps}) & A5 (Section~\ref{Sec:Assumps}) & A6 (Section~\ref{Sec:Assumps}) & A7 (Section~\ref{Sec:Assumps}) & A8 (Section~\ref{Sec:Assumps})
 \\
 \midrule
 T1 (\hyperref[T:t1SafetyReq]{Definition~T:t1SafetyReq}) &  &  &  &  &  &  &  & 
@@ -775,57 +776,57 @@ DD7 (\hyperref[DD:tolLoad]{Definition~DD:tolLoad}) &  &  &  &  &  &  &  &
 \\
 DD8 (\hyperref[DD:sdf.tol]{Definition~DD:sdf.tol}) &  &  &  & X &  &  &  & 
 \\
-LC1 (Section~\ref{Sec:LikeChan}) &  &  & X &  &  &  &  & 
+LC1 (Section~\ref{Sec:LCs}) &  &  & X &  &  &  &  & 
 \\
-LC2 (Section~\ref{Sec:LikeChan}) &  &  &  & X &  &  &  & X
+LC2 (Section~\ref{Sec:LCs}) &  &  &  & X &  &  &  & X
 \\
-LC3 (Section~\ref{Sec:LikeChan}) &  &  &  &  & X &  &  & 
+LC3 (Section~\ref{Sec:LCs}) &  &  &  &  & X &  &  & 
 \\
-LC4 (Section~\ref{Sec:LikeChan}) &  &  &  &  &  & X &  & 
+LC4 (Section~\ref{Sec:LCs}) &  &  &  &  &  & X &  & 
 \\
-LC5 (Section~\ref{Sec:LikeChan}) &  &  &  &  &  &  & X & 
+LC5 (Section~\ref{Sec:LCs}) &  &  &  &  &  &  & X & 
 \\
-R1 (Section~\ref{Sec:FuncRequ}) &  &  &  &  &  &  &  & 
+R1 (Section~\ref{Sec:FRs}) &  &  &  &  &  &  &  & 
 \\
-R2 (Section~\ref{Sec:FuncRequ}) &  &  &  & X & X &  &  & X
+R2 (Section~\ref{Sec:FRs}) &  &  &  & X & X &  &  & X
 \\
-R3 (Section~\ref{Sec:FuncRequ}) &  &  &  &  &  &  &  & 
+R3 (Section~\ref{Sec:FRs}) &  &  &  &  &  &  &  & 
 \\
-R4 (Section~\ref{Sec:FuncRequ}) &  &  &  &  &  &  &  & 
+R4 (Section~\ref{Sec:FRs}) &  &  &  &  &  &  &  & 
 \\
-R5 (Section~\ref{Sec:FuncRequ}) &  &  &  &  &  &  &  & 
+R5 (Section~\ref{Sec:FRs}) &  &  &  &  &  &  &  & 
 \\
-R6 (Section~\ref{Sec:FuncRequ}) &  &  &  &  &  &  &  & 
+R6 (Section~\ref{Sec:FRs}) &  &  &  &  &  &  &  & 
 \\
 \bottomrule
 \caption{Traceability Matrix Showing the Connections Between Assumptions and Other Items}
-\label{Table:TracMatrShowtheConnBetwAssuandOtheItem}
+\label{Table:TraceyAssumpsOthers}
 \end{longtable}
-The purpose of the traceability graphs is also to provide easy references on what has to be additionally modified if a certain component is changed. The arrows in the graphs represent dependencies. The component at the tail of an arrow is depended on by the component at the head of that arrow. Therefore, if a component is changed, the components that it points to should also be changed. Figure~\ref{Figure:Figu2:TracMatrShowtheConnBetwItemofDiffSect} shows the dependencies of theoretical models, instance models, and data definitions on each other. Figure~\ref{Figure:Figu3:TracMatrShowtheConnBetwRequandOtheItem} shows the dependencies of requirements on theoretical models, instance models, data definitions, and data constraints. Figure~\ref{Figure:Figu4:TracMatrShowtheConnBetwAssuandOtheItem} shows the dependencies of theoretical models, instance models, data definitions, requirements, and likely changes on assumptions.
+The purpose of the traceability graphs is also to provide easy references on what has to be additionally modified if a certain component is changed. The arrows in the graphs represent dependencies. The component at the tail of an arrow is depended on by the component at the head of that arrow. Therefore, if a component is changed, the components that it points to should also be changed. Figure~\ref{Figure:TraceyItemSecs} shows the dependencies of theoretical models, instance models, and data definitions on each other. Figure~\ref{Figure:TraceyReqsItems} shows the dependencies of requirements on theoretical models, instance models, data definitions, and data constraints. Figure~\ref{Figure:TraceyAssumpsOthers} shows the dependencies of theoretical models, instance models, data definitions, requirements, and likely changes on assumptions.
 NOTE: Building a tool to automatically generate the graphical representation of the matrix by scanning the labels and reference can be future work.
 \begin{figure}
 \begin{center}
 \includegraphics[width=\textwidth]{../../../datafiles/GlassBR/Trace.png}
 \caption{Figure 2: Traceability Matrix Showing the Connections Between Items of Different Sections}
-\label{Figure:Figu2:TracMatrShowtheConnBetwItemofDiffSect}
+\label{Figure:TraceyItemSecs}
 \end{center}
 \end{figure}
 \begin{figure}
 \begin{center}
 \includegraphics[width=\textwidth]{../../../datafiles/GlassBR/RTrace.png}
 \caption{Figure 3: Traceability Matrix Showing the Connections Between Requirements and Other Items}
-\label{Figure:Figu3:TracMatrShowtheConnBetwRequandOtheItem}
+\label{Figure:TraceyReqsItems}
 \end{center}
 \end{figure}
 \begin{figure}
 \begin{center}
 \includegraphics[width=\textwidth]{../../../datafiles/GlassBR/ATrace.png}
 \caption{Figure 4: Traceability Matrix Showing the Connections Between Assumptions and Other Items}
-\label{Figure:Figu4:TracMatrShowtheConnBetwAssuandOtheItem}
+\label{Figure:TraceyAssumpsOthers}
 \end{center}
 \end{figure}
 \section{Values of Auxiliary Constants}
-\label{Sec:ValuofAuxiCons}
+\label{Sec:AuxConstants}
 This section contains the standard values that are used for calculations in GlassBR.
 \begin{longtabu}{l X[l] l l}
 \toprule
@@ -860,86 +861,84 @@ ${SD_{max}}$ & maximum stand off distance permissible for input & $130.0$ & m
 \\
 \bottomrule
 \caption{Auxiliary Constants}
-\label{Table:AuxiCons}
+\label{Table:TAuxConsts}
 \end{longtabu}
 \section{References}
-\label{Sec:Refe}
+\label{Sec:References}
 \begin{filecontents*}{bibfile.bib}
-@mastersthesis{Koothoor2013,
+@misc{astm\_C1036,
+author={ASTM C1036-16},
+title={Standard specification for Flat Glass},
+publisher={ASTM International},
+address={West Conshohocken, PA},
+year={2016},
+howpublished={\url{www.astm.org}}}
+
+@misc{astm\_C1048,
+author={ASTM C1048-04},
+title={Specification for Heat-Treated Flat Glass-Kind HS, Kind FT Coated and Uncoated Glass},
+publisher={ASTM International},
+address={West Conshohocken, PA},
+year={2009},
+howpublished={\url{www.astm.org}}}
+
+@misc{astm\_LR2009,
+author={ASTM E1300-09},
+title={Standard Practice for Determining Load Resistance of Glass in Buildings},
+publisher={ASTM International},
+booktitle={Standard E1300-09a},
+year={2009},
+howpublished={\url{www.astm.org}}}
+
+@misc{glThick1998,
+author={Beason, W. Lynn and Kohutek, Terry L. and Bracci, Joseph M.},
+title={Basis for ASTME E 1300 Annealed Glass Thickness Selection Charts},
+booktitle={ASCE Library},
+month={feb},
+year={1998},
+howpublished={\url{doi.org/10.1061/(ASCE)0733-9445(1998)124:2(215)}}}
+
+@mastersthesis{koothoor2013,
 author={Koothoor, Nirmitha},
 title={A document drive approach to certifying scientific computing software},
 school={McMaster University},
-place={Hamilton, Canada},
-year={2013}}
+year={2013},
+address={Hamilton, ON, Canada}}
 
-@article{SmithLai2005,
-author={Smith, W. Spencer and Lai, Lei},
-title={A new requirements template for scientific computing},
-journal={Proceedings of the First International Workshop on Situational Requirements Engineering Processes - Methods, Techniques and Tools to Support Situation-Specific Requirements Engineering Processes, SREP'05},
-editor={Agerfalk, PJ and Kraiem, N. and Ralyte, J.},
-place={Paris, France},
-pages={107-121},
-note={In conjunction with 13th IEEE International Requirements Engineering Conference,},
-year={2005}}
-
-@article{RobertsonRobertson2012,
+@misc{rbrtsn2012,
 author={Robertson, James and Robertson, Suzanne},
 title={Volere requirements specification template edition 16},
-url={https://pdfs.semanticscholar.org/cf57/27a59801086cbd3d14e587e09880561dbe22.pdf},
+howpublished={\url{https://pdfs.semanticscholar.org/cf57/27a59801086cbd3d14e587e09880561dbe22.pdf}},
 year={2012}}
 
-@misc{ASTME1300-092009,
-author={ASTM E1300-09},
-sortkey={ASTM E1300-09},
-title={Standard Practice for Determining Load Resistance of Glass in Buildings},
-publisher={ASTM International},
-collection={Standard E1300-09a},
-year={2009},
-url={www.astm.org}}
-
-@misc{ASTMC1036-162016,
-author={ASTM C1036-16},
-sortkey={ASTM C1036-16},
-title={Standard specification for Flat Glass},
-publisher={ASTM International},
-place={West Conshohocken, PA},
-year={2016},
-url={www.astm.org}}
-
-@misc{ASTMC1048-042009,
-author={ASTM C1048-04},
-sortkey={ASTM C1048-04},
-title={Specification for Heat-Treated Flat Glass-Kind HS, Kind FT Coated and Uncoated Glass},
-publisher={ASTM International},
-place={West Conshohocken, PA},
-year={2009},
-url={www.astm.org}}
-
-@misc{BeasonKohutekBracci1998,
-author={Beason, W. Lynn and Kohutek, Terry L. and Bracci, Joseph M.},
-title={Basis for ASTME E 1300 Annealed Glass Thickness Selection Charts},
-collection={ASCE Library},
-year={1 February 1998},
-url={doi.org/10.1061/(ASCE)0733-9445(1998)124:2(215)}}
+@inproceedings{smithLai2005,
+author={Smith, W. Spencer and Lai, Lei},
+title={A new requirements template for scientific computing},
+booktitle={Proceedings of the First International Workshop on Situational Requirements Engineering Processes - Methods, Techniques and Tools to Support Situation-Specific Requirements Engineering Processes, SREP'05},
+year={2005},
+editor={Agerfalk, PJ and Kraiem, N. and Ralyte, J.},
+address={Paris, France},
+pages={"107-121"},
+note={In conjunction with 13th IEEE International Requirements Engineering Conference,}}
 \end{filecontents*}
 \nocite{*}
 \bibstyle{ieeetr}
 \printbibliography[heading=none]
 \section{Appendix}
-\label{Sec:Appe}
-This appendix holds the graphs (Figure~\ref{Figure:Figu5:3secoduraequipres()versStanoffdist(SD)versCharweig()} and Figure~\ref{Figure:Figu6:Nondimelateload()versAspeRati(AR)versStredistfact(Fun()}) used for interpolating values needed in the models.
+\label{Sec:Appendix}
+This appendix holds the graphs (Figure~\ref{Figure:demandVSsod} and Figure~\ref{Figure:dimlessloadVSaspect}) used for interpolating values needed in the models.
 \begin{figure}
 \begin{center}
 \includegraphics[width=\textwidth]{../../../datafiles/GlassBR/ASTM_F2248-09.png}
 \caption{Figure 5: 3 second duration equivalent pressure ($q$) versus Stand off distance (SD) versus Charge weight ($m$)}
-\label{Figure:Figu5:3secoduraequipres()versStanoffdist(SD)versCharweig()}
+\label{Figure:demandVSsod}
 \end{center}
 \end{figure}
 \begin{figure}
 \begin{center}
 \includegraphics[width=\textwidth]{../../../datafiles/GlassBR/ASTM_F2248-09_BeasonEtAl.png}
 \caption{Figure 6: Non dimensional lateral load ($\hat{q}$) versus Aspect Ratio (AR) versus Stress distribution factor (Function) ($J$)}
-\label{Figure:Figu6:Nondimelateload()versAspeRati(AR)versStredistfact(Fun()}
+\label{Figure:dimlessloadVSaspect}
 \end{center}
 \end{figure}
 \end{document}

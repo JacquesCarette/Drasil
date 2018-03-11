@@ -18,7 +18,7 @@ Software Requirements Specification for GlassBR program
 Nikitha Krithnan and W. Spencer Smith
 </h2>
 </div>
-<a id="Sec:RefeMate">
+<a id="Sec:RefMat">
 <div class="section">
 <h2>
 Reference Material
@@ -26,7 +26,7 @@ Reference Material
 <p class="paragraph">
 This section records information for easy reference.
 </p>
-<a id="Sec:TablofUnit">
+<a id="Sec:ToU">
 <div class="subsection">
 <h3>
 Table of Units
@@ -34,7 +34,7 @@ Table of Units
 <p class="paragraph">
 The unit system used throughout is SI (Syst&egrave;me International d'Unit&eacute;s). In addition to the basic units, several derived units are also used. For each unit, the table lists the symbol, a description and the SI name.
 </p>
-<a id="Table:TablofUnit">
+<a id="Table:ToU">
 <table class="table">
 <tr>
 <th>
@@ -88,7 +88,7 @@ time (second)
 </a>
 </div>
 </a>
-<a id="Sec:TablofSymb">
+<a id="Sec:ToS">
 <div class="subsection">
 <h3>
 Table of Symbols
@@ -96,7 +96,7 @@ Table of Symbols
 <p class="paragraph">
 The table that follows summarizes the symbols used in this document along with their units. The symbols are listed in alphabetical order.
 </p>
-<a id="Table:TablofSymb">
+<a id="Table:ToS">
 <table class="table">
 <tr>
 <th>
@@ -542,12 +542,12 @@ kg
 </a>
 </div>
 </a>
-<a id="Sec:AbbrandAcro">
+<a id="Sec:TAbbAcc">
 <div class="subsection">
 <h3>
 Abbreviations and Acronyms
 </h3>
-<a id="Table:AbbrandAcro">
+<a id="Table:TAbbAcc">
 <table class="table">
 <tr>
 <th>
@@ -723,7 +723,7 @@ Typical Uncertainty
 </a>
 </div>
 </a>
-<a id="Sec:Intr">
+<a id="Sec:Intro">
 <div class="section">
 <h2>
 Introduction
@@ -734,7 +734,7 @@ Software is helpful to efficiently and correctly predict the blast risk involved
 <p class="paragraph">
 The following section provides an overview of the Software Requirements Specification (SRS) for GlassBR. This section explains the purpose of this document, the scope of the system, the organization of the document, and the characteristics of the intended reader.
 </p>
-<a id="Sec:PurpofDocu">
+<a id="Sec:DocPurpose">
 <div class="subsection">
 <h3>
 Purpose of Document
@@ -747,7 +747,7 @@ This document will be used as a starting point for subsequent development phases
 </p>
 </div>
 </a>
-<a id="Sec:ScopofRequ">
+<a id="Sec:ReqsScope">
 <div class="subsection">
 <h3>
 Scope of Requirements
@@ -757,23 +757,23 @@ The scope of the requirements includes getting all input parameters related to t
 </p>
 </div>
 </a>
-<a id="Sec:CharofInteRead">
+<a id="Sec:ReaderChars">
 <div class="subsection">
 <h3>
 Characteristics of Intended Reader
 </h3>
 <p class="paragraph">
-Reviewers of this documentation should have a strong knowledge in theory behind glass breakage and blast risk. The reviewers should also have an understanding of second year calculus, structural mechanics, and computer applications in civil engineering.In addition, reviewers should be familiar with the applicable standards for constructions using glass from [4-6] in <a href=#Sec:Refe>Sec:Refe</a>. The users of GlassBR can have a lower level of expertise, as explained in <a href=#Sec:UserChar>Sec:UserChar</a>.
+Reviewers of this documentation should have a strong knowledge in theory behind glass breakage and blast risk. The reviewers should also have an understanding of second year calculus, structural mechanics, and computer applications in civil engineering.In addition, reviewers should be familiar with the applicable standards for constructions using glass from [4-6] in <a href=#Sec:References>References</a>. The users of GlassBR can have a lower level of expertise, as explained in <a href=#Sec:UserChars>User Characteristics</a>.
 </p>
 </div>
 </a>
-<a id="Sec:OrgaofDocu">
+<a id="Sec:DocOrg">
 <div class="subsection">
 <h3>
 Organization of Document
 </h3>
 <p class="paragraph">
-The organization of this document follows the template for an SRS for scientific computing software proposed by [1] and [2] (in <a href=#Sec:Refe>Sec:Refe</a>), with some aspects taken from Volere template 16 [3]. The presentation follows the standard pattern of presenting goals, theories, definitions, and assumptions. For readers that would like a more bottom up approach, they can start reading the data definitions in <a href=#Sec:DataDefi>Sec:DataDefi</a> and trace back to find any additional information they require.
+The organization of this document follows the template for an SRS for scientific computing software proposed by <a href=#koothoor2013>koothoor2013</a> and <a href=#smithLai2005>smithLai2005</a>, with some aspects taken from Volere template 16 <a href=#rbrtsn2012>rbrtsn2012</a>. The presentation follows the standard pattern of presenting goals, theories, definitions, and assumptions. For readers that would like a more bottom up approach, they can start reading the data definitions in <a href=#Sec:DDs>Data Definitions</a> and trace back to find any additional information they require.
 </p>
 <p class="paragraph">
 The goal statements are refined to the theoretical models, and the theoretical models to the instance models. The data definitions are used to support the definitions of the different models.
@@ -782,7 +782,7 @@ The goal statements are refined to the theoretical models, and the theoretical m
 </a>
 </div>
 </a>
-<a id="Sec:Stak">
+<a id="Sec:Stakeholder">
 <div class="section">
 <h2>
 Stakeholders
@@ -790,7 +790,7 @@ Stakeholders
 <p class="paragraph">
 This section describes the Stakeholders: the people who have an interest in the product.
 </p>
-<a id="Sec:TheClie">
+<a id="Sec:Client">
 <div class="subsection">
 <h3>
 The Client
@@ -800,7 +800,7 @@ The client for GlassBR is a company named Entuitive. It is developed by Dr. Manu
 </p>
 </div>
 </a>
-<a id="Sec:TheCust">
+<a id="Sec:Customer">
 <div class="subsection">
 <h3>
 The Customer
@@ -812,7 +812,7 @@ The customers are the end user of GlassBR.
 </a>
 </div>
 </a>
-<a id="Sec:GeneSystDesc">
+<a id="Sec:GenSysDesc">
 <div class="section">
 <h2>
 General System Description
@@ -820,7 +820,7 @@ General System Description
 <p class="paragraph">
 This section provides general information about the system, identifies the interfaces between the system and its environment, and describes the user characteristics and the system constraints.
 </p>
-<a id="Sec:UserChar">
+<a id="Sec:UserChars">
 <div class="subsection">
 <h3>
 User Characteristics
@@ -838,7 +838,7 @@ The end user is expected to have basic computer literacy to handle the software.
 </ul>
 </div>
 </a>
-<a id="Sec:SystCons">
+<a id="Sec:SysConstraints">
 <div class="subsection">
 <h3>
 System Constraints
@@ -850,7 +850,7 @@ There are no system constraints.
 </a>
 </div>
 </a>
-<a id="Sec:ScopoftheProj">
+<a id="Sec:ProjScope">
 <div class="section">
 <h2>
 Scope of the Project
@@ -858,12 +858,12 @@ Scope of the Project
 <p class="paragraph">
 This section presents the scope of the project. It describes the expected use of GlassBR as well as the inputs and outputs of each action. The use cases are input and output, which defines the action of getting the input and displaying the output.
 </p>
-<a id="Sec:ProdUseCaseTabl">
+<a id="Sec:UseCaseTable">
 <div class="subsection">
 <h3>
 Product Use Case Table
 </h3>
-<a id="Table:UseCaseTabl">
+<a id="Table:useCaseTable">
 <table class="table">
 <tr>
 <th>
@@ -878,7 +878,7 @@ Input and Output
 User
 </td>
 <td>
-Characteristics of the glass slab and of the blast. Details in <a href=#Sec:IndiProdUseCase>Sec:IndiProdUseCase</a>
+Characteristics of the glass slab and of the blast. Details in <a href=#Sec:IndividualProdUC>Individual Product Use Cases</a>
 </td>
 </tr>
 <tr>
@@ -896,7 +896,7 @@ Use Case Table
 </a>
 </div>
 </a>
-<a id="Sec:IndiProdUseCase">
+<a id="Sec:IndividualProdUC">
 <div class="subsection">
 <h3>
 Individual Product Use Cases
@@ -924,13 +924,13 @@ Problem Description
 <p class="paragraph">
 A system is needed to efficiently and correctly predict the blast risk involved with the glass. GlassBR is a computer program developed to interpret the inputs to give out the outputs which predicts whether the glass slab can withstand the blast under the conditions.
 </p>
-<a id="Sec:TermandDefi">
+<a id="Sec:TermDefs">
 <div class="subsubsection">
 <h4>
 Terminology and Definitions
 </h4>
 <p class="paragraph">
-This subsection provides a list of terms that are used in the subsequent sections and their meaning, with the purpose of reducing ambiguity and making it easier to correctly understand the requirements. All of the terms are extracted from [4] in <a href=#Sec:Refe>Sec:Refe</a>.
+This subsection provides a list of terms that are used in the subsequent sections and their meaning, with the purpose of reducing ambiguity and making it easier to correctly understand the requirements. All of the terms are extracted from [4] in <a href=#Sec:References>References</a>.
 </p>
 <ol class="list">
 <li>
@@ -1006,13 +1006,13 @@ Probability of breakage (<em>P<sub>b</sub></em>) - The fraction of glass lites o
 </ol>
 </div>
 </a>
-<a id="Sec:PhysSystDesc">
+<a id="Sec:PhysSyst">
 <div class="subsubsection">
 <h4>
 Physical System Description
 </h4>
 <p class="paragraph">
-The physical system of GlassBR, as shown in <a href=#Figure:Thephyssyst>Figure:Thephyssyst</a>, includes the following elements:
+The physical system of GlassBR, as shown in <a href=#Figure:physSystImage>Figure:physSystImage</a>, includes the following elements:
 </p>
 <div class="list">
 <p>
@@ -1022,7 +1022,7 @@ PS1: Glass slab
 PS2: The point of explosion. Where the bomb, or any kind of man-made explosion, is located. The stand off distance is the distance between the point of explosion and the glass.
 </p>
 </div>
-<a id="Figure:Thephyssyst">
+<a id="Figure:physSystImage">
 <img class="figure" src="../../../datafiles/GlassBR/physicalsystimage.png" alt="The physical system"></img>
 <p class="caption">
 The physical system
@@ -1030,7 +1030,7 @@ The physical system
 </a>
 </div>
 </a>
-<a id="Sec:GoalStat">
+<a id="Sec:GoalStmt">
 <div class="subsubsection">
 <h4>
 Goal Statements
@@ -1047,60 +1047,60 @@ GS1: Analyze and predict whether the glass slab under consideration will be able
 </a>
 </div>
 </a>
-<a id="Sec:SoluCharSpec">
+<a id="Sec:SolCharSpec">
 <div class="subsection">
 <h3>
 Solution Characteristics Specification
 </h3>
 <p class="paragraph">
-The instance models that govern GlassBR are presented in <a href=#Sec:InstMode>Sec:InstMode</a>. The information to understand the meaning of the instance models and their derivation is also presented, so that the instance models can be verified.
+The instance models that govern GlassBR are presented in <a href=#Sec:IMs>Instance Models</a>. The information to understand the meaning of the instance models and their derivation is also presented, so that the instance models can be verified.
 </p>
-<a id="Sec:Assu">
+<a id="Sec:Assumps">
 <div class="subsubsection">
 <h4>
 Assumptions
 </h4>
 <p class="paragraph">
-This section simplifies the original problem and helps in developing the theoretical model by filling in the missing information for the physical system. The numbers given in the square brackets refer to the Theoretical Models [<a href=#Sec:TheoMode>Sec:TheoMode</a>], General Definitions [<a href=#Sec:GeneDefi>Sec:GeneDefi</a>], Data Definitions [<a href=#Sec:DataDefi>Sec:DataDefi</a>], Instance Models [<a href=#Sec:InstMode>Sec:InstMode</a>], or Likely Changes [<a href=#Sec:LikeChan>Sec:LikeChan</a>], in which the respective assumption is used.
+This section simplifies the original problem and helps in developing the theoretical model by filling in the missing information for the physical system. The numbers given in the square brackets refer to the Theoretical Models [<a href=#Sec:TMs>Theoretical Models</a>], General Definitions [<a href=#Sec:GDs>General Definitions</a>], Data Definitions [<a href=#Sec:DDs>Data Definitions</a>], Instance Models [<a href=#Sec:IMs>Instance Models</a>], or Likely Changes [<a href=#Sec:LCs>Likely Changes</a>], in which the respective assumption is used.
 </p>
-<a id="A:assumption1">
+<a id="A:glassTyA">
 <ul>
-A1: The standard E1300-09a for calculation applies only to monolithic, laminated, or insulating glass constructions of rectangular shape with continuous lateral support along. one, two, three, or four edge This practice assumes that (1) the supported glass edge for two, three and four-sided support conditions are simply supported and free to slip in plane; (2) glass supported on two sides acts as a simply supported beam and (3) glass supported on one side acts as a cantilever.
+glassTyA: The standard E1300-09a for calculation applies only to monolithic, laminated, or insulating glass constructions of rectangular shape with continuous lateral support along. one, two, three, or four edge This practice assumes that (1) the supported glass edge for two, three and four-sided support conditions are simply supported and free to slip in plane; (2) glass supported on two sides acts as a simply supported beam and (3) glass supported on one side acts as a cantilever.
 </ul>
 </a>
-<a id="A:assumption2">
+<a id="A:glassConditionA">
 <ul>
-A2: Following [4 (pg. 1)], this practice does not apply to any form of wired, patterned, etched, sandblasted, drilled, notched, or grooved glass with surface and edge treatments that alter the glass strength.
+glassConditionA: Following <a href=#astm.LR2009>astm_LR2009</a> (pg. 1), this practice does not apply to any form of wired, patterned, etched, sandblasted, drilled, notched, or grooved glass with surface and edge treatments that alter the glass strength.
 </ul>
 </a>
-<a id="A:assumption3">
+<a id="A:explsnScenarioA">
 <ul>
-A3: This system only considers the external explosion scenario for its calculations.
+explsnScenarioA: This system only considers the external explosion scenario for its calculations.
 </ul>
 </a>
-<a id="A:assumption4">
+<a id="A:standardValuesA">
 <ul>
-A4: The values provided in <a href=#Sec:ValuofAuxiCons>Sec:ValuofAuxiCons</a> are assumed for the duration of load (<em>t<sub>d</sub></em>), and the material properties of <em>m</em>, <em>k</em>, and <em>E</em>.
+standardValuesA: The values provided in <a href=#Sec:AuxConstants>Values of Auxiliary Constants</a> are assumed for the duration of load (<em>t<sub>d</sub></em>), and the material properties of <em>m</em>, <em>k</em>, and <em>E</em>.
 </ul>
 </a>
-<a id="A:assumption5">
+<a id="A:glassLiteA">
 <ul>
-A5: Glass under consideration is assumed to be a single lite. Hence the value of LSF is equal to 1 for all calculations in GlassBR.
+glassLiteA: Glass under consideration is assumed to be a single lite. Hence the value of LSF is equal to 1 for all calculations in GlassBR.
 </ul>
 </a>
-<a id="A:assumption6">
+<a id="A:bndryConditionsA">
 <ul>
-A6: Boundary conditions for the glass slab is assumed to be 4-sided support for calculations.
+bndryConditionsA: Boundary conditions for the glass slab is assumed to be 4-sided support for calculations.
 </ul>
 </a>
-<a id="A:assumption7">
+<a id="A:responseTyA">
 <ul>
-A7: The response type considered in GlassBR is flexural.
+responseTyA: The response type considered in GlassBR is flexural.
 </ul>
 </a>
-<a id="A:assumption8">
+<a id="A:ldfConstantA">
 <ul>
-A8: With reference to A4 the value of load duration factor (<em>LDF</em>) is a constant in GlassBR. It is calculated by the equation: <em>LDF</em> = (<div class="fraction">
+ldfConstantA: With reference to <a href=#A:standardValuesA>standardValuesA</a> the value of load duration factor (<em>LDF</em>) is a constant in GlassBR. It is calculated by the equation: <em>LDF</em> = (<div class="fraction">
 <span class="fup">
 <em>t<sub>d</sub></em>
 </span>
@@ -1119,7 +1119,7 @@ A8: With reference to A4 the value of load duration factor (<em>LDF</em>) is a c
 </a>
 </div>
 </a>
-<a id="Sec:TheoMode">
+<a id="Sec:TMs">
 <div class="subsubsection">
 <h4>
 Theoretical Models
@@ -1221,7 +1221,7 @@ If <em>is_safe2</em>, the glass is considered safe. <em>is_safe1</em> (from <a h
 </a>
 </div>
 </a>
-<a id="Sec:GeneDefi">
+<a id="Sec:GDs">
 <div class="subsubsection">
 <h4>
 General Definitions
@@ -1231,7 +1231,7 @@ There are no general definitions.
 </p>
 </div>
 </a>
-<a id="Sec:DataDefi">
+<a id="Sec:DDs">
 <div class="subsubsection">
 <h4>
 Data Definitions
@@ -1828,13 +1828,13 @@ Description
 </a>
 </div>
 </a>
-<a id="Sec:InstMode">
+<a id="Sec:IMs">
 <div class="subsubsection">
 <h4>
 Instance Models
 </h4>
 <p class="paragraph">
-This section transforms the problem defined in <a href=#Sec:ProbDesc>Sec:ProbDesc</a> into one which is expressed in mathematical terms. It uses concrete symbols defined in <a href=#Sec:DataDefi>Sec:DataDefi</a> to replace the abstract symbols in the models identified in <a href=#Sec:TheoMode>Sec:TheoMode</a> and <a href=#Sec:GeneDefi>Sec:GeneDefi</a>.
+This section transforms the problem defined in <a href=#Sec:ProbDesc>Problem Description</a> into one which is expressed in mathematical terms. It uses concrete symbols defined in <a href=#Sec:DDs>Data Definitions</a> to replace the abstract symbols in the models identified in <a href=#Sec:TMs>Theoretical Models</a> and <a href=#Sec:GDs>General Definitions</a>.
 </p>
 <a id="T:probOfBr">
 <table class="tdefn">
@@ -1976,15 +1976,15 @@ Description
 </a>
 </div>
 </a>
-<a id="Sec:DataCons">
+<a id="Sec:DataConstraints">
 <div class="subsubsection">
 <h4>
 Data Constraints
 </h4>
 <p class="paragraph">
-<a href=#Table:InpuDataCons>Table:InpuDataCons</a>, and <a href=#Table:OutpDataCons>Table:OutpDataCons</a> shows the data constraints on the input and output variables, respectively. The column for physical constraints gives the physical limitations on the range of values that can be taken by the variable. The uncertainty column provides an estimate of the confidence with which the physical quantities can be measured. This information would be part of the input if one were performing an uncertainty quantification exercise. The constraints are conservative, to give the user of the model the flexibility to experiment with unusual situations. The column of typical values is intended to provide a feel for a common scenario. <a href=#Sec:ValuofAuxiCons>Sec:ValuofAuxiCons</a> gives the values of the specification parameters used in <a href=#Table:InpuDataCons>Table:InpuDataCons</a>. <a href=#Table:OutpDataCons>Table:OutpDataCons</a> shows the constraints that must be satisfied by the output.
+<a href=#Table:InDataConstraints>Table:InDataConstraints</a>, and <a href=#Table:OutDataConstraints>Table:OutDataConstraints</a> shows the data constraints on the input and output variables, respectively. The column for physical constraints gives the physical limitations on the range of values that can be taken by the variable. The uncertainty column provides an estimate of the confidence with which the physical quantities can be measured. This information would be part of the input if one were performing an uncertainty quantification exercise. The constraints are conservative, to give the user of the model the flexibility to experiment with unusual situations. The column of typical values is intended to provide a feel for a common scenario. <a href=#Sec:AuxConstants>Values of Auxiliary Constants</a> gives the values of the specification parameters used in <a href=#Table:InDataConstraints>Table:InDataConstraints</a>. <a href=#Table:OutDataConstraints>Table:OutDataConstraints</a> shows the constraints that must be satisfied by the output.
 </p>
-<a id="Table:InpuDataCons">
+<a id="Table:InDataConstraints">
 <table class="table">
 <tr>
 <th>
@@ -2117,7 +2117,7 @@ None
 Input Data Constraints
 </p>
 </a>
-<a id="Table:OutpDataCons">
+<a id="Table:OutDataConstraints">
 <table class="table">
 <tr>
 <th>
@@ -2146,7 +2146,7 @@ Output Data Constraints
 </a>
 </div>
 </a>
-<a id="Sec:Requ">
+<a id="Sec:Requirements">
 <div class="section">
 <h2>
 Requirements
@@ -2154,32 +2154,32 @@ Requirements
 <p class="paragraph">
 This section provides the functional requirements, the business tasks that the software is expected to complete, and the non-functional requirements, the qualities that the software is expected to exhibit.
 </p>
-<a id="Sec:FuncRequ">
+<a id="Sec:FRs">
 <div class="subsection">
 <h3>
 Functional Requirements
 </h3>
-<a id="R:s71req1">
+<a id="FR:s7.1.req1">
 <ul>
-R1: Input the quantities from <a href=#Table:RequInpufollR1>Table:RequInpufollR1</a>, which define the glass dimensions, type of glass, tolerable probability of failure and the characteristics of the blast Note: <em>a</em> and <em>b</em> will be input in terms of millimetres and will be converted to the equivalent value in metres.
+R1: Input the quantities from <a href=#Table:R1ReqInputs>Table:R1ReqInputs</a>, which define the glass dimensions, type of glass, tolerable probability of failure and the characteristics of the blast Note: <em>a</em> and <em>b</em> will be input in terms of millimetres and will be converted to the equivalent value in metres.
 </ul>
 </a>
-<a id="R:s71req2">
+<a id="FR:s7.1.req2">
 <ul>
 R2: The system shall set the known values as follows: <em>m</em>, <em>k</em>, <em>E</em>, <em>t<sub>d</sub></em> following A4, <em>LDF</em> following A8, and LSF following A5.
 </ul>
 </a>
-<a id="R:s71req3">
+<a id="FR:s7.1.req3">
 <ul>
-R3: The system shall check the entered input values to ensure that they do not exceed the data constraints mentioned in <a href=#Sec:DataCons>Sec:DataCons</a>. If any of the input parameters is out of bounds, an error message is displayed and the calculations stop.
+R3: The system shall check the entered input values to ensure that they do not exceed the data constraints mentioned in <a href=#Sec:DataConstraints>Data Constraints</a>. If any of the input parameters is out of bounds, an error message is displayed and the calculations stop.
 </ul>
 </a>
-<a id="R:s71req4">
+<a id="FR:s7.1.req4">
 <ul>
 R4: Output the input quantities from R1 and the known quantities from R2.
 </ul>
 </a>
-<a id="R:s71req5">
+<a id="FR:s7.1.req5">
 <ul>
 R5: If <em>is_safe1</em> and <em>is_safe2</em> (from <a href=#T:t1SafetyReq>T:t1SafetyReq</a> and <a href=#T:t2SafetyReq>T:t2SafetyReq</a>) are true, output the message &quot;For the given input parameters, the glass is considered safe.&quot; If the condition is false, then output the message &quot;For the given input parameters, the glass is NOT considered safe.&quot;
 </ul>
@@ -2231,7 +2231,7 @@ R6: Output the following quantities:
     </ul>
 </p>
 </div>
-<a id="Table:RequInpufollR1">
+<a id="Table:R1ReqInputs">
 <table class="table">
 <tr>
 <th>
@@ -2361,7 +2361,7 @@ Required Inputs following R1
 </a>
 </div>
 </a>
-<a id="Sec:Non-Requ">
+<a id="Sec:NFRs">
 <div class="subsection">
 <h3>
 Non-Functional Requirements
@@ -2373,47 +2373,47 @@ This problem is small in size and relatively simple, so performance is not a pri
 </a>
 </div>
 </a>
-<a id="Sec:LikeChan">
+<a id="Sec:LCs">
 <div class="section">
 <h2>
 Likely Changes
 </h2>
-<a id="LC:s8likelychg1">
+<a id="LC:s8.likelychg1">
 <ul>
 LC1: A3 - The system currently only calculates for external blast risk. In the future calculations can be added for the internal blast risk.
 </ul>
 </a>
-<a id="LC:s8likelychg2">
+<a id="LC:s8.likelychg2">
 <ul>
 LC2: A4, A8 - Currently the values for <em>m</em>, <em>k</em>, and <em>E</em> are assumed to be the same for all glass. In the future these values can be changed to variable inputs.
 </ul>
 </a>
-<a id="LC:s8likelychg3">
+<a id="LC:s8.likelychg3">
 <ul>
 LC3: A5 - The software may be changed to accommodate more than a single lite.
 </ul>
 </a>
-<a id="LC:s8likelychg4">
+<a id="LC:s8.likelychg4">
 <ul>
 LC4: A6 - The software may be changed to accommodate more boundary conditions than 4-sided support.
 </ul>
 </a>
-<a id="LC:s8likelychg5">
+<a id="LC:s8.likelychg5">
 <ul>
 LC5: A7 - The software may be changed to consider more than just flexure of the glass.
 </ul>
 </a>
 </div>
 </a>
-<a id="Sec:TracMatrandGrap">
+<a id="Sec:TraceMatrices">
 <div class="section">
 <h2>
 Traceability Matrices and Graphs
 </h2>
 <p class="paragraph">
-The purpose of the traceability matrices is to provide easy references on what has to be additionally modified if a certain component is changed. Every time a component is changed, the items in the column of that component that are marked with an &quot;X&quot; should be modified as well. <a href=#Table:TracMatrShowtheConnBetwItemofDiffSect>Table:TracMatrShowtheConnBetwItemofDiffSect</a> shows the dependencies of theoretical models, instance models, and data definitions with each other. <a href=#Table:TracMatrShowtheConnBetwRequandOtheItem>Table:TracMatrShowtheConnBetwRequandOtheItem</a> shows the dependencies of requirements on theoretical models, instance models, data definitions, and data constraints. <a href=#Table:TracMatrShowtheConnBetwAssuandOtheItem>Table:TracMatrShowtheConnBetwAssuandOtheItem</a> shows the dependencies of theoretical models, instance models, data definitions, likely changes and requirements on the assumptions.
+The purpose of the traceability matrices is to provide easy references on what has to be additionally modified if a certain component is changed. Every time a component is changed, the items in the column of that component that are marked with an &quot;X&quot; should be modified as well. <a href=#Table:TraceyItemSecs>Table:TraceyItemSecs</a> shows the dependencies of theoretical models, instance models, and data definitions with each other. <a href=#Table:TraceyReqsItems>Table:TraceyReqsItems</a> shows the dependencies of requirements on theoretical models, instance models, data definitions, and data constraints. <a href=#Table:TraceyAssumpsOthers>Table:TraceyAssumpsOthers</a> shows the dependencies of theoretical models, instance models, data definitions, likely changes and requirements on the assumptions.
 </p>
-<a id="Table:TracMatrShowtheConnBetwItemofDiffSect">
+<a id="Table:TraceyItemSecs">
 <table class="table">
 <tr>
 <th>
@@ -3036,7 +3036,7 @@ X
 Traceability Matrix Showing the Connections Between Items of Different Sections
 </p>
 </a>
-<a id="Table:TracMatrShowtheConnBetwRequandOtheItem">
+<a id="Table:TraceyReqsItems">
 <table class="table">
 <tr>
 <th>
@@ -3082,95 +3082,30 @@ DD7 (<a href=#DD:tolLoad>DD:tolLoad</a>)
 DD8 (<a href=#DD:sdf.tol>DD:sdf.tol</a>)
 </th>
 <th>
-Data Constraints (<a href=#Sec:DataCons>Sec:DataCons</a>)
+Data Constraints (<a href=#Sec:DataConstraints>Data Constraints</a>)
 </th>
 <th>
-R1 (<a href=#Sec:FuncRequ>Sec:FuncRequ</a>)
+R1 (<a href=#Sec:FRs>Functional Requirements</a>)
 </th>
 <th>
-R2 (<a href=#Sec:FuncRequ>Sec:FuncRequ</a>)
+R2 (<a href=#Sec:FRs>Functional Requirements</a>)
 </th>
 <th>
-R3 (<a href=#Sec:FuncRequ>Sec:FuncRequ</a>)
+R3 (<a href=#Sec:FRs>Functional Requirements</a>)
 </th>
 <th>
-R4 (<a href=#Sec:FuncRequ>Sec:FuncRequ</a>)
+R4 (<a href=#Sec:FRs>Functional Requirements</a>)
 </th>
 <th>
-R5 (<a href=#Sec:FuncRequ>Sec:FuncRequ</a>)
+R5 (<a href=#Sec:FRs>Functional Requirements</a>)
 </th>
 <th>
-R6 (<a href=#Sec:FuncRequ>Sec:FuncRequ</a>)
+R6 (<a href=#Sec:FRs>Functional Requirements</a>)
 </th>
 </tr>
 <tr>
 <td>
-R1 (in <a href=#Sec:FuncRequ>Sec:FuncRequ</a>)
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-<td>
-
-</td>
-</tr>
-<tr>
-<td>
-R2 (in <a href=#Sec:FuncRequ>Sec:FuncRequ</a>)
+R1 (in <a href=#Sec:FRs>Functional Requirements</a>)
 </td>
 <td>
 
@@ -3235,7 +3170,72 @@ R2 (in <a href=#Sec:FuncRequ>Sec:FuncRequ</a>)
 </tr>
 <tr>
 <td>
-R3 (in <a href=#Sec:FuncRequ>Sec:FuncRequ</a>)
+R2 (in <a href=#Sec:FRs>Functional Requirements</a>)
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+<td>
+
+</td>
+</tr>
+<tr>
+<td>
+R3 (in <a href=#Sec:FRs>Functional Requirements</a>)
 </td>
 <td>
 
@@ -3300,7 +3300,7 @@ X
 </tr>
 <tr>
 <td>
-R4 (in <a href=#Sec:FuncRequ>Sec:FuncRequ</a>)
+R4 (in <a href=#Sec:FRs>Functional Requirements</a>)
 </td>
 <td>
 
@@ -3365,7 +3365,7 @@ X
 </tr>
 <tr>
 <td>
-R5 (in <a href=#Sec:FuncRequ>Sec:FuncRequ</a>)
+R5 (in <a href=#Sec:FRs>Functional Requirements</a>)
 </td>
 <td>
 X
@@ -3430,7 +3430,7 @@ X
 </tr>
 <tr>
 <td>
-R6 (in <a href=#Sec:FuncRequ>Sec:FuncRequ</a>)
+R6 (in <a href=#Sec:FRs>Functional Requirements</a>)
 </td>
 <td>
 
@@ -3498,35 +3498,35 @@ X
 Traceability Matrix Showing the Connections Between Requirements and Other Items
 </p>
 </a>
-<a id="Table:TracMatrShowtheConnBetwAssuandOtheItem">
+<a id="Table:TraceyAssumpsOthers">
 <table class="table">
 <tr>
 <th>
 
 </th>
 <th>
-A1 (<a href=#Sec:Assu>Sec:Assu</a>)
+A1 (<a href=#Sec:Assumps>Assumptions</a>)
 </th>
 <th>
-A2 (<a href=#Sec:Assu>Sec:Assu</a>)
+A2 (<a href=#Sec:Assumps>Assumptions</a>)
 </th>
 <th>
-A3 (<a href=#Sec:Assu>Sec:Assu</a>)
+A3 (<a href=#Sec:Assumps>Assumptions</a>)
 </th>
 <th>
-A4 (<a href=#Sec:Assu>Sec:Assu</a>)
+A4 (<a href=#Sec:Assumps>Assumptions</a>)
 </th>
 <th>
-A5 (<a href=#Sec:Assu>Sec:Assu</a>)
+A5 (<a href=#Sec:Assumps>Assumptions</a>)
 </th>
 <th>
-A6 (<a href=#Sec:Assu>Sec:Assu</a>)
+A6 (<a href=#Sec:Assumps>Assumptions</a>)
 </th>
 <th>
-A7 (<a href=#Sec:Assu>Sec:Assu</a>)
+A7 (<a href=#Sec:Assumps>Assumptions</a>)
 </th>
 <th>
-A8 (<a href=#Sec:Assu>Sec:Assu</a>)
+A8 (<a href=#Sec:Assumps>Assumptions</a>)
 </th>
 </tr>
 <tr>
@@ -3908,7 +3908,7 @@ X
 </tr>
 <tr>
 <td>
-LC1 (<a href=#Sec:LikeChan>Sec:LikeChan</a>)
+LC1 (<a href=#Sec:LCs>Likely Changes</a>)
 </td>
 <td>
 
@@ -3937,7 +3937,7 @@ X
 </tr>
 <tr>
 <td>
-LC2 (<a href=#Sec:LikeChan>Sec:LikeChan</a>)
+LC2 (<a href=#Sec:LCs>Likely Changes</a>)
 </td>
 <td>
 
@@ -3966,7 +3966,7 @@ X
 </tr>
 <tr>
 <td>
-LC3 (<a href=#Sec:LikeChan>Sec:LikeChan</a>)
+LC3 (<a href=#Sec:LCs>Likely Changes</a>)
 </td>
 <td>
 
@@ -3995,7 +3995,7 @@ X
 </tr>
 <tr>
 <td>
-LC4 (<a href=#Sec:LikeChan>Sec:LikeChan</a>)
+LC4 (<a href=#Sec:LCs>Likely Changes</a>)
 </td>
 <td>
 
@@ -4024,7 +4024,7 @@ X
 </tr>
 <tr>
 <td>
-LC5 (<a href=#Sec:LikeChan>Sec:LikeChan</a>)
+LC5 (<a href=#Sec:LCs>Likely Changes</a>)
 </td>
 <td>
 
@@ -4053,7 +4053,7 @@ X
 </tr>
 <tr>
 <td>
-R1 (<a href=#Sec:FuncRequ>Sec:FuncRequ</a>)
+R1 (<a href=#Sec:FRs>Functional Requirements</a>)
 </td>
 <td>
 
@@ -4082,7 +4082,7 @@ R1 (<a href=#Sec:FuncRequ>Sec:FuncRequ</a>)
 </tr>
 <tr>
 <td>
-R2 (<a href=#Sec:FuncRequ>Sec:FuncRequ</a>)
+R2 (<a href=#Sec:FRs>Functional Requirements</a>)
 </td>
 <td>
 
@@ -4111,7 +4111,7 @@ X
 </tr>
 <tr>
 <td>
-R3 (<a href=#Sec:FuncRequ>Sec:FuncRequ</a>)
+R3 (<a href=#Sec:FRs>Functional Requirements</a>)
 </td>
 <td>
 
@@ -4140,7 +4140,7 @@ R3 (<a href=#Sec:FuncRequ>Sec:FuncRequ</a>)
 </tr>
 <tr>
 <td>
-R4 (<a href=#Sec:FuncRequ>Sec:FuncRequ</a>)
+R4 (<a href=#Sec:FRs>Functional Requirements</a>)
 </td>
 <td>
 
@@ -4169,7 +4169,7 @@ R4 (<a href=#Sec:FuncRequ>Sec:FuncRequ</a>)
 </tr>
 <tr>
 <td>
-R5 (<a href=#Sec:FuncRequ>Sec:FuncRequ</a>)
+R5 (<a href=#Sec:FRs>Functional Requirements</a>)
 </td>
 <td>
 
@@ -4198,7 +4198,7 @@ R5 (<a href=#Sec:FuncRequ>Sec:FuncRequ</a>)
 </tr>
 <tr>
 <td>
-R6 (<a href=#Sec:FuncRequ>Sec:FuncRequ</a>)
+R6 (<a href=#Sec:FRs>Functional Requirements</a>)
 </td>
 <td>
 
@@ -4231,24 +4231,24 @@ Traceability Matrix Showing the Connections Between Assumptions and Other Items
 </p>
 </a>
 <p class="paragraph">
-The purpose of the traceability graphs is also to provide easy references on what has to be additionally modified if a certain component is changed. The arrows in the graphs represent dependencies. The component at the tail of an arrow is depended on by the component at the head of that arrow. Therefore, if a component is changed, the components that it points to should also be changed. <a href=#Figure:Figu2:TracMatrShowtheConnBetwItemofDiffSect>Figure:Figu2:TracMatrShowtheConnBetwItemofDiffSect</a> shows the dependencies of theoretical models, instance models, and data definitions on each other. <a href=#Figure:Figu3:TracMatrShowtheConnBetwRequandOtheItem>Figure:Figu3:TracMatrShowtheConnBetwRequandOtheItem</a> shows the dependencies of requirements on theoretical models, instance models, data definitions, and data constraints. <a href=#Figure:Figu4:TracMatrShowtheConnBetwAssuandOtheItem>Figure:Figu4:TracMatrShowtheConnBetwAssuandOtheItem</a> shows the dependencies of theoretical models, instance models, data definitions, requirements, and likely changes on assumptions.
+The purpose of the traceability graphs is also to provide easy references on what has to be additionally modified if a certain component is changed. The arrows in the graphs represent dependencies. The component at the tail of an arrow is depended on by the component at the head of that arrow. Therefore, if a component is changed, the components that it points to should also be changed. <a href=#Figure:TraceyItemSecs>Figure:TraceyItemSecs</a> shows the dependencies of theoretical models, instance models, and data definitions on each other. <a href=#Figure:TraceyReqsItems>Figure:TraceyReqsItems</a> shows the dependencies of requirements on theoretical models, instance models, data definitions, and data constraints. <a href=#Figure:TraceyAssumpsOthers>Figure:TraceyAssumpsOthers</a> shows the dependencies of theoretical models, instance models, data definitions, requirements, and likely changes on assumptions.
 </p>
 <p class="paragraph">
 NOTE: Building a tool to automatically generate the graphical representation of the matrix by scanning the labels and reference can be future work.
 </p>
-<a id="Figure:Figu2:TracMatrShowtheConnBetwItemofDiffSect">
+<a id="Figure:TraceyItemSecs">
 <img class="figure" src="../../../datafiles/GlassBR/Trace.png" alt="Figure 2: Traceability Matrix Showing the Connections Between Items of Different Sections"></img>
 <p class="caption">
 Figure 2: Traceability Matrix Showing the Connections Between Items of Different Sections
 </p>
 </a>
-<a id="Figure:Figu3:TracMatrShowtheConnBetwRequandOtheItem">
+<a id="Figure:TraceyReqsItems">
 <img class="figure" src="../../../datafiles/GlassBR/RTrace.png" alt="Figure 3: Traceability Matrix Showing the Connections Between Requirements and Other Items"></img>
 <p class="caption">
 Figure 3: Traceability Matrix Showing the Connections Between Requirements and Other Items
 </p>
 </a>
-<a id="Figure:Figu4:TracMatrShowtheConnBetwAssuandOtheItem">
+<a id="Figure:TraceyAssumpsOthers">
 <img class="figure" src="../../../datafiles/GlassBR/ATrace.png" alt="Figure 4: Traceability Matrix Showing the Connections Between Assumptions and Other Items"></img>
 <p class="caption">
 Figure 4: Traceability Matrix Showing the Connections Between Assumptions and Other Items
@@ -4256,7 +4256,7 @@ Figure 4: Traceability Matrix Showing the Connections Between Assumptions and Ot
 </a>
 </div>
 </a>
-<a id="Sec:ValuofAuxiCons">
+<a id="Sec:AuxConstants">
 <div class="section">
 <h2>
 Values of Auxiliary Constants
@@ -4264,7 +4264,7 @@ Values of Auxiliary Constants
 <p class="paragraph">
 This section contains the standard values that are used for calculations in GlassBR.
 </p>
-<a id="Table:AuxiCons">
+<a id="Table:TAuxConsts">
 <table class="table">
 <tr>
 <th>
@@ -4483,51 +4483,63 @@ Auxiliary Constants
 </a>
 </div>
 </a>
-<a id="Sec:Refe">
+<a id="Sec:References">
 <div class="section">
 <h2>
 References
 </h2>
-<div class="list">
-<p>
-[1]: ASTM C1036-16. <em>Standard specification for Flat Glass</em>. West Conshohocken, PA: ASTM International, 2016. www.astm.org. 
-</p>
-<p>
-[2]: ASTM C1048-04. <em>Specification for Heat-Treated Flat Glass-Kind HS, Kind FT Coated and Uncoated Glass</em>. West Conshohocken, PA: ASTM International, 2009. www.astm.org. 
-</p>
-<p>
-[3]: ASTM E1300-09. <em>Standard Practice for Determining Load Resistance of Glass in Buildings</em>. <em>Standard E1300-09a</em>. ASTM International, 2009. www.astm.org. 
-</p>
-<p>
-[4]: Beason, W. Lynn, Kohutek, Terry L., and Bracci, Joseph M. <em>Basis for ASTME E 1300 Annealed Glass Thickness Selection Charts</em>. <em>ASCE Library</em>. 1 February 1998. doi.org/10.1061/(ASCE)0733-9445(1998)124:2(215). 
-</p>
-<p>
-[5]: Koothoor, Nirmitha. <em>A document drive approach to certifying scientific computing software</em>. Master's thesis, McMaster University, Hamilton, Canada: 2013. Print.
-</p>
-<p>
-[6]: Robertson, James and Robertson, Suzanne. "Volere requirements specification template edition 16." 2012. https://pdfs.semanticscholar.org/cf57/27a59801086cbd3d14e587e09880561dbe22.pdf. Print.
-</p>
-<p>
-[7]: Smith, W. Spencer and Lai, Lei. "A new requirements template for scientific computing." Edited by PJ Agerfalk, N. Kraiem, and J. Ralyte, <em>Proceedings of the First International Workshop on Situational Requirements Engineering Processes - Methods, Techniques and Tools to Support Situation-Specific Requirements Engineering Processes, SREP'05</em>, Paris, France: 2005. pp. 107&ndash;121. In conjunction with 13th IEEE International Requirements Engineering Conference, Print.
-</p>
-</div>
+<a id="astm_C1036">
+<ul>
+[1]: ASTM C1036-16. <em>Standard specification for Flat Glass</em>. West Conshohocken, PA: ASTM International, 2016. www.astm.org.
+</ul>
+</a>
+<a id="astm_C1048">
+<ul>
+[2]: ASTM C1048-04. <em>Specification for Heat-Treated Flat Glass-Kind HS, Kind FT Coated and Uncoated Glass</em>. West Conshohocken, PA: ASTM International, 2009. www.astm.org.
+</ul>
+</a>
+<a id="astm_LR2009">
+<ul>
+[3]: ASTM E1300-09. <em>Standard Practice for Determining Load Resistance of Glass in Buildings</em>. <em>Standard E1300-09a</em>. ASTM International, 2009. www.astm.org.
+</ul>
+</a>
+<a id="glThick1998">
+<ul>
+[4]: Beason, W. Lynn, Kohutek, Terry L., and Bracci, Joseph M. <em>Basis for ASTME E 1300 Annealed Glass Thickness Selection Charts</em>. <em>ASCE Library</em>. February, 1998. doi.org/10.1061/(ASCE)0733-9445(1998)124:2(215).
+</ul>
+</a>
+<a id="koothoor2013">
+<ul>
+[5]: Koothoor, Nirmitha. <em>A document drive approach to certifying scientific computing software</em>. McMaster University, Hamilton, ON, Canada: 2013. Print.
+</ul>
+</a>
+<a id="rbrtsn2012">
+<ul>
+[6]: Robertson, James and Robertson, Suzanne. <em>Volere requirements specification template edition 16</em>. 2012. https://pdfs.semanticscholar.org/cf57/27a59801086cbd3d14e587e09880561dbe22.pdf.
+</ul>
+</a>
+<a id="smithLai2005">
+<ul>
+[7]: Smith, W. Spencer and Lai, Lei. "A new requirements template for scientific computing." <em>Proceedings of the First International Workshop on Situational Requirements Engineering Processes - Methods, Techniques and Tools to Support Situation-Specific Requirements Engineering Processes, SREP'05</em>. Edited by PJ Agerfalk, N. Kraiem, and J. Ralyte, Paris, France: 2005. pp. 107&ndash;121. In conjunction with 13th IEEE International Requirements Engineering Conference,
+</ul>
+</a>
 </div>
 </a>
-<a id="Sec:Appe">
+<a id="Sec:Appendix">
 <div class="section">
 <h2>
 Appendix
 </h2>
 <p class="paragraph">
-This appendix holds the graphs (<a href=#Figure:Figu5:3secoduraequipres()versStanoffdist(SD)versCharweig()>Figure:Figu5:3secoduraequipres()versStanoffdist(SD)versCharweig()</a> and <a href=#Figure:Figu6:Nondimelateload()versAspeRati(AR)versStredistfact(Fun()>Figure:Figu6:Nondimelateload()versAspeRati(AR)versStredistfact(Fun()</a>) used for interpolating values needed in the models.
+This appendix holds the graphs (<a href=#Figure:demandVSsod>Figure:demandVSsod</a> and <a href=#Figure:dimlessloadVSaspect>Figure:dimlessloadVSaspect</a>) used for interpolating values needed in the models.
 </p>
-<a id="Figure:Figu5:3secoduraequipres()versStanoffdist(SD)versCharweig()">
+<a id="Figure:demandVSsod">
 <img class="figure" src="../../../datafiles/GlassBR/ASTM_F2248-09.png" alt="Figure 5: 3 second duration equivalent pressure (<em>q</em>) versus Stand off distance (SD) versus Charge weight (<em>m</em>)"></img>
 <p class="caption">
 Figure 5: 3 second duration equivalent pressure (<em>q</em>) versus Stand off distance (SD) versus Charge weight (<em>m</em>)
 </p>
 </a>
-<a id="Figure:Figu6:Nondimelateload()versAspeRati(AR)versStredistfact(Fun()">
+<a id="Figure:dimlessloadVSaspect">
 <img class="figure" src="../../../datafiles/GlassBR/ASTM_F2248-09_BeasonEtAl.png" alt="Figure 6: Non dimensional lateral load (<em>q&#770;</em>) versus Aspect Ratio (AR) versus Stress distribution factor (Function) (<em>J</em>)"></img>
 <p class="caption">
 Figure 6: Non dimensional lateral load (<em>q&#770;</em>) versus Aspect Ratio (AR) versus Stress distribution factor (Function) (<em>J</em>)

@@ -1,6 +1,6 @@
 module Drasil.HGHC.HGHC (srsBody, thisCode, allSymbols) where
 
-import Language.Drasil
+import Language.Drasil hiding (Manual) -- Citation name conflict. FIXME: Move to different namespace
 import Drasil.DocumentLanguage
 
 import Drasil.HGHC.HeatTransfer (hghcVars, fp, htOutputs,

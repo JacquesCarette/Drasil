@@ -1,6 +1,6 @@
 -- | Document Description Language
 module Language.Drasil.Document where
-import Language.Drasil.Chunk (uid)
+
 import Language.Drasil.Chunk.AssumpChunk
 import Language.Drasil.Chunk.Change
 import Language.Drasil.Chunk.Eq

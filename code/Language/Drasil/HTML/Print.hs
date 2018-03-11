@@ -1,7 +1,7 @@
 module Language.Drasil.HTML.Print where
 
 import Prelude hiding (print)
-import Data.List (intersperse, sort)
+import Data.List (intersperse, sortBy)
 import Text.PrettyPrint hiding (render, quotes, Str)
 import Numeric (showFFloat)
 
@@ -79,19 +79,19 @@ title_spec s          sm = p_spec s sm
 
 -- | Renders the Sentences in the HTML body (called by 'printLO')
 p_spec :: HasSymbolTable s => Spec -> s -> String
-p_spec (E e)       _ = p_expr e
-p_spec (a :+: b)  sm = p_spec a sm ++ p_spec b sm
-p_spec (a :-: b)  sm = p_spec a sm ++ sub (brace (p_spec b sm))
-p_spec (a :^: b)  sm = p_spec a sm ++ sup (p_spec b sm)
-p_spec (a :/: b)  sm = fraction (p_spec a sm) (p_spec b sm)
-p_spec (S s)       _ = s
-p_spec (N s)       _ = symbol s
-p_spec (Sy s)      _ = uSymb s
-p_spec (G g)       _ = unPH $ greek g
-p_spec (Sp s)      _ = unPH $ special s
-p_spec HARDNL      _ = "<br />"
-p_spec (Ref r a)  sm = reflink r (p_spec a sm)
-p_spec EmptyS      _ = ""
+p_spec (E e)        _ = p_expr e
+p_spec (a :+: b)   sm = p_spec a sm ++ p_spec b sm
+p_spec (a :-: b)   sm = p_spec a sm ++ sub (brace (p_spec b sm))
+p_spec (a :^: b)   sm = p_spec a sm ++ sup (p_spec b sm)
+p_spec (a :/: b)   sm = fraction (p_spec a sm) (p_spec b sm)
+p_spec (S s)        _ = s
+p_spec (N s)        _ = symbol s
+p_spec (Sy s)       _ = uSymb s
+p_spec (G g)        _ = unPH $ greek g
+p_spec (Sp s)       _ = unPH $ special s
+p_spec HARDNL       _ = "<br />"
+p_spec (Ref _ r a) sm = reflink r (p_spec a sm)
+p_spec EmptyS       _ = ""
 
 -- | Renders symbols for HTML title
 t_symbol :: Symbol -> String
@@ -305,9 +305,9 @@ makeList (Simple items) sm = div_tag ["list"]
 makeList (Desc items)   sm = div_tag ["list"]
   (vcat $ map (\(b,e) -> wrap "p" [] ((wrap "b" [] (text (p_spec b sm ++ ": "))
    <> (p_item e sm)))) items)
-makeList t@(Ordered items) sm = wrap (show t ++ "l") ["list"] (vcat $ map
+makeList (Ordered items) sm = wrap "ol" ["list"] (vcat $ map
   (wrap "li" [] . flip p_item sm) items)
-makeList t@(Unordered items) sm = wrap (show t ++ "l") ["list"] (vcat $ map
+makeList (Unordered items) sm = wrap "ul" ["list"] (vcat $ map
   (wrap "li" [] . flip p_item sm) items)
 makeList (Definitions items) sm = div_tag ["list"]
   (vcat $ map (\(b,e) -> wrap "p" [] ((text (p_spec b sm ++ " is the") <+>
@@ -401,7 +401,7 @@ makeRefList a l i = refwrap l (wrap "ul" [] (text $ i ++ ": " ++ a))
 -- **THE MAIN FUNCTION**
 
 makeBib :: HasSymbolTable s => s -> BibRef -> Doc
-makeBib sm = vcat . map (\(x,(y,z)) -> makeRefList z y x) . 
+makeBib sm = vcat . map (\(x,(y,z)) -> makeRefList z y x) .
   zip [sqbrac $ show x | x <- ([1..] :: [Int])] . map (renderCite sm)
   --some function to get a numbered list, idealy it wouldn't go from string to Spec
 
@@ -416,8 +416,52 @@ renderCite sm (Cite e _ cfs) = (e, renderF sm cfs useStyleArtcl ++ "") --FIXME: 
 
 renderF :: HasSymbolTable s => s -> [CiteField] -> (StyleGuide -> (CiteField -> s -> String)) -> String
 renderF sm fields styl = unwords $
-  map (flip (styl bibStyleH) sm) (sort fields) 
+  map (flip (styl bibStyleH) sm) (sortBy compCiteField fields)
 
+compCiteField :: CiteField -> CiteField -> Ordering
+compCiteField (Institution _) _ = LT
+compCiteField _ (Institution _) = GT
+compCiteField (Organization _) _ = LT
+compCiteField _ (Organization _) = GT
+compCiteField (Author     _) _ = LT
+compCiteField _ (Author     _) = GT
+compCiteField (Title      _) _ = LT
+compCiteField _ (Title      _) = GT
+compCiteField (Series     _) _ = LT
+compCiteField _ (Series     _) = GT
+compCiteField (BookTitle _) _  = LT
+compCiteField _ (BookTitle _)  = GT
+compCiteField (Editor     _) _ = LT
+compCiteField _ (Editor     _) = GT
+compCiteField (Journal    _) _ = LT
+compCiteField _ (Journal    _) = GT
+compCiteField (Volume     _) _ = LT
+compCiteField _ (Volume     _) = GT
+compCiteField (Number     _) _ = LT
+compCiteField _ (Number     _) = GT
+compCiteField (Edition    _) _ = LT
+compCiteField _ (Edition    _) = GT
+compCiteField (HowPublished (Verb _)) _ = LT
+compCiteField _ (HowPublished (Verb _)) = GT
+compCiteField (School     _) _ = LT
+compCiteField _ (School     _) = GT
+compCiteField (Address      _) _ = LT
+compCiteField _ (Address      _) = GT
+compCiteField (Publisher  _) _ = LT
+compCiteField _ (Publisher  _) = GT
+compCiteField (Month      _) _ = LT
+compCiteField _ (Month      _) = GT
+compCiteField (Year       _) _ = LT
+compCiteField _ (Year       _) = GT
+compCiteField (HowPublished (URL _)) _ = LT
+compCiteField _ (HowPublished (URL _)) = GT
+compCiteField (Chapter    _) _ = LT
+compCiteField _ (Chapter    _) = GT
+compCiteField (Pages      _) _ = LT
+compCiteField _ (Pages      _) = GT
+compCiteField (Note       _) _ = LT
+compCiteField _ (Note       _) = GT
+compCiteField (Type       _) _ = LT
 
 -- Config helpers --
 useStyleBk :: HasSymbolTable s => StyleGuide -> (CiteField -> s -> String)

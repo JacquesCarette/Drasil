@@ -6,6 +6,7 @@ import Data.Ratio (numerator,denominator)
 import Prelude hiding (sqrt)
 import Language.Drasil.Chunk (Chunk(..))
 import Language.Drasil.Symbol
+import Language.Drasil.Chunk.SymbolForm
 import Language.Drasil.Space (Space(..))
 
 import Control.Lens ((^.))
@@ -34,10 +35,11 @@ data Expr where
   Int      :: Integer -> Expr
   Str      :: String -> Expr
   Assoc    :: Oper -> [Expr] -> Expr
-  Deriv    :: Chunk c => DerivType -> Expr -> c -> Expr -- Derivative, syntax is:
+  Deriv    :: DerivType -> Expr -> (String, Stage -> Symbol) -> Expr 
+  -- Derivative, syntax is:
   -- Type (Partial or total) -> principal part of change -> with respect to
   -- For example: Deriv Part y x1 would be (dy/dx1)
-  C        :: (Chunk c) => c -> Expr -- Chunk (must have a symbol)
+  C        :: String -> (Stage -> Symbol) -> Expr -- Chunk (must have a symbol)
   FCall    :: Expr -> [Expr] -> Expr -- F(x) is (FCall F [x]) or similar
                                   -- FCall accepts a list of params
                                   -- F(x,y) would be (FCall F [x,y]) or sim.
@@ -70,14 +72,16 @@ a $/ b = BinaryOp Div a b
 a $&& b = Assoc And [a,b]
 a $|| b = Assoc Or  [a,b]
 
-sy :: Chunk c => c -> Expr
-sy = C
+sy :: (Chunk c, HasSymbol c) => c -> Expr
+sy x = C (x ^. uid) (\st -> symbol st x)
+
+deriv, pderiv :: (Chunk c, HasSymbol c) => Expr -> c -> Expr
+deriv e c = Deriv Total e (c^.uid, \st -> symbol st c)
+pderiv e c = Deriv Part e (c^.uid, \st -> symbol st c)
 
 type Variable = String
 
-data DerivType = Part
-               | Total
-  deriving Eq
+data DerivType = Part | Total deriving Eq
 
 -- TODO: have $+ flatten nest Adds
 instance Num Expr where
@@ -97,8 +101,8 @@ instance Eq Expr where
   Int a == Int b               =  a == b
   Str a == Str b               =  a == b
   Assoc o1 l1 == Assoc o2 l2   =  o1 == o2 && l1 == l2
-  Deriv t1 a b == Deriv t2 c d =  t1 == t2 && a == c && (b ^. uid) == (d ^. uid)
-  C a == C b                   =  (a ^. uid) == (b ^. uid)
+  Deriv t1 a (b,_) == Deriv t2 c (d,_) =  t1 == t2 && a == c && b == d
+  C a _ == C b _               =  a == b
   FCall a b == FCall c d       =  a == c && b == d
   Case a == Case b             =  a == b
   IsIn  a b  == IsIn  c d      =  a == c && b == d

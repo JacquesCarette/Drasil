@@ -1,7 +1,7 @@
 module Language.Drasil.HTML.Import where
 
 import Prelude hiding (id)
-import Language.Drasil.Expr (Expr(..), Oper(..), BinOp(..),
+import Language.Drasil.Expr (Expr(..), Oper(..), BinOp(..), sy,
     DerivType(..), EOperator(..), ($=), DomainDesc(..), RealRange(..))
 import Language.Drasil.Spec
 import qualified Language.Drasil.Printing.AST as P
@@ -15,9 +15,9 @@ import Language.Drasil.Chunk.Eq
 import Language.Drasil.Chunk.ExprRelat (relat)
 import Language.Drasil.Chunk.NamedIdea (term, getA)
 import Language.Drasil.Chunk.Quantity (Quantity(..))
-import Language.Drasil.Chunk.SymbolForm (eqSymb)
+import Language.Drasil.Chunk.SymbolForm (eqSymb,Stage(Equational))
+import Language.Drasil.ChunkDB (HasSymbolTable(..), getUnitLup)
 import Language.Drasil.Chunk.ReqChunk (requires)
-import Language.Drasil.ChunkDB (HasSymbolTable(..), getUnitLup, symbLookup)
 import Language.Drasil.Chunk.Citation ( CiteField(..), HP(..), Citation 
                                       , externRefT, citeID, fields)
 import Language.Drasil.Config (verboseDDDescription)
@@ -41,11 +41,10 @@ expr (Int i)          _ = P.Int   i
 expr (Str s)          _ = P.Str   s
 expr (Assoc op l)     sm = P.Assoc op $ map (\x -> expr x sm) l
 expr (Deriv Part a b) sm = P.BOp Frac (P.Assoc Mul [P.Sym (Special Partial), expr a sm])
-                          (P.Assoc Mul [P.Sym (Special Partial), expr (C b) sm])
+                          (P.Assoc Mul [P.Sym (Special Partial), P.Sym $ snd b Equational])
 expr (Deriv Total a b)sm = P.BOp Frac (P.Assoc Mul [P.Sym lD, expr a sm])
-                          (P.Assoc Mul [P.Sym lD, expr (C b) sm])
-expr (C c)            sm = -- FIXME: Add Stage for Context
-  P.Sym $ (eqSymb (symbLookup c (sm ^. symbolTable)))
+                          (P.Assoc Mul [P.Sym lD, P.Sym $ snd b Equational])
+expr (C _ s)          _  = P.Sym $ s Equational -- FIXME
 expr (FCall f x)      sm = P.Call (expr f sm) (map (flip expr sm) x)
 expr (Case ps)        sm = if length ps < 2 then
                     error "Attempting to use multi-case expr incorrectly"
@@ -89,20 +88,20 @@ replace_divs (BinaryOp Subt a b) sm = P.BOp Subt (replace_divs a sm) (replace_di
 replace_divs a                   sm = expr a sm
 
 -- | Translates Sentence to the HTML representation of Sentence ('Spec')
-spec :: HasSymbolTable s => Sentence -> s -> H.Spec
-spec (S s)      _ = H.S s
-spec (Sy s)     _ = H.Sy s
+spec :: HasSymbolTable s => Sentence -> s -> P.Spec
+spec (S s)      _ = P.S s
+spec (Sy s)     _ = P.Sy s
 spec (EmptyS :+: b) sm = spec b sm
 spec (a :+: EmptyS) sm = spec a sm
-spec (a :+: b) sm = spec a sm H.:+: spec b sm
-spec (G g)      _ = H.G g
-spec (Sp s)     _ = H.Sp s
-spec (P s)      _ = H.N s
+spec (a :+: b) sm = spec a sm P.:+: spec b sm
+spec (G g)      _ = P.G g
+spec (Sp s)     _ = P.Sp s
+spec (P s)      _ = P.N s
 spec (F f s)    sm = spec (accent f s) sm
-spec (Ref _ r n) sm = H.Ref r (spec n sm)
-spec (Quote q) sm = H.S "&quot;" H.:+: spec q sm H.:+: H.S "&quot;"
-spec EmptyS     _ = H.EmptyS
-spec (E e)     sm = H.E $ expr e sm
+spec (Ref t r n) sm = P.Ref t r (spec n sm)
+spec (Quote q) sm = P.S "&quot;" P.:+: spec q sm P.:+: P.S "&quot;"
+spec EmptyS     _ = P.EmptyS
+spec (E e)     sm = P.E $ expr e sm
 
 -- | Helper function for translating accented characters to
 -- an HTML renderable form.
@@ -136,72 +135,72 @@ sec :: HasSymbolTable s => Int -> Section -> s -> H.LayoutObj
 sec depth x@(Section title contents _) sm =
   H.HDiv [(concat $ replicate depth "sub") ++ "section"]
   ((H.Header (depth+2) (spec title sm)):(map (flip (layout depth) sm) contents))
-  (H.S (refAdd x))
+  (P.S (refAdd x))
 
 -- | Translates from Contents to the HTML Representation of LayoutObj.
 -- Called internally by layout.
 lay :: HasSymbolTable s => Contents -> s -> H.LayoutObj
 lay x@(Table hdr lls t b _) sm = H.Table ["table"]
-  ((map (flip spec sm) hdr) : (map (map (flip spec sm)) lls)) (H.S (refAdd x)) b (spec t sm)
+  ((map (flip spec sm) hdr) : (map (map (flip spec sm)) lls)) (P.S (refAdd x)) b (spec t sm)
 lay (Paragraph c)       sm = H.Paragraph (spec c sm)
-lay (EqnBlock c _)      sm = H.HDiv ["equation"] [H.Tagless (H.E (expr c sm))] (H.EmptyS)
+lay (EqnBlock c _)      sm = H.HDiv ["equation"] [H.Tagless (P.E (expr c sm))] (P.EmptyS)
                               -- FIXME: Make equations referable
 --lay (CodeBlock c)        = H.CodeBlock c
-lay x@(Definition c)    sm = H.Definition c (makePairs c sm) (H.S (refAdd x))
+lay x@(Definition c)    sm = H.Definition c (makePairs c sm) (P.S (refAdd x))
 lay (Enumeration cs)    sm = H.List $ makeL cs sm
-lay x@(Figure c f wp _) sm = H.Figure (H.S (refAdd x)) (spec c sm) f wp
-lay (Graph _ _ _ _ _)    _ = H.Paragraph (H.EmptyS)  -- FIXME: need to implement!
+lay x@(Figure c f wp _) sm = H.Figure (P.S (refAdd x)) (spec c sm) f wp
+lay (Graph _ _ _ _ _)    _ = H.Paragraph (P.EmptyS)  -- FIXME: need to implement!
 lay x@(Requirement r)   sm = H.ALUR H.Requirement
-  (spec (requires r) sm) (H.S (refAdd x)) (spec (fromJust $ getShortName r) sm)
+  (spec (requires r) sm) (P.S (refAdd x)) (spec (fromJust $ getShortName r) sm)
 lay x@(Assumption a)    sm = H.ALUR H.Assumption
-  (spec (assuming a) sm) (H.S (refAdd x)) (spec (fromJust $ getShortName a) sm)
+  (spec (assuming a) sm) (P.S (refAdd x)) (spec (fromJust $ getShortName a) sm)
 lay x@(Change lc) sm = H.ALUR 
   (if (chngType lc) == Likely then H.LikelyChange else H.UnlikelyChange)
-  (spec (chng lc) sm) (H.S (refAdd x)) (spec (fromJust $ getShortName lc) sm)
-lay (Defnt dtyp pairs rn) sm = H.Definition dtyp (layPairs pairs) (H.S rn)
+  (spec (chng lc) sm) (P.S (refAdd x)) (spec (fromJust $ getShortName lc) sm)
+lay (Defnt dtyp pairs rn) sm = H.Definition dtyp (layPairs pairs) (P.S rn)
   where layPairs = map (\(x,y) -> (x, (map (\z -> lay z sm) y)))
 lay (Bib bib)           sm = H.Bib $ map (layCite sm) bib
 
 -- | For importing bibliography
-layCite :: HasSymbolTable s => s -> Citation -> H.Citation
-layCite sm c = H.Cite (citeID c) (externRefT c) (map (layField sm) (fields c))
+layCite :: HasSymbolTable s => s -> Citation -> P.Citation
+layCite sm c = P.Cite (citeID c) (externRefT c) (map (layField sm) (fields c))
 
-layField :: HasSymbolTable s => s -> CiteField -> H.CiteField
-layField sm (Address      s) = H.Address      $ spec s sm
-layField  _ (Author       p) = H.Author       p
-layField sm (BookTitle    s) = H.BookTitle    $ spec s sm
-layField  _ (Chapter      i) = H.Chapter      i
-layField  _ (Edition      n) = H.Edition      n
-layField  _ (Editor       p) = H.Editor       p
-layField sm (Institution  i) = H.Institution  $ spec i sm
-layField sm (Journal      s) = H.Journal      $ spec s sm
-layField  _ (Month        m) = H.Month        m
-layField sm (Note         s) = H.Note         $ spec s sm
-layField  _ (Number       n) = H.Number       n
-layField sm (Organization i) = H.Organization $ spec i sm
-layField  _ (Pages        n) = H.Pages        n
-layField sm (Publisher    s) = H.Publisher    $ spec s sm
-layField sm (School       s) = H.School       $ spec s sm
-layField sm (Series       s) = H.Series       $ spec s sm
-layField sm (Title        s) = H.Title        $ spec s sm
-layField sm (Type         t) = H.Type         $ spec t sm
-layField  _ (Volume       n) = H.Volume       n
-layField  _ (Year         n) = H.Year         n
-layField sm (HowPublished (URL  s)) = H.HowPublished (H.URL  $ spec s sm)
-layField sm (HowPublished (Verb s)) = H.HowPublished (H.Verb $ spec s sm)
+layField :: HasSymbolTable s => s -> CiteField -> P.CiteField
+layField sm (Address      s) = P.Address      $ spec s sm
+layField  _ (Author       p) = P.Author       p
+layField sm (BookTitle    s) = P.BookTitle    $ spec s sm
+layField  _ (Chapter      i) = P.Chapter      i
+layField  _ (Edition      n) = P.Edition      n
+layField  _ (Editor       p) = P.Editor       p
+layField sm (Institution  i) = P.Institution  $ spec i sm
+layField sm (Journal      s) = P.Journal      $ spec s sm
+layField  _ (Month        m) = P.Month        m
+layField sm (Note         s) = P.Note         $ spec s sm
+layField  _ (Number       n) = P.Number       n
+layField sm (Organization i) = P.Organization $ spec i sm
+layField  _ (Pages        n) = P.Pages        n
+layField sm (Publisher    s) = P.Publisher    $ spec s sm
+layField sm (School       s) = P.School       $ spec s sm
+layField sm (Series       s) = P.Series       $ spec s sm
+layField sm (Title        s) = P.Title        $ spec s sm
+layField sm (Type         t) = P.Type         $ spec t sm
+layField  _ (Volume       n) = P.Volume       n
+layField  _ (Year         n) = P.Year         n
+layField sm (HowPublished (URL  s)) = P.HowPublished (P.URL  $ spec s sm)
+layField sm (HowPublished (Verb s)) = P.HowPublished (P.Verb $ spec s sm)
 
 -- | Translates lists
-makeL :: HasSymbolTable s => ListType -> s -> H.ListType
-makeL (Bullet bs)      sm = H.Unordered   $ map (flip item sm) bs
-makeL (Numeric ns)     sm = H.Ordered     $ map (flip item sm) ns
-makeL (Simple ps)      sm = H.Simple      $ map (\(x,y) -> (spec x sm, item y sm)) ps
-makeL (Desc ps)        sm = H.Desc        $ map (\(x,y) -> (spec x sm, item y sm)) ps
-makeL (Definitions ps) sm = H.Definitions $ map (\(x,y) -> (spec x sm, item y sm)) ps
+makeL :: HasSymbolTable s => ListType -> s -> P.ListType
+makeL (Bullet bs)      sm = P.Unordered   $ map (flip item sm) bs
+makeL (Numeric ns)     sm = P.Ordered     $ map (flip item sm) ns
+makeL (Simple ps)      sm = P.Simple      $ map (\(x,y) -> (spec x sm, item y sm)) ps
+makeL (Desc ps)        sm = P.Desc        $ map (\(x,y) -> (spec x sm, item y sm)) ps
+makeL (Definitions ps) sm = P.Definitions $ map (\(x,y) -> (spec x sm, item y sm)) ps
 
 -- | Helper for translating list items
-item :: HasSymbolTable s => ItemType -> s -> H.ItemType
-item (Flat i)     sm = H.Flat (spec i sm)
-item (Nested t s) sm = H.Nested (spec t sm) (makeL s sm)
+item :: HasSymbolTable s => ItemType -> s -> P.ItemType
+item (Flat i)     sm = P.Flat (spec i sm)
+item (Nested t s) sm = P.Nested (spec t sm) (makeL s sm)
 
 -- | Translates definitions
 -- (Data defs, General defs, Theoretical models, etc.)
@@ -210,14 +209,14 @@ makePairs (Data c) m = [
   ("Number",      [H.Paragraph $ spec (missingAcro (S "DD") $ fmap S $ getA c) m]),
   ("Label",       [H.Paragraph $ spec (titleize $ c ^. term) m]),
   ("Units",       [H.Paragraph $ spec (unit'2Contents c) m]),
-  ("Equation",    [H.HDiv ["equation"] [H.Tagless (buildEqn c m)] (H.EmptyS)]),
+  ("Equation",    [H.HDiv ["equation"] [H.Tagless (buildEqn c m)] (P.EmptyS)]),
   ("Description", [H.Paragraph (buildDDDescription c m)])
   ]
 makePairs (Theory c) m = [
   ("Number",      [H.Paragraph $ spec (missingAcro (S "T") $ fmap S $ getA c) m]),
   ("Label",       [H.Paragraph $ spec (titleize $ c ^. term) m]),
-  ("Equation",    [H.HDiv ["equation"] [H.Tagless (H.E (expr (c ^. relat) m))]
-                  (H.EmptyS)]),
+  ("Equation",    [H.HDiv ["equation"] [H.Tagless (P.E (expr (c ^. relat) m))]
+                  (P.EmptyS)]),
   ("Description", [H.Paragraph (spec (c ^. defn) m)])
   ]
 makePairs General  _ = error "Not yet implemented"
@@ -231,22 +230,22 @@ missingAcro _ (Just a) = S "<b>":+: a :+: S "</b>"
 
 -- | Translates the defining equation from a QDefinition to
 -- HTML's version of Sentence
-buildEqn :: HasSymbolTable s => QDefinition -> s -> H.Spec
-buildEqn c sm = H.N (eqSymb c) H.:+: H.S " = " H.:+:
-  H.E (expr (c^.equat) sm)
+buildEqn :: HasSymbolTable s => QDefinition -> s -> P.Spec  
+buildEqn c sm = P.N (eqSymb c) P.:+: P.S " = " P.:+: 
+  P.E (expr (c^.equat) sm)
 
 -- | Build descriptions in data defs based on required verbosity
-buildDDDescription :: HasSymbolTable s => QDefinition -> s -> H.Spec
+buildDDDescription :: HasSymbolTable s => QDefinition -> s -> P.Spec
 buildDDDescription c m = descLines
   (if verboseDDDescription then (vars (getQ c $= c^.equat) m) else []) m
-  where getQ (EC a _ _) = C a
+  where getQ (EC a _ _) = sy a
 
 -- | Helper for building each line of the description of a data def
-descLines :: (HasSymbolTable s, Quantity q) => [q] -> s -> H.Spec
+descLines :: (HasSymbolTable s, Quantity q) => [q] -> s -> P.Spec  
 descLines []    _   = error "No chunks to describe"
-descLines (vc:[]) m = (H.N (eqSymb vc) H.:+:
-  (H.S " is the " H.:+: (spec (phrase $ vc ^. term) m) H.:+:
+descLines (vc:[]) m = (P.N (eqSymb vc) P.:+: 
+  (P.S " is the " P.:+: (spec (phrase $ vc ^. term) m) P.:+:
    unWrp (getUnitLup vc m)))
-  where unWrp (Just a) = H.S " (" H.:+: H.Sy (a ^. usymb) H.:+: H.S ")"
-        unWrp Nothing  = H.S ""
-descLines (vc:vcs) m = descLines (vc:[]) m H.:+: H.HARDNL H.:+: descLines vcs m
+  where unWrp (Just a) = P.S " (" P.:+: P.Sy (a ^. usymb) P.:+: P.S ")"
+        unWrp Nothing  = P.S ""
+descLines (vc:vcs) m = descLines (vc:[]) m P.:+: P.HARDNL P.:+: descLines vcs m

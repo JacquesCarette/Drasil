@@ -36,13 +36,11 @@ commandD s c = (pure $ (H.bslash TP.<> text s)) <> br c
 
 -- 1-argument command, with optional argument
 command1o :: String -> Maybe String -> String -> D
-command1o s o c = pure $ (H.bslash TP.<> text s) TP.<>
-  (maybe TP.empty H.sq o) TP.<> H.br c
+command1o s o c = pure $ (H.bslash TP.<> text s) TP.<> (maybe TP.empty H.sq o) TP.<> H.br c
 
 -- no braces!
 command1oD :: String -> Maybe D -> D -> D
-command1oD s o c = 
-  (pure $ (H.bslash TP.<> text s)) <> (maybe empty sq o) <> c
+command1oD s o c = (pure $ (H.bslash TP.<> text s)) <> (maybe empty sq o) <> c
 
 -- 0-argument command
 command0 :: String -> D
@@ -67,7 +65,6 @@ comm b1 b2 s1 = command0 "newcommand" <> (pure $ H.br ("\\" ++ b1) TP.<>
 -- this one is special enough, let this sub-optimal implementation stand
 renewcomm :: String -> String -> D
 renewcomm b1 b2 = pure $ text "\\renewcommand" TP.<> H.br ("\\" ++ b1) TP.<> H.br b2
-
 
 -- Useful to have empty 
 empty :: D

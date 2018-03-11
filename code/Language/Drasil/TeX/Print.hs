@@ -332,15 +332,15 @@ spec (Sy s)      = p_unit s
 spec (G g)       = pure $ text $ unPL $ greek g
 spec (Sp s)      = pure $ text $ unPL $ special s
 spec HARDNL      = pure $ text $ "\\newline"
-spec (Ref t@LS.Sect r _) = sref (show t) (spec r)
-spec (Ref t@LS.Def r _)  = hyperref (show t) (spec r)
-spec (Ref LS.Mod r _)    = mref  (spec r)
-spec (Ref LS.Req r _)    = rref  (spec r)
-spec (Ref LS.Assump r _) = aref  (spec r)
-spec (Ref LS.LC r _)     = lcref (spec r)
-spec (Ref LS.UC r _)     = ucref (spec r)
-spec (Ref LS.Cite r _)   = cite  (spec r)
-spec (Ref t r _)         = ref (show t) (spec r)
+spec (Ref t@LS.Sect _ r) = sref (show t) (spec r)
+spec (Ref t@LS.Def _ r)  = hyperref (show t) (spec r)
+spec (Ref LS.Mod _ r)    = mref  (spec r)
+spec (Ref LS.Req _ r)    = rref  (spec r)
+spec (Ref LS.Assump _ r) = aref  (spec r)
+spec (Ref LS.LC _ r)     = lcref (spec r)
+spec (Ref LS.UC _ r)     = ucref (spec r)
+spec (Ref LS.Cite _ r)   = cite  (spec r)
+spec (Ref t _ r)         = ref (show t) (spec r)
 spec EmptyS      = empty
 
 escapeChars :: Char -> String
@@ -422,8 +422,8 @@ makeEquation contents = toEqn (spec contents)
 makeList :: ListType -> D
 makeList (Simple items)      = itemize     $ vcat (sim_item items)
 makeList (Desc items)        = description $ vcat (sim_item items)
-makeList (Item items)        = itemize     $ vcat (map p_item items)
-makeList (Enum items)        = enumerate   $ vcat (map p_item items)
+makeList (Unordered items)   = itemize     $ vcat (map p_item items)
+makeList (Ordered items)     = enumerate   $ vcat (map p_item items)
 makeList (Definitions items) = description $ vcat (def_item items)
 
 p_item :: ItemType -> D

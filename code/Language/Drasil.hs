@@ -7,11 +7,12 @@ module Language.Drasil (
   -- Recipe
   , Recipe(..)
   -- Expr
-  , Expr(Int,Dbl,Str,IsIn,Deriv,FCall,Grouping,Case)
+  , Expr(Int,Dbl,Str,IsIn,FCall,Grouping,Case)
   , Relation, DerivType(..), RealInterval(..), Inclusive(..)
   , ($=), ($<), ($<=), ($>), ($>=), ($^), ($&&), ($||), ($=>), ($<=>), ($.)
   , log, abs, sin, cos, tan, sec, csc, cot, exp, sqrt, square, euclidean, vars
   , sy -- old "Chunk" constructor C
+  , deriv, pderiv
   , dim, idx
   , sum_all, defsum, prod_all, defprod, defint, int_all
   , cross, m2x2, vec2D, dgnl2x2
@@ -38,7 +39,7 @@ module Language.Drasil (
   -- Chunk.Constrained
   , Constrained(..), HasReasVal(..), ConstrainedChunk(..), Constraint(..), ConstrConcept(..)
   , ConstraintReason(..)
-  , physc, sfwrc, enumc, constrained, cuc, cvc, constrained', cuc', constrainedNRV'
+  , physc, sfwrc, enumc, constrained, cuc, cvc, cvc', constrained', cuc', constrainedNRV'
   , isPhysC, isSfwrC, renderC
   , cnstrw
   , Reason(..), TheoryConstraint(..)
@@ -161,7 +162,7 @@ module Language.Drasil (
 import Prelude hiding (log, sin, cos, tan, sqrt, id, return, print, break, exp, product)
 import Language.Drasil.SystemInformation
 import Language.Drasil.Expr (Expr(..), Relation, DerivType(..),
-          RealInterval(..), Inclusive(..), sy,
+          RealInterval(..), Inclusive(..), sy, deriv, pderiv,
           ($=), ($<), ($<=), ($>), ($>=), ($^), ($&&), ($||), ($=>), ($<=>), ($.))
 import Language.Drasil.Expr.Math (log, sin, cos, tan, sqrt, square, sec, csc, cot, exp,
           dim, idx,

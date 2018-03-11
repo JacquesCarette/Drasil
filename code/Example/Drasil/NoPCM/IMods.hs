@@ -22,7 +22,7 @@ eBalanceOnWtr = makeRC "eBalanceOnWtr" (nounPhraseSP $ "Energy balance on " ++
   "water to find the temperature of the water") balWtrDesc balWtr_Rel
 
 balWtr_Rel :: Relation
-balWtr_Rel = (Deriv Total (sy temp_W) time) $= (Int 1) / (sy tau_W) *
+balWtr_Rel = (deriv (sy temp_W) time) $= (Int 1) / (sy tau_W) *
   (((sy temp_C) - (FCall (sy temp_W) [sy time])))
 
 balWtrDesc :: Sentence

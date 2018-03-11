@@ -3,6 +3,10 @@ module Language.Drasil.Printing.AST where
 import Language.Drasil.Expr (Oper(..),UFunc,BinOp(..))
 import Language.Drasil.Symbol (Symbol)
 import Language.Drasil.Space (Space)
+import Language.Drasil.Spec (USymb, RefType, RefAdd)
+import Language.Drasil.Unicode (Greek, Special)
+import Language.Drasil.People (People)
+import Language.Drasil.Chunk.Citation (Month, EntryID, CitationKind)
 
 data Expr = Dbl   Double
           | Int   Integer
@@ -45,3 +49,62 @@ prec2 Iff = 13
 prec2 Index = 1
 prec2 Dot = 3
 prec2 Cross = 3
+
+infixr 5 :+:
+
+data Spec = E Expr
+          | S String
+          | Spec :+: Spec -- concat
+          | Spec :^: Spec -- superscript
+          | Spec :-: Spec -- subscript
+          | Spec :/: Spec -- frac
+          | Sy USymb
+          | N Symbol
+          | G Greek
+          | Sp Special
+          | Ref RefType RefAdd Spec
+          | EmptyS
+          | HARDNL        -- newline. Temp fix for multi-line descriptions; 
+                          -- May move to a new LayoutObj, but only exists in TeX
+                          -- so it's not really a big deal ATM.
+type Title    = Spec
+
+data ListType = Ordered [ItemType] 
+              | Unordered [ItemType]
+              | Simple      [(Title,ItemType)]
+              | Desc        [(Title,ItemType)]
+              | Definitions  [(Title,ItemType)]
+
+data ItemType = Flat Spec
+              | Nested Spec ListType
+
+type BibRef = [Citation]
+
+data Citation = Cite EntryID CitationKind [CiteField]
+
+-- | Fields used in citations.
+data CiteField = Address      Spec
+               | Author       People
+               | BookTitle    Spec -- Used for 'InCollection' references only.
+               | Chapter      Int
+               | Edition      Int
+               | Editor       People
+               | HowPublished HP
+               | Institution  Spec
+               | Journal      Spec
+               | Month        Month
+               | Note         Spec
+               | Number       Int
+               | Organization Spec
+               | Pages        [Int] -- Range of pages (ex1. 1-32; ex2. 7,31,52-55)
+               | Publisher    Spec
+               | School       Spec
+               | Series       Spec
+               | Title        Spec
+               | Type         Spec -- BibTeX "type" field
+               | Volume       Int
+               | Year         Int
+
+-- | How Published. Necessary for URLs to work properly.
+data HP = URL Spec
+        | Verb Spec

@@ -535,22 +535,22 @@ s4_2_3_eq1, s4_2_3_eq2, s4_2_3_eq3, s4_2_3_eq4, s4_2_3_eq5 :: Expr
 s4_2_3_eq1 = (negate (int_all (eqSymb vol) ((sy gradient) $. (sy thFluxVect)))) + 
   (int_all (eqSymb vol) (sy vol_ht_gen)) $=
   (int_all (eqSymb vol) ((sy density)
-  * (sy QT.heat_cap_spec) * Deriv Part (sy QT.temp) time))
+  * (sy QT.heat_cap_spec) * pderiv (sy QT.temp) time))
 
 s4_2_3_eq2 = (negate (int_all (eqSymb surface) ((sy thFluxVect) $. (sy uNormalVect)))) +
   (int_all (eqSymb vol) (sy vol_ht_gen)) $= 
   (int_all (eqSymb vol)
-  ((sy density) * (sy QT.heat_cap_spec) * Deriv Part (sy QT.temp) time))
+  ((sy density) * (sy QT.heat_cap_spec) * pderiv (sy QT.temp) time))
 
 s4_2_3_eq3 = (sy ht_flux_in) * (sy in_SA) - (sy ht_flux_out) *
   (sy out_SA) + (sy vol_ht_gen) * (sy vol) $= 
-  (int_all (eqSymb vol) ((sy density) * (sy QT.heat_cap_spec) * Deriv Part (sy QT.temp) time))
+  (int_all (eqSymb vol) ((sy density) * (sy QT.heat_cap_spec) * pderiv (sy QT.temp) time))
 
-s4_2_3_eq4 = (sy density) * (sy QT.heat_cap_spec) * (sy vol) * Deriv Total
+s4_2_3_eq4 = (sy density) * (sy QT.heat_cap_spec) * (sy vol) * deriv
   (sy QT.temp) time $= (sy ht_flux_in) * (sy in_SA) - (sy ht_flux_out) *
   (sy out_SA) + (sy vol_ht_gen) * (sy vol)
 
-s4_2_3_eq5 = (sy mass) * (sy QT.heat_cap_spec) * Deriv Total (sy QT.temp)
+s4_2_3_eq5 = (sy mass) * (sy QT.heat_cap_spec) * deriv (sy QT.temp)
   time $= (sy ht_flux_in) * (sy in_SA) - (sy ht_flux_out)
   * (sy out_SA) + (sy vol_ht_gen) * (sy vol)
 
@@ -608,17 +608,17 @@ s4_2_5_equation = map eqUnR [s4_2_5_eq1, s4_2_5_eq2, s4_2_5_eq3, s4_2_5_eq4]
 
 s4_2_5_eq1, s4_2_5_eq2, s4_2_5_eq3, s4_2_5_eq4 ::Expr
 
-s4_2_5_eq1 = (sy w_mass) * (sy htCap_W) * Deriv Total (sy temp_W) time $=
+s4_2_5_eq1 = (sy w_mass) * (sy htCap_W) * deriv (sy temp_W) time $=
   (sy ht_flux_C) * (sy coil_SA)
  
-s4_2_5_eq2 = (sy w_mass) * (sy htCap_W) * Deriv Total (sy temp_W) time $=
+s4_2_5_eq2 = (sy w_mass) * (sy htCap_W) * deriv (sy temp_W) time $=
   (sy coil_HTC) * (sy coil_SA) * ((sy temp_C) - (sy temp_W))
 
-s4_2_5_eq3 = Deriv Total (sy temp_W) time $= ((sy coil_HTC) *
+s4_2_5_eq3 = deriv (sy temp_W) time $= ((sy coil_HTC) *
   (sy coil_SA)) / ((sy w_mass) * (sy htCap_W)) * ((sy temp_C) -
   (sy temp_W))
 
-s4_2_5_eq4 = Deriv Total (sy temp_W) time $= (1 / (sy tau_W)) *
+s4_2_5_eq4 = deriv (sy temp_W) time $= (1 / (sy tau_W)) *
   ((sy temp_C) - (sy temp_W))
 
 s4_2_6_table1 :: Contents

@@ -150,7 +150,7 @@ relToQD :: (ExprRelat c, HasSymbolTable ctx) => ctx -> c -> QDefinition
 relToQD sm r = convertRel sm $ r ^. relat
 
 convertRel :: HasSymbolTable ctx => ctx -> Expr -> QDefinition
-convertRel sm (BinaryOp Eq (C x) r) = ec' (symbLookup x (sm ^. symbolTable)) r
+convertRel sm (BinaryOp Eq (C x _) r) = ec' (symbLookup x (sm ^. symbolTable)) r
 convertRel _ _ = error "Conversion failed"
 
 data Mod = Mod Name [Func]
@@ -208,7 +208,7 @@ asVC (FData (FuncData n _)) = implVar n (nounPhraseSP n) (Atomic n) Real
 asVC (FCD cd) = codeVC cd (codeSymb cd) (cd ^. typ)
 
 asExpr :: Func -> Expr
-asExpr f = C $ asVC f
+asExpr f = sy $ asVC f
 
 -- name of variable/function maps to module name
 type ModExportMap = Map.Map String String

@@ -152,11 +152,11 @@ dd8impulse = mkDataDef QP.impulseS impulseEqn
 
 -- The last two terms in the denominator should be cross products.
 impulseEqn :: Expr
-impulseEqn = ((negate ((Int 1) + (sy QP.restitutionCoef))) * (sy initRelVel) $.
-  (sy normalVect)) / (((((Int 1) / (sy mass_A))) + ((Int 1) / (sy mass_B))) *
-  ((sy normalLen) $^ (Int 2)) +
-  (((sy perpLen_A) $^ (Int 2)) / (sy momtInert_A)) +
-  (((sy perpLen_B) $^ (Int 2))/ (sy momtInert_B)))
+impulseEqn = ((negate (1 + (sy QP.restitutionCoef))) * (sy initRelVel) $.
+  (sy normalVect)) / ((((1 / (sy mass_A))) + (1 / (sy mass_B))) *
+  ((sy normalLen) $^ 2) +
+  (((sy perpLen_A) $^ 2) / (sy momtInert_A)) +
+  (((sy perpLen_B) $^ 2)/ (sy momtInert_B)))
 {-
 --NOTE: Removed an extra "the" that was showing up in the output.
 dd8descr :: Sentence

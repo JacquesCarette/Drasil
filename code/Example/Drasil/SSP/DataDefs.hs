@@ -64,7 +64,7 @@ bsWtrFEqn = (inxi baseLngth)*(Case [case1,case2])
   where case1 = (((inxi waterHght)-(inxi slipHght))*(sy waterWeight),
           (inxi waterHght) $> (inxi slipHght))
 
-        case2 = (Int 0, (inxi waterHght) $<= (inxi slipHght))
+        case2 = (0, (inxi waterHght) $<= (inxi slipHght))
 
 --DD3
 
@@ -76,7 +76,7 @@ surfWtrFEqn = (inxi surfLngth)*(Case [case1,case2])
   where case1 = (((inxi waterHght)-(inxi slopeHght))*(sy waterWeight),
           (inxi waterHght) $> (inxi slopeHght))
 
-        case2 = (Int 0, (inxi waterHght) $<= (inxi slopeHght))
+        case2 = (0, (inxi waterHght) $<= (inxi slopeHght))
 
 --DD4
 
@@ -92,7 +92,7 @@ intersliceWtrFEqn = Case [case1,case2,case3]
         case2 = (((inxi waterHght)-(inxi slipHght ))$^ 2 / 2  * (sy satWeight),
                 (inxi slopeHght) $> (inxi waterHght) $> (inxi slipHght))
 
-        case3 = (Int 0,(inxi waterHght) $<= (inxi slipHght))
+        case3 = (0,(inxi waterHght) $<= (inxi slipHght))
 
 --DD5
 
@@ -221,8 +221,8 @@ shearStiffness :: QDefinition
 shearStiffness = mkDataDef shrStiffBase shearStiffnessEqn  
 
 shearStiffnessEqn :: Expr
-shearStiffnessEqn = sy intNormForce / (Int 2 * (Int 1 + sy poissnsRatio)) *
-  (Dbl 0.1 / sy baseWthX) + (inxi cohesion - sy normStress *
+shearStiffnessEqn = sy intNormForce / (2 * (1 + sy poissnsRatio)) *
+  (dbl 0.1 / sy baseWthX) + (inxi cohesion - sy normStress *
   tan(inxi fricAngle)) / (abs (sy shrDispl) + sy constant_a)
 
 --DD15 this is the second part to the original DD14
@@ -234,7 +234,7 @@ soilStiffnessEqn :: Expr
 soilStiffnessEqn = (Case [case1,case2])
   where case1 = (block, (sy SM.poissnsR) $< 0)
 
-        case2 = ((Dbl 0.01) * block + (sy constant_K) / ((sy nrmDispl)+
+        case2 = ((dbl 0.01) * block + (sy constant_K) / ((sy nrmDispl)+
           (sy constant_A)), (sy SM.poissnsR) $>= 0)
 
         block = (sy intNormForce)*(1 - (sy SM.poissnsR))/

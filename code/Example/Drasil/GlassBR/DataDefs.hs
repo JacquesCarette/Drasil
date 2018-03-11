@@ -80,7 +80,7 @@ strDisFac = aqd (mkDataDef' stressDistFac strDisFac_eq
 --DD5--
 
 nonFL_eq :: Expr
-nonFL_eq = ((sy tolLoad) * (sy mod_elas) * (sy act_thick) $^ (4)) /
+nonFL_eq = ((sy tolLoad) * (sy mod_elas) * (sy act_thick) $^ 4) /
   (square (Grouping ((sy plate_len) * (sy plate_width))))
 
 nonFL :: QDefinition
@@ -93,7 +93,7 @@ glaTyFac_eq :: Expr
 glaTyFac_eq = (Case (zipWith glaTyFac_helper glassTypeFactors glassTypeAbbrsStr))
 
 glaTyFac_helper :: Integer -> String -> (Expr, Relation)
-glaTyFac_helper result condition = (Int result, (sy glass_type) $= Str condition)
+glaTyFac_helper result condition = (int result, (sy glass_type) $= Str condition)
 
 glaTyFac :: QDefinition
 glaTyFac = aqd (mkDataDef gTF glaTyFac_eq) ([] :: Attributes)
@@ -102,7 +102,7 @@ glaTyFac = aqd (mkDataDef gTF glaTyFac_eq) ([] :: Attributes)
 
 dimLL_eq :: Expr
 dimLL_eq = ((sy demand) * (square (Grouping ((sy plate_len) * (sy plate_width)))))
-  / ((sy mod_elas) * ((sy act_thick) $^ (4)) * (sy gTF))
+  / ((sy mod_elas) * ((sy act_thick) $^ 4) * (sy gTF))
 
 dimLL :: QDefinition
 dimLL = aqd (mkDataDef' dimlessLoad dimLL_eq 

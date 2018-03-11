@@ -1,6 +1,6 @@
 module Language.Drasil.Expr.Math where
 
-import Prelude hiding (id, sqrt)
+import Prelude hiding (sqrt)
 import Language.Drasil.Symbol
 import Language.Drasil.Expr
 
@@ -44,12 +44,21 @@ exp = UnaryOp Exp
 dim :: Expr -> Expr
 dim = UnaryOp Dim
 
--- | Smarth constructor for indexing
+-- | Smart constructor for indexing
 idx :: Expr -> Expr -> Expr
 idx = BinaryOp Index
 
--- | Smart constructor for the summation, product, and integrals
+-- | Smart constructors for integers, doubles, strings
+int :: Integer -> Expr
+int = Int
 
+dbl :: Double -> Expr
+dbl = Dbl
+
+str :: String -> Expr
+str = Str
+
+-- | Smart constructor for the summation, product, and integrals
 defint, defsum, defprod :: Symbol -> Expr -> Expr -> Expr -> Expr
 int_all, sum_all, prod_all :: Symbol -> Expr -> Expr
 

@@ -102,7 +102,7 @@ nom_thick = cuc "nom_thick"
   (nounPhraseSent $ S "nominal thickness" +:+ displayConstrntsAsSet 
     nom_thick (map show nominalThicknesses))
   lT millimetre ({-DiscreteD nominalThicknesses-} Rational) 
-  [enumc nominalThicknesses] (Int 8)
+  [enumc nominalThicknesses] 8
 
 -- FIXME glassTypeAbbrsStr should really not exist...
 glass_type  = cvc' "glass_type" (nounPhraseSent $ phrase glassTy +:+ 

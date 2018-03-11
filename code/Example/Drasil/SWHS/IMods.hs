@@ -30,7 +30,7 @@ eBalanceOnWtr = makeRC "eBalanceOnWtr" (nounPhraseSP $ "Energy balance on " ++
   "water to find the temperature of the water") balWtrDesc balWtr_Rel
 
 balWtr_Rel :: Relation
-balWtr_Rel = (deriv (sy temp_W) time) $= (Int 1) / (sy tau_W) *
+balWtr_Rel = (deriv (sy temp_W) time) $= 1 / (sy tau_W) *
   (((sy temp_C) - (FCall (sy temp_W) [sy time])) +
   (sy eta) * ((FCall (sy temp_PCM) [sy time]) - (FCall (sy temp_W) [sy time])))
 
@@ -44,9 +44,9 @@ balWtrDesc = foldlSent [(E $ sy temp_W) `isThe` phrase temp_W +:+.
   (E $ sy eta $= (sy pcm_HTC * sy pcm_SA) / (sy coil_HTC * sy coil_SA)),
   S "is a constant" +:+. sParen (S "dimensionless"),
   S "The above", phrase equation, S "applies as long as the", phrase water,
-  S "is in", phrase liquid, S "form" `sC` (E $ Int 0 $< sy temp_W $< (Int 100)),
-  sParen (unwrap $ getUnit temp_W), S "where", S $ show (0 :: Integer),
-  sParen (unwrap $ getUnit temp_W) `sAnd` (S $ show (100 :: Integer)),
+  S "is in", phrase liquid, S "form" `sC` (E $ 0 $< sy temp_W $< 100),
+  sParen (unwrap $ getUnit temp_W), S "where", E 0,
+  sParen (unwrap $ getUnit temp_W) `sAnd` (E 100),
   sParen (unwrap $ getUnit temp_W), S "are the", phrase melting `sAnd`
   plural boil_pt, S "of", phrase water `sC` S "respectively",
   sParen (makeRef (mkAssump "assump14" EmptyS) `sC`
@@ -66,15 +66,15 @@ balPCM_Rel :: Relation
 balPCM_Rel = (deriv (sy temp_PCM) time) $=
   Case [case1, case2, case3, case4]
 
-  where case1 = (((Int 1) / (sy tau_S_P)) * ((FCall (sy temp_W) [sy time]) -
+  where case1 = ((1 / (sy tau_S_P)) * ((FCall (sy temp_W) [sy time]) -
           (FCall (sy temp_PCM) [sy time])), (sy temp_PCM) $< (sy temp_melt_P))
 
-        case2 = (((Int 1) / (sy tau_L_P)) * ((FCall (sy temp_W) [sy time]) -
+        case2 = ((1 / (sy tau_L_P)) * ((FCall (sy temp_W) [sy time]) -
           (FCall (sy temp_PCM) [sy time])), (sy temp_PCM) $> (sy temp_melt_P))
 
-        case3 = ((Int 0), (sy temp_PCM) $= (sy temp_melt_P))
+        case3 = (0, (sy temp_PCM) $= (sy temp_melt_P))
 
-        case4 = ((Int 0), (Int 0) $< (sy melt_frac) $< (Int 1))
+        case4 = (0, 0 $< (sy melt_frac) $< 1)
 
 balPCMDesc :: Sentence
 balPCMDesc = foldlSent [(E $ sy temp_W) `isThe` phrase temp_W +:+.
@@ -113,7 +113,7 @@ htWtrDesc = foldlSent [S "The above", phrase equation,
   phrase time, getES time, sParen (unwrap $ getUnit t_init_melt) `sC`
   (getES temp_W) `sAnd` S "the", phrase temp_init `sC` getES temp_init +:+.
   sParen (unwrap $ getUnit temp_init), S "This", phrase equation,
-  S "applies as long as", (E $ (Int 0) $< (sy temp_W) $< (Int 0)) :+:
+  S "applies as long as", (E $ 0 $< (sy temp_W) $< 0) :+:
   (unwrap $ getUnit temp_W),
   sParen $ makeRef (mkAssump "assump14" EmptyS) `sC`
   makeRef (mkAssump "assump19" EmptyS)]
@@ -138,7 +138,7 @@ htPCM_Rel = sy pcm_E $= Case [case1, case2, case3, case4]
           (sy temp_PCM) $= (sy temp_melt_P))
 
         case4 = (sy pcm_initMltE + (FCall (sy latentE_P) [sy time]),
-          (Int 0) $< (sy melt_frac) $< (Int 1))
+          0 $< (sy melt_frac) $< 1)
 
 htPCMDesc :: Sentence
 htPCMDesc = foldlSent [S "The above", phrase equation,

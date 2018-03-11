@@ -583,7 +583,7 @@ s4_2_5_desc1 roc temw en wa vo wv ma wm hcw ht hfc csa ta purin a11 vhg a12 =
   phrase ta) `sC` S "since it has been assumed to be",
   phrase purin +:+. sParen (acroTest a11 s4_2_1_list), S "Assuming no",
   phrase vhg +:+. (sParen (acroTest a12 s4_2_1_list) `sC`
-  E (sy vhg $= Int 0)), S "Therefore, the", phrase M.equation, S "for",
+  E (sy vhg $= 0)), S "Therefore, the", phrase M.equation, S "for",
   acroGD 2, S "can be written as"]
 
 s4_2_5_desc2 :: QDefinition -> [Sentence]

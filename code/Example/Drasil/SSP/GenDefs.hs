@@ -173,7 +173,7 @@ momentEql = makeRC "momentEql" (nounPhraseSP "moment equilibrium")
   momEql_desc momEql_rel
 
 momEql_rel :: Relation
-momEql_rel = (Int 0) $= momExpr (\ x y -> x -
+momEql_rel = 0 $= momExpr (\ x y -> x -
   (inxi baseWthX / 2 * (inxi intShrForce + inxiM1 intShrForce)) + y)
 
 momEql_desc :: Sentence

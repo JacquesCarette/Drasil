@@ -160,6 +160,8 @@ module Language.Drasil (
   , citationRefTable, citeLookup
   -- Goal
   , Goal, goal, gs, gs'
+  -- PhysSystDesc
+  , PhysSystDesc, pSysDes, psd, psd'
 ) where
 
 import Prelude hiding (log, sin, cos, tan, sqrt, id, return, print, break, exp, product)
@@ -217,6 +219,7 @@ import Language.Drasil.Chunk.GenDefn
 import Language.Drasil.Chunk.Goal (Goal, goal, gs, gs')
 import Language.Drasil.Chunk.InstanceModel
 import Language.Drasil.Chunk.NamedIdea
+import Language.Drasil.Chunk.PhysSystDesc (PhysSystDesc, pSysDes, psd, psd')
 import Language.Drasil.Chunk.Quantity
 import Language.Drasil.Chunk.Relation(RelationConcept, makeRC, makeRC')
 import Language.Drasil.Chunk.ReqChunk(ReqChunk, ReqType(..), reqType, requires

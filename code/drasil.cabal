@@ -99,6 +99,7 @@ library
     , Language.Drasil.Chunk.Goal
     , Language.Drasil.Chunk.InstanceModel
     , Language.Drasil.Chunk.NamedIdea
+    , Language.Drasil.Chunk.PhysSystDesc
     , Language.Drasil.Chunk.Quantity
     , Language.Drasil.Chunk.Relation
     , Language.Drasil.Chunk.ReqChunk

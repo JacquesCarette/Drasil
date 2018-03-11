@@ -6,6 +6,7 @@ module Language.Drasil.Chunk.Goal
   ( Goal
   , goal
   , gs, gs'
+  , refAddr
   ) where
 
 import Language.Drasil.Chunk
@@ -19,7 +20,9 @@ data Goal = GS
           , goal :: Sentence
           , _refAddr :: RefAdd
           , _attribs :: Attributes -- FIXME: I doubt this is necessary for these
-                                   -- but included for consistency.
+                                   -- but included for consistency, and since every
+                                   -- chunk should eventually have the capability
+                                   -- for attributes.
           }
 
 makeLenses ''Goal

@@ -9,7 +9,7 @@ import Drasil.DocumentLanguage.RefHelpers
 
 import Data.Drasil.SI_Units
 import Data.Drasil.People (spencerSmith, nikitha, mCampidelli)
-import Data.Drasil.Concepts.Documentation (analysis, appendix, aspect,
+import Data.Drasil.Concepts.Documentation as Doc (analysis, appendix, aspect,
   characteristic, class_, code, condition, constant, constraint, content,
   datum, definition, description, document, emphasis, endUser, failure,
   figure, goal, implementation, information, interface, input_, item,
@@ -285,7 +285,7 @@ endScoR = foldl (+:+) EmptyS [S "use the", plural datum `sAnd`
 s2_1_intro_p1 :: NamedChunk -> CI -> NamedChunk -> Sentence
 s2_1_intro_p1 typeOf progName gvnVar = foldlSent [S "The main", phrase purpose,
   S "of this", phrase typeOf, S "is to predict whether a given", phrase gvnVar,
-  S "is likely to resist a specified" +:+. phrase blast, S "The", plural goal
+  S "is likely to resist a specified" +:+. phrase blast, S "The", plural Doc.goal
   `sAnd` plural thModel, S "used in the", short progName, phrase code,
   S "are provided" `sC` S "with an", phrase emphasis,
   S "on explicitly identifying", (plural assumption) `sAnd` S "unambiguous" +:+.

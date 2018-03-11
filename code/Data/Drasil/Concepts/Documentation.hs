@@ -1,6 +1,6 @@
 module Data.Drasil.Concepts.Documentation where
 
-import Language.Drasil hiding (organization)
+import Language.Drasil hiding (organization, goal)
 
 import Data.Drasil.Concepts.Math (graph)
 import Control.Lens ((^.))

@@ -40,7 +40,7 @@ import Data.Drasil.Utils (enumSimple, getES, refFromType,
   itemRefToSent, makeTMatrix, itemRefToSent, weave, eqUnR)
 import Data.Drasil.Citations (parnas1986, smithLai2005)
 
-import Data.Drasil.Concepts.Documentation (datumConstraint, inModel,
+import Data.Drasil.Concepts.Documentation as Doc (datumConstraint, inModel,
   requirement, section_, traceyGraph, item, assumption, dataDefn,
   likelyChg, genDefn, thModel, traceyMatrix, model, acroNumGen,
   output_, quantity, input_, physicalConstraint, condition,
@@ -213,7 +213,7 @@ s2_end pro pr = foldlSent_ [EmptyS +:+. plural pro, S "The developed",
 s2_1 :: CI -> Sentence
 s2_1 pro = foldlSent [S "The main", phrase purpose, S "of this",
   phrase document, S "is to describe the modelling of" +:+.
-  phrase pro, S "The", plural goal `sAnd` plural thModel,
+  phrase pro, S "The", plural Doc.goal `sAnd` plural thModel,
   S "used in the", short pro, S "code are provided, with an emphasis",
   S "on explicitly identifying", plural assumption, S "and unambiguous" +:+.
   plural definition, S "This", phrase document,

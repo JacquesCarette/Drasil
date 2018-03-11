@@ -157,7 +157,7 @@ glassSystInfo = SI {
   --FIXME: All named ideas, not just acronyms.
 
 gbRefDB :: ReferenceDB
-gbRefDB = rdb newAssumptions newReqs [] gbCitations
+gbRefDB = rdb [] [] newAssumptions newReqs [] gbCitations
 
 newAssumptions :: [AssumpChunk] -- For testing
 newAssumptions = [newA1, newA2, newA3, newA4, newA5, newA6, newA7, newA8]

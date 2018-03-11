@@ -87,7 +87,7 @@ chipmunkSysInfo = SI {
 }
 
 cpRefDB :: ReferenceDB
-cpRefDB = rdb [] [] [] cpCitations -- FIXME: Convert the rest to new chunk types
+cpRefDB = rdb [] [] [] [] [] cpCitations -- FIXME: Convert the rest to new chunk types
 
 --FIXME: All named ideas, not just acronyms.
 

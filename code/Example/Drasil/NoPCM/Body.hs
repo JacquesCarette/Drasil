@@ -177,7 +177,7 @@ nopcm_si = SI {
 }
 
 nopcmRefDB :: ReferenceDB
-nopcmRefDB = rdb [] [] [] s9_refList -- FIXME: Convert the rest to new chunk types
+nopcmRefDB = rdb [] [] [] [] [] s9_refList -- FIXME: Convert the rest to new chunk types
 
 nopcm_code :: CodeSpec
 nopcm_code = codeSpec' nopcm_si [inputMod]

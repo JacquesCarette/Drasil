@@ -116,7 +116,7 @@ swhs_si = SI {
 }
 
 swhsRefDB :: ReferenceDB
-swhsRefDB = rdb [] [] [] s9_swhs_citations
+swhsRefDB = rdb [] [] [] [] [] s9_swhs_citations
 
 swhsSymMap :: ChunkDB
 swhsSymMap = cdb swhsSymbolsAll (map nw swhsSymbols ++ map nw acronyms) ([] :: [UnitDefn] ) -- FIXME: Fill in Concepts

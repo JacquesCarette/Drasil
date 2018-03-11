@@ -34,13 +34,11 @@ gbQDefns = [Parallel hFromt {-DD2-} [glaTyFac {-DD6-}]] ++ --can be calculated o
 
 --DD1--
 
---Source : #7 -> See Issue #357
-
 risk_eq :: Expr
-risk_eq = ((sy sflawParamK) / (Grouping ((sy plate_len) *
-  (sy plate_width))) $^ ((sy sflawParamM) - 1) *
-  (Grouping (sy mod_elas * 1000) * (square (Grouping (sy act_thick))))
-  $^ (sy sflawParamM) * (sy lDurFac) * (exp (sy stressDistFac)))
+risk_eq = ((sy sflawParamK) / 
+  ((sy plate_len) * (sy plate_width)) $^ ((sy sflawParamM) - 1) *
+  (1000 * sy mod_elas * (square $ sy act_thick)) $^ (sy sflawParamM) 
+  * (sy lDurFac) * (exp (sy stressDistFac)))
 
 risk :: QDefinition
 risk = aqd (mkDataDef' risk_fun risk_eq (aGrtrThanB +:+ hRef +:+ ldfRef +:+ jRef))

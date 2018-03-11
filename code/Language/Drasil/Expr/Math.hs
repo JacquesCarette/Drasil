@@ -90,6 +90,10 @@ sum' x = foldr1 (+) x
 cross :: Expr -> Expr -> Expr
 cross = BinaryOp Cross
 
+-- | Smart constructor for case statement (underscore as case is reserved)
+case_ :: [(Expr,Relation)] -> Expr
+case_ = Case
+
 square :: Expr -> Expr
 square x = x $^ 2
 

@@ -49,7 +49,7 @@ risk = aqd (mkDataDef' risk_fun risk_eq (aGrtrThanB +:+ hRef +:+ ldfRef +:+ jRef
 --DD2--
 
 hFromt_eq :: Relation
-hFromt_eq = (1/1000) * (Case (zipWith hFromt_helper 
+hFromt_eq = (1/1000) * (case_ (zipWith hFromt_helper 
   actualThicknesses nominalThicknesses))
 
 hFromt_helper :: Double -> Double -> (Expr, Relation)
@@ -90,7 +90,7 @@ nonFL = aqd (mkDataDef' nonFactorL nonFL_eq (aGrtrThanB +:+ hRef +:+ qHtTlTolRef
 --DD6--
 
 glaTyFac_eq :: Expr
-glaTyFac_eq = (Case (zipWith glaTyFac_helper glassTypeFactors glassTypeAbbrsStr))
+glaTyFac_eq = (case_ (zipWith glaTyFac_helper glassTypeFactors glassTypeAbbrsStr))
 
 glaTyFac_helper :: Integer -> String -> (Expr, Relation)
 glaTyFac_helper result condition = (int result, (sy glass_type) $= str condition)

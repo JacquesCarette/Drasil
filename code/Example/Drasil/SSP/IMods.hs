@@ -69,8 +69,8 @@ nrmShrFor = makeRC "nrmShrFor" (nounPhraseSP "normal/shear force ratio")
   nrmShrF_desc nrmShrF_rel
 
 nrmShrF_rel :: Relation
-nrmShrF_rel = (inxi normFunc) $= Case [case1,case2,case3] $=
-  inxi shearFunc $= Case [
+nrmShrF_rel = (inxi normFunc) $= case_ [case1,case2,case3] $=
+  inxi shearFunc $= case_ [
   (indx1 baseWthX * indx1 scalFunc * indx1 intNormForce, sy index $= 1),
   (inxi baseWthX * (inxi scalFunc * inxi intNormForce +
     inx scalFunc (-1) * inx intNormForce (-1)),
@@ -110,7 +110,7 @@ intsliceFs = makeRC "intsliceFs" (nounPhraseSP "interslice forces")
   sliceFs_desc sliceFs_rel
 
 sliceFs_rel :: Relation
-sliceFs_rel = inxi intNormForce $= Case [
+sliceFs_rel = inxi intNormForce $= case_ [
   (((sy fs) * indx1 shearFNoIntsl - indx1 shearRNoIntsl) / indx1 shrResC,
     sy index $= 1),
   ((inx mobShrC (-1) * inx intNormForce (-1) +

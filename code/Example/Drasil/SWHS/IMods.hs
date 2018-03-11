@@ -63,9 +63,7 @@ eBalanceOnPCM = makeRC "eBalanceOnPCM" (nounPhraseSP
   balPCMDesc balPCM_Rel
 
 balPCM_Rel :: Relation
-balPCM_Rel = (deriv (sy temp_PCM) time) $=
-  Case [case1, case2, case3, case4]
-
+balPCM_Rel = (deriv (sy temp_PCM) time) $= case_ [case1, case2, case3, case4]
   where case1 = ((1 / (sy tau_S_P)) * ((FCall (sy temp_W) [sy time]) -
           (FCall (sy temp_PCM) [sy time])), (sy temp_PCM) $< (sy temp_melt_P))
 
@@ -126,7 +124,7 @@ heatEInPCM = makeRC "heatEInPCM" (nounPhraseSP "Heat energy in the PCM")
   htPCMDesc htPCM_Rel
 
 htPCM_Rel :: Relation
-htPCM_Rel = sy pcm_E $= Case [case1, case2, case3, case4]
+htPCM_Rel = sy pcm_E $= case_ [case1, case2, case3, case4]
   where case1 = (sy htCap_S_P * sy pcm_mass * ((FCall (sy temp_PCM) [sy time]) -
           sy temp_init), (sy temp_PCM) $< (sy temp_melt_P))
 

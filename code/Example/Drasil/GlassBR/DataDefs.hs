@@ -59,7 +59,7 @@ hFromt = aqd (mkDataDef' act_thick hFromt_eq (hMin)) ([] :: Attributes)
 --DD3--
 
 -- loadDF_eq :: Expr 
--- loadDF_eq = (Grouping ((sy load_dur) / (60))) $^ ((sy sflawParamM) / (16))
+-- loadDF_eq = (sy load_dur / 60) $^ (sy sflawParamM / 16)
 
 -- loadDF :: QDefinition
 -- loadDF = mkDataDef lDurFac loadDF_eq
@@ -79,7 +79,7 @@ strDisFac = aqd (mkDataDef' stressDistFac strDisFac_eq
 
 nonFL_eq :: Expr
 nonFL_eq = ((sy tolLoad) * (sy mod_elas) * (sy act_thick) $^ 4) /
-  (square (Grouping ((sy plate_len) * (sy plate_width))))
+  (square (sy plate_len * sy plate_width))
 
 nonFL :: QDefinition
 nonFL = aqd (mkDataDef' nonFactorL nonFL_eq (aGrtrThanB +:+ hRef +:+ qHtTlTolRef))
@@ -99,8 +99,8 @@ glaTyFac = aqd (mkDataDef gTF glaTyFac_eq) ([] :: Attributes)
 --DD7--
 
 dimLL_eq :: Expr
-dimLL_eq = ((sy demand) * (square (Grouping ((sy plate_len) * (sy plate_width)))))
-  / ((sy mod_elas) * ((sy act_thick) $^ 4) * (sy gTF))
+dimLL_eq = ((sy demand) * (square (sy plate_len * sy plate_width)))
+  / ((sy mod_elas) * (sy act_thick $^ 4) * (sy gTF))
 
 dimLL :: QDefinition
 dimLL = aqd (mkDataDef' dimlessLoad dimLL_eq 
@@ -119,10 +119,9 @@ tolPre = aqd (mkDataDef' tolLoad tolPre_eq (qHtTlExtra)) ([] :: Attributes)
 
 tolStrDisFac_eq :: Expr
 tolStrDisFac_eq = log (log (1 / (1 - (sy pb_tol)))
-  * ((Grouping ((sy plate_len) * (sy plate_width)) $^ (sy sflawParamM - 1) / 
-    ((sy sflawParamK) *
-    (Grouping (Grouping ((sy mod_elas * 1000) *
-    (square (Grouping (sy act_thick))))) $^ (sy sflawParamM) * (sy lDurFac))))))
+  * ((((sy plate_len) * (sy plate_width)) $^ (sy sflawParamM - 1) / 
+    ((sy sflawParamK) * ((1000 * sy mod_elas *
+    (square (sy act_thick)))) $^ (sy sflawParamM) * (sy lDurFac)))))
 
 tolStrDisFac :: QDefinition
 tolStrDisFac = aqd (mkDataDef' sdf_tol tolStrDisFac_eq

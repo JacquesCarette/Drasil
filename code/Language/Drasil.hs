@@ -7,7 +7,7 @@ module Language.Drasil (
   -- Recipe
   , Recipe(..)
   -- Expr
-  , Expr(Dbl,Str,IsIn,FCall,Grouping,Case)
+  , Expr(IsIn,FCall,Grouping,Case)
   , Relation, DerivType(..), RealInterval(..), Inclusive(..)
   , ($=), ($<), ($<=), ($>), ($>=), ($^), ($&&), ($||), ($=>), ($<=>), ($.)
   , sy -- old "Chunk" constructor C

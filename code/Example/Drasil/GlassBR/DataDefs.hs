@@ -53,7 +53,7 @@ hFromt_eq = (1/1000) * (Case (zipWith hFromt_helper
   actualThicknesses nominalThicknesses))
 
 hFromt_helper :: Double -> Double -> (Expr, Relation)
-hFromt_helper result condition = ((Dbl result), (sy nom_thick) $= Dbl condition)
+hFromt_helper result condition = (dbl result, (sy nom_thick) $= dbl condition)
 
 hFromt :: QDefinition
 hFromt = aqd (mkDataDef' act_thick hFromt_eq (hMin)) ([] :: Attributes)
@@ -93,7 +93,7 @@ glaTyFac_eq :: Expr
 glaTyFac_eq = (Case (zipWith glaTyFac_helper glassTypeFactors glassTypeAbbrsStr))
 
 glaTyFac_helper :: Integer -> String -> (Expr, Relation)
-glaTyFac_helper result condition = (int result, (sy glass_type) $= Str condition)
+glaTyFac_helper result condition = (int result, (sy glass_type) $= str condition)
 
 glaTyFac :: QDefinition
 glaTyFac = aqd (mkDataDef gTF glaTyFac_eq) ([] :: Attributes)

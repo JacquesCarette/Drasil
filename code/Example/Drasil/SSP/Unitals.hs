@@ -71,48 +71,48 @@ fs, coords, dx_i, dy_i :: ConstrConcept
 --FIXME: add (x,y) when we can index or make related unitals
 
 elasticMod = uq (constrained' SM.elastMod [gtZeroConstr]
-  (Dbl 15000)) defultUncrt
+  (dbl 15000)) defultUncrt
 
 cohesion = uqc "c'" (cn $ "effective cohesion")
   "internal pressure that sticks particles of soil together"
-  (prime $ Atomic "c") pascal Real [gtZeroConstr] (Dbl 10) defultUncrt
+  (prime $ Atomic "c") pascal Real [gtZeroConstr] (dbl 10) defultUncrt
 
 poissnsRatio = uq (constrained' SM.poissnsR
-  [physc $ Bounded (Exc 0) (Exc 1)] (Dbl 0.4)) defultUncrt
+  [physc $ Bounded (Exc 0) (Exc 1)] (dbl 0.4)) defultUncrt
 
 fricAngle = uqc "varphi'" (cn $ "effective angle of friction")
   ("The angle of inclination with respect to the horizontal axis of " ++
   "the Mohr-Coulomb shear resistance line") --http://www.geotechdata.info
   (prime $ Greek Phi_V) degree Real [physc $ Bounded (Exc 0) (Exc 90)]
-  (Dbl 25) defultUncrt
+  (dbl 25) defultUncrt
 
 dryWeight = uqc "gamma" (cn $ "dry unit weight")
   "The weight of a dry soil/ground layer divided by the volume of the layer."
   (Greek Gamma_L) specific_weight Real [gtZeroConstr]
-  (Dbl 20) defultUncrt
+  (dbl 20) defultUncrt
 
 satWeight = uqc "gamma_sat" (cn $ "saturated unit weight")
   ("The weight of saturated soil/ground " ++
   "layer divided by the volume of the layer.")
   (sub (Greek Gamma_L) (Atomic "Sat")) specific_weight Real [gtZeroConstr]
-  (Dbl 20) defultUncrt
+  (dbl 20) defultUncrt
 
 waterWeight = uqc "gamma_w" (cn $ "unit weight of water")
   "The weight of one cubic meter of water."
   (sub (Greek Gamma_L) lW) specific_weight Real [gtZeroConstr]
-  (Dbl 9.8) defultUncrt
+  (dbl 9.8) defultUncrt
   
 constant_a = uqc "a" (cn "constant") fixme
-  lA metre Real [] (Dbl 0) defultUncrt
+  lA metre Real [] (dbl 0) defultUncrt
   
 constant_A = uqc "A" (cn "constant") fixme
-  cA metre Real [] (Dbl 0) defultUncrt
+  cA metre Real [] (dbl 0) defultUncrt
   
 constant_K = uqc "kappa" (cn "constant") fixme
-  (Greek Kappa_L) pascal Real [] (Dbl 0) defultUncrt
+  (Greek Kappa_L) pascal Real [] (dbl 0) defultUncrt
 
 {-Output Variables-} --FIXME: See if there should be typical values
-fs = constrained' (cv fs_concept (Atomic "FS") Real) [gtZeroConstr] (Dbl 1)
+fs = constrained' (cv fs_concept (Atomic "FS") Real) [gtZeroConstr] (dbl 1)
 
 fs_min :: ConVar -- This is a hack to remove the use of indexing for 'min'.
 fs_min = cv (dcc "fs_min" (cn "minimum factor of safety") 
@@ -124,13 +124,13 @@ coords = cuc' "(x,y)"
   (cn $ "cartesian position coordinates" )
   ("y is considered parallel to the direction of the force of " ++
   "gravity and x is considered perpendicular to y")
-  (Atomic "(x,y)") metre Real [] (Dbl 1)
+  (Atomic "(x,y)") metre Real [] (dbl 1)
 
 dx_i = cuc' "dx_i" (cn $ "displacement") ("in the x-ordinate direction " ++
-  fsi) (Concat [Greek Delta_L, Atomic "x"]) metre Real [] (Dbl 1)
+  fsi) (Concat [Greek Delta_L, Atomic "x"]) metre Real [] (dbl 1)
 
 dy_i = cuc' "dy_i" (cn $ "displacement") ("in the y-ordinate direction " ++
-  fsi) (Concat [Greek Delta_L, Atomic "y"]) metre Real [] (Dbl 1)
+  fsi) (Concat [Greek Delta_L, Atomic "y"]) metre Real [] (dbl 1)
 
 ---------------------------
 -- START OF UNITALCHUNKS --

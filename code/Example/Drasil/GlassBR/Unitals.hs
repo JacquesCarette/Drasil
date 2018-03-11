@@ -68,24 +68,24 @@ plate_len = uqcND "plate_len" (nounPhraseSP "plate length (long dimension)")
   [ gtZeroConstr,
     physc $ UpFrom $ Exc $ sy plate_width,
     sfwrc $ Bounded (Inc $ sy dim_min) (Inc $ sy dim_max),
-    sfwrc $ UpTo $ Exc $ sy ar_max * sy plate_width ] (Dbl 1.5) defaultUncrt
+    sfwrc $ UpTo $ Exc $ sy ar_max * sy plate_width ] (dbl 1.5) defaultUncrt
 
 plate_width = uqcND "plate_width" (nounPhraseSP "plate width (short dimension)")
   lB metre Real
   [ gtZeroConstr,
     physc $ Bounded (Exc 0) (Exc $ sy plate_len),
     sfwrc $ Bounded (Inc $ sy dim_min) (Inc $ sy dim_max),
-    sfwrc $ UpTo $ Exc $ sy plate_len / sy ar_max ] (Dbl 1.2) defaultUncrt
+    sfwrc $ UpTo $ Exc $ sy plate_len / sy ar_max ] (dbl 1.2) defaultUncrt
 
 pb_tol = uvc "pb_tol" (nounPhraseSP "tolerable probability of breakage") 
   (sub cP (Atomic "btol")) Real
-  [ physc $ Bounded (Exc 0) (Exc 1)] (Dbl 0.008) (0.001)
+  [ physc $ Bounded (Exc 0) (Exc 1)] (dbl 0.008) (0.001)
 
 char_weight = uqcND "char_weight" (nounPhraseSP "charge weight") 
   lW kilogram Real
   [ gtZeroConstr,
     sfwrc $ Bounded (Inc $ sy cWeightMin) (Inc $ sy cWeightMax)]
-    (Dbl 42) defaultUncrt
+    (dbl 42) defaultUncrt
 
 tNT = uvc "tNT" (nounPhraseSP "TNT equivalent factor")
   (Atomic "TNT") Real
@@ -95,7 +95,7 @@ standOffDist = uqcND "standOffDist" (nounPhraseSP "stand off distance")
   (Atomic "SD") metre Real
   [ gtZeroConstr,
     sfwrc $ Bounded (Exc $ sy sd_min) (Exc $ sy sd_max)]
-  (Dbl 45) defaultUncrt
+  (dbl 45) defaultUncrt
 --FIXME: ^ incorporate definition in here?
 
 nom_thick = cuc "nom_thick" 
@@ -118,7 +118,7 @@ gbOutputs = map qw [is_safe1, is_safe2] ++ map qw [prob_br]
 prob_br :: ConstrainedChunk
 prob_br = cvc "prob_br" (nounPhraseSP "probability of breakage")
   (sub cP lB) Rational
-  [ physc $ Bounded (Exc 0) (Exc 1)] (Dbl 0.4)
+  [ physc $ Bounded (Exc 0) (Exc 1)] (dbl 0.4)
   --FIXME: no typical value!
 
 {--}
@@ -132,31 +132,31 @@ dim_max, dim_min, ar_max, cWeightMax, cWeightMin, sd_min,
 
 dim_max     = mkDataDef (unitary "dim_max"
   (nounPhraseSP "maximum value for one of the dimensions of the glass plate") 
-  (sub lD (Atomic "max")) millimetre Real) (Dbl 5)
+  (sub lD (Atomic "max")) millimetre Real) (dbl 5)
 
 dim_min     = mkDataDef (unitary "dim_min"
   (nounPhraseSP "minimum value for one of the dimensions of the glass plate") 
-  (sub lD (Atomic "min")) millimetre Real) (Dbl 0.1)
+  (sub lD (Atomic "min")) millimetre Real) (dbl 0.1)
 
 ar_max     = mkDataDef (vc "ar_max"
   (nounPhraseSP "maximum aspect ratio")
-  (sub (Atomic "AR") (Atomic "max")) Rational) (Dbl 5)
+  (sub (Atomic "AR") (Atomic "max")) Rational) (dbl 5)
 
 cWeightMax = mkDataDef (unitary "cWeightMax" 
   (nounPhraseSP "maximum permissible input charge weight")
-  (sub (eqSymb char_weight) (Atomic "max")) kilogram Rational) (Dbl 910)
+  (sub (eqSymb char_weight) (Atomic "max")) kilogram Rational) (dbl 910)
 
 cWeightMin = mkDataDef (unitary "cWeightMin"
   (nounPhraseSP "minimum permissible input charge weight")
-  (sub (eqSymb char_weight) (Atomic "min")) kilogram Rational) (Dbl 4.5)
+  (sub (eqSymb char_weight) (Atomic "min")) kilogram Rational) (dbl 4.5)
 
 sd_min     = mkDataDef (unitary "sd_min"
   (nounPhraseSP "minimum stand off distance permissible for input") 
-  (sub (eqSymb standOffDist) (Atomic "min")) metre Real) (Dbl 6)
+  (sub (eqSymb standOffDist) (Atomic "min")) metre Real) (dbl 6)
 
 sd_max     = mkDataDef (unitary "sd_max"
   (nounPhraseSP "maximum stand off distance permissible for input")
-  (sub (eqSymb standOffDist) (Atomic "max")) metre Real) (Dbl 130)
+  (sub (eqSymb standOffDist) (Atomic "max")) metre Real) (dbl 130)
 
 {--}
 
@@ -363,9 +363,9 @@ gbConstants = [constant_M, constant_K, constant_ModElas, constant_LoadDur, const
                 ++ gBRSpecParamVals 
 
 constant_M, constant_K, constant_ModElas, constant_LoadDur, constant_LoadDF, constant_LoadSF :: QDefinition
-constant_K       = mkDataDef sflawParamK  $ (Grouping (Dbl 2.86)) * (10 $^ (negate 53))
+constant_K       = mkDataDef sflawParamK  $ (Grouping (dbl 2.86)) * (10 $^ (negate 53))
 constant_M       = mkDataDef sflawParamM  $ 7
-constant_ModElas = mkDataDef mod_elas     $ (Grouping (Dbl 7.17)) * (10 $^ 7)
+constant_ModElas = mkDataDef mod_elas     $ (Grouping (dbl 7.17)) * (10 $^ 7)
 constant_LoadDur = mkDataDef load_dur     $ 3
 constant_LoadDF  = mkDataDef lDurFac      $ (Grouping ((sy load_dur) / (60))) $^ ((sy sflawParamM) / (16))
 constant_LoadSF  = mkDataDef loadSF       $ 1

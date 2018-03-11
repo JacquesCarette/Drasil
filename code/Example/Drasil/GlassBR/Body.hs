@@ -504,7 +504,7 @@ a8Desc mainConcept = foldlSent [S "With", phrase reference, S "to",
   sParen (getES mainConcept), S "is a", phrase constant, S "in" +:+.
   short gLassBR, S "It is calculated by the" +: phrase equation +:+.
   E (sy mainConcept $= mainConcept^.equat), S "Using this" `sC`
-  E (sy mainConcept $= (Dbl 0.27))]
+  E (sy mainConcept $= dbl 0.27)]
 
 {--Theoretical Models--}
 

@@ -1,68 +1,77 @@
+{-# Language TemplateHaskell #-}
 module Language.Drasil.Reference where
 
 import Language.Drasil.Chunk (Chunk, uid)
-import Language.Drasil.Chunk.AssumpChunk
-import Language.Drasil.Chunk.Change
-import Language.Drasil.Chunk.ReqChunk
-import Language.Drasil.Chunk.Citation
+import Language.Drasil.Chunk.AssumpChunk as A
+import Language.Drasil.Chunk.Change as Ch
+import Language.Drasil.Chunk.Citation as Ci
+import Language.Drasil.Chunk.Goal as G
+import Language.Drasil.Chunk.PhysSystDesc as PD
+import Language.Drasil.Chunk.ReqChunk as R
 import Language.Drasil.Document
 import Language.Drasil.Spec
-import Control.Lens ((^.), Simple, Lens)
+import Control.Lens ((^.), Simple, Lens, makeLenses)
 
 import Data.List (partition, sortBy)
 import qualified Data.Map as Map
 import Data.Function (on)
 
--- | Create References to a given 'LayoutObj'
--- This should not be exported to the end-user, but should be usable
--- within the recipe (we want to force reference creation to check if the given
--- item exists in our database of referable objects.
-makeRef :: (Referable l) => l -> Sentence
-makeRef r = customRef r (refName r)
+-- | Database for maintaining references.
+-- The Int is that reference's number.
+-- Maintains access to both num and chunk for easy reference swapping
+-- between number and shortname/refname when necessary (or use of number
+-- if no shortname exists)
+type RefMap a = Map.Map String (a, Int)
 
--- | Create a reference with a custom 'RefName'
-customRef :: (Referable l) => l -> Sentence -> Sentence
-customRef r n = Ref (rType r) (refAdd r) n
+-- | Physical System Description Database
+type PhysSystDescMap = RefMap PhysSystDesc
+-- | Goal Statement Database
+type GoalMap = RefMap Goal
+-- | Assumption Database
+type AssumpMap = RefMap AssumpChunk
+-- | Requirement (functional/non-functional) Database
+type ReqMap = RefMap ReqChunk
+-- | Change (likely/unlikely) Database
+type ChangeMap = RefMap Change
+-- | Citation Database (bibliography information)
+type BibMap = RefMap Citation
 
 -- | Database for internal references.
-data ReferenceDB = RDB
-  { assumpDB :: AssumpMap
-  , reqDB :: ReqMap
-  , changeDB :: ChangeMap
-  , citationDB :: BibMap
+data ReferenceDB = RDB -- organized in order of appearance in SmithEtAl template
+  { _physSystDescDB :: PhysSystDescMap
+  , _goalDB :: GoalMap
+  , _assumpDB :: AssumpMap
+  , _reqDB :: ReqMap
+  , _changeDB :: ChangeMap
+  , _citationDB :: BibMap
   }
-  
+
+makeLenses ''ReferenceDB
+
 data RefBy = ByName
            | ByNum -- If applicable
 
-rdb :: [AssumpChunk] -> [ReqChunk] -> [Change] -> BibRef ->
-  ReferenceDB
-rdb assumps reqs changes citations = RDB
+rdb :: [PhysSystDesc] -> [Goal] -> [AssumpChunk] -> [ReqChunk] -> [Change] ->
+  BibRef -> ReferenceDB
+rdb psds goals assumps reqs changes citations = RDB
+  (psdMap psds)
+  (goalMap goals)
   (assumpMap assumps)
   (reqMap reqs)
   (changeMap changes)
   (bibMap citations)
 
--- | Map for maintaining assumption references.
--- The Int is that reference's number.
--- Maintains access to both num and chunk for easy reference swapping
--- between number and shortname when necessary (or use of number
--- if no shortname exists)
-type AssumpMap = Map.Map String (AssumpChunk, Int)
+zipWithIntRefMap :: Chunk a => [a] -> RefMap a
+zipWithIntRefMap xs = Map.fromList $ zip (map (^. uid) xs) (zip xs [1..])
+
+psdMap :: [PhysSystDesc] -> PhysSystDescMap
+psdMap = zipWithIntRefMap
+
+goalMap :: [Goal] -> GoalMap
+goalMap = zipWithIntRefMap
 
 assumpMap :: [AssumpChunk] -> AssumpMap
-assumpMap a = Map.fromList $ zip (map (^. uid) a) (zip a [1..])
-
-assumpLookup :: Chunk c => c -> AssumpMap -> (AssumpChunk, Int)
-assumpLookup a m = let lookC = Map.lookup (a ^. uid) m in
-                   getS lookC
-  where getS (Just x) = x
-        getS Nothing = error $ "Assumption: " ++ (a ^. uid) ++
-          " referencing information not found in Assumption Map"
-
--- | Map for maintaining requirement references.
--- Similar to AssumpMap
-type ReqMap = Map.Map String (ReqChunk, Int)
+assumpMap = zipWithIntRefMap
 
 reqMap :: [ReqChunk] -> ReqMap
 reqMap rs = Map.fromList $ zip (map (^. uid) (frs ++ nfrs)) ((zip frs [1..]) ++
@@ -71,34 +80,12 @@ reqMap rs = Map.fromList $ zip (map (^. uid) (frs ++ nfrs)) ((zip frs [1..]) ++
         isFuncRec FR = True
         isFuncRec _  = False
 
-reqLookup :: Chunk c => c -> ReqMap -> (ReqChunk, Int)
-reqLookup r m = let lookC = Map.lookup (r ^. uid) m in
-                   getS lookC
-  where getS (Just x) = x
-        getS Nothing = error $ "Requirement: " ++ (r ^. uid) ++
-          " referencing information not found in Requirement Map"
-
--- | Map for maintaining change references.
--- Similar to AssumpMap
-type ChangeMap = Map.Map String (Change, Int)
-
 changeMap :: [Change] -> ChangeMap
 changeMap cs = Map.fromList $ zip (map (^. uid) (lcs ++ ulcs))
   ((zip lcs [1..]) ++ (zip ulcs [1..]))
   where (lcs, ulcs) = partition (isLikely . chngType) cs
         isLikely Likely = True
         isLikely _ = False
-
-changeLookup :: Chunk c => c -> ChangeMap -> (Change, Int)
-changeLookup c m = let lookC = Map.lookup (c ^. uid) m in
-                   getS lookC
-  where getS (Just x) = x
-        getS Nothing = error $ "Change: " ++ (c ^. uid) ++
-          " referencing information not found in Change Map"
-
--- | Map for maintaining citation references.
--- Similar to AssumpMap.
-type BibMap = Map.Map String (Citation, Int)
 
 bibMap :: [Citation] -> BibMap
 bibMap cs = Map.fromList $ zip (map (^. uid) scs) (zip scs [1..])
@@ -107,10 +94,39 @@ bibMap cs = Map.fromList $ zip (map (^. uid) scs) (zip scs [1..])
         -- Sorting is necessary if using elems to pull all the citations
         -- (as it sorts them and would change the order).
         -- We can always change the sorting to whatever makes most sense
-        
+
+psdLookup :: Chunk c => c -> PhysSystDescMap -> (PhysSystDesc, Int)
+psdLookup p m = getS $ Map.lookup (p ^. uid) m
+  where getS (Just x) = x
+        getS Nothing = error $ "No referencing information found for: " ++
+          (p ^. uid) ++ " in PhysSystDesc Map"
+
+goalLookup :: Chunk c => c -> GoalMap -> (Goal, Int)
+goalLookup g m = getS $ Map.lookup (g ^. uid) m
+  where getS (Just x) = x
+        getS Nothing = error $ "No referencing information found for: " ++
+          (g ^. uid) ++ " in Goal Map"
+
+assumpLookup :: Chunk c => c -> AssumpMap -> (AssumpChunk, Int)
+assumpLookup a m = getS $ Map.lookup (a ^. uid) m
+  where getS (Just x) = x
+        getS Nothing = error $ "Assumption: " ++ (a ^. uid) ++
+          " referencing information not found in Assumption Map"
+
+reqLookup :: Chunk c => c -> ReqMap -> (ReqChunk, Int)
+reqLookup r m = getS $ Map.lookup (r ^. uid) m
+  where getS (Just x) = x
+        getS Nothing = error $ "Requirement: " ++ (r ^. uid) ++
+          " referencing information not found in Requirement Map"
+
+changeLookup :: Chunk c => c -> ChangeMap -> (Change, Int)
+changeLookup c m = getS $ Map.lookup (c ^. uid) m
+  where getS (Just x) = x
+        getS Nothing = error $ "Change: " ++ (c ^. uid) ++
+          " referencing information not found in Change Map"
+
 citeLookup :: Chunk c => c -> BibMap -> (Citation, Int)
-citeLookup c m = let lookC = Map.lookup (c ^. uid) m in
-                   getS lookC
+citeLookup c m = getS $ Map.lookup (c ^. uid) m
   where getS (Just x) = x
         getS Nothing = error $ "Change: " ++ (c ^. uid) ++
           " referencing information not found in Change Map"
@@ -118,33 +134,40 @@ citeLookup c m = let lookC = Map.lookup (c ^. uid) m in
 -- Classes and instances --
 class HasAssumpRefs s where
   assumpRefTable :: Simple Lens s AssumpMap
-
-instance HasAssumpRefs ReferenceDB where
-  assumpRefTable f (RDB a b c d) = fmap (\x -> RDB x b c d) (f a)
-
 class HasReqRefs s where
   reqRefTable :: Simple Lens s ReqMap
-
-instance HasReqRefs ReferenceDB where
-  reqRefTable f (RDB a b c d) = fmap (\x -> RDB a x c d) (f b)
-
 class HasChangeRefs s where
   changeRefTable :: Simple Lens s ChangeMap
-
-instance HasChangeRefs ReferenceDB where
-  changeRefTable f (RDB a b c d) = fmap (\x -> RDB a b x d) (f c)
-
 class HasCitationRefs s where
   citationRefTable :: Simple Lens s BibMap
+class HasGoalRefs s where
+  goalRefTable :: Simple Lens s GoalMap
+class HasPSDRefs s where
+  psdRefTable :: Simple Lens s PhysSystDescMap
 
-instance HasCitationRefs ReferenceDB where
-  citationRefTable f (RDB a b c d) = fmap (\x -> RDB a b c x) (f d)
+instance HasGoalRefs ReferenceDB where goalRefTable = goalDB
+instance HasPSDRefs ReferenceDB where psdRefTable = physSystDescDB
+instance HasAssumpRefs ReferenceDB where assumpRefTable = assumpDB
+instance HasReqRefs ReferenceDB where reqRefTable = reqDB
+instance HasChangeRefs ReferenceDB where changeRefTable = changeDB
+instance HasCitationRefs ReferenceDB where citationRefTable = citationDB
+
 
 class Referable s where
   refName :: s -> RefName -- Sentence; The text to be displayed for the link.
   refAdd  :: s -> String  -- The reference address (what we're linking to).
                           -- Should be string with no spaces/special chars.
   rType   :: s -> RefType -- The reference type (referencing namespace?)
+
+instance Referable Goal where
+  refName g = S $ g ^. G.refAddr
+  refAdd g = "GS:" ++ g ^. G.refAddr
+  rType _ = Goal
+  
+instance Referable PhysSystDesc where
+  refName p = S $ p ^. PD.refAddr
+  refAdd p = "PS:" ++ p ^. PD.refAddr
+  rType _ = PSD
 
 instance Referable AssumpChunk where
   refName (AC _ _ sn _) = sn
@@ -240,6 +263,17 @@ assumptionsFromDB am = dropNums $ sortBy (compare `on` snd) assumptions
 repUnd :: Char -> String
 repUnd '_' = "."
 repUnd c = c : []
+
+-- | Create References to a given 'LayoutObj'
+-- This should not be exported to the end-user, but should be usable
+-- within the recipe (we want to force reference creation to check if the given
+-- item exists in our database of referable objects.
+makeRef :: (Referable l) => l -> Sentence
+makeRef r = customRef r (refName r)
+
+-- | Create a reference with a custom 'RefName'
+customRef :: (Referable l) => l -> Sentence -> Sentence
+customRef r n = Ref (rType r) (refAdd r) n
 
 -- This works for passing the correct id to the reference generator for Assumptions,
 -- Requirements and Likely Changes but I question whether we should use it.

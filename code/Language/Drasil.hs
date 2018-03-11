@@ -149,10 +149,11 @@ module Language.Drasil (
   -- AssumpChunk
   , AssumpChunk, assuming, ac, ac'
   -- Referencing
-  , ReferenceDB(..), AssumpMap, assumpMap, assumpLookup, assumptionsFromDB
+  , ReferenceDB, AssumpMap, assumpMap, assumpLookup, assumptionsFromDB
   , rdb, assumpRefTable, customRef
   , reqMap, HasAssumpRefs, HasReqRefs, reqRefTable, reqLookup, changeMap
   , HasChangeRefs, changeRefTable, changeLookup, RefBy(..)
+  , reqDB, assumpDB
   -- ReqChunk
   , ReqChunk, ReqType(..), reqType, requires, frc, nfrc, rc'
   -- Change
@@ -240,7 +241,7 @@ import Language.Drasil.Space (Space(..))
 import Language.Drasil.Spec (USymb(..), Sentence(..), Accent(..),
                               sParen, sParenNum, sSqBr, sSqBrNum, sC, (+:+), (+:+.), (+.), (+:),
                               semiCol, sParenDash, sDash)
-import Language.Drasil.Reference (makeRef, acroTest, ReferenceDB(assumpDB, reqDB)
+import Language.Drasil.Reference (makeRef, acroTest, ReferenceDB, assumpDB, reqDB
                                  , AssumpMap, assumpMap, assumpLookup, HasAssumpRefs
                                  , assumpRefTable, assumptionsFromDB
                                  , rdb, reqMap, reqRefTable, reqLookup, RefBy(..)

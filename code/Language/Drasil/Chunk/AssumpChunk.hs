@@ -1,7 +1,6 @@
-{-# Language GADTs #-}
+{-# Language TemplateHaskell #-}
 module Language.Drasil.Chunk.AssumpChunk 
   ( AssumpChunk(..)
-  , assuming
   , ac, ac'
   ) where
 
@@ -9,21 +8,20 @@ import Language.Drasil.Chunk
 import Language.Drasil.Chunk.Attribute
 import Language.Drasil.Spec (Sentence(..), RefName)
 
-import Control.Lens ((^.))
+import Control.Lens (makeLenses, (^.))
 
 -- | Assumption chunk type. Has id, what is being assumed, and attributes.
 -- Presently assumptions are captured as sentences.
 data AssumpChunk = AC 
-                 { _id :: String
+                 { _aid :: String
                  , assuming :: Sentence
                  , _refName :: RefName -- HACK for refs?. No spaces/special chars allowed
-                 , _as :: Attributes
+                 , _attribs :: Attributes
                  }
+makeLenses ''AssumpChunk
 
-instance Chunk AssumpChunk where
-  uid f (AC a b c d) = fmap (\x -> AC x b c d) (f a)
-instance HasAttributes AssumpChunk where
-  attributes f (AC a b c d) = fmap (\x -> AC a b c x) (f d)
+instance Chunk AssumpChunk where uid = aid
+instance HasAttributes AssumpChunk where attributes = attribs
 instance Eq AssumpChunk where
   a == b = a ^. uid == b ^. uid
   

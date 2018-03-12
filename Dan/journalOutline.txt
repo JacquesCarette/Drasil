@@ -1,0 +1,293 @@
+Style note: I want to thread an example through the entirety of the paper,
+  particularly through the KBSE section, as examples would probably drive
+  the points home quite a bit better than just walls of text.
+  but I'd written most of the outline first, so it needs a bit more work.
+
+Title:
+
+Abstract:
+
+Writing non-executable software artifacts (requirements documents, design,
+verification & validation plans, etc.) can be monotonous work, but ultimately
+improves the quality of software.
+Similarly, maintenance of these artifacts typically requires a large time
+investment. Why, in a world of software tools, do we continue to undertake these
+efforts manually? Literate programming had the right idea, but focused too
+heavily on code.
+
+We present Drasil -- a tool for supporting a Knowledge-Based (KB) approach to
+Software Engineering (SE) -- as a means of generating ``all the things".
+
+-- START: Remove from here --
+This KB approach aims to reuse as much of the underlying science knowledge
+as possible to reduce maintenance woes, while simultaneously allowing
+users to update all software artifacts, including code, with the push of a button.
+-- END: to here? --
+
+Drasil is still a work in progress being developed through the application of
+Grounded Theory. We introduce a series of case studies to exemplify Drasil's
+artifact generation and knowledge-reuse mechanics.
+
+As Drasil's knowledge-base continues to grow, creating new software families
+in the captured domains will become much easier and faster. We have already seen
+how in-built sanity-checking removes a number of tedious, hard-to-notice errors,
+not to mention the
+-- anecdotally --
+effects on how easy it is to maintain documents and trace knowledge between them.
+
+=================
+Intro
+=================
+- Blurb on how all artifacts are useful and improve quality. Lead into DDD.
+
+----------------
+Doc Driven Des
+----------------
+- Document-driven design and its advantages/disadvantages.
+  - Quality improvements
+  - Large time investment for initial artifact creation
+  - Large time investment every time something needs to be updated
+  - Often artifacts fall out of sync with each other and are inconsistent
+  - All but necessary for certification
+- Need to overcome the disadvantages somehow.
+  - Most obvious solution would be to automate if possible.
+
+----------------
+Previous efforts
+----------------
+
+---- START: move to side note / other subsection? ----
+- Compendia
+  - Trying to solve the problem of reproducibility **or whichever R goes here**
+  - Not focused on DDD or its benefits, moreso focused on good science and
+    being able to re-run experiments exactly
+-------------- END ------------------------------------
+
+- Previous attempts at automating documentation (à la DDD)
+  - LP, tools like javadoc, Haddock, etc.
+  - Too code-centric!
+  - Comments and code still need to be updated in parallel, albeit to a lesser
+    extent in some cases
+  - In general, fairly rigidly structured output (you don't have much say on
+    how it looks, only what information should be included and, sometimes, where
+  - Finish with a focus on the good stuff:
+    - Identified the need for good documentation
+    - Keeps docs and code in the same place
+        - Easier to manually maintain consistency and apply updates
+- One other problem we've identified:
+  - common underlying knowledge between projects is duplicated as there is no
+   real cross-project reuse mechanism in place with these tools.
+
+====================================
+Knowledge-Based Software Engineering
+====================================
+
+- The main ideas:
+  - Capture underlying science knowledge in a meaningful way
+  - Reuse wherever appropriate (inter- and intra-project) thanks to
+    knowledge-base and transformations.
+  - Maintain a single source of knowledge and generate the software artifacts
+    from there.
+- Scope
+  - Well-understood domains
+    - There is a solid theoretical underpinning (science/math).
+    - We can explain it to a computer! (not as easy as you'd think)
+  - Particularly we focus on KBSE for Scientific Computing Software (SCS) as it
+    is rich in knowledge
+
+--------------------------
+Knowledge vs. Information
+--------------------------
+
+- Knowledge is something that can be used and transformed.
+  - It is 'alive'
+  - It is well-understood (hence transformations).
+    -> Points to scope
+  - Information is 'dead' -> always appears in the same form
+  - Information is not necessarily well-understood.
+  - Examples: Knowledge - ConsThermE; Information - this sentence.
+- We focus on the capture of knowledge within the database
+- We also use information as necessary, since not everything (particularly English
+  language sentences) is understood well enough to be transformed.
+
+--------------------------
+Capturing Knowledge
+--------------------------
+
+- Knowledge comes in many forms (theories, concepts, etc.)
+  - As such we capture it in a number of chunks
+    - Define chunk, use figure to help.
+    *F* Chunk Hierarchy (simplified) ***
+- Need to capture ALL information around a piece of knowledge, even if it may
+  not be relevant to the current phase of development
+- Store knowledge in a common knowledge-base for easy inter/intra project reuse
+- We are building ontologies, piecewise, for specific domains.
+  - But they are useful even when incomplete!
+
+--------------------------
+Using Knowledge
+--------------------------
+
+- Most obvious benefit -> no more copy/paste! Just reuse the chunk you need.
+- Recipes!
+  - Represent different 'views' of the knowledge based on how abstract, what
+    audience, etc.
+    - Transforms the knowledge into its requisite form (eqns, descriptions, code)
+    - Variabilities -> Program families.
+      - Easy to specialize to different family members
+      - Example: SWHS vs NoPCM
+      *F* Show portion of each SRS, one similarity, one difference? *F*
+- Requires a framework / tool support to automate rendering of recipes
+
+====================================
+Heeeeeeeeeere's Drasil
+====================================
+
+- To use KBSE to its potential we need a strong support framework
+- Intro to Drasil
+    *F* Knowledge tree ***
+  - What it is and does
+    - DSL
+    - Generate all the things!
+  - How is Knowledge Capture handled in Drasil?
+  - What do Recipes look like?
+    *F* SmithEtAl template for SRS = Drasil.DocumentLanguage ***
+  - Key components of the generator / renderer
+
+---------------------
+Grounded Theory
+---------------------
+
+- Development following grounded theory (ish).
+- Example -> Before SI to today's SI w/ mini-DBs?
+
+---------------------
+Drasil Today
+---------------------
+
+- Sentence and Document
+- Explain the chunk hierarchy (extended?)
+  *F* Chunk hierarchy (extended) ***
+- Data.Drasil
+  *F* Knowledge areas we've started to capture (See: SE-CSE paper) ***
+- Recipe Language(s) -- Refer to:
+  *F* Drasil.DocumentLanguage***
+- The generator
+  - HTML and TeX rendering
+  - GOOL for code
+- System Information -> Get into it
+
+====================================
+The big example(s)
+====================================
+
+- Introduce case studies
+  - Our methods for reimplementing
+  - CI for testing
+- Time to show off a bit.
+  - Start with common knowledge
+  - Then onto GlassBR example to show off the doc lang recipe
+  - Then let's see SRS vs. NoPCM for reuse (particularly NoPCM)
+
+---------
+Data.Drasil
+---------
+
+- Common knowledge
+  *F* SI_Units ***
+  *F* Thermodynamics (ConsThermE?) ***
+
+--------
+GlassBR
+--------
+
+- Brief intro to problem GlassBR is solving
+- Show off the doc language here
+  *F* GlassBR SRS in (truncated) DocLang format ***
+  - "Reads like a table of contents, with a few quirks"
+- Show off some code generation
+  *F* Side-by-side of Chunk Eqn vs. Doc Eqn vs. Code ***
+  - "Easy to see that the code matches the equations"
+- Talk about potential variabilities and how to make this a family
+- Why this example is interesting:
+  - ODE solver -> We don't gen, just link to existing good one(s)
+
+--------
+NoPCM & SWHS
+--------
+
+- Introduce the problems
+- See how they're a family?
+- Really drill in the similarities
+  *F* Figure showing NoPCM import(s) ***
+- Lots of knowledge-reuse
+- Very few 'new' chunks (count them?)
+- Show example of variability in action
+  *F* Equation with/without PCM *** (rendered?)
+
+--------
+Others
+--------
+
+- Mention SSP, Tiny, GamePhysics, but don't go too in-depth.
+  - Useful examples as they give us a wider range of problems
+- Testing
+  - Physics is physics -> when we make updates, the underlying knowledge isn't
+    changing, so neither should our output
+  - Refer to CI
+
+--------------------
+Compliments of System Information
+--------------------
+- Thanks to the recipe language and the way we structure out system information
+  we can get
+- Table of Symbols
+- Table of Units
+- Table of Abbreviations and Acronyms
+- Bibliography
+
+- All tedious to do by hand, but are free to automatically generate
+- Generator includes sanity-checking -> Can't use something that isn't defined!
+
+====================================
+Results
+====================================
+
+--------------------
+Common issues across case studies
+--------------------
+- Auto-generating the symbol table and including sanity-checking revealed a
+  number of missing symbols.
+- Sanity-checks are run every time artifacts are generated.
+- Sanity-checks are 'free' -> we can check for errors with our symbols,
+  ensure units are consistent, guard against constraints, and ensure we only
+  reference those things which are defined in our system. (see "Compliments ...")
+
+--------------------
+NoPCM and SWHS
+--------------------
+- Along with the common errors, there was some sharing of PCM-related knowledge
+  - Found because PCM symbols were not in the ToS and the sanity-check caught it.
+  - No way to specifically exclude knowledge that shouldn't 'exist' in a project
+
+-----------------
+SSP
+-----------------
+- Symbols for given quantities changed throughout the documentation
+  - Went unnoticed by a human for years! Found almost instantly by Drasil
+    - the new symbols were undefined.
+
+-----------------
+Error Tracking
+-----------------
+
+- Easy to track down errors (smart error messages point to the chunk causing the
+  problem).
+
+=====================
+Future Work
+=====================
+
+=====================
+Conclusion
+=====================

@@ -31,8 +31,8 @@ eBalanceOnWtr = makeRC "eBalanceOnWtr" (nounPhraseSP $ "Energy balance on " ++
 
 balWtr_Rel :: Relation
 balWtr_Rel = (deriv (sy temp_W) time) $= 1 / (sy tau_W) *
-  (((sy temp_C) - (FCall (sy temp_W) [sy time])) +
-  (sy eta) * ((FCall (sy temp_PCM) [sy time]) - (FCall (sy temp_W) [sy time])))
+  (((sy temp_C) - (apply1 temp_W time)) +
+  (sy eta) * ((apply1 temp_PCM time) - (apply1 temp_W time)))
 
 balWtrDesc :: Sentence
 balWtrDesc = foldlSent [(E $ sy temp_W) `isThe` phrase temp_W +:+.
@@ -63,14 +63,12 @@ eBalanceOnPCM = makeRC "eBalanceOnPCM" (nounPhraseSP
   balPCMDesc balPCM_Rel
 
 balPCM_Rel :: Relation
-balPCM_Rel = (deriv (sy temp_PCM) time) $=
-  Case [case1, case2, case3, case4]
+balPCM_Rel = (deriv (sy temp_PCM) time) $= case_ [case1, case2, case3, case4]
+  where case1 = ((1 / (sy tau_S_P)) * ((apply1 temp_W time) -
+          (apply1 temp_PCM time)), (sy temp_PCM) $< (sy temp_melt_P))
 
-  where case1 = ((1 / (sy tau_S_P)) * ((FCall (sy temp_W) [sy time]) -
-          (FCall (sy temp_PCM) [sy time])), (sy temp_PCM) $< (sy temp_melt_P))
-
-        case2 = ((1 / (sy tau_L_P)) * ((FCall (sy temp_W) [sy time]) -
-          (FCall (sy temp_PCM) [sy time])), (sy temp_PCM) $> (sy temp_melt_P))
+        case2 = ((1 / (sy tau_L_P)) * ((apply1 temp_W time) -
+          (apply1 temp_PCM time)), (sy temp_PCM) $> (sy temp_melt_P))
 
         case3 = (0, (sy temp_PCM) $= (sy temp_melt_P))
 
@@ -95,8 +93,8 @@ heatEInWtr = makeRC "heatEInWtr" (nounPhraseSP "Heat energy in the water")
   htWtrDesc htWtr_Rel
 
 htWtr_Rel :: Relation
-htWtr_Rel = (FCall (sy w_E) [sy time]) $= (sy htCap_W) * (sy w_mass) *
-  ((FCall (sy temp_W) [sy time]) - sy temp_init)
+htWtr_Rel = (apply1 w_E time) $= (sy htCap_W) * (sy w_mass) *
+  ((apply1 temp_W time) - sy temp_init)
 
 htWtrDesc :: Sentence
 htWtrDesc = foldlSent [S "The above", phrase equation,
@@ -126,18 +124,18 @@ heatEInPCM = makeRC "heatEInPCM" (nounPhraseSP "Heat energy in the PCM")
   htPCMDesc htPCM_Rel
 
 htPCM_Rel :: Relation
-htPCM_Rel = sy pcm_E $= Case [case1, case2, case3, case4]
-  where case1 = (sy htCap_S_P * sy pcm_mass * ((FCall (sy temp_PCM) [sy time]) -
+htPCM_Rel = sy pcm_E $= case_ [case1, case2, case3, case4]
+  where case1 = (sy htCap_S_P * sy pcm_mass * ((apply1 temp_PCM time) -
           sy temp_init), (sy temp_PCM) $< (sy temp_melt_P))
 
         case2 = (sy pcm_initMltE + (sy htFusion * sy pcm_mass) +
-          (sy htCap_L_P * sy pcm_mass * ((FCall (sy temp_PCM) [sy time]) -
+          (sy htCap_L_P * sy pcm_mass * ((apply1 temp_PCM time) -
           sy temp_melt_P)), (sy temp_PCM) $> (sy temp_melt_P))
 
-        case3 = (sy pcm_initMltE + (FCall (sy latentE_P) [sy time]),
+        case3 = (sy pcm_initMltE + (apply1 latentE_P time),
           (sy temp_PCM) $= (sy temp_melt_P))
 
-        case4 = (sy pcm_initMltE + (FCall (sy latentE_P) [sy time]),
+        case4 = (sy pcm_initMltE + (apply1 latentE_P time),
           0 $< (sy melt_frac) $< 1)
 
 htPCMDesc :: Sentence

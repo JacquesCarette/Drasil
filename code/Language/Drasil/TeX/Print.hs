@@ -102,7 +102,6 @@ p_expr (Funct o e)   = p_op o e
 p_expr (Call f x) = p_expr f ++ paren (concat $ intersperse "," $ map p_expr x)
 p_expr (Case ps)  = "\\begin{cases}\n" ++ cases ps ++ "\n\\end{cases}"
 p_expr (UOp f es)  = p_uop f es
-p_expr (Grouping x) = paren (p_expr x)
 p_expr (Mtx a)    = "\\begin{bmatrix}\n" ++ p_matrix a ++ "\n\\end{bmatrix}"
 --Logic
 p_expr (Assoc And l)  = concat $ intersperse "\\land{}" $ map p_expr l

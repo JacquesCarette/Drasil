@@ -34,13 +34,11 @@ gbQDefns = [Parallel hFromt {-DD2-} [glaTyFac {-DD6-}]] ++ --can be calculated o
 
 --DD1--
 
---Source : #7 -> See Issue #357
-
 risk_eq :: Expr
-risk_eq = ((sy sflawParamK) / (Grouping ((sy plate_len) *
-  (sy plate_width))) $^ ((sy sflawParamM) - 1) *
-  (Grouping (sy mod_elas * 1000) * (square (Grouping (sy act_thick))))
-  $^ (sy sflawParamM) * (sy lDurFac) * (exp (sy stressDistFac)))
+risk_eq = ((sy sflawParamK) / 
+  ((sy plate_len) * (sy plate_width)) $^ ((sy sflawParamM) - 1) *
+  (1000 * sy mod_elas * (square $ sy act_thick)) $^ (sy sflawParamM) 
+  * (sy lDurFac) * (exp (sy stressDistFac)))
 
 risk :: QDefinition
 risk = aqd (mkDataDef' risk_fun risk_eq (aGrtrThanB +:+ hRef +:+ ldfRef +:+ jRef))
@@ -49,7 +47,7 @@ risk = aqd (mkDataDef' risk_fun risk_eq (aGrtrThanB +:+ hRef +:+ ldfRef +:+ jRef
 --DD2--
 
 hFromt_eq :: Relation
-hFromt_eq = (1/1000) * (Case (zipWith hFromt_helper 
+hFromt_eq = (1/1000) * (case_ (zipWith hFromt_helper 
   actualThicknesses nominalThicknesses))
 
 hFromt_helper :: Double -> Double -> (Expr, Relation)
@@ -61,7 +59,7 @@ hFromt = aqd (mkDataDef' act_thick hFromt_eq (hMin)) ([] :: Attributes)
 --DD3--
 
 -- loadDF_eq :: Expr 
--- loadDF_eq = (Grouping ((sy load_dur) / (60))) $^ ((sy sflawParamM) / (16))
+-- loadDF_eq = (sy load_dur / 60) $^ (sy sflawParamM / 16)
 
 -- loadDF :: QDefinition
 -- loadDF = mkDataDef lDurFac loadDF_eq
@@ -69,7 +67,7 @@ hFromt = aqd (mkDataDef' act_thick hFromt_eq (hMin)) ([] :: Attributes)
 --DD4--
 
 strDisFac_eq :: Expr
-strDisFac_eq = FCall (sy stressDistFac) 
+strDisFac_eq = apply (sy stressDistFac) 
   [sy dimlessLoad, (sy plate_len) / (sy plate_width)]
 --strDisFac_eq = FCall (asExpr interpZ) [V "SDF.txt", (sy plate_len) / (sy plate_width), sy dimlessLoad]
   
@@ -81,7 +79,7 @@ strDisFac = aqd (mkDataDef' stressDistFac strDisFac_eq
 
 nonFL_eq :: Expr
 nonFL_eq = ((sy tolLoad) * (sy mod_elas) * (sy act_thick) $^ 4) /
-  (square (Grouping ((sy plate_len) * (sy plate_width))))
+  (square (sy plate_len * sy plate_width))
 
 nonFL :: QDefinition
 nonFL = aqd (mkDataDef' nonFactorL nonFL_eq (aGrtrThanB +:+ hRef +:+ qHtTlTolRef))
@@ -90,7 +88,7 @@ nonFL = aqd (mkDataDef' nonFactorL nonFL_eq (aGrtrThanB +:+ hRef +:+ qHtTlTolRef
 --DD6--
 
 glaTyFac_eq :: Expr
-glaTyFac_eq = (Case (zipWith glaTyFac_helper glassTypeFactors glassTypeAbbrsStr))
+glaTyFac_eq = (case_ (zipWith glaTyFac_helper glassTypeFactors glassTypeAbbrsStr))
 
 glaTyFac_helper :: Integer -> String -> (Expr, Relation)
 glaTyFac_helper result condition = (int result, (sy glass_type) $= str condition)
@@ -101,8 +99,8 @@ glaTyFac = aqd (mkDataDef gTF glaTyFac_eq) ([] :: Attributes)
 --DD7--
 
 dimLL_eq :: Expr
-dimLL_eq = ((sy demand) * (square (Grouping ((sy plate_len) * (sy plate_width)))))
-  / ((sy mod_elas) * ((sy act_thick) $^ 4) * (sy gTF))
+dimLL_eq = ((sy demand) * (square (sy plate_len * sy plate_width)))
+  / ((sy mod_elas) * (sy act_thick $^ 4) * (sy gTF))
 
 dimLL :: QDefinition
 dimLL = aqd (mkDataDef' dimlessLoad dimLL_eq 
@@ -111,7 +109,7 @@ dimLL = aqd (mkDataDef' dimlessLoad dimLL_eq
 --DD8--
 
 tolPre_eq :: Expr
-tolPre_eq = FCall (sy tolLoad) [sy sdf_tol, (sy plate_len) / (sy plate_width)]
+tolPre_eq = apply (sy tolLoad) [sy sdf_tol, (sy plate_len) / (sy plate_width)]
 --tolPre_eq = FCall (asExpr interpY) [V "SDF.txt", (sy plate_len) / (sy plate_width), sy sdf_tol]
 
 tolPre :: QDefinition
@@ -121,10 +119,9 @@ tolPre = aqd (mkDataDef' tolLoad tolPre_eq (qHtTlExtra)) ([] :: Attributes)
 
 tolStrDisFac_eq :: Expr
 tolStrDisFac_eq = log (log (1 / (1 - (sy pb_tol)))
-  * ((Grouping ((sy plate_len) * (sy plate_width)) $^ (sy sflawParamM - 1) / 
-    ((sy sflawParamK) *
-    (Grouping (Grouping ((sy mod_elas * 1000) *
-    (square (Grouping (sy act_thick))))) $^ (sy sflawParamM) * (sy lDurFac))))))
+  * ((((sy plate_len) * (sy plate_width)) $^ (sy sflawParamM - 1) / 
+    ((sy sflawParamK) * ((1000 * sy mod_elas *
+    (square (sy act_thick)))) $^ (sy sflawParamM) * (sy lDurFac)))))
 
 tolStrDisFac :: QDefinition
 tolStrDisFac = aqd (mkDataDef' sdf_tol tolStrDisFac_eq

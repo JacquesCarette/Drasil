@@ -1370,10 +1370,10 @@ s4_2_7_deriv_1 lce ewat en co pcmat d1hfc d2hfp su ht  =
 s4_2_7_deriv_2 :: Contents
 s4_2_7_deriv_2 = eqUnR
   ((sy w_E) $= (defint (eqSymb time) 0 (sy time)
-  ((sy coil_HTC) * (sy coil_SA) * ((sy temp_C) - FCall (sy temp_W)
-  [sy time]))) - (defint (eqSymb time) 0 (sy time)
-  ((sy pcm_HTC) * (sy pcm_SA) * ((FCall (sy temp_W) [sy time]) -
-  (FCall (sy temp_PCM) [sy time])))))
+  ((sy coil_HTC) * (sy coil_SA) * ((sy temp_C) - apply1 temp_W time)))
+  - (defint (eqSymb time) 0 (sy time)
+  ((sy pcm_HTC) * (sy pcm_SA) * ((apply1 temp_W time) -
+  (apply1 temp_PCM time)))))
 
 s4_2_7_deriv_3 :: UncertQ -> UnitalChunk -> CI -> ConceptChunk -> Contents
 s4_2_7_deriv_3 epcm en pcmat wa =
@@ -1384,8 +1384,8 @@ s4_2_7_deriv_3 epcm en pcmat wa =
 s4_2_7_deriv_4 :: Contents
 s4_2_7_deriv_4 = eqUnR
   ((sy pcm_E) $= (defint (eqSymb time) 0 (sy time)
-  ((sy pcm_HTC) * (sy pcm_SA) * ((FCall (sy temp_W) [sy time]) - (FCall
-  (sy temp_PCM) [sy time])))))
+  ((sy pcm_HTC) * (sy pcm_SA) * ((apply1 temp_W time) - 
+  (apply1 temp_PCM time)))))
 
 s4_2_7_deriv_5 :: ConceptChunk -> CI -> CI -> Contents
 s4_2_7_deriv_5 eq pro rs = foldlSP [titleize' eq, S "(FIXME: Equation 7)" 

@@ -43,7 +43,7 @@ sliceWght :: QDefinition
 sliceWght = mkDataDef slcWght slcWgtEqn
 
 slcWgtEqn :: Expr
-slcWgtEqn = (inxi baseWthX) * (Case [case1,case2,case3])
+slcWgtEqn = (inxi baseWthX) * (case_ [case1,case2,case3])
   where case1 = (((inxi slopeHght)-(inxi slipHght ))*(sy satWeight),
           (inxi waterHght) $>= (inxi slopeHght))
 
@@ -60,7 +60,7 @@ baseWtrF :: QDefinition
 baseWtrF = mkDataDef baseHydroForce bsWtrFEqn 
 
 bsWtrFEqn :: Expr
-bsWtrFEqn = (inxi baseLngth)*(Case [case1,case2])
+bsWtrFEqn = (inxi baseLngth)*(case_ [case1,case2])
   where case1 = (((inxi waterHght)-(inxi slipHght))*(sy waterWeight),
           (inxi waterHght) $> (inxi slipHght))
 
@@ -72,7 +72,7 @@ surfWtrF :: QDefinition
 surfWtrF = mkDataDef surfHydroForce surfWtrFEqn
 
 surfWtrFEqn :: Expr
-surfWtrFEqn = (inxi surfLngth)*(Case [case1,case2])
+surfWtrFEqn = (inxi surfLngth)*(case_ [case1,case2])
   where case1 = (((inxi waterHght)-(inxi slopeHght))*(sy waterWeight),
           (inxi waterHght) $> (inxi slopeHght))
 
@@ -84,7 +84,7 @@ intersliceWtrF :: QDefinition
 intersliceWtrF = mkDataDef watrForce intersliceWtrFEqn
 
 intersliceWtrFEqn :: Expr
-intersliceWtrFEqn = Case [case1,case2,case3]
+intersliceWtrFEqn = case_ [case1,case2,case3]
   where case1 = (((inxi slopeHght)-(inxi slipHght ))$^ 2 / 2  *
           (sy satWeight) + ((inxi waterHght)-(inxi slopeHght))$^ 2 *
           (sy satWeight), (inxi waterHght) $>= (inxi slopeHght))
@@ -231,7 +231,7 @@ soilStiffness :: QDefinition
 soilStiffness = mkDataDef nrmStiffBase soilStiffnessEqn
 
 soilStiffnessEqn :: Expr
-soilStiffnessEqn = (Case [case1,case2])
+soilStiffnessEqn = (case_ [case1,case2])
   where case1 = (block, (sy SM.poissnsR) $< 0)
 
         case2 = ((dbl 0.01) * block + (sy constant_K) / ((sy nrmDispl)+

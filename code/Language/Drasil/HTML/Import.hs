@@ -51,7 +51,6 @@ expr (Case ps)        sm = if length ps < 2 then
                     else P.Case (zip (map (flip expr sm . fst) ps) (map (flip expr sm . snd) ps))
 expr (Matrix a)         sm = P.Mtx $ map (map (flip expr sm)) a
 expr (UnaryOp o u)      sm = P.UOp o (expr u sm)
-expr (Grouping e)       sm = P.Grouping (expr e sm)
 expr (BinaryOp Div a b)  sm = P.BOp Frac (replace_divs a sm) (replace_divs b sm)
 expr (BinaryOp o a b)   sm = P.BOp o (expr a sm) (expr b sm)
 expr (EOp o)            sm = eop o sm

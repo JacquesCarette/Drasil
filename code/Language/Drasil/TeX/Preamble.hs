@@ -4,7 +4,7 @@ import Data.List (nub)
 
 import Language.Drasil.Config (hyperSettings, fontSize,bibFname)
 import Language.Drasil.TeX.Monad
-import Language.Drasil.TeX.AST hiding (URL)
+import Language.Drasil.TeX.AST
 import Language.Drasil.TeX.Helpers
 
 -- FIXME: this really shouldn't be in code, it should be data!

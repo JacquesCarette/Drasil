@@ -29,8 +29,8 @@ nwtnCooling = makeRC "nwtnCooling" (nounPhraseSP "Newton's law of cooling")
   nwtnCooling_desc nwtnCooling_rel
 
 nwtnCooling_rel :: Relation
-nwtnCooling_rel = FCall (sy thFluxVect) [sy QP.time] $= sy htTransCoeff *
-  FCall (sy deltaT) [sy QP.time]
+nwtnCooling_rel = apply1 thFluxVect QP.time $= sy htTransCoeff *
+  apply1 deltaT QP.time
 
 nwtnCooling_desc :: Sentence
 nwtnCooling_desc = foldlSent [at_start law_conv_cooling +:+.
@@ -38,13 +38,13 @@ nwtnCooling_desc = foldlSent [at_start law_conv_cooling +:+.
   S "The law is stated as", S "the", phrase rate,
   S "of heat loss from a body is proportional to the",
   S "difference in", plural temp, S "between the body" +:+.
-  S "and its surroundings", E (FCall (sy thFluxVect) [sy QP.time]) `isThe`
+  S "and its surroundings", E (apply1 thFluxVect QP.time) `isThe`
   S "thermal flux" +:+. sParen (Sy $ unit_symb thFluxVect),
   getES htTransCoeff `isThe` S "heat transfer coefficient" `sC`
   S "assumed independant of", getES QT.temp, sParen (acroA 2) +:+.
   sParen (Sy $ unit_symb htTransCoeff),
-  E (FCall (sy deltaT) [sy QP.time] $= FCall (sy temp) [sy QP.time] -
-  FCall (sy temp_env) [sy QP.time]) `isThe` S "time-dependant thermal gradient",
+  E (apply1 deltaT QP.time $= apply1 temp QP.time -
+  apply1 temp_env QP.time) `isThe` S "time-dependant thermal gradient",
   S "between the environment and the object",
   sParen (Sy $ unit_symb deltaT)]
 

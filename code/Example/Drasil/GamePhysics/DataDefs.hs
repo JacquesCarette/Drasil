@@ -47,7 +47,7 @@ dd2linDisp :: QDefinition
 dd2linDisp = mkDataDef QP.linearDisplacement dispEqn
 
 dispEqn :: Expr
-dispEqn = deriv (FCall (sy QP.position) [sy QP.time]) QP.time
+dispEqn = deriv (apply1 QP.position QP.time) QP.time
 {-
 dd2descr :: Sentence
 dd2descr = S "linear" +:+ (QP.displacement ^. term) +:+ S "of a" +:+
@@ -73,7 +73,7 @@ dd3linVel :: QDefinition
 dd3linVel = mkDataDef QP.linearVelocity velEqn
 
 velEqn :: Expr
-velEqn = deriv (FCall (sy QP.displacement) [sy QP.time]) QP.time
+velEqn = deriv (apply1 QP.displacement QP.time) QP.time
 {-
 dd3descr :: Sentence
 dd3descr = S "linear" +:+ (QP.velocity ^. term) +:+ S "of a" +:+
@@ -88,7 +88,7 @@ dd4linAcc :: QDefinition
 dd4linAcc = mkDataDef QP.linearAccel accelEqn
 
 accelEqn :: Expr
-accelEqn = deriv (FCall (sy QP.velocity) [sy QP.time]) QP.time
+accelEqn = deriv (apply1 QP.velocity QP.time) QP.time
 {-
 dd4descr :: Sentence
 dd4descr = S "linear" +:+ (accel ^. term) +:+ S "of a" +:+
@@ -103,7 +103,7 @@ dd5angDisp :: QDefinition
 dd5angDisp = mkDataDef QP.angularDisplacement angDispEqn
 
 angDispEqn :: Expr
-angDispEqn = deriv (FCall (sy QM.orientation) [sy QP.time]) QP.time
+angDispEqn = deriv (apply1 QM.orientation QP.time) QP.time
 {-
 dd5descr :: Sentence
 dd5descr = (QP.angularDisplacement ^. term) +:+ S "of a" +:+
@@ -118,7 +118,7 @@ dd6angVel :: QDefinition
 dd6angVel = mkDataDef QP.angularVelocity angVelEqn
 
 angVelEqn :: Expr
-angVelEqn = deriv (FCall (sy QP.angularDisplacement) [sy QP.time]) QP.time
+angVelEqn = deriv (apply1 QP.angularDisplacement QP.time) QP.time
 {-
 dd6descr :: Sentence
 dd6descr = ((QP.angularVelocity ^. term)) +:+ S "of a" +:+
@@ -133,7 +133,7 @@ dd7angAccel :: QDefinition
 dd7angAccel = mkDataDef QP.angularAccel angAccelEqn
 
 angAccelEqn :: Expr
-angAccelEqn = deriv (FCall (sy QP.angularVelocity) [sy QP.time]) QP.time
+angAccelEqn = deriv (apply1 QP.angularVelocity QP.time) QP.time
 {-
 dd7descr :: Sentence
 dd7descr = (QP.angularAccel ^. term) +:+ S "of a" +:+

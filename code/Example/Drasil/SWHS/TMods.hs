@@ -85,7 +85,7 @@ t2SensHtE = makeRC "t2SensHtE"
   (nounPhraseSP "Sensible heat energy") t2descr sensHtEEqn
 
 sensHtEEqn :: Relation
-sensHtEEqn = (sy sens_heat) $= Case [((sy htCap_S) * (sy mass) * (sy deltaT),
+sensHtEEqn = (sy sens_heat) $= case_ [((sy htCap_S) * (sy mass) * (sy deltaT),
   ((sy temp) $< (sy melt_pt))), ((sy htCap_L) *
   (sy mass) * (sy deltaT), ((sy melt_pt) $< (sy temp) $<
   (sy boil_pt))), ((sy htCap_V) * (sy mass) *
@@ -139,9 +139,8 @@ t3LatHtE = makeRC "t3LatHtE"
   (nounPhraseSP "Latent heat energy") t3descr latHtEEqn
 
 latHtEEqn :: Relation
-latHtEEqn = FCall (sy latent_heat) [sy time] $= 
-  defint (eqSymb tau) 0 (sy time) 
-         (deriv (FCall (sy latent_heat) [sy tau]) tau)
+latHtEEqn = apply1 latent_heat time $= 
+  defint (eqSymb tau) 0 (sy time) (deriv (apply1 latent_heat tau) tau)
 
 -- Integrals need dTau at end
 

@@ -73,7 +73,6 @@ import Drasil.DocumentLanguage {-(DocDesc,
   IntroSec (IntroProg),
   IntroSub (IOrgSec, IScope, IChar, IPurpose),
   Literature (Lit, Doc'))-}
-import Drasil.DocumentLanguage.Definitions
   
 import Drasil.Sections.SpecificSystemDescription (inDataConstTbl,
   outDataConstTbl, solChSpecF, dataConstraintUncertainty, physSystDesc,

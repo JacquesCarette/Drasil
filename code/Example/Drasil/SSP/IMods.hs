@@ -9,7 +9,7 @@ import Drasil.SSP.Unitals (inxi, shrStress, baseLngth, sum1toN, mobStress,
   fs, fs_min, fsloc, shrDispl, shrStiffBase, genForce, constant_a, fricAngle,
   normStress, baseWthX, cohesion, poissnsRatio, intNormForce, nrmStiffBase,
   nrmDispl, dy_i, dx_i, baseAngle, genDisplace, rotatedDispl, index, yi,
-  xi, numbSlices, shrResC, shearRNoIntsl, shearFNoIntsl, inx, mobShrC,
+  xi, numbSlices, shrResC, shearRNoIntsl, shearFNoIntsl, mobShrC,
   inxi, inxiP1, normToShear, scalFunc, intShrForce, wiif, inxiM1, totNrmForce,
   nrmFSubWat, mobShrI, baseHydroForce, impLoadAngle, surfLoad, surfAngle,
   surfHydroForce, earthqkLoadFctr, slcWght, midpntHght, watrForce, critCoords,
@@ -68,12 +68,22 @@ nrmShrFor :: RelationConcept
 nrmShrFor = makeRC "nrmShrFor" (nounPhraseSP "normal/shear force ratio")
   nrmShrF_desc nrmShrF_rel
 
+intNormForceAdj :: QDefinition
+intNormForceAdj = ec' 
+  (mkQuant "fixme1" (cn "fixme") (Atomic "SpencerFixme1Please") Real Nothing Nothing)
+  (inxi intNormForce + inxiM1 intNormForce)
+
+watrForceAdj :: QDefinition
+watrForceAdj = ec'
+  (mkQuant "fixme2" (cn "fixme") (Atomic "SpencerFixme2Please") Real Nothing Nothing)
+           (inxi watrForce + inxiM1 watrForce)
+
 nrmShrF_rel :: Relation
-nrmShrF_rel = (inxi normFunc) $= Case [case1,case2,case3] $=
-  inxi shearFunc $= Case [
+nrmShrF_rel = (inxi normFunc) $= case_ [case1,case2,case3] $=
+  inxi shearFunc $= case_ [
   (indx1 baseWthX * indx1 scalFunc * indx1 intNormForce, sy index $= 1),
   (inxi baseWthX * (inxi scalFunc * inxi intNormForce +
-    inx scalFunc (-1) * inx intNormForce (-1)),
+    inxiM1 scalFunc  * inxiM1 intNormForce),
     2 $<= sy index $<= (sy numbSlices - 1)),
   (indxn baseWthX * idx (sy intNormForce) (sy numbSlices - 1) *
     idx (sy watrForce) (sy numbSlices - 1), sy index $= 1)
@@ -82,10 +92,9 @@ nrmShrF_rel = (inxi normFunc) $= Case [case1,case2,case3] $=
   sy normToShear $= sum1toN (inxi normFunc) / sum1toN (inxi shearFunc)
   where case1 = ((indx1 baseWthX)*((indx1 intNormForce)+(indx1 watrForce)) *
           tan (indx1 baseAngle), sy index $= 1)
-        case2 = ((inxi baseWthX)*(Grouping (inxi intNormForce +
-          inx intNormForce (-1))+ Grouping (inxi watrForce +
-          inx watrForce (-1))) * tan (inxi baseAngle)+
-          (sy midpntHght) * (sy earthqkLoadFctr * inxi slcWght -
+        case2 = ((inxi baseWthX)*
+          (sy intNormForceAdj + sy watrForceAdj)
+           * tan (inxi baseAngle)+ (sy midpntHght) * (sy earthqkLoadFctr * inxi slcWght -
           2 * inxi surfHydroForce * sin (inxi surfAngle) -
           2 * inxi surfLoad * cos (inxi impLoadAngle)),
           2 $<= sy index $<= ((sy numbSlices) - 1))
@@ -110,10 +119,10 @@ intsliceFs = makeRC "intsliceFs" (nounPhraseSP "interslice forces")
   sliceFs_desc sliceFs_rel
 
 sliceFs_rel :: Relation
-sliceFs_rel = inxi intNormForce $= Case [
+sliceFs_rel = inxi intNormForce $= case_ [
   (((sy fs) * indx1 shearFNoIntsl - indx1 shearRNoIntsl) / indx1 shrResC,
     sy index $= 1),
-  ((inx mobShrC (-1) * inx intNormForce (-1) +
+  ((inxiM1 mobShrC * inxiM1 intNormForce +
     sy fs * inxi shearFNoIntsl - inxi shearRNoIntsl) / inxi shrResC,
     2 $<= sy index $<= ((sy numbSlices) - 1)),
   (0, sy index $= 0 $|| sy index $= sy numbSlices)]  
@@ -135,18 +144,18 @@ fDisEq_rel :: Relation --FIXME: split into two IMOD
 fDisEq_rel = negate (inxi watrForceDif) - (sy earthqkLoadFctr)*(inxi slcWght) -
   (inxi baseHydroForce)*(sin(inxi baseAngle)) +
   (inxi surfHydroForce)*sin(inxi surfAngle) + (inxi surfLoad) *
-  sin(inxi impLoadAngle) $= inx  dx_i (-1) * (negate (inx surfLngth (-1)) *
-  inx nrmStiffIntsl (-1)) + inxi dx_i * (negate (inx surfLngth (-1)) *
-  inx nrmStiffIntsl (-1) +
+  sin(inxi impLoadAngle) $= inxiM1  dx_i * (negate (inxiM1 surfLngth) *
+  inxiM1 nrmStiffIntsl) + inxi dx_i * (negate (inxiM1 surfLngth) *
+  inxiM1 nrmStiffIntsl +
   inxi surfLngth * inxi nrmStiffIntsl + inxi baseLngth * inxi effStiffA) +
-  inx  dx_i 1 * (negate (inxi surfLngth) * inxi nrmStiffIntsl) +
+  inxiP1  dx_i * (negate (inxi surfLngth) * inxi nrmStiffIntsl) +
   inxi dy_i * (negate (inxi baseLngth) * inxi effStiffB) $=
   negate (inxi slcWght) - (inxi baseHydroForce)*(cos(inxi baseAngle)) +
   (inxi surfHydroForce)*cos(inxi surfAngle) + (inxi surfLoad) *
-  cos(inxi impLoadAngle) $= inx  dy_i (-1) * (negate (inx surfLngth (-1)) *
-  inx shrStiffIntsl (-1)) + inxi dy_i * (negate (inx surfLngth (-1)) *
-  inx shrStiffIntsl (-1) + inxi surfLngth * inxi nrmStiffIntsl +
-  inxi baseLngth * inxi effStiffA) + inx  dy_i 1 * (negate (inxi surfLngth) *
+  cos(inxi impLoadAngle) $= inxiM1  dy_i * (negate (inxiM1 surfLngth) *
+  inxiM1 shrStiffIntsl) + inxi dy_i * (negate (inxiM1 surfLngth) *
+  inxiM1 shrStiffIntsl + inxi surfLngth * inxi nrmStiffIntsl +
+  inxi baseLngth * inxi effStiffA) + inxiP1 dy_i * (negate (inxi surfLngth) *
   inxi shrStiffIntsl) + inxi dx_i * (negate (inxi baseLngth) * inxi effStiffB)
 
 fDisEq_desc :: Sentence
@@ -188,7 +197,7 @@ fosFracSum :: Expr
 fosFracSum = sum1toN
   (inxi baseLngth * (inxi cohesion - inxi nrmStiffBase * inxi nrmDispl
     * tan(inxi fricAngle))) /
-  sum1toN (inxi baseLngth * Grouping (inxi shrStiffBase * inxi shrDispl))
+  sum1toN (inxi baseLngth * inxi shrStiffBase * inxi shrDispl)
 
 rfemFoS_desc :: Sentence
 rfemFoS_desc = foldlSent [
@@ -209,8 +218,7 @@ crtSlpId = makeRC "crtSlpId" (nounPhraseSP "critical slip identification")
 
 -- FIXME: horrible hack. This is short an argument... that was never defined!
 crtSlpId_rel :: Relation
-crtSlpId_rel = (sy fs_min) $=
-  (FCall (sy minFunction) [sy critCoords]) -- sy inputHack])
+crtSlpId_rel = (sy fs_min) $= (apply1 minFunction critCoords) -- sy inputHack])
   --FIXME: add subscript to fs
 
 crtSlpId_desc :: Sentence
@@ -312,8 +320,7 @@ nrmShrDerivation = [
   
   eqUnR $
   inxi normToShear $= sum1toN
-  (inxi baseWthX * (Grouping (inxi intNormForce + inxiM1 intNormForce) +
-  Grouping (inxi watrForce + inxiM1 watrForce)) * tan(inxi baseAngle) +
+  (inxi baseWthX * (sy intNormForceAdj + sy watrForceAdj) * tan(inxi baseAngle) +
   inxi midpntHght * (sy earthqkLoadFctr * inxi slcWght -
   2 * inxi surfHydroForce * sin(inxi surfAngle) -
   2 * inxi surfLoad * sin(inxi impLoadAngle))) / 
@@ -393,7 +400,7 @@ intrSlcDerivation = [
   sin (inxiP1 baseAngle) - cos (inxiP1 baseAngle)) * (sy fs),
   
   eqUnR $
-  (inxi intNormForce) $= (inx mobShrC (-1) * inx intNormForce (-1) +
+  (inxi intNormForce) $= (inxiM1 mobShrC * inxiM1 intNormForce +
   sy fs * inxi shearFNoIntsl - inxi shearRNoIntsl) / inxi shrResC,
   
   fUnknowns]

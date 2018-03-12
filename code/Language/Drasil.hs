@@ -7,15 +7,16 @@ module Language.Drasil (
   -- Recipe
   , Recipe(..)
   -- Expr
-  , Expr(FCall,Grouping,Case)
+  , Expr
   , Relation, DerivType(..), RealInterval(..), Inclusive(..)
   , ($=), ($<), ($<=), ($>), ($>=), ($^), ($&&), ($||), ($=>), ($<=>), ($.)
   , sy -- old "Chunk" constructor C
-  , deriv, pderiv
   -- Expr.Math
   , log, abs, sin, cos, tan, sec, csc, cot, exp, sqrt, square, euclidean, vars
-  , dim, idx, int, dbl, str, isin
+  , dim, idx, int, dbl, str, isin, case_
   , sum_all, defsum, prod_all, defprod, defint, int_all
+  , deriv, pderiv
+  , apply, apply1, apply2
   , cross, m2x2, vec2D, dgnl2x2
   -- all the stuff from Unicode
   , Greek(..), Special(..)
@@ -45,7 +46,7 @@ module Language.Drasil (
   , cnstrw
   , Reason(..), TheoryConstraint(..)
   -- Chunk.Eq
-  , QDefinition(..), fromEqn, fromEqn', fromEqn'', getVC, equat
+  , QDefinition(..), fromEqn, fromEqn', fromEqn'', getVC, equat, ec, ec'
   -- Chunk.GenDefn
   , GenDefn, gd, gdUnit
   -- Chunk.InstanceModel
@@ -171,8 +172,9 @@ import Language.Drasil.Expr (Expr(..), Relation, DerivType(..),
           RealInterval(..), Inclusive(..), sy, deriv, pderiv,
           ($=), ($<), ($<=), ($>), ($>=), ($^), ($&&), ($||), ($=>), ($<=>), ($.))
 import Language.Drasil.Expr.Math (log, sin, cos, tan, sqrt, square, sec, csc, cot, exp,
-          dim, idx, int, dbl, str, isin,
+          dim, idx, int, dbl, str, isin, case_,
           sum_all, defsum, prod_all, defprod,
+          apply, apply1, apply2,
           cross, m2x2, vec2D, dgnl2x2, euclidean, defint, int_all)
 import Language.Drasil.Expr.Extract (vars)
 import Language.Drasil.Output.Formats (DocType(SRS,MG,MIS,Website),DocSpec(DocSpec))
@@ -214,7 +216,7 @@ import Language.Drasil.Chunk.Concept
 import Language.Drasil.Chunk.Constrained
 import Language.Drasil.Chunk.ConVar
 import Language.Drasil.Chunk.DefinedQuantity
-import Language.Drasil.Chunk.Eq (QDefinition(..), fromEqn, fromEqn', fromEqn'', getVC, equat, aqd)
+import Language.Drasil.Chunk.Eq (QDefinition(..), fromEqn, fromEqn', fromEqn'', getVC, equat, aqd, ec, ec')
 import Language.Drasil.Chunk.ExprRelat
 import Language.Drasil.Chunk.GenDefn
 import Language.Drasil.Chunk.Goal (Goal, goal, gs, gs')

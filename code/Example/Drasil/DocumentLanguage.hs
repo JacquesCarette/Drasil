@@ -27,7 +27,7 @@ import qualified Drasil.Sections.TraceabilityMandGs as TMG
 import qualified Drasil.Sections.GeneralSystDesc as GSD
 import qualified Drasil.Sections.Requirements as R
 
-import Data.Drasil.Concepts.Documentation (refmat, tOfSymb, reference)
+import Data.Drasil.Concepts.Documentation (refmat)
 
 import Data.Maybe (isJust,fromJust)
 import Data.List (sort, sortBy, nub)

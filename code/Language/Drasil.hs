@@ -7,7 +7,7 @@ module Language.Drasil (
   -- Recipe
   , Recipe(..)
   -- Expr
-  , Expr(FCall,Grouping)
+  , Expr(FCall)
   , Relation, DerivType(..), RealInterval(..), Inclusive(..)
   , ($=), ($<), ($<=), ($>), ($>=), ($^), ($&&), ($||), ($=>), ($<=>), ($.)
   , sy -- old "Chunk" constructor C
@@ -45,7 +45,7 @@ module Language.Drasil (
   , cnstrw
   , Reason(..), TheoryConstraint(..)
   -- Chunk.Eq
-  , QDefinition(..), fromEqn, fromEqn', fromEqn'', getVC, equat
+  , QDefinition(..), fromEqn, fromEqn', fromEqn'', getVC, equat, ec, ec'
   -- Chunk.GenDefn
   , GenDefn, gd, gdUnit
   -- Chunk.InstanceModel
@@ -209,7 +209,7 @@ import Language.Drasil.Chunk.Concept
 import Language.Drasil.Chunk.Constrained
 import Language.Drasil.Chunk.ConVar
 import Language.Drasil.Chunk.DefinedQuantity
-import Language.Drasil.Chunk.Eq (QDefinition(..), fromEqn, fromEqn', fromEqn'', getVC, equat, aqd)
+import Language.Drasil.Chunk.Eq (QDefinition(..), fromEqn, fromEqn', fromEqn'', getVC, equat, aqd, ec, ec')
 import Language.Drasil.Chunk.ExprRelat
 import Language.Drasil.Chunk.GenDefn
 import Language.Drasil.Chunk.InstanceModel

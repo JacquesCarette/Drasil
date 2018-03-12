@@ -1042,7 +1042,7 @@ Label & Normal/shear Force Ratio
 Equation & ${C1}_{i}=\begin{cases}
 b_{1} \left(E_{1}+H_{1}\right) \tan\left(\alpha{}_{1}\right), & i=1\\
 \begin{multlined}
-b_{i} \left(\left(E_{i}+E_{i-1}\right)+\left(H_{i}+H_{i-1}\right)\right) \tan\left(\alpha{}_{i}\right)
+b_{i} \left(SpencerFixme1Please+SpencerFixme2Please\right) \tan\left(\alpha{}_{i}\right)
 \\+
 h \left({K_{c}} W_{i}-2 {U_{t,i}} \sin\left(\beta{}_{i}\right)-2 Q_{i} \cos\left(\omega{}_{i}\right)\right)
 \end{multlined}
@@ -1073,7 +1073,7 @@ H_{i-1} \left(z_{i-1}-\left(b_{i}/2\right) \tan\left(\alpha{}_{i}\right)\right)+
 Taking a summation of each slice, and applying the boundary condition that $E_{0}$ and $E_{n}$ are equal to $0$, a general equation for the constant $\lambda{}$ is developed in equation (15), also found in IM2.
 \begin{dmath}
 \lambda{}_{i}=\frac{\begin{multlined}
-\displaystyle\sum_{i=1}^{n}{\left[b_{i} \left(\left(E_{i}+E_{i-1}\right)+\left(H_{i}+H_{i-1}\right)\right) \tan\left(\alpha{}_{i}\right)+h_{i} \left({K_{c}} W_{i}-2 {U_{t,i}} \sin\left(\beta{}_{i}\right)-2 Q_{i} \sin\left(\omega{}_{i}\right)\right)\right]}
+\displaystyle\sum_{i=1}^{n}{\left[b_{i} \left(SpencerFixme1Please+SpencerFixme2Please\right) \tan\left(\alpha{}_{i}\right)+h_{i} \left({K_{c}} W_{i}-2 {U_{t,i}} \sin\left(\beta{}_{i}\right)-2 Q_{i} \sin\left(\omega{}_{i}\right)\right)\right]}
 \end{multlined}
 }{\displaystyle\sum_{i=1}^{n}{\left[b_{i} \left(E_{i} f_{i}+E_{i-1} f_{i-1}\right)\right]}}
 \end{dmath}
@@ -1150,7 +1150,7 @@ Label & RFEM Factor of Safety
 Equation & ${FS_{Loc,i,i}}=\frac{{c'}_{i}-{K_{bn,i}} {\delta{}v}_{i} \tan\left({\varphi{}'}_{i}\right)}{{K_{bt,i}} {\delta{}u}_{i}}=\frac{\begin{multlined}
 \displaystyle\sum_{i=1}^{n}{\left[{\ell{}_{b,i}} \left({c'}_{i}-{K_{bn,i}} {\delta{}v}_{i} \tan\left({\varphi{}'}_{i}\right)\right)\right]}
 \end{multlined}
-}{\displaystyle\sum_{i=1}^{n}{\left[{\ell{}_{b,i}} \left({K_{bt,i}} {\delta{}u}_{i}\right)\right]}}$
+}{\displaystyle\sum_{i=1}^{n}{\left[{\ell{}_{b,i}} {K_{bt,i}} {\delta{}u}_{i}\right]}}$
 \\ \midrule \\
 Description & ${FS_{Loc,i}}$ is the factor of safety for slice i. $FS$ is the factor of safety for the entire slip surface. $c'$ is the cohesion of slice i's base. $\varphi{}'$ is the effective angle of friction of slice i's base. $\delta{}v$ is the normal displacement of slice i. $\delta{}u$ is the shear displacement of slice i. ${K_{bt}}$ is the length of the base of slice i. ${K_{bn}}$ is the base normal stiffness at surface i. $n$ is the number of slices in the slip surface.
 \\ \bottomrule \end{tabular}
@@ -1187,7 +1187,7 @@ The global Factor of Safety is then the ratio of the summation of the resistive 
 FS=\frac{\displaystyle\sum_{i=1}^{n}{\left[{\ell{}_{b,i}} s_{i}\right]}}{\displaystyle\sum_{i=1}^{n}{\left[{\ell{}_{b,i}} \tau{}_{i}\right]}}=\frac{\begin{multlined}
 \displaystyle\sum_{i=1}^{n}{\left[{\ell{}_{b,i}} \left({c'}_{i}-{K_{bn,i}} {\delta{}v}_{i} \tan\left({\varphi{}'}_{i}\right)\right)\right]}
 \end{multlined}
-}{\displaystyle\sum_{i=1}^{n}{\left[{\ell{}_{b,i}} \left({K_{bt,i}} {\delta{}u}_{i}\right)\right]}}
+}{\displaystyle\sum_{i=1}^{n}{\left[{\ell{}_{b,i}} {K_{bt,i}} {\delta{}u}_{i}\right]}}
 \end{dmath}
 ~\newline
 \noindent \begin{minipage}{\textwidth}

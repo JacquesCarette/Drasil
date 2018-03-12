@@ -46,7 +46,6 @@ data Expr where
   Case     :: [(Expr,Relation)] -> Expr -- For multi-case expressions,
                                      -- each pair represents one case
   Matrix   :: [[Expr]] -> Expr
-  Grouping :: Expr -> Expr
   UnaryOp  :: UFunc -> Expr -> Expr
   BinaryOp :: BinOp -> Expr -> Expr -> Expr
   EOp      :: EOperator -> Expr

@@ -67,7 +67,7 @@ hFromt = aqd (mkDataDef' act_thick hFromt_eq (hMin)) ([] :: Attributes)
 --DD4--
 
 strDisFac_eq :: Expr
-strDisFac_eq = FCall (sy stressDistFac) 
+strDisFac_eq = apply (sy stressDistFac) 
   [sy dimlessLoad, (sy plate_len) / (sy plate_width)]
 --strDisFac_eq = FCall (asExpr interpZ) [V "SDF.txt", (sy plate_len) / (sy plate_width), sy dimlessLoad]
   
@@ -109,7 +109,7 @@ dimLL = aqd (mkDataDef' dimlessLoad dimLL_eq
 --DD8--
 
 tolPre_eq :: Expr
-tolPre_eq = FCall (sy tolLoad) [sy sdf_tol, (sy plate_len) / (sy plate_width)]
+tolPre_eq = apply (sy tolLoad) [sy sdf_tol, (sy plate_len) / (sy plate_width)]
 --tolPre_eq = FCall (asExpr interpY) [V "SDF.txt", (sy plate_len) / (sy plate_width), sy sdf_tol]
 
 tolPre :: QDefinition

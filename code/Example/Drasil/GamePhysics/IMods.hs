@@ -20,8 +20,8 @@ im1NP :: NP
 im1NP =  nounPhraseSP "Force on the translational motion of a set of 2d rigid bodies"
 
 im1Rel :: Relation -- FIXME: add proper equation
-im1Rel = (sy acc_i) $= (deriv (FCall (sy vel_i) [sy QP.time]) QP.time)
-  $= (sy QP.gravitationalAccel) + ((FCall (sy force_i) [sy QP.time]) / (sy mass_i))
+im1Rel = (sy acc_i) $= (deriv (apply1 vel_i QP.time) QP.time)
+  $= (sy QP.gravitationalAccel) + ((apply1 force_i QP.time) / (sy mass_i))
 
 
 --fixme: need referencing
@@ -46,8 +46,8 @@ im2NP =  nounPhraseSP "Force on the rotational motion of a set of 2D rigid body"
 
 im2Rel :: Relation
 im2Rel = (sy QP.angularAccel) $= deriv
-  (FCall (sy QP.angularVelocity) [sy QP.time]) QP.time $= 
-     ((FCall (sy torque_i) [sy QP.time]) / (sy QP.momentOfInertia))
+  (apply1 QP.angularVelocity QP.time) QP.time $= 
+     ((apply1 torque_i QP.time) / (sy QP.momentOfInertia))
 
 --fixme: need referencing
 im2descr, im2leg :: Sentence
@@ -67,18 +67,18 @@ im3NP :: NP
 im3NP =  nounPhraseSP "Collisions on 2D rigid bodies"
 
 im3Rel1 {-, im3Rel2, im3Rel3, im3Rel4 -} :: Relation -- FIXME: add proper equation
-im3Rel1 = (FCall (sy vel_A) [sy time_c]) $= (FCall (sy vel_A) [sy QP.time]) +
+im3Rel1 = (apply1 vel_A time_c) $= (apply1 vel_A QP.time) +
   ((sy QP.impulseS) / (sy mass_A)) * (sy normalVect)
 
---im3Rel2 = (FCall (sy vel_B) [sy time_c]) $= (FCall (sy vel_B) [sy QP.time]) -
+--im3Rel2 = (apply1 vel_B time_c) $= (apply1 vel_B QP.time) -
 --  ((sy QP.impulseS) / (sy mass_B)) * (sy normalVect)
 
 
 --fixme: these two need to use cross product and parametrized dispUnit symbol
---im3Rel3 = (FCall (sy angVel_A) [sy time_c]) $= (FCall (sy angVel_A) [sy QP.time]) +
+--im3Rel3 = (apply1 angVel_A time_c) $= (apply1 angVel_A QP.time) +
 --  ((sy dispUnit) * ((sy QP.impulseS) * (sy normalVect))) / (sy QP.momentOfInertia)
 
---im3Rel4 = (FCall (sy angVel_B) [sy time_c]) $= (FCall (sy angVel_B) [sy QP.time]) -
+--im3Rel4 = (apply1 angVel_B time_c) $= (apply1 angVel_B QP.time) -
 --  ((sy dispUnit) * ((sy QP.impulseS) * (sy normalVect))) / (sy QP.momentOfInertia)
 
 --fixme: need referencing

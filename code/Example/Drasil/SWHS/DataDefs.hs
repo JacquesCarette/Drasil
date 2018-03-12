@@ -24,7 +24,7 @@ dd1HtFluxC :: QDefinition
 dd1HtFluxC = mkDataDef ht_flux_C htFluxCEqn
 
 htFluxCEqn :: Expr
-htFluxCEqn = (sy coil_HTC) * ((sy temp_C) - FCall (sy temp_W) [sy time])
+htFluxCEqn = (sy coil_HTC) * ((sy temp_C) - apply1 temp_W time)
 
 --Can't include info in description beyond definition of variables?
 
@@ -32,8 +32,7 @@ dd2HtFluxP :: QDefinition
 dd2HtFluxP = mkDataDef ht_flux_P htFluxPEqn
 
 htFluxPEqn :: Expr
-htFluxPEqn = (sy pcm_HTC) * (FCall (sy temp_W) [sy time] -
-             FCall (sy temp_PCM) [sy time])
+htFluxPEqn = (sy pcm_HTC) * (apply1 temp_W time - apply1 temp_PCM time)
 
 dd3HtFusion :: QDefinition
 dd3HtFusion = mkDataDef htFusion htFusionEqn

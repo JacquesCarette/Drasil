@@ -139,9 +139,8 @@ t3LatHtE = makeRC "t3LatHtE"
   (nounPhraseSP "Latent heat energy") t3descr latHtEEqn
 
 latHtEEqn :: Relation
-latHtEEqn = FCall (sy latent_heat) [sy time] $= 
-  defint (eqSymb tau) 0 (sy time) 
-         (deriv (FCall (sy latent_heat) [sy tau]) tau)
+latHtEEqn = apply1 latent_heat time $= 
+  defint (eqSymb tau) 0 (sy time) (deriv (apply1 latent_heat tau) tau)
 
 -- Integrals need dTau at end
 

@@ -4,6 +4,8 @@ import Prelude hiding (sqrt)
 import Language.Drasil.Symbol
 import Language.Drasil.Expr
 import Language.Drasil.Space (Space)
+import Language.Drasil.Chunk (Chunk)
+import Language.Drasil.Chunk.SymbolForm (HasSymbol)
 
 -- | Smart constructor to take the log of an expression
 log :: Expr -> Expr
@@ -106,3 +108,14 @@ vec2D a b    = Matrix [[a],[b]]
 
 dgnl2x2 :: Expr -> Expr -> Expr
 dgnl2x2 a d  = m2x2 a (Int 0) (Int 0) d
+
+-- Some helper functions to do function application
+apply :: Expr -> [Expr] -> Expr
+apply = FCall
+
+apply1 :: (Chunk f, HasSymbol f, Chunk a, HasSymbol a) => f -> a -> Expr
+apply1 f a = FCall (sy f) [sy a]
+
+apply2 :: (Chunk f, HasSymbol f, Chunk a, HasSymbol a, Chunk b, HasSymbol b) => 
+    f -> a -> b -> Expr
+apply2 f a b = FCall (sy f) [sy a, sy b]

@@ -218,8 +218,7 @@ crtSlpId = makeRC "crtSlpId" (nounPhraseSP "critical slip identification")
 
 -- FIXME: horrible hack. This is short an argument... that was never defined!
 crtSlpId_rel :: Relation
-crtSlpId_rel = (sy fs_min) $=
-  (FCall (sy minFunction) [sy critCoords]) -- sy inputHack])
+crtSlpId_rel = (sy fs_min) $= (apply1 minFunction critCoords) -- sy inputHack])
   --FIXME: add subscript to fs
 
 crtSlpId_desc :: Sentence

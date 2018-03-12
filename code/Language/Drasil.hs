@@ -149,11 +149,11 @@ module Language.Drasil (
   -- AssumpChunk
   , AssumpChunk, assuming, ac, ac'
   -- Referencing
-  , ReferenceDB, AssumpMap, assumpMap, assumpLookup, assumptionsFromDB
+  , ReferenceDB, AssumpMap, assumpLookup, assumptionsFromDB
   , rdb, assumpRefTable, customRef
-  , reqMap, HasAssumpRefs, HasReqRefs, reqRefTable, reqLookup, changeMap
+  , HasAssumpRefs, HasReqRefs, reqRefTable, reqLookup
   , HasChangeRefs, changeRefTable, changeLookup, RefBy(..)
-  , reqDB, assumpDB
+  , reqDB, assumpDB, RefMap, simpleMap
   -- ReqChunk
   , ReqChunk, ReqType(..), reqType, requires, frc, nfrc, rc'
   -- Change
@@ -242,12 +242,13 @@ import Language.Drasil.Spec (USymb(..), Sentence(..), Accent(..),
                               sParen, sParenNum, sSqBr, sSqBrNum, sC, (+:+), (+:+.), (+.), (+:),
                               semiCol, sParenDash, sDash)
 import Language.Drasil.Reference (makeRef, acroTest, ReferenceDB, assumpDB, reqDB
-                                 , AssumpMap, assumpMap, assumpLookup, HasAssumpRefs
+                                 , AssumpMap, assumpLookup, HasAssumpRefs
                                  , assumpRefTable, assumptionsFromDB
-                                 , rdb, reqMap, reqRefTable, reqLookup, RefBy(..)
-                                 , HasReqRefs, Referable(..), changeMap, customRef
+                                 , rdb, reqRefTable, reqLookup, RefBy(..)
+                                 , HasReqRefs, Referable(..), customRef
                                  , HasChangeRefs, changeRefTable, changeLookup
-                                 , citationRefTable, citeLookup)
+                                 , citationRefTable, citeLookup, RefMap
+                                 , simpleMap)
 import Language.Drasil.Symbol (Symbol(..), sub, sup, vec, hat, prime, sCurlyBrSymb)
 import Language.Drasil.SymbolAlphabet
 import Language.Drasil.Misc -- all of it

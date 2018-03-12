@@ -5,9 +5,13 @@ import Language.Drasil.Chunk (Chunk, uid)
 import Language.Drasil.Chunk.AssumpChunk as A
 import Language.Drasil.Chunk.Change as Ch
 import Language.Drasil.Chunk.Citation as Ci
+import Language.Drasil.Chunk.Eq
+import Language.Drasil.Chunk.GenDefn
 import Language.Drasil.Chunk.Goal as G
+import Language.Drasil.Chunk.InstanceModel
 import Language.Drasil.Chunk.PhysSystDesc as PD
 import Language.Drasil.Chunk.ReqChunk as R
+import Language.Drasil.Chunk.Theory
 import Language.Drasil.Document
 import Language.Drasil.Spec
 import Control.Lens ((^.), Simple, Lens, makeLenses)
@@ -54,24 +58,15 @@ data RefBy = ByName
 rdb :: [PhysSystDesc] -> [Goal] -> [AssumpChunk] -> [ReqChunk] -> [Change] ->
   BibRef -> ReferenceDB
 rdb psds goals assumps reqs changes citations = RDB
-  (psdMap psds)
-  (goalMap goals)
-  (assumpMap assumps)
+  (simpleMap psds)
+  (simpleMap goals)
+  (simpleMap assumps)
   (reqMap reqs)
   (changeMap changes)
   (bibMap citations)
 
-zipWithIntRefMap :: Chunk a => [a] -> RefMap a
-zipWithIntRefMap xs = Map.fromList $ zip (map (^. uid) xs) (zip xs [1..])
-
-psdMap :: [PhysSystDesc] -> PhysSystDescMap
-psdMap = zipWithIntRefMap
-
-goalMap :: [Goal] -> GoalMap
-goalMap = zipWithIntRefMap
-
-assumpMap :: [AssumpChunk] -> AssumpMap
-assumpMap = zipWithIntRefMap
+simpleMap :: Chunk a => [a] -> RefMap a
+simpleMap xs = Map.fromList $ zip (map (^. uid) xs) (zip xs [1..])
 
 reqMap :: [ReqChunk] -> ReqMap
 reqMap rs = Map.fromList $ zip (map (^. uid) (frs ++ nfrs)) ((zip frs [1..]) ++
@@ -163,7 +158,7 @@ instance Referable Goal where
   refName g = S $ g ^. G.refAddr
   refAdd g = "GS:" ++ g ^. G.refAddr
   rType _ = Goal
-  
+
 instance Referable PhysSystDesc where
   refName p = S $ p ^. PD.refAddr
   refAdd p = "PS:" ++ p ^. PD.refAddr
@@ -195,13 +190,36 @@ instance Referable Citation where
   refAdd c = concatMap repUnd $ citeID c -- citeID should be unique.
   rType _ = Cite
 
+-- error used below is on purpose. These refNames should be made explicit as necessary
+instance Referable TheoryModel where
+  refName t = error "No explicit name given for theory model -- build a custom Ref"
+  refAdd  t = "T:" ++ t^.uid
+  rType   t = Def
+
+instance Referable GenDefn where
+  refName g = error "No explicit name given for theory model -- build a custom Ref"
+  refAdd  g = "GD:" ++ g^.uid
+  rType   g = Def
+
+instance Referable QDefinition where -- FIXME: This could lead to trouble; need
+                                     -- to ensure sanity checking when building
+                                     -- Refs. Double-check QDef is a DD before allowing
+  refName d = error "No explicit name given for theory model -- build a custom Ref"
+  refAdd  d = "DD:" ++ d^.uid
+  rType   d = Def
+
+instance Referable InstanceModel where
+  refName i = error "No explicit name given for theory model -- build a custom Ref"
+  refAdd  i = "IM:" ++ i^.uid
+  rType   i = Def
+
 instance Referable Contents where
   refName (Table _ _ _ _ r)     = S "Table:" :+: S r
   refName (Figure _ _ _ r)      = S "Figure:" :+: S r
   refName (Graph _ _ _ _ r)     = S "Figure:" :+: S r
   refName (EqnBlock _ r)        = S "Equation:" :+: S r
   refName (Definition d)        = S $ getDefName d
-  refName (Defnt dt _ r)        = S (getDefName dt) :+: S r
+  refName (Defnt _ _ r)         = S r
   refName (Requirement rc)      = refName rc
   refName (Assumption ca)       = refName ca
   refName (Change lcc)          = refName lcc
@@ -228,7 +246,7 @@ instance Referable Contents where
   refAdd (Graph _ _ _ _ r)      = "Figure:" ++ r
   refAdd (EqnBlock _ r)         = "Equation:" ++ r
   refAdd (Definition d)         = getDefName d
-  refAdd (Defnt dt _ r)         = getDefName dt ++ r
+  refAdd (Defnt _ _ r)          = r
   refAdd (Requirement rc)       = refAdd rc
   refAdd (Assumption ca)        = refAdd ca
   refAdd (Change lcc)           = refAdd lcc

@@ -1,8 +1,9 @@
-{-# Language GADTs, Rank2Types #-}
-
+{-# Language Rank2Types #-}
 module Drasil.DocumentLanguage.RefHelpers
   ( refA, refR, refChng, cite
   , refAByNum, refRByNum, refChngByNum, citeByNum
+  , ModelDB, tmRefDB, gdRefDB, ddRefDB, imRefDB
+  , mdb, modelsFromDB, refTM, refDD, refGD, refIM
   )where
 
 import Language.Drasil
@@ -10,7 +11,49 @@ import Language.Drasil
 import Data.Drasil.Concepts.Documentation (assumption)
 
 import Control.Lens ((^.), Simple, Lens)
-import Prelude hiding (id)
+import Data.List (sortBy)
+import Data.Function (on)
+import qualified Data.Map as Map
+
+modelsFromDB :: RefMap a -> [a]
+modelsFromDB db = dropNums $ sortBy (compare `on` snd) elemPairs
+  where elemPairs = Map.elems db
+        dropNums = map fst
+
+-- Trying not to add to RefDB since these are recipe-specific content-types for
+-- the SmithEtAl Template recipe.
+data ModelDB = MDB
+             { tmRefDB :: RefMap TheoryModel
+             , gdRefDB :: RefMap GenDefn
+             , ddRefDB :: RefMap QDefinition
+             , imRefDB :: RefMap InstanceModel
+             }
+
+mdb :: [TheoryModel] -> [GenDefn] -> [QDefinition] -> [InstanceModel] -> ModelDB
+mdb tms gds dds ims = MDB
+  (simpleMap tms) (simpleMap gds) (simpleMap dds) (simpleMap ims)
+
+-- | Automatically reference TMs by number.
+refTM :: RefMap TheoryModel -> TheoryModel -> Sentence
+refTM db c = customRef c (S $ "T" ++ (show $ snd $ modelLookup c db))
+
+-- | Automatically reference GDs by number.
+refGD :: RefMap GenDefn -> GenDefn -> Sentence
+refGD db c = customRef c (S $ "GD" ++ (show $ snd $ modelLookup c db))
+
+-- | Automatically reference DDs by number.
+refDD :: RefMap QDefinition -> QDefinition -> Sentence
+refDD db c = customRef c (S $ "DD" ++ (show $ snd $ modelLookup c db))
+
+-- | Automatically reference IMs by number.
+refIM :: RefMap InstanceModel -> InstanceModel -> Sentence
+refIM db c = customRef c (S $ "IM" ++ (show $ snd $ modelLookup c db))
+
+modelLookup :: Chunk a => a -> RefMap a -> (a, Int)
+modelLookup c db = getS $ Map.lookup (c ^. uid) db
+  where getS (Just x) = x
+        getS Nothing  = error $ "Could not find model id: " ++ c ^. uid ++
+                       " in model database"
 
 -- | Internal lookup function for the number associated with an assumption,
 -- requirement, etc. and returns it as a Sentence.

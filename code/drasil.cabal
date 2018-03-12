@@ -149,7 +149,8 @@ executable tiny
     , Drasil.Sections.GeneralSystDesc
     , Drasil.DocumentLanguage
     , Drasil.DocumentLanguage.Definitions
-    , Drasil.DocumentLanguage.RefHelpers 
+    , Drasil.DocumentLanguage.RefHelpers
+    , Drasil.DocumentLanguage.TraceabilityMatrix
     , Drasil.Sections.AuxiliaryConstants
     , Drasil.Sections.TableOfUnits
     , Drasil.Sections.SpecificSystemDescription
@@ -201,6 +202,7 @@ executable nopcm
     , Drasil.DocumentLanguage
     , Drasil.DocumentLanguage.Definitions
     , Drasil.DocumentLanguage.RefHelpers
+    , Drasil.DocumentLanguage.TraceabilityMatrix
     , Drasil.Sections.SpecificSystemDescription
     , Drasil.Sections.Introduction
     , Drasil.Sections.Requirements
@@ -244,7 +246,8 @@ executable ssp
     , Drasil.Sections.TraceabilityMandGs
     , Drasil.DocumentLanguage
     , Drasil.DocumentLanguage.Definitions
-    , Drasil.DocumentLanguage.RefHelpers 
+    , Drasil.DocumentLanguage.RefHelpers
+    , Drasil.DocumentLanguage.TraceabilityMatrix
     , Drasil.Sections.TableOfUnits
     , Drasil.Sections.AuxiliaryConstants
     , Drasil.Sections.SpecificSystemDescription
@@ -269,7 +272,8 @@ executable glassbr
   other-modules:
       Drasil.DocumentLanguage
     , Drasil.DocumentLanguage.Definitions
-    , Drasil.DocumentLanguage.RefHelpers 
+    , Drasil.DocumentLanguage.RefHelpers
+    , Drasil.DocumentLanguage.TraceabilityMatrix
     , Drasil.GlassBR.Body
     , Drasil.GlassBR.Concepts
     , Drasil.GlassBR.Unitals
@@ -311,7 +315,8 @@ executable chipmunkdocs
   other-modules:
       Drasil.DocumentLanguage
     , Drasil.DocumentLanguage.Definitions
-    , Drasil.DocumentLanguage.RefHelpers 
+    , Drasil.DocumentLanguage.RefHelpers
+    , Drasil.DocumentLanguage.TraceabilityMatrix
     , Drasil.GamePhysics.Body
     , Drasil.GamePhysics.Concepts
     , Drasil.GamePhysics.DataDefs
@@ -344,14 +349,15 @@ executable chipmunkdocs
     drasil >= 0.0.6
   default-language: Haskell2010
   ghc-options:      -Wall
-  
+
 executable swhs
   hs-source-dirs: Example
   main-is: Drasil/SWHS/Main.hs
   other-modules:
       Drasil.DocumentLanguage
     , Drasil.DocumentLanguage.Definitions
-    , Drasil.DocumentLanguage.RefHelpers 
+    , Drasil.DocumentLanguage.RefHelpers
+    , Drasil.DocumentLanguage.TraceabilityMatrix
     , Drasil.Sections.SpecificSystemDescription
     , Drasil.Sections.Introduction
     , Drasil.Sections.Requirements
@@ -389,7 +395,7 @@ executable swhs
     drasil >= 0.0.6
   default-language: Haskell2010
   ghc-options:      -Wall
-  
+
 source-repository head
   type:     git
   location: git://github.com/JacquesCarette/Drasil.git

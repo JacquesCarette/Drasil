@@ -17,7 +17,6 @@ data Expr = Dbl   Double
           | Call  Expr [Expr]
           | Case  [(Expr,Expr)]
           | UOp   UFunc Expr
-          | Grouping Expr
           | Funct Functional Expr
           | IsIn  Expr Space
           | Mtx [[Expr]]

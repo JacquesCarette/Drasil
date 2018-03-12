@@ -158,7 +158,6 @@ p_expr (Funct f e)    = p_op f e
 p_expr (Call f x) = p_expr f ++ paren (concat $ intersperse "," $ map p_expr x)
 p_expr (Case ps)  = cases ps (p_expr)
 p_expr (UOp f es)  = p_uop f es
-p_expr (Grouping e) = paren (p_expr e)
 p_expr (Mtx a)    = "<table class=\"matrix\">\n" ++ p_matrix a ++ "</table>"
 p_expr (BOp Index a i)= p_indx a i
 --Logic

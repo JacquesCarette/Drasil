@@ -192,26 +192,26 @@ instance Referable Citation where
 
 -- error used below is on purpose. These refNames should be made explicit as necessary
 instance Referable TheoryModel where
-  refName t = error "No explicit name given for theory model -- build a custom Ref"
+  refName _ = error "No explicit name given for theory model -- build a custom Ref"
   refAdd  t = "T:" ++ t^.uid
-  rType   t = Def
+  rType   _ = Def
 
 instance Referable GenDefn where
-  refName g = error "No explicit name given for theory model -- build a custom Ref"
+  refName _ = error "No explicit name given for theory model -- build a custom Ref"
   refAdd  g = "GD:" ++ g^.uid
-  rType   g = Def
+  rType   _ = Def
 
 instance Referable QDefinition where -- FIXME: This could lead to trouble; need
                                      -- to ensure sanity checking when building
                                      -- Refs. Double-check QDef is a DD before allowing
-  refName d = error "No explicit name given for theory model -- build a custom Ref"
+  refName _ = error "No explicit name given for theory model -- build a custom Ref"
   refAdd  d = "DD:" ++ d^.uid
-  rType   d = Def
+  rType   _ = Def
 
 instance Referable InstanceModel where
-  refName i = error "No explicit name given for theory model -- build a custom Ref"
+  refName _ = error "No explicit name given for theory model -- build a custom Ref"
   refAdd  i = "IM:" ++ i^.uid
-  rType   i = Def
+  rType   _ = Def
 
 instance Referable Contents where
   refName (Table _ _ _ _ r)     = S "Table:" :+: S r

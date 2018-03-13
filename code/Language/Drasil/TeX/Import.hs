@@ -17,7 +17,7 @@ import Language.Drasil.Chunk.ExprRelat (relat)
 import Language.Drasil.Chunk.NamedIdea (term)
 import Language.Drasil.Chunk.Quantity (Quantity(..))
 import Language.Drasil.Chunk.SymbolForm (eqSymb,Stage(Equational))
-import Language.Drasil.ChunkDB (getUnitLup, HasSymbolTable(..))
+import Language.Drasil.ChunkDB (getUnitLup, HasSymbolTable(..),symbLookup)
 import Language.Drasil.Chunk.ReqChunk (requires)
 import Language.Drasil.Chunk.Citation ( Citation, CiteField(..), HP(..)
                                       , citeID, externRefT, fields)
@@ -37,9 +37,9 @@ expr (Str s)            _ = P.Str  s
 expr (Assoc op l)      sm = P.Assoc op $ map (\x -> expr x sm) l
 expr (C _ s)           _  = P.Sym $ s Equational -- FIXME: Add Stage for Context
 expr (Deriv Part a b)  sm = P.BOp Frac (P.Assoc Mul [P.Sym (Special Partial), expr a sm])
-                           (P.Assoc Mul [P.Sym (Special Partial), P.Sym $ snd b Equational])
+                            (P.Assoc Mul [P.Sym (Special Partial), P.Sym $ eqSymb $ symbLookup b $ sm^.symbolTable])
 expr (Deriv Total a b) sm = P.BOp Frac (P.Assoc Mul [P.Sym lD, expr a sm])
-                           (P.Assoc Mul [P.Sym lD, P.Sym $ snd b Equational])
+                            (P.Assoc Mul [P.Sym lD, P.Sym $ eqSymb $ symbLookup b $ sm^.symbolTable])
 expr (FCall f x)       sm = P.Call (expr f sm) (map (flip expr sm) x)
 expr (Case ps)         sm = if length ps < 2 then
         error "Attempting to use multi-case expr incorrectly"

@@ -35,7 +35,7 @@ data Expr where
   Int      :: Integer -> Expr
   Str      :: String -> Expr
   Assoc    :: Oper -> [Expr] -> Expr
-  Deriv    :: DerivType -> Expr -> (String, Stage -> Symbol) -> Expr 
+  Deriv    :: DerivType -> Expr -> String -> Expr 
   -- Derivative, syntax is:
   -- Type (Partial or total) -> principal part of change -> with respect to
   -- For example: Deriv Part y x1 would be (dy/dx1)
@@ -75,8 +75,8 @@ sy :: (Chunk c, HasSymbol c) => c -> Expr
 sy x = C (x ^. uid) (\st -> symbol st x)
 
 deriv, pderiv :: (Chunk c, HasSymbol c) => Expr -> c -> Expr
-deriv e c = Deriv Total e (c^.uid, \st -> symbol st c)
-pderiv e c = Deriv Part e (c^.uid, \st -> symbol st c)
+deriv e c = Deriv Total e (c^.uid)
+pderiv e c = Deriv Part e (c^.uid)
 
 type Variable = String
 
@@ -100,7 +100,7 @@ instance Eq Expr where
   Int a == Int b               =  a == b
   Str a == Str b               =  a == b
   Assoc o1 l1 == Assoc o2 l2   =  o1 == o2 && l1 == l2
-  Deriv t1 a (b,_) == Deriv t2 c (d,_) =  t1 == t2 && a == c && b == d
+  Deriv t1 a b == Deriv t2 c d =  t1 == t2 && a == c && b == d
   C a _ == C b _               =  a == b
   FCall a b == FCall c d       =  a == c && b == d
   Case a == Case b             =  a == b

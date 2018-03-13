@@ -11,7 +11,7 @@ import Language.Drasil.Chunk.Quantity (QuantityDict)
 -- | Get dependencies from an equation  
 dep :: Expr -> [String]
 dep (Assoc _ l)   = nub (concat $ map dep l)
-dep (Deriv _ a (b,_)) = nub (b : dep a)
+dep (Deriv _ a b) = nub (b : dep a)
 dep (C c _)       = [c]
 dep (Int _)       = []
 dep (Dbl _)       = []
@@ -27,7 +27,7 @@ dep (Matrix a)    = nub (concat $ map (concat . map dep) a)
 -- | Get a list of quantities (QuantityDict) from an equation in order to print
 vars :: (HasSymbolTable s) => Expr -> s -> [QuantityDict]
 vars (Assoc _ l)    m = nub $ concat $ map (\x -> vars x m) l
-vars (Deriv _ a (b,_))  m = nub (vars a m ++ [symbLookup b $ m ^. symbolTable])
+vars (Deriv _ a b)  m = nub (vars a m ++ [symbLookup b $ m ^. symbolTable])
 vars (C c _)        m = [symbLookup c $ m ^. symbolTable]
 vars (Int _)        _ = []
 vars (Dbl _)        _ = []
@@ -43,7 +43,7 @@ vars (Matrix a)     m = nub (concat $ map (\x -> concat $ map (\y -> vars y m) x
 -- | Get a list of CodeChunks from an equation
 codevars :: (HasSymbolTable s) => Expr -> s -> [CodeChunk]
 codevars (Assoc _ l)  sm = nub (concat $ map (\x -> codevars x sm) l)
-codevars (Deriv _ a b) sm = nub (codevars a sm ++ [codevar $ symbLookup (fst b) (sm ^. symbolTable)])
+codevars (Deriv _ a b) sm = nub (codevars a sm ++ [codevar $ symbLookup b (sm ^. symbolTable)])
 codevars (C c _)      sm = [codevar $ symbLookup c (sm ^. symbolTable)]
 codevars (Int _)      _ = []
 codevars (Dbl _)      _ = []
@@ -60,7 +60,7 @@ codevars (Matrix a)   sm = nub (concat $ map (concat . map (\x -> codevars x sm)
 -- | Get a list of CodeChunks from an equation (no functions)
 codevars' :: (HasSymbolTable s) => Expr -> s -> [CodeChunk]
 codevars' (Assoc _ l)  sm = nub (concat $ map (\x -> codevars' x sm) l)
-codevars' (Deriv _ a b) sm = nub (codevars' a sm ++ [codevar $ symbLookup (fst b) (sm^.symbolTable)])
+codevars' (Deriv _ a b) sm = nub (codevars' a sm ++ [codevar $ symbLookup b (sm^.symbolTable)])
 codevars' (C c _)       sm = [codevar $ symbLookup c (sm ^. symbolTable)]
 codevars' (Int _)       _ = []
 codevars' (Dbl _)       _ = []

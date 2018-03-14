@@ -3,7 +3,11 @@ Style note: I want to thread an example through the entirety of the paper,
   the points home quite a bit better than just walls of text.
   but I'd written most of the outline first, so it needs a bit more work.
 
-Title:
+[*SS* - I agree with the use of examples.  Figures over text whenever possible is
+ also a great idea.]
+
+Title: [*SS* I wonder if a variation on "generate all the things" should be
+worked into the title?]
 
 Abstract:
 
@@ -33,7 +37,13 @@ in the captured domains will become much easier and faster. We have already seen
 how in-built sanity-checking removes a number of tedious, hard-to-notice errors,
 not to mention the
 -- anecdotally --
-effects on how easy it is to maintain documents and trace knowledge between them.
+effects on how easy it is to maintain documents and trace knowledge between
+them.
+
+[*SS* - ideally we will be able to quantify the improvements, at least a little
+in the abstract.  Maybe we can do something with counting the generated lines of
+documentation?  We will also want to be more specific with the OPG example where
+we generate the same documentation following two different recipes.]
 
 =================
 Intro
@@ -55,6 +65,13 @@ Doc Driven Des
 ----------------
 Previous efforts
 ----------------
+
+[*SS* - I wonder if the previous efforts description should be kept short here,
+and we can add a Background section to cover the details?  In general if the
+intro is getting too long, which it might, we can put the details in a
+background section.  For instance information on grounded theory could go in the
+background section.  If we move some of the content elsewhere, we should still
+mention the code-centric nature of the previous efforts.]
 
 ---- START: move to side note / other subsection? ----
 - Compendia
@@ -110,6 +127,10 @@ Knowledge vs. Information
 - We also use information as necessary, since not everything (particularly English
   language sentences) is understood well enough to be transformed.
 
+[*SS* - Is this distinction between knowledge and information your own?  We
+don't want to contradict any existing conventions on the use of this
+terminology.]
+
 --------------------------
 Capturing Knowledge
 --------------------------
@@ -161,6 +182,8 @@ Grounded Theory
 - Development following grounded theory (ish).
 - Example -> Before SI to today's SI w/ mini-DBs?
 
+[*SS* - should this be in a background section?]
+
 ---------------------
 Drasil Today
 ---------------------
@@ -211,6 +234,8 @@ GlassBR
 - Talk about potential variabilities and how to make this a family
 - Why this example is interesting:
   - ODE solver -> We don't gen, just link to existing good one(s)
+  
+  [*SS* - The ODE solver is part of SWHS, not GlassBR]
 
 --------
 NoPCM & SWHS
@@ -287,6 +312,18 @@ Error Tracking
 =====================
 Future Work
 =====================
+
+[*SS* - Once we are capable of true variability in the documentation, we can
+really start asking the question about what is the "best" documentation for a
+given context.  In the future experiments could be done with presenting the same
+information in different ways to find which approach is the most effective.]
+
+[*SS* - Related to the previous point, the act of formalizing the knowledge that
+goes into the requirements documentation forces us to deeply understand the
+distinctions between difference concepts, like scope, goal, theory, assumption,
+simplification, etc.  With this knowledge we can improve the focus and
+effectiveness of existing templates, and existing requirements solicitation and
+analysis efforts.]
 
 =====================
 Conclusion

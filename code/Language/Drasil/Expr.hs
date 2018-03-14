@@ -14,6 +14,7 @@ import Control.Lens ((^.))
 --FIXME: Haddock open issue #43 seems to make it so GADT constructors cannot
 -- be documented properly
 
+type UID = String
 type Relation = Expr
 
 infixr 8 $^
@@ -35,11 +36,11 @@ data Expr where
   Int      :: Integer -> Expr
   Str      :: String -> Expr
   Assoc    :: Oper -> [Expr] -> Expr
-  Deriv    :: DerivType -> Expr -> String -> Expr 
+  Deriv    :: DerivType -> Expr -> UID -> Expr 
   -- Derivative, syntax is:
   -- Type (Partial or total) -> principal part of change -> with respect to
   -- For example: Deriv Part y x1 would be (dy/dx1)
-  C        :: String -> (Stage -> Symbol) -> Expr -- Chunk (must have a symbol)
+  C        :: UID -> Expr -- Chunk (must have a symbol)
   FCall    :: Expr -> [Expr] -> Expr -- F(x) is (FCall F [x]) or similar
                                   -- FCall accepts a list of params
                                   -- F(x,y) would be (FCall F [x,y]) or sim.
@@ -72,7 +73,7 @@ a $&& b = Assoc And [a,b]
 a $|| b = Assoc Or  [a,b]
 
 sy :: (Chunk c, HasSymbol c) => c -> Expr
-sy x = C (x ^. uid) (\st -> symbol st x)
+sy x = C (x ^. uid)
 
 deriv, pderiv :: (Chunk c, HasSymbol c) => Expr -> c -> Expr
 deriv e c = Deriv Total e (c^.uid)
@@ -101,7 +102,7 @@ instance Eq Expr where
   Str a == Str b               =  a == b
   Assoc o1 l1 == Assoc o2 l2   =  o1 == o2 && l1 == l2
   Deriv t1 a b == Deriv t2 c d =  t1 == t2 && a == c && b == d
-  C a _ == C b _               =  a == b
+  C a == C b                   =  a == b
   FCall a b == FCall c d       =  a == c && b == d
   Case a == Case b             =  a == b
   IsIn  a b  == IsIn  c d      =  a == c && b == d

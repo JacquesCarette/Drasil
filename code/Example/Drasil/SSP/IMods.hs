@@ -19,6 +19,7 @@ import Drasil.SSP.Defs (slope, slice, slip,
   intrslce, ssa, morPrice, crtSlpSrf, factorOfSafety)
 import Data.Drasil.SentenceStructures (foldlSent, isThe)
 import Data.Drasil.Utils (getES, eqUnR)
+import Drasil.SSP.DataDefs (fixme1,fixme2)
 
 -- Needed for derivations
 import Data.Drasil.Concepts.Documentation (analysis,
@@ -68,16 +69,6 @@ nrmShrFor :: RelationConcept
 nrmShrFor = makeRC "nrmShrFor" (nounPhraseSP "normal/shear force ratio")
   nrmShrF_desc nrmShrF_rel
 
-intNormForceAdj :: QDefinition
-intNormForceAdj = ec' 
-  (mkQuant "fixme1" (cn "fixme") (Atomic "SpencerFixme1Please") Real Nothing Nothing)
-  (inxi intNormForce + inxiM1 intNormForce)
-
-watrForceAdj :: QDefinition
-watrForceAdj = ec'
-  (mkQuant "fixme2" (cn "fixme") (Atomic "SpencerFixme2Please") Real Nothing Nothing)
-           (inxi watrForce + inxiM1 watrForce)
-
 nrmShrF_rel :: Relation
 nrmShrF_rel = (inxi normFunc) $= case_ [case1,case2,case3] $=
   inxi shearFunc $= case_ [
@@ -93,7 +84,7 @@ nrmShrF_rel = (inxi normFunc) $= case_ [case1,case2,case3] $=
   where case1 = ((indx1 baseWthX)*((indx1 intNormForce)+(indx1 watrForce)) *
           tan (indx1 baseAngle), sy index $= 1)
         case2 = ((inxi baseWthX)*
-          (sy intNormForceAdj + sy watrForceAdj)
+          (sy fixme1 + sy fixme2)
            * tan (inxi baseAngle)+ (sy midpntHght) * (sy earthqkLoadFctr * inxi slcWght -
           2 * inxi surfHydroForce * sin (inxi surfAngle) -
           2 * inxi surfLoad * cos (inxi impLoadAngle)),
@@ -320,7 +311,7 @@ nrmShrDerivation = [
   
   eqUnR $
   inxi normToShear $= sum1toN
-  (inxi baseWthX * (sy intNormForceAdj + sy watrForceAdj) * tan(inxi baseAngle) +
+  (inxi baseWthX * (sy fixme1 + sy fixme2) * tan(inxi baseAngle) +
   inxi midpntHght * (sy earthqkLoadFctr * inxi slcWght -
   2 * inxi surfHydroForce * sin(inxi surfAngle) -
   2 * inxi surfLoad * sin(inxi impLoadAngle))) / 

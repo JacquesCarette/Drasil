@@ -446,10 +446,10 @@ convExpr (Assoc Mul l)  = fmap (foldr1 (#*)) $ sequence $ map convExpr l
 convExpr (Assoc E.And l)  = fmap (foldr1 (?&&)) $ sequence $ map convExpr l
 convExpr (Assoc E.Or l)  = fmap (foldr1 (?||)) $ sequence $ map convExpr l
 convExpr (Deriv _ _ _) = return $ litString "**convExpr :: Deriv unimplemented**"
-convExpr (C c _)        = do
+convExpr (C c)         = do
   g <- ask
   variable $ codeName $ codevar $ symbLookup c $ (sysinfodb $ codeSpec g) ^. symbolTable
-convExpr (FCall (C c _) x)  = do
+convExpr (FCall (C c) x)  = do
   g <- ask
   let info = sysinfodb $ codeSpec g
   args <- mapM convExpr x

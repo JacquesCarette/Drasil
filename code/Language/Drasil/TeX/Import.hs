@@ -16,7 +16,7 @@ import Language.Drasil.Chunk.Eq
 import Language.Drasil.Chunk.ExprRelat (relat)
 import Language.Drasil.Chunk.NamedIdea (term)
 import Language.Drasil.Chunk.Quantity (Quantity(..))
-import Language.Drasil.Chunk.SymbolForm (eqSymb,Stage(Equational))
+import Language.Drasil.Chunk.SymbolForm (eqSymb)
 import Language.Drasil.ChunkDB (getUnitLup, HasSymbolTable(..),symbLookup)
 import Language.Drasil.Chunk.ReqChunk (requires)
 import Language.Drasil.Chunk.Citation ( Citation, CiteField(..), HP(..)
@@ -35,7 +35,7 @@ expr (Dbl d)            _ = P.Dbl  d
 expr (Int i)            _ = P.Int  i
 expr (Str s)            _ = P.Str  s
 expr (Assoc op l)      sm = P.Assoc op $ map (\x -> expr x sm) l
-expr (C _ s)           _  = P.Sym $ s Equational -- FIXME: Add Stage for Context
+expr (C c)            sm = P.Sym $ eqSymb $ symbLookup c $ sm^.symbolTable -- FIXME Stage?
 expr (Deriv Part a b)  sm = P.BOp Frac (P.Assoc Mul [P.Sym (Special Partial), expr a sm])
                             (P.Assoc Mul [P.Sym (Special Partial), P.Sym $ eqSymb $ symbLookup b $ sm^.symbolTable])
 expr (Deriv Total a b) sm = P.BOp Frac (P.Assoc Mul [P.Sym lD, expr a sm])

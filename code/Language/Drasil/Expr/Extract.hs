@@ -12,7 +12,7 @@ import Language.Drasil.Chunk.Quantity (QuantityDict)
 dep :: Expr -> [String]
 dep (Assoc _ l)   = nub (concat $ map dep l)
 dep (Deriv _ a b) = nub (b : dep a)
-dep (C c _)       = [c]
+dep (C c)         = [c]
 dep (Int _)       = []
 dep (Dbl _)       = []
 dep (Str _)       = []
@@ -28,7 +28,7 @@ dep (Matrix a)    = nub (concat $ map (concat . map dep) a)
 vars :: (HasSymbolTable s) => Expr -> s -> [QuantityDict]
 vars (Assoc _ l)    m = nub $ concat $ map (\x -> vars x m) l
 vars (Deriv _ a b)  m = nub (vars a m ++ [symbLookup b $ m ^. symbolTable])
-vars (C c _)        m = [symbLookup c $ m ^. symbolTable]
+vars (C c)          m = [symbLookup c $ m ^. symbolTable]
 vars (Int _)        _ = []
 vars (Dbl _)        _ = []
 vars (Str _)        _ = []
@@ -44,11 +44,11 @@ vars (Matrix a)     m = nub (concat $ map (\x -> concat $ map (\y -> vars y m) x
 codevars :: (HasSymbolTable s) => Expr -> s -> [CodeChunk]
 codevars (Assoc _ l)  sm = nub (concat $ map (\x -> codevars x sm) l)
 codevars (Deriv _ a b) sm = nub (codevars a sm ++ [codevar $ symbLookup b (sm ^. symbolTable)])
-codevars (C c _)      sm = [codevar $ symbLookup c (sm ^. symbolTable)]
+codevars (C c)       sm = [codevar $ symbLookup c (sm ^. symbolTable)]
 codevars (Int _)      _ = []
 codevars (Dbl _)      _ = []
 codevars (Str _)      _ = []
-codevars (FCall (C c _) x)  sm = nub ((codefunc $ symbLookup c (sm ^. symbolTable)) : (concat $ map (\y -> codevars y sm) x))
+codevars (FCall (C c) x)  sm = nub ((codefunc $ symbLookup c (sm ^. symbolTable)) : (concat $ map (\y -> codevars y sm) x))
 codevars (FCall f x)  sm = nub (codevars f sm ++ (concat $ map (\y -> codevars y sm) x))
 codevars (Case ls)    sm = nub (concat $ map (\x -> codevars (fst x) sm) ls ++ map (\x -> codevars (snd x) sm) ls)
 codevars (UnaryOp _ u)  sm = codevars u sm
@@ -59,9 +59,9 @@ codevars (Matrix a)   sm = nub (concat $ map (concat . map (\x -> codevars x sm)
 
 -- | Get a list of CodeChunks from an equation (no functions)
 codevars' :: (HasSymbolTable s) => Expr -> s -> [CodeChunk]
-codevars' (Assoc _ l)  sm = nub (concat $ map (\x -> codevars' x sm) l)
+codevars' (Assoc _ l)   sm = nub (concat $ map (\x -> codevars' x sm) l)
 codevars' (Deriv _ a b) sm = nub (codevars' a sm ++ [codevar $ symbLookup b (sm^.symbolTable)])
-codevars' (C c _)       sm = [codevar $ symbLookup c (sm ^. symbolTable)]
+codevars' (C c)         sm = [codevar $ symbLookup c (sm ^. symbolTable)]
 codevars' (Int _)       _ = []
 codevars' (Dbl _)       _ = []
 codevars' (Str _)       _ = []

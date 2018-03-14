@@ -12,7 +12,8 @@ import Drasil.SSP.Unitals (shrStiffBase, index, genDisplace, baseAngle, inxi,
   fricAngle, baseHydroForce, watrForce, nrmFSubWat, shrResI, constant_A,
   nrmDispl, constant_K, constant_a, normStress, poissnsRatio, inx, surfLngth,
   baseLngth, genForce, shrDispl, scalFunc, normToShear, slipDist, slopeDist,
-  slopeHght, slipHght, waterHght, satWeight, waterWeight, dryWeight)
+  slopeHght, slipHght, waterHght, satWeight, waterWeight, dryWeight,
+  ufixme1, ufixme2)
 import Drasil.SSP.GenDefs (eqlExpr, displMtx, rotMtx)
 import Drasil.SSP.Defs (intrslce)
 
@@ -35,7 +36,8 @@ sspDataDefs :: [QDefinition]
 sspDataDefs = [sliceWght, baseWtrF, surfWtrF, intersliceWtrF, angleA, angleB,
   lengthB, lengthLb, lengthLs, seismicLoadF, surfLoads, intrsliceF, resShearWO,
   mobShearWO, displcmntRxnF, displcmntBasel, netFDsplcmntEqbm, shearStiffness,
-  soilStiffness]
+  soilStiffness, 
+  fixme1, fixme2]
 
 --DD1
 
@@ -241,10 +243,20 @@ soilStiffnessEqn = (case_ [case1,case2])
           ((1 + (sy SM.poissnsR)) * (1 - 2 *(sy SM.poissnsR) + (sy baseWthX)))
 
 -----------------
+-- Hacks --------
+-----------------
+
+fixme1 :: QDefinition
+fixme1 = ec' ufixme1 (inxi intNormForce + inxiM1 intNormForce)
+
+fixme2 :: QDefinition
+fixme2 = ec' ufixme2 (inxi watrForce + inxiM1 watrForce)
+
+-----------------
 -- Derivations --
 -----------------
 
--- FIXEME: move derivations with the appropriate data definition
+-- FIXME: move derivations with the appropriate data definition
 
 resShrDerivation :: [Contents]
 resShrDerivation = [

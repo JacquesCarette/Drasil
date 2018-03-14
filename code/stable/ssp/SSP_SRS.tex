@@ -136,6 +136,10 @@ $S$ & Mobilized Shear Force: for slice index i & N
 \\
 $s$ & Mobilized Shear Stress: acting on the base of a slice & Pa
 \\
+$SpencerFixme1Please$ & Fixme: What is this value? & 
+\\
+$SpencerFixme2Please$ & Fixme: What is this value? & 
+\\
 $T$ & Mobilized Shear Force: without the influence of interslice forces for slice index i & N
 \\
 ${U_{b}}$ & Base Hydrostatic Force: from water pressure within the slice for slice index i & N
@@ -1004,6 +1008,38 @@ Equation & ${K_{bn}}$ = $\begin{cases}
 \end{cases}$
 \\ \midrule \\
 Description & ${K_{bn}}$ is the normal stiffness ($\frac{\text{Pa}}{\text{m}}$)\newline$E$ is the interslice normal force (N)\newline$\nu{}$ is the Poisson's ratio\newline$b$ is the base width of a slice (m)\newline$\kappa{}$ is the constant (Pa)\newline$\delta{}v$ is the displacement (m)\newline$A$ is the constant (m)
+\\ \bottomrule \end{tabular}
+\end{minipage}\\
+~\newline
+\noindent \begin{minipage}{\textwidth}
+\begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
+\toprule \textbf{Refname} & \textbf{DD:fixme1}
+\phantomsection 
+\label{DD:fixme1}
+\\ \midrule \\
+Label & Fixme
+\\ \midrule \\
+Units & Unitless
+\\ \midrule \\
+Equation & $SpencerFixme1Please$ = $E_{i}+E_{i-1}$
+\\ \midrule \\
+Description & $SpencerFixme1Please$ is the fixme\newline$E$ is the interslice normal force (N)\newline$i$ is the index
+\\ \bottomrule \end{tabular}
+\end{minipage}\\
+~\newline
+\noindent \begin{minipage}{\textwidth}
+\begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
+\toprule \textbf{Refname} & \textbf{DD:fixme2}
+\phantomsection 
+\label{DD:fixme2}
+\\ \midrule \\
+Label & Fixme
+\\ \midrule \\
+Units & Unitless
+\\ \midrule \\
+Equation & $SpencerFixme2Please$ = $H_{i}+H_{i-1}$
+\\ \midrule \\
+Description & $SpencerFixme2Please$ is the fixme\newline$H$ is the interslice water force (N)\newline$i$ is the index
 \\ \bottomrule \end{tabular}
 \end{minipage}\\
 \subsubsection{Instance Models}

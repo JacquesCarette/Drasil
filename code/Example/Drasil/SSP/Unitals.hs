@@ -389,7 +389,8 @@ fy = uc' "fy" (cn "y-component of the net force") fixme
 
 sspUnitless :: [ConVar]
 sspUnitless = [earthqkLoadFctr, normToShear,scalFunc,
-  numbSlices, minFunction, fsloc, index, varblU, varblV, fs_min]
+  numbSlices, minFunction, fsloc, index, varblU, varblV, fs_min,
+  ufixme1, ufixme2]
 
 earthqkLoadFctr, normToShear, scalFunc,
   numbSlices, minFunction, fsloc, index, varblU, varblV :: ConVar
@@ -418,6 +419,12 @@ minFunction = cv (dcc "Upsilon" (nounPhraseSP "function")
 
 fsloc = cv (dcc "FS_loci" (nounPhraseSP "local factor of safety") fsi)
   (sub (Atomic "FS") (Atomic "Loc,i")) Real
+
+ufixme1 = cv (dcc "fixme1" (cn "fixme") "What is this value?")
+  (Atomic "SpencerFixme1Please") Real
+
+ufixme2 = cv (dcc "fixme2" (cn "fixme") "What is this value?")
+  (Atomic "SpencerFixme2Please") Real
 
 --------------------
 -- Index Function --

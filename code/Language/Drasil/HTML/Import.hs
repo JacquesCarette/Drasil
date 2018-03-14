@@ -15,7 +15,7 @@ import Language.Drasil.Chunk.Eq
 import Language.Drasil.Chunk.ExprRelat (relat)
 import Language.Drasil.Chunk.NamedIdea (term, getA)
 import Language.Drasil.Chunk.Quantity (Quantity(..))
-import Language.Drasil.Chunk.SymbolForm (eqSymb,Stage(Equational))
+import Language.Drasil.Chunk.SymbolForm (eqSymb)
 import Language.Drasil.ChunkDB (HasSymbolTable(..), getUnitLup, symbLookup)
 import Language.Drasil.Chunk.ReqChunk (requires)
 import Language.Drasil.Chunk.Citation ( CiteField(..), HP(..), Citation 
@@ -44,7 +44,7 @@ expr (Deriv Part a b) sm = P.BOp Frac (P.Assoc Mul [P.Sym (Special Partial), exp
                           (P.Assoc Mul [P.Sym (Special Partial), P.Sym $ eqSymb $ symbLookup b $ sm^.symbolTable])
 expr (Deriv Total a b)sm = P.BOp Frac (P.Assoc Mul [P.Sym lD, expr a sm])
                           (P.Assoc Mul [P.Sym lD, P.Sym $ eqSymb $ symbLookup b $ sm^.symbolTable])
-expr (C _ s)          _  = P.Sym $ s Equational -- FIXME
+expr (C c)            sm = P.Sym $ eqSymb $ symbLookup c $ sm^.symbolTable
 expr (FCall f x)      sm = P.Call (expr f sm) (map (flip expr sm) x)
 expr (Case ps)        sm = if length ps < 2 then
                     error "Attempting to use multi-case expr incorrectly"

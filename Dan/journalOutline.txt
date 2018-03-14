@@ -323,7 +323,7 @@ goes into the requirements documentation forces us to deeply understand the
 distinctions between difference concepts, like scope, goal, theory, assumption,
 simplification, etc.  With this knowledge we can improve the focus and
 effectiveness of existing templates, and existing requirements solicitation and
-analysis efforts.]
+analysis efforts.  Teaching it to a computer.]
 
 =====================
 Conclusion

@@ -20,7 +20,7 @@ efforts manually? Literate programming had the right idea, but focused too
 heavily on code.
 
 We present Drasil -- a tool for supporting a Knowledge-Based (KB) approach to
-Software Engineering (SE) -- as a means of generating ``all the things".
+Software Engineering (SE) -- as a means of ``generating all the things".
 
 -- START: Remove from here --
 This KB approach aims to reuse as much of the underlying science knowledge
@@ -45,10 +45,20 @@ in the abstract.  Maybe we can do something with counting the generated lines of
 documentation?  We will also want to be more specific with the OPG example where
 we generate the same documentation following two different recipes.]
 
+[*JC* We really want to use the structured abstract format here, with the explicit
+keywords in it (at least for now).]
+
+[*JC* What is the take-home message of the paper?  We should list it first in 
+this outline, between the title and the abstract.]
+
 =================
 Intro
 =================
 - Blurb on how all artifacts are useful and improve quality. Lead into DDD.
+
+[*JC* Can we do without such motherhood-yet-unproven statements?  There are
+some contexts (certification!) where documents are required, sometimes by
+law. DDD is a hard sell, so why start with that?]
 
 ----------------
 Doc Driven Des
@@ -73,12 +83,17 @@ background section.  For instance information on grounded theory could go in the
 background section.  If we move some of the content elsewhere, we should still
 mention the code-centric nature of the previous efforts.]
 
+[*JC* I agree, this shouldn't be in the introduction. ]
+
 ---- START: move to side note / other subsection? ----
 - Compendia
   - Trying to solve the problem of reproducibility **or whichever R goes here**
   - Not focused on DDD or its benefits, moreso focused on good science and
     being able to re-run experiments exactly
 -------------- END ------------------------------------
+
+[*JC* So what I'm missing is a clear definition of the problem being
+tackled. It wasn't in the abstract, and it's not in the outline either.]
 
 - Previous attempts at automating documentation (à la DDD)
   - LP, tools like javadoc, Haddock, etc.
@@ -98,6 +113,13 @@ mention the code-centric nature of the previous efforts.]
 ====================================
 Knowledge-Based Software Engineering
 ====================================
+
+[*JC* Now that I read this, it seems that KBSE as presented in this
+way/order seems like a solution plucked out of thin air.  But it's not!
+It comes out of a rational analysis of the 'actual content' of the
+set of software artifacts in SCS. A good order remains
+CONTEXT - PROBLEM - ANALYSIS - SOLUTION - CONCLUSIONS.
+This outline is too fuzzy on 'problem', and skips the 'analysis'.]
 
 - The main ideas:
   - Capture underlying science knowledge in a meaningful way
@@ -131,9 +153,25 @@ Knowledge vs. Information
 don't want to contradict any existing conventions on the use of this
 terminology.]
 
+[*JC* Just to capture today's conversation: the difference is between
+natural language encoded knowledge and 'structured' encodings that allow
+the knowledge content to be re-used automatically.  We don't want to go
+with full Ontology, or with more elaborate schemes like MMT at least
+not until we know we need it for sure]
+
 --------------------------
 Capturing Knowledge
 --------------------------
+
+[*JC* Too solution-driven still.  We need to understand what knowledge is
+present, and how it will ultimately be used. 'chunks' are now reduced to 
+just "labelled pieces of information". The label is super useful as a means
+of identifying things (like a primary key in a database), but no longer
+any more than that.
+
+The hierarchy needs *explained*. That explanation will not be coherent unless
+you first describe what structure is present in the captured knowledge -- and 
+what structure must be present for re-use.]
 
 - Knowledge comes in many forms (theories, concepts, etc.)
   - As such we capture it in a number of chunks
@@ -144,6 +182,10 @@ Capturing Knowledge
 - Store knowledge in a common knowledge-base for easy inter/intra project reuse
 - We are building ontologies, piecewise, for specific domains.
   - But they are useful even when incomplete!
+
+[*JC* And I'm going to stop here as far as going through this outline.
+Mostly because I think that going through it with the changes above in mind,
+that could have a non-trivial ripple effect.]
 
 --------------------------
 Using Knowledge

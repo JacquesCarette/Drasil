@@ -57,10 +57,9 @@ data Greek = Alpha_L
            | Nabla
   deriving (Eq, Ord)
 
--- | Special characters including @<=@, partial derivatives, degree circle, and
+-- | Special characters including partial derivatives, degree circle, and
 -- underscores
-data Special = LEQ
-             | Partial
+data Special = Partial
              | Circle
              | Percent
              | Hash

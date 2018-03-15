@@ -118,7 +118,6 @@ greekToCodeName Zeta      = "Zeta"
 
 specialToCodeName :: Special -> String
 specialToCodeName Circle        = "circ"
-specialToCodeName LEQ           = "leq"
 specialToCodeName Partial       = "partial"
 specialToCodeName UScore        = "_"
 specialToCodeName Percent       = "%"

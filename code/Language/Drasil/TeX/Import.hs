@@ -53,15 +53,32 @@ ufunc Not = P.Not
 ufunc Neg = P.Neg
 ufunc Dim = P.Dim
 
+binop :: BinOp -> P.BinOp
+binop Frac = P.Frac
+binop Div = P.Div
+binop Pow = P.Pow
+binop Subt = P.Subt
+binop Eq = P.Eq
+binop NEq = P.NEq
+binop Lt = P.Lt
+binop Gt = P.Gt
+binop LEq = P.LEq
+binop GEq = P.GEq
+binop Impl = P.Impl
+binop Iff = P.Iff
+binop Index = P.Index
+binop Dot = P.Dot
+binop Cross = P.Cross
+
 expr :: HasSymbolTable ctx => Expr -> ctx -> P.Expr
 expr (Dbl d)            _ = P.Dbl  d
 expr (Int i)            _ = P.Int  i
 expr (Str s)            _ = P.Str  s
 expr (Assoc op l)      sm = P.Assoc (oper op) $ map (\x -> expr x sm) l
 expr (C c)            sm = P.Sym $ eqSymb $ symbLookup c $ sm^.symbolTable -- FIXME Stage?
-expr (Deriv Part a b)  sm = P.BOp Frac (P.Assoc P.Mul [P.Sym (Special Partial), expr a sm])
+expr (Deriv Part a b)  sm = P.BOp P.Frac (P.Assoc P.Mul [P.Sym (Special Partial), expr a sm])
                             (P.Assoc P.Mul [P.Sym (Special Partial), P.Sym $ eqSymb $ symbLookup b $ sm^.symbolTable])
-expr (Deriv Total a b) sm = P.BOp Frac (P.Assoc P.Mul [P.Sym lD, expr a sm])
+expr (Deriv Total a b) sm = P.BOp P.Frac (P.Assoc P.Mul [P.Sym lD, expr a sm])
                             (P.Assoc P.Mul [P.Sym lD, P.Sym $ eqSymb $ symbLookup b $ sm^.symbolTable])
 expr (FCall f x)       sm = P.Call (expr f sm) (map (flip expr sm) x)
 expr (Case ps)         sm = if length ps < 2 then
@@ -70,8 +87,8 @@ expr (Case ps)         sm = if length ps < 2 then
 expr (Matrix a)        sm = P.Mtx $ map (map (flip expr sm)) a
 expr (UnaryOp o u)     sm = P.UOp (ufunc o) $ expr u sm
 expr (EOp o)           sm = eop o sm
-expr (BinaryOp Div a b) sm = P.BOp Frac (replace_divs sm a) (replace_divs sm b)
-expr (BinaryOp o a b)  sm = P.BOp o (expr a sm) (expr b sm)
+expr (BinaryOp Div a b) sm = P.BOp P.Frac (replace_divs sm a) (replace_divs sm b)
+expr (BinaryOp o a b)  sm = P.BOp (binop o) (expr a sm) (expr b sm)
 expr (IsIn  a b)       sm = P.IsIn  (expr a sm) b
 
 eop :: HasSymbolTable ctx => EOperator -> ctx -> P.Expr
@@ -94,10 +111,10 @@ int_wrt :: Symbol -> P.Expr
 int_wrt wrtc = P.Assoc P.Mul [P.Sym lD, P.Sym wrtc]
 
 replace_divs :: HasSymbolTable ctx => ctx -> Expr -> P.Expr
-replace_divs sm (BinaryOp Div a b) = P.BOp Div (replace_divs sm a) (replace_divs sm b)
+replace_divs sm (BinaryOp Div a b) = P.BOp P.Div (replace_divs sm a) (replace_divs sm b)
 replace_divs sm (Assoc op l) = P.Assoc (oper op) $ map (replace_divs sm) l
-replace_divs sm (BinaryOp Pow a b) = P.BOp Pow (replace_divs sm a) (replace_divs sm b)
-replace_divs sm (BinaryOp Subt a b) = P.BOp Subt (replace_divs sm a) (replace_divs sm b)
+replace_divs sm (BinaryOp Pow a b) = P.BOp P.Pow (replace_divs sm a) (replace_divs sm b)
+replace_divs sm (BinaryOp Subt a b) = P.BOp P.Subt (replace_divs sm a) (replace_divs sm b)
 replace_divs sm a            = expr a sm
 
 spec :: HasSymbolTable ctx => ctx -> Sentence -> P.Spec

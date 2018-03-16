@@ -1,6 +1,5 @@
 module Language.Drasil.Printing.AST where
 
-import Language.Drasil.Expr (BinOp(..))
 import Language.Drasil.Symbol (Symbol)
 import Language.Drasil.Space (Space)
 import Language.Drasil.Spec (USymb, RefType, RefAdd)
@@ -12,6 +11,9 @@ data Oper = Add | Mul | And | Or
 
 data UFunc = Norm | Abs | Log | Sin | Cos | Tan | Sec | Csc | Cot | Exp
   | Sqrt | Not | Neg | Dim
+
+data BinOp = Frac | Div | Pow | Subt | Eq | NEq | Lt | Gt | LEq | GEq | Impl | Iff | Index
+  | Dot | Cross
 
 data Expr = Dbl   Double
           | Int   Integer

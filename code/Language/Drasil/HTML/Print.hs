@@ -5,7 +5,6 @@ import Data.List (intersperse, sortBy)
 import Text.PrettyPrint hiding (render, quotes, Str)
 import Numeric (showFFloat)
 
-import Language.Drasil.Expr (BinOp(..))
 import Language.Drasil.HTML.Import (makeDocument, spec)
 import Language.Drasil.Printing.AST
 import Language.Drasil.HTML.AST

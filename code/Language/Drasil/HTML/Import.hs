@@ -57,15 +57,33 @@ ufunc Not = P.Not
 ufunc Neg = P.Neg
 ufunc Dim = P.Dim
 
+binop :: BinOp -> P.BinOp
+binop Frac = P.Frac
+binop Div = P.Div
+binop Pow = P.Pow
+binop Subt = P.Subt
+binop Eq = P.Eq
+binop NEq = P.NEq
+binop Lt = P.Lt
+binop Gt = P.Gt
+binop LEq = P.LEq
+binop GEq = P.GEq
+binop Impl = P.Impl
+binop Iff = P.Iff
+binop Index = P.Index
+binop Dot = P.Dot
+binop Cross = P.Cross
+
+
 -- | expr translation function from Drasil to HTML 'AST'
 expr :: HasSymbolTable s => Expr -> s -> P.Expr
 expr (Dbl d)          _ = P.Dbl   d
 expr (Int i)          _ = P.Int   i
 expr (Str s)          _ = P.Str   s
 expr (Assoc op l)     sm = P.Assoc (oper op) $ map (\x -> expr x sm) l
-expr (Deriv Part a b) sm = P.BOp Frac (P.Assoc P.Mul [P.Sym (Special Partial), expr a sm])
+expr (Deriv Part a b) sm = P.BOp P.Frac (P.Assoc P.Mul [P.Sym (Special Partial), expr a sm])
                           (P.Assoc P.Mul [P.Sym (Special Partial), P.Sym $ eqSymb $ symbLookup b $ sm^.symbolTable])
-expr (Deriv Total a b)sm = P.BOp Frac (P.Assoc P.Mul [P.Sym lD, expr a sm])
+expr (Deriv Total a b)sm = P.BOp P.Frac (P.Assoc P.Mul [P.Sym lD, expr a sm])
                           (P.Assoc P.Mul [P.Sym lD, P.Sym $ eqSymb $ symbLookup b $ sm^.symbolTable])
 expr (C c)            sm = P.Sym $ eqSymb $ symbLookup c $ sm^.symbolTable
 expr (FCall f x)      sm = P.Call (expr f sm) (map (flip expr sm) x)
@@ -74,8 +92,8 @@ expr (Case ps)        sm = if length ps < 2 then
                     else P.Case (zip (map (flip expr sm . fst) ps) (map (flip expr sm . snd) ps))
 expr (Matrix a)         sm = P.Mtx $ map (map (flip expr sm)) a
 expr (UnaryOp o u)      sm = P.UOp (ufunc o) (expr u sm)
-expr (BinaryOp Div a b)  sm = P.BOp Frac (replace_divs a sm) (replace_divs b sm)
-expr (BinaryOp o a b)   sm = P.BOp o (expr a sm) (expr b sm)
+expr (BinaryOp Div a b) sm = P.BOp P.Frac (replace_divs a sm) (replace_divs b sm)
+expr (BinaryOp o a b)   sm = P.BOp (binop o) (expr a sm) (expr b sm)
 expr (EOp o)            sm = eop o sm
 expr (IsIn  a b)        sm = P.IsIn  (expr a sm) b
 
@@ -103,10 +121,10 @@ int_wrt wrtc = P.Assoc P.Mul [P.Sym lD, P.Sym wrtc]
 
 -- | Helper function for translating operations in expressions
 replace_divs :: HasSymbolTable s => Expr -> s -> P.Expr
-replace_divs (BinaryOp Div a b)  sm = P.BOp Div (replace_divs a sm) (replace_divs b sm)
+replace_divs (BinaryOp Div a b)  sm = P.BOp P.Div (replace_divs a sm) (replace_divs b sm)
 replace_divs (Assoc op l)        sm = P.Assoc (oper op) $ map (\x -> replace_divs x sm) l
-replace_divs (BinaryOp Pow  a b) sm = P.BOp Pow (replace_divs a sm) (replace_divs b sm)
-replace_divs (BinaryOp Subt a b) sm = P.BOp Subt (replace_divs a sm) (replace_divs b sm)
+replace_divs (BinaryOp Pow  a b) sm = P.BOp P.Pow (replace_divs a sm) (replace_divs b sm)
+replace_divs (BinaryOp Subt a b) sm = P.BOp P.Subt (replace_divs a sm) (replace_divs b sm)
 replace_divs a                   sm = expr a sm
 
 -- | Translates Sentence to the HTML representation of Sentence ('Spec')

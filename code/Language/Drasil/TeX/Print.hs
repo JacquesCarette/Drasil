@@ -8,7 +8,6 @@ import Numeric (showFFloat)
 
 import Control.Applicative (pure)
 
-import Language.Drasil.Expr (BinOp(..))
 import Language.Drasil.Printing.AST
 import Language.Drasil.TeX.AST
 import qualified Language.Drasil.TeX.Import as I

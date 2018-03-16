@@ -90,6 +90,8 @@ p_expr (Int i)    = show i
 p_expr (Str s)    = s  -- FIXME this is probably the wrong way to print strings
 p_expr (Assoc Add l)  = concat $ intersperse "+" $ map p_expr l
 p_expr (Assoc Mul l)  = mul l
+p_expr (Assoc And l)  = concat $ intersperse "\\land{}" $ map p_expr l
+p_expr (Assoc Or l)   = concat $ intersperse "\\lor{}" $ map p_expr l
 p_expr (Sym s)    = symbol s
 p_expr (BOp Frac n d) = "\\frac{" ++ needMultlined n ++ "}{" ++ needMultlined d ++"}"
 p_expr (BOp Div n d)  = divide n d
@@ -102,10 +104,16 @@ p_expr (Call f x) = p_expr f ++ paren (concat $ intersperse "," $ map p_expr x)
 p_expr (Case ps)  = "\\begin{cases}\n" ++ cases ps ++ "\n\\end{cases}"
 p_expr (UOp f es)  = p_uop f es
 p_expr (Mtx a)    = "\\begin{bmatrix}\n" ++ p_matrix a ++ "\n\\end{bmatrix}"
---Logic
-p_expr (Assoc And l)  = concat $ intersperse "\\land{}" $ map p_expr l
-p_expr (Assoc Or l)   = concat $ intersperse "\\lor{}" $ map p_expr l
 p_expr (IsIn  a b) = p_expr a ++ "\\in{}" ++ p_space b
+p_expr (Row l) = concatMap p_expr l
+p_expr (Ident s) = s
+p_expr (Spec s) = unPL $ special s
+p_expr (Gr g) = unPL $ greek g
+p_expr (Sub e) = "^" ++ brace (p_expr e)
+p_expr (Sup e) = "_" ++ brace (p_expr e)
+p_expr (Over Hat s)     = "\\hat{" ++ p_expr s ++ "}"
+p_expr (Over Vector s)  = "\\mathbf{" ++ p_expr s ++ "}"
+p_expr (Over Prime s)   = p_expr s ++ "'"
 
 p_bop :: BinOp -> String
 p_bop Subt = "-"

@@ -1,6 +1,6 @@
 module Language.Drasil.Printing.AST where
 
-import Language.Drasil.Symbol (Symbol)
+import Language.Drasil.Symbol (Symbol, Decoration)
 import Language.Drasil.Space (Space)
 import Language.Drasil.Spec (USymb, RefType, RefAdd)
 import Language.Drasil.Unicode (Greek, Special)
@@ -27,6 +27,13 @@ data Expr = Dbl   Double
           | Funct Functional Expr
           | IsIn  Expr Space
           | Mtx [[Expr]]
+          | Row   [Expr]
+          | Ident String
+          | Spec  Special
+          | Gr    Greek
+          | Sub   Expr
+          | Sup   Expr
+          | Over  Decoration Expr
           
 data Functional = 
             Summation (Maybe ((Symbol, Expr),Expr))

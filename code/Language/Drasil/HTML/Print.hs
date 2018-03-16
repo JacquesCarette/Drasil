@@ -157,7 +157,15 @@ p_expr (BOp Index a i)= p_indx a i
 p_expr (BOp Impl a b) = p_expr a ++ " &rArr; " ++ p_expr b
 p_expr (BOp Iff a b)  = p_expr a ++ " &hArr; " ++ p_expr b
 p_expr (IsIn  a b) = p_expr a ++ "&thinsp;&isin;&thinsp;"  ++ p_space b
-
+p_expr (Row l) = concatMap p_expr l
+p_expr (Ident s) = s
+p_expr (Spec s) = unPH $ special s
+p_expr (Gr g) = unPH $ greek g
+p_expr (Sub e) = sub $ p_expr e
+p_expr (Sup e) = sup $ p_expr e
+p_expr (Over Vector s)  = "<b>" ++ p_expr s ++ "</b>"
+p_expr (Over Hat s)     = p_expr s ++ "&#770;"
+p_expr (Over Prime s)   = p_expr s ++ "&prime;"
 
 -- | For printing indexes
 p_indx :: Expr -> Expr -> String

@@ -2,7 +2,7 @@ module Language.Drasil.TeX.Import where
 
 import Control.Lens ((^.))
 import Prelude hiding (id)
-import Language.Drasil.Expr (Expr(..), Oper(..), BinOp(..), sy,
+import Language.Drasil.Expr (Expr(..), Oper(..), BinOp(..), sy, UFunc(..),
     DerivType(..), EOperator(..), ($=), RealRange(..), DomainDesc(..))
 import Language.Drasil.Chunk.AssumpChunk
 import Language.Drasil.Expr.Extract
@@ -37,6 +37,22 @@ oper Or = P.Or
 oper Add = P.Add
 oper Mul = P.Mul
 
+ufunc :: UFunc -> P.UFunc
+ufunc Norm = P.Norm
+ufunc Abs = P.Abs
+ufunc Log = P.Log
+ufunc Sin = P.Sin
+ufunc Cos = P.Cos
+ufunc Tan = P.Tan
+ufunc Sec = P.Sec
+ufunc Csc = P.Csc
+ufunc Cot = P.Cot
+ufunc Exp = P.Exp
+ufunc Sqrt = P.Sqrt
+ufunc Not = P.Not
+ufunc Neg = P.Neg
+ufunc Dim = P.Dim
+
 expr :: HasSymbolTable ctx => Expr -> ctx -> P.Expr
 expr (Dbl d)            _ = P.Dbl  d
 expr (Int i)            _ = P.Int  i
@@ -52,7 +68,7 @@ expr (Case ps)         sm = if length ps < 2 then
         error "Attempting to use multi-case expr incorrectly"
         else P.Case (zip (map (flip expr sm . fst) ps) (map (flip expr sm . snd) ps))
 expr (Matrix a)        sm = P.Mtx $ map (map (flip expr sm)) a
-expr (UnaryOp o u)     sm = P.UOp o $ expr u sm
+expr (UnaryOp o u)     sm = P.UOp (ufunc o) $ expr u sm
 expr (EOp o)           sm = eop o sm
 expr (BinaryOp Div a b) sm = P.BOp Frac (replace_divs sm a) (replace_divs sm b)
 expr (BinaryOp o a b)  sm = P.BOp o (expr a sm) (expr b sm)

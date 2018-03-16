@@ -1,7 +1,7 @@
 module Language.Drasil.HTML.Import where
 
 import Prelude hiding (id)
-import Language.Drasil.Expr (Expr(..), Oper(..), BinOp(..), sy,
+import Language.Drasil.Expr (Expr(..), Oper(..), BinOp(..), sy, UFunc(..),
     DerivType(..), EOperator(..), ($=), DomainDesc(..), RealRange(..))
 import Language.Drasil.Spec
 import qualified Language.Drasil.Printing.AST as P
@@ -41,6 +41,22 @@ oper Or = P.Or
 oper Add = P.Add
 oper Mul = P.Mul
 
+ufunc :: UFunc -> P.UFunc
+ufunc Norm = P.Norm
+ufunc Abs = P.Abs
+ufunc Log = P.Log
+ufunc Sin = P.Sin
+ufunc Cos = P.Cos
+ufunc Tan = P.Tan
+ufunc Sec = P.Sec
+ufunc Csc = P.Csc
+ufunc Cot = P.Cot
+ufunc Exp = P.Exp
+ufunc Sqrt = P.Sqrt
+ufunc Not = P.Not
+ufunc Neg = P.Neg
+ufunc Dim = P.Dim
+
 -- | expr translation function from Drasil to HTML 'AST'
 expr :: HasSymbolTable s => Expr -> s -> P.Expr
 expr (Dbl d)          _ = P.Dbl   d
@@ -57,7 +73,7 @@ expr (Case ps)        sm = if length ps < 2 then
                     error "Attempting to use multi-case expr incorrectly"
                     else P.Case (zip (map (flip expr sm . fst) ps) (map (flip expr sm . snd) ps))
 expr (Matrix a)         sm = P.Mtx $ map (map (flip expr sm)) a
-expr (UnaryOp o u)      sm = P.UOp o (expr u sm)
+expr (UnaryOp o u)      sm = P.UOp (ufunc o) (expr u sm)
 expr (BinaryOp Div a b)  sm = P.BOp Frac (replace_divs a sm) (replace_divs b sm)
 expr (BinaryOp o a b)   sm = P.BOp o (expr a sm) (expr b sm)
 expr (EOp o)            sm = eop o sm

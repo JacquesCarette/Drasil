@@ -1,6 +1,6 @@
 module Language.Drasil.Printing.AST where
 
-import Language.Drasil.Expr (UFunc,BinOp(..))
+import Language.Drasil.Expr (BinOp(..))
 import Language.Drasil.Symbol (Symbol)
 import Language.Drasil.Space (Space)
 import Language.Drasil.Spec (USymb, RefType, RefAdd)
@@ -9,6 +9,9 @@ import Language.Drasil.People (People)
 import Language.Drasil.Chunk.Citation (Month, EntryID, CitationKind)
 
 data Oper = Add | Mul | And | Or
+
+data UFunc = Norm | Abs | Log | Sin | Cos | Tan | Sec | Csc | Cot | Exp
+  | Sqrt | Not | Neg | Dim
 
 data Expr = Dbl   Double
           | Int   Integer

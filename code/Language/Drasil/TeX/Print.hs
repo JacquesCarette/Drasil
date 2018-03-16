@@ -8,7 +8,7 @@ import Numeric (showFFloat)
 
 import Control.Applicative (pure)
 
-import Language.Drasil.Expr (Oper(..),UFunc(..),BinOp(..))
+import Language.Drasil.Expr (UFunc(..),BinOp(..))
 import Language.Drasil.Printing.AST
 import Language.Drasil.TeX.AST
 import qualified Language.Drasil.TeX.Import as I
@@ -21,7 +21,7 @@ import Language.Drasil.TeX.Preamble
 import Language.Drasil.Symbol (Symbol(..),Decoration(..))
 import qualified Language.Drasil.Document as L
 import Language.Drasil.Unicode (RenderGreek(..), RenderSpecial(..))
-import Language.Drasil.People (People,rendPersLFM,lstName)
+import Language.Drasil.People (People,rendPersLFM)
 import Language.Drasil.ChunkDB (HasSymbolTable)
 import Language.Drasil.Space (Space(..))
 import Language.Drasil.Chunk.Citation (CitationKind(..), Month(..))

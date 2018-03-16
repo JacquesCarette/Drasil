@@ -30,16 +30,23 @@ import Language.Drasil.Symbol
 import Language.Drasil.SymbolAlphabet
 import Language.Drasil.Unit (usymb)
 
+-- | translating operations
+oper :: Oper -> P.Oper
+oper And = P.And
+oper Or = P.Or
+oper Add = P.Add
+oper Mul = P.Mul
+
 expr :: HasSymbolTable ctx => Expr -> ctx -> P.Expr
 expr (Dbl d)            _ = P.Dbl  d
 expr (Int i)            _ = P.Int  i
 expr (Str s)            _ = P.Str  s
-expr (Assoc op l)      sm = P.Assoc op $ map (\x -> expr x sm) l
+expr (Assoc op l)      sm = P.Assoc (oper op) $ map (\x -> expr x sm) l
 expr (C c)            sm = P.Sym $ eqSymb $ symbLookup c $ sm^.symbolTable -- FIXME Stage?
-expr (Deriv Part a b)  sm = P.BOp Frac (P.Assoc Mul [P.Sym (Special Partial), expr a sm])
-                            (P.Assoc Mul [P.Sym (Special Partial), P.Sym $ eqSymb $ symbLookup b $ sm^.symbolTable])
-expr (Deriv Total a b) sm = P.BOp Frac (P.Assoc Mul [P.Sym lD, expr a sm])
-                            (P.Assoc Mul [P.Sym lD, P.Sym $ eqSymb $ symbLookup b $ sm^.symbolTable])
+expr (Deriv Part a b)  sm = P.BOp Frac (P.Assoc P.Mul [P.Sym (Special Partial), expr a sm])
+                            (P.Assoc P.Mul [P.Sym (Special Partial), P.Sym $ eqSymb $ symbLookup b $ sm^.symbolTable])
+expr (Deriv Total a b) sm = P.BOp Frac (P.Assoc P.Mul [P.Sym lD, expr a sm])
+                            (P.Assoc P.Mul [P.Sym lD, P.Sym $ eqSymb $ symbLookup b $ sm^.symbolTable])
 expr (FCall f x)       sm = P.Call (expr f sm) (map (flip expr sm) x)
 expr (Case ps)         sm = if length ps < 2 then
         error "Attempting to use multi-case expr incorrectly"
@@ -68,11 +75,11 @@ eop (Integral (IntegerDD _ _) _) _ =
   error "TeX/Import.hs Integral cannot be over Integers"
 
 int_wrt :: Symbol -> P.Expr
-int_wrt wrtc = P.Assoc Mul [P.Sym lD, P.Sym wrtc]
+int_wrt wrtc = P.Assoc P.Mul [P.Sym lD, P.Sym wrtc]
 
 replace_divs :: HasSymbolTable ctx => ctx -> Expr -> P.Expr
 replace_divs sm (BinaryOp Div a b) = P.BOp Div (replace_divs sm a) (replace_divs sm b)
-replace_divs sm (Assoc op l) = P.Assoc op $ map (replace_divs sm) l
+replace_divs sm (Assoc op l) = P.Assoc (oper op) $ map (replace_divs sm) l
 replace_divs sm (BinaryOp Pow a b) = P.BOp Pow (replace_divs sm a) (replace_divs sm b)
 replace_divs sm (BinaryOp Subt a b) = P.BOp Subt (replace_divs sm a) (replace_divs sm b)
 replace_divs sm a            = expr a sm

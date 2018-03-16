@@ -1,12 +1,14 @@
 module Language.Drasil.Printing.AST where
 
-import Language.Drasil.Expr (Oper(..),UFunc,BinOp(..))
+import Language.Drasil.Expr (UFunc,BinOp(..))
 import Language.Drasil.Symbol (Symbol)
 import Language.Drasil.Space (Space)
 import Language.Drasil.Spec (USymb, RefType, RefAdd)
 import Language.Drasil.Unicode (Greek, Special)
 import Language.Drasil.People (People)
 import Language.Drasil.Chunk.Citation (Month, EntryID, CitationKind)
+
+data Oper = Add | Mul | And | Or
 
 data Expr = Dbl   Double
           | Int   Integer

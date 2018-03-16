@@ -34,16 +34,23 @@ import Language.Drasil.Unit (usymb)
 import Control.Lens ((^.))
 import Data.Maybe (fromJust)
 
+-- | translating operations
+oper :: Oper -> P.Oper
+oper And = P.And
+oper Or = P.Or
+oper Add = P.Add
+oper Mul = P.Mul
+
 -- | expr translation function from Drasil to HTML 'AST'
 expr :: HasSymbolTable s => Expr -> s -> P.Expr
 expr (Dbl d)          _ = P.Dbl   d
 expr (Int i)          _ = P.Int   i
 expr (Str s)          _ = P.Str   s
-expr (Assoc op l)     sm = P.Assoc op $ map (\x -> expr x sm) l
-expr (Deriv Part a b) sm = P.BOp Frac (P.Assoc Mul [P.Sym (Special Partial), expr a sm])
-                          (P.Assoc Mul [P.Sym (Special Partial), P.Sym $ eqSymb $ symbLookup b $ sm^.symbolTable])
-expr (Deriv Total a b)sm = P.BOp Frac (P.Assoc Mul [P.Sym lD, expr a sm])
-                          (P.Assoc Mul [P.Sym lD, P.Sym $ eqSymb $ symbLookup b $ sm^.symbolTable])
+expr (Assoc op l)     sm = P.Assoc (oper op) $ map (\x -> expr x sm) l
+expr (Deriv Part a b) sm = P.BOp Frac (P.Assoc P.Mul [P.Sym (Special Partial), expr a sm])
+                          (P.Assoc P.Mul [P.Sym (Special Partial), P.Sym $ eqSymb $ symbLookup b $ sm^.symbolTable])
+expr (Deriv Total a b)sm = P.BOp Frac (P.Assoc P.Mul [P.Sym lD, expr a sm])
+                          (P.Assoc P.Mul [P.Sym lD, P.Sym $ eqSymb $ symbLookup b $ sm^.symbolTable])
 expr (C c)            sm = P.Sym $ eqSymb $ symbLookup c $ sm^.symbolTable
 expr (FCall f x)      sm = P.Call (expr f sm) (map (flip expr sm) x)
 expr (Case ps)        sm = if length ps < 2 then
@@ -76,12 +83,12 @@ eop (Integral (IntegerDD _ _) _) _ =
 
 -- | Helper function for translating the differential
 int_wrt :: Symbol -> P.Expr
-int_wrt wrtc = P.Assoc Mul [P.Sym lD, P.Sym wrtc]
+int_wrt wrtc = P.Assoc P.Mul [P.Sym lD, P.Sym wrtc]
 
 -- | Helper function for translating operations in expressions
 replace_divs :: HasSymbolTable s => Expr -> s -> P.Expr
 replace_divs (BinaryOp Div a b)  sm = P.BOp Div (replace_divs a sm) (replace_divs b sm)
-replace_divs (Assoc op l)        sm = P.Assoc op $ map (\x -> replace_divs x sm) l
+replace_divs (Assoc op l)        sm = P.Assoc (oper op) $ map (\x -> replace_divs x sm) l
 replace_divs (BinaryOp Pow  a b) sm = P.BOp Pow (replace_divs a sm) (replace_divs b sm)
 replace_divs (BinaryOp Subt a b) sm = P.BOp Subt (replace_divs a sm) (replace_divs b sm)
 replace_divs a                   sm = expr a sm

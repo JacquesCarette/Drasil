@@ -54,8 +54,6 @@ infixr 5 :+:
 data Spec = E Expr
           | S String
           | Spec :+: Spec -- concat
-          | Spec :^: Spec -- superscript
-          | Spec :-: Spec -- subscript
           | Spec :/: Spec -- frac
           | Sy USymb
           | N Symbol

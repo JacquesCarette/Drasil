@@ -149,9 +149,15 @@ mkIMField i m l@(Description v u) fs = (show l,
   foldr (\x -> buildDescription v u x m) [] [i ^. relat]) : fs
 mkIMField _ _ l@(RefBy) fs = (show l, fixme) : fs --FIXME: fill this in
 mkIMField i _ l@(Source) fs = (show l, [Paragraph $ getSource i]) : fs --FIXME: fill this in
-mkIMField i _ l@(Output) fs = (show l, [Paragraph $ foldl (sC) x xs]) : fs
+mkIMField i _ l@(Output) fs = 
+  case (i ^. imOutputs) of
+  [] -> (show l, [Paragraph EmptyS]) : fs -- FIXME? Should an empty output list be allowed?
+  (_:_) -> (show l, [Paragraph $ foldl (sC) x xs]) : fs
   where (x:xs) = map (P . symbol Equational) (i ^. imOutputs)
-mkIMField i _ l@(Input) fs = (show l, [Paragraph $ foldl (sC) x xs]) : fs
+mkIMField i _ l@(Input) fs = 
+  case (i ^. imInputs) of
+  [] -> (show l, [Paragraph EmptyS]) : fs -- FIXME? Should an empty input list be allowed?
+  (_:_) -> (show l, [Paragraph $ foldl (sC) x xs]) : fs
   where (x:xs) = map (P . symbol Equational) (i ^. imInputs)
 mkIMField i _ l@(InConstraints) fs  = (show l,
   foldr ((:) . eqUnR) [] (map tConToExpr (i ^. inCons))) : fs

@@ -21,7 +21,7 @@ import Language.Drasil.TeX.Preamble
 import Language.Drasil.Symbol (Symbol(..),Decoration(..))
 import qualified Language.Drasil.Document as L
 import Language.Drasil.Unicode (RenderGreek(..), RenderSpecial(..))
-import Language.Drasil.People (People,rendPersLFM,lstName,Person(..),Conv(Mono))
+import Language.Drasil.People (People,rendPersLFM,lstName)
 import Language.Drasil.ChunkDB (HasSymbolTable)
 import Language.Drasil.Space (Space(..))
 import Language.Drasil.Chunk.Citation (CitationKind(..), Month(..))
@@ -280,7 +280,6 @@ specLength (S x)     = length x
 specLength (E x)     = length $ filter (\c -> c `notElem` dontCount) $ p_expr x
 specLength (Sy _)    = 1
 specLength (a :+: b) = specLength a + specLength b
-specLength (a :/: b) = specLength a + specLength b
 specLength (G _)     = 1
 specLength (EmptyS)  = 0
 specLength _         = 0
@@ -301,7 +300,6 @@ needs :: Spec -> MathContext
 needs (a :+: b) = needs a `lub` needs b
 needs (S _)     = Text
 needs (E _)     = Math
-needs (_ :/: _) = Math -- Fractions are always equations.
 needs (Sy _)    = Text
 needs (N _)     = Math
 needs (G _)     = Math
@@ -318,7 +316,6 @@ spec a@(s :+: t) = s' <> t'
     s' = switch ctx $ spec s
     t' = switch ctx $ spec t
 spec (E ex)      = toMath $ pure $ text $ p_expr ex
-spec (a :/: s)   = toMath $ fraction (spec a) (spec s)
 spec (S s)       = pure $ text (concatMap escapeChars s)
 spec (N s)       = toMath $ pure $ text $ symbol s
 spec (Sy s)      = p_unit s

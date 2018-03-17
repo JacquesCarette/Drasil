@@ -245,9 +245,9 @@ minus e = "&minus;" ++ p_expr e
 
 -- | Helper for properly rendering exponents
 pow :: Expr -> Expr -> String
-pow a@(Assoc Add _)  b = sqbrac (p_expr a) ++ sup (p_expr b)
-pow a@(BOp Subt _ _) b = sqbrac (p_expr a) ++ sup (p_expr b)
-pow a@(BOp Frac _ _) b = sqbrac (p_expr a) ++ sup (p_expr b)
+pow a@(Assoc Add _)  b = paren (p_expr a) ++ sup (p_expr b)
+pow a@(BOp Subt _ _) b = paren (p_expr a) ++ sup (p_expr b)
+pow a@(BOp Frac _ _) b = paren (p_expr a) ++ sup (p_expr b)
 pow a@(BOp Div _ _)  b = paren (p_expr a) ++ sup (p_expr b)
 pow a@(Assoc Mul _)  b = paren (p_expr a) ++ sup (p_expr b)
 pow a@(BOp Pow _ _)  b = paren (p_expr a) ++ sup (p_expr b)

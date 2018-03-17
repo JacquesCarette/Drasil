@@ -238,9 +238,9 @@ neg x@(Sym _) = "-" ++ p_expr x
 neg x         = paren ("-" ++ p_expr x)
 
 pow :: Expr -> Expr -> String
-pow x@(Assoc Add _) y = sqbrac (p_expr x) ++ "^" ++ brace (p_expr y)
-pow x@(BOp Subt _ _) y = sqbrac (p_expr x) ++ "^" ++ brace (p_expr y)
-pow x@(BOp Frac _ _) y = sqbrac (p_expr x) ++ "^" ++ brace (p_expr y)
+pow x@(Assoc Add _) y = paren (p_expr x) ++ "^" ++ brace (p_expr y)
+pow x@(BOp Subt _ _) y = paren (p_expr x) ++ "^" ++ brace (p_expr y)
+pow x@(BOp Frac _ _) y = paren (p_expr x) ++ "^" ++ brace (p_expr y)
 pow x@(BOp Div _ _) y = paren (p_expr x) ++ "^" ++ brace (p_expr y)
 pow x@(Assoc Mul _) y = paren (p_expr x) ++ "^" ++ brace (p_expr y)
 pow x@(BOp Pow _ _) y = paren (p_expr x) ++ "^" ++ brace (p_expr y)

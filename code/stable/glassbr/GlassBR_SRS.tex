@@ -337,7 +337,7 @@ This section simplifies the original problem and helps in developing the theoret
 \item[\refstepcounter{assumpnum}\atheassumpnum\label{A:responseTyA}:]The response type considered in GlassBR is flexural.
 \end{description}
 \begin{description}
-\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:ldfConstantA}:]With reference to A\ref{A:standardValuesA} the value of load duration factor ($LDF$) is a constant in GlassBR. It is calculated by the equation: $LDF=\left[\frac{{t_{d}}}{60}\right]^{\frac{m}{16}}$. Using this, $LDF=0.27$.
+\item[\refstepcounter{assumpnum}\atheassumpnum\label{A:ldfConstantA}:]With reference to A\ref{A:standardValuesA} the value of load duration factor ($LDF$) is a constant in GlassBR. It is calculated by the equation: $LDF=\left(\frac{{t_{d}}}{60}\right)^{\frac{m}{16}}$. Using this, $LDF=0.27$.
 \end{description}
 \subsubsection{Theoretical Models}
 \label{Sec:TMs}
@@ -432,7 +432,7 @@ Label & Stress Distribution Factor (Function)
 \\ \midrule \\
 Units & Unitless
 \\ \midrule \\
-Equation & $J$ = $J\left(\hat{q},\frac{a}{b}\right)$
+Equation & $J$ = $J\left(\hat{q}, \frac{a}{b}\right)$
 \\ \midrule \\
 Description & $J$ is the stress distribution factor (Function)\newline$\hat{q}$ is the dimensionless load\newline$a$ is the plate length (long dimension) (m)\newline$b$ is the plate width (short dimension) (m)
 \\ \bottomrule \end{tabular}
@@ -500,7 +500,7 @@ Label & Tolerable Load
 \\ \midrule \\
 Units & Unitless
 \\ \midrule \\
-Equation & ${\hat{q}_{tol}}$ = ${\hat{q}_{tol}}\left({J_{tol}},\frac{a}{b}\right)$
+Equation & ${\hat{q}_{tol}}$ = ${\hat{q}_{tol}}\left({J_{tol}}, \frac{a}{b}\right)$
 \\ \midrule \\
 Description & ${\hat{q}_{tol}}$ is the tolerable load\newline${J_{tol}}$ is the stress distribution factor (Function) based on Pbtol\newline$a$ is the plate length (long dimension) (m)\newline$b$ is the plate width (short dimension) (m)
 \\ \bottomrule \end{tabular}
@@ -561,7 +561,7 @@ Description & $LR$ is the load resistance, which is also called capacity. $NFL$ 
 \\ \midrule \\
 Label & Calculation of Demand(q)
 \\ \midrule \\
-Equation & $q=q\left({w_{TNT}},SD\right)$
+Equation & $q=q\left({w_{TNT}}, SD\right)$
 \\ \midrule \\
 Description & $q$ or demand, is the 3 second duration equivalent pressure obtained from Figure 2 by interpolation using stand off distance ($SD$) and ${w_{TNT}}$ as parameters. ${w_{TNT}}$ is defined as $w TNT$. $w$ is the charge weight. $TNT$ is the TNT equivalent factor. $SD$ is the stand off distance where $\sqrt{{SD_{x}}^{2}+{SD_{y}}^{2}+{SD_{z}}^{2}}$ where (${SD_{x}}$, ${SD_{y}}$, ${SD_{z}}$) are coordinates.
 \\ \bottomrule \end{tabular}
@@ -841,7 +841,7 @@ $E$ & modulus of elasticity of glass & $7.17 10^{7}$ & Pa
 \\
 ${t_{d}}$ & duration of load & $3$ & s
 \\
-$LDF$ & load duration factor & $\left[\frac{{t_{d}}}{60}\right]^{\frac{m}{16}}$ & Unitless
+$LDF$ & load duration factor & $\left(\frac{{t_{d}}}{60}\right)^{\frac{m}{16}}$ & Unitless
 \\
 $LSF$ & load share factor & $1$ & Unitless
 \\

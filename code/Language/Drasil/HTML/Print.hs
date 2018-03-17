@@ -20,9 +20,10 @@ import Language.Drasil.HTML.Monad
 import Language.Drasil.People (People,Person(..),rendPersLFM',rendPersLFM'',Conv(..),nameStr,rendPersLFM, isInitial)
 import Language.Drasil.Config (StyleGuide(..), bibStyleH)
 import Language.Drasil.ChunkDB (HasSymbolTable(..))
-import Language.Drasil.Space (Space(..))
 
 import Language.Drasil.Chunk.Citation (CitationKind(..))
+
+data OpenClose = Open | Close
 
 --FIXME? Use Doc in place of Strings for p_spec/title_spec
 
@@ -153,10 +154,8 @@ p_expr (Case ps)  = cases ps (p_expr)
 p_expr (UOp f es)  = p_uop f es
 p_expr (Mtx a)    = "<table class=\"matrix\">\n" ++ p_matrix a ++ "</table>"
 p_expr (BOp Index a i)= p_indx a i
---Logic
 p_expr (BOp Impl a b) = p_expr a ++ " &rArr; " ++ p_expr b
 p_expr (BOp Iff a b)  = p_expr a ++ " &hArr; " ++ p_expr b
-p_expr (IsIn  a b) = p_expr a ++ "&thinsp;&isin;&thinsp;"  ++ p_space b
 p_expr (Row l) = concatMap p_expr l
 p_expr (Ident s) = s
 p_expr (Spec s) = unPH $ special s
@@ -166,11 +165,29 @@ p_expr (Sup e) = sup $ p_expr e
 p_expr (Over Vector s)  = "<b>" ++ p_expr s ++ "</b>"
 p_expr (Over Hat s)     = p_expr s ++ "&#770;"
 p_expr (Over Prime s)   = p_expr s ++ "&prime;"
+p_expr (MO o) = p_ops o
+p_expr (Fenced l r e) = fence Open l ++ p_expr e ++ fence Close r
+
+p_ops :: Ops -> String
+p_ops IsIn = "&thinsp;&isin;&thinsp;"
+p_ops Integer  = "&#8484;"
+p_ops Rational = "&#8474;"
+p_ops Real     = "&#8477;"
+p_ops Natural  = "&#8469;"
+p_ops Boolean  = "&#120121;"
+p_ops Comma    = ", "
+
+fence :: OpenClose -> Fence -> String
+fence Open Paren = "("
+fence Close Paren = ")"
+fence Open Curly = "{"
+fence Close Curly = "}"
 
 -- | For printing indexes
 p_indx :: Expr -> Expr -> String
 p_indx a@(Sym (Corners [] [] [] [_] _)) i = p_expr a ++ sub (","++ p_sub i)
 p_indx a i = p_expr a ++ sub (p_sub i)
+
 -- Ensures only simple Expr's get rendered as an index
 p_sub :: Expr -> String
 p_sub e@(Dbl _)        = p_expr e
@@ -236,20 +253,6 @@ pow a@(BOp Div _ _)  b = paren (p_expr a) ++ sup (p_expr b)
 pow a@(Assoc Mul _)  b = paren (p_expr a) ++ sup (p_expr b)
 pow a@(BOp Pow _ _)  b = paren (p_expr a) ++ sup (p_expr b)
 pow a                b = p_expr a ++ sup (p_expr b)
-
-p_space :: Space -> String
-p_space Integer  = "&#8484;"
-p_space Rational = "&#8474;"
-p_space Real     = "&#8477;"
-p_space Natural  = "&#8469;"
-p_space Boolean  = "&#120121;"
-p_space Char     = "Char"
-p_space String   = "String"
-p_space Radians  = "rad"
-p_space (Vect a) = "V" ++ p_space a
-p_space (DiscreteI a)  = "{" ++ (concat $ intersperse ", " (map show a)) ++ "}"
-p_space (DiscreteD a)  = "{" ++ (concat $ intersperse ", " (map show a)) ++ "}"
-p_space (DiscreteS a)  = "{" ++ (concat $ intersperse ", " a) ++ "}"
 
 -----------------------------------------------------------------
 ------------------BEGIN TABLE PRINTING---------------------------

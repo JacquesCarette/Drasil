@@ -4,6 +4,7 @@ import Prelude hiding (id)
 import Language.Drasil.Expr (Expr(..), Oper(..), BinOp(..), sy, UFunc(..),
     DerivType(..), EOperator(..), ($=), DomainDesc(..), RealRange(..))
 import Language.Drasil.Spec
+import Language.Drasil.Space (Space(..))
 import qualified Language.Drasil.Printing.AST as P
 import qualified Language.Drasil.HTML.AST as H
 
@@ -33,6 +34,7 @@ import Language.Drasil.Unit (usymb)
 
 import Control.Lens ((^.))
 import Data.Maybe (fromJust)
+import Data.List (intersperse)
 
 -- | translating operations
 oper :: Oper -> P.Oper
@@ -95,7 +97,32 @@ expr (UnaryOp o u)      sm = P.UOp (ufunc o) (expr u sm)
 expr (BinaryOp Div a b) sm = P.BOp P.Frac (replace_divs a sm) (replace_divs b sm)
 expr (BinaryOp o a b)   sm = P.BOp (binop o) (expr a sm) (expr b sm)
 expr (EOp o)            sm = eop o sm
-expr (IsIn  a b)        sm = P.IsIn  (expr a sm) b
+expr (IsIn  a b)        sm = P.Row  [expr a sm, P.MO P.IsIn, space b]
+
+space :: Space -> P.Expr
+space Integer = P.MO P.Integer
+space Rational = P.MO P.Rational
+space Real = P.MO P.Real
+space Natural = P.MO P.Natural
+space Boolean = P.MO P.Boolean
+space Char = P.Ident "Char"
+space String = P.Ident "String"
+space Radians = error "Radians not translated"
+space (Vect s) = error "Vector space not translated"
+space (DiscreteI _) = error "DiscreteI" --ex. let A = {1, 2, 4, 7}
+space (DiscreteD _) = error "DiscreteD" -- [Double]
+space (DiscreteS l) = P.Fenced P.Curly P.Curly $ P.Row $ intersperse (P.MO P.Comma) $ map P.Ident l --ex. let Meal = {"breakfast", "lunch", "dinner"}
+
+{-
+p_space :: Space -> String
+p_space Char     = "Char"
+p_space String   = "String"
+p_space Radians  = "rad"
+p_space (Vect a) = "V" ++ p_space a
+p_space (DiscreteI a)  = "{" ++ (concat $ intersperse ", " (map show a)) ++ "}"
+p_space (DiscreteD a)  = "{" ++ (concat $ intersperse ", " (map show a)) ++ "}"
+p_space (DiscreteS a)  = "{" ++ (concat $ intersperse ", " a) ++ "}"
+-}
 
 -- | Helper function for translating 'EOperator's
 eop :: HasSymbolTable s => EOperator -> s -> P.Expr

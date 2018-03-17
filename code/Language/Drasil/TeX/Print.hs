@@ -22,7 +22,6 @@ import qualified Language.Drasil.Document as L
 import Language.Drasil.Unicode (RenderGreek(..), RenderSpecial(..))
 import Language.Drasil.People (People,rendPersLFM)
 import Language.Drasil.ChunkDB (HasSymbolTable)
-import Language.Drasil.Space (Space(..))
 import Language.Drasil.Chunk.Citation (CitationKind(..), Month(..))
 
 genTeX :: HasSymbolTable ctx => L.Document -> ctx -> TP.Doc
@@ -80,6 +79,8 @@ sFormat Hat    s = "\\hat{" ++ symbol s ++ "}"
 sFormat Vector s = "\\mathbf{" ++ symbol s ++ "}"
 sFormat Prime  s = symbol s ++ "'"
 
+data OpenClose = Open | Close
+
 -----------------------------------------------------------------
 ------------------ EXPRESSION PRINTING----------------------
 -----------------------------------------------------------------
@@ -104,7 +105,6 @@ p_expr (Call f x) = p_expr f ++ paren (concat $ intersperse "," $ map p_expr x)
 p_expr (Case ps)  = "\\begin{cases}\n" ++ cases ps ++ "\n\\end{cases}"
 p_expr (UOp f es)  = p_uop f es
 p_expr (Mtx a)    = "\\begin{bmatrix}\n" ++ p_matrix a ++ "\n\\end{bmatrix}"
-p_expr (IsIn  a b) = p_expr a ++ "\\in{}" ++ p_space b
 p_expr (Row l) = concatMap p_expr l
 p_expr (Ident s) = s
 p_expr (Spec s) = unPL $ special s
@@ -114,6 +114,8 @@ p_expr (Sup e) = "_" ++ brace (p_expr e)
 p_expr (Over Hat s)     = "\\hat{" ++ p_expr s ++ "}"
 p_expr (Over Vector s)  = "\\mathbf{" ++ p_expr s ++ "}"
 p_expr (Over Prime s)   = p_expr s ++ "'"
+p_expr (MO o) = p_ops o
+p_expr (Fenced l r m)    = fence Open l ++ p_expr m ++ fence Close r
 
 p_bop :: BinOp -> String
 p_bop Subt = "-"
@@ -131,6 +133,37 @@ p_bop Pow = "^"
 p_bop Dot = "\\cdot{}"
 p_bop Index = error "no printing of Index"
 p_bop Cross = "\\times"
+
+p_ops :: Ops -> String
+p_ops IsIn = "\\in{}"
+p_ops Integer  = "\\mathbb{Z}"
+p_ops Rational = "\\mathbb{Q}"
+p_ops Real     = "\\mathbb{R}"
+p_ops Natural  = "\\mathbb{N}"
+p_ops Boolean  = "\\mathbb{B}"
+p_ops Comma    = ", "
+
+{-
+p_space :: Space -> String
+p_space Integer  = "\\mathbb{Z}"
+p_space Rational = "\\mathbb{Q}"
+p_space Real     = "\\mathbb{R}"
+p_space Natural  = "\\mathbb{N}"
+p_space Boolean  = "\\mathbb{B}"
+p_space Char     = "Char"
+p_space String   = "String"
+p_space Radians  = "rad"
+p_space (Vect a) = "V" ++ p_space a
+p_space (DiscreteI a)  = "\\{" ++ (concat $ intersperse ", " (map show a)) ++ "\\}"
+p_space (DiscreteD a)  = "\\{" ++ (concat $ intersperse ", " (map show a)) ++ "\\}"
+p_space (DiscreteS a)  = "\\{" ++ (concat $ intersperse ", " a) ++ "\\}"
+-}
+
+fence :: OpenClose -> Fence -> String
+fence Open Paren = "("
+fence Close Paren = ")"
+fence Open Curly = "\\{"
+fence Close Curly = "\\}"
 
 -- | For seeing if long numerators or denominators need to be on multiple lines
 needMultlined :: Expr -> String
@@ -219,19 +252,6 @@ cases []     = error "Attempt to create case expression without cases"
 cases (p:[]) = (needMultlined $ fst p) ++ ", & " ++ p_expr (snd p)
 cases (p:ps) = cases [p] ++ "\\\\\n" ++ cases ps
 
-p_space :: Space -> String
-p_space Integer  = "\\mathbb{Z}"
-p_space Rational = "\\mathbb{Q}"
-p_space Real     = "\\mathbb{R}"
-p_space Natural  = "\\mathbb{N}"
-p_space Boolean  = "\\mathbb{B}"
-p_space Char     = "Char"
-p_space String   = "String"
-p_space Radians  = "rad"
-p_space (Vect a) = "V" ++ p_space a
-p_space (DiscreteI a)  = "\\{" ++ (concat $ intersperse ", " (map show a)) ++ "\\}"
-p_space (DiscreteD a)  = "\\{" ++ (concat $ intersperse ", " (map show a)) ++ "\\}"
-p_space (DiscreteS a)  = "\\{" ++ (concat $ intersperse ", " a) ++ "\\}"
 
 oper :: Functional -> String
 oper (Summation _)  = "\\displaystyle\\sum"

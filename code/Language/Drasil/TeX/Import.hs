@@ -1,7 +1,8 @@
 module Language.Drasil.TeX.Import where
 
 import Control.Lens ((^.))
-import Prelude hiding (id)
+import Data.List (intersperse)
+
 import Language.Drasil.Expr (Expr(..), Oper(..), BinOp(..), sy, UFunc(..),
     DerivType(..), EOperator(..), ($=), RealRange(..), DomainDesc(..))
 import Language.Drasil.Chunk.AssumpChunk
@@ -9,6 +10,7 @@ import Language.Drasil.Expr.Extract
 import Language.Drasil.Chunk.Change (chng, chngType, ChngType(..))
 import Language.Drasil.Chunk.Concept (defn)
 import Language.Drasil.Spec
+import Language.Drasil.Space (Space(..))
 import qualified Language.Drasil.TeX.AST as T
 import qualified Language.Drasil.Printing.AST as P
 import Language.Drasil.Unicode (Special(Partial))
@@ -70,6 +72,20 @@ binop Index = P.Index
 binop Dot = P.Dot
 binop Cross = P.Cross
 
+space :: Space -> P.Expr
+space Integer = P.MO P.Integer
+space Rational = P.MO P.Rational
+space Real = P.MO P.Real
+space Natural = P.MO P.Natural
+space Boolean = P.MO P.Boolean
+space Char = P.Ident "Char"
+space String = P.Ident "String"
+space Radians = error "Radians not translated"
+space (Vect _) = error "Vector space not translated"
+space (DiscreteI _) = error "DiscreteI" --ex. let A = {1, 2, 4, 7}
+space (DiscreteD _) = error "DiscreteD" -- [Double]
+space (DiscreteS l) = P.Fenced P.Curly P.Curly $ P.Row $ intersperse (P.MO P.Comma) $ map P.Ident l
+
 expr :: HasSymbolTable ctx => Expr -> ctx -> P.Expr
 expr (Dbl d)            _ = P.Dbl  d
 expr (Int i)            _ = P.Int  i
@@ -89,7 +105,7 @@ expr (UnaryOp o u)     sm = P.UOp (ufunc o) $ expr u sm
 expr (EOp o)           sm = eop o sm
 expr (BinaryOp Div a b) sm = P.BOp P.Frac (replace_divs sm a) (replace_divs sm b)
 expr (BinaryOp o a b)  sm = P.BOp (binop o) (expr a sm) (expr b sm)
-expr (IsIn  a b)       sm = P.IsIn  (expr a sm) b
+expr (IsIn  a b)       sm = P.Row [expr a sm, P.MO P.IsIn, space b]
 
 eop :: HasSymbolTable ctx => EOperator -> ctx -> P.Expr
 eop (Summation (IntegerDD v (BoundedR l h)) e) sm =

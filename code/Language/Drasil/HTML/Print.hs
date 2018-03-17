@@ -216,7 +216,7 @@ mul = concat . intersperse "&#8239;" . map (add_paren (prec Mul))
 
 -- | Helper for properly rendering parentheses around the multiplier
 add_paren :: Int -> Expr -> String
-add_paren p a@(Assoc o _)    = if prec o > p then paren $ p_expr a else p_expr a
+add_paren p a@(Assoc o _)    = if prec o < p then paren $ p_expr a else p_expr a
 add_paren _ a@(BOp Div _ _)  = paren $ p_expr a
 add_paren _ a@(BOp Subt _ _) = paren $ p_expr a
 add_paren _ a                = p_expr a

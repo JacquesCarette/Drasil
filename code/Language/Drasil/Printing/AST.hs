@@ -24,7 +24,6 @@ data Expr = Dbl   Double
           | Assoc Oper [Expr]
           | BOp   BinOp Expr Expr
           | Sym   Symbol
-          | Call  Expr [Expr]
           | Case  [(Expr,Expr)]
           | UOp   UFunc Expr
           | Funct Functional Expr

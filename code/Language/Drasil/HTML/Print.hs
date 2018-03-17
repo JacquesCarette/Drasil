@@ -149,7 +149,6 @@ p_expr (BOp Dot a b)  = p_expr a ++ "&sdot;" ++ p_expr b
 p_expr (BOp Cross a b) = p_expr a ++ "&#10799;" ++ p_expr b
 p_expr (UOp Neg a)    = neg a
 p_expr (Funct f e)    = p_op f e
-p_expr (Call f x) = p_expr f ++ paren (concat $ intersperse "," $ map p_expr x)
 p_expr (Case ps)  = cases ps (p_expr)
 p_expr (UOp f es)  = p_uop f es
 p_expr (Mtx a)    = "<table class=\"matrix\">\n" ++ p_matrix a ++ "</table>"

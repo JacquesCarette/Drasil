@@ -101,7 +101,6 @@ p_expr (BOp Index a i) = p_indx a i
 p_expr (BOp o x y)    = p_expr x ++ p_bop o ++ p_expr y
 p_expr (UOp Neg x)   = neg x
 p_expr (Funct o e)   = p_op o e
-p_expr (Call f x) = p_expr f ++ paren (concat $ intersperse "," $ map p_expr x)
 p_expr (Case ps)  = "\\begin{cases}\n" ++ cases ps ++ "\n\\end{cases}"
 p_expr (UOp f es)  = p_uop f es
 p_expr (Mtx a)    = "\\begin{bmatrix}\n" ++ p_matrix a ++ "\n\\end{bmatrix}"
@@ -160,8 +159,8 @@ p_space (DiscreteS a)  = "\\{" ++ (concat $ intersperse ", " a) ++ "\\}"
 -}
 
 fence :: OpenClose -> Fence -> String
-fence Open Paren = "("
-fence Close Paren = ")"
+fence Open Paren = "\\left("
+fence Close Paren = "\\right)"
 fence Open Curly = "\\{"
 fence Close Curly = "\\}"
 

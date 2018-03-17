@@ -96,7 +96,8 @@ expr (Deriv Part a b)  sm = P.BOp P.Frac (P.Assoc P.Mul [P.Sym (Special Partial)
                             (P.Assoc P.Mul [P.Sym (Special Partial), P.Sym $ eqSymb $ symbLookup b $ sm^.symbolTable])
 expr (Deriv Total a b) sm = P.BOp P.Frac (P.Assoc P.Mul [P.Sym lD, expr a sm])
                             (P.Assoc P.Mul [P.Sym lD, P.Sym $ eqSymb $ symbLookup b $ sm^.symbolTable])
-expr (FCall f x)       sm = P.Call (expr f sm) (map (flip expr sm) x)
+expr (FCall f x)       sm = P.Row [expr f sm, 
+  P.Fenced P.Paren P.Paren $ P.Row $ intersperse (P.MO P.Comma) $ map (flip expr sm) x]
 expr (Case ps)         sm = if length ps < 2 then
         error "Attempting to use multi-case expr incorrectly"
         else P.Case (zip (map (flip expr sm . fst) ps) (map (flip expr sm . snd) ps))

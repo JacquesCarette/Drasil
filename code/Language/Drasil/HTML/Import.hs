@@ -1,10 +1,9 @@
 module Language.Drasil.HTML.Import where
 
 import Prelude hiding (id)
-import Language.Drasil.Expr (Expr(..), Oper(..), BinOp(..), sy, UFunc(..),
+import Language.Drasil.Expr (Expr(..), BinOp(..), sy,
     DerivType(..), EOperator(..), ($=), DomainDesc(..), RealRange(..))
 import Language.Drasil.Spec
-import Language.Drasil.Space (Space(..))
 import qualified Language.Drasil.Printing.AST as P
 import qualified Language.Drasil.HTML.AST as H
 
@@ -31,51 +30,11 @@ import Language.Drasil.Symbol
 import Language.Drasil.SymbolAlphabet (lD)
 import Language.Drasil.Unicode (Special(Partial))
 import Language.Drasil.Unit (usymb)
+import Language.Drasil.Printing.Import (oper,ufunc,binop,space)
 
 import Control.Lens ((^.))
 import Data.Maybe (fromJust)
 import Data.List (intersperse)
-
--- | translating operations
-oper :: Oper -> P.Oper
-oper And = P.And
-oper Or = P.Or
-oper Add = P.Add
-oper Mul = P.Mul
-
-ufunc :: UFunc -> P.UFunc
-ufunc Norm = P.Norm
-ufunc Abs = P.Abs
-ufunc Log = P.Log
-ufunc Sin = P.Sin
-ufunc Cos = P.Cos
-ufunc Tan = P.Tan
-ufunc Sec = P.Sec
-ufunc Csc = P.Csc
-ufunc Cot = P.Cot
-ufunc Exp = P.Exp
-ufunc Sqrt = P.Sqrt
-ufunc Not = P.Not
-ufunc Neg = P.Neg
-ufunc Dim = P.Dim
-
-binop :: BinOp -> P.BinOp
-binop Frac = P.Frac
-binop Div = P.Div
-binop Pow = P.Pow
-binop Subt = P.Subt
-binop Eq = P.Eq
-binop NEq = P.NEq
-binop Lt = P.Lt
-binop Gt = P.Gt
-binop LEq = P.LEq
-binop GEq = P.GEq
-binop Impl = P.Impl
-binop Iff = P.Iff
-binop Index = P.Index
-binop Dot = P.Dot
-binop Cross = P.Cross
-
 
 -- | expr translation function from Drasil to HTML 'AST'
 expr :: HasSymbolTable s => Expr -> s -> P.Expr
@@ -100,31 +59,6 @@ expr (BinaryOp o a b)   sm = P.BOp (binop o) (expr a sm) (expr b sm)
 expr (EOp o)            sm = eop o sm
 expr (IsIn  a b)        sm = P.Row  [expr a sm, P.MO P.IsIn, space b]
 
-space :: Space -> P.Expr
-space Integer = P.MO P.Integer
-space Rational = P.MO P.Rational
-space Real = P.MO P.Real
-space Natural = P.MO P.Natural
-space Boolean = P.MO P.Boolean
-space Char = P.Ident "Char"
-space String = P.Ident "String"
-space Radians = error "Radians not translated"
-space (Vect s) = error "Vector space not translated"
-space (DiscreteI _) = error "DiscreteI" --ex. let A = {1, 2, 4, 7}
-space (DiscreteD _) = error "DiscreteD" -- [Double]
-space (DiscreteS l) = P.Fenced P.Curly P.Curly $ P.Row $ intersperse (P.MO P.Comma) $ map P.Ident l --ex. let Meal = {"breakfast", "lunch", "dinner"}
-
-{-
-p_space :: Space -> String
-p_space Char     = "Char"
-p_space String   = "String"
-p_space Radians  = "rad"
-p_space (Vect a) = "V" ++ p_space a
-p_space (DiscreteI a)  = "{" ++ (concat $ intersperse ", " (map show a)) ++ "}"
-p_space (DiscreteD a)  = "{" ++ (concat $ intersperse ", " (map show a)) ++ "}"
-p_space (DiscreteS a)  = "{" ++ (concat $ intersperse ", " a) ++ "}"
--}
-
 -- | Helper function for translating 'EOperator's
 eop :: HasSymbolTable s => EOperator -> s -> P.Expr
 eop (Summation (IntegerDD v (BoundedR l h)) e) sm =
@@ -141,7 +75,6 @@ eop (Integral (All v) e) sm =
   P.Funct (P.Integral (Just (P.Sym v), Nothing) v) (expr e sm)
 eop (Integral (IntegerDD _ _) _) _ =
   error "HTML/Import.hs Integral cannot be over Integers"
-
 
 -- | Helper function for translating the differential
 int_wrt :: Symbol -> P.Expr

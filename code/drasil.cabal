@@ -119,6 +119,7 @@ library
     , Language.Drasil.Output.Formats
     , Language.Drasil.Printing.Helpers
     , Language.Drasil.Printing.AST
+    , Language.Drasil.Printing.Import
     , Language.Drasil.DataDesc
 
   Build-Depends:

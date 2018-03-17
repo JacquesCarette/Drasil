@@ -3,14 +3,13 @@ module Language.Drasil.TeX.Import where
 import Control.Lens ((^.))
 import Data.List (intersperse)
 
-import Language.Drasil.Expr (Expr(..), Oper(..), BinOp(..), sy, UFunc(..),
+import Language.Drasil.Expr (Expr(..), BinOp(..), sy,
     DerivType(..), EOperator(..), ($=), RealRange(..), DomainDesc(..))
 import Language.Drasil.Chunk.AssumpChunk
 import Language.Drasil.Expr.Extract
 import Language.Drasil.Chunk.Change (chng, chngType, ChngType(..))
 import Language.Drasil.Chunk.Concept (defn)
 import Language.Drasil.Spec
-import Language.Drasil.Space (Space(..))
 import qualified Language.Drasil.TeX.AST as T
 import qualified Language.Drasil.Printing.AST as P
 import Language.Drasil.Unicode (Special(Partial))
@@ -31,60 +30,7 @@ import Language.Drasil.Reference
 import Language.Drasil.Symbol
 import Language.Drasil.SymbolAlphabet
 import Language.Drasil.Unit (usymb)
-
--- | translating operations
-oper :: Oper -> P.Oper
-oper And = P.And
-oper Or = P.Or
-oper Add = P.Add
-oper Mul = P.Mul
-
-ufunc :: UFunc -> P.UFunc
-ufunc Norm = P.Norm
-ufunc Abs = P.Abs
-ufunc Log = P.Log
-ufunc Sin = P.Sin
-ufunc Cos = P.Cos
-ufunc Tan = P.Tan
-ufunc Sec = P.Sec
-ufunc Csc = P.Csc
-ufunc Cot = P.Cot
-ufunc Exp = P.Exp
-ufunc Sqrt = P.Sqrt
-ufunc Not = P.Not
-ufunc Neg = P.Neg
-ufunc Dim = P.Dim
-
-binop :: BinOp -> P.BinOp
-binop Frac = P.Frac
-binop Div = P.Div
-binop Pow = P.Pow
-binop Subt = P.Subt
-binop Eq = P.Eq
-binop NEq = P.NEq
-binop Lt = P.Lt
-binop Gt = P.Gt
-binop LEq = P.LEq
-binop GEq = P.GEq
-binop Impl = P.Impl
-binop Iff = P.Iff
-binop Index = P.Index
-binop Dot = P.Dot
-binop Cross = P.Cross
-
-space :: Space -> P.Expr
-space Integer = P.MO P.Integer
-space Rational = P.MO P.Rational
-space Real = P.MO P.Real
-space Natural = P.MO P.Natural
-space Boolean = P.MO P.Boolean
-space Char = P.Ident "Char"
-space String = P.Ident "String"
-space Radians = error "Radians not translated"
-space (Vect _) = error "Vector space not translated"
-space (DiscreteI _) = error "DiscreteI" --ex. let A = {1, 2, 4, 7}
-space (DiscreteD _) = error "DiscreteD" -- [Double]
-space (DiscreteS l) = P.Fenced P.Curly P.Curly $ P.Row $ intersperse (P.MO P.Comma) $ map P.Ident l
+import Language.Drasil.Printing.Import (oper,ufunc,binop,space)
 
 expr :: HasSymbolTable ctx => Expr -> ctx -> P.Expr
 expr (Dbl d)            _ = P.Dbl  d

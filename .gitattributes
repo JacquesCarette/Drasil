@@ -1,6 +1,6 @@
 *.sh text eol=lf
 Dan/* linguist-documentation
-FamiliyOfGamePhysicsEngines/* linguist-documentation
+FamilyOfGamePhysicsEngines/* linguist-documentation
 Steve/* linguist-documentation
 notes/* linguist-documentation
 Presentations/* linguist-documentation

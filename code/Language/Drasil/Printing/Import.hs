@@ -13,22 +13,6 @@ oper Or = P.Or
 oper Add = P.Add
 oper Mul = P.Mul
 
-ufunc :: UFunc -> P.UFunc
-ufunc Norm = error "ufunc@Norm should no longer be used"
-ufunc Abs = error "ufunc@Abs should no longer be used"
-ufunc Log = error "ufunc@Log should no longer be used"
-ufunc Sin = error "ufunc@Sin should no longer be used"
-ufunc Cos = error "ufunc@Cos should no longer be used"
-ufunc Tan = error "ufunc@Tan should no longer be used"
-ufunc Sec = error "ufunc@Sec should no longer be used"
-ufunc Csc = error "ufunc@Csc should no longer be used"
-ufunc Cot = error "ufunc@Cot should no longer be used"
-ufunc Exp = error "ufunc@Exp should no longer be used"
-ufunc Sqrt = P.Sqrt
-ufunc Not = error "ufunc@Not should no longer be used"
-ufunc Neg = P.Neg
-ufunc Dim = error "ufunc@Dim should no longer be used"
-
 binop :: BinOp -> P.BinOp
 binop Frac = P.Frac
 binop Div = P.Div

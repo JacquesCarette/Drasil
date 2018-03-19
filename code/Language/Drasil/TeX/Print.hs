@@ -101,7 +101,6 @@ p_expr (BOp Pow x y)  = pow x y
 p_expr (BOp Index a i) = p_indx a i
 p_expr (BOp o x y)    = p_expr x ++ p_bop o ++ p_expr y
 p_expr (UOp Neg x)   = neg x
-p_expr (UOp f es)  = p_uop f es
 p_expr (Funct o e)   = p_op o e
 p_expr (Case ps)  = "\\begin{cases}\n" ++ cases ps ++ "\n\\end{cases}"
 p_expr (Mtx a)    = "\\begin{bmatrix}\n" ++ p_matrix a ++ "\n\\end{bmatrix}"
@@ -156,6 +155,7 @@ p_ops Cot      = "\\cot"
 p_ops Not      = "\\neg{}"
 p_ops Dim      = "\\mathsf{dim}"
 p_ops Exp      = "e"
+p_ops Sqrt     = "\\sqrt"
 
 fence :: OpenClose -> Fence -> String
 fence Open Paren = "\\left("
@@ -264,10 +264,6 @@ oper :: Functional -> String
 oper (Summation _)  = "\\displaystyle\\sum"
 oper (Product _)    = "\\displaystyle\\prod"
 oper (Integral _ _) = "\\int"
-
-function :: UFunc -> String
-function Sqrt           = "\\sqrt"
-function Neg            = "-"
 
 -----------------------------------------------------------------
 ------------------ TABLE PRINTING---------------------------
@@ -472,10 +468,6 @@ p_op f@(Summation bs) x = oper f ++ makeBound bs ++ brace (sqbrac (p_expr x))
 p_op f@(Product bs) x = oper f ++ makeBound bs ++ brace (p_expr x)
 p_op f@(Integral bs wrtc) x = oper f ++ makeIBound bs ++ 
   brace (p_expr x ++ "d" ++ symbol wrtc) -- HACK alert.
-
-p_uop :: UFunc -> Expr -> String
-p_uop f@(Sqrt) x = function f ++ "{" ++ p_expr x ++ "}"
-p_uop Neg _ = error "p_uop is printing Neg?"
 
 makeBound :: Maybe ((Symbol, Expr),Expr) -> String
 makeBound (Just ((s,v),hi)) = "_" ++ brace ((symbol s ++"="++ p_expr v)) ++

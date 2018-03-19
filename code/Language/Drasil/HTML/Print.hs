@@ -136,7 +136,6 @@ p_expr (Assoc Add l)  = concat $ intersperse " &plus; " $ map p_expr l
 p_expr (Assoc And l)  = concat $ intersperse " &and; " $ map p_expr l
 p_expr (Assoc Or l)   = concat $ intersperse " &or; " $ map p_expr l
 p_expr (UOp Neg a)    = neg a
-p_expr (UOp f es)  = p_uop f es
 p_expr (BOp Subt a b)  = p_expr a ++ " &minus; " ++ p_expr b
 p_expr (BOp Frac a b) = fraction (p_expr a) (p_expr b) --Found in HTMLHelpers
 p_expr (BOp Div a b)  = divide a b
@@ -186,6 +185,7 @@ p_ops Cot      = "cot"
 p_ops Not      = "&not;"
 p_ops Dim      = "dim"
 p_ops Exp      = "e"
+p_ops Sqrt     = "&radic;"
 
 fence :: OpenClose -> Fence -> String
 fence Open Paren = "("
@@ -363,11 +363,6 @@ p_op (Product bs) x = lrgOp "&prod;" bs ++ paren (p_expr x)
 p_op (Integral bs wrtc) x = intg bs
   ++ paren (p_expr x ++ (symbol (Atomic "d") ++ "&#8239;" ++ symbol wrtc))
 
-p_uop :: UFunc -> Expr -> String
-p_uop Neg _    = error "should never get here!" -- neg a
-p_uop f x = function f ++ paren (p_expr x) --Unary ops, this will change once more complicated functions appear.
-
-
 -- | Helpers for summation/product, used by 'p_op'
 makeBound :: String -> String
 makeBound s = "<tr><td><span class=\"bound\">" ++ s ++ "</span></td></tr>\n"
@@ -388,10 +383,6 @@ intg (low,high) = "<table class=\"operator\">\n" ++ pHigh high ++
         pLow (Just l)  = makeBound (p_expr l)
         pHigh Nothing  = ""
         pHigh (Just hi) = makeBound (p_expr hi)
-
-function :: UFunc -> String
-function Sqrt           = "&radic;"
-function Neg            = "-" -- but usually not reached...
 
 -- | Renders modules
 -- makeModule :: String -> String -> Doc

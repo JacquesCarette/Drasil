@@ -29,7 +29,7 @@ import Language.Drasil.Reference
 import Language.Drasil.Symbol
 import Language.Drasil.Unicode (Special(Partial))
 import Language.Drasil.Unit (usymb)
-import Language.Drasil.Printing.Import (oper,ufunc,binop,space)
+import Language.Drasil.Printing.Import (oper,binop,space)
 
 import Control.Lens ((^.))
 import Data.Maybe (fromJust)
@@ -64,7 +64,8 @@ expr (UnaryOp Not u)    sm = P.Row [P.MO P.Not, expr u sm]
 expr (UnaryOp Exp u)    sm = P.Row [P.MO P.Exp, P.Sup $ expr u sm]
 expr (UnaryOp Abs u)    sm = P.Fenced P.Abs P.Abs $ expr u sm
 expr (UnaryOp Norm u)   sm = P.Fenced P.Norm P.Norm $ expr u sm
-expr (UnaryOp o u)      sm = P.UOp (ufunc o) (expr u sm)
+expr (UnaryOp Sqrt u)   sm = mkCall sm P.Sqrt u
+expr (UnaryOp Neg u)    sm = P.UOp P.Neg (expr u sm)
 expr (BinaryOp Div a b) sm = P.BOp P.Frac (replace_divs a sm) (replace_divs b sm)
 expr (BinaryOp o a b)   sm = P.BOp (binop o) (expr a sm) (expr b sm)
 expr (EOp o)            sm = eop o sm

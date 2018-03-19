@@ -177,6 +177,12 @@ p_ops Boolean  = "&#120121;"
 p_ops Comma    = ","
 p_ops Prime    = "&prime;"
 p_ops Log      = "log"
+p_ops Sin      = "sin"
+p_ops Cos      = "cos"
+p_ops Tan      = "tan"
+p_ops Sec      = "sec"
+p_ops Csc      = "csc"
+p_ops Cot      = "cot"
 
 fence :: OpenClose -> Fence -> String
 fence Open Paren = "("
@@ -249,6 +255,7 @@ neg' (Font _ a)      = neg' a
 neg' (Row [a])       = neg' a
 neg' (Row [a, Sub _])= neg' a
 neg' (Row [a, Sup _])= neg' a
+neg' (Row [MO _, Fenced _ _ _]) = True
 neg' _               = False
 
 neg :: Expr -> String
@@ -384,12 +391,6 @@ intg (low,high) = "<table class=\"operator\">\n" ++ pHigh high ++
 function :: UFunc -> String
 function Abs            = ""
 function Norm           = ""
-function Sin            = "sin"
-function Cos            = "cos"
-function Tan            = "tan"
-function Sec            = "sec"
-function Csc            = "csc"
-function Cot            = "cot"
 function Exp            = "e"
 function Sqrt           = "&radic;"
 function Not            = "&not;"

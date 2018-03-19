@@ -3,7 +3,7 @@ module Language.Drasil.TeX.Import(makeDocument,spec) where
 import Control.Lens ((^.))
 import Data.List (intersperse)
 
-import Language.Drasil.Expr (Expr(..), BinOp(..), sy, UFunc(Log),
+import Language.Drasil.Expr (Expr(..), BinOp(..), sy, UFunc(..),
     DerivType(..), EOperator(..), ($=), RealRange(..), DomainDesc(..))
 import Language.Drasil.Chunk.AssumpChunk
 import Language.Drasil.Expr.Extract
@@ -48,12 +48,21 @@ expr (Case ps)         sm = if length ps < 2 then
         error "Attempting to use multi-case expr incorrectly"
         else P.Case (zip (map (flip expr sm . fst) ps) (map (flip expr sm . snd) ps))
 expr (Matrix a)        sm = P.Mtx $ map (map (flip expr sm)) a
-expr (UnaryOp Log u)   sm = P.Row [P.MO P.Log, P.Fenced P.Paren P.Paren $ expr u sm]
+expr (UnaryOp Log u)   sm = mkCall sm P.Log u
+expr (UnaryOp Sin u)    sm = mkCall sm P.Sin u
+expr (UnaryOp Cos u)    sm = mkCall sm P.Cos u
+expr (UnaryOp Tan u)    sm = mkCall sm P.Tan u
+expr (UnaryOp Sec u)    sm = mkCall sm P.Sec u
+expr (UnaryOp Csc u)    sm = mkCall sm P.Csc u
+expr (UnaryOp Cot u)    sm = mkCall sm P.Cot u
 expr (UnaryOp o u)     sm = P.UOp (ufunc o) $ expr u sm
 expr (EOp o)           sm = eop o sm
 expr (BinaryOp Div a b) sm = P.BOp P.Frac (replace_divs sm a) (replace_divs sm b)
 expr (BinaryOp o a b)  sm = P.BOp (binop o) (expr a sm) (expr b sm)
 expr (IsIn  a b)       sm = P.Row [expr a sm, P.MO P.IsIn, space b]
+
+mkCall :: HasSymbolTable ctx => ctx -> P.Ops -> Expr -> P.Expr
+mkCall s o e = P.Row [P.MO o, P.Fenced P.Paren P.Paren $ expr e s]
 
 eop :: HasSymbolTable ctx => EOperator -> ctx -> P.Expr
 eop (Summation (IntegerDD v (BoundedR l h)) e) sm =

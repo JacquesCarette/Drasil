@@ -579,10 +579,10 @@ Equation & $\varepsilon{}_{i}=\begin{bmatrix}
 {\delta{}v}_{i}
 \end{bmatrix}=\begin{bmatrix}
 \cos\left(\alpha{}_{i}\right) & \sin\left(\alpha{}_{i}\right)\\
-\left(-\sin\left(\alpha{}_{i}\right)\right) & \cos\left(\alpha{}_{i}\right)
+-\sin\left(\alpha{}_{i}\right) & \cos\left(\alpha{}_{i}\right)
 \end{bmatrix} \delta{}_{i}=\begin{bmatrix}
 \cos\left(\alpha{}_{i}\right) & \sin\left(\alpha{}_{i}\right)\\
-\left(-\sin\left(\alpha{}_{i}\right)\right) & \cos\left(\alpha{}_{i}\right)
+-\sin\left(\alpha{}_{i}\right) & \cos\left(\alpha{}_{i}\right)
 \end{bmatrix} \begin{bmatrix}
 {\delta{}x}_{i}\\
 {\delta{}y}_{i}
@@ -908,7 +908,7 @@ For interslice surfaces the stiffness constants and displacements refer to an un
 For basal surfaces the stiffness constants and displacements refer to a system rotated for the base angle alpha (DD5). To analyze the effect of force-displacement relationships occurring on both basal and interslice surfaces of an element $i$ they must reference the same coordinate system. The basal stiffness matrix must be rotated counter clockwise to align with the angle of the basal surface. The base stiffness counter clockwise rotation is applied in equation (7) to the new matrix $N*$.
 \begin{dmath}
 {K_{st,i}}=\begin{bmatrix}
-\cos\left(\alpha{}_{i}\right) & \left(-\sin\left(\alpha{}_{i}\right)\right)\\
+\cos\left(\alpha{}_{i}\right) & -\sin\left(\alpha{}_{i}\right)\\
 \sin\left(\alpha{}_{i}\right) & \cos\left(\alpha{}_{i}\right)
 \end{bmatrix} {K_{st,i}}=\begin{bmatrix}
 {K_{bt,i}} \cos\left(\alpha{}_{i}\right) & \left(-{K_{bn,i}} \sin\left(\alpha{}_{i}\right)\right)\\
@@ -925,7 +925,7 @@ p_{i}
 {K_{bt,i}} \sin\left(\alpha{}_{i}\right) & {K_{bn,i}} \cos\left(\alpha{}_{i}\right)
 \end{bmatrix} \begin{bmatrix}
 \cos\left(\alpha{}_{i}\right) & \sin\left(\alpha{}_{i}\right)\\
-\left(-\sin\left(\alpha{}_{i}\right)\right) & \cos\left(\alpha{}_{i}\right)
+-\sin\left(\alpha{}_{i}\right) & \cos\left(\alpha{}_{i}\right)
 \end{bmatrix} \begin{bmatrix}
 {\delta{}x}_{i}\\
 {\delta{}y}_{i}
@@ -1196,7 +1196,7 @@ RFEM analysis can also be used to calculate the factor of safety for the slope. 
 {\delta{}u}_{i}=\cos\left(\alpha{}_{i}\right) {\delta{}x}_{i}+\sin\left(\alpha{}_{i}\right) {\delta{}y}_{i}
 \end{dmath}
 \begin{dmath}
-{\delta{}v}_{i}=\left(-\sin\left(\alpha{}_{i}\right)\right) {\delta{}x}_{i}+\sin\left(\alpha{}_{i}\right) {\delta{}y}_{i}
+{\delta{}v}_{i}=-\sin\left(\alpha{}_{i}\right) {\delta{}x}_{i}+\sin\left(\alpha{}_{i}\right) {\delta{}y}_{i}
 \end{dmath}
 With the definition of normal stiffness from DD14 to find the normal stiffness of the base ${K_{bn}}$ and the now known base displacement perpendicular to the surface $\delta{}v$ from equation (25) the normal base stress can be calculated from the force-displacement relationship of T5. Stress $\sigma{}$ is used in place of force $F$ as the stiffness hasn't been normalized for the length of the base. Results in equation (26).
 \begin{dmath}

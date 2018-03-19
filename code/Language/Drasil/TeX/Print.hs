@@ -147,6 +147,12 @@ p_ops Boolean  = "\\mathbb{B}"
 p_ops Comma    = ","
 p_ops Prime    = "'"
 p_ops Log      = "\\log"
+p_ops Sin      = "\\sin"
+p_ops Cos      = "\\cos"
+p_ops Tan      = "\\tan"
+p_ops Sec      = "\\sec"
+p_ops Csc      = "\\csc"
+p_ops Cot      = "\\cot"
 
 fence :: OpenClose -> Fence -> String
 fence Open Paren = "\\left("
@@ -231,6 +237,7 @@ neg a@(Ident   _)     = "-" ++ p_expr a
 -- FIXME - these are hacks, but they should become obsolete later
 neg   (Font Emph a)   = neg a -- because Emph is ignored
 neg a@(Row [_]) = "-" ++ p_expr a
+neg a@(Row [MO _, Fenced _ _ _]) = "-" ++ p_expr a
 neg x         = paren ("-" ++ p_expr x)
 
 pow :: Expr -> Expr -> String
@@ -256,12 +263,6 @@ oper (Integral _ _) = "\\int"
 function :: UFunc -> String
 function Abs            = ""
 function Norm           = ""
-function Sin            = "\\sin"
-function Cos            = "\\cos"
-function Tan            = "\\tan"
-function Sec            = "\\sec"
-function Csc            = "\\csc"
-function Cot            = "\\cot"
 function Exp            = "e"
 function Sqrt           = "\\sqrt"
 function Not            = "\\neg{}"

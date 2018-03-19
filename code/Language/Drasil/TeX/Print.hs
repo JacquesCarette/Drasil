@@ -153,6 +153,8 @@ p_ops Tan      = "\\tan"
 p_ops Sec      = "\\sec"
 p_ops Csc      = "\\csc"
 p_ops Cot      = "\\cot"
+p_ops Not      = "\\neg{}"
+p_ops Dim      = "\\mathsf{dim}"
 
 fence :: OpenClose -> Fence -> String
 fence Open Paren = "\\left("
@@ -265,9 +267,7 @@ function Abs            = ""
 function Norm           = ""
 function Exp            = "e"
 function Sqrt           = "\\sqrt"
-function Not            = "\\neg{}"
 function Neg            = "-"
-function Dim            = error "Dim should not be reachable?"
 
 -----------------------------------------------------------------
 ------------------ TABLE PRINTING---------------------------
@@ -479,7 +479,6 @@ p_uop Norm x = "||" ++ p_expr x ++ "||"
 p_uop f@(Exp) x = function f ++ "^" ++ brace (p_expr x)
 p_uop f@(Sqrt) x = function f ++ "{" ++ p_expr x ++ "}"
 p_uop Neg _ = error "p_uop is printing Neg?"
-p_uop f x = function f ++ paren (p_expr x) --Unary ops, this will change once more complicated functions appear.
 
 makeBound :: Maybe ((Symbol, Expr),Expr) -> String
 makeBound (Just ((s,v),hi)) = "_" ++ brace ((symbol s ++"="++ p_expr v)) ++

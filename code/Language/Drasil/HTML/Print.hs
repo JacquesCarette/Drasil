@@ -183,6 +183,8 @@ p_ops Tan      = "tan"
 p_ops Sec      = "sec"
 p_ops Csc      = "csc"
 p_ops Cot      = "cot"
+p_ops Not      = "&not;"
+p_ops Dim      = "dim"
 
 fence :: OpenClose -> Fence -> String
 fence Open Paren = "("
@@ -361,7 +363,6 @@ p_op (Integral bs wrtc) x = intg bs
 p_uop :: UFunc -> Expr -> String
 p_uop Abs x = "|" ++ p_expr x ++ "|"
 p_uop Norm x = "||" ++ p_expr x ++ "||"
-p_uop Not a    = "&not;" ++ p_expr a
 p_uop Neg _    = error "should never get here!" -- neg a
 p_uop f@(Exp) x = function f ++ sup (p_expr x)
 p_uop f x = function f ++ paren (p_expr x) --Unary ops, this will change once more complicated functions appear.
@@ -393,9 +394,7 @@ function Abs            = ""
 function Norm           = ""
 function Exp            = "e"
 function Sqrt           = "&radic;"
-function Not            = "&not;"
 function Neg            = "-" -- but usually not reached...
-function Dim            = "dim" -- hmmm
 
 -- | Renders modules
 -- makeModule :: String -> String -> Doc

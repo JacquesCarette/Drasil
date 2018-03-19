@@ -25,9 +25,9 @@ ufunc Csc = error "ufunc@Csc should no longer be used"
 ufunc Cot = error "ufunc@Cot should no longer be used"
 ufunc Exp = P.Exp
 ufunc Sqrt = P.Sqrt
-ufunc Not = P.Not
+ufunc Not = error "ufunc@Not should no longer be used"
 ufunc Neg = P.Neg
-ufunc Dim = P.Dim
+ufunc Dim = error "ufunc@Dim should no longer be used"
 
 binop :: BinOp -> P.BinOp
 binop Frac = P.Frac

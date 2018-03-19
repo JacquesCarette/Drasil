@@ -155,6 +155,7 @@ p_ops Csc      = "\\csc"
 p_ops Cot      = "\\cot"
 p_ops Not      = "\\neg{}"
 p_ops Dim      = "\\mathsf{dim}"
+p_ops Exp      = "e"
 
 fence :: OpenClose -> Fence -> String
 fence Open Paren = "\\left("
@@ -265,7 +266,6 @@ oper (Integral _ _) = "\\int"
 function :: UFunc -> String
 function Abs            = ""
 function Norm           = ""
-function Exp            = "e"
 function Sqrt           = "\\sqrt"
 function Neg            = "-"
 
@@ -476,7 +476,6 @@ p_op f@(Integral bs wrtc) x = oper f ++ makeIBound bs ++
 p_uop :: UFunc -> Expr -> String
 p_uop Abs x = "|" ++ p_expr x ++ "|"
 p_uop Norm x = "||" ++ p_expr x ++ "||"
-p_uop f@(Exp) x = function f ++ "^" ++ brace (p_expr x)
 p_uop f@(Sqrt) x = function f ++ "{" ++ p_expr x ++ "}"
 p_uop Neg _ = error "p_uop is printing Neg?"
 

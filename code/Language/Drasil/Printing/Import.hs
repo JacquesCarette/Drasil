@@ -16,7 +16,7 @@ oper Mul = P.Mul
 ufunc :: UFunc -> P.UFunc
 ufunc Norm = P.Norm
 ufunc Abs = P.Abs
-ufunc Log = P.Log
+ufunc Log = error "ufunc: should not longer be used"
 ufunc Sin = P.Sin
 ufunc Cos = P.Cos
 ufunc Tan = P.Tan

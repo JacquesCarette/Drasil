@@ -1,7 +1,7 @@
 module Language.Drasil.HTML.Import(makeDocument,spec) where
 
 import Prelude hiding (id)
-import Language.Drasil.Expr (Expr(..), BinOp(..), sy,
+import Language.Drasil.Expr (Expr(..), BinOp(..), sy, UFunc(Log),
     DerivType(..), EOperator(..), ($=), DomainDesc(..), RealRange(..))
 import Language.Drasil.Spec
 import qualified Language.Drasil.Printing.AST as P
@@ -52,6 +52,7 @@ expr (Case ps)        sm = if length ps < 2 then
                     error "Attempting to use multi-case expr incorrectly"
                     else P.Case (zip (map (flip expr sm . fst) ps) (map (flip expr sm . snd) ps))
 expr (Matrix a)         sm = P.Mtx $ map (map (flip expr sm)) a
+expr (UnaryOp Log u)   sm = P.Row [P.MO P.Log, P.Fenced P.Paren P.Paren $ expr u sm]
 expr (UnaryOp o u)      sm = P.UOp (ufunc o) (expr u sm)
 expr (BinaryOp Div a b) sm = P.BOp P.Frac (replace_divs a sm) (replace_divs b sm)
 expr (BinaryOp o a b)   sm = P.BOp (binop o) (expr a sm) (expr b sm)

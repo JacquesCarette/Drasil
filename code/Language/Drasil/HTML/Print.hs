@@ -176,6 +176,7 @@ p_ops Natural  = "&#8469;"
 p_ops Boolean  = "&#120121;"
 p_ops Comma    = ","
 p_ops Prime    = "&prime;"
+p_ops Log      = "log"
 
 fence :: OpenClose -> Fence -> String
 fence Open Paren = "("
@@ -381,7 +382,6 @@ intg (low,high) = "<table class=\"operator\">\n" ++ pHigh high ++
         pHigh (Just hi) = makeBound (p_expr hi)
 
 function :: UFunc -> String
-function Log            = "log"
 function Abs            = ""
 function Norm           = ""
 function Sin            = "sin"

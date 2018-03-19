@@ -146,6 +146,7 @@ p_ops Natural  = "\\mathbb{N}"
 p_ops Boolean  = "\\mathbb{B}"
 p_ops Comma    = ","
 p_ops Prime    = "'"
+p_ops Log      = "\\log"
 
 fence :: OpenClose -> Fence -> String
 fence Open Paren = "\\left("
@@ -253,7 +254,6 @@ oper (Product _)    = "\\displaystyle\\prod"
 oper (Integral _ _) = "\\int"
 
 function :: UFunc -> String
-function Log            = "\\log"
 function Abs            = ""
 function Norm           = ""
 function Sin            = "\\sin"

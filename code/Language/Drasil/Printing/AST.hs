@@ -8,13 +8,13 @@ import Language.Drasil.Chunk.Citation (Month, EntryID, CitationKind)
 
 data Oper = Add | Mul | And | Or
 
-data UFunc = Norm | Abs | Log | Sin | Cos | Tan | Sec | Csc | Cot | Exp
+data UFunc = Norm | Abs | Sin | Cos | Tan | Sec | Csc | Cot | Exp
   | Sqrt | Not | Neg | Dim
 
 data BinOp = Frac | Div | Pow | Subt | Eq | NEq | Lt | Gt | LEq | GEq | Impl | Iff | Index
   | Dot | Cross
 
-data Ops = IsIn | Integer | Real | Rational | Natural | Boolean | Comma | Prime
+data Ops = IsIn | Integer | Real | Rational | Natural | Boolean | Comma | Prime | Log
 
 data Fence = Paren | Curly
 data OverSymb = Hat

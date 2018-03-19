@@ -192,6 +192,8 @@ fence Open Paren = "("
 fence Close Paren = ")"
 fence Open Curly = "{"
 fence Close Curly = "}"
+fence _ Abs = "|"
+fence _ Norm = "||"
 
 -- | For printing indexes
 p_indx :: Expr -> Expr -> String
@@ -362,8 +364,6 @@ p_op (Integral bs wrtc) x = intg bs
   ++ paren (p_expr x ++ (symbol (Atomic "d") ++ "&#8239;" ++ symbol wrtc))
 
 p_uop :: UFunc -> Expr -> String
-p_uop Abs x = "|" ++ p_expr x ++ "|"
-p_uop Norm x = "||" ++ p_expr x ++ "||"
 p_uop Neg _    = error "should never get here!" -- neg a
 p_uop f x = function f ++ paren (p_expr x) --Unary ops, this will change once more complicated functions appear.
 
@@ -390,8 +390,6 @@ intg (low,high) = "<table class=\"operator\">\n" ++ pHigh high ++
         pHigh (Just hi) = makeBound (p_expr hi)
 
 function :: UFunc -> String
-function Abs            = ""
-function Norm           = ""
 function Sqrt           = "&radic;"
 function Neg            = "-" -- but usually not reached...
 

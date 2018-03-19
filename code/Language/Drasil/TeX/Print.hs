@@ -162,6 +162,8 @@ fence Open Paren = "\\left("
 fence Close Paren = "\\right)"
 fence Open Curly = "\\{"
 fence Close Curly = "\\}"
+fence _ Abs = "|"
+fence _ Norm = "||"
 
 -- | For seeing if long numerators or denominators need to be on multiple lines
 needMultlined :: Expr -> String
@@ -264,8 +266,6 @@ oper (Product _)    = "\\displaystyle\\prod"
 oper (Integral _ _) = "\\int"
 
 function :: UFunc -> String
-function Abs            = ""
-function Norm           = ""
 function Sqrt           = "\\sqrt"
 function Neg            = "-"
 
@@ -474,8 +474,6 @@ p_op f@(Integral bs wrtc) x = oper f ++ makeIBound bs ++
   brace (p_expr x ++ "d" ++ symbol wrtc) -- HACK alert.
 
 p_uop :: UFunc -> Expr -> String
-p_uop Abs x = "|" ++ p_expr x ++ "|"
-p_uop Norm x = "||" ++ p_expr x ++ "||"
 p_uop f@(Sqrt) x = function f ++ "{" ++ p_expr x ++ "}"
 p_uop Neg _ = error "p_uop is printing Neg?"
 

@@ -14,8 +14,8 @@ oper Add = P.Add
 oper Mul = P.Mul
 
 ufunc :: UFunc -> P.UFunc
-ufunc Norm = P.Norm
-ufunc Abs = P.Abs
+ufunc Norm = error "ufunc@Norm should no longer be used"
+ufunc Abs = error "ufunc@Abs should no longer be used"
 ufunc Log = error "ufunc@Log should no longer be used"
 ufunc Sin = error "ufunc@Sin should no longer be used"
 ufunc Cos = error "ufunc@Cos should no longer be used"

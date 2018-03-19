@@ -72,4 +72,3 @@ instance RenderSpecial PrintHTML where
   special CurlyBrClose = PH "}"
   special SqBrOpen     = PH "["
   special SqBrClose    = PH "]"
-

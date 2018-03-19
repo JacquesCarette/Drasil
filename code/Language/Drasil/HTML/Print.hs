@@ -1,4 +1,4 @@
-module Language.Drasil.HTML.Print where
+module Language.Drasil.HTML.Print(genHTML) where
 
 import Prelude hiding (print)
 import Data.List (intersperse, sortBy)
@@ -14,7 +14,8 @@ import Language.Drasil.Spec (USymb(..), Sentence, sC, (+:+))
 import Language.Drasil.HTML.Helpers
 import Language.Drasil.Printing.Helpers
 import Language.Drasil.Unicode
-import Language.Drasil.Symbol (Symbol(..), Decoration(..))
+import           Language.Drasil.Symbol (Symbol(..))
+import qualified Language.Drasil.Symbol as S
 import qualified Language.Drasil.Document as L
 import Language.Drasil.HTML.Monad
 import Language.Drasil.People (People,Person(..),rendPersLFM',rendPersLFM'',Conv(..),nameStr,rendPersLFM, isInitial)
@@ -110,9 +111,9 @@ symbolNoEm (Corners [] [] [] [x] s) = (symbolNoEm s) ++ sub (symbolNoEm x)
 symbolNoEm (Corners [_] [] [] [] _) = error "rendering of ul prescript"
 symbolNoEm (Corners [] [_] [] [] _) = error "rendering of ll prescript"
 symbolNoEm (Corners _ _ _ _ _)      = error "rendering of Corners (general)"
-symbolNoEm (Atop Vector s)       = "<b>" ++ symbolNoEm s ++ "</b>"
-symbolNoEm (Atop Hat s)          = symbolNoEm s ++ "&#770;"
-symbolNoEm (Atop Prime s)        = symbolNoEm s ++ "&prime;"
+symbolNoEm (Atop S.Vector s)       = "<b>" ++ symbolNoEm s ++ "</b>"
+symbolNoEm (Atop S.Hat s)          = symbolNoEm s ++ "&#770;"
+symbolNoEm (Atop S.Prime s)        = symbolNoEm s ++ "&prime;"
 symbolNoEm Empty                 = ""
 
 uSymb :: USymb -> String
@@ -130,11 +131,12 @@ p_expr :: Expr -> String
 p_expr (Dbl d)    = showFFloat Nothing d ""
 p_expr (Int i)    = show i
 p_expr (Str s)    = s
-p_expr (Sym s)    = symbol s
 p_expr (Assoc Mul l) = mul l
 p_expr (Assoc Add l)  = concat $ intersperse " &plus; " $ map p_expr l
 p_expr (Assoc And l)  = concat $ intersperse " &and; " $ map p_expr l
 p_expr (Assoc Or l)   = concat $ intersperse " &or; " $ map p_expr l
+p_expr (UOp Neg a)    = neg a
+p_expr (UOp f es)  = p_uop f es
 p_expr (BOp Subt a b)  = p_expr a ++ " &minus; " ++ p_expr b
 p_expr (BOp Frac a b) = fraction (p_expr a) (p_expr b) --Found in HTMLHelpers
 p_expr (BOp Div a b)  = divide a b
@@ -147,25 +149,23 @@ p_expr (BOp LEq a b)  = p_expr a ++ "&thinsp;&le;&thinsp;" ++ p_expr b
 p_expr (BOp GEq a b)  = p_expr a ++ "&thinsp;&ge;&thinsp;" ++ p_expr b
 p_expr (BOp Dot a b)  = p_expr a ++ "&sdot;" ++ p_expr b
 p_expr (BOp Cross a b) = p_expr a ++ "&#10799;" ++ p_expr b
-p_expr (UOp Neg a)    = neg a
-p_expr (Funct f e)    = p_op f e
-p_expr (Case ps)  = cases ps (p_expr)
-p_expr (UOp f es)  = p_uop f es
-p_expr (Mtx a)    = "<table class=\"matrix\">\n" ++ p_matrix a ++ "</table>"
 p_expr (BOp Index a i)= p_indx a i
 p_expr (BOp Impl a b) = p_expr a ++ " &rArr; " ++ p_expr b
 p_expr (BOp Iff a b)  = p_expr a ++ " &hArr; " ++ p_expr b
+p_expr (Funct f e)    = p_op f e
+p_expr (Case ps)  = cases ps (p_expr)
+p_expr (Mtx a)    = "<table class=\"matrix\">\n" ++ p_matrix a ++ "</table>"
 p_expr (Row l) = concatMap p_expr l
 p_expr (Ident s) = s
 p_expr (Spec s) = unPH $ special s
 p_expr (Gr g) = unPH $ greek g
 p_expr (Sub e) = sub $ p_expr e
 p_expr (Sup e) = sup $ p_expr e
-p_expr (Over Vector s)  = "<b>" ++ p_expr s ++ "</b>"
 p_expr (Over Hat s)     = p_expr s ++ "&#770;"
-p_expr (Over Prime s)   = p_expr s ++ "&prime;"
 p_expr (MO o) = p_ops o
 p_expr (Fenced l r e) = fence Open l ++ p_expr e ++ fence Close r
+p_expr (Font Bold e) = bold $ p_expr e
+p_expr (Font Emph e) = em $ p_expr e
 
 p_ops :: Ops -> String
 p_ops IsIn = "&thinsp;&isin;&thinsp;"
@@ -174,7 +174,8 @@ p_ops Rational = "&#8474;"
 p_ops Real     = "&#8477;"
 p_ops Natural  = "&#8469;"
 p_ops Boolean  = "&#120121;"
-p_ops Comma    = ", "
+p_ops Comma    = ","
+p_ops Prime    = "&prime;"
 
 fence :: OpenClose -> Fence -> String
 fence Open Paren = "("
@@ -184,20 +185,22 @@ fence Close Curly = "}"
 
 -- | For printing indexes
 p_indx :: Expr -> Expr -> String
-p_indx a@(Sym (Corners [] [] [] [_] _)) i = p_expr a ++ sub (","++ p_sub i)
+p_indx (Row [a]) i = p_indx a i
+p_indx (Row [a, Sub b]) i = p_expr $ Row [a, Sub (Row [b, MO Comma, i])]
+p_indx (Font Emph (Row [a, Sub b])) i = 
+  p_expr $ Row [Font Emph a, Sub (Row [Font Emph b, MO Comma, i])]
 p_indx a i = p_expr a ++ sub (p_sub i)
 
 -- Ensures only simple Expr's get rendered as an index
 p_sub :: Expr -> String
 p_sub e@(Dbl _)        = p_expr e
 p_sub e@(Int _)        = p_expr e
-p_sub e@(Sym _)        = p_expr e
 p_sub   (Assoc Add l)  = concat $ intersperse "&plus;" $ map p_expr l --removed spaces
 p_sub   (BOp Subt a b) = p_expr a ++ "&minus;" ++ p_expr b
 p_sub e@(Assoc _ _)    = p_expr e
 p_sub   (BOp Frac a b) = divide a b --no block division
 p_sub e@(BOp Div _ _)  = p_expr e
-p_sub _                = error "Tried to Index a non-simple expr in HTML, currently not supported."
+p_sub e                = p_expr e -- error "Tried to Index a non-simple expr in HTML, currently not supported."
 
 -- | For printing Matrix
 p_matrix :: [[Expr]] -> String
@@ -230,15 +233,25 @@ divide n@(BOp Subt _ _) d  = paren (p_expr n) ++ "/" ++ p_expr d
 divide n d                 = p_expr n ++ "/" ++ p_expr d
 
 -- | Helper for properly rendering negation of expressions
+neg' :: Expr -> Bool
+neg' (Dbl     _)     = True
+neg' (Int     _)     = True
+neg' (Gr      _)     = True
+neg' (Spec    _)     = True
+neg' (Ident   _)     = True
+neg' (UOp   _ _)     = True
+neg' (Funct _ _)     = True
+neg' (Assoc Mul _)   = True
+neg' (BOp Index _ _) = True
+-- FIXME, serious hacks...
+neg' (Font _ a)      = neg' a
+neg' (Row [a])       = neg' a
+neg' (Row [a, Sub _])= neg' a
+neg' (Row [a, Sup _])= neg' a
+neg' _               = False
+
 neg :: Expr -> String
-neg a@(Dbl     _)     = minus a
-neg a@(Int     _)     = minus a
-neg a@(Sym     _)     = minus a
-neg a@(UOp   _ _)     = minus a
-neg a@(Funct _ _)     = minus a
-neg a@(Assoc Mul _)   = minus a
-neg a@(BOp Index _ _) = minus a
-neg a               = "&minus;" ++ paren (p_expr a)
+neg a = if (neg' a) then minus a else "&minus;" ++ paren (p_expr a)
 
 minus :: Expr -> String
 minus e = "&minus;" ++ p_expr e
@@ -341,6 +354,7 @@ p_uop :: UFunc -> Expr -> String
 p_uop Abs x = "|" ++ p_expr x ++ "|"
 p_uop Norm x = "||" ++ p_expr x ++ "||"
 p_uop Not a    = "&not;" ++ p_expr a
+p_uop Neg _    = error "should never get here!" -- neg a
 p_uop f@(Exp) x = function f ++ sup (p_expr x)
 p_uop f x = function f ++ paren (p_expr x) --Unary ops, this will change once more complicated functions appear.
 
@@ -366,13 +380,6 @@ intg (low,high) = "<table class=\"operator\">\n" ++ pHigh high ++
         pHigh Nothing  = ""
         pHigh (Just hi) = makeBound (p_expr hi)
 
--- | Helper for integration bound creation, used by 'p_op'
-makeIBound :: (Maybe Expr, Maybe Expr) -> String
-makeIBound (Just low, Just high) = sub (p_expr low) ++ sup (p_expr high)
-makeIBound (Just low, Nothing)   = sub (p_expr low)
-makeIBound (Nothing, Just high)  = sup (p_expr high)
-makeIBound (Nothing, Nothing)    = ""
-
 function :: UFunc -> String
 function Log            = "log"
 function Abs            = ""
@@ -390,8 +397,8 @@ function Neg            = "-" -- but usually not reached...
 function Dim            = "dim" -- hmmm
 
 -- | Renders modules
-makeModule :: String -> String -> Doc
-makeModule m l = refwrap l (paragraph $ wrap "b" [] (text m))
+-- makeModule :: String -> String -> Doc
+-- makeModule m l = refwrap l (paragraph $ wrap "b" [] (text m))
 
 -- | Renders assumptions, requirements, likely changes
 makeRefList :: String -> String -> String -> Doc

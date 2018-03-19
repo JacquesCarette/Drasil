@@ -1,4 +1,4 @@
-module Language.Drasil.TeX.Import where
+module Language.Drasil.TeX.Import(makeDocument,spec) where
 
 import Control.Lens ((^.))
 import Data.List (intersperse)
@@ -28,7 +28,6 @@ import Language.Drasil.Misc (unit'2Contents)
 import Language.Drasil.NounPhrase (phrase, titleize)
 import Language.Drasil.Reference
 import Language.Drasil.Symbol
-import Language.Drasil.SymbolAlphabet
 import Language.Drasil.Unit (usymb)
 import Language.Drasil.Printing.Import (oper,ufunc,binop,space)
 
@@ -37,11 +36,12 @@ expr (Dbl d)            _ = P.Dbl  d
 expr (Int i)            _ = P.Int  i
 expr (Str s)            _ = P.Str  s
 expr (Assoc op l)      sm = P.Assoc (oper op) $ map (\x -> expr x sm) l
-expr (C c)            sm = P.Sym $ eqSymb $ symbLookup c $ sm^.symbolTable -- FIXME Stage?
-expr (Deriv Part a b)  sm = P.BOp P.Frac (P.Assoc P.Mul [P.Sym (Special Partial), expr a sm])
-                            (P.Assoc P.Mul [P.Sym (Special Partial), P.Sym $ eqSymb $ symbLookup b $ sm^.symbolTable])
-expr (Deriv Total a b) sm = P.BOp P.Frac (P.Assoc P.Mul [P.Sym lD, expr a sm])
-                            (P.Assoc P.Mul [P.Sym lD, P.Sym $ eqSymb $ symbLookup b $ sm^.symbolTable])
+expr (C c)            sm = symbol $ eqSymb $ symbLookup c $ sm^.symbolTable -- FIXME Stage?
+expr (Deriv Part a b)  sm = P.BOp P.Frac (P.Assoc P.Mul [P.Spec Partial, expr a sm])
+                            (P.Assoc P.Mul [P.Spec Partial, symbol $ eqSymb $ symbLookup b $ sm^.symbolTable])
+expr (Deriv Total a b) sm = P.BOp P.Frac (P.Assoc P.Mul [P.Ident "d", expr a sm])
+                            (P.Assoc P.Mul [P.Ident "d", symbol $ eqSymb $ symbLookup b $ sm^.symbolTable])
+expr (FCall f [x])     sm = P.Row [expr f sm, P.Fenced P.Paren P.Paren $ expr x sm]
 expr (FCall f x)       sm = P.Row [expr f sm, 
   P.Fenced P.Paren P.Paren $ P.Row $ intersperse (P.MO P.Comma) $ map (flip expr sm) x]
 expr (Case ps)         sm = if length ps < 2 then
@@ -66,12 +66,9 @@ eop (Product (RealDD _ _) _) _ = error "TeX/Import.hs Product cannot be over Rea
 eop (Integral (RealDD v (BoundedR l h)) e) sm =
   P.Funct (P.Integral (Just (expr l sm), Just (expr h sm)) v) (expr e sm)
 eop (Integral (All v) e) sm =
-  P.Funct (P.Integral (Just (P.Sym v), Nothing) v) (expr e sm)
+  P.Funct (P.Integral (Just (symbol v), Nothing) v) (expr e sm)
 eop (Integral (IntegerDD _ _) _) _ =
   error "TeX/Import.hs Integral cannot be over Integers"
-
-int_wrt :: Symbol -> P.Expr
-int_wrt wrtc = P.Assoc P.Mul [P.Sym lD, P.Sym wrtc]
 
 replace_divs :: HasSymbolTable ctx => ctx -> Expr -> P.Expr
 replace_divs sm (BinaryOp Div a b) = P.BOp P.Div (replace_divs sm a) (replace_divs sm b)
@@ -79,6 +76,27 @@ replace_divs sm (Assoc op l) = P.Assoc (oper op) $ map (replace_divs sm) l
 replace_divs sm (BinaryOp Pow a b) = P.BOp P.Pow (replace_divs sm a) (replace_divs sm b)
 replace_divs sm (BinaryOp Subt a b) = P.BOp P.Subt (replace_divs sm a) (replace_divs sm b)
 replace_divs sm a            = expr a sm
+
+symbol :: Symbol -> P.Expr
+symbol (Atomic s)  = P.Ident s
+symbol (Special s) = P.Spec s
+symbol (Greek g)   = P.Gr g
+symbol (Concat sl) = P.Row $ map symbol sl
+--
+-- handle the special cases first, then general case
+-- double Row is to reproduce what was there before.  FIXME ?
+symbol (Corners [] [] [x] [] s) = P.Row [P.Row [symbol s, P.Sup $ symbol x]]
+symbol (Corners [] [] [] [x] s) = P.Row [P.Row [symbol s, P.Sub $ symbol x]]
+symbol (Corners [_] [] [] [] _) = error "rendering of ul prescript"
+symbol (Corners [] [_] [] [] _) = error "rendering of ll prescript"
+symbol (Corners _ _ _ _ _)      = error "rendering of Corners (general)"
+symbol (Atop f s) = sFormat f s
+symbol (Empty)    = P.Row []
+
+sFormat :: Decoration -> Symbol -> P.Expr
+sFormat Hat    s = P.Over P.Hat $ symbol s
+sFormat Vector s = P.Font P.Bold $ symbol s
+sFormat Prime  s = P.Row [symbol s, P.MO P.Prime]
 
 spec :: HasSymbolTable ctx => ctx -> Sentence -> P.Spec
 spec _  (S s)          = P.S s
@@ -95,10 +113,10 @@ spec sm (Quote q)      = P.S "``" P.:+: spec sm q P.:+: P.S "\""
 spec _  EmptyS         = P.EmptyS
 spec sm (E e)          = P.E $ expr e sm
 
-decorate :: Decoration -> Sentence -> Sentence
-decorate Hat    s = S "\\hat{" :+: s :+: S "}"
-decorate Vector s = S "\\bf{" :+: s :+: S "}"
-decorate Prime  s = s :+: S "'"
+-- decorate :: Decoration -> Sentence -> Sentence
+-- decorate Hat    s = S "\\hat{" :+: s :+: S "}"
+-- decorate Vector s = S "\\bf{" :+: s :+: S "}"
+-- decorate Prime  s = s :+: S "'"
 
 accent :: Accent -> Char -> Sentence
 accent Grave  s = S $ "\\`{" ++ (s : "}")

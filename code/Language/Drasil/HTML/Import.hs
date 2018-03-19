@@ -1,4 +1,4 @@
-module Language.Drasil.HTML.Import where
+module Language.Drasil.HTML.Import(makeDocument,spec) where
 
 import Prelude hiding (id)
 import Language.Drasil.Expr (Expr(..), BinOp(..), sy,
@@ -27,7 +27,6 @@ import Language.Drasil.Misc (unit'2Contents)
 import Language.Drasil.NounPhrase (phrase, titleize)
 import Language.Drasil.Reference
 import Language.Drasil.Symbol
-import Language.Drasil.SymbolAlphabet (lD)
 import Language.Drasil.Unicode (Special(Partial))
 import Language.Drasil.Unit (usymb)
 import Language.Drasil.Printing.Import (oper,ufunc,binop,space)
@@ -42,11 +41,11 @@ expr (Dbl d)          _ = P.Dbl   d
 expr (Int i)          _ = P.Int   i
 expr (Str s)          _ = P.Str   s
 expr (Assoc op l)     sm = P.Assoc (oper op) $ map (\x -> expr x sm) l
-expr (Deriv Part a b) sm = P.BOp P.Frac (P.Assoc P.Mul [P.Sym (Special Partial), expr a sm])
-                          (P.Assoc P.Mul [P.Sym (Special Partial), P.Sym $ eqSymb $ symbLookup b $ sm^.symbolTable])
-expr (Deriv Total a b)sm = P.BOp P.Frac (P.Assoc P.Mul [P.Sym lD, expr a sm])
-                          (P.Assoc P.Mul [P.Sym lD, P.Sym $ eqSymb $ symbLookup b $ sm^.symbolTable])
-expr (C c)            sm = P.Sym $ eqSymb $ symbLookup c $ sm^.symbolTable
+expr (Deriv Part a b) sm = P.BOp P.Frac (P.Assoc P.Mul [P.Font P.Emph $ P.Spec Partial, expr a sm])
+                          (P.Assoc P.Mul [P.Font P.Emph $ P.Spec Partial, P.Font P.Emph $ symbol $ eqSymb $ symbLookup b $ sm^.symbolTable])
+expr (Deriv Total a b)sm = P.BOp P.Frac (P.Assoc P.Mul [P.Font P.Emph $ P.Ident "d", expr a sm])
+                          (P.Assoc P.Mul [P.Font P.Emph $ P.Ident "d", P.Font P.Emph $ symbol $ eqSymb $ symbLookup b $ sm^.symbolTable])
+expr (C c)            sm = P.Font P.Emph $ symbol $ eqSymb $ symbLookup c $ sm^.symbolTable
 expr (FCall f x)      sm = P.Row [expr f sm, 
   P.Fenced P.Paren P.Paren $ P.Row $ intersperse (P.MO P.Comma) $ map (flip expr sm) x]
 expr (Case ps)        sm = if length ps < 2 then
@@ -72,13 +71,9 @@ eop (Product (RealDD _ _) _) _ = error "HTML/Import.hs Product cannot be over Re
 eop (Integral (RealDD v (BoundedR l h)) e) sm =
   P.Funct (P.Integral (Just (expr l sm), Just (expr h sm)) v) (expr e sm)
 eop (Integral (All v) e) sm =
-  P.Funct (P.Integral (Just (P.Sym v), Nothing) v) (expr e sm)
+  P.Funct (P.Integral (Just $ P.Font P.Emph $ symbol v, Nothing) v) (expr e sm)
 eop (Integral (IntegerDD _ _) _) _ =
   error "HTML/Import.hs Integral cannot be over Integers"
-
--- | Helper function for translating the differential
-int_wrt :: Symbol -> P.Expr
-int_wrt wrtc = P.Assoc P.Mul [P.Sym lD, P.Sym wrtc]
 
 -- | Helper function for translating operations in expressions
 replace_divs :: HasSymbolTable s => Expr -> s -> P.Expr
@@ -87,6 +82,26 @@ replace_divs (Assoc op l)        sm = P.Assoc (oper op) $ map (\x -> replace_div
 replace_divs (BinaryOp Pow  a b) sm = P.BOp P.Pow (replace_divs a sm) (replace_divs b sm)
 replace_divs (BinaryOp Subt a b) sm = P.BOp P.Subt (replace_divs a sm) (replace_divs b sm)
 replace_divs a                   sm = expr a sm
+
+symbol :: Symbol -> P.Expr
+symbol (Atomic s)  = P.Ident s
+symbol (Special s) = P.Spec s
+symbol (Greek g)   = P.Gr g
+symbol (Concat sl) = P.Row $ map symbol sl
+--
+-- handle the special cases first, then general case
+symbol (Corners [] [] [x] [] s) = P.Row [P.Row [symbol s], P.Sup $ symbol x]
+symbol (Corners [] [] [] [x] s) = P.Row [P.Row [symbol s], P.Sub $ symbol x]
+symbol (Corners [_] [] [] [] _) = error "rendering of ul prescript"
+symbol (Corners [] [_] [] [] _) = error "rendering of ll prescript"
+symbol (Corners _ _ _ _ _)      = error "rendering of Corners (general)"
+symbol (Atop f s) = sFormat f s
+symbol (Empty)    = P.Row []
+
+sFormat :: Decoration -> Symbol -> P.Expr
+sFormat Hat    s = P.Over P.Hat $ symbol s
+sFormat Vector s = P.Font P.Bold $ symbol s
+sFormat Prime  s = P.Row [symbol s, P.MO P.Prime]
 
 -- | Translates Sentence to the HTML representation of Sentence ('Spec')
 spec :: HasSymbolTable s => Sentence -> s -> P.Spec
@@ -109,13 +124,6 @@ spec (E e)     sm = P.E $ expr e sm
 accent :: Accent -> Char -> Sentence
 accent Grave  s = S $ '&' : s : "grave;" --Only works on vowels.
 accent Acute  s = S $ '&' : s : "acute;" --Only works on vowels.
-
--- | Helper function for translating decorated characters to
--- an HTML renderable form.
-decorate :: Decoration -> Sentence -> Sentence
-decorate Hat    s = s :+: S "&#770;"
-decorate Vector s = S "<b>" :+: s :+: S "</b>"
-decorate Prime  s = s :+: S "&prime;"
 
 -- | Translates from Document to the HTML representation of Document
 makeDocument :: HasSymbolTable s => Document -> s -> H.Document

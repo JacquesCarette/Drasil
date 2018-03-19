@@ -17,7 +17,8 @@ import Language.Drasil.Printing.Helpers hiding (paren, sqbrac)
 import Language.Drasil.TeX.Helpers
 import Language.Drasil.TeX.Monad
 import Language.Drasil.TeX.Preamble
-import Language.Drasil.Symbol (Symbol(..),Decoration(..))
+import           Language.Drasil.Symbol (Symbol(..))
+import qualified Language.Drasil.Symbol as S
 import qualified Language.Drasil.Document as L
 import Language.Drasil.Unicode (RenderGreek(..), RenderSpecial(..))
 import Language.Drasil.People (People,rendPersLFM)
@@ -74,10 +75,10 @@ symbol (Corners _ _ _ _ _)      = error "rendering of Corners (general)"
 symbol (Atop f s) = sFormat f s
 symbol (Empty)    = ""
 
-sFormat :: Decoration -> Symbol -> String
-sFormat Hat    s = "\\hat{" ++ symbol s ++ "}"
-sFormat Vector s = "\\mathbf{" ++ symbol s ++ "}"
-sFormat Prime  s = symbol s ++ "'"
+sFormat :: S.Decoration -> Symbol -> String
+sFormat S.Hat    s = "\\hat{" ++ symbol s ++ "}"
+sFormat S.Vector s = "\\mathbf{" ++ symbol s ++ "}"
+sFormat S.Prime  s = symbol s ++ "'"
 
 data OpenClose = Open | Close
 
@@ -93,28 +94,31 @@ p_expr (Assoc Add l)  = concat $ intersperse "+" $ map p_expr l
 p_expr (Assoc Mul l)  = mul l
 p_expr (Assoc And l)  = concat $ intersperse "\\land{}" $ map p_expr l
 p_expr (Assoc Or l)   = concat $ intersperse "\\lor{}" $ map p_expr l
-p_expr (Sym s)    = symbol s
+-- p_expr (Sym s)    = symbol s
 p_expr (BOp Frac n d) = "\\frac{" ++ needMultlined n ++ "}{" ++ needMultlined d ++"}"
 p_expr (BOp Div n d)  = divide n d
 p_expr (BOp Pow x y)  = pow x y
 p_expr (BOp Index a i) = p_indx a i
 p_expr (BOp o x y)    = p_expr x ++ p_bop o ++ p_expr y
 p_expr (UOp Neg x)   = neg x
+p_expr (UOp f es)  = p_uop f es
 p_expr (Funct o e)   = p_op o e
 p_expr (Case ps)  = "\\begin{cases}\n" ++ cases ps ++ "\n\\end{cases}"
-p_expr (UOp f es)  = p_uop f es
 p_expr (Mtx a)    = "\\begin{bmatrix}\n" ++ p_matrix a ++ "\n\\end{bmatrix}"
+p_expr (Row [x]) = brace $ p_expr x -- a bit of a hack...
 p_expr (Row l) = concatMap p_expr l
 p_expr (Ident s) = s
 p_expr (Spec s) = unPL $ special s
 p_expr (Gr g) = unPL $ greek g
-p_expr (Sub e) = "^" ++ brace (p_expr e)
-p_expr (Sup e) = "_" ++ brace (p_expr e)
+p_expr (Sub e) = "_" ++ brace (p_expr e)
+p_expr (Sup e) = "^" ++ brace (p_expr e)
 p_expr (Over Hat s)     = "\\hat{" ++ p_expr s ++ "}"
-p_expr (Over Vector s)  = "\\mathbf{" ++ p_expr s ++ "}"
-p_expr (Over Prime s)   = p_expr s ++ "'"
+-- p_expr (Over Vector s)  = "\\mathbf{" ++ p_expr s ++ "}"
+-- p_expr (Over Prime s)   = p_expr s ++ "'"
 p_expr (MO o) = p_ops o
 p_expr (Fenced l r m)    = fence Open l ++ p_expr m ++ fence Close r
+p_expr (Font Bold e) = "\\mathbf{" ++ p_expr e ++ "}"
+p_expr (Font Emph e) = p_expr e -- Emph is ignored here because we're in Math mode
 
 p_bop :: BinOp -> String
 p_bop Subt = "-"
@@ -140,23 +144,8 @@ p_ops Rational = "\\mathbb{Q}"
 p_ops Real     = "\\mathbb{R}"
 p_ops Natural  = "\\mathbb{N}"
 p_ops Boolean  = "\\mathbb{B}"
-p_ops Comma    = ", "
-
-{-
-p_space :: Space -> String
-p_space Integer  = "\\mathbb{Z}"
-p_space Rational = "\\mathbb{Q}"
-p_space Real     = "\\mathbb{R}"
-p_space Natural  = "\\mathbb{N}"
-p_space Boolean  = "\\mathbb{B}"
-p_space Char     = "Char"
-p_space String   = "String"
-p_space Radians  = "rad"
-p_space (Vect a) = "V" ++ p_space a
-p_space (DiscreteI a)  = "\\{" ++ (concat $ intersperse ", " (map show a)) ++ "\\}"
-p_space (DiscreteD a)  = "\\{" ++ (concat $ intersperse ", " (map show a)) ++ "\\}"
-p_space (DiscreteS a)  = "\\{" ++ (concat $ intersperse ", " a) ++ "\\}"
--}
+p_ops Comma    = ","
+p_ops Prime    = "'"
 
 fence :: OpenClose -> Fence -> String
 fence Open Paren = "\\left("
@@ -180,28 +169,29 @@ needMultlined x
         extrac (f,l)   = [Assoc Add f, Assoc Add l]
 
 splitTerms :: Expr -> [Expr]
-splitTerms (UOp Neg e) = map (\x -> UOp Neg x) $ splitTerms e
+splitTerms (UOp Neg e) = map (UOp Neg) $ splitTerms e
 splitTerms (Assoc Add l) = concat $ map splitTerms l
 splitTerms (BOp Subt a b) = splitTerms a ++ splitTerms (UOp Neg b)
 splitTerms e = [e]
 
 -- | For printing indexes
 p_indx :: Expr -> Expr -> String
-p_indx (Sym (Corners [] [] [] [x] s)) i = p_expr $ Sym $ Corners [][][][Concat [x, Atomic (","++ p_sub i)]] s
-p_indx a@(Sym (Atomic _)) i = p_expr a ++"_"++ brace (p_sub i)
-p_indx a@(Sym (Greek  _)) i = p_expr a ++"_"++ brace (p_sub i)
-p_indx a                  i = brace (p_expr a) ++"_"++ brace (p_sub i)
+p_indx   (Row [a]) i = brace $ p_indx a i
+p_indx   (Row [a, Sub b]) i = p_expr $ Row [a, Sub $ Row [b, MO Comma, i]]
+p_indx a@(Ident _) i = p_expr a ++ "_" ++ brace (p_sub i)
+p_indx a@(Gr    _) i = p_expr a ++ "_" ++ brace (p_sub i)
+p_indx a           i = brace (p_expr a) ++"_"++ brace (p_sub i)
+
 -- Ensures only simple Expr's get rendered as an index
 p_sub :: Expr -> String
 p_sub e@(Dbl _)    = p_expr e
 p_sub e@(Int _)    = p_expr e
-p_sub e@(Sym _)    = p_expr e
 p_sub e@(Assoc Add _)  = p_expr e
 p_sub e@(BOp Subt _ _)  = p_expr e
 p_sub e@(Assoc Mul _)  = p_expr e
 p_sub   (BOp Frac a b) = divide a b --no block division in an index
 p_sub e@(BOp Div _ _)  = p_expr e
-p_sub _            = error "Tried to Index a non-simple expr in LaTeX, currently not supported."
+p_sub e                = p_expr e -- error "Tried to Index a non-simple expr in LaTeX, currently not supported."
 
 -- | For printing Matrix
 p_matrix :: [[Expr]] -> String
@@ -234,7 +224,12 @@ divide n d = p_expr n ++ "/" ++ p_expr d
 neg :: Expr -> String
 neg x@(Dbl _) = "-" ++ p_expr x
 neg x@(Int _) = "-" ++ p_expr x
-neg x@(Sym _) = "-" ++ p_expr x
+neg a@(Gr      _)     = "-" ++ p_expr a
+neg a@(Spec    _)     = "-" ++ p_expr a
+neg a@(Ident   _)     = "-" ++ p_expr a
+-- FIXME - these are hacks, but they should become obsolete later
+neg   (Font Emph a)   = neg a -- because Emph is ignored
+neg a@(Row [_]) = "-" ++ p_expr a
 neg x         = paren ("-" ++ p_expr x)
 
 pow :: Expr -> Expr -> String
@@ -482,6 +477,7 @@ p_uop Abs x = "|" ++ p_expr x ++ "|"
 p_uop Norm x = "||" ++ p_expr x ++ "||"
 p_uop f@(Exp) x = function f ++ "^" ++ brace (p_expr x)
 p_uop f@(Sqrt) x = function f ++ "{" ++ p_expr x ++ "}"
+p_uop Neg _ = error "p_uop is printing Neg?"
 p_uop f x = function f ++ paren (p_expr x) --Unary ops, this will change once more complicated functions appear.
 
 makeBound :: Maybe ((Symbol, Expr),Expr) -> String

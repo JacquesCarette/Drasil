@@ -1,6 +1,6 @@
 module Language.Drasil.Printing.AST where
 
-import Language.Drasil.Symbol (Symbol, Decoration)
+import Language.Drasil.Symbol (Symbol)
 import Language.Drasil.Spec (USymb, RefType, RefAdd)
 import Language.Drasil.Unicode (Greek, Special)
 import Language.Drasil.People (People)
@@ -14,16 +14,17 @@ data UFunc = Norm | Abs | Log | Sin | Cos | Tan | Sec | Csc | Cot | Exp
 data BinOp = Frac | Div | Pow | Subt | Eq | NEq | Lt | Gt | LEq | GEq | Impl | Iff | Index
   | Dot | Cross
 
-data Ops = IsIn | Integer | Real | Rational | Natural | Boolean | Comma
+data Ops = IsIn | Integer | Real | Rational | Natural | Boolean | Comma | Prime
 
 data Fence = Paren | Curly
+data OverSymb = Hat
+data Fonts = Bold | Emph
 
 data Expr = Dbl   Double
           | Int   Integer
           | Str   String
           | Assoc Oper [Expr]
           | BOp   BinOp Expr Expr
-          | Sym   Symbol
           | Case  [(Expr,Expr)]
           | UOp   UFunc Expr
           | Funct Functional Expr
@@ -34,9 +35,10 @@ data Expr = Dbl   Double
           | Gr    Greek
           | Sub   Expr
           | Sup   Expr
-          | Over  Decoration Expr
           | MO    Ops
+          | Over  OverSymb Expr
           | Fenced Fence Fence Expr
+          | Font  Fonts Expr
           
 data Functional = 
             Summation (Maybe ((Symbol, Expr),Expr))

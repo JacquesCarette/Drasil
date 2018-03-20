@@ -8,7 +8,7 @@ import Language.Drasil.Chunk.Citation (Month, EntryID, CitationKind)
 
 data Oper = Add | Mul | And | Or
 
-data BinOp = Frac | Div | Pow | Subt | Index
+data BinOp = Frac | Div | Pow | Subt
 
 data Ops = IsIn | Integer | Real | Rational | Natural | Boolean | Comma | Prime | Log
   | Sin | Cos | Tan | Sec | Csc | Cot | Not | Dim | Exp | Sqrt | Neg | Cross
@@ -57,7 +57,6 @@ prec2 Frac = 190
 prec2 Div = 190
 prec2 Pow = 150
 prec2 Subt = 220
-prec2 Index = 250
 
 infixr 5 :+:
 

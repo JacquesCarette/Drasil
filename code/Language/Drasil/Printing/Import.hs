@@ -26,7 +26,7 @@ binop LEq = error "Printing.Import.binop: LEq"
 binop GEq = error "Printing.Import.binop: GEq"
 binop Impl = error "Printing.Import.binop: Impl"
 binop Iff = error "Printing.Import.binop: Iff"
-binop Index = P.Index
+binop Index = error "Printing.Import.bin: Index"
 binop Dot = error "Printing.Import.binop: Dot"
 binop Cross = error "Printing.Import.binop: Cross"
 

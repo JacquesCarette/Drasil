@@ -98,7 +98,7 @@ p_expr (Assoc Or l)   = concat $ intersperse "\\lor{}" $ map p_expr l
 p_expr (BOp Frac n d) = "\\frac{" ++ needMultlined n ++ "}{" ++ needMultlined d ++"}"
 p_expr (BOp Div n d)  = divide n d
 p_expr (BOp Pow x y)  = pow x y
-p_expr (BOp Index a i) = p_indx a i
+-- p_expr (BOp Index a i) = p_indx a i
 p_expr (BOp o x y)    = p_expr x ++ p_bop o ++ p_expr y
 p_expr (Funct o e)   = p_op o e
 p_expr (Case ps)  = "\\begin{cases}\n" ++ cases ps ++ "\n\\end{cases}"
@@ -121,7 +121,6 @@ p_bop Subt = "-"
 p_bop Frac = "/"
 p_bop Div = "/"
 p_bop Pow = "^"
-p_bop Index = error "no printing of Index"
 
 p_ops :: Ops -> String
 p_ops IsIn = "\\in{}"
@@ -183,25 +182,6 @@ splitTerms :: Expr -> [Expr]
 splitTerms (Assoc Add l) = concat $ map splitTerms l
 -- splitTerms (BOp Subt a b) = splitTerms a ++ splitTerms (UOp Neg b)
 splitTerms e = [e]
-
--- | For printing indexes
-p_indx :: Expr -> Expr -> String
-p_indx   (Row [a]) i = brace $ p_indx a i
-p_indx   (Row [a, Sub b]) i = p_expr $ Row [a, Sub $ Row [b, MO Comma, i]]
-p_indx a@(Ident _) i = p_expr a ++ "_" ++ brace (p_sub i)
-p_indx a@(Gr    _) i = p_expr a ++ "_" ++ brace (p_sub i)
-p_indx a           i = brace (p_expr a) ++"_"++ brace (p_sub i)
-
--- Ensures only simple Expr's get rendered as an index
-p_sub :: Expr -> String
-p_sub e@(Dbl _)    = p_expr e
-p_sub e@(Int _)    = p_expr e
-p_sub e@(Assoc Add _)  = p_expr e
-p_sub e@(BOp Subt _ _)  = p_expr e
-p_sub e@(Assoc Mul _)  = p_expr e
-p_sub   (BOp Frac a b) = divide a b --no block division in an index
-p_sub e@(BOp Div _ _)  = p_expr e
-p_sub e                = p_expr e -- error "Tried to Index a non-simple expr in LaTeX, currently not supported."
 
 -- | For printing Matrix
 p_matrix :: [[Expr]] -> String

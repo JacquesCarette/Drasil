@@ -139,7 +139,7 @@ p_expr (BOp Subt a b)  = p_expr a ++ " &minus; " ++ p_expr b
 p_expr (BOp Frac a b) = fraction (p_expr a) (p_expr b) --Found in HTMLHelpers
 p_expr (BOp Div a b)  = divide a b
 p_expr (BOp Pow a b)  = pow a b
-p_expr (BOp Index a i)= p_indx a i
+-- p_expr (BOp Index a i)= p_indx a i
 p_expr (Funct f e)    = p_op f e
 p_expr (Case ps)  = cases ps (p_expr)
 p_expr (Mtx a)    = "<table class=\"matrix\">\n" ++ p_matrix a ++ "</table>"
@@ -194,25 +194,6 @@ fence Open Curly = "{"
 fence Close Curly = "}"
 fence _ Abs = "|"
 fence _ Norm = "||"
-
--- | For printing indexes
-p_indx :: Expr -> Expr -> String
-p_indx (Row [a]) i = p_indx a i
-p_indx (Row [a, Sub b]) i = p_expr $ Row [a, Sub (Row [b, MO Comma, i])]
-p_indx (Font Emph (Row [a, Sub b])) i = 
-  p_expr $ Row [Font Emph a, Sub (Row [Font Emph b, MO Comma, i])]
-p_indx a i = p_expr a ++ sub (p_sub i)
-
--- Ensures only simple Expr's get rendered as an index
-p_sub :: Expr -> String
-p_sub e@(Dbl _)        = p_expr e
-p_sub e@(Int _)        = p_expr e
-p_sub   (Assoc Add l)  = concat $ intersperse "&plus;" $ map p_expr l --removed spaces
-p_sub   (BOp Subt a b) = p_expr a ++ "&minus;" ++ p_expr b
-p_sub e@(Assoc _ _)    = p_expr e
-p_sub   (BOp Frac a b) = divide a b --no block division
-p_sub e@(BOp Div _ _)  = p_expr e
-p_sub e                = p_expr e -- error "Tried to Index a non-simple expr in HTML, currently not supported."
 
 -- | For printing Matrix
 p_matrix :: [[Expr]] -> String

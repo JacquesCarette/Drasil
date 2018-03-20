@@ -77,6 +77,7 @@ expr (BinaryOp LEq a b) sm = mkBOp sm P.LEq a b
 expr (BinaryOp GEq a b) sm = mkBOp sm P.GEq a b
 expr (BinaryOp Impl a b) sm = mkBOp sm P.Impl a b
 expr (BinaryOp Iff a b) sm = mkBOp sm P.Iff a b
+expr (BinaryOp Index a b) sm = indx sm a b
 expr (BinaryOp o a b)   sm = P.BOp (binop o) (expr a sm) (expr b sm)
 expr (EOp o)            sm = eop o sm
 expr (IsIn  a b)        sm = P.Row  [expr a sm, P.MO P.IsIn, space b]
@@ -103,6 +104,21 @@ neg sm a = if (neg' a) then
              P.Row [P.MO P.Neg, expr a sm]
            else 
              P.Row [P.MO P.Neg, P.Fenced P.Paren P.Paren $ expr a sm]
+
+-- | For printing indexes
+indx :: HasSymbolTable ctx => ctx -> Expr -> Expr -> P.Expr
+indx sm (C c) i = f s
+  where
+    i' = expr i sm
+    s = eqSymb $ symbLookup c $ sm^.symbolTable
+    f (Corners [] [] [] [b] e) = 
+      let e' = P.Font P.Emph $ symbol e
+          b' = P.Font P.Emph $ symbol b in
+      P.Row [P.Row [e', P.Sub (P.Row [b', P.MO P.Comma, i'])]] -- FIXME, extra Row
+    f a@(Atomic _) = P.Row [P.Font P.Emph $ symbol a, P.Sub i']
+    f a@(Greek _)  = P.Row [P.Font P.Emph $ symbol a, P.Sub i']
+    f   e          = let e' = P.Font P.Emph $ symbol e in P.Row [P.Row [e'], P.Sub i']
+indx sm a i = P.Row [P.Row [expr a sm], P.Sub $ expr i sm]
 
 -- | Helper function for translating 'EOperator's
 eop :: HasSymbolTable s => EOperator -> s -> P.Expr

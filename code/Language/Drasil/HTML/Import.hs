@@ -67,6 +67,7 @@ expr (UnaryOp Norm u)   sm = P.Fenced P.Norm P.Norm $ expr u sm
 expr (UnaryOp Sqrt u)   sm = mkCall sm P.Sqrt u
 expr (UnaryOp Neg u)    sm = neg sm u
 expr (BinaryOp Div a b) sm = P.BOp P.Frac (replace_divs a sm) (replace_divs b sm)
+expr (BinaryOp Cross a b) sm = P.Row [expr a sm, P.MO P.Cross, expr b sm]
 expr (BinaryOp o a b)   sm = P.BOp (binop o) (expr a sm) (expr b sm)
 expr (EOp o)            sm = eop o sm
 expr (IsIn  a b)        sm = P.Row  [expr a sm, P.MO P.IsIn, space b]

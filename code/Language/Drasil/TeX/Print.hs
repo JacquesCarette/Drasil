@@ -111,8 +111,6 @@ p_expr (Gr g) = unPL $ greek g
 p_expr (Sub e) = "_" ++ brace (p_expr e)
 p_expr (Sup e) = "^" ++ brace (p_expr e)
 p_expr (Over Hat s)     = "\\hat{" ++ p_expr s ++ "}"
--- p_expr (Over Vector s)  = "\\mathbf{" ++ p_expr s ++ "}"
--- p_expr (Over Prime s)   = p_expr s ++ "'"
 p_expr (MO o) = p_ops o
 p_expr (Fenced l r m)    = fence Open l ++ p_expr m ++ fence Close r
 p_expr (Font Bold e) = "\\mathbf{" ++ p_expr e ++ "}"
@@ -133,7 +131,6 @@ p_bop Div = "/"
 p_bop Pow = "^"
 p_bop Dot = "\\cdot{}"
 p_bop Index = error "no printing of Index"
-p_bop Cross = "\\times"
 
 p_ops :: Ops -> String
 p_ops IsIn = "\\in{}"
@@ -156,6 +153,7 @@ p_ops Dim      = "\\mathsf{dim}"
 p_ops Exp      = "e"
 p_ops Sqrt     = "\\sqrt"
 p_ops Neg      = "-"
+p_ops Cross    = "\\times"
 
 fence :: OpenClose -> Fence -> String
 fence Open Paren = "\\left("

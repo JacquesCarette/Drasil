@@ -146,7 +146,6 @@ p_expr (BOp Gt a b)   = p_expr a ++ "&thinsp;&gt;&thinsp;" ++ p_expr b
 p_expr (BOp LEq a b)  = p_expr a ++ "&thinsp;&le;&thinsp;" ++ p_expr b
 p_expr (BOp GEq a b)  = p_expr a ++ "&thinsp;&ge;&thinsp;" ++ p_expr b
 p_expr (BOp Dot a b)  = p_expr a ++ "&sdot;" ++ p_expr b
-p_expr (BOp Cross a b) = p_expr a ++ "&#10799;" ++ p_expr b
 p_expr (BOp Index a i)= p_indx a i
 p_expr (BOp Impl a b) = p_expr a ++ " &rArr; " ++ p_expr b
 p_expr (BOp Iff a b)  = p_expr a ++ " &hArr; " ++ p_expr b
@@ -186,6 +185,7 @@ p_ops Dim      = "dim"
 p_ops Exp      = "e"
 p_ops Sqrt     = "&radic;"
 p_ops Neg      = "&minus;"
+p_ops Cross    = "&#10799;"
 
 fence :: OpenClose -> Fence -> String
 fence Open Paren = "("

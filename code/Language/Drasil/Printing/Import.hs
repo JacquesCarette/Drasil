@@ -28,7 +28,7 @@ binop Impl = P.Impl
 binop Iff = P.Iff
 binop Index = P.Index
 binop Dot = P.Dot
-binop Cross = P.Cross
+binop Cross = error "Printing.Import.binop: Cross should no longer translate through here"
 
 space :: Space -> P.Expr
 space Integer = P.MO P.Integer

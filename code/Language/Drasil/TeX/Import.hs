@@ -3,7 +3,7 @@ module Language.Drasil.TeX.Import(makeDocument,spec) where
 import Control.Lens ((^.))
 import Data.List (intersperse)
 
-import Language.Drasil.Expr (Expr(..), BinOp(..), sy, UFunc(..),
+import Language.Drasil.Expr (Expr(..), BinOp(..), sy, UFunc(..), Oper(Mul),
     DerivType(..), EOperator(..), ($=), RealRange(..), DomainDesc(..))
 import Language.Drasil.Chunk.AssumpChunk
 import Language.Drasil.Expr.Extract
@@ -61,7 +61,7 @@ expr (UnaryOp Exp u)    sm = P.Row [P.MO P.Exp, P.Sup $ expr u sm]
 expr (UnaryOp Abs u)    sm = P.Fenced P.Abs P.Abs $ expr u sm
 expr (UnaryOp Norm u)   sm = P.Fenced P.Norm P.Norm $ expr u sm
 expr (UnaryOp Sqrt u)   sm = P.Row [P.MO P.Sqrt, P.Row [expr u sm]]
-expr (UnaryOp Neg u)    sm = P.UOp P.Neg (expr u sm)
+expr (UnaryOp Neg u)    sm = neg sm u
 expr (EOp o)           sm = eop o sm
 expr (BinaryOp Div a b) sm = P.BOp P.Frac (replace_divs sm a) (replace_divs sm b)
 expr (BinaryOp o a b)  sm = P.BOp (binop o) (expr a sm) (expr b sm)
@@ -69,6 +69,14 @@ expr (IsIn  a b)       sm = P.Row [expr a sm, P.MO P.IsIn, space b]
 
 mkCall :: HasSymbolTable ctx => ctx -> P.Ops -> Expr -> P.Expr
 mkCall s o e = P.Row [P.MO o, P.Fenced P.Paren P.Paren $ expr e s]
+
+neg :: HasSymbolTable ctx => ctx -> Expr -> P.Expr
+neg s x@(Dbl _) = P.Row [P.MO P.Neg, expr x s]
+neg s x@(Int _) = P.Row [P.MO P.Neg, expr x s]
+neg s a@(C   _) = P.Row [P.MO P.Neg, expr a s]
+neg s a@(UnaryOp _ _)   = P.Row [P.MO P.Neg, expr a s]
+neg s a@(Assoc Mul _)   = P.Row [P.MO P.Neg, expr a s]
+neg s x                 = P.Fenced P.Paren P.Paren $ P.Row $ [P.MO P.Neg, expr x s]
 
 eop :: HasSymbolTable ctx => EOperator -> ctx -> P.Expr
 eop (Summation (IntegerDD v (BoundedR l h)) e) sm =

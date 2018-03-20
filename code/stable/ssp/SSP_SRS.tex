@@ -911,7 +911,7 @@ For basal surfaces the stiffness constants and displacements refer to a system r
 \cos\left(\alpha{}_{i}\right) & -\sin\left(\alpha{}_{i}\right)\\
 \sin\left(\alpha{}_{i}\right) & \cos\left(\alpha{}_{i}\right)
 \end{bmatrix} {K_{st,i}}=\begin{bmatrix}
-{K_{bt,i}} \cos\left(\alpha{}_{i}\right) & \left(-{K_{bn,i}} \sin\left(\alpha{}_{i}\right)\right)\\
+{K_{bt,i}} \cos\left(\alpha{}_{i}\right) & -{K_{bn,i}} \sin\left(\alpha{}_{i}\right)\\
 {K_{bt,i}} \sin\left(\alpha{}_{i}\right) & {K_{bn,i}} \cos\left(\alpha{}_{i}\right)
 \end{bmatrix}
 \end{dmath}
@@ -921,7 +921,7 @@ The Hooke's law force displacement relationship of GD8 applied to the base also 
 p_{i}\\
 p_{i}
 \end{bmatrix}={K_{bt,i}} \varepsilon{}=\begin{bmatrix}
-{K_{bt,i}} \cos\left(\alpha{}_{i}\right) & \left(-{K_{bn,i}} \sin\left(\alpha{}_{i}\right)\right)\\
+{K_{bt,i}} \cos\left(\alpha{}_{i}\right) & -{K_{bn,i}} \sin\left(\alpha{}_{i}\right)\\
 {K_{bt,i}} \sin\left(\alpha{}_{i}\right) & {K_{bn,i}} \cos\left(\alpha{}_{i}\right)
 \end{bmatrix} \begin{bmatrix}
 \cos\left(\alpha{}_{i}\right) & \sin\left(\alpha{}_{i}\right)\\
@@ -1100,9 +1100,9 @@ Taking the last static equation of T2 with the moment equilibrium of GD6 about t
 The equation in terms of $\lambda{}$ leads to equation (14).
 \begin{dmath}
 \lambda{}=\frac{\begin{multlined}
-\left(-E_{i}\right) \left(z_{i}-\left(b_{i}/2\right) \tan\left(\alpha{}_{i}\right)\right)+E_{i-1} \left(z_{i-1}-\left(b_{i}/2\right) \tan\left(\alpha{}_{i}\right)\right)+\left(-H_{i} \left(z_{i}-\left(b_{i}/2\right) \tan\left(\alpha{}_{i}\right)\right)\right)
+\left(-E_{i}\right) \left(z_{i}-\left(b_{i}/2\right) \tan\left(\alpha{}_{i}\right)\right)+E_{i-1} \left(z_{i-1}-\left(b_{i}/2\right) \tan\left(\alpha{}_{i}\right)\right)-H_{i} \left(z_{i}-\left(b_{i}/2\right) \tan\left(\alpha{}_{i}\right)\right)
 \\+
-H_{i-1} \left(z_{i-1}-\left(b_{i}/2\right) \tan\left(\alpha{}_{i}\right)\right)+{K_{c}} W_{i} h_{i}/2+\left(-{U_{t,i}} \sin\left(\beta{}_{i}\right) h_{i}\right)+\left(-Q_{i} \sin\left(\omega{}_{i}\right) h_{i}\right)
+H_{i-1} \left(z_{i-1}-\left(b_{i}/2\right) \tan\left(\alpha{}_{i}\right)\right)+{K_{c}} W_{i} h_{i}/2-{U_{t,i}} \sin\left(\beta{}_{i}\right) h_{i}-Q_{i} \sin\left(\omega{}_{i}\right) h_{i}
 \end{multlined}
 }{\left(b_{i}/2\right) \left(E_{i} f_{i}+E_{i-1} f_{i-1}\right)}
 \end{dmath}

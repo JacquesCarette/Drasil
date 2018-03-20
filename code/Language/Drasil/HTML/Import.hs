@@ -1,7 +1,7 @@
 module Language.Drasil.HTML.Import(makeDocument,spec) where
 
 import Prelude hiding (id)
-import Language.Drasil.Expr (Expr(..), BinOp(..), sy, UFunc(..),
+import Language.Drasil.Expr (Expr(..), BinOp(..), sy, UFunc(..), Oper(..),
     DerivType(..), EOperator(..), ($=), DomainDesc(..), RealRange(..))
 import Language.Drasil.Spec
 import qualified Language.Drasil.Printing.AST as P
@@ -65,7 +65,7 @@ expr (UnaryOp Exp u)    sm = P.Row [P.MO P.Exp, P.Sup $ expr u sm]
 expr (UnaryOp Abs u)    sm = P.Fenced P.Abs P.Abs $ expr u sm
 expr (UnaryOp Norm u)   sm = P.Fenced P.Norm P.Norm $ expr u sm
 expr (UnaryOp Sqrt u)   sm = mkCall sm P.Sqrt u
-expr (UnaryOp Neg u)    sm = P.UOp P.Neg (expr u sm)
+expr (UnaryOp Neg u)    sm = neg sm u
 expr (BinaryOp Div a b) sm = P.BOp P.Frac (replace_divs a sm) (replace_divs b sm)
 expr (BinaryOp o a b)   sm = P.BOp (binop o) (expr a sm) (expr b sm)
 expr (EOp o)            sm = eop o sm
@@ -73,6 +73,23 @@ expr (IsIn  a b)        sm = P.Row  [expr a sm, P.MO P.IsIn, space b]
 
 mkCall :: HasSymbolTable ctx => ctx -> P.Ops -> Expr -> P.Expr
 mkCall s o e = P.Row [P.MO o, P.Fenced P.Paren P.Paren $ expr e s]
+
+-- | Helper for properly rendering negation of expressions
+neg' :: Expr -> Bool
+neg' (Dbl     _)     = True
+neg' (Int     _)     = True
+neg' (EOp _)         = True
+neg' (Assoc Mul _)   = True
+neg' (BinaryOp Index _ _) = True
+neg' (UnaryOp _ _)   = True
+neg' (C _)           = True
+neg' _               = False
+
+neg :: HasSymbolTable s => s -> Expr -> P.Expr
+neg sm a = if (neg' a) then 
+             P.Row [P.MO P.Neg, expr a sm]
+           else 
+             P.Row [P.MO P.Neg, P.Fenced P.Paren P.Paren $ expr a sm]
 
 -- | Helper function for translating 'EOperator's
 eop :: HasSymbolTable s => EOperator -> s -> P.Expr

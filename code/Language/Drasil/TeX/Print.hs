@@ -100,7 +100,6 @@ p_expr (BOp Div n d)  = divide n d
 p_expr (BOp Pow x y)  = pow x y
 p_expr (BOp Index a i) = p_indx a i
 p_expr (BOp o x y)    = p_expr x ++ p_bop o ++ p_expr y
-p_expr (UOp Neg x)   = neg x
 p_expr (Funct o e)   = p_op o e
 p_expr (Case ps)  = "\\begin{cases}\n" ++ cases ps ++ "\n\\end{cases}"
 p_expr (Mtx a)    = "\\begin{bmatrix}\n" ++ p_matrix a ++ "\n\\end{bmatrix}"
@@ -156,6 +155,7 @@ p_ops Not      = "\\neg{}"
 p_ops Dim      = "\\mathsf{dim}"
 p_ops Exp      = "e"
 p_ops Sqrt     = "\\sqrt"
+p_ops Neg      = "-"
 
 fence :: OpenClose -> Fence -> String
 fence Open Paren = "\\left("
@@ -181,9 +181,9 @@ needMultlined x
         extrac (f,l)   = [Assoc Add f, Assoc Add l]
 
 splitTerms :: Expr -> [Expr]
-splitTerms (UOp Neg e) = map (UOp Neg) $ splitTerms e
+-- splitTerms (UOp Neg e) = map (UOp Neg) $ splitTerms e
 splitTerms (Assoc Add l) = concat $ map splitTerms l
-splitTerms (BOp Subt a b) = splitTerms a ++ splitTerms (UOp Neg b)
+-- splitTerms (BOp Subt a b) = splitTerms a ++ splitTerms (UOp Neg b)
 splitTerms e = [e]
 
 -- | For printing indexes

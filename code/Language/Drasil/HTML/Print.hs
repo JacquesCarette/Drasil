@@ -135,7 +135,6 @@ p_expr (Assoc Mul l) = mul l
 p_expr (Assoc Add l)  = concat $ intersperse " &plus; " $ map p_expr l
 p_expr (Assoc And l)  = concat $ intersperse " &and; " $ map p_expr l
 p_expr (Assoc Or l)   = concat $ intersperse " &or; " $ map p_expr l
-p_expr (UOp Neg a)    = neg a
 p_expr (BOp Subt a b)  = p_expr a ++ " &minus; " ++ p_expr b
 p_expr (BOp Frac a b) = fraction (p_expr a) (p_expr b) --Found in HTMLHelpers
 p_expr (BOp Div a b)  = divide a b
@@ -186,6 +185,7 @@ p_ops Not      = "&not;"
 p_ops Dim      = "dim"
 p_ops Exp      = "e"
 p_ops Sqrt     = "&radic;"
+p_ops Neg      = "&minus;"
 
 fence :: OpenClose -> Fence -> String
 fence Open Paren = "("
@@ -251,7 +251,6 @@ neg' (Int     _)     = True
 neg' (Gr      _)     = True
 neg' (Spec    _)     = True
 neg' (Ident   _)     = True
-neg' (UOp   _ _)     = True
 neg' (Funct _ _)     = True
 neg' (Assoc Mul _)   = True
 neg' (BOp Index _ _) = True

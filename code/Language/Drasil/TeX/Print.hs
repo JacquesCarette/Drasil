@@ -233,18 +233,6 @@ divide n@(Assoc Add _) d = paren (p_expr n) ++ "/" ++ p_expr d
 divide n@(BOp Subt _ _) d = paren (p_expr n) ++ "/" ++ p_expr d
 divide n d = p_expr n ++ "/" ++ p_expr d
 
-neg :: Expr -> String
-neg x@(Dbl _) = "-" ++ p_expr x
-neg x@(Int _) = "-" ++ p_expr x
-neg a@(Gr      _)     = "-" ++ p_expr a
-neg a@(Spec    _)     = "-" ++ p_expr a
-neg a@(Ident   _)     = "-" ++ p_expr a
--- FIXME - these are hacks, but they should become obsolete later
-neg   (Font Emph a)   = neg a -- because Emph is ignored
-neg a@(Row [_]) = "-" ++ p_expr a
-neg a@(Row [MO _, Fenced _ _ _]) = "-" ++ p_expr a
-neg x         = paren ("-" ++ p_expr x)
-
 pow :: Expr -> Expr -> String
 pow x@(Assoc Add _) y = paren (p_expr x) ++ "^" ++ brace (p_expr y)
 pow x@(BOp Subt _ _) y = paren (p_expr x) ++ "^" ++ brace (p_expr y)

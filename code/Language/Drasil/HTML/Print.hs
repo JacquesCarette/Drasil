@@ -244,30 +244,6 @@ divide n@(Assoc Add _)  d  = paren (p_expr n) ++ "/" ++ p_expr d
 divide n@(BOp Subt _ _) d  = paren (p_expr n) ++ "/" ++ p_expr d
 divide n d                 = p_expr n ++ "/" ++ p_expr d
 
--- | Helper for properly rendering negation of expressions
-neg' :: Expr -> Bool
-neg' (Dbl     _)     = True
-neg' (Int     _)     = True
-neg' (Gr      _)     = True
-neg' (Spec    _)     = True
-neg' (Ident   _)     = True
-neg' (Funct _ _)     = True
-neg' (Assoc Mul _)   = True
-neg' (BOp Index _ _) = True
--- FIXME, serious hacks...
-neg' (Font _ a)      = neg' a
-neg' (Row [a])       = neg' a
-neg' (Row [a, Sub _])= neg' a
-neg' (Row [a, Sup _])= neg' a
-neg' (Row [MO _, Fenced _ _ _]) = True
-neg' _               = False
-
-neg :: Expr -> String
-neg a = if (neg' a) then minus a else "&minus;" ++ paren (p_expr a)
-
-minus :: Expr -> String
-minus e = "&minus;" ++ p_expr e
-
 -- | Helper for properly rendering exponents
 pow :: Expr -> Expr -> String
 pow a@(Assoc Add _)  b = paren (p_expr a) ++ sup (p_expr b)

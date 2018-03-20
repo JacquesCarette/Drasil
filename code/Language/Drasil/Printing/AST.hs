@@ -9,10 +9,11 @@ import Language.Drasil.Chunk.Citation (Month, EntryID, CitationKind)
 data Oper = Add | Mul | And | Or
 
 data BinOp = Frac | Div | Pow | Subt | Eq | NEq | Lt | Gt | LEq | GEq | Impl | Iff | Index
-  | Dot
+
 
 data Ops = IsIn | Integer | Real | Rational | Natural | Boolean | Comma | Prime | Log
   | Sin | Cos | Tan | Sec | Csc | Cot | Not | Dim | Exp | Sqrt | Neg | Cross
+  | Dot
 
 data Fence = Paren | Curly | Norm | Abs
 data OverSymb = Hat
@@ -66,7 +67,6 @@ prec2 GEq  = 130
 prec2 Impl = 130
 prec2 Iff = 130
 prec2 Index = 250
-prec2 Dot = 190
 
 infixr 5 :+:
 

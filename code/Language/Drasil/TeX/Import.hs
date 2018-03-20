@@ -65,6 +65,7 @@ expr (UnaryOp Neg u)    sm = neg sm u
 expr (EOp o)           sm = eop o sm
 expr (BinaryOp Div a b) sm = P.BOp P.Frac (replace_divs sm a) (replace_divs sm b)
 expr (BinaryOp Cross a b) sm = P.Row [expr a sm, P.MO P.Cross, expr b sm]
+expr (BinaryOp Dot a b) sm = P.Row [expr a sm, P.MO P.Dot, expr b sm]
 expr (BinaryOp o a b)  sm = P.BOp (binop o) (expr a sm) (expr b sm)
 expr (IsIn  a b)       sm = P.Row [expr a sm, P.MO P.IsIn, space b]
 

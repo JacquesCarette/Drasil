@@ -129,7 +129,6 @@ p_bop Iff = "\\iff{}"
 p_bop Frac = "/"
 p_bop Div = "/"
 p_bop Pow = "^"
-p_bop Dot = "\\cdot{}"
 p_bop Index = error "no printing of Index"
 
 p_ops :: Ops -> String
@@ -154,6 +153,7 @@ p_ops Exp      = "e"
 p_ops Sqrt     = "\\sqrt"
 p_ops Neg      = "-"
 p_ops Cross    = "\\times"
+p_ops Dot      = "\\cdot{}"
 
 fence :: OpenClose -> Fence -> String
 fence Open Paren = "\\left("

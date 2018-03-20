@@ -26,6 +26,33 @@ infixr 9 $||
 data Oper = Add | Mul | And | Or
   deriving (Eq)
 
+-- These precedences are inspired from Haskell/F# 
+-- as documented at http://kevincantu.org/code/operators.html
+-- They are all multiplied by 10, to leave room to weave things in between
+
+prec2 :: BinOp -> Int
+prec2 Frac = 190
+prec2 Div = 190
+prec2 Pow = 150
+prec2 Subt = 220
+prec2 Eq = 130
+prec2 NEq  = 130
+prec2 Lt  = 130
+prec2 Gt  = 130
+prec2 LEq  = 130
+prec2 GEq  = 130
+prec2 Impl = 130
+prec2 Iff = 130
+prec2 Index = 250
+prec2 Dot = 190
+prec2 Cross = 190
+
+prec :: Oper -> Int
+prec Mul = 190
+prec Add = 180
+prec And = 120
+prec Or = 110
+
 data BinOp = Frac | Div | Pow | Subt | Eq | NEq | Lt | Gt | LEq | GEq | Impl | Iff | Index
   | Dot | Cross
   deriving Eq

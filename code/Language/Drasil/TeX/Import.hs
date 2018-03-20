@@ -66,11 +66,22 @@ expr (EOp o)           sm = eop o sm
 expr (BinaryOp Div a b) sm = P.BOp P.Frac (replace_divs sm a) (replace_divs sm b)
 expr (BinaryOp Cross a b) sm = P.Row [expr a sm, P.MO P.Cross, expr b sm]
 expr (BinaryOp Dot a b) sm = P.Row [expr a sm, P.MO P.Dot, expr b sm]
+expr (BinaryOp Eq a b) sm = mkBOp sm P.Eq a b
+expr (BinaryOp NEq a b) sm = mkBOp sm P.NEq a b
+expr (BinaryOp Lt a b) sm = mkBOp sm P.Lt a b
+expr (BinaryOp Gt a b) sm = mkBOp sm P.Gt a b
+expr (BinaryOp LEq a b) sm = mkBOp sm P.LEq a b
+expr (BinaryOp GEq a b) sm = mkBOp sm P.GEq a b
+expr (BinaryOp Impl a b) sm = mkBOp sm P.Impl a b
+expr (BinaryOp Iff a b) sm = mkBOp sm P.Iff a b
 expr (BinaryOp o a b)  sm = P.BOp (binop o) (expr a sm) (expr b sm)
 expr (IsIn  a b)       sm = P.Row [expr a sm, P.MO P.IsIn, space b]
 
 mkCall :: HasSymbolTable ctx => ctx -> P.Ops -> Expr -> P.Expr
 mkCall s o e = P.Row [P.MO o, P.Fenced P.Paren P.Paren $ expr e s]
+
+mkBOp :: HasSymbolTable ctx => ctx -> P.Ops -> Expr -> Expr -> P.Expr
+mkBOp sm o a b = P.Row [expr a sm, P.MO o, expr b sm]
 
 neg :: HasSymbolTable ctx => ctx -> Expr -> P.Expr
 neg s x@(Dbl _) = P.Row [P.MO P.Neg, expr x s]

@@ -139,15 +139,7 @@ p_expr (BOp Subt a b)  = p_expr a ++ " &minus; " ++ p_expr b
 p_expr (BOp Frac a b) = fraction (p_expr a) (p_expr b) --Found in HTMLHelpers
 p_expr (BOp Div a b)  = divide a b
 p_expr (BOp Pow a b)  = pow a b
-p_expr (BOp Eq a b)   = p_expr a ++ " = " ++ p_expr b
-p_expr (BOp NEq a b)  = p_expr a ++ "&ne;" ++ p_expr b
-p_expr (BOp Lt a b)   = p_expr a ++ "&thinsp;&lt;&thinsp;" ++ p_expr b --thin spaces make these more readable
-p_expr (BOp Gt a b)   = p_expr a ++ "&thinsp;&gt;&thinsp;" ++ p_expr b
-p_expr (BOp LEq a b)  = p_expr a ++ "&thinsp;&le;&thinsp;" ++ p_expr b
-p_expr (BOp GEq a b)  = p_expr a ++ "&thinsp;&ge;&thinsp;" ++ p_expr b
 p_expr (BOp Index a i)= p_indx a i
-p_expr (BOp Impl a b) = p_expr a ++ " &rArr; " ++ p_expr b
-p_expr (BOp Iff a b)  = p_expr a ++ " &hArr; " ++ p_expr b
 p_expr (Funct f e)    = p_op f e
 p_expr (Case ps)  = cases ps (p_expr)
 p_expr (Mtx a)    = "<table class=\"matrix\">\n" ++ p_matrix a ++ "</table>"
@@ -186,6 +178,14 @@ p_ops Sqrt     = "&radic;"
 p_ops Neg      = "&minus;"
 p_ops Cross    = "&#10799;"
 p_ops Dot      = "&sdot;"
+p_ops Eq       = " = " -- with spaces?
+p_ops NEq      = "&ne;"
+p_ops Lt       = "&thinsp;&lt;&thinsp;" --thin spaces make these more readable
+p_ops Gt       = "&thinsp;&gt;&thinsp;" 
+p_ops LEq      = "&thinsp;&le;&thinsp;"
+p_ops GEq      = "&thinsp;&ge;&thinsp;"
+p_ops Impl     = " &rArr; "
+p_ops Iff      = " &hArr; "
 
 fence :: OpenClose -> Fence -> String
 fence Open Paren = "("

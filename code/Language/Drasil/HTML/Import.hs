@@ -78,6 +78,7 @@ expr (BinaryOp GEq a b) sm = mkBOp sm P.GEq a b
 expr (BinaryOp Impl a b) sm = mkBOp sm P.Impl a b
 expr (BinaryOp Iff a b) sm = mkBOp sm P.Iff a b
 expr (BinaryOp Index a b) sm = indx sm a b
+expr (BinaryOp Pow a b) sm = pow sm a b
 expr (BinaryOp o a b)   sm = P.BOp (binop o) (expr a sm) (expr b sm)
 expr (EOp o)            sm = eop o sm
 expr (IsIn  a b)        sm = P.Row  [expr a sm, P.MO P.IsIn, space b]
@@ -141,7 +142,7 @@ eop (Integral (IntegerDD _ _) _) _ =
 replace_divs :: HasSymbolTable s => Expr -> s -> P.Expr
 replace_divs (BinaryOp Div a b)  sm = P.BOp P.Div (replace_divs a sm) (replace_divs b sm)
 replace_divs (Assoc op l)        sm = P.Assoc (oper op) $ map (\x -> replace_divs x sm) l
-replace_divs (BinaryOp Pow  a b) sm = P.BOp P.Pow (replace_divs a sm) (replace_divs b sm)
+-- replace_divs (BinaryOp Pow  a b) sm = P.BOp P.Pow (replace_divs a sm) (replace_divs b sm)
 replace_divs (BinaryOp Subt a b) sm = P.BOp P.Subt (replace_divs a sm) (replace_divs b sm)
 replace_divs a                   sm = expr a sm
 
@@ -164,6 +165,16 @@ sFormat :: Decoration -> Symbol -> P.Expr
 sFormat Hat    s = P.Over P.Hat $ symbol s
 sFormat Vector s = P.Font P.Bold $ symbol s
 sFormat Prime  s = P.Row [symbol s, P.MO P.Prime]
+
+-- | Helper for properly rendering exponents
+pow :: HasSymbolTable ctx => ctx -> Expr -> Expr -> P.Expr
+pow sm a@(Assoc Add _)  b = P.Row [P.Fenced P.Paren P.Paren (expr a sm), P.Sup (expr b sm)]
+pow sm a@(BinaryOp Subt _ _) b = P.Row [P.Fenced P.Paren P.Paren (expr a sm), P.Sup (expr b sm)]
+pow sm a@(BinaryOp Frac _ _) b = P.Row [P.Fenced P.Paren P.Paren (expr a sm), P.Sup (expr b sm)]
+pow sm a@(BinaryOp Div _ _)  b = P.Row [P.Fenced P.Paren P.Paren (expr a sm), P.Sup (expr b sm)]
+pow sm a@(Assoc Mul _)  b = P.Row [P.Fenced P.Paren P.Paren (expr a sm), P.Sup (expr b sm)]
+pow sm a@(BinaryOp Pow _ _)  b = P.Row [P.Fenced P.Paren P.Paren (expr a sm), P.Sup (expr b sm)]
+pow sm a                b = P.Row [expr a sm, P.Sup (expr b sm)]
 
 -- | Translates Sentence to the HTML representation of Sentence ('Spec')
 spec :: HasSymbolTable s => Sentence -> s -> P.Spec

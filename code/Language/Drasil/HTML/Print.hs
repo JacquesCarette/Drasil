@@ -138,8 +138,6 @@ p_expr (Assoc Or l)   = concat $ intersperse " &or; " $ map p_expr l
 p_expr (BOp Subt a b)  = p_expr a ++ " &minus; " ++ p_expr b
 p_expr (BOp Frac a b) = fraction (p_expr a) (p_expr b) --Found in HTMLHelpers
 p_expr (BOp Div a b)  = divide a b
-p_expr (BOp Pow a b)  = pow a b
--- p_expr (BOp Index a i)= p_indx a i
 p_expr (Funct f e)    = p_op f e
 p_expr (Case ps)  = cases ps (p_expr)
 p_expr (Mtx a)    = "<table class=\"matrix\">\n" ++ p_matrix a ++ "</table>"
@@ -224,16 +222,6 @@ divide n d@(BOp Subt _ _)  = p_expr n ++ "/" ++ paren (p_expr d)
 divide n@(Assoc Add _)  d  = paren (p_expr n) ++ "/" ++ p_expr d
 divide n@(BOp Subt _ _) d  = paren (p_expr n) ++ "/" ++ p_expr d
 divide n d                 = p_expr n ++ "/" ++ p_expr d
-
--- | Helper for properly rendering exponents
-pow :: Expr -> Expr -> String
-pow a@(Assoc Add _)  b = paren (p_expr a) ++ sup (p_expr b)
-pow a@(BOp Subt _ _) b = paren (p_expr a) ++ sup (p_expr b)
-pow a@(BOp Frac _ _) b = paren (p_expr a) ++ sup (p_expr b)
-pow a@(BOp Div _ _)  b = paren (p_expr a) ++ sup (p_expr b)
-pow a@(Assoc Mul _)  b = paren (p_expr a) ++ sup (p_expr b)
-pow a@(BOp Pow _ _)  b = paren (p_expr a) ++ sup (p_expr b)
-pow a                b = p_expr a ++ sup (p_expr b)
 
 -----------------------------------------------------------------
 ------------------BEGIN TABLE PRINTING---------------------------

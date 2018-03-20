@@ -94,11 +94,8 @@ p_expr (Assoc Add l)  = concat $ intersperse "+" $ map p_expr l
 p_expr (Assoc Mul l)  = mul l
 p_expr (Assoc And l)  = concat $ intersperse "\\land{}" $ map p_expr l
 p_expr (Assoc Or l)   = concat $ intersperse "\\lor{}" $ map p_expr l
--- p_expr (Sym s)    = symbol s
 p_expr (BOp Frac n d) = "\\frac{" ++ needMultlined n ++ "}{" ++ needMultlined d ++"}"
 p_expr (BOp Div n d)  = divide n d
-p_expr (BOp Pow x y)  = pow x y
--- p_expr (BOp Index a i) = p_indx a i
 p_expr (BOp o x y)    = p_expr x ++ p_bop o ++ p_expr y
 p_expr (Funct o e)   = p_op o e
 p_expr (Case ps)  = "\\begin{cases}\n" ++ cases ps ++ "\n\\end{cases}"
@@ -120,7 +117,7 @@ p_bop :: BinOp -> String
 p_bop Subt = "-"
 p_bop Frac = "/"
 p_bop Div = "/"
-p_bop Pow = "^"
+-- p_bop Pow = "^"
 
 p_ops :: Ops -> String
 p_ops IsIn = "\\in{}"
@@ -210,15 +207,6 @@ divide n d@(BOp Subt _ _) = p_expr n ++ "/" ++ paren (p_expr d)
 divide n@(Assoc Add _) d = paren (p_expr n) ++ "/" ++ p_expr d
 divide n@(BOp Subt _ _) d = paren (p_expr n) ++ "/" ++ p_expr d
 divide n d = p_expr n ++ "/" ++ p_expr d
-
-pow :: Expr -> Expr -> String
-pow x@(Assoc Add _) y = paren (p_expr x) ++ "^" ++ brace (p_expr y)
-pow x@(BOp Subt _ _) y = paren (p_expr x) ++ "^" ++ brace (p_expr y)
-pow x@(BOp Frac _ _) y = paren (p_expr x) ++ "^" ++ brace (p_expr y)
-pow x@(BOp Div _ _) y = paren (p_expr x) ++ "^" ++ brace (p_expr y)
-pow x@(Assoc Mul _) y = paren (p_expr x) ++ "^" ++ brace (p_expr y)
-pow x@(BOp Pow _ _) y = paren (p_expr x) ++ "^" ++ brace (p_expr y)
-pow x y = p_expr x ++ "^" ++ brace (p_expr y)
 
 cases :: [(Expr,Expr)] -> String
 cases []     = error "Attempt to create case expression without cases"

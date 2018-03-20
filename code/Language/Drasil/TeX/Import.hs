@@ -3,7 +3,7 @@ module Language.Drasil.TeX.Import(makeDocument,spec) where
 import Control.Lens ((^.))
 import Data.List (intersperse)
 
-import Language.Drasil.Expr (Expr(..), BinOp(..), sy, UFunc(..), Oper(Mul),
+import Language.Drasil.Expr (Expr(..), BinOp(..), sy, UFunc(..), Oper(Mul,Add),
     DerivType(..), EOperator(..), ($=), RealRange(..), DomainDesc(..))
 import Language.Drasil.Chunk.AssumpChunk
 import Language.Drasil.Expr.Extract
@@ -63,7 +63,7 @@ expr (UnaryOp Norm u)   sm = P.Fenced P.Norm P.Norm $ expr u sm
 expr (UnaryOp Sqrt u)   sm = P.Row [P.MO P.Sqrt, P.Row [expr u sm]]
 expr (UnaryOp Neg u)    sm = neg sm u
 expr (EOp o)           sm = eop o sm
-expr (BinaryOp Div a b) sm = P.BOp P.Frac (replace_divs sm a) (replace_divs sm b)
+expr (BinaryOp Div a b) sm = P.BOp P.Frac (expr a sm) (expr b sm)
 expr (BinaryOp Cross a b) sm = P.Row [expr a sm, P.MO P.Cross, expr b sm]
 expr (BinaryOp Dot a b) sm = P.Row [expr a sm, P.MO P.Dot, expr b sm]
 expr (BinaryOp Eq a b) sm = mkBOp sm P.Eq a b
@@ -75,6 +75,7 @@ expr (BinaryOp GEq a b) sm = mkBOp sm P.GEq a b
 expr (BinaryOp Impl a b) sm = mkBOp sm P.Impl a b
 expr (BinaryOp Iff a b) sm = mkBOp sm P.Iff a b
 expr (BinaryOp Index a b) sm = indx sm a b
+expr (BinaryOp Pow a b) sm = pow sm a b
 expr (BinaryOp o a b)  sm = P.BOp (binop o) (expr a sm) (expr b sm)
 expr (IsIn  a b)       sm = P.Row [expr a sm, P.MO P.IsIn, space b]
 
@@ -107,13 +108,6 @@ eop (Integral (All v) e) sm =
   P.Funct (P.Integral (Just (symbol v), Nothing) v) (expr e sm)
 eop (Integral (IntegerDD _ _) _) _ =
   error "TeX/Import.hs Integral cannot be over Integers"
-
-replace_divs :: HasSymbolTable ctx => ctx -> Expr -> P.Expr
-replace_divs sm (BinaryOp Div a b) = P.BOp P.Div (replace_divs sm a) (replace_divs sm b)
-replace_divs sm (Assoc op l) = P.Assoc (oper op) $ map (replace_divs sm) l
-replace_divs sm (BinaryOp Pow a b) = P.BOp P.Pow (replace_divs sm a) (replace_divs sm b)
-replace_divs sm (BinaryOp Subt a b) = P.BOp P.Subt (replace_divs sm a) (replace_divs sm b)
-replace_divs sm a            = expr a sm
 
 -- | For printing indexes
 indx :: HasSymbolTable ctx => ctx -> Expr -> Expr -> P.Expr
@@ -150,6 +144,16 @@ sFormat :: Decoration -> Symbol -> P.Expr
 sFormat Hat    s = P.Over P.Hat $ symbol s
 sFormat Vector s = P.Font P.Bold $ symbol s
 sFormat Prime  s = P.Row [symbol s, P.MO P.Prime]
+
+-- | Helper for properly rendering exponents
+pow :: HasSymbolTable ctx => ctx -> Expr -> Expr -> P.Expr
+pow sm a@(Assoc Add _)  b = P.Row [P.Fenced P.Paren P.Paren (expr a sm), P.Sup (expr b sm)]
+pow sm a@(BinaryOp Subt _ _) b = P.Row [P.Fenced P.Paren P.Paren (expr a sm), P.Sup (expr b sm)]
+pow sm a@(BinaryOp Frac _ _) b = P.Row [P.Fenced P.Paren P.Paren (expr a sm), P.Sup (expr b sm)]
+pow sm a@(BinaryOp Div _ _)  b = P.Row [P.Fenced P.Paren P.Paren (expr a sm), P.Sup (expr b sm)]
+pow sm a@(Assoc Mul _)  b = P.Row [P.Fenced P.Paren P.Paren (expr a sm), P.Sup (expr b sm)]
+pow sm a@(BinaryOp Pow _ _)  b = P.Row [P.Fenced P.Paren P.Paren (expr a sm), P.Sup (expr b sm)]
+pow sm a                b = P.Row [expr a sm, P.Sup (expr b sm)]
 
 spec :: HasSymbolTable ctx => ctx -> Sentence -> P.Spec
 spec _  (S s)          = P.S s

@@ -8,11 +8,9 @@ import Language.Drasil.Chunk.Citation (Month, EntryID, CitationKind)
 
 data Oper = Add | Mul | And | Or
 
-data BinOp = Subt
-
 data Ops = IsIn | Integer | Real | Rational | Natural | Boolean | Comma | Prime | Log
   | Sin | Cos | Tan | Sec | Csc | Cot | Not | Dim | Exp | Sqrt | Neg | Cross
-  | Dot | Eq | NEq | Lt | Gt | LEq | GEq | Impl | Iff
+  | Dot | Eq | NEq | Lt | Gt | LEq | GEq | Impl | Iff | Subt
 
 data Fence = Paren | Curly | Norm | Abs
 data OverSymb = Hat
@@ -22,7 +20,6 @@ data Expr = Dbl   Double
           | Int   Integer
           | Str   String
           | Assoc Oper [Expr]
-          | BOp   BinOp Expr Expr
           | Case  [(Expr,Expr)]
           | Funct Functional Expr
           | Mtx [[Expr]]
@@ -52,9 +49,6 @@ prec Mul = 190
 prec Add = 180
 prec And = 120
 prec Or = 110
-
-prec2 :: BinOp -> Int
-prec2 Subt = 220
 
 infixr 5 :+:
 

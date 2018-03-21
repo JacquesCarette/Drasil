@@ -13,22 +13,6 @@ oper Or = P.Or
 oper Add = P.Add
 oper Mul = P.Mul
 
-binop :: BinOp -> P.BinOp
-binop Frac = error "Print.Import.binop: Div"
-binop Pow = error "Print.Import.binop: Pow"
-binop Subt = P.Subt
-binop Eq = error "Printing.Import.binop: Eq"
-binop NEq = error "Printing.Import.binop: NEq"
-binop Lt = error "Printing.Import.binop: Lt"
-binop Gt = error "Printing.Import.binop: Gt"
-binop LEq = error "Printing.Import.binop: LEq"
-binop GEq = error "Printing.Import.binop: GEq"
-binop Impl = error "Printing.Import.binop: Impl"
-binop Iff = error "Printing.Import.binop: Iff"
-binop Index = error "Printing.Import.bin: Index"
-binop Dot = error "Printing.Import.binop: Dot"
-binop Cross = error "Printing.Import.binop: Cross"
-
 space :: Space -> P.Expr
 space Integer = P.MO P.Integer
 space Rational = P.MO P.Rational

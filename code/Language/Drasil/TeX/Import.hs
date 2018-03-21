@@ -29,7 +29,7 @@ import Language.Drasil.NounPhrase (phrase, titleize)
 import Language.Drasil.Reference
 import Language.Drasil.Symbol
 import Language.Drasil.Unit (usymb)
-import Language.Drasil.Printing.Import (oper,binop,space)
+import Language.Drasil.Printing.Import (oper,space)
 
 expr :: HasSymbolTable ctx => Expr -> ctx -> P.Expr
 expr (Dbl d)            _ = P.Dbl  d
@@ -76,7 +76,7 @@ expr (BinaryOp Impl a b) sm = mkBOp sm P.Impl a b
 expr (BinaryOp Iff a b) sm = mkBOp sm P.Iff a b
 expr (BinaryOp Index a b) sm = indx sm a b
 expr (BinaryOp Pow a b) sm = pow sm a b
-expr (BinaryOp o a b)  sm = P.BOp (binop o) (expr a sm) (expr b sm)
+expr (BinaryOp Subt a b)  sm = P.Row [expr a sm, P.MO P.Subt, expr b sm]
 expr (IsIn  a b)       sm = P.Row [expr a sm, P.MO P.IsIn, space b]
 
 mkCall :: HasSymbolTable ctx => ctx -> P.Ops -> Expr -> P.Expr

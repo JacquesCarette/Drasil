@@ -95,7 +95,6 @@ p_expr (Assoc Mul l)  = mul l
 p_expr (Assoc And l)  = concat $ intersperse "\\land{}" $ map p_expr l
 p_expr (Assoc Or l)   = concat $ intersperse "\\lor{}" $ map p_expr l
 p_expr (Div n d) = "\\frac{" ++ p_expr n ++ "}{" ++ p_expr d ++"}"
-p_expr (BOp o x y)    = p_expr x ++ p_bop o ++ p_expr y
 p_expr (Funct o e)   = p_op o e
 p_expr (Case ps)  = "\\begin{cases}\n" ++ cases ps ++ "\n\\end{cases}"
 p_expr (Mtx a)    = "\\begin{bmatrix}\n" ++ p_matrix a ++ "\n\\end{bmatrix}"
@@ -111,9 +110,6 @@ p_expr (MO o) = p_ops o
 p_expr (Fenced l r m)    = fence Open l ++ p_expr m ++ fence Close r
 p_expr (Font Bold e) = "\\mathbf{" ++ p_expr e ++ "}"
 p_expr (Font Emph e) = p_expr e -- Emph is ignored here because we're in Math mode
-
-p_bop :: BinOp -> String
-p_bop Subt = "-"
 
 p_ops :: Ops -> String
 p_ops IsIn = "\\in{}"
@@ -146,6 +142,7 @@ p_ops GEq = "\\geq{}"
 p_ops LEq = "\\leq{}"
 p_ops Impl = "\\implies{}"
 p_ops Iff = "\\iff{}"
+p_ops Subt = "-"
 
 fence :: OpenClose -> Fence -> String
 fence Open Paren = "\\left("
@@ -172,7 +169,7 @@ mul = concat . intersperse " " . map mulParen
 
 mulParen :: Expr -> String
 mulParen a@(Assoc Add _) = paren $ p_expr a
-mulParen a@(BOp Subt _ _) = paren $ p_expr a
+-- mulParen a@(BOp Subt _ _) = paren $ p_expr a
 mulParen a@(Div _ _) = paren $ p_expr a
 mulParen a = p_expr a
 

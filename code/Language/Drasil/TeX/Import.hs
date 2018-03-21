@@ -4,7 +4,8 @@ import Control.Lens ((^.))
 import Data.List (intersperse)
 
 import Language.Drasil.Expr (Expr(..), BinOp(..), sy, UFunc(..), Oper(..),
-    DerivType(..), EOperator(..), ($=), RealRange(..), DomainDesc(..), prec, prec1, prec2)
+    DerivType(..), EOperator(..), ($=), RealRange(..), DomainDesc(..))
+import Language.Drasil.Expr.Precedence (prec, eprec)
 import Language.Drasil.Chunk.AssumpChunk
 import Language.Drasil.Expr.Extract
 import Language.Drasil.Chunk.Change (chng, chngType, ChngType(..))
@@ -81,24 +82,6 @@ expr (BinaryOp Index a b) sm = indx sm a b
 expr (BinaryOp Pow a b) sm = pow sm a b
 expr (BinaryOp Subt a b)  sm = P.Row [expr a sm, P.MO P.Subt, expr b sm]
 expr (IsIn  a b)       sm = P.Row [expr a sm, P.MO P.IsIn, space b]
-
-eprec :: Expr -> Int
-eprec (Dbl _)           = 500
-eprec (Int _)           = 500
-eprec (Str _)           = 500
-eprec (Assoc op _)      = prec op
-eprec (C _)             = 500
-eprec (Deriv _ _ _)     = prec2 Frac
-eprec (FCall _ _)       = 210
-eprec (Case _)          = 200
-eprec (Matrix _)        = 220
-eprec (UnaryOp fn _)    = prec1 fn
-eprec (EOp (Summation _ _)) = prec Add
-eprec (EOp (Product _ _))   = prec Mul
-eprec (EOp (Integral _ _))  = prec Add
-eprec (BinaryOp bo _ _) = prec2 bo
-eprec (IsIn  _ _)       = 170
-
 
 expr' :: HasSymbolTable ctx => ctx -> Int -> Expr -> P.Expr
 expr' s p e = fence pe

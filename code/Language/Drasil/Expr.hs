@@ -27,44 +27,12 @@ data BinOp = Frac | Pow | Subt | Eq | NEq | Lt | Gt | LEq | GEq | Impl | Iff | I
   | Dot | Cross
   deriving Eq
 
--- These precedences are inspired from Haskell/F# 
--- as documented at http://kevincantu.org/code/operators.html
--- They are all multiplied by 10, to leave room to weave things in between
-
-prec2 :: BinOp -> Int
-prec2 Frac = 190
-prec2 Pow = 200
-prec2 Subt = 180
-prec2 Eq = 130
-prec2 NEq  = 130
-prec2 Lt  = 130
-prec2 Gt  = 130
-prec2 LEq  = 130
-prec2 GEq  = 130
-prec2 Impl = 130
-prec2 Iff = 130
-prec2 Index = 250
-prec2 Dot = 190
-prec2 Cross = 190
-
 data Oper = Add | Mul | And | Or
   deriving (Eq)
-
-prec :: Oper -> Int
-prec Mul = 190
-prec Add = 180
-prec And = 120
-prec Or = 110
 
 -- | Unary functions
 data UFunc = Norm | Abs | Log | Sin | Cos | Tan | Sec | Csc | Cot | Exp
   | Sqrt | Not | Neg | Dim
-
-prec1 :: UFunc -> Int
-prec1 Neg = 230
-prec1 Exp = 200
-prec1 Not = 230
-prec1 _ = 250
 
 -- | Drasil Expressions
 data Expr where

@@ -1,17 +1,9 @@
 module Language.Drasil.Printing.Import where
 
-import Language.Drasil.Expr
 import Language.Drasil.Space
 import qualified Language.Drasil.Printing.AST as P
 
 import Data.List (intersperse)
-
--- | translating operations
-oper :: Oper -> P.Oper
-oper And = P.And
-oper Or = P.Or
-oper Add = P.Add
-oper Mul = P.Mul
 
 space :: Space -> P.Expr
 space Integer = P.MO P.Integer

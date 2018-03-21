@@ -999,12 +999,7 @@ Units & $\frac{\text{Pa}}{\text{m}}$
 \\ \midrule \\
 Equation & ${K_{bn}}$ = $\begin{cases}
 \frac{E \left(1-\nu{}\right)}{\left(1+\nu{}\right) \left(1-2 \nu{}+b\right)}, & \nu{}<0\\
-\begin{multlined}
-0.01 \frac{E \left(1-\nu{}\right)}{\left(1+\nu{}\right) \left(1-2 \nu{}+b\right)}
-\\+
-\frac{\kappa{}}{\delta{}v+A}
-\end{multlined}
-, & \nu{}\geq{}0
+0.01 \frac{E \left(1-\nu{}\right)}{\left(1+\nu{}\right) \left(1-2 \nu{}+b\right)}+\frac{\kappa{}}{\delta{}v+A}, & \nu{}\geq{}0
 \end{cases}$
 \\ \midrule \\
 Description & ${K_{bn}}$ is the normal stiffness ($\frac{\text{Pa}}{\text{m}}$)\newline$E$ is the interslice normal force (N)\newline$\nu{}$ is the Poisson's ratio\newline$b$ is the base width of a slice (m)\newline$\kappa{}$ is the constant (Pa)\newline$\delta{}v$ is the displacement (m)\newline$A$ is the constant (m)
@@ -1077,12 +1072,7 @@ Label & Normal/shear Force Ratio
 \\ \midrule \\
 Equation & ${C1}_{i}=\begin{cases}
 b_{1} \left(E_{1}+H_{1}\right) \tan\left(\alpha{}_{1}\right), & i=1\\
-\begin{multlined}
-b_{i} \left(SpencerFixme1Please+SpencerFixme2Please\right) \tan\left(\alpha{}_{i}\right)
-\\+
-h \left({K_{c}} W_{i}-2 {U_{t,i}} \sin\left(\beta{}_{i}\right)-2 Q_{i} \cos\left(\omega{}_{i}\right)\right)
-\end{multlined}
-, & 2\leq{}i\leq{}n-1\\
+b_{i} \left(SpencerFixme1Please+SpencerFixme2Please\right) \tan\left(\alpha{}_{i}\right)+h \left({K_{c}} W_{i}-2 {U_{t,i}} \sin\left(\beta{}_{i}\right)-2 Q_{i} \cos\left(\omega{}_{i}\right)\right), & 2\leq{}i\leq{}n-1\\
 b_{n} \left(E_{n-1}+H_{n-1}\right) \tan\left(\alpha{}_{n-1}\right), & i=n
 \end{cases}={C2}_{i}=\begin{cases}
 b_{1} f_{1} E_{1}, & i=1\\
@@ -1099,19 +1089,11 @@ Taking the last static equation of T2 with the moment equilibrium of GD6 about t
 \end{dmath}
 The equation in terms of $\lambda{}$ leads to equation (14).
 \begin{dmath}
-\lambda{}=\frac{\begin{multlined}
-\left(-E_{i}\right) \left(z_{i}-\left(b_{i}/2\right) \tan\left(\alpha{}_{i}\right)\right)+E_{i-1} \left(z_{i-1}-\left(b_{i}/2\right) \tan\left(\alpha{}_{i}\right)\right)-H_{i} \left(z_{i}-\left(b_{i}/2\right) \tan\left(\alpha{}_{i}\right)\right)
-\\+
-H_{i-1} \left(z_{i-1}-\left(b_{i}/2\right) \tan\left(\alpha{}_{i}\right)\right)+{K_{c}} W_{i} h_{i}/2-{U_{t,i}} \sin\left(\beta{}_{i}\right) h_{i}-Q_{i} \sin\left(\omega{}_{i}\right) h_{i}
-\end{multlined}
-}{\left(b_{i}/2\right) \left(E_{i} f_{i}+E_{i-1} f_{i-1}\right)}
+\lambda{}=\frac{\left(-E_{i}\right) \left(z_{i}-\frac{b_{i}}{2} \tan\left(\alpha{}_{i}\right)\right)+E_{i-1} \left(z_{i-1}-\frac{b_{i}}{2} \tan\left(\alpha{}_{i}\right)\right)-H_{i} \left(z_{i}-\frac{b_{i}}{2} \tan\left(\alpha{}_{i}\right)\right)+H_{i-1} \left(z_{i-1}-\frac{b_{i}}{2} \tan\left(\alpha{}_{i}\right)\right)+\frac{{K_{c}} W_{i} h_{i}}{2}-{U_{t,i}} \sin\left(\beta{}_{i}\right) h_{i}-Q_{i} \sin\left(\omega{}_{i}\right) h_{i}}{\frac{b_{i}}{2} \left(E_{i} f_{i}+E_{i-1} f_{i-1}\right)}
 \end{dmath}
 Taking a summation of each slice, and applying the boundary condition that $E_{0}$ and $E_{n}$ are equal to $0$, a general equation for the constant $\lambda{}$ is developed in equation (15), also found in IM2.
 \begin{dmath}
-\lambda{}_{i}=\frac{\begin{multlined}
-\displaystyle\sum_{i=1}^{n}{\left[b_{i} \left(SpencerFixme1Please+SpencerFixme2Please\right) \tan\left(\alpha{}_{i}\right)+h_{i} \left({K_{c}} W_{i}-2 {U_{t,i}} \sin\left(\beta{}_{i}\right)-2 Q_{i} \sin\left(\omega{}_{i}\right)\right)\right]}
-\end{multlined}
-}{\displaystyle\sum_{i=1}^{n}{\left[b_{i} \left(E_{i} f_{i}+E_{i-1} f_{i-1}\right)\right]}}
+\lambda{}_{i}=\frac{\displaystyle\sum_{i=1}^{n}{\left[b_{i} \left(SpencerFixme1Please+SpencerFixme2Please\right) \tan\left(\alpha{}_{i}\right)+h_{i} \left({K_{c}} W_{i}-2 {U_{t,i}} \sin\left(\beta{}_{i}\right)-2 Q_{i} \sin\left(\omega{}_{i}\right)\right)\right]}}{\displaystyle\sum_{i=1}^{n}{\left[b_{i} \left(E_{i} f_{i}+E_{i-1} f_{i-1}\right)\right]}}
 \end{dmath}
 equation (15) for $\lambda{}$, is a function of the unknown interslice normal force $E$ IM3.
 ~\newline
@@ -1183,10 +1165,7 @@ Using the known input assumption of A2, the force variable definitions of DD1 to
 \\ \midrule \\
 Label & RFEM Factor of Safety
 \\ \midrule \\
-Equation & ${FS_{Loc,i,i}}=\frac{{c'}_{i}-{K_{bn,i}} {\delta{}v}_{i} \tan\left({\varphi{}'}_{i}\right)}{{K_{bt,i}} {\delta{}u}_{i}}=\frac{\begin{multlined}
-\displaystyle\sum_{i=1}^{n}{\left[{\ell{}_{b,i}} \left({c'}_{i}-{K_{bn,i}} {\delta{}v}_{i} \tan\left({\varphi{}'}_{i}\right)\right)\right]}
-\end{multlined}
-}{\displaystyle\sum_{i=1}^{n}{\left[{\ell{}_{b,i}} {K_{bt,i}} {\delta{}u}_{i}\right]}}$
+Equation & ${FS_{Loc,i,i}}=\frac{{c'}_{i}-{K_{bn,i}} {\delta{}v}_{i} \tan\left({\varphi{}'}_{i}\right)}{{K_{bt,i}} {\delta{}u}_{i}}=\frac{\displaystyle\sum_{i=1}^{n}{\left[{\ell{}_{b,i}} \left({c'}_{i}-{K_{bn,i}} {\delta{}v}_{i} \tan\left({\varphi{}'}_{i}\right)\right)\right]}}{\displaystyle\sum_{i=1}^{n}{\left[{\ell{}_{b,i}} {K_{bt,i}} {\delta{}u}_{i}\right]}}$
 \\ \midrule \\
 Description & ${FS_{Loc,i}}$ is the factor of safety for slice i. $FS$ is the factor of safety for the entire slip surface. $c'$ is the cohesion of slice i's base. $\varphi{}'$ is the effective angle of friction of slice i's base. $\delta{}v$ is the normal displacement of slice i. $\delta{}u$ is the shear displacement of slice i. ${K_{bt}}$ is the length of the base of slice i. ${K_{bn}}$ is the base normal stiffness at surface i. $n$ is the number of slices in the slip surface.
 \\ \bottomrule \end{tabular}
@@ -1220,10 +1199,7 @@ The resistive shear stress acting on the base of a slice $\tau{}$ acts as the mo
 \end{dmath}
 The global Factor of Safety is then the ratio of the summation of the resistive and mobile shears for each slice, with a weighting for the length of the slice's base. Shown in equation (31) and IM5.
 \begin{dmath}
-FS=\frac{\displaystyle\sum_{i=1}^{n}{\left[{\ell{}_{b,i}} s_{i}\right]}}{\displaystyle\sum_{i=1}^{n}{\left[{\ell{}_{b,i}} \tau{}_{i}\right]}}=\frac{\begin{multlined}
-\displaystyle\sum_{i=1}^{n}{\left[{\ell{}_{b,i}} \left({c'}_{i}-{K_{bn,i}} {\delta{}v}_{i} \tan\left({\varphi{}'}_{i}\right)\right)\right]}
-\end{multlined}
-}{\displaystyle\sum_{i=1}^{n}{\left[{\ell{}_{b,i}} {K_{bt,i}} {\delta{}u}_{i}\right]}}
+FS=\frac{\displaystyle\sum_{i=1}^{n}{\left[{\ell{}_{b,i}} s_{i}\right]}}{\displaystyle\sum_{i=1}^{n}{\left[{\ell{}_{b,i}} \tau{}_{i}\right]}}=\frac{\displaystyle\sum_{i=1}^{n}{\left[{\ell{}_{b,i}} \left({c'}_{i}-{K_{bn,i}} {\delta{}v}_{i} \tan\left({\varphi{}'}_{i}\right)\right)\right]}}{\displaystyle\sum_{i=1}^{n}{\left[{\ell{}_{b,i}} {K_{bt,i}} {\delta{}u}_{i}\right]}}
 \end{dmath}
 ~\newline
 \noindent \begin{minipage}{\textwidth}

@@ -1,8 +1,7 @@
 module Language.Drasil.HTML.Import(makeDocument,spec) where
 
-import Prelude hiding (id)
 import Language.Drasil.Expr (Expr(..), BinOp(..), sy, UFunc(..), Oper(..),
-    DerivType(..), EOperator(..), ($=), DomainDesc(..), RealRange(..))
+    DerivType(..), EOperator(..), ($=), DomainDesc(..), RealRange(..), prec, prec1, prec2)
 import Language.Drasil.Spec
 import qualified Language.Drasil.Printing.AST as P
 import qualified Language.Drasil.HTML.AST as H
@@ -29,7 +28,7 @@ import Language.Drasil.Reference
 import Language.Drasil.Symbol
 import Language.Drasil.Unicode (Special(Partial))
 import Language.Drasil.Unit (usymb)
-import Language.Drasil.Printing.Import (oper,space)
+import Language.Drasil.Printing.Import (space)
 
 import Control.Lens ((^.))
 import Data.Maybe (fromJust)
@@ -40,11 +39,14 @@ expr :: HasSymbolTable s => Expr -> s -> P.Expr
 expr (Dbl d)          _ = P.Dbl   d
 expr (Int i)          _ = P.Int   i
 expr (Str s)          _ = P.Str   s
-expr (Assoc op l)     sm = P.Assoc (oper op) $ map (\x -> expr x sm) l
-expr (Deriv Part a b) sm = P.Div (P.Assoc P.Mul [P.Font P.Emph $ P.Spec Partial, expr a sm])
-                          (P.Assoc P.Mul [P.Font P.Emph $ P.Spec Partial, P.Font P.Emph $ symbol $ eqSymb $ symbLookup b $ sm^.symbolTable])
-expr (Deriv Total a b)sm = P.Div (P.Assoc P.Mul [P.Font P.Emph $ P.Ident "d", expr a sm])
-                          (P.Assoc P.Mul [P.Font P.Emph $ P.Ident "d", P.Font P.Emph $ symbol $ eqSymb $ symbLookup b $ sm^.symbolTable])
+expr (Assoc And l)    sm = P.Row $ intersperse (P.MO P.And) $ map (expr' sm (prec And)) l
+expr (Assoc Or l)     sm = P.Row $ intersperse (P.MO P.Or) $ map (expr' sm (prec Or)) l
+expr (Assoc Add l)     sm = P.Row $ intersperse (P.MO P.Add) $ map (expr' sm (prec Add)) l
+expr (Assoc Mul l)     sm = P.Row $ intersperse (P.MO P.Mul) $ map (expr' sm (prec Mul)) l
+expr (Deriv Part a b) sm = P.Div (P.Row [P.Font P.Emph $ P.Spec Partial, P.MO P.Mul, expr a sm])
+                          (P.Row [P.Font P.Emph $ P.Spec Partial, P.MO P.Mul, P.Font P.Emph $ symbol $ eqSymb $ symbLookup b $ sm^.symbolTable])
+expr (Deriv Total a b)sm = P.Div (P.Row [P.Font P.Emph $ P.Ident "d", P.MO P.Mul, expr a sm])
+                          (P.Row [P.Font P.Emph $ P.Ident "d", P.MO P.Mul, P.Font P.Emph $ symbol $ eqSymb $ symbLookup b $ sm^.symbolTable])
 expr (C c)            sm = P.Font P.Emph $ symbol $ eqSymb $ symbLookup c $ sm^.symbolTable
 expr (FCall f x)      sm = P.Row [expr f sm, 
   P.Fenced P.Paren P.Paren $ P.Row $ intersperse (P.MO P.Comma) $ map (flip expr sm) x]
@@ -83,11 +85,34 @@ expr (BinaryOp Subt a b)   sm = P.Row [expr a sm, P.MO P.Subt, expr b sm]
 expr (EOp o)            sm = eop o sm
 expr (IsIn  a b)        sm = P.Row  [expr a sm, P.MO P.IsIn, space b]
 
+eprec :: Expr -> Int
+eprec (Dbl _)           = 500
+eprec (Int _)           = 500
+eprec (Str _)           = 500
+eprec (Assoc op _)      = prec op
+eprec (C _)             = 500
+eprec (Deriv _ _ _)     = prec2 Frac
+eprec (FCall _ _)       = 210
+eprec (Case _)          = 200
+eprec (Matrix _)        = 220
+eprec (UnaryOp fn _)    = prec1 fn
+eprec (EOp (Summation _ _)) = prec Add
+eprec (EOp (Product _ _))   = prec Mul
+eprec (EOp (Integral _ _))  = prec Add
+eprec (BinaryOp bo _ _) = prec2 bo
+eprec (IsIn  _ _)       = 170
+
 mkCall :: HasSymbolTable ctx => ctx -> P.Ops -> Expr -> P.Expr
 mkCall s o e = P.Row [P.MO o, P.Fenced P.Paren P.Paren $ expr e s]
 
 mkBOp :: HasSymbolTable ctx => ctx -> P.Ops -> Expr -> Expr -> P.Expr
 mkBOp sm o a b = P.Row [expr a sm, P.MO o, expr b sm]
+
+expr' :: HasSymbolTable ctx => ctx -> Int -> Expr -> P.Expr
+expr' s p e = fence e'
+  where
+  e' = expr e s
+  fence = if eprec e < p then P.Fenced P.Paren P.Paren else id
 
 -- | Helper for properly rendering negation of expressions
 neg' :: Expr -> Bool

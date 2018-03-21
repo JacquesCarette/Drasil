@@ -23,8 +23,9 @@ infixr 4 $=
 infixr 9 $&&
 infixr 9 $||
 
-data Oper = Add | Mul | And | Or
-  deriving (Eq)
+data BinOp = Frac | Pow | Subt | Eq | NEq | Lt | Gt | LEq | GEq | Impl | Iff | Index
+  | Dot | Cross
+  deriving Eq
 
 -- These precedences are inspired from Haskell/F# 
 -- as documented at http://kevincantu.org/code/operators.html
@@ -32,8 +33,8 @@ data Oper = Add | Mul | And | Or
 
 prec2 :: BinOp -> Int
 prec2 Frac = 190
-prec2 Pow = 150
-prec2 Subt = 220
+prec2 Pow = 200
+prec2 Subt = 180
 prec2 Eq = 130
 prec2 NEq  = 130
 prec2 Lt  = 130
@@ -46,15 +47,24 @@ prec2 Index = 250
 prec2 Dot = 190
 prec2 Cross = 190
 
+data Oper = Add | Mul | And | Or
+  deriving (Eq)
+
 prec :: Oper -> Int
 prec Mul = 190
 prec Add = 180
 prec And = 120
 prec Or = 110
 
-data BinOp = Frac | Pow | Subt | Eq | NEq | Lt | Gt | LEq | GEq | Impl | Iff | Index
-  | Dot | Cross
-  deriving Eq
+-- | Unary functions
+data UFunc = Norm | Abs | Log | Sin | Cos | Tan | Sec | Csc | Cot | Exp
+  | Sqrt | Not | Neg | Dim
+
+prec1 :: UFunc -> Int
+prec1 Neg = 230
+prec1 Exp = 200
+prec1 Not = 230
+prec1 _ = 250
 
 -- | Drasil Expressions
 data Expr where
@@ -151,10 +161,6 @@ data EOperator where
   Summation :: DomainDesc -> Expr -> EOperator
   Product :: DomainDesc -> Expr -> EOperator
   Integral :: DomainDesc -> Expr -> EOperator
-
--- | Unary functions
-data UFunc = Norm | Abs | Log | Sin | Cos | Tan | Sec | Csc | Cot | Exp
-  | Sqrt | Not | Neg | Dim
 
 
 -- | Domain Description. A 'Domain' is the extent of a variable that

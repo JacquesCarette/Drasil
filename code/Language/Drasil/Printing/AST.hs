@@ -6,11 +6,10 @@ import Language.Drasil.Unicode (Greek, Special)
 import Language.Drasil.People (People)
 import Language.Drasil.Chunk.Citation (Month, EntryID, CitationKind)
 
-data Oper = Add | Mul | And | Or
-
 data Ops = IsIn | Integer | Real | Rational | Natural | Boolean | Comma | Prime | Log
   | Sin | Cos | Tan | Sec | Csc | Cot | Not | Dim | Exp | Sqrt | Neg | Cross
-  | Dot | Eq | NEq | Lt | Gt | LEq | GEq | Impl | Iff | Subt
+  | Dot | Eq | NEq | Lt | Gt | LEq | GEq | Impl | Iff | Subt | And | Or
+  | Add | Mul
 
 data Fence = Paren | Curly | Norm | Abs
 data OverSymb = Hat
@@ -19,7 +18,6 @@ data Fonts = Bold | Emph
 data Expr = Dbl   Double
           | Int   Integer
           | Str   String
-          | Assoc Oper [Expr]
           | Case  [(Expr,Expr)]
           | Funct Functional Expr
           | Mtx [[Expr]]
@@ -39,16 +37,6 @@ data Functional =
             Summation (Maybe ((Symbol, Expr),Expr))
           | Integral ((Maybe Expr),(Maybe Expr)) Symbol
           | Product (Maybe ((Symbol, Expr), Expr))
-
--- These precedences are inspired from Haskell/F# 
--- as documented at http://kevincantu.org/code/operators.html
--- They are all multiplied by 10, to leave room to weave things in between
-
-prec :: Oper -> Int
-prec Mul = 190
-prec Add = 180
-prec And = 120
-prec Or = 110
 
 infixr 5 :+:
 

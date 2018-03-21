@@ -381,7 +381,7 @@ This section transforms the problem defined in FIXME REF into one which is expre
 \\ \midrule \\
 Label & Force on the Translational Motion of a Set of 2d Rigid Bodies
 \\ \midrule \\
-Equation & ${\mathbf{a}_{i}}=\frac{d {\mathbf{v}_{i}}\left(t\right)}{d t}=g+\frac{{\mathbf{F}_{i}}\left(t\right)}{{m_{j}}}$
+Equation & ${\mathbf{a}_{i}}=\frac{d{\mathbf{v}_{i}}\left(t\right)}{dt}=g+\frac{{\mathbf{F}_{i}}\left(t\right)}{{m_{j}}}$
 \\ \midrule \\
 Description & The above equation expresses the total acceleration of the rigid body (A1, A2) i as the sum of gravitational acceleration (GD3) and acceleration due to applied force Fi(t) (T1). The resultant outputs are then obtained from this equation using DD2, DD3 and DD4. It is currently assumed that there is no damping (A6) or constraints (A7) involved. ${m_{i}}$ is the mass of the i-th rigid body (kg). $g$ is the gravitational acceleration ($\frac{\text{m}}{\text{s}^{2}}$). $t$ is the point in time (s). ${t_{0}}$ is the denotes the initial time (s). ${\mathbf{p}_{CM}}$ is the the mass-weighted average position of a rigid body's particles (m). $\mathbf{a}$ is the acceleration ($\frac{\text{m}}{\text{s}^{2}}$). $\mathbf{v}$ is the velocity ($\frac{\text{m}}{\text{s}}$). ${\mathbf{F}_{i}}$ is the force applied to the i-th body at time t (N).
 \\ \bottomrule \end{tabular}
@@ -395,7 +395,7 @@ Description & The above equation expresses the total acceleration of the rigid b
 \\ \midrule \\
 Label & Force on the Rotational Motion of a Set of 2D Rigid Body
 \\ \midrule \\
-Equation & $\alpha{}=\frac{d \omega{}\left(t\right)}{d t}=\frac{{\tau{}_{i}}\left(t\right)}{\mathbf{I}}$
+Equation & $\alpha{}=\frac{d\omega{}\left(t\right)}{dt}=\frac{{\tau{}_{i}}\left(t\right)}{\mathbf{I}}$
 \\ \midrule \\
 Description & The above equation for the total angular acceleration of the rigid body (A1, A2) i is derived from T5, and the resultant outputs are then obtained from this equation using DD5, DD6 and DD7. It is currently assumed that there is no damping (A6) or constraints (A7) involved. ${m_{i}}$ is the mass of the i-th rigid body (kg). $g$ is the gravitational acceleration ($\frac{\text{m}}{\text{s}^{2}}$). $t$ is the point in time (s). ${t_{0}}$ is the denotes the initial time (s). $\phi{}$ is the orientation (rad). $\omega{}$ is the angular velocity ($\frac{\text{rad}}{\text{s}}$). $\alpha{}$ is the angular acceleration ($\frac{\text{rad}}{\text{s}^{2}}$). ${\tau{}_{i}}$ is the is the torque applied to the i-th body (Nm). ${\mathbf{I}_{k}}$ is the moment of inertia of the k-th rigid body (kg$\text{m}^{2}$).
 \\ \bottomrule \end{tabular}
@@ -444,7 +444,7 @@ Label & Linear Displacement
 \\ \midrule \\
 Units & m
 \\ \midrule \\
-Equation & $\mathbf{r}(t)$ = $\frac{d \mathbf{p}\left(t\right)}{d t}$
+Equation & $\mathbf{r}(t)$ = $\frac{d\mathbf{p}\left(t\right)}{dt}$
 \\ \midrule \\
 Description & $\mathbf{r}(t)$ is the linear displacement (m)\newline$\mathbf{p}$ is the position (m)\newline$t$ is the time (s)
 \\ \bottomrule \end{tabular}
@@ -460,7 +460,7 @@ Label & Linear Velocity
 \\ \midrule \\
 Units & $\frac{\text{m}}{\text{s}}$
 \\ \midrule \\
-Equation & $\mathbf{v}(t)$ = $\frac{d \mathbf{r}\left(t\right)}{d t}$
+Equation & $\mathbf{v}(t)$ = $\frac{d\mathbf{r}\left(t\right)}{dt}$
 \\ \midrule \\
 Description & $\mathbf{v}(t)$ is the linear velocity ($\frac{\text{m}}{\text{s}}$)\newline$\mathbf{r}$ is the displacement (m)\newline$t$ is the time (s)
 \\ \bottomrule \end{tabular}
@@ -476,7 +476,7 @@ Label & Linear Acceleration
 \\ \midrule \\
 Units & $\frac{\text{m}}{\text{s}^{2}}$
 \\ \midrule \\
-Equation & $\mathbf{a}(t)$ = $\frac{d \mathbf{v}\left(t\right)}{d t}$
+Equation & $\mathbf{a}(t)$ = $\frac{d\mathbf{v}\left(t\right)}{dt}$
 \\ \midrule \\
 Description & $\mathbf{a}(t)$ is the linear acceleration ($\frac{\text{m}}{\text{s}^{2}}$)\newline$\mathbf{v}$ is the velocity ($\frac{\text{m}}{\text{s}}$)\newline$t$ is the time (s)
 \\ \bottomrule \end{tabular}
@@ -492,7 +492,7 @@ Label & Angular Displacement
 \\ \midrule \\
 Units & rad
 \\ \midrule \\
-Equation & $\theta{}$ = $\frac{d \phi{}\left(t\right)}{d t}$
+Equation & $\theta{}$ = $\frac{d\phi{}\left(t\right)}{dt}$
 \\ \midrule \\
 Description & $\theta{}$ is the angular displacement (rad)\newline$\phi{}$ is the orientation (rad)\newline$t$ is the time (s)
 \\ \bottomrule \end{tabular}
@@ -508,7 +508,7 @@ Label & Angular Velocity
 \\ \midrule \\
 Units & $\frac{\text{rad}}{\text{s}}$
 \\ \midrule \\
-Equation & $\omega{}$ = $\frac{d \theta{}\left(t\right)}{d t}$
+Equation & $\omega{}$ = $\frac{d\theta{}\left(t\right)}{dt}$
 \\ \midrule \\
 Description & $\omega{}$ is the angular velocity ($\frac{\text{rad}}{\text{s}}$)\newline$\theta{}$ is the angular displacement (rad)\newline$t$ is the time (s)
 \\ \bottomrule \end{tabular}
@@ -524,7 +524,7 @@ Label & Angular Acceleration
 \\ \midrule \\
 Units & $\frac{\text{rad}}{\text{s}^{2}}$
 \\ \midrule \\
-Equation & $\alpha{}$ = $\frac{d \omega{}\left(t\right)}{d t}$
+Equation & $\alpha{}$ = $\frac{d\omega{}\left(t\right)}{dt}$
 \\ \midrule \\
 Description & $\alpha{}$ is the angular acceleration ($\frac{\text{rad}}{\text{s}^{2}}$)\newline$\omega{}$ is the angular velocity ($\frac{\text{rad}}{\text{s}}$)\newline$t$ is the time (s)
 \\ \bottomrule \end{tabular}
@@ -540,12 +540,7 @@ Label & Impulse (scalar)
 \\ \midrule \\
 Units & Ns
 \\ \midrule \\
-Equation & $j$ = $\frac{\left(-1+{C_{R}}\right) {{\mathbf{v}_{i}}^{AB}}\cdot{}\mathbf{n}}{\begin{multlined}
-\left(1/{m_{A}}+1/{m_{B}}\right) ||\mathbf{n}||^{2}
-\\+
-||{\mathbf{r}_{AP}}*\mathbf{n}||^{2}/{\mathbf{I}_{A}}+||{\mathbf{r}_{BP}}*\mathbf{n}||^{2}/{\mathbf{I}_{B}}
-\end{multlined}
-}$
+Equation & $j$ = $\frac{\left(-1+{C_{R}}\right) {{\mathbf{v}_{i}}^{AB}}\cdot{}\mathbf{n}}{\left(\frac{1}{{m_{A}}}+\frac{1}{{m_{B}}}\right) ||\mathbf{n}||^{2}+\frac{||{\mathbf{r}_{AP}}*\mathbf{n}||^{2}}{{\mathbf{I}_{A}}}+\frac{||{\mathbf{r}_{BP}}*\mathbf{n}||^{2}}{{\mathbf{I}_{B}}}}$
 \\ \midrule \\
 Description & $j$ is the impulse (scalar) (Ns)\newline${C_{R}}$ is the coefficient of restitution\newline${{\mathbf{v}_{i}}^{AB}}$ is the relative velocity between rigid bodies of A and B ($\frac{\text{m}}{\text{s}}$)\newline$\mathbf{n}$ is the collision normal vector (m)\newline${m_{A}}$ is the mass of rigid body A (kg)\newline${m_{B}}$ is the mass of rigid body B (kg)\newline$||\mathbf{n}||$ is the length of the normal vector (m)\newline$||{\mathbf{r}_{AP}}*\mathbf{n}||$ is the length of the perpendicular vector to the contact displacement vector of rigid body A (m)\newline${\mathbf{I}_{A}}$ is the moment of inertia of rigid body A (kg$\text{m}^{2}$)\newline$||{\mathbf{r}_{BP}}*\mathbf{n}||$ is the length of the perpendicular vector to the contact displacement vector of rigid body B (m)\newline${\mathbf{I}_{B}}$ is the moment of inertia of rigid body B (kg$\text{m}^{2}$)
 \\ \bottomrule \end{tabular}

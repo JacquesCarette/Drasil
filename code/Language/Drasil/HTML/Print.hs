@@ -1,7 +1,7 @@
 module Language.Drasil.HTML.Print(genHTML) where
 
 import Prelude hiding (print)
-import Data.List (intersperse, sortBy)
+import Data.List (sortBy)
 import Text.PrettyPrint hiding (render, quotes, Str)
 import Numeric (showFFloat)
 
@@ -131,10 +131,6 @@ p_expr :: Expr -> String
 p_expr (Dbl d)    = showFFloat Nothing d ""
 p_expr (Int i)    = show i
 p_expr (Str s)    = s
-p_expr (Assoc Mul l) = mul l
-p_expr (Assoc Add l)  = concat $ intersperse " &plus; " $ map p_expr l
-p_expr (Assoc And l)  = concat $ intersperse " &and; " $ map p_expr l
-p_expr (Assoc Or l)   = concat $ intersperse " &or; " $ map p_expr l
 p_expr (Div a b) = fraction (p_expr a) (p_expr b) --Found in HTMLHelpers
 p_expr (Funct f e)    = p_op f e
 p_expr (Case ps)  = cases ps (p_expr)
@@ -183,6 +179,10 @@ p_ops GEq      = "&thinsp;&ge;&thinsp;"
 p_ops Impl     = " &rArr; "
 p_ops Iff      = " &hArr; "
 p_ops Subt     = "&minus;"
+p_ops And      = " &and; "
+p_ops Or       = " &or; "
+p_ops Add      = "&plus;"
+p_ops Mul      = "&#8239;"
 
 fence :: OpenClose -> Fence -> String
 fence Open Paren = "("
@@ -202,17 +202,6 @@ p_in :: [Expr] -> String
 p_in [] = ""
 p_in [x] = "<td>" ++ p_expr x ++ "</td>"
 p_in (x:xs) = p_in [x] ++ p_in xs
-
--- | Helper for properly rendering multiplication of expressions
-mul :: [ Expr ] -> String
-mul = concat . intersperse "&#8239;" . map (add_paren (prec Mul))
-
--- | Helper for properly rendering parentheses around the multiplier
-add_paren :: Int -> Expr -> String
-add_paren p a@(Assoc o _)    = if prec o < p then paren $ p_expr a else p_expr a
-add_paren _ a@(Div _ _)  = paren $ p_expr a
--- add_paren _ a@(BOp Subt _ _) = paren $ p_expr a
-add_paren _ a                = p_expr a
 
 -----------------------------------------------------------------
 ------------------BEGIN TABLE PRINTING---------------------------

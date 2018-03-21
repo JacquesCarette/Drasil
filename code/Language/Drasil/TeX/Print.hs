@@ -90,10 +90,6 @@ p_expr :: Expr -> String
 p_expr (Dbl d)    = showFFloat Nothing d ""
 p_expr (Int i)    = show i
 p_expr (Str s)    = s  -- FIXME this is probably the wrong way to print strings
-p_expr (Assoc Add l)  = concat $ intersperse "+" $ map p_expr l
-p_expr (Assoc Mul l)  = mul l
-p_expr (Assoc And l)  = concat $ intersperse "\\land{}" $ map p_expr l
-p_expr (Assoc Or l)   = concat $ intersperse "\\lor{}" $ map p_expr l
 p_expr (Div n d) = "\\frac{" ++ p_expr n ++ "}{" ++ p_expr d ++"}"
 p_expr (Funct o e)   = p_op o e
 p_expr (Case ps)  = "\\begin{cases}\n" ++ cases ps ++ "\n\\end{cases}"
@@ -143,6 +139,10 @@ p_ops LEq = "\\leq{}"
 p_ops Impl = "\\implies{}"
 p_ops Iff = "\\iff{}"
 p_ops Subt = "-"
+p_ops And = "\\land{}"
+p_ops Or  = "\\lor{}"
+p_ops Add = "+"
+p_ops Mul = " "
 
 fence :: OpenClose -> Fence -> String
 fence Open Paren = "\\left("
@@ -162,16 +162,6 @@ p_in :: [Expr] -> String
 p_in [] = ""
 p_in [x] = p_expr x
 p_in (x:xs) = p_in [x] ++ " & " ++ p_in xs
-
--- | Helper for properly rendering multiplication of expressions
-mul :: [ Expr ] -> String
-mul = concat . intersperse " " . map mulParen
-
-mulParen :: Expr -> String
-mulParen a@(Assoc Add _) = paren $ p_expr a
--- mulParen a@(BOp Subt _ _) = paren $ p_expr a
-mulParen a@(Div _ _) = paren $ p_expr a
-mulParen a = p_expr a
 
 cases :: [(Expr,Expr)] -> String
 cases []     = error "Attempt to create case expression without cases"

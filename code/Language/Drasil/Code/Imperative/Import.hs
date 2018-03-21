@@ -456,7 +456,7 @@ convExpr (FCall (C c) x)  = do
   fApp (codeName (codefunc $ symbLookup c $ info ^. symbolTable)) args
 convExpr (FCall _ _)   = return $ litString "**convExpr :: FCall unimplemented**"
 convExpr (UnaryOp o u) = fmap (unop o) (convExpr u)
-convExpr (BinaryOp Div (Int a) (Int b)) =
+convExpr (BinaryOp Frac (Int a) (Int b)) =
   return $ (litFloat $ fromIntegral a) #/ (litFloat $ fromIntegral b) -- hack to deal with integer division
 convExpr (BinaryOp o a b)  = liftM2 (bfunc o) (convExpr a) (convExpr b)
 convExpr (Case l)      = doit l -- FIXME this is sub-optimal
@@ -497,7 +497,6 @@ bfunc Subt   = (#-)
 bfunc Impl    = error "convExpr :=>"
 bfunc Iff        = error "convExpr :<=>"
 bfunc Dot = error "convExpr DotProduct"
-bfunc Div = (#/)
 bfunc Frac = (#/)
 bfunc Index      = (\x y -> x$.(listAccess y))
 

@@ -32,7 +32,6 @@ data Oper = Add | Mul | And | Or
 
 prec2 :: BinOp -> Int
 prec2 Frac = 190
-prec2 Div = 190
 prec2 Pow = 150
 prec2 Subt = 220
 prec2 Eq = 130
@@ -53,7 +52,7 @@ prec Add = 180
 prec And = 120
 prec Or = 110
 
-data BinOp = Frac | Div | Pow | Subt | Eq | NEq | Lt | Gt | LEq | GEq | Impl | Iff | Index
+data BinOp = Frac | Pow | Subt | Eq | NEq | Lt | Gt | LEq | GEq | Impl | Iff | Index
   | Dot | Cross
   deriving Eq
 
@@ -92,7 +91,7 @@ a $=> b = BinaryOp Impl a b
 a $<=> b = BinaryOp Iff a b
 a $. b   = BinaryOp Dot a b
 a $- b = BinaryOp Subt a b
-a $/ b = BinaryOp Div a b
+a $/ b = BinaryOp Frac a b
 
 ($^), ($&&), ($||) :: Expr -> Expr -> Expr
 ($^) = BinaryOp Pow
@@ -137,8 +136,8 @@ instance Eq Expr where
   _ == _                       =  False
 
 instance Fractional Expr where
-  a / b = BinaryOp Div a b
-  fromRational r = BinaryOp Div (fromInteger $ numerator   r)
+  a / b = BinaryOp Frac a b
+  fromRational r = BinaryOp Frac (fromInteger $ numerator   r)
                                 (fromInteger $ denominator r)
 
 

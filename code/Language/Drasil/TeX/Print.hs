@@ -94,8 +94,7 @@ p_expr (Assoc Add l)  = concat $ intersperse "+" $ map p_expr l
 p_expr (Assoc Mul l)  = mul l
 p_expr (Assoc And l)  = concat $ intersperse "\\land{}" $ map p_expr l
 p_expr (Assoc Or l)   = concat $ intersperse "\\lor{}" $ map p_expr l
-p_expr (BOp Frac n d) = "\\frac{" ++ needMultlined n ++ "}{" ++ needMultlined d ++"}"
-p_expr (BOp Div n d)  = divide n d
+p_expr (BOp Div n d) = "\\frac{" ++ p_expr n ++ "}{" ++ p_expr d ++"}"
 p_expr (BOp o x y)    = p_expr x ++ p_bop o ++ p_expr y
 p_expr (Funct o e)   = p_op o e
 p_expr (Case ps)  = "\\begin{cases}\n" ++ cases ps ++ "\n\\end{cases}"
@@ -115,9 +114,7 @@ p_expr (Font Emph e) = p_expr e -- Emph is ignored here because we're in Math mo
 
 p_bop :: BinOp -> String
 p_bop Subt = "-"
-p_bop Frac = "/"
 p_bop Div = "/"
--- p_bop Pow = "^"
 
 p_ops :: Ops -> String
 p_ops IsIn = "\\in{}"
@@ -159,27 +156,6 @@ fence Close Curly = "\\}"
 fence _ Abs = "|"
 fence _ Norm = "||"
 
--- | For seeing if long numerators or denominators need to be on multiple lines
-needMultlined :: Expr -> String
-needMultlined x
-  | lngth > 70 = multl $ mklines $ map p_expr $ groupEx $ splitTerms x
-  | otherwise  = p_expr x
-  where lngth     = specLength $ E x
-        multl str = "\\begin{multlined}\n" ++ str ++ "\\end{multlined}\n"
-        mklines   = unlines . intersperse "\\\\+"
-        --FIXME: make multiple splits if needed; don't always split in 2
-        groupEx lst = extrac $ splitAt (length lst `div` 2) lst
-        extrac ([],[]) = []
-        extrac ([],l)  = [Assoc Add l]
-        extrac (f,[])  = [Assoc Add f]
-        extrac (f,l)   = [Assoc Add f, Assoc Add l]
-
-splitTerms :: Expr -> [Expr]
--- splitTerms (UOp Neg e) = map (UOp Neg) $ splitTerms e
-splitTerms (Assoc Add l) = concat $ map splitTerms l
--- splitTerms (BOp Subt a b) = splitTerms a ++ splitTerms (UOp Neg b)
-splitTerms e = [e]
-
 -- | For printing Matrix
 p_matrix :: [[Expr]] -> String
 p_matrix [] = ""
@@ -201,16 +177,9 @@ mulParen a@(BOp Subt _ _) = paren $ p_expr a
 mulParen a@(BOp Div _ _) = paren $ p_expr a
 mulParen a = p_expr a
 
-divide :: Expr -> Expr -> String
-divide n d@(Assoc Add _) = p_expr n ++ "/" ++ paren (p_expr d)
-divide n d@(BOp Subt _ _) = p_expr n ++ "/" ++ paren (p_expr d)
-divide n@(Assoc Add _) d = paren (p_expr n) ++ "/" ++ p_expr d
-divide n@(BOp Subt _ _) d = paren (p_expr n) ++ "/" ++ p_expr d
-divide n d = p_expr n ++ "/" ++ p_expr d
-
 cases :: [(Expr,Expr)] -> String
 cases []     = error "Attempt to create case expression without cases"
-cases (p:[]) = (needMultlined $ fst p) ++ ", & " ++ p_expr (snd p)
+cases (p:[]) = (p_expr $ fst p) ++ ", & " ++ p_expr (snd p)
 cases (p:ps) = cases [p] ++ "\\\\\n" ++ cases ps
 
 

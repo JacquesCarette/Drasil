@@ -41,9 +41,9 @@ expr (Dbl d)          _ = P.Dbl   d
 expr (Int i)          _ = P.Int   i
 expr (Str s)          _ = P.Str   s
 expr (Assoc op l)     sm = P.Assoc (oper op) $ map (\x -> expr x sm) l
-expr (Deriv Part a b) sm = P.BOp P.Frac (P.Assoc P.Mul [P.Font P.Emph $ P.Spec Partial, expr a sm])
+expr (Deriv Part a b) sm = P.BOp P.Div (P.Assoc P.Mul [P.Font P.Emph $ P.Spec Partial, expr a sm])
                           (P.Assoc P.Mul [P.Font P.Emph $ P.Spec Partial, P.Font P.Emph $ symbol $ eqSymb $ symbLookup b $ sm^.symbolTable])
-expr (Deriv Total a b)sm = P.BOp P.Frac (P.Assoc P.Mul [P.Font P.Emph $ P.Ident "d", expr a sm])
+expr (Deriv Total a b)sm = P.BOp P.Div (P.Assoc P.Mul [P.Font P.Emph $ P.Ident "d", expr a sm])
                           (P.Assoc P.Mul [P.Font P.Emph $ P.Ident "d", P.Font P.Emph $ symbol $ eqSymb $ symbLookup b $ sm^.symbolTable])
 expr (C c)            sm = P.Font P.Emph $ symbol $ eqSymb $ symbLookup c $ sm^.symbolTable
 expr (FCall f x)      sm = P.Row [expr f sm, 
@@ -66,7 +66,7 @@ expr (UnaryOp Abs u)    sm = P.Fenced P.Abs P.Abs $ expr u sm
 expr (UnaryOp Norm u)   sm = P.Fenced P.Norm P.Norm $ expr u sm
 expr (UnaryOp Sqrt u)   sm = mkCall sm P.Sqrt u
 expr (UnaryOp Neg u)    sm = neg sm u
-expr (BinaryOp Div a b) sm = P.BOp P.Frac (replace_divs a sm) (replace_divs b sm)
+expr (BinaryOp Frac a b) sm = P.BOp P.Div (expr a sm) (expr b sm)
 expr (BinaryOp Cross a b) sm = mkBOp sm P.Cross a b
 expr (BinaryOp Dot a b) sm = mkBOp sm P.Dot a b
 expr (BinaryOp Eq a b) sm = mkBOp sm P.Eq a b
@@ -138,14 +138,6 @@ eop (Integral (All v) e) sm =
 eop (Integral (IntegerDD _ _) _) _ =
   error "HTML/Import.hs Integral cannot be over Integers"
 
--- | Helper function for translating operations in expressions
-replace_divs :: HasSymbolTable s => Expr -> s -> P.Expr
-replace_divs (BinaryOp Div a b)  sm = P.BOp P.Div (replace_divs a sm) (replace_divs b sm)
-replace_divs (Assoc op l)        sm = P.Assoc (oper op) $ map (\x -> replace_divs x sm) l
--- replace_divs (BinaryOp Pow  a b) sm = P.BOp P.Pow (replace_divs a sm) (replace_divs b sm)
-replace_divs (BinaryOp Subt a b) sm = P.BOp P.Subt (replace_divs a sm) (replace_divs b sm)
-replace_divs a                   sm = expr a sm
-
 symbol :: Symbol -> P.Expr
 symbol (Atomic s)  = P.Ident s
 symbol (Special s) = P.Spec s
@@ -171,7 +163,6 @@ pow :: HasSymbolTable ctx => ctx -> Expr -> Expr -> P.Expr
 pow sm a@(Assoc Add _)  b = P.Row [P.Fenced P.Paren P.Paren (expr a sm), P.Sup (expr b sm)]
 pow sm a@(BinaryOp Subt _ _) b = P.Row [P.Fenced P.Paren P.Paren (expr a sm), P.Sup (expr b sm)]
 pow sm a@(BinaryOp Frac _ _) b = P.Row [P.Fenced P.Paren P.Paren (expr a sm), P.Sup (expr b sm)]
-pow sm a@(BinaryOp Div _ _)  b = P.Row [P.Fenced P.Paren P.Paren (expr a sm), P.Sup (expr b sm)]
 pow sm a@(Assoc Mul _)  b = P.Row [P.Fenced P.Paren P.Paren (expr a sm), P.Sup (expr b sm)]
 pow sm a@(BinaryOp Pow _ _)  b = P.Row [P.Fenced P.Paren P.Paren (expr a sm), P.Sup (expr b sm)]
 pow sm a                b = P.Row [expr a sm, P.Sup (expr b sm)]

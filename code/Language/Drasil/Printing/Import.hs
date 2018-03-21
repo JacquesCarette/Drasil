@@ -14,7 +14,7 @@ oper Add = P.Add
 oper Mul = P.Mul
 
 binop :: BinOp -> P.BinOp
-binop Frac = P.Div
+binop Frac = error "Print.Import.binop: Div"
 binop Pow = error "Print.Import.binop: Pow"
 binop Subt = P.Subt
 binop Eq = error "Printing.Import.binop: Eq"

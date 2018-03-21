@@ -41,9 +41,9 @@ expr (Dbl d)          _ = P.Dbl   d
 expr (Int i)          _ = P.Int   i
 expr (Str s)          _ = P.Str   s
 expr (Assoc op l)     sm = P.Assoc (oper op) $ map (\x -> expr x sm) l
-expr (Deriv Part a b) sm = P.BOp P.Div (P.Assoc P.Mul [P.Font P.Emph $ P.Spec Partial, expr a sm])
+expr (Deriv Part a b) sm = P.Div (P.Assoc P.Mul [P.Font P.Emph $ P.Spec Partial, expr a sm])
                           (P.Assoc P.Mul [P.Font P.Emph $ P.Spec Partial, P.Font P.Emph $ symbol $ eqSymb $ symbLookup b $ sm^.symbolTable])
-expr (Deriv Total a b)sm = P.BOp P.Div (P.Assoc P.Mul [P.Font P.Emph $ P.Ident "d", expr a sm])
+expr (Deriv Total a b)sm = P.Div (P.Assoc P.Mul [P.Font P.Emph $ P.Ident "d", expr a sm])
                           (P.Assoc P.Mul [P.Font P.Emph $ P.Ident "d", P.Font P.Emph $ symbol $ eqSymb $ symbLookup b $ sm^.symbolTable])
 expr (C c)            sm = P.Font P.Emph $ symbol $ eqSymb $ symbLookup c $ sm^.symbolTable
 expr (FCall f x)      sm = P.Row [expr f sm, 
@@ -66,7 +66,7 @@ expr (UnaryOp Abs u)    sm = P.Fenced P.Abs P.Abs $ expr u sm
 expr (UnaryOp Norm u)   sm = P.Fenced P.Norm P.Norm $ expr u sm
 expr (UnaryOp Sqrt u)   sm = mkCall sm P.Sqrt u
 expr (UnaryOp Neg u)    sm = neg sm u
-expr (BinaryOp Frac a b) sm = P.BOp P.Div (expr a sm) (expr b sm)
+expr (BinaryOp Frac a b) sm = P.Div (expr a sm) (expr b sm)
 expr (BinaryOp Cross a b) sm = mkBOp sm P.Cross a b
 expr (BinaryOp Dot a b) sm = mkBOp sm P.Dot a b
 expr (BinaryOp Eq a b) sm = mkBOp sm P.Eq a b

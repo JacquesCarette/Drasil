@@ -8,7 +8,7 @@ import Language.Drasil.Chunk.Citation (Month, EntryID, CitationKind)
 
 data Oper = Add | Mul | And | Or
 
-data BinOp = Div | Subt
+data BinOp = Subt
 
 data Ops = IsIn | Integer | Real | Rational | Natural | Boolean | Comma | Prime | Log
   | Sin | Cos | Tan | Sec | Csc | Cot | Not | Dim | Exp | Sqrt | Neg | Cross
@@ -36,6 +36,7 @@ data Expr = Dbl   Double
           | Over  OverSymb Expr
           | Fenced Fence Fence Expr
           | Font  Fonts Expr
+          | Div   Expr Expr -- actually, fractions are a layout thing!
           
 data Functional = 
             Summation (Maybe ((Symbol, Expr),Expr))
@@ -53,7 +54,6 @@ prec And = 120
 prec Or = 110
 
 prec2 :: BinOp -> Int
-prec2 Div = 190
 prec2 Subt = 220
 
 infixr 5 :+:

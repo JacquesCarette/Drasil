@@ -136,7 +136,7 @@ p_expr (Assoc Add l)  = concat $ intersperse " &plus; " $ map p_expr l
 p_expr (Assoc And l)  = concat $ intersperse " &and; " $ map p_expr l
 p_expr (Assoc Or l)   = concat $ intersperse " &or; " $ map p_expr l
 p_expr (BOp Subt a b)  = p_expr a ++ " &minus; " ++ p_expr b
-p_expr (BOp Div a b) = fraction (p_expr a) (p_expr b) --Found in HTMLHelpers
+p_expr (Div a b) = fraction (p_expr a) (p_expr b) --Found in HTMLHelpers
 p_expr (Funct f e)    = p_op f e
 p_expr (Case ps)  = cases ps (p_expr)
 p_expr (Mtx a)    = "<table class=\"matrix\">\n" ++ p_matrix a ++ "</table>"
@@ -210,7 +210,7 @@ mul = concat . intersperse "&#8239;" . map (add_paren (prec Mul))
 -- | Helper for properly rendering parentheses around the multiplier
 add_paren :: Int -> Expr -> String
 add_paren p a@(Assoc o _)    = if prec o < p then paren $ p_expr a else p_expr a
-add_paren _ a@(BOp Div _ _)  = paren $ p_expr a
+add_paren _ a@(Div _ _)  = paren $ p_expr a
 add_paren _ a@(BOp Subt _ _) = paren $ p_expr a
 add_paren _ a                = p_expr a
 

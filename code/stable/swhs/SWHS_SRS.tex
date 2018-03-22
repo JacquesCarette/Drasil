@@ -398,7 +398,7 @@ This section focuses on the general equations and laws that SWHS is based on.
 \\ \midrule \\
 Label & Conservation of Thermal Energy
 \\ \midrule \\
-Equation & $-\nabla{}\cdot{}\mathbf{q}+g=\rho{} C \frac{\partial{} T}{\partial{} t}$
+Equation & $-\nabla{}\cdot{}\mathbf{q}+g=\rho{} C \frac{\partial{}\,T}{\partial{}\,t}$
 \\ \midrule \\
 Description & The above equation gives the law of conservation of energy for transient heat transfer in a material of specific heat capacity $C$ ($\frac{\text{J}}{(\text{kg}{}^{\circ}\text{C})}$) and density, $\rho{}$ ($\frac{\text{kg}}{\text{m}^{3}}$), where $\mathbf{q}$ is the thermal flux vector ($\frac{\text{W}}{\text{m}^{2}}$), $g$ is the volumetric heat generation per unit volume ($\frac{\text{W}}{\text{m}^{3}}$), $T$ is the temperature (${}^{\circ}$C), $t$ is time (s), and $\nabla{}$ is the degree of steepness of a graph at any point. For this equation to apply, other forms of energy, such as mechanical energy, are assumed to be negligible in the system (A\ref{A:assump1}).
 \\ \bottomrule \end{tabular}
@@ -430,9 +430,9 @@ Description & $E$ is the change in sensible heat energy (J). ${C^{S}}$, ${C^{L}}
 \\ \midrule \\
 Label & Latent Heat Energy
 \\ \midrule \\
-Equation & $Q\left(t\right)=\int_{0}^{t}{\frac{d Q\left(\tau{}\right)}{d \tau{}}d\tau{}}$
+Equation & $Q\left(t\right)=\int_{0}^{t}{\frac{d\,Q\left(\tau{}\right)}{d\,\tau{}}d\tau{}}$
 \\ \midrule \\
-Description & $Q$ is the change in thermal energy (J), latent heat energy. $Q\left(t\right)=\int_{0}^{t}{\frac{d Q\left(\tau{}\right)}{d \tau{}}d\tau{}}$ is the rate of change of $Q$ with respect to time $\tau{}$ (s). $t$ is the time (s) elapsed, as long as the phase change is not complete. The status of the phase change depends on the melt fraction, \hyperref[DD:htFusion]{Definition~DD:htFusion}. ${T_{melt}}$ and ${T_{boil}}$ are the melting point temperature and boiling point temperature, respectively (${}^{\circ}$C). Latent heating stops when all material has changed to the new phase.
+Description & $Q$ is the change in thermal energy (J), latent heat energy. $Q\left(t\right)=\int_{0}^{t}{\frac{d\,Q\left(\tau{}\right)}{d\,\tau{}}d\tau{}}$ is the rate of change of $Q$ with respect to time $\tau{}$ (s). $t$ is the time (s) elapsed, as long as the phase change is not complete. The status of the phase change depends on the melt fraction, \hyperref[DD:htFusion]{Definition~DD:htFusion}. ${T_{melt}}$ and ${T_{boil}}$ are the melting point temperature and boiling point temperature, respectively (${}^{\circ}$C). Latent heating stops when all material has changed to the new phase.
 \\ \bottomrule \end{tabular}
 \end{minipage}\\
 \subsubsection{General Definitions}
@@ -461,7 +461,7 @@ Description & Newton's law of cooling describes convective cooling from a surfac
 \\ \midrule \\
 Label & Simplified Rate of Change of Temperature
 \\ \midrule \\
-Equation & $m C \frac{d T}{d t}={q_{in}} {A_{in}}-{q_{out}} {A_{out}}+g V$
+Equation & $m C \frac{d\,T}{d\,t}={q_{in}} {A_{in}}-{q_{out}} {A_{out}}+g V$
 \\ \midrule \\
 Description & The basic equation governing the rate of change of temperature, for a given volume $V$, with time. $m$ is the mass (kg). $C$ is the specific heat capacity ($\frac{\text{J}}{(\text{kg}{}^{\circ}\text{C})}$). $T$ is the temperature (${}^{\circ}$C) and $t$ is the time (s). ${q_{in}}$ and ${q_{out}}$ are the in and out heat transfer rates, respectively ($\frac{\text{W}}{\text{m}^{2}}$). ${A_{in}}$ and ${A_{out}}$ are the surface areas over which the heat is being transferred in and out, respectively ($\text{m}^{2}$). $g$ is the volumetric heat generated ($\frac{\text{W}}{\text{m}^{3}}$). $V$ is the volume ($\text{m}^{3}$).
 \\ \bottomrule \end{tabular}
@@ -469,23 +469,23 @@ Description & The basic equation governing the rate of change of temperature, fo
 Detailed derivation of simplified rate of change of temperature:
 Integrating \hyperref[T:t1ConsThermE]{Definition~T:t1ConsThermE} over a volume ($V$), we have:
 \begin{dmath}
-\left(-\int_{V}{\nabla{}\cdot{}\mathbf{q}dV}\right)+\int_{V}{gdV}=\int_{V}{\rho{} C \frac{\partial{} T}{\partial{} t}dV}
+\left(-\int_{V}{\nabla{}\cdot{}\mathbf{q}dV}\right)+\int_{V}{gdV}=\int_{V}{\rho{} C \frac{\partial{}\,T}{\partial{}\,t}dV}
 \end{dmath}
 Applying Gauss's Divergence Theorem to the first term over the surface $S$ of the volume, with $\mathbf{q}$ as the thermal flux vector for the surface and $\mathbf{\hat{n}}$ as a unit outward normal vector for a surface:
 \begin{dmath}
-\left(-\int_{S}{\mathbf{q}\cdot{}\mathbf{\hat{n}}dS}\right)+\int_{V}{gdV}=\int_{V}{\rho{} C \frac{\partial{} T}{\partial{} t}dV}
+\left(-\int_{S}{\mathbf{q}\cdot{}\mathbf{\hat{n}}dS}\right)+\int_{V}{gdV}=\int_{V}{\rho{} C \frac{\partial{}\,T}{\partial{}\,t}dV}
 \end{dmath}
 We consider an arbitrary volume. The volumetric heat generation per unit volume is assumed constant. Then (1) can be written as:
 \begin{dmath}
-{q_{in}} {A_{in}}-{q_{out}} {A_{out}}+g V=\int_{V}{\rho{} C \frac{\partial{} T}{\partial{} t}dV}
+{q_{in}} {A_{in}}-{q_{out}} {A_{out}}+g V=\int_{V}{\rho{} C \frac{\partial{}\,T}{\partial{}\,t}dV}
 \end{dmath}
 Where ${q_{in}}$, ${q_{out}}$, ${A_{in}}$, and ${A_{out}}$ are explained in GD2. Assuming $\rho{}$, $C$ and $T$ are constant over the volume, which is true in our case by Assumptions (A\ref{A:assump3}), (A\ref{A:assump4}), (A\ref{A:assump5}), and (A\ref{A:assump6}), we have:
 \begin{dmath}
-\rho{} C V \frac{d T}{d t}={q_{in}} {A_{in}}-{q_{out}} {A_{out}}+g V
+\rho{} C V \frac{d\,T}{d\,t}={q_{in}} {A_{in}}-{q_{out}} {A_{out}}+g V
 \end{dmath}
 Using the fact that $\rho{}$=$m$/$V$, (2) can be written as:
 \begin{dmath}
-m C \frac{d T}{d t}={q_{in}} {A_{in}}-{q_{out}} {A_{out}}+g V
+m C \frac{d\,T}{d\,t}={q_{in}} {A_{in}}-{q_{out}} {A_{out}}+g V
 \end{dmath}
 \subsubsection{Data Definitions}
 \label{Sec:DDs}
@@ -567,7 +567,7 @@ The goals GS1 to GS4 are solved by IM1 to IM4. The solutions for IM1 and IM2 are
 \\ \midrule \\
 Label & Energy Balance on Water to Find the Temperature of the Water
 \\ \midrule \\
-Equation & $\frac{d {T_{W}}}{d t}=\frac{1}{{\tau{}_{W}}} \left({T_{C}}-{T_{W}}\left(t\right)+\eta{} \left({T_{P}}\left(t\right)-{T_{W}}\left(t\right)\right)\right)$
+Equation & $\frac{d\,{T_{W}}}{d\,t}=\frac{1}{{\tau{}_{W}}} \left({T_{C}}-{T_{W}}\left(t\right)+\eta{} \left({T_{P}}\left(t\right)-{T_{W}}\left(t\right)\right)\right)$
 \\ \midrule \\
 Description & ${T_{W}}$ is the temperature of the water (${}^{\circ}$C). ${T_{P}}$ is the temperature of the phase change material (${}^{\circ}$C). ${T_{C}}$ is the temperature of the heating coil (${}^{\circ}$C). ${\tau{}_{W}}=\frac{{m_{W}} {C_{W}}}{{h_{C}} {A_{C}}}$ is a constant (s). $\eta{}=\frac{{h_{P}} {A_{P}}}{{h_{C}} {A_{C}}}$ is a constant (dimensionless). The above equation applies as long as the water is in liquid form, $0<{T_{W}}<100$ (${}^{\circ}$C) where $0$ (${}^{\circ}$C) and $100$ (${}^{\circ}$C) are the melting and boiling point temperatures of water, respectively (A\ref{A:assump14}, A\ref{A:assump19}).
 \\ \bottomrule \end{tabular}
@@ -575,31 +575,31 @@ Description & ${T_{W}}$ is the temperature of the water (${}^{\circ}$C). ${T_{P}
 Derivation of the energy balance on water:
 To find the rate of change of ${T_{W}}$, we look at the energy balance on water. The volume being considered is the volume of water ${V_{W}}$, which has mass of water ${m_{W}}$ and specific heat capacity of water, ${C_{W}}$. ${q_{C}}$ represents the heat flux into the water from the coil and ${q_{P}}$ represents the heat flux into the PCM from water, over heating coil surface area and phase change material surface area of ${A_{C}}$ and ${A_{P}}$, respectively. No heat transfer occurs to the outside of the tank, since it has been assumed to be perfectly insulated (A\ref{A:assump15}). Assuming no volumetric heat generation per unit volume (A\ref{A:assump16}), $g=0$. Therefore, the equation for GD2 can be written as:
 \begin{dmath}
-{m_{W}} {C_{W}} \frac{d {T_{W}}}{d t}={q_{C}} {A_{C}}-{q_{P}} {A_{P}}
+{m_{W}} {C_{W}} \frac{d\,{T_{W}}}{d\,t}={q_{C}} {A_{C}}-{q_{P}} {A_{P}}
 \end{dmath}
 Using \hyperref[DD:ht.flux.C]{Definition~DD:ht.flux.C} and \hyperref[DD:ht.flux.P]{Definition~DD:ht.flux.P} for ${q_{C}}$ and ${q_{P}}$ respectively, this can be written as:
 \begin{dmath}
-{m_{W}} {C_{W}} \frac{d {T_{W}}}{d t}={h_{C}} {A_{C}} \left({T_{C}}-{T_{W}}\right)-{h_{P}} {A_{P}} \left({T_{W}}-{T_{P}}\right)
+{m_{W}} {C_{W}} \frac{d\,{T_{W}}}{d\,t}={h_{C}} {A_{C}} \left({T_{C}}-{T_{W}}\right)-{h_{P}} {A_{P}} \left({T_{W}}-{T_{P}}\right)
 \end{dmath}
 Dividing (3) by ${m_{W}}$${C_{W}}$, we obtain:
 \begin{dmath}
-\frac{d {T_{W}}}{d t}=\frac{{h_{C}} {A_{C}}}{{m_{W}} {C_{W}}} \left({T_{C}}-{T_{W}}\right)-\frac{{m_{P}} {A_{P}}}{{m_{W}} {C_{W}}} \left({T_{W}}-{T_{P}}\right)
+\frac{d\,{T_{W}}}{d\,t}=\frac{{h_{C}} {A_{C}}}{{m_{W}} {C_{W}}} \left({T_{C}}-{T_{W}}\right)-\frac{{m_{P}} {A_{P}}}{{m_{W}} {C_{W}}} \left({T_{W}}-{T_{P}}\right)
 \end{dmath}
 Factoring the negative sign out of the second term of the RHS of Equation (4) and multiplying it by ${h_{C}}$${A_{C}}$/${h_{C}}$${A_{C}}$ yields:
 \begin{dmath}
-\frac{d {T_{W}}}{d t}=\frac{{h_{C}} {A_{C}}}{{m_{W}} {C_{W}}} \left({T_{C}}-{T_{W}}\right)+\frac{{h_{C}} {A_{C}}}{{h_{C}} {A_{C}}} \frac{{h_{P}} {A_{P}}}{{m_{W}} {C_{W}}} \left({T_{P}}-{T_{W}}\right)
+\frac{d\,{T_{W}}}{d\,t}=\frac{{h_{C}} {A_{C}}}{{m_{W}} {C_{W}}} \left({T_{C}}-{T_{W}}\right)+\frac{{h_{C}} {A_{C}}}{{h_{C}} {A_{C}}} \frac{{h_{P}} {A_{P}}}{{m_{W}} {C_{W}}} \left({T_{P}}-{T_{W}}\right)
 \end{dmath}
 Which simplifies to:
 \begin{dmath}
-\frac{d {T_{W}}}{d t}=\frac{{h_{C}} {A_{C}}}{{m_{W}} {C_{W}}} \left({T_{C}}-{T_{W}}\right)+\frac{{h_{P}} {A_{P}}}{{h_{C}} {A_{C}}} \frac{{h_{C}} {A_{C}}}{{m_{W}} {C_{W}}} \left({T_{P}}-{T_{W}}\right)
+\frac{d\,{T_{W}}}{d\,t}=\frac{{h_{C}} {A_{C}}}{{m_{W}} {C_{W}}} \left({T_{C}}-{T_{W}}\right)+\frac{{h_{P}} {A_{P}}}{{h_{C}} {A_{C}}} \frac{{h_{C}} {A_{C}}}{{m_{W}} {C_{W}}} \left({T_{P}}-{T_{W}}\right)
 \end{dmath}
 Setting ${\tau{}_{W}}=\frac{{m_{W}} {C_{W}}}{{h_{C}} {A_{C}}}$ and $\eta{}=\frac{{h_{P}} {A_{P}}}{{h_{C}} {A_{C}}}$, Equation (5) can be written as:
 \begin{dmath}
-\frac{d {T_{W}}}{d t}=\frac{1}{{\tau{}_{W}}} \left({T_{C}}-{T_{W}}\right)+\frac{\eta{}}{{\tau{}_{W}}} \left({T_{P}}-{T_{W}}\right)
+\frac{d\,{T_{W}}}{d\,t}=\frac{1}{{\tau{}_{W}}} \left({T_{C}}-{T_{W}}\right)+\frac{\eta{}}{{\tau{}_{W}}} \left({T_{P}}-{T_{W}}\right)
 \end{dmath}
 Finally, factoring out $\frac{1}{{\tau{}_{W}}}$, we are left with the governing ODE for IM1:
 \begin{dmath}
-\frac{d {T_{W}}}{d t}=\frac{1}{{\tau{}_{W}}} \left({T_{C}}-{T_{W}}+\eta{} \left({T_{P}}-{T_{W}}\right)\right)
+\frac{d\,{T_{W}}}{d\,t}=\frac{1}{{\tau{}_{W}}} \left({T_{C}}-{T_{W}}+\eta{} \left({T_{P}}-{T_{W}}\right)\right)
 \end{dmath}
 ~\newline
 \noindent \begin{minipage}{\textwidth}
@@ -610,7 +610,7 @@ Finally, factoring out $\frac{1}{{\tau{}_{W}}}$, we are left with the governing 
 \\ \midrule \\
 Label & Energy Balance on PCM to Find T\_p
 \\ \midrule \\
-Equation & $\frac{d {T_{P}}}{d t}=\begin{cases}
+Equation & $\frac{d\,{T_{P}}}{d\,t}=\begin{cases}
 \frac{1}{{{\tau{}_{P}}^{S}}} \left({T_{W}}\left(t\right)-{T_{P}}\left(t\right)\right), & {T_{P}}<{{T_{melt}}^{P}}\\
 \frac{1}{{{\tau{}_{P}}^{L}}} \left({T_{W}}\left(t\right)-{T_{P}}\left(t\right)\right), & {T_{P}}>{{T_{melt}}^{P}}\\
 0, & {T_{P}}={{T_{melt}}^{P}}\\
@@ -623,19 +623,19 @@ Description & ${T_{W}}$ is the temperature of the water (${}^{\circ}$C). ${T_{P}
 Detailed derivation of the energy balance on the PCM during sensible heating phase:
 To find the rate of change of ${T_{P}}$, we look at the energy balance on the PCM. The volume being considered is the volume of PCM, ${V_{P}}$. The derivation that follows is initially for the solid PCM. The mass of phase change material is ${m_{P}}$ and the specific heat capacity of PCM as a solid is ${{C_{P}}^{S}}$. The heat flux into the PCM from water is ${q_{P}}$ over phase change material surface area ${A_{P}}$. There is no heat flux output. Assuming no volumetric heat generation per unit volume (A\ref{A:assump16}), $g$=0, the equation for GD2 can be written as:
 \begin{dmath}
-{m_{P}} {{C_{P}}^{S}} \frac{d {T_{P}}}{d t}={q_{P}} {A_{P}}
+{m_{P}} {{C_{P}}^{S}} \frac{d\,{T_{P}}}{d\,t}={q_{P}} {A_{P}}
 \end{dmath}
 Using \hyperref[DD:ht.flux.P]{Definition~DD:ht.flux.P} for ${q_{P}}$, this equation can be written as:
 \begin{dmath}
-{m_{P}} {{C_{P}}^{S}} \frac{d {T_{P}}}{d t}={h_{P}} {A_{P}} \left({T_{W}}-{T_{P}}\right)
+{m_{P}} {{C_{P}}^{S}} \frac{d\,{T_{P}}}{d\,t}={h_{P}} {A_{P}} \left({T_{W}}-{T_{P}}\right)
 \end{dmath}
 Dividing by ${m_{P}}$${{C_{P}}^{S}}$ we obtain:
 \begin{dmath}
-\frac{d {T_{P}}}{d t}=\frac{{h_{P}} {A_{P}}}{{m_{P}} {{C_{P}}^{S}}} \left({T_{W}}-{T_{P}}\right)
+\frac{d\,{T_{P}}}{d\,t}=\frac{{h_{P}} {A_{P}}}{{m_{P}} {{C_{P}}^{S}}} \left({T_{W}}-{T_{P}}\right)
 \end{dmath}
 Setting ${{\tau{}_{P}}^{S}}$=${m_{P}}$${{C_{P}}^{S}}$/${h_{P}}$${A_{P}}$, this can be written as:
 \begin{dmath}
-\frac{d {T_{P}}}{d t}=\frac{1}{{{\tau{}_{P}}^{S}}} \left({T_{W}}-{T_{P}}\right)
+\frac{d\,{T_{P}}}{d\,t}=\frac{1}{{{\tau{}_{P}}^{S}}} \left({T_{W}}-{T_{P}}\right)
 \end{dmath}
 Equation (6) applies for the solid PCM. In the case where all of the PCM is melted, the same derivation applies, except that ${{C_{P}}^{S}}$ is replaced by ${{C_{P}}^{L}}$, and thus ${{\tau{}_{P}}^{S}}$ is replaced by ${{\tau{}_{P}}^{L}}$. Although a small change in surface area would be expected with melting, this is not included, since the volume change of the PCM with melting is assumed to be negligible (A\ref{A:assump17}).
 In the case where ${T_{P}}$=${{T_{melt}}^{P}}$ and not all of the PCM is melted, the temperature of the phase change material does not change. Therefore, in this case d${T_{P}}$/d$t$=0.

@@ -146,6 +146,7 @@ p_expr (MO o) = p_ops o
 p_expr (Fenced l r e) = fence Open l ++ p_expr e ++ fence Close r
 p_expr (Font Bold e) = bold $ p_expr e
 p_expr (Font Emph e) = em $ p_expr e
+p_expr (Spc Thin) = "&#8239;"
 
 p_ops :: Ops -> String
 p_ops IsIn = "&thinsp;&isin;&thinsp;"

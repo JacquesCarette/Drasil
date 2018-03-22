@@ -44,10 +44,13 @@ expr (Assoc And l)    sm = P.Row $ intersperse (P.MO P.And) $ map (expr' sm (pre
 expr (Assoc Or l)     sm = P.Row $ intersperse (P.MO P.Or) $ map (expr' sm (prec Or)) l
 expr (Assoc Add l)     sm = P.Row $ intersperse (P.MO P.Add) $ map (expr' sm (prec Add)) l
 expr (Assoc Mul l)     sm = P.Row $ intersperse (P.MO P.Mul) $ map (expr' sm (prec Mul)) l
-expr (Deriv Part a b) sm = P.Div (P.Row [P.Font P.Emph $ P.Spec Partial, P.MO P.Mul, expr a sm])
-                          (P.Row [P.Font P.Emph $ P.Spec Partial, P.MO P.Mul, P.Font P.Emph $ symbol $ eqSymb $ symbLookup b $ sm^.symbolTable])
-expr (Deriv Total a b)sm = P.Div (P.Row [P.Font P.Emph $ P.Ident "d", P.MO P.Mul, expr a sm])
-                          (P.Row [P.Font P.Emph $ P.Ident "d", P.MO P.Mul, P.Font P.Emph $ symbol $ eqSymb $ symbLookup b $ sm^.symbolTable])
+expr (Deriv Part a b) sm = 
+  P.Div (P.Row [P.Font P.Emph $ P.Spec Partial, P.Spc P.Thin, expr a sm])
+        (P.Row [P.Font P.Emph $ P.Spec Partial, P.Spc P.Thin, 
+                P.Font P.Emph $ symbol $ eqSymb $ symbLookup b $ sm^.symbolTable])
+expr (Deriv Total a b)sm = 
+  P.Div (P.Row [P.Font P.Emph $ P.Ident "d", P.Spc P.Thin, expr a sm])
+        (P.Row [P.Font P.Emph $ P.Ident "d", P.Spc P.Thin, P.Font P.Emph $ symbol $ eqSymb $ symbLookup b $ sm^.symbolTable])
 expr (C c)            sm = P.Font P.Emph $ symbol $ eqSymb $ symbLookup c $ sm^.symbolTable
 expr (FCall f x)      sm = P.Row [expr f sm, 
   P.Fenced P.Paren P.Paren $ P.Row $ intersperse (P.MO P.Comma) $ map (flip expr sm) x]

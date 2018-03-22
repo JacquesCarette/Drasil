@@ -14,6 +14,7 @@ data Ops = IsIn | Integer | Real | Rational | Natural | Boolean | Comma | Prime 
 data Fence = Paren | Curly | Norm | Abs
 data OverSymb = Hat
 data Fonts = Bold | Emph
+data Spacing = Thin
 
 data Expr = Dbl   Double
           | Int   Integer
@@ -32,6 +33,7 @@ data Expr = Dbl   Double
           | Fenced Fence Fence Expr
           | Font  Fonts Expr
           | Div   Expr Expr -- actually, fractions are a layout thing!
+          | Spc   Spacing
           
 data Functional = 
             Summation (Maybe ((Symbol, Expr),Expr))

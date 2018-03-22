@@ -314,7 +314,7 @@ This section focuses on the general equations and laws that SWHS is based on.
 \\ \midrule \\
 Label & Conservation of Thermal Energy
 \\ \midrule \\
-Equation & $-\nabla{}\cdot{}\mathbf{q}+g=\rho{} C \frac{\partial{} T}{\partial{} t}$
+Equation & $-\nabla{}\cdot{}\mathbf{q}+g=\rho{} C \frac{\partial{}\,T}{\partial{}\,t}$
 \\ \midrule \\
 Description & The above equation gives the law of conservation of energy for transient heat transfer in a material of specific heat capacity $C$ ($\frac{\text{J}}{(\text{kg}{}^{\circ}\text{C})}$) and density, $\rho{}$ ($\frac{\text{kg}}{\text{m}^{3}}$), where $\mathbf{q}$ is the thermal flux vector ($\frac{\text{W}}{\text{m}^{2}}$), $g$ is the volumetric heat generation per unit volume ($\frac{\text{W}}{\text{m}^{3}}$), $T$ is the temperature (${}^{\circ}$C), $t$ is time (s), and $\nabla{}$ is the degree of steepness of a graph at any point. For this equation to apply, other forms of energy, such as mechanical energy, are assumed to be negligible in the system (A\ref{A:assump1}).
 \\ \bottomrule \end{tabular}
@@ -345,7 +345,7 @@ Description & Newton's law of cooling describes convective cooling from a surfac
 \\ \midrule \\
 Label & Simplified Rate of Change of Temperature
 \\ \midrule \\
-Equation & $m C \frac{d T}{d t}={q_{in}} {A_{in}}-{q_{out}} {A_{out}}+g V$
+Equation & $m C \frac{d\,T}{d\,t}={q_{in}} {A_{in}}-{q_{out}} {A_{out}}+g V$
 \\ \midrule \\
 Description & The basic equation governing the rate of change of temperature, for a given volume $V$, with time. $m$ is the mass (kg). $C$ is the specific heat capacity ($\frac{\text{J}}{(\text{kg}{}^{\circ}\text{C})}$). $T$ is the temperature (${}^{\circ}$C) and $t$ is the time (s). ${q_{in}}$ and ${q_{out}}$ are the in and out heat transfer rates, respectively ($\frac{\text{W}}{\text{m}^{2}}$). ${A_{in}}$ and ${A_{out}}$ are the surface areas over which the heat is being transferred in and out, respectively ($\text{m}^{2}$). $g$ is the volumetric heat generated ($\frac{\text{W}}{\text{m}^{3}}$). $V$ is the volume ($\text{m}^{3}$).
 \\ \bottomrule \end{tabular}
@@ -353,23 +353,23 @@ Description & The basic equation governing the rate of change of temperature, fo
 Detailed derivation of simplified rate of change of temperature:
 Integrating \hyperref[T:t1ConsThermE]{Definition~T:t1ConsThermE} over a volume ($V$), we have:
 \begin{dmath}
-\left(-\int_{V}{\nabla{}\cdot{}\mathbf{q}dV}\right)+\int_{V}{gdV}=\int_{V}{\rho{} C \frac{\partial{} T}{\partial{} t}dV}
+\left(-\int_{V}{\nabla{}\cdot{}\mathbf{q}dV}\right)+\int_{V}{gdV}=\int_{V}{\rho{} C \frac{\partial{}\,T}{\partial{}\,t}dV}
 \end{dmath}
 Applying Gauss's Divergence Theorem to the first term over the surface $S$ of the volume, with $\mathbf{q}$ as the thermal flux vector for the surface and $\mathbf{\hat{n}}$ as a unit outward normal vector for a surface:
 \begin{dmath}
-\left(-\int_{S}{\mathbf{q}\cdot{}\mathbf{\hat{n}}dS}\right)+\int_{V}{gdV}=\int_{V}{\rho{} C \frac{\partial{} T}{\partial{} t}dV}
+\left(-\int_{S}{\mathbf{q}\cdot{}\mathbf{\hat{n}}dS}\right)+\int_{V}{gdV}=\int_{V}{\rho{} C \frac{\partial{}\,T}{\partial{}\,t}dV}
 \end{dmath}
 We consider an arbitrary volume. The volumetric heat generation per unit volume is assumed constant. Then (1) can be written as:
 \begin{dmath}
-{q_{in}} {A_{in}}-{q_{out}} {A_{out}}+g V=\int_{V}{\rho{} C \frac{\partial{} T}{\partial{} t}dV}
+{q_{in}} {A_{in}}-{q_{out}} {A_{out}}+g V=\int_{V}{\rho{} C \frac{\partial{}\,T}{\partial{}\,t}dV}
 \end{dmath}
 Where ${q_{in}}$, ${q_{out}}$, ${A_{in}}$, and ${A_{out}}$ are explained in GD2. Assuming $\rho{}$, $C$ and $T$ are constant over the volume, which is true in our case by Assumptions (A\ref{A:assump3}), (A\ref{A:assump4}), and (A\ref{A:assump5}), we have:
 \begin{dmath}
-\rho{} C V \frac{d T}{d t}={q_{in}} {A_{in}}-{q_{out}} {A_{out}}+g V
+\rho{} C V \frac{d\,T}{d\,t}={q_{in}} {A_{in}}-{q_{out}} {A_{out}}+g V
 \end{dmath}
 Using the fact that $\rho{}$=$m$/$V$, (2) can be written as:
 \begin{dmath}
-m C \frac{d T}{d t}={q_{in}} {A_{in}}-{q_{out}} {A_{out}}+g V
+m C \frac{d\,T}{d\,t}={q_{in}} {A_{in}}-{q_{out}} {A_{out}}+g V
 \end{dmath}
 \subsubsection{Data Definitions}
 \label{Sec:DDs}
@@ -402,7 +402,7 @@ This section transforms the problem defined in Section~\ref{Sec:ProbDesc} into o
 \\ \midrule \\
 Label & Energy Balance on Water to Find the Temperature of the Water
 \\ \midrule \\
-Equation & $\frac{d {T_{W}}}{d t}=\frac{1}{{\tau{}_{W}}} \left({T_{C}}-{T_{W}}\left(t\right)\right)$
+Equation & $\frac{d\,{T_{W}}}{d\,t}=\frac{1}{{\tau{}_{W}}} \left({T_{C}}-{T_{W}}\left(t\right)\right)$
 \\ \midrule \\
 Description & ${T_{W}}$ is the temperature of the water (${}^{\circ}$C). ${T_{C}}$ is the temperature of the heating coil (${}^{\circ}$C). ${\tau{}_{W}}=\frac{{m_{W}} {C_{W}}}{{h_{C}} {A_{C}}}$ is a constant (s). The above equation applies as long as the water is in liquid form, $0<{T_{W}}<100$ (${}^{\circ}$C) where $0$ (${}^{\circ}$C) and $100$ (${}^{\circ}$C) are the melting and boiling point temperatures of water, respectively (A\ref{A:assump10}).
 \\ \bottomrule \end{tabular}
@@ -410,19 +410,19 @@ Description & ${T_{W}}$ is the temperature of the water (${}^{\circ}$C). ${T_{C}
 Derivation of the energy balance on water:
 To find the rate of change of ${T_{W}}$, we look at the energy balance on water. The volume being considered is the volume of water ${V_{W}}$, which has mass ${m_{W}}$ and specific heat capacity of water, ${C_{W}}$. Heat transfer occurs in the water from the coil as ${q_{C}}$, over area ${A_{C}}$. No heat transfer occurs to the outside of the tank, since it has been assumed to be perfectly insulated (A\ref{A:assump15}). Assuming no volumetric heat generation per unit volume (A\ref{A:assump12}), $g=0$. Therefore, the equation for GD2 can be written as:
 \begin{dmath}
-{m_{W}} {C_{W}} \frac{d {T_{W}}}{d t}={q_{C}} {A_{C}}
+{m_{W}} {C_{W}} \frac{d\,{T_{W}}}{d\,t}={q_{C}} {A_{C}}
 \end{dmath}
 Using \hyperref[DD:ht.flux.C]{Definition~DD:ht.flux.C}, this can be written as:
 \begin{dmath}
-{m_{W}} {C_{W}} \frac{d {T_{W}}}{d t}={h_{C}} {A_{C}} \left({T_{C}}-{T_{W}}\right)
+{m_{W}} {C_{W}} \frac{d\,{T_{W}}}{d\,t}={h_{C}} {A_{C}} \left({T_{C}}-{T_{W}}\right)
 \end{dmath}
 Dividing (3) by ${m_{W}}$${C_{W}}$, we obtain:
 \begin{dmath}
-\frac{d {T_{W}}}{d t}=\frac{{h_{C}} {A_{C}}}{{m_{W}} {C_{W}}} \left({T_{C}}-{T_{W}}\right)
+\frac{d\,{T_{W}}}{d\,t}=\frac{{h_{C}} {A_{C}}}{{m_{W}} {C_{W}}} \left({T_{C}}-{T_{W}}\right)
 \end{dmath}
 Setting ${\tau{}_{W}}$=${m_{W}}$${C_{W}}$/${h_{C}}$${A_{C}}$, Equation (4) can be written in its final form as:
 \begin{dmath}
-\frac{d {T_{W}}}{d t}=\frac{1}{{\tau{}_{W}}} \left({T_{C}}-{T_{W}}\right)
+\frac{d\,{T_{W}}}{d\,t}=\frac{1}{{\tau{}_{W}}} \left({T_{C}}-{T_{W}}\right)
 \end{dmath}
 ~\newline
 \noindent \begin{minipage}{\textwidth}

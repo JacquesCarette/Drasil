@@ -106,6 +106,7 @@ p_expr (MO o) = p_ops o
 p_expr (Fenced l r m)    = fence Open l ++ p_expr m ++ fence Close r
 p_expr (Font Bold e) = "\\mathbf{" ++ p_expr e ++ "}"
 p_expr (Font Emph e) = p_expr e -- Emph is ignored here because we're in Math mode
+p_expr (Spc Thin) = "\\,"
 
 p_ops :: Ops -> String
 p_ops IsIn = "\\in{}"

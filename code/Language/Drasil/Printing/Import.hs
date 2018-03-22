@@ -27,3 +27,4 @@ p_space (DiscreteI a)  = "{" ++ (concat $ intersperse ", " (map show a)) ++ "}"
 p_space (DiscreteD a)  = "{" ++ (concat $ intersperse ", " (map show a)) ++ "}"
 p_space (DiscreteS a)  = "{" ++ (concat $ intersperse ", " a) ++ "}"
 -}
+

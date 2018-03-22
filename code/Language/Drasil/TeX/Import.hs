@@ -40,11 +40,14 @@ expr (Assoc And l)    sm = P.Row $ intersperse (P.MO P.And) $ map (expr' sm (pre
 expr (Assoc Or l)     sm = P.Row $ intersperse (P.MO P.Or) $ map (expr' sm (prec Or)) l
 expr (Assoc Add l)     sm = P.Row $ intersperse (P.MO P.Add) $ map (expr' sm (prec Add)) l
 expr (Assoc Mul l)     sm = P.Row $ intersperse (P.MO P.Mul) $ map (expr' sm (prec Mul)) l
+expr (Deriv Part a b)  sm = 
+  P.Div (P.Row [P.Font P.Emph $ P.Spec Partial, P.Spc P.Thin, expr a sm])
+        (P.Row [P.Font P.Emph $ P.Spec Partial, P.Spc P.Thin, 
+                P.Font P.Emph $ symbol $ eqSymb $ symbLookup b $ sm^.symbolTable])
+expr (Deriv Total a b)sm = 
+  P.Div (P.Row [P.Font P.Emph $ P.Ident "d", P.Spc P.Thin, expr a sm])
+        (P.Row [P.Font P.Emph $ P.Ident "d", P.Spc P.Thin, P.Font P.Emph $ symbol $ eqSymb $ symbLookup b $ sm^.symbolTable])
 expr (C c)            sm = symbol $ eqSymb $ symbLookup c $ sm^.symbolTable -- FIXME Stage?
-expr (Deriv Part a b)  sm = P.Div (P.Row [P.Spec Partial, expr a sm])
-                            (P.Row [P.Spec Partial, symbol $ eqSymb $ symbLookup b $ sm^.symbolTable])
-expr (Deriv Total a b) sm = P.Div (P.Row [P.Ident "d", expr a sm])
-                            (P.Row [P.Ident "d", symbol $ eqSymb $ symbLookup b $ sm^.symbolTable])
 expr (FCall f [x])     sm = P.Row [expr f sm, P.Fenced P.Paren P.Paren $ expr x sm]
 expr (FCall f x)       sm = P.Row [expr f sm, 
   P.Fenced P.Paren P.Paren $ P.Row $ intersperse (P.MO P.Comma) $ map (flip expr sm) x]
@@ -68,8 +71,8 @@ expr (UnaryOp Sqrt u)   sm = P.Row [P.MO P.Sqrt, P.Row [expr u sm]]
 expr (UnaryOp Neg u)    sm = neg sm u
 expr (EOp o)           sm = eop o sm
 expr (BinaryOp Frac a b) sm = P.Div (expr a sm) (expr b sm)
-expr (BinaryOp Cross a b) sm = P.Row [expr a sm, P.MO P.Cross, expr b sm]
-expr (BinaryOp Dot a b) sm = P.Row [expr a sm, P.MO P.Dot, expr b sm]
+expr (BinaryOp Cross a b) sm = mkBOp sm P.Cross a b
+expr (BinaryOp Dot a b) sm = mkBOp sm P.Dot a b
 expr (BinaryOp Eq a b) sm = mkBOp sm P.Eq a b
 expr (BinaryOp NEq a b) sm = mkBOp sm P.NEq a b
 expr (BinaryOp Lt a b) sm = mkBOp sm P.Lt a b

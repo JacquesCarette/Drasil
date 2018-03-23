@@ -95,7 +95,7 @@ getRVal c = uns (c ^. reasVal)
 
 -- | outputs sentence with % attached to it
 addPercent :: Float ->  Sentence
-addPercent num = (S (show num) :+: (P (Special Percent)))
+addPercent num = (S (show num) :+: (Sp Percent))
 
 -- | appends a sentence to the front of a list of list of sentences
 zipSentList :: [[Sentence]] -> [Sentence] -> [[Sentence]] -> [[Sentence]] 

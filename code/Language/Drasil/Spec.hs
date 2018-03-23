@@ -23,7 +23,6 @@ infixr 5 :+:
 data Sentence where
   Sy    :: USymb -> Sentence
   S     :: String -> Sentence       -- Strings, used for Descriptions in Chunks
-  G     :: Greek -> Sentence
   Sp    :: Special -> Sentence
   P     :: Symbol -> Sentence
   F     :: Accent -> Char -> Sentence  -- Special formatting for certain special

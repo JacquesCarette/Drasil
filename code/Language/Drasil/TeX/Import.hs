@@ -173,7 +173,6 @@ spec _  (Sy s)         = P.Sy s
 spec sm (EmptyS :+: b) = spec sm b
 spec sm (a :+: EmptyS) = spec sm a
 spec sm (a :+: b)      = spec sm a P.:+: spec sm b
-spec _  (G g)          = P.E $ P.Gr g
 spec _  (Sp s)         = P.Sp s
 spec sm (F f s)        = spec sm (accent f s)
 spec _  (P s)          = P.N s

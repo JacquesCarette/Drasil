@@ -47,7 +47,6 @@ data Spec = E Expr
           | S String
           | Spec :+: Spec -- concat
           | Sy USymb
-          | N Symbol
           | Sp Special
           | Ref RefType RefAdd Spec
           | EmptyS

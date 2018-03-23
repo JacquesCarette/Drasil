@@ -181,14 +181,14 @@ pow sm a                b = P.Row [expr a sm, P.Sup (expr b sm)]
 
 -- | Translates Sentence to the HTML representation of Sentence ('Spec')
 spec :: HasSymbolTable s => Sentence -> s -> P.Spec
-spec (S s)      _ = P.S s
-spec (Sy s)     _ = P.Sy s
+spec (S s)        _ = P.S s
+spec (Sy s)       _ = P.Sy s
 spec (EmptyS :+: b) sm = spec b sm
 spec (a :+: EmptyS) sm = spec a sm
-spec (a :+: b) sm = spec a sm P.:+: spec b sm
-spec (Sp s)     _ = P.Sp s
-spec (P s)      _ = P.N s
-spec (F f s)    sm = spec (accent f s) sm
+spec (a :+: b) sm   = spec a sm P.:+: spec b sm
+spec (Sp s)       _ = P.Sp s
+spec (P s)        _ = P.E $ P.Font P.Emph $ symbol s
+spec (F f s)     sm = spec (accent f s) sm
 spec (Ref t r n) sm = P.Ref t r (spec n sm)
 spec (Quote q) sm = P.S "&quot;" P.:+: spec q sm P.:+: P.S "&quot;"
 spec EmptyS     _ = P.EmptyS
@@ -315,7 +315,7 @@ missingAcro _ (Just a) = S "<b>":+: a :+: S "</b>"
 -- | Translates the defining equation from a QDefinition to
 -- HTML's version of Sentence
 buildEqn :: HasSymbolTable s => QDefinition -> s -> P.Spec
-buildEqn c sm = P.N (eqSymb c) P.:+: P.S " = " P.:+:
+buildEqn c sm = P.E (P.Font P.Emph $ symbol (eqSymb c)) P.:+: P.S " = " P.:+:
   P.E (P.Font P.Emph $ expr (c^.equat) sm)
 
 -- | Build descriptions in data defs based on required verbosity
@@ -327,9 +327,9 @@ buildDDDescription c m = descLines
 -- | Helper for building each line of the description of a data def
 descLines :: (HasSymbolTable s, Quantity q) => [q] -> s -> P.Spec
 descLines []    _   = error "No chunks to describe"
-descLines (vc:[]) m = (P.N (eqSymb vc) P.:+:
+descLines (vc:[]) m = (P.E $ P.Font P.Emph $ symbol (eqSymb vc)) P.:+:
   (P.S " is the " P.:+: (spec (phrase $ vc ^. term) m) P.:+:
-   unWrp (getUnitLup vc m)))
+   unWrp (getUnitLup vc m))
   where unWrp (Just a) = P.S " (" P.:+: P.Sy (a ^. usymb) P.:+: P.S ")"
         unWrp Nothing  = P.S ""
 descLines (vc:vcs) m = descLines (vc:[]) m P.:+: P.HARDNL P.:+: descLines vcs m

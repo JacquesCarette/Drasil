@@ -175,7 +175,7 @@ spec sm (a :+: EmptyS) = spec sm a
 spec sm (a :+: b)      = spec sm a P.:+: spec sm b
 spec _  (Sp s)         = P.Sp s
 spec sm (F f s)        = spec sm (accent f s)
-spec _  (P s)          = P.N s
+spec _  (P s)          = P.E $ symbol s
 spec _  (Ref t r _)    = P.Ref t r (P.S r)
 spec sm (Quote q)      = P.S "``" P.:+: spec sm q P.:+: P.S "\""
 spec _  EmptyS         = P.EmptyS
@@ -295,7 +295,7 @@ eqnStyleTM :: T.Contents -> T.LayoutObj
 eqnStyleTM = if numberedTMEquations then T.EqnBlock else T.Paragraph
 
 buildEqn :: HasSymbolTable ctx => ctx -> QDefinition -> P.Spec
-buildEqn sm c = P.N (eqSymb c) P.:+: P.S " = " P.:+:
+buildEqn sm c = P.E (symbol $ eqSymb c) P.:+: P.S " = " P.:+:
   P.E (expr (c^.equat) sm)
 
 -- Build descriptions in data defs based on required verbosity
@@ -305,7 +305,7 @@ buildDDDescription m c = descLines m
 
 descLines :: (HasSymbolTable ctx, Quantity q) => ctx -> [q] -> P.Spec
 descLines _ []      = error "No chunks to describe"
-descLines m (vc:[]) = (P.N (eqSymb vc) P.:+:
+descLines m (vc:[]) = (P.E (symbol $ eqSymb vc) P.:+:
   (P.S " is the " P.:+: (spec m (phrase $ vc ^. term)) P.:+:
    maybe (P.S "") (\a -> P.S " (" P.:+: P.Sy (a ^. usymb) P.:+: P.S ")") (getUnitLup vc m)))
 descLines m (vc:vcs) = descLines m (vc:[]) P.:+: P.HARDNL P.:+: descLines m vcs

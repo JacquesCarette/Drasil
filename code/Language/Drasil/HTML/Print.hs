@@ -70,7 +70,6 @@ print l sm = foldr ($$) empty $ map (printLO sm) l
 -- | Renders the title of the document. Different than body rendering
 -- because certain things can't be rendered in an HTML title.
 title_spec :: HasSymbolTable s => Spec -> s -> String
-title_spec (N s)       _ = t_symbol s
 title_spec (a :+: b)  sm = title_spec a sm ++ title_spec b sm
 title_spec HARDNL      _ = ""
 title_spec s          sm = p_spec s sm
@@ -80,18 +79,19 @@ p_spec :: HasSymbolTable s => Spec -> s -> String
 p_spec (E e)        _ = p_expr e
 p_spec (a :+: b)   sm = p_spec a sm ++ p_spec b sm
 p_spec (S s)        _ = s
-p_spec (N s)        _ = symbol s
 p_spec (Sy s)       _ = uSymb s
 p_spec (Sp s)       _ = unPH $ special s
 p_spec HARDNL       _ = "<br />"
 p_spec (Ref _ r a) sm = reflink r (p_spec a sm)
 p_spec EmptyS       _ = ""
 
+{-
 -- | Renders symbols for HTML title
 t_symbol :: Symbol -> String
 t_symbol (Corners [] [] [] [x] s) = t_symbol s ++ "_" ++ t_symbol x
 t_symbol (Corners [] [] [x] [] s) = t_symbol s ++ "^" ++ t_symbol x
 t_symbol s                        = symbol s
+-}
 
 -- | Adds emphasis to symbols by default. Use symbolNoEm for no <em>
 --   Units do not need this, for example.

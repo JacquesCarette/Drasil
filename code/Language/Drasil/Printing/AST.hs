@@ -7,7 +7,7 @@ import Language.Drasil.People (People)
 import Language.Drasil.Chunk.Citation (Month, EntryID, CitationKind)
 
 data Ops = IsIn | Integer | Real | Rational | Natural | Boolean | Comma | Prime | Log
-  | Sin | Cos | Tan | Sec | Csc | Cot | Not | Dim | Exp | Sqrt | Neg | Cross
+  | Sin | Cos | Tan | Sec | Csc | Cot | Not | Dim | Exp | Neg | Cross
   | Dot | Eq | NEq | Lt | Gt | LEq | GEq | Impl | Iff | Subt | And | Or
   | Add | Mul
 
@@ -20,7 +20,7 @@ data Expr = Dbl   Double
           | Int   Integer
           | Str   String
           | Case  [(Expr,Expr)]
-          | Funct Functional Expr
+          | Funct Functional Expr -- FIXME, this still needs to go!
           | Mtx [[Expr]]
           | Row   [Expr]
           | Ident String
@@ -33,6 +33,7 @@ data Expr = Dbl   Double
           | Fenced Fence Fence Expr
           | Font  Fonts Expr
           | Div   Expr Expr -- actually, fractions are a layout thing!
+          | Sqrt  Expr      -- as are roots. Just sqrt for now.
           | Spc   Spacing
           
 data Functional = 

@@ -18,7 +18,7 @@ import Language.Drasil.Chunk.Quantity (Quantity(..))
 import Language.Drasil.Chunk.SymbolForm (eqSymb)
 import Language.Drasil.ChunkDB (HasSymbolTable(..), getUnitLup, symbLookup)
 import Language.Drasil.Chunk.ReqChunk (requires)
-import Language.Drasil.Chunk.Citation ( CiteField(..), HP(..), Citation 
+import Language.Drasil.Chunk.Citation ( CiteField(..), HP(..), Citation
                                       , externRefT, citeID, fields)
 import Language.Drasil.Config (verboseDDDescription)
 import Language.Drasil.Document
@@ -44,15 +44,15 @@ expr (Assoc And l)    sm = P.Row $ intersperse (P.MO P.And) $ map (expr' sm (pre
 expr (Assoc Or l)     sm = P.Row $ intersperse (P.MO P.Or) $ map (expr' sm (prec Or)) l
 expr (Assoc Add l)     sm = P.Row $ intersperse (P.MO P.Add) $ map (expr' sm (prec Add)) l
 expr (Assoc Mul l)     sm = P.Row $ intersperse (P.MO P.Mul) $ map (expr' sm (prec Mul)) l
-expr (Deriv Part a b) sm = 
+expr (Deriv Part a b) sm =
   P.Div (P.Row [P.Font P.Emph $ P.Spec Partial, P.Spc P.Thin, expr a sm])
-        (P.Row [P.Font P.Emph $ P.Spec Partial, P.Spc P.Thin, 
+        (P.Row [P.Font P.Emph $ P.Spec Partial, P.Spc P.Thin,
                 P.Font P.Emph $ symbol $ eqSymb $ symbLookup b $ sm^.symbolTable])
-expr (Deriv Total a b)sm = 
+expr (Deriv Total a b)sm =
   P.Div (P.Row [P.Font P.Emph $ P.Ident "d", P.Spc P.Thin, expr a sm])
         (P.Row [P.Font P.Emph $ P.Ident "d", P.Spc P.Thin, P.Font P.Emph $ symbol $ eqSymb $ symbLookup b $ sm^.symbolTable])
 expr (C c)            sm = P.Font P.Emph $ symbol $ eqSymb $ symbLookup c $ sm^.symbolTable
-expr (FCall f x)      sm = P.Row [expr f sm, 
+expr (FCall f x)      sm = P.Row [expr f sm,
   P.Fenced P.Paren P.Paren $ P.Row $ intersperse (P.MO P.Comma) $ map (flip expr sm) x]
 expr (Case ps)        sm = if length ps < 2 then
                     error "Attempting to use multi-case expr incorrectly"
@@ -70,7 +70,7 @@ expr (UnaryOp Not u)    sm = P.Row [P.MO P.Not, expr u sm]
 expr (UnaryOp Exp u)    sm = P.Row [P.MO P.Exp, P.Sup $ expr u sm]
 expr (UnaryOp Abs u)    sm = P.Fenced P.Abs P.Abs $ expr u sm
 expr (UnaryOp Norm u)   sm = P.Fenced P.Norm P.Norm $ expr u sm
-expr (UnaryOp Sqrt u)   sm = mkCall sm P.Sqrt u
+expr (UnaryOp Sqrt u)   sm = P.Sqrt $ expr u sm
 expr (UnaryOp Neg u)    sm = neg sm u
 expr (BinaryOp Frac a b) sm = P.Div (expr a sm) (expr b sm)
 expr (BinaryOp Cross a b) sm = mkBOp sm P.Cross a b
@@ -113,9 +113,9 @@ neg' (C _)           = True
 neg' _               = False
 
 neg :: HasSymbolTable s => s -> Expr -> P.Expr
-neg sm a = if (neg' a) then 
+neg sm a = if (neg' a) then
              P.Row [P.MO P.Neg, expr a sm]
-           else 
+           else
              P.Row [P.MO P.Neg, P.Fenced P.Paren P.Paren $ expr a sm]
 
 -- | For printing indexes
@@ -124,7 +124,7 @@ indx sm (C c) i = f s
   where
     i' = expr i sm
     s = eqSymb $ symbLookup c $ sm^.symbolTable
-    f (Corners [] [] [] [b] e) = 
+    f (Corners [] [] [] [b] e) =
       let e' = P.Font P.Emph $ symbol e
           b' = P.Font P.Emph $ symbol b in
       P.Row [P.Row [e', P.Sub (P.Row [b', P.MO P.Comma, i'])]] -- FIXME, extra Row
@@ -239,7 +239,7 @@ lay x@(Requirement r)   sm = H.ALUR H.Requirement
   (spec (requires r) sm) (P.S (refAdd x)) (spec (fromJust $ getShortName r) sm)
 lay x@(Assumption a)    sm = H.ALUR H.Assumption
   (spec (assuming a) sm) (P.S (refAdd x)) (spec (fromJust $ getShortName a) sm)
-lay x@(Change lc) sm = H.ALUR 
+lay x@(Change lc) sm = H.ALUR
   (if (chngType lc) == Likely then H.LikelyChange else H.UnlikelyChange)
   (spec (chng lc) sm) (P.S (refAdd x)) (spec (fromJust $ getShortName lc) sm)
 lay (Defnt dtyp pairs rn) sm = H.Definition dtyp (layPairs pairs) (P.S rn)
@@ -315,8 +315,8 @@ missingAcro _ (Just a) = S "<b>":+: a :+: S "</b>"
 
 -- | Translates the defining equation from a QDefinition to
 -- HTML's version of Sentence
-buildEqn :: HasSymbolTable s => QDefinition -> s -> P.Spec  
-buildEqn c sm = P.N (eqSymb c) P.:+: P.S " = " P.:+: 
+buildEqn :: HasSymbolTable s => QDefinition -> s -> P.Spec
+buildEqn c sm = P.N (eqSymb c) P.:+: P.S " = " P.:+:
   P.E (expr (c^.equat) sm)
 
 -- | Build descriptions in data defs based on required verbosity
@@ -326,9 +326,9 @@ buildDDDescription c m = descLines
   where getQ (EC a _ _) = sy a
 
 -- | Helper for building each line of the description of a data def
-descLines :: (HasSymbolTable s, Quantity q) => [q] -> s -> P.Spec  
+descLines :: (HasSymbolTable s, Quantity q) => [q] -> s -> P.Spec
 descLines []    _   = error "No chunks to describe"
-descLines (vc:[]) m = (P.N (eqSymb vc) P.:+: 
+descLines (vc:[]) m = (P.N (eqSymb vc) P.:+:
   (P.S " is the " P.:+: (spec (phrase $ vc ^. term) m) P.:+:
    unWrp (getUnitLup vc m)))
   where unWrp (Just a) = P.S " (" P.:+: P.Sy (a ^. usymb) P.:+: P.S ")"

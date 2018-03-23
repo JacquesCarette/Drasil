@@ -107,6 +107,7 @@ p_expr (Fenced l r m)    = fence Open l ++ p_expr m ++ fence Close r
 p_expr (Font Bold e) = "\\mathbf{" ++ p_expr e ++ "}"
 p_expr (Font Emph e) = p_expr e -- Emph is ignored here because we're in Math mode
 p_expr (Spc Thin) = "\\,"
+p_expr (Sqrt e)  = "\\sqrt{" ++ p_expr e ++ "}"
 
 p_ops :: Ops -> String
 p_ops IsIn = "\\in{}"
@@ -127,7 +128,6 @@ p_ops Cot      = "\\cot"
 p_ops Not      = "\\neg{}"
 p_ops Dim      = "\\mathsf{dim}"
 p_ops Exp      = "e"
-p_ops Sqrt     = "\\sqrt"
 p_ops Neg      = "-"
 p_ops Cross    = "\\times"
 p_ops Dot      = "\\cdot{}"

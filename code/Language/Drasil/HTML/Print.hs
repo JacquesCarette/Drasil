@@ -147,6 +147,7 @@ p_expr (Fenced l r e) = fence Open l ++ p_expr e ++ fence Close r
 p_expr (Font Bold e) = bold $ p_expr e
 p_expr (Font Emph e) = em $ p_expr e
 p_expr (Spc Thin) = "&#8239;"
+p_expr (Sqrt e)    = "&radic;(" ++ p_expr e ++")"
 
 p_ops :: Ops -> String
 p_ops IsIn = "&thinsp;&isin;&thinsp;"
@@ -167,7 +168,6 @@ p_ops Cot      = "cot"
 p_ops Not      = "&not;"
 p_ops Dim      = "dim"
 p_ops Exp      = "e"
-p_ops Sqrt     = "&radic;"
 p_ops Neg      = "&minus;"
 p_ops Cross    = "&#10799;"
 p_ops Dot      = "&sdot;"

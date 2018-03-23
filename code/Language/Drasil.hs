@@ -20,9 +20,11 @@ module Language.Drasil (
   , cross, m2x2, vec2D, dgnl2x2
   -- all the stuff from Unicode
   , Greek(..), Special(..)
+  -- UnitLang
+  , UDefn(..), from_udefn
   -- Unit
-  , IsUnit, HasUnitSymbol(..), UDefn(..), DerUChunk(..), FundUnit(..), UnitDefn, unitWrapper
-  , from_udefn , makeDerU, unitCon
+  , IsUnit, HasUnitSymbol(..), DerUChunk(..), FundUnit(..), UnitDefn, unitWrapper
+  , makeDerU, unitCon
   , (^:), (/:), (*:), new_unit
   -- Chunk
   , Chunk(..), VarChunk(..), ConceptChunk
@@ -185,6 +187,7 @@ import Language.Drasil.Document (Document(..), DType(..)
   , ListPair)
 import Language.Drasil.Recipe (Recipe(..))
 import Language.Drasil.Unicode -- all of it
+import Language.Drasil.UnitLang -- all of it
 import Language.Drasil.Unit -- all of it
 import Language.Drasil.Chunk
 import Language.Drasil.Chunk.AssumpChunk
@@ -240,9 +243,9 @@ import Language.Drasil.ChunkDB
 import Language.Drasil.NounPhrase hiding (at_start, at_start', titleize
                                           , titleize', phrase, plural)
 import Language.Drasil.Space (Space(..))
-import Language.Drasil.Spec (USymb(..), Sentence(..), Accent(..),
-                              sParen, sParenNum, sSqBr, sSqBrNum, sC, (+:+), (+:+.), (+.), (+:),
-                              semiCol, sParenDash, sDash)
+import Language.Drasil.Spec (Sentence(..), Accent(..),
+  sParen, sParenNum, sSqBr, sSqBrNum, sC, (+:+), (+:+.), (+.), (+:),
+  semiCol, sParenDash, sDash)
 import Language.Drasil.Reference (makeRef, acroTest, ReferenceDB, assumpDB, reqDB
                                  , AssumpMap, assumpLookup, HasAssumpRefs
                                  , assumpRefTable, assumptionsFromDB

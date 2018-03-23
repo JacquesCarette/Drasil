@@ -2,7 +2,8 @@ module Language.Drasil.Misc where
 
 import Language.Drasil.Spec
 import Language.Drasil.Chunk.Quantity
-import Language.Drasil.Unit
+import Language.Drasil.UnitLang (USymb)
+import Language.Drasil.Unit (HasUnitSymbol(usymb))
 import Language.Drasil.Chunk.NamedIdea (NamedIdea, Idea, short, term)
 import Language.Drasil.Chunk.Unitary
 import qualified Language.Drasil.NounPhrase as NP

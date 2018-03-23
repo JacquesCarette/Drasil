@@ -5,6 +5,7 @@ module Language.Drasil.Spec where
 import Language.Drasil.Unicode (Special(CurlyBrOpen,CurlyBrClose,SqBrOpen,SqBrClose))
 import Language.Drasil.Symbol
 import Language.Drasil.Expr
+import Language.Drasil.UnitLang (USymb)
 
 type RefName = Sentence
 type RefAdd  = String
@@ -39,16 +40,6 @@ data Sentence where
 instance Monoid Sentence where
   mempty = EmptyS
   mappend = (:+:)
-
---Moving this here to avoid cyclic imports
--- | Language of unit equations, to define a unit relative
--- to another
-data USymb = UName Symbol
-           | UProd [USymb] -- ^ Product
-           | UPow USymb Integer -- ^ can be negative, should not be 0
-           | UDiv USymb USymb   -- ^ Get proper division (not neg pow)
-                                -- necessary for things like J/(kg*C)
-  deriving (Eq, Ord)
 
 -- | For building references. Defines the possible type of reference.
 data RefType = Tab    -- ^ Table

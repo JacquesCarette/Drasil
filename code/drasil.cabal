@@ -56,6 +56,7 @@ library
     , Language.Drasil.SymbolAlphabet
     , Language.Drasil.Unicode
     , Language.Drasil.Unit
+    , Language.Drasil.UnitLang
     , Language.Drasil.CodeSpec
     , Language.Drasil.Code.Code
     , Language.Drasil.Code.Imperative.AST

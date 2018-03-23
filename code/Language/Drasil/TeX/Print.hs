@@ -12,6 +12,7 @@ import Language.Drasil.Printing.AST
 import Language.Drasil.TeX.AST
 import qualified Language.Drasil.TeX.Import as I
 import qualified Language.Drasil.Spec as LS
+import Language.Drasil.UnitLang
 import Language.Drasil.Config (colAwidth, colBwidth, bibStyleT,bibFname)
 import Language.Drasil.Printing.Helpers hiding (paren, sqbrac)
 import Language.Drasil.TeX.Helpers
@@ -270,17 +271,17 @@ symbol_needs (Corners _ _ _ _ _) = Math
 symbol_needs (Atop _ _)          = Math
 symbol_needs Empty               = Curr
 
-p_unit :: LS.USymb -> D
-p_unit (LS.UName (Concat s)) = foldl (<>) empty $ map (p_unit . LS.UName) s
-p_unit (LS.UName n) =
+p_unit :: USymb -> D
+p_unit (UName (Concat s)) = foldl (<>) empty $ map (p_unit . UName) s
+p_unit (UName n) =
   let cn = symbol_needs n in
   switch (const cn) (pure $ text $ symbol n)
-p_unit (LS.UProd l) = foldr (<>) empty (map p_unit l)
-p_unit (LS.UPow n p) = toMath $ superscript (p_unit n) (pure $ text $ show p)
-p_unit (LS.UDiv n d) = toMath $
+p_unit (UProd l) = foldr (<>) empty (map p_unit l)
+p_unit (UPow n p) = toMath $ superscript (p_unit n) (pure $ text $ show p)
+p_unit (UDiv n d) = toMath $
   case d of -- 4 possible cases, 2 need parentheses, 2 don't
-    LS.UProd _  -> fraction (p_unit n) (parens $ p_unit d)
-    LS.UDiv _ _ -> fraction (p_unit n) (parens $ p_unit d)
+    UProd _  -> fraction (p_unit n) (parens $ p_unit d)
+    UDiv _ _ -> fraction (p_unit n) (parens $ p_unit d)
     _        -> fraction (p_unit n) (p_unit d)
 
 -----------------------------------------------------------------

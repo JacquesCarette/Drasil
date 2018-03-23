@@ -1,6 +1,5 @@
 module Language.Drasil.Unit (
-    UDefn(..)                   -- languages
-  , IsUnit, UnitEq(..),HasUnitSymbol(..)        -- classes
+    IsUnit, UnitEq(..),HasUnitSymbol(..)        -- classes
   , FundUnit(..), DerUChunk(..) -- data-structures
   , UnitDefn                    -- synonym for FundUnit
   , from_udefn, makeDerU, unitCon
@@ -15,19 +14,10 @@ import Language.Drasil.Chunk (Chunk(..))
 import Language.Drasil.Chunk.NamedIdea (NamedIdea(..), Idea(..))
 import Language.Drasil.Chunk.Concept (Concept,Definition(..), 
   ConceptDomain(..),ConceptChunk, dcc, cw)
-import Language.Drasil.NounPhrase
-import Language.Drasil.Spec (USymb(..))
 import Language.Drasil.Symbol
+import Language.Drasil.UnitLang
 
-import Language.Drasil.NounPhrase (cn')
-
--- | Language of units (how to build them up)
--- UName for the base cases, otherwise build up.
--- Probably a 7-vector would be better (less error-prone!)
-
-data UDefn = USynonym USymb      -- ^ to define straight synonyms
-           | UScale Double USymb -- ^ scale, i.e. *
-           | UShift Double USymb -- ^ shift, i.e. +
+import Language.Drasil.NounPhrase (cn,cn',NP)
 
 -- | Some chunks store a unit symbol
 class HasUnitSymbol u where
@@ -39,12 +29,6 @@ class (Concept u, HasUnitSymbol u) => IsUnit u where
 
 class UnitEq u where
    uniteq :: Simple Lens u UDefn
-
--- | Can generate a default symbol
-from_udefn :: UDefn -> USymb
-from_udefn (USynonym x) = x
-from_udefn (UScale _ s) = s
-from_udefn (UShift _ s) = s
 
 -- | Create a derived unit chunk from a concept and a unit equation
 makeDerU :: ConceptChunk -> UDefn -> DerUChunk

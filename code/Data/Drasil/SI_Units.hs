@@ -3,7 +3,8 @@ import Language.Drasil
 
 -- These are not normally all exported, but need them here. Should probably create
 -- some kind of Language.Drasil.Development module... FIXME
-import Language.Drasil.Unit (HasUnitSymbol(..), UDefn(..), FundUnit(..), DerUChunk(..),
+import Language.Drasil.UnitLang(UDefn(..))
+import Language.Drasil.Unit (HasUnitSymbol(..), FundUnit(..), DerUChunk(..),
   UnitDefn, new_unit, (^:), (/:), (*:), makeDerU, shift, scale,
   derUC, derUC', derUC'', unitWrapper)
 

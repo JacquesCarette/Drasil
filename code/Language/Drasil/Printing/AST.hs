@@ -1,7 +1,8 @@
 module Language.Drasil.Printing.AST where
 
 import Language.Drasil.Symbol (Symbol)
-import Language.Drasil.Spec (USymb, RefType, RefAdd)
+import Language.Drasil.UnitLang (USymb)
+import Language.Drasil.Spec (RefType, RefAdd)
 import Language.Drasil.Unicode (Greek, Special)
 import Language.Drasil.People (People)
 import Language.Drasil.Chunk.Citation (Month, EntryID, CitationKind)

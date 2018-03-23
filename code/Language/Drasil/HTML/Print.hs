@@ -9,7 +9,8 @@ import Language.Drasil.HTML.Import (makeDocument, spec)
 import Language.Drasil.Printing.AST
 import Language.Drasil.HTML.AST
 import qualified Language.Drasil.Output.Formats as F
-import Language.Drasil.Spec (USymb(..), Sentence, sC, (+:+))
+import Language.Drasil.Spec (Sentence, sC, (+:+))
+import Language.Drasil.UnitLang
 
 import Language.Drasil.HTML.Helpers
 import Language.Drasil.Printing.Helpers

@@ -45,13 +45,13 @@ expr (Assoc Or l)     sm = P.Row $ intersperse (P.MO P.Or) $ map (expr' sm (prec
 expr (Assoc Add l)     sm = P.Row $ intersperse (P.MO P.Add) $ map (expr' sm (prec Add)) l
 expr (Assoc Mul l)     sm = P.Row $ intersperse (P.MO P.Mul) $ map (expr' sm (prec Mul)) l
 expr (Deriv Part a b) sm =
-  P.Div (P.Row [P.Font P.Emph $ P.Spec Partial, P.Spc P.Thin, expr a sm])
-        (P.Row [P.Font P.Emph $ P.Spec Partial, P.Spc P.Thin,
-                P.Font P.Emph $ symbol $ eqSymb $ symbLookup b $ sm^.symbolTable])
+  P.Div (P.Row [P.Spec Partial, P.Spc P.Thin, expr a sm])
+        (P.Row [P.Spec Partial, P.Spc P.Thin,
+                symbol $ eqSymb $ symbLookup b $ sm^.symbolTable])
 expr (Deriv Total a b)sm =
-  P.Div (P.Row [P.Font P.Emph $ P.Ident "d", P.Spc P.Thin, expr a sm])
-        (P.Row [P.Font P.Emph $ P.Ident "d", P.Spc P.Thin, P.Font P.Emph $ symbol $ eqSymb $ symbLookup b $ sm^.symbolTable])
-expr (C c)            sm = P.Font P.Emph $ symbol $ eqSymb $ symbLookup c $ sm^.symbolTable
+  P.Div (P.Row [P.Ident "d", P.Spc P.Thin, expr a sm])
+        (P.Row [P.Ident "d", P.Spc P.Thin, symbol $ eqSymb $ symbLookup b $ sm^.symbolTable])
+expr (C c)            sm = symbol $ eqSymb $ symbLookup c $ sm^.symbolTable
 expr (FCall f x)      sm = P.Row [expr f sm,
   P.Fenced P.Paren P.Paren $ P.Row $ intersperse (P.MO P.Comma) $ map (flip expr sm) x]
 expr (Case ps)        sm = if length ps < 2 then
@@ -125,12 +125,12 @@ indx sm (C c) i = f s
     i' = expr i sm
     s = eqSymb $ symbLookup c $ sm^.symbolTable
     f (Corners [] [] [] [b] e) =
-      let e' = P.Font P.Emph $ symbol e
-          b' = P.Font P.Emph $ symbol b in
+      let e' = symbol e
+          b' = symbol b in
       P.Row [P.Row [e', P.Sub (P.Row [b', P.MO P.Comma, i'])]] -- FIXME, extra Row
-    f a@(Atomic _) = P.Row [P.Font P.Emph $ symbol a, P.Sub i']
-    f a@(Greek _)  = P.Row [P.Font P.Emph $ symbol a, P.Sub i']
-    f   e          = let e' = P.Font P.Emph $ symbol e in P.Row [P.Row [e'], P.Sub i']
+    f a@(Atomic _) = P.Row [symbol a, P.Sub i']
+    f a@(Greek _)  = P.Row [symbol a, P.Sub i']
+    f   e          = let e' = symbol e in P.Row [P.Row [e'], P.Sub i']
 indx sm a i = P.Row [P.Row [expr a sm], P.Sub $ expr i sm]
 
 -- | Helper function for translating 'EOperator's
@@ -146,7 +146,7 @@ eop (Product (RealDD _ _) _) _ = error "HTML/Import.hs Product cannot be over Re
 eop (Integral (RealDD v (BoundedR l h)) e) sm =
   P.Funct (P.Integral (Just (expr l sm), Just (expr h sm)) v) (expr e sm)
 eop (Integral (All v) e) sm =
-  P.Funct (P.Integral (Just $ P.Font P.Emph $ symbol v, Nothing) v) (expr e sm)
+  P.Funct (P.Integral (Just $ symbol v, Nothing) v) (expr e sm)
 eop (Integral (IntegerDD _ _) _) _ =
   error "HTML/Import.hs Integral cannot be over Integers"
 
@@ -193,7 +193,7 @@ spec (F f s)    sm = spec (accent f s) sm
 spec (Ref t r n) sm = P.Ref t r (spec n sm)
 spec (Quote q) sm = P.S "&quot;" P.:+: spec q sm P.:+: P.S "&quot;"
 spec EmptyS     _ = P.EmptyS
-spec (E e)     sm = P.E $ expr e sm
+spec (E e)     sm = P.E $ P.Font P.Emph $ expr e sm
 
 -- | Helper function for translating accented characters to
 -- an HTML renderable form.
@@ -228,7 +228,7 @@ lay :: HasSymbolTable s => Contents -> s -> H.LayoutObj
 lay x@(Table hdr lls t b _) sm = H.Table ["table"]
   ((map (flip spec sm) hdr) : (map (map (flip spec sm)) lls)) (P.S (refAdd x)) b (spec t sm)
 lay (Paragraph c)       sm = H.Paragraph (spec c sm)
-lay (EqnBlock c _)      sm = H.HDiv ["equation"] [H.Tagless (P.E (expr c sm))] (P.EmptyS)
+lay (EqnBlock c _)      sm = H.HDiv ["equation"] [H.Tagless (P.E (P.Font P.Emph $ expr c sm))] (P.EmptyS)
                               -- FIXME: Make equations referable
 --lay (CodeBlock c)        = H.CodeBlock c
 lay x@(Definition c)    sm = H.Definition c (makePairs c sm) (P.S (refAdd x))
@@ -300,7 +300,7 @@ makePairs (Data c) m = [
 makePairs (Theory c) m = [
   ("Number",      [H.Paragraph $ spec (missingAcro (S "T") $ fmap S $ getA c) m]),
   ("Label",       [H.Paragraph $ spec (titleize $ c ^. term) m]),
-  ("Equation",    [H.HDiv ["equation"] [H.Tagless (P.E (expr (c ^. relat) m))]
+  ("Equation",    [H.HDiv ["equation"] [H.Tagless (P.E (P.Font P.Emph $ expr (c ^. relat) m))]
                   (P.EmptyS)]),
   ("Description", [H.Paragraph (spec (c ^. defn) m)])
   ]
@@ -317,7 +317,7 @@ missingAcro _ (Just a) = S "<b>":+: a :+: S "</b>"
 -- HTML's version of Sentence
 buildEqn :: HasSymbolTable s => QDefinition -> s -> P.Spec
 buildEqn c sm = P.N (eqSymb c) P.:+: P.S " = " P.:+:
-  P.E (expr (c^.equat) sm)
+  P.E (P.Font P.Emph $ expr (c^.equat) sm)
 
 -- | Build descriptions in data defs based on required verbosity
 buildDDDescription :: HasSymbolTable s => QDefinition -> s -> P.Spec

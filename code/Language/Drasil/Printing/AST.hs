@@ -48,7 +48,6 @@ data Spec = E Expr
           | Spec :+: Spec -- concat
           | Sy USymb
           | N Symbol
-          | G Greek
           | Sp Special
           | Ref RefType RefAdd Spec
           | EmptyS

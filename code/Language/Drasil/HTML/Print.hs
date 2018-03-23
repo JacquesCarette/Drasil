@@ -82,7 +82,6 @@ p_spec (a :+: b)   sm = p_spec a sm ++ p_spec b sm
 p_spec (S s)        _ = s
 p_spec (N s)        _ = symbol s
 p_spec (Sy s)       _ = uSymb s
-p_spec (G g)        _ = unPH $ greek g
 p_spec (Sp s)       _ = unPH $ special s
 p_spec HARDNL       _ = "<br />"
 p_spec (Ref _ r a) sm = reflink r (p_spec a sm)

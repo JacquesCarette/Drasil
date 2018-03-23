@@ -2,7 +2,7 @@
 -- | Contains Sentences and helpers
 module Language.Drasil.Spec where
 
-import Language.Drasil.Unicode (Greek,Special,Special(CurlyBrOpen,CurlyBrClose,SqBrOpen,SqBrClose))
+import Language.Drasil.Unicode (Special(CurlyBrOpen,CurlyBrClose,SqBrOpen,SqBrClose))
 import Language.Drasil.Symbol
 import Language.Drasil.Expr
 

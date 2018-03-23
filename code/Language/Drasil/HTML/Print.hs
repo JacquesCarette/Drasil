@@ -174,7 +174,7 @@ p_ops Dot      = "&sdot;"
 p_ops Eq       = " = " -- with spaces?
 p_ops NEq      = "&ne;"
 p_ops Lt       = "&thinsp;&lt;&thinsp;" --thin spaces make these more readable
-p_ops Gt       = "&thinsp;&gt;&thinsp;" 
+p_ops Gt       = "&thinsp;&gt;&thinsp;"
 p_ops LEq      = "&thinsp;&le;&thinsp;"
 p_ops GEq      = "&thinsp;&ge;&thinsp;"
 p_ops Impl     = " &rArr; "
@@ -289,29 +289,14 @@ p_op (Integral bs wrtc) x = intg bs
   ++ paren (p_expr x ++ (symbol (Atomic "d") ++ "&#8239;" ++ symbol wrtc))
 
 -- | Helpers for summation/product, used by 'p_op'
-makeBound :: String -> String
-makeBound s = "<tr><td><span class=\"bound\">" ++ s ++ "</span></td></tr>\n"
-
 lrgOp :: String -> Maybe ((Symbol, Expr),Expr) -> String
-lrgOp f Nothing = "<span class=\"symb\">" ++ f ++ "</span>"
-lrgOp f (Just ((s,v),hi)) = "<table class=\"operator\">\n" ++ makeBound (p_expr hi) ++
-  "<tr><td><span class=\"symb\">" ++ f ++ "</span></td></tr>\n" ++
-  makeBound (symbol s ++"="++ p_expr v) ++ "</table>"
+lrgOp f Nothing = f
+lrgOp f (Just ((s,v),hi)) = f
+  ++ sub (symbol s ++ "=" ++ p_expr v)
+  ++ (sup (p_expr hi))
 
 intg :: (Maybe Expr, Maybe Expr) -> String
-intg (Nothing, Nothing) = "<span class=\"symb\">&int;</span>"
-intg (Just l, Nothing) = "<span class=\"symb\">&int;</span>" ++ sub (p_expr l ++ " ")
-intg (low,high) = "<table class=\"operator\">\n" ++ pHigh high ++
-  "<tr><td><span class=\"symb\">&int;</span></td></tr>\n" ++
-  pLow low ++ "</table>"
-  where pLow Nothing   = ""
-        pLow (Just l)  = makeBound (p_expr l)
-        pHigh Nothing  = ""
-        pHigh (Just hi) = makeBound (p_expr hi)
-
--- | Renders modules
--- makeModule :: String -> String -> Doc
--- makeModule m l = refwrap l (paragraph $ wrap "b" [] (text m))
+intg (low, high) = "&int;" ++ maybe "" (sub . p_expr) low ++ maybe "" (sup . p_expr) high
 
 -- | Renders assumptions, requirements, likely changes
 makeRefList :: String -> String -> String -> Doc

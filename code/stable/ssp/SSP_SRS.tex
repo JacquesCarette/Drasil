@@ -509,7 +509,7 @@ Description & The assumption for the Morgenstern Price method (A5) that the inte
 \\ \midrule \\
 Label & Moment Equilibrium
 \\ \midrule \\
-Equation & $0=\left(-E_{i}\right) \left(z_{i}-\frac{b_{i}}{2} \tan\left(\alpha{}_{i}\right)\right)+E_{i-1} \left(z_{i-1}-\frac{b_{i}}{2} \tan\left(\alpha{}_{i}\right)\right)-H_{i} \left(z_{i}-\frac{b_{i}}{2} \tan\left(\alpha{}_{i}\right)\right)+H_{i-1} \left(z_{i-1}-\frac{b_{i}}{2} \tan\left(\alpha{}_{i}\right)\right)-\frac{b_{i}}{2} \left(X_{i}+X_{i-1}\right)+\frac{{K_{c}} W_{i} h_{i}}{2}-{U_{t,i}} \sin\left(\beta{}_{i}\right) h_{i}-Q_{i} \sin\left(\omega{}_{i}\right) h_{i}$
+Equation & $0=-E_{i} \left(z_{i}-\frac{b_{i}}{2} \tan\left(\alpha{}_{i}\right)\right)+E_{i-1} \left(z_{i-1}-\frac{b_{i}}{2} \tan\left(\alpha{}_{i}\right)\right)-H_{i} \left(z_{i}-\frac{b_{i}}{2} \tan\left(\alpha{}_{i}\right)\right)+H_{i-1} \left(z_{i-1}-\frac{b_{i}}{2} \tan\left(\alpha{}_{i}\right)\right)-\frac{b_{i}}{2} \left(X_{i}+X_{i-1}\right)+\frac{{K_{c}} W_{i} h_{i}}{2}-{U_{t,i}} \sin\left(\beta{}_{i}\right) h_{i}-Q_{i} \sin\left(\omega{}_{i}\right) h_{i}$
 \\ \midrule \\
 Description & For a slice of mass in the slope the moment equilibrium to satisfy T2 in the direction perpendicular to the base surface of the slice. Moment equilibrium is derived from the free body diagram of Section~\ref{Sec:PhysSyst}. Index i refers to the values of the properties for slice/interslices following convention in Section~\ref{Sec:PhysSyst}. Variable definitions can be found in DD1 to DD9.
 \\ \bottomrule \end{tabular}
@@ -523,7 +523,7 @@ Description & For a slice of mass in the slope the moment equilibrium to satisfy
 \\ \midrule \\
 Label & Net X-Component Force
 \\ \midrule \\
-Equation & ${F_{x,i}}=\left(-{\Delta{}H}_{i}\right)-{K_{c}} W_{i}-{U_{b,i}} \sin\left(\alpha{}_{i}\right)+{U_{t,i}} \sin\left(\beta{}_{i}\right)+Q_{i} \sin\left(\omega{}_{i}\right)$
+Equation & ${F_{x,i}}=-{\Delta{}H}_{i}-{K_{c}} W_{i}-{U_{b,i}} \sin\left(\alpha{}_{i}\right)+{U_{t,i}} \sin\left(\beta{}_{i}\right)+Q_{i} \sin\left(\omega{}_{i}\right)$
 \\ \midrule \\
 Description & 
 \\ \bottomrule \end{tabular}
@@ -537,7 +537,7 @@ Description &
 \\ \midrule \\
 Label & Net Y-Component Force
 \\ \midrule \\
-Equation & ${F_{y,i}}=\left(-W_{i}\right)+{U_{b,i}} \cos\left(\alpha{}_{i}\right)-{U_{t,i}} \cos\left(\beta{}_{i}\right)-Q_{i} \cos\left(\omega{}_{i}\right)$
+Equation & ${F_{y,i}}=-W_{i}+{U_{b,i}} \cos\left(\alpha{}_{i}\right)-{U_{t,i}} \cos\left(\beta{}_{i}\right)-Q_{i} \cos\left(\omega{}_{i}\right)$
 \\ \midrule \\
 Description & These equations show the net sum of the forces acting on a slice for the RFEM model and the forces that create an applied load on the slice. ${F_{x}}$ refers to the load in the direction perpendicular to the direction of the force of gravity for slice $i$, while ${F_{y}}$ refers to the load in the direction parallel to the force of gravity for slice $i$. Forces are found in the free body diagram of Section~\ref{Sec:PhysSyst}. In this model the elements are not exerting forces on each other, so the interslice forces $E$ and $X$ are not a part of the model. Index $i$ refers to the values of the properties for slice/interslices following convention in Section~\ref{Sec:PhysSyst}. Force variable definitions can be found in DD1 to DD8.
 \\ \bottomrule \end{tabular}
@@ -965,7 +965,7 @@ Label & Force
 \\ \midrule \\
 Units & N
 \\ \midrule \\
-Equation & $F$ = $\left(-{\ell{}_{s,i-1}}\right) {K_{sn,i-1}} \delta{}_{i-1}+\left({\ell{}_{s,i-1}} {K_{sn,i-1}}+{\ell{}_{b,i}} {K_{bn,i}}+{\ell{}_{s,i}} {K_{sn,i}}\right) \delta{}_{i}-{\ell{}_{s,i}} {K_{sn,i}} \delta{}_{i+1}$
+Equation & $F$ = $-{\ell{}_{s,i-1}} {K_{sn,i-1}} \delta{}_{i-1}+\left({\ell{}_{s,i-1}} {K_{sn,i-1}}+{\ell{}_{b,i}} {K_{bn,i}}+{\ell{}_{s,i}} {K_{sn,i}}\right) \delta{}_{i}-{\ell{}_{s,i}} {K_{sn,i}} \delta{}_{i+1}$
 \\ \midrule \\
 Description & $F$ is the force (N)\newline${\ell{}_{s}}$ is the length of an interslice surface (m)\newline$i$ is the index\newline${K_{sn}}$ is the normal stiffness ($\frac{\text{Pa}}{\text{m}}$)\newline$\delta{}$ is the displacement (m)\newline${\ell{}_{b}}$ is the total base length of a slice (m)\newline${K_{bn}}$ is the normal stiffness ($\frac{\text{Pa}}{\text{m}}$)
 \\ \bottomrule \end{tabular}
@@ -1085,11 +1085,11 @@ Description & $\lambda{}$ is the magnitude ratio between shear and normal forces
 \end{minipage}\\
 Taking the last static equation of T2 with the moment equilibrium of GD6 about the midpoint of the base and the assumption of GD5 results in equation (13).
 \begin{dmath}
-0=\left(-E_{i}\right) \left(z_{i}-\frac{b_{i}}{2} \tan\left(\alpha{}_{i}\right)\right)+E_{i-1} \left(z_{i-1}-\frac{b_{i}}{2} \tan\left(\alpha{}_{i}\right)\right)-H_{i} \left(z_{i}-\frac{b_{i}}{2} \tan\left(\alpha{}_{i}\right)\right)+H_{i-1} \left(z_{i-1}-\frac{b_{i}}{2} \tan\left(\alpha{}_{i}\right)\right)-\lambda{} \frac{b_{i}}{2} \left(E_{i} f_{i}+E_{i-1} f_{i-1}\right)+\frac{{K_{c}} W_{i} h_{i}}{2}-{U_{t,i}} \sin\left(\beta{}_{i}\right) h_{i}-Q_{i} \sin\left(\omega{}_{i}\right) h_{i}
+0=-E_{i} \left(z_{i}-\frac{b_{i}}{2} \tan\left(\alpha{}_{i}\right)\right)+E_{i-1} \left(z_{i-1}-\frac{b_{i}}{2} \tan\left(\alpha{}_{i}\right)\right)-H_{i} \left(z_{i}-\frac{b_{i}}{2} \tan\left(\alpha{}_{i}\right)\right)+H_{i-1} \left(z_{i-1}-\frac{b_{i}}{2} \tan\left(\alpha{}_{i}\right)\right)-\lambda{} \frac{b_{i}}{2} \left(E_{i} f_{i}+E_{i-1} f_{i-1}\right)+\frac{{K_{c}} W_{i} h_{i}}{2}-{U_{t,i}} \sin\left(\beta{}_{i}\right) h_{i}-Q_{i} \sin\left(\omega{}_{i}\right) h_{i}
 \end{dmath}
 The equation in terms of $\lambda{}$ leads to equation (14).
 \begin{dmath}
-\lambda{}=\frac{\left(-E_{i}\right) \left(z_{i}-\frac{b_{i}}{2} \tan\left(\alpha{}_{i}\right)\right)+E_{i-1} \left(z_{i-1}-\frac{b_{i}}{2} \tan\left(\alpha{}_{i}\right)\right)-H_{i} \left(z_{i}-\frac{b_{i}}{2} \tan\left(\alpha{}_{i}\right)\right)+H_{i-1} \left(z_{i-1}-\frac{b_{i}}{2} \tan\left(\alpha{}_{i}\right)\right)+\frac{{K_{c}} W_{i} h_{i}}{2}-{U_{t,i}} \sin\left(\beta{}_{i}\right) h_{i}-Q_{i} \sin\left(\omega{}_{i}\right) h_{i}}{\frac{b_{i}}{2} \left(E_{i} f_{i}+E_{i-1} f_{i-1}\right)}
+\lambda{}=\frac{-E_{i} \left(z_{i}-\frac{b_{i}}{2} \tan\left(\alpha{}_{i}\right)\right)+E_{i-1} \left(z_{i-1}-\frac{b_{i}}{2} \tan\left(\alpha{}_{i}\right)\right)-H_{i} \left(z_{i}-\frac{b_{i}}{2} \tan\left(\alpha{}_{i}\right)\right)+H_{i-1} \left(z_{i-1}-\frac{b_{i}}{2} \tan\left(\alpha{}_{i}\right)\right)+\frac{{K_{c}} W_{i} h_{i}}{2}-{U_{t,i}} \sin\left(\beta{}_{i}\right) h_{i}-Q_{i} \sin\left(\omega{}_{i}\right) h_{i}}{\frac{b_{i}}{2} \left(E_{i} f_{i}+E_{i-1} f_{i-1}\right)}
 \end{dmath}
 Taking a summation of each slice, and applying the boundary condition that $E_{0}$ and $E_{n}$ are equal to $0$, a general equation for the constant $\lambda{}$ is developed in equation (15), also found in IM2.
 \begin{dmath}
@@ -1146,14 +1146,14 @@ The constants $\Psi{}$ and $\Phi{}$ described in equation (20) and equation (19)
 \\ \midrule \\
 Label & Force Displacement Equilibrium
 \\ \midrule \\
-Equation & $\left(-{\Delta{}H}_{i}\right)-{K_{c}} W_{i}-{U_{b,i}} \sin\left(\alpha{}_{i}\right)+{U_{t,i}} \sin\left(\beta{}_{i}\right)+Q_{i} \sin\left(\omega{}_{i}\right)={\delta{}x}_{i-1} \left(-{\ell{}_{s,i-1}}\right) {K_{sn,i-1}}+{\delta{}x}_{i} \left(\left(-{\ell{}_{s,i-1}}\right) {K_{sn,i-1}}+{\ell{}_{s,i}} {K_{sn,i}}+{\ell{}_{b,i}} {K_{bA,i}}\right)+{\delta{}x}_{i+1} \left(-{\ell{}_{s,i}}\right) {K_{sn,i}}+{\delta{}y}_{i} \left(-{\ell{}_{b,i}}\right) {K_{bB,i}}=\left(-W_{i}\right)-{U_{b,i}} \cos\left(\alpha{}_{i}\right)+{U_{t,i}} \cos\left(\beta{}_{i}\right)+Q_{i} \cos\left(\omega{}_{i}\right)={\delta{}y}_{i-1} \left(-{\ell{}_{s,i-1}}\right) {K_{st,i-1}}+{\delta{}y}_{i} \left(\left(-{\ell{}_{s,i-1}}\right) {K_{st,i-1}}+{\ell{}_{s,i}} {K_{sn,i}}+{\ell{}_{b,i}} {K_{bA,i}}\right)+{\delta{}y}_{i+1} \left(-{\ell{}_{s,i}}\right) {K_{st,i}}+{\delta{}x}_{i} \left(-{\ell{}_{b,i}}\right) {K_{bB,i}}$
+Equation & $-{\Delta{}H}_{i}-{K_{c}} W_{i}-{U_{b,i}} \sin\left(\alpha{}_{i}\right)+{U_{t,i}} \sin\left(\beta{}_{i}\right)+Q_{i} \sin\left(\omega{}_{i}\right)={\delta{}x}_{i-1} -{\ell{}_{s,i-1}} {K_{sn,i-1}}+{\delta{}x}_{i} \left(-{\ell{}_{s,i-1}} {K_{sn,i-1}}+{\ell{}_{s,i}} {K_{sn,i}}+{\ell{}_{b,i}} {K_{bA,i}}\right)+{\delta{}x}_{i+1} -{\ell{}_{s,i}} {K_{sn,i}}+{\delta{}y}_{i} -{\ell{}_{b,i}} {K_{bB,i}}=-W_{i}-{U_{b,i}} \cos\left(\alpha{}_{i}\right)+{U_{t,i}} \cos\left(\beta{}_{i}\right)+Q_{i} \cos\left(\omega{}_{i}\right)={\delta{}y}_{i-1} -{\ell{}_{s,i-1}} {K_{st,i-1}}+{\delta{}y}_{i} \left(-{\ell{}_{s,i-1}} {K_{st,i-1}}+{\ell{}_{s,i}} {K_{sn,i}}+{\ell{}_{b,i}} {K_{bA,i}}\right)+{\delta{}y}_{i+1} -{\ell{}_{s,i}} {K_{st,i}}+{\delta{}x}_{i} -{\ell{}_{b,i}} {K_{bB,i}}$
 \\ \midrule \\
 Description & There is one set of force displacement equilibrium equations in the x and y directions for each element. System of equations solved for displacements ( $\delta{}x$ and $\delta{}y$ ) $\Delta{}H$ = $H$ is the net hydrostatic force across a slice. ${K_{c}}$ is the earthquake load factor. $W$ is the weight of the slice. ${U_{b}}$ is the pore water pressure acting on the slice base. ${U_{t}}$ is the pore water pressure acting on the slice surface. $\alpha{}$ is the angle of the base with the horizontal. $\beta{}$ is the angle of the surface with the horizontal. $\delta{}x$ is the x displacement of slice i. $\delta{}y$ is the y displacement of slice i. ${\ell{}_{s}}$ is the length of the interslice surface i. ${\ell{}_{b}}$ is the length of the base surface i. ${K_{st}}$ is the interslice shear stiffness at surface i.  Kst,i-1 is the interslice normal stiffness at surface i. KbA,i, and KbB,i are the base stiffness values for slice i.
 \\ \bottomrule \end{tabular}
 \end{minipage}\\
 Using the net force-displacement equilibrium equation of a slice from DD13 with the definitions of the stiffness matrices from DD12 and the force definitions from GD7 a broken down force displacement equilibrium equation can be derived. equation (22) gives the broken down equation in the $x$ direction, and equation (23) gives the broken down equation in the $y$ direction.
 \begin{dmath}
-\left(-{\Delta{}H}_{i}\right)-{K_{c}} W_{i}-{U_{b,i}} \sin\left(\alpha{}_{i}\right)+{U_{t,i}} \sin\left(\beta{}_{i}\right)+Q_{i} \sin\left(\omega{}_{i}\right)={\delta{}x}_{i-1} \left(-{\ell{}_{s,i-1}}\right) {K_{sn,i-1}}+{\delta{}x}_{i} \left(\left(-{\ell{}_{s,i-1}}\right) {K_{sn,i-1}}+{\ell{}_{s,i}} {K_{sn,i}}+{\ell{}_{b,i}} {K_{bA,i}}\right)+{\delta{}x}_{i+1} \left(-{\ell{}_{s,i}}\right) {K_{sn,i}}+{\delta{}y}_{i} \left(-{\ell{}_{b,i}}\right) {K_{bB,i}}=\left(-W_{i}\right)-{U_{b,i}} \cos\left(\alpha{}_{i}\right)+{U_{t,i}} \cos\left(\beta{}_{i}\right)+Q_{i} \cos\left(\omega{}_{i}\right)={\delta{}y}_{i-1} \left(-{\ell{}_{s,i-1}}\right) {K_{st,i-1}}+{\delta{}y}_{i} \left(\left(-{\ell{}_{s,i-1}}\right) {K_{st,i-1}}+{\ell{}_{s,i}} {K_{sn,i}}+{\ell{}_{b,i}} {K_{bA,i}}\right)+{\delta{}y}_{i+1} \left(-{\ell{}_{s,i}}\right) {K_{st,i}}+{\delta{}x}_{i} \left(-{\ell{}_{b,i}}\right) {K_{bB,i}}
+-{\Delta{}H}_{i}-{K_{c}} W_{i}-{U_{b,i}} \sin\left(\alpha{}_{i}\right)+{U_{t,i}} \sin\left(\beta{}_{i}\right)+Q_{i} \sin\left(\omega{}_{i}\right)={\delta{}x}_{i-1} -{\ell{}_{s,i-1}} {K_{sn,i-1}}+{\delta{}x}_{i} \left(-{\ell{}_{s,i-1}} {K_{sn,i-1}}+{\ell{}_{s,i}} {K_{sn,i}}+{\ell{}_{b,i}} {K_{bA,i}}\right)+{\delta{}x}_{i+1} -{\ell{}_{s,i}} {K_{sn,i}}+{\delta{}y}_{i} -{\ell{}_{b,i}} {K_{bB,i}}=-W_{i}-{U_{b,i}} \cos\left(\alpha{}_{i}\right)+{U_{t,i}} \cos\left(\beta{}_{i}\right)+Q_{i} \cos\left(\omega{}_{i}\right)={\delta{}y}_{i-1} -{\ell{}_{s,i-1}} {K_{st,i-1}}+{\delta{}y}_{i} \left(-{\ell{}_{s,i-1}} {K_{st,i-1}}+{\ell{}_{s,i}} {K_{sn,i}}+{\ell{}_{b,i}} {K_{bA,i}}\right)+{\delta{}y}_{i+1} -{\ell{}_{s,i}} {K_{st,i}}+{\delta{}x}_{i} -{\ell{}_{b,i}} {K_{bB,i}}
 \end{dmath}
 Using the known input assumption of A2, the force variable definitions of DD1 to DD8 on the left side of the equations can be solved for. The only unknown in the variables to solve for the stiffness values from DD14 is the displacements. Therefore taking the equation from each slice a set of $2 n$ equations, with $2 n$ unknown displacements in the $x$ and $y$ directions of each slice can be derived. Solutions for the displacements of each slice can then be found. The use of displacement in the definition of the stiffness values makes the equation implicit, which means an iterative solution method, with an initial guess for the displacements in the stiffness values is required.
 ~\newline

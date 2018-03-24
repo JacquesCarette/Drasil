@@ -430,9 +430,9 @@ Description & $E$ is the change in sensible heat energy (J). ${C^{S}}$, ${C^{L}}
 \\ \midrule \\
 Label & Latent Heat Energy
 \\ \midrule \\
-Equation & $Q\left(t\right)=\int_{0}^{t}{\frac{d\,Q\left(\tau{}\right)}{d\,\tau{}}d\tau{}}$
+Equation & $Q\left(t\right)=\int_{0}^{t}{\frac{d\,Q\left(\tau{}\right)}{d\,\tau{}}}\,d\tau{}$
 \\ \midrule \\
-Description & $Q$ is the change in thermal energy (J), latent heat energy. $Q\left(t\right)=\int_{0}^{t}{\frac{d\,Q\left(\tau{}\right)}{d\,\tau{}}d\tau{}}$ is the rate of change of $Q$ with respect to time $\tau{}$ (s). $t$ is the time (s) elapsed, as long as the phase change is not complete. The status of the phase change depends on the melt fraction, \hyperref[DD:htFusion]{Definition~DD:htFusion}. ${T_{melt}}$ and ${T_{boil}}$ are the melting point temperature and boiling point temperature, respectively (${}^{\circ}$C). Latent heating stops when all material has changed to the new phase.
+Description & $Q$ is the change in thermal energy (J), latent heat energy. $Q\left(t\right)=\int_{0}^{t}{\frac{d\,Q\left(\tau{}\right)}{d\,\tau{}}}\,d\tau{}$ is the rate of change of $Q$ with respect to time $\tau{}$ (s). $t$ is the time (s) elapsed, as long as the phase change is not complete. The status of the phase change depends on the melt fraction, \hyperref[DD:htFusion]{Definition~DD:htFusion}. ${T_{melt}}$ and ${T_{boil}}$ are the melting point temperature and boiling point temperature, respectively (${}^{\circ}$C). Latent heating stops when all material has changed to the new phase.
 \\ \bottomrule \end{tabular}
 \end{minipage}\\
 \subsubsection{General Definitions}
@@ -469,15 +469,15 @@ Description & The basic equation governing the rate of change of temperature, fo
 Detailed derivation of simplified rate of change of temperature:
 Integrating \hyperref[T:t1ConsThermE]{Definition~T:t1ConsThermE} over a volume ($V$), we have:
 \begin{dmath}
-\left(-\int_{V}{\nabla{}\cdot{}\mathbf{q}dV}\right)+\int_{V}{gdV}=\int_{V}{\rho{} C \frac{\partial{}\,T}{\partial{}\,t}dV}
+\left(-\int_{V}{\nabla{}\cdot{}\mathbf{q}}\,dV\right)+\int_{V}{g}\,dV=\int_{V}{\rho{} C \frac{\partial{}\,T}{\partial{}\,t}}\,dV
 \end{dmath}
 Applying Gauss's Divergence Theorem to the first term over the surface $S$ of the volume, with $\mathbf{q}$ as the thermal flux vector for the surface and $\mathbf{\hat{n}}$ as a unit outward normal vector for a surface:
 \begin{dmath}
-\left(-\int_{S}{\mathbf{q}\cdot{}\mathbf{\hat{n}}dS}\right)+\int_{V}{gdV}=\int_{V}{\rho{} C \frac{\partial{}\,T}{\partial{}\,t}dV}
+\left(-\int_{S}{\mathbf{q}\cdot{}\mathbf{\hat{n}}}\,dS\right)+\int_{V}{g}\,dV=\int_{V}{\rho{} C \frac{\partial{}\,T}{\partial{}\,t}}\,dV
 \end{dmath}
 We consider an arbitrary volume. The volumetric heat generation per unit volume is assumed constant. Then (1) can be written as:
 \begin{dmath}
-{q_{in}} {A_{in}}-{q_{out}} {A_{out}}+g V=\int_{V}{\rho{} C \frac{\partial{}\,T}{\partial{}\,t}dV}
+{q_{in}} {A_{in}}-{q_{out}} {A_{out}}+g V=\int_{V}{\rho{} C \frac{\partial{}\,T}{\partial{}\,t}}\,dV
 \end{dmath}
 Where ${q_{in}}$, ${q_{out}}$, ${A_{in}}$, and ${A_{out}}$ are explained in GD2. Assuming $\rho{}$, $C$ and $T$ are constant over the volume, which is true in our case by Assumptions (A\ref{A:assump3}), (A\ref{A:assump4}), (A\ref{A:assump5}), and (A\ref{A:assump6}), we have:
 \begin{dmath}
@@ -740,11 +740,11 @@ ${E_{P}}$ & ${E_{P}}\geq{}0$
 \label{Sec:CorSolProps}
 A correct solution must exhibit the law of conservation of energy. This means that the change in heat energy in the water should equal the difference between the total energy input from the heating coil and the energy output to the PCM. This can be shown as an equation by taking \hyperref[DD:ht.flux.C]{Definition~DD:ht.flux.C} and \hyperref[DD:ht.flux.P]{Definition~DD:ht.flux.P}, multiplying each by their respective surface area of heat transfer, and integrating each over the simulation time, as follows:
 \begin{dmath}
-{E_{W}}=\int_{0}^{t}{{h_{C}} {A_{C}} \left({T_{C}}-{T_{W}}\left(t\right)\right)dt}-\int_{0}^{t}{{h_{P}} {A_{P}} \left({T_{W}}\left(t\right)-{T_{P}}\left(t\right)\right)dt}
+{E_{W}}=\int_{0}^{t}{{h_{C}} {A_{C}} \left({T_{C}}-{T_{W}}\left(t\right)\right)}\,dt-\int_{0}^{t}{{h_{P}} {A_{P}} \left({T_{W}}\left(t\right)-{T_{P}}\left(t\right)\right)}\,dt
 \end{dmath}
 In addition, the change in heat energy in the PCM should equal the energy input to the PCM from the water. This can be expressed as
 \begin{dmath}
-{E_{P}}=\int_{0}^{t}{{h_{P}} {A_{P}} \left({T_{W}}\left(t\right)-{T_{P}}\left(t\right)\right)dt}
+{E_{P}}=\int_{0}^{t}{{h_{P}} {A_{P}} \left({T_{W}}\left(t\right)-{T_{P}}\left(t\right)\right)}\,dt
 \end{dmath}
 Equations (FIXME: Equation 7) and (FIXME: Equation 8) can be used as ``sanity"checks to gain confidence in any solution computed by SWHS. The relative error between the results computed by SWHS and the results calculated from the RHS of these equations should be less than 0.001% R\ref{FR:req9}.
 \section{Requirements}

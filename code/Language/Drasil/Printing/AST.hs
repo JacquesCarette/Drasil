@@ -1,6 +1,5 @@
 module Language.Drasil.Printing.AST where
 
-import Language.Drasil.Symbol (Symbol)
 import Language.Drasil.UnitLang (USymb)
 import Language.Drasil.Spec (RefType, RefAdd)
 import Language.Drasil.Unicode (Greek, Special)
@@ -10,7 +9,7 @@ import Language.Drasil.Chunk.Citation (Month, EntryID, CitationKind)
 data Ops = IsIn | Integer | Real | Rational | Natural | Boolean | Comma | Prime | Log
   | Sin | Cos | Tan | Sec | Csc | Cot | Not | Dim | Exp | Neg | Cross
   | Dot | Eq | NEq | Lt | Gt | LEq | GEq | Impl | Iff | Subt | And | Or
-  | Add | Mul
+  | Add | Mul | Summ | Inte | Prod
 
 data Fence = Paren | Curly | Norm | Abs
 data OverSymb = Hat
@@ -21,7 +20,6 @@ data Expr = Dbl   Double
           | Int   Integer
           | Str   String
           | Case  [(Expr,Expr)]
-          | Funct Functional Expr -- FIXME, this still needs to go!
           | Mtx [[Expr]]
           | Row   [Expr]
           | Ident String
@@ -37,11 +35,6 @@ data Expr = Dbl   Double
           | Sqrt  Expr      -- as are roots. Just sqrt for now.
           | Spc   Spacing
           
-data Functional = 
-            Summation (Maybe ((Symbol, Expr),Expr))
-          | Integral ((Maybe Expr),(Maybe Expr)) Symbol
-          | Product (Maybe ((Symbol, Expr), Expr))
-
 infixr 5 :+:
 
 data Spec = E Expr

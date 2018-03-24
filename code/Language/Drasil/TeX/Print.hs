@@ -92,7 +92,6 @@ p_expr (Dbl d)    = showFFloat Nothing d ""
 p_expr (Int i)    = show i
 p_expr (Str s)    = s  -- FIXME this is probably the wrong way to print strings
 p_expr (Div n d) = "\\frac{" ++ p_expr n ++ "}{" ++ p_expr d ++"}"
-p_expr (Funct o e)   = p_op o e
 p_expr (Case ps)  = "\\begin{cases}\n" ++ cases ps ++ "\n\\end{cases}"
 p_expr (Mtx a)    = "\\begin{bmatrix}\n" ++ p_matrix a ++ "\n\\end{bmatrix}"
 p_expr (Row [x]) = brace $ p_expr x -- a bit of a hack...
@@ -145,6 +144,9 @@ p_ops And = "\\land{}"
 p_ops Or  = "\\lor{}"
 p_ops Add = "+"
 p_ops Mul = " "
+p_ops Summ = "\\displaystyle\\sum"
+p_ops Prod = "\\displaystyle\\prod"
+p_ops Inte = "\\int"
 
 fence :: OpenClose -> Fence -> String
 fence Open Paren = "\\left("
@@ -169,12 +171,6 @@ cases :: [(Expr,Expr)] -> String
 cases []     = error "Attempt to create case expression without cases"
 cases (p:[]) = (p_expr $ fst p) ++ ", & " ++ p_expr (snd p)
 cases (p:ps) = cases [p] ++ "\\\\\n" ++ cases ps
-
-
-oper :: Functional -> String
-oper (Summation _)  = "\\displaystyle\\sum"
-oper (Product _)    = "\\displaystyle\\prod"
-oper (Integral _ _) = "\\int"
 
 -----------------------------------------------------------------
 ------------------ TABLE PRINTING---------------------------
@@ -369,23 +365,23 @@ makeFigure r c f wp =
 -----------------------------------------------------------------
 ------------------ EXPR OP PRINTING-------------------------
 -----------------------------------------------------------------
-p_op :: Functional -> Expr -> String
-p_op f@(Summation bs) x = oper f ++ makeBound bs ++ brace (sqbrac (p_expr x))
-p_op f@(Product bs) x = oper f ++ makeBound bs ++ brace (p_expr x)
-p_op f@(Integral bs wrtc) x = oper f ++ makeIBound bs ++ 
-  brace (p_expr x ++ "d" ++ symbol wrtc) -- HACK alert.
-
-makeBound :: Maybe ((Symbol, Expr),Expr) -> String
-makeBound (Just ((s,v),hi)) = "_" ++ brace ((symbol s ++"="++ p_expr v)) ++
-                              "^" ++ brace (p_expr hi)
-makeBound Nothing = ""
-
-makeIBound :: (Maybe Expr, Maybe Expr) -> String
-makeIBound (Just low, Just high) = "_" ++ brace (p_expr low) ++
-                                   "^" ++ brace (p_expr high)
-makeIBound (Just low, Nothing)   = "_" ++ brace (p_expr low)
-makeIBound (Nothing, Just high)  = "^" ++ brace (p_expr high)
-makeIBound (Nothing, Nothing)    = ""
+-- p_op :: Functional -> Expr -> String
+-- p_op f@(Summation bs) x = oper f ++ makeBound bs ++ brace (sqbrac (p_expr x))
+-- p_op f@(Product bs) x = oper f ++ makeBound bs ++ brace (p_expr x)
+-- p_op f@(Integral bs wrtc) x = oper f ++ makeIBound bs ++ 
+--   brace (p_expr x ++ "d" ++ symbol wrtc) -- HACK alert.
+-- 
+-- makeBound :: Maybe ((Symbol, Expr),Expr) -> String
+-- makeBound (Just ((s,v),hi)) = "_" ++ brace ((symbol s ++"="++ p_expr v)) ++
+--                               "^" ++ brace (p_expr hi)
+-- makeBound Nothing = ""
+-- 
+-- makeIBound :: (Maybe Expr, Maybe Expr) -> String
+-- makeIBound (Just low, Just high) = "_" ++ brace (p_expr low) ++
+--                                    "^" ++ brace (p_expr high)
+-- makeIBound (Just low, Nothing)   = "_" ++ brace (p_expr low)
+-- makeIBound (Nothing, Just high)  = "^" ++ brace (p_expr high)
+-- makeIBound (Nothing, Nothing)    = ""
 
 -----------------------------------------------------------------
 ------------------ MODULE PRINTING----------------------------

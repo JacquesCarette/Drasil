@@ -94,11 +94,6 @@ t_symbol (Corners [] [] [x] [] s) = t_symbol s ++ "^" ++ t_symbol x
 t_symbol s                        = symbol s
 -}
 
--- | Adds emphasis to symbols by default. Use symbolNoEm for no <em>
---   Units do not need this, for example.
-symbol :: Symbol -> String
-symbol s = em $ symbolNoEm s
-
 -- | Renders symbols for HTML document
 symbolNoEm :: Symbol -> String
 symbolNoEm (Atomic s)  = s
@@ -132,7 +127,6 @@ p_expr (Dbl d)    = showFFloat Nothing d ""
 p_expr (Int i)    = show i
 p_expr (Str s)    = s
 p_expr (Div a b) = fraction (p_expr a) (p_expr b) --Found in HTMLHelpers
-p_expr (Funct f e)    = p_op f e
 p_expr (Case ps)  = cases ps (p_expr)
 p_expr (Mtx a)    = "<table class=\"matrix\">\n" ++ p_matrix a ++ "</table>"
 p_expr (Row l) = concatMap p_expr l
@@ -184,6 +178,9 @@ p_ops And      = " &and; "
 p_ops Or       = " &or; "
 p_ops Add      = "&plus;"
 p_ops Mul      = "&#8239;"
+p_ops Summ     = "&sum;"
+p_ops Inte     = "&int;"
+p_ops Prod     = "&prod;"
 
 fence :: OpenClose -> Fence -> String
 fence Open Paren = "("
@@ -282,21 +279,21 @@ makeFigure r c f wp = refwrap r (image f c wp $$ caption c)
 ------------------BEGIN EXPR OP PRINTING-------------------------
 -----------------------------------------------------------------
 -- | Renders expression operations/functions.
-p_op :: Functional -> Expr -> String
-p_op (Summation bs) x = lrgOp "&sum;" bs ++ paren (p_expr x)
-p_op (Product bs) x = lrgOp "&prod;" bs ++ paren (p_expr x)
-p_op (Integral bs wrtc) x = intg bs
-  ++ paren (p_expr x ++ (symbol (Atomic "d") ++ "&#8239;" ++ symbol wrtc))
+-- p_op :: Functional -> Expr -> String
+-- p_op (Summation bs) x = lrgOp "&sum;" bs ++ paren (p_expr x)
+-- p_op (Product bs) x = lrgOp "&prod;" bs ++ paren (p_expr x)
+-- p_op (Integral bs wrtc) x = intg bs
+--   ++ paren (p_expr x ++ (symbol (Atomic "d") ++ "&#8239;" ++ symbol wrtc))
 
 -- | Helpers for summation/product, used by 'p_op'
-lrgOp :: String -> Maybe ((Symbol, Expr),Expr) -> String
-lrgOp f Nothing = f
-lrgOp f (Just ((s,v),hi)) = f
-  ++ sub (symbol s ++ "=" ++ p_expr v)
-  ++ (sup (p_expr hi))
-
-intg :: (Maybe Expr, Maybe Expr) -> String
-intg (low, high) = "&int;" ++ maybe "" (sub . p_expr) low ++ maybe "" (sup . p_expr) high
+-- lrgOp :: String -> Maybe ((Symbol, Expr),Expr) -> String
+-- lrgOp f Nothing = f
+-- lrgOp f (Just ((s,v),hi)) = f
+--   ++ sub (symbol s ++ "=" ++ p_expr v)
+--   ++ (sup (p_expr hi))
+-- 
+-- intg :: (Maybe Expr, Maybe Expr) -> String
+-- intg (low, high) = "&int;" ++ maybe "" (sub . p_expr) low ++ maybe "" (sup . p_expr) high
 
 -- | Renders assumptions, requirements, likely changes
 makeRefList :: String -> String -> String -> Doc

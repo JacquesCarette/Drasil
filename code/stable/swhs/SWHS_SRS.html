@@ -1448,14 +1448,14 @@ Equation
 <td>
 <a id="">
 <div class="equation">
-<em>Q(t) = &int;<sub>0</sub><sup>t</sup>(<div class="fraction">
+<em>Q(t) = &int;<sub>0</sub><sup>t</sup><div class="fraction">
 <span class="fup">
 d&#8239;Q(&tau;)
 </span>
 <span class="fdn">
 d&#8239;&tau;
 </span>
-</div><em>d</em>&#8239;<em>&tau;</em>)</em>
+</div>&#8239;d&tau;</em>
 </div>
 </a>
 </td>
@@ -1466,14 +1466,14 @@ Description
 </th>
 <td>
 <p class="paragraph">
-<em>Q</em> is the change in thermal energy (J), latent heat energy. <em>Q(t) = &int;<sub>0</sub><sup>t</sup>(<div class="fraction">
+<em>Q</em> is the change in thermal energy (J), latent heat energy. <em>Q(t) = &int;<sub>0</sub><sup>t</sup><div class="fraction">
 <span class="fup">
 d&#8239;Q(&tau;)
 </span>
 <span class="fdn">
 d&#8239;&tau;
 </span>
-</div><em>d</em>&#8239;<em>&tau;</em>)</em> is the rate of change of <em>Q</em> with respect to time <em>&tau;</em> (s). <em>t</em> is the time (s) elapsed, as long as the phase change is not complete. The status of the phase change depends on the melt fraction, <a href=#DD:htFusion>DD:htFusion</a>. <em>T<sub>melt</sub></em> and <em>T<sub>boil</sub></em> are the melting point temperature and boiling point temperature, respectively (&deg;C). Latent heating stops when all material has changed to the new phase.
+</div>&#8239;d&tau;</em> is the rate of change of <em>Q</em> with respect to time <em>&tau;</em> (s). <em>t</em> is the time (s) elapsed, as long as the phase change is not complete. The status of the phase change depends on the melt fraction, <a href=#DD:htFusion>DD:htFusion</a>. <em>T<sub>melt</sub></em> and <em>T<sub>boil</sub></em> are the melting point temperature and boiling point temperature, respectively (&deg;C). Latent heating stops when all material has changed to the new phase.
 </p>
 </td>
 </tr>
@@ -1596,14 +1596,14 @@ Integrating <a href=#T:t1ConsThermE>T:t1ConsThermE</a> over a volume (<em>V</em>
 </p>
 <a id="">
 <div class="equation">
-<em>&minus;&int;<sub>V</sub>(&nabla;&sdot;<b>q</b><em>d</em>&#8239;<em>V</em>)&plus;&int;<sub>V</sub>(g<em>d</em>&#8239;<em>V</em>) = &int;<sub>V</sub>(&rho;&#8239;C&#8239;<div class="fraction">
+<em>&minus;&int;<sub>V</sub>&nabla;&sdot;<b>q</b>&#8239;dV&plus;&int;<sub>V</sub>g&#8239;dV = &int;<sub>V</sub>&rho;&#8239;C&#8239;<div class="fraction">
 <span class="fup">
 &part;&#8239;T
 </span>
 <span class="fdn">
 &part;&#8239;t
 </span>
-</div><em>d</em>&#8239;<em>V</em>)</em>
+</div>&#8239;dV</em>
 </div>
 </a>
 <p class="paragraph">
@@ -1611,14 +1611,14 @@ Applying Gauss's Divergence Theorem to the first term over the surface <em>S</em
 </p>
 <a id="">
 <div class="equation">
-<em>&minus;&int;<sub>S</sub>(<b>q</b>&sdot;<b>n&#770;</b><em>d</em>&#8239;<em>S</em>)&plus;&int;<sub>V</sub>(g<em>d</em>&#8239;<em>V</em>) = &int;<sub>V</sub>(&rho;&#8239;C&#8239;<div class="fraction">
+<em>&minus;&int;<sub>S</sub><b>q</b>&sdot;<b>n&#770;</b>&#8239;dS&plus;&int;<sub>V</sub>g&#8239;dV = &int;<sub>V</sub>&rho;&#8239;C&#8239;<div class="fraction">
 <span class="fup">
 &part;&#8239;T
 </span>
 <span class="fdn">
 &part;&#8239;t
 </span>
-</div><em>d</em>&#8239;<em>V</em>)</em>
+</div>&#8239;dV</em>
 </div>
 </a>
 <p class="paragraph">
@@ -1626,14 +1626,14 @@ We consider an arbitrary volume. The volumetric heat generation per unit volume 
 </p>
 <a id="">
 <div class="equation">
-<em>q<sub>in</sub>&#8239;A<sub>in</sub>&minus;q<sub>out</sub>&#8239;A<sub>out</sub>&plus;g&#8239;V = &int;<sub>V</sub>(&rho;&#8239;C&#8239;<div class="fraction">
+<em>q<sub>in</sub>&#8239;A<sub>in</sub>&minus;q<sub>out</sub>&#8239;A<sub>out</sub>&plus;g&#8239;V = &int;<sub>V</sub>&rho;&#8239;C&#8239;<div class="fraction">
 <span class="fup">
 &part;&#8239;T
 </span>
 <span class="fdn">
 &part;&#8239;t
 </span>
-</div><em>d</em>&#8239;<em>V</em>)</em>
+</div>&#8239;dV</em>
 </div>
 </a>
 <p class="paragraph">
@@ -2910,7 +2910,7 @@ A correct solution must exhibit the law of conservation of energy. This means th
 </p>
 <a id="">
 <div class="equation">
-<em>E<sub>W</sub> = &int;<sub>0</sub><sup>t</sup>(h<sub>C</sub>&#8239;A<sub>C</sub>&#8239;(T<sub>C</sub>&minus;T<sub>W</sub>(t))<em>d</em>&#8239;<em>t</em>)&minus;&int;<sub>0</sub><sup>t</sup>(h<sub>P</sub>&#8239;A<sub>P</sub>&#8239;(T<sub>W</sub>(t)&minus;T<sub>P</sub>(t))<em>d</em>&#8239;<em>t</em>)</em>
+<em>E<sub>W</sub> = &int;<sub>0</sub><sup>t</sup>h<sub>C</sub>&#8239;A<sub>C</sub>&#8239;(T<sub>C</sub>&minus;T<sub>W</sub>(t))&#8239;dt&minus;&int;<sub>0</sub><sup>t</sup>h<sub>P</sub>&#8239;A<sub>P</sub>&#8239;(T<sub>W</sub>(t)&minus;T<sub>P</sub>(t))&#8239;dt</em>
 </div>
 </a>
 <p class="paragraph">
@@ -2918,7 +2918,7 @@ In addition, the change in heat energy in the PCM should equal the energy input 
 </p>
 <a id="">
 <div class="equation">
-<em>E<sub>P</sub> = &int;<sub>0</sub><sup>t</sup>(h<sub>P</sub>&#8239;A<sub>P</sub>&#8239;(T<sub>W</sub>(t)&minus;T<sub>P</sub>(t))<em>d</em>&#8239;<em>t</em>)</em>
+<em>E<sub>P</sub> = &int;<sub>0</sub><sup>t</sup>h<sub>P</sub>&#8239;A<sub>P</sub>&#8239;(T<sub>W</sub>(t)&minus;T<sub>P</sub>(t))&#8239;dt</em>
 </div>
 </a>
 <p class="paragraph">

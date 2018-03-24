@@ -353,15 +353,15 @@ Description & The basic equation governing the rate of change of temperature, fo
 Detailed derivation of simplified rate of change of temperature:
 Integrating \hyperref[T:t1ConsThermE]{Definition~T:t1ConsThermE} over a volume ($V$), we have:
 \begin{dmath}
-\left(-\int_{V}{\nabla{}\cdot{}\mathbf{q}dV}\right)+\int_{V}{gdV}=\int_{V}{\rho{} C \frac{\partial{}\,T}{\partial{}\,t}dV}
+\left(-\int_{V}{\nabla{}\cdot{}\mathbf{q}}\,dV\right)+\int_{V}{g}\,dV=\int_{V}{\rho{} C \frac{\partial{}\,T}{\partial{}\,t}}\,dV
 \end{dmath}
 Applying Gauss's Divergence Theorem to the first term over the surface $S$ of the volume, with $\mathbf{q}$ as the thermal flux vector for the surface and $\mathbf{\hat{n}}$ as a unit outward normal vector for a surface:
 \begin{dmath}
-\left(-\int_{S}{\mathbf{q}\cdot{}\mathbf{\hat{n}}dS}\right)+\int_{V}{gdV}=\int_{V}{\rho{} C \frac{\partial{}\,T}{\partial{}\,t}dV}
+\left(-\int_{S}{\mathbf{q}\cdot{}\mathbf{\hat{n}}}\,dS\right)+\int_{V}{g}\,dV=\int_{V}{\rho{} C \frac{\partial{}\,T}{\partial{}\,t}}\,dV
 \end{dmath}
 We consider an arbitrary volume. The volumetric heat generation per unit volume is assumed constant. Then (1) can be written as:
 \begin{dmath}
-{q_{in}} {A_{in}}-{q_{out}} {A_{out}}+g V=\int_{V}{\rho{} C \frac{\partial{}\,T}{\partial{}\,t}dV}
+{q_{in}} {A_{in}}-{q_{out}} {A_{out}}+g V=\int_{V}{\rho{} C \frac{\partial{}\,T}{\partial{}\,t}}\,dV
 \end{dmath}
 Where ${q_{in}}$, ${q_{out}}$, ${A_{in}}$, and ${A_{out}}$ are explained in GD2. Assuming $\rho{}$, $C$ and $T$ are constant over the volume, which is true in our case by Assumptions (A\ref{A:assump3}), (A\ref{A:assump4}), and (A\ref{A:assump5}), we have:
 \begin{dmath}

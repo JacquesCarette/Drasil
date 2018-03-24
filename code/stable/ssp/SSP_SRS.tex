@@ -380,7 +380,7 @@ Description & The stability metric of the slope, known as the factor of safety (
 \\ \midrule \\
 Label & Equilibrium
 \\ \midrule \\
-Equation & $\displaystyle\sum{\left[{F_{x}}\right]}=\displaystyle\sum{\left[{F_{y}}\right]}=\displaystyle\sum{\left[M\right]}=0$
+Equation & $\displaystyle\sum{{F_{x}}}=\displaystyle\sum{{F_{y}}}=\displaystyle\sum{M}=0$
 \\ \midrule \\
 Description & For a body in static equilibrium, the net forces and net moments acting on the body will cancel out. Assuming a 2D problem (A8) the x-component of the net force ${F_{x}}$ and y-component of the net force ${F_{y}}$ will be equal to $0$. All forces and their distance from the chosen point of rotation will create a net moment equal to, $0$ also able to be analyzed as a scalar in a 2D problem.
 \\ \bottomrule \end{tabular}
@@ -1051,14 +1051,14 @@ The values of the interslice normal force $E$ the interslice normal/shear force 
 \\ \midrule \\
 Label & Factor of Safety
 \\ \midrule \\
-Equation & $FS=\frac{\displaystyle\sum_{v=1}^{n-1}{\left[R_{v} \displaystyle\prod_{u=i}^{n-1}{\frac{\Psi{}_{u}}{\Phi{}_{u}}}\right]}+R_{n}}{\displaystyle\sum_{v=1}^{n-1}{\left[T_{v} \displaystyle\prod_{u=i}^{n-1}{\frac{\Psi{}_{u}}{\Phi{}_{u}}}\right]}+T_{n}}$
+Equation & $FS=\frac{\displaystyle\sum_{v=1}^{n-1}{R_{v} \displaystyle\prod_{u=i}^{n-1}{\frac{\Psi{}_{u}}{\Phi{}_{u}}}}+R_{n}}{\displaystyle\sum_{v=1}^{n-1}{T_{v} \displaystyle\prod_{u=i}^{n-1}{\frac{\Psi{}_{u}}{\Phi{}_{u}}}}+T_{n}}$
 \\ \midrule \\
 Description & Equation for the Factor of Safety is the ratio between resistive and mobile shear of the slip surface. The sum of values from each slice is taken to find the total resistive and mobile shear for the slip surface. The constants $\Phi{}$ and $\Psi{}$ convert the resistive and mobile shear without the inluence of interslice forces, to a calculation considering the interslice forces.
 \\ \bottomrule \end{tabular}
 \end{minipage}\\
 Using equation (21) from IM3, rearranging, and applying the boundary condition that $E_{0}$ and $E_{n}$ are equal to $0$, an equation for the factor of safety is found as equation (12), also seen in IM1.
 \begin{dmath}
-FS=\frac{\displaystyle\sum_{v=1}^{n-1}{\left[R_{v} \displaystyle\prod_{u=i}^{n-1}{\frac{\Psi{}_{u}}{\Phi{}_{u}}}\right]}+R_{n}}{\displaystyle\sum_{v=1}^{n-1}{\left[T_{v} \displaystyle\prod_{u=i}^{n-1}{\frac{\Psi{}_{u}}{\Phi{}_{u}}}\right]}+T_{n}}
+FS=\frac{\displaystyle\sum_{v=1}^{n-1}{R_{v} \displaystyle\prod_{u=i}^{n-1}{\frac{\Psi{}_{u}}{\Phi{}_{u}}}}+R_{n}}{\displaystyle\sum_{v=1}^{n-1}{T_{v} \displaystyle\prod_{u=i}^{n-1}{\frac{\Psi{}_{u}}{\Phi{}_{u}}}}+T_{n}}
 \end{dmath}
 The constants $\Psi{}$ and $\Phi{}$ described in equation (20) and equation (19) are functions of the unknowns: the interslice normal/shear force ratio $\lambda{}$ (IM2) and the factor of safety $FS$ (IM1).
 ~\newline
@@ -1078,7 +1078,7 @@ b_{n} \left(E_{n-1}+H_{n-1}\right) \tan\left(\alpha{}_{n-1}\right), & i=n
 b_{1} f_{1} E_{1}, & i=1\\
 b_{i} \left(f_{i} E_{i}+f_{i-1} E_{i-1}\right), & 2\leq{}i\leq{}n-1\\
 b_{n} E_{n-1} H_{n-1}, & i=1
-\end{cases}=\lambda{}=\frac{\displaystyle\sum_{i=1}^{n}{\left[{C1}_{i}\right]}}{\displaystyle\sum_{i=1}^{n}{\left[{C2}_{i}\right]}}$
+\end{cases}=\lambda{}=\frac{\displaystyle\sum_{i=1}^{n}{{C1}_{i}}}{\displaystyle\sum_{i=1}^{n}{{C2}_{i}}}$
 \\ \midrule \\
 Description & $\lambda{}$ is the magnitude ratio between shear and normal forces at the interslice interfaces as the assumption of the Morgenstern Price method in GD5 The inclination function $f$ determines the relative magnitude ratio between the different interslices, while $\lambda{}$ determines the magnitude. $\lambda{}$ uses the sum of interslice normal and shear forces taken from each interslice.
 \\ \bottomrule \end{tabular}
@@ -1093,7 +1093,7 @@ The equation in terms of $\lambda{}$ leads to equation (14).
 \end{dmath}
 Taking a summation of each slice, and applying the boundary condition that $E_{0}$ and $E_{n}$ are equal to $0$, a general equation for the constant $\lambda{}$ is developed in equation (15), also found in IM2.
 \begin{dmath}
-\lambda{}_{i}=\frac{\displaystyle\sum_{i=1}^{n}{\left[b_{i} \left(SpencerFixme1Please+SpencerFixme2Please\right) \tan\left(\alpha{}_{i}\right)+h_{i} \left({K_{c}} W_{i}-2 {U_{t,i}} \sin\left(\beta{}_{i}\right)-2 Q_{i} \sin\left(\omega{}_{i}\right)\right)\right]}}{\displaystyle\sum_{i=1}^{n}{\left[b_{i} \left(E_{i} f_{i}+E_{i-1} f_{i-1}\right)\right]}}
+\lambda{}_{i}=\frac{\displaystyle\sum_{i=1}^{n}{b_{i} \left(SpencerFixme1Please+SpencerFixme2Please\right) \tan\left(\alpha{}_{i}\right)+h_{i} \left({K_{c}} W_{i}-2 {U_{t,i}} \sin\left(\beta{}_{i}\right)-2 Q_{i} \sin\left(\omega{}_{i}\right)\right)}}{\displaystyle\sum_{i=1}^{n}{b_{i} \left(E_{i} f_{i}+E_{i-1} f_{i-1}\right)}}
 \end{dmath}
 equation (15) for $\lambda{}$, is a function of the unknown interslice normal force $E$ IM3.
 ~\newline
@@ -1165,7 +1165,7 @@ Using the known input assumption of A2, the force variable definitions of DD1 to
 \\ \midrule \\
 Label & RFEM Factor of Safety
 \\ \midrule \\
-Equation & ${FS_{Loc,i,i}}=\frac{{c'}_{i}-{K_{bn,i}} {\delta{}v}_{i} \tan\left({\varphi{}'}_{i}\right)}{{K_{bt,i}} {\delta{}u}_{i}}=\frac{\displaystyle\sum_{i=1}^{n}{\left[{\ell{}_{b,i}} \left({c'}_{i}-{K_{bn,i}} {\delta{}v}_{i} \tan\left({\varphi{}'}_{i}\right)\right)\right]}}{\displaystyle\sum_{i=1}^{n}{\left[{\ell{}_{b,i}} {K_{bt,i}} {\delta{}u}_{i}\right]}}$
+Equation & ${FS_{Loc,i,i}}=\frac{{c'}_{i}-{K_{bn,i}} {\delta{}v}_{i} \tan\left({\varphi{}'}_{i}\right)}{{K_{bt,i}} {\delta{}u}_{i}}=\frac{\displaystyle\sum_{i=1}^{n}{{\ell{}_{b,i}} \left({c'}_{i}-{K_{bn,i}} {\delta{}v}_{i} \tan\left({\varphi{}'}_{i}\right)\right)}}{\displaystyle\sum_{i=1}^{n}{{\ell{}_{b,i}} {K_{bt,i}} {\delta{}u}_{i}}}$
 \\ \midrule \\
 Description & ${FS_{Loc,i}}$ is the factor of safety for slice i. $FS$ is the factor of safety for the entire slip surface. $c'$ is the cohesion of slice i's base. $\varphi{}'$ is the effective angle of friction of slice i's base. $\delta{}v$ is the normal displacement of slice i. $\delta{}u$ is the shear displacement of slice i. ${K_{bt}}$ is the length of the base of slice i. ${K_{bn}}$ is the base normal stiffness at surface i. $n$ is the number of slices in the slip surface.
 \\ \bottomrule \end{tabular}
@@ -1199,7 +1199,7 @@ The resistive shear stress acting on the base of a slice $\tau{}$ acts as the mo
 \end{dmath}
 The global Factor of Safety is then the ratio of the summation of the resistive and mobile shears for each slice, with a weighting for the length of the slice's base. Shown in equation (31) and IM5.
 \begin{dmath}
-FS=\frac{\displaystyle\sum_{i=1}^{n}{\left[{\ell{}_{b,i}} s_{i}\right]}}{\displaystyle\sum_{i=1}^{n}{\left[{\ell{}_{b,i}} \tau{}_{i}\right]}}=\frac{\displaystyle\sum_{i=1}^{n}{\left[{\ell{}_{b,i}} \left({c'}_{i}-{K_{bn,i}} {\delta{}v}_{i} \tan\left({\varphi{}'}_{i}\right)\right)\right]}}{\displaystyle\sum_{i=1}^{n}{\left[{\ell{}_{b,i}} {K_{bt,i}} {\delta{}u}_{i}\right]}}
+FS=\frac{\displaystyle\sum_{i=1}^{n}{{\ell{}_{b,i}} s_{i}}}{\displaystyle\sum_{i=1}^{n}{{\ell{}_{b,i}} \tau{}_{i}}}=\frac{\displaystyle\sum_{i=1}^{n}{{\ell{}_{b,i}} \left({c'}_{i}-{K_{bn,i}} {\delta{}v}_{i} \tan\left({\varphi{}'}_{i}\right)\right)}}{\displaystyle\sum_{i=1}^{n}{{\ell{}_{b,i}} {K_{bt,i}} {\delta{}u}_{i}}}
 \end{dmath}
 ~\newline
 \noindent \begin{minipage}{\textwidth}

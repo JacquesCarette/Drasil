@@ -34,7 +34,8 @@ import qualified Drasil.Sections.ReferenceMaterial as RM
 import Drasil.GamePhysics.Unitals (cpSymbolsAll, cpOutputConstraints,
   inputSymbols, outputSymbols, cpInputConstraints)
 import Drasil.GamePhysics.Concepts (chipmunk, cpAcronyms, twoD)
-import Drasil.GamePhysics.TMods (cpTMods)
+import Drasil.GamePhysics.TMods (cpTMods, t1NewtonSL_new, t2NewtonTL_new, 
+            t3NewtonLUG_new, t4ChaslesThm_new, t5NewtonSLR_new)
 import Drasil.GamePhysics.IMods (iModels)
 import Drasil.GamePhysics.DataDefs (cpDDefs, cpQDefs)
 
@@ -44,6 +45,9 @@ import Drasil.Sections.SolutionCharacterSpec
 import Drasil.Sections.Requirements (reqF)
 import Drasil.Sections.AuxiliaryConstants (valsOfAuxConstantsF)
 import Drasil.GamePhysics.References (cpCitations)
+import Drasil.DocumentLanguage
+import Drasil.DocumentLanguage.Definitions
+import Drasil.DocumentLanguage.Chunk.GenDefn
 
 authors :: People
 authors = [alex, luthfi]
@@ -62,9 +66,25 @@ mkSRS = RefSec (RefProg RM.intro [TUnits, tsymb tableOfSymbols, TAandA]) :
    IScope scope_of_requirements_intro_p1 scope_of_requirements_intro_p2, 
    IChar (S "rigid body dynamics") (phrase highSchoolCalculus) (EmptyS), 
    IOrgSec organization_of_documents_intro inModel solution_characteristics_specification EmptyS]) :
+   
+   SSDSec 
+    (SSDProg [SSDSubVerb problem_description
+      , SSDSolChSpec 
+        (SCSProg 
+          [ TMs ([Label] ++ stdFields) [t1NewtonSL_new, t2NewtonTL_new, 
+            t3NewtonLUG_new, t4ChaslesThm_new, t5NewtonSLR_new] 
+          
+          ]
+        )
+      ]
+    ):
+   
   (map Verbatim [general_syatem_description, specific_system_description, requirements, likely_changes, off_the_shelf_solutions, traceability_matrices_and_graph, values_of_auxiliary_constatnts]) ++ 
   ([Bibliography cpCitations])
     where tableOfSymbols = [TSPurpose, TypogConvention[Vector Bold], SymbOrder]
+	
+stdFields :: Fields
+stdFields = [DefiningEquation, Description Verbose IncludeUnits, Source, RefBy]
 
     --FIXME: Need to be able to print defn for gravitational constant.
 

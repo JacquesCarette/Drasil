@@ -21,8 +21,11 @@ import Drasil.DocumentLanguage.Chunk.InstanceModel
 -- OutputConstraints -> Attributes -> InstanceModel
 --Tcon :: Expr -> Constraint
 eBalanceOnWtr_new :: InstanceModel
-eBalanceOnWtr_new = im eBalanceOnWtr [qw tau_W, qw temp_C, qw temp_W, qw time] 
-  [TCon AssumedCon $ 0 $< C tau_W $> 100, TCon AssumedCon $ C tau_W $> 0] [qw temp_W, qw time] [] []
+eBalanceOnWtr_new = im eBalanceOnWtr [qw temp_C, qw temp_init, qw time_final, 
+  qw coil_SA, qw coil_HTC, qw htCap_W, qw w_mass] 
+  [TCon AssumedCon $C temp_init $<= C temp_C] [qw temp_W] 
+  --Tw(0) cannot be presented, there is one more constraint Tw(0) = Tinit
+  [TCon AssumedCon $ 0 $< C time $< C time_final] []
 
 eBalanceOnWtr :: RelationConcept
 eBalanceOnWtr = makeRC "eBalanceOnWtr" (nounPhraseSP $ "Energy balance on " ++

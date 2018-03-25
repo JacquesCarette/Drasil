@@ -148,7 +148,7 @@ mkSRS = RefSec (RefProg intro
   (org_of_doc_end inModel M.ode progName)]) : 
   Verbatim gen_sys_desc: --Verbatim gen_sys_desc:
   ------
-  {-SSDSec 
+  SSDSec 
     (SSDProg [SSDSubVerb prob_des
       , SSDSolChSpec 
         (SCSProg 
@@ -158,13 +158,13 @@ mkSRS = RefSec (RefProg intro
           , Source, RefBy] generalDefinitions ShowDerivation
           , DDs ([Label, Symbol, Units] ++ stdFields) [dd1HtFluxC] ShowDerivation
           , IMs ([Label, Input, Output, InConstraints, OutConstraints] ++ stdFields)
-           [eBalanceOnWtr_new, heatEInWtr_new] HideDerivation
+           [eBalanceOnWtr_new, heatEInWtr_new] ShowDerivation
           ]
         )
       ]
     ): --Testing General Definitions.-}
   
-  Verbatim spec_sys_des: -- Comment this out and the above in for testing GDs.
+  --Verbatim spec_sys_des: -- Comment this out and the above in for testing GDs.
   map Verbatim [req, likely_chg, trace_matrix_grph, aux_cons] ++
   [Bibliography ref_refList]
 

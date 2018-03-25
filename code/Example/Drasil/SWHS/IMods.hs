@@ -8,7 +8,7 @@ import Drasil.DocumentLanguage (mkAssump)
 import Drasil.SWHS.Unitals (t_init_melt, latentE_P, pcm_E, pcm_initMltE,
   temp_melt_P, temp_PCM, htCap_L_P, pcm_mass, htFusion, temp_init, htCap_S_P,
   melt_frac, temp_W, w_mass, w_E, htCap_W, tau_S_P, pcm_SA, tau_L_P, pcm_HTC,
-  coil_SA, coil_HTC, eta, tau_W, temp_C)
+  coil_SA, coil_HTC, eta, tau_W, temp_C, time_final)
 import Data.Drasil.Utils (getES, unwrap)
 import Data.Drasil.SentenceStructures (acroT, acroDD, foldlSent, isThe,
   sAnd, ofThe)
@@ -92,8 +92,8 @@ balPCMDesc = foldlSent [(E $ C temp_W) `isThe` phrase temp_W +:+.
 -- IM3 --
 ---------
 heatEInWtr_new :: InstanceModel
-heatEInWtr_new = im heatEInWtr [qw htCap_W, qw w_mass, qw temp_W, qw time, qw temp_init] 
-  [TCon AssumedCon $ 0 $< C tau_W $> 100, TCon AssumedCon $ C tau_W $> 0] [qw w_E, qw time] [] []
+heatEInWtr_new = im heatEInWtr [qw temp_init, qw coil_SA, qw htCap_W, qw w_mass] 
+  [] [qw w_E] [TCon AssumedCon $ 0 $< C time $< C time_final] []
 
 heatEInWtr :: RelationConcept
 heatEInWtr = makeRC "heatEInWtr" (nounPhraseSP "Heat energy in the water")

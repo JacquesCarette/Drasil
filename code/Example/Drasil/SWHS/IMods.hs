@@ -65,10 +65,10 @@ eBalanceOnPCM = makeRC "eBalanceOnPCM" (nounPhraseSP
 balPCM_Rel :: Relation
 balPCM_Rel = (deriv (sy temp_PCM) time) $= case_ [case1, case2, case3, case4]
   where case1 = ((1 / (sy tau_S_P)) * ((apply1 temp_W time) -
-          (apply1 temp_PCM time)), (sy temp_PCM) $< (sy temp_melt_P))
+          (apply1 temp_PCM time)), real_interval temp_PCM (UpTo $ Exc (sy temp_melt_P)))
 
         case2 = ((1 / (sy tau_L_P)) * ((apply1 temp_W time) -
-          (apply1 temp_PCM time)), (sy temp_PCM) $> (sy temp_melt_P))
+          (apply1 temp_PCM time)), real_interval temp_PCM (UpFrom $ Exc (sy temp_melt_P)))
 
         case3 = (0, (sy temp_PCM) $= (sy temp_melt_P))
 
@@ -126,11 +126,11 @@ heatEInPCM = makeRC "heatEInPCM" (nounPhraseSP "Heat energy in the PCM")
 htPCM_Rel :: Relation
 htPCM_Rel = sy pcm_E $= case_ [case1, case2, case3, case4]
   where case1 = (sy htCap_S_P * sy pcm_mass * ((apply1 temp_PCM time) -
-          sy temp_init), (sy temp_PCM) $< (sy temp_melt_P))
+          sy temp_init), real_interval temp_PCM (UpTo $ Exc $ sy temp_melt_P))
 
         case2 = (sy pcm_initMltE + (sy htFusion * sy pcm_mass) +
           (sy htCap_L_P * sy pcm_mass * ((apply1 temp_PCM time) -
-          sy temp_melt_P)), (sy temp_PCM) $> (sy temp_melt_P))
+          sy temp_melt_P)), real_interval temp_PCM (UpFrom $ Exc $ sy temp_melt_P))
 
         case3 = (sy pcm_initMltE + (apply1 latentE_P time),
           (sy temp_PCM) $= (sy temp_melt_P))

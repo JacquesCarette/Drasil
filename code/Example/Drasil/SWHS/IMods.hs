@@ -72,7 +72,7 @@ balPCM_Rel = (deriv (sy temp_PCM) time) $= case_ [case1, case2, case3, case4]
 
         case3 = (0, (sy temp_PCM) $= (sy temp_melt_P))
 
-        case4 = (0, 0 $< (sy melt_frac) $< 1)
+        case4 = (0, real_interval melt_frac (Bounded (Exc 0) (Exc 1)))
 
 balPCMDesc :: Sentence
 balPCMDesc = foldlSent [(E $ sy temp_W) `isThe` phrase temp_W +:+.
@@ -111,8 +111,8 @@ htWtrDesc = foldlSent [S "The above", phrase equation,
   phrase time, getES time, sParen (unwrap $ getUnit t_init_melt) `sC`
   (getES temp_W) `sAnd` S "the", phrase temp_init `sC` getES temp_init +:+.
   sParen (unwrap $ getUnit temp_init), S "This", phrase equation,
-  S "applies as long as", (E $ 0 $< (sy temp_W) $< 0) :+:
-  (unwrap $ getUnit temp_W),
+  S "applies as long as", (E $ real_interval temp_W (Bounded (Exc 0) (Exc 100)))
+  :+: (unwrap $ getUnit temp_W),
   sParen $ makeRef (mkAssump "assump14" EmptyS) `sC`
   makeRef (mkAssump "assump19" EmptyS)]
 
@@ -136,7 +136,7 @@ htPCM_Rel = sy pcm_E $= case_ [case1, case2, case3, case4]
           (sy temp_PCM) $= (sy temp_melt_P))
 
         case4 = (sy pcm_initMltE + (apply1 latentE_P time),
-          0 $< (sy melt_frac) $< 1)
+          real_interval melt_frac (Bounded (Exc 0) (Exc 1)))
 
 htPCMDesc :: Sentence
 htPCMDesc = foldlSent [S "The above", phrase equation,

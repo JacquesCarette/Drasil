@@ -275,7 +275,8 @@ s4_1_2_bullets = enumBullet $ map foldlSent_ [
   [at_start' itslPrpty, S "convention is noted by j. The end",
   plural itslPrpty, S "are usually not of", phrase interest `sC`
   S "therefore use the", plural itslPrpty, S "from", 
-  (E $ 1 $<= sy index $<= (sy numbSlices) - 1)],
+  E $ real_interval index $ Bounded (Inc 1) (Inc (sy numbSlices -1))],
+  -- (E $ 1 $<= sy index $<= (sy numbSlices) - 1)],
 
   [at_start slice, plural property +:+. S "convention is noted by",
   getES index]]

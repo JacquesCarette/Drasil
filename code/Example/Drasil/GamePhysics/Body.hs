@@ -36,7 +36,7 @@ import Drasil.GamePhysics.Unitals (cpSymbolsAll, cpOutputConstraints,
 import Drasil.GamePhysics.Concepts (chipmunk, cpAcronyms, twoD)
 import Drasil.GamePhysics.TMods (cpTMods, t1NewtonSL_new, t2NewtonTL_new, 
             t3NewtonLUG_new, t4ChaslesThm_new, t5NewtonSLR_new)
-import Drasil.GamePhysics.IMods (iModels)
+import Drasil.GamePhysics.IMods (iModels, im1_new, im2_new, im3_new)
 import Drasil.GamePhysics.DataDefs (cpDDefs, cpQDefs)
 
 import Drasil.DocumentLanguage 
@@ -72,7 +72,9 @@ mkSRS = RefSec (RefProg RM.intro [TUnits, tsymb tableOfSymbols, TAandA]) :
       , SSDSolChSpec 
         (SCSProg 
           [ TMs ([Label] ++ stdFields) [t1NewtonSL_new, t2NewtonTL_new, 
-            t3NewtonLUG_new, t4ChaslesThm_new, t5NewtonSLR_new] 
+            t3NewtonLUG_new, t4ChaslesThm_new, t5NewtonSLR_new]
+          , IMs ([Label, Input, Output, InConstraints, OutConstraints] ++ stdFields)
+           [im1_new, im2_new, im3_new] ShowDerivation
           
           ]
         )

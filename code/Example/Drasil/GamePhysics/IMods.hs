@@ -1,4 +1,4 @@
-module Drasil.GamePhysics.IMods (iModels) where
+module Drasil.GamePhysics.IMods (iModels, im1_new, im2_new, im3_new) where
 
 import Language.Drasil
 import Data.Drasil.Utils (foldle1, fmtU, getES)
@@ -8,11 +8,17 @@ import qualified Data.Drasil.Quantities.Physics as QP (acceleration,
   angularAccel, force, gravitationalAccel, momentOfInertia, angularVelocity, 
   time, impulseS)
 import Drasil.GamePhysics.Unitals
+import Drasil.DocumentLanguage.Chunk.InstanceModel
 
 iModels :: [RelationConcept]
 iModels = [im1, im2, im3]
 
 {-- Force on the translational motion  --}
+im1_new :: InstanceModel
+im1_new = im im1 [qw vel_i, qw QP.time, qw QP.gravitationalAccel, qw force_i, qw mass_i] 
+  [ TCon AssumedCon $ C vel_i $> 0, TCon AssumedCon $ C QP.time $> 0, TCon AssumedCon $ C QP.gravitationalAccel $> 0, 
+  TCon AssumedCon $ C force_i $> 0, TCon AssumedCon $ C mass_i $> 0 ] [qw acc_i] [] []
+
 im1 :: RelationConcept
 im1 = makeRC "im1" (im1NP) (im1descr +:+ im1leg) im1Rel 
 
@@ -38,6 +44,12 @@ im1leg = foldle1 (+:+) (+:+) $ map defList im1legTerms
 
 {-- --}
 
+im2_new :: InstanceModel
+im2_new = im im2 [qw QP.angularVelocity, qw QP.time, qw torque_i, qw QP.momentOfInertia]
+  [TCon AssumedCon $ C QP.angularVelocity $> 0, TCon AssumedCon $ C QP.time $> 0,
+  TCon AssumedCon $ C torque_i $> 0, TCon AssumedCon $ C QP.momentOfInertia $> 0] 
+  [qw QP.angularAccel] [TCon AssumedCon $ C QP.angularAccel $> 0] [] 
+
 im2 :: RelationConcept
 im2 = makeRC "im2" (im2NP) (im2descr +:+ im2leg) im2Rel 
 
@@ -59,6 +71,11 @@ im2descr = foldlSent [S "The above equation for the total angular acceleration",
 im2leg = foldle1 (+:+) (+:+) $ map defList im2legTerms  
 
 {-- --}
+
+im3_new :: InstanceModel
+im3_new = im im3 [qw QP.time, qw QP.impulseS, qw mass_A, qw normalVect] [TCon AssumedCon $ C QP.time $> 0,
+  TCon AssumedCon $ C QP.impulseS $> 0, TCon AssumedCon $ C mass_A $> 0, TCon AssumedCon $ C normalVect $> 0]
+  [qw vel_A, qw time_c] [TCon AssumedCon $ C vel_A $> 0, TCon AssumedCon $ C time_c $> 0] []
 
 im3 :: RelationConcept
 im3 = makeRC "im3" (im3NP) (im3descr +:+ im3leg) im3Rel1

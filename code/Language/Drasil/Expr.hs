@@ -23,6 +23,9 @@ infixr 4 $=
 infixr 9 $&&
 infixr 9 $||
 
+--Known math functions.
+-- TODO: Move the below to a separate file somehow. How to go about it?
+
 data BinOp = Frac | Pow | Subt | Eq | NEq | Lt | Gt | LEq | GEq | Impl | Iff | Index
   | Dot | Cross
   deriving Eq
@@ -119,10 +122,6 @@ instance Fractional Expr where
   fromRational r = BinaryOp Frac (fromInteger $ numerator   r)
                                 (fromInteger $ denominator r)
 
-
---Known math functions.
--- TODO: Move the below to a separate file somehow. How to go about it?
-
 -- | Operators
 -- All operators take a |DomainDesc| and a variable
 -- FIXME: the Variable should not be an |Expr|
@@ -130,7 +129,6 @@ data EOperator where
   Summation :: DomainDesc -> Expr -> EOperator
   Product :: DomainDesc -> Expr -> EOperator
   Integral :: DomainDesc -> Expr -> EOperator
-
 
 -- | Domain Description. A 'Domain' is the extent of a variable that
 -- ranges over a particular Space. So a |DomainDesc| contains

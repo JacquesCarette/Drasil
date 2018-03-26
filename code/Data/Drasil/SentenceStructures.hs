@@ -214,7 +214,7 @@ typUncr :: (UncertainQuantity c) => c -> Sentence
 typUncr x = maybe none (S . show) (x ^. uncert)
 
 constraintToExpr :: (Quantity c) => c -> Constraint -> Expr
-constraintToExpr c (Range _ ri) = real_interval (c^.uid) ri
+constraintToExpr c (Range _ ri) = real_interval c ri
 constraintToExpr c (EnumeratedReal _ l) = isin (sy c) (DiscreteD l)
 constraintToExpr c (EnumeratedStr _ l) = isin (sy c) (DiscreteS l)
 

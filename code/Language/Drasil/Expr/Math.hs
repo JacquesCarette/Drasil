@@ -1,10 +1,11 @@
 module Language.Drasil.Expr.Math where
 
 import Prelude hiding (sqrt)
+import Control.Lens ((^.))
 import Language.Drasil.Symbol
 import Language.Drasil.Expr
 import Language.Drasil.Space (Space)
-import Language.Drasil.Chunk (Chunk)
+import Language.Drasil.Chunk (Chunk(uid))
 import Language.Drasil.Chunk.SymbolForm (HasSymbol)
 
 -- | Smart constructor to take the log of an expression
@@ -81,8 +82,8 @@ defprod v low high e = EOp $ Product (IntegerDD v (BoundedR low high)) e
 prod_all v e = EOp $ Product (All v) e
 
 -- | Smart constructor for 'real interval' membership
-real_interval :: UID -> RealInterval -> Expr
-real_interval = RealI
+real_interval :: Chunk c => c -> RealInterval -> Expr
+real_interval c = RealI (c ^. uid)
 
 -- | Euclidean function : takes a vector and returns the sqrt of the sum-of-squares
 euclidean :: [Expr] -> Expr

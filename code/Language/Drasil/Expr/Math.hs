@@ -80,6 +80,10 @@ sum_all v e = EOp $ Summation (All v) e
 defprod v low high e = EOp $ Product (IntegerDD v (BoundedR low high)) e
 prod_all v e = EOp $ Product (All v) e
 
+-- | Smart constructor for 'real interval' membership
+real_interval :: UID -> RealInterval -> Expr
+real_interval = RealI
+
 -- | Euclidean function : takes a vector and returns the sqrt of the sum-of-squares
 euclidean :: [Expr] -> Expr
 euclidean = sqrt . sum' . map square

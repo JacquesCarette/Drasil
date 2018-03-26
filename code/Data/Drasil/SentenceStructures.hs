@@ -19,7 +19,7 @@ module Data.Drasil.SentenceStructures
 
 import Language.Drasil
 import Data.Drasil.Utils (foldle, foldle1, getES)
-import Data.Drasil.Concepts.Documentation
+import Data.Drasil.Concepts.Documentation hiding (constraint)
 import Data.Drasil.Concepts.Math (equation)
 
 import Control.Lens ((^.))
@@ -213,12 +213,17 @@ none = S "None"
 typUncr :: (UncertainQuantity c) => c -> Sentence
 typUncr x = maybe none (S . show) (x ^. uncert)
 
+constraintToExpr :: (Quantity c) => c -> Constraint -> Expr
+constraintToExpr c (Range _ ri) = real_interval (c^.uid) ri
+constraintToExpr c (EnumeratedReal _ l) = isin (sy c) (DiscreteD l)
+constraintToExpr c (EnumeratedStr _ l) = isin (sy c) (DiscreteS l)
+
 --Formatters for the constraints
 fmtPhys :: (Constrained c, Quantity c) => c -> Sentence
-fmtPhys c = foldlList $ map (E . renderC c) $ filter isPhysC (c ^. constraints)
+fmtPhys c = foldlList $ map (E . constraintToExpr c) $ filter isPhysC (c ^. constraints)
 
 fmtSfwr :: (Constrained c, Quantity c) => c -> Sentence
-fmtSfwr c = foldlList $ map (E . renderC c) $ filter isSfwrC (c ^. constraints)
+fmtSfwr c = foldlList $ map (E . constraintToExpr c) $ filter isSfwrC (c ^. constraints)
 
 replaceEmptyS :: Sentence -> Sentence
 replaceEmptyS EmptyS = none

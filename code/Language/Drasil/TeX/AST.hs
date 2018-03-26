@@ -2,6 +2,7 @@ module Language.Drasil.TeX.AST where
 
 import Language.Drasil.Document (MaxWidthPercent, DType)
 import Language.Drasil.Printing.AST
+import Language.Drasil.Printing.Citation (BibRef)
 
 data Document = Document Title Author [LayoutObj]
 type Author   = Spec

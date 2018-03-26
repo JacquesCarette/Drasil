@@ -7,8 +7,13 @@ import Language.Drasil.Code.Imperative.LanguageRenderer (Options(..))
 import Language.Drasil.Code.Imperative.Parsers.ConfigParser (pythonLabel, cppLabel, cSharpLabel, javaLabel)
 import Language.Drasil.Code.Imperative.Lang
 import Language.Drasil.Code.CodeGeneration (createCodeFiles, makeCode)
+import Language.Drasil.Chunk (Chunk(..))
+import Language.Drasil.Chunk.SymbolForm (HasSymbol)
 import Language.Drasil.Chunk.Code
+import Language.Drasil.Chunk.Quantity (QuantityDict)
+import Language.Drasil.Chunk.Constrained (Constraint(..))
 import Language.Drasil.Expr as E hiding (($.))
+import Language.Drasil.Space (Space(..))
 import Language.Drasil.Expr.Extract hiding (vars)
 import Language.Drasil.CodeSpec hiding (codeSpec, Mod(..))
 import qualified Language.Drasil.CodeSpec as CS (Mod(..))
@@ -159,8 +164,8 @@ genInputConstraints = do
   g <- ask
   let vars   = inputs $ codeSpec g
       cm     = cMap $ codeSpec g
-      sfwrCs = concatMap (\x -> sfwrLookup x cm) vars
-      physCs = concatMap (\x -> physLookup x cm) vars
+      sfwrCs = concatMap (renderC . sfwrLookup cm) vars
+      physCs = concatMap (renderC . physLookup cm) vars
   parms <- getParams vars
   sf <- mapM (\x -> do { e <- convExpr x; return $ ifCond [((?!) e, sfwrCBody g x)] noElse}) sfwrCs
   hw <- mapM (\x -> do { e <- convExpr x; return $ ifCond [((?!) e, physCBody g x)] noElse}) physCs
@@ -467,6 +472,30 @@ convExpr (Case l)      = doit l -- FIXME this is sub-optimal
 convExpr (Matrix _)    = error "convExpr: Matrix"
 convExpr (EOp _)       = error "convExpr: EOp"
 convExpr (IsIn _ _)    = error "convExpr: IsIn"
+convExpr (RealI c ri)  = do
+  g <- ask
+  convExpr $ renderRealInt (lookupC (sysinfodb $ codeSpec g) c) ri
+
+lookupC :: HasSymbolTable s => s -> UID -> QuantityDict
+lookupC sm c = symbLookup c $ sm^.symbolTable
+
+renderC :: (Chunk c, HasSymbol c) => (c, [Constraint]) -> [Expr]
+renderC (u, l) = map (renderC' u) l
+
+renderC' :: (Chunk c, HasSymbol c) => c -> Constraint -> Expr
+renderC' s (Range _ rr)          = renderRealInt s rr
+renderC' s (EnumeratedReal _ rr) = IsIn (sy s) (DiscreteD rr)
+renderC' s (EnumeratedStr _ rr)  = IsIn (sy s) (DiscreteS rr)
+
+renderRealInt :: (Chunk c, HasSymbol c) => c -> RealInterval -> Expr
+renderRealInt s (Bounded (Inc a) (Inc b)) = (a $<= sy s) $&& (sy s $<= b)
+renderRealInt s (Bounded (Inc a) (Exc b)) = (a $<= sy s) $&& (sy s $<  b)
+renderRealInt s (Bounded (Exc a) (Inc b)) = (a $<  sy s) $&& (sy s $<= b)
+renderRealInt s (Bounded (Exc a) (Exc b)) = (a $<  sy s) $&& (sy s $<  b)
+renderRealInt s (UpTo (Inc a))    = sy s $<= a
+renderRealInt s (UpTo (Exc a))    = sy s $< a
+renderRealInt s (UpFrom (Inc a))  = sy s $>= a
+renderRealInt s (UpFrom (Exc a))  = sy s $>  a
 
 unop :: UFunc -> (Value -> Value)
 unop E.Sqrt = (#/^)

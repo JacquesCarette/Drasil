@@ -15,6 +15,7 @@ module Language.Drasil (
   , log, abs, sin, cos, tan, sec, csc, cot, exp, sqrt, square, euclidean, vars
   , dim, idx, int, dbl, str, isin, case_
   , sum_all, defsum, prod_all, defprod, defint, int_all
+  , real_interval
   , deriv, pderiv
   , apply, apply1, apply2
   , cross, m2x2, vec2D, dgnl2x2
@@ -44,7 +45,7 @@ module Language.Drasil (
   , Constrained(..), HasReasVal(..), ConstrainedChunk(..), Constraint(..), ConstrConcept(..)
   , ConstraintReason(..)
   , physc, sfwrc, enumc, constrained, cuc, cvc, cvc', constrained', cuc', constrainedNRV'
-  , isPhysC, isSfwrC, renderC
+  , isPhysC, isSfwrC
   , cnstrw
   , Reason(..), TheoryConstraint(..)
   -- Chunk.Eq
@@ -176,6 +177,7 @@ import Language.Drasil.Expr (Expr(..), Relation, DerivType(..),
 import Language.Drasil.Expr.Math (log, sin, cos, tan, sqrt, square, sec, csc, cot, exp,
           dim, idx, int, dbl, str, isin, case_,
           sum_all, defsum, prod_all, defprod,
+          real_interval,
           apply, apply1, apply2,
           cross, m2x2, vec2D, dgnl2x2, euclidean, defint, int_all)
 import Language.Drasil.Expr.Extract (vars)

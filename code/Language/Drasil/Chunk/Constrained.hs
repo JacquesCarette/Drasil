@@ -4,15 +4,14 @@ module Language.Drasil.Chunk.Constrained (
   , Constraint(..), ConstraintReason(..)
   , ConstrainedChunk(..)
   , ConstrConcept(..)
-  , physc, sfwrc, enumc, isPhysC, isSfwrC, renderC
+  , physc, sfwrc, enumc, isPhysC, isSfwrC
   , constrained, cuc, cvc, cvc', constrained', cuc', constrainedNRV'
   , cnstrw
   , Reason(..), TheoryConstraint(..)
   ) where
 
 import Control.Lens (Lens', (^.), makeLenses, view)
-import Language.Drasil.Expr (Expr(..), RealInterval(..), Relation, Inclusive(..),
-  ($<), ($<=), ($>), ($>=), sy)
+import Language.Drasil.Expr (Expr(..), RealInterval(..), Relation)
 import Language.Drasil.Chunk.Quantity
 import Language.Drasil.Chunk.DefinedQuantity
 import Language.Drasil.Chunk.NamedIdea
@@ -68,22 +67,6 @@ isSfwrC (Range Software _) = True
 isSfwrC (EnumeratedReal Software _) = True
 isSfwrC (EnumeratedStr Software _) = True
 isSfwrC _ = False
-
-renderC :: (Chunk c, HasSymbol c) => c -> Constraint -> Expr
-renderC s (Range _ rr)          = renderRealInt s rr
-renderC s (EnumeratedReal _ rr) = IsIn (sy s) (DiscreteD rr)
-renderC s (EnumeratedStr _ rr)  = IsIn (sy s) (DiscreteS rr)
-
--- FIXME: bit of a hack for display purposes here
-renderRealInt :: (Chunk c, HasSymbol c) => c -> RealInterval -> Expr
-renderRealInt s (Bounded (Inc a) (Inc b)) = a $<= sy s $<= b
-renderRealInt s (Bounded (Inc a) (Exc b)) = a $<= sy s $<  b
-renderRealInt s (Bounded (Exc a) (Inc b)) = a $<  sy s $<= b
-renderRealInt s (Bounded (Exc a) (Exc b)) = a $<  sy s $<  b
-renderRealInt s (UpTo (Inc a))    = sy s $<= a
-renderRealInt s (UpTo (Exc a))    = sy s $< a
-renderRealInt s (UpFrom (Inc a))  = sy s $>= a
-renderRealInt s (UpFrom (Exc a))  = sy s $>  a
 
 -- | ConstrainedChunks are 'Symbolic Quantities'
 -- with 'Constraints' and maybe typical value

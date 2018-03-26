@@ -1,11 +1,12 @@
 module Language.Drasil.Printing.Import(space,expr,symbol) where
 
 import Language.Drasil.Expr (Expr(..), BinOp(..), UFunc(..), Oper(..),
-    DerivType(..), EOperator(..), DomainDesc(..), RealRange(..))
+    DerivType(..), EOperator(..), DomainDesc(..), RealRange(..), UID,
+    RealInterval(..),Inclusive(..))
 import Language.Drasil.Expr.Precedence (prec, eprec)
 import qualified Language.Drasil.Printing.AST as P
 
-import Language.Drasil.Chunk.SymbolForm (eqSymb)
+import qualified Language.Drasil.Chunk.SymbolForm as SF
 import Language.Drasil.ChunkDB (HasSymbolTable(..), symbLookup)
 import Language.Drasil.Symbol
 import Language.Drasil.Unicode (Special(Partial))
@@ -49,11 +50,11 @@ expr (Assoc Mul l)     sm = P.Row $ intersperse (P.MO P.Mul) $ map (expr' sm (pr
 expr (Deriv Part a b) sm =
   P.Div (P.Row [P.Spec Partial, P.Spc P.Thin, expr a sm])
         (P.Row [P.Spec Partial, P.Spc P.Thin,
-                symbol $ eqSymb $ symbLookup b $ sm^.symbolTable])
+                symbol $ SF.eqSymb $ symbLookup b $ sm^.symbolTable])
 expr (Deriv Total a b)sm =
   P.Div (P.Row [P.Ident "d", P.Spc P.Thin, expr a sm])
-        (P.Row [P.Ident "d", P.Spc P.Thin, symbol $ eqSymb $ symbLookup b $ sm^.symbolTable])
-expr (C c)            sm = symbol $ eqSymb $ symbLookup c $ sm^.symbolTable
+        (P.Row [P.Ident "d", P.Spc P.Thin, symbol $ SF.eqSymb $ symbLookup b $ sm^.symbolTable])
+expr (C c)            sm = symbol $ lookupC sm c
 expr (FCall f [x])    sm = P.Row [expr f sm, P.Fenced P.Paren P.Paren $ expr x sm]
 expr (FCall f l)      sm = P.Row [expr f sm,
   P.Fenced P.Paren P.Paren $ P.Row $ intersperse (P.MO P.Comma) $ map (flip expr sm) l]
@@ -91,6 +92,10 @@ expr (BinaryOp Pow a b) sm = pow sm a b
 expr (BinaryOp Subt a b)   sm = P.Row [expr a sm, P.MO P.Subt, expr b sm]
 expr (EOp o)            sm = eop o sm
 expr (IsIn  a b)        sm = P.Row  [expr a sm, P.MO P.IsIn, space b]
+expr (RealI c ri)       sm = renderRealInt sm (lookupC sm c) ri
+
+lookupC :: HasSymbolTable s => s -> UID -> Symbol
+lookupC sm c = SF.eqSymb $ symbLookup c $ sm^.symbolTable
 
 mkCall :: HasSymbolTable ctx => ctx -> P.Ops -> Expr -> P.Expr
 mkCall s o e = P.Row [P.MO o, P.Fenced P.Paren P.Paren $ expr e s]
@@ -126,7 +131,7 @@ indx :: HasSymbolTable ctx => ctx -> Expr -> Expr -> P.Expr
 indx sm (C c) i = f s
   where
     i' = expr i sm
-    s = eqSymb $ symbLookup c $ sm^.symbolTable
+    s = SF.eqSymb $ symbLookup c $ sm^.symbolTable
     f (Corners [] [] [] [b] e) =
       let e' = symbol e
           b' = symbol b in
@@ -186,3 +191,22 @@ pow sm a@(Assoc Mul _)  b = P.Row [P.Fenced P.Paren P.Paren (expr a sm), P.Sup (
 pow sm a@(BinaryOp Pow _ _)  b = P.Row [P.Fenced P.Paren P.Paren (expr a sm), P.Sup (expr b sm)]
 pow sm a                b = P.Row [expr a sm, P.Sup (expr b sm)]
 
+{-
+constraint :: (HasSymbolTable st, Quantity q) => st -> q -> Constraint -> P.Expr
+constraint st s (Range _ rr)          = renderRealInt st (SF.eqSymb s) rr
+constraint _  s (EnumeratedReal _ rr) = P.Row [symbol $ SF.eqSymb s, P.MO P.IsIn, space $ DiscreteD rr]
+constraint _  s (EnumeratedStr _ rr)  = P.Row [symbol $ SF.eqSymb s, P.MO P.IsIn, space $ DiscreteS rr]
+-}
+renderRealInt :: HasSymbolTable st => st -> Symbol -> RealInterval -> P.Expr
+renderRealInt st s (Bounded (Inc a) (Inc b)) = 
+  P.Row [ expr a st, P.MO P.LEq, symbol s, P.MO P.LEq, expr b st]
+renderRealInt st s (Bounded (Inc a) (Exc b)) =
+  P.Row [ expr a st, P.MO P.LEq, symbol s, P.MO P.Lt, expr b st]
+renderRealInt st s (Bounded (Exc a) (Inc b)) =
+  P.Row [ expr a st, P.MO P.Lt, symbol s, P.MO P.LEq, expr b st]
+renderRealInt st s (Bounded (Exc a) (Exc b)) =
+  P.Row [ expr a st, P.MO P.Lt, symbol s, P.MO P.Lt, expr b st]
+renderRealInt st s (UpTo (Inc a))    = P.Row [ symbol s, P.MO P.LEq, expr a st]
+renderRealInt st s (UpTo (Exc a))    = P.Row [ symbol s, P.MO P.Lt, expr a st]
+renderRealInt st s (UpFrom (Inc a))  = P.Row [ symbol s, P.MO P.GEq, expr a st]
+renderRealInt st s (UpFrom (Exc a))  = P.Row [ symbol s, P.MO P.Gt, expr a st]

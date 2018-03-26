@@ -55,3 +55,4 @@ eprec (EOp (Product _ _))   = prec Mul
 eprec (EOp (Integral _ _))  = prec Add
 eprec (BinaryOp bo _ _) = prec2 bo
 eprec (IsIn  _ _)       = 170
+eprec (RealI _ _)       = 170

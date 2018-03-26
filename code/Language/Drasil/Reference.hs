@@ -13,7 +13,8 @@ import Language.Drasil.Chunk.PhysSystDesc as PD
 import Language.Drasil.Chunk.ReqChunk as R
 import Language.Drasil.Chunk.Theory
 import Language.Drasil.Document
-import Language.Drasil.Spec
+import Language.Drasil.Spec (Sentence(..),RefName)
+import Language.Drasil.RefTypes (RefType(..))
 import Control.Lens ((^.), Simple, Lens, makeLenses)
 
 import Data.List (partition, sortBy)

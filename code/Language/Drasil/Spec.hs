@@ -5,13 +5,15 @@ module Language.Drasil.Spec where
 import Language.Drasil.Unicode (Special(CurlyBrOpen,CurlyBrClose,SqBrOpen,SqBrClose))
 import Language.Drasil.Symbol
 import Language.Drasil.Expr
+import Language.Drasil.RefTypes
 import Language.Drasil.UnitLang (USymb)
-
-type RefName = Sentence
-type RefAdd  = String
+import qualified Language.Drasil.Printing.AST as PA
 
 -- | For writing accented characters
 data Accent = Grave | Acute deriving Eq
+
+-- | One slight hack remaining
+type RefName = Sentence
 
 -- | For writing "sentences" via combining smaller elements
 -- Sentences are made up of some known vocabulary of things:
@@ -40,36 +42,6 @@ data Sentence where
 instance Monoid Sentence where
   mempty = EmptyS
   mappend = (:+:)
-
--- | For building references. Defines the possible type of reference.
-data RefType = Tab    -- ^ Table
-             | Fig    -- ^ Figure
-             | Sect   -- ^ Section
-             | Def    -- ^ Definition (includes theoretical models)
-             | Mod    -- ^ Module
-             | Req    -- ^ Requirement
-             | Assump -- ^ Assumption
-             | LC     -- ^ Likely Change
-             | UC     -- ^ Unlikely Change
-             | EqnB   -- ^ Equation Block
-             | Cite   -- ^ Citation
-             | Goal   -- ^ Goal Statement
-             | PSD    -- ^ Physical System Description
-             
-instance Show RefType where
-  show Tab    = "Table"
-  show Fig    = "Figure"
-  show Sect   = "Section"
-  show Mod    = "Module"
-  show Def    = "Definition"
-  show Req    = "Requirement"
-  show Assump = "Assumption"
-  show LC     = "Likely Change"
-  show UC     = "Unlikely Change"
-  show Cite   = "Citation"
-  show Goal   = "Goal Statement"
-  show PSD    = "Physical System Description"
-  show EqnB   = "Equation"
 
 -- | Helper function for wrapping sentences in parentheses.
 sParen :: Sentence -> Sentence

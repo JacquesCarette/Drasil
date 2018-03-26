@@ -3,6 +3,7 @@ module Language.Drasil.HTML.AST where
 
 import Language.Drasil.Document (DType (..), MaxWidthPercent)
 import Language.Drasil.Printing.AST
+import Language.Drasil.Printing.Citation (BibRef)
 
 -- | Internal HTML version of Document
 -- (for converting 'Language.Drasil.Document.Document')

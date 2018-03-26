@@ -10,6 +10,7 @@ import Language.Drasil.Chunk.Concept (defn)
 import Language.Drasil.Spec
 import qualified Language.Drasil.TeX.AST as T
 import qualified Language.Drasil.Printing.AST as P
+import qualified Language.Drasil.Printing.Citation as P
 import Language.Drasil.Chunk.Eq
 import Language.Drasil.Chunk.ExprRelat (relat)
 import Language.Drasil.Chunk.NamedIdea (term)

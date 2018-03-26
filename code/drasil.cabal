@@ -49,6 +49,7 @@ library
     , Language.Drasil.NounPhrase
     , Language.Drasil.People
     , Language.Drasil.Recipe
+    , Language.Drasil.RefTypes
     , Language.Drasil.Reference
     , Language.Drasil.Space
     , Language.Drasil.Spec
@@ -121,6 +122,7 @@ library
     , Language.Drasil.Output.Formats
     , Language.Drasil.Printing.Helpers
     , Language.Drasil.Printing.AST
+    , Language.Drasil.Printing.Citation
     , Language.Drasil.Printing.Import
     , Language.Drasil.DataDesc
 

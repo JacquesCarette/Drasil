@@ -7,6 +7,7 @@ import Numeric (showFFloat)
 
 import Language.Drasil.HTML.Import (makeDocument, spec)
 import Language.Drasil.Printing.AST
+import Language.Drasil.Printing.Citation
 import Language.Drasil.HTML.AST
 import qualified Language.Drasil.Output.Formats as F
 import Language.Drasil.Spec (Sentence, sC, (+:+))

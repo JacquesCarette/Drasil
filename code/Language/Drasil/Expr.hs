@@ -56,6 +56,7 @@ data Expr where
   EOp      :: EOperator -> Expr
 
   IsIn     :: Expr -> Space -> Expr --	element of
+  RealI    :: UID -> RealInterval -> Expr -- a different kind of 'element of'
 
 ($=), ($!=), ($<), ($>), ($<=), ($>=), ($=>), ($<=>), ($.), ($-), 
   ($/) :: Expr -> Expr -> Expr

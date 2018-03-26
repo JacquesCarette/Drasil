@@ -11,7 +11,8 @@ module Language.Drasil.Chunk.Goal
 
 import Language.Drasil.Chunk
 import Language.Drasil.Chunk.Attribute
-import Language.Drasil.Spec (Sentence, RefAdd)
+import Language.Drasil.Spec (Sentence)
+import Language.Drasil.RefTypes (RefAdd)
 
 import Control.Lens (makeLenses, (^.))
 

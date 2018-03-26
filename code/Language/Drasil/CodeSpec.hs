@@ -8,7 +8,7 @@ import Language.Drasil.Chunk.Quantity -- for hack
 import Language.Drasil.Chunk.SymbolForm (codeSymb)
 import Language.Drasil.NounPhrase
 import Language.Drasil.Symbol
-import Language.Drasil.Spec hiding (Mod)
+import Language.Drasil.Spec
 import Language.Drasil.SystemInformation
 import Language.Drasil.Expr -- for hack
 import Language.Drasil.Space -- for hack

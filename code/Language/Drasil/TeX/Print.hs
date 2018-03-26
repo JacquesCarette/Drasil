@@ -9,9 +9,11 @@ import Numeric (showFFloat)
 import Control.Applicative (pure)
 
 import Language.Drasil.Printing.AST
+import Language.Drasil.Printing.Citation
 import Language.Drasil.TeX.AST
 import qualified Language.Drasil.TeX.Import as I
 import qualified Language.Drasil.Spec as LS
+import qualified Language.Drasil.RefTypes as RT
 import Language.Drasil.UnitLang
 import Language.Drasil.Config (colAwidth, colBwidth, bibStyleT,bibFname)
 import Language.Drasil.Printing.Helpers hiding (paren, sqbrac)
@@ -242,14 +244,14 @@ spec (S s)       = pure $ text (concatMap escapeChars s)
 spec (Sy s)      = p_unit s
 spec (Sp s)      = pure $ text $ unPL $ special s
 spec HARDNL      = pure $ text $ "\\newline"
-spec (Ref t@LS.Sect _ r) = sref (show t) (spec r)
-spec (Ref t@LS.Def _ r)  = hyperref (show t) (spec r)
-spec (Ref LS.Mod _ r)    = mref  (spec r)
-spec (Ref LS.Req _ r)    = rref  (spec r)
-spec (Ref LS.Assump _ r) = aref  (spec r)
-spec (Ref LS.LC _ r)     = lcref (spec r)
-spec (Ref LS.UC _ r)     = ucref (spec r)
-spec (Ref LS.Cite _ r)   = cite  (spec r)
+spec (Ref t@RT.Sect _ r) = sref (show t) (spec r)
+spec (Ref t@RT.Def _ r)  = hyperref (show t) (spec r)
+spec (Ref RT.Mod _ r)    = mref  (spec r)
+spec (Ref RT.Req _ r)    = rref  (spec r)
+spec (Ref RT.Assump _ r) = aref  (spec r)
+spec (Ref RT.LC _ r)     = lcref (spec r)
+spec (Ref RT.UC _ r)     = ucref (spec r)
+spec (Ref RT.Cite _ r)   = cite  (spec r)
 spec (Ref t _ r)         = ref (show t) (spec r)
 spec EmptyS      = empty
 

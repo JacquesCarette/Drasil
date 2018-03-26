@@ -3,7 +3,7 @@ module Language.Drasil.Chunk.Code (
     CodeIdea(..), CodeChunk(..), CodeDefinition(..),
     programName,
     codeType, codevar, codefunc, qtoc, qtov, codeEquat,
-    ConstraintMap, constraintMap, physLookup, sfwrLookup, constraintLookup,
+    ConstraintMap, constraintMap, physLookup, sfwrLookup,
     symbToCodeName, CodeType(..),
     spaceToCodeType, toCodeName, funcPrefix
   ) where
@@ -204,16 +204,12 @@ type ConstraintMap = Map.Map String [Constraint]
 constraintMap :: (Constrained c) => [c] -> ConstraintMap
 constraintMap = Map.fromList . map (\x -> ((x ^. uid), (x ^. constraints)))
 
-physLookup :: (Quantity q) => q -> ConstraintMap -> [Expr]
-physLookup q m = constraintLookup' q m (filter isPhysC)
+physLookup :: (Quantity q) => ConstraintMap -> q -> (q,[Constraint])
+physLookup m q = constraintLookup' q m (filter isPhysC)
 
-sfwrLookup :: (Quantity q) => q -> ConstraintMap -> [Expr]
-sfwrLookup q m = constraintLookup' q m (filter isPhysC)
-
-constraintLookup :: (Quantity q) => q -> ConstraintMap -> [Expr]
-constraintLookup q m = constraintLookup' q m id
+sfwrLookup :: (Quantity q) => ConstraintMap -> q -> (q,[Constraint])
+sfwrLookup m q = constraintLookup' q m (filter isPhysC)
 
 constraintLookup' :: (Quantity q) => q -> ConstraintMap
-                      -> ([Constraint] -> [Constraint]) -> [Expr]
-constraintLookup' q m filt =
-  maybe [] (\cs -> map (renderC q) (filt cs)) (Map.lookup (q ^. uid) m)
+                      -> ([Constraint] -> [Constraint]) -> (q , [Constraint])
+constraintLookup' q m filt = (q, maybe [] filt (Map.lookup (q^.uid) m))

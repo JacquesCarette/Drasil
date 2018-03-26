@@ -170,7 +170,7 @@ mkSRS = RefSec (RefProg intro
 
 stdFields :: Fields
 stdFields = [DefiningEquation, Description Verbose IncludeUnits, Source, RefBy]
--- zzzzz  means the generalDefinations have a type of a list of GenDefn zzzzzzz -----
+
 generalDefinitions :: [GenDefn]
 generalDefinitions = [gd nwtnCooling (Just thermal_flux) ([] :: Attributes),
   gd rocTempSimp (Nothing :: Maybe DerUChunk) [D roc_temp_simp_deriv]]

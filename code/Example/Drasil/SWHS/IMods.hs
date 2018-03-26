@@ -1,5 +1,6 @@
 module Drasil.SWHS.IMods (insta_model_IMods,
-  eBalanceOnWtr, heatEInWtr, heatEInWtr_new) where
+  eBalanceOnWtr, eBalanceOnWtr_new, heatEInWtr, heatEInWtr_new,
+   heatEInPCM_new, heatEInPCM, eBalanceOnPCM_new, eBalanceOnPCM) where
 
 import Language.Drasil
 
@@ -26,6 +27,12 @@ insta_model_IMods = [eBalanceOnWtr, eBalanceOnPCM, heatEInWtr, heatEInPCM]
 ---------
 -- IM1 --
 ---------
+eBalanceOnWtr_new :: InstanceModel
+eBalanceOnWtr_new = im eBalanceOnWtr [qw time, qw tau_W, qw temp_C, qw eta,
+ qw temp_PCM, qw time_final, qw temp_init, qw coil_SA]
+  [TCon AssumedCon $ C temp_init $< C temp_C] [qw temp_W]
+   [TCon AssumedCon $ 0 $< C time $< C time_final] []
+
 eBalanceOnWtr :: RelationConcept
 eBalanceOnWtr = makeRC "eBalanceOnWtr" (nounPhraseSP $ "Energy balance on " ++
   "water to find the temperature of the water") balWtrDesc balWtr_Rel
@@ -57,6 +64,12 @@ balWtrDesc = foldlSent [(E $ C temp_W) `isThe` phrase temp_W +:+.
 ---------
 -- IM2 --
 ---------
+eBalanceOnPCM_new :: InstanceModel
+eBalanceOnPCM_new = im eBalanceOnPCM [qw time, qw tau_W, qw temp_C, qw eta,
+ qw temp_PCM, qw time_final, qw temp_init, qw coil_SA]
+  [TCon AssumedCon $ C temp_init $< C temp_C] [qw temp_W]
+   [TCon AssumedCon $ 0 $< C time $< C time_final] []
+
 eBalanceOnPCM :: RelationConcept
 eBalanceOnPCM = makeRC "eBalanceOnPCM" (nounPhraseSP
   "Energy balance on PCM to find T_p")
@@ -126,6 +139,12 @@ htWtrDesc = foldlSent [S "The above", phrase equation,
 ---------
 -- IM4 --
 ---------
+heatEInPCM_new :: InstanceModel
+heatEInPCM_new = im heatEInPCM [qw time, qw tau_W, qw temp_C, qw eta,
+ qw temp_PCM, qw time_final, qw temp_init, qw coil_SA]
+  [TCon AssumedCon $ C temp_init $< C temp_C] [qw temp_W]
+   [TCon AssumedCon $ 0 $< C time $< C time_final] []
+
 heatEInPCM :: RelationConcept
 heatEInPCM = makeRC "heatEInPCM" (nounPhraseSP "Heat energy in the PCM")
   htPCMDesc htPCM_Rel

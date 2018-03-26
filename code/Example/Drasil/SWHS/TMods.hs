@@ -2,7 +2,7 @@
 {-# LANGUAGE FlexibleContexts #-}
 module Drasil.SWHS.TMods (tModels, t1ConsThermE, 
   theory_model_swhsTMods, theory_model_T1,
-  t1ConsThermE_new) where
+  t1ConsThermE_new, t2SensHtE_new, theory_model_T2, t2SensHtE) where
 
 import Language.Drasil
 import Control.Lens ((^.))
@@ -88,6 +88,12 @@ t1descr = foldlSent [
 -------------------------
 -- Theoretical Model 2 --
 -------------------------
+t2SensHtE_new :: TheoryModel
+t2SensHtE_new = tm (cw t2SensHtE)
+  (tc' "SensHtE_new" [qw sens_heat, qw htCap_S, qw mass, 
+    qw deltaT, qw melt_pt, qw temp, qw htCap_L, qw boil_pt, qw htCap_V] ([] :: [CWrapper])
+  [] [TCon Invariant sensHtEEqn] [])
+
 --s4_2_2_T2
 theory_model_T2 :: [Contents]
 theory_model_T2 = map swhsSymbMapT [t2SensHtE]

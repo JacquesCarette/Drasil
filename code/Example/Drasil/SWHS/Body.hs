@@ -40,11 +40,13 @@ import Drasil.SWHS.Unitals (pcm_SA, temp_W, temp_PCM, pcm_HTC, pcm_E,
 import Drasil.SWHS.Concepts (progName, sWHT, water, rightSide, phsChgMtrl,
   coil, perfect_insul, tank, transient, gauss_div, swhs_pcm,
   phase_change_material, tank_pcm)
-import Drasil.SWHS.TMods (tModels, t1ConsThermE, theory_model_swhsTMods)
-import Drasil.SWHS.IMods (insta_model_IMods)
+import Drasil.SWHS.TMods (tModels, t1ConsThermE, theory_model_swhsTMods, t1ConsThermE_new,
+ t2SensHtE_new)
+import Drasil.SWHS.IMods (insta_model_IMods, heatEInWtr_new, eBalanceOnWtr_new,
+  heatEInPCM_new, eBalanceOnPCM_new)
 import Drasil.SWHS.DataDefs (swhsSymbMapDRef, swhsSymbMapTRef, swhsDataDefs,
-  dd1HtFluxC, dd2HtFluxP, swhsSymbMapT, data_def_swhsDataDefs)
-import Drasil.SWHS.GenDefs (swhsGenDefs)
+  dd1HtFluxC, dd2HtFluxP, dd3HtFusion, dd4MeltFrac, swhsSymbMapT, data_def_swhsDataDefs)
+import Drasil.SWHS.GenDefs (swhsGenDefs, nwtnCooling, rocTempSimp)
 import Drasil.SWHS.References (ref_swhs_citations)
 import Drasil.SWHS.Assumptions (assumps_list, assump3, assump4, assump5,
   assump6, assump13, assump15, assump16, assump17, assump18)
@@ -53,12 +55,12 @@ import Drasil.SWHS.Requirements (req1, req2, func_req_Eqn1, func_req_Eqn2,
 import Drasil.SWHS.LikelyChanges (likeChg1, likeChg2, likeChg3, likeChg4,
   likeChg5, likeChg6)
 import Drasil.SWHS.DataDesc (swhsInputMod)
-
+import Drasil.DocumentLanguage.Chunk.GenDefn
 import qualified Drasil.SRS as SRS (inModel, missingP, likeChg,
   funcReq, propCorSol, genDefn, dataDefn, thModel, probDesc, goalStmt,
   sysCont, reference)
 
-import Drasil.DocumentLanguage (DocDesc, mkDoc, tsymb'',
+import Drasil.DocumentLanguage {-(DocDesc, mkDoc, tsymb'',
   LFunc (TermExcept),
   Literature (Lit, Doc'),
   TSIntro (SymbOrder, SymbConvention, TSPurpose),
@@ -67,8 +69,8 @@ import Drasil.DocumentLanguage (DocDesc, mkDoc, tsymb'',
   IntroSec (IntroProg),
   RefTab (TAandA, TUnits),
   RefSec (RefProg),
-  AuxConstntSec (AuxConsProg))
-
+  AuxConstntSec (AuxConsProg))-}
+import Drasil.DocumentLanguage.Definitions
 import Drasil.Sections.ReferenceMaterial (intro)
 import Drasil.Sections.SpecificSystemDescription (inModelF, assumpF,
   inDataConstTbl, outDataConstTbl, dataConstraintUncertainty, solChSpecF,
@@ -82,7 +84,7 @@ import Data.Drasil.Utils (enumSimple, weave, getES, itemRefToSent, makeListRef,
 import Data.Drasil.SentenceStructures (acroIM, acroGD, acroGS, showingCxnBw,
   foldlSent, foldlSent_, foldlSP, foldlSP_, foldlSPCol, foldlsC, isThe, ofThe,
   ofThe', sAnd, sOf, foldlList)
-
+import Data.Drasil.Units.Thermodynamics (thermal_flux)
 -------------------------------------------------------------------------------
 
 acronyms :: [CI]
@@ -128,10 +130,10 @@ swhsPeople :: [Person]
 swhsPeople = [thulasi, brooks, spencerSmith]
 
 mkSRS :: DocDesc
-mkSRS = [RefSec (RefProg intro
-  [TUnits, tsymb'' tsymb_intro (TermExcept [uNormalVect]), TAandA])] ++
+mkSRS = RefSec (RefProg intro
+  [TUnits, tsymb'' tsymb_intro (TermExcept [uNormalVect]), TAandA]):
 
-  [IntroSec (IntroProg (intro_intro CT.ener_src energy swhs_pcm phsChgMtrl 
+  IntroSec (IntroProg (intro_intro CT.ener_src energy swhs_pcm phsChgMtrl 
     progName CT.thermal_energy latent_heat unit_) (intro_kSent swhs_pcm program
     progName) [
    
@@ -143,11 +145,30 @@ mkSRS = [RefSec (RefProg intro
   IChar (charac_of_reader_knowledge CT.ht_trans_theo) (charac_of_reader_understanding de) (EmptyS),
   
   IOrgSec (org_of_doc_intro) (inModel) (SRS.inModel SRS.missingP [])
-  (org_of_doc_trail swhs_pcm progName)])] ++
+  (org_of_doc_trail swhs_pcm progName)]):
+  Verbatim gen_sys_desc: 
+  ------
+  SSDSec 
+    (SSDProg [SSDSubVerb problem_desc
+      , SSDSolChSpec 
+        (SCSProg 
+          [ TMs ([Label] ++ stdFields) [t1ConsThermE_new, t2SensHtE_new]
+          , GDs [Label, Units, DefiningEquation   ---check glassbr
+          , Description Verbose IncludeUnits
+          , Source, RefBy] generalDefinitions ShowDerivation
+          , DDs ([Label, Symbol, Units] ++ stdFields) [dd1HtFluxC, dd2HtFluxP, dd3HtFusion,
+            dd4MeltFrac] ShowDerivation
+          , IMs ([Label, Input, Output, InConstraints, OutConstraints] ++ stdFields)
+           [eBalanceOnWtr_new, heatEInWtr_new, heatEInPCM_new, eBalanceOnPCM_new] ShowDerivation
+          ]
+        )
+      ]
+    ): --Testing General Definitions.-}
   
   map Verbatim [gen_sys_desc, spec_sys_desc, req, likely_chng, trace_matrix_grph] ++ 
     [AuxConstntSec (AuxConsProg progName specParamValList)] ++ 
     [Bibliography ref_swhs_citations]
+
 
 swhsCode :: CodeSpec
 swhsCode = codeSpec' swhs_si [swhsInputMod]
@@ -159,6 +180,13 @@ tsymb_intro = [TSPurpose, SymbConvention
 swhs_srs' :: Document
 swhs_srs' = mkDoc mkSRS (for) swhs_si
 
+
+generalDefinitions :: [GenDefn]
+generalDefinitions = [gd nwtnCooling (Just thermal_flux) ([] :: Attributes),
+  gd rocTempSimp (Nothing :: Maybe DerUChunk) []]
+
+stdFields :: Fields
+stdFields = [DefiningEquation, Description Verbose IncludeUnits, Source, RefBy]
 -- It is sometimes hard to remember to add new sections both here and above.
 
 -- =================================== --

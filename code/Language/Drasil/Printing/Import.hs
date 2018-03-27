@@ -1,9 +1,10 @@
 module Language.Drasil.Printing.Import(space,expr,symbol) where
 
-import Language.Drasil.Expr (Expr(..), BinOp(..), UFunc(..), Oper(..),
+import Language.Drasil.Expr (Expr(..), BinOp(..), UFunc(..), ArithOper(..),
+    BoolOper(..),
     DerivType(..), EOperator(..), DomainDesc(..), RealRange(..), UID,
     RealInterval(..),Inclusive(..))
-import Language.Drasil.Expr.Precedence (prec, eprec)
+import Language.Drasil.Expr.Precedence (precA, precB, eprec)
 import qualified Language.Drasil.Printing.AST as P
 
 import qualified Language.Drasil.Chunk.SymbolForm as SF
@@ -43,10 +44,10 @@ expr :: HasSymbolTable s => Expr -> s -> P.Expr
 expr (Dbl d)          _ = P.Dbl   d
 expr (Int i)          _ = P.Int   i
 expr (Str s)          _ = P.Str   s
-expr (Assoc And l)    sm = P.Row $ intersperse (P.MO P.And) $ map (expr' sm (prec And)) l
-expr (Assoc Or l)     sm = P.Row $ intersperse (P.MO P.Or) $ map (expr' sm (prec Or)) l
-expr (Assoc Add l)     sm = P.Row $ intersperse (P.MO P.Add) $ map (expr' sm (prec Add)) l
-expr (Assoc Mul l)     sm = P.Row $ intersperse (P.MO P.Mul) $ map (expr' sm (prec Mul)) l
+expr (AssocB And l)    sm = P.Row $ intersperse (P.MO P.And) $ map (expr' sm (precB And)) l
+expr (AssocB Or l)     sm = P.Row $ intersperse (P.MO P.Or) $ map (expr' sm (precB Or)) l
+expr (AssocA Add l)     sm = P.Row $ intersperse (P.MO P.Add) $ map (expr' sm (precA Add)) l
+expr (AssocA Mul l)     sm = P.Row $ intersperse (P.MO P.Mul) $ map (expr' sm (precA Mul)) l
 expr (Deriv Part a b) sm =
   P.Div (P.Row [P.Spec Partial, P.Spc P.Thin, expr a sm])
         (P.Row [P.Spec Partial, P.Spc P.Thin,
@@ -114,7 +115,7 @@ neg' :: Expr -> Bool
 neg' (Dbl     _)     = True
 neg' (Int     _)     = True
 neg' (EOp _)         = True
-neg' (Assoc Mul _)   = True
+neg' (AssocA Mul _)   = True
 neg' (BinaryOp Index _ _) = True
 neg' (UnaryOp _ _)   = True
 neg' (C _)           = True
@@ -182,10 +183,10 @@ sFormat Prime  s = P.Row [symbol s, P.MO P.Prime]
 
 -- | Helper for properly rendering exponents
 pow :: HasSymbolTable ctx => ctx -> Expr -> Expr -> P.Expr
-pow sm a@(Assoc Add _)  b = P.Row [P.Fenced P.Paren P.Paren (expr a sm), P.Sup (expr b sm)]
+pow sm a@(AssocA Add _)  b = P.Row [P.Fenced P.Paren P.Paren (expr a sm), P.Sup (expr b sm)]
 pow sm a@(BinaryOp Subt _ _) b = P.Row [P.Fenced P.Paren P.Paren (expr a sm), P.Sup (expr b sm)]
 pow sm a@(BinaryOp Frac _ _) b = P.Row [P.Fenced P.Paren P.Paren (expr a sm), P.Sup (expr b sm)]
-pow sm a@(Assoc Mul _)  b = P.Row [P.Fenced P.Paren P.Paren (expr a sm), P.Sup (expr b sm)]
+pow sm a@(AssocA Mul _)  b = P.Row [P.Fenced P.Paren P.Paren (expr a sm), P.Sup (expr b sm)]
 pow sm a@(BinaryOp Pow _ _)  b = P.Row [P.Fenced P.Paren P.Paren (expr a sm), P.Sup (expr b sm)]
 pow sm a                b = P.Row [expr a sm, P.Sup (expr b sm)]
 

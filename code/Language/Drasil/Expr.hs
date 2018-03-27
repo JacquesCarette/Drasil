@@ -30,8 +30,9 @@ data BinOp = Frac | Pow | Subt | Eq | NEq | Lt | Gt | LEq | GEq | Impl | Iff | I
   | Dot | Cross
   deriving Eq
 
-data Oper = Add | Mul | And | Or
-  deriving (Eq)
+data ArithOper = Add | Mul deriving (Eq)
+
+data BoolOper = And | Or deriving (Eq)
 
 -- | Unary functions
 data UFunc = Norm | Abs | Log | Sin | Cos | Tan | Sec | Csc | Cot | Exp
@@ -42,7 +43,8 @@ data Expr where
   Dbl      :: Double -> Expr
   Int      :: Integer -> Expr
   Str      :: String -> Expr
-  Assoc    :: Oper -> [Expr] -> Expr
+  AssocA   :: ArithOper -> [Expr] -> Expr
+  AssocB   :: BoolOper  -> [Expr] -> Expr
   Deriv    :: DerivType -> Expr -> UID -> Expr 
   -- Derivative, syntax is:
   -- Type (Partial or total) -> principal part of change -> with respect to
@@ -77,8 +79,8 @@ a $/ b = BinaryOp Frac a b
 
 ($^), ($&&), ($||) :: Expr -> Expr -> Expr
 ($^) = BinaryOp Pow
-a $&& b = Assoc And [a,b]
-a $|| b = Assoc Or  [a,b]
+a $&& b = AssocB And [a,b]
+a $|| b = AssocB Or  [a,b]
 
 sy :: (Chunk c, HasSymbol c) => c -> Expr
 sy x = C (x ^. uid)
@@ -93,8 +95,8 @@ data DerivType = Part | Total deriving Eq
 
 -- TODO: have $+ flatten nest Adds
 instance Num Expr where
-  a + b = Assoc Add [a, b]
-  a * b = Assoc Mul [a, b]
+  a + b = AssocA Add [a, b]
+  a * b = AssocA Mul [a, b]
   a - b = BinaryOp Subt a b
   fromInteger a = Int a
   abs = UnaryOp Abs
@@ -108,7 +110,8 @@ instance Eq Expr where
   Dbl a == Dbl b               =  a == b
   Int a == Int b               =  a == b
   Str a == Str b               =  a == b
-  Assoc o1 l1 == Assoc o2 l2   =  o1 == o2 && l1 == l2
+  AssocA o1 l1 == AssocA o2 l2   =  o1 == o2 && l1 == l2
+  AssocB o1 l1 == AssocB o2 l2   =  o1 == o2 && l1 == l2
   Deriv t1 a b == Deriv t2 c d =  t1 == t2 && a == c && b == d
   C a == C b                   =  a == b
   FCall a b == FCall c d       =  a == c && b == d

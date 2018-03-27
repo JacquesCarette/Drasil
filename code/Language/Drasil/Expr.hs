@@ -142,7 +142,8 @@ data EOperator where
 data DomainDesc where
   RealDD :: Symbol -> RealRange Double -> DomainDesc
   IntegerDD :: Symbol -> RealRange Integer -> DomainDesc
-  All :: Symbol -> DomainDesc
+  AllReal :: Symbol -> DomainDesc
+  AllInt :: Symbol -> DomainDesc
 
 data Inclusive a where
   Inc :: a -> Inclusive a

@@ -146,19 +146,22 @@ eop :: HasSymbolTable s => EOperator -> s -> P.Expr
 eop (Summation (IntegerDD v (BoundedR l h)) e) sm =
   P.Row [P.MO P.Summ, P.Sub (P.Row [symbol v, P.MO P.Eq, expr l sm]), P.Sup (expr h sm),
          P.Row [expr e sm]]
-eop (Summation (All _) e) sm = P.Row [P.MO P.Summ, P.Row [expr e sm]]
+eop (Summation (AllInt _) e) sm = P.Row [P.MO P.Summ, P.Row [expr e sm]]
+eop (Summation (AllReal _) _) _ = error "HTML/Import.hs Summation cannot be over Real"
 eop (Summation(RealDD _ _) _) _ = error "HTML/Import.hs Summation cannot be over Real"
 eop (Product (IntegerDD v (BoundedR l h)) e) sm =
   P.Row [P.MO P.Prod, P.Sub (P.Row [symbol v, P.MO P.Eq, expr l sm]), P.Sup (expr h sm),
          P.Row [expr e sm]]
-eop (Product (All _) e) sm = P.Row [P.MO P.Prod, P.Row[expr e sm]]
+eop (Product (AllInt _) e) sm = P.Row [P.MO P.Prod, P.Row[expr e sm]]
+eop (Product (AllReal _) _) _ = error "HTML/Import.hs Product cannot be over Real"
 eop (Product (RealDD _ _) _) _ = error "HTML/Import.hs Product cannot be over Real"
 eop (Integral (RealDD v (BoundedR l h)) e) sm =
   P.Row [P.MO P.Inte, P.Sub (expr l sm), P.Sup (expr h sm),
          P.Row [expr e sm], P.Spc P.Thin, P.Ident "d", symbol v]
-eop (Integral (All v) e) sm =
+eop (Integral (AllReal v) e) sm =
   P.Row [P.MO P.Inte, P.Sub (symbol v), P.Row [expr e sm], P.Spc P.Thin, 
          P.Ident "d", symbol v]
+eop (Integral (AllInt _) _) _ = error "HTML/Import.hs Integral cannot be over Integers"
 eop (Integral (IntegerDD _ _) _) _ =
   error "HTML/Import.hs Integral cannot be over Integers"
 

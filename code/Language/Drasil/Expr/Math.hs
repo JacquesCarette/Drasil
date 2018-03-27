@@ -73,13 +73,13 @@ defint, defsum, defprod :: Symbol -> Expr -> Expr -> Expr -> Expr
 int_all, sum_all, prod_all :: Symbol -> Expr -> Expr
 
 defint v low high e = EOp $ Integral (RealDD v (BoundedR low high)) e
-int_all v e = EOp $ Integral (All v) e
+int_all v e = EOp $ Integral (AllReal v) e
 
 defsum v low high e = EOp $ Summation (IntegerDD v (BoundedR low high)) e
-sum_all v e = EOp $ Summation (All v) e
+sum_all v e = EOp $ Summation (AllInt v) e
 
 defprod v low high e = EOp $ Product (IntegerDD v (BoundedR low high)) e
-prod_all v e = EOp $ Product (All v) e
+prod_all v e = EOp $ Product (AllInt v) e
 
 -- | Smart constructor for 'real interval' membership
 real_interval :: Chunk c => c -> RealInterval -> Expr

@@ -7,7 +7,6 @@ import Language.Drasil.Symbol
 import Language.Drasil.Expr
 import Language.Drasil.RefTypes
 import Language.Drasil.UnitLang (USymb)
-import qualified Language.Drasil.Printing.AST as PA
 
 -- | For writing accented characters
 data Accent = Grave | Acute deriving Eq

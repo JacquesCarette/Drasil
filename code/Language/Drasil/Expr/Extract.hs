@@ -115,6 +115,5 @@ codevars'_inc s (Inc e) = codevars' e s
 codevars'_inc s (Exc e) = codevars' e s
 
 unpackop :: EOperator -> Expr
-unpackop (Summation _ e) = e
 unpackop (Product _ e) = e
 unpackop (Integral _ e) = e

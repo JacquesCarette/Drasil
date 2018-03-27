@@ -50,7 +50,6 @@ eprec (FCall _ _)       = 210
 eprec (Case _)          = 200
 eprec (Matrix _)        = 220
 eprec (UnaryOp fn _)    = prec1 fn
-eprec (EOp (Summation _ _)) = prec Add
 eprec (EOp (Product _ _))   = prec Mul
 eprec (EOp (Integral _ _))  = prec Add
 eprec (BinaryOp bo _ _) = prec2 bo

@@ -124,9 +124,9 @@ instance Fractional Expr where
 
 -- | Operators
 -- All operators take a |DomainDesc| and a variable
+-- Summation is represented via Integral over a discrete domain
 -- FIXME: the Variable should not be an |Expr|
 data EOperator where
-  Summation :: DomainDesc -> Expr -> EOperator
   Product :: DomainDesc -> Expr -> EOperator
   Integral :: DomainDesc -> Expr -> EOperator
 
@@ -141,8 +141,9 @@ data EOperator where
 -- We use a phantom type in |RealRange| as a proxy for now
 data DomainDesc where
   RealDD :: Symbol -> RealRange Double -> DomainDesc
-  IntegerDD :: Symbol -> RealRange Integer -> DomainDesc
   AllReal :: Symbol -> DomainDesc
+
+  IntegerDD :: Symbol -> RealRange Integer -> DomainDesc
   AllInt :: Symbol -> DomainDesc
 
 data Inclusive a where

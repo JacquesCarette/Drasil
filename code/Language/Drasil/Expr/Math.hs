@@ -75,8 +75,8 @@ int_all, sum_all, prod_all :: Symbol -> Expr -> Expr
 defint v low high e = EOp $ Integral (RealDD v (BoundedR low high)) e
 int_all v e = EOp $ Integral (AllReal v) e
 
-defsum v low high e = EOp $ Summation (IntegerDD v (BoundedR low high)) e
-sum_all v e = EOp $ Summation (AllInt v) e
+defsum v low high e = EOp $ Integral (IntegerDD v (BoundedR low high)) e
+sum_all v e = EOp $ Integral (AllInt v) e
 
 defprod v low high e = EOp $ Product (IntegerDD v (BoundedR low high)) e
 prod_all v e = EOp $ Product (AllInt v) e

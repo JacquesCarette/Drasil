@@ -8,6 +8,7 @@ data Document = Document Title Author [LayoutObj]
 type Author   = Spec
 type Contents = Spec
 type Items    = [LayoutObj]
+type Tags     = [String]
 type Depth    = Int
 type Width    = Float
 type Height   = Float
@@ -15,7 +16,7 @@ type Label    = Spec
 type Filepath = String
 type Caption  = Spec
 
-data LayoutObj = Table [[Spec]] Label Bool Title
+data LayoutObj = Table Tags [[Spec]] Label Bool Caption
                | Section Depth Title [LayoutObj] Label
                | Paragraph Contents
                | EqnBlock Contents

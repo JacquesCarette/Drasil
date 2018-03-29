@@ -68,7 +68,7 @@ sec sm depth x@(Section title contents _) =
 
 lay :: HasSymbolTable ctx => ctx -> Contents -> T.LayoutObj
 lay sm x@(Table hdr lls t b _)
-  | null lls || length hdr == length (head lls) = T.Table ((map (spec sm) hdr) :
+  | null lls || length hdr == length (head lls) = T.Table [] ((map (spec sm) hdr) :
       (map (map (spec sm)) lls)) (P.S (refAdd x)) b (spec sm t)
   | otherwise = error $ "Attempting to make table with " ++ show (length hdr) ++
                         " headers, but data contains " ++

@@ -84,7 +84,7 @@ parseDoc los' = ([FullPage, HyperRef, AMSMath, AMSsymb, Mathtools, Breqn] ++
   where 
     res = map parseDoc' los'
     parseDoc' :: LayoutObj -> ([Package], [Def])
-    parseDoc' (Table _ _ _ _) = ([Tabu,LongTable,BookTabs,Caption], [TabuLine])
+    parseDoc' (Table _ _ _ _ _) = ([Tabu,LongTable,BookTabs,Caption], [TabuLine])
     parseDoc' (Section _ _ slos _) = 
       let res1 = map parseDoc' slos in
       let pp = concat $ map fst res1 in

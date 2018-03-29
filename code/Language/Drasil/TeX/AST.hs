@@ -16,6 +16,7 @@ type Label    = Spec
 type Filepath = String
 type Caption  = Spec
 
+data ALUR = Assumption | LikelyChange | UnlikelyChange | Requirement
 data LayoutObj = Table Tags [[Spec]] Label Bool Caption
                | Section Depth Title [LayoutObj] Label
                | Paragraph Contents
@@ -23,10 +24,7 @@ data LayoutObj = Table Tags [[Spec]] Label Bool Caption
                | Definition [(String,[LayoutObj])] Label
                | List ListType
                | Figure Label Caption Filepath MaxWidthPercent
-               | Requirement Contents Label
-               | Assumption Contents Label
-               | LikelyChange Contents Label
-               | UnlikelyChange Contents Label
+               | ALUR ALUR Contents Label
                | Graph [(Spec, Spec)] (Maybe Width) (Maybe Height) Caption Label
                | Bib BibRef
                | Defnt DType [(String,[LayoutObj])] Label -- To replace Definition eventually

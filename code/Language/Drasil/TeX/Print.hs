@@ -48,10 +48,10 @@ lo (Definition ssPs l) sm  = toText $ makeDefn sm ssPs $ spec l
 lo (Defnt _ ssPs l)    sm  = toText $ makeDefn sm ssPs $ spec l
 lo (List l)             _  = toText $ makeList l
 lo (Figure r c f wp)    _  = toText $ makeFigure (spec r) (spec c) f wp
-lo (Requirement n l)    _  = toText $ makeReq (spec n) (spec l)
-lo (Assumption n l)     _  = toText $ makeAssump (spec n) (spec l)
-lo (LikelyChange n l)   _  = toText $ makeLC (spec n) (spec l)
-lo (UnlikelyChange n l) _  = toText $ makeUC (spec n) (spec l)
+lo (ALUR Requirement n l)    _  = toText $ makeReq (spec n) (spec l)
+lo (ALUR Assumption n l)     _  = toText $ makeAssump (spec n) (spec l)
+lo (ALUR LikelyChange n l)   _  = toText $ makeLC (spec n) (spec l)
+lo (ALUR UnlikelyChange n l) _  = toText $ makeUC (spec n) (spec l)
 lo (Bib bib)            sm = toText $ makeBib sm bib
 lo (Graph ps w h c l)   _  = toText $ makeGraph
   (map (\(a,b) -> (spec a, spec b)) ps)

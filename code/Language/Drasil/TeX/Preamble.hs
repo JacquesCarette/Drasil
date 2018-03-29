@@ -97,10 +97,10 @@ parseDoc los' = ([FullPage, HyperRef, AMSMath, AMSsymb, Mathtools, Breqn] ++
       let dd = concat $ map snd res1 in
       (Tabu:LongTable:BookTabs:pp,TabuLine:dd)
     parseDoc' (Figure _ _ _ _) = ([Graphics,Caption],[])
-    parseDoc' (Requirement _ _) = ([], [ReqCounter])
-    parseDoc' (Assumption _ _) = ([], [AssumpCounter])
-    parseDoc' (LikelyChange _ _) = ([], [LCCounter])
-    parseDoc' (UnlikelyChange _ _) = ([], [UCCounter])
+    parseDoc' (ALUR Requirement _ _) = ([], [ReqCounter])
+    parseDoc' (ALUR Assumption _ _) = ([], [AssumpCounter])
+    parseDoc' (ALUR LikelyChange _ _) = ([], [LCCounter])
+    parseDoc' (ALUR UnlikelyChange _ _) = ([], [UCCounter])
     parseDoc' (Graph _ _ _ _ _) = ([Caption,Tikz,Dot2Tex,AdjustBox],[])
     parseDoc' (Bib _) = ([FileContents,BibLaTeX,URL],[Bibliography])
     parseDoc' _ = ([], [])-- ignore the rest?

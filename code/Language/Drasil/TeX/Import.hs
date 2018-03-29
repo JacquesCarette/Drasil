@@ -5,7 +5,7 @@ import Control.Lens ((^.))
 import Language.Drasil.Expr (sy, ($=))
 import Language.Drasil.Chunk.AssumpChunk
 import Language.Drasil.Expr.Extract
-import Language.Drasil.Chunk.Change (chng, chngType, ChngType(..))
+import Language.Drasil.Chunk.Change (chng, chngType, ChngType(Likely))
 import Language.Drasil.Chunk.Concept (defn)
 import Language.Drasil.Spec
 import qualified Language.Drasil.TeX.AST as T
@@ -79,12 +79,13 @@ lay sm (EqnBlock c _)        = T.EqnBlock (P.E (expr c sm))
 lay sm x@(Definition c)       = T.Definition (makePairs sm c) (P.S (refAdd x))
 lay sm (Enumeration cs)       = T.List $ makeL sm cs
 lay sm x@(Figure c f wp _)    = T.Figure (P.S (refAdd x)) (spec sm c) f wp
-lay sm x@(Requirement r)      =
-  T.Requirement (spec sm (requires r)) (P.S (refAdd x))
-lay sm x@(Assumption a)       =
-  T.Assumption (spec sm (assuming a)) (P.S (refAdd x))
-lay sm x@(Change lc)    = (if (chngType lc) == Likely then 
-  T.LikelyChange else T.UnlikelyChange) (spec sm (chng lc)) (P.S (refAdd x))
+lay sm x@(Requirement r)      = T.ALUR T.Requirement (spec sm (requires r)) (P.S (refAdd x))
+lay sm x@(Assumption a)       = T.ALUR T.Assumption (spec sm (assuming a)) (P.S (refAdd x))
+lay sm x@(Change ct)          = 
+  if chngType ct == Likely then
+    T.ALUR T.LikelyChange (spec sm (chng ct)) (P.S (refAdd x))
+  else
+    T.ALUR T.UnlikelyChange (spec sm (chng ct)) (P.S (refAdd x))
 lay sm x@(Graph ps w h t _)   = T.Graph (map (\(y,z) -> (spec sm y, spec sm z)) ps)
                                w h (spec sm t) (P.S (refAdd x))
 lay sm (Defnt dtyp pairs rn)  = T.Defnt dtyp (layPairs pairs) (P.S rn)

@@ -70,7 +70,7 @@ createLayout secs sm = map (flip (sec 0) sm) secs
 sec :: HasSymbolTable s => Int -> Section -> s -> H.LayoutObj
 sec depth x@(Section title contents _) sm =
   H.HDiv [(concat $ replicate depth "sub") ++ "section"]
-  ((H.Header (depth+2) (spec title sm)):(map (flip (layout depth) sm) contents))
+  ((H.Header (depth+2) (spec title sm) P.EmptyS):(map (flip (layout depth) sm) contents))
   (P.S (refAdd x))
 
 -- | Translates from Contents to the HTML Representation of LayoutObj.

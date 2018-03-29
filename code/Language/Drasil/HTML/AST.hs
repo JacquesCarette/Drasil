@@ -11,13 +11,14 @@ type Author   = Spec
 type Contents = Spec
 type Items    = [LayoutObj]
 type Tags     = [String]
+type Depth    = Int
 type Label    = Spec
 type Filepath = String
 type Caption  = Spec
 
 data ALUR = Assumption | LikelyChange | UnlikelyChange | Requirement
 data LayoutObj = Table Tags [[Spec]] Label Bool Caption
-               | Header Int Contents
+               | Header Depth Title Label
                | Paragraph Contents
                | HDiv Tags [LayoutObj] Label
                | Tagless Contents

@@ -98,20 +98,20 @@ mkSRS = RefSec (RefProg intro [TUnits, tsymb [TSPurpose, SymbOrder], TAandA]) :
     SystCons [] []]) :
   ScpOfProjSec (ScpOfProjProg (short gLassBR) (s5_1_table) (s5_2 (glaSlab)
     (capacity) (demandq) (probability))) :
-  SSDSec (SSDVerb s6) : {-
+  --SSDSec (SSDVerb s6) : 
   SSDSec 
-    (SSDProg
+    (SSDProg  --first argument
       [SSDProblem  (PDProg start gLassBR ending [s6_1_1, s6_1_2, s6_1_3])
-      , SSDSolChSpec 
+      , SSDSolChSpec -- second argument
         (SCSProg
-          [ TMs ([Label] ++ stdFields) [t1IsSafe]
+          [ TMs ([Label] ++ stdFields) [t1IsSafe] --【t1IsSafe, t2issafe】
           , GDs [] [] HideDerivation -- No Gen Defs for GlassBR
           , DDs ([Label, Symbol, Units] ++ stdFields) dataDefns ShowDerivation
           , IMs ([Label, Input, Output, InConstraints, OutConstraints] ++ stdFields) [probOfBreak, testIMFromQD] HideDerivation
           ]
         )
       ]
-    ) : -}
+    ): --probaly because of this :
   ReqrmntSec (ReqsProg [
     FReqsSub s7_1_list, 
     NonFReqsSub [performance] (gBRpriorityNFReqs)
@@ -125,7 +125,8 @@ mkSRS = RefSec (RefProg intro [TUnits, tsymb [TSPurpose, SymbOrder], TAandA]) :
   AuxConstntSec (AuxConsProg gLassBR auxiliaryConstants) :
   Bibliography gbCitations :
   AppndxSec (AppndxProg [s12_intro, fig_5, fig_6]) : []
-  
+ 
+-- this is to control what sections having to be shown and the order to show. 
 stdFields :: Fields
 stdFields = [DefiningEquation, Description Verbose IncludeUnits, Source, RefBy]
 

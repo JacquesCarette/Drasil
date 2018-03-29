@@ -4,6 +4,7 @@ module Drasil.SRS
   probDesc, termAndDefn, termogy, physSyst, goalStmt, solCharSpec, assump, thModel,
   genDefn, inModel, dataDefn, datCon, require, nonfuncReq, funcReq, likeChg, traceyMandG,
   appendix, reference, propCorSol, offShelfSol, missingP, valsOfAuxCons) where
+  	---zzzz A module in Haskell serves the dual purpose of controlling name-spaces and creating abstract data types. zzzz------
 --Temporary file for keeping the "srs" document constructor until I figure out
 -- a better place for it. Maybe Data.Drasil or Language.Drasil.Template?
 
@@ -11,7 +12,7 @@ module Drasil.SRS
 
 import Language.Drasil
 
-import qualified Data.Drasil.Concepts.Documentation as Doc
+import qualified Data.Drasil.Concepts.Documentation as Doc   --zzzz qualified means giving another name zzzz---
 
 -- Local function to keep things looking clean, not exported.
 forTT :: (NamedIdea c, NamedIdea d) => c -> d -> Sentence

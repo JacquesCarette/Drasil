@@ -17,6 +17,7 @@ import Prelude hiding (id)
 class Theory t where
   valid_context :: Simple Lens t [TWrapper]
   spaces :: Simple Lens t [SpaceDefn] 
+  --start here
   quantities :: Simple Lens t [QWrapper]
   operations :: Simple Lens t [CWrapper] -- FIXME: Should not be Concept
   defined_quant :: Simple Lens t [QDefinition]

@@ -185,9 +185,9 @@ sim_time = uc' "sim_time" (compoundPhrase' (simulation ^. term)
 -- Unitless symbols --
 ----------------------
 swhsUnitless :: [ConVar]
-swhsUnitless = [uNormalVect, surface, eta, melt_frac]
+swhsUnitless = [uNormalVect, surface, eta, melt_frac, frac_min]
 
-eta, melt_frac :: ConVar
+eta, melt_frac, frac_min :: ConVar
 
 eta = cvR (dcc "eta" (nounPhraseSP "ODE parameter")
   "Derived parameter based on rate of change of temperature of water")
@@ -197,6 +197,11 @@ melt_frac = cvR (dcc "melt_frac" (nounPhraseSP "melt fraction")
   "Ratio of thermal energy to amount of mass melted")
   --FIXME: Not sure if definition is exactly correct
   (Greek Phi_L)
+
+frac_min = cvR (dcc "frac_min" (nounPhraseSP "minmum fraction")
+  "minmum fraction")
+  (Atomic "MINFRACT")
+
 
 -----------------
 -- Constraints --
@@ -420,7 +425,7 @@ cons_tol = uvc "pb_tol"
 -------------------------
 
 specParamValList :: [QDefinition]
-specParamValList = [tank_length_min, tank_length_max, frac_min,
+specParamValList = [tank_length_min, tank_length_max,
   htTransCoeff_min, pcm_density_min, pcm_density_max, w_density_min, 
   w_density_max, htCap_S_P_min, htCap_S_P_max, htCap_L_P_min,
   htCap_L_P_max, htCap_W_min, htCap_W_max, coil_HTC_min, 
@@ -430,7 +435,7 @@ tank_length_min, tank_length_max, htTransCoeff_min, pcm_density_min,
   pcm_density_max, w_density_min, w_density_max, htCap_S_P_min, 
   htCap_S_P_max, htCap_L_P_min, htCap_L_P_max,
   htCap_W_min, htCap_W_max, coil_HTC_min, coil_HTC_max, pcm_HTC_min,
-  pcm_HTC_max, time_final_max, frac_min :: QDefinition
+  pcm_HTC_max, time_final_max :: QDefinition
 
 htFusion_min, htFusion_max, coil_SA_max :: UnitaryChunk
 
@@ -442,11 +447,6 @@ tank_length_min = mkDataDef (unitary "tank_length_min"
 tank_length_max = mkDataDef (unitary "tank_length_max"
   (nounPhraseSP "maximum length of tank")
   (sub (eqSymb tank_length) (Atomic "max")) metre Rational) (Int 50)
-
--- Used in Constraint 3
-frac_min = mkDataDef (unitary "frac_min"
-  (nounPhraseSP "minimum length of tank")
-  (Atomic "minfract") metre Rational) (Dbl 10e-6)
 
 -- Used in Constraint 4
 htTransCoeff_min = mkDataDef (unitary "htTransCoeff_min"

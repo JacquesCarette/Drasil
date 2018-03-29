@@ -18,6 +18,7 @@ This folder contains our working examples (implementations in Drasil of the prev
 **Sections**
   - Contains the files used to auto-generate the paragraphs of each case study.
   
+
 **SSP**
   - Contains the current state of the slope stability analysis case study implemented in Drasil
   

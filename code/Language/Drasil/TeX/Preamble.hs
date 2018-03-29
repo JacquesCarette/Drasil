@@ -90,8 +90,7 @@ parseDoc los' = ([FullPage, HyperRef, AMSMath, AMSsymb, Mathtools, Breqn] ++
       let pp = concat $ map fst res1 in
       let dd = concat $ map snd res1 in
       (pp, dd)
-   -- parseDoc' (CodeBlock _) = [Listings],[]
-    parseDoc' (Definition ps _) =
+    parseDoc' (Definition _ ps _) =
       let res1 = concat $ map (map parseDoc' . snd) ps in
       let pp = concat $ map fst res1 in
       let dd = concat $ map snd res1 in

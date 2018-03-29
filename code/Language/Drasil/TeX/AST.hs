@@ -17,14 +17,15 @@ type Filepath = String
 type Caption  = Spec
 
 data ALUR = Assumption | LikelyChange | UnlikelyChange | Requirement
-data LayoutObj = Table Tags [[Spec]] Label Bool Caption
-               | Section Depth Title [LayoutObj] Label
-               | Paragraph Contents
-               | EqnBlock Contents
-               | Definition [(String,[LayoutObj])] Label
-               | List ListType
-               | Figure Label Caption Filepath MaxWidthPercent
-               | ALUR ALUR Contents Label
-               | Graph [(Spec, Spec)] (Maybe Width) (Maybe Height) Caption Label
-               | Bib BibRef
-               | Defnt DType [(String,[LayoutObj])] Label -- To replace Definition eventually
+data LayoutObj = 
+     Table Tags [[Spec]] Label Bool Caption
+   | Section Depth Title [LayoutObj] Label
+   | Paragraph Contents
+   | Definition DType [(String,[LayoutObj])] Label -- To replace Definition eventually
+   | List ListType
+   | Figure Label Caption Filepath MaxWidthPercent
+   | ALUR ALUR Contents Label
+   | Bib BibRef
+   -- these are 'special' to TeX still
+   | EqnBlock Contents
+   | Graph [(Spec, Spec)] (Maybe Width) (Maybe Height) Caption Label

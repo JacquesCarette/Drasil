@@ -76,7 +76,7 @@ lay sm x@(Table hdr lls t b _)
 lay sm (Paragraph c)         = T.Paragraph (spec sm c)
 lay sm (EqnBlock c _)        = T.EqnBlock (P.E (expr c sm))
 --lay (CodeBlock c)         = T.CodeBlock c
-lay sm x@(Definition c)       = T.Definition (makePairs sm c) (P.S (refAdd x))
+lay sm x@(Definition c)       = T.Definition c (makePairs sm c) (P.S (refAdd x))
 lay sm (Enumeration cs)       = T.List $ makeL sm cs
 lay sm x@(Figure c f wp _)    = T.Figure (P.S (refAdd x)) (spec sm c) f wp
 lay sm x@(Requirement r)      = T.ALUR T.Requirement (spec sm (requires r)) (P.S (refAdd x))
@@ -88,7 +88,7 @@ lay sm x@(Change ct)          =
     T.ALUR T.UnlikelyChange (spec sm (chng ct)) (P.S (refAdd x))
 lay sm x@(Graph ps w h t _)   = T.Graph (map (\(y,z) -> (spec sm y, spec sm z)) ps)
                                w h (spec sm t) (P.S (refAdd x))
-lay sm (Defnt dtyp pairs rn)  = T.Defnt dtyp (layPairs pairs) (P.S rn)
+lay sm (Defnt dtyp pairs rn)  = T.Definition dtyp (layPairs pairs) (P.S rn)
   where layPairs = map (\(x,y) -> (x, map (lay sm) y))
 lay sm (Bib bib)          = T.Bib $ map (layCite sm) bib
 

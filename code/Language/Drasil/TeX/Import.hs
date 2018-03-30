@@ -55,17 +55,19 @@ makeDocument :: HasSymbolTable ctx => ctx -> Document -> T.Document
 makeDocument sm (Document title author sections) =
   T.Document (spec sm title) (spec sm author) (createLayout sm sections)
 
-layout :: HasSymbolTable ctx => ctx -> Int -> SecCons -> [T.LayoutObj]
+layout :: HasSymbolTable ctx => ctx -> Int -> SecCons -> T.LayoutObj
 layout sm currDepth (Sub s) = sec sm (currDepth+1) s
-layout sm _         (Con c) = [lay sm c]
+layout sm _         (Con c) = lay sm c
 
 createLayout :: HasSymbolTable ctx => ctx -> Sections -> [T.LayoutObj]
-createLayout sm = concatMap (sec sm 0)
+createLayout sm = map (sec sm 0)
 
-sec :: HasSymbolTable ctx => ctx -> Int -> Section -> [T.LayoutObj]
+sec :: HasSymbolTable ctx => ctx -> Int -> Section -> T.LayoutObj
 sec sm depth x@(Section title contents _) =
-  [T.Header depth (spec sm title) (P.S (refAdd x)),
-   T.Tagless $ concatMap (layout sm depth) contents ]
+  let ref = P.S (refAdd x) in
+  T.HDiv [] -- no need
+  (T.Header depth (spec sm title) ref :
+   map (layout sm depth) contents) P.EmptyS
 
 lay :: HasSymbolTable ctx => ctx -> Contents -> T.LayoutObj
 lay sm x@(Table hdr lls t b _)

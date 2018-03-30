@@ -85,7 +85,7 @@ parseDoc los' = ([FullPage, HyperRef, AMSMath, AMSsymb, Mathtools, Breqn] ++
     res = map parseDoc' los'
     parseDoc' :: LayoutObj -> ([Package], [Def])
     parseDoc' (Table _ _ _ _ _) = ([Tabu,LongTable,BookTabs,Caption], [TabuLine])
-    parseDoc' (Tagless slos) = 
+    parseDoc' (HDiv _ slos _) = 
       let res1 = map parseDoc' slos in
       let pp = concat $ map fst res1 in
       let dd = concat $ map snd res1 in

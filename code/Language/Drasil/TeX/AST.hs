@@ -28,5 +28,4 @@ data LayoutObj =
    | ALUR ALUR Contents Label
    | Bib BibRef
    | Graph [(Spec, Spec)] (Maybe Width) (Maybe Height) Caption Label
-   -- these are 'special' to TeX still
-   | Tagless [LayoutObj]
+   | HDiv Tags [LayoutObj] Label

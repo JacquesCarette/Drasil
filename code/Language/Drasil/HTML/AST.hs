@@ -30,5 +30,4 @@ data LayoutObj =
   | ALUR ALUR Contents Label Label
   | Bib BibRef
   | Graph [(Spec, Spec)] (Maybe Width) (Maybe Height) Caption Label
-  -- these are 'special' to HTML still
   | HDiv Tags [LayoutObj] Label

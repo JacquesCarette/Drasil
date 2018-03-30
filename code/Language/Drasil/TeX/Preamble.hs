@@ -3,8 +3,8 @@ module Language.Drasil.TeX.Preamble(genPreamble) where
 import Data.List (nub)
 
 import Language.Drasil.Config (hyperSettings, fontSize,bibFname)
+import Language.Drasil.Printing.LayoutObj
 import Language.Drasil.TeX.Monad
-import Language.Drasil.TeX.AST
 import Language.Drasil.TeX.Helpers
 
 -- FIXME: this really shouldn't be in code, it should be data!
@@ -96,10 +96,10 @@ parseDoc los' = ([FullPage, HyperRef, AMSMath, AMSsymb, Mathtools, Breqn] ++
       let dd = concat $ map snd res1 in
       (Tabu:LongTable:BookTabs:pp,TabuLine:dd)
     parseDoc' (Figure _ _ _ _) = ([Graphics,Caption],[])
-    parseDoc' (ALUR Requirement _ _) = ([], [ReqCounter])
-    parseDoc' (ALUR Assumption _ _) = ([], [AssumpCounter])
-    parseDoc' (ALUR LikelyChange _ _) = ([], [LCCounter])
-    parseDoc' (ALUR UnlikelyChange _ _) = ([], [UCCounter])
+    parseDoc' (ALUR Requirement _ _ _) = ([], [ReqCounter])
+    parseDoc' (ALUR Assumption _ _ _) = ([], [AssumpCounter])
+    parseDoc' (ALUR LikelyChange _ _ _) = ([], [LCCounter])
+    parseDoc' (ALUR UnlikelyChange _ _ _) = ([], [UCCounter])
     parseDoc' (Graph _ _ _ _ _) = ([Caption,Tikz,Dot2Tex,AdjustBox],[])
     parseDoc' (Bib _) = ([FileContents,BibLaTeX,URL],[Bibliography])
     parseDoc' (Header _ _ _) = ([], [])

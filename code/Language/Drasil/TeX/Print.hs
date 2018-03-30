@@ -10,7 +10,7 @@ import Control.Applicative (pure)
 
 import Language.Drasil.Printing.AST
 import Language.Drasil.Printing.Citation
-import Language.Drasil.TeX.AST
+import Language.Drasil.Printing.LayoutObj
 import qualified Language.Drasil.TeX.Import as I
 import qualified Language.Drasil.Spec as LS
 import qualified Language.Drasil.RefTypes as RT
@@ -48,10 +48,10 @@ lo (Table _ rows r bl t) _  = toText $ makeTable rows (spec r) bl (spec t)
 lo (Definition _ ssPs l) sm  = toText $ makeDefn sm ssPs $ spec l
 lo (List l)               _  = toText $ makeList l
 lo (Figure r c f wp)      _  = toText $ makeFigure (spec r) (spec c) f wp
-lo (ALUR Requirement n l)    _  = toText $ makeReq (spec n) (spec l)
-lo (ALUR Assumption n l)     _  = toText $ makeAssump (spec n) (spec l)
-lo (ALUR LikelyChange n l)   _  = toText $ makeLC (spec n) (spec l)
-lo (ALUR UnlikelyChange n l) _  = toText $ makeUC (spec n) (spec l)
+lo (ALUR Requirement n l _)    _  = toText $ makeReq (spec n) (spec l)
+lo (ALUR Assumption n l _)     _  = toText $ makeAssump (spec n) (spec l)
+lo (ALUR LikelyChange n l _)   _  = toText $ makeLC (spec n) (spec l)
+lo (ALUR UnlikelyChange n l _) _  = toText $ makeUC (spec n) (spec l)
 lo (Bib bib)            sm = toText $ makeBib sm bib
 lo (Graph ps w h c l)   _  = toText $ makeGraph
   (map (\(a,b) -> (spec a, spec b)) ps)

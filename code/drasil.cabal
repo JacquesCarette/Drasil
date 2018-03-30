@@ -74,12 +74,10 @@ library
     , Language.Drasil.Code.Imperative.LanguageRenderer.PythonRenderer
     , Language.Drasil.Code.CodeGeneration
     , Language.Drasil.Code.Imperative.Parsers.ConfigParser
-    , Language.Drasil.HTML.AST
     , Language.Drasil.HTML.Helpers
     , Language.Drasil.HTML.Import
     , Language.Drasil.HTML.Print
     , Language.Drasil.HTML.Monad
-    , Language.Drasil.TeX.AST
     , Language.Drasil.TeX.Helpers
     , Language.Drasil.TeX.Import
     , Language.Drasil.TeX.Print
@@ -124,6 +122,7 @@ library
     , Language.Drasil.Printing.AST
     , Language.Drasil.Printing.Citation
     , Language.Drasil.Printing.Import
+    , Language.Drasil.Printing.LayoutObj
     , Language.Drasil.DataDesc
 
   Build-Depends:

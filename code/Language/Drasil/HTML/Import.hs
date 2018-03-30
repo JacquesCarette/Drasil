@@ -4,7 +4,7 @@ import Language.Drasil.Expr (sy, ($=))
 import Language.Drasil.Spec
 import qualified Language.Drasil.Printing.AST as P
 import qualified Language.Drasil.Printing.Citation as PC
-import qualified Language.Drasil.HTML.AST as H
+import qualified Language.Drasil.Printing.LayoutObj as H
 
 import Language.Drasil.Chunk.AssumpChunk
 import Language.Drasil.Chunk.Attribute

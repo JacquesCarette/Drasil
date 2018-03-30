@@ -1,4 +1,4 @@
-module Language.Drasil.TeX.AST where
+module Language.Drasil.Printing.LayoutObj where
 
 import Language.Drasil.Document (MaxWidthPercent, DType)
 import Language.Drasil.Printing.AST
@@ -25,7 +25,7 @@ data LayoutObj =
    | Definition DType [(String,[LayoutObj])] Label -- To replace Definition eventually
    | List ListType
    | Figure Label Caption Filepath MaxWidthPercent
-   | ALUR ALUR Contents Label
+   | ALUR ALUR Contents Label Label
    | Bib BibRef
    | Graph [(Spec, Spec)] (Maybe Width) (Maybe Height) Caption Label
    | HDiv Tags [LayoutObj] Label

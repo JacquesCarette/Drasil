@@ -151,7 +151,7 @@ module Language.Drasil (
   , HasDefinitionTable, conceptMap, defTable
   , HasUnitTable, unitMap, unitTable
   -- AssumpChunk
-  , AssumpChunk, assuming, ac, ac'
+  , AssumpChunk, assuming, assump
   -- Referencing
   , ReferenceDB, AssumpMap, assumpLookup, assumptionsFromDB
   , rdb, assumpRefTable, customRef

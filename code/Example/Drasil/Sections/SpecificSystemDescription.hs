@@ -16,7 +16,7 @@ module Drasil.Sections.SpecificSystemDescription
   , inDataConstTbl, outDataConstTbl 
   ) where
 
-import Language.Drasil hiding (constraint)
+import Language.Drasil
 import Data.Drasil.Concepts.Documentation
 import Data.Drasil.Concepts.Math (equation)
 import Data.Drasil.Concepts.Software (program)
@@ -121,7 +121,7 @@ solutionCharSpecIntro progName instModelSection = foldlSP [S "The", plural inMod
 -- wrappers for assumpIntro. Use assumpF' if genDefs is not needed
 assumpF :: Section -> Section -> Section -> Section -> Section -> [Contents] -> Section
 assumpF theMod genDef dataDef inMod likeChg otherContents = 
-      SRS.assump ((assumpIntro theMod genDef dataDef inMod likeChg):otherContents) []
+      SRS.assumpt ((assumpIntro theMod genDef dataDef inMod likeChg):otherContents) []
 
 
 -- takes a bunch of references to things discribed in the wrapper

@@ -3,8 +3,6 @@ module Drasil.SWHS.IMods (s4_2_5_IMods,
 
 import Language.Drasil
 
-import Drasil.DocumentLanguage (mkAssump)
-
 import Drasil.SWHS.Unitals (t_init_melt, latentE_P, pcm_E, pcm_initMltE,
   temp_melt_P, temp_PCM, htCap_L_P, pcm_mass, htFusion, temp_init, htCap_S_P,
   melt_frac, temp_W, w_mass, w_E, htCap_W, tau_S_P, pcm_SA, tau_L_P, pcm_HTC,
@@ -49,8 +47,7 @@ balWtrDesc = foldlSent [(E $ sy temp_W) `isThe` phrase temp_W +:+.
   sParen (unwrap $ getUnit temp_W) `sAnd` (E 100),
   sParen (unwrap $ getUnit temp_W), S "are the", phrase melting `sAnd`
   plural boil_pt, S "of", phrase water `sC` S "respectively",
-  sParen (makeRef (mkAssump "assump14" EmptyS) `sC`
-  makeRef (mkAssump "assump19" EmptyS))]
+  sParen (makeRef a14 `sC` makeRef a19)]
 
 
 ---------
@@ -113,8 +110,7 @@ htWtrDesc = foldlSent [S "The above", phrase equation,
   sParen (unwrap $ getUnit temp_init), S "This", phrase equation,
   S "applies as long as", (E $ real_interval temp_W (Bounded (Exc 0) (Exc 100)))
   :+: (unwrap $ getUnit temp_W),
-  sParen $ makeRef (mkAssump "assump14" EmptyS) `sC`
-  makeRef (mkAssump "assump19" EmptyS)]
+  sParen $ makeRef a14 `sC` makeRef a19]
 
 ---------
 -- IM4 --
@@ -174,13 +170,11 @@ htPCMDesc = foldlSent [S "The above", phrase equation,
   S "for", phrase boiling, S "of the", short phsChgMtrl,
   S "is not detailed" `sC` S "since the", short phsChgMtrl,
   S "is assumed to either be in a", phrase solid, S "or", phrase liquid,
-  S "state", sParen (makeRef (mkAssump "assump18" EmptyS))]
+  S "state", sParen (makeRef a18)]
 
-
-
-{--varWithDesc :: N c => c -> Sentence
-varWithDesc conceptVar = (E $ sy conceptVar) `isThe` phrase conceptVar +:+.
-  sParen (unwrap $ getUnit conceptVar)
-
---need to create a wrapper
---}
+---------------
+-- FIXME, hacks
+a14, a18, a19 :: Contents
+a14 = Assumption $ assump "assump14" EmptyS (S "assump14")
+a18 = Assumption $ assump "assump18" EmptyS (S "assump18")
+a19 = Assumption $ assump "assump19" EmptyS (S "assump19")

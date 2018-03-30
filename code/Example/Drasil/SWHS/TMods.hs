@@ -1,12 +1,9 @@
-{-# OPTIONS -Wall #-}
-{-# LANGUAGE FlexibleContexts #-}
 module Drasil.SWHS.TMods (tModels, t1ConsThermE, 
   s4_2_2_swhsTMods, s4_2_2_T1) where
 
 import Language.Drasil
 import Control.Lens ((^.))
 
-import Drasil.DocumentLanguage (mkAssump)
 import Data.Drasil.Concepts.Documentation (system, acroNumGen)
 import Data.Drasil.SI_Units (joule)
 
@@ -68,10 +65,12 @@ t1descr = foldlSent [
   S "is the" +:+. (gradient ^. defn), S "For this", phrase equation,
   S "to apply" `sC` S "other forms of", phrase energy `sC` S "such as",
   phrase mech_energy `sC`
-  S "are assumed to be negligible in the", phrase system,
-  sParen (makeRef (mkAssump "assump1" EmptyS))]
+  S "are assumed to be negligible in the", phrase system, sParen (makeRef a1)]
 
 --referencing within a simple list is not yet implemented.
+-- FIXME
+a1 :: Contents
+a1 = Assumption $ assump "assump1" EmptyS (S "assump1")
 
 -------------------------
 -- Theoretical Model 2 --

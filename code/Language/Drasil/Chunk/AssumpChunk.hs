@@ -1,7 +1,7 @@
 {-# Language TemplateHaskell #-}
 module Language.Drasil.Chunk.AssumpChunk 
   ( AssumpChunk(..)
-  , ac, ac'
+  , assump
   ) where
 
 import Language.Drasil.Chunk
@@ -27,10 +27,5 @@ instance Eq AssumpChunk where
   
 -- | Smart constructor for Assumption chunks. The second 'Sentence' here is 
 -- a short name (attribute).
-ac :: String -> Sentence -> RefName -> AssumpChunk
-ac i a s = AC i a s [ShortName s]
-
--- | Smart constructor for Assumptions lacking a short name. FIXME: Remove this
--- and make shortnames mandatory.
-ac' :: String -> Sentence -> AssumpChunk
-ac' i a = AC i a (S i) [ShortName (S i)] -- FIXME: HACK
+assump :: String -> Sentence -> RefName -> AssumpChunk
+assump i a s = AC i a s [ShortName s]

@@ -1,8 +1,6 @@
 module Drasil.NoPCM.IMods (eBalanceOnWtr) where
 
 import Language.Drasil
-import Drasil.DocumentLanguage (mkAssump)
-
 
 import Drasil.SWHS.Concepts (water)
 import Drasil.SWHS.Unitals
@@ -37,5 +35,8 @@ balWtrDesc = foldlSent [(E $ sy temp_W) `isThe` phrase temp_W +:+.
   sParen (unwrap $ getUnit temp_W) `sAnd` (E 100),
   sParen (unwrap $ getUnit temp_W), S "are the", phrase melting `sAnd`
   plural boil_pt, S "of", phrase water `sC` S "respectively",
-  sParen (makeRef (mkAssump "assump10" EmptyS))]
-  
+  sParen (makeRef a10)]
+
+-- FIXME
+a10 :: Contents
+a10 = Assumption $ assump "assump10" EmptyS (S "assump10")

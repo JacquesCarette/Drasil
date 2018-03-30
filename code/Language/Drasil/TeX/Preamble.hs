@@ -85,7 +85,7 @@ parseDoc los' = ([FullPage, HyperRef, AMSMath, AMSsymb, Mathtools, Breqn] ++
     res = map parseDoc' los'
     parseDoc' :: LayoutObj -> ([Package], [Def])
     parseDoc' (Table _ _ _ _ _) = ([Tabu,LongTable,BookTabs,Caption], [TabuLine])
-    parseDoc' (Section _ _ slos _) = 
+    parseDoc' (Tagless slos) = 
       let res1 = map parseDoc' slos in
       let pp = concat $ map fst res1 in
       let dd = concat $ map snd res1 in
@@ -102,4 +102,7 @@ parseDoc los' = ([FullPage, HyperRef, AMSMath, AMSsymb, Mathtools, Breqn] ++
     parseDoc' (ALUR UnlikelyChange _ _) = ([], [UCCounter])
     parseDoc' (Graph _ _ _ _ _) = ([Caption,Tikz,Dot2Tex,AdjustBox],[])
     parseDoc' (Bib _) = ([FileContents,BibLaTeX,URL],[Bibliography])
-    parseDoc' _ = ([], [])-- ignore the rest?
+    parseDoc' (Header _ _ _) = ([], [])
+    parseDoc' (Paragraph _)  = ([], [])
+    parseDoc' (List _)       = ([], [])
+    parseDoc' (EqnBlock _)   = ([], [])

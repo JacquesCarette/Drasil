@@ -19,13 +19,14 @@ type Caption  = Spec
 data ALUR = Assumption | LikelyChange | UnlikelyChange | Requirement
 data LayoutObj = 
      Table Tags [[Spec]] Label Bool Caption
-   | Section Depth Title [LayoutObj] Label
+   | Header Depth Title Label
    | Paragraph Contents
+   | EqnBlock Contents
    | Definition DType [(String,[LayoutObj])] Label -- To replace Definition eventually
    | List ListType
    | Figure Label Caption Filepath MaxWidthPercent
    | ALUR ALUR Contents Label
    | Bib BibRef
    -- these are 'special' to TeX still
-   | EqnBlock Contents
+   | Tagless [LayoutObj]
    | Graph [(Spec, Spec)] (Maybe Width) (Maybe Height) Caption Label

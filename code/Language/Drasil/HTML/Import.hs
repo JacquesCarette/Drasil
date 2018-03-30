@@ -79,7 +79,7 @@ lay :: HasSymbolTable s => Contents -> s -> H.LayoutObj
 lay x@(Table hdr lls t b _) sm = H.Table ["table"]
   ((map (flip spec sm) hdr) : (map (map (flip spec sm)) lls)) (P.S (refAdd x)) b (spec t sm)
 lay (Paragraph c)       sm = H.Paragraph (spec c sm)
-lay (EqnBlock c _)      sm = H.HDiv ["equation"] [H.Tagless (P.E (P.Font P.Emph $ expr c sm))] (P.EmptyS)
+lay (EqnBlock c _)      sm = H.HDiv ["equation"] [H.EqnBlock (P.E (P.Font P.Emph $ expr c sm))] (P.EmptyS)
                               -- FIXME: Make equations referable
 --lay (CodeBlock c)        = H.CodeBlock c
 lay x@(Definition c)    sm = H.Definition c (makePairs c sm) (P.S (refAdd x))
@@ -145,13 +145,13 @@ makePairs (Data c) m = [
   ("Number",      [H.Paragraph $ spec (missingAcro (S "DD") $ fmap S $ getA c) m]),
   ("Label",       [H.Paragraph $ spec (titleize $ c ^. term) m]),
   ("Units",       [H.Paragraph $ spec (unit'2Contents c) m]),
-  ("Equation",    [H.HDiv ["equation"] [H.Tagless (buildEqn c m)] (P.EmptyS)]),
+  ("Equation",    [H.HDiv ["equation"] [H.EqnBlock (buildEqn c m)] (P.EmptyS)]),
   ("Description", [H.Paragraph (buildDDDescription c m)])
   ]
 makePairs (Theory c) m = [
   ("Number",      [H.Paragraph $ spec (missingAcro (S "T") $ fmap S $ getA c) m]),
   ("Label",       [H.Paragraph $ spec (titleize $ c ^. term) m]),
-  ("Equation",    [H.HDiv ["equation"] [H.Tagless (P.E (P.Font P.Emph $ expr (c ^. relat) m))]
+  ("Equation",    [H.HDiv ["equation"] [H.EqnBlock (P.E (P.Font P.Emph $ expr (c ^. relat) m))]
                   (P.EmptyS)]),
   ("Description", [H.Paragraph (spec (c ^. defn) m)])
   ]

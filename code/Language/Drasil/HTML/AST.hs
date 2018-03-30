@@ -21,11 +21,11 @@ data LayoutObj =
     Table Tags [[Spec]] Label Bool Caption
   | Header Depth Title Label
   | Paragraph Contents
+  | EqnBlock Contents
   | Definition DType [(String,[LayoutObj])] Label
   | List ListType
   | Figure Label Caption Filepath MaxWidthPercent
   | ALUR ALUR Contents Label Label
   | Bib BibRef
   -- these are 'special' to HTML still
-  | Tagless Contents
   | HDiv Tags [LayoutObj] Label

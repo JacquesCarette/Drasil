@@ -51,7 +51,7 @@ printLO :: HasSymbolTable s => s -> LayoutObj -> Doc
 printLO sm (HDiv ts layoutObs l)  = refwrap (p_spec l sm) $
                                    div_tag ts (vcat (map (printLO sm) layoutObs))
 printLO sm (Paragraph contents)   = paragraph $ text (p_spec contents sm)
-printLO sm (Tagless contents)     = text $ p_spec contents sm
+printLO sm (EqnBlock contents)    = text $ p_spec contents sm
 printLO sm (Table ts rows r b t)  = makeTable ts rows (p_spec r sm) b (p_spec t sm) sm
 printLO sm (Definition dt ssPs l) = makeDefn dt ssPs (p_spec l sm) sm
 printLO sm (Header n contents _)  = h n $ text (p_spec contents sm) -- FIXME

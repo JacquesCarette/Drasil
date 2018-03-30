@@ -40,7 +40,8 @@ buildStd sm (Document t a c) =
 
 -- clean until here; lo needs its sub-functions fixed first though
 lo :: HasSymbolTable s => LayoutObj -> s -> D
-lo (Section d t con l)  sm  = sec d (spec t) %% label (spec l) %% print sm con
+lo (Header d t l)       _  = sec d (spec t) %% label (spec l)
+lo (Tagless con)        sm = print sm con
 lo (Paragraph contents) _  = toText $ spec contents
 lo (EqnBlock contents)  _  = makeEquation contents
 lo (Table _ rows r bl t) _  = toText $ makeTable rows (spec r) bl (spec t)

@@ -12,6 +12,8 @@ type Contents = Spec
 type Items    = [LayoutObj]
 type Tags     = [String]
 type Depth    = Int
+type Width    = Float
+type Height   = Float
 type Label    = Spec
 type Filepath = String
 type Caption  = Spec
@@ -27,5 +29,6 @@ data LayoutObj =
   | Figure Label Caption Filepath MaxWidthPercent
   | ALUR ALUR Contents Label Label
   | Bib BibRef
+  | Graph [(Spec, Spec)] (Maybe Width) (Maybe Height) Caption Label
   -- these are 'special' to HTML still
   | HDiv Tags [LayoutObj] Label

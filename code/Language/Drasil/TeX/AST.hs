@@ -27,6 +27,6 @@ data LayoutObj =
    | Figure Label Caption Filepath MaxWidthPercent
    | ALUR ALUR Contents Label
    | Bib BibRef
+   | Graph [(Spec, Spec)] (Maybe Width) (Maybe Height) Caption Label
    -- these are 'special' to TeX still
    | Tagless [LayoutObj]
-   | Graph [(Spec, Spec)] (Maybe Width) (Maybe Height) Caption Label

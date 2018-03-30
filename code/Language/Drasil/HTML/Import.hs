@@ -85,7 +85,8 @@ lay (EqnBlock c _)      sm = H.HDiv ["equation"] [H.EqnBlock (P.E (P.Font P.Emph
 lay x@(Definition c)    sm = H.Definition c (makePairs c sm) (P.S (refAdd x))
 lay (Enumeration cs)    sm = H.List $ makeL cs sm
 lay x@(Figure c f wp _) sm = H.Figure (P.S (refAdd x)) (spec c sm) f wp
-lay (Graph _ _ _ _ _)    _ = H.Paragraph (P.EmptyS)  -- FIXME: need to implement!
+lay x@(Graph ps w h t _) sm = H.Graph (map (\(y,z) -> (spec y sm, spec z sm)) ps)
+                               w h (spec t sm) (P.S (refAdd x))
 lay x@(Requirement r)   sm = H.ALUR H.Requirement
   (spec (requires r) sm) (P.S (refAdd x)) (spec (fromJust $ getShortName r) sm)
 lay x@(Assumption a)    sm = H.ALUR H.Assumption

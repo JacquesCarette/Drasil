@@ -59,6 +59,7 @@ printLO sm (List t)               = makeList t sm
 printLO sm (Figure r c f wp)      = makeFigure (p_spec r sm) (p_spec c sm) f wp
 printLO sm (ALUR _ x l i)         = makeRefList (p_spec x sm) (p_spec l sm) (p_spec i sm)
 printLO sm (Bib bib)              = makeBib sm bib
+printLO _  (Graph _ _ _ _ _)      = empty -- FIXME
 
 
 -- | Called by build, uses 'printLO' to render the layout

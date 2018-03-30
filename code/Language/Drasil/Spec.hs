@@ -33,7 +33,7 @@ data Sentence where
                                     -- See Reference.hs
   Quote :: Sentence -> Sentence     -- Adds quotation marks around a sentence
                                     
-  -- Direct concatenation of two Specs (no implicit spaces!)
+  -- Direct concatenation of two Sentences (no implicit spaces!)
   (:+:) :: Sentence -> Sentence -> Sentence   
   EmptyS :: Sentence
   E :: Expr -> Sentence

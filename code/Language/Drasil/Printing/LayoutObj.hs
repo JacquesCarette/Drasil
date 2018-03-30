@@ -22,10 +22,11 @@ data LayoutObj =
    | Header Depth Title Label
    | Paragraph Contents
    | EqnBlock Contents
-   | Definition DType [(String,[LayoutObj])] Label -- To replace Definition eventually
+   | Definition DType [(String,[LayoutObj])] Label
    | List ListType
    | Figure Label Caption Filepath MaxWidthPercent
-   | ALUR ALUR Contents Label Label
-   | Bib BibRef
+   | ALUR ALUR Contents Label Label -- two labels?
    | Graph [(Spec, Spec)] (Maybe Width) (Maybe Height) Caption Label
    | HDiv Tags [LayoutObj] Label
+   -- this shouldn't be here, it should have been expanded.
+   | Bib BibRef

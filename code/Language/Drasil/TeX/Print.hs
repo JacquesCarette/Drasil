@@ -276,11 +276,13 @@ p_unit (UName n) =
   switch (const cn) (pure $ text $ symbol n)
 p_unit (UProd l) = foldr (<>) empty (map p_unit l)
 p_unit (UPow n p) = toMath $ superscript (p_unit n) (pure $ text $ show p)
+{-
 p_unit (UDiv n d) = toMath $
   case d of -- 4 possible cases, 2 need parentheses, 2 don't
     UProd _  -> fraction (p_unit n) (parens $ p_unit d)
     UDiv _ _ -> fraction (p_unit n) (parens $ p_unit d)
     _        -> fraction (p_unit n) (p_unit d)
+-}
 
 -----------------------------------------------------------------
 ------------------ DATA DEFINITION PRINTING-----------------

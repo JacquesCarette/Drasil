@@ -21,4 +21,4 @@ gravConstU :: DerUChunk
 
 gravConstU = makeDerU (dcc "gravConstU" (cn "gravitational constant")
   "universal gravitational constant") $
-   USynonym (UDiv (m_3 ^. usymb) (UProd [kilogram ^. usymb, s_2 ^. usymb]))
+   USynonym (UProd [m_3 ^. usymb, kilogram ^: (-1), s_2 ^: (-1)])

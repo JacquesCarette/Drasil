@@ -100,11 +100,14 @@ unitWrapper u = UD (cw u) (u ^. usymb)
 --- These conveniences go here, because we need the class
 -- | Combinator for raising a unit to a power
 (^:) :: IsUnit u => u -> Integer -> USymb
-u ^: i = UPow (u ^. usymb) i
+u ^: i = upow (u ^. usymb)
+  where
+    upow (UPow a j) = UPow a (i*j)
+    upow x          = UPow x i
 
 -- | Combinator for dividing one unit by another
 (/:) :: (IsUnit u1, IsUnit u2) => u1 -> u2 -> USymb
-u1 /: u2 = UDiv (u1 ^. usymb) (u2 ^. usymb)
+u1 /: u2 = UProd [(u1 ^. usymb) , u2 ^: (-1) ]
 
 -- | Combinator for multiplying two units together
 (*:) :: (IsUnit u1, IsUnit u2) => u1 -> u2 -> USymb

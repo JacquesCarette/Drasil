@@ -1,5 +1,5 @@
 module Language.Drasil.UnitLang (
-    USymb(UName,UProd,UPow,UDiv), UDefn(..)
+    USymb(UName,UProd,UPow), UDefn(..)
   , from_udefn, comp_usymb
   ) where
 
@@ -13,8 +13,6 @@ import Language.Drasil.Symbol (Symbol, compsy)
 data USymb = UName Symbol
            | UProd [USymb] -- ^ Product
            | UPow USymb Integer -- ^ can be negative, should not be 0
-           | UDiv USymb USymb   -- ^ Get proper division (not neg pow)
-                                -- necessary for things like J/(kg*C)
   deriving (Eq)
 
 
@@ -40,5 +38,3 @@ comp_usymb (UPow l a) (UPow m b) = case comp_usymb l m of { EQ -> compare a b; x
 comp_usymb (UPow l a) (UName b)  = if l == UName b && a == 1 then EQ else GT
 comp_usymb (UPow _ _) (UProd _)  = GT
 comp_usymb (UPow _ _) _          = LT
-comp_usymb (UDiv a b) (UDiv c d) = comp_usymb a c `mappend` comp_usymb b d
-comp_usymb (UDiv _ _) _          = GT

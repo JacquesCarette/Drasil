@@ -88,37 +88,29 @@ p_spec HARDNL       _ = "<br />"
 p_spec (Ref _ r a) sm = reflink r (p_spec a sm)
 p_spec EmptyS       _ = ""
 
-{-
--- | Renders symbols for HTML title
-t_symbol :: Symbol -> String
-t_symbol (Corners [] [] [] [x] s) = t_symbol s ++ "_" ++ t_symbol x
-t_symbol (Corners [] [] [x] [] s) = t_symbol s ++ "^" ++ t_symbol x
-t_symbol s                        = symbol s
--}
-
 -- | Renders symbols for HTML document
-symbolNoEm :: Symbol -> String
-symbolNoEm (Atomic s)  = s
-symbolNoEm (Special s) = unPH $ special s
-symbolNoEm (Concat sl) = foldr (++) "" $ map symbolNoEm sl
-symbolNoEm (Greek g)   = unPH $ greek g
+symbol :: Symbol -> String
+symbol (Atomic s)  = s
+symbol (Special s) = unPH $ special s
+symbol (Concat sl) = foldr (++) "" $ map symbol sl
+symbol (Greek g)   = unPH $ greek g
 -- handle the special cases first, then general case
-symbolNoEm (Corners [] [] [x] [] s) = (symbolNoEm s) ++ sup (symbolNoEm x)
-symbolNoEm (Corners [] [] [] [x] s) = (symbolNoEm s) ++ sub (symbolNoEm x)
-symbolNoEm (Corners [_] [] [] [] _) = error "rendering of ul prescript"
-symbolNoEm (Corners [] [_] [] [] _) = error "rendering of ll prescript"
-symbolNoEm (Corners _ _ _ _ _)      = error "rendering of Corners (general)"
-symbolNoEm (Atop S.Vector s)       = "<b>" ++ symbolNoEm s ++ "</b>"
-symbolNoEm (Atop S.Hat s)          = symbolNoEm s ++ "&#770;"
-symbolNoEm (Atop S.Prime s)        = symbolNoEm s ++ "&prime;"
-symbolNoEm Empty                 = ""
+symbol (Corners [] [] [x] [] s) = (symbol s) ++ sup (symbol x)
+symbol (Corners [] [] [] [x] s) = (symbol s) ++ sub (symbol x)
+symbol (Corners [_] [] [] [] _) = error "rendering of ul prescript"
+symbol (Corners [] [_] [] [] _) = error "rendering of ll prescript"
+symbol (Corners _ _ _ _ _)      = error "rendering of Corners (general)"
+symbol (Atop S.Vector s)       = "<b>" ++ symbol s ++ "</b>"
+symbol (Atop S.Hat s)          = symbol s ++ "&#770;"
+symbol (Atop S.Prime s)        = symbol s ++ "&prime;"
+symbol Empty                 = ""
 
 uSymb :: USymb -> String
-uSymb (UName s)           = symbolNoEm s
+uSymb (UName s)           = symbol s
 uSymb (UProd l)           = foldr1 (\x -> ((x++"&sdot;")++) ) (map uSymb l)
 uSymb (UPow s i)          = uSymb s ++ sup (show i)
-uSymb (UDiv n (UName d))  = uSymb n ++ "/" ++ uSymb (UName d)
-uSymb (UDiv n d)          = uSymb n ++ "/(" ++ (uSymb d) ++ ")"
+-- uSymb (UDiv n (UName d))  = uSymb n ++ "/" ++ uSymb (UName d)
+-- uSymb (UDiv n d)          = uSymb n ++ "/(" ++ (uSymb d) ++ ")"
 
 -----------------------------------------------------------------
 ------------------BEGIN EXPRESSION PRINTING----------------------

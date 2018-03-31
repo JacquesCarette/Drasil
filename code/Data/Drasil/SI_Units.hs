@@ -152,7 +152,7 @@ specificE = makeDerU (dcc "specificE" (cnIES "specific energy")
 specific_weight :: DerUChunk
 specific_weight = makeDerU (dcc "specific_weight" (cn' "specific weight")
   "weight per unit volume") $
-  USynonym (UDiv (newton ^. usymb) (metre ^: 3))
+  USynonym $ UProd [newton ^. usymb, metre ^: (-3)]
   
 -- FIXME: Need to add pi 
 --degrees = DUC

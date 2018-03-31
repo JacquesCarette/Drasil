@@ -31,7 +31,7 @@ eqlExpr :: (Expr -> Expr) -> (Expr -> Expr) -> (Expr -> Expr -> Expr) -> Expr
 eqlExpr f1_ f2_ _e_ = (inxi slcWght `_e_`
   (inxi surfHydroForce * cos (inxi surfAngle)) +
   (inxi surfLoad) * (cos (inxi impLoadAngle))) * (f1_ (inxi baseAngle)) +
-  (negate (C earthqkLoadFctr) * (inxi slcWght) - (inxi intNormForce) +
+  (negate (sy earthqkLoadFctr) * (inxi slcWght) - (inxi intNormForce) +
   (inxiM1 intNormForce) - (inxi watrForce) + (inxiM1 watrForce) +
   (inxi surfHydroForce) * sin (inxi surfAngle) + 
   (inxi surfLoad) * (sin (inxi impLoadAngle))) * (f2_ (inxi baseAngle))
@@ -107,17 +107,17 @@ resShr_rel = inxi shrResI $= shrResEqn
 resShr_desc :: Sentence
 resShr_desc = foldlSent [S "The Mohr-Coulomb resistive shear strength of a",
   phrase slice, getES shrStress, S "from", acroT 3,
-  S "is multiplied by the area", E $ C baseWthX * sec(C baseAngle) * 1,
+  S "is multiplied by the area", E $ sy baseWthX * sec(sy baseAngle) * 1,
   S "to obtain the" +:+. getTandS shrResI, S "Note the extra", E 1,
   S "is to represent a unit of width which is multiplied by the",
   getTandS baseLngth, S "of the plane where the", phrase normal,
-  S "occurs, where", (E $ C baseLngth $= C baseWthX * sec(C baseAngle))
+  S "occurs, where", (E $ sy baseLngth $= sy baseWthX * sec(sy baseAngle))
   `sAnd` getES baseWthX, S "is the x width of the base. This accounts for the",
-  phrase nrmFSubWat, E $ C nrmFSubWat $= C totNrmForce - C baseHydroForce,
+  phrase nrmFSubWat, E $ sy nrmFSubWat $= sy totNrmForce - sy baseHydroForce,
   S "of a soil from", -- FIXME: add prime to nrmStrss
   acroT 4, S "where the", phrase nrmStrss,
   S "is multiplied by the same area to obtain the", phrase nrmFSubWat,
-  E $ C nrmStrss * C baseWthX * sec(C baseAngle) * 1 $= C nrmFSubWat]
+  E $ sy nrmStrss * sy baseWthX * sec(sy baseAngle) * 1 $= sy nrmFSubWat]
 
 --
 mobShr :: RelationConcept
@@ -125,7 +125,7 @@ mobShr = makeRC "mobShr"
   (nounPhraseSP "mobile shear force") mobShr_desc mobShr_rel
 
 mobShr_rel :: Relation
-mobShr_rel = inxi mobShrI $= inxi shrResI / C fs $= shrResEqn / C fs
+mobShr_rel = inxi mobShrI $= inxi shrResI / sy fs $= shrResEqn / sy fs
 
 mobShr_desc :: Sentence
 mobShr_desc = foldlSent [
@@ -141,7 +141,7 @@ normShrR = makeRC "normShrR"
   (nounPhraseSP "interslice normal/shear relationship") nmShrR_desc nmShrR_rel
 
 nmShrR_rel :: Relation
-nmShrR_rel = C intShrForce $= C normToShear * C scalFunc * C intNormForce
+nmShrR_rel = sy intShrForce $= sy normToShear * sy scalFunc * sy intNormForce
 
 nmShrR_desc :: Sentence
 nmShrR_desc = foldlSent [S "The", phrase assumption,
@@ -164,7 +164,7 @@ momExpr _e_ = (negate (inxi intNormForce) * (inxi sliceHght -
   inxi watrForce * (inxi sliceHght - inxi baseWthX / 2 *
   tan (inxi baseAngle)) + inxiM1 watrForce * (inxiM1 sliceHght -
   inxi baseWthX / 2 * tan (inxi baseAngle))) `_e_`
-  (C earthqkLoadFctr * inxi slcWght * inxi midpntHght / 2 -
+  (sy earthqkLoadFctr * inxi slcWght * inxi midpntHght / 2 -
   inxi surfHydroForce * sin (inxi surfAngle) * inxi midpntHght -
   inxi surfLoad * sin (inxi impLoadAngle) * inxi midpntHght)
 
@@ -173,7 +173,7 @@ momentEql = makeRC "momentEql" (nounPhraseSP "moment equilibrium")
   momEql_desc momEql_rel
 
 momEql_rel :: Relation
-momEql_rel = (Int 0) $= momExpr (\ x y -> x -
+momEql_rel = 0 $= momExpr (\ x y -> x -
   (inxi baseWthX / 2 * (inxi intShrForce + inxiM1 intShrForce)) + y)
 
 momEql_desc :: Sentence
@@ -195,7 +195,7 @@ netForcex = makeRC "netForce" (nounPhraseSP "net x-component force")
 
 fNetx_rel :: Relation
 fNetx_rel = inxi fx $= (negate $ inxi watrForceDif) -
-  (C earthqkLoadFctr)*(inxi slcWght)
+  (sy earthqkLoadFctr)*(inxi slcWght)
   - (inxi baseHydroForce) * sin (inxi baseAngle) +
   (inxi surfHydroForce) * sin (inxi surfAngle)
   + (inxi surfLoad) * sin (inxi impLoadAngle)

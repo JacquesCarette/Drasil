@@ -1,4 +1,3 @@
-{-# OPTIONS -Wall #-} 
 -- | Helper functions for printing
 module Language.Drasil.Printing.Helpers where
 
@@ -63,12 +62,12 @@ lowcase (c:cs) = text $ toLower c:cs --make first letter lowercase
 --FIXME: move this. It is here for not since TeX and HTML
 --       use this for bibliography rendering
 -- Used only on single digit Int
-sufx :: Integer -> String
+sufx :: Int -> String
 sufx 1 = "st"
 sufx 2 = "nd"
 sufx 3 = "rd"
 sufx _ = "th"
 
 -- Use on any sized Int
-sufxer :: Integer -> String
+sufxer :: Int -> String
 sufxer = dot . sufx . mod 10

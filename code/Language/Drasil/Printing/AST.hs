@@ -1,62 +1,57 @@
 module Language.Drasil.Printing.AST where
 
-import Language.Drasil.Expr (Variable, Oper(..))
-import Language.Drasil.Symbol (Symbol)
-import Language.Drasil.Space (Space)
+import Language.Drasil.UnitLang (USymb)
+import Language.Drasil.RefTypes (RefType, RefAdd)
+import Language.Drasil.Unicode (Greek, Special)
 
-data BinOp = Frac | Div | Pow | Sub | Eq | NEq | Lt | Gt | LEq | GEq | Impl | Iff | Index
-  | Dot | Cross
+data Ops = IsIn | Integer | Real | Rational | Natural | Boolean | Comma | Prime | Log
+  | Sin | Cos | Tan | Sec | Csc | Cot | Not | Dim | Exp | Neg | Cross
+  | Dot | Eq | NEq | Lt | Gt | LEq | GEq | Impl | Iff | Subt | And | Or
+  | Add | Mul | Summ | Inte | Prod
 
-data Expr = Var   Variable
-          | Dbl   Double
+data Fence = Paren | Curly | Norm | Abs
+data OverSymb = Hat
+data Fonts = Bold | Emph
+data Spacing = Thin
+
+data Expr = Dbl   Double
           | Int   Integer
-          | Assoc Oper [Expr]
-          | BOp   BinOp Expr Expr
-          | Sym   Symbol
-          | Call  Expr [Expr]
+          | Str   String
           | Case  [(Expr,Expr)]
-          | Op Function [Expr]
-          | Grouping Expr
-          | IsIn  Expr Space
           | Mtx [[Expr]]
+          | Row   [Expr]
+          | Ident String
+          | Spec  Special
+          | Gr    Greek
+          | Sub   Expr
+          | Sup   Expr
+          | MO    Ops
+          | Over  OverSymb Expr
+          | Fenced Fence Fence Expr
+          | Font  Fonts Expr
+          | Div   Expr Expr -- actually, fractions are a layout thing!
+          | Sqrt  Expr      -- as are roots. Just sqrt for now.
+          | Spc   Spacing
           
-data Function = Log
-           | Summation (Maybe ((Symbol, Expr),Expr))
-           | Abs
-           | Norm
-           | Integral ((Maybe Expr),(Maybe Expr)) Symbol
-           | Sin
-           | Cos
-           | Tan
-           | Sec
-           | Csc
-           | Cot
-           | Product (Maybe ((Symbol, Expr), Expr))
-           | Exp
-           | Sqrt
-           | Not
-           | Neg
-           | Dim
+infixr 5 :+:
 
-prec :: Oper -> Int
-prec Mul = 3
-prec Add = 4
-prec And = 11
-prec Or = 12
+data Spec = E Expr
+          | S String
+          | Spec :+: Spec -- concat
+          | Sy USymb
+          | Sp Special
+          | Ref RefType RefAdd Spec
+          | EmptyS
+          | HARDNL        -- newline. Temp fix for multi-line descriptions; 
+                          -- May move to a new LayoutObj, but only exists in TeX
+                          -- so it's not really a big deal ATM.
+type Title    = Spec
 
-prec2 :: BinOp -> Int
-prec2 Frac = 3
-prec2 Div = 3
-prec2 Pow = 2
-prec2 Sub = 4
-prec2 Eq = 9
-prec2 NEq  = 9
-prec2 Lt  = 9
-prec2 Gt  = 9
-prec2 LEq  = 9
-prec2 GEq  = 9
-prec2 Impl = 13
-prec2 Iff = 13
-prec2 Index = 1
-prec2 Dot = 3
-prec2 Cross = 3
+data ListType = Ordered [ItemType] 
+              | Unordered [ItemType]
+              | Simple      [(Title,ItemType)]
+              | Desc        [(Title,ItemType)]
+              | Definitions  [(Title,ItemType)]
+
+data ItemType = Flat Spec
+              | Nested Spec ListType

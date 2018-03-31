@@ -4,10 +4,11 @@ module Language.Drasil.CodeSpec where
 import Language.Drasil.Chunk.Code
 import Language.Drasil.Chunk.NamedIdea
 import Language.Drasil.Chunk.Eq
-import Language.Drasil.Chunk.Quantity -- for hack and codeSymb
+import Language.Drasil.Chunk.Quantity -- for hack
+import Language.Drasil.Chunk.SymbolForm (codeSymb)
 import Language.Drasil.NounPhrase
 import Language.Drasil.Symbol
-import Language.Drasil.Spec hiding (Mod)
+import Language.Drasil.Spec
 import Language.Drasil.SystemInformation
 import Language.Drasil.Expr -- for hack
 import Language.Drasil.Space -- for hack
@@ -31,7 +32,7 @@ type Derived = CodeDefinition
 type Def = CodeDefinition
 
 data CodeSpec = CodeSpec {
-  program :: CodeName,
+  program :: IdeaDict,
   inputs :: [Input],
   extInputs :: [Input],
   derivedInputs :: [Derived],
@@ -84,7 +85,7 @@ codeSpec' (SI {_sys = sys, _quants = q, _definitions = defs', _inputs = ins, _ou
       outs' = map codevar outs
       allInputs = nub $ inputs' ++ map codevar derived
   in  CodeSpec {
-        program = NICN sys,
+        program = nw sys,
         inputs = allInputs,
         extInputs = inputs',
         derivedInputs = derived,
@@ -149,7 +150,7 @@ relToQD :: (ExprRelat c, HasSymbolTable ctx) => ctx -> c -> QDefinition
 relToQD sm r = convertRel sm $ r ^. relat
 
 convertRel :: HasSymbolTable ctx => ctx -> Expr -> QDefinition
-convertRel sm (BinaryOp (EEquals (C x) r)) = ec' (symbLookup x (sm ^. symbolTable)) r
+convertRel sm (BinaryOp Eq (C x) r) = ec' (symbLookup x (sm ^. symbolTable)) r
 convertRel _ _ = error "Conversion failed"
 
 data Mod = Mod Name [Func]
@@ -187,8 +188,10 @@ data FuncStmt where
   FThrow :: String -> FuncStmt
   FTry :: [FuncStmt] -> [FuncStmt] -> FuncStmt
   FContinue :: FuncStmt
-  FVal :: Expr -> FuncStmt
   FDec :: CodeChunk -> CodeType -> FuncStmt
+  FProcCall :: Func -> [Expr] -> FuncStmt
+  -- slight hack, for now
+  FAppend :: Expr -> Expr -> FuncStmt
   
 fasg :: (Quantity c) => c -> Expr -> FuncStmt
 fasg v e = FAsg (codevar v) e
@@ -200,13 +203,12 @@ fdec :: (Quantity c) => c -> Space -> FuncStmt
 fdec v t = FDec (codevar v) (spaceToCodeType t)
 
 asVC :: Func -> VarChunk
-asVC (FDef (FuncDef n _ _ _)) = makeVC' n (nounPhraseSP n) (Atomic n)
-asVC (FData (FuncData n _)) = makeVC' n (nounPhraseSP n) (Atomic n)
+asVC (FDef (FuncDef n _ _ _)) = implVar n (nounPhraseSP n) (Atomic n) Real
+asVC (FData (FuncData n _)) = implVar n (nounPhraseSP n) (Atomic n) Real
 asVC (FCD cd) = codeVC cd (codeSymb cd) (cd ^. typ)
 
 asExpr :: Func -> Expr
-asExpr f = C $ asVC f
-
+asExpr f = sy $ asVC f
 
 -- name of variable/function maps to module name
 type ModExportMap = Map.Map String String
@@ -243,36 +245,46 @@ modDepMap sm mem ms = Map.fromList $ map (\(Mod n _) -> n) ms `zip` map getModDe
         fdep (FData (FuncData _ d)) = map codeName $ getInputs d   
 
 fstdep :: HasSymbolTable ctx => ctx -> FuncStmt -> [CodeChunk]
-fstdep _ (FDec cc _) = [cc]
+fstdep _  (FDec cc _) = [cc]
 fstdep sm (FAsg cc e) = cc:codevars e sm
 fstdep sm (FFor cc e fs) = delete cc $ nub (codevars e sm ++ concatMap (fstdep sm) fs)
 fstdep sm (FWhile e fs) = codevars e sm ++ concatMap (fstdep sm) fs
 fstdep sm (FCond e tfs efs) = codevars e sm ++ concatMap (fstdep sm) tfs ++ concatMap (fstdep sm) efs
 fstdep sm (FRet e) = codevars e sm
 fstdep sm (FTry tfs cfs) = concatMap (fstdep sm) tfs ++ concatMap (fstdep sm) cfs
-fstdep sm (FVal e) = codevars e sm
-fstdep _ _ = []
+fstdep _  (FThrow _) = [] -- is this right?
+fstdep _  (FContinue) = []
+fstdep sm (FProcCall _ l) = concatMap (\x -> codevars x sm) l
+fstdep sm (FAppend a b) = nub (codevars a sm ++ codevars b sm)
 
 fstdecl :: HasSymbolTable ctx => ctx -> [FuncStmt] -> [CodeChunk]
 fstdecl ctx fsts = (nub $ concatMap (fstvars ctx) fsts) \\ (nub $ concatMap (declared ctx) fsts) 
   where
     fstvars :: HasSymbolTable ctx => ctx -> FuncStmt -> [CodeChunk]
-    fstvars _ (FDec cc _) = [cc]
+    fstvars _  (FDec cc _) = [cc]
     fstvars sm (FAsg cc e) = cc:codevars' e sm
     fstvars sm (FFor cc e fs) = delete cc $ nub (codevars' e sm ++ concatMap (fstvars sm) fs)
     fstvars sm (FWhile e fs) = codevars' e sm ++ concatMap (fstvars sm) fs
     fstvars sm (FCond e tfs efs) = codevars' e sm ++ concatMap (fstvars sm) tfs ++ concatMap (fstvars sm) efs
     fstvars sm (FRet e) = codevars' e sm
     fstvars sm (FTry tfs cfs) = concatMap (fstvars sm) tfs ++ concatMap (fstvars sm) cfs
-    fstvars sm (FVal e) = codevars' e sm
-    fstvars _ _ = []
+    fstvars _  (FThrow _) = [] -- is this right?
+    fstvars _  (FContinue) = []
+    fstvars sm (FProcCall _ l) = concatMap (\x -> codevars x sm) l
+    fstvars sm (FAppend a b) = nub (codevars a sm ++ codevars b sm)
+
     declared :: HasSymbolTable ctx => ctx -> FuncStmt -> [CodeChunk]
-    declared _ (FDec cc _) = [cc]
+    declared _  (FDec cc _) = [cc]
+    declared _  (FAsg _ _) = []
     declared sm (FFor _ _ fs) = concatMap (declared sm) fs
     declared sm (FWhile _ fs) = concatMap (declared sm) fs
     declared sm (FCond _ tfs efs) = concatMap (declared sm) tfs ++ concatMap (declared sm) efs
+    declared _  (FRet _) = []
     declared sm (FTry tfs cfs) = concatMap (declared sm) tfs ++ concatMap (declared sm) cfs
-    declared _ _ = []
+    declared _  (FThrow _) = [] -- is this right?
+    declared _  (FContinue) = []
+    declared _  (FProcCall _ _) = []
+    declared _  (FAppend _ _) = []
        
 fname :: Func -> Name       
 fname (FCD cd) = codeName cd
@@ -285,11 +297,10 @@ prefixFunctions = map (\(Mod nm fs) -> Mod nm $ map pfunc fs)
         pfunc (FData (FuncData n dd)) = FData (FuncData (funcPrefix ++ n) dd)
         pfunc (FDef (FuncDef n a t f)) = FDef (FuncDef (funcPrefix ++ n) a t f)
 
-
 getDerivedInputs :: HasSymbolTable ctx => [QDefinition] -> [Input] -> [Const] -> ctx -> [QDefinition]
 getDerivedInputs defs' ins consts sm =
   let refSet = ins ++ map codevar consts 
-  in  filter ((`subsetOf` refSet) . flip codevars sm . equat) defs'
+  in  filter ((`subsetOf` refSet) . flip codevars sm . (^.equat)) defs'
   
 type Known = CodeChunk
 type Need  = CodeChunk
@@ -299,8 +310,9 @@ getExecOrder d k' n' sm = getExecOrder' [] d k' (n' \\ k')
   where getExecOrder' ord _ _ []   = ord
         getExecOrder' ord defs' k n = 
           let new  = filter ((`subsetOf` k) . flip codevars' sm . codeEquat) defs'
-              kNew = k ++ map codevar new
-              nNew = n \\ map codevar new
+              cnew = map codevar new
+              kNew = k ++ cnew
+              nNew = n \\ cnew
           in  if null new 
               then error "Cannot find path from inputs to outputs"
               else getExecOrder' (ord ++ new) (defs' \\ new) kNew nNew

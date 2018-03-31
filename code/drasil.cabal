@@ -1,5 +1,5 @@
 Name:		drasil
-Version:	0.0.8
+Version:	0.0.9
 Cabal-Version:  >= 1.18
 Author:		Dan Szymczak, Steven Palmer, Jacques Carette, Spencer Smith
 build-type:     Simple
@@ -39,8 +39,8 @@ library
       Language.Drasil.SystemInformation
     , Language.Drasil.Expr
     , Language.Drasil.Expr.Math
+    , Language.Drasil.Expr.Precedence
     , Language.Drasil.Chunk
-    , Language.Drasil.Citations
     , Language.Drasil.Config
     , Language.Drasil.Document
     , Language.Drasil.Format
@@ -49,7 +49,7 @@ library
     , Language.Drasil.NounPhrase
     , Language.Drasil.People
     , Language.Drasil.Recipe
-    , Language.Drasil.RefHelpers
+    , Language.Drasil.RefTypes
     , Language.Drasil.Reference
     , Language.Drasil.Space
     , Language.Drasil.Spec
@@ -57,6 +57,7 @@ library
     , Language.Drasil.SymbolAlphabet
     , Language.Drasil.Unicode
     , Language.Drasil.Unit
+    , Language.Drasil.UnitLang
     , Language.Drasil.CodeSpec
     , Language.Drasil.Code.Code
     , Language.Drasil.Code.Imperative.AST
@@ -84,27 +85,34 @@ library
     , Language.Drasil.TeX.Print
     , Language.Drasil.TeX.Monad
     , Language.Drasil.TeX.Preamble
+    , Language.Drasil.Chunk.AssumpChunk
     , Language.Drasil.Chunk.Attribute
     , Language.Drasil.Chunk.Attribute.Derivation
+    , Language.Drasil.Chunk.Change
+    , Language.Drasil.Chunk.Citation
     , Language.Drasil.Chunk.Code
     , Language.Drasil.Chunk.CommonIdea
     , Language.Drasil.Chunk.Concept
     , Language.Drasil.Chunk.ConVar
     , Language.Drasil.Chunk.Constrained
+    , Language.Drasil.Chunk.DefinedQuantity
     , Language.Drasil.Chunk.Eq
     , Language.Drasil.Chunk.ExprRelat
+    , Language.Drasil.Chunk.GenDefn
+    , Language.Drasil.Chunk.Goal
+    , Language.Drasil.Chunk.InstanceModel
     , Language.Drasil.Chunk.NamedIdea
+    , Language.Drasil.Chunk.PhysSystDesc
     , Language.Drasil.Chunk.Quantity
     , Language.Drasil.Chunk.Relation
+    , Language.Drasil.Chunk.ReqChunk
     , Language.Drasil.Chunk.SymbolForm
     , Language.Drasil.Chunk.Theory
     , Language.Drasil.Chunk.UncertainQuantity
     , Language.Drasil.Chunk.Unital
     , Language.Drasil.Chunk.Unitary
+    , Language.Drasil.Chunk.UnitaryConcept
     , Language.Drasil.Chunk.VarChunk
-    , Language.Drasil.Chunk.Wrapper
-    , Language.Drasil.Chunk.Wrapper.QSWrapper
-    , Language.Drasil.Chunk.Wrapper.UWrapper
     , Language.Drasil.ChunkDB
     , Language.Drasil.Expr.Extract
     , Language.Drasil.Make.AST
@@ -114,6 +122,8 @@ library
     , Language.Drasil.Output.Formats
     , Language.Drasil.Printing.Helpers
     , Language.Drasil.Printing.AST
+    , Language.Drasil.Printing.Citation
+    , Language.Drasil.Printing.Import
     , Language.Drasil.DataDesc
 
   Build-Depends:
@@ -143,9 +153,9 @@ executable tiny
     , Drasil.Sections.Requirements
     , Drasil.Sections.GeneralSystDesc
     , Drasil.DocumentLanguage
-    , Drasil.DocumentLanguage.Chunk.GenDefn
-    , Drasil.DocumentLanguage.Chunk.InstanceModel
     , Drasil.DocumentLanguage.Definitions
+    , Drasil.DocumentLanguage.RefHelpers
+    , Drasil.DocumentLanguage.TraceabilityMatrix
     , Drasil.Sections.AuxiliaryConstants
     , Drasil.Sections.TableOfUnits
     , Drasil.Sections.SpecificSystemDescription
@@ -195,9 +205,9 @@ executable nopcm
     , Drasil.SRS
     , Drasil.Sections.TableOfAbbAndAcronyms
     , Drasil.DocumentLanguage
-    , Drasil.DocumentLanguage.Chunk.GenDefn
-    , Drasil.DocumentLanguage.Chunk.InstanceModel
     , Drasil.DocumentLanguage.Definitions
+    , Drasil.DocumentLanguage.RefHelpers
+    , Drasil.DocumentLanguage.TraceabilityMatrix
     , Drasil.Sections.SpecificSystemDescription
     , Drasil.Sections.Introduction
     , Drasil.Sections.Requirements
@@ -240,9 +250,9 @@ executable ssp
     , Drasil.Sections.ScopeOfTheProject
     , Drasil.Sections.TraceabilityMandGs
     , Drasil.DocumentLanguage
-    , Drasil.DocumentLanguage.Chunk.GenDefn
-    , Drasil.DocumentLanguage.Chunk.InstanceModel
     , Drasil.DocumentLanguage.Definitions
+    , Drasil.DocumentLanguage.RefHelpers
+    , Drasil.DocumentLanguage.TraceabilityMatrix
     , Drasil.Sections.TableOfUnits
     , Drasil.Sections.AuxiliaryConstants
     , Drasil.Sections.SpecificSystemDescription
@@ -266,9 +276,9 @@ executable glassbr
   main-is: Drasil/GlassBR/Main.hs
   other-modules:
       Drasil.DocumentLanguage
-    , Drasil.DocumentLanguage.Chunk.GenDefn
-    , Drasil.DocumentLanguage.Chunk.InstanceModel
     , Drasil.DocumentLanguage.Definitions
+    , Drasil.DocumentLanguage.RefHelpers
+    , Drasil.DocumentLanguage.TraceabilityMatrix
     , Drasil.GlassBR.Body
     , Drasil.GlassBR.Concepts
     , Drasil.GlassBR.Unitals
@@ -309,9 +319,9 @@ executable chipmunkdocs
   main-is: Drasil/GamePhysics/Main.hs
   other-modules:
       Drasil.DocumentLanguage
-    , Drasil.DocumentLanguage.Chunk.GenDefn
-    , Drasil.DocumentLanguage.Chunk.InstanceModel
     , Drasil.DocumentLanguage.Definitions
+    , Drasil.DocumentLanguage.RefHelpers
+    , Drasil.DocumentLanguage.TraceabilityMatrix
     , Drasil.GamePhysics.Body
     , Drasil.GamePhysics.Concepts
     , Drasil.GamePhysics.DataDefs
@@ -344,15 +354,15 @@ executable chipmunkdocs
     drasil >= 0.0.6
   default-language: Haskell2010
   ghc-options:      -Wall
-  
+
 executable swhs
   hs-source-dirs: Example
   main-is: Drasil/SWHS/Main.hs
   other-modules:
       Drasil.DocumentLanguage
-    , Drasil.DocumentLanguage.Chunk.GenDefn
-    , Drasil.DocumentLanguage.Chunk.InstanceModel
     , Drasil.DocumentLanguage.Definitions
+    , Drasil.DocumentLanguage.RefHelpers
+    , Drasil.DocumentLanguage.TraceabilityMatrix
     , Drasil.Sections.SpecificSystemDescription
     , Drasil.Sections.Introduction
     , Drasil.Sections.Requirements
@@ -390,8 +400,8 @@ executable swhs
     drasil >= 0.0.6
   default-language: Haskell2010
   ghc-options:      -Wall
-  
+
 source-repository head
   type:     git
-  location: git://github.com/JacquesCarette/literate-scientific-software.git
+  location: git://github.com/JacquesCarette/Drasil.git
   subdir: code

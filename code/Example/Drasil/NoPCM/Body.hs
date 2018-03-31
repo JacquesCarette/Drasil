@@ -25,22 +25,22 @@ import Drasil.SWHS.Unitals (w_vol, tank_length, tank_vol, tau_W, temp_W,
   deltaT, w_E, tank_length_min, tank_length_max, htTransCoeff_min,
   w_density_min, w_density_max, htCap_W_min, htCap_W_max, coil_HTC_min,
   coil_HTC_max, time_final_max, sim_time, coil_SA_max, eta)
-import Drasil.SWHS.DataDefs(swhsSymbMapDRef, swhsSymbMapTRef, dd1HtFluxC,
-  data_def_DD1, swhsSymbMapT)
+import Drasil.SWHS.DataDefs(dd1HtFluxC, data_def_DD1)
 import Drasil.SWHS.TMods (theory_model_T1, t1ConsThermE, t1ConsThermE_new)
 import Drasil.SWHS.GenDefs (swhsGenDefs, nwtnCooling, rocTempSimp)
 import Drasil.SWHS.IMods (heatEInWtr, heatEInWtr_new)
 import Drasil.NoPCM.IMods (eBalanceOnWtr, eBalanceOnWtr_new)
 import Drasil.NoPCM.Unitals (temp_init)
-import Drasil.SWHS.References (ref2, ref3, ref4, ref5, ref6)
+import Drasil.SWHS.References (ref2, ref3, ref4)
 import Drasil.SWHS.Requirements (non_func_req)
 import Drasil.SWHS.LikelyChanges (likeChg2, likeChg3, likeChg6)
 
 import Data.Drasil.People (thulasi)
 import Data.Drasil.Utils (enumSimple, getES, refFromType,
-  itemRefToSent, makeTMatrix, itemRefToSent, weave)
+  itemRefToSent, makeTMatrix, itemRefToSent, weave, eqUnR)
+import Data.Drasil.Citations (parnas1986, smithLai2005)
 
-import Data.Drasil.Concepts.Documentation (datumConstraint, inModel,
+import Data.Drasil.Concepts.Documentation as Doc (datumConstraint, inModel,
   requirement, section_, traceyGraph, item, assumption, dataDefn,
   likelyChg, genDefn, thModel, traceyMatrix, model, acroNumGen,
   output_, quantity, input_, physicalConstraint, condition,
@@ -74,8 +74,6 @@ import Drasil.DocumentLanguage {-(DocDesc,
   IntroSub (IOrgSec, IScope, IChar, IPurpose),
   Literature (Lit, Doc'))-}
 import Drasil.DocumentLanguage.Definitions
-import Drasil.DocumentLanguage.Chunk.GenDefn
-  
 import Drasil.Sections.SpecificSystemDescription (inDataConstTbl,
   outDataConstTbl, solChSpecF, dataConstraintUncertainty, physSystDesc,
   termDefnF, specSysDesF)
@@ -90,7 +88,7 @@ import Data.Drasil.Units.Thermodynamics (thermal_flux)
 
 -- This defines the standard units used throughout the document
 this_si :: [UnitDefn]
-this_si = map UU [metre, kilogram, second] ++ map UU [centigrade, joule, watt]
+this_si = map unitWrapper [metre, kilogram, second] ++ map unitWrapper [centigrade, joule, watt]
 
 -- This defines the list of acronyms that are used throughout the document
 acronyms :: [CI]
@@ -98,18 +96,18 @@ acronyms = [assumption, dataDefn, genDefn, goalStmt, inModel, likelyChg, M.ode,
             physSyst, requirement, srs, progName, thModel, typUnc]
 
 -- This contains the list of symbols used throughout the document
-nopcm_Symbols :: [CQSWrapper]
+nopcm_Symbols :: [DefinedQuantityDict]
 nopcm_Symbols = (map cqs nopcm_Units) ++ (map cqs nopcm_Constraints)
   
-nopcm_SymbolsAll :: [QWrapper] --FIXME: Why is PCM (swhsSymbolsAll) here?
+nopcm_SymbolsAll :: [QuantityDict] --FIXME: Why is PCM (swhsSymbolsAll) here?
                                --Can't generate without SWHS-specific symbols like pcm_HTC and pcm_SA
                                --FOUND LOC OF ERROR: Instance Models
-nopcm_SymbolsAll = (map qs nopcm_Units) ++ (map qs nopcm_Constraints) ++
-  (map qs specParamValList) ++ 
-  (map qs [coil_SA_max]) ++ (map qs [tau_W]) ++ 
-  (map qs [surface, uNormalVect, gradient, eta])
+nopcm_SymbolsAll = (map qw nopcm_Units) ++ (map qw nopcm_Constraints) ++
+  (map qw specParamValList) ++ 
+  (map qw [coil_SA_max]) ++ (map qw [tau_W]) ++ 
+  (map qw [surface, uNormalVect, gradient, eta])
 
-nopcm_Units :: [UCWrapper]
+nopcm_Units :: [UnitaryConceptDict]
 nopcm_Units = map ucw [density, tau, in_SA, out_SA,
   htCap_L, QT.ht_flux, ht_flux_in, ht_flux_out, vol_ht_gen,
   htTransCoeff, mass, tank_vol, QT.temp, QT.heat_cap_spec,
@@ -165,8 +163,7 @@ mkSRS = RefSec (RefProg intro
     ): --Testing General Definitions.-}
   
   --Verbatim spec_sys_des: -- Comment this out and the above in for testing GDs.
-  map Verbatim [req, likely_chg, trace_matrix_grph, aux_cons] ++
-  [Bibliography ref_refList]
+  map Verbatim [req, likely_chg, trace_matrix_grph, aux_cons] ++ (Bibliography : [])
 
 stdFields :: Fields
 stdFields = [DefiningEquation, Description Verbose IncludeUnits, Source, RefBy]
@@ -184,13 +181,17 @@ nopcm_si = SI {
   _quants = nopcm_Symbols,
   _concepts = (nopcm_Symbols),
   _definitions = [dd1HtFluxC],          --dataDefs
-  _inputs = (map qs nopcm_Constraints), --inputs
-  _outputs = (map qs [temp_W, w_E]),     --outputs
+  _inputs = (map qw nopcm_Constraints), --inputs
+  _outputs = (map qw [temp_W, w_E]),     --outputs
   _defSequence = [Parallel dd1HtFluxC []],
   _constraints = (nopcm_Constraints),        --constrained
   _constants = [],
-  _sysinfodb = nopcm_SymbMap
+  _sysinfodb = nopcm_SymbMap,
+  _refdb = nopcmRefDB
 }
+
+nopcmRefDB :: ReferenceDB
+nopcmRefDB = rdb [] [] [] [] [] ref_refList -- FIXME: Convert the rest to new chunk types
 
 nopcm_code :: CodeSpec
 nopcm_code = codeSpec' nopcm_si [inputMod]
@@ -200,7 +201,7 @@ nopcm_srs :: Document
 nopcm_srs = mkDoc mkSRS (for) nopcm_si
 
 nopcm_SymbMap :: ChunkDB
-nopcm_SymbMap = cdb nopcm_SymbolsAll (map nw nopcm_Symbols ++ map nw acronyms) ([] :: [CWrapper]) -- FIXME: Fill in Concepts
+nopcm_SymbMap = cdb nopcm_SymbolsAll (map nw nopcm_Symbols ++ map nw acronyms) ([] :: [UnitDefn]) -- FIXME: Fill in Concepts
   this_si
 
 --------------------------
@@ -227,7 +228,7 @@ intro_end pro pr = foldlSent_ [EmptyS +:+. plural pro, S "The developed",
 purpose_of_doc :: CI -> Sentence
 purpose_of_doc pro = foldlSent [S "The main", phrase purpose, S "of this",
   phrase document, S "is to describe the modelling of" +:+.
-  phrase pro, S "The", plural goal `sAnd` plural thModel,
+  phrase pro, S "The", plural Doc.goal `sAnd` plural thModel,
   S "used in the", short pro, S "code are provided, with an emphasis",
   S "on explicitly identifying", plural assumption, S "and unambiguous" +:+.
   plural definition, S "This", phrase document,
@@ -283,10 +284,10 @@ charac_of_reader = charIntRdrF knowledge understanding sWHS EmptyS
 
 --s2_4_end
 org_of_doc_end :: CI -> CI -> CI -> Sentence
-org_of_doc_end im od pro = foldlSent_ [S "The", phrase im,
+org_of_doc_end im_ od pro = foldlSent_ [S "The", phrase im_,
   sParen (makeRef (SRS.inModel SRS.missingP [])),
   S "to be solved is referred to as" +:+. acroIM 1,
-  S "The", phrase im, S "provides the",
+  S "The", phrase im_, S "provides the",
   titleize od, sParen (short od), S "that model the"
   +:+. phrase pro, short pro, S "solves this", short od]
 
@@ -376,7 +377,7 @@ phy_sys_des = physSystDesc (getAcc progName) fig_tank
 fig_tank :: Contents
 fig_tank = fig (at_start sWHT `sC` S "with" +:+ phrase ht_flux +:+
   S "from" +:+ phrase coil `sOf` getES ht_flux_C)
-  "TankWaterOnly.png"
+  "TankWaterOnly.png" "Tank"
 
 --s4_1_2_list
 phy_sys_des_list :: Contents
@@ -405,9 +406,9 @@ goal_stmt_list temw we = enumSimple 1 (short goalStmt) [
 --s4_2  
 sol_charac_spec = solChSpecF progName (prob_des, likely_chg) data_def_intro_end (mid,
   dataConstraintUncertainty, end) (assump_list, acroNumGen theory_model_T1 1,
-  general_def_paragraph M.rOfChng temp, acroNumGen data_def_DD1 1,
-  [swhsSymbMapT eBalanceOnWtr] ++ (insta_model_d1startPara energy water) ++
-  intance_model_paragraph ++ [swhsSymbMapT heatEInWtr], [data_constraint_table1, data_constraint_table2])
+  general_def_paragraph M.rOfChng temp, acroNumGen [data_def_DD1] 1,
+  [reldefn eBalanceOnWtr] ++ (insta_model_d1startPara energy water) ++
+  intance_model_paragraph ++ [reldefn heatEInWtr], [data_constraint_table1, data_constraint_table2])
   []
   where
   mid = foldlSent [S "The", phrase column, S "for",
@@ -510,7 +511,7 @@ assump13 = mkAssump "assump13"
 
 --s4_2_3_paragraph
 general_def_paragraph :: ConceptChunk -> ConceptChunk -> [Contents]
-general_def_paragraph roc te = (map swhsSymbMapT swhsGenDefs) ++ [foldlSPCol
+general_def_paragraph roc te = (map reldefn swhsGenDefs) ++ [foldlSPCol
   [S "Detailed derivation of simplified", phrase roc, S "of", phrase te]] ++
   (weave [general_def_description, general_def_equation])
 
@@ -527,7 +528,7 @@ general_def_description = map foldlSPCol [
 --s4_2_3_desc1
 general_def_desc1 :: RelationConcept -> UnitalChunk -> [Sentence]
 general_def_desc1 t1C vo =
-  [S "Integrating", swhsSymbMapTRef t1C,
+  [S "Integrating", makeRef $ reldefn t1C,
   S "over a", phrase vo, sParen (getES vo) `sC` S "we have"]
 
 --s4_2_3_desc2
@@ -564,35 +565,35 @@ general_def_desc5 den ma vo = [S "Using the fact that", getES den :+: S "=" :+:
 general_def_eq1, general_def_eq2, general_def_eq3, general_def_eq4, general_def_eq5 :: Expr
 
 --s4_2_3_eq1
-general_def_eq1 = (negate (int_all (eqSymb vol) ((C gradient) $. (C thFluxVect)))) + 
-  (int_all (eqSymb vol) (C vol_ht_gen)) $=
-  (int_all (eqSymb vol) ((C density)
-  * (C QT.heat_cap_spec) * Deriv Part (C QT.temp) time))
+general_def_eq1 = (negate (int_all (eqSymb vol) ((sy gradient) $. (sy thFluxVect)))) + 
+  (int_all (eqSymb vol) (sy vol_ht_gen)) $=
+  (int_all (eqSymb vol) ((sy density)
+  * (sy QT.heat_cap_spec) * pderiv (sy QT.temp) time))
 
 --s4_2_3_eq2
-general_def_eq2 = (negate (int_all (eqSymb surface) ((C thFluxVect) $. (C uNormalVect)))) +
-  (int_all (eqSymb vol) (C vol_ht_gen)) $= 
+general_def_eq2 = (negate (int_all (eqSymb surface) ((sy thFluxVect) $. (sy uNormalVect)))) +
+  (int_all (eqSymb vol) (sy vol_ht_gen)) $= 
   (int_all (eqSymb vol)
-  ((C density) * (C QT.heat_cap_spec) * Deriv Part (C QT.temp) time))
+  ((sy density) * (sy QT.heat_cap_spec) * pderiv (sy QT.temp) time))
 
 --s4_2_3_eq3
-general_def_eq3 = (C ht_flux_in) * (C in_SA) - (C ht_flux_out) *
-  (C out_SA) + (C vol_ht_gen) * (C vol) $= 
-  (int_all (eqSymb vol) ((C density) * (C QT.heat_cap_spec) * Deriv Part (C QT.temp) time))
+general_def_eq3 = (sy ht_flux_in) * (sy in_SA) - (sy ht_flux_out) *
+  (sy out_SA) + (sy vol_ht_gen) * (sy vol) $= 
+  (int_all (eqSymb vol) ((sy density) * (sy QT.heat_cap_spec) * pderiv (sy QT.temp) time))
 
 --s4_2_3_eq4
-general_def_eq4 = (C density) * (C QT.heat_cap_spec) * (C vol) * Deriv Total
-  (C QT.temp) time $= (C ht_flux_in) * (C in_SA) - (C ht_flux_out) *
-  (C out_SA) + (C vol_ht_gen) * (C vol)
+general_def_eq4 = (sy density) * (sy QT.heat_cap_spec) * (sy vol) * deriv
+  (sy QT.temp) time $= (sy ht_flux_in) * (sy in_SA) - (sy ht_flux_out) *
+  (sy out_SA) + (sy vol_ht_gen) * (sy vol)
 
 --s4_2_3_eq5
-general_def_eq5 = (C mass) * (C QT.heat_cap_spec) * Deriv Total (C QT.temp)
-  time $= (C ht_flux_in) * (C in_SA) - (C ht_flux_out)
-  * (C out_SA) + (C vol_ht_gen) * (C vol)
+general_def_eq5 = (sy mass) * (sy QT.heat_cap_spec) * deriv (sy QT.temp)
+  time $= (sy ht_flux_in) * (sy in_SA) - (sy ht_flux_out)
+  * (sy out_SA) + (sy vol_ht_gen) * (sy vol)
 
 --s4_2_3_equation
 general_def_equation :: [Contents]
-general_def_equation = map EqnBlock [general_def_eq1, general_def_eq2, general_def_eq3, 
+general_def_equation = map eqUnR [general_def_eq1, general_def_eq2, general_def_eq3, 
   general_def_eq4, general_def_eq5]
 
 --s4_2_5_paragraph
@@ -627,13 +628,12 @@ intance_model_desc1 roc temw en wa vo wv ma wm hcw ht hfc csa ta purin a11 vhg a
   phrase ta) `sC` S "since it has been assumed to be",
   phrase purin +:+. sParen (acroTest a11 assump_list), S "Assuming no",
   phrase vhg +:+. (sParen (acroTest a12 assump_list) `sC`
-  E (C vhg $= Int 0)), S "Therefore, the", phrase M.equation, S "for",
+  E (sy vhg $= 0)), S "Therefore, the", phrase M.equation, S "for",
   acroGD 2, S "can be written as"]
 
 --s4_2_5_desc2
 intance_model_desc2 :: QDefinition -> [Sentence]
-intance_model_desc2 d1hf = [S "Using", swhsSymbMapDRef d1hf `sC`
-  S "this can be written as"]
+intance_model_desc2 d1hf = [S "Using", (makeRef $ datadefn d1hf) `sC` S "this can be written as"]
 
 --s4_2_5_desc3
 intance_model_desc3 :: UnitalChunk -> UncertQ -> [Sentence]
@@ -649,27 +649,27 @@ intance_model_desc4 temw wm hcw chtc csa = [S "Setting", (getES temw :+: S "=" :
 
 --s4_2_5_equation
 intance_model_equation :: [Contents]
-intance_model_equation = map EqnBlock [intance_model_eq1, intance_model_eq2, 
+intance_model_equation = map eqUnR [intance_model_eq1, intance_model_eq2, 
   intance_model_eq3, intance_model_eq4]
 
 intance_model_eq1, intance_model_eq2, intance_model_eq3, intance_model_eq4 ::Expr
 
 --s4_2_5_eq1
-intance_model_eq1 = (C w_mass) * (C htCap_W) * Deriv Total (C temp_W) time $=
-  (C ht_flux_C) * (C coil_SA)
+intance_model_eq1 = (sy w_mass) * (sy htCap_W) * deriv (sy temp_W) time $=
+  (sy ht_flux_C) * (sy coil_SA)
 
 --s4_2_5_eq2 
-intance_model_eq2 = (C w_mass) * (C htCap_W) * Deriv Total (C temp_W) time $=
-  (C coil_HTC) * (C coil_SA) * ((C temp_C) - (C temp_W))
+intance_model_eq2 = (sy w_mass) * (sy htCap_W) * deriv (sy temp_W) time $=
+  (sy coil_HTC) * (sy coil_SA) * ((sy temp_C) - (sy temp_W))
 
 --s4_2_5_eq3
-intance_model_eq3 = Deriv Total (C temp_W) time $= ((C coil_HTC) *
-  (C coil_SA)) / ((C w_mass) * (C htCap_W)) * ((C temp_C) -
-  (C temp_W))
+intance_model_eq3 = deriv (sy temp_W) time $= ((sy coil_HTC) *
+  (sy coil_SA)) / ((sy w_mass) * (sy htCap_W)) * ((sy temp_C) -
+  (sy temp_W))
 
 --s4_2_5_eq4
-intance_model_eq4 = Deriv Total (C temp_W) time $= (1 / (C tau_W)) *
-  ((C temp_C) - (C temp_W))
+intance_model_eq4 = deriv (sy temp_W) time $= (1 / (sy tau_W)) *
+  ((sy temp_C) - (sy temp_W))
 
 --s4_2_6_table1
 data_constraint_table1 :: Contents
@@ -695,8 +695,8 @@ data_constraint_table2 = outDataConstTbl data_constraint_conListOut
 data_constraint_conListOut :: [UncertQ]
 data_constraint_conListOut = [temp_W, w_E]
 
-inputVar :: [QWrapper]
-inputVar = map qs data_constraint_conListIn 
+inputVar :: [QuantityDict]
+inputVar = map qw data_constraint_conListIn 
 
 
 
@@ -723,14 +723,13 @@ functional_req_list_items :: [Contents]
 functional_req_list_items = [
 
   Table [titleize symbol_, titleize M.unit_, titleize description]
-  (mkTable
-  [getES,
+  (mkTable [getES,
   unit'2Contents,
   phrase] inputVar)
-  (titleize input_ +:+ titleize variable +:+ titleize requirement) False,
+  (titleize input_ +:+ titleize variable +:+ titleize requirement) False "fr1list",
 
-  EqnBlock ((C w_mass) $= (C w_vol) * (C w_density) $=
-  (((C diam) / 2) * (C tank_length) * (C w_density)))
+  eqUnR ((sy w_mass) $= (sy w_vol) * (sy w_density) $=
+  (((sy diam) / 2) * (sy tank_length) * (sy w_density)))
   ]
 --s5_1_list_words
 -- functional_req_list_words = map (\x -> Enumeration $ Simple [x])
@@ -963,7 +962,7 @@ trace_matrix_grph_table1 = Table (EmptyS:trace_matrix_grph_row_header_t1)
   (makeTMatrix (trace_matrix_grph_row_header_t1) (trace_matrix_grph_columns_t1) 
     (trace_matrix_grph_row_t1))
   (showingCxnBw traceyMatrix
-  (titleize' requirement `sAnd` titleize' inModel)) True
+  (titleize' requirement `sAnd` titleize' inModel)) True "TraceyRI"
 
 {-Traceability Matrix 2-}
 --s7_row_t2
@@ -1011,7 +1010,7 @@ trace_matrix_grph_table2 = Table (EmptyS:trace_matrix_grph_row_header_t2)
   (makeTMatrix (trace_matrix_grph_col_header_t2) (trace_matrix_grph_columns_t2) 
     (trace_matrix_grph_row_t2))
   (showingCxnBw traceyMatrix
-  (titleize' requirement `sAnd` titleize' inModel)) True
+  (titleize' requirement `sAnd` titleize' inModel)) True "TraceyRIs"
 
 {-Traceability Matrix 3-}
 --s7_row_t3
@@ -1062,7 +1061,7 @@ trace_matrix_grph_table3 = Table (EmptyS:trace_matrix_grph_row_header_t3)
   (makeTMatrix trace_matrix_grph_col_header_t3 trace_matrix_grph_columns_t3 
     trace_matrix_grph_row_t3)
   (showingCxnBw traceyMatrix (titleize' assumption `sAnd` S "Other" +:+
-  titleize' item)) True
+  titleize' item)) True "TraceyAI"
 
 -- These matrices can probably be generated automatically when enough info is
 -- abstracted out.
@@ -1086,12 +1085,13 @@ trace_matrix_grph_intro2 = traceGIntro [trace_matrix_grph_fig1, trace_matrix_grp
 -- s7_fig1
 trace_matrix_grph_fig1 :: Contents
 trace_matrix_grph_fig1 = fig (showingCxnBw traceyGraph (titleize' item +:+
-  S "of Different" +:+ titleize' section_)) "ATrace.png"
+  S "of Different" +:+ titleize' section_)) "ATrace.png" "TraceA"
 
 --s7_fig2
 trace_matrix_grph_fig2 :: Contents
 trace_matrix_grph_fig2 = fig (showingCxnBw traceyGraph (titleize' requirement `sC`
   titleize' inModel `sC` S "and" +:+ titleize' datumConstraint)) "RTrace.png"
+  "TraceR"
 
   -- Using the SWHS graphs as place holders until ones can be generated for NoPCM 
 
@@ -1125,4 +1125,4 @@ aux_cons = valsOfAuxConstantsF progName specParamValList
 
 --s9_refList
 ref_refList :: BibRef
-ref_refList = [ref2, ref3, ref4, ref5, ref6]
+ref_refList = [ref2, ref3, ref4, parnas1986, smithLai2005]

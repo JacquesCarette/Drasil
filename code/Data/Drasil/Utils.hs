@@ -2,7 +2,6 @@ module Data.Drasil.Utils
   ( foldle
   , foldle1
   , mkEnumAbbrevList
-  , listConstS
   , zipFTable
   , zipSentList
   , makeTMatrix
@@ -13,20 +12,18 @@ module Data.Drasil.Utils
   , enumBullet
   , mkRefsList
   , mkInputDatTb
-  , getS, getES, getCS
+  , getES
   , getRVal
   , addPercent
   , weave
   , fmtU
   , unwrap
-  , fmtBF
-  , symbolMapFun
-  , fterms , fterm
+  , fterms
   , mkDataDef, mkDataDef'
   , prodUCTbl
+  , eqUnR
   ) where
 
-import Prelude hiding (id)
 import Data.List
 import Control.Lens ((^.))
 import Language.Drasil {-(Sentence(Sy, P, EmptyS, S, (:+:), E), (+:+),
@@ -34,9 +31,12 @@ import Language.Drasil {-(Sentence(Sy, P, EmptyS, S, (:+:), E), (+:+),
   makeRef, DType, Section, ListType(Simple, Bullet), getUnit, Quantity,
   symbol, SymbolForm, symbolMap, UnitDefn, usymb, Chunk, Expr(..),
   phrase, titleize, titleize', mkTable, Contents(Table), fromEqn, fromEqn', 
-  UnitalChunk, QDefinition, term, id, unit, ucw)-}
+  UnitalChunk, QDefinition, term, uid, unit, ucw)-}
 import Data.Drasil.Concepts.Documentation
 import Data.Drasil.Concepts.Math (unit_)
+
+eqUnR :: Expr -> Contents -- FIXME: Unreferable equations
+eqUnR e = EqnBlock e ""
   
 -- | fold helper functions applies f to all but the last element, applies g to
 -- last element and the accumulator
@@ -77,51 +77,25 @@ mkRefsList s l = Enumeration $ Simple $ zip (enumWithSquBrk s) (map Flat l)
 enumWithSquBrk :: Integer -> [Sentence]
 enumWithSquBrk start = [sSqBr $ S $ show x | x <- [start..]]
 
--- | formats constraints on variables for tables
-fmtCS :: Sentence -> Sentence -> Sentence -> Sentence
-fmtCS _ EmptyS EmptyS = S "None"  
-fmtCS symb a EmptyS   = symb +:+ a
-fmtCS symb a b        = symb +:+ a +:+ S "and" +:+ symb +:+ b
-
--- | formats numbers with units for tables
-fmtUS :: Sentence -> Sentence -> Sentence
-fmtUS num EmptyS = num
-fmtUS num units  = num +:+ units
-
 -- | takes a amount and adds a unit to it
 -- n - sentenc representing an amount
 -- u - unit we want to attach to amount
 fmtU :: (Quantity a) => Sentence -> a -> Sentence
 fmtU n u  = n +:+ (unwrap $ getUnit u)
 
--- | takes a chunk and a list of binary operator contraints to make an expression (Sentence)
--- ex. fmtBF x [((:>),0), ((:<),1)] -> x>0 and x<1
-fmtBF ::(SymbolForm a) => a -> [(Expr -> Expr -> Expr, Expr)] -> Sentence
-fmtBF _ []      = S "None"  
-fmtBF symb [(f,num)]  = E ((C symb) `f` num)
-fmtBF symb ((f,num):xs) = (E ((C symb) `f` num)) +:+ S "and" +:+ (fmtBF symb xs)
-
--- | gets symbol from chunk
-getS :: (Quantity a) => Stage -> a -> Sentence
-getS st = P . symbol st
-
-getES, getCS :: Quantity q => q -> Sentence
-getES = getS Equational
-getCS = getS Implementation
+-- | gets 'presentation' symbol from chunk
+getES :: (HasSymbol a) => a -> Sentence
+getES = P . eqSymb
 
 -- | gets a reasonable or typical value from a Constrained chunk
-getRVal :: (Constrained c) => c -> Expr
+getRVal :: (HasReasVal c) => c -> Expr
 getRVal c = uns (c ^. reasVal)
   where uns (Just e) = e
-        uns Nothing  = (V "WARNING: getRVal found no Expr")
+        uns Nothing  = error $ "getRVal found no Expr for " ++ (c ^. uid)
 
 -- | outputs sentence with % attached to it
 addPercent :: Float ->  Sentence
-addPercent num = (S (show num) :+: (P (Special Percent)))
-
--- | makes a list of sentence from sentences
-listConstS :: (Sentence, Sentence, Sentence, Sentence, Sentence) -> [Sentence]
-listConstS (symb, a, b, n, u) = [symb, fmtCS symb a b, fmtUS n u]
+addPercent num = (S (show num) :+: (Sp Percent))
 
 -- | appends a sentence to the front of a list of list of sentences
 zipSentList :: [[Sentence]] -> [Sentence] -> [[Sentence]] -> [[Sentence]] 
@@ -147,8 +121,8 @@ makeTMatrix colName col row = zipSentList [] colName [zipFTable [] x row | x <- 
 mkInputDatTb :: (Quantity a) => [a] -> Contents
 mkInputDatTb inputVar = Table [titleize symbol_, titleize unit_, 
   S "Name"]
-  (mkTable [getS Equational, fmtU EmptyS, phrase] inputVar) 
-  (S "Required" +:+ titleize' input_) True
+  (mkTable [getES , fmtU EmptyS, phrase] inputVar) 
+  (S "Required" +:+ titleize' input_) True "inDataTable"
 
 -- | makes sentences from an item and its reference 
 -- a - String title of reference
@@ -170,7 +144,7 @@ makeListRef l r = take (length l) $ repeat $ makeRef r
 
 -- | enumBullet apply Enumeration, Bullet and Flat to a list
 enumBullet ::[Sentence] -> Contents
-enumBullet f = Enumeration $ Bullet $ map (Flat) f
+enumBullet = Enumeration . Bullet . map Flat
 
 -- | enumSimple enumerates a list and applies simple and enumeration to it
 -- s - start index for the enumeration
@@ -181,35 +155,30 @@ enumSimple s t l = Enumeration $ Simple $ mkEnumAbbrevList s t l
 
 -- | interweaves two lists together [[a,b,c],[d,e,f]] -> [a,d,b,e,c,f]
 weave :: [[a]] -> [a]
-weave = (concat . transpose)
+weave = concat . transpose
 
 -- | get a unit symbol if there is one
 unwrap :: (Maybe UnitDefn) -> Sentence
 unwrap (Just a) = Sy (a ^. usymb)
 unwrap Nothing  = EmptyS
 
--- Using symbolMap from Extract
---FIXME: Not sure what type d should be
-symbolMapFun :: (a -> DType) -> a -> Contents
-symbolMapFun fun = (Definition . fun)
-
--- Used to help make Qdefinitions when id, term, and symbol come from the same source
+-- Used to help make Qdefinitions when uid, term, and symbol come from the same source
 mkDataDef :: (Quantity c) => c -> Expr -> QDefinition
 mkDataDef cncpt equation = datadef $ getUnit cncpt
-  where datadef (Just a) = fromEqn  (cncpt ^. id) (cncpt ^. term) EmptyS
+  where datadef (Just a) = fromEqn  (cncpt ^. uid) (cncpt ^. term) EmptyS
                            (eqSymb cncpt) a equation
-        datadef Nothing  = fromEqn' (cncpt ^. id) (cncpt ^. term) EmptyS
+        datadef Nothing  = fromEqn' (cncpt ^. uid) (cncpt ^. term) EmptyS
                            (eqSymb cncpt) equation
 
 -- Same as 'mkDataDef', but with an additional Sentence that can be taken as "extra information"; issue #350
 mkDataDef' :: (Quantity c) => c -> Expr -> Sentence -> QDefinition
 mkDataDef' cncpt equation extraInfo = datadef $ getUnit cncpt
-  where datadef (Just a) = fromEqn  (cncpt ^. id) (cncpt ^. term) (extraInfo)
+  where datadef (Just a) = fromEqn  (cncpt ^. uid) (cncpt ^. term) (extraInfo)
                            (eqSymb cncpt) a equation
-        datadef Nothing  = fromEqn' (cncpt ^. id) (cncpt ^. term) (extraInfo)
+        datadef Nothing  = fromEqn' (cncpt ^. uid) (cncpt ^. term) (extraInfo)
                            (eqSymb cncpt) equation
 
 prodUCTbl :: [[Sentence]] -> Contents
 prodUCTbl cases = Table [S "Actor", titleize input_ +:+ S "and" +:+ titleize output_]
   cases
-  (titleize useCaseTable) True
+  (titleize useCaseTable) True "useCaseTable"

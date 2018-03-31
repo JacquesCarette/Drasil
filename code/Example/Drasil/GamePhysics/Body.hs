@@ -1,7 +1,7 @@
 module Drasil.GamePhysics.Body where
 
 import Control.Lens ((^.))
-import Language.Drasil
+import Language.Drasil hiding (organization)
 import Data.Drasil.SI_Units
 
 import Data.Drasil.People (alex, luthfi)
@@ -62,8 +62,8 @@ mkSRS = RefSec (RefProg RM.intro [TUnits, tsymb tableOfSymbols, TAandA]) :
    IScope s2_2_intro_p1 s2_2_intro_p2, 
    IChar (S "rigid body dynamics") (phrase highSchoolCalculus) (EmptyS), 
    IOrgSec s2_4_intro inModel s4_2 EmptyS]) :
-  (map Verbatim [s3, s4, s5, s6, s7, s8, s9]) ++ 
-  ([Bibliography cpCitations])
+  (map Verbatim [s3, s4, s5, s6, s7, s8, s9])  ++ 
+  (Bibliography : []) 
     where tableOfSymbols = [TSPurpose, TypogConvention[Vector Bold], SymbOrder]
 
     --FIXME: Need to be able to print defn for gravitational constant.
@@ -75,23 +75,27 @@ chipmunkSysInfo = SI {
   _authors = authors,
   _units = chipUnits,
   _quants = cpSymbolsAll, 
-  _concepts = ([] :: [CQSWrapper]), 
+  _concepts = ([] :: [DefinedQuantityDict]),
   _definitions = (cpDDefs), 
   _inputs = (inputSymbols), 
   _outputs = (outputSymbols), 
   _defSequence = (cpQDefs), 
   _constraints = cpInputConstraints,
   _constants = [],
-  _sysinfodb = everything
+  _sysinfodb = everything,
+  _refdb = cpRefDB
 }
+
+cpRefDB :: ReferenceDB
+cpRefDB = rdb [] [] [] [] [] cpCitations -- FIXME: Convert the rest to new chunk types
 
 --FIXME: All named ideas, not just acronyms.
 
 chipUnits :: [UnitDefn]
-chipUnits = map UU [metre, kilogram, second] ++ map UU [newton, radian]
+chipUnits = map unitWrapper [metre, kilogram, second] ++ map unitWrapper [newton, radian]
 
 everything :: ChunkDB
-everything = cdb cpSymbolsAll (map nw cpSymbolsAll ++ map nw cpAcronyms) ([] :: [CWrapper]) -- FIXME: Fill in Concepts
+everything = cdb cpSymbolsAll (map nw cpSymbolsAll ++ map nw cpAcronyms) ([] :: [FundUnit]) -- FIXME: Fill in Concepts
   chipUnits
 
 chipCode :: CodeSpec
@@ -137,7 +141,7 @@ programDescription :: Sentence
 programDescription = foldlSent_ [(phrase openSource), getAcc twoD, 
   (phrase CP.rigidBody), (phrase physLib)]
 
-para1_s2_1_param :: (NamedIdea a, NamedIdea b) => a -> b -> Sentence -> Sentence ->
+para1_s2_1_param :: (Idea a, NamedIdea b) => a -> b -> Sentence -> Sentence ->
   [Sentence] -> Sentence
 para1_s2_1_param progName typeOf progDescrip appOf listOf = foldlSent 
   [S "This", (phrase typeOf), S "descibes the modeling of an",
@@ -676,7 +680,7 @@ s8_table1 = Table (EmptyS:(s8_row_header_t1))
   (makeTMatrix s8_col_header_t1 s8_columns_t1 s8_row_t1)
   (showingCxnBw (traceyMatrix) (titleize' requirement +:+ sParen (makeRef s5)
   `sC` (titleize' goalStmt) +:+ sParen (makeRef s4_1) `sAnd` S "Other" +:+
-  titleize' item)) True
+  titleize' item)) True "TraceyReqGoalsOther"
 
 s8_columns_t2 :: [[String]]
 s8_columns_t2 = [t1_t2, t2_t2, t3_t2, t4_t2, t5_t2, gD1_t2, gD2_t2, gD3_t2,
@@ -731,7 +735,7 @@ s8_table2 :: Contents
 s8_table2 = Table (EmptyS:s8_row_header_t2)
   (makeTMatrix s8_col_header_t2 s8_columns_t2 s8_row_t2) 
   (showingCxnBw (traceyMatrix) (titleize' assumption +:+ sParen (makeRef s4_1) 
-  `sAnd` S "Other" +:+ titleize' item)) True
+  `sAnd` S "Other" +:+ titleize' item)) True "TraceyAssumpsOther"
 
 
 s8_columns_t3 :: [[String]]
@@ -781,7 +785,7 @@ s8_table3 :: Contents
 s8_table3 = Table (EmptyS:s8_row_header_t3)
   (makeTMatrix s8_col_header_t3 s8_columns_t3 s8_row_t3)
   (showingCxnBw (traceyMatrix) (titleize' item `sAnd` 
-  S "Other" +:+ titleize' section_)) True
+  S "Other" +:+ titleize' section_)) True "TraceyItemsSecs"
 
 -----------------------------------
 -- VALUES OF AUXILIARY CONSTANTS --

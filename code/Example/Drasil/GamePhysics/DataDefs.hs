@@ -24,7 +24,7 @@ dd1CtrOfMass = mkDataDef pos_CM ctrOfMassEqn
 
 -- FIXME (Atomic "i") is a horrible hack
 ctrOfMassEqn :: Expr
-ctrOfMassEqn = (sum_all (Atomic "i") ((C mass_i) * (C pos_i))) / (C mTot)
+ctrOfMassEqn = (sum_all (Atomic "i") ((sy mass_i) * (sy pos_i))) / (sy mTot)
 
 -- DD2 : Linear displacement --
 
@@ -47,7 +47,7 @@ dd2linDisp :: QDefinition
 dd2linDisp = mkDataDef QP.linearDisplacement dispEqn
 
 dispEqn :: Expr
-dispEqn = Deriv Total (FCall (C QP.position) [C QP.time]) QP.time
+dispEqn = deriv (apply1 QP.position QP.time) QP.time
 {-
 dd2descr :: Sentence
 dd2descr = S "linear" +:+ (QP.displacement ^. term) +:+ S "of a" +:+
@@ -73,7 +73,7 @@ dd3linVel :: QDefinition
 dd3linVel = mkDataDef QP.linearVelocity velEqn
 
 velEqn :: Expr
-velEqn = Deriv Total (FCall (C QP.displacement) [C QP.time]) QP.time
+velEqn = deriv (apply1 QP.displacement QP.time) QP.time
 {-
 dd3descr :: Sentence
 dd3descr = S "linear" +:+ (QP.velocity ^. term) +:+ S "of a" +:+
@@ -88,7 +88,7 @@ dd4linAcc :: QDefinition
 dd4linAcc = mkDataDef QP.linearAccel accelEqn
 
 accelEqn :: Expr
-accelEqn = Deriv Total (FCall (C QP.velocity) [C QP.time]) QP.time
+accelEqn = deriv (apply1 QP.velocity QP.time) QP.time
 {-
 dd4descr :: Sentence
 dd4descr = S "linear" +:+ (accel ^. term) +:+ S "of a" +:+
@@ -103,7 +103,7 @@ dd5angDisp :: QDefinition
 dd5angDisp = mkDataDef QP.angularDisplacement angDispEqn
 
 angDispEqn :: Expr
-angDispEqn = Deriv Total (FCall (C QM.orientation) [C QP.time]) QP.time
+angDispEqn = deriv (apply1 QM.orientation QP.time) QP.time
 {-
 dd5descr :: Sentence
 dd5descr = (QP.angularDisplacement ^. term) +:+ S "of a" +:+
@@ -118,7 +118,7 @@ dd6angVel :: QDefinition
 dd6angVel = mkDataDef QP.angularVelocity angVelEqn
 
 angVelEqn :: Expr
-angVelEqn = Deriv Total (FCall (C QP.angularDisplacement) [C QP.time]) QP.time
+angVelEqn = deriv (apply1 QP.angularDisplacement QP.time) QP.time
 {-
 dd6descr :: Sentence
 dd6descr = ((QP.angularVelocity ^. term)) +:+ S "of a" +:+
@@ -133,7 +133,7 @@ dd7angAccel :: QDefinition
 dd7angAccel = mkDataDef QP.angularAccel angAccelEqn
 
 angAccelEqn :: Expr
-angAccelEqn = Deriv Total (FCall (C QP.angularVelocity) [C QP.time]) QP.time
+angAccelEqn = deriv (apply1 QP.angularVelocity QP.time) QP.time
 {-
 dd7descr :: Sentence
 dd7descr = (QP.angularAccel ^. term) +:+ S "of a" +:+
@@ -152,11 +152,11 @@ dd8impulse = mkDataDef QP.impulseS impulseEqn
 
 -- The last two terms in the denominator should be cross products.
 impulseEqn :: Expr
-impulseEqn = ((negate ((Int 1) + (C QP.restitutionCoef))) * (C initRelVel) $.
-  (C normalVect)) / (((((Int 1) / (C mass_A))) + ((Int 1) / (C mass_B))) *
-  ((C normalLen) $^ (Int 2)) +
-  (((C perpLen_A) $^ (Int 2)) / (C momtInert_A)) +
-  (((C perpLen_B) $^ (Int 2))/ (C momtInert_B)))
+impulseEqn = ((negate (1 + (sy QP.restitutionCoef))) * (sy initRelVel) $.
+  (sy normalVect)) / ((((1 / (sy mass_A))) + (1 / (sy mass_B))) *
+  ((sy normalLen) $^ 2) +
+  (((sy perpLen_A) $^ 2) / (sy momtInert_A)) +
+  (((sy perpLen_B) $^ 2)/ (sy momtInert_B)))
 {-
 --NOTE: Removed an extra "the" that was showing up in the output.
 dd8descr :: Sentence

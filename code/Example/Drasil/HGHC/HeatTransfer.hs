@@ -6,8 +6,8 @@ import Data.Drasil.Units.Thermodynamics (heat_transfer_coef)
 
 {--}
 
-symbols :: [QWrapper]
-symbols = map qs hghcVars ++ map qs htVars
+symbols :: [QuantityDict]
+symbols = map qw hghcVars ++ map qw htVars
 
 hghcVars :: [QDefinition]
 hghcVars = [htTransCladFuel, htTransCladCool]
@@ -15,18 +15,18 @@ hghcVars = [htTransCladFuel, htTransCladCool]
 htVars :: [VarChunk]
 htVars = [cladThick, coolFilmCond, gapFilmCond, cladCond]
 
-htInputs, htOutputs :: [QWrapper]
-htInputs = map qs htVars
-htOutputs = map qs hghcVars
+htInputs, htOutputs :: [QuantityDict]
+htInputs = map qw htVars
+htOutputs = map qw hghcVars
 
 cladThick, coolFilmCond, gapFilmCond, cladCond :: VarChunk
-cladThick    = makeVC "cladThick"    (cn''' "clad thickness")
-  ((Greek Tau_L) `sub` lC)
-coolFilmCond = makeVC "coolFilmCond" (cn' "initial coolant film conductance")
-  (lH `sub` lB)
-gapFilmCond  = makeVC "gapFilmCond"  (cn' "initial gap film conductance")
-  (lH `sub` lP)
-cladCond     = makeVC "cladCond"     (cnIES "clad conductivity") (lK `sub` lC)
+cladThick    = vc "cladThick"    (cn''' "clad thickness")
+  ((Greek Tau_L) `sub` lC) Real
+coolFilmCond = vc "coolFilmCond" (cn' "initial coolant film conductance")
+  (lH `sub` lB) Real
+gapFilmCond  = vc "gapFilmCond"  (cn' "initial gap film conductance")
+  (lH `sub` lP) Real
+cladCond     = vc "cladCond"     (cnIES "clad conductivity") (lK `sub` lC) Real
 
 htTransCladCool_eq, htTransCladFuel_eq :: Expr
 htTransCladCool, htTransCladFuel :: QDefinition
@@ -37,16 +37,16 @@ htTransCladCool = fromEqn "htTransCladCool" (nounPhraseSP
   (lH `sub` lC) heat_transfer_coef htTransCladCool_eq
 
 htTransCladCool_eq =
-  (2 * (C cladCond) * (C coolFilmCond) / (2 * (C cladCond) + (C cladThick) 
-  * (C coolFilmCond)))
+  (2 * (sy cladCond) * (sy coolFilmCond) / (2 * (sy cladCond) + (sy cladThick) 
+  * (sy coolFilmCond)))
 
 htTransCladFuel = fromEqn "htTransCladFuel" (nounPhraseSP
   "effective heat transfer coefficient between clad and fuel surface")
   EmptyS
   (lH `sub` lG) heat_transfer_coef htTransCladFuel_eq
 
-htTransCladFuel_eq = (2 * (C cladCond) * (C gapFilmCond)) / (2 * (C cladCond)
-  + ((C cladThick) * (C gapFilmCond)))
+htTransCladFuel_eq = (2 * (sy cladCond) * (sy gapFilmCond)) / (2 * (sy cladCond)
+  + ((sy cladThick) * (sy gapFilmCond)))
 
 hghc, nuclearPhys, fp :: NamedChunk
 hghc = nc "hghc" (cn "tiny")

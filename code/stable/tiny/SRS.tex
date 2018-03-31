@@ -18,10 +18,10 @@
 \tableofcontents
 \newpage
 \section{Reference Material}
-\label{Sec:RefeMate}
+\label{Sec:RefMat}
 This section records information for easy reference.
 \subsection{Table of Units}
-\label{Sec:TablofUnit}
+\label{Sec:ToU}
 The unit system used throughout is SI (Syst\`{e}me International d'Unit\'{e}s). In addition to the basic units, several derived units are also used. For each unit, the table lists the symbol, a description and the SI name.
 \begin{longtable*}{l l}
 \toprule
@@ -97,10 +97,10 @@ Wb & magnetic flux (weber)
 $\Omega{}$ & resistance (ohm)
 \\
 \bottomrule
-\label{Table:TablofUnit}
+\label{Table:ToU}
 \end{longtable*}
 \subsection{Table of Symbols}
-\label{Sec:TablofSymb}
+\label{Sec:ToS}
 The table that follows summarizes the symbols used in this document along with their units. The choice of symbols was made to be consistent with the nuclear physics literature and with that used in the FP manual.
 \begin{longtabu}{l X[l] l}
 \toprule
@@ -120,10 +120,10 @@ ${k_{c}}$ & Clad conductivity &
 ${\tau{}_{c}}$ & Clad thickness & 
 \\
 \bottomrule
-\label{Table:TablofSymb}
+\label{Table:ToS}
 \end{longtabu}
 \section{Data Definitions}
-\label{Sec:DataDefi}
+\label{Sec:DDs}
 This section collects and defines all the data needed to build the instance models.
 ~\newline
 \noindent \begin{minipage}{\textwidth}
@@ -136,7 +136,7 @@ Label & Effective Heat Transfer Coefficient Between Clad and Fuel Surface
 \\ \midrule \\
 Units & $\frac{\text{W}}{(\text{m}^{2}{}^{\circ}\text{C})}$
 \\ \midrule \\
-Equation & ${h_{g}}$ = $\frac{2{k_{c}}{h_{p}}}{2{k_{c}}+{\tau{}_{c}}{h_{p}}}$
+Equation & ${h_{g}}$ = $\frac{2 {k_{c}} {h_{p}}}{2 {k_{c}}+{\tau{}_{c}} {h_{p}}}$
 \\ \midrule \\
 Description & ${h_{g}}$ is the effective heat transfer coefficient between clad and fuel surface ($\frac{\text{W}}{(\text{m}^{2}{}^{\circ}\text{C})}$)\newline${k_{c}}$ is the clad conductivity\newline${h_{p}}$ is the initial gap film conductance\newline${\tau{}_{c}}$ is the clad thickness
 \\ \bottomrule \end{tabular}
@@ -152,7 +152,7 @@ Label & Convective Heat Transfer Coefficient Between Clad and Coolant
 \\ \midrule \\
 Units & $\frac{\text{W}}{(\text{m}^{2}{}^{\circ}\text{C})}$
 \\ \midrule \\
-Equation & ${h_{c}}$ = $\frac{2{k_{c}}{h_{b}}}{2{k_{c}}+{\tau{}_{c}}{h_{b}}}$
+Equation & ${h_{c}}$ = $\frac{2 {k_{c}} {h_{b}}}{2 {k_{c}}+{\tau{}_{c}} {h_{b}}}$
 \\ \midrule \\
 Description & ${h_{c}}$ is the convective heat transfer coefficient between clad and coolant ($\frac{\text{W}}{(\text{m}^{2}{}^{\circ}\text{C})}$)\newline${k_{c}}$ is the clad conductivity\newline${h_{b}}$ is the initial coolant film conductance\newline${\tau{}_{c}}$ is the clad thickness
 \\ \bottomrule \end{tabular}

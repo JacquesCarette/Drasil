@@ -1,6 +1,6 @@
 module Drasil.SSP.Body (ssp_srs, ssp_code, sspSymMap) where
 
-import Language.Drasil
+import Language.Drasil hiding (organization)
 import Data.Drasil.SI_Units
 import Control.Lens ((^.))
 import Prelude hiding (sin, cos, tan)
@@ -56,8 +56,7 @@ import Data.Drasil.Concepts.Math (surface, equation)
 import Data.Drasil.Concepts.SolidMechanics (normForce, shearForce)
 import Data.Drasil.Software.Products (sciCompS)
 
-import Data.Drasil.Utils (symbolMapFun,
-  getES, enumBullet, enumSimple, weave)
+import Data.Drasil.Utils (getES, enumBullet, enumSimple, weave)
 import Data.Drasil.SentenceStructures (sOr, acroDD,
   foldlSent, ofThe, sAnd, foldlSP, foldlList, foldlSent_)
 
@@ -82,7 +81,7 @@ theory_model_tmods, gen_def_genDefs, data_def_dataDefs, insta_model_IMods :: [Co
 
 --Document Setup--
 this_si :: [UnitDefn]
-this_si = map UU [metre, degree] ++ map UU [newton, pascal]
+this_si = map unitWrapper [metre, degree] ++ map unitWrapper [newton, pascal]
 
 ssp_si :: SystemInformation
 ssp_si = SI {
@@ -93,13 +92,17 @@ ssp_si = SI {
   _quants = sspSymbols,
   _concepts = (sspSymbols),
   _definitions = sspDataDefs,
-  _inputs = (map qs sspInputs),
-  _outputs = (map qs sspOutputs),
+  _inputs = map qw sspInputs,
+  _outputs = map qw sspOutputs,
   _defSequence = [Parallel (head sspDataDefs) (tail sspDataDefs)],
   _constraints = sspConstrained,
   _constants = [],
-  _sysinfodb = sspSymMap
+  _sysinfodb = sspSymMap,
+  _refdb = sspRefDB
 }
+
+sspRefDB :: ReferenceDB
+sspRefDB = rdb [] [] [] [] [] sspCitations -- FIXME: Convert the rest to new chunk types
 
 mkSRS :: DocDesc
 mkSRS = RefSec (RefProg intro
@@ -111,8 +114,8 @@ mkSRS = RefSec (RefProg intro
       EmptyS
     , IOrgSec orgSecStart inModel (SRS.inModel SRS.missingP []) orgSecEnd]) :
     --FIXME: issue #235
-  map Verbatim [gen_sys_desc, spec_sys_desc, req, likely_chg, aux_cons]
-   ++ [Bibliography sspCitations]
+  map Verbatim [gen_sys_desc, spec_sys_desc, req, likely_chg, aux_cons] 
+   ++ (Bibliography : [])
   
 ssp_srs :: Document
 ssp_srs = mkDoc mkSRS (for) ssp_si
@@ -123,14 +126,8 @@ ssp_code = codeSpec' ssp_si [sspInputMod]
 
 -- SYMBOL MAP HELPERS --
 sspSymMap :: ChunkDB
-sspSymMap = cdb sspSymbols (map nw sspSymbols ++ map nw acronyms) ([] :: [CWrapper]) -- FIXME: Fill in Concepts
+sspSymMap = cdb sspSymbols (map nw sspSymbols ++ map nw acronyms) ([] :: [UnitDefn]) -- FIXME: Fill in Concepts
   this_si
-
-sspSymMapT :: RelationConcept -> Contents
-sspSymMapT = symbolMapFun Theory
-
-sspSymMapD :: QDefinition -> Contents
-sspSymMapD = symbolMapFun Data
 
 -- SECTION 1 --
 --automatically generated in mkSRS -
@@ -168,7 +165,7 @@ startIntro = foldlSent [S "A", phrase slope, S "of geological",
 
 kSent = keySent ssa
 
-keySent :: (NamedIdea a) => a -> Sentence
+keySent :: (Idea a) => a -> Sentence
 keySent pname = foldlSent_ [S "a", phrase pname +:+. phrase problem,
   S "The developed", phrase program, S "will be referred to as the",
   introduceAbb pname, phrase program]
@@ -182,7 +179,7 @@ prpsOfDoc_p1 = purposeDoc ssa crtSlpSrf fs how introduces analysizes
         introduces = phrase slope +:+ S "stability" +:+ plural issue
         analysizes = S "safe" +:+ phrase slope
 
-purposeDoc :: (NamedIdea a, NamedIdea b, NamedIdea c) =>
+purposeDoc :: (Idea a, NamedIdea b, NamedIdea c) =>
               a -> b -> c -> Sentence -> Sentence -> Sentence
               -> Sentence
 purposeDoc pname what calculates how introduces analysizes =
@@ -230,7 +227,7 @@ userCharIntro :: Contents
 userCharIntro = userChar ssa [S "Calculus", titleize physics]
   [phrase soil, plural mtrlPrpty]
 
-userChar :: (NamedIdea a) => a -> [Sentence] -> [Sentence] -> Contents
+userChar :: (Idea a) => a -> [Sentence] -> [Sentence] -> Contents
 userChar pname understandings familiarities = foldlSP [
   S "The", phrase endUser, S "of", short pname,
   S "should have an understanding of undergraduate Level 1",
@@ -271,7 +268,7 @@ phys_sys_desc_p1 = physSystIntro slope how intrslce slice (S "slice base")
   fig_indexconv
   where how = S "as a series of" +:+ phrase slice +:+. plural element
 
-physSystIntro :: (NamedIdea a, NamedIdea b, NamedIdea c, LayoutObj d) =>
+physSystIntro :: (NamedIdea a, NamedIdea b, NamedIdea c, Referable d) =>
   a -> Sentence -> b -> c -> Sentence -> d -> Contents
 physSystIntro what how p1 p2 p3 indexref = foldlSP [
   at_start analysis, S "of the", phrase what, S "is performed by looking at",
@@ -285,7 +282,8 @@ phys_sys_desc_bullets = enumBullet $ map foldlSent_ [
   [at_start' itslPrpty, S "convention is noted by j. The end",
   plural itslPrpty, S "are usually not of", phrase interest `sC`
   S "therefore use the", plural itslPrpty, S "from", 
-  (E $ 1 $<= C index $<= (C numbSlices) - 1)],
+  E $ real_interval index $ Bounded (Inc 1) (Inc (sy numbSlices -1))],
+  -- (E $ 1 $<= sy index $<= (sy numbSlices) - 1)],
 
   [at_start slice, plural property +:+. S "convention is noted by",
   getES index]]
@@ -297,11 +295,11 @@ phys_sys_desc_p2 = foldlSP [S "A", phrase fbd, S "of the", plural force,
 fig_indexconv :: Contents
 fig_indexconv = fig (foldlSent_ [S "Index convention for numbering",
   phrase slice `sAnd` phrase intrslce,
-  phrase force, plural variable]) "IndexConvention.png"
+  phrase force, plural variable]) "IndexConvention.png" "IndexConvention"
 
 fig_forceacting :: Contents
 fig_forceacting = fig (at_start' force +:+ S "acting on a" +:+
-  phrase slice) "ForceDiagram.png"
+  phrase slice) "ForceDiagram.png" "ForceDiagram"
 
 -- SECTION 4.1.3 --
 goal_stmt = goalStmtF (map (\(x, y) -> x `ofThe` y) [
@@ -334,25 +332,25 @@ assumps_list = enumSimple 1 (short assumption) sspAssumptions
 -- SECTION 4.2.2 --
 -- TModels is automatically generated in solChSpecF using the tmods below
 
-theory_model_tmods = map sspSymMapT sspTMods
+theory_model_tmods = map reldefn sspTMods
 
 -- SECTION 4.2.3 --
 -- General Definitions is automatically generated in solChSpecF
-gen_def_genDefs = map sspSymMapT sspGenDefs
+gen_def_genDefs = map reldefn sspGenDefs
 
 -- SECTION 4.2.4 --
 -- Data Definitions is automatically generated in solChSpecF
-data_def_dataDefs = (map sspSymMapD (take 13 sspDataDefs)) ++ resShrDerivation ++
-  [sspSymMapD (sspDataDefs !! 13)] ++ mobShrDerivation ++
-  map sspSymMapD [sspDataDefs !! 14, sspDataDefs !! 15] ++
-  stfMtrxDerivation ++ (map sspSymMapD (drop 16 sspDataDefs))
+data_def_dataDefs = (map datadefn (take 13 sspDataDefs)) ++ resShrDerivation ++
+  [datadefn (sspDataDefs !! 13)] ++ mobShrDerivation ++
+  map datadefn [sspDataDefs !! 14, sspDataDefs !! 15] ++
+  stfMtrxDerivation ++ (map datadefn (drop 16 sspDataDefs))
   --FIXME: derivations should be with the appropriate DataDef
 
 -- SECTION 4.2.5 --
 -- Instance Models is automatically generated in solChSpecF
 -- using the paragraphs below
 
-insta_model_IMods = concat $ weave [map (\x -> [sspSymMapT x]) sspIMods,
+insta_model_IMods = concat $ weave [map (\x -> [reldefn x]) sspIMods,
   [fctSftyDerivation, nrmShrDerivation, intrSlcDerivation,
   rigDisDerivation, rigFoSDerivation]]
   --FIXME: derivations should be with the appropriate IMod

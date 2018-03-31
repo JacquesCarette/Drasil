@@ -13,6 +13,7 @@
 \usepackage{graphics}
 \usepackage{filecontents}
 \usepackage[backend=bibtex]{biblatex}
+\usepackage{url}
 \global\tabulinesep=1mm
 \newcounter{assumpnum}
 \newcommand{\atheassumpnum}{A\theassumpnum}
@@ -28,10 +29,10 @@
 \tableofcontents
 \newpage
 \section{Reference Material}
-\label{Sec:RefeMate}
+\label{Sec:RefMat}
 This section records information for easy reference.
 \subsection{Table of Units}
-\label{Sec:TablofUnit}
+\label{Sec:ToU}
 The unit system used throughout is SI (Syst\`{e}me International d'Unit\'{e}s). In addition to the basic units, several derived units are also used. For each unit, the table lists the symbol, a description and the SI name.
 \begin{longtable*}{l l}
 \toprule
@@ -51,10 +52,10 @@ s & time (second)
 W & power (watt)
 \\
 \bottomrule
-\label{Table:TablofUnit}
+\label{Table:ToU}
 \end{longtable*}
 \subsection{Table of Symbols}
-\label{Sec:TablofSymb}
+\label{Sec:ToS}
 The table that follows summarizes the symbols used in this document along with their units. The choice of symbols was made to be consistent with the heat transfer literature and with existing documentation for solar water heating systems. The symbols are listed in alphabetical order.
 \begin{longtabu}{l X[l] l}
 \toprule
@@ -186,10 +187,10 @@ ${\tau{}_{W}}$ & ODE parameter for water & s
 $\phi{}$ & Melt fraction & 
 \\
 \bottomrule
-\label{Table:TablofSymb}
+\label{Table:ToS}
 \end{longtabu}
 \subsection{Abbreviations and Acronyms}
-\label{Sec:AbbrandAcro}
+\label{Sec:TAbbAcc}
 \begin{longtable*}{l l}
 \toprule
 Symbol & Description
@@ -226,37 +227,37 @@ T & Theoretical Model
 TU & Typical Uncertainty
 \\
 \bottomrule
-\label{Table:AbbrandAcro}
+\label{Table:TAbbAcc}
 \end{longtable*}
 \section{Introduction}
-\label{Sec:Intr}
+\label{Sec:Intro}
 Due to increasing cost, diminishing availability, and negative environmental impact of fossil fuels, there is a higher demand for renewable energy sources and energy storage technology. Solar water heating systems incorporating phase change material (PCM) use renewable energy sources and provide a novel way of storing energy. Solar water heating systems incorporating PCM improve over the traditional solar water heating systems because of their smaller size. The smaller size is possible because of the ability of PCM to store thermal energy as latent heat, which allows higher thermal energy storage capacity per unit weight.
 The following section provides an overview of the Software Requirements Specification (SRS) for solar water heating systems incorporating PCM. The developed program will be referred to as Solar Water Heating System (SWHS). This section explains the purpose of this document, the scope of the system, the organization of the document, and the characteristics of the intended reader.
 \subsection{Purpose of Document}
-\label{Sec:PurpofDocu}
+\label{Sec:DocPurpose}
 The main purpose of this document is to describe the modelling of solar water heating systems incorporating PCM. The goal statements and theoretical models used in the SWHS code are provided, with an emphasis on explicitly identifying assumptions and unambiguous definitions. This document is intended to be used as a reference to provide ad hoc access to all information necessary to understand and verify the model. The SRS is abstract because the contents say what problem is being solved, but do not say how to solve it.
 This document will be used as a starting point for subsequent development phases, including writing the design specification and the software verification and validation plan. The design document will show how the requirements are to be realized, including decisions on the numerical algorithms and programming environment. The verification and validation plan will show the steps that will be used to increase confidence in the software documentation and the implementation. Although the SRS fits in a series of documents that follow the so-called waterfall model, the actual development process is not constrained in any way. Even when the waterfall model is not followed, as Parnas and Clements point out, the most logical way to present the documentation is still to ``fake" a rational design process.
 \subsection{Scope of Requirements}
-\label{Sec:ScopofRequ}
+\label{Sec:ReqsScope}
 The scope of the requirements includes thermal analysis of a single solar water heating tank incorporating PCM. Given the appropriate inputs, the code for solar water heating systems incorporating PCM is intended to predict the temperature and thermal energy histories for the water and the PCM. This entire document is written assuming that the substances inside the solar water heating tank are water and PCM.
 \subsection{Characteristics of Intended Reader}
-\label{Sec:CharofInteRead}
-Reviewers of this documentation should have a strong knowledge in heat transfer theory. A third or fourth year Mechanical Engineering course on this topic is recommended. The reviewers should also have an understanding of differential equations, as typically covered in first and second year Calculus courses. The users of solar water heating systems incorporating PCM can have a lower level of expertise, as explained in Section~\ref{Sec:UserChar}.
+\label{Sec:ReaderChars}
+Reviewers of this documentation should have a strong knowledge in heat transfer theory. A third or fourth year Mechanical Engineering course on this topic is recommended. The reviewers should also have an understanding of differential equations, as typically covered in first and second year Calculus courses. The users of solar water heating systems incorporating PCM can have a lower level of expertise, as explained in Section~\ref{Sec:UserChars}.
 \subsection{Organization of Document}
-\label{Sec:OrgaofDocu}
-The organization of this document follows the template for an SRS for scientific computing software proposed by {[}3{]} and {[}6{]} (Section~\ref{Sec:Refe}). The presentation follows the standard pattern of presenting goals, theories, definitions, and assumptions. For readers that would like a more bottom up approach, they can start reading the instance models in Section~\ref{Sec:InstMode} and trace back to find any additional information they require.
-The goal statements are refined to the theoretical models, and the theoretical models to the instance models. The instance models (Section~\ref{Sec:InstMode}) to be solved are referred to as IM1 to IM4. The instance models provide the Ordinary Differential Equation (ODEs) and algebraic equations that model the solar water heating systems incorporating PCM. SWHS solves these ODEs.
+\label{Sec:DocOrg}
+The organization of this document follows the template for an SRS for scientific computing software proposed by {[}3{]} and {[}6{]} (Section~\ref{Sec:References}). The presentation follows the standard pattern of presenting goals, theories, definitions, and assumptions. For readers that would like a more bottom up approach, they can start reading the instance models in Section~\ref{Sec:IMs} and trace back to find any additional information they require.
+The goal statements are refined to the theoretical models, and the theoretical models to the instance models. The instance models (Section~\ref{Sec:IMs}) to be solved are referred to as IM1 to IM4. The instance models provide the Ordinary Differential Equation (ODEs) and algebraic equations that model the solar water heating systems incorporating PCM. SWHS solves these ODEs.
 \section{General System Description}
-\label{Sec:GeneSystDesc}
+\label{Sec:GenSysDesc}
 This section provides general information about the system, identifies the interfaces between the system and its environment, and describes the user characteristics and the system constraints.
 \subsection{System Context}
-\label{Sec:SystCont}
-Figure~\ref{Figure::SystCont} shows the system context. A circle represents an external entity outside the software, the user in this case. A rectangle represents the software system itself (SWHS). Arrows are used to show the data flow between the system and its environment.
+\label{Sec:SysContext}
+Figure~\ref{Figure:SysCon} shows the system context. A circle represents an external entity outside the software, the user in this case. A rectangle represents the software system itself (SWHS). Arrows are used to show the data flow between the system and its environment.
 \begin{figure}
 \begin{center}
 \includegraphics[width=\textwidth]{SystemContextFigure.png}
-\caption{Figure~\ref{Figure::SystCont}: System Context}
-\label{Figure::SystCont}
+\caption{Figure~\ref{Figure:SysCon}: System Context}
+\label{Figure:SysCon}
 \end{center}
 \end{figure}
 SWHS is mostly self-contained. The only external interaction is through the user interface. The responsibilities of the user and the system are as follows:
@@ -274,10 +275,10 @@ SWHS is mostly self-contained. The only external interaction is through the user
 \end{enumerate}
 \end{enumerate}
 \subsection{User Characteristics}
-\label{Sec:UserChar}
+\label{Sec:UserChars}
 The end user of SWHS should have an understanding of undergraduate Level 1 Calculus and Physics.
 \subsection{System Constraints}
-\label{Sec:SystCons}
+\label{Sec:SysConstraints}
 There are no system constraints.
 \section{Specific System Description}
 \label{Sec:SpecSystDesc}
@@ -286,7 +287,7 @@ This section first presents the problem description, which gives a high-level vi
 \label{Sec:ProbDesc}
 SWHS is a computer program developed to investigate the effect of employing PCM within a solar water heating tank.
 \subsubsection{Terminology and Definitions}
-\label{Sec:TermandDefi}
+\label{Sec:TermDefs}
 This subsection provides a list of terms that are used in the subsequent sections and their meaning, with the purpose of reducing ambiguity and making it easier to correctly understand the requirements.
 \begin{enumerate}
 \item{Heat flux: The rate of thermal energy transfer through a given surface per unit time.}
@@ -296,8 +297,8 @@ This subsection provides a list of terms that are used in the subsequent section
 \item{Transient: Changing with time.}
 \end{enumerate}
 \subsubsection{Physical System Description}
-\label{Sec:PhysSystDesc}
-The physical system of SWHS, as shown in Figure~\ref{Figure:SolawateheattankwithheatfluxintothewatefromthecoilofandheatfluxintothePCMfromwateof}, includes the following elements:
+\label{Sec:PhysSyst}
+The physical system of SWHS, as shown in Figure~\ref{Figure:Tank}, includes the following elements:
 \begin{itemize}
 \item[PS1:]Tank containing water.
 \item[PS2:]Heating coil at bottom of tank. (${q_{C}}$ represents the heat flux into the water from the coil.)
@@ -307,11 +308,11 @@ The physical system of SWHS, as shown in Figure~\ref{Figure:Solawateheattankwith
 \begin{center}
 \includegraphics[width=\textwidth]{Tank.png}
 \caption{Solar water heating tank, with heat flux into the water from the coil of ${q_{C}}$ and heat flux into the PCM from water of ${q_{P}}$}
-\label{Figure:SolawateheattankwithheatfluxintothewatefromthecoilofandheatfluxintothePCMfromwateof}
+\label{Figure:Tank}
 \end{center}
 \end{figure}
 \subsubsection{Goal Statements}
-\label{Sec:GoalStat}
+\label{Sec:GoalStmt}
 Given the temperature of the heating coil, initial conditions for the temperature of the water and the temperature of the phase change material, and material properties, the goal statements are:
 \begin{itemize}
 \item[GS1:]Predict the temperature of the water over time.
@@ -320,11 +321,11 @@ Given the temperature of the heating coil, initial conditions for the temperatur
 \item[GS4:]Predict the change in heat energy in the PCM over time.
 \end{itemize}
 \subsection{Solution Characteristics Specification}
-\label{Sec:SoluCharSpec}
-The instance models that govern SWHS are presented in Section~\ref{Sec:InstMode}. The information to understand the meaning of the instance models and their derivation is also presented, so that the instance models can be verified.
+\label{Sec:SolCharSpec}
+The instance models that govern SWHS are presented in Section~\ref{Sec:IMs}. The information to understand the meaning of the instance models and their derivation is also presented, so that the instance models can be verified.
 \subsubsection{Assumptions}
-\label{Sec:Assu}
-This section simplifies the original problem and helps in developing the theoretical model by filling in the missing information for the physical system. The numbers given in the square brackets refer to the Theoretical Models {[}Section~\ref{Sec:TheoMode}{]}, General Definitions {[}Section~\ref{Sec:GeneDefi}{]}, Data Definitions {[}Section~\ref{Sec:DataDefi}{]}, Instance Models {[}Section~\ref{Sec:InstMode}{]}, or Likely Changes {[}Section~\ref{Sec:LikeChan}{]}, in which the respective assumption is used.
+\label{Sec:Assumps}
+This section simplifies the original problem and helps in developing the theoretical model by filling in the missing information for the physical system. The numbers given in the square brackets refer to the Theoretical Models {[}Section~\ref{Sec:TMs}{]}, General Definitions {[}Section~\ref{Sec:GDs}{]}, Data Definitions {[}Section~\ref{Sec:DDs}{]}, Instance Models {[}Section~\ref{Sec:IMs}{]}, or Likely Changes {[}Section~\ref{Sec:LCs}{]}, in which the respective assumption is used.
 \begin{description}
 \item[\refstepcounter{assumpnum}\atheassumpnum\label{A:assump1}:]The only form of energy that is relevant for this problem is thermal energy. All other forms of energy, such as mechanical energy, are assumed to be negligible {[}\hyperref[T:t1ConsThermE]{Definition~T:t1ConsThermE}{]}.
 \end{description}
@@ -386,7 +387,7 @@ This section simplifies the original problem and helps in developing the theoret
 \item[\refstepcounter{assumpnum}\atheassumpnum\label{A:assump20}:]When considering the volume of water in the tank, the volume of the heating coil is assumed to be negligible.
 \end{description}
 \subsubsection{Theoretical Models}
-\label{Sec:TheoMode}
+\label{Sec:TMs}
 This section focuses on the general equations and laws that SWHS is based on.
 ~\newline
 \noindent \begin{minipage}{\textwidth}
@@ -397,7 +398,7 @@ This section focuses on the general equations and laws that SWHS is based on.
 \\ \midrule \\
 Label & Conservation of Thermal Energy
 \\ \midrule \\
-Equation & $-\nabla{}\cdot{}\mathbf{q}+g=\rho{}C\frac{\partial{}T}{\partial{}t}$
+Equation & $-\nabla{}\cdot{}\mathbf{q}+g=\rho{} C \frac{\partial{}\,T}{\partial{}\,t}$
 \\ \midrule \\
 Description & The above equation gives the law of conservation of energy for transient heat transfer in a material of specific heat capacity $C$ ($\frac{\text{J}}{(\text{kg}{}^{\circ}\text{C})}$) and density, $\rho{}$ ($\frac{\text{kg}}{\text{m}^{3}}$), where $\mathbf{q}$ is the thermal flux vector ($\frac{\text{W}}{\text{m}^{2}}$), $g$ is the volumetric heat generation per unit volume ($\frac{\text{W}}{\text{m}^{3}}$), $T$ is the temperature (${}^{\circ}$C), $t$ is time (s), and $\nabla{}$ is the degree of steepness of a graph at any point. For this equation to apply, other forms of energy, such as mechanical energy, are assumed to be negligible in the system (A\ref{A:assump1}).
 \\ \bottomrule \end{tabular}
@@ -412,9 +413,9 @@ Description & The above equation gives the law of conservation of energy for tra
 Label & Sensible Heat Energy
 \\ \midrule \\
 Equation & $E=\begin{cases}
-{C^{S}}m\Delta{}T, & T<{T_{melt}}\\
-{C^{L}}m\Delta{}T, & {T_{melt}}<T<{T_{boil}}\\
-{C^{V}}m\Delta{}T, & {T_{boil}}<T
+{C^{S}} m \Delta{}T, & T<{T_{melt}}\\
+{C^{L}} m \Delta{}T, & {T_{melt}}<T<{T_{boil}}\\
+{C^{V}} m \Delta{}T, & {T_{boil}}<T
 \end{cases}$
 \\ \midrule \\
 Description & $E$ is the change in sensible heat energy (J). ${C^{S}}$, ${C^{L}}$, ${C^{V}}$ are the specific heat capacity of a solid, specific heat capacity of a liquid, and specific heat capacity of a vapour, respectively ($\frac{\text{J}}{(\text{kg}{}^{\circ}\text{C})}$). $m$ is the mass (kg). $T$ is the temperature (${}^{\circ}$C), and $\Delta{}T$ is the change in temperature (${}^{\circ}$C). ${T_{melt}}$ and ${T_{boil}}$ are the melting point temperature and boiling point temperature, respectively (${}^{\circ}$C). Sensible heating occurs as long as the material does not reach a temperature where a phase change occurs. A phase change occurs if $T$=${T_{boil}}$ or $T$=${T_{melt}}$. If this is the case, refer to \hyperref[T:t3LatHtE]{Definition~T:t3LatHtE}, Latent heat energy.
@@ -429,13 +430,13 @@ Description & $E$ is the change in sensible heat energy (J). ${C^{S}}$, ${C^{L}}
 \\ \midrule \\
 Label & Latent Heat Energy
 \\ \midrule \\
-Equation & $Q\left(t\right)=\int_{0}^{t}{\frac{dQ\left(\tau{}\right)}{d\tau{}}d\tau{}}$
+Equation & $Q\left(t\right)=\int_{0}^{t}{\frac{d\,Q\left(\tau{}\right)}{d\,\tau{}}}\,d\tau{}$
 \\ \midrule \\
-Description & $Q$ is the change in thermal energy (J), latent heat energy. $Q\left(t\right)=\int_{0}^{t}{\frac{dQ\left(\tau{}\right)}{d\tau{}}d\tau{}}$ is the rate of change of $Q$ with respect to time $\tau{}$ (s). $t$ is the time (s) elapsed, as long as the phase change is not complete. The status of the phase change depends on the melt fraction, \hyperref[DD:htFusion]{Definition~DD:htFusion}. ${T_{melt}}$ and ${T_{boil}}$ are the melting point temperature and boiling point temperature, respectively (${}^{\circ}$C). Latent heating stops when all material has changed to the new phase.
+Description & $Q$ is the change in thermal energy (J), latent heat energy. $Q\left(t\right)=\int_{0}^{t}{\frac{d\,Q\left(\tau{}\right)}{d\,\tau{}}}\,d\tau{}$ is the rate of change of $Q$ with respect to time $\tau{}$ (s). $t$ is the time (s) elapsed, as long as the phase change is not complete. The status of the phase change depends on the melt fraction, \hyperref[DD:htFusion]{Definition~DD:htFusion}. ${T_{melt}}$ and ${T_{boil}}$ are the melting point temperature and boiling point temperature, respectively (${}^{\circ}$C). Latent heating stops when all material has changed to the new phase.
 \\ \bottomrule \end{tabular}
 \end{minipage}\\
 \subsubsection{General Definitions}
-\label{Sec:GeneDefi}
+\label{Sec:GDs}
 This section collects the laws and equations that will be used in deriving the data definitions, which in turn are used to build the instance models.
 ~\newline
 \noindent \begin{minipage}{\textwidth}
@@ -446,7 +447,7 @@ This section collects the laws and equations that will be used in deriving the d
 \\ \midrule \\
 Label & Newton's Law of Cooling
 \\ \midrule \\
-Equation & $\mathbf{q}\left(t\right)=h\Delta{}T\left(t\right)$
+Equation & $\mathbf{q}\left(t\right)=h \Delta{}T\left(t\right)$
 \\ \midrule \\
 Description & Newton's law of cooling describes convective cooling from a surface. The law is stated as: the rate of heat loss from a body is proportional to the difference in temperatures between the body and its surroundings. $\mathbf{q}\left(t\right)$ is the thermal flux ($\frac{\text{W}}{\text{m}^{2}}$). $h$ is the heat transfer coefficient, assumed independant of $T$ (A2) ($\frac{\text{W}}{(\text{m}^{2}{}^{\circ}\text{C})}$). $\Delta{}T\left(t\right)=T\left(t\right)-{T_{env}}\left(t\right)$ is the time-dependant thermal gradient between the environment and the object (${}^{\circ}$C).
 \\ \bottomrule \end{tabular}
@@ -460,7 +461,7 @@ Description & Newton's law of cooling describes convective cooling from a surfac
 \\ \midrule \\
 Label & Simplified Rate of Change of Temperature
 \\ \midrule \\
-Equation & $mC\frac{dT}{dt}={q_{in}}{A_{in}}-{q_{out}}{A_{out}}+gV$
+Equation & $m C \frac{d\,T}{d\,t}={q_{in}} {A_{in}}-{q_{out}} {A_{out}}+g V$
 \\ \midrule \\
 Description & The basic equation governing the rate of change of temperature, for a given volume $V$, with time. $m$ is the mass (kg). $C$ is the specific heat capacity ($\frac{\text{J}}{(\text{kg}{}^{\circ}\text{C})}$). $T$ is the temperature (${}^{\circ}$C) and $t$ is the time (s). ${q_{in}}$ and ${q_{out}}$ are the in and out heat transfer rates, respectively ($\frac{\text{W}}{\text{m}^{2}}$). ${A_{in}}$ and ${A_{out}}$ are the surface areas over which the heat is being transferred in and out, respectively ($\text{m}^{2}$). $g$ is the volumetric heat generated ($\frac{\text{W}}{\text{m}^{3}}$). $V$ is the volume ($\text{m}^{3}$).
 \\ \bottomrule \end{tabular}
@@ -468,26 +469,26 @@ Description & The basic equation governing the rate of change of temperature, fo
 Detailed derivation of simplified rate of change of temperature:
 Integrating \hyperref[T:t1ConsThermE]{Definition~T:t1ConsThermE} over a volume ($V$), we have:
 \begin{dmath}
-\left(-\int_{V}{\nabla{}\cdot{}\mathbf{q}dV}\right)+\int_{V}{gdV}=\int_{V}{\rho{}C\frac{\partial{}T}{\partial{}t}dV}
+-\int_{V}{\nabla{}\cdot{}\mathbf{q}}\,dV+\int_{V}{g}\,dV=\int_{V}{\rho{} C \frac{\partial{}\,T}{\partial{}\,t}}\,dV
 \end{dmath}
 Applying Gauss's Divergence Theorem to the first term over the surface $S$ of the volume, with $\mathbf{q}$ as the thermal flux vector for the surface and $\mathbf{\hat{n}}$ as a unit outward normal vector for a surface:
 \begin{dmath}
-\left(-\int_{S}{\mathbf{q}\cdot{}\mathbf{\hat{n}}dS}\right)+\int_{V}{gdV}=\int_{V}{\rho{}C\frac{\partial{}T}{\partial{}t}dV}
+-\int_{S}{\mathbf{q}\cdot{}\mathbf{\hat{n}}}\,dS+\int_{V}{g}\,dV=\int_{V}{\rho{} C \frac{\partial{}\,T}{\partial{}\,t}}\,dV
 \end{dmath}
 We consider an arbitrary volume. The volumetric heat generation per unit volume is assumed constant. Then (1) can be written as:
 \begin{dmath}
-{q_{in}}{A_{in}}-{q_{out}}{A_{out}}+gV=\int_{V}{\rho{}C\frac{\partial{}T}{\partial{}t}dV}
+{q_{in}} {A_{in}}-{q_{out}} {A_{out}}+g V=\int_{V}{\rho{} C \frac{\partial{}\,T}{\partial{}\,t}}\,dV
 \end{dmath}
 Where ${q_{in}}$, ${q_{out}}$, ${A_{in}}$, and ${A_{out}}$ are explained in GD2. Assuming $\rho{}$, $C$ and $T$ are constant over the volume, which is true in our case by Assumptions (A\ref{A:assump3}), (A\ref{A:assump4}), (A\ref{A:assump5}), and (A\ref{A:assump6}), we have:
 \begin{dmath}
-\rho{}CV\frac{dT}{dt}={q_{in}}{A_{in}}-{q_{out}}{A_{out}}+gV
+\rho{} C V \frac{d\,T}{d\,t}={q_{in}} {A_{in}}-{q_{out}} {A_{out}}+g V
 \end{dmath}
 Using the fact that $\rho{}$=$m$/$V$, (2) can be written as:
 \begin{dmath}
-mC\frac{dT}{dt}={q_{in}}{A_{in}}-{q_{out}}{A_{out}}+gV
+m C \frac{d\,T}{d\,t}={q_{in}} {A_{in}}-{q_{out}} {A_{out}}+g V
 \end{dmath}
 \subsubsection{Data Definitions}
-\label{Sec:DataDefi}
+\label{Sec:DDs}
 This section collects and defines all the data needed to build the instance models. The dimension of each quantity is also given.
 ~\newline
 \noindent \begin{minipage}{\textwidth}
@@ -500,7 +501,7 @@ Label & Heat Flux Into the Water From the Coil
 \\ \midrule \\
 Units & $\frac{\text{W}}{\text{m}^{2}}$
 \\ \midrule \\
-Equation & ${q_{C}}$ = ${h_{C}}\left({T_{C}}-{T_{W}}\left(t\right)\right)$
+Equation & ${q_{C}}$ = ${h_{C}} \left({T_{C}}-{T_{W}}\left(t\right)\right)$
 \\ \midrule \\
 Description & ${q_{C}}$ is the heat flux into the water from the coil ($\frac{\text{W}}{\text{m}^{2}}$)\newline${h_{C}}$ is the convective heat transfer coefficient between coil and water ($\frac{\text{W}}{(\text{m}^{2}{}^{\circ}\text{C})}$)\newline${T_{C}}$ is the temperature of the heating coil (${}^{\circ}$C)\newline${T_{W}}$ is the temperature of the water (${}^{\circ}$C)\newline$t$ is the time (s)
 \\ \bottomrule \end{tabular}
@@ -516,7 +517,7 @@ Label & Heat Flux Into the PCM From Water
 \\ \midrule \\
 Units & $\frac{\text{W}}{\text{m}^{2}}$
 \\ \midrule \\
-Equation & ${q_{P}}$ = ${h_{P}}\left({T_{W}}\left(t\right)-{T_{P}}\left(t\right)\right)$
+Equation & ${q_{P}}$ = ${h_{P}} \left({T_{W}}\left(t\right)-{T_{P}}\left(t\right)\right)$
 \\ \midrule \\
 Description & ${q_{P}}$ is the heat flux into the PCM from water ($\frac{\text{W}}{\text{m}^{2}}$)\newline${h_{P}}$ is the convective heat transfer coefficient between PCM and water ($\frac{\text{W}}{(\text{m}^{2}{}^{\circ}\text{C})}$)\newline${T_{W}}$ is the temperature of the water (${}^{\circ}$C)\newline$t$ is the time (s)\newline${T_{P}}$ is the temperature of the phase change material (${}^{\circ}$C)
 \\ \bottomrule \end{tabular}
@@ -548,14 +549,14 @@ Label & Melt Fraction
 \\ \midrule \\
 Units & Unitless
 \\ \midrule \\
-Equation & $\phi{}$ = $\frac{{Q_{P}}}{{H_{f}}{m_{P}}}$
+Equation & $\phi{}$ = $\frac{{Q_{P}}}{{H_{f}} {m_{P}}}$
 \\ \midrule \\
 Description & $\phi{}$ is the melt fraction\newline${Q_{P}}$ is the latent heat energy added to PCM (J)\newline${H_{f}}$ is the specific latent heat of fusion ($\frac{\text{J}}{\text{kg}}$)\newline${m_{P}}$ is the mass of phase change material (kg)
 \\ \bottomrule \end{tabular}
 \end{minipage}\\
 \subsubsection{Instance Models}
-\label{Sec:InstMode}
-This section transforms the problem defined in Section~\ref{Sec:ProbDesc} into one which is expressed in mathematical terms. It uses concrete symbols defined in Section~\ref{Sec:DataDefi} to replace the abstract symbols in the models identified in Section~\ref{Sec:TheoMode} and Section~\ref{Sec:GeneDefi}.
+\label{Sec:IMs}
+This section transforms the problem defined in Section~\ref{Sec:ProbDesc} into one which is expressed in mathematical terms. It uses concrete symbols defined in Section~\ref{Sec:DDs} to replace the abstract symbols in the models identified in Section~\ref{Sec:TMs} and Section~\ref{Sec:GDs}.
 The goals GS1 to GS4 are solved by IM1 to IM4. The solutions for IM1 and IM2 are coupled since the solution for ${T_{W}}$ and ${T_{P}}$ depend on one another. IM3 can be solved once IM1 has been solved. The solution of IM2 and IM4 are also coupled, since the temperature of the phase change material and change in heat energy in the PCM depend on the phase change.
 ~\newline
 \noindent \begin{minipage}{\textwidth}
@@ -566,39 +567,39 @@ The goals GS1 to GS4 are solved by IM1 to IM4. The solutions for IM1 and IM2 are
 \\ \midrule \\
 Label & Energy Balance on Water to Find the Temperature of the Water
 \\ \midrule \\
-Equation & $\frac{d{T_{W}}}{dt}=\frac{1}{{\tau{}_{W}}}\left({T_{C}}-{T_{W}}\left(t\right)+\eta{}\left({T_{P}}\left(t\right)-{T_{W}}\left(t\right)\right)\right)$
+Equation & $\frac{d\,{T_{W}}}{d\,t}=\frac{1}{{\tau{}_{W}}} \left({T_{C}}-{T_{W}}\left(t\right)+\eta{} \left({T_{P}}\left(t\right)-{T_{W}}\left(t\right)\right)\right)$
 \\ \midrule \\
-Description & ${T_{W}}$ is the temperature of the water (${}^{\circ}$C). ${T_{P}}$ is the temperature of the phase change material (${}^{\circ}$C). ${T_{C}}$ is the temperature of the heating coil (${}^{\circ}$C). ${\tau{}_{W}}=\frac{{m_{W}}{C_{W}}}{{h_{C}}{A_{C}}}$ is a constant (s). $\eta{}=\frac{{h_{P}}{A_{P}}}{{h_{C}}{A_{C}}}$ is a constant (dimensionless). The above equation applies as long as the water is in liquid form, $0<{T_{W}}<100$ (${}^{\circ}$C) where 0 (${}^{\circ}$C) and 100 (${}^{\circ}$C) are the melting and boiling point temperatures of water, respectively (A\ref{A:assump14}, A\ref{A:assump19}).
+Description & ${T_{W}}$ is the temperature of the water (${}^{\circ}$C). ${T_{P}}$ is the temperature of the phase change material (${}^{\circ}$C). ${T_{C}}$ is the temperature of the heating coil (${}^{\circ}$C). ${\tau{}_{W}}=\frac{{m_{W}} {C_{W}}}{{h_{C}} {A_{C}}}$ is a constant (s). $\eta{}=\frac{{h_{P}} {A_{P}}}{{h_{C}} {A_{C}}}$ is a constant (dimensionless). The above equation applies as long as the water is in liquid form, $0<{T_{W}}<100$ (${}^{\circ}$C) where $0$ (${}^{\circ}$C) and $100$ (${}^{\circ}$C) are the melting and boiling point temperatures of water, respectively (A\ref{A:assump14}, A\ref{A:assump19}).
 \\ \bottomrule \end{tabular}
 \end{minipage}\\
 Derivation of the energy balance on water:
 To find the rate of change of ${T_{W}}$, we look at the energy balance on water. The volume being considered is the volume of water ${V_{W}}$, which has mass of water ${m_{W}}$ and specific heat capacity of water, ${C_{W}}$. ${q_{C}}$ represents the heat flux into the water from the coil and ${q_{P}}$ represents the heat flux into the PCM from water, over heating coil surface area and phase change material surface area of ${A_{C}}$ and ${A_{P}}$, respectively. No heat transfer occurs to the outside of the tank, since it has been assumed to be perfectly insulated (A\ref{A:assump15}). Assuming no volumetric heat generation per unit volume (A\ref{A:assump16}), $g=0$. Therefore, the equation for GD2 can be written as:
 \begin{dmath}
-{m_{W}}{C_{W}}\frac{d{T_{W}}}{dt}={q_{C}}{A_{C}}-{q_{P}}{A_{P}}
+{m_{W}} {C_{W}} \frac{d\,{T_{W}}}{d\,t}={q_{C}} {A_{C}}-{q_{P}} {A_{P}}
 \end{dmath}
 Using \hyperref[DD:ht.flux.C]{Definition~DD:ht.flux.C} and \hyperref[DD:ht.flux.P]{Definition~DD:ht.flux.P} for ${q_{C}}$ and ${q_{P}}$ respectively, this can be written as:
 \begin{dmath}
-{m_{W}}{C_{W}}\frac{d{T_{W}}}{dt}={h_{C}}{A_{C}}\left({T_{C}}-{T_{W}}\right)-{h_{P}}{A_{P}}\left({T_{W}}-{T_{P}}\right)
+{m_{W}} {C_{W}} \frac{d\,{T_{W}}}{d\,t}={h_{C}} {A_{C}} \left({T_{C}}-{T_{W}}\right)-{h_{P}} {A_{P}} \left({T_{W}}-{T_{P}}\right)
 \end{dmath}
 Dividing (3) by ${m_{W}}$${C_{W}}$, we obtain:
 \begin{dmath}
-\frac{d{T_{W}}}{dt}=\frac{{h_{C}}{A_{C}}}{{m_{W}}{C_{W}}}\left({T_{C}}-{T_{W}}\right)-\frac{{m_{P}}{A_{P}}}{{m_{W}}{C_{W}}}\left({T_{W}}-{T_{P}}\right)
+\frac{d\,{T_{W}}}{d\,t}=\frac{{h_{C}} {A_{C}}}{{m_{W}} {C_{W}}} \left({T_{C}}-{T_{W}}\right)-\frac{{m_{P}} {A_{P}}}{{m_{W}} {C_{W}}} \left({T_{W}}-{T_{P}}\right)
 \end{dmath}
 Factoring the negative sign out of the second term of the RHS of Equation (4) and multiplying it by ${h_{C}}$${A_{C}}$/${h_{C}}$${A_{C}}$ yields:
 \begin{dmath}
-\frac{d{T_{W}}}{dt}=\frac{{h_{C}}{A_{C}}}{{m_{W}}{C_{W}}}\left({T_{C}}-{T_{W}}\right)+\frac{{h_{C}}{A_{C}}}{{h_{C}}{A_{C}}}\frac{{h_{P}}{A_{P}}}{{m_{W}}{C_{W}}}\left({T_{P}}-{T_{W}}\right)
+\frac{d\,{T_{W}}}{d\,t}=\frac{{h_{C}} {A_{C}}}{{m_{W}} {C_{W}}} \left({T_{C}}-{T_{W}}\right)+\frac{{h_{C}} {A_{C}}}{{h_{C}} {A_{C}}} \frac{{h_{P}} {A_{P}}}{{m_{W}} {C_{W}}} \left({T_{P}}-{T_{W}}\right)
 \end{dmath}
 Which simplifies to:
 \begin{dmath}
-\frac{d{T_{W}}}{dt}=\frac{{h_{C}}{A_{C}}}{{m_{W}}{C_{W}}}\left({T_{C}}-{T_{W}}\right)+\frac{{h_{P}}{A_{P}}}{{h_{C}}{A_{C}}}\frac{{h_{C}}{A_{C}}}{{m_{W}}{C_{W}}}\left({T_{P}}-{T_{W}}\right)
+\frac{d\,{T_{W}}}{d\,t}=\frac{{h_{C}} {A_{C}}}{{m_{W}} {C_{W}}} \left({T_{C}}-{T_{W}}\right)+\frac{{h_{P}} {A_{P}}}{{h_{C}} {A_{C}}} \frac{{h_{C}} {A_{C}}}{{m_{W}} {C_{W}}} \left({T_{P}}-{T_{W}}\right)
 \end{dmath}
-Setting ${\tau{}_{W}}=\frac{{m_{W}}{C_{W}}}{{h_{C}}{A_{C}}}$ and $\eta{}=\frac{{h_{P}}{A_{P}}}{{h_{C}}{A_{C}}}$, Equation (5) can be written as:
+Setting ${\tau{}_{W}}=\frac{{m_{W}} {C_{W}}}{{h_{C}} {A_{C}}}$ and $\eta{}=\frac{{h_{P}} {A_{P}}}{{h_{C}} {A_{C}}}$, Equation (5) can be written as:
 \begin{dmath}
-\frac{d{T_{W}}}{dt}=\frac{1}{{\tau{}_{W}}}\left({T_{C}}-{T_{W}}\right)+\frac{\eta{}}{{\tau{}_{W}}}\left({T_{P}}-{T_{W}}\right)
+\frac{d\,{T_{W}}}{d\,t}=\frac{1}{{\tau{}_{W}}} \left({T_{C}}-{T_{W}}\right)+\frac{\eta{}}{{\tau{}_{W}}} \left({T_{P}}-{T_{W}}\right)
 \end{dmath}
 Finally, factoring out $\frac{1}{{\tau{}_{W}}}$, we are left with the governing ODE for IM1:
 \begin{dmath}
-\frac{d{T_{W}}}{dt}=\frac{1}{{\tau{}_{W}}}\left({T_{C}}-{T_{W}}+\eta{}\left({T_{P}}-{T_{W}}\right)\right)
+\frac{d\,{T_{W}}}{d\,t}=\frac{1}{{\tau{}_{W}}} \left({T_{C}}-{T_{W}}+\eta{} \left({T_{P}}-{T_{W}}\right)\right)
 \end{dmath}
 ~\newline
 \noindent \begin{minipage}{\textwidth}
@@ -609,32 +610,32 @@ Finally, factoring out $\frac{1}{{\tau{}_{W}}}$, we are left with the governing 
 \\ \midrule \\
 Label & Energy Balance on PCM to Find T\_p
 \\ \midrule \\
-Equation & $\frac{d{T_{P}}}{dt}=\begin{cases}
-\frac{1}{{{\tau{}_{P}}^{S}}}\left({T_{W}}\left(t\right)-{T_{P}}\left(t\right)\right), & {T_{P}}<{{T_{melt}}^{P}}\\
-\frac{1}{{{\tau{}_{P}}^{L}}}\left({T_{W}}\left(t\right)-{T_{P}}\left(t\right)\right), & {T_{P}}>{{T_{melt}}^{P}}\\
+Equation & $\frac{d\,{T_{P}}}{d\,t}=\begin{cases}
+\frac{1}{{{\tau{}_{P}}^{S}}} \left({T_{W}}\left(t\right)-{T_{P}}\left(t\right)\right), & {T_{P}}<{{T_{melt}}^{P}}\\
+\frac{1}{{{\tau{}_{P}}^{L}}} \left({T_{W}}\left(t\right)-{T_{P}}\left(t\right)\right), & {T_{P}}>{{T_{melt}}^{P}}\\
 0, & {T_{P}}={{T_{melt}}^{P}}\\
 0, & 0<\phi{}<1
 \end{cases}$
 \\ \midrule \\
-Description & ${T_{W}}$ is the temperature of the water (${}^{\circ}$C). ${T_{P}}$ is the temperature of the phase change material (${}^{\circ}$C). ${{\tau{}_{P}}^{S}}=\frac{{m_{P}}{{C_{P}}^{S}}}{{h_{P}}{A_{P}}}$ is a constant (s). ${{\tau{}_{P}}^{L}}=\frac{{m_{P}}{{C_{P}}^{L}}}{{h_{P}}{A_{P}}}$ is a constant (s).
+Description & ${T_{W}}$ is the temperature of the water (${}^{\circ}$C). ${T_{P}}$ is the temperature of the phase change material (${}^{\circ}$C). ${{\tau{}_{P}}^{S}}=\frac{{m_{P}} {{C_{P}}^{S}}}{{h_{P}} {A_{P}}}$ is a constant (s). ${{\tau{}_{P}}^{L}}=\frac{{m_{P}} {{C_{P}}^{L}}}{{h_{P}} {A_{P}}}$ is a constant (s).
 \\ \bottomrule \end{tabular}
 \end{minipage}\\
 Detailed derivation of the energy balance on the PCM during sensible heating phase:
 To find the rate of change of ${T_{P}}$, we look at the energy balance on the PCM. The volume being considered is the volume of PCM, ${V_{P}}$. The derivation that follows is initially for the solid PCM. The mass of phase change material is ${m_{P}}$ and the specific heat capacity of PCM as a solid is ${{C_{P}}^{S}}$. The heat flux into the PCM from water is ${q_{P}}$ over phase change material surface area ${A_{P}}$. There is no heat flux output. Assuming no volumetric heat generation per unit volume (A\ref{A:assump16}), $g$=0, the equation for GD2 can be written as:
 \begin{dmath}
-{m_{P}}{{C_{P}}^{S}}\frac{d{T_{P}}}{dt}={q_{P}}{A_{P}}
+{m_{P}} {{C_{P}}^{S}} \frac{d\,{T_{P}}}{d\,t}={q_{P}} {A_{P}}
 \end{dmath}
 Using \hyperref[DD:ht.flux.P]{Definition~DD:ht.flux.P} for ${q_{P}}$, this equation can be written as:
 \begin{dmath}
-{m_{P}}{{C_{P}}^{S}}\frac{d{T_{P}}}{dt}={h_{P}}{A_{P}}\left({T_{W}}-{T_{P}}\right)
+{m_{P}} {{C_{P}}^{S}} \frac{d\,{T_{P}}}{d\,t}={h_{P}} {A_{P}} \left({T_{W}}-{T_{P}}\right)
 \end{dmath}
 Dividing by ${m_{P}}$${{C_{P}}^{S}}$ we obtain:
 \begin{dmath}
-\frac{d{T_{P}}}{dt}=\frac{{h_{P}}{A_{P}}}{{m_{P}}{{C_{P}}^{S}}}\left({T_{W}}-{T_{P}}\right)
+\frac{d\,{T_{P}}}{d\,t}=\frac{{h_{P}} {A_{P}}}{{m_{P}} {{C_{P}}^{S}}} \left({T_{W}}-{T_{P}}\right)
 \end{dmath}
 Setting ${{\tau{}_{P}}^{S}}$=${m_{P}}$${{C_{P}}^{S}}$/${h_{P}}$${A_{P}}$, this can be written as:
 \begin{dmath}
-\frac{d{T_{P}}}{dt}=\frac{1}{{{\tau{}_{P}}^{S}}}\left({T_{W}}-{T_{P}}\right)
+\frac{d\,{T_{P}}}{d\,t}=\frac{1}{{{\tau{}_{P}}^{S}}} \left({T_{W}}-{T_{P}}\right)
 \end{dmath}
 Equation (6) applies for the solid PCM. In the case where all of the PCM is melted, the same derivation applies, except that ${{C_{P}}^{S}}$ is replaced by ${{C_{P}}^{L}}$, and thus ${{\tau{}_{P}}^{S}}$ is replaced by ${{\tau{}_{P}}^{L}}$. Although a small change in surface area would be expected with melting, this is not included, since the volume change of the PCM with melting is assumed to be negligible (A\ref{A:assump17}).
 In the case where ${T_{P}}$=${{T_{melt}}^{P}}$ and not all of the PCM is melted, the temperature of the phase change material does not change. Therefore, in this case d${T_{P}}$/d$t$=0.
@@ -648,9 +649,9 @@ This derivation does not consider the boiling of the PCM, as the PCM is assumed 
 \\ \midrule \\
 Label & Heat Energy in the Water
 \\ \midrule \\
-Equation & ${E_{W}}\left(t\right)={C_{W}}{m_{W}}\left({T_{W}}\left(t\right)-{T_{init}}\right)$
+Equation & ${E_{W}}\left(t\right)={C_{W}} {m_{W}} \left({T_{W}}\left(t\right)-{T_{init}}\right)$
 \\ \midrule \\
-Description & The above equation is derived using T2. ${E_{W}}$ is the change in thermal energy of the liquid water relative to the energy at the initial temperature (${T_{init}}$) (J). ${C_{W}}$ is the specific heat capacity of liquid water ($\frac{\text{J}}{(\text{kg}{}^{\circ}\text{C})}$) and ${m_{W}}$ is the mass of the water (kg). The change in temperature is the difference between the temperature at time $t$ (s), ${T_{W}}$ and the initial temperature, ${T_{init}}$ (${}^{\circ}$C). This equation applies as long as $0<{T_{W}}<0$${}^{\circ}$C (A\ref{A:assump14}, A\ref{A:assump19}).
+Description & The above equation is derived using T2. ${E_{W}}$ is the change in thermal energy of the liquid water relative to the energy at the initial temperature (${T_{init}}$) (J). ${C_{W}}$ is the specific heat capacity of liquid water ($\frac{\text{J}}{(\text{kg}{}^{\circ}\text{C})}$) and ${m_{W}}$ is the mass of the water (kg). The change in temperature is the difference between the temperature at time $t$ (s), ${T_{W}}$ and the initial temperature, ${T_{init}}$ (${}^{\circ}$C). This equation applies as long as $0<{T_{W}}<100$${}^{\circ}$C (A\ref{A:assump14}, A\ref{A:assump19}).
 \\ \bottomrule \end{tabular}
 \end{minipage}\\
 ~\newline
@@ -663,18 +664,18 @@ Description & The above equation is derived using T2. ${E_{W}}$ is the change in
 Label & Heat Energy in the PCM
 \\ \midrule \\
 Equation & ${E_{P}}=\begin{cases}
-{{C_{P}}^{S}}{m_{P}}\left({T_{P}}\left(t\right)-{T_{init}}\right), & {T_{P}}<{{T_{melt}}^{P}}\\
-{{{E_{P}}_{melt}}^{init}}+{H_{f}}{m_{P}}+{{C_{P}}^{L}}{m_{P}}\left({T_{P}}\left(t\right)-{{T_{melt}}^{P}}\right), & {T_{P}}>{{T_{melt}}^{P}}\\
+{{C_{P}}^{S}} {m_{P}} \left({T_{P}}\left(t\right)-{T_{init}}\right), & {T_{P}}<{{T_{melt}}^{P}}\\
+{{{E_{P}}_{melt}}^{init}}+{H_{f}} {m_{P}}+{{C_{P}}^{L}} {m_{P}} \left({T_{P}}\left(t\right)-{{T_{melt}}^{P}}\right), & {T_{P}}>{{T_{melt}}^{P}}\\
 {{{E_{P}}_{melt}}^{init}}+{Q_{P}}\left(t\right), & {T_{P}}={{T_{melt}}^{P}}\\
 {{{E_{P}}_{melt}}^{init}}+{Q_{P}}\left(t\right), & 0<\phi{}<1
 \end{cases}$
 \\ \midrule \\
-Description & The above equation is derived using T2 and T3. ${E_{P}}$ is the change in thermal energy of the PCM relative to the energy at the initial temperature (${T_{init}}$) J. ${E_{P}}$ for the solid PCM is found using T2 for sensible heat ing, with the specific heat capacity of the solid PCM, ${{C_{P}}^{S}}$ ($\frac{\text{J}}{(\text{kg}{}^{\circ}\text{C})}$) and the change in the PCM temperature from the initial temperature (${}^{\circ}$C). ${E_{P}}$ for the melted PCM (${T_{P}}>{{{E_{P}}_{melt}}^{init}}$) is found using T2 for sensible heat of the liquid. PCM plus the energy when melting starts, plus the energy required to melt all of the PCM The energy when melting starts is ${{{E_{P}}_{melt}}^{init}}$ (J). The energy required to melt all of the PCM is ${H_{f}}{m_{P}}$ (J) (DD3). the specific heat capacity of the liquid PCM is ${{C_{P}}^{L}}$ ($\frac{\text{J}}{(\text{kg}{}^{\circ}\text{C})}$) and the change in temperature is ${T_{P}}-{{T_{melt}}^{P}}$ (${}^{\circ}$C). ${E_{P}}$ during melting of the PCM is found using the energy required at the instant melting of the PCM begins, ${{{E_{P}}_{melt}}^{init}}$ plus the latent heat energy added to the PCM, ${Q_{P}}$ (J) since the time when melting began ${{t_{melt}}^{init}}$ (s). The heat energy for boiling of the PCM is not detailed, since the PCM is assumed to either be in a solid or liquid state (A\ref{A:assump18}).
+Description & The above equation is derived using T2 and T3. ${E_{P}}$ is the change in thermal energy of the PCM relative to the energy at the initial temperature (${T_{init}}$) J. ${E_{P}}$ for the solid PCM is found using T2 for sensible heat ing, with the specific heat capacity of the solid PCM, ${{C_{P}}^{S}}$ ($\frac{\text{J}}{(\text{kg}{}^{\circ}\text{C})}$) and the change in the PCM temperature from the initial temperature (${}^{\circ}$C). ${E_{P}}$ for the melted PCM (${T_{P}}>{{{E_{P}}_{melt}}^{init}}$) is found using T2 for sensible heat of the liquid. PCM plus the energy when melting starts, plus the energy required to melt all of the PCM The energy when melting starts is ${{{E_{P}}_{melt}}^{init}}$ (J). The energy required to melt all of the PCM is ${H_{f}} {m_{P}}$ (J) (DD3). the specific heat capacity of the liquid PCM is ${{C_{P}}^{L}}$ ($\frac{\text{J}}{(\text{kg}{}^{\circ}\text{C})}$) and the change in temperature is ${T_{P}}-{{T_{melt}}^{P}}$ (${}^{\circ}$C). ${E_{P}}$ during melting of the PCM is found using the energy required at the instant melting of the PCM begins, ${{{E_{P}}_{melt}}^{init}}$ plus the latent heat energy added to the PCM, ${Q_{P}}$ (J) since the time when melting began ${{t_{melt}}^{init}}$ (s). The heat energy for boiling of the PCM is not detailed, since the PCM is assumed to either be in a solid or liquid state (A\ref{A:assump18}).
 \\ \bottomrule \end{tabular}
 \end{minipage}\\
 \subsubsection{Data Constraints}
-\label{Sec:DataCons}
-Table~\ref{Table:InpuDataCons}, and Table~\ref{Table:OutpDataCons} shows the data constraints on the input and output variables, respectively. The column for physical constraints gives the physical limitations on the range of values that can be taken by the variable. The uncertainty column provides an estimate of the confidence with which the physical quantities can be measured. This information would be part of the input if one were performing an uncertainty quantification exercise. The constraints are conservative, to give the user of the model the flexibility to experiment with unusual situations. The column of typical values is intended to provide a feel for a common scenario. The column for software constraints restricts the range of inputs to reasonable values. (*) These quantities cannot be equal to zero, or there will be a divide by zero in the model. (+) These quantities cannot be zero, or there would be freezing (A\ref{A:assump13}). (\#) The constraints on the surface area are calculated by considering the surface area to volume ratio. The assumption is that the lowest ratio is 1 and the highest possible is $\frac{2}{{h_{min}}}$, where ${h_{min}}$ is the thickness of a ``sheet" of PCM. A thin sheet has the greatest surface area to volume ratio. (**) The constraint on the maximum time at the end of the simulation is the total number of seconds in one day.
+\label{Sec:DataConstraints}
+Table~\ref{Table:InDataConstraints}, and Table~\ref{Table:OutDataConstraints} shows the data constraints on the input and output variables, respectively. The column for physical constraints gives the physical limitations on the range of values that can be taken by the variable. The uncertainty column provides an estimate of the confidence with which the physical quantities can be measured. This information would be part of the input if one were performing an uncertainty quantification exercise. The constraints are conservative, to give the user of the model the flexibility to experiment with unusual situations. The column of typical values is intended to provide a feel for a common scenario. The column for software constraints restricts the range of inputs to reasonable values. (*) These quantities cannot be equal to zero, or there will be a divide by zero in the model. (+) These quantities cannot be zero, or there would be freezing (A\ref{A:assump13}). (\#) The constraints on the surface area are calculated by considering the surface area to volume ratio. The assumption is that the lowest ratio is 1 and the highest possible is $\frac{2}{{h_{min}}}$, where ${h_{min}}$ is the thickness of a ``sheet" of PCM. A thin sheet has the greatest surface area to volume ratio. (**) The constraint on the maximum time at the end of the simulation is the total number of seconds in one day.
 \begin{longtable}{l l l l l}
 \toprule
 Var & Physical Constraints & Software Constraints & Typical Value & TU
@@ -682,19 +683,19 @@ Var & Physical Constraints & Software Constraints & Typical Value & TU
 \midrule
 $L$ & $L>0$ & ${L_{min}}\leq{}L\leq{}{L_{max}}$ & $1.5$ m & 0.1
 \\
-$D$ & $D>0$ & $\frac{D}{{L_{max}}}\leq{}\frac{D}{L}\leq{}\frac{D}{{L_{min}}}$ & $0.412$ m & 0.1
+$D$ & $D>0$ & None & $0.412$ m & 0.1
 \\
-${V_{P}}$ & ${V_{P}}>0$ and ${V_{P}}<{V_{tank}}$ & ${V_{P}}\geq{}{V_{tank}}$ & $0.05$ $\text{m}^{3}$ & 0.1
+${V_{P}}$ & $0<{V_{P}}<{V_{tank}}$ & None & $0.05$ $\text{m}^{3}$ & 0.1
 \\
-${A_{P}}$ & ${A_{P}}>0$ & ${V_{P}}\leq{}{A_{P}}\leq{}\frac{2}{{h_{min}}}{V_{tank}}$ & $1.2$ $\text{m}^{2}$ & 0.1
+${A_{P}}$ & ${A_{P}}>0$ & ${V_{P}}\leq{}{A_{P}}\leq{}\frac{2}{{h_{min}}} {V_{tank}}$ & $1.2$ $\text{m}^{2}$ & 0.1
 \\
-${\rho{}_{P}}$ & ${\rho{}_{P}}>0$ and ${{\rho{}_{P}}^{min}}<{\rho{}_{P}}<{{\rho{}_{P}}^{max}}$ & None & $1007.0$ $\frac{\text{kg}}{\text{m}^{3}}$ & 0.1
+${\rho{}_{P}}$ & ${{\rho{}_{P}}^{min}}<{\rho{}_{P}}<{{\rho{}_{P}}^{max}}$ & None & $1007.0$ $\frac{\text{kg}}{\text{m}^{3}}$ & 0.1
 \\
 ${{T_{melt}}^{P}}$ & $0<{{T_{melt}}^{P}}<{T_{C}}$ & None & $44.2$ ${}^{\circ}$C & 0.1
 \\
-${{C_{P}}^{S}}$ & ${{C_{P}}^{S}}>0$ & ${{{C_{P}}^{S}}}_{min}<{{C_{P}}^{S}}<{{{C_{P}}^{S}}}_{max}$ & $1760.0$ $\frac{\text{J}}{(\text{kg}{}^{\circ}\text{C})}$ & 0.1
+${{C_{P}}^{S}}$ & ${{C_{P}}^{S}}>0$ & ${{{C_{P}}^{S}}_{min}}<{{C_{P}}^{S}}<{{{C_{P}}^{S}}_{max}}$ & $1760.0$ $\frac{\text{J}}{(\text{kg}{}^{\circ}\text{C})}$ & 0.1
 \\
-${{C_{P}}^{L}}$ & ${{C_{P}}^{L}}>0$ & ${{{C_{P}}^{L}}}_{min}<{{C_{P}}^{L}}<{{{C_{P}}^{L}}}_{max}$ & $2270.0$ $\frac{\text{J}}{(\text{kg}{}^{\circ}\text{C})}$ & 0.1
+${{C_{P}}^{L}}$ & ${{C_{P}}^{L}}>0$ & ${{{C_{P}}^{L}}_{min}}<{{C_{P}}^{L}}<{{{C_{P}}^{L}}_{max}}$ & $2270.0$ $\frac{\text{J}}{(\text{kg}{}^{\circ}\text{C})}$ & 0.1
 \\
 ${H_{f}}$ & ${H_{f}}>0$ & ${{H_{f}}_{min}}<{H_{f}}<{{H_{f}}_{max}}$ & $211600.0$ $\frac{\text{J}}{\text{kg}}$ & 0.1
 \\
@@ -716,7 +717,7 @@ ${t_{final}}$ & ${t_{final}}>0$ & ${t_{final}}<{{t_{final}}^{max}}$ & $50000.0$ 
 \\
 \bottomrule
 \caption{Input Data Constraints}
-\label{Table:InpuDataCons}
+\label{Table:InDataConstraints}
 \end{longtable}
 \begin{longtable}{l l}
 \toprule
@@ -733,26 +734,26 @@ ${E_{P}}$ & ${E_{P}}\geq{}0$
 \\
 \bottomrule
 \caption{Output Data Constraints}
-\label{Table:OutpDataCons}
+\label{Table:OutDataConstraints}
 \end{longtable}
 \subsubsection{Properties of a Correct Solution}
-\label{Sec:PropofaCorrSolu}
+\label{Sec:CorSolProps}
 A correct solution must exhibit the law of conservation of energy. This means that the change in heat energy in the water should equal the difference between the total energy input from the heating coil and the energy output to the PCM. This can be shown as an equation by taking \hyperref[DD:ht.flux.C]{Definition~DD:ht.flux.C} and \hyperref[DD:ht.flux.P]{Definition~DD:ht.flux.P}, multiplying each by their respective surface area of heat transfer, and integrating each over the simulation time, as follows:
 \begin{dmath}
-{E_{W}}=\int_{0}^{t}{{h_{C}}{A_{C}}\left({T_{C}}-{T_{W}}\left(t\right)\right)dt}-\int_{0}^{t}{{h_{P}}{A_{P}}\left({T_{W}}\left(t\right)-{T_{P}}\left(t\right)\right)dt}
+{E_{W}}=\int_{0}^{t}{{h_{C}} {A_{C}} \left({T_{C}}-{T_{W}}\left(t\right)\right)}\,dt-\int_{0}^{t}{{h_{P}} {A_{P}} \left({T_{W}}\left(t\right)-{T_{P}}\left(t\right)\right)}\,dt
 \end{dmath}
 In addition, the change in heat energy in the PCM should equal the energy input to the PCM from the water. This can be expressed as
 \begin{dmath}
-{E_{P}}=\int_{0}^{t}{{h_{P}}{A_{P}}\left({T_{W}}\left(t\right)-{T_{P}}\left(t\right)\right)dt}
+{E_{P}}=\int_{0}^{t}{{h_{P}} {A_{P}} \left({T_{W}}\left(t\right)-{T_{P}}\left(t\right)\right)}\,dt
 \end{dmath}
-Equations (FIXME: Equation 7) and (FIXME: Equation 8) can be used as ``sanity"checks to gain confidence in any solution computed by SWHS. The relative error between the results computed by SWHS and the results calculated from the RHS of these equations should be less than 0.001% R\ref{R:req9}.
+Equations (FIXME: Equation 7) and (FIXME: Equation 8) can be used as ``sanity"checks to gain confidence in any solution computed by SWHS. The relative error between the results computed by SWHS and the results calculated from the RHS of these equations should be less than 0.001% R\ref{FR:req9}.
 \section{Requirements}
-\label{Sec:Requ}
+\label{Sec:Requirements}
 This section provides the functional requirements, the business tasks that the software is expected to complete, and the non-functional requirements, the qualities that the software is expected to exhibit.
 \subsection{Functional Requirements}
-\label{Sec:FuncRequ}
+\label{Sec:FRs}
 \begin{description}
-\item[\refstepcounter{reqnum}\rthereqnum\label{R:req1}:]Input the following quantities, which define the tank parameters, material properties and initial conditions:
+\item[\refstepcounter{reqnum}\rthereqnum\label{FR:req1}:]Input the following quantities, which define the tank parameters, material properties and initial conditions:
 \end{description}
 \begin{longtabu}{l l X[l]}
 \toprule
@@ -794,49 +795,49 @@ ${T_{init}}$ & ${}^{\circ}$C & initial temperature
 ${t_{final}}$ & s & final time
 \\
 \bottomrule
-\label{Table:InpuVariRequ}
+\label{Table:InConstraints}
 \end{longtabu}
 \begin{description}
-\item[\refstepcounter{reqnum}\rthereqnum\label{R:req2}:]Use the inputs in R\ref{R:req1} to find the mass needed for IM1 to IM4, as follows, where ${V_{W}}$ is the volume of water and ${V_{tank}}$ is the volume of the cylindrical tank:
+\item[\refstepcounter{reqnum}\rthereqnum\label{FR:req2}:]Use the inputs in R\ref{FR:req1} to find the mass needed for IM1 to IM4, as follows, where ${V_{W}}$ is the volume of water and ${V_{tank}}$ is the volume of the cylindrical tank:
 \end{description}
 \begin{dmath}
-{m_{W}}={V_{W}}{\rho{}_{W}}=\left({V_{tank}}-{V_{P}}\right){\rho{}_{W}}=\left(\frac{D}{2}L-{V_{P}}\right){\rho{}_{W}}
+{m_{W}}={V_{W}} {\rho{}_{W}}=\left({V_{tank}}-{V_{P}}\right) {\rho{}_{W}}=\left(\frac{D}{2} L-{V_{P}}\right) {\rho{}_{W}}
 \end{dmath}
 \begin{dmath}
-{m_{P}}={V_{P}}{\rho{}_{P}}
+{m_{P}}={V_{P}} {\rho{}_{P}}
 \end{dmath}
 \begin{description}
-\item[\refstepcounter{reqnum}\rthereqnum\label{R:req3}:]Verify that the inputs satisfy the required physical constraints.
+\item[\refstepcounter{reqnum}\rthereqnum\label{FR:req3}:]Verify that the inputs satisfy the required physical constraints.
 \end{description}
 \begin{description}
-\item[\refstepcounter{reqnum}\rthereqnum\label{R:req4}:]Output the input quantities and derived quantities in the following list: the quantities from R1, the masses from R2, ${\tau{}_{W}}$ (from IM1), $\eta{}$ (from IM1), ${{\tau{}_{P}}^{S}}$ (from IM2) and ${{\tau{}_{P}}^{L}}$ (from IM2).
+\item[\refstepcounter{reqnum}\rthereqnum\label{FR:req4}:]Output the input quantities and derived quantities in the following list: the quantities from R1, the masses from R2, ${\tau{}_{W}}$ (from IM1), $\eta{}$ (from IM1), ${{\tau{}_{P}}^{S}}$ (from IM2) and ${{\tau{}_{P}}^{L}}$ (from IM2).
 \end{description}
 \begin{description}
-\item[\refstepcounter{reqnum}\rthereqnum\label{R:req5}:]Calculate and output the temperature of the water (${T_{W}}$($t$)) over the simulation time (from IM1).
+\item[\refstepcounter{reqnum}\rthereqnum\label{FR:req5}:]Calculate and output the temperature of the water (${T_{W}}$($t$)) over the simulation time (from IM1).
 \end{description}
 \begin{description}
-\item[\refstepcounter{reqnum}\rthereqnum\label{R:req6}:]Calculate and output the temperature of the phase change material (${T_{P}}$($t$)) over the simulation time (from IM2).
+\item[\refstepcounter{reqnum}\rthereqnum\label{FR:req6}:]Calculate and output the temperature of the phase change material (${T_{P}}$($t$)) over the simulation time (from IM2).
 \end{description}
 \begin{description}
-\item[\refstepcounter{reqnum}\rthereqnum\label{R:req7}:]Calculate and output the change in heat energy in the water (${E_{W}}$($t$)) over the simulation time (from IM3).
+\item[\refstepcounter{reqnum}\rthereqnum\label{FR:req7}:]Calculate and output the change in heat energy in the water (${E_{W}}$($t$)) over the simulation time (from IM3).
 \end{description}
 \begin{description}
-\item[\refstepcounter{reqnum}\rthereqnum\label{R:req8}:]Calculate and output the change in heat energy in the PCM (${E_{P}}$($t$)) over the simulation time (from IM4).
+\item[\refstepcounter{reqnum}\rthereqnum\label{FR:req8}:]Calculate and output the change in heat energy in the PCM (${E_{P}}$($t$)) over the simulation time (from IM4).
 \end{description}
 \begin{description}
-\item[\refstepcounter{reqnum}\rthereqnum\label{R:req9}:]Verify that the energy outputs (${E_{W}}$($t$) and ${E_{P}}$($t$)) follow the law of conservation of energy with relative error no greater than 0.001%.
+\item[\refstepcounter{reqnum}\rthereqnum\label{FR:req9}:]Verify that the energy outputs (${E_{W}}$($t$) and ${E_{P}}$($t$)) follow the law of conservation of energy with relative error no greater than 0.001%.
 \end{description}
 \begin{description}
-\item[\refstepcounter{reqnum}\rthereqnum\label{R:req10}:]Calculate and output the time at which the PCM begins to melt ${{t_{melt}}^{init}}$ (from IM2).
+\item[\refstepcounter{reqnum}\rthereqnum\label{FR:req10}:]Calculate and output the time at which the PCM begins to melt ${{t_{melt}}^{init}}$ (from IM2).
 \end{description}
 \begin{description}
-\item[\refstepcounter{reqnum}\rthereqnum\label{R:req11}:]Calculate and output the time at which the PCM stops melting ${{t_{melt}}^{final}}$ (from IM2).
+\item[\refstepcounter{reqnum}\rthereqnum\label{FR:req11}:]Calculate and output the time at which the PCM stops melting ${{t_{melt}}^{final}}$ (from IM2).
 \end{description}
 \subsection{Non-Functional Requirements}
-\label{Sec:Non-Requ}
+\label{Sec:NFRs}
 This problem is small in size and relatively simple, so performance is not a priority. Any reasonable implementation will be very quick and use minimal storage. Rather than performance, the non-functional requirement priorities are correctness, verifiability, understandability, reusability, and maintainability.
 \section{Likely Changes}
-\label{Sec:LikeChan}
+\label{Sec:LCs}
 \begin{description}
 \item[\refstepcounter{lcnum}\lcthelcnum\label{LC:likeChg1}:]A\ref{A:assump4} - PCM is actually a poor thermal conductor, so the assumption of uniform temperature of the phase change material is not likely.
 \end{description}
@@ -856,8 +857,8 @@ This problem is small in size and relatively simple, so performance is not a pri
 \item[\refstepcounter{lcnum}\lcthelcnum\label{LC:likeChg6}:]A\ref{A:assump15} - Any real tank cannot be perfectly insulated and will lose heat.
 \end{description}
 \section{Traceability Matrices and Graphs}
-\label{Sec:TracMatrandGrap}
-The purpose of the traceability matrices is to provide easy references on what has to be additionally modified if a certain component is changed. Every time a component is changed, the items in the column of that component that are marked with an ``X" should be modified as well. Table~\ref{Table:TracMatrShowtheConnBetwItemofDiffSect} shows the dependencies of theoretical models, general definitions, data definitions, and instance models with each other. Table~\ref{Table:TracMatrShowtheConnBetwRequandInstMode} shows the dependencies of instance models, requirements, and data constraints on each other. Table~\ref{Table:TracMatrShowtheConnBetwAssuandOtheItem} shows the dependencies of theoretical models, general definitions, data definitions, instance models, and likely changes on the assumptions.
+\label{Sec:TraceMatrices}
+The purpose of the traceability matrices is to provide easy references on what has to be additionally modified if a certain component is changed. Every time a component is changed, the items in the column of that component that are marked with an ``X" should be modified as well. Table~\ref{Table:Tracey2} shows the dependencies of theoretical models, general definitions, data definitions, and instance models with each other. Table~\ref{Table:Tracey1} shows the dependencies of instance models, requirements, and data constraints on each other. Table~\ref{Table:Tracey3} shows the dependencies of theoretical models, general definitions, data definitions, instance models, and likely changes on the assumptions.
 \begin{longtable}{l l l l l l l l l l l l l l}
 \toprule
  & T1 (\hyperref[T:t1ConsThermE]{Definition~T:t1ConsThermE}) & T2 (\hyperref[T:t2SensHtE]{Definition~T:t2SensHtE}) & T3 (\hyperref[T:t3LatHtE]{Definition~T:t3LatHtE}) & GD1 (\hyperref[T:nwtnCooling]{Definition~T:nwtnCooling}) & GD2 (\hyperref[T:rocTempSimp]{Definition~T:rocTempSimp}) & DD1 (\hyperref[DD:ht.flux.C]{Definition~DD:ht.flux.C}) & DD2 (\hyperref[DD:ht.flux.P]{Definition~DD:ht.flux.P}) & DD3 (\hyperref[DD:htFusion]{Definition~DD:htFusion}) & DD4 (\hyperref[DD:melt.frac]{Definition~DD:melt.frac}) & IM1 (\hyperref[T:eBalanceOnWtr]{Definition~T:eBalanceOnWtr}) & IM2 (\hyperref[T:eBalanceOnPCM]{Definition~T:eBalanceOnPCM}) & IM3 (\hyperref[T:heatEInWtr]{Definition~T:heatEInWtr}) & IM4 (\hyperref[T:heatEInPCM]{Definition~T:heatEInPCM})
@@ -891,11 +892,11 @@ IM4 (\hyperref[T:heatEInPCM]{Definition~T:heatEInPCM}) &  & X & X &  &  &  & X &
 \\
 \bottomrule
 \caption{Traceability Matrix Showing the Connections Between Items of Different Sections}
-\label{Table:TracMatrShowtheConnBetwItemofDiffSect}
+\label{Table:Tracey2}
 \end{longtable}
 \begin{longtable}{l l l l l l l l l l l l l l l l l}
 \toprule
- & IM1 (\hyperref[T:eBalanceOnWtr]{Definition~T:eBalanceOnWtr}) & IM2 (\hyperref[T:eBalanceOnPCM]{Definition~T:eBalanceOnPCM}) & IM3 (\hyperref[T:heatEInWtr]{Definition~T:heatEInWtr}) & IM4 (\hyperref[T:heatEInPCM]{Definition~T:heatEInPCM}) & Data Constraints (Table~\ref{Table:InpuDataCons}) & R1 (Section~\ref{Sec:FuncRequ}) & R2 (Section~\ref{Sec:FuncRequ}) & R3 (Section~\ref{Sec:FuncRequ}) & R4 (Section~\ref{Sec:FuncRequ}) & R5 (Section~\ref{Sec:FuncRequ}) & R6 (Section~\ref{Sec:FuncRequ}) & R7 (Section~\ref{Sec:FuncRequ}) & R8 (Section~\ref{Sec:FuncRequ}) & R9 (Section~\ref{Sec:FuncRequ}) & R10 (Section~\ref{Sec:FuncRequ}) & R11 (Section~\ref{Sec:FuncRequ})
+ & IM1 (\hyperref[T:eBalanceOnWtr]{Definition~T:eBalanceOnWtr}) & IM2 (\hyperref[T:eBalanceOnPCM]{Definition~T:eBalanceOnPCM}) & IM3 (\hyperref[T:heatEInWtr]{Definition~T:heatEInWtr}) & IM4 (\hyperref[T:heatEInPCM]{Definition~T:heatEInPCM}) & Data Constraints (Table~\ref{Table:InDataConstraints}) & R1 (Section~\ref{Sec:FRs}) & R2 (Section~\ref{Sec:FRs}) & R3 (Section~\ref{Sec:FRs}) & R4 (Section~\ref{Sec:FRs}) & R5 (Section~\ref{Sec:FRs}) & R6 (Section~\ref{Sec:FRs}) & R7 (Section~\ref{Sec:FRs}) & R8 (Section~\ref{Sec:FRs}) & R9 (Section~\ref{Sec:FRs}) & R10 (Section~\ref{Sec:FRs}) & R11 (Section~\ref{Sec:FRs})
 \\
 \midrule
 IM1 (\hyperref[T:eBalanceOnWtr]{Definition~T:eBalanceOnWtr}) &  & X &  &  &  & X & X &  &  &  &  &  &  &  &  & 
@@ -906,35 +907,35 @@ IM3 (\hyperref[T:heatEInWtr]{Definition~T:heatEInWtr}) &  &  &  &  &  & X & X & 
 \\
 IM4 (\hyperref[T:heatEInPCM]{Definition~T:heatEInPCM}) &  & X &  &  &  & X & X &  &  &  &  &  &  &  &  & 
 \\
-R1 (Section~\ref{Sec:FuncRequ}) &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+R1 (Section~\ref{Sec:FRs}) &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-R2 (Section~\ref{Sec:FuncRequ}) &  &  &  &  &  & X &  &  &  &  &  &  &  &  &  & 
+R2 (Section~\ref{Sec:FRs}) &  &  &  &  &  & X &  &  &  &  &  &  &  &  &  & 
 \\
-R3 (Section~\ref{Sec:FuncRequ}) &  &  &  &  & X &  &  &  &  &  &  &  &  &  &  & 
+R3 (Section~\ref{Sec:FRs}) &  &  &  &  & X &  &  &  &  &  &  &  &  &  &  & 
 \\
-R4 (Section~\ref{Sec:FuncRequ}) & X & X &  &  &  & X & X &  &  &  &  &  &  &  &  & 
+R4 (Section~\ref{Sec:FRs}) & X & X &  &  &  & X & X &  &  &  &  &  &  &  &  & 
 \\
-R5 (Section~\ref{Sec:FuncRequ}) & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+R5 (Section~\ref{Sec:FRs}) & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-R6 (Section~\ref{Sec:FuncRequ}) &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+R6 (Section~\ref{Sec:FRs}) &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-R7 (Section~\ref{Sec:FuncRequ}) &  &  & X &  &  &  &  &  &  &  &  &  &  &  &  & 
+R7 (Section~\ref{Sec:FRs}) &  &  & X &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-R8 (Section~\ref{Sec:FuncRequ}) &  &  &  & X &  &  &  &  &  &  &  &  &  &  &  & 
+R8 (Section~\ref{Sec:FRs}) &  &  &  & X &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-R9 (Section~\ref{Sec:FuncRequ}) &  &  & X & X &  &  &  &  &  &  &  &  &  &  &  & 
+R9 (Section~\ref{Sec:FRs}) &  &  & X & X &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-R10 (Section~\ref{Sec:FuncRequ}) &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+R10 (Section~\ref{Sec:FRs}) &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-R11 (Section~\ref{Sec:FuncRequ}) &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+R11 (Section~\ref{Sec:FRs}) &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
 \bottomrule
 \caption{Traceability Matrix Showing the Connections Between Requirements and Instance Models}
-\label{Table:TracMatrShowtheConnBetwRequandInstMode}
+\label{Table:Tracey1}
 \end{longtable}
 \begin{longtable}{l l l l l l l l l l l l l l l l l l l l}
 \toprule
- & A1 (Section~\ref{Sec:Assu}) & A2 (Section~\ref{Sec:Assu}) & A3 (Section~\ref{Sec:Assu}) & A4 (Section~\ref{Sec:Assu}) & A5 (Section~\ref{Sec:Assu}) & A6 (Section~\ref{Sec:Assu}) & A7 (Section~\ref{Sec:Assu}) & A8 (Section~\ref{Sec:Assu}) & A9 (Section~\ref{Sec:Assu}) & A10 (Section~\ref{Sec:Assu}) & A11 (Section~\ref{Sec:Assu}) & A12 (Section~\ref{Sec:Assu}) & A13 (Section~\ref{Sec:Assu}) & A14 (Section~\ref{Sec:Assu}) & A15 (Section~\ref{Sec:Assu}) & A16 (Section~\ref{Sec:Assu}) & A17 (Section~\ref{Sec:Assu}) & A18 (Section~\ref{Sec:Assu}) & A19 (Section~\ref{Sec:Assu})
+ & A1 (Section~\ref{Sec:Assumps}) & A2 (Section~\ref{Sec:Assumps}) & A3 (Section~\ref{Sec:Assumps}) & A4 (Section~\ref{Sec:Assumps}) & A5 (Section~\ref{Sec:Assumps}) & A6 (Section~\ref{Sec:Assumps}) & A7 (Section~\ref{Sec:Assumps}) & A8 (Section~\ref{Sec:Assumps}) & A9 (Section~\ref{Sec:Assumps}) & A10 (Section~\ref{Sec:Assumps}) & A11 (Section~\ref{Sec:Assumps}) & A12 (Section~\ref{Sec:Assumps}) & A13 (Section~\ref{Sec:Assumps}) & A14 (Section~\ref{Sec:Assumps}) & A15 (Section~\ref{Sec:Assumps}) & A16 (Section~\ref{Sec:Assumps}) & A17 (Section~\ref{Sec:Assumps}) & A18 (Section~\ref{Sec:Assumps}) & A19 (Section~\ref{Sec:Assumps})
 \\
 \midrule
 T1 (\hyperref[T:t1ConsThermE]{Definition~T:t1ConsThermE}) & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
@@ -963,40 +964,40 @@ IM3 (\hyperref[T:heatEInWtr]{Definition~T:heatEInWtr}) &  &  &  &  &  &  &  &  &
 \\
 IM4 (\hyperref[T:heatEInPCM]{Definition~T:heatEInPCM}) &  &  &  &  &  &  &  &  &  &  &  &  & X &  &  &  &  & X & 
 \\
-LC1 (Section~\ref{Sec:LikeChan}) &  &  &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
+LC1 (Section~\ref{Sec:LCs}) &  &  &  & X &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 
 \\
-LC2 (Section~\ref{Sec:LikeChan}) &  &  &  &  &  &  &  & X &  &  &  &  &  &  &  &  &  &  & 
+LC2 (Section~\ref{Sec:LCs}) &  &  &  &  &  &  &  & X &  &  &  &  &  &  &  &  &  &  & 
 \\
-LC3 (Section~\ref{Sec:LikeChan}) &  &  &  &  &  &  &  &  & X &  &  &  &  &  &  &  &  &  & 
+LC3 (Section~\ref{Sec:LCs}) &  &  &  &  &  &  &  &  & X &  &  &  &  &  &  &  &  &  & 
 \\
-LC4 (Section~\ref{Sec:LikeChan}) &  &  &  &  &  &  &  &  &  &  & X &  &  &  &  &  &  &  & 
+LC4 (Section~\ref{Sec:LCs}) &  &  &  &  &  &  &  &  &  &  & X &  &  &  &  &  &  &  & 
 \\
-LC5 (Section~\ref{Sec:LikeChan}) &  &  &  &  &  &  &  &  &  &  &  & X &  &  &  &  &  &  & 
+LC5 (Section~\ref{Sec:LCs}) &  &  &  &  &  &  &  &  &  &  &  & X &  &  &  &  &  &  & 
 \\
-LC6 (Section~\ref{Sec:LikeChan}) &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X &  &  &  & 
+LC6 (Section~\ref{Sec:LCs}) &  &  &  &  &  &  &  &  &  &  &  &  &  &  & X &  &  &  & 
 \\
 \bottomrule
 \caption{Traceability Matrix Showing the Connections Between Assumptions and Other Items}
-\label{Table:TracMatrShowtheConnBetwAssuandOtheItem}
+\label{Table:Tracey3}
 \end{longtable}
-The purpose of the traceability graphs is also to provide easy references on what has to be additionally modified if a certain component is changed. The arrows in the graphs represent dependencies. The component at the tail of an arrow is depended on by the component at the head of that arrow. Therefore, if a component is changed, the components that it points to should also be changed. Figure~\ref{Figure:TracGrapShowtheConnBetwItemofDiffSect} shows the dependencies of theoretical models, general definitions, data definitions, instance models, likely changes, and assumptions on each other. Figure~\ref{Figure:TracGrapShowtheConnBetwInstModeRequandDataCons} shows the dependencies of instance models, requirements, and data constraints on each other.
+The purpose of the traceability graphs is also to provide easy references on what has to be additionally modified if a certain component is changed. The arrows in the graphs represent dependencies. The component at the tail of an arrow is depended on by the component at the head of that arrow. Therefore, if a component is changed, the components that it points to should also be changed. Figure~\ref{Figure:TraceyA} shows the dependencies of theoretical models, general definitions, data definitions, instance models, likely changes, and assumptions on each other. Figure~\ref{Figure:TraceyR} shows the dependencies of instance models, requirements, and data constraints on each other.
 NOTE: Building a tool to automatically generate the graphical representation of the matrix by scanning the labels and reference can be future work.
 \begin{figure}
 \begin{center}
 \includegraphics[width=\textwidth]{ATrace.png}
 \caption{Traceability Graph Showing the Connections Between Items of Different Sections}
-\label{Figure:TracGrapShowtheConnBetwItemofDiffSect}
+\label{Figure:TraceyA}
 \end{center}
 \end{figure}
 \begin{figure}
 \begin{center}
 \includegraphics[width=\textwidth]{RTrace.png}
 \caption{Traceability Graph Showing the Connections Between Instance Models, Requirements, and Data Constraints}
-\label{Figure:TracGrapShowtheConnBetwInstModeRequandDataCons}
+\label{Figure:TraceyR}
 \end{center}
 \end{figure}
 \section{Values of Auxiliary Constants}
-\label{Sec:ValuofAuxiCons}
+\label{Sec:AuxConstants}
 This section contains the standard values that are used for calculations in SWHS.
 \begin{longtabu}{l X[l] l l}
 \toprule
@@ -1041,59 +1042,60 @@ ${{t_{final}}^{max}}$ & maximum final time & $86400$ & s
 \\
 \bottomrule
 \caption{Auxiliary Constants}
-\label{Table:AuxiCons}
+\label{Table:TAuxConsts}
 \end{longtabu}
 \section{References}
-\label{Sec:Refe}
+\label{Sec:References}
 \begin{filecontents*}{bibfile.bib}
-@article{Bueche1986,
+@book{bueche1986,
 author={Bueche, J. Frederick},
 title={Introduction to Physics for Scientists},
-edition={4nd.},
 publisher={McGraw Hill},
-place={New York City, New York},
-year={1986}}
+year={1986},
+edition={4},
+address={New York City, New York}}
 
-@article{IncroperaDewittBergmanLavine2007,
+@book{incroperaEtAl2007,
 author={Incropera, F. P. and Dewitt, D. P. and Bergman, T. L. and Lavine, A. S.},
 title={Fundamentals of Heat and Mass Transfer},
-edition={6th.},
 publisher={John Wiley and Sons},
-place={Hoboken, New Jersey},
-year={2007}}
+year={2007},
+edition={6},
+address={Hoboken, New Jersey}}
 
-@mastersthesis{Koothoor2013,
+@mastersthesis{koothoor2013,
 author={Koothoor, Nirmitha},
 title={A document drive approach to certifying scientific computing software},
 school={McMaster University},
-place={Hamilton, Canada},
-year={2013}}
+year={2013},
+address={Hamilton, ON, Canada}}
 
-@misc{Lightstone2012,
+@misc{lightstone2012,
 author={Lightstone, Marilyn},
 title={Derivation of tank/pcm model},
 year={2012},
 note={From Marilyn Lightstone's Personal Notes}}
 
-@article{ParnasClements1986,
+@article{parnas1986,
 author={Parnas, David L. and Clements, P. C.},
 title={A rational design process: How and why to fake it},
 journal={IEEE Transactions on Software Engineering},
+year={1986},
+month={feb},
 volume={12},
 number={2},
-pages={251-257},
-year={1986},
-place={Washington, USA}}
+pages={"251-257"},
+address={Washington, USA}}
 
-@article{SmithLai2005,
+@inproceedings{smithLai2005,
 author={Smith, W. Spencer and Lai, Lei},
 title={A new requirements template for scientific computing},
-journal={Proceedings of the First International Workshop on Situational Requirements Engineering Processes - Methods, Techniques and Tools to Support Situation-Specific Requirements Engineering Processes, SREP'05},
+booktitle={Proceedings of the First International Workshop on Situational Requirements Engineering Processes - Methods, Techniques and Tools to Support Situation-Specific Requirements Engineering Processes, SREP'05},
+year={2005},
 editor={Agerfalk, PJ and Kraiem, N. and Ralyte, J.},
-place={Paris, France},
-pages={107-121},
-note={In conjunction with 13th IEEE International Requirements Engineering Conference,},
-year={2005}}
+address={Paris, France},
+pages={"107-121"},
+note={In conjunction with 13th IEEE International Requirements Engineering Conference,}}
 \end{filecontents*}
 \nocite{*}
 \bibstyle{ieeetr}

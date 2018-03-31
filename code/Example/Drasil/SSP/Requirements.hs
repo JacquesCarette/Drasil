@@ -4,7 +4,7 @@ import Language.Drasil
 
 import Drasil.SSP.Defs (slice, slope, slpSrf,
   crtSlpSrf, morPrice)
-import Drasil.SSP.Unitals (fs, sspInputs, coords)
+import Drasil.SSP.Unitals (fs, fs_min, sspInputs, coords)
 
 import Data.Drasil.Utils (mkInputDatTb)
 import Data.Drasil.SentenceStructures (acroR,
@@ -47,10 +47,10 @@ generateCSS' = foldlSent [S "Generate new potential", plural crtSlpSrf,
   plural fs]
 
 repeatFindFS = foldlSent [S "Repeat", plural requirement, acroR 3, S "to",
-  acroR 7, S "until the minimum", phrase fs, S "remains" +:+. 
+  acroR 7, S "until the", phrase fs_min, S "remains" +:+. 
   S "approximately the same over a predetermined number of repetitions",
-  S "Identify the", (phrase slpSrf), S "that generates the minimum",
-  phrase fs, S "as the", phrase crtSlpSrf]
+  S "Identify the", (phrase slpSrf), S "that generates the",
+  phrase fs_min, S "as the", phrase crtSlpSrf]
 
 prepareCSS   = foldlSent [S "Prepare the", phrase crtSlpSrf, S "for", 
   phrase method_, S "of", plural slice, S "or limit equilibrium analysis"]

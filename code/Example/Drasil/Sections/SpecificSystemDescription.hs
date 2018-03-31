@@ -16,19 +16,18 @@ module Drasil.Sections.SpecificSystemDescription
   , inDataConstTbl, outDataConstTbl 
   ) where
 
-import qualified Data.Drasil.Concepts.Documentation as D
-import Language.Drasil
+import Language.Drasil hiding (constraint)
 import Data.Drasil.Concepts.Documentation
 import Data.Drasil.Concepts.Math (equation)
 import Data.Drasil.Concepts.Software (program)
-import Data.Drasil.Utils (foldle)
+import Data.Drasil.Utils (foldle, getES, fmtU, getRVal)
 import Data.Drasil.SentenceStructures
 import qualified Drasil.SRS as SRS
 
 
 -- | Specific System description section builder. Takes the system and subsections.
 specSysDescr :: (NamedIdea a) => a -> [Section] -> Section
-specSysDescr sys subs = section (titleize D.specificsystemdescription) [intro_ sys] subs
+specSysDescr sys subs = SRS.specSysDes [intro_ sys] subs
 
 -- FIXME: this all should be broken down and mostly generated.
 -- Generates an introduction based on the system.
@@ -61,7 +60,7 @@ specSysDesIntro l_end = foldlSP
                   eND (False) =  S "and" +:+. plural definition-}
 
 -- give starting sentence(s), the program name, and finish the last sentence
-probDescF :: (NamedIdea a) => Sentence -> a -> Sentence -> [Section] -> Section
+probDescF :: (Idea a) => Sentence -> a -> Sentence -> [Section] -> Section
 probDescF start progName ending subSec = SRS.probDesc [Paragraph intro] subSec
   where intro = foldlSent [start, (short progName), S "is a computer", 
                 (phrase program), S "developed to", ending]
@@ -94,7 +93,7 @@ goalStmtF givenInputs otherContents = SRS.goalStmt (intro:otherContents) []
 -- progName (ex ssp, progName), the two sections, gendef is True if you want general definitions sections, 
 --  ddEndSent is the ending sentence for Data Definitions, this is a 4-tuple of inputs for Data Constraints, 
 --  the last input is a tupple of lists of Sections for each Subsection in order.
-solChSpecF :: (NamedIdea a) => a -> (Section, Section) -> Sentence -> 
+solChSpecF :: (Idea a) => a -> (Section, Section) -> Sentence -> 
   (Sentence, Sentence, Sentence) -> 
   ([Contents], [Contents], [Contents], [Contents], [Contents], [Contents]) -> 
   [Section] -> Section
@@ -110,7 +109,7 @@ solChSpecF progName (probDes, likeChg) ddEndSent (mid, hasUncertainty, trail) (a
         dataConstr   = datConF mid hasUncertainty trail dc
 
 
-solutionCharSpecIntro :: (NamedIdea a) => a -> Section -> Contents
+solutionCharSpecIntro :: (Idea a) => a -> Section -> Contents
 solutionCharSpecIntro progName instModelSection = foldlSP [S "The", plural inModel, 
   S "that govern", short progName, S "are presented in" +:+. 
   makeRef (instModelSection), S "The", phrase information, S "to understand", 
@@ -140,11 +139,11 @@ assumpIntro r1 r2 r3 r4 r5 = Paragraph $ foldlSent
                                 (inModel, r4)]
 
 --wrapper for thModelIntro
-thModF :: (NamedIdea a) => a -> [Contents] -> Section
+thModF :: (Idea a) => a -> [Contents] -> Section
 thModF progName otherContents = SRS.thModel ((thModIntro progName):otherContents) []
 
 -- generalized theoretical model introduction: identifies key word pertaining to topic
-thModIntro :: (NamedIdea a) => a -> Contents
+thModIntro :: (Idea a) => a -> Contents
 thModIntro progName = foldlSP
           [S "This", phrase section_, S "focuses on", 
           S "the", phrase general, (plural equation), S "and", 
@@ -154,7 +153,7 @@ thModIntro progName = foldlSP
 genDefnF :: [Contents] -> Section
 genDefnF otherContents = SRS.genDefn (generalDefinitionIntro otherContents:otherContents) []
 
-generalDefinitionIntro :: (LayoutObj t) => [t] -> Contents
+generalDefinitionIntro :: (Referable t) => [t] -> Contents
 generalDefinitionIntro [] = Paragraph $ S "There are no general definitions."
 generalDefinitionIntro _ = foldlSP [S "This", phrase section_, 
   S "collects the", S "laws and", (plural equation), 
@@ -204,7 +203,7 @@ dataConstraintParagraph hasUncertainty tableRef middleSent trailingSent = Paragr
 -- makes a list of references to tables takes
 -- l  list of layout objects that can be referenced
 -- outputs a sentence containing references to the layout objects 
-listofTablesToRefs :: LayoutObj l => [l] -> Sentence
+listofTablesToRefs :: Referable l => [l] -> Sentence
 listofTablesToRefs  []     = EmptyS
 listofTablesToRefs  [x]    = (makeRef x) +:+ S "shows"
 listofTablesToRefs  [x,y]  = (makeRef x) `sC` S "and" +:+ listofTablesToRefs [y]
@@ -233,27 +232,25 @@ dataConstraintUncertainty = foldlSent [S "The", phrase uncertainty, phrase colum
   phrase uncertainty, S "quantification exercise"]
 
 -- Creates the input Data Constraints Table
-inDataConstTbl :: (UncertainQuantity c, Constrained c) => [c] -> Contents
-inDataConstTbl qlst = Table ([S "Var"] ++ 
-  (addTitle (titleize' physicalConstraint) $ physC (head qlst) qlst) ++
-  (addTitle (titleize' softwareConstraint) $ sfwrC (head qlst) qlst) ++ 
-  [S "Typical" +:+ titleize value] ++
-  (addTitle (short typUnc) $ typUncr (head qlst) qlst))
-  (map (\x -> fmtInputConstr x qlst) qlst)
-  (S "Input Data Constraints") True
+inDataConstTbl :: (UncertainQuantity c, Constrained c, HasReasVal c) => [c] -> Contents
+inDataConstTbl qlst = Table titl cts (S "Input Data Constraints") True "InDataConstraints"
+  where
+   datum = [(S "Var", map getES qlst),
+            (titleize' physicalConstraint, map fmtPhys qlst),
+            (titleize' softwareConstraint, map fmtSfwr qlst),
+            (S "Typical Value", map (\q -> fmtU (E $ getRVal q) q) qlst),
+            (short typUnc, map typUncr qlst)]
+   tbl = mkTableFromColumns datum
+   titl = fst tbl
+   cts = snd tbl
 
 -- Creates the output Data Constraints Table
 outDataConstTbl :: (Quantity c, Constrained c) => [c] -> Contents
-outDataConstTbl qlst = Table ([S "Var"] ++ 
-  (addTitle (titleize' physicalConstraint) $ physC (head qlst) qlst) ++
-  (addTitle (titleize' softwareConstraint) $ sfwrC (head qlst) qlst))
-  (map (\x -> fmtOutputConstr x qlst) qlst)
-  (S "Output Data Constraints") True
-
-------------------------------------------------------------
--- Not exported
-
--- If there's something, add the title (as a singleton list)
-addTitle :: title -> [a] -> [title]
-addTitle _ [] = []
-addTitle t _  = [t]
+outDataConstTbl qlst = Table titl cts (S "Output Data Constraints") True "OutDataConstraints"
+  where
+   datum = [(S "Var", map getES qlst),
+            (titleize' physicalConstraint, map fmtPhys qlst),
+            (titleize' softwareConstraint, map fmtSfwr qlst)]
+   tbl = mkTableFromColumns datum
+   titl = fst tbl
+   cts = snd tbl

@@ -12,16 +12,19 @@ module Data.Drasil.SentenceStructures
   , getTandS, getTDS
   , eqN
   , displayConstrntsAsSet
-  , fmtInputConstr, fmtOutputConstr, physC, sfwrC, typUncr, rval
-  , extrctStrng
+  , getES, fmtPhys, fmtSfwr, typUncr
+  , mkTableFromColumns
   , acroA, acroDD, acroGD, acroGS, acroIM, acroLC, acroPS, acroR, acroT
   ) where
 
 import Language.Drasil
-import Data.Drasil.Utils (foldle, foldle1, getES, fmtU, getRVal)
-import Data.Drasil.Concepts.Documentation
+import Data.Drasil.Utils (foldle, foldle1, getES)
+import Data.Drasil.Concepts.Documentation hiding (constraint)
 import Data.Drasil.Concepts.Math (equation)
+
 import Control.Lens ((^.))
+import Data.Monoid (mconcat)
+import Data.List (intersperse,transpose)
 
 {--** Sentence Folding **--}
 -- | partial function application of foldle for sentences specifically
@@ -48,10 +51,7 @@ foldlSPCol = Paragraph . foldlSentCol
 
 -- | creates a list of elements seperated by commas, including the last element
 foldlsC :: [Sentence] -> Sentence
-foldlsC []       = EmptyS
-foldlsC [x]      = x
-foldlsC [x,y]    = x `sC` y
-foldlsC (x:y:xs) = foldle sC sC (x `sC` y) xs
+foldlsC = mconcat . intersperse (S ", ")
 
 -- | creates a list of elements seperated by commas, ending in a "_, and _"
 foldlList :: [Sentence] -> Sentence
@@ -129,9 +129,9 @@ tableShows ref trailing = (makeRef ref) +:+ S "shows the" +:+
 
 -- | Function that creates (a label for) a figure
 --FIXME: Is `figureLabel` defined in the correct file?
-figureLabel :: NamedIdea c => Int -> c -> Sentence -> [Char]-> Contents
-figureLabel num traceyMG contents filePath = Figure (titleize figure +: 
-  (S (show num)) +:+ (showingCxnBw (traceyMG) (contents))) filePath 100
+figureLabel :: NamedIdea c => Int -> c -> Sentence -> [Char]-> String ->Contents
+figureLabel num traceyMG contents filePath rn = Figure (titleize figure +: 
+  (S (show num)) +:+ (showingCxnBw (traceyMG) (contents))) filePath 100 rn
 
 showingCxnBw :: NamedIdea c => c -> Sentence -> Sentence
 showingCxnBw traceyVar contents = titleize traceyVar +:+ S "Showing the" +:+
@@ -195,68 +195,36 @@ eqN n = phrase equation +:+ sParen (S $ show n)
 
 --Produces a sentence that displays the constraints in a {}.
 displayConstrntsAsSet :: Quantity a => a -> [String] -> Sentence
-displayConstrntsAsSet sym listOfVals = E $ (C sym) `IsIn` (DiscreteS listOfVals)
-
-extrctStrng :: Sentence -> String
-extrctStrng (S strng) = strng
-extrctStrng _ = error "Invalid type extraction"
+displayConstrntsAsSet sym listOfVals = E $ (sy sym) `isin` (DiscreteS listOfVals)
 
 {-BELOW IS TO BE MOVED TO EXAMPLE/DRASIL/SECTIONS-}
 
--- Start of attempt at intelligent formatter for input constraints
--- these are the helper functions for inDataConstTbl
-
-fmtInputConstr :: (UncertainQuantity c, Constrained c, Quantity c) => c -> [c] -> [Sentence]
-fmtInputConstr q qlst = [getES q] ++ physC q qlst ++ sfwrC q qlst ++ [fmtU (E $ getRVal q) q] ++ typUncr q qlst
-
-fmtOutputConstr :: (Constrained c, Quantity c) => c -> [c] -> [Sentence]
-fmtOutputConstr q qlst = [getES q] ++ physC q qlst ++ sfwrC q qlst
+mkTableFromColumns :: [(Sentence, [Sentence])] -> ([Sentence], [[Sentence]])
+mkTableFromColumns l = 
+  let l' = filter (\(_,b) -> not $ null $ filter (not . isEmpty) b) l in 
+  (map fst l', transpose $ map ((map replaceEmptyS) . snd) l')
+  where
+    isEmpty EmptyS = True
+    isEmpty _      = False
 
 none :: Sentence
 none = S "None"
 
---These check the entire list of UncertainQuantity and if they are all empty in that field,
--- return empty list, otherwise return the appropriate thing
-physC :: (Constrained c, Quantity c) => c -> [c] -> [Sentence]
-physC q qlst
-  | noPhysC (foldlSent_ $ map fmtPhys qlst) = []
-  | noPhysC (fmtPhys q) = [none]
-  | otherwise = [fmtPhys q]
-  where noPhysC EmptyS = True
-        noPhysC _      = False
-        
-sfwrC :: (Constrained c, Quantity c) => c -> [c] -> [Sentence]
-sfwrC q qlst
-  | noSfwrC (foldlSent_ $ map fmtSfwr qlst) = []
-  | noSfwrC (fmtSfwr q) = [none]
-  | otherwise = [fmtSfwr q]
-  where noSfwrC EmptyS = True
-        noSfwrC _      = False
+typUncr :: (UncertainQuantity c) => c -> Sentence
+typUncr x = maybe none (S . show) (x ^. uncert)
 
-rval :: (Constrained c) => c -> [c] -> [Sentence]
-rval q qlst
-  | null (filter isRV $ map (^. reasVal) qlst) = []
-  | isRV (q ^. reasVal) = [fmtU (E $ getRVal q) q]
-  | otherwise = [none]
-  where isRV (Just _) = True
-        isRV Nothing  = False
-        
-typUncr :: (UncertainQuantity c) => c -> [c] -> [Sentence]
-typUncr q qlst
-  | null (filter isUn $ map (^. uncert) qlst) = []
-  | isUn (q ^. uncert) = [S $ show $ unwU (q ^. uncert)]
-  | otherwise = [none]
-  where unwU (Just u) = u
-        unwU Nothing  = error $ "Something when wrong with 'typUncr'." ++
-                        "'typUncr' was possibly called by fmtInputConstr or inDataConstTbl."
-        isUn (Just _) = True
-        isUn Nothing  = False
+constraintToExpr :: (Quantity c) => c -> Constraint -> Expr
+constraintToExpr c (Range _ ri) = real_interval c ri
+constraintToExpr c (EnumeratedReal _ l) = isin (sy c) (DiscreteD l)
+constraintToExpr c (EnumeratedStr _ l) = isin (sy c) (DiscreteS l)
 
 --Formatters for the constraints
-fmtPhys :: (Constrained s, Quantity s) => s -> Sentence
-fmtPhys s = foldlList $ fmtCP $ getPhys (s ^. constraints)
-  where fmtCP = map (\f -> E $ f (C s))
+fmtPhys :: (Constrained c, Quantity c) => c -> Sentence
+fmtPhys c = foldlList $ map (E . constraintToExpr c) $ filter isPhysC (c ^. constraints)
 
-fmtSfwr :: (Constrained s, Quantity s) => s -> Sentence
-fmtSfwr s = foldlList $ fmtCS $ getSfwr (s ^. constraints)
-  where fmtCS = map (\f -> E $ f (C s))
+fmtSfwr :: (Constrained c, Quantity c) => c -> Sentence
+fmtSfwr c = foldlList $ map (E . constraintToExpr c) $ filter isSfwrC (c ^. constraints)
+
+replaceEmptyS :: Sentence -> Sentence
+replaceEmptyS EmptyS = none
+replaceEmptyS s@_ = s

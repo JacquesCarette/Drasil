@@ -1,4 +1,4 @@
-{-# LANGUAGE GADTs, Rank2Types #-}
+{-# LANGUAGE TemplateHaskell #-}
 module Language.Drasil.Chunk.Unital 
   ( UnitalChunk(..)
   , makeUCWDS
@@ -10,17 +10,15 @@ module Language.Drasil.Chunk.Unital
   , ucsWS
   ) where
 
-import Control.Lens (Simple, Lens, (^.), set)
-import Prelude hiding (id)
+import Control.Lens (makeLenses, view)
 import Language.Drasil.Chunk (Chunk(..))
-import Language.Drasil.Chunk.NamedIdea (NamedIdea(..))
-import Language.Drasil.Chunk.Concept (Concept(..), dcc, dccWDS)
-import Language.Drasil.Chunk.ConVar (ConVar (..))
-import Language.Drasil.Chunk.SymbolForm (SF(..), StagedSymbolChunk, ssc'
-                                        , getSymbForStage)
-import Language.Drasil.Chunk.Quantity (Quantity(..))
+import Language.Drasil.Chunk.NamedIdea (NamedIdea(..),Idea(..))
+import Language.Drasil.Chunk.Concept (Concept, dcc, dccWDS,Definition(..),ConceptDomain(..), cw)
+import Language.Drasil.Chunk.ConVar (ConVar (..), cv)
+import Language.Drasil.Chunk.Quantity (Quantity(..),HasSpace(typ))
 import Language.Drasil.Chunk.Unitary (Unitary(..))
-import Language.Drasil.Unit (Unit(..), UnitDefn(..))
+import Language.Drasil.Chunk.SymbolForm (HasSymbol(symbol))
+import Language.Drasil.Unit (UnitDefn,IsUnit,unitWrapper)
 import Language.Drasil.Symbol
 import Language.Drasil.Space
 import Language.Drasil.Spec (Sentence)
@@ -28,74 +26,49 @@ import Language.Drasil.Spec (Sentence)
 import Language.Drasil.NounPhrase (NP)
 
 -- | UnitalChunks are Unitary
-data UnitalChunk where --Named Unital...?
-  UC :: (Concept c, Unit u) => 
-    c -> StagedSymbolChunk -> u -> Space -> UnitalChunk
-  UCV :: (Unit u) => ConVar -> u -> UnitalChunk
-instance Chunk UnitalChunk where
-  id = nl id
-instance NamedIdea UnitalChunk where
-  term = nl term
-  getA (UC qc _ _ _) = getA qc
-  getA (UCV cv _ ) = getA cv
-instance Concept UnitalChunk where
-  defn = nl defn
-  cdom = nl cdom
-instance Quantity UnitalChunk where
-  typ f (UC named s u t) = fmap (\x -> UC named s u x) (f t)
-  typ f ucv@(UCV _ _) = cvl typ f ucv
-  getSymb st (UCV c _ ) = getSymb st c
-  getSymb st (UC _ s _ _) = SF $ getSymbForStage st s
-  getUnit = Just . unit
-  getStagedS (UCV c _ ) = getStagedS c
-  getStagedS (UC _ s _ _) = s
-instance Unitary UnitalChunk where
-  unit (UC _ _ u _) = UU u
-  unit (UCV _ u) = UU u
+data UnitalChunk = UC { _con :: ConVar, _uni :: UnitDefn }
+makeLenses ''UnitalChunk
+
+instance Chunk         UnitalChunk where uid = con . uid
+instance NamedIdea     UnitalChunk where term = con . term
+instance Idea          UnitalChunk where getA (UC qc _) = getA qc
+instance Definition    UnitalChunk where defn = con . defn
+instance ConceptDomain UnitalChunk where cdom = con . cdom
+instance Concept       UnitalChunk where
+instance HasSpace      UnitalChunk where typ = con . typ
+instance HasSymbol     UnitalChunk where symbol st (UC c _ ) = symbol st c
+instance Quantity      UnitalChunk where getUnit = Just . unit
+instance Unitary       UnitalChunk where unit = view uni
   
-nl :: (forall c. (Concept c) => Simple Lens c a) -> Simple Lens UnitalChunk a
-nl l f (UC qc s u t) = fmap (\x -> UC (set l x qc) s u t) (f (qc ^. l))
-nl l f (UCV cv u) = fmap (\x -> UCV (set l x cv) u) (f (cv ^. l))
-
-cvl :: (forall c. (Concept c, Quantity c) => 
-  Simple Lens c a) -> Simple Lens UnitalChunk a
-cvl _ _ (UC _ _ _ _) = error $ "Incorrect use of cvl for UC unital chunks. " ++
-  "Should only be used with UCV"
-cvl l f (UCV cv u) = fmap (\x -> UCV (set l x cv) u) (f (cv ^. l))
-
 --{BEGIN HELPER FUNCTIONS}--
 
--- FIXME: Temporarily hacking in the space for UC chunks, these can be fixed
--- with the use of other constructors.
-
 -- | Used to create a UnitalChunk from a 'Concept', 'Symbol', and 'Unit'.
--- Assumes the 'Space' is Rational
-uc :: (Concept c, Unit u) => c -> Symbol -> u -> UnitalChunk
-uc a b c = UC a (ssc' (a ^. id) b) c Real
+-- Assumes the 'Space' is Real
+uc :: (Concept c, IsUnit u) => c -> Symbol -> u -> UnitalChunk
+uc a b c = UC (cv (cw a) b Real) (unitWrapper c)
 
-ucs' :: (Concept c, Unit u) => c -> Symbol -> u -> Space -> UnitalChunk
-ucs' a b c p = UC a (ssc' (a ^. id) b) c p
+ucs' :: (Concept c, IsUnit u) => c -> Symbol -> u -> Space -> UnitalChunk
+ucs' a b c p = UC (cv (cw a) b p) (unitWrapper c)
 
 -- | Same as 'uc', except it builds the Concept portion of the UnitalChunk
--- from a given id, term, and defn. Those are the first three arguments
-uc' :: (Unit u) => String -> NP -> String -> Symbol -> u -> UnitalChunk
-uc' i t d s u = UC (dcc i t d) (ssc' i s) u Real
+-- from a given uid, term, and defn. Those are the first three arguments
+uc' :: (IsUnit u) => String -> NP -> String -> Symbol -> u -> UnitalChunk
+uc' i t d s u = UC (cv (dcc i t d) s Real) (unitWrapper u)
 
 -- | Same as 'uc'', but does not assume the 'Space'
-ucs :: (Unit u) => String -> NP -> String -> Symbol -> u -> Space -> UnitalChunk
-ucs nam trm desc sym un space = UC (dcc nam trm desc) (ssc' nam sym) un space
+ucs :: (IsUnit u) => String -> NP -> String -> Symbol -> u -> Space -> UnitalChunk
+ucs nam trm desc sym un space = UC (cv (dcc nam trm desc) sym space) (unitWrapper un)
 
 -- ucs With a Sentence for desc
-ucsWS :: Unit u => String -> NP -> Sentence -> Symbol -> u -> Space -> UnitalChunk
-ucsWS nam trm desc sym un space = 
-  UC (dccWDS nam trm desc) (ssc' nam sym) un space
+ucsWS :: IsUnit u => String -> NP -> Sentence -> Symbol -> u -> Space -> UnitalChunk
+ucsWS nam trm desc sym un space = UC (cv (dccWDS nam trm desc) sym space) (unitWrapper un)
 
 --Better names will come later.
 -- | Create a UnitalChunk in the same way as 'uc'', but with a 'Sentence' for
 -- the definition instead of a String
-makeUCWDS :: Unit u => String -> NP -> Sentence -> Symbol -> u -> UnitalChunk
-makeUCWDS nam trm desc sym un = UC (dccWDS nam trm desc) (ssc' nam sym) un Real
+makeUCWDS :: IsUnit u => String -> NP -> Sentence -> Symbol -> u -> UnitalChunk
+makeUCWDS nam trm desc sym un = UC (cv (dccWDS nam trm desc) sym Real) (unitWrapper un)
 
 -- | Create a UnitalChunk from a 'ConVar' by supplying the additional 'Unit'
-ucFromCV :: Unit u => ConVar -> u -> UnitalChunk
-ucFromCV conv un = UCV conv un
+ucFromCV :: IsUnit u => ConVar -> u -> UnitalChunk
+ucFromCV conv un = UC conv (unitWrapper un)

@@ -13,6 +13,7 @@
 \usepackage{graphics}
 \usepackage{filecontents}
 \usepackage[backend=bibtex]{biblatex}
+\usepackage{url}
 \global\tabulinesep=1mm
 \bibliography{bibfile}
 \title{Software Requirements Specification for Slope Stability Analysis}
@@ -22,10 +23,10 @@
 \tableofcontents
 \newpage
 \section{Reference Material}
-\label{Sec:RefeMate}
+\label{Sec:RefMat}
 This section records information for easy reference.
 \subsection{Table of Units}
-\label{Sec:TablofUnit}
+\label{Sec:ToU}
 The unit system used throughout is SI (Syst\`{e}me International d'Unit\'{e}s). In addition to the basic units, several derived units are also used. For each unit, the table lists the symbol, a description and the SI name.
 \begin{longtable*}{l l}
 \toprule
@@ -41,10 +42,10 @@ N & force (newton)
 Pa & pressure (pascal)
 \\
 \bottomrule
-\label{Table:TablofUnit}
+\label{Table:ToU}
 \end{longtable*}
 \subsection{Table of Symbols}
-\label{Sec:TablofSymb}
+\label{Sec:ToS}
 The table that follows summarizes the symbols used in this document along with their units. Throughout the document, values with a subscript $i$ implies that the value will be taken at and analyzed at a slice or slice interface composing the total slip mass.
 \begin{longtabu}{l X[l] l}
 \toprule
@@ -82,6 +83,8 @@ $f$ & Scaling Function: magnitude of interslice forces as a function of the x co
 $FS$ & Factor of Safety: The global stability of a surface in a slope & 
 \\
 ${FS_{Loc,i}}$ & Local Factor of Safety: for slice index i & 
+\\
+${FS_{min}}$ & Minimum Factor of Safety: The minimum factor of safety & 
 \\
 $H$ & Interslice Water Force: exerted in the x-ordinate direction between adjacent slices for interslice index i & N
 \\
@@ -132,6 +135,10 @@ $R$ & Resistive Shear Force: without the influence of interslice forces for slic
 $S$ & Mobilized Shear Force: for slice index i & N
 \\
 $s$ & Mobilized Shear Stress: acting on the base of a slice & Pa
+\\
+$SpencerFixme1Please$ & Fixme: What is this value? & 
+\\
+$SpencerFixme2Please$ & Fixme: What is this value? & 
 \\
 $T$ & Mobilized Shear Force: without the influence of interslice forces for slice index i & N
 \\
@@ -195,7 +202,7 @@ $\lambda{}$ & Interslice Normal/shear Force Ratio: applied to all interslices &
 \\
 $\mu{}$ & Pore Pressure: from water within the soil & Pa
 \\
-$\nu{}$ & Poisson's Ratio: The ratio of perpendicular strain to parellel strain. & 
+$\nu{}$ & Poisson's Ratio: The ratio of perpendicular strain to parallel strain. & 
 \\
 $\sigma{}$ & Normal Stress: The stress exerted perpendicular to the plain of the object & Pa
 \\
@@ -216,10 +223,10 @@ ${\ell{}_{b}}$ & Total Base Length of a Slice: for slice index i & m
 ${\ell{}_{s}}$ & Length of an Interslice Surface: from slip base to slope surface in a vertical line from an interslice vertex for interslice index i & m
 \\
 \bottomrule
-\label{Table:TablofSymb}
+\label{Table:ToS}
 \end{longtabu}
 \subsection{Abbreviations and Acronyms}
-\label{Sec:AbbrandAcro}
+\label{Sec:TAbbAcc}
 \begin{longtable*}{l l}
 \toprule
 Symbol & Description
@@ -250,34 +257,34 @@ T & Theoretical Model
 TU & Typical Uncertainty
 \\
 \bottomrule
-\label{Table:AbbrandAcro}
+\label{Table:TAbbAcc}
 \end{longtable*}
 \section{Introduction}
-\label{Sec:Intr}
+\label{Sec:Intro}
 A slope of geological mass, composed of soil and rock, is subject to the influence of gravity on the mass. For an unstable slope this can cause instability in the form of soil/rock movement. The effects of soil/rock movement can range from inconvenient to seriously hazardous, resulting in signifcant life and economic losses. Slope stability is of interest both when analyzing natural slopes, and when designing an excavated slope. Slope stability analysis is the assessment of the safety of a slope, identifying the surface most likely to experience slip and an index of its relative stability known as the factor of safety.
 The following section provides an overview of the Software Requirements Specification (SRS) for a slope stability analysis problem. The developed program will be referred to as the Slope Stability Analysis (SSA) program. This section explains the purpose of this document, the scope of the system, the organization of the document, and the characteristics of the intended reader.
 \subsection{Purpose of Document}
-\label{Sec:PurpofDocu}
+\label{Sec:DocPurpose}
 The SSA program determines the critical slip surface, and its respective factor of safety as a method of assessing the stability of a slope design. The program is intended to be used as an educational tool for introducing slope stability issues, and will facilitate the analysis and design of a safe slope.
 This document will be used as a starting point for subsequent development phases, including writing the design specification and the software verification and validation plan. The design document will show how the requirements are to be realized, including decisions on the numerical algorithms and programming environment. The verification and validation plan will show the steps that will be used to increase confidence in the software documentation and the implementation. Although the SRS fits in a series of documents that follow the so-called waterfall model, the actual development process is not constrained in any way. Even when the waterfall model is not followed, as Parnas and Clements point out, the most logical way to present the documentation is still to ``fake" a rational design process.
 \subsection{Scope of Requirements}
-\label{Sec:ScopofRequ}
+\label{Sec:ReqsScope}
 The scope of the requirements includes stability analysis of a 2 dimensional slope, composed of homogeneous soil layers. Given the appropriate inputs, the code for SSA is intended to identify the most likely failure surface within the possible input range, and find the factor of safety for the slope as well as displacement of soil that will occur on the slope.
 \subsection{Characteristics of Intended Reader}
-\label{Sec:CharofInteRead}
-Reviewers of this documentation should have a strong knowledge in solid mechanics. The reviewers should also have an understanding of undergraduate level 4 physics. The users of SSA can have a lower level of expertise, as explained in Section~\ref{Sec:UserChar}.
+\label{Sec:ReaderChars}
+Reviewers of this documentation should have a strong knowledge in solid mechanics. The reviewers should also have an understanding of undergraduate level 4 physics. The users of SSA can have a lower level of expertise, as explained in Section~\ref{Sec:UserChars}.
 \subsection{Organization of Document}
-\label{Sec:OrgaofDocu}
-The organization of this document follows the template for an SRS for scientific computing software proposed by Koothoor as well as Smith and Lai. The presentation follows the standard pattern of presenting goals, theories, definitions, and assumptions. For readers that would like a more bottom up approach, they can start reading the instance models in Section~\ref{Sec:InstMode} and trace back to find any additional information they require.
+\label{Sec:DocOrg}
+The organization of this document follows the template for an SRS for scientific computing software proposed by Koothoor as well as Smith and Lai. The presentation follows the standard pattern of presenting goals, theories, definitions, and assumptions. For readers that would like a more bottom up approach, they can start reading the instance models in Section~\ref{Sec:IMs} and trace back to find any additional information they require.
 The goal statements are refined to the theoretical models, and the theoretical models to the instance models. The instance models provide the set of algebraic equations that must be solved iteratively to perform a Morgenstern Price Analysis.
 \section{General System Description}
-\label{Sec:GeneSystDesc}
+\label{Sec:GenSysDesc}
 This section provides general information about the system, identifies the interfaces between the system and its environment, and describes the user characteristics and the system constraints.
 \subsection{User Characteristics}
-\label{Sec:UserChar}
+\label{Sec:UserChars}
 The end user of SSA should have an understanding of undergraduate Level 1 Calculus and Physics, and be familiar with soil and material properties.
 \subsection{System Constraints}
-\label{Sec:SystCons}
+\label{Sec:SysConstraints}
 There are no system constraints.
 \section{Specific System Description}
 \label{Sec:SpecSystDesc}
@@ -286,7 +293,7 @@ This section first presents the problem description, which gives a high-level vi
 \label{Sec:ProbDesc}
 SSA is a computer program developed to evaluate the factor of safety of a slope's slip surface and to calculate the displacement that the slope will experience.
 \subsubsection{Terminology and Definitions}
-\label{Sec:TermandDefi}
+\label{Sec:TermDefs}
 This subsection provides a list of terms that are used in the subsequent sections and their meaning, with the purpose of reducing ambiguity and making it easier to correctly understand the requirements.
 \begin{itemize}
 \item[Factor of Safety:]The global stability of a surface in a slope
@@ -300,29 +307,29 @@ This subsection provides a list of terms that are used in the subsequent section
 \item[Plane Strain:]The resultant stresses in one of the directions of a 3 dimensional material can be approximated as 0. Results when the length of one dimension of the body dominates the others. Stresses in the dominate dimensions direction are the ones that can be approximated as 0.
 \end{itemize}
 \subsubsection{Physical System Description}
-\label{Sec:PhysSystDesc}
-Analysis of the slope is performed by looking at properties of the slope as a series of slice elements. Some properties are interslice properties, and some are slice or slice base properties. The index convention for referencing which interslice or slice is being used is shown in Figure~\ref{Figure:Indeconvfornumbslicandinteforcvaris}.
+\label{Sec:PhysSyst}
+Analysis of the slope is performed by looking at properties of the slope as a series of slice elements. Some properties are interslice properties, and some are slice or slice base properties. The index convention for referencing which interslice or slice is being used is shown in Figure~\ref{Figure:IndexConvention}.
 \begin{enumerate}
 \item{Interslice properties convention is noted by j. The end interslice properties are usually not of interest, therefore use the interslice properties from $1\leq{}i\leq{}n-1$}
 \item{Slice properties convention is noted by. $i$}
 \end{enumerate}
-A free body diagram of the forces acting on the slice is displayed in Figure~\ref{Figure:Forcactionaslic}.
+A free body diagram of the forces acting on the slice is displayed in Figure~\ref{Figure:ForceDiagram}.
 \begin{figure}
 \begin{center}
 \includegraphics[width=\textwidth]{IndexConvention.png}
 \caption{Index convention for numbering slice and interslice force variables}
-\label{Figure:Indeconvfornumbslicandinteforcvaris}
+\label{Figure:IndexConvention}
 \end{center}
 \end{figure}
 \begin{figure}
 \begin{center}
 \includegraphics[width=\textwidth]{ForceDiagram.png}
 \caption{Forces acting on a slice}
-\label{Figure:Forcactionaslic}
+\label{Figure:ForceDiagram}
 \end{center}
 \end{figure}
 \subsubsection{Goal Statements}
-\label{Sec:GoalStat}
+\label{Sec:GoalStmt}
 Given the geometry of the water table, the geometry of the layers composing the plane of a slope, and the material properties of the layers, the goal statements are:
 \begin{itemize}
 \item[GS1:]Evaluate local and global factors of safety along a given slip surface.
@@ -330,11 +337,11 @@ Given the geometry of the water table, the geometry of the layers composing the 
 \item[GS3:]Determine the displacement of the slope.
 \end{itemize}
 \subsection{Solution Characteristics Specification}
-\label{Sec:SoluCharSpec}
-The instance models that govern SSA are presented in Section~\ref{Sec:InstMode}. The information to understand the meaning of the instance models and their derivation is also presented, so that the instance models can be verified.
+\label{Sec:SolCharSpec}
+The instance models that govern SSA are presented in Section~\ref{Sec:IMs}. The information to understand the meaning of the instance models and their derivation is also presented, so that the instance models can be verified.
 \subsubsection{Assumptions}
-\label{Sec:Assu}
-This section simplifies the original problem and helps in developing the theoretical model by filling in the missing information for the physical system. The numbers given in the square brackets refer to the Theoretical Models {[}Section~\ref{Sec:TheoMode}{]}, General Definitions {[}Section~\ref{Sec:GeneDefi}{]}, Data Definitions {[}Section~\ref{Sec:DataDefi}{]}, Instance Models {[}Section~\ref{Sec:InstMode}{]}, or Likely Changes {[}Section~\ref{Sec:LikeChan}{]}, in which the respective assumption is used.
+\label{Sec:Assumps}
+This section simplifies the original problem and helps in developing the theoretical model by filling in the missing information for the physical system. The numbers given in the square brackets refer to the Theoretical Models {[}Section~\ref{Sec:TMs}{]}, General Definitions {[}Section~\ref{Sec:GDs}{]}, Data Definitions {[}Section~\ref{Sec:DDs}{]}, Instance Models {[}Section~\ref{Sec:IMs}{]}, or Likely Changes {[}Section~\ref{Sec:LCs}{]}, in which the respective assumption is used.
 \begin{itemize}
 \item[A1:]The slip surface is concave with respect to the slope surface. The $(x,y)$ coordinates of the failure surface follow a monotonic function.
 \item[A2:]The geometry of the slope, and the material properties of the soil layers are given as inputs.
@@ -348,7 +355,7 @@ This section simplifies the original problem and helps in developing the theoret
 \item[A10:]The surface and base of a slice between interslice nodes are approximated as straight lines.
 \end{itemize}
 \subsubsection{Theoretical Models}
-\label{Sec:TheoMode}
+\label{Sec:TMs}
 This section focuses on the general equations and laws that SSA is based on.
 ~\newline
 \noindent \begin{minipage}{\textwidth}
@@ -373,7 +380,7 @@ Description & The stability metric of the slope, known as the factor of safety (
 \\ \midrule \\
 Label & Equilibrium
 \\ \midrule \\
-Equation & $\displaystyle\sum{\left[{F_{x}}\right]}=\displaystyle\sum{\left[{F_{y}}\right]}=\displaystyle\sum{\left[M\right]}=0$
+Equation & $\displaystyle\sum{{F_{x}}}=\displaystyle\sum{{F_{y}}}=\displaystyle\sum{M}=0$
 \\ \midrule \\
 Description & For a body in static equilibrium, the net forces and net moments acting on the body will cancel out. Assuming a 2D problem (A8) the x-component of the net force ${F_{x}}$ and y-component of the net force ${F_{y}}$ will be equal to $0$. All forces and their distance from the chosen point of rotation will create a net moment equal to, $0$ also able to be analyzed as a scalar in a 2D problem.
 \\ \bottomrule \end{tabular}
@@ -421,7 +428,7 @@ Description & Description Stiffness $K$ is the resistance a body others to defor
 \\ \bottomrule \end{tabular}
 \end{minipage}\\
 \subsubsection{General Definitions}
-\label{Sec:GeneDefi}
+\label{Sec:GDs}
 This section collects the laws and equations that will be used in deriving the data definitions, which in turn are used to build the instance models.
 ~\newline
 \noindent \begin{minipage}{\textwidth}
@@ -434,7 +441,7 @@ Label & Normal Force Equilibrium
 \\ \midrule \\
 Equation & $N_{i}=\left(W_{i}-X_{i-1}+X_{i}+{U_{t,i}} \cos\left(\beta{}_{i}\right)+Q_{i} \cos\left(\omega{}_{i}\right)\right) \cos\left(\alpha{}_{i}\right)+\left(-{K_{c}} W_{i}-E_{i}+E_{i-1}-H_{i}+H_{i-1}+{U_{t,i}} \sin\left(\beta{}_{i}\right)+Q_{i} \sin\left(\omega{}_{i}\right)\right) \sin\left(\alpha{}_{i}\right)$
 \\ \midrule \\
-Description & For a slice of mass in the slope the force equilibrium to satisfy T2 in the direction perpendicular to the base surface of the slice. Rearranged to solve for the normal force of the surface $N$. Force equilibrium is derived from the free body diagram of Section~\ref{Sec:PhysSystDesc} Index i refers to the values of the properties for slice/interslices following convention in Section~\ref{Sec:PhysSystDesc}. Force variable definitions can be found in DD1 to DD9.
+Description & For a slice of mass in the slope the force equilibrium to satisfy T2 in the direction perpendicular to the base surface of the slice. Rearranged to solve for the normal force of the surface $N$. Force equilibrium is derived from the free body diagram of Section~\ref{Sec:PhysSyst} Index i refers to the values of the properties for slice/interslices following convention in Section~\ref{Sec:PhysSyst}. Force variable definitions can be found in DD1 to DD9.
 \\ \bottomrule \end{tabular}
 \end{minipage}\\
 ~\newline
@@ -448,7 +455,7 @@ Label & Base Shear Force Equilibrium
 \\ \midrule \\
 Equation & $S_{i}=\left(W_{i}-X_{i-1}+X_{i}+{U_{t,i}} \cos\left(\beta{}_{i}\right)+Q_{i} \cos\left(\omega{}_{i}\right)\right) \sin\left(\alpha{}_{i}\right)+\left(-{K_{c}} W_{i}-E_{i}+E_{i-1}-H_{i}+H_{i-1}+{U_{t,i}} \sin\left(\beta{}_{i}\right)+Q_{i} \sin\left(\omega{}_{i}\right)\right) \cos\left(\alpha{}_{i}\right)$
 \\ \midrule \\
-Description & For a slice of mass in the slope the force equilibrium to satisfy T2 in the direction parallel to the base surface of the slice. Rearranged to solve for the shear force on the base $S$. Force equilibrium is derived from the free body diagram of Section~\ref{Sec:PhysSystDesc} Index $i$ refers to the values of the properties for slice/interslices following convention in Section~\ref{Sec:PhysSystDesc}. Force variable definitions can be found in DD1 to DD9.
+Description & For a slice of mass in the slope the force equilibrium to satisfy T2 in the direction parallel to the base surface of the slice. Rearranged to solve for the shear force on the base $S$. Force equilibrium is derived from the free body diagram of Section~\ref{Sec:PhysSyst} Index $i$ refers to the values of the properties for slice/interslices following convention in Section~\ref{Sec:PhysSyst}. Force variable definitions can be found in DD1 to DD9.
 \\ \bottomrule \end{tabular}
 \end{minipage}\\
 ~\newline
@@ -502,9 +509,9 @@ Description & The assumption for the Morgenstern Price method (A5) that the inte
 \\ \midrule \\
 Label & Moment Equilibrium
 \\ \midrule \\
-Equation & $0=\left(-E_{i}\right) \left(z_{i}-\frac{b_{i}}{2} \tan\left(\alpha{}_{i}\right)\right)+E_{i-1} \left(z_{i-1}-\frac{b_{i}}{2} \tan\left(\alpha{}_{i}\right)\right)-H_{i} \left(z_{i}-\frac{b_{i}}{2} \tan\left(\alpha{}_{i}\right)\right)+H_{i-1} \left(z_{i-1}-\frac{b_{i}}{2} \tan\left(\alpha{}_{i}\right)\right)-\frac{b_{i}}{2} \left(X_{i}+X_{i-1}\right)+\frac{{K_{c}} W_{i} h_{i}}{2}-{U_{t,i}} \sin\left(\beta{}_{i}\right) h_{i}-Q_{i} \sin\left(\omega{}_{i}\right) h_{i}$
+Equation & $0=-E_{i} \left(z_{i}-\frac{b_{i}}{2} \tan\left(\alpha{}_{i}\right)\right)+E_{i-1} \left(z_{i-1}-\frac{b_{i}}{2} \tan\left(\alpha{}_{i}\right)\right)-H_{i} \left(z_{i}-\frac{b_{i}}{2} \tan\left(\alpha{}_{i}\right)\right)+H_{i-1} \left(z_{i-1}-\frac{b_{i}}{2} \tan\left(\alpha{}_{i}\right)\right)-\frac{b_{i}}{2} \left(X_{i}+X_{i-1}\right)+\frac{{K_{c}} W_{i} h_{i}}{2}-{U_{t,i}} \sin\left(\beta{}_{i}\right) h_{i}-Q_{i} \sin\left(\omega{}_{i}\right) h_{i}$
 \\ \midrule \\
-Description & For a slice of mass in the slope the moment equilibrium to satisfy T2 in the direction perpendicular to the base surface of the slice. Moment equilibrium is derived from the free body diagram of Section~\ref{Sec:PhysSystDesc}. Index i refers to the values of the properties for slice/interslices following convention in Section~\ref{Sec:PhysSystDesc}. Variable definitions can be found in DD1 to DD9.
+Description & For a slice of mass in the slope the moment equilibrium to satisfy T2 in the direction perpendicular to the base surface of the slice. Moment equilibrium is derived from the free body diagram of Section~\ref{Sec:PhysSyst}. Index i refers to the values of the properties for slice/interslices following convention in Section~\ref{Sec:PhysSyst}. Variable definitions can be found in DD1 to DD9.
 \\ \bottomrule \end{tabular}
 \end{minipage}\\
 ~\newline
@@ -516,7 +523,7 @@ Description & For a slice of mass in the slope the moment equilibrium to satisfy
 \\ \midrule \\
 Label & Net X-Component Force
 \\ \midrule \\
-Equation & ${F_{x,i}}=\left(-{\Delta{}H}_{i}\right)-{K_{c}} W_{i}-{U_{b,i}} \sin\left(\alpha{}_{i}\right)+{U_{t,i}} \sin\left(\beta{}_{i}\right)+Q_{i} \sin\left(\omega{}_{i}\right)$
+Equation & ${F_{x,i}}=-{\Delta{}H}_{i}-{K_{c}} W_{i}-{U_{b,i}} \sin\left(\alpha{}_{i}\right)+{U_{t,i}} \sin\left(\beta{}_{i}\right)+Q_{i} \sin\left(\omega{}_{i}\right)$
 \\ \midrule \\
 Description & 
 \\ \bottomrule \end{tabular}
@@ -530,9 +537,9 @@ Description &
 \\ \midrule \\
 Label & Net Y-Component Force
 \\ \midrule \\
-Equation & ${F_{y,i}}=\left(-W_{i}\right)+{U_{b,i}} \cos\left(\alpha{}_{i}\right)-{U_{t,i}} \cos\left(\beta{}_{i}\right)-Q_{i} \cos\left(\omega{}_{i}\right)$
+Equation & ${F_{y,i}}=-W_{i}+{U_{b,i}} \cos\left(\alpha{}_{i}\right)-{U_{t,i}} \cos\left(\beta{}_{i}\right)-Q_{i} \cos\left(\omega{}_{i}\right)$
 \\ \midrule \\
-Description & These equations show the net sum of the forces acting on a slice for the RFEM model and the forces that create an applied load on the slice. ${F_{x}}$ refers to the load in the direction perpendicular to the direction of the force of gravity for slice $i$, while ${F_{y}}$ refers to the load in the direction parallel to the force of gravity for slice $i$. Forces are found in the free body diagram of Section~\ref{Sec:PhysSystDesc}. In this model the elements are not exerting forces on each other, so the interslice forces $E$ and $X$ are not a part of the model. Index $i$ refers to the values of the properties for slice/interslices following convention in Section~\ref{Sec:PhysSystDesc}. Force variable definitions can be found in DD1 to DD8.
+Description & These equations show the net sum of the forces acting on a slice for the RFEM model and the forces that create an applied load on the slice. ${F_{x}}$ refers to the load in the direction perpendicular to the direction of the force of gravity for slice $i$, while ${F_{y}}$ refers to the load in the direction parallel to the force of gravity for slice $i$. Forces are found in the free body diagram of Section~\ref{Sec:PhysSyst}. In this model the elements are not exerting forces on each other, so the interslice forces $E$ and $X$ are not a part of the model. Index $i$ refers to the values of the properties for slice/interslices following convention in Section~\ref{Sec:PhysSyst}. Force variable definitions can be found in DD1 to DD8.
 \\ \bottomrule \end{tabular}
 \end{minipage}\\
 ~\newline
@@ -572,10 +579,10 @@ Equation & $\varepsilon{}_{i}=\begin{bmatrix}
 {\delta{}v}_{i}
 \end{bmatrix}=\begin{bmatrix}
 \cos\left(\alpha{}_{i}\right) & \sin\left(\alpha{}_{i}\right)\\
-\left(-\sin\left(\alpha{}_{i}\right)\right) & \cos\left(\alpha{}_{i}\right)
+-\sin\left(\alpha{}_{i}\right) & \cos\left(\alpha{}_{i}\right)
 \end{bmatrix} \delta{}_{i}=\begin{bmatrix}
 \cos\left(\alpha{}_{i}\right) & \sin\left(\alpha{}_{i}\right)\\
-\left(-\sin\left(\alpha{}_{i}\right)\right) & \cos\left(\alpha{}_{i}\right)
+-\sin\left(\alpha{}_{i}\right) & \cos\left(\alpha{}_{i}\right)
 \end{bmatrix} \begin{bmatrix}
 {\delta{}x}_{i}\\
 {\delta{}y}_{i}
@@ -585,7 +592,7 @@ Description & Vectors describing the displacement of slice $i$. $\delta{}$ is th
 \\ \bottomrule \end{tabular}
 \end{minipage}\\
 \subsubsection{Data Definitions}
-\label{Sec:DataDefi}
+\label{Sec:DDs}
 This section collects and defines all the data needed to build the instance models. Definitions DD1 to DD8 are the force variables that can be solved by direct analysis of given inputs. The interslice forces DD9 are force variables that must be written in terms of DD1 to DD8 to solve.
 ~\newline
 \noindent \begin{minipage}{\textwidth}
@@ -657,8 +664,8 @@ Label & Interslice Water Force
 Units & N
 \\ \midrule \\
 Equation & $H$ = $\begin{cases}
-\frac{\left[{y_{us,i}}-{y_{slip,i}}\right]^{2}}{2} {\gamma{}_{Sat}}+\left[{y_{wt,i}}-{y_{us,i}}\right]^{2} {\gamma{}_{Sat}}, & {y_{wt,i}}\geq{}{y_{us,i}}\\
-\frac{\left[{y_{wt,i}}-{y_{slip,i}}\right]^{2}}{2} {\gamma{}_{Sat}}, & {y_{us,i}}>{y_{wt,i}}>{y_{slip,i}}\\
+\frac{\left({y_{us,i}}-{y_{slip,i}}\right)^{2}}{2} {\gamma{}_{Sat}}+\left({y_{wt,i}}-{y_{us,i}}\right)^{2} {\gamma{}_{Sat}}, & {y_{wt,i}}\geq{}{y_{us,i}}\\
+\frac{\left({y_{wt,i}}-{y_{slip,i}}\right)^{2}}{2} {\gamma{}_{Sat}}, & {y_{us,i}}>{y_{wt,i}}>{y_{slip,i}}\\
 0, & {y_{wt,i}}\leq{}{y_{slip,i}}
 \end{cases}$
 \\ \midrule \\
@@ -901,10 +908,10 @@ For interslice surfaces the stiffness constants and displacements refer to an un
 For basal surfaces the stiffness constants and displacements refer to a system rotated for the base angle alpha (DD5). To analyze the effect of force-displacement relationships occurring on both basal and interslice surfaces of an element $i$ they must reference the same coordinate system. The basal stiffness matrix must be rotated counter clockwise to align with the angle of the basal surface. The base stiffness counter clockwise rotation is applied in equation (7) to the new matrix $N*$.
 \begin{dmath}
 {K_{st,i}}=\begin{bmatrix}
-\cos\left(\alpha{}_{i}\right) & \left(-\sin\left(\alpha{}_{i}\right)\right)\\
+\cos\left(\alpha{}_{i}\right) & -\sin\left(\alpha{}_{i}\right)\\
 \sin\left(\alpha{}_{i}\right) & \cos\left(\alpha{}_{i}\right)
 \end{bmatrix} {K_{st,i}}=\begin{bmatrix}
-{K_{bt,i}} \cos\left(\alpha{}_{i}\right) & \left(-{K_{bn,i}} \sin\left(\alpha{}_{i}\right)\right)\\
+{K_{bt,i}} \cos\left(\alpha{}_{i}\right) & -{K_{bn,i}} \sin\left(\alpha{}_{i}\right)\\
 {K_{bt,i}} \sin\left(\alpha{}_{i}\right) & {K_{bn,i}} \cos\left(\alpha{}_{i}\right)
 \end{bmatrix}
 \end{dmath}
@@ -914,11 +921,11 @@ The Hooke's law force displacement relationship of GD8 applied to the base also 
 p_{i}\\
 p_{i}
 \end{bmatrix}={K_{bt,i}} \varepsilon{}=\begin{bmatrix}
-{K_{bt,i}} \cos\left(\alpha{}_{i}\right) & \left(-{K_{bn,i}} \sin\left(\alpha{}_{i}\right)\right)\\
+{K_{bt,i}} \cos\left(\alpha{}_{i}\right) & -{K_{bn,i}} \sin\left(\alpha{}_{i}\right)\\
 {K_{bt,i}} \sin\left(\alpha{}_{i}\right) & {K_{bn,i}} \cos\left(\alpha{}_{i}\right)
 \end{bmatrix} \begin{bmatrix}
 \cos\left(\alpha{}_{i}\right) & \sin\left(\alpha{}_{i}\right)\\
-\left(-\sin\left(\alpha{}_{i}\right)\right) & \cos\left(\alpha{}_{i}\right)
+-\sin\left(\alpha{}_{i}\right) & \cos\left(\alpha{}_{i}\right)
 \end{bmatrix} \begin{bmatrix}
 {\delta{}x}_{i}\\
 {\delta{}y}_{i}
@@ -958,7 +965,7 @@ Label & Force
 \\ \midrule \\
 Units & N
 \\ \midrule \\
-Equation & $F$ = $\left(-{\ell{}_{s,i-1}}\right) {K_{sn,i-1}} \delta{}_{i-1}+\left({\ell{}_{s,i-1}} {K_{sn,i-1}}+{\ell{}_{b,i}} {K_{bn,i}}+{\ell{}_{s,i}} {K_{sn,i}}\right) \delta{}_{i}-{\ell{}_{s,i}} {K_{sn,i}} \delta{}_{i+1}$
+Equation & $F$ = $-{\ell{}_{s,i-1}} {K_{sn,i-1}} \delta{}_{i-1}+\left({\ell{}_{s,i-1}} {K_{sn,i-1}}+{\ell{}_{b,i}} {K_{bn,i}}+{\ell{}_{s,i}} {K_{sn,i}}\right) \delta{}_{i}-{\ell{}_{s,i}} {K_{sn,i}} \delta{}_{i+1}$
 \\ \midrule \\
 Description & $F$ is the force (N)\newline${\ell{}_{s}}$ is the length of an interslice surface (m)\newline$i$ is the index\newline${K_{sn}}$ is the normal stiffness ($\frac{\text{Pa}}{\text{m}}$)\newline$\delta{}$ is the displacement (m)\newline${\ell{}_{b}}$ is the total base length of a slice (m)\newline${K_{bn}}$ is the normal stiffness ($\frac{\text{Pa}}{\text{m}}$)
 \\ \bottomrule \end{tabular}
@@ -992,20 +999,47 @@ Units & $\frac{\text{Pa}}{\text{m}}$
 \\ \midrule \\
 Equation & ${K_{bn}}$ = $\begin{cases}
 \frac{E \left(1-\nu{}\right)}{\left(1+\nu{}\right) \left(1-2 \nu{}+b\right)}, & \nu{}<0\\
-\begin{multlined}
-0.01 \frac{E \left(1-\nu{}\right)}{\left(1+\nu{}\right) \left(1-2 \nu{}+b\right)}
-\\+
-\frac{\kappa{}}{\delta{}v+A}
-\end{multlined}
-, & \nu{}\geq{}0
+0.01 \frac{E \left(1-\nu{}\right)}{\left(1+\nu{}\right) \left(1-2 \nu{}+b\right)}+\frac{\kappa{}}{\delta{}v+A}, & \nu{}\geq{}0
 \end{cases}$
 \\ \midrule \\
 Description & ${K_{bn}}$ is the normal stiffness ($\frac{\text{Pa}}{\text{m}}$)\newline$E$ is the interslice normal force (N)\newline$\nu{}$ is the Poisson's ratio\newline$b$ is the base width of a slice (m)\newline$\kappa{}$ is the constant (Pa)\newline$\delta{}v$ is the displacement (m)\newline$A$ is the constant (m)
 \\ \bottomrule \end{tabular}
 \end{minipage}\\
+~\newline
+\noindent \begin{minipage}{\textwidth}
+\begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
+\toprule \textbf{Refname} & \textbf{DD:fixme1}
+\phantomsection 
+\label{DD:fixme1}
+\\ \midrule \\
+Label & Fixme
+\\ \midrule \\
+Units & Unitless
+\\ \midrule \\
+Equation & $SpencerFixme1Please$ = $E_{i}+E_{i-1}$
+\\ \midrule \\
+Description & $SpencerFixme1Please$ is the fixme\newline$E$ is the interslice normal force (N)\newline$i$ is the index
+\\ \bottomrule \end{tabular}
+\end{minipage}\\
+~\newline
+\noindent \begin{minipage}{\textwidth}
+\begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
+\toprule \textbf{Refname} & \textbf{DD:fixme2}
+\phantomsection 
+\label{DD:fixme2}
+\\ \midrule \\
+Label & Fixme
+\\ \midrule \\
+Units & Unitless
+\\ \midrule \\
+Equation & $SpencerFixme2Please$ = $H_{i}+H_{i-1}$
+\\ \midrule \\
+Description & $SpencerFixme2Please$ is the fixme\newline$H$ is the interslice water force (N)\newline$i$ is the index
+\\ \bottomrule \end{tabular}
+\end{minipage}\\
 \subsubsection{Instance Models}
-\label{Sec:InstMode}
-This section transforms the problem defined in Section~\ref{Sec:ProbDesc} into one which is expressed in mathematical terms. It uses concrete symbols defined in Section~\ref{Sec:DataDefi} to replace the abstract symbols in the models identified in Section~\ref{Sec:TheoMode} and Section~\ref{Sec:GeneDefi}.
+\label{Sec:IMs}
+This section transforms the problem defined in Section~\ref{Sec:ProbDesc} into one which is expressed in mathematical terms. It uses concrete symbols defined in Section~\ref{Sec:DDs} to replace the abstract symbols in the models identified in Section~\ref{Sec:TMs} and Section~\ref{Sec:GDs}.
 The Morgenstern Price method is a vertical slice, limit equilibrium slope stability analysis method. Analysis is performed by breaking the assumed failure surface into a series of vertical slices of mass. Static equilibrium analysis using two force equilibrium, and one moment equation as in T2. The problem is statically indeterminate with only these 3 equations and one constitutive equation (the Mohr Coulomb shear strength of T3) so the assumption of GD5 is used. Solving for force equilibrium allows definitions of all forces in terms of the physical properties of DD1 to DD9, as done in DD10, DD11.
 The values of the interslice normal force $E$ the interslice normal/shear force ratio $\lambda{}$, and the Factor of Safety ($FS$), are unknown. Equations for the unknowns are written in terms of only the values in DD1 to DD9, the values of $R$, and $T$ in DD10 and DD11, and each other. The relationships between the unknowns are non linear, and therefore explicit equations cannot be derived and an iterative solutions method is required.
 ~\newline
@@ -1017,14 +1051,14 @@ The values of the interslice normal force $E$ the interslice normal/shear force 
 \\ \midrule \\
 Label & Factor of Safety
 \\ \midrule \\
-Equation & $FS=\frac{\displaystyle\sum_{v=1}^{n-1}{\left[R_{v} \displaystyle\prod_{u=i}^{n-1}{\frac{\Psi{}_{u}}{\Phi{}_{u}}}\right]}+R_{n}}{\displaystyle\sum_{v=1}^{n-1}{\left[T_{v} \displaystyle\prod_{u=i}^{n-1}{\frac{\Psi{}_{u}}{\Phi{}_{u}}}\right]}+T_{n}}$
+Equation & $FS=\frac{\displaystyle\sum_{v=1}^{n-1}{R_{v} \displaystyle\prod_{u=i}^{n-1}{\frac{\Psi{}_{u}}{\Phi{}_{u}}}}+R_{n}}{\displaystyle\sum_{v=1}^{n-1}{T_{v} \displaystyle\prod_{u=i}^{n-1}{\frac{\Psi{}_{u}}{\Phi{}_{u}}}}+T_{n}}$
 \\ \midrule \\
 Description & Equation for the Factor of Safety is the ratio between resistive and mobile shear of the slip surface. The sum of values from each slice is taken to find the total resistive and mobile shear for the slip surface. The constants $\Phi{}$ and $\Psi{}$ convert the resistive and mobile shear without the inluence of interslice forces, to a calculation considering the interslice forces.
 \\ \bottomrule \end{tabular}
 \end{minipage}\\
 Using equation (21) from IM3, rearranging, and applying the boundary condition that $E_{0}$ and $E_{n}$ are equal to $0$, an equation for the factor of safety is found as equation (12), also seen in IM1.
 \begin{dmath}
-FS=\frac{\displaystyle\sum_{v=1}^{n-1}{\left[R_{v} \displaystyle\prod_{u=i}^{n-1}{\frac{\Psi{}_{u}}{\Phi{}_{u}}}\right]}+R_{n}}{\displaystyle\sum_{v=1}^{n-1}{\left[T_{v} \displaystyle\prod_{u=i}^{n-1}{\frac{\Psi{}_{u}}{\Phi{}_{u}}}\right]}+T_{n}}
+FS=\frac{\displaystyle\sum_{v=1}^{n-1}{R_{v} \displaystyle\prod_{u=i}^{n-1}{\frac{\Psi{}_{u}}{\Phi{}_{u}}}}+R_{n}}{\displaystyle\sum_{v=1}^{n-1}{T_{v} \displaystyle\prod_{u=i}^{n-1}{\frac{\Psi{}_{u}}{\Phi{}_{u}}}}+T_{n}}
 \end{dmath}
 The constants $\Psi{}$ and $\Phi{}$ described in equation (20) and equation (19) are functions of the unknowns: the interslice normal/shear force ratio $\lambda{}$ (IM2) and the factor of safety $FS$ (IM1).
 ~\newline
@@ -1038,41 +1072,28 @@ Label & Normal/shear Force Ratio
 \\ \midrule \\
 Equation & ${C1}_{i}=\begin{cases}
 b_{1} \left(E_{1}+H_{1}\right) \tan\left(\alpha{}_{1}\right), & i=1\\
-\begin{multlined}
-b_{i} \left(\left(E_{i}+E_{i-1}\right)+\left(H_{i}+H_{i-1}\right)\right) \tan\left(\alpha{}_{i}\right)
-\\+
-h \left({K_{c}} W_{i}-2 {U_{t,i}} \sin\left(\beta{}_{i}\right)-2 Q_{i} \cos\left(\omega{}_{i}\right)\right)
-\end{multlined}
-, & 2\leq{}i\leq{}n-1\\
+b_{i} \left(SpencerFixme1Please+SpencerFixme2Please\right) \tan\left(\alpha{}_{i}\right)+h \left({K_{c}} W_{i}-2 {U_{t,i}} \sin\left(\beta{}_{i}\right)-2 Q_{i} \cos\left(\omega{}_{i}\right)\right), & 2\leq{}i\leq{}n-1\\
 b_{n} \left(E_{n-1}+H_{n-1}\right) \tan\left(\alpha{}_{n-1}\right), & i=n
 \end{cases}={C2}_{i}=\begin{cases}
 b_{1} f_{1} E_{1}, & i=1\\
 b_{i} \left(f_{i} E_{i}+f_{i-1} E_{i-1}\right), & 2\leq{}i\leq{}n-1\\
 b_{n} E_{n-1} H_{n-1}, & i=1
-\end{cases}=\lambda{}=\frac{\displaystyle\sum_{i=1}^{n}{\left[{C1}_{i}\right]}}{\displaystyle\sum_{i=1}^{n}{\left[{C2}_{i}\right]}}$
+\end{cases}=\lambda{}=\frac{\displaystyle\sum_{i=1}^{n}{{C1}_{i}}}{\displaystyle\sum_{i=1}^{n}{{C2}_{i}}}$
 \\ \midrule \\
 Description & $\lambda{}$ is the magnitude ratio between shear and normal forces at the interslice interfaces as the assumption of the Morgenstern Price method in GD5 The inclination function $f$ determines the relative magnitude ratio between the different interslices, while $\lambda{}$ determines the magnitude. $\lambda{}$ uses the sum of interslice normal and shear forces taken from each interslice.
 \\ \bottomrule \end{tabular}
 \end{minipage}\\
 Taking the last static equation of T2 with the moment equilibrium of GD6 about the midpoint of the base and the assumption of GD5 results in equation (13).
 \begin{dmath}
-0=\left(-E_{i}\right) \left(z_{i}-\frac{b_{i}}{2} \tan\left(\alpha{}_{i}\right)\right)+E_{i-1} \left(z_{i-1}-\frac{b_{i}}{2} \tan\left(\alpha{}_{i}\right)\right)-H_{i} \left(z_{i}-\frac{b_{i}}{2} \tan\left(\alpha{}_{i}\right)\right)+H_{i-1} \left(z_{i-1}-\frac{b_{i}}{2} \tan\left(\alpha{}_{i}\right)\right)-\lambda{} \frac{b_{i}}{2} \left(E_{i} f_{i}+E_{i-1} f_{i-1}\right)+\frac{{K_{c}} W_{i} h_{i}}{2}-{U_{t,i}} \sin\left(\beta{}_{i}\right) h_{i}-Q_{i} \sin\left(\omega{}_{i}\right) h_{i}
+0=-E_{i} \left(z_{i}-\frac{b_{i}}{2} \tan\left(\alpha{}_{i}\right)\right)+E_{i-1} \left(z_{i-1}-\frac{b_{i}}{2} \tan\left(\alpha{}_{i}\right)\right)-H_{i} \left(z_{i}-\frac{b_{i}}{2} \tan\left(\alpha{}_{i}\right)\right)+H_{i-1} \left(z_{i-1}-\frac{b_{i}}{2} \tan\left(\alpha{}_{i}\right)\right)-\lambda{} \frac{b_{i}}{2} \left(E_{i} f_{i}+E_{i-1} f_{i-1}\right)+\frac{{K_{c}} W_{i} h_{i}}{2}-{U_{t,i}} \sin\left(\beta{}_{i}\right) h_{i}-Q_{i} \sin\left(\omega{}_{i}\right) h_{i}
 \end{dmath}
 The equation in terms of $\lambda{}$ leads to equation (14).
 \begin{dmath}
-\lambda{}=\frac{\begin{multlined}
-\left(-E_{i}\right) \left(z_{i}-\left(b_{i}/2\right) \tan\left(\alpha{}_{i}\right)\right)+E_{i-1} \left(z_{i-1}-\left(b_{i}/2\right) \tan\left(\alpha{}_{i}\right)\right)+\left(-H_{i} \left(z_{i}-\left(b_{i}/2\right) \tan\left(\alpha{}_{i}\right)\right)\right)
-\\+
-H_{i-1} \left(z_{i-1}-\left(b_{i}/2\right) \tan\left(\alpha{}_{i}\right)\right)+{K_{c}} W_{i} h_{i}/2+\left(-{U_{t,i}} \sin\left(\beta{}_{i}\right) h_{i}\right)+\left(-Q_{i} \sin\left(\omega{}_{i}\right) h_{i}\right)
-\end{multlined}
-}{\left(b_{i}/2\right) \left(E_{i} f_{i}+E_{i-1} f_{i-1}\right)}
+\lambda{}=\frac{-E_{i} \left(z_{i}-\frac{b_{i}}{2} \tan\left(\alpha{}_{i}\right)\right)+E_{i-1} \left(z_{i-1}-\frac{b_{i}}{2} \tan\left(\alpha{}_{i}\right)\right)-H_{i} \left(z_{i}-\frac{b_{i}}{2} \tan\left(\alpha{}_{i}\right)\right)+H_{i-1} \left(z_{i-1}-\frac{b_{i}}{2} \tan\left(\alpha{}_{i}\right)\right)+\frac{{K_{c}} W_{i} h_{i}}{2}-{U_{t,i}} \sin\left(\beta{}_{i}\right) h_{i}-Q_{i} \sin\left(\omega{}_{i}\right) h_{i}}{\frac{b_{i}}{2} \left(E_{i} f_{i}+E_{i-1} f_{i-1}\right)}
 \end{dmath}
 Taking a summation of each slice, and applying the boundary condition that $E_{0}$ and $E_{n}$ are equal to $0$, a general equation for the constant $\lambda{}$ is developed in equation (15), also found in IM2.
 \begin{dmath}
-\lambda{}_{i}=\frac{\begin{multlined}
-\displaystyle\sum_{i=1}^{n}{\left[b_{i} \left(\left(E_{i}+E_{i-1}\right)+\left(H_{i}+H_{i-1}\right)\right) \tan\left(\alpha{}_{i}\right)+h_{i} \left({K_{c}} W_{i}-2 {U_{t,i}} \sin\left(\beta{}_{i}\right)-2 Q_{i} \sin\left(\omega{}_{i}\right)\right)\right]}
-\end{multlined}
-}{\displaystyle\sum_{i=1}^{n}{\left[b_{i} \left(E_{i} f_{i}+E_{i-1} f_{i-1}\right)\right]}}
+\lambda{}_{i}=\frac{\displaystyle\sum_{i=1}^{n}{b_{i} \left(SpencerFixme1Please+SpencerFixme2Please\right) \tan\left(\alpha{}_{i}\right)+h_{i} \left({K_{c}} W_{i}-2 {U_{t,i}} \sin\left(\beta{}_{i}\right)-2 Q_{i} \sin\left(\omega{}_{i}\right)\right)}}{\displaystyle\sum_{i=1}^{n}{b_{i} \left(E_{i} f_{i}+E_{i-1} f_{i-1}\right)}}
 \end{dmath}
 equation (15) for $\lambda{}$, is a function of the unknown interslice normal force $E$ IM3.
 ~\newline
@@ -1125,14 +1146,14 @@ The constants $\Psi{}$ and $\Phi{}$ described in equation (20) and equation (19)
 \\ \midrule \\
 Label & Force Displacement Equilibrium
 \\ \midrule \\
-Equation & $\left(-{\Delta{}H}_{i}\right)-{K_{c}} W_{i}-{U_{b,i}} \sin\left(\alpha{}_{i}\right)+{U_{t,i}} \sin\left(\beta{}_{i}\right)+Q_{i} \sin\left(\omega{}_{i}\right)={\delta{}x}_{i-1} \left(-{\ell{}_{s,i-1}}\right) {K_{sn,i-1}}+{\delta{}x}_{i} \left(\left(-{\ell{}_{s,i-1}}\right) {K_{sn,i-1}}+{\ell{}_{s,i}} {K_{sn,i}}+{\ell{}_{b,i}} {K_{bA,i}}\right)+{\delta{}x}_{i+1} \left(-{\ell{}_{s,i}}\right) {K_{sn,i}}+{\delta{}y}_{i} \left(-{\ell{}_{b,i}}\right) {K_{bB,i}}=\left(-W_{i}\right)-{U_{b,i}} \cos\left(\alpha{}_{i}\right)+{U_{t,i}} \cos\left(\beta{}_{i}\right)+Q_{i} \cos\left(\omega{}_{i}\right)={\delta{}y}_{i-1} \left(-{\ell{}_{s,i-1}}\right) {K_{st,i-1}}+{\delta{}y}_{i} \left(\left(-{\ell{}_{s,i-1}}\right) {K_{st,i-1}}+{\ell{}_{s,i}} {K_{sn,i}}+{\ell{}_{b,i}} {K_{bA,i}}\right)+{\delta{}y}_{i+1} \left(-{\ell{}_{s,i}}\right) {K_{st,i}}+{\delta{}x}_{i} \left(-{\ell{}_{b,i}}\right) {K_{bB,i}}$
+Equation & $-{\Delta{}H}_{i}-{K_{c}} W_{i}-{U_{b,i}} \sin\left(\alpha{}_{i}\right)+{U_{t,i}} \sin\left(\beta{}_{i}\right)+Q_{i} \sin\left(\omega{}_{i}\right)={\delta{}x}_{i-1} -{\ell{}_{s,i-1}} {K_{sn,i-1}}+{\delta{}x}_{i} \left(-{\ell{}_{s,i-1}} {K_{sn,i-1}}+{\ell{}_{s,i}} {K_{sn,i}}+{\ell{}_{b,i}} {K_{bA,i}}\right)+{\delta{}x}_{i+1} -{\ell{}_{s,i}} {K_{sn,i}}+{\delta{}y}_{i} -{\ell{}_{b,i}} {K_{bB,i}}=-W_{i}-{U_{b,i}} \cos\left(\alpha{}_{i}\right)+{U_{t,i}} \cos\left(\beta{}_{i}\right)+Q_{i} \cos\left(\omega{}_{i}\right)={\delta{}y}_{i-1} -{\ell{}_{s,i-1}} {K_{st,i-1}}+{\delta{}y}_{i} \left(-{\ell{}_{s,i-1}} {K_{st,i-1}}+{\ell{}_{s,i}} {K_{sn,i}}+{\ell{}_{b,i}} {K_{bA,i}}\right)+{\delta{}y}_{i+1} -{\ell{}_{s,i}} {K_{st,i}}+{\delta{}x}_{i} -{\ell{}_{b,i}} {K_{bB,i}}$
 \\ \midrule \\
 Description & There is one set of force displacement equilibrium equations in the x and y directions for each element. System of equations solved for displacements ( $\delta{}x$ and $\delta{}y$ ) $\Delta{}H$ = $H$ is the net hydrostatic force across a slice. ${K_{c}}$ is the earthquake load factor. $W$ is the weight of the slice. ${U_{b}}$ is the pore water pressure acting on the slice base. ${U_{t}}$ is the pore water pressure acting on the slice surface. $\alpha{}$ is the angle of the base with the horizontal. $\beta{}$ is the angle of the surface with the horizontal. $\delta{}x$ is the x displacement of slice i. $\delta{}y$ is the y displacement of slice i. ${\ell{}_{s}}$ is the length of the interslice surface i. ${\ell{}_{b}}$ is the length of the base surface i. ${K_{st}}$ is the interslice shear stiffness at surface i.  Kst,i-1 is the interslice normal stiffness at surface i. KbA,i, and KbB,i are the base stiffness values for slice i.
 \\ \bottomrule \end{tabular}
 \end{minipage}\\
 Using the net force-displacement equilibrium equation of a slice from DD13 with the definitions of the stiffness matrices from DD12 and the force definitions from GD7 a broken down force displacement equilibrium equation can be derived. equation (22) gives the broken down equation in the $x$ direction, and equation (23) gives the broken down equation in the $y$ direction.
 \begin{dmath}
-\left(-{\Delta{}H}_{i}\right)-{K_{c}} W_{i}-{U_{b,i}} \sin\left(\alpha{}_{i}\right)+{U_{t,i}} \sin\left(\beta{}_{i}\right)+Q_{i} \sin\left(\omega{}_{i}\right)={\delta{}x}_{i-1} \left(-{\ell{}_{s,i-1}}\right) {K_{sn,i-1}}+{\delta{}x}_{i} \left(\left(-{\ell{}_{s,i-1}}\right) {K_{sn,i-1}}+{\ell{}_{s,i}} {K_{sn,i}}+{\ell{}_{b,i}} {K_{bA,i}}\right)+{\delta{}x}_{i+1} \left(-{\ell{}_{s,i}}\right) {K_{sn,i}}+{\delta{}y}_{i} \left(-{\ell{}_{b,i}}\right) {K_{bB,i}}=\left(-W_{i}\right)-{U_{b,i}} \cos\left(\alpha{}_{i}\right)+{U_{t,i}} \cos\left(\beta{}_{i}\right)+Q_{i} \cos\left(\omega{}_{i}\right)={\delta{}y}_{i-1} \left(-{\ell{}_{s,i-1}}\right) {K_{st,i-1}}+{\delta{}y}_{i} \left(\left(-{\ell{}_{s,i-1}}\right) {K_{st,i-1}}+{\ell{}_{s,i}} {K_{sn,i}}+{\ell{}_{b,i}} {K_{bA,i}}\right)+{\delta{}y}_{i+1} \left(-{\ell{}_{s,i}}\right) {K_{st,i}}+{\delta{}x}_{i} \left(-{\ell{}_{b,i}}\right) {K_{bB,i}}
+-{\Delta{}H}_{i}-{K_{c}} W_{i}-{U_{b,i}} \sin\left(\alpha{}_{i}\right)+{U_{t,i}} \sin\left(\beta{}_{i}\right)+Q_{i} \sin\left(\omega{}_{i}\right)={\delta{}x}_{i-1} -{\ell{}_{s,i-1}} {K_{sn,i-1}}+{\delta{}x}_{i} \left(-{\ell{}_{s,i-1}} {K_{sn,i-1}}+{\ell{}_{s,i}} {K_{sn,i}}+{\ell{}_{b,i}} {K_{bA,i}}\right)+{\delta{}x}_{i+1} -{\ell{}_{s,i}} {K_{sn,i}}+{\delta{}y}_{i} -{\ell{}_{b,i}} {K_{bB,i}}=-W_{i}-{U_{b,i}} \cos\left(\alpha{}_{i}\right)+{U_{t,i}} \cos\left(\beta{}_{i}\right)+Q_{i} \cos\left(\omega{}_{i}\right)={\delta{}y}_{i-1} -{\ell{}_{s,i-1}} {K_{st,i-1}}+{\delta{}y}_{i} \left(-{\ell{}_{s,i-1}} {K_{st,i-1}}+{\ell{}_{s,i}} {K_{sn,i}}+{\ell{}_{b,i}} {K_{bA,i}}\right)+{\delta{}y}_{i+1} -{\ell{}_{s,i}} {K_{st,i}}+{\delta{}x}_{i} -{\ell{}_{b,i}} {K_{bB,i}}
 \end{dmath}
 Using the known input assumption of A2, the force variable definitions of DD1 to DD8 on the left side of the equations can be solved for. The only unknown in the variables to solve for the stiffness values from DD14 is the displacements. Therefore taking the equation from each slice a set of $2 n$ equations, with $2 n$ unknown displacements in the $x$ and $y$ directions of each slice can be derived. Solutions for the displacements of each slice can then be found. The use of displacement in the definition of the stiffness values makes the equation implicit, which means an iterative solution method, with an initial guess for the displacements in the stiffness values is required.
 ~\newline
@@ -1144,10 +1165,7 @@ Using the known input assumption of A2, the force variable definitions of DD1 to
 \\ \midrule \\
 Label & RFEM Factor of Safety
 \\ \midrule \\
-Equation & ${FS_{Loc,i,i}}=\frac{{c'}_{i}-{K_{bn,i}} {\delta{}v}_{i} \tan\left({\varphi{}'}_{i}\right)}{{K_{bt,i}} {\delta{}u}_{i}}=\frac{\begin{multlined}
-\displaystyle\sum_{i=1}^{n}{\left[{\ell{}_{b,i}} \left({c'}_{i}-{K_{bn,i}} {\delta{}v}_{i} \tan\left({\varphi{}'}_{i}\right)\right)\right]}
-\end{multlined}
-}{\displaystyle\sum_{i=1}^{n}{\left[{\ell{}_{b,i}} \left({K_{bt,i}} {\delta{}u}_{i}\right)\right]}}$
+Equation & ${FS_{Loc,i,i}}=\frac{{c'}_{i}-{K_{bn,i}} {\delta{}v}_{i} \tan\left({\varphi{}'}_{i}\right)}{{K_{bt,i}} {\delta{}u}_{i}}=\frac{\displaystyle\sum_{i=1}^{n}{{\ell{}_{b,i}} \left({c'}_{i}-{K_{bn,i}} {\delta{}v}_{i} \tan\left({\varphi{}'}_{i}\right)\right)}}{\displaystyle\sum_{i=1}^{n}{{\ell{}_{b,i}} {K_{bt,i}} {\delta{}u}_{i}}}$
 \\ \midrule \\
 Description & ${FS_{Loc,i}}$ is the factor of safety for slice i. $FS$ is the factor of safety for the entire slip surface. $c'$ is the cohesion of slice i's base. $\varphi{}'$ is the effective angle of friction of slice i's base. $\delta{}v$ is the normal displacement of slice i. $\delta{}u$ is the shear displacement of slice i. ${K_{bt}}$ is the length of the base of slice i. ${K_{bn}}$ is the base normal stiffness at surface i. $n$ is the number of slices in the slip surface.
 \\ \bottomrule \end{tabular}
@@ -1157,7 +1175,7 @@ RFEM analysis can also be used to calculate the factor of safety for the slope. 
 {\delta{}u}_{i}=\cos\left(\alpha{}_{i}\right) {\delta{}x}_{i}+\sin\left(\alpha{}_{i}\right) {\delta{}y}_{i}
 \end{dmath}
 \begin{dmath}
-{\delta{}v}_{i}=\left(-\sin\left(\alpha{}_{i}\right)\right) {\delta{}x}_{i}+\sin\left(\alpha{}_{i}\right) {\delta{}y}_{i}
+{\delta{}v}_{i}=-\sin\left(\alpha{}_{i}\right) {\delta{}x}_{i}+\sin\left(\alpha{}_{i}\right) {\delta{}y}_{i}
 \end{dmath}
 With the definition of normal stiffness from DD14 to find the normal stiffness of the base ${K_{bn}}$ and the now known base displacement perpendicular to the surface $\delta{}v$ from equation (25) the normal base stress can be calculated from the force-displacement relationship of T5. Stress $\sigma{}$ is used in place of force $F$ as the stiffness hasn't been normalized for the length of the base. Results in equation (26).
 \begin{dmath}
@@ -1181,10 +1199,7 @@ The resistive shear stress acting on the base of a slice $\tau{}$ acts as the mo
 \end{dmath}
 The global Factor of Safety is then the ratio of the summation of the resistive and mobile shears for each slice, with a weighting for the length of the slice's base. Shown in equation (31) and IM5.
 \begin{dmath}
-FS=\frac{\displaystyle\sum_{i=1}^{n}{\left[{\ell{}_{b,i}} s_{i}\right]}}{\displaystyle\sum_{i=1}^{n}{\left[{\ell{}_{b,i}} \tau{}_{i}\right]}}=\frac{\begin{multlined}
-\displaystyle\sum_{i=1}^{n}{\left[{\ell{}_{b,i}} \left({c'}_{i}-{K_{bn,i}} {\delta{}v}_{i} \tan\left({\varphi{}'}_{i}\right)\right)\right]}
-\end{multlined}
-}{\displaystyle\sum_{i=1}^{n}{\left[{\ell{}_{b,i}} \left({K_{bt,i}} {\delta{}u}_{i}\right)\right]}}
+FS=\frac{\displaystyle\sum_{i=1}^{n}{{\ell{}_{b,i}} s_{i}}}{\displaystyle\sum_{i=1}^{n}{{\ell{}_{b,i}} \tau{}_{i}}}=\frac{\displaystyle\sum_{i=1}^{n}{{\ell{}_{b,i}} \left({c'}_{i}-{K_{bn,i}} {\delta{}v}_{i} \tan\left({\varphi{}'}_{i}\right)\right)}}{\displaystyle\sum_{i=1}^{n}{{\ell{}_{b,i}} {K_{bt,i}} {\delta{}u}_{i}}}
 \end{dmath}
 ~\newline
 \noindent \begin{minipage}{\textwidth}
@@ -1195,32 +1210,32 @@ FS=\frac{\displaystyle\sum_{i=1}^{n}{\left[{\ell{}_{b,i}} s_{i}\right]}}{\displa
 \\ \midrule \\
 Label & Critical Slip Identification
 \\ \midrule \\
-Equation & $FS_{min}=\Upsilon{}\left(\{{x_{cs}}{,y_{cs}}\},Input\right)$
+Equation & ${FS_{min}}=\Upsilon{}\left(\{{x_{cs}}{,y_{cs}}\}\right)$
 \\ \midrule \\
-Description & Given the necessary slope inputs, a minimization algorithm or function $\Upsilon{}$ will identify the critical slip surface of the slope, with the critical slip coordinates $\{{x_{cs}}{,y_{cs}}\}$ and the minimum factor of safety $FS_{min}$ that results.
+Description & Given the necessary slope inputs, a minimization algorithm or function $\Upsilon{}$ will identify the critical slip surface of the slope, with the critical slip coordinates $\{{x_{cs}}{,y_{cs}}\}$ and the minimum factor of safety ${FS_{min}}$ that results.
 \\ \bottomrule \end{tabular}
 \end{minipage}\\
 \subsubsection{Data Constraints}
-\label{Sec:DataCons}
-Table~\ref{Table:InpuDataCons}, and Table~\ref{Table:OutpDataCons} shows the data constraints on the input and output variables, respectively. The column for physical constraints gives the physical limitations on the range of values that can be taken by the variable. The uncertainty column provides an estimate of the confidence with which the physical quantities can be measured. This information would be part of the input if one were performing an uncertainty quantification exercise. The constraints are conservative, to give the user of the model the flexibility to experiment with unusual situations. The column of typical values is intended to provide a feel for a common scenario.
+\label{Sec:DataConstraints}
+Table~\ref{Table:InDataConstraints}, and Table~\ref{Table:OutDataConstraints} shows the data constraints on the input and output variables, respectively. The column for physical constraints gives the physical limitations on the range of values that can be taken by the variable. The uncertainty column provides an estimate of the confidence with which the physical quantities can be measured. This information would be part of the input if one were performing an uncertainty quantification exercise. The constraints are conservative, to give the user of the model the flexibility to experiment with unusual situations. The column of typical values is intended to provide a feel for a common scenario.
 \begin{longtable}{l l l l}
 \toprule
 Var & Physical Constraints & Typical Value & TU
 \\
 \midrule
-$E$ & $0<E$ & $15000.0$ Pa & 0.1
+$E$ & $E>0$ & $15000.0$ Pa & 0.1
 \\
-$c'$ & $0<c'$ & $10.0$ Pa & 0.1
+$c'$ & $c'>0$ & $10.0$ Pa & 0.1
 \\
 $\nu{}$ & $0<\nu{}<1$ & $0.4$ & 0.1
 \\
 $\varphi{}'$ & $0<\varphi{}'<90$ & $25.0$ ${}^{\circ}$ & 0.1
 \\
-$\gamma{}$ & $0<\gamma{}$ & $20.0$ $\frac{\text{N}}{\text{m}^{3}}$ & 0.1
+$\gamma{}$ & $\gamma{}>0$ & $20.0$ $\frac{\text{N}}{\text{m}^{3}}$ & 0.1
 \\
-${\gamma{}_{Sat}}$ & $0<{\gamma{}_{Sat}}$ & $20.0$ $\frac{\text{N}}{\text{m}^{3}}$ & 0.1
+${\gamma{}_{Sat}}$ & ${\gamma{}_{Sat}}>0$ & $20.0$ $\frac{\text{N}}{\text{m}^{3}}$ & 0.1
 \\
-${\gamma{}_{w}}$ & $0<{\gamma{}_{w}}$ & $9.8$ $\frac{\text{N}}{\text{m}^{3}}$ & 0.1
+${\gamma{}_{w}}$ & ${\gamma{}_{w}}>0$ & $9.8$ $\frac{\text{N}}{\text{m}^{3}}$ & 0.1
 \\
 $a$ & None & $0.0$ m & 0.1
 \\
@@ -1230,16 +1245,16 @@ $\kappa{}$ & None & $0.0$ Pa & 0.1
 \\
 \bottomrule
 \caption{Input Data Constraints}
-\label{Table:InpuDataCons}
+\label{Table:InDataConstraints}
 \end{longtable}
 \begin{longtable}{l l}
 \toprule
 Var & Physical Constraints
 \\
 \midrule
-$FS$ & $0<FS$
+$FS$ & $FS>0$
 \\
-$(x,y)$ & $\left(x_{i}<x_{i+1}\implies{}y_{i}<y_{i+1}\right)$
+$(x,y)$ & None
 \\
 $\delta{}x$ & None
 \\
@@ -1247,15 +1262,15 @@ $\delta{}y$ & None
 \\
 \bottomrule
 \caption{Output Data Constraints}
-\label{Table:OutpDataCons}
+\label{Table:OutDataConstraints}
 \end{longtable}
 \section{Requirements}
-\label{Sec:Requ}
+\label{Sec:Requirements}
 This section provides the functional requirements, the business tasks that the software is expected to complete, and the non-functional requirements, the qualities that the software is expected to exhibit.
 \subsection{Functional Requirements}
-\label{Sec:FuncRequ}
+\label{Sec:FRs}
 \begin{itemize}
-\item[R1:]Read the input file, and store the data. Necessary input data summarized in Table~\ref{Table:RequInpu}.
+\item[R1:]Read the input file, and store the data. Necessary input data summarized in Table~\ref{Table:inDataTable}.
 \item[R2:]Generate potential critical slip surface's for the input slope.
 \item[R3:]Test the slip surfaces to determine if they are physically realizable based on a set of pass or fail criteria.
 \item[R4:]Prepare the slip surfaces for a method of slices or limit equilibrium analysis.
@@ -1296,81 +1311,86 @@ $\kappa{}$ & Pa & constant
 \\
 \bottomrule
 \caption{Required Inputs}
-\label{Table:RequInpu}
+\label{Table:inDataTable}
 \end{longtable}
 \subsection{Non-Functional Requirements}
-\label{Sec:Non-Requ}
+\label{Sec:NFRs}
 SSA is intended to be an educational tool, so accuracy and performance are not priorities. Rather, the non-functional requirement priorities are correctness, understandability, reusability, and maintainability.
 \section{Likely Changes}
-\label{Sec:LikeChan}
+\label{Sec:LCs}
 \section{Values of Auxiliary Constants}
-\label{Sec:ValuofAuxiCons}
+\label{Sec:AuxConstants}
 There are no auxiliary constants.
 \section{References}
-\label{Sec:Refe}
+\label{Sec:References}
 \begin{filecontents*}{bibfile.bib}
-@article{QianZhuLeeChen2005,
+@article{chen2005,
 author={Qian, Q. H. and Zhu, D. Y. and Lee, C. F. and Chen, G. R.},
 title={A concise algorithm for computing the factor of safety using the morgenstern price method},
-year={19 February 2005},
-pages={272-278},
 journal={Canadian Geotechnical Journal},
+year={2005},
+month={feb},
 volume={42},
-number={1}}
+number={1},
+pages={"272-278"}}
 
-@article{ParnasClements1986,
-author={Parnas, David L. and Clements, P. C.},
-title={A rational design process: How and why to fake it},
-journal={IEEE Transactions on Software Engineering},
-volume={12},
-number={2},
-pages={251-257},
-year={1986},
-place={Washington, USA}}
-
-@mastersthesis{Koothoor2013,
-author={Koothoor, Nirmitha},
-title={A document drive approach to certifying scientific computing software},
-school={McMaster University},
-place={Hamilton, Canada},
-year={2013}}
-
-@article{FredlundKrahn1977,
+@article{fredlund1977,
 author={Fredlund, D. G. and Krahn, J.},
 title={Comparison of slope stability methods of analysis},
-year={4 April 1977},
-pages={429-439},
 journal={Canadian Geotechnical Journal},
+year={1977},
+month={apr},
+pages={"429-439"},
 volume={14},
 number={3}}
 
-@article{SmithLai2005,
-author={Smith, W. Spencer and Lai, Lei},
-title={A new requirements template for scientific computing},
-journal={Proceedings of the First International Workshop on Situational Requirements Engineering Processes - Methods, Techniques and Tools to Support Situation-Specific Requirements Engineering Processes, SREP'05},
-editor={Agerfalk, PJ and Kraiem, N. and Ralyte, J.},
-place={Paris, France},
-pages={107-121},
-note={In conjunction with 13th IEEE International Requirements Engineering Conference,},
-year={2005}}
+@mastersthesis{koothoor2013,
+author={Koothoor, Nirmitha},
+title={A document drive approach to certifying scientific computing software},
+school={McMaster University},
+year={2013},
+address={Hamilton, ON, Canada}}
 
-@article{StolleGuo2008,
-author={Stolle, Dieter and Guo, Peijun},
-title={Limit equilibrum slope stability analysis using rigid finite elements},
-year={20 May 2008},
-pages={653-662},
-journal={Canadian Geotechnical Journal},
-volume={45},
-number={5}}
-
-@article{Yu-ChaoYun-MinZhanSao-ShengCleall2010,
+@article{li2010,
 author={Yu-Chao, Li and Yun-Min, Chen and Zhan, Tony L. T. and Sao-Sheng, Ling and Cleall, Peter John},
 title={An efficient approach for locating the critical slip surface in slope stability analyses using a real-coded genetic algorithm},
-year={25 June 2010},
-pages={806-820},
 journal={Canadian Geotechnical Journal},
+year={2010},
+month={jun},
+pages={"806-820"},
 volume={47},
 number={7}}
+
+@article{parnas1986,
+author={Parnas, David L. and Clements, P. C.},
+title={A rational design process: How and why to fake it},
+journal={IEEE Transactions on Software Engineering},
+year={1986},
+month={feb},
+volume={12},
+number={2},
+pages={"251-257"},
+address={Washington, USA}}
+
+@inproceedings{smithLai2005,
+author={Smith, W. Spencer and Lai, Lei},
+title={A new requirements template for scientific computing},
+booktitle={Proceedings of the First International Workshop on Situational Requirements Engineering Processes - Methods, Techniques and Tools to Support Situation-Specific Requirements Engineering Processes, SREP'05},
+year={2005},
+editor={Agerfalk, PJ and Kraiem, N. and Ralyte, J.},
+address={Paris, France},
+pages={"107-121"},
+note={In conjunction with 13th IEEE International Requirements Engineering Conference,}}
+
+@article{stolle2008,
+author={Stolle, Dieter and Guo, Peijun},
+title={Limit equilibrum slope stability analysis using rigid finite elements},
+journal={Canadian Geotechnical Journal},
+year={2008},
+month={may},
+pages={"653-662"},
+volume={45},
+number={5}}
 \end{filecontents*}
 \nocite{*}
 \bibstyle{ieeetr}

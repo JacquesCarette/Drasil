@@ -36,13 +36,11 @@ commandD s c = (pure $ (H.bslash TP.<> text s)) <> br c
 
 -- 1-argument command, with optional argument
 command1o :: String -> Maybe String -> String -> D
-command1o s o c = pure $ (H.bslash TP.<> text s) TP.<>
-  (maybe TP.empty H.sq o) TP.<> H.br c
+command1o s o c = pure $ (H.bslash TP.<> text s) TP.<> (maybe TP.empty H.sq o) TP.<> H.br c
 
 -- no braces!
 command1oD :: String -> Maybe D -> D -> D
-command1oD s o c = 
-  (pure $ (H.bslash TP.<> text s)) <> (maybe empty sq o) <> c
+command1oD s o c = (pure $ (H.bslash TP.<> text s)) <> (maybe empty sq o) <> c
 
 -- 0-argument command
 command0 :: String -> D
@@ -68,7 +66,6 @@ comm b1 b2 s1 = command0 "newcommand" <> (pure $ H.br ("\\" ++ b1) TP.<>
 renewcomm :: String -> String -> D
 renewcomm b1 b2 = pure $ text "\\renewcommand" TP.<> H.br ("\\" ++ b1) TP.<> H.br b2
 
-
 -- Useful to have empty 
 empty :: D
 empty = pure TP.empty
@@ -84,15 +81,21 @@ genSec d
       TP.<> (if (not numberedSections) then text "*" else TP.empty) 
 
 -- For references
-ref, sref, hyperref, mref, rref, aref, lcref, ucref :: String -> D -> D
-ref t x = (pure $ text (t ++ "~\\ref")) <> br x
+ref, sref, hyperref :: String -> D -> D
+sref         = if numberedSections then ref else hyperref
+ref      t x = custRef (t ++ "~\\ref") x
 hyperref t x = command0 "hyperref" <> sq x <> br ((pure $ text (t ++ "~")) <> x)
-sref = if numberedSections then ref else hyperref
-mref _ x = (pure $ text "M\\ref") <> br x
-rref _ x = (pure $ text "R\\ref") <> br x
-aref _ x = (pure $ text "A\\ref") <> br x
-lcref _ x = (pure $ text "LC\\ref") <> br x
-ucref _ x = (pure $ text "UC\\ref") <> br x
+
+custRef :: String -> D -> D
+custRef t x = (pure $ text t) <> br x
+
+mref, rref, aref, lcref, ucref, cite :: D -> D
+mref  x = custRef "M\\ref"  x
+rref  x = custRef "R\\ref"  x
+aref  x = custRef "A\\ref"  x
+lcref x = custRef "LC\\ref" x
+ucref x = custRef "UC\\ref" x
+cite  x = custRef "\\cite"  x
 -----------------------------------------------------------------------------
 -- Now create standard LaTeX stuff
 

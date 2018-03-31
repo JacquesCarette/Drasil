@@ -1,6 +1,6 @@
 module Drasil.SWHS.Body where
 
-import Language.Drasil hiding (de)
+import Language.Drasil hiding (organization)
 import Data.Drasil.SI_Units
 import Control.Lens ((^.))
 
@@ -44,8 +44,8 @@ import Drasil.SWHS.TMods (tModels, t1ConsThermE, theory_model_swhsTMods, t1ConsT
  t2SensHtE_new)
 import Drasil.SWHS.IMods (insta_model_IMods, heatEInWtr_new, eBalanceOnWtr_new,
   heatEInPCM_new, eBalanceOnPCM_new)
-import Drasil.SWHS.DataDefs (swhsSymbMapDRef, swhsSymbMapTRef, swhsDataDefs,
-  dd1HtFluxC, dd2HtFluxP, dd3HtFusion, dd4MeltFrac, swhsSymbMapT, data_def_swhsDataDefs)
+import Drasil.SWHS.DataDefs (swhsDataDefs,dd1HtFluxC, dd2HtFluxP, dd3HtFusion,
+ dd4MeltFrac, data_def_swhsDataDefs)
 import Drasil.SWHS.GenDefs (swhsGenDefs, nwtnCooling, rocTempSimp)
 import Drasil.SWHS.References (ref_swhs_citations)
 import Drasil.SWHS.Assumptions (assumps_list, assump3, assump4, assump5,
@@ -55,7 +55,6 @@ import Drasil.SWHS.Requirements (req1, req2, func_req_Eqn1, func_req_Eqn2,
 import Drasil.SWHS.LikelyChanges (likeChg1, likeChg2, likeChg3, likeChg4,
   likeChg5, likeChg6)
 import Drasil.SWHS.DataDesc (swhsInputMod)
-import Drasil.DocumentLanguage.Chunk.GenDefn
 import qualified Drasil.SRS as SRS (inModel, missingP, likeChg,
   funcReq, propCorSol, genDefn, dataDefn, thModel, probDesc, goalStmt,
   sysCont, reference)
@@ -80,7 +79,7 @@ import Drasil.Sections.Requirements (reqF)
 import Drasil.Sections.GeneralSystDesc (genSysF)
 
 import Data.Drasil.Utils (enumSimple, weave, getES, itemRefToSent, makeListRef,
-  makeTMatrix, refFromType)
+  makeTMatrix, refFromType, eqUnR)
 import Data.Drasil.SentenceStructures (acroIM, acroGD, acroGS, showingCxnBw,
   foldlSent, foldlSent_, foldlSP, foldlSP_, foldlSPCol, foldlsC, isThe, ofThe,
   ofThe', sAnd, sOf, foldlList)
@@ -92,8 +91,8 @@ acronyms = [assumption, dataDefn, genDefn, goalStmt, inModel, likelyChg, ode,
   phsChgMtrl, physSyst, requirement, rightSide, srs, progName, thModel, typUnc]
 
 this_si :: [UnitDefn]
-this_si = map UU [metre, kilogram, second] ++ 
-  map UU [centigrade, joule, watt]
+this_si = map unitWrapper [metre, kilogram, second] ++ 
+  map unitWrapper [centigrade, joule, watt]
 
 --Will there be a table of contents?
 
@@ -108,17 +107,21 @@ swhs_si = SI {
   _units = this_si,
   _quants = swhsSymbols,
   _concepts = (swhsSymbols),
-  _definitions = (swhsDataDefs :: [QDefinition]),
-  _inputs = ((map qs swhsInputs) :: [QWrapper]),
-  _outputs = ((map qs swhsOutputs) :: [QWrapper]),
+  _definitions = swhsDataDefs,
+  _inputs = map qw swhsInputs,
+  _outputs = map qw swhsOutputs,
   _defSequence = ([] :: [Block QDefinition]),
   _constraints = (swhsConstrained),
   _constants = [],
-  _sysinfodb = swhsSymMap
+  _sysinfodb = swhsSymMap,
+  _refdb = swhsRefDB
 }
 
+swhsRefDB :: ReferenceDB
+swhsRefDB = rdb [] [] [] [] [] ref_swhs_citations
+
 swhsSymMap :: ChunkDB
-swhsSymMap = cdb swhsSymbolsAll (map nw swhsSymbols ++ map nw acronyms) ([] :: [CWrapper] ) -- FIXME: Fill in Concepts
+swhsSymMap = cdb swhsSymbolsAll (map nw swhsSymbols ++ map nw acronyms) ([] :: [UnitDefn] ) -- FIXME: Fill in Concepts
   this_si
 
   --Note: The second swhsSymbols here is
@@ -167,7 +170,7 @@ mkSRS = RefSec (RefProg intro
   
   map Verbatim [gen_sys_desc, spec_sys_desc, req, likely_chng, trace_matrix_grph] ++ 
     [AuxConstntSec (AuxConsProg progName specParamValList)] ++ 
-    [Bibliography ref_swhs_citations]
+    (Bibliography : [])
 
 
 swhsCode :: CodeSpec
@@ -387,7 +390,7 @@ assumps = assumpF
 -- General Definitions is automatically generated in solChSpecF
 --s4_2_3_genDefs
 sol_charac_genDefs :: [Contents]
-sol_charac_genDefs = map swhsSymbMapT swhsGenDefs
+sol_charac_genDefs = map reldefn swhsGenDefs
 
 --s4_2_3_deriv
 sol_charac_deriv :: [Contents]
@@ -422,7 +425,7 @@ instnce_model = inModelF problem_desc
 --s4_2_5_IModsWithDerivs
 instnce_model_IModsWithDerivs :: [Contents]
 instnce_model_IModsWithDerivs = concat $ weave [instnce_model_derivations,
-  map (\x -> [swhsSymbMapT x]) insta_model_IMods]
+  map (\x -> [reldefn x]) insta_model_IMods]
 
 --s4_2_5_derivations
 instnce_model_derivations :: [[Contents]]
@@ -435,7 +438,7 @@ instnce_model_deriv1 = (insta_model_d1startPara energy water) ++
   (weave [instnce_model_d1sent_list, instnce_model_d1eqn_list])
 
 --s4_2_5_d1eqn_list
-instnce_model_d1eqn_list = map EqnBlock [insta_model_d_eqn1, insta_model_d_eqn2,
+instnce_model_d1eqn_list = map eqUnR [insta_model_d_eqn1, insta_model_d_eqn2,
   insta_model_d_eqn3, insta_model_d_eqn4, insta_model_d_eqn5, insta_model_d_eqn6,
    insta_model_d_eqn7]
 
@@ -463,7 +466,7 @@ instnce_model_d2sent_list = map foldlSPCol [insta_model_d2sent_1 dd2HtFluxP ht_f
   insta_model_d2sent_2, insta_model_d2sent_3]
 
 --s4_2_5_d2eqn_list
-instnce_model_d2eqn_list = map (EqnBlock) [insta_model_d2eqn1, insta_model_d2eqn2,
+instnce_model_d2eqn_list = map eqUnR [insta_model_d2eqn1, insta_model_d2eqn2,
   insta_model_d2eqn3, insta_model_d2eqn4]
 
 ----------------------------
@@ -551,8 +554,9 @@ func_req_1_Table = (Table [titleize symbol_, titleize unit_, titleize descriptio
   [getES,
   --(\ch -> Sy (unit_symb ch)),
   unit'2Contents,
-  phrase] (map qs inputConstraints))
+  phrase] (map qw inputConstraints))
   (titleize input_ +:+ titleize variable +:+ titleize requirement) False)
+  "InConstraints"
 
 --s5_1_Reqs
 func_req_Reqs :: [Contents]
@@ -733,7 +737,7 @@ trace_matrix_grph_table2 = Table (EmptyS:trace_matrix_grph_row_header_t2)
   (makeTMatrix (trace_matrix_grph_col_header_t2) (trace_matrix_grph_columns_t2)
    (trace_matrix_grph_row_t2))
   (showingCxnBw traceyMatrix
-  (titleize' requirement `sAnd` titleize' inModel)) True
+  (titleize' requirement `sAnd` titleize' inModel)) True "Tracey1"
 
 {-Traceability Matrix 3-}
 
@@ -967,7 +971,7 @@ sys_context_contents pro = foldlSP [makeRef sys_context_fig, S "shows the" +:+.
 sys_context_fig :: Contents
 sys_context_fig = fig (foldlSent_
   [makeRef sys_context_fig +: EmptyS, titleize sysCont])
-  "SystemContextFigure.png"
+  "SystemContextFigure.png" "SysCon"
 
 --s3_1_2_intro
 swhs_resp_intro :: CI -> NamedChunk -> Contents
@@ -1075,7 +1079,7 @@ fig_tank :: Contents
 fig_tank = fig (
   foldlSent_ [at_start sWHT `sC` S "with", phrase ht_flux_C, S "of",
   getES ht_flux_C `sAnd` phrase ht_flux_P, S "of", getES ht_flux_P])
-  "Tank.png"
+  "Tank.png" "Tank"
 
 -----------------------------
 -- 4.1.3 : Goal Statements --
@@ -1130,13 +1134,13 @@ gen_def_deriv_1 roc tem = foldlSPCol [S "Detailed derivation of simplified",
 
 --s4_2_3_deriv_2
 gen_def_deriv_2 :: RelationConcept -> UnitalChunk -> Contents
-gen_def_deriv_2 t1ct vo = foldlSPCol [S "Integrating", swhsSymbMapTRef t1ct,
+gen_def_deriv_2 t1ct vo = foldlSPCol [S "Integrating", makeRef $ reldefn t1ct,
   S "over a", phrase vo, sParen (getES vo) `sC` S "we have"]
 
-gen_def_deriv_3 = EqnBlock
-  ((negate (int_all (eqSymb vol) ((C gradient) $. (C thFluxVect)))) +
-  (int_all (eqSymb vol) (C vol_ht_gen)) $=
-  (int_all (eqSymb vol) ((C density) * (C heat_cap_spec) * Deriv Part (C temp) time)))
+gen_def_deriv_3 = eqUnR
+  ((negate (int_all (eqSymb vol) ((sy gradient) $. (sy thFluxVect)))) +
+  (int_all (eqSymb vol) (sy vol_ht_gen)) $=
+  (int_all (eqSymb vol) ((sy density) * (sy heat_cap_spec) * pderiv (sy temp) time)))
 
 --s4_2_3_deriv_4
 gen_def_deriv_4 :: ConceptChunk -> ConVar -> UnitalChunk -> UnitalChunk ->
@@ -1147,10 +1151,10 @@ gen_def_deriv_4 gd su vo tfv unv un = foldlSPCol [S "Applying", titleize gd,
   phrase surface `sAnd` getES unv, S "as a", phrase un,
   S "outward", phrase unv, S "for a", phrase su]
 
-gen_def_deriv_5 = EqnBlock
-  ((negate (int_all (eqSymb surface) ((C thFluxVect) $. (C uNormalVect)))) +
-  (int_all (eqSymb vol) (C vol_ht_gen)) $= 
-  (int_all (eqSymb vol) ((C density) * (C heat_cap_spec) * Deriv Part (C temp) time)))
+gen_def_deriv_5 = eqUnR
+  ((negate (int_all (eqSymb surface) ((sy thFluxVect) $. (sy uNormalVect)))) +
+  (int_all (eqSymb vol) (sy vol_ht_gen)) $= 
+  (int_all (eqSymb vol) ((sy density) * (sy heat_cap_spec) * pderiv (sy temp) time)))
 
 --s4_2_3_deriv_6
 gen_def_deriv_6 :: UnitalChunk -> UnitalChunk -> Contents
@@ -1158,10 +1162,10 @@ gen_def_deriv_6 vo vhg = foldlSPCol [S "We consider an arbitrary" +:+.
   phrase vo, S "The", phrase vhg, S "is assumed constant. Then",
   sParen $ S $ show (1 :: Integer), S "can be written as"]
 
-gen_def_deriv_7 = EqnBlock
-  ((C ht_flux_in) * (C in_SA) - (C ht_flux_out) *
-  (C out_SA) + (C vol_ht_gen) * (C vol) $= 
-  (int_all (eqSymb vol) ((C density) * (C heat_cap_spec) * Deriv Part (C temp) time)))
+gen_def_deriv_7 = eqUnR
+  ((sy ht_flux_in) * (sy in_SA) - (sy ht_flux_out) *
+  (sy out_SA) + (sy vol_ht_gen) * (sy vol) $= 
+  (int_all (eqSymb vol) ((sy density) * (sy heat_cap_spec) * pderiv (sy temp) time)))
 
 --s4_2_3_deriv_8
 gen_def_deriv_8 :: UnitalChunk -> UnitalChunk -> UnitalChunk -> UnitalChunk ->
@@ -1175,24 +1179,24 @@ gen_def_deriv_8 hfi hfo isa osa den hcs tem vo assu a3 a4 a5 a6 = foldlSPCol
   foldlList (map (\c -> sParen (makeRef c)) [a3, a4, a5, a6]) `sC` S "we have"]
 
 --s4_2_3_deriv_9
-gen_def_deriv_9 = EqnBlock
-  ((C density) * (C heat_cap_spec) * (C vol) * Deriv Total (C temp)
-  time $= (C ht_flux_in) * (C in_SA) - (C ht_flux_out) *
-  (C out_SA) + (C vol_ht_gen) * (C vol))
+gen_def_deriv_9 = eqUnR
+  ((sy density) * (sy heat_cap_spec) * (sy vol) * deriv (sy temp)
+  time $= (sy ht_flux_in) * (sy in_SA) - (sy ht_flux_out) *
+  (sy out_SA) + (sy vol_ht_gen) * (sy vol))
 
 --s4_2_3_deriv_10
 gen_def_deriv_10 :: UnitalChunk -> UnitalChunk -> UnitalChunk -> Contents
 gen_def_deriv_10 den ma vo = foldlSPCol [S "Using the fact that", getES den :+:
   S "=" :+: getES ma :+: S "/" :+: getES vo `sC` S "(2) can be written as"]
 
-gen_def_deriv_11 = EqnBlock
-  ((C mass) * (C heat_cap_spec) * Deriv Total (C temp)
-  time $= (C ht_flux_in) * (C in_SA) - (C ht_flux_out)
-  * (C out_SA) + (C vol_ht_gen) * (C vol))
+gen_def_deriv_11 = eqUnR
+  ((sy mass) * (sy heat_cap_spec) * deriv (sy temp)
+  time $= (sy ht_flux_in) * (sy in_SA) - (sy ht_flux_out)
+  * (sy out_SA) + (sy vol_ht_gen) * (sy vol))
 
 -- Created a unitalChunk for "S"... should I add it to table of symbols?
 -- Add references to above when available (assumptions, GDs)
--- Replace relevant Derivs with the regular derivative when it is available
+-- Replace relevant derivs with the regular derivative when it is available
 
 ------------------------------
 -- 4.2.4 : Data Definitions --
@@ -1241,14 +1245,14 @@ insta_model_d1sent_1 roc temw en wa vo wvo wma hcw hfc hfp csa psa ht ta purin v
   phrase ta) `sC` S "since it has been assumed to be",
   phrase purin +:+. sParen (makeRef a15), S "Assuming no",
   phrase vhg +:+. (sParen (makeRef a16) `sC`
-  (E $ C vhg $= 0)), S "Therefore, the", phrase equation, S "for",
+  (E $ sy vhg $= 0)), S "Therefore, the", phrase equation, S "for",
   acroGD 2, S "can be written as"]
 
 --s4_2_5_d1sent_2
 insta_model_d1sent_2 :: QDefinition -> QDefinition -> UnitalChunk ->
   UnitalChunk -> [Sentence]
-insta_model_d1sent_2 d1hf d2hf hfc hfp = [S "Using", swhsSymbMapDRef d1hf `sAnd`
-  swhsSymbMapDRef d2hf, S "for", getES hfc `sAnd`
+insta_model_d1sent_2 d1hf d2hf hfc hfp = [S "Using", (makeRef $ datadefn d1hf) `sAnd`
+  (makeRef $ datadefn d2hf), S "for", getES hfc `sAnd`
   getES hfp, S "respectively, this can be written as"]
 
 --s4_2_5_d1sent_3
@@ -1272,13 +1276,13 @@ insta_model_d1sent_5 = [S "Which simplifies to"]
 --s4_2_5_d1sent_6
 insta_model_d1sent_6 :: [Sentence]
 insta_model_d1sent_6 = [S "Setting",
-  (E $ C tau_W $= (C w_mass * C htCap_W) / (C coil_HTC * C coil_SA)) `sAnd`
-  (E $ C eta $= (C pcm_HTC * C pcm_SA) / (C coil_HTC * C coil_SA)) `sC`
+  (E $ sy tau_W $= (sy w_mass * sy htCap_W) / (sy coil_HTC * sy coil_SA)) `sAnd`
+  (E $ sy eta $= (sy pcm_HTC * sy pcm_SA) / (sy coil_HTC * sy coil_SA)) `sC`
   titleize equation, S "(5) can be written as"]
 
 --s4_2_5_d1sent_7
 insta_model_d1sent_7 :: [Sentence]
-insta_model_d1sent_7 = [S "Finally, factoring out", (E $ 1 / C tau_W) `sC` 
+insta_model_d1sent_7 = [S "Finally, factoring out", (E $ 1 / sy tau_W) `sC` 
   S "we are left with the governing", short ode, S "for", acroIM 1]
 
 --s4_2_5_d_eqn1, s4_2_5_d_eqn2, s4_2_5_d_eqn3, s4_2_5_d_eqn4, s4_2_5_d_eqn5,
@@ -1286,45 +1290,45 @@ insta_model_d1sent_7 = [S "Finally, factoring out", (E $ 1 / C tau_W) `sC`
 insta_model_d_eqn1, insta_model_d_eqn2, insta_model_d_eqn3, insta_model_d_eqn4,
   insta_model_d_eqn5, insta_model_d_eqn6, insta_model_d_eqn7 :: Expr
 
-insta_model_d_eqn1 = ((C w_mass) * (C htCap_W) * Deriv Total (C temp_W) time $=
-  (C ht_flux_C) * (C coil_SA) - (C ht_flux_P) * (C pcm_SA))
+insta_model_d_eqn1 = ((sy w_mass) * (sy htCap_W) * deriv (sy temp_W) time $=
+  (sy ht_flux_C) * (sy coil_SA) - (sy ht_flux_P) * (sy pcm_SA))
 
-insta_model_d_eqn2 = ((C w_mass) * (C htCap_W) * Deriv Total (C temp_W) time $=
-  (C coil_HTC) * (C coil_SA) * ((C temp_C) - (C temp_W)) -
-  (C pcm_HTC) * (C pcm_SA) * ((C temp_W) - (C temp_PCM)))
+insta_model_d_eqn2 = ((sy w_mass) * (sy htCap_W) * deriv (sy temp_W) time $=
+  (sy coil_HTC) * (sy coil_SA) * ((sy temp_C) - (sy temp_W)) -
+  (sy pcm_HTC) * (sy pcm_SA) * ((sy temp_W) - (sy temp_PCM)))
 
-insta_model_d_eqn3 = (Deriv Total (C temp_W) time $= ((C coil_HTC) *
-  (C coil_SA)) / ((C w_mass) * (C htCap_W)) * ((C temp_C) -
-  (C temp_W)) - ((C pcm_mass) * (C pcm_SA)) / ((C w_mass) *
-  (C htCap_W)) * ((C temp_W) - (C temp_PCM)))
+insta_model_d_eqn3 = (deriv (sy temp_W) time $= ((sy coil_HTC) *
+  (sy coil_SA)) / ((sy w_mass) * (sy htCap_W)) * ((sy temp_C) -
+  (sy temp_W)) - ((sy pcm_mass) * (sy pcm_SA)) / ((sy w_mass) *
+  (sy htCap_W)) * ((sy temp_W) - (sy temp_PCM)))
 
-insta_model_d_eqn4 = (Deriv Total (C temp_W) time $= ((C coil_HTC) *
-  (C coil_SA)) / ((C w_mass) * (C htCap_W)) * ((C temp_C) - (C temp_W)) +
-  (((C coil_HTC) * (C coil_SA)) / ((C coil_HTC) * (C coil_SA))) *
-  (((C pcm_HTC) * (C pcm_SA)) / ((C w_mass) * (C htCap_W))) *
-  ((C temp_PCM) - (C temp_W)))
+insta_model_d_eqn4 = (deriv (sy temp_W) time $= ((sy coil_HTC) *
+  (sy coil_SA)) / ((sy w_mass) * (sy htCap_W)) * ((sy temp_C) - (sy temp_W)) +
+  (((sy coil_HTC) * (sy coil_SA)) / ((sy coil_HTC) * (sy coil_SA))) *
+  (((sy pcm_HTC) * (sy pcm_SA)) / ((sy w_mass) * (sy htCap_W))) *
+  ((sy temp_PCM) - (sy temp_W)))
 
-insta_model_d_eqn5 = (Deriv Total (C temp_W) time $= ((C coil_HTC) *
-  (C coil_SA)) / ((C w_mass) * (C htCap_W)) * ((C temp_C) - (C temp_W)) +
-  (((C pcm_HTC) * (C pcm_SA)) / ((C coil_HTC) * (C coil_SA))) *
-  (((C coil_HTC) * (C coil_SA)) / ((C w_mass) * (C htCap_W))) *
-  ((C temp_PCM) - (C temp_W)))
+insta_model_d_eqn5 = (deriv (sy temp_W) time $= ((sy coil_HTC) *
+  (sy coil_SA)) / ((sy w_mass) * (sy htCap_W)) * ((sy temp_C) - (sy temp_W)) +
+  (((sy pcm_HTC) * (sy pcm_SA)) / ((sy coil_HTC) * (sy coil_SA))) *
+  (((sy coil_HTC) * (sy coil_SA)) / ((sy w_mass) * (sy htCap_W))) *
+  ((sy temp_PCM) - (sy temp_W)))
 
-insta_model_d_eqn6 = (Deriv Total (C temp_W) time $= (1 / (C tau_W)) *
-  ((C temp_C) - (C temp_W)) + ((C eta) / (C tau_W)) *
-  ((C temp_PCM) - (C temp_W)))
+insta_model_d_eqn6 = (deriv (sy temp_W) time $= (1 / (sy tau_W)) *
+  ((sy temp_C) - (sy temp_W)) + ((sy eta) / (sy tau_W)) *
+  ((sy temp_PCM) - (sy temp_W)))
 
-insta_model_d_eqn7 = (Deriv Total (C temp_W) time $= (1 / (C tau_W)) *
-  (((C temp_C) - (C temp_W)) + (C eta) * ((C temp_PCM) -
-  (C temp_W))))
+insta_model_d_eqn7 = (deriv (sy temp_W) time $= (1 / (sy tau_W)) *
+  (((sy temp_C) - (sy temp_W)) + (sy eta) * ((sy temp_PCM) -
+  (sy temp_W))))
 
 -- Should "energy balance" be a concept?
 -- Add IM, GD, A, and EqnBlock references when available
--- Replace Derivs with regular derivative when available
+-- Replace derivs with regular derivative when available
 -- Fractions in paragraph?
 --s4_2_5_d2sent_1
 insta_model_d2sent_1 :: QDefinition -> UnitalChunk -> [Sentence]
-insta_model_d2sent_1 d2hfp hfp = [S "Using", swhsSymbMapDRef d2hfp, S "for", 
+insta_model_d2sent_1 d2hfp hfp = [S "Using", makeRef $ datadefn d2hfp, S "for", 
   getES hfp `sC` S "this", phrase equation, S "can be written as"]
 
 --s4_2_5_d2sent_2
@@ -1341,17 +1345,17 @@ insta_model_d2sent_3 = [S "Setting", getES tau_S_P :+: S "=" :+: getES pcm_mass 
 --s4_2_5_d2eqn1, s4_2_5_d2eqn2, s4_2_5_d2eqn3, s4_2_5_d2eqn4
 insta_model_d2eqn1, insta_model_d2eqn2, insta_model_d2eqn3, insta_model_d2eqn4 :: Expr
 
-insta_model_d2eqn1 = ((C pcm_mass) * (C htCap_S_P) * Deriv Total (C temp_PCM)
-  time $= (C ht_flux_P) * (C pcm_SA))
+insta_model_d2eqn1 = ((sy pcm_mass) * (sy htCap_S_P) * deriv (sy temp_PCM)
+  time $= (sy ht_flux_P) * (sy pcm_SA))
 
-insta_model_d2eqn2 = ((C pcm_mass) * (C htCap_S_P) * Deriv Total (C temp_PCM)
-  time $= (C pcm_HTC) * (C pcm_SA) * ((C temp_W) - (C temp_PCM)))
+insta_model_d2eqn2 = ((sy pcm_mass) * (sy htCap_S_P) * deriv (sy temp_PCM)
+  time $= (sy pcm_HTC) * (sy pcm_SA) * ((sy temp_W) - (sy temp_PCM)))
 
-insta_model_d2eqn3 = (Deriv Total (C temp_PCM) time $= ((C pcm_HTC) *
-  (C pcm_SA)) / ((C pcm_mass) * (C htCap_S_P)) * ((C temp_W) - (C temp_PCM)))
+insta_model_d2eqn3 = (deriv (sy temp_PCM) time $= ((sy pcm_HTC) *
+  (sy pcm_SA)) / ((sy pcm_mass) * (sy htCap_S_P)) * ((sy temp_W) - (sy temp_PCM)))
 
-insta_model_d2eqn4 = (Deriv Total (C temp_PCM) time $= (1 / (C tau_S_P)) *
-  ((C temp_W) - (C temp_PCM)))
+insta_model_d2eqn4 = (deriv (sy temp_PCM) time $= (1 / (sy tau_S_P)) *
+  ((sy temp_W) - (sy temp_PCM)))
 
 instnce_model_d1eqn_list, instnce_model_d1sent_list, instnce_model_d2eqn_list, 
   instnce_model_d2sent_list :: [Contents]
@@ -1415,8 +1419,8 @@ insta_model_d2endPara pcmat hcsp hclp tsp tlp sur mel vo ptem tmp boi so li = ma
   ]
 
 -- Add GD, A, and EqnBlock references when available
--- Replace Derivs with regular derivative when available
--- Derivative notation in paragraph?
+-- Replace derivs with regular derivative when available
+-- derivative notation in paragraph?
 
 
 ----------------------------
@@ -1449,8 +1453,8 @@ data_constraint_T1footer qua sa vo htcm pcmat = foldlSent_ $ map foldlSent [
   S "are calculated by considering the", phrase sa, S "to", phrase vo +:+.
   S "ratio", S "The", phrase assumption, S "is that the lowest ratio is",
   (S $ show (1 :: Integer)) `sAnd`
-  S "the highest possible is", E (2 / C htcm) `sC` S "where",
-  E $ C htcm, S "is the thickness of a", Quote (S "sheet"), S "of" +:+.
+  S "the highest possible is", E (2 / sy htcm) `sC` S "where",
+  E $ sy htcm, S "is the thickness of a", Quote (S "sheet"), S "of" +:+.
   short pcmat, S "A thin sheet has the greatest", phrase sa, S "to",
   phrase vo, S "ratio"],
 
@@ -1483,19 +1487,19 @@ property_of_corr_sol_deriv_1 lce ewat en co pcmat d1hfc d2hfp su ht  =
   phrase input_, S "from the", phrase co `sAnd` S "the",
   phrase en, phrase output_, S "to the" +:+. short pcmat,
   S "This can be shown as an", phrase equation, S "by taking",
-  swhsSymbMapDRef d1hfc `sAnd` swhsSymbMapDRef d2hfp `sC`
+  (makeRef $ datadefn d1hfc) `sAnd` (makeRef $ datadefn d2hfp) `sC`
   S "multiplying each by their respective", phrase su,
   S "area of", phrase ht `sC` S "and integrating each",
   S "over the", phrase sim_time `sC` S "as follows"]
 
 --s4_2_7_deriv_2
 property_of_corr_sol_deriv_2 :: Contents
-property_of_corr_sol_deriv_2 = EqnBlock
-  ((C w_E) $= (defint (eqSymb time) 0 (C time)
-  ((C coil_HTC) * (C coil_SA) * ((C temp_C) - FCall (C temp_W)
-  [C time]))) - (defint (eqSymb time) 0 (C time)
-  ((C pcm_HTC) * (C pcm_SA) * ((FCall (C temp_W) [C time]) -
-  (FCall (C temp_PCM) [C time])))))
+property_of_corr_sol_deriv_2 = eqUnR
+  ((sy w_E) $= (defint (eqSymb time) 0 (sy time)
+  ((sy coil_HTC) * (sy coil_SA) * ((sy temp_C) - apply1 temp_W time)))
+  - (defint (eqSymb time) 0 (sy time)
+  ((sy pcm_HTC) * (sy pcm_SA) * ((apply1 temp_W time) -
+  (apply1 temp_PCM time)))))
 
 --s4_2_7_deriv_3
 property_of_corr_sol_deriv_3 :: UncertQ -> UnitalChunk -> CI -> ConceptChunk -> Contents
@@ -1506,10 +1510,10 @@ property_of_corr_sol_deriv_3 epcm en pcmat wa =
 
 --s4_2_7_deriv_4
 property_of_corr_sol_deriv_4 :: Contents
-property_of_corr_sol_deriv_4 = EqnBlock
-  ((C pcm_E) $= (defint (eqSymb time) 0 (C time)
-  ((C pcm_HTC) * (C pcm_SA) * ((FCall (C temp_W) [C time]) - (FCall
-  (C temp_PCM) [C time])))))
+property_of_corr_sol_deriv_4 = eqUnR
+  ((sy pcm_E) $= (defint (eqSymb time) 0 (sy time)
+  ((sy pcm_HTC) * (sy pcm_SA) * ((apply1 temp_W time) - 
+  (apply1 temp_PCM time)))))
 
 --s4_2_7_deriv_5
 property_of_corr_sol_deriv_5 :: ConceptChunk -> CI -> CI -> Contents
@@ -1565,14 +1569,14 @@ trace_matrix_grph_table1 :: Contents
 trace_matrix_grph_table1 = Table (EmptyS:trace_matrix_grph_row_header_t1)
   (makeTMatrix (trace_matrix_grph_row_header_t1) (trace_matrix_grph_columns_t1) (trace_matrix_grph_row_t1))
   (showingCxnBw traceyMatrix
-  (titleize' item +:+ S "of Different" +:+ titleize' section_)) True
+  (titleize' item +:+ S "of Different" +:+ titleize' section_)) True "Tracey2"
 
 --s7_table3
 trace_matrix_grph_table3 :: Contents
 trace_matrix_grph_table3 = Table (EmptyS:trace_matrix_grph_row_header_t3)
   (makeTMatrix trace_matrix_grph_col_header_t3 trace_matrix_grph_columns_t3 trace_matrix_grph_row_t3)
   (showingCxnBw traceyMatrix (titleize' assumption `sAnd` S "Other" +:+
-  titleize' item)) True
+  titleize' item)) True "Tracey3"
 
 -- These matrices can probably be generated automatically when enough info is
 -- abstracted out.
@@ -1591,12 +1595,12 @@ trace_matrix_grph_intro2 = traceGIntro [trace_matrix_grph_fig1, trace_matrix_grp
 --s7_fig1
 trace_matrix_grph_fig1 :: Contents
 trace_matrix_grph_fig1 = fig (showingCxnBw traceyGraph (titleize' item +:+
-  S "of Different" +:+ titleize' section_)) "ATrace.png"
+  S "of Different" +:+ titleize' section_)) "ATrace.png" "TraceyA"
 
 --s7_fig2
 trace_matrix_grph_fig2 :: Contents
 trace_matrix_grph_fig2 = fig (showingCxnBw traceyGraph (foldlList $ map titleize' 
-  renameList2)) "RTrace.png"
+  renameList2)) "RTrace.png" "TraceyR"
 
 -------------------------------------------------
 -- Section 8 :  Specification Parameter Values --

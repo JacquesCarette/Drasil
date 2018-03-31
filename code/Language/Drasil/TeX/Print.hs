@@ -1,4 +1,4 @@
-module Language.Drasil.TeX.Print where
+module Language.Drasil.TeX.Print(genTeX) where
 
 import Prelude hiding (print)
 import Data.List (intersperse, transpose)
@@ -8,34 +8,28 @@ import Numeric (showFFloat)
 
 import Control.Applicative (pure)
 
-import Language.Drasil.Expr (Oper(..))
 import Language.Drasil.Printing.AST
+import Language.Drasil.Printing.Citation
 import Language.Drasil.TeX.AST
 import qualified Language.Drasil.TeX.Import as I
-import qualified Language.Drasil.Output.Formats as A
 import qualified Language.Drasil.Spec as LS
-import Language.Drasil.Config (lpmTeXParams, colAwidth, colBwidth,
-              LPMParams(..),bibStyleT,bibFname)
+import qualified Language.Drasil.RefTypes as RT
+import Language.Drasil.UnitLang
+import Language.Drasil.Config (colAwidth, colBwidth, bibStyleT,bibFname)
 import Language.Drasil.Printing.Helpers hiding (paren, sqbrac)
 import Language.Drasil.TeX.Helpers
 import Language.Drasil.TeX.Monad
 import Language.Drasil.TeX.Preamble
-import Language.Drasil.Symbol (Symbol(..),Decoration(..))
+import           Language.Drasil.Symbol (Symbol(..))
+import qualified Language.Drasil.Symbol as S
 import qualified Language.Drasil.Document as L
 import Language.Drasil.Unicode (RenderGreek(..), RenderSpecial(..))
-import Language.Drasil.People (People,rendPersLFM,lstName,Person(..),Conv(Mono))
+import Language.Drasil.People (People,rendPersLFM)
 import Language.Drasil.ChunkDB (HasSymbolTable)
-import Language.Drasil.Space (Space(..))
+import Language.Drasil.Chunk.Citation (CitationKind(..), Month(..))
 
-genTeX :: HasSymbolTable ctx => A.DocType -> L.Document -> ctx -> TP.Doc
-genTeX typ doc sm = runPrint (build sm typ $ I.makeDocument sm doc) Text
-
-build :: HasSymbolTable s => s -> A.DocType -> Document -> D
-build sm (A.SRS _) doc   = buildStd sm doc
-build sm (A.MG _) doc    = buildStd sm doc
-build sm (A.MIS _) doc   = buildStd sm doc
-build sm (A.LPM _) doc   = buildLPM sm lpmTeXParams doc
-build _ (A.Website _) _ = error "Cannot use TeX to typeset Website" --Can't happen
+genTeX :: HasSymbolTable ctx => L.Document -> ctx -> TP.Doc
+genTeX doc sm = runPrint (buildStd sm $ I.makeDocument sm doc) Text
 
 buildStd :: HasSymbolTable s => s -> Document -> D
 buildStd sm (Document t a c) =
@@ -44,25 +38,12 @@ buildStd sm (Document t a c) =
   author (spec a) %%
   document (maketitle %% maketoc %% newpage %% print sm c)
 
-buildLPM :: HasSymbolTable s => s -> LPMParams -> Document -> D
-buildLPM sm (LPMParams (A.DocClass sb b1) (A.UsePackages ps) (A.ExDoc f n))
-          (Document t a c) =
-  docclass sb b1 %%
-  listpackages ps %%
-  exdoc f n %%
-  title (spec t) %%
-  author (spec a) %%
-  document (maketitle %% print sm c)
-
-listpackages :: [String] -> D
-listpackages lp = foldr (%%) empty $ map usepackage lp
-
 -- clean until here; lo needs its sub-functions fixed first though
 lo :: HasSymbolTable s => LayoutObj -> s -> D
 lo (Section d t con l)  sm  = sec d (spec t) %% label (spec l) %% print sm con
 lo (Paragraph contents) _  = toText $ spec contents
 lo (EqnBlock contents)  _  = makeEquation contents
-lo (Table rows r bl t)  _  = toText $ makeTable rows (spec r) bl (spec t)
+lo (Table _ rows r bl t) _  = toText $ makeTable rows (spec r) bl (spec t)
 lo (Definition ssPs l) sm  = toText $ makeDefn sm ssPs $ spec l
 lo (Defnt _ ssPs l)    sm  = toText $ makeDefn sm ssPs $ spec l
 lo (List l)             _  = toText $ makeList l
@@ -77,7 +58,6 @@ lo (Graph ps w h c l)   _  = toText $ makeGraph
   (pure $ text $ maybe "" (\x -> "text width = " ++ show x ++ "em ,") w)
   (pure $ text $ maybe "" (\x -> "minimum height = " ++ show x ++ "em, ") h)
   (spec c) (spec l)
-
 
 print :: HasSymbolTable s => s -> [LayoutObj] -> D
 print sm l = foldr ($+$) empty $ map (flip lo sm) l
@@ -96,95 +76,87 @@ symbol (Corners [_] [] [] [] _) = error "rendering of ul prescript"
 symbol (Corners [] [_] [] [] _) = error "rendering of ll prescript"
 symbol (Corners _ _ _ _ _)      = error "rendering of Corners (general)"
 symbol (Atop f s) = sFormat f s
+symbol (Empty)    = ""
 
-sFormat :: Decoration -> Symbol -> String
-sFormat Hat    s = "\\hat{" ++ symbol s ++ "}"
-sFormat Vector s = "\\mathbf{" ++ symbol s ++ "}"
-sFormat Prime  s = symbol s ++ "'"
+sFormat :: S.Decoration -> Symbol -> String
+sFormat S.Hat    s = "\\hat{" ++ symbol s ++ "}"
+sFormat S.Vector s = "\\mathbf{" ++ symbol s ++ "}"
+sFormat S.Prime  s = symbol s ++ "'"
+
+data OpenClose = Open | Close
 
 -----------------------------------------------------------------
 ------------------ EXPRESSION PRINTING----------------------
 -----------------------------------------------------------------
 -- (Since this is all implicitly in Math, leave it as String for now)
 p_expr :: Expr -> String
-p_expr (Var v)    = symbol (Atomic v) --Ensures variables are rendered the same as other symbols
 p_expr (Dbl d)    = showFFloat Nothing d ""
 p_expr (Int i)    = show i
-p_expr (Assoc Add l)  = concat $ intersperse "+" $ map p_expr l
-p_expr (Assoc Mul l)  = mul l
-p_expr (Sym s)    = symbol s
-p_expr (BOp Frac n d) = "\\frac{" ++ needMultlined n ++ "}{" ++ needMultlined d ++"}"
-p_expr (BOp Div n d)  = divide n d
-p_expr (BOp Pow x y)  = pow x y
-p_expr (BOp Index a i) = p_indx a i
-p_expr (BOp o x y)    = p_expr x ++ p_bop o ++ p_expr y
-p_expr (Op Neg [x])   = neg x
-p_expr (Call f x) = p_expr f ++ paren (concat $ intersperse "," $ map p_expr x)
+p_expr (Str s)    = s  -- FIXME this is probably the wrong way to print strings
+p_expr (Div n d) = "\\frac{" ++ p_expr n ++ "}{" ++ p_expr d ++"}"
 p_expr (Case ps)  = "\\begin{cases}\n" ++ cases ps ++ "\n\\end{cases}"
-p_expr (Op f es)  = p_op f es
-p_expr (Grouping x) = paren (p_expr x)
 p_expr (Mtx a)    = "\\begin{bmatrix}\n" ++ p_matrix a ++ "\n\\end{bmatrix}"
---Logic
-p_expr (Assoc And l)  = concat $ intersperse "\\land{}" $ map p_expr l
-p_expr (Assoc Or l)   = concat $ intersperse "\\lor{}" $ map p_expr l
-p_expr (IsIn  a b) = p_expr a ++ "\\in{}" ++ p_space b
+p_expr (Row [x]) = brace $ p_expr x -- a bit of a hack...
+p_expr (Row l) = concatMap p_expr l
+p_expr (Ident s) = s
+p_expr (Spec s) = unPL $ special s
+p_expr (Gr g) = unPL $ greek g
+p_expr (Sub e) = "_" ++ brace (p_expr e)
+p_expr (Sup e) = "^" ++ brace (p_expr e)
+p_expr (Over Hat s)     = "\\hat{" ++ p_expr s ++ "}"
+p_expr (MO o) = p_ops o
+p_expr (Fenced l r m)    = fence Open l ++ p_expr m ++ fence Close r
+p_expr (Font Bold e) = "\\mathbf{" ++ p_expr e ++ "}"
+p_expr (Font Emph e) = p_expr e -- Emph is ignored here because we're in Math mode
+p_expr (Spc Thin) = "\\,"
+p_expr (Sqrt e)  = "\\sqrt{" ++ p_expr e ++ "}"
 
-p_bop :: BinOp -> String
-p_bop Sub = "-"
-p_bop Eq = "="
-p_bop NEq = "\\neq{}"
-p_bop Lt = "<"
-p_bop Gt = ">"
-p_bop GEq = "\\geq{}"
-p_bop LEq = "\\leq{}"
-p_bop Impl = "\\implies{}"
-p_bop Iff = "\\iff{}"
-p_bop Frac = "/"
-p_bop Div = "/"
-p_bop Pow = "^"
-p_bop Dot = "\\cdot{}"
-p_bop Index = error "no printing of Index"
-p_bop Cross = "\\times"
+p_ops :: Ops -> String
+p_ops IsIn = "\\in{}"
+p_ops Integer  = "\\mathbb{Z}"
+p_ops Rational = "\\mathbb{Q}"
+p_ops Real     = "\\mathbb{R}"
+p_ops Natural  = "\\mathbb{N}"
+p_ops Boolean  = "\\mathbb{B}"
+p_ops Comma    = ","
+p_ops Prime    = "'"
+p_ops Log      = "\\log"
+p_ops Sin      = "\\sin"
+p_ops Cos      = "\\cos"
+p_ops Tan      = "\\tan"
+p_ops Sec      = "\\sec"
+p_ops Csc      = "\\csc"
+p_ops Cot      = "\\cot"
+p_ops Not      = "\\neg{}"
+p_ops Dim      = "\\mathsf{dim}"
+p_ops Exp      = "e"
+p_ops Neg      = "-"
+p_ops Cross    = "\\times"
+p_ops Dot      = "\\cdot{}"
+p_ops Eq = "="
+p_ops NEq = "\\neq{}"
+p_ops Lt = "<"
+p_ops Gt = ">"
+p_ops GEq = "\\geq{}"
+p_ops LEq = "\\leq{}"
+p_ops Impl = "\\implies{}"
+p_ops Iff = "\\iff{}"
+p_ops Subt = "-"
+p_ops And = "\\land{}"
+p_ops Or  = "\\lor{}"
+p_ops Add = "+"
+p_ops Mul = " "
+p_ops Summ = "\\displaystyle\\sum"
+p_ops Prod = "\\displaystyle\\prod"
+p_ops Inte = "\\int"
 
--- | For seeing if long numerators or denominators need to be on multiple lines
-needMultlined :: Expr -> String
-needMultlined x
-  | lngth > 70 = multl $ mklines $ map p_expr $ groupEx $ splitTerms x
-  | otherwise  = p_expr x
-  where lngth     = specLength $ E x
-        multl str = "\\begin{multlined}\n" ++ str ++ "\\end{multlined}\n"
-        mklines   = unlines . intersperse "\\\\+"
-        --FIXME: make multiple splits if needed; don't always split in 2
-        groupEx lst = extrac $ splitAt (length lst `div` 2) lst
-        extrac ([],[]) = []
-        extrac ([],l)  = [Assoc Add l]
-        extrac (f,[])  = [Assoc Add f]
-        extrac (f,l)   = [Assoc Add f, Assoc Add l]
-
-splitTerms :: Expr -> [Expr]
-splitTerms (Op Neg [e])   = map (\x -> Op Neg [x]) $ splitTerms e
-splitTerms (Assoc Add l) = concat $ map splitTerms l
-splitTerms (BOp Sub a b) = splitTerms a ++ splitTerms (Op Neg [b])
-splitTerms e = [e]
-
--- | For printing indexes
-p_indx :: Expr -> Expr -> String
-p_indx (Sym (Corners [] [] [] [x] s)) i = p_expr $ Sym $ Corners [][][][Concat [x, Atomic (","++ p_sub i)]] s
-p_indx a@(Sym (Atomic _)) i = p_expr a ++"_"++ brace (p_sub i)
-p_indx a@(Sym (Greek  _)) i = p_expr a ++"_"++ brace (p_sub i)
-p_indx a                  i = brace (p_expr a) ++"_"++ brace (p_sub i)
--- Ensures only simple Expr's get rendered as an index
-p_sub :: Expr -> String
-p_sub e@(Var _)    = p_expr e
-p_sub e@(Dbl _)    = p_expr e
-p_sub e@(Int _)    = p_expr e
-p_sub e@(Sym _)    = p_expr e
-p_sub e@(Assoc Add _)  = p_expr e
-p_sub e@(BOp Sub _ _)  = p_expr e
-p_sub e@(Assoc Mul _)  = p_expr e
-p_sub   (BOp Frac a b) = divide a b --no block division in an index
-p_sub e@(BOp Div _ _)  = p_expr e
-p_sub _            = error "Tried to Index a non-simple expr in LaTeX, currently not supported."
+fence :: OpenClose -> Fence -> String
+fence Open Paren = "\\left("
+fence Close Paren = "\\right)"
+fence Open Curly = "\\{"
+fence Close Curly = "\\}"
+fence _ Abs = "|"
+fence _ Norm = "||"
 
 -- | For printing Matrix
 p_matrix :: [[Expr]] -> String
@@ -197,79 +169,10 @@ p_in [] = ""
 p_in [x] = p_expr x
 p_in (x:xs) = p_in [x] ++ " & " ++ p_in xs
 
-
--- | Helper for properly rendering multiplication of expressions
-mul :: [ Expr ] -> String
-mul = concat . intersperse " " . map mulParen
-
-mulParen :: Expr -> String
-mulParen a@(Assoc Add _) = paren $ p_expr a
-mulParen a@(BOp Sub _ _) = paren $ p_expr a
-mulParen a@(BOp Div _ _) = paren $ p_expr a
-mulParen a = p_expr a
-
-divide :: Expr -> Expr -> String
-divide n d@(Assoc Add _) = p_expr n ++ "/" ++ paren (p_expr d)
-divide n d@(BOp Sub _ _) = p_expr n ++ "/" ++ paren (p_expr d)
-divide n@(Assoc Add _) d = paren (p_expr n) ++ "/" ++ p_expr d
-divide n@(BOp Sub _ _) d = paren (p_expr n) ++ "/" ++ p_expr d
-divide n d = p_expr n ++ "/" ++ p_expr d
-
-neg :: Expr -> String
-neg x@(Var _) = "-" ++ p_expr x
-neg x@(Dbl _) = "-" ++ p_expr x
-neg x@(Int _) = "-" ++ p_expr x
-neg x@(Sym _) = "-" ++ p_expr x
--- neg x@(Neg _) = "-" ++ p_expr x
-neg x         = paren ("-" ++ p_expr x)
-
-pow :: Expr -> Expr -> String
-pow x@(Assoc Add _) y = sqbrac (p_expr x) ++ "^" ++ brace (p_expr y)
-pow x@(BOp Sub _ _) y = sqbrac (p_expr x) ++ "^" ++ brace (p_expr y)
-pow x@(BOp Frac _ _) y = sqbrac (p_expr x) ++ "^" ++ brace (p_expr y)
-pow x@(BOp Div _ _) y = paren (p_expr x) ++ "^" ++ brace (p_expr y)
-pow x@(Assoc Mul _) y = paren (p_expr x) ++ "^" ++ brace (p_expr y)
-pow x@(BOp Pow _ _) y = paren (p_expr x) ++ "^" ++ brace (p_expr y)
-pow x y = p_expr x ++ "^" ++ brace (p_expr y)
-
 cases :: [(Expr,Expr)] -> String
 cases []     = error "Attempt to create case expression without cases"
-cases (p:[]) = (needMultlined $ fst p) ++ ", & " ++ p_expr (snd p)
+cases (p:[]) = (p_expr $ fst p) ++ ", & " ++ p_expr (snd p)
 cases (p:ps) = cases [p] ++ "\\\\\n" ++ cases ps
-
-p_space :: Space -> String
-p_space Integer  = "\\mathbb{Z}"
-p_space Rational = "\\mathbb{Q}"
-p_space Real     = "\\mathbb{R}"
-p_space Natural  = "\\mathbb{N}"
-p_space Boolean  = "\\mathbb{B}"
-p_space Char     = "Char"
-p_space String   = "String"
-p_space Radians  = "rad"
-p_space (Vect a) = "V" ++ p_space a
-p_space (Obj a)  = a
-p_space (DiscreteI a)  = "\\{" ++ (concat $ intersperse ", " (map show a)) ++ "\\}"
-p_space (DiscreteD a)  = "\\{" ++ (concat $ intersperse ", " (map show a)) ++ "\\}"
-p_space (DiscreteS a)  = "\\{" ++ (concat $ intersperse ", " a) ++ "\\}"
-
-function :: Function -> String
-function Log            = "\\log"
-function (Summation _)  = "\\displaystyle\\sum"
-function (Product _)    = "\\displaystyle\\prod"
-function Abs            = ""
-function Norm           = ""
-function (Integral _ _) = "\\int"
-function Sin            = "\\sin"
-function Cos            = "\\cos"
-function Tan            = "\\tan"
-function Sec            = "\\sec"
-function Csc            = "\\csc"
-function Cot            = "\\cot"
-function Exp            = "e"
-function Sqrt           = "\\sqrt"
-function Not            = "\\neg{}"
-function Neg            = "-"
-function Dim            = error "Dim should not be reachable?"
 
 -----------------------------------------------------------------
 ------------------ TABLE PRINTING---------------------------
@@ -304,12 +207,8 @@ specLength (S x)     = length x
 specLength (E x)     = length $ filter (\c -> c `notElem` dontCount) $ p_expr x
 specLength (Sy _)    = 1
 specLength (a :+: b) = specLength a + specLength b
-specLength (a :-: b) = specLength a + specLength b
-specLength (a :^: b) = specLength a + specLength b
-specLength (a :/: b) = specLength a + specLength b
-specLength (G _)     = 1
 specLength (EmptyS)  = 0
-specLength _         = 0 
+specLength _         = 0
 
 dontCount :: String
 dontCount = "\\/[]{}()_^$:"
@@ -327,16 +226,11 @@ needs :: Spec -> MathContext
 needs (a :+: b) = needs a `lub` needs b
 needs (S _)     = Text
 needs (E _)     = Math
-needs (_ :-: _) = Math --Sub/superscripts must be in Math ctxt.
-needs (_ :^: _) = Math
-needs (_ :/: _) = Math -- Fractions are always equations.
 needs (Sy _)    = Text
-needs (N _)     = Math
-needs (G _)     = Math
 needs (Sp _)    = Math
 needs HARDNL    = Text
-needs (Ref _ _) = Text
-needs (EmptyS)  = Text  
+needs (Ref _ _ _) = Text
+needs (EmptyS)  = Text
 
 -- print all Spec through here
 spec :: Spec -> D
@@ -346,23 +240,19 @@ spec a@(s :+: t) = s' <> t'
     s' = switch ctx $ spec s
     t' = switch ctx $ spec t
 spec (E ex)      = toMath $ pure $ text $ p_expr ex
-spec (a :-: s)   = toMath $ subscript (spec a) (spec s)
-spec (a :^: s)   = toMath $ superscript (spec a) (spec s)
-spec (a :/: s)   = toMath $ fraction (spec a) (spec s)
 spec (S s)       = pure $ text (concatMap escapeChars s)
-spec (N s)       = toMath $ pure $ text $ symbol s
 spec (Sy s)      = p_unit s
-spec (G g)       = pure $ text $ unPL $ greek g
 spec (Sp s)      = pure $ text $ unPL $ special s
 spec HARDNL      = pure $ text $ "\\newline"
-spec (Ref t@LS.Sect r) = sref (show t) (spec r)
-spec (Ref t@(LS.Def _) r) = hyperref (show t) (spec r)
-spec (Ref t@LS.Mod r) = mref (show t) (spec r)
-spec (Ref t@(LS.Req _) r) = rref (show t) (spec r)
-spec (Ref t@(LS.Assump _) r) = aref (show t) (spec r)
-spec (Ref t@(LS.LC _) r) = lcref (show t) (spec r)
-spec (Ref t@LS.UC r) = ucref (show t) (spec r)
-spec (Ref t r)   = ref (show t) (spec r)
+spec (Ref t@RT.Sect _ r) = sref (show t) (spec r)
+spec (Ref t@RT.Def _ r)  = hyperref (show t) (spec r)
+spec (Ref RT.Mod _ r)    = mref  (spec r)
+spec (Ref RT.Req _ r)    = rref  (spec r)
+spec (Ref RT.Assump _ r) = aref  (spec r)
+spec (Ref RT.LC _ r)     = lcref (spec r)
+spec (Ref RT.UC _ r)     = ucref (spec r)
+spec (Ref RT.Cite _ r)   = cite  (spec r)
+spec (Ref t _ r)         = ref (show t) (spec r)
 spec EmptyS      = empty
 
 escapeChars :: Char -> String
@@ -377,18 +267,19 @@ symbol_needs (Concat [])         = Math
 symbol_needs (Concat (s:_))      = symbol_needs s
 symbol_needs (Corners _ _ _ _ _) = Math
 symbol_needs (Atop _ _)          = Math
+symbol_needs Empty               = Curr
 
-p_unit :: LS.USymb -> D
-p_unit (LS.UName (Concat s)) = foldl (<>) empty $ map (p_unit . LS.UName) s
-p_unit (LS.UName n) =
+p_unit :: USymb -> D
+p_unit (UName (Concat s)) = foldl (<>) empty $ map (p_unit . UName) s
+p_unit (UName n) =
   let cn = symbol_needs n in
   switch (const cn) (pure $ text $ symbol n)
-p_unit (LS.UProd l) = foldr (<>) empty (map p_unit l)
-p_unit (LS.UPow n p) = toMath $ superscript (p_unit n) (pure $ text $ show p)
-p_unit (LS.UDiv n d) = toMath $
+p_unit (UProd l) = foldr (<>) empty (map p_unit l)
+p_unit (UPow n p) = toMath $ superscript (p_unit n) (pure $ text $ show p)
+p_unit (UDiv n d) = toMath $
   case d of -- 4 possible cases, 2 need parentheses, 2 don't
-    LS.UProd _  -> fraction (p_unit n) (parens $ p_unit d)
-    LS.UDiv _ _ -> fraction (p_unit n) (parens $ p_unit d)
+    UProd _  -> fraction (p_unit n) (parens $ p_unit d)
+    UDiv _ _ -> fraction (p_unit n) (parens $ p_unit d)
     _        -> fraction (p_unit n) (p_unit d)
 
 -----------------------------------------------------------------
@@ -420,7 +311,7 @@ makeDRows :: HasSymbolTable s => s -> [(String,[LayoutObj])] -> D
 makeDRows _  []         = error "No fields to create Defn table"
 makeDRows sm ((f,d):[]) = dBoilerplate %% (pure $ text (f ++ " & ")) <>
   (vcat $ map (flip lo sm) d)
-makeDRows sm ((f,d):ps) = dBoilerplate %% (pure $ text (f ++ " & ")) <> 
+makeDRows sm ((f,d):ps) = dBoilerplate %% (pure $ text (f ++ " & ")) <>
   (vcat $ map (flip lo sm) d)
                        %% makeDRows sm ps
 dBoilerplate :: D
@@ -441,10 +332,10 @@ makeEquation contents = toEqn (spec contents)
 -----------------------------------------------------------------
 
 makeList :: ListType -> D
-makeList (Simple items) = itemize   $ vcat (sim_item items)
-makeList (Desc items)   = description $ vcat (sim_item items)
-makeList (Item items)   = itemize   $ vcat (map p_item items)
-makeList (Enum items)   = enumerate $ vcat (map p_item items)
+makeList (Simple items)      = itemize     $ vcat (sim_item items)
+makeList (Desc items)        = description $ vcat (sim_item items)
+makeList (Unordered items)   = itemize     $ vcat (map p_item items)
+makeList (Ordered items)     = enumerate   $ vcat (map p_item items)
 makeList (Definitions items) = description $ vcat (def_item items)
 
 p_item :: ItemType -> D
@@ -452,14 +343,12 @@ p_item (Flat s) = item (spec s)
 p_item (Nested t s) = vcat [item (spec t), makeList s]
 
 sim_item :: [(Spec,ItemType)] -> [D]
-sim_item [] = [empty]
-sim_item ((x,y):zs) = item' (spec (x :+: S ":")) (sp_item y) : sim_item zs
-    where sp_item (Flat s) = spec s
-          sp_item (Nested t s) = vcat [spec t, makeList s]
-          
+sim_item = map (\(x,y) -> item' (spec (x :+: S ":")) (sp_item y))
+  where sp_item (Flat s) = spec s
+        sp_item (Nested t s) = vcat [spec t, makeList s]
+
 def_item :: [(Spec, ItemType)] -> [D]
-def_item [] = [empty]
-def_item ((x,y):zs) = item (spec (x :+: S " is the " :+: d_item y)) : def_item zs
+def_item = map (\(x,y) -> item $ spec $ x :+: S " is the " :+: d_item y)
   where d_item (Flat s) = s
         d_item (Nested _ _) = error "Cannot use sublists in definitions"
 -----------------------------------------------------------------
@@ -478,41 +367,27 @@ makeFigure r c f wp =
 -----------------------------------------------------------------
 ------------------ EXPR OP PRINTING-------------------------
 -----------------------------------------------------------------
-p_op :: Function -> [Expr] -> String
-p_op f@(Summation bs) (x:[]) = function f ++ makeBound bs ++ brace (sqbrac (p_expr x))
-p_op (Summation _) _ = error "Something went wrong with a summation"
-p_op f@(Product bs) (x:[]) = function f ++ makeBound bs ++ brace (p_expr x)
-p_op f@(Integral bs wrtc) (x:[]) = function f ++ makeIBound bs ++ 
-  brace (p_expr x ++ "d" ++ symbol wrtc) -- HACK alert.
-p_op (Integral _ _) _  = error "Something went wrong with an integral"
-p_op Abs (x:[]) = "|" ++ p_expr x ++ "|"
-p_op Abs _ = error "Abs should only take one expr."
-p_op Norm (x:[]) = "||" ++ p_expr x ++ "||"
-p_op Norm _ = error "Norm should only take on expression."
-p_op f@(Exp) (x:[]) = function f ++ "^" ++ brace (p_expr x)
-p_op f@(Sqrt) (x:[]) = function f ++ "{" ++ p_expr x ++ "}"
-p_op f (x:[]) = function f ++ paren (p_expr x) --Unary ops, this will change once more complicated functions appear.
-p_op _ _ = error "Something went wrong with an operation"
-
-makeBound :: Maybe ((Symbol, Expr),Expr) -> String
-makeBound (Just ((s,v),hi)) = "_" ++ brace ((symbol s ++"="++ p_expr v)) ++
-                              "^" ++ brace (p_expr hi)
-makeBound Nothing = ""
-
-makeIBound :: (Maybe Expr, Maybe Expr) -> String
-makeIBound (Just low, Just high) = "_" ++ brace (p_expr low) ++ 
-                                   "^" ++ brace (p_expr high)
-makeIBound (Just low, Nothing)   = "_" ++ brace (p_expr low)
-makeIBound (Nothing, Just high)  = "^" ++ brace (p_expr high)
-makeIBound (Nothing, Nothing)    = ""
+-- p_op :: Functional -> Expr -> String
+-- p_op f@(Summation bs) x = oper f ++ makeBound bs ++ brace (sqbrac (p_expr x))
+-- p_op f@(Product bs) x = oper f ++ makeBound bs ++ brace (p_expr x)
+-- p_op f@(Integral bs wrtc) x = oper f ++ makeIBound bs ++ 
+--   brace (p_expr x ++ "d" ++ symbol wrtc) -- HACK alert.
+-- 
+-- makeBound :: Maybe ((Symbol, Expr),Expr) -> String
+-- makeBound (Just ((s,v),hi)) = "_" ++ brace ((symbol s ++"="++ p_expr v)) ++
+--                               "^" ++ brace (p_expr hi)
+-- makeBound Nothing = ""
+-- 
+-- makeIBound :: (Maybe Expr, Maybe Expr) -> String
+-- makeIBound (Just low, Just high) = "_" ++ brace (p_expr low) ++
+--                                    "^" ++ brace (p_expr high)
+-- makeIBound (Just low, Nothing)   = "_" ++ brace (p_expr low)
+-- makeIBound (Nothing, Just high)  = "^" ++ brace (p_expr high)
+-- makeIBound (Nothing, Nothing)    = ""
 
 -----------------------------------------------------------------
 ------------------ MODULE PRINTING----------------------------
 -----------------------------------------------------------------
-
-makeModule :: String -> D -> D
-makeModule n l = description $ item' ((pure $ text ("\\refstepcounter{modnum}"
-  ++ "\\mthemodnum")) <> label l <> (pure $ text ":")) (pure $ text n)
 
 makeReq :: D -> D -> D
 makeReq n l = description $ item' ((pure $ text ("\\refstepcounter{reqnum}"
@@ -529,8 +404,6 @@ makeLC n l = description $ item' ((pure $ text ("\\refstepcounter{lcnum}"
 makeUC :: D -> D -> D
 makeUC n l = description $ item' ((pure $ text ("\\refstepcounter{ucnum}"
   ++ "\\uctheucnum")) <> label l <> (pure $ text ":")) n
-
-
 
 makeGraph :: [(D,D)] -> D -> D -> D -> D -> D
 makeGraph ps w h c l =
@@ -569,85 +442,90 @@ makeBib sm bib = spec $
 
 bibLines :: String
 bibLines =
-  "\\nocite{*}\n" ++ 
+  "\\nocite{*}\n" ++
   "\\bibstyle{" ++ bibStyleT ++ "}\n" ++ --bibStyle is in Config.hs
   "\\printbibliography[heading=none]"
 
 mkBibRef :: HasSymbolTable s => s -> BibRef -> Spec
-mkBibRef sm = foldl1 (\x y -> x :+: S "\n\n" :+: y) . map (renderCite sm)
+mkBibRef sm = foldl1 (\x y -> x :+: S "\n\n" :+: y) . map (renderF sm)
 
---for when we add other things to reference like website, newspaper
-renderCite :: HasSymbolTable s => s -> Citation -> Spec
-renderCite sm c@(Book      fields) = renderF sm c fields
-renderCite sm c@(Article   fields) = renderF sm c fields
-renderCite sm c@(MThesis   fields) = renderF sm c fields
-renderCite sm c@(PhDThesis fields) = renderF sm c fields
-renderCite sm c@(Misc      fields) = renderF sm c fields
-renderCite sm c@(Online    fields) = renderF sm c fields
-
---Rendering a book--
-renderF :: HasSymbolTable s => s -> Citation -> [CiteField] -> Spec
-renderF sm c fields = 
-  S "@":+: S (show c) :+: S "{" :+: (cite sm fields) :+: S ",\n" :+: 
+renderF :: HasSymbolTable s => s -> Citation -> Spec
+renderF sm (Cite cid refType fields) =
+  S (showT refType) :+: S ("{" ++ cid ++ ",\n") :+:
   (foldl1 (:+:) . intersperse (S ",\n") . map (showBibTeX sm)) fields :+: S "}"
---renderBook _ = error "Tried to render a non-book using renderBook." 
 
-cite :: HasSymbolTable s => s -> [CiteField] -> Spec
-cite sm fields = foldr1 (:+:) $
-  map (I.spec sm . rmSpace . lstName) (getAuthors fields) ++ [S $ show $ getYear fields]
-
--- Remove spaces
-rmSpace :: LS.Sentence -> LS.Sentence
-rmSpace (a LS.:+: b) = rmSpace a LS.:+: rmSpace b
-rmSpace (LS.S x) = LS.S $ rmSpaceChar x
-rmSpace y = y
-
-rmSpaceChar :: [Char] -> [Char]
-rmSpaceChar [] = []
-rmSpaceChar (' ':xs) = rmSpaceChar xs
-rmSpaceChar (x:xs)   = x : rmSpaceChar xs
-
-
-getAuthors :: [CiteField] -> People
-getAuthors [] = error "No authors found" --FIXME: return a warning
-getAuthors ((Author people):_) = people
-getAuthors (_:xs) = getAuthors xs
-
-getYear :: [CiteField] -> Integer
-getYear [] = error "No year found" --FIXME: return a warning
-getYear ((Year year):_) = year
-getYear ((Date _ _ year):_) = year
-getYear (_:xs) = getYear xs
+showT :: CitationKind -> String
+showT Article       = "@article"
+showT Book          = "@book"
+showT Booklet       = "@booklet"
+showT InBook        = "@inbook"
+showT InCollection  = "@incollection"
+showT InProceedings = "@inproceedings"
+showT Manual        = "@manual"
+showT MThesis       = "@mastersthesis"
+showT Misc          = "@misc"
+showT PhDThesis     = "@phdthesis"
+showT Proceedings   = "@proceedings"
+showT TechReport    = "@techreport"
+showT Unpublished   = "@unpublished"
 
 showBibTeX :: HasSymbolTable s => s -> CiteField -> Spec
-showBibTeX _ (Place (city, state)) = showField "place" (city :+: S ", " :+: state)
-showBibTeX _ (Edition    s) = showField "edition" (S $ show s ++ sufxer s)
-showBibTeX _ (Series     s) = showField "series" s
-showBibTeX _ (Title      s) = showField "title" s
-showBibTeX _ (Volume     s) = showField "volume" (S $ show s)
-showBibTeX _ (Publisher  s) = showField "publisher" s
-showBibTeX sm (Author p@(Person {_convention=Mono}:_)) = showField "author" 
-  (I.spec sm (rendPeople p)) :+: S ",\n" :+: 
-  showField "sortkey" (I.spec sm (rendPeople p))
-showBibTeX sm (Author    p) = showField "author" $ I.spec sm (rendPeople p)
-showBibTeX _ (Year       y) = showField "year" (S $ show y)
-showBibTeX _ (Date   d m y) = showField "year"    (S $ unwords [show d, show m, show y])
-showBibTeX _ (URLdate d m y) = showField "urldate" (S $ unwords [show d, show m, show y])
-showBibTeX _ (Collection s) = showField "collection" s
-showBibTeX _ (Journal    s) = showField "journal" s
-showBibTeX _ (Page       s) = showField "pages" (S $ show s)
-showBibTeX _ (Pages (a, b)) = showField "pages" (S $ show a ++ "-" ++ show b)
-showBibTeX _ (Note       s) = showField "note" s
-showBibTeX _ (Issue      s) = showField "number" (S $ show s)
-showBibTeX _ (School     s) = showField "school" s
-showBibTeX _ (URL        s) = showField "url" s
-showBibTeX _ (HowPub     s) = showField "howpublished" s
-showBibTeX sm (Editor     p) = showField "editor" $ I.spec sm (rendPeople p)
+showBibTeX  _ (Address      s) = showField "address" s
+showBibTeX sm (Author       p) = showField "author" (rendPeople sm p)
+showBibTeX  _ (BookTitle    b) = showField "booktitle" b
+showBibTeX  _ (Chapter      c) = showField "chapter" (wrapS c)
+showBibTeX  _ (Edition      e) = showField "edition" (wrapS e)
+showBibTeX sm (Editor       e) = showField "editor" (rendPeople sm e)
+showBibTeX  _ (Institution  i) = showField "institution" i
+showBibTeX  _ (Journal      j) = showField "journal" j
+showBibTeX  _ (Month        m) = showField "month" (bibTeXMonth m)
+showBibTeX  _ (Note         n) = showField "note" n
+showBibTeX  _ (Number       n) = showField "number" (wrapS n)
+showBibTeX  _ (Organization o) = showField "organization" o
+showBibTeX  _ (Pages        p) = showField "pages" (pages p)
+showBibTeX  _ (Publisher    p) = showField "publisher" p
+showBibTeX  _ (School       s) = showField "school" s
+showBibTeX  _ (Series       s) = showField "series" s
+showBibTeX  _ (Title        t) = showField "title" t
+showBibTeX  _ (Type         t) = showField "type" t
+showBibTeX  _ (Volume       v) = showField "volume" (wrapS v)
+showBibTeX  _ (Year         y) = showField "year" (wrapS y)
+showBibTeX  _ (HowPublished (URL  u)) =
+  showField "howpublished" (S "\\url{" :+: u :+: S "}")
+showBibTeX  _ (HowPublished (Verb v)) = showField "howpublished" v
+
+--showBibTeX sm (Author p@(Person {_convention=Mono}:_)) = showField "author"
+  -- (I.spec sm (rendPeople p)) :+: S ",\n" :+:
+  -- showField "sortkey" (I.spec sm (rendPeople p))
+-- showBibTeX sm (Author    p) = showField "author" $ I.spec sm (rendPeople p)
 
 showField :: String -> Spec -> Spec
 showField f s = S f :+: S "={" :+: s :+: S "}"
 
-rendPeople :: People -> LS.Sentence
-rendPeople []  = LS.S "N.a." -- "No authors given"
-rendPeople people =
+rendPeople :: HasSymbolTable ctx => ctx -> People -> Spec
+rendPeople _ []  = S "N.a." -- "No authors given"
+rendPeople sm people = I.spec sm $
   foldl1 (\x y -> x LS.+:+ LS.S "and" LS.+:+ y) $ map rendPersLFM people
+
+bibTeXMonth :: Month -> Spec
+bibTeXMonth Jan = S "jan"
+bibTeXMonth Feb = S "feb"
+bibTeXMonth Mar = S "mar"
+bibTeXMonth Apr = S "apr"
+bibTeXMonth May = S "may"
+bibTeXMonth Jun = S "jun"
+bibTeXMonth Jul = S "jul"
+bibTeXMonth Aug = S "aug"
+bibTeXMonth Sep = S "sep"
+bibTeXMonth Oct = S "oct"
+bibTeXMonth Nov = S "nov"
+bibTeXMonth Dec = S "dec"
+
+wrapS :: Show a => a -> Spec
+wrapS = S . show
+
+pages :: [Int] -> Spec
+pages []  = error "Empty list of pages"
+pages (x:[]) = wrapS x
+pages (x:x2:[]) = wrapS $ show x ++ "-" ++ show x2
+pages xs = error $ "Too many pages given in reference. Received: " ++ show xs

@@ -6,6 +6,7 @@ module Language.Drasil.Unit (
   , (^:), (/:), (*:), new_unit
   , scale, shift
   , derUC, derUC', derUC'', unitWrapper
+  , comp_unitdefn
   ) where
 
 import Control.Lens (Simple, Lens, (^.))
@@ -124,4 +125,6 @@ new_unit s u = makeDerU (unitCon s) (USynonym u)
 type UnitDefn = FundUnit
 
 instance Eq FundUnit where a == b = (a ^. usymb) == (b ^. usymb)
-instance Ord FundUnit where compare a b = compare (a ^. usymb) (b ^. usymb)
+
+comp_unitdefn :: UnitDefn -> UnitDefn -> Ordering
+comp_unitdefn a b = comp_usymb (a ^. usymb) (b ^. usymb)

@@ -25,7 +25,7 @@ module Language.Drasil (
   , UDefn(..), from_udefn
   -- Unit
   , IsUnit, HasUnitSymbol(..), DerUChunk(..), FundUnit(..), UnitDefn, unitWrapper
-  , makeDerU, unitCon
+  , makeDerU, unitCon, comp_unitdefn
   , (^:), (/:), (*:), new_unit
   -- Chunk
   , Chunk(..), VarChunk(..), ConceptChunk
@@ -114,7 +114,7 @@ module Language.Drasil (
   -- Space
   , Space(..)
   -- Symbol
-  , Symbol(..), sub, sup, vec, hat, prime, sCurlyBrSymb
+  , Symbol(..), sub, sup, vec, hat, prime, sCurlyBrSymb, compsy
   -- SymbolAlphabet
   , cA, cB, cC, cD, cE, cF, cG, cH, cI, cJ, cK, cL, cM, cN, cO, cP, cQ, cR, cS, cT, cU, cV, cW, cX, cY, cZ
   , lA, lB, lC, lD, lE, lF, lG, lH, lI, lJ, lK, lL, lM, lN, lO, lP, lQ, lR, lS, lT, lU, lV, lW, lX, lY, lZ
@@ -256,7 +256,7 @@ import Language.Drasil.Reference (makeRef, acroTest, ReferenceDB, assumpDB, reqD
                                  , HasChangeRefs, changeRefTable, changeLookup
                                  , citationRefTable, citeLookup, RefMap
                                  , simpleMap)
-import Language.Drasil.Symbol (Symbol(..), sub, sup, vec, hat, prime, sCurlyBrSymb)
+import Language.Drasil.Symbol (Symbol(..), sub, sup, vec, hat, prime, sCurlyBrSymb, compsy)
 import Language.Drasil.SymbolAlphabet
 import Language.Drasil.Misc -- all of it
 import Language.Drasil.Printing.Helpers (capitalize, paren, sqbrac)

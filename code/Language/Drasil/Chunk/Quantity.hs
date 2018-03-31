@@ -33,9 +33,6 @@ instance HasSymbol QuantityDict where symbol st x = view symb' x st
 instance Quantity  QuantityDict where getUnit = view unit'
 instance Eq        QuantityDict where a == b = (a ^. uid) == (b ^. uid)
 
--- FIXME: Ordering hack. Should be context-dependent
--- instance Ord QuantityDict where compare a b = compare (eqSymb a) (eqSymb b)
-
 qw :: Quantity q => q -> QuantityDict
 qw q = QD (nw q) (q^.typ) (\stg -> symbol stg q) (getUnit q)
 

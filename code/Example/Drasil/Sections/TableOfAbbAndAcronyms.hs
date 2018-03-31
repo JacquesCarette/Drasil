@@ -9,7 +9,7 @@ import Data.Drasil.Concepts.Documentation
 
 -- | Creates a standard table of abbreviations and acronyms section from a
 -- given list of abbreviated chunks
-table_of_abb_and_acronyms :: (Ord s, Idea s) => [s] -> Section
+table_of_abb_and_acronyms :: (Idea s) => [s] -> Section
 table_of_abb_and_acronyms ls = Section (S "Abbreviations and Acronyms") 
   [Con (table ls)] "TAbbAcc"
 

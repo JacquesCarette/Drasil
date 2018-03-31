@@ -428,8 +428,8 @@ mkSolChSpec si (SCSProg l) =
       SSD.dataDefnF EmptyS (map (ddefn fields (_sysinfodb si')) dds) : l'
     mkSubSCS si' (GDs fields gs' ShowDerivation) l' =
       SSD.genDefnF (concat (map (\x -> gdefn fields (_sysinfodb si') x : derivation x) gs')) : l'
-    mkSubSCS si' (GDs fields gs _) l' =
-      SSD.genDefnF (map (gdefn fields (_sysinfodb si')) gs) : l'
+    mkSubSCS si' (GDs fields gs' _) l' =
+      SSD.genDefnF (map (gdefn fields (_sysinfodb si')) gs') : l'
     mkSubSCS si' (IMs fields ims ShowDerivation) l' =
       SRS.inModel (concat (map (\x -> instanceModel fields (_sysinfodb si') x : derivation x) ims)) [] : l'
     mkSubSCS si' (IMs fields ims _) l' = SRS.inModel

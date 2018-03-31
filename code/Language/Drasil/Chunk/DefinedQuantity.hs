@@ -21,12 +21,6 @@ makeLenses ''DefinedQuantityDict
 instance Chunk DefinedQuantityDict where uid = quant . uid
 instance Eq DefinedQuantityDict where a == b = (a ^. uid) == (b ^. uid)
   
-{-
-instance Ord DefinedQuantityDict where
-  compare a b = -- FIXME: Ordering hack. Should be context-dependent
-    compare (eqSymb a) (eqSymb b)
--}
-  
 instance NamedIdea DefinedQuantityDict where term = con . term
 instance Idea DefinedQuantityDict where getA (DQD a _) = getA a
 instance Definition DefinedQuantityDict where defn = con . defn

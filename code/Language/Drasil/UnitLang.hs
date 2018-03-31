@@ -1,5 +1,5 @@
 module Language.Drasil.UnitLang (
-    USymb(..), UDefn(..)
+    USymb(UName,UProd,UPow,UDiv), UDefn(..)
   , from_udefn, comp_usymb
   ) where
 

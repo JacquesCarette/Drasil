@@ -16,7 +16,7 @@ module Drasil.Sections.SpecificSystemDescription
   , inDataConstTbl, outDataConstTbl 
   ) where
 
-import Language.Drasil hiding (constraint)
+import Language.Drasil
 import Data.Drasil.Concepts.Documentation
 import Data.Drasil.Concepts.Math (equation)
 import Data.Drasil.Concepts.Software (program)

@@ -30,7 +30,8 @@ thisSI = SI {
   _defSequence = ([] :: [Block QDefinition]),
   _constraints = ([] :: [ConstrainedChunk]),
   _constants = [],
-  _sysinfodb = allSymbols
+  _sysinfodb = allSymbols,
+  _refdb = rdb [] [] [] [] [] [] --FIXME?
 }
 
 allSymbols :: ChunkDB

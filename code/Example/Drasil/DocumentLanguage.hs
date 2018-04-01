@@ -235,10 +235,10 @@ mkSections si l = foldr doit [] l
     doit (SSDSec ss)         ls = mkSSDSec si ss : ls
     doit (AuxConstntSec acs) ls = mkAuxConsSec acs : ls
     doit Bibliography        ls = mkBib (citeDB si) : ls
-    doit (GSDSec gs)         ls = mkGSDSec gs : ls 
+    doit (GSDSec gs')         ls = mkGSDSec gs' : ls 
     doit (ScpOfProjSec sop)  ls = mkScpOfProjSec sop : ls
     doit (ReqrmntSec r)      ls = mkReqrmntSec r : ls
-    doit (LCsSec lc)         ls = mkLCsSec lc : ls
+    doit (LCsSec lc')         ls = mkLCsSec lc' : ls
     doit (TraceabilitySec t) ls = mkTraceabilitySec t : ls
     doit (AppndxSec a)       ls = mkAppndxSec a : ls
 
@@ -425,10 +425,10 @@ mkSolChSpec si (SCSProg l) =
       SSD.dataDefnF EmptyS (concat (map (\x -> ddefn fields (_sysinfodb si') x : derivation x) dds)) : l'
     mkSubSCS si' (DDs fields dds _) l' =
       SSD.dataDefnF EmptyS (map (ddefn fields (_sysinfodb si')) dds) : l'
-    mkSubSCS si' (GDs fields gs ShowDerivation) l' = 
-      SSD.genDefnF (concat (map (\x -> gdefn fields (_sysinfodb si') x : derivation x) gs)) : l'
-    mkSubSCS si' (GDs fields gs _) l' = 
-      SSD.genDefnF (map (gdefn fields (_sysinfodb si')) gs) : l'
+    mkSubSCS si' (GDs fields gs' ShowDerivation) l' = 
+      SSD.genDefnF (concat (map (\x -> gdefn fields (_sysinfodb si') x : derivation x) gs')) : l'
+    mkSubSCS si' (GDs fields gs' _) l' = 
+      SSD.genDefnF (map (gdefn fields (_sysinfodb si')) gs') : l'
     mkSubSCS si' (IMs fields ims ShowDerivation) l' = 
       SRS.inModel (concat (map (\x -> instanceModel fields (_sysinfodb si') x : derivation x) ims)) [] : l'
     mkSubSCS si' (IMs fields ims _) l' = SRS.inModel 

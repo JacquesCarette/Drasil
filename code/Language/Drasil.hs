@@ -25,8 +25,8 @@ module Language.Drasil (
   , UDefn(..), from_udefn
   -- Unit
   , IsUnit, HasUnitSymbol(..), DerUChunk(..), FundUnit(..), UnitDefn, unitWrapper
-  , makeDerU, unitCon, comp_unitdefn
-  , (^:), (/:), (*:), new_unit
+  , makeDerU, unitCon, fund, comp_unitdefn
+  , (^:), (/:), (*:), (*$), (/$), new_unit
   -- Chunk
   , Chunk(..), VarChunk(..), ConceptChunk
   , vc

@@ -1,5 +1,5 @@
 module Language.Drasil.UnitLang (
-    USymb(UName,UProd,UPow), UDefn(..)
+    USymb(US), UDefn(..)
   , from_udefn, comp_usymb
   ) where
 
@@ -10,11 +10,8 @@ import Language.Drasil.Symbol (Symbol, compsy)
 -- Probably a 7-vector would be better (less error-prone!)
 -- | Language of unit equations, to define a unit relative
 -- to another
-data USymb = UName Symbol
-           | UProd [USymb] -- ^ Product
-           | UPow USymb Integer -- ^ can be negative, should not be 0
+newtype USymb = US [(Symbol, Integer)] -- can be negative, should not be 0
   deriving (Eq)
-
 
 data UDefn = USynonym USymb      -- ^ to define straight synonyms
            | UScale Double USymb -- ^ scale, i.e. *
@@ -29,12 +26,6 @@ from_udefn (UShift _ s) = s
 -- | Hand-rolled version of compare. Should assume |USymb| is normalized, so
 -- that some redundant EQ cases can be removed.
 comp_usymb :: USymb -> USymb -> Ordering
-comp_usymb (UName a)  (UName b)  = compsy a b
-comp_usymb (UName _)  _          = LT
-comp_usymb (UProd l)  (UProd m)  = foldl mappend EQ $ zipWith comp_usymb l m
-comp_usymb (UProd l)  (UName b)  = if l == [UName b] then EQ else GT
-comp_usymb (UProd _)  _          = LT
-comp_usymb (UPow l a) (UPow m b) = case comp_usymb l m of { EQ -> compare a b; x -> x}
-comp_usymb (UPow l a) (UName b)  = if l == UName b && a == 1 then EQ else GT
-comp_usymb (UPow _ _) (UProd _)  = GT
-comp_usymb (UPow _ _) _          = LT
+comp_usymb (US l)  (US m)  = foldl mappend EQ $ zipWith comp l m
+  where
+    comp (s1, i1) (s2, i2) = compsy s1 s2 `mappend` compare i1 i2

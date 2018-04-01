@@ -1,9 +1,10 @@
 module Language.Drasil.HTML.Print(genHTML) where
 
 import Prelude hiding (print)
-import Data.List (sortBy)
+import Data.List (sortBy,partition,intersperse)
 import Text.PrettyPrint hiding (render, quotes, Str)
 import Numeric (showFFloat)
+import Control.Arrow (second)
 
 import Language.Drasil.HTML.Import (makeDocument, spec)
 import Language.Drasil.Printing.AST
@@ -106,11 +107,27 @@ symbol (Atop S.Prime s)        = symbol s ++ "&prime;"
 symbol Empty                 = ""
 
 uSymb :: USymb -> String
+uSymb (US ls) = formatu t b
+  where
+    (t,b) = partition ((> 0) . snd) ls
+    formatu :: [(Symbol,Integer)] -> [(Symbol,Integer)] -> String
+    formatu [] l = line l
+    formatu l [] = concat $ intersperse "&sdot;" $ map pow l
+    formatu nu de = line nu ++ "/" ++ (line $ map (second negate) de)
+    line :: [(Symbol,Integer)] -> String
+    line []  = ""
+    line [x] = pow x
+    line l   = '(' : (concat $ intersperse "&sdot;" $ map pow l) ++ ")"
+    pow :: (Symbol,Integer) -> String
+    pow (x,1) = symbol x
+    pow (x,p) = symbol x ++ sup (show p)
+{-
 uSymb (UName s)           = symbol s
 uSymb (UProd l)           = foldr1 (\x -> ((x++"&sdot;")++) ) (map uSymb l)
 uSymb (UPow s i)          = uSymb s ++ sup (show i)
--- uSymb (UDiv n (UName d))  = uSymb n ++ "/" ++ uSymb (UName d)
--- uSymb (UDiv n d)          = uSymb n ++ "/(" ++ (uSymb d) ++ ")"
+uSymb (UDiv n (UName d))  = uSymb n ++ "/" ++ uSymb (UName d)
+uSymb (UDiv n d)          = uSymb n ++ "/(" ++ (uSymb d) ++ ")"
+-}
 
 -----------------------------------------------------------------
 ------------------BEGIN EXPRESSION PRINTING----------------------

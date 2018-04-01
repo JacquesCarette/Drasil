@@ -1,12 +1,12 @@
 module Language.Drasil.TeX.Print(genTeX) where
 
 import Prelude hiding (print)
-import Data.List (intersperse, transpose)
+import Data.List (intersperse, transpose, partition)
 import Text.PrettyPrint (text, (<+>))
 import qualified Text.PrettyPrint as TP
 import Numeric (showFFloat)
-
 import Control.Applicative (pure)
+import Control.Arrow (second)
 
 import Language.Drasil.Printing.AST
 import Language.Drasil.Printing.Citation
@@ -270,13 +270,32 @@ symbol_needs (Atop _ _)          = Math
 symbol_needs Empty               = Curr
 
 p_unit :: USymb -> D
+p_unit (US ls) = formatu t b
+  where
+    (t,b) = partition ((> 0) . snd) ls
+    formatu :: [(Symbol,Integer)] -> [(Symbol,Integer)] -> D
+    formatu [] l = line l 
+    formatu l [] = foldr (<>) empty $ map pow l
+    formatu nu de = toMath $ fraction (line nu) (line $ map (second negate) de)
+    line :: [(Symbol,Integer)] -> D
+    line []  = empty
+    line [n] = pow n
+    line l   = parens $ foldr (<>) empty $ map pow l
+    pow :: (Symbol,Integer) -> D
+    pow (n,1) = p_symb n
+    pow (n,p) = toMath $ superscript (p_symb n) (pure $ text $ show p)
+    -- printing of unit symbols is done weirdly... FIXME?
+    p_symb (Concat s) = foldl (<>) empty $ map p_symb s
+    p_symb n = let cn = symbol_needs n in switch (const cn) (pure $ text $ symbol n)
+
+{-
+p_unit :: USymb -> D
 p_unit (UName (Concat s)) = foldl (<>) empty $ map (p_unit . UName) s
 p_unit (UName n) =
   let cn = symbol_needs n in
   switch (const cn) (pure $ text $ symbol n)
 p_unit (UProd l) = foldr (<>) empty (map p_unit l)
 p_unit (UPow n p) = toMath $ superscript (p_unit n) (pure $ text $ show p)
-{-
 p_unit (UDiv n d) = toMath $
   case d of -- 4 possible cases, 2 need parentheses, 2 don't
     UProd _  -> fraction (p_unit n) (parens $ p_unit d)

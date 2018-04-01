@@ -2,7 +2,7 @@ module Language.Drasil.Printing.Import(space,expr,symbol) where
 
 import Language.Drasil.Expr (Expr(..), BinOp(..), UFunc(..), ArithOper(..),
     BoolOper(..),
-    DerivType(..), EOperator(..), DomainDesc(..), RealRange(..), UID,
+    DerivType(..), DomainDesc(..), RealRange(..), UID,
     RealInterval(..),Inclusive(..))
 import Language.Drasil.Expr.Precedence (precA, precB, eprec)
 import qualified Language.Drasil.Printing.AST as P
@@ -91,7 +91,7 @@ expr (BinaryOp Iff a b) sm = mkBOp sm P.Iff a b
 expr (BinaryOp Index a b) sm = indx sm a b
 expr (BinaryOp Pow a b) sm = pow sm a b
 expr (BinaryOp Subt a b)   sm = P.Row [expr a sm, P.MO P.Subt, expr b sm]
-expr (EOp o)            sm = eop o sm
+expr (Operator o dd e)     sm = eop sm o dd e
 expr (IsIn  a b)        sm = P.Row  [expr a sm, P.MO P.IsIn, space b]
 expr (RealI c ri)       sm = renderRealInt sm (lookupC sm c) ri
 
@@ -114,8 +114,8 @@ expr' s p e = fence e'
 neg' :: Expr -> Bool
 neg' (Dbl     _)     = True
 neg' (Int     _)     = True
-neg' (EOp _)         = True
-neg' (AssocA Mul _)   = True
+neg' (Operator _ _ _) = True
+neg' (AssocA Mul _)  = True
 neg' (BinaryOp Index _ _) = True
 neg' (UnaryOp _ _)   = True
 neg' (C _)           = True
@@ -143,23 +143,23 @@ indx sm (C c) i = f s
 indx sm a i = P.Row [P.Row [expr a sm], P.Sub $ expr i sm]
 
 -- | Helper function for translating 'EOperator's
-eop :: HasSymbolTable s => EOperator -> s -> P.Expr
-eop (Product (IntegerDD v (BoundedR l h)) e) sm =
+eop :: HasSymbolTable s => s -> ArithOper -> DomainDesc -> Expr -> P.Expr
+eop sm Mul (IntegerDD v (BoundedR l h)) e =
   P.Row [P.MO P.Prod, P.Sub (P.Row [symbol v, P.MO P.Eq, expr l sm]), P.Sup (expr h sm),
          P.Row [expr e sm]]
-eop (Product (AllInt _) e) sm = P.Row [P.MO P.Prod, P.Row[expr e sm]]
-eop (Product (AllReal _) _) _ = error "HTML/Import.hs Product cannot be over Real"
-eop (Product (RealDD _ _) _) _ = error "HTML/Import.hs Product cannot be over Real"
-eop (Integral (RealDD v (BoundedR l h)) e) sm =
+eop sm Mul (AllInt _) e = P.Row [P.MO P.Prod, P.Row[expr e sm]]
+eop _  Mul (AllReal _) _ = error "HTML/Import.hs Product-Integral not implemented."
+eop _  Mul (RealDD _ _) _ = error "HTML/Import.hs Product-Integral not implemented."
+eop sm Add (RealDD v (BoundedR l h)) e =
   P.Row [P.MO P.Inte, P.Sub (expr l sm), P.Sup (expr h sm),
          P.Row [expr e sm], P.Spc P.Thin, P.Ident "d", symbol v]
-eop (Integral (AllReal v) e) sm =
+eop sm Add (AllReal v) e =
   P.Row [P.MO P.Inte, P.Sub (symbol v), P.Row [expr e sm], P.Spc P.Thin, 
          P.Ident "d", symbol v]
-eop (Integral (IntegerDD v (BoundedR l h)) e) sm =
+eop sm Add (IntegerDD v (BoundedR l h)) e =
   P.Row [P.MO P.Summ, P.Sub (P.Row [symbol v, P.MO P.Eq, expr l sm]), P.Sup (expr h sm),
          P.Row [expr e sm]]
-eop (Integral (AllInt _) e) sm = P.Row [P.MO P.Summ, P.Row [expr e sm]]
+eop sm Add (AllInt _) e = P.Row [P.MO P.Summ, P.Row [expr e sm]]
 
 symbol :: Symbol -> P.Expr
 symbol (Atomic s)  = P.Ident s

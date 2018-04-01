@@ -2,7 +2,7 @@ module Language.Drasil.Expr.Extract(dep, vars, codevars, codevars') where
 
 import Data.List (nub)
 import Control.Lens hiding ((:<),(:>))
-import Language.Drasil.Expr (Expr(..), EOperator(..),RealInterval(..),Inclusive(..))
+import Language.Drasil.Expr (Expr(..), RealInterval(..),Inclusive(..))
 import Language.Drasil.ChunkDB
 import Language.Drasil.Chunk.Code
 import Language.Drasil.Chunk.Quantity (QuantityDict)
@@ -21,7 +21,7 @@ dep (FCall f x)   = nub (dep f ++ (concat $ map dep x))
 dep (Case ls)     = nub (concat $ map (dep . fst) ls ++ map (dep . snd) ls)
 dep (UnaryOp _ u) = dep u
 dep (BinaryOp _ a b)  = nub (dep a ++ dep b)
-dep (EOp o)       = dep (unpackop o)
+dep (Operator _ _ e)  = dep e
 dep (IsIn  a _)   = nub (dep a)
 dep (Matrix a)    = nub (concat $ map (concat . map dep) a)
 dep (RealI c b)   = nub (c : dep_ri b)
@@ -48,7 +48,7 @@ vars (FCall f x)    m = nub (vars f m ++ (concat $ map (\y -> vars y m) x))
 vars (Case ls)      m = nub (concat $ map (\x -> vars (fst x) m) ls ++ map (\x -> vars (snd x) m) ls)
 vars (UnaryOp _ u)  m = vars u m
 vars (BinaryOp _ a b)   m = nub $ vars a m ++ vars b m
-vars (EOp o)        m = vars (unpackop o) m
+vars (Operator _ _ e)   m = vars e m
 vars (IsIn  a _)    m = nub (vars a m)
 vars (Matrix a)     m = nub (concat $ map (\x -> concat $ map (\y -> vars y m) x) a)
 vars (RealI c b)    m = nub ((symbLookup c $ m ^. symbolTable) : vars_ri m b)
@@ -76,7 +76,7 @@ codevars (FCall f x)  sm = nub (codevars f sm ++ (concat $ map (\y -> codevars y
 codevars (Case ls)    sm = nub (concat $ map (\x -> codevars (fst x) sm) ls ++ map (\x -> codevars (snd x) sm) ls)
 codevars (UnaryOp _ u)  sm = codevars u sm
 codevars (BinaryOp _ a b) sm = nub $ codevars a sm ++ codevars b sm
-codevars (EOp o)  sm = codevars (unpackop o) sm
+codevars (Operator _ _ e)  sm = codevars e sm
 codevars (IsIn  a _)  sm = nub (codevars a sm)
 codevars (Matrix a)   sm = nub (concat $ map (concat . map (\x -> codevars x sm)) a)
 codevars (RealI c b)  sm = nub ((codevar $ symbLookup c $ sm ^. symbolTable) : codevars_ri sm b)
@@ -104,7 +104,7 @@ codevars' (Case ls)    sm = nub (concat $ map (\x -> codevars' (fst x) sm) ls ++
                               map (\y -> codevars' (snd y) sm) ls)
 codevars' (UnaryOp _ u)  sm = codevars' u sm
 codevars' (BinaryOp _ a b) sm = nub $ codevars' a sm ++ codevars' b sm
-codevars' (EOp o)      sm = codevars' (unpackop o) sm
+codevars' (Operator _ _ e)      sm = codevars' e sm
 codevars' (IsIn  a _)  sm = nub (codevars' a sm)
 codevars' (Matrix a)   sm = nub (concat $ map (concat . map (\x -> codevars' x sm)) a)
 codevars' (RealI c b)  sm = nub ((codevar $ symbLookup c $ sm ^. symbolTable) : codevars'_ri sm b)
@@ -117,7 +117,3 @@ codevars'_ri s (UpFrom il)     = codevars'_inc s il
 codevars'_inc :: HasSymbolTable s => s -> Inclusive Expr -> [CodeChunk]
 codevars'_inc s (Inc e) = codevars' e s
 codevars'_inc s (Exc e) = codevars' e s
-
-unpackop :: EOperator -> Expr
-unpackop (Product _ e) = e
-unpackop (Integral _ e) = e

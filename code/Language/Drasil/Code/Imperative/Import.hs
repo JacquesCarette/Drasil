@@ -470,7 +470,7 @@ convExpr (Case l)      = doit l -- FIXME this is sub-optimal
     doit [(e,_)] = convExpr e -- should always be the else clause
     doit ((e,cond):xs) = liftM3 Condi (convExpr cond) (convExpr e) (convExpr (Case xs))
 convExpr (Matrix _)    = error "convExpr: Matrix"
-convExpr (EOp _)       = error "convExpr: EOp"
+convExpr (Operator _ _ _) = error "convExpr: Operator"
 convExpr (IsIn _ _)    = error "convExpr: IsIn"
 convExpr (RealI c ri)  = do
   g <- ask

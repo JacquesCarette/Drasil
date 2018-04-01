@@ -58,7 +58,10 @@ data Expr where
   Matrix   :: [[Expr]] -> Expr
   UnaryOp  :: UFunc -> Expr -> Expr
   BinaryOp :: BinOp -> Expr -> Expr -> Expr
-  EOp      :: EOperator -> Expr
+  -- Operators are generalized arithmetic operators over a |DomainDesc|
+  --   of an |Expr|.  Could be called |BigOp|.
+  -- ex: Summation is represented via |Add| over a discrete domain
+  Operator :: ArithOper -> DomainDesc -> Expr -> Expr
 
   IsIn     :: Expr -> Space -> Expr --	element of
   RealI    :: UID -> RealInterval -> Expr -- a different kind of 'element of'
@@ -105,7 +108,6 @@ instance Num Expr where
   -- this is a Num wart
   signum _ = error "should not use signum in expressions"
 
-
 instance Eq Expr where
   Dbl a == Dbl b               =  a == b
   Int a == Int b               =  a == b
@@ -124,14 +126,6 @@ instance Fractional Expr where
   a / b = BinaryOp Frac a b
   fromRational r = BinaryOp Frac (fromInteger $ numerator   r)
                                 (fromInteger $ denominator r)
-
--- | Operators
--- All operators take a |DomainDesc| and a variable
--- Summation is represented via Integral over a discrete domain
--- FIXME: the Variable should not be an |Expr|
-data EOperator where
-  Product :: DomainDesc -> Expr -> EOperator
-  Integral :: DomainDesc -> Expr -> EOperator
 
 -- | Domain Description. A 'Domain' is the extent of a variable that
 -- ranges over a particular Space. So a |DomainDesc| contains

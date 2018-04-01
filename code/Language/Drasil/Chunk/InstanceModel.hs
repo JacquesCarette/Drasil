@@ -15,7 +15,7 @@ import Language.Drasil.Chunk.Relation
 import Language.Drasil.Chunk.Quantity
 import Language.Drasil.ChunkDB
 import Language.Drasil.Expr
-import Language.Drasil.Expr.Extract
+import Language.Drasil.Expr.Extract (vars)
 import Language.Drasil.Spec (Sentence)
 
 import Control.Lens (makeLenses, (^.))

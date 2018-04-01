@@ -1,119 +1,86 @@
 module Language.Drasil.Expr.Extract(dep, vars, codevars, codevars') where
 
 import Data.List (nub)
-import Control.Lens hiding ((:<),(:>))
+import Control.Lens ((^.))
 import Language.Drasil.Expr (Expr(..), RealInterval(..),Inclusive(..))
 import Language.Drasil.ChunkDB
 import Language.Drasil.Chunk.Code
 import Language.Drasil.Chunk.Quantity (QuantityDict)
 
---FIXME: Missing Patterns
+-- | Generic traverse of all positions that could lead to names
+names :: Expr -> [String]
+names (AssocA _ l)   = concatMap names l
+names (AssocB _ l)   = concatMap names l
+names (Deriv _ a b) = b : names a
+names (C c)         = [c]
+names (Int _)       = []
+names (Dbl _)       = []
+names (Str _)       = []
+names (FCall f x)   = names f ++ (concatMap names x)
+names (Case ls)     = (concatMap (names . fst) ls) ++ concatMap (names . snd) ls
+names (UnaryOp _ u) = names u
+names (BinaryOp _ a b)  = names a ++ names b
+names (Operator _ _ e)  = names e
+names (IsIn  a _)   = names a
+names (Matrix a)    = concatMap (concat . map names) a
+names (RealI c b)   = c : names_ri b
+
+names_ri :: RealInterval -> [String]
+names_ri (Bounded il iu) = names_inc il ++ names_inc iu
+names_ri (UpTo iu)       = names_inc iu
+names_ri (UpFrom il)     = names_inc il
+
+names_inc :: Inclusive Expr -> [String]
+names_inc (Inc e) = names e
+names_inc (Exc e) = names e
+
+-- | Generic traverse of all positions that could lead to names, without
+-- functions.  FIXME : this should really be done via post-facto filtering, but
+-- right now the information needed to do this is not available!
+names' :: Expr -> [String]
+names' (AssocA _ l)   = concatMap names' l
+names' (AssocB _ l)   = concatMap names' l
+names' (Deriv _ a b) = b : names' a
+names' (C c)         = [c]
+names' (Int _)       = []
+names' (Dbl _)       = []
+names' (Str _)       = []
+names' (FCall _ x)   = concatMap names' x
+names' (Case ls)     = (concatMap (names' . fst) ls) ++ concatMap (names' . snd) ls
+names' (UnaryOp _ u) = names' u
+names' (BinaryOp _ a b)  = names' a ++ names' b
+names' (Operator _ _ e)  = names' e
+names' (IsIn  a _)   = names' a
+names' (Matrix a)    = concatMap (concat . map names') a
+names' (RealI c b)   = c : names'_ri b
+
+names'_ri :: RealInterval -> [String]
+names'_ri (Bounded il iu) = names'_inc il ++ names'_inc iu
+names'_ri (UpTo iu)       = names'_inc iu
+names'_ri (UpFrom il)     = names'_inc il
+
+names'_inc :: Inclusive Expr -> [String]
+names'_inc (Inc e) = names' e
+names'_inc (Exc e) = names' e
+
+---------------------------------------------------------------------------
+-- And now implement the exported traversals all in terms of the above
+
 -- | Get dependencies from an equation  
 dep :: Expr -> [String]
-dep (AssocA _ l)   = nub (concat $ map dep l)
-dep (AssocB _ l)   = nub (concat $ map dep l)
-dep (Deriv _ a b) = nub (b : dep a)
-dep (C c)         = [c]
-dep (Int _)       = []
-dep (Dbl _)       = []
-dep (Str _)       = []
-dep (FCall f x)   = nub (dep f ++ (concat $ map dep x))
-dep (Case ls)     = nub (concat $ map (dep . fst) ls ++ map (dep . snd) ls)
-dep (UnaryOp _ u) = dep u
-dep (BinaryOp _ a b)  = nub (dep a ++ dep b)
-dep (Operator _ _ e)  = dep e
-dep (IsIn  a _)   = nub (dep a)
-dep (Matrix a)    = nub (concat $ map (concat . map dep) a)
-dep (RealI c b)   = nub (c : dep_ri b)
-
-dep_ri :: RealInterval -> [String]
-dep_ri (Bounded il iu) = dep_inc il ++ dep_inc iu
-dep_ri (UpTo iu)       = dep_inc iu
-dep_ri (UpFrom il)     = dep_inc il
-
-dep_inc :: Inclusive Expr -> [String]
-dep_inc (Inc e) = dep e
-dep_inc (Exc e) = dep e
+dep = nub . names
 
 -- | Get a list of quantities (QuantityDict) from an equation in order to print
 vars :: (HasSymbolTable s) => Expr -> s -> [QuantityDict]
-vars (AssocA _ l)    m = nub $ concat $ map (\x -> vars x m) l
-vars (AssocB _ l)    m = nub $ concat $ map (\x -> vars x m) l
-vars (Deriv _ a b)  m = nub (vars a m ++ [symbLookup b $ m ^. symbolTable])
-vars (C c)          m = [symbLookup c $ m ^. symbolTable]
-vars (Int _)        _ = []
-vars (Dbl _)        _ = []
-vars (Str _)        _ = []
-vars (FCall f x)    m = nub (vars f m ++ (concat $ map (\y -> vars y m) x))
-vars (Case ls)      m = nub (concat $ map (\x -> vars (fst x) m) ls ++ map (\x -> vars (snd x) m) ls)
-vars (UnaryOp _ u)  m = vars u m
-vars (BinaryOp _ a b)   m = nub $ vars a m ++ vars b m
-vars (Operator _ _ e)   m = vars e m
-vars (IsIn  a _)    m = nub (vars a m)
-vars (Matrix a)     m = nub (concat $ map (\x -> concat $ map (\y -> vars y m) x) a)
-vars (RealI c b)    m = nub ((symbLookup c $ m ^. symbolTable) : vars_ri m b)
-
-vars_ri :: HasSymbolTable s => s -> RealInterval -> [QuantityDict]
-vars_ri s (Bounded il iu) = vars_inc s il ++ vars_inc s iu
-vars_ri s (UpTo iu)       = vars_inc s iu
-vars_ri s (UpFrom il)     = vars_inc s il
-
-vars_inc :: HasSymbolTable s => s -> Inclusive Expr -> [QuantityDict]
-vars_inc s (Inc e) = vars e s
-vars_inc s (Exc e) = vars e s
+vars e m = map resolve $ dep e
+  where resolve x = symbLookup x $ m ^. symbolTable
 
 -- | Get a list of CodeChunks from an equation
 codevars :: (HasSymbolTable s) => Expr -> s -> [CodeChunk]
-codevars (AssocA _ l)  sm = nub (concat $ map (\x -> codevars x sm) l)
-codevars (AssocB _ l)  sm = nub (concat $ map (\x -> codevars x sm) l)
-codevars (Deriv _ a b) sm = nub (codevars a sm ++ [codevar $ symbLookup b (sm ^. symbolTable)])
-codevars (C c)       sm = [codevar $ symbLookup c (sm ^. symbolTable)]
-codevars (Int _)      _ = []
-codevars (Dbl _)      _ = []
-codevars (Str _)      _ = []
-codevars (FCall (C c) x)  sm = nub ((codefunc $ symbLookup c (sm ^. symbolTable)) : (concat $ map (\y -> codevars y sm) x))
-codevars (FCall f x)  sm = nub (codevars f sm ++ (concat $ map (\y -> codevars y sm) x))
-codevars (Case ls)    sm = nub (concat $ map (\x -> codevars (fst x) sm) ls ++ map (\x -> codevars (snd x) sm) ls)
-codevars (UnaryOp _ u)  sm = codevars u sm
-codevars (BinaryOp _ a b) sm = nub $ codevars a sm ++ codevars b sm
-codevars (Operator _ _ e)  sm = codevars e sm
-codevars (IsIn  a _)  sm = nub (codevars a sm)
-codevars (Matrix a)   sm = nub (concat $ map (concat . map (\x -> codevars x sm)) a)
-codevars (RealI c b)  sm = nub ((codevar $ symbLookup c $ sm ^. symbolTable) : codevars_ri sm b)
-
-codevars_ri :: HasSymbolTable s => s -> RealInterval -> [CodeChunk]
-codevars_ri s (Bounded il iu) = codevars_inc s il ++ codevars_inc s iu
-codevars_ri s (UpTo iu)       = codevars_inc s iu
-codevars_ri s (UpFrom il)     = codevars_inc s il
-
-codevars_inc :: HasSymbolTable s => s -> Inclusive Expr -> [CodeChunk]
-codevars_inc s (Inc e) = codevars e s
-codevars_inc s (Exc e) = codevars e s
+codevars e m = map resolve $ dep e
+  where resolve x = codevar $ symbLookup x $ m ^. symbolTable
 
 -- | Get a list of CodeChunks from an equation (no functions)
 codevars' :: (HasSymbolTable s) => Expr -> s -> [CodeChunk]
-codevars' (AssocA _ l)   sm = nub (concat $ map (\x -> codevars' x sm) l)
-codevars' (AssocB _ l)   sm = nub (concat $ map (\x -> codevars' x sm) l)
-codevars' (Deriv _ a b) sm = nub (codevars' a sm ++ [codevar $ symbLookup b (sm^.symbolTable)])
-codevars' (C c)         sm = [codevar $ symbLookup c (sm ^. symbolTable)]
-codevars' (Int _)       _ = []
-codevars' (Dbl _)       _ = []
-codevars' (Str _)       _ = []
-codevars' (FCall _ x)  sm = nub (concat $ map (\y -> codevars' y sm) x)
-codevars' (Case ls)    sm = nub (concat $ map (\x -> codevars' (fst x) sm) ls ++
-                              map (\y -> codevars' (snd y) sm) ls)
-codevars' (UnaryOp _ u)  sm = codevars' u sm
-codevars' (BinaryOp _ a b) sm = nub $ codevars' a sm ++ codevars' b sm
-codevars' (Operator _ _ e)      sm = codevars' e sm
-codevars' (IsIn  a _)  sm = nub (codevars' a sm)
-codevars' (Matrix a)   sm = nub (concat $ map (concat . map (\x -> codevars' x sm)) a)
-codevars' (RealI c b)  sm = nub ((codevar $ symbLookup c $ sm ^. symbolTable) : codevars'_ri sm b)
-
-codevars'_ri :: HasSymbolTable s => s -> RealInterval -> [CodeChunk]
-codevars'_ri s (Bounded il iu) = codevars'_inc s il ++ codevars'_inc s iu
-codevars'_ri s (UpTo iu)       = codevars'_inc s iu
-codevars'_ri s (UpFrom il)     = codevars'_inc s il
-
-codevars'_inc :: HasSymbolTable s => s -> Inclusive Expr -> [CodeChunk]
-codevars'_inc s (Inc e) = codevars' e s
-codevars'_inc s (Exc e) = codevars' e s
+codevars' e m = map resolve $ nub $ names' e
+  where resolve x = codevar $ symbLookup x $ m ^. symbolTable

@@ -25,7 +25,7 @@ names (IsIn  a _)   = names a
 names (Matrix a)    = concatMap (concat . map names) a
 names (RealI c b)   = c : names_ri b
 
-names_ri :: RealInterval -> [String]
+names_ri :: RealInterval Expr Expr -> [String]
 names_ri (Bounded (_,il) (_,iu)) = names il ++ names iu
 names_ri (UpTo (_,iu))       = names iu
 names_ri (UpFrom (_,il))     = names il
@@ -50,7 +50,7 @@ names' (IsIn  a _)   = names' a
 names' (Matrix a)    = concatMap (concat . map names') a
 names' (RealI c b)   = c : names'_ri b
 
-names'_ri :: RealInterval -> [String]
+names'_ri :: RealInterval Expr Expr -> [String]
 names'_ri (Bounded il iu) = names' (snd il) ++ names' (snd iu)
 names'_ri (UpTo iu)       = names' (snd iu)
 names'_ri (UpFrom il)     = names' (snd il)

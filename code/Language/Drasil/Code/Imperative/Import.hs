@@ -487,7 +487,7 @@ renderC' s (Range _ rr)          = renderRealInt s rr
 renderC' s (EnumeratedReal _ rr) = IsIn (sy s) (DiscreteD rr)
 renderC' s (EnumeratedStr _ rr)  = IsIn (sy s) (DiscreteS rr)
 
-renderRealInt :: (Chunk c, HasSymbol c) => c -> RealInterval -> Expr
+renderRealInt :: (Chunk c, HasSymbol c) => c -> RealInterval Expr Expr -> Expr
 renderRealInt s (Bounded (Inc,a) (Inc,b)) = (a $<= sy s) $&& (sy s $<= b)
 renderRealInt s (Bounded (Inc,a) (Exc,b)) = (a $<= sy s) $&& (sy s $<  b)
 renderRealInt s (Bounded (Exc,a) (Inc,b)) = (a $<  sy s) $&& (sy s $<= b)

@@ -143,7 +143,7 @@ indx sm (C c) i = f s
 indx sm a i = P.Row [P.Row [expr a sm], P.Sub $ expr i sm]
 
 -- | Helper function for translating 'EOperator's
-eop :: HasSymbolTable s => s -> ArithOper -> DomainDesc -> Expr -> P.Expr
+eop :: HasSymbolTable s => s -> ArithOper -> DomainDesc Expr Expr -> Expr -> P.Expr
 eop sm Mul (BoundedDD v Discrete l h) e =
   P.Row [P.MO P.Prod, P.Sub (P.Row [symbol v, P.MO P.Eq, expr l sm]), P.Sup (expr h sm),
          P.Row [expr e sm]]
@@ -196,7 +196,7 @@ constraint st s (Range _ rr)          = renderRealInt st (SF.eqSymb s) rr
 constraint _  s (EnumeratedReal _ rr) = P.Row [symbol $ SF.eqSymb s, P.MO P.IsIn, space $ DiscreteD rr]
 constraint _  s (EnumeratedStr _ rr)  = P.Row [symbol $ SF.eqSymb s, P.MO P.IsIn, space $ DiscreteS rr]
 -}
-renderRealInt :: HasSymbolTable st => st -> Symbol -> RealInterval -> P.Expr
+renderRealInt :: HasSymbolTable st => st -> Symbol -> RealInterval Expr Expr -> P.Expr
 renderRealInt st s (Bounded (Inc,a) (Inc,b)) = 
   P.Row [ expr a st, P.MO P.LEq, symbol s, P.MO P.LEq, expr b st]
 renderRealInt st s (Bounded (Inc,a) (Exc,b)) =

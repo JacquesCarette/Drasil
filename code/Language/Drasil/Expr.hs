@@ -61,10 +61,10 @@ data Expr where
   -- Operators are generalized arithmetic operators over a |DomainDesc|
   --   of an |Expr|.  Could be called |BigOp|.
   -- ex: Summation is represented via |Add| over a discrete domain
-  Operator :: ArithOper -> DomainDesc -> Expr -> Expr
+  Operator :: ArithOper -> DomainDesc Expr Expr -> Expr -> Expr
 
   IsIn     :: Expr -> Space -> Expr --	element of
-  RealI    :: UID -> RealInterval -> Expr -- a different kind of 'element of'
+  RealI    :: UID -> RealInterval Expr Expr -> Expr -- a different kind of 'element of'
 
 ($=), ($!=), ($<), ($>), ($<=), ($>=), ($=>), ($<=>), ($.), ($-), 
   ($/) :: Expr -> Expr -> Expr
@@ -130,25 +130,16 @@ instance Fractional Expr where
 -- | Topology of a subset of reals.
 data RTopology = Continuous | Discrete
 
--- | Domain Description. A 'Domain' is the extent of a variable that
--- ranges over a particular Space. So a |DomainDesc| contains
--- a variable, a Space and a "description of a subspace".
--- Except that the kinds of descriptions we want for different kinds of
--- spaces really are quite different. So we will internalize the |Space|
--- into the description. Which means that only some |Space|s will be
--- represented, as needed.
--- [Later when we move to GADTs, some of this can be unified]
--- We use a phantom type in |RealRange| as a proxy for now
-data DomainDesc where
-  BoundedDD :: Symbol -> RTopology -> Expr -> Expr -> DomainDesc
-  AllDD :: Symbol -> RTopology -> DomainDesc
+data DomainDesc a b where
+  BoundedDD :: Symbol -> RTopology -> a -> b -> DomainDesc a b
+  AllDD :: Symbol -> RTopology -> DomainDesc a b
 
 data Inclusive = Inc | Exc
 
 -- | RealInterval. A |RealInterval| is a subset of |Real| (as a |Space|).
 -- These come in different flavours.
 -- For now, embed |Expr| for the bounds, but that will change as well.
-data RealInterval where
-  Bounded :: (Inclusive, Expr) -> (Inclusive, Expr) -> RealInterval  -- (x .. y)
-  UpTo :: (Inclusive, Expr) -> RealInterval -- (-infinity .. x)
-  UpFrom :: (Inclusive, Expr) -> RealInterval -- (x .. infinity)
+data RealInterval a b where
+  Bounded :: (Inclusive, a) -> (Inclusive, b) -> RealInterval a b -- (x .. y)
+  UpTo :: (Inclusive, a) -> RealInterval a b -- (-infinity .. x)
+  UpFrom :: (Inclusive, b) -> RealInterval a b -- (x .. infinity)

@@ -82,7 +82,7 @@ defprod v low high e = Operator Mul (BoundedDD v Discrete low high) e
 prod_all v e = Operator Mul (AllDD v Discrete) e
 
 -- | Smart constructor for 'real interval' membership
-real_interval :: Chunk c => c -> RealInterval -> Expr
+real_interval :: Chunk c => c -> RealInterval Expr Expr -> Expr
 real_interval c = RealI (c ^. uid)
 
 -- | Euclidean function : takes a vector and returns the sqrt of the sum-of-squares

@@ -72,14 +72,14 @@ isin = IsIn
 defint, defsum, defprod :: Symbol -> Expr -> Expr -> Expr -> Expr
 int_all, sum_all, prod_all :: Symbol -> Expr -> Expr
 
-defint v low high e = Operator Add (RealDD v low high) e
-int_all v e = Operator Add (AllReal v) e
+defint v low high e = Operator Add (BoundedDD v Continuous low high) e
+int_all v e = Operator Add (AllDD v Continuous) e
 
-defsum v low high e = Operator Add (IntegerDD v low high) e
-sum_all v e = Operator Add (AllInt v) e
+defsum v low high e = Operator Add (BoundedDD v Discrete low high) e
+sum_all v e = Operator Add (AllDD v Discrete) e
 
-defprod v low high e = Operator Mul (IntegerDD v low high) e
-prod_all v e = Operator Mul (AllInt v) e
+defprod v low high e = Operator Mul (BoundedDD v Discrete low high) e
+prod_all v e = Operator Mul (AllDD v Discrete) e
 
 -- | Smart constructor for 'real interval' membership
 real_interval :: Chunk c => c -> RealInterval -> Expr

@@ -127,6 +127,9 @@ instance Fractional Expr where
   fromRational r = BinaryOp Frac (fromInteger $ numerator   r)
                                 (fromInteger $ denominator r)
 
+-- | Topology of a subset of reals.
+data RTopology = Continuous | Discrete
+
 -- | Domain Description. A 'Domain' is the extent of a variable that
 -- ranges over a particular Space. So a |DomainDesc| contains
 -- a variable, a Space and a "description of a subspace".
@@ -137,11 +140,8 @@ instance Fractional Expr where
 -- [Later when we move to GADTs, some of this can be unified]
 -- We use a phantom type in |RealRange| as a proxy for now
 data DomainDesc where
-  RealDD :: Symbol -> Expr -> Expr -> DomainDesc
-  AllReal :: Symbol -> DomainDesc
-
-  IntegerDD :: Symbol -> Expr -> Expr -> DomainDesc
-  AllInt :: Symbol -> DomainDesc
+  BoundedDD :: Symbol -> RTopology -> Expr -> Expr -> DomainDesc
+  AllDD :: Symbol -> RTopology -> DomainDesc
 
 data Inclusive = Inc | Exc
 

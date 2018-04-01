@@ -1,9 +1,20 @@
-module Drasil.GlassBR.ModuleDefs where
+module Drasil.GlassBR.ModuleDefs
+  (read_table,implVars,exportedFuncs
+  , readTableMod, inputMod, interpMod
+  ) where
 
 import Language.Drasil
 
 import Drasil.GlassBR.Unitals (plate_len, plate_width, nom_thick,
   glass_type, char_weight, tNT, sdx, sdy, sdz, pb_tol)
+
+implVars :: [VarChunk]
+implVars = [v_v, v_x_z_1, v_y_z_1, v_x_z_2, v_y_z_2, v_mat, v_col,
+  v_i, v_j, v_k, v_z, v_z_array, v_y_array, v_x_array, v_y, v_arr, v_filename,
+  v_y_2, v_y_1, v_x_2, v_x_1, v_x]
+
+exportedFuncs :: [Func]
+exportedFuncs = read_table_funcs ++ glassInputDataFuncs ++ interpFuncs
 
 --from TSD.txt:
 
@@ -14,15 +25,15 @@ read_table = funcData "read_table" $
                          listEntry [WithLine, WithPattern] v_y_array]) ','
   ]
   
+read_table_funcs :: [Func]
+read_table_funcs = [read_table]
+
 readTableMod :: Mod
-readTableMod = packmod "ReadTable" [read_table]
+readTableMod = packmod "ReadTable" read_table_funcs
 
 -----
 
 --from defaultInput.txt:
-
-inputMod :: Mod
-inputMod = packmod "InputFormat" [glassInputData]
 
 glassInputData :: Func
 glassInputData = funcData "get_input" $
@@ -40,6 +51,13 @@ glassInputData = funcData "get_input" $
     singleton pb_tol
   ]
 
+glassInputDataFuncs :: [Func]
+glassInputDataFuncs = [glassInputData]
+
+inputMod :: Mod
+inputMod = packmod "InputFormat" glassInputDataFuncs
+
+-----
   
 one, two :: Symbol
 one = Atomic "1"
@@ -168,5 +186,8 @@ interpZ = funcDef "interpZ" [{-v_x_array, v_y_array, v_z_array,-} v_filename, v_
     FThrow "Interpolation of z failed"      
   ]
 
+interpFuncs :: [Func]
+interpFuncs = [linInterp, indInSeq, matrixCol, interpY, interpZ]
+
 interpMod :: Mod
-interpMod = packmod "Interpolation" $ [linInterp, indInSeq, matrixCol, interpY, interpZ]
+interpMod = packmod "Interpolation" interpFuncs

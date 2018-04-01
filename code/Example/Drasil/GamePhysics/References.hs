@@ -4,8 +4,7 @@ import Language.Drasil
 
 import Data.Drasil.People (dParnas, gWilson, daAruliah, cTitus, nChueHong, 
   mDavis, rGuy, shdHaddock, kdHuff, imMitchell, mdPlumblet, bWaugh, 
-  epWhite, pWilson, pcClements, dmWiess, nKoothoor, jBueche, lLai, 
-  pjAgerfalk, nKraiem, jRalyte, spencerSmith)
+  epWhite, pWilson, pcClements, dmWiess, jBueche)
   
 import Data.Drasil.Citations (koothoor2013, parnas1986, smithLai2005)
 
@@ -40,36 +39,6 @@ dParnasPcClements1984 = cInProceedings "dParnasPcClements1984"
   (S "The Modular Structure of Complex Systems")
   (S "ICSE '84: Proceedings of the 7th international conference on Software engineering")
   1984 [pages [408, 417]]
-
-{- Duplicates --
-dParnasPcClements1986 = cArticle "dParnasPcClements1986" [dParnas, pcClements],
-    (S "A Rational Design Process: How and Why to Fake it")
-    (S "IEEE Transactions on Software Engineering") 1986
-    pages [251, 257]
-
-
-koothoor2013 = cMThesis [nKoothoor],
-    (S "A document drive approach to certifying scientific computing software"),
-    School (S "McMaster University"),
-    Place (S "Hamilton", S "Canada"),
-    Year (2013)
-  ]
-
-smithLai2005 = Article [
-    Author [spencerSmith, lLai],
-    Title (S "A new requirements template for scientific computing"),
-    Journal (S "Proceedings of the First International Workshop on" +:+
-    S "Situational Requirements Engineering Processes - Methods," +:+
-    S "Techniques and Tools to Support Situation-Specific Requirements" +:+
-    S "Engineering Processes, SREP'05"),
-    Editor [pjAgerfalk, nKraiem, jRalyte],
-    Place (S "Paris", S "France"),
-    Pages (107, 121),
-    Note (S "In conjunction with 13th IEEE International Requirements" +:+
-    S "Engineering Conference,"),
-    Year 2005
-  ]
--}
 
 jfBeucheIntro = cMisc "jfBeucheIntro"
   [ author [jBueche]

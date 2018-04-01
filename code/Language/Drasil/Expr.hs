@@ -143,14 +143,12 @@ data DomainDesc where
   IntegerDD :: Symbol -> Expr -> Expr -> DomainDesc
   AllInt :: Symbol -> DomainDesc
 
-data Inclusive a where
-  Inc :: a -> Inclusive a
-  Exc :: a -> Inclusive a
+data Inclusive = Inc | Exc
 
 -- | RealInterval. A |RealInterval| is a subset of |Real| (as a |Space|).
 -- These come in different flavours.
 -- For now, embed |Expr| for the bounds, but that will change as well.
 data RealInterval where
-  Bounded :: Inclusive Expr -> Inclusive Expr -> RealInterval  -- (x .. y)
-  UpTo :: Inclusive Expr -> RealInterval -- (-infinity .. x)
-  UpFrom :: Inclusive Expr -> RealInterval -- (x .. infinity)
+  Bounded :: (Inclusive, Expr) -> (Inclusive, Expr) -> RealInterval  -- (x .. y)
+  UpTo :: (Inclusive, Expr) -> RealInterval -- (-infinity .. x)
+  UpFrom :: (Inclusive, Expr) -> RealInterval -- (x .. infinity)

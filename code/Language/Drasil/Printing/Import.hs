@@ -197,15 +197,15 @@ constraint _  s (EnumeratedReal _ rr) = P.Row [symbol $ SF.eqSymb s, P.MO P.IsIn
 constraint _  s (EnumeratedStr _ rr)  = P.Row [symbol $ SF.eqSymb s, P.MO P.IsIn, space $ DiscreteS rr]
 -}
 renderRealInt :: HasSymbolTable st => st -> Symbol -> RealInterval -> P.Expr
-renderRealInt st s (Bounded (Inc a) (Inc b)) = 
+renderRealInt st s (Bounded (Inc,a) (Inc,b)) = 
   P.Row [ expr a st, P.MO P.LEq, symbol s, P.MO P.LEq, expr b st]
-renderRealInt st s (Bounded (Inc a) (Exc b)) =
+renderRealInt st s (Bounded (Inc,a) (Exc,b)) =
   P.Row [ expr a st, P.MO P.LEq, symbol s, P.MO P.Lt, expr b st]
-renderRealInt st s (Bounded (Exc a) (Inc b)) =
+renderRealInt st s (Bounded (Exc,a) (Inc,b)) =
   P.Row [ expr a st, P.MO P.Lt, symbol s, P.MO P.LEq, expr b st]
-renderRealInt st s (Bounded (Exc a) (Exc b)) =
+renderRealInt st s (Bounded (Exc,a) (Exc,b)) =
   P.Row [ expr a st, P.MO P.Lt, symbol s, P.MO P.Lt, expr b st]
-renderRealInt st s (UpTo (Inc a))    = P.Row [ symbol s, P.MO P.LEq, expr a st]
-renderRealInt st s (UpTo (Exc a))    = P.Row [ symbol s, P.MO P.Lt, expr a st]
-renderRealInt st s (UpFrom (Inc a))  = P.Row [ symbol s, P.MO P.GEq, expr a st]
-renderRealInt st s (UpFrom (Exc a))  = P.Row [ symbol s, P.MO P.Gt, expr a st]
+renderRealInt st s (UpTo (Inc,a))    = P.Row [ symbol s, P.MO P.LEq, expr a st]
+renderRealInt st s (UpTo (Exc,a))    = P.Row [ symbol s, P.MO P.Lt, expr a st]
+renderRealInt st s (UpFrom (Inc,a))  = P.Row [ symbol s, P.MO P.GEq, expr a st]
+renderRealInt st s (UpFrom (Exc,a))  = P.Row [ symbol s, P.MO P.Gt, expr a st]

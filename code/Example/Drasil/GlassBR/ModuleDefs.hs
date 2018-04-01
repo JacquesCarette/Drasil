@@ -83,10 +83,26 @@ mat     = implVar "v_mat"     (nounPhraseSP "mat")       (Atomic "mat") (Vect $ 
 col     = implVar "v_col"     (nounPhraseSP "col")       (Atomic "col") (Vect Real)
 filename= implVar "v_filename" (nounPhraseSP "filename") (Atomic "filename") String
 
+------------------------------------------------------------------------------------------
+--
+-- Some semantic functions
+
 -- Given two points (x1,y1) and (x2,y2) [not in that order!], and an x ordinate, return
 -- interpolated y on the straight line in between
 interp :: (Num a, Fractional a) => a -> a -> a -> a -> a -> a
 interp x1 y1 x2 y2 x_ = ((y2 - y1) / (x2 - x1)) * (x_ - x1) + y1
+
+------------------------------------------------------------------------------------------
+-- Code Template functions
+
+vLook :: (HasSymbol a, HasSymbol i, Chunk a, Chunk i) => a -> i -> Expr
+vLook a i_ = idx (sy a) (sy i_)
+vLookp1 :: (HasSymbol a, HasSymbol i, Chunk a, Chunk i) => a -> i -> Expr
+vLookp1 a i_ = idx (sy a) (sy i_ + 1)
+
+aLook :: (HasSymbol a, HasSymbol i, HasSymbol j, Chunk a, Chunk i, Chunk j) => 
+  a -> i -> j -> Expr
+aLook a i_ j_ = idx (idx (sy a) (sy i_)) (sy j_)
 
 linInterp :: Func
 linInterp = funcDef "lin_interp" [x_1, y_1, x_2, y_2, x] Real 
@@ -96,8 +112,7 @@ indInSeq :: Func
 indInSeq = funcDef "indInSeq" [arr, v] Natural 
   [
     ffor i (sy i $< (dim (sy arr) - 1))
-      [ FCond (((idx (sy arr) (sy i)) $<= (sy v)) $&& 
-              ((sy v) $<= (idx (sy arr) ((sy i) + 1))))
+      [ FCond ((vLook arr i $<= (sy v)) $&& ((sy v) $<= vLookp1 arr i))
         [ FRet $ sy i ] [] ],
     FThrow "Bound error"      
   ]
@@ -108,7 +123,7 @@ matrixCol = funcDef "matrixCol" [mat, j] (Vect Real)
     fdec col (Vect Rational),
     --
     ffor i (sy i $< dim (sy mat)) 
-      [ FAppend (sy col) (idx (idx (sy mat) (sy i)) (sy j)) ],
+      [ FAppend (sy col) (aLook mat i j) ],
     FRet (sy col)
   ]
 
@@ -122,28 +137,28 @@ interpY = funcDef "interpY" [{-x_array, y_array, z_array,-} filename, x, z] Real
   --
   FProcCall read_table [sy filename, sy z_array, sy x_array, sy y_array],
   -- endhack
-    fasg i (apply2 (asVC indInSeq) z_array z),
-    fasg x_z_1 (apply2 (asVC matrixCol) x_array i),
-    fasg y_z_1 (apply2 (asVC matrixCol) y_array i),
-    fasg x_z_2 (apply (asExpr matrixCol) [sy x_array, (sy i) + 1]),
-    fasg y_z_2 (apply (asExpr matrixCol) [sy y_array, (sy i) + 1]),
+    i $:= (apply2 (asVC indInSeq) z_array z),
+    x_z_1 $:= (apply2 (asVC matrixCol) x_array i),
+    y_z_1 $:= (apply2 (asVC matrixCol) y_array i),
+    x_z_2 $:= (apply (asExpr matrixCol) [sy x_array, (sy i) + 1]),
+    y_z_2 $:= (apply (asExpr matrixCol) [sy y_array, (sy i) + 1]),
     FTry 
-      [ fasg j (apply2 (asVC indInSeq) x_z_1 x),
-        fasg k (apply2 (asVC indInSeq) x_z_2 x) ]
+      [ j $:= (apply2 (asVC indInSeq) x_z_1 x),
+        k $:= (apply2 (asVC indInSeq) x_z_2 x) ]
       [ FThrow "Interpolation of y failed" ],
-    fasg y_1 (apply (asExpr linInterp) [ idx (sy x_z_1) (sy j), 
-                                         idx (sy y_z_1) (sy j),
-                                         idx (sy x_z_1) ((sy j) + 1), 
-                                         idx (sy y_z_1) ((sy j) + 1),
-                                         sy x ]),
-    fasg y_2 (apply (asExpr linInterp) [ idx (sy x_z_2) (sy k), 
-                                         idx (sy y_z_2) (sy k),
-                                         idx (sy x_z_2) ((sy k) + 1), 
-                                         idx (sy y_z_2) ((sy k) + 1),
-                                         sy x ]),
-    FRet (apply (asExpr linInterp) [ idx (sy z_array) (sy i),
+    y_1 $:= (apply (asExpr linInterp) [ vLook x_z_1 j,
+                                        vLook y_z_1 j,
+                                        vLookp1 x_z_1 j,
+                                        vLookp1 y_z_1 j,
+                                        sy x ]),
+    y_2 $:= (apply (asExpr linInterp) [ vLook x_z_2 k,
+                                        vLook y_z_2 k,
+                                        vLookp1 x_z_2 k,
+                                        vLookp1 y_z_2 k,
+                                        sy x ]),
+    FRet (apply (asExpr linInterp) [ vLook z_array i,
                                      sy y_1,
-                                     idx (sy z_array) ((sy i) + 1),
+                                     vLookp1 z_array i,
                                      sy y_2,
                                      sy z ] )                                  
   ]  
@@ -160,20 +175,20 @@ interpZ = funcDef "interpZ" [{-x_array, y_array, z_array,-} filename, x, y] Real
   -- endhack
     ffor i (sy i $< (dim (sy z_array) - 1)) 
       [
-        fasg x_z_1 (apply2 (asVC matrixCol) x_array i),
-        fasg y_z_1 (apply2 (asVC matrixCol) y_array i),
-        fasg x_z_2 (apply (asExpr matrixCol) [sy x_array, (sy i) + 1]),
-        fasg y_z_2 (apply (asExpr matrixCol) [sy y_array, (sy i) + 1]),
+        x_z_1 $:= (apply2 (asVC matrixCol) x_array i),
+        y_z_1 $:= (apply2 (asVC matrixCol) y_array i),
+        x_z_2 $:= (apply (asExpr matrixCol) [sy x_array, (sy i) + 1]),
+        y_z_2 $:= (apply (asExpr matrixCol) [sy y_array, (sy i) + 1]),
         FTry 
-          [ fasg j (apply2 (asVC indInSeq) x_z_1 x),
-            fasg k (apply2 (asVC indInSeq) x_z_2 x) ]
+          [ j $:= (apply2 (asVC indInSeq) x_z_1 x),
+            k $:= (apply2 (asVC indInSeq) x_z_2 x) ]
           [ FContinue ],
-        fasg y_1 (apply (asExpr linInterp) [ idx (sy x_z_1) (sy j), 
+        y_1 $:= (apply (asExpr linInterp) [ idx (sy x_z_1) (sy j), 
                                              idx (sy y_z_1) (sy j),
                                              idx (sy x_z_1) ((sy j) + 1), 
                                              idx (sy y_z_1) ((sy j) + 1),
                                              sy x ]),
-        fasg y_2 (apply (asExpr linInterp) [ idx (sy x_z_2) (sy k), 
+        y_2 $:= (apply (asExpr linInterp) [ idx (sy x_z_2) (sy k), 
                                              idx (sy y_z_2) (sy k),
                                              idx (sy x_z_2) ((sy k) + 1), 
                                              idx (sy y_z_2) ((sy k) + 1),

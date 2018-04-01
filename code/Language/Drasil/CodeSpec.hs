@@ -193,8 +193,8 @@ data FuncStmt where
   -- slight hack, for now
   FAppend :: Expr -> Expr -> FuncStmt
   
-fasg :: (Quantity c) => c -> Expr -> FuncStmt
-fasg v e = FAsg (codevar v) e
+($:=) :: (Quantity c) => c -> Expr -> FuncStmt
+v $:= e = FAsg (codevar v) e
 
 ffor :: (Quantity c) => c -> Expr -> [FuncStmt] -> FuncStmt
 ffor v e fs = FFor (codevar v) e fs

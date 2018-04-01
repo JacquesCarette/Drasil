@@ -137,10 +137,10 @@ instance Fractional Expr where
 -- [Later when we move to GADTs, some of this can be unified]
 -- We use a phantom type in |RealRange| as a proxy for now
 data DomainDesc where
-  RealDD :: Symbol -> RealRange Double -> DomainDesc
+  RealDD :: Symbol -> Expr -> Expr -> DomainDesc
   AllReal :: Symbol -> DomainDesc
 
-  IntegerDD :: Symbol -> RealRange Integer -> DomainDesc
+  IntegerDD :: Symbol -> Expr -> Expr -> DomainDesc
   AllInt :: Symbol -> DomainDesc
 
 data Inclusive a where
@@ -154,7 +154,3 @@ data RealInterval where
   Bounded :: Inclusive Expr -> Inclusive Expr -> RealInterval  -- (x .. y)
   UpTo :: Inclusive Expr -> RealInterval -- (-infinity .. x)
   UpFrom :: Inclusive Expr -> RealInterval -- (x .. infinity)
-
--- | RealRange is a specialized version of |RealInterval| to simplify
--- integration, summation, etc, where the |Inclusive| would just be noise.
-data RealRange a = BoundedR Expr Expr

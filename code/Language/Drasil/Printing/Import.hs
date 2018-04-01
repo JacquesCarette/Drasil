@@ -2,7 +2,7 @@ module Language.Drasil.Printing.Import(space,expr,symbol) where
 
 import Language.Drasil.Expr (Expr(..), BinOp(..), UFunc(..), ArithOper(..),
     BoolOper(..),
-    DerivType(..), DomainDesc(..), RealRange(..), UID,
+    DerivType(..), DomainDesc(..), UID,
     RealInterval(..),Inclusive(..))
 import Language.Drasil.Expr.Precedence (precA, precB, eprec)
 import qualified Language.Drasil.Printing.AST as P
@@ -144,19 +144,19 @@ indx sm a i = P.Row [P.Row [expr a sm], P.Sub $ expr i sm]
 
 -- | Helper function for translating 'EOperator's
 eop :: HasSymbolTable s => s -> ArithOper -> DomainDesc -> Expr -> P.Expr
-eop sm Mul (IntegerDD v (BoundedR l h)) e =
+eop sm Mul (IntegerDD v l h) e =
   P.Row [P.MO P.Prod, P.Sub (P.Row [symbol v, P.MO P.Eq, expr l sm]), P.Sup (expr h sm),
          P.Row [expr e sm]]
 eop sm Mul (AllInt _) e = P.Row [P.MO P.Prod, P.Row[expr e sm]]
 eop _  Mul (AllReal _) _ = error "HTML/Import.hs Product-Integral not implemented."
-eop _  Mul (RealDD _ _) _ = error "HTML/Import.hs Product-Integral not implemented."
-eop sm Add (RealDD v (BoundedR l h)) e =
+eop _  Mul (RealDD _ _ _) _ = error "HTML/Import.hs Product-Integral not implemented."
+eop sm Add (RealDD v l h) e =
   P.Row [P.MO P.Inte, P.Sub (expr l sm), P.Sup (expr h sm),
          P.Row [expr e sm], P.Spc P.Thin, P.Ident "d", symbol v]
 eop sm Add (AllReal v) e =
   P.Row [P.MO P.Inte, P.Sub (symbol v), P.Row [expr e sm], P.Spc P.Thin, 
          P.Ident "d", symbol v]
-eop sm Add (IntegerDD v (BoundedR l h)) e =
+eop sm Add (IntegerDD v l h) e =
   P.Row [P.MO P.Summ, P.Sub (P.Row [symbol v, P.MO P.Eq, expr l sm]), P.Sup (expr h sm),
          P.Row [expr e sm]]
 eop sm Add (AllInt _) e = P.Row [P.MO P.Summ, P.Row [expr e sm]]

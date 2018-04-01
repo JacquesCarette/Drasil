@@ -28,9 +28,12 @@ module Language.Drasil (
   , makeDerU, unitCon, fund, comp_unitdefn
   , (^:), (/:), (*:), (*$), (/$), new_unit
   -- Chunk
-  , Chunk(..), VarChunk(..), ConceptChunk
+  , Chunk(..)
+  -- Chunk.VarChunk
+  , VarChunk(..), ConceptChunk
   , vc
-  , dcc, dcc', dccWDS, dccWDS', cv, vc', vc'', ccs, cc, cc', implVar
+  , dcc, dcc', dccWDS, dccWDS', cv, vc', vc'', ccs, cc, cc'
+  , implVar
   -- Chunk.Concept
   , Concept, cw, Definition(defn), ConceptDomain(cdom)
   -- Chunk.CommonIdea

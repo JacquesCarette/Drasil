@@ -108,6 +108,9 @@ linInterp :: Func
 linInterp = funcDef "lin_interp" [x_1, y_1, x_2, y_2, x] Real 
   [ FRet $ interp (sy x_1) (sy y_1) (sy x_2) (sy y_2) (sy x) ]
 
+------------------------------------------------------------------------------------------
+-- More straightforward "code generation"
+
 indInSeq :: Func
 indInSeq = funcDef "indInSeq" [arr, v] Natural 
   [
@@ -117,8 +120,8 @@ indInSeq = funcDef "indInSeq" [arr, v] Natural
     FThrow "Bound error"      
   ]
 
-matrixCol :: Func
-matrixCol = funcDef "matrixCol" [mat, j] (Vect Real) 
+extractColumn :: Func
+extractColumn = funcDef "extractColumn" [mat, j] (Vect Real) 
   [
     fdec col (Vect Rational),
     --
@@ -138,10 +141,10 @@ interpY = funcDef "interpY" [{-x_array, y_array, z_array,-} filename, x, z] Real
   FProcCall read_table [sy filename, sy z_array, sy x_array, sy y_array],
   -- endhack
     i $:= (apply2 (asVC indInSeq) z_array z),
-    x_z_1 $:= (apply2 (asVC matrixCol) x_array i),
-    y_z_1 $:= (apply2 (asVC matrixCol) y_array i),
-    x_z_2 $:= (apply (asExpr matrixCol) [sy x_array, (sy i) + 1]),
-    y_z_2 $:= (apply (asExpr matrixCol) [sy y_array, (sy i) + 1]),
+    x_z_1 $:= (apply (asExpr extractColumn) [sy x_array, sy i]),
+    y_z_1 $:= (apply (asExpr extractColumn) [sy y_array, sy i]),
+    x_z_2 $:= (apply (asExpr extractColumn) [sy x_array, (sy i) + 1]),
+    y_z_2 $:= (apply (asExpr extractColumn) [sy y_array, (sy i) + 1]),
     FTry 
       [ j $:= (apply2 (asVC indInSeq) x_z_1 x),
         k $:= (apply2 (asVC indInSeq) x_z_2 x) ]
@@ -175,24 +178,24 @@ interpZ = funcDef "interpZ" [{-x_array, y_array, z_array,-} filename, x, y] Real
   -- endhack
     ffor i (sy i $< (dim (sy z_array) - 1)) 
       [
-        x_z_1 $:= (apply2 (asVC matrixCol) x_array i),
-        y_z_1 $:= (apply2 (asVC matrixCol) y_array i),
-        x_z_2 $:= (apply (asExpr matrixCol) [sy x_array, (sy i) + 1]),
-        y_z_2 $:= (apply (asExpr matrixCol) [sy y_array, (sy i) + 1]),
+        x_z_1 $:= (apply (asExpr extractColumn) [sy x_array, sy i]),
+        y_z_1 $:= (apply (asExpr extractColumn) [sy y_array, sy i]),
+        x_z_2 $:= (apply (asExpr extractColumn) [sy x_array, (sy i) + 1]),
+        y_z_2 $:= (apply (asExpr extractColumn) [sy y_array, (sy i) + 1]),
         FTry 
           [ j $:= (apply2 (asVC indInSeq) x_z_1 x),
             k $:= (apply2 (asVC indInSeq) x_z_2 x) ]
           [ FContinue ],
-        y_1 $:= (apply (asExpr linInterp) [ idx (sy x_z_1) (sy j), 
-                                             idx (sy y_z_1) (sy j),
-                                             idx (sy x_z_1) ((sy j) + 1), 
-                                             idx (sy y_z_1) ((sy j) + 1),
-                                             sy x ]),
-        y_2 $:= (apply (asExpr linInterp) [ idx (sy x_z_2) (sy k), 
-                                             idx (sy y_z_2) (sy k),
-                                             idx (sy x_z_2) ((sy k) + 1), 
-                                             idx (sy y_z_2) ((sy k) + 1),
-                                             sy x ]),
+        y_1 $:= (apply (asExpr linInterp) [ vLook x_z_1 j,
+                                            vLook y_z_1 j,
+                                            vLookp1 x_z_1 j,
+                                            vLookp1 y_z_1 j,
+                                            sy x ]),
+        y_2 $:= (apply (asExpr linInterp) [ vLook x_z_2 k,
+                                            vLook y_z_2 k,
+                                            vLookp1 x_z_2 k,
+                                            vLookp1 y_z_2 k,
+                                            sy x ]),
         FCond ((sy y_1 $<= sy y) $&& (sy y $<= sy y_2))
           [ FRet (apply (asExpr linInterp) [ sy y_1,
                                              idx (sy z_array) (sy i),
@@ -206,4 +209,4 @@ interpZ = funcDef "interpZ" [{-x_array, y_array, z_array,-} filename, x, y] Real
 
 
 interpMod :: Mod
-interpMod = packmod "Interpolation" [linInterp, indInSeq, matrixCol, interpY, interpZ]
+interpMod = packmod "Interpolation" [linInterp, indInSeq, extractColumn, interpY, interpZ]

@@ -1,6 +1,6 @@
 module Drasil.GlassBR.ModuleDefs (implVars, allMods) where
 
-import Language.Drasil
+import Language.Drasil hiding (a_)
 
 import Drasil.GlassBR.Unitals (plate_len, plate_width, nom_thick,
   glass_type, char_weight, tNT, sdx, sdy, sdz, pb_tol)
@@ -11,14 +11,14 @@ allMods = [readTableMod, inputMod, interpMod]
 -- It's a bit odd that this has to be explicitly built here...
 implVars :: [VarChunk]
 implVars = [v, x_z_1, y_z_1, x_z_2, y_z_2, mat, col,
-  i, j, k, z, z_array, y_array, x_array, y, arr, filename,
+  i, j, k, z, z_vector, y_array, x_array, y, arr, filename,
   y_2, y_1, x_2, x_1, x]
 
 --from TSD.txt:
 
 read_table :: Func
 read_table = funcData "read_table" $
-  [ singleLine (repeated [junk, listEntry [WithPattern] z_array]) ',',
+  [ singleLine (repeated [junk, listEntry [WithPattern] z_vector]) ',',
     multiLine (repeated [listEntry [WithLine, WithPattern] x_array, 
                          listEntry [WithLine, WithPattern] y_array]) ','
   ]
@@ -63,14 +63,14 @@ x_2  = implVar "v_x_2"    (nounPhraseSP "x2")   (sub lX two) Real
 x    = implVar "v_x"      (nounPhraseSP "x")    lX           Real -- = params.wtnt from mainFun.py
 
 v, x_z_1, y_z_1, x_z_2, y_z_2, mat, col,
-  i, j, k, z, z_array, y_array, x_array, y, arr, filename :: VarChunk
+  i, j, k, z, z_vector, y_array, x_array, y, arr, filename :: VarChunk
 v       = implVar "v_v"          (nounPhraseSP "v")       lV  Real
 i       = implVar "v_i"          (nounPhraseSP "i")       lI  Natural
 j       = implVar "v_j"          (nounPhraseSP "j")       lJ  Natural
 k       = implVar "v_k"          (nounPhraseSP "k")       (sub lK two) Natural -- k breaks things until we start using ids
                                                                           -- in codegen (after refactor end of August)
 z       = implVar "v_z"       (nounPhraseSP "z")       lZ  Real
-z_array = implVar "v_z_array" (nounPhraseSP "z_array") (sub lZ (Atomic "array")) (Vect Real)
+z_vector = implVar "v_z_vector" (nounPhraseSP "z_vector") (sub lZ (Atomic "vector")) (Vect Real)
 y_array = implVar "v_y_array" (nounPhraseSP "y_array") (sub lY (Atomic "array")) (Vect $ Vect Real)
 x_array = implVar "v_x_array" (nounPhraseSP "x_array") (sub lX (Atomic "array")) (Vect $ Vect Real)
 y       = implVar "v_y"       (nounPhraseSP "y")       lY Real
@@ -87,26 +87,32 @@ filename= implVar "v_filename" (nounPhraseSP "filename") (Atomic "filename") Str
 --
 -- Some semantic functions
 
--- Given two points (x1,y1) and (x2,y2) [not in that order!], and an x ordinate, return
+-- Given two points (x1,y1) and (x2,y2), and an x ordinate, return
 -- interpolated y on the straight line in between
-interp :: (Num a, Fractional a) => a -> a -> a -> a -> a -> a
-interp x1 y1 x2 y2 x_ = ((y2 - y1) / (x2 - x1)) * (x_ - x1) + y1
+interp :: (Num a, Fractional a) => (a, a) -> (a, a) -> a -> a
+interp (x1,y1) (x2,y2) x_ = ((y2 - y1) / (x2 - x1)) * (x_ - x1) + y1
 
 ------------------------------------------------------------------------------------------
 -- Code Template functions
 
-vLook :: (HasSymbol a, HasSymbol i, Chunk a, Chunk i) => a -> i -> Expr
-vLook a i_ = idx (sy a) (sy i_)
-vLookp1 :: (HasSymbol a, HasSymbol i, Chunk a, Chunk i) => a -> i -> Expr
-vLookp1 a i_ = idx (sy a) (sy i_ + 1)
+vLook :: (HasSymbol a, HasSymbol i, Chunk a, Chunk i) => a -> i -> Expr -> Expr
+
+vLook a i_ p = idx (sy a) (sy i_ + p)
 
 aLook :: (HasSymbol a, HasSymbol i, HasSymbol j, Chunk a, Chunk i, Chunk j) => 
   a -> i -> j -> Expr
 aLook a i_ j_ = idx (idx (sy a) (sy i_)) (sy j_)
 
+getCol, getColp1 :: (HasSymbol a, HasSymbol i, Chunk a, Chunk i) => a -> i -> Expr
+getCol   a_ i_ = apply (asExpr extractColumn) [sy a_, sy i_]
+getColp1 a_ i_ = apply (asExpr extractColumn) [sy a_, sy i_ + 1]
+
+------------------------------------------------------------------------------------------
+-- Instantiating
+
 linInterp :: Func
 linInterp = funcDef "lin_interp" [x_1, y_1, x_2, y_2, x] Real 
-  [ FRet $ interp (sy x_1) (sy y_1) (sy x_2) (sy y_2) (sy x) ]
+  [ FRet $ interp (sy x_1, sy y_1) (sy x_2, sy y_2) (sy x) ]
 
 ------------------------------------------------------------------------------------------
 -- More straightforward "code generation"
@@ -115,7 +121,7 @@ indInSeq :: Func
 indInSeq = funcDef "indInSeq" [arr, v] Natural 
   [
     ffor i (sy i $< (dim (sy arr) - 1))
-      [ FCond ((vLook arr i $<= (sy v)) $&& ((sy v) $<= vLookp1 arr i))
+      [ FCond ((vLook arr i 0 $<= (sy v)) $&& ((sy v) $<= vLook arr i 1))
         [ FRet $ sy i ] [] ],
     FThrow "Bound error"      
   ]
@@ -131,52 +137,52 @@ extractColumn = funcDef "extractColumn" [mat, j] (Vect Real)
   ]
 
 interpY :: Func
-interpY = funcDef "interpY" [{-x_array, y_array, z_array,-} filename, x, z] Real
+interpY = funcDef "interpY" [{-x_array, y_array, z_vector,-} filename, x, z] Real
   [
     -- hack
   fdec x_array (Vect $ Vect Rational),
   fdec y_array (Vect $ Vect Rational),
-  fdec z_array (Vect Rational),
+  fdec z_vector (Vect Rational),
   --
-  FProcCall read_table [sy filename, sy z_array, sy x_array, sy y_array],
+  FProcCall read_table [sy filename, sy z_vector, sy x_array, sy y_array],
   -- endhack
-    i $:= (apply2 (asVC indInSeq) z_array z),
-    x_z_1 $:= (apply (asExpr extractColumn) [sy x_array, sy i]),
-    y_z_1 $:= (apply (asExpr extractColumn) [sy y_array, sy i]),
-    x_z_2 $:= (apply (asExpr extractColumn) [sy x_array, (sy i) + 1]),
-    y_z_2 $:= (apply (asExpr extractColumn) [sy y_array, (sy i) + 1]),
+    i     $:= (apply (asExpr indInSeq)      [sy z_vector, sy z]),
+    x_z_1 $:= getCol   x_array i,
+    y_z_1 $:= getCol   y_array i,
+    x_z_2 $:= getColp1 x_array i,
+    y_z_2 $:= getColp1 y_array i,
     FTry 
       [ j $:= (apply2 (asVC indInSeq) x_z_1 x),
         k $:= (apply2 (asVC indInSeq) x_z_2 x) ]
       [ FThrow "Interpolation of y failed" ],
-    y_1 $:= (apply (asExpr linInterp) [ vLook x_z_1 j,
-                                        vLook y_z_1 j,
-                                        vLookp1 x_z_1 j,
-                                        vLookp1 y_z_1 j,
+    y_1 $:= (apply (asExpr linInterp) [ vLook x_z_1 j 0,
+                                        vLook y_z_1 j 0,
+                                        vLook x_z_1 j 1,
+                                        vLook y_z_1 j 1,
                                         sy x ]),
-    y_2 $:= (apply (asExpr linInterp) [ vLook x_z_2 k,
-                                        vLook y_z_2 k,
-                                        vLookp1 x_z_2 k,
-                                        vLookp1 y_z_2 k,
+    y_2 $:= (apply (asExpr linInterp) [ vLook x_z_2 k 0,
+                                        vLook y_z_2 k 0,
+                                        vLook x_z_2 k 1,
+                                        vLook y_z_2 k 1,
                                         sy x ]),
-    FRet (apply (asExpr linInterp) [ vLook z_array i,
+    FRet (apply (asExpr linInterp) [ vLook z_vector i 0,
                                      sy y_1,
-                                     vLookp1 z_array i,
+                                     vLook z_vector i 1,
                                      sy y_2,
                                      sy z ] )                                  
   ]  
   
 interpZ :: Func
-interpZ = funcDef "interpZ" [{-x_array, y_array, z_array,-} filename, x, y] Real
+interpZ = funcDef "interpZ" [{-x_array, y_array, z_vector,-} filename, x, y] Real
   [
     -- hack
   fdec x_array (Vect $ Vect Rational),
   fdec y_array (Vect $ Vect Rational),
-  fdec z_array (Vect Rational),
+  fdec z_vector (Vect Rational),
   --
-  FProcCall read_table [sy filename, sy z_array, sy x_array, sy y_array],
+  FProcCall read_table [sy filename, sy z_vector, sy x_array, sy y_array],
   -- endhack
-    ffor i (sy i $< (dim (sy z_array) - 1)) 
+    ffor i (sy i $< (dim (sy z_vector) - 1)) 
       [
         x_z_1 $:= (apply (asExpr extractColumn) [sy x_array, sy i]),
         y_z_1 $:= (apply (asExpr extractColumn) [sy y_array, sy i]),
@@ -186,21 +192,21 @@ interpZ = funcDef "interpZ" [{-x_array, y_array, z_array,-} filename, x, y] Real
           [ j $:= (apply2 (asVC indInSeq) x_z_1 x),
             k $:= (apply2 (asVC indInSeq) x_z_2 x) ]
           [ FContinue ],
-        y_1 $:= (apply (asExpr linInterp) [ vLook x_z_1 j,
-                                            vLook y_z_1 j,
-                                            vLookp1 x_z_1 j,
-                                            vLookp1 y_z_1 j,
+        y_1 $:= (apply (asExpr linInterp) [ vLook x_z_1 j 0,
+                                            vLook y_z_1 j 0,
+                                            vLook x_z_1 j 1,
+                                            vLook y_z_1 j 1,
                                             sy x ]),
-        y_2 $:= (apply (asExpr linInterp) [ vLook x_z_2 k,
-                                            vLook y_z_2 k,
-                                            vLookp1 x_z_2 k,
-                                            vLookp1 y_z_2 k,
+        y_2 $:= (apply (asExpr linInterp) [ vLook x_z_2 k 0,
+                                            vLook y_z_2 k 0,
+                                            vLook x_z_2 k 1,
+                                            vLook y_z_2 k 1,
                                             sy x ]),
         FCond ((sy y_1 $<= sy y) $&& (sy y $<= sy y_2))
           [ FRet (apply (asExpr linInterp) [ sy y_1,
-                                             idx (sy z_array) (sy i),
+                                             idx (sy z_vector) (sy i),
                                              sy y_2,
-                                             idx (sy z_array) ((sy i) + 1),
+                                             idx (sy z_vector) ((sy i) + 1),
                                              sy y ] )  
           ] []                                             
       ],

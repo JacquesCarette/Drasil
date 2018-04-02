@@ -1,203 +1,123 @@
-{-# LANGUAGE RankNTypes #-}
 module Language.Drasil.Expr.Extract(dep, vars, codevars, codevars') where
 
 import Data.List (nub)
 import Control.Lens hiding ((:<),(:>))
-import Prelude hiding (id)
-import Language.Drasil.Expr (Expr(..), UFunc(..), BiFunc(..), EOperator(..))
-import Language.Drasil.Chunk (id)
+import Language.Drasil.Expr (Expr(..), EOperator(..),RealInterval(..),Inclusive(..))
 import Language.Drasil.ChunkDB
 import Language.Drasil.Chunk.Code
-import Language.Drasil.Chunk.Quantity (QWrapper)
+import Language.Drasil.Chunk.Quantity (QuantityDict)
 
 --FIXME: Missing Patterns
 -- | Get dependencies from an equation  
 dep :: Expr -> [String]
-dep (a :/ b)      = nub (dep a ++ dep b)
-dep (a :* b)      = nub (dep a ++ dep b)
-dep (a :+ b)      = nub (dep a ++ dep b)
-dep (a :^ b)      = nub (dep a ++ dep b)
-dep (a :- b)      = nub (dep a ++ dep b)
-dep (a :. b)      = nub (dep a ++ dep b)
-dep (a :&& b)     = nub (dep a ++ dep b)
-dep (a :|| b)     = nub (dep a ++ dep b)
-dep (Deriv _ a b) = nub (dep a ++ dep b)
-dep (Not e)       = dep e
-dep (Neg e)       = dep e
-dep (C c)         = [c ^. id]
+dep (AssocA _ l)   = nub (concat $ map dep l)
+dep (AssocB _ l)   = nub (concat $ map dep l)
+dep (Deriv _ a b) = nub (b : dep a)
+dep (C c)         = [c]
 dep (Int _)       = []
 dep (Dbl _)       = []
-dep (V _)         = []
+dep (Str _)       = []
 dep (FCall f x)   = nub (dep f ++ (concat $ map dep x))
 dep (Case ls)     = nub (concat $ map (dep . fst) ls ++ map (dep . snd) ls)
-dep (EEquals a b)      = nub (dep a ++ dep b)
-dep (ENEquals a b)     = nub (dep a ++ dep b)
-dep (ELess a b)        = nub (dep a ++ dep b)
-dep (EGreater a b)     = nub (dep a ++ dep b)
-dep (EGreaterEq a b)   = nub (dep a ++ dep b)
-dep (ELessEq a b)      = nub (dep a ++ dep b)
-dep (UnaryOp u)   = dep (unpack u)
-dep (Grouping e)  = dep e
-dep (BinaryOp b)  = nub (concat $ map dep (binop b))
+dep (UnaryOp _ u) = dep u
+dep (BinaryOp _ a b)  = nub (dep a ++ dep b)
 dep (EOp o)       = dep (unpackop o)
-dep (a :=>  b)    = nub (dep a ++ dep b)
-dep (a :<=> b)    = nub (dep a ++ dep b)
 dep (IsIn  a _)   = nub (dep a)
-dep (ForAll _ b)  = nub (dep b)
-dep (Exists _ b)  = nub (dep b)
 dep (Matrix a)    = nub (concat $ map (concat . map dep) a)
-dep (Index a i)   = nub (dep a ++ dep i)
-dep (Len a)       = nub (dep a)
-dep (Append a b)  = nub (dep a ++ dep b) 
+dep (RealI c b)   = nub (c : dep_ri b)
 
--- | Get a list of quantities (QWrapper) from an equation in order to print
-vars :: (HasSymbolTable s) => Expr -> s -> [QWrapper]
-vars (a :/ b)     m = nub (vars a m ++ vars b m)
-vars (a :* b)     m = nub (vars a m ++ vars b m)
-vars (a :+ b)     m = nub (vars a m ++ vars b m)
-vars (a :^ b)     m = nub (vars a m ++ vars b m)
-vars (a :- b)     m = nub (vars a m ++ vars b m)
-vars (a :. b)     m = nub (vars a m ++ vars b m)
-vars (a :&& b)    m = nub (vars a m ++ vars b m)
-vars (a :|| b)    m = nub (vars a m ++ vars b m)
-vars (Deriv _ a b) m = nub (vars a m ++ vars b m)
-vars (Not e)      m = vars e m
-vars (Neg e)      m = vars e m
-vars (C c)        m = [symbLookup c $ m ^. symbolTable]
-vars (Int _)      _ = []
-vars (Dbl _)      _ = []
-vars (V _)        _ = []
-vars (FCall f x)  m = nub (vars f m ++ (concat $ map (\y -> vars y m) x))
-vars (Case ls)    m = nub (concat $ map (\x -> vars (fst x) m) ls ++ map (\x -> vars (snd x) m) ls)
-vars (EEquals a b)     m = nub (vars a m ++ vars b m)
-vars (ENEquals a b)    m = nub (vars a m ++ vars b m)
-vars (EGreater a b)     m = nub (vars a m ++ vars b m)
-vars (ELess a b)     m = nub (vars a m ++ vars b m)
-vars (ELessEq a b)    m = nub (vars a m ++ vars b m)
-vars (EGreaterEq a b)    m = nub (vars a m ++ vars b m)
-vars (UnaryOp u)  m = vars (unpack u) m
-vars (Grouping e) m = vars e m
-vars (BinaryOp b) m = nub (concat $ map (\x -> vars x m) (binop b))
-vars (EOp o) m = vars (unpackop o) m
-vars (a :=>  b)   m = nub (vars a m ++ vars b m)
-vars (a :<=> b)   m = nub (vars a m ++ vars b m)
-vars (IsIn  a _)  m = nub (vars a m)
-vars (ForAll _ b)  m = nub $ vars b m
-vars (Exists _ b)  m = nub $ vars b m
-vars (Matrix a)   m = nub (concat $ map (\x -> concat $ map (\y -> vars y m) x) a)
-vars (Index a i)  m = nub (vars a m ++ vars i m)
-vars (Len a)      m = nub (vars a m)
-vars (Append a b) m = nub (vars a m ++ vars b m) 
+dep_ri :: RealInterval -> [String]
+dep_ri (Bounded il iu) = dep_inc il ++ dep_inc iu
+dep_ri (UpTo iu)       = dep_inc iu
+dep_ri (UpFrom il)     = dep_inc il
+
+dep_inc :: Inclusive Expr -> [String]
+dep_inc (Inc e) = dep e
+dep_inc (Exc e) = dep e
+
+-- | Get a list of quantities (QuantityDict) from an equation in order to print
+vars :: (HasSymbolTable s) => Expr -> s -> [QuantityDict]
+vars (AssocA _ l)    m = nub $ concat $ map (\x -> vars x m) l
+vars (AssocB _ l)    m = nub $ concat $ map (\x -> vars x m) l
+vars (Deriv _ a b)  m = nub (vars a m ++ [symbLookup b $ m ^. symbolTable])
+vars (C c)          m = [symbLookup c $ m ^. symbolTable]
+vars (Int _)        _ = []
+vars (Dbl _)        _ = []
+vars (Str _)        _ = []
+vars (FCall f x)    m = nub (vars f m ++ (concat $ map (\y -> vars y m) x))
+vars (Case ls)      m = nub (concat $ map (\x -> vars (fst x) m) ls ++ map (\x -> vars (snd x) m) ls)
+vars (UnaryOp _ u)  m = vars u m
+vars (BinaryOp _ a b)   m = nub $ vars a m ++ vars b m
+vars (EOp o)        m = vars (unpackop o) m
+vars (IsIn  a _)    m = nub (vars a m)
+vars (Matrix a)     m = nub (concat $ map (\x -> concat $ map (\y -> vars y m) x) a)
+vars (RealI c b)    m = nub ((symbLookup c $ m ^. symbolTable) : vars_ri m b)
+
+vars_ri :: HasSymbolTable s => s -> RealInterval -> [QuantityDict]
+vars_ri s (Bounded il iu) = vars_inc s il ++ vars_inc s iu
+vars_ri s (UpTo iu)       = vars_inc s iu
+vars_ri s (UpFrom il)     = vars_inc s il
+
+vars_inc :: HasSymbolTable s => s -> Inclusive Expr -> [QuantityDict]
+vars_inc s (Inc e) = vars e s
+vars_inc s (Exc e) = vars e s
 
 -- | Get a list of CodeChunks from an equation
 codevars :: (HasSymbolTable s) => Expr -> s -> [CodeChunk]
-codevars (a :/ b)     sm = nub (codevars a sm ++ codevars b sm)
-codevars (a :* b)     sm = nub (codevars a sm ++ codevars b sm)
-codevars (a :+ b)     sm = nub (codevars a sm ++ codevars b sm)
-codevars (a :^ b)     sm = nub (codevars a sm ++ codevars b sm)
-codevars (a :- b)     sm = nub (codevars a sm ++ codevars b sm)
-codevars (a :. b)     sm = nub (codevars a sm ++ codevars b sm)
-codevars (a :&& b)    sm = nub (codevars a sm ++ codevars b sm)
-codevars (a :|| b)    sm = nub (codevars a sm ++ codevars b sm)
-codevars (Deriv _ a b) sm = nub (codevars a sm ++ codevars b sm)
-codevars (Not e)      sm = codevars e sm
-codevars (Neg e)      sm = codevars e sm
-codevars (C c)        sm = [codevar $ symbLookup c (sm ^. symbolTable)]
+codevars (AssocA _ l)  sm = nub (concat $ map (\x -> codevars x sm) l)
+codevars (AssocB _ l)  sm = nub (concat $ map (\x -> codevars x sm) l)
+codevars (Deriv _ a b) sm = nub (codevars a sm ++ [codevar $ symbLookup b (sm ^. symbolTable)])
+codevars (C c)       sm = [codevar $ symbLookup c (sm ^. symbolTable)]
 codevars (Int _)      _ = []
 codevars (Dbl _)      _ = []
-codevars (V _)        _ = []
+codevars (Str _)      _ = []
 codevars (FCall (C c) x)  sm = nub ((codefunc $ symbLookup c (sm ^. symbolTable)) : (concat $ map (\y -> codevars y sm) x))
 codevars (FCall f x)  sm = nub (codevars f sm ++ (concat $ map (\y -> codevars y sm) x))
 codevars (Case ls)    sm = nub (concat $ map (\x -> codevars (fst x) sm) ls ++ map (\x -> codevars (snd x) sm) ls)
-codevars (EEquals a b)     sm = nub (codevars a sm ++ codevars b sm)
-codevars (ENEquals a b)    sm = nub (codevars a sm ++ codevars b sm)
-codevars (EGreater a b)     sm = nub (codevars a sm ++ codevars b sm)
-codevars (ELess a b)     sm = nub (codevars a sm ++ codevars b sm)
-codevars (ELessEq a b)    sm = nub (codevars a sm ++ codevars b sm)
-codevars (EGreaterEq a b)    sm = nub (codevars a sm ++ codevars b sm)
-codevars (UnaryOp u)  sm = codevars (unpack u) sm
-codevars (Grouping e) sm = codevars e sm
-codevars (BinaryOp b) sm = nub (concat $ map (\x -> codevars x sm) (binop b))
+codevars (UnaryOp _ u)  sm = codevars u sm
+codevars (BinaryOp _ a b) sm = nub $ codevars a sm ++ codevars b sm
 codevars (EOp o)  sm = codevars (unpackop o) sm
-codevars (a :=>  b)   sm = nub (codevars a sm ++ codevars b sm)
-codevars (a :<=> b)   sm = nub (codevars a sm ++ codevars b sm)
 codevars (IsIn  a _)  sm = nub (codevars a sm)
-codevars (ForAll _ b) sm = nub $ codevars b sm
-codevars (Exists _ b) sm = nub $ codevars b sm
 codevars (Matrix a)   sm = nub (concat $ map (concat . map (\x -> codevars x sm)) a)
-codevars (Index a i)  sm = nub (codevars a sm ++ codevars i sm)
-codevars (Len a)      sm = nub (codevars a sm)
-codevars (Append a b) sm = nub (codevars a sm ++ codevars b sm) 
+codevars (RealI c b)  sm = nub ((codevar $ symbLookup c $ sm ^. symbolTable) : codevars_ri sm b)
 
+codevars_ri :: HasSymbolTable s => s -> RealInterval -> [CodeChunk]
+codevars_ri s (Bounded il iu) = codevars_inc s il ++ codevars_inc s iu
+codevars_ri s (UpTo iu)       = codevars_inc s iu
+codevars_ri s (UpFrom il)     = codevars_inc s il
+
+codevars_inc :: HasSymbolTable s => s -> Inclusive Expr -> [CodeChunk]
+codevars_inc s (Inc e) = codevars e s
+codevars_inc s (Exc e) = codevars e s
 
 -- | Get a list of CodeChunks from an equation (no functions)
 codevars' :: (HasSymbolTable s) => Expr -> s -> [CodeChunk]
-codevars' (a :/ b)     sm = nub (codevars' a sm ++ codevars' b sm)
-codevars' (a :* b)     sm = nub (codevars' a sm ++ codevars' b sm)
-codevars' (a :+ b)     sm = nub (codevars' a sm ++ codevars' b sm)
-codevars' (a :^ b)     sm = nub (codevars' a sm ++ codevars' b sm)
-codevars' (a :- b)     sm = nub (codevars' a sm ++ codevars' b sm)
-codevars' (a :. b)     sm = nub (codevars' a sm ++ codevars' b sm)
-codevars' (a :&& b)    sm = nub (codevars' a sm ++ codevars' b sm)
-codevars' (a :|| b)    sm = nub (codevars' a sm ++ codevars' b sm)
-codevars' (Deriv _ a b) sm = nub (codevars' a sm ++ codevars' b sm)
-codevars' (Not e)      sm = codevars' e sm 
-codevars' (Neg e)      sm = codevars' e sm 
-codevars' (C c)        sm = [codevar $ symbLookup c (sm ^. symbolTable)]
+codevars' (AssocA _ l)   sm = nub (concat $ map (\x -> codevars' x sm) l)
+codevars' (AssocB _ l)   sm = nub (concat $ map (\x -> codevars' x sm) l)
+codevars' (Deriv _ a b) sm = nub (codevars' a sm ++ [codevar $ symbLookup b (sm^.symbolTable)])
+codevars' (C c)         sm = [codevar $ symbLookup c (sm ^. symbolTable)]
 codevars' (Int _)       _ = []
 codevars' (Dbl _)       _ = []
-codevars' (V _)         _ = []
+codevars' (Str _)       _ = []
 codevars' (FCall _ x)  sm = nub (concat $ map (\y -> codevars' y sm) x)
 codevars' (Case ls)    sm = nub (concat $ map (\x -> codevars' (fst x) sm) ls ++
                               map (\y -> codevars' (snd y) sm) ls)
-codevars' (EEquals a b)     sm = nub (codevars' a sm ++ codevars' b sm)
-codevars' (ENEquals a b)    sm = nub (codevars' a sm ++ codevars' b sm)
-codevars' (EGreater a b)     sm = nub (codevars' a sm ++ codevars' b sm)
-codevars' (ELess a b)     sm = nub (codevars' a sm ++ codevars' b sm)
-codevars' (ELessEq a b)    sm = nub (codevars' a sm ++ codevars' b sm)
-codevars' (EGreaterEq a b)    sm = nub (codevars' a sm ++ codevars' b sm)
-codevars' (UnaryOp u)  sm = codevars' (unpack u) sm
-codevars' (Grouping e) sm = codevars' e sm
-codevars' (BinaryOp b) sm = nub (concat $ map (\x -> codevars' x sm) (binop b))
+codevars' (UnaryOp _ u)  sm = codevars' u sm
+codevars' (BinaryOp _ a b) sm = nub $ codevars' a sm ++ codevars' b sm
 codevars' (EOp o)      sm = codevars' (unpackop o) sm
-codevars' (a :=>  b)   sm = nub (codevars' a sm ++ codevars' b sm)
-codevars' (a :<=> b)   sm = nub (codevars' a sm ++ codevars' b sm)
 codevars' (IsIn  a _)  sm = nub (codevars' a sm)
-codevars' (ForAll _ b)  sm = nub $ codevars' b sm
-codevars' (Exists _ b)  sm = nub $ codevars' b sm
 codevars' (Matrix a)   sm = nub (concat $ map (concat . map (\x -> codevars' x sm)) a)
-codevars' (Index a i)  sm = nub (codevars' a sm ++ codevars' i sm)
-codevars' (Len a)      sm = nub (codevars' a sm)
-codevars' (Append a b) sm = nub (codevars' a sm ++ codevars' b sm) 
+codevars' (RealI c b)  sm = nub ((codevar $ symbLookup c $ sm ^. symbolTable) : codevars'_ri sm b)
 
+codevars'_ri :: HasSymbolTable s => s -> RealInterval -> [CodeChunk]
+codevars'_ri s (Bounded il iu) = codevars'_inc s il ++ codevars'_inc s iu
+codevars'_ri s (UpTo iu)       = codevars'_inc s iu
+codevars'_ri s (UpFrom il)     = codevars'_inc s il
 
--- | Helper function for vars and dep, gets the Expr portion of a UFunc
-unpack :: UFunc -> Expr
-unpack (Log e) = e
-unpack (Abs e) = e
-unpack (Norm e) = e
-unpack (Sin e) = e
-unpack (Cos e) = e
-unpack (Tan e) = e
-unpack (Sec e) = e
-unpack (Csc e) = e
-unpack (Cot e) = e
-unpack (Exp e) = e
-unpack (Sqrt e) = e
+codevars'_inc :: HasSymbolTable s => s -> Inclusive Expr -> [CodeChunk]
+codevars'_inc s (Inc e) = codevars' e s
+codevars'_inc s (Exc e) = codevars' e s
 
 unpackop :: EOperator -> Expr
-unpackop (Summation _ e) = e
 unpackop (Product _ e) = e
 unpackop (Integral _ e) = e
-
--- | Helper function for vars and dep, gets Exprs from binary operations.
-binop :: BiFunc -> [Expr]
-binop (Cross e f) = [e,f]
-
--- Steven edit:  need this to have a type for code generation
---   setting to all to rational
--- | Convert any chunk to a VarChunk as long as it is an instance of SymbolForm.
--- Again, used for printing equations/descriptions mostly.
---toVC :: (Chunk c, HasSymbolTable s) => c -> s -> VarChunk
---toVC c m = vc' (lookupC) (symbol lookupC) (Rational)
-  --where lookupC = symbLookup c (m ^. symbolTable)

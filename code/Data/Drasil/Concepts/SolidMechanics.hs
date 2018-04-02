@@ -27,7 +27,7 @@ nrmStrss   = dccWDS "nrmStrss" (cn "normal stress")
   
 poissnsR   = dccWDS "poissnsR" (nounPhraseSP "Poisson's ratio") 
   (S "The ratio of perpendicular" +:+ phrase strain +:+ 
-  S "to parellel" +:+. phrase strain)
+  S "to parallel" +:+. phrase strain)
   
 shearRes   = dccWDS "shearRes" (cn "shear resistance") 
   (S "The resulting" +:+ phrase friction +:+ 

@@ -1,7 +1,7 @@
 module Drasil.GamePhysics.Body where
 
 import Control.Lens ((^.))
-import Language.Drasil
+import Language.Drasil hiding (organization)
 import Data.Drasil.SI_Units
 
 import Data.Drasil.People (alex, luthfi)
@@ -47,7 +47,7 @@ import Drasil.Sections.AuxiliaryConstants (valsOfAuxConstantsF)
 import Drasil.GamePhysics.References (cpCitations)
 import Drasil.DocumentLanguage
 import Drasil.DocumentLanguage.Definitions
-import Drasil.DocumentLanguage.Chunk.GenDefn
+
 
 authors :: People
 authors = [alex, luthfi]
@@ -82,7 +82,7 @@ mkSRS = RefSec (RefProg RM.intro [TUnits, tsymb tableOfSymbols, TAandA]) :
     ):
    
   (map Verbatim [general_syatem_description, specific_system_description, requirements, likely_changes, off_the_shelf_solutions, traceability_matrices_and_graph, values_of_auxiliary_constatnts]) ++ 
-  ([Bibliography cpCitations])
+  (Bibliography : [])
     where tableOfSymbols = [TSPurpose, TypogConvention[Vector Bold], SymbOrder]
 	
 stdFields :: Fields
@@ -97,23 +97,27 @@ chipmunkSysInfo = SI {
   _authors = authors,
   _units = chipUnits,
   _quants = cpSymbolsAll, 
-  _concepts = ([] :: [CQSWrapper]), 
+  _concepts = ([] :: [DefinedQuantityDict]),
   _definitions = (cpDDefs), 
   _inputs = (inputSymbols), 
   _outputs = (outputSymbols), 
   _defSequence = (cpQDefs), 
   _constraints = cpInputConstraints,
   _constants = [],
-  _sysinfodb = everything
+  _sysinfodb = everything,
+  _refdb = cpRefDB
 }
+
+cpRefDB :: ReferenceDB
+cpRefDB = rdb [] [] [] [] [] cpCitations -- FIXME: Convert the rest to new chunk types
 
 --FIXME: All named ideas, not just acronyms.
 
 chipUnits :: [UnitDefn]
-chipUnits = map UU [metre, kilogram, second] ++ map UU [newton, radian]
+chipUnits = map unitWrapper [metre, kilogram, second] ++ map unitWrapper [newton, radian]
 
 everything :: ChunkDB
-everything = cdb cpSymbolsAll (map nw cpSymbolsAll ++ map nw cpAcronyms) ([] :: [CWrapper]) -- FIXME: Fill in Concepts
+everything = cdb cpSymbolsAll (map nw cpSymbolsAll ++ map nw cpAcronyms) ([] :: [FundUnit]) -- FIXME: Fill in Concepts
   chipUnits
 
 chipCode :: CodeSpec
@@ -159,7 +163,7 @@ programDescription :: Sentence
 programDescription = foldlSent_ [(phrase openSource), getAcc twoD, 
   (phrase CP.rigidBody), (phrase physLib)]
 
-para1_purpose_of_document_param :: (NamedIdea a, NamedIdea b) => a -> b -> Sentence -> Sentence ->
+para1_purpose_of_document_param :: (Idea a, NamedIdea b) => a -> b -> Sentence -> Sentence ->
   [Sentence] -> Sentence
 para1_purpose_of_document_param progName typeOf progDescrip appOf listOf = foldlSent 
   [S "This", (phrase typeOf), S "descibes the modeling of an",
@@ -698,7 +702,7 @@ traceability_matrices_and_graph_table1 = Table (EmptyS:(traceability_matrices_an
   (makeTMatrix traceability_matrices_and_graph_col_header_t1 traceability_matrices_and_graph_columns_t1 traceability_matrices_and_graph_row_t1)
   (showingCxnBw (traceyMatrix) (titleize' requirement +:+ sParen (makeRef requirements)
   `sC` (titleize' goalStmt) +:+ sParen (makeRef problem_description) `sAnd` S "Other" +:+
-  titleize' item)) True
+  titleize' item)) True "TraceyReqGoalsOther"
 
 traceability_matrices_and_graph_columns_t2 :: [[String]]
 traceability_matrices_and_graph_columns_t2 = [t1_t2, t2_t2, t3_t2, t4_t2, t5_t2, gD1_t2, gD2_t2, gD3_t2,
@@ -753,7 +757,7 @@ traceability_matrices_and_graph_table2 :: Contents
 traceability_matrices_and_graph_table2 = Table (EmptyS:traceability_matrices_and_graph_row_header_t2)
   (makeTMatrix traceability_matrices_and_graph_col_header_t2 traceability_matrices_and_graph_columns_t2 traceability_matrices_and_graph_row_t2) 
   (showingCxnBw (traceyMatrix) (titleize' assumption +:+ sParen (makeRef problem_description) 
-  `sAnd` S "Other" +:+ titleize' item)) True
+  `sAnd` S "Other" +:+ titleize' item)) True "TraceyAssumpsOther"
 
 
 traceability_matrices_and_graph_columns_t3 :: [[String]]
@@ -803,7 +807,7 @@ traceability_matrices_and_graph_table3 :: Contents
 traceability_matrices_and_graph_table3 = Table (EmptyS:traceability_matrices_and_graph_row_header_t3)
   (makeTMatrix traceability_matrices_and_graph_col_header_t3 traceability_matrices_and_graph_columns_t3 traceability_matrices_and_graph_row_t3)
   (showingCxnBw (traceyMatrix) (titleize' item `sAnd` 
-  S "Other" +:+ titleize' section_)) True
+  S "Other" +:+ titleize' section_)) True "TraceyItemsSecs"
 
 -----------------------------------
 -- VALUES OF AUXILIARY CONSTANTS --

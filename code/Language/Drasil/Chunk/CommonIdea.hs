@@ -4,9 +4,7 @@ module Language.Drasil.Chunk.CommonIdea
   , getAcc
   ) where
 
-import Prelude hiding (id)
-
-import Language.Drasil.Chunk (Chunk(id))
+import Language.Drasil.Chunk (Chunk(uid))
 import Language.Drasil.Chunk.NamedIdea
 import Language.Drasil.Spec (Sentence(S))
 import Language.Drasil.NounPhrase
@@ -22,9 +20,10 @@ class NamedIdea c => CommonIdea c where
 data CI = CI String String NP 
 
 instance Chunk CI where
-  id f (CI a b c) = fmap (\x -> CI x b c) (f a)
+  uid f (CI a b c) = fmap (\x -> CI x b c) (f a)
 instance NamedIdea CI where
   term f (CI a b c) = fmap (\x -> CI a b x) (f c)
+instance Idea CI where
   getA (CI _ b _) = Just b
 instance CommonIdea CI where
   abrv (CI _ b _) = b

@@ -11,7 +11,7 @@ import Language.Drasil
 import qualified Drasil.SRS as SRS
 import Data.Drasil.SentenceStructures (ofThe, ofThe',
   foldlList, foldlsC, refineChain, foldlSP)
-import Data.Drasil.Concepts.Documentation
+import Data.Drasil.Concepts.Documentation as Doc
 import Data.Drasil.Concepts.Computation (algorithm)
 
 
@@ -42,14 +42,14 @@ developmentProcessParagraph = foldlSP [S "This", phrase document,
 introductionSubsections :: Sentence
 introductionSubsections = foldlList (map (\(x,y) -> x `ofThe` y) 
   [(phrase scope, phrase system), 
-  (phrase organization, phrase document), 
+  (phrase Doc.organization, phrase document), 
   (plural characteristic, phrase intReader)])
 
 -------------------------
 --                    --
 -------------------------
 
-introductionF :: (NamedIdea a, NamedIdea b) => 
+introductionF :: (Idea a, NamedIdea b) => 
   a -> (Sentence, Sentence) -> Sentence -> (Sentence, Sentence) -> 
   (Sentence, Sentence, Sentence) -> (Sentence, b, Section, Sentence) -> Section
 
@@ -89,7 +89,7 @@ purposeOfDoc purposeOfProgramParagraph = SRS.prpsOfDoc
 -- mainRequirement  - the main requirement for the program
 -- programName      - the name of the program
 -- intendedPurpose  - the intended purpose of the program
-scopeOfRequirements :: (NamedIdea a) => Sentence -> a -> Sentence -> Section
+scopeOfRequirements :: (Idea a) => Sentence -> a -> Sentence -> Section
 scopeOfRequirements mainRequirement programName intendedPurpose = SRS.scpOfReq [intro] []
   where intro = foldlSP [(phrase scope) `ofThe'` (plural requirement),
                 S "includes" +:+. mainRequirement, S "Given the appropriate inputs, the code for",
@@ -101,7 +101,7 @@ scopeOfRequirements mainRequirement programName intendedPurpose = SRS.scpOfReq [
 -- progName
 -- appStandd
 -- r
-charIntRdrF :: (NamedIdea a) => 
+charIntRdrF :: (Idea a) => 
   Sentence -> Sentence -> a -> Sentence -> Section -> Section
 charIntRdrF know und progName appStandd r = 
   SRS.charOfIR (intReaderIntro know und progName appStandd r) []
@@ -111,7 +111,7 @@ charIntRdrF know und progName appStandd r =
 -- topic2     - sentence the reader should understand
 -- stdrd      - sentence of the standards the reader should be familiar with
 -- sectionRef - reference to user characteristic section
-intReaderIntro :: (NamedIdea a) => 
+intReaderIntro :: (Idea a) => 
   Sentence -> Sentence -> a -> Sentence -> Section -> [Contents]
 intReaderIntro EmptyS topic2 progName stdrd sectionRef = 
   [foldlSP [S "Reviewers of this",
@@ -125,7 +125,7 @@ intReaderIntro topic1 topic2 progName stdrd sectionRef =
   stdrd, S "The", (plural user), S "of", (short progName),
   S "can have a lower level of expertise, as explained in", (makeRef sectionRef)]]
 
--- | Organization of the document section constructor.  => Sentence -> c -> Section -> Sentence -> Section
+-- | Doc.organization of the document section constructor.  => Sentence -> c -> Section -> Sentence -> Section
 orgSec :: NamedIdea c => Sentence -> c -> Section -> Sentence -> Section
 orgSec i b s t = SRS.orgOfDoc (orgIntro i b s t) []
 
@@ -134,7 +134,7 @@ orgSec i b s t = SRS.orgOfDoc (orgIntro i b s t) []
 orgIntro :: (NamedIdea c) => Sentence -> c -> Section -> Sentence -> [Contents]
 orgIntro intro bottom bottomSec trailingSentence = [foldlSP [
           intro, S "The presentation follows the standard pattern of presenting",
-          (foldlsC $ map (plural) [goal, theory, definition]) `sC` S "and assumptions.",
+          (foldlsC $ map (plural) [Doc.goal, theory, definition]) `sC` S "and assumptions.",
           S "For readers that would like a more bottom up approach" `sC`
           S "they can start reading the", plural bottom, 
           S "in", makeRef bottomSec +:+

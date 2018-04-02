@@ -1,17 +1,8 @@
 -- | Global configuration for output
 -- (This should be deprecated in the future as Recipes evolve)
-module Language.Drasil.Config where
-import Language.Drasil.Output.Formats
-
-data LPMParams = LPMParams DocClass UsePackages ExDoc
-
--- TeX only - Parameters for rendering literate programmer's manual
-lpmTeXParams :: LPMParams
-lpmTeXParams = defaultLPMparams
-
--- | TeX table width in cm
-tableWidth :: Double
-tableWidth = 10.5
+module Language.Drasil.Config(numberedSections,hyperSettings,fontSize,bibFname,
+  verboseDDDescription,StyleGuide(..),bibStyleH,bibStyleT,colAwidth,colBwidth,
+  numberedDDEquations,numberedTMEquations) where
 
 -- | TeX font size
 fontSize :: Int
@@ -41,13 +32,6 @@ numberedSections = True
 --  (UsePackages ["fullpage","booktabs","longtable","listings","graphics","hyperref","caption",
 --  "amsmath"])
 
--- | default parameters for a generated literate programmer's manual 
-defaultLPMparams :: LPMParams
-defaultLPMparams = LPMParams
-  (DocClass (Just "article") "cweb-hy")
-  (UsePackages ["xr"])
-  (ExDoc (Just "L-") "hghc_SRS")
-  
 -- | TeX Only - column width for data definitions 
 -- (fraction of LaTeX textwidth)
 colAwidth, colBwidth :: Double
@@ -63,10 +47,6 @@ hyperSettings =
   ++ "citecolor=blue,"     -- color of links to bibliography
   ++ "filecolor=magenta,"  -- color of file links
   ++ "urlcolor=cyan"       -- color of external links
-
--- | Split up generated code into source files based on modules
-splitSource :: Bool
-splitSource = True
 
 -- | The bibliography format
 data StyleGuide = MLA | APA | Chicago

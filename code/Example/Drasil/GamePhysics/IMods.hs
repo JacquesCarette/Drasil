@@ -8,7 +8,7 @@ import qualified Data.Drasil.Quantities.Physics as QP (acceleration,
   angularAccel, force, gravitationalAccel, momentOfInertia, angularVelocity, 
   time, impulseS)
 import Drasil.GamePhysics.Unitals
-import Drasil.DocumentLanguage.Chunk.InstanceModel
+
 
 iModels :: [RelationConcept]
 iModels = [im1, im2, im3]
@@ -16,8 +16,8 @@ iModels = [im1, im2, im3]
 {-- Force on the translational motion  --}
 im1_new :: InstanceModel
 im1_new = im im1 [qw vel_i, qw QP.time, qw QP.gravitationalAccel, qw force_i, qw mass_i] 
-  [ TCon AssumedCon $ C vel_i $> 0, TCon AssumedCon $ C QP.time $> 0, TCon AssumedCon $ C QP.gravitationalAccel $> 0, 
-  TCon AssumedCon $ C force_i $> 0, TCon AssumedCon $ C mass_i $> 0 ] [qw acc_i] [] []
+  [ TCon AssumedCon $ sy vel_i $> 0, TCon AssumedCon $ sy QP.time $> 0, TCon AssumedCon $ sy QP.gravitationalAccel $> 0, 
+  TCon AssumedCon $ sy force_i $> 0, TCon AssumedCon $ sy mass_i $> 0 ] [qw acc_i] [] []
 
 im1 :: RelationConcept
 im1 = makeRC "im1" (im1NP) (im1descr +:+ im1leg) im1Rel 
@@ -26,8 +26,8 @@ im1NP :: NP
 im1NP =  nounPhraseSP "Force on the translational motion of a set of 2d rigid bodies"
 
 im1Rel :: Relation -- FIXME: add proper equation
-im1Rel = (C acc_i) $= (Deriv Total (FCall (C vel_i) [C QP.time]) (C QP.time))
-  $= (C QP.gravitationalAccel) + ((FCall (C force_i) [C QP.time]) / (C mass_i))
+im1Rel = (sy acc_i) $= (deriv (apply1 vel_i QP.time) QP.time)
+  $= (sy QP.gravitationalAccel) + ((apply1 force_i QP.time) / (sy mass_i))
 
 
 --fixme: need referencing
@@ -46,9 +46,9 @@ im1leg = foldle1 (+:+) (+:+) $ map defList im1legTerms
 
 im2_new :: InstanceModel
 im2_new = im im2 [qw QP.angularVelocity, qw QP.time, qw torque_i, qw QP.momentOfInertia]
-  [TCon AssumedCon $ C QP.angularVelocity $> 0, TCon AssumedCon $ C QP.time $> 0,
-  TCon AssumedCon $ C torque_i $> 0, TCon AssumedCon $ C QP.momentOfInertia $> 0] 
-  [qw QP.angularAccel] [TCon AssumedCon $ C QP.angularAccel $> 0] [] 
+  [TCon AssumedCon $ sy QP.angularVelocity $> 0, TCon AssumedCon $ sy QP.time $> 0,
+  TCon AssumedCon $ sy torque_i $> 0, TCon AssumedCon $ sy QP.momentOfInertia $> 0] 
+  [qw QP.angularAccel] [TCon AssumedCon $ sy QP.angularAccel $> 0] [] 
 
 im2 :: RelationConcept
 im2 = makeRC "im2" (im2NP) (im2descr +:+ im2leg) im2Rel 
@@ -57,9 +57,9 @@ im2NP :: NP
 im2NP =  nounPhraseSP "Force on the rotational motion of a set of 2D rigid body"
 
 im2Rel :: Relation
-im2Rel = (C QP.angularAccel) $= Deriv Total
-  (FCall (C QP.angularVelocity) [C QP.time])
-  (C QP.time) $= ((FCall (C torque_i) [C QP.time]) / (C QP.momentOfInertia))
+im2Rel = (sy QP.angularAccel) $= deriv
+  (apply1 QP.angularVelocity QP.time) QP.time $= 
+     ((apply1 torque_i QP.time) / (sy QP.momentOfInertia))
 
 --fixme: need referencing
 im2descr, im2leg :: Sentence
@@ -73,9 +73,9 @@ im2leg = foldle1 (+:+) (+:+) $ map defList im2legTerms
 {-- --}
 
 im3_new :: InstanceModel
-im3_new = im im3 [qw QP.time, qw QP.impulseS, qw mass_A, qw normalVect] [TCon AssumedCon $ C QP.time $> 0,
-  TCon AssumedCon $ C QP.impulseS $> 0, TCon AssumedCon $ C mass_A $> 0, TCon AssumedCon $ C normalVect $> 0]
-  [qw vel_A, qw time_c] [TCon AssumedCon $ C vel_A $> 0, TCon AssumedCon $ C time_c $> 0] []
+im3_new = im im3 [qw QP.time, qw QP.impulseS, qw mass_A, qw normalVect] [TCon AssumedCon $ sy QP.time $> 0,
+  TCon AssumedCon $ sy QP.impulseS $> 0, TCon AssumedCon $ sy mass_A $> 0, TCon AssumedCon $ sy normalVect $> 0]
+  [qw vel_A, qw time_c] [TCon AssumedCon $ sy vel_A $> 0, TCon AssumedCon $ sy time_c $> 0] []
 
 im3 :: RelationConcept
 im3 = makeRC "im3" (im3NP) (im3descr +:+ im3leg) im3Rel1
@@ -84,19 +84,19 @@ im3NP :: NP
 im3NP =  nounPhraseSP "Collisions on 2D rigid bodies"
 
 im3Rel1 {-, im3Rel2, im3Rel3, im3Rel4 -} :: Relation -- FIXME: add proper equation
-im3Rel1 = (FCall (C vel_A) [C time_c]) $= (FCall (C vel_A) [C QP.time]) +
-  ((C QP.impulseS) / (C mass_A)) * (C normalVect)
+im3Rel1 = (apply1 vel_A time_c) $= (apply1 vel_A QP.time) +
+  ((sy QP.impulseS) / (sy mass_A)) * (sy normalVect)
 
---im3Rel2 = (FCall (C vel_B) [C time_c]) $= (FCall (C vel_B) [C QP.time]) -
---  ((C QP.impulseS) / (C mass_B)) * (C normalVect)
+--im3Rel2 = (apply1 vel_B time_c) $= (apply1 vel_B QP.time) -
+--  ((sy QP.impulseS) / (sy mass_B)) * (sy normalVect)
 
 
 --fixme: these two need to use cross product and parametrized dispUnit symbol
---im3Rel3 = (FCall (C angVel_A) [C time_c]) $= (FCall (C angVel_A) [C QP.time]) +
---  ((C dispUnit) * ((C QP.impulseS) * (C normalVect))) / (C QP.momentOfInertia)
+--im3Rel3 = (apply1 angVel_A time_c) $= (apply1 angVel_A QP.time) +
+--  ((sy dispUnit) * ((sy QP.impulseS) * (sy normalVect))) / (sy QP.momentOfInertia)
 
---im3Rel4 = (FCall (C angVel_B) [C time_c]) $= (FCall (C angVel_B) [C QP.time]) -
---  ((C dispUnit) * ((C QP.impulseS) * (C normalVect))) / (C QP.momentOfInertia)
+--im3Rel4 = (apply1 angVel_B time_c) $= (apply1 angVel_B QP.time) -
+--  ((sy dispUnit) * ((sy QP.impulseS) * (sy normalVect))) / (sy QP.momentOfInertia)
 
 --fixme: need referencing
 im3descr, im3leg :: Sentence

@@ -23,15 +23,15 @@ cpTMods = [t1NewtonSL, t2NewtonTL, t3NewtonLUG, t4ChaslesThm, t5NewtonSLR]
 
 t1NewtonSL_new :: TheoryModel
 t1NewtonSL_new = tm(cw t1NewtonSL)
-  (tc' "NewtonSL" [qw QP.force, qw QPP.mass, qw QP.acceleration] ([] :: [CWrapper])
-  [] [TCon Invariant $ (C QP.force) $= (C QPP.mass) * (C QP.acceleration)] [])
+  (tc' "NewtonSL" [qw QP.force, qw QPP.mass, qw QP.acceleration] ([] :: [FundUnit])
+  [] [TCon Invariant $ (sy QP.force) $= (sy QPP.mass) * (sy QP.acceleration)] [])
 
 t1NewtonSL :: RelationConcept
 t1NewtonSL = makeRC "t1NewtonSL" (nounPhraseSP "Newton's second law of motion")
   t1descr newtonSLRel
 
 newtonSLRel :: Relation
-newtonSLRel = (C QP.force) $= (C QPP.mass) * (C QP.acceleration)
+newtonSLRel = (sy QP.force) $= (sy QPP.mass) * (sy QP.acceleration)
 
 t1descr :: Sentence
 t1descr = foldlSent [S "The net", (phrase QP.force), (getES QP.force), 
@@ -48,15 +48,15 @@ t1descr = foldlSent [S "The net", (phrase QP.force), (getES QP.force),
 
 t2NewtonTL_new :: TheoryModel
 t2NewtonTL_new = tm(cw t2NewtonTL)
-  (tc' "NewtonTL" [qw force_1, qw force_2] ([] :: [CWrapper])
-  [] [TCon Invariant $ (C force_1) $= (Neg (C force_2))] [] )
+  (tc' "NewtonTL" [qw force_1, qw force_2] ([] :: [FundUnit])
+  [] [TCon Invariant $ (sy force_1) $= (negate (sy force_2))] [] )
 
 t2NewtonTL :: RelationConcept
 t2NewtonTL = makeRC "t2NewtonTL" (nounPhraseSP "Newton's third law of motion")
   t2descr newtonTLRel
 
 newtonTLRel :: Relation
-newtonTLRel = (C force_1) $= (Neg (C force_2))
+newtonTLRel = (sy force_1) $= (negate (sy force_2))
 
 t2descr :: Sentence
 t2descr = foldlSent [S "Every action has an equal and opposite reaction. In other",
@@ -72,22 +72,22 @@ t2descr = foldlSent [S "Every action has an equal and opposite reaction. In othe
 t3NewtonLUG_new :: TheoryModel
 t3NewtonLUG_new = tm(cw t3NewtonLUG)
   (tc' "NewtonLUG" [qw QP.force, qw QP.gravitationalConst, qw mass_1, qw mass_2,
-  qw dispNorm, qw dispUnit, qw QP.displacement] ([] :: [CWrapper])
-  [] [TCon Invariant $ (C QP.force) $= (C QP.gravitationalConst) * ((C mass_1) * 
-  (C mass_2) / ((C dispNorm) :^ (fromInteger 2))) * (C dispUnit) $= 
-  (C QP.gravitationalConst) * ((C mass_1) * (C mass_2) / ((C dispNorm) 
-  :^ (fromInteger 2))) * ((C QP.displacement) / (C dispNorm))] [] )
+  qw dispNorm, qw dispUnit, qw QP.displacement] ([] :: [FundUnit])
+  [] [TCon Invariant $ (sy QP.force) $= (sy QP.gravitationalConst) * ((sy mass_1) * 
+  (sy mass_2) / ((sy dispNorm) $^ (fromInteger 2))) * (sy dispUnit) $= 
+  (sy QP.gravitationalConst) * ((sy mass_1) * (sy mass_2) / ((sy dispNorm) 
+  $^ (fromInteger 2))) * ((sy QP.displacement) / (sy dispNorm))] [] )
 
 t3NewtonLUG :: RelationConcept
 t3NewtonLUG = makeRC "t3NewtonLUG" 
   (nounPhraseSP "Newton's law of universal gravitation") t3descr newtonLUGRel
 
 newtonLUGRel :: Relation
-newtonLUGRel = (C QP.force) $=
-  (C QP.gravitationalConst) * ((C mass_1) * (C mass_2) /
-  ((C dispNorm) :^ (fromInteger 2))) * (C dispUnit) $=
-  (C QP.gravitationalConst) * ((C mass_1) * (C mass_2) /
-  ((C dispNorm) :^ (fromInteger 2))) * ((C QP.displacement) / (C dispNorm))
+newtonLUGRel = (sy QP.force) $=
+  (sy QP.gravitationalConst) * ((sy mass_1) * (sy mass_2) /
+  ((sy dispNorm) $^ (fromInteger 2))) * (sy dispUnit) $=
+  (sy QP.gravitationalConst) * ((sy mass_1) * (sy mass_2) /
+  ((sy dispNorm) $^ (fromInteger 2))) * ((sy QP.displacement) / (sy dispNorm))
 
 -- Can't include fractions within a sentence (in the part where 'r denotes the
 -- unit displacement vector, equivalent to r/||r||' (line 184)). Changed to a
@@ -123,8 +123,8 @@ t3descr = foldlSent [S "Two", (plural CP.rigidBody), S "in the universe",
 t4ChaslesThm_new :: TheoryModel
 t4ChaslesThm_new = tm(cw t4ChaslesThm)
   (tc' "ChaslesThm" [qw vel_B, qw vel_O, qw QP.angularVelocity, qw r_OB] 
-  ([] :: [CWrapper]) [] [TCon Invariant $ (C vel_B) $= (C vel_O) + (cross 
-  (C  QP.angularVelocity) (C r_OB))] [])
+  ([] :: [FundUnit]) [] [TCon Invariant $ (sy vel_B) $= (sy vel_O) + (cross 
+  (sy  QP.angularVelocity) (sy r_OB))] [])
 
 t4ChaslesThm :: RelationConcept
 t4ChaslesThm = makeRC "t4ChaslesThm" (nounPhraseSP "Chasles' theorem")
@@ -132,7 +132,7 @@ t4ChaslesThm = makeRC "t4ChaslesThm" (nounPhraseSP "Chasles' theorem")
 
 -- Need the cross product symbol - third term should be a cross product.
 chaslesRel :: Relation
-chaslesRel = (C vel_B) $= (C vel_O) + (cross (C  QP.angularVelocity) (C r_OB))
+chaslesRel = (sy vel_B) $= (sy vel_O) + (cross (sy  QP.angularVelocity) (sy r_OB))
 
 -- B should ideally be italicized in 'point B' (line 202).
 t4descr :: Sentence
@@ -154,15 +154,15 @@ t4descr = foldlSent [S "The linear", (phrase QP.velocity),
 t5NewtonSLR_new :: TheoryModel
 t5NewtonSLR_new = tm(cw t5NewtonSLR)
   (tc' "NewtonSLR" [qw QP.torque, qw QP.momentOfInertia, qw QP.angularAccel] 
-  ([] :: [CWrapper]) [] [TCon Invariant $ (C  QP.torque) $= (C QP.momentOfInertia) 
-  * (C QP.angularAccel)] [])
+  ([] :: [FundUnit]) [] [TCon Invariant $ (sy  QP.torque) $= (sy QP.momentOfInertia) 
+  * (sy QP.angularAccel)] [])
 
 t5NewtonSLR :: RelationConcept
 t5NewtonSLR = makeRC "t5NewtonSLR" 
   (nounPhraseSP "Newton's second law for rotational motion") t5descr newtonSLRRel
 
 newtonSLRRel :: Relation
-newtonSLRRel = (C  QP.torque) $= (C QP.momentOfInertia) * (C QP.angularAccel)
+newtonSLRRel = (sy  QP.torque) $= (sy QP.momentOfInertia) * (sy QP.angularAccel)
 
 -- Need reference to A2 (line 236) -- can't reference specific assumptions
 -- without referencing the entire section or dividing each bullet into its own

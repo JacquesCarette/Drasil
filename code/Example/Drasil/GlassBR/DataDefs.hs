@@ -17,6 +17,8 @@ import Data.Drasil.Concepts.PhysicalProperties (dimension)
 import Data.Drasil.Concepts.Math (probability, parameter, calculation)
 import Data.Drasil.Concepts.Documentation (datum, user)
 
+import Control.Lens ((^.))
+
 ----------------------
 -- DATA DEFINITIONS --
 ----------------------
@@ -32,13 +34,11 @@ gbQDefns = [Parallel hFromt {-DD2-} [glaTyFac {-DD6-}]] ++ --can be calculated o
 
 --DD1--
 
---Source : #7 -> See Issue #357
-
 risk_eq :: Expr
-risk_eq = ((C sflawParamK) / (Grouping ((C plate_len) *
-  (C plate_width))) :^ ((C sflawParamM) - 1) *
-  (Grouping (C mod_elas * 1000) * (square (Grouping (C act_thick))))
-  :^ (C sflawParamM) * (C lDurFac) * (exp (C stressDistFac)))
+risk_eq = ((sy sflawParamK) / 
+  ((sy plate_len) * (sy plate_width)) $^ ((sy sflawParamM) - 1) *
+  (1000 * sy mod_elas * (square $ sy act_thick)) $^ (sy sflawParamM) 
+  * (sy lDurFac) * (exp (sy stressDistFac)))
 
 risk :: QDefinition
 risk = aqd (mkDataDef' risk_fun risk_eq (aGrtrThanB +:+ hRef +:+ ldfRef +:+ jRef))
@@ -47,11 +47,11 @@ risk = aqd (mkDataDef' risk_fun risk_eq (aGrtrThanB +:+ hRef +:+ ldfRef +:+ jRef
 --DD2--
 
 hFromt_eq :: Relation
-hFromt_eq = (1/1000) * (Case (zipWith hFromt_helper 
+hFromt_eq = (1/1000) * (case_ (zipWith hFromt_helper 
   actualThicknesses nominalThicknesses))
 
 hFromt_helper :: Double -> Double -> (Expr, Relation)
-hFromt_helper result condition = ((Dbl result), (C nom_thick) $= Dbl condition)
+hFromt_helper result condition = (dbl result, (sy nom_thick) $= dbl condition)
 
 hFromt :: QDefinition
 hFromt = aqd (mkDataDef' act_thick hFromt_eq (hMin)) ([] :: Attributes)
@@ -59,7 +59,7 @@ hFromt = aqd (mkDataDef' act_thick hFromt_eq (hMin)) ([] :: Attributes)
 --DD3--
 
 -- loadDF_eq :: Expr 
--- loadDF_eq = (Grouping ((C load_dur) / (60))) :^ ((C sflawParamM) / (16))
+-- loadDF_eq = (sy load_dur / 60) $^ (sy sflawParamM / 16)
 
 -- loadDF :: QDefinition
 -- loadDF = mkDataDef lDurFac loadDF_eq
@@ -67,9 +67,9 @@ hFromt = aqd (mkDataDef' act_thick hFromt_eq (hMin)) ([] :: Attributes)
 --DD4--
 
 strDisFac_eq :: Expr
-strDisFac_eq = FCall (C stressDistFac) 
-  [C dimlessLoad, (C plate_len) / (C plate_width)]
---strDisFac_eq = FCall (asExpr interpZ) [V "SDF.txt", (C plate_len) / (C plate_width), C dimlessLoad]
+strDisFac_eq = apply (sy stressDistFac) 
+  [sy dimlessLoad, (sy plate_len) / (sy plate_width)]
+--strDisFac_eq = FCall (asExpr interpZ) [V "SDF.txt", (sy plate_len) / (sy plate_width), sy dimlessLoad]
   
 strDisFac :: QDefinition
 strDisFac = aqd (mkDataDef' stressDistFac strDisFac_eq
@@ -78,8 +78,8 @@ strDisFac = aqd (mkDataDef' stressDistFac strDisFac_eq
 --DD5--
 
 nonFL_eq :: Expr
-nonFL_eq = ((C tolLoad) * (C mod_elas) * (C act_thick) :^ (4)) /
-  (square (Grouping ((C plate_len) * (C plate_width))))
+nonFL_eq = ((sy tolLoad) * (sy mod_elas) * (sy act_thick) $^ 4) /
+  (square (sy plate_len * sy plate_width))
 
 nonFL :: QDefinition
 nonFL = aqd (mkDataDef' nonFactorL nonFL_eq (aGrtrThanB +:+ hRef +:+ qHtTlTolRef))
@@ -88,10 +88,10 @@ nonFL = aqd (mkDataDef' nonFactorL nonFL_eq (aGrtrThanB +:+ hRef +:+ qHtTlTolRef
 --DD6--
 
 glaTyFac_eq :: Expr
-glaTyFac_eq = (Case (zipWith glaTyFac_helper glassTypeFactors glassTypeAbbrsStr))
+glaTyFac_eq = (case_ (zipWith glaTyFac_helper glassTypeFactors glassTypeAbbrsStr))
 
 glaTyFac_helper :: Integer -> String -> (Expr, Relation)
-glaTyFac_helper result condition = (Int result, (C glass_type) $= V condition)
+glaTyFac_helper result condition = (int result, (sy glass_type) $= str condition)
 
 glaTyFac :: QDefinition
 glaTyFac = aqd (mkDataDef gTF glaTyFac_eq) ([] :: Attributes)
@@ -99,8 +99,8 @@ glaTyFac = aqd (mkDataDef gTF glaTyFac_eq) ([] :: Attributes)
 --DD7--
 
 dimLL_eq :: Expr
-dimLL_eq = ((C demand) * (square (Grouping ((C plate_len) * (C plate_width)))))
-  / ((C mod_elas) * ((C act_thick) :^ (4)) * (C gTF))
+dimLL_eq = ((sy demand) * (square (sy plate_len * sy plate_width)))
+  / ((sy mod_elas) * (sy act_thick $^ 4) * (sy gTF))
 
 dimLL :: QDefinition
 dimLL = aqd (mkDataDef' dimlessLoad dimLL_eq 
@@ -109,8 +109,8 @@ dimLL = aqd (mkDataDef' dimlessLoad dimLL_eq
 --DD8--
 
 tolPre_eq :: Expr
-tolPre_eq = FCall (C tolLoad) [C sdf_tol, (C plate_len) / (C plate_width)]
---tolPre_eq = FCall (asExpr interpY) [V "SDF.txt", (C plate_len) / (C plate_width), C sdf_tol]
+tolPre_eq = apply (sy tolLoad) [sy sdf_tol, (sy plate_len) / (sy plate_width)]
+--tolPre_eq = FCall (asExpr interpY) [V "SDF.txt", (sy plate_len) / (sy plate_width), sy sdf_tol]
 
 tolPre :: QDefinition
 tolPre = aqd (mkDataDef' tolLoad tolPre_eq (qHtTlExtra)) ([] :: Attributes)
@@ -118,12 +118,10 @@ tolPre = aqd (mkDataDef' tolLoad tolPre_eq (qHtTlExtra)) ([] :: Attributes)
 --DD9--
 
 tolStrDisFac_eq :: Expr
-tolStrDisFac_eq = log (log ((1) / ((1) - (C pb_tol)))
-  * ((Grouping ((C plate_len) * (C plate_width)) :^
-  ((C sflawParamM) - (1)) / ((C sflawParamK) *
-  (Grouping (Grouping ((C mod_elas * 1000) *
-  (square (Grouping (C act_thick))))) :^ 
-  (C sflawParamM) * (C lDurFac))))))
+tolStrDisFac_eq = log (log (1 / (1 - (sy pb_tol)))
+  * ((((sy plate_len) * (sy plate_width)) $^ (sy sflawParamM - 1) / 
+    ((sy sflawParamK) * ((1000 * sy mod_elas *
+    (square (sy act_thick)))) $^ (sy sflawParamM) * (sy lDurFac)))))
 
 tolStrDisFac :: QDefinition
 tolStrDisFac = aqd (mkDataDef' sdf_tol tolStrDisFac_eq
@@ -134,7 +132,7 @@ tolStrDisFac = aqd (mkDataDef' sdf_tol tolStrDisFac_eq
 aGrtrThanB :: Sentence
 aGrtrThanB = ((getES plate_len) `sC` (getES plate_width) +:+ 
   S "are" +:+ plural dimension +:+ S "of the plate" `sC` S "where" +:+. 
-  sParen (E (C plate_len $> C plate_width)))
+  sParen (E (sy plate_len $> sy plate_width)))
 
 hRef :: Sentence
 hRef = (getES nom_thick +:+ S "is the true thickness" `sC` 
@@ -158,7 +156,7 @@ hMin = (getES nom_thick +:+ S "is a function that maps from the nominal thicknes
 
 qHtTlExtra :: Sentence
 qHtTlExtra = (getES tolLoad +:+ S "is the tolerable pressure which is obtained from Figure 7 using" 
-  +:+ getES sdf_tol `sAnd` phrase aspectR +:+ sParen (E (equat aspectRWithEqn)) +:+
+  +:+ getES sdf_tol `sAnd` phrase aspectR +:+ sParen (E $ aspectRWithEqn^.equat) +:+
   S "as" +:+ plural parameter +:+. S "using interpolation" +:+ titleize calculation +:+
   S "of" +:+ getES sdf_tol +:+. S "is defined in DD9")
 

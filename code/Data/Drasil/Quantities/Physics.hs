@@ -5,11 +5,8 @@ import Data.Drasil.Concepts.Physics as CP
 import Data.Drasil.Units.Physics
 import Data.Drasil.SI_Units
 
-
 restitutionCoef :: ConVar
-
-restitutionCoef = cvR CP.restitutionCoef (sub cC cR)
-
+restitutionCoef = cv CP.restitutionCoef (sub cC cR) Real
 
 angularAccel, angularDisplacement, angularVelocity, acceleration, displacement,
   distance, energy, force, gravitationalAccel, gravitationalConst, impulseS,

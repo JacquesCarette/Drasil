@@ -20,12 +20,12 @@ tModels = [t1SafetyReq, t2SafetyReq]
 -- needs to be updated properly.
 t1IsSafe :: TheoryModel
 t1IsSafe = tm (cw t1SafetyReq) 
-  (tc' "isSafe" [qw is_safe1, qw prob_br, qw pb_tol] ([] :: [CWrapper])
-  [] [TCon Invariant $ (C is_safe1) $= (C prob_br) $< (C pb_tol)] [])
+  (tc' "isSafe" [qw is_safe1, qw prob_br, qw pb_tol] ([] :: [FundUnit])
+  [] [TCon Invariant $ (sy is_safe1) $= (sy prob_br) $< (sy pb_tol)] [])
 
 t1SafetyReq :: RelationConcept
 t1SafetyReq = makeRC "t1SafetyReq" (nounPhraseSP "Safety Requirement-1")
-  t1descr $ (C is_safe1) $= (C prob_br) $< (C pb_tol)
+  t1descr $ (sy is_safe1) $= (sy prob_br) $< (sy pb_tol)
 
 t1descr :: Sentence
 t1descr = tDescr (is_safe1) s ending
@@ -38,12 +38,12 @@ t1descr = tDescr (is_safe1) s ending
 
 t2IsSafe :: TheoryModel
 t2IsSafe = tm(cw t2SafetyReq)
-   (tc' "isSafe2" [qw is_safe2, qw lRe, qw demand] ([] :: [CWrapper])
-   [] [TCon Invariant $ (C is_safe2) $= (C lRe) $> (C demand)] [])
+   (tc' "isSafe2" [qw is_safe2, qw lRe, qw demand] ([] :: [FundUnit])
+   [] [TCon Invariant $ (sy is_safe2) $= (sy lRe) $> (sy demand)] [])
 
 t2SafetyReq :: RelationConcept
 t2SafetyReq = makeRC "t2SafetyReq" (nounPhraseSP "Safety Requirement-2")
-  t2descr $ (C is_safe2) $= (C lRe) $> (C demand)
+  t2descr $ (sy is_safe2) $= (sy lRe) $> (sy demand)
 
 t2descr :: Sentence
 t2descr = tDescr (is_safe2) s ending

@@ -42,12 +42,12 @@ Simply run: `make argument` to build the corresponding example, where argument i
 
 Argument | Example
 -------- | -------
-gamephys | Chipmunk2D
-swhs | Solar Water Heating System with PCM
-glassbr | Glass-BR
-tiny | HGHC toy example
-ssp | Slope Stability Analysis
-nopcm | minimal SWHS example, with PCM removed
+gamephys_diff | Chipmunk2D
+swhs_diff | Solar Water Heating System with PCM
+glassbr_diff | Glass-BR
+tiny_diff | HGHC toy example
+ssp_diff | Slope Stability Analysis
+nopcm_diff | minimal SWHS example, with PCM removed
 
 ## Running the example(s)
 

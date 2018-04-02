@@ -1,166 +1,60 @@
-module Language.Drasil.HTML.Import where
-import Prelude hiding (id)
-import Language.Drasil.Expr (Expr(..), Relation, UFunc(..), BiFunc(..),
-    DerivType(..), EOperator(..), ($=), DomainDesc(..), RealRange(..))
+module Language.Drasil.HTML.Import(makeDocument,spec) where
+
+import Language.Drasil.Expr (sy, ($=))
 import Language.Drasil.Spec
+import qualified Language.Drasil.Printing.AST as P
+import qualified Language.Drasil.Printing.Citation as PC
 import qualified Language.Drasil.HTML.AST as H
-import Language.Drasil.Unicode (Special(Partial))
+
+import Language.Drasil.Chunk.AssumpChunk
+import Language.Drasil.Chunk.Attribute
+import Language.Drasil.Chunk.Change (chng, chngType, ChngType(..))
+import Language.Drasil.Chunk.Concept (defn)
 import Language.Drasil.Chunk.Eq
 import Language.Drasil.Chunk.ExprRelat (relat)
-import Language.Drasil.Chunk.NamedIdea (term, short, getA)
-import Language.Drasil.Chunk.Concept (defn)
-import Language.Drasil.Chunk.Quantity (Quantity(..), eqSymb)
-import Language.Drasil.ChunkDB (HasSymbolTable(..), getUnitLup, symbLookup)
-import Language.Drasil.Expr.Extract
+import Language.Drasil.Chunk.NamedIdea (term, getA)
+import Language.Drasil.Chunk.Quantity (Quantity(..))
+import Language.Drasil.Chunk.SymbolForm (eqSymb)
+import Language.Drasil.ChunkDB (HasSymbolTable(..), getUnitLup)
+import Language.Drasil.Chunk.ReqChunk (requires)
+import Language.Drasil.Chunk.Citation ( CiteField(..), HP(..), Citation
+                                      , externRefT, citeID, fields)
 import Language.Drasil.Config (verboseDDDescription)
 import Language.Drasil.Document
-import Language.Drasil.Symbol
+import Language.Drasil.Expr.Extract
 import Language.Drasil.Misc (unit'2Contents)
-import Language.Drasil.SymbolAlphabet (lD)
 import Language.Drasil.NounPhrase (phrase, titleize)
+import Language.Drasil.Reference
 import Language.Drasil.Unit (usymb)
-import Language.Drasil.Citations (Citation(..),CiteField(..))
+import Language.Drasil.Printing.Import (expr,symbol)
 
-import Control.Lens hiding ((:>),(:<),set)
-
--- | expr translation function from Drasil to HTML 'AST'
-expr :: HasSymbolTable s => Expr -> s -> H.Expr
-expr (V v)            _ = H.Var   v
-expr (Dbl d)          _ = H.Dbl   d
-expr (Int i)          _ = H.Int   i
-expr (a :* b)         sm = H.Mul   (expr a sm) (expr b sm)
-expr (a :+ b)         sm = H.Add   (expr a sm) (expr b sm)
-expr (a :/ b)         sm = H.Frac  (replace_divs a sm) (replace_divs b sm)
-expr (a :^ b)         sm = H.Pow   (expr a sm) (expr b sm)
-expr (a :- b)         sm = H.Sub   (expr a sm) (expr b sm)
-expr (a :. b)         sm = H.Dot   (expr a sm) (expr b sm)
-expr (Neg a)          sm = H.Neg   (expr a sm)
-expr (Deriv Part a 1) sm = H.Mul (H.Sym (Special Partial)) (expr a sm)
-expr (Deriv Total a 1)sm = H.Mul (H.Sym lD) (expr a sm)
-expr (Deriv Part a b) sm = H.Frac (H.Mul (H.Sym (Special Partial)) (expr a sm)) 
-                          (H.Mul (H.Sym (Special Partial)) (expr b sm))
-expr (Deriv Total a b)sm = H.Frac (H.Mul (H.Sym lD) (expr a sm)) 
-                          (H.Mul (H.Sym lD) (expr b sm))
-expr (C c)            sm = -- FIXME: Add Stage for Context
-  H.Sym $ (eqSymb (symbLookup c (sm ^. symbolTable)))
-expr (FCall f x)      sm = H.Call (expr f sm) (map (flip expr sm) x)
-expr (Case ps)        sm = if length ps < 2 then 
-                    error "Attempting to use multi-case expr incorrectly"
-                    else H.Case (zip (map (flip expr sm . fst) ps) (map (flip rel sm . snd) ps))
-expr e@(EEquals _ _)    sm = rel e sm
-expr e@(ENEquals _ _)   sm = rel e sm
-expr e@(EGreater _ _)   sm = rel e sm
-expr e@(ELess _ _)      sm = rel e sm 
-expr e@(ELessEq _ _)    sm = rel e sm 
-expr e@(EGreaterEq _ _) sm = rel e sm 
-expr (Matrix a)         sm = H.Mtx $ map (map (flip expr sm)) a
-expr (Index a i)        sm = H.Index (expr a sm) (expr i sm)
-expr (UnaryOp u)        sm = (\(x,y) -> H.Op x [y]) $ ufunc u sm
-expr (Grouping e)       sm = H.Grouping (expr e sm)
-expr (BinaryOp b)       sm = (\(x,y) -> H.Op x y) (bfunc b sm)
-expr (EOp o)            sm = (\(x,y) -> H.Op x [y]) $ eop o sm
-expr (Not a)            sm = H.Not   (expr a sm)
-expr (a  :&&  b)        sm = H.And   (expr a sm) (expr b sm)
-expr (a  :||  b)        sm = H.Or    (expr a sm) (expr b sm)
-expr (a  :=>  b)        sm = H.Impl  (expr a sm) (expr b sm)
-expr (a  :<=> b)        sm = H.Iff   (expr a sm) (expr b sm)
-expr (IsIn  a b)        sm = H.IsIn  (expr a sm) b
-expr (ForAll a b)       sm = H.Forall a (expr b sm)
-expr (Exists a b)       sm = H.Exists a (expr b sm)
-expr (Len _)             _ = error "Len not yet implemented"
-expr (Append _ _)        _ = error "Append not yet implemented"
-
--- | Helper function for translating 'UFunc's
-ufunc :: HasSymbolTable s => UFunc -> s -> (H.Function, H.Expr)
-ufunc (Abs e) sm = (H.Abs, expr e sm)
-ufunc (Norm e) sm = (H.Norm, expr e sm)
-ufunc (Log e) sm = (H.Log, expr e sm)
-ufunc (Sin e)    sm = (H.Sin,  expr e sm)
-ufunc (Cos e)    sm = (H.Cos,  expr e sm)
-ufunc (Tan e)    sm = (H.Tan,  expr e sm)
-ufunc (Sec e)    sm = (H.Sec,  expr e sm)
-ufunc (Csc e)    sm = (H.Csc,  expr e sm)
-ufunc (Cot e)    sm = (H.Cot,  expr e sm)
-ufunc (Exp e)    sm = (H.Exp,  expr e sm)
-ufunc (Sqrt e)   sm = (H.Sqrt, expr e sm)
-
--- | Helper function for translating 'BiFunc's
-bfunc :: HasSymbolTable s => BiFunc -> s -> (H.Function, [H.Expr])
-bfunc (Cross e1 e2) sm = (H.Cross, map (flip expr sm) [e1,e2])
-
--- | Helper function for translating 'EOperator's
-eop :: HasSymbolTable s => EOperator -> s -> (H.Function, H.Expr)
-eop (Summation (IntegerDD v (BoundedR l h)) e) sm =
-  (H.Summation (Just ((v, expr l sm), expr h sm)), (expr e sm))
-eop (Summation (All _) e) sm = (H.Summation Nothing,(expr e sm))
-eop (Summation(RealDD _ _) _) _ = error "HTML/Import.hs Summation cannot be over Real"
-eop (Product (IntegerDD v (BoundedR l h)) e) sm = 
-  (H.Product (Just ((v, expr l sm), expr h sm)), expr e sm)
-eop (Product (All _) e) sm = (H.Product Nothing, (expr e sm))
-eop (Product (RealDD _ _) _) _ = error "HTML/Import.hs Product cannot be over Real"
-eop (Integral (RealDD v (BoundedR l h)) e) sm = 
-  (H.Integral (Just (expr l sm), Just (expr h sm)) v, expr e sm)
-eop (Integral (All v) e) sm = 
-  (H.Integral (Just (H.Sym v), Nothing) v, expr e sm)
-eop (Integral (IntegerDD _ _) _) _ = 
-  error "HTML/Import.hs Integral cannot be over Integers"
-
-
--- | Helper function for translating 'Relation's
-rel :: HasSymbolTable s => Relation -> s -> H.Expr
-rel (EEquals a b)    sm = H.Eq  (expr a sm) (expr b sm)
-rel (ENEquals a b)   sm = H.NEq (expr a sm) (expr b sm)
-rel (ELess a b)      sm = H.Lt  (expr a sm) (expr b sm)
-rel (EGreater a b)   sm = H.Gt  (expr a sm) (expr b sm)
-rel (ELessEq a b)    sm = H.LEq (expr a sm) (expr b sm)
-rel (EGreaterEq a b) sm = H.GEq (expr a sm) (expr b sm)
-rel _ _ = error "Attempting to use non-Relation Expr in relation context."
-
--- | Helper function for translating the differential
-int_wrt :: Symbol -> H.Expr
-int_wrt wrtc = H.Mul (H.Sym lD) (H.Sym wrtc)
-
--- | Helper function for translating operations in expressions 
-replace_divs :: HasSymbolTable s => Expr -> s -> H.Expr
-replace_divs (a :/ b) sm = H.Div (replace_divs a sm) (replace_divs b sm)
-replace_divs (a :+ b) sm = H.Add (replace_divs a sm) (replace_divs b sm)
-replace_divs (a :* b) sm = H.Mul (replace_divs a sm) (replace_divs b sm)
-replace_divs (a :^ b) sm = H.Pow (replace_divs a sm) (replace_divs b sm)
-replace_divs (a :- b) sm = H.Sub (replace_divs a sm) (replace_divs b sm)
-replace_divs a        sm = expr a sm
+import Control.Lens ((^.))
+import Data.Maybe (fromJust)
 
 -- | Translates Sentence to the HTML representation of Sentence ('Spec')
-spec :: HasSymbolTable s => Sentence -> s -> H.Spec
-spec (S s)      _ = H.S s
-spec (Sy s)     _ = H.Sy s
+spec :: HasSymbolTable s => Sentence -> s -> P.Spec
+spec (S s)        _ = P.S s
+spec (Sy s)       _ = P.Sy s
 spec (EmptyS :+: b) sm = spec b sm
 spec (a :+: EmptyS) sm = spec a sm
-spec (a :+: b) sm = spec a sm H.:+: spec b sm
-spec (G g)      _ = H.G g
-spec (Sp s)     _ = H.Sp s
-spec (P s)      _ = H.N s
-spec (F f s)    sm = spec (accent f s) sm
-spec (Ref t r) sm = H.Ref t (spec r sm)
-spec (Quote q) sm = H.S "&quot;" H.:+: spec q sm H.:+: H.S "&quot;"
-spec EmptyS     _ = H.EmptyS
-spec (E e)     sm = H.E $ expr e sm
+spec (a :+: b) sm   = spec a sm P.:+: spec b sm
+spec (Sp s)       _ = P.Sp s
+spec (P s)        _ = P.E $ P.Font P.Emph $ symbol s
+spec (F f s)     sm = spec (accent f s) sm
+spec (Ref t r n) sm = P.Ref t r (spec n sm)
+spec (Quote q) sm = P.S "&quot;" P.:+: spec q sm P.:+: P.S "&quot;"
+spec EmptyS     _ = P.EmptyS
+spec (E e)     sm = P.E $ P.Font P.Emph $ expr e sm
 
--- | Helper function for translating accented characters to 
+-- | Helper function for translating accented characters to
 -- an HTML renderable form.
 accent :: Accent -> Char -> Sentence
 accent Grave  s = S $ '&' : s : "grave;" --Only works on vowels.
 accent Acute  s = S $ '&' : s : "acute;" --Only works on vowels.
 
--- | Helper function for translating decorated characters to
--- an HTML renderable form.
-decorate :: Decoration -> Sentence -> Sentence
-decorate Hat    s = s :+: S "&#770;" 
-decorate Vector s = S "<b>" :+: s :+: S "</b>"
-decorate Prime  s = s :+: S "&prime;"
-
 -- | Translates from Document to the HTML representation of Document
 makeDocument :: HasSymbolTable s => Document -> s -> H.Document
-makeDocument (Document title author sections) sm = 
+makeDocument (Document title author sections) sm =
   H.Document (spec title sm) (spec author sm) (createLayout sections sm)
 
 -- | Translates from LayoutObj to the HTML representation of LayoutObj
@@ -174,84 +68,75 @@ createLayout secs sm = map (flip (sec 0) sm) secs
 
 -- | Helper function for creating sections at the appropriate depth
 sec :: HasSymbolTable s => Int -> Section -> s -> H.LayoutObj
-sec depth x@(Section title contents) sm = 
-  H.HDiv [(concat $ replicate depth "sub") ++ "section"] 
-  ((H.Header (depth+2) (spec title sm)):(map (flip (layout depth) sm) contents)) 
-  (spec (refName x) sm)
+sec depth x@(Section title contents _) sm =
+  H.HDiv [(concat $ replicate depth "sub") ++ "section"]
+  ((H.Header (depth+2) (spec title sm)):(map (flip (layout depth) sm) contents))
+  (P.S (refAdd x))
 
 -- | Translates from Contents to the HTML Representation of LayoutObj.
 -- Called internally by layout.
 lay :: HasSymbolTable s => Contents -> s -> H.LayoutObj
-lay x@(Table hdr lls t b) sm = H.Table ["table"] 
-  ((map (flip spec sm) hdr) : (map (map (flip spec sm)) lls)) (spec (refName x) sm) b (spec t sm)
+lay x@(Table hdr lls t b _) sm = H.Table ["table"]
+  ((map (flip spec sm) hdr) : (map (map (flip spec sm)) lls)) (P.S (refAdd x)) b (spec t sm)
 lay (Paragraph c)       sm = H.Paragraph (spec c sm)
-lay (EqnBlock c)        sm = H.HDiv ["equation"] [H.Tagless (H.E (expr c sm))] (H.EmptyS)
+lay (EqnBlock c _)      sm = H.HDiv ["equation"] [H.Tagless (P.E (P.Font P.Emph $ expr c sm))] (P.EmptyS)
+                              -- FIXME: Make equations referable
 --lay (CodeBlock c)        = H.CodeBlock c
-lay x@(Definition c)    sm = H.Definition c (makePairs c sm) (spec (refName x) sm)
+lay x@(Definition c)    sm = H.Definition c (makePairs c sm) (P.S (refAdd x))
 lay (Enumeration cs)    sm = H.List $ makeL cs sm
-lay x@(Figure c f wp)   sm = H.Figure (spec (refName x) sm) (spec c sm) f wp
-lay (Graph _ _ _ _)      _ = H.Paragraph (H.EmptyS)  -- need to implement!
-lay x@(Requirement r)   sm = 
-  H.ALUR H.Requirement (spec (phrase $ r ^. term) sm) (spec (refName x) sm) (spec (short r) sm)
-lay x@(Assumption a)    sm = 
-  H.ALUR H.Assumption (spec (phrase $ a ^. term) sm) (spec (refName x) sm) (spec (short a) sm)
-lay x@(LikelyChange lc) sm = 
-  H.ALUR H.LikelyChange (spec (phrase $ lc ^. term) sm) (spec (refName x) sm) (spec (short lc) sm)
-lay x@(UnlikelyChange uc) sm = 
-  H.ALUR H.UnlikelyChange (spec (phrase $ uc ^. term) sm) (spec (refName x) sm) (spec (short uc) sm)
-lay (Defnt dtyp pairs rn) sm = H.Definition dtyp (layPairs pairs) (spec rn sm)
+lay x@(Figure c f wp _) sm = H.Figure (P.S (refAdd x)) (spec c sm) f wp
+lay (Graph _ _ _ _ _)    _ = H.Paragraph (P.EmptyS)  -- FIXME: need to implement!
+lay x@(Requirement r)   sm = H.ALUR H.Requirement
+  (spec (requires r) sm) (P.S (refAdd x)) (spec (fromJust $ getShortName r) sm)
+lay x@(Assumption a)    sm = H.ALUR H.Assumption
+  (spec (assuming a) sm) (P.S (refAdd x)) (spec (fromJust $ getShortName a) sm)
+lay x@(Change lc) sm = H.ALUR
+  (if (chngType lc) == Likely then H.LikelyChange else H.UnlikelyChange)
+  (spec (chng lc) sm) (P.S (refAdd x)) (spec (fromJust $ getShortName lc) sm)
+lay (Defnt dtyp pairs rn) sm = H.Definition dtyp (layPairs pairs) (P.S rn)
   where layPairs = map (\(x,y) -> (x, (map (\z -> lay z sm) y)))
-lay (GDef)               _ = H.Paragraph (H.EmptyS)  -- need to implement!
-lay (IMod)               _ = H.Paragraph (H.EmptyS)  -- need to implement!
-lay (TMod ps rf r)      sm = H.Definition (Theory r) 
-  (map (\(x,y) -> (x, map (flip lay sm) y)) ps) (spec rf sm)
-lay (DDef ps rf d)      sm = H.Definition (Data d)
-  (map (\(x,y) -> (x, map (flip lay sm) y)) ps) (spec rf sm)
-lay (Bib bib)           sm = H.Bib $ map (flip layCite sm) bib
+lay (Bib bib)           sm = H.Bib $ map (layCite sm) bib
 
 -- | For importing bibliography
-layCite :: HasSymbolTable s => Citation -> s -> H.Citation
-layCite (Book      fields) sm = H.Book      $ map (flip layField sm) fields
-layCite (Article   fields) sm = H.Article   $ map (flip layField sm) fields
-layCite (MThesis   fields) sm = H.MThesis   $ H.Thesis H.M   : map (flip layField sm) fields
-layCite (PhDThesis fields) sm = H.PhDThesis $ H.Thesis H.PhD : map (flip layField sm) fields
-layCite (Misc      fields) sm = H.Misc      $ map (flip layField sm) fields
-layCite (Online    fields) sm = H.Online    $ map (flip layField sm) fields
+layCite :: HasSymbolTable s => s -> Citation -> PC.Citation
+layCite sm c = PC.Cite (citeID c) (externRefT c) (map (layField sm) (fields c))
 
-layField :: HasSymbolTable s => CiteField -> s -> H.CiteField
-layField (Author     p)   _ = H.Author     p
-layField (Title      s)  sm = H.Title      $ spec s sm
-layField (Series     s)  sm = H.Series     $ spec s sm
-layField (Collection s)  sm = H.Collection $ spec s sm
-layField (Volume     n)   _ = H.Volume     n
-layField (Edition    n)   _ = H.Edition    n
-layField (Place (c, s))  sm = H.Place      (spec c sm, spec s sm)
-layField (Publisher  s)  sm = H.Publisher  $ spec s sm
-layField (Journal    s)  sm = H.Journal    $ spec s sm
-layField (Year       n)   _ = H.Year       n
-layField (Date    n m y)  _ = H.Date       n m y
-layField (URLdate n m y)  _ = H.URLdate    n m y
-layField (Page       n)   _ = H.Page       n
-layField (Pages     ns)   _ = H.Pages      ns
-layField (Note       s)  sm = H.Note       $ spec s sm
-layField (Issue      n)   _ = H.Issue      n
-layField (School     s)  sm = H.School     $ spec s sm
-layField (URL        s)  sm = H.URL        $ spec s sm
-layField (HowPub     s)  sm = H.HowPub     $ spec s sm
-layField (Editor     p)   _ = H.Editor     p
+layField :: HasSymbolTable s => s -> CiteField -> PC.CiteField
+layField sm (Address      s) = PC.Address      $ spec s sm
+layField  _ (Author       p) = PC.Author       p
+layField sm (BookTitle    s) = PC.BookTitle    $ spec s sm
+layField  _ (Chapter      i) = PC.Chapter      i
+layField  _ (Edition      n) = PC.Edition      n
+layField  _ (Editor       p) = PC.Editor       p
+layField sm (Institution  i) = PC.Institution  $ spec i sm
+layField sm (Journal      s) = PC.Journal      $ spec s sm
+layField  _ (Month        m) = PC.Month        m
+layField sm (Note         s) = PC.Note         $ spec s sm
+layField  _ (Number       n) = PC.Number       n
+layField sm (Organization i) = PC.Organization $ spec i sm
+layField  _ (Pages        n) = PC.Pages        n
+layField sm (Publisher    s) = PC.Publisher    $ spec s sm
+layField sm (School       s) = PC.School       $ spec s sm
+layField sm (Series       s) = PC.Series       $ spec s sm
+layField sm (Title        s) = PC.Title        $ spec s sm
+layField sm (Type         t) = PC.Type         $ spec t sm
+layField  _ (Volume       n) = PC.Volume       n
+layField  _ (Year         n) = PC.Year         n
+layField sm (HowPublished (URL  s)) = PC.HowPublished (PC.URL  $ spec s sm)
+layField sm (HowPublished (Verb s)) = PC.HowPublished (PC.Verb $ spec s sm)
 
 -- | Translates lists
-makeL :: HasSymbolTable s => ListType -> s -> H.ListType
-makeL (Bullet bs)      sm = H.Unordered   $ map (flip item sm) bs
-makeL (Number ns)      sm = H.Ordered     $ map (flip item sm) ns
-makeL (Simple ps)      sm = H.Simple      $ map (\(x,y) -> (spec x sm, item y sm)) ps
-makeL (Desc ps)        sm = H.Desc        $ map (\(x,y) -> (spec x sm, item y sm)) ps
-makeL (Definitions ps) sm = H.Definitions $ map (\(x,y) -> (spec x sm, item y sm)) ps
+makeL :: HasSymbolTable s => ListType -> s -> P.ListType
+makeL (Bullet bs)      sm = P.Unordered   $ map (flip item sm) bs
+makeL (Numeric ns)     sm = P.Ordered     $ map (flip item sm) ns
+makeL (Simple ps)      sm = P.Simple      $ map (\(x,y) -> (spec x sm, item y sm)) ps
+makeL (Desc ps)        sm = P.Desc        $ map (\(x,y) -> (spec x sm, item y sm)) ps
+makeL (Definitions ps) sm = P.Definitions $ map (\(x,y) -> (spec x sm, item y sm)) ps
 
 -- | Helper for translating list items
-item :: HasSymbolTable s => ItemType -> s -> H.ItemType
-item (Flat i)     sm = H.Flat (spec i sm)
-item (Nested t s) sm = H.Nested (spec t sm) (makeL s sm)
+item :: HasSymbolTable s => ItemType -> s -> P.ItemType
+item (Flat i)     sm = P.Flat (spec i sm)
+item (Nested t s) sm = P.Nested (spec t sm) (makeL s sm)
 
 -- | Translates definitions
 -- (Data defs, General defs, Theoretical models, etc.)
@@ -260,14 +145,14 @@ makePairs (Data c) m = [
   ("Number",      [H.Paragraph $ spec (missingAcro (S "DD") $ fmap S $ getA c) m]),
   ("Label",       [H.Paragraph $ spec (titleize $ c ^. term) m]),
   ("Units",       [H.Paragraph $ spec (unit'2Contents c) m]),
-  ("Equation",    [H.HDiv ["equation"] [H.Tagless (buildEqn c m)] (H.EmptyS)]),
+  ("Equation",    [H.HDiv ["equation"] [H.Tagless (buildEqn c m)] (P.EmptyS)]),
   ("Description", [H.Paragraph (buildDDDescription c m)])
   ]
 makePairs (Theory c) m = [
   ("Number",      [H.Paragraph $ spec (missingAcro (S "T") $ fmap S $ getA c) m]),
   ("Label",       [H.Paragraph $ spec (titleize $ c ^. term) m]),
-  ("Equation",    [H.HDiv ["equation"] [H.Tagless (H.E (rel (c ^. relat) m))]
-                  (H.EmptyS)]),
+  ("Equation",    [H.HDiv ["equation"] [H.Tagless (P.E (P.Font P.Emph $ expr (c ^. relat) m))]
+                  (P.EmptyS)]),
   ("Description", [H.Paragraph (spec (c ^. defn) m)])
   ]
 makePairs General  _ = error "Not yet implemented"
@@ -279,24 +164,24 @@ missingAcro :: Sentence -> Maybe Sentence -> Sentence
 missingAcro dflt Nothing = S "<b>":+: dflt :+: S "</b>"
 missingAcro _ (Just a) = S "<b>":+: a :+: S "</b>"
 
--- | Translates the defining equation from a QDefinition to 
+-- | Translates the defining equation from a QDefinition to
 -- HTML's version of Sentence
-buildEqn :: HasSymbolTable s => QDefinition -> s -> H.Spec  
-buildEqn c sm = H.N (eqSymb c) H.:+: H.S " = " H.:+: 
-  H.E (expr (equat c) sm)
+buildEqn :: HasSymbolTable s => QDefinition -> s -> P.Spec
+buildEqn c sm = P.E (P.Font P.Emph $ symbol (eqSymb c)) P.:+: P.S " = " P.:+:
+  P.E (P.Font P.Emph $ expr (c^.equat) sm)
 
 -- | Build descriptions in data defs based on required verbosity
-buildDDDescription :: HasSymbolTable s => QDefinition -> s -> H.Spec
-buildDDDescription c m = descLines 
-  (if verboseDDDescription then (vars (getQ c $= equat c) m) else []) m
-  where getQ (EC a _ _) = C a
+buildDDDescription :: HasSymbolTable s => QDefinition -> s -> P.Spec
+buildDDDescription c m = descLines
+  (if verboseDDDescription then (vars (getQ c $= c^.equat) m) else []) m
+  where getQ (EC a _ _) = sy a
 
 -- | Helper for building each line of the description of a data def
-descLines :: (HasSymbolTable s, Quantity q) => [q] -> s -> H.Spec  
+descLines :: (HasSymbolTable s, Quantity q) => [q] -> s -> P.Spec
 descLines []    _   = error "No chunks to describe"
-descLines (vc:[]) m = (H.N (eqSymb vc) H.:+: 
-  (H.S " is the " H.:+: (spec (phrase $ vc ^. term) m) H.:+:
-   unWrp (getUnitLup vc m)))
-  where unWrp (Just a) = H.S " (" H.:+: H.Sy (a ^. usymb) H.:+: H.S ")"
-        unWrp Nothing  = H.S ""
-descLines (vc:vcs) m = descLines (vc:[]) m H.:+: H.HARDNL H.:+: descLines vcs m
+descLines (vc:[]) m = (P.E $ P.Font P.Emph $ symbol (eqSymb vc)) P.:+:
+  (P.S " is the " P.:+: (spec (phrase $ vc ^. term) m) P.:+:
+   unWrp (getUnitLup vc m))
+  where unWrp (Just a) = P.S " (" P.:+: P.Sy (a ^. usymb) P.:+: P.S ")"
+        unWrp Nothing  = P.S ""
+descLines (vc:vcs) m = descLines (vc:[]) m P.:+: P.HARDNL P.:+: descLines vcs m

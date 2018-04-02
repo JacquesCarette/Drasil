@@ -2,14 +2,14 @@ module Language.Drasil.Make.Print where
 
 import Text.PrettyPrint hiding (render)
 
-import Language.Drasil.Output.Formats (DocType(..))
+import Language.Drasil.Output.Formats (DocSpec(..))
 import Language.Drasil.Make.AST
 import Language.Drasil.Make.Import
 import Language.Drasil.Make.Helpers
 import Language.Drasil.Printing.Helpers (tab)
 
 -- | Generates the makefile by calling 'build' after 'toMake'
-genMake :: [DocType] -> Doc
+genMake :: [DocSpec] -> Doc
 genMake = build . toMake
 
 -- | Renders the makefile rules

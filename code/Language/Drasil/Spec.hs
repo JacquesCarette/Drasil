@@ -2,12 +2,17 @@
 -- | Contains Sentences and helpers
 module Language.Drasil.Spec where
 
-import Language.Drasil.Unicode (Greek,Special,Special(CurlyBrOpen,CurlyBrClose,SqBrOpen,SqBrClose))
+import Language.Drasil.Unicode (Special(CurlyBrOpen,CurlyBrClose,SqBrOpen,SqBrClose))
 import Language.Drasil.Symbol
 import Language.Drasil.Expr
+import Language.Drasil.RefTypes
+import Language.Drasil.UnitLang (USymb)
 
 -- | For writing accented characters
 data Accent = Grave | Acute deriving Eq
+
+-- | One slight hack remaining
+type RefName = Sentence
 
 -- | For writing "sentences" via combining smaller elements
 -- Sentences are made up of some known vocabulary of things:
@@ -20,12 +25,11 @@ infixr 5 :+:
 data Sentence where
   Sy    :: USymb -> Sentence
   S     :: String -> Sentence       -- Strings, used for Descriptions in Chunks
-  G     :: Greek -> Sentence
   Sp    :: Special -> Sentence
   P     :: Symbol -> Sentence
   F     :: Accent -> Char -> Sentence  -- Special formatting for certain special
                                        -- chars
-  Ref   :: RefType -> Sentence -> Sentence  -- Needs helper func to create Ref
+  Ref   :: RefType -> RefAdd -> RefName -> Sentence  -- Needs helper func to create Ref
                                     -- See Reference.hs
   Quote :: Sentence -> Sentence     -- Adds quotation marks around a sentence
                                     
@@ -34,41 +38,9 @@ data Sentence where
   EmptyS :: Sentence
   E :: Expr -> Sentence
 
---Moving this here to avoid cyclic imports
--- | Language of unit equations, to define a unit relative
--- to another
-data USymb = UName Symbol
-           | UProd [USymb] -- ^ Product
-           | UPow USymb Integer -- ^ can be negative, should not be 0
-           | UDiv USymb USymb   -- ^ Get proper division (not neg pow)
-                                -- necessary for things like J/(kg*C)
-  deriving (Eq, Ord)
-
--- | For building references. Defines the possible type of reference.
-data RefType = Tab -- ^ Table
-             | Fig -- ^ Figure
-             | Sect -- ^ Section
-             | Def (Maybe Sentence)-- ^ Definition (includes theoretical models)
-             | Mod -- ^ Module
-             | Req (Maybe Sentence)-- ^ Requirement
-             | Assump (Maybe Sentence)-- ^ Assumption
-             | LC (Maybe Sentence)-- ^ Likely Change
-             | UC -- ^ Unlikely Change
-
-instance Show RefType where
-  show Tab = "Table"
-  show Fig = "Figure"
-  show Sect = "Section"
-  show Mod = "Module"
-  -- show (Req (S r)) = r
-  -- show (Assump (S a)) = a
-  -- show (LC (S lc)) = lc
-  show (Def Nothing) = "Definition"
-  show (Req Nothing) = "Requirement"
-  show (Assump Nothing) = "Assumption"
-  show (LC Nothing) = "Likely Change"
-  show UC = "Unlikely Change"
-  show _ = error "Type not recognized"
+instance Monoid Sentence where
+  mempty = EmptyS
+  mappend = (:+:)
 
 -- | Helper function for wrapping sentences in parentheses.
 sParen :: Sentence -> Sentence

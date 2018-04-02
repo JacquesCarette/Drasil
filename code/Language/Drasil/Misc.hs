@@ -1,17 +1,12 @@
 module Language.Drasil.Misc where
 
 import Language.Drasil.Spec
---import Language.Drasil.Expr
 import Language.Drasil.Chunk.Quantity
-import Language.Drasil.Unit
-import Language.Drasil.Chunk.NamedIdea (NamedIdea, short, term)
-import Language.Drasil.Chunk.CommonIdea (CommonIdea, abrv)
+import Language.Drasil.UnitLang (USymb)
+import Language.Drasil.Unit (HasUnitSymbol(usymb))
+import Language.Drasil.Chunk.NamedIdea (NamedIdea, Idea, short, term)
 import Language.Drasil.Chunk.Unitary
 import qualified Language.Drasil.NounPhrase as NP
-
---import Data.List (delete)
---import Language.Drasil.ChunkDB 
---import Language.Drasil.Chunk.SymbolForm
 
 import Control.Lens ((^.))
 
@@ -35,7 +30,7 @@ mkTable []     _  = error "Attempting to make table without data"
 mkTable fl (c:cl) = map ($ c) fl : mkTable fl cl
 
 -- where should this go?
--- | Get the units for a Quantity, if they exist, and wrap them as a Sentence
+-- | Get the units, if they exist, and wrap them as a Sentence
 unit'2Contents :: Quantity u => u -> Sentence
 unit'2Contents x = maybe (S "Unitless") (\y -> Sy (y ^. usymb)) (getUnit x)
 
@@ -50,7 +45,7 @@ unit_symb c = (unit c) ^. usymb
 -- | Helper for common pattern of introducing the title-case version of a 
 -- noun phrase (from a NamedIdea)
 -- followed by its abbreviation in parentheses.
-introduceAbb :: NamedIdea n => n -> Sentence
+introduceAbb :: Idea n => n -> Sentence
 introduceAbb n = (NP.titleize $ n ^. term) +:+ (sParen (short n))
 
 -- | Helper function for getting the sentence case of a noun phrase from a 

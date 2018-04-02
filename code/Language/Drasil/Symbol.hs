@@ -1,5 +1,3 @@
-{-# LANGUAGE GADTs #-}
-
 -- | A 'Symbol' is actually going to be a graphical description of what
 -- gets rendered as a (unique) symbol.  This is actually NOT based on
 -- semantics at all, but just a description of how things look.
@@ -19,20 +17,26 @@ data Decoration = Hat | Vector | Prime deriving (Eq, Ord)
 -- - Greek characters
 -- - Decorated symbols
 -- - Concatenations of symbols, including subscripts and superscripts
-data Symbol where
-  Atomic   :: String -> Symbol
-  Special  :: Special -> Symbol
-  Greek    :: Greek -> Symbol
-  Atop  :: Decoration -> Symbol -> Symbol
-  Corners  :: [Symbol] -> [Symbol] -> [Symbol] -> [Symbol] -> Symbol -> Symbol
-            --upleft  -> lowleft  -> upright  -> lowright -> base   -> out
-            -- [1] -> [2] -> [3] -> [4] -> [5] -> out
-            --  Visually:  [1]   [3]
-            --    (out)       [5]
-            --             [2]   [4]
-  Concat :: [ Symbol ]  -> Symbol
+-- - empty! (this is to give this a monoid-like flavour)
+data Symbol =
+    Atomic  String
+  | Special Special
+  | Greek   Greek
+  | Atop    Decoration Symbol
+  | Corners [Symbol] [Symbol] [Symbol] [Symbol] Symbol
+          -- upleft   lowleft  upright  lowright base
+          -- [1]      [2]      [3]      [4]      [5]
+          --  Visually:  [1]   [3]
+          --    (out)       [5]
+          --             [2]   [4]
+  | Concat [Symbol]
             -- [s1, s2] -> s1s2
+  | Empty
   deriving Eq
+
+instance Monoid Symbol where
+  mempty = Empty
+  mappend a b = Concat [a , b]
 
 --FIXME? The exact ordering we want may need to be updated, or should we
 --  allow custom?  
@@ -68,6 +72,9 @@ instance Ord Symbol where
   compare (Atomic _)             _                     = LT
   compare  _                    (Atomic _)             = GT
   compare (Greek a)             (Greek b)              = compare a b
+  compare  Empty                 Empty                 = EQ
+  compare  _                     Empty                 = GT
+  compare  Empty                 _                     = LT
 
 -- | Helper for creating a symbol with a superscript on the left side of the symbol.
 -- Arguments: Base symbol, then superscripted symbol.

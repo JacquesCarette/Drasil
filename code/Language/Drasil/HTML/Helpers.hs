@@ -1,12 +1,10 @@
-{-# OPTIONS -Wall #-} 
 module Language.Drasil.HTML.Helpers where
 
 import Text.PrettyPrint
 import Data.List (intersperse)
 
 import Language.Drasil.Document (Document, MaxWidthPercent)
-import Language.Drasil.HTML.AST (Expr)
-
+import Language.Drasil.Printing.AST (Expr)
 
 html, head_tag, body, title, paragraph, code, tr, th, td :: Doc -> Doc
 -- | HTML tag wrapper
@@ -39,7 +37,7 @@ h n       | n < 0 = error "Illegal header (too small)"
 wrap :: String -> [String] -> Doc -> Doc
 wrap s [] = \x -> 
   let tb c = text $ "<" ++ c ++ ">"
-  in vcat [tb s, x, tb $ "/"++s]
+  in vcat [tb s, x, tb $ '/':s]
 wrap s ts = \x ->
   let tb c = text $ "<" ++c++ " class=\""++(foldr1 (++) (intersperse " " ts))++"\">"
   in let te c = text $ "</" ++ c ++ ">"
@@ -51,7 +49,7 @@ caption t = wrap "p" ["caption"] (text t)
 
 -- | Helper for setting up references
 refwrap :: String -> Doc -> Doc
-refwrap r = \x -> vcat [text ("<a id=\"" ++ r ++ "\">"), x, text "</a>"]
+refwrap r x = vcat [text ("<a id=\"" ++ r ++ "\">"), x, text "</a>"]
 
 -- | Helper for setting up links to references
 reflink :: String -> String -> String
@@ -65,13 +63,15 @@ image f c wp =
   text $ "<img class=\"figure\" src=\"" ++ f ++ "\" alt=\"" ++ c ++ "\"" ++
   "style=\"max-width: " ++ show (wp / 100) ++ "%;\"></img>"
 
-sub,sup,em :: String -> String  
+sub,sup,em,bold :: String -> String  
 -- | Subscript tag
 sub = \x -> "<sub>" ++ x ++ "</sub>"
 -- | Superscript tag
 sup = \x -> "<sup>" ++ x ++ "</sup>"
 -- | Emphasis (italics) tag
 em  = \x -> "<em>"  ++ x ++ "</em>"
+-- | Bold tag
+bold  = \x -> "<b>"  ++ x ++ "</b>"
 
 article_title, author :: Doc -> Doc
 -- | Title header
@@ -190,21 +190,6 @@ makeCSS _ = vcat [
     text "  padding: 5px;",
     text "  text-align: center;",
     text "  border: 0px;}"
-    ],
-  vcat [
-    text ".operator {",
-    text "  position: relative;",
-    text "  display: inline-table;",
-    text "  margin: -2px 0px 2px;",
-    text "  vertical-align: 105%;}",
-    text ".operator td {",
-    text "  text-align: center;",
-    text "  border: 0px;}",
-    text ".symb {",
-    text "  font-size: 150%;",
-    text "  line-height: 110%;",
-    text "  vertical-align: -10%;}",
-    text ".bound {font-size: 80%;}"
     ]
   ]
 

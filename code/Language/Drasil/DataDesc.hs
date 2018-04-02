@@ -1,5 +1,3 @@
-{-# LANGUAGE GADTs #-}
-
 module Language.Drasil.DataDesc where
 
 import Language.Drasil.Chunk.Code
@@ -8,7 +6,6 @@ import Language.Drasil.Chunk.Quantity
 import Data.List (nub)
 
 type DataDesc = [Data]
-
 type DataItem = CodeChunk
 
 data Entry = Entry DataItem             -- regular entry (float, int, bool, etc)
@@ -31,10 +28,8 @@ data LinePattern = Straight [Entry]             -- line of data with no pattern
                  | Repeat [Entry] (Maybe Integer)   -- line of data with repeated pattern
                                                 -- (Maybe Int) = number of repetitions, Nothing = unknown so go to end of line          
 
-                                            
-
 entry :: (Quantity c) => c -> Entry
-entry c = Entry $ codevar c
+entry = Entry . codevar
 
 listEntry :: (Quantity c) => [Ind] -> c -> Entry
 listEntry i c = ListEntry i $ codevar c
@@ -43,7 +38,7 @@ junk :: Entry
 junk = JunkEntry
 
 singleton :: (Quantity c) => c -> Data
-singleton c = Singleton $ codevar c
+singleton = Singleton . codevar
 
 junkLine :: Data
 junkLine = JunkData
@@ -65,8 +60,6 @@ repeated e = Repeat e Nothing
 
 repeated' :: [Entry] -> Integer -> LinePattern
 repeated' e i = Repeat e (Just i)
-
-
 
 getInputs :: DataDesc -> [CodeChunk]
 getInputs d = nub $ concatMap getDataInputs d

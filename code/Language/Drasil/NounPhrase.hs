@@ -17,8 +17,6 @@ import Language.Drasil.Spec (Sentence(..), (+:+))
 --Linguistically, nounphrase might not be the best name (yet!), but once
 -- it is fleshed out and/or we do more with it, it will likely be a good fit
 
---Using String for now, as it will allow us to add these to sentence 
--- very easily. If we need other options we can always change it.
 class NounPhrase n where
   phrase :: n -> Sentence -- ex. "the quick brown fox"
   plural :: n -> PluralForm -- ex. "the quick brown foxes" 
@@ -245,9 +243,3 @@ isNotCaps s
 doNotCaps :: [String]
 doNotCaps = ["a", "an", "the", "at", "by", "for", "in", "of",
   "on", "to", "up", "and", "as", "but", "or", "nor"] --Ref http://grammar.yourdictionary.com
-
--- ity, ness, ion :: String -> String
--- Maybe export these for use in irregular cases?
--- ity  s = init s ++ "ity"
--- ness s = init s ++ "ness"
--- ion  s = init s ++ "ion"

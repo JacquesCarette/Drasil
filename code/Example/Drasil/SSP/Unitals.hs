@@ -11,7 +11,7 @@ import Data.Drasil.Units.Physics (momentOfForceU)
 import Drasil.SSP.Defs (fs_concept)
 import Data.Drasil.Constraints (gtZeroConstr)
 
-sspSymbols :: [CQSWrapper]
+sspSymbols :: [DefinedQuantityDict]
 sspSymbols = (map cqs sspInputs) ++ (map cqs sspOutputs) ++
   (map cqs sspUnits) ++ (map cqs sspUnitless)
 
@@ -43,7 +43,7 @@ smsi  = "refers to either slice i midpoint, or slice interface i"
 -- START OF CONSTRAINEDCHUNKS --
 --------------------------------
 
-sspConstrained :: [ConstrWrapper]
+sspConstrained :: [ConstrainedChunk]
 sspConstrained = map cnstrw sspInputs ++ map cnstrw sspOutputs
 
 sspInputs :: [UncertQ]
@@ -53,10 +53,11 @@ sspInputs = [elasticMod, cohesion, poissnsRatio, fricAngle, dryWeight,
 sspOutputs :: [ConstrConcept]
 sspOutputs = [fs, coords, dx_i, dy_i]
 
+{-
 monotonicIn :: [Constraint]  --FIXME: Move this?
 monotonicIn = [physc $ \_ -> -- FIXME: Hack with "index" !
-  ForAll (eqSymb index) (C index `IsIn` Natural :=>
-  Grouping (inx xi 0 $< inx xi 1 :=> inx yi 0 $< inx yi 1))]
+  (idx xi (sy index) $< idx xi (sy index + 1) $=> idx yi (sy index) $< idx yi (sy index + 1))]
+-}
 
 defultUncrt :: Double
 defultUncrt = 0.1
@@ -70,66 +71,72 @@ fs, coords, dx_i, dy_i :: ConstrConcept
 --FIXME: add (x,y) when we can index or make related unitals
 
 elasticMod = uq (constrained' SM.elastMod [gtZeroConstr]
-  (Dbl 15000)) defultUncrt
+  (dbl 15000)) defultUncrt
 
 cohesion = uqc "c'" (cn $ "effective cohesion")
   "internal pressure that sticks particles of soil together"
-  (prime $ Atomic "c") pascal Real [gtZeroConstr] (Dbl 10) defultUncrt
+  (prime $ Atomic "c") pascal Real [gtZeroConstr] (dbl 10) defultUncrt
 
 poissnsRatio = uq (constrained' SM.poissnsR
-  [physc $ \c -> (Int 0) $< c $< (Int 1)] (Dbl 0.4)) defultUncrt
+  [physc $ Bounded (Exc 0) (Exc 1)] (dbl 0.4)) defultUncrt
 
 fricAngle = uqc "varphi'" (cn $ "effective angle of friction")
   ("The angle of inclination with respect to the horizontal axis of " ++
   "the Mohr-Coulomb shear resistance line") --http://www.geotechdata.info
-  (prime $ Greek Phi_V) degree Real [physc $ \c -> (Int 0) $< c $< (Int 90)]
-  (Dbl 25) defultUncrt
+  (prime $ Greek Phi_V) degree Real [physc $ Bounded (Exc 0) (Exc 90)]
+  (dbl 25) defultUncrt
 
 dryWeight = uqc "gamma" (cn $ "dry unit weight")
   "The weight of a dry soil/ground layer divided by the volume of the layer."
   (Greek Gamma_L) specific_weight Real [gtZeroConstr]
-  (Dbl 20) defultUncrt
+  (dbl 20) defultUncrt
 
 satWeight = uqc "gamma_sat" (cn $ "saturated unit weight")
   ("The weight of saturated soil/ground " ++
   "layer divided by the volume of the layer.")
   (sub (Greek Gamma_L) (Atomic "Sat")) specific_weight Real [gtZeroConstr]
-  (Dbl 20) defultUncrt
+  (dbl 20) defultUncrt
 
 waterWeight = uqc "gamma_w" (cn $ "unit weight of water")
   "The weight of one cubic meter of water."
   (sub (Greek Gamma_L) lW) specific_weight Real [gtZeroConstr]
-  (Dbl 9.8) defultUncrt
+  (dbl 9.8) defultUncrt
   
 constant_a = uqc "a" (cn "constant") fixme
-  lA metre Real [] (Dbl 0) defultUncrt
+  lA metre Real [] (dbl 0) defultUncrt
   
 constant_A = uqc "A" (cn "constant") fixme
-  cA metre Real [] (Dbl 0) defultUncrt
+  cA metre Real [] (dbl 0) defultUncrt
   
 constant_K = uqc "kappa" (cn "constant") fixme
-  (Greek Kappa_L) pascal Real [] (Dbl 0) defultUncrt
+  (Greek Kappa_L) pascal Real [] (dbl 0) defultUncrt
 
 {-Output Variables-} --FIXME: See if there should be typical values
-fs = constrained' (cvR fs_concept (Atomic "FS")) [gtZeroConstr] (Dbl 1)
+fs = constrained' (cv fs_concept (Atomic "FS") Real) [gtZeroConstr] (dbl 1)
+
+fs_min :: ConVar -- This is a hack to remove the use of indexing for 'min'.
+fs_min = cv (dcc "fs_min" (cn "minimum factor of safety") 
+  ("The minimum factor of safety")) (sub (eqSymb fs) (Atomic "min")) Real
+-- Once things are converted to the new style of instance models, this will
+-- be removed/fixed.
 
 coords = cuc' "(x,y)"
   (cn $ "cartesian position coordinates" )
   ("y is considered parallel to the direction of the force of " ++
   "gravity and x is considered perpendicular to y")
-  (Atomic "(x,y)") metre Real monotonicIn (Dbl 1)
+  (Atomic "(x,y)") metre Real [] (dbl 1)
 
 dx_i = cuc' "dx_i" (cn $ "displacement") ("in the x-ordinate direction " ++
-  fsi) (Concat [Greek Delta_L, Atomic "x"]) metre Real [] (Dbl 1)
+  fsi) (Concat [Greek Delta_L, Atomic "x"]) metre Real [] (dbl 1)
 
 dy_i = cuc' "dy_i" (cn $ "displacement") ("in the y-ordinate direction " ++
-  fsi) (Concat [Greek Delta_L, Atomic "y"]) metre Real [] (Dbl 1)
+  fsi) (Concat [Greek Delta_L, Atomic "y"]) metre Real [] (dbl 1)
 
 ---------------------------
 -- START OF UNITALCHUNKS --
 ---------------------------
 
-sspUnits :: [UCWrapper]
+sspUnits :: [UnitaryConceptDict]
 sspUnits = map ucw [normStress, genPressure, normFunc, shearFunc,
   waterHght, slopeHght, slipHght, xi, yi, critCoords, slopeDist, slipDist,
   mobShrI, shrResI, shearFNoIntsl, shearRNoIntsl, slcWght, watrForce,
@@ -382,56 +389,63 @@ fy = uc' "fy" (cn "y-component of the net force") fixme
 
 sspUnitless :: [ConVar]
 sspUnitless = [earthqkLoadFctr, normToShear,scalFunc,
-  numbSlices, minFunction, fsloc, index, varblU, varblV]
+  numbSlices, minFunction, fsloc, index, varblU, varblV, fs_min,
+  ufixme1, ufixme2]
 
 earthqkLoadFctr, normToShear, scalFunc,
   numbSlices, minFunction, fsloc, index, varblU, varblV :: ConVar
 
-earthqkLoadFctr = cvR (dcc "K_c" (nounPhraseSP $ "earthquake load factor")
+earthqkLoadFctr = cv (dcc "K_c" (nounPhraseSP $ "earthquake load factor")
   ("proportionality factor of force that " ++
   "weight pushes outwards; caused by seismic earth movements"))
-  (sub cK lC)
+  (sub cK lC) Real
 
-normToShear = cvR (dcc "lambda"
+normToShear = cv (dcc "lambda"
   (nounPhraseSP $ "interslice normal/shear force ratio")
-  ("applied to all interslices")) (Greek Lambda_L)
+  ("applied to all interslices")) (Greek Lambda_L) Real
 
-scalFunc = cvR (dcc "f_i" (nounPhraseSP $ "scaling function")
+scalFunc = cv (dcc "f_i" (nounPhraseSP $ "scaling function")
   ("magnitude of interslice forces as a function " ++
   "of the x coordinate" ++ fisi ++ "; can be constant or a half-sine"))
-  (lF)
+  (lF) Real
 
-numbSlices = cvRs (dcc "n" (nounPhraseSP "number of slices")
+numbSlices = cv (dcc "n" (nounPhraseSP "number of slices")
   "the slip mass has been divided into")
   lN Natural
 
-minFunction = cvR (dcc "Upsilon" (nounPhraseSP "function")
+minFunction = cv (dcc "Upsilon" (nounPhraseSP "function")
   ("generic minimization function or algorithm"))
-  (Greek Upsilon)
+  (Greek Upsilon) Real
 
-fsloc = cvR (dcc "FS_loci" (nounPhraseSP "local factor of safety") fsi)
-  (sub (Atomic "FS") (Atomic "Loc,i"))
+fsloc = cv (dcc "FS_loci" (nounPhraseSP "local factor of safety") fsi)
+  (sub (Atomic "FS") (Atomic "Loc,i")) Real
+
+ufixme1 = cv (dcc "fixme1" (cn "fixme") "What is this value?")
+  (Atomic "SpencerFixme1Please") Real
+
+ufixme2 = cv (dcc "fixme2" (cn "fixme") "What is this value?")
+  (Atomic "SpencerFixme2Please") Real
 
 --------------------
 -- Index Function --
 --------------------
 
-varblU = cvRs (dcc "varblU" (nounPhraseSP "local index")
+varblU = cv (dcc "varblU" (nounPhraseSP "local index")
   ("used as a bound variable index in calculations"))
   lU Natural
-varblV = cvRs (dcc "varblV" (nounPhraseSP "local index")
+varblV = cv (dcc "varblV" (nounPhraseSP "local index")
   ("used as a bound variable index in calculations"))
   lV Natural
 
-index = cvRs (dcc "index" (nounPhraseSP "index")
+index = cv (dcc "index" (nounPhraseSP "index")
   ("used to show a quantity applies to only one slice")) lI Natural
 
 --FIXME: possibly move to Language/Drasil/Expr.hs
 indx1 :: (Quantity a) => a -> Expr
-indx1 a = Index (C a) (Int 1)
+indx1 a = idx (sy a) 1
 
 indxn :: (Quantity a) => a -> Expr
-indxn a = Index (C a) (C numbSlices)
+indxn a = idx (sy a) (sy numbSlices)
 
 inxi, inxiP1, inxiM1 :: Quantity e => e -> Expr
 inxiP1 e = inx e 1
@@ -440,9 +454,9 @@ inxiM1 e = inx e (-1)
 
 inx :: Quantity e => e -> Integer -> Expr
 inx e n 
-  | n < 0     = Index (C e) (C index - Int (-n))
-  | n == 0    = Index (C e) (C index)
-  | otherwise = Index (C e) (C index + Int n)
+  | n < 0     = idx (sy e) (sy index - int (-n))
+  | n == 0    = idx (sy e) (sy index)
+  | otherwise = idx (sy e) (sy index + int n)
 
 sum1toN :: Expr -> Expr
-sum1toN = defsum (eqSymb index) 1 (C numbSlices)
+sum1toN = defsum (eqSymb index) 1 (sy numbSlices)

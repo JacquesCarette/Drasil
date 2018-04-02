@@ -7,8 +7,13 @@ import Language.Drasil.Code.Imperative.LanguageRenderer (Options(..))
 import Language.Drasil.Code.Imperative.Parsers.ConfigParser (pythonLabel, cppLabel, cSharpLabel, javaLabel)
 import Language.Drasil.Code.Imperative.Lang
 import Language.Drasil.Code.CodeGeneration (createCodeFiles, makeCode)
+import Language.Drasil.Chunk (Chunk(..))
+import Language.Drasil.Chunk.SymbolForm (HasSymbol)
 import Language.Drasil.Chunk.Code
-import Language.Drasil.Expr as E
+import Language.Drasil.Chunk.Quantity (QuantityDict)
+import Language.Drasil.Chunk.Constrained (Constraint(..))
+import Language.Drasil.Expr as E hiding (($.))
+import Language.Drasil.Space (Space(..))
 import Language.Drasil.Expr.Extract hiding (vars)
 import Language.Drasil.CodeSpec hiding (codeSpec, Mod(..))
 import qualified Language.Drasil.CodeSpec as CS (Mod(..))
@@ -22,7 +27,7 @@ import qualified Data.Map as Map (lookup)
 import Data.Maybe (maybe)
 import Language.Drasil.ChunkDB (symbLookup, HasSymbolTable(..))
 import Control.Lens ((^.))
-import Control.Monad (when,liftM2,zipWithM)
+import Control.Monad (when,liftM2,liftM3,zipWithM)
 import Control.Monad.Reader (Reader, ask, runReader, withReader)
 
 -- Private State, used to push these options around the generator
@@ -94,7 +99,7 @@ generateCode ch g =
             (Options Nothing Nothing Nothing (Just "Code"))
             (toAbsCode prog modules)
           setCurrentDirectory workingDir) (lang $ ch)
-  where prog = codeName $ program $ codeSpec g
+  where prog = programName $ program $ codeSpec g
         modules = runReader genModules g
 
 genModules :: Reader State [Module]
@@ -159,8 +164,8 @@ genInputConstraints = do
   g <- ask
   let vars   = inputs $ codeSpec g
       cm     = cMap $ codeSpec g
-      sfwrCs = concatMap (\x -> sfwrLookup x cm) vars
-      physCs = concatMap (\x -> physLookup x cm) vars
+      sfwrCs = concatMap (renderC . sfwrLookup cm) vars
+      physCs = concatMap (renderC . physLookup cm) vars
   parms <- getParams vars
   sf <- mapM (\x -> do { e <- convExpr x; return $ ifCond [((?!) e, sfwrCBody g x)] noElse}) sfwrCs
   hw <- mapM (\x -> do { e <- convExpr x; return $ ifCond [((?!) e, physCBody g x)] noElse}) physCs
@@ -218,8 +223,8 @@ genCalcBlock t' v' e' = do
   doit t' v' e'
     where
     doit :: CalcType -> String -> Expr -> Reader State Body
+    doit t v (Case e)    = genCaseBlock t v e
     doit t v e
-      | containsCase e   = genCaseBlock t v $ getCases e
       | t == CalcAssign  = fmap oneLiner $ do { vv <- variable v; ee <- convExpr e; assign vv ee}
       | otherwise        = fmap (oneLiner . I.return) $ convExpr e
 
@@ -435,148 +440,94 @@ convType C.Char = char
 convType C.String = string
 convType (C.List t) = listT $ convType t
 convType (C.Object n) = obj n
-convType _ = error "No type conversion"
+convType (C.File) = error "convType: File ?"
 
 convExpr :: Expr -> Reader State Value
-convExpr (V v)        = return $ litString v  -- V constructor should be removed
 convExpr (Dbl d)      = return $ litFloat d
 convExpr (Int i)      = return $ litInt i
-convExpr ((Int a) :/ (Int b)) = return $ (litFloat $ fromIntegral a) #/ (litFloat $ fromIntegral b) -- hack to deal with integer division
-convExpr (a :/ b)     = liftM2 (#/) (convExpr a) (convExpr b)
-convExpr (a :* b)     = liftM2 (#*)  (convExpr a) (convExpr b)
-convExpr (a :+ b)     = liftM2 (#+)  (convExpr a) (convExpr b)
-convExpr (a :^ b)     = liftM2 (#^)  (convExpr a) (convExpr b)
-convExpr (0 :- b)     = convExpr (Neg b)
-convExpr (a :- b)     = liftM2 (#-)  (convExpr a) (convExpr b)
-convExpr (a :. b)     = liftM2 (#*)  (convExpr a) (convExpr b)
-convExpr (a :&& b)    = liftM2 (?&&) (convExpr a) (convExpr b)
-convExpr (a :|| b)    = liftM2 (?||) (convExpr a) (convExpr b)
+convExpr (Str s)      = return $ litString s
+convExpr (AssocA Add l)  = fmap (foldr1 (#+)) $ sequence $ map convExpr l
+convExpr (AssocA Mul l)  = fmap (foldr1 (#*)) $ sequence $ map convExpr l
+convExpr (AssocB E.And l)  = fmap (foldr1 (?&&)) $ sequence $ map convExpr l
+convExpr (AssocB E.Or l)  = fmap (foldr1 (?||)) $ sequence $ map convExpr l
 convExpr (Deriv _ _ _) = return $ litString "**convExpr :: Deriv unimplemented**"
-convExpr (E.Not e)      = fmap (?!) (convExpr e)
-convExpr (Neg e)      = fmap (#~) (convExpr e)
-convExpr (C c)        = do
+convExpr (C c)         = do
   g <- ask
   variable $ codeName $ codevar $ symbLookup c $ (sysinfodb $ codeSpec g) ^. symbolTable
-convExpr (Index a i)  = liftM2 (\x y -> x$.(listAccess y)) (convExpr a) (convExpr i)
-convExpr (Len a)      = fmap ($.listSize) (convExpr a)
-convExpr (Append a v) = liftM2 (\x y -> x$.(listAppend y)) (convExpr a) (convExpr v)
 convExpr (FCall (C c) x)  = do
   g <- ask
   let info = sysinfodb $ codeSpec g
   args <- mapM convExpr x
   fApp (codeName (codefunc $ symbLookup c $ info ^. symbolTable)) args
-convExpr (FCall _ _)  = return $ litString "**convExpr :: FCall unimplemented**"
-convExpr (EEquals a b)    = liftM2 (?==) (convExpr a) (convExpr b)
-convExpr (ENEquals a b)   = liftM2 (?!=) (convExpr a) (convExpr b)
-convExpr (EGreater a b)   = liftM2 (?>)  (convExpr a) (convExpr b)
-convExpr (ELess a b)      = liftM2 (?<)  (convExpr a) (convExpr b)
-convExpr (ELessEq a b)    = liftM2 (?<=) (convExpr a) (convExpr b)
-convExpr (EGreaterEq a b) = liftM2 (?>=) (convExpr a) (convExpr b)
-convExpr (UnaryOp u)  = unop u
-convExpr (Grouping e) = convExpr e
-convExpr (BinaryOp _) = return $ litString "**convExpr :: BinaryOp unimplemented**"
-convExpr (Case _)     = error "**convExpr :: Case should be dealt with separately**"
-convExpr _           = return $ litString "**convExpr :: ? unimplemented**"
+convExpr (FCall _ _)   = return $ litString "**convExpr :: FCall unimplemented**"
+convExpr (UnaryOp o u) = fmap (unop o) (convExpr u)
+convExpr (BinaryOp Frac (Int a) (Int b)) =
+  return $ (litFloat $ fromIntegral a) #/ (litFloat $ fromIntegral b) -- hack to deal with integer division
+convExpr (BinaryOp o a b)  = liftM2 (bfunc o) (convExpr a) (convExpr b)
+convExpr (Case l)      = doit l -- FIXME this is sub-optimal
+  where
+    doit [] = error "should never happen"
+    doit [(e,_)] = convExpr e -- should always be the else clause
+    doit ((e,cond):xs) = liftM3 Condi (convExpr cond) (convExpr e) (convExpr (Case xs))
+convExpr (Matrix _)    = error "convExpr: Matrix"
+convExpr (EOp _)       = error "convExpr: EOp"
+convExpr (IsIn _ _)    = error "convExpr: IsIn"
+convExpr (RealI c ri)  = do
+  g <- ask
+  convExpr $ renderRealInt (lookupC (sysinfodb $ codeSpec g) c) ri
 
-unop :: UFunc -> Reader State Value
-unop (E.Sqrt e)  = fmap (#/^) (convExpr e)
-unop (E.Log e)   = fmap I.log (convExpr e)
-unop (E.Abs e)   = fmap (#|)  (convExpr e)
-unop (E.Exp e)   = fmap I.exp (convExpr e)
-unop (E.Sin e)   = fmap I.sin (convExpr e)
-unop (E.Cos e)   = fmap I.cos (convExpr e)
-unop (E.Tan e)   = fmap I.tan (convExpr e)
-unop (E.Csc e)   = fmap I.csc (convExpr e)
-unop (E.Sec e)   = fmap I.sec (convExpr e)
-unop (E.Cot e)   = fmap I.cot (convExpr e)
-unop _           = error "not implemented"
+lookupC :: HasSymbolTable s => s -> UID -> QuantityDict
+lookupC sm c = symbLookup c $ sm^.symbolTable
 
+renderC :: (Chunk c, HasSymbol c) => (c, [Constraint]) -> [Expr]
+renderC (u, l) = map (renderC' u) l
 
-containsCase :: Expr -> Bool
-containsCase (Case _) = True
-containsCase (a :/ b)     = (containsCase a) || (containsCase b)
-containsCase (a :* b)     = (containsCase a) || (containsCase b)
-containsCase (a :+ b)     = (containsCase a) || (containsCase b)
-containsCase (a :^ b)     = (containsCase a) || (containsCase b)
-containsCase (a :- b)     = (containsCase a) || (containsCase b)
-containsCase (a :. b)     = (containsCase a) || (containsCase b)
-containsCase (a :&& b)    = (containsCase a) || (containsCase b)
-containsCase (a :|| b)    = (containsCase a) || (containsCase b)
-containsCase (Deriv _ _ _) = error "not implemented"
-containsCase (E.Not e)     = containsCase e
-containsCase (Neg e)       = containsCase e
-containsCase (EEquals a b)    = (containsCase a) || (containsCase b)
-containsCase (ENEquals a b)   = (containsCase a) || (containsCase b)
-containsCase (EGreater a b)   = (containsCase a) || (containsCase b)
-containsCase (ELess a b)      = (containsCase a) || (containsCase b)
-containsCase (ELessEq a b)    = (containsCase a) || (containsCase b)
-containsCase (EGreaterEq a b) = (containsCase a) || (containsCase b)
-containsCase (UnaryOp u)  = unopcase u
-containsCase (Grouping e) = containsCase e
-containsCase (BinaryOp _) = error "not implemented"
-containsCase _            = False
+renderC' :: (Chunk c, HasSymbol c) => c -> Constraint -> Expr
+renderC' s (Range _ rr)          = renderRealInt s rr
+renderC' s (EnumeratedReal _ rr) = IsIn (sy s) (DiscreteD rr)
+renderC' s (EnumeratedStr _ rr)  = IsIn (sy s) (DiscreteS rr)
 
-unopcase :: UFunc -> Bool
-unopcase (E.Sqrt e)         = containsCase e
-unopcase (E.Log e)          = containsCase e
-unopcase (E.Abs e)          = containsCase e
-unopcase (E.Exp e)          = containsCase e
-unopcase (E.Sin e)          = containsCase e
-unopcase (E.Cos e)          = containsCase e
-unopcase (E.Tan e)          = containsCase e
-unopcase (E.Sec e)          = containsCase e
-unopcase (E.Csc e)          = containsCase e
-unopcase (E.Cot e)          = containsCase e
-unopcase _                  = error "not implemented"
+renderRealInt :: (Chunk c, HasSymbol c) => c -> RealInterval -> Expr
+renderRealInt s (Bounded (Inc a) (Inc b)) = (a $<= sy s) $&& (sy s $<= b)
+renderRealInt s (Bounded (Inc a) (Exc b)) = (a $<= sy s) $&& (sy s $<  b)
+renderRealInt s (Bounded (Exc a) (Inc b)) = (a $<  sy s) $&& (sy s $<= b)
+renderRealInt s (Bounded (Exc a) (Exc b)) = (a $<  sy s) $&& (sy s $<  b)
+renderRealInt s (UpTo (Inc a))    = sy s $<= a
+renderRealInt s (UpTo (Exc a))    = sy s $< a
+renderRealInt s (UpFrom (Inc a))  = sy s $>= a
+renderRealInt s (UpFrom (Exc a))  = sy s $>  a
 
-getCases :: Expr -> [(Expr, Relation)]
-getCases (Case a)     = a
-getCases e            = getCases (compactCase e)
+unop :: UFunc -> (Value -> Value)
+unop E.Sqrt = (#/^)
+unop E.Log  = I.log
+unop E.Abs  = (#|)
+unop E.Exp  = I.exp
+unop E.Sin  = I.sin
+unop E.Cos  = I.cos
+unop E.Tan  = I.tan
+unop E.Csc  = I.csc
+unop E.Sec  = I.sec
+unop E.Cot  = I.cot
+unop E.Dim  = ($.listSize)
+unop E.Norm = error "unop: Norm not implemented"
+unop E.Not  = (?!)
+unop E.Neg  = (#~)
 
-compactCase :: Expr -> Expr
-compactCase (a :/ b)     = compactCaseBinary (:/) a b
-compactCase (a :* b)     = compactCaseBinary (:*) a b
-compactCase (a :+ b)     = compactCaseBinary (:+) a b
-compactCase (a :^ b)     = compactCaseBinary (:^) a b
-compactCase (a :- b)     = compactCaseBinary (:-) a b
-compactCase (a :. b)     = compactCaseBinary (:.) a b
-compactCase (a :&& b)    = compactCaseBinary (:&&) a b
-compactCase (a :|| b)    = compactCaseBinary (:||) a b
-compactCase (Deriv _ _ _) = error "not implemented"
-compactCase (E.Not e)    = compactCaseUnary E.Not e
-compactCase (Neg e)      = compactCaseUnary Neg e
-compactCase (EEquals a b)    = compactCaseBinary ($=) a b
-compactCase (ENEquals a b)   = compactCaseBinary ($!=) a b
-compactCase (EGreater a b)   = compactCaseBinary ($>) a b
-compactCase (ELess a b)      = compactCaseBinary ($<) a b
-compactCase (ELessEq a b)    = compactCaseBinary ($<=) a b
-compactCase (EGreaterEq a b) = compactCaseBinary ($>=) a b
-compactCase (UnaryOp u)  = unopcomcase u
-compactCase (Grouping e) = compactCaseUnary Grouping e
-compactCase (BinaryOp _) = error "not implemented"
-compactCase e            = e
-
-unopcomcase :: UFunc -> Expr
-unopcomcase (E.Sqrt e)  = compactCaseUnary (UnaryOp . E.Sqrt) e
-unopcomcase (E.Log e)   = compactCaseUnary (UnaryOp . E.Log) e
-unopcomcase (E.Abs e)   = compactCaseUnary (UnaryOp . E.Abs) e
-unopcomcase (E.Exp e)   = compactCaseUnary (UnaryOp . E.Exp) e
-unopcomcase (E.Sin e)   = compactCaseUnary (UnaryOp . E.Sin) e
-unopcomcase (E.Cos e)   = compactCaseUnary (UnaryOp . E.Cos) e
-unopcomcase (E.Tan e)   = compactCaseUnary (UnaryOp . E.Tan) e
-unopcomcase (E.Sec e)   = compactCaseUnary (UnaryOp . E.Sec) e
-unopcomcase (E.Csc e)   = compactCaseUnary (UnaryOp . E.Csc) e
-unopcomcase (E.Cot e)   = compactCaseUnary (UnaryOp . E.Cot) e
-unopcomcase _           = error "not implemented"
-
-compactCaseBinary :: (Expr -> Expr -> Expr) -> Expr -> Expr -> Expr
-compactCaseBinary op (Case c) b = Case (map (\(e, r) -> (e `op` b, r)) c)
-compactCaseBinary op a (Case c) = Case (map (\(e, r) -> (a `op` e, r)) c)
-compactCaseBinary op a b        = (compactCase a) `op` (compactCase b)
-
-compactCaseUnary :: (Expr -> Expr) -> Expr -> Expr
-compactCaseUnary op (Case c) = Case (map (\(e, r) -> (op e, r)) c)
-compactCaseUnary op a        = op (compactCase a)
+bfunc :: BinOp -> (Value -> Value -> Value)
+bfunc Eq    = (?==)
+bfunc NEq   = (?!=)
+bfunc Gt   = (?>)
+bfunc Lt      = (?<)
+bfunc LEq    = (?<=)
+bfunc GEq = (?>=)
+bfunc Cross      = error "bfunc: Cross not implemented"
+bfunc Pow    = (#^)
+bfunc Subt   = (#-)
+bfunc Impl    = error "convExpr :=>"
+bfunc Iff        = error "convExpr :<=>"
+bfunc Dot = error "convExpr DotProduct"
+bfunc Frac = (#/)
+bfunc Index      = (\x y -> x$.(listAccess y))
 
 -- medium hacks --
 genModDef :: CS.Mod -> Reader State Module
@@ -597,9 +548,7 @@ genFunc (FData (FuncData n dd)) = genDataFunc n dd
 genFunc (FCD cd) = genCalcFunc cd
 
 convStmt :: FuncStmt -> Reader State Statement
-convStmt (FAsg v e) = do
-  e' <- convExpr e
-  assign (var $ codeName v) e'
+convStmt (FAsg v e) = convExpr e >>= assign (var $ codeName v)
 convStmt (FFor v e st) = do
   stmts <- mapM convStmt st
   e' <- convExpr e
@@ -625,9 +574,11 @@ convStmt (FTry t c) = do
   stmt2 <- mapM convStmt c
   return $ tryCatch [ block stmt1 ] [ block stmt2 ]
 convStmt (FContinue) = return continue
-convStmt (FVal e) = fmap valStmt $ convExpr e
 convStmt (FDec v (C.List t)) = return $ listDec' (codeName v) (convType t) 0
 convStmt (FDec v t) = return $ varDec (codeName v) (convType t)
+convStmt (FProcCall n l) = fmap valStmt $ convExpr (FCall (asExpr n) l)
+convStmt (FAppend a b) = fmap valStmt $
+  liftM2 (\x y -> x$.(listAppend y)) (convExpr a) (convExpr b)
 
 -- this is really ugly!!
 genDataFunc :: Name -> DataDesc -> Reader State Method

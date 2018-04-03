@@ -1070,7 +1070,7 @@ There are no system constraints.
 Specific System Description
 </h2>
 <p class="paragraph">
-This section first presents the problem description, which gives a high-level view of the problem to be solved. This is followed by the solution characteristics specification, which presents the assumptions, theories, and definitions that are used for the physics library.
+This section first presents the problem description, which gives a high-level view of the problem to be solved. This is followed by the solution characteristics specification, which presents the assumptions, theories, and definitions that are used for the Chipmunk2D game physics library.
 </p>
 <a id="Sec:ProbDesc">
 <div class="subsection">
@@ -1139,7 +1139,7 @@ GS4: Given the physical properties, initial positions, orientations, linear velo
 Solution Characteristics Specification
 </h3>
 <p class="paragraph">
-The instance models that govern Chipmunk2D are presented in FIXME REF to IModSection. The information to understand the meaning of the instance models and their derivation is also presented, so that the instance models can be verified.
+The instance models that govern Chipmunk2D are presented in <a href=#Sec:IMs>Instance Models</a>. The information to understand the meaning of the instance models and their derivation is also presented, so that the instance models can be verified.
 </p>
 <a id="Sec:Assumps">
 <div class="subsubsection">
@@ -1186,21 +1186,11 @@ This section focuses on the general equations and laws that Chipmunk2D is based 
 <table class="tdefn">
 <tr>
 <th>
-Number
-</th>
-<td>
-<p class="paragraph">
-<b>T</b>
-</p>
-</td>
-</tr>
-<tr>
-<th>
 Label
 </th>
 <td>
 <p class="paragraph">
-Newton's Second Law of Motion
+Newton's second law of motion
 </p>
 </td>
 </tr>
@@ -1221,8 +1211,36 @@ Equation
 Description
 </th>
 <td>
+<div class="list">
+<p>
+<em><b>F</b></em> is the force (N)
+</p>
+<p>
+<em>m</em> is the mass (kg)
+</p>
+<p>
+<em><b>a</b></em> is the acceleration (m/s<sup>2</sup>)
+</p>
+</div>
+</td>
+</tr>
+<tr>
+<th>
+Source
+</th>
+<td>
 <p class="paragraph">
-The net force <em><b>F</b></em> (N) on a rigid body is proportional to the acceleration <em><b>a</b></em> (m/s<sup>2</sup>) of the rigid body, where <em>m</em> (kg) denotes the mass of the rigid body as the constant of proportionality.
+FIXME: This needs to be filled in
+</p>
+</td>
+</tr>
+<tr>
+<th>
+RefBy
+</th>
+<td>
+<p class="paragraph">
+FIXME: This needs to be filled in
 </p>
 </td>
 </tr>
@@ -1232,21 +1250,11 @@ The net force <em><b>F</b></em> (N) on a rigid body is proportional to the accel
 <table class="tdefn">
 <tr>
 <th>
-Number
-</th>
-<td>
-<p class="paragraph">
-<b>T</b>
-</p>
-</td>
-</tr>
-<tr>
-<th>
 Label
 </th>
 <td>
 <p class="paragraph">
-Newton's Third Law of Motion
+Newton's third law of motion
 </p>
 </td>
 </tr>
@@ -1267,8 +1275,33 @@ Equation
 Description
 </th>
 <td>
+<div class="list">
+<p>
+<em><b>F</b><sub>1</sub></em> is the force exerted by the first body (on another body) (N)
+</p>
+<p>
+<em><b>F</b><sub>2</sub></em> is the force exerted by the second body (on another body) (N)
+</p>
+</div>
+</td>
+</tr>
+<tr>
+<th>
+Source
+</th>
+<td>
 <p class="paragraph">
-Every action has an equal and opposite reaction. In other words, the force <em><b>F</b><sub>1</sub></em> (N) exerted on the second rigid body by the first is equal in magnitude and in the opposite direction to the force <em><b>F</b><sub>2</sub></em> (N) exerted on the first rigid body by the second.
+FIXME: This needs to be filled in
+</p>
+</td>
+</tr>
+<tr>
+<th>
+RefBy
+</th>
+<td>
+<p class="paragraph">
+FIXME: This needs to be filled in
 </p>
 </td>
 </tr>
@@ -1278,21 +1311,11 @@ Every action has an equal and opposite reaction. In other words, the force <em><
 <table class="tdefn">
 <tr>
 <th>
-Number
-</th>
-<td>
-<p class="paragraph">
-<b>T</b>
-</p>
-</td>
-</tr>
-<tr>
-<th>
 Label
 </th>
 <td>
 <p class="paragraph">
-Newton's Law of Universal Gravitation
+Newton's law of universal gravitation
 </p>
 </td>
 </tr>
@@ -1334,8 +1357,48 @@ m<sub>1</sub>&#8239;m<sub>2</sub>
 Description
 </th>
 <td>
+<div class="list">
+<p>
+<em><b>F</b></em> is the force (N)
+</p>
+<p>
+<em>G</em> is the gravitational constant (m<sup>3</sup>/(kg&sdot;s<sup>2</sup>))
+</p>
+<p>
+<em>m<sub>1</sub></em> is the mass of the first body (kg)
+</p>
+<p>
+<em>m<sub>2</sub></em> is the mass of the second body (kg)
+</p>
+<p>
+<em>||<b>r</b>||</em> is the Euclidean norm of the displacement (m)
+</p>
+<p>
+<em><b>r&#770;</b></em> is the displacement unit vector (m)
+</p>
+<p>
+<em><b>r</b></em> is the displacement (m)
+</p>
+</div>
+</td>
+</tr>
+<tr>
+<th>
+Source
+</th>
+<td>
 <p class="paragraph">
-Two rigid bodies in the universe attract each other with a force <em><b>F</b></em> (N) that is directly proportional to the product of their masses, <em>m<sub>1</sub></em> and <em>m<sub>2</sub></em> (kg), and inversely proportional to the squared distance <em>||<b>r</b>||<sup>2</sup></em> (m<sup>2</sup>) between them. The vector <em><b>r</b></em> (m) is the displacement between the centres of the rigid bodies and <em>||<b>r</b>||</em> (m) represents the Euclidean norm of the displacement, or absolute distance between the two. <em><b>r&#770;</b></em> denotes the displacement unit vector, equivalent to the displacement divided by the Euclidean norm of the displacement, as shown above. Finally, <em>G</em> is the gravitational constant (6.673 * 10E-11) (m<sup>3</sup>/(kg&sdot;s<sup>2</sup>)).
+FIXME: This needs to be filled in
+</p>
+</td>
+</tr>
+<tr>
+<th>
+RefBy
+</th>
+<td>
+<p class="paragraph">
+FIXME: This needs to be filled in
 </p>
 </td>
 </tr>
@@ -1345,21 +1408,11 @@ Two rigid bodies in the universe attract each other with a force <em><b>F</b></e
 <table class="tdefn">
 <tr>
 <th>
-Number
-</th>
-<td>
-<p class="paragraph">
-<b>T</b>
-</p>
-</td>
-</tr>
-<tr>
-<th>
 Label
 </th>
 <td>
 <p class="paragraph">
-Chasles' Theorem
+Chasles' theorem
 </p>
 </td>
 </tr>
@@ -1380,8 +1433,39 @@ Equation
 Description
 </th>
 <td>
+<div class="list">
+<p>
+<em><b>v</b><sub>B</sub></em> is the velocity at point B (m/s)
+</p>
+<p>
+<em><b>v</b><sub>O</sub></em> is the velocity at point origin (m/s)
+</p>
+<p>
+<em>&omega;</em> is the angular velocity (rad/s)
+</p>
+<p>
+<em><b>r</b><sub>OB</sub></em> is the displacement vector between the origin and point B (m)
+</p>
+</div>
+</td>
+</tr>
+<tr>
+<th>
+Source
+</th>
+<td>
 <p class="paragraph">
-The linear velocity <em><b>v</b><sub>B</sub></em> (m/s) of any point B in a rigid body is the sum of the linear velocity <em><b>v</b><sub>O</sub></em> (m/s) of the rigid body at the origin (axis of rotation) and the resultant vector from the cross product of the rigid body's angular velocity <em>&omega;</em> (rad/s) and the displacement vector between the origin and point B, <em><b>r</b><sub>OB</sub></em> (m).
+FIXME: This needs to be filled in
+</p>
+</td>
+</tr>
+<tr>
+<th>
+RefBy
+</th>
+<td>
+<p class="paragraph">
+FIXME: This needs to be filled in
 </p>
 </td>
 </tr>
@@ -1391,21 +1475,11 @@ The linear velocity <em><b>v</b><sub>B</sub></em> (m/s) of any point B in a rigi
 <table class="tdefn">
 <tr>
 <th>
-Number
-</th>
-<td>
-<p class="paragraph">
-<b>T</b>
-</p>
-</td>
-</tr>
-<tr>
-<th>
 Label
 </th>
 <td>
 <p class="paragraph">
-Newton's Second Law for Rotational Motion
+Newton's second law for rotational motion
 </p>
 </td>
 </tr>
@@ -1426,8 +1500,36 @@ Equation
 Description
 </th>
 <td>
+<div class="list">
+<p>
+<em>&tau;</em> is the torque (N&sdot;m)
+</p>
+<p>
+<em><b>I</b></em> is the moment of inertia (kg&sdot;m<sup>2</sup>)
+</p>
+<p>
+<em>&alpha;</em> is the angular acceleration (rad/s<sup>2</sup>)
+</p>
+</div>
+</td>
+</tr>
+<tr>
+<th>
+Source
+</th>
+<td>
 <p class="paragraph">
-The net torque <em>&tau;</em> (N&sdot;m) on a rigid body is proportional to its angular acceleration <em>&alpha;</em> (rad/s<sup>2</sup>). Here, <em><b>I</b></em> (kg&sdot;m<sup>2</sup>) denotes the moment of inertia of the rigid body. We also assume that all rigid bodies involved are two-dimensional (A2).
+FIXME: This needs to be filled in
+</p>
+</td>
+</tr>
+<tr>
+<th>
+RefBy
+</th>
+<td>
+<p class="paragraph">
+FIXME: This needs to be filled in
 </p>
 </td>
 </tr>
@@ -1450,29 +1552,75 @@ There are no general definitions.
 <h4>
 Instance Models
 </h4>
-<p class="paragraph">
-This section transforms the problem defined in FIXME REF into one which is expressed in mathematical terms. It uses concrete symbols defined in FIXME REF to replace the abstract symbols in the models identified in FIXME REF and FIXME REF.
-</p>
-<a id="T:im1">
-<table class="tdefn">
-<tr>
-<th>
-Number
-</th>
-<td>
-<p class="paragraph">
-<b>T</b>
-</p>
-</td>
-</tr>
+<a id="IM:im1">
+<table class="idefn">
 <tr>
 <th>
 Label
 </th>
 <td>
 <p class="paragraph">
-Force on the Translational Motion of a Set of 2d Rigid Bodies
+Force on the translational motion of a set of 2d rigid bodies
 </p>
+</td>
+</tr>
+<tr>
+<th>
+Input
+</th>
+<td>
+<p class="paragraph">
+<em><b>v</b><sub>i</sub></em>, <em>t</em>, <em>g</em>, <em><b>F</b><sub>i</sub></em>, <em>m<sub>j</sub></em>
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Output
+</th>
+<td>
+<p class="paragraph">
+<em><b>a</b><sub>i</sub></em>
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Input Constraints
+</th>
+<td>
+<a id="">
+<div class="equation">
+<em><b>v</b><sub>i</sub>&thinsp;&gt;&thinsp;0</em>
+</div>
+</a>
+<a id="">
+<div class="equation">
+<em>t&thinsp;&gt;&thinsp;0</em>
+</div>
+</a>
+<a id="">
+<div class="equation">
+<em>g&thinsp;&gt;&thinsp;0</em>
+</div>
+</a>
+<a id="">
+<div class="equation">
+<em><b>F</b><sub>i</sub>&thinsp;&gt;&thinsp;0</em>
+</div>
+</a>
+<a id="">
+<div class="equation">
+<em>m<sub>j</sub>&thinsp;&gt;&thinsp;0</em>
+</div>
+</a>
+</td>
+</tr>
+<tr>
+<th>
+Output Constraints
+</th>
+<td>
 </td>
 </tr>
 <tr>
@@ -1506,33 +1654,119 @@ m<sub>j</sub>
 Description
 </th>
 <td>
+<div class="list">
+<p>
+<em><b>a</b><sub>i</sub></em> is the the i-th body's acceleration (m/s<sup>2</sup>)
+</p>
+<p>
+<em>t</em> is the time (s)
+</p>
+<p>
+<em><b>v</b><sub>i</sub></em> is the velocity of the i-th body's velocity (m/s)
+</p>
+<p>
+<em>g</em> is the gravitational acceleration (m/s<sup>2</sup>)
+</p>
+<p>
+<em><b>F</b><sub>i</sub></em> is the force applied to the i-th body at time t (N)
+</p>
+<p>
+<em>m<sub>j</sub></em> is the mass of the j-th particle (kg)
+</p>
+</div>
+</td>
+</tr>
+<tr>
+<th>
+Source
+</th>
+<td>
 <p class="paragraph">
-The above equation expresses the total acceleration of the rigid body (A1, A2) i as the sum of gravitational acceleration (GD3) and acceleration due to applied force Fi(t) (T1). The resultant outputs are then obtained from this equation using DD2, DD3 and DD4. It is currently assumed that there is no damping (A6) or constraints (A7) involved. <em>m<sub>i</sub></em> is the mass of the i-th rigid body (kg). <em>g</em> is the gravitational acceleration (m/s<sup>2</sup>). <em>t</em> is the point in time (s). <em>t<sub>0</sub></em> is the denotes the initial time (s). <em><b>p</b><sub>CM</sub></em> is the the mass-weighted average position of a rigid body's particles (m). <em><b>a</b></em> is the acceleration (m/s<sup>2</sup>). <em><b>v</b></em> is the velocity (m/s). <em><b>F</b><sub>i</sub></em> is the force applied to the i-th body at time t (N).
+
+</p>
+</td>
+</tr>
+<tr>
+<th>
+RefBy
+</th>
+<td>
+<p class="paragraph">
+FIXME: This needs to be filled in
 </p>
 </td>
 </tr>
 </table>
 </a>
-<a id="T:im2">
-<table class="tdefn">
-<tr>
-<th>
-Number
-</th>
-<td>
-<p class="paragraph">
-<b>T</b>
-</p>
-</td>
-</tr>
+<a id="IM:im2">
+<table class="idefn">
 <tr>
 <th>
 Label
 </th>
 <td>
 <p class="paragraph">
-Force on the Rotational Motion of a Set of 2D Rigid Body
+Force on the rotational motion of a set of 2D rigid body
 </p>
+</td>
+</tr>
+<tr>
+<th>
+Input
+</th>
+<td>
+<p class="paragraph">
+<em>&omega;</em>, <em>t</em>, <em>&tau;<sub>i</sub></em>, <em><b>I</b></em>
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Output
+</th>
+<td>
+<p class="paragraph">
+<em>&alpha;</em>
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Input Constraints
+</th>
+<td>
+<a id="">
+<div class="equation">
+<em>&omega;&thinsp;&gt;&thinsp;0</em>
+</div>
+</a>
+<a id="">
+<div class="equation">
+<em>t&thinsp;&gt;&thinsp;0</em>
+</div>
+</a>
+<a id="">
+<div class="equation">
+<em>&tau;<sub>i</sub>&thinsp;&gt;&thinsp;0</em>
+</div>
+</a>
+<a id="">
+<div class="equation">
+<em><b>I</b>&thinsp;&gt;&thinsp;0</em>
+</div>
+</a>
+</td>
+</tr>
+<tr>
+<th>
+Output Constraints
+</th>
+<td>
+<a id="">
+<div class="equation">
+<em>&alpha;&thinsp;&gt;&thinsp;0</em>
+</div>
+</a>
 </td>
 </tr>
 <tr>
@@ -1566,33 +1800,121 @@ d&#8239;t
 Description
 </th>
 <td>
+<div class="list">
+<p>
+<em>&alpha;</em> is the angular acceleration (rad/s<sup>2</sup>)
+</p>
+<p>
+<em>t</em> is the time (s)
+</p>
+<p>
+<em>&omega;</em> is the angular velocity (rad/s)
+</p>
+<p>
+<em>&tau;<sub>i</sub></em> is the is the torque applied to the i-th body (N&sdot;m)
+</p>
+<p>
+<em><b>I</b></em> is the moment of inertia (kg&sdot;m<sup>2</sup>)
+</p>
+</div>
+</td>
+</tr>
+<tr>
+<th>
+Source
+</th>
+<td>
 <p class="paragraph">
-The above equation for the total angular acceleration of the rigid body (A1, A2) i is derived from T5, and the resultant outputs are then obtained from this equation using DD5, DD6 and DD7. It is currently assumed that there is no damping (A6) or constraints (A7) involved. <em>m<sub>i</sub></em> is the mass of the i-th rigid body (kg). <em>g</em> is the gravitational acceleration (m/s<sup>2</sup>). <em>t</em> is the point in time (s). <em>t<sub>0</sub></em> is the denotes the initial time (s). <em>&phi;</em> is the orientation (rad). <em>&omega;</em> is the angular velocity (rad/s). <em>&alpha;</em> is the angular acceleration (rad/s<sup>2</sup>). <em>&tau;<sub>i</sub></em> is the is the torque applied to the i-th body (N&sdot;m). <em><b>I</b><sub>k</sub></em> is the moment of inertia of the k-th rigid body (kg&sdot;m<sup>2</sup>).
+
+</p>
+</td>
+</tr>
+<tr>
+<th>
+RefBy
+</th>
+<td>
+<p class="paragraph">
+FIXME: This needs to be filled in
 </p>
 </td>
 </tr>
 </table>
 </a>
-<a id="T:im3">
-<table class="tdefn">
-<tr>
-<th>
-Number
-</th>
-<td>
-<p class="paragraph">
-<b>T</b>
-</p>
-</td>
-</tr>
+<a id="IM:im3">
+<table class="idefn">
 <tr>
 <th>
 Label
 </th>
 <td>
 <p class="paragraph">
-Collisions on 2D Rigid Bodies
+Collisions on 2D rigid bodies
 </p>
+</td>
+</tr>
+<tr>
+<th>
+Input
+</th>
+<td>
+<p class="paragraph">
+<em>t</em>, <em>j</em>, <em>m<sub>A</sub></em>, <em><b>n</b></em>
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Output
+</th>
+<td>
+<p class="paragraph">
+<em><b>v</b><sub>A</sub></em>, <em>t<sub>c</sub></em>
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Input Constraints
+</th>
+<td>
+<a id="">
+<div class="equation">
+<em>t&thinsp;&gt;&thinsp;0</em>
+</div>
+</a>
+<a id="">
+<div class="equation">
+<em>j&thinsp;&gt;&thinsp;0</em>
+</div>
+</a>
+<a id="">
+<div class="equation">
+<em>m<sub>A</sub>&thinsp;&gt;&thinsp;0</em>
+</div>
+</a>
+<a id="">
+<div class="equation">
+<em><b>n</b>&thinsp;&gt;&thinsp;0</em>
+</div>
+</a>
+</td>
+</tr>
+<tr>
+<th>
+Output Constraints
+</th>
+<td>
+<a id="">
+<div class="equation">
+<em><b>v</b><sub>A</sub>&thinsp;&gt;&thinsp;0</em>
+</div>
+</a>
+<a id="">
+<div class="equation">
+<em>t<sub>c</sub>&thinsp;&gt;&thinsp;0</em>
+</div>
+</a>
 </td>
 </tr>
 <tr>
@@ -1619,12 +1941,51 @@ m<sub>A</sub>
 Description
 </th>
 <td>
+<div class="list">
+<p>
+<em><b>v</b><sub>A</sub></em> is the velocity at point A (m/s)
+</p>
+<p>
+<em>t<sub>c</sub></em> is the denotes the time at collision (s)
+</p>
+<p>
+<em>t</em> is the time (s)
+</p>
+<p>
+<em>j</em> is the impulse (scalar) (N&sdot;s)
+</p>
+<p>
+<em>m<sub>A</sub></em> is the mass of rigid body A (kg)
+</p>
+<p>
+<em><b>n</b></em> is the collision normal vector (m)
+</p>
+</div>
+</td>
+</tr>
+<tr>
+<th>
+Source
+</th>
+<td>
 <p class="paragraph">
-This instance model is based on our assumptions regarding rigid body (A1, A2) collisions (A5). Again, this does not take damping (A6) or constraints (A7) into account. <em>m<sub>i</sub></em> is the mass of the i-th rigid body (kg). <em><b>I</b><sub>k</sub></em> is the moment of inertia of the k-th rigid body (kg&sdot;m<sup>2</sup>). <em>t</em> is the point in time (s). <em>t<sub>0</sub></em> is the denotes the initial time (s). <em>t<sub>c</sub></em> is the denotes the time at collision (s). <em><b>p</b><sub>CM</sub></em> is the the mass-weighted average position of a rigid body's particles (m). <em><b>v</b></em> is the velocity (m/s). <em>&phi;</em> is the orientation (rad). <em>&omega;</em> is the angular velocity (rad/s). <em><b>n</b></em> is the collision normal vector (m). <em>j</em> is the collision impulse (scalar) (N&sdot;s). <em>P</em> is the point of collision (m). <em><b>r</b><sub>kP</sub></em> is the displacement vector between the centre of mass of rigid body k and contact point P (m).
+
+</p>
+</td>
+</tr>
+<tr>
+<th>
+RefBy
+</th>
+<td>
+<p class="paragraph">
+FIXME: This needs to be filled in
 </p>
 </td>
 </tr>
 </table>
+</a>
+</div>
 </a>
 </div>
 </a>

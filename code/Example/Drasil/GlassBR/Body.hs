@@ -55,8 +55,8 @@ import Drasil.GlassBR.Symbols
 import Drasil.GlassBR.Concepts (aR, lShareFac, gLassBR, stdOffDist,
   glaSlab, blastRisk, glass, responseTy, cantilever, beam, plane, edge,
   glaPlane, glassBRProg, ptOfExplsn, acronyms)
-import Drasil.GlassBR.TMods (tModels, t1SafetyReq, t2SafetyReq,t1IsSafe)
-import Drasil.GlassBR.IMods (iModels, calOfCap, calOfDe, probOfBr, probOfBreak)
+import Drasil.GlassBR.TMods (tModels, t1SafetyReq, t2SafetyReq)
+import Drasil.GlassBR.IMods (iModels, calOfCap, calOfDe, probOfBr)
 import Drasil.GlassBR.DataDefs (dataDefns, gbQDefns, hFromt,
   strDisFac, nonFL, dimLL, glaTyFac, tolStrDisFac, tolPre, risk)
 import Drasil.GlassBR.References

@@ -199,8 +199,8 @@ v $:= e = FAsg (codevar v) e
 ffor :: (Quantity c) => c -> Expr -> [FuncStmt] -> FuncStmt
 ffor v e fs = FFor (codevar v) e fs
 
-fdec :: (Quantity c) => c -> Space -> FuncStmt
-fdec v t = FDec (codevar v) (spaceToCodeType t)
+fdec :: (Quantity c) => c -> FuncStmt
+fdec v = FDec (codevar v) (spaceToCodeType $ v ^. typ)
 
 asVC :: Func -> VarChunk
 asVC (FDef (FuncDef n _ _ _)) = implVar n (nounPhraseSP n) (Atomic n) Real

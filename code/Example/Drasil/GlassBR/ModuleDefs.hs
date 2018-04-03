@@ -129,7 +129,7 @@ indInSeq = funcDef "indInSeq" [arr, v] Natural
 extractColumn :: Func
 extractColumn = funcDef "extractColumn" [mat, j] (Vect Real) 
   [
-    fdec col (Vect Rational),
+    fdec col,
     --
     ffor i (sy i $< dim (sy mat)) 
       [ FAppend (sy col) (aLook mat i j) ],
@@ -140,9 +140,9 @@ interpY :: Func
 interpY = funcDef "interpY" [{-x_array, y_array, z_vector,-} filename, x, z] Real
   [
     -- hack
-  fdec x_array (Vect $ Vect Rational),
-  fdec y_array (Vect $ Vect Rational),
-  fdec z_vector (Vect Rational),
+  fdec x_array,
+  fdec y_array,
+  fdec z_vector,
   --
   FProcCall read_table [sy filename, sy z_vector, sy x_array, sy y_array],
   -- endhack
@@ -176,9 +176,9 @@ interpZ :: Func
 interpZ = funcDef "interpZ" [{-x_array, y_array, z_vector,-} filename, x, y] Real
   [
     -- hack
-  fdec x_array (Vect $ Vect Rational),
-  fdec y_array (Vect $ Vect Rational),
-  fdec z_vector (Vect Rational),
+  fdec x_array,
+  fdec y_array,
+  fdec z_vector,
   --
   FProcCall read_table [sy filename, sy z_vector, sy x_array, sy y_array],
   -- endhack

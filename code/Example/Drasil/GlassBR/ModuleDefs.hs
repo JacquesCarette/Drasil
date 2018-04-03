@@ -94,10 +94,16 @@ filename= var "filename"  (Atomic "filename")         String
 --
 -- Some semantic functions
 
+-- Given two points (x1,y1) and (x2,y2), return the slope of the line going through them
+slope :: (Num a, Fractional a) => (a, a) -> (a, a) -> a
+slope (x1,y1) (x2,y2) = (y2 - y1) / (x2 - x1)
+
 -- Given two points (x1,y1) and (x2,y2), and an x ordinate, return
--- interpolated y on the straight line in between
-interp :: (Num a, Fractional a) => (a, a) -> (a, a) -> a -> a
-interp (x1,y1) (x2,y2) x_ = ((y2 - y1) / (x2 - x1)) * (x_ - x1) + y1
+-- extrapoled y on the straight line in between
+onLine :: (Num a, Fractional a) => (a, a) -> (a, a) -> a -> a
+onLine p1@(x1,y1) p2 x_ = 
+  let m = slope p1 p2 in
+  m * (x_ - x1) + y1
 
 ------------------------------------------------------------------------------------------
 -- Code Template helper functions
@@ -132,9 +138,10 @@ interpOver ptx pty ind vv =
 -- Code Templates
 
 -- Note how this one uses a semantic function in its body
+-- But it is also 'wrong' in the sense that it assumes x_1 <= x <= x_2
 linInterpCT :: Func
 linInterpCT = funcDef "lin_interp" [x_1, y_1, x_2, y_2, x] Real
-  [ FRet $ interp (sy x_1, sy y_1) (sy x_2, sy y_2) (sy x) ]
+  [ FRet $ onLine (sy x_1, sy y_1) (sy x_2, sy y_2) (sy x) ]
 
 findCT :: Func
 findCT = funcDef "find" [arr, v] Natural

@@ -256,7 +256,7 @@ Given the temperature of the heating coil, initial temperature of the water, and
 \end{itemize}
 \subsection{Solution Characteristics Specification}
 \label{Sec:SolCharSpec}
-The instance models that govern SWHS are presented in Section~\ref{Sec:IMs}. The information to understand the meaning of the instance models and their derivation is also presented, so that the instance models can be verified.
+The instance models that govern Solar Water Heating Systems are presented in Section~\ref{Sec:IMs}. The information to understand the meaning of the instance models and their derivation is also presented, so that the instance models can be verified.
 \subsubsection{Assumptions}
 \label{Sec:Assumps}
 This section simplifies the original problem and helps in developing the theoretical model by filling in the missing information for the physical system. The numbers given in the square brackets refer to the Theoretical Models {[}Section~\ref{Sec:TMs}{]}, General Definitions {[}Section~\ref{Sec:GDs}{]}, Data Definitions {[}Section~\ref{Sec:DDs}{]}, Instance Models {[}Section~\ref{Sec:IMs}{]}, or Likely Changes {[}Section~\ref{Sec:LCs}{]}, in which the respective assumption is used.
@@ -312,11 +312,25 @@ This section focuses on the general equations and laws that SWHS is based on.
 \phantomsection 
 \label{T:t1ConsThermE}
 \\ \midrule \\
-Label & Conservation of Thermal Energy
+Label & Conservation of thermal energy
 \\ \midrule \\
-Equation & $-\nabla{}\cdot{}\mathbf{q}+g=\rho{} C \frac{\partial{}\,T}{\partial{}\,t}$
+Equation & \begin{dmath}
+           -\nabla{}\cdot{}\mathbf{q}+g=\rho{} C \frac{\partial{}\,T}{\partial{}\,t}
+           \end{dmath}
 \\ \midrule \\
-Description & The above equation gives the law of conservation of energy for transient heat transfer in a material of specific heat capacity $C$ ($\frac{\text{J}}{(\text{kg}{}^{\circ}\text{C})}$) and density, $\rho{}$ ($\frac{\text{kg}}{\text{m}^{3}}$), where $\mathbf{q}$ is the thermal flux vector ($\frac{\text{W}}{\text{m}^{2}}$), $g$ is the volumetric heat generation per unit volume ($\frac{\text{W}}{\text{m}^{3}}$), $T$ is the temperature (${}^{\circ}$C), $t$ is time (s), and $\nabla{}$ is the degree of steepness of a graph at any point. For this equation to apply, other forms of energy, such as mechanical energy, are assumed to be negligible in the system (A\ref{A:assump1}).
+Description & \begin{description}
+              \item{$\nabla{}$ is the gradient (Unitless)}
+              \item{$\mathbf{q}$ is the thermal flux vector ($\frac{\text{W}}{\text{m}^{2}}$)}
+              \item{$g$ is the volumetric heat generation per unit volume ($\frac{\text{W}}{\text{m}^{3}}$)}
+              \item{$\rho{}$ is the density ($\frac{\text{kg}}{\text{m}^{3}}$)}
+              \item{$C$ is the specific heat capacity ($\frac{\text{J}}{(\text{kg}{}^{\circ}\text{C})}$)}
+              \item{$T$ is the temperature (${}^{\circ}$C)}
+              \item{$t$ is the time (s)}
+              \end{description}
+\\ \midrule \\
+Source & FIXME: This needs to be filled in
+\\ \midrule \\
+RefBy & FIXME: This needs to be filled in
 \\ \bottomrule \end{tabular}
 \end{minipage}\\
 \subsubsection{General Definitions}
@@ -325,29 +339,59 @@ This section collects the laws and equations that will be used in deriving the d
 ~\newline
 \noindent \begin{minipage}{\textwidth}
 \begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
-\toprule \textbf{Refname} & \textbf{T:nwtnCooling}
+\toprule \textbf{Refname} & \textbf{GD:nwtnCooling}
 \phantomsection 
-\label{T:nwtnCooling}
+\label{GD:nwtnCooling}
 \\ \midrule \\
-Label & Newton's Law of Cooling
+Label & Newton's law of cooling
 \\ \midrule \\
-Equation & $\mathbf{q}\left(t\right)=h \Delta{}T\left(t\right)$
+Units & $\frac{\text{W}}{\text{m}^{2}}$
 \\ \midrule \\
-Description & Newton's law of cooling describes convective cooling from a surface. The law is stated as: the rate of heat loss from a body is proportional to the difference in temperatures between the body and its surroundings. $\mathbf{q}\left(t\right)$ is the thermal flux ($\frac{\text{W}}{\text{m}^{2}}$). $h$ is the heat transfer coefficient, assumed independant of $T$ (A2) ($\frac{\text{W}}{(\text{m}^{2}{}^{\circ}\text{C})}$). $\Delta{}T\left(t\right)=T\left(t\right)-{T_{env}}\left(t\right)$ is the time-dependant thermal gradient between the environment and the object (${}^{\circ}$C).
+Equation & \begin{dmath}
+           \mathbf{q}\left(t\right)=h \Delta{}T\left(t\right)
+           \end{dmath}
+\\ \midrule \\
+Description & \begin{description}
+              \item{$\mathbf{q}$ is the thermal flux vector ($\frac{\text{W}}{\text{m}^{2}}$)}
+              \item{$t$ is the time (s)}
+              \item{$h$ is the convective heat transfer coefficient ($\frac{\text{W}}{(\text{m}^{2}{}^{\circ}\text{C})}$)}
+              \item{$\Delta{}T$ is the change in temperature (${}^{\circ}$C)}
+              \end{description}
+\\ \midrule \\
+Source & 
+\\ \midrule \\
+RefBy & FIXME: This needs to be filled in
 \\ \bottomrule \end{tabular}
 \end{minipage}\\
 ~\newline
 \noindent \begin{minipage}{\textwidth}
 \begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
-\toprule \textbf{Refname} & \textbf{T:rocTempSimp}
+\toprule \textbf{Refname} & \textbf{GD:rocTempSimp}
 \phantomsection 
-\label{T:rocTempSimp}
+\label{GD:rocTempSimp}
 \\ \midrule \\
-Label & Simplified Rate of Change of Temperature
+Label & Simplified rate of change of temperature
 \\ \midrule \\
-Equation & $m C \frac{d\,T}{d\,t}={q_{in}} {A_{in}}-{q_{out}} {A_{out}}+g V$
+Equation & \begin{dmath}
+           m C \frac{d\,T}{d\,t}={q_{in}} {A_{in}}-{q_{out}} {A_{out}}+g V
+           \end{dmath}
 \\ \midrule \\
-Description & The basic equation governing the rate of change of temperature, for a given volume $V$, with time. $m$ is the mass (kg). $C$ is the specific heat capacity ($\frac{\text{J}}{(\text{kg}{}^{\circ}\text{C})}$). $T$ is the temperature (${}^{\circ}$C) and $t$ is the time (s). ${q_{in}}$ and ${q_{out}}$ are the in and out heat transfer rates, respectively ($\frac{\text{W}}{\text{m}^{2}}$). ${A_{in}}$ and ${A_{out}}$ are the surface areas over which the heat is being transferred in and out, respectively ($\text{m}^{2}$). $g$ is the volumetric heat generated ($\frac{\text{W}}{\text{m}^{3}}$). $V$ is the volume ($\text{m}^{3}$).
+Description & \begin{description}
+              \item{$m$ is the mass (kg)}
+              \item{$C$ is the specific heat capacity ($\frac{\text{J}}{(\text{kg}{}^{\circ}\text{C})}$)}
+              \item{$T$ is the temperature (${}^{\circ}$C)}
+              \item{$t$ is the time (s)}
+              \item{${q_{in}}$ is the heat flux input ($\frac{\text{W}}{\text{m}^{2}}$)}
+              \item{${A_{in}}$ is the surface area over which heat is transferred in ($\text{m}^{2}$)}
+              \item{${q_{out}}$ is the heat flux output ($\frac{\text{W}}{\text{m}^{2}}$)}
+              \item{${A_{out}}$ is the surface area over which heat is transferred out ($\text{m}^{2}$)}
+              \item{$g$ is the volumetric heat generation per unit volume ($\frac{\text{W}}{\text{m}^{3}}$)}
+              \item{$V$ is the volume ($\text{m}^{3}$)}
+              \end{description}
+\\ \midrule \\
+Source & 
+\\ \midrule \\
+RefBy & FIXME: This needs to be filled in
 \\ \bottomrule \end{tabular}
 \end{minipage}\\
 Detailed derivation of simplified rate of change of temperature:
@@ -377,17 +421,29 @@ This section collects and defines all the data needed to build the instance mode
 ~\newline
 \noindent \begin{minipage}{\textwidth}
 \begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
-\toprule \textbf{Refname} & \textbf{DD:ht.flux.C}
+\toprule \textbf{Refname} & \textbf{DD:ht\_flux\_C}
 \phantomsection 
-\label{DD:ht.flux.C}
+\label{DD:ht\_flux\_C}
 \\ \midrule \\
-Label & Heat Flux Into the Water From the Coil
+Label & Heat flux into the water from the coil
+\\ \midrule \\
+Symbol & ${q_{C}}$
 \\ \midrule \\
 Units & $\frac{\text{W}}{\text{m}^{2}}$
 \\ \midrule \\
 Equation & ${q_{C}}$ = ${h_{C}} \left({T_{C}}-{T_{W}}\left(t\right)\right)$
 \\ \midrule \\
-Description & ${q_{C}}$ is the heat flux into the water from the coil ($\frac{\text{W}}{\text{m}^{2}}$)\newline${h_{C}}$ is the convective heat transfer coefficient between coil and water ($\frac{\text{W}}{(\text{m}^{2}{}^{\circ}\text{C})}$)\newline${T_{C}}$ is the temperature of the heating coil (${}^{\circ}$C)\newline${T_{W}}$ is the temperature of the water (${}^{\circ}$C)\newline$t$ is the time (s)
+Description & \begin{description}
+              \item{${q_{C}}$ is the heat flux into the water from the coil ($\frac{\text{W}}{\text{m}^{2}}$)}
+              \item{${h_{C}}$ is the convective heat transfer coefficient between coil and water ($\frac{\text{W}}{(\text{m}^{2}{}^{\circ}\text{C})}$)}
+              \item{${T_{C}}$ is the temperature of the heating coil (${}^{\circ}$C)}
+              \item{${T_{W}}$ is the temperature of the water (${}^{\circ}$C)}
+              \item{$t$ is the time (s)}
+              \end{description}
+\\ \midrule \\
+Source & 
+\\ \midrule \\
+RefBy & FIXME: This needs to be filled in
 \\ \bottomrule \end{tabular}
 \end{minipage}\\
 \subsubsection{Instance Models}
@@ -396,15 +452,38 @@ This section transforms the problem defined in Section~\ref{Sec:ProbDesc} into o
 ~\newline
 \noindent \begin{minipage}{\textwidth}
 \begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
-\toprule \textbf{Refname} & \textbf{T:eBalanceOnWtr}
+\toprule \textbf{Refname} & \textbf{IM:eBalanceOnWtr}
 \phantomsection 
-\label{T:eBalanceOnWtr}
+\label{IM:eBalanceOnWtr}
 \\ \midrule \\
-Label & Energy Balance on Water to Find the Temperature of the Water
+Label & Energy balance on water to find the temperature of the water
 \\ \midrule \\
-Equation & $\frac{d\,{T_{W}}}{d\,t}=\frac{1}{{\tau{}_{W}}} \left({T_{C}}-{T_{W}}\left(t\right)\right)$
+Input & ${T_{C}}$, ${T_{init}}$, ${t_{final}}$, ${A_{C}}$, ${h_{C}}$, ${C_{W}}$, ${m_{W}}$
 \\ \midrule \\
-Description & ${T_{W}}$ is the temperature of the water (${}^{\circ}$C). ${T_{C}}$ is the temperature of the heating coil (${}^{\circ}$C). ${\tau{}_{W}}=\frac{{m_{W}} {C_{W}}}{{h_{C}} {A_{C}}}$ is a constant (s). The above equation applies as long as the water is in liquid form, $0<{T_{W}}<100$ (${}^{\circ}$C) where $0$ (${}^{\circ}$C) and $100$ (${}^{\circ}$C) are the melting and boiling point temperatures of water, respectively (A\ref{A:assump10}).
+Output & ${T_{W}}$
+\\ \midrule \\
+Input Constraints & \begin{dmath}
+                    {T_{init}}\leq{}{T_{C}}
+                    \end{dmath}
+\\ \midrule \\
+Output Constraints & \begin{dmath}
+                     0<t<{t_{final}}
+                     \end{dmath}
+\\ \midrule \\
+Equation & \begin{dmath}
+           \frac{d\,{T_{W}}}{d\,t}=\frac{1}{{\tau{}_{W}}} \left({T_{C}}-{T_{W}}\left(t\right)\right)
+           \end{dmath}
+\\ \midrule \\
+Description & \begin{description}
+              \item{${T_{W}}$ is the temperature of the water (${}^{\circ}$C)}
+              \item{$t$ is the time (s)}
+              \item{${\tau{}_{W}}$ is the ODE parameter for water (s)}
+              \item{${T_{C}}$ is the temperature of the heating coil (${}^{\circ}$C)}
+              \end{description}
+\\ \midrule \\
+Source & 
+\\ \midrule \\
+RefBy & FIXME: This needs to be filled in
 \\ \bottomrule \end{tabular}
 \end{minipage}\\
 Derivation of the energy balance on water:
@@ -427,15 +506,38 @@ Setting ${\tau{}_{W}}$=${m_{W}}$${C_{W}}$/${h_{C}}$${A_{C}}$, Equation (4) can b
 ~\newline
 \noindent \begin{minipage}{\textwidth}
 \begin{tabular}{p{0.2\textwidth} p{0.73\textwidth}}
-\toprule \textbf{Refname} & \textbf{T:heatEInWtr}
+\toprule \textbf{Refname} & \textbf{IM:heatEInWtr}
 \phantomsection 
-\label{T:heatEInWtr}
+\label{IM:heatEInWtr}
 \\ \midrule \\
-Label & Heat Energy in the Water
+Label & Heat energy in the water
 \\ \midrule \\
-Equation & ${E_{W}}\left(t\right)={C_{W}} {m_{W}} \left({T_{W}}\left(t\right)-{T_{init}}\right)$
+Input & ${T_{init}}$, ${A_{C}}$, ${C_{W}}$, ${m_{W}}$
 \\ \midrule \\
-Description & The above equation is derived using T2. ${E_{W}}$ is the change in thermal energy of the liquid water relative to the energy at the initial temperature (${T_{init}}$) (J). ${C_{W}}$ is the specific heat capacity of liquid water ($\frac{\text{J}}{(\text{kg}{}^{\circ}\text{C})}$) and ${m_{W}}$ is the mass of the water (kg). The change in temperature is the difference between the temperature at time $t$ (s), ${T_{W}}$ and the initial temperature, ${T_{init}}$ (${}^{\circ}$C). This equation applies as long as $0<{T_{W}}<100$${}^{\circ}$C (A\ref{A:assump14}, A\ref{A:assump19}).
+Output & ${E_{W}}$
+\\ \midrule \\
+Input Constraints & 
+\\ \midrule \\
+Output Constraints & \begin{dmath}
+                     0<t<{t_{final}}
+                     \end{dmath}
+\\ \midrule \\
+Equation & \begin{dmath}
+           {E_{W}}\left(t\right)={C_{W}} {m_{W}} \left({T_{W}}\left(t\right)-{T_{init}}\right)
+           \end{dmath}
+\\ \midrule \\
+Description & \begin{description}
+              \item{${E_{W}}$ is the change in heat energy in the water (J)}
+              \item{$t$ is the time (s)}
+              \item{${C_{W}}$ is the specific heat capacity of water ($\frac{\text{J}}{(\text{kg}{}^{\circ}\text{C})}$)}
+              \item{${m_{W}}$ is the mass of water (kg)}
+              \item{${T_{W}}$ is the temperature of the water (${}^{\circ}$C)}
+              \item{${T_{init}}$ is the initial temperature (${}^{\circ}$C)}
+              \end{description}
+\\ \midrule \\
+Source & 
+\\ \midrule \\
+RefBy & FIXME: This needs to be filled in
 \\ \bottomrule \end{tabular}
 \end{minipage}\\
 \subsubsection{Data Constraints}

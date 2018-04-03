@@ -23,10 +23,10 @@ implVars = [v, x_z_1, y_z_1, x_z_2, y_z_2, mat, col,
 read_table :: Func
 read_table = funcData "read_table" $
   [ singleLine (repeated [junk, listEntry [WithPattern] z_vector]) ',',
-    multiLine (repeated [listEntry [WithLine, WithPattern] x_matrix, 
+    multiLine (repeated [listEntry [WithLine, WithPattern] x_matrix,
                          listEntry [WithLine, WithPattern] y_matrix]) ','
   ]
-  
+
 readTableMod :: Mod
 readTableMod = packmod "ReadTable" [read_table]
 
@@ -39,11 +39,11 @@ glassInputData = funcData "get_input" $
   [ junkLine,
     singleton plate_len, singleton plate_width, singleton nom_thick,
     junkLine,
-    singleton glass_type, 
+    singleton glass_type,
     junkLine,
-    singleton char_weight, 
-    junkLine, 
-    singleton tNT, 
+    singleton char_weight,
+    junkLine,
+    singleton tNT,
     junkLine,
     singleton sdx, singleton sdy, singleton sdz,
     junkLine,
@@ -54,10 +54,10 @@ inputMod :: Mod
 inputMod = packmod "InputFormat" [glassInputData]
 
 -----
-  
+
 one, two :: Symbol
 one = Atomic "1"
-two = Atomic "2"  
+two = Atomic "2"
 
 -- No need to be too verbose
 var :: String -> Symbol -> Space -> VarChunk
@@ -105,7 +105,7 @@ interp (x1,y1) (x2,y2) x_ = ((y2 - y1) / (x2 - x1)) * (x_ - x1) + y1
 vLook :: (HasSymbol a, HasSymbol i, Chunk a, Chunk i) => a -> i -> Expr -> Expr
 vLook a i_ p = idx (sy a) (sy i_ + p)
 
-aLook :: (HasSymbol a, HasSymbol i, HasSymbol j, Chunk a, Chunk i, Chunk j) => 
+aLook :: (HasSymbol a, HasSymbol i, HasSymbol j, Chunk a, Chunk i, Chunk j) =>
   a -> i -> j -> Expr
 aLook a i_ j_ = idx (idx (sy a) (sy i_)) (sy j_)
 
@@ -116,31 +116,41 @@ call :: Func -> [VarChunk] -> FuncStmt
 call f l = FProcCall f $ map sy l
 
 find :: (Chunk zv, Chunk z, HasSymbol zv, HasSymbol z) => zv -> z -> Expr
-find zv z = apply (asExpr findCT) [sy zv, sy z]
+find zv z_ = apply (asExpr findCT) [sy zv, sy z_]
 
+linInterp :: [Expr] -> Expr
+linInterp = apply (asExpr linInterpCT)
+
+interpOver :: (Chunk ptx, Chunk pty, Chunk ind, Chunk vv,
+  HasSymbol ptx, HasSymbol pty, HasSymbol ind, HasSymbol vv) =>
+  ptx -> pty -> ind -> vv -> [Expr]
+interpOver ptx pty ind vv =
+  [ vLook ptx ind 0, vLook pty ind 0
+  , vLook ptx ind 1, vLook pty ind 1
+  , sy vv ]
 ------------------------------------------------------------------------------------------
 -- Code Templates
 
 -- Note how this one uses a semantic function in its body
 linInterpCT :: Func
-linInterpCT = funcDef "lin_interp" [x_1, y_1, x_2, y_2, x] Real 
+linInterpCT = funcDef "lin_interp" [x_1, y_1, x_2, y_2, x] Real
   [ FRet $ interp (sy x_1, sy y_1) (sy x_2, sy y_2) (sy x) ]
 
 findCT :: Func
-findCT = funcDef "find" [arr, v] Natural 
+findCT = funcDef "find" [arr, v] Natural
   [
     ffor i (sy i $< (dim (sy arr) - 1))
       [ FCond ((vLook arr i 0 $<= (sy v)) $&& ((sy v) $<= vLook arr i 1))
         [ FRet $ sy i ] [] ],
-    FThrow "Bound error"      
+    FThrow "Bound error"
   ]
 
 extractColumnCT :: Func
-extractColumnCT = funcDef "extractColumn" [mat, j] (Vect Real) 
+extractColumnCT = funcDef "extractColumn" [mat, j] (Vect Real)
   [
     fdec col,
     --
-    ffor i (sy i $< dim (sy mat)) 
+    ffor i (sy i $< dim (sy mat))
       [ FAppend (sy col) (aLook mat i j) ],
     FRet (sy col)
   ]
@@ -155,32 +165,20 @@ interpY = funcDef "interpY" [filename, x, z] Real
   --
   call read_table [filename, z_vector, x_matrix, y_matrix],
   -- endhack
-    i     $:= (apply (asExpr findCT) [sy z_vector, sy z]),
+    i     $:= find z_vector z,
     x_z_1 $:= getCol x_matrix i 0,
     y_z_1 $:= getCol y_matrix i 0,
     x_z_2 $:= getCol x_matrix i 1,
     y_z_2 $:= getCol y_matrix i 1,
-    FTry 
-      [ j $:= (apply2 (asVC findCT) x_z_1 x),
-        k $:= (apply2 (asVC findCT) x_z_2 x) ]
+    FTry
+      [ j $:= find x_z_1 x,
+        k $:= find x_z_2 x ]
       [ FThrow "Interpolation of y failed" ],
-    y_1 $:= (apply (asExpr linInterpCT) [ vLook x_z_1 j 0,
-                                        vLook y_z_1 j 0,
-                                        vLook x_z_1 j 1,
-                                        vLook y_z_1 j 1,
-                                        sy x ]),
-    y_2 $:= (apply (asExpr linInterpCT) [ vLook x_z_2 k 0,
-                                        vLook y_z_2 k 0,
-                                        vLook x_z_2 k 1,
-                                        vLook y_z_2 k 1,
-                                        sy x ]),
-    FRet (apply (asExpr linInterpCT) [ vLook z_vector i 0,
-                                     sy y_1,
-                                     vLook z_vector i 1,
-                                     sy y_2,
-                                     sy z ] )                                  
-  ]  
-  
+    y_1 $:= (linInterp $ interpOver x_z_1 y_z_1 j x),
+    y_2 $:= (linInterp $ interpOver x_z_2 y_z_2 k x),
+    FRet $ linInterp [ vLook z_vector i 0, sy y_1, vLook z_vector i 1, sy y_2, sy z ]
+  ]
+
 interpZ :: Func
 interpZ = funcDef "interpZ" [filename, x, y] Real
   [
@@ -191,37 +189,24 @@ interpZ = funcDef "interpZ" [filename, x, y] Real
   --
   call read_table [filename, z_vector, x_matrix, y_matrix],
   -- endhack
-    ffor i (sy i $< (dim (sy z_vector) - 1)) 
+    ffor i (sy i $< (dim (sy z_vector) - 1))
       [
-        x_z_1 $:= (apply (asExpr extractColumnCT) [sy x_matrix, sy i]),
-        y_z_1 $:= (apply (asExpr extractColumnCT) [sy y_matrix, sy i]),
-        x_z_2 $:= (apply (asExpr extractColumnCT) [sy x_matrix, (sy i) + 1]),
-        y_z_2 $:= (apply (asExpr extractColumnCT) [sy y_matrix, (sy i) + 1]),
-        FTry 
-          [ j $:= (apply2 (asVC findCT) x_z_1 x),
-            k $:= (apply2 (asVC findCT) x_z_2 x) ]
+        x_z_1 $:= getCol x_matrix i 0,
+        y_z_1 $:= getCol y_matrix i 0,
+        x_z_2 $:= getCol x_matrix i 1,
+        y_z_2 $:= getCol y_matrix i 1,
+        FTry
+          [ j $:= find x_z_1 x,
+            k $:= find x_z_2 x ]
           [ FContinue ],
-        y_1 $:= (apply (asExpr linInterpCT) [ vLook x_z_1 j 0,
-                                            vLook y_z_1 j 0,
-                                            vLook x_z_1 j 1,
-                                            vLook y_z_1 j 1,
-                                            sy x ]),
-        y_2 $:= (apply (asExpr linInterpCT) [ vLook x_z_2 k 0,
-                                            vLook y_z_2 k 0,
-                                            vLook x_z_2 k 1,
-                                            vLook y_z_2 k 1,
-                                            sy x ]),
+        y_1 $:= (linInterp $ interpOver x_z_1 y_z_1 j x),
+        y_2 $:= (linInterp $ interpOver x_z_2 y_z_2 k x),
         FCond ((sy y_1 $<= sy y) $&& (sy y $<= sy y_2))
-          [ FRet (apply (asExpr linInterpCT) [ sy y_1,
-                                             idx (sy z_vector) (sy i),
-                                             sy y_2,
-                                             idx (sy z_vector) ((sy i) + 1),
-                                             sy y ] )  
-          ] []                                             
+          [ FRet $ linInterp [ sy y_1, vLook z_vector i 0, sy y_2, vLook z_vector i 1, sy y ]
+          ] []
       ],
-    FThrow "Interpolation of z failed"      
+    FThrow "Interpolation of z failed"
   ]
-
 
 interpMod :: Mod
 interpMod = packmod "Interpolation" [linInterpCT, findCT, extractColumnCT, interpY, interpZ]

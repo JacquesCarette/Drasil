@@ -1,14 +1,15 @@
 module Language.Drasil.HTML.Print(genHTML) where
 
 import Prelude hiding (print)
-import Data.List (sortBy)
+import Data.List (sortBy,partition,intersperse)
 import Text.PrettyPrint hiding (render, quotes, Str)
 import Numeric (showFFloat)
+import Control.Arrow (second)
 
 import Language.Drasil.HTML.Import (makeDocument, spec)
 import Language.Drasil.Printing.AST
 import Language.Drasil.Printing.Citation
-import Language.Drasil.HTML.AST
+import Language.Drasil.Printing.LayoutObj
 import qualified Language.Drasil.Output.Formats as F
 import Language.Drasil.Spec (Sentence, sC, (+:+))
 import Language.Drasil.UnitLang
@@ -51,14 +52,15 @@ printLO :: HasSymbolTable s => s -> LayoutObj -> Doc
 printLO sm (HDiv ts layoutObs l)  = refwrap (p_spec l sm) $
                                    div_tag ts (vcat (map (printLO sm) layoutObs))
 printLO sm (Paragraph contents)   = paragraph $ text (p_spec contents sm)
-printLO sm (Tagless contents)     = text $ p_spec contents sm
+printLO sm (EqnBlock contents)    = text $ p_spec contents sm
 printLO sm (Table ts rows r b t)  = makeTable ts rows (p_spec r sm) b (p_spec t sm) sm
 printLO sm (Definition dt ssPs l) = makeDefn dt ssPs (p_spec l sm) sm
-printLO sm (Header n contents)    = h n $ text (p_spec contents sm)
+printLO sm (Header n contents _)  = h n $ text (p_spec contents sm) -- FIXME
 printLO sm (List t)               = makeList t sm
 printLO sm (Figure r c f wp)      = makeFigure (p_spec r sm) (p_spec c sm) f wp
 printLO sm (ALUR _ x l i)         = makeRefList (p_spec x sm) (p_spec l sm) (p_spec i sm)
 printLO sm (Bib bib)              = makeBib sm bib
+printLO _  (Graph _ _ _ _ _)      = empty -- FIXME
 
 
 -- | Called by build, uses 'printLO' to render the layout
@@ -87,37 +89,45 @@ p_spec HARDNL       _ = "<br />"
 p_spec (Ref _ r a) sm = reflink r (p_spec a sm)
 p_spec EmptyS       _ = ""
 
-{-
--- | Renders symbols for HTML title
-t_symbol :: Symbol -> String
-t_symbol (Corners [] [] [] [x] s) = t_symbol s ++ "_" ++ t_symbol x
-t_symbol (Corners [] [] [x] [] s) = t_symbol s ++ "^" ++ t_symbol x
-t_symbol s                        = symbol s
--}
-
 -- | Renders symbols for HTML document
-symbolNoEm :: Symbol -> String
-symbolNoEm (Atomic s)  = s
-symbolNoEm (Special s) = unPH $ special s
-symbolNoEm (Concat sl) = foldr (++) "" $ map symbolNoEm sl
-symbolNoEm (Greek g)   = unPH $ greek g
+symbol :: Symbol -> String
+symbol (Atomic s)  = s
+symbol (Special s) = unPH $ special s
+symbol (Concat sl) = foldr (++) "" $ map symbol sl
+symbol (Greek g)   = unPH $ greek g
 -- handle the special cases first, then general case
-symbolNoEm (Corners [] [] [x] [] s) = (symbolNoEm s) ++ sup (symbolNoEm x)
-symbolNoEm (Corners [] [] [] [x] s) = (symbolNoEm s) ++ sub (symbolNoEm x)
-symbolNoEm (Corners [_] [] [] [] _) = error "rendering of ul prescript"
-symbolNoEm (Corners [] [_] [] [] _) = error "rendering of ll prescript"
-symbolNoEm (Corners _ _ _ _ _)      = error "rendering of Corners (general)"
-symbolNoEm (Atop S.Vector s)       = "<b>" ++ symbolNoEm s ++ "</b>"
-symbolNoEm (Atop S.Hat s)          = symbolNoEm s ++ "&#770;"
-symbolNoEm (Atop S.Prime s)        = symbolNoEm s ++ "&prime;"
-symbolNoEm Empty                 = ""
+symbol (Corners [] [] [x] [] s) = (symbol s) ++ sup (symbol x)
+symbol (Corners [] [] [] [x] s) = (symbol s) ++ sub (symbol x)
+symbol (Corners [_] [] [] [] _) = error "rendering of ul prescript"
+symbol (Corners [] [_] [] [] _) = error "rendering of ll prescript"
+symbol (Corners _ _ _ _ _)      = error "rendering of Corners (general)"
+symbol (Atop S.Vector s)       = "<b>" ++ symbol s ++ "</b>"
+symbol (Atop S.Hat s)          = symbol s ++ "&#770;"
+symbol (Atop S.Prime s)        = symbol s ++ "&prime;"
+symbol Empty                 = ""
 
 uSymb :: USymb -> String
-uSymb (UName s)           = symbolNoEm s
+uSymb (US ls) = formatu t b
+  where
+    (t,b) = partition ((> 0) . snd) ls
+    formatu :: [(Symbol,Integer)] -> [(Symbol,Integer)] -> String
+    formatu [] l = line l
+    formatu l [] = concat $ intersperse "&sdot;" $ map pow l
+    formatu nu de = line nu ++ "/" ++ (line $ map (second negate) de)
+    line :: [(Symbol,Integer)] -> String
+    line []  = ""
+    line [x] = pow x
+    line l   = '(' : (concat $ intersperse "&sdot;" $ map pow l) ++ ")"
+    pow :: (Symbol,Integer) -> String
+    pow (x,1) = symbol x
+    pow (x,p) = symbol x ++ sup (show p)
+{-
+uSymb (UName s)           = symbol s
 uSymb (UProd l)           = foldr1 (\x -> ((x++"&sdot;")++) ) (map uSymb l)
 uSymb (UPow s i)          = uSymb s ++ sup (show i)
 uSymb (UDiv n (UName d))  = uSymb n ++ "/" ++ uSymb (UName d)
 uSymb (UDiv n d)          = uSymb n ++ "/(" ++ (uSymb d) ++ ")"
+-}
 
 -----------------------------------------------------------------
 ------------------BEGIN EXPRESSION PRINTING----------------------

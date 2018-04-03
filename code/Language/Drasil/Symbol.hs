@@ -38,43 +38,47 @@ instance Monoid Symbol where
   mempty = Empty
   mappend a b = Concat [a , b]
 
+complsy :: [Symbol] -> [Symbol] -> Ordering
+complsy [] [] = EQ
+complsy [] _  = LT
+complsy _  [] = GT
+complsy (x : xs) (y : ys) = compsy x y `mappend` complsy xs ys
+
 --FIXME? The exact ordering we want may need to be updated, or should we
 --  allow custom?  
-instance Ord Symbol where
-  compare (Concat (x:[]))       (Concat (y:[]))        = compare x y
-  compare (Concat ((Greek Delta):xs))                b = compare (Concat xs) b 
-  compare a                (Concat ((Greek Delta):ys)) = compare a           (Concat ys)
-  compare (Concat (x:xs))       (Concat (x':ys))       = --The above two lines ensure symbols like "x" and "delta x" stay together
-    case compare x x' of
-      EQ -> compare xs ys
-      other -> other
-  compare (Concat a)             b                     = compare a [b]
-  compare b                      (Concat a)            = compare [b] a
-  compare (Corners _ _ ur lr b) (Corners _ _ u' l' b') = 
-    case compare b b' of
-      EQ -> case compare lr l' of
-            EQ -> compare ur u'
-            other -> other
-      other -> other
-  compare (Corners _ _ _ _ a)    b                     = compare a b
-  compare b                      (Corners _ _ _ _ a)   = compare b a
-  compare (Atop d1 a)           (Atop d2 a')           = 
-    case compare a a' of
-      EQ -> compare d1 d2
-      other -> other
-  compare (Atop _ a)             b                     = compare a b  
-  compare b                      (Atop _ a)            = compare b a
-  compare (Atomic x)             (Atomic y)            = 
-    compare (map toLower x) (map toLower y)
-  compare (Special a)           (Special b)            = compare a b
-  compare (Special _)            _                     = LT
-  compare _                     (Special _)            = GT
-  compare (Atomic _)             _                     = LT
-  compare  _                    (Atomic _)             = GT
-  compare (Greek a)             (Greek b)              = compare a b
-  compare  Empty                 Empty                 = EQ
-  compare  _                     Empty                 = GT
-  compare  Empty                 _                     = LT
+compsy :: Symbol -> Symbol -> Ordering
+compsy (Concat (x:[]))       (Concat (y:[]))        = compsy x y
+compsy (Concat ((Greek Delta):xs))                b = compsy (Concat xs) b 
+compsy a                (Concat ((Greek Delta):ys)) = compsy a           (Concat ys)
+compsy (Concat (x:xs))       (Concat (y:ys))       = --The above two lines ensure symbols like "x" and "delta x" stay together
+ compsy x y `mappend` complsy xs ys
+compsy (Concat a)             b                     = complsy a [b]
+compsy b                      (Concat a)            = complsy [b] a
+compsy (Corners _ _ ur lr b) (Corners _ _ u' l' b') = 
+  case compsy b b' of
+    EQ -> case complsy lr l' of
+          EQ -> complsy ur u'
+          other -> other
+    other -> other
+compsy (Corners _ _ _ _ a)    b                     = compsy a b
+compsy b                      (Corners _ _ _ _ a)   = compsy b a
+compsy (Atop d1 a)           (Atop d2 a')           = 
+  case compsy a a' of
+    EQ -> compare d1 d2
+    other -> other
+compsy (Atop _ a)             b                     = compsy a b  
+compsy b                      (Atop _ a)            = compsy b a
+compsy (Atomic x)             (Atomic y)            = 
+  compare (map toLower x) (map toLower y)
+compsy (Special a)           (Special b)            = compare a b
+compsy (Special _)            _                     = LT
+compsy _                     (Special _)            = GT
+compsy (Atomic _)             _                     = LT
+compsy  _                    (Atomic _)             = GT
+compsy (Greek a)             (Greek b)              = compare a b
+compsy  Empty                 Empty                 = EQ
+compsy  _                     Empty                 = GT
+compsy  Empty                 _                     = LT
 
 -- | Helper for creating a symbol with a superscript on the left side of the symbol.
 -- Arguments: Base symbol, then superscripted symbol.

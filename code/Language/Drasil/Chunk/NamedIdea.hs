@@ -46,8 +46,6 @@ nc = NC
 data IdeaDict = IdeaDict { _nc :: NamedChunk, _mabbr :: Maybe String }
 
 instance Eq        IdeaDict where a == b = a ^. uid == b ^. uid
--- FIXME : this is not a good order!
-instance Ord       IdeaDict where compare a b = compare (a ^. uid) (b ^. uid) 
 instance Chunk     IdeaDict where uid = inc . uid
 instance NamedIdea IdeaDict where term = inc . term
 instance Idea      IdeaDict where getA (IdeaDict _ b) = b

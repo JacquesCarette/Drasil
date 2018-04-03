@@ -22,7 +22,7 @@ import Data.Drasil.SentenceStructures (foldlSent, sAnd, ofThe)
 --------------------------------
 
 s6_start :: Contents -> Sentence
-s6_start assump = makeRef assump +:+ S "-"
+s6_start a = makeRef a +:+ S "-"
 
 likeChg1, likeChg2, likeChg3, likeChg4, likeChg5, likeChg6 :: Contents
 

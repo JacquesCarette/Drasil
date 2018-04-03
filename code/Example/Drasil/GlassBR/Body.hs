@@ -100,13 +100,14 @@ mkSRS = RefSec (RefProg intro [TUnits, tsymb [TSPurpose, SymbOrder], TAandA]) :
     SystCons [] []]) :
   ScpOfProjSec (ScpOfProjProg (short gLassBR) (product_use_case_table) (individual_product_use_case (glaSlab)
     (capacity) (demandq) (probability))) :
-  SSDSec (SSDVerb specific_sysytem_description) : 
+  -- SSDSec (SSDVerb specific_sysytem_description) : 
   SSDSec 
     (SSDProg
       [SSDProblem  (PDProg start gLassBR ending [terminology_and_description , physical_system_description, goal_statements])
       , SSDSolChSpec 
         (SCSProg
-          [ TMs ([Label] ++ stdFields) [t1IsSafe, t2IsSafe]
+          [ Assumptions
+          , TMs ([Label] ++ stdFields) [t1IsSafe, t2IsSafe]
           , GDs [] [] HideDerivation -- No Gen Defs for GlassBR
           , DDs ([Label, Symbol, Units] ++ stdFields) dataDefns ShowDerivation
           , IMs ([Label, Input, Output, InConstraints, OutConstraints] ++ stdFields) [probOfBreak, calofCapacity, calofDemand, testIMFromQD] HideDerivation
@@ -161,19 +162,19 @@ newAssumptions :: [AssumpChunk] -- For testing
 newAssumptions = [newA1, newA2, newA3, newA4, newA5, newA6, newA7, newA8]
 
 newA1, newA2, newA3, newA4, newA5, newA6, newA7, newA8 :: AssumpChunk
-newA1 = ac' "glassTyA" a1Desc
-newA2 = ac' "glassConditionA" a2Desc
-newA3 = ac' "explsnScenarioA"a3Desc
-newA4 = ac' "standardValuesA" (a4Desc load_dur)
-newA5 = ac' "glassLiteA" a5Desc
-newA6 = ac' "bndryConditionsA" a6Desc
-newA7 = ac' "responseTyA" a7Desc
-newA8 = ac' "ldfConstantA" $ a8Desc constant_LoadDF
+newA1 = assump "glassTyA" a1Desc (S "glassTy")
+newA2 = assump "glassConditionA" a2Desc (S "glassCondition")
+newA3 = assump "explsnScenarioA"a3Desc (S "explainScenario")
+newA4 = assump "standardValuesA" (a4Desc load_dur) (S "StandardValues")
+newA5 = assump "glassLiteA" a5Desc (S "glassLite")
+newA6 = assump "bndryConditionsA" a6Desc (S "boundaryConditions")
+newA7 = assump "responseTyA" a7Desc (S "responseType")
+newA8 = assump "ldfConstantA" (a8Desc constant_LoadDF) (S "ldfConstant")
   
 testIMFromQD :: InstanceModel
 testIMFromQD = imQD gbSymbMap risk EmptyS [] [] []
 glassBR_code :: CodeSpec
-glassBR_code = codeSpec' glassSystInfo [interpMod, inputMod, readTableMod]
+glassBR_code = codeSpec' glassSystInfo allMods
 
 
 specific_sysytem_description, problem_description, terminology_and_description, physical_system_description, goal_statements, solution_characteristics_specification :: Section
@@ -459,13 +460,13 @@ solution_characteristics_specification_intro = foldlSP [S "This", phrase section
 {--Assumptions--}
 
 assumptions_list :: [Contents]
-assumptions_list = acroNumGen assumptions 1
+assumptions_list = assumpList newAssumptions
 
 assumpList :: [AssumpChunk] -> [Contents]
 assumpList = map Assumption
 
 assumptions :: [Contents] -- FIXME: Remove this entirely and use new refs + docLang.
-assumptions = fst (foldr (\s (ls, n) -> ((mkAssump ("A" ++ show n) s) : ls, n-1))
+assumptions = fst (foldr (\s (ls, n) -> ((Assumption $ assump ("A" ++ show n) s (S $ "A" ++ show n)) : ls, n-1))
  ([], (length assumptionDescs)::Int) assumptionDescs)
 -- These correspond to glassTyAssumps, glassCondition, explsnScenario,
 -- standardValues, glassLiteAssmp, bndryConditions, responseTyAssump, ldfConstant
@@ -728,7 +729,7 @@ traceability_matrices_and_graphs_funcReq = ["R1", "R2", "R3", "R4", "R5", "R6"]
 traceability_matrices_and_graphs_funcReqRef = makeListRef traceability_matrices_and_graphs_funcReq (SRS.funcReq SRS.missingP [])
 
 traceability_matrices_and_graphs_assump = ["A1", "A2", "A3", "A4", "A5", "A6", "A7", "A8"]
-traceability_matrices_and_graphs_assumpRef = makeListRef traceability_matrices_and_graphs_assump (SRS.assump SRS.missingP [])
+traceability_matrices_and_graphs_assumpRef = makeListRef traceability_matrices_and_graphs_assump (SRS.assumpt SRS.missingP [])
 
 traceability_matrices_and_graphs_likelyChg = ["LC1", "LC2", "LC3", "LC4", "LC5"]
 traceability_matrices_and_graphs_likelyChgRef = makeListRef traceability_matrices_and_graphs_likelyChg (SRS.likeChg SRS.missingP [])

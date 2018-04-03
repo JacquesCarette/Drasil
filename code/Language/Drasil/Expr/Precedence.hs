@@ -1,7 +1,7 @@
 module Language.Drasil.Expr.Precedence where
 
 import Language.Drasil.Expr (BinOp(..),BoolOper(..),ArithOper(..),
-  UFunc(..),Expr(..),EOperator(..))
+  UFunc(..),Expr(..))
 
 -- These precedences are inspired from Haskell/F# 
 -- as documented at http://kevincantu.org/code/operators.html
@@ -54,8 +54,7 @@ eprec (FCall _ _)       = 210
 eprec (Case _)          = 200
 eprec (Matrix _)        = 220
 eprec (UnaryOp fn _)    = prec1 fn
-eprec (EOp (Product _ _))   = precA Mul
-eprec (EOp (Integral _ _))  = precA Add
+eprec (Operator o _ _)  = precA o
 eprec (BinaryOp bo _ _) = prec2 bo
 eprec (IsIn  _ _)       = 170
 eprec (RealI _ _)       = 170

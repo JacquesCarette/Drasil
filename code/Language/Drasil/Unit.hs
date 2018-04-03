@@ -3,12 +3,14 @@ module Language.Drasil.Unit (
   , FundUnit(..), DerUChunk(..) -- data-structures
   , UnitDefn                    -- synonym for FundUnit
   , from_udefn, makeDerU, unitCon
-  , (^:), (/:), (*:), new_unit
+  , (^:), (/:), (*:), (*$), (/$), new_unit
   , scale, shift
   , derUC, derUC', derUC'', unitWrapper
+  , fund, comp_unitdefn
   ) where
 
 import Control.Lens (Simple, Lens, (^.))
+import Control.Arrow (second)
 
 import Language.Drasil.Chunk (Chunk(..))
 import Language.Drasil.Chunk.NamedIdea (NamedIdea(..), Idea(..))
@@ -38,14 +40,14 @@ makeDerU concept eqn = DUC (UD concept (from_udefn eqn)) eqn
 -- symbol, and unit equation
 derUC, derUC' :: String -> String -> String -> Symbol -> UDefn -> DerUChunk
 -- | Uses self-plural term
-derUC  a b c s u = DUC (UD (dcc a (cn b) c) (UName $ s)) u
+derUC  a b c s u = DUC (UD (dcc a (cn b) c) (US [(s,1)])) u
 -- | Uses term that pluralizes by adding *s* to the end
-derUC' a b c s u = DUC (UD (dcc a (cn' b) c) (UName $ s)) u
+derUC' a b c s u = DUC (UD (dcc a (cn' b) c) (US [(s,1)])) u
 
 -- | Create a derived unit chunk from an id, term (as noun phrase), definition, 
 -- symbol, and unit equation
 derUC'' :: String -> NP -> String -> Symbol -> UDefn -> DerUChunk
-derUC'' a b c s u = DUC (UD (dcc a b c) (UName $ s)) u
+derUC'' a b c s u = DUC (UD (dcc a b c) (US [(s,1)])) u
 
 --FIXME: Make this use a meaningful identifier.
 -- | Helper for fundamental unit concept chunk creation. Uses the same string
@@ -99,15 +101,33 @@ unitWrapper u = UD (cw u) (u ^. usymb)
 --- These conveniences go here, because we need the class
 -- | Combinator for raising a unit to a power
 (^:) :: IsUnit u => u -> Integer -> USymb
-u ^: i = UPow (u ^. usymb) i
+u ^: i = upow (u ^. usymb)
+  where
+    upow (US l) = US $ map (second (* i)) l
 
 -- | Combinator for dividing one unit by another
 (/:) :: (IsUnit u1, IsUnit u2) => u1 -> u2 -> USymb
-u1 /: u2 = UDiv (u1 ^. usymb) (u2 ^. usymb)
+u1 /: u2 = let US l1 = u1 ^. usymb
+               US l2 = u2 ^. usymb in
+  US $ l1 ++ map (second negate) l2
 
 -- | Combinator for multiplying two units together
 (*:) :: (IsUnit u1, IsUnit u2) => u1 -> u2 -> USymb
-u1 *: u2 = UProd [(u1 ^. usymb), (u2 ^. usymb)]
+u1 *: u2 = let US l1 = u1 ^. usymb
+               US l2 = u2 ^. usymb in
+  US $ l1 ++ l2
+
+-- | Combinator for multiplying a unit and a symbol
+(*$) :: (IsUnit u1) => u1 -> USymb -> USymb
+u1 *$ u2 = let US l1 = u1 ^. usymb
+               US l2 = u2 in
+  US $ l1 ++ l2
+
+-- | Combinator for dividing a unit and a symbol
+(/$) :: (IsUnit u1) => u1 -> USymb -> USymb
+u1 /$ u2 = let US l1 = u1 ^. usymb
+               US l2 = u2 in
+  US $ l1 ++ map (second negate) l2
 
 -- | Combinator for scaling one unit by some number
 scale :: IsUnit s => Double -> s -> UDefn
@@ -121,7 +141,12 @@ shift a b = UShift a (b ^. usymb)
 new_unit :: String -> USymb -> DerUChunk
 new_unit s u = makeDerU (unitCon s) (USynonym u)
 
+fund :: String -> String -> String -> FundUnit
+fund nam desc sym = UD (dcc nam (cn' nam) desc) (US [(Atomic sym, 1)])
+
 type UnitDefn = FundUnit
 
 instance Eq FundUnit where a == b = (a ^. usymb) == (b ^. usymb)
-instance Ord FundUnit where compare a b = compare (a ^. usymb) (b ^. usymb)
+
+comp_unitdefn :: UnitDefn -> UnitDefn -> Ordering
+comp_unitdefn a b = comp_usymb (a ^. usymb) (b ^. usymb)

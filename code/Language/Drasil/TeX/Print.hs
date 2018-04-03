@@ -1,16 +1,16 @@
 module Language.Drasil.TeX.Print(genTeX) where
 
 import Prelude hiding (print)
-import Data.List (intersperse, transpose)
+import Data.List (intersperse, transpose, partition)
 import Text.PrettyPrint (text, (<+>))
 import qualified Text.PrettyPrint as TP
 import Numeric (showFFloat)
-
 import Control.Applicative (pure)
+import Control.Arrow (second)
 
 import Language.Drasil.Printing.AST
 import Language.Drasil.Printing.Citation
-import Language.Drasil.TeX.AST
+import Language.Drasil.Printing.LayoutObj
 import qualified Language.Drasil.TeX.Import as I
 import qualified Language.Drasil.Spec as LS
 import qualified Language.Drasil.RefTypes as RT
@@ -40,18 +40,18 @@ buildStd sm (Document t a c) =
 
 -- clean until here; lo needs its sub-functions fixed first though
 lo :: HasSymbolTable s => LayoutObj -> s -> D
-lo (Section d t con l)  sm  = sec d (spec t) %% label (spec l) %% print sm con
+lo (Header d t l)       _  = sec d (spec t) %% label (spec l)
+lo (HDiv _ con _)       sm = print sm con -- FIXME ignoring 2 arguments?
 lo (Paragraph contents) _  = toText $ spec contents
 lo (EqnBlock contents)  _  = makeEquation contents
 lo (Table _ rows r bl t) _  = toText $ makeTable rows (spec r) bl (spec t)
-lo (Definition ssPs l) sm  = toText $ makeDefn sm ssPs $ spec l
-lo (Defnt _ ssPs l)    sm  = toText $ makeDefn sm ssPs $ spec l
-lo (List l)             _  = toText $ makeList l
-lo (Figure r c f wp)    _  = toText $ makeFigure (spec r) (spec c) f wp
-lo (Requirement n l)    _  = toText $ makeReq (spec n) (spec l)
-lo (Assumption n l)     _  = toText $ makeAssump (spec n) (spec l)
-lo (LikelyChange n l)   _  = toText $ makeLC (spec n) (spec l)
-lo (UnlikelyChange n l) _  = toText $ makeUC (spec n) (spec l)
+lo (Definition _ ssPs l) sm  = toText $ makeDefn sm ssPs $ spec l
+lo (List l)               _  = toText $ makeList l
+lo (Figure r c f wp)      _  = toText $ makeFigure (spec r) (spec c) f wp
+lo (ALUR Requirement n l _)    _  = toText $ makeReq (spec n) (spec l)
+lo (ALUR Assumption n l _)     _  = toText $ makeAssump (spec n) (spec l)
+lo (ALUR LikelyChange n l _)   _  = toText $ makeLC (spec n) (spec l)
+lo (ALUR UnlikelyChange n l _) _  = toText $ makeUC (spec n) (spec l)
 lo (Bib bib)            sm = toText $ makeBib sm bib
 lo (Graph ps w h c l)   _  = toText $ makeGraph
   (map (\(a,b) -> (spec a, spec b)) ps)
@@ -270,6 +270,26 @@ symbol_needs (Atop _ _)          = Math
 symbol_needs Empty               = Curr
 
 p_unit :: USymb -> D
+p_unit (US ls) = formatu t b
+  where
+    (t,b) = partition ((> 0) . snd) ls
+    formatu :: [(Symbol,Integer)] -> [(Symbol,Integer)] -> D
+    formatu [] l = line l 
+    formatu l [] = foldr (<>) empty $ map pow l
+    formatu nu de = toMath $ fraction (line nu) (line $ map (second negate) de)
+    line :: [(Symbol,Integer)] -> D
+    line []  = empty
+    line [n] = pow n
+    line l   = parens $ foldr (<>) empty $ map pow l
+    pow :: (Symbol,Integer) -> D
+    pow (n,1) = p_symb n
+    pow (n,p) = toMath $ superscript (p_symb n) (pure $ text $ show p)
+    -- printing of unit symbols is done weirdly... FIXME?
+    p_symb (Concat s) = foldl (<>) empty $ map p_symb s
+    p_symb n = let cn = symbol_needs n in switch (const cn) (pure $ text $ symbol n)
+
+{-
+p_unit :: USymb -> D
 p_unit (UName (Concat s)) = foldl (<>) empty $ map (p_unit . UName) s
 p_unit (UName n) =
   let cn = symbol_needs n in
@@ -281,6 +301,7 @@ p_unit (UDiv n d) = toMath $
     UProd _  -> fraction (p_unit n) (parens $ p_unit d)
     UDiv _ _ -> fraction (p_unit n) (parens $ p_unit d)
     _        -> fraction (p_unit n) (p_unit d)
+-}
 
 -----------------------------------------------------------------
 ------------------ DATA DEFINITION PRINTING-----------------

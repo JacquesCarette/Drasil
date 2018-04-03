@@ -41,15 +41,15 @@ data TheoryConstraint = TCon Reason Relation
 
 data ConstraintReason = Physical | Software
 data Constraint where
-  Range          :: ConstraintReason -> RealInterval -> Constraint
-  EnumeratedReal :: ConstraintReason -> [Double]     -> Constraint
-  EnumeratedStr  :: ConstraintReason -> [String]     -> Constraint
+  Range          :: ConstraintReason -> RealInterval Expr Expr -> Constraint
+  EnumeratedReal :: ConstraintReason -> [Double]               -> Constraint
+  EnumeratedStr  :: ConstraintReason -> [String]               -> Constraint
 
 -- by default, physical and software constraints are ranges
-physc :: RealInterval -> Constraint
+physc :: RealInterval Expr Expr -> Constraint
 physc = Range Physical
 
-sfwrc :: RealInterval -> Constraint
+sfwrc :: RealInterval Expr Expr -> Constraint
 sfwrc = Range Software
 
 -- but also for enumeration of values; right now, always physical

@@ -282,7 +282,7 @@ Stress distribution factor (Function) based on Pbtol
 Surface flaw parameter
 </td>
 <td>
-m<sup>12</sup>/(N<sup>7</sup>)
+m<sup>12</sup>/N<sup>7</sup>
 </td>
 </tr>
 <tr>
@@ -326,7 +326,7 @@ Load share factor
 Surface flaw parameter
 </td>
 <td>
-m<sup>12</sup>/(N<sup>7</sup>)
+m<sup>12</sup>/N<sup>7</sup>
 </td>
 </tr>
 <tr>
@@ -914,7 +914,7 @@ The user provides the inputs to GlassBR for use within the analysis. There are t
 Specific System Description
 </h2>
 <p class="paragraph">
-This section first presents the problem description, which gives a high-level view of the problem to be solved. This is followed by the solution characteristics specification, which presents the assumptions, theories, and definitions.
+This section first presents the problem description, which gives a high-level view of the problem to be solved. This is followed by the solution characteristics specification, which presents the assumptions, theories, and definitions that are used for the GlassBR program.
 </p>
 <a id="Sec:ProbDesc">
 <div class="subsection">
@@ -1065,42 +1065,42 @@ This section simplifies the original problem and helps in developing the theoret
 </p>
 <a id="A:glassTyA">
 <ul>
-glassTyA: The standard E1300-09a for calculation applies only to monolithic, laminated, or insulating glass constructions of rectangular shape with continuous lateral support along. one, two, three, or four edge This practice assumes that (1) the supported glass edge for two, three and four-sided support conditions are simply supported and free to slip in plane; (2) glass supported on two sides acts as a simply supported beam and (3) glass supported on one side acts as a cantilever.
+glassTy: The standard E1300-09a for calculation applies only to monolithic, laminated, or insulating glass constructions of rectangular shape with continuous lateral support along. one, two, three, or four edge This practice assumes that (1) the supported glass edge for two, three and four-sided support conditions are simply supported and free to slip in plane; (2) glass supported on two sides acts as a simply supported beam and (3) glass supported on one side acts as a cantilever.
 </ul>
 </a>
 <a id="A:glassConditionA">
 <ul>
-glassConditionA: Following <a href=#astm.LR2009>astm_LR2009</a> (pg. 1), this practice does not apply to any form of wired, patterned, etched, sandblasted, drilled, notched, or grooved glass with surface and edge treatments that alter the glass strength.
+glassCondition: Following <a href=#astm.LR2009>astm_LR2009</a> (pg. 1), this practice does not apply to any form of wired, patterned, etched, sandblasted, drilled, notched, or grooved glass with surface and edge treatments that alter the glass strength.
 </ul>
 </a>
 <a id="A:explsnScenarioA">
 <ul>
-explsnScenarioA: This system only considers the external explosion scenario for its calculations.
+explainScenario: This system only considers the external explosion scenario for its calculations.
 </ul>
 </a>
 <a id="A:standardValuesA">
 <ul>
-standardValuesA: The values provided in <a href=#Sec:AuxConstants>Values of Auxiliary Constants</a> are assumed for the duration of load (<em>t<sub>d</sub></em>), and the material properties of <em>m</em>, <em>k</em>, and <em>E</em>.
+StandardValues: The values provided in <a href=#Sec:AuxConstants>Values of Auxiliary Constants</a> are assumed for the duration of load (<em>t<sub>d</sub></em>), and the material properties of <em>m</em>, <em>k</em>, and <em>E</em>.
 </ul>
 </a>
 <a id="A:glassLiteA">
 <ul>
-glassLiteA: Glass under consideration is assumed to be a single lite. Hence the value of LSF is equal to 1 for all calculations in GlassBR.
+glassLite: Glass under consideration is assumed to be a single lite. Hence the value of LSF is equal to 1 for all calculations in GlassBR.
 </ul>
 </a>
 <a id="A:bndryConditionsA">
 <ul>
-bndryConditionsA: Boundary conditions for the glass slab is assumed to be 4-sided support for calculations.
+boundaryConditions: Boundary conditions for the glass slab is assumed to be 4-sided support for calculations.
 </ul>
 </a>
 <a id="A:responseTyA">
 <ul>
-responseTyA: The response type considered in GlassBR is flexural.
+responseType: The response type considered in GlassBR is flexural.
 </ul>
 </a>
 <a id="A:ldfConstantA">
 <ul>
-ldfConstantA: With reference to <a href=#A:standardValuesA>standardValuesA</a> the value of load duration factor (<em>LDF</em>) is a constant in GlassBR. It is calculated by the equation: <em>LDF = (<div class="fraction">
+ldfConstant: With reference to <a href=#A:standardValuesA>StandardValues</a> the value of load duration factor (<em>LDF</em>) is a constant in GlassBR. It is calculated by the equation: <em>LDF = (<div class="fraction">
 <span class="fup">
 t<sub>d</sub>
 </span>
@@ -1131,16 +1131,6 @@ This section focuses on the general equations and laws that GlassBR is based on.
 <table class="tdefn">
 <tr>
 <th>
-Number
-</th>
-<td>
-<p class="paragraph">
-<b>T</b>
-</p>
-</td>
-</tr>
-<tr>
-<th>
 Label
 </th>
 <td>
@@ -1166,8 +1156,36 @@ Equation
 Description
 </th>
 <td>
+<div class="list">
+<p>
+<em>is_safe1</em> is the true when calculated probability is less than tolerable probability (Unitless)
+</p>
+<p>
+<em>P<sub>b</sub></em> is the probability of breakage (Unitless)
+</p>
+<p>
+<em>P<sub>btol</sub></em> is the tolerable probability of breakage (Unitless)
+</p>
+</div>
+</td>
+</tr>
+<tr>
+<th>
+Source
+</th>
+<td>
 <p class="paragraph">
-If <em>is_safe1</em>, the glass is considered safe. <em>is_safe1</em> and <em>is_safe2</em> (from <a href=#T:t2SafetyReq>T:t2SafetyReq</a>) are either both True or both False. <em>P<sub>b</sub></em> is the probability of breakage, as calculated in <a href=#T:probOfBr>T:probOfBr</a>. <em>P<sub>btol</sub></em> is the tolerable probability of breakage entered by the user.
+FIXME: This needs to be filled in
+</p>
+</td>
+</tr>
+<tr>
+<th>
+RefBy
+</th>
+<td>
+<p class="paragraph">
+FIXME: This needs to be filled in
 </p>
 </td>
 </tr>
@@ -1175,16 +1193,6 @@ If <em>is_safe1</em>, the glass is considered safe. <em>is_safe1</em> and <em>is
 </a>
 <a id="T:t2SafetyReq">
 <table class="tdefn">
-<tr>
-<th>
-Number
-</th>
-<td>
-<p class="paragraph">
-<b>T</b>
-</p>
-</td>
-</tr>
 <tr>
 <th>
 Label
@@ -1212,8 +1220,36 @@ Equation
 Description
 </th>
 <td>
+<div class="list">
+<p>
+<em>is_safe2</em> is the true when load resistance (capacity) is greater than load (demand) (Unitless)
+</p>
+<p>
+<em>LR</em> is the load resistance (Unitless)
+</p>
+<p>
+<em>q</em> is the applied load (demand) (kPa)
+</p>
+</div>
+</td>
+</tr>
+<tr>
+<th>
+Source
+</th>
+<td>
 <p class="paragraph">
-If <em>is_safe2</em>, the glass is considered safe. <em>is_safe1</em> (from <a href=#T:t1SafetyReq>T:t1SafetyReq</a>) and <em>is_safe2</em> are either both True or both False. LR is the load resistance (also called capacity), as defined in <a href=#T:calOfCap>T:calOfCap</a>. <em>q</em> (also referred as the Demand) is the 3 second duration equivalent pressure, as defined in <a href=#T:calOfDe>T:calOfDe</a>.
+FIXME: This needs to be filled in
+</p>
+</td>
+</tr>
+<tr>
+<th>
+RefBy
+</th>
+<td>
+<p class="paragraph">
+FIXME: This needs to be filled in
 </p>
 </td>
 </tr>
@@ -1239,25 +1275,25 @@ Data Definitions
 <p class="paragraph">
 This section collects and defines all the data needed to build the instance models.
 </p>
-<a id="DD:risk.fun">
+<a id="DD:risk_fun">
 <table class="ddefn">
-<tr>
-<th>
-Number
-</th>
-<td>
-<p class="paragraph">
-<b>DD</b>
-</p>
-</td>
-</tr>
 <tr>
 <th>
 Label
 </th>
 <td>
 <p class="paragraph">
-Risk of Failure
+Risk of failure
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Symbol
+</th>
+<td>
+<p class="paragraph">
+<em>B</em>
 </p>
 </td>
 </tr>
@@ -1295,32 +1331,78 @@ k
 Description
 </th>
 <td>
+<div class="list">
+<p>
+<em>B</em> is the risk of failure (Unitless)
+</p>
+<p>
+<em>k</em> is the surface flaw parameter (m<sup>12</sup>/N<sup>7</sup>)
+</p>
+<p>
+<em>a</em> is the plate length (long dimension) (m)
+</p>
+<p>
+<em>b</em> is the plate width (short dimension) (m)
+</p>
+<p>
+<em>m</em> is the surface flaw parameter (m<sup>12</sup>/N<sup>7</sup>)
+</p>
+<p>
+<em>E</em> is the modulus of elasticity of glass (Pa)
+</p>
+<p>
+<em>h</em> is the actual thickness (m)
+</p>
+<p>
+<em>LDF</em> is the load duration factor (Unitless)
+</p>
+<p>
+<em>J</em> is the stress distribution factor (Function) (Unitless)
+</p>
+</div>
+</td>
+</tr>
+<tr>
+<th>
+Source
+</th>
+<td>
 <p class="paragraph">
-<em>B</em> is the risk of failure<br /><em>k</em> is the surface flaw parameter (m<sup>12</sup>/(N<sup>7</sup>))<br /><em>a</em> is the plate length (long dimension) (m)<br /><em>b</em> is the plate width (short dimension) (m)<br /><em>m</em> is the surface flaw parameter (m<sup>12</sup>/(N<sup>7</sup>))<br /><em>E</em> is the modulus of elasticity of glass (Pa)<br /><em>h</em> is the actual thickness (m)<br /><em>LDF</em> is the load duration factor<br /><em>J</em> is the stress distribution factor (Function)
+[4]
+</p>
+</td>
+</tr>
+<tr>
+<th>
+RefBy
+</th>
+<td>
+<p class="paragraph">
+FIXME: This needs to be filled in
 </p>
 </td>
 </tr>
 </table>
 </a>
-<a id="DD:act.thick">
+<a id="DD:act_thick">
 <table class="ddefn">
-<tr>
-<th>
-Number
-</th>
-<td>
-<p class="paragraph">
-<b>DD</b>
-</p>
-</td>
-</tr>
 <tr>
 <th>
 Label
 </th>
 <td>
 <p class="paragraph">
-Actual Thickness
+Actual thickness
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Symbol
+</th>
+<td>
+<p class="paragraph">
+<em>h</em>
 </p>
 </td>
 </tr>
@@ -1422,8 +1504,33 @@ t = 22.0
 Description
 </th>
 <td>
+<div class="list">
+<p>
+<em>h</em> is the actual thickness (m)
+</p>
+<p>
+<em>t</em> is the nominal thickness <em>t&thinsp;&isin;&thinsp;{2.5,2.7,3.0,4.0,5.0,6.0,8.0,10.0,12.0,16.0,19.0,22.0}</em> (mm)
+</p>
+</div>
+</td>
+</tr>
+<tr>
+<th>
+Source
+</th>
+<td>
 <p class="paragraph">
-<em>h</em> is the actual thickness (m)<br /><em>t</em> is the nominal thickness <em>t&thinsp;&isin;&thinsp;{2.5,2.7,3.0,4.0,5.0,6.0,8.0,10.0,12.0,16.0,19.0,22.0}</em> (mm)
+
+</p>
+</td>
+</tr>
+<tr>
+<th>
+RefBy
+</th>
+<td>
+<p class="paragraph">
+FIXME: This needs to be filled in
 </p>
 </td>
 </tr>
@@ -1433,21 +1540,21 @@ Description
 <table class="ddefn">
 <tr>
 <th>
-Number
+Label
 </th>
 <td>
 <p class="paragraph">
-<b>DD</b>
+Stress distribution factor (Function)
 </p>
 </td>
 </tr>
 <tr>
 <th>
-Label
+Symbol
 </th>
 <td>
 <p class="paragraph">
-Stress Distribution Factor (Function)
+<em>J</em>
 </p>
 </td>
 </tr>
@@ -1485,8 +1592,42 @@ b
 Description
 </th>
 <td>
+<div class="list">
+<p>
+<em>J</em> is the stress distribution factor (Function) (Unitless)
+</p>
+<p>
+<em>J</em> is the stress distribution factor (Function) (Unitless)
+</p>
+<p>
+<em>q&#770;</em> is the dimensionless load (Unitless)
+</p>
+<p>
+<em>a</em> is the plate length (long dimension) (m)
+</p>
+<p>
+<em>b</em> is the plate width (short dimension) (m)
+</p>
+</div>
+</td>
+</tr>
+<tr>
+<th>
+Source
+</th>
+<td>
 <p class="paragraph">
-<em>J</em> is the stress distribution factor (Function)<br /><em>q&#770;</em> is the dimensionless load<br /><em>a</em> is the plate length (long dimension) (m)<br /><em>b</em> is the plate width (short dimension) (m)
+
+</p>
+</td>
+</tr>
+<tr>
+<th>
+RefBy
+</th>
+<td>
+<p class="paragraph">
+FIXME: This needs to be filled in
 </p>
 </td>
 </tr>
@@ -1496,21 +1637,21 @@ Description
 <table class="ddefn">
 <tr>
 <th>
-Number
+Label
 </th>
 <td>
 <p class="paragraph">
-<b>DD</b>
+Non-factored load
 </p>
 </td>
 </tr>
 <tr>
 <th>
-Label
+Symbol
 </th>
 <td>
 <p class="paragraph">
-Non-Factored Load
+<em>NFL</em>
 </p>
 </td>
 </tr>
@@ -1548,8 +1689,45 @@ q&#770;<sub>tol</sub>&#8239;E&#8239;h<sup>4</sup>
 Description
 </th>
 <td>
+<div class="list">
+<p>
+<em>NFL</em> is the non-factored load (Unitless)
+</p>
+<p>
+<em>q&#770;<sub>tol</sub></em> is the tolerable load (Unitless)
+</p>
+<p>
+<em>E</em> is the modulus of elasticity of glass (Pa)
+</p>
+<p>
+<em>h</em> is the actual thickness (m)
+</p>
+<p>
+<em>a</em> is the plate length (long dimension) (m)
+</p>
+<p>
+<em>b</em> is the plate width (short dimension) (m)
+</p>
+</div>
+</td>
+</tr>
+<tr>
+<th>
+Source
+</th>
+<td>
 <p class="paragraph">
-<em>NFL</em> is the non-factored load<br /><em>q&#770;<sub>tol</sub></em> is the tolerable load<br /><em>E</em> is the modulus of elasticity of glass (Pa)<br /><em>h</em> is the actual thickness (m)<br /><em>a</em> is the plate length (long dimension) (m)<br /><em>b</em> is the plate width (short dimension) (m)
+
+</p>
+</td>
+</tr>
+<tr>
+<th>
+RefBy
+</th>
+<td>
+<p class="paragraph">
+FIXME: This needs to be filled in
 </p>
 </td>
 </tr>
@@ -1559,21 +1737,21 @@ Description
 <table class="ddefn">
 <tr>
 <th>
-Number
+Label
 </th>
 <td>
 <p class="paragraph">
-<b>DD</b>
+Glass type factor
 </p>
 </td>
 </tr>
 <tr>
 <th>
-Label
+Symbol
 </th>
 <td>
 <p class="paragraph">
-Glass Type Factor
+<em>GTF</em>
 </p>
 </td>
 </tr>
@@ -1623,8 +1801,33 @@ g = HS
 Description
 </th>
 <td>
+<div class="list">
+<p>
+<em>GTF</em> is the glass type factor (Unitless)
+</p>
+<p>
+<em>g</em> is the glass type <em>g&thinsp;&isin;&thinsp;{AN,FT,HS}</em> (Unitless)
+</p>
+</div>
+</td>
+</tr>
+<tr>
+<th>
+Source
+</th>
+<td>
 <p class="paragraph">
-<em>GTF</em> is the glass type factor<br /><em>g</em> is the glass type <em>g&thinsp;&isin;&thinsp;{AN,FT,HS}</em>
+
+</p>
+</td>
+</tr>
+<tr>
+<th>
+RefBy
+</th>
+<td>
+<p class="paragraph">
+FIXME: This needs to be filled in
 </p>
 </td>
 </tr>
@@ -1634,21 +1837,21 @@ Description
 <table class="ddefn">
 <tr>
 <th>
-Number
+Label
 </th>
 <td>
 <p class="paragraph">
-<b>DD</b>
+Dimensionless load
 </p>
 </td>
 </tr>
 <tr>
 <th>
-Label
+Symbol
 </th>
 <td>
 <p class="paragraph">
-Dimensionless Load
+<em>q&#770;</em>
 </p>
 </td>
 </tr>
@@ -1686,8 +1889,48 @@ E&#8239;h<sup>4</sup>&#8239;GTF
 Description
 </th>
 <td>
+<div class="list">
+<p>
+<em>q&#770;</em> is the dimensionless load (Unitless)
+</p>
+<p>
+<em>q</em> is the applied load (demand) (kPa)
+</p>
+<p>
+<em>a</em> is the plate length (long dimension) (m)
+</p>
+<p>
+<em>b</em> is the plate width (short dimension) (m)
+</p>
+<p>
+<em>E</em> is the modulus of elasticity of glass (Pa)
+</p>
+<p>
+<em>h</em> is the actual thickness (m)
+</p>
+<p>
+<em>GTF</em> is the glass type factor (Unitless)
+</p>
+</div>
+</td>
+</tr>
+<tr>
+<th>
+Source
+</th>
+<td>
 <p class="paragraph">
-<em>q&#770;</em> is the dimensionless load<br /><em>q</em> is the applied load (demand) (kPa)<br /><em>a</em> is the plate length (long dimension) (m)<br /><em>b</em> is the plate width (short dimension) (m)<br /><em>E</em> is the modulus of elasticity of glass (Pa)<br /><em>h</em> is the actual thickness (m)<br /><em>GTF</em> is the glass type factor
+
+</p>
+</td>
+</tr>
+<tr>
+<th>
+RefBy
+</th>
+<td>
+<p class="paragraph">
+FIXME: This needs to be filled in
 </p>
 </td>
 </tr>
@@ -1697,21 +1940,21 @@ Description
 <table class="ddefn">
 <tr>
 <th>
-Number
+Label
 </th>
 <td>
 <p class="paragraph">
-<b>DD</b>
+Tolerable load
 </p>
 </td>
 </tr>
 <tr>
 <th>
-Label
+Symbol
 </th>
 <td>
 <p class="paragraph">
-Tolerable Load
+<em>q&#770;<sub>tol</sub></em>
 </p>
 </td>
 </tr>
@@ -1749,32 +1992,66 @@ b
 Description
 </th>
 <td>
+<div class="list">
+<p>
+<em>q&#770;<sub>tol</sub></em> is the tolerable load (Unitless)
+</p>
+<p>
+<em>q&#770;<sub>tol</sub></em> is the tolerable load (Unitless)
+</p>
+<p>
+<em>J<sub>tol</sub></em> is the stress distribution factor (Function) based on Pbtol (Unitless)
+</p>
+<p>
+<em>a</em> is the plate length (long dimension) (m)
+</p>
+<p>
+<em>b</em> is the plate width (short dimension) (m)
+</p>
+</div>
+</td>
+</tr>
+<tr>
+<th>
+Source
+</th>
+<td>
 <p class="paragraph">
-<em>q&#770;<sub>tol</sub></em> is the tolerable load<br /><em>J<sub>tol</sub></em> is the stress distribution factor (Function) based on Pbtol<br /><em>a</em> is the plate length (long dimension) (m)<br /><em>b</em> is the plate width (short dimension) (m)
+
+</p>
+</td>
+</tr>
+<tr>
+<th>
+RefBy
+</th>
+<td>
+<p class="paragraph">
+FIXME: This needs to be filled in
 </p>
 </td>
 </tr>
 </table>
 </a>
-<a id="DD:sdf.tol">
+<a id="DD:sdf_tol">
 <table class="ddefn">
-<tr>
-<th>
-Number
-</th>
-<td>
-<p class="paragraph">
-<b>DD</b>
-</p>
-</td>
-</tr>
 <tr>
 <th>
 Label
 </th>
 <td>
 <p class="paragraph">
-Stress Distribution Factor (Function) Based on Pbtol
+Stress distribution factor (Function) based on Pbtol
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Symbol
+</th>
+<td>
+<p class="paragraph">
+<em>J<sub>tol</sub></em>
 </p>
 </td>
 </tr>
@@ -1819,8 +2096,54 @@ k&#8239;(1000&#8239;E&#8239;h<sup>2</sup>)<sup>m</sup>&#8239;LDF
 Description
 </th>
 <td>
+<div class="list">
+<p>
+<em>J<sub>tol</sub></em> is the stress distribution factor (Function) based on Pbtol (Unitless)
+</p>
+<p>
+<em>P<sub>btol</sub></em> is the tolerable probability of breakage (Unitless)
+</p>
+<p>
+<em>a</em> is the plate length (long dimension) (m)
+</p>
+<p>
+<em>b</em> is the plate width (short dimension) (m)
+</p>
+<p>
+<em>m</em> is the surface flaw parameter (m<sup>12</sup>/N<sup>7</sup>)
+</p>
+<p>
+<em>k</em> is the surface flaw parameter (m<sup>12</sup>/N<sup>7</sup>)
+</p>
+<p>
+<em>E</em> is the modulus of elasticity of glass (Pa)
+</p>
+<p>
+<em>h</em> is the actual thickness (m)
+</p>
+<p>
+<em>LDF</em> is the load duration factor (Unitless)
+</p>
+</div>
+</td>
+</tr>
+<tr>
+<th>
+Source
+</th>
+<td>
 <p class="paragraph">
-<em>J<sub>tol</sub></em> is the stress distribution factor (Function) based on Pbtol<br /><em>P<sub>btol</sub></em> is the tolerable probability of breakage<br /><em>a</em> is the plate length (long dimension) (m)<br /><em>b</em> is the plate width (short dimension) (m)<br /><em>m</em> is the surface flaw parameter (m<sup>12</sup>/(N<sup>7</sup>))<br /><em>k</em> is the surface flaw parameter (m<sup>12</sup>/(N<sup>7</sup>))<br /><em>E</em> is the modulus of elasticity of glass (Pa)<br /><em>h</em> is the actual thickness (m)<br /><em>LDF</em> is the load duration factor
+
+</p>
+</td>
+</tr>
+<tr>
+<th>
+RefBy
+</th>
+<td>
+<p class="paragraph">
+FIXME: This needs to be filled in
 </p>
 </td>
 </tr>
@@ -1836,18 +2159,8 @@ Instance Models
 <p class="paragraph">
 This section transforms the problem defined in <a href=#Sec:ProbDesc>Problem Description</a> into one which is expressed in mathematical terms. It uses concrete symbols defined in <a href=#Sec:DDs>Data Definitions</a> to replace the abstract symbols in the models identified in <a href=#Sec:TMs>Theoretical Models</a> and <a href=#Sec:GDs>General Definitions</a>.
 </p>
-<a id="T:probOfBr">
-<table class="tdefn">
-<tr>
-<th>
-Number
-</th>
-<td>
-<p class="paragraph">
-<b>T</b>
-</p>
-</td>
-</tr>
+<a id="IM:probOfBr">
+<table class="idefn">
 <tr>
 <th>
 Label
@@ -1856,6 +2169,50 @@ Label
 <p class="paragraph">
 Probability of Glass Breakage
 </p>
+</td>
+</tr>
+<tr>
+<th>
+Input
+</th>
+<td>
+<p class="paragraph">
+<em>B</em>
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Output
+</th>
+<td>
+<p class="paragraph">
+<em>P<sub>b</sub></em>
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Input Constraints
+</th>
+<td>
+<a id="">
+<div class="equation">
+<em>B&thinsp;&gt;&thinsp;0</em>
+</div>
+</a>
+</td>
+</tr>
+<tr>
+<th>
+Output Constraints
+</th>
+<td>
+<a id="">
+<div class="equation">
+<em>P<sub>b</sub>&thinsp;&gt;&thinsp;0</em>
+</div>
+</a>
 </td>
 </tr>
 <tr>
@@ -1875,25 +2232,40 @@ Equation
 Description
 </th>
 <td>
+<div class="list">
+<p>
+<em>P<sub>b</sub></em> is the probability of breakage (Unitless)
+</p>
+<p>
+<em>B</em> is the risk of failure (Unitless)
+</p>
+</div>
+</td>
+</tr>
+<tr>
+<th>
+Source
+</th>
+<td>
 <p class="paragraph">
-<em>P<sub>b</sub></em> is the calculated probability of breakage. <em>B</em> is the risk of failure.
+
+</p>
+</td>
+</tr>
+<tr>
+<th>
+RefBy
+</th>
+<td>
+<p class="paragraph">
+FIXME: This needs to be filled in
 </p>
 </td>
 </tr>
 </table>
 </a>
-<a id="T:calOfCap">
-<table class="tdefn">
-<tr>
-<th>
-Number
-</th>
-<td>
-<p class="paragraph">
-<b>T</b>
-</p>
-</td>
-</tr>
+<a id="IM:calOfCap">
+<table class="idefn">
 <tr>
 <th>
 Label
@@ -1902,6 +2274,55 @@ Label
 <p class="paragraph">
 Calculation of Capacity(LR)
 </p>
+</td>
+</tr>
+<tr>
+<th>
+Input
+</th>
+<td>
+<p class="paragraph">
+<em>NFL</em>, <em>GTF</em>, <em>LSF</em>
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Output
+</th>
+<td>
+<p class="paragraph">
+<em>LR</em>
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Input Constraints
+</th>
+<td>
+<a id="">
+<div class="equation">
+<em>NFL&thinsp;&gt;&thinsp;0</em>
+</div>
+</a>
+<a id="">
+<div class="equation">
+<em>GTF&thinsp;&gt;&thinsp;0</em>
+</div>
+</a>
+<a id="">
+<div class="equation">
+<em>LSF&thinsp;&gt;&thinsp;0</em>
+</div>
+</a>
+</td>
+</tr>
+<tr>
+<th>
+Output Constraints
+</th>
+<td>
 </td>
 </tr>
 <tr>
@@ -1921,25 +2342,46 @@ Equation
 Description
 </th>
 <td>
+<div class="list">
+<p>
+<em>LR</em> is the load resistance (Unitless)
+</p>
+<p>
+<em>NFL</em> is the non-factored load (Unitless)
+</p>
+<p>
+<em>GTF</em> is the glass type factor (Unitless)
+</p>
+<p>
+<em>LSF</em> is the load share factor (Unitless)
+</p>
+</div>
+</td>
+</tr>
+<tr>
+<th>
+Source
+</th>
+<td>
 <p class="paragraph">
-<em>LR</em> is the load resistance, which is also called capacity. <em>NFL</em> is the non-factored load. <em>GTF</em> is the glass type factor. <em>LSF</em> is the load share factor. Follows A2 and A1 (&quot;In the development of this procedure, it was assumed that all four edges of the glass are simply supported and free to slip in the plane of the glass. This boundary condition has been shown to be typical of many glass installations&quot;) from [4 (pg. 53)].
+
+</p>
+</td>
+</tr>
+<tr>
+<th>
+RefBy
+</th>
+<td>
+<p class="paragraph">
+FIXME: This needs to be filled in
 </p>
 </td>
 </tr>
 </table>
 </a>
-<a id="T:calOfDe">
-<table class="tdefn">
-<tr>
-<th>
-Number
-</th>
-<td>
-<p class="paragraph">
-<b>T</b>
-</p>
-</td>
-</tr>
+<a id="IM:calOfDe">
+<table class="idefn">
 <tr>
 <th>
 Label
@@ -1948,6 +2390,55 @@ Label
 <p class="paragraph">
 Calculation of Demand(q)
 </p>
+</td>
+</tr>
+<tr>
+<th>
+Input
+</th>
+<td>
+<p class="paragraph">
+<em>q</em>, <em>w<sub>TNT</sub></em>, <em>SD</em>
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Output
+</th>
+<td>
+<p class="paragraph">
+<em>q</em>
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Input Constraints
+</th>
+<td>
+<a id="">
+<div class="equation">
+<em>q&thinsp;&gt;&thinsp;0</em>
+</div>
+</a>
+<a id="">
+<div class="equation">
+<em>w<sub>TNT</sub>&thinsp;&gt;&thinsp;0</em>
+</div>
+</a>
+<a id="">
+<div class="equation">
+<em>SD&thinsp;&gt;&thinsp;0</em>
+</div>
+</a>
+</td>
+</tr>
+<tr>
+<th>
+Output Constraints
+</th>
+<td>
 </td>
 </tr>
 <tr>
@@ -1967,12 +2458,165 @@ Equation
 Description
 </th>
 <td>
+<div class="list">
+<p>
+<em>q</em> is the applied load (demand) (kPa)
+</p>
+<p>
+<em>w<sub>TNT</sub></em> is the explosive mass in equivalent weight of TNT (kg)
+</p>
+<p>
+<em>SD</em> is the stand off distance (m)
+</p>
+</div>
+</td>
+</tr>
+<tr>
+<th>
+Source
+</th>
+<td>
 <p class="paragraph">
-<em>q</em> or demand, is the 3 second duration equivalent pressure obtained from Figure 2 by interpolation using stand off distance (<em>SD</em>) and <em>w<sub>TNT</sub></em> as parameters. <em>w<sub>TNT</sub></em> is defined as <em>w&#8239;TNT</em>. <em>w</em> is the charge weight. <em>TNT</em> is the TNT equivalent factor. <em>SD</em> is the stand off distance where <em>&radic;(SD<sub>x</sub><sup>2</sup>&plus;SD<sub>y</sub><sup>2</sup>&plus;SD<sub>z</sub><sup>2</sup>)</em> where (<em>SD<sub>x</sub></em>, <em>SD<sub>y</sub></em>, <em>SD<sub>z</sub></em>) are coordinates.
+
+</p>
+</td>
+</tr>
+<tr>
+<th>
+RefBy
+</th>
+<td>
+<p class="paragraph">
+FIXME: This needs to be filled in
 </p>
 </td>
 </tr>
 </table>
+</a>
+<a id="IM:risk_fun">
+<table class="idefn">
+<tr>
+<th>
+Label
+</th>
+<td>
+<p class="paragraph">
+Risk of failure
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Input
+</th>
+<td>
+<p class="paragraph">
+<em>k</em>, <em>a</em>, <em>b</em>, <em>m</em>, <em>E</em>, <em>h</em>, <em>LDF</em>, <em>J</em>
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Output
+</th>
+<td>
+<p class="paragraph">
+<em>B</em>
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Input Constraints
+</th>
+<td>
+</td>
+</tr>
+<tr>
+<th>
+Output Constraints
+</th>
+<td>
+</td>
+</tr>
+<tr>
+<th>
+Equation
+</th>
+<td>
+<a id="">
+<div class="equation">
+<em>B = <div class="fraction">
+<span class="fup">
+k
+</span>
+<span class="fdn">
+(a&#8239;b)<sup>m&minus;1</sup>
+</span>
+</div>&#8239;(1000&#8239;E&#8239;h<sup>2</sup>)<sup>m</sup>&#8239;LDF&#8239;e<sup>J</sup></em>
+</div>
+</a>
+</td>
+</tr>
+<tr>
+<th>
+Description
+</th>
+<td>
+<div class="list">
+<p>
+<em>B</em> is the risk of failure (Unitless)
+</p>
+<p>
+<em>k</em> is the surface flaw parameter (m<sup>12</sup>/N<sup>7</sup>)
+</p>
+<p>
+<em>a</em> is the plate length (long dimension) (m)
+</p>
+<p>
+<em>b</em> is the plate width (short dimension) (m)
+</p>
+<p>
+<em>m</em> is the surface flaw parameter (m<sup>12</sup>/N<sup>7</sup>)
+</p>
+<p>
+<em>E</em> is the modulus of elasticity of glass (Pa)
+</p>
+<p>
+<em>h</em> is the actual thickness (m)
+</p>
+<p>
+<em>LDF</em> is the load duration factor (Unitless)
+</p>
+<p>
+<em>J</em> is the stress distribution factor (Function) (Unitless)
+</p>
+</div>
+</td>
+</tr>
+<tr>
+<th>
+Source
+</th>
+<td>
+<p class="paragraph">
+
+</p>
+</td>
+</tr>
+<tr>
+<th>
+RefBy
+</th>
+<td>
+<p class="paragraph">
+FIXME: This needs to be filled in
+</p>
+</td>
+</tr>
+</table>
+</a>
+</div>
 </a>
 </div>
 </a>
@@ -2159,27 +2803,27 @@ This section provides the functional requirements, the business tasks that the s
 <h3>
 Functional Requirements
 </h3>
-<a id="FR:s7.1.req1">
+<a id="FR:functional.requirements.req1">
 <ul>
 R1: Input the quantities from <a href=#Table:R1ReqInputs>Table:R1ReqInputs</a>, which define the glass dimensions, type of glass, tolerable probability of failure and the characteristics of the blast Note: <em>a</em> and <em>b</em> will be input in terms of millimetres and will be converted to the equivalent value in metres.
 </ul>
 </a>
-<a id="FR:s7.1.req2">
+<a id="FR:functional.requirements.req2">
 <ul>
 R2: The system shall set the known values as follows: <em>m</em>, <em>k</em>, <em>E</em>, <em>t<sub>d</sub></em> following A4, <em>LDF</em> following A8, and LSF following A5.
 </ul>
 </a>
-<a id="FR:s7.1.req3">
+<a id="FR:functional.requirements.req3">
 <ul>
 R3: The system shall check the entered input values to ensure that they do not exceed the data constraints mentioned in <a href=#Sec:DataConstraints>Data Constraints</a>. If any of the input parameters is out of bounds, an error message is displayed and the calculations stop.
 </ul>
 </a>
-<a id="FR:s7.1.req4">
+<a id="FR:functional.requirements.req4">
 <ul>
 R4: Output the input quantities from R1 and the known quantities from R2.
 </ul>
 </a>
-<a id="FR:s7.1.req5">
+<a id="FR:functional.requirements.req5">
 <ul>
 R5: If <em>is_safe1</em> and <em>is_safe2</em> (from <a href=#T:t1SafetyReq>T:t1SafetyReq</a> and <a href=#T:t2SafetyReq>T:t2SafetyReq</a>) are true, output the message &quot;For the given input parameters, the glass is considered safe.&quot; If the condition is false, then output the message &quot;For the given input parameters, the glass is NOT considered safe.&quot;
 </ul>
@@ -2378,27 +3022,27 @@ This problem is small in size and relatively simple, so performance is not a pri
 <h2>
 Likely Changes
 </h2>
-<a id="LC:s8.likelychg1">
+<a id="LC:likely.changes.likelychg1">
 <ul>
 LC1: A3 - The system currently only calculates for external blast risk. In the future calculations can be added for the internal blast risk.
 </ul>
 </a>
-<a id="LC:s8.likelychg2">
+<a id="LC:likely.changes.likelychg2">
 <ul>
 LC2: A4, A8 - Currently the values for <em>m</em>, <em>k</em>, and <em>E</em> are assumed to be the same for all glass. In the future these values can be changed to variable inputs.
 </ul>
 </a>
-<a id="LC:s8.likelychg3">
+<a id="LC:likely.changes.likelychg3">
 <ul>
 LC3: A5 - The software may be changed to accommodate more than a single lite.
 </ul>
 </a>
-<a id="LC:s8.likelychg4">
+<a id="LC:likely.changes.likelychg4">
 <ul>
 LC4: A6 - The software may be changed to accommodate more boundary conditions than 4-sided support.
 </ul>
 </a>
-<a id="LC:s8.likelychg5">
+<a id="LC:likely.changes.likelychg5">
 <ul>
 LC5: A7 - The software may be changed to consider more than just flexure of the glass.
 </ul>
@@ -4291,7 +4935,7 @@ surface flaw parameter
 <em>7</em>
 </td>
 <td>
-m<sup>12</sup>/(N<sup>7</sup>)
+m<sup>12</sup>/N<sup>7</sup>
 </td>
 </tr>
 <tr>
@@ -4305,7 +4949,7 @@ surface flaw parameter
 <em>2.86&#8239;10<sup>&minus;53</sup></em>
 </td>
 <td>
-m<sup>12</sup>/(N<sup>7</sup>)
+m<sup>12</sup>/N<sup>7</sup>
 </td>
 </tr>
 <tr>

@@ -66,25 +66,25 @@ gbInputDataConstraints = (map uncrtnw gbInputsWUnitsUncrtn) ++
 plate_len = uqcND "plate_len" (nounPhraseSP "plate length (long dimension)")
   lA metre Real 
   [ gtZeroConstr,
-    physc $ UpFrom $ Exc $ sy plate_width,
-    sfwrc $ Bounded (Inc $ sy dim_min) (Inc $ sy dim_max),
-    sfwrc $ UpTo $ Exc $ sy ar_max * sy plate_width ] (dbl 1.5) defaultUncrt
+    physc $ UpFrom (Exc, sy plate_width),
+    sfwrc $ Bounded (Inc , sy dim_min) (Inc , sy dim_max),
+    sfwrc $ UpTo (Exc, sy ar_max * sy plate_width)] (dbl 1.5) defaultUncrt
 
 plate_width = uqcND "plate_width" (nounPhraseSP "plate width (short dimension)")
   lB metre Real
   [ gtZeroConstr,
-    physc $ Bounded (Exc 0) (Exc $ sy plate_len),
-    sfwrc $ Bounded (Inc $ sy dim_min) (Inc $ sy dim_max),
-    sfwrc $ UpTo $ Exc $ sy plate_len / sy ar_max ] (dbl 1.2) defaultUncrt
+    physc $ Bounded (Exc,0) (Exc, sy plate_len),
+    sfwrc $ Bounded (Inc, sy dim_min) (Inc, sy dim_max),
+    sfwrc $ UpTo (Exc, sy plate_len / sy ar_max)] (dbl 1.2) defaultUncrt
 
 pb_tol = uvc "pb_tol" (nounPhraseSP "tolerable probability of breakage") 
   (sub cP (Atomic "btol")) Real
-  [ physc $ Bounded (Exc 0) (Exc 1)] (dbl 0.008) (0.001)
+  [ physc $ Bounded (Exc,0) (Exc,1)] (dbl 0.008) (0.001)
 
 char_weight = uqcND "char_weight" (nounPhraseSP "charge weight") 
   lW kilogram Real
   [ gtZeroConstr,
-    sfwrc $ Bounded (Inc $ sy cWeightMin) (Inc $ sy cWeightMax)]
+    sfwrc $ Bounded (Inc, sy cWeightMin) (Inc, sy cWeightMax)]
     (dbl 42) defaultUncrt
 
 tNT = uvc "tNT" (nounPhraseSP "TNT equivalent factor")
@@ -94,7 +94,7 @@ tNT = uvc "tNT" (nounPhraseSP "TNT equivalent factor")
 standOffDist = uqcND "standOffDist" (nounPhraseSP "stand off distance") 
   (Atomic "SD") metre Real
   [ gtZeroConstr,
-    sfwrc $ Bounded (Exc $ sy sd_min) (Exc $ sy sd_max)]
+    sfwrc $ Bounded (Exc, sy sd_min) (Exc, sy sd_max)]
   (dbl 45) defaultUncrt
 --FIXME: ^ incorporate definition in here?
 
@@ -118,7 +118,7 @@ gbOutputs = map qw [is_safe1, is_safe2] ++ map qw [prob_br]
 prob_br :: ConstrainedChunk
 prob_br = cvc "prob_br" (nounPhraseSP "probability of breakage")
   (sub cP lB) Rational
-  [ physc $ Bounded (Exc 0) (Exc 1)] (dbl 0.4)
+  [ physc $ Bounded (Exc,0) (Exc,1)] (dbl 0.4)
   --FIXME: no typical value!
 
 {--}

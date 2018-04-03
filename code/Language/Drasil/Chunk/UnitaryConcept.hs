@@ -25,7 +25,6 @@ instance HasSymbol UnitaryConceptDict where symbol stage = symbol stage . view u
 instance Quantity UnitaryConceptDict where getUnit = getUnit . view unitary
 
 instance Eq UnitaryConceptDict where a == b = (a ^. uid) == (b ^. uid)
-instance Ord UnitaryConceptDict where compare a b = compare (a ^. uid) (b ^. uid)
 
 ucw :: (Unitary c, Concept c) => c -> UnitaryConceptDict
 ucw c = UCC (mkUnitary c) (DAD (c ^. defn) (c ^. cdom))

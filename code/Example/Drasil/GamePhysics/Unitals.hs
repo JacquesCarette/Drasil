@@ -266,7 +266,7 @@ cpInputConstraints = map (\x -> uq x (0.1 :: Double))
   veloCons, angVeloCons, forceCons, torqueCons, restCoefCons]
 
 nonNegativeConstraint :: Constraint -- should be pulled out an put somewhere for generic constraints
-nonNegativeConstraint = physc $ UpFrom $ Inc 0
+nonNegativeConstraint = physc $ UpFrom (Inc,0)
 
 -- FIXME
 pi_ :: QuantityDict
@@ -282,7 +282,7 @@ orientCons     = constrained' QM.orientation        [] (sy pi_ / 2) -- physical 
 angVeloCons    = constrained' QP.angularVelocity    [] (dbl 2.1)
 forceCons      = constrained' QP.force              [] (dbl 98.1)
 torqueCons     = constrained' QP.torque             [] (dbl 200)
-restCoefCons   = constrained' QP.restitutionCoef    [physc $ Bounded (Inc 0) (Inc 1)] (dbl 0.8)
+restCoefCons   = constrained' QP.restitutionCoef    [physc $ Bounded (Inc,0) (Inc,1)] (dbl 0.8)
 
 ---------------------
 -- INSTANCE MODELS --

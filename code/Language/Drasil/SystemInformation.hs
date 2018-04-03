@@ -23,7 +23,7 @@ data SystemInformation where
 -- I'm thinking for getting concepts that are also quantities, we could
 -- use a lookup of some sort from their internal (Drasil) ids.
  SI :: (Idea a, Idea b, HasName c, IsUnit d,
-  Quantity e, Ord e, Ord f, Quantity f, Concept f,
+  Quantity e, Eq e, Quantity f, Concept f, Eq f,
   Quantity h, Quantity i,
   Constrained j) => 
   { _sys :: a

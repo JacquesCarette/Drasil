@@ -2,8 +2,6 @@ module Data.Drasil.Units.Physics where
 
 import Language.Drasil
 import Data.Drasil.SI_Units
-import Control.Lens ((^.))
-
 
 accelU, angVelU, angAccelU, momtInertU, momentOfForceU, impulseU, springConstU, torqueU, velU :: DerUChunk
 
@@ -20,5 +18,4 @@ velU            = new_unit "velocity"             $ metre /: second
 gravConstU :: DerUChunk
 
 gravConstU = makeDerU (dcc "gravConstU" (cn "gravitational constant")
-  "universal gravitational constant") $
-   USynonym (UDiv (m_3 ^. usymb) (UProd [kilogram ^. usymb, s_2 ^. usymb]))
+  "universal gravitational constant") $ USynonym (m_3 /$ (kilogram *: s_2))

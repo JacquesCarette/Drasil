@@ -470,7 +470,7 @@ convExpr (Case l)      = doit l -- FIXME this is sub-optimal
     doit [(e,_)] = convExpr e -- should always be the else clause
     doit ((e,cond):xs) = liftM3 Condi (convExpr cond) (convExpr e) (convExpr (Case xs))
 convExpr (Matrix _)    = error "convExpr: Matrix"
-convExpr (EOp _)       = error "convExpr: EOp"
+convExpr (Operator _ _ _) = error "convExpr: Operator"
 convExpr (IsIn _ _)    = error "convExpr: IsIn"
 convExpr (RealI c ri)  = do
   g <- ask
@@ -487,15 +487,15 @@ renderC' s (Range _ rr)          = renderRealInt s rr
 renderC' s (EnumeratedReal _ rr) = IsIn (sy s) (DiscreteD rr)
 renderC' s (EnumeratedStr _ rr)  = IsIn (sy s) (DiscreteS rr)
 
-renderRealInt :: (Chunk c, HasSymbol c) => c -> RealInterval -> Expr
-renderRealInt s (Bounded (Inc a) (Inc b)) = (a $<= sy s) $&& (sy s $<= b)
-renderRealInt s (Bounded (Inc a) (Exc b)) = (a $<= sy s) $&& (sy s $<  b)
-renderRealInt s (Bounded (Exc a) (Inc b)) = (a $<  sy s) $&& (sy s $<= b)
-renderRealInt s (Bounded (Exc a) (Exc b)) = (a $<  sy s) $&& (sy s $<  b)
-renderRealInt s (UpTo (Inc a))    = sy s $<= a
-renderRealInt s (UpTo (Exc a))    = sy s $< a
-renderRealInt s (UpFrom (Inc a))  = sy s $>= a
-renderRealInt s (UpFrom (Exc a))  = sy s $>  a
+renderRealInt :: (Chunk c, HasSymbol c) => c -> RealInterval Expr Expr -> Expr
+renderRealInt s (Bounded (Inc,a) (Inc,b)) = (a $<= sy s) $&& (sy s $<= b)
+renderRealInt s (Bounded (Inc,a) (Exc,b)) = (a $<= sy s) $&& (sy s $<  b)
+renderRealInt s (Bounded (Exc,a) (Inc,b)) = (a $<  sy s) $&& (sy s $<= b)
+renderRealInt s (Bounded (Exc,a) (Exc,b)) = (a $<  sy s) $&& (sy s $<  b)
+renderRealInt s (UpTo (Inc,a))    = sy s $<= a
+renderRealInt s (UpTo (Exc,a))    = sy s $< a
+renderRealInt s (UpFrom (Inc,a))  = sy s $>= a
+renderRealInt s (UpFrom (Exc,a))  = sy s $>  a
 
 unop :: UFunc -> (Value -> Value)
 unop E.Sqrt = (#/^)

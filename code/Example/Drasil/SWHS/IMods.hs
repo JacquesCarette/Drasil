@@ -3,8 +3,6 @@ module Drasil.SWHS.IMods (s4_2_5_IMods,
 
 import Language.Drasil
 
-import Drasil.DocumentLanguage (mkAssump)
-
 import Drasil.SWHS.Unitals (t_init_melt, latentE_P, pcm_E, pcm_initMltE,
   temp_melt_P, temp_PCM, htCap_L_P, pcm_mass, htFusion, temp_init, htCap_S_P,
   melt_frac, temp_W, w_mass, w_E, htCap_W, tau_S_P, pcm_SA, tau_L_P, pcm_HTC,
@@ -44,13 +42,12 @@ balWtrDesc = foldlSent [(E $ sy temp_W) `isThe` phrase temp_W +:+.
   (E $ sy eta $= (sy pcm_HTC * sy pcm_SA) / (sy coil_HTC * sy coil_SA)),
   S "is a constant" +:+. sParen (S "dimensionless"),
   S "The above", phrase equation, S "applies as long as the", phrase water,
-  S "is in", phrase liquid, S "form" `sC` (E $ real_interval temp_W (Bounded (Exc 0) (Exc 100))),
+  S "is in", phrase liquid, S "form" `sC` (E $ real_interval temp_W (Bounded (Exc,0) (Exc,100))),
   sParen (unwrap $ getUnit temp_W), S "where", E 0,
   sParen (unwrap $ getUnit temp_W) `sAnd` (E 100),
   sParen (unwrap $ getUnit temp_W), S "are the", phrase melting `sAnd`
   plural boil_pt, S "of", phrase water `sC` S "respectively",
-  sParen (makeRef (mkAssump "assump14" EmptyS) `sC`
-  makeRef (mkAssump "assump19" EmptyS))]
+  sParen (makeRef a14 `sC` makeRef a19)]
 
 
 ---------
@@ -65,14 +62,14 @@ eBalanceOnPCM = makeRC "eBalanceOnPCM" (nounPhraseSP
 balPCM_Rel :: Relation
 balPCM_Rel = (deriv (sy temp_PCM) time) $= case_ [case1, case2, case3, case4]
   where case1 = ((1 / (sy tau_S_P)) * ((apply1 temp_W time) -
-          (apply1 temp_PCM time)), real_interval temp_PCM (UpTo $ Exc (sy temp_melt_P)))
+          (apply1 temp_PCM time)), real_interval temp_PCM (UpTo (Exc,sy temp_melt_P)))
 
         case2 = ((1 / (sy tau_L_P)) * ((apply1 temp_W time) -
-          (apply1 temp_PCM time)), real_interval temp_PCM (UpFrom $ Exc (sy temp_melt_P)))
+          (apply1 temp_PCM time)), real_interval temp_PCM (UpFrom (Exc,sy temp_melt_P)))
 
         case3 = (0, (sy temp_PCM) $= (sy temp_melt_P))
 
-        case4 = (0, real_interval melt_frac (Bounded (Exc 0) (Exc 1)))
+        case4 = (0, real_interval melt_frac (Bounded (Exc,0) (Exc,1)))
 
 balPCMDesc :: Sentence
 balPCMDesc = foldlSent [(E $ sy temp_W) `isThe` phrase temp_W +:+.
@@ -111,10 +108,9 @@ htWtrDesc = foldlSent [S "The above", phrase equation,
   phrase time, getES time, sParen (unwrap $ getUnit t_init_melt) `sC`
   (getES temp_W) `sAnd` S "the", phrase temp_init `sC` getES temp_init +:+.
   sParen (unwrap $ getUnit temp_init), S "This", phrase equation,
-  S "applies as long as", (E $ real_interval temp_W (Bounded (Exc 0) (Exc 100)))
+  S "applies as long as", (E $ real_interval temp_W (Bounded (Exc,0) (Exc,100)))
   :+: (unwrap $ getUnit temp_W),
-  sParen $ makeRef (mkAssump "assump14" EmptyS) `sC`
-  makeRef (mkAssump "assump19" EmptyS)]
+  sParen $ makeRef a14 `sC` makeRef a19]
 
 ---------
 -- IM4 --
@@ -126,17 +122,17 @@ heatEInPCM = makeRC "heatEInPCM" (nounPhraseSP "Heat energy in the PCM")
 htPCM_Rel :: Relation
 htPCM_Rel = sy pcm_E $= case_ [case1, case2, case3, case4]
   where case1 = (sy htCap_S_P * sy pcm_mass * ((apply1 temp_PCM time) -
-          sy temp_init), real_interval temp_PCM (UpTo $ Exc $ sy temp_melt_P))
+          sy temp_init), real_interval temp_PCM (UpTo (Exc, sy temp_melt_P)))
 
         case2 = (sy pcm_initMltE + (sy htFusion * sy pcm_mass) +
           (sy htCap_L_P * sy pcm_mass * ((apply1 temp_PCM time) -
-          sy temp_melt_P)), real_interval temp_PCM (UpFrom $ Exc $ sy temp_melt_P))
+          sy temp_melt_P)), real_interval temp_PCM (UpFrom (Exc, sy temp_melt_P)))
 
         case3 = (sy pcm_initMltE + (apply1 latentE_P time),
           (sy temp_PCM) $= (sy temp_melt_P))
 
         case4 = (sy pcm_initMltE + (apply1 latentE_P time),
-          real_interval melt_frac (Bounded (Exc 0) (Exc 1)))
+          real_interval melt_frac (Bounded (Exc,0) (Exc,1)))
 
 htPCMDesc :: Sentence
 htPCMDesc = foldlSent [S "The above", phrase equation,
@@ -174,13 +170,11 @@ htPCMDesc = foldlSent [S "The above", phrase equation,
   S "for", phrase boiling, S "of the", short phsChgMtrl,
   S "is not detailed" `sC` S "since the", short phsChgMtrl,
   S "is assumed to either be in a", phrase solid, S "or", phrase liquid,
-  S "state", sParen (makeRef (mkAssump "assump18" EmptyS))]
+  S "state", sParen (makeRef a18)]
 
-
-
-{--varWithDesc :: N c => c -> Sentence
-varWithDesc conceptVar = (E $ sy conceptVar) `isThe` phrase conceptVar +:+.
-  sParen (unwrap $ getUnit conceptVar)
-
---need to create a wrapper
---}
+---------------
+-- FIXME, hacks
+a14, a18, a19 :: Contents
+a14 = Assumption $ assump "assump14" EmptyS (S "assump14")
+a18 = Assumption $ assump "assump18" EmptyS (S "assump18")
+a19 = Assumption $ assump "assump19" EmptyS (S "assump19")

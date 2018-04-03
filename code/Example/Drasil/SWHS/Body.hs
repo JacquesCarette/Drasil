@@ -168,7 +168,7 @@ mkSRS = RefSec (RefProg intro
       ]
     ): --Testing General Definitions.-}
   
-  map Verbatim [gen_sys_desc, spec_sys_desc, req, likely_chng, trace_matrix_grph] ++ 
+  map Verbatim [req, likely_chng, trace_matrix_grph] ++ 
     [AuxConstntSec (AuxConsProg progName specParamValList)] ++ 
     (Bibliography : [])
 

@@ -11,7 +11,7 @@ allMods = [readTableMod, inputMod, interpMod]
 -- It's a bit odd that this has to be explicitly built here...
 implVars :: [VarChunk]
 implVars = [v, x_z_1, y_z_1, x_z_2, y_z_2, mat, col,
-  i, j, k, z, z_vector, y_array, x_array, y, arr, filename,
+  i, j, k, z, z_vector, y_matrix, x_matrix, y, arr, filename,
   y_2, y_1, x_2, x_1, x]
 
 --from TSD.txt:
@@ -19,8 +19,8 @@ implVars = [v, x_z_1, y_z_1, x_z_2, y_z_2, mat, col,
 read_table :: Func
 read_table = funcData "read_table" $
   [ singleLine (repeated [junk, listEntry [WithPattern] z_vector]) ',',
-    multiLine (repeated [listEntry [WithLine, WithPattern] x_array, 
-                         listEntry [WithLine, WithPattern] y_array]) ','
+    multiLine (repeated [listEntry [WithLine, WithPattern] x_matrix, 
+                         listEntry [WithLine, WithPattern] y_matrix]) ','
   ]
   
 readTableMod :: Mod
@@ -56,32 +56,32 @@ one = Atomic "1"
 two = Atomic "2"  
 
 y_2, y_1, x_2, x_1, x :: VarChunk
-y_1  = implVar "v_y_1"    (nounPhraseSP "y1")   (sub lY one) Real
-y_2  = implVar "v_y_2"    (nounPhraseSP "y2")   (sub lY two) Real
-x_1  = implVar "v_x_1"    (nounPhraseSP "x1")   (sub lX one) Real
-x_2  = implVar "v_x_2"    (nounPhraseSP "x2")   (sub lX two) Real
-x    = implVar "v_x"      (nounPhraseSP "x")    lX           Real -- = params.wtnt from mainFun.py
+y_1  = implVar "y_1"    (nounPhraseSP "y1")   (sub lY one) Real
+y_2  = implVar "y_2"    (nounPhraseSP "y2")   (sub lY two) Real
+x_1  = implVar "x_1"    (nounPhraseSP "x1")   (sub lX one) Real
+x_2  = implVar "x_2"    (nounPhraseSP "x2")   (sub lX two) Real
+x    = implVar "x"      (nounPhraseSP "x")    lX           Real -- = params.wtnt from mainFun.py
 
 v, x_z_1, y_z_1, x_z_2, y_z_2, mat, col,
-  i, j, k, z, z_vector, y_array, x_array, y, arr, filename :: VarChunk
-v       = implVar "v_v"          (nounPhraseSP "v")       lV  Real
-i       = implVar "v_i"          (nounPhraseSP "i")       lI  Natural
-j       = implVar "v_j"          (nounPhraseSP "j")       lJ  Natural
-k       = implVar "v_k"          (nounPhraseSP "k")       (sub lK two) Natural -- k breaks things until we start using ids
+  i, j, k, z, z_vector, y_matrix, x_matrix, y, arr, filename :: VarChunk
+v       = implVar "v"          (nounPhraseSP "v")       lV  Real
+i       = implVar "i"          (nounPhraseSP "i")       lI  Natural
+j       = implVar "j"          (nounPhraseSP "j")       lJ  Natural
+k       = implVar "k"          (nounPhraseSP "k")       (sub lK two) Natural -- k breaks things until we start using ids
                                                                           -- in codegen (after refactor end of August)
-z       = implVar "v_z"       (nounPhraseSP "z")       lZ  Real
-z_vector = implVar "v_z_vector" (nounPhraseSP "z_vector") (sub lZ (Atomic "vector")) (Vect Real)
-y_array = implVar "v_y_array" (nounPhraseSP "y_array") (sub lY (Atomic "array")) (Vect $ Vect Real)
-x_array = implVar "v_x_array" (nounPhraseSP "x_array") (sub lX (Atomic "array")) (Vect $ Vect Real)
-y       = implVar "v_y"       (nounPhraseSP "y")       lY Real
-arr     = implVar "v_arr"     (nounPhraseSP "arr")     (Atomic "arr") (Vect Real)--FIXME: temporary variable for indInSeq?
-x_z_1   = implVar "v_x_z_1"   (nounPhraseSP "x_z_1")     (sub lX (sub lZ one)) (Vect Real)
-y_z_1   = implVar "v_y_z_1"   (nounPhraseSP "y_z_1")     (sub lY (sub lZ one)) (Vect Real)
-x_z_2   = implVar "v_x_z_2"   (nounPhraseSP "x_z_2")     (sub lX (sub lZ two)) (Vect Real)
-y_z_2   = implVar "v_y_z_2"   (nounPhraseSP "y_z_2")     (sub lY (sub lZ two)) (Vect Real)
-mat     = implVar "v_mat"     (nounPhraseSP "mat")       (Atomic "mat") (Vect $ Vect Real)
-col     = implVar "v_col"     (nounPhraseSP "col")       (Atomic "col") (Vect Real)
-filename= implVar "v_filename" (nounPhraseSP "filename") (Atomic "filename") String
+z       = implVar "z"       (nounPhraseSP "z")       lZ  Real
+z_vector = implVar "z_vector" (nounPhraseSP "z_vector") (sub lZ (Atomic "vector")) (Vect Real)
+y_matrix = implVar "y_matrix" (nounPhraseSP "y_matrix") (sub lY (Atomic "matrix")) (Vect $ Vect Real)
+x_matrix = implVar "x_matrix" (nounPhraseSP "x_matrix") (sub lX (Atomic "matrix")) (Vect $ Vect Real)
+y       = implVar "y"       (nounPhraseSP "y")       lY Real
+arr     = implVar "arr"     (nounPhraseSP "arr")     (Atomic "arr") (Vect Real)--FIXME: temporary variable for indInSeq?
+x_z_1   = implVar "x_z_1"   (nounPhraseSP "x_z_1")     (sub lX (sub lZ one)) (Vect Real)
+y_z_1   = implVar "y_z_1"   (nounPhraseSP "y_z_1")     (sub lY (sub lZ one)) (Vect Real)
+x_z_2   = implVar "x_z_2"   (nounPhraseSP "x_z_2")     (sub lX (sub lZ two)) (Vect Real)
+y_z_2   = implVar "y_z_2"   (nounPhraseSP "y_z_2")     (sub lY (sub lZ two)) (Vect Real)
+mat     = implVar "mat"     (nounPhraseSP "mat")       (Atomic "mat") (Vect $ Vect Real)
+col     = implVar "col"     (nounPhraseSP "col")       (Atomic "col") (Vect Real)
+filename= implVar "filename" (nounPhraseSP "filename") (Atomic "filename") String
 
 ------------------------------------------------------------------------------------------
 --
@@ -137,20 +137,20 @@ extractColumn = funcDef "extractColumn" [mat, j] (Vect Real)
   ]
 
 interpY :: Func
-interpY = funcDef "interpY" [{-x_array, y_array, z_vector,-} filename, x, z] Real
+interpY = funcDef "interpY" [filename, x, z] Real
   [
-    -- hack
-  fdec x_array,
-  fdec y_array,
+  -- hack
+  fdec x_matrix,
+  fdec y_matrix,
   fdec z_vector,
   --
-  FProcCall read_table [sy filename, sy z_vector, sy x_array, sy y_array],
+  FProcCall read_table [sy filename, sy z_vector, sy x_matrix, sy y_matrix],
   -- endhack
     i     $:= (apply (asExpr indInSeq)      [sy z_vector, sy z]),
-    x_z_1 $:= getCol   x_array i,
-    y_z_1 $:= getCol   y_array i,
-    x_z_2 $:= getColp1 x_array i,
-    y_z_2 $:= getColp1 y_array i,
+    x_z_1 $:= getCol   x_matrix i,
+    y_z_1 $:= getCol   y_matrix i,
+    x_z_2 $:= getColp1 x_matrix i,
+    y_z_2 $:= getColp1 y_matrix i,
     FTry 
       [ j $:= (apply2 (asVC indInSeq) x_z_1 x),
         k $:= (apply2 (asVC indInSeq) x_z_2 x) ]
@@ -173,21 +173,21 @@ interpY = funcDef "interpY" [{-x_array, y_array, z_vector,-} filename, x, z] Rea
   ]  
   
 interpZ :: Func
-interpZ = funcDef "interpZ" [{-x_array, y_array, z_vector,-} filename, x, y] Real
+interpZ = funcDef "interpZ" [filename, x, y] Real
   [
     -- hack
-  fdec x_array,
-  fdec y_array,
+  fdec x_matrix,
+  fdec y_matrix,
   fdec z_vector,
   --
-  FProcCall read_table [sy filename, sy z_vector, sy x_array, sy y_array],
+  FProcCall read_table [sy filename, sy z_vector, sy x_matrix, sy y_matrix],
   -- endhack
     ffor i (sy i $< (dim (sy z_vector) - 1)) 
       [
-        x_z_1 $:= (apply (asExpr extractColumn) [sy x_array, sy i]),
-        y_z_1 $:= (apply (asExpr extractColumn) [sy y_array, sy i]),
-        x_z_2 $:= (apply (asExpr extractColumn) [sy x_array, (sy i) + 1]),
-        y_z_2 $:= (apply (asExpr extractColumn) [sy y_array, (sy i) + 1]),
+        x_z_1 $:= (apply (asExpr extractColumn) [sy x_matrix, sy i]),
+        y_z_1 $:= (apply (asExpr extractColumn) [sy y_matrix, sy i]),
+        x_z_2 $:= (apply (asExpr extractColumn) [sy x_matrix, (sy i) + 1]),
+        y_z_2 $:= (apply (asExpr extractColumn) [sy y_matrix, (sy i) + 1]),
         FTry 
           [ j $:= (apply2 (asVC indInSeq) x_z_1 x),
             k $:= (apply2 (asVC indInSeq) x_z_2 x) ]

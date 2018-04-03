@@ -834,7 +834,7 @@ GS2: predict the change in heat energy in the water over time
 Solution Characteristics Specification
 </h3>
 <p class="paragraph">
-The instance models that govern SWHS are presented in <a href=#Sec:IMs>Instance Models</a>. The information to understand the meaning of the instance models and their derivation is also presented, so that the instance models can be verified.
+The instance models that govern Solar Water Heating Systems are presented in <a href=#Sec:IMs>Instance Models</a>. The information to understand the meaning of the instance models and their derivation is also presented, so that the instance models can be verified.
 </p>
 <a id="Sec:Assumps">
 <div class="subsubsection">
@@ -928,21 +928,11 @@ This section focuses on the general equations and laws that SWHS is based on.
 <table class="tdefn">
 <tr>
 <th>
-Number
-</th>
-<td>
-<p class="paragraph">
-<b>T1</b>
-</p>
-</td>
-</tr>
-<tr>
-<th>
 Label
 </th>
 <td>
 <p class="paragraph">
-Conservation of Thermal Energy
+Conservation of thermal energy
 </p>
 </td>
 </tr>
@@ -970,8 +960,48 @@ Equation
 Description
 </th>
 <td>
+<div class="list">
+<p>
+<em>&nabla;</em> is the gradient (Unitless)
+</p>
+<p>
+<em><b>q</b></em> is the thermal flux vector (W/(m<sup>2</sup>))
+</p>
+<p>
+<em>g</em> is the volumetric heat generation per unit volume (W/(m<sup>3</sup>))
+</p>
+<p>
+<em>&rho;</em> is the density (kg/(m<sup>3</sup>))
+</p>
+<p>
+<em>C</em> is the specific heat capacity (J/(kg&sdot;&deg;C))
+</p>
+<p>
+<em>T</em> is the temperature (&deg;C)
+</p>
+<p>
+<em>t</em> is the time (s)
+</p>
+</div>
+</td>
+</tr>
+<tr>
+<th>
+Source
+</th>
+<td>
 <p class="paragraph">
-The above equation gives the law of conservation of energy for transient heat transfer in a material of specific heat capacity <em>C</em> (J/(kg&sdot;&deg;C)) and density, <em>&rho;</em> (kg/(m<sup>3</sup>)), where <em><b>q</b></em> is the thermal flux vector (W/(m<sup>2</sup>)), <em>g</em> is the volumetric heat generation per unit volume (W/(m<sup>3</sup>)), <em>T</em> is the temperature (&deg;C), <em>t</em> is time (s), and <em>&nabla;</em> is the degree of steepness of a graph at any point. For this equation to apply, other forms of energy, such as mechanical energy, are assumed to be negligible in the system (<a href=#A:assump1>assump1</a>).
+FIXME: This needs to be filled in
+</p>
+</td>
+</tr>
+<tr>
+<th>
+RefBy
+</th>
+<td>
+<p class="paragraph">
+FIXME: This needs to be filled in
 </p>
 </td>
 </tr>
@@ -987,25 +1017,25 @@ General Definitions
 <p class="paragraph">
 This section collects the laws and equations that will be used in deriving the data definitions, which in turn are used to build the instance models.
 </p>
-<a id="T:nwtnCooling">
-<table class="tdefn">
-<tr>
-<th>
-Number
-</th>
-<td>
-<p class="paragraph">
-<b>T</b>
-</p>
-</td>
-</tr>
+<a id="GD:nwtnCooling">
+<table class="gdefn">
 <tr>
 <th>
 Label
 </th>
 <td>
 <p class="paragraph">
-Newton's Law of Cooling
+Newton's law of cooling
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Units
+</th>
+<td>
+<p class="paragraph">
+W/(m<sup>2</sup>)
 </p>
 </td>
 </tr>
@@ -1026,32 +1056,53 @@ Equation
 Description
 </th>
 <td>
+<div class="list">
+<p>
+<em><b>q</b></em> is the thermal flux vector (W/(m<sup>2</sup>))
+</p>
+<p>
+<em>t</em> is the time (s)
+</p>
+<p>
+<em>h</em> is the convective heat transfer coefficient (W/(m<sup>2</sup>&sdot;&deg;C))
+</p>
+<p>
+<em>&Delta;T</em> is the change in temperature (&deg;C)
+</p>
+</div>
+</td>
+</tr>
+<tr>
+<th>
+Source
+</th>
+<td>
 <p class="paragraph">
-Newton's law of cooling describes convective cooling from a surface. The law is stated as: the rate of heat loss from a body is proportional to the difference in temperatures between the body and its surroundings. <em><b>q</b>(t)</em> is the thermal flux (W/(m<sup>2</sup>)). <em>h</em> is the heat transfer coefficient, assumed independant of <em>T</em> (A2) (W/(m<sup>2</sup>&sdot;&deg;C)). <em>&Delta;T(t) = T(t)&minus;T<sub>env</sub>(t)</em> is the time-dependant thermal gradient between the environment and the object (&deg;C).
+
+</p>
+</td>
+</tr>
+<tr>
+<th>
+RefBy
+</th>
+<td>
+<p class="paragraph">
+FIXME: This needs to be filled in
 </p>
 </td>
 </tr>
 </table>
 </a>
-<a id="T:rocTempSimp">
-<table class="tdefn">
-<tr>
-<th>
-Number
-</th>
-<td>
-<p class="paragraph">
-<b>T</b>
-</p>
-</td>
-</tr>
+<a id="GD:rocTempSimp">
+<table class="gdefn">
 <tr>
 <th>
 Label
 </th>
 <td>
 <p class="paragraph">
-Simplified Rate of Change of Temperature
+Simplified rate of change of temperature
 </p>
 </td>
 </tr>
@@ -1079,8 +1130,57 @@ d&#8239;t
 Description
 </th>
 <td>
+<div class="list">
+<p>
+<em>m</em> is the mass (kg)
+</p>
+<p>
+<em>C</em> is the specific heat capacity (J/(kg&sdot;&deg;C))
+</p>
+<p>
+<em>T</em> is the temperature (&deg;C)
+</p>
+<p>
+<em>t</em> is the time (s)
+</p>
+<p>
+<em>q<sub>in</sub></em> is the heat flux input (W/(m<sup>2</sup>))
+</p>
+<p>
+<em>A<sub>in</sub></em> is the surface area over which heat is transferred in (m<sup>2</sup>)
+</p>
+<p>
+<em>q<sub>out</sub></em> is the heat flux output (W/(m<sup>2</sup>))
+</p>
+<p>
+<em>A<sub>out</sub></em> is the surface area over which heat is transferred out (m<sup>2</sup>)
+</p>
+<p>
+<em>g</em> is the volumetric heat generation per unit volume (W/(m<sup>3</sup>))
+</p>
+<p>
+<em>V</em> is the volume (m<sup>3</sup>)
+</p>
+</div>
+</td>
+</tr>
+<tr>
+<th>
+Source
+</th>
+<td>
 <p class="paragraph">
-The basic equation governing the rate of change of temperature, for a given volume <em>V</em>, with time. <em>m</em> is the mass (kg). <em>C</em> is the specific heat capacity (J/(kg&sdot;&deg;C)). <em>T</em> is the temperature (&deg;C) and <em>t</em> is the time (s). <em>q<sub>in</sub></em> and <em>q<sub>out</sub></em> are the in and out heat transfer rates, respectively (W/(m<sup>2</sup>)). <em>A<sub>in</sub></em> and <em>A<sub>out</sub></em> are the surface areas over which the heat is being transferred in and out, respectively (m<sup>2</sup>). <em>g</em> is the volumetric heat generated (W/(m<sup>3</sup>)). <em>V</em> is the volume (m<sup>3</sup>).
+
+</p>
+</td>
+</tr>
+<tr>
+<th>
+RefBy
+</th>
+<td>
+<p class="paragraph">
+FIXME: This needs to be filled in
 </p>
 </td>
 </tr>
@@ -1174,25 +1274,25 @@ Data Definitions
 <p class="paragraph">
 This section collects and defines all the data needed to build the instance models. The dimension of each quantity is also given.
 </p>
-<a id="DD:ht.flux.C">
+<a id="DD:ht_flux_C">
 <table class="ddefn">
-<tr>
-<th>
-Number
-</th>
-<td>
-<p class="paragraph">
-<b>DD1</b>
-</p>
-</td>
-</tr>
 <tr>
 <th>
 Label
 </th>
 <td>
 <p class="paragraph">
-Heat Flux Into the Water From the Coil
+Heat flux into the water from the coil
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Symbol
+</th>
+<td>
+<p class="paragraph">
+<em>q<sub>C</sub></em>
 </p>
 </td>
 </tr>
@@ -1223,8 +1323,42 @@ Equation
 Description
 </th>
 <td>
+<div class="list">
+<p>
+<em>q<sub>C</sub></em> is the heat flux into the water from the coil (W/(m<sup>2</sup>))
+</p>
+<p>
+<em>h<sub>C</sub></em> is the convective heat transfer coefficient between coil and water (W/(m<sup>2</sup>&sdot;&deg;C))
+</p>
+<p>
+<em>T<sub>C</sub></em> is the temperature of the heating coil (&deg;C)
+</p>
+<p>
+<em>T<sub>W</sub></em> is the temperature of the water (&deg;C)
+</p>
+<p>
+<em>t</em> is the time (s)
+</p>
+</div>
+</td>
+</tr>
+<tr>
+<th>
+Source
+</th>
+<td>
 <p class="paragraph">
-<em>q<sub>C</sub></em> is the heat flux into the water from the coil (W/(m<sup>2</sup>))<br /><em>h<sub>C</sub></em> is the convective heat transfer coefficient between coil and water (W/(m<sup>2</sup>&sdot;&deg;C))<br /><em>T<sub>C</sub></em> is the temperature of the heating coil (&deg;C)<br /><em>T<sub>W</sub></em> is the temperature of the water (&deg;C)<br /><em>t</em> is the time (s)
+
+</p>
+</td>
+</tr>
+<tr>
+<th>
+RefBy
+</th>
+<td>
+<p class="paragraph">
+FIXME: This needs to be filled in
 </p>
 </td>
 </tr>
@@ -1240,26 +1374,60 @@ Instance Models
 <p class="paragraph">
 This section transforms the problem defined in <a href=#Sec:ProbDesc>Problem Description</a> into one which is expressed in mathematical terms. It uses concrete symbols defined in <a href=#Sec:DDs>Data Definitions</a> to replace the abstract symbols in the models identified in <a href=#Sec:TMs>Theoretical Models</a> and <a href=#Sec:GDs>General Definitions</a>.
 </p>
-<a id="T:eBalanceOnWtr">
-<table class="tdefn">
-<tr>
-<th>
-Number
-</th>
-<td>
-<p class="paragraph">
-<b>T</b>
-</p>
-</td>
-</tr>
+<a id="IM:eBalanceOnWtr">
+<table class="idefn">
 <tr>
 <th>
 Label
 </th>
 <td>
 <p class="paragraph">
-Energy Balance on Water to Find the Temperature of the Water
+Energy balance on water to find the temperature of the water
 </p>
+</td>
+</tr>
+<tr>
+<th>
+Input
+</th>
+<td>
+<p class="paragraph">
+<em>T<sub>C</sub></em>, <em>T<sub>init</sub></em>, <em>t<sub>final</sub></em>, <em>A<sub>C</sub></em>, <em>h<sub>C</sub></em>, <em>C<sub>W</sub></em>, <em>m<sub>W</sub></em>
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Output
+</th>
+<td>
+<p class="paragraph">
+<em>T<sub>W</sub></em>
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Input Constraints
+</th>
+<td>
+<a id="">
+<div class="equation">
+<em>T<sub>init</sub>&thinsp;&le;&thinsp;T<sub>C</sub></em>
+</div>
+</a>
+</td>
+</tr>
+<tr>
+<th>
+Output Constraints
+</th>
+<td>
+<a id="">
+<div class="equation">
+<em>0&thinsp;&lt;&thinsp;t&thinsp;&lt;&thinsp;t<sub>final</sub></em>
+</div>
+</a>
 </td>
 </tr>
 <tr>
@@ -1293,15 +1461,39 @@ d&#8239;t
 Description
 </th>
 <td>
+<div class="list">
+<p>
+<em>T<sub>W</sub></em> is the temperature of the water (&deg;C)
+</p>
+<p>
+<em>t</em> is the time (s)
+</p>
+<p>
+<em>&tau;<sub>W</sub></em> is the ODE parameter for water (s)
+</p>
+<p>
+<em>T<sub>C</sub></em> is the temperature of the heating coil (&deg;C)
+</p>
+</div>
+</td>
+</tr>
+<tr>
+<th>
+Source
+</th>
+<td>
 <p class="paragraph">
-<em>T<sub>W</sub></em> is the temperature of the water (&deg;C). <em>T<sub>C</sub></em> is the temperature of the heating coil (&deg;C). <em>&tau;<sub>W</sub> = <div class="fraction">
-<span class="fup">
-m<sub>W</sub>&#8239;C<sub>W</sub>
-</span>
-<span class="fdn">
-h<sub>C</sub>&#8239;A<sub>C</sub>
-</span>
-</div></em> is a constant (s). The above equation applies as long as the water is in liquid form, <em>0&thinsp;&lt;&thinsp;T<sub>W</sub>&thinsp;&lt;&thinsp;100</em> (&deg;C) where <em>0</em> (&deg;C) and <em>100</em> (&deg;C) are the melting and boiling point temperatures of water, respectively (<a href=#A:assump10>assump10</a>).
+
+</p>
+</td>
+</tr>
+<tr>
+<th>
+RefBy
+</th>
+<td>
+<p class="paragraph">
+FIXME: This needs to be filled in
 </p>
 </td>
 </tr>
@@ -1384,26 +1576,55 @@ d&#8239;t
 </div>&#8239;(T<sub>C</sub>&minus;T<sub>W</sub>)</em>
 </div>
 </a>
-<a id="T:heatEInWtr">
-<table class="tdefn">
-<tr>
-<th>
-Number
-</th>
-<td>
-<p class="paragraph">
-<b>T</b>
-</p>
-</td>
-</tr>
+<a id="IM:heatEInWtr">
+<table class="idefn">
 <tr>
 <th>
 Label
 </th>
 <td>
 <p class="paragraph">
-Heat Energy in the Water
+Heat energy in the water
 </p>
+</td>
+</tr>
+<tr>
+<th>
+Input
+</th>
+<td>
+<p class="paragraph">
+<em>T<sub>init</sub></em>, <em>A<sub>C</sub></em>, <em>C<sub>W</sub></em>, <em>m<sub>W</sub></em>
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Output
+</th>
+<td>
+<p class="paragraph">
+<em>E<sub>W</sub></em>
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Input Constraints
+</th>
+<td>
+</td>
+</tr>
+<tr>
+<th>
+Output Constraints
+</th>
+<td>
+<a id="">
+<div class="equation">
+<em>0&thinsp;&lt;&thinsp;t&thinsp;&lt;&thinsp;t<sub>final</sub></em>
+</div>
+</a>
 </td>
 </tr>
 <tr>
@@ -1423,8 +1644,45 @@ Equation
 Description
 </th>
 <td>
+<div class="list">
+<p>
+<em>E<sub>W</sub></em> is the change in heat energy in the water (J)
+</p>
+<p>
+<em>t</em> is the time (s)
+</p>
+<p>
+<em>C<sub>W</sub></em> is the specific heat capacity of water (J/(kg&sdot;&deg;C))
+</p>
+<p>
+<em>m<sub>W</sub></em> is the mass of water (kg)
+</p>
+<p>
+<em>T<sub>W</sub></em> is the temperature of the water (&deg;C)
+</p>
+<p>
+<em>T<sub>init</sub></em> is the initial temperature (&deg;C)
+</p>
+</div>
+</td>
+</tr>
+<tr>
+<th>
+Source
+</th>
+<td>
 <p class="paragraph">
-The above equation is derived using T2. <em>E<sub>W</sub></em> is the change in thermal energy of the liquid water relative to the energy at the initial temperature (<em>T<sub>init</sub></em>) (J). <em>C<sub>W</sub></em> is the specific heat capacity of liquid water (J/(kg&sdot;&deg;C)) and <em>m<sub>W</sub></em> is the mass of the water (kg). The change in temperature is the difference between the temperature at time <em>t</em> (s), <em>T<sub>W</sub></em> and the initial temperature, <em>T<sub>init</sub></em> (&deg;C). This equation applies as long as <em>0&thinsp;&lt;&thinsp;T<sub>W</sub>&thinsp;&lt;&thinsp;100</em>&deg;C (<a href=#A:assump14>assump14</a>, <a href=#A:assump19>assump19</a>).
+
+</p>
+</td>
+</tr>
+<tr>
+<th>
+RefBy
+</th>
+<td>
+<p class="paragraph">
+FIXME: This needs to be filled in
 </p>
 </td>
 </tr>

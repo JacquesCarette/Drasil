@@ -4,11 +4,6 @@ import Language.Drasil
 
 import Drasil.GlassBR.Body (glassBR_srs, glassBR_code, gbSymbMap)
 
-docs :: [Recipe]
-docs = 
-  [Recipe (DocSpec SRS "GlassBR_SRS")     glassBR_srs, 
-   Recipe (DocSpec Website "GlassBR_SRS") glassBR_srs
-  ]
 
 glassChoices :: Choices
 glassChoices = Choices {
@@ -24,5 +19,6 @@ glassChoices = Choices {
   
 main :: IO()
 main = do
-  gen docs gbSymbMap
+  gen (DocSpec SRS "GlassBR_SRS")     glassBR_srs gbSymbMap
+  gen (DocSpec Website "GlassBR_SRS") glassBR_srs gbSymbMap
   genCode glassChoices glassBR_code

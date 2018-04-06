@@ -4,8 +4,6 @@ module Language.Drasil (
     DocType(SRS,MG,MIS,Website), DocSpec(DocSpec)
   -- SystemInformation
   , SystemInformation(..), Block(..), citeDB
-  -- Recipe
-  , Recipe(..)
   -- Expr
   , Expr
   , Relation, DerivType(..), RealInterval(..), Inclusive(..)
@@ -190,7 +188,6 @@ import Language.Drasil.Document (Document(..), DType(..)
   , section, fig, figWithWidth
   , datadefn, reldefn
   , ListPair)
-import Language.Drasil.Recipe (Recipe(..))
 import Language.Drasil.Unicode -- all of it
 import Language.Drasil.UnitLang -- all of it
 import Language.Drasil.Unit -- all of it

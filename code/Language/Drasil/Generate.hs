@@ -12,23 +12,22 @@ import Language.Drasil.HTML.Helpers (makeCSS)
 import Language.Drasil.Make.Print (genMake)
 import Language.Drasil.Document
 import Language.Drasil.Format(Format(TeX, HTML))
-import Language.Drasil.Recipe(Recipe(Recipe))
 import Language.Drasil.Code.Imperative.Import (generator, generateCode)
 import Language.Drasil.CodeSpec
 import Language.Drasil.ChunkDB (HasSymbolTable(..))
 
 -- | Generate a number of artifacts based on a list of recipes.
-gen :: HasSymbolTable s => [Recipe] -> s -> IO ()
-gen rl sm = mapM_ (prnt sm) rl
+gen :: HasSymbolTable s => DocSpec -> Document -> s -> IO ()
+gen ds fn sm = prnt sm ds fn
 
 -- | Generate the output artifacts (TeX+Makefile or HTML)
-prnt :: HasSymbolTable s => s -> Recipe -> IO ()
-prnt sm (Recipe dt@(DocSpec Website fn) body) =
+prnt :: HasSymbolTable s => s -> DocSpec -> Document -> IO ()
+prnt sm dt@(DocSpec Website fn) body =
   do prntDoc dt body sm
      outh2 <- openFile ("Website/" ++ fn ++ ".css") WriteMode
      hPutStrLn outh2 $ render (makeCSS body)
      hClose outh2
-prnt sm (Recipe dt@(DocSpec _ _) body) =
+prnt sm dt@(DocSpec _ _) body =
   do prntDoc dt body sm
      prntMake dt
 

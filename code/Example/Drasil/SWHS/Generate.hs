@@ -4,11 +4,6 @@ import Language.Drasil
 
 import Drasil.SWHS.Body (swhs_srs', swhsSymMap)
 
-docs :: [Recipe]
-docs = [Recipe (DocSpec SRS "SWHS_SRS") swhs_srs',
-        Recipe (DocSpec Website "SWHS_SRS") swhs_srs'
-       ]
-       
 swhsChoices :: Choices
 swhsChoices = Choices {
   lang = [Python, Cpp, CSharp, Java],
@@ -22,4 +17,7 @@ swhsChoices = Choices {
 }
 
 generate :: IO ()
-generate = gen docs swhsSymMap
+generate = do
+  gen (DocSpec SRS "SWHS_SRS")     swhs_srs' swhsSymMap
+  gen (DocSpec Website "SWHS_SRS") swhs_srs' swhsSymMap
+       

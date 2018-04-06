@@ -48,7 +48,6 @@ library
     , Language.Drasil.Misc
     , Language.Drasil.NounPhrase
     , Language.Drasil.People
-    , Language.Drasil.Recipe
     , Language.Drasil.RefTypes
     , Language.Drasil.Reference
     , Language.Drasil.Space

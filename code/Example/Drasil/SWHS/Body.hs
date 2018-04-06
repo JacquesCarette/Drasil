@@ -46,7 +46,7 @@ import Drasil.SWHS.IMods (insta_model_IMods, heatEInWtr_new, eBalanceOnWtr_new,
   heatEInPCM_new, eBalanceOnPCM_new)
 import Drasil.SWHS.DataDefs (swhsDataDefs,dd1HtFluxC, dd2HtFluxP, dd3HtFusion,
  dd4MeltFrac, data_def_swhsDataDefs)
-import Drasil.SWHS.GenDefs (swhsGenDefs, nwtnCooling, rocTempSimp)
+import Drasil.SWHS.GenDefs (swhsGenDefs, nwtnCooling, rocTempSimp, roc_temp_simp_deriv)
 import Drasil.SWHS.References (ref_swhs_citations)
 import Drasil.SWHS.Assumptions (assumps_list, assump3, assump4, assump5,
   assump6, assump13, assump15, assump16, assump17, assump18)
@@ -186,7 +186,7 @@ swhs_srs' = mkDoc mkSRS (for) swhs_si
 
 generalDefinitions :: [GenDefn]
 generalDefinitions = [gd nwtnCooling (Just thermal_flux) ([] :: Attributes),
-  gd rocTempSimp (Nothing :: Maybe DerUChunk) []]
+  gd rocTempSimp (Nothing :: Maybe DerUChunk) [D roc_temp_simp_deriv]]
 
 stdFields :: Fields
 stdFields = [DefiningEquation, Description Verbose IncludeUnits, Source, RefBy]

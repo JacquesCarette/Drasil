@@ -150,13 +150,15 @@ mkSRS = RefSec (RefProg intro
     (SSDProg [SSDSubVerb prob_des
       , SSDSolChSpec 
         (SCSProg 
-          [ TMs ([Label] ++ stdFields) [t1ConsThermE_new] -- only have the same T1 with SWHS
+          [ Assumptions 
+          , TMs ([Label] ++ stdFields) [t1ConsThermE_new] -- only have the same T1 with SWHS
           , GDs [Label, Units, DefiningEquation   ---check glassbr
           , Description Verbose IncludeUnits
           , Source, RefBy] generalDefinitions ShowDerivation
           , DDs ([Label, Symbol, Units] ++ stdFields) [dd1HtFluxC] ShowDerivation
           , IMs ([Label, Input, Output, InConstraints, OutConstraints] ++ stdFields)
            [eBalanceOnWtr_new, heatEInWtr_new] ShowDerivation
+          {-, Constraints -}
           ]
         )
       ]

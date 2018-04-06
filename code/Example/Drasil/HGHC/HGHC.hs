@@ -31,7 +31,7 @@ thisSI = SI {
   _constraints = ([] :: [ConstrainedChunk]),
   _constants = [],
   _sysinfodb = allSymbols,
-  _refdb = rdb [] [] [] [] [] [] --FIXME?
+  _refdb = rdb [] [] [] [] [] [] -- FIXME?
 }
 
 allSymbols :: ChunkDB

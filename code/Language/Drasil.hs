@@ -6,7 +6,7 @@ module Language.Drasil (
   , SystemInformation(..), Block(..), citeDB
   -- Expr
   , Expr
-  , Relation, DerivType(..), RealInterval(..), Inclusive(..)
+  , Relation, RealInterval(..), Inclusive(..)
   , ($=), ($<), ($<=), ($>), ($>=), ($^), ($&&), ($||), ($=>), ($<=>), ($.)
   , sy -- old "Chunk" constructor C
   -- Expr.Math
@@ -172,7 +172,7 @@ module Language.Drasil (
 
 import Prelude hiding (log, sin, cos, tan, sqrt, id, return, print, break, exp, product)
 import Language.Drasil.SystemInformation
-import Language.Drasil.Expr (Expr(..), Relation, DerivType(..),
+import Language.Drasil.Expr (Expr(..), Relation,
           RealInterval(..), Inclusive(..), sy, deriv, pderiv,
           ($=), ($<), ($<=), ($>), ($>=), ($^), ($&&), ($||), ($=>), ($<=>), ($.))
 import Language.Drasil.Expr.Math (log, sin, cos, tan, sqrt, square, sec, csc, cot, exp,

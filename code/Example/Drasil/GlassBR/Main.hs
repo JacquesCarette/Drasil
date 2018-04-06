@@ -15,11 +15,11 @@ glassChoices = Choices {
   lang = [Python, Cpp, CSharp, Java],
   impType = Program,
   logFile = "log.txt",
-  logging = LogNone,         -- LogNone, LogFunc
-  comments = CommentNone,    -- CommentNone, CommentFunc
-  onSfwrConstraint = Exception,  -- Warning, Exception
-  onPhysConstraint = Exception,  -- Warning, Exception
-  inputStructure = AsClass    -- Loose, AsClass
+  logging = LogNone,
+  comments = CommentNone,
+  onSfwrConstraint = Exception,
+  onPhysConstraint = Exception,
+  inputStructure = AsClass
 }
   
 main :: IO()

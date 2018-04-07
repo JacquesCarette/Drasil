@@ -4,7 +4,6 @@
 -- Drasil.DocumentationLanguage.X
 module Language.Drasil.Chunk.Goal
   ( Goal
-  , goal
   , gs, gs'
   , refAddr
   ) where

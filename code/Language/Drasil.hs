@@ -165,7 +165,7 @@ module Language.Drasil (
   , Change, ChngType(..), chngType, chng, lc, ulc, chc'
   , citationRefTable, citeLookup
   -- Goal
-  , Goal, goal, gs, gs'
+  , Goal, gs, gs'
   -- PhysSystDesc
   , PhysSystDesc, pSysDes, psd, psd'
 ) where
@@ -224,7 +224,7 @@ import Language.Drasil.Chunk.DefinedQuantity
 import Language.Drasil.Chunk.Eq (QDefinition(..), fromEqn, fromEqn', fromEqn'', getVC, equat, aqd, ec, ec')
 import Language.Drasil.Chunk.ExprRelat
 import Language.Drasil.Chunk.GenDefn
-import Language.Drasil.Chunk.Goal (Goal, goal, gs, gs')
+import Language.Drasil.Chunk.Goal (Goal, gs, gs')
 import Language.Drasil.Chunk.InstanceModel
 import Language.Drasil.Chunk.NamedIdea
 import Language.Drasil.Chunk.PhysSystDesc (PhysSystDesc, pSysDes, psd, psd')

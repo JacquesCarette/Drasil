@@ -12,7 +12,7 @@ module Drasil.DocumentLanguage.Definitions
   )where
 
 import Language.Drasil
-import Data.Drasil.Utils (foldle, eqUnR)
+import Data.Drasil.Utils (eqUnR)
 
 import Control.Lens ((^.))
 
@@ -38,10 +38,6 @@ data Verbosity = Verbose  -- Full Descriptions
 
 data InclUnits = IncludeUnits -- In description field (for other symbols)
                | IgnoreUnits
-
--- FIXME: Will need to couple specialized intros with the chunks they belong to.
--- Sounds like an attribute for Definitions/Models.
-type VerbatimIntro = Sentence
 
 -- | Create a theoretical model using a list of fields to be displayed, a database of symbols,
 -- and a RelationConcept (called automatically by 'SCSSub' program)
@@ -149,11 +145,8 @@ mkIMField i m l@(Description v u) fs = (show l,
   foldr (\x -> buildDescription v u x m) [] [i ^. relat]) : fs
 mkIMField _ _ l@(RefBy) fs = (show l, fixme) : fs --FIXME: fill this in
 mkIMField i _ l@(Source) fs = (show l, [Paragraph $ getSource i]) : fs --FIXME: fill this in
-mkIMField i _ l@(Output) fs = 
-  case (i ^. imOutputs) of
-  [] -> (show l, [Paragraph EmptyS]) : fs -- FIXME? Should an empty output list be allowed?
-  (_:_) -> (show l, [Paragraph $ foldl (sC) x xs]) : fs
-  where (x:xs) = map (P . symbol Equational) (i ^. imOutputs)
+mkIMField i _ l@(Output) fs = (show l, [Paragraph x]) : fs
+  where x = P . symbol Equational $ i ^. imOutput
 mkIMField i _ l@(Input) fs = 
   case (i ^. imInputs) of
   [] -> (show l, [Paragraph EmptyS]) : fs -- FIXME? Should an empty input list be allowed?

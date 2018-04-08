@@ -1,7 +1,7 @@
 {-# LANGUAGE TemplateHaskell #-}
 module Language.Drasil.Chunk.InstanceModel 
   ( InstanceModel
-  , inCons, outCons, imOutputs, imInputs, im, imQD
+  , inCons, outCons, imOutput, imInputs, im, imQD
   )where
 
 import Language.Drasil.Chunk
@@ -21,7 +21,7 @@ import Language.Drasil.Spec (Sentence)
 import Control.Lens (makeLenses, (^.))
 
 type Inputs = [QuantityDict]
-type Outputs = [QuantityDict]
+type Output = QuantityDict
 
 type InputConstraints  = [TheoryConstraint]
 type OutputConstraints = [TheoryConstraint]
@@ -31,7 +31,7 @@ type OutputConstraints = [TheoryConstraint]
 data InstanceModel = IM { _rc :: RelationConcept
                         , _imInputs :: Inputs
                         , _inCons :: InputConstraints
-                        , _imOutputs :: Outputs
+                        , _imOutput :: Output
                         , _outCons :: OutputConstraints
                         , _attribs :: Attributes 
                         }
@@ -47,7 +47,7 @@ instance ExprRelat InstanceModel where relat = rc . relat
 instance HasAttributes InstanceModel where attributes = attribs
 
 -- | Smart constructor for instance models
-im :: RelationConcept -> Inputs -> InputConstraints -> Outputs -> 
+im :: RelationConcept -> Inputs -> InputConstraints -> Output -> 
   OutputConstraints -> Attributes -> InstanceModel
 im = IM
 
@@ -55,4 +55,4 @@ im = IM
 -- (Sentence is the "concept" definition for the relation concept)
 imQD :: HasSymbolTable ctx => ctx -> QDefinition -> Sentence -> InputConstraints -> OutputConstraints -> Attributes -> InstanceModel
 imQD ctx qd dfn incon ocon att = IM (makeRC (qd ^. uid) (qd ^. term) dfn 
-  (sy qd $= qd ^. equat)) (vars (qd^.equat) ctx) incon [qw qd] ocon att
+  (sy qd $= qd ^. equat)) (vars (qd^.equat) ctx) incon (qw qd) ocon att

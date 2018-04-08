@@ -4,16 +4,19 @@ import Language.Drasil
 import Drasil.DocumentLanguage (mkAssump)
 
 
-import Drasil.SWHS.Concepts (water)
+import Drasil.SWHS.Concepts (water, coil, tank)
 import Drasil.SWHS.Unitals
-import Data.Drasil.Utils (unwrap)
+import Data.Drasil.Utils (unwrap, weave)
 import Data.Drasil.SentenceStructures (foldlSent, isThe,
-  sAnd)
-import Data.Drasil.Quantities.Physics (time)
-import Data.Drasil.Concepts.Math (equation)
+  sAnd, foldlList, ofThe, acroGD, foldlSentCol, sOf)
+import Data.Drasil.Quantities.Physics (time, energy)
+import Data.Drasil.Concepts.Math (equation, rOfChng)
 import Data.Drasil.Concepts.PhysicalProperties (liquid)
-import Data.Drasil.Concepts.Thermodynamics (melting, boil_pt)
+import Data.Drasil.Concepts.Thermodynamics (melting, boil_pt, heat_cap_spec, 
+  heat_trans)
 
+import Data.Drasil.Quantities.PhysicalProperties (vol, mass)
+import Drasil.SWHS.DataDefs(dd1HtFluxC)
 ---------
 -- IM1 --
 ---------
@@ -25,7 +28,7 @@ eBalanceOnWtr_new = im eBalanceOnWtr [qw temp_C, qw temp_init, qw time_final,
   qw coil_SA, qw coil_HTC, qw htCap_W, qw w_mass] 
   [TCon AssumedCon $sy temp_init $<= sy temp_C] [qw temp_W] 
   --Tw(0) cannot be presented, there is one more constraint Tw(0) = Tinit
-  [TCon AssumedCon $ 0 $< sy time $< sy time_final] []
+  [TCon AssumedCon $ 0 $< sy time $< sy time_final] [D eBalanceOnWtr_deriv_nopcm]
 
 eBalanceOnWtr :: RelationConcept
 eBalanceOnWtr = makeRC "eBalanceOnWtr" (nounPhraseSP $ "Energy balance on " ++
@@ -49,3 +52,69 @@ balWtrDesc = foldlSent [(E $ sy temp_W) `isThe` phrase temp_W +:+.
   plural boil_pt, S "of", phrase water `sC` S "respectively",
   sParen (makeRef (mkAssump "assump10" EmptyS))]
   
+----------------------------------------------
+--    Derivation of eBalanceOnWtr           --
+----------------------------------------------
+eBalanceOnWtr_deriv_nopcm :: Derivation
+eBalanceOnWtr_deriv_nopcm =
+  [S "Detailed derivation of the" +:+ phrase energy +:+ S "balance on water"] ++
+  (weave [eBalanceOnWtr_deriv_sentences_nopcm, map E eBalanceOnWtr_deriv_eqns_nopcm])
+
+eBalanceOnWtr_deriv_sentences_nopcm :: [Sentence]
+eBalanceOnWtr_deriv_sentences_nopcm = map foldlSentCol [
+  s4_2_3_desc1_nopcm rOfChng temp_W energy water vol w_vol mass w_mass heat_cap_spec
+    htCap_W heat_trans coil ht_flux_C coil_SA tank [S "A11"] [S "A12"],
+  s4_2_3_desc2_nopcm dd1HtFluxC,
+  s4_2_3_desc3_nopcm eq1,
+  s4_2_3_desc4_nopcm eq2]
+
+s4_2_3_desc1_nopcm :: ConceptChunk -> UncertQ -> UnitalChunk -> ConceptChunk -> UnitalChunk -> 
+  UnitalChunk -> UnitalChunk -> UnitalChunk -> ConceptChunk -> UncertQ -> ConceptChunk -> 
+  ConceptChunk -> UnitalChunk -> UncertQ -> ConceptChunk -> [Sentence] -> [Sentence] -> [Sentence]
+s4_2_3_desc1_nopcm roc tw en wt vo wvo ms wms hcs hw ht cl hfc cs tk ass11 ass12 =
+  [S "To find the", phrase roc `sOf` (E $ sy tw) `sC` S "we look at the",
+   phrase en, S "balance on" +:+. phrase wt, S "The", phrase vo, S "being considered" 
+   `isThe` (phrase vo `sOf` phrase wt), (E $ sy wvo) `sC` S "which has", phrase ms,
+   (E $ sy wms) `sAnd` (phrase hcs `sOf` phrase wt) `sC` (E $ sy hw), 
+    phrase ht, S "occurs in the", phrase wt, S "from the", phrase cs, 
+    (E $ sy hfc) `sC` S "over area" +:+. (E $ sy cs), S "No", phrase ht,
+    S "occurs to", S "outside" `ofThe` phrase tk `sC` 
+    S "since it has been assumed to be perfectly insulted", 
+    (foldlList $ (map (\d -> sParen (d))) ass11), S ". Assuming no volumetric", 
+    phrase ht, S "generation per unit", phrase vo,
+    (foldlList $ (map (\d -> sParen (d))) ass12) `sC` S "g = 0. Therefore, the equation for",
+     acroGD 2, S "can be written as"]
+
+s4_2_3_desc2_nopcm :: QDefinition -> [Sentence]
+s4_2_3_desc2_nopcm dd1HtFluxC =
+  [S "Using", makeRef $ datadefn dd1HtFluxC, S "this can be written as"]
+
+s4_2_3_desc3_nopcm :: Expr-> [Sentence]
+s4_2_3_desc3_nopcm eq11 = [S "Dividing (3) by", (E eq11), S "we obtain"]
+
+s4_2_3_desc4_nopcm :: Expr-> [Sentence]
+s4_2_3_desc4_nopcm eq22 = 
+  [S "Setting", (E eq22), S "Equation (4) can be written in its final form as"]
+
+eq1, eq2:: Expr
+eq1 = (sy w_mass) * (sy htCap_W)
+eq2 = (sy tau_W) $= ((sy w_mass) * (sy htCap_W)) / ((sy ht_flux_C) * (sy coil_SA))
+
+s4_2_3_eq1_nopcm, s4_2_3_eq2_nopcm, s4_2_3_eq3_nopcm, s4_2_3_eq4_nopcm :: Expr
+
+s4_2_3_eq1_nopcm = (sy w_mass) * (sy htCap_W) * (deriv (sy temp_W) time) $= 
+  (sy ht_flux_C) * (sy coil_SA)
+
+s4_2_3_eq2_nopcm = (sy w_mass) * (sy htCap_W) * (deriv (sy temp_W) time) $= 
+  (sy coil_HTC) * (sy coil_SA) *  ((sy temp_C) - (sy temp_W))
+
+s4_2_3_eq3_nopcm = (deriv (sy temp_W) time) $= 
+  ((sy coil_HTC) * (sy coil_SA) / 
+  ((sy w_mass) * (sy htCap_W))) *  ((sy temp_C) - (sy temp_W))
+
+s4_2_3_eq4_nopcm =  
+  (deriv (sy temp_W) time) $= 1 / (sy tau_W) * ((sy temp_C) - (sy temp_W))
+
+
+eBalanceOnWtr_deriv_eqns_nopcm :: [Expr]
+eBalanceOnWtr_deriv_eqns_nopcm = [s4_2_3_eq1_nopcm, s4_2_3_eq2_nopcm, s4_2_3_eq3_nopcm, s4_2_3_eq4_nopcm]

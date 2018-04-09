@@ -18,7 +18,7 @@ import Language.Drasil.Symbol (Symbol)
 import Language.Drasil.Space
 
 import Language.Drasil.NounPhrase (NP)
-import Language.Drasil.Spec
+import Language.Drasil.Spec (Sentence)
 
 -- | A QDefinition is a 'Quantity' with a defining equation.
 data QDefinition = EC { _qua :: QuantityDict, _equat :: Expr, _att :: Attributes}
@@ -36,18 +36,15 @@ instance ExprRelat QDefinition where relat = equat
 instance HasAttributes QDefinition where attributes = att
 instance Eq QDefinition where a == b = (a ^. uid) == (b ^. uid)
   
--- useful: to be used for equations with units
+-- | Create a 'QDefinition' with an uid, noun phrase (term), definition, symbol,
+-- unit, and defining equation.  And it ignores the definition...
 --FIXME: Space hack
-
--- | Create a 'QDefinition' with an uid, noun phrase, term, symbol,
--- unit, and defining equation.  And it ignores the term...
 fromEqn :: IsUnit u => String -> NP -> Sentence -> Symbol -> u -> Expr -> QDefinition
 fromEqn nm desc _ symb un eqn = 
   EC (mkQuant nm desc symb Real (Just $ unitWrapper un) Nothing) eqn []
 
--- and without
---FIXME: Space hack
 -- | Same as fromEqn, but has no units.
+--FIXME: Space hack
 fromEqn' :: String -> NP -> Sentence -> Symbol -> Expr -> QDefinition
 fromEqn' nm desc _ symb eqn = EC (mkQuant nm desc symb Real Nothing Nothing) eqn []
 

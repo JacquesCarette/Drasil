@@ -41,6 +41,7 @@
 
 % Document starts
 \begin{document}
+
 % Title portion. Note the short title for running heads
 \title[headertitle]{TITLE}
 
@@ -112,16 +113,31 @@
 
 \begin{abstract}
 
-CONTEXT: Software (re-)certification requires the creation and maintenance of many different software artifacts. Manually creating and maintaining them is tedious and costly.
+CONTEXT: Software (re-)certification requires the creation and maintenance of
+many different software artifacts. Manually creating and maintaining them is
+tedious and costly.
 
-OBJECTIVE: Improve software (re-)certification efforts by automating as much of the artifact creation process as possible while maintaining full traceability within -- and between -- artifacts. Creation of our tool -- Drasil -- will facilitate this automation process using a knowledge-based approach to Software Engineering.
-%DS Secondary objective -> Knowledge reuse -- Don't know if I want to focus here as it muddies the waters.
+OBJECTIVE: Improve software (re-)certification efforts by automating as much of
+the artifact creation process as possible while maintaining full traceability
+within -- and between -- artifacts. Creation of our tool -- Drasil -- will
+facilitate this automation process using a knowledge-based approach to Software
+Engineering. %DS Secondary objective -> Knowledge reuse -- Don't know if I want
+% to focus here as it muddies the waters.
 
-METHOD: Use grounded theory in the creation of a tool for software artifact generation. Generate all the things! Capture the underlying knowledge and apply transformations to create each of the requisite artifacts. Captured knowledge can be re-used across projects as it represents the ``science''. Maintenance will then involve updating the captured knowledge or transformations as necessary. 
+METHOD: Use grounded theory in the creation of a tool for software artifact
+generation. Start by analyzing the artifacts themselves from several case 
+studies to understand what (semantically) is being said in each.
+Generate all the things! Capture the underlying knowledge and apply 
+transformations to create each of the requisite artifacts. Captured knowledge
+can be re-used across projects as it represents the ``science''. Maintenance
+involves updating the captured knowledge or transformations as necessary.
 
-RESULTS: Case studies -- GlassBR to show capture and transformation. SWHS and NoPCM for reuse (Something about Kolmogorov complexity / MDL here?). 
+RESULTS: Case studies -- GlassBR to show capture and transformation. SWHS and
+NoPCM for reuse (Something about Kolmogorov complexity / MDL here?).
 
-CONCLUSIONS: Automatically generating software artifacts from captured knowledge (fill in later)?????
+CONCLUSIONS: With good tool support and a front-loaded time investment, we can 
+automate the generation of software artifacts required for certification. W 
+(fill in later)?????
 
 \end{abstract}
 
@@ -169,25 +185,333 @@ CONCLUSIONS: Automatically generating software artifacts from captured knowledge
 \keywords{??}
 
 
-
-
 \maketitle
 
 % The default list of authors is too long for headers.
 \renewcommand{\shortauthors}{D. Szymczak et al.}
-
+\newcommand{\fgr}{\textcolor{red}{!FIGURE!}}
 \section{Introduction}\label{S:Intro}
+
+- Context blurb.
 
 \subsection{Certification}
 
-\subsection{Document-Driven Design} %?
+- Gist: Certify that software (or pieces of it) perform a given task correctly 
+and can be reused elsewhere
+- Necessary BY LAW in certain fields.
+- Different requirements based on the certifying body; but looking at several 
+examples (cite standards) there are common required artifacts (*list*).
+- The cost(s) of re-certification:
+	- Expensive! \$\$\$ and time
+
+\subsection{Document-Driven Design} %DS worth having?
+- Document-driven design and its advantages/disadvantages.
+  - Quality improvements
+  - Large time investment for initial artifact creation
+  - Large time investment for every (non-trivial) update
+  - Often artifacts fall out of sync with each other and are inconsistent
+  - All but necessary for certification
+- Need to overcome the disadvantages somehow.
+  - Most obvious solution would be to automate if possible.
+
+\subsection{Scope} %DS Should this be here?
+
+- Scientific Computing Software
+	- Why? Many highly specialized SCS require certification. Ex. Control sfwr 
+	in nuclear power, x-ray machines, and other safety-critical contexts.
+	- Well understood domain -> theories underpinning the work being done.
 
 \section{Background}
 
-\subsection{Previous efforts}
+- We are not the first to try and deal with certification / artifact creation.
+
+\subsection{Previous efforts} %DS Is this subsect necessary?
+
 Previous attempts at automating / reducing the artifact burden.
 
-\subsection{}
+- Compendia - Trying to solve the problem of reproducibility 
+%DS or whichever appropriate R goes here -- see Gentleman & Lang
+  - Fits with goals of certification
+  - focused on good science and being able to re-run experiments exactly
+  - Not focused on DDD or its benefits, moreso 
+
+- Previous attempts at automatically generating documentation
+  - LP, tools like javadoc, Haddock, etc.
+  - Too code-centric!
+  - Comments and code still need to be updated in parallel, albeit to a lesser
+    extent in some cases
+  - In general, fairly rigidly structured output (you don't have much say on
+    how it looks, only what information should be included and, sometimes, where
+  - Finish with a focus on the good stuff:
+    - Identified the need for good documentation
+    - Keeps docs and code in the same place
+        - Easier to manually maintain consistency and apply updates
+- One other problem we've identified:
+  - common underlying knowledge between projects is duplicated as there is no
+   real cross-project reuse mechanism in place with these tools.
+
+%DS - Should an intro to grounded theory show up here?
+
+\section{A rational analysis of software artifacts}
+
+- This section exists to show how we get from problem to solution.
+- We introduce our case studies in a bit more depth here
+	- GlassBR - what it's for, if it'll
+	- SWHS and NoPCM - Program family members with a twist.
+	- The rest (tiny, Gamephysics, and SSP) for additional examples and to give 
+	us a bit more credibility in our analysis.
+- Looking for commonalities between types of artifacts and what they are really 
+saying.
+- An obvious commonality across many projects in SCS -- SI and derived Units.
+
+\subsection{Common software artifacts}
+- Compare and contrast different software artifacts.
+	- SRS vs. detailed design vs. code
+	- same knowledge, different 'views'
+	- only some of that knowledge is necessarily relevant in those views
+	- \fgr: SRS \& DD showing the same piece of knowledge 
+	in diff contexts. Use a few different \fgr here.
+	- \fgr: Attempt to show generalized overlap via Venn diagram?
+
+\subsection{The structure of knowledge} %DS want to fit this into the analysis
+\label{S:KnowStruct}
+- As shown above, in the artifacts we see different ways of representing what 
+are semantically the same things.
+	- There are many pieces to a single piece of underlying knowledge.
+	- Each of these components tells us about the way our knowledge can be used 
+	and transformed.
+- Take a look at one particular example across artifacts in GlassBR. Has:
+	%DS (not sure which yet, probably something big -- like a quantity or 
+	%bigger; maybe a DD or TM?).
+	% Working from TM or DD as an example
+	- identifier (label)
+	- symbolic (theory) representation (shown in SRS, DD - \fgr)
+	- symbolic (implementation) representation (\fgr)
+	- Concise natural language description (term)
+	- Verbose natural language description (definition)
+	- equation (\fgr -- show as math and code; same thing in a transformed 
+	view)
+	- units? %DS If applicable in the example?
+	- constraints (Really relevant. Again show \fgr as math and code)
+
+- Similar examples crop up all over the artifacts, some with the same depth of 
+information, and some without.
+	- Those lacking depth still contain some of the pieces - term, defn, etc.
+
+\section{Knowledge-Based Software Engineering (KBSE)}
+
+- Start with a note on terminology? How ``knowledge'' means a structured 
+encoding that allows for automatic reuse vs. natural language encoded 
+information which does not?
+
+- The main ideas:
+  - Capture underlying science knowledge in a meaningful way
+  - Reuse wherever appropriate (inter- and intra-project) thanks to
+    knowledge-base and transformations.
+  - Maintain a single source of knowledge and generate the software artifacts
+    from there.
+- Scope
+  - Well-understood domains
+    - There is a solid theoretical underpinning (science/math).
+    - We can explain it to a computer! (not as easy as you'd think)
+  - Particularly we focus on KBSE for Scientific Computing Software (SCS) as it
+    is rich in knowledge
+
+\subsection{Capturing Knowledge}
+\label{S:KnowCapt}
+
+- Based on Section~\ref{S:KnowStruct} we can create a knowledge-capture 
+mechanism for encoding the science into a computer-usable form.
+
+- We like chunks *(nod to LP)* for knowledge-capture.
+	- A chunk is a labeled piece of information.
+	- \fgr: Chunk hierarchy in Drasil (to be explained more in the coming 
+	sections) mimics the structure mentioned in Section~\ref{S:KnowStruct}
+- We have to capture all of the information surrounding a piece of 
+	knowledge to create our artifacts, regardless of whether that information 
+	is relevant to any one particular artifact.
+- Once knowledge is properly captured, we shouldn't have to capture it again if 
+we want to reuse it in a different project.
+
+\subsection{(Re-)Using Knowledge}
+
+- Most obvious benefit -> no more copy/paste! Just reuse the chunk you need.
+- Transformations
+  - Represent different 'views' of the knowledge based on how abstract, what
+    audience, etc.
+    - Translate the knowledge into its requisite form (eqns, descriptions, code)
+    - Variabilities -> different projects in the same family.
+      - Easy to specialize to different family members
+      - Example: SWHS vs NoPCM
+      \fgr{} Show portion of each SRS, one similarity, one difference?
+- Requires a framework / tool support to automate rendering of these 
+transformations, otherwise it is even more work for humans.
+
+\section{Drasil}
+- To use KBSE to its potential we need a strong support framework
+- Intro to Drasil
+    \fgr{} Knowledge tree
+  - What it is and does
+    - Domain Specific Language
+    - Generate all the things!
+  - Dev to date.
+  - How is Knowledge Capture handled in Drasil? - chunks!
+  - What do transformations look like? Recipes!
+    \fgr{} SmithEtAl template for SRS = Drasil.DocumentLanguage
+  - Key components of the generator / renderer
+
+\subsection{Developing Drasil - A grounded theory} %DS Should this be here or 
+													%in bg?
+- Following grounded theory (ish). Using data from case studies to guide 
+development and implement new features.
+- \fgr{}: Before and after System Information.
+- \fgr{}: Before and after mini-DBs
+- Majority of features developed after analyzing commonalities in the case 
+studies and abstracting them out.
+- Allows for rapid progress -> constant iteration based on what we find in the 
+data.
+
+\subsection{Drasil Today}
+
+- Sentence and Document
+- Explain the chunk hierarchy (refer to Section~\ref{S:KnowCapt} figure)
+- Data.Drasil
+  \fgr{} Knowledge areas we've started to capture (See: SE-CSE paper)
+- Recipe Language(s) -- Refer to:
+  \fgr{} Drasil.DocumentLanguage
+- The generator
+  - HTML and TeX rendering
+  - GOOL for code
+- System Information -> Get into it
+
+\section{Case studies - in more depth}
+
+- Re-introduce case studies
+  - Our methods for reimplementing
+  - CI for testing
+- Start showing off re-use and automated generation.
+  - Start with common knowledge (generalized \fgr{}?)
+  - Then onto GlassBR example to show off the doc lang recipe (\fgr{}?)
+  - Then let's see SRS vs. NoPCM for reuse (particularly NoPCM) (\fgr{}?)
+
+
+\subsection{Data.Drasil}
+
+- Common knowledge
+  \fgr{} SI\_Units
+  \fgr{} Thermodynamics (ConsThermE?)
+
+\subsection{GlassBR}
+
+- Brief intro to problem GlassBR is solving - how it works
+- Show off the doc language here
+  \fgr{} GlassBR SRS in (truncated) DocLang format 
+  - "Reads like a table of contents, with a few quirks"
+- Show off some code generation
+  \fgr{} Side-by-side of Chunk Eqn vs. Doc Eqn vs. Code 
+  - "Easy to see that the code matches the equations"
+- Talk about potential variabilities and how to make this a family
+- Why is this interesting?
+	- Fairly straightforward example of something a scientist would create/use 
+	in their research
+
+\subsection{NoPCM \& SWHS}
+
+- Re-introduce the problems
+- See how they're a family?
+- Really drill in the similarities
+  \fgr{} Figure showing NoPCM import(s)
+- Lots of knowledge-reuse
+- Very few 'new' chunks (count them?)
+- Show example of variability in action
+  \fgr{} Equation with/without PCM (rendered?)
+- Why this example is interesting:
+  - ODE solver -> We don't gen, just link to existing good one(s)
+
+\subsection{Others}
+
+- Mention SSP, Tiny, GamePhysics, but don't go too in-depth.
+  - Useful examples as they give us a wider range of problems for analysis
+- Testing
+  - Physics is physics -> when we make updates, the underlying knowledge isn't
+    changing, so neither should our output
+  - Refer to CI
+
+\subsection{Freebies - Compliments of System Information}
+
+- Thanks to the recipe language and the way we structure out system information
+  we can get
+- Table of Symbols
+- Table of Units
+- Table of Abbreviations and Acronyms
+- Bibliography
+
+- All tedious to do by hand, but are free to automatically generate
+- Generator includes sanity-checking -> Can't use something that isn't defined!
+- Sanity-checks are 'free' -> we can check for errors with our symbols,
+  ensure units are consistent, guard against constraints, and ensure we only
+  reference those things which are defined in our system. 
+- Sanity-checks are run every time artifacts are generated.
+
+\subsection{Results}
+
+- Here we discuss the results we've seen so far.
+- Had some of these case studies attempted to be certified, they would (should) 
+have failed.
+	- A number of common problems.
+
+\subsection{Common issues across case studies}
+
+- A number of undefined symbols even after multiple passes by humans. 
+(Auto-generating the symbol table and including sanity-checking revealed them)
+
+\subsection{NoPCM and SWHS}
+
+- Along with the common errors, there was some sharing of PCM-related knowledge
+  - Found because PCM symbols were not in the ToS and the sanity-check caught 
+  it.
+  - No way to specifically exclude knowledge that shouldn't 'exist' in a project
+- Work in Kolmogorov complexity / MDL for NoPCM + SWHS?
+- Kolmogorov/MDL implies less writing for the same artifacts -> less to sift 
+through = maybe better?
+
+\subsection{SSP}
+
+- Symbols for given quantities changed throughout the documentation
+  - Went unnoticed by a human for years! Found almost instantly by Drasil
+    - the new symbols were undefined.
+
+\subsection{Pervasive Bugs}
+
+- Mistakes in knowledge can be found in all artifacts - more likely to be 
+caught!
+- Easy to track down errors (smart error messages point to the exact chunk 
+causing the problem).
+
+\section{Future Work}
+
+[*SS* - Once we are capable of true variability in the documentation, we can
+really start asking the question about what is the "best" documentation for a
+given context.  In the future experiments could be done with presenting the same
+information in different ways to find which approach is the most effective.]
+
+[*SS* - Related to the previous point, the act of formalizing the knowledge that
+goes into the requirements documentation forces us to deeply understand the
+distinctions between difference concepts, like scope, goal, theory, assumption,
+simplification, etc.  With this knowledge we can improve the focus and
+effectiveness of existing templates, and existing requirements solicitation and
+analysis efforts.  Teaching it to a computer.]
+
+- Run an experiment to determine how easy it is to create new software with 
+Drasil.
+
+- Run an experiment to see how easy it is to find and remove errors with Drasil
+
+- Experiment to see time saved in maintenance while using Drasil vs. not
+
+\section{Conclusion}
+
+- Easier to find errors (anecdotally) - future work will tell us if this holds.
 
 
 \end{document}

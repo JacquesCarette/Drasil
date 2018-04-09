@@ -136,7 +136,7 @@ RESULTS: Case studies -- GlassBR to show capture and transformation. SWHS and
 NoPCM for reuse (Something about Kolmogorov complexity / MDL here?).
 
 CONCLUSIONS: With good tool support and a front-loaded time investment, we can 
-automate the generation of software artifacts required for certification. W 
+automate the generation of software artifacts required for certification. 
 (fill in later)?????
 
 \end{abstract}
@@ -192,16 +192,68 @@ automate the generation of software artifacts required for certification. W
 \newcommand{\fgr}{\textcolor{red}{!FIGURE!}}
 \section{Introduction}\label{S:Intro}
 
-- Context blurb.
+Writing non-executable software artifacts (requirements and design documents,
+verification \& validation plans, etc.) can be tedious work, but is 
+ultimately necessary when attempting to certify software. 
+Similarly, maintenance of these artifacts, as necessary for re-certification as 
+improvements are made, typically requires a large time investment.
 
-\subsection{Certification}
+Why, in a world of software tools, do we continue to undertake these
+efforts manually? Literate programming had the right idea, but was too heavily 
+focused on code.
 
-- Gist: Certify that software (or pieces of it) perform a given task correctly 
-and can be reused elsewhere
-- Necessary BY LAW in certain fields.
-- Different requirements based on the certifying body; but looking at several 
-examples (cite standards) there are common required artifacts (*list*).
-- The cost(s) of re-certification:
+We want to aid software (re-)certification efforts by automating as much of the 
+artifact creation process as possible. By generating our software artifacts -- 
+including code -- in the right way, we can implement changes much more quickly 
+and easily for a modest up-front time investment. By front-loading the costs of 
+maintenance and rolling them into the development cycle, we can save time and 
+money in the long run.
+
+%DS Maybe throw in a figure here to show off a bunch of common artifacts.
+
+%DS Should everything after this point go into Background? Maybe not
+\subsection{Software (Re-)certification}
+
+When we talk about software certification, we are specifically discussing the 
+goal of determining ``based on the principles of science, engineering and 
+measurement theory, whether an artifact satisﬁes accepted, well deﬁned and 
+measurable criteria"~\cite{HatcliffEtAl2009}. Essentially, we are ensuring that 
+software, or some piece of it, performs a given task to within an acceptable 
+standard and can potentially be reused in other systems.
+
+Software certification is necessary by law in certain fields. This is 
+particularly evident in safety-critical applications, such as control systems 
+for nuclear power plants or X-ray machines. 
+
+Different certifying bodies exist across domains and each has their own list of 
+requirements to satisfy for certifying software. Looking at some 
+examples (!CITE STANDARDS!) there are several common required artifacts:
+
+\begin{itemize}
+\item Requirements document
+\item !OTHER JUNK!
+\end{itemize}
+
+One thing to keep in mind when attempting to certify software is that we 
+require full traceability, within and between artifacts, of the knowledge 
+contained therein.
+
+%DS rework the following paragraph
+Getting something certified has many costs associated with it. There is a 
+massive time investment, fees, and costs associated with contracting out a 
+third-party for verification. Overall it is a very expensive process.
+
+Re-certification of software following any change, no matter how minor,%DS keep?
+incurs the same level of costs, as all the artifacts must be updated to 
+reflect the new change, and everything must be re-checked and verified to 
+ensure no new errors have been introduced.
+
+We intend to alleviate some of this cost-burden through a strategic, generative 
+approach to Software Engineering (SE). With the automated generation of 
+artifacts, we can implement changes quickly and automatically update every 
+relevant and/or dependent artifact.
+
+The cost(s) of re-certification:
 	- Expensive! \$\$\$ and time
 
 \subsection{Document-Driven Design} %DS worth having?

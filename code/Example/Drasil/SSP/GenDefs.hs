@@ -1,5 +1,6 @@
 module Drasil.SSP.GenDefs (sspGenDefs, eqlExpr, displMtx,
-  rotMtx, momExpr) where
+  rotMtx, momExpr, normForcEq, bsShrFEq, resShr, mobShr,
+  normShrR, momentEql, netForcex, netForcey, hookesLaw2d, displVect) where
 
 import Prelude hiding (sin, cos, tan)
 import Language.Drasil

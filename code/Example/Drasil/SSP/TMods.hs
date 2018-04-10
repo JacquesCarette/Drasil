@@ -1,4 +1,5 @@
-module Drasil.SSP.TMods (sspTMods) where
+module Drasil.SSP.TMods (fs_rc_new, equilibrium_new, mcShrStrgth_new, hookesLaw_new
+  , effStress_new, sspTMods) where
 
 import Prelude hiding (tan)
 import Language.Drasil
@@ -22,11 +23,19 @@ import Data.Drasil.Quantities.PhysicalProperties (mass)
 --  Theoretical Models  --
 --------------------------
 
+
 sspTMods :: [RelationConcept]
-sspTMods = [fs_rc, equilibrium, mcShrStrgth, effStress, hookesLaw]
+sspTMods = [fs_rc, equilibrium, mcShrStrgth, hookesLaw
+  , effStress]
 
 -- 
+------------- New Chunck -----------
+fs_rc_new :: TheoryModel
+fs_rc_new = tm (cw fs_rc)
+  (tc' "fs_rc_new" [qw fs, qw shearRes, qw mobShear] ([] :: [FundUnit])
+  [] [TCon Invariant fs_rel] [])
 
+------------------------------------
 fs_rc :: RelationConcept
 fs_rc = makeRC "fs_rc" factorOfSafety fs_desc fs_rel
 
@@ -42,7 +51,13 @@ fs_desc = foldlSent [
   S "and the resistive shear", sParen (getES shearRes)]
 
 --
-  
+------------- New Chunck -----------
+equilibrium_new :: TheoryModel
+equilibrium_new = tm (cw equilibrium)
+  (tc' "equilibrium_new" [qw fx] ([] :: [FundUnit])
+  [] [TCon Invariant eq_rel] [])
+
+------------------------------------  
 equilibrium :: RelationConcept
 equilibrium = makeRC "equilibrium" (nounPhraseSP "equilibrium") eq_desc eq_rel
 
@@ -61,6 +76,14 @@ eq_desc = foldlSent [S "For a body in static equilibrium, the net",
   S "also able to be analyzed as a scalar in a 2D problem"]
 
 --
+------------- New Chunck -----------
+mcShrStrgth_new :: TheoryModel
+mcShrStrgth_new = tm (cw fs_rc)
+  (tc' "fmcShrStrgth_new" [qw shrStress, qw normStress, qw fricAngle, qw cohesion] 
+  ([] :: [FundUnit])
+  [] [TCon Invariant mcSS_rel] [])
+
+------------------------------------
 mcShrStrgth :: RelationConcept
 mcShrStrgth = makeRC "mcShrStrgth" (nounPhraseSP "Mohr-Coulumb shear strength")
   mcSS_desc mcSS_rel
@@ -88,7 +111,14 @@ mcSS_desc = foldlSent [S "For a", phrase soil, S "under", phrase stress,
   S "represents the", getES shrStress, S "intercept of the fitted line"]
 
 --
+------------- New Chunck -----------
+effStress_new :: TheoryModel
+effStress_new = tm (cw effStress)
+  (tc' "effStress_new" [qw normStress, qw porePressure] 
+  ([] :: [FundUnit])
+  [] [TCon Invariant effS_rel] [])
 
+------------------------------------
 effStress :: RelationConcept
 effStress = makeRC "effStress"
   (nounPhraseSP "effective stress") effS_desc effS_rel
@@ -111,6 +141,14 @@ effS_desc = foldlSent [getES normStress, S "is the total", phrase stress,
   phrase stress, getES porePressure]
 
 --
+------------- New Chunck -----------
+hookesLaw_new :: TheoryModel
+hookesLaw_new = tm (cw hookesLaw)
+  (tc' "effStress_new" [qw genForce, qw stffness, qw genDisplace] 
+  ([] :: [FundUnit])
+  [] [TCon Invariant hksLw_rel] [])
+
+------------------------------------
 hookesLaw :: RelationConcept
 hookesLaw = makeRC "hookesLaw"
   (nounPhraseSP "Hooke's law") hksLw_desc hksLw_rel

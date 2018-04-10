@@ -1,6 +1,6 @@
 module Drasil.SWHS.IMods (insta_model_IMods,
-  eBalanceOnWtr, eBalanceOnWtr_new, heatEInWtr, heatEInWtr_new,
-   heatEInPCM_new, heatEInPCM, eBalanceOnPCM_new, eBalanceOnPCM) where
+   eBalanceOnWtr_new,  heatEInWtr_new,
+   heatEInPCM_new,  eBalanceOnPCM_new, heatEInWtr) where
 
 import Language.Drasil
 

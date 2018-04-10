@@ -40,7 +40,17 @@ import Drasil.SSP.GenDefs (eqlExpr, momExpr)
 sspIMods :: [RelationConcept]
 sspIMods = [fctSfty, nrmShrFor, intsliceFs, forDisEqlb, rfemFoS, crtSlpId]
 
+sspIMods_new :: [InstanceModel]
+sspIMods_new = [fctSfty_new, nrmShrFor_new, intsliceFs_new, forDisEqlb_new,
+ rfemFoS_new, crtSlpId_new]
+
 --
+fctSfty_new :: InstanceModel
+fctSfty_new = im fctSfty [qw fs, qw shearRNoIntsl, qw shearFNoIntsl, qw index,
+ qw numbSlices, qw mobShrC, qw varblU, qw shrResC, qw varblV]
+  [TCon AssumedCon $ sy fs $< sy fs] [qw fs]
+   [TCon AssumedCon $ 0 $< sy fs $< sy fs] []
+
 fctSfty :: RelationConcept
 fctSfty = makeRC "fctSfty" factorOfSafety fcSfty_desc fcSfty_rel
 
@@ -65,6 +75,14 @@ fcSfty_desc = foldlSent [S "Equation for the", titleize fs `isThe` S "ratio",
   S "interslice forces, to a calculation considering the interslice forces"]
 
 --
+nrmShrFor_new :: InstanceModel
+nrmShrFor_new = im nrmShrFor [qw normFunc, qw shearFunc, qw baseWthX, qw scalFunc,
+ qw intNormForce, qw index, qw numbSlices, qw watrForce, qw baseAngle, qw midpntHght, 
+ qw earthqkLoadFctr, qw slcWght, qw surfHydroForce, qw surfLoad, qw impLoadAngle,
+ qw fixme1, qw fixme2]
+  [TCon AssumedCon $ sy fixme1 $< sy fixme1] [qw fixme1]
+   [TCon AssumedCon $ 0 $< sy fixme1 $< sy fixme1] []
+
 nrmShrFor :: RelationConcept
 nrmShrFor = makeRC "nrmShrFor" (nounPhraseSP "normal/shear force ratio")
   nrmShrF_desc nrmShrF_rel
@@ -105,6 +123,13 @@ nrmShrF_desc = foldlSent [getES normToShear `isThe` S "magnitude ratio",
   S "and shear forces taken from each interslice"]
 
 --
+
+intsliceFs_new :: InstanceModel
+intsliceFs_new = im intsliceFs [qw normFunc, qw shearFunc, qw intNormForce, qw index,
+ qw numbSlices, qw shearFNoIntsl, qw fs]
+  [TCon AssumedCon $ sy fs $< sy fs] [qw fs]
+   [TCon AssumedCon $ 0 $< sy fs $< sy fs] []
+
 intsliceFs :: RelationConcept
 intsliceFs = makeRC "intsliceFs" (nounPhraseSP "interslice forces")
   sliceFs_desc sliceFs_rel
@@ -127,6 +152,13 @@ sliceFs_desc = foldlSent [S "The value of the interslice normal force",
   S "exert horizontally on each other"]
 
 --
+forDisEqlb_new :: InstanceModel
+forDisEqlb_new = im forDisEqlb [qw watrForceDif, qw earthqkLoadFctr, qw slcWght, qw baseAngle,
+ qw baseHydroForce, qw surfHydroForce, qw surfAngle, qw surfLoad, qw impLoadAngle,
+ qw surfLngth, qw nrmStiffIntsl, qw dx_i, qw effStiffA, qw dy_i, qw baseLngth, qw effStiffB]
+  [TCon AssumedCon $ sy earthqkLoadFctr $< sy earthqkLoadFctr] [qw earthqkLoadFctr]
+   [TCon AssumedCon $ 0 $< sy earthqkLoadFctr $< sy earthqkLoadFctr] []
+
 forDisEqlb :: RelationConcept
 forDisEqlb = makeRC "forDisEqlb"
   (nounPhraseSP "force displacement equilibrium") fDisEq_desc fDisEq_rel
@@ -173,6 +205,13 @@ fDisEq_desc = foldlSent [
   S "KbA,i, and KbB,i", S "are the base stiffness values for slice i"]
 
 --
+rfemFoS_new :: InstanceModel
+rfemFoS_new = im rfemFoS [qw fsloc, qw cohesion, qw nrmStiffBase, qw nrmDispl,
+ qw fricAngle, qw shrStiffBase, qw shrDispl, qw baseLngth]
+  [TCon AssumedCon $ inxi fsloc $< inxi fsloc] []
+   [TCon AssumedCon $ 0 $< inxi fsloc $< inxi fsloc] []
+
+
 rfemFoS :: RelationConcept
 rfemFoS = makeRC "rfemFoS" (nounPhraseSP "RFEM factor of safety")
   rfemFoS_desc rfemFoS_rel
@@ -203,6 +242,11 @@ rfemFoS_desc = foldlSent [
   (getES numbSlices) `isThe` S "number of slices in the slip surface"]
 
 --
+crtSlpId_new :: InstanceModel
+crtSlpId_new = im crtSlpId [qw fs_min]
+  [TCon AssumedCon $ sy fs_min $< sy fs_min] []
+   [TCon AssumedCon $ 0 $< sy fs_min $< sy fs_min] []{-derivation part-}
+
 crtSlpId :: RelationConcept
 crtSlpId = makeRC "crtSlpId" (nounPhraseSP "critical slip identification")
   crtSlpId_desc crtSlpId_rel

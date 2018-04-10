@@ -14,14 +14,17 @@ import Drasil.SSP.DataDesc (sspInputMod)
 import Drasil.SSP.Defs (ssa, acronyms, slice, slope, soil,
   crtSlpSrf, soilLyr, morPrice, mtrlPrpty, slpSrf,
   fs_concept, plnStrn, intrslce, itslPrpty)
-import Drasil.SSP.GenDefs (sspGenDefs)
+import Drasil.SSP.GenDefs (sspGenDefs, normForcEq, bsShrFEq, resShr, mobShr,
+  normShrR, momentEql, netForcex, netForcey, hookesLaw2d, displVect)
 import Drasil.SSP.Goals (sspGoals)
 import Drasil.SSP.IMods (instModIntro1, instModIntro2,
   sspIMods, fctSftyDerivation, nrmShrDerivation,
-  intrSlcDerivation, rigDisDerivation, rigFoSDerivation)
+  intrSlcDerivation, rigDisDerivation, rigFoSDerivation,
+  sspIMods_new)
 import Drasil.SSP.References (sspCitations)
 import Drasil.SSP.Requirements (sspRequirements, sspInputDataTable)
-import Drasil.SSP.TMods (sspTMods)
+import Drasil.SSP.TMods (fs_rc_new, equilibrium_new, mcShrStrgth_new, hookesLaw_new
+  , effStress_new, sspTMods)
 import Drasil.SSP.Unitals (sspSymbols, sspInputs, sspOutputs,
   sspConstrained, index, fs, numbSlices)
 import qualified Drasil.SRS as SRS (physSyst, funcReq, likeChg, inModel,
@@ -59,7 +62,8 @@ import Data.Drasil.Software.Products (sciCompS)
 import Data.Drasil.Utils (getES, enumBullet, enumSimple, weave)
 import Data.Drasil.SentenceStructures (sOr, acroDD,
   foldlSent, ofThe, sAnd, foldlSP, foldlList, foldlSent_)
-
+import Drasil.DocumentLanguage.Definitions
+import Drasil.DocumentLanguage
 --type declarations for sections--
 -- s3, s4, s5, s6, s7
 gen_sys_desc, spec_sys_desc, req, likely_chg, aux_cons :: Section
@@ -114,9 +118,46 @@ mkSRS = RefSec (RefProg intro
       EmptyS
     , IOrgSec orgSecStart inModel (SRS.inModel SRS.missingP []) orgSecEnd]) :
     --FIXME: issue #235
+    Verbatim gen_sys_desc: 
+  ------
+    SSDSec 
+      (SSDProg [SSDSubVerb problem_desc
+        , SSDSolChSpec 
+          (SCSProg 
+            [Assumptions 
+            ,TMs ([Label] ++ stdFields) [fs_rc_new, equilibrium_new, mcShrStrgth_new,
+             effStress_new, hookesLaw_new]
+            , GDs [Label, Units, DefiningEquation   ---check glassbr
+            , Description Verbose IncludeUnits
+            , Source, RefBy] generalDefinitions ShowDerivation
+            , DDs ([Label, Symbol, Units] ++ stdFields) sspDataDefs ShowDerivation
+            , IMs ([Label, Input, Output, InConstraints, OutConstraints] ++ stdFields)
+             sspIMods_new ShowDerivation
+            ]
+          )
+        ]
+      ): --Testing General Definitions.-}
   map Verbatim [gen_sys_desc, spec_sys_desc, req, likely_chg, aux_cons] 
    ++ (Bibliography : [])
-  
+
+{--normForcEq, bsShrFEq, resShr, mobShr,
+  normShrR, momentEql, netForcex, netForcey, hookesLaw2d, displVect-}
+generalDefinitions :: [GenDefn]
+generalDefinitions = [gd normForcEq (Nothing :: Maybe DerUChunk) ([] :: Attributes),
+  gd bsShrFEq (Nothing :: Maybe DerUChunk) ([] :: Attributes),
+  gd resShr (Nothing :: Maybe DerUChunk) ([] :: Attributes),
+  gd mobShr (Nothing :: Maybe DerUChunk) ([] :: Attributes),
+  gd normShrR (Nothing :: Maybe DerUChunk) ([] :: Attributes),
+  gd momentEql (Nothing :: Maybe DerUChunk) ([] :: Attributes),
+  gd netForcex (Nothing :: Maybe DerUChunk) ([] :: Attributes),
+  gd netForcey (Nothing :: Maybe DerUChunk) ([] :: Attributes),
+  gd hookesLaw2d (Nothing :: Maybe DerUChunk) ([] :: Attributes),
+  gd displVect (Nothing :: Maybe DerUChunk) ([] :: Attributes)]
+
+
+stdFields :: Fields
+stdFields = [DefiningEquation, Description Verbose IncludeUnits, Source, RefBy]
+
 ssp_srs :: Document
 ssp_srs = mkDoc mkSRS (for) ssp_si
   

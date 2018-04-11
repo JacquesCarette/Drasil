@@ -22,6 +22,7 @@ import Data.Drasil.Concepts.Thermodynamics (boiling, heat, temp, melting,
   phase_change)
 
 import Drasil.SWHS.DataDefs(dd1HtFluxC)
+import Data.Drasil.Concepts.Documentation (assumption, dataDefn)
 --s4_2_5_IMods
 insta_model_IMods :: [RelationConcept]
 insta_model_IMods = [eBalanceOnWtr, eBalanceOnPCM, heatEInWtr, heatEInPCM]
@@ -74,28 +75,28 @@ eBalanceOnWtr_deriv_swhs =
 eBalanceOnWtr_deriv_sentences_swhs_im1 :: [Sentence]
 eBalanceOnWtr_deriv_sentences_swhs_im1 = map foldlSentCol [
   s4_2_3_desc1_swhs_im1 rOfChng temp_W energy water vol w_vol mass w_mass heat_cap_spec
-    htCap_W heat_trans coil ht_flux_C coil_SA tank [S "A11"] [S "A12"] ht_flux_P surface,
+    htCap_W heat_trans coil ht_flux_C coil_SA pcm_SA tank [S "A11"] [S "A12"] ht_flux_P surface,
   s4_2_3_desc2_swhs_im1 dd1HtFluxC ht_flux_C ht_flux_P,
   s4_2_3_desc3_swhs_im1 eq1,
-  s4_2_3_desc4_swhs_im1 1,
+  s4_2_3_desc4_swhs_im1 eq2,
   s4_2_3_desc5_swhs_im1,
-  s4_2_3_desc6_swhs_im1 eq2,
-  s4_2_3_desc6_swhs_im1 eq2]
+  s4_2_3_desc6_swhs_im1 eq3 eq4,
+  s4_2_3_desc7_swhs_im1 eq5]
 
 s4_2_3_desc1_swhs_im1 :: ConceptChunk -> UncertQ -> UnitalChunk -> ConceptChunk -> 
   ConceptChunk -> UnitalChunk -> ConceptChunk -> UnitalChunk -> ConceptChunk -> UncertQ -> 
-  ConceptChunk -> ConceptChunk -> UnitalChunk -> UncertQ -> ConceptChunk -> [Sentence] -> [Sentence] -> 
-  UnitalChunk -> ConceptChunk -> [Sentence]
-s4_2_3_desc1_swhs_im1 roc tw en wt vo wvo ms wms hcs hw ht cl hfc cs tk ass11 ass12 hfp su =
+  ConceptChunk -> ConceptChunk -> UnitalChunk -> UncertQ -> UncertQ -> ConceptChunk ->
+  [Sentence] -> [Sentence] -> UnitalChunk -> ConceptChunk -> [Sentence]
+s4_2_3_desc1_swhs_im1 roc tw en wt vo wvo ms wms hcs hw ht cl hfc cs ps tk ass11 ass12 hfp su =
   [S "To find the", phrase roc `sOf` (E $ sy tw) `sC` S "we look at the",
    phrase en, S "balance on" +:+. phrase wt, S "The", phrase vo, S "being considered" 
    `isThe` (phrase vo `sOf` phrase wt), (E $ sy wvo) `sC` S "which has", phrase ms,
    (E $ sy wms) `sAnd` (phrase hcs `sOf` phrase wt) `sC` (E $ sy hw), 
     (E $ sy hfc), S "represents the", phrase ht, S "flux into the", phrase wt,
     S "from the", (phrase cl `sAnd` (E $ sy hfp)), S "represents the", phrase ht,
-    S "flux into the PCM from", phrase wt, S "over heating", phrase cl, phrase su,
+    S "flux into the PCM from", phrase wt `sC` S "over heating", phrase cl, phrase su,
     S "area and", phrase phase_change, S "material", phrase su, S "area of",
-    (E $ sy hfc) `sAnd` (E $ sy hfp) `sC` S "respectively.",  S "No", phrase ht,
+    (E $ sy cs) `sAnd` (E $ sy ps) `sC` S "respectively.",  S "No", phrase ht,
     S "occurs to", S "outside" `ofThe` phrase tk `sC` 
     S "since it has been assumed to be perfectly insulted", 
     (foldlList $ (map (\d -> sParen (d))) ass11), S ". Assuming no volumetric", 
@@ -105,69 +106,79 @@ s4_2_3_desc1_swhs_im1 roc tw en wt vo wvo ms wms hcs hw ht cl hfc cs tk ass11 as
 
 s4_2_3_desc2_swhs_im1 :: QDefinition -> UnitalChunk -> UnitalChunk -> [Sentence]
 s4_2_3_desc2_swhs_im1 dd1HtFluxC hfc hfp =
-  [S "Using", makeRef $ datadefn dd1HtFluxC, S "and", makeRef $ datadefn dd1HtFluxC,
+  [S "Using", titleize' dataDefn, makeRef $ datadefn dd1HtFluxC, S "and",
+  titleize' dataDefn, makeRef $ datadefn dd1HtFluxC,
    S "for", (E $ sy hfc) `sAnd` (E $ sy hfp), S "respectively, this can be written as"]
 
-s4_2_3_desc3_swhs_im1 :: Expr-> [Sentence]
-s4_2_3_desc3_swhs_im1 eq11 = [S "Dividing (3) by", (E eq11), S "we obtain"]
+s4_2_3_desc3_swhs_im1 :: [Sentence] -> [Sentence]
+s4_2_3_desc3_swhs_im1 eq11 = [S "Dividing (3) by"] ++ eq11 ++ [S "we obtain"]
 
-s4_2_3_desc4_swhs_im1 :: Expr-> [Sentence]
-s4_2_3_desc4_swhs_im1 eq11 = [S "Factoring the negative sign out of the second term",
-  S "of the RHS of Equationf (4) and multiplying it by", (E eq11), S "yields"]
+s4_2_3_desc4_swhs_im1 :: [Sentence] -> [Sentence]
+s4_2_3_desc4_swhs_im1 eq22 = [S "Factoring the negative sign out of the second term",
+  S "of the RHS of Equationf (4) and multiplying it by"] ++ eq22 ++ [S "yields"]
 
 s4_2_3_desc5_swhs_im1 ::[Sentence]
 s4_2_3_desc5_swhs_im1 = [S "Which simplifies to"]
 
-s4_2_3_desc6_swhs_im1 :: Expr-> [Sentence]
-s4_2_3_desc6_swhs_im1 eq22 = 
-  [S "Setting", (E eq22), S "Equation (5) can be written in its final form as"]
+s4_2_3_desc6_swhs_im1 :: Expr -> Expr -> [Sentence]
+s4_2_3_desc6_swhs_im1 eq33 eq44 = 
+  [S "Setting", (E eq33) `sAnd` (E eq44), S "Equation (5) can be written in its final form as"]
 
-s4_2_3_desc7_swhs_im1 :: Expr-> [Sentence]
-s4_2_3_desc7_swhs_im1 eq22 = 
-  [S "Finally, factoring out", (E eq22), S ", we are left with the governing ODE for IM1"]
+s4_2_3_desc7_swhs_im1 :: Expr -> [Sentence]
+s4_2_3_desc7_swhs_im1 eq55 = 
+  [S "Finally, factoring out", (E eq55), S ", we are left with the governing ODE for IM1"]
 
-eq1, eq2:: Expr
-eq1 = (sy w_mass) * (sy htCap_W)
-eq2 = (sy tau_W) $= ((sy w_mass) * (sy htCap_W)) / ((sy ht_flux_C) * (sy coil_SA))
+eq1, eq2:: [Sentence]
+eq1 = [getES w_mass, getES htCap_W]
+eq2 = [getES tau_W, S "= (", getES w_mass, S "*", getES htCap_W, S ") / (", getES ht_flux_C,
+  S "*", getES coil_SA, S ")"]
+
+eq3, eq4, eq5:: Expr
+eq3 = (sy tau) $= ((sy w_mass) * (sy htCap_W)) / ((sy coil_HTC) * (sy coil_SA))
+eq4 = (sy eta) $= ((sy pcm_HTC) * (sy pcm_SA)) / 
+  ((sy coil_HTC) * (sy coil_SA))
+eq5 = 1 / (sy tau_W)
 
 s4_2_3_eq1_swhs_im1, s4_2_3_eq2_swhs_im1, s4_2_3_eq3_swhs_im1,
  s4_2_3_eq4_swhs_im1, s4_2_3_eq5_swhs_im1, s4_2_3_eq6_swhs_im1, s4_2_3_eq7_swhs_im1 :: Expr
 
 s4_2_3_eq1_swhs_im1 = (sy w_mass) * (sy htCap_W) * (deriv (sy temp_W) time) $= 
-  (sy ht_flux_C) * (sy coil_SA) - (sy ht_flux_P) * (sy coil_SA)
+  (sy ht_flux_C) * (sy coil_SA) - (sy ht_flux_P) * (sy pcm_SA)
 
 s4_2_3_eq2_swhs_im1 = (sy w_mass) * (sy htCap_W) * (deriv (sy temp_W) time) $= 
   (sy coil_HTC) * (sy coil_SA) *  ((sy temp_C) - (sy temp_W)) -
-  (sy coil_HTC) * (sy coil_SA) *  ((sy temp_C) - (sy temp_W))
+  (sy pcm_HTC) * (sy pcm_SA) *  ((sy temp_W) - (sy temp_PCM))
 
 s4_2_3_eq3_swhs_im1 = (deriv (sy temp_W) time) $= 
   ((sy coil_HTC) * (sy coil_SA) / 
   ((sy w_mass) * (sy htCap_W))) *  ((sy temp_C) - (sy temp_W)) -
-  ((sy coil_HTC) * (sy coil_SA) / 
-  ((sy w_mass) * (sy htCap_W))) *  ((sy temp_C) - (sy temp_W))
+  ((sy pcm_mass) * (sy pcm_SA) / 
+  ((sy w_mass) * (sy htCap_W))) *  ((sy temp_W) - (sy temp_PCM))
 
-s4_2_3_eq4_swhs_im1 =  
+s4_2_3_eq4_swhs_im1 = 
   (deriv (sy temp_W) time) $= 
-  ((sy coil_HTC) * (sy coil_SA) / 
-  ((sy w_mass) * (sy htCap_W))) *  ((sy temp_C) - (sy temp_W)) -
-  ((sy coil_HTC) * (sy coil_SA) / 
-  ((sy w_mass) * (sy htCap_W))) *  ((sy temp_C) - (sy temp_W))
-
-s4_2_3_eq5_swhs_im1 = (sy w_mass) * (sy htCap_W) * (deriv (sy temp_W) time) $= 
-  (deriv (sy temp_W) time) $= 
-  ((sy coil_HTC) * (sy coil_SA) / 
-  ((sy w_mass) * (sy htCap_W))) *  ((sy temp_C) - (sy temp_W)) -
-  ((sy coil_HTC) * (sy coil_SA) / 
-  ((sy w_mass) * (sy htCap_W))) *  ((sy temp_C) - (sy temp_W))
-
-s4_2_3_eq6_swhs_im1 = (deriv (sy temp_W) time) $= 
   ((sy coil_HTC) * (sy coil_SA) / 
   ((sy w_mass) * (sy htCap_W))) *  ((sy temp_C) - (sy temp_W)) +
-  1 / (sy tau_W) * ((sy temp_C) - (sy temp_W))
+  ((sy coil_HTC) * (sy coil_SA) / 
+  ((sy coil_HTC) * (sy coil_SA))) * ((sy pcm_HTC) * (sy pcm_SA) / 
+  ((sy w_mass) * (sy coil_HTC))) * ((sy temp_PCM) - (sy temp_W))
+
+s4_2_3_eq5_swhs_im1 =  
+  (deriv (sy temp_W) time) $= 
+  ((sy coil_HTC) * (sy coil_SA) / 
+  ((sy w_mass) * (sy htCap_W))) *  ((sy temp_C) - (sy temp_W)) +
+  ((sy pcm_HTC) * (sy pcm_SA) / 
+  ((sy coil_HTC) * (sy coil_SA))) * ((sy coil_HTC) * (sy coil_SA) / 
+  ((sy w_mass) * (sy coil_HTC))) * ((sy temp_PCM) - (sy temp_W))
+
+
+s4_2_3_eq6_swhs_im1 = (deriv (sy temp_W) time) $= 
+  1 / (sy tau_W) * ((sy temp_C) - (sy temp_W)) +
+  (sy eta) / (sy tau_W) * ((sy temp_PCM) - (sy temp_W))
 
 s4_2_3_eq7_swhs_im1 =  
-  (deriv (sy temp_W) time) $= 1 / (sy tau_W) * ((sy temp_C) - (sy temp_W)) +
-  1 / (sy tau_W) * ((sy temp_C) - (sy temp_W))
+  (deriv (sy temp_W) time) $= 1 / (sy tau_W) * (((sy temp_C) - (sy temp_W)) +
+  sy eta * ((sy temp_PCM) - (sy temp_W)))
 
 
 eBalanceOnWtr_deriv_eqns_swhs_im1 :: [Expr]

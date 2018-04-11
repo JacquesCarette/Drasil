@@ -2,7 +2,8 @@
 {-# LANGUAGE FlexibleContexts #-}
 module Drasil.SWHS.TMods (tModels, t1ConsThermE, 
   theory_model_swhsTMods, theory_model_T1,
-  t1ConsThermE_new, t2SensHtE_new, theory_model_T2, t2SensHtE) where
+  t1ConsThermE_new, t2SensHtE_new, theory_model_T2, t2SensHtE,
+  t3LatHtE_new, theory_model_T3) where
 
 import Language.Drasil
 import Control.Lens ((^.))
@@ -147,6 +148,11 @@ t2descr = foldlSent [
 -------------------------
 -- Theoretical Model 3 --
 -------------------------
+t3LatHtE_new :: TheoryModel
+t3LatHtE_new = tm (cw t3LatHtE)
+  (tc' "SensHtE_new" [qw latent_heat, qw time, qw tau] ([] :: [FundUnit])
+  [] [TCon Invariant latHtEEqn] [])
+
 --s4_2_2_T3
 theory_model_T3 :: [Contents]
 theory_model_T3 = [reldefn t3LatHtE]

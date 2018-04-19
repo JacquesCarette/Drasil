@@ -61,7 +61,7 @@ layout :: HasSymbolTable ctx => ctx -> Int -> SecCons -> T.LayoutObj
 layout sm currDepth (Sub s) = sec sm (currDepth+1) s
 layout sm _         (Con c) = lay sm c
 
-createLayout :: HasSymbolTable ctx => ctx -> Sections -> [T.LayoutObj]
+createLayout :: HasSymbolTable ctx => ctx -> [Section] -> [T.LayoutObj]
 createLayout sm = map (sec sm 0)
 
 sec :: HasSymbolTable ctx => ctx -> Int -> Section -> T.LayoutObj

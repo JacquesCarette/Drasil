@@ -350,39 +350,39 @@ defaultTUI = [System, Derived, TUPurpose]
 mkIntroSec :: SystemInformation -> IntroSec -> Section
 mkIntroSec _ (IntroVerb s) = s
 mkIntroSec si (IntroProg probIntro progDefn l) =
-  Intro.introductionSection probIntro progDefn $ foldr (mkSubIntro si) [] l
+  Intro.introductionSection probIntro progDefn $ map (mkSubIntro si) l
   where
-    mkSubIntro :: SystemInformation -> IntroSub -> [Section] -> [Section]
-    mkSubIntro _ (IVerb s) l' = s : l'
-    mkSubIntro _ (IPurpose intro) l' = Intro.purposeOfDoc intro : l'
-    mkSubIntro (SI {_sys = sys}) (IScope main intendedPurp) l' =
-      Intro.scopeOfRequirements main sys intendedPurp : l'
-    mkSubIntro (SI {_sys = sys}) (IChar know understand appStandd) l' =
-      Intro.charIntRdrF know understand sys appStandd (SRS.userChar [] []) : l'
-    mkSubIntro _ (IOrgSec i b s t) l' = Intro.orgSec i b s t : l'
+    mkSubIntro :: SystemInformation -> IntroSub -> Section
+    mkSubIntro _ (IVerb s) = s
+    mkSubIntro _ (IPurpose intro) = Intro.purposeOfDoc intro
+    mkSubIntro (SI {_sys = sys}) (IScope main intendedPurp) =
+      Intro.scopeOfRequirements main sys intendedPurp
+    mkSubIntro (SI {_sys = sys}) (IChar know understand appStandd) =
+      Intro.charIntRdrF know understand sys appStandd (SRS.userChar [] [])
+    mkSubIntro _ (IOrgSec i b s t)  = Intro.orgSec i b s t
     -- FIXME: s should be "looked up" using "b" once we have all sections being generated
 
 -- | Helper for making the 'Stakeholders' section
 mkStkhldrSec :: StkhldrSec -> Section
 mkStkhldrSec (StkhldrVerb s) = s
 mkStkhldrSec (StkhldrProg key details) = (Stk.stakehldrGeneral key details)
-mkStkhldrSec (StkhldrProg2 l) = SRS.stakeholder [Stk.stakeholderIntro] $ foldr (mkSubs) [] l
+mkStkhldrSec (StkhldrProg2 l) = SRS.stakeholder [Stk.stakeholderIntro] $ map mkSubs l
   where
-    mkSubs :: StkhldrSub -> [Section] -> [Section]
-    mkSubs (StkhldrSubVerb s) l' = s : l'
-    mkSubs (Client kWrd details) l' = (Stk.tClientF kWrd details) : l'
-    mkSubs (Cstmr kWrd) l'          = (Stk.tCustomerF kWrd) : l'
+    mkSubs :: StkhldrSub -> Section
+    mkSubs (StkhldrSubVerb s)    = s
+    mkSubs (Client kWrd details) = Stk.tClientF kWrd details
+    mkSubs (Cstmr kWrd)          = Stk.tCustomerF kWrd
 
 -- | Helper for making the 'General System Description' section
 mkGSDSec :: GSDSec -> Section
 mkGSDSec (GSDVerb s) = s
 mkGSDSec (GSDProg cntxt uI cnstrnts systSubSec) = GSD.genSysF cntxt uI cnstrnts systSubSec
-mkGSDSec (GSDProg2 l) = SRS.genSysDes [GSD.genSysIntro] $ foldr (mkSubs) [] l
+mkGSDSec (GSDProg2 l) = SRS.genSysDes [GSD.genSysIntro] $ map mkSubs l
    where
-     mkSubs :: GSDSub -> [Section] -> [Section]
-     mkSubs (GSDSubVerb s) l' = s : l'
-     mkSubs (UsrChars intro) l'   = (GSD.usrCharsF intro) : l'
-     mkSubs (SystCons cntnts subsec) l' = (GSD.systCon cntnts subsec) : l'
+     mkSubs :: GSDSub -> Section
+     mkSubs (GSDSubVerb s)           = s
+     mkSubs (UsrChars intro)         = GSD.usrCharsF intro
+     mkSubs (SystCons cntnts subsec) = GSD.systCon cntnts subsec
 
 -- | Helper for making the 'Scope of the Project' section
 mkScpOfProjSec :: ScpOfProjSec -> Section
@@ -394,12 +394,12 @@ mkScpOfProjSec (ScpOfProjProg kWrd uCTCntnts indCases) =
 mkSSDSec :: SystemInformation -> SSDSec -> Section
 mkSSDSec _ (SSDVerb s) = s
 mkSSDSec si (SSDProg l) =
-  SSD.specSysDescr (siSys si) $ foldr (mkSubSSD si) [] l
+  SSD.specSysDescr (siSys si) $ map (mkSubSSD si) l
   where
-    mkSubSSD :: SystemInformation -> SSDSub -> [Section] -> [Section]
-    mkSubSSD _ (SSDSubVerb s) l'        = s : l'
-    mkSubSSD sysi (SSDProblem pd) l'    = mkSSDProb sysi pd : l'
-    mkSubSSD sysi (SSDSolChSpec scs) l' = mkSolChSpec sysi scs : l'
+    mkSubSSD :: SystemInformation -> SSDSub -> Section
+    mkSubSSD _ (SSDSubVerb s)        = s
+    mkSubSSD sysi (SSDProblem pd)    = mkSSDProb sysi pd
+    mkSubSSD sysi (SSDSolChSpec scs) = mkSolChSpec sysi scs
 
 mkSSDProb :: SystemInformation -> ProblemDescription -> Section
 mkSSDProb _ (PDVerb s) = s
@@ -410,32 +410,32 @@ mkSolChSpec :: SystemInformation -> SolChSpec -> Section
 mkSolChSpec _ (SCSVerb s) = s
 mkSolChSpec si (SCSProg l) =
   SRS.solCharSpec [SSD.solutionCharSpecIntro (siSys si) inModSec] $
-    foldr (mkSubSCS si) [] l
+    map (mkSubSCS si) l
   where
-    mkSubSCS :: SystemInformation -> SCSSub -> [Section] -> [Section]
-    mkSubSCS _ (SCSSubVerb s) l' = s : l'
-    mkSubSCS _ (TMs _ []) _   = error "There are no Theoretical Models"
-    mkSubSCS _ (GDs _ [] _) l' = SSD.genDefnF [] : l'
-    mkSubSCS _ (DDs _ [] _) _ = error "There are no Data Definitions"
-    mkSubSCS _ (IMs _ [] _) _   = error "There are no Instance Models"
-    mkSubSCS si' (TMs fields ts) l' =
-      SSD.thModF (siSys si') (map (tmodel fields (_sysinfodb si')) ts) : l'
-    mkSubSCS si' (DDs fields dds ShowDerivation) l' = --FIXME: need to keep track of DD intro.
-      SSD.dataDefnF EmptyS (concat (map (\x -> ddefn fields (_sysinfodb si') x : derivation x) dds)) : l'
-    mkSubSCS si' (DDs fields dds _) l' =
-      SSD.dataDefnF EmptyS (map (ddefn fields (_sysinfodb si')) dds) : l'
-    mkSubSCS si' (GDs fields gs' ShowDerivation) l' =
-      SSD.genDefnF (concat (map (\x -> gdefn fields (_sysinfodb si') x : derivation x) gs')) : l'
-    mkSubSCS si' (GDs fields gs' _) l' =
-      SSD.genDefnF (map (gdefn fields (_sysinfodb si')) gs') : l'
-    mkSubSCS si' (IMs fields ims ShowDerivation) l' =
-      SRS.inModel (concat (map (\x -> instanceModel fields (_sysinfodb si') x : derivation x) ims)) [] : l'
-    mkSubSCS si' (IMs fields ims _) l' = SRS.inModel
-      (map (instanceModel fields (_sysinfodb si')) ims) [] : l'
-    mkSubSCS (SI {_refdb = db}) Assumptions l' =
+    mkSubSCS :: SystemInformation -> SCSSub -> Section
+    mkSubSCS _ (SCSSubVerb s)  = s
+    mkSubSCS _ (TMs _ [])   = error "There are no Theoretical Models"
+    mkSubSCS _ (GDs _ [] _) = SSD.genDefnF []
+    mkSubSCS _ (DDs _ [] _) = error "There are no Data Definitions"
+    mkSubSCS _ (IMs _ [] _)  = error "There are no Instance Models"
+    mkSubSCS si' (TMs fields ts) =
+      SSD.thModF (siSys si') (map (tmodel fields (_sysinfodb si')) ts)
+    mkSubSCS si' (DDs fields dds ShowDerivation) = --FIXME: need to keep track of DD intro.
+      SSD.dataDefnF EmptyS (concat (map (\x -> ddefn fields (_sysinfodb si') x : derivation x) dds))
+    mkSubSCS si' (DDs fields dds _) =
+      SSD.dataDefnF EmptyS (map (ddefn fields (_sysinfodb si')) dds)
+    mkSubSCS si' (GDs fields gs' ShowDerivation) =
+      SSD.genDefnF (concat (map (\x -> gdefn fields (_sysinfodb si') x : derivation x) gs'))
+    mkSubSCS si' (GDs fields gs' _) =
+      SSD.genDefnF (map (gdefn fields (_sysinfodb si')) gs')
+    mkSubSCS si' (IMs fields ims ShowDerivation) =
+      SRS.inModel (concat (map (\x -> instanceModel fields (_sysinfodb si') x : derivation x) ims)) []
+    mkSubSCS si' (IMs fields ims _) = SRS.inModel
+      (map (instanceModel fields (_sysinfodb si')) ims) []
+    mkSubSCS (SI {_refdb = db}) Assumptions =
       (SSD.assumpF tmStub gdStub ddStub imStub lcStub
-      (map Assumption $ assumptionsFromDB (db ^. assumpRefTable))) : l'
-    mkSubSCS _ (Constraints a b c d) l' = (SSD.datConF a b c d) : l'
+      (map Assumption $ assumptionsFromDB (db ^. assumpRefTable)))
+    mkSubSCS _ (Constraints a b c d) = (SSD.datConF a b c d)
     inModSec = (SRS.inModel [Paragraph EmptyS] [])
     --FIXME: inModSec should be replaced with a walk
     -- over the SCSProg and generate a relevant intro.
@@ -455,13 +455,12 @@ lcStub = SRS.likeChg  [] []
 -- | Helper for making the 'Requirements' section
 mkReqrmntSec :: ReqrmntSec -> Section
 mkReqrmntSec (ReqsVerb s) = s
-mkReqrmntSec (ReqsProg l) = R.reqF $ foldr (mkSubs) [] l
+mkReqrmntSec (ReqsProg l) = R.reqF $ map mkSubs l
   where
-    mkSubs :: ReqsSub -> [Section] -> [Section]
-    mkSubs (ReqsSubVerb s) l' = s : l'
-    mkSubs (FReqsSub reqs) l'   = (R.fReqF reqs) : l'
-    mkSubs (NonFReqsSub noPrrty prrty rsn explain) l' =
-      (R.nonFuncReqF noPrrty prrty rsn explain) : l'
+    mkSubs :: ReqsSub -> Section
+    mkSubs (ReqsSubVerb s) = s
+    mkSubs (FReqsSub reqs) = R.fReqF reqs
+    mkSubs (NonFReqsSub noPrrty prrty rsn explain) = R.nonFuncReqF noPrrty prrty rsn explain
 
 {--}
 

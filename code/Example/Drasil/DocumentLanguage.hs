@@ -29,7 +29,6 @@ import qualified Drasil.Sections.Requirements as R
 
 import Data.Drasil.Concepts.Documentation (refmat)
 
-import Data.Maybe (isJust,fromJust)
 import Data.List (sortBy, nub)
 import Data.Function (on)
 
@@ -262,8 +261,7 @@ mkRefSec si (RefProg c l) = section (titleize refmat) [c]
          (nub v)) at_start)] []) : l'
     mkSubRef (SI {_concepts = cccs}) (TSymb' f con) l' = (mkTSymb cccs f con) : l'
     mkSubRef (SI {_sysinfodb = db}) TAandA l' =
-      (table_of_abb_and_acronyms $ sortBy (compare `on` (fromJust . getA)) $
-      filter (isJust . getA) (nub $ Map.elems (db ^. termTable))) : l'
+      (table_of_abb_and_acronyms $ nub $ Map.elems (db ^. termTable)) : l'
     mkSubRef _              (TVerb s) l' = s : l'
 
 -- | Helper for creating the table of symbols

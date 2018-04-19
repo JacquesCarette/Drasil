@@ -224,45 +224,45 @@ mkDoc l comb si@(SI {_sys = sys, _kind = kind, _authors = authors}) = Document
 
 -- | Helper for creating the document sections
 mkSections :: SystemInformation -> DocDesc -> [Section]
-mkSections si l = foldr doit [] l
+mkSections si l = map doit l
   where
-    doit :: DocSection -> [Section] -> [Section]
-    doit (Verbatim s)        ls = s : ls
-    doit (RefSec rs)         ls = mkRefSec si rs : ls
-    doit (IntroSec is)       ls = mkIntroSec si is : ls
-    doit (StkhldrSec sts)    ls = mkStkhldrSec sts : ls
-    doit (SSDSec ss)         ls = mkSSDSec si ss : ls
-    doit (AuxConstntSec acs) ls = mkAuxConsSec acs : ls
-    doit Bibliography        ls = mkBib (citeDB si) : ls
-    doit (GSDSec gs')        ls = mkGSDSec gs' : ls
-    doit (ScpOfProjSec sop)  ls = mkScpOfProjSec sop : ls
-    doit (ReqrmntSec r)      ls = mkReqrmntSec r : ls
-    doit (LCsSec lc')        ls = mkLCsSec lc' : ls
-    doit (TraceabilitySec t) ls = mkTraceabilitySec t : ls
-    doit (AppndxSec a)       ls = mkAppndxSec a : ls
+    doit :: DocSection -> Section
+    doit (Verbatim s)        = s
+    doit (RefSec rs)         = mkRefSec si rs
+    doit (IntroSec is)       = mkIntroSec si is
+    doit (StkhldrSec sts)    = mkStkhldrSec sts
+    doit (SSDSec ss)         = mkSSDSec si ss
+    doit (AuxConstntSec acs) = mkAuxConsSec acs
+    doit Bibliography        = mkBib (citeDB si)
+    doit (GSDSec gs')        = mkGSDSec gs'
+    doit (ScpOfProjSec sop)  = mkScpOfProjSec sop
+    doit (ReqrmntSec r)      = mkReqrmntSec r
+    doit (LCsSec lc')        = mkLCsSec lc'
+    doit (TraceabilitySec t) = mkTraceabilitySec t
+    doit (AppndxSec a)       = mkAppndxSec a
 
 
 -- | Helper for creating the reference section and subsections
 mkRefSec :: SystemInformation -> RefSec -> Section
 mkRefSec _  (RefVerb s) = s
 mkRefSec si (RefProg c l) = section (titleize refmat) [c]
-  (foldr (mkSubRef si) [] l) "RefMat"
+  (map (mkSubRef si) l) "RefMat"
   where
-    mkSubRef :: SystemInformation -> RefTab -> [Section] -> [Section]
-    mkSubRef (SI {_sysinfodb = db})  TUnits l' =
-        table_of_units (sortBy comp_unitdefn $ Map.elems $ db ^. unitTable) (tuIntro defaultTUI) : l'
-    mkSubRef (SI {_sysinfodb = db}) (TUnits' con) l' =
-        table_of_units (sortBy comp_unitdefn $ Map.elems $ db ^. unitTable) (tuIntro con) : l'
-    mkSubRef (SI {_quants = v}) (TSymb con) l' =
-      (SRS.tOfSymb
+    mkSubRef :: SystemInformation -> RefTab -> Section
+    mkSubRef (SI {_sysinfodb = db})  TUnits =
+        table_of_units (sortBy comp_unitdefn $ Map.elems $ db ^. unitTable) (tuIntro defaultTUI)
+    mkSubRef (SI {_sysinfodb = db}) (TUnits' con) =
+        table_of_units (sortBy comp_unitdefn $ Map.elems $ db ^. unitTable) (tuIntro con)
+    mkSubRef (SI {_quants = v}) (TSymb con) =
+      SRS.tOfSymb
       [tsIntro con, (table Equational (
          sortBy (compsy `on` eqSymb) $
          filter (\q -> hasStageSymbol q Equational)
-         (nub v)) at_start)] []) : l'
-    mkSubRef (SI {_concepts = cccs}) (TSymb' f con) l' = (mkTSymb cccs f con) : l'
-    mkSubRef (SI {_sysinfodb = db}) TAandA l' =
-      (table_of_abb_and_acronyms $ nub $ Map.elems (db ^. termTable)) : l'
-    mkSubRef _              (TVerb s) l' = s : l'
+         (nub v)) at_start)] []
+    mkSubRef (SI {_concepts = cccs}) (TSymb' f con) = (mkTSymb cccs f con)
+    mkSubRef (SI {_sysinfodb = db}) TAandA =
+      (table_of_abb_and_acronyms $ nub $ Map.elems (db ^. termTable))
+    mkSubRef _              (TVerb s) = s
 
 -- | Helper for creating the table of symbols
 mkTSymb :: (Quantity e, Concept e, Eq e) =>

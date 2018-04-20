@@ -88,6 +88,7 @@ p_spec (Sp s)       _ = unPH $ special s
 p_spec HARDNL       _ = "<br />"
 p_spec (Ref _ r a) sm = reflink r (p_spec a sm)
 p_spec EmptyS       _ = ""
+p_spec (Quote q)   sm = "&quot;" ++ p_spec q sm ++ "&quot;"
 
 -- | Renders symbols for HTML document
 symbol :: Symbol -> String

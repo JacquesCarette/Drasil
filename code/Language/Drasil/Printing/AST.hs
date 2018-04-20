@@ -42,6 +42,7 @@ data Spec = E Expr
           | Sp Special
           | Ref RefType RefAdd Spec
           | EmptyS
+          | Quote Spec    -- quotes are different in different languages
           | HARDNL        -- newline. Temp fix for multi-line descriptions; 
                           -- May move to a new LayoutObj, but only exists in TeX
                           -- so it's not really a big deal ATM.

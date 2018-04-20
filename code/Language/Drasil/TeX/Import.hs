@@ -31,16 +31,17 @@ import Language.Drasil.Unit (usymb)
 import Language.Drasil.Printing.Import (symbol,expr)
 
 spec :: HasSymbolTable ctx => ctx -> Sentence -> P.Spec
-spec _  (S s)          = P.S s
-spec _  (Sy s)         = P.Sy s
+  -- make sure these optimizations are clear
 spec sm (EmptyS :+: b) = spec sm b
 spec sm (a :+: EmptyS) = spec sm a
 spec sm (a :+: b)      = spec sm a P.:+: spec sm b
+spec _  (S s)          = P.S s
+spec _  (Sy s)         = P.Sy s
 spec _  (Sp s)         = P.Sp s
 spec sm (F f s)        = spec sm (accent f s)
 spec _  (P s)          = P.E $ symbol s
 spec _  (Ref t r _)    = P.Ref t r (P.S r)
-spec sm (Quote q)      = P.S "``" P.:+: spec sm q P.:+: P.S "\""
+spec sm (Quote q)      = P.Quote $ spec sm q
 spec _  EmptyS         = P.EmptyS
 spec sm (E e)          = P.E $ expr e sm
 

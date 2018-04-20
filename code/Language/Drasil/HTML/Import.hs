@@ -42,7 +42,7 @@ spec (Sp s)       _ = P.Sp s
 spec (P s)        _ = P.E $ P.Font P.Emph $ symbol s
 spec (F f s)     sm = spec (accent f s) sm
 spec (Ref t r n) sm = P.Ref t r (spec n sm)
-spec (Quote q) sm = P.S "&quot;" P.:+: spec q sm P.:+: P.S "&quot;"
+spec (Quote q) sm = P.Quote $ spec q sm -- P.S "&quot;" P.:+: spec q sm P.:+: P.S "&quot;"
 spec EmptyS     _ = P.EmptyS
 spec (E e)     sm = P.E $ P.Font P.Emph $ expr e sm
 

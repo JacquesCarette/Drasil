@@ -37,21 +37,22 @@ makeDocument :: HasSymbolTable ctx => ctx -> Document -> T.Document
 makeDocument sm (Document title author sections) =
   T.Document (spec sm title) (spec sm author) (createLayout sm sections)
 
--- | Translates from LayoutObj to the HTML representation of LayoutObj
+-- | Translates from LayoutObj to the Printing representation of LayoutObj
 layout :: HasSymbolTable ctx => ctx -> Int -> SecCons -> T.LayoutObj
 layout sm currDepth (Sub s) = sec sm (currDepth+1) s
 layout sm _         (Con c) = lay sm c
 
 -- | Helper function for creating sections as layout objects
 createLayout :: HasSymbolTable ctx => ctx -> [Section] -> [T.LayoutObj]
-createLayout sm secs = map (sec sm 0) secs
+createLayout sm = map (sec sm 0)
 
 -- | Helper function for creating sections at the appropriate depth
-sec :: HasSymbolTable s => s -> Int -> Section -> T.LayoutObj
+sec :: HasSymbolTable ctx => ctx -> Int -> Section -> T.LayoutObj
 sec sm depth x@(Section title contents _) =
+  let ref = P.S (refAdd x) in
   T.HDiv [(concat $ replicate depth "sub") ++ "section"]
-  ((T.Header (depth+2) (spec sm title) P.EmptyS):(map (layout sm depth) contents))
-  (P.S (refAdd x))
+  ((T.Header (depth+2) (spec sm title) ref) :
+  map (layout sm depth) contents) ref
 
 -- | Translates from Contents to the HTML Representation of LayoutObj.
 -- Called internally by layout.

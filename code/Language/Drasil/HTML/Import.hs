@@ -1,9 +1,12 @@
 module Language.Drasil.HTML.Import(makeDocument) where
 
+import Control.Lens ((^.))
+import Data.Maybe (fromJust)
+
 import Language.Drasil.Expr (sy, ($=))
-import Language.Drasil.Spec
+import Language.Drasil.Spec (Sentence(S,(:+:)))
 import qualified Language.Drasil.Printing.AST as P
-import qualified Language.Drasil.Printing.Citation as PC
+import qualified Language.Drasil.Printing.Citation as P
 import qualified Language.Drasil.Printing.LayoutObj as H
 import Language.Drasil.Printing.Import (spec)
 
@@ -28,9 +31,6 @@ import Language.Drasil.NounPhrase (phrase, titleize)
 import Language.Drasil.Reference
 import Language.Drasil.Unit (usymb)
 import Language.Drasil.Printing.Import (expr,symbol)
-
-import Control.Lens ((^.))
-import Data.Maybe (fromJust)
 
 -- | Translates from Document to the HTML representation of Document
 makeDocument :: HasSymbolTable s => Document -> s -> H.Document
@@ -79,32 +79,32 @@ lay (Defnt dtyp pairs rn) sm = H.Definition dtyp (layPairs pairs) (P.S rn)
 lay (Bib bib)           sm = H.Bib $ map (layCite sm) bib
 
 -- | For importing bibliography
-layCite :: HasSymbolTable s => s -> Citation -> PC.Citation
-layCite sm c = PC.Cite (citeID c) (externRefT c) (map (layField sm) (fields c))
+layCite :: HasSymbolTable s => s -> Citation -> P.Citation
+layCite sm c = P.Cite (citeID c) (externRefT c) (map (layField sm) (fields c))
 
-layField :: HasSymbolTable s => s -> CiteField -> PC.CiteField
-layField sm (Address      s) = PC.Address      $ spec sm s
-layField  _ (Author       p) = PC.Author       p
-layField sm (BookTitle    s) = PC.BookTitle    $ spec sm s
-layField  _ (Chapter      i) = PC.Chapter      i
-layField  _ (Edition      n) = PC.Edition      n
-layField  _ (Editor       p) = PC.Editor       p
-layField sm (Institution  i) = PC.Institution  $ spec sm i
-layField sm (Journal      s) = PC.Journal      $ spec sm s
-layField  _ (Month        m) = PC.Month        m
-layField sm (Note         s) = PC.Note         $ spec sm s
-layField  _ (Number       n) = PC.Number       n
-layField sm (Organization i) = PC.Organization $ spec sm i
-layField  _ (Pages        n) = PC.Pages        n
-layField sm (Publisher    s) = PC.Publisher    $ spec sm s
-layField sm (School       s) = PC.School       $ spec sm s
-layField sm (Series       s) = PC.Series       $ spec sm s
-layField sm (Title        s) = PC.Title        $ spec sm s
-layField sm (Type         t) = PC.Type         $ spec sm t
-layField  _ (Volume       n) = PC.Volume       n
-layField  _ (Year         n) = PC.Year         n
-layField sm (HowPublished (URL  s)) = PC.HowPublished (PC.URL  $ spec sm s)
-layField sm (HowPublished (Verb s)) = PC.HowPublished (PC.Verb $ spec sm s)
+layField :: HasSymbolTable s => s -> CiteField -> P.CiteField
+layField sm (Address      s) = P.Address      $ spec sm s
+layField  _ (Author       p) = P.Author       p
+layField sm (BookTitle    s) = P.BookTitle    $ spec sm s
+layField  _ (Chapter      i) = P.Chapter      i
+layField  _ (Edition      n) = P.Edition      n
+layField  _ (Editor       p) = P.Editor       p
+layField sm (Institution  i) = P.Institution  $ spec sm i
+layField sm (Journal      s) = P.Journal      $ spec sm s
+layField  _ (Month        m) = P.Month        m
+layField sm (Note         s) = P.Note         $ spec sm s
+layField  _ (Number       n) = P.Number       n
+layField sm (Organization i) = P.Organization $ spec sm i
+layField  _ (Pages        n) = P.Pages        n
+layField sm (Publisher    s) = P.Publisher    $ spec sm s
+layField sm (School       s) = P.School       $ spec sm s
+layField sm (Series       s) = P.Series       $ spec sm s
+layField sm (Title        s) = P.Title        $ spec sm s
+layField sm (Type         t) = P.Type         $ spec sm t
+layField  _ (Volume       n) = P.Volume       n
+layField  _ (Year         n) = P.Year         n
+layField sm (HowPublished (URL  s)) = P.HowPublished (P.URL  $ spec sm s)
+layField sm (HowPublished (Verb s)) = P.HowPublished (P.Verb $ spec sm s)
 
 -- | Translates lists
 makeL :: HasSymbolTable s => ListType -> s -> P.ListType

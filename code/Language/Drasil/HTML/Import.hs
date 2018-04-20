@@ -32,51 +32,51 @@ import Language.Drasil.Unit (usymb)
 import Language.Drasil.Spec (Sentence(S,(:+:)))
 import Language.Drasil.Printing.Import (symbol,expr)
 
--- | Translates from Document to the HTML representation of Document
-makeDocument :: HasSymbolTable s => s -> Document -> T.Document
+-- | Translates from Document to the Printing representation of Document
+makeDocument :: HasSymbolTable ctx => ctx -> Document -> T.Document
 makeDocument sm (Document title author sections) =
-  T.Document (spec sm title) (spec sm author) (createLayout sections sm)
+  T.Document (spec sm title) (spec sm author) (createLayout sm sections)
 
 -- | Translates from LayoutObj to the HTML representation of LayoutObj
-layout :: HasSymbolTable s => Int -> SecCons -> s -> T.LayoutObj
-layout currDepth (Sub s) sm = sec (currDepth+1) s sm
-layout _         (Con c) sm = lay c sm
+layout :: HasSymbolTable ctx => ctx -> Int -> SecCons -> T.LayoutObj
+layout sm currDepth (Sub s) = sec sm (currDepth+1) s
+layout sm _         (Con c) = lay sm c
 
 -- | Helper function for creating sections as layout objects
-createLayout :: HasSymbolTable s => [Section] -> s -> [T.LayoutObj]
-createLayout secs sm = map (flip (sec 0) sm) secs
+createLayout :: HasSymbolTable ctx => ctx -> [Section] -> [T.LayoutObj]
+createLayout sm secs = map (sec sm 0) secs
 
 -- | Helper function for creating sections at the appropriate depth
-sec :: HasSymbolTable s => Int -> Section -> s -> T.LayoutObj
-sec depth x@(Section title contents _) sm =
+sec :: HasSymbolTable s => s -> Int -> Section -> T.LayoutObj
+sec sm depth x@(Section title contents _) =
   T.HDiv [(concat $ replicate depth "sub") ++ "section"]
-  ((T.Header (depth+2) (spec sm title) P.EmptyS):(map (flip (layout depth) sm) contents))
+  ((T.Header (depth+2) (spec sm title) P.EmptyS):(map (layout sm depth) contents))
   (P.S (refAdd x))
 
 -- | Translates from Contents to the HTML Representation of LayoutObj.
 -- Called internally by layout.
-lay :: HasSymbolTable s => Contents -> s -> T.LayoutObj
-lay x@(Table hdr lls t b _) sm = T.Table ["table"]
+lay :: HasSymbolTable ctx => ctx -> Contents -> T.LayoutObj
+lay sm x@(Table hdr lls t b _) = T.Table ["table"]
   ((map (spec sm) hdr) : (map (map (spec sm)) lls)) (P.S (refAdd x)) b (spec sm t)
-lay (Paragraph c)       sm = T.Paragraph (spec sm c)
-lay (EqnBlock c _)      sm = T.HDiv ["equation"] [T.EqnBlock (P.E (P.Font P.Emph $ expr c sm))] (P.EmptyS)
+lay sm (Paragraph c)       = T.Paragraph (spec sm c)
+lay sm (EqnBlock c _)      = T.HDiv ["equation"] [T.EqnBlock (P.E (P.Font P.Emph $ expr c sm))] (P.EmptyS)
                               -- FIXME: Make equations referable
 --lay (CodeBlock c)        = T.CodeBlock c
-lay x@(Definition c)    sm = T.Definition c (makePairs c sm) (P.S (refAdd x))
-lay (Enumeration cs)    sm = T.List $ makeL cs sm
-lay x@(Figure c f wp _) sm = T.Figure (P.S (refAdd x)) (spec sm c) f wp
-lay x@(Graph ps w h t _) sm = T.Graph (map (\(y,z) -> (spec sm y, spec sm z)) ps)
+lay sm x@(Definition c)    = T.Definition c (makePairs c sm) (P.S (refAdd x))
+lay sm (Enumeration cs)    = T.List $ makeL cs sm
+lay sm x@(Figure c f wp _) = T.Figure (P.S (refAdd x)) (spec sm c) f wp
+lay sm x@(Graph ps w h t _) = T.Graph (map (\(y,z) -> (spec sm y, spec sm z)) ps)
                                w h (spec sm t) (P.S (refAdd x))
-lay x@(Requirement r)   sm = T.ALUR T.Requirement
+lay sm x@(Requirement r)   = T.ALUR T.Requirement
   (spec sm $ requires r) (P.S (refAdd x)) (spec sm (fromJust $ getShortName r))
-lay x@(Assumption a)    sm = T.ALUR T.Assumption
+lay sm x@(Assumption a)    = T.ALUR T.Assumption
   (spec sm (assuming a)) (P.S (refAdd x)) (spec sm (fromJust $ getShortName a))
-lay x@(Change lc) sm = T.ALUR
+lay sm x@(Change lc)       = T.ALUR
   (if (chngType lc) == Likely then T.LikelyChange else T.UnlikelyChange)
   (spec sm (chng lc)) (P.S (refAdd x)) (spec sm (fromJust $ getShortName lc))
-lay (Defnt dtyp pairs rn) sm = T.Definition dtyp (layPairs pairs) (P.S rn)
-  where layPairs = map (\(x,y) -> (x, (map (\z -> lay z sm) y)))
-lay (Bib bib)           sm = T.Bib $ map (layCite sm) bib
+lay sm (Defnt dtyp pairs rn) = T.Definition dtyp (layPairs pairs) (P.S rn)
+  where layPairs = map (\(x,y) -> (x, map (lay sm) y))
+lay sm (Bib bib)           = T.Bib $ map (layCite sm) bib
 
 -- | For importing bibliography
 layCite :: HasSymbolTable s => s -> Citation -> P.Citation

@@ -31,6 +31,7 @@ import Language.Drasil.Reference
 import Language.Drasil.Unit (usymb)
 import Language.Drasil.Printing.Import (symbol,expr)
 
+-- | Translates from Document to the Printing representation of Document
 makeDocument :: HasSymbolTable ctx => ctx -> Document -> T.Document
 makeDocument sm (Document title author sections) =
   T.Document (spec sm title) (spec sm author) (createLayout sm sections)

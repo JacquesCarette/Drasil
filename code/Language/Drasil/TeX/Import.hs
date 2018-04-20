@@ -1,21 +1,21 @@
-module Language.Drasil.TeX.Import(makeDocument,spec) where
+module Language.Drasil.TeX.Import(makeDocument, spec) where
 
 import Control.Lens ((^.))
 import Data.Maybe (fromJust)
 
 import Language.Drasil.Expr (sy, ($=))
-import qualified Language.Drasil.Printing.LayoutObj as T
 import qualified Language.Drasil.Printing.AST as P
 import qualified Language.Drasil.Printing.Citation as P
+import qualified Language.Drasil.Printing.LayoutObj as T
 import Language.Drasil.Printing.Import (spec)
 
 import Language.Drasil.Chunk.AssumpChunk
 import Language.Drasil.Chunk.Attribute (getShortName)
-import Language.Drasil.Chunk.Eq
 import Language.Drasil.Chunk.Change (chng, chngType, ChngType(Likely))
 import Language.Drasil.Chunk.Concept (defn)
+import Language.Drasil.Chunk.Eq
 import Language.Drasil.Chunk.ExprRelat (relat)
-import Language.Drasil.Chunk.NamedIdea (term)
+import Language.Drasil.Chunk.NamedIdea (term, getA)
 import Language.Drasil.Chunk.Quantity (Quantity(..))
 import Language.Drasil.Chunk.SymbolForm (eqSymb)
 import Language.Drasil.ChunkDB (getUnitLup, HasSymbolTable(..))

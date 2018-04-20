@@ -34,7 +34,7 @@ data OpenClose = Open | Close
 
 -- | Generate an HTML document from a Drasil 'Document'
 genHTML :: HasSymbolTable s => F.Filename -> L.Document -> s -> Doc
-genHTML fn doc sm = build fn (makeDocument doc sm) sm
+genHTML fn doc sm = build fn (makeDocument sm doc) sm
 
 -- | Build the HTML Document, called by genHTML
 build :: HasSymbolTable s => String -> Document -> s -> Doc

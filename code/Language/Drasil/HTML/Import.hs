@@ -10,19 +10,19 @@ import qualified Language.Drasil.Printing.LayoutObj as T
 import Language.Drasil.Printing.Import (spec)
 
 import Language.Drasil.Chunk.AssumpChunk
-import Language.Drasil.Chunk.Attribute
-import Language.Drasil.Chunk.Change (chng, chngType, ChngType(..))
+import Language.Drasil.Chunk.Attribute (getShortName)
+import Language.Drasil.Chunk.Change (chng, chngType, ChngType(Likely))
 import Language.Drasil.Chunk.Concept (defn)
 import Language.Drasil.Chunk.Eq
 import Language.Drasil.Chunk.ExprRelat (relat)
 import Language.Drasil.Chunk.NamedIdea (term, getA)
 import Language.Drasil.Chunk.Quantity (Quantity(..))
 import Language.Drasil.Chunk.SymbolForm (eqSymb)
-import Language.Drasil.ChunkDB (HasSymbolTable(..), getUnitLup)
+import Language.Drasil.ChunkDB (getUnitLup, HasSymbolTable(..))
 import Language.Drasil.Chunk.ReqChunk (requires)
-import Language.Drasil.Chunk.Citation ( CiteField(..), HP(..), Citation
-                                      , externRefT, citeID, fields)
-import Language.Drasil.Config (verboseDDDescription)
+import Language.Drasil.Chunk.Citation ( Citation, CiteField(..), HP(..)
+                                      , citeID, externRefT, fields)
+import Language.Drasil.Config (verboseDDDescription, numberedDDEquations, numberedTMEquations)
 import Language.Drasil.Document
 import Language.Drasil.Expr.Extract
 import Language.Drasil.Misc (unit'2Contents)
@@ -30,11 +30,11 @@ import Language.Drasil.NounPhrase (phrase, titleize)
 import Language.Drasil.Reference
 import Language.Drasil.Unit (usymb)
 import Language.Drasil.Spec (Sentence(S,(:+:)))
-import Language.Drasil.Printing.Import (expr,symbol)
+import Language.Drasil.Printing.Import (symbol,expr)
 
 -- | Translates from Document to the HTML representation of Document
-makeDocument :: HasSymbolTable s => Document -> s -> T.Document
-makeDocument (Document title author sections) sm =
+makeDocument :: HasSymbolTable s => s -> Document -> T.Document
+makeDocument sm (Document title author sections) =
   T.Document (spec sm title) (spec sm author) (createLayout sections sm)
 
 -- | Translates from LayoutObj to the HTML representation of LayoutObj

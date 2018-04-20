@@ -154,8 +154,7 @@ buildEqn c sm = P.E (P.Font P.Emph $ symbol (eqSymb c)) P.:+: P.S " = " P.:+:
 -- | Build descriptions in data defs based on required verbosity
 buildDDDescription :: HasSymbolTable s => QDefinition -> s -> P.Spec
 buildDDDescription c m = descLines
-  (if verboseDDDescription then (vars (getQ c $= c^.equat) m) else []) m
-  where getQ (EC a _ _) = sy a
+  (if verboseDDDescription then (vars (sy c $= c^.equat) m) else []) m
 
 -- | Helper for building each line of the description of a data def
 descLines :: (HasSymbolTable s, Quantity q) => [q] -> s -> P.Spec

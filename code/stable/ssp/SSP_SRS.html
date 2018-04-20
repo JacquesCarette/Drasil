@@ -20,17 +20,17 @@ Henry Frankis
 </div>
 <a id="Sec:RefMat">
 <div class="section">
-<h2>
+<h0>
 Reference Material
-</h2>
+</h0>
 <p class="paragraph">
 This section records information for easy reference.
 </p>
 <a id="Sec:ToU">
 <div class="subsection">
-<h3>
+<h1>
 Table of Units
-</h3>
+</h1>
 <p class="paragraph">
 The unit system used throughout is SI (Syst&egrave;me International d'Unit&eacute;s). In addition to the basic units, several derived units are also used. For each unit, the table lists the symbol, a description and the SI name.
 </p>
@@ -82,9 +82,9 @@ pressure (pascal)
 </a>
 <a id="Sec:ToS">
 <div class="subsection">
-<h3>
+<h1>
 Table of Symbols
-</h3>
+</h1>
 <p class="paragraph">
 The table that follows summarizes the symbols used in this document along with their units. Throughout the document, values with a subscript <em>i</em> implies that the value will be taken at and analyzed at a slice or slice interface composing the total slip mass.
 </p>
@@ -1042,9 +1042,9 @@ m
 </a>
 <a id="Sec:TAbbAcc">
 <div class="subsection">
-<h3>
+<h1>
 Abbreviations and Acronyms
-</h3>
+</h1>
 <a id="Table:TAbbAcc">
 <table class="table">
 <tr>
@@ -1159,9 +1159,9 @@ Typical Uncertainty
 </a>
 <a id="Sec:Intro">
 <div class="section">
-<h2>
+<h0>
 Introduction
-</h2>
+</h0>
 <p class="paragraph">
 A slope of geological mass, composed of soil and rock, is subject to the influence of gravity on the mass. For an unstable slope this can cause instability in the form of soil/rock movement. The effects of soil/rock movement can range from inconvenient to seriously hazardous, resulting in signifcant life and economic losses. Slope stability is of interest both when analyzing natural slopes, and when designing an excavated slope. Slope stability analysis is the assessment of the safety of a slope, identifying the surface most likely to experience slip and an index of its relative stability known as the factor of safety.
 </p>
@@ -1170,9 +1170,9 @@ The following section provides an overview of the Software Requirements Specific
 </p>
 <a id="Sec:DocPurpose">
 <div class="subsection">
-<h3>
+<h1>
 Purpose of Document
-</h3>
+</h1>
 <p class="paragraph">
 The SSA program determines the critical slip surface, and its respective factor of safety as a method of assessing the stability of a slope design. The program is intended to be used as an educational tool for introducing slope stability issues, and will facilitate the analysis and design of a safe slope.
 </p>
@@ -1183,9 +1183,9 @@ This document will be used as a starting point for subsequent development phases
 </a>
 <a id="Sec:ReqsScope">
 <div class="subsection">
-<h3>
+<h1>
 Scope of Requirements
-</h3>
+</h1>
 <p class="paragraph">
 The scope of the requirements includes stability analysis of a 2 dimensional slope, composed of homogeneous soil layers. Given the appropriate inputs, the code for SSA is intended to identify the most likely failure surface within the possible input range, and find the factor of safety for the slope as well as displacement of soil that will occur on the slope.
 </p>
@@ -1193,9 +1193,9 @@ The scope of the requirements includes stability analysis of a 2 dimensional slo
 </a>
 <a id="Sec:ReaderChars">
 <div class="subsection">
-<h3>
+<h1>
 Characteristics of Intended Reader
-</h3>
+</h1>
 <p class="paragraph">
 Reviewers of this documentation should have a strong knowledge in solid mechanics. The reviewers should also have an understanding of undergraduate level 4 physics. The users of SSA can have a lower level of expertise, as explained in <a href=#Sec:UserChars>User Characteristics</a>.
 </p>
@@ -1203,9 +1203,9 @@ Reviewers of this documentation should have a strong knowledge in solid mechanic
 </a>
 <a id="Sec:DocOrg">
 <div class="subsection">
-<h3>
+<h1>
 Organization of Document
-</h3>
+</h1>
 <p class="paragraph">
 The organization of this document follows the template for an SRS for scientific computing software proposed by Koothoor as well as Smith and Lai. The presentation follows the standard pattern of presenting goals, theories, definitions, and assumptions. For readers that would like a more bottom up approach, they can start reading the instance models in <a href=#Sec:IMs>Instance Models</a> and trace back to find any additional information they require.
 </p>
@@ -1218,17 +1218,17 @@ The goal statements are refined to the theoretical models, and the theoretical m
 </a>
 <a id="Sec:GenSysDesc">
 <div class="section">
-<h2>
+<h0>
 General System Description
-</h2>
+</h0>
 <p class="paragraph">
 This section provides general information about the system, identifies the interfaces between the system and its environment, and describes the user characteristics and the system constraints.
 </p>
 <a id="Sec:UserChars">
 <div class="subsection">
-<h3>
+<h1>
 User Characteristics
-</h3>
+</h1>
 <p class="paragraph">
 The end user of SSA should have an understanding of undergraduate Level 1 Calculus and Physics, and be familiar with soil and material properties.
 </p>
@@ -1236,9 +1236,9 @@ The end user of SSA should have an understanding of undergraduate Level 1 Calcul
 </a>
 <a id="Sec:SysConstraints">
 <div class="subsection">
-<h3>
+<h1>
 System Constraints
-</h3>
+</h1>
 <p class="paragraph">
 There are no system constraints.
 </p>
@@ -1248,25 +1248,25 @@ There are no system constraints.
 </a>
 <a id="Sec:SpecSystDesc">
 <div class="section">
-<h2>
+<h0>
 Specific System Description
-</h2>
+</h0>
 <p class="paragraph">
 This section first presents the problem description, which gives a high-level view of the problem to be solved. This is followed by the solution characteristics specification, which presents the assumptions, theories, definitions and finally the instance models that model the slope.
 </p>
 <a id="Sec:ProbDesc">
 <div class="subsection">
-<h3>
+<h1>
 Problem Description
-</h3>
+</h1>
 <p class="paragraph">
 SSA is a computer program developed to evaluate the factor of safety of a slope's slip surface and to calculate the displacement that the slope will experience.
 </p>
 <a id="Sec:TermDefs">
 <div class="subsubsection">
-<h4>
+<h2>
 Terminology and Definitions
-</h4>
+</h2>
 <p class="paragraph">
 This subsection provides a list of terms that are used in the subsequent sections and their meaning, with the purpose of reducing ambiguity and making it easier to correctly understand the requirements.
 </p>
@@ -1303,9 +1303,9 @@ Plane Strain: The resultant stresses in one of the directions of a 3 dimensional
 </a>
 <a id="Sec:PhysSyst">
 <div class="subsubsection">
-<h4>
+<h2>
 Physical System Description
-</h4>
+</h2>
 <p class="paragraph">
 Analysis of the slope is performed by looking at properties of the slope as a series of slice elements. Some properties are interslice properties, and some are slice or slice base properties. The index convention for referencing which interslice or slice is being used is shown in <a href=#Figure:IndexConvention>Figure:IndexConvention</a>.
 </p>
@@ -1336,9 +1336,9 @@ Forces acting on a slice
 </a>
 <a id="Sec:GoalStmt">
 <div class="subsubsection">
-<h4>
+<h2>
 Goal Statements
-</h4>
+</h2>
 <p class="paragraph">
 Given the geometry of the water table, the geometry of the layers composing the plane of a slope, and the material properties of the layers, the goal statements are:
 </p>
@@ -1359,17 +1359,17 @@ GS3: Determine the displacement of the slope.
 </a>
 <a id="Sec:SolCharSpec">
 <div class="subsection">
-<h3>
+<h1>
 Solution Characteristics Specification
-</h3>
+</h1>
 <p class="paragraph">
 The instance models that govern SSA are presented in <a href=#Sec:IMs>Instance Models</a>. The information to understand the meaning of the instance models and their derivation is also presented, so that the instance models can be verified.
 </p>
 <a id="Sec:Assumps">
 <div class="subsubsection">
-<h4>
+<h2>
 Assumptions
-</h4>
+</h2>
 <p class="paragraph">
 This section simplifies the original problem and helps in developing the theoretical model by filling in the missing information for the physical system. The numbers given in the square brackets refer to the Theoretical Models [<a href=#Sec:TMs>Theoretical Models</a>], General Definitions [<a href=#Sec:GDs>General Definitions</a>], Data Definitions [<a href=#Sec:DDs>Data Definitions</a>], Instance Models [<a href=#Sec:IMs>Instance Models</a>], or Likely Changes [<a href=#Sec:LCs>Likely Changes</a>], in which the respective assumption is used.
 </p>
@@ -1409,9 +1409,9 @@ A10: The surface and base of a slice between interslice nodes are approximated a
 </a>
 <a id="Sec:TMs">
 <div class="subsubsection">
-<h4>
+<h2>
 Theoretical Models
-</h4>
+</h2>
 <p class="paragraph">
 This section focuses on the general equations and laws that SSA is based on.
 </p>
@@ -1656,9 +1656,9 @@ Description Stiffness <em>K</em> is the resistance a body others to deformation 
 </a>
 <a id="Sec:GDs">
 <div class="subsubsection">
-<h4>
+<h2>
 General Definitions
-</h4>
+</h2>
 <p class="paragraph">
 This section collects the laws and equations that will be used in deriving the data definitions, which in turn are used to build the instance models.
 </p>
@@ -2203,9 +2203,9 @@ Vectors describing the displacement of slice <em>i</em>. <em>&delta;</em> is the
 </a>
 <a id="Sec:DDs">
 <div class="subsubsection">
-<h4>
+<h2>
 Data Definitions
-</h4>
+</h2>
 <p class="paragraph">
 This section collects and defines all the data needed to build the instance models. Definitions DD1 to DD8 are the force variables that can be solved by direct analysis of given inputs. The interslice forces DD9 are force variables that must be written in terms of DD1 to DD8 to solve.
 </p>
@@ -3675,9 +3675,9 @@ Description
 </a>
 <a id="Sec:IMs">
 <div class="subsubsection">
-<h4>
+<h2>
 Instance Models
-</h4>
+</h2>
 <p class="paragraph">
 This section transforms the problem defined in <a href=#Sec:ProbDesc>Problem Description</a> into one which is expressed in mathematical terms. It uses concrete symbols defined in <a href=#Sec:DDs>Data Definitions</a> to replace the abstract symbols in the models identified in <a href=#Sec:TMs>Theoretical Models</a> and <a href=#Sec:GDs>General Definitions</a>.
 </p>
@@ -4417,9 +4417,9 @@ Given the necessary slope inputs, a minimization algorithm or function <em>&Upsi
 </a>
 <a id="Sec:DataConstraints">
 <div class="subsubsection">
-<h4>
+<h2>
 Data Constraints
-</h4>
+</h2>
 <p class="paragraph">
 <a href=#Table:InDataConstraints>Table:InDataConstraints</a>, and <a href=#Table:OutDataConstraints>Table:OutDataConstraints</a> shows the data constraints on the input and output variables, respectively. The column for physical constraints gives the physical limitations on the range of values that can be taken by the variable. The uncertainty column provides an estimate of the confidence with which the physical quantities can be measured. This information would be part of the input if one were performing an uncertainty quantification exercise. The constraints are conservative, to give the user of the model the flexibility to experiment with unusual situations. The column of typical values is intended to provide a feel for a common scenario.
 </p>
@@ -4639,17 +4639,17 @@ Output Data Constraints
 </a>
 <a id="Sec:Requirements">
 <div class="section">
-<h2>
+<h0>
 Requirements
-</h2>
+</h0>
 <p class="paragraph">
 This section provides the functional requirements, the business tasks that the software is expected to complete, and the non-functional requirements, the qualities that the software is expected to exhibit.
 </p>
 <a id="Sec:FRs">
 <div class="subsection">
-<h3>
+<h1>
 Functional Requirements
-</h3>
+</h1>
 <div class="list">
 <p>
 R1: Read the input file, and store the data. Necessary input data summarized in <a href=#Table:inDataTable>Table:inDataTable</a>.
@@ -4828,9 +4828,9 @@ Required Inputs
 </a>
 <a id="Sec:NFRs">
 <div class="subsection">
-<h3>
+<h1>
 Non-Functional Requirements
-</h3>
+</h1>
 <p class="paragraph">
 SSA is intended to be an educational tool, so accuracy and performance are not priorities. Rather, the non-functional requirement priorities are correctness, understandability, reusability, and maintainability.
 </p>
@@ -4840,16 +4840,16 @@ SSA is intended to be an educational tool, so accuracy and performance are not p
 </a>
 <a id="Sec:LCs">
 <div class="section">
-<h2>
+<h0>
 Likely Changes
-</h2>
+</h0>
 </div>
 </a>
 <a id="Sec:AuxConstants">
 <div class="section">
-<h2>
+<h0>
 Values of Auxiliary Constants
-</h2>
+</h0>
 <p class="paragraph">
 There are no auxiliary constants.
 </p>
@@ -4857,9 +4857,9 @@ There are no auxiliary constants.
 </a>
 <a id="Sec:References">
 <div class="section">
-<h2>
+<h0>
 References
-</h2>
+</h0>
 <a id="chen2005">
 <ul>
 [1]: Qian, Q. H., Zhu, D. Y., Lee, C. F., and Chen, G. R. "A concise algorithm for computing the factor of safety using the morgenstern price method." <em>Canadian Geotechnical Journal</em>, vol. 42, no. 1, February, 2005. pp. 272&ndash;278. Print.

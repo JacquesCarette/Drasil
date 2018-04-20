@@ -49,7 +49,7 @@ createLayout sm = map (sec sm 0)
 sec :: HasSymbolTable ctx => ctx -> Int -> Section -> T.LayoutObj
 sec sm depth x@(Section title contents _) =
   let ref = P.S (refAdd x) in
-  T.HDiv [] -- no need
+  T.HDiv [(concat $ replicate depth "sub") ++ "section"]
   (T.Header depth (spec sm title) ref :
    map (layout sm depth) contents) P.EmptyS
 

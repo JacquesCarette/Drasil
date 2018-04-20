@@ -51,7 +51,7 @@ sec :: HasSymbolTable ctx => ctx -> Int -> Section -> T.LayoutObj
 sec sm depth x@(Section title contents _) =
   let ref = P.S (refAdd x) in
   T.HDiv [(concat $ replicate depth "sub") ++ "section"]
-  ((T.Header (depth+2) (spec sm title) ref) :
+  (T.Header depth (spec sm title) ref :
   map (layout sm depth) contents) ref
 
 -- | Translates from Contents to the HTML Representation of LayoutObj.

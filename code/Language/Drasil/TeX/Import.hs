@@ -146,12 +146,12 @@ makePairs :: HasSymbolTable ctx => ctx -> DType -> [(String,[T.LayoutObj])]
 makePairs m (Data c) = [
   ("Label",       [T.Paragraph $ spec m (titleize $ c ^. term)]),
   ("Units",       [T.Paragraph $ spec m (unit'2Contents c)]),
-  ("Equation",    [eqnStyleDD  $ buildEqn m c]),
+  ("Equation",    [eqnStyle numberedDDEquations  $ buildEqn m c]),
   ("Description", [T.Paragraph $ buildDDDescription m c])
   ]
 makePairs m (Theory c) = [
   ("Label",       [T.Paragraph $ spec m (titleize $ c ^. term)]),
-  ("Equation",    [eqnStyleTM $ P.E (expr (c ^. relat) m)]),
+  ("Equation",    [eqnStyle numberedTMEquations $ P.E (expr (c ^. relat) m)]),
   ("Description", [T.Paragraph (spec m (c ^. defn))])
   ]
 makePairs _ General  = error "Not yet implemented"
@@ -159,13 +159,9 @@ makePairs _ Instance = error "Not yet implemented"
 makePairs _ TM       = error "Not yet implemented"
 makePairs _ DD       = error "Not yet implemented"
 
-
 -- Toggle equation style
-eqnStyleDD :: T.Contents -> T.LayoutObj
-eqnStyleDD = if numberedDDEquations then T.EqnBlock else T.Paragraph
-
-eqnStyleTM :: T.Contents -> T.LayoutObj
-eqnStyleTM = if numberedTMEquations then T.EqnBlock else T.Paragraph
+eqnStyle :: Bool -> T.Contents -> T.LayoutObj
+eqnStyle b = if b then T.EqnBlock else T.Paragraph
 
 buildEqn :: HasSymbolTable ctx => ctx -> QDefinition -> P.Spec
 buildEqn sm c = P.E (symbol $ eqSymb c) P.:+: P.S " = " P.:+:

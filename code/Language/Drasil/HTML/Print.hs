@@ -6,10 +6,11 @@ import Text.PrettyPrint hiding (render, quotes, Str)
 import Numeric (showFFloat)
 import Control.Arrow (second)
 
-import Language.Drasil.HTML.Import (makeDocument, spec)
+import Language.Drasil.HTML.Import (makeDocument)
 import Language.Drasil.Printing.AST
 import Language.Drasil.Printing.Citation
 import Language.Drasil.Printing.LayoutObj
+import Language.Drasil.Printing.Import (spec)
 import qualified Language.Drasil.Output.Formats as F
 import Language.Drasil.Spec (Sentence, sC, (+:+), Accent(..))
 import Language.Drasil.UnitLang
@@ -79,8 +80,10 @@ title_spec HARDNL      _ = ""
 title_spec s          sm = p_spec s sm
 
 -- | Renders the Sentences in the HTML body (called by 'printLO')
+-- Hack alert: don't double-em, but do put it in...
 p_spec :: HasSymbolTable s => Spec -> s -> String
-p_spec (E e)        _ = p_expr e
+p_spec (E (Font Emph e)) _ = em $ p_expr e
+p_spec (E e)        _ = em $ p_expr e
 p_spec (a :+: b)   sm = p_spec a sm ++ p_spec b sm
 p_spec (S s)        _ = s
 p_spec (Sy s)       _ = uSymb s
@@ -417,7 +420,7 @@ bookMLA (School     s) sm  = comm $ p_spec s sm
 --bookMLA (URL        s) sm  = dot $ p_spec s sm
 bookMLA (HowPublished (Verb s)) sm  = comm $ p_spec s sm
 bookMLA (HowPublished (URL s)) sm = dot $ p_spec s sm
-bookMLA (Editor     p) sm  = comm $ "Edited by " ++ p_spec (foldlList (map (flip spec sm . nameStr) p)) sm
+bookMLA (Editor     p) sm  = comm $ "Edited by " ++ p_spec (foldlList (map (spec sm . nameStr) p)) sm
 bookMLA (Chapter _) _ = ""
 bookMLA (Institution i) sm = comm $ p_spec i sm
 bookMLA (Organization i) sm = comm $ p_spec i sm
@@ -433,7 +436,7 @@ bookAPA (Year     y)  _ = dot $ paren $ show y --APA puts "()" around the year
 bookAPA (Pages     [n])   _ = dot $ show n
 bookAPA (Pages (a:b:[]))  _ = dot $ show a ++ "&ndash;" ++ show b
 bookAPA (Pages _) _ = error "Page range specified is empty or has more than two items"
-bookAPA (Editor   p)  sm = dot $ p_spec (foldlList $ map ( flip spec sm . nameStr) p) sm ++ " (Ed.)"
+bookAPA (Editor   p)  sm = dot $ p_spec (foldlList $ map (spec sm . nameStr) p) sm ++ " (Ed.)"
 bookAPA i sm = bookMLA i sm --Most items are rendered the same as MLA
 
 bookChicago :: HasSymbolTable s => CiteField -> s -> String
@@ -441,7 +444,7 @@ bookChicago (Author   p) sm = needDot $ p_spec (rendPeople sm rendPersLFM'' p) s
 --bookChicago (Date _ _ y) sm = bookChicago (Year y) sm --APA doesn't care about the day or month
 --bookChicago (URLdate d m y)  _ = "accessed " ++ (comm $ unwords [show d, show m, show y])
 bookChicago p@(Pages  _) sm = bookAPA p sm
-bookChicago (Editor   p) sm = dot $ p_spec (foldlList $ map (flip spec sm . nameStr) p) sm ++ toPlural p " ed"
+bookChicago (Editor   p) sm = dot $ p_spec (foldlList $ map (spec sm . nameStr) p) sm ++ toPlural p " ed"
 bookChicago i sm = bookMLA i sm--Most items are rendered the same as MLA
 
 -- for article renderings
@@ -467,11 +470,11 @@ artclChicago i = bookChicago i
 
 rendPeople :: HasSymbolTable s => s -> (Person -> Sentence) -> People -> Spec
 rendPeople _ _ []  = S "N.a." -- "No authors given"
-rendPeople sm f people = foldlList $ map (flip spec sm . f) people --foldlList is in SentenceStructures.hs
+rendPeople sm f people = foldlList $ map (spec sm . f) people --foldlList is in SentenceStructures.hs
 
 rendPeople' :: HasSymbolTable s => s -> People -> Spec
 rendPeople' _ []  = S "N.a." -- "No authors given"
-rendPeople' sm people = foldlList $ map (flip spec sm . rendPers) (init people) ++  [spec (rendPersL $ last people) sm]
+rendPeople' sm people = foldlList $ map (spec sm . rendPers) (init people) ++  [spec sm (rendPersL $ last people)]
 
 foldlList :: [Spec] -> Spec
 foldlList []    = EmptyS

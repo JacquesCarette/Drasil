@@ -8,10 +8,10 @@ import Language.Drasil.Chunk.AssumpChunk
 import Language.Drasil.Expr.Extract
 import Language.Drasil.Chunk.Change (chng, chngType, ChngType(Likely))
 import Language.Drasil.Chunk.Concept (defn)
-import Language.Drasil.Spec
 import qualified Language.Drasil.Printing.LayoutObj as T
 import qualified Language.Drasil.Printing.AST as P
 import qualified Language.Drasil.Printing.Citation as P
+import Language.Drasil.Printing.Import (spec)
 import Language.Drasil.Chunk.Attribute (getShortName)
 import Language.Drasil.Chunk.Eq
 import Language.Drasil.Chunk.ExprRelat (relat)
@@ -29,24 +29,6 @@ import Language.Drasil.NounPhrase (phrase, titleize)
 import Language.Drasil.Reference
 import Language.Drasil.Unit (usymb)
 import Language.Drasil.Printing.Import (symbol,expr)
-
-spec :: HasSymbolTable ctx => ctx -> Sentence -> P.Spec
-  -- make sure these optimizations are clear
-spec sm (EmptyS :+: b) = spec sm b
-spec sm (a :+: EmptyS) = spec sm a
-spec sm (a :+: b)      = spec sm a P.:+: spec sm b
-spec _  (S s)          = P.S s
-spec _  (Sy s)         = P.Sy s
-spec _  (Sp s)         = P.Sp s
-spec _  (F f c)        = P.Acc f c
-spec _  (P s)          = P.E $ symbol s
-spec _  (Ref t r _)    = P.Ref t r (P.S r)
-spec sm (Quote q)      = P.Quote $ spec sm q
-spec _  EmptyS         = P.EmptyS
-spec sm (E e)          = P.E $ expr e sm
-
--- accent Grave  s = S $ "\\`{" ++ (s : "}")
--- accent Acute  s = S $ "\\'{" ++ (s : "}")
 
 makeDocument :: HasSymbolTable ctx => ctx -> Document -> T.Document
 makeDocument sm (Document title author sections) =

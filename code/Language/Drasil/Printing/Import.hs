@@ -1,4 +1,4 @@
-module Language.Drasil.Printing.Import(space,expr,symbol) where
+module Language.Drasil.Printing.Import(space,expr,symbol,spec) where
 
 import Language.Drasil.Expr (Expr(..), BinOp(..), UFunc(..), ArithOper(..),
     BoolOper(..), RTopology(..),
@@ -11,6 +11,7 @@ import qualified Language.Drasil.Chunk.SymbolForm as SF
 import Language.Drasil.ChunkDB (HasSymbolTable(..), symbLookup)
 import Language.Drasil.Symbol
 import Language.Drasil.Unicode (Special(Partial))
+import Language.Drasil.Spec (Sentence(..))
 
 import Control.Lens ((^.))
 import Language.Drasil.Space
@@ -190,12 +191,7 @@ pow sm a@(AssocA Mul _)  b = P.Row [P.Fenced P.Paren P.Paren (expr a sm), P.Sup 
 pow sm a@(BinaryOp Pow _ _)  b = P.Row [P.Fenced P.Paren P.Paren (expr a sm), P.Sup (expr b sm)]
 pow sm a                b = P.Row [expr a sm, P.Sup (expr b sm)]
 
-{-
-constraint :: (HasSymbolTable st, Quantity q) => st -> q -> Constraint -> P.Expr
-constraint st s (Range _ rr)          = renderRealInt st (SF.eqSymb s) rr
-constraint _  s (EnumeratedReal _ rr) = P.Row [symbol $ SF.eqSymb s, P.MO P.IsIn, space $ DiscreteD rr]
-constraint _  s (EnumeratedStr _ rr)  = P.Row [symbol $ SF.eqSymb s, P.MO P.IsIn, space $ DiscreteS rr]
--}
+-- | Print a RealInterval
 renderRealInt :: HasSymbolTable st => st -> Symbol -> RealInterval Expr Expr -> P.Expr
 renderRealInt st s (Bounded (Inc,a) (Inc,b)) = 
   P.Row [ expr a st, P.MO P.LEq, symbol s, P.MO P.LEq, expr b st]
@@ -209,3 +205,20 @@ renderRealInt st s (UpTo (Inc,a))    = P.Row [ symbol s, P.MO P.LEq, expr a st]
 renderRealInt st s (UpTo (Exc,a))    = P.Row [ symbol s, P.MO P.Lt, expr a st]
 renderRealInt st s (UpFrom (Inc,a))  = P.Row [ symbol s, P.MO P.GEq, expr a st]
 renderRealInt st s (UpFrom (Exc,a))  = P.Row [ symbol s, P.MO P.Gt, expr a st]
+
+
+-- | Translates Sentence to the Printing representation of Sentence ('Spec')
+spec :: HasSymbolTable s => s -> Sentence -> P.Spec
+  -- make sure these optimizations are clear
+spec sm (EmptyS :+: b) = spec sm b
+spec sm (a :+: EmptyS) = spec sm a
+spec sm (a :+: b)      = spec sm a P.:+: spec sm b
+spec _ (S s)           = P.S s
+spec _ (Sy s)          = P.Sy s
+spec _ (Sp s)          = P.Sp s
+spec _ (P s)           = P.E $ symbol s
+spec _ (F f c)         = P.Acc f c
+spec sm (Ref t r n)    = P.Ref t r $ spec sm n
+spec sm (Quote q)      = P.Quote $ spec sm q
+spec _  EmptyS         = P.EmptyS
+spec sm (E e)          = P.E $ expr e sm

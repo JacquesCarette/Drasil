@@ -40,17 +40,11 @@ spec (a :+: EmptyS) sm = spec a sm
 spec (a :+: b) sm   = spec a sm P.:+: spec b sm
 spec (Sp s)       _ = P.Sp s
 spec (P s)        _ = P.E $ P.Font P.Emph $ symbol s
-spec (F f s)     sm = spec (accent f s) sm
+spec (F f c)      _ = P.Acc f c
 spec (Ref t r n) sm = P.Ref t r (spec n sm)
 spec (Quote q) sm = P.Quote $ spec q sm -- P.S "&quot;" P.:+: spec q sm P.:+: P.S "&quot;"
 spec EmptyS     _ = P.EmptyS
 spec (E e)     sm = P.E $ P.Font P.Emph $ expr e sm
-
--- | Helper function for translating accented characters to
--- an HTML renderable form.
-accent :: Accent -> Char -> Sentence
-accent Grave  s = S $ '&' : s : "grave;" --Only works on vowels.
-accent Acute  s = S $ '&' : s : "acute;" --Only works on vowels.
 
 -- | Translates from Document to the HTML representation of Document
 makeDocument :: HasSymbolTable s => Document -> s -> H.Document

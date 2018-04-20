@@ -153,6 +153,10 @@ subscript, superscript :: D -> D -> D
 subscript a b = a <> (pure $ H.unders) <> br b
 superscript a b = a <> (pure $ H.hat) <> br b
 
+grave, acute :: Char -> D
+grave c = (pure $ text "\\`{") <> pure (TP.char c) <> (pure $ text "}")
+acute c = (pure $ text "\\'{") <> pure (TP.char c) <> (pure $ text "}")
+
 -- Macro / Command def'n --
 --TeX--
 srsComms, lpmComms, bullet, counter, ddefnum, ddref, colAw, colBw, arrayS

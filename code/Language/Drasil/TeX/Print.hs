@@ -232,6 +232,7 @@ needs HARDNL    = Text
 needs (Ref _ _ _) = Text
 needs (EmptyS)  = Text
 needs (Quote _) = Text
+needs (Acc _ _) = Text
 
 -- print all Spec through here
 spec :: Spec -> D
@@ -254,8 +255,10 @@ spec (Ref RT.LC _ r)     = lcref (spec r)
 spec (Ref RT.UC _ r)     = ucref (spec r)
 spec (Ref RT.Cite _ r)   = cite  (spec r)
 spec (Ref t _ r)         = ref (show t) (spec r)
-spec EmptyS      = empty
-spec (Quote q)   = quote $ spec q
+spec EmptyS              = empty
+spec (Quote q)           = quote $ spec q
+spec (Acc LS.Grave c)    = grave c
+spec (Acc LS.Acute c)    = acute c
 
 escapeChars :: Char -> String
 escapeChars '_' = "\\_"

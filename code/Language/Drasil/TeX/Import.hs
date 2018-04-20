@@ -38,21 +38,15 @@ spec sm (a :+: b)      = spec sm a P.:+: spec sm b
 spec _  (S s)          = P.S s
 spec _  (Sy s)         = P.Sy s
 spec _  (Sp s)         = P.Sp s
-spec sm (F f s)        = spec sm (accent f s)
+spec _  (F f c)        = P.Acc f c
 spec _  (P s)          = P.E $ symbol s
 spec _  (Ref t r _)    = P.Ref t r (P.S r)
 spec sm (Quote q)      = P.Quote $ spec sm q
 spec _  EmptyS         = P.EmptyS
 spec sm (E e)          = P.E $ expr e sm
 
--- decorate :: Decoration -> Sentence -> Sentence
--- decorate Hat    s = S "\\hat{" :+: s :+: S "}"
--- decorate Vector s = S "\\bf{" :+: s :+: S "}"
--- decorate Prime  s = s :+: S "'"
-
-accent :: Accent -> Char -> Sentence
-accent Grave  s = S $ "\\`{" ++ (s : "}")
-accent Acute  s = S $ "\\'{" ++ (s : "}")
+-- accent Grave  s = S $ "\\`{" ++ (s : "}")
+-- accent Acute  s = S $ "\\'{" ++ (s : "}")
 
 makeDocument :: HasSymbolTable ctx => ctx -> Document -> T.Document
 makeDocument sm (Document title author sections) =

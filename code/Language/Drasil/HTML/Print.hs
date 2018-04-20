@@ -11,7 +11,7 @@ import Language.Drasil.Printing.AST
 import Language.Drasil.Printing.Citation
 import Language.Drasil.Printing.LayoutObj
 import qualified Language.Drasil.Output.Formats as F
-import Language.Drasil.Spec (Sentence, sC, (+:+))
+import Language.Drasil.Spec (Sentence, sC, (+:+), Accent(..))
 import Language.Drasil.UnitLang
 
 import Language.Drasil.HTML.Helpers
@@ -89,6 +89,9 @@ p_spec HARDNL       _ = "<br />"
 p_spec (Ref _ r a) sm = reflink r (p_spec a sm)
 p_spec EmptyS       _ = ""
 p_spec (Quote q)   sm = "&quot;" ++ p_spec q sm ++ "&quot;"
+p_spec (Acc Grave c) _ = '&' : c : "grave;" --Only works on vowels.
+p_spec (Acc Acute c) _ = '&' : c : "acute;" --Only works on vowels.
+
 
 -- | Renders symbols for HTML document
 symbol :: Symbol -> String

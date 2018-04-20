@@ -132,7 +132,7 @@ makePairs (Data c) m = [
 makePairs (Theory c) m = [
   ("Number",      [H.Paragraph $ spec m (missingAcro (S "T") $ fmap S $ getA c)]),
   ("Label",       [H.Paragraph $ spec m (titleize $ c ^. term)]),
-  ("Equation",    [H.HDiv ["equation"] [H.EqnBlock (P.E (P.Font P.Emph $ expr (c ^. relat) m))]
+  ("Equation",    [H.HDiv ["equation"] [H.EqnBlock $ P.E $ expr (c ^. relat) m]
                   (P.EmptyS)]),
   ("Description", [H.Paragraph (spec m (c ^. defn))])
   ]
@@ -148,8 +148,8 @@ missingAcro _ (Just a) = S "<b>":+: a :+: S "</b>"
 -- | Translates the defining equation from a QDefinition to
 -- HTML's version of Sentence
 buildEqn :: HasSymbolTable s => QDefinition -> s -> P.Spec
-buildEqn c sm = P.E (P.Font P.Emph $ symbol (eqSymb c)) P.:+: P.S " = " P.:+:
-  P.E (P.Font P.Emph $ expr (c^.equat) sm)
+buildEqn c sm = P.E (symbol $ eqSymb c) P.:+: P.S " = " P.:+:
+  P.E (expr (c^.equat) sm)
 
 -- | Build descriptions in data defs based on required verbosity
 buildDDDescription :: HasSymbolTable s => QDefinition -> s -> P.Spec

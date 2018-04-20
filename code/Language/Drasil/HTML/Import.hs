@@ -4,10 +4,9 @@ import Control.Lens ((^.))
 import Data.Maybe (fromJust)
 
 import Language.Drasil.Expr (sy, ($=))
-import Language.Drasil.Spec (Sentence(S,(:+:)))
 import qualified Language.Drasil.Printing.AST as P
 import qualified Language.Drasil.Printing.Citation as P
-import qualified Language.Drasil.Printing.LayoutObj as H
+import qualified Language.Drasil.Printing.LayoutObj as T
 import Language.Drasil.Printing.Import (spec)
 
 import Language.Drasil.Chunk.AssumpChunk
@@ -30,53 +29,54 @@ import Language.Drasil.Misc (unit'2Contents)
 import Language.Drasil.NounPhrase (phrase, titleize)
 import Language.Drasil.Reference
 import Language.Drasil.Unit (usymb)
+import Language.Drasil.Spec (Sentence(S,(:+:)))
 import Language.Drasil.Printing.Import (expr,symbol)
 
 -- | Translates from Document to the HTML representation of Document
-makeDocument :: HasSymbolTable s => Document -> s -> H.Document
+makeDocument :: HasSymbolTable s => Document -> s -> T.Document
 makeDocument (Document title author sections) sm =
-  H.Document (spec sm title) (spec sm author) (createLayout sections sm)
+  T.Document (spec sm title) (spec sm author) (createLayout sections sm)
 
 -- | Translates from LayoutObj to the HTML representation of LayoutObj
-layout :: HasSymbolTable s => Int -> SecCons -> s -> H.LayoutObj
+layout :: HasSymbolTable s => Int -> SecCons -> s -> T.LayoutObj
 layout currDepth (Sub s) sm = sec (currDepth+1) s sm
 layout _         (Con c) sm = lay c sm
 
 -- | Helper function for creating sections as layout objects
-createLayout :: HasSymbolTable s => [Section] -> s -> [H.LayoutObj]
+createLayout :: HasSymbolTable s => [Section] -> s -> [T.LayoutObj]
 createLayout secs sm = map (flip (sec 0) sm) secs
 
 -- | Helper function for creating sections at the appropriate depth
-sec :: HasSymbolTable s => Int -> Section -> s -> H.LayoutObj
+sec :: HasSymbolTable s => Int -> Section -> s -> T.LayoutObj
 sec depth x@(Section title contents _) sm =
-  H.HDiv [(concat $ replicate depth "sub") ++ "section"]
-  ((H.Header (depth+2) (spec sm title) P.EmptyS):(map (flip (layout depth) sm) contents))
+  T.HDiv [(concat $ replicate depth "sub") ++ "section"]
+  ((T.Header (depth+2) (spec sm title) P.EmptyS):(map (flip (layout depth) sm) contents))
   (P.S (refAdd x))
 
 -- | Translates from Contents to the HTML Representation of LayoutObj.
 -- Called internally by layout.
-lay :: HasSymbolTable s => Contents -> s -> H.LayoutObj
-lay x@(Table hdr lls t b _) sm = H.Table ["table"]
+lay :: HasSymbolTable s => Contents -> s -> T.LayoutObj
+lay x@(Table hdr lls t b _) sm = T.Table ["table"]
   ((map (spec sm) hdr) : (map (map (spec sm)) lls)) (P.S (refAdd x)) b (spec sm t)
-lay (Paragraph c)       sm = H.Paragraph (spec sm c)
-lay (EqnBlock c _)      sm = H.HDiv ["equation"] [H.EqnBlock (P.E (P.Font P.Emph $ expr c sm))] (P.EmptyS)
+lay (Paragraph c)       sm = T.Paragraph (spec sm c)
+lay (EqnBlock c _)      sm = T.HDiv ["equation"] [T.EqnBlock (P.E (P.Font P.Emph $ expr c sm))] (P.EmptyS)
                               -- FIXME: Make equations referable
---lay (CodeBlock c)        = H.CodeBlock c
-lay x@(Definition c)    sm = H.Definition c (makePairs c sm) (P.S (refAdd x))
-lay (Enumeration cs)    sm = H.List $ makeL cs sm
-lay x@(Figure c f wp _) sm = H.Figure (P.S (refAdd x)) (spec sm c) f wp
-lay x@(Graph ps w h t _) sm = H.Graph (map (\(y,z) -> (spec sm y, spec sm z)) ps)
+--lay (CodeBlock c)        = T.CodeBlock c
+lay x@(Definition c)    sm = T.Definition c (makePairs c sm) (P.S (refAdd x))
+lay (Enumeration cs)    sm = T.List $ makeL cs sm
+lay x@(Figure c f wp _) sm = T.Figure (P.S (refAdd x)) (spec sm c) f wp
+lay x@(Graph ps w h t _) sm = T.Graph (map (\(y,z) -> (spec sm y, spec sm z)) ps)
                                w h (spec sm t) (P.S (refAdd x))
-lay x@(Requirement r)   sm = H.ALUR H.Requirement
+lay x@(Requirement r)   sm = T.ALUR T.Requirement
   (spec sm $ requires r) (P.S (refAdd x)) (spec sm (fromJust $ getShortName r))
-lay x@(Assumption a)    sm = H.ALUR H.Assumption
+lay x@(Assumption a)    sm = T.ALUR T.Assumption
   (spec sm (assuming a)) (P.S (refAdd x)) (spec sm (fromJust $ getShortName a))
-lay x@(Change lc) sm = H.ALUR
-  (if (chngType lc) == Likely then H.LikelyChange else H.UnlikelyChange)
+lay x@(Change lc) sm = T.ALUR
+  (if (chngType lc) == Likely then T.LikelyChange else T.UnlikelyChange)
   (spec sm (chng lc)) (P.S (refAdd x)) (spec sm (fromJust $ getShortName lc))
-lay (Defnt dtyp pairs rn) sm = H.Definition dtyp (layPairs pairs) (P.S rn)
+lay (Defnt dtyp pairs rn) sm = T.Definition dtyp (layPairs pairs) (P.S rn)
   where layPairs = map (\(x,y) -> (x, (map (\z -> lay z sm) y)))
-lay (Bib bib)           sm = H.Bib $ map (layCite sm) bib
+lay (Bib bib)           sm = T.Bib $ map (layCite sm) bib
 
 -- | For importing bibliography
 layCite :: HasSymbolTable s => s -> Citation -> P.Citation
@@ -121,20 +121,20 @@ item (Nested t s) sm = P.Nested (spec sm t) (makeL s sm)
 
 -- | Translates definitions
 -- (Data defs, General defs, Theoretical models, etc.)
-makePairs :: HasSymbolTable s => DType -> s -> [(String,[H.LayoutObj])]
+makePairs :: HasSymbolTable s => DType -> s -> [(String,[T.LayoutObj])]
 makePairs (Data c) m = [
-  ("Number",      [H.Paragraph $ spec m (missingAcro (S "DD") $ fmap S $ getA c)]),
-  ("Label",       [H.Paragraph $ spec m (titleize $ c ^. term)]),
-  ("Units",       [H.Paragraph $ spec m (unit'2Contents c)]),
-  ("Equation",    [H.HDiv ["equation"] [H.EqnBlock (buildEqn c m)] (P.EmptyS)]),
-  ("Description", [H.Paragraph (buildDDDescription c m)])
+  ("Number",      [T.Paragraph $ spec m (missingAcro (S "DD") $ fmap S $ getA c)]),
+  ("Label",       [T.Paragraph $ spec m (titleize $ c ^. term)]),
+  ("Units",       [T.Paragraph $ spec m (unit'2Contents c)]),
+  ("Equation",    [T.HDiv ["equation"] [T.EqnBlock (buildEqn c m)] (P.EmptyS)]),
+  ("Description", [T.Paragraph (buildDDDescription c m)])
   ]
 makePairs (Theory c) m = [
-  ("Number",      [H.Paragraph $ spec m (missingAcro (S "T") $ fmap S $ getA c)]),
-  ("Label",       [H.Paragraph $ spec m (titleize $ c ^. term)]),
-  ("Equation",    [H.HDiv ["equation"] [H.EqnBlock $ P.E $ expr (c ^. relat) m]
+  ("Number",      [T.Paragraph $ spec m (missingAcro (S "T") $ fmap S $ getA c)]),
+  ("Label",       [T.Paragraph $ spec m (titleize $ c ^. term)]),
+  ("Equation",    [T.HDiv ["equation"] [T.EqnBlock $ P.E $ expr (c ^. relat) m]
                   (P.EmptyS)]),
-  ("Description", [H.Paragraph (spec m (c ^. defn))])
+  ("Description", [T.Paragraph (spec m (c ^. defn))])
   ]
 makePairs General  _ = error "Not yet implemented"
 makePairs Instance _ = error "Not yet implemented"

@@ -63,26 +63,26 @@ lay sm (Paragraph c)          = T.Paragraph (spec sm c)
 lay sm (EqnBlock c _)         = T.HDiv ["equation"] [T.EqnBlock (P.E (expr c sm))] P.EmptyS
                               -- FIXME: Make equations referable
 lay sm x@(Definition c)       = T.Definition c (makePairs sm c) (P.S (refAdd x))
-lay sm (Enumeration cs)       = T.List $ makeL cs sm
+lay sm (Enumeration cs)       = T.List $ makeL sm cs
 lay sm x@(Figure c f wp _)    = T.Figure (P.S (refAdd x)) (spec sm c) f wp
-lay sm x@(Graph ps w h t _) = T.Graph (map (\(y,z) -> (spec sm y, spec sm z)) ps)
-                               w h (spec sm t) (P.S (refAdd x))
-lay sm x@(Requirement r)   = T.ALUR T.Requirement
-  (spec sm $ requires r) (P.S (refAdd x)) (spec sm (fromJust $ getShortName r))
-lay sm x@(Assumption a)    = T.ALUR T.Assumption
+lay sm x@(Requirement r)      = T.ALUR T.Requirement
+  (spec sm $ requires r) (P.S $ refAdd x) (spec sm (fromJust $ getShortName r))
+lay sm x@(Assumption a)       = T.ALUR T.Assumption
   (spec sm (assuming a)) (P.S (refAdd x)) (spec sm (fromJust $ getShortName a))
-lay sm x@(Change lc)       = T.ALUR
+lay sm x@(Change lc)          = T.ALUR
   (if (chngType lc) == Likely then T.LikelyChange else T.UnlikelyChange)
   (spec sm (chng lc)) (P.S (refAdd x)) (spec sm (fromJust $ getShortName lc))
-lay sm (Defnt dtyp pairs rn) = T.Definition dtyp (layPairs pairs) (P.S rn)
+lay sm x@(Graph ps w h t _)   = T.Graph (map (\(y,z) -> (spec sm y, spec sm z)) ps)
+                               w h (spec sm t) (P.S (refAdd x))
+lay sm (Defnt dtyp pairs rn)  = T.Definition dtyp (layPairs pairs) (P.S rn)
   where layPairs = map (\(x,y) -> (x, map (lay sm) y))
-lay sm (Bib bib)           = T.Bib $ map (layCite sm) bib
+lay sm (Bib bib)              = T.Bib $ map (layCite sm) bib
 
 -- | For importing bibliography
-layCite :: HasSymbolTable s => s -> Citation -> P.Citation
+layCite :: HasSymbolTable ctx => ctx -> Citation -> P.Citation
 layCite sm c = P.Cite (citeID c) (externRefT c) (map (layField sm) (fields c))
 
-layField :: HasSymbolTable s => s -> CiteField -> P.CiteField
+layField :: HasSymbolTable ctx => ctx -> CiteField -> P.CiteField
 layField sm (Address      s) = P.Address      $ spec sm s
 layField  _ (Author       p) = P.Author       p
 layField sm (BookTitle    s) = P.BookTitle    $ spec sm s
@@ -107,17 +107,17 @@ layField sm (HowPublished (URL  s)) = P.HowPublished (P.URL  $ spec sm s)
 layField sm (HowPublished (Verb s)) = P.HowPublished (P.Verb $ spec sm s)
 
 -- | Translates lists
-makeL :: HasSymbolTable s => ListType -> s -> P.ListType
-makeL (Bullet bs)      sm = P.Unordered   $ map (flip item sm) bs
-makeL (Numeric ns)     sm = P.Ordered     $ map (flip item sm) ns
-makeL (Simple ps)      sm = P.Simple      $ map (\(x,y) -> (spec sm x, item y sm)) ps
-makeL (Desc ps)        sm = P.Desc        $ map (\(x,y) -> (spec sm x, item y sm)) ps
-makeL (Definitions ps) sm = P.Definitions $ map (\(x,y) -> (spec sm x, item y sm)) ps
+makeL :: HasSymbolTable s => s -> ListType -> P.ListType
+makeL sm (Bullet bs)      = P.Unordered   $ map (flip item sm) bs
+makeL sm (Numeric ns)     = P.Ordered     $ map (flip item sm) ns
+makeL sm (Simple ps)      = P.Simple      $ map (\(x,y) -> (spec sm x, item y sm)) ps
+makeL sm (Desc ps)        = P.Desc        $ map (\(x,y) -> (spec sm x, item y sm)) ps
+makeL sm (Definitions ps) = P.Definitions $ map (\(x,y) -> (spec sm x, item y sm)) ps
 
 -- | Helper for translating list items
 item :: HasSymbolTable s => ItemType -> s -> P.ItemType
 item (Flat i)     sm = P.Flat $ spec sm i
-item (Nested t s) sm = P.Nested (spec sm t) (makeL s sm)
+item (Nested t s) sm = P.Nested (spec sm t) (makeL sm s)
 
 -- | Translates definitions
 -- (Data defs, General defs, Theoretical models, etc.)

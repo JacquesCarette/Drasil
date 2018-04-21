@@ -262,13 +262,13 @@ Creating a gaming physics library is a difficult task. Games need physics librar
 \subsubsection{Terminology and Definitions}
 \label{Sec:TermDefs}
 This subsection provides a list of terms that are used in the subsequent sections and their meaning, with the purpose of reducing ambiguity and making it easier to correctly understand the requirements
-\begin{enumerate}
+\begin{itemize}
 \item{Rigid body: A solid body in which deformation is neglected.}
 \item{Elasticity: Ratio of the relative velocities of two colliding objects after and before a collision.}
 \item{Centre of mass: The mean location of the distribution of mass of the object.}
 \item{Cartesian coordinate system: A coordinate system that specifies each point uniquely in a plane by a pair of numerical coordinates.}
 \item{Right-handed coordinate system: A coordinate system where the positive z-axis comes out of the screen.}
-\end{enumerate}
+\end{itemize}
 \subsubsection{Goal Statements}
 \label{Sec:GoalStmt}
 Given the inputs, the goal statements are:
@@ -626,16 +626,16 @@ This section lists the likely changes to be made to the physics game library.
 \section{Off-The-Shelf Solutions}
 \label{Sec:ExistingSolns}
 As mentioned in Section~\ref{Sec:ProbDesc}, there already exist free open source game physics libraries. Similar 2D physics libraries are:
-\begin{enumerate}
+\begin{itemize}
 \item{Box2D: http://box2d.org/}
 \item{Nape Physics Engine: http://napephys.com/}
-\end{enumerate}
+\end{itemize}
 Free open source 3D game physics libraries include:
-\begin{enumerate}
+\begin{itemize}
 \item{Bullet: http://bulletphysics.org/}
 \item{Open Dynamics Engine: http://www.ode.org/}
 \item{Newton Game Dynamics: http://newtondynamics.com/}
-\end{enumerate}
+\end{itemize}
 \section{Traceability Matrices and Graphs}
 \label{Sec:TraceMatrices}
 The purpose of the traceability matrices is to provide easy references on what has to be additionally modified if a certain component is changed. Every time a component is changed, the items in the column of that component that are marked with an ``X'' should be modified as well. Table~\ref{Table:TraceyReqGoalsOther} shows the dependencies of goal statements, requirements, instance models, and data constraints with each other. Table~\ref{Table:TraceyAssumpsOther} shows the dependencies of theoretical models, general definitions, data definitions, instance models, and on the assumptions. Table~\ref{Table:TraceyItemsSecs} shows the dependencies of theoretical models, general definitions, data definitions, and instance models on each other.

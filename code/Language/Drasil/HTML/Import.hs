@@ -85,39 +85,39 @@ layCite sm c = P.Cite (citeID c) (externRefT c) (map (layField sm) (fields c))
 layField :: HasSymbolTable ctx => ctx -> CiteField -> P.CiteField
 layField sm (Address      s) = P.Address      $ spec sm s
 layField  _ (Author       p) = P.Author       p
-layField sm (BookTitle    s) = P.BookTitle    $ spec sm s
-layField  _ (Chapter      i) = P.Chapter      i
-layField  _ (Edition      n) = P.Edition      n
-layField  _ (Editor       p) = P.Editor       p
+layField sm (BookTitle    b) = P.BookTitle    $ spec sm b
+layField  _ (Chapter      c) = P.Chapter      c
+layField  _ (Edition      e) = P.Edition      e
+layField  _ (Editor       e) = P.Editor       e
 layField sm (Institution  i) = P.Institution  $ spec sm i
-layField sm (Journal      s) = P.Journal      $ spec sm s
+layField sm (Journal      j) = P.Journal      $ spec sm j
 layField  _ (Month        m) = P.Month        m
-layField sm (Note         s) = P.Note         $ spec sm s
+layField sm (Note         n) = P.Note         $ spec sm n
 layField  _ (Number       n) = P.Number       n
-layField sm (Organization i) = P.Organization $ spec sm i
-layField  _ (Pages        n) = P.Pages        n
-layField sm (Publisher    s) = P.Publisher    $ spec sm s
+layField sm (Organization o) = P.Organization $ spec sm o
+layField  _ (Pages        p) = P.Pages        p
+layField sm (Publisher    p) = P.Publisher    $ spec sm p
 layField sm (School       s) = P.School       $ spec sm s
 layField sm (Series       s) = P.Series       $ spec sm s
-layField sm (Title        s) = P.Title        $ spec sm s
+layField sm (Title        t) = P.Title        $ spec sm t
 layField sm (Type         t) = P.Type         $ spec sm t
-layField  _ (Volume       n) = P.Volume       n
-layField  _ (Year         n) = P.Year         n
-layField sm (HowPublished (URL  s)) = P.HowPublished (P.URL  $ spec sm s)
-layField sm (HowPublished (Verb s)) = P.HowPublished (P.Verb $ spec sm s)
+layField  _ (Volume       v) = P.Volume       v
+layField  _ (Year         y) = P.Year         y
+layField sm (HowPublished (URL  u)) = P.HowPublished (P.URL  $ spec sm u)
+layField sm (HowPublished (Verb v)) = P.HowPublished (P.Verb $ spec sm v)
 
 -- | Translates lists
-makeL :: HasSymbolTable s => s -> ListType -> P.ListType
-makeL sm (Bullet bs)      = P.Unordered   $ map (flip item sm) bs
-makeL sm (Numeric ns)     = P.Ordered     $ map (flip item sm) ns
-makeL sm (Simple ps)      = P.Simple      $ map (\(x,y) -> (spec sm x, item y sm)) ps
-makeL sm (Desc ps)        = P.Desc        $ map (\(x,y) -> (spec sm x, item y sm)) ps
-makeL sm (Definitions ps) = P.Definitions $ map (\(x,y) -> (spec sm x, item y sm)) ps
+makeL :: HasSymbolTable ctx => ctx -> ListType -> P.ListType
+makeL sm (Bullet bs)      = P.Unordered   $ map (item sm) bs
+makeL sm (Numeric ns)     = P.Ordered     $ map (item sm) ns
+makeL sm (Simple ps)      = P.Simple      $ map (\(x,y) -> (spec sm x, item sm y)) ps
+makeL sm (Desc ps)        = P.Desc        $ map (\(x,y) -> (spec sm x, item sm y)) ps
+makeL sm (Definitions ps) = P.Definitions $ map (\(x,y) -> (spec sm x, item sm y)) ps
 
 -- | Helper for translating list items
-item :: HasSymbolTable s => ItemType -> s -> P.ItemType
-item (Flat i)     sm = P.Flat $ spec sm i
-item (Nested t s) sm = P.Nested (spec sm t) (makeL sm s)
+item :: HasSymbolTable ctx => ctx -> ItemType -> P.ItemType
+item sm (Flat i)     = P.Flat $ spec sm i
+item sm (Nested t s) = P.Nested (spec sm t) (makeL sm s)
 
 -- | Translates definitions
 -- (Data defs, General defs, Theoretical models, etc.)

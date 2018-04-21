@@ -365,8 +365,6 @@ eqnStyle b = if b then T.EqnBlock else T.Paragraph
 -- Printing's version of Sentence
 buildEqn :: HasSymbolTable ctx => ctx -> QDefinition -> P.Spec
 buildEqn sm c = P.E $ mkBOp sm P.Eq (sy c) (c^.equat)
-  -- P.E (symbol $ eqSymb c) P.:+: P.S " = " P.:+:
-  -- P.E (expr (c^.equat) sm)
 
 -- | Build descriptions in data defs based on required verbosity
 buildDDDescription :: HasSymbolTable ctx => ctx -> QDefinition -> P.Spec

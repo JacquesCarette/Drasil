@@ -29,6 +29,7 @@ import Language.Drasil.Misc (unit'2Contents)
 import Language.Drasil.NounPhrase (phrase, titleize)
 import Language.Drasil.Reference
 import Language.Drasil.Unit (usymb)
+import Language.Drasil.Spec (Sentence(S,(:+:)))
 import Language.Drasil.Printing.Import (symbol,expr)
 
 -- | Translates from Document to the Printing representation of Document
@@ -105,6 +106,7 @@ layField  _ (Year         y) = P.Year         y
 layField sm (HowPublished (URL  u)) = P.HowPublished (P.URL  $ spec sm u)
 layField sm (HowPublished (Verb v)) = P.HowPublished (P.Verb $ spec sm v)
 
+-- | Translates lists
 makeL :: HasSymbolTable ctx => ctx -> ListType -> P.ListType
 makeL sm (Bullet bs)      = P.Unordered   $ map (item sm) bs
 makeL sm (Numeric ns)     = P.Ordered     $ map (item sm) ns
@@ -112,20 +114,23 @@ makeL sm (Simple ps)      = P.Simple      $ map (\(x,y) -> (spec sm x, item sm y
 makeL sm (Desc ps)        = P.Desc        $ map (\(x,y) -> (spec sm x, item sm y)) ps
 makeL sm (Definitions ps) = P.Definitions $ map (\(x,y) -> (spec sm x, item sm y)) ps
 
+-- | Helper for translating list items
 item :: HasSymbolTable ctx => ctx -> ItemType -> P.ItemType
-item sm (Flat i)     = P.Flat   (spec sm i)
+item sm (Flat i)     = P.Flat $ spec sm i
 item sm (Nested t s) = P.Nested (spec sm t) (makeL sm s)
 
+-- | Translates definitions
+-- (Data defs, General defs, Theoretical models, etc.)
 makePairs :: HasSymbolTable ctx => ctx -> DType -> [(String,[T.LayoutObj])]
 makePairs m (Data c) = [
   ("Label",       [T.Paragraph $ spec m (titleize $ c ^. term)]),
   ("Units",       [T.Paragraph $ spec m (unit'2Contents c)]),
-  ("Equation",    [eqnStyle numberedDDEquations  $ buildEqn m c]),
+  ("Equation",    [T.HDiv ["equation"] [eqnStyle numberedDDEquations $ buildEqn m c] P.EmptyS]),
   ("Description", [T.Paragraph $ buildDDDescription m c])
   ]
 makePairs m (Theory c) = [
   ("Label",       [T.Paragraph $ spec m (titleize $ c ^. term)]),
-  ("Equation",    [eqnStyle numberedTMEquations $ P.E (expr (c ^. relat) m)]),
+  ("Equation",    [T.HDiv ["equation"] [eqnStyle numberedTMEquations $ P.E (expr (c ^. relat) m)] P.EmptyS]),
   ("Description", [T.Paragraph (spec m (c ^. defn))])
   ]
 makePairs _ General  = error "Not yet implemented"
@@ -137,18 +142,21 @@ makePairs _ DD       = error "Not yet implemented"
 eqnStyle :: Bool -> T.Contents -> T.LayoutObj
 eqnStyle b = if b then T.EqnBlock else T.Paragraph
 
+-- | Translates the defining equation from a QDefinition to
+-- Printing's version of Sentence
 buildEqn :: HasSymbolTable ctx => ctx -> QDefinition -> P.Spec
 buildEqn sm c = P.E (symbol $ eqSymb c) P.:+: P.S " = " P.:+:
   P.E (expr (c^.equat) sm)
 
--- Build descriptions in data defs based on required verbosity
+-- | Build descriptions in data defs based on required verbosity
 buildDDDescription :: HasSymbolTable ctx => ctx -> QDefinition -> P.Spec
-buildDDDescription m c = descLines m
-  (if verboseDDDescription then vars (sy c $= c^.equat) m else [])
+buildDDDescription m c = descLines m $
+  if verboseDDDescription then vars (sy c $= c^.equat) m else []
 
+-- | Helper for building each line of the description of a data def
 descLines :: (HasSymbolTable ctx, Quantity q) => ctx -> [q] -> P.Spec
 descLines _ []      = error "No chunks to describe"
-descLines m (vc:[]) = (P.E (symbol $ eqSymb vc) P.:+:
+descLines m (vc:[]) = (P.E $ symbol $ eqSymb vc) P.:+:
   (P.S " is the " P.:+: (spec m (phrase $ vc ^. term)) P.:+:
-   maybe (P.S "") (\a -> P.S " (" P.:+: P.Sy (a ^. usymb) P.:+: P.S ")") (getUnitLup vc m)))
+   maybe (P.S "") (\a -> P.S " (" P.:+: P.Sy (a ^. usymb) P.:+: P.S ")") (getUnitLup vc m))
 descLines m (vc:vcs) = descLines m (vc:[]) P.:+: P.HARDNL P.:+: descLines m vcs

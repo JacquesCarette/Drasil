@@ -121,19 +121,16 @@ item sm (Nested t s) = P.Nested (spec sm t) (makeL sm s)
 
 -- | Translates definitions
 -- (Data defs, General defs, Theoretical models, etc.)
-makePairs :: HasSymbolTable s => s -> DType -> [(String,[T.LayoutObj])]
+makePairs :: HasSymbolTable ctx => ctx -> DType -> [(String,[T.LayoutObj])]
 makePairs m (Data c) = [
-  ("Number",      [T.Paragraph $ spec m (missingAcro (S "DD") $ fmap S $ getA c)]),
   ("Label",       [T.Paragraph $ spec m (titleize $ c ^. term)]),
   ("Units",       [T.Paragraph $ spec m (unit'2Contents c)]),
-  ("Equation",    [T.HDiv ["equation"] [T.EqnBlock (buildEqn c m)] (P.EmptyS)]),
-  ("Description", [T.Paragraph (buildDDDescription c m)])
+  ("Equation",    [T.HDiv ["equation"] [eqnStyle numberedDDEquations $ buildEqn m c] P.EmptyS]),
+  ("Description", [T.Paragraph $ buildDDDescription m c])
   ]
 makePairs m (Theory c) = [
-  ("Number",      [T.Paragraph $ spec m (missingAcro (S "T") $ fmap S $ getA c)]),
   ("Label",       [T.Paragraph $ spec m (titleize $ c ^. term)]),
-  ("Equation",    [T.HDiv ["equation"] [T.EqnBlock $ P.E $ expr (c ^. relat) m]
-                  (P.EmptyS)]),
+  ("Equation",    [T.HDiv ["equation"] [eqnStyle numberedTMEquations $ P.E (expr (c ^. relat) m)] P.EmptyS]),
   ("Description", [T.Paragraph (spec m (c ^. defn))])
   ]
 makePairs _ General  = error "Not yet implemented"
@@ -141,27 +138,26 @@ makePairs _ Instance = error "Not yet implemented"
 makePairs _ TM       = error "Not yet implemented"
 makePairs _ DD       = error "Not yet implemented"
 
-missingAcro :: Sentence -> Maybe Sentence -> Sentence
-missingAcro dflt Nothing = S "<b>":+: dflt :+: S "</b>"
-missingAcro _ (Just a) = S "<b>":+: a :+: S "</b>"
+-- Toggle equation style
+eqnStyle :: Bool -> T.Contents -> T.LayoutObj
+eqnStyle b = if b then T.EqnBlock else T.Paragraph
 
 -- | Translates the defining equation from a QDefinition to
--- HTML's version of Sentence
-buildEqn :: HasSymbolTable s => QDefinition -> s -> P.Spec
-buildEqn c sm = P.E (symbol $ eqSymb c) P.:+: P.S " = " P.:+:
+-- Printing's version of Sentence
+buildEqn :: HasSymbolTable ctx => ctx -> QDefinition -> P.Spec
+buildEqn sm c = P.E (symbol $ eqSymb c) P.:+: P.S " = " P.:+:
   P.E (expr (c^.equat) sm)
 
 -- | Build descriptions in data defs based on required verbosity
-buildDDDescription :: HasSymbolTable s => QDefinition -> s -> P.Spec
-buildDDDescription c m = descLines
-  (if verboseDDDescription then (vars (sy c $= c^.equat) m) else []) m
+buildDDDescription :: HasSymbolTable ctx => ctx -> QDefinition -> P.Spec
+buildDDDescription m c = descLines m $
+  if verboseDDDescription then vars (sy c $= c^.equat) m else []
 
 -- | Helper for building each line of the description of a data def
-descLines :: (HasSymbolTable s, Quantity q) => [q] -> s -> P.Spec
-descLines []    _   = error "No chunks to describe"
-descLines (vc:[]) m = (P.E $ P.Font P.Emph $ symbol (eqSymb vc)) P.:+:
+descLines :: (HasSymbolTable ctx, Quantity q) => ctx -> [q] -> P.Spec
+descLines _ []      = error "No chunks to describe"
+descLines m (vc:[]) = (P.E $ symbol $ eqSymb vc) P.:+:
   (P.S " is the " P.:+: (spec m (phrase $ vc ^. term)) P.:+:
-   unWrp (getUnitLup vc m))
-  where unWrp (Just a) = P.S " (" P.:+: P.Sy (a ^. usymb) P.:+: P.S ")"
-        unWrp Nothing  = P.S ""
-descLines (vc:vcs) m = descLines (vc:[]) m P.:+: P.HARDNL P.:+: descLines vcs m
+   maybe (P.S "") (\a -> P.S " (" P.:+: P.Sy (a ^. usymb) P.:+: P.S ")") (getUnitLup vc m))
+
+descLines m (vc:vcs) = descLines m (vc:[]) P.:+: P.HARDNL P.:+: descLines m vcs

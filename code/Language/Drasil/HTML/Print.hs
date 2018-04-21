@@ -33,19 +33,19 @@ data OpenClose = Open | Close
 --FIXME? Use Doc in place of Strings for p_spec/title_spec
 
 -- | Generate an HTML document from a Drasil 'Document'
-genHTML :: HasSymbolTable s => F.Filename -> L.Document -> s -> Doc
-genHTML fn doc sm = build fn (makeDocument sm doc) sm
+genHTML :: HasSymbolTable ctx => ctx -> F.Filename -> L.Document -> Doc
+genHTML sm fn doc = build sm fn (makeDocument sm doc)
 
 -- | Build the HTML Document, called by genHTML
-build :: HasSymbolTable s => String -> Document -> s -> Doc
-build fn (Document t a c) sm =
+build :: HasSymbolTable s => s -> String -> Document -> Doc
+build s fn (Document t a c) =
   text ( "<!DOCTYPE html PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\""++
           " \"http://www.w3.org/TR/html4/loose.dtd\">" ++ "\n" ++
           "<script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/"++
           "2.7.0/MathJax.js?config=TeX-MML-AM_CHTML'></script>") $$
-  html (head_tag ((linkCSS fn) $$ (title (text (title_spec t sm)))) $$
-  body (article_title (text (p_spec t sm)) $$ author (text (p_spec a sm))
-  $$ print c sm
+  html (head_tag ((linkCSS fn) $$ (title (text (title_spec t s)))) $$
+  body (article_title (text (p_spec t s)) $$ author (text (p_spec a s))
+  $$ print c s
   ))
 
 -- | Helper for rendering LayoutObjects into HTML

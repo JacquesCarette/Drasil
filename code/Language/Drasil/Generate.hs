@@ -43,7 +43,7 @@ prntDoc' :: (HasSymbolTable s, Show a) => a -> String -> Format -> Document -> s
 prntDoc' dt' fn format body' sm = do
   createDirectoryIfMissing False $ show dt'
   outh <- openFile (show dt' ++ "/" ++ fn ++ getExt format) WriteMode
-  hPutStrLn outh $ render $ writeDoc format fn body' sm
+  hPutStrLn outh $ render $ writeDoc sm format fn body'
   hClose outh
   where getExt TeX  = ".tex"
         getExt HTML = ".html"
@@ -57,9 +57,9 @@ prntMake ds@(DocSpec dt _) =
      hClose outh
 
 -- | Renders the documents
-writeDoc :: HasSymbolTable s => Format -> Filename -> Document -> s -> Doc
-writeDoc TeX  _  doc s = genTeX doc s
-writeDoc HTML fn doc s = genHTML fn doc s
+writeDoc :: HasSymbolTable s => s -> Format -> Filename -> Document -> Doc
+writeDoc s TeX  _  doc = genTeX doc s
+writeDoc s HTML fn doc = genHTML s fn doc
 writeDoc _    _  _   _ = error "we can only write TeX/HTML (for now)"
 
 -- | Calls the code generator

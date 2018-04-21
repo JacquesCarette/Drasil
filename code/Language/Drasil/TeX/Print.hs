@@ -11,7 +11,7 @@ import Control.Arrow (second)
 import Language.Drasil.Printing.AST
 import Language.Drasil.Printing.Citation
 import Language.Drasil.Printing.LayoutObj
-import qualified Language.Drasil.TeX.Import as I
+import qualified Language.Drasil.Printing.Import as I
 import qualified Language.Drasil.Spec as LS
 import qualified Language.Drasil.RefTypes as RT
 import Language.Drasil.UnitLang
@@ -521,9 +521,9 @@ showBibTeX  _ (HowPublished (URL  u)) =
 showBibTeX  _ (HowPublished (Verb v)) = showField "howpublished" v
 
 --showBibTeX sm (Author p@(Person {_convention=Mono}:_)) = showField "author"
-  -- (I.spec sm (rendPeople p)) :+: S ",\n" :+:
-  -- showField "sortkey" (I.spec sm (rendPeople p))
--- showBibTeX sm (Author    p) = showField "author" $ I.spec sm (rendPeople p)
+  -- (LS.spec sm (rendPeople p)) :+: S ",\n" :+:
+  -- showField "sortkey" (LS.spec sm (rendPeople p))
+-- showBibTeX sm (Author    p) = showField "author" $ LS.spec sm (rendPeople p)
 
 showField :: String -> Spec -> Spec
 showField f s = S f :+: S "={" :+: s :+: S "}"

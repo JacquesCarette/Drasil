@@ -74,11 +74,9 @@ library
     , Language.Drasil.Code.CodeGeneration
     , Language.Drasil.Code.Imperative.Parsers.ConfigParser
     , Language.Drasil.HTML.Helpers
-    , Language.Drasil.HTML.Import
     , Language.Drasil.HTML.Print
     , Language.Drasil.HTML.Monad
     , Language.Drasil.TeX.Helpers
-    , Language.Drasil.TeX.Import
     , Language.Drasil.TeX.Print
     , Language.Drasil.TeX.Monad
     , Language.Drasil.TeX.Preamble

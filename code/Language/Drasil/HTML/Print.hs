@@ -6,7 +6,7 @@ import Text.PrettyPrint hiding (render, quotes, Str)
 import Numeric (showFFloat)
 import Control.Arrow (second)
 
-import Language.Drasil.HTML.Import (makeDocument)
+import Language.Drasil.Printing.Import (makeDocument)
 import Language.Drasil.Printing.AST
 import Language.Drasil.Printing.Citation
 import Language.Drasil.Printing.LayoutObj

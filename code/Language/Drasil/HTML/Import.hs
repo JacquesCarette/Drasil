@@ -52,20 +52,19 @@ sec sm depth x@(Section title contents _) =
   let ref = P.S (refAdd x) in
   T.HDiv [(concat $ replicate depth "sub") ++ "section"]
   (T.Header depth (spec sm title) ref :
-  map (layout sm depth) contents) ref
+   map (layout sm depth) contents) ref
 
--- | Translates from Contents to the HTML Representation of LayoutObj.
+-- | Translates from Contents to the Printing Representation of LayoutObj.
 -- Called internally by layout.
 lay :: HasSymbolTable ctx => ctx -> Contents -> T.LayoutObj
 lay sm x@(Table hdr lls t b _) = T.Table ["table"]
   ((map (spec sm) hdr) : (map (map (spec sm)) lls)) (P.S (refAdd x)) b (spec sm t)
-lay sm (Paragraph c)       = T.Paragraph (spec sm c)
-lay sm (EqnBlock c _)      = T.HDiv ["equation"] [T.EqnBlock (P.E (P.Font P.Emph $ expr c sm))] (P.EmptyS)
+lay sm (Paragraph c)          = T.Paragraph (spec sm c)
+lay sm (EqnBlock c _)         = T.HDiv ["equation"] [T.EqnBlock (P.E (P.Font P.Emph $ expr c sm))] (P.EmptyS)
                               -- FIXME: Make equations referable
---lay (CodeBlock c)        = T.CodeBlock c
-lay sm x@(Definition c)    = T.Definition c (makePairs c sm) (P.S (refAdd x))
-lay sm (Enumeration cs)    = T.List $ makeL cs sm
-lay sm x@(Figure c f wp _) = T.Figure (P.S (refAdd x)) (spec sm c) f wp
+lay sm x@(Definition c)       = T.Definition c (makePairs c sm) (P.S (refAdd x))
+lay sm (Enumeration cs)       = T.List $ makeL cs sm
+lay sm x@(Figure c f wp _)    = T.Figure (P.S (refAdd x)) (spec sm c) f wp
 lay sm x@(Graph ps w h t _) = T.Graph (map (\(y,z) -> (spec sm y, spec sm z)) ps)
                                w h (spec sm t) (P.S (refAdd x))
 lay sm x@(Requirement r)   = T.ALUR T.Requirement

@@ -59,7 +59,8 @@ lay :: HasSymbolTable ctx => ctx -> Contents -> T.LayoutObj
 lay sm x@(Table hdr lls t b _) = T.Table ["table"]
   ((map (spec sm) hdr) : (map (map (spec sm)) lls)) (P.S (refAdd x)) b (spec sm t)
 lay sm (Paragraph c)          = T.Paragraph (spec sm c)
-lay sm (EqnBlock c _)         = T.EqnBlock (P.E (expr c sm))
+lay sm (EqnBlock c _)         = T.HDiv ["equation"] [T.EqnBlock (P.E (expr c sm))] P.EmptyS
+                              -- FIXME: Make equations referable
 lay sm x@(Definition c)       = T.Definition c (makePairs sm c) (P.S (refAdd x))
 lay sm (Enumeration cs)       = T.List $ makeL sm cs
 lay sm x@(Figure c f wp _)    = T.Figure (P.S (refAdd x)) (spec sm c) f wp

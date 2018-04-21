@@ -60,9 +60,9 @@ lay :: HasSymbolTable ctx => ctx -> Contents -> T.LayoutObj
 lay sm x@(Table hdr lls t b _) = T.Table ["table"]
   ((map (spec sm) hdr) : (map (map (spec sm)) lls)) (P.S (refAdd x)) b (spec sm t)
 lay sm (Paragraph c)          = T.Paragraph (spec sm c)
-lay sm (EqnBlock c _)         = T.HDiv ["equation"] [T.EqnBlock (P.E (P.Font P.Emph $ expr c sm))] (P.EmptyS)
+lay sm (EqnBlock c _)         = T.HDiv ["equation"] [T.EqnBlock (P.E (expr c sm))] P.EmptyS
                               -- FIXME: Make equations referable
-lay sm x@(Definition c)       = T.Definition c (makePairs c sm) (P.S (refAdd x))
+lay sm x@(Definition c)       = T.Definition c (makePairs sm c) (P.S (refAdd x))
 lay sm (Enumeration cs)       = T.List $ makeL cs sm
 lay sm x@(Figure c f wp _)    = T.Figure (P.S (refAdd x)) (spec sm c) f wp
 lay sm x@(Graph ps w h t _) = T.Graph (map (\(y,z) -> (spec sm y, spec sm z)) ps)
@@ -121,25 +121,25 @@ item (Nested t s) sm = P.Nested (spec sm t) (makeL s sm)
 
 -- | Translates definitions
 -- (Data defs, General defs, Theoretical models, etc.)
-makePairs :: HasSymbolTable s => DType -> s -> [(String,[T.LayoutObj])]
-makePairs (Data c) m = [
+makePairs :: HasSymbolTable s => s -> DType -> [(String,[T.LayoutObj])]
+makePairs m (Data c) = [
   ("Number",      [T.Paragraph $ spec m (missingAcro (S "DD") $ fmap S $ getA c)]),
   ("Label",       [T.Paragraph $ spec m (titleize $ c ^. term)]),
   ("Units",       [T.Paragraph $ spec m (unit'2Contents c)]),
   ("Equation",    [T.HDiv ["equation"] [T.EqnBlock (buildEqn c m)] (P.EmptyS)]),
   ("Description", [T.Paragraph (buildDDDescription c m)])
   ]
-makePairs (Theory c) m = [
+makePairs m (Theory c) = [
   ("Number",      [T.Paragraph $ spec m (missingAcro (S "T") $ fmap S $ getA c)]),
   ("Label",       [T.Paragraph $ spec m (titleize $ c ^. term)]),
   ("Equation",    [T.HDiv ["equation"] [T.EqnBlock $ P.E $ expr (c ^. relat) m]
                   (P.EmptyS)]),
   ("Description", [T.Paragraph (spec m (c ^. defn))])
   ]
-makePairs General  _ = error "Not yet implemented"
-makePairs Instance _ = error "Not yet implemented"
-makePairs TM _       = error "Not yet implemented"
-makePairs DD _       = error "Not yet implemented"
+makePairs _ General  = error "Not yet implemented"
+makePairs _ Instance = error "Not yet implemented"
+makePairs _ TM       = error "Not yet implemented"
+makePairs _ DD       = error "Not yet implemented"
 
 missingAcro :: Sentence -> Maybe Sentence -> Sentence
 missingAcro dflt Nothing = S "<b>":+: dflt :+: S "</b>"

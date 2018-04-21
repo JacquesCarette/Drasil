@@ -15,7 +15,7 @@ import Language.Drasil.Chunk.Change (chng, chngType, ChngType(Likely))
 import Language.Drasil.Chunk.Concept (defn)
 import Language.Drasil.Chunk.Eq
 import Language.Drasil.Chunk.ExprRelat (relat)
-import Language.Drasil.Chunk.NamedIdea (term, getA)
+import Language.Drasil.Chunk.NamedIdea (term)
 import Language.Drasil.Chunk.Quantity (Quantity(..))
 import Language.Drasil.Chunk.SymbolForm (eqSymb)
 import Language.Drasil.ChunkDB (getUnitLup, HasSymbolTable(..))
@@ -29,7 +29,6 @@ import Language.Drasil.Misc (unit'2Contents)
 import Language.Drasil.NounPhrase (phrase, titleize)
 import Language.Drasil.Reference
 import Language.Drasil.Unit (usymb)
-import Language.Drasil.Spec (Sentence(S,(:+:)))
 import Language.Drasil.Printing.Import (symbol,expr)
 
 -- | Translates from Document to the Printing representation of Document
@@ -52,7 +51,7 @@ sec sm depth x@(Section title contents _) =
   let ref = P.S (refAdd x) in
   T.HDiv [(concat $ replicate depth "sub") ++ "section"]
   (T.Header depth (spec sm title) ref :
-   map (layout sm depth) contents) P.EmptyS
+   map (layout sm depth) contents) ref
 
 -- | Translates from Contents to the Printing Representation of LayoutObj.
 -- Called internally by layout.

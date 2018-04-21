@@ -605,7 +605,7 @@ Label & Weight
 \\ \midrule \\
 Units & N
 \\ \midrule \\
-Equation & $W$ = $b_{i} \begin{cases}
+Equation & $W=b_{i} \begin{cases}
 \left({y_{us,i}}-{y_{slip,i}}\right) {\gamma{}_{Sat}}, & {y_{wt,i}}\geq{}{y_{us,i}}\\
 \left({y_{us,i}}-{y_{wt,i}}\right) \gamma{}+\left({y_{wt,i}}-{y_{slip,i}}\right) {\gamma{}_{Sat}}, & {y_{us,i}}>{y_{wt,i}}>{y_{slip,i}}\\
 \left({y_{us,i}}-{y_{slip,i}}\right) \gamma{}, & {y_{wt,i}}\leq{}{y_{slip,i}}
@@ -625,7 +625,7 @@ Label & Base Hydrostatic Force
 \\ \midrule \\
 Units & N
 \\ \midrule \\
-Equation & ${U_{b}}$ = ${\ell{}_{b,i}} \begin{cases}
+Equation & ${U_{b}}={\ell{}_{b,i}} \begin{cases}
 \left({y_{wt,i}}-{y_{slip,i}}\right) {\gamma{}_{w}}, & {y_{wt,i}}>{y_{slip,i}}\\
 0, & {y_{wt,i}}\leq{}{y_{slip,i}}
 \end{cases}$
@@ -644,7 +644,7 @@ Label & Surface Hydrostatic Force
 \\ \midrule \\
 Units & N
 \\ \midrule \\
-Equation & ${U_{t}}$ = ${\ell{}_{s,i}} \begin{cases}
+Equation & ${U_{t}}={\ell{}_{s,i}} \begin{cases}
 \left({y_{wt,i}}-{y_{us,i}}\right) {\gamma{}_{w}}, & {y_{wt,i}}>{y_{us,i}}\\
 0, & {y_{wt,i}}\leq{}{y_{us,i}}
 \end{cases}$
@@ -663,7 +663,7 @@ Label & Interslice Water Force
 \\ \midrule \\
 Units & N
 \\ \midrule \\
-Equation & $H$ = $\begin{cases}
+Equation & $H=\begin{cases}
 \frac{\left({y_{us,i}}-{y_{slip,i}}\right)^{2}}{2} {\gamma{}_{Sat}}+\left({y_{wt,i}}-{y_{us,i}}\right)^{2} {\gamma{}_{Sat}}, & {y_{wt,i}}\geq{}{y_{us,i}}\\
 \frac{\left({y_{wt,i}}-{y_{slip,i}}\right)^{2}}{2} {\gamma{}_{Sat}}, & {y_{us,i}}>{y_{wt,i}}>{y_{slip,i}}\\
 0, & {y_{wt,i}}\leq{}{y_{slip,i}}
@@ -683,7 +683,7 @@ Label & Angle
 \\ \midrule \\
 Units & ${}^{\circ}$
 \\ \midrule \\
-Equation & $\alpha{}$ = $\frac{{y_{slip,i}}-{y_{slip,i-1}}}{{x_{slip,i}}-{x_{slip,i-1}}}$
+Equation & $\alpha{}=\frac{{y_{slip,i}}-{y_{slip,i-1}}}{{x_{slip,i}}-{x_{slip,i-1}}}$
 \\ \midrule \\
 Description & $\alpha{}$ is the angle (${}^{\circ}$)\newline${y_{slip}}$ is the y ordinate (m)\newline$i$ is the index\newline${x_{slip}}$ is the x ordinate (m)
 \\ \bottomrule \end{tabular}
@@ -699,7 +699,7 @@ Label & Angle
 \\ \midrule \\
 Units & ${}^{\circ}$
 \\ \midrule \\
-Equation & $\beta{}$ = $\frac{{y_{us,i}}-{y_{us,i-1}}}{{x_{us,i}}-{x_{us,i-1}}}$
+Equation & $\beta{}=\frac{{y_{us,i}}-{y_{us,i-1}}}{{x_{us,i}}-{x_{us,i-1}}}$
 \\ \midrule \\
 Description & $\beta{}$ is the angle (${}^{\circ}$)\newline${y_{us}}$ is the y ordinate (m)\newline$i$ is the index\newline${x_{us}}$ is the x ordinate (m)
 \\ \bottomrule \end{tabular}
@@ -715,7 +715,7 @@ Label & Base Width of a Slice
 \\ \midrule \\
 Units & m
 \\ \midrule \\
-Equation & $b$ = ${x_{slip,i}}-{x_{slip,i-1}}$
+Equation & $b={x_{slip,i}}-{x_{slip,i-1}}$
 \\ \midrule \\
 Description & $b$ is the base width of a slice (m)\newline${x_{slip}}$ is the x ordinate (m)\newline$i$ is the index
 \\ \bottomrule \end{tabular}
@@ -731,7 +731,7 @@ Label & Total Base Length of a Slice
 \\ \midrule \\
 Units & m
 \\ \midrule \\
-Equation & ${\ell{}_{b}}$ = $b_{i} \sec\left(\alpha{}_{i}\right)$
+Equation & ${\ell{}_{b}}=b_{i} \sec\left(\alpha{}_{i}\right)$
 \\ \midrule \\
 Description & ${\ell{}_{b}}$ is the total base length of a slice (m)\newline$b$ is the base width of a slice (m)\newline$i$ is the index\newline$\alpha{}$ is the angle (${}^{\circ}$)
 \\ \bottomrule \end{tabular}
@@ -747,7 +747,7 @@ Label & Length of an Interslice Surface
 \\ \midrule \\
 Units & m
 \\ \midrule \\
-Equation & ${\ell{}_{s}}$ = $b_{i} \sec\left(\beta{}_{i}\right)$
+Equation & ${\ell{}_{s}}=b_{i} \sec\left(\beta{}_{i}\right)$
 \\ \midrule \\
 Description & ${\ell{}_{s}}$ is the length of an interslice surface (m)\newline$b$ is the base width of a slice (m)\newline$i$ is the index\newline$\beta{}$ is the angle (${}^{\circ}$)
 \\ \bottomrule \end{tabular}
@@ -763,7 +763,7 @@ Label & Earthquake Load Factor
 \\ \midrule \\
 Units & Unitless
 \\ \midrule \\
-Equation & ${K_{c}}$ = ${K_{c}} W_{i}$
+Equation & ${K_{c}}={K_{c}} W_{i}$
 \\ \midrule \\
 Description & ${K_{c}}$ is the earthquake load factor\newline$W$ is the weight (N)\newline$i$ is the index
 \\ \bottomrule \end{tabular}
@@ -779,7 +779,7 @@ Label & Imposed Surface Load
 \\ \midrule \\
 Units & N
 \\ \midrule \\
-Equation & $Q$ = $Q_{i} \omega{}_{i}$
+Equation & $Q=Q_{i} \omega{}_{i}$
 \\ \midrule \\
 Description & $Q$ is the imposed surface load (N)\newline$i$ is the index\newline$\omega{}$ is the angle (${}^{\circ}$)
 \\ \bottomrule \end{tabular}
@@ -795,7 +795,7 @@ Label & Interslice Shear Force
 \\ \midrule \\
 Units & N
 \\ \midrule \\
-Equation & $X$ = $\lambda{} f_{i} E_{i}$
+Equation & $X=\lambda{} f_{i} E_{i}$
 \\ \midrule \\
 Description & $X$ is the interslice shear force (N)\newline$\lambda{}$ is the interslice normal/shear force ratio\newline$f$ is the scaling function\newline$i$ is the index\newline$E$ is the interslice normal force (N)
 \\ \bottomrule \end{tabular}
@@ -811,7 +811,7 @@ Label & Resistive Shear Force
 \\ \midrule \\
 Units & N
 \\ \midrule \\
-Equation & $R$ = $\left(\left(W_{i}+{U_{t,i}} \cos\left(\beta{}_{i}\right)+Q_{i} \cos\left(\omega{}_{i}\right)\right) \cos\left(\alpha{}_{i}\right)+\left(-{K_{c}} W_{i}-{\Delta{}H}_{i}+{U_{t,i}} \sin\left(\beta{}_{i}\right)+Q_{i} \sin\left(\omega{}_{i}\right)\right) \sin\left(\alpha{}_{i}\right)-{U_{b,i}}\right) \tan\left({\varphi{}'}_{i}\right)+{c'}_{i} b_{i} \sec\left(\alpha{}_{i}\right)$
+Equation & $R=\left(\left(W_{i}+{U_{t,i}} \cos\left(\beta{}_{i}\right)+Q_{i} \cos\left(\omega{}_{i}\right)\right) \cos\left(\alpha{}_{i}\right)+\left(-{K_{c}} W_{i}-{\Delta{}H}_{i}+{U_{t,i}} \sin\left(\beta{}_{i}\right)+Q_{i} \sin\left(\omega{}_{i}\right)\right) \sin\left(\alpha{}_{i}\right)-{U_{b,i}}\right) \tan\left({\varphi{}'}_{i}\right)+{c'}_{i} b_{i} \sec\left(\alpha{}_{i}\right)$
 \\ \midrule \\
 Description & $R$ is the resistive shear force (N)\newline$W$ is the weight (N)\newline$i$ is the index\newline${U_{t}}$ is the surface hydrostatic force (N)\newline$\beta{}$ is the angle (${}^{\circ}$)\newline$Q$ is the imposed surface load (N)\newline$\omega{}$ is the angle (${}^{\circ}$)\newline$\alpha{}$ is the angle (${}^{\circ}$)\newline${K_{c}}$ is the earthquake load factor\newline$\Delta{}H$ is the difference between interslice forces (N)\newline${U_{b}}$ is the base hydrostatic force (N)\newline$\varphi{}'$ is the effective angle of friction (${}^{\circ}$)\newline$c'$ is the effective cohesion (Pa)\newline$b$ is the base width of a slice (m)
 \\ \bottomrule \end{tabular}
@@ -839,7 +839,7 @@ Label & Mobilized Shear Force
 \\ \midrule \\
 Units & N
 \\ \midrule \\
-Equation & $T$ = $\left(W_{i}+{U_{t,i}} \cos\left(\beta{}_{i}\right)+Q_{i} \cos\left(\omega{}_{i}\right)\right) \sin\left(\alpha{}_{i}\right)-\left(-{K_{c}} W_{i}-{\Delta{}H}_{i}+{U_{t,i}} \sin\left(\beta{}_{i}\right)+Q_{i} \sin\left(\omega{}_{i}\right)\right) \cos\left(\alpha{}_{i}\right)$
+Equation & $T=\left(W_{i}+{U_{t,i}} \cos\left(\beta{}_{i}\right)+Q_{i} \cos\left(\omega{}_{i}\right)\right) \sin\left(\alpha{}_{i}\right)-\left(-{K_{c}} W_{i}-{\Delta{}H}_{i}+{U_{t,i}} \sin\left(\beta{}_{i}\right)+Q_{i} \sin\left(\omega{}_{i}\right)\right) \cos\left(\alpha{}_{i}\right)$
 \\ \midrule \\
 Description & $T$ is the mobilized shear force (N)\newline$W$ is the weight (N)\newline$i$ is the index\newline${U_{t}}$ is the surface hydrostatic force (N)\newline$\beta{}$ is the angle (${}^{\circ}$)\newline$Q$ is the imposed surface load (N)\newline$\omega{}$ is the angle (${}^{\circ}$)\newline$\alpha{}$ is the angle (${}^{\circ}$)\newline${K_{c}}$ is the earthquake load factor\newline$\Delta{}H$ is the difference between interslice forces (N)
 \\ \bottomrule \end{tabular}
@@ -864,7 +864,7 @@ Label & Pressure
 \\ \midrule \\
 Units & Pa
 \\ \midrule \\
-Equation & $p$ = $\begin{bmatrix}
+Equation & $p=\begin{bmatrix}
 {K_{st,i}} & 0\\
 0 & {K_{bn,i}}
 \end{bmatrix} \begin{bmatrix}
@@ -886,7 +886,7 @@ Label & Pressure
 \\ \midrule \\
 Units & Pa
 \\ \midrule \\
-Equation & $p$ = $\begin{bmatrix}
+Equation & $p=\begin{bmatrix}
 {K_{bA,i}} & {K_{bB,i}}\\
 {K_{bB,i}} & {K_{bA,i}}
 \end{bmatrix} \begin{bmatrix}
@@ -965,7 +965,7 @@ Label & Force
 \\ \midrule \\
 Units & N
 \\ \midrule \\
-Equation & $F$ = $-{\ell{}_{s,i-1}} {K_{sn,i-1}} \delta{}_{i-1}+\left({\ell{}_{s,i-1}} {K_{sn,i-1}}+{\ell{}_{b,i}} {K_{bn,i}}+{\ell{}_{s,i}} {K_{sn,i}}\right) \delta{}_{i}-{\ell{}_{s,i}} {K_{sn,i}} \delta{}_{i+1}$
+Equation & $F=-{\ell{}_{s,i-1}} {K_{sn,i-1}} \delta{}_{i-1}+\left({\ell{}_{s,i-1}} {K_{sn,i-1}}+{\ell{}_{b,i}} {K_{bn,i}}+{\ell{}_{s,i}} {K_{sn,i}}\right) \delta{}_{i}-{\ell{}_{s,i}} {K_{sn,i}} \delta{}_{i+1}$
 \\ \midrule \\
 Description & $F$ is the force (N)\newline${\ell{}_{s}}$ is the length of an interslice surface (m)\newline$i$ is the index\newline${K_{sn}}$ is the normal stiffness ($\frac{\text{Pa}}{\text{m}}$)\newline$\delta{}$ is the displacement (m)\newline${\ell{}_{b}}$ is the total base length of a slice (m)\newline${K_{bn}}$ is the normal stiffness ($\frac{\text{Pa}}{\text{m}}$)
 \\ \bottomrule \end{tabular}
@@ -981,7 +981,7 @@ Label & Shear Stiffness
 \\ \midrule \\
 Units & $\frac{\text{Pa}}{\text{m}}$
 \\ \midrule \\
-Equation & ${K_{bt}}$ = $\frac{E}{2 \left(1+\nu{}\right)} \frac{0.1}{b}+\frac{{c'}_{i}-\sigma{} \tan\left({\varphi{}'}_{i}\right)}{|\delta{}u|+a}$
+Equation & ${K_{bt}}=\frac{E}{2 \left(1+\nu{}\right)} \frac{0.1}{b}+\frac{{c'}_{i}-\sigma{} \tan\left({\varphi{}'}_{i}\right)}{|\delta{}u|+a}$
 \\ \midrule \\
 Description & ${K_{bt}}$ is the shear stiffness ($\frac{\text{Pa}}{\text{m}}$)\newline$E$ is the interslice normal force (N)\newline$\nu{}$ is the Poisson's ratio\newline$b$ is the base width of a slice (m)\newline$c'$ is the effective cohesion (Pa)\newline$i$ is the index\newline$\sigma{}$ is the normal stress (Pa)\newline$\varphi{}'$ is the effective angle of friction (${}^{\circ}$)\newline$\delta{}u$ is the displacement (m)\newline$a$ is the constant (m)
 \\ \bottomrule \end{tabular}
@@ -997,7 +997,7 @@ Label & Normal Stiffness
 \\ \midrule \\
 Units & $\frac{\text{Pa}}{\text{m}}$
 \\ \midrule \\
-Equation & ${K_{bn}}$ = $\begin{cases}
+Equation & ${K_{bn}}=\begin{cases}
 \frac{E \left(1-\nu{}\right)}{\left(1+\nu{}\right) \left(1-2 \nu{}+b\right)}, & \nu{}<0\\
 0.01 \frac{E \left(1-\nu{}\right)}{\left(1+\nu{}\right) \left(1-2 \nu{}+b\right)}+\frac{\kappa{}}{\delta{}v+A}, & \nu{}\geq{}0
 \end{cases}$
@@ -1016,7 +1016,7 @@ Label & Fixme
 \\ \midrule \\
 Units & Unitless
 \\ \midrule \\
-Equation & $SpencerFixme1Please$ = $E_{i}+E_{i-1}$
+Equation & $SpencerFixme1Please=E_{i}+E_{i-1}$
 \\ \midrule \\
 Description & $SpencerFixme1Please$ is the fixme\newline$E$ is the interslice normal force (N)\newline$i$ is the index
 \\ \bottomrule \end{tabular}
@@ -1032,7 +1032,7 @@ Label & Fixme
 \\ \midrule \\
 Units & Unitless
 \\ \midrule \\
-Equation & $SpencerFixme2Please$ = $H_{i}+H_{i-1}$
+Equation & $SpencerFixme2Please=H_{i}+H_{i-1}$
 \\ \midrule \\
 Description & $SpencerFixme2Please$ is the fixme\newline$H$ is the interslice water force (N)\newline$i$ is the index
 \\ \bottomrule \end{tabular}

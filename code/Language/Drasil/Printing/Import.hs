@@ -40,6 +40,7 @@ import Control.Lens ((^.))
 import Language.Drasil.Space
 import Data.List (intersperse)
 
+-- | Render a Space
 space :: Space -> P.Expr
 space Integer = P.MO P.Integer
 space Rational = P.MO P.Rational
@@ -63,15 +64,19 @@ p_space (DiscreteD a)  = "{" ++ (concat $ intersperse ", " (map show a)) ++ "}"
 p_space (DiscreteS a)  = "{" ++ (concat $ intersperse ", " a) ++ "}"
 -}
 
+-- | Helper for inserting parentheses.
+parens :: P.Expr -> P.Expr
+parens = P.Fenced P.Paren P.Paren
+
 -- | expr translation function from Drasil to layout AST
 expr :: HasSymbolTable s => Expr -> s -> P.Expr
-expr (Dbl d)          _ = P.Dbl   d
-expr (Int i)          _ = P.Int   i
-expr (Str s)          _ = P.Str   s
+expr (Dbl d)            _ = P.Dbl   d
+expr (Int i)            _ = P.Int   i
+expr (Str s)            _ = P.Str   s
 expr (AssocB And l)    sm = P.Row $ intersperse (P.MO P.And) $ map (expr' sm (precB And)) l
-expr (AssocB Or l)     sm = P.Row $ intersperse (P.MO P.Or) $ map (expr' sm (precB Or)) l
-expr (AssocA Add l)     sm = P.Row $ intersperse (P.MO P.Add) $ map (expr' sm (precA Add)) l
-expr (AssocA Mul l)     sm = P.Row $ intersperse (P.MO P.Mul) $ map (expr' sm (precA Mul)) l
+expr (AssocB Or l)     sm = P.Row $ intersperse (P.MO P.Or ) $ map (expr' sm (precB Or)) l
+expr (AssocA Add l)    sm = P.Row $ intersperse (P.MO P.Add) $ map (expr' sm (precA Add)) l
+expr (AssocA Mul l)    sm = P.Row $ intersperse (P.MO P.Mul) $ map (expr' sm (precA Mul)) l
 expr (Deriv Part a b) sm =
   P.Div (P.Row [P.Spec Partial, P.Spc P.Thin, expr a sm])
         (P.Row [P.Spec Partial, P.Spc P.Thin,
@@ -80,9 +85,9 @@ expr (Deriv Total a b)sm =
   P.Div (P.Row [P.Ident "d", P.Spc P.Thin, expr a sm])
         (P.Row [P.Ident "d", P.Spc P.Thin, symbol $ SF.eqSymb $ symbLookup b $ sm^.symbolTable])
 expr (C c)            sm = symbol $ lookupC sm c
-expr (FCall f [x])    sm = P.Row [expr f sm, P.Fenced P.Paren P.Paren $ expr x sm]
+expr (FCall f [x])    sm = P.Row [expr f sm, parens $ expr x sm]
 expr (FCall f l)      sm = P.Row [expr f sm,
-  P.Fenced P.Paren P.Paren $ P.Row $ intersperse (P.MO P.Comma) $ map (flip expr sm) l]
+  parens $ P.Row $ intersperse (P.MO P.Comma) $ map (flip expr sm) l]
 expr (Case ps)        sm = if length ps < 2 then
                     error "Attempting to use multi-case expr incorrectly"
                     else P.Case (zip (map (flip expr sm . fst) ps) (map (flip expr sm . snd) ps))
@@ -101,55 +106,52 @@ expr (UnaryOp Abs u)    sm = P.Fenced P.Abs P.Abs $ expr u sm
 expr (UnaryOp Norm u)   sm = P.Fenced P.Norm P.Norm $ expr u sm
 expr (UnaryOp Sqrt u)   sm = P.Sqrt $ expr u sm
 expr (UnaryOp Neg u)    sm = neg sm u
-expr (BinaryOp Frac a b) sm = P.Div (expr a sm) (expr b sm)
+expr (BinaryOp Frac a b)  sm = P.Div (expr a sm) (expr b sm)
 expr (BinaryOp Cross a b) sm = mkBOp sm P.Cross a b
-expr (BinaryOp Dot a b) sm = mkBOp sm P.Dot a b
-expr (BinaryOp Eq a b) sm = mkBOp sm P.Eq a b
-expr (BinaryOp NEq a b) sm = mkBOp sm P.NEq a b
-expr (BinaryOp Lt a b) sm = mkBOp sm P.Lt a b
-expr (BinaryOp Gt a b) sm = mkBOp sm P.Gt a b
-expr (BinaryOp LEq a b) sm = mkBOp sm P.LEq a b
-expr (BinaryOp GEq a b) sm = mkBOp sm P.GEq a b
-expr (BinaryOp Impl a b) sm = mkBOp sm P.Impl a b
-expr (BinaryOp Iff a b) sm = mkBOp sm P.Iff a b
+expr (BinaryOp Dot a b)   sm = mkBOp sm P.Dot a b
+expr (BinaryOp Eq a b)    sm = mkBOp sm P.Eq a b
+expr (BinaryOp NEq a b)   sm = mkBOp sm P.NEq a b
+expr (BinaryOp Lt a b)    sm = mkBOp sm P.Lt a b
+expr (BinaryOp Gt a b)    sm = mkBOp sm P.Gt a b
+expr (BinaryOp LEq a b)   sm = mkBOp sm P.LEq a b
+expr (BinaryOp GEq a b)   sm = mkBOp sm P.GEq a b
+expr (BinaryOp Impl a b)  sm = mkBOp sm P.Impl a b
+expr (BinaryOp Iff a b)   sm = mkBOp sm P.Iff a b
 expr (BinaryOp Index a b) sm = indx sm a b
-expr (BinaryOp Pow a b) sm = pow sm a b
-expr (BinaryOp Subt a b)   sm = P.Row [expr a sm, P.MO P.Subt, expr b sm]
-expr (Operator o dd e)     sm = eop sm o dd e
-expr (IsIn  a b)        sm = P.Row  [expr a sm, P.MO P.IsIn, space b]
-expr (RealI c ri)       sm = renderRealInt sm (lookupC sm c) ri
+expr (BinaryOp Pow a b)   sm = pow sm a b
+expr (BinaryOp Subt a b)  sm = P.Row [expr a sm, P.MO P.Subt, expr b sm]
+expr (Operator o dd e)    sm = eop sm o dd e
+expr (IsIn  a b)          sm = P.Row  [expr a sm, P.MO P.IsIn, space b]
+expr (RealI c ri)         sm = renderRealInt sm (lookupC sm c) ri
 
 lookupC :: HasSymbolTable s => s -> UID -> Symbol
 lookupC sm c = SF.eqSymb $ symbLookup c $ sm^.symbolTable
 
 mkCall :: HasSymbolTable ctx => ctx -> P.Ops -> Expr -> P.Expr
-mkCall s o e = P.Row [P.MO o, P.Fenced P.Paren P.Paren $ expr e s]
+mkCall s o e = P.Row [P.MO o, parens $ expr e s]
 
 mkBOp :: HasSymbolTable ctx => ctx -> P.Ops -> Expr -> Expr -> P.Expr
 mkBOp sm o a b = P.Row [expr a sm, P.MO o, expr b sm]
 
 expr' :: HasSymbolTable ctx => ctx -> Int -> Expr -> P.Expr
-expr' s p e = fence e'
+expr' s p e = fence $ expr e s
   where
-  e' = expr e s
-  fence = if eprec e < p then P.Fenced P.Paren P.Paren else id
+  fence = if eprec e < p then parens else id
 
 -- | Helper for properly rendering negation of expressions
 neg' :: Expr -> Bool
-neg' (Dbl     _)     = True
-neg' (Int     _)     = True
-neg' (Operator _ _ _) = True
-neg' (AssocA Mul _)  = True
+neg' (Dbl     _)          = True
+neg' (Int     _)          = True
+neg' (Operator _ _ _)     = True
+neg' (AssocA Mul _)       = True
 neg' (BinaryOp Index _ _) = True
-neg' (UnaryOp _ _)   = True
-neg' (C _)           = True
-neg' _               = False
+neg' (UnaryOp _ _)        = True
+neg' (C _)                = True
+neg' _                    = False
 
+-- | Render negated expressions
 neg :: HasSymbolTable s => s -> Expr -> P.Expr
-neg sm a = if (neg' a) then
-             P.Row [P.MO P.Neg, expr a sm]
-           else
-             P.Row [P.MO P.Neg, P.Fenced P.Paren P.Paren $ expr a sm]
+neg sm a = P.Row [P.MO P.Neg, (if neg' a then id else parens) $ expr a sm]
 
 -- | For printing indexes
 indx :: HasSymbolTable ctx => ctx -> Expr -> Expr -> P.Expr
@@ -172,8 +174,8 @@ eop sm Mul (BoundedDD v Discrete l h) e =
   P.Row [P.MO P.Prod, P.Sub (P.Row [symbol v, P.MO P.Eq, expr l sm]), P.Sup (expr h sm),
          P.Row [expr e sm]]
 eop sm Mul (AllDD _ Discrete) e = P.Row [P.MO P.Prod, P.Row[expr e sm]]
-eop _  Mul (AllDD _ Continuous) _ = error "HTML/Import.hs Product-Integral not implemented."
-eop _  Mul (BoundedDD _ Continuous _ _) _ = error "HTML/Import.hs Product-Integral not implemented."
+eop _  Mul (AllDD _ Continuous) _ = error "Printing/Import.hs Product-Integral not implemented."
+eop _  Mul (BoundedDD _ Continuous _ _) _ = error "Printing/Import.hs Product-Integral not implemented."
 eop sm Add (BoundedDD v Continuous l h) e =
   P.Row [P.MO P.Inte, P.Sub (expr l sm), P.Sup (expr h sm),
          P.Row [expr e sm], P.Spc P.Thin, P.Ident "d", symbol v]
@@ -207,11 +209,11 @@ sFormat Prime  s = P.Row [symbol s, P.MO P.Prime]
 
 -- | Helper for properly rendering exponents
 pow :: HasSymbolTable ctx => ctx -> Expr -> Expr -> P.Expr
-pow sm a@(AssocA Add _)  b = P.Row [P.Fenced P.Paren P.Paren (expr a sm), P.Sup (expr b sm)]
-pow sm a@(BinaryOp Subt _ _) b = P.Row [P.Fenced P.Paren P.Paren (expr a sm), P.Sup (expr b sm)]
-pow sm a@(BinaryOp Frac _ _) b = P.Row [P.Fenced P.Paren P.Paren (expr a sm), P.Sup (expr b sm)]
-pow sm a@(AssocA Mul _)  b = P.Row [P.Fenced P.Paren P.Paren (expr a sm), P.Sup (expr b sm)]
-pow sm a@(BinaryOp Pow _ _)  b = P.Row [P.Fenced P.Paren P.Paren (expr a sm), P.Sup (expr b sm)]
+pow sm a@(AssocA Add _)  b = P.Row [parens (expr a sm), P.Sup (expr b sm)]
+pow sm a@(BinaryOp Subt _ _) b = P.Row [parens (expr a sm), P.Sup (expr b sm)]
+pow sm a@(BinaryOp Frac _ _) b = P.Row [parens (expr a sm), P.Sup (expr b sm)]
+pow sm a@(AssocA Mul _)  b = P.Row [parens (expr a sm), P.Sup (expr b sm)]
+pow sm a@(BinaryOp Pow _ _)  b = P.Row [parens (expr a sm), P.Sup (expr b sm)]
 pow sm a                b = P.Row [expr a sm, P.Sup (expr b sm)]
 
 -- | Print a RealInterval
@@ -362,18 +364,20 @@ eqnStyle b = if b then T.EqnBlock else T.Paragraph
 -- | Translates the defining equation from a QDefinition to
 -- Printing's version of Sentence
 buildEqn :: HasSymbolTable ctx => ctx -> QDefinition -> P.Spec
-buildEqn sm c = P.E (symbol $ eqSymb c) P.:+: P.S " = " P.:+:
-  P.E (expr (c^.equat) sm)
+buildEqn sm c = P.E $ mkBOp sm P.Eq (sy c) (c^.equat)
+  -- P.E (symbol $ eqSymb c) P.:+: P.S " = " P.:+:
+  -- P.E (expr (c^.equat) sm)
 
 -- | Build descriptions in data defs based on required verbosity
 buildDDDescription :: HasSymbolTable ctx => ctx -> QDefinition -> P.Spec
-buildDDDescription m c = descLines m $
-  if verboseDDDescription then vars (sy c $= c^.equat) m else []
+buildDDDescription m c =
+  if verboseDDDescription then descLines m $ vars (sy c $= c^.equat) m else P.EmptyS
 
 -- | Helper for building each line of the description of a data def
 descLines :: (HasSymbolTable ctx, Quantity q) => ctx -> [q] -> P.Spec
-descLines _ []      = error "No chunks to describe"
-descLines m (vc:[]) = (P.E $ symbol $ eqSymb vc) P.:+:
-  (P.S " is the " P.:+: (spec m (phrase $ vc ^. term)) P.:+:
-   maybe (P.S "") (\a -> P.S " (" P.:+: P.Sy (a ^. usymb) P.:+: P.S ")") (getUnitLup vc m))
-descLines m (vc:vcs) = descLines m (vc:[]) P.:+: P.HARDNL P.:+: descLines m vcs
+descLines m l = foldr (P.:+:) P.EmptyS $ intersperse P.HARDNL $ map descLine l
+  where
+    descLine vc = (P.E $ symbol $ eqSymb vc) P.:+:
+      (P.S " is the " P.:+: (spec m (phrase $ vc ^. term)) P.:+:
+      maybe P.EmptyS (\a -> P.S " (" P.:+: P.Sy (a ^. usymb) P.:+: P.S ")") 
+            (getUnitLup vc m))

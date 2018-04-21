@@ -387,7 +387,7 @@ Label & Risk of Failure
 \\ \midrule \\
 Units & Unitless
 \\ \midrule \\
-Equation & $B$ = $\frac{k}{\left(a b\right)^{m-1}} \left(1000 E h^{2}\right)^{m} LDF e^{J}$
+Equation & $B=\frac{k}{\left(a b\right)^{m-1}} \left(1000 E h^{2}\right)^{m} LDF e^{J}$
 \\ \midrule \\
 Description & $B$ is the risk of failure\newline$k$ is the surface flaw parameter ($\frac{\text{m}^{12}}{\text{N}^{7}}$)\newline$a$ is the plate length (long dimension) (m)\newline$b$ is the plate width (short dimension) (m)\newline$m$ is the surface flaw parameter ($\frac{\text{m}^{12}}{\text{N}^{7}}$)\newline$E$ is the modulus of elasticity of glass (Pa)\newline$h$ is the actual thickness (m)\newline$LDF$ is the load duration factor\newline$J$ is the stress distribution factor (Function)
 \\ \bottomrule \end{tabular}
@@ -403,7 +403,7 @@ Label & Actual Thickness
 \\ \midrule \\
 Units & m
 \\ \midrule \\
-Equation & $h$ = $\frac{1}{1000} \begin{cases}
+Equation & $h=\frac{1}{1000} \begin{cases}
 2.16, & t=2.5\\
 2.59, & t=2.7\\
 2.92, & t=3.0\\
@@ -432,7 +432,7 @@ Label & Stress Distribution Factor (Function)
 \\ \midrule \\
 Units & Unitless
 \\ \midrule \\
-Equation & $J$ = $J\left(\hat{q},\frac{a}{b}\right)$
+Equation & $J=J\left(\hat{q},\frac{a}{b}\right)$
 \\ \midrule \\
 Description & $J$ is the stress distribution factor (Function)\newline$\hat{q}$ is the dimensionless load\newline$a$ is the plate length (long dimension) (m)\newline$b$ is the plate width (short dimension) (m)
 \\ \bottomrule \end{tabular}
@@ -448,7 +448,7 @@ Label & Non-Factored Load
 \\ \midrule \\
 Units & Unitless
 \\ \midrule \\
-Equation & $NFL$ = $\frac{{\hat{q}_{tol}} E h^{4}}{\left(a b\right)^{2}}$
+Equation & $NFL=\frac{{\hat{q}_{tol}} E h^{4}}{\left(a b\right)^{2}}$
 \\ \midrule \\
 Description & $NFL$ is the non-factored load\newline${\hat{q}_{tol}}$ is the tolerable load\newline$E$ is the modulus of elasticity of glass (Pa)\newline$h$ is the actual thickness (m)\newline$a$ is the plate length (long dimension) (m)\newline$b$ is the plate width (short dimension) (m)
 \\ \bottomrule \end{tabular}
@@ -464,7 +464,7 @@ Label & Glass Type Factor
 \\ \midrule \\
 Units & Unitless
 \\ \midrule \\
-Equation & $GTF$ = $\begin{cases}
+Equation & $GTF=\begin{cases}
 1, & g=AN\\
 4, & g=FT\\
 2, & g=HS
@@ -484,7 +484,7 @@ Label & Dimensionless Load
 \\ \midrule \\
 Units & Unitless
 \\ \midrule \\
-Equation & $\hat{q}$ = $\frac{q \left(a b\right)^{2}}{E h^{4} GTF}$
+Equation & $\hat{q}=\frac{q \left(a b\right)^{2}}{E h^{4} GTF}$
 \\ \midrule \\
 Description & $\hat{q}$ is the dimensionless load\newline$q$ is the applied load (demand) (kPa)\newline$a$ is the plate length (long dimension) (m)\newline$b$ is the plate width (short dimension) (m)\newline$E$ is the modulus of elasticity of glass (Pa)\newline$h$ is the actual thickness (m)\newline$GTF$ is the glass type factor
 \\ \bottomrule \end{tabular}
@@ -500,7 +500,7 @@ Label & Tolerable Load
 \\ \midrule \\
 Units & Unitless
 \\ \midrule \\
-Equation & ${\hat{q}_{tol}}$ = ${\hat{q}_{tol}}\left({J_{tol}},\frac{a}{b}\right)$
+Equation & ${\hat{q}_{tol}}={\hat{q}_{tol}}\left({J_{tol}},\frac{a}{b}\right)$
 \\ \midrule \\
 Description & ${\hat{q}_{tol}}$ is the tolerable load\newline${J_{tol}}$ is the stress distribution factor (Function) based on Pbtol\newline$a$ is the plate length (long dimension) (m)\newline$b$ is the plate width (short dimension) (m)
 \\ \bottomrule \end{tabular}
@@ -516,7 +516,7 @@ Label & Stress Distribution Factor (Function) Based on Pbtol
 \\ \midrule \\
 Units & Unitless
 \\ \midrule \\
-Equation & ${J_{tol}}$ = $\log\left(\log\left(\frac{1}{1-{P_{btol}}}\right) \frac{\left(a b\right)^{m-1}}{k \left(1000 E h^{2}\right)^{m} LDF}\right)$
+Equation & ${J_{tol}}=\log\left(\log\left(\frac{1}{1-{P_{btol}}}\right) \frac{\left(a b\right)^{m-1}}{k \left(1000 E h^{2}\right)^{m} LDF}\right)$
 \\ \midrule \\
 Description & ${J_{tol}}$ is the stress distribution factor (Function) based on Pbtol\newline${P_{btol}}$ is the tolerable probability of breakage\newline$a$ is the plate length (long dimension) (m)\newline$b$ is the plate width (short dimension) (m)\newline$m$ is the surface flaw parameter ($\frac{\text{m}^{12}}{\text{N}^{7}}$)\newline$k$ is the surface flaw parameter ($\frac{\text{m}^{12}}{\text{N}^{7}}$)\newline$E$ is the modulus of elasticity of glass (Pa)\newline$h$ is the actual thickness (m)\newline$LDF$ is the load duration factor
 \\ \bottomrule \end{tabular}

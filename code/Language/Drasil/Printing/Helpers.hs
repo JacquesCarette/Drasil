@@ -35,16 +35,17 @@ br t = text $ "{" ++ t ++ "}"
 indent :: Doc -> Doc
 indent = nest 4
 
+dot, comm :: Doc -> Doc
+dot    = \x -> x <> text "."
+comm   = \x -> x <> text ","
+
 -- | basic plaintext (String) wrapping
-paren,brace,dollar,quotes,sqbrac,angbrac,dot,comm :: String -> String
+paren,brace,dollar,sqbrac,angbrac:: String -> String
 paren  = \x -> "(" ++ x ++ ")"
 brace  = \x -> "{" ++ x ++ "}"
 dollar = \x -> "$" ++ x ++ "$"
-quotes = \x -> "\"" ++ x ++ "\""
 sqbrac = \x -> "[" ++ x ++ "]"
 angbrac = \x -> "<" ++ x ++ ">"
-dot    = \x -> x ++ "."
-comm   = \x -> x ++ ","
 
 -- | String capitalization
 capitalize :: String -> String
@@ -70,4 +71,4 @@ sufx _ = "th"
 
 -- Use on any sized Int
 sufxer :: Int -> String
-sufxer = dot . sufx . mod 10
+sufxer = (\x -> x ++ ".") . sufx . mod 10

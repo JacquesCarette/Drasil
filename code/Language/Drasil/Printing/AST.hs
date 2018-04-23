@@ -3,7 +3,6 @@ module Language.Drasil.Printing.AST where
 import Language.Drasil.UnitLang (USymb)
 import Language.Drasil.RefTypes (RefType, RefAdd)
 import Language.Drasil.Unicode (Greek, Special)
-import Language.Drasil.Spec (Accent(..))
 
 data Ops = IsIn | Integer | Real | Rational | Natural | Boolean | Comma | Prime | Log
   | Sin | Cos | Tan | Sec | Csc | Cot | Not | Dim | Exp | Neg | Cross
@@ -43,7 +42,6 @@ data Spec = E Expr
           | Sp Special
           | Ref RefType RefAdd Spec
           | EmptyS
-          | Acc Accent Char
           | Quote Spec    -- quotes are different in different languages
           | HARDNL        -- newline. Temp fix for multi-line descriptions; 
                           -- May move to a new LayoutObj, but only exists in TeX

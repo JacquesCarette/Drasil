@@ -96,7 +96,7 @@ module Language.Drasil (
   , cProceedings, cTechReport, cUnpublished
   , CitationKind(..)
   -- Spec
-  , USymb(..), Sentence(..), Accent(..), sParen, sParenNum, sSqBr, sSqBrNum
+  , USymb(..), Sentence(..), sParen, sParenNum, sSqBr, sSqBrNum
   , (+:+), (+:+.), (+.), sC, (+:), semiCol, sParenDash
   , sDash
   -- NounPhrase
@@ -245,7 +245,7 @@ import Language.Drasil.ChunkDB
 import Language.Drasil.NounPhrase hiding (at_start, at_start', titleize
                                           , titleize', phrase, plural)
 import Language.Drasil.Space (Space(..))
-import Language.Drasil.Spec (Sentence(..), Accent(..),
+import Language.Drasil.Spec (Sentence(..),
   sParen, sParenNum, sSqBr, sSqBrNum, sC, (+:+), (+:+.), (+.), (+:),
   semiCol, sParenDash, sDash)
 import Language.Drasil.Reference (makeRef, acroTest, ReferenceDB, assumpDB, reqDB

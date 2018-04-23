@@ -242,7 +242,6 @@ spec _ (S s)           = P.S s
 spec _ (Sy s)          = P.Sy s
 spec _ (Sp s)          = P.Sp s
 spec _ (P s)           = P.E $ symbol s
-spec _ (F f c)         = P.Acc f c
 spec sm (Ref t r n)    = P.Ref t r $ spec sm n
 spec sm (Quote q)      = P.Quote $ spec sm q
 spec _  EmptyS         = P.EmptyS

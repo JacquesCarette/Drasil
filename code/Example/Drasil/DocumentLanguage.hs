@@ -336,12 +336,12 @@ tuIntro x = Paragraph $ foldr (+:+) (EmptyS) (map tuI x)
 
 -- | table of units intro writer. Translates a TUIntro to a Sentence.
 tuI :: TUIntro -> Sentence
-tuI System  = (S "The unit system used throughout is SI (Syst" :+:
-  (F Grave 'e') :+: S "me International d'Unit" :+: (F Acute 'e') :+: S "s).")
-tuI TUPurpose = S "For each unit, the table lists the symbol," +:+
-  S "a description and the SI name."
-tuI Derived = S "In addition to the basic units, several derived units are" +:+
-  S "also used."
+tuI System  = 
+  S "The unit system used throughout is SI (Système International d'Unités)."
+tuI TUPurpose = 
+  S "For each unit, the table lists the symbol, a description and the SI name."
+tuI Derived = 
+  S "In addition to the basic units, several derived units are also used."
 
 -- | Default table of units intro contains the
 defaultTUI :: [TUIntro]

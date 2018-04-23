@@ -1,5 +1,7 @@
 POTENTIAL TASKS (Proto-issues)
 
+- Learn you a Haskell
+
 - de-embed text when the combinators aren't really capturing any knowledge
 	- is the knowledge reusable?
 	- is the knowledge derivable from existing knowledge?
@@ -11,7 +13,7 @@ POTENTIAL TASKS (Proto-issues)
 	- knowledge modelling
 	- existing scientific knowledge ontologies
 
-- review existing "manual" examples looking for errors/inconsistencies
+- review existing "manual" examples looking for errors/inconsistencies - create at least 5 issues? - units match
 
 - apply inspection and review techniques to improve existing "manual" examples
 
@@ -26,12 +28,16 @@ POTENTIAL TASKS (Proto-issues)
 
 - documentation of using Drasil, Drasil design, steps to create a new document
 
+- documentation example using existing OPG template
+
 - improve design documentation for existing case studies
 	- document design like an SRS through refinement
 
 - add additional test cases to the existing examples
 
 - redo the game physics documentation and implementation to no longer use Chipmunk
+
+- physics library - what is in the applets, equations, stick it in Drasil, build it up
 
 - add doxygen (or similar) comments to "manual" code, or better yet, generate documentation comments
 

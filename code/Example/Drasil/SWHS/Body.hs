@@ -95,7 +95,7 @@ this_si = map unitWrapper [metre, kilogram, second] ++
 --Will there be a table of contents?
 
 swhsAuthors :: Sentence
-swhsAuthors = manyNames swhsPeople
+swhsAuthors = S $ manyNames swhsPeople
 
 swhs_si :: SystemInformation
 swhs_si = SI {

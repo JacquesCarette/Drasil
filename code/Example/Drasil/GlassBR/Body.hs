@@ -93,7 +93,7 @@ mkSRS = RefSec (RefProg intro [TUnits, tsymb [TSPurpose, SymbOrder], TAandA]) :
   StkhldrSec
     (StkhldrProg2
       [Client gLassBR (S "a" +:+ phrase company
-        +:+ S "named Entuitive. It is developed by Dr." +:+ name mCampidelli),
+        +:+ S "named Entuitive. It is developed by Dr." +:+ (S $ name mCampidelli)),
       Cstmr gLassBR]) :
   GSDSec (GSDProg2 [UsrChars [s4_1_bullets endUser gLassBR secondYear
     undergradDegree civilEng structuralEng glBreakage blastRisk],

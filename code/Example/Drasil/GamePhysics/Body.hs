@@ -49,7 +49,7 @@ authors :: People
 authors = [alex, luthfi]
 
 auths :: Sentence
-auths = manyNames authors
+auths = S $ manyNames authors
 
 chipmunkSRS' :: Document
 chipmunkSRS' = mkDoc mkSRS for' chipmunkSysInfo

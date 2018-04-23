@@ -528,7 +528,7 @@ showField f s = S f :+: S "={" :+: s :+: S "}"
 rendPeople :: HasSymbolTable ctx => ctx -> People -> Spec
 rendPeople _ []  = S "N.a." -- "No authors given"
 rendPeople sm people = I.spec sm $
-  foldl1 (\x y -> x LS.+:+ LS.S "and" LS.+:+ y) $ map rendPersLFM people
+  foldl1 (\x y -> x LS.+:+ LS.S "and" LS.+:+ y) $ map (LS.S . rendPersLFM) people
 
 bibTeXMonth :: Month -> Spec
 bibTeXMonth Jan = S "jan"

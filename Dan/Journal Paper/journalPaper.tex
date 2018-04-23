@@ -40,6 +40,19 @@
 %\received[revised]{March 2009}
 %\received[accepted]{June 2009}
 
+%% Comments
+\newif\ifcomments\commentstrue
+
+\ifcomments
+\newcommand{\authornotes}[3]{\textcolor{#1}{[#3 ---#2]}}
+\newcommand{\todo}[1]{\textcolor{red}{[TODO: #1]}}
+\else
+\newcommand{\authornotes}[3]{}
+\newcommand{\todo}[1]{}
+\fi
+
+\newcommand{\wss}[1]{\authornotes{blue}{SS}{#1}}
+\newcommand{\jc}[1]{\authornotes{red}{JC}{#1}}
 
 % Document starts
 \begin{document}
@@ -116,11 +129,11 @@
 \begin{abstract}
 
 CONTEXT: Software (re-)certification requires the creation and maintenance of
-many different software artifacts. Manually creating and maintaining them is
-tedious and costly.
+many different software artifacts. Manually creating and maintaining \wss{and
+reusing?} them is tedious and costly. \wss{and error prone}
 
 OBJECTIVE: Improve software (re-)certification efforts by automating as much of
-the artifact creation process as possible while maintaining full traceability
+the artifact creation process as possible, while maintaining full traceability
 within -- and between -- artifacts.  %DS Secondary objective -> Knowledge reuse 
 %-- Don't know if I want
 % to focus here as it muddies the waters.
@@ -130,7 +143,7 @@ METHOD: %Use grounded theory in the creation of a tool for software artifact
 Start by analyzing the artifacts themselves from several case 
 studies to understand what (semantically) is being said in each.
 Capture the underlying knowledge and apply transformations to create each of 
-the requisite artifacts through a generative approach. 
+the requisite artifacts through a generative approach.  
 
 RESULTS: Case studies -- GlassBR to show capture and transformation. SWHS and
 NoPCM for reuse (Something about Kolmogorov complexity / MDL here?).
@@ -140,7 +153,11 @@ be re-used across projects as it represents the ``science''. Maintenance
 involves updating the captured knowledge or transformations as necessary.
 %Moved from Objective:
 Creation of our tool -- Drasil -- facilitates this automation process using a 
-knowledge-based approach to Software Engineering.
+knowledge-based approach to Software Engineering.  \wss{Maybe add something
+  about the infrastructure now being in place to reuse/grow the scientific and
+  computing knowledge base to cover new case studies?  It would be nice if we
+  could make the connection between Drasil's knowledge and existing scientific
+  knowledge ontologies, but maybe it is too early for that connection?}
 
 CONCLUSIONS: With good tool support and a front-loaded time investment, we can 
 automate the generation of software artifacts required for certification. 

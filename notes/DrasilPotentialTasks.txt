@@ -1,0 +1,50 @@
+POTENTIAL TASKS (Proto-issues)
+
+- de-embed text when the combinators aren't really capturing any knowledge
+	- is the knowledge reusable?
+	- is the knowledge derivable from existing knowledge?
+	- if the answers to these questions are unclear, make it text (for now)
+
+- literature survey
+	- model driven development
+	- grounded theory
+	- knowledge modelling
+	- existing scientific knowledge ontologies
+
+- review existing "manual" examples looking for errors/inconsistencies
+
+- apply inspection and review techniques to improve existing "manual" examples
+
+- create a rigorous model for the types of knowledge captured in the SRS:
+	- what distinguishes a data definition from a theoretical model?
+	- what is the required relationships between the parts?
+	
+- support Dan's work by, for instance:
+	- creating figures
+	- proof reading
+	- doing anything Dan can assign as an issue
+
+- documentation of using Drasil, Drasil design, steps to create a new document
+
+- improve design documentation for existing case studies
+	- document design like an SRS through refinement
+
+- add additional test cases to the existing examples
+
+- redo the game physics documentation and implementation to no longer use Chipmunk
+
+- add doxygen (or similar) comments to "manual" code, or better yet, generate documentation comments
+
+- move to using pandoc
+
+- move to using MathJax
+
+- issue #475 Setting up Drasil documentation/test infrastructure, (https://github.com/JacquesCarette/Drasil/issues/475)
+
+
+
+
+
+
+
+

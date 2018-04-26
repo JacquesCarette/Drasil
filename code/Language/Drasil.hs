@@ -28,10 +28,9 @@ module Language.Drasil (
   -- Chunk
   , Chunk(..)
   -- Chunk.VarChunk
-  , VarChunk(..), ConceptChunk
-  , vc
-  , dcc, dcc', dccWDS, dccWDS', cv, vc', vc'', ccs, cc, cc'
-  , implVar
+  , VarChunk, ConceptChunk
+  , vc, implVar
+  , dcc, dcc', dccWDS, dccWDS', cv, vc'', ccs, cc, cc'
   -- Chunk.Concept
   , Concept, cw, Definition(defn), ConceptDomain(cdom)
   -- Chunk.CommonIdea

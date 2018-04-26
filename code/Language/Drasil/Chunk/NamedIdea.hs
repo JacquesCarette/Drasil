@@ -1,3 +1,4 @@
+{-# LANGUAGE TemplateHaskell #-}
 module Language.Drasil.Chunk.NamedIdea (NamedIdea(..), Idea(..),
   NamedChunk, nc, IdeaDict, compoundterm, short, nw, mkIdea,
   compoundNC, compoundNC', compoundNC'', compoundNC''',
@@ -5,7 +6,7 @@ module Language.Drasil.Chunk.NamedIdea (NamedIdea(..), Idea(..),
   with, with', and_, and_', andRT, the, theCustom, this, aNP, a_, ofA) where
 
 import Language.Drasil.Chunk
-import Control.Lens (Simple, Lens, (^.))
+import Control.Lens (Simple, Lens, (^.), makeLenses)
 
 import Language.Drasil.Spec
 import Language.Drasil.NounPhrase
@@ -25,17 +26,18 @@ class NamedIdea c => Idea c where
 
 -- | Get short form (if it exists), else get term.
 short :: Idea c => c -> Sentence
-short c = maybe (phrase (c ^. term)) (\x -> x) (fmap S $ getA c)
+short c = maybe (phrase (c ^. term)) id (fmap S $ getA c)
 
 -- === DATA TYPES/INSTANCES === --
 -- | Note that a |NamedChunk| does not have an acronym/abbreviation
 -- as that's a |CommonIdea|, which has its own representation
-data NamedChunk = NC String NP
+data NamedChunk = NC {_uu :: String, _np :: NP}
+makeLenses ''NamedChunk
 
 instance Eq        NamedChunk where c1 == c2 = (c1 ^. uid) == (c2 ^. uid)
-instance Chunk     NamedChunk where uid f (NC a b) = fmap (\x -> NC x b) (f a)
-instance NamedIdea NamedChunk where term f (NC a b) = fmap (\x -> NC a x) (f b)
-instance Idea      NamedChunk where getA (NC _ _) = Nothing
+instance Chunk     NamedChunk where uid = uu
+instance NamedIdea NamedChunk where term = np
+instance Idea      NamedChunk where getA = \_ -> Nothing
   
 -- | 'NamedChunk' constructor, takes an uid and a term.
 nc :: String -> NP -> NamedChunk
@@ -54,7 +56,7 @@ inc :: Simple Lens IdeaDict NamedChunk
 inc f (IdeaDict a b) = fmap (\x -> IdeaDict x b) (f a)
 
 mkIdea :: String -> NP -> Maybe String -> IdeaDict
-mkIdea s np ms = IdeaDict (nc s np) ms
+mkIdea s np' ms = IdeaDict (nc s np') ms
 
 -- Historical name: nw comes from 'named wrapped' from when
 -- |NamedIdea| exported |getA| (now in |Idea|). But there are

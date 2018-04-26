@@ -47,10 +47,51 @@ POTENTIAL TASKS (Proto-issues)
 
 - issue #475 Setting up Drasil documentation/test infrastructure, (https://github.com/JacquesCarette/Drasil/issues/475)
 
+- Code issues:
+  - remove Greek from Unicode and use the actual characters
+  - understand if sClrlyBrSymb in Symbol makese sense
+  - investigate StringLike and/or OverloadedStrings.  See SymbolAlphabet.
+  - Space needs to be rethought
+  - RefTypes is way too specific. `RefType` should not exist...
+  - Printing/Helpers is possibly full of stuff already in some
+    pretty-printing package.  Needs a cleanup.
+  - TeX.Monad: adjust should use `lub` (functionality duplication)
+  - Printing.AST: move Spec closer to Pandoc
+  - People: better names for render* routines.
+  - remove all warnings from all files.
+  - rethink everything in this file. Seems wrong.
+  - Make.Helpers: should have 'resource files' where such text can be
+    stored.  It's silly to embed it like this.
+  - Make.AST: rethink the rule `Type`. Maybe these should be more semantic.
+  - Make.Import: too specific.
+  - Make.Print: `build` seems hackish. `printRule` too specific?
+  - Format: deprecate?
+  - Config: perhaps re-org to be clearer about where each configuration
+     parameter belongs.  This file might well disappear.
+  - Code.Imperative.Lang: would be nice to re-enable them all
+  - Code.Imperative.Helpers: some of these are in common with Printing.Helpers
+  - " : pure String manipulation might move elsewhere?
+  - Code.Imperative.AST: needs a full redesign...
+  - Code.Code: why are these things defined here?
+  - (skipping all the LanguageRenderer since the AST needs redesigned)
+  - Code: this re-exports lots of stuff. Should be exposed?
+  - Expr: make Expr into a type constructor
+  - Chunk:
+    - SymbolForm: better names. Show not a good idea.
+    - ExprRelat: this is a hack. Fix and remove.
+    - Attribute.Derivation: should be more structured?
+    - Attribute: longer term, need to rethink the implementation
+    - AssumpChunk: Hack. re-implement.
+    - Change: Hack. re-implement.
+    - Citation: should investigate 3rd party implementations
+  - Spec: a lot of the Sentence constructors should be deleted...
 
-
-
-
-
-
+- Structural:
+  - break Drasil into packages.  Likely drasil-lang, drasil-data,
+    drasil-code and drasil-examples. As a start.
+  - make sure the generated code compiles and runs correctly (at least
+    on travis?).
+  - investigate
+    https://hackage.haskell.org/package/bibdb
+    http://pandoc.org/MANUAL.html#citations
 

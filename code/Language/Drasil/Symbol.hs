@@ -44,8 +44,6 @@ complsy [] _  = LT
 complsy _  [] = GT
 complsy (x : xs) (y : ys) = compsy x y `mappend` complsy xs ys
 
---FIXME? The exact ordering we want may need to be updated, or should we
---  allow custom?  
 compsy :: Symbol -> Symbol -> Ordering
 compsy (Concat (x:[]))       (Concat (y:[]))        = compsy x y
 compsy (Concat ((Greek Delta):xs))                b = compsy (Concat xs) b 

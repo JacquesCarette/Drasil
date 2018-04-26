@@ -6,7 +6,7 @@ module Language.Drasil.Chunk.NamedIdea (NamedIdea(..), Idea(..),
   with, with', and_, and_', andRT, the, theCustom, this, aNP, a_, ofA) where
 
 import Language.Drasil.Chunk
-import Control.Lens (Simple, Lens, (^.), makeLenses)
+import Control.Lens (Simple, Lens, (^.), makeLenses, view)
 
 import Language.Drasil.Spec
 import Language.Drasil.NounPhrase
@@ -45,16 +45,14 @@ nc = NC
 
 -- | |IdeaDict| is the canonical dictionary associated to the |Idea| class
 -- don't export the record accessors
-data IdeaDict = IdeaDict { _nc :: NamedChunk, _mabbr :: Maybe String }
+data IdeaDict = IdeaDict { _nc' :: NamedChunk, _mabbr :: Maybe String }
+makeLenses ''IdeaDict
 
 instance Eq        IdeaDict where a == b = a ^. uid == b ^. uid
-instance Chunk     IdeaDict where uid = inc . uid
-instance NamedIdea IdeaDict where term = inc . term
-instance Idea      IdeaDict where getA (IdeaDict _ b) = b
+instance Chunk     IdeaDict where uid = nc' . uid
+instance NamedIdea IdeaDict where term = nc' . term
+instance Idea      IdeaDict where getA = view mabbr
   
-inc :: Simple Lens IdeaDict NamedChunk
-inc f (IdeaDict a b) = fmap (\x -> IdeaDict x b) (f a)
-
 mkIdea :: String -> NP -> Maybe String -> IdeaDict
 mkIdea s np' ms = IdeaDict (nc s np') ms
 

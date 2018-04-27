@@ -9,8 +9,6 @@ import Language.Drasil.Spec (Sentence(EmptyS))
 import Language.Drasil.Chunk
 import Language.Drasil.Chunk.Attribute.Derivation
 
-import Prelude hiding (id)
-
 -- | Attributes are just a list of 'Attribute'
 type Attributes = [Attribute]
 
@@ -27,7 +25,7 @@ data Attribute where
                -- but we may need to create a new
                -- representation for it in the future.
                -- To collapse Attributes into QDefinitions, can't use Contents
-  Uses      :: Chunk c => [c] -> Attribute -- Which chunks does this one rely on?
+  Uses      :: [String] -> Attribute -- Which chunks does this one rely on?
 
 -- Should this get only the first one or all potential sources?
 -- Should we change the source ref to have a list (to keep things clean in case

@@ -6,7 +6,7 @@ import Language.Drasil.Symbol (Symbol(Empty))
 -- | A HasSymbol is anything which has a Symbol
 class HasSymbol c where
   -- | Provides the Symbol --  for a particular stage of generation
-  symbol  :: Stage -> c -> Symbol
+  symbol  :: c -> Stage -> Symbol
   
 -- FIXME: More fine-grained stages.
 -- | Stages correspond to what we're trying to look up. They range from abstract
@@ -25,12 +25,12 @@ instance Show Stage where
 
 -- | Helper function for getting a symbol in the Equational Stage
 eqSymb :: HasSymbol q => q -> Symbol
-eqSymb = symbol Equational
+eqSymb = \c -> symbol c Equational
 
 -- | Helper function for getting a symbol in the Implementation Stage
 codeSymb :: HasSymbol q => q -> Symbol
-codeSymb = symbol Implementation
+codeSymb = \c -> symbol c Implementation
 
 -- | Is a Stage symbol real or Empty?
 hasStageSymbol :: HasSymbol q => q -> Stage -> Bool
-hasStageSymbol q st = symbol st q /= Empty
+hasStageSymbol q st = symbol q st /= Empty

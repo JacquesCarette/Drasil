@@ -10,7 +10,7 @@ module Language.Drasil.Chunk.Unital
   , ucsWS
   ) where
 
-import Control.Lens (makeLenses, view)
+import Control.Lens (makeLenses, view, (^.))
 import Language.Drasil.Chunk (Chunk(..))
 import Language.Drasil.Chunk.NamedIdea (NamedIdea(..),Idea(..))
 import Language.Drasil.Chunk.Concept (Concept, dcc, dccWDS,Definition(..),ConceptDomain(..), cw)
@@ -36,7 +36,7 @@ instance Definition    UnitalChunk where defn = con . defn
 instance ConceptDomain UnitalChunk where cdom = con . cdom
 instance Concept       UnitalChunk where
 instance HasSpace      UnitalChunk where typ = con . typ
-instance HasSymbol     UnitalChunk where symbol st (UC c _ ) = symbol st c
+instance HasSymbol     UnitalChunk where symbol c st = symbol (c^.con) st
 instance Quantity      UnitalChunk where getUnit = Just . unit
 instance Unitary       UnitalChunk where unit = view uni
   

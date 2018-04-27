@@ -148,7 +148,7 @@ instance Chunk CodeChunk where uid = qc . uid
 instance NamedIdea CodeChunk where term = qc . term
 instance Idea CodeChunk where getA = getA . view qc
 instance HasSpace CodeChunk where typ = qc . typ
-instance HasSymbol CodeChunk where symbol s c = symbol s (c ^. qc)
+instance HasSymbol CodeChunk where symbol c = symbol (c ^. qc)
 instance Quantity CodeChunk where getUnit = getUnit . view qc
 instance CodeIdea CodeChunk where
   codeName (CodeC c Var) = symbToCodeName (codeSymb c)
@@ -185,7 +185,7 @@ instance Chunk CodeDefinition where uid = quant . uid
 instance NamedIdea CodeDefinition where term = quant . term
 instance Idea CodeDefinition where getA = getA . view quant
 instance HasSpace CodeDefinition where typ = quant . typ
-instance HasSymbol CodeDefinition where symbol s c = symbol s $ c ^. quant
+instance HasSymbol CodeDefinition where symbol c = symbol (c ^. quant)
 instance Quantity CodeDefinition where getUnit = getUnit . view quant
 instance CodeIdea CodeDefinition where codeName = (^. ci)
 instance Eq CodeDefinition where c1 == c2 = (c1 ^. uid) == (c2 ^. uid)

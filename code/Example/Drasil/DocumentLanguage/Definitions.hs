@@ -146,12 +146,12 @@ mkIMField i m l@(Description v u) fs = (show l,
 mkIMField _ _ l@(RefBy) fs = (show l, fixme) : fs --FIXME: fill this in
 mkIMField i _ l@(Source) fs = (show l, [Paragraph $ getSource i]) : fs --FIXME: fill this in
 mkIMField i _ l@(Output) fs = (show l, [Paragraph x]) : fs
-  where x = P . symbol Equational $ i ^. imOutput
+  where x = P . eqSymb $ i ^. imOutput
 mkIMField i _ l@(Input) fs = 
   case (i ^. imInputs) of
   [] -> (show l, [Paragraph EmptyS]) : fs -- FIXME? Should an empty input list be allowed?
   (_:_) -> (show l, [Paragraph $ foldl (sC) x xs]) : fs
-  where (x:xs) = map (P . symbol Equational) (i ^. imInputs)
+  where (x:xs) = map (P . eqSymb) (i ^. imInputs)
 mkIMField i _ l@(InConstraints) fs  = (show l,
   foldr ((:) . eqUnR) [] (map tConToExpr (i ^. inCons))) : fs
 mkIMField i _ l@(OutConstraints) fs = (show l,

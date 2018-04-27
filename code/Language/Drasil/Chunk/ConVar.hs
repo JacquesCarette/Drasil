@@ -28,7 +28,7 @@ instance NamedIdea ConVar where term = con . term
 instance Idea ConVar where getA (CV c _ _) = getA c
 instance Definition ConVar where defn = con . defn
 instance ConceptDomain ConVar where cdom = con . cdom
-instance HasSymbol ConVar where symbol st c = (c ^. symb) st
+instance HasSymbol ConVar where symbol c = (c ^. symb)
 instance HasSpace ConVar where typ = spa
 instance Concept ConVar where
 instance Quantity ConVar where getUnit _ = Nothing
@@ -39,4 +39,4 @@ cv c s = CV c (\_ -> s)
 
 -- | Make a ConVar out of a combined |Concept| + |Quantity|
 makeCV :: (Quantity c, Concept c) => c -> ConVar
-makeCV c = CV (cw c) (\st -> symbol st c) (c ^. typ)
+makeCV c = CV (cw c) (symbol c) (c ^. typ)

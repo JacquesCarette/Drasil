@@ -27,7 +27,7 @@ instance Definition DefinedQuantityDict where defn = con . defn
 instance ConceptDomain DefinedQuantityDict where cdom = con . cdom
 instance Concept DefinedQuantityDict where
 instance Q.HasSpace DefinedQuantityDict where  typ = quant . Q.typ
-instance HasSymbol DefinedQuantityDict where symbol s (DQD a _) = symbol s a
+instance HasSymbol DefinedQuantityDict where symbol q st = symbol (q^.quant) st
 instance Q.Quantity DefinedQuantityDict where getUnit (DQD a _) = Q.getUnit a
 
 cqs :: (Q.Quantity c, Concept c) => c -> DefinedQuantityDict

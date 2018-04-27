@@ -29,7 +29,7 @@ instance Chunk QDefinition where uid = qua . uid
 instance NamedIdea QDefinition where term = qua . term
 instance Idea QDefinition where getA c = getA $ c ^. qua
 instance HasSpace QDefinition where typ = qua . typ
-instance HasSymbol QDefinition where symbol s (EC a _ _)  = symbol s a
+instance HasSymbol QDefinition where symbol e st = symbol (e^.qua) st
 instance Quantity QDefinition where getUnit (EC a _ _)   = getUnit a
   
 instance ExprRelat QDefinition where relat = equat
@@ -67,7 +67,7 @@ ec' e c = ec e c []
 -- | Returns a 'VarChunk' from a 'QDefinition'.
 -- Currently only used in example /Modules/ which are being reworked.
 getVC :: QDefinition -> VarChunk
-getVC qd = vcSt (qd ^. uid) (qd ^. term) (\s -> symbol s qd) (qd ^. typ)
+getVC qd = vcSt (qd ^. uid) (qd ^. term) (symbol qd) (qd ^. typ)
 
 -- | For testing ONLY. Once all the chunks are updated for attributes this
 -- should be removed and the other constructors should be updated to include

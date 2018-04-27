@@ -42,7 +42,7 @@ instance Chunk UncertQ where uid = coco . uid
 instance NamedIdea UncertQ where term = coco . term
 instance Idea UncertQ where getA (UQ q _) = getA q
 instance HasSpace UncertQ where typ = coco . typ
-instance HasSymbol UncertQ where symbol s  (UQ q _) = symbol s q
+instance HasSymbol UncertQ where symbol c = symbol (c^.coco)
 instance Quantity UncertQ where getUnit    (UQ q _) = getUnit q
 instance UncertainQuantity UncertQ where uncert = unc
 instance Constrained UncertQ where constraints = coco . constraints
@@ -86,7 +86,7 @@ instance Eq UncertainChunk where c1 == c2 = (c1 ^. uid) == (c2 ^. uid)
 instance NamedIdea UncertainChunk where term = conc . term
 instance Idea UncertainChunk where getA (UCh n _) = getA n
 instance HasSpace UncertainChunk where typ = conc . typ
-instance HasSymbol UncertainChunk where symbol s  (UCh c _) = symbol s c
+instance HasSymbol UncertainChunk where symbol c = symbol (c^.conc)
 instance Quantity UncertainChunk where getUnit    (UCh c _) = getUnit c
 instance Constrained UncertainChunk where constraints = conc . constraints
 instance HasReasVal UncertainChunk where reasVal = conc . reasVal

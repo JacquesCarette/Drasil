@@ -21,7 +21,7 @@ instance Definition UnitaryConceptDict where defn = dad . defn
 instance ConceptDomain UnitaryConceptDict where cdom = dad . cdom
 instance Concept UnitaryConceptDict where
 instance HasSpace UnitaryConceptDict where typ = unitary . typ
-instance HasSymbol UnitaryConceptDict where symbol stage = symbol stage . view unitary
+instance HasSymbol UnitaryConceptDict where symbol c stage = symbol (c^.unitary) stage
 instance Quantity UnitaryConceptDict where getUnit = getUnit . view unitary
 
 instance Eq UnitaryConceptDict where a == b = (a ^. uid) == (b ^. uid)

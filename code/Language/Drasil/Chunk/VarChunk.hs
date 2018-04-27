@@ -23,7 +23,7 @@ instance Eq        VarChunk where c1 == c2 = (c1 ^. uid) == (c2 ^. uid)
 instance Chunk     VarChunk where uid = ni . uid
 instance NamedIdea VarChunk where term = ni . term
 instance Idea      VarChunk where getA = getA . view ni
-instance HasSymbol VarChunk where symbol st x = (x ^. vsymb) st
+instance HasSymbol VarChunk where symbol x = (x ^. vsymb)
 instance HasSpace  VarChunk where typ = vtyp
 instance Quantity  VarChunk where getUnit _  = Nothing
   

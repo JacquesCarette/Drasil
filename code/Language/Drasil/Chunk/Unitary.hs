@@ -28,7 +28,7 @@ instance Chunk     UnitaryChunk where uid = quant . uid
 instance NamedIdea UnitaryChunk where term = quant . term
 instance Idea      UnitaryChunk where getA uc = getA $ uc ^. quant
 instance HasSpace  UnitaryChunk where typ = quant . typ
-instance HasSymbol UnitaryChunk where symbol st (UC s _) = symbol st s
+instance HasSymbol UnitaryChunk where symbol u st = symbol (u^.quant) st
 instance Quantity  UnitaryChunk where getUnit = Just . _un
 instance Unitary   UnitaryChunk where unit x = x ^. un
   

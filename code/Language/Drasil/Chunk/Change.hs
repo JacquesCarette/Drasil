@@ -45,7 +45,7 @@ chc :: String -> ChngType -> Sentence -> RefName -> Attributes -> Change
 chc = ChC
 
 chc' :: Change -> Sentence -> Change
-chc' c s = set attributes ([ShortName s] ++ (c ^. attributes)) c
+chc' c s = set attributes ([shortname s] ++ (c ^. attributes)) c
 
 lc, ulc :: String -> Sentence -> RefName -> Attributes -> Change
 -- | Smart constructor for functional requirement chunks.

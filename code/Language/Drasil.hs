@@ -72,8 +72,9 @@ module Language.Drasil (
   -- Chunk.UnitaryConcept
   , ucw, UnitaryConceptDict
   -- Chunks w/ Attributes
-  , Attribute(..), Attributes, attributes, getSource, aqd -- TODO: Remove aqd
+  , Attributes, attributes, getSource, aqd -- TODO: Remove aqd
   , HasAttributes, Derivation, getDerivation, getShortName
+  , sourceref, derivationsteps
   --Citations
   , Citation, BibRef, CiteField, Month(..), HP
     -- CiteFields smart constructors

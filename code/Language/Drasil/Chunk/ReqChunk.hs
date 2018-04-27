@@ -49,7 +49,7 @@ rc :: String -> ReqType -> Sentence -> RefName -> Attributes -> ReqChunk
 rc = RC
 
 rc' :: ReqChunk -> Sentence -> ReqChunk
-rc' r s = set attributes ([ShortName s] ++ (r ^. attributes)) r
+rc' r s = set attributes (shortname s : (r ^. attributes)) r
 
 frc, nfrc :: String -> Sentence -> RefName -> Attributes -> ReqChunk
 -- | Smart constructor for functional requirement chunks.

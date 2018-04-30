@@ -6,8 +6,8 @@ module Language.Drasil.Chunk.Concept
   , CommonConcept
   )where
 
-import Language.Drasil.Classes (HasUID(uid), NamedIdea(term))
-import Language.Drasil.Chunk.NamedIdea
+import Language.Drasil.Classes (HasUID(uid), NamedIdea(term), Idea(getA))
+import Language.Drasil.Chunk.NamedIdea(IdeaDict,mkIdea,nw)
 import Language.Drasil.Chunk.CommonIdea (CI,CommonIdea(abrv),commonIdea)
 import Language.Drasil.Spec
 import Language.Drasil.NounPhrase

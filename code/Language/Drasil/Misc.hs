@@ -1,11 +1,11 @@
 module Language.Drasil.Misc where
 
 import Language.Drasil.Spec
-import Language.Drasil.Classes (NamedIdea(term))
+import Language.Drasil.Classes (NamedIdea(term), Idea(getA))
 import Language.Drasil.Chunk.Quantity
 import Language.Drasil.UnitLang (USymb)
 import Language.Drasil.Unit (HasUnitSymbol(usymb))
-import Language.Drasil.Chunk.NamedIdea (Idea, short)
+import Language.Drasil.Chunk.NamedIdea (short)
 import Language.Drasil.Chunk.Unitary
 import qualified Language.Drasil.NounPhrase as NP
 

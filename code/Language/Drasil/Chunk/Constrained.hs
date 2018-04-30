@@ -14,7 +14,6 @@ import Control.Lens (Lens', (^.), makeLenses, view)
 import Language.Drasil.Expr (Expr(..), RealInterval(..), Relation)
 import Language.Drasil.Chunk.Quantity
 import Language.Drasil.Chunk.DefinedQuantity
-import Language.Drasil.Chunk.NamedIdea (Idea(..))
 import Language.Drasil.Chunk.Unitary
 import Language.Drasil.Chunk.VarChunk
 import Language.Drasil.Chunk.Unital (ucs)
@@ -24,7 +23,7 @@ import Language.Drasil.Unit
 import Language.Drasil.NounPhrase
 import Language.Drasil.Space
 import Language.Drasil.Symbol
-import Language.Drasil.Classes (HasUID(uid), NamedIdea(term))
+import Language.Drasil.Classes (HasUID(uid), NamedIdea(term), Idea(getA))
 
 -- | A Constrained is a 'Quantity' that has value constraints
 class Quantity c => Constrained c where

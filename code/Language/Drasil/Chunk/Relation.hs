@@ -6,8 +6,8 @@ module Language.Drasil.Chunk.Relation
 
 import Control.Lens (makeLenses, (^.))
 import Language.Drasil.Expr (Relation)
-import Language.Drasil.Classes (HasUID(uid),NamedIdea(term))
-import Language.Drasil.Chunk.NamedIdea
+import Language.Drasil.Classes (HasUID(uid),NamedIdea(term),Idea(getA))
+-- import Language.Drasil.Chunk.NamedIdea
 import Language.Drasil.Chunk.Concept
 import Language.Drasil.Spec (Sentence(..))
 import Language.Drasil.Chunk.ExprRelat

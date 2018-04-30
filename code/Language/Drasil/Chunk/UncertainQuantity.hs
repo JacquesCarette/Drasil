@@ -11,8 +11,7 @@ module Language.Drasil.Chunk.UncertainQuantity
   , uncrtnw
   ) where
   
-import Language.Drasil.Classes (HasUID(uid), NamedIdea(term))
-import Language.Drasil.Chunk.NamedIdea (Idea(..))
+import Language.Drasil.Classes (HasUID(uid), NamedIdea(term), Idea(getA))
 import Language.Drasil.Chunk.Quantity
 import Language.Drasil.Chunk.DefinedQuantity (cqs)
 import Language.Drasil.Chunk.Constrained

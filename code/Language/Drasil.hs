@@ -28,6 +28,7 @@ module Language.Drasil (
   -- Classes
   , HasUID(uid)
   , NamedIdea(term)
+  , Idea(getA)
   -- Chunk.VarChunk
   , VarChunk
   , vc, implVar
@@ -38,7 +39,7 @@ module Language.Drasil (
   -- Chunk.CommonIdea
   , CommonIdea(..) , commonIdea, CI, getAcc
   -- Chunk.NamedIdea
-  , NamedChunk, Idea(..), short, nc, IdeaDict
+  , NamedChunk, short, nc, IdeaDict
   , nw -- bad name (historical)
   , compoundterm, for, for', for'', of_, of_', of_'', of__, of'', compoundNC, compoundNC'
   , compoundNC'', compoundNC''', with, with', and_, and_', andRT, aNP, the, a_
@@ -195,7 +196,7 @@ import Language.Drasil.Document (Document(..), DType(..)
 import Language.Drasil.Unicode -- all of it
 import Language.Drasil.UnitLang -- all of it
 import Language.Drasil.Unit -- all of it
-import Language.Drasil.Classes (HasUID(uid), NamedIdea(term))
+import Language.Drasil.Classes (HasUID(uid), NamedIdea(term), Idea(getA))
 import Language.Drasil.Chunk.AssumpChunk
 import Language.Drasil.Chunk.Attribute
 import Language.Drasil.Chunk.Attribute.Derivation (Derivation)

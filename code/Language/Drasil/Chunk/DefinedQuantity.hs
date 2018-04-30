@@ -4,8 +4,7 @@ module Language.Drasil.Chunk.DefinedQuantity
   ( cqs, DefinedQuantityDict
   ) where
 
-import Language.Drasil.Classes (HasUID(uid), NamedIdea(term))
-import Language.Drasil.Chunk.NamedIdea (Idea(..))
+import Language.Drasil.Classes (HasUID(uid), NamedIdea(term), Idea(getA))
 import Language.Drasil.Chunk.Concept
 import Language.Drasil.Chunk.SymbolForm (HasSymbol(symbol))
 import qualified Language.Drasil.Chunk.Quantity as Q

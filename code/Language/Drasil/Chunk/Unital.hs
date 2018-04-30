@@ -11,8 +11,7 @@ module Language.Drasil.Chunk.Unital
   ) where
 
 import Control.Lens (makeLenses, view, (^.))
-import Language.Drasil.Classes (HasUID(uid), NamedIdea(term))
-import Language.Drasil.Chunk.NamedIdea (Idea(..))
+import Language.Drasil.Classes (HasUID(uid), NamedIdea(term), Idea(getA))
 import Language.Drasil.Chunk.Concept (Concept, dcc, dccWDS,Definition(..),ConceptDomain(..), cw)
 import Language.Drasil.Chunk.ConVar (ConVar (..), cv)
 import Language.Drasil.Chunk.Quantity (Quantity(..),HasSpace(typ))

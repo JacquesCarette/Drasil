@@ -2,6 +2,7 @@
 module Language.Drasil.Classes (
     HasUID(uid), UID
   , NamedIdea(term)
+  , Idea(getA)
   ) where
 
 import Language.Drasil.NounPhrase.Core (NP)
@@ -20,4 +21,11 @@ class HasUID c where
 class HasUID c => NamedIdea c where
   -- | Lens to the term (a noun phrase)
   term :: Lens' c NP
+
+-- | An |Idea| is the 'meet' of |NamedIdea| and |CommonIdea|.
+-- In other words, it /may/ have an acronym/abbreviation.
+class NamedIdea c => Idea c where
+  getA :: c -> Maybe String
+  --Get Abbreviation/Acronym? These might need to be separated 
+  --depending on contexts, but for now I don't see a problem with it.
 

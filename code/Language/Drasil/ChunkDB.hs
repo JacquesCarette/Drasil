@@ -7,9 +7,9 @@ module Language.Drasil.ChunkDB
   , HasUnitTable(..), unitMap
   ) where
 
-import Language.Drasil.Classes (HasUID(uid))
+import Language.Drasil.Classes (HasUID(uid), Idea(getA))
+import Language.Drasil.Chunk.NamedIdea (IdeaDict, nw)
 import Language.Drasil.Chunk.Quantity
-import Language.Drasil.Chunk.NamedIdea
 import Language.Drasil.Chunk.Concept 
 import Language.Drasil.Unit
 

@@ -1,22 +1,15 @@
 {-# LANGUAGE TemplateHaskell #-}
-module Language.Drasil.Chunk.NamedIdea (Idea(..),
+module Language.Drasil.Chunk.NamedIdea (
   NamedChunk, nc, IdeaDict, compoundterm, short, nw, mkIdea,
   compoundNC, compoundNC', compoundNC'', compoundNC''',
   for, for', for'', of_, of_', of_'', of__, of'',
   with, with', and_, and_', andRT, the, theCustom, this, aNP, a_, ofA) where
 
-import Language.Drasil.Classes
+import Language.Drasil.Classes (HasUID(uid), NamedIdea(term), Idea(getA))
 import Control.Lens ((^.), makeLenses, view)
 
 import Language.Drasil.Spec
 import Language.Drasil.NounPhrase
-
--- | An |Idea| is the 'meet' of |NamedIdea| and |CommonIdea|.
--- In other words, it /may/ have an acronym/abbreviation.
-class NamedIdea c => Idea c where
-  getA :: c -> Maybe String
-  --Get Abbreviation/Acronym? These might need to be separated 
-  --depending on contexts, but for now I don't see a problem with it.
 
 -- | Get short form (if it exists), else get term.
 short :: Idea c => c -> Sentence

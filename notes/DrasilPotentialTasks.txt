@@ -49,7 +49,7 @@ POTENTIAL TASKS (Proto-issues)
 
 - Code issues:
   - remove Greek from Unicode and use the actual characters
-  - understand if sClrlyBrSymb in Symbol makese sense
+  - understand if sClrlyBrSymb in Symbol makes sense
   - investigate StringLike and/or OverloadedStrings.  See SymbolAlphabet.
   - Space needs to be rethought
   - RefTypes is way too specific. `RefType` should not exist...
@@ -85,13 +85,21 @@ POTENTIAL TASKS (Proto-issues)
     - Change: Hack. re-implement.
     - Citation: should investigate 3rd party implementations
   - Spec: a lot of the Sentence constructors should be deleted...
+  - Remove multiple occurrences of definition of DD as Data Definition
 
 - Structural:
   - break Drasil into packages.  Likely drasil-lang, drasil-data,
     drasil-code and drasil-examples. As a start.
-  - make sure the generated code compiles and runs correctly (at least
-    on travis?).
+  - make sure the generated code compiles and runs correctly and html is clean, tex 
+    compiles (at least on travis?)
   - investigate
     https://hackage.haskell.org/package/bibdb
     http://pandoc.org/MANUAL.html#citations
+
+- Consistency checks
+	- bunch of them
+
+- Document choice points
+	- verbosity
+	
 

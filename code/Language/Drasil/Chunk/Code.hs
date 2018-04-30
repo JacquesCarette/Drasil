@@ -29,7 +29,7 @@ import Data.String.Utils (replace)
 import qualified Data.Map as Map
 
 -- not using lenses for now
-class (Chunk c) => CodeIdea c where
+class CodeIdea c where
   codeName      :: c -> String
 
 programName :: CommonIdea c => c -> String

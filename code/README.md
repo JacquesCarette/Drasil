@@ -19,17 +19,15 @@ top level
 
 5. One blank line between top-level definitions. No blank lines between type signatures and function definitions.
 
-6. Surround binary operators with a single space on either side. Ex:
-
-`x ^. term`
+6. Surround binary operators with a single space on either side. Ex: `x ^. term`
 
 7. Do not break operations across lines, unless they are sentence combinators (`:+:`, `+:+`, `(sC)`, etc.). Ex: 
 
 ```Haskell
-S "The" +:+ (phrase $ heat_trans ^. term) +:+ 
-S "is the"
+  S "The" +:+ (phrase $ heat_trans ^. term) +:+ 
+  S "is the"
+  ...
 ```
-...
 
 -------------------------------------------------
 ### Quick Start Legend
@@ -57,6 +55,15 @@ S "is the"
 **Note: See Language.Drasil.Spec.hs for more information on the Sentence type**
 
 More to come as questions arise.
+
+-------------------------------------------------
+### Data types and class instances
+-------------------------------------------------
+
+See the 
+[cheat sheet on Data Types](https://github.com/JacquesCarette/Drasil/blob/master/Dan/DataTypes.xlsx) 
+(located in ../Dan/DataTypes) for more information on which chunk types are instances
+of which classes.
 
 -------------------------------------------------
 ### Building Up-to-Date Documentation
@@ -104,11 +111,16 @@ Makefile
 README.md
   - This file
   
+countCommand.txt
+  - A text file containing instructions on how to count all unique words 
+  within a file using bash commands
+  
 drasil.cabal
   - Cabal file, used by stack to build Drasil
   
 log_check.sh
-  - A shell script for comparing the generated output to the expected output for each example. Outputs whether the examples match their stable versions or not
+  - A shell script for comparing the generated output to the expected output for
+  each example. Outputs whether the examples match their stable versions or not
   
 stack.yaml
   - Used by Stack

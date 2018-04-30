@@ -1,7 +1,7 @@
 {-# Language TemplateHaskell #-}
 module Language.Drasil.Chunk.VarChunk(VarChunk,implVar,codeVC,vc,vcSt,vc'') where
 
-import Language.Drasil.Chunk
+import Language.Drasil.Classes (HasUID(uid))
 import Language.Drasil.Chunk.NamedIdea
 import Language.Drasil.Chunk.SymbolForm (Stage(..), HasSymbol(symbol))
 import Language.Drasil.Chunk.Quantity (Quantity(getUnit))
@@ -20,7 +20,7 @@ data VarChunk = VC { _ni :: IdeaDict
 makeLenses ''VarChunk
 
 instance Eq        VarChunk where c1 == c2 = (c1 ^. uid) == (c2 ^. uid)
-instance Chunk     VarChunk where uid = ni . uid
+instance HasUID    VarChunk where uid = ni . uid
 instance NamedIdea VarChunk where term = ni . term
 instance Idea      VarChunk where getA = getA . view ni
 instance HasSymbol VarChunk where symbol x = (x ^. vsymb)

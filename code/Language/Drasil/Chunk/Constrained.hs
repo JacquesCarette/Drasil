@@ -24,7 +24,7 @@ import Language.Drasil.Unit
 import Language.Drasil.NounPhrase
 import Language.Drasil.Space
 import Language.Drasil.Symbol
-import Language.Drasil.Chunk
+import Language.Drasil.Classes (HasUID(uid))
 
 -- | A Constrained is a 'Quantity' that has value constraints
 class Quantity c => Constrained c where
@@ -74,7 +74,7 @@ data ConstrainedChunk = ConstrainedChunk {
   _qd :: QuantityDict, _constr :: [Constraint], _reasV :: Maybe Expr}
 makeLenses ''ConstrainedChunk
 
-instance Chunk       ConstrainedChunk where uid = qd . uid
+instance HasUID      ConstrainedChunk where uid = qd . uid
 instance NamedIdea   ConstrainedChunk where term = qd . term
 instance Idea        ConstrainedChunk where getA = getA . view qd
 instance HasSpace    ConstrainedChunk where typ = qd . typ
@@ -107,7 +107,7 @@ data ConstrConcept = ConstrConcept { _defq :: DefinedQuantityDict,
   _constr' :: [Constraint], _reasV' :: Maybe Expr}
 makeLenses ''ConstrConcept
 
-instance Chunk         ConstrConcept where uid = defq . uid
+instance HasUID        ConstrConcept where uid = defq . uid
 instance NamedIdea     ConstrConcept where term = defq . term
 instance Idea          ConstrConcept where getA = getA . view defq
 instance HasSpace      ConstrConcept where typ = defq . typ

@@ -4,8 +4,7 @@ module Language.Drasil.Chunk.Unitary
   , unitary, mkUnitary
   , Unitary(..)) where
 
-import Control.Lens ((^.), makeLenses)
-import Language.Drasil.Chunk (Chunk(..))
+import Language.Drasil.Classes (HasUID(uid))
 import Language.Drasil.Chunk.NamedIdea (NamedIdea(..), Idea(..))
 import Language.Drasil.Chunk.Quantity (Quantity(..), QuantityDict, mkQuant, qw, 
   HasSpace(typ))
@@ -13,8 +12,9 @@ import Language.Drasil.Chunk.SymbolForm (HasSymbol(symbol))
 import Language.Drasil.Unit (IsUnit, UnitDefn, unitWrapper)
 import Language.Drasil.Symbol
 import Language.Drasil.Space
-
 import Language.Drasil.NounPhrase (NP)
+
+import Control.Lens ((^.), makeLenses)
 
 -- | A Unitary is a 'Quantity' that __must__ have a unit
 class (Quantity c) => Unitary c where
@@ -24,7 +24,7 @@ class (Quantity c) => Unitary c where
 data UnitaryChunk = UC { _quant :: QuantityDict, _un :: UnitDefn }
 makeLenses ''UnitaryChunk
 
-instance Chunk     UnitaryChunk where uid = quant . uid
+instance HasUID    UnitaryChunk where uid = quant . uid
 instance NamedIdea UnitaryChunk where term = quant . term
 instance Idea      UnitaryChunk where getA uc = getA $ uc ^. quant
 instance HasSpace  UnitaryChunk where typ = quant . typ

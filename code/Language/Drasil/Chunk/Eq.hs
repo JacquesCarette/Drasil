@@ -5,7 +5,7 @@ module Language.Drasil.Chunk.Eq
 
 import Control.Lens ((^.), makeLenses)
 import Language.Drasil.Expr (Expr)
-import Language.Drasil.Chunk
+import Language.Drasil.Classes (HasUID(uid))
 import Language.Drasil.Chunk.Attribute
 import Language.Drasil.Chunk.NamedIdea (NamedIdea(..), Idea(..))
 import Language.Drasil.Chunk.Quantity (Quantity(getUnit),HasSpace(typ), QuantityDict,
@@ -25,16 +25,15 @@ data QDefinition = EC { _qua :: QuantityDict, _equat :: Expr, _att :: Attributes
 makeLenses ''QDefinition
 
 -- this works because UnitalChunk is a Chunk
-instance Chunk QDefinition where uid = qua . uid
-instance NamedIdea QDefinition where term = qua . term
-instance Idea QDefinition where getA c = getA $ c ^. qua
-instance HasSpace QDefinition where typ = qua . typ
-instance HasSymbol QDefinition where symbol e st = symbol (e^.qua) st
-instance Quantity QDefinition where getUnit (EC a _ _)   = getUnit a
-  
-instance ExprRelat QDefinition where relat = equat
+instance HasUID QDefinition        where uid = qua . uid
+instance NamedIdea QDefinition     where term = qua . term
+instance Idea QDefinition          where getA c = getA $ c ^. qua
+instance HasSpace QDefinition      where typ = qua . typ
+instance HasSymbol QDefinition     where symbol e st = symbol (e^.qua) st
+instance Quantity QDefinition      where getUnit (EC a _ _)   = getUnit a
+instance ExprRelat QDefinition     where relat = equat
 instance HasAttributes QDefinition where attributes = att
-instance Eq QDefinition where a == b = (a ^. uid) == (b ^. uid)
+instance Eq QDefinition            where a == b = (a ^. uid) == (b ^. uid)
   
 -- | Create a 'QDefinition' with an uid, noun phrase (term), definition, symbol,
 -- unit, and defining equation.  And it ignores the definition...

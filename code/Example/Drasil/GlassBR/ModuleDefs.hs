@@ -108,26 +108,26 @@ onLine p1@(x1,y1) p2 x_ =
 ------------------------------------------------------------------------------------------
 -- Code Template helper functions
 
-vLook :: (HasSymbol a, HasSymbol i, Chunk a, Chunk i) => a -> i -> Expr -> Expr
+vLook :: (HasSymbol a, HasSymbol i, HasUID a, HasUID i) => a -> i -> Expr -> Expr
 vLook a i_ p = idx (sy a) (sy i_ + p)
 
-aLook :: (HasSymbol a, HasSymbol i, HasSymbol j, Chunk a, Chunk i, Chunk j) =>
+aLook :: (HasSymbol a, HasSymbol i, HasSymbol j, HasUID a, HasUID i, HasUID j) =>
   a -> i -> j -> Expr
 aLook a i_ j_ = idx (idx (sy a) (sy i_)) (sy j_)
 
-getCol :: (HasSymbol a, HasSymbol i, Chunk a, Chunk i) => a -> i -> Expr -> Expr
+getCol :: (HasSymbol a, HasSymbol i, HasUID a, HasUID i) => a -> i -> Expr -> Expr
 getCol a_ i_ p = apply (asExpr extractColumnCT) [sy a_, sy i_ + p]
 
 call :: Func -> [VarChunk] -> FuncStmt
 call f l = FProcCall f $ map sy l
 
-find :: (Chunk zv, Chunk z, HasSymbol zv, HasSymbol z) => zv -> z -> Expr
+find :: (HasUID zv, HasUID z, HasSymbol zv, HasSymbol z) => zv -> z -> Expr
 find zv z_ = apply (asExpr findCT) [sy zv, sy z_]
 
 linInterp :: [Expr] -> Expr
 linInterp = apply (asExpr linInterpCT)
 
-interpOver :: (Chunk ptx, Chunk pty, Chunk ind, Chunk vv,
+interpOver :: (HasUID ptx, HasUID pty, HasUID ind, HasUID vv,
   HasSymbol ptx, HasSymbol pty, HasSymbol ind, HasSymbol vv) =>
   ptx -> pty -> ind -> vv -> [Expr]
 interpOver ptx pty ind vv =

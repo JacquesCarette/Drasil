@@ -6,7 +6,7 @@ module Language.Drasil.Chunk.Quantity
 import Control.Lens ((^.),makeLenses,view)
 
 import Language.Drasil.Space
-import Language.Drasil.Chunk
+import Language.Drasil.Classes (HasUID(uid))
 import Language.Drasil.Chunk.NamedIdea
 import Language.Drasil.Symbol (Symbol)
 import Language.Drasil.NounPhrase
@@ -25,7 +25,7 @@ data QuantityDict = QD { _id' :: IdeaDict, _typ' :: Space,
   _symb' :: Stage -> Symbol, _unit' :: Maybe UnitDefn}
 makeLenses ''QuantityDict
 
-instance Chunk     QuantityDict where uid = id' . uid
+instance HasUID    QuantityDict where uid = id' . uid
 instance NamedIdea QuantityDict where term = id' . term
 instance Idea      QuantityDict where getA  qd = getA (qd ^. id')
 instance HasSpace  QuantityDict where typ = typ'

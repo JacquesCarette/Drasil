@@ -4,7 +4,7 @@ module Language.Drasil.Chunk.AssumpChunk
   , assump
   ) where
 
-import Language.Drasil.Chunk
+import Language.Drasil.Classes (HasUID(uid))
 import Language.Drasil.Chunk.Attribute (Attributes, HasAttributes(..), shortname)
 import Language.Drasil.Spec (Sentence(..), RefName)
 
@@ -20,10 +20,9 @@ data AssumpChunk = AC
                  }
 makeLenses ''AssumpChunk
 
-instance Chunk AssumpChunk where uid = aid
+instance HasUID AssumpChunk        where uid = aid
 instance HasAttributes AssumpChunk where attributes = attribs
-instance Eq AssumpChunk where
-  a == b = a ^. uid == b ^. uid
+instance Eq AssumpChunk            where a == b = a ^. uid == b ^. uid
   
 -- | Smart constructor for Assumption chunks. The second 'Sentence' here is 
 -- a short name (attribute).

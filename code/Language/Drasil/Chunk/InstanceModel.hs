@@ -4,7 +4,7 @@ module Language.Drasil.Chunk.InstanceModel
   , inCons, outCons, imOutput, imInputs, im, imQD
   )where
 
-import Language.Drasil.Chunk
+import Language.Drasil.Classes (HasUID(uid))
 import Language.Drasil.Chunk.Attribute
 import Language.Drasil.Chunk.Concept
 import Language.Drasil.Chunk.Constrained
@@ -37,13 +37,13 @@ data InstanceModel = IM { _rc :: RelationConcept
                         }
 makeLenses ''InstanceModel
   
-instance Chunk InstanceModel where uid = rc . uid
-instance NamedIdea InstanceModel where term = rc . term
-instance Idea InstanceModel where getA (IM a _ _ _ _ _) = getA a
+instance HasUID InstanceModel        where uid = rc . uid
+instance NamedIdea InstanceModel     where term = rc . term
+instance Idea InstanceModel          where getA (IM a _ _ _ _ _) = getA a
 instance Concept InstanceModel
-instance Definition InstanceModel where defn = rc . defn
+instance Definition InstanceModel    where defn = rc . defn
 instance ConceptDomain InstanceModel where cdom = rc . cdom
-instance ExprRelat InstanceModel where relat = rc . relat
+instance ExprRelat InstanceModel     where relat = rc . relat
 instance HasAttributes InstanceModel where attributes = attribs
 
 -- | Smart constructor for instance models

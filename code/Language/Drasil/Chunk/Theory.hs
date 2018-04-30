@@ -3,7 +3,7 @@ module Language.Drasil.Chunk.Theory
   ( tc', Theory(..), TheoryChunk, TheoryModel, tm, tw
   )where
 
-import Language.Drasil.Chunk
+import Language.Drasil.Classes (HasUID(uid))
 import Language.Drasil.Chunk.Concept
 import Language.Drasil.Chunk.Constrained
 import Language.Drasil.Chunk.Eq
@@ -11,7 +11,7 @@ import Language.Drasil.Chunk.NamedIdea
 import Language.Drasil.Chunk.Quantity
 
 import Control.Lens (Lens', (^.), view, makeLenses)
-class Chunk t => Theory t where
+class HasUID t => Theory t where
   valid_context :: Lens' t [TheoryChunk]
   spaces        :: Lens' t [SpaceDefn] 
   quantities    :: Lens' t [QuantityDict]
@@ -42,7 +42,7 @@ instance Theory TheoryChunk where
   invariants    = invs
   defined_fun   = dfun
 
-instance Chunk TheoryChunk where uid = tid
+instance HasUID TheoryChunk where uid = tid
 
 tw :: Theory t => t -> TheoryChunk
 tw t = TC (t ^. uid) (t ^. valid_context) (t ^. spaces) (t ^. quantities)
@@ -52,7 +52,7 @@ tw t = TC (t ^. uid) (t ^. valid_context) (t ^. spaces) (t ^. quantities)
 data TheoryModel = TM {_con :: ConceptChunk, _thy :: TheoryChunk }
 makeLenses ''TheoryModel
   
-instance Chunk TheoryModel where uid = con . uid
+instance HasUID TheoryModel where uid = con . uid
 instance NamedIdea TheoryModel where term = con . term
 instance Idea TheoryModel where getA = getA . view con
 instance Definition TheoryModel where defn = con . defn

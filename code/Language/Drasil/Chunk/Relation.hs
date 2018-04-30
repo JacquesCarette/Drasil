@@ -6,7 +6,7 @@ module Language.Drasil.Chunk.Relation
 
 import Control.Lens (makeLenses, (^.))
 import Language.Drasil.Expr (Relation)
-import Language.Drasil.Chunk
+import Language.Drasil.Classes (HasUID(uid))
 import Language.Drasil.Chunk.NamedIdea
 import Language.Drasil.Chunk.Concept
 import Language.Drasil.Spec (Sentence(..))
@@ -17,7 +17,7 @@ import Language.Drasil.NounPhrase (NP)
 data RelationConcept = RC {_conc :: ConceptChunk, _rel :: Relation }
 makeLenses ''RelationConcept
 
-instance Chunk         RelationConcept where uid = conc . uid
+instance HasUID        RelationConcept where uid = conc . uid
 instance NamedIdea     RelationConcept where term = conc . term
 instance Idea          RelationConcept where getA (RC c _) = getA c
 instance Definition    RelationConcept where defn = conc . defn

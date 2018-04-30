@@ -5,7 +5,7 @@ module Language.Drasil.Chunk.NamedIdea (NamedIdea(..), Idea(..),
   for, for', for'', of_, of_', of_'', of__, of'',
   with, with', and_, and_', andRT, the, theCustom, this, aNP, a_, ofA) where
 
-import Language.Drasil.Chunk
+import Language.Drasil.Classes
 import Control.Lens (Simple, Lens, (^.), makeLenses, view)
 
 import Language.Drasil.Spec
@@ -13,7 +13,7 @@ import Language.Drasil.NounPhrase
 
 -- | A NamedIdea is a 'term' that we've identified (has an 'id') as 
 -- being worthy of naming.
-class Chunk c => NamedIdea c where
+class HasUID c => NamedIdea c where
   -- | Lens to the term (a noun phrase)
   term :: Simple Lens c NP
 
@@ -35,7 +35,7 @@ data NamedChunk = NC {_uu :: String, _np :: NP}
 makeLenses ''NamedChunk
 
 instance Eq        NamedChunk where c1 == c2 = (c1 ^. uid) == (c2 ^. uid)
-instance Chunk     NamedChunk where uid = uu
+instance HasUID    NamedChunk where uid = uu
 instance NamedIdea NamedChunk where term = np
 instance Idea      NamedChunk where getA = \_ -> Nothing
   
@@ -49,7 +49,7 @@ data IdeaDict = IdeaDict { _nc' :: NamedChunk, _mabbr :: Maybe String }
 makeLenses ''IdeaDict
 
 instance Eq        IdeaDict where a == b = a ^. uid == b ^. uid
-instance Chunk     IdeaDict where uid = nc' . uid
+instance HasUID    IdeaDict where uid = nc' . uid
 instance NamedIdea IdeaDict where term = nc' . term
 instance Idea      IdeaDict where getA = view mabbr
   

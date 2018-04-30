@@ -3,7 +3,7 @@ module Language.Drasil.Chunk.ReqChunk
   , frc, nfrc, rc'
   ) where
 
-import Language.Drasil.Chunk
+import Language.Drasil.Classes (HasUID(uid))
 import Language.Drasil.Chunk.Attribute
 import Language.Drasil.Spec (Sentence, RefName)
 
@@ -37,12 +37,9 @@ data ReqChunk = RC
   , _atts      :: Attributes
   }
   
-instance Chunk ReqChunk where
-  uid f (RC a b c d e) = fmap (\x -> RC x b c d e) (f a)
-instance HasAttributes ReqChunk where
-  attributes f (RC a b c d e) = fmap (\x -> RC a b c d x) (f e)
-instance Eq ReqChunk where
-  a == b = a ^. uid == b ^. uid
+instance HasUID ReqChunk where uid f (RC a b c d e) = fmap (\x -> RC x b c d e) (f a)
+instance HasAttributes ReqChunk where attributes f (RC a b c d e) = fmap (\x -> RC a b c d x) (f e)
+instance Eq ReqChunk where a == b = a ^. uid == b ^. uid
 
 -- | Smart constructor for requirement chunks (should not be exported)
 rc :: String -> ReqType -> Sentence -> RefName -> Attributes -> ReqChunk

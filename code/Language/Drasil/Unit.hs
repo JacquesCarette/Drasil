@@ -12,7 +12,7 @@ module Language.Drasil.Unit (
 import Control.Lens (Simple, Lens, (^.))
 import Control.Arrow (second)
 
-import Language.Drasil.Chunk (Chunk(..))
+import Language.Drasil.Classes (HasUID(uid))
 import Language.Drasil.Chunk.NamedIdea (NamedIdea(..), Idea(..))
 import Language.Drasil.Chunk.Concept (Concept,Definition(..), 
   ConceptDomain(..),ConceptChunk, dcc, cw)
@@ -63,7 +63,7 @@ data FundUnit = UD { _vc :: ConceptChunk, _u :: USymb }
 vc :: Simple Lens FundUnit ConceptChunk
 vc f (UD a b) = fmap (\x -> UD x b) (f a)
 
-instance Chunk         FundUnit where uid = vc . uid
+instance HasUID        FundUnit where uid = vc . uid
 instance NamedIdea     FundUnit where term   = vc . term
 instance Idea          FundUnit where getA c = getA (c ^. vc)
 instance Definition    FundUnit where defn = vc . defn
@@ -79,7 +79,7 @@ data DerUChunk = DUC { _uc :: FundUnit, _eq :: UDefn }
 duc :: Simple Lens DerUChunk FundUnit
 duc f (DUC a b) = fmap (\x -> DUC x b) (f a)
 
-instance Chunk         DerUChunk where uid  = duc . uid
+instance HasUID        DerUChunk where uid  = duc . uid
 instance NamedIdea     DerUChunk where term = duc . term
 instance Idea          DerUChunk where getA c = getA (c ^. duc)
 instance Definition    DerUChunk where defn = duc . defn

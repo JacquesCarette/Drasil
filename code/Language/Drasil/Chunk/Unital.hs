@@ -11,7 +11,7 @@ module Language.Drasil.Chunk.Unital
   ) where
 
 import Control.Lens (makeLenses, view, (^.))
-import Language.Drasil.Chunk (Chunk(..))
+import Language.Drasil.Classes (HasUID(uid))
 import Language.Drasil.Chunk.NamedIdea (NamedIdea(..),Idea(..))
 import Language.Drasil.Chunk.Concept (Concept, dcc, dccWDS,Definition(..),ConceptDomain(..), cw)
 import Language.Drasil.Chunk.ConVar (ConVar (..), cv)
@@ -29,7 +29,7 @@ import Language.Drasil.NounPhrase (NP)
 data UnitalChunk = UC { _con :: ConVar, _uni :: UnitDefn }
 makeLenses ''UnitalChunk
 
-instance Chunk         UnitalChunk where uid = con . uid
+instance HasUID        UnitalChunk where uid = con . uid
 instance NamedIdea     UnitalChunk where term = con . term
 instance Idea          UnitalChunk where getA (UC qc _) = getA qc
 instance Definition    UnitalChunk where defn = con . defn

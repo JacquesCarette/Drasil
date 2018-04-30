@@ -7,7 +7,7 @@ module Language.Drasil.ChunkDB
   , HasUnitTable(..), unitMap
   ) where
 
-import Language.Drasil.Chunk
+import Language.Drasil.Classes (HasUID(uid))
 import Language.Drasil.Chunk.Quantity
 import Language.Drasil.Chunk.NamedIdea
 import Language.Drasil.Chunk.Concept 
@@ -76,11 +76,11 @@ class HasUnitTable s where
   unitTable :: Lens' s UnitMap
 
 -- | Gets a unit if it exists, or Nothing.        
-getUnitLup :: HasSymbolTable s => (Chunk c) => c -> s -> Maybe UnitDefn
+getUnitLup :: HasSymbolTable s => (HasUID c) => c -> s -> Maybe UnitDefn
 getUnitLup c m = getUnit $ symbLookup (c ^. uid) (m ^. symbolTable)
 
 -- | Looks up an uid in the term table. If nothing is found, an error is thrown
-termLookup :: (Chunk c) => c -> TermMap -> IdeaDict
+termLookup :: (HasUID c) => c -> TermMap -> IdeaDict
 termLookup c m = getT $ Map.lookup (c ^. uid) m
   where getT (Just x) = x
         getT Nothing  = error $ "Term: " ++ (c ^. uid) ++ " not found in TermMap"

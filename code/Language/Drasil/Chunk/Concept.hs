@@ -6,7 +6,7 @@ module Language.Drasil.Chunk.Concept
   , CommonConcept
   )where
 
-import Language.Drasil.Chunk
+import Language.Drasil.Classes (HasUID(uid))
 import Language.Drasil.Chunk.NamedIdea
 import Language.Drasil.Chunk.CommonIdea (CI,CommonIdea(abrv),commonIdea)
 import Language.Drasil.Spec
@@ -42,7 +42,7 @@ instance Definition    (DefnAndDomain a) where defn = defn'
 instance ConceptDomain (DefnAndDomain ConceptChunk) where cdom = cdom'
 
 instance Eq            ConceptChunk where c1 == c2 = (c1 ^. uid) == (c2 ^. uid)
-instance Chunk         ConceptChunk where uid = idea . uid
+instance HasUID        ConceptChunk where uid = idea . uid
 instance NamedIdea     ConceptChunk where term = idea . term
 instance Idea          ConceptChunk where getA = getA . view idea
 instance Definition    ConceptChunk where defn = dad . defn'
@@ -53,7 +53,7 @@ data CommonConcept = ComConDict { _comm :: CI, _def :: Sentence, _dom :: [Concep
 makeLenses ''CommonConcept
 
 instance Eq            CommonConcept where c1 == c2 = (c1 ^. uid) == (c2 ^. uid)
-instance Chunk         CommonConcept where uid = comm . uid
+instance HasUID        CommonConcept where uid = comm . uid
 instance NamedIdea     CommonConcept where term = comm . term
 instance Idea          CommonConcept where getA = getA . view comm
 instance Definition    CommonConcept where defn = def

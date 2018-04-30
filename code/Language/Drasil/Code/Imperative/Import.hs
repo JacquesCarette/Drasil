@@ -7,7 +7,7 @@ import Language.Drasil.Code.Imperative.LanguageRenderer (Options(..))
 import Language.Drasil.Code.Imperative.Parsers.ConfigParser (pythonLabel, cppLabel, cSharpLabel, javaLabel)
 import Language.Drasil.Code.Imperative.Lang
 import Language.Drasil.Code.CodeGeneration (createCodeFiles, makeCode)
-import Language.Drasil.Chunk (Chunk(..))
+import Language.Drasil.Classes (HasUID(uid))
 import Language.Drasil.Chunk.SymbolForm (HasSymbol)
 import Language.Drasil.Chunk.Code
 import Language.Drasil.Chunk.Quantity (QuantityDict)
@@ -479,15 +479,15 @@ convExpr (RealI c ri)  = do
 lookupC :: HasSymbolTable s => s -> UID -> QuantityDict
 lookupC sm c = symbLookup c $ sm^.symbolTable
 
-renderC :: (Chunk c, HasSymbol c) => (c, [Constraint]) -> [Expr]
+renderC :: (HasUID c, HasSymbol c) => (c, [Constraint]) -> [Expr]
 renderC (u, l) = map (renderC' u) l
 
-renderC' :: (Chunk c, HasSymbol c) => c -> Constraint -> Expr
+renderC' :: (HasUID c, HasSymbol c) => c -> Constraint -> Expr
 renderC' s (Range _ rr)          = renderRealInt s rr
 renderC' s (EnumeratedReal _ rr) = IsIn (sy s) (DiscreteD rr)
 renderC' s (EnumeratedStr _ rr)  = IsIn (sy s) (DiscreteS rr)
 
-renderRealInt :: (Chunk c, HasSymbol c) => c -> RealInterval Expr Expr -> Expr
+renderRealInt :: (HasUID c, HasSymbol c) => c -> RealInterval Expr Expr -> Expr
 renderRealInt s (Bounded (Inc,a) (Inc,b)) = (a $<= sy s) $&& (sy s $<= b)
 renderRealInt s (Bounded (Inc,a) (Exc,b)) = (a $<= sy s) $&& (sy s $<  b)
 renderRealInt s (Bounded (Exc,a) (Inc,b)) = (a $<  sy s) $&& (sy s $<= b)

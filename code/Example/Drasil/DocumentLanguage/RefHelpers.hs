@@ -49,7 +49,7 @@ refDD db c = customRef c (S $ "DD" ++ (show $ snd $ modelLookup c db))
 refIM :: RefMap InstanceModel -> InstanceModel -> Sentence
 refIM db c = customRef c (S $ "IM" ++ (show $ snd $ modelLookup c db))
 
-modelLookup :: Chunk a => a -> RefMap a -> (a, Int)
+modelLookup :: HasUID a => a -> RefMap a -> (a, Int)
 modelLookup c db = getS $ Map.lookup (c ^. uid) db
   where getS (Just x) = x
         getS Nothing  = error $ "Could not find model id: " ++ c ^. uid ++
@@ -62,14 +62,14 @@ modelLookup c db = getS $ Map.lookup (c ^. uid) db
 -- For example, looking up an assumption number would require:
 -- a reference database, the assumpRefTable lens, the assumpLookup function, and
 -- the assumption chunk being looked up.
-numLookup :: Chunk c => ReferenceDB -> Simple Lens ReferenceDB t ->
+numLookup :: HasUID c => ReferenceDB -> Simple Lens ReferenceDB t ->
   (c -> t -> (ct, Int)) -> c -> Sentence
 numLookup db tableLens lookupFun chunk =
   S $ show $ snd $ lookupFun chunk (db ^. tableLens)
 
 -- | Verifies that a chunk exists within our referencing database before we
 -- attempt to make a reference to it.
-chunkLookup :: Chunk c => ReferenceDB -> Simple Lens ReferenceDB t ->
+chunkLookup :: HasUID c => ReferenceDB -> Simple Lens ReferenceDB t ->
   (c -> t -> (ct, Int)) -> c -> ct
 chunkLookup db tableLens lookupFun chunk =
   fst $ lookupFun chunk (db ^. tableLens)

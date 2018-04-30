@@ -25,8 +25,8 @@ module Language.Drasil (
   , IsUnit, HasUnitSymbol(..), DerUChunk(..), FundUnit(..), UnitDefn, unitWrapper
   , makeDerU, unitCon, fund, comp_unitdefn
   , (^:), (/:), (*:), (*$), (/$), new_unit
-  -- Chunk
-  , Chunk(..)
+  -- Classes
+  , HasUID(uid)
   -- Chunk.VarChunk
   , VarChunk
   , vc, implVar
@@ -192,7 +192,7 @@ import Language.Drasil.Document (Document(..), DType(..)
 import Language.Drasil.Unicode -- all of it
 import Language.Drasil.UnitLang -- all of it
 import Language.Drasil.Unit -- all of it
-import Language.Drasil.Chunk
+import Language.Drasil.Classes (HasUID(uid))
 import Language.Drasil.Chunk.AssumpChunk
 import Language.Drasil.Chunk.Attribute
 import Language.Drasil.Chunk.Attribute.Derivation (Derivation)

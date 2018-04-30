@@ -11,7 +11,7 @@ module Language.Drasil.Chunk.UncertainQuantity
   , uncrtnw
   ) where
   
-import Language.Drasil.Chunk
+import Language.Drasil.Classes (HasUID(uid))
 import Language.Drasil.Chunk.NamedIdea
 import Language.Drasil.Chunk.Quantity
 import Language.Drasil.Chunk.DefinedQuantity (cqs)
@@ -38,7 +38,7 @@ data UncertQ = UQ { _coco :: ConstrConcept, _unc :: Maybe Double }
 makeLenses ''UncertQ
   
 instance Eq UncertQ where a == b = (a ^. uid) == (b ^. uid)
-instance Chunk UncertQ where uid = coco . uid
+instance HasUID UncertQ where uid = coco . uid
 instance NamedIdea UncertQ where term = coco . term
 instance Idea UncertQ where getA (UQ q _) = getA q
 instance HasSpace UncertQ where typ = coco . typ
@@ -81,7 +81,7 @@ uqcND nam trm sym un space cs val uncrt = uq (cuc' nam trm "" sym un space cs va
 data UncertainChunk  = UCh { _conc :: ConstrainedChunk, _unc' :: Maybe Double }
 makeLenses ''UncertainChunk
 
-instance Chunk UncertainChunk where uid = conc . uid
+instance HasUID UncertainChunk where uid = conc . uid
 instance Eq UncertainChunk where c1 == c2 = (c1 ^. uid) == (c2 ^. uid)
 instance NamedIdea UncertainChunk where term = conc . term
 instance Idea UncertainChunk where getA (UCh n _) = getA n

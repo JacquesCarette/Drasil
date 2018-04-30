@@ -16,7 +16,7 @@ import Language.Drasil.Chunk.CommonIdea
 import Language.Drasil.Chunk.NamedIdea
 import Language.Drasil.Chunk.Eq
 import Language.Drasil.Chunk.SymbolForm
-import Language.Drasil.Chunk
+import Language.Drasil.Classes (HasUID(uid))
 
 import Language.Drasil.Space as S
 import Language.Drasil.Code.Code as G (CodeType(..))
@@ -139,7 +139,7 @@ data VarOrFunc = Var | Func
 data CodeChunk = CodeC {_qc :: QuantityDict, kind :: VarOrFunc}
 makeLenses ''CodeChunk
 
-instance Chunk CodeChunk where uid = qc . uid
+instance HasUID CodeChunk where uid = qc . uid
 instance NamedIdea CodeChunk where term = qc . term
 instance Idea CodeChunk where getA = getA . view qc
 instance HasSpace CodeChunk where typ = qc . typ
@@ -176,7 +176,7 @@ codefunc c = CodeC (qw c) Func
 data CodeDefinition = CD { _quant :: QuantityDict, _ci :: String, _def :: Expr }
 makeLenses ''CodeDefinition
 
-instance Chunk CodeDefinition where uid = quant . uid
+instance HasUID CodeDefinition where uid = quant . uid
 instance NamedIdea CodeDefinition where term = quant . term
 instance Idea CodeDefinition where getA = getA . view quant
 instance HasSpace CodeDefinition where typ = quant . typ

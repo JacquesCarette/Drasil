@@ -4,7 +4,7 @@ module Language.Drasil.Chunk.CommonIdea
   , getAcc
   ) where
 
-import Language.Drasil.Classes (HasUID(uid))
+import Language.Drasil.Classes (HasUID(uid), NamedIdea(term))
 import Language.Drasil.Chunk.NamedIdea
 import Language.Drasil.Spec (Sentence(S))
 import Language.Drasil.NounPhrase

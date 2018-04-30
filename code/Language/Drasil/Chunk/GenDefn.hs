@@ -3,11 +3,11 @@ module Language.Drasil.Chunk.GenDefn
   ( GenDefn, gd, gdUnit
   ) where
 
-import Language.Drasil.Classes (HasUID(uid))
+import Language.Drasil.Classes (HasUID(uid), NamedIdea(term))
 import Language.Drasil.Chunk.Attribute
 import Language.Drasil.Chunk.Concept
 import Language.Drasil.Chunk.ExprRelat
-import Language.Drasil.Chunk.NamedIdea
+import Language.Drasil.Chunk.NamedIdea (Idea(..))
 import Language.Drasil.Chunk.Relation
 import Language.Drasil.Unit
 

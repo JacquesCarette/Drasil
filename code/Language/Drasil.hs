@@ -8,13 +8,13 @@ module Language.Drasil (
   , Expr
   , Relation, RealInterval(..), Inclusive(..)
   , ($=), ($<), ($<=), ($>), ($>=), ($^), ($&&), ($||), ($=>), ($<=>), ($.)
-  , sy -- old "Chunk" constructor C
   -- Expr.Math
   , log, abs, sin, cos, tan, sec, csc, cot, exp, sqrt, square, euclidean, vars
   , dim, idx, int, dbl, str, isin, case_
   , sum_all, defsum, prod_all, defprod, defint, int_all
   , real_interval
   , deriv, pderiv
+  , sy -- old "Chunk" constructor C
   , apply, apply1, apply2
   , cross, m2x2, vec2D, dgnl2x2
   -- all the stuff from Unicode
@@ -27,6 +27,7 @@ module Language.Drasil (
   , (^:), (/:), (*:), (*$), (/$), new_unit
   -- Classes
   , HasUID(uid)
+  , NamedIdea(term)
   -- Chunk.VarChunk
   , VarChunk
   , vc, implVar
@@ -37,7 +38,7 @@ module Language.Drasil (
   -- Chunk.CommonIdea
   , CommonIdea(..) , commonIdea, CI, getAcc
   -- Chunk.NamedIdea
-  , NamedIdea(..), NamedChunk, Idea(..), short, nc, IdeaDict
+  , NamedChunk, Idea(..), short, nc, IdeaDict
   , nw -- bad name (historical)
   , compoundterm, for, for', for'', of_, of_', of_'', of__, of'', compoundNC, compoundNC'
   , compoundNC'', compoundNC''', with, with', and_, and_', andRT, aNP, the, a_
@@ -104,7 +105,8 @@ module Language.Drasil (
   , NounPhrase(..), NP, pn, pn', pn'', pn''', pnIrr, cn, cn', cn'', cn''', cnIP
   , cnIrr, cnIES, cnICES, cnIS, cnUM, nounPhrase, nounPhrase', at_start, at_start'
   , CapitalizationRule(..)
-  , PluralRule(..), compoundPhrase, compoundPhrase', compoundPhrase'', compoundPhrase''', titleize, titleize'
+  , PluralRule(..)
+  , compoundPhrase, compoundPhrase', compoundPhrase'', compoundPhrase''', titleize, titleize'
   , nounPhrase'', nounPhraseSP, nounPhraseSent
   -- Document
   , Referable(..), Document(..), DType(..), Section(..), Contents(..)
@@ -174,13 +176,14 @@ module Language.Drasil (
 import Prelude hiding (log, sin, cos, tan, sqrt, id, return, print, break, exp, product)
 import Language.Drasil.SystemInformation
 import Language.Drasil.Expr (Expr(..), Relation,
-          RealInterval(..), Inclusive(..), sy, deriv, pderiv,
+          RealInterval(..), Inclusive(..), 
           ($=), ($<), ($<=), ($>), ($>=), ($^), ($&&), ($||), ($=>), ($<=>), ($.))
 import Language.Drasil.Expr.Math (log, sin, cos, tan, sqrt, square, sec, csc, cot, exp,
           dim, idx, int, dbl, str, isin, case_,
           sum_all, defsum, prod_all, defprod,
           real_interval,
           apply, apply1, apply2,
+          sy, deriv, pderiv,
           cross, m2x2, vec2D, dgnl2x2, euclidean, defint, int_all)
 import Language.Drasil.Expr.Extract (vars)
 import Language.Drasil.Output.Formats (DocType(SRS,MG,MIS,Website),DocSpec(DocSpec))
@@ -192,7 +195,7 @@ import Language.Drasil.Document (Document(..), DType(..)
 import Language.Drasil.Unicode -- all of it
 import Language.Drasil.UnitLang -- all of it
 import Language.Drasil.Unit -- all of it
-import Language.Drasil.Classes (HasUID(uid))
+import Language.Drasil.Classes (HasUID(uid), NamedIdea(term))
 import Language.Drasil.Chunk.AssumpChunk
 import Language.Drasil.Chunk.Attribute
 import Language.Drasil.Chunk.Attribute.Derivation (Derivation)

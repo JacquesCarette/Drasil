@@ -1,21 +1,15 @@
 {-# LANGUAGE TemplateHaskell #-}
-module Language.Drasil.Chunk.NamedIdea (NamedIdea(..), Idea(..),
+module Language.Drasil.Chunk.NamedIdea (Idea(..),
   NamedChunk, nc, IdeaDict, compoundterm, short, nw, mkIdea,
   compoundNC, compoundNC', compoundNC'', compoundNC''',
   for, for', for'', of_, of_', of_'', of__, of'',
   with, with', and_, and_', andRT, the, theCustom, this, aNP, a_, ofA) where
 
 import Language.Drasil.Classes
-import Control.Lens (Simple, Lens, (^.), makeLenses, view)
+import Control.Lens ((^.), makeLenses, view)
 
 import Language.Drasil.Spec
 import Language.Drasil.NounPhrase
-
--- | A NamedIdea is a 'term' that we've identified (has an 'id') as 
--- being worthy of naming.
-class HasUID c => NamedIdea c where
-  -- | Lens to the term (a noun phrase)
-  term :: Simple Lens c NP
 
 -- | An |Idea| is the 'meet' of |NamedIdea| and |CommonIdea|.
 -- In other words, it /may/ have an acronym/abbreviation.

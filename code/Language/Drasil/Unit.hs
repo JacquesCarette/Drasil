@@ -12,8 +12,8 @@ module Language.Drasil.Unit (
 import Control.Lens (Simple, Lens, (^.))
 import Control.Arrow (second)
 
-import Language.Drasil.Classes (HasUID(uid))
-import Language.Drasil.Chunk.NamedIdea (NamedIdea(..), Idea(..))
+import Language.Drasil.Classes (HasUID(uid), NamedIdea(term))
+import Language.Drasil.Chunk.NamedIdea (Idea(..))
 import Language.Drasil.Chunk.Concept (Concept,Definition(..), 
   ConceptDomain(..),ConceptChunk, dcc, cw)
 import Language.Drasil.Symbol

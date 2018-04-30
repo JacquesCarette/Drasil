@@ -4,17 +4,18 @@ module Language.Drasil.Chunk.InstanceModel
   , inCons, outCons, imOutput, imInputs, im, imQD
   )where
 
-import Language.Drasil.Classes (HasUID(uid))
+import Language.Drasil.Classes (HasUID(uid), NamedIdea(term))
 import Language.Drasil.Chunk.Attribute
 import Language.Drasil.Chunk.Concept
 import Language.Drasil.Chunk.Constrained
 import Language.Drasil.Chunk.Eq
 import Language.Drasil.Chunk.ExprRelat
-import Language.Drasil.Chunk.NamedIdea
+import Language.Drasil.Chunk.NamedIdea (Idea(..))
 import Language.Drasil.Chunk.Relation
 import Language.Drasil.Chunk.Quantity
 import Language.Drasil.ChunkDB
 import Language.Drasil.Expr
+import Language.Drasil.Expr.Math (sy)
 import Language.Drasil.Expr.Extract (vars)
 import Language.Drasil.Spec (Sentence)
 

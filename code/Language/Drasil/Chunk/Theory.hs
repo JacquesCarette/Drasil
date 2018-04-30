@@ -3,11 +3,11 @@ module Language.Drasil.Chunk.Theory
   ( tc', Theory(..), TheoryChunk, TheoryModel, tm, tw
   )where
 
-import Language.Drasil.Classes (HasUID(uid))
+import Language.Drasil.Classes (HasUID(uid), NamedIdea(term))
 import Language.Drasil.Chunk.Concept
 import Language.Drasil.Chunk.Constrained
 import Language.Drasil.Chunk.Eq
-import Language.Drasil.Chunk.NamedIdea
+import Language.Drasil.Chunk.NamedIdea (Idea(..))
 import Language.Drasil.Chunk.Quantity
 
 import Control.Lens (Lens', (^.), view, makeLenses)

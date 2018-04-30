@@ -4,12 +4,13 @@ import Language.Drasil.Expr (Expr(..), BinOp(..), UFunc(..), ArithOper(..),
     BoolOper(..), RTopology(..),
     DerivType(..), DomainDesc(..), UID,
     RealInterval(..),Inclusive(..),
-    sy,($=))
+    ($=))
 import Language.Drasil.Expr.Precedence (precA, precB, eprec)
 import qualified Language.Drasil.Printing.AST as P
 import qualified Language.Drasil.Printing.Citation as P
 import qualified Language.Drasil.Printing.LayoutObj as T
 
+import Language.Drasil.Classes (term)
 import qualified Language.Drasil.Chunk.SymbolForm as SF
 import Language.Drasil.Chunk.AssumpChunk
 import Language.Drasil.Chunk.Attribute (getShortName,HasAttributes)
@@ -17,7 +18,6 @@ import Language.Drasil.Chunk.Change (chng, chngType, ChngType(Likely))
 import Language.Drasil.Chunk.Concept (defn)
 import Language.Drasil.Chunk.Eq
 import Language.Drasil.Chunk.ExprRelat (relat)
-import Language.Drasil.Chunk.NamedIdea (term)
 import Language.Drasil.Chunk.Quantity (Quantity(..))
 import Language.Drasil.Chunk.SymbolForm (eqSymb)
 import Language.Drasil.ChunkDB (getUnitLup, HasSymbolTable(..),symbLookup)
@@ -26,6 +26,7 @@ import Language.Drasil.Chunk.Citation ( Citation, CiteField(..), HP(..)
                                       , citeID, externRefT, fields)
 import Language.Drasil.Config (verboseDDDescription, numberedDDEquations, numberedTMEquations)
 import Language.Drasil.Expr.Extract
+import Language.Drasil.Expr.Math (sy)
 import Language.Drasil.Symbol
 import Language.Drasil.Unicode (Special(Partial))
 import Language.Drasil.Spec (Sentence(..))

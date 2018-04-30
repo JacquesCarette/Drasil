@@ -6,7 +6,7 @@ module Language.Drasil.Chunk.Quantity
 import Control.Lens ((^.),makeLenses,view)
 
 import Language.Drasil.Space
-import Language.Drasil.Classes (HasUID(uid))
+import Language.Drasil.Classes (HasUID(uid), NamedIdea(term))
 import Language.Drasil.Chunk.NamedIdea
 import Language.Drasil.Symbol (Symbol)
 import Language.Drasil.NounPhrase

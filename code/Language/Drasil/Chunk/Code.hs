@@ -13,10 +13,10 @@ import Control.Lens ((^.),makeLenses,view)
 import Language.Drasil.Chunk.Constrained
 import Language.Drasil.Chunk.Quantity
 import Language.Drasil.Chunk.CommonIdea
-import Language.Drasil.Chunk.NamedIdea
+import Language.Drasil.Chunk.NamedIdea (Idea(..))
 import Language.Drasil.Chunk.Eq
 import Language.Drasil.Chunk.SymbolForm
-import Language.Drasil.Classes (HasUID(uid))
+import Language.Drasil.Classes (HasUID(uid), NamedIdea(term))
 
 import Language.Drasil.Space as S
 import Language.Drasil.Code.Code as G (CodeType(..))

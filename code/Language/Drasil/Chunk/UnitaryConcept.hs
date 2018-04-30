@@ -5,9 +5,9 @@ import Language.Drasil.Chunk.Concept (DefnAndDomain(DAD), ConceptChunk, Concept,
   Definition(defn), ConceptDomain(cdom))
 import Language.Drasil.Chunk.Unitary (UnitaryChunk, mkUnitary, Unitary)
 import Language.Drasil.Chunk.Quantity (Quantity(getUnit),HasSpace(typ))
-import Language.Drasil.Chunk.NamedIdea (Idea(getA),NamedIdea(term))
+import Language.Drasil.Chunk.NamedIdea (Idea(getA))
 import Language.Drasil.Chunk.SymbolForm (HasSymbol(symbol))
-import Language.Drasil.Classes (HasUID(uid))
+import Language.Drasil.Classes (HasUID(uid), NamedIdea(term))
 
 import Control.Lens ((^.), makeLenses, view)
 

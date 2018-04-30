@@ -1,9 +1,9 @@
 {-# LANGUAGE GADTs #-}
 module Language.Drasil.CodeSpec where
 
+import Language.Drasil.Classes (term)
 import Language.Drasil.Chunk.Code
 import Language.Drasil.Chunk.CommonIdea
-import Language.Drasil.Chunk.NamedIdea (term)
 import Language.Drasil.Chunk.Eq
 import Language.Drasil.Chunk.Quantity -- for hack
 import Language.Drasil.Chunk.SymbolForm (codeSymb)
@@ -12,6 +12,7 @@ import Language.Drasil.Symbol
 import Language.Drasil.Spec
 import Language.Drasil.SystemInformation
 import Language.Drasil.Expr -- for hack
+import Language.Drasil.Expr.Math (sy)
 import Language.Drasil.Space -- for hack
 import Language.Drasil.DataDesc
 import Language.Drasil.Chunk.ExprRelat

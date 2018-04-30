@@ -1,8 +1,8 @@
 {-# Language TemplateHaskell #-}
 module Language.Drasil.Chunk.VarChunk(VarChunk,implVar,codeVC,vc,vcSt,vc'') where
 
-import Language.Drasil.Classes (HasUID(uid))
-import Language.Drasil.Chunk.NamedIdea
+import Language.Drasil.Classes (HasUID(uid), NamedIdea(term))
+import Language.Drasil.Chunk.NamedIdea (Idea(..), IdeaDict, nw, nc)
 import Language.Drasil.Chunk.SymbolForm (Stage(..), HasSymbol(symbol))
 import Language.Drasil.Chunk.Quantity (Quantity(getUnit))
 

@@ -4,8 +4,8 @@ module Language.Drasil.Chunk.Unitary
   , unitary, mkUnitary
   , Unitary(..)) where
 
-import Language.Drasil.Classes (HasUID(uid))
-import Language.Drasil.Chunk.NamedIdea (NamedIdea(..), Idea(..))
+import Language.Drasil.Classes (HasUID(uid), NamedIdea(term))
+import Language.Drasil.Chunk.NamedIdea (Idea(..))
 import Language.Drasil.Chunk.Quantity (Quantity(..), QuantityDict, mkQuant, qw, 
   HasSpace(typ))
 import Language.Drasil.Chunk.SymbolForm (HasSymbol(symbol))

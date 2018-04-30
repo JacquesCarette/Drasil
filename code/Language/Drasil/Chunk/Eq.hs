@@ -5,9 +5,9 @@ module Language.Drasil.Chunk.Eq
 
 import Control.Lens ((^.), makeLenses)
 import Language.Drasil.Expr (Expr)
-import Language.Drasil.Classes (HasUID(uid))
+import Language.Drasil.Classes (HasUID(uid),NamedIdea(term))
 import Language.Drasil.Chunk.Attribute
-import Language.Drasil.Chunk.NamedIdea (NamedIdea(..), Idea(..))
+import Language.Drasil.Chunk.NamedIdea (Idea(..))
 import Language.Drasil.Chunk.Quantity (Quantity(getUnit),HasSpace(typ), QuantityDict,
   mkQuant, qw)
 import Language.Drasil.Chunk.ExprRelat

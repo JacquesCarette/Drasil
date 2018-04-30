@@ -3,8 +3,8 @@ module Language.Drasil.Chunk.ConVar
   ( ConVar(CV), cv, makeCV
   ) where
 
-import Language.Drasil.Classes (HasUID(uid))
-import Language.Drasil.Chunk.NamedIdea
+import Language.Drasil.Classes (HasUID(uid), NamedIdea(term))
+import Language.Drasil.Chunk.NamedIdea (Idea(..))
 import Language.Drasil.Chunk.Concept
 import Language.Drasil.Space (HasSpace(typ))
 import Language.Drasil.Chunk.SymbolForm (Stage,HasSymbol(symbol))

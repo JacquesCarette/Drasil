@@ -4,12 +4,8 @@ module Language.Drasil.Expr where
 
 import Data.Ratio (numerator,denominator)
 import Prelude hiding (sqrt)
-import Language.Drasil.Classes (HasUID(..))
 import Language.Drasil.Symbol
-import Language.Drasil.Chunk.SymbolForm
 import Language.Drasil.Space (Space(..))
-
-import Control.Lens ((^.))
 
 --FIXME: Haddock open issue #43 seems to make it so GADT constructors cannot
 -- be documented properly
@@ -84,14 +80,6 @@ a $/ b = BinaryOp Frac a b
 ($^) = BinaryOp Pow
 a $&& b = AssocB And [a,b]
 a $|| b = AssocB Or  [a,b]
-
--- Note how |sy| 'enforces' having a symbol
-sy :: (HasUID c, HasSymbol c) => c -> Expr
-sy x = C (x ^. uid)
-
-deriv, pderiv :: (HasUID c, HasSymbol c) => Expr -> c -> Expr
-deriv e c = Deriv Total e (c^.uid)
-pderiv e c = Deriv Part e (c^.uid)
 
 type Variable = String
 

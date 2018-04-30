@@ -32,5 +32,5 @@ makeRC rID rTerm rDefn = RC (dccWDS rID rTerm rDefn)
 
 -- | Create a RelationConcept from a given id, term, defn, abbreviation, and relation.
 makeRC' :: String -> NP -> Sentence -> String -> Relation -> RelationConcept
-makeRC' rID rTerm rDefn rAbb = RC (dccWDS' rID rTerm rDefn rAbb)
+makeRC' rID rTerm rDefn rAbb = RC (cw $ dccWDS' rID rTerm rDefn rAbb)
 

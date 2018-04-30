@@ -1,9 +1,9 @@
 {-# LANGUAGE TemplateHaskell #-}
 module Language.Drasil.Chunk.Code (
     CodeIdea(..), CodeChunk(..), CodeDefinition(..),
-    programName,
     codeType, codevar, codefunc, qtoc, qtov, codeEquat,
     ConstraintMap, constraintMap, physLookup, sfwrLookup,
+    programName,
     symbToCodeName, CodeType(..),
     spaceToCodeType, toCodeName, funcPrefix
   ) where
@@ -12,6 +12,7 @@ import Control.Lens ((^.),makeLenses,view)
 
 import Language.Drasil.Chunk.Constrained
 import Language.Drasil.Chunk.Quantity
+import Language.Drasil.Chunk.CommonIdea
 import Language.Drasil.Chunk.NamedIdea
 import Language.Drasil.Chunk.Eq
 import Language.Drasil.Chunk.SymbolForm
@@ -22,9 +23,7 @@ import Language.Drasil.Code.Code as G (CodeType(..))
 
 import Language.Drasil.Expr
 import Language.Drasil.Unicode
-import Language.Drasil.Spec
 import Language.Drasil.Symbol
-import Language.Drasil.NounPhrase
 
 import Data.String.Utils (replace)
 import qualified Data.Map as Map
@@ -33,12 +32,8 @@ import qualified Data.Map as Map
 class (Chunk c) => CodeIdea c where
   codeName      :: c -> String
 
-programName :: NamedIdea c => c -> String
-programName c = sentenceToCodeName (phrase $ c ^. term)
-
-sentenceToCodeName :: Sentence -> String
-sentenceToCodeName (S s) = toCodeName s
-sentenceToCodeName _ = error "fix"
+programName :: CommonIdea c => c -> String
+programName = toCodeName . abrv
 
 symbToCodeName :: Symbol -> String
 symbToCodeName (Atomic s) = toCodeName s

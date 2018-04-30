@@ -1,6 +1,6 @@
 module Language.Drasil.Chunk.CommonIdea
   ( CommonIdea(..)
-  , CI, commonIdea
+  , CI, commonIdea, toCommonIdea
   , getAcc
   ) where
 
@@ -8,6 +8,8 @@ import Language.Drasil.Chunk (Chunk(uid))
 import Language.Drasil.Chunk.NamedIdea
 import Language.Drasil.Spec (Sentence(S))
 import Language.Drasil.NounPhrase
+
+import Control.Lens ((^.))
 
 -- | CommonIdea is a chunk that is a 'NamedIdea' with the additional
 -- constraint that it __must__ have an abbreviation.
@@ -27,6 +29,7 @@ instance Idea CI where
   getA (CI _ b _) = Just b
 instance CommonIdea CI where
   abrv (CI _ b _) = b
+-- FIXME: This is a horrible hack. The user should use 'term' to get at this.
 instance NounPhrase CI where
   phrase       (CI _ _ c) = phrase c
   plural       (CI _ _ c) = plural c
@@ -37,6 +40,9 @@ instance NounPhrase CI where
 -- term (of type 'NP'), and abbreviation (as a string)
 commonIdea :: String -> NP -> String -> CI
 commonIdea i t a = CI i a t
+
+toCommonIdea :: CommonIdea a => a -> CI
+toCommonIdea c = commonIdea (c^.uid) (c^.term) (abrv c)
 
 getAcc :: CI -> Sentence
 getAcc = S . abrv

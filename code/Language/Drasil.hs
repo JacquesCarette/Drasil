@@ -28,11 +28,12 @@ module Language.Drasil (
   -- Chunk
   , Chunk(..)
   -- Chunk.VarChunk
-  , VarChunk, ConceptChunk
+  , VarChunk
   , vc, implVar
   , dcc, dcc', dccWDS, dccWDS', cv, vc'', ccs, cc, cc'
   -- Chunk.Concept
-  , Concept, cw, Definition(defn), ConceptDomain(cdom)
+  , Concept, cw, Definition(defn), ConceptDomain(cdom), ConceptChunk
+  , CommonConcept
   -- Chunk.CommonIdea
   , CommonIdea(..) , commonIdea, CI, getAcc
   -- Chunk.NamedIdea

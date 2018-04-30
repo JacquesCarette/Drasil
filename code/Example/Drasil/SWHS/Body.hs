@@ -722,7 +722,7 @@ s7_t3_LC6 = ["A15"]
 -- Section 2 : INTRODUCTION --
 ------------------------------
 
-s2_intro :: ConceptChunk -> UnitalChunk -> ConceptChunk -> CI -> CI ->
+s2_intro :: (NamedIdea en, Definition en) => ConceptChunk -> UnitalChunk -> en -> CI -> CI ->
   ConceptChunk -> UnitalChunk -> ConceptChunk -> Sentence
 s2_intro es en sp pcmat pro te lh un = foldlSent [
   S "Due to", foldlList (map S ["increasing cost", "diminishing availability",
@@ -737,7 +737,7 @@ s2_intro es en sp pcmat pro te lh un = foldlSent [
   S "which allows higher", phrase te, S "storage capacity per",
   phrase un, S "weight"]
 
-s2_kSent :: ConceptChunk -> ConceptChunk -> CI -> Sentence
+s2_kSent :: NamedIdea ni => ni -> ConceptChunk -> CI -> Sentence
 s2_kSent sp pr pro = foldlSent_ [EmptyS +:+. phrase sp, S "The developed",
   phrase pr, S "will be referred to as", titleize pro,
   sParen (short pro)] -- SSP has same style sentence here
@@ -757,7 +757,7 @@ s2_kSent sp pr pro = foldlSent_ [EmptyS +:+. phrase sp, S "The developed",
 -- 2.1 : Purpose of Document --
 -------------------------------
 
-s2_1_par1 :: ConceptChunk -> CI -> Sentence
+s2_1_par1 :: NamedIdea ni => ni -> CI -> Sentence
 s2_1_par1 sp pro = foldlSent [S "The main", phrase purpose, S "of this",
   phrase document, S "is to describe the modelling of" +:+.
   phrase sp, S "The", plural goalStmt `sAnd` plural thModel,
@@ -826,7 +826,7 @@ s2_4_intro = foldlSent [S "The", phrase organization, S "of this",
   S "for", phrase sciCompS, S "proposed by", (sSqBrNum 3) `sAnd`
   (sSqBrNum 6), sParen (makeRef (SRS.reference SRS.missingP []))]
 
-s2_4_trail :: ConceptChunk -> CI -> Sentence
+s2_4_trail :: NamedIdea ni => ni -> CI -> Sentence
 s2_4_trail sp pro = foldlSent_ [S "The", plural inModel,
   sParen (makeRef (SRS.inModel SRS.missingP [])),
   S "to be solved are referred to as", acroIM 1,
@@ -928,7 +928,7 @@ s3_2_contents pro = foldlSP [S "The end", phrase user, S "of",
 -- Section 4 : SPECIFIC SYSTEM DESCRIPTION --
 ---------------------------------------------
 
-s4_intro_end :: ConceptChunk -> Sentence
+s4_intro_end :: NamedIdea ni => ni -> Sentence
 s4_intro_end sw = foldlSent_ [foldlsC (map plural (take 3 renameList1))
   `sC` S "and finally the", plural inModel, sParen (short ode :+: S "s"),
   S "that", phrase model, S "the", phrase sw]

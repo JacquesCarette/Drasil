@@ -2,7 +2,8 @@
 module Language.Drasil.CodeSpec where
 
 import Language.Drasil.Chunk.Code
-import Language.Drasil.Chunk.NamedIdea
+import Language.Drasil.Chunk.CommonIdea
+import Language.Drasil.Chunk.NamedIdea (term)
 import Language.Drasil.Chunk.Eq
 import Language.Drasil.Chunk.Quantity -- for hack
 import Language.Drasil.Chunk.SymbolForm (codeSymb)
@@ -32,7 +33,7 @@ type Derived = CodeDefinition
 type Def = CodeDefinition
 
 data CodeSpec = CodeSpec {
-  program :: IdeaDict,
+  program :: CI,
   inputs :: [Input],
   extInputs :: [Input],
   derivedInputs :: [Derived],
@@ -85,7 +86,7 @@ codeSpec' (SI {_sys = sys, _quants = q, _definitions = defs', _inputs = ins, _ou
       outs' = map codevar outs
       allInputs = nub $ inputs' ++ map codevar derived
   in  CodeSpec {
-        program = nw sys,
+        program = toCommonIdea sys,
         inputs = allInputs,
         extInputs = inputs',
         derivedInputs = derived,

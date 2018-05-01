@@ -48,8 +48,7 @@ import Drasil.SWHS.DataDefs (swhsDataDefs,dd1HtFluxC, dd2HtFluxP, dd3HtFusion,
  dd4MeltFrac, data_def_swhsDataDefs)
 import Drasil.SWHS.GenDefs (swhsGenDefs, nwtnCooling, rocTempSimp, roc_temp_simp_deriv)
 import Drasil.SWHS.References (ref_swhs_citations)
-import Drasil.SWHS.Assumptions (assumps_list, assump3, assump4, assump5,
-  assump6, assump13, assump15, assump16, assump17, assump18)
+import Drasil.SWHS.Assumptions
 import Drasil.SWHS.Requirements (req1, req2, func_req_Eqn1, func_req_Eqn2,
   req3, req4, req5, req6, req7, req8, req9, req10, req11, non_func_req)
 import Drasil.SWHS.LikelyChanges (likeChg1, likeChg2, likeChg3, likeChg4,
@@ -117,8 +116,10 @@ swhs_si = SI {
   _refdb = swhsRefDB
 }
 
+--rdb :: [PhysSystDesc] -> [Goal] -> [AssumpChunk] -> [ReqChunk] -> [Change] ->
+--  BibRef -> ReferenceDB
 swhsRefDB :: ReferenceDB
-swhsRefDB = rdb [] [] [] [] [] ref_swhs_citations
+swhsRefDB = rdb [] [] assumps_assump_list_new [] [] ref_swhs_citations
 
 swhsSymMap :: ChunkDB
 swhsSymMap = cdb swhsSymbolsAll (map nw swhsSymbols ++ map nw acronyms) ([] :: [UnitDefn] ) -- FIXME: Fill in Concepts

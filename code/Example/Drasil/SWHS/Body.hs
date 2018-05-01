@@ -119,7 +119,7 @@ swhs_si = SI {
 --rdb :: [PhysSystDesc] -> [Goal] -> [AssumpChunk] -> [ReqChunk] -> [Change] ->
 --  BibRef -> ReferenceDB
 swhsRefDB :: ReferenceDB
-swhsRefDB = rdb [] [] assumps_assump_list_new [] [] ref_swhs_citations
+swhsRefDB = rdb [] [] assumps_SWHS_list_new [] [] ref_swhs_citations
 
 swhsSymMap :: ChunkDB
 swhsSymMap = cdb swhsSymbolsAll (map nw swhsSymbols ++ map nw acronyms) ([] :: [UnitDefn] ) -- FIXME: Fill in Concepts

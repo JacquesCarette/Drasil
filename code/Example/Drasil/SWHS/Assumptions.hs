@@ -41,11 +41,12 @@ assump_new_1, assump_new_2,assump_new_3, assump_new_4, assump_new_5,
   assump_new_11, assump_new_12, assump_new_13, assump_new_14, assump_new_15,
   assump_new_16, assump_new_17, assump_new_18, assump_new_19, assump_new_20 :: AssumpChunk
 
-assumps_assump_list_new :: [AssumpChunk]
-assumps_assump_list_new = [assump_new_1, assump_new_2,assump_new_3, assump_new_4, assump_new_5,
+assumps_SWHS_list_new :: [AssumpChunk]
+assumps_SWHS_list_new = [assump_new_1, assump_new_2,assump_new_3, assump_new_4, assump_new_5,
   assump_new_6, assump_new_7, assump_new_8, assump_new_9, assump_new_10,
   assump_new_11, assump_new_12, assump_new_13, assump_new_14, assump_new_15,
   assump_new_16, assump_new_17, assump_new_18, assump_new_19, assump_new_20]
+
 
 assump_new_1 = ac' "assump1" $ foldlSent [
   S "The only form of", phrase energy, S "that is",

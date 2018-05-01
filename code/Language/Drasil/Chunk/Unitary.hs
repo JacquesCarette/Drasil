@@ -1,10 +1,11 @@
-{-# LANGUAGE TemplateHaskell #-}
+{-# LANGUAGE TemplateHaskell, TypeFamilies #-}
 module Language.Drasil.Chunk.Unitary
   ( UnitaryChunk
   , unitary, mkUnitary
   , Unitary(..)) where
 
-import Language.Drasil.Classes (HasUID(uid), NamedIdea(term), Idea(getA))
+import Language.Drasil.Classes (HasUID(uid), NamedIdea(term), Idea(getA),
+  ConceptDomain(DOM))
 import Language.Drasil.Chunk.Quantity (Quantity(..), QuantityDict, mkQuant, qw, 
   HasSpace(typ))
 import Language.Drasil.Chunk.SymbolForm (HasSymbol(symbol))
@@ -12,6 +13,7 @@ import Language.Drasil.Unit (IsUnit, UnitDefn, unitWrapper)
 import Language.Drasil.Symbol
 import Language.Drasil.Space
 import Language.Drasil.NounPhrase (NP)
+import Language.Drasil.Chunk.Concept (ConceptChunk)
 
 import Control.Lens ((^.), makeLenses)
 
@@ -33,7 +35,8 @@ instance Unitary   UnitaryChunk where unit x = x ^. un
   
 -- Builds the Quantity part from the uid, term, symbol and space.
 -- assumes there's no abbreviation.
-unitary :: IsUnit u => String -> NP -> Symbol -> u -> Space -> UnitaryChunk
+unitary :: (IsUnit u, DOM u ~ ConceptChunk) => 
+  String -> NP -> Symbol -> u -> Space -> UnitaryChunk
 unitary i t s u space = UC (mkQuant i t s space (Just uu) Nothing) uu
   where uu = unitWrapper u
 

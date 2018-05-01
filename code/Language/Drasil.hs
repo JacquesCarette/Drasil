@@ -29,13 +29,14 @@ module Language.Drasil (
   , HasUID(uid)
   , NamedIdea(term)
   , Idea(getA)
+  , Definition(defn), ConceptDomain(cdom)
+  , Concept
   -- Chunk.VarChunk
   , VarChunk
   , vc, implVar
   , dcc, dcc', dccWDS, dccWDS', cv, vc'', ccs, cc, cc'
   -- Chunk.Concept
-  , Concept, cw, Definition(defn), ConceptDomain(cdom), ConceptChunk
-  , CommonConcept
+  , cw , ConceptChunk , CommonConcept
   -- Chunk.CommonIdea
   , CommonIdea(..) , commonIdea, CI, getAcc
   -- Chunk.NamedIdea
@@ -196,7 +197,8 @@ import Language.Drasil.Document (Document(..), DType(..)
 import Language.Drasil.Unicode -- all of it
 import Language.Drasil.UnitLang -- all of it
 import Language.Drasil.Unit -- all of it
-import Language.Drasil.Classes (HasUID(uid), NamedIdea(term), Idea(getA))
+import Language.Drasil.Classes (HasUID(uid), NamedIdea(term), Idea(getA),
+  Definition(defn), ConceptDomain(cdom), Concept)
 import Language.Drasil.Chunk.AssumpChunk
 import Language.Drasil.Chunk.Attribute
 import Language.Drasil.Chunk.Attribute.Derivation (Derivation)

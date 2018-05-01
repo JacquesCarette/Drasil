@@ -1,9 +1,10 @@
-{-# Language TemplateHaskell #-}
+{-# Language TemplateHaskell, TypeFamilies #-}
 module Language.Drasil.Chunk.Theory 
   ( tc', Theory(..), TheoryChunk, TheoryModel, tm, tw
   )where
 
-import Language.Drasil.Classes (HasUID(uid), NamedIdea(term), Idea(getA))
+import Language.Drasil.Classes (HasUID(uid), NamedIdea(term), Idea(getA),
+  Definition(defn),ConceptDomain(cdom,DOM),Concept)
 import Language.Drasil.Chunk.Concept
 import Language.Drasil.Chunk.Constrained
 import Language.Drasil.Chunk.Eq
@@ -55,7 +56,9 @@ instance HasUID TheoryModel where uid = con . uid
 instance NamedIdea TheoryModel where term = con . term
 instance Idea TheoryModel where getA = getA . view con
 instance Definition TheoryModel where defn = con . defn
-instance ConceptDomain TheoryModel where cdom = con . cdom
+instance ConceptDomain TheoryModel where
+  type DOM TheoryModel = ConceptChunk
+  cdom = con . cdom
 instance Concept TheoryModel where
 instance Theory TheoryModel where
   valid_context = thy . valid_context
@@ -66,14 +69,15 @@ instance Theory TheoryModel where
   invariants    = thy . invariants
   defined_fun   = thy . defined_fun
 
-tc :: (Theory t, Quantity q, Concept c) => String -> [t] -> 
+tc :: (Theory t, Quantity q, Concept c, DOM c ~ ConceptChunk) => String -> [t] -> 
   [SpaceDefn] -> [q] -> [c] -> [QDefinition] -> [TheoryConstraint] -> 
   [QDefinition] -> TheoryChunk
 tc cid t s q c = TC cid (map tw t) s (map qw q) (map cw c)
 
-tc' :: (Quantity q, Concept c) => String -> [q] -> [c] -> [QDefinition] -> 
+tc' :: (Quantity q, Concept c, DOM c ~ ConceptChunk) =>
+  String -> [q] -> [c] -> [QDefinition] -> 
   [TheoryConstraint] -> [QDefinition] -> TheoryChunk
 tc' cid q c = tc cid ([] :: [TheoryChunk]) [] q c
 
-tm :: (Concept c, Theory t) => c -> t -> TheoryModel
+tm :: (Concept c, Theory t, DOM c ~ ConceptChunk) => c -> t -> TheoryModel
 tm c t = TM (cw c) (tw t)

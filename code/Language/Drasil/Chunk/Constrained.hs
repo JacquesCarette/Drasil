@@ -1,4 +1,4 @@
-{-# Language GADTs, TemplateHaskell #-}
+{-# Language GADTs, TemplateHaskell, TypeFamilies #-}
 module Language.Drasil.Chunk.Constrained (
     Constrained(..), HasReasVal(..)
   , Constraint(..), ConstraintReason(..)
@@ -23,7 +23,8 @@ import Language.Drasil.Unit
 import Language.Drasil.NounPhrase
 import Language.Drasil.Space
 import Language.Drasil.Symbol
-import Language.Drasil.Classes (HasUID(uid), NamedIdea(term), Idea(getA))
+import Language.Drasil.Classes (HasUID(uid), NamedIdea(term), Idea(getA),
+  Definition(defn),ConceptDomain(cdom,DOM),Concept)
 
 -- | A Constrained is a 'Quantity' that has value constraints
 class Quantity c => Constrained c where
@@ -88,7 +89,7 @@ constrained :: (Quantity c) => c -> [Constraint] -> Expr -> ConstrainedChunk
 constrained q cs ex = ConstrainedChunk (qw q) cs (Just ex)
 
 -- | Creates a constrained unitary
-cuc :: IsUnit u => String -> NP -> Symbol -> u
+cuc :: (IsUnit u, DOM u ~ ConceptChunk) => String -> NP -> Symbol -> u
                 -> Space -> [Constraint] -> Expr -> ConstrainedChunk
 cuc i t s u space cs rv =
   ConstrainedChunk (qw $ unitary i t s (unitWrapper u) space) cs (Just rv)
@@ -113,19 +114,22 @@ instance HasSpace      ConstrConcept where typ = defq . typ
 instance HasSymbol     ConstrConcept where symbol c = symbol (c^.defq)
 instance Quantity      ConstrConcept where getUnit = getUnit . view defq
 instance Definition    ConstrConcept where defn = defq . defn
-instance ConceptDomain ConstrConcept where cdom = defq . cdom
+instance ConceptDomain ConstrConcept where
+  type DOM ConstrConcept = ConceptChunk
+  cdom = defq . cdom
 instance Concept       ConstrConcept where
 instance Constrained   ConstrConcept where constraints  = constr'
 instance HasReasVal    ConstrConcept where reasVal      = reasV'
 instance Eq            ConstrConcept where c1 == c2 = (c1 ^.defq.uid) == (c2 ^.defq.uid)
 
-constrained' :: (Quantity c, Concept c) => c -> [Constraint] -> Expr -> ConstrConcept
+constrained' :: (Quantity c, Concept c, DOM c ~ ConceptChunk) =>
+  c -> [Constraint] -> Expr -> ConstrConcept
 constrained' q cs rv = ConstrConcept (cqs q) cs (Just rv)
 
-constrainedNRV' :: (Quantity c, Concept c) => c -> [Constraint] -> ConstrConcept
+constrainedNRV' :: (Quantity c, Concept c, DOM c ~ ConceptChunk) => c -> [Constraint] -> ConstrConcept
 constrainedNRV' q cs = ConstrConcept (cqs q) cs Nothing
 
-cuc' :: (IsUnit u) => String -> NP -> String -> Symbol -> u
+cuc' :: (IsUnit u, DOM u ~ ConceptChunk) => String -> NP -> String -> Symbol -> u
                   -> Space -> [Constraint] -> Expr -> ConstrConcept
 cuc' nam trm desc sym un space cs rv =
   ConstrConcept (cqs $ ucs nam trm desc sym un space) cs (Just rv)

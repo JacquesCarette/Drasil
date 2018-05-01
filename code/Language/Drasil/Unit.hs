@@ -1,3 +1,4 @@
+{-# Language TypeFamilies #-}
 module Language.Drasil.Unit (
     IsUnit, UnitEq(..),HasUnitSymbol(..)        -- classes
   , FundUnit(..), DerUChunk(..) -- data-structures
@@ -12,9 +13,9 @@ module Language.Drasil.Unit (
 import Control.Lens (Simple, Lens, (^.))
 import Control.Arrow (second)
 
-import Language.Drasil.Classes (HasUID(uid), NamedIdea(term), Idea(getA))
-import Language.Drasil.Chunk.Concept (Concept,Definition(..), 
-  ConceptDomain(..),ConceptChunk, dcc, cw)
+import Language.Drasil.Classes (HasUID(uid), NamedIdea(term), Idea(getA),
+  Definition(defn),ConceptDomain(cdom,DOM),Concept)
+import Language.Drasil.Chunk.Concept (ConceptChunk, dcc, cw)
 import Language.Drasil.Symbol
 import Language.Drasil.UnitLang
 
@@ -66,7 +67,9 @@ instance HasUID        FundUnit where uid = vc . uid
 instance NamedIdea     FundUnit where term   = vc . term
 instance Idea          FundUnit where getA c = getA (c ^. vc)
 instance Definition    FundUnit where defn = vc . defn
-instance ConceptDomain FundUnit where cdom = vc . cdom
+instance ConceptDomain FundUnit where
+  type DOM FundUnit = ConceptChunk
+  cdom = vc . cdom
 instance Concept       FundUnit where
 instance HasUnitSymbol FundUnit where usymb f (UD a b) = fmap (\x -> UD a x) (f b)
 instance IsUnit        FundUnit
@@ -82,7 +85,9 @@ instance HasUID        DerUChunk where uid  = duc . uid
 instance NamedIdea     DerUChunk where term = duc . term
 instance Idea          DerUChunk where getA c = getA (c ^. duc)
 instance Definition    DerUChunk where defn = duc . defn
-instance ConceptDomain DerUChunk where cdom = duc . cdom
+instance ConceptDomain DerUChunk where
+  type DOM DerUChunk = ConceptChunk
+  cdom = duc . cdom
 instance Concept       DerUChunk where
 instance HasUnitSymbol DerUChunk where usymb  = duc . usymb
 instance IsUnit        DerUChunk where
@@ -94,7 +99,7 @@ instance UnitEq DerUChunk where
 
 -- | For allowing lists to mix the two, thus forgetting
 -- the definition part
-unitWrapper :: IsUnit u => u -> FundUnit
+unitWrapper :: (IsUnit u, DOM u ~ ConceptChunk) => u -> FundUnit
 unitWrapper u = UD (cw u) (u ^. usymb)
 
 --- These conveniences go here, because we need the class

@@ -1,4 +1,4 @@
-{-# LANGUAGE TemplateHaskell #-}
+{-# LANGUAGE TemplateHaskell, TypeFamilies #-}
 module Language.Drasil.Chunk.Relation
   ( RelationConcept(..)
   , makeRC, makeRC'
@@ -6,8 +6,8 @@ module Language.Drasil.Chunk.Relation
 
 import Control.Lens (makeLenses, (^.))
 import Language.Drasil.Expr (Relation)
-import Language.Drasil.Classes (HasUID(uid),NamedIdea(term),Idea(getA))
--- import Language.Drasil.Chunk.NamedIdea
+import Language.Drasil.Classes (HasUID(uid),NamedIdea(term),Idea(getA),
+  Definition(defn),ConceptDomain(cdom,DOM),Concept)
 import Language.Drasil.Chunk.Concept
 import Language.Drasil.Spec (Sentence(..))
 import Language.Drasil.Chunk.ExprRelat
@@ -21,7 +21,9 @@ instance HasUID        RelationConcept where uid = conc . uid
 instance NamedIdea     RelationConcept where term = conc . term
 instance Idea          RelationConcept where getA (RC c _) = getA c
 instance Definition    RelationConcept where defn = conc . defn
-instance ConceptDomain RelationConcept where cdom = conc . cdom
+instance ConceptDomain RelationConcept where
+  type DOM RelationConcept = ConceptChunk
+  cdom = conc . cdom
 instance Concept       RelationConcept where
 instance ExprRelat     RelationConcept where relat = rel
 instance Eq            RelationConcept where a == b = (a ^. uid) == (b ^. uid)

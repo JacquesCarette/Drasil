@@ -1,7 +1,7 @@
 module Language.Drasil.Misc where
 
 import Language.Drasil.Spec
-import Language.Drasil.Classes (NamedIdea(term), Idea(getA))
+import Language.Drasil.Classes (NamedIdea(term), Idea)
 import Language.Drasil.Chunk.Quantity
 import Language.Drasil.UnitLang (USymb)
 import Language.Drasil.Unit (HasUnitSymbol(usymb))

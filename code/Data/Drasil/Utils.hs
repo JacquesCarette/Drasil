@@ -1,3 +1,4 @@
+{-# Language TypeFamilies #-}
 module Data.Drasil.Utils
   ( foldle
   , foldle1

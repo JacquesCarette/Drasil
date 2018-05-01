@@ -1,10 +1,11 @@
-{-# LANGUAGE TemplateHaskell #-}
+{-# LANGUAGE TemplateHaskell, TypeFamilies #-}
 
 module Language.Drasil.Chunk.DefinedQuantity
   ( cqs, DefinedQuantityDict
   ) where
 
-import Language.Drasil.Classes (HasUID(uid), NamedIdea(term), Idea(getA))
+import Language.Drasil.Classes (HasUID(uid), NamedIdea(term), Idea(getA),
+  Definition(defn),ConceptDomain(cdom,DOM),Concept)
 import Language.Drasil.Chunk.Concept
 import Language.Drasil.Chunk.SymbolForm (HasSymbol(symbol))
 import qualified Language.Drasil.Chunk.Quantity as Q
@@ -23,11 +24,13 @@ instance Eq DefinedQuantityDict            where a == b = (a ^. uid) == (b ^. ui
 instance NamedIdea DefinedQuantityDict     where term = con . term
 instance Idea DefinedQuantityDict          where getA (DQD a _) = getA a
 instance Definition DefinedQuantityDict    where defn = con . defn
-instance ConceptDomain DefinedQuantityDict where cdom = con . cdom
+instance ConceptDomain DefinedQuantityDict where
+  type DOM DefinedQuantityDict = ConceptChunk
+  cdom = con . cdom
 instance Concept DefinedQuantityDict       where
 instance Q.HasSpace DefinedQuantityDict    where  typ = quant . Q.typ
 instance HasSymbol DefinedQuantityDict     where symbol q st = symbol (q^.quant) st
 instance Q.Quantity DefinedQuantityDict    where getUnit (DQD a _) = Q.getUnit a
 
-cqs :: (Q.Quantity c, Concept c) => c -> DefinedQuantityDict
+cqs :: (Q.Quantity c, Concept c, DOM c ~ ConceptChunk) => c -> DefinedQuantityDict
 cqs c = DQD (Q.qw c) (cw c)

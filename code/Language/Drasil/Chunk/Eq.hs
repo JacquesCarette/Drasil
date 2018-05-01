@@ -1,12 +1,13 @@
-{-# LANGUAGE TemplateHaskell #-}
+{-# LANGUAGE TemplateHaskell, TypeFamilies #-}
 module Language.Drasil.Chunk.Eq 
   (QDefinition(..), fromEqn, fromEqn', fromEqn'', equat, getVC
   , ec, ec', aqd) where
 
 import Control.Lens ((^.), makeLenses)
 import Language.Drasil.Expr (Expr)
-import Language.Drasil.Classes (HasUID(uid),NamedIdea(term), Idea(getA))
+import Language.Drasil.Classes (HasUID(uid),NamedIdea(term), Idea(getA),DOM)
 import Language.Drasil.Chunk.Attribute
+import Language.Drasil.Chunk.Concept (ConceptChunk)
 import Language.Drasil.Chunk.Quantity (Quantity(getUnit),HasSpace(typ), QuantityDict,
   mkQuant, qw)
 import Language.Drasil.Chunk.ExprRelat
@@ -37,7 +38,8 @@ instance Eq QDefinition            where a == b = (a ^. uid) == (b ^. uid)
 -- | Create a 'QDefinition' with an uid, noun phrase (term), definition, symbol,
 -- unit, and defining equation.  And it ignores the definition...
 --FIXME: Space hack
-fromEqn :: IsUnit u => String -> NP -> Sentence -> Symbol -> u -> Expr -> QDefinition
+fromEqn :: (IsUnit u, DOM u ~ ConceptChunk) => 
+  String -> NP -> Sentence -> Symbol -> u -> Expr -> QDefinition
 fromEqn nm desc _ symb un eqn = 
   EC (mkQuant nm desc symb Real (Just $ unitWrapper un) Nothing) eqn []
 
@@ -48,7 +50,7 @@ fromEqn' nm desc _ symb eqn = EC (mkQuant nm desc symb Real Nothing Nothing) eqn
 
 -- | Create a 'QDefinition' with an uid, noun phrase (term), symbol,
 -- abbreviation, unit, and defining equation.
-fromEqn'' :: (IsUnit u) => String -> NP -> Sentence -> Symbol -> String -> Maybe u -> Expr -> QDefinition
+fromEqn'' :: (IsUnit u, DOM u ~ ConceptChunk) => String -> NP -> Sentence -> Symbol -> String -> Maybe u -> Expr -> QDefinition
 fromEqn'' nm desc _ symb abbr u eqn = 
   EC (mkQuant nm desc symb Real (fmap unitWrapper u) (Just abbr)) eqn []
 

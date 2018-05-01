@@ -1,9 +1,10 @@
-{-# LANGUAGE TemplateHaskell #-}
+{-# LANGUAGE TemplateHaskell, TypeFamilies #-}
 module Language.Drasil.Chunk.ConVar
   ( ConVar(CV), cv, makeCV
   ) where
 
-import Language.Drasil.Classes (HasUID(uid), NamedIdea(term), Idea(getA))
+import Language.Drasil.Classes (HasUID(uid), NamedIdea(term), Idea(getA),
+  Definition(defn),ConceptDomain(cdom,DOM),Concept)
 import Language.Drasil.Chunk.Concept
 import Language.Drasil.Space (HasSpace(typ))
 import Language.Drasil.Chunk.SymbolForm (Stage,HasSymbol(symbol))
@@ -25,7 +26,9 @@ instance HasUID ConVar        where uid = con . uid
 instance NamedIdea ConVar     where term = con . term
 instance Idea ConVar          where getA (CV c _ _) = getA c
 instance Definition ConVar    where defn = con . defn
-instance ConceptDomain ConVar where cdom = con . cdom
+instance ConceptDomain ConVar where
+  type DOM ConVar = ConceptChunk
+  cdom = con . cdom
 instance HasSymbol ConVar     where symbol c = (c ^. symb)
 instance HasSpace ConVar      where typ = spa
 instance Concept ConVar       where
@@ -36,5 +39,5 @@ cv :: ConceptChunk -> Symbol -> Space -> ConVar
 cv c s = CV c (\_ -> s)
 
 -- | Make a ConVar out of a combined |Concept| + |Quantity|
-makeCV :: (Quantity c, Concept c) => c -> ConVar
+makeCV :: (Quantity c, Concept c, DOM c ~ ConceptChunk) => c -> ConVar
 makeCV c = CV (cw c) (symbol c) (c ^. typ)

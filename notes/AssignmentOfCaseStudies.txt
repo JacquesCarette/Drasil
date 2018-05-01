@@ -1,8 +1,8 @@
 Assignment of Case Studies
 
-Tiny:			Devi
+Tiny:		Devi
 GlassBR: 	Devi		Sam, Kangze
 Game Phys: 	Devi 		Gabe
 SWHS: 		Yuzhi		Akram
 NoPCM: 		Yuzhi		Akram
-SSP: 			Yuzhi	 	Maryyam
+SSP: 		Yuzhi	 	Maryyam

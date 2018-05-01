@@ -33,8 +33,9 @@ type Const = CodeDefinition
 type Derived = CodeDefinition
 type Def = CodeDefinition
 
-data CodeSpec = CodeSpec {
-  program :: CI,
+data CodeSpec where
+  CodeSpec :: CommonIdea a => {
+  program :: a,
   inputs :: [Input],
   extInputs :: [Input],
   derivedInputs :: [Derived],
@@ -50,7 +51,7 @@ data CodeSpec = CodeSpec {
   mods :: [Mod],  -- medium hack
   dMap :: ModDepMap,
   sysinfodb :: ChunkDB
-}
+  } -> CodeSpec
 
 type FunctionMap = Map.Map String CodeDefinition
 type VarMap      = Map.Map String CodeChunk
@@ -87,7 +88,7 @@ codeSpec' (SI {_sys = sys, _quants = q, _definitions = defs', _inputs = ins, _ou
       outs' = map codevar outs
       allInputs = nub $ inputs' ++ map codevar derived
   in  CodeSpec {
-        program = toCommonIdea sys,
+        program = sys,
         inputs = allInputs,
         extInputs = inputs',
         derivedInputs = derived,

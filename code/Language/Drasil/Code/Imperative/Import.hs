@@ -100,7 +100,7 @@ generateCode ch g =
             (Options Nothing Nothing Nothing (Just "Code"))
             (toAbsCode prog modules)
           setCurrentDirectory workingDir) (lang $ ch)
-  where prog = programName $ program $ codeSpec g
+  where prog = case codeSpec g of { CodeSpec {program = pp} -> programName pp }
         modules = runReader genModules g
 
 genModules :: Reader State [Module]

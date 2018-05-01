@@ -165,6 +165,7 @@ mkSRS = RefSec (RefProg intro
             dd4MeltFrac] ShowDerivation
           , IMs ([Label, Input, Output, InConstraints, OutConstraints] ++ stdFields)
            [eBalanceOnWtr_new, eBalanceOnPCM_new, heatEInWtr_new, heatEInPCM_new ] ShowDerivation
+          , Constraints ()
           ]
         )
       ]

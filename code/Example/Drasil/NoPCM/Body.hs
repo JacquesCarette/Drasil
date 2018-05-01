@@ -159,7 +159,7 @@ mkSRS = RefSec (RefProg intro
           , DDs ([Label, Symbol, Units] ++ stdFields) [dd1HtFluxC] ShowDerivation
           , IMs ([Label, Input, Output, InConstraints, OutConstraints] ++ stdFields)
             [eBalanceOnWtr_new, heatEInWtr_new] ShowDerivation
-          {-, Constraints -}
+          {-, Constraints ()-}
           ]
         )
       ]

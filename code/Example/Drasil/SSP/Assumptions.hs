@@ -1,4 +1,4 @@
-module Drasil.SSP.Assumptions (sspAssumptions) where
+module Drasil.SSP.Assumptions (sspAssumptions, assumps_SSP_list_new) where
 
 import Language.Drasil
 
@@ -13,6 +13,21 @@ import Data.Drasil.Concepts.Documentation (condition)
 import Data.Drasil.Concepts.Physics (force, stress, strain)
 import Data.Drasil.Concepts.Math (surface, unit_)
 import Data.Drasil.Concepts.SolidMechanics (shearForce)
+
+assumps_SSP_list_new :: [AssumpChunk]
+assumps_SSP_list_new = [assump_new_1, assump_new_2,assump_new_3, assump_new_4, assump_new_5,
+  assump_new_6, assump_new_7, assump_new_8, assump_new_9, assump_new_10]
+
+assump_new_1 = ac' "assump1" $ monotonicF;
+assump_new_2 = ac' "assump2" $ slopeG;
+assump_new_3 = ac' "assump3" $ homogeneousL;
+assump_new_4 = ac' "assump4" $ isotropicP;
+assump_new_5 = ac' "assump5" $ linearS;
+assump_new_6 = ac' "assump6" $ linearF;
+assump_new_7 = ac' "assump7" $ stressC;
+assump_new_8 = ac' "assump8" $ planeS;
+assump_new_9 = ac' "assump9" $ largeN;
+assump_new_10 = ac' "assump10" $ straightS;
 
 sspAssumptions :: [Sentence]
 sspAssumptions = [monotonicF, slopeG, homogeneousL, isotropicP,

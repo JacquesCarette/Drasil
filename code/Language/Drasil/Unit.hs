@@ -1,7 +1,6 @@
 {-# Language TypeFamilies #-}
 module Language.Drasil.Unit (
-    UnitEq(..)          -- classes
-  , FundUnit(..), DerUChunk(..) -- data-structures
+    FundUnit(..), DerUChunk(..) -- data-structures
   , UnitDefn                    -- synonym for FundUnit
   , from_udefn, makeDerU, unitCon
   , (^:), (/:), (*:), (*$), (/$), new_unit
@@ -14,15 +13,13 @@ import Control.Lens (Simple, Lens, (^.))
 import Control.Arrow (second)
 
 import Language.Drasil.Classes (HasUID(uid), NamedIdea(term), Idea(getA),
-  Definition(defn),ConceptDomain(cdom,DOM),Concept,HasUnitSymbol(usymb), IsUnit)
+  Definition(defn),ConceptDomain(cdom,DOM),Concept,HasUnitSymbol(usymb), IsUnit,
+  UnitEq(uniteq))
 import Language.Drasil.Chunk.Concept (ConceptChunk, dcc, cw)
 import Language.Drasil.Symbol
 import Language.Drasil.UnitLang
 
 import Language.Drasil.NounPhrase (cn,cn',NP)
-
-class UnitEq u where
-   uniteq :: Simple Lens u UDefn
 
 -- | Create a derived unit chunk from a concept and a unit equation
 makeDerU :: ConceptChunk -> UDefn -> DerUChunk

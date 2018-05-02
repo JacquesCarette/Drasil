@@ -11,13 +11,14 @@ module Language.Drasil.Classes (
   , HasSpace(typ)
   , HasUnitSymbol(usymb)
   , IsUnit
+  , UnitEq(uniteq)
   ) where
 
 import Language.Drasil.NounPhrase.Core (NP)
 import Language.Drasil.Spec (Sentence)
 import Language.Drasil.Symbol (Stage,Symbol)
 import Language.Drasil.Space (Space)
-import Language.Drasil.UnitLang (USymb)
+import Language.Drasil.UnitLang (USymb,UDefn)
 
 import Control.Lens (Lens')
 
@@ -73,4 +74,7 @@ class HasUnitSymbol u where
 -- | Units are concepts which store a unit symbol.
 -- They must also be explicitly declared to be instances of IsUnit
 class (Concept u, HasUnitSymbol u) => IsUnit u where
+
+class UnitEq u where
+   uniteq :: Lens' u UDefn
 

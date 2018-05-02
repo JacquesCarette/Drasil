@@ -95,6 +95,10 @@ in ./code/ for more information.
 **Steve**
   - Steven Palmer's work
   
+**WindowsFix**
+  - Contains registry files for adding and removing the autorun of the command 
+  `chcp 65001`. This is to fix an issue with unicode characters. **ONLY** affects Windows machines.
+  
 **code**
   - The main folder for Drasil source code and example implementations
   

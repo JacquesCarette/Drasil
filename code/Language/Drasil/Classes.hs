@@ -7,10 +7,12 @@ module Language.Drasil.Classes (
   , Definition(defn)
   , ConceptDomain(cdom, DOM)
   , Concept
+  , HasSymbol(symbol)
   ) where
 
 import Language.Drasil.NounPhrase.Core (NP)
 import Language.Drasil.Spec (Sentence)
+import Language.Drasil.Symbol(Stage,Symbol)
 
 import Control.Lens (Lens')
 
@@ -48,3 +50,8 @@ class ConceptDomain c where
 -- | Concepts are 'Idea's with definitions and domains
 class (Idea c, Definition c, ConceptDomain c) => Concept c where
 
+-- | A HasSymbol is anything which has a Symbol
+class HasSymbol c where
+  -- | Provides the Symbol --  for a particular stage of generation
+  symbol  :: c -> Stage -> Symbol
+  

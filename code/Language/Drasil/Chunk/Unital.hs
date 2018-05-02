@@ -12,12 +12,11 @@ module Language.Drasil.Chunk.Unital
 
 import Control.Lens (makeLenses, view, (^.))
 import Language.Drasil.Classes (HasUID(uid), NamedIdea(term), Idea(getA),
-  Definition(defn),ConceptDomain(cdom,DOM),Concept)
+  Definition(defn),ConceptDomain(cdom,DOM),Concept,HasSymbol(symbol))
 import Language.Drasil.Chunk.Concept (ConceptChunk,dcc, dccWDS,cw)
 import Language.Drasil.Chunk.ConVar (ConVar (..), cv)
 import Language.Drasil.Chunk.Quantity (Quantity(..),HasSpace(typ))
 import Language.Drasil.Chunk.Unitary (Unitary(..))
-import Language.Drasil.Chunk.SymbolForm (HasSymbol(symbol))
 import Language.Drasil.Unit (UnitDefn,IsUnit,unitWrapper)
 import Language.Drasil.Symbol
 import Language.Drasil.Space

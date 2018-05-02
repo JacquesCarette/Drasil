@@ -4,9 +4,8 @@ module Language.Drasil.Chunk.UnitaryConcept (ucw, UnitaryConceptDict) where
 import Language.Drasil.Chunk.Concept (DefnAndDomain(DAD), ConceptChunk)
 import Language.Drasil.Chunk.Unitary (UnitaryChunk, mkUnitary, Unitary)
 import Language.Drasil.Chunk.Quantity (Quantity(getUnit),HasSpace(typ))
-import Language.Drasil.Chunk.SymbolForm (HasSymbol(symbol))
 import Language.Drasil.Classes (HasUID(uid), NamedIdea(term), Idea(getA),
-  Definition(defn),ConceptDomain(cdom,DOM),Concept)
+  Definition(defn),ConceptDomain(cdom,DOM),Concept,HasSymbol(symbol))
 
 import Control.Lens ((^.), makeLenses, view)
 

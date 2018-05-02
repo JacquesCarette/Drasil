@@ -5,10 +5,9 @@ module Language.Drasil.Chunk.Unitary
   , Unitary(..)) where
 
 import Language.Drasil.Classes (HasUID(uid), NamedIdea(term), Idea(getA),
-  ConceptDomain(DOM))
+  ConceptDomain(DOM), HasSymbol(symbol))
 import Language.Drasil.Chunk.Quantity (Quantity(..), QuantityDict, mkQuant, qw, 
   HasSpace(typ))
-import Language.Drasil.Chunk.SymbolForm (HasSymbol(symbol))
 import Language.Drasil.Unit (IsUnit, UnitDefn, unitWrapper)
 import Language.Drasil.Symbol
 import Language.Drasil.Space

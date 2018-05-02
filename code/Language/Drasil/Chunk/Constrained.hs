@@ -18,13 +18,12 @@ import Language.Drasil.Chunk.Unitary
 import Language.Drasil.Chunk.VarChunk
 import Language.Drasil.Chunk.Unital (ucs)
 import Language.Drasil.Chunk.Concept
-import Language.Drasil.Chunk.SymbolForm
 import Language.Drasil.Unit
 import Language.Drasil.NounPhrase
 import Language.Drasil.Space
-import Language.Drasil.Symbol
+import Language.Drasil.Symbol (Symbol)
 import Language.Drasil.Classes (HasUID(uid), NamedIdea(term), Idea(getA),
-  Definition(defn),ConceptDomain(cdom,DOM),Concept)
+  Definition(defn),ConceptDomain(cdom,DOM),Concept, HasSymbol(symbol))
 
 -- | A Constrained is a 'Quantity' that has value constraints
 class Quantity c => Constrained c where

@@ -4,12 +4,11 @@ module Language.Drasil.Chunk.ConVar
   ) where
 
 import Language.Drasil.Classes (HasUID(uid), NamedIdea(term), Idea(getA),
-  Definition(defn),ConceptDomain(cdom,DOM),Concept)
+  Definition(defn),ConceptDomain(cdom,DOM),Concept,HasSymbol(symbol))
 import Language.Drasil.Chunk.Concept
 import Language.Drasil.Space (HasSpace(typ))
-import Language.Drasil.Chunk.SymbolForm (Stage,HasSymbol(symbol))
 import Language.Drasil.Chunk.Quantity (Quantity(getUnit))
-import Language.Drasil.Symbol
+import Language.Drasil.Symbol (Symbol,Stage)
 import Language.Drasil.Space
 
 import Control.Lens ((^.),makeLenses)

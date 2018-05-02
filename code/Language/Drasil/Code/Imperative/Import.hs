@@ -7,7 +7,6 @@ import Language.Drasil.Code.Imperative.LanguageRenderer (Options(..))
 import Language.Drasil.Code.Imperative.Parsers.ConfigParser (pythonLabel, cppLabel, cSharpLabel, javaLabel)
 import Language.Drasil.Code.Imperative.Lang
 import Language.Drasil.Code.CodeGeneration (createCodeFiles, makeCode)
-import Language.Drasil.Chunk.SymbolForm (HasSymbol)
 import Language.Drasil.Chunk.Code
 import Language.Drasil.Chunk.Quantity (QuantityDict)
 import Language.Drasil.Chunk.Constrained (Constraint(..))
@@ -18,7 +17,7 @@ import Language.Drasil.Expr.Extract hiding (vars)
 import Language.Drasil.CodeSpec hiding (codeSpec, Mod(..))
 import qualified Language.Drasil.CodeSpec as CS (Mod(..))
 import Language.Drasil.DataDesc
-import Language.Drasil.Classes (HasUID)
+import Language.Drasil.Classes (HasUID, HasSymbol)
 
 import Prelude hiding (log, exp, const)
 import Data.List (intersperse, (\\), stripPrefix)

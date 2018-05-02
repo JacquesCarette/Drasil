@@ -5,8 +5,7 @@ import Control.Lens ((^.))
 import Language.Drasil.Symbol
 import Language.Drasil.Expr
 import Language.Drasil.Space (Space)
-import Language.Drasil.Classes (HasUID(uid))
-import Language.Drasil.Chunk.SymbolForm (HasSymbol)
+import Language.Drasil.Classes (HasUID(uid),HasSymbol)
 
 -- | Smart constructor to take the log of an expression
 log :: Expr -> Expr

@@ -5,7 +5,8 @@ module Language.Drasil.Chunk.AssumpChunk
   ) where
 
 import Language.Drasil.Classes (HasUID(uid))
-import Language.Drasil.Chunk.Attribute (Attributes, HasAttributes(..), shortname)
+import Language.Drasil.Chunk.Attribute (HasAttributes(..), shortname)
+import Language.Drasil.Chunk.Attribute.Core (Attributes)
 import Language.Drasil.Spec (Sentence(..), RefName)
 
 import Control.Lens (makeLenses, (^.))

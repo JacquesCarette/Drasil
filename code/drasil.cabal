@@ -83,6 +83,7 @@ library
     , Language.Drasil.TeX.Preamble
     , Language.Drasil.Chunk.AssumpChunk
     , Language.Drasil.Chunk.Attribute
+    , Language.Drasil.Chunk.Attribute.Core
     , Language.Drasil.Chunk.Attribute.Derivation
     , Language.Drasil.Chunk.Change
     , Language.Drasil.Chunk.Citation

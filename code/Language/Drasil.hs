@@ -77,9 +77,11 @@ module Language.Drasil (
   , cqs, DefinedQuantityDict
   -- Chunk.UnitaryConcept
   , ucw, UnitaryConceptDict
-  -- Chunks w/ Attributes
-  , Attributes, attributes, getSource, aqd -- TODO: Remove aqd
-  , HasAttributes, Derivation, getDerivation, getShortName
+  -- Chunk.Attributes.Core
+  , Attributes
+  -- Chunk.Attributes
+  , getSource, aqd -- TODO: Remove aqd
+  , HasAttributes(attributes), Derivation, getDerivation, getShortName
   , sourceref, derivationsteps
   --Citations
   , Citation, BibRef, CiteField, Month(..), HP
@@ -204,6 +206,7 @@ import Language.Drasil.Classes (HasUID(uid), NamedIdea(term), Idea(getA),
   IsUnit)
 import Language.Drasil.Chunk.AssumpChunk
 import Language.Drasil.Chunk.Attribute
+import Language.Drasil.Chunk.Attribute.Core (Attributes)
 import Language.Drasil.Chunk.Attribute.Derivation (Derivation)
 import Language.Drasil.Chunk.Change
 import Language.Drasil.Chunk.Citation (

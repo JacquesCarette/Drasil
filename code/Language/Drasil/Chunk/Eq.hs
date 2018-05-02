@@ -7,7 +7,8 @@ import Control.Lens ((^.), makeLenses)
 import Language.Drasil.Expr (Expr)
 import Language.Drasil.Classes (HasUID(uid),NamedIdea(term), Idea(getA),DOM,
   HasSymbol(symbol), IsUnit)
-import Language.Drasil.Chunk.Attribute
+import Language.Drasil.Chunk.Attribute (HasAttributes(attributes))
+import Language.Drasil.Chunk.Attribute.Core (Attributes)
 import Language.Drasil.Chunk.Concept (ConceptChunk)
 import Language.Drasil.Chunk.Quantity (Quantity(getUnit),HasSpace(typ), QuantityDict,
   mkQuant, qw)

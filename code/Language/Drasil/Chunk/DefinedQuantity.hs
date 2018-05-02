@@ -5,9 +5,8 @@ module Language.Drasil.Chunk.DefinedQuantity
   ) where
 
 import Language.Drasil.Classes (HasUID(uid), NamedIdea(term), Idea(getA),
-  Definition(defn),ConceptDomain(cdom,DOM),Concept)
+  Definition(defn),ConceptDomain(cdom,DOM),Concept,HasSymbol(symbol))
 import Language.Drasil.Chunk.Concept (ConceptChunk,cw)
-import Language.Drasil.Chunk.SymbolForm (HasSymbol(symbol))
 import qualified Language.Drasil.Chunk.Quantity as Q
 
 import Control.Lens ((^.), makeLenses)

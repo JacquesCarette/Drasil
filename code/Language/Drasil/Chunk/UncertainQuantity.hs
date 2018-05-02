@@ -12,17 +12,16 @@ module Language.Drasil.Chunk.UncertainQuantity
   ) where
   
 import Language.Drasil.Classes (HasUID(uid), NamedIdea(term), Idea(getA),
-  Definition(defn),ConceptDomain(cdom,DOM),Concept)
+  Definition(defn),ConceptDomain(cdom,DOM),Concept,HasSymbol(symbol))
 import Language.Drasil.Chunk.Quantity
 import Language.Drasil.Chunk.DefinedQuantity (cqs)
 import Language.Drasil.Chunk.Constrained
 import Language.Drasil.Chunk.Concept
-import Language.Drasil.Chunk.SymbolForm
 import Language.Drasil.Unit
 import Language.Drasil.Expr
 import Language.Drasil.NounPhrase
 import Language.Drasil.Space
-import Language.Drasil.Symbol
+import Language.Drasil.Symbol (Symbol)
 import Control.Lens ((^.), Lens', makeLenses)
 
 -- | An UncertainQuantity is just a Quantity with some uncertainty associated to it.

@@ -1,13 +1,9 @@
 module Language.Drasil.Chunk.SymbolForm
-  (HasSymbol(..), Stage(..), eqSymb, codeSymb, hasStageSymbol) where
+  (eqSymb, codeSymb, hasStageSymbol) where
 
+import Language.Drasil.Classes (HasSymbol(symbol))
 import Language.Drasil.Symbol (Symbol(Empty), Stage(Equational,Implementation))
 
--- | A HasSymbol is anything which has a Symbol
-class HasSymbol c where
-  -- | Provides the Symbol --  for a particular stage of generation
-  symbol  :: c -> Stage -> Symbol
-  
 -- | Helper function for getting a symbol in the Equational Stage
 eqSymb :: HasSymbol q => q -> Symbol
 eqSymb = \c -> symbol c Equational

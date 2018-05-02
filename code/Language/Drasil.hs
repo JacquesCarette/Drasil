@@ -198,7 +198,7 @@ import Language.Drasil.Unicode -- all of it
 import Language.Drasil.UnitLang -- all of it
 import Language.Drasil.Unit -- all of it
 import Language.Drasil.Classes (HasUID(uid), NamedIdea(term), Idea(getA),
-  Definition(defn), ConceptDomain(cdom), Concept)
+  Definition(defn), ConceptDomain(cdom), Concept, HasSymbol(symbol))
 import Language.Drasil.Chunk.AssumpChunk
 import Language.Drasil.Chunk.Attribute
 import Language.Drasil.Chunk.Attribute.Derivation (Derivation)
@@ -239,8 +239,7 @@ import Language.Drasil.Chunk.Quantity
 import Language.Drasil.Chunk.Relation(RelationConcept, makeRC, makeRC')
 import Language.Drasil.Chunk.ReqChunk(ReqChunk, ReqType(..), reqType, requires
                                      , frc, nfrc, rc')
-import Language.Drasil.Chunk.SymbolForm (HasSymbol(symbol), Stage(..)
-                                        , eqSymb, codeSymb, hasStageSymbol)
+import Language.Drasil.Chunk.SymbolForm (eqSymb, codeSymb, hasStageSymbol)
 import Language.Drasil.Chunk.Theory
 import Language.Drasil.Chunk.UncertainQuantity
 import Language.Drasil.Chunk.Unital(UnitalChunk(..), makeUCWDS, ucFromCV
@@ -263,7 +262,8 @@ import Language.Drasil.Reference (makeRef, acroTest, ReferenceDB, assumpDB, reqD
                                  , HasChangeRefs, changeRefTable, changeLookup
                                  , citationRefTable, citeLookup, RefMap
                                  , simpleMap)
-import Language.Drasil.Symbol (Symbol(..), sub, sup, vec, hat, prime, sCurlyBrSymb, compsy)
+import Language.Drasil.Symbol (Symbol(..), sub, sup, vec, hat, prime, sCurlyBrSymb, 
+  compsy, Stage(..))
 import Language.Drasil.SymbolAlphabet
 import Language.Drasil.Misc -- all of it
 import Language.Drasil.Printing.Helpers (capitalize, paren, sqbrac)

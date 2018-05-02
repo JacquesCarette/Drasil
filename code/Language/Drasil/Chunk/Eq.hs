@@ -5,14 +5,14 @@ module Language.Drasil.Chunk.Eq
 
 import Control.Lens ((^.), makeLenses)
 import Language.Drasil.Expr (Expr)
-import Language.Drasil.Classes (HasUID(uid),NamedIdea(term), Idea(getA),DOM)
+import Language.Drasil.Classes (HasUID(uid),NamedIdea(term), Idea(getA),DOM,
+  HasSymbol(symbol))
 import Language.Drasil.Chunk.Attribute
 import Language.Drasil.Chunk.Concept (ConceptChunk)
 import Language.Drasil.Chunk.Quantity (Quantity(getUnit),HasSpace(typ), QuantityDict,
   mkQuant, qw)
 import Language.Drasil.Chunk.ExprRelat
 import Language.Drasil.Chunk.VarChunk (VarChunk, vcSt)
-import Language.Drasil.Chunk.SymbolForm (HasSymbol(symbol))
 import Language.Drasil.Unit (IsUnit, unitWrapper)
 import Language.Drasil.Symbol (Symbol)
 import Language.Drasil.Space

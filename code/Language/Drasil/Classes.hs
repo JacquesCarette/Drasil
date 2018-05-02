@@ -10,6 +10,7 @@ module Language.Drasil.Classes (
   , HasSymbol(symbol)
   , HasSpace(typ)
   , HasUnitSymbol(usymb)
+  , IsUnit
   ) where
 
 import Language.Drasil.NounPhrase.Core (NP)
@@ -68,3 +69,8 @@ class HasSpace c where
 -- | Some chunks store a unit symbol
 class HasUnitSymbol u where
    usymb :: Lens' u USymb
+
+-- | Units are concepts which store a unit symbol.
+-- They must also be explicitly declared to be instances of IsUnit
+class (Concept u, HasUnitSymbol u) => IsUnit u where
+

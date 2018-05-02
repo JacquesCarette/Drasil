@@ -1,6 +1,6 @@
 {-# Language TypeFamilies #-}
 module Language.Drasil.Unit (
-    IsUnit, UnitEq(..)          -- classes
+    UnitEq(..)          -- classes
   , FundUnit(..), DerUChunk(..) -- data-structures
   , UnitDefn                    -- synonym for FundUnit
   , from_udefn, makeDerU, unitCon
@@ -14,16 +14,12 @@ import Control.Lens (Simple, Lens, (^.))
 import Control.Arrow (second)
 
 import Language.Drasil.Classes (HasUID(uid), NamedIdea(term), Idea(getA),
-  Definition(defn),ConceptDomain(cdom,DOM),Concept,HasUnitSymbol(usymb))
+  Definition(defn),ConceptDomain(cdom,DOM),Concept,HasUnitSymbol(usymb), IsUnit)
 import Language.Drasil.Chunk.Concept (ConceptChunk, dcc, cw)
 import Language.Drasil.Symbol
 import Language.Drasil.UnitLang
 
 import Language.Drasil.NounPhrase (cn,cn',NP)
-
--- | Units are concepts which store a unit symbol.
--- They must also be explicitly declared to be instances of IsUnit
-class (Concept u, HasUnitSymbol u) => IsUnit u where
 
 class UnitEq u where
    uniteq :: Simple Lens u UDefn

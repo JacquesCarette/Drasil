@@ -12,12 +12,12 @@ module Language.Drasil.Chunk.UncertainQuantity
   ) where
   
 import Language.Drasil.Classes (HasUID(uid), NamedIdea(term), Idea(getA),
-  Definition(defn),ConceptDomain(cdom,DOM),Concept,HasSymbol(symbol))
+  Definition(defn),ConceptDomain(cdom,DOM),Concept,HasSymbol(symbol),IsUnit)
 import Language.Drasil.Chunk.Quantity
 import Language.Drasil.Chunk.DefinedQuantity (cqs)
 import Language.Drasil.Chunk.Constrained
 import Language.Drasil.Chunk.Concept
-import Language.Drasil.Unit
+-- import Language.Drasil.Unit
 import Language.Drasil.Expr
 import Language.Drasil.NounPhrase
 import Language.Drasil.Space

@@ -39,7 +39,8 @@ build fn (Document t a c) =
           " \"http://www.w3.org/TR/html4/loose.dtd\">" ++ "\n" ++
           "<script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/"++
           "2.7.0/MathJax.js?config=TeX-MML-AM_CHTML'></script>") $$
-  html (head_tag ((linkCSS fn) $$ title (title_spec t)) $$
+  html ( head_tag ((linkCSS fn) $$ title (title_spec t) $$
+  text ("<meta charset=\"utf-8\">")) $$
   body (article_title (p_spec t) $$ author (p_spec a)
   $$ print c
   ))

@@ -22,7 +22,7 @@ module Language.Drasil (
   -- UnitLang
   , UDefn(..), from_udefn
   -- Unit
-  , IsUnit, HasUnitSymbol(..), DerUChunk(..), FundUnit(..), UnitDefn, unitWrapper
+  , IsUnit, DerUChunk(..), FundUnit(..), UnitDefn, unitWrapper
   , makeDerU, unitCon, fund, comp_unitdefn
   , (^:), (/:), (*:), (*$), (/$), new_unit
   -- Classes
@@ -31,6 +31,7 @@ module Language.Drasil (
   , Idea(getA)
   , Definition(defn), ConceptDomain(cdom)
   , Concept
+  , HasUnitSymbol(usymb)
   -- Chunk.VarChunk
   , VarChunk
   , vc, implVar
@@ -198,7 +199,7 @@ import Language.Drasil.Unicode -- all of it
 import Language.Drasil.UnitLang -- all of it
 import Language.Drasil.Unit -- all of it
 import Language.Drasil.Classes (HasUID(uid), NamedIdea(term), Idea(getA),
-  Definition(defn), ConceptDomain(cdom), Concept, HasSymbol(symbol))
+  Definition(defn), ConceptDomain(cdom), Concept, HasSymbol(symbol), HasUnitSymbol(usymb))
 import Language.Drasil.Chunk.AssumpChunk
 import Language.Drasil.Chunk.Attribute
 import Language.Drasil.Chunk.Attribute.Derivation (Derivation)

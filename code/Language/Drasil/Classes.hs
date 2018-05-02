@@ -9,12 +9,14 @@ module Language.Drasil.Classes (
   , Concept
   , HasSymbol(symbol)
   , HasSpace(typ)
+  , HasUnitSymbol(usymb)
   ) where
 
 import Language.Drasil.NounPhrase.Core (NP)
 import Language.Drasil.Spec (Sentence)
 import Language.Drasil.Symbol (Stage,Symbol)
 import Language.Drasil.Space (Space)
+import Language.Drasil.UnitLang (USymb)
 
 import Control.Lens (Lens')
 
@@ -60,3 +62,9 @@ class HasSymbol c where
 -- | HasSpace is anything which has a Space...
 class HasSpace c where
   typ      :: Lens' c Space
+
+-----------------------------------------------------
+-- Below are for units only
+-- | Some chunks store a unit symbol
+class HasUnitSymbol u where
+   usymb :: Lens' u USymb

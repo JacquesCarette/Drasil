@@ -10,7 +10,7 @@ import qualified Language.Drasil.Printing.AST as P
 import qualified Language.Drasil.Printing.Citation as P
 import qualified Language.Drasil.Printing.LayoutObj as T
 
-import Language.Drasil.Classes (term,defn)
+import Language.Drasil.Classes (term,defn,usymb)
 import qualified Language.Drasil.Chunk.SymbolForm as SF
 import Language.Drasil.Chunk.AssumpChunk
 import Language.Drasil.Chunk.Attribute (getShortName,HasAttributes)
@@ -32,7 +32,6 @@ import Language.Drasil.Spec (Sentence(..))
 import Language.Drasil.Misc (unit'2Contents)
 import Language.Drasil.NounPhrase (phrase, titleize)
 import Language.Drasil.Reference
-import Language.Drasil.Unit (usymb)
 
 import Language.Drasil.Document
 

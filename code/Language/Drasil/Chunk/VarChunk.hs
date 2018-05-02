@@ -2,12 +2,12 @@
 module Language.Drasil.Chunk.VarChunk(VarChunk,implVar,codeVC,vc,vcSt,vc'') where
 
 import Language.Drasil.Classes (HasUID(uid), NamedIdea(term), Idea(getA),
-  HasSymbol(symbol))
+  HasSymbol(symbol), HasSpace(typ))
 import Language.Drasil.Chunk.NamedIdea (IdeaDict, nw, nc)
 import Language.Drasil.Chunk.Quantity (Quantity(getUnit))
 
 import Language.Drasil.Symbol (Symbol(Empty),Stage(..))
-import Language.Drasil.Space
+import Language.Drasil.Space (Space)
 
 import Language.Drasil.NounPhrase (NP)
 

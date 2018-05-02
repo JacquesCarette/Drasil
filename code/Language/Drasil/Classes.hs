@@ -8,11 +8,13 @@ module Language.Drasil.Classes (
   , ConceptDomain(cdom, DOM)
   , Concept
   , HasSymbol(symbol)
+  , HasSpace(typ)
   ) where
 
 import Language.Drasil.NounPhrase.Core (NP)
 import Language.Drasil.Spec (Sentence)
-import Language.Drasil.Symbol(Stage,Symbol)
+import Language.Drasil.Symbol (Stage,Symbol)
+import Language.Drasil.Space (Space)
 
 import Control.Lens (Lens')
 
@@ -55,3 +57,6 @@ class HasSymbol c where
   -- | Provides the Symbol --  for a particular stage of generation
   symbol  :: c -> Stage -> Symbol
   
+-- | HasSpace is anything which has a Space...
+class HasSpace c where
+  typ      :: Lens' c Space

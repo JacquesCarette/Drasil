@@ -16,7 +16,7 @@ import Drasil.SWHS.Assumptions (assump_new_1, assump_new_2,assump_new_6, assump_
   assump1, assump2, assump7, assump8, assump9, assump14, assump15, assump20)
 import Drasil.SWHS.Body (charac_of_reader_knowledge, charac_of_reader_understanding, org_of_doc_intro,
   gen_sys_desc, physSyst1, physSyst2, data_def_intro_end, insta_model_d1startPara,
-  trace_matrix_grph_trailing)
+  trace_matrix_grph_trailing, data_constraint_mid)
 import Drasil.SWHS.Concepts (progName, water, gauss_div, sWHT, tank, coil,
   transient, perfect_insul, tank_para)
 import Drasil.SWHS.Unitals (w_vol, tank_length, tank_vol, tau_W, temp_W,
@@ -159,7 +159,8 @@ mkSRS = RefSec (RefProg intro
           , DDs ([Label, Symbol, Units] ++ stdFields) [dd1HtFluxC] ShowDerivation
           , IMs ([Label, Input, Output, InConstraints, OutConstraints] ++ stdFields)
             [eBalanceOnWtr_new, heatEInWtr_new] ShowDerivation
-          {-, Constraints ()-}
+          , Constraints  EmptyS dataConstraintUncertainty data_constraint_mid
+           [data_constraint_table1, data_constraint_table2]
           ]
         )
       ]

@@ -3,9 +3,9 @@ module Language.Drasil.Chunk.Change
   , lc, ulc, chc'
   ) where
 
-import Language.Drasil.Classes (HasUID(uid))
+import Language.Drasil.Classes (HasUID(uid),HasAttributes(attributes))
 import Language.Drasil.Chunk.Attribute.Core(Attributes)
-import Language.Drasil.Chunk.Attribute(HasAttributes(attributes),shortname)
+import Language.Drasil.Chunk.Attribute(shortname)
 import Language.Drasil.Spec (Sentence, RefName)
 
 import Control.Lens (set, (^.))

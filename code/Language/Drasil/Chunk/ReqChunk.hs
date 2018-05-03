@@ -3,8 +3,8 @@ module Language.Drasil.Chunk.ReqChunk
   , frc, nfrc, rc'
   ) where
 
-import Language.Drasil.Classes (HasUID(uid))
-import Language.Drasil.Chunk.Attribute (HasAttributes(attributes),shortname)
+import Language.Drasil.Classes (HasUID(uid), HasAttributes(attributes))
+import Language.Drasil.Chunk.Attribute (shortname)
 import Language.Drasil.Chunk.Attribute.Core (Attributes)
 import Language.Drasil.Spec (Sentence, RefName)
 

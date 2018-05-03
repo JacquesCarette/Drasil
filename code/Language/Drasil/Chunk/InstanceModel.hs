@@ -5,8 +5,7 @@ module Language.Drasil.Chunk.InstanceModel
   )where
 
 import Language.Drasil.Classes (HasUID(uid), NamedIdea(term), Idea(getA),
-  Definition(defn),ConceptDomain(cdom,DOM),Concept)
-import Language.Drasil.Chunk.Attribute (HasAttributes(attributes))
+  Definition(defn),ConceptDomain(cdom,DOM),Concept, HasAttributes(attributes))
 import Language.Drasil.Chunk.Attribute.Core (Attributes)
 import Language.Drasil.Chunk.Concept
 import Language.Drasil.Chunk.Constrained

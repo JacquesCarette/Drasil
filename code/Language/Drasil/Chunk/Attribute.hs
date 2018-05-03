@@ -1,17 +1,13 @@
 module Language.Drasil.Chunk.Attribute 
-  ( HasAttributes(..)
-  , getSource, getDerivation, getShortName
+  ( getSource, getDerivation, getShortName
   , shortname, sourceref, derivationsteps
   ) where
 
-import Control.Lens (Lens', (^.))
+import Control.Lens ((^.))
 import Language.Drasil.Spec (Sentence(EmptyS))
 import Language.Drasil.Chunk.Attribute.Core (Attributes, Attribute(..))
 import Language.Drasil.Chunk.Attribute.Derivation (Derivation)
-
--- | Anything with 'Attributes'
-class HasAttributes c where
-  attributes :: Lens' c Attributes
+import Language.Drasil.Classes (HasAttributes(attributes))
 
 --------------------------------------------------------------------------------
 

@@ -33,6 +33,7 @@ module Language.Drasil (
   , Concept
   , HasUnitSymbol(usymb)
   , IsUnit
+  , HasAttributes(attributes)
   -- Chunk.VarChunk
   , VarChunk
   , vc, implVar
@@ -81,7 +82,7 @@ module Language.Drasil (
   , Attributes
   -- Chunk.Attributes
   , getSource, aqd -- TODO: Remove aqd
-  , HasAttributes(attributes), Derivation, getDerivation, getShortName
+  , Derivation, getDerivation, getShortName
   , sourceref, derivationsteps
   --Citations
   , Citation, BibRef, CiteField, Month(..), HP
@@ -203,7 +204,7 @@ import Language.Drasil.UnitLang -- all of it
 import Language.Drasil.Unit -- all of it
 import Language.Drasil.Classes (HasUID(uid), NamedIdea(term), Idea(getA),
   Definition(defn), ConceptDomain(cdom), Concept, HasSymbol(symbol), HasUnitSymbol(usymb),
-  IsUnit)
+  IsUnit, HasAttributes(attributes))
 import Language.Drasil.Chunk.AssumpChunk
 import Language.Drasil.Chunk.Attribute
 import Language.Drasil.Chunk.Attribute.Core (Attributes)

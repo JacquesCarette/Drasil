@@ -4,8 +4,7 @@ module Language.Drasil.Chunk.GenDefn
   ) where
 
 import Language.Drasil.Classes (HasUID(uid), NamedIdea(term), Idea(getA),
-  Definition(defn), ConceptDomain(cdom,DOM), Concept, IsUnit)
-import Language.Drasil.Chunk.Attribute (HasAttributes(attributes))
+  Definition(defn), ConceptDomain(cdom,DOM), Concept, IsUnit, HasAttributes(attributes))
 import Language.Drasil.Chunk.Attribute.Core (Attributes)
 import Language.Drasil.Chunk.Concept (ConceptChunk)
 import Language.Drasil.Chunk.ExprRelat (ExprRelat(relat))

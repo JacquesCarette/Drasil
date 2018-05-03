@@ -8,8 +8,7 @@ module Language.Drasil.Chunk.Goal
   , refAddr
   ) where
 
-import Language.Drasil.Classes (HasUID(uid))
-import Language.Drasil.Chunk.Attribute (HasAttributes(attributes))
+import Language.Drasil.Classes (HasUID(uid), HasAttributes(attributes))
 import Language.Drasil.Chunk.Attribute.Core (Attributes)
 import Language.Drasil.Spec (Sentence)
 import Language.Drasil.RefTypes (RefAdd)

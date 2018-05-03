@@ -12,6 +12,7 @@ module Language.Drasil.Classes (
   , HasUnitSymbol(usymb)
   , IsUnit
   , UnitEq(uniteq)
+  , HasAttributes(attributes)
   ) where
 
 import Language.Drasil.NounPhrase.Core (NP)
@@ -19,6 +20,7 @@ import Language.Drasil.Spec (Sentence)
 import Language.Drasil.Symbol (Stage,Symbol)
 import Language.Drasil.Space (Space)
 import Language.Drasil.UnitLang (USymb,UDefn)
+import Language.Drasil.Chunk.Attribute.Core (Attributes)
 
 import Control.Lens (Lens')
 
@@ -64,6 +66,10 @@ class HasSymbol c where
 -- | HasSpace is anything which has a Space...
 class HasSpace c where
   typ      :: Lens' c Space
+
+-- | Anything with 'Attributes'
+class HasAttributes c where
+  attributes :: Lens' c Attributes
 
 -----------------------------------------------------
 -- Below are for units only

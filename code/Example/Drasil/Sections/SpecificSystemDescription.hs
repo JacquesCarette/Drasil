@@ -31,12 +31,15 @@ specSysDescr sys subs = SRS.specSysDes [intro_ sys] subs
 
 -- FIXME: this all should be broken down and mostly generated.
 -- Generates an introduction based on the system.
+--theoretical models, general definitions, data definitions, and finally 
+--the instance models (ODEs) that model the solar water heating systems incorporating PCM.
 intro_ :: (NamedIdea a) => a -> Contents
 intro_ sys = Paragraph $ S "This section first presents the problem" +:+
   S "description, which gives a high-level view of the problem to be" +:+
   S "solved. This is followed by the solution characteristics" +:+
-  S "specification, which presents the assumptions" `sC`
-  S "theories, and definitions that are used for the" +:+. (phrase sys)
+  S "specification, which presents the assumptions" `sC` S "theories" `sC`
+  S "theoretical models, general definitions, data definitions" `sC` 
+  S "and finally the instance models (ODEs) that model the" +:+. (phrase sys)
 
 -- wrapper for specSysDesIntro
 specSysDesF :: Sentence -> [Section] -> Section

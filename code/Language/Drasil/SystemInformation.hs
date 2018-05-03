@@ -2,9 +2,8 @@
 
 module Language.Drasil.SystemInformation where
 
-import Language.Drasil.Classes (Idea,Concept,IsUnit,CommonIdea)
+import Language.Drasil.Classes (HasUID,Idea,Concept,IsUnit,CommonIdea,Constrained)
 import Language.Drasil.Chunk.Citation (BibRef)
-import Language.Drasil.Chunk.Constrained
 import Language.Drasil.Chunk.Eq
 import Language.Drasil.Chunk.Quantity
 import Language.Drasil.ChunkDB (ChunkDB)
@@ -23,7 +22,7 @@ data SystemInformation where
  SI :: (CommonIdea a, Idea a, Idea b, HasName c, IsUnit d,
   Quantity e, Eq e, Quantity f, Concept f, Eq f,
   Quantity h, Quantity i,
-  Constrained j) => 
+  HasUID j, Constrained j) => 
   { _sys :: a
   , _kind :: b
   , _authors :: [c]

@@ -1,17 +1,15 @@
-{-# Language GADTs, TemplateHaskell, TypeFamilies #-}
+{-# Language TemplateHaskell, TypeFamilies #-}
 module Language.Drasil.Chunk.Constrained (
-    Constrained(..), HasReasVal(..)
-  , Constraint(..), ConstraintReason(..)
-  , ConstrainedChunk(..)
+    ConstrainedChunk(..)
   , ConstrConcept(..)
-  , physc, sfwrc, enumc, isPhysC, isSfwrC
   , constrained, cuc, cvc, cvc', constrained', cuc', constrainedNRV'
   , cnstrw
-  , Reason(..), TheoryConstraint(..)
   ) where
 
-import Control.Lens (Lens', (^.), makeLenses, view)
-import Language.Drasil.Expr (Expr(..), RealInterval(..), Relation)
+import Control.Lens ((^.), makeLenses, view)
+
+import Language.Drasil.Chunk.Constrained.Core (Constraint(..))
+import Language.Drasil.Expr (Expr(..))
 import Language.Drasil.Chunk.Quantity
 import Language.Drasil.Chunk.DefinedQuantity
 import Language.Drasil.Chunk.Unitary
@@ -23,49 +21,8 @@ import Language.Drasil.NounPhrase
 import Language.Drasil.Space
 import Language.Drasil.Symbol (Symbol)
 import Language.Drasil.Classes (HasUID(uid), NamedIdea(term), Idea(getA),
-  Definition(defn),ConceptDomain(cdom,DOM),Concept, HasSymbol(symbol), IsUnit)
-
--- | A Constrained is a 'Quantity' that has value constraints
-class Quantity c => Constrained c where
-  constraints :: Lens' c [Constraint]
-
--- | A HasReasVal is a 'Quantity' that could have a reasonable value
-class Quantity c => HasReasVal c where
-  reasVal     :: Lens' c (Maybe Expr)
-
--- AssumedCon are constraints that come from assumptions as opposed to theory invariants.
--- This might be an artificial distinction as they may be "the same"
-data Reason = Invariant | AssumedCon
-data TheoryConstraint = TCon Reason Relation 
-
-data ConstraintReason = Physical | Software
-data Constraint where
-  Range          :: ConstraintReason -> RealInterval Expr Expr -> Constraint
-  EnumeratedReal :: ConstraintReason -> [Double]               -> Constraint
-  EnumeratedStr  :: ConstraintReason -> [String]               -> Constraint
-
--- by default, physical and software constraints are ranges
-physc :: RealInterval Expr Expr -> Constraint
-physc = Range Physical
-
-sfwrc :: RealInterval Expr Expr -> Constraint
-sfwrc = Range Software
-
--- but also for enumeration of values; right now, always physical
-enumc :: [Double] -> Constraint
-enumc = EnumeratedReal Physical
-
--- helpful for filtering for Physical / Software constraints
-isPhysC, isSfwrC :: Constraint -> Bool
-isPhysC (Range Physical _) = True
-isPhysC (EnumeratedReal Physical _) = True
-isPhysC (EnumeratedStr Physical _) = True
-isPhysC _ = False
-
-isSfwrC (Range Software _) = True
-isSfwrC (EnumeratedReal Software _) = True
-isSfwrC (EnumeratedStr Software _) = True
-isSfwrC _ = False
+  Definition(defn),ConceptDomain(cdom,DOM),Concept, HasSymbol(symbol), IsUnit,
+  Constrained(constraints),HasReasVal(reasVal))
 
 -- | ConstrainedChunks are 'Symbolic Quantities'
 -- with 'Constraints' and maybe typical value
@@ -133,5 +90,5 @@ cuc' :: (IsUnit u, DOM u ~ ConceptChunk) => String -> NP -> String -> Symbol -> 
 cuc' nam trm desc sym un space cs rv =
   ConstrConcept (cqs $ ucs nam trm desc sym un space) cs (Just rv)
 
-cnstrw :: (Constrained c, HasReasVal c) => c -> ConstrainedChunk
+cnstrw :: (Quantity c, Constrained c, HasReasVal c) => c -> ConstrainedChunk
 cnstrw c = ConstrainedChunk (qw c) (c ^. constraints) (c ^. reasVal)

@@ -14,6 +14,8 @@ module Language.Drasil.Classes (
   , UnitEq(uniteq)
   , HasAttributes(attributes)
   , CommonIdea(abrv)
+  , Constrained(constraints)
+  , HasReasVal(reasVal)
   ) where
 
 import Language.Drasil.NounPhrase.Core (NP)
@@ -22,6 +24,8 @@ import Language.Drasil.Symbol (Stage,Symbol)
 import Language.Drasil.Space (Space)
 import Language.Drasil.UnitLang (USymb,UDefn)
 import Language.Drasil.Chunk.Attribute.Core (Attributes)
+import Language.Drasil.Chunk.Constrained.Core (Constraint)
+import Language.Drasil.Expr (Expr)
 
 import Control.Lens (Lens')
 
@@ -77,6 +81,15 @@ class HasAttributes c where
 class NamedIdea c => CommonIdea c where
   -- | Introduces abrv which necessarily provides an abbreviation.
   abrv :: c -> String
+
+-- | A Constrained is a 'Quantity' that has value constraints
+-- but do not enforce Quantity at this point
+class Constrained c where
+  constraints :: Lens' c [Constraint]
+
+-- | A HasReasVal is a 'Quantity' that could have a reasonable value
+class HasReasVal c where
+  reasVal     :: Lens' c (Maybe Expr)
 
 -----------------------------------------------------
 -- Below are for units only

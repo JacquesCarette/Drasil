@@ -9,7 +9,7 @@ import Language.Drasil.Code.Imperative.Lang
 import Language.Drasil.Code.CodeGeneration (createCodeFiles, makeCode)
 import Language.Drasil.Chunk.Code
 import Language.Drasil.Chunk.Quantity (QuantityDict)
-import Language.Drasil.Chunk.Constrained (Constraint(..))
+import Language.Drasil.Chunk.Constrained.Core (Constraint(..))
 import Language.Drasil.Expr as E hiding (($.))
 import Language.Drasil.Expr.Math (sy)
 import Language.Drasil.Space (Space(..))

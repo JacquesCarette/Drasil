@@ -6,7 +6,7 @@ module Language.Drasil.Chunk.Theory
 import Language.Drasil.Classes (HasUID(uid), NamedIdea(term), Idea(getA),
   Definition(defn),ConceptDomain(cdom,DOM),Concept)
 import Language.Drasil.Chunk.Concept
-import Language.Drasil.Chunk.Constrained
+import Language.Drasil.Chunk.Constrained.Core (TheoryConstraint)
 import Language.Drasil.Chunk.Eq
 import Language.Drasil.Chunk.Quantity
 

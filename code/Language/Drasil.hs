@@ -35,6 +35,8 @@ module Language.Drasil (
   , IsUnit
   , HasAttributes(attributes)
   , CommonIdea(abrv)
+  , Constrained(constraints)
+  , HasReasVal(reasVal)
   -- Chunk.VarChunk
   , VarChunk
   , vc, implVar
@@ -49,13 +51,14 @@ module Language.Drasil (
   , compoundterm, for, for', for'', of_, of_', of_'', of__, of'', compoundNC, compoundNC'
   , compoundNC'', compoundNC''', with, with', and_, and_', andRT, aNP, the, a_
   , ofA,theCustom, this
-  -- Chunk.Constrained
-  , Constrained(..), HasReasVal(..), ConstrainedChunk(..), Constraint(..), ConstrConcept(..)
-  , ConstraintReason(..)
-  , physc, sfwrc, enumc, constrained, cuc, cvc, cvc', constrained', cuc', constrainedNRV'
-  , isPhysC, isSfwrC
-  , cnstrw
+  -- Chunk.Constrained.Core
+  , physc, sfwrc, enumc , isPhysC, isSfwrC
+  , Constraint(..), ConstraintReason(..)
   , Reason(..), TheoryConstraint(..)
+  -- Chunk.Constrained
+  , ConstrainedChunk(..), ConstrConcept(..)
+  , constrained, cuc, cvc, cvc', constrained', cuc', constrainedNRV'
+  , cnstrw
   -- Chunk.Eq
   , QDefinition(..), fromEqn, fromEqn', fromEqn'', getVC, equat, ec, ec'
   -- Chunk.GenDefn
@@ -205,7 +208,8 @@ import Language.Drasil.UnitLang -- all of it
 import Language.Drasil.Unit -- all of it
 import Language.Drasil.Classes (HasUID(uid), NamedIdea(term), Idea(getA),
   Definition(defn), ConceptDomain(cdom), Concept, HasSymbol(symbol), HasUnitSymbol(usymb),
-  IsUnit, HasAttributes(attributes), CommonIdea(abrv))
+  IsUnit, HasAttributes(attributes), CommonIdea(abrv),
+  Constrained(constraints), HasReasVal(reasVal))
 import Language.Drasil.Chunk.AssumpChunk
 import Language.Drasil.Chunk.Attribute
 import Language.Drasil.Chunk.Attribute.Core (Attributes)
@@ -234,6 +238,8 @@ import Language.Drasil.Chunk.Citation (
 import Language.Drasil.Chunk.CommonIdea
 import Language.Drasil.Chunk.Concept
 import Language.Drasil.Chunk.Constrained
+import Language.Drasil.Chunk.Constrained.Core (physc, sfwrc, enumc, isPhysC, isSfwrC,
+  Constraint(..), ConstraintReason(..), Reason(..), TheoryConstraint(..))
 import Language.Drasil.Chunk.ConVar
 import Language.Drasil.Chunk.DefinedQuantity
 import Language.Drasil.Chunk.Eq (QDefinition(..), fromEqn, fromEqn', fromEqn'', getVC, equat, aqd, ec, ec')

@@ -10,12 +10,12 @@ module Language.Drasil.Chunk.Code (
 
 import Control.Lens ((^.),makeLenses,view)
 
-import Language.Drasil.Chunk.Constrained
+import Language.Drasil.Chunk.Constrained.Core (Constraint,isPhysC)
 import Language.Drasil.Chunk.Quantity
 import Language.Drasil.Chunk.Eq
 import Language.Drasil.Chunk.SymbolForm (codeSymb)
 import Language.Drasil.Classes (HasUID(uid), NamedIdea(term), Idea(getA),
-  HasSymbol(symbol), CommonIdea(abrv))
+  HasSymbol(symbol), CommonIdea(abrv), Constrained(constraints))
 
 import Language.Drasil.Space as S
 import Language.Drasil.Code.Code as G (CodeType(..))
@@ -195,7 +195,7 @@ codeEquat cd = cd ^. def
 
 type ConstraintMap = Map.Map String [Constraint]
 
-constraintMap :: (Constrained c) => [c] -> ConstraintMap
+constraintMap :: (HasUID c, Constrained c) => [c] -> ConstraintMap
 constraintMap = Map.fromList . map (\x -> ((x ^. uid), (x ^. constraints)))
 
 physLookup :: (Quantity q) => ConstraintMap -> q -> (q,[Constraint])

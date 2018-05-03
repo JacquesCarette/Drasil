@@ -12,12 +12,14 @@ module Language.Drasil.Chunk.UncertainQuantity
   ) where
   
 import Language.Drasil.Classes (HasUID(uid), NamedIdea(term), Idea(getA),
-  Definition(defn),ConceptDomain(cdom,DOM),Concept,HasSymbol(symbol),IsUnit)
+  Definition(defn),ConceptDomain(cdom,DOM),Concept,HasSymbol(symbol),IsUnit,
+  Constrained(constraints), HasReasVal(reasVal))
 import Language.Drasil.Chunk.Quantity
 import Language.Drasil.Chunk.DefinedQuantity (cqs)
-import Language.Drasil.Chunk.Constrained
+import Language.Drasil.Chunk.Constrained.Core (Constraint)
+import Language.Drasil.Chunk.Constrained (ConstrConcept(..), ConstrainedChunk,cuc',cnstrw,
+  cvc)
 import Language.Drasil.Chunk.Concept
--- import Language.Drasil.Unit
 import Language.Drasil.Expr
 import Language.Drasil.NounPhrase
 import Language.Drasil.Space
@@ -36,21 +38,21 @@ class Quantity c => UncertainQuantity c where
 data UncertQ = UQ { _coco :: ConstrConcept, _unc :: Maybe Double }
 makeLenses ''UncertQ
   
-instance Eq UncertQ where a == b = (a ^. uid) == (b ^. uid)
-instance HasUID UncertQ where uid = coco . uid
-instance NamedIdea UncertQ where term = coco . term
-instance Idea UncertQ where getA (UQ q _) = getA q
-instance HasSpace UncertQ where typ = coco . typ
-instance HasSymbol UncertQ where symbol c = symbol (c^.coco)
-instance Quantity UncertQ where getUnit    (UQ q _) = getUnit q
+instance Eq UncertQ                where a == b = (a ^. uid) == (b ^. uid)
+instance HasUID UncertQ            where uid = coco . uid
+instance NamedIdea UncertQ         where term = coco . term
+instance Idea UncertQ              where getA (UQ q _) = getA q
+instance HasSpace UncertQ          where typ = coco . typ
+instance HasSymbol UncertQ         where symbol c = symbol (c^.coco)
+instance Quantity UncertQ          where getUnit    (UQ q _) = getUnit q
 instance UncertainQuantity UncertQ where uncert = unc
-instance Constrained UncertQ where constraints = coco . constraints
-instance HasReasVal UncertQ where reasVal = coco . reasVal
-instance Definition UncertQ where defn = coco . defn
-instance ConceptDomain UncertQ where
+instance Constrained UncertQ       where constraints = coco . constraints
+instance HasReasVal UncertQ        where reasVal = coco . reasVal
+instance Definition UncertQ        where defn = coco . defn
+instance ConceptDomain UncertQ     where
   type DOM UncertQ = ConceptChunk
   cdom = coco . cdom
-instance Concept UncertQ where
+instance Concept UncertQ           where
 
 {-- Constructors --}
 -- | The UncertainQuantity constructor. Requires a Quantity, a percentage, and a typical value
@@ -64,8 +66,7 @@ uqNU q = UQ (ConstrConcept (cqs q) (q ^. constraints) (q ^. reasVal)) Nothing
 -- this is kind of crazy and probably shouldn't be used!
 uqc :: (IsUnit u, DOM u ~ ConceptChunk) => String -> NP -> String -> Symbol -> u -> Space -> [Constraint]
                 -> Expr -> Double -> UncertQ
-uqc nam trm desc sym un space cs val uncrt = uq
-  (cuc' nam trm desc sym un space cs val) uncrt
+uqc nam trm desc sym un space cs val uncrt = uq (cuc' nam trm desc sym un space cs val) uncrt
 
 --uncertainty quanity constraint no uncertainty
 uqcNU :: (IsUnit u, DOM u ~ ConceptChunk) => String -> NP -> String -> Symbol -> u 

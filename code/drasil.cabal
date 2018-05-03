@@ -93,6 +93,7 @@ library
     , Language.Drasil.Chunk.Concept.Core
     , Language.Drasil.Chunk.ConVar
     , Language.Drasil.Chunk.Constrained
+    , Language.Drasil.Chunk.Constrained.Core
     , Language.Drasil.Chunk.DefinedQuantity
     , Language.Drasil.Chunk.Eq
     , Language.Drasil.Chunk.ExprRelat

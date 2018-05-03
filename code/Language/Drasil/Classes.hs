@@ -97,9 +97,9 @@ class HasReasVal c where
 class HasUnitSymbol u where
    usymb :: Lens' u USymb
 
--- | Units are concepts which store a unit symbol.
+-- | Units are Ideas with a Definition which store a unit symbol.
 -- They must also be explicitly declared to be instances of IsUnit
-class (Concept u, HasUnitSymbol u) => IsUnit u where
+class (Idea u, Definition u, HasUnitSymbol u) => IsUnit u where
 
 -- Investigate (TODO): is this really needed?
 class UnitEq u where

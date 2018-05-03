@@ -13,9 +13,9 @@ import Control.Lens (Simple, Lens, (^.))
 import Control.Arrow (second)
 
 import Language.Drasil.Classes (HasUID(uid), NamedIdea(term), Idea(getA),
-  Definition(defn),ConceptDomain(cdom,DOM),Concept,HasUnitSymbol(usymb), IsUnit,
+  Definition(defn),ConceptDomain(cdom,DOM),HasUnitSymbol(usymb), IsUnit,
   UnitEq(uniteq))
-import Language.Drasil.Chunk.Concept (ConceptChunk, dcc, cw)
+import Language.Drasil.Chunk.Concept (ConceptChunk, dcc, cc')
 import Language.Drasil.Symbol
 import Language.Drasil.UnitLang
 
@@ -59,7 +59,6 @@ instance Definition    FundUnit where defn = vc . defn
 instance ConceptDomain FundUnit where
   type DOM FundUnit = ConceptChunk
   cdom = vc . cdom
-instance Concept       FundUnit where
 instance HasUnitSymbol FundUnit where usymb f (UD a b) = fmap (\x -> UD a x) (f b)
 instance IsUnit        FundUnit
 
@@ -77,7 +76,6 @@ instance Definition    DerUChunk where defn = duc . defn
 instance ConceptDomain DerUChunk where
   type DOM DerUChunk = ConceptChunk
   cdom = duc . cdom
-instance Concept       DerUChunk where
 instance HasUnitSymbol DerUChunk where usymb  = duc . usymb
 instance IsUnit        DerUChunk where
 
@@ -88,8 +86,8 @@ instance UnitEq DerUChunk where
 
 -- | For allowing lists to mix the two, thus forgetting
 -- the definition part
-unitWrapper :: (IsUnit u, DOM u ~ ConceptChunk) => u -> FundUnit
-unitWrapper u = UD (cw u) (u ^. usymb)
+unitWrapper :: (IsUnit u) => u -> FundUnit
+unitWrapper u = UD (cc' u (u ^. defn)) (u ^. usymb)
 
 --- These conveniences go here, because we need the class
 -- | Combinator for raising a unit to a power

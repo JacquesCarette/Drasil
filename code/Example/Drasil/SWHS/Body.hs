@@ -119,7 +119,7 @@ swhsRefDB :: ReferenceDB
 swhsRefDB = rdb [] [] [] [] [] s9_swhs_citations
 
 swhsSymMap :: ChunkDB
-swhsSymMap = cdb swhsSymbolsAll (map nw swhsSymbols ++ map nw acronyms) ([] :: [UnitDefn] ) -- FIXME: Fill in Concepts
+swhsSymMap = cdb swhsSymbolsAll (map nw swhsSymbols ++ map nw acronyms) ([] :: [ConceptChunk] ) -- FIXME: Fill in Concepts
   this_si
 
   --Note: The second swhsSymbols here is

@@ -95,7 +95,7 @@ chipUnits :: [UnitDefn]
 chipUnits = map unitWrapper [metre, kilogram, second] ++ map unitWrapper [newton, radian]
 
 everything :: ChunkDB
-everything = cdb cpSymbolsAll (map nw cpSymbolsAll ++ map nw cpAcronyms) ([] :: [FundUnit]) -- FIXME: Fill in Concepts
+everything = cdb cpSymbolsAll (map nw cpSymbolsAll ++ map nw cpAcronyms) ([] :: [ConceptChunk]) -- FIXME: Fill in Concepts
   chipUnits
 
 chipCode :: CodeSpec

@@ -186,7 +186,7 @@ nopcm_srs :: Document
 nopcm_srs = mkDoc mkSRS (for) nopcm_si
 
 nopcm_SymbMap :: ChunkDB
-nopcm_SymbMap = cdb nopcm_SymbolsAll (map nw nopcm_Symbols ++ map nw acronyms) ([] :: [UnitDefn]) -- FIXME: Fill in Concepts
+nopcm_SymbMap = cdb nopcm_SymbolsAll (map nw nopcm_Symbols ++ map nw acronyms) ([] :: [ConceptChunk]) -- FIXME: Fill in Concepts
   this_si
 
 --------------------------

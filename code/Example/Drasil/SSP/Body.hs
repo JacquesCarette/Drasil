@@ -120,7 +120,7 @@ ssp_code = codeSpec' ssp_si [sspInputMod]
 
 -- SYMBOL MAP HELPERS --
 sspSymMap :: ChunkDB
-sspSymMap = cdb sspSymbols (map nw sspSymbols ++ map nw acronyms) ([] :: [UnitDefn]) -- FIXME: Fill in Concepts
+sspSymMap = cdb sspSymbols (map nw sspSymbols ++ map nw acronyms) ([] :: [ConceptChunk]) -- FIXME: Fill in Concepts
   this_si
 
 -- SECTION 1 --

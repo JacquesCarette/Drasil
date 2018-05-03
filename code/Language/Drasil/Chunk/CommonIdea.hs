@@ -1,18 +1,11 @@
 module Language.Drasil.Chunk.CommonIdea
-  ( CommonIdea(..)
-  , CI, commonIdea
+  ( CI, commonIdea
   , getAcc
   ) where
 
-import Language.Drasil.Classes (HasUID(uid), NamedIdea(term), Idea(getA))
+import Language.Drasil.Classes (HasUID(uid), NamedIdea(term), Idea(getA), CommonIdea(abrv))
 import Language.Drasil.Spec (Sentence(S))
 import Language.Drasil.NounPhrase
-
--- | CommonIdea is a chunk that is a 'NamedIdea' with the additional
--- constraint that it __must__ have an abbreviation.
-class NamedIdea c => CommonIdea c where
-  -- | Introduces abrv which necessarily provides an abbreviation.
-  abrv :: c -> String
 
 -- | The common idea (with nounPhrase) data type. It must have a 
 -- 'NounPhrase' for its 'term'.

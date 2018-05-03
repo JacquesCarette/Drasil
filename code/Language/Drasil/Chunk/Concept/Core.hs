@@ -3,9 +3,9 @@ module Language.Drasil.Chunk.Concept.Core where
 
 import Language.Drasil.Spec (Sentence)
 import Language.Drasil.Chunk.NamedIdea (IdeaDict)
-import Language.Drasil.Chunk.CommonIdea (CI,CommonIdea(abrv))
+import Language.Drasil.Chunk.CommonIdea (CI)
 import Language.Drasil.Classes (HasUID(uid), NamedIdea(term), Idea(getA),
-  Definition(defn), ConceptDomain(DOM,cdom), Concept)
+  Definition(defn), ConceptDomain(DOM,cdom), Concept, CommonIdea(abrv))
 
 import Control.Lens (makeLenses, (^.), view)
 

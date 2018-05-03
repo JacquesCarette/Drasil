@@ -13,6 +13,7 @@ module Language.Drasil.Classes (
   , IsUnit
   , UnitEq(uniteq)
   , HasAttributes(attributes)
+  , CommonIdea(abrv)
   ) where
 
 import Language.Drasil.NounPhrase.Core (NP)
@@ -70,6 +71,12 @@ class HasSpace c where
 -- | Anything with 'Attributes'
 class HasAttributes c where
   attributes :: Lens' c Attributes
+
+-- | CommonIdea is a 'NamedIdea' with the additional
+-- constraint that it __must__ have an abbreviation.
+class NamedIdea c => CommonIdea c where
+  -- | Introduces abrv which necessarily provides an abbreviation.
+  abrv :: c -> String
 
 -----------------------------------------------------
 -- Below are for units only

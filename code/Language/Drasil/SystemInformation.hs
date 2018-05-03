@@ -2,11 +2,10 @@
 
 module Language.Drasil.SystemInformation where
 
-import Language.Drasil.Classes (Idea,Concept,IsUnit)
+import Language.Drasil.Classes (Idea,Concept,IsUnit,CommonIdea)
 import Language.Drasil.Chunk.Citation (BibRef)
 import Language.Drasil.Chunk.Constrained
 import Language.Drasil.Chunk.Eq
-import Language.Drasil.Chunk.CommonIdea (CommonIdea)
 import Language.Drasil.Chunk.Quantity
 import Language.Drasil.ChunkDB (ChunkDB)
 import Language.Drasil.People

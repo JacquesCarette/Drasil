@@ -34,6 +34,7 @@ module Language.Drasil (
   , HasUnitSymbol(usymb)
   , IsUnit
   , HasAttributes(attributes)
+  , CommonIdea(abrv)
   -- Chunk.VarChunk
   , VarChunk
   , vc, implVar
@@ -41,7 +42,7 @@ module Language.Drasil (
   -- Chunk.Concept
   , cw , ConceptChunk , CommonConcept
   -- Chunk.CommonIdea
-  , CommonIdea(..) , commonIdea, CI, getAcc
+  , commonIdea, CI, getAcc
   -- Chunk.NamedIdea
   , NamedChunk, short, nc, IdeaDict
   , nw -- bad name (historical)
@@ -204,7 +205,7 @@ import Language.Drasil.UnitLang -- all of it
 import Language.Drasil.Unit -- all of it
 import Language.Drasil.Classes (HasUID(uid), NamedIdea(term), Idea(getA),
   Definition(defn), ConceptDomain(cdom), Concept, HasSymbol(symbol), HasUnitSymbol(usymb),
-  IsUnit, HasAttributes(attributes))
+  IsUnit, HasAttributes(attributes), CommonIdea(abrv))
 import Language.Drasil.Chunk.AssumpChunk
 import Language.Drasil.Chunk.Attribute
 import Language.Drasil.Chunk.Attribute.Core (Attributes)

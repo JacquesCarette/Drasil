@@ -83,6 +83,11 @@ import Data.Drasil.SentenceStructures (acroIM, acroGD, acroGS, showingCxnBw,
   foldlSent, foldlSent_, foldlSP, foldlSP_, foldlSPCol, foldlsC, isThe, ofThe,
   ofThe', sAnd, sOf, foldlList)
 import Data.Drasil.Units.Thermodynamics (thermal_flux)
+
+
+
+
+import qualified Drasil.SRS as SRS
 -------------------------------------------------------------------------------
 
 acronyms :: [CI]
@@ -152,6 +157,7 @@ mkSRS = RefSec (RefProg intro
   (org_of_doc_trail swhs_pcm progName)]):
   Verbatim gen_sys_desc: 
   ------
+  --Constraints :: Sentence -> Sentence -> Sentence -> [Contents]
   SSDSec 
     (SSDProg [SSDSubVerb problem_desc
       , SSDSolChSpec 
@@ -165,7 +171,8 @@ mkSRS = RefSec (RefProg intro
             dd4MeltFrac] ShowDerivation
           , IMs ([Label, Input, Output, InConstraints, OutConstraints] ++ stdFields)
            [eBalanceOnWtr_new, eBalanceOnPCM_new, heatEInWtr_new, heatEInPCM_new ] ShowDerivation
-          , Constraints ()
+          , Constraints  EmptyS dataConstraintUncertainty data_contraint_trailing
+           [data_constraints_table1, data_constraints_table3]
           ]
         )
       ]
@@ -478,9 +485,13 @@ instnce_model_d2eqn_list = map eqUnR [insta_model_d2eqn1, insta_model_d2eqn2,
 ------------------------------
 -- Data Constraint: Table 1 --
 ------------------------------
+
 --s4_2_6_DataConTables
 data_constraints_DataConTables :: [Contents]
 data_constraints_DataConTables = [data_constraints_table1, data_constraints_table3]
+
+data_constraints_refTable :: Sentence
+data_constraints_refTable = (makeRef data_constraints_table1)
 
 --s4_2_6_table1
 data_constraints_table1 :: Contents
@@ -1437,6 +1448,10 @@ data_constraint_mid :: Sentence
 data_constraint_mid = foldlSent [S "The", phrase column, S "for", phrase software,
   plural constraint, S "restricts the range of",
   plural input_, S "to reasonable", plural value]
+
+data_contraint_trailing :: Sentence
+data_contraint_trailing = data_constraint_mid :+:
+  (data_constraint_T1footer quantity surArea vol htTransCoeff_min phsChgMtrl)
 
 ------------------------------
 -- Data Constraint: Table 1 --

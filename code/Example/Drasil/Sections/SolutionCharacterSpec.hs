@@ -519,6 +519,7 @@ dataConstraintIntroSent tableRef = foldlSent [(listofTablesToRefs tableRef),
   plural Doc.limitation, S "on the range of", plural Doc.value, 
   S "that can be taken by the", phrase Doc.variable]
 
+
 dataConstraintClosingSent :: [Sentence] -> Sentence
 dataConstraintClosingSent trailing = (foldlSent
   [S "The", plural Doc.constraint, S "are conservative, to give", 

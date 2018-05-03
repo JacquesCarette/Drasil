@@ -13,7 +13,7 @@ module Drasil.Sections.SpecificSystemDescription
   , inModelF
   , datConF
   , dataConstraintUncertainty
-  , inDataConstTbl, outDataConstTbl 
+  , inDataConstTbl, outDataConstTbl
   ) where
 
 import Language.Drasil
@@ -223,6 +223,7 @@ dataConstraintClosingSent uncertaintySent trailingSent = foldlSent
   S "experiment with unusual situations. The", phrase column, S "of", S "typical",
   plural value, S "is intended to provide a feel for a common scenario"]
   +:+ uncertaintySent +:+ trailingSent
+
 
 dataConstraintUncertainty :: Sentence
 dataConstraintUncertainty = foldlSent [S "The", phrase uncertainty, phrase column,

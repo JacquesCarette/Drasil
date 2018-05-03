@@ -30,7 +30,7 @@ instance Idea      NamedChunk where getA = \_ -> Nothing
 nc :: String -> NP -> NamedChunk
 nc = NC
 
--- | |IdeaDict| is the canonical dictionary associated to the |Idea| class
+-- | |IdeaDict| is the canonical dictionary associated to |Idea|
 -- don't export the record accessors
 data IdeaDict = IdeaDict { _nc' :: NamedChunk, _mabbr :: Maybe String }
 makeLenses ''IdeaDict

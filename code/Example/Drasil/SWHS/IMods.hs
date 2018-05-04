@@ -19,9 +19,9 @@ import Drasil.SWHS.Concepts (phsChgMtrl, water, coil, tank)
 import Data.Drasil.Concepts.PhysicalProperties (solid, liquid, mass, vol)
 import Data.Drasil.Concepts.Thermodynamics (boiling, heat, temp, melting,
   latent_heat, sens_heat, heat_cap_spec, thermal_energy, boil_pt, heat_trans,
-  phase_change)
+  phase_change, ht_flux)
 
-import Drasil.SWHS.DataDefs(dd1HtFluxC)
+import Drasil.SWHS.DataDefs(dd1HtFluxC, dd2HtFluxP)
 import Data.Drasil.Concepts.Documentation (assumption, dataDefn)
 --s4_2_5_IMods
 insta_model_IMods :: [RelationConcept]
@@ -105,9 +105,9 @@ s4_2_3_desc1_swhs_im1 roc tw en wt vo wvo ms wms hcs hw ht cl hfc cs ps tk ass11
      acroGD 2, S "can be written as"]
 
 s4_2_3_desc2_swhs_im1 :: QDefinition -> UnitalChunk -> UnitalChunk -> [Sentence]
-s4_2_3_desc2_swhs_im1 dd1HtFluxC hfc hfp =
-  [S "Using", titleize' dataDefn, makeRef $ datadefn dd1HtFluxC, S "and",
-  titleize' dataDefn, makeRef $ datadefn dd1HtFluxC,
+s4_2_3_desc2_swhs_im1 dd1 hfc hfp =
+  [S "Using", titleize' dataDefn, makeRef $ datadefn dd1, S "and",
+  titleize' dataDefn, makeRef $ datadefn dd1,
    S "for", (E $ sy hfc) `sAnd` (E $ sy hfp), S "respectively, this can be written as"]
 
 s4_2_3_desc3_swhs_im1 :: [Sentence] -> [Sentence]
@@ -194,7 +194,7 @@ eBalanceOnPCM_new :: InstanceModel
 eBalanceOnPCM_new = im eBalanceOnPCM [qw time, qw tau_W, qw temp_C, qw eta,
  qw temp_PCM, qw time_final, qw temp_init, qw coil_SA]
   [TCon AssumedCon $ sy temp_init $< sy temp_C] [qw temp_W]
-   [TCon AssumedCon $ 0 $< sy time $< sy time_final] []
+   [TCon AssumedCon $ 0 $< sy time $< sy time_final] [D eBalanceOnPCM_deriv_swhs]
 
 eBalanceOnPCM :: RelationConcept
 eBalanceOnPCM = makeRC "eBalanceOnPCM" (nounPhraseSP
@@ -223,6 +223,87 @@ balPCMDesc = foldlSent [(E $ sy temp_W) `isThe` phrase temp_W +:+.
   sParen (unwrap $ getUnit tau_S_P), (E $ (sy tau_L_P) $=
   ((sy pcm_mass) * (sy htCap_L_P)) / ((sy pcm_HTC) * (sy pcm_SA))),
   S "is a constant", sParen (unwrap $ getUnit tau_S_P)]
+
+
+
+
+ ----------------------------------------------
+--    Derivation of eBalanceOnPCM          --
+----------------------------------------------
+eBalanceOnPCM_deriv_swhs :: Derivation
+eBalanceOnPCM_deriv_swhs =
+  [S "Detailed derivation of the" +:+ phrase energy +:+ S "balance on the PCM during " +:+ 
+    phrase sens_heat +:+ S "phase:" ] ++
+  (weave [eBalanceOnPCM_deriv_sentences_swhs_im2, map E eBalanceOnPCM_deriv_eqns_swhs_im2])
+
+eBalanceOnPCM_deriv_sentences_swhs_im2 :: [Sentence]
+eBalanceOnPCM_deriv_sentences_swhs_im2 = map foldlSentCol [
+  s4_2_3_desc1_swhs_im2 rOfChng temp_PCM energy water vol pcm_vol pcm_mass heat_cap_spec
+    htCap_S_P ht_flux ht_flux_P phase_change pcm_SA heat_trans [S "A12"],
+  s4_2_3_desc2_swhs_im2 dd2HtFluxP ht_flux_P,
+  s4_2_3_desc3_swhs_im2 eq6,
+  s4_2_3_desc4_swhs_im2 eq7]
+
+s4_2_3_desc1_swhs_im2 :: ConceptChunk -> UncertQ -> UnitalChunk -> ConceptChunk -> 
+  ConceptChunk-> UncertQ -> UnitalChunk -> ConceptChunk -> UncertQ -> 
+  ConceptChunk -> UnitalChunk -> ConceptChunk -> UncertQ ->  ConceptChunk ->
+  [Sentence] -> [Sentence]
+s4_2_3_desc1_swhs_im2 roc tempP en wt vo pcmvo pm hcs hsp hf hfp pc ps ht ass13 =
+  [S "To find the", phrase roc `sOf` (E $ sy tempP) `sC` S "we look at the",
+   phrase en, S "balance on" +:+. S "PCM", S "The", phrase vo, S "being considered" 
+   `isThe` (phrase vo `sOf` S "PCM,") +:+. (E $ sy pcmvo), S "The derivation that follows is" +:+. 
+   S "initially for the solid PCM", S "The mass of phase change material is", (E $ sy pm) `sAnd` S "the",
+   phrase hcs `sOf` S "PCM as a solid is" +:+. (E $ sy hsp), S "The", phrase hf,
+   S "into the PCM from", phrase wt, S "is", (E $ sy hfp), S "over", phrase pc, 
+   S "material is surface area" +:+. (E $ sy ps), S "There is no", phrase hf +:+. S "output",
+   S "Assuming no volumetric", phrase ht, S "generation per unit", phrase vo,
+    (foldlList $ (map (\d -> sParen (d))) ass13) `sC` S "g = 0, the equation for",
+     acroGD 2, S "can be written as"]
+
+s4_2_3_desc2_swhs_im2 :: QDefinition -> UnitalChunk -> [Sentence]
+s4_2_3_desc2_swhs_im2 dd2 hfp =
+  [S "Using", titleize' dataDefn, makeRef $ datadefn dd2,
+   S "for", (E $ sy hfp) `sC` S "this equation can be written as"]
+
+s4_2_3_desc3_swhs_im2 :: [Sentence] -> [Sentence]
+s4_2_3_desc3_swhs_im2 eq66 = 
+  [S "Dividing by"] ++ eq66 ++ [S "we obtain"]
+
+s4_2_3_desc4_swhs_im2 :: Expr -> [Sentence]
+s4_2_3_desc4_swhs_im2 eq77 = 
+  [S "Setting", (E eq77) `sC` S "this can be written as"]
+
+{-eq1, eq2:: [Sentence]
+eq1 = [getES w_mass, getES htCap_W]
+eq2 = [getES tau_W, S "= (", getES w_mass, S "*", getES htCap_W, S ") / (", getES ht_flux_C,
+  S "*", getES coil_SA, S ")"]-}
+eq6:: [Sentence]
+eq6 = [getES pcm_mass, getES htCap_S_P]
+
+eq7 :: Expr
+eq7 = (sy tau_S_P) $= ((sy pcm_mass) * (sy htCap_S_P)) / 
+  ((sy ht_flux_P) * (sy pcm_SA))
+
+s4_2_3_eq1_swhs_im2, s4_2_3_eq2_swhs_im2, s4_2_3_eq3_swhs_im2,
+ s4_2_3_eq4_swhs_im2 :: Expr
+
+s4_2_3_eq1_swhs_im2 = (sy pcm_mass) * (sy htCap_S_P) * (deriv (sy temp_PCM) time) $= 
+  (sy ht_flux_P) * (sy pcm_SA)
+
+s4_2_3_eq2_swhs_im2 = (sy pcm_mass) * (sy htCap_S_P) * (deriv (sy temp_PCM) time) $= 
+  (sy pcm_HTC) * (sy pcm_SA) *  ((sy temp_W) - (sy temp_PCM))
+
+s4_2_3_eq3_swhs_im2 = (deriv (sy temp_PCM) time) $= 
+  (((sy pcm_HTC) * (sy pcm_SA)) / ((sy pcm_mass) * (sy htCap_S_P))) *  ((sy temp_W) - (sy temp_PCM))
+
+s4_2_3_eq4_swhs_im2 = 
+  (deriv (sy temp_PCM) time) $= 
+  (1 / sy tau_S_P) * ((sy temp_W) - (sy temp_PCM))
+
+
+eBalanceOnPCM_deriv_eqns_swhs_im2 :: [Expr]
+eBalanceOnPCM_deriv_eqns_swhs_im2 = [s4_2_3_eq1_swhs_im2, s4_2_3_eq2_swhs_im2,
+ s4_2_3_eq3_swhs_im2, s4_2_3_eq4_swhs_im2]
 
 
 ---------

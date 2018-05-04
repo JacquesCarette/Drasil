@@ -10,7 +10,6 @@ newtype PrintHTML = PH {unPH :: String}
 
 instance RenderGreek PrintHTML where
  
-  greek Beta_L    = PH "&beta;"
   greek Beta      = PH "&Beta;"
   greek Chi_L     = PH "&chi"
   greek Chi       = PH "&Chi"

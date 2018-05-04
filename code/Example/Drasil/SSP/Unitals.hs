@@ -273,7 +273,7 @@ baseAngle = uc' "alpha_i" (cn $ "angle")
 
 surfAngle = uc' "beta_i" (cn $ "angle")
   ("surface of the mass relative to the horizontal " ++ fsi)
-  (Greek Beta_L) degree
+  (lBeta) degree
 
 impLoadAngle = uc' "omega_i" (cn $ "angle")
   ("of imposed surface load acting into the surface " ++

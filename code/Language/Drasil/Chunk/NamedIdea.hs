@@ -3,7 +3,7 @@ module Language.Drasil.Chunk.NamedIdea (
   NamedChunk, nc, IdeaDict, compoundterm, short, nw, mkIdea,
   compoundNC, compoundNC', compoundNC'', compoundNC''',
   for, for', for'', of_, of_', of_'', of__,
-  with', and_, and_', andRT, the, theCustom, aNP, ofA) where
+  with', and_, and_', andRT, the, theCustom, ofA) where
 
 import Language.Drasil.Classes (HasUID(uid), NamedIdea(term), Idea(getA))
 import Control.Lens ((^.), makeLenses, view)
@@ -170,11 +170,6 @@ the t = nc ("the" ++ t ^. uid) (nounPhrase''
 theCustom :: (NamedIdea c) => (c -> Sentence) -> c -> NamedChunk
 theCustom f t = nc ("the" ++ t ^. uid) (nounPhrase''(S "the" +:+ (f t)) 
   (S "the" +:+ (f t)) CapFirst CapWords)
-
-aNP :: (NamedIdea c) => c -> NP --Should not be allowed to pluralize
-aNP t = nounPhrase'' 
-  (S "a" +:+ (phrase $ t ^. term)) (S "a" +:+ (phrase $ t ^. term))
-  CapFirst CapWords
 
 ofA :: (NamedIdea c, NamedIdea d) => c -> d -> NP
 ofA t1 t2 = nounPhrase'' 

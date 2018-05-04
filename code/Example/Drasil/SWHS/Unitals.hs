@@ -157,7 +157,7 @@ w_vol = uc' "w_vol" (vol `of_` water)
 
 deltaT = uc' "deltaT" (nounPhraseSP "change in temperature")
   "Change in the average kinetic energy of a given material"
-  (Concat [Greek Delta, (eqSymb temp)]) centigrade
+  (Concat [cDelta, (eqSymb temp)]) centigrade
 
 tau = uc' "tau" (nounPhraseSP "dummy variable for integration over time")
   "Binary value representing the presence or absence of integration over time"

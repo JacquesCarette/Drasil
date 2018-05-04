@@ -40,7 +40,7 @@ module Language.Drasil (
   -- Chunk.VarChunk
   , VarChunk
   , vc, implVar
-  , dcc, dcc', dccWDS, dccWDS', cv, vc'', ccs, cc, cc'
+  , dcc, dcc', dccWDS, dccWDS', vc'', ccs, cc, cc'
   -- Chunk.Concept
   , cw , ConceptChunk , CommonConcept
   -- Chunk.CommonIdea
@@ -59,6 +59,8 @@ module Language.Drasil (
   , ConstrainedChunk(..), ConstrConcept(..)
   , constrained, cuc, cvc, cvc', constrained', cuc', constrainedNRV'
   , cnstrw
+  -- Chunk.ConVar
+  , ConVar, cv
   -- Chunk.Eq
   , QDefinition(..), fromEqn, fromEqn', fromEqn'', getVC, equat, ec, ec'
   -- Chunk.GenDefn
@@ -67,7 +69,7 @@ module Language.Drasil (
   , InstanceModel
   , inCons, outCons, imOutput, imInputs, im, imQD
   -- Chunk.Quantity
-  , Quantity(..), QuantityDict, qw, ConVar(..), mkQuant
+  , Quantity(..), QuantityDict, qw, mkQuant
   -- Chunk.UncertainQuantity
   , UncertainQuantity(..), UncertainChunk(..), UncertQ, uq, uqNU, uqc, uqcNU, uqcND, uncrtnChunk, uvc
   , uncrtnw
@@ -240,7 +242,7 @@ import Language.Drasil.Chunk.Concept
 import Language.Drasil.Chunk.Constrained
 import Language.Drasil.Chunk.Constrained.Core (physc, sfwrc, enumc, isPhysC, isSfwrC,
   Constraint(..), ConstraintReason(..), Reason(..), TheoryConstraint(..))
-import Language.Drasil.Chunk.ConVar
+import Language.Drasil.Chunk.ConVar (cv, ConVar)
 import Language.Drasil.Chunk.DefinedQuantity
 import Language.Drasil.Chunk.Eq (QDefinition(..), fromEqn, fromEqn', fromEqn'', getVC, equat, aqd, ec, ec')
 import Language.Drasil.Chunk.ExprRelat

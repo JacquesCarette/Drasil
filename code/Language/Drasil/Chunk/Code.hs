@@ -58,7 +58,7 @@ decorate s Prime = s ++ "'"
 
 greekToCodeName :: Greek -> String
 --greekToCodeName Alpha_L   = "alpha"
-greekToCodeName Alpha     = "Alpha"
+--greekToCodeName Alpha     = "Alpha"
 greekToCodeName Beta_L    = "beta"
 greekToCodeName Beta      = "Beta"
 greekToCodeName Chi_L     = "chi"

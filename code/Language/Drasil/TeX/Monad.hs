@@ -109,7 +109,6 @@ data Latex = L { unPL :: String }
 
 instance RenderGreek Latex where
   
-  greek Alpha     = L "\\Alpha{}"
   greek Beta_L    = L "\\beta{}"
   greek Beta      = L "\\Beta{}"
   greek Chi_L     = L "\\chi{}"

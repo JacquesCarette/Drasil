@@ -49,7 +49,7 @@ module Language.Drasil (
   , NamedChunk, short, nc, IdeaDict
   , nw -- bad name (historical)
   , compoundterm, for, for', for'', of_, of_', of_'', of__, of'', compoundNC, compoundNC'
-  , compoundNC'', compoundNC''', with, with', and_, and_', andRT, aNP, the, a_
+  , compoundNC'', compoundNC''', with', and_, and_', andRT, aNP, the, a_
   , ofA,theCustom, this
   -- Chunk.Constrained.Core
   , physc, sfwrc, enumc , isPhysC, isSfwrC

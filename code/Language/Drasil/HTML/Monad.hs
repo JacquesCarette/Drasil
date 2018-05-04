@@ -20,7 +20,6 @@ instance RenderGreek PrintHTML where
   greek Epsilon   = PH "&Epsilon;"
   greek Eta_L     = PH "&eta;"
   greek Eta       = PH "&Eta;"
-  greek Gamma     = PH "&Gamma;"
   greek Iota_L    = PH "&iota;"
   greek Iota      = PH "&Iota;"
   greek Kappa_L   = PH "&kappa;"

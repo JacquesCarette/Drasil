@@ -119,7 +119,6 @@ instance RenderGreek Latex where
   greek Epsilon   = L "E"
   greek Eta_L     = L "\\eta{}"
   greek Eta       = L "H"
-  greek Gamma     = L "\\Gamma{}"
   greek Iota_L    = L "\\iota{}"
   greek Iota      = L "I"
   greek Kappa_L   = L "\\kappa{}"

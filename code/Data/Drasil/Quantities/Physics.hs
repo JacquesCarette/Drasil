@@ -4,6 +4,7 @@ import Language.Drasil
 import Data.Drasil.Concepts.Physics as CP
 import Data.Drasil.Units.Physics
 import Data.Drasil.SI_Units
+import Language.Drasil.SymbolAlphabet
 
 restitutionCoef :: ConVar
 restitutionCoef = cv CP.restitutionCoef (sub cC cR) Real
@@ -13,7 +14,7 @@ angularAccel, angularDisplacement, angularVelocity, acceleration, displacement,
   impulseV, linearAccel, linearDisplacement, linearVelocity, momentOfInertia,
   position, pressure, time, torque, velocity :: UnitalChunk
 
-angularAccel        = uc CP.angAccel (Greek Alpha_L) angAccelU
+angularAccel        = uc CP.angAccel (lAlpha) angAccelU
 angularDisplacement = uc CP.angDisp (Greek Theta_L) radian
 angularVelocity     = uc CP.angVelo (Greek Omega_L) angVelU
 acceleration        = uc CP.acceleration (vec lA) accelU

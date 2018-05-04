@@ -11,6 +11,7 @@ import Data.Drasil.Units.Physics (momentOfForceU)
 import Drasil.SSP.Defs (fs_concept)
 import Data.Drasil.Constraints (gtZeroConstr)
 
+
 sspSymbols :: [DefinedQuantityDict]
 sspSymbols = (map cqs sspInputs) ++ (map cqs sspOutputs) ++
   (map cqs sspUnits) ++ (map cqs sspUnitless)
@@ -268,7 +269,7 @@ surfLoad = uc' "Q_i" (cn $ "imposed surface load")
 
 baseAngle = uc' "alpha_i" (cn $ "angle")
   ("base of the mass relative to the horizontal " ++ fsi)
-  (Greek Alpha_L) degree
+  (lAlpha) degree
 
 surfAngle = uc' "beta_i" (cn $ "angle")
   ("surface of the mass relative to the horizontal " ++ fsi)

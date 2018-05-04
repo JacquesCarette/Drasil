@@ -9,7 +9,7 @@ import Language.Drasil.Unicode
 newtype PrintHTML = PH {unPH :: String}
 
 instance RenderGreek PrintHTML where
-  greek Alpha_L   = PH "&alpha;"
+ 
   greek Alpha     = PH "&Alpha;"
   greek Beta_L    = PH "&beta;"
   greek Beta      = PH "&Beta;"

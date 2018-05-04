@@ -115,7 +115,7 @@ s4_2_3_desc3_swhs_im1 eq11 = [S "Dividing (3) by"] ++ eq11 ++ [S "we obtain"]
 
 s4_2_3_desc4_swhs_im1 :: [Sentence] -> [Sentence]
 s4_2_3_desc4_swhs_im1 eq22 = [S "Factoring the negative sign out of the second term",
-  S "of the RHS of Equationf (4) and multiplying it by"] ++ eq22 ++ [S "yields"]
+  S "of the RHS of Equation (4) and multiplying it by"] ++ eq22 ++ [S "yields"]
 
 s4_2_3_desc5_swhs_im1 ::[Sentence]
 s4_2_3_desc5_swhs_im1 = [S "Which simplifies to"]
@@ -242,7 +242,8 @@ eBalanceOnPCM_deriv_sentences_swhs_im2 = map foldlSentCol [
     htCap_S_P ht_flux ht_flux_P phase_change pcm_SA heat_trans [S "A12"],
   s4_2_3_desc2_swhs_im2 dd2HtFluxP ht_flux_P,
   s4_2_3_desc3_swhs_im2 eq6,
-  s4_2_3_desc4_swhs_im2 eq7]
+  s4_2_3_desc4_swhs_im2 eq7,
+  s4_2_3_desc5_swhs_im2 htCap_S_P htCap_L_P tau_S_P tau_L_P]
 
 s4_2_3_desc1_swhs_im2 :: ConceptChunk -> UncertQ -> UnitalChunk -> ConceptChunk -> 
   ConceptChunk-> UncertQ -> UnitalChunk -> ConceptChunk -> UncertQ -> 
@@ -273,10 +274,12 @@ s4_2_3_desc4_swhs_im2 :: Expr -> [Sentence]
 s4_2_3_desc4_swhs_im2 eq77 = 
   [S "Setting", (E eq77) `sC` S "this can be written as"]
 
-{-eq1, eq2:: [Sentence]
-eq1 = [getES w_mass, getES htCap_W]
-eq2 = [getES tau_W, S "= (", getES w_mass, S "*", getES htCap_W, S ") / (", getES ht_flux_C,
-  S "*", getES coil_SA, S ")"]-}
+s4_2_3_desc5_swhs_im2 ::  UncertQ -> UncertQ -> UnitalChunk -> UnitalChunk-> [Sentence]
+s4_2_3_desc5_swhs_im2 hsp hlp tsp tsl= 
+  [S "Equation (6) applies for the solid PCM. In the case where all of the PCM is melted, the same",
+   S "derivation applies, except that", (E $ sy hsp), S "is replaced by", (E $ sy hlp),
+   S "and thus", (E $ sy tsp), S "is replaced by" +:+. (E $ sy tsl)]
+
 eq6:: [Sentence]
 eq6 = [getES pcm_mass, getES htCap_S_P]
 

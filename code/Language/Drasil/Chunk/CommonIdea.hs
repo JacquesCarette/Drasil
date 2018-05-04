@@ -1,25 +1,26 @@
-module Language.Drasil.Chunk.CommonIdea
-  ( CI, commonIdea
-  , getAcc
-  ) where
+{-# Language TemplateHaskell #-}
+module Language.Drasil.Chunk.CommonIdea ( CI, commonIdea , getAcc) where
 
 import Language.Drasil.Classes (HasUID(uid), NamedIdea(term), Idea(getA), CommonIdea(abrv))
 import Language.Drasil.Spec (Sentence(S))
-import Language.Drasil.NounPhrase
+import Language.Drasil.NounPhrase (NP)
+
+import Control.Lens (makeLenses, view)
 
 -- | The common idea (with nounPhrase) data type. It must have a 
 -- 'NounPhrase' for its 'term'.
-data CI = CI String String NP 
+data CI = CI { _cid :: String, _ni :: NP, _ab :: String}
+makeLenses ''CI
 
-instance HasUID CI     where uid f (CI a b c) = fmap (\x -> CI x b c) (f a)
-instance NamedIdea CI  where term f (CI a b c) = fmap (\x -> CI a b x) (f c)
-instance Idea CI       where getA (CI _ b _) = Just b
-instance CommonIdea CI where abrv (CI _ b _) = b
+instance HasUID CI     where uid = cid
+instance NamedIdea CI  where term = ni
+instance Idea CI       where getA = Just . view ab
+instance CommonIdea CI where abrv = view ab
   
 -- | The commonIdea smart constructor requires a chunk id, 
 -- term (of type 'NP'), and abbreviation (as a string)
 commonIdea :: String -> NP -> String -> CI
-commonIdea i t a = CI i a t
+commonIdea = CI
 
 getAcc :: CI -> Sentence
 getAcc = S . abrv

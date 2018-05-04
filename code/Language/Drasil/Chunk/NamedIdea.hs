@@ -2,8 +2,8 @@
 module Language.Drasil.Chunk.NamedIdea (
   NamedChunk, nc, IdeaDict, compoundterm, short, nw, mkIdea,
   compoundNC, compoundNC', compoundNC'', compoundNC''',
-  for, for', for'', of_, of_', of_'', of__, of'',
-  with', and_, and_', andRT, the, theCustom, this, aNP, a_, ofA) where
+  for, for', for'', of_, of_', of_'', of__,
+  with', and_, and_', andRT, the, theCustom, aNP, ofA) where
 
 import Language.Drasil.Classes (HasUID(uid), NamedIdea(term), Idea(getA))
 import Control.Lens ((^.), makeLenses, view)
@@ -130,9 +130,6 @@ of__ t1 t2 = nounPhrase''
   (Replace ((at_start' $ t1 ^. term) +:+ S "of" +:+ (phrase $ t2 ^. term)))
   (Replace ((titleize' $ t1 ^. term) +:+ S "of" +:+ (titleize $ t2 ^. term)))
 
-of'' :: (NamedIdea c, NamedIdea d) => (NP -> Sentence) -> (NP -> Sentence) -> c -> d -> Sentence
-of'' f1 f2 t1 t2 = (f1 $ t1 ^. term) +:+ S "of" +:+ (f2 $ t2 ^. term)
-
 -- | Similar to 'with', except this is the
 -- case with "T1s with T2", as opposed to "T1 with T2", i.e.
 -- phrase defaults to @(plural t1) "with" (phrase t2)@, plural pluralizes both.
@@ -174,20 +171,10 @@ theCustom :: (NamedIdea c) => (c -> Sentence) -> c -> NamedChunk
 theCustom f t = nc ("the" ++ t ^. uid) (nounPhrase''(S "the" +:+ (f t)) 
   (S "the" +:+ (f t)) CapFirst CapWords)
 
-this :: (NamedIdea c) => c -> NamedChunk
-this t = nc ("this" ++ t ^. uid) (nounPhrase'' 
-  (S "this" +:+ (phrase $ t ^. term)) (S "this" +:+ (plural $ t ^. term))
-  CapFirst CapWords)
-
 aNP :: (NamedIdea c) => c -> NP --Should not be allowed to pluralize
 aNP t = nounPhrase'' 
   (S "a" +:+ (phrase $ t ^. term)) (S "a" +:+ (phrase $ t ^. term))
-  CapFirst CapWords  
-  
-a_ :: (NamedIdea c) => c -> NamedChunk --Pluralization disallowed
-a_ t = nc ("a" ++ t ^.uid) (nounPhrase'' 
-  (S "a" +:+ (phrase $ t ^. term)) (S "a" +:+ (phrase $ t ^. term)) 
-  CapFirst CapWords)
+  CapFirst CapWords
 
 ofA :: (NamedIdea c, NamedIdea d) => c -> d -> NP
 ofA t1 t2 = nounPhrase'' 

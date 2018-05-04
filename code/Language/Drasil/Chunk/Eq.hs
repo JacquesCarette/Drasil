@@ -1,6 +1,6 @@
 {-# LANGUAGE TemplateHaskell, TypeFamilies #-}
 module Language.Drasil.Chunk.Eq 
-  (QDefinition(..), fromEqn, fromEqn', fromEqn'', equat, getVC
+  (QDefinition, fromEqn, fromEqn', fromEqn'', equat, getVC
   , ec, ec', aqd) where
 
 import Control.Lens ((^.), makeLenses)

@@ -62,7 +62,7 @@ module Language.Drasil (
   -- Chunk.ConVar
   , ConVar, cv
   -- Chunk.Eq
-  , QDefinition(..), fromEqn, fromEqn', fromEqn'', getVC, equat, ec, ec'
+  , QDefinition, fromEqn, fromEqn', fromEqn'', getVC, equat, ec, ec'
   -- Chunk.GenDefn
   , GenDefn, gd, gdUnit
   -- Chunk.InstanceModel

@@ -12,7 +12,8 @@ import Control.Lens ((^.),makeLenses,view)
 
 import Language.Drasil.Chunk.Constrained.Core (Constraint,isPhysC)
 import Language.Drasil.Chunk.Quantity
-import Language.Drasil.Chunk.Eq
+import Language.Drasil.Chunk.Eq (QDefinition)
+import Language.Drasil.Chunk.ExprRelat (relat)
 import Language.Drasil.Chunk.SymbolForm (codeSymb)
 import Language.Drasil.Classes (HasUID(uid), NamedIdea(term), Idea(getA),
   HasSymbol(symbol), CommonIdea(abrv), Constrained(constraints))
@@ -185,10 +186,10 @@ instance CodeIdea CodeDefinition where codeName = (^. ci)
 instance Eq CodeDefinition where c1 == c2 = (c1 ^. uid) == (c2 ^. uid)
 
 qtoc :: QDefinition -> CodeDefinition
-qtoc (EC q e _) = CD (qw q) (funcPrefix ++ symbToCodeName (codeSymb q)) e
+qtoc q = CD (qw q) (funcPrefix ++ symbToCodeName (codeSymb q)) (q ^. relat)
 
 qtov :: QDefinition -> CodeDefinition
-qtov (EC q e _) = CD (qw q) (symbToCodeName (codeSymb q)) e
+qtov q = CD (qw q) (symbToCodeName (codeSymb q)) (q ^. relat)
 
 codeEquat :: CodeDefinition -> Expr
 codeEquat cd = cd ^. def

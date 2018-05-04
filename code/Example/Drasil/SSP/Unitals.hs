@@ -128,10 +128,10 @@ coords = cuc' "(x,y)"
   (Atomic "(x,y)") metre Real [] (dbl 1)
 
 dx_i = cuc' "dx_i" (cn $ "displacement") ("in the x-ordinate direction " ++
-  fsi) (Concat [Greek Delta_L, Atomic "x"]) metre Real [] (dbl 1)
+  fsi) (Concat [lDelta, Atomic "x"]) metre Real [] (dbl 1)
 
 dy_i = cuc' "dy_i" (cn $ "displacement") ("in the y-ordinate direction " ++
-  fsi) (Concat [Greek Delta_L, Atomic "y"]) metre Real [] (dbl 1)
+  fsi) (Concat [lDelta, Atomic "y"]) metre Real [] (dbl 1)
 
 ---------------------------
 -- START OF UNITALCHUNKS --
@@ -300,7 +300,7 @@ momntOfBdy = uc' "M" (cn $ "moment of a body") ("assumed 2D allowing a scalar")
   cM momentOfForceU --FIXME: move in concepts.physics ?
 
 genDisplace = uc' "genDisplace" (cn $ "displacement")
-  "generic displacement of a body" (Greek Delta_L) metre
+  "generic displacement of a body" (lDelta) metre
 
 shrStiffIntsl = uc' "K_st,i" (cn $ "shear stiffness")
   ("for interslice surface, " ++ wla ++ " " ++ fisi)
@@ -336,19 +336,19 @@ effStiffB = uc' "K_bB" (cn $ "effective base stiffness A")
 
 shrDispl = uc' "du_i" (cn $ "displacement")
   ("shear displacement " ++ fsi)
-  (Concat [Greek Delta_L, Atomic "u"]) metre
+  (Concat [lDelta, Atomic "u"]) metre
 
 nrmDispl = uc' "dv_i" (cn $ "displacement")
   ("normal displacement " ++ fsi)
-  (Concat [Greek Delta_L, Atomic "v"]) metre
+  (Concat [lDelta, Atomic "v"]) metre
   
 elmNrmDispl = uc' "dt_i" (cn $ "displacement")
   ("for the element normal to the surface " ++ fsi)
-  (Concat [Greek Delta_L, Atomic "t"]) metre
+  (Concat [lDelta, Atomic "t"]) metre
   
 elmPrllDispl = uc' "dn_i" (cn $ "displacement")
   ("for the element parallel to the surface " ++ fsi)
-  (Concat [Greek Delta_L, Atomic "n"]) metre
+  (Concat [lDelta, Atomic "n"]) metre
 
 porePressure = uc' "mu" (cn "pore pressure") ("from water within the soil")
   (Greek Mu_L) pascal

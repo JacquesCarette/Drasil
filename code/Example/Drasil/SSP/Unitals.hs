@@ -89,18 +89,18 @@ fricAngle = uqc "varphi'" (cn $ "effective angle of friction")
 
 dryWeight = uqc "gamma" (cn $ "dry unit weight")
   "The weight of a dry soil/ground layer divided by the volume of the layer."
-  (Greek Gamma_L) specific_weight Real [gtZeroConstr]
+  (lGamma) specific_weight Real [gtZeroConstr]
   (dbl 20) defultUncrt
 
 satWeight = uqc "gamma_sat" (cn $ "saturated unit weight")
   ("The weight of saturated soil/ground " ++
   "layer divided by the volume of the layer.")
-  (sub (Greek Gamma_L) (Atomic "Sat")) specific_weight Real [gtZeroConstr]
+  (sub (lGamma) (Atomic "Sat")) specific_weight Real [gtZeroConstr]
   (dbl 20) defultUncrt
 
 waterWeight = uqc "gamma_w" (cn $ "unit weight of water")
   "The weight of one cubic meter of water."
-  (sub (Greek Gamma_L) lW) specific_weight Real [gtZeroConstr]
+  (sub (lGamma) lW) specific_weight Real [gtZeroConstr]
   (dbl 9.8) defultUncrt
   
 constant_a = uqc "a" (cn "constant") fixme

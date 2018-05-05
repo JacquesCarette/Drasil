@@ -430,9 +430,9 @@ mkSolChSpec si (SCSProg l) =
     mkSubSCS si' (GDs fields gs _) l' = 
       SSD.genDefnF (map (gdefn fields (_sysinfodb si')) gs) : l'
     mkSubSCS si' (IMs fields ims ShowDerivation) l' = 
-      SRS.inModel (concat (map (\x -> instanceModel fields (_sysinfodb si') x : derivation x) ims)) [] : l'
-    mkSubSCS si' (IMs fields ims _) l' = SRS.inModel 
-      (map (instanceModel fields (_sysinfodb si')) ims) [] : l'
+      SSD.inModelF pdStub ddStub tmStub gdStub (concat (map (\x -> instanceModel fields (_sysinfodb si') x : derivation x) ims)) : l'
+    mkSubSCS si' (IMs fields ims _) l' = 
+      SSD.inModelF pdStub ddStub tmStub gdStub (map (instanceModel fields (_sysinfodb si')) ims) : l'
     mkSubSCS (SI {_refdb = db}) Assumptions l' = 
       (SSD.assumpF tmStub gdStub ddStub imStub lcStub
       (map Assumption $ assumptionsFromDB (db ^. assumpRefTable))) : l'
@@ -452,6 +452,7 @@ gdStub = SRS.genDefn  [] []
 ddStub = SRS.dataDefn [] []
 imStub = SRS.inModel  [] []
 lcStub = SRS.likeChg  [] []
+pdStub = SRS.probDesc [] []
 
 -- | Helper for making the 'Requirements' section
 mkReqrmntSec :: ReqrmntSec -> Section

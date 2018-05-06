@@ -148,7 +148,6 @@ instance RenderGreek Latex where
   greek Upsilon   = L "\\Upsilon{}"
   greek Xi_L      = L "\\xi{}"
   greek Xi        = L "\\Xi{}"
-  greek Zeta_L    = L "\\zeta{}"
   greek Zeta      = L "\\Zeta{}"
 
 instance RenderSpecial Latex where

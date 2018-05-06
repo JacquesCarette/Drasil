@@ -14,7 +14,7 @@ import Data.Drasil.Utils (getES, unwrap, weave)
 import Data.Drasil.SentenceStructures (acroT, acroDD, foldlSent, isThe,
   sAnd, ofThe, foldlSent, isThe, foldlList, acroGD, foldlSentCol, sOf)
 import Data.Drasil.Quantities.Physics (time, energy)
-import Data.Drasil.Concepts.Math (equation, change, rOfChng, surface)
+import Data.Drasil.Concepts.Math (equation, change, rOfChng, surface, area)
 import Drasil.SWHS.Concepts (phsChgMtrl, water, coil, tank)
 import Data.Drasil.Concepts.PhysicalProperties (solid, liquid, mass, vol)
 import Data.Drasil.Concepts.Thermodynamics (boiling, heat, temp, melting,
@@ -243,7 +243,8 @@ eBalanceOnPCM_deriv_sentences_swhs_im2 = map foldlSentCol [
   s4_2_3_desc2_swhs_im2 dd2HtFluxP ht_flux_P,
   s4_2_3_desc3_swhs_im2 eq6,
   s4_2_3_desc4_swhs_im2 eq7,
-  s4_2_3_desc5_swhs_im2 htCap_S_P htCap_L_P tau_S_P tau_L_P]
+  s4_2_3_desc5_swhs_im2 htCap_S_P htCap_L_P tau_S_P tau_L_P surface area melting vol temp_PCM temp_melt_P
+    temp phase_change boiling solid liquid]
 
 s4_2_3_desc1_swhs_im2 :: ConceptChunk -> UncertQ -> UnitalChunk -> ConceptChunk -> 
   ConceptChunk-> UncertQ -> UnitalChunk -> ConceptChunk -> UncertQ -> 
@@ -274,12 +275,20 @@ s4_2_3_desc4_swhs_im2 :: Expr -> [Sentence]
 s4_2_3_desc4_swhs_im2 eq77 = 
   [S "Setting", (E eq77) `sC` S "this can be written as"]
 
-s4_2_3_desc5_swhs_im2 ::  UncertQ -> UncertQ -> UnitalChunk -> UnitalChunk-> [Sentence]
-s4_2_3_desc5_swhs_im2 hsp hlp tsp tsl= 
+s4_2_3_desc5_swhs_im2 ::  UncertQ -> UncertQ -> UnitalChunk -> UnitalChunk -> ConceptChunk -> ConceptChunk-> ConceptChunk
+  -> ConceptChunk -> UncertQ -> UncertQ -> ConceptChunk -> ConceptChunk -> ConceptChunk -> ConceptChunk -> ConceptChunk -> [Sentence]
+s4_2_3_desc5_swhs_im2 hsp hlp tsp tlp sur ar melt vo cg tp tempa pc boil sld lqd= 
   [S "Equation (6) applies for the solid PCM. In the case where all of the PCM is melted, the same",
    S "derivation applies, except that", (E $ sy hsp), S "is replaced by", (E $ sy hlp),
-   S "and thus", (E $ sy tsp), S "is replaced by" +:+. (E $ sy tsl)]
-
+   S "and thus", (E $ sy tsp), S "is replaced by" +:+. (E $ sy tlp), S "Although a small change in",
+   phrase sur, phrase ar, S "would be expected with", phrase melt, S "this is not included" `sC`
+   S "since the", phrase vo, phrase cg, S "of the PCM with", phrase melting, S "is assumed to be negligible" +:+.
+   S "A(13)", S "In the case where", (E $ sy tp), S "and not all of the PCM is melted" `sC`
+   phrase tempa, S "of the", phrase pc +:+. S "material does not change", S "Therefore" `sC` 
+   S "in this case" +:+. S "This derivation does not consider the",
+   phrase boil, S "of the PCM" `sC` S "as the PCM is assumed to either be in a", phrase sld, S "state or a",
+   phrase lqd, S "state (A14)"]
+--(E $ ((deriv (sy temp_PCm) time) $= 0)
 eq6:: [Sentence]
 eq6 = [getES pcm_mass, getES htCap_S_P]
 

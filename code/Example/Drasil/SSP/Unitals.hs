@@ -355,7 +355,7 @@ porePressure = uc' "mu" (cn "pore pressure") ("from water within the soil")
 
 rotatedDispl = uc' "varepsilon_i" (cn "displacement")
   ("in rotated coordinate system")
-  (Greek Epsilon_V) metre
+  (vEpsilon) metre
   
 shrStress = uc' "tau_i" (cn "resistive shear stress")
   ("acting on the base of a slice")

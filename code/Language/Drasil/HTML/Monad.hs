@@ -13,7 +13,6 @@ instance RenderGreek PrintHTML where
   greek Chi_L     = PH "&chi"
   greek Chi       = PH "&Chi"
   greek Ell       = PH "&#8467;"
-  greek Epsilon_L = PH "&#1013;"
   greek Epsilon_V = PH "&epsilon;"
   greek Epsilon   = PH "&Epsilon;"
   greek Eta_L     = PH "&eta;"

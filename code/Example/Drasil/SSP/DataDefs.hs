@@ -257,6 +257,59 @@ fixme2 = ec' ufixme2 (inxi watrForce + inxiM1 watrForce)
 -----------------
 
 -- FIXME: move derivations with the appropriate data definition
+{--resShr_deriv_ssp :: Derivation
+resShr_deriv_ssp = weave [resShrDerivation_sentence, map E resShr_deriv_eqns_ssp]
+
+resShr_deriv_sentences_ssp_s1 :: [Sentence]
+resShr_deriv_sentences_ssp_s1 = [S "The", phrase shrResI, S "of a slice is", 
+  S "defined as", getES shrResI, S "in" +:+. acroGD 3, S "The",
+  phrase nrmFSubWat, S "in the", phrase equation, S "for", getES shrResI,
+  S "of the soil is defined in the perpendicular force equilibrium",
+  S "of a slice from", acroGD 2 `sC` S "using the", getTandS nrmFSubWat,
+  S "of", acroT 4, S "shown in", eqN 1]
+
+resShr_deriv_sentences_ssp_s2 :: [Sentence]
+resShr_deriv_sentences_ssp_s2 = [plural value `ofThe'` S "interslice forces",
+  getES intNormForce `sAnd` getES intShrForce, S "in the", phrase equation,
+  S "are unknown, while the other", plural value,
+  S "are found from the physical force", plural definition, S "of",
+  acroDD 1, S "to" +:+. acroDD 9,
+  S "Consider a force equilibrium without the affect of interslice forces" `sC`
+  S "to obtain a solvable value as done for", getES nrmFNoIntsl, S "in", eqN 2]
+
+resShr_deriv_sentences_ssp_s3 :: [Sentence]
+resShr_deriv_sentences_ssp_s3 = [S "Using", getES nrmFNoIntsl `sC` S "a", phrase shearRNoIntsl,
+  shearRNoIntsl ^. defn, S "can be solved for in terms of all known",
+  plural value, S "as done in", eqN 3]
+
+
+resShrDerivation_sentence :: [Sentence]
+resShrDerivation_sentence = map foldlSentCol [resShr_deriv_sentences_ssp_s1, resShr_deriv_sentences_ssp_s2,
+  resShr_deriv_sentences_ssp_s3]
+
+resShr_deriv_eqns_ssp :: [Expr]
+resShr_deriv_eqns_ssp = [eq1, eq2, eq3]
+
+eq1, eq2, eq3:: Expr
+eq1 = (inxi nrmFSubWat) $= eqlExpr cos sin (\x y -> x -
+  inxiM1 intShrForce + inxi intShrForce + y) - inxi baseHydroForce
+
+eq2 = (inxi nrmFNoIntsl) $= (((inxi slcWght) + (inxi surfHydroForce) *
+  (cos (inxi surfAngle)) + (inxi surfLoad) * (cos (inxi impLoadAngle))) *
+  (cos (inxi baseAngle)) + (negate (sy earthqkLoadFctr) * (inxi slcWght) -
+  (inxi watrForce) + (inxiM1 watrForce) + (inxi surfHydroForce) *
+  sin (inxi surfAngle) + (inxi surfLoad) * (sin (inxi impLoadAngle))) *
+  (sin (inxi baseAngle)) - (inxi baseHydroForce))
+
+eq3 = inxi shearRNoIntsl $= (inxi nrmFNoIntsl) * tan (inxi fricAngle) +
+  (inxi cohesion) * (inxi baseWthX) * sec (inxi baseAngle) $=
+  (((inxi slcWght) + (inxi surfHydroForce) * (cos (inxi surfAngle)) +
+  (inxi surfLoad) * (cos (inxi impLoadAngle))) * (cos (inxi baseAngle)) +
+  (negate (sy earthqkLoadFctr) * (inxi slcWght) - (inxi watrForceDif) +
+  (inxi surfHydroForce) * sin (inxi surfAngle) + (inxi surfLoad) *
+  (sin (inxi impLoadAngle))) * (sin (inxi baseAngle)) -
+  (inxi baseHydroForce)) * tan (inxi fricAngle) + (inxi cohesion) *
+  (inxi baseWthX) * sec (inxi baseAngle)--}
 
 resShrDerivation :: [Contents]
 resShrDerivation = [
@@ -304,6 +357,7 @@ resShrDerivation = [
 
   ]
 
+------------------------------------------------------------------
 mobShrDerivation :: [Contents]
 mobShrDerivation = [
 

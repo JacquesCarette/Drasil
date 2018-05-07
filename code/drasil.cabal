@@ -15,6 +15,7 @@ library
     Data.Drasil.Constraints
     Data.Drasil.SentenceStructures
     Data.Drasil.SI_Units
+    Data.Drasil.Phrase
     Data.Drasil.Utils
     Data.Drasil.Concepts.Computation
     Data.Drasil.Concepts.Documentation

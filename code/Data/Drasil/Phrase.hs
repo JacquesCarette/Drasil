@@ -45,3 +45,28 @@ with t1 t2 = nounPhrase''
   (plural t1 +:+ S "with" +:+ plural t2)
   (Replace (at_start' t1 +:+ S "with" +:+ phrase t2))
   (Replace (titleize' t1 +:+ S "with" +:+ titleize t2))
+
+-- | Creates a noun phrase by combining two 'NamedIdea's with the word "of" between
+-- their terms. Plural is defaulted to @(phrase t1) "of" (plural t2)@
+of_ :: (NamedIdea c, NamedIdea d) => c -> d -> NP
+of_ t1 t2 = nounPhrase'' 
+  ((phrase t1) +:+ S "of" +:+ (phrase t2))
+  ((phrase t1) +:+ S "of" +:+ (plural t2))
+  (Replace ((at_start t1) +:+ S "of" +:+ (phrase t2)))
+  (Replace ((titleize t1) +:+ S "of" +:+ (titleize t2)))
+
+-- | Creates a noun phrase by combining two 'NamedIdea's with the word "of" between
+-- them. 'phrase' is defaulted to @(phrase t1) "of" (plural t2)@. Plural is the same.
+of_' :: (NamedIdea c, NamedIdea d) => c -> d -> NP
+of_' t1 t2 = nounPhrase'' 
+  ((phrase t1) +:+ S "of" +:+ (plural t2))
+  ((phrase t1) +:+ S "of" +:+ (plural t2))
+  (Replace ((at_start t1) +:+ S "of" +:+ (plural t2)))
+  (Replace ((titleize t1) +:+ S "of" +:+ (titleize' t2)))
+
+of__ :: (NamedIdea c, NamedIdea d) => c -> d -> NP
+of__ t1 t2 = nounPhrase'' 
+  ((plural t1) +:+ S "of" +:+ (phrase t2))
+  ((plural t1) +:+ S "of" +:+ (phrase t2))
+  (Replace ((at_start' t1) +:+ S "of" +:+ (phrase t2)))
+  (Replace ((titleize' t1) +:+ S "of" +:+ (titleize t2)))

@@ -2,7 +2,7 @@
 module Language.Drasil.Chunk.NamedIdea (
   NamedChunk, nc, IdeaDict, compoundterm, short, nw, mkIdea,
   compoundNC, compoundNC', compoundNC'', compoundNC''',
-  for, for', for'', of_, of_', of__, the, theCustom) where
+  for, for', for'', the, theCustom) where
 
 import Language.Drasil.Classes (HasUID(uid), NamedIdea(term), Idea(getA))
 import Control.Lens ((^.), makeLenses, view)
@@ -96,31 +96,6 @@ for' t1 t2 = (titleize $ t1 ^. term) +:+ S "for" +:+ (short t2)
 -- before inserting for. For example one could use @for'' phrase plural t1 t2@
 for'' :: (NamedIdea c, NamedIdea d) => (c -> Sentence) -> (d -> Sentence) -> c -> d -> Sentence
 for'' f1 f2 t1 t2 = (f1 t1) +:+ S "for" +:+ (f2 t2)
-
--- | Creates a noun phrase by combining two 'NamedIdea's with the word "of" between
--- their terms. Plural is defaulted to @(phrase t1) "of" (plural t2)@
-of_ :: (NamedIdea c, NamedIdea d) => c -> d -> NP
-of_ t1 t2 = nounPhrase'' 
-  ((phrase $ t1^.term) +:+ S "of" +:+ (phrase $ t2^.term))
-  ((phrase $ t1^.term) +:+ S "of" +:+ (plural $ t2^.term))
-  (Replace ((at_start $ t1 ^. term) +:+ S "of" +:+ (phrase $ t2 ^. term)))
-  (Replace ((titleize $ t1 ^. term) +:+ S "of" +:+ (titleize $ t2 ^. term)))
-
--- | Creates a noun phrase by combining two 'NamedIdea's with the word "of" between
--- them. 'phrase' is defaulted to @(phrase t1) "of" (plural t2)@. Plural is the same.
-of_' :: (NamedIdea c, NamedIdea d) => c -> d -> NP
-of_' t1 t2 = nounPhrase'' 
-  ((phrase $ t1^.term) +:+ S "of" +:+ (plural $ t2^.term))
-  ((phrase $ t1^.term) +:+ S "of" +:+ (plural $ t2^.term))
-  (Replace ((at_start $ t1 ^. term) +:+ S "of" +:+ (plural $ t2^.term)))
-  (Replace ((titleize $ t1 ^. term) +:+ S "of" +:+ (titleize' $ t2 ^. term)))
-
-of__ :: (NamedIdea c, NamedIdea d) => c -> d -> NP
-of__ t1 t2 = nounPhrase'' 
-  ((plural $ t1^.term) +:+ S "of" +:+ (phrase $ t2^.term))
-  ((plural $ t1^.term) +:+ S "of" +:+ (phrase $ t2^.term))
-  (Replace ((at_start' $ t1 ^. term) +:+ S "of" +:+ (phrase $ t2 ^. term)))
-  (Replace ((titleize' $ t1 ^. term) +:+ S "of" +:+ (titleize $ t2 ^. term)))
   
 the :: (NamedIdea c) => c -> NamedChunk
 the t = nc ("the" ++ t ^. uid) (nounPhrase'' 

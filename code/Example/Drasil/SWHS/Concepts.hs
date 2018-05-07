@@ -4,6 +4,7 @@ import Language.Drasil
 import Control.Lens ((^.))
 
 import Data.Drasil.Concepts.Math (parameter)
+import Data.Drasil.Phrase (with)
 
 ---Acronyms---
 phsChgMtrl,rightSide,progName :: CI
@@ -18,7 +19,7 @@ progName    = commonIdea "swhsName"   (nounPhrase "solar water heating system"
   "solar water heating systems") "SWHS"
 
 swhsFull :: NamedChunk
-swhsFull    = nc "swhsFull" (progName `with'` phsChgMtrl)
+swhsFull    = nc "swhsFull" (progName `with` phsChgMtrl)
 -- I want to include SI as an acronym, but I can't find a way for the
 -- description to have accents when using dcc.
 

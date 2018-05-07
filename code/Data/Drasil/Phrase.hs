@@ -36,3 +36,12 @@ and_' t1 t2 = nounPhrase''
   ((phrase t1) +:+ S "and" +:+ (plural t2))
   (Replace ((at_start t1) +:+ S "and" +:+ (plural t2)))
   (Replace ((titleize t1) +:+ S "and" +:+ (titleize' t2)))
+
+-- Case with "T1s with T2", as opposed to "T1 with T2", i.e.
+-- phrase defaults to @(plural t1) "with" (phrase t2)@, plural pluralizes both.
+with :: (NamedIdea c, NamedIdea d) => c -> d -> NP
+with t1 t2 = nounPhrase''
+  (plural t1 +:+ S "with" +:+ phrase t2)
+  (plural t1 +:+ S "with" +:+ plural t2)
+  (Replace (at_start' t1 +:+ S "with" +:+ phrase t2))
+  (Replace (titleize' t1 +:+ S "with" +:+ titleize t2))

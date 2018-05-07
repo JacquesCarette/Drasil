@@ -2,8 +2,7 @@
 module Language.Drasil.Chunk.NamedIdea (
   NamedChunk, nc, IdeaDict, compoundterm, short, nw, mkIdea,
   compoundNC, compoundNC', compoundNC'', compoundNC''',
-  for, for', for'', of_, of_', of__,
-  with', the, theCustom) where
+  for, for', for'', of_, of_', of__, the, theCustom) where
 
 import Language.Drasil.Classes (HasUID(uid), NamedIdea(term), Idea(getA))
 import Control.Lens ((^.), makeLenses, view)
@@ -122,16 +121,6 @@ of__ t1 t2 = nounPhrase''
   ((plural $ t1^.term) +:+ S "of" +:+ (phrase $ t2^.term))
   (Replace ((at_start' $ t1 ^. term) +:+ S "of" +:+ (phrase $ t2 ^. term)))
   (Replace ((titleize' $ t1 ^. term) +:+ S "of" +:+ (titleize $ t2 ^. term)))
-
--- | Similar to 'with', except this is the
--- case with "T1s with T2", as opposed to "T1 with T2", i.e.
--- phrase defaults to @(plural t1) "with" (phrase t2)@, plural pluralizes both.
-with' :: (NamedIdea c, NamedIdea d) => c -> d -> NP
-with' t1 t2 = nounPhrase''
-  (plural (t1 ^. term) +:+ S "with" +:+ phrase (t2 ^. term))
-  (plural (t1 ^. term) +:+ S "with" +:+ plural (t2 ^. term))
-  (Replace (at_start' (t1 ^. term) +:+ S "with" +:+ phrase (t2 ^. term)))
-  (Replace (titleize' (t1 ^. term) +:+ S "with" +:+ titleize (t2 ^. term)))
   
 the :: (NamedIdea c) => c -> NamedChunk
 the t = nc ("the" ++ t ^. uid) (nounPhrase'' 

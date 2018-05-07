@@ -67,6 +67,7 @@ balWtrDesc = foldlSent [(E $ sy temp_W) `isThe` phrase temp_W +:+.
   ----------------------------------------------
 --    Derivation of eBalanceOnWtr           --
 ----------------------------------------------
+-- type Derivation = [sentence]
 eBalanceOnWtr_deriv_swhs :: Derivation
 eBalanceOnWtr_deriv_swhs =
   [S "Detailed derivation of the" +:+ phrase energy +:+ S "balance on water"] ++

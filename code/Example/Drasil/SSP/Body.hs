@@ -139,7 +139,8 @@ mkSRS = RefSec (RefProg intro
           )
         ]
       ): --Testing General Definitions.-}
-  map Verbatim [gen_sys_desc, spec_sys_desc, req, likely_chg, aux_cons] 
+  --spec_sys_desc,
+  map Verbatim [gen_sys_desc, req, likely_chg, aux_cons] 
    ++ (Bibliography : [])
 
 {--normForcEq, bsShrFEq, resShr, mobShr,
@@ -394,8 +395,10 @@ data_def_dataDefs = (map datadefn (take 13 sspDataDefs)) ++ resShrDerivation ++
 -- using the paragraphs below
 
 insta_model_IMods = concat $ weave [map (\x -> [reldefn x]) sspIMods,
-  [fctSftyDerivation, nrmShrDerivation, intrSlcDerivation,
-  rigDisDerivation, rigFoSDerivation]]
+  []]
+
+--fctSftyDerivation, nrmShrDerivation, intrSlcDerivation, rigDisDerivation, rigFoSDerivation
+
   --FIXME: derivations should be with the appropriate IMod
 
 -- SECTION 4.2.6 --

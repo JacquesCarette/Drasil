@@ -2,7 +2,7 @@
 module Language.Drasil.Chunk.NamedIdea (
   NamedChunk, nc, IdeaDict, compoundterm, short, nw, mkIdea,
   compoundNC, compoundNC', compoundNC'', compoundNC''',
-  for, for', for'', of_, of_', of_'', of__,
+  for, for', for'', of_, of_', of__,
   with', and_, and_', andRT, the, theCustom, ofA) where
 
 import Language.Drasil.Classes (HasUID(uid), NamedIdea(term), Idea(getA))
@@ -115,13 +115,6 @@ of_' t1 t2 = nounPhrase''
   ((phrase $ t1^.term) +:+ S "of" +:+ (plural $ t2^.term))
   (Replace ((at_start $ t1 ^. term) +:+ S "of" +:+ (plural $ t2^.term)))
   (Replace ((titleize $ t1 ^. term) +:+ S "of" +:+ (titleize' $ t2 ^. term)))
-  
-of_'' :: (NamedIdea c, NamedIdea d) => c -> d -> NP
-of_'' t1 t2 = nounPhrase'' 
-  ((phrase $ t1^.term) +:+ S "of" +:+ (phrase $ t2^.term))
-  ((plural $ t1^.term) +:+ S "of" +:+ (phrase $ t2^.term))
-  (Replace ((at_start $ t1 ^. term) +:+ S "of" +:+ (phrase $ t2^.term)))
-  (Replace ((titleize $ t1 ^. term) +:+ S "of" +:+ (titleize $ t2 ^. term)))
 
 of__ :: (NamedIdea c, NamedIdea d) => c -> d -> NP
 of__ t1 t2 = nounPhrase'' 

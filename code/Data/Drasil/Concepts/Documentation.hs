@@ -3,6 +3,8 @@ module Data.Drasil.Concepts.Documentation where
 import Language.Drasil hiding (organization)
 
 import Data.Drasil.Concepts.Math (graph)
+import Data.Drasil.Phrase (ofA, andRT, and_, and_')
+
 import Control.Lens ((^.))
 import qualified Language.Drasil.NounPhrase as NP
 

@@ -270,7 +270,7 @@ nonNegativeConstraint = physc $ UpFrom (Inc,0)
 
 -- FIXME
 pi_ :: QuantityDict
-pi_ = mkQuant "pi" (nounPhraseSP "pi") (Greek Pi_L) Real Nothing Nothing
+pi_ = mkQuant "pi" (nounPhraseSP "pi") (lPi) Real Nothing Nothing
 
 lengthCons     = constrained' QPP.len               [nonNegativeConstraint] (dbl 44.2)
 massCons       = constrained' QPP.mass              [nonNegativeConstraint] (dbl 56.2)

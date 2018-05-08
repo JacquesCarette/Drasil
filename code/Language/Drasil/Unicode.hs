@@ -3,8 +3,7 @@ module Language.Drasil.Unicode where
 
 -- | Greek alphabet. @_L@ following the name represents lower case version.
 data Greek = 
-             Omicron_L
-           | Omicron
+             Omicron
            | Pi_L
            | Pi
            | Rho_L

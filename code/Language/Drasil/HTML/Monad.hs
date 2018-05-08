@@ -33,7 +33,6 @@ instance RenderGreek PrintHTML where
   greek Tau       = PH "&Tau;"
   greek Upsilon_L = PH "&upsilon;"
   greek Upsilon   = PH "&Upsilon;"
-  greek Xi        = PH "&Xi;"
   
   
 instance RenderSpecial PrintHTML where

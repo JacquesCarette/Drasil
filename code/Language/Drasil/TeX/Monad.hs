@@ -132,7 +132,6 @@ instance RenderGreek Latex where
   greek Tau       = L "\\Tau{}"
   greek Upsilon_L = L "\\upsilon{}"
   greek Upsilon   = L "\\Upsilon{}"
-  greek Xi        = L "\\Xi{}"
   
 
 instance RenderSpecial Latex where

@@ -106,7 +106,7 @@ greekToCodeName Tau       = "Tau"
 greekToCodeName Upsilon_L = "upsilon"
 greekToCodeName Upsilon   = "Upsilon"
 --greekToCodeName Xi_L      = "xi"
-greekToCodeName Xi        = "Xi"
+--greekToCodeName Xi        = "Xi"
 --greekToCodeName Zeta_L    = "zeta"
 --greekToCodeName Zeta      = "Zeta"
 

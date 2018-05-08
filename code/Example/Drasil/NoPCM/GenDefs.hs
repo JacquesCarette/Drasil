@@ -18,8 +18,7 @@ import Data.Drasil.Quantities.Physics (time)
 
 roc_temp_simp_deriv :: Derivation
 roc_temp_simp_deriv =
-  [S "Detailed derivation of simplified" +:+ phrase rOfChng +:+ S "of" +:+.
-    phrase temp] ++
+  [S "Detailed derivation of simplified" +:+ phrase rOfChng +:+ S "of" +:+ phrase temp +:+ S ":"] ++
   (weave [roc_temp_simp_deriv_sentences, map E roc_temp_simp_deriv_eqns])
 
 roc_temp_simp_deriv_sentences :: [Sentence]

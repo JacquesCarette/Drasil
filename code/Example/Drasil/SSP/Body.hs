@@ -139,6 +139,7 @@ mkSRS = RefSec (RefProg intro
           )
         ]
       ): --Testing General Definitions.-}
+  -- comment spec_sys_desc out to cut off the redundant section being generated
   --spec_sys_desc,
   map Verbatim [gen_sys_desc, req, likely_chg, aux_cons] 
    ++ (Bibliography : [])
@@ -395,7 +396,7 @@ data_def_dataDefs = (map datadefn (take 13 sspDataDefs)) ++ resShrDerivation ++
 -- using the paragraphs below
 
 insta_model_IMods = concat $ weave [map (\x -> [reldefn x]) sspIMods,
-  []]
+  [fctSftyDerivation, nrmShrDerivation, intrSlcDerivation, rigDisDerivation, rigFoSDerivation]]
 
 --fctSftyDerivation, nrmShrDerivation, intrSlcDerivation, rigDisDerivation, rigFoSDerivation
 

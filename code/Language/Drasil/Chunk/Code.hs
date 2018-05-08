@@ -108,7 +108,7 @@ greekToCodeName Upsilon   = "Upsilon"
 greekToCodeName Xi_L      = "xi"
 greekToCodeName Xi        = "Xi"
 --greekToCodeName Zeta_L    = "zeta"
-greekToCodeName Zeta      = "Zeta"
+--greekToCodeName Zeta      = "Zeta"
 
 specialToCodeName :: Special -> String
 specialToCodeName Circle        = "circ"

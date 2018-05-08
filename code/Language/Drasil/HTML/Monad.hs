@@ -49,7 +49,7 @@ instance RenderGreek PrintHTML where
   greek Upsilon   = PH "&Upsilon;"
   greek Xi_L      = PH "&xi;"
   greek Xi        = PH "&Xi;"
-  greek Zeta      = PH "&Zeta;"
+  
   
 instance RenderSpecial PrintHTML where
   special Circle       = PH "&deg;"

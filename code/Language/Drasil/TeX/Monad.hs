@@ -112,7 +112,6 @@ instance RenderGreek Latex where
   greek Chi_L     = L "\\chi{}"
   greek Chi       = L "X"
   greek Ell       = L "\\ell{}"
-  greek Mu        = L "M"
   greek Nabla     = L "\\nabla{}"
   greek Nu_L      = L "\\nu{}"
   greek Nu        = L "N"

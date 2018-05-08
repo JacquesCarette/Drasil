@@ -403,7 +403,7 @@ earthqkLoadFctr = cv (dcc "K_c" (nounPhraseSP $ "earthquake load factor")
 
 normToShear = cv (dcc "lambda"
   (nounPhraseSP $ "interslice normal/shear force ratio")
-  ("applied to all interslices")) (Greek Lambda_L) Real
+  ("applied to all interslices")) (lLambda) Real
 
 scalFunc = cv (dcc "f_i" (nounPhraseSP $ "scaling function")
   ("magnitude of interslice forces as a function " ++

@@ -123,7 +123,7 @@ s4_2_3_desc5_swhs_im1 = [S "Which simplifies to"]
 
 s4_2_3_desc6_swhs_im1 :: Expr -> Expr -> [Sentence]
 s4_2_3_desc6_swhs_im1 eq33 eq44 = 
-  [S "Setting", (E eq33) `sAnd` (E eq44), S "Equation (5) can be written in its final form as"]
+  [S "Setting", ((E eq33) `sAnd` (E eq44)) `sC` S "Equation (5) can be written in its final form as"]
 
 s4_2_3_desc7_swhs_im1 :: Expr -> [Sentence]
 s4_2_3_desc7_swhs_im1 eq55 = 
@@ -131,11 +131,10 @@ s4_2_3_desc7_swhs_im1 eq55 =
 
 eq1, eq2:: [Sentence]
 eq1 = [getES w_mass, getES htCap_W]
-eq2 = [getES tau_W, S "= (", getES w_mass, S "*", getES htCap_W, S ") / (", getES ht_flux_C,
-  S "*", getES coil_SA, S ")"]
+eq2 = [getES w_mass, getES htCap_W, getES ht_flux_C, getES coil_SA]
 
 eq3, eq4, eq5:: Expr
-eq3 = (sy tau) $= ((sy w_mass) * (sy htCap_W)) / ((sy coil_HTC) * (sy coil_SA))
+eq3 = (sy tau_W) $= ((sy w_mass) * (sy htCap_W)) / ((sy coil_HTC) * (sy coil_SA))
 eq4 = (sy eta) $= ((sy pcm_HTC) * (sy pcm_SA)) / 
   ((sy coil_HTC) * (sy coil_SA))
 eq5 = 1 / (sy tau_W)

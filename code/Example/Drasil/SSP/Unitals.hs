@@ -110,7 +110,7 @@ constant_A = uqc "A" (cn "constant") fixme
   cA metre Real [] (dbl 0) defultUncrt
   
 constant_K = uqc "kappa" (cn "constant") fixme
-  (Greek Kappa_L) pascal Real [] (dbl 0) defultUncrt
+  (lKappa) pascal Real [] (dbl 0) defultUncrt
 
 {-Output Variables-} --FIXME: See if there should be typical values
 fs = constrained' (cv fs_concept (Atomic "FS") Real) [gtZeroConstr] (dbl 1)

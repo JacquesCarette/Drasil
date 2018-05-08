@@ -3,8 +3,7 @@ module Language.Drasil.Unicode where
 
 -- | Greek alphabet. @_L@ following the name represents lower case version.
 data Greek = 
-             Iota
-           | Kappa_L
+             Kappa_L
            | Kappa
            | Lambda_L
            | Lambda

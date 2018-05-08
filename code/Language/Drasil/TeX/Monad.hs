@@ -115,7 +115,6 @@ instance RenderGreek Latex where
   greek Nabla     = L "\\nabla{}"
   greek Omega_L   = L "\\omega{}"
   greek Omega     = L "\\Omega{}"
-  greek Omicron   = L "O"
   greek Pi_L      = L "\\pi{}"
   greek Pi        = L "\\Pi{}"
   greek Phi_L     = L "\\phi{}"

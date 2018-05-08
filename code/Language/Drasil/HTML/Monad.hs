@@ -41,7 +41,6 @@ instance RenderGreek PrintHTML where
   greek Sigma     = PH "&Sigma;"
   greek Tau_L     = PH "&tau;"
   greek Tau       = PH "&Tau;"
-  greek Theta     = PH "&Theta;"
   greek Upsilon_L = PH "&upsilon;"
   greek Upsilon   = PH "&Upsilon;"
   greek Xi_L      = PH "&xi;"

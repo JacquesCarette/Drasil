@@ -252,7 +252,7 @@ s4_2_3_desc1_swhs_im2 :: ConceptChunk -> UncertQ -> UnitalChunk -> ConceptChunk 
   [Sentence] -> [Sentence]
 s4_2_3_desc1_swhs_im2 roc tempP en wt vo pcmvo pm hcs hsp hf hfp pc ps ht ass13 =
   [S "To find the", phrase roc `sOf` (E $ sy tempP) `sC` S "we look at the",
-   phrase en, S "balance on" +:+. S "PCM", S "The", phrase vo, S "being considered" 
+   phrase en, S "balance on the" +:+. S "PCM", S "The", phrase vo, S "being considered" 
    `isThe` (phrase vo `sOf` S "PCM,") +:+. (E $ sy pcmvo), S "The derivation that follows is" +:+. 
    S "initially for the solid PCM", S "The mass of phase change material is", (E $ sy pm) `sAnd` S "the",
    phrase hcs `sOf` S "PCM as a solid is" +:+. (E $ sy hsp), S "The", phrase hf,

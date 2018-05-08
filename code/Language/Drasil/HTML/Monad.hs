@@ -16,7 +16,6 @@ instance RenderGreek PrintHTML where
   greek Nabla     = PH "&nabla;"
   greek Omega_L   = PH "&omega;"
   greek Omega     = PH "&Omega;"
-  greek Pi        = PH "&Pi;"
   greek Phi_L     = PH "&phi;"
   greek Phi_V     = PH "&phiv;"
   greek Phi       = PH "&Phi;"

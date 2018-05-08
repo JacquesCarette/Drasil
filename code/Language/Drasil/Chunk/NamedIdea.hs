@@ -1,6 +1,6 @@
 {-# LANGUAGE TemplateHaskell #-}
 module Language.Drasil.Chunk.NamedIdea (
-  NamedChunk, nc, IdeaDict, compoundterm, short, nw, mkIdea,
+  NamedChunk, nc, IdeaDict, short, nw, mkIdea,
   compoundNC, compoundNC', compoundNC'', compoundNC''',
   for, for', for'', the, theCustom) where
 
@@ -50,11 +50,6 @@ nw c = IdeaDict (NC (c^.uid) (c^.term)) (getA c)
 
 ----------------------
 -- various combinators
-
--- | Combinator for combining two 'NamedIdea's into one NamedChunk.
--- /Does not preserve abbreviations/
-compoundterm :: (NamedIdea c, NamedIdea d) => c -> d -> NamedChunk
-compoundterm t1 t2 = nc (t1^.uid ++ t2^.uid) (compoundPhrase (t1 ^. term) (t2 ^. term))
 
 -- | Combinator for combining two 'NamedChunk's into one.
 -- /Does not preserve abbreviations/

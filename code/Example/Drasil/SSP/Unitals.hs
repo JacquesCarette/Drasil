@@ -351,7 +351,7 @@ elmPrllDispl = uc' "dn_i" (cn $ "displacement")
   (Concat [lDelta, Atomic "n"]) metre
 
 porePressure = uc' "mu" (cn "pore pressure") ("from water within the soil")
-  (Greek Mu_L) pascal
+  (lMu) pascal
 
 rotatedDispl = uc' "varepsilon_i" (cn "displacement")
   ("in rotated coordinate system")

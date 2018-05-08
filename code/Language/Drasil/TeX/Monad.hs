@@ -112,7 +112,6 @@ instance RenderGreek Latex where
   greek Chi_L     = L "\\chi{}"
   greek Chi       = L "X"
   greek Ell       = L "\\ell{}"
-  greek Eta       = L "H"
   greek Iota_L    = L "\\iota{}"
   greek Iota      = L "I"
   greek Kappa_L   = L "\\kappa{}"

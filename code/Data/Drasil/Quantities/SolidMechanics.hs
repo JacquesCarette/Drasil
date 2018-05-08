@@ -14,4 +14,4 @@ stffness = uc CSM.stffness cK stiffnessU
 nrmStrss = uc CSM.nrmStrss (Greek Sigma_L) pascal
 
 poissnsR :: ConVar
-poissnsR = cv CSM.poissnsR (Greek Nu_L) Real
+poissnsR = cv CSM.poissnsR (lNu) Real

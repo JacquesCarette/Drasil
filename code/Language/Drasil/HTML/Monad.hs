@@ -21,7 +21,6 @@ instance RenderGreek PrintHTML where
   greek Phi       = PH "&Phi;"
   greek Psi_L     = PH "&psi;"
   greek Psi       = PH "&Psi;"
-  greek Rho_L     = PH "&rho;"
   greek Rho       = PH "&Rho;"
   greek Sigma_L   = PH "&sigma;"
   greek Sigma     = PH "&Sigma;"

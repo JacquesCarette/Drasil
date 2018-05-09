@@ -21,7 +21,6 @@ instance RenderGreek PrintHTML where
   greek Phi       = PH "&Phi;"
   greek Psi_L     = PH "&psi;"
   greek Psi       = PH "&Psi;"
-  greek Upsilon   = PH "&Upsilon;"
   
   
 instance RenderSpecial PrintHTML where

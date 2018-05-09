@@ -416,7 +416,7 @@ numbSlices = cv (dcc "n" (nounPhraseSP "number of slices")
 
 minFunction = cv (dcc "Upsilon" (nounPhraseSP "function")
   ("generic minimization function or algorithm"))
-  (Greek Upsilon) Real
+  (cUpsilon) Real
 
 fsloc = cv (dcc "FS_loci" (nounPhraseSP "local factor of safety") fsi)
   (sub (Atomic "FS") (Atomic "Loc,i")) Real

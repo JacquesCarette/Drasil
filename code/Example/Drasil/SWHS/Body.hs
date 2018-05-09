@@ -496,8 +496,8 @@ s5_1 :: Section
 s5_1 = SRS.funcReq s5_1_list []
 
 s5_1_list :: [Contents]
-s5_1_list = (acroNumGen [req1] 1) ++ [s5_1_1_Table] ++ (acroNumGen [req2] 2) ++
-  [s5_1_2_Eqn1, s5_1_2_Eqn2] ++ (acroNumGen s5_1_Reqs 3) 
+s5_1_list = ([req1]) ++ [s5_1_1_Table] ++ ([req2]) ++
+  [s5_1_2_Eqn1, s5_1_2_Eqn2] ++ (s5_1_Reqs) 
 
 s5_1_1_Table :: Contents
 s5_1_1_Table = (Table [titleize symbol_, titleize unit_, titleize description]
@@ -523,7 +523,7 @@ s6 :: Section
 s6 = SRS.likeChg s6_list []
 
 s6_list :: [Contents]
-s6_list = acroNumGen s6_likeChg_list 1
+s6_list = s6_likeChg_list
 
 s6_likeChg_list :: [Contents]
 s6_likeChg_list = [likeChg1, likeChg2, likeChg3, likeChg4, likeChg5, likeChg6]

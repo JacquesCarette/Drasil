@@ -552,7 +552,7 @@ s6_2_5_intro2 = foldlSent [makeRef s6_2_5_table2, S "shows the",
 
 {--Functional Requirements--}
 
-s7_1_list = (acroNumGen s7_1_listOfReqs 1) ++ s7_1_req6 ++ [s7_1_req1Table]
+s7_1_list = (s7_1_listOfReqs) ++ s7_1_req6 ++ [s7_1_req1Table]
 
 s7_1_req1, s7_1_req2, s7_1_req3, s7_1_req4, s7_1_req5 :: Contents
 req1Desc, req2Desc, req3Desc, req4Desc :: Sentence

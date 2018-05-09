@@ -54,7 +54,7 @@ melt_frac_eqn = (sy latentE_P) / ((sy htFusion) * (sy pcm_mass))
 --Need to add units to data definition descriptions
 
 s4_2_4_swhsDataDefs :: [Contents]
-s4_2_4_swhsDataDefs = acroNumGen [s4_2_4_DD1, s4_2_4_DD2, s4_2_4_DD3, s4_2_4_DD4] 1
+s4_2_4_swhsDataDefs = [s4_2_4_DD1, s4_2_4_DD2, s4_2_4_DD3, s4_2_4_DD4] 
 
 s4_2_4_DD1, s4_2_4_DD2, s4_2_4_DD3, s4_2_4_DD4 :: Contents
 s4_2_4_DD1 = datadefn dd1HtFluxC

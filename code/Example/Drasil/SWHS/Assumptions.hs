@@ -31,7 +31,7 @@ import Data.Drasil.SentenceStructures (acroGD, acroIM, foldlSent, ofThe,
 -------------------------
 
 s4_2_1_list :: [Contents]
-s4_2_1_list = acroNumGen s4_2_1_assump_list 1
+s4_2_1_list = s4_2_1_assump_list 
 
 s4_2_1_assump_list :: [Contents]
 s4_2_1_assump_list = [assump1, assump2, assump3, assump4, assump5,

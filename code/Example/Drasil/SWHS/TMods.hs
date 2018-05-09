@@ -28,7 +28,7 @@ tModels :: [RelationConcept]
 tModels = [t1ConsThermE, t2SensHtE, t3LatHtE]
 
 s4_2_2_swhsTMods :: [Contents]
-s4_2_2_swhsTMods = acroNumGen (s4_2_2_T1 ++ s4_2_2_T2 ++ s4_2_2_T3) 1
+s4_2_2_swhsTMods = (s4_2_2_T1 ++ s4_2_2_T2 ++ s4_2_2_T3)
 
 -------------------------
 -- Theoretical Model 1 --

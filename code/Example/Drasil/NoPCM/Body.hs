@@ -379,7 +379,7 @@ s4_1_3_list temw we = enumSimple 1 (short goalStmt) [
 ------------------------------------------------------
   
 s4_2 = solChSpecF progName (s4_1, s6) s4_2_4_intro_end (mid,
-  dataConstraintUncertainty, end) (s4_2_1_list, acroNumGen s4_2_2_T1 1,
+  dataConstraintUncertainty, EmptyS) (s4_2_1_list, acroNumGen s4_2_2_T1 1,
   s4_2_3_paragraph M.rOfChng temp, acroNumGen [s4_2_4_DD1] 1,
   [reldefn eBalanceOnWtr] ++ (s4_2_5_d1startPara energy water) ++
   s4_2_5_paragraph ++ [reldefn heatEInWtr], [s4_2_6_table1, s4_2_6_table2])
@@ -389,11 +389,11 @@ s4_2 = solChSpecF progName (s4_1, s6) s4_2_4_intro_end (mid,
     plural softwareConstraint, S "restricts the range of",
     plural input_, S "to reasonable", plural value]
 
-  end = foldlSent [S "The", phrase uncertCol,
+  {--end = foldlSent [S "The", phrase uncertCol,
     S "provides an estimate of the confidence with which the physical",
     plural quantity, S "can be measured. This", phrase information,
     S "would be part of the input if one were performing an",
-    phrase uncertainty, S "quantification exercise"]
+    phrase uncertainty, S "quantification exercise"]--}
 
 s4_2_1_list :: [Contents]
 s4_2_1_list = acroNumGen [assump1, assump2, assump3, assump4, assump5, assump7,

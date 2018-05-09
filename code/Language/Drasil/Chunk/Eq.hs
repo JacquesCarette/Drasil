@@ -21,7 +21,11 @@ import Language.Drasil.NounPhrase (NP)
 import Language.Drasil.Spec (Sentence)
 
 -- | A QDefinition is a 'Quantity' with a defining equation.
-data QDefinition = EC { _qua :: QuantityDict, _equat :: Expr, _att :: Attributes}
+data QDefinition = EC
+          { _qua :: QuantityDict
+          , _equat :: Expr
+          , _att :: Attributes
+          }
 makeLenses ''QDefinition
 
 -- this works because UnitalChunk is a Chunk
@@ -39,14 +43,14 @@ instance Eq QDefinition            where a == b = (a ^. uid) == (b ^. uid)
 -- unit, and defining equation.  And it ignores the definition...
 --FIXME: Space hack
 fromEqn :: (IsUnit u, DOM u ~ ConceptChunk) => 
-  String -> NP -> Sentence -> Symbol -> u -> Expr -> QDefinition
-fromEqn nm desc _ symb un eqn = 
-  EC (mkQuant nm desc symb Real (Just $ unitWrapper un) Nothing) eqn []
+  String -> NP -> Sentence -> Symbol -> u -> Expr -> Attributes -> QDefinition
+fromEqn nm desc _ symb un eqn atts = 
+  EC (mkQuant nm desc symb Real (Just $ unitWrapper un) Nothing) eqn atts
 
 -- | Same as fromEqn, but has no units.
 --FIXME: Space hack
-fromEqn' :: String -> NP -> Sentence -> Symbol -> Expr -> QDefinition
-fromEqn' nm desc _ symb eqn = EC (mkQuant nm desc symb Real Nothing Nothing) eqn []
+fromEqn' :: String -> NP -> Sentence -> Symbol -> Expr -> Attributes -> QDefinition
+fromEqn' nm desc _ symb eqn atts = EC (mkQuant nm desc symb Real Nothing Nothing) eqn atts
 
 -- | Create a 'QDefinition' with an uid, noun phrase (term), symbol,
 -- abbreviation, unit, and defining equation.

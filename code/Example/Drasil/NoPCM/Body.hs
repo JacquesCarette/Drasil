@@ -657,33 +657,33 @@ s5_1_list_words_num = acroNumGen [req1, req2, req3, req4, req5, req6] 1
 req1, req2, req3, req4, req5, req6 :: Contents
 
 --Empty list is supposed to take a ModuleChunk. Not sure what to put there.
-req1 = mkRequirement "req1" $
+req1 = mkRequirement "req1" (
   titleize input_ +:+ S "the following" +:+ plural quantity `sC`
   S "which define the" +:+ plural tank_para `sC` S "material" +:+
-  plural property +:+ S "and initial" +: plural condition
-req2 = mkRequirement "req2" $
+  plural property +:+ S "and initial" +: plural condition) (S "inputQuantReq")
+req2 = mkRequirement "req2" (
   S "Use the" +:+ plural input_ +:+ S "in" +:+
   acroTest req1 s5_1_list_words_num +:+ S "to find the" +:+ phrase mass +:+
   S "needed for" +:+ acroIM 1 +:+ S "to" +:+ acroIM 2 `sC`
   S "as follows, where" +:+ getES w_vol `isThe` phrase w_vol +:+
-  S "and" +: (getES tank_vol `isThe` phrase tank_vol)
-req3 = mkRequirement "req3" $
+  S "and" +: (getES tank_vol `isThe` phrase tank_vol) ) (S "massReq")
+req3 = mkRequirement "req3" (
   S "Verify that the" +:+ plural input_ +:+ S "satisfy the required"
-  +:+ phrase physicalConstraint +:+ S "shown in" +:+. makeRef s4_2_6_table1
-req4 = mkRequirement "req4" $
+  +:+ phrase physicalConstraint +:+ S "shown in" +:+. makeRef s4_2_6_table1 ) (S "checkConsReq")
+req4 = mkRequirement "req4" (
   titleize' output_ `sAnd` plural input_ +:+ plural quantity
   +:+ S "and derived" +:+ plural quantity +:+ S "in the following list: the" +:+
   plural quantity +:+ S "from" +:+ (acroTest req1 s5_1_list_words_num) `sC`
   S "the" +:+ phrase mass +:+ S "from" +:+ acroTest req2 s5_1_list_words_num
-  `sAnd` getES tau_W +:+. sParen(S "from" +:+ acroIM 1)
-req5 = mkRequirement "req5" $
+  `sAnd` getES tau_W +:+. sParen(S "from" +:+ acroIM 1) ) (S "outputInputReq")
+req5 = mkRequirement "req5" (
   S "Calculate and output the" +:+ phrase temp_W +:+
   sParen (getES temp_W :+: sParen (getES time)) +:+ S "over the" +:+
-  phrase sim_time
-req6 = mkRequirement "req6" $
+  phrase sim_time ) (S "tempWReq")
+req6 = mkRequirement "req6" (
   S "Calculate and" +:+ phrase output_ +:+ S "the" +:+ phrase w_E
   +:+ sParen (getES w_E :+: sParen (getES time)) +:+ S "over the" +:+
-  phrase sim_time +:+. sParen (S "from" +:+ acroIM 3)
+  phrase sim_time +:+. sParen (S "from" +:+ acroIM 3) ) (S "changeHeatEnergyReq")
 
 -------------------------------------------
 --Section 5.2 : NON-FUNCTIONAL REQUIREMENTS

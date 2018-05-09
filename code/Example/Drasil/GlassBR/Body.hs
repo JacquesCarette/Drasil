@@ -562,11 +562,11 @@ s7_1_req6 :: [Contents] --FIXME: Issue #327
 s7_1_listOfReqs :: [Contents]
 s7_1_listOfReqs = [s7_1_req1, s7_1_req2, s7_1_req3, s7_1_req4, s7_1_req5]
 
-s7_1_req1 = mkRequirement "s7_1_req1" req1Desc
-s7_1_req2 = mkRequirement "s7_1_req2" req2Desc
-s7_1_req3 = mkRequirement "s7_1_req3" req3Desc
-s7_1_req4 = mkRequirement "s7_1_req4" req4Desc
-s7_1_req5 = mkRequirement "s7_1_req5" (req5Desc (output_))
+s7_1_req1 = mkRequirement "s7_1_req1" req1Desc (S "inputReq")
+s7_1_req2 = mkRequirement "s7_1_req2" req2Desc (S "setValueReq")
+s7_1_req3 = mkRequirement "s7_1_req3" req3Desc (S "checkConsReq")
+s7_1_req4 = mkRequirement "s7_1_req4" req4Desc (S "outputReq")
+s7_1_req5 = mkRequirement "s7_1_req5" (req5Desc (output_)) (S "safeCheckReq")
 
 -- newReqs is ONLY for testing until I get refs working. Then the old reqs should
 -- be converted to reqChunk format with meaningful refnames and this should be

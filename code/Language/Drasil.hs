@@ -87,7 +87,7 @@ module Language.Drasil (
   , Attributes
   -- Chunk.Attributes
   , getSource, aqd -- TODO: Remove aqd
-  , Derivation, getDerivation, getShortName
+  , Derivation, getDerivation, getShortName, shortname
   , sourceref, derivationsteps
   --Citations
   , Citation, BibRef, CiteField, Month(..), HP

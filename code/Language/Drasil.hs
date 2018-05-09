@@ -48,7 +48,7 @@ module Language.Drasil (
   -- Chunk.NamedIdea
   , NamedChunk, short, nc, IdeaDict
   , nw -- bad name (historical)
-  , for, for', for'', compoundNC, compoundNC', compoundNC'', compoundNC'''
+  , compoundNC, compoundNC', compoundNC'', compoundNC'''
   , the, theCustom
   -- Chunk.Constrained.Core
   , physc, sfwrc, enumc , isPhysC, isSfwrC

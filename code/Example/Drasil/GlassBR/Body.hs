@@ -67,6 +67,7 @@ import Drasil.Sections.SpecificSystemDescription (solChSpecF,
   inDataConstTbl, outDataConstTbl, dataConstraintUncertainty, goalStmtF,
   physSystDesc, termDefnF, probDescF, specSysDesF)
 import Data.Drasil.Citations (koothoor2013, smithLai2005)
+import Data.Drasil.Phrase(for'')
 
 {--}
 

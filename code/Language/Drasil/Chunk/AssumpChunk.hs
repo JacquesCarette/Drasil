@@ -27,5 +27,5 @@ instance Eq AssumpChunk            where a == b = a ^. uid == b ^. uid
   
 -- | Smart constructor for Assumption chunks. The second 'Sentence' here is 
 -- a short name (attribute).
-assump :: String -> Sentence -> RefName -> AssumpChunk
-assump i a s = AC i a s [shortname s]
+assump :: String -> Sentence -> RefName -> Attributes -> AssumpChunk
+assump i a s att = AC i a s att --[shortname s]

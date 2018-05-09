@@ -120,7 +120,6 @@ instance RenderGreek Latex where
   greek Phi       = L "\\Phi{}"
   greek Psi_L     = L "\\psi{}"
   greek Psi       = L "\\Psi{}"
-  greek Tau_L     = L "\\tau{}"
   greek Tau       = L "\\Tau{}"
   greek Upsilon_L = L "\\upsilon{}"
   greek Upsilon   = L "\\Upsilon{}"

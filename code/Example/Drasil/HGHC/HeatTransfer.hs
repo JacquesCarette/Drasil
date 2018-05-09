@@ -21,7 +21,7 @@ htOutputs = map qw hghcVars
 
 cladThick, coolFilmCond, gapFilmCond, cladCond :: VarChunk
 cladThick    = vc "cladThick"    (cn''' "clad thickness")
-  ((Greek Tau_L) `sub` lC) Real
+  ((lTau) `sub` lC) Real
 coolFilmCond = vc "coolFilmCond" (cn' "initial coolant film conductance")
   (lH `sub` lB) Real
 gapFilmCond  = vc "gapFilmCond"  (cn' "initial gap film conductance")

@@ -35,5 +35,5 @@ momentOfInertia     = uc CP.momentOfInertia (vec cI) momtInertU
 position            = uc CP.position (vec lP) metre
 pressure            = uc CP.pressure lP pascal
 time                = uc CP.time lT second
-torque              = uc CP.torque (Greek Tau_L) torqueU
+torque              = uc CP.torque (lTau) torqueU
 velocity            = uc CP.velocity (vec lV) velU

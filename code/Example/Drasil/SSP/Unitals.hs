@@ -359,7 +359,7 @@ rotatedDispl = uc' "varepsilon_i" (cn "displacement")
   
 shrStress = uc' "tau_i" (cn "resistive shear stress")
   ("acting on the base of a slice")
-  (Greek Tau_L) pascal
+  (lTau) pascal
   
 mobStress = uc' "s_i" (cn "mobilized shear stress")
   ("acting on the base of a slice")

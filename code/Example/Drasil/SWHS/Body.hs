@@ -1039,7 +1039,7 @@ s4_2_3_deriv_3 = eqUnR
 
 s4_2_3_deriv_4 :: ConceptChunk -> ConVar -> UnitalChunk -> UnitalChunk ->
   ConVar -> ConceptChunk -> Contents
-s4_2_3_deriv_4 gd su vo tfv unv un = foldlSPCol [S "Applying", titleize gd,
+s4_2_3_deriv_4 gaussdiv su vo tfv unv un = foldlSPCol [S "Applying", titleize gaussdiv,
   S "to the first term over", (phrase su +:+ getES su `ofThe` phrase vo) `sC`
   S "with", getES tfv, S "as the", phrase tfv, S "for the",
   phrase surface `sAnd` getES unv, S "as a", phrase un,

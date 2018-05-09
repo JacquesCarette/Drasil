@@ -243,7 +243,7 @@ import Language.Drasil.Chunk.Constrained.Core (physc, sfwrc, enumc, isPhysC, isS
   Constraint(..), ConstraintReason(..), Reason(..), TheoryConstraint(..))
 import Language.Drasil.Chunk.ConVar (cv, ConVar)
 import Language.Drasil.Chunk.DefinedQuantity
-import Language.Drasil.Chunk.Eq (QDefinition(..), fromEqn, fromEqn', fromEqn'', getVC, equat, aqd, ec, ec')
+import Language.Drasil.Chunk.Eq (QDefinition, fromEqn, fromEqn', fromEqn'', getVC, equat, aqd, ec, ec')
 import Language.Drasil.Chunk.ExprRelat
 import Language.Drasil.Chunk.GenDefn
 import Language.Drasil.Chunk.Goal (Goal, mkGoal)

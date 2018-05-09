@@ -54,9 +54,10 @@ fromEqn' nm desc _ symb eqn atts = EC (mkQuant nm desc symb Real Nothing Nothing
 
 -- | Create a 'QDefinition' with an uid, noun phrase (term), symbol,
 -- abbreviation, unit, and defining equation.
-fromEqn'' :: (IsUnit u, DOM u ~ ConceptChunk) => String -> NP -> Sentence -> Symbol -> String -> Maybe u -> Expr -> QDefinition
-fromEqn'' nm desc _ symb abbr u eqn = 
-  EC (mkQuant nm desc symb Real (fmap unitWrapper u) (Just abbr)) eqn []
+fromEqn'' :: (IsUnit u, DOM u ~ ConceptChunk) => String -> NP -> Sentence ->
+ Symbol -> String -> Maybe u -> Expr -> Attributes -> QDefinition
+fromEqn'' nm desc _ symb abbr u eqn atts = 
+  EC (mkQuant nm desc symb Real (fmap unitWrapper u) (Just abbr)) eqn atts
 
 -- | Smart constructor for QDefinitions. Requires a quantity, its defining 
 -- equation, and a list of attributes

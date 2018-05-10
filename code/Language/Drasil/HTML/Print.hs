@@ -21,7 +21,7 @@ import qualified Language.Drasil.Symbol as S
 import qualified Language.Drasil.Document as L
 import Language.Drasil.HTML.Monad
 import Language.Drasil.People (People,Person(..),rendPersLFM',rendPersLFM'',
-  Conv(..),nameStr,rendPersLFM, dotInitial, nameSep)
+  Conv(..),nameStr,rendPersLFM)
 import Language.Drasil.Config (StyleGuide(..), bibStyleH)
 import Language.Drasil.ChunkDB(HasSymbolTable)
 
@@ -454,12 +454,8 @@ rendPers = rendPersLFM
 
 -- To render the last person's name
 rendPersL :: Person -> String
-rendPersL (Person {_surname = n, _convention = Mono}) = n
-rendPersL (Person {_given = f, _surname = l, _middle = []}) =
-  dotInitial l ++ ", " ++ dotInitial f
-rendPersL (Person {_given = f, _surname = l, _middle = ms}) =
-  dotInitial l ++ ", " ++ foldr1 nameSep (
-    dotInitial f : map dotInitial (init ms) ++ [last ms])
+rendPersL =
+  (\n -> (if not (null n) && last n == '.' then init else id) n) . rendPers
 
 --adds an 's' if there is more than one person in a list
 toPlural :: People -> String -> String

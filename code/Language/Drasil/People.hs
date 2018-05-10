@@ -4,8 +4,8 @@ module Language.Drasil.People
   , HasName
   , name, manyNames, nameStr
   , Conv(..) --This is needed to unwrap names for the bibliography
-  , lstName, initial, dotInitial
-  , rendPersLFM, rendPersLFM', rendPersLFM'', nameSep
+  , lstName
+  , rendPersLFM, rendPersLFM', rendPersLFM''
   ) where
 
 -- | A person can have a given name, middle name(s), and surname, as well

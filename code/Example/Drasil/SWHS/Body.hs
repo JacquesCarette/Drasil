@@ -153,7 +153,7 @@ mkSRS = [RefSec (RefProg intro
   (Bibliography : [])
 
 swhsCode :: CodeSpec
-swhsCode = codeSpec' swhs_si [swhsInputMod]
+swhsCode = codeSpec' swhs_si [swhsInputMod] []
 
 tsymb_intro :: [TSIntro]
 tsymb_intro = [TSPurpose, SymbConvention

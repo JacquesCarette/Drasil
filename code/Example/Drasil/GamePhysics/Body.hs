@@ -99,7 +99,7 @@ everything = cdb cpSymbolsAll (map nw cpSymbolsAll ++ map nw cpAcronyms) ([] :: 
   chipUnits
 
 chipCode :: CodeSpec
-chipCode = codeSpec' chipmunkSysInfo []
+chipCode = codeSpec' chipmunkSysInfo [] []
 
 
 --FIXME: The SRS has been partly switched over to the new docLang, so some of

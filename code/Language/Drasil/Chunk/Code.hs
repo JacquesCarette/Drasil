@@ -28,6 +28,8 @@ import Language.Drasil.Symbol
 import Data.String.Utils (replace)
 import qualified Data.Map as Map
 
+import Language.Drasil.Chunk.Attribute.Core (Attributes)
+
 -- not using lenses for now
 class CodeIdea c where
   codeName      :: c -> String
@@ -173,7 +175,7 @@ codevar c = CodeC (qw c) Var
 codefunc :: (Quantity c) => c -> CodeChunk
 codefunc c = CodeC (qw c) Func
 
-data CodeDefinition = CD { _quant :: QuantityDict, _ci :: String, _def :: Expr }
+data CodeDefinition = CD { _quant :: QuantityDict, _ci :: String, _def :: Expr, _attribs :: Attributes}
 makeLenses ''CodeDefinition
 
 instance HasUID CodeDefinition where uid = quant . uid
@@ -185,11 +187,11 @@ instance Quantity CodeDefinition where getUnit = getUnit . view quant
 instance CodeIdea CodeDefinition where codeName = (^. ci)
 instance Eq CodeDefinition where c1 == c2 = (c1 ^. uid) == (c2 ^. uid)
 
-qtoc :: QDefinition -> CodeDefinition
-qtoc q = CD (qw q) (funcPrefix ++ symbToCodeName (codeSymb q)) (q ^. relat)
+qtoc :: Attributes -> QDefinition  -> CodeDefinition
+qtoc atts q = CD (qw q) (funcPrefix ++ symbToCodeName (codeSymb q)) (q ^. relat) atts
 
-qtov :: QDefinition -> CodeDefinition
-qtov q = CD (qw q) (symbToCodeName (codeSymb q)) (q ^. relat)
+qtov :: Attributes -> QDefinition -> CodeDefinition
+qtov atts q = CD (qw q) (symbToCodeName (codeSymb q)) (q ^. relat) atts
 
 codeEquat :: CodeDefinition -> Expr
 codeEquat cd = cd ^. def

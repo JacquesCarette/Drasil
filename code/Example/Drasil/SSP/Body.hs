@@ -115,7 +115,7 @@ ssp_srs :: Document
 ssp_srs = mkDoc mkSRS (for) ssp_si
   
 ssp_code :: CodeSpec
-ssp_code = codeSpec' ssp_si [sspInputMod]
+ssp_code = codeSpec' ssp_si [sspInputMod] []
 
 
 -- SYMBOL MAP HELPERS --

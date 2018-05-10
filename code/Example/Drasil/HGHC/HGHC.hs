@@ -14,7 +14,7 @@ import Data.Drasil.People (spencerSmith)
 import Data.Drasil.Concepts.Documentation (srs)
 
 thisCode :: CodeSpec
-thisCode = codeSpec' thisSI []
+thisCode = codeSpec' thisSI [] []
   
 thisSI :: SystemInformation
 thisSI = SI {

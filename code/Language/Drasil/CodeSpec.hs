@@ -26,6 +26,8 @@ import Data.List (nub, delete, (\\))
 
 import Prelude hiding (const)
 
+import Language.Drasil.Chunk.Attribute.Core (Attributes)
+
 type Input = CodeChunk
 type Output = CodeChunk
 type Const = CodeDefinition
@@ -73,15 +75,15 @@ getStr (P s) = symbToCodeName s
 getStr ((:+:) s1 s2) = getStr s1 ++ getStr s2
 getStr _ = error "Term is not a string" 
 
-codeSpec :: SystemInformation -> [Mod] -> CodeSpec
-codeSpec si ms = codeSpec' si ms
+codeSpec :: SystemInformation -> [Mod] -> Attributes -> CodeSpec
+codeSpec si ms atts = codeSpec' si ms atts
 
-codeSpec' :: SystemInformation -> [Mod] -> CodeSpec
-codeSpec' (SI {_sys = sys, _quants = q, _definitions = defs', _inputs = ins, _outputs = outs, _constraints = cs, _constants = constants, _sysinfodb = db}) ms = 
+codeSpec' :: SystemInformation -> [Mod] -> Attributes -> CodeSpec
+codeSpec' (SI {_sys = sys, _quants = q, _definitions = defs', _inputs = ins, _outputs = outs, _constraints = cs, _constants = constants, _sysinfodb = db}) ms atts = 
   let inputs' = map codevar ins
-      const' = map qtov constants
-      derived = map qtov $ getDerivedInputs defs' inputs' const' db
-      rels = (map qtoc defs') \\ derived
+      const' = map (qtov atts) constants
+      derived = map (qtov atts) $ getDerivedInputs defs' inputs' const' db
+      rels = (map (qtoc atts) defs') \\ derived
       mods' = prefixFunctions $ (packmod "Calculations" $ map FCD rels):ms 
       mem   = modExportMap mods' inputs' const'
       outs' = map codevar outs
@@ -166,8 +168,8 @@ data Func = FCD CodeDefinition
           | FDef FuncDef
           | FData FuncData
 
-funcQD :: QDefinition -> Func
-funcQD qd = FCD $ qtoc qd
+funcQD :: Attributes -> QDefinition -> Func
+funcQD atts qd = FCD $ qtoc atts qd 
 
 funcData :: Name -> DataDesc -> Func
 funcData n dd = FData $ FuncData (toCodeName n) dd 

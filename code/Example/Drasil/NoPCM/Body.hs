@@ -179,7 +179,7 @@ nopcmRefDB :: ReferenceDB
 nopcmRefDB = rdb [] [] [] [] [] s9_refList -- FIXME: Convert the rest to new chunk types
 
 nopcm_code :: CodeSpec
-nopcm_code = codeSpec' nopcm_si [inputMod]
+nopcm_code = codeSpec' nopcm_si [inputMod] []
 -- Sub interpolation mod into list when possible              ^
 
 nopcm_srs :: Document

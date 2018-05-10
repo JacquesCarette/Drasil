@@ -51,9 +51,9 @@ constrained q cs ex atts = ConstrainedChunk (qw q) cs (Just ex) atts
 
 -- | Creates a constrained unitary
 cuc :: (IsUnit u, DOM u ~ ConceptChunk) => String -> NP -> Symbol -> u
-                -> Space -> [Constraint] -> Expr -> Attributes ->n ConstrainedChunk
+                -> Space -> [Constraint] -> Expr -> Attributes -> ConstrainedChunk
 cuc i t s u space cs rv atts =
-  ConstrainedChunk (qw $ unitary i t s (unitWrapper u) space) cs (Just rv) atts
+  ConstrainedChunk (qw $ unitary i t s (unitWrapper u) space atts) cs (Just rv) atts --FIXME: atts used twice?
 
 -- | Creates a constrained varchunk
 cvc :: String -> NP -> Symbol -> Space -> [Constraint] -> Expr -> Attributes -> ConstrainedChunk
@@ -87,7 +87,7 @@ instance HasReasVal    ConstrConcept where reasVal      = reasV'
 instance Eq            ConstrConcept where c1 == c2 = (c1 ^.defq.uid) == (c2 ^.defq.uid)
 instance HasAttributes ConstrConcept where attributes = attrbs
 
-constrained' :: (Quantity c, Concept c, DOM c ~ ConceptChunk) =>
+constrained' :: (HasAttributes c, Quantity c, Concept c, DOM c ~ ConceptChunk) =>
   c -> [Constraint] -> Expr -> Attributes -> ConstrConcept
 constrained' q cs rv atts = ConstrConcept (cqs q) cs (Just rv) atts
 
@@ -95,7 +95,7 @@ constrainedNRV' :: (HasAttributes c, Quantity c, Concept c, DOM c ~ ConceptChunk
   c -> [Constraint] -> ConstrConcept
 constrainedNRV' q cs = ConstrConcept (cqs q) cs Nothing (q ^. attributes)
 
-cuc' :: (IsUnit u, DOM u ~ ConceptChunk) => String -> NP -> String -> Symbol -> u
+cuc' :: (HasAttributes u, IsUnit u, DOM u ~ ConceptChunk) => String -> NP -> String -> Symbol -> u
                   -> Space -> [Constraint] -> Expr -> Attributes -> ConstrConcept
 cuc' nam trm desc sym un space cs rv atts =
   ConstrConcept (cqs $ ucs nam trm desc sym un space) cs (Just rv) atts

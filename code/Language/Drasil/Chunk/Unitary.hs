@@ -24,7 +24,9 @@ class (Quantity c) => Unitary c where
 -- | UnitaryChunks are 'Unitary's with 'Symbols'
 data UnitaryChunk = UC { _quant :: QuantityDict
                        , _un :: UnitDefn
-                       , _attribs :: Attributes
+                       , _attribs :: Attributes -- FIXME: Attributes included for consistency,
+                                                -- since every chunk should eventually have the
+                                                -- capability for attributes.
                        }
 makeLenses ''UnitaryChunk
 

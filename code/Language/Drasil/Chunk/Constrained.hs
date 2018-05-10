@@ -30,7 +30,9 @@ import Language.Drasil.Classes (HasUID(uid), NamedIdea(term), Idea(getA),
 data ConstrainedChunk = ConstrainedChunk { _qd :: QuantityDict
                                          , _constr :: [Constraint]
                                          , _reasV :: Maybe Expr
-                                         , _attribs :: Attributes
+                                         , _attribs :: Attributes -- FIXME: Attributes included for consistency,
+                                                                  -- since every chunk should eventually have the
+                                                                  -- capability for attributes.
                                          }
 makeLenses ''ConstrainedChunk
 
@@ -67,7 +69,9 @@ cvc' i des sym space cs atts = ConstrainedChunk (qw $ vc i des sym space atts) c
 data ConstrConcept = ConstrConcept { _defq :: DefinedQuantityDict
                                    , _constr' :: [Constraint]
                                    , _reasV' :: Maybe Expr
-                                   , _attrbs :: Attributes
+                                   , _attrbs :: Attributes -- FIXME: Attributes included for consistency,
+                                                           -- since every chunk should eventually have the
+                                                           -- capability for attributes.
                                    }
 makeLenses ''ConstrConcept
 

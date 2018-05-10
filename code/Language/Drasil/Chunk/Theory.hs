@@ -52,7 +52,9 @@ instance HasUID TheoryChunk where uid = tid
 -- use the id of the TheoryModel as the uid. FIXME ?
 data TheoryModel = TM { _con :: ConceptChunk
                       , _thy :: TheoryChunk
-                      , _attrbs :: Attributes
+                      , _attrbs :: Attributes -- FIXME: Attributes included for consistency,
+                                              -- since every chunk should eventually have the
+                                              -- capability for attributes.
                       }
 makeLenses ''TheoryModel
   

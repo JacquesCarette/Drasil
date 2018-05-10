@@ -17,7 +17,9 @@ import Control.Lens ((^.), makeLenses, view)
 data VarChunk = VC { _ni :: IdeaDict
                    , _vsymb :: Stage -> Symbol
                    , _vtyp  :: Space
-                   , _attribs :: Attributes
+                   , _attribs :: Attributes -- FIXME: Attributes included for consistency,
+                                            -- since every chunk should eventually have the
+                                            -- capability for attributes.
                    }
 makeLenses ''VarChunk
 

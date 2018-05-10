@@ -139,7 +139,9 @@ funcPrefix = "func_"
 data VarOrFunc = Var | Func
 data CodeChunk = CodeC { _qc :: QuantityDict
                        , kind :: VarOrFunc
-                       , _atts :: Attributes
+                       , _atts :: Attributes -- FIXME: Attributes included for consistency,
+                                             -- since every chunk should eventually have the
+                                             -- capability for attributes.
                        }
 makeLenses ''CodeChunk
 
@@ -186,7 +188,13 @@ codefunc :: (Quantity c) => c -> Attributes -> CodeChunk
 codefunc c atts = CodeC (qw c) Func atts
 -}
 
-data CodeDefinition = CD { _quant :: QuantityDict, _ci :: String, _def :: Expr, _attribs :: Attributes}
+data CodeDefinition = CD { _quant :: QuantityDict
+                         , _ci :: String
+                         , _def :: Expr
+                         , _attribs :: Attributes -- FIXME: Attributes included for consistency,
+                                                  -- since every chunk should eventually have the
+                                                  -- capability for attributes.
+                       }
 makeLenses ''CodeDefinition
 
 instance HasUID CodeDefinition where uid = quant . uid

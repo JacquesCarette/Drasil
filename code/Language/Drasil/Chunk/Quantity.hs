@@ -25,7 +25,9 @@ data QuantityDict = QD { _id' :: IdeaDict
                        , _typ' :: Space
                        , _symb' :: Stage -> Symbol
                        , _unit' :: Maybe UnitDefn
-                       , _attribs :: Attributes 
+                       , _attribs :: Attributes -- FIXME: Attributes included for consistency,
+                                                -- since every chunk should eventually have the
+                                                -- capability for attributes.
                        }
 makeLenses ''QuantityDict
 

@@ -17,7 +17,9 @@ import Control.Lens ((^.), makeLenses)
 -- not really the best as this duplicates |id|.  At least, it should...
 data DefinedQuantityDict = DQD { _quant :: Q.QuantityDict
                                , _con :: ConceptChunk
-                               , _attribs :: Attributes
+                               , _attribs :: Attributes -- FIXME: Attributes included for consistency,
+                                                        -- since every chunk should eventually have the
+                                                        -- capability for attributes.
                                }
   
 makeLenses ''DefinedQuantityDict

@@ -29,7 +29,9 @@ import Language.Drasil.Chunk.Attribute.Core (Attributes)
 -- | UnitalChunks are Unitary
 data UnitalChunk = UC { _con :: ConVar
                       , _uni :: UnitDefn
-                      , _attribs :: Attributes
+                      , _attribs :: Attributes -- FIXME: Attributes included for consistency,
+                                               -- since every chunk should eventually have the
+                                               -- capability for attributes.
                       }
 makeLenses ''UnitalChunk
 

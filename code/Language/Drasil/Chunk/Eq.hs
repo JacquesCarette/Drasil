@@ -24,7 +24,9 @@ import Language.Drasil.Spec (Sentence)
 data QDefinition = EC
           { _qua :: QuantityDict
           , _equat :: Expr
-          , _att :: Attributes
+          , _att :: Attributes -- FIXME: Attributes included for consistency,
+                               -- since every chunk should eventually have the
+                               -- capability for attributes.
           }
 makeLenses ''QDefinition
 

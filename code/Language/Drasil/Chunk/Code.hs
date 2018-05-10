@@ -153,7 +153,7 @@ instance CodeIdea CodeChunk where
   codeName (CodeC c Var atts) = symbToCodeName (codeSymb c)
   codeName (CodeC c Func atts) = funcPrefix ++ symbToCodeName (codeSymb c)
 instance Eq CodeChunk where c1 == c2 = (c1 ^. uid) == (c2 ^. uid)
-instance HasAttributes CodeChunk where attributes = attrbs
+instance HasAttributes CodeChunk where attributes = atts
 
 spaceToCodeType :: Space -> CodeType
 spaceToCodeType S.Integer = G.Integer
@@ -172,18 +172,19 @@ spaceToCodeType (S.DiscreteS _) = G.List (spaceToCodeType S.String)
 codeType :: HasSpace c => c -> CodeType
 codeType c = spaceToCodeType $ c ^. typ
 
-{-
 codevar :: (HasAttributes c, Quantity c) => c -> Attributes -> CodeChunk
 codevar c atts = CodeC (qw c) Var atts
 
 codefunc :: (HasAttributes c, Quantity c) => c -> Attributes -> CodeChunk
 codefunc c atts= CodeC (qw c) Func atts
--}
+
+{-
 codevar :: (Quantity c) => Attributes -> c -> CodeChunk
 codevar atts c = CodeC (qw c) Var atts
 
 codefunc :: (Quantity c) => c -> Attributes -> CodeChunk
 codefunc c atts = CodeC (qw c) Func atts
+-}
 
 data CodeDefinition = CD { _quant :: QuantityDict, _ci :: String, _def :: Expr, _attribs :: Attributes}
 makeLenses ''CodeDefinition

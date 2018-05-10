@@ -37,5 +37,5 @@ instance HasSymbol DefinedQuantityDict     where symbol q st = symbol (q^.quant)
 instance Q.Quantity DefinedQuantityDict    where getUnit (DQD a _ _) = Q.getUnit a
 instance HasAttributes DefinedQuantityDict where attributes = attribs
 
-cqs :: (HasAttributes c, Q.Quantity c, Concept c, DOM c ~ ConceptChunk) => c -> Attributes -> DefinedQuantityDict
-cqs c atts = DQD (Q.qw c) (cw c) atts 
+cqs :: (HasAttributes c, Q.Quantity c, Concept c, DOM c ~ ConceptChunk) => c -> DefinedQuantityDict
+cqs c = DQD (Q.qw c) (cw c) (c ^. attributes) 

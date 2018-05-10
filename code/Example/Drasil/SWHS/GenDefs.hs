@@ -26,7 +26,7 @@ swhsGenDefs = [nwtnCooling, rocTempSimp]
 --
 nwtnCooling :: RelationConcept
 nwtnCooling = makeRC "nwtnCooling" (nounPhraseSP "Newton's law of cooling") 
-  nwtnCooling_desc nwtnCooling_rel
+  nwtnCooling_desc nwtnCooling_rel []
 
 nwtnCooling_rel :: Relation
 nwtnCooling_rel = apply1 thFluxVect QP.time $= sy htTransCoeff *
@@ -51,7 +51,7 @@ nwtnCooling_desc = foldlSent [at_start law_conv_cooling +:+.
 --
 rocTempSimp :: RelationConcept
 rocTempSimp = makeRC "rocTempSimp" (nounPhraseSP $ "Simplified rate " ++
-  "of change of temperature") rocTempSimp_desc rocTempSimp_rel
+  "of change of temperature") rocTempSimp_desc rocTempSimp_rel []
 
 rocTempSimp_rel :: Relation
 rocTempSimp_rel = (sy QPP.mass) * (sy QT.heat_cap_spec) *

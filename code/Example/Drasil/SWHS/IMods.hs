@@ -25,7 +25,7 @@ s4_2_5_IMods = [eBalanceOnWtr, eBalanceOnPCM, heatEInWtr, heatEInPCM]
 ---------
 eBalanceOnWtr :: RelationConcept
 eBalanceOnWtr = makeRC "eBalanceOnWtr" (nounPhraseSP $ "Energy balance on " ++
-  "water to find the temperature of the water") balWtrDesc balWtr_Rel
+  "water to find the temperature of the water") balWtrDesc balWtr_Rel []
 
 balWtr_Rel :: Relation
 balWtr_Rel = (deriv (sy temp_W) time) $= 1 / (sy tau_W) *
@@ -57,7 +57,7 @@ eBalanceOnPCM :: RelationConcept
 eBalanceOnPCM = makeRC "eBalanceOnPCM" (nounPhraseSP
   "Energy balance on PCM to find T_p")
   --FIXME: T_p should be called from symbol
-  balPCMDesc balPCM_Rel
+  balPCMDesc balPCM_Rel []
 
 balPCM_Rel :: Relation
 balPCM_Rel = (deriv (sy temp_PCM) time) $= case_ [case1, case2, case3, case4]
@@ -87,7 +87,7 @@ balPCMDesc = foldlSent [(E $ sy temp_W) `isThe` phrase temp_W +:+.
 ---------
 heatEInWtr :: RelationConcept
 heatEInWtr = makeRC "heatEInWtr" (nounPhraseSP "Heat energy in the water")
-  htWtrDesc htWtr_Rel
+  htWtrDesc htWtr_Rel []
 
 htWtr_Rel :: Relation
 htWtr_Rel = (apply1 w_E time) $= (sy htCap_W) * (sy w_mass) *
@@ -117,7 +117,7 @@ htWtrDesc = foldlSent [S "The above", phrase equation,
 ---------
 heatEInPCM :: RelationConcept
 heatEInPCM = makeRC "heatEInPCM" (nounPhraseSP "Heat energy in the PCM")
-  htPCMDesc htPCM_Rel
+  htPCMDesc htPCM_Rel []
 
 htPCM_Rel :: Relation
 htPCM_Rel = sy pcm_E $= case_ [case1, case2, case3, case4]

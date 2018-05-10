@@ -48,7 +48,7 @@ module Language.Drasil (
   -- Chunk.NamedIdea
   , NamedChunk, short, nc, IdeaDict
   , nw -- bad name (historical)
-  , for, for', for'', compoundNC, compoundNC', compoundNC'', compoundNC'''
+  , compoundNC, compoundNC', compoundNC'', compoundNC'''
   , the, theCustom
   -- Chunk.Constrained.Core
   , physc, sfwrc, enumc , isPhysC, isSfwrC
@@ -135,7 +135,7 @@ module Language.Drasil (
   , cA, cB, cC, cD, cE, cF, cG, cH, cI, cJ, cK, cL, cM, cN, cO, cP, cQ, cR, cS, cT, cU, cV, cW, cX, cY, cZ
   , lA, lB, lC, lD, lE, lF, lG, lH, lI, lJ, lK, lL, lM, lN, lO, lP, lQ, lR, lS, lT, lU, lV, lW, lX, lY, lZ
   -- Misc
-  , mkTable, unit'2Contents, unit_symb, introduceAbb, phrase, plural, phrase's, plural's, at_start
+  , mkTable, unit'2Contents, unit_symb, introduceAbb, phrase, plural, phrase's, plural's
   , unitHidingUnitless
   -- Printing.Helpers
   , capitalize, paren, sqbrac
@@ -243,7 +243,7 @@ import Language.Drasil.Chunk.Constrained.Core (physc, sfwrc, enumc, isPhysC, isS
   Constraint(..), ConstraintReason(..), Reason(..), TheoryConstraint(..))
 import Language.Drasil.Chunk.ConVar (cv, ConVar)
 import Language.Drasil.Chunk.DefinedQuantity
-import Language.Drasil.Chunk.Eq (QDefinition(..), fromEqn, fromEqn', fromEqn'', getVC, equat, aqd, ec, ec')
+import Language.Drasil.Chunk.Eq (QDefinition, fromEqn, fromEqn', fromEqn'', getVC, equat, aqd, ec, ec')
 import Language.Drasil.Chunk.ExprRelat
 import Language.Drasil.Chunk.GenDefn
 import Language.Drasil.Chunk.Goal (Goal, mkGoal)

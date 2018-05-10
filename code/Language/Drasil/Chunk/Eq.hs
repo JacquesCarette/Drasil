@@ -72,7 +72,7 @@ ec' e c = ec e c []
 -- | Returns a 'VarChunk' from a 'QDefinition'.
 -- Currently only used in example /Modules/ which are being reworked.
 getVC :: QDefinition -> VarChunk
-getVC qd = vcSt (qd ^. uid) (qd ^. term) (symbol qd) (qd ^. typ)
+getVC qd = vcSt (qd ^. uid) (qd ^. term) (symbol qd) (qd ^. typ) (qd ^. attributes)
 
 -- | For testing ONLY. Once all the chunks are updated for attributes this
 -- should be removed and the other constructors should be updated to include

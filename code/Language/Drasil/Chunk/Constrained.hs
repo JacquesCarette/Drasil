@@ -57,10 +57,10 @@ cuc i t s u space cs rv atts =
 
 -- | Creates a constrained varchunk
 cvc :: String -> NP -> Symbol -> Space -> [Constraint] -> Expr -> Attributes -> ConstrainedChunk
-cvc i des sym space cs rv atts = ConstrainedChunk (qw $ vc i des sym space) cs (Just rv) atts
+cvc i des sym space cs rv atts = ConstrainedChunk (qw $ vc i des sym space atts) cs (Just rv) atts
 
 cvc' :: String -> NP -> Symbol -> Space -> [Constraint] -> Attributes -> ConstrainedChunk
-cvc' i des sym space cs atts = ConstrainedChunk (qw $ vc i des sym space) cs Nothing atts
+cvc' i des sym space cs atts = ConstrainedChunk (qw $ vc i des sym space atts) cs Nothing atts
 
 -- | ConstrConcepts are 'Conceptual Symbolic Quantities'
 -- with 'Constraints' and maybe a reasonable value

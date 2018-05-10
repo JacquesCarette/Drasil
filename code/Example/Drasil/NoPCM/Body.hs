@@ -532,8 +532,8 @@ s4_2_5_desc1 roc temw en wa vo wv ma wm hcw ht hfc csa ta purin a11 vhg a12 =
   `sC` S "over area") +:+. getES csa, S "No",
   phrase ht, S "occurs to", (S "outside" `ofThe`
   phrase ta) `sC` S "since it has been assumed to be",
-  phrase purin +:+. sParen (acroTest a11 s4_2_1_list), S "Assuming no",
-  phrase vhg +:+. (sParen (acroTest a12 s4_2_1_list) `sC`
+  phrase purin +:+. sParen (makeRef (find' a11 s4_2_1_list)), S "Assuming no",
+  phrase vhg +:+. (sParen (makeRef (find' a12 s4_2_1_list)) `sC`
   E (sy vhg $= 0)), S "Therefore, the", phrase M.equation, S "for",
   acroGD 2, S "can be written as"]
 
@@ -663,7 +663,7 @@ req1 = mkRequirement "req1" (
   plural property +:+ S "and initial" +: plural condition) (S "inputQuantReq")
 req2 = mkRequirement "req2" (
   S "Use the" +:+ plural input_ +:+ S "in" +:+
-  acroTest req1 s5_1_list_words_num +:+ S "to find the" +:+ phrase mass +:+
+  (makeRef (find' req1 s5_1_list_words_num)) +:+ S "to find the" +:+ phrase mass +:+
   S "needed for" +:+ acroIM 1 +:+ S "to" +:+ acroIM 2 `sC`
   S "as follows, where" +:+ getES w_vol `isThe` phrase w_vol +:+
   S "and" +: (getES tank_vol `isThe` phrase tank_vol) ) (S "massReq")
@@ -673,8 +673,8 @@ req3 = mkRequirement "req3" (
 req4 = mkRequirement "req4" (
   titleize' output_ `sAnd` plural input_ +:+ plural quantity
   +:+ S "and derived" +:+ plural quantity +:+ S "in the following list: the" +:+
-  plural quantity +:+ S "from" +:+ (acroTest req1 s5_1_list_words_num) `sC`
-  S "the" +:+ phrase mass +:+ S "from" +:+ acroTest req2 s5_1_list_words_num
+  plural quantity +:+ S "from" +:+ (makeRef (find' req1 s5_1_list_words_num)) `sC`
+  S "the" +:+ phrase mass +:+ S "from" +:+ (makeRef (find' req2 s5_1_list_words_num))
   `sAnd` getES tau_W +:+. sParen(S "from" +:+ acroIM 1) ) (S "outputInputReq")
 req5 = mkRequirement "req5" (
   S "Calculate and output the" +:+ phrase temp_W +:+
@@ -720,7 +720,7 @@ s6_list = acroNumGen [likeChg2, likeChg3, likeChg3_npcm, likeChg6] 1
   -- []) EmptyS
 likeChg3_npcm :: Contents
 likeChg3_npcm = mkLklyChnk "likeChg3" (
-  acroTest assump9_npcm s4_2_1_list :+: S "- The" +:+ phrase model +:+
+  (makeRef (find' assump9_npcm s4_2_1_list)) :+: S "- The" +:+ phrase model +:+
   S "currently only accounts for charging of the tank. A more complete"
   +:+ phrase model +:+. S "would also account for discharging of the tank") (S "dischargeChg")
 -- likeChg4 = LikelyChange (LCChunk (nw $ npnc "likeChg4" $
@@ -775,7 +775,7 @@ s7_instaModelRef = map (refFromType Theory) [eBalanceOnWtr,
   heatEInWtr]
 
 s7_funcReq = ["R1", "R2", "R3", "R4", "R5", "R6"]
-s7_funcReqRef = map (\x -> acroTest x s5_1_list_words_num)
+s7_funcReqRef = map (\x -> (makeRef (find' x s5_1_list_words_num)))
   s5_1_list_words_num--makeListRef s7_funcReq s5_1
 
 s7_data = ["Data Constraints"]
@@ -783,7 +783,7 @@ s7_dataRef = [makeRef s4_2_6_table1] --FIXME: Reference section?
 
 s7_assump = ["A1", "A2", "A3", "A4", "A5", "A6", "A7", "A8", "A9", "A10",
   "A11", "A12", "A13", "A14"]
-s7_assumpRef = map (\x -> acroTest x s4_2_1_list) s4_2_1_list--makeListRef s7_assump (SRS.inModel SRS.missingP [])
+s7_assumpRef = map (\x -> (makeRef (find' x s4_2_1_list))) s4_2_1_list--makeListRef s7_assump (SRS.inModel SRS.missingP [])
 
 s7_theories = ["T1"]
 s7_theoriesRef = map (refFromType Theory) [t1ConsThermE]
@@ -795,7 +795,7 @@ s7_dataDefs = ["DD1"]
 s7_dataDefRef = map (refFromType Data) [dd1HtFluxC]
 
 s7_likelyChg = ["LC1", "LC2", "LC3", "LC4"]
-s7_likelyChgRef = map (\x -> acroTest x s6_list) s6_list--makeListRef s7_likelyChg s6
+s7_likelyChgRef = map (\x -> (makeRef (find' x s6_list))) s6_list--makeListRef s7_likelyChg s6
 
 {-Traceability Matrix 1-}
 

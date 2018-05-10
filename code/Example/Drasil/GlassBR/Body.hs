@@ -663,11 +663,11 @@ likelyChanges_SRS = [s8_likelychg1, s8_likelychg2, s8_likelychg3,
 s8_likelychg1, s8_likelychg2, s8_likelychg3, s8_likelychg4,
   s8_likelychg5 :: Contents
 
-s8_likelychg1 = mkLklyChnk "s8_likelychg1" (lc1Desc (blastRisk))
-s8_likelychg2 = mkLklyChnk "s8_likelychg2" (lc2Desc)
-s8_likelychg3 = mkLklyChnk "s8_likelychg3" (lc3Desc)
-s8_likelychg4 = mkLklyChnk "s8_likelychg4" (lc4Desc)
-s8_likelychg5 = mkLklyChnk "s8_likelychg5" (lc5Desc)
+s8_likelychg1 = mkLklyChnk "s8_likelychg1" (lc1Desc (blastRisk)) (S "internalBlastChg")
+s8_likelychg2 = mkLklyChnk "s8_likelychg2" (lc2Desc) (S "variableValuesChg")
+s8_likelychg3 = mkLklyChnk "s8_likelychg3" (lc3Desc) (S "accomSingleLiteChg")
+s8_likelychg4 = mkLklyChnk "s8_likelychg4" (lc4Desc) (S "accomBoundaryChg")
+s8_likelychg5 = mkLklyChnk "s8_likelychg5" (lc5Desc) (S "moreThanFlexureChg")
 
 lc1Desc :: NamedChunk -> Sentence
 lc2Desc, lc3Desc, lc4Desc, lc5Desc :: Sentence

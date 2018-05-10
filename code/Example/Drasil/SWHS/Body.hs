@@ -523,7 +523,7 @@ s6 :: Section
 s6 = SRS.likeChg s6_list []
 
 s6_list :: [Contents]
-s6_list = s6_likeChg_list
+s6_list = s6_likeChg_list 
 
 s6_likeChg_list :: [Contents]
 s6_likeChg_list = [likeChg1, likeChg2, likeChg3, likeChg4, likeChg5, likeChg6]

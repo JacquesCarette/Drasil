@@ -719,10 +719,10 @@ s6_list = acroNumGen [likeChg2, likeChg3, likeChg3_npcm, likeChg6] 1
   -- S "within it cools."))
   -- []) EmptyS
 likeChg3_npcm :: Contents
-likeChg3_npcm = mkLklyChnk "likeChg3" $
+likeChg3_npcm = mkLklyChnk "likeChg3" (
   acroTest assump9_npcm s4_2_1_list :+: S "- The" +:+ phrase model +:+
   S "currently only accounts for charging of the tank. A more complete"
-  +:+ phrase model +:+. S "would also account for discharging of the tank"
+  +:+ phrase model +:+. S "would also account for discharging of the tank") (S "dischargeChg")
 -- likeChg4 = LikelyChange (LCChunk (nw $ npnc "likeChg4" $
   -- nounPhraseSent (makeRef assump11 :+: S "- Any real" +:+ phrase tank +:+
   -- S "cannot be perfectly insulated and will lose" +:+. phrase heat))

@@ -7,6 +7,8 @@ import Language.Drasil.ChunkDB
 import Language.Drasil.Chunk.Code
 import Language.Drasil.Chunk.Quantity (QuantityDict)
 
+import Language.Drasil.Chunk.Attribute.Core (Attributes)
+
 -- | Generic traverse of all positions that could lead to names
 names :: Expr -> [String]
 names (AssocA _ l)   = concatMap names l
@@ -68,11 +70,11 @@ vars e m = map resolve $ dep e
   where resolve x = symbLookup x $ m ^. symbolTable
 
 -- | Get a list of CodeChunks from an equation
-codevars :: (HasSymbolTable s) => Expr -> s -> [CodeChunk]
-codevars e m = map resolve $ dep e
-  where resolve x = codevar $ symbLookup x $ m ^. symbolTable
+codevars :: (HasSymbolTable s) => Attributes -> Expr -> s -> [CodeChunk]
+codevars atts e m = map resolve $ dep e
+  where resolve x = codevar atts (symbLookup x $ m ^. symbolTable)
 
 -- | Get a list of CodeChunks from an equation (no functions)
-codevars' :: (HasSymbolTable s) => Expr -> s -> [CodeChunk]
-codevars' e m = map resolve $ nub $ names' e
-  where resolve x = codevar $ symbLookup x $ m ^. symbolTable
+codevars' :: (HasSymbolTable s) => Attributes -> Expr -> s -> [CodeChunk]
+codevars' atts e m = map resolve $ nub $ names' e
+  where  resolve x = codevar atts (symbLookup x (m ^. symbolTable))

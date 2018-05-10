@@ -138,7 +138,7 @@ funcPrefix :: String
 funcPrefix = "func_"
  
 data VarOrFunc = Var | Func
-data CodeChunk = CodeC {_qc :: QuantityDict, kind :: VarOrFunc}
+data CodeChunk = CodeC {_qc :: QuantityDict, kind :: VarOrFunc, _atts :: Attributes}
 makeLenses ''CodeChunk
 
 instance HasUID CodeChunk where uid = qc . uid
@@ -148,8 +148,8 @@ instance HasSpace CodeChunk where typ = qc . typ
 instance HasSymbol CodeChunk where symbol c = symbol (c ^. qc)
 instance Quantity CodeChunk where getUnit = getUnit . view qc
 instance CodeIdea CodeChunk where
-  codeName (CodeC c Var) = symbToCodeName (codeSymb c)
-  codeName (CodeC c Func) = funcPrefix ++ symbToCodeName (codeSymb c)
+  codeName (CodeC c Var atts) = symbToCodeName (codeSymb c)
+  codeName (CodeC c Func atts) = funcPrefix ++ symbToCodeName (codeSymb c)
 instance Eq CodeChunk where c1 == c2 = (c1 ^. uid) == (c2 ^. uid)
 
 spaceToCodeType :: Space -> CodeType
@@ -169,11 +169,11 @@ spaceToCodeType (S.DiscreteS _) = G.List (spaceToCodeType S.String)
 codeType :: HasSpace c => c -> CodeType
 codeType c = spaceToCodeType $ c ^. typ
 
-codevar :: (Quantity c) => c -> CodeChunk
-codevar c = CodeC (qw c) Var
+codevar :: (Quantity c) => Attributes -> c -> CodeChunk
+codevar atts c = CodeC (qw c) Var atts
 
-codefunc :: (Quantity c) => c -> CodeChunk
-codefunc c = CodeC (qw c) Func
+codefunc :: (Quantity c) => c -> Attributes -> CodeChunk
+codefunc c atts = CodeC (qw c) Func atts
 
 data CodeDefinition = CD { _quant :: QuantityDict, _ci :: String, _def :: Expr, _attribs :: Attributes}
 makeLenses ''CodeDefinition

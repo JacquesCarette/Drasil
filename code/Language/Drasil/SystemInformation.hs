@@ -2,16 +2,13 @@
 
 module Language.Drasil.SystemInformation where
 
+import Language.Drasil.Classes (HasUID,Idea,Concept,IsUnit,CommonIdea,Constrained)
 import Language.Drasil.Chunk.Citation (BibRef)
-import Language.Drasil.Chunk.Concept
-import Language.Drasil.Chunk.Constrained
 import Language.Drasil.Chunk.Eq
-import Language.Drasil.Chunk.NamedIdea
 import Language.Drasil.Chunk.Quantity
 import Language.Drasil.ChunkDB (ChunkDB)
 import Language.Drasil.People
 import Language.Drasil.Reference
-import Language.Drasil.Unit
 
 import Control.Lens ((^.))
 
@@ -22,10 +19,10 @@ data SystemInformation where
 --There should be a way to remove redundant "Quantity" constraint.
 -- I'm thinking for getting concepts that are also quantities, we could
 -- use a lookup of some sort from their internal (Drasil) ids.
- SI :: (Idea a, Idea b, HasName c, IsUnit d,
-  Quantity e, Ord e, Ord f, Quantity f, Concept f,
+ SI :: (CommonIdea a, Idea a, Idea b, HasName c, IsUnit d,
+  Quantity e, Eq e, Quantity f, Concept f, Eq f,
   Quantity h, Quantity i,
-  Constrained j) => 
+  HasUID j, Constrained j) => 
   { _sys :: a
   , _kind :: b
   , _authors :: [c]

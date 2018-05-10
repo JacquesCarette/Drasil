@@ -32,7 +32,7 @@ sspTMods = [fs_rc, equilibrium, mcShrStrgth, hookesLaw
 ------------- New Chunck -----------
 fs_rc_new :: TheoryModel
 fs_rc_new = tm (cw fs_rc)
-  (tc' "fs_rc_new" [qw fs, qw shearRes, qw mobShear] ([] :: [FundUnit])
+  (tc' "fs_rc_new" [qw fs, qw shearRes, qw mobShear] ([] :: [ConceptChunk])
   [] [TCon Invariant fs_rel] [])
 
 ------------------------------------
@@ -54,7 +54,7 @@ fs_desc = foldlSent [
 ------------- New Chunck -----------
 equilibrium_new :: TheoryModel
 equilibrium_new = tm (cw equilibrium)
-  (tc' "equilibrium_new" [qw fx] ([] :: [FundUnit])
+  (tc' "equilibrium_new" [qw fx] ([] :: [ConceptChunk])
   [] [TCon Invariant eq_rel] [])
 
 ------------------------------------  
@@ -80,7 +80,7 @@ eq_desc = foldlSent [S "For a body in static equilibrium, the net",
 mcShrStrgth_new :: TheoryModel
 mcShrStrgth_new = tm (cw fs_rc)
   (tc' "fmcShrStrgth_new" [qw shrStress, qw normStress, qw fricAngle, qw cohesion] 
-  ([] :: [FundUnit])
+  ([] :: [ConceptChunk])
   [] [TCon Invariant mcSS_rel] [])
 
 ------------------------------------
@@ -115,7 +115,7 @@ mcSS_desc = foldlSent [S "For a", phrase soil, S "under", phrase stress,
 effStress_new :: TheoryModel
 effStress_new = tm (cw effStress)
   (tc' "effStress_new" [qw normStress, qw porePressure] 
-  ([] :: [FundUnit])
+  ([] :: [ConceptChunk])
   [] [TCon Invariant effS_rel] [])
 
 ------------------------------------
@@ -145,7 +145,7 @@ effS_desc = foldlSent [getES normStress, S "is the total", phrase stress,
 hookesLaw_new :: TheoryModel
 hookesLaw_new = tm (cw hookesLaw)
   (tc' "effStress_new" [qw genForce, qw stffness, qw genDisplace] 
-  ([] :: [FundUnit])
+  ([] :: [ConceptChunk])
   [] [TCon Invariant hksLw_rel] [])
 
 ------------------------------------

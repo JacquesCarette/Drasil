@@ -4,13 +4,12 @@
 -- Drasil.DocumentationLanguage.X
 module Language.Drasil.Chunk.Goal
   ( Goal
-  , goal
-  , gs, gs'
+  , mkGoal
   , refAddr
   ) where
 
-import Language.Drasil.Chunk
-import Language.Drasil.Chunk.Attribute
+import Language.Drasil.Classes (HasUID(uid), HasAttributes(attributes))
+import Language.Drasil.Chunk.Attribute.Core (Attributes)
 import Language.Drasil.Spec (Sentence)
 import Language.Drasil.RefTypes (RefAdd)
 
@@ -28,15 +27,10 @@ data Goal = GS
 
 makeLenses ''Goal
 
-instance Chunk Goal where uid = gid
+instance HasUID Goal        where uid = gid
 instance HasAttributes Goal where attributes = attribs
-instance Eq Goal where 
-  a == b = a ^. uid == b ^. uid
+instance Eq Goal            where a == b = a ^. uid == b ^. uid
   
--- | Goal smart constructor (has no explicit 'Attributes')
-gs :: String -> Sentence -> RefAdd -> Goal
-gs i g r = GS i g r []
-
 -- | Goal smart constructor (with explicit 'Attributes')
-gs' :: String -> Sentence -> RefAdd -> Attributes -> Goal
-gs' = GS
+mkGoal :: String -> Sentence -> RefAdd -> Attributes -> Goal
+mkGoal = GS

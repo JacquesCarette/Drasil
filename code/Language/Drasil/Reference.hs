@@ -1,7 +1,7 @@
 {-# Language TemplateHaskell #-}
 module Language.Drasil.Reference where
 
-import Language.Drasil.Chunk (Chunk, uid)
+import Language.Drasil.Classes (HasUID(uid))
 import Language.Drasil.Chunk.AssumpChunk as A
 import Language.Drasil.Chunk.Change as Ch
 import Language.Drasil.Chunk.Citation as Ci
@@ -66,7 +66,7 @@ rdb psds goals assumps reqs changes citations = RDB
   (changeMap changes)
   (bibMap citations)
 
-simpleMap :: Chunk a => [a] -> RefMap a
+simpleMap :: HasUID a => [a] -> RefMap a
 simpleMap xs = Map.fromList $ zip (map (^. uid) xs) (zip xs [1..])
 
 reqMap :: [ReqChunk] -> ReqMap
@@ -91,37 +91,37 @@ bibMap cs = Map.fromList $ zip (map (^. uid) scs) (zip scs [1..])
         -- (as it sorts them and would change the order).
         -- We can always change the sorting to whatever makes most sense
 
-psdLookup :: Chunk c => c -> PhysSystDescMap -> (PhysSystDesc, Int)
+psdLookup :: HasUID c => c -> PhysSystDescMap -> (PhysSystDesc, Int)
 psdLookup p m = getS $ Map.lookup (p ^. uid) m
   where getS (Just x) = x
         getS Nothing = error $ "No referencing information found for: " ++
           (p ^. uid) ++ " in PhysSystDesc Map"
 
-goalLookup :: Chunk c => c -> GoalMap -> (Goal, Int)
+goalLookup :: HasUID c => c -> GoalMap -> (Goal, Int)
 goalLookup g m = getS $ Map.lookup (g ^. uid) m
   where getS (Just x) = x
         getS Nothing = error $ "No referencing information found for: " ++
           (g ^. uid) ++ " in Goal Map"
 
-assumpLookup :: Chunk c => c -> AssumpMap -> (AssumpChunk, Int)
+assumpLookup :: HasUID c => c -> AssumpMap -> (AssumpChunk, Int)
 assumpLookup a m = getS $ Map.lookup (a ^. uid) m
   where getS (Just x) = x
         getS Nothing = error $ "Assumption: " ++ (a ^. uid) ++
           " referencing information not found in Assumption Map"
 
-reqLookup :: Chunk c => c -> ReqMap -> (ReqChunk, Int)
+reqLookup :: HasUID c => c -> ReqMap -> (ReqChunk, Int)
 reqLookup r m = getS $ Map.lookup (r ^. uid) m
   where getS (Just x) = x
         getS Nothing = error $ "Requirement: " ++ (r ^. uid) ++
           " referencing information not found in Requirement Map"
 
-changeLookup :: Chunk c => c -> ChangeMap -> (Change, Int)
+changeLookup :: HasUID c => c -> ChangeMap -> (Change, Int)
 changeLookup c m = getS $ Map.lookup (c ^. uid) m
   where getS (Just x) = x
         getS Nothing = error $ "Change: " ++ (c ^. uid) ++
           " referencing information not found in Change Map"
 
-citeLookup :: Chunk c => c -> BibMap -> (Citation, Int)
+citeLookup :: HasUID c => c -> BibMap -> (Citation, Int)
 citeLookup c m = getS $ Map.lookup (c ^. uid) m
   where getS (Just x) = x
         getS Nothing = error $ "Change: " ++ (c ^. uid) ++

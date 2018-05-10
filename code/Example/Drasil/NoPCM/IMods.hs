@@ -1,8 +1,6 @@
 module Drasil.NoPCM.IMods (eBalanceOnWtr, eBalanceOnWtr_new) where
 
 import Language.Drasil
-import Drasil.DocumentLanguage (mkAssump)
-
 
 import Drasil.SWHS.Concepts (water, coil, tank)
 import Drasil.SWHS.Unitals
@@ -17,6 +15,7 @@ import Data.Drasil.Concepts.Thermodynamics (melting, boil_pt, heat_cap_spec,
 
 import Data.Drasil.Quantities.PhysicalProperties (vol, mass)
 import Drasil.SWHS.DataDefs(dd1HtFluxC)
+import Drasil.SWHS.Assumptions
 ---------
 -- IM1 --
 ---------
@@ -26,9 +25,9 @@ import Drasil.SWHS.DataDefs(dd1HtFluxC)
 eBalanceOnWtr_new :: InstanceModel
 eBalanceOnWtr_new = im eBalanceOnWtr [qw temp_C, qw temp_init, qw time_final, 
   qw coil_SA, qw coil_HTC, qw htCap_W, qw w_mass] 
-  [TCon AssumedCon $sy temp_init $<= sy temp_C] [qw temp_W] 
+  [TCon AssumedCon $sy temp_init $<= sy temp_C] (qw temp_W) 
   --Tw(0) cannot be presented, there is one more constraint Tw(0) = Tinit
-  [TCon AssumedCon $ 0 $< sy time $< sy time_final] [D eBalanceOnWtr_deriv_nopcm]
+  [TCon AssumedCon $ 0 $< sy time $< sy time_final] [(derivationsteps eBalanceOnWtr_deriv_nopcm)]
 
 eBalanceOnWtr :: RelationConcept
 eBalanceOnWtr = makeRC "eBalanceOnWtr" (nounPhraseSP $ "Energy balance on " ++
@@ -50,7 +49,7 @@ balWtrDesc = foldlSent [(E $ sy temp_W) `isThe` phrase temp_W +:+.
   sParen (unwrap $ getUnit temp_W) `sAnd` (E 100),
   sParen (unwrap $ getUnit temp_W), S "are the", phrase melting `sAnd`
   plural boil_pt, S "of", phrase water `sC` S "respectively",
-  sParen (makeRef (mkAssump "assump10" EmptyS))]
+  sParen (makeRef assump_new_10)]
   
 ----------------------------------------------
 --    Derivation of eBalanceOnWtr           --

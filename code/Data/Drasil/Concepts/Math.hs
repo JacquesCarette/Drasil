@@ -3,6 +3,8 @@ module Data.Drasil.Concepts.Math where
 import Language.Drasil
 import Control.Lens ((^.))
 
+import Data.Drasil.Phrase(of_)
+
 angle, area, calculation, diameter, equation, euclidN, euclidSpace, gradient, 
   graph, law, matrix, norm, normal, normalV, number, orient, parameter, perp, 
   perpV, probability, shape, surArea, surface, unit_, unitV, vector, rate, 

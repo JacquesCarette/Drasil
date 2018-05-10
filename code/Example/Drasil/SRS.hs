@@ -1,7 +1,7 @@
 module Drasil.SRS
  (doc, doc', intro, prpsOfDoc, scpOfReq, charOfIR, orgOfDoc, stakeholder, theCustomer, theClient, 
   genSysDes, sysCont, userChar, sysCon, scpOfTheProj, prodUCTable, indPRCase, specSysDes,
-  probDesc, termAndDefn, termogy, physSyst, goalStmt, solCharSpec, assump, thModel,
+  probDesc, termAndDefn, termogy, physSyst, goalStmt, solCharSpec, assumpt, thModel,
   genDefn, inModel, dataDefn, datCon, require, nonfuncReq, funcReq, likeChg, traceyMandG,
   appendix, reference, propCorSol, offShelfSol, missingP, valsOfAuxCons, tOfSymb) where
 --Temporary file for keeping the "srs" document constructor until I figure out
@@ -30,7 +30,7 @@ doc' sys authors secs = Document (Doc.srs `forTT'` sys) authors secs
 -- | Standard SRS section builders
 intro, prpsOfDoc, scpOfReq, charOfIR, orgOfDoc, stakeholder, theCustomer, theClient, 
   genSysDes, sysCont, userChar, sysCon, scpOfTheProj, prodUCTable, indPRCase, specSysDes,
-  probDesc, termAndDefn, termogy, physSyst, goalStmt, solCharSpec, assump, thModel,
+  probDesc, termAndDefn, termogy, physSyst, goalStmt, solCharSpec, assumpt, thModel,
   genDefn, inModel, dataDefn, datCon, propCorSol, require, nonfuncReq, funcReq, likeChg, traceyMandG, tOfSymb,
   appendix, reference, offShelfSol, valsOfAuxCons :: [Contents] -> [Section] -> Section
 
@@ -60,7 +60,7 @@ termogy     cs ss = section (titleize Doc.terminology)        cs ss "Terminology
 physSyst    cs ss = section (titleize Doc.physSyst)           cs ss "PhysSyst"
 goalStmt    cs ss = section (titleize' Doc.goalStmt)          cs ss "GoalStmt"
 solCharSpec cs ss = section (titleize Doc.solutionCharSpec)   cs ss "SolCharSpec"
-assump      cs ss = section (titleize' Doc.assumption)        cs ss "Assumps"
+assumpt     cs ss = section (titleize' Doc.assumption)        cs ss "Assumps"
 thModel     cs ss = section (titleize' Doc.thModel)           cs ss "TMs"
 genDefn     cs ss = section (titleize' Doc.genDefn)           cs ss "GDs"
 inModel     cs ss = section (titleize' Doc.inModel)           cs ss "IMs"

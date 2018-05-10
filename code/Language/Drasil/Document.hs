@@ -20,11 +20,10 @@ type Height   = Float
 type ListPair = (Title,ItemType) -- ^ Title: Item
 type Filepath = String
 type Label    = Sentence
-type Sections = [Section]
 
 -- | A Document has a Title ('Sentence'), Author(s) ('Sentence'), and Sections
 -- which hold the contents of the document
-data Document = Document Title Author Sections
+data Document = Document Title Author [Section]
 
 -- | Section Contents are split into subsections or contents, where contents
 -- are standard layout objects (see 'Contents')
@@ -101,7 +100,7 @@ figWithWidth :: Label -> Filepath -> MaxWidthPercent -> RefAdd -> Contents
 figWithWidth = Figure
 
 datadefn :: QDefinition -> Contents
-datadefn qd = Definition $ Data qd
+datadefn = Definition . Data
 
 reldefn :: RelationConcept -> Contents
-reldefn rc = Definition $ Theory rc
+reldefn = Definition . Theory

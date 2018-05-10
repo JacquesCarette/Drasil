@@ -32,7 +32,7 @@ t1IsSafe = tm//all the changes should include this, means theoritical model cons
 
 t1IsSafe :: TheoryModel
 t1IsSafe = tm (cw t1SafetyReq) 
-  (tc' "isSafe" [qw is_safe1, qw prob_br, qw pb_tol] ([] :: [FundUnit])
+  (tc' "isSafe" [qw is_safe1, qw prob_br, qw pb_tol] ([] :: [ConceptChunk])
   [] [TCon Invariant $ (sy is_safe1) $= (sy prob_br) $< (sy pb_tol)] [])
 
 t1SafetyReq :: RelationConcept

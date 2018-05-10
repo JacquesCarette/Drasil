@@ -40,9 +40,10 @@ risk_eq = ((sy sflawParamK) /
   (1000 * sy mod_elas * (square $ sy act_thick)) $^ (sy sflawParamM) 
   * (sy lDurFac) * (exp (sy stressDistFac)))
 
+-- FIXME [4] !!!
 risk :: QDefinition
 risk = aqd (mkDataDef' risk_fun risk_eq (aGrtrThanB +:+ hRef +:+ ldfRef +:+ jRef))
-  [SourceRef $ S "[4]"]
+  [sourceref $ S "[4]"]
 
 --DD2--
 

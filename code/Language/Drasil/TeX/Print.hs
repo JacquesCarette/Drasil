@@ -1,17 +1,17 @@
 module Language.Drasil.TeX.Print(genTeX) where
 
 import Prelude hiding (print)
-import Data.List (intersperse, transpose)
+import Data.List (intersperse, transpose, partition)
 import Text.PrettyPrint (text, (<+>))
 import qualified Text.PrettyPrint as TP
 import Numeric (showFFloat)
-
 import Control.Applicative (pure)
+import Control.Arrow (second)
 
 import Language.Drasil.Printing.AST
 import Language.Drasil.Printing.Citation
-import Language.Drasil.TeX.AST
-import qualified Language.Drasil.TeX.Import as I
+import Language.Drasil.Printing.LayoutObj
+import qualified Language.Drasil.Printing.Import as I
 import qualified Language.Drasil.Spec as LS
 import qualified Language.Drasil.RefTypes as RT
 import Language.Drasil.UnitLang
@@ -40,18 +40,18 @@ buildStd sm (Document t a c) =
 
 -- clean until here; lo needs its sub-functions fixed first though
 lo :: HasSymbolTable s => LayoutObj -> s -> D
-lo (Section d t con l)  sm  = sec d (spec t) %% label (spec l) %% print sm con
+lo (Header d t l)       _  = sec d (spec t) %% label (spec l)
+lo (HDiv _ con _)       sm = print sm con -- FIXME ignoring 2 arguments?
 lo (Paragraph contents) _  = toText $ spec contents
 lo (EqnBlock contents)  _  = makeEquation contents
 lo (Table _ rows r bl t) _  = toText $ makeTable rows (spec r) bl (spec t)
-lo (Definition ssPs l) sm  = toText $ makeDefn sm ssPs $ spec l
-lo (Defnt _ ssPs l)    sm  = toText $ makeDefn sm ssPs $ spec l
-lo (List l)             _  = toText $ makeList l
-lo (Figure r c f wp)    _  = toText $ makeFigure (spec r) (spec c) f wp
-lo (Requirement n l)    _  = toText $ makeReq (spec n) (spec l)
-lo (Assumption n l)     _  = toText $ makeAssump (spec n) (spec l)
-lo (LikelyChange n l)   _  = toText $ makeLC (spec n) (spec l)
-lo (UnlikelyChange n l) _  = toText $ makeUC (spec n) (spec l)
+lo (Definition _ ssPs l) sm  = toText $ makeDefn sm ssPs $ spec l
+lo (List l)               _  = toText $ makeList l
+lo (Figure r c f wp)      _  = toText $ makeFigure (spec r) (spec c) f wp
+lo (ALUR Requirement n l _)    _  = toText $ makeReq (spec n) (spec l)
+lo (ALUR Assumption n l _)     _  = toText $ makeAssump (spec n) (spec l)
+lo (ALUR LikelyChange n l _)   _  = toText $ makeLC (spec n) (spec l)
+lo (ALUR UnlikelyChange n l _) _  = toText $ makeUC (spec n) (spec l)
 lo (Bib bib)            sm = toText $ makeBib sm bib
 lo (Graph ps w h c l)   _  = toText $ makeGraph
   (map (\(a,b) -> (spec a, spec b)) ps)
@@ -231,6 +231,7 @@ needs (Sp _)    = Math
 needs HARDNL    = Text
 needs (Ref _ _ _) = Text
 needs (EmptyS)  = Text
+needs (Quote _) = Text
 
 -- print all Spec through here
 spec :: Spec -> D
@@ -243,17 +244,18 @@ spec (E ex)      = toMath $ pure $ text $ p_expr ex
 spec (S s)       = pure $ text (concatMap escapeChars s)
 spec (Sy s)      = p_unit s
 spec (Sp s)      = pure $ text $ unPL $ special s
-spec HARDNL      = pure $ text $ "\\newline"
-spec (Ref t@RT.Sect _ r) = sref (show t) (spec r)
-spec (Ref t@RT.Def _ r)  = hyperref (show t) (spec r)
-spec (Ref RT.Mod _ r)    = mref  (spec r)
-spec (Ref RT.Req _ r)    = rref  (spec r)
-spec (Ref RT.Assump _ r) = aref  (spec r)
-spec (Ref RT.LC _ r)     = lcref (spec r)
-spec (Ref RT.UC _ r)     = ucref (spec r)
-spec (Ref RT.Cite _ r)   = cite  (spec r)
-spec (Ref t _ r)         = ref (show t) (spec r)
-spec EmptyS      = empty
+spec HARDNL      = pure $ text "\\newline"
+spec (Ref t@RT.Sect r _) = sref (show t) (pure $ text r)
+spec (Ref t@RT.Def r _)  = hyperref (show t) (pure $ text r)
+spec (Ref RT.Mod r _)    = mref  (pure $ text r)
+spec (Ref RT.Req r _)    = rref  (pure $ text r)
+spec (Ref RT.Assump r _) = aref  (pure $ text r)
+spec (Ref RT.LC r _)     = lcref (pure $ text r)
+spec (Ref RT.UC r _)     = ucref (pure $ text r)
+spec (Ref RT.Cite r _)   = cite  (pure $ text r)
+spec (Ref t r _)         = ref (show t) (pure $ text r)
+spec EmptyS              = empty
+spec (Quote q)           = quote $ spec q
 
 escapeChars :: Char -> String
 escapeChars '_' = "\\_"
@@ -270,6 +272,26 @@ symbol_needs (Atop _ _)          = Math
 symbol_needs Empty               = Curr
 
 p_unit :: USymb -> D
+p_unit (US ls) = formatu t b
+  where
+    (t,b) = partition ((> 0) . snd) ls
+    formatu :: [(Symbol,Integer)] -> [(Symbol,Integer)] -> D
+    formatu [] l = line l 
+    formatu l [] = foldr (<>) empty $ map pow l
+    formatu nu de = toMath $ fraction (line nu) (line $ map (second negate) de)
+    line :: [(Symbol,Integer)] -> D
+    line []  = empty
+    line [n] = pow n
+    line l   = parens $ foldr (<>) empty $ map pow l
+    pow :: (Symbol,Integer) -> D
+    pow (n,1) = p_symb n
+    pow (n,p) = toMath $ superscript (p_symb n) (pure $ text $ show p)
+    -- printing of unit symbols is done weirdly... FIXME?
+    p_symb (Concat s) = foldl (<>) empty $ map p_symb s
+    p_symb n = let cn = symbol_needs n in switch (const cn) (pure $ text $ symbol n)
+
+{-
+p_unit :: USymb -> D
 p_unit (UName (Concat s)) = foldl (<>) empty $ map (p_unit . UName) s
 p_unit (UName n) =
   let cn = symbol_needs n in
@@ -281,6 +303,7 @@ p_unit (UDiv n d) = toMath $
     UProd _  -> fraction (p_unit n) (parens $ p_unit d)
     UDiv _ _ -> fraction (p_unit n) (parens $ p_unit d)
     _        -> fraction (p_unit n) (p_unit d)
+-}
 
 -----------------------------------------------------------------
 ------------------ DATA DEFINITION PRINTING-----------------
@@ -495,9 +518,9 @@ showBibTeX  _ (HowPublished (URL  u)) =
 showBibTeX  _ (HowPublished (Verb v)) = showField "howpublished" v
 
 --showBibTeX sm (Author p@(Person {_convention=Mono}:_)) = showField "author"
-  -- (I.spec sm (rendPeople p)) :+: S ",\n" :+:
-  -- showField "sortkey" (I.spec sm (rendPeople p))
--- showBibTeX sm (Author    p) = showField "author" $ I.spec sm (rendPeople p)
+  -- (LS.spec sm (rendPeople p)) :+: S ",\n" :+:
+  -- showField "sortkey" (LS.spec sm (rendPeople p))
+-- showBibTeX sm (Author    p) = showField "author" $ LS.spec sm (rendPeople p)
 
 showField :: String -> Spec -> Spec
 showField f s = S f :+: S "={" :+: s :+: S "}"
@@ -505,7 +528,7 @@ showField f s = S f :+: S "={" :+: s :+: S "}"
 rendPeople :: HasSymbolTable ctx => ctx -> People -> Spec
 rendPeople _ []  = S "N.a." -- "No authors given"
 rendPeople sm people = I.spec sm $
-  foldl1 (\x y -> x LS.+:+ LS.S "and" LS.+:+ y) $ map rendPersLFM people
+  foldl1 (\x y -> x LS.+:+ LS.S "and" LS.+:+ y) $ map (LS.S . rendPersLFM) people
 
 bibTeXMonth :: Month -> Spec
 bibTeXMonth Jan = S "jan"

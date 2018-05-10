@@ -1,5 +1,3 @@
-{-# OPTIONS -Wall #-}
-{-# LANGUAGE FlexibleContexts #-}
 module Drasil.SWHS.TMods (tModels, t1ConsThermE, 
   theory_model_swhsTMods, theory_model_T1,
   t1ConsThermE_new, t2SensHtE_new, theory_model_T2, t2SensHtE,
@@ -8,7 +6,6 @@ module Drasil.SWHS.TMods (tModels, t1ConsThermE,
 import Language.Drasil
 import Control.Lens ((^.))
 
-import Drasil.DocumentLanguage (mkAssump)
 import Data.Drasil.Concepts.Documentation (system, acroNumGen)
 import Data.Drasil.SI_Units (joule)
 
@@ -45,7 +42,7 @@ theory_model_swhsTMods = acroNumGen (theory_model_T1 ++ theory_model_T2
 t1ConsThermE_new :: TheoryModel
 t1ConsThermE_new = tm (cw t1ConsThermE)
   (tc' "ConsThermE_new" [qw thFluxVect, qw gradient, qw vol_ht_gen, 
-    qw density, qw heat_cap_spec, qw temp, qw time] ([] :: [FundUnit])
+    qw density, qw heat_cap_spec, qw temp, qw time] ([] :: [ConceptChunk])
   [] [TCon Invariant consThermERel] [])
 
 ------------------------------------
@@ -80,10 +77,12 @@ t1descr = foldlSent [
   S "is the" +:+. (gradient ^. defn), S "For this", phrase equation,
   S "to apply" `sC` S "other forms of", phrase energy `sC` S "such as",
   phrase mech_energy `sC`
-  S "are assumed to be negligible in the", phrase system,
-  sParen (makeRef (mkAssump "assump1" EmptyS))]
+  S "are assumed to be negligible in the", phrase system, sParen (makeRef a1)]
 
 --referencing within a simple list is not yet implemented.
+-- FIXME
+a1 :: Contents
+a1 = Assumption $ assump "assump1" EmptyS (S "assump1")
 
 -------------------------
 -- Theoretical Model 2 --
@@ -91,7 +90,7 @@ t1descr = foldlSent [
 t2SensHtE_new :: TheoryModel
 t2SensHtE_new = tm (cw t2SensHtE)
   (tc' "SensHtE_new" [qw sens_heat, qw htCap_S, qw mass, 
-    qw deltaT, qw melt_pt, qw temp, qw htCap_L, qw boil_pt, qw htCap_V] ([] :: [FundUnit])
+    qw deltaT, qw melt_pt, qw temp, qw htCap_L, qw boil_pt, qw htCap_V] ([] :: [ConceptChunk])
   [] [TCon Invariant sensHtEEqn] [])
 
 --s4_2_2_T2
@@ -150,7 +149,7 @@ t2descr = foldlSent [
 -------------------------
 t3LatHtE_new :: TheoryModel
 t3LatHtE_new = tm (cw t3LatHtE)
-  (tc' "SensHtE_new" [qw latent_heat, qw time, qw tau] ([] :: [FundUnit])
+  (tc' "SensHtE_new" [qw latent_heat, qw time, qw tau] ([] :: [ConceptChunk])
   [] [TCon Invariant latHtEEqn] [])
 
 --s4_2_2_T3

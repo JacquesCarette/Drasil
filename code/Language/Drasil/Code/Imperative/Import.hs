@@ -7,17 +7,17 @@ import Language.Drasil.Code.Imperative.LanguageRenderer (Options(..))
 import Language.Drasil.Code.Imperative.Parsers.ConfigParser (pythonLabel, cppLabel, cSharpLabel, javaLabel)
 import Language.Drasil.Code.Imperative.Lang
 import Language.Drasil.Code.CodeGeneration (createCodeFiles, makeCode)
-import Language.Drasil.Chunk (Chunk(..))
-import Language.Drasil.Chunk.SymbolForm (HasSymbol)
 import Language.Drasil.Chunk.Code
 import Language.Drasil.Chunk.Quantity (QuantityDict)
-import Language.Drasil.Chunk.Constrained (Constraint(..))
+import Language.Drasil.Chunk.Constrained.Core (Constraint(..))
 import Language.Drasil.Expr as E hiding (($.))
+import Language.Drasil.Expr.Math (sy)
 import Language.Drasil.Space (Space(..))
 import Language.Drasil.Expr.Extract hiding (vars)
 import Language.Drasil.CodeSpec hiding (codeSpec, Mod(..))
 import qualified Language.Drasil.CodeSpec as CS (Mod(..))
 import Language.Drasil.DataDesc
+import Language.Drasil.Classes (HasUID, HasSymbol)
 
 import Prelude hiding (log, exp, const)
 import Data.List (intersperse, (\\), stripPrefix)
@@ -99,7 +99,7 @@ generateCode ch g =
             (Options Nothing Nothing Nothing (Just "Code"))
             (toAbsCode prog modules)
           setCurrentDirectory workingDir) (lang $ ch)
-  where prog = programName $ program $ codeSpec g
+  where prog = case codeSpec g of { CodeSpec {program = pp} -> programName pp }
         modules = runReader genModules g
 
 genModules :: Reader State [Module]
@@ -470,7 +470,7 @@ convExpr (Case l)      = doit l -- FIXME this is sub-optimal
     doit [(e,_)] = convExpr e -- should always be the else clause
     doit ((e,cond):xs) = liftM3 Condi (convExpr cond) (convExpr e) (convExpr (Case xs))
 convExpr (Matrix _)    = error "convExpr: Matrix"
-convExpr (EOp _)       = error "convExpr: EOp"
+convExpr (Operator _ _ _) = error "convExpr: Operator"
 convExpr (IsIn _ _)    = error "convExpr: IsIn"
 convExpr (RealI c ri)  = do
   g <- ask
@@ -479,23 +479,23 @@ convExpr (RealI c ri)  = do
 lookupC :: HasSymbolTable s => s -> UID -> QuantityDict
 lookupC sm c = symbLookup c $ sm^.symbolTable
 
-renderC :: (Chunk c, HasSymbol c) => (c, [Constraint]) -> [Expr]
+renderC :: (HasUID c, HasSymbol c) => (c, [Constraint]) -> [Expr]
 renderC (u, l) = map (renderC' u) l
 
-renderC' :: (Chunk c, HasSymbol c) => c -> Constraint -> Expr
+renderC' :: (HasUID c, HasSymbol c) => c -> Constraint -> Expr
 renderC' s (Range _ rr)          = renderRealInt s rr
 renderC' s (EnumeratedReal _ rr) = IsIn (sy s) (DiscreteD rr)
 renderC' s (EnumeratedStr _ rr)  = IsIn (sy s) (DiscreteS rr)
 
-renderRealInt :: (Chunk c, HasSymbol c) => c -> RealInterval -> Expr
-renderRealInt s (Bounded (Inc a) (Inc b)) = (a $<= sy s) $&& (sy s $<= b)
-renderRealInt s (Bounded (Inc a) (Exc b)) = (a $<= sy s) $&& (sy s $<  b)
-renderRealInt s (Bounded (Exc a) (Inc b)) = (a $<  sy s) $&& (sy s $<= b)
-renderRealInt s (Bounded (Exc a) (Exc b)) = (a $<  sy s) $&& (sy s $<  b)
-renderRealInt s (UpTo (Inc a))    = sy s $<= a
-renderRealInt s (UpTo (Exc a))    = sy s $< a
-renderRealInt s (UpFrom (Inc a))  = sy s $>= a
-renderRealInt s (UpFrom (Exc a))  = sy s $>  a
+renderRealInt :: (HasUID c, HasSymbol c) => c -> RealInterval Expr Expr -> Expr
+renderRealInt s (Bounded (Inc,a) (Inc,b)) = (a $<= sy s) $&& (sy s $<= b)
+renderRealInt s (Bounded (Inc,a) (Exc,b)) = (a $<= sy s) $&& (sy s $<  b)
+renderRealInt s (Bounded (Exc,a) (Inc,b)) = (a $<  sy s) $&& (sy s $<= b)
+renderRealInt s (Bounded (Exc,a) (Exc,b)) = (a $<  sy s) $&& (sy s $<  b)
+renderRealInt s (UpTo (Inc,a))    = sy s $<= a
+renderRealInt s (UpTo (Exc,a))    = sy s $< a
+renderRealInt s (UpFrom (Inc,a))  = sy s $>= a
+renderRealInt s (UpFrom (Exc,a))  = sy s $>  a
 
 unop :: UFunc -> (Value -> Value)
 unop E.Sqrt = (#/^)

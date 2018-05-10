@@ -9,8 +9,8 @@ module Language.Drasil.Chunk.PhysSystDesc
   , refAddr
   ) where
 
-import Language.Drasil.Chunk
-import Language.Drasil.Chunk.Attribute
+import Language.Drasil.Classes (HasUID(uid), HasAttributes(attributes))
+import Language.Drasil.Chunk.Attribute.Core (Attributes)
 import Language.Drasil.Spec (Sentence)
 import Language.Drasil.RefTypes (RefAdd)
 
@@ -25,10 +25,9 @@ data PhysSystDesc = PSD
 
 makeLenses ''PhysSystDesc
 
-instance Chunk PhysSystDesc where uid = did
+instance HasUID PhysSystDesc        where uid = did
 instance HasAttributes PhysSystDesc where attributes = attribs
-instance Eq PhysSystDesc where 
-  a == b = a ^. uid == b ^. uid
+instance Eq PhysSystDesc            where a == b = a ^. uid == b ^. uid
   
 -- | PhysSystDesc smart constructor (has no explicit 'Attributes')
 psd :: String -> Sentence -> RefAdd -> PhysSystDesc

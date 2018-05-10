@@ -6,6 +6,7 @@
 <title>
 Software Requirements Specification for Slope Stability Analysis
 </title>
+<meta charset="utf-8">
 </head>
 <body>
 <div class="title">
@@ -15,24 +16,24 @@ Software Requirements Specification for Slope Stability Analysis
 </div>
 <div class="author">
 <h2>
-Henry Frankis
+HenryFrankis
 </h2>
 </div>
 <a id="Sec:RefMat">
 <div class="section">
-<h2>
+<h1>
 Reference Material
-</h2>
+</h1>
 <p class="paragraph">
 This section records information for easy reference.
 </p>
 <a id="Sec:ToU">
 <div class="subsection">
-<h3>
+<h2>
 Table of Units
-</h3>
+</h2>
 <p class="paragraph">
-The unit system used throughout is SI (Syst&egrave;me International d'Unit&eacute;s). In addition to the basic units, several derived units are also used. For each unit, the table lists the symbol, a description and the SI name.
+The unit system used throughout is SI (Système International d'Unités). In addition to the basic units, several derived units are also used. For each unit, the table lists the symbol, a description and the SI name.
 </p>
 <a id="Table:ToU">
 <table class="table">
@@ -82,9 +83,9 @@ pressure (pascal)
 </a>
 <a id="Sec:ToS">
 <div class="subsection">
-<h3>
+<h2>
 Table of Symbols
-</h3>
+</h2>
 <p class="paragraph">
 The table that follows summarizes the symbols used in this document along with their units. Throughout the document, values with a subscript <em>i</em> implies that the value will be taken at and analyzed at a slice or slice interface composing the total slip mass.
 </p>
@@ -780,7 +781,7 @@ Angle: surface of the mass relative to the horizontal for slice index i
 Dry Unit Weight: The weight of a dry soil/ground layer divided by the volume of the layer.
 </td>
 <td>
-N/(m<sup>3</sup>)
+N/m<sup>3</sup>
 </td>
 </tr>
 <tr>
@@ -791,7 +792,7 @@ N/(m<sup>3</sup>)
 Saturated Unit Weight: The weight of saturated soil/ground layer divided by the volume of the layer.
 </td>
 <td>
-N/(m<sup>3</sup>)
+N/m<sup>3</sup>
 </td>
 </tr>
 <tr>
@@ -802,7 +803,7 @@ N/(m<sup>3</sup>)
 Unit Weight of Water: The weight of one cubic meter of water.
 </td>
 <td>
-N/(m<sup>3</sup>)
+N/m<sup>3</sup>
 </td>
 </tr>
 <tr>
@@ -1042,9 +1043,9 @@ m
 </a>
 <a id="Sec:TAbbAcc">
 <div class="subsection">
-<h3>
+<h2>
 Abbreviations and Acronyms
-</h3>
+</h2>
 <a id="Table:TAbbAcc">
 <table class="table">
 <tr>
@@ -1159,9 +1160,9 @@ Typical Uncertainty
 </a>
 <a id="Sec:Intro">
 <div class="section">
-<h2>
+<h1>
 Introduction
-</h2>
+</h1>
 <p class="paragraph">
 A slope of geological mass, composed of soil and rock, is subject to the influence of gravity on the mass. For an unstable slope this can cause instability in the form of soil/rock movement. The effects of soil/rock movement can range from inconvenient to seriously hazardous, resulting in signifcant life and economic losses. Slope stability is of interest both when analyzing natural slopes, and when designing an excavated slope. Slope stability analysis is the assessment of the safety of a slope, identifying the surface most likely to experience slip and an index of its relative stability known as the factor of safety.
 </p>
@@ -1170,9 +1171,9 @@ The following section provides an overview of the Software Requirements Specific
 </p>
 <a id="Sec:DocPurpose">
 <div class="subsection">
-<h3>
+<h2>
 Purpose of Document
-</h3>
+</h2>
 <p class="paragraph">
 The SSA program determines the critical slip surface, and its respective factor of safety as a method of assessing the stability of a slope design. The program is intended to be used as an educational tool for introducing slope stability issues, and will facilitate the analysis and design of a safe slope.
 </p>
@@ -1183,9 +1184,9 @@ This document will be used as a starting point for subsequent development phases
 </a>
 <a id="Sec:ReqsScope">
 <div class="subsection">
-<h3>
+<h2>
 Scope of Requirements
-</h3>
+</h2>
 <p class="paragraph">
 The scope of the requirements includes stability analysis of a 2 dimensional slope, composed of homogeneous soil layers. Given the appropriate inputs, the code for SSA is intended to identify the most likely failure surface within the possible input range, and find the factor of safety for the slope as well as displacement of soil that will occur on the slope.
 </p>
@@ -1193,9 +1194,9 @@ The scope of the requirements includes stability analysis of a 2 dimensional slo
 </a>
 <a id="Sec:ReaderChars">
 <div class="subsection">
-<h3>
+<h2>
 Characteristics of Intended Reader
-</h3>
+</h2>
 <p class="paragraph">
 Reviewers of this documentation should have a strong knowledge in solid mechanics. The reviewers should also have an understanding of undergraduate level 4 physics. The users of SSA can have a lower level of expertise, as explained in <a href=#Sec:UserChars>User Characteristics</a>.
 </p>
@@ -1203,9 +1204,9 @@ Reviewers of this documentation should have a strong knowledge in solid mechanic
 </a>
 <a id="Sec:DocOrg">
 <div class="subsection">
-<h3>
+<h2>
 Organization of Document
-</h3>
+</h2>
 <p class="paragraph">
 The organization of this document follows the template for an SRS for scientific computing software proposed by Koothoor as well as Smith and Lai. The presentation follows the standard pattern of presenting goals, theories, definitions, and assumptions. For readers that would like a more bottom up approach, they can start reading the instance models in <a href=#Sec:IMs>Instance Models</a> and trace back to find any additional information they require.
 </p>
@@ -1218,17 +1219,17 @@ The goal statements are refined to the theoretical models, and the theoretical m
 </a>
 <a id="Sec:GenSysDesc">
 <div class="section">
-<h2>
+<h1>
 General System Description
-</h2>
+</h1>
 <p class="paragraph">
 This section provides general information about the system, identifies the interfaces between the system and its environment, and describes the user characteristics and the system constraints.
 </p>
 <a id="Sec:UserChars">
 <div class="subsection">
-<h3>
+<h2>
 User Characteristics
-</h3>
+</h2>
 <p class="paragraph">
 The end user of SSA should have an understanding of undergraduate Level 1 Calculus and Physics, and be familiar with soil and material properties.
 </p>
@@ -1236,9 +1237,9 @@ The end user of SSA should have an understanding of undergraduate Level 1 Calcul
 </a>
 <a id="Sec:SysConstraints">
 <div class="subsection">
-<h3>
+<h2>
 System Constraints
-</h3>
+</h2>
 <p class="paragraph">
 There are no system constraints.
 </p>
@@ -1248,25 +1249,25 @@ There are no system constraints.
 </a>
 <a id="Sec:SpecSystDesc">
 <div class="section">
-<h2>
+<h1>
 Specific System Description
-</h2>
+</h1>
 <p class="paragraph">
 This section first presents the problem description, which gives a high-level view of the problem to be solved. This is followed by the solution characteristics specification, which presents the assumptions, theories, definitions and finally the instance models that model the slope.
 </p>
 <a id="Sec:ProbDesc">
 <div class="subsection">
-<h3>
+<h2>
 Problem Description
-</h3>
+</h2>
 <p class="paragraph">
 SSA is a computer program developed to evaluate the factor of safety of a slope's slip surface and to calculate the displacement that the slope will experience.
 </p>
 <a id="Sec:TermDefs">
 <div class="subsubsection">
-<h4>
+<h3>
 Terminology and Definitions
-</h4>
+</h3>
 <p class="paragraph">
 This subsection provides a list of terms that are used in the subsequent sections and their meaning, with the purpose of reducing ambiguity and making it easier to correctly understand the requirements.
 </p>
@@ -1303,9 +1304,9 @@ Plane Strain: The resultant stresses in one of the directions of a 3 dimensional
 </a>
 <a id="Sec:PhysSyst">
 <div class="subsubsection">
-<h4>
+<h3>
 Physical System Description
-</h4>
+</h3>
 <p class="paragraph">
 Analysis of the slope is performed by looking at properties of the slope as a series of slice elements. Some properties are interslice properties, and some are slice or slice base properties. The index convention for referencing which interslice or slice is being used is shown in <a href=#Figure:IndexConvention>Figure:IndexConvention</a>.
 </p>
@@ -1336,9 +1337,9 @@ Forces acting on a slice
 </a>
 <a id="Sec:GoalStmt">
 <div class="subsubsection">
-<h4>
+<h3>
 Goal Statements
-</h4>
+</h3>
 <p class="paragraph">
 Given the geometry of the water table, the geometry of the layers composing the plane of a slope, and the material properties of the layers, the goal statements are:
 </p>
@@ -1359,17 +1360,17 @@ GS3: Determine the displacement of the slope.
 </a>
 <a id="Sec:SolCharSpec">
 <div class="subsection">
-<h3>
+<h2>
 Solution Characteristics Specification
-</h3>
+</h2>
 <p class="paragraph">
 The instance models that govern SSA are presented in <a href=#Sec:IMs>Instance Models</a>. The information to understand the meaning of the instance models and their derivation is also presented, so that the instance models can be verified.
 </p>
 <a id="Sec:Assumps">
 <div class="subsubsection">
-<h4>
+<h3>
 Assumptions
-</h4>
+</h3>
 <p class="paragraph">
 This section simplifies the original problem and helps in developing the theoretical model by filling in the missing information for the physical system. The numbers given in the square brackets refer to the Theoretical Models [<a href=#Sec:TMs>Theoretical Models</a>], General Definitions [<a href=#Sec:GDs>General Definitions</a>], Data Definitions [<a href=#Sec:DDs>Data Definitions</a>], Instance Models [<a href=#Sec:IMs>Instance Models</a>], or Likely Changes [<a href=#Sec:LCs>Likely Changes</a>], in which the respective assumption is used.
 </p>
@@ -1409,24 +1410,14 @@ A10: The surface and base of a slice between interslice nodes are approximated a
 </a>
 <a id="Sec:TMs">
 <div class="subsubsection">
-<h4>
+<h3>
 Theoretical Models
-</h4>
+</h3>
 <p class="paragraph">
 This section focuses on the general equations and laws that SSA is based on.
 </p>
 <a id="T:fs.rc">
 <table class="tdefn">
-<tr>
-<th>
-Number
-</th>
-<td>
-<p class="paragraph">
-<b>T</b>
-</p>
-</td>
-</tr>
 <tr>
 <th>
 Label
@@ -1444,6 +1435,7 @@ Equation
 <td>
 <a id="">
 <div class="equation">
+<p class="paragraph">
 <em>FS = <div class="fraction">
 <span class="fup">
 P
@@ -1452,6 +1444,7 @@ P
 S
 </span>
 </div></em>
+</p>
 </div>
 </a>
 </td>
@@ -1472,16 +1465,6 @@ The stability metric of the slope, known as the factor of safety (<em>FS</em>), 
 <table class="tdefn">
 <tr>
 <th>
-Number
-</th>
-<td>
-<p class="paragraph">
-<b>T</b>
-</p>
-</td>
-</tr>
-<tr>
-<th>
 Label
 </th>
 <td>
@@ -1497,7 +1480,9 @@ Equation
 <td>
 <a id="">
 <div class="equation">
+<p class="paragraph">
 <em>&sum;F<sub>x</sub> = &sum;F<sub>y</sub> = &sum;M = 0</em>
+</p>
 </div>
 </a>
 </td>
@@ -1518,16 +1503,6 @@ For a body in static equilibrium, the net forces and net moments acting on the b
 <table class="tdefn">
 <tr>
 <th>
-Number
-</th>
-<td>
-<p class="paragraph">
-<b>T</b>
-</p>
-</td>
-</tr>
-<tr>
-<th>
 Label
 </th>
 <td>
@@ -1543,7 +1518,9 @@ Equation
 <td>
 <a id="">
 <div class="equation">
+<p class="paragraph">
 <em>&tau; = &sigma;&#8239;tan(&phiv;&prime;)&plus;c&prime;</em>
+</p>
 </div>
 </a>
 </td>
@@ -1564,16 +1541,6 @@ For a soil under stress it will exert a shear resistive strength based on the Co
 <table class="tdefn">
 <tr>
 <th>
-Number
-</th>
-<td>
-<p class="paragraph">
-<b>T</b>
-</p>
-</td>
-</tr>
-<tr>
-<th>
 Label
 </th>
 <td>
@@ -1589,7 +1556,9 @@ Equation
 <td>
 <a id="">
 <div class="equation">
+<p class="paragraph">
 <em>&sigma; = &sigma;&minus;&mu;</em>
+</p>
 </div>
 </a>
 </td>
@@ -1610,16 +1579,6 @@ Description
 <table class="tdefn">
 <tr>
 <th>
-Number
-</th>
-<td>
-<p class="paragraph">
-<b>T</b>
-</p>
-</td>
-</tr>
-<tr>
-<th>
 Label
 </th>
 <td>
@@ -1635,7 +1594,9 @@ Equation
 <td>
 <a id="">
 <div class="equation">
+<p class="paragraph">
 <em>F = K&#8239;&delta;</em>
+</p>
 </div>
 </a>
 </td>
@@ -1656,24 +1617,14 @@ Description Stiffness <em>K</em> is the resistance a body others to deformation 
 </a>
 <a id="Sec:GDs">
 <div class="subsubsection">
-<h4>
+<h3>
 General Definitions
-</h4>
+</h3>
 <p class="paragraph">
 This section collects the laws and equations that will be used in deriving the data definitions, which in turn are used to build the instance models.
 </p>
 <a id="T:normForcEq">
 <table class="tdefn">
-<tr>
-<th>
-Number
-</th>
-<td>
-<p class="paragraph">
-<b>T</b>
-</p>
-</td>
-</tr>
 <tr>
 <th>
 Label
@@ -1691,7 +1642,9 @@ Equation
 <td>
 <a id="">
 <div class="equation">
+<p class="paragraph">
 <em>N<sub>i</sub> = (W<sub>i</sub>&minus;X<sub>i&minus;1</sub>&plus;X<sub>i</sub>&plus;U<sub>t,i</sub>&#8239;cos(&beta;<sub>i</sub>)&plus;Q<sub>i</sub>&#8239;cos(&omega;<sub>i</sub>))&#8239;cos(&alpha;<sub>i</sub>)&plus;(&minus;K<sub>c</sub>&#8239;W<sub>i</sub>&minus;E<sub>i</sub>&plus;E<sub>i&minus;1</sub>&minus;H<sub>i</sub>&plus;H<sub>i&minus;1</sub>&plus;U<sub>t,i</sub>&#8239;sin(&beta;<sub>i</sub>)&plus;Q<sub>i</sub>&#8239;sin(&omega;<sub>i</sub>))&#8239;sin(&alpha;<sub>i</sub>)</em>
+</p>
 </div>
 </a>
 </td>
@@ -1712,16 +1665,6 @@ For a slice of mass in the slope the force equilibrium to satisfy T2 in the dire
 <table class="tdefn">
 <tr>
 <th>
-Number
-</th>
-<td>
-<p class="paragraph">
-<b>T</b>
-</p>
-</td>
-</tr>
-<tr>
-<th>
 Label
 </th>
 <td>
@@ -1737,7 +1680,9 @@ Equation
 <td>
 <a id="">
 <div class="equation">
+<p class="paragraph">
 <em>S<sub>i</sub> = (W<sub>i</sub>&minus;X<sub>i&minus;1</sub>&plus;X<sub>i</sub>&plus;U<sub>t,i</sub>&#8239;cos(&beta;<sub>i</sub>)&plus;Q<sub>i</sub>&#8239;cos(&omega;<sub>i</sub>))&#8239;sin(&alpha;<sub>i</sub>)&plus;(&minus;K<sub>c</sub>&#8239;W<sub>i</sub>&minus;E<sub>i</sub>&plus;E<sub>i&minus;1</sub>&minus;H<sub>i</sub>&plus;H<sub>i&minus;1</sub>&plus;U<sub>t,i</sub>&#8239;sin(&beta;<sub>i</sub>)&plus;Q<sub>i</sub>&#8239;sin(&omega;<sub>i</sub>))&#8239;cos(&alpha;<sub>i</sub>)</em>
+</p>
 </div>
 </a>
 </td>
@@ -1758,16 +1703,6 @@ For a slice of mass in the slope the force equilibrium to satisfy T2 in the dire
 <table class="tdefn">
 <tr>
 <th>
-Number
-</th>
-<td>
-<p class="paragraph">
-<b>T</b>
-</p>
-</td>
-</tr>
-<tr>
-<th>
 Label
 </th>
 <td>
@@ -1783,7 +1718,9 @@ Equation
 <td>
 <a id="">
 <div class="equation">
+<p class="paragraph">
 <em>P<sub>i</sub> = N&prime;<sub>i</sub>&#8239;tan(&phiv;&prime;<sub>i</sub>)&plus;c&prime;<sub>i</sub>&#8239;b<sub>i</sub>&#8239;sec(&alpha;<sub>i</sub>)</em>
+</p>
 </div>
 </a>
 </td>
@@ -1804,16 +1741,6 @@ The Mohr-Coulomb resistive shear strength of a slice <em>&tau;</em> from T3 is m
 <table class="tdefn">
 <tr>
 <th>
-Number
-</th>
-<td>
-<p class="paragraph">
-<b>T</b>
-</p>
-</td>
-</tr>
-<tr>
-<th>
 Label
 </th>
 <td>
@@ -1829,6 +1756,7 @@ Equation
 <td>
 <a id="">
 <div class="equation">
+<p class="paragraph">
 <em>S<sub>i</sub> = <div class="fraction">
 <span class="fup">
 P<sub>i</sub>
@@ -1844,6 +1772,7 @@ N&prime;<sub>i</sub>&#8239;tan(&phiv;&prime;<sub>i</sub>)&plus;c&prime;<sub>i</s
 FS
 </span>
 </div></em>
+</p>
 </div>
 </a>
 </td>
@@ -1864,16 +1793,6 @@ From the definition of the factor of safety in T1, and the new definition of <em
 <table class="tdefn">
 <tr>
 <th>
-Number
-</th>
-<td>
-<p class="paragraph">
-<b>T</b>
-</p>
-</td>
-</tr>
-<tr>
-<th>
 Label
 </th>
 <td>
@@ -1889,7 +1808,9 @@ Equation
 <td>
 <a id="">
 <div class="equation">
+<p class="paragraph">
 <em>X = &lambda;&#8239;f&#8239;E</em>
+</p>
 </div>
 </a>
 </td>
@@ -1910,16 +1831,6 @@ The assumption for the Morgenstern Price method (A5) that the interslice shear f
 <table class="tdefn">
 <tr>
 <th>
-Number
-</th>
-<td>
-<p class="paragraph">
-<b>T</b>
-</p>
-</td>
-</tr>
-<tr>
-<th>
 Label
 </th>
 <td>
@@ -1935,6 +1846,7 @@ Equation
 <td>
 <a id="">
 <div class="equation">
+<p class="paragraph">
 <em>0 = &minus;E<sub>i</sub>&#8239;(z<sub>i</sub>&minus;<div class="fraction">
 <span class="fup">
 b<sub>i</sub>
@@ -1978,6 +1890,7 @@ K<sub>c</sub>&#8239;W<sub>i</sub>&#8239;h<sub>i</sub>
 2
 </span>
 </div>&minus;U<sub>t,i</sub>&#8239;sin(&beta;<sub>i</sub>)&#8239;h<sub>i</sub>&minus;Q<sub>i</sub>&#8239;sin(&omega;<sub>i</sub>)&#8239;h<sub>i</sub></em>
+</p>
 </div>
 </a>
 </td>
@@ -1998,16 +1911,6 @@ For a slice of mass in the slope the moment equilibrium to satisfy T2 in the dir
 <table class="tdefn">
 <tr>
 <th>
-Number
-</th>
-<td>
-<p class="paragraph">
-<b>T</b>
-</p>
-</td>
-</tr>
-<tr>
-<th>
 Label
 </th>
 <td>
@@ -2023,7 +1926,9 @@ Equation
 <td>
 <a id="">
 <div class="equation">
+<p class="paragraph">
 <em>F<sub>x,i</sub> = &minus;&Delta;H<sub>i</sub>&minus;K<sub>c</sub>&#8239;W<sub>i</sub>&minus;U<sub>b,i</sub>&#8239;sin(&alpha;<sub>i</sub>)&plus;U<sub>t,i</sub>&#8239;sin(&beta;<sub>i</sub>)&plus;Q<sub>i</sub>&#8239;sin(&omega;<sub>i</sub>)</em>
+</p>
 </div>
 </a>
 </td>
@@ -2044,16 +1949,6 @@ Description
 <table class="tdefn">
 <tr>
 <th>
-Number
-</th>
-<td>
-<p class="paragraph">
-<b>T</b>
-</p>
-</td>
-</tr>
-<tr>
-<th>
 Label
 </th>
 <td>
@@ -2069,7 +1964,9 @@ Equation
 <td>
 <a id="">
 <div class="equation">
+<p class="paragraph">
 <em>F<sub>y,i</sub> = &minus;W<sub>i</sub>&plus;U<sub>b,i</sub>&#8239;cos(&alpha;<sub>i</sub>)&minus;U<sub>t,i</sub>&#8239;cos(&beta;<sub>i</sub>)&minus;Q<sub>i</sub>&#8239;cos(&omega;<sub>i</sub>)</em>
+</p>
 </div>
 </a>
 </td>
@@ -2090,16 +1987,6 @@ These equations show the net sum of the forces acting on a slice for the RFEM mo
 <table class="tdefn">
 <tr>
 <th>
-Number
-</th>
-<td>
-<p class="paragraph">
-<b>T</b>
-</p>
-</td>
-</tr>
-<tr>
-<th>
 Label
 </th>
 <td>
@@ -2115,6 +2002,7 @@ Equation
 <td>
 <a id="">
 <div class="equation">
+<p class="paragraph">
 <em><table class="matrix">
 <tr><td>p<sub>i</sub></td></tr>
 <tr><td>p<sub>i</sub></td></tr>
@@ -2125,6 +2013,7 @@ Equation
 <tr><td>&delta;x<sub>i</sub></td></tr>
 <tr><td>&delta;y<sub>i</sub></td></tr>
 </table></em>
+</p>
 </div>
 </a>
 </td>
@@ -2145,16 +2034,6 @@ A 2D component implementation of Hooke's law as seen in T5. <em>&delta;n</em> is
 <table class="tdefn">
 <tr>
 <th>
-Number
-</th>
-<td>
-<p class="paragraph">
-<b>T</b>
-</p>
-</td>
-</tr>
-<tr>
-<th>
 Label
 </th>
 <td>
@@ -2170,6 +2049,7 @@ Equation
 <td>
 <a id="">
 <div class="equation">
+<p class="paragraph">
 <em>&epsilon;<sub>i</sub> = <table class="matrix">
 <tr><td>&delta;u<sub>i</sub></td></tr>
 <tr><td>&delta;v<sub>i</sub></td></tr>
@@ -2183,6 +2063,7 @@ Equation
 <tr><td>&delta;x<sub>i</sub></td></tr>
 <tr><td>&delta;y<sub>i</sub></td></tr>
 </table></em>
+</p>
 </div>
 </a>
 </td>
@@ -2203,24 +2084,14 @@ Vectors describing the displacement of slice <em>i</em>. <em>&delta;</em> is the
 </a>
 <a id="Sec:DDs">
 <div class="subsubsection">
-<h4>
+<h3>
 Data Definitions
-</h4>
+</h3>
 <p class="paragraph">
 This section collects and defines all the data needed to build the instance models. Definitions DD1 to DD8 are the force variables that can be solved by direct analysis of given inputs. The interslice forces DD9 are force variables that must be written in terms of DD1 to DD8 to solve.
 </p>
 <a id="DD:W.i">
 <table class="ddefn">
-<tr>
-<th>
-Number
-</th>
-<td>
-<p class="paragraph">
-<b>DD</b>
-</p>
-</td>
-</tr>
 <tr>
 <th>
 Label
@@ -2248,7 +2119,8 @@ Equation
 <td>
 <a id="">
 <div class="equation">
-<em>W</em> = <em>b<sub>i</sub>&#8239;<span class="casebr">
+<p class="paragraph">
+<em>W = b<sub>i</sub>&#8239;<span class="casebr">
 {
 </span>
 <div class="cases">
@@ -2268,6 +2140,7 @@ y<sub>wt,i</sub>&thinsp;&le;&thinsp;y<sub>slip,i</sub>
 </span>
 </span>
 </div></em>
+</p>
 </div>
 </a>
 </td>
@@ -2278,7 +2151,7 @@ Description
 </th>
 <td>
 <p class="paragraph">
-<em>W</em> is the weight (N)<br /><em>b</em> is the base width of a slice (m)<br /><em>i</em> is the index<br /><em>y<sub>us</sub></em> is the y ordinate (m)<br /><em>y<sub>slip</sub></em> is the y ordinate (m)<br /><em>&gamma;<sub>Sat</sub></em> is the saturated unit weight (N/(m<sup>3</sup>))<br /><em>y<sub>wt</sub></em> is the y ordinate (m)<br /><em>&gamma;</em> is the dry unit weight (N/(m<sup>3</sup>))
+<em>W</em> is the weight (N)<br /><em>b</em> is the base width of a slice (m)<br /><em>i</em> is the index<br /><em>y<sub>us</sub></em> is the y ordinate (m)<br /><em>y<sub>slip</sub></em> is the y ordinate (m)<br /><em>&gamma;<sub>Sat</sub></em> is the saturated unit weight (N/m<sup>3</sup>)<br /><em>y<sub>wt</sub></em> is the y ordinate (m)<br /><em>&gamma;</em> is the dry unit weight (N/m<sup>3</sup>)
 </p>
 </td>
 </tr>
@@ -2286,16 +2159,6 @@ Description
 </a>
 <a id="DD:U.b,i">
 <table class="ddefn">
-<tr>
-<th>
-Number
-</th>
-<td>
-<p class="paragraph">
-<b>DD</b>
-</p>
-</td>
-</tr>
 <tr>
 <th>
 Label
@@ -2323,7 +2186,8 @@ Equation
 <td>
 <a id="">
 <div class="equation">
-<em>U<sub>b</sub></em> = <em>&#8467;<sub>b,i</sub>&#8239;<span class="casebr">
+<p class="paragraph">
+<em>U<sub>b</sub> = &#8467;<sub>b,i</sub>&#8239;<span class="casebr">
 {
 </span>
 <div class="cases">
@@ -2338,6 +2202,7 @@ y<sub>wt,i</sub>&thinsp;&le;&thinsp;y<sub>slip,i</sub>
 </span>
 </span>
 </div></em>
+</p>
 </div>
 </a>
 </td>
@@ -2348,7 +2213,7 @@ Description
 </th>
 <td>
 <p class="paragraph">
-<em>U<sub>b</sub></em> is the base hydrostatic force (N)<br /><em>&#8467;<sub>b</sub></em> is the total base length of a slice (m)<br /><em>i</em> is the index<br /><em>y<sub>wt</sub></em> is the y ordinate (m)<br /><em>y<sub>slip</sub></em> is the y ordinate (m)<br /><em>&gamma;<sub>w</sub></em> is the unit weight of water (N/(m<sup>3</sup>))
+<em>U<sub>b</sub></em> is the base hydrostatic force (N)<br /><em>&#8467;<sub>b</sub></em> is the total base length of a slice (m)<br /><em>i</em> is the index<br /><em>y<sub>wt</sub></em> is the y ordinate (m)<br /><em>y<sub>slip</sub></em> is the y ordinate (m)<br /><em>&gamma;<sub>w</sub></em> is the unit weight of water (N/m<sup>3</sup>)
 </p>
 </td>
 </tr>
@@ -2356,16 +2221,6 @@ Description
 </a>
 <a id="DD:U.t,i">
 <table class="ddefn">
-<tr>
-<th>
-Number
-</th>
-<td>
-<p class="paragraph">
-<b>DD</b>
-</p>
-</td>
-</tr>
 <tr>
 <th>
 Label
@@ -2393,7 +2248,8 @@ Equation
 <td>
 <a id="">
 <div class="equation">
-<em>U<sub>t</sub></em> = <em>&#8467;<sub>s,i</sub>&#8239;<span class="casebr">
+<p class="paragraph">
+<em>U<sub>t</sub> = &#8467;<sub>s,i</sub>&#8239;<span class="casebr">
 {
 </span>
 <div class="cases">
@@ -2408,6 +2264,7 @@ y<sub>wt,i</sub>&thinsp;&le;&thinsp;y<sub>us,i</sub>
 </span>
 </span>
 </div></em>
+</p>
 </div>
 </a>
 </td>
@@ -2418,7 +2275,7 @@ Description
 </th>
 <td>
 <p class="paragraph">
-<em>U<sub>t</sub></em> is the surface hydrostatic force (N)<br /><em>&#8467;<sub>s</sub></em> is the length of an interslice surface (m)<br /><em>i</em> is the index<br /><em>y<sub>wt</sub></em> is the y ordinate (m)<br /><em>y<sub>us</sub></em> is the y ordinate (m)<br /><em>&gamma;<sub>w</sub></em> is the unit weight of water (N/(m<sup>3</sup>))
+<em>U<sub>t</sub></em> is the surface hydrostatic force (N)<br /><em>&#8467;<sub>s</sub></em> is the length of an interslice surface (m)<br /><em>i</em> is the index<br /><em>y<sub>wt</sub></em> is the y ordinate (m)<br /><em>y<sub>us</sub></em> is the y ordinate (m)<br /><em>&gamma;<sub>w</sub></em> is the unit weight of water (N/m<sup>3</sup>)
 </p>
 </td>
 </tr>
@@ -2426,16 +2283,6 @@ Description
 </a>
 <a id="DD:H.i">
 <table class="ddefn">
-<tr>
-<th>
-Number
-</th>
-<td>
-<p class="paragraph">
-<b>DD</b>
-</p>
-</td>
-</tr>
 <tr>
 <th>
 Label
@@ -2463,7 +2310,8 @@ Equation
 <td>
 <a id="">
 <div class="equation">
-<em>H</em> = <em><span class="casebr">
+<p class="paragraph">
+<em>H = <span class="casebr">
 {
 </span>
 <div class="cases">
@@ -2497,6 +2345,7 @@ y<sub>wt,i</sub>&thinsp;&le;&thinsp;y<sub>slip,i</sub>
 </span>
 </span>
 </div></em>
+</p>
 </div>
 </a>
 </td>
@@ -2507,7 +2356,7 @@ Description
 </th>
 <td>
 <p class="paragraph">
-<em>H</em> is the interslice water force (N)<br /><em>y<sub>us</sub></em> is the y ordinate (m)<br /><em>i</em> is the index<br /><em>y<sub>slip</sub></em> is the y ordinate (m)<br /><em>&gamma;<sub>Sat</sub></em> is the saturated unit weight (N/(m<sup>3</sup>))<br /><em>y<sub>wt</sub></em> is the y ordinate (m)
+<em>H</em> is the interslice water force (N)<br /><em>y<sub>us</sub></em> is the y ordinate (m)<br /><em>i</em> is the index<br /><em>y<sub>slip</sub></em> is the y ordinate (m)<br /><em>&gamma;<sub>Sat</sub></em> is the saturated unit weight (N/m<sup>3</sup>)<br /><em>y<sub>wt</sub></em> is the y ordinate (m)
 </p>
 </td>
 </tr>
@@ -2515,16 +2364,6 @@ Description
 </a>
 <a id="DD:alpha.i">
 <table class="ddefn">
-<tr>
-<th>
-Number
-</th>
-<td>
-<p class="paragraph">
-<b>DD</b>
-</p>
-</td>
-</tr>
 <tr>
 <th>
 Label
@@ -2552,7 +2391,8 @@ Equation
 <td>
 <a id="">
 <div class="equation">
-<em>&alpha;</em> = <em><div class="fraction">
+<p class="paragraph">
+<em>&alpha; = <div class="fraction">
 <span class="fup">
 y<sub>slip,i</sub>&minus;y<sub>slip,i&minus;1</sub>
 </span>
@@ -2560,6 +2400,7 @@ y<sub>slip,i</sub>&minus;y<sub>slip,i&minus;1</sub>
 x<sub>slip,i</sub>&minus;x<sub>slip,i&minus;1</sub>
 </span>
 </div></em>
+</p>
 </div>
 </a>
 </td>
@@ -2580,16 +2421,6 @@ Description
 <table class="ddefn">
 <tr>
 <th>
-Number
-</th>
-<td>
-<p class="paragraph">
-<b>DD</b>
-</p>
-</td>
-</tr>
-<tr>
-<th>
 Label
 </th>
 <td>
@@ -2615,7 +2446,8 @@ Equation
 <td>
 <a id="">
 <div class="equation">
-<em>&beta;</em> = <em><div class="fraction">
+<p class="paragraph">
+<em>&beta; = <div class="fraction">
 <span class="fup">
 y<sub>us,i</sub>&minus;y<sub>us,i&minus;1</sub>
 </span>
@@ -2623,6 +2455,7 @@ y<sub>us,i</sub>&minus;y<sub>us,i&minus;1</sub>
 x<sub>us,i</sub>&minus;x<sub>us,i&minus;1</sub>
 </span>
 </div></em>
+</p>
 </div>
 </a>
 </td>
@@ -2641,16 +2474,6 @@ Description
 </a>
 <a id="DD:b.i">
 <table class="ddefn">
-<tr>
-<th>
-Number
-</th>
-<td>
-<p class="paragraph">
-<b>DD</b>
-</p>
-</td>
-</tr>
 <tr>
 <th>
 Label
@@ -2678,7 +2501,9 @@ Equation
 <td>
 <a id="">
 <div class="equation">
-<em>b</em> = <em>x<sub>slip,i</sub>&minus;x<sub>slip,i&minus;1</sub></em>
+<p class="paragraph">
+<em>b = x<sub>slip,i</sub>&minus;x<sub>slip,i&minus;1</sub></em>
+</p>
 </div>
 </a>
 </td>
@@ -2697,16 +2522,6 @@ Description
 </a>
 <a id="DD:l.b,i">
 <table class="ddefn">
-<tr>
-<th>
-Number
-</th>
-<td>
-<p class="paragraph">
-<b>DD</b>
-</p>
-</td>
-</tr>
 <tr>
 <th>
 Label
@@ -2734,7 +2549,9 @@ Equation
 <td>
 <a id="">
 <div class="equation">
-<em>&#8467;<sub>b</sub></em> = <em>b<sub>i</sub>&#8239;sec(&alpha;<sub>i</sub>)</em>
+<p class="paragraph">
+<em>&#8467;<sub>b</sub> = b<sub>i</sub>&#8239;sec(&alpha;<sub>i</sub>)</em>
+</p>
 </div>
 </a>
 </td>
@@ -2753,16 +2570,6 @@ Description
 </a>
 <a id="DD:l.s,i">
 <table class="ddefn">
-<tr>
-<th>
-Number
-</th>
-<td>
-<p class="paragraph">
-<b>DD</b>
-</p>
-</td>
-</tr>
 <tr>
 <th>
 Label
@@ -2790,7 +2597,9 @@ Equation
 <td>
 <a id="">
 <div class="equation">
-<em>&#8467;<sub>s</sub></em> = <em>b<sub>i</sub>&#8239;sec(&beta;<sub>i</sub>)</em>
+<p class="paragraph">
+<em>&#8467;<sub>s</sub> = b<sub>i</sub>&#8239;sec(&beta;<sub>i</sub>)</em>
+</p>
 </div>
 </a>
 </td>
@@ -2809,16 +2618,6 @@ Description
 </a>
 <a id="DD:K.c">
 <table class="ddefn">
-<tr>
-<th>
-Number
-</th>
-<td>
-<p class="paragraph">
-<b>DD</b>
-</p>
-</td>
-</tr>
 <tr>
 <th>
 Label
@@ -2846,7 +2645,9 @@ Equation
 <td>
 <a id="">
 <div class="equation">
-<em>K<sub>c</sub></em> = <em>K<sub>c</sub>&#8239;W<sub>i</sub></em>
+<p class="paragraph">
+<em>K<sub>c</sub> = K<sub>c</sub>&#8239;W<sub>i</sub></em>
+</p>
 </div>
 </a>
 </td>
@@ -2865,16 +2666,6 @@ Description
 </a>
 <a id="DD:Q.i">
 <table class="ddefn">
-<tr>
-<th>
-Number
-</th>
-<td>
-<p class="paragraph">
-<b>DD</b>
-</p>
-</td>
-</tr>
 <tr>
 <th>
 Label
@@ -2902,7 +2693,9 @@ Equation
 <td>
 <a id="">
 <div class="equation">
-<em>Q</em> = <em>Q<sub>i</sub>&#8239;&omega;<sub>i</sub></em>
+<p class="paragraph">
+<em>Q = Q<sub>i</sub>&#8239;&omega;<sub>i</sub></em>
+</p>
 </div>
 </a>
 </td>
@@ -2921,16 +2714,6 @@ Description
 </a>
 <a id="DD:X.i">
 <table class="ddefn">
-<tr>
-<th>
-Number
-</th>
-<td>
-<p class="paragraph">
-<b>DD</b>
-</p>
-</td>
-</tr>
 <tr>
 <th>
 Label
@@ -2958,7 +2741,9 @@ Equation
 <td>
 <a id="">
 <div class="equation">
-<em>X</em> = <em>&lambda;&#8239;f<sub>i</sub>&#8239;E<sub>i</sub></em>
+<p class="paragraph">
+<em>X = &lambda;&#8239;f<sub>i</sub>&#8239;E<sub>i</sub></em>
+</p>
 </div>
 </a>
 </td>
@@ -2977,16 +2762,6 @@ Description
 </a>
 <a id="DD:R.i">
 <table class="ddefn">
-<tr>
-<th>
-Number
-</th>
-<td>
-<p class="paragraph">
-<b>DD</b>
-</p>
-</td>
-</tr>
 <tr>
 <th>
 Label
@@ -3014,7 +2789,9 @@ Equation
 <td>
 <a id="">
 <div class="equation">
-<em>R</em> = <em>((W<sub>i</sub>&plus;U<sub>t,i</sub>&#8239;cos(&beta;<sub>i</sub>)&plus;Q<sub>i</sub>&#8239;cos(&omega;<sub>i</sub>))&#8239;cos(&alpha;<sub>i</sub>)&plus;(&minus;K<sub>c</sub>&#8239;W<sub>i</sub>&minus;&Delta;H<sub>i</sub>&plus;U<sub>t,i</sub>&#8239;sin(&beta;<sub>i</sub>)&plus;Q<sub>i</sub>&#8239;sin(&omega;<sub>i</sub>))&#8239;sin(&alpha;<sub>i</sub>)&minus;U<sub>b,i</sub>)&#8239;tan(&phiv;&prime;<sub>i</sub>)&plus;c&prime;<sub>i</sub>&#8239;b<sub>i</sub>&#8239;sec(&alpha;<sub>i</sub>)</em>
+<p class="paragraph">
+<em>R = ((W<sub>i</sub>&plus;U<sub>t,i</sub>&#8239;cos(&beta;<sub>i</sub>)&plus;Q<sub>i</sub>&#8239;cos(&omega;<sub>i</sub>))&#8239;cos(&alpha;<sub>i</sub>)&plus;(&minus;K<sub>c</sub>&#8239;W<sub>i</sub>&minus;&Delta;H<sub>i</sub>&plus;U<sub>t,i</sub>&#8239;sin(&beta;<sub>i</sub>)&plus;Q<sub>i</sub>&#8239;sin(&omega;<sub>i</sub>))&#8239;sin(&alpha;<sub>i</sub>)&minus;U<sub>b,i</sub>)&#8239;tan(&phiv;&prime;<sub>i</sub>)&plus;c&prime;<sub>i</sub>&#8239;b<sub>i</sub>&#8239;sec(&alpha;<sub>i</sub>)</em>
+</p>
 </div>
 </a>
 </td>
@@ -3059,16 +2836,6 @@ Using <em>N*</em>, a resistive shear force without the influence of interslice f
 <table class="ddefn">
 <tr>
 <th>
-Number
-</th>
-<td>
-<p class="paragraph">
-<b>DD</b>
-</p>
-</td>
-</tr>
-<tr>
-<th>
 Label
 </th>
 <td>
@@ -3094,7 +2861,9 @@ Equation
 <td>
 <a id="">
 <div class="equation">
-<em>T</em> = <em>(W<sub>i</sub>&plus;U<sub>t,i</sub>&#8239;cos(&beta;<sub>i</sub>)&plus;Q<sub>i</sub>&#8239;cos(&omega;<sub>i</sub>))&#8239;sin(&alpha;<sub>i</sub>)&minus;(&minus;K<sub>c</sub>&#8239;W<sub>i</sub>&minus;&Delta;H<sub>i</sub>&plus;U<sub>t,i</sub>&#8239;sin(&beta;<sub>i</sub>)&plus;Q<sub>i</sub>&#8239;sin(&omega;<sub>i</sub>))&#8239;cos(&alpha;<sub>i</sub>)</em>
+<p class="paragraph">
+<em>T = (W<sub>i</sub>&plus;U<sub>t,i</sub>&#8239;cos(&beta;<sub>i</sub>)&plus;Q<sub>i</sub>&#8239;cos(&omega;<sub>i</sub>))&#8239;sin(&alpha;<sub>i</sub>)&minus;(&minus;K<sub>c</sub>&#8239;W<sub>i</sub>&minus;&Delta;H<sub>i</sub>&plus;U<sub>t,i</sub>&#8239;sin(&beta;<sub>i</sub>)&plus;Q<sub>i</sub>&#8239;sin(&omega;<sub>i</sub>))&#8239;cos(&alpha;<sub>i</sub>)</em>
+</p>
 </div>
 </a>
 </td>
@@ -3134,16 +2903,6 @@ The values of <em>R</em> and <em>T</em> are now defined completely in terms of t
 <table class="ddefn">
 <tr>
 <th>
-Number
-</th>
-<td>
-<p class="paragraph">
-<b>DD</b>
-</p>
-</td>
-</tr>
-<tr>
-<th>
 Label
 </th>
 <td>
@@ -3169,13 +2928,15 @@ Equation
 <td>
 <a id="">
 <div class="equation">
-<em>p</em> = <em><table class="matrix">
+<p class="paragraph">
+<em>p = <table class="matrix">
 <tr><td>K<sub>st,i</sub></td><td>0</td></tr>
 <tr><td>0</td><td>K<sub>bn,i</sub></td></tr>
 </table>&#8239;<table class="matrix">
 <tr><td>&delta;x<sub>i</sub></td></tr>
 <tr><td>&delta;y<sub>i</sub></td></tr>
 </table></em>
+</p>
 </div>
 </a>
 </td>
@@ -3196,16 +2957,6 @@ Description
 <table class="ddefn">
 <tr>
 <th>
-Number
-</th>
-<td>
-<p class="paragraph">
-<b>DD</b>
-</p>
-</td>
-</tr>
-<tr>
-<th>
 Label
 </th>
 <td>
@@ -3231,13 +2982,15 @@ Equation
 <td>
 <a id="">
 <div class="equation">
-<em>p</em> = <em><table class="matrix">
+<p class="paragraph">
+<em>p = <table class="matrix">
 <tr><td>K<sub>bA,i</sub></td><td>K<sub>bB,i</sub></td></tr>
 <tr><td>K<sub>bB,i</sub></td><td>K<sub>bA,i</sub></td></tr>
 </table>&#8239;<table class="matrix">
 <tr><td>&delta;x<sub>i</sub></td></tr>
 <tr><td>&delta;y<sub>i</sub></td></tr>
 </table></em>
+</p>
 </div>
 </a>
 </td>
@@ -3339,16 +3092,6 @@ A force-displacement relationship for an element <em>i</em> can be written in te
 <table class="ddefn">
 <tr>
 <th>
-Number
-</th>
-<td>
-<p class="paragraph">
-<b>DD</b>
-</p>
-</td>
-</tr>
-<tr>
-<th>
 Label
 </th>
 <td>
@@ -3374,7 +3117,9 @@ Equation
 <td>
 <a id="">
 <div class="equation">
-<em>F</em> = <em>&minus;&#8467;<sub>s,i&minus;1</sub>&#8239;K<sub>sn,i&minus;1</sub>&#8239;&delta;<sub>i&minus;1</sub>&plus;(&#8467;<sub>s,i&minus;1</sub>&#8239;K<sub>sn,i&minus;1</sub>&plus;&#8467;<sub>b,i</sub>&#8239;K<sub>bn,i</sub>&plus;&#8467;<sub>s,i</sub>&#8239;K<sub>sn,i</sub>)&#8239;&delta;<sub>i</sub>&minus;&#8467;<sub>s,i</sub>&#8239;K<sub>sn,i</sub>&#8239;&delta;<sub>i&plus;1</sub></em>
+<p class="paragraph">
+<em>F = &minus;&#8467;<sub>s,i&minus;1</sub>&#8239;K<sub>sn,i&minus;1</sub>&#8239;&delta;<sub>i&minus;1</sub>&plus;(&#8467;<sub>s,i&minus;1</sub>&#8239;K<sub>sn,i&minus;1</sub>&plus;&#8467;<sub>b,i</sub>&#8239;K<sub>bn,i</sub>&plus;&#8467;<sub>s,i</sub>&#8239;K<sub>sn,i</sub>)&#8239;&delta;<sub>i</sub>&minus;&#8467;<sub>s,i</sub>&#8239;K<sub>sn,i</sub>&#8239;&delta;<sub>i&plus;1</sub></em>
+</p>
 </div>
 </a>
 </td>
@@ -3393,16 +3138,6 @@ Description
 </a>
 <a id="DD:K.bt,i">
 <table class="ddefn">
-<tr>
-<th>
-Number
-</th>
-<td>
-<p class="paragraph">
-<b>DD</b>
-</p>
-</td>
-</tr>
 <tr>
 <th>
 Label
@@ -3430,7 +3165,8 @@ Equation
 <td>
 <a id="">
 <div class="equation">
-<em>K<sub>bt</sub></em> = <em><div class="fraction">
+<p class="paragraph">
+<em>K<sub>bt</sub> = <div class="fraction">
 <span class="fup">
 E
 </span>
@@ -3452,6 +3188,7 @@ c&prime;<sub>i</sub>&minus;&sigma;&#8239;tan(&phiv;&prime;<sub>i</sub>)
 |&delta;u|&plus;a
 </span>
 </div></em>
+</p>
 </div>
 </a>
 </td>
@@ -3470,16 +3207,6 @@ Description
 </a>
 <a id="DD:K.bn,i">
 <table class="ddefn">
-<tr>
-<th>
-Number
-</th>
-<td>
-<p class="paragraph">
-<b>DD</b>
-</p>
-</td>
-</tr>
 <tr>
 <th>
 Label
@@ -3507,7 +3234,8 @@ Equation
 <td>
 <a id="">
 <div class="equation">
-<em>K<sub>bn</sub></em> = <em><span class="casebr">
+<p class="paragraph">
+<em>K<sub>bn</sub> = <span class="casebr">
 {
 </span>
 <div class="cases">
@@ -3543,6 +3271,7 @@ E&#8239;(1&minus;&nu;)
 </span>
 </span>
 </div></em>
+</p>
 </div>
 </a>
 </td>
@@ -3563,16 +3292,6 @@ Description
 <table class="ddefn">
 <tr>
 <th>
-Number
-</th>
-<td>
-<p class="paragraph">
-<b>DD</b>
-</p>
-</td>
-</tr>
-<tr>
-<th>
 Label
 </th>
 <td>
@@ -3598,7 +3317,9 @@ Equation
 <td>
 <a id="">
 <div class="equation">
-<em>SpencerFixme1Please</em> = <em>E<sub>i</sub>&plus;E<sub>i&minus;1</sub></em>
+<p class="paragraph">
+<em>SpencerFixme1Please = E<sub>i</sub>&plus;E<sub>i&minus;1</sub></em>
+</p>
 </div>
 </a>
 </td>
@@ -3619,16 +3340,6 @@ Description
 <table class="ddefn">
 <tr>
 <th>
-Number
-</th>
-<td>
-<p class="paragraph">
-<b>DD</b>
-</p>
-</td>
-</tr>
-<tr>
-<th>
 Label
 </th>
 <td>
@@ -3654,7 +3365,9 @@ Equation
 <td>
 <a id="">
 <div class="equation">
-<em>SpencerFixme2Please</em> = <em>H<sub>i</sub>&plus;H<sub>i&minus;1</sub></em>
+<p class="paragraph">
+<em>SpencerFixme2Please = H<sub>i</sub>&plus;H<sub>i&minus;1</sub></em>
+</p>
 </div>
 </a>
 </td>
@@ -3675,9 +3388,9 @@ Description
 </a>
 <a id="Sec:IMs">
 <div class="subsubsection">
-<h4>
+<h3>
 Instance Models
-</h4>
+</h3>
 <p class="paragraph">
 This section transforms the problem defined in <a href=#Sec:ProbDesc>Problem Description</a> into one which is expressed in mathematical terms. It uses concrete symbols defined in <a href=#Sec:DDs>Data Definitions</a> to replace the abstract symbols in the models identified in <a href=#Sec:TMs>Theoretical Models</a> and <a href=#Sec:GDs>General Definitions</a>.
 </p>
@@ -3689,16 +3402,6 @@ The values of the interslice normal force <em>E</em> the interslice normal/shear
 </p>
 <a id="T:fctSfty">
 <table class="tdefn">
-<tr>
-<th>
-Number
-</th>
-<td>
-<p class="paragraph">
-<b>T</b>
-</p>
-</td>
-</tr>
 <tr>
 <th>
 Label
@@ -3716,6 +3419,7 @@ Equation
 <td>
 <a id="">
 <div class="equation">
+<p class="paragraph">
 <em>FS = <div class="fraction">
 <span class="fup">
 &sum;<sub>v = 1</sub><sup>n&minus;1</sup>R<sub>v</sub>&#8239;&prod;<sub>u = i</sub><sup>n&minus;1</sup><div class="fraction">
@@ -3738,6 +3442,7 @@ Equation
 </div>&plus;T<sub>n</sub>
 </span>
 </div></em>
+</p>
 </div>
 </a>
 </td>
@@ -3790,16 +3495,6 @@ The constants <em>&Psi;</em> and <em>&Phi;</em> described in equation (20) and e
 <table class="tdefn">
 <tr>
 <th>
-Number
-</th>
-<td>
-<p class="paragraph">
-<b>T</b>
-</p>
-</td>
-</tr>
-<tr>
-<th>
 Label
 </th>
 <td>
@@ -3815,6 +3510,7 @@ Equation
 <td>
 <a id="">
 <div class="equation">
+<p class="paragraph">
 <em>C1<sub>i</sub> = <span class="casebr">
 {
 </span>
@@ -3861,6 +3557,7 @@ i = 1
 &sum;<sub>i = 1</sub><sup>n</sup>C2<sub>i</sub>
 </span>
 </div></em>
+</p>
 </div>
 </a>
 </td>
@@ -4006,16 +3703,6 @@ equation (15) for <em>&lambda;</em>, is a function of the unknown interslice nor
 <table class="tdefn">
 <tr>
 <th>
-Number
-</th>
-<td>
-<p class="paragraph">
-<b>T</b>
-</p>
-</td>
-</tr>
-<tr>
-<th>
 Label
 </th>
 <td>
@@ -4031,6 +3718,7 @@ Equation
 <td>
 <a id="">
 <div class="equation">
+<p class="paragraph">
 <em>E<sub>i</sub> = <span class="casebr">
 {
 </span>
@@ -4065,6 +3753,7 @@ i = 0 &or; i = n
 </span>
 </span>
 </div></em>
+</p>
 </div>
 </a>
 </td>
@@ -4144,16 +3833,6 @@ The constants <em>&Psi;</em> and <em>&Phi;</em> described in equation (20) and e
 <table class="tdefn">
 <tr>
 <th>
-Number
-</th>
-<td>
-<p class="paragraph">
-<b>T</b>
-</p>
-</td>
-</tr>
-<tr>
-<th>
 Label
 </th>
 <td>
@@ -4169,7 +3848,9 @@ Equation
 <td>
 <a id="">
 <div class="equation">
+<p class="paragraph">
 <em>&minus;&Delta;H<sub>i</sub>&minus;K<sub>c</sub>&#8239;W<sub>i</sub>&minus;U<sub>b,i</sub>&#8239;sin(&alpha;<sub>i</sub>)&plus;U<sub>t,i</sub>&#8239;sin(&beta;<sub>i</sub>)&plus;Q<sub>i</sub>&#8239;sin(&omega;<sub>i</sub>) = &delta;x<sub>i&minus;1</sub>&#8239;&minus;&#8467;<sub>s,i&minus;1</sub>&#8239;K<sub>sn,i&minus;1</sub>&plus;&delta;x<sub>i</sub>&#8239;(&minus;&#8467;<sub>s,i&minus;1</sub>&#8239;K<sub>sn,i&minus;1</sub>&plus;&#8467;<sub>s,i</sub>&#8239;K<sub>sn,i</sub>&plus;&#8467;<sub>b,i</sub>&#8239;K<sub>bA,i</sub>)&plus;&delta;x<sub>i&plus;1</sub>&#8239;&minus;&#8467;<sub>s,i</sub>&#8239;K<sub>sn,i</sub>&plus;&delta;y<sub>i</sub>&#8239;&minus;&#8467;<sub>b,i</sub>&#8239;K<sub>bB,i</sub> = &minus;W<sub>i</sub>&minus;U<sub>b,i</sub>&#8239;cos(&alpha;<sub>i</sub>)&plus;U<sub>t,i</sub>&#8239;cos(&beta;<sub>i</sub>)&plus;Q<sub>i</sub>&#8239;cos(&omega;<sub>i</sub>) = &delta;y<sub>i&minus;1</sub>&#8239;&minus;&#8467;<sub>s,i&minus;1</sub>&#8239;K<sub>st,i&minus;1</sub>&plus;&delta;y<sub>i</sub>&#8239;(&minus;&#8467;<sub>s,i&minus;1</sub>&#8239;K<sub>st,i&minus;1</sub>&plus;&#8467;<sub>s,i</sub>&#8239;K<sub>sn,i</sub>&plus;&#8467;<sub>b,i</sub>&#8239;K<sub>bA,i</sub>)&plus;&delta;y<sub>i&plus;1</sub>&#8239;&minus;&#8467;<sub>s,i</sub>&#8239;K<sub>st,i</sub>&plus;&delta;x<sub>i</sub>&#8239;&minus;&#8467;<sub>b,i</sub>&#8239;K<sub>bB,i</sub></em>
+</p>
 </div>
 </a>
 </td>
@@ -4201,16 +3882,6 @@ Using the known input assumption of A2, the force variable definitions of DD1 to
 <table class="tdefn">
 <tr>
 <th>
-Number
-</th>
-<td>
-<p class="paragraph">
-<b>T</b>
-</p>
-</td>
-</tr>
-<tr>
-<th>
 Label
 </th>
 <td>
@@ -4226,6 +3897,7 @@ Equation
 <td>
 <a id="">
 <div class="equation">
+<p class="paragraph">
 <em>FS<sub>Loc,i,i</sub> = <div class="fraction">
 <span class="fup">
 c&prime;<sub>i</sub>&minus;K<sub>bn,i</sub>&#8239;&delta;v<sub>i</sub>&#8239;tan(&phiv;&prime;<sub>i</sub>)
@@ -4241,6 +3913,7 @@ K<sub>bt,i</sub>&#8239;&delta;u<sub>i</sub>
 &sum;<sub>i = 1</sub><sup>n</sup>&#8467;<sub>b,i</sub>&#8239;K<sub>bt,i</sub>&#8239;&delta;u<sub>i</sub>
 </span>
 </div></em>
+</p>
 </div>
 </a>
 </td>
@@ -4371,16 +4044,6 @@ The global Factor of Safety is then the ratio of the summation of the resistive 
 <table class="tdefn">
 <tr>
 <th>
-Number
-</th>
-<td>
-<p class="paragraph">
-<b>T</b>
-</p>
-</td>
-</tr>
-<tr>
-<th>
 Label
 </th>
 <td>
@@ -4396,7 +4059,9 @@ Equation
 <td>
 <a id="">
 <div class="equation">
+<p class="paragraph">
 <em>FS<sub>min</sub> = &Upsilon;({x<sub>cs</sub>,y<sub>cs</sub>})</em>
+</p>
 </div>
 </a>
 </td>
@@ -4417,9 +4082,9 @@ Given the necessary slope inputs, a minimization algorithm or function <em>&Upsi
 </a>
 <a id="Sec:DataConstraints">
 <div class="subsubsection">
-<h4>
+<h3>
 Data Constraints
-</h4>
+</h3>
 <p class="paragraph">
 <a href=#Table:InDataConstraints>Table:InDataConstraints</a>, and <a href=#Table:OutDataConstraints>Table:OutDataConstraints</a> shows the data constraints on the input and output variables, respectively. The column for physical constraints gives the physical limitations on the range of values that can be taken by the variable. The uncertainty column provides an estimate of the confidence with which the physical quantities can be measured. This information would be part of the input if one were performing an uncertainty quantification exercise. The constraints are conservative, to give the user of the model the flexibility to experiment with unusual situations. The column of typical values is intended to provide a feel for a common scenario.
 </p>
@@ -4503,7 +4168,7 @@ TU
 <em>&gamma;&thinsp;&gt;&thinsp;0</em>
 </td>
 <td>
-<em>20.0</em> N/(m<sup>3</sup>)
+<em>20.0</em> N/m<sup>3</sup>
 </td>
 <td>
 0.1
@@ -4517,7 +4182,7 @@ TU
 <em>&gamma;<sub>Sat</sub>&thinsp;&gt;&thinsp;0</em>
 </td>
 <td>
-<em>20.0</em> N/(m<sup>3</sup>)
+<em>20.0</em> N/m<sup>3</sup>
 </td>
 <td>
 0.1
@@ -4531,7 +4196,7 @@ TU
 <em>&gamma;<sub>w</sub>&thinsp;&gt;&thinsp;0</em>
 </td>
 <td>
-<em>9.8</em> N/(m<sup>3</sup>)
+<em>9.8</em> N/m<sup>3</sup>
 </td>
 <td>
 0.1
@@ -4639,17 +4304,17 @@ Output Data Constraints
 </a>
 <a id="Sec:Requirements">
 <div class="section">
-<h2>
+<h1>
 Requirements
-</h2>
+</h1>
 <p class="paragraph">
 This section provides the functional requirements, the business tasks that the software is expected to complete, and the non-functional requirements, the qualities that the software is expected to exhibit.
 </p>
 <a id="Sec:FRs">
 <div class="subsection">
-<h3>
+<h2>
 Functional Requirements
-</h3>
+</h2>
 <div class="list">
 <p>
 R1: Read the input file, and store the data. Necessary input data summarized in <a href=#Table:inDataTable>Table:inDataTable</a>.
@@ -4758,7 +4423,7 @@ effective angle of friction
 <em>&gamma;</em>
 </td>
 <td>
-N/(m<sup>3</sup>)
+N/m<sup>3</sup>
 </td>
 <td>
 dry unit weight
@@ -4769,7 +4434,7 @@ dry unit weight
 <em>&gamma;<sub>Sat</sub></em>
 </td>
 <td>
-N/(m<sup>3</sup>)
+N/m<sup>3</sup>
 </td>
 <td>
 saturated unit weight
@@ -4780,7 +4445,7 @@ saturated unit weight
 <em>&gamma;<sub>w</sub></em>
 </td>
 <td>
-N/(m<sup>3</sup>)
+N/m<sup>3</sup>
 </td>
 <td>
 unit weight of water
@@ -4828,9 +4493,9 @@ Required Inputs
 </a>
 <a id="Sec:NFRs">
 <div class="subsection">
-<h3>
+<h2>
 Non-Functional Requirements
-</h3>
+</h2>
 <p class="paragraph">
 SSA is intended to be an educational tool, so accuracy and performance are not priorities. Rather, the non-functional requirement priorities are correctness, understandability, reusability, and maintainability.
 </p>
@@ -4840,16 +4505,16 @@ SSA is intended to be an educational tool, so accuracy and performance are not p
 </a>
 <a id="Sec:LCs">
 <div class="section">
-<h2>
+<h1>
 Likely Changes
-</h2>
+</h1>
 </div>
 </a>
 <a id="Sec:AuxConstants">
 <div class="section">
-<h2>
+<h1>
 Values of Auxiliary Constants
-</h2>
+</h1>
 <p class="paragraph">
 There are no auxiliary constants.
 </p>
@@ -4857,42 +4522,42 @@ There are no auxiliary constants.
 </a>
 <a id="Sec:References">
 <div class="section">
-<h2>
+<h1>
 References
-</h2>
+</h1>
 <a id="chen2005">
 <ul>
-[1]: Qian, Q. H., Zhu, D. Y., Lee, C. F., and Chen, G. R. "A concise algorithm for computing the factor of safety using the morgenstern price method." <em>Canadian Geotechnical Journal</em>, vol. 42, no. 1, February, 2005. pp. 272&ndash;278. Print.
+[1]: Qian, Q.H., Zhu, D.Y., Lee, C.F., and Chen, G.R."A concise algorithm for computing the factor of safety using the morgenstern price method."<em>Canadian Geotechnical Journal</em>,vol. 42,no. 1,February,2005.pp. 272&ndash;278. Print.
 </ul>
 </a>
 <a id="fredlund1977">
 <ul>
-[2]: Fredlund, D. G. and Krahn, J.. "Comparison of slope stability methods of analysis." <em>Canadian Geotechnical Journal</em>, vol. 14, no. 3, April, 1977. pp. 429&ndash;439. Print.
+[2]: Fredlund, D.G. and Krahn, J.."Comparison of slope stability methods of analysis."<em>Canadian Geotechnical Journal</em>,vol. 14,no. 3,April,1977.pp. 429&ndash;439. Print.
 </ul>
 </a>
 <a id="koothoor2013">
 <ul>
-[3]: Koothoor, Nirmitha. <em>A document drive approach to certifying scientific computing software</em>. McMaster University, Hamilton, ON, Canada: 2013. Print.
+[3]: Koothoor, Nirmitha.<em>A document drive approach to certifying scientific computing software</em>.McMaster University,Hamilton, ON, Canada:2013. Print.
 </ul>
 </a>
 <a id="li2010">
 <ul>
-[4]: Yu-Chao, Li, Yun-Min, Chen, Zhan, Tony L. T., Sao-Sheng, Ling, and Cleall, Peter John. "An efficient approach for locating the critical slip surface in slope stability analyses using a real-coded genetic algorithm." <em>Canadian Geotechnical Journal</em>, vol. 47, no. 7, June, 2010. pp. 806&ndash;820. Print.
+[4]: Yu-Chao, Li, Yun-Min, Chen, Zhan, TonyL.T., Sao-Sheng, Ling, and Cleall, PeterJohn."An efficient approach for locating the critical slip surface in slope stability analyses using a real-coded genetic algorithm."<em>Canadian Geotechnical Journal</em>,vol. 47,no. 7,June,2010.pp. 806&ndash;820. Print.
 </ul>
 </a>
 <a id="parnas1986">
 <ul>
-[5]: Parnas, David L. and Clements, P. C. "A rational design process: How and why to fake it." <em>IEEE Transactions on Software Engineering</em>, vol. 12, no. 2, Washington, USA: February, 1986. pp. 251&ndash;257. Print.
+[5]: Parnas, DavidL. and Clements, P.C."A rational design process: How and why to fake it."<em>IEEE Transactions on Software Engineering</em>,vol. 12,no. 2,Washington, USA:February,1986.pp. 251&ndash;257. Print.
 </ul>
 </a>
 <a id="smithLai2005">
 <ul>
-[6]: Smith, W. Spencer and Lai, Lei. "A new requirements template for scientific computing." <em>Proceedings of the First International Workshop on Situational Requirements Engineering Processes - Methods, Techniques and Tools to Support Situation-Specific Requirements Engineering Processes, SREP'05</em>. Edited by PJ Agerfalk, N. Kraiem, and J. Ralyte, Paris, France: 2005. pp. 107&ndash;121. In conjunction with 13th IEEE International Requirements Engineering Conference,
+[6]: Smith, W.Spencer and Lai, Lei."A new requirements template for scientific computing."<em>Proceedings of the First International Workshop on Situational Requirements Engineering Processes - Methods, Techniques and Tools to Support Situation-Specific Requirements Engineering Processes, SREP'05</em>.Edited by PJAgerfalk, N.Kraiem, and J.Ralyte,Paris, France:2005.pp. 107&ndash;121.In conjunction with 13th IEEE International Requirements Engineering Conference,
 </ul>
 </a>
 <a id="stolle2008">
 <ul>
-[7]: Stolle, Dieter and Guo, Peijun. "Limit equilibrum slope stability analysis using rigid finite elements." <em>Canadian Geotechnical Journal</em>, vol. 45, no. 5, May, 2008. pp. 653&ndash;662. Print.
+[7]: Stolle, Dieter and Guo, Peijun."Limit equilibrum slope stability analysis using rigid finite elements."<em>Canadian Geotechnical Journal</em>,vol. 45,no. 5,May,2008.pp. 653&ndash;662. Print.
 </ul>
 </a>
 </div>

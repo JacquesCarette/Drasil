@@ -1,4 +1,5 @@
 \documentclass[12pt]{article}
+\usepackage{fontspec}
 \usepackage{fullpage}
 \usepackage{hyperref}
 \hypersetup{bookmarks=true,colorlinks=true,linkcolor=red,citecolor=blue,filecolor=magenta,urlcolor=cyan}
@@ -16,7 +17,7 @@
 \global\tabulinesep=1mm
 \bibliography{bibfile}
 \title{Software Requirements Specification for Chipmunk2D}
-\author{Alex Halliwushka and Luthfi Mawarid}
+\author{AlexHalliwushka and LuthfiMawarid}
 \begin{document}
 \maketitle
 \tableofcontents
@@ -26,7 +27,7 @@
 This section records information for easy reference.
 \subsection{Table of Units}
 \label{Sec:ToU}
-The unit system used throughout is SI (Syst\`{e}me International d'Unit\'{e}s). In addition to the basic units, several derived units are also used. For each unit, the table lists the symbol, a description and the SI name.
+The unit system used throughout is SI (Système International d'Unités). In addition to the basic units, several derived units are also used. For each unit, the table lists the symbol, a description and the SI name.
 \begin{longtable*}{l l}
 \toprule
 Symbol & Description
@@ -233,7 +234,7 @@ The following section provides an overview of the Software Requirements Specific
 \subsection{Purpose of Document}
 \label{Sec:DocPurpose}
 This document descibes the modeling of an open source 2D rigid body physics library used for games. The theoretical models and goal statements used in Chipmunk2D are provided. This document is intended to be used as a reference to provide all necessary information to understand and verify the model.
-This document will be used as a starting point for subsequent development phases, including writing the design specification and the software verification and validation plan. The design document will show how the requirements are to be realized, including decisions on the numerical algorithms and programming environment. The verification and validation plan will show the steps that will be used to increase confidence in the software documentation and the implementation. Although the SRS fits in a series of documents that follow the so-called waterfall model, the actual development process is not constrained in any way. Even when the waterfall model is not followed, as Parnas and Clements point out, the most logical way to present the documentation is still to ``fake" a rational design process.
+This document will be used as a starting point for subsequent development phases, including writing the design specification and the software verification and validation plan. The design document will show how the requirements are to be realized, including decisions on the numerical algorithms and programming environment. The verification and validation plan will show the steps that will be used to increase confidence in the software documentation and the implementation. Although the SRS fits in a series of documents that follow the so-called waterfall model, the actual development process is not constrained in any way. Even when the waterfall model is not followed, as Parnas and Clements point out, the most logical way to present the documentation is still to ``fake'' a rational design process.
 \subsection{Scope of Requirements}
 \label{Sec:ReqsScope}
 The scope of the requirements includes the physical simulation of 2D rigid bodies acted on by forces. Given the appropriate inputs, the code for Chipmunk2D is intended to simulate how these rigid bodies interact with one another.
@@ -262,13 +263,13 @@ Creating a gaming physics library is a difficult task. Games need physics librar
 \subsubsection{Terminology and Definitions}
 \label{Sec:TermDefs}
 This subsection provides a list of terms that are used in the subsequent sections and their meaning, with the purpose of reducing ambiguity and making it easier to correctly understand the requirements
-\begin{enumerate}
+\begin{itemize}
 \item{Rigid body: A solid body in which deformation is neglected.}
 \item{Elasticity: Ratio of the relative velocities of two colliding objects after and before a collision.}
 \item{Centre of mass: The mean location of the distribution of mass of the object.}
 \item{Cartesian coordinate system: A coordinate system that specifies each point uniquely in a plane by a pair of numerical coordinates.}
 \item{Right-handed coordinate system: A coordinate system where the positive z-axis comes out of the screen.}
-\end{enumerate}
+\end{itemize}
 \subsubsection{Goal Statements}
 \label{Sec:GoalStmt}
 Given the inputs, the goal statements are:
@@ -428,7 +429,7 @@ Label & The Mass-Weighted Average Position of a Rigid Body's Particles
 \\ \midrule \\
 Units & m
 \\ \midrule \\
-Equation & ${\mathbf{p}_{CM}}$ = $\frac{\displaystyle\sum{{m_{j}} {\mathbf{p}_{j}}}}{M}$
+Equation & ${\mathbf{p}_{CM}}=\frac{\displaystyle\sum{{m_{j}} {\mathbf{p}_{j}}}}{M}$
 \\ \midrule \\
 Description & ${\mathbf{p}_{CM}}$ is the the mass-weighted average position of a rigid body's particles (m)\newline${m_{j}}$ is the mass of the j-th particle (kg)\newline${\mathbf{p}_{j}}$ is the position vector of the j-th particle (m)\newline$M$ is the total mass of the rigid body (kg)
 \\ \bottomrule \end{tabular}
@@ -444,9 +445,9 @@ Label & Linear Displacement
 \\ \midrule \\
 Units & m
 \\ \midrule \\
-Equation & $\mathbf{r}(t)$ = $\frac{d\,\mathbf{p}\left(t\right)}{d\,t}$
+Equation & $\mathbf{r}(t)=\frac{d\,\mathbf{p}\left(t\right)}{d\,t}$
 \\ \midrule \\
-Description & $\mathbf{r}(t)$ is the linear displacement (m)\newline$\mathbf{p}$ is the position (m)\newline$t$ is the time (s)
+Description & $\mathbf{r}(t)$ is the linear displacement (m)\newline$t$ is the time (s)\newline$\mathbf{p}$ is the position (m)
 \\ \bottomrule \end{tabular}
 \end{minipage}\\
 ~\newline
@@ -460,9 +461,9 @@ Label & Linear Velocity
 \\ \midrule \\
 Units & $\frac{\text{m}}{\text{s}}$
 \\ \midrule \\
-Equation & $\mathbf{v}(t)$ = $\frac{d\,\mathbf{r}\left(t\right)}{d\,t}$
+Equation & $\mathbf{v}(t)=\frac{d\,\mathbf{r}\left(t\right)}{d\,t}$
 \\ \midrule \\
-Description & $\mathbf{v}(t)$ is the linear velocity ($\frac{\text{m}}{\text{s}}$)\newline$\mathbf{r}$ is the displacement (m)\newline$t$ is the time (s)
+Description & $\mathbf{v}(t)$ is the linear velocity ($\frac{\text{m}}{\text{s}}$)\newline$t$ is the time (s)\newline$\mathbf{r}$ is the displacement (m)
 \\ \bottomrule \end{tabular}
 \end{minipage}\\
 ~\newline
@@ -476,9 +477,9 @@ Label & Linear Acceleration
 \\ \midrule \\
 Units & $\frac{\text{m}}{\text{s}^{2}}$
 \\ \midrule \\
-Equation & $\mathbf{a}(t)$ = $\frac{d\,\mathbf{v}\left(t\right)}{d\,t}$
+Equation & $\mathbf{a}(t)=\frac{d\,\mathbf{v}\left(t\right)}{d\,t}$
 \\ \midrule \\
-Description & $\mathbf{a}(t)$ is the linear acceleration ($\frac{\text{m}}{\text{s}^{2}}$)\newline$\mathbf{v}$ is the velocity ($\frac{\text{m}}{\text{s}}$)\newline$t$ is the time (s)
+Description & $\mathbf{a}(t)$ is the linear acceleration ($\frac{\text{m}}{\text{s}^{2}}$)\newline$t$ is the time (s)\newline$\mathbf{v}$ is the velocity ($\frac{\text{m}}{\text{s}}$)
 \\ \bottomrule \end{tabular}
 \end{minipage}\\
 ~\newline
@@ -492,9 +493,9 @@ Label & Angular Displacement
 \\ \midrule \\
 Units & rad
 \\ \midrule \\
-Equation & $\theta{}$ = $\frac{d\,\phi{}\left(t\right)}{d\,t}$
+Equation & $\theta{}=\frac{d\,\phi{}\left(t\right)}{d\,t}$
 \\ \midrule \\
-Description & $\theta{}$ is the angular displacement (rad)\newline$\phi{}$ is the orientation (rad)\newline$t$ is the time (s)
+Description & $\theta{}$ is the angular displacement (rad)\newline$t$ is the time (s)\newline$\phi{}$ is the orientation (rad)
 \\ \bottomrule \end{tabular}
 \end{minipage}\\
 ~\newline
@@ -508,9 +509,9 @@ Label & Angular Velocity
 \\ \midrule \\
 Units & $\frac{\text{rad}}{\text{s}}$
 \\ \midrule \\
-Equation & $\omega{}$ = $\frac{d\,\theta{}\left(t\right)}{d\,t}$
+Equation & $\omega{}=\frac{d\,\theta{}\left(t\right)}{d\,t}$
 \\ \midrule \\
-Description & $\omega{}$ is the angular velocity ($\frac{\text{rad}}{\text{s}}$)\newline$\theta{}$ is the angular displacement (rad)\newline$t$ is the time (s)
+Description & $\omega{}$ is the angular velocity ($\frac{\text{rad}}{\text{s}}$)\newline$t$ is the time (s)\newline$\theta{}$ is the angular displacement (rad)
 \\ \bottomrule \end{tabular}
 \end{minipage}\\
 ~\newline
@@ -524,9 +525,9 @@ Label & Angular Acceleration
 \\ \midrule \\
 Units & $\frac{\text{rad}}{\text{s}^{2}}$
 \\ \midrule \\
-Equation & $\alpha{}$ = $\frac{d\,\omega{}\left(t\right)}{d\,t}$
+Equation & $\alpha{}=\frac{d\,\omega{}\left(t\right)}{d\,t}$
 \\ \midrule \\
-Description & $\alpha{}$ is the angular acceleration ($\frac{\text{rad}}{\text{s}^{2}}$)\newline$\omega{}$ is the angular velocity ($\frac{\text{rad}}{\text{s}}$)\newline$t$ is the time (s)
+Description & $\alpha{}$ is the angular acceleration ($\frac{\text{rad}}{\text{s}^{2}}$)\newline$t$ is the time (s)\newline$\omega{}$ is the angular velocity ($\frac{\text{rad}}{\text{s}}$)
 \\ \bottomrule \end{tabular}
 \end{minipage}\\
 ~\newline
@@ -540,7 +541,7 @@ Label & Impulse (scalar)
 \\ \midrule \\
 Units & Ns
 \\ \midrule \\
-Equation & $j$ = $\frac{-\left(1+{C_{R}}\right) {{\mathbf{v}_{i}}^{AB}}\cdot{}\mathbf{n}}{\left(\frac{1}{{m_{A}}}+\frac{1}{{m_{B}}}\right) ||\mathbf{n}||^{2}+\frac{||{\mathbf{r}_{AP}}*\mathbf{n}||^{2}}{{\mathbf{I}_{A}}}+\frac{||{\mathbf{r}_{BP}}*\mathbf{n}||^{2}}{{\mathbf{I}_{B}}}}$
+Equation & $j=\frac{-\left(1+{C_{R}}\right) {{\mathbf{v}_{i}}^{AB}}\cdot{}\mathbf{n}}{\left(\frac{1}{{m_{A}}}+\frac{1}{{m_{B}}}\right) ||\mathbf{n}||^{2}+\frac{||{\mathbf{r}_{AP}}*\mathbf{n}||^{2}}{{\mathbf{I}_{A}}}+\frac{||{\mathbf{r}_{BP}}*\mathbf{n}||^{2}}{{\mathbf{I}_{B}}}}$
 \\ \midrule \\
 Description & $j$ is the impulse (scalar) (Ns)\newline${C_{R}}$ is the coefficient of restitution\newline${{\mathbf{v}_{i}}^{AB}}$ is the relative velocity between rigid bodies of A and B ($\frac{\text{m}}{\text{s}}$)\newline$\mathbf{n}$ is the collision normal vector (m)\newline${m_{A}}$ is the mass of rigid body A (kg)\newline${m_{B}}$ is the mass of rigid body B (kg)\newline$||\mathbf{n}||$ is the length of the normal vector (m)\newline$||{\mathbf{r}_{AP}}*\mathbf{n}||$ is the length of the perpendicular vector to the contact displacement vector of rigid body A (m)\newline${\mathbf{I}_{A}}$ is the moment of inertia of rigid body A (kg$\text{m}^{2}$)\newline$||{\mathbf{r}_{BP}}*\mathbf{n}||$ is the length of the perpendicular vector to the contact displacement vector of rigid body B (m)\newline${\mathbf{I}_{B}}$ is the moment of inertia of rigid body B (kg$\text{m}^{2}$)
 \\ \bottomrule \end{tabular}
@@ -626,19 +627,19 @@ This section lists the likely changes to be made to the physics game library.
 \section{Off-The-Shelf Solutions}
 \label{Sec:ExistingSolns}
 As mentioned in Section~\ref{Sec:ProbDesc}, there already exist free open source game physics libraries. Similar 2D physics libraries are:
-\begin{enumerate}
+\begin{itemize}
 \item{Box2D: http://box2d.org/}
 \item{Nape Physics Engine: http://napephys.com/}
-\end{enumerate}
+\end{itemize}
 Free open source 3D game physics libraries include:
-\begin{enumerate}
+\begin{itemize}
 \item{Bullet: http://bulletphysics.org/}
 \item{Open Dynamics Engine: http://www.ode.org/}
 \item{Newton Game Dynamics: http://newtondynamics.com/}
-\end{enumerate}
+\end{itemize}
 \section{Traceability Matrices and Graphs}
 \label{Sec:TraceMatrices}
-The purpose of the traceability matrices is to provide easy references on what has to be additionally modified if a certain component is changed. Every time a component is changed, the items in the column of that component that are marked with an ``X" should be modified as well. Table~\ref{Table:TraceyReqGoalsOther} shows the dependencies of goal statements, requirements, instance models, and data constraints with each other. Table~\ref{Table:TraceyAssumpsOther} shows the dependencies of theoretical models, general definitions, data definitions, instance models, and on the assumptions. Table~\ref{Table:TraceyItemsSecs} shows the dependencies of theoretical models, general definitions, data definitions, and instance models on each other.
+The purpose of the traceability matrices is to provide easy references on what has to be additionally modified if a certain component is changed. Every time a component is changed, the items in the column of that component that are marked with an ``X'' should be modified as well. Table~\ref{Table:TraceyReqGoalsOther} shows the dependencies of goal statements, requirements, instance models, and data constraints with each other. Table~\ref{Table:TraceyAssumpsOther} shows the dependencies of theoretical models, general definitions, data definitions, instance models, and on the assumptions. Table~\ref{Table:TraceyItemsSecs} shows the dependencies of theoretical models, general definitions, data definitions, and instance models on each other.
 \begin{longtable}{l l l l l l l l}
 \toprule
  & IM1 (\hyperref[T:im1]{Definition~T:im1}) & IM2 (\hyperref[T:im2]{Definition~T:im2}) & IM3 (\hyperref[T:im3]{Definition~T:im3}) & R1 (Section~\ref{Sec:FRs}) & R4 (Section~\ref{Sec:FRs}) & R7 (Section~\ref{Sec:FRs}) & Data Constraints (Section~\ref{Sec:SolCharSpec})
@@ -797,21 +798,21 @@ There are no auxiliary constants.
 \label{Sec:References}
 \begin{filecontents*}{bibfile.bib}
 @article{dParnas1972,
-author={Parnas, David L.},
+author={Parnas, DavidL.},
 title={On the Criteria To Be Used in Decomposing Systems into Modules},
 journal={Communications of the ACM},
 year={1972},
 pages={"1053-1058"}}
 
 @inproceedings{dParnasPcClements1984,
-author={Parnas, David L. and Clements, P. C. and Wiess, },
+author={Parnas, DavidL. and Clements, P.C. and Wiess, },
 title={The Modular Structure of Complex Systems},
 booktitle={ICSE '84: Proceedings of the 7th international conference on Software engineering},
 year={1984},
 pages={"408-417"}}
 
 @misc{jfBeucheIntro,
-author={Bueche, J. Frederick},
+author={Bueche, J.Frederick},
 title={Introduction to Physics for Scientists, Fourth Edition},
 publisher={Mcgraw-Hill College},
 year={1986}}
@@ -824,14 +825,14 @@ year={2013},
 address={Hamilton, ON, Canada}}
 
 @inproceedings{parnas1978,
-author={Parnas, David L.},
+author={Parnas, DavidL.},
 title={Designing Software for Ease of Extension and Contraction.},
 booktitle={ICSE '78: Proceedings of the 3rd international conference on Software engineering},
 year={1978},
 pages={"264-277"}}
 
 @article{parnas1986,
-author={Parnas, David L. and Clements, P. C.},
+author={Parnas, DavidL. and Clements, P.C.},
 title={A rational design process: How and why to fake it},
 journal={IEEE Transactions on Software Engineering},
 year={1986},
@@ -842,7 +843,7 @@ pages={"251-257"},
 address={Washington, USA}}
 
 @article{sciComp2013,
-author={Wilson, Greg and Aruliah, D. A. and Titus, C. and Chue Hong, Neil P. and Davis, Matt and Guy, Richard T. and Haddock, Steven H. D. and Huff, Kathryn D. and Mitchell, Ian M. and Plumblet, Mark D. and Waugh, Ben and White, Ethan P. and Wilson, Paul},
+author={Wilson, Greg and Aruliah, D.A. and Titus, C. and Chue Hong, NeilP. and Davis, Matt and Guy, RichardT. and Haddock, StevenH.D. and Huff, KathrynD. and Mitchell, IanM. and Plumblet, MarkD. and Waugh, Ben and White, EthanP. and Wilson, Paul},
 title={Best Practices for Scientific Computing, 2013},
 journal={PLoS Biol},
 year={2013},
@@ -850,7 +851,7 @@ volume={12},
 number={1}}
 
 @inproceedings{smithLai2005,
-author={Smith, W. Spencer and Lai, Lei},
+author={Smith, W.Spencer and Lai, Lei},
 title={A new requirements template for scientific computing},
 booktitle={Proceedings of the First International Workshop on Situational Requirements Engineering Processes - Methods, Techniques and Tools to Support Situation-Specific Requirements Engineering Processes, SREP'05},
 year={2005},

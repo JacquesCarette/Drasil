@@ -298,7 +298,7 @@ goalStatementSect (SectionModel niname xs) = SRS.goalStmt
 -----------------------------------------------------------
 
 assumptionSect :: SubSec -> Section
-assumptionSect (SectionModel niname xs) = SRS.assump
+assumptionSect (SectionModel niname xs) = SRS.assumpt
   (assumpIntro:(pullContents xs)) (pullSections xs)
 
 

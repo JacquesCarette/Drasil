@@ -3,8 +3,8 @@ module Language.Drasil.TeX.Preamble(genPreamble) where
 import Data.List (nub)
 
 import Language.Drasil.Config (hyperSettings, fontSize,bibFname)
+import Language.Drasil.Printing.LayoutObj
 import Language.Drasil.TeX.Monad
-import Language.Drasil.TeX.AST
 import Language.Drasil.TeX.Helpers
 
 -- FIXME: this really shouldn't be in code, it should be data!
@@ -26,6 +26,7 @@ data Package = AMSMath
              | Tabu --adds auto column width feature for tables 
              | Mathtools --line breaks for long fractions and cases
              | URL
+             | FontSpec -- for utf-8 encoding in lualatex
              deriving Eq
 
 addPackage :: Package -> D
@@ -49,6 +50,7 @@ addPackage BibLaTeX  = command1o "usepackage" (Just "backend=bibtex") "biblatex"
 addPackage Tabu      = usepackage "tabu"
 addPackage Mathtools = usepackage "mathtools"
 addPackage URL       = usepackage "url"
+addPackage FontSpec   = usepackage "fontspec"
 
 data Def = AssumpCounter
          | LCCounter
@@ -79,28 +81,30 @@ genPreamble los = let (pkgs, defs) = parseDoc los
      (vcat $ map addPackage pkgs) %% (vcat $ map addDef defs)
 
 parseDoc :: [LayoutObj] -> ([Package], [Def])
-parseDoc los' = ([FullPage, HyperRef, AMSMath, AMSsymb, Mathtools, Breqn] ++ 
+parseDoc los' = ([FontSpec, FullPage, HyperRef, AMSMath, AMSsymb, Mathtools, Breqn] ++ 
    (nub $ concat $ map fst res), nub $ concat $ map snd res)
   where 
     res = map parseDoc' los'
     parseDoc' :: LayoutObj -> ([Package], [Def])
     parseDoc' (Table _ _ _ _ _) = ([Tabu,LongTable,BookTabs,Caption], [TabuLine])
-    parseDoc' (Section _ _ slos _) = 
+    parseDoc' (HDiv _ slos _) = 
       let res1 = map parseDoc' slos in
       let pp = concat $ map fst res1 in
       let dd = concat $ map snd res1 in
       (pp, dd)
-   -- parseDoc' (CodeBlock _) = [Listings],[]
-    parseDoc' (Definition ps _) =
+    parseDoc' (Definition _ ps _) =
       let res1 = concat $ map (map parseDoc' . snd) ps in
       let pp = concat $ map fst res1 in
       let dd = concat $ map snd res1 in
       (Tabu:LongTable:BookTabs:pp,TabuLine:dd)
     parseDoc' (Figure _ _ _ _) = ([Graphics,Caption],[])
-    parseDoc' (Requirement _ _) = ([], [ReqCounter])
-    parseDoc' (Assumption _ _) = ([], [AssumpCounter])
-    parseDoc' (LikelyChange _ _) = ([], [LCCounter])
-    parseDoc' (UnlikelyChange _ _) = ([], [UCCounter])
+    parseDoc' (ALUR Requirement _ _ _) = ([], [ReqCounter])
+    parseDoc' (ALUR Assumption _ _ _) = ([], [AssumpCounter])
+    parseDoc' (ALUR LikelyChange _ _ _) = ([], [LCCounter])
+    parseDoc' (ALUR UnlikelyChange _ _ _) = ([], [UCCounter])
     parseDoc' (Graph _ _ _ _ _) = ([Caption,Tikz,Dot2Tex,AdjustBox],[])
     parseDoc' (Bib _) = ([FileContents,BibLaTeX,URL],[Bibliography])
-    parseDoc' _ = ([], [])-- ignore the rest?
+    parseDoc' (Header _ _ _) = ([], [])
+    parseDoc' (Paragraph _)  = ([], [])
+    parseDoc' (List _)       = ([], [])
+    parseDoc' (EqnBlock _)   = ([], [])

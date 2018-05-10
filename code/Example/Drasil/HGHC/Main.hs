@@ -4,12 +4,6 @@ import Language.Drasil
 
 import Drasil.HGHC.HGHC (srsBody, allSymbols)
 
-docs :: [Recipe]
-docs = [
-  Recipe (DocSpec Website "SRS") srsBody,
-  Recipe (DocSpec SRS "SRS") srsBody
-  ]
-
 thisChoices :: Choices
 thisChoices = Choices {
   lang             = [Python, Cpp, CSharp, Java],
@@ -24,5 +18,6 @@ thisChoices = Choices {
   
 main :: IO ()            
 main = do
-  gen docs allSymbols
+  gen (DocSpec Website "SRS") srsBody allSymbols
+  gen (DocSpec SRS "SRS")     srsBody allSymbols
   --genCode thisChoices thisCode

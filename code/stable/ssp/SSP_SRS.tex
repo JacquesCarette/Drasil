@@ -1,4 +1,5 @@
 \documentclass[12pt]{article}
+\usepackage{fontspec}
 \usepackage{fullpage}
 \usepackage{hyperref}
 \hypersetup{bookmarks=true,colorlinks=true,linkcolor=red,citecolor=blue,filecolor=magenta,urlcolor=cyan}
@@ -17,7 +18,7 @@
 \global\tabulinesep=1mm
 \bibliography{bibfile}
 \title{Software Requirements Specification for Slope Stability Analysis}
-\author{Henry Frankis}
+\author{HenryFrankis}
 \begin{document}
 \maketitle
 \tableofcontents
@@ -27,7 +28,7 @@
 This section records information for easy reference.
 \subsection{Table of Units}
 \label{Sec:ToU}
-The unit system used throughout is SI (Syst\`{e}me International d'Unit\'{e}s). In addition to the basic units, several derived units are also used. For each unit, the table lists the symbol, a description and the SI name.
+The unit system used throughout is SI (Système International d'Unités). In addition to the basic units, several derived units are also used. For each unit, the table lists the symbol, a description and the SI name.
 \begin{longtable*}{l l}
 \toprule
 Symbol & Description
@@ -266,7 +267,7 @@ The following section provides an overview of the Software Requirements Specific
 \subsection{Purpose of Document}
 \label{Sec:DocPurpose}
 The SSA program determines the critical slip surface, and its respective factor of safety as a method of assessing the stability of a slope design. The program is intended to be used as an educational tool for introducing slope stability issues, and will facilitate the analysis and design of a safe slope.
-This document will be used as a starting point for subsequent development phases, including writing the design specification and the software verification and validation plan. The design document will show how the requirements are to be realized, including decisions on the numerical algorithms and programming environment. The verification and validation plan will show the steps that will be used to increase confidence in the software documentation and the implementation. Although the SRS fits in a series of documents that follow the so-called waterfall model, the actual development process is not constrained in any way. Even when the waterfall model is not followed, as Parnas and Clements point out, the most logical way to present the documentation is still to ``fake" a rational design process.
+This document will be used as a starting point for subsequent development phases, including writing the design specification and the software verification and validation plan. The design document will show how the requirements are to be realized, including decisions on the numerical algorithms and programming environment. The verification and validation plan will show the steps that will be used to increase confidence in the software documentation and the implementation. Although the SRS fits in a series of documents that follow the so-called waterfall model, the actual development process is not constrained in any way. Even when the waterfall model is not followed, as Parnas and Clements point out, the most logical way to present the documentation is still to ``fake'' a rational design process.
 \subsection{Scope of Requirements}
 \label{Sec:ReqsScope}
 The scope of the requirements includes stability analysis of a 2 dimensional slope, composed of homogeneous soil layers. Given the appropriate inputs, the code for SSA is intended to identify the most likely failure surface within the possible input range, and find the factor of safety for the slope as well as displacement of soil that will occur on the slope.
@@ -309,10 +310,10 @@ This subsection provides a list of terms that are used in the subsequent section
 \subsubsection{Physical System Description}
 \label{Sec:PhysSyst}
 Analysis of the slope is performed by looking at properties of the slope as a series of slice elements. Some properties are interslice properties, and some are slice or slice base properties. The index convention for referencing which interslice or slice is being used is shown in Figure~\ref{Figure:IndexConvention}.
-\begin{enumerate}
+\begin{itemize}
 \item{Interslice properties convention is noted by j. The end interslice properties are usually not of interest, therefore use the interslice properties from $1\leq{}i\leq{}n-1$}
 \item{Slice properties convention is noted by. $i$}
-\end{enumerate}
+\end{itemize}
 A free body diagram of the forces acting on the slice is displayed in Figure~\ref{Figure:ForceDiagram}.
 \begin{figure}
 \begin{center}
@@ -605,7 +606,7 @@ Label & Weight
 \\ \midrule \\
 Units & N
 \\ \midrule \\
-Equation & $W$ = $b_{i} \begin{cases}
+Equation & $W=b_{i} \begin{cases}
 \left({y_{us,i}}-{y_{slip,i}}\right) {\gamma{}_{Sat}}, & {y_{wt,i}}\geq{}{y_{us,i}}\\
 \left({y_{us,i}}-{y_{wt,i}}\right) \gamma{}+\left({y_{wt,i}}-{y_{slip,i}}\right) {\gamma{}_{Sat}}, & {y_{us,i}}>{y_{wt,i}}>{y_{slip,i}}\\
 \left({y_{us,i}}-{y_{slip,i}}\right) \gamma{}, & {y_{wt,i}}\leq{}{y_{slip,i}}
@@ -625,7 +626,7 @@ Label & Base Hydrostatic Force
 \\ \midrule \\
 Units & N
 \\ \midrule \\
-Equation & ${U_{b}}$ = ${\ell{}_{b,i}} \begin{cases}
+Equation & ${U_{b}}={\ell{}_{b,i}} \begin{cases}
 \left({y_{wt,i}}-{y_{slip,i}}\right) {\gamma{}_{w}}, & {y_{wt,i}}>{y_{slip,i}}\\
 0, & {y_{wt,i}}\leq{}{y_{slip,i}}
 \end{cases}$
@@ -644,7 +645,7 @@ Label & Surface Hydrostatic Force
 \\ \midrule \\
 Units & N
 \\ \midrule \\
-Equation & ${U_{t}}$ = ${\ell{}_{s,i}} \begin{cases}
+Equation & ${U_{t}}={\ell{}_{s,i}} \begin{cases}
 \left({y_{wt,i}}-{y_{us,i}}\right) {\gamma{}_{w}}, & {y_{wt,i}}>{y_{us,i}}\\
 0, & {y_{wt,i}}\leq{}{y_{us,i}}
 \end{cases}$
@@ -663,7 +664,7 @@ Label & Interslice Water Force
 \\ \midrule \\
 Units & N
 \\ \midrule \\
-Equation & $H$ = $\begin{cases}
+Equation & $H=\begin{cases}
 \frac{\left({y_{us,i}}-{y_{slip,i}}\right)^{2}}{2} {\gamma{}_{Sat}}+\left({y_{wt,i}}-{y_{us,i}}\right)^{2} {\gamma{}_{Sat}}, & {y_{wt,i}}\geq{}{y_{us,i}}\\
 \frac{\left({y_{wt,i}}-{y_{slip,i}}\right)^{2}}{2} {\gamma{}_{Sat}}, & {y_{us,i}}>{y_{wt,i}}>{y_{slip,i}}\\
 0, & {y_{wt,i}}\leq{}{y_{slip,i}}
@@ -683,7 +684,7 @@ Label & Angle
 \\ \midrule \\
 Units & ${}^{\circ}$
 \\ \midrule \\
-Equation & $\alpha{}$ = $\frac{{y_{slip,i}}-{y_{slip,i-1}}}{{x_{slip,i}}-{x_{slip,i-1}}}$
+Equation & $\alpha{}=\frac{{y_{slip,i}}-{y_{slip,i-1}}}{{x_{slip,i}}-{x_{slip,i-1}}}$
 \\ \midrule \\
 Description & $\alpha{}$ is the angle (${}^{\circ}$)\newline${y_{slip}}$ is the y ordinate (m)\newline$i$ is the index\newline${x_{slip}}$ is the x ordinate (m)
 \\ \bottomrule \end{tabular}
@@ -699,7 +700,7 @@ Label & Angle
 \\ \midrule \\
 Units & ${}^{\circ}$
 \\ \midrule \\
-Equation & $\beta{}$ = $\frac{{y_{us,i}}-{y_{us,i-1}}}{{x_{us,i}}-{x_{us,i-1}}}$
+Equation & $\beta{}=\frac{{y_{us,i}}-{y_{us,i-1}}}{{x_{us,i}}-{x_{us,i-1}}}$
 \\ \midrule \\
 Description & $\beta{}$ is the angle (${}^{\circ}$)\newline${y_{us}}$ is the y ordinate (m)\newline$i$ is the index\newline${x_{us}}$ is the x ordinate (m)
 \\ \bottomrule \end{tabular}
@@ -715,7 +716,7 @@ Label & Base Width of a Slice
 \\ \midrule \\
 Units & m
 \\ \midrule \\
-Equation & $b$ = ${x_{slip,i}}-{x_{slip,i-1}}$
+Equation & $b={x_{slip,i}}-{x_{slip,i-1}}$
 \\ \midrule \\
 Description & $b$ is the base width of a slice (m)\newline${x_{slip}}$ is the x ordinate (m)\newline$i$ is the index
 \\ \bottomrule \end{tabular}
@@ -731,7 +732,7 @@ Label & Total Base Length of a Slice
 \\ \midrule \\
 Units & m
 \\ \midrule \\
-Equation & ${\ell{}_{b}}$ = $b_{i} \sec\left(\alpha{}_{i}\right)$
+Equation & ${\ell{}_{b}}=b_{i} \sec\left(\alpha{}_{i}\right)$
 \\ \midrule \\
 Description & ${\ell{}_{b}}$ is the total base length of a slice (m)\newline$b$ is the base width of a slice (m)\newline$i$ is the index\newline$\alpha{}$ is the angle (${}^{\circ}$)
 \\ \bottomrule \end{tabular}
@@ -747,7 +748,7 @@ Label & Length of an Interslice Surface
 \\ \midrule \\
 Units & m
 \\ \midrule \\
-Equation & ${\ell{}_{s}}$ = $b_{i} \sec\left(\beta{}_{i}\right)$
+Equation & ${\ell{}_{s}}=b_{i} \sec\left(\beta{}_{i}\right)$
 \\ \midrule \\
 Description & ${\ell{}_{s}}$ is the length of an interslice surface (m)\newline$b$ is the base width of a slice (m)\newline$i$ is the index\newline$\beta{}$ is the angle (${}^{\circ}$)
 \\ \bottomrule \end{tabular}
@@ -763,7 +764,7 @@ Label & Earthquake Load Factor
 \\ \midrule \\
 Units & Unitless
 \\ \midrule \\
-Equation & ${K_{c}}$ = ${K_{c}} W_{i}$
+Equation & ${K_{c}}={K_{c}} W_{i}$
 \\ \midrule \\
 Description & ${K_{c}}$ is the earthquake load factor\newline$W$ is the weight (N)\newline$i$ is the index
 \\ \bottomrule \end{tabular}
@@ -779,7 +780,7 @@ Label & Imposed Surface Load
 \\ \midrule \\
 Units & N
 \\ \midrule \\
-Equation & $Q$ = $Q_{i} \omega{}_{i}$
+Equation & $Q=Q_{i} \omega{}_{i}$
 \\ \midrule \\
 Description & $Q$ is the imposed surface load (N)\newline$i$ is the index\newline$\omega{}$ is the angle (${}^{\circ}$)
 \\ \bottomrule \end{tabular}
@@ -795,7 +796,7 @@ Label & Interslice Shear Force
 \\ \midrule \\
 Units & N
 \\ \midrule \\
-Equation & $X$ = $\lambda{} f_{i} E_{i}$
+Equation & $X=\lambda{} f_{i} E_{i}$
 \\ \midrule \\
 Description & $X$ is the interslice shear force (N)\newline$\lambda{}$ is the interslice normal/shear force ratio\newline$f$ is the scaling function\newline$i$ is the index\newline$E$ is the interslice normal force (N)
 \\ \bottomrule \end{tabular}
@@ -811,7 +812,7 @@ Label & Resistive Shear Force
 \\ \midrule \\
 Units & N
 \\ \midrule \\
-Equation & $R$ = $\left(\left(W_{i}+{U_{t,i}} \cos\left(\beta{}_{i}\right)+Q_{i} \cos\left(\omega{}_{i}\right)\right) \cos\left(\alpha{}_{i}\right)+\left(-{K_{c}} W_{i}-{\Delta{}H}_{i}+{U_{t,i}} \sin\left(\beta{}_{i}\right)+Q_{i} \sin\left(\omega{}_{i}\right)\right) \sin\left(\alpha{}_{i}\right)-{U_{b,i}}\right) \tan\left({\varphi{}'}_{i}\right)+{c'}_{i} b_{i} \sec\left(\alpha{}_{i}\right)$
+Equation & $R=\left(\left(W_{i}+{U_{t,i}} \cos\left(\beta{}_{i}\right)+Q_{i} \cos\left(\omega{}_{i}\right)\right) \cos\left(\alpha{}_{i}\right)+\left(-{K_{c}} W_{i}-{\Delta{}H}_{i}+{U_{t,i}} \sin\left(\beta{}_{i}\right)+Q_{i} \sin\left(\omega{}_{i}\right)\right) \sin\left(\alpha{}_{i}\right)-{U_{b,i}}\right) \tan\left({\varphi{}'}_{i}\right)+{c'}_{i} b_{i} \sec\left(\alpha{}_{i}\right)$
 \\ \midrule \\
 Description & $R$ is the resistive shear force (N)\newline$W$ is the weight (N)\newline$i$ is the index\newline${U_{t}}$ is the surface hydrostatic force (N)\newline$\beta{}$ is the angle (${}^{\circ}$)\newline$Q$ is the imposed surface load (N)\newline$\omega{}$ is the angle (${}^{\circ}$)\newline$\alpha{}$ is the angle (${}^{\circ}$)\newline${K_{c}}$ is the earthquake load factor\newline$\Delta{}H$ is the difference between interslice forces (N)\newline${U_{b}}$ is the base hydrostatic force (N)\newline$\varphi{}'$ is the effective angle of friction (${}^{\circ}$)\newline$c'$ is the effective cohesion (Pa)\newline$b$ is the base width of a slice (m)
 \\ \bottomrule \end{tabular}
@@ -839,7 +840,7 @@ Label & Mobilized Shear Force
 \\ \midrule \\
 Units & N
 \\ \midrule \\
-Equation & $T$ = $\left(W_{i}+{U_{t,i}} \cos\left(\beta{}_{i}\right)+Q_{i} \cos\left(\omega{}_{i}\right)\right) \sin\left(\alpha{}_{i}\right)-\left(-{K_{c}} W_{i}-{\Delta{}H}_{i}+{U_{t,i}} \sin\left(\beta{}_{i}\right)+Q_{i} \sin\left(\omega{}_{i}\right)\right) \cos\left(\alpha{}_{i}\right)$
+Equation & $T=\left(W_{i}+{U_{t,i}} \cos\left(\beta{}_{i}\right)+Q_{i} \cos\left(\omega{}_{i}\right)\right) \sin\left(\alpha{}_{i}\right)-\left(-{K_{c}} W_{i}-{\Delta{}H}_{i}+{U_{t,i}} \sin\left(\beta{}_{i}\right)+Q_{i} \sin\left(\omega{}_{i}\right)\right) \cos\left(\alpha{}_{i}\right)$
 \\ \midrule \\
 Description & $T$ is the mobilized shear force (N)\newline$W$ is the weight (N)\newline$i$ is the index\newline${U_{t}}$ is the surface hydrostatic force (N)\newline$\beta{}$ is the angle (${}^{\circ}$)\newline$Q$ is the imposed surface load (N)\newline$\omega{}$ is the angle (${}^{\circ}$)\newline$\alpha{}$ is the angle (${}^{\circ}$)\newline${K_{c}}$ is the earthquake load factor\newline$\Delta{}H$ is the difference between interslice forces (N)
 \\ \bottomrule \end{tabular}
@@ -864,7 +865,7 @@ Label & Pressure
 \\ \midrule \\
 Units & Pa
 \\ \midrule \\
-Equation & $p$ = $\begin{bmatrix}
+Equation & $p=\begin{bmatrix}
 {K_{st,i}} & 0\\
 0 & {K_{bn,i}}
 \end{bmatrix} \begin{bmatrix}
@@ -886,7 +887,7 @@ Label & Pressure
 \\ \midrule \\
 Units & Pa
 \\ \midrule \\
-Equation & $p$ = $\begin{bmatrix}
+Equation & $p=\begin{bmatrix}
 {K_{bA,i}} & {K_{bB,i}}\\
 {K_{bB,i}} & {K_{bA,i}}
 \end{bmatrix} \begin{bmatrix}
@@ -965,7 +966,7 @@ Label & Force
 \\ \midrule \\
 Units & N
 \\ \midrule \\
-Equation & $F$ = $-{\ell{}_{s,i-1}} {K_{sn,i-1}} \delta{}_{i-1}+\left({\ell{}_{s,i-1}} {K_{sn,i-1}}+{\ell{}_{b,i}} {K_{bn,i}}+{\ell{}_{s,i}} {K_{sn,i}}\right) \delta{}_{i}-{\ell{}_{s,i}} {K_{sn,i}} \delta{}_{i+1}$
+Equation & $F=-{\ell{}_{s,i-1}} {K_{sn,i-1}} \delta{}_{i-1}+\left({\ell{}_{s,i-1}} {K_{sn,i-1}}+{\ell{}_{b,i}} {K_{bn,i}}+{\ell{}_{s,i}} {K_{sn,i}}\right) \delta{}_{i}-{\ell{}_{s,i}} {K_{sn,i}} \delta{}_{i+1}$
 \\ \midrule \\
 Description & $F$ is the force (N)\newline${\ell{}_{s}}$ is the length of an interslice surface (m)\newline$i$ is the index\newline${K_{sn}}$ is the normal stiffness ($\frac{\text{Pa}}{\text{m}}$)\newline$\delta{}$ is the displacement (m)\newline${\ell{}_{b}}$ is the total base length of a slice (m)\newline${K_{bn}}$ is the normal stiffness ($\frac{\text{Pa}}{\text{m}}$)
 \\ \bottomrule \end{tabular}
@@ -981,7 +982,7 @@ Label & Shear Stiffness
 \\ \midrule \\
 Units & $\frac{\text{Pa}}{\text{m}}$
 \\ \midrule \\
-Equation & ${K_{bt}}$ = $\frac{E}{2 \left(1+\nu{}\right)} \frac{0.1}{b}+\frac{{c'}_{i}-\sigma{} \tan\left({\varphi{}'}_{i}\right)}{|\delta{}u|+a}$
+Equation & ${K_{bt}}=\frac{E}{2 \left(1+\nu{}\right)} \frac{0.1}{b}+\frac{{c'}_{i}-\sigma{} \tan\left({\varphi{}'}_{i}\right)}{|\delta{}u|+a}$
 \\ \midrule \\
 Description & ${K_{bt}}$ is the shear stiffness ($\frac{\text{Pa}}{\text{m}}$)\newline$E$ is the interslice normal force (N)\newline$\nu{}$ is the Poisson's ratio\newline$b$ is the base width of a slice (m)\newline$c'$ is the effective cohesion (Pa)\newline$i$ is the index\newline$\sigma{}$ is the normal stress (Pa)\newline$\varphi{}'$ is the effective angle of friction (${}^{\circ}$)\newline$\delta{}u$ is the displacement (m)\newline$a$ is the constant (m)
 \\ \bottomrule \end{tabular}
@@ -997,7 +998,7 @@ Label & Normal Stiffness
 \\ \midrule \\
 Units & $\frac{\text{Pa}}{\text{m}}$
 \\ \midrule \\
-Equation & ${K_{bn}}$ = $\begin{cases}
+Equation & ${K_{bn}}=\begin{cases}
 \frac{E \left(1-\nu{}\right)}{\left(1+\nu{}\right) \left(1-2 \nu{}+b\right)}, & \nu{}<0\\
 0.01 \frac{E \left(1-\nu{}\right)}{\left(1+\nu{}\right) \left(1-2 \nu{}+b\right)}+\frac{\kappa{}}{\delta{}v+A}, & \nu{}\geq{}0
 \end{cases}$
@@ -1016,7 +1017,7 @@ Label & Fixme
 \\ \midrule \\
 Units & Unitless
 \\ \midrule \\
-Equation & $SpencerFixme1Please$ = $E_{i}+E_{i-1}$
+Equation & $SpencerFixme1Please=E_{i}+E_{i-1}$
 \\ \midrule \\
 Description & $SpencerFixme1Please$ is the fixme\newline$E$ is the interslice normal force (N)\newline$i$ is the index
 \\ \bottomrule \end{tabular}
@@ -1032,7 +1033,7 @@ Label & Fixme
 \\ \midrule \\
 Units & Unitless
 \\ \midrule \\
-Equation & $SpencerFixme2Please$ = $H_{i}+H_{i-1}$
+Equation & $SpencerFixme2Please=H_{i}+H_{i-1}$
 \\ \midrule \\
 Description & $SpencerFixme2Please$ is the fixme\newline$H$ is the interslice water force (N)\newline$i$ is the index
 \\ \bottomrule \end{tabular}
@@ -1325,7 +1326,7 @@ There are no auxiliary constants.
 \label{Sec:References}
 \begin{filecontents*}{bibfile.bib}
 @article{chen2005,
-author={Qian, Q. H. and Zhu, D. Y. and Lee, C. F. and Chen, G. R.},
+author={Qian, Q.H. and Zhu, D.Y. and Lee, C.F. and Chen, G.R.},
 title={A concise algorithm for computing the factor of safety using the morgenstern price method},
 journal={Canadian Geotechnical Journal},
 year={2005},
@@ -1335,7 +1336,7 @@ number={1},
 pages={"272-278"}}
 
 @article{fredlund1977,
-author={Fredlund, D. G. and Krahn, J.},
+author={Fredlund, D.G. and Krahn, J.},
 title={Comparison of slope stability methods of analysis},
 journal={Canadian Geotechnical Journal},
 year={1977},
@@ -1352,7 +1353,7 @@ year={2013},
 address={Hamilton, ON, Canada}}
 
 @article{li2010,
-author={Yu-Chao, Li and Yun-Min, Chen and Zhan, Tony L. T. and Sao-Sheng, Ling and Cleall, Peter John},
+author={Yu-Chao, Li and Yun-Min, Chen and Zhan, TonyL.T. and Sao-Sheng, Ling and Cleall, PeterJohn},
 title={An efficient approach for locating the critical slip surface in slope stability analyses using a real-coded genetic algorithm},
 journal={Canadian Geotechnical Journal},
 year={2010},
@@ -1362,7 +1363,7 @@ volume={47},
 number={7}}
 
 @article{parnas1986,
-author={Parnas, David L. and Clements, P. C.},
+author={Parnas, DavidL. and Clements, P.C.},
 title={A rational design process: How and why to fake it},
 journal={IEEE Transactions on Software Engineering},
 year={1986},
@@ -1373,7 +1374,7 @@ pages={"251-257"},
 address={Washington, USA}}
 
 @inproceedings{smithLai2005,
-author={Smith, W. Spencer and Lai, Lei},
+author={Smith, W.Spencer and Lai, Lei},
 title={A new requirements template for scientific computing},
 booktitle={Proceedings of the First International Workshop on Situational Requirements Engineering Processes - Methods, Techniques and Tools to Support Situation-Specific Requirements Engineering Processes, SREP'05},
 year={2005},

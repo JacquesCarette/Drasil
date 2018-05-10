@@ -15,6 +15,7 @@ library
     Data.Drasil.Constraints
     Data.Drasil.SentenceStructures
     Data.Drasil.SI_Units
+    Data.Drasil.Phrase
     Data.Drasil.Utils
     Data.Drasil.Concepts.Computation
     Data.Drasil.Concepts.Documentation
@@ -40,15 +41,15 @@ library
     , Language.Drasil.Expr
     , Language.Drasil.Expr.Math
     , Language.Drasil.Expr.Precedence
-    , Language.Drasil.Chunk
+    , Language.Drasil.Classes
     , Language.Drasil.Config
     , Language.Drasil.Document
     , Language.Drasil.Format
     , Language.Drasil.Generate
     , Language.Drasil.Misc
+    , Language.Drasil.NounPhrase.Core
     , Language.Drasil.NounPhrase
     , Language.Drasil.People
-    , Language.Drasil.Recipe
     , Language.Drasil.RefTypes
     , Language.Drasil.Reference
     , Language.Drasil.Space
@@ -74,27 +75,26 @@ library
     , Language.Drasil.Code.Imperative.LanguageRenderer.PythonRenderer
     , Language.Drasil.Code.CodeGeneration
     , Language.Drasil.Code.Imperative.Parsers.ConfigParser
-    , Language.Drasil.HTML.AST
     , Language.Drasil.HTML.Helpers
-    , Language.Drasil.HTML.Import
     , Language.Drasil.HTML.Print
     , Language.Drasil.HTML.Monad
-    , Language.Drasil.TeX.AST
     , Language.Drasil.TeX.Helpers
-    , Language.Drasil.TeX.Import
     , Language.Drasil.TeX.Print
     , Language.Drasil.TeX.Monad
     , Language.Drasil.TeX.Preamble
     , Language.Drasil.Chunk.AssumpChunk
     , Language.Drasil.Chunk.Attribute
+    , Language.Drasil.Chunk.Attribute.Core
     , Language.Drasil.Chunk.Attribute.Derivation
     , Language.Drasil.Chunk.Change
     , Language.Drasil.Chunk.Citation
     , Language.Drasil.Chunk.Code
     , Language.Drasil.Chunk.CommonIdea
     , Language.Drasil.Chunk.Concept
+    , Language.Drasil.Chunk.Concept.Core
     , Language.Drasil.Chunk.ConVar
     , Language.Drasil.Chunk.Constrained
+    , Language.Drasil.Chunk.Constrained.Core
     , Language.Drasil.Chunk.DefinedQuantity
     , Language.Drasil.Chunk.Eq
     , Language.Drasil.Chunk.ExprRelat
@@ -124,6 +124,7 @@ library
     , Language.Drasil.Printing.AST
     , Language.Drasil.Printing.Citation
     , Language.Drasil.Printing.Import
+    , Language.Drasil.Printing.LayoutObj
     , Language.Drasil.DataDesc
 
   Build-Depends:
@@ -135,7 +136,8 @@ library
     directory >= 1.2.6.2,
     split >= 0.2.3.1,
     MissingH >= 1.4.0.1,
-    parsec >= 3.1.9
+    parsec >= 3.1.9,
+    data-fix (>= 0.0.4 && <= 1.0)
   default-language: Haskell2010
   ghc-options:      -Wall
 

@@ -5,7 +5,6 @@ import Control.Lens ((^.))
 
 import Data.Drasil.Concepts.Documentation (system, simulation, model, 
   problem, acroNumGen)
-import Drasil.DocumentLanguage (mkAssump)
 
 import Drasil.SWHS.DataDefs (dd1HtFluxC, dd2HtFluxP)
 import Drasil.SWHS.Concepts (coil, tank, phsChgMtrl, water, perfect_insul,
@@ -48,114 +47,114 @@ assumps_SWHS_list_new = [assump_new_1, assump_new_2,assump_new_3, assump_new_4, 
   assump_new_16, assump_new_17, assump_new_18, assump_new_19, assump_new_20]
 
 
-assump_new_1 = ac' "assump1" $ foldlSent [
+assump_new_1 = assump "assump1" (foldlSent [
   S "The only form of", phrase energy, S "that is",
   S "relevant for this", phrase problem, S "is" +:+. 
   phrase CT.thermal_energy, S "All other forms of", phrase energy `sC`
   S "such as", phrase mech_energy `sC` S "are assumed to be negligible",
-  sSqBr $ makeRef $ reldefn t1ConsThermE]
+  sSqBr $ makeRef $ reldefn t1ConsThermE]) (S "assump1")
 
-assump_new_2 = ac' "assump2" $ foldlSent [
+assump_new_2 = assump "assump2" (foldlSent [
   S "All", phrase CT.heat_trans, S "coefficients are constant over",
-  phrase time, sSqBr $ acroGD 1]
+  phrase time, sSqBr $ acroGD 1]) (S "assump2")
 
-assump_new_3 = ac' "assump3" $ foldlSent [
+assump_new_3 = assump "assump3" (foldlSent [
   S "The", phrase water, S "in the", phrase tank,
   S "is fully mixed, so the", phrase temp_W `isThe` 
   S "same throughout the entire", phrase tank,
-  sSqBr $ acroGD 2 `sC` (makeRef $ datadefn dd2HtFluxP)]
+  sSqBr $ acroGD 2 `sC` (makeRef $ datadefn dd2HtFluxP)]) (S "assump3")
 
-assump_new_4 = ac' "assump4" $ foldlSent [
+assump_new_4 = assump "assump4" (foldlSent [
   S "The", phrase temp_PCM `isThe` S "same throughout the", phrase pcm_vol,
   sSqBr $ acroGD 2 `sC`
-  (makeRef $ datadefn dd2HtFluxP)]
+  (makeRef $ datadefn dd2HtFluxP)]) (S "assump4")
 
-assump_new_5 = ac' "assump5" $ foldlSent [
+assump_new_5 = assump "assump5" (foldlSent [
   S "The", phrase w_density `sAnd` phrase pcm_density,
   S "have no spatial variation; that is" `sC`
   S "they are each constant over their entire", phrase vol,
-  sSqBr $ acroGD 2]
+  sSqBr $ acroGD 2]) (S "assump5")
 
-assump_new_6 = ac' "assump6" $ foldlSent [
+assump_new_6 = assump "assump6" (foldlSent [
   S "The", phrase htCap_W `sC` phrase htCap_S_P `sC` S "and",
   phrase htCap_L_P, S "have no spatial variation; that",
   S "is" `sC` S "they are each constant over their entire",
-  phrase vol, sSqBr $ acroGD 2]
+  phrase vol, sSqBr $ acroGD 2]) (S "assump6")
 
-assump_new_7 = ac' "assump7" $ foldlSent [
+assump_new_7 = assump "assump7" (foldlSent [
   CT.law_conv_cooling ^. defn, S "applies between the",
   phrase coil `sAnd` S "the", phrase water,
-  sSqBr $ makeRef $ datadefn dd1HtFluxC]
+  sSqBr $ makeRef $ datadefn dd1HtFluxC]) (S "assump7")
 
-assump_new_8 = ac' "assump8" $ foldlSent [
+assump_new_8 = assump "assump8" (foldlSent [
   S "The", phrase temp_C, S "is constant over", phrase time,
-  sSqBr $ makeRef $ datadefn dd1HtFluxC]
+  sSqBr $ makeRef $ datadefn dd1HtFluxC]) (S "assump8")
 
-assump_new_9 = ac' "assump9" $ foldlSent [
+assump_new_9 = assump "assump9" (foldlSent [
   S "The", phrase temp_C, S "does not vary along its length",
-  sSqBr $ makeRef $ datadefn dd1HtFluxC]
+  sSqBr $ makeRef $ datadefn dd1HtFluxC]) (S "assump9")
 
-assump_new_10 = ac' "assump10" $ foldlSent [
+assump_new_10 = assump "assump10" (foldlSent [
   CT.law_conv_cooling ^. defn, S "applies between the",
   phrase water `sAnd` S "the", short phsChgMtrl,
-  sSqBr $ makeRef $ datadefn dd2HtFluxP]
+  sSqBr $ makeRef $ datadefn dd2HtFluxP]) (S "assump10")
 
-assump_new_11 = ac' "assump11" $ foldlSent [
+assump_new_11 = assump "assump11" (foldlSent [
   S "The", phrase model, S "only accounts for", (charging ^. defn) `sC`
   S "not" +:+. phrase discharging, S "The", phrase temp_W `sAnd`
   phrase temp_PCM, S "can only increase, or remain",
   S "constant; they do not decrease. This implies that the",
   phrase temp_init, sSqBr $ makeRef assump12, S "is less than (or equal)",
-  S "to the", phrase temp_C, sSqBr $ acroIM 1]
+  S "to the", phrase temp_C, sSqBr $ acroIM 1]) (S "assump11")
 
-assump_new_12 = ac' "assump12" $ foldlSent [
+assump_new_12 = assump "assump12" (foldlSent [
   phrase temp_init `ofThe'` phrase water `sAnd` S "the",
   short phsChgMtrl `isThe` S "same",
-  sSqBr $ acroIM 1 `sC` acroIM 2]
+  sSqBr $ acroIM 1 `sC` acroIM 2]) (S "assump12")
 
-assump_new_13 = ac' "assump13" $ foldlSent [
+assump_new_13 = assump "assump13" (foldlSent [
   S "The", phrase simulation, S "will start with the",
   short phsChgMtrl, S "in a", solid ^. defn,
-  sSqBr $ acroIM 2 `sC` acroIM 4]
+  sSqBr $ acroIM 2 `sC` acroIM 4]) (S "assump13")
 
-assump_new_14 = ac' "assump14" $ foldlSent [
+assump_new_14 = assump "assump14" (foldlSent [
   (S "operating" +:+ phrase temp +:+ S "range") `ofThe'` phrase system,
   S "is such that the", phrase water,
   S "is always in" +:+. (liquid ^. defn), S "That is" `sC`
   S "the", phrase temp, S "will not drop below the",
   phrase melt_pt, S "of", phrase water `sC` S "or rise above its",
-  phrase boil_pt, sSqBr $ acroIM 1 `sC` acroIM 3]
+  phrase boil_pt, sSqBr $ acroIM 1 `sC` acroIM 3]) (S "assump14")
 
-assump_new_15 = ac' "assump15" $ foldlSent [
+assump_new_15 = assump "assump15" (foldlSent [
   S "The", phrase tank, S "is", phrase perfect_insul,
   S "so that there is no", phrase CT.heat, S "loss from the",
-  phrase tank, sSqBr $ acroIM 1]
+  phrase tank, sSqBr $ acroIM 1]) (S "assump15")
 
-assump_new_16 = ac' "assump16" $ foldlSent [
+assump_new_16 = assump "assump16" (foldlSent [
   S "No internal", phrase CT.heat, S "is generated by either the",
   phrase water, S "or the", short phsChgMtrl `semiCol`
   S "therefore, the", phrase vol_ht_gen, S "is zero",
-  sSqBr $ acroIM 1 `sC` acroIM 2]
+  sSqBr $ acroIM 1 `sC` acroIM 2]) (S "assump16")
 
-assump_new_17 = ac' "assump17" $ foldlSent [
+assump_new_17 = assump "assump17" (foldlSent [
   (phrase vol +:+ phrase change) `ofThe'` short phsChgMtrl,
-  S "due to", phrase CT.melting, S "is negligible", sSqBr $ acroIM 2]
+  S "due to", phrase CT.melting, S "is negligible", sSqBr $ acroIM 2]) (S "assump17")
 
-assump_new_18 = ac' "assump18" $ foldlSent [
+assump_new_18 = assump "assump18" (foldlSent [
   S "The", short phsChgMtrl, S "is either in a", liquid ^. defn,
   S "or a", solid ^. defn, S "but not a", gaseous ^. defn,
-  sSqBr $ acroIM 2 `sC` acroIM 4]
+  sSqBr $ acroIM 2 `sC` acroIM 4]) (S "assump18")
 
-assump_new_19 = ac' "assump19" $ foldlSent [
+assump_new_19 = assump "assump19" (foldlSent [
   S "The pressure in the", phrase tank, S "is atmospheric, so the",
   phrase melt_pt `sAnd` phrase boil_pt, S "are", S (show (0 :: Integer)) :+:
   Sy (unit_symb temp) `sAnd` S (show (100 :: Integer)) :+:
-  Sy (unit_symb temp) `sC` S "respectively", sSqBr $ acroIM 1 `sC` acroIM 3]
+  Sy (unit_symb temp) `sC` S "respectively", sSqBr $ acroIM 1 `sC` acroIM 3]) (S "assump19")
 
-assump_new_20 = ac' "assump20" $ foldlSent [
+assump_new_20 = assump "assump20" (foldlSent [
   S "When considering the", phrase w_vol, S "in the",
   phrase tank `sC` (phrase vol `ofThe` phrase coil),
-  S "is assumed to be negligible"]
+  S "is assumed to be negligible"]) (S "assump20")
 
 assumps_list :: [Contents]
 assumps_list = acroNumGen assumps_assump_list 1
@@ -169,115 +168,31 @@ assump1, assump2, assump3, assump4, assump5, assump6, assump7,
   assump8, assump9, assump10, assump11, assump12, assump13, assump14,
   assump15, assump16, assump17, assump18, assump19, assump20 :: Contents
 
-assump1 = mkAssump "assump1" $ foldlSent [
-  S "The only form of", phrase energy, S "that is",
-  S "relevant for this", phrase problem, S "is" +:+. 
-  phrase CT.thermal_energy, S "All other forms of", phrase energy `sC`
-  S "such as", phrase mech_energy `sC` S "are assumed to be negligible",
-  sSqBr $ makeRef $ reldefn t1ConsThermE]
---
-assump2 = mkAssump "assump2" $ foldlSent [
-  S "All", phrase CT.heat_trans, S "coefficients are constant over",
-  phrase time, sSqBr $ acroGD 1]
---
-assump3 = mkAssump "assump3" $ foldlSent [
-  S "The", phrase water, S "in the", phrase tank,
-  S "is fully mixed, so the", phrase temp_W `isThe` 
-  S "same throughout the entire", phrase tank,
-  sSqBr $ acroGD 2 `sC` (makeRef $ datadefn dd2HtFluxP)]
---
-assump4 = mkAssump "assump4" $ foldlSent [
-  S "The", phrase temp_PCM `isThe` S "same throughout the", phrase pcm_vol,
-  sSqBr $ acroGD 2 `sC`
-  (makeRef $ datadefn dd2HtFluxP)]--FIXME `sC` makeRef likeChg1]
---
-assump5 = mkAssump "assump5" $ foldlSent [
-  S "The", phrase w_density `sAnd` phrase pcm_density,
-  S "have no spatial variation; that is" `sC`
-  S "they are each constant over their entire", phrase vol,
-  sSqBr $ acroGD 2]
---
-assump6 = mkAssump "assump6" $ foldlSent [
-  S "The", phrase htCap_W `sC` phrase htCap_S_P `sC` S "and",
-  phrase htCap_L_P, S "have no spatial variation; that",
-  S "is" `sC` S "they are each constant over their entire",
-  phrase vol, sSqBr $ acroGD 2]
---
-assump7 = mkAssump "assump7" $ foldlSent [
-  CT.law_conv_cooling ^. defn, S "applies between the",
-  phrase coil `sAnd` S "the", phrase water,
-  sSqBr $ makeRef $ datadefn dd1HtFluxC]
---
-assump8 = mkAssump "assump8" $ foldlSent [
-  S "The", phrase temp_C, S "is constant over", phrase time,
-  sSqBr $ makeRef $ datadefn dd1HtFluxC]--FIXME `sC` makeRef likeChg2]
---
-assump9 = mkAssump "assump9" $ foldlSent [
-  S "The", phrase temp_C, S "does not vary along its length",
-  sSqBr $ makeRef $ datadefn dd1HtFluxC]--FIXME `sC` makeRef likeChg3]
---
-assump10 = mkAssump "assump10" $ foldlSent [
-  CT.law_conv_cooling ^. defn, S "applies between the",
-  phrase water `sAnd` S "the", short phsChgMtrl,
-  sSqBr $ makeRef $ datadefn dd2HtFluxP]
---
-assump11 = mkAssump "assump11" $ foldlSent [
-  S "The", phrase model, S "only accounts for", (charging ^. defn) `sC`
-  S "not" +:+. phrase discharging, S "The", phrase temp_W `sAnd`
-  phrase temp_PCM, S "can only increase, or remain",
-  S "constant; they do not decrease. This implies that the",
-  phrase temp_init, sSqBr $ makeRef assump12, S "is less than (or equal)",
-  S "to the", phrase temp_C, sSqBr $ acroIM 1]--FIXME `sC` makeRef likeChg4]
---
-assump12 = mkAssump "assump12" $ foldlSent [
-  phrase temp_init `ofThe'` phrase water `sAnd` S "the",
-  short phsChgMtrl `isThe` S "same",
-  sSqBr $ acroIM 1 `sC` acroIM 2]--FIXME `sC` makeRef likeChg5]
---
-assump13 = mkAssump "assump13" $ foldlSent [
-  S "The", phrase simulation, S "will start with the",
-  short phsChgMtrl, S "in a", solid ^. defn,
-  sSqBr $ acroIM 2 `sC` acroIM 4]
---
-assump14 = mkAssump "assump14" $ foldlSent [
-  (S "operating" +:+ phrase temp +:+ S "range") `ofThe'` phrase system,
-  S "is such that the", phrase water,
-  S "is always in" +:+. (liquid ^. defn), S "That is" `sC`
-  S "the", phrase temp, S "will not drop below the",
-  phrase melt_pt, S "of", phrase water `sC` S "or rise above its",
-  phrase boil_pt, sSqBr $ acroIM 1 `sC` acroIM 3]
---
-assump15 = mkAssump "assump15" $ foldlSent [
-  S "The", phrase tank, S "is", phrase perfect_insul,
-  S "so that there is no", phrase CT.heat, S "loss from the",
-  phrase tank, sSqBr $ acroIM 1]--FIXME `sC` makeRef likeChg6]
---
-assump16 = mkAssump "assump16" $ foldlSent [
-  S "No internal", phrase CT.heat, S "is generated by either the",
-  phrase water, S "or the", short phsChgMtrl `semiCol`
-  S "therefore, the", phrase vol_ht_gen, S "is zero",
-  sSqBr $ acroIM 1 `sC` acroIM 2]
---
-assump17 = mkAssump "assump17" $ foldlSent [
-  (phrase vol +:+ phrase change) `ofThe'` short phsChgMtrl,
-  S "due to", phrase CT.melting, S "is negligible", sSqBr $ acroIM 2]
---
-assump18 = mkAssump "assump18" $ foldlSent [
-  S "The", short phsChgMtrl, S "is either in a", liquid ^. defn,
-  S "or a", solid ^. defn, S "but not a", gaseous ^. defn,
-  sSqBr $ acroIM 2 `sC` acroIM 4]
---
-assump19 = mkAssump "assump19" $ foldlSent [
-  S "The pressure in the", phrase tank, S "is atmospheric, so the",
-  phrase melt_pt `sAnd` phrase boil_pt, S "are", S (show (0 :: Integer)) :+:
-  Sy (unit_symb temp) `sAnd` S (show (100 :: Integer)) :+:
-  Sy (unit_symb temp) `sC` S "respectively", sSqBr $ acroIM 1 `sC` acroIM 3]
---
-assump20 = mkAssump "assump20" $ foldlSent [
-  S "When considering the", phrase w_vol, S "in the",
-  phrase tank `sC` (phrase vol `ofThe` phrase coil),
-  S "is assumed to be negligible"]--FIXME , sSqBr $ makeRef req2]
-  
+assump1 = Assumption $ assump_new_1
+assump2 = Assumption $ assump_new_2
+assump3 = Assumption $ assump_new_3
+assump4 = Assumption $ assump_new_4
+  --FIXME `sC` makeRef likeChg1]
+assump5 = Assumption $ assump_new_5
+assump6 = Assumption $ assump_new_6
+assump7 = Assumption $ assump_new_7
+assump8 = Assumption $ assump_new_8
+  --FIXME `sC` makeRef likeChg2]
+assump9 = Assumption $ assump_new_9
+  --FIXME `sC` makeRef likeChg3]
+assump10 = Assumption $ assump_new_10
+assump11 = Assumption $ assump_new_11
+  --FIXME `sC` makeRef likeChg4]
+assump12 = Assumption $ assump_new_12
+  --FIXME `sC` makeRef likeChg5]
+assump13 = Assumption $ assump_new_13
+assump14 = Assumption $ assump_new_14
+assump15 = Assumption $ assump_new_15
+assump16 = Assumption $ assump_new_16
+assump17 = Assumption $ assump_new_17
+assump18 = Assumption $ assump_new_18
+assump19 = Assumption $ assump_new_19
+assump20 = Assumption $ assump_new_20
 
 -- Again, list structure is same between all examples.
 

@@ -6,6 +6,8 @@ import Data.Drasil.Concepts.Documentation (assumption, dataDefn,
   srs, thModel, typUnc, property, safety)
 import Data.Drasil.Concepts.Math (surface)
 
+import Data.Drasil.Phrase(of_'')
+
 ----Acronyms-----
 acronyms :: [CI]
 acronyms = [assumption, dataDefn, genDefn, goalStmt, inModel, likelyChg,

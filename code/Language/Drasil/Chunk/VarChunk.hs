@@ -1,13 +1,13 @@
 {-# Language TemplateHaskell #-}
-module Language.Drasil.Chunk.VarChunk(VarChunk(VC),implVar,vc,vcSt,vc',codeVC,vc'') where
+module Language.Drasil.Chunk.VarChunk(VarChunk,implVar,codeVC,vc,vcSt,vc'') where
 
-import Language.Drasil.Chunk
-import Language.Drasil.Chunk.NamedIdea
-import Language.Drasil.Chunk.SymbolForm (Stage(..), HasSymbol(symbol))
+import Language.Drasil.Classes (HasUID(uid), NamedIdea(term), Idea(getA),
+  HasSymbol(symbol), HasSpace(typ))
+import Language.Drasil.Chunk.NamedIdea (IdeaDict, nw, nc)
 import Language.Drasil.Chunk.Quantity (Quantity(getUnit))
 
-import Language.Drasil.Symbol
-import Language.Drasil.Space
+import Language.Drasil.Symbol (Symbol(Empty),Stage(..))
+import Language.Drasil.Space (Space)
 
 import Language.Drasil.NounPhrase (NP)
 
@@ -20,14 +20,13 @@ data VarChunk = VC { _ni :: IdeaDict
 makeLenses ''VarChunk
 
 instance Eq        VarChunk where c1 == c2 = (c1 ^. uid) == (c2 ^. uid)
-instance Chunk     VarChunk where uid = ni . uid
+instance HasUID    VarChunk where uid = ni . uid
 instance NamedIdea VarChunk where term = ni . term
 instance Idea      VarChunk where getA = getA . view ni
-instance HasSymbol VarChunk where symbol st x = (x ^. vsymb) st
+instance HasSymbol VarChunk where symbol x = (x ^. vsymb)
 instance HasSpace  VarChunk where typ = vtyp
 instance Quantity  VarChunk where getUnit _  = Nothing
   
-
 -- | implVar makes an variable that is implementation-only
 implVar :: String -> NP -> Symbol -> Space -> VarChunk
 implVar i des sym ty = vcSt i des f ty
@@ -44,10 +43,6 @@ vc i des sym space = VC (nw $ nc i des) (\_ -> sym) space
 vcSt :: String -> NP -> (Stage -> Symbol) -> Space -> VarChunk
 vcSt i des sym space = VC (nw $ nc i des) sym space
 
--- | Creates a VarChunk from an 'Idea', symbol, and space
-vc' :: Idea c => c -> Symbol -> Space -> VarChunk
-vc' n s t = VC (nw n) (\_ -> s) t
-
 codeVC :: Idea c => c -> Symbol -> Space -> VarChunk
 codeVC  n s t = VC (nw n) f t
   where
@@ -55,6 +50,6 @@ codeVC  n s t = VC (nw n) f t
     f Implementation = s
     f Equational = Empty
 
--- | Creates a VarChunk from an 'Idea''s uid and term and symbol
+-- | Creates a VarChunk from an 'Idea', symbol and space
 vc'' :: Idea c => c -> Symbol -> Space -> VarChunk
 vc'' n sy space = vc (n ^. uid) (n ^. term) sy space

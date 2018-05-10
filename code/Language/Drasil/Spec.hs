@@ -2,14 +2,11 @@
 -- | Contains Sentences and helpers
 module Language.Drasil.Spec where
 
-import Language.Drasil.Unicode (Special(CurlyBrOpen,CurlyBrClose,SqBrOpen,SqBrClose))
+import Language.Drasil.Unicode (Special(SqBrOpen,SqBrClose))
 import Language.Drasil.Symbol
 import Language.Drasil.Expr
 import Language.Drasil.RefTypes
 import Language.Drasil.UnitLang (USymb)
-
--- | For writing accented characters
-data Accent = Grave | Acute deriving Eq
 
 -- | One slight hack remaining
 type RefName = Sentence
@@ -27,13 +24,11 @@ data Sentence where
   S     :: String -> Sentence       -- Strings, used for Descriptions in Chunks
   Sp    :: Special -> Sentence
   P     :: Symbol -> Sentence
-  F     :: Accent -> Char -> Sentence  -- Special formatting for certain special
-                                       -- chars
   Ref   :: RefType -> RefAdd -> RefName -> Sentence  -- Needs helper func to create Ref
                                     -- See Reference.hs
   Quote :: Sentence -> Sentence     -- Adds quotation marks around a sentence
                                     
-  -- Direct concatenation of two Specs (no implicit spaces!)
+  -- Direct concatenation of two Sentences (no implicit spaces!)
   (:+:) :: Sentence -> Sentence -> Sentence   
   EmptyS :: Sentence
   E :: Expr -> Sentence
@@ -55,9 +50,6 @@ sSqBr x = Sp SqBrOpen :+: x :+: Sp SqBrClose
 
 sSqBrNum :: Int -> Sentence
 sSqBrNum y = sSqBr (S (show y))
-
-sCurlyBr :: Sentence -> Sentence
-sCurlyBr x = Sp CurlyBrOpen :+: x :+: Sp CurlyBrClose
 
 -- | Helper for concatenating two sentences with a space between them.
 (+:+) :: Sentence -> Sentence -> Sentence

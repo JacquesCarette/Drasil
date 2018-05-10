@@ -44,32 +44,34 @@ wrap s ts = \x ->
   in vcat [tb s, x, te s]
 
 -- | Helper for setting up captions  
-caption :: String -> Doc
-caption t = wrap "p" ["caption"] (text t)
+caption :: Doc -> Doc
+caption = wrap "p" ["caption"]
 
 -- | Helper for setting up references
-refwrap :: String -> Doc -> Doc
-refwrap r x = vcat [text ("<a id=\"" ++ r ++ "\">"), x, text "</a>"]
+refwrap :: Doc -> Doc -> Doc
+refwrap r x = vcat [hcat [text "<a id=\"", r, text  "\">"], x, text "</a>"]
 
 -- | Helper for setting up links to references
-reflink :: String -> String -> String
-reflink ref txt = "<a href=#" ++ ref ++ ">" ++ txt ++ "</a>"
+reflink :: String -> Doc -> Doc
+reflink ref txt = text ("<a href=#" ++ ref ++ ">") <> txt <> text "</a>"
 
 -- | Helper for setting up figures
-image :: String -> String -> MaxWidthPercent -> Doc
+image :: Doc -> Doc -> MaxWidthPercent -> Doc
 image f c 100 = 
-  text $ "<img class=\"figure\" src=\"" ++ f ++ "\" alt=\"" ++ c ++ "\"></img>"
+  text "<img class=\"figure\" src=\"" <> f <> text "\" alt=\"" <> c <> text "\"></img>"
 image f c wp =
-  text $ "<img class=\"figure\" src=\"" ++ f ++ "\" alt=\"" ++ c ++ "\"" ++
-  "style=\"max-width: " ++ show (wp / 100) ++ "%;\"></img>"
+  text "<img class=\"figure\" src=\"" <> f <> text "\" alt=\"" <> c <> 
+  text ("\"style=\"max-width: " ++ show (wp / 100) ++ "%;\"></img>")
 
-sub,sup,em,bold :: String -> String  
+em :: Doc -> Doc
+-- | Emphasis (italics) tag
+em  = \x -> text "<em>"  <> x <> text "</em>"
+
+sub,sup,bold :: String -> String  
 -- | Subscript tag
 sub = \x -> "<sub>" ++ x ++ "</sub>"
 -- | Superscript tag
 sup = \x -> "<sup>" ++ x ++ "</sup>"
--- | Emphasis (italics) tag
-em  = \x -> "<em>"  ++ x ++ "</em>"
 -- | Bold tag
 bold  = \x -> "<b>"  ++ x ++ "</b>"
 

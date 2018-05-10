@@ -4,11 +4,9 @@ import Language.Drasil
 -- These are not normally all exported, but need them here. Should probably create
 -- some kind of Language.Drasil.Development module... FIXME
 import Language.Drasil.UnitLang(UDefn(..))
-import Language.Drasil.Unit (HasUnitSymbol(..), FundUnit(..), DerUChunk(..),
+import Language.Drasil.Unit (FundUnit(..), DerUChunk(..),
   UnitDefn, new_unit, (^:), (/:), (*:), makeDerU, shift, scale,
   derUC, derUC', derUC'', unitWrapper)
-
-import Control.Lens ((^.))
 
 fundamentals :: [FundUnit]
 fundamentals = [metre, kilogram, second, kelvin, mole, ampere, candela]
@@ -23,11 +21,6 @@ si_units = map unitWrapper fundamentals ++ map unitWrapper derived
 
 ------------- Fundamental SI Units ---------------------------------------------
 
-fund :: String -> String -> String -> FundUnit
---This is one case where I don't consider having "id" and "term" equal 
--- a bad thing.
-fund nam desc sym = UD (dcc nam (cn' nam) desc) (UName $ Atomic sym)
-
 metre, kilogram, second, kelvin, mole, ampere, candela :: FundUnit
 metre    = fund "metre"    "length"               "m"
 kilogram = fund "kilogram" "mass"                 "kg"
@@ -38,6 +31,9 @@ ampere   = fund "ampere"   "electric current"     "A"
 candela  = fund "candela"  "luminous intensity"   "cd"
 
 ------------- Commonly defined units -------------------------------------------
+
+degree :: FundUnit --FIXME: define degree in terms of radians and pi
+degree = UD (dcc "degree" (cn' "degree") "angle") (US [(Special Circle,1)])
 
 -- Some of these units are easiest to define via others less common names, 
 -- which we define first.
@@ -82,7 +78,7 @@ hertz = derUC "hertz"
 
 joule = derUC' "joule" 
   "joule" "energy" (Atomic "J") 
-  (USynonym (UProd [kilogram ^. usymb, m_2 ^. usymb, (second ^: (-2))]))
+  (USynonym $ kilogram *$ (m_2 *$ (second ^: (-2))))
 
 katal = derUC' "katal" 
   "katal" "catalytic activity" (Atomic "kat") (USynonym (mole /: second))
@@ -107,15 +103,14 @@ millimetre = derUC' "millimetre"
   "millimetre" "length" (Atomic "mm") (scale 0.0001 metre)
 
 newton = derUC' "newton"
-  "newton" "force" (Atomic "N")
-  (USynonym (UProd [(kilogram ^. usymb), (second ^: (-2))]))
+  "newton" "force" (Atomic "N") (USynonym $ kilogram *$ (second ^: (-2)))
   
 ohm = derUC' "ohm"
   "ohm" "resistance" (Greek Omega) (USynonym (volt /: ampere))
   
 pascal = derUC' "pascal" 
   "pascal" "pressure" (Atomic "Pa")
-  (USynonym (UProd [(kilogram ^. usymb), (metre ^: (-1)), (second ^: (-2))]))
+  (USynonym $ kilogram /$ (metre *$ (second ^: 2)))
   
 radian = derUC' "radian" 
   "radian" "angle" (Atomic "rad") (USynonym (metre /: metre))
@@ -137,14 +132,11 @@ volt = derUC' "volt"
   "volt" "voltage" (Atomic "V") (USynonym (watt /: ampere))
 
 watt = derUC' "watt" "watt" "power" (Atomic "W")
-  (USynonym (UProd [kilogram ^. usymb, m_2 ^. usymb, (second ^: (-3))]))
+  (USynonym $ kilogram *$ (m_2 *$ (second ^: (-3))))
           
 weber = derUC' "weber"
   "weber" "magnetic flux" (Atomic "Wb") (USynonym (volt *: second))
   
-degree :: FundUnit --FIXME: define degree in terms of radians and pi
-degree = UD (dcc "degree" (cn' "degree") "angle") (UName (Special Circle))
-
 specificE :: DerUChunk
 specificE = makeDerU (dcc "specificE" (cnIES "specific energy") 
   "energy per unit mass") $ USynonym (joule /: kilogram)
@@ -152,7 +144,7 @@ specificE = makeDerU (dcc "specificE" (cnIES "specific energy")
 specific_weight :: DerUChunk
 specific_weight = makeDerU (dcc "specific_weight" (cn' "specific weight")
   "weight per unit volume") $
-  USynonym (UDiv (newton ^. usymb) (metre ^: 3))
+  USynonym $ newton *$ (metre ^: (-3))
   
 -- FIXME: Need to add pi 
 --degrees = DUC

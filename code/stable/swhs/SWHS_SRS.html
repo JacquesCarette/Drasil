@@ -6,6 +6,7 @@
 <title>
 Software Requirements Specification for Solar Water Heating Systems Incorporating PCM
 </title>
+<meta charset="utf-8">
 </head>
 <body>
 <div class="title">
@@ -15,24 +16,24 @@ Software Requirements Specification for Solar Water Heating Systems Incorporatin
 </div>
 <div class="author">
 <h2>
-Thulasi Jegatheesan, Brooks MacLachlan, and W. Spencer Smith
+ThulasiJegatheesan,BrooksMacLachlan, andW.SpencerSmith
 </h2>
 </div>
 <a id="Sec:RefMat">
 <div class="section">
-<h2>
+<h1>
 Reference Material
-</h2>
+</h1>
 <p class="paragraph">
 This section records information for easy reference.
 </p>
 <a id="Sec:ToU">
 <div class="subsection">
-<h3>
+<h2>
 Table of Units
-</h3>
+</h2>
 <p class="paragraph">
-The unit system used throughout is SI (Syst&egrave;me International d'Unit&eacute;s). In addition to the basic units, several derived units are also used. For each unit, the table lists the symbol, a description and the SI name.
+The unit system used throughout is SI (Système International d'Unités). In addition to the basic units, several derived units are also used. For each unit, the table lists the symbol, a description and the SI name.
 </p>
 <a id="Table:ToU">
 <table class="table">
@@ -98,9 +99,9 @@ power (watt)
 </a>
 <a id="Sec:ToS">
 <div class="subsection">
-<h3>
+<h2>
 Table of Symbols
-</h3>
+</h2>
 <p class="paragraph">
 The table that follows summarizes the symbols used in this document along with their units. The choice of symbols was made to be consistent with the heat transfer literature and with existing documentation for solar water heating systems. The symbols are listed in alphabetical order.
 </p>
@@ -301,7 +302,7 @@ J
 Volumetric heat generation per unit volume
 </td>
 <td>
-W/(m<sup>3</sup>)
+W/m<sup>3</sup>
 </td>
 </tr>
 <tr>
@@ -394,17 +395,6 @@ kg
 </tr>
 <tr>
 <td>
-<em>MINFRACT</em>
-</td>
-<td>
-Minmum fraction
-</td>
-<td>
-
-</td>
-</tr>
-<tr>
-<td>
 <em><b>n&#770;</b></em>
 </td>
 <td>
@@ -422,7 +412,7 @@ Unit outward normal vector for a surface
 Heat flux
 </td>
 <td>
-W/(m<sup>2</sup>)
+W/m<sup>2</sup>
 </td>
 </tr>
 <tr>
@@ -444,7 +434,7 @@ J
 Thermal flux vector
 </td>
 <td>
-W/(m<sup>2</sup>)
+W/m<sup>2</sup>
 </td>
 </tr>
 <tr>
@@ -455,7 +445,7 @@ W/(m<sup>2</sup>)
 Heat flux into the water from the coil
 </td>
 <td>
-W/(m<sup>2</sup>)
+W/m<sup>2</sup>
 </td>
 </tr>
 <tr>
@@ -466,7 +456,7 @@ W/(m<sup>2</sup>)
 Heat flux input
 </td>
 <td>
-W/(m<sup>2</sup>)
+W/m<sup>2</sup>
 </td>
 </tr>
 <tr>
@@ -477,7 +467,7 @@ W/(m<sup>2</sup>)
 Heat flux output
 </td>
 <td>
-W/(m<sup>2</sup>)
+W/m<sup>2</sup>
 </td>
 </tr>
 <tr>
@@ -488,7 +478,7 @@ W/(m<sup>2</sup>)
 Heat flux into the PCM from water
 </td>
 <td>
-W/(m<sup>2</sup>)
+W/m<sup>2</sup>
 </td>
 </tr>
 <tr>
@@ -730,7 +720,7 @@ ODE parameter
 Density
 </td>
 <td>
-kg/(m<sup>3</sup>)
+kg/m<sup>3</sup>
 </td>
 </tr>
 <tr>
@@ -741,7 +731,7 @@ kg/(m<sup>3</sup>)
 Density of PCM
 </td>
 <td>
-kg/(m<sup>3</sup>)
+kg/m<sup>3</sup>
 </td>
 </tr>
 <tr>
@@ -752,7 +742,7 @@ kg/(m<sup>3</sup>)
 Density of water
 </td>
 <td>
-kg/(m<sup>3</sup>)
+kg/m<sup>3</sup>
 </td>
 </tr>
 <tr>
@@ -816,9 +806,9 @@ Melt fraction
 </a>
 <a id="Sec:TAbbAcc">
 <div class="subsection">
-<h3>
+<h2>
 Abbreviations and Acronyms
-</h3>
+</h2>
 <a id="Table:TAbbAcc">
 <table class="table">
 <tr>
@@ -957,9 +947,9 @@ Typical Uncertainty
 </a>
 <a id="Sec:Intro">
 <div class="section">
-<h2>
+<h1>
 Introduction
-</h2>
+</h1>
 <p class="paragraph">
 Due to increasing cost, diminishing availability, and negative environmental impact of fossil fuels, there is a higher demand for renewable energy sources and energy storage technology. Solar water heating systems incorporating phase change material (PCM) use renewable energy sources and provide a novel way of storing energy. Solar water heating systems incorporating PCM improve over the traditional solar water heating systems because of their smaller size. The smaller size is possible because of the ability of PCM to store thermal energy as latent heat, which allows higher thermal energy storage capacity per unit weight.
 </p>
@@ -968,9 +958,9 @@ The following section provides an overview of the Software Requirements Specific
 </p>
 <a id="Sec:DocPurpose">
 <div class="subsection">
-<h3>
+<h2>
 Purpose of Document
-</h3>
+</h2>
 <p class="paragraph">
 The main purpose of this document is to describe the modelling of solar water heating systems incorporating PCM. The goal statements and theoretical models used in the SWHS code are provided, with an emphasis on explicitly identifying assumptions and unambiguous definitions. This document is intended to be used as a reference to provide ad hoc access to all information necessary to understand and verify the model. The SRS is abstract because the contents say what problem is being solved, but do not say how to solve it.
 </p>
@@ -981,29 +971,29 @@ This document will be used as a starting point for subsequent development phases
 </a>
 <a id="Sec:ReqsScope">
 <div class="subsection">
-<h3>
+<h2>
 Scope of Requirements
-</h3>
+</h2>
 <p class="paragraph">
-The scope of the requirements includes thermal analysis of a single solar water heating tank incorporating PCM. Given the appropriate inputs, the code for solar water heating systems incorporating PCM is intended to predict the temperature and thermal energy histories for the water and the PCM. This entire document is written assuming that the substances inside the solar water heating tank are water and PCM.
+The scope of the requirements includes thermal analysis of a single solar water heating tank incorporating PCM. Given the appropriate inputs, the code for SWHS is intended to predict the temperature and thermal energy histories for the water and the PCM. This entire document is written assuming that the substances inside the solar water heating tank are water and PCM.
 </p>
 </div>
 </a>
 <a id="Sec:ReaderChars">
 <div class="subsection">
-<h3>
+<h2>
 Characteristics of Intended Reader
-</h3>
+</h2>
 <p class="paragraph">
-Reviewers of this documentation should have a strong knowledge in heat transfer theory. A third or fourth year Mechanical Engineering course on this topic is recommended. The reviewers should also have an understanding of differential equations, as typically covered in first and second year Calculus courses. The users of solar water heating systems incorporating PCM can have a lower level of expertise, as explained in <a href=#Sec:UserChars>User Characteristics</a>.
+Reviewers of this documentation should have a strong knowledge in heat transfer theory. A third or fourth year Mechanical Engineering course on this topic is recommended. The reviewers should also have an understanding of differential equations, as typically covered in first and second year Calculus courses. The users of SWHS can have a lower level of expertise, as explained in <a href=#Sec:UserChars>User Characteristics</a>.
 </p>
 </div>
 </a>
 <a id="Sec:DocOrg">
 <div class="subsection">
-<h3>
+<h2>
 Organization of Document
-</h3>
+</h2>
 <p class="paragraph">
 The organization of this document follows the template for an SRS for scientific computing software proposed by [3] and [6] (<a href=#Sec:References>References</a>). The presentation follows the standard pattern of presenting goals, theories, definitions, and assumptions. For readers that would like a more bottom up approach, they can start reading the instance models in <a href=#Sec:IMs>Instance Models</a> and trace back to find any additional information they require.
 </p>
@@ -1016,17 +1006,17 @@ The goal statements are refined to the theoretical models, and the theoretical m
 </a>
 <a id="Sec:GenSysDesc">
 <div class="section">
-<h2>
+<h1>
 General System Description
-</h2>
+</h1>
 <p class="paragraph">
 This section provides general information about the system, identifies the interfaces between the system and its environment, and describes the user characteristics and the system constraints.
 </p>
 <a id="Sec:SysContext">
 <div class="subsection">
-<h3>
+<h2>
 System Context
-</h3>
+</h2>
 <p class="paragraph">
 <a href=#Figure:SysCon>Figure:SysCon</a> shows the system context. A circle represents an external entity outside the software, the user in this case. A rectangle represents the software system itself (SWHS). Arrows are used to show the data flow between the system and its environment.
 </p>
@@ -1070,9 +1060,9 @@ Calculate the required outputs
 </a>
 <a id="Sec:UserChars">
 <div class="subsection">
-<h3>
+<h2>
 User Characteristics
-</h3>
+</h2>
 <p class="paragraph">
 The end user of SWHS should have an understanding of undergraduate Level 1 Calculus and Physics.
 </p>
@@ -1080,9 +1070,9 @@ The end user of SWHS should have an understanding of undergraduate Level 1 Calcu
 </a>
 <a id="Sec:SysConstraints">
 <div class="subsection">
-<h3>
+<h2>
 System Constraints
-</h3>
+</h2>
 <p class="paragraph">
 There are no system constraints.
 </p>
@@ -1092,25 +1082,25 @@ There are no system constraints.
 </a>
 <a id="Sec:SpecSystDesc">
 <div class="section">
-<h2>
+<h1>
 Specific System Description
-</h2>
+</h1>
 <p class="paragraph">
 This section first presents the problem description, which gives a high-level view of the problem to be solved. This is followed by the solution characteristics specification, which presents the assumptions, theories, theoretical models, general definitions, data definitions, and finally the instance models (ODEs) that model the solar water heating systems incorporating PCM.
 </p>
 <a id="Sec:ProbDesc">
 <div class="subsection">
-<h3>
+<h2>
 Problem Description
-</h3>
+</h2>
 <p class="paragraph">
 SWHS is a computer program developed to investigate the effect of employing PCM within a solar water heating tank.
 </p>
 <a id="Sec:TermDefs">
 <div class="subsubsection">
-<h4>
+<h3>
 Terminology and Definitions
-</h4>
+</h3>
 <p class="paragraph">
 This subsection provides a list of terms that are used in the subsequent sections and their meaning, with the purpose of reducing ambiguity and making it easier to correctly understand the requirements.
 </p>
@@ -1135,9 +1125,9 @@ Transient: Changing with time.
 </a>
 <a id="Sec:PhysSyst">
 <div class="subsubsection">
-<h4>
+<h3>
 Physical System Description
-</h4>
+</h3>
 <p class="paragraph">
 The physical system of SWHS, as shown in <a href=#Figure:Tank>Figure:Tank</a>, includes the following elements:
 </p>
@@ -1162,9 +1152,9 @@ Solar water heating tank, with heat flux into the water from the coil of <em>q<s
 </a>
 <a id="Sec:GoalStmt">
 <div class="subsubsection">
-<h4>
+<h3>
 Goal Statements
-</h4>
+</h3>
 <p class="paragraph">
 Given the temperature of the heating coil, initial conditions for the temperature of the water and the temperature of the phase change material, and material properties, the goal statements are:
 </p>
@@ -1188,17 +1178,17 @@ GS4: Predict the change in heat energy in the PCM over time.
 </a>
 <a id="Sec:SolCharSpec">
 <div class="subsection">
-<h3>
+<h2>
 Solution Characteristics Specification
-</h3>
+</h2>
 <p class="paragraph">
-The instance models that govern solar water heating systems incorporating PCM are presented in <a href=#Sec:IMs>Instance Models</a>. The information to understand the meaning of the instance models and their derivation is also presented, so that the instance models can be verified.
+The instance models that govern SWHS are presented in <a href=#Sec:IMs>Instance Models</a>. The information to understand the meaning of the instance models and their derivation is also presented, so that the instance models can be verified.
 </p>
 <a id="Sec:Assumps">
 <div class="subsubsection">
-<h4>
+<h3>
 Assumptions
-</h4>
+</h3>
 <p class="paragraph">
 This section simplifies the original problem and helps in developing the theoretical model by filling in the missing information for the physical system. The numbers given in the square brackets refer to the Theoretical Models [<a href=#Sec:TMs>Theoretical Models</a>], General Definitions [<a href=#Sec:GDs>General Definitions</a>], Data Definitions [<a href=#Sec:DDs>Data Definitions</a>], Instance Models [<a href=#Sec:IMs>Instance Models</a>], or Likely Changes [<a href=#Sec:LCs>Likely Changes</a>], in which the respective assumption is used.
 </p>
@@ -1306,9 +1296,9 @@ A20: When considering the volume of water in the tank, the volume of the heating
 </a>
 <a id="Sec:TMs">
 <div class="subsubsection">
-<h4>
+<h3>
 Theoretical Models
-</h4>
+</h3>
 <p class="paragraph">
 This section focuses on the general equations and laws that SWHS is based on.
 </p>
@@ -1320,7 +1310,7 @@ Label
 </th>
 <td>
 <p class="paragraph">
-Conservation of thermal energy
+Conservation of Thermal Energy
 </p>
 </td>
 </tr>
@@ -1331,6 +1321,7 @@ Equation
 <td>
 <a id="">
 <div class="equation">
+<p class="paragraph">
 <em>&minus;&nabla;&sdot;<b>q</b>&plus;g = &rho;&#8239;C&#8239;<div class="fraction">
 <span class="fup">
 &part;&#8239;T
@@ -1339,6 +1330,7 @@ Equation
 &part;&#8239;t
 </span>
 </div></em>
+</p>
 </div>
 </a>
 </td>
@@ -1348,48 +1340,8 @@ Equation
 Description
 </th>
 <td>
-<div class="list">
-<p>
-<em>&nabla;</em> is the gradient (Unitless)
-</p>
-<p>
-<em><b>q</b></em> is the thermal flux vector (W/(m<sup>2</sup>))
-</p>
-<p>
-<em>g</em> is the volumetric heat generation per unit volume (W/(m<sup>3</sup>))
-</p>
-<p>
-<em>&rho;</em> is the density (kg/(m<sup>3</sup>))
-</p>
-<p>
-<em>C</em> is the specific heat capacity (J/(kg&sdot;&deg;C))
-</p>
-<p>
-<em>T</em> is the temperature (&deg;C)
-</p>
-<p>
-<em>t</em> is the time (s)
-</p>
-</div>
-</td>
-</tr>
-<tr>
-<th>
-Source
-</th>
-<td>
 <p class="paragraph">
-FIXME: This needs to be filled in
-</p>
-</td>
-</tr>
-<tr>
-<th>
-RefBy
-</th>
-<td>
-<p class="paragraph">
-FIXME: This needs to be filled in
+The above equation gives the law of conservation of energy for transient heat transfer in a material of specific heat capacity <em>C</em> (J/(kg&sdot;&deg;C)) and density, <em>&rho;</em> (kg/m<sup>3</sup>), where <em><b>q</b></em> is the thermal flux vector (W/m<sup>2</sup>), <em>g</em> is the volumetric heat generation per unit volume (W/m<sup>3</sup>), <em>T</em> is the temperature (&deg;C), <em>t</em> is time (s), and <em>&nabla;</em> is the degree of steepness of a graph at any point. For this equation to apply, other forms of energy, such as mechanical energy, are assumed to be negligible in the system (<a href=#A:assump1>assump1</a>).
 </p>
 </td>
 </tr>
@@ -1403,7 +1355,7 @@ Label
 </th>
 <td>
 <p class="paragraph">
-Sensible heat energy
+Sensible Heat Energy
 </p>
 </td>
 </tr>
@@ -1414,6 +1366,7 @@ Equation
 <td>
 <a id="">
 <div class="equation">
+<p class="paragraph">
 <em>E = <span class="casebr">
 {
 </span>
@@ -1434,6 +1387,7 @@ T<sub>boil</sub>&thinsp;&lt;&thinsp;T
 </span>
 </span>
 </div></em>
+</p>
 </div>
 </a>
 </td>
@@ -1443,54 +1397,60 @@ T<sub>boil</sub>&thinsp;&lt;&thinsp;T
 Description
 </th>
 <td>
-<div class="list">
-<p>
-<em>E</em> is the sensible heat (J)
+<p class="paragraph">
+<em>E</em> is the change in sensible heat energy (J). <em>C<sup>S</sup></em>, <em>C<sup>L</sup></em>, <em>C<sup>V</sup></em> are the specific heat capacity of a solid, specific heat capacity of a liquid, and specific heat capacity of a vapour, respectively (J/(kg&sdot;&deg;C)). <em>m</em> is the mass (kg). <em>T</em> is the temperature (&deg;C), and <em>&Delta;T</em> is the change in temperature (&deg;C). <em>T<sub>melt</sub></em> and <em>T<sub>boil</sub></em> are the melting point temperature and boiling point temperature, respectively (&deg;C). Sensible heating occurs as long as the material does not reach a temperature where a phase change occurs. A phase change occurs if <em>T</em>=<em>T<sub>boil</sub></em> or <em>T</em>=<em>T<sub>melt</sub></em>. If this is the case, refer to <a href=#T:t3LatHtE>T:t3LatHtE</a>, Latent heat energy.
 </p>
-<p>
-<em>C<sup>S</sup></em> is the specific heat capacity of a solid (J/(kg&sdot;&deg;C))
+</td>
+</tr>
+</table>
+</a>
+<a id="T:t3LatHtE">
+<table class="tdefn">
+<tr>
+<th>
+Label
+</th>
+<td>
+<p class="paragraph">
+Latent Heat Energy
 </p>
-<p>
-<em>m</em> is the mass (kg)
-</p>
-<p>
-<em>&Delta;T</em> is the change in temperature (&deg;C)
-</p>
-<p>
-<em>C<sup>L</sup></em> is the specific heat capacity of a liquid (J/(kg&sdot;&deg;C))
-</p>
-<p>
-<em>C<sup>V</sup></em> is the specific heat capacity of a vapour (J/(kg&sdot;&deg;C))
-</p>
-<p>
-<em>T</em> is the temperature (&deg;C)
-</p>
-<p>
-<em>T<sub>melt</sub></em> is the melting point temperature (&deg;C)
-</p>
-<p>
-<em>T<sub>boil</sub></em> is the boiling point temperature (&deg;C)
+</td>
+</tr>
+<tr>
+<th>
+Equation
+</th>
+<td>
+<a id="">
+<div class="equation">
+<p class="paragraph">
+<em>Q(t) = &int;<sub>0</sub><sup>t</sup><div class="fraction">
+<span class="fup">
+d&#8239;Q(&tau;)
+</span>
+<span class="fdn">
+d&#8239;&tau;
+</span>
+</div>&#8239;d&tau;</em>
 </p>
 </div>
+</a>
 </td>
 </tr>
 <tr>
 <th>
-Source
+Description
 </th>
 <td>
 <p class="paragraph">
-FIXME: This needs to be filled in
-</p>
-</td>
-</tr>
-<tr>
-<th>
-RefBy
-</th>
-<td>
-<p class="paragraph">
-FIXME: This needs to be filled in
+<em>Q</em> is the change in thermal energy (J), latent heat energy. <em>Q(t) = &int;<sub>0</sub><sup>t</sup><div class="fraction">
+<span class="fup">
+d&#8239;Q(&tau;)
+</span>
+<span class="fdn">
+d&#8239;&tau;
+</span>
+</div>&#8239;d&tau;</em> is the rate of change of <em>Q</em> with respect to time <em>&tau;</em> (s). <em>t</em> is the time (s) elapsed, as long as the phase change is not complete. The status of the phase change depends on the melt fraction, <a href=#DD:htFusion>DD:htFusion</a>. <em>T<sub>melt</sub></em> and <em>T<sub>boil</sub></em> are the melting point temperature and boiling point temperature, respectively (&deg;C). Latent heating stops when all material has changed to the new phase.
 </p>
 </td>
 </tr>
@@ -1500,31 +1460,21 @@ FIXME: This needs to be filled in
 </a>
 <a id="Sec:GDs">
 <div class="subsubsection">
-<h4>
+<h3>
 General Definitions
-</h4>
+</h3>
 <p class="paragraph">
 This section collects the laws and equations that will be used in deriving the data definitions, which in turn are used to build the instance models.
 </p>
-<a id="GD:nwtnCooling">
-<table class="gdefn">
+<a id="T:nwtnCooling">
+<table class="tdefn">
 <tr>
 <th>
 Label
 </th>
 <td>
 <p class="paragraph">
-Newton's law of cooling
-</p>
-</td>
-</tr>
-<tr>
-<th>
-Units
-</th>
-<td>
-<p class="paragraph">
-W/(m<sup>2</sup>)
+Newton's Law of Cooling
 </p>
 </td>
 </tr>
@@ -1535,7 +1485,9 @@ Equation
 <td>
 <a id="">
 <div class="equation">
+<p class="paragraph">
 <em><b>q</b>(t) = h&#8239;&Delta;T(t)</em>
+</p>
 </div>
 </a>
 </td>
@@ -1545,53 +1497,22 @@ Equation
 Description
 </th>
 <td>
-<div class="list">
-<p>
-<em><b>q</b></em> is the thermal flux vector (W/(m<sup>2</sup>))
-</p>
-<p>
-<em>t</em> is the time (s)
-</p>
-<p>
-<em>h</em> is the convective heat transfer coefficient (W/(m<sup>2</sup>&sdot;&deg;C))
-</p>
-<p>
-<em>&Delta;T</em> is the change in temperature (&deg;C)
-</p>
-</div>
-</td>
-</tr>
-<tr>
-<th>
-Source
-</th>
-<td>
 <p class="paragraph">
-
-</p>
-</td>
-</tr>
-<tr>
-<th>
-RefBy
-</th>
-<td>
-<p class="paragraph">
-FIXME: This needs to be filled in
+Newton's law of cooling describes convective cooling from a surface. The law is stated as: the rate of heat loss from a body is proportional to the difference in temperatures between the body and its surroundings. <em><b>q</b>(t)</em> is the thermal flux (W/m<sup>2</sup>). <em>h</em> is the heat transfer coefficient, assumed independant of <em>T</em> (A2) (W/(m<sup>2</sup>&sdot;&deg;C)). <em>&Delta;T(t) = T(t)&minus;T<sub>env</sub>(t)</em> is the time-dependant thermal gradient between the environment and the object (&deg;C).
 </p>
 </td>
 </tr>
 </table>
 </a>
-<a id="GD:rocTempSimp">
-<table class="gdefn">
+<a id="T:rocTempSimp">
+<table class="tdefn">
 <tr>
 <th>
 Label
 </th>
 <td>
 <p class="paragraph">
-Simplified rate of change of temperature
+Simplified Rate of Change of Temperature
 </p>
 </td>
 </tr>
@@ -1602,6 +1523,7 @@ Equation
 <td>
 <a id="">
 <div class="equation">
+<p class="paragraph">
 <em>m&#8239;C&#8239;<div class="fraction">
 <span class="fup">
 d&#8239;T
@@ -1610,6 +1532,7 @@ d&#8239;T
 d&#8239;t
 </span>
 </div> = q<sub>in</sub>&#8239;A<sub>in</sub>&minus;q<sub>out</sub>&#8239;A<sub>out</sub>&plus;g&#8239;V</em>
+</p>
 </div>
 </a>
 </td>
@@ -1619,57 +1542,8 @@ d&#8239;t
 Description
 </th>
 <td>
-<div class="list">
-<p>
-<em>m</em> is the mass (kg)
-</p>
-<p>
-<em>C</em> is the specific heat capacity (J/(kg&sdot;&deg;C))
-</p>
-<p>
-<em>T</em> is the temperature (&deg;C)
-</p>
-<p>
-<em>t</em> is the time (s)
-</p>
-<p>
-<em>q<sub>in</sub></em> is the heat flux input (W/(m<sup>2</sup>))
-</p>
-<p>
-<em>A<sub>in</sub></em> is the surface area over which heat is transferred in (m<sup>2</sup>)
-</p>
-<p>
-<em>q<sub>out</sub></em> is the heat flux output (W/(m<sup>2</sup>))
-</p>
-<p>
-<em>A<sub>out</sub></em> is the surface area over which heat is transferred out (m<sup>2</sup>)
-</p>
-<p>
-<em>g</em> is the volumetric heat generation per unit volume (W/(m<sup>3</sup>))
-</p>
-<p>
-<em>V</em> is the volume (m<sup>3</sup>)
-</p>
-</div>
-</td>
-</tr>
-<tr>
-<th>
-Source
-</th>
-<td>
 <p class="paragraph">
-
-</p>
-</td>
-</tr>
-<tr>
-<th>
-RefBy
-</th>
-<td>
-<p class="paragraph">
-FIXME: This needs to be filled in
+The basic equation governing the rate of change of temperature, for a given volume <em>V</em>, with time. <em>m</em> is the mass (kg). <em>C</em> is the specific heat capacity (J/(kg&sdot;&deg;C)). <em>T</em> is the temperature (&deg;C) and <em>t</em> is the time (s). <em>q<sub>in</sub></em> and <em>q<sub>out</sub></em> are the in and out heat transfer rates, respectively (W/m<sup>2</sup>). <em>A<sub>in</sub></em> and <em>A<sub>out</sub></em> are the surface areas over which the heat is being transferred in and out, respectively (m<sup>2</sup>). <em>g</em> is the volumetric heat generated (W/m<sup>3</sup>). <em>V</em> is the volume (m<sup>3</sup>).
 </p>
 </td>
 </tr>
@@ -1757,13 +1631,13 @@ d&#8239;t
 </a>
 <a id="Sec:DDs">
 <div class="subsubsection">
-<h4>
+<h3>
 Data Definitions
-</h4>
+</h3>
 <p class="paragraph">
 This section collects and defines all the data needed to build the instance models. The dimension of each quantity is also given.
 </p>
-<a id="DD:ht_flux_C">
+<a id="DD:ht.flux.C">
 <table class="ddefn">
 <tr>
 <th>
@@ -1771,17 +1645,7 @@ Label
 </th>
 <td>
 <p class="paragraph">
-Heat flux into the water from the coil
-</p>
-</td>
-</tr>
-<tr>
-<th>
-Symbol
-</th>
-<td>
-<p class="paragraph">
-<em>q<sub>C</sub></em>
+Heat Flux Into the Water From the Coil
 </p>
 </td>
 </tr>
@@ -1791,7 +1655,7 @@ Units
 </th>
 <td>
 <p class="paragraph">
-W/(m<sup>2</sup>)
+W/m<sup>2</sup>
 </p>
 </td>
 </tr>
@@ -1802,7 +1666,9 @@ Equation
 <td>
 <a id="">
 <div class="equation">
-<em>q<sub>C</sub></em> = <em>h<sub>C</sub>&#8239;(T<sub>C</sub>&minus;T<sub>W</sub>(t))</em>
+<p class="paragraph">
+<em>q<sub>C</sub> = h<sub>C</sub>&#8239;(T<sub>C</sub>&minus;T<sub>W</sub>(t))</em>
+</p>
 </div>
 </a>
 </td>
@@ -1812,48 +1678,14 @@ Equation
 Description
 </th>
 <td>
-<div class="list">
-<p>
-<em>q<sub>C</sub></em> is the heat flux into the water from the coil (W/(m<sup>2</sup>))
-</p>
-<p>
-<em>h<sub>C</sub></em> is the convective heat transfer coefficient between coil and water (W/(m<sup>2</sup>&sdot;&deg;C))
-</p>
-<p>
-<em>T<sub>C</sub></em> is the temperature of the heating coil (&deg;C)
-</p>
-<p>
-<em>T<sub>W</sub></em> is the temperature of the water (&deg;C)
-</p>
-<p>
-<em>t</em> is the time (s)
-</p>
-</div>
-</td>
-</tr>
-<tr>
-<th>
-Source
-</th>
-<td>
 <p class="paragraph">
-
-</p>
-</td>
-</tr>
-<tr>
-<th>
-RefBy
-</th>
-<td>
-<p class="paragraph">
-FIXME: This needs to be filled in
+<em>q<sub>C</sub></em> is the heat flux into the water from the coil (W/m<sup>2</sup>)<br /><em>h<sub>C</sub></em> is the convective heat transfer coefficient between coil and water (W/(m<sup>2</sup>&sdot;&deg;C))<br /><em>T<sub>C</sub></em> is the temperature of the heating coil (&deg;C)<br /><em>T<sub>W</sub></em> is the temperature of the water (&deg;C)<br /><em>t</em> is the time (s)
 </p>
 </td>
 </tr>
 </table>
 </a>
-<a id="DD:ht_flux_P">
+<a id="DD:ht.flux.P">
 <table class="ddefn">
 <tr>
 <th>
@@ -1861,17 +1693,7 @@ Label
 </th>
 <td>
 <p class="paragraph">
-Heat flux into the PCM from water
-</p>
-</td>
-</tr>
-<tr>
-<th>
-Symbol
-</th>
-<td>
-<p class="paragraph">
-<em>q<sub>P</sub></em>
+Heat Flux Into the PCM From Water
 </p>
 </td>
 </tr>
@@ -1881,7 +1703,7 @@ Units
 </th>
 <td>
 <p class="paragraph">
-W/(m<sup>2</sup>)
+W/m<sup>2</sup>
 </p>
 </td>
 </tr>
@@ -1892,7 +1714,9 @@ Equation
 <td>
 <a id="">
 <div class="equation">
-<em>q<sub>P</sub></em> = <em>h<sub>P</sub>&#8239;(T<sub>W</sub>(t)&minus;T<sub>P</sub>(t))</em>
+<p class="paragraph">
+<em>q<sub>P</sub> = h<sub>P</sub>&#8239;(T<sub>W</sub>(t)&minus;T<sub>P</sub>(t))</em>
+</p>
 </div>
 </a>
 </td>
@@ -1902,42 +1726,8 @@ Equation
 Description
 </th>
 <td>
-<div class="list">
-<p>
-<em>q<sub>P</sub></em> is the heat flux into the PCM from water (W/(m<sup>2</sup>))
-</p>
-<p>
-<em>h<sub>P</sub></em> is the convective heat transfer coefficient between PCM and water (W/(m<sup>2</sup>&sdot;&deg;C))
-</p>
-<p>
-<em>T<sub>W</sub></em> is the temperature of the water (&deg;C)
-</p>
-<p>
-<em>t</em> is the time (s)
-</p>
-<p>
-<em>T<sub>P</sub></em> is the temperature of the phase change material (&deg;C)
-</p>
-</div>
-</td>
-</tr>
-<tr>
-<th>
-Source
-</th>
-<td>
 <p class="paragraph">
-
-</p>
-</td>
-</tr>
-<tr>
-<th>
-RefBy
-</th>
-<td>
-<p class="paragraph">
-FIXME: This needs to be filled in
+<em>q<sub>P</sub></em> is the heat flux into the PCM from water (W/m<sup>2</sup>)<br /><em>h<sub>P</sub></em> is the convective heat transfer coefficient between PCM and water (W/(m<sup>2</sup>&sdot;&deg;C))<br /><em>T<sub>W</sub></em> is the temperature of the water (&deg;C)<br /><em>t</em> is the time (s)<br /><em>T<sub>P</sub></em> is the temperature of the phase change material (&deg;C)
 </p>
 </td>
 </tr>
@@ -1951,17 +1741,7 @@ Label
 </th>
 <td>
 <p class="paragraph">
-Specific latent heat of fusion
-</p>
-</td>
-</tr>
-<tr>
-<th>
-Symbol
-</th>
-<td>
-<p class="paragraph">
-<em>H<sub>f</sub></em>
+Specific Latent Heat of Fusion
 </p>
 </td>
 </tr>
@@ -1982,7 +1762,8 @@ Equation
 <td>
 <a id="">
 <div class="equation">
-<em>H<sub>f</sub></em> = <em><div class="fraction">
+<p class="paragraph">
+<em>H<sub>f</sub> = <div class="fraction">
 <span class="fup">
 Q
 </span>
@@ -1990,6 +1771,7 @@ Q
 m
 </span>
 </div></em>
+</p>
 </div>
 </a>
 </td>
@@ -1999,42 +1781,14 @@ m
 Description
 </th>
 <td>
-<div class="list">
-<p>
-<em>H<sub>f</sub></em> is the specific latent heat of fusion (J/kg)
-</p>
-<p>
-<em>Q</em> is the latent heat (J)
-</p>
-<p>
-<em>m</em> is the mass (kg)
-</p>
-</div>
-</td>
-</tr>
-<tr>
-<th>
-Source
-</th>
-<td>
 <p class="paragraph">
-
-</p>
-</td>
-</tr>
-<tr>
-<th>
-RefBy
-</th>
-<td>
-<p class="paragraph">
-FIXME: This needs to be filled in
+<em>H<sub>f</sub></em> is the specific latent heat of fusion (J/kg)<br /><em>Q</em> is the latent heat (J)<br /><em>m</em> is the mass (kg)
 </p>
 </td>
 </tr>
 </table>
 </a>
-<a id="DD:melt_frac">
+<a id="DD:melt.frac">
 <table class="ddefn">
 <tr>
 <th>
@@ -2042,17 +1796,7 @@ Label
 </th>
 <td>
 <p class="paragraph">
-Melt fraction
-</p>
-</td>
-</tr>
-<tr>
-<th>
-Symbol
-</th>
-<td>
-<p class="paragraph">
-<em>&phi;</em>
+Melt Fraction
 </p>
 </td>
 </tr>
@@ -2073,7 +1817,8 @@ Equation
 <td>
 <a id="">
 <div class="equation">
-<em>&phi;</em> = <em><div class="fraction">
+<p class="paragraph">
+<em>&phi; = <div class="fraction">
 <span class="fup">
 Q<sub>P</sub>
 </span>
@@ -2081,6 +1826,7 @@ Q<sub>P</sub>
 H<sub>f</sub>&#8239;m<sub>P</sub>
 </span>
 </div></em>
+</p>
 </div>
 </a>
 </td>
@@ -2090,39 +1836,8 @@ H<sub>f</sub>&#8239;m<sub>P</sub>
 Description
 </th>
 <td>
-<div class="list">
-<p>
-<em>&phi;</em> is the melt fraction (Unitless)
-</p>
-<p>
-<em>Q<sub>P</sub></em> is the latent heat energy added to PCM (J)
-</p>
-<p>
-<em>H<sub>f</sub></em> is the specific latent heat of fusion (J/kg)
-</p>
-<p>
-<em>m<sub>P</sub></em> is the mass of phase change material (kg)
-</p>
-</div>
-</td>
-</tr>
-<tr>
-<th>
-Source
-</th>
-<td>
 <p class="paragraph">
-
-</p>
-</td>
-</tr>
-<tr>
-<th>
-RefBy
-</th>
-<td>
-<p class="paragraph">
-FIXME: This needs to be filled in
+<em>&phi;</em> is the melt fraction<br /><em>Q<sub>P</sub></em> is the latent heat energy added to PCM (J)<br /><em>H<sub>f</sub></em> is the specific latent heat of fusion (J/kg)<br /><em>m<sub>P</sub></em> is the mass of phase change material (kg)
 </p>
 </td>
 </tr>
@@ -2132,69 +1847,25 @@ FIXME: This needs to be filled in
 </a>
 <a id="Sec:IMs">
 <div class="subsubsection">
-<h4>
+<h3>
 Instance Models
-</h4>
+</h3>
 <p class="paragraph">
 This section transforms the problem defined in <a href=#Sec:ProbDesc>Problem Description</a> into one which is expressed in mathematical terms. It uses concrete symbols defined in <a href=#Sec:DDs>Data Definitions</a> to replace the abstract symbols in the models identified in <a href=#Sec:TMs>Theoretical Models</a> and <a href=#Sec:GDs>General Definitions</a>.
 </p>
 <p class="paragraph">
 The goals GS1 to GS4 are solved by IM1 to IM4. The solutions for IM1 and IM2 are coupled since the solution for <em>T<sub>W</sub></em> and <em>T<sub>P</sub></em> depend on one another. IM3 can be solved once IM1 has been solved. The solution of IM2 and IM4 are also coupled, since the temperature of the phase change material and change in heat energy in the PCM depend on the phase change.
 </p>
-<a id="IM:eBalanceOnWtr">
-<table class="idefn">
+<a id="T:eBalanceOnWtr">
+<table class="tdefn">
 <tr>
 <th>
 Label
 </th>
 <td>
 <p class="paragraph">
-Energy balance on water to find the temperature of the water
+Energy Balance on Water to Find the Temperature of the Water
 </p>
-</td>
-</tr>
-<tr>
-<th>
-Input
-</th>
-<td>
-<p class="paragraph">
-<em>t</em>, <em>&tau;<sub>W</sub></em>, <em>T<sub>C</sub></em>, <em>&eta;</em>, <em>T<sub>P</sub></em>, <em>t<sub>final</sub></em>, <em>T<sub>init</sub></em>, <em>A<sub>C</sub></em>
-</p>
-</td>
-</tr>
-<tr>
-<th>
-Output
-</th>
-<td>
-<p class="paragraph">
-<em>T<sub>W</sub></em>
-</p>
-</td>
-</tr>
-<tr>
-<th>
-Input Constraints
-</th>
-<td>
-<a id="">
-<div class="equation">
-<em>T<sub>init</sub>&thinsp;&lt;&thinsp;T<sub>C</sub></em>
-</div>
-</a>
-</td>
-</tr>
-<tr>
-<th>
-Output Constraints
-</th>
-<td>
-<a id="">
-<div class="equation">
-<em>0&thinsp;&lt;&thinsp;t&thinsp;&lt;&thinsp;t<sub>final</sub></em>
-</div>
-</a>
 </td>
 </tr>
 <tr>
@@ -2204,6 +1875,7 @@ Equation
 <td>
 <a id="">
 <div class="equation">
+<p class="paragraph">
 <em><div class="fraction">
 <span class="fup">
 d&#8239;T<sub>W</sub>
@@ -2219,6 +1891,7 @@ d&#8239;t
 &tau;<sub>W</sub>
 </span>
 </div>&#8239;(T<sub>C</sub>&minus;T<sub>W</sub>(t)&plus;&eta;&#8239;(T<sub>P</sub>(t)&minus;T<sub>W</sub>(t)))</em>
+</p>
 </div>
 </a>
 </td>
@@ -2228,45 +1901,22 @@ d&#8239;t
 Description
 </th>
 <td>
-<div class="list">
-<p>
-<em>T<sub>W</sub></em> is the temperature of the water (&deg;C)
-</p>
-<p>
-<em>t</em> is the time (s)
-</p>
-<p>
-<em>&tau;<sub>W</sub></em> is the ODE parameter for water (s)
-</p>
-<p>
-<em>T<sub>C</sub></em> is the temperature of the heating coil (&deg;C)
-</p>
-<p>
-<em>&eta;</em> is the ODE parameter (Unitless)
-</p>
-<p>
-<em>T<sub>P</sub></em> is the temperature of the phase change material (&deg;C)
-</p>
-</div>
-</td>
-</tr>
-<tr>
-<th>
-Source
-</th>
-<td>
 <p class="paragraph">
-
-</p>
-</td>
-</tr>
-<tr>
-<th>
-RefBy
-</th>
-<td>
-<p class="paragraph">
-FIXME: This needs to be filled in
+<em>T<sub>W</sub></em> is the temperature of the water (&deg;C). <em>T<sub>P</sub></em> is the temperature of the phase change material (&deg;C). <em>T<sub>C</sub></em> is the temperature of the heating coil (&deg;C). <em>&tau;<sub>W</sub> = <div class="fraction">
+<span class="fup">
+m<sub>W</sub>&#8239;C<sub>W</sub>
+</span>
+<span class="fdn">
+h<sub>C</sub>&#8239;A<sub>C</sub>
+</span>
+</div></em> is a constant (s). <em>&eta; = <div class="fraction">
+<span class="fup">
+h<sub>P</sub>&#8239;A<sub>P</sub>
+</span>
+<span class="fdn">
+h<sub>C</sub>&#8239;A<sub>C</sub>
+</span>
+</div></em> is a constant (dimensionless). The above equation applies as long as the water is in liquid form, <em>0&thinsp;&lt;&thinsp;T<sub>W</sub>&thinsp;&lt;&thinsp;100</em> (&deg;C) where <em>0</em> (&deg;C) and <em>100</em> (&deg;C) are the melting and boiling point temperatures of water, respectively (<a href=#A:assump14>assump14</a>, <a href=#A:assump19>assump19</a>).
 </p>
 </td>
 </tr>
@@ -2478,60 +2128,16 @@ d&#8239;t
 </div>&#8239;(T<sub>C</sub>&minus;T<sub>W</sub>&plus;&eta;&#8239;(T<sub>P</sub>&minus;T<sub>W</sub>))</em>
 </div>
 </a>
-<a id="IM:eBalanceOnPCM">
-<table class="idefn">
+<a id="T:eBalanceOnPCM">
+<table class="tdefn">
 <tr>
 <th>
 Label
 </th>
 <td>
 <p class="paragraph">
-Energy balance on PCM to find T_p
+Energy Balance on PCM to Find T_p
 </p>
-</td>
-</tr>
-<tr>
-<th>
-Input
-</th>
-<td>
-<p class="paragraph">
-<em>t</em>, <em>&tau;<sub>W</sub></em>, <em>T<sub>C</sub></em>, <em>&eta;</em>, <em>T<sub>P</sub></em>, <em>t<sub>final</sub></em>, <em>T<sub>init</sub></em>, <em>A<sub>C</sub></em>
-</p>
-</td>
-</tr>
-<tr>
-<th>
-Output
-</th>
-<td>
-<p class="paragraph">
-<em>T<sub>W</sub></em>
-</p>
-</td>
-</tr>
-<tr>
-<th>
-Input Constraints
-</th>
-<td>
-<a id="">
-<div class="equation">
-<em>T<sub>init</sub>&thinsp;&lt;&thinsp;T<sub>C</sub></em>
-</div>
-</a>
-</td>
-</tr>
-<tr>
-<th>
-Output Constraints
-</th>
-<td>
-<a id="">
-<div class="equation">
-<em>0&thinsp;&lt;&thinsp;t&thinsp;&lt;&thinsp;t<sub>final</sub></em>
-</div>
-</a>
 </td>
 </tr>
 <tr>
@@ -2541,6 +2147,7 @@ Equation
 <td>
 <a id="">
 <div class="equation">
+<p class="paragraph">
 <em><div class="fraction">
 <span class="fup">
 d&#8239;T<sub>P</sub>
@@ -2587,6 +2194,7 @@ T<sub>P</sub> = T<sub>melt</sub><sup>P</sup>
 </span>
 </span>
 </div></em>
+</p>
 </div>
 </a>
 </td>
@@ -2596,48 +2204,22 @@ T<sub>P</sub> = T<sub>melt</sub><sup>P</sup>
 Description
 </th>
 <td>
-<div class="list">
-<p>
-<em>T<sub>P</sub></em> is the temperature of the phase change material (&deg;C)
-</p>
-<p>
-<em>t</em> is the time (s)
-</p>
-<p>
-<em>&tau;<sub>P</sub><sup>S</sup></em> is the ODE parameter for solid PCM (s)
-</p>
-<p>
-<em>T<sub>W</sub></em> is the temperature of the water (&deg;C)
-</p>
-<p>
-<em>&tau;<sub>P</sub><sup>L</sup></em> is the ODE parameter for liquid PCM (s)
-</p>
-<p>
-<em>T<sub>melt</sub><sup>P</sup></em> is the melting point temperature for PCM (&deg;C)
-</p>
-<p>
-<em>&phi;</em> is the melt fraction (Unitless)
-</p>
-</div>
-</td>
-</tr>
-<tr>
-<th>
-Source
-</th>
-<td>
 <p class="paragraph">
-
-</p>
-</td>
-</tr>
-<tr>
-<th>
-RefBy
-</th>
-<td>
-<p class="paragraph">
-FIXME: This needs to be filled in
+<em>T<sub>W</sub></em> is the temperature of the water (&deg;C). <em>T<sub>P</sub></em> is the temperature of the phase change material (&deg;C). <em>&tau;<sub>P</sub><sup>S</sup> = <div class="fraction">
+<span class="fup">
+m<sub>P</sub>&#8239;C<sub>P</sub><sup>S</sup>
+</span>
+<span class="fdn">
+h<sub>P</sub>&#8239;A<sub>P</sub>
+</span>
+</div></em> is a constant (s). <em>&tau;<sub>P</sub><sup>L</sup> = <div class="fraction">
+<span class="fup">
+m<sub>P</sub>&#8239;C<sub>P</sub><sup>L</sup>
+</span>
+<span class="fdn">
+h<sub>P</sub>&#8239;A<sub>P</sub>
+</span>
+</div></em> is a constant (s).
 </p>
 </td>
 </tr>
@@ -2729,55 +2311,16 @@ In the case where <em>T<sub>P</sub></em>=<em>T<sub>melt</sub><sup>P</sup></em> a
 <p class="paragraph">
 This derivation does not consider the boiling of the PCM, as the PCM is assumed to either be in a solid state or a liquid state (<a href=#A:assump18>assump18</a>).
 </p>
-<a id="IM:heatEInWtr">
-<table class="idefn">
+<a id="T:heatEInWtr">
+<table class="tdefn">
 <tr>
 <th>
 Label
 </th>
 <td>
 <p class="paragraph">
-Heat energy in the water
+Heat Energy in the Water
 </p>
-</td>
-</tr>
-<tr>
-<th>
-Input
-</th>
-<td>
-<p class="paragraph">
-<em>T<sub>init</sub></em>, <em>A<sub>C</sub></em>, <em>C<sub>W</sub></em>, <em>m<sub>W</sub></em>
-</p>
-</td>
-</tr>
-<tr>
-<th>
-Output
-</th>
-<td>
-<p class="paragraph">
-<em>E<sub>W</sub></em>
-</p>
-</td>
-</tr>
-<tr>
-<th>
-Input Constraints
-</th>
-<td>
-</td>
-</tr>
-<tr>
-<th>
-Output Constraints
-</th>
-<td>
-<a id="">
-<div class="equation">
-<em>0&thinsp;&lt;&thinsp;t&thinsp;&lt;&thinsp;t<sub>final</sub></em>
-</div>
-</a>
 </td>
 </tr>
 <tr>
@@ -2787,7 +2330,9 @@ Equation
 <td>
 <a id="">
 <div class="equation">
+<p class="paragraph">
 <em>E<sub>W</sub>(t) = C<sub>W</sub>&#8239;m<sub>W</sub>&#8239;(T<sub>W</sub>(t)&minus;T<sub>init</sub>)</em>
+</p>
 </div>
 </a>
 </td>
@@ -2797,104 +2342,23 @@ Equation
 Description
 </th>
 <td>
-<div class="list">
-<p>
-<em>E<sub>W</sub></em> is the change in heat energy in the water (J)
-</p>
-<p>
-<em>t</em> is the time (s)
-</p>
-<p>
-<em>C<sub>W</sub></em> is the specific heat capacity of water (J/(kg&sdot;&deg;C))
-</p>
-<p>
-<em>m<sub>W</sub></em> is the mass of water (kg)
-</p>
-<p>
-<em>T<sub>W</sub></em> is the temperature of the water (&deg;C)
-</p>
-<p>
-<em>T<sub>init</sub></em> is the initial temperature (&deg;C)
-</p>
-</div>
-</td>
-</tr>
-<tr>
-<th>
-Source
-</th>
-<td>
 <p class="paragraph">
-
-</p>
-</td>
-</tr>
-<tr>
-<th>
-RefBy
-</th>
-<td>
-<p class="paragraph">
-FIXME: This needs to be filled in
+The above equation is derived using T2. <em>E<sub>W</sub></em> is the change in thermal energy of the liquid water relative to the energy at the initial temperature (<em>T<sub>init</sub></em>) (J). <em>C<sub>W</sub></em> is the specific heat capacity of liquid water (J/(kg&sdot;&deg;C)) and <em>m<sub>W</sub></em> is the mass of the water (kg). The change in temperature is the difference between the temperature at time <em>t</em> (s), <em>T<sub>W</sub></em> and the initial temperature, <em>T<sub>init</sub></em> (&deg;C). This equation applies as long as <em>0&thinsp;&lt;&thinsp;T<sub>W</sub>&thinsp;&lt;&thinsp;100</em>&deg;C (<a href=#A:assump14>assump14</a>, <a href=#A:assump19>assump19</a>).
 </p>
 </td>
 </tr>
 </table>
 </a>
-<a id="IM:heatEInPCM">
-<table class="idefn">
+<a id="T:heatEInPCM">
+<table class="tdefn">
 <tr>
 <th>
 Label
 </th>
 <td>
 <p class="paragraph">
-Heat energy in the PCM
+Heat Energy in the PCM
 </p>
-</td>
-</tr>
-<tr>
-<th>
-Input
-</th>
-<td>
-<p class="paragraph">
-<em>t</em>, <em>&tau;<sub>W</sub></em>, <em>T<sub>C</sub></em>, <em>&eta;</em>, <em>T<sub>P</sub></em>, <em>t<sub>final</sub></em>, <em>T<sub>init</sub></em>, <em>A<sub>C</sub></em>
-</p>
-</td>
-</tr>
-<tr>
-<th>
-Output
-</th>
-<td>
-<p class="paragraph">
-<em>T<sub>W</sub></em>
-</p>
-</td>
-</tr>
-<tr>
-<th>
-Input Constraints
-</th>
-<td>
-<a id="">
-<div class="equation">
-<em>T<sub>init</sub>&thinsp;&lt;&thinsp;T<sub>C</sub></em>
-</div>
-</a>
-</td>
-</tr>
-<tr>
-<th>
-Output Constraints
-</th>
-<td>
-<a id="">
-<div class="equation">
-<em>0&thinsp;&lt;&thinsp;t&thinsp;&lt;&thinsp;t<sub>final</sub></em>
-</div>
-</a>
 </td>
 </tr>
 <tr>
@@ -2904,6 +2368,7 @@ Equation
 <td>
 <a id="">
 <div class="equation">
+<p class="paragraph">
 <em>E<sub>P</sub> = <span class="casebr">
 {
 </span>
@@ -2929,6 +2394,7 @@ E<sub>P</sub><sub>melt</sub><sup>init</sup>&plus;Q<sub>P</sub>(t) , <span class=
 </span>
 </span>
 </div></em>
+</p>
 </div>
 </a>
 </td>
@@ -2938,63 +2404,8 @@ E<sub>P</sub><sub>melt</sub><sup>init</sup>&plus;Q<sub>P</sub>(t) , <span class=
 Description
 </th>
 <td>
-<div class="list">
-<p>
-<em>E<sub>P</sub></em> is the change in heat energy in the PCM (J)
-</p>
-<p>
-<em>C<sub>P</sub><sup>S</sup></em> is the specific heat capacity of PCM as a solid (J/(kg&sdot;&deg;C))
-</p>
-<p>
-<em>m<sub>P</sub></em> is the mass of phase change material (kg)
-</p>
-<p>
-<em>T<sub>P</sub></em> is the temperature of the phase change material (&deg;C)
-</p>
-<p>
-<em>t</em> is the time (s)
-</p>
-<p>
-<em>T<sub>init</sub></em> is the initial temperature (&deg;C)
-</p>
-<p>
-<em>E<sub>P</sub><sub>melt</sub><sup>init</sup></em> is the change in heat energy in the PCM at the instant when melting begins (J)
-</p>
-<p>
-<em>H<sub>f</sub></em> is the specific latent heat of fusion (J/kg)
-</p>
-<p>
-<em>C<sub>P</sub><sup>L</sup></em> is the specific heat capacity of PCM as a liquid (J/(kg&sdot;&deg;C))
-</p>
-<p>
-<em>T<sub>melt</sub><sup>P</sup></em> is the melting point temperature for PCM (&deg;C)
-</p>
-<p>
-<em>Q<sub>P</sub></em> is the latent heat energy added to PCM (J)
-</p>
-<p>
-<em>&phi;</em> is the melt fraction (Unitless)
-</p>
-</div>
-</td>
-</tr>
-<tr>
-<th>
-Source
-</th>
-<td>
 <p class="paragraph">
-
-</p>
-</td>
-</tr>
-<tr>
-<th>
-RefBy
-</th>
-<td>
-<p class="paragraph">
-FIXME: This needs to be filled in
+The above equation is derived using T2 and T3. <em>E<sub>P</sub></em> is the change in thermal energy of the PCM relative to the energy at the initial temperature (<em>T<sub>init</sub></em>) J. <em>E<sub>P</sub></em> for the solid PCM is found using T2 for sensible heat ing, with the specific heat capacity of the solid PCM, <em>C<sub>P</sub><sup>S</sup></em> (J/(kg&sdot;&deg;C)) and the change in the PCM temperature from the initial temperature (&deg;C). <em>E<sub>P</sub></em> for the melted PCM (<em>T<sub>P</sub>&thinsp;&gt;&thinsp;E<sub>P</sub><sub>melt</sub><sup>init</sup></em>) is found using T2 for sensible heat of the liquid. PCM plus the energy when melting starts, plus the energy required to melt all of the PCM The energy when melting starts is <em>E<sub>P</sub><sub>melt</sub><sup>init</sup></em> (J). The energy required to melt all of the PCM is <em>H<sub>f</sub>&#8239;m<sub>P</sub></em> (J) (DD3). the specific heat capacity of the liquid PCM is <em>C<sub>P</sub><sup>L</sup></em> (J/(kg&sdot;&deg;C)) and the change in temperature is <em>T<sub>P</sub>&minus;T<sub>melt</sub><sup>P</sup></em> (&deg;C). <em>E<sub>P</sub></em> during melting of the PCM is found using the energy required at the instant melting of the PCM begins, <em>E<sub>P</sub><sub>melt</sub><sup>init</sup></em> plus the latent heat energy added to the PCM, <em>Q<sub>P</sub></em> (J) since the time when melting began <em>t<sub>melt</sub><sup>init</sup></em> (s). The heat energy for boiling of the PCM is not detailed, since the PCM is assumed to either be in a solid or liquid state (<a href=#A:assump18>assump18</a>).
 </p>
 </td>
 </tr>
@@ -3004,9 +2415,9 @@ FIXME: This needs to be filled in
 </a>
 <a id="Sec:DataConstraints">
 <div class="subsubsection">
-<h4>
+<h3>
 Data Constraints
-</h4>
+</h3>
 <p class="paragraph">
 <a href=#Table:InDataConstraints>Table:InDataConstraints</a>, and <a href=#Table:OutDataConstraints>Table:OutDataConstraints</a> shows the data constraints on the input and output variables, respectively. The column for physical constraints gives the physical limitations on the range of values that can be taken by the variable. The uncertainty column provides an estimate of the confidence with which the physical quantities can be measured. This information would be part of the input if one were performing an uncertainty quantification exercise. The constraints are conservative, to give the user of the model the flexibility to experiment with unusual situations. The column of typical values is intended to provide a feel for a common scenario. The column for software constraints restricts the range of inputs to reasonable values. (*) These quantities cannot be equal to zero, or there will be a divide by zero in the model. (+) These quantities cannot be zero, or there would be freezing (<a href=#A:assump13>assump13</a>). (#) The constraints on the surface area are calculated by considering the surface area to volume ratio. The assumption is that the lowest ratio is 1 and the highest possible is <em><div class="fraction">
 <span class="fup">
@@ -3122,7 +2533,7 @@ h<sub>min</sub>
 None
 </td>
 <td>
-<em>1007.0</em> kg/(m<sup>3</sup>)
+<em>1007.0</em> kg/m<sup>3</sup>
 </td>
 <td>
 0.1
@@ -3241,7 +2652,7 @@ None
 <em>&rho;<sub>W</sub><sup>min</sup>&thinsp;&lt;&thinsp;&rho;<sub>W</sub>&thinsp;&le;&thinsp;&rho;<sub>W</sub><sup>max</sup></em>
 </td>
 <td>
-<em>1000.0</em> kg/(m<sup>3</sup>)
+<em>1000.0</em> kg/m<sup>3</sup>
 </td>
 <td>
 0.1
@@ -3388,9 +2799,9 @@ Output Data Constraints
 </a>
 <a id="Sec:CorSolProps">
 <div class="subsubsection">
-<h4>
+<h3>
 Properties of a Correct Solution
-</h4>
+</h3>
 <p class="paragraph">
 A correct solution must exhibit the law of conservation of energy. This means that the change in heat energy in the water should equal the difference between the total energy input from the heating coil and the energy output to the PCM. This can be shown as an equation by taking <a href=#DD:ht.flux.C>DD:ht.flux.C</a> and <a href=#DD:ht.flux.P>DD:ht.flux.P</a>, multiplying each by their respective surface area of heat transfer, and integrating each over the simulation time, as follows:
 </p>
@@ -3418,17 +2829,17 @@ Equations (FIXME: Equation 7) and (FIXME: Equation 8) can be used as &quot;sanit
 </a>
 <a id="Sec:Requirements">
 <div class="section">
-<h2>
+<h1>
 Requirements
-</h2>
+</h1>
 <p class="paragraph">
 This section provides the functional requirements, the business tasks that the software is expected to complete, and the non-functional requirements, the qualities that the software is expected to exhibit.
 </p>
 <a id="Sec:FRs">
 <div class="subsection">
-<h3>
+<h2>
 Functional Requirements
-</h3>
+</h2>
 <a id="FR:req1">
 <ul>
 R1: Input the following quantities, which define the tank parameters, material properties and initial conditions:
@@ -3496,7 +2907,7 @@ phase change material surface area
 <em>&rho;<sub>P</sub></em>
 </td>
 <td>
-kg/(m<sup>3</sup>)
+kg/m<sup>3</sup>
 </td>
 <td>
 density of PCM
@@ -3573,7 +2984,7 @@ temperature of the heating coil
 <em>&rho;<sub>W</sub></em>
 </td>
 <td>
-kg/(m<sup>3</sup>)
+kg/m<sup>3</sup>
 </td>
 <td>
 density of water
@@ -3707,9 +3118,9 @@ R11: Calculate and output the time at which the PCM stops melting <em>t<sub>melt
 </a>
 <a id="Sec:NFRs">
 <div class="subsection">
-<h3>
+<h2>
 Non-Functional Requirements
-</h3>
+</h2>
 <p class="paragraph">
 This problem is small in size and relatively simple, so performance is not a priority. Any reasonable implementation will be very quick and use minimal storage. Rather than performance, the non-functional requirement priorities are correctness, verifiability, understandability, reusability, and maintainability.
 </p>
@@ -3719,9 +3130,9 @@ This problem is small in size and relatively simple, so performance is not a pri
 </a>
 <a id="Sec:LCs">
 <div class="section">
-<h2>
+<h1>
 Likely Changes
-</h2>
+</h1>
 <a id="LC:likeChg1">
 <ul>
 LC1: <a href=#A:assump4>assump4</a> - PCM is actually a poor thermal conductor, so the assumption of uniform temperature of the phase change material is not likely.
@@ -3756,9 +3167,9 @@ LC6: <a href=#A:assump15>assump15</a> - Any real tank cannot be perfectly insula
 </a>
 <a id="Sec:TraceMatrices">
 <div class="section">
-<h2>
+<h1>
 Traceability Matrices and Graphs
-</h2>
+</h1>
 <p class="paragraph">
 The purpose of the traceability matrices is to provide easy references on what has to be additionally modified if a certain component is changed. Every time a component is changed, the items in the column of that component that are marked with an &quot;X&quot; should be modified as well. <a href=#Table:Tracey2>Table:Tracey2</a> shows the dependencies of theoretical models, general definitions, data definitions, and instance models with each other. <a href=#Table:Tracey1>Table:Tracey1</a> shows the dependencies of instance models, requirements, and data constraints on each other. <a href=#Table:Tracey3>Table:Tracey3</a> shows the dependencies of theoretical models, general definitions, data definitions, instance models, and likely changes on the assumptions.
 </p>
@@ -6509,9 +5920,9 @@ Traceability Graph Showing the Connections Between Instance Models, Requirements
 </a>
 <a id="Sec:AuxConstants">
 <div class="section">
-<h2>
+<h1>
 Values of Auxiliary Constants
-</h2>
+</h1>
 <p class="paragraph">
 This section contains the standard values that are used for calculations in SWHS.
 </p>
@@ -6584,7 +5995,7 @@ minimum density of PCM
 <em>500</em>
 </td>
 <td>
-kg/(m<sup>3</sup>)
+kg/m<sup>3</sup>
 </td>
 </tr>
 <tr>
@@ -6598,7 +6009,7 @@ maximum density of PCM
 <em>20000</em>
 </td>
 <td>
-kg/(m<sup>3</sup>)
+kg/m<sup>3</sup>
 </td>
 </tr>
 <tr>
@@ -6612,7 +6023,7 @@ minimum density of water
 <em>950</em>
 </td>
 <td>
-kg/(m<sup>3</sup>)
+kg/m<sup>3</sup>
 </td>
 </tr>
 <tr>
@@ -6626,7 +6037,7 @@ maximum density of water
 <em>1000</em>
 </td>
 <td>
-kg/(m<sup>3</sup>)
+kg/m<sup>3</sup>
 </td>
 </tr>
 <tr>
@@ -6792,37 +6203,37 @@ Auxiliary Constants
 </a>
 <a id="Sec:References">
 <div class="section">
-<h2>
+<h1>
 References
-</h2>
+</h1>
 <a id="bueche1986">
 <ul>
-[1]: Bueche, J. Frederick. <em>Introduction to Physics for Scientists</em>. 4nd. ed., New York City, New York: McGraw Hill, 1986. Print.
+[1]: Bueche, J.Frederick.<em>Introduction to Physics for Scientists</em>.4nd. ed.,New York City, New York:McGraw Hill,1986. Print.
 </ul>
 </a>
 <a id="incroperaEtAl2007">
 <ul>
-[2]: Incropera, F. P., Dewitt, D. P., Bergman, T. L., and Lavine, A. S. <em>Fundamentals of Heat and Mass Transfer</em>. 6th. ed., Hoboken, New Jersey: John Wiley and Sons, 2007. Print.
+[2]: Incropera, F.P., Dewitt, D.P., Bergman, T.L., and Lavine, A.S.<em>Fundamentals of Heat and Mass Transfer</em>.6th. ed.,Hoboken, New Jersey:John Wiley and Sons,2007. Print.
 </ul>
 </a>
 <a id="koothoor2013">
 <ul>
-[3]: Koothoor, Nirmitha. <em>A document drive approach to certifying scientific computing software</em>. McMaster University, Hamilton, ON, Canada: 2013. Print.
+[3]: Koothoor, Nirmitha.<em>A document drive approach to certifying scientific computing software</em>.McMaster University,Hamilton, ON, Canada:2013. Print.
 </ul>
 </a>
 <a id="lightstone2012">
 <ul>
-[4]: Lightstone, Marilyn. <em>Derivation of tank/pcm model</em>. 2012. From Marilyn Lightstone's Personal Notes
+[4]: Lightstone, Marilyn.<em>Derivation of tank/pcm model</em>.2012.From Marilyn Lightstone's Personal Notes
 </ul>
 </a>
 <a id="parnas1986">
 <ul>
-[5]: Parnas, David L. and Clements, P. C. "A rational design process: How and why to fake it." <em>IEEE Transactions on Software Engineering</em>, vol. 12, no. 2, Washington, USA: February, 1986. pp. 251&ndash;257. Print.
+[5]: Parnas, DavidL. and Clements, P.C."A rational design process: How and why to fake it."<em>IEEE Transactions on Software Engineering</em>,vol. 12,no. 2,Washington, USA:February,1986.pp. 251&ndash;257. Print.
 </ul>
 </a>
 <a id="smithLai2005">
 <ul>
-[6]: Smith, W. Spencer and Lai, Lei. "A new requirements template for scientific computing." <em>Proceedings of the First International Workshop on Situational Requirements Engineering Processes - Methods, Techniques and Tools to Support Situation-Specific Requirements Engineering Processes, SREP'05</em>. Edited by PJ Agerfalk, N. Kraiem, and J. Ralyte, Paris, France: 2005. pp. 107&ndash;121. In conjunction with 13th IEEE International Requirements Engineering Conference,
+[6]: Smith, W.Spencer and Lai, Lei."A new requirements template for scientific computing."<em>Proceedings of the First International Workshop on Situational Requirements Engineering Processes - Methods, Techniques and Tools to Support Situation-Specific Requirements Engineering Processes, SREP'05</em>.Edited by PJAgerfalk, N.Kraiem, and J.Ralyte,Paris, France:2005.pp. 107&ndash;121.In conjunction with 13th IEEE International Requirements Engineering Conference,
 </ul>
 </a>
 </div>

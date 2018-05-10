@@ -5,23 +5,17 @@ import Language.Drasil
 import Data.Drasil.People (jmBracci, tlKohutek, wlBeason, jRobertson, sRobertson)
 import Data.Drasil.Citations (koothoor2013, smithLai2005)
 
-{--}
-
 rbrtsn2012, astm_LR2009, astm_C1036, astm_C1048, glThick1998 :: Citation
 
 gbCitations :: BibRef
 gbCitations = [koothoor2013, smithLai2005, rbrtsn2012, astm_LR2009, astm_C1036,
   astm_C1048, glThick1998]
 
---ref3
 rbrtsn2012 = cMisc "rbrtsn2012" [author [jRobertson, sRobertson], title
   (S "Volere requirements specification template edition 16"),
   howPublishedU (S "https://pdfs.semanticscholar.org/cf57/27a59801086cbd3d14e5" :+: 
     S "87e09880561dbe22.pdf"), year 2012]
 
----
-
---ref4
 astm_LR2009 = cMisc "astm_LR2009" [author [mononym "ASTM E1300-09"],
   title (S "Standard Practice for Determining Load Resistance of Glass in Buildings"),
   publisher (S "ASTM International"),
@@ -29,9 +23,6 @@ astm_LR2009 = cMisc "astm_LR2009" [author [mononym "ASTM E1300-09"],
   year (2009),
   howPublishedU (S "www.astm.org")]
 
----
-
---ref5
 astm_C1036 = cMisc "astm_C1036"
   [ author [mononym "ASTM C1036-16"],
   title (S "Standard specification for Flat Glass"),
@@ -40,9 +31,6 @@ astm_C1036 = cMisc "astm_C1036"
   year 2016, howPublishedU (S "www.astm.org")
   ]
 
----
-
---ref6
 astm_C1048 = cMisc "astm_C1048"
   [
   author [mononym "ASTM C1048-04"],
@@ -54,9 +42,6 @@ astm_C1048 = cMisc "astm_C1048"
   howPublishedU (S "www.astm.org")
   ]
 
----
-
---ref7
 glThick1998 = cMisc "glThick1998"
   [
   author [wlBeason, tlKohutek, jmBracci],

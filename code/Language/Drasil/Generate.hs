@@ -12,23 +12,22 @@ import Language.Drasil.HTML.Helpers (makeCSS)
 import Language.Drasil.Make.Print (genMake)
 import Language.Drasil.Document
 import Language.Drasil.Format(Format(TeX, HTML))
-import Language.Drasil.Recipe(Recipe(Recipe))
 import Language.Drasil.Code.Imperative.Import (generator, generateCode)
 import Language.Drasil.CodeSpec
 import Language.Drasil.ChunkDB (HasSymbolTable(..))
 
 -- | Generate a number of artifacts based on a list of recipes.
-gen :: HasSymbolTable s => [Recipe] -> s -> IO ()
-gen rl sm = mapM_ (prnt sm) rl
+gen :: HasSymbolTable s => DocSpec -> Document -> s -> IO ()
+gen ds fn sm = prnt sm ds fn
 
 -- | Generate the output artifacts (TeX+Makefile or HTML)
-prnt :: HasSymbolTable s => s -> Recipe -> IO ()
-prnt sm (Recipe dt@(DocSpec Website fn) body) =
+prnt :: HasSymbolTable s => s -> DocSpec -> Document -> IO ()
+prnt sm dt@(DocSpec Website fn) body =
   do prntDoc dt body sm
      outh2 <- openFile ("Website/" ++ fn ++ ".css") WriteMode
      hPutStrLn outh2 $ render (makeCSS body)
      hClose outh2
-prnt sm (Recipe dt@(DocSpec _ _) body) =
+prnt sm dt@(DocSpec _ _) body =
   do prntDoc dt body sm
      prntMake dt
 
@@ -44,7 +43,7 @@ prntDoc' :: (HasSymbolTable s, Show a) => a -> String -> Format -> Document -> s
 prntDoc' dt' fn format body' sm = do
   createDirectoryIfMissing False $ show dt'
   outh <- openFile (show dt' ++ "/" ++ fn ++ getExt format) WriteMode
-  hPutStrLn outh $ render $ writeDoc format fn body' sm
+  hPutStrLn outh $ render $ writeDoc sm format fn body'
   hClose outh
   where getExt TeX  = ".tex"
         getExt HTML = ".html"
@@ -58,9 +57,9 @@ prntMake ds@(DocSpec dt _) =
      hClose outh
 
 -- | Renders the documents
-writeDoc :: HasSymbolTable s => Format -> Filename -> Document -> s -> Doc
-writeDoc TeX  _  doc s = genTeX doc s
-writeDoc HTML fn doc s = genHTML fn doc s
+writeDoc :: HasSymbolTable s => s -> Format -> Filename -> Document -> Doc
+writeDoc s TeX  _  doc = genTeX doc s
+writeDoc s HTML fn doc = genHTML s fn doc
 writeDoc _    _  _   _ = error "we can only write TeX/HTML (for now)"
 
 -- | Calls the code generator

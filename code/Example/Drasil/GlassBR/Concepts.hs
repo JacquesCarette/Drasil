@@ -8,7 +8,7 @@ import Data.Drasil.Concepts.Documentation (assumption,
 
 {--}
 
-glassBRProg :: ConceptChunk
+glassBRProg :: CommonConcept
 glassBRProg = dcc' "glassBRProg" (nounPhraseSP "GlassBR program")
   "The glass safety analysis program" "GlassBR" 
 

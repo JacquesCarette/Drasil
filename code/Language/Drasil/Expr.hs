@@ -4,12 +4,8 @@ module Language.Drasil.Expr where
 
 import Data.Ratio (numerator,denominator)
 import Prelude hiding (sqrt)
-import Language.Drasil.Chunk (Chunk(..))
 import Language.Drasil.Symbol
-import Language.Drasil.Chunk.SymbolForm
 import Language.Drasil.Space (Space(..))
-
-import Control.Lens ((^.))
 
 --FIXME: Haddock open issue #43 seems to make it so GADT constructors cannot
 -- be documented properly
@@ -49,7 +45,7 @@ data Expr where
   -- Derivative, syntax is:
   -- Type (Partial or total) -> principal part of change -> with respect to
   -- For example: Deriv Part y x1 would be (dy/dx1)
-  C        :: UID -> Expr -- Chunk (must have a symbol)
+  C        :: UID -> Expr -- implicitly assumes has a symbol
   FCall    :: Expr -> [Expr] -> Expr -- F(x) is (FCall F [x]) or similar
                                   -- FCall accepts a list of params
                                   -- F(x,y) would be (FCall F [x,y]) or sim.
@@ -58,10 +54,13 @@ data Expr where
   Matrix   :: [[Expr]] -> Expr
   UnaryOp  :: UFunc -> Expr -> Expr
   BinaryOp :: BinOp -> Expr -> Expr -> Expr
-  EOp      :: EOperator -> Expr
+  -- Operators are generalized arithmetic operators over a |DomainDesc|
+  --   of an |Expr|.  Could be called |BigOp|.
+  -- ex: Summation is represented via |Add| over a discrete domain
+  Operator :: ArithOper -> DomainDesc Expr Expr -> Expr -> Expr
 
   IsIn     :: Expr -> Space -> Expr --	element of
-  RealI    :: UID -> RealInterval -> Expr -- a different kind of 'element of'
+  RealI    :: UID -> RealInterval Expr Expr -> Expr -- a different kind of 'element of'
 
 ($=), ($!=), ($<), ($>), ($<=), ($>=), ($=>), ($<=>), ($.), ($-), 
   ($/) :: Expr -> Expr -> Expr
@@ -82,20 +81,19 @@ a $/ b = BinaryOp Frac a b
 a $&& b = AssocB And [a,b]
 a $|| b = AssocB Or  [a,b]
 
-sy :: (Chunk c, HasSymbol c) => c -> Expr
-sy x = C (x ^. uid)
-
-deriv, pderiv :: (Chunk c, HasSymbol c) => Expr -> c -> Expr
-deriv e c = Deriv Total e (c^.uid)
-pderiv e c = Deriv Part e (c^.uid)
-
 type Variable = String
 
 data DerivType = Part | Total deriving Eq
 
--- TODO: have $+ flatten nest Adds
+-- TODO: have + flatten nest Adds
 instance Num Expr where
+  (Int 0) + b = b
+  a + (Int 0) = a
+  (AssocA Add l) + (AssocA Add m) = AssocA Add (l ++ m)
+  (AssocA Add l) + b = AssocA Add (l ++ [b])
+  a + (AssocA Add l) = AssocA Add (a : l)
   a + b = AssocA Add [a, b]
+
   a * b = AssocA Mul [a, b]
   a - b = BinaryOp Subt a b
   fromInteger a = Int a
@@ -104,7 +102,6 @@ instance Num Expr where
 
   -- this is a Num wart
   signum _ = error "should not use signum in expressions"
-
 
 instance Eq Expr where
   Dbl a == Dbl b               =  a == b
@@ -125,42 +122,19 @@ instance Fractional Expr where
   fromRational r = BinaryOp Frac (fromInteger $ numerator   r)
                                 (fromInteger $ denominator r)
 
--- | Operators
--- All operators take a |DomainDesc| and a variable
--- Summation is represented via Integral over a discrete domain
--- FIXME: the Variable should not be an |Expr|
-data EOperator where
-  Product :: DomainDesc -> Expr -> EOperator
-  Integral :: DomainDesc -> Expr -> EOperator
+-- | Topology of a subset of reals.
+data RTopology = Continuous | Discrete
 
--- | Domain Description. A 'Domain' is the extent of a variable that
--- ranges over a particular Space. So a |DomainDesc| contains
--- a variable, a Space and a "description of a subspace".
--- Except that the kinds of descriptions we want for different kinds of
--- spaces really are quite different. So we will internalize the |Space|
--- into the description. Which means that only some |Space|s will be
--- represented, as needed.
--- [Later when we move to GADTs, some of this can be unified]
--- We use a phantom type in |RealRange| as a proxy for now
-data DomainDesc where
-  RealDD :: Symbol -> RealRange Double -> DomainDesc
-  AllReal :: Symbol -> DomainDesc
+data DomainDesc a b where
+  BoundedDD :: Symbol -> RTopology -> a -> b -> DomainDesc a b
+  AllDD :: Symbol -> RTopology -> DomainDesc a b
 
-  IntegerDD :: Symbol -> RealRange Integer -> DomainDesc
-  AllInt :: Symbol -> DomainDesc
-
-data Inclusive a where
-  Inc :: a -> Inclusive a
-  Exc :: a -> Inclusive a
+data Inclusive = Inc | Exc
 
 -- | RealInterval. A |RealInterval| is a subset of |Real| (as a |Space|).
 -- These come in different flavours.
 -- For now, embed |Expr| for the bounds, but that will change as well.
-data RealInterval where
-  Bounded :: Inclusive Expr -> Inclusive Expr -> RealInterval  -- (x .. y)
-  UpTo :: Inclusive Expr -> RealInterval -- (-infinity .. x)
-  UpFrom :: Inclusive Expr -> RealInterval -- (x .. infinity)
-
--- | RealRange is a specialized version of |RealInterval| to simplify
--- integration, summation, etc, where the |Inclusive| would just be noise.
-data RealRange a = BoundedR Expr Expr
+data RealInterval a b where
+  Bounded :: (Inclusive, a) -> (Inclusive, b) -> RealInterval a b -- (x .. y)
+  UpTo :: (Inclusive, a) -> RealInterval a b -- (-infinity .. x)
+  UpFrom :: (Inclusive, b) -> RealInterval a b -- (x .. infinity)

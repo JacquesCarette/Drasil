@@ -171,7 +171,7 @@ ssp_code = codeSpec' ssp_si [sspInputMod]
 
 -- SYMBOL MAP HELPERS --
 sspSymMap :: ChunkDB
-sspSymMap = cdb sspSymbols (map nw sspSymbols ++ map nw acronyms) ([] :: [UnitDefn]) -- FIXME: Fill in Concepts
+sspSymMap = cdb sspSymbols (map nw sspSymbols ++ map nw acronyms) ([] :: [ConceptChunk]) -- FIXME: Fill in Concepts
   this_si
 
 -- SECTION 1 --
@@ -327,7 +327,7 @@ phys_sys_desc_bullets = enumBullet $ map foldlSent_ [
   [at_start' itslPrpty, S "convention is noted by j. The end",
   plural itslPrpty, S "are usually not of", phrase interest `sC`
   S "therefore use the", plural itslPrpty, S "from", 
-  E $ real_interval index $ Bounded (Inc 1) (Inc (sy numbSlices -1))],
+  E $ real_interval index $ Bounded (Inc,1) (Inc,sy numbSlices -1)],
   -- (E $ 1 $<= sy index $<= (sy numbSlices) - 1)],
 
   [at_start slice, plural property +:+. S "convention is noted by",

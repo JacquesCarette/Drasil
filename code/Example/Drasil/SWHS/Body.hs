@@ -101,7 +101,7 @@ this_si = map unitWrapper [metre, kilogram, second] ++
 --Will there be a table of contents?
 
 swhsAuthors :: Sentence
-swhsAuthors = manyNames swhsPeople
+swhsAuthors = S $ manyNames swhsPeople
 
 swhs_si :: SystemInformation
 swhs_si = SI {
@@ -127,7 +127,7 @@ swhsRefDB :: ReferenceDB
 swhsRefDB = rdb [] [] assumps_SWHS_list_new [] [] ref_swhs_citations
 
 swhsSymMap :: ChunkDB
-swhsSymMap = cdb swhsSymbolsAll (map nw swhsSymbols ++ map nw acronyms) ([] :: [UnitDefn] ) -- FIXME: Fill in Concepts
+swhsSymMap = cdb swhsSymbolsAll (map nw swhsSymbols ++ map nw acronyms) ([] :: [ConceptChunk] ) -- FIXME: Fill in Concepts
   this_si
 
   --Note: The second swhsSymbols here is
@@ -196,7 +196,7 @@ swhs_srs' = mkDoc mkSRS (for) swhs_si
 
 generalDefinitions :: [GenDefn]
 generalDefinitions = [gd nwtnCooling (Just thermal_flux) ([] :: Attributes),
-  gd rocTempSimp (Nothing :: Maybe DerUChunk) [D roc_temp_simp_deriv]]
+  gd rocTempSimp (Nothing :: Maybe DerUChunk) [(derivationsteps roc_temp_simp_deriv)]]
 
 stdFields :: Fields
 stdFields = [DefiningEquation, Description Verbose IncludeUnits, Source, RefBy]
@@ -830,8 +830,8 @@ trace_matrix_grph_t3_LC6 = ["A15"]
 ------------------------------
 -- Section 2 : INTRODUCTION --
 ------------------------------
---s2_intro
-intro_intro :: ConceptChunk -> UnitalChunk -> ConceptChunk -> CI -> CI ->
+
+intro_intro :: (NamedIdea en, Definition en) => ConceptChunk -> UnitalChunk -> en -> CI -> CI ->
   ConceptChunk -> UnitalChunk -> ConceptChunk -> Sentence
 intro_intro es en sp pcmat pro te lh un = foldlSent [
   S "Due to", foldlList (map S ["increasing cost", "diminishing availability",
@@ -846,8 +846,7 @@ intro_intro es en sp pcmat pro te lh un = foldlSent [
   S "which allows higher", phrase te, S "storage capacity per",
   phrase un, S "weight"]
 
---s2_kSent
-intro_kSent :: ConceptChunk -> ConceptChunk -> CI -> Sentence
+intro_kSent :: NamedIdea ni => ni -> ConceptChunk -> CI -> Sentence
 intro_kSent sp pr pro = foldlSent_ [EmptyS +:+. phrase sp, S "The developed",
   phrase pr, S "will be referred to as", titleize pro,
   sParen (short pro)] -- SSP has same style sentence here
@@ -866,8 +865,8 @@ intro_kSent sp pr pro = foldlSent_ [EmptyS +:+. phrase sp, S "The developed",
 -------------------------------
 -- 2.1 : Purpose of Document --
 -------------------------------
---s2_1_par1
-purps_of_doc_par1 :: ConceptChunk -> CI -> Sentence
+
+purps_of_doc_par1 :: NamedIdea ni => ni -> CI -> Sentence
 purps_of_doc_par1 sp pro = foldlSent [S "The main", phrase purpose, S "of this",
   phrase document, S "is to describe the modelling of" +:+.
   phrase sp, S "The", plural goalStmt `sAnd` plural thModel,
@@ -938,8 +937,7 @@ org_of_doc_intro = foldlSent [S "The", phrase organization, S "of this",
   S "for", phrase sciCompS, S "proposed by", (sSqBrNum 3) `sAnd`
   (sSqBrNum 6), sParen (makeRef (SRS.reference SRS.missingP []))]
 
---s2_4_trail
-org_of_doc_trail :: ConceptChunk -> CI -> Sentence
+org_of_doc_trail :: NamedIdea ni => ni -> CI -> Sentence
 org_of_doc_trail sp pro = foldlSent_ [S "The", plural inModel,
   sParen (makeRef (SRS.inModel SRS.missingP [])),
   S "to be solved are referred to as", acroIM 1,
@@ -1043,8 +1041,8 @@ user_charac_contents pro = foldlSP [S "The end", phrase user, S "of",
 ---------------------------------------------
 -- Section 4 : SPECIFIC SYSTEM DESCRIPTION --
 ---------------------------------------------
---s4_intro_end
-spec_sys_desc_intro_end :: ConceptChunk -> Sentence
+
+spec_sys_desc_intro_end :: NamedIdea ni => ni -> Sentence
 spec_sys_desc_intro_end sw = foldlSent_ [foldlsC (map plural (take 3 renameList1))
   `sC` S "and finally the", plural inModel, sParen (short ode :+: S "s"),
   S "that", phrase model, S "the", phrase sw]

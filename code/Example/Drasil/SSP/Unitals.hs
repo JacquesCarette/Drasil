@@ -78,12 +78,12 @@ cohesion = uqc "c'" (cn $ "effective cohesion")
   (prime $ Atomic "c") pascal Real [gtZeroConstr] (dbl 10) defultUncrt
 
 poissnsRatio = uq (constrained' SM.poissnsR
-  [physc $ Bounded (Exc 0) (Exc 1)] (dbl 0.4)) defultUncrt
+  [physc $ Bounded (Exc,0) (Exc,1)] (dbl 0.4)) defultUncrt
 
 fricAngle = uqc "varphi'" (cn $ "effective angle of friction")
   ("The angle of inclination with respect to the horizontal axis of " ++
   "the Mohr-Coulomb shear resistance line") --http://www.geotechdata.info
-  (prime $ Greek Phi_V) degree Real [physc $ Bounded (Exc 0) (Exc 90)]
+  (prime $ Greek Phi_V) degree Real [physc $ Bounded (Exc,0) (Exc,90)]
   (dbl 25) defultUncrt
 
 dryWeight = uqc "gamma" (cn $ "dry unit weight")

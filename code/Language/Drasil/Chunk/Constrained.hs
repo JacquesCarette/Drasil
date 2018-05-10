@@ -21,8 +21,8 @@ import Language.Drasil.NounPhrase
 import Language.Drasil.Space
 import Language.Drasil.Symbol (Symbol)
 import Language.Drasil.Classes (HasUID(uid), NamedIdea(term), Idea(getA),
-  Definition(defn),ConceptDomain(cdom,DOM),Concept, HasSymbol(symbol), IsUnit,
-  Constrained(constraints),HasReasVal(reasVal))
+  Definition(defn), ConceptDomain(cdom, DOM), Concept, HasSymbol(symbol),
+  IsUnit, Constrained(constraints), HasReasVal(reasVal))
 
 -- | ConstrainedChunks are 'Symbolic Quantities'
 -- with 'Constraints' and maybe typical value
@@ -90,5 +90,5 @@ cuc' :: (IsUnit u, DOM u ~ ConceptChunk) => String -> NP -> String -> Symbol -> 
 cuc' nam trm desc sym un space cs rv =
   ConstrConcept (cqs $ ucs nam trm desc sym un space) cs (Just rv)
 
-cnstrw :: (Quantity c, Constrained c, HasReasVal c) => c -> ConstrainedChunk
+cnstrw :: (HasAttributes c, Quantity c, Constrained c, HasReasVal c) => c -> ConstrainedChunk
 cnstrw c = ConstrainedChunk (qw c) (c ^. constraints) (c ^. reasVal)

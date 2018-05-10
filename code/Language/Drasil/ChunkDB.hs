@@ -39,7 +39,7 @@ type TermMap = Map.Map String IdeaDict
 
 -- | Smart constructor for a 'SymbolMap'
 symbolMap :: (Quantity c) => [c] -> SymbolMap
-symbolMap = Map.fromList . map (\x -> (x ^. uid, qw x))
+symbolMap = Map.fromList . map (\x -> (x ^. uid, qw x [])) --FIXME: should [] be atts (i.e. list of attributes?)
 
 -- | Smart constructor for a 'TermMap'
 termMap :: (Idea c) => [c] -> TermMap

@@ -45,28 +45,28 @@ instance Eq QDefinition            where a == b = (a ^. uid) == (b ^. uid)
 fromEqn :: (IsUnit u, DOM u ~ ConceptChunk) => 
   String -> NP -> Sentence -> Symbol -> u -> Expr -> Attributes -> QDefinition
 fromEqn nm desc _ symb un eqn atts = 
-  EC (mkQuant nm desc symb Real (Just $ unitWrapper un) Nothing) eqn atts
+  EC (mkQuant nm desc symb Real (Just $ unitWrapper un) Nothing atts) eqn atts --FIXME: atts is used twice?
 
 -- | Same as fromEqn, but has no units.
 --FIXME: Space hack
 fromEqn' :: String -> NP -> Sentence -> Symbol -> Expr -> Attributes -> QDefinition
-fromEqn' nm desc _ symb eqn atts = EC (mkQuant nm desc symb Real Nothing Nothing) eqn atts
+fromEqn' nm desc _ symb eqn atts = EC (mkQuant nm desc symb Real Nothing Nothing atts) eqn atts --FIXME: atts is used twice?
 
 -- | Create a 'QDefinition' with an uid, noun phrase (term), symbol,
 -- abbreviation, unit, and defining equation.
 fromEqn'' :: (IsUnit u, DOM u ~ ConceptChunk) => String -> NP -> Sentence ->
  Symbol -> String -> Maybe u -> Expr -> Attributes -> QDefinition
 fromEqn'' nm desc _ symb abbr u eqn atts = 
-  EC (mkQuant nm desc symb Real (fmap unitWrapper u) (Just abbr)) eqn atts
+  EC (mkQuant nm desc symb Real (fmap unitWrapper u) (Just abbr) atts) eqn atts --FIXME: atts is used twice?
 
 -- | Smart constructor for QDefinitions. Requires a quantity, its defining 
 -- equation, and a list of attributes
-ec :: Quantity c => c -> Expr -> Attributes -> QDefinition
-ec c = EC (qw c)
+ec :: (HasAttributes c, Quantity c) => c -> Expr -> Attributes -> QDefinition
+ec c eqn atts = EC (qw c) eqn atts
 
 -- | Smart constructor for QDefinitions. Requires a quantity and its defining
 -- equation. Assumes no attributes.
-ec' :: Quantity c => c -> Expr -> QDefinition
+ec' :: (HasAttributes c, Quantity c) => c -> Expr -> QDefinition
 ec' e c = ec e c []
   
 -- | Returns a 'VarChunk' from a 'QDefinition'.

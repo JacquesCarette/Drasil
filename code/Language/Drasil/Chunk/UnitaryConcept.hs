@@ -5,8 +5,9 @@ import Language.Drasil.Chunk.Concept (DefnAndDomain(DAD), ConceptChunk)
 import Language.Drasil.Chunk.Unitary (UnitaryChunk, mkUnitary, Unitary)
 import Language.Drasil.Chunk.Quantity (Quantity(getUnit),HasSpace(typ))
 import Language.Drasil.Classes (HasUID(uid), NamedIdea(term), Idea(getA),
-  Definition(defn),ConceptDomain(cdom,DOM),Concept,HasSymbol(symbol))
-
+  Definition(defn), ConceptDomain(cdom, DOM), Concept, HasSymbol(symbol),
+  HasAttributes(attributes))
+import Language.Drasil.Chunk.Attribute.Core (Attributes)
 import Control.Lens ((^.), makeLenses, view)
 
 data UnitaryConceptDict = UCC {_unitary :: UnitaryChunk, _dad :: DefnAndDomain ConceptChunk}

@@ -6,12 +6,12 @@ module Language.Drasil.Chunk.Quantity
 import Control.Lens ((^.),makeLenses,view)
 
 import Language.Drasil.Classes (HasUID(uid), NamedIdea(term), Idea(getA),
-  HasSymbol(symbol),HasSpace(typ))
+  HasSymbol(symbol), HasSpace(typ), HasAttributes(attributes))
 import Language.Drasil.Chunk.NamedIdea (IdeaDict,nw,mkIdea)
 import Language.Drasil.Symbol (Symbol,Stage)
 import Language.Drasil.Space (Space)
 import Language.Drasil.NounPhrase
-
+import Language.Drasil.Chunk.Attribute.Core (Attributes)
 import Language.Drasil.Unit(UnitDefn)
 
 -- | A Quantity is an 'Idea' with a 'Space' and a symbol and 
@@ -21,8 +21,12 @@ class (Idea c, HasSpace c, HasSymbol c) => Quantity c where
   -- 'Nothing'
   getUnit  :: c -> Maybe UnitDefn
 
-data QuantityDict = QD { _id' :: IdeaDict, _typ' :: Space,
-  _symb' :: Stage -> Symbol, _unit' :: Maybe UnitDefn}
+data QuantityDict = QD { _id' :: IdeaDict
+                       , _typ' :: Space
+                       , _symb' :: Stage -> Symbol
+                       , _unit' :: Maybe UnitDefn
+                       , _attribs :: Attributes 
+                       }
 makeLenses ''QuantityDict
 
 instance HasUID    QuantityDict where uid = id' . uid
@@ -32,9 +36,10 @@ instance HasSpace  QuantityDict where typ = typ'
 instance HasSymbol QuantityDict where symbol = view symb'
 instance Quantity  QuantityDict where getUnit = view unit'
 instance Eq        QuantityDict where a == b = (a ^. uid) == (b ^. uid)
+instance HasAttributes QuantityDict where attributes = attribs
 
-qw :: Quantity q => q -> QuantityDict
-qw q = QD (nw q) (q^.typ) (symbol q) (getUnit q)
+qw :: (HasAttributes q, Quantity q) => q -> QuantityDict
+qw q = QD (nw q) (q^.typ) (symbol q) (getUnit q) (q ^. attributes)
 
-mkQuant :: String -> NP -> Symbol -> Space -> Maybe UnitDefn -> Maybe String -> QuantityDict
-mkQuant i t s sp u ab = QD (mkIdea i t ab) sp (\_ -> s) u
+mkQuant :: String -> NP -> Symbol -> Space -> Maybe UnitDefn -> Maybe String -> Attributes -> QuantityDict
+mkQuant i t s sp u ab atts = QD (mkIdea i t ab) sp (\_ -> s) u atts

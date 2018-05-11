@@ -19,14 +19,12 @@ import Language.Drasil.ChunkDB
 import Language.Drasil.Expr.Extract (codevars, codevars')
 import Language.Drasil.Chunk.VarChunk
 import Language.Drasil.Code.Imperative.Lang
-
+import Language.Drasil.Chunk.Attribute.Core (Attributes)
 import qualified Data.Map as Map
 import Control.Lens ((^.))
 import Data.List (nub, delete, (\\))
 
 import Prelude hiding (const)
-
-import Language.Drasil.Chunk.Attribute.Core (Attributes)
 
 type Input = CodeChunk
 type Output = CodeChunk
@@ -75,19 +73,19 @@ getStr (P s) = symbToCodeName s
 getStr ((:+:) s1 s2) = getStr s1 ++ getStr s2
 getStr _ = error "Term is not a string" 
 
-codeSpec :: SystemInformation -> [Mod] -> Attributes -> CodeSpec
-codeSpec si ms atts = codeSpec' si ms atts
+codeSpec :: SystemInformation -> [Mod] -> CodeSpec
+codeSpec si ms = codeSpec' si ms
 
 codeSpec' :: SystemInformation -> [Mod] -> Attributes -> CodeSpec
 codeSpec' (SI {_sys = sys, _quants = q, _definitions = defs', _inputs = ins, _outputs = outs, _constraints = cs, _constants = constants, _sysinfodb = db}) ms atts = 
-  let inputs' = map (codevar atts) ins
+  let inputs' = map codevar ins
       const' = map (qtov atts) constants
-      derived = map (qtov atts) $ getDerivedInputs defs' inputs' const' db atts
+      derived = map qtov $ getDerivedInputs defs' inputs' const' db
       rels = (map (qtoc atts) defs') \\ derived
       mods' = prefixFunctions $ (packmod "Calculations" $ map FCD rels):ms 
       mem   = modExportMap mods' inputs' const'
-      outs' = map (codevar atts) outs
-      allInputs = nub $ inputs' ++ map (codevar atts) derived
+      outs' = map codevar outs
+      allInputs = nub $ inputs' ++ map codevar derived
   in  CodeSpec {
         program = sys,
         inputs = allInputs,
@@ -95,15 +93,15 @@ codeSpec' (SI {_sys = sys, _quants = q, _definitions = defs', _inputs = ins, _ou
         derivedInputs = derived,
         outputs = outs',
         relations = rels,
-        execOrder = getExecOrder rels (allInputs ++ map (codevar atts) const') outs' db atts,
+        execOrder = getExecOrder rels (allInputs ++ map codevar const') outs' db,
         cMap = constraintMap cs,
         fMap = assocToMap rels,
-        vMap = assocToMap (map (codevar atts) q),
+        vMap = assocToMap (map codevar q),
         eMap = mem,
         constMap = assocToMap const',
         const = const',
         mods = mods',
-        dMap = modDepMap db mem mods' atts,
+        dMap = modDepMap db mem mods',
         sysinfodb = db
       }
 
@@ -174,8 +172,8 @@ funcQD atts qd = FCD $ qtoc atts qd
 funcData :: Name -> DataDesc -> Func
 funcData n dd = FData $ FuncData (toCodeName n) dd 
 
-funcDef :: (Quantity c) => Name -> [c] -> Space -> [FuncStmt] -> Attributes -> Func  
-funcDef s i t fs atts = FDef $ FuncDef (toCodeName s) (map (codevar atts) i) (spaceToCodeType t) fs 
+funcDef :: (Quantity c) => Name -> [c] -> Space -> [FuncStmt] -> Func  
+funcDef s i t fs  = FDef $ FuncDef (toCodeName s) (map (codevar ) i) (spaceToCodeType t) fs 
      
 data FuncData where
   FuncData :: Name -> DataDesc -> FuncData
@@ -197,19 +195,19 @@ data FuncStmt where
   -- slight hack, for now
   FAppend :: Expr -> Expr -> FuncStmt
   
-($:=) :: (Quantity c) => c -> Expr -> Attributes -> FuncStmt
-(v $:= e) atts = FAsg (codevar atts v) e
+($:=) :: (Quantity c) => c -> Expr -> FuncStmt
+v $:= e = FAsg (codevar v) e
 
-ffor :: (Quantity c) => c -> Expr -> [FuncStmt] -> Attributes -> FuncStmt
-ffor v e fs atts = FFor (codevar atts v) e fs
+ffor :: (Quantity c) => c -> Expr -> [FuncStmt] -> FuncStmt
+ffor v e fs  = FFor (codevar  v) e fs
 
-fdec :: (Quantity c) => c -> Attributes -> FuncStmt
-fdec v atts = FDec (codevar atts v) (spaceToCodeType $ v ^. typ)
+fdec :: (Quantity c) => c -> FuncStmt
+fdec v  = FDec (codevar  v) (spaceToCodeType $ v ^. typ)
 
-asVC :: Func -> VarChunk
-asVC (FDef (FuncDef n _ _ _)) = implVar n (nounPhraseSP n) (Atomic n) Real
-asVC (FData (FuncData n _)) = implVar n (nounPhraseSP n) (Atomic n) Real
-asVC (FCD cd) = codeVC cd (codeSymb cd) (cd ^. typ)
+asVC :: Func -> Attributes -> VarChunk
+asVC (FDef (FuncDef n _ _ _)) atts = implVar n (nounPhraseSP n) (Atomic n) Real atts
+asVC (FData (FuncData n _)) atts = implVar n (nounPhraseSP n) (Atomic n) Real atts
+asVC (FCD cd) atts = codeVC cd (codeSymb cd) (cd ^. typ) atts
 
 asExpr :: Func -> Expr
 asExpr f = sy $ asVC f
@@ -230,8 +228,8 @@ modExportMap ms ins _ = Map.fromList $ concatMap mpair ms
           
 type ModDepMap = Map.Map String [String]
 
-modDepMap :: HasSymbolTable ctx => ctx -> ModExportMap -> [Mod] -> Attributes -> ModDepMap
-modDepMap sm mem ms atts = Map.fromList $ map (\(Mod n _) -> n) ms `zip` map getModDep ms 
+modDepMap :: HasSymbolTable ctx => ctx -> ModExportMap -> [Mod] -> ModDepMap
+modDepMap sm mem ms  = Map.fromList $ map (\(Mod n _) -> n) ms `zip` map getModDep ms 
                                    ++ [("Control", [ "InputParameters",  
                                                      "DerivedValues",
                                                      "InputConstraints",
@@ -244,38 +242,38 @@ modDepMap sm mem ms atts = Map.fromList $ map (\(Mod n _) -> n) ms `zip` map get
   where getModDep (Mod name funcs) = 
           delete name $ nub $ concatMap getDep (concatMap fdep funcs)
         getDep n = maybe [] (\x -> [x]) (Map.lookup n mem)        
-        fdep (FCD cd) = codeName cd:map codeName (codevars atts (codeEquat cd) sm)
-        fdep (FDef (FuncDef _ i _ fs)) = map codeName (i ++ concatMap (fstdep sm atts) fs)
+        fdep (FCD cd) = codeName cd:map codeName (codevars  (codeEquat cd) sm)
+        fdep (FDef (FuncDef _ i _ fs)) = map codeName (i ++ concatMap (fstdep sm ) fs)
         fdep (FData (FuncData _ d)) = map codeName $ getInputs d   
 
-fstdep :: HasSymbolTable ctx => ctx -> Attributes -> FuncStmt ->[CodeChunk]
-fstdep _  _    (FDec cc _) = [cc]
-fstdep sm atts (FAsg cc e) = cc:codevars atts e sm
-fstdep sm atts (FFor cc e fs) = delete cc $ nub (codevars atts e sm ++ concatMap (fstdep sm atts) fs)
-fstdep sm atts (FWhile e fs) = codevars atts e sm ++ concatMap (fstdep sm atts) fs
-fstdep sm atts (FCond e tfs efs)  = codevars atts e sm ++ concatMap (fstdep sm atts) tfs ++ concatMap (fstdep sm atts) efs
-fstdep sm atts (FRet e)  = codevars atts e sm
-fstdep sm atts (FTry tfs cfs) = concatMap (fstdep sm atts) tfs ++ concatMap (fstdep sm atts) cfs
-fstdep _  _    (FThrow _) = [] -- is this right?
-fstdep _  _    (FContinue) = []
-fstdep sm atts (FProcCall _ l)  = concatMap (\x -> codevars atts x sm) l
-fstdep sm atts (FAppend a b)  = nub (codevars atts a sm ++ codevars atts b sm)
+fstdep :: HasSymbolTable ctx => ctx -> FuncStmt ->[CodeChunk]
+fstdep _  (FDec cc _) = [cc]
+fstdep sm (FAsg cc e) = cc:codevars e sm
+fstdep sm (FFor cc e fs) = delete cc $ nub (codevars  e sm ++ concatMap (fstdep sm ) fs)
+fstdep sm (FWhile e fs) = codevars e sm ++ concatMap (fstdep sm ) fs
+fstdep sm (FCond e tfs efs)  = codevars e sm ++ concatMap (fstdep sm ) tfs ++ concatMap (fstdep sm ) efs
+fstdep sm (FRet e)  = codevars  e sm
+fstdep sm (FTry tfs cfs) = concatMap (fstdep sm ) tfs ++ concatMap (fstdep sm ) cfs
+fstdep _  (FThrow _) = [] -- is this right?
+fstdep _  (FContinue) = []
+fstdep sm (FProcCall _ l)  = concatMap (\x -> codevars  x sm) l
+fstdep sm (FAppend a b)  = nub (codevars  a sm ++ codevars  b sm)
 
-fstdecl :: HasSymbolTable ctx => ctx -> Attributes -> [FuncStmt] -> [CodeChunk]
-fstdecl ctx atts fsts = (nub $ concatMap (fstvars ctx atts) fsts) \\ (nub $ concatMap (declared ctx) fsts) 
+fstdecl :: HasSymbolTable ctx => ctx -> [FuncStmt] -> [CodeChunk]
+fstdecl ctx fsts = (nub $ concatMap (fstvars ctx) fsts) \\ (nub $ concatMap (declared ctx) fsts) 
   where
-    fstvars :: HasSymbolTable ctx => ctx -> Attributes -> FuncStmt -> [CodeChunk]
-    fstvars _  _    (FDec cc _) = [cc]
-    fstvars sm atts (FAsg cc e) = cc:codevars' atts e sm
-    fstvars sm atts (FFor cc e fs) = delete cc $ nub (codevars' atts e sm ++ concatMap (fstvars sm atts) fs)
-    fstvars sm atts (FWhile e fs) = codevars' atts e sm ++ concatMap (fstvars sm atts) fs
-    fstvars sm atts (FCond e tfs efs) = codevars' atts e sm ++ concatMap (fstvars sm atts) tfs ++ concatMap (fstvars sm atts) efs
-    fstvars sm atts (FRet e) = codevars' atts e sm
-    fstvars sm atts (FTry tfs cfs) = concatMap (fstvars sm atts) tfs ++ concatMap (fstvars sm atts) cfs
-    fstvars _  _    (FThrow _) = [] -- is this right?
-    fstvars _  atts (FContinue) = []
-    fstvars sm atts (FProcCall _ l) = concatMap (\x -> codevars atts x sm) l
-    fstvars sm atts (FAppend a b) = nub (codevars atts a sm ++ codevars atts b sm)
+    fstvars :: HasSymbolTable ctx => ctx -> FuncStmt -> [CodeChunk]
+    fstvars _  (FDec cc _) = [cc]
+    fstvars sm (FAsg cc e) = cc:codevars' e sm
+    fstvars sm (FFor cc e fs) = delete cc $ nub (codevars' e sm ++ concatMap (fstvars sm) fs)
+    fstvars sm (FWhile e fs) = codevars' e sm ++ concatMap (fstvars sm) fs
+    fstvars sm (FCond e tfs efs) = codevars' e sm ++ concatMap (fstvars sm) tfs ++ concatMap (fstvars sm) efs
+    fstvars sm (FRet e) = codevars' e sm
+    fstvars sm (FTry tfs cfs) = concatMap (fstvars sm) tfs ++ concatMap (fstvars sm ) cfs
+    fstvars _  (FThrow _) = [] -- is this right?
+    fstvars _  (FContinue) = []
+    fstvars sm (FProcCall _ l) = concatMap (\x -> codevars x sm) l
+    fstvars sm (FAppend a b) = nub (codevars a sm ++ codevars b sm)
 
     declared :: HasSymbolTable ctx => ctx -> FuncStmt -> [CodeChunk]
     declared _  (FDec cc _) = [cc]
@@ -301,20 +299,20 @@ prefixFunctions = map (\(Mod nm fs) -> Mod nm $ map pfunc fs)
         pfunc (FData (FuncData n dd)) = FData (FuncData (funcPrefix ++ n) dd)
         pfunc (FDef (FuncDef n a t f)) = FDef (FuncDef (funcPrefix ++ n) a t f)
 
-getDerivedInputs :: HasSymbolTable ctx => [QDefinition] -> [Input] -> [Const] -> ctx -> Attributes -> [QDefinition]
-getDerivedInputs defs' ins consts sm atts =
-  let refSet = ins ++ map (codevar atts) consts 
-  in  filter ((`subsetOf` refSet) . flip (codevars atts) sm . (^.equat)) defs'
+getDerivedInputs :: HasSymbolTable ctx => [QDefinition] -> [Input] -> [Const] -> ctx -> [QDefinition]
+getDerivedInputs defs' ins consts sm  =
+  let refSet = ins ++ map (codevar) consts 
+  in  filter ((`subsetOf` refSet) . flip (codevars) sm . (^.equat)) defs'
   
 type Known = CodeChunk
 type Need  = CodeChunk
 
-getExecOrder :: HasSymbolTable ctx => [Def] -> [Known] -> [Need] -> ctx -> Attributes -> [Def]
-getExecOrder d k' n' sm atts = getExecOrder' [] d k' (n' \\ k')
+getExecOrder :: HasSymbolTable ctx => [Def] -> [Known] -> [Need] -> ctx -> [Def]
+getExecOrder d k' n' sm  = getExecOrder' [] d k' (n' \\ k')
   where getExecOrder' ord _ _ []   = ord
         getExecOrder' ord defs' k n = 
-          let new  = filter ((`subsetOf` k) . flip (codevars' atts) sm . codeEquat) defs'
-              cnew = map (codevar atts) new
+          let new  = filter ((`subsetOf` k) . flip (codevars') sm . codeEquat) defs'
+              cnew = map codevar new
               kNew = k ++ cnew
               nNew = n \\ cnew
           in  if null new 

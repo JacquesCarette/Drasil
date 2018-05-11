@@ -1,7 +1,7 @@
 {-# LANGUAGE GADTs #-}
 module Language.Drasil.CodeSpec where
 
-import Language.Drasil.Classes (term,CommonIdea)
+import Language.Drasil.Classes (term, CommonIdea, HasAttributes)
 import Language.Drasil.Chunk.Code
 import Language.Drasil.Chunk.Eq
 import Language.Drasil.Chunk.Quantity -- for hack
@@ -77,7 +77,14 @@ codeSpec :: SystemInformation -> [Mod] -> CodeSpec
 codeSpec si ms = codeSpec' si ms
 
 codeSpec' :: SystemInformation -> [Mod] -> CodeSpec
-codeSpec' (SI {_sys = sys, _quants = q, _definitions = defs', _inputs = ins, _outputs = outs, _constraints = cs, _constants = constants, _sysinfodb = db}) ms = 
+codeSpec' (SI {_sys = sys
+              , _quants = q
+              , _definitions = defs'
+              , _inputs = ins
+              , _outputs = outs
+              , _constraints = cs
+              , _constants = constants
+              , _sysinfodb = db}) ms = 
   let inputs' = map codevar ins
       const' = map qtov constants
       derived = map qtov $ getDerivedInputs defs' inputs' const' db
@@ -166,13 +173,13 @@ data Func = FCD CodeDefinition
           | FDef FuncDef
           | FData FuncData
 
-funcQD :: Attributes -> QDefinition -> Func
-funcQD atts qd = FCD $ qtoc atts qd 
+funcQD :: QDefinition -> Func
+funcQD qd = FCD $ qtoc qd 
 
 funcData :: Name -> DataDesc -> Func
 funcData n dd = FData $ FuncData (toCodeName n) dd 
 
-funcDef :: (Quantity c) => Name -> [c] -> Space -> [FuncStmt] -> Func  
+funcDef :: (HasAttributes c, Quantity c) => Name -> [c] -> Space -> [FuncStmt] -> Func  
 funcDef s i t fs  = FDef $ FuncDef (toCodeName s) (map (codevar ) i) (spaceToCodeType t) fs 
      
 data FuncData where
@@ -195,22 +202,22 @@ data FuncStmt where
   -- slight hack, for now
   FAppend :: Expr -> Expr -> FuncStmt
   
-($:=) :: (Quantity c) => c -> Expr -> FuncStmt
+($:=) :: (HasAttributes c, Quantity c) => c -> Expr -> FuncStmt
 v $:= e = FAsg (codevar v) e
 
-ffor :: (Quantity c) => c -> Expr -> [FuncStmt] -> FuncStmt
+ffor :: (HasAttributes c, Quantity c) => c -> Expr -> [FuncStmt] -> FuncStmt
 ffor v e fs  = FFor (codevar  v) e fs
 
-fdec :: (Quantity c) => c -> FuncStmt
+fdec :: (HasAttributes c, Quantity c) => c -> FuncStmt
 fdec v  = FDec (codevar  v) (spaceToCodeType $ v ^. typ)
 
-asVC :: Func -> Attributes -> VarChunk
+asVC :: Func -> Attributes -> VarChunk --asVC uses Attributes to pass them into VarChunk constructors
 asVC (FDef (FuncDef n _ _ _)) atts = implVar n (nounPhraseSP n) (Atomic n) Real atts
 asVC (FData (FuncData n _)) atts = implVar n (nounPhraseSP n) (Atomic n) Real atts
 asVC (FCD cd) atts = codeVC cd (codeSymb cd) (cd ^. typ) atts
 
-asExpr :: Func -> Expr
-asExpr f = sy $ asVC f
+asExpr :: Func -> Attributes -> Expr --Attributes need to be passed in for asVC
+asExpr f atts = sy $ asVC f atts
 
 -- name of variable/function maps to module name
 type ModExportMap = Map.Map String String

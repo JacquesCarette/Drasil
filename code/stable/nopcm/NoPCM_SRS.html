@@ -16,7 +16,7 @@ Software Requirements Specification for Solar Water Heating Systems
 </div>
 <div class="author">
 <h2>
-ThulasiJegatheesan
+Thulasi Jegatheesan
 </h2>
 </div>
 <a id="Sec:RefMat">
@@ -963,36 +963,6 @@ Equation
 Description
 </th>
 <td>
-<div class="list">
-<p>
-<em>&nabla;</em> is the gradient (Unitless)
-</p>
-<p>
-<em><b>q</b></em> is the thermal flux vector (W/(m<sup>2</sup>))
-</p>
-<p>
-<em>g</em> is the volumetric heat generation per unit volume (W/(m<sup>3</sup>))
-</p>
-<p>
-<em>&rho;</em> is the density (kg/(m<sup>3</sup>))
-</p>
-<p>
-<em>C</em> is the specific heat capacity (J/(kg&sdot;&deg;C))
-</p>
-<p>
-<em>T</em> is the temperature (&deg;C)
-</p>
-<p>
-<em>t</em> is the time (s)
-</p>
-</div>
-</td>
-</tr>
-<tr>
-<th>
-Source
-</th>
-<td>
 <p class="paragraph">
 The above equation gives the law of conservation of energy for transient heat transfer in a material of specific heat capacity <em>C</em> (J/(kg&sdot;&deg;C)) and density, <em>&rho;</em> (kg/m<sup>3</sup>), where <em><b>q</b></em> is the thermal flux vector (W/m<sup>2</sup>), <em>g</em> is the volumetric heat generation per unit volume (W/m<sup>3</sup>), <em>T</em> is the temperature (&deg;C), <em>t</em> is time (s), and <em>&nabla;</em> is the degree of steepness of a graph at any point. For this equation to apply, other forms of energy, such as mechanical energy, are assumed to be negligible in the system (<a href=#A:assump1>assump1</a>).
 </p>
@@ -1015,7 +985,6 @@ This section collects the laws and equations that will be used in deriving the d
 <tr>
 <th>
 Label
-==== BASE ====
 </th>
 <td>
 <p class="paragraph">
@@ -1042,27 +1011,6 @@ Equation
 Description
 </th>
 <td>
-<div class="list">
-<p>
-<em><b>q</b></em> is the thermal flux vector (W/(m<sup>2</sup>))
-</p>
-<p>
-<em>t</em> is the time (s)
-</p>
-<p>
-<em>h</em> is the convective heat transfer coefficient (W/(m<sup>2</sup>&sdot;&deg;C))
-</p>
-<p>
-<em>&Delta;T</em> is the change in temperature (&deg;C)
-</p>
-</div>
-</td>
-</tr>
-<tr>
-<th>
-Source
-</th>
-<td>
 <p class="paragraph">
 Newton's law of cooling describes convective cooling from a surface. The law is stated as: the rate of heat loss from a body is proportional to the difference in temperatures between the body and its surroundings. <em><b>q</b>(t)</em> is the thermal flux (W/m<sup>2</sup>). <em>h</em> is the heat transfer coefficient, assumed independant of <em>T</em> (A2) (W/(m<sup>2</sup>&sdot;&deg;C)). <em>&Delta;T(t) = T(t)&minus;T<sub>env</sub>(t)</em> is the time-dependant thermal gradient between the environment and the object (&deg;C).
 </p>
@@ -1074,23 +1022,11 @@ Newton's law of cooling describes convective cooling from a surface. The law is 
 <table class="tdefn">
 <tr>
 <th>
-==== BASE ====
-Number
-</th>
-<td>
-<p class="paragraph">
-<b>T</b>
-</p>
-</td>
-</tr>
-<tr>
-<th>
-==== BASE ====
 Label
 </th>
 <td>
 <p class="paragraph">
-Simplified rate of change of temperature
+Simplified Rate of Change of Temperature
 </p>
 </td>
 </tr>
@@ -1120,49 +1056,8 @@ d&#8239;t
 Description
 </th>
 <td>
-<div class="list">
-<p>
-<em>m</em> is the mass (kg)
-</p>
-<p>
-<em>C</em> is the specific heat capacity (J/(kg&sdot;&deg;C))
-</p>
-<p>
-<em>T</em> is the temperature (&deg;C)
-</p>
-<p>
-<em>t</em> is the time (s)
-</p>
-<p>
-<em>q<sub>in</sub></em> is the heat flux input (W/(m<sup>2</sup>))
-</p>
-<p>
-<em>A<sub>in</sub></em> is the surface area over which heat is transferred in (m<sup>2</sup>)
-</p>
-<p>
-<em>q<sub>out</sub></em> is the heat flux output (W/(m<sup>2</sup>))
-</p>
-<p>
-<em>A<sub>out</sub></em> is the surface area over which heat is transferred out (m<sup>2</sup>)
-</p>
-<p>
-<em>g</em> is the volumetric heat generation per unit volume (W/(m<sup>3</sup>))
-</p>
-<p>
-<em>V</em> is the volume (m<sup>3</sup>)
-</p>
-</div>
-</td>
-</tr>
-<tr>
-<th>
-Source
-</th>
-<td>
 <p class="paragraph">
-==== BASE ====
-The basic equation governing the rate of change of temperature, for a given volume <em>V</em>, with time. <em>m</em> is the mass (kg). <em>C</em> is the specific heat capacity (J/(kg&sdot;&deg;C)). <em>T</em> is the temperature (&deg;C) and <em>t</em> is the time (s). <em>q<sub>in</sub></em> and <em>q<sub>out</sub></em> are the in and out heat transfer rates, respectively (W/(m<sup>2</sup>)). <em>A<sub>in</sub></em> and <em>A<sub>out</sub></em> are the surface areas over which the heat is being transferred in and out, respectively (m<sup>2</sup>). <em>g</em> is the volumetric heat generated (W/(m<sup>3</sup>)). <em>V</em> is the volume (m<sup>3</sup>).
-==== BASE ====
+The basic equation governing the rate of change of temperature, for a given volume <em>V</em>, with time. <em>m</em> is the mass (kg). <em>C</em> is the specific heat capacity (J/(kg&sdot;&deg;C)). <em>T</em> is the temperature (&deg;C) and <em>t</em> is the time (s). <em>q<sub>in</sub></em> and <em>q<sub>out</sub></em> are the in and out heat transfer rates, respectively (W/m<sup>2</sup>). <em>A<sub>in</sub></em> and <em>A<sub>out</sub></em> are the surface areas over which the heat is being transferred in and out, respectively (m<sup>2</sup>). <em>g</em> is the volumetric heat generated (W/m<sup>3</sup>). <em>V</em> is the volume (m<sup>3</sup>).
 </p>
 </td>
 </tr>
@@ -1256,27 +1151,15 @@ Data Definitions
 <p class="paragraph">
 This section collects and defines all the data needed to build the instance models. The dimension of each quantity is also given.
 </p>
-<a id="DD:ht_flux_C">
+<a id="DD:ht.flux.C">
 <table class="ddefn">
 <tr>
 <th>
-==== BASE ====
-Number
-</th>
-<td>
-<p class="paragraph">
-<b>DD1</b>
-</p>
-</td>
-</tr>
-<tr>
-<th>
 Label
-==== BASE ====
 </th>
 <td>
 <p class="paragraph">
-<em>q<sub>C</sub></em>
+Heat Flux Into the Water From the Coil
 </p>
 </td>
 </tr>
@@ -1309,44 +1192,8 @@ Equation
 Description
 </th>
 <td>
-<div class="list">
-<p>
-<em>q<sub>C</sub></em> is the heat flux into the water from the coil (W/(m<sup>2</sup>))
-</p>
-<p>
-<em>h<sub>C</sub></em> is the convective heat transfer coefficient between coil and water (W/(m<sup>2</sup>&sdot;&deg;C))
-</p>
-<p>
-<em>T<sub>C</sub></em> is the temperature of the heating coil (&deg;C)
-</p>
-<p>
-<em>T<sub>W</sub></em> is the temperature of the water (&deg;C)
-</p>
-<p>
-<em>t</em> is the time (s)
-</p>
-</div>
-</td>
-</tr>
-<tr>
-<th>
-Source
-</th>
-<td>
 <p class="paragraph">
-
-</p>
-</td>
-</tr>
-<tr>
-<th>
-RefBy
-</th>
-<td>
-<p class="paragraph">
-==== BASE ====
-<em>q<sub>C</sub></em> is the heat flux into the water from the coil (W/(m<sup>2</sup>))<br /><em>h<sub>C</sub></em> is the convective heat transfer coefficient between coil and water (W/(m<sup>2</sup>&sdot;&deg;C))<br /><em>T<sub>C</sub></em> is the temperature of the heating coil (&deg;C)<br /><em>T<sub>W</sub></em> is the temperature of the water (&deg;C)<br /><em>t</em> is the time (s)
-==== BASE ====
+<em>q<sub>C</sub></em> is the heat flux into the water from the coil (W/m<sup>2</sup>)<br /><em>h<sub>C</sub></em> is the convective heat transfer coefficient between coil and water (W/(m<sup>2</sup>&sdot;&deg;C))<br /><em>T<sub>C</sub></em> is the temperature of the heating coil (&deg;C)<br /><em>T<sub>W</sub></em> is the temperature of the water (&deg;C)<br /><em>t</em> is the time (s)
 </p>
 </td>
 </tr>
@@ -1362,52 +1209,16 @@ Instance Models
 <p class="paragraph">
 This section transforms the problem defined in <a href=#Sec:ProbDesc>Problem Description</a> into one which is expressed in mathematical terms. It uses concrete symbols defined in <a href=#Sec:DDs>Data Definitions</a> to replace the abstract symbols in the models identified in <a href=#Sec:TMs>Theoretical Models</a> and <a href=#Sec:GDs>General Definitions</a>.
 </p>
-<a id="IM:eBalanceOnWtr">
-<table class="idefn">
-<tr>
-<th>
-==== BASE ====
-Number
-</th>
-<td>
-<p class="paragraph">
-<b>T</b>
-</p>
-</td>
-</tr>
+<a id="T:eBalanceOnWtr">
+<table class="tdefn">
 <tr>
 <th>
 Label
-==== BASE ====
 </th>
 <td>
 <p class="paragraph">
-<em>T<sub>W</sub></em>
+Energy Balance on Water to Find the Temperature of the Water
 </p>
-</td>
-</tr>
-<tr>
-<th>
-Input Constraints
-</th>
-<td>
-<a id="">
-<div class="equation">
-<em>T<sub>init</sub>&thinsp;&le;&thinsp;T<sub>C</sub></em>
-</div>
-</a>
-</td>
-</tr>
-<tr>
-<th>
-Output Constraints
-</th>
-<td>
-<a id="">
-<div class="equation">
-<em>0&thinsp;&lt;&thinsp;t&thinsp;&lt;&thinsp;t<sub>final</sub></em>
-</div>
-</a>
 </td>
 </tr>
 <tr>
@@ -1443,39 +1254,15 @@ d&#8239;t
 Description
 </th>
 <td>
-<div class="list">
-<p>
-<em>T<sub>W</sub></em> is the temperature of the water (&deg;C)
-</p>
-<p>
-<em>t</em> is the time (s)
-</p>
-<p>
-<em>&tau;<sub>W</sub></em> is the ODE parameter for water (s)
-</p>
-<p>
-<em>T<sub>C</sub></em> is the temperature of the heating coil (&deg;C)
-</p>
-</div>
-</td>
-</tr>
-<tr>
-<th>
-Source
-</th>
-<td>
 <p class="paragraph">
-
-</p>
-</td>
-</tr>
-<tr>
-<th>
-RefBy
-</th>
-<td>
-<p class="paragraph">
-FIXME: This needs to be filled in
+<em>T<sub>W</sub></em> is the temperature of the water (&deg;C). <em>T<sub>C</sub></em> is the temperature of the heating coil (&deg;C). <em>&tau;<sub>W</sub> = <div class="fraction">
+<span class="fup">
+m<sub>W</sub>&#8239;C<sub>W</sub>
+</span>
+<span class="fdn">
+h<sub>C</sub>&#8239;A<sub>C</sub>
+</span>
+</div></em> is a constant (s). The above equation applies as long as the water is in liquid form, <em>0&thinsp;&lt;&thinsp;T<sub>W</sub>&thinsp;&lt;&thinsp;100</em> (&deg;C) where <em>0</em> (&deg;C) and <em>100</em> (&deg;C) are the melting and boiling point temperatures of water, respectively (<a href=#A:assump10>assump10</a>).
 </p>
 </td>
 </tr>
@@ -1558,47 +1345,16 @@ d&#8239;t
 </div>&#8239;(T<sub>C</sub>&minus;T<sub>W</sub>)</em>
 </div>
 </a>
-<a id="IM:heatEInWtr">
-<table class="idefn">
-<tr>
-<th>
-==== BASE ====
-Number
-</th>
-<td>
-<p class="paragraph">
-<b>T</b>
-</p>
-</td>
-</tr>
+<a id="T:heatEInWtr">
+<table class="tdefn">
 <tr>
 <th>
 Label
-==== BASE ====
 </th>
 <td>
 <p class="paragraph">
-<em>E<sub>W</sub></em>
+Heat Energy in the Water
 </p>
-</td>
-</tr>
-<tr>
-<th>
-Input Constraints
-</th>
-<td>
-</td>
-</tr>
-<tr>
-<th>
-Output Constraints
-</th>
-<td>
-<a id="">
-<div class="equation">
-<em>0&thinsp;&lt;&thinsp;t&thinsp;&lt;&thinsp;t<sub>final</sub></em>
-</div>
-</a>
 </td>
 </tr>
 <tr>
@@ -1620,45 +1376,8 @@ Equation
 Description
 </th>
 <td>
-<div class="list">
-<p>
-<em>E<sub>W</sub></em> is the change in heat energy in the water (J)
-</p>
-<p>
-<em>t</em> is the time (s)
-</p>
-<p>
-<em>C<sub>W</sub></em> is the specific heat capacity of water (J/(kg&sdot;&deg;C))
-</p>
-<p>
-<em>m<sub>W</sub></em> is the mass of water (kg)
-</p>
-<p>
-<em>T<sub>W</sub></em> is the temperature of the water (&deg;C)
-</p>
-<p>
-<em>T<sub>init</sub></em> is the initial temperature (&deg;C)
-</p>
-</div>
-</td>
-</tr>
-<tr>
-<th>
-Source
-</th>
-<td>
 <p class="paragraph">
-
-</p>
-</td>
-</tr>
-<tr>
-<th>
-RefBy
-</th>
-<td>
-<p class="paragraph">
-FIXME: This needs to be filled in
+The above equation is derived using T2. <em>E<sub>W</sub></em> is the change in thermal energy of the liquid water relative to the energy at the initial temperature (<em>T<sub>init</sub></em>) (J). <em>C<sub>W</sub></em> is the specific heat capacity of liquid water (J/(kg&sdot;&deg;C)) and <em>m<sub>W</sub></em> is the mass of the water (kg). The change in temperature is the difference between the temperature at time <em>t</em> (s), <em>T<sub>W</sub></em> and the initial temperature, <em>T<sub>init</sub></em> (&deg;C). This equation applies as long as <em>0&thinsp;&lt;&thinsp;T<sub>W</sub>&thinsp;&lt;&thinsp;100</em>&deg;C (<a href=#A:assump14>assump14</a>, <a href=#A:assump19>assump19</a>).
 </p>
 </td>
 </tr>
@@ -1672,7 +1391,7 @@ FIXME: This needs to be filled in
 Data Constraints
 </h3>
 <p class="paragraph">
-<a href=#Table:InDataConstraints>Table:InDataConstraints</a>, and <a href=#Table:OutDataConstraints>Table:OutDataConstraints</a> shows the data constraints on the input and output variables, respectively. The column for physical constraints gives the physical limitations on the range of values that can be taken by the variable. The uncertainty column provides an estimate of the confidence with which the physical quantities can be measured. This information would be part of the input if one were performing an uncertainty quantification exercise. The constraints are conservative, to give the user of the model the flexibility to experiment with unusual situations. The column of typical values is intended to provide a feel for a common scenario. The column for software constraints restricts the range of inputs to reasonable values. The uncertainty column provides an estimate of the confidence with which the physical quantities can be measured. This information would be part of the input if one were performing an uncertainty quantification exercise.
+<a href=#Table:InDataConstraints>Table:InDataConstraints</a>, and <a href=#Table:OutDataConstraints>Table:OutDataConstraints</a> shows the data constraints on the input and output variables, respectively. The column for physical constraints gives the physical limitations on the range of values that can be taken by the variable. The uncertainty column provides an estimate of the confidence with which the physical quantities can be measured. This information would be part of the input if one were performing an uncertainty quantification exercise. The constraints are conservative, to give the user of the model the flexibility to experiment with unusual situations. The column of typical values is intended to provide a feel for a common scenario. The column for software constraints restricts the range of inputs to reasonable values.
 </p>
 <a id="Table:InDataConstraints">
 <table class="table">
@@ -3291,27 +3010,27 @@ References
 </h1>
 <a id="incroperaEtAl2007">
 <ul>
-[1]: Incropera, F.P., Dewitt, D.P., Bergman, T.L., and Lavine, A.S.<em>Fundamentals of Heat and Mass Transfer</em>.6th. ed.,Hoboken, New Jersey:John Wiley and Sons,2007. Print.
+[1]: Incropera, F. P., Dewitt, D. P., Bergman, T. L., and Lavine, A. S. <em>Fundamentals of Heat and Mass Transfer</em>. 6th. ed., Hoboken, New Jersey: John Wiley and Sons, 2007. Print.
 </ul>
 </a>
 <a id="koothoor2013">
 <ul>
-[2]: Koothoor, Nirmitha.<em>A document drive approach to certifying scientific computing software</em>.McMaster University,Hamilton, ON, Canada:2013. Print.
+[2]: Koothoor, Nirmitha. <em>A document drive approach to certifying scientific computing software</em>. McMaster University, Hamilton, ON, Canada: 2013. Print.
 </ul>
 </a>
 <a id="lightstone2012">
 <ul>
-[3]: Lightstone, Marilyn.<em>Derivation of tank/pcm model</em>.2012.From Marilyn Lightstone's Personal Notes
+[3]: Lightstone, Marilyn. <em>Derivation of tank/pcm model</em>. 2012. From Marilyn Lightstone's Personal Notes
 </ul>
 </a>
 <a id="parnas1986">
 <ul>
-[4]: Parnas, DavidL. and Clements, P.C."A rational design process: How and why to fake it."<em>IEEE Transactions on Software Engineering</em>,vol. 12,no. 2,Washington, USA:February,1986.pp. 251&ndash;257. Print.
+[4]: Parnas, David L. and Clements, P. C. "A rational design process: How and why to fake it." <em>IEEE Transactions on Software Engineering</em>, vol. 12, no. 2, Washington, USA: February, 1986. pp. 251&ndash;257. Print.
 </ul>
 </a>
 <a id="smithLai2005">
 <ul>
-[5]: Smith, W.Spencer and Lai, Lei."A new requirements template for scientific computing."<em>Proceedings of the First International Workshop on Situational Requirements Engineering Processes - Methods, Techniques and Tools to Support Situation-Specific Requirements Engineering Processes, SREP'05</em>.Edited by PJAgerfalk, N.Kraiem, and J.Ralyte,Paris, France:2005.pp. 107&ndash;121.In conjunction with 13th IEEE International Requirements Engineering Conference,
+[5]: Smith, W. Spencer and Lai, Lei. "A new requirements template for scientific computing." <em>Proceedings of the First International Workshop on Situational Requirements Engineering Processes - Methods, Techniques and Tools to Support Situation-Specific Requirements Engineering Processes, SREP'05</em>. Edited by PJ Agerfalk, N. Kraiem, and J. Ralyte, Paris, France: 2005. pp. 107&ndash;121. In conjunction with 13th IEEE International Requirements Engineering Conference,
 </ul>
 </a>
 </div>

@@ -4,7 +4,7 @@
 
 module Drasil.GlassBR.ModuleDefs (implVars, allMods) where
 
-import Language.Drasil hiding (a_)
+import Language.Drasil
 
 import Drasil.GlassBR.Unitals (plate_len, plate_width, nom_thick,
   glass_type, char_weight, tNT, sdx, sdy, sdz, pb_tol)

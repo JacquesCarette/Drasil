@@ -77,3 +77,26 @@ ofA t1 t2 = nounPhrase''
   ((plural t1) +:+ S "of a" +:+ (phrase t2))
   (Replace ((at_start' t1) +:+ S "of a" +:+ (phrase t2)))
   (Replace ((titleize' t1) +:+ S "of a" +:+ (titleize t2)))
+
+--FIXME: As mentioned in issue #487, the following should be re-examined later,
+--       as they may embody a deeper idea in some cases.
+
+-- we might want to eventually restrict the use of these via
+-- some kind of type system, which asserts that:
+-- 1. t1 `for` t2 means that t1 is a view of part of the reason behind t2
+-- 2. t1 `of_` t2 means that t1 is a view of part of the structure of t2
+
+-- | Inserts the word "for" between the titleized versions of
+-- two terms
+for :: (NamedIdea c, NamedIdea d) => c -> d -> Sentence
+for t1 t2 = (titleize t1) +:+ S "for" +:+ (titleize t2)
+
+-- | Similar to 'for', but uses titleized version of term 1 with the abbreviation
+-- (if it exists, phrase otherwise) for term 2
+for' :: (NamedIdea c, Idea d) => c -> d -> Sentence
+for' t1 t2 = (titleize t1) +:+ S "for" +:+ (short t2)
+
+-- | Similar to 'for', but allows one to specify the function to use on each term
+-- before inserting for. For example one could use @for'' phrase plural t1 t2@
+for'' :: (NamedIdea c, NamedIdea d) => (c -> Sentence) -> (d -> Sentence) -> c -> d -> Sentence
+for'' f1 f2 t1 t2 = (f1 t1) +:+ S "for" +:+ (f2 t2)

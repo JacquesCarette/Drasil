@@ -8,10 +8,10 @@ import Drasil.SSP.Unitals (fs, fx, fy, momntOfBdy,
   shrStress, surfHydroForce, fricAngle, cohesion)
 import Drasil.SSP.Defs (slope, factor, factorOfSafety, soil)
 import Data.Drasil.SentenceStructures (ofThe, ofThe',
-  foldlSent, acroA, getTandS, sAnd, sOf)
+  foldlSent, getTandS, sAnd, sOf)
 import Data.Drasil.Utils (getES)
 import Data.Drasil.Quantities.Physics (force, distance, displacement)
-import Data.Drasil.Concepts.Documentation (safety, model, source)
+import Data.Drasil.Concepts.Documentation (safety, model, source, assumption)
 import Data.Drasil.Concepts.Math (surface)
 import Data.Drasil.Quantities.SolidMechanics (shearRes, mobShear, stffness)
 import Data.Drasil.Concepts.SolidMechanics (normForce, shearForce)
@@ -54,7 +54,7 @@ eq_rel = foldr ($=) 0 (map summ [fx, fy, momntOfBdy])
 eq_desc :: Sentence
 eq_desc = foldlSent [S "For a body in static equilibrium, the net",
   plural force +:+. S "and net moments acting on the body will cancel out",
-  S "Assuming a 2D problem", sParen (acroA 8), S "the", getTandS fx `sAnd`
+  S "Assuming a 2D problem", sParen ((short assumption) :+: S (show 8)), S "the", getTandS fx `sAnd`
   getTandS fy, S "will be equal to" +:+. E 0, S "All", plural force,
   S "and their", phrase distance, S "from the chosen point of rotation",
   S "will create a net moment equal to" `sC` E 0,
@@ -84,7 +84,7 @@ mcSS_desc = foldlSent [S "For a", phrase soil, S "under", phrase stress,
   S "relationship is not truly",
   phrase linear `sC` S "but assuming the effective", phrase normForce,
   S "is strong enough it can be approximated with a", phrase linear,
-  S "fit", sParen (acroA 9), S "where the cohesion", getES cohesion,
+  S "fit", sParen ((short assumption) :+: S (show 9)), S "where the cohesion", getES cohesion,
   S "represents the", getES shrStress, S "intercept of the fitted line"]
 
 --

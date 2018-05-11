@@ -4,7 +4,7 @@ import Prelude hiding (sin, cos, tan)
 
 import Language.Drasil
 
-import Data.Drasil.SentenceStructures (foldlSent, acroA)
+import Data.Drasil.SentenceStructures (foldlSent)
 import Data.Drasil.Quantities.PhysicalProperties as QPP (vol, mass)
 import Data.Drasil.Quantities.Thermodynamics as QT (ht_flux, heat_cap_spec,
   temp)
@@ -15,6 +15,7 @@ import Data.Drasil.SentenceStructures (isThe, sAnd)
 import Data.Drasil.Utils (getES, unwrap)
 import Data.Drasil.Concepts.Math (equation, rOfChng, rate)
 import Data.Drasil.Concepts.Thermodynamics (law_conv_cooling)
+import Data.Drasil.Concepts.Documentation (assumption)
 
 ---------------------------
 --  General Definitions  --
@@ -41,7 +42,7 @@ nwtnCooling_desc = foldlSent [at_start law_conv_cooling +:+.
   S "and its surroundings", E (apply1 thFluxVect QP.time) `isThe`
   S "thermal flux" +:+. sParen (Sy $ unit_symb thFluxVect),
   getES htTransCoeff `isThe` S "heat transfer coefficient" `sC`
-  S "assumed independant of", getES QT.temp, sParen (acroA 2) +:+.
+  S "assumed independant of", getES QT.temp, sParen ((short assumption) :+: S (show 2)) +:+.
   sParen (Sy $ unit_symb htTransCoeff),
   E (apply1 deltaT QP.time $= apply1 temp QP.time -
   apply1 temp_env QP.time) `isThe` S "time-dependant thermal gradient",

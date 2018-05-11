@@ -25,7 +25,7 @@ import Drasil.SSP.DataDefs (fixme1,fixme2)
 import Data.Drasil.Concepts.Documentation (analysis,
   solution, definition, value, assumption, physicalProperty,
   problem, method_)
-import Data.Drasil.SentenceStructures (andThe, acroA, acroGD, acroDD,
+import Data.Drasil.SentenceStructures (andThe, acroGD, acroDD,
   sIs, sIn, getTDS, getTandS, ofThe, ofThe', sAnd, sOf, acroIM, acroT,
   eqN, foldlSP, foldlSent_)
 import Data.Drasil.Concepts.Math (equation, surface)
@@ -409,7 +409,7 @@ rigDisDerivation = [
 
   eqUnR fDisEq_rel,
   
-  foldlSP [S "Using the known input assumption of", acroA 2 `sC`
+  foldlSP [S "Using the known input assumption of", ((short assumption) :+: S (show 2)) `sC`
   S "the force variable", plural definition, S "of", acroDD 1, S "to",
   acroDD 8, S "on", S "left side" `ofThe` plural equation,
   S "can be solved for. The only unknown in the variables to solve",

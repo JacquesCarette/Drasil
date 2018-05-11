@@ -19,7 +19,7 @@ import Drasil.SSP.Defs (slope, slice, intrslce, slpSrf)
 import Data.Drasil.Concepts.PhysicalProperties (mass, len)
 import Data.Drasil.Quantities.Physics (displacement, force)
 import Data.Drasil.SentenceStructures (sAnd, getTandS,
-  isThe, ofThe, foldlSent, acroA, acroDD, acroGD, acroT)
+  isThe, ofThe, foldlSent, acroDD, acroGD, acroT)
 import Data.Drasil.Concepts.SolidMechanics (normForce, shearForce)
 import Data.Drasil.Quantities.SolidMechanics (nrmStrss)
 import Data.Drasil.Concepts.Math (surface, angle,
@@ -145,7 +145,7 @@ nmShrR_rel = sy intShrForce $= sy normToShear * sy scalFunc * sy intNormForce
 
 nmShrR_desc :: Sentence
 nmShrR_desc = foldlSent [S "The", phrase assumption,
-  S "for the Morgenstern Price", phrase method_, sParen (acroA 5),
+  S "for the Morgenstern Price", phrase method_, sParen ((short assumption) :+: S (show 5)),
   S "that the", phrase intrslce, phrase shearForce, getES xi,
   S "is proportional to the", phrase intrslce, 
   phrase normForce, getES intNormForce, S "by a proportionality constant",

@@ -34,7 +34,7 @@ import Data.Drasil.Concepts.Math (graph, calculation, probability,
   parameter, surface, equation, shape)
 import Data.Drasil.Utils (getES, makeTMatrix, makeListRef, itemRefToSent,
   refFromType, enumSimple, enumBullet, prodUCTbl)
-import Data.Drasil.SentenceStructures (acroA, acroR, sVersus, sAnd, foldlSP,
+import Data.Drasil.SentenceStructures (acroR, sVersus, sAnd, foldlSP,
   foldlSent, foldlOptions, foldlSent_, figureLabel, foldlList, showingCxnBw,
   foldlsC, sOf, followA, ofThe, sIn, isThe, isExpctdToHv, sOr, underConsidertn,
   tAndDWAcc, tAndDOnly, tAndDWSym, andThe)
@@ -677,21 +677,21 @@ lc1Desc mainConcept = foldlSent [((short assumption) :+: S (show 3)) `sDash` S "
   phrase mainConcept, S "In the future", plural calculation,
   S "can be added for the internal", phrase mainConcept]
 
-lc2Desc = foldlSent [acroA 4 `sC` (acroA 8 `sDash`
+lc2Desc = foldlSent [((short assumption) :+: S (show 4)) `sC` (((short assumption) :+: S (show 8)) `sDash`
   S "Currently the"), plural value, S "for",
   foldlList (map getES (take 3 assumptionConstants)),
   S "are assumed to be the same for all" +:+. phrase glass,
   S "In the future these", plural value, S "can be changed to",
   phrase variable, plural input_]
 
-lc3Desc = foldlSent [acroA 5 `sDash` S "The", phrase software,
+lc3Desc = foldlSent [((short assumption) :+: S (show 5)) `sDash` S "The", phrase software,
   S "may be changed to accommodate more than a single", phrase lite]
 
-lc4Desc = foldlSent [acroA 6 `sDash` S "The", phrase software,
+lc4Desc = foldlSent [((short assumption) :+: S (show 6)) `sDash` S "The", phrase software,
   S "may be changed to accommodate more boundary", plural condition,
   S "than 4-sided support"]
 
-lc5Desc = foldlSent [acroA 7 `sDash` S "The", phrase software,
+lc5Desc = foldlSent [((short assumption) :+: S (show 7)) `sDash` S "The", phrase software,
   S "may be changed to consider more than just", phrase flexure,
   S "of the glass"]
 

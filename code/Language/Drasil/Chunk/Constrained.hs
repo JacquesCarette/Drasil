@@ -65,9 +65,6 @@ cvc' i des sym space cs atts = ConstrainedChunk (qw (vc i des sym space atts)) c
 data ConstrConcept = ConstrConcept { _defq :: DefinedQuantityDict
                                    , _constr' :: [Constraint]
                                    , _reasV' :: Maybe Expr
-                                   , _attrbs :: Attributes -- FIXME: Attributes included for consistency,
-                                                           -- since every chunk should eventually have the
-                                                           -- capability for attributes.
                                    }
 makeLenses ''ConstrConcept
 
@@ -85,20 +82,20 @@ instance Concept       ConstrConcept where
 instance Constrained   ConstrConcept where constraints  = constr'
 instance HasReasVal    ConstrConcept where reasVal      = reasV'
 instance Eq            ConstrConcept where c1 == c2 = (c1 ^.defq.uid) == (c2 ^.defq.uid)
-instance HasAttributes ConstrConcept where attributes = attrbs
+instance HasAttributes ConstrConcept where attributes = defq . attributes
 
 constrained' :: (HasAttributes c, Quantity c, Concept c, DOM c ~ ConceptChunk) =>
   c -> [Constraint] -> Expr -> ConstrConcept
-constrained' q cs rv = ConstrConcept (cqs q) cs (Just rv) (q ^. attributes)
+constrained' q cs rv = ConstrConcept (cqs q) cs (Just rv)
 
 constrainedNRV' :: (HasAttributes c, Quantity c, Concept c, DOM c ~ ConceptChunk) => 
   c -> [Constraint] -> ConstrConcept
-constrainedNRV' q cs = ConstrConcept (cqs q) cs Nothing (q ^. attributes)
+constrainedNRV' q cs = ConstrConcept (cqs q) cs Nothing
 
 cuc' :: (HasAttributes u, IsUnit u, DOM u ~ ConceptChunk) => String -> NP -> String -> Symbol -> u
                   -> Space -> [Constraint] -> Expr -> ConstrConcept
 cuc' nam trm desc sym un space cs rv =
-  ConstrConcept (cqs $ ucs nam trm desc sym un space) cs (Just rv) (un ^. attributes)
+  ConstrConcept (cqs $ ucs nam trm desc sym un space) cs (Just rv)
 
 cnstrw :: (HasAttributes c, Quantity c, Constrained c, HasReasVal c) => c -> ConstrainedChunk
 cnstrw c = ConstrainedChunk (qw c) (c ^. constraints) (c ^. reasVal)

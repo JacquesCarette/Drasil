@@ -39,17 +39,16 @@ class Quantity c => UncertainQuantity c where
 
 data UncertQ = UQ { _coco :: ConstrConcept
                   , _unc :: Maybe Double
-                  , _attribs :: Attributes
                   }
 makeLenses ''UncertQ
   
 instance Eq UncertQ                where a == b = (a ^. uid) == (b ^. uid)
 instance HasUID UncertQ            where uid = coco . uid
 instance NamedIdea UncertQ         where term = coco . term
-instance Idea UncertQ              where getA (UQ q _ _) = getA q
+instance Idea UncertQ              where getA (UQ q _) = getA q
 instance HasSpace UncertQ          where typ = coco . typ
 instance HasSymbol UncertQ         where symbol c = symbol (c^.coco)
-instance Quantity UncertQ          where getUnit    (UQ q _ _) = getUnit q
+instance Quantity UncertQ          where getUnit    (UQ q _) = getUnit q
 instance UncertainQuantity UncertQ where uncert = unc
 instance Constrained UncertQ       where constraints = coco . constraints
 instance HasReasVal UncertQ        where reasVal = coco . reasVal
@@ -58,17 +57,17 @@ instance ConceptDomain UncertQ     where
   type DOM UncertQ = ConceptChunk
   cdom = coco . cdom
 instance Concept UncertQ           where
-instance HasAttributes UncertQ     where attributes = attribs
+instance HasAttributes UncertQ     where attributes = coco . attributes
 
 {-- Constructors --}
 -- | The UncertainQuantity constructor. Requires a Quantity, a percentage, and a typical value
 uq :: (HasAttributes c, Quantity c, Constrained c, Concept c, HasReasVal c, DOM c ~ ConceptChunk) => 
   c -> Double -> UncertQ
-uq q u = UQ (ConstrConcept (cqs q) (q ^. constraints) (q ^. reasVal) (q ^. attributes)) (Just u) (q ^. attributes) --FIXME: (q ^. attributes) used twice?
+uq q u = UQ (ConstrConcept (cqs q) (q ^. constraints) (q ^. reasVal)) (Just u)
 
 uqNU :: (HasAttributes c, Quantity c, Constrained c, Concept c, HasReasVal c, DOM c ~ ConceptChunk) =>
   c -> UncertQ
-uqNU q = UQ (ConstrConcept (cqs q) (q ^. constraints) (q ^. reasVal) (q ^. attributes)) Nothing (q ^. attributes) --FIXME: (q ^. attributes) used twice?
+uqNU q = UQ (ConstrConcept (cqs q) (q ^. constraints) (q ^. reasVal)) Nothing 
 
 -- this is kind of crazy and probably shouldn't be used!
 uqc :: (HasAttributes u, IsUnit u, DOM u ~ ConceptChunk) => String -> NP -> String -> Symbol -> u -> Space

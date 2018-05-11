@@ -90,29 +90,28 @@ uqcND nam trm sym un space cs val uncrt = uq (cuc' nam trm "" sym un space cs va
 
 data UncertainChunk  = UCh { _conc :: ConstrainedChunk
                            , _unc' :: Maybe Double
-                           , _attrbs :: Attributes
                            }
 makeLenses ''UncertainChunk
 
 instance HasUID UncertainChunk where uid = conc . uid
 instance Eq UncertainChunk where c1 == c2 = (c1 ^. uid) == (c2 ^. uid)
 instance NamedIdea UncertainChunk where term = conc . term
-instance Idea UncertainChunk where getA (UCh n _ _) = getA n
+instance Idea UncertainChunk where getA (UCh n _) = getA n
 instance HasSpace UncertainChunk where typ = conc . typ
 instance HasSymbol UncertainChunk where symbol c = symbol (c^.conc)
-instance Quantity UncertainChunk where getUnit    (UCh c _ _) = getUnit c
+instance Quantity UncertainChunk where getUnit    (UCh c _) = getUnit c
 instance Constrained UncertainChunk where constraints = conc . constraints
 instance HasReasVal UncertainChunk where reasVal = conc . reasVal
 instance UncertainQuantity UncertainChunk where uncert = unc'
-instance HasAttributes UncertainChunk where attributes = attrbs
+instance HasAttributes UncertainChunk where attributes = conc . attributes
 
 {-- Constructors --}
 uncrtnChunk :: (HasAttributes c, Quantity c, Constrained c, HasReasVal c) => c -> Double -> UncertainChunk
-uncrtnChunk q u = UCh (cnstrw q) (Just u) (q ^. attributes)
+uncrtnChunk q u = UCh (cnstrw q) (Just u)
 
 -- | Creates an uncertain varchunk
 uvc :: String -> NP -> Symbol -> Space -> [Constraint] -> Expr -> Double -> Attributes -> UncertainChunk
 uvc nam trm sym space cs val uncrt atts = uncrtnChunk (cvc nam trm sym space cs val atts) uncrt
 
 uncrtnw :: (HasAttributes c, UncertainQuantity c, Constrained c, HasReasVal c) => c -> UncertainChunk
-uncrtnw c = UCh (cnstrw c) (c ^. uncert) (c ^. attributes)
+uncrtnw c = UCh (cnstrw c) (c ^. uncert)

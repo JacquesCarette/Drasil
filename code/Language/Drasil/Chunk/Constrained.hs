@@ -41,7 +41,7 @@ instance Quantity    ConstrainedChunk where getUnit = getUnit . view qd
 instance Constrained ConstrainedChunk where constraints = constr
 instance HasReasVal  ConstrainedChunk where reasVal     = reasV
 instance Eq          ConstrainedChunk where c1 == c2 = (c1 ^. qd . uid) == (c2 ^. qd . uid)
---instance HasAttributes ConstrainedChunk where attributes = attribs
+instance HasAttributes ConstrainedChunk where attributes = qd . attributes
 
 -- | Creates a constrained chunk from a symbolic quantity
 constrained :: (HasAttributes c, Quantity c) => c -> [Constraint] -> Expr -> ConstrainedChunk

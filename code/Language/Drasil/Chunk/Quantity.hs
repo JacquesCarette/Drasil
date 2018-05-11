@@ -31,13 +31,13 @@ data QuantityDict = QD { _id' :: IdeaDict
                        }
 makeLenses ''QuantityDict
 
-instance HasUID    QuantityDict where uid = id' . uid
-instance NamedIdea QuantityDict where term = id' . term
-instance Idea      QuantityDict where getA  qd = getA (qd ^. id')
-instance HasSpace  QuantityDict where typ = typ'
-instance HasSymbol QuantityDict where symbol = view symb'
-instance Quantity  QuantityDict where getUnit = view unit'
-instance Eq        QuantityDict where a == b = (a ^. uid) == (b ^. uid)
+instance HasUID        QuantityDict where uid = id' . uid
+instance NamedIdea     QuantityDict where term = id' . term
+instance Idea          QuantityDict where getA  qd = getA (qd ^. id')
+instance HasSpace      QuantityDict where typ = typ'
+instance HasSymbol     QuantityDict where symbol = view symb'
+instance Quantity      QuantityDict where getUnit = view unit'
+instance Eq            QuantityDict where a == b = (a ^. uid) == (b ^. uid)
 instance HasAttributes QuantityDict where attributes = attribs
 
 qw :: (HasAttributes q, Quantity q) => q -> QuantityDict

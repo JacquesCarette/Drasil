@@ -32,15 +32,15 @@ data ConstrainedChunk = ConstrainedChunk { _qd :: QuantityDict
                                          }
 makeLenses ''ConstrainedChunk
 
-instance HasUID      ConstrainedChunk   where uid = qd . uid
-instance NamedIdea   ConstrainedChunk   where term = qd . term
-instance Idea        ConstrainedChunk   where getA = getA . view qd
-instance HasSpace    ConstrainedChunk   where typ = qd . typ
-instance HasSymbol   ConstrainedChunk   where symbol c = symbol (c^.qd)
-instance Quantity    ConstrainedChunk   where getUnit = getUnit . view qd
-instance Constrained ConstrainedChunk   where constraints = constr
-instance HasReasVal  ConstrainedChunk   where reasVal     = reasV
-instance Eq          ConstrainedChunk   where c1 == c2 = (c1 ^. qd . uid) == (c2 ^. qd . uid)
+instance HasUID        ConstrainedChunk where uid = qd . uid
+instance NamedIdea     ConstrainedChunk where term = qd . term
+instance Idea          ConstrainedChunk where getA = getA . view qd
+instance HasSpace      ConstrainedChunk where typ = qd . typ
+instance HasSymbol     ConstrainedChunk where symbol c = symbol (c^.qd)
+instance Quantity      ConstrainedChunk where getUnit = getUnit . view qd
+instance Constrained   ConstrainedChunk where constraints = constr
+instance HasReasVal    ConstrainedChunk where reasVal     = reasV
+instance Eq            ConstrainedChunk where c1 == c2 = (c1 ^. qd . uid) == (c2 ^. qd . uid)
 instance HasAttributes ConstrainedChunk where attributes = qd . attributes
 
 -- | Creates a constrained chunk from a symbolic quantity

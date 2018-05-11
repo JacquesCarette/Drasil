@@ -10,7 +10,6 @@ import Language.Drasil.Chunk.Quantity (Quantity(..), QuantityDict, mkQuant, qw,
   HasSpace(typ))
 import Language.Drasil.Unit (UnitDefn, unitWrapper)
 import Language.Drasil.Symbol
-import Language.Drasil.Chunk.Attribute.Core (Attributes)
 import Language.Drasil.Space
 import Language.Drasil.NounPhrase (NP)
 import Language.Drasil.Chunk.Concept (ConceptChunk)
@@ -24,9 +23,6 @@ class (Quantity c) => Unitary c where
 -- | UnitaryChunks are 'Unitary's with 'Symbols'
 data UnitaryChunk = UC { _quant :: QuantityDict
                        , _un :: UnitDefn
-                       , _attribs :: Attributes -- FIXME: Attributes included for consistency,
-                                                -- since every chunk should eventually have the
-                                                -- capability for attributes.
                        }
 makeLenses ''UnitaryChunk
 
@@ -37,14 +33,14 @@ instance HasSpace  UnitaryChunk where typ = quant . typ
 instance HasSymbol UnitaryChunk where symbol u st = symbol (u^.quant) st
 instance Quantity  UnitaryChunk where getUnit = Just . _un
 instance Unitary   UnitaryChunk where unit x = x ^. un
-instance HasAttributes UnitaryChunk where attributes = attribs
+--instance HasAttributes UnitaryChunk where attributes u = u ^. attributes
 
 -- Builds the Quantity part from the uid, term, symbol and space.
 -- assumes there's no abbreviation.
-unitary :: (IsUnit u, DOM u ~ ConceptChunk) => 
-  String -> NP -> Symbol -> u -> Space -> Attributes -> UnitaryChunk
-unitary i t s u space atts = UC (mkQuant i t s space (Just uu) Nothing atts) uu atts --FIXME:atts used twice?
+unitary :: (HasAttributes u, IsUnit u, DOM u ~ ConceptChunk) => 
+  String -> NP -> Symbol -> u -> Space -> UnitaryChunk
+unitary i t s u space = UC (mkQuant i t s space (Just uu) Nothing (u ^. attributes)) uu
   where uu = unitWrapper u
 
-mkUnitary :: (HasAttributes u, Unitary u) => u -> Attributes -> UnitaryChunk
-mkUnitary u atts = UC (qw u) (unit u) atts
+mkUnitary :: (HasAttributes u, Unitary u) => u -> UnitaryChunk
+mkUnitary u = UC (qw u) (unit u)

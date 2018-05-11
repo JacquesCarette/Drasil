@@ -42,7 +42,7 @@ import Data.Drasil.Citations (parnas1986, smithLai2005)
 
 import Data.Drasil.Concepts.Documentation as Doc (datumConstraint, inModel,
   requirement, section_, traceyGraph, item, assumption, dataDefn,
-  likelyChg, genDefn, thModel, traceyMatrix, model, acroNumGen,
+  likelyChg, genDefn, thModel, traceyMatrix, model, 
   output_, quantity, input_, physicalConstraint, condition,
   property, variable, description, symbol_, uncertainty,
   information, uncertCol, value, column, softwareConstraint, goalStmt,
@@ -379,8 +379,8 @@ s4_1_3_list temw we = enumSimple 1 (short goalStmt) [
 ------------------------------------------------------
   
 s4_2 = solChSpecF progName (s4_1, s6) s4_2_4_intro_end (mid,
-  dataConstraintUncertainty, end) (s4_2_1_list, acroNumGen s4_2_2_T1 1,
-  s4_2_3_paragraph M.rOfChng temp, acroNumGen [s4_2_4_DD1] 1,
+  dataConstraintUncertainty, end) (s4_2_1_list, s4_2_2_T1,
+  s4_2_3_paragraph M.rOfChng temp, [s4_2_4_DD1],
   [reldefn eBalanceOnWtr] ++ (s4_2_5_d1startPara energy water) ++
   s4_2_5_paragraph ++ [reldefn heatEInWtr], [s4_2_6_table1, s4_2_6_table2])
   []
@@ -396,9 +396,9 @@ s4_2 = solChSpecF progName (s4_1, s6) s4_2_4_intro_end (mid,
     phrase uncertainty, S "quantification exercise"]
 
 s4_2_1_list :: [Contents]
-s4_2_1_list = acroNumGen [assump1, assump2, assump3, assump4, assump5, assump7,
+s4_2_1_list = [assump1, assump2, assump3, assump4, assump5, assump7,
   assump8, assump9, assump9_npcm, assump14, assump15, assump12, assump13,
-  assump20] 1
+  assump20]
   
 assump3, assump4, assump5, assump9_npcm, assump12, assump13 :: Contents
 
@@ -652,7 +652,7 @@ s5_1_list_items = [
   -- ]
 
 s5_1_list_words_num :: [Contents]
-s5_1_list_words_num = acroNumGen [req1, req2, req3, req4, req5, req6] 1
+s5_1_list_words_num = [req1, req2, req3, req4, req5, req6] 
 
 req1, req2, req3, req4, req5, req6 :: Contents
 
@@ -660,30 +660,30 @@ req1, req2, req3, req4, req5, req6 :: Contents
 req1 = mkRequirement "req1" (
   titleize input_ +:+ S "the following" +:+ plural quantity `sC`
   S "which define the" +:+ plural tank_para `sC` S "material" +:+
-  plural property +:+ S "and initial" +: plural condition) (S "inputQuantReq")
+  plural property +:+ S "and initial" +: plural condition) (S "Input-Inital-Values")
 req2 = mkRequirement "req2" (
   S "Use the" +:+ plural input_ +:+ S "in" +:+
   (makeRef (find' req1 s5_1_list_words_num)) +:+ S "to find the" +:+ phrase mass +:+
   S "needed for" +:+ acroIM 1 +:+ S "to" +:+ acroIM 2 `sC`
   S "as follows, where" +:+ getES w_vol `isThe` phrase w_vol +:+
-  S "and" +: (getES tank_vol `isThe` phrase tank_vol) ) (S "massReq")
+  S "and" +: (getES tank_vol `isThe` phrase tank_vol) ) (S "Use-Above-Find-Mass-IM1-IM2")
 req3 = mkRequirement "req3" (
   S "Verify that the" +:+ plural input_ +:+ S "satisfy the required"
-  +:+ phrase physicalConstraint +:+ S "shown in" +:+. makeRef s4_2_6_table1 ) (S "checkConsReq")
+  +:+ phrase physicalConstraint +:+ S "shown in" +:+. makeRef s4_2_6_table1 ) (S "Check-Inputs-Satisfy-Physical-Constraints")
 req4 = mkRequirement "req4" (
   titleize' output_ `sAnd` plural input_ +:+ plural quantity
   +:+ S "and derived" +:+ plural quantity +:+ S "in the following list: the" +:+
   plural quantity +:+ S "from" +:+ (makeRef (find' req1 s5_1_list_words_num)) `sC`
   S "the" +:+ phrase mass +:+ S "from" +:+ (makeRef (find' req2 s5_1_list_words_num))
-  `sAnd` getES tau_W +:+. sParen(S "from" +:+ acroIM 1) ) (S "outputInputReq")
+  `sAnd` getES tau_W +:+. sParen(S "from" +:+ acroIM 1) ) (S "Output-Input-Derivied-Quantities")
 req5 = mkRequirement "req5" (
   S "Calculate and output the" +:+ phrase temp_W +:+
   sParen (getES temp_W :+: sParen (getES time)) +:+ S "over the" +:+
-  phrase sim_time ) (S "tempWReq")
+  phrase sim_time ) (S "Calculate-Temperature-Water-Over-Time")
 req6 = mkRequirement "req6" (
   S "Calculate and" +:+ phrase output_ +:+ S "the" +:+ phrase w_E
   +:+ sParen (getES w_E :+: sParen (getES time)) +:+ S "over the" +:+
-  phrase sim_time +:+. sParen (S "from" +:+ acroIM 3) ) (S "changeHeatEnergyReq")
+  phrase sim_time +:+. sParen (S "from" +:+ acroIM 3) ) (S "Calculate-Change-Heat_Energy-Water-Time")
 
 -------------------------------------------
 --Section 5.2 : NON-FUNCTIONAL REQUIREMENTS
@@ -703,7 +703,7 @@ req6 = mkRequirement "req6" (
 s6 = SRS.likeChg s6_list []
 
 s6_list :: [Contents]
-s6_list = acroNumGen [likeChg2, likeChg3, likeChg3_npcm, likeChg6] 1
+s6_list = [likeChg2, likeChg3, likeChg3_npcm, likeChg6]
 
 -- likeChg1, likeChg2, likeChg3, likeChg4 :: Contents
 
@@ -722,7 +722,7 @@ likeChg3_npcm :: Contents
 likeChg3_npcm = mkLklyChnk "likeChg3" (
   (makeRef (find' assump9_npcm s4_2_1_list)) :+: S "- The" +:+ phrase model +:+
   S "currently only accounts for charging of the tank. A more complete"
-  +:+ phrase model +:+. S "would also account for discharging of the tank") (S "dischargeChg")
+  +:+ phrase model +:+. S "would also account for discharging of the tank") (S "Discharging-Tank")
 -- likeChg4 = LikelyChange (LCChunk (nw $ npnc "likeChg4" $
   -- nounPhraseSent (makeRef assump11 :+: S "- Any real" +:+ phrase tank +:+
   -- S "cannot be perfectly insulated and will lose" +:+. phrase heat))

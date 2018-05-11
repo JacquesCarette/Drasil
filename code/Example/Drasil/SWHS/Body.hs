@@ -12,7 +12,7 @@ import Data.Drasil.Concepts.Documentation (section_, traceyGraph, item,
   value, software, column, model, goalStmt, quantity, property, condition, 
   physics, user, physical, datum, system, variable, sysCont, environment, 
   srs, softwareSys, organization, document, problem, content, information, 
-  reference, definition, purpose, description, acroNumGen, symbol_, physSyst,
+  reference, definition, purpose, description, symbol_, physSyst,
   typUnc)
 
 import Data.Drasil.Concepts.PhysicalProperties (liquid, solid)

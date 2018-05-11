@@ -4,7 +4,7 @@ module Drasil.SWHS.TMods (tModels, t1ConsThermE,
 import Language.Drasil
 import Control.Lens ((^.))
 
-import Data.Drasil.Concepts.Documentation (system, acroNumGen)
+import Data.Drasil.Concepts.Documentation (system)
 import Data.Drasil.SI_Units (joule)
 
 import Data.Drasil.Concepts.Thermodynamics (phase_change, thermal_energy,

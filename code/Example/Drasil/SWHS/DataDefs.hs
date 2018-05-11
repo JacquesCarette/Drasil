@@ -6,8 +6,6 @@ import Control.Lens ((^.))
 import Drasil.SWHS.Unitals (melt_frac, latentE_P, htFusion, pcm_mass,
   temp_W, temp_PCM, ht_flux_P, pcm_HTC, coil_HTC, temp_C, ht_flux_C)
 
-import Data.Drasil.Concepts.Documentation (acroNumGen)
-
 import Data.Drasil.Quantities.Physics (time)
 import Data.Drasil.Quantities.PhysicalProperties (mass)
 import Data.Drasil.Quantities.Thermodynamics (latent_heat)

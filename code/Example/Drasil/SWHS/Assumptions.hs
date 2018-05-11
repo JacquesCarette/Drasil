@@ -4,7 +4,7 @@ import Language.Drasil
 import Control.Lens ((^.))
 
 import Data.Drasil.Concepts.Documentation (system, simulation, model, 
-  problem, acroNumGen)
+  problem)
 
 import Drasil.SWHS.DataDefs (dd1HtFluxC, dd2HtFluxP)
 import Drasil.SWHS.Concepts (coil, tank, phsChgMtrl, water, perfect_insul,

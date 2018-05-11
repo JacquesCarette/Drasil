@@ -76,12 +76,12 @@ getStr _ = error "Term is not a string"
 codeSpec :: SystemInformation -> [Mod] -> CodeSpec
 codeSpec si ms = codeSpec' si ms
 
-codeSpec' :: SystemInformation -> [Mod] -> Attributes -> CodeSpec
-codeSpec' (SI {_sys = sys, _quants = q, _definitions = defs', _inputs = ins, _outputs = outs, _constraints = cs, _constants = constants, _sysinfodb = db}) ms atts = 
+codeSpec' :: SystemInformation -> [Mod] -> CodeSpec
+codeSpec' (SI {_sys = sys, _quants = q, _definitions = defs', _inputs = ins, _outputs = outs, _constraints = cs, _constants = constants, _sysinfodb = db}) ms = 
   let inputs' = map codevar ins
-      const' = map (qtov atts) constants
+      const' = map qtov constants
       derived = map qtov $ getDerivedInputs defs' inputs' const' db
-      rels = (map (qtoc atts) defs') \\ derived
+      rels = (map qtoc defs') \\ derived
       mods' = prefixFunctions $ (packmod "Calculations" $ map FCD rels):ms 
       mem   = modExportMap mods' inputs' const'
       outs' = map codevar outs

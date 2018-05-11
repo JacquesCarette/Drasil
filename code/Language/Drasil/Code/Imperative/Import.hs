@@ -178,7 +178,7 @@ genInputDerived :: Attributes -> Reader State Method
 genInputDerived atts = do
   g <- ask
   let dvals = derivedInputs $ codeSpec g
-  parms <- getParams $ map (codevar atts) dvals
+  parms <- getParams $ map codevar dvals
   inps <- mapM (\x -> genCalcBlock atts CalcAssign (codeName x) (codeEquat x)) dvals
   publicMethod methodTypeVoid "derived_values" parms
       (return $ concat inps)
@@ -211,7 +211,7 @@ genCalcMod n defs = buildModule n [] [] (map genCalcFunc (filter (validExpr . co
 genCalcFunc :: Attributes -> CodeDefinition -> Reader State Method
 genCalcFunc atts cdef = do
   g <- ask
-  parms <- getParams (codevars' atts (codeEquat cdef) $ sysinfodb $ codeSpec g)
+  parms <- getParams (codevars' (codeEquat cdef) $ sysinfodb $ codeSpec g)
   publicMethod
     (methodType $ convType (codeType cdef))
     (codeName cdef)
@@ -326,7 +326,7 @@ genMainFunc atts =
       v_params = var l_params
   in do
     g <- ask
-    let args1 x = getArgs $ codevars' atts (codeEquat x) $ sysinfodb $ codeSpec g
+    let args1 x = getArgs $ codevars' (codeEquat x) $ sysinfodb $ codeSpec g
     args2 <- getArgs $ outputs $ codeSpec g
     gi <- fApp (funcPrefix ++ "get_input") [v_filename, v_params]
     dv <- fApp "derived_values" [v_params]
@@ -460,7 +460,7 @@ convExpr atts  (FCall (C c) x)  = do
   g <- ask
   let info = sysinfodb $ codeSpec g
   args <- mapM (convExpr atts) x
-  fApp (codeName (codefunc (symbLookup c (info ^. symbolTable)) atts)) args
+  fApp (codeName (codefunc (symbLookup c (info ^. symbolTable)))) args
 convExpr _    (FCall _ _)   = return $ litString "**convExpr :: FCall unimplemented**"
 convExpr atts  (UnaryOp o u) = fmap (unop o) (convExpr atts u)
 convExpr _    (BinaryOp Frac (Int a) (Int b)) =
@@ -578,7 +578,7 @@ convStmt atts (FTry t c) = do
 convStmt _    (FContinue) = return continue
 convStmt _    (FDec v (C.List t)) = return $ listDec' (codeName v) (convType t) 0
 convStmt _    (FDec v t) = return $ varDec (codeName v) (convType t)
-convStmt atts (FProcCall n l) = fmap valStmt $ convExpr atts (FCall (asExpr n) l)
+convStmt atts (FProcCall n l) = fmap valStmt $ convExpr atts (FCall (asExpr n atts) l) --FIXME: atts passed in twice?
 convStmt atts (FAppend a b) = fmap valStmt $
   liftM2 (\x y -> x$.(listAppend y)) (convExpr atts a) (convExpr atts b)
 

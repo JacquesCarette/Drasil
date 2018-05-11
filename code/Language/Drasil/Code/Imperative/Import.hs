@@ -108,7 +108,7 @@ genModules :: Attributes -> Reader State [Module]
 genModules atts = do
   g <- ask
   let s = codeSpec g
-  mn     <- genMain atts
+  mn     <- genMain
   inp    <- chooseInStructure atts $ inStruct g
   out    <- genOutputMod atts $ outputs s
   moddef <- sequence $ fmap (genModDef atts) (mods s) -- hack ?
@@ -315,11 +315,11 @@ genModule n maybeMs maybeCs = do
   return $ buildModule n ls [] ms cs
 
 
-genMain :: Attributes -> Reader State Module
-genMain atts = genModule "Control" (Just $ liftS $ genMainFunc atts ) Nothing
+genMain :: Reader State Module
+genMain = genModule "Control" (Just $ liftS $ genMainFunc) Nothing
 
-genMainFunc :: Attributes -> Reader State FunctionDecl
-genMainFunc atts =
+genMainFunc :: Reader State FunctionDecl
+genMainFunc =
   let l_filename = "inputfile"
       v_filename = var l_filename
       l_params = "inParams"
@@ -455,7 +455,7 @@ convExpr atts (AssocB E.Or l)  = fmap (foldr1 (?||)) $ sequence $ map (convExpr 
 convExpr _    (Deriv _ _ _) = return $ litString "**convExpr :: Deriv unimplemented**"
 convExpr atts (C c)         = do
   g <- ask
-  variable atts $ codeName $ codevar atts $ symbLookup c $ (sysinfodb $ codeSpec g) ^. symbolTable
+  variable atts $ codeName $ codevar (symbLookup c ((sysinfodb $ codeSpec g) ^. symbolTable))
 convExpr atts  (FCall (C c) x)  = do
   g <- ask
   let info = sysinfodb $ codeSpec g
@@ -543,7 +543,7 @@ genFunc atts (FDef (FuncDef n i o s)) = do
   publicMethod (methodType $ convType o) n parms
     (return [ block $
         (map (\x -> varDec (codeName x) (convType $ codeType x))
-          ((((fstdecl $ sysinfodb $ codeSpec g) atts) s) \\ i)) 
+          ((((fstdecl (sysinfodb (codeSpec g)))) s) \\ i)) 
         ++ stmts
     ])
 genFunc atts (FData (FuncData n dd)) = genDataFunc atts n dd

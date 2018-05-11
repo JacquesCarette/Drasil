@@ -1,7 +1,7 @@
 {-# Language TemplateHaskell, TypeFamilies #-}
 module Language.Drasil.Chunk.Theory 
   ( tc',
-   Theory(..), TheoryChunk, TheoryModel--, tm,
+   Theory(..), TheoryChunk, TheoryModel, tm,
   )where
 
 import Language.Drasil.Classes (HasUID(uid), NamedIdea(term), Idea(getA),
@@ -86,7 +86,7 @@ tc' :: (HasAttributes q, Quantity q, Concept c, DOM c ~ ConceptChunk) =>
     [TheoryConstraint] -> [QDefinition] -> TheoryChunk
 tc' cid q c atts = tc cid ([] :: [TheoryChunk]) [] q c atts
 
-{-
+
 tm :: (Concept c, DOM c ~ ConceptChunk) => c -> TheoryChunk -> Attributes -> TheoryModel
 tm c t atts = TM (cw c) t atts
--}
+

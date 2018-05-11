@@ -17,7 +17,6 @@ import Language.Drasil.Chunk.Unitary
 import Language.Drasil.Chunk.VarChunk
 import Language.Drasil.Chunk.Unital (ucs)
 import Language.Drasil.Chunk.Concept
-import Language.Drasil.Unit (unitWrapper)
 import Language.Drasil.NounPhrase
 import Language.Drasil.Space
 import Language.Drasil.Symbol (Symbol)
@@ -45,21 +44,21 @@ instance Eq          ConstrainedChunk where c1 == c2 = (c1 ^. qd . uid) == (c2 ^
 --instance HasAttributes ConstrainedChunk where attributes = attribs
 
 -- | Creates a constrained chunk from a symbolic quantity
-constrained :: (HasAttributes c, Quantity c) => c -> [Constraint] -> Expr -> Attributes -> ConstrainedChunk
-constrained q cs ex atts = ConstrainedChunk (qw q) cs (Just ex) atts
+constrained :: (HasAttributes c, Quantity c) => c -> [Constraint] -> Expr -> ConstrainedChunk
+constrained q cs ex = ConstrainedChunk (qw q) cs (Just ex)
 
 -- | Creates a constrained unitary
-cuc :: (IsUnit u, DOM u ~ ConceptChunk) => String -> NP -> Symbol -> u
-                -> Space -> [Constraint] -> Expr -> Attributes -> ConstrainedChunk
-cuc i t s u space cs rv atts =
-  ConstrainedChunk (qw $ unitary i t s (unitWrapper u) space atts) cs (Just rv) atts --FIXME: atts used twice?
+cuc :: (HasAttributes u, IsUnit u, DOM u ~ ConceptChunk) => String -> NP -> Symbol -> u
+                -> Space -> [Constraint] -> Expr  -> ConstrainedChunk
+cuc i t s u space cs rv =
+  ConstrainedChunk (qw (unitary i t s u space)) cs (Just rv)
 
 -- | Creates a constrained varchunk
 cvc :: String -> NP -> Symbol -> Space -> [Constraint] -> Expr -> Attributes -> ConstrainedChunk
-cvc i des sym space cs rv atts = ConstrainedChunk (qw $ vc i des sym space atts) cs (Just rv) atts
+cvc i des sym space cs rv atts = ConstrainedChunk (qw (vc i des sym space atts)) cs (Just rv)
 
 cvc' :: String -> NP -> Symbol -> Space -> [Constraint] -> Attributes -> ConstrainedChunk
-cvc' i des sym space cs atts = ConstrainedChunk (qw $ vc i des sym space atts) cs Nothing atts
+cvc' i des sym space cs atts = ConstrainedChunk (qw (vc i des sym space atts)) cs Nothing
 
 -- | ConstrConcepts are 'Conceptual Symbolic Quantities'
 -- with 'Constraints' and maybe a reasonable value
@@ -102,4 +101,4 @@ cuc' nam trm desc sym un space cs rv =
   ConstrConcept (cqs $ ucs nam trm desc sym un space) cs (Just rv) (un ^. attributes)
 
 cnstrw :: (HasAttributes c, Quantity c, Constrained c, HasReasVal c) => c -> ConstrainedChunk
-cnstrw c = ConstrainedChunk (qw c) (c ^. constraints) (c ^. reasVal) (c ^. attributes)
+cnstrw c = ConstrainedChunk (qw c) (c ^. constraints) (c ^. reasVal)

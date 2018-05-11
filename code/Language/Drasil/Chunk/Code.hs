@@ -14,7 +14,6 @@ import Language.Drasil.Chunk.Constrained.Core (Constraint,isPhysC)
 import Language.Drasil.Chunk.Quantity
 import Language.Drasil.Chunk.Eq (QDefinition)
 import Language.Drasil.Chunk.ExprRelat (relat)
-import Language.Drasil.Chunk.Attribute.Core (Attributes)
 import Language.Drasil.Chunk.SymbolForm (codeSymb)
 import Language.Drasil.Classes (HasUID(uid), NamedIdea(term), Idea(getA),
   HasSymbol(symbol), CommonIdea(abrv), Constrained(constraints), HasAttributes(attributes))
@@ -139,9 +138,6 @@ funcPrefix = "func_"
 data VarOrFunc = Var | Func
 data CodeChunk = CodeC { _qc :: QuantityDict
                        , kind :: VarOrFunc
-                       , _atts :: Attributes -- FIXME: Attributes included for consistency,
-                                             -- since every chunk should eventually have the
-                                             -- capability for attributes.
                        }
 makeLenses ''CodeChunk
 
@@ -152,10 +148,10 @@ instance HasSpace CodeChunk where typ = qc . typ
 instance HasSymbol CodeChunk where symbol c = symbol (c ^. qc)
 instance Quantity CodeChunk where getUnit = getUnit . view qc
 instance CodeIdea CodeChunk where
-  codeName (CodeC c Var atts) = symbToCodeName (codeSymb c)
-  codeName (CodeC c Func atts) = funcPrefix ++ symbToCodeName (codeSymb c)
+  codeName (CodeC c Var) = symbToCodeName (codeSymb c)
+  codeName (CodeC c Func) = funcPrefix ++ symbToCodeName (codeSymb c)
 instance Eq CodeChunk where c1 == c2 = (c1 ^. uid) == (c2 ^. uid)
-instance HasAttributes CodeChunk where attributes = atts
+instance HasAttributes CodeChunk where attributes = qc . attributes
 
 spaceToCodeType :: Space -> CodeType
 spaceToCodeType S.Integer = G.Integer
@@ -174,11 +170,11 @@ spaceToCodeType (S.DiscreteS _) = G.List (spaceToCodeType S.String)
 codeType :: HasSpace c => c -> CodeType
 codeType c = spaceToCodeType $ c ^. typ
 
-codevar :: (HasAttributes c, Quantity c) => c -> Attributes -> CodeChunk
-codevar c atts = CodeC (qw c) Var atts
+codevar :: (HasAttributes c, Quantity c) => c -> CodeChunk
+codevar c = CodeC (qw c) Var
 
-codefunc :: (HasAttributes c, Quantity c) => c -> Attributes -> CodeChunk
-codefunc c atts= CodeC (qw c) Func atts
+codefunc :: (HasAttributes c, Quantity c) => c -> CodeChunk
+codefunc c = CodeC (qw c) Func 
 
 {-
 codevar :: (Quantity c) => Attributes -> c -> CodeChunk

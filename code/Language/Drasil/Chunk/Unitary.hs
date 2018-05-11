@@ -33,7 +33,7 @@ instance HasSpace  UnitaryChunk where typ = quant . typ
 instance HasSymbol UnitaryChunk where symbol u st = symbol (u^.quant) st
 instance Quantity  UnitaryChunk where getUnit = Just . _un
 instance Unitary   UnitaryChunk where unit x = x ^. un
---instance HasAttributes UnitaryChunk where attributes u = u ^. attributes
+instance HasAttributes UnitaryChunk where attributes = quant . attributes
 
 -- Builds the Quantity part from the uid, term, symbol and space.
 -- assumes there's no abbreviation.

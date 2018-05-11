@@ -30,9 +30,6 @@ import Language.Drasil.Classes (HasUID(uid), NamedIdea(term), Idea(getA),
 data ConstrainedChunk = ConstrainedChunk { _qd :: QuantityDict
                                          , _constr :: [Constraint]
                                          , _reasV :: Maybe Expr
-                                         , _attribs :: Attributes -- FIXME: Attributes included for consistency,
-                                                                  -- since every chunk should eventually have the
-                                                                  -- capability for attributes.
                                          }
 makeLenses ''ConstrainedChunk
 
@@ -45,7 +42,7 @@ instance Quantity    ConstrainedChunk where getUnit = getUnit . view qd
 instance Constrained ConstrainedChunk where constraints = constr
 instance HasReasVal  ConstrainedChunk where reasVal     = reasV
 instance Eq          ConstrainedChunk where c1 == c2 = (c1 ^. qd . uid) == (c2 ^. qd . uid)
-instance HasAttributes ConstrainedChunk where attributes = attribs
+--instance HasAttributes ConstrainedChunk where attributes = attribs
 
 -- | Creates a constrained chunk from a symbolic quantity
 constrained :: (HasAttributes c, Quantity c) => c -> [Constraint] -> Expr -> Attributes -> ConstrainedChunk

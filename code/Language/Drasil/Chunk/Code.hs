@@ -20,7 +20,6 @@ import Language.Drasil.Classes (HasUID(uid), NamedIdea(term), Idea(getA),
   HasAttributes(attributes))
 import Language.Drasil.Space as S
 import Language.Drasil.Code.Code as G (CodeType(..))
-import Language.Drasil.Chunk.Attribute.Core (Attributes)
 import Language.Drasil.Expr
 import Language.Drasil.Unicode
 import Language.Drasil.Symbol

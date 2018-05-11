@@ -563,10 +563,10 @@ s7_1_listOfReqs :: [Contents]
 s7_1_listOfReqs = [s7_1_req1, s7_1_req2, s7_1_req3, s7_1_req4, s7_1_req5]
 
 s7_1_req1 = mkRequirement "s7_1_req1" req1Desc (S "Input-Glass-Props")
-s7_1_req2 = mkRequirement "s7_1_req2" req2Desc (S "setValueReq")
-s7_1_req3 = mkRequirement "s7_1_req3" req3Desc (S "checkConsReq")
-s7_1_req4 = mkRequirement "s7_1_req4" req4Desc (S "outputReq")
-s7_1_req5 = mkRequirement "s7_1_req5" (req5Desc (output_)) (S "safeCheckReq")
+s7_1_req2 = mkRequirement "s7_1_req2" req2Desc (S "System-Set-Values-Following-Assumptions")
+s7_1_req3 = mkRequirement "s7_1_req3" req3Desc (S "Check-Input-with-Data_Constraints")
+s7_1_req4 = mkRequirement "s7_1_req4" req4Desc (S "Output-Values-and-Known-Quantities")
+s7_1_req5 = mkRequirement "s7_1_req5" (req5Desc (output_)) (S "Check-Glass-Safety")
 
 -- newReqs is ONLY for testing until I get refs working. Then the old reqs should
 -- be converted to reqChunk format with meaningful refnames and this should be

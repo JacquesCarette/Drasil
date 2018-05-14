@@ -11,7 +11,7 @@ module Language.Drasil.NounPhrase
   , CapitalizationRule(..), PluralRule(..)
   ) where
 
-import Data.Char (toUpper, toLower)
+import Data.Char (toUpper, toLower, isLetter, isLatin1)
 import Data.List (intersperse)
 
 import Language.Drasil.NounPhrase.Core
@@ -194,7 +194,7 @@ sPlur a _ = S "MISSING PLURAL FOR:" +:+ a
 -- | Capitalization helper function.
 cap :: Sentence -> CapitalizationRule -> Sentence
 cap _ (Replace s) = s
-cap (S (s:ss))   CapFirst = S $ (toUpper s : ss)
+cap (S (s:ss))   CapFirst = S $ findNotCaps $ (toUpper s : ss)
 cap (S s)        CapWords = S $ findNotCaps $ findHyph $ concat (intersperse " " 
   (map (\x -> (toUpper (head x) : (tail x))) (words s)))
 cap ((S s1) :+: (S s2)) r = cap (S (s1++s2)) r
@@ -217,6 +217,7 @@ findNotCaps s = concat $ intersperse " " ((head $ words s) : map isNotCaps (tail
 
 isNotCaps :: String -> String
 isNotCaps s
+  | not ((isLetter (head s)) && (isLatin1 (head s))) = (toLower (head s)) : tail s
   | (toLower (head s) : tail s) `elem` doNotCaps = toLower (head s) : tail s
   | otherwise = s
 

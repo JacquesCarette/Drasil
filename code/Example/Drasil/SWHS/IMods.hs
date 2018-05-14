@@ -20,7 +20,8 @@ import Data.Drasil.Concepts.Thermodynamics (boiling, heat, temp, melting,
   phase_change, ht_flux)
 
 import Drasil.SWHS.DataDefs(dd1HtFluxC, dd2HtFluxP)
-import Data.Drasil.Concepts.Documentation (assumption, dataDefn)
+import Drasil.SWHS.Assumptions (assump_new_15, assump_new_16)
+import Data.Drasil.Concepts.Documentation (dataDefn)
 --s4_2_5_IMods
 insta_model_IMods :: [RelationConcept]
 insta_model_IMods = [eBalanceOnWtr, eBalanceOnPCM, heatEInWtr, heatEInPCM]
@@ -73,9 +74,9 @@ eBalanceOnWtr_deriv_swhs =
 eBalanceOnWtr_deriv_sentences_swhs_im1 :: [Sentence]
 eBalanceOnWtr_deriv_sentences_swhs_im1 = map foldlSentCol [
   s4_2_3_desc1_swhs_im1 rOfChng temp_W energy water vol w_vol mass w_mass heat_cap_spec
-    htCap_W heat_trans coil ht_flux_C coil_SA pcm_SA tank [S "A11"] [S "A12"] ht_flux_P surface,
-  s4_2_3_desc2_swhs_im1 dd1HtFluxC ht_flux_C ht_flux_P,
-  s4_2_3_desc3_swhs_im1 eq1,
+    htCap_W heat_trans coil ht_flux_C coil_SA pcm_SA tank ht_flux_P surface vol_ht_gen,
+  s4_2_3_desc2_swhs_im1 dd1HtFluxC dd2HtFluxP,
+  s4_2_3_desc3_swhs_im1 w_mass htCap_W,
   s4_2_3_desc4_swhs_im1 eq2,
   s4_2_3_desc5_swhs_im1,
   s4_2_3_desc6_swhs_im1 eq3 eq4,
@@ -84,32 +85,34 @@ eBalanceOnWtr_deriv_sentences_swhs_im1 = map foldlSentCol [
 s4_2_3_desc1_swhs_im1 :: ConceptChunk -> UncertQ -> UnitalChunk -> ConceptChunk -> 
   ConceptChunk -> UnitalChunk -> ConceptChunk -> UnitalChunk -> ConceptChunk -> UncertQ -> 
   ConceptChunk -> ConceptChunk -> UnitalChunk -> UncertQ -> UncertQ -> ConceptChunk ->
-  [Sentence] -> [Sentence] -> UnitalChunk -> ConceptChunk -> [Sentence]
-s4_2_3_desc1_swhs_im1 roc tw en wt vo wvo ms wms hcs hw ht cl hfc cs ps tk ass11 ass12 hfp su =
+  UnitalChunk -> ConceptChunk -> UnitalChunk -> [Sentence]
+s4_2_3_desc1_swhs_im1 roc tw en wt vo wvo ms wms hcs hw ht cl hfc cs ps tk hfp su vhg =
   [S "To find the", phrase roc `sOf` (E $ sy tw) `sC` S "we look at the",
    phrase en, S "balance on" +:+. phrase wt, S "The", phrase vo, S "being considered" 
-   `isThe` (phrase vo `sOf` phrase wt), (E $ sy wvo) `sC` S "which has", phrase ms,
-   (E $ sy wms) `sAnd` (phrase hcs `sOf` phrase wt) `sC` (E $ sy hw), 
-    (E $ sy hfc), S "represents the", phrase ht, S "flux into the", phrase wt,
+   `isThe` (phrase vo `sOf` phrase wt), (E $ sy wvo) `sC` S "which has", 
+   (phrase ms `sOf` phrase wt) +:+.
+   ((E $ sy wms) `sAnd` (phrase hcs `sOf` phrase wt) `sC` (E $ sy hw)), 
+    (E $ sy hfc), S "represents the", phrase ht, S "into the", phrase wt,
     S "from the", (phrase cl `sAnd` (E $ sy hfp)), S "represents the", phrase ht,
-    S "flux into the PCM from", phrase wt `sC` S "over heating", phrase cl, phrase su,
+    S "into the PCM from", phrase wt `sC` S "over", phrase cl, phrase su,
     S "area and", phrase phase_change, S "material", phrase su, S "area of",
     (E $ sy cs) `sAnd` (E $ sy ps) `sC` S "respectively.",  S "No", phrase ht,
     S "occurs to", S "outside" `ofThe` phrase tk `sC` 
-    S "since it has been assumed to be perfectly insulted", 
-    (foldlList $ (map (\d -> sParen (d))) ass11), S ". Assuming no volumetric", 
-    phrase ht, S "generation per unit", phrase vo,
-    (foldlList $ (map (\d -> sParen (d))) ass12) `sC` S "g = 0. Therefore, the equation for",
+    S "since it has been assumed to be perfectly insulated", 
+    sParen (makeRef assump_new_15) :+: S ". Assuming no volumetric", 
+    S "heat generation per unit", phrase vo +:+.
+    (sParen (makeRef assump_new_16) `sC` (E $ sy vhg $= 0)), S "Therefore, the equation for",
      acroGD 2, S "can be written as"]
 
-s4_2_3_desc2_swhs_im1 :: QDefinition -> UnitalChunk -> UnitalChunk -> [Sentence]
-s4_2_3_desc2_swhs_im1 dd1 hfc hfp =
-  [S "Using", titleize' dataDefn, makeRef $ datadefn dd1, S "and",
-  titleize' dataDefn, makeRef $ datadefn dd1,
-   S "for", (E $ sy hfc) `sAnd` (E $ sy hfp), S "respectively, this can be written as"]
+s4_2_3_desc2_swhs_im1 :: QDefinition -> QDefinition -> [Sentence]
+s4_2_3_desc2_swhs_im1 dd1 dd2 =
+  [S "Using", makeRef $ datadefn dd1, S "and",
+  makeRef $ datadefn dd2,
+   S "for", (E $ sy dd1) `sAnd` (E $ sy dd2), S "respectively, this can be written as"]
 
-s4_2_3_desc3_swhs_im1 :: [Sentence] -> [Sentence]
-s4_2_3_desc3_swhs_im1 eq11 = [S "Dividing (3) by"] ++ eq11 ++ [S "we obtain"]
+s4_2_3_desc3_swhs_im1 ::  UnitalChunk -> UncertQ -> [Sentence]
+s4_2_3_desc3_swhs_im1 wm hcw = 
+  [S "Dividing (3) by", getES wm :+: getES hcw `sC` S "we obtain"]
 
 s4_2_3_desc4_swhs_im1 :: [Sentence] -> [Sentence]
 s4_2_3_desc4_swhs_im1 eq22 = [S "Factoring the negative sign out of the second term",

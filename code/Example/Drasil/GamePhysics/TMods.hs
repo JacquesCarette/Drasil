@@ -23,7 +23,7 @@ cpTMods = [t1NewtonSL, t2NewtonTL, t3NewtonLUG, t4ChaslesThm, t5NewtonSLR]
 
 t1NewtonSL_new :: TheoryModel
 t1NewtonSL_new = tm(cw t1NewtonSL)
-  (tc' "NewtonSL" [qw QP.force, qw QPP.mass, qw QP.acceleration] ([] :: [FundUnit])
+  (tc' "NewtonSL" [qw QP.force, qw QPP.mass, qw QP.acceleration] ([] :: [ConceptChunk])
   [] [TCon Invariant $ (sy QP.force) $= (sy QPP.mass) * (sy QP.acceleration)] [])
 
 t1NewtonSL :: RelationConcept
@@ -48,7 +48,7 @@ t1descr = foldlSent [S "The net", (phrase QP.force), (getES QP.force),
 
 t2NewtonTL_new :: TheoryModel
 t2NewtonTL_new = tm(cw t2NewtonTL)
-  (tc' "NewtonTL" [qw force_1, qw force_2] ([] :: [FundUnit])
+  (tc' "NewtonTL" [qw force_1, qw force_2] ([] :: [ConceptChunk])
   [] [TCon Invariant $ (sy force_1) $= (negate (sy force_2))] [] )
 
 t2NewtonTL :: RelationConcept
@@ -72,7 +72,7 @@ t2descr = foldlSent [S "Every action has an equal and opposite reaction. In othe
 t3NewtonLUG_new :: TheoryModel
 t3NewtonLUG_new = tm(cw t3NewtonLUG)
   (tc' "NewtonLUG" [qw QP.force, qw QP.gravitationalConst, qw mass_1, qw mass_2,
-  qw dispNorm, qw dispUnit, qw QP.displacement] ([] :: [FundUnit])
+  qw dispNorm, qw dispUnit, qw QP.displacement] ([] :: [ConceptChunk])
   [] [TCon Invariant $ (sy QP.force) $= (sy QP.gravitationalConst) * ((sy mass_1) * 
   (sy mass_2) / ((sy dispNorm) $^ (fromInteger 2))) * (sy dispUnit) $= 
   (sy QP.gravitationalConst) * ((sy mass_1) * (sy mass_2) / ((sy dispNorm) 
@@ -123,7 +123,7 @@ t3descr = foldlSent [S "Two", (plural CP.rigidBody), S "in the universe",
 t4ChaslesThm_new :: TheoryModel
 t4ChaslesThm_new = tm(cw t4ChaslesThm)
   (tc' "ChaslesThm" [qw vel_B, qw vel_O, qw QP.angularVelocity, qw r_OB] 
-  ([] :: [FundUnit]) [] [TCon Invariant $ (sy vel_B) $= (sy vel_O) + (cross 
+  ([] :: [ConceptChunk]) [] [TCon Invariant $ (sy vel_B) $= (sy vel_O) + (cross 
   (sy  QP.angularVelocity) (sy r_OB))] [])
 
 t4ChaslesThm :: RelationConcept
@@ -154,7 +154,7 @@ t4descr = foldlSent [S "The linear", (phrase QP.velocity),
 t5NewtonSLR_new :: TheoryModel
 t5NewtonSLR_new = tm(cw t5NewtonSLR)
   (tc' "NewtonSLR" [qw QP.torque, qw QP.momentOfInertia, qw QP.angularAccel] 
-  ([] :: [FundUnit]) [] [TCon Invariant $ (sy  QP.torque) $= (sy QP.momentOfInertia) 
+  ([] :: [ConceptChunk]) [] [TCon Invariant $ (sy  QP.torque) $= (sy QP.momentOfInertia) 
   * (sy QP.angularAccel)] [])
 
 t5NewtonSLR :: RelationConcept

@@ -38,7 +38,7 @@ t1descr = tDescr (is_safe1) s ending
 
 t2IsSafe :: TheoryModel
 t2IsSafe = tm(cw t2SafetyReq)
-   (tc' "isSafe2" [qw is_safe2, qw lRe, qw demand] ([] :: [FundUnit])
+   (tc' "isSafe2" [qw is_safe2, qw lRe, qw demand] ([] :: [ConceptChunk])
    [] [TCon Invariant $ (sy is_safe2) $= (sy lRe) $> (sy demand)] [])
 
 t2SafetyReq :: RelationConcept

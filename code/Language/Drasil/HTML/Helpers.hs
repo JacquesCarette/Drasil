@@ -149,7 +149,7 @@ makeCSS _ = vcat [
     text "  border-collapse: collapse;",
     text "  margin-left: auto;",
     text "  margin-right: auto;}"],
-  text "th, td {border: 1px solid black; padding: 1%;}",
+  text "th, td {border: 1px solid black; padding: 0.5em;}",
   text ".tdefn, .ddefn {width: 75%; margin-top: 1%; margin-bottom: 1%;}",
   text ".tdefn th {width: 15%;}",
   text ".ddefn th {width: 15%;}",

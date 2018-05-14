@@ -96,31 +96,31 @@ iVect, jVect, normalVect, force_1, force_2, force_i, mass_1, mass_2, dispUnit,
   momtInert_k, pointOfCollision, contDisp_k, collisionImpulse :: UnitalChunk
 
 -- FIXME: parametrized hack
-iVect = ucFromCV ivec metre
+iVect = ucFromCV ivec metre []
   where ivec = cv (dccWDS "unitVect" (compoundPhrase' (cn "horizontal")
                (QM.unitVect ^. term)) (phrase QM.unitVect)) 
                (eqSymb QM.unitVect) Real
 -- FIXME: parametrized hack
-jVect       = ucFromCV ivec metre
+jVect       = ucFromCV ivec metre []
   where ivec = cv (dccWDS "unitVectJ" (compoundPhrase' (cn "vertical")
                (QM.unitVect ^. term)) (phrase QM.unitVect)) (vec $ hat lJ) Real
 -- FIXME: parametrized hack
-normalVect  = ucFromCV normVect metre
+normalVect  = ucFromCV normVect metre []
   where normVect = cv (dccWDS "normalVect" (compoundPhrase' (cn "collision")
                    (QM.normalVect ^. term)) (phrase QM.normalVect)) 
                    (eqSymb QM.normalVect) Real
 
-dispUnit = ucFromCV dispVect metre
+dispUnit = ucFromCV dispVect metre []
   where dispVect = cv (dccWDS "dispUnit" (cn "displacement unit vector") 
                    (S "displacement" +:+ (phrase QM.unitVect))) (vec (hat lR)) Real
 
 -- FIXME: parametrized hack
-dispNorm = ucFromCV norm metre
+dispNorm = ucFromCV norm metre []
   where norm = cv (dccWDS "euclideanNormDisp" (cn "Euclidean norm of the displacement")
                (phrase QM.euclidNorm) ) (eqSymb QM.euclidNorm) Real
 
 -- FIXME: parametrized hack
-sqrDist = ucFromCV norm m_2
+sqrDist = ucFromCV norm m_2 []
   where norm = cv (dccWDS "euclideanNorm" (cn' "squared distance")
                (phrase QM.euclidNorm) ) (sup (eqSymb QM.euclidNorm) 
                (Atomic "2")) Real
@@ -128,115 +128,115 @@ sqrDist = ucFromCV norm m_2
 r_OB    = uc' "r_OB" 
   (nounPhraseSP "displacement vector between the origin and point B")
   "FIXME: Define this or remove the need for definitions" 
-  (sub (eqSymb QP.displacement) (Concat [cO, cB])) metre
+  (sub (eqSymb QP.displacement) (Concat [cO, cB])) metre []
 
 pos_CM = ucs "p_CM" (nounPhraseSP $ 
   "the mass-weighted average position of a rigid " ++
   "body's particles") 
   "FIXME: Define this or remove the need for definitions" 
-  (sub (eqSymb QP.position) (Atomic "CM")) metre Real
+  (sub (eqSymb QP.position) (Atomic "CM")) metre Real []
 
 --FIXME: parametrized hack
-mass_i = ucFromCV massi kilogram
+mass_i = ucFromCV massi kilogram []
   where massi = cv (dccWDS "m_j" (compoundPhrase' (QPP.mass ^. term)
                 (cn "of the j-th particle")) (phrase QPP.mass)) 
                 (sub (eqSymb QPP.mass) lJ) Real
 
-pos_i = ucFromCV posi metre
+pos_i = ucFromCV posi metre []
   where posi = cv (dccWDS "p_j" (compoundPhrase' (QP.position ^. term) 
                (cn "vector of the j-th particle")) (phrase QP.position))
                (sub (eqSymb QP.position) lJ) Real
 
-acc_i = ucFromCV accI accelU
+acc_i = ucFromCV accI accelU []
   where accI = cv (dccWDS "acc_i" (compoundPhrase' (cn "the i-th body's")
                (QP.acceleration ^. term)) (phrase QP.acceleration))
                (sub (eqSymb QP.acceleration) lI) Real
 
-vel_i = ucFromCV accI velU
+vel_i = ucFromCV accI velU []
   where accI = cv (dccWDS "vel_i" (compoundPhrase' (QP.velocity ^. term) 
                (cn "of the i-th body's velocity")) (phrase QP.velocity))
                (sub (eqSymb QP.velocity) lI) Real
 
-torque_i = ucFromCV torI torqueU
+torque_i = ucFromCV torI torqueU []
   where torI = cv (dccWDS "torque_i" 
                (cn "is the torque applied to the i-th body")
                (phrase QP.torque)) (sub (eqSymb QP.torque) lI) Real
 
-mTot = ucFromCV mtotal kilogram
+mTot = ucFromCV mtotal kilogram []
   where mtotal = cv (dccWDS "M" (compoundPhrase' (cn "total mass of the") 
                  (CP.rigidBody ^. term)) (phrase QPP.mass)) cM Real
 
-time_c = ucFromCV timec second
+time_c = ucFromCV timec second []
   where timec = cv (dccWDS "time_c" (cn "denotes the time at collision") 
                 (phrase QP.time)) (sub (eqSymb QP.time) lC) Real
 
 --FIXME: parametrized hack
-initRelVel = ucFromCV relVel velU
+initRelVel = ucFromCV relVel velU []
   where relVel = cv (dccWDS "v_i^AB" (compoundPhrase'
                  (compoundPhrase' (cn "relative") (QP.velocity ^. term))
                  (cn "between rigid bodies of A and B")) (phrase QP.velocity))
                  (sup (sub (eqSymb QP.velocity) lI) (Concat [cA, cB])) Real
 
 --FIXME: parametrized hack
-massIRigidBody = ucFromCV massI kilogram
+massIRigidBody = ucFromCV massI kilogram []
   where massI = cv (dccWDS "massI" (compoundPhrase' (QPP.mass ^. term) 
                 (cn "of the i-th rigid body")) (phrase QPP.mass)) 
                 (sub (eqSymb QPP.mass) lI) Real
 --FIXME: parametrized hack
-normalLen = ucFromCV normLen metre
+normalLen = ucFromCV normLen metre []
   where normLen = cv (dccWDS "length of the normal vector" (compoundPhrase'
                   (cn "length of the") (QM.normalVect ^. term)) 
                   (phrase QM.normalVect))
                   (Concat [Atomic "||",(eqSymb QM.normalVect), Atomic "||"]) Real
 
-timeT = ucFromCV timet second
+timeT = ucFromCV timet second []
   where timet = cv (dccWDS "t" (cn "point in time") (phrase QP.time))
                 (eqSymb QP.time) Real
 
-initTime = ucFromCV timeN second
+initTime = ucFromCV timeN second []
   where timeN = cv (dccWDS "t_0" (cn "denotes the initial time") 
                 (phrase QP.time)) (sub (eqSymb QP.time) (Atomic "0")) Real
 
-momtInert_k = ucFromCV momtK momtInertU
+momtInert_k = ucFromCV momtK momtInertU []
  where momtK = cv (dccWDS "momentOfInertiaK" (compoundPhrase'
                (QP.momentOfInertia ^. term) 
                (cn $ "of the k-th rigid body"))
                (phrase QP.momentOfInertia)) 
                (sub (eqSymb QP.momentOfInertia) lK) Real
 
-pointOfCollision = ucFromCV pointC metre
+pointOfCollision = ucFromCV pointC metre []
   where pointC = cv (dccWDS "point_c" (cn "point of collision") 
                  (S "point")) cP Real
 
-collisionImpulse = ucFromCV impul impulseU
+collisionImpulse = ucFromCV impul impulseU []
   where impul = cv (dccWDS "collisionImp" (compoundPhrase' 
                 (cn $ "collision") (QP.impulseS ^. term)) (phrase QP.impulseS)) 
                 (eqSymb QP.impulseS) Real
 
 
-force_i = ucFromCV theforce newton
+force_i = ucFromCV theforce newton []
   where theforce = cv (dccWDS "force_i" (compoundPhrase' 
                 (QP.force ^. term) (cn "applied to the i-th body at time t")) 
                 (phrase QP.force)) (sub (eqSymb QP.force) lI) Real
 
-force_1     = ucFromCV (forceParam "1" "first")               newton
-force_2     = ucFromCV (forceParam "2" "second")              newton
-mass_1      = ucFromCV (massParam "1" "first")                kilogram
-mass_2      = ucFromCV (massParam "2" "second")               kilogram
-vel_A       = ucFromCV (velParam "A" cA)                      velU
-vel_B       = ucFromCV (velParam "B" cB)                      velU
-vel_O       = ucFromCV (velParam "origin" cO)                 velU
-angVel_A    = ucFromCV (angParam "A" cA)                      angVelU
-angVel_B    = ucFromCV (angParam "B" cB)                      angVelU
-perpLen_A   = ucFromCV (perpParam "A" $ eqSymb contDisp_A)    metre
-perpLen_B   = ucFromCV (perpParam "B" $ eqSymb contDisp_B)    metre
-momtInert_A = ucFromCV (momtParam "A" "A")                    momtInertU
-momtInert_B = ucFromCV (momtParam "B" "B")                    momtInertU
-contDisp_A  = ucFromCV (contParam "A" "A")                    metre
-contDisp_B  = ucFromCV (contParam "B" "B")                    metre
-contDisp_k  = ucFromCV (contParam "k" "k")                    metre
-mass_A      = ucFromCV (rigidParam "A" cA)                    kilogram
-mass_B      = ucFromCV (rigidParam "B" cB)                    kilogram
+force_1     = ucFromCV (forceParam "1" "first")               newton      []
+force_2     = ucFromCV (forceParam "2" "second")              newton      []
+mass_1      = ucFromCV (massParam "1" "first")                kilogram    []
+mass_2      = ucFromCV (massParam "2" "second")               kilogram    []
+vel_A       = ucFromCV (velParam "A" cA)                      velU        []
+vel_B       = ucFromCV (velParam "B" cB)                      velU        []
+vel_O       = ucFromCV (velParam "origin" cO)                 velU        []
+angVel_A    = ucFromCV (angParam "A" cA)                      angVelU     []
+angVel_B    = ucFromCV (angParam "B" cB)                      angVelU     []
+perpLen_A   = ucFromCV (perpParam "A" $ eqSymb contDisp_A)    metre       []
+perpLen_B   = ucFromCV (perpParam "B" $ eqSymb contDisp_B)    metre       []
+momtInert_A = ucFromCV (momtParam "A" "A")                    momtInertU  []
+momtInert_B = ucFromCV (momtParam "B" "B")                    momtInertU  []
+contDisp_A  = ucFromCV (contParam "A" "A")                    metre       []
+contDisp_B  = ucFromCV (contParam "B" "B")                    metre       []
+contDisp_k  = ucFromCV (contParam "k" "k")                    metre       []
+mass_A      = ucFromCV (rigidParam "A" cA)                    kilogram    []
+mass_B      = ucFromCV (rigidParam "B" cB)                    kilogram    []
 
 --------------------------
 -- CHUNKS WITHOUT UNITS --
@@ -246,7 +246,7 @@ cpUnitless :: [VarChunk]
 cpUnitless = [numParticles]
 
 numParticles :: VarChunk
-numParticles = vc "n" (nounPhraseSP "number of particles in a rigid body") lN Integer
+numParticles = vc "n" (nounPhraseSP "number of particles in a rigid body") lN Integer []
 
 
 -----------------------
@@ -270,7 +270,7 @@ nonNegativeConstraint = physc $ UpFrom (Inc,0)
 
 -- FIXME
 pi_ :: QuantityDict
-pi_ = mkQuant "pi" (nounPhraseSP "pi") (Greek Pi_L) Real Nothing Nothing
+pi_ = mkQuant "pi" (nounPhraseSP "pi") (Greek Pi_L) Real Nothing Nothing []
 
 lengthCons     = constrained' QPP.len               [nonNegativeConstraint] (dbl 44.2)
 massCons       = constrained' QPP.mass              [nonNegativeConstraint] (dbl 56.2)

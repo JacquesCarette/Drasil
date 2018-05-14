@@ -12,9 +12,9 @@ import Control.Lens (makeLenses, view)
 data CI = CI { _cid :: String, _ni :: NP, _ab :: String}
 makeLenses ''CI
 
-instance HasUID CI     where uid = cid
-instance NamedIdea CI  where term = ni
-instance Idea CI       where getA = Just . view ab
+instance HasUID     CI where uid = cid
+instance NamedIdea  CI where term = ni
+instance Idea       CI where getA = Just . view ab
 instance CommonIdea CI where abrv = view ab
   
 -- | The commonIdea smart constructor requires a chunk id, 

@@ -265,7 +265,7 @@ cpInputConstraints = map (\x -> uq x (0.1 :: Double))
   [lengthCons, massCons, mmntOfInCons, gravAccelCons, posCons, orientCons,
   veloCons, angVeloCons, forceCons, torqueCons, restCoefCons]
 
-nonNegativeConstraint :: Constraint -- should be pulled out an put somewhere for generic constraints
+nonNegativeConstraint :: Constraint -- should be pulled out and put somewhere for generic constraints
 nonNegativeConstraint = physc $ UpFrom (Inc,0)
 
 -- FIXME

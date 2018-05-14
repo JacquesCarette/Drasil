@@ -31,15 +31,15 @@ data QDefinition = EC
 makeLenses ''QDefinition
 
 -- this works because UnitalChunk is a Chunk
-instance HasUID QDefinition        where uid = qua . uid
-instance NamedIdea QDefinition     where term = qua . term
-instance Idea QDefinition          where getA c = getA $ c ^. qua
-instance HasSpace QDefinition      where typ = qua . typ
-instance HasSymbol QDefinition     where symbol e st = symbol (e^.qua) st
-instance Quantity QDefinition      where getUnit (EC a _ _)   = getUnit a
-instance ExprRelat QDefinition     where relat = equat
+instance HasUID        QDefinition where uid = qua . uid
+instance NamedIdea     QDefinition where term = qua . term
+instance Idea          QDefinition where getA c = getA $ c ^. qua
+instance HasSpace      QDefinition where typ = qua . typ
+instance HasSymbol     QDefinition where symbol e st = symbol (e^.qua) st
+instance Quantity      QDefinition where getUnit (EC a _ _)   = getUnit a
+instance ExprRelat     QDefinition where relat = equat
 instance HasAttributes QDefinition where attributes = att
-instance Eq QDefinition            where a == b = (a ^. uid) == (b ^. uid)
+instance Eq            QDefinition where a == b = (a ^. uid) == (b ^. uid)
   
 -- | Create a 'QDefinition' with an uid, noun phrase (term), definition, symbol,
 -- unit, and defining equation.  And it ignores the definition...

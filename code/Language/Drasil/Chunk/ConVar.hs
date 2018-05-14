@@ -18,18 +18,18 @@ data ConVar = CV { _con :: ConceptChunk
                  }
 makeLenses ''ConVar
                      
-instance Eq ConVar            where c1 == c2 = (c1 ^. uid) == (c2 ^. uid)
-instance HasUID ConVar        where uid = con . uid
-instance NamedIdea ConVar     where term = con . term
-instance Idea ConVar          where getA (CV c _ _) = getA c
-instance Definition ConVar    where defn = con . defn
+instance Eq            ConVar where c1 == c2 = (c1 ^. uid) == (c2 ^. uid)
+instance HasUID        ConVar where uid = con . uid
+instance NamedIdea     ConVar where term = con . term
+instance Idea          ConVar where getA (CV c _ _) = getA c
+instance Definition    ConVar where defn = con . defn
 instance ConceptDomain ConVar where
   type DOM ConVar = ConceptChunk
   cdom = con . cdom
-instance HasSymbol ConVar     where symbol c = (c ^. symb)
-instance HasSpace ConVar      where typ = spa
-instance Concept ConVar       where
-instance Quantity ConVar      where getUnit _ = Nothing
+instance HasSymbol     ConVar where symbol c = (c ^. symb)
+instance HasSpace      ConVar where typ = spa
+instance Concept       ConVar where
+instance Quantity      ConVar where getUnit _ = Nothing
 
 -- | Constructor for 'ConVar' with explicit 'Space'
 cv :: ConceptChunk -> Symbol -> Space -> ConVar

@@ -38,15 +38,15 @@ data InstanceModel = IM { _rc :: RelationConcept
                         }
 makeLenses ''InstanceModel
   
-instance HasUID InstanceModel        where uid = rc . uid
-instance NamedIdea InstanceModel     where term = rc . term
-instance Idea InstanceModel          where getA (IM a _ _ _ _ _) = getA a
-instance Concept InstanceModel
-instance Definition InstanceModel    where defn = rc . defn
+instance HasUID        InstanceModel where uid = rc . uid
+instance NamedIdea     InstanceModel where term = rc . term
+instance Idea          InstanceModel where getA (IM a _ _ _ _ _) = getA a
+instance Concept       InstanceModel where
+instance Definition    InstanceModel where defn = rc . defn
 instance ConceptDomain InstanceModel where
   type DOM InstanceModel = ConceptChunk
   cdom = rc . cdom
-instance ExprRelat InstanceModel     where relat = rc . relat
+instance ExprRelat     InstanceModel where relat = rc . relat
 instance HasAttributes InstanceModel where attributes = attribs
 
 -- | Smart constructor for instance models

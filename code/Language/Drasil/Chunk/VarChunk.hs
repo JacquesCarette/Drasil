@@ -23,13 +23,13 @@ data VarChunk = VC { _ni :: IdeaDict
                    }
 makeLenses ''VarChunk
 
-instance Eq        VarChunk where c1 == c2 = (c1 ^. uid) == (c2 ^. uid)
-instance HasUID    VarChunk where uid = ni . uid
-instance NamedIdea VarChunk where term = ni . term
-instance Idea      VarChunk where getA = getA . view ni
-instance HasSymbol VarChunk where symbol x = (x ^. vsymb)
-instance HasSpace  VarChunk where typ = vtyp
-instance Quantity  VarChunk where getUnit _  = Nothing
+instance Eq            VarChunk where c1 == c2 = (c1 ^. uid) == (c2 ^. uid)
+instance HasUID        VarChunk where uid = ni . uid
+instance NamedIdea     VarChunk where term = ni . term
+instance Idea          VarChunk where getA = getA . view ni
+instance HasSymbol     VarChunk where symbol x = (x ^. vsymb)
+instance HasSpace      VarChunk where typ = vtyp
+instance Quantity      VarChunk where getUnit _  = Nothing
 instance HasAttributes VarChunk where attributes = attribs
 
 -- | implVar makes an variable that is implementation-only

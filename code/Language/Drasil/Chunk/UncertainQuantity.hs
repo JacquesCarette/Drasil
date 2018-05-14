@@ -42,22 +42,22 @@ data UncertQ = UQ { _coco :: ConstrConcept
                   }
 makeLenses ''UncertQ
   
-instance Eq UncertQ                where a == b = (a ^. uid) == (b ^. uid)
-instance HasUID UncertQ            where uid = coco . uid
-instance NamedIdea UncertQ         where term = coco . term
-instance Idea UncertQ              where getA (UQ q _) = getA q
-instance HasSpace UncertQ          where typ = coco . typ
-instance HasSymbol UncertQ         where symbol c = symbol (c^.coco)
-instance Quantity UncertQ          where getUnit    (UQ q _) = getUnit q
+instance Eq                UncertQ where a == b = (a ^. uid) == (b ^. uid)
+instance HasUID            UncertQ where uid = coco . uid
+instance NamedIdea         UncertQ where term = coco . term
+instance Idea              UncertQ where getA (UQ q _) = getA q
+instance HasSpace          UncertQ where typ = coco . typ
+instance HasSymbol         UncertQ where symbol c = symbol (c^.coco)
+instance Quantity          UncertQ where getUnit    (UQ q _) = getUnit q
 instance UncertainQuantity UncertQ where uncert = unc
-instance Constrained UncertQ       where constraints = coco . constraints
-instance HasReasVal UncertQ        where reasVal = coco . reasVal
-instance Definition UncertQ        where defn = coco . defn
-instance ConceptDomain UncertQ     where
+instance Constrained       UncertQ where constraints = coco . constraints
+instance HasReasVal        UncertQ where reasVal = coco . reasVal
+instance Definition        UncertQ where defn = coco . defn
+instance ConceptDomain     UncertQ where
   type DOM UncertQ = ConceptChunk
   cdom = coco . cdom
-instance Concept UncertQ           where
-instance HasAttributes UncertQ     where attributes = coco . attributes
+instance Concept           UncertQ where
+instance HasAttributes     UncertQ where attributes = coco . attributes
 
 {-- Constructors --}
 -- | The UncertainQuantity constructor. Requires a Quantity, a percentage, and a typical value

@@ -181,14 +181,14 @@ data CodeDefinition = CD { _quant :: QuantityDict
                          }
 makeLenses ''CodeDefinition
 
-instance HasUID CodeDefinition where uid = quant . uid
-instance NamedIdea CodeDefinition where term = quant . term
-instance Idea CodeDefinition where getA = getA . view quant
-instance HasSpace CodeDefinition where typ = quant . typ
-instance HasSymbol CodeDefinition where symbol c = symbol (c ^. quant)
-instance Quantity CodeDefinition where getUnit = getUnit . view quant
-instance CodeIdea CodeDefinition where codeName = (^. ci)
-instance Eq CodeDefinition where c1 == c2 = (c1 ^. uid) == (c2 ^. uid)
+instance HasUID        CodeDefinition where uid = quant . uid
+instance NamedIdea     CodeDefinition where term = quant . term
+instance Idea          CodeDefinition where getA = getA . view quant
+instance HasSpace      CodeDefinition where typ = quant . typ
+instance HasSymbol     CodeDefinition where symbol c = symbol (c ^. quant)
+instance Quantity      CodeDefinition where getUnit = getUnit . view quant
+instance CodeIdea      CodeDefinition where codeName = (^. ci)
+instance Eq            CodeDefinition where c1 == c2 = (c1 ^. uid) == (c2 ^. uid)
 instance HasAttributes CodeDefinition where attributes = quant . attributes
 
 qtoc :: QDefinition  -> CodeDefinition

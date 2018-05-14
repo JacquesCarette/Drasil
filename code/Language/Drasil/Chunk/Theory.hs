@@ -58,10 +58,10 @@ data TheoryModel = TM { _con :: ConceptChunk
                       }
 makeLenses ''TheoryModel
   
-instance HasUID TheoryModel where uid = con . uid
-instance NamedIdea TheoryModel where term = con . term
-instance Idea TheoryModel where getA = getA . view con
-instance Definition TheoryModel where defn = con . defn
+instance HasUID        TheoryModel where uid = con . uid
+instance NamedIdea     TheoryModel where term = con . term
+instance Idea          TheoryModel where getA = getA . view con
+instance Definition    TheoryModel where defn = con . defn
 instance HasAttributes TheoryModel where attributes = attrbs
 instance ConceptDomain TheoryModel where
   type DOM TheoryModel = ConceptChunk

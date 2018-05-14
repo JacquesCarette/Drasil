@@ -21,9 +21,9 @@ data AssumpChunk = AC
                  }
 makeLenses ''AssumpChunk
 
-instance HasUID AssumpChunk        where uid = aid
+instance HasUID        AssumpChunk where uid = aid
 instance HasAttributes AssumpChunk where attributes = attribs
-instance Eq AssumpChunk            where a == b = a ^. uid == b ^. uid
+instance Eq            AssumpChunk where a == b = a ^. uid == b ^. uid
   
 -- | Smart constructor for Assumption chunks. The second 'Sentence' here is 
 -- a short name (attribute).

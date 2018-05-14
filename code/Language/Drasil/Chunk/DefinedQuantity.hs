@@ -21,18 +21,18 @@ data DefinedQuantityDict = DQD { _quant :: Q.QuantityDict
 makeLenses ''DefinedQuantityDict
 
 -- but we pick it from the Quantity.
-instance HasUID DefinedQuantityDict        where uid = quant . uid
-instance Eq DefinedQuantityDict            where a == b = (a ^. uid) == (b ^. uid)
-instance NamedIdea DefinedQuantityDict     where term = con . term
-instance Idea DefinedQuantityDict          where getA (DQD a _) = getA a
-instance Definition DefinedQuantityDict    where defn = con . defn
+instance HasUID        DefinedQuantityDict where uid = quant . uid
+instance Eq            DefinedQuantityDict where a == b = (a ^. uid) == (b ^. uid)
+instance NamedIdea     DefinedQuantityDict where term = con . term
+instance Idea          DefinedQuantityDict where getA (DQD a _) = getA a
+instance Definition    DefinedQuantityDict where defn = con . defn
 instance ConceptDomain DefinedQuantityDict where
   type DOM DefinedQuantityDict = ConceptChunk
   cdom = con . cdom
-instance Concept DefinedQuantityDict       where
-instance Q.HasSpace DefinedQuantityDict    where typ = quant . Q.typ
-instance HasSymbol DefinedQuantityDict     where symbol q st = symbol (q^.quant) st
-instance Q.Quantity DefinedQuantityDict    where getUnit (DQD a _) = Q.getUnit a
+instance Concept       DefinedQuantityDict where
+instance Q.HasSpace    DefinedQuantityDict where typ = quant . Q.typ
+instance HasSymbol     DefinedQuantityDict where symbol q st = symbol (q^.quant) st
+instance Q.Quantity    DefinedQuantityDict where getUnit (DQD a _) = Q.getUnit a
 instance HasAttributes DefinedQuantityDict where attributes = quant . attributes
 
 cqs :: (HasAttributes c, Q.Quantity c, Concept c, DOM c ~ ConceptChunk) => c -> DefinedQuantityDict

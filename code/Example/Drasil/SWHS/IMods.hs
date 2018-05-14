@@ -20,7 +20,7 @@ import Data.Drasil.Concepts.Thermodynamics (boiling, heat, temp, melting,
   phase_change, ht_flux)
 
 import Drasil.SWHS.DataDefs(dd1HtFluxC, dd2HtFluxP)
-import Drasil.SWHS.Assumptions (assump_new_15, assump_new_16)
+import Drasil.SWHS.Assumptions (assump_new_15, assump_new_16, assump_new_17, assump_new_18)
 import Data.Drasil.Concepts.Documentation (dataDefn)
 --s4_2_5_IMods
 insta_model_IMods :: [RelationConcept]
@@ -123,7 +123,7 @@ s4_2_3_desc5_swhs_im1 = [S "Which simplifies to"]
 
 s4_2_3_desc6_swhs_im1 :: Expr -> Expr -> [Sentence]
 s4_2_3_desc6_swhs_im1 eq33 eq44 = 
-  [S "Setting", ((E eq33) `sAnd` (E eq44)) `sC` S "Equation (5) can be written in its final form as"]
+  [S "Setting", ((E eq33) `sAnd` (E eq44)) `sC` S "Equation (5) can be written as"]
 
 s4_2_3_desc7_swhs_im1 :: Expr -> [Sentence]
 s4_2_3_desc7_swhs_im1 eq55 = 
@@ -131,7 +131,7 @@ s4_2_3_desc7_swhs_im1 eq55 =
 
 eq1, eq2:: [Sentence]
 eq1 = [getES w_mass, getES htCap_W]
-eq2 = [getES w_mass, getES htCap_W, getES ht_flux_C, getES coil_SA]
+eq2 = [getES coil_HTC, getES coil_SA, S "/", getES coil_HTC, getES coil_SA]
 
 eq3, eq4, eq5:: Expr
 eq3 = (sy tau_W) $= ((sy w_mass) * (sy htCap_W)) / ((sy coil_HTC) * (sy coil_SA))
@@ -161,7 +161,7 @@ s4_2_3_eq4_swhs_im1 =
   ((sy w_mass) * (sy htCap_W))) *  ((sy temp_C) - (sy temp_W)) +
   ((sy coil_HTC) * (sy coil_SA) / 
   ((sy coil_HTC) * (sy coil_SA))) * ((sy pcm_HTC) * (sy pcm_SA) / 
-  ((sy w_mass) * (sy coil_HTC))) * ((sy temp_PCM) - (sy temp_W))
+  ((sy w_mass) * (sy htCap_W))) * ((sy temp_PCM) - (sy temp_W))
 
 s4_2_3_eq5_swhs_im1 =  
   (deriv (sy temp_W) time) $= 
@@ -169,7 +169,7 @@ s4_2_3_eq5_swhs_im1 =
   ((sy w_mass) * (sy htCap_W))) *  ((sy temp_C) - (sy temp_W)) +
   ((sy pcm_HTC) * (sy pcm_SA) / 
   ((sy coil_HTC) * (sy coil_SA))) * ((sy coil_HTC) * (sy coil_SA) / 
-  ((sy w_mass) * (sy coil_HTC))) * ((sy temp_PCM) - (sy temp_W))
+  ((sy w_mass) * (sy htCap_W))) * ((sy temp_PCM) - (sy temp_W))
 
 
 s4_2_3_eq6_swhs_im1 = (deriv (sy temp_W) time) $= 
@@ -198,7 +198,7 @@ eBalanceOnPCM_new = im eBalanceOnPCM [qw time, qw tau_W, qw temp_C, qw eta,
 
 eBalanceOnPCM :: RelationConcept
 eBalanceOnPCM = makeRC "eBalanceOnPCM" (nounPhraseSP
-  "Energy balance on PCM to find T_p")
+  "Energy Balance on PCM to Find T_p")
   --FIXME: T_p should be called from symbol
   balPCMDesc balPCM_Rel
 
@@ -233,68 +233,83 @@ balPCMDesc = foldlSent [(E $ sy temp_W) `isThe` phrase temp_W +:+.
 eBalanceOnPCM_deriv_swhs :: Derivation
 eBalanceOnPCM_deriv_swhs =
   [S "Detailed derivation of the" +:+ phrase energy +:+ S "balance on the PCM during " +:+ 
-    phrase sens_heat +:+ S "phase:" ] ++
+    S "sensible heating phase:" ] ++
   (weave [eBalanceOnPCM_deriv_sentences_swhs_im2, map E eBalanceOnPCM_deriv_eqns_swhs_im2])
+  ++ (s4_2_3_desc5_swhs_im2 htCap_S_P htCap_L_P tau_S_P tau_L_P surface area melting vol assump_new_17)
+  ++ (s4_2_3_desc6_swhs_im2 temp_PCM)
+  ++ (s4_2_3_desc7_swhs_im2 boiling solid liquid assump_new_18)
 
 eBalanceOnPCM_deriv_sentences_swhs_im2 :: [Sentence]
 eBalanceOnPCM_deriv_sentences_swhs_im2 = map foldlSentCol [
   s4_2_3_desc1_swhs_im2 rOfChng temp_PCM energy water vol pcm_vol pcm_mass heat_cap_spec
-    htCap_S_P ht_flux ht_flux_P phase_change pcm_SA heat_trans [S "A12"],
+    htCap_S_P ht_flux ht_flux_P phase_change pcm_SA heat assump_new_16 vol_ht_gen,
   s4_2_3_desc2_swhs_im2 dd2HtFluxP ht_flux_P,
   s4_2_3_desc3_swhs_im2 eq6,
-  s4_2_3_desc4_swhs_im2 eq7,
-  s4_2_3_desc5_swhs_im2 htCap_S_P htCap_L_P tau_S_P tau_L_P surface area melting vol temp_PCM temp_melt_P
-    temp phase_change boiling solid liquid]
+  s4_2_3_desc4_swhs_im2 eq7
+   ]
 
 s4_2_3_desc1_swhs_im2 :: ConceptChunk -> UncertQ -> UnitalChunk -> ConceptChunk -> 
   ConceptChunk-> UncertQ -> UnitalChunk -> ConceptChunk -> UncertQ -> 
   ConceptChunk -> UnitalChunk -> ConceptChunk -> UncertQ ->  ConceptChunk ->
-  [Sentence] -> [Sentence]
-s4_2_3_desc1_swhs_im2 roc tempP en wt vo pcmvo pm hcs hsp hf hfp pc ps ht ass13 =
+  AssumpChunk -> UnitalChunk -> [Sentence]
+s4_2_3_desc1_swhs_im2 roc tempP en wt vo pcmvo pm hcs hsp hf hfp pc ps ht ass16 vhg=
   [S "To find the", phrase roc `sOf` (E $ sy tempP) `sC` S "we look at the",
    phrase en, S "balance on the" +:+. S "PCM", S "The", phrase vo, S "being considered" 
    `isThe` (phrase vo `sOf` S "PCM,") +:+. (E $ sy pcmvo), S "The derivation that follows is" +:+. 
    S "initially for the solid PCM", S "The mass of phase change material is", (E $ sy pm) `sAnd` S "the",
    phrase hcs `sOf` S "PCM as a solid is" +:+. (E $ sy hsp), S "The", phrase hf,
    S "into the PCM from", phrase wt, S "is", (E $ sy hfp), S "over", phrase pc, 
-   S "material is surface area" +:+. (E $ sy ps), S "There is no", phrase hf +:+. S "output",
+   S "material surface area" +:+. (E $ sy ps), S "There is no", phrase hf +:+. S "output",
    S "Assuming no volumetric", phrase ht, S "generation per unit", phrase vo,
-    (foldlList $ (map (\d -> sParen (d))) ass13) `sC` S "g = 0, the equation for",
+   (sParen (makeRef ass16)) `sC` (E $ sy vhg $= 0), S ", the equation for",
      acroGD 2, S "can be written as"]
 
 s4_2_3_desc2_swhs_im2 :: QDefinition -> UnitalChunk -> [Sentence]
 s4_2_3_desc2_swhs_im2 dd2 hfp =
-  [S "Using", titleize' dataDefn, makeRef $ datadefn dd2,
+  [S "Using", makeRef $ datadefn dd2,
    S "for", (E $ sy hfp) `sC` S "this equation can be written as"]
 
 s4_2_3_desc3_swhs_im2 :: [Sentence] -> [Sentence]
 s4_2_3_desc3_swhs_im2 eq66 = 
   [S "Dividing by"] ++ eq66 ++ [S "we obtain"]
 
-s4_2_3_desc4_swhs_im2 :: Expr -> [Sentence]
+s4_2_3_desc4_swhs_im2 :: [Sentence] -> [Sentence]
 s4_2_3_desc4_swhs_im2 eq77 = 
-  [S "Setting", (E eq77) `sC` S "this can be written as"]
+  [S "Setting"] ++ eq77 ++ [S ", this can be written as"]
 
 s4_2_3_desc5_swhs_im2 ::  UncertQ -> UncertQ -> UnitalChunk -> UnitalChunk -> ConceptChunk -> ConceptChunk-> ConceptChunk
-  -> ConceptChunk -> UncertQ -> UncertQ -> ConceptChunk -> ConceptChunk -> ConceptChunk -> ConceptChunk -> ConceptChunk -> [Sentence]
-s4_2_3_desc5_swhs_im2 hsp hlp tsp tlp sur ar melt vo cg tp tempa pc boil sld lqd= 
-  [S "Equation (6) applies for the solid PCM. In the case where all of the PCM is melted, the same",
-   S "derivation applies, except that", (E $ sy hsp), S "is replaced by", (E $ sy hlp),
-   S "and thus", (E $ sy tsp), S "is replaced by" +:+. (E $ sy tlp), S "Although a small change in",
-   phrase sur, phrase ar, S "would be expected with", phrase melt, S "this is not included" `sC`
-   S "since the", phrase vo, phrase cg, S "of the PCM with", phrase melting, S "is assumed to be negligible" +:+.
-   S "A(13)", S "In the case where", (E $ sy tp), S "and not all of the PCM is melted" `sC`
-   phrase tempa, S "of the", phrase pc +:+. S "material does not change", S "Therefore" `sC` 
-   S "in this case" +:+. S "This derivation does not consider the",
-   phrase boil, S "of the PCM" `sC` S "as the PCM is assumed to either be in a", phrase sld, S "state or a",
-   phrase lqd, S "state (A14)"]
+  -> ConceptChunk -> AssumpChunk -> [Sentence]
+s4_2_3_desc5_swhs_im2 hsp hlp tsp tlp sur ar melt vo ass17= 
+  [S "Equation (6) applies for the solid PCM. In the case where all of the PCM is melted, the same" +:+
+   S "derivation applies, except that" +:+ (E $ sy hsp) +:+ S "is replaced by" +:+ (E $ sy hlp) `sC`
+   S "and thus" +:+ (E $ sy tsp) +:+ S "is replaced by" +:+. (E $ sy tlp) +:+ S "Although a small change in" +:+
+   phrase sur +:+ phrase ar +:+ S "would be expected with" +:+ phrase melt `sC` S "this is not included" `sC`
+   S "since the" +:+ phrase vo +:+ S "change of the PCM with" +:+ phrase melting +:+ S "is assumed to be negligible" +:+.
+   (sParen (makeRef ass17))]
+
+s4_2_3_desc6_swhs_im2 :: UncertQ -> [Sentence]
+s4_2_3_desc6_swhs_im2 tp =
+    [S "In the case where" +:+ (E eq6_1) +:+ S "and not all of the PCM is melted" `sC`
+   S "the" +:+ phrase tp +:+. S "does not change" +:+ S "Therefore" `sC` 
+   S "in this case" +:+ (foldlSent eq6_2)]
+
+s4_2_3_desc7_swhs_im2 :: ConceptChunk -> ConceptChunk -> ConceptChunk -> AssumpChunk-> [Sentence]
+s4_2_3_desc7_swhs_im2 boil sld lqd assp18=
+   [S "This derivation does not consider the" +:+
+   phrase boil +:+ S "of the PCM" `sC` S "as the PCM is assumed to either be in a" +:+ phrase sld +:+ S "state or a" +:+
+   phrase lqd +:+ S "state" +:+. (sParen (makeRef assp18))]
 --(E $ ((deriv (sy temp_PCm) time) $= 0)
 eq6:: [Sentence]
 eq6 = [getES pcm_mass, getES htCap_S_P]
 
-eq7 :: Expr
-eq7 = (sy tau_S_P) $= ((sy pcm_mass) * (sy htCap_S_P)) / 
-  ((sy ht_flux_P) * (sy pcm_SA))
+eq7:: [Sentence]
+eq7 = [getES tau_S_P, S "=", getES pcm_mass, getES htCap_S_P, S "/", 
+  getES pcm_HTC, getES pcm_SA]
+eq6_1 :: Expr
+eq6_1 = (sy temp_PCM) $= (sy temp_melt_P)
+eq6_2 :: [Sentence]
+eq6_2 = [S "d" +:+ getES temp_PCM +:+ S "/ d" +:+ getES time +:+ S "= 0"]
+
 
 s4_2_3_eq1_swhs_im2, s4_2_3_eq2_swhs_im2, s4_2_3_eq3_swhs_im2,
  s4_2_3_eq4_swhs_im2 :: Expr

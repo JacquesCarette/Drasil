@@ -125,16 +125,16 @@ sqrDist = ucFromCV norm m_2 []
                (phrase QM.euclidNorm) ) (sup (eqSymb QM.euclidNorm) 
                (Atomic "2")) Real
 
-r_OB    = uc' "r_OB" 
+r_OB    = uc'EL "r_OB" 
   (nounPhraseSP "displacement vector between the origin and point B")
   "FIXME: Define this or remove the need for definitions" 
-  (sub (eqSymb QP.displacement) (Concat [cO, cB])) metre []
+  (sub (eqSymb QP.displacement) (Concat [cO, cB])) metre
 
-pos_CM = ucs "p_CM" (nounPhraseSP $ 
+pos_CM = ucsEL "p_CM" (nounPhraseSP $ 
   "the mass-weighted average position of a rigid " ++
   "body's particles") 
   "FIXME: Define this or remove the need for definitions" 
-  (sub (eqSymb QP.position) (Atomic "CM")) metre Real []
+  (sub (eqSymb QP.position) (Atomic "CM")) metre Real
 
 --FIXME: parametrized hack
 mass_i = ucFromCV massi kilogram []

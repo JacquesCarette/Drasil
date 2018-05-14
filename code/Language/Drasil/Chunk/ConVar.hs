@@ -1,5 +1,5 @@
 {-# LANGUAGE TemplateHaskell, TypeFamilies #-}
-module Language.Drasil.Chunk.ConVar ({- ConVar(CV), cv-}) where
+module Language.Drasil.Chunk.ConVar (ConVar(CV), cv) where
 
 import Language.Drasil.Classes (HasUID(uid), NamedIdea(term), Idea(getA),
   Definition(defn),ConceptDomain(cdom,DOM),Concept,HasSymbol(symbol), HasSpace(typ))
@@ -12,9 +12,10 @@ import Control.Lens ((^.),makeLenses)
 
 -- | ConVar is a 'Concept' as well as a 'Quantity'. 
 -- It adds a 'Space' and 'Symbol' to an existing 'ConceptChunk'.
-{-data ConVar = CV { _con :: ConceptChunk
+data ConVar = CV { _con :: ConceptChunk
                  , _symb :: Stage -> Symbol
-                 , _spa :: Space }
+                 , _spa :: Space 
+                 }
 makeLenses ''ConVar
                      
 instance Eq ConVar            where c1 == c2 = (c1 ^. uid) == (c2 ^. uid)
@@ -32,4 +33,4 @@ instance Quantity ConVar      where getUnit _ = Nothing
 
 -- | Constructor for 'ConVar' with explicit 'Space'
 cv :: ConceptChunk -> Symbol -> Space -> ConVar
-cv c s = CV c (\_ -> s)-}
+cv c s = CV c (\_ -> s)

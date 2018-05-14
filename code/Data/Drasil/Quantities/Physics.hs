@@ -13,24 +13,24 @@ angularAccel, angularDisplacement, angularVelocity, acceleration, displacement,
   impulseV, linearAccel, linearDisplacement, linearVelocity, momentOfInertia,
   position, pressure, time, torque, velocity :: UnitalChunk
 
-angularAccel        = uc CP.angAccel (Greek Alpha_L) angAccelU []
-angularDisplacement = uc CP.angDisp (Greek Theta_L) radian []
-angularVelocity     = uc CP.angVelo (Greek Omega_L) angVelU []
-acceleration        = uc CP.acceleration (vec lA) accelU []
-displacement        = uc CP.displacement (vec lR) metre []
-distance            = uc CP.distance lR metre []
-energy              = uc CP.energy cE joule []
-force               = uc CP.force (vec cF) newton []
-gravitationalAccel  = uc CP.gravitationalAccel lG accelU []
-gravitationalConst  = uc CP.gravitationalConst cG gravConstU []
-impulseS            = uc CP.impulseS lJ impulseU []
-impulseV            = uc CP.impulseV (vec cJ) impulseU []
-linearAccel         = uc CP.linAccel (Concat [(vec lA), Atomic "(", lT, Atomic ")"]) accelU []
-linearDisplacement  = uc CP.linDisp (Concat [(vec lR), Atomic "(",lT, Atomic ")"]) metre []
-linearVelocity      = uc CP.linVelo (Concat [(vec lV), Atomic "(", lT, Atomic ")"]) velU []
-momentOfInertia     = uc CP.momentOfInertia (vec cI) momtInertU []
-position            = uc CP.position (vec lP) metre []
-pressure            = uc CP.pressure lP pascal []
-time                = uc CP.time lT second []
-torque              = uc CP.torque (Greek Tau_L) torqueU []
-velocity            = uc CP.velocity (vec lV) velU []
+angularAccel        = ucEL CP.angAccel (Greek Alpha_L) angAccelU
+angularDisplacement = ucEL CP.angDisp (Greek Theta_L) radian
+angularVelocity     = ucEL CP.angVelo (Greek Omega_L) angVelU
+acceleration        = ucEL CP.acceleration (vec lA) accelU
+displacement        = ucEL CP.displacement (vec lR) metre
+distance            = ucEL CP.distance lR metre
+energy              = ucEL CP.energy cE joule
+force               = ucEL CP.force (vec cF) newton
+gravitationalAccel  = ucEL CP.gravitationalAccel lG accelU
+gravitationalConst  = ucEL CP.gravitationalConst cG gravConstU
+impulseS            = ucEL CP.impulseS lJ impulseU
+impulseV            = ucEL CP.impulseV (vec cJ) impulseU
+linearAccel         = ucEL CP.linAccel (Concat [(vec lA), Atomic "(", lT, Atomic ")"]) accelU
+linearDisplacement  = ucEL CP.linDisp (Concat [(vec lR), Atomic "(",lT, Atomic ")"]) metre
+linearVelocity      = ucEL CP.linVelo (Concat [(vec lV), Atomic "(", lT, Atomic ")"]) velU
+momentOfInertia     = ucEL CP.momentOfInertia (vec cI) momtInertU
+position            = ucEL CP.position (vec lP) metre
+pressure            = ucEL CP.pressure lP pascal
+time                = ucEL CP.time lT second
+torque              = ucEL CP.torque (Greek Tau_L) torqueU
+velocity            = ucEL CP.velocity (vec lV) velU

@@ -37,7 +37,3 @@ instance HasAttributes DefinedQuantityDict where attributes = quant . attributes
 
 cqs :: (HasAttributes c, Q.Quantity c, Concept c, DOM c ~ ConceptChunk) => c -> DefinedQuantityDict
 cqs c = DQD (Q.qw c) (cw c)
-
-{- | Constructor for 'ConVar' with explicit 'Space'
-cv :: ConceptChunk -> Symbol -> Space -> ConVar
-cv c s = CV c (\_ -> s)-}

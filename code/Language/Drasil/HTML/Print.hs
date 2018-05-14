@@ -59,7 +59,7 @@ printLO (Figure r c f wp)      = makeFigure (p_spec r) (p_spec c) (text f) wp
 printLO (ALUR _ x l i)         = makeRefList (p_spec x) (p_spec l) (p_spec i)
 printLO (Bib bib)              = makeBib bib
 printLO (Graph _ _ _ _ _)      = empty -- FIXME
-printLO _  (Graph _ _ _ _ _)      = empty -- FIXME
+
 
 -- | Called by build, uses 'printLO' to render the layout
 -- objects in Doc format.
@@ -123,7 +123,6 @@ uSymb (US ls) = formatu t b
     pow :: (Symbol,Integer) -> String
     pow (x,1) = symbol x
     pow (x,p) = symbol x ++ sup (show p)
--}
 
 -----------------------------------------------------------------
 ------------------BEGIN EXPRESSION PRINTING----------------------

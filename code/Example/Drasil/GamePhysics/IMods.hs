@@ -17,7 +17,7 @@ iModels = [im1, im2, im3]
 im1_new :: InstanceModel
 im1_new = im im1 [qw vel_i, qw QP.time, qw QP.gravitationalAccel, qw force_i, qw mass_i] 
   [ TCon AssumedCon $ sy vel_i $> 0, TCon AssumedCon $ sy QP.time $> 0, TCon AssumedCon $ sy QP.gravitationalAccel $> 0, 
-  TCon AssumedCon $ sy force_i $> 0, TCon AssumedCon $ sy mass_i $> 0 ] [qw acc_i] [] []
+  TCon AssumedCon $ sy force_i $> 0, TCon AssumedCon $ sy mass_i $> 0 ] (qw acc_i) [] []
 
 im1 :: RelationConcept
 im1 = makeRC "im1" (im1NP) (im1descr +:+ im1leg) im1Rel 
@@ -48,7 +48,7 @@ im2_new :: InstanceModel
 im2_new = im im2 [qw QP.angularVelocity, qw QP.time, qw torque_i, qw QP.momentOfInertia]
   [TCon AssumedCon $ sy QP.angularVelocity $> 0, TCon AssumedCon $ sy QP.time $> 0,
   TCon AssumedCon $ sy torque_i $> 0, TCon AssumedCon $ sy QP.momentOfInertia $> 0] 
-  [qw QP.angularAccel] [TCon AssumedCon $ sy QP.angularAccel $> 0] [] 
+  (qw QP.angularAccel) [TCon AssumedCon $ sy QP.angularAccel $> 0] [] 
 
 im2 :: RelationConcept
 im2 = makeRC "im2" (im2NP) (im2descr +:+ im2leg) im2Rel 
@@ -75,7 +75,7 @@ im2leg = foldle1 (+:+) (+:+) $ map defList im2legTerms
 im3_new :: InstanceModel
 im3_new = im im3 [qw QP.time, qw QP.impulseS, qw mass_A, qw normalVect] [TCon AssumedCon $ sy QP.time $> 0,
   TCon AssumedCon $ sy QP.impulseS $> 0, TCon AssumedCon $ sy mass_A $> 0, TCon AssumedCon $ sy normalVect $> 0]
-  [qw vel_A, qw time_c] [TCon AssumedCon $ sy vel_A $> 0, TCon AssumedCon $ sy time_c $> 0] []
+  (qw time_c) [TCon AssumedCon $ sy vel_A $> 0, TCon AssumedCon $ sy time_c $> 0] []
 
 im3 :: RelationConcept
 im3 = makeRC "im3" (im3NP) (im3descr +:+ im3leg) im3Rel1

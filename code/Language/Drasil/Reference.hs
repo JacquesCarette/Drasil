@@ -167,17 +167,17 @@ instance Referable PhysSystDesc where
 
 instance Referable AssumpChunk where
   refName (AC _ _ sn _) = sn
-  refAdd  x             = "A:" ++ concatMap repUnd (x ^. uid)
+  refAdd  x             = "A:" ++ repUScore (x ^. uid)
   rType   _             = Assump
 
 instance Referable ReqChunk where
   refName (RC _ _ _ sn _)   = sn
-  refAdd  r@(RC _ rt _ _ _) = show rt ++ ":" ++ concatMap repUnd (r ^. uid)
+  refAdd  r@(RC _ rt _ _ _) = show rt ++ ":" ++ repUScore (r ^. uid)
   rType   _                 = Req
 
 instance Referable Change where
   refName (ChC _ _ _ sn _)     = sn
-  refAdd r@(ChC _ rt _ _ _)    = show rt ++ ":" ++ concatMap repUnd (r ^. uid)
+  refAdd r@(ChC _ rt _ _ _)    = show rt ++ ":" ++ repUScore (r ^. uid)
   rType (ChC _ Likely _ _ _)   = LC
   rType (ChC _ Unlikely _ _ _) = UC
 
@@ -188,30 +188,30 @@ instance Referable Section where
 
 instance Referable Citation where
   refName c = S $ citeID c
-  refAdd c = concatMap repUnd $ citeID c -- citeID should be unique.
+  refAdd c = repUScore $ citeID c -- citeID should be unique.
   rType _ = Cite
 
 -- error used below is on purpose. These refNames should be made explicit as necessary
 instance Referable TheoryModel where
   refName _ = error "No explicit name given for theory model -- build a custom Ref"
-  refAdd  t = "T:" ++ t^.uid
+  refAdd  t = "T:" ++ repUScore (t ^. uid)
   rType   _ = Def
 
 instance Referable GenDefn where
   refName _ = error "No explicit name given for theory model -- build a custom Ref"
-  refAdd  g = "GD:" ++ g^.uid
+  refAdd  g = "GD:" ++ repUScore (g ^. uid)
   rType   _ = Def
 
 instance Referable QDefinition where -- FIXME: This could lead to trouble; need
                                      -- to ensure sanity checking when building
                                      -- Refs. Double-check QDef is a DD before allowing
   refName _ = error "No explicit name given for theory model -- build a custom Ref"
-  refAdd  d = "DD:" ++ d^.uid
+  refAdd  d = "DD:" ++ repUScore (d ^. uid)
   rType   _ = Def
 
 instance Referable InstanceModel where
   refName _ = error "No explicit name given for theory model -- build a custom Ref"
-  refAdd  i = "IM:" ++ i^.uid
+  refAdd  i = "IM:" ++ repUScore (i ^. uid)
   rType   _ = Def
 
 instance Referable Contents where
@@ -259,8 +259,8 @@ instance Referable Contents where
 
 -- | Automatically create the label for a definition
 getDefName :: DType -> String
-getDefName (Data c)   = "DD:" ++ concatMap repUnd (c ^. uid) -- FIXME: To be removed
-getDefName (Theory c) = "T:" ++ concatMap repUnd (c ^. uid) -- FIXME: To be removed
+getDefName (Data c)   = "DD:" ++ repUScore (c ^. uid) -- FIXME: To be removed
+getDefName (Theory c) = "T:" ++ repUScore (c ^. uid) -- FIXME: To be removed
 getDefName TM         = "T:"
 getDefName DD         = "DD:"
 getDefName Instance   = "IM:"
@@ -282,6 +282,9 @@ assumptionsFromDB am = dropNums $ sortBy (compare `on` snd) assumptions
 repUnd :: Char -> String
 repUnd '_' = "."
 repUnd c = c : []
+
+repUScore :: String -> String
+repUScore = concatMap repUnd
 
 -- | Create References to a given 'LayoutObj'
 -- This should not be exported to the end-user, but should be usable

@@ -5,9 +5,9 @@ import Drasil.GlassBR.Unitals
 import Drasil.GlassBR.ModuleDefs (implVars,allMods)
 
 this_symbols :: [QuantityDict]
-this_symbols = map qw [prob_br] ++ gbInputs ++ (map qw gBRSpecParamVals) ++ 
+this_symbols = qw prob_br : gbInputs ++ (map qw gBRSpecParamVals) ++ 
   (map qw glassBRSymbolsWithDefns) ++ (map qw glassBRSymbols) ++
   (map qw glassBRUnitless) ++ (map qw gbInputDataConstraints)
-  -- hack to include functions as symbols
+  -- include all module functions as symbols
   ++ (map (qw . asVC) $ concatMap (\(Mod _ l) -> l) allMods)
   ++ map qw implVars

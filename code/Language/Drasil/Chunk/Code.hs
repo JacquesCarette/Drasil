@@ -1,44 +1,39 @@
 {-# LANGUAGE TemplateHaskell #-}
 module Language.Drasil.Chunk.Code (
     CodeIdea(..), CodeChunk(..), CodeDefinition(..),
-    programName,
     codeType, codevar, codefunc, qtoc, qtov, codeEquat,
     ConstraintMap, constraintMap, physLookup, sfwrLookup,
+    programName,
     symbToCodeName, CodeType(..),
     spaceToCodeType, toCodeName, funcPrefix
   ) where
 
 import Control.Lens ((^.),makeLenses,view)
 
-import Language.Drasil.Chunk.Constrained
+import Language.Drasil.Chunk.Constrained.Core (Constraint,isPhysC)
 import Language.Drasil.Chunk.Quantity
-import Language.Drasil.Chunk.NamedIdea
-import Language.Drasil.Chunk.Eq
-import Language.Drasil.Chunk.SymbolForm
-import Language.Drasil.Chunk
+import Language.Drasil.Chunk.Eq (QDefinition)
+import Language.Drasil.Chunk.ExprRelat (relat)
+import Language.Drasil.Chunk.SymbolForm (codeSymb)
+import Language.Drasil.Classes (HasUID(uid), NamedIdea(term), Idea(getA),
+  HasSymbol(symbol), CommonIdea(abrv), Constrained(constraints))
 
 import Language.Drasil.Space as S
 import Language.Drasil.Code.Code as G (CodeType(..))
 
 import Language.Drasil.Expr
 import Language.Drasil.Unicode
-import Language.Drasil.Spec
 import Language.Drasil.Symbol
-import Language.Drasil.NounPhrase
 
 import Data.String.Utils (replace)
 import qualified Data.Map as Map
 
 -- not using lenses for now
-class (Chunk c) => CodeIdea c where
+class CodeIdea c where
   codeName      :: c -> String
 
-programName :: NamedIdea c => c -> String
-programName c = sentenceToCodeName (phrase $ c ^. term)
-
-sentenceToCodeName :: Sentence -> String
-sentenceToCodeName (S s) = toCodeName s
-sentenceToCodeName _ = error "fix"
+programName :: CommonIdea c => c -> String
+programName = toCodeName . abrv
 
 symbToCodeName :: Symbol -> String
 symbToCodeName (Atomic s) = toCodeName s
@@ -144,11 +139,11 @@ data VarOrFunc = Var | Func
 data CodeChunk = CodeC {_qc :: QuantityDict, kind :: VarOrFunc}
 makeLenses ''CodeChunk
 
-instance Chunk CodeChunk where uid = qc . uid
+instance HasUID CodeChunk where uid = qc . uid
 instance NamedIdea CodeChunk where term = qc . term
 instance Idea CodeChunk where getA = getA . view qc
 instance HasSpace CodeChunk where typ = qc . typ
-instance HasSymbol CodeChunk where symbol s c = symbol s (c ^. qc)
+instance HasSymbol CodeChunk where symbol c = symbol (c ^. qc)
 instance Quantity CodeChunk where getUnit = getUnit . view qc
 instance CodeIdea CodeChunk where
   codeName (CodeC c Var) = symbToCodeName (codeSymb c)
@@ -181,27 +176,27 @@ codefunc c = CodeC (qw c) Func
 data CodeDefinition = CD { _quant :: QuantityDict, _ci :: String, _def :: Expr }
 makeLenses ''CodeDefinition
 
-instance Chunk CodeDefinition where uid = quant . uid
+instance HasUID CodeDefinition where uid = quant . uid
 instance NamedIdea CodeDefinition where term = quant . term
 instance Idea CodeDefinition where getA = getA . view quant
 instance HasSpace CodeDefinition where typ = quant . typ
-instance HasSymbol CodeDefinition where symbol s c = symbol s $ c ^. quant
+instance HasSymbol CodeDefinition where symbol c = symbol (c ^. quant)
 instance Quantity CodeDefinition where getUnit = getUnit . view quant
 instance CodeIdea CodeDefinition where codeName = (^. ci)
 instance Eq CodeDefinition where c1 == c2 = (c1 ^. uid) == (c2 ^. uid)
 
 qtoc :: QDefinition -> CodeDefinition
-qtoc (EC q e _) = CD (qw q) (funcPrefix ++ symbToCodeName (codeSymb q)) e
+qtoc q = CD (qw q) (funcPrefix ++ symbToCodeName (codeSymb q)) (q ^. relat)
 
 qtov :: QDefinition -> CodeDefinition
-qtov (EC q e _) = CD (qw q) (symbToCodeName (codeSymb q)) e
+qtov q = CD (qw q) (symbToCodeName (codeSymb q)) (q ^. relat)
 
 codeEquat :: CodeDefinition -> Expr
 codeEquat cd = cd ^. def
 
 type ConstraintMap = Map.Map String [Constraint]
 
-constraintMap :: (Constrained c) => [c] -> ConstraintMap
+constraintMap :: (HasUID c, Constrained c) => [c] -> ConstraintMap
 constraintMap = Map.fromList . map (\x -> ((x ^. uid), (x ^. constraints)))
 
 physLookup :: (Quantity q) => ConstraintMap -> q -> (q,[Constraint])

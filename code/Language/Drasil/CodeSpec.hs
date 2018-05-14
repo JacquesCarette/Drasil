@@ -1,8 +1,8 @@
 {-# LANGUAGE GADTs #-}
 module Language.Drasil.CodeSpec where
 
+import Language.Drasil.Classes (term,CommonIdea)
 import Language.Drasil.Chunk.Code
-import Language.Drasil.Chunk.NamedIdea
 import Language.Drasil.Chunk.Eq
 import Language.Drasil.Chunk.Quantity -- for hack
 import Language.Drasil.Chunk.SymbolForm (codeSymb)
@@ -11,6 +11,7 @@ import Language.Drasil.Symbol
 import Language.Drasil.Spec
 import Language.Drasil.SystemInformation
 import Language.Drasil.Expr -- for hack
+import Language.Drasil.Expr.Math (sy)
 import Language.Drasil.Space -- for hack
 import Language.Drasil.DataDesc
 import Language.Drasil.Chunk.ExprRelat
@@ -31,8 +32,9 @@ type Const = CodeDefinition
 type Derived = CodeDefinition
 type Def = CodeDefinition
 
-data CodeSpec = CodeSpec {
-  program :: IdeaDict,
+data CodeSpec where
+  CodeSpec :: CommonIdea a => {
+  program :: a,
   inputs :: [Input],
   extInputs :: [Input],
   derivedInputs :: [Derived],
@@ -48,7 +50,7 @@ data CodeSpec = CodeSpec {
   mods :: [Mod],  -- medium hack
   dMap :: ModDepMap,
   sysinfodb :: ChunkDB
-}
+  } -> CodeSpec
 
 type FunctionMap = Map.Map String CodeDefinition
 type VarMap      = Map.Map String CodeChunk
@@ -85,7 +87,7 @@ codeSpec' (SI {_sys = sys, _quants = q, _definitions = defs', _inputs = ins, _ou
       outs' = map codevar outs
       allInputs = nub $ inputs' ++ map codevar derived
   in  CodeSpec {
-        program = nw sys,
+        program = sys,
         inputs = allInputs,
         extInputs = inputs',
         derivedInputs = derived,
@@ -93,10 +95,10 @@ codeSpec' (SI {_sys = sys, _quants = q, _definitions = defs', _inputs = ins, _ou
         relations = rels,
         execOrder = getExecOrder rels (allInputs ++ map codevar const') outs' db,
         cMap = constraintMap cs,
-        fMap = assocToMap $ rels,
+        fMap = assocToMap rels,
         vMap = assocToMap (map codevar q),
         eMap = mem,
-        constMap = assocToMap $ const',
+        constMap = assocToMap const',
         const = const',
         mods = mods',
         dMap = modDepMap db mem mods',
@@ -199,8 +201,8 @@ v $:= e = FAsg (codevar v) e
 ffor :: (Quantity c) => c -> Expr -> [FuncStmt] -> FuncStmt
 ffor v e fs = FFor (codevar v) e fs
 
-fdec :: (Quantity c) => c -> Space -> FuncStmt
-fdec v t = FDec (codevar v) (spaceToCodeType t)
+fdec :: (Quantity c) => c -> FuncStmt
+fdec v = FDec (codevar v) (spaceToCodeType $ v ^. typ)
 
 asVC :: Func -> VarChunk
 asVC (FDef (FuncDef n _ _ _)) = implVar n (nounPhraseSP n) (Atomic n) Real

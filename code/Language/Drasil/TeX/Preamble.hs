@@ -26,6 +26,7 @@ data Package = AMSMath
              | Tabu --adds auto column width feature for tables 
              | Mathtools --line breaks for long fractions and cases
              | URL
+             | FontSpec -- for utf-8 encoding in lualatex
              deriving Eq
 
 addPackage :: Package -> D
@@ -49,6 +50,7 @@ addPackage BibLaTeX  = command1o "usepackage" (Just "backend=bibtex") "biblatex"
 addPackage Tabu      = usepackage "tabu"
 addPackage Mathtools = usepackage "mathtools"
 addPackage URL       = usepackage "url"
+addPackage FontSpec   = usepackage "fontspec"
 
 data Def = AssumpCounter
          | LCCounter
@@ -79,7 +81,7 @@ genPreamble los = let (pkgs, defs) = parseDoc los
      (vcat $ map addPackage pkgs) %% (vcat $ map addDef defs)
 
 parseDoc :: [LayoutObj] -> ([Package], [Def])
-parseDoc los' = ([FullPage, HyperRef, AMSMath, AMSsymb, Mathtools, Breqn] ++ 
+parseDoc los' = ([FontSpec, FullPage, HyperRef, AMSMath, AMSsymb, Mathtools, Breqn] ++ 
    (nub $ concat $ map fst res), nub $ concat $ map snd res)
   where 
     res = map parseDoc' los'

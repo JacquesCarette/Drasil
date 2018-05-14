@@ -17,7 +17,6 @@ cabal.config
 *.snm
 *.toc
 *.swp
-/Physics Engine Families/Papers
 Main
 .idea
 *.out

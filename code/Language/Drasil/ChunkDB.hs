@@ -1,4 +1,4 @@
-{-# LANGUAGE TemplateHaskell #-}
+{-# LANGUAGE TemplateHaskell, TypeFamilies #-}
 module Language.Drasil.ChunkDB 
   ( ChunkDB, cdb
   , HasSymbolTable(..), symbolMap, symbLookup, getUnitLup
@@ -7,11 +7,11 @@ module Language.Drasil.ChunkDB
   , HasUnitTable(..), unitMap
   ) where
 
-import Language.Drasil.Chunk
+import Language.Drasil.Classes (HasUID(uid), Idea, Concept, DOM, IsUnit)
+import Language.Drasil.Chunk.NamedIdea (IdeaDict, nw)
 import Language.Drasil.Chunk.Quantity
-import Language.Drasil.Chunk.NamedIdea
 import Language.Drasil.Chunk.Concept 
-import Language.Drasil.Unit
+import Language.Drasil.Unit (unitWrapper, UnitDefn)
 
 import Control.Lens ((^.), Lens', makeLenses)
 import qualified Data.Map as Map
@@ -46,11 +46,11 @@ termMap :: (Idea c) => [c] -> TermMap
 termMap = Map.fromList . map (\x -> (x ^. uid, nw x))
 
 -- | Smart constructor for a 'ConceptMap'
-conceptMap :: (Concept c) => [c] -> ConceptMap
+conceptMap :: (Concept c, DOM c ~ ConceptChunk) => [c] -> ConceptMap
 conceptMap = Map.fromList . map (\x -> (x ^. uid, cw x))
 
 -- | Smart constructor for a 'UnitMap'
-unitMap :: (IsUnit u) => [u] -> UnitMap
+unitMap :: (IsUnit u, DOM u ~ ConceptChunk) => [u] -> UnitMap
 unitMap = Map.fromList . map (\x -> (x ^. uid, unitWrapper x))
 
 -- | Looks up an uid in the symbol table. If nothing is found, an error is thrown
@@ -76,11 +76,11 @@ class HasUnitTable s where
   unitTable :: Lens' s UnitMap
 
 -- | Gets a unit if it exists, or Nothing.        
-getUnitLup :: HasSymbolTable s => (Chunk c) => c -> s -> Maybe UnitDefn
+getUnitLup :: HasSymbolTable s => (HasUID c) => c -> s -> Maybe UnitDefn
 getUnitLup c m = getUnit $ symbLookup (c ^. uid) (m ^. symbolTable)
 
 -- | Looks up an uid in the term table. If nothing is found, an error is thrown
-termLookup :: (Chunk c) => c -> TermMap -> IdeaDict
+termLookup :: (HasUID c) => c -> TermMap -> IdeaDict
 termLookup c m = getT $ Map.lookup (c ^. uid) m
   where getT (Just x) = x
         getT Nothing  = error $ "Term: " ++ (c ^. uid) ++ " not found in TermMap"
@@ -95,7 +95,8 @@ makeLenses ''ChunkDB
 -- | Smart constructor for chunk databases. Takes a list of Quantities 
 -- (for SymbolTable), NamedIdeas (for TermTable), Concepts (for DefinitionTable),
 -- and Units (for UnitTable)
-cdb :: (Quantity q, Idea t, Concept c, IsUnit u) => [q] -> [t] -> [c] -> [u] -> ChunkDB
+cdb :: (Quantity q, Idea t, Concept c, IsUnit u,
+        DOM c ~ ConceptChunk, DOM u ~ ConceptChunk) => [q] -> [t] -> [c] -> [u] -> ChunkDB
 cdb s t c u = CDB (symbolMap s) (termMap t) (conceptMap c) (unitMap u)
 
 ----------------------

@@ -4,25 +4,21 @@ import Language.Drasil
 
 import Drasil.GlassBR.Body (glassBR_srs, glassBR_code, gbSymbMap)
 
-docs :: [Recipe]
-docs = 
-  [Recipe (DocSpec SRS "GlassBR_SRS")     glassBR_srs, 
-   Recipe (DocSpec Website "GlassBR_SRS") glassBR_srs
-  ]
 
 glassChoices :: Choices
 glassChoices = Choices {
   lang = [Python, Cpp, CSharp, Java],
   impType = Program,
   logFile = "log.txt",
-  logging = LogNone,         -- LogNone, LogFunc
-  comments = CommentNone,    -- CommentNone, CommentFunc
-  onSfwrConstraint = Exception,  -- Warning, Exception
-  onPhysConstraint = Exception,  -- Warning, Exception
-  inputStructure = AsClass    -- Loose, AsClass
+  logging = LogNone,
+  comments = CommentNone,
+  onSfwrConstraint = Exception,
+  onPhysConstraint = Exception,
+  inputStructure = AsClass
 }
   
 main :: IO()
 main = do
-  gen docs gbSymbMap
+  gen (DocSpec SRS "GlassBR_SRS")     glassBR_srs gbSymbMap
+  gen (DocSpec Website "GlassBR_SRS") glassBR_srs gbSymbMap
   genCode glassChoices glassBR_code

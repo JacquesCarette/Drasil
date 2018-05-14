@@ -1,9 +1,8 @@
-module Language.Drasil.Chunk.ExprRelat where
+module Language.Drasil.Chunk.ExprRelat (ExprRelat (relat)) where
 
-import Language.Drasil.Chunk
-import Language.Drasil.Expr
+import Language.Drasil.Expr (Expr)
 
-import Control.Lens (Simple, Lens)
+import Control.Lens (Lens')
 
-class Chunk c => ExprRelat c where
-  relat :: Simple Lens c Expr
+class ExprRelat c where
+  relat :: Lens' c Expr

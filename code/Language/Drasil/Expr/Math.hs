@@ -5,8 +5,7 @@ import Control.Lens ((^.))
 import Language.Drasil.Symbol
 import Language.Drasil.Expr
 import Language.Drasil.Space (Space)
-import Language.Drasil.Chunk (Chunk(uid))
-import Language.Drasil.Chunk.SymbolForm (HasSymbol)
+import Language.Drasil.Classes (HasUID(uid),HasSymbol)
 
 -- | Smart constructor to take the log of an expression
 log :: Expr -> Expr
@@ -82,7 +81,7 @@ defprod v low high e = Operator Mul (BoundedDD v Discrete low high) e
 prod_all v e = Operator Mul (AllDD v Discrete) e
 
 -- | Smart constructor for 'real interval' membership
-real_interval :: Chunk c => c -> RealInterval Expr Expr -> Expr
+real_interval :: HasUID c => c -> RealInterval Expr Expr -> Expr
 real_interval c = RealI (c ^. uid)
 
 -- | Euclidean function : takes a vector and returns the sqrt of the sum-of-squares
@@ -118,9 +117,17 @@ dgnl2x2 a d  = m2x2 a (Int 0) (Int 0) d
 apply :: Expr -> [Expr] -> Expr
 apply = FCall
 
-apply1 :: (Chunk f, HasSymbol f, Chunk a, HasSymbol a) => f -> a -> Expr
+apply1 :: (HasUID f, HasSymbol f, HasUID a, HasSymbol a) => f -> a -> Expr
 apply1 f a = FCall (sy f) [sy a]
 
-apply2 :: (Chunk f, HasSymbol f, Chunk a, HasSymbol a, Chunk b, HasSymbol b) => 
+apply2 :: (HasUID f, HasSymbol f, HasUID a, HasSymbol a, HasUID b, HasSymbol b) => 
     f -> a -> b -> Expr
 apply2 f a b = FCall (sy f) [sy a, sy b]
+
+-- Note how |sy| 'enforces' having a symbol
+sy :: (HasUID c, HasSymbol c) => c -> Expr
+sy x = C (x ^. uid)
+
+deriv, pderiv :: (HasUID c, HasSymbol c) => Expr -> c -> Expr
+deriv e c = Deriv Total e (c^.uid)
+pderiv e c = Deriv Part e (c^.uid)

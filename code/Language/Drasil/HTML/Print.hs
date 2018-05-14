@@ -2,16 +2,15 @@ module Language.Drasil.HTML.Print(genHTML) where
 
 import Prelude hiding (print)
 import Data.List (sortBy,partition,intersperse)
-import Text.PrettyPrint hiding (render, quotes, Str)
+import Text.PrettyPrint hiding (render, Str)
 import Numeric (showFFloat)
 import Control.Arrow (second)
 
-import Language.Drasil.HTML.Import (makeDocument, spec)
+import Language.Drasil.Printing.Import (makeDocument)
 import Language.Drasil.Printing.AST
 import Language.Drasil.Printing.Citation
 import Language.Drasil.Printing.LayoutObj
 import qualified Language.Drasil.Output.Formats as F
-import Language.Drasil.Spec (Sentence, sC, (+:+))
 import Language.Drasil.UnitLang
 
 import Language.Drasil.HTML.Helpers
@@ -21,73 +20,76 @@ import           Language.Drasil.Symbol (Symbol(..))
 import qualified Language.Drasil.Symbol as S
 import qualified Language.Drasil.Document as L
 import Language.Drasil.HTML.Monad
-import Language.Drasil.People (People,Person(..),rendPersLFM',rendPersLFM'',Conv(..),nameStr,rendPersLFM, isInitial)
+import Language.Drasil.People (People,Person(..),rendPersLFM',rendPersLFM'',Conv(..),nameStr,rendPersLFM, dotInitial)
 import Language.Drasil.Config (StyleGuide(..), bibStyleH)
-import Language.Drasil.ChunkDB (HasSymbolTable(..))
+import Language.Drasil.ChunkDB(HasSymbolTable)
 
 import Language.Drasil.Chunk.Citation (CitationKind(..))
 
 data OpenClose = Open | Close
 
---FIXME? Use Doc in place of Strings for p_spec/title_spec
-
 -- | Generate an HTML document from a Drasil 'Document'
-genHTML :: HasSymbolTable s => F.Filename -> L.Document -> s -> Doc
-genHTML fn doc sm = build fn (makeDocument doc sm) sm
+genHTML :: HasSymbolTable ctx => ctx -> F.Filename -> L.Document -> Doc
+genHTML sm fn doc = build fn (makeDocument sm doc)
 
 -- | Build the HTML Document, called by genHTML
-build :: HasSymbolTable s => String -> Document -> s -> Doc
-build fn (Document t a c) sm =
+build :: String -> Document -> Doc
+build fn (Document t a c) =
   text ( "<!DOCTYPE html PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\""++
           " \"http://www.w3.org/TR/html4/loose.dtd\">" ++ "\n" ++
           "<script src='https://cdnjs.cloudflare.com/ajax/libs/mathjax/"++
           "2.7.0/MathJax.js?config=TeX-MML-AM_CHTML'></script>") $$
-  html (head_tag ((linkCSS fn) $$ (title (text (title_spec t sm)))) $$
-  body (article_title (text (p_spec t sm)) $$ author (text (p_spec a sm))
-  $$ print c sm
+  html ( head_tag ((linkCSS fn) $$ title (title_spec t) $$
+  text ("<meta charset=\"utf-8\">")) $$
+  body (article_title (p_spec t) $$ author (p_spec a)
+  $$ print c
   ))
 
 -- | Helper for rendering LayoutObjects into HTML
-printLO :: HasSymbolTable s => s -> LayoutObj -> Doc
-printLO sm (HDiv ts layoutObs l)  = refwrap (p_spec l sm) $
-                                   div_tag ts (vcat (map (printLO sm) layoutObs))
-printLO sm (Paragraph contents)   = paragraph $ text (p_spec contents sm)
-printLO sm (EqnBlock contents)    = text $ p_spec contents sm
-printLO sm (Table ts rows r b t)  = makeTable ts rows (p_spec r sm) b (p_spec t sm) sm
-printLO sm (Definition dt ssPs l) = makeDefn dt ssPs (p_spec l sm) sm
-printLO sm (Header n contents _)  = h n $ text (p_spec contents sm) -- FIXME
-printLO sm (List t)               = makeList t sm
-printLO sm (Figure r c f wp)      = makeFigure (p_spec r sm) (p_spec c sm) f wp
-printLO sm (ALUR _ x l i)         = makeRefList (p_spec x sm) (p_spec l sm) (p_spec i sm)
-printLO sm (Bib bib)              = makeBib sm bib
+printLO :: LayoutObj -> Doc
+printLO (HDiv ts layoutObs l)  = refwrap (p_spec l) $
+                                 div_tag ts (vcat (map printLO layoutObs))
+printLO (Paragraph contents)   = paragraph $ p_spec contents
+printLO (EqnBlock contents)    = p_spec contents
+printLO (Table ts rows r b t)  = makeTable ts rows (p_spec r) b (p_spec t)
+printLO (Definition dt ssPs l) = makeDefn dt ssPs (p_spec l)
+printLO (Header n contents _)  = h (n + 1) $ p_spec contents -- FIXME
+printLO (List t)               = makeList t
+printLO (Figure r c f wp)      = makeFigure (p_spec r) (p_spec c) (text f) wp
+printLO (ALUR _ x l i)         = makeRefList (p_spec x) (p_spec l) (p_spec i)
+printLO (Bib bib)              = makeBib bib
+printLO (Graph _ _ _ _ _)      = empty -- FIXME
 printLO _  (Graph _ _ _ _ _)      = empty -- FIXME
-
 
 -- | Called by build, uses 'printLO' to render the layout
 -- objects in Doc format.
-print :: HasSymbolTable s => [LayoutObj] -> s -> Doc
-print l sm = foldr ($$) empty $ map (printLO sm) l
+print :: [LayoutObj] -> Doc
+print l = foldr ($$) empty $ map printLO l
 
 -----------------------------------------------------------------
 --------------------BEGIN SPEC PRINTING--------------------------
 -----------------------------------------------------------------
 -- | Renders the title of the document. Different than body rendering
--- because certain things can't be rendered in an HTML title.
-title_spec :: HasSymbolTable s => Spec -> s -> String
-title_spec (a :+: b)  sm = title_spec a sm ++ title_spec b sm
-title_spec HARDNL      _ = ""
-title_spec s          sm = p_spec s sm
+-- because newline can't be rendered in an HTML title.
+title_spec :: Spec -> Doc
+title_spec (a :+: b) = title_spec a <> title_spec b
+title_spec HARDNL    = empty
+title_spec s         = p_spec s
 
 -- | Renders the Sentences in the HTML body (called by 'printLO')
-p_spec :: HasSymbolTable s => Spec -> s -> String
-p_spec (E e)        _ = p_expr e
-p_spec (a :+: b)   sm = p_spec a sm ++ p_spec b sm
-p_spec (S s)        _ = s
-p_spec (Sy s)       _ = uSymb s
-p_spec (Sp s)       _ = unPH $ special s
-p_spec HARDNL       _ = "<br />"
-p_spec (Ref _ r a) sm = reflink r (p_spec a sm)
-p_spec EmptyS       _ = ""
+p_spec :: Spec -> Doc
+p_spec (E e)             = em $ text $ p_expr e
+p_spec (a :+: b)         = p_spec a <> p_spec b
+p_spec (S s)             = text s
+p_spec (Sy s)            = text $ uSymb s
+p_spec (Sp s)            = text $ unPH $ special s
+p_spec HARDNL            = text "<br />"
+p_spec (Ref _ r a)       = reflink r $ p_spec a
+p_spec EmptyS            = text "" -- Expected in the output
+p_spec (Quote q)         = text "&quot;" <> p_spec q <> text "&quot;"
+-- p_spec (Acc Grave c)     = text $ '&' : c : "grave;" --Only works on vowels.
+-- p_spec (Acc Acute c)     = text $ '&' : c : "acute;" --Only works on vowels.
+
 
 -- | Renders symbols for HTML document
 symbol :: Symbol -> String
@@ -101,10 +103,10 @@ symbol (Corners [] [] [] [x] s) = (symbol s) ++ sub (symbol x)
 symbol (Corners [_] [] [] [] _) = error "rendering of ul prescript"
 symbol (Corners [] [_] [] [] _) = error "rendering of ll prescript"
 symbol (Corners _ _ _ _ _)      = error "rendering of Corners (general)"
-symbol (Atop S.Vector s)       = "<b>" ++ symbol s ++ "</b>"
-symbol (Atop S.Hat s)          = symbol s ++ "&#770;"
-symbol (Atop S.Prime s)        = symbol s ++ "&prime;"
-symbol Empty                 = ""
+symbol (Atop S.Vector s)        = "<b>" ++ symbol s ++ "</b>"
+symbol (Atop S.Hat s)           = symbol s ++ "&#770;"
+symbol (Atop S.Prime s)         = symbol s ++ "&prime;"
+symbol Empty                    = ""
 
 uSymb :: USymb -> String
 uSymb (US ls) = formatu t b
@@ -121,12 +123,6 @@ uSymb (US ls) = formatu t b
     pow :: (Symbol,Integer) -> String
     pow (x,1) = symbol x
     pow (x,p) = symbol x ++ sup (show p)
-{-
-uSymb (UName s)           = symbol s
-uSymb (UProd l)           = foldr1 (\x -> ((x++"&sdot;")++) ) (map uSymb l)
-uSymb (UPow s i)          = uSymb s ++ sup (show i)
-uSymb (UDiv n (UName d))  = uSymb n ++ "/" ++ uSymb (UName d)
-uSymb (UDiv n d)          = uSymb n ++ "/(" ++ (uSymb d) ++ ")"
 -}
 
 -----------------------------------------------------------------
@@ -134,28 +130,28 @@ uSymb (UDiv n d)          = uSymb n ++ "/(" ++ (uSymb d) ++ ")"
 -----------------------------------------------------------------
 -- | Renders expressions in the HTML (called by multiple functions)
 p_expr :: Expr -> String
-p_expr (Dbl d)    = showFFloat Nothing d ""
-p_expr (Int i)    = show i
-p_expr (Str s)    = s
-p_expr (Div a b) = fraction (p_expr a) (p_expr b) --Found in HTMLHelpers
-p_expr (Case ps)  = cases ps (p_expr)
-p_expr (Mtx a)    = "<table class=\"matrix\">\n" ++ p_matrix a ++ "</table>"
-p_expr (Row l) = concatMap p_expr l
-p_expr (Ident s) = s
-p_expr (Spec s) = unPH $ special s
-p_expr (Gr g) = unPH $ greek g
-p_expr (Sub e) = sub $ p_expr e
-p_expr (Sup e) = sup $ p_expr e
-p_expr (Over Hat s)     = p_expr s ++ "&#770;"
-p_expr (MO o) = p_ops o
+p_expr (Dbl d)        = showFFloat Nothing d ""
+p_expr (Int i)        = show i
+p_expr (Str s)        = s
+p_expr (Div a b)      = fraction (p_expr a) (p_expr b)
+p_expr (Case ps)      = cases ps p_expr
+p_expr (Mtx a)        = "<table class=\"matrix\">\n" ++ p_matrix a ++ "</table>"
+p_expr (Row l)        = concatMap p_expr l
+p_expr (Ident s)      = s
+p_expr (Spec s)       = unPH $ special s
+p_expr (Gr g)         = unPH $ greek g
+p_expr (Sub e)        = sub $ p_expr e
+p_expr (Sup e)        = sup $ p_expr e
+p_expr (Over Hat s)   = p_expr s ++ "&#770;"
+p_expr (MO o)         = p_ops o
 p_expr (Fenced l r e) = fence Open l ++ p_expr e ++ fence Close r
-p_expr (Font Bold e) = bold $ p_expr e
-p_expr (Font Emph e) = em $ p_expr e
-p_expr (Spc Thin) = "&#8239;"
-p_expr (Sqrt e)    = "&radic;(" ++ p_expr e ++")"
+p_expr (Font Bold e)  = bold $ p_expr e
+p_expr (Font Emph e)  = "<em>" ++ p_expr e ++ "</em>" -- FIXME
+p_expr (Spc Thin)     = "&#8239;"
+p_expr (Sqrt e)       = "&radic;(" ++ p_expr e ++")"
 
 p_ops :: Ops -> String
-p_ops IsIn = "&thinsp;&isin;&thinsp;"
+p_ops IsIn     = "&thinsp;&isin;&thinsp;"
 p_ops Integer  = "&#8484;"
 p_ops Rational = "&#8474;"
 p_ops Real     = "&#8477;"
@@ -194,12 +190,12 @@ p_ops Inte     = "&int;"
 p_ops Prod     = "&prod;"
 
 fence :: OpenClose -> Fence -> String
-fence Open Paren = "("
+fence Open  Paren = "("
 fence Close Paren = ")"
-fence Open Curly = "{"
+fence Open  Curly = "{"
 fence Close Curly = "}"
-fence _ Abs = "|"
-fence _ Norm = "||"
+fence _     Abs   = "|"
+fence _     Norm  = "||"
 
 -- | For printing Matrix
 p_matrix :: [[Expr]] -> String
@@ -217,121 +213,98 @@ p_in (x:xs) = p_in [x] ++ p_in xs
 -----------------------------------------------------------------
 
 -- | Renders HTML table, called by 'printLO'
-makeTable ::HasSymbolTable s => Tags -> [[Spec]] -> String -> Bool -> String -> s -> Doc
-makeTable _ [] _ _ _        _ = error "No table to print (see PrintHTML)"
-makeTable ts (l:lls) r b t sm = refwrap r (wrap "table" ts (
-    tr (makeHeaderCols l sm) $$ makeRows lls sm) $$ if b then caption t else empty)
+makeTable :: Tags -> [[Spec]] -> Doc -> Bool -> Doc -> Doc
+makeTable _ [] _ _ _       = error "No table to print (see PrintHTML)"
+makeTable ts (l:lls) r b t = refwrap r (wrap "table" ts (
+    tr (makeHeaderCols l) $$ makeRows lls) $$ if b then caption t else empty)
 
 -- | Helper for creating table rows
-makeRows :: HasSymbolTable s => [[Spec]] -> s -> Doc
-makeRows []      _ = empty
-makeRows (c:cs) sm = tr (makeColumns c sm) $$ makeRows cs sm
+makeRows :: [[Spec]] -> Doc
+makeRows = foldr ($$) empty . map (tr . makeColumns)
 
-makeColumns, makeHeaderCols :: HasSymbolTable s => [Spec] -> s -> Doc
+makeColumns, makeHeaderCols :: [Spec] -> Doc
 -- | Helper for creating table header row (each of the column header cells)
-makeHeaderCols ls sm = vcat $ map (th . text . flip p_spec sm) ls
+makeHeaderCols = vcat . map (th . p_spec)
 
 -- | Helper for creating table columns
-makeColumns ls sm = vcat $ map (td . text . flip p_spec sm) ls
+makeColumns = vcat . map (td . p_spec)
 
 -----------------------------------------------------------------
 ------------------BEGIN DEFINITION PRINTING----------------------
 -----------------------------------------------------------------
 
 -- | Renders definition tables (Data, General, Theory, etc.)
-makeDefn :: HasSymbolTable s => L.DType -> [(String,[LayoutObj])] -> String -> s -> Doc
-makeDefn _ [] _    _ = error "Empty definition"
-makeDefn dt ps l sm = refwrap l $ wrap "table" [dtag dt] (makeDRows ps sm)
+makeDefn :: L.DType -> [(String,[LayoutObj])] -> Doc -> Doc
+makeDefn _ [] _  = error "Empty definition"
+makeDefn dt ps l = refwrap l $ wrap "table" [dtag dt] (makeDRows ps)
   where dtag (L.Data _)   = "ddefn"
         dtag (L.Theory _) = "tdefn"
         dtag (L.General)  = "gdefn"
         dtag (L.Instance) = "idefn"
-        dtag (L.TM) = "tdefn"
-        dtag (L.DD) = "ddefn"
+        dtag (L.TM)       = "tdefn"
+        dtag (L.DD)       = "ddefn"
 
 -- | Helper for making the definition table rows
-makeDRows :: HasSymbolTable s => [(String,[LayoutObj])] -> s -> Doc
-makeDRows []          _ = error "No fields to create defn table"
-makeDRows ((f,d):[]) sm = tr (th (text f) $$ td (vcat $ map (printLO sm) d))
-makeDRows ((f,d):ps) sm = tr (th (text f) $$ td (vcat $ map (printLO sm) d)) $$ makeDRows ps sm
+makeDRows :: [(String,[LayoutObj])] -> Doc
+makeDRows []         = error "No fields to create defn table"
+makeDRows ((f,d):[]) = tr (th (text f) $$ td (vcat $ map printLO d))
+makeDRows ((f,d):ps) = tr (th (text f) $$ td (vcat $ map printLO d)) $$ makeDRows ps
 
 -----------------------------------------------------------------
 ------------------BEGIN LIST PRINTING----------------------------
 -----------------------------------------------------------------
 
 -- | Renders lists
-makeList :: HasSymbolTable s => ListType -> s -> Doc
-makeList (Simple items) sm = div_tag ["list"]
-  (vcat $ map (\(b,e) -> wrap "p" [] ((text (p_spec b sm ++ ": ") <> (p_item e sm)))) items)
-makeList (Desc items)   sm = div_tag ["list"]
-  (vcat $ map (\(b,e) -> wrap "p" [] ((wrap "b" [] (text (p_spec b sm ++ ": "))
-   <> (p_item e sm)))) items)
-makeList (Ordered items) sm = wrap "ol" ["list"] (vcat $ map
-  (wrap "li" [] . flip p_item sm) items)
-makeList (Unordered items) sm = wrap "ul" ["list"] (vcat $ map
-  (wrap "li" [] . flip p_item sm) items)
-makeList (Definitions items) sm = div_tag ["list"]
-  (vcat $ map (\(b,e) -> wrap "p" [] ((text (p_spec b sm ++ " is the") <+>
-  (p_item e sm)))) items)
+makeList :: ListType -> Doc
+makeList (Simple items) = div_tag ["list"]
+  (vcat $ map (\(b,e) -> wrap "p" [] ((p_spec b <> text ": ") <> (p_item e))) items)
+makeList (Desc items)   = div_tag ["list"]
+  (vcat $ map (\(b,e) -> wrap "p" [] ((wrap "b" [] (p_spec b <> text ": ")
+   <> (p_item e)))) items)
+makeList (Ordered items) = wrap "ol" ["list"] (vcat $ map
+  (wrap "li" [] . p_item) items)
+makeList (Unordered items) = wrap "ul" ["list"] (vcat $ map
+  (wrap "li" [] . p_item) items)
+makeList (Definitions items) = div_tag ["list"]
+  (vcat $ map (\(b,e) -> wrap "p" [] ((p_spec b <> text " is the") <+>
+  (p_item e))) items)
 
 -- | Helper for rendering list items
-p_item :: HasSymbolTable s => ItemType -> s -> Doc
-p_item (Flat s)     sm = text $ p_spec s sm
-p_item (Nested s l) sm = vcat [text (p_spec s sm),makeList l sm]
+p_item :: ItemType -> Doc
+p_item (Flat s)     = p_spec s
+p_item (Nested s l) = vcat [p_spec s, makeList l]
 
 -----------------------------------------------------------------
 ------------------BEGIN FIGURE PRINTING--------------------------
 -----------------------------------------------------------------
 -- | Renders figures in HTML
-makeFigure :: String -> String -> String -> L.MaxWidthPercent -> Doc
+makeFigure :: Doc -> Doc -> Doc -> L.MaxWidthPercent -> Doc
 makeFigure r c f wp = refwrap r (image f c wp $$ caption c)
 
------------------------------------------------------------------
-------------------BEGIN EXPR OP PRINTING-------------------------
------------------------------------------------------------------
--- | Renders expression operations/functions.
--- p_op :: Functional -> Expr -> String
--- p_op (Summation bs) x = lrgOp "&sum;" bs ++ paren (p_expr x)
--- p_op (Product bs) x = lrgOp "&prod;" bs ++ paren (p_expr x)
--- p_op (Integral bs wrtc) x = intg bs
---   ++ paren (p_expr x ++ (symbol (Atomic "d") ++ "&#8239;" ++ symbol wrtc))
-
--- | Helpers for summation/product, used by 'p_op'
--- lrgOp :: String -> Maybe ((Symbol, Expr),Expr) -> String
--- lrgOp f Nothing = f
--- lrgOp f (Just ((s,v),hi)) = f
---   ++ sub (symbol s ++ "=" ++ p_expr v)
---   ++ (sup (p_expr hi))
--- 
--- intg :: (Maybe Expr, Maybe Expr) -> String
--- intg (low, high) = "&int;" ++ maybe "" (sub . p_expr) low ++ maybe "" (sup . p_expr) high
-
 -- | Renders assumptions, requirements, likely changes
-makeRefList :: String -> String -> String -> Doc
-makeRefList a l i = refwrap l (wrap "ul" [] (text $ i ++ ": " ++ a))
+makeRefList :: Doc -> Doc -> Doc -> Doc
+makeRefList a l i = refwrap l (wrap "ul" [] (i <> text ": " <> a))
 
 ---------------------
 --HTML bibliography--
 ---------------------
 -- **THE MAIN FUNCTION**
 
-makeBib :: HasSymbolTable s => s -> BibRef -> Doc
-makeBib sm = vcat . map (\(x,(y,z)) -> makeRefList z y x) .
-  zip [sqbrac $ show x | x <- ([1..] :: [Int])] . map (renderCite sm)
-  --some function to get a numbered list, idealy it wouldn't go from string to Spec
+makeBib :: BibRef -> Doc
+makeBib = vcat . map (\(x,(y,z)) -> makeRefList z y x) .
+  zip [text $ sqbrac $ show x | x <- ([1..] :: [Int])] . map renderCite
 
 --for when we add other things to reference like website, newspaper
-renderCite :: HasSymbolTable s => s -> Citation -> (String, String)
-renderCite sm (Cite e Book cfs) = (e, renderF sm cfs useStyleBk ++ " Print.")
-renderCite sm (Cite e Article cfs) = (e, renderF sm cfs useStyleArtcl ++ " Print.")
-renderCite sm (Cite e MThesis cfs) = (e, renderF sm cfs useStyleBk ++ " Print.")
-renderCite sm (Cite e PhDThesis cfs) = (e, renderF sm cfs useStyleBk ++ " Print.")
-renderCite sm (Cite e Misc cfs) = (e, renderF sm cfs useStyleBk ++ "")
-renderCite sm (Cite e _ cfs) = (e, renderF sm cfs useStyleArtcl ++ "") --FIXME: Properly render these later.
+renderCite :: Citation -> (Doc, Doc)
+renderCite (Cite e Book cfs) = (text e, renderF cfs useStyleBk <> text " Print.")
+renderCite (Cite e Article cfs) = (text e, renderF cfs useStyleArtcl <> text " Print.")
+renderCite (Cite e MThesis cfs) = (text e, renderF cfs useStyleBk <> text " Print.")
+renderCite (Cite e PhDThesis cfs) = (text e, renderF cfs useStyleBk <> text " Print.")
+renderCite (Cite e Misc cfs) = (text e, renderF cfs useStyleBk)
+renderCite (Cite e _ cfs) = (text e, renderF cfs useStyleArtcl) --FIXME: Properly render these later.
 
-renderF :: HasSymbolTable s => s -> [CiteField] -> (StyleGuide -> (CiteField -> s -> String)) -> String
-renderF sm fields styl = unwords $
-  map (flip (styl bibStyleH) sm) (sortBy compCiteField fields)
+renderF :: [CiteField] -> (StyleGuide -> (CiteField -> Doc)) -> Doc
+renderF fields styl = hcat $ map (styl bibStyleH) (sortBy compCiteField fields)
 
 compCiteField :: CiteField -> CiteField -> Ordering
 compCiteField (Institution _) _ = LT
@@ -379,95 +352,91 @@ compCiteField _ (Note       _) = GT
 compCiteField (Type       _) _ = LT
 
 -- Config helpers --
-useStyleBk :: HasSymbolTable s => StyleGuide -> (CiteField -> s -> String)
+useStyleBk :: StyleGuide -> (CiteField -> Doc)
 useStyleBk MLA     = bookMLA
 useStyleBk APA     = bookAPA
 useStyleBk Chicago = bookChicago
 
-useStyleArtcl :: HasSymbolTable s => StyleGuide -> (CiteField -> s -> String)
+useStyleArtcl :: StyleGuide -> (CiteField -> Doc)
 useStyleArtcl MLA     = artclMLA
 useStyleArtcl APA     = artclAPA
 useStyleArtcl Chicago = artclChicago
 
 -- FIXME: move these show functions and use tags, combinators
-bookMLA :: HasSymbolTable s => CiteField -> s -> String
-bookMLA (Address s) sm = p_spec s sm ++ ":"
-bookMLA (Edition    s)  _  = comm $ show s ++ sufxer s ++ " ed."
-bookMLA (Series     s) sm  = dot $ em $ p_spec s sm
-bookMLA (Title      s) sm  = dot $ em $ p_spec s sm --If there is a series or collection, this should be in quotes, not italics
-bookMLA (Volume     s)  _  = comm $ "vol. " ++ show s
-bookMLA (Publisher  s) sm  = comm $ p_spec s sm
-bookMLA (Author     p) sm  = dot $ p_spec (rendPeople' sm p) sm
-bookMLA (Year       y)  _  = dot $ show y
---bookMLA (Date    d m y)  _ = dot $ unwords [show d, show m, show y]
---bookMLA (URLdate d m y) sm = "Web. " ++ bookMLA (Date d m y) sm
-bookMLA (BookTitle s) sm  = dot $ em $ p_spec s sm
-bookMLA (Journal    s) sm  = comm $ em $ p_spec s sm
-bookMLA (Pages      [n])  _  = dot $ "p. " ++ show n
-bookMLA (Pages  (a:b:[]))  _  = dot $ "pp. " ++ show a ++ "&ndash;" ++ show b
-bookMLA (Pages _) _ = error "Page range specified is empty or has more than two items"
-bookMLA (Note       s) sm  = p_spec s sm
-bookMLA (Number      n)  _  = comm $ "no. " ++ show n
-bookMLA (School     s) sm  = comm $ p_spec s sm
---bookMLA (Thesis     t)  _  = comm $ show t
---bookMLA (URL        s) sm  = dot $ p_spec s sm
-bookMLA (HowPublished (Verb s)) sm  = comm $ p_spec s sm
-bookMLA (HowPublished (URL s)) sm = dot $ p_spec s sm
-bookMLA (Editor     p) sm  = comm $ "Edited by " ++ p_spec (foldlList (map (flip spec sm . nameStr) p)) sm
-bookMLA (Chapter _) _ = ""
-bookMLA (Institution i) sm = comm $ p_spec i sm
-bookMLA (Organization i) sm = comm $ p_spec i sm
-bookMLA (Month m) _ = comm $ show m
-bookMLA (Type t) sm = comm $ p_spec t sm
+bookMLA :: CiteField -> Doc
+bookMLA (Address s)     = p_spec s <> text ":"
+bookMLA (Edition    s)  = comm $ text $ show s ++ sufxer s ++ " ed."
+bookMLA (Series     s)  = dot $ em $ p_spec s
+bookMLA (Title      s)  = dot $ em $ p_spec s --If there is a series or collection, this should be in quotes, not italics
+bookMLA (Volume     s)  = comm $ text $ "vol. " ++ show s
+bookMLA (Publisher  s)  = comm $ p_spec s
+bookMLA (Author     p)  = dot $ p_spec (rendPeople' p)
+bookMLA (Year       y)  = dot $ text $ show y
+--bookMLA (Date    d m y) = dot $ unwords [show d, show m, show y]
+--bookMLA (URLdate d m y) = "Web. " ++ bookMLA (Date d m y) sm
+bookMLA (BookTitle s)   = dot $ em $ p_spec s
+bookMLA (Journal    s)  = comm $ em $ p_spec s
+bookMLA (Pages      [n]) = dot $ text $ "p. " ++ show n
+bookMLA (Pages  (a:b:[])) = dot $ text $ "pp. " ++ show a ++ "&ndash;" ++ show b
+bookMLA (Pages _) = error "Page range specified is empty or has more than two items"
+bookMLA (Note       s)    = p_spec s
+bookMLA (Number      n)   = comm $ text $ ("no. " ++ show n)
+bookMLA (School     s)    = comm $ p_spec s
+--bookMLA (Thesis     t)  = comm $ show t
+--bookMLA (URL        s)  = dot $ p_spec s
+bookMLA (HowPublished (Verb s)) = comm $ p_spec s
+bookMLA (HowPublished (URL s))  = dot $ p_spec s
+bookMLA  (Editor     p)    = comm $ text "Edited by " <> p_spec (foldlList (map (S . nameStr) p))
+bookMLA (Chapter _)       = text ""
+bookMLA (Institution i)   = comm $ p_spec i
+bookMLA (Organization i)  = comm $ p_spec i
+bookMLA (Month m)         = comm $ text $ show m
+bookMLA (Type t)          = comm $ p_spec t
 
+bookAPA :: CiteField -> Doc --FIXME: year needs to come after author in APA
+bookAPA (Author   p) = p_spec (rendPeople rendPersLFM' p) --APA uses initals rather than full name
+bookAPA (Year     y) = dot $ text $ paren $ show y --APA puts "()" around the year
+--bookAPA (Date _ _ y) = bookAPA (Year y) --APA doesn't care about the day or month
+--bookAPA (URLdate d m y) = "Retrieved, " ++ (comm $ unwords [show d, show m, show y])
+bookAPA (Pages     [n])  = dot $ text $ show n
+bookAPA (Pages (a:b:[])) = dot $ text $ show a ++ "&ndash;" ++ show b
+bookAPA (Pages _) = error "Page range specified is empty or has more than two items"
+bookAPA (Editor   p)  = dot $ p_spec (foldlList $ map (S . nameStr) p) <> text " (Ed.)"
+bookAPA i = bookMLA i --Most items are rendered the same as MLA
 
-bookAPA :: HasSymbolTable s => CiteField -> s -> String --FIXME: year needs to come after author in APA
-bookAPA (Author   p) sm = needDot $ p_spec (rendPeople sm rendPersLFM' p) sm --APA uses initals rather than full name
-bookAPA (Year     y)  _ = dot $ paren $ show y --APA puts "()" around the year
---bookAPA (Date _ _ y) sm = bookAPA (Year y) sm --APA doesn't care about the day or month
---bookAPA (URLdate d m y)  _ = "Retrieved, " ++ (comm $ unwords [show d, show m, show y])
-bookAPA (Pages     [n])   _ = dot $ show n
-bookAPA (Pages (a:b:[]))  _ = dot $ show a ++ "&ndash;" ++ show b
-bookAPA (Pages _) _ = error "Page range specified is empty or has more than two items"
-bookAPA (Editor   p)  sm = dot $ p_spec (foldlList $ map ( flip spec sm . nameStr) p) sm ++ " (Ed.)"
-bookAPA i sm = bookMLA i sm --Most items are rendered the same as MLA
-
-bookChicago :: HasSymbolTable s => CiteField -> s -> String
-bookChicago (Author   p) sm = needDot $ p_spec (rendPeople sm rendPersLFM'' p) sm --APA uses middle initals rather than full name
---bookChicago (Date _ _ y) sm = bookChicago (Year y) sm --APA doesn't care about the day or month
---bookChicago (URLdate d m y)  _ = "accessed " ++ (comm $ unwords [show d, show m, show y])
-bookChicago p@(Pages  _) sm = bookAPA p sm
-bookChicago (Editor   p) sm = dot $ p_spec (foldlList $ map (flip spec sm . nameStr) p) sm ++ toPlural p " ed"
-bookChicago i sm = bookMLA i sm--Most items are rendered the same as MLA
+bookChicago :: CiteField -> Doc
+bookChicago (Author   p) = p_spec (rendPeople rendPersLFM'' p) --APA uses middle initals rather than full name
+bookChicago p@(Pages  _) = bookAPA p
+bookChicago (Editor   p) = dot $ p_spec (foldlList $ map (S . nameStr) p) <> (text $ toPlural p " ed")
+bookChicago i = bookMLA i --Most items are rendered the same as MLA
 
 -- for article renderings
-artclMLA :: HasSymbolTable s => CiteField -> s -> String
-artclMLA (Title s) = quotes . dot . p_spec s
-artclMLA i = bookMLA i
+artclMLA :: CiteField -> Doc
+artclMLA (Title s) = doubleQuotes $ dot $ p_spec s
+artclMLA i         = bookMLA i
 
-artclAPA :: HasSymbolTable s => CiteField -> s -> String
-artclAPA (Title  s) sm = dot $ p_spec s sm
-artclAPA (Volume n)  _ = em $ show n
-artclAPA (Number  n)  _ = comm $ paren $ show n
-artclAPA i sm = bookAPA i sm
+artclAPA :: CiteField -> Doc
+artclAPA (Title  s)  = dot $ p_spec s
+artclAPA (Volume n)  = em $ text $ show n
+artclAPA (Number  n) = comm $ text $ paren $ show n
+artclAPA i           = bookAPA i
 
-artclChicago :: HasSymbolTable s => CiteField -> s -> String
+artclChicago :: CiteField -> Doc
 artclChicago i@(Title    _) = artclMLA i
-artclChicago (Volume     n) = \_ -> comm $ show n
-artclChicago (Number      n) = \_ -> "no. " ++ show n
+artclChicago (Volume     n) = comm $ text $ show n
+artclChicago (Number      n) = text $ "no. " ++ show n
 artclChicago i@(Year     _) = bookAPA i
 --artclChicago i@(Date _ _ _) = bookAPA i
 artclChicago i = bookChicago i
 
 -- PEOPLE RENDERING --
+rendPeople :: (Person -> String) -> People -> Spec
+rendPeople _ []  = S "N.a." -- "No authors given"
+rendPeople f people = foldlList $ map (S . f) people --foldlList is in SentenceStructures.hs
 
-rendPeople :: HasSymbolTable s => s -> (Person -> Sentence) -> People -> Spec
-rendPeople _ _ []  = S "N.a." -- "No authors given"
-rendPeople sm f people = foldlList $ map (flip spec sm . f) people --foldlList is in SentenceStructures.hs
-
-rendPeople' :: HasSymbolTable s => s -> People -> Spec
-rendPeople' _ []  = S "N.a." -- "No authors given"
-rendPeople' sm people = foldlList $ map (flip spec sm . rendPers) (init people) ++  [spec (rendPersL $ last people) sm]
+rendPeople' :: People -> Spec
+rendPeople' []  = S "N.a." -- "No authors given"
+rendPeople' people = foldlList $ map (S . rendPers) (init people) ++  [S (rendPersL $ last people)]
 
 foldlList :: [Spec] -> Spec
 foldlList []    = EmptyS
@@ -480,21 +449,17 @@ foldle1 _ _ [x]      = x
 foldle1 _ g [x,y]    = g x y
 foldle1 f g (x:y:xs) = foldle1 f g ((f x y):xs)
 
-needDot :: String -> String
-needDot str = dotIt $ last str
-  where dotIt '.' = str
-        dotIt _   = dot str
 -- LFM is Last, First Middle
-rendPers :: Person -> Sentence
+rendPers :: Person -> String
 rendPers = rendPersLFM
 
 -- To render the last person's name
-rendPersL :: Person -> Sentence
+rendPersL :: Person -> String
 rendPersL (Person {_surname = n, _convention = Mono}) = n
 rendPersL (Person {_given = f, _surname = l, _middle = []}) =
-  isInitial l `sC` isInitial f
+  dotInitial l ++ ", " ++ dotInitial f
 rendPersL (Person {_given = f, _surname = l, _middle = ms}) =
-  isInitial l `sC` foldr1 (+:+) ([isInitial f] ++ map (isInitial) (init ms) ++ [last ms])
+  dotInitial l ++ ", " ++ foldr1 (++) (dotInitial f : map dotInitial (init ms) ++ [last ms])
 
 --adds an 's' if there is more than one person in a list
 toPlural :: People -> String -> String

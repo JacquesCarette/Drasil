@@ -13,7 +13,7 @@ import Language.Drasil.Document (MaxWidthPercent)
 -- Infrastructre for defining commands, environments, etc.
 --   (calls to TP should only occur in this section)
 
-br, sq, parens :: D -> D
+br, sq, parens, quote :: D -> D
 br x = lb <> x <> rb
   where
   lb = pure $ text "{"
@@ -26,6 +26,10 @@ parens x = lp <> x <> rp
   where
   lp = pure $ text "("
   rp = pure $ text ")"
+quote x = lq <> x <> rq
+  where
+  lq = pure $ text "``"
+  rq = pure $ text "''"
 
 -- Make 1-argument command
 command :: String -> (String -> D)
@@ -148,6 +152,10 @@ sec d b1 = genSec d <> br b1
 subscript, superscript :: D -> D -> D
 subscript a b = a <> (pure $ H.unders) <> br b
 superscript a b = a <> (pure $ H.hat) <> br b
+
+-- grave, acute :: Char -> D
+-- grave c = (pure $ text "\\`{") <> pure (TP.char c) <> (pure $ text "}")
+-- acute c = (pure $ text "\\'{") <> pure (TP.char c) <> (pure $ text "}")
 
 -- Macro / Command def'n --
 --TeX--

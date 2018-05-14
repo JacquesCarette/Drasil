@@ -15,7 +15,6 @@ import Drasil.GlassBR.Unitals (tNT, sdWithEqn, demand, standOffDist,
   lRe, risk_fun, prob_br)
 import Drasil.GlassBR.DataDefs (nonFL, risk, glaTyFac)
 import Drasil.GlassBR.Concepts (lResistance, glassTypeFac, lShareFac)
-{--}
 
 iModels :: [RelationConcept]
 iModels = [probOfBr, calOfCap, calOfDe]
@@ -23,7 +22,8 @@ iModels = [probOfBr, calOfCap, calOfDe]
 {--}
 
 probOfBreak :: InstanceModel
-probOfBreak = im probOfBr [qw risk] [TCon AssumedCon $ sy risk $> 0] [qw prob_br] [TCon AssumedCon $ sy prob_br $> 0] []
+probOfBreak = im probOfBr [qw risk] 
+  [TCon AssumedCon $ sy risk $> 0] (qw prob_br) [TCon AssumedCon $ sy prob_br $> 0] []
 
 {--}
 

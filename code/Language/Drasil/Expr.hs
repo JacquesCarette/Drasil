@@ -4,12 +4,8 @@ module Language.Drasil.Expr where
 
 import Data.Ratio (numerator,denominator)
 import Prelude hiding (sqrt)
-import Language.Drasil.Chunk (Chunk(..))
 import Language.Drasil.Symbol
-import Language.Drasil.Chunk.SymbolForm
 import Language.Drasil.Space (Space(..))
-
-import Control.Lens ((^.))
 
 --FIXME: Haddock open issue #43 seems to make it so GADT constructors cannot
 -- be documented properly
@@ -49,7 +45,7 @@ data Expr where
   -- Derivative, syntax is:
   -- Type (Partial or total) -> principal part of change -> with respect to
   -- For example: Deriv Part y x1 would be (dy/dx1)
-  C        :: UID -> Expr -- Chunk (must have a symbol)
+  C        :: UID -> Expr -- implicitly assumes has a symbol
   FCall    :: Expr -> [Expr] -> Expr -- F(x) is (FCall F [x]) or similar
                                   -- FCall accepts a list of params
                                   -- F(x,y) would be (FCall F [x,y]) or sim.
@@ -84,13 +80,6 @@ a $/ b = BinaryOp Frac a b
 ($^) = BinaryOp Pow
 a $&& b = AssocB And [a,b]
 a $|| b = AssocB Or  [a,b]
-
-sy :: (Chunk c, HasSymbol c) => c -> Expr
-sy x = C (x ^. uid)
-
-deriv, pderiv :: (Chunk c, HasSymbol c) => Expr -> c -> Expr
-deriv e c = Deriv Total e (c^.uid)
-pderiv e c = Deriv Part e (c^.uid)
 
 type Variable = String
 

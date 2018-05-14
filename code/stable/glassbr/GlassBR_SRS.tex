@@ -1,4 +1,5 @@
 \documentclass[12pt]{article}
+\usepackage{fontspec}
 \usepackage{fullpage}
 \usepackage{hyperref}
 \hypersetup{bookmarks=true,colorlinks=true,linkcolor=red,citecolor=blue,filecolor=magenta,urlcolor=cyan}
@@ -23,7 +24,7 @@
 \newcommand{\lcthelcnum}{LC\thelcnum}
 \bibliography{bibfile}
 \title{Software Requirements Specification for GlassBR program}
-\author{Nikitha Krithnan and W. Spencer Smith}
+\author{NikithaKrithnan and W.SpencerSmith}
 \begin{document}
 \maketitle
 \tableofcontents
@@ -33,7 +34,7 @@
 This section records information for easy reference.
 \subsection{Table of Units}
 \label{Sec:ToU}
-The unit system used throughout is SI (Syst\`{e}me International d'Unit\'{e}s). In addition to the basic units, several derived units are also used. For each unit, the table lists the symbol, a description and the SI name.
+The unit system used throughout is SI (Système International d'Unités). In addition to the basic units, several derived units are also used. For each unit, the table lists the symbol, a description and the SI name.
 \begin{longtable*}{l l}
 \toprule
 Symbol & Description
@@ -76,7 +77,7 @@ ${d_{min}}$ & Minimum value for one of the dimensions of the glass plate & mm
 \\
 $E$ & Modulus of elasticity of glass & Pa
 \\
-$g$ & Glass type $g\in{}\{AN, FT, HS\}$ & 
+$g$ & Glass type $g\in{}\{AN,FT,HS\}$ & 
 \\
 $GTF$ & Glass type factor & 
 \\
@@ -124,7 +125,7 @@ ${SD_{y}}$ & Stand off distance (y-component) & m
 \\
 ${SD_{z}}$ & Stand off distance (z-component) & m
 \\
-$t$ & Nominal thickness $t\in{}\{2.5, 2.7, 3.0, 4.0, 5.0, 6.0, 8.0, 10.0, 12.0, 16.0, 19.0, 22.0\}$ & mm
+$t$ & Nominal thickness $t\in{}\{2.5,2.7,3.0,4.0,5.0,6.0,8.0,10.0,12.0,16.0,19.0,22.0\}$ & mm
 \\
 ${t_{d}}$ & Duration of load & s
 \\
@@ -198,7 +199,7 @@ The following section provides an overview of the Software Requirements Specific
 \subsection{Purpose of Document}
 \label{Sec:DocPurpose}
 The main purpose of this document is to predict whether a given glass slab is likely to resist a specified blast. The goals and theoretical models used in the GlassBR code are provided, with an emphasis on explicitly identifying assumptions and unambiguous definitions. This document is intended to be used as a reference to provide all information necessary to understand and verify the analysis. The SRS is abstract because the contents say what problem is being solved, but not how to solve it.
-This document will be used as a starting point for subsequent development phases, including writing the design specification and the software verification and validation plan. The design document will show how the requirements are to be realized, including decisions on the numerical algorithms and programming environment. The verification and validation plan will show the steps that will be used to increase confidence in the software documentation and the implementation. Although the SRS fits in a series of documents that follow the so-called waterfall model, the actual development process is not constrained in any way. Even when the waterfall model is not followed, as Parnas and Clements point out, the most logical way to present the documentation is still to ``fake" a rational design process.
+This document will be used as a starting point for subsequent development phases, including writing the design specification and the software verification and validation plan. The design document will show how the requirements are to be realized, including decisions on the numerical algorithms and programming environment. The verification and validation plan will show the steps that will be used to increase confidence in the software documentation and the implementation. Although the SRS fits in a series of documents that follow the so-called waterfall model, the actual development process is not constrained in any way. Even when the waterfall model is not followed, as Parnas and Clements point out, the most logical way to present the documentation is still to ``fake'' a rational design process.
 \subsection{Scope of Requirements}
 \label{Sec:ReqsScope}
 The scope of the requirements includes getting all input parameters related to the glass slab and also the parameters related to blast type. Given the appropriate inputs, the code for GlassBR is intended to use the data and predict whether the glass slab is safe to use or not.
@@ -214,7 +215,7 @@ The goal statements are refined to the theoretical models, and the theoretical m
 This section describes the Stakeholders: the people who have an interest in the product.
 \subsection{The Client}
 \label{Sec:Client}
-The client for GlassBR is a company named Entuitive. It is developed by Dr. Manuel Campidelli. The client has the final say on acceptance of the product.
+The client for GlassBR is a company named Entuitive. It is developed by Dr. ManuelCampidelli. The client has the final say on acceptance of the product.
 \subsection{The Customer}
 \label{Sec:Customer}
 The customers are the end user of GlassBR.
@@ -223,11 +224,11 @@ The customers are the end user of GlassBR.
 This section provides general information about the system, identifies the interfaces between the system and its environment, and describes the user characteristics and the system constraints.
 \subsection{User Characteristics}
 \label{Sec:UserChars}
-\begin{enumerate}
+\begin{itemize}
 \item{The end user of GlassBR is expected to have completed at least the equivalent of the second year of an undergraduate degree in civil engineering or structural engineering.}
 \item{The end user is expected to have an understanding of theory behind glass breakage and blast risk.}
 \item{The end user is expected to have basic computer literacy to handle the software.}
-\end{enumerate}
+\end{itemize}
 \subsection{System Constraints}
 \label{Sec:SysConstraints}
 There are no system constraints.
@@ -261,7 +262,7 @@ A system is needed to efficiently and correctly predict the blast risk involved 
 \subsubsection{Terminology and Definitions}
 \label{Sec:TermDefs}
 This subsection provides a list of terms that are used in the subsequent sections and their meaning, with the purpose of reducing ambiguity and making it easier to correctly understand the requirements. All of the terms are extracted from {[}4{]} in Section~\ref{Sec:References}.
-\begin{itemize}
+\begin{enumerate}
 \item{Glass breakage - The fracture or breakage of any lite or ply in monolithic, laminated, or insulating glass.}
 \item{Lateral - Perpendicular to the glass surface.}
 \item{Lite - Pieces of glass that are cut, prepared, and used to create the window or door.}
@@ -269,26 +270,26 @@ This subsection provides a list of terms that are used in the subsequent section
 \item{Blast resistant glazing - Glazing that provides protection against air blast pressure generated by explosions.}
 \item{Equivalent TNT charge mass - Mass of TNT placed on the ground in a hemisphere that represents the design explosive threat.}
 \item{Glass Type:}
-\begin{enumerate}
+\begin{itemize}
 \item{Annealed glass (AN) - A flat, monolithic, glass lite which has uniform thickness where the residual surface stresses are almost zero, as defined in [5].}
 \item{Fully tempered glass (FT) - A flat and monolithic, glass lite of uniform thickness that has been subjected to a special heat treatment process where the residual surface compression is not less than 69 MPa (10 000 psi) or the edge compression not less than 67 MPa (9700 psi), as defined in [6].}
 \item{Heat strengthened glass (HS) - A flat, monolithic, glass lite of uniform thickness that has been subjected to a special heat treatment process where the residual surface compression is not less than 24 MPa (3500psi) or greater than 52 MPa (7500 psi), as defined in [6].}
-\end{enumerate}
+\end{itemize}
 \item{Load:}
-\begin{enumerate}
+\begin{itemize}
 \item{Load resistance (LR) - The uniform lateral load that a glass construction can sustain based upon a given probability of breakage and load duration as defined in [4 (pg. 1, 53)], following A2 and A1 respectively.}
 \item{Non-factored load (NFL) - Three second duration uniform load associated with a probability of breakage less than or equal to 8 lites per 1000 for monolithic AN glass.}
 \item{Glass weight load - The dead load component of the glass weight.}
 \item{Short duration load - Any load lasting 3s or less.}
 \item{Specified design load - The magnitude in kPa (psf), type (for example, wind or snow) and duration of the load given by the specifying authority.}
 \item{Long duration load - Any load lasting approximately 30 days.}
-\end{enumerate}
+\end{itemize}
 \item{Stand off distance (SD) - The distance from the glazing surface to the centroid of a hemispherical high explosive charge. It is represented by the coordinates (${SD_{x}}$, ${SD_{y}}$, ${SD_{z}}$).}
 \item{Load share factor (LSF) - A multiplying factor derived from the load sharing between the double glazing, of equal or different thickness's and types (including the layered behaviour of LG under long duration loads), in a sealed IG unit.}
 \item{Glass type factor (GTF) - A multiplying factor for adjusting the LR of different glass type, that is, AN, FT, or HS, in monolithic glass, LG (Laminated Glass), or IG (Insulating Glass) constructions.}
 \item{Aspect ratio (AR) - The ratio of the long dimension of the glass to the short dimension of the glass. For glass supported on four sides, the aspect ratio is always equal to or greater than 1.0. For glass supported on three sides, the ratio of the length of one of the supported edges perpendicular to the free edge, to the length of the free edge, is equal to or greater than 0.5.}
 \item{Probability of breakage (${P_{b}}$) - The fraction of glass lites or plies that would break at the first occurrence of a specified load and duration, typically expressed in lites per 1000.}
-\end{itemize}
+\end{enumerate}
 \subsubsection{Physical System Description}
 \label{Sec:PhysSyst}
 The physical system of GlassBR, as shown in Figure~\ref{Figure:physSystImage}, includes the following elements:
@@ -393,7 +394,7 @@ Symbol & $B$
 \\ \midrule \\
 Units & Unitless
 \\ \midrule \\
-Equation & $B$ = $\frac{k}{\left(a b\right)^{m-1}} \left(1000 E h^{2}\right)^{m} LDF e^{J}$
+Equation & $B=\frac{k}{\left(a b\right)^{m-1}} \left(1000 E h^{2}\right)^{m} LDF e^{J}$
 \\ \midrule \\
 Description & \begin{description}
               \item{$B$ is the risk of failure (Unitless)}
@@ -425,7 +426,7 @@ Symbol & $h$
 \\ \midrule \\
 Units & m
 \\ \midrule \\
-Equation & $h$ = $\frac{1}{1000} \begin{cases}
+Equation & $h=\frac{1}{1000} \begin{cases}
 2.16, & t=2.5\\
 2.59, & t=2.7\\
 2.92, & t=3.0\\
@@ -440,14 +441,7 @@ Equation & $h$ = $\frac{1}{1000} \begin{cases}
 21.44, & t=22.0
 \end{cases}$
 \\ \midrule \\
-Description & \begin{description}
-              \item{$h$ is the actual thickness (m)}
-              \item{$t$ is the nominal thickness $t\in{}\{2.5,2.7,3.0,4.0,5.0,6.0,8.0,10.0,12.0,16.0,19.0,22.0\}$ (mm)}
-              \end{description}
-\\ \midrule \\
-Source & 
-\\ \midrule \\
-RefBy & FIXME: This needs to be filled in
+Description & $h$ is the actual thickness (m)\newline$t$ is the nominal thickness $t\in{}\{2.5,2.7,3.0,4.0,5.0,6.0,8.0,10.0,12.0,16.0,19.0,22.0\}$ (mm)
 \\ \bottomrule \end{tabular}
 \end{minipage}\\
 ~\newline
@@ -463,7 +457,7 @@ Symbol & $J$
 \\ \midrule \\
 Units & Unitless
 \\ \midrule \\
-Equation & $J$ = $J\left(\hat{q}, \frac{a}{b}\right)$
+Equation & $J=J\left(\hat{q},\frac{a}{b}\right)$
 \\ \midrule \\
 Description & \begin{description}
               \item{$J$ is the stress distribution factor (Function) (Unitless)}
@@ -491,7 +485,7 @@ Symbol & $NFL$
 \\ \midrule \\
 Units & Unitless
 \\ \midrule \\
-Equation & $NFL$ = $\frac{{\hat{q}_{tol}} E h^{4}}{\left(a b\right)^{2}}$
+Equation & $NFL=\frac{{\hat{q}_{tol}} E h^{4}}{\left(a b\right)^{2}}$
 \\ \midrule \\
 Description & \begin{description}
               \item{$NFL$ is the non-factored load (Unitless)}
@@ -520,20 +514,13 @@ Symbol & $GTF$
 \\ \midrule \\
 Units & Unitless
 \\ \midrule \\
-Equation & $GTF$ = $\begin{cases}
+Equation & $GTF=\begin{cases}
 1, & g=AN\\
 4, & g=FT\\
 2, & g=HS
 \end{cases}$
 \\ \midrule \\
-Description & \begin{description}
-              \item{$GTF$ is the glass type factor (Unitless)}
-              \item{$g$ is the glass type $g\in{}\{AN,FT,HS\}$ (Unitless)}
-              \end{description}
-\\ \midrule \\
-Source & 
-\\ \midrule \\
-RefBy & FIXME: This needs to be filled in
+Description & $GTF$ is the glass type factor\newline$g$ is the glass type $g\in{}\{AN,FT,HS\}$
 \\ \bottomrule \end{tabular}
 \end{minipage}\\
 ~\newline
@@ -549,7 +536,7 @@ Symbol & $\hat{q}$
 \\ \midrule \\
 Units & Unitless
 \\ \midrule \\
-Equation & $\hat{q}$ = $\frac{q \left(a b\right)^{2}}{E h^{4} GTF}$
+Equation & $\hat{q}=\frac{q \left(a b\right)^{2}}{E h^{4} GTF}$
 \\ \midrule \\
 Description & \begin{description}
               \item{$\hat{q}$ is the dimensionless load (Unitless)}
@@ -579,7 +566,7 @@ Symbol & ${\hat{q}_{tol}}$
 \\ \midrule \\
 Units & Unitless
 \\ \midrule \\
-Equation & ${\hat{q}_{tol}}$ = ${\hat{q}_{tol}}\left({J_{tol}}, \frac{a}{b}\right)$
+Equation & ${\hat{q}_{tol}}={\hat{q}_{tol}}\left({J_{tol}},\frac{a}{b}\right)$
 \\ \midrule \\
 Description & \begin{description}
               \item{${\hat{q}_{tol}}$ is the tolerable load (Unitless)}
@@ -607,7 +594,7 @@ Symbol & ${J_{tol}}$
 \\ \midrule \\
 Units & Unitless
 \\ \midrule \\
-Equation & ${J_{tol}}$ = $\log\left(\log\left(\frac{1}{1-{P_{btol}}}\right) \frac{\left(a b\right)^{m-1}}{k \left(1000 E h^{2}\right)^{m} LDF}\right)$
+Equation & ${J_{tol}}=\log\left(\log\left(\frac{1}{1-{P_{btol}}}\right) \frac{\left(a b\right)^{m-1}}{k \left(1000 E h^{2}\right)^{m} LDF}\right)$
 \\ \midrule \\
 Description & \begin{description}
               \item{${J_{tol}}$ is the stress distribution factor (Function) based on Pbtol (Unitless)}
@@ -675,34 +662,7 @@ Label & Calculation of Capacity(LR)
 \\ \midrule \\
 Input & $NFL$, $GTF$, $LSF$
 \\ \midrule \\
-Output & $LR$
-\\ \midrule \\
-Input Constraints & \begin{dmath}
-                    NFL>0
-                    \end{dmath}
-                    \begin{dmath}
-                    GTF>0
-                    \end{dmath}
-                    \begin{dmath}
-                    LSF>0
-                    \end{dmath}
-\\ \midrule \\
-Output Constraints & 
-\\ \midrule \\
-Equation & \begin{dmath}
-           LR=NFL GTF LSF
-           \end{dmath}
-\\ \midrule \\
-Description & \begin{description}
-              \item{$LR$ is the load resistance (Unitless)}
-              \item{$NFL$ is the non-factored load (Unitless)}
-              \item{$GTF$ is the glass type factor (Unitless)}
-              \item{$LSF$ is the load share factor (Unitless)}
-              \end{description}
-\\ \midrule \\
-Source & 
-\\ \midrule \\
-RefBy & FIXME: This needs to be filled in
+Description & $LR$ is the load resistance, which is also called capacity. $NFL$ is the non-factored load. $GTF$ is the glass type factor. $LSF$ is the load share factor. Follows A2 and A1 (``In the development of this procedure, it was assumed that all four edges of the glass are simply supported and free to slip in the plane of the glass. This boundary condition has been shown to be typical of many glass installations'') from [4 (pg. 53)].
 \\ \bottomrule \end{tabular}
 \end{minipage}\\
 ~\newline
@@ -714,7 +674,7 @@ RefBy & FIXME: This needs to be filled in
 \\ \midrule \\
 Label & Calculation of Demand(q)
 \\ \midrule \\
-Input & $q$, ${w_{TNT}}$, $SD$
+Equation & $q=q\left({w_{TNT}},SD\right)$
 \\ \midrule \\
 Output & $q$
 \\ \midrule \\
@@ -805,7 +765,7 @@ This section provides the functional requirements, the business tasks that the s
 \end{description}
 \begin{itemize}
 \item[R6:]Output the following quantities:
-          \begin{enumerate}
+          \begin{itemize}
           \item{Probability of breakage (${P_{b}}$) (\hyperref[T:probOfBr]{Definition~T:probOfBr})}
           \item{Load resistance ($LR$) (\hyperref[T:calOfCap]{Definition~T:calOfCap})}
           \item{Applied load (demand) ($q$) (\hyperref[T:calOfDe]{Definition~T:calOfDe})}
@@ -817,7 +777,7 @@ This section provides the functional requirements, the business tasks that the s
           \item{Stress distribution factor (Function) ($J$) (\hyperref[DD:stressDistFac]{Definition~DD:stressDistFac})}
           \item{Actual thickness ($h$) (\hyperref[DD:act.thick]{Definition~DD:act.thick})}
           \item{Aspect Ratio ($AR$) $AR=\frac{a}{b}$}
-          \end{enumerate}
+          \end{itemize}
 \end{itemize}
 \begin{longtabu}{l X[l] l}
 \toprule
@@ -840,9 +800,9 @@ ${SD_{y}}$ & Stand off distance (y-component) & m
 \\
 ${SD_{z}}$ & Stand off distance (z-component) & m
 \\
-$g$ & Glass type $g\in{}\{AN, FT, HS\}$ & Unitless
+$g$ & Glass type $g\in{}\{AN,FT,HS\}$ & Unitless
 \\
-$t$ & Nominal thickness $t\in{}\{2.5, 2.7, 3.0, 4.0, 5.0, 6.0, 8.0, 10.0, 12.0, 16.0, 19.0, 22.0\}$ & mm
+$t$ & Nominal thickness $t\in{}\{2.5,2.7,3.0,4.0,5.0,6.0,8.0,10.0,12.0,16.0,19.0,22.0\}$ & mm
 \\
 \bottomrule
 \caption{Required Inputs following R1}
@@ -870,7 +830,7 @@ This problem is small in size and relatively simple, so performance is not a pri
 \end{description}
 \section{Traceability Matrices and Graphs}
 \label{Sec:TraceMatrices}
-The purpose of the traceability matrices is to provide easy references on what has to be additionally modified if a certain component is changed. Every time a component is changed, the items in the column of that component that are marked with an ``X" should be modified as well. Table~\ref{Table:TraceyItemSecs} shows the dependencies of theoretical models, instance models, and data definitions with each other. Table~\ref{Table:TraceyReqsItems} shows the dependencies of requirements on theoretical models, instance models, data definitions, and data constraints. Table~\ref{Table:TraceyAssumpsOthers} shows the dependencies of theoretical models, instance models, data definitions, likely changes and requirements on the assumptions.
+The purpose of the traceability matrices is to provide easy references on what has to be additionally modified if a certain component is changed. Every time a component is changed, the items in the column of that component that are marked with an ``X'' should be modified as well. Table~\ref{Table:TraceyItemSecs} shows the dependencies of theoretical models, instance models, and data definitions with each other. Table~\ref{Table:TraceyReqsItems} shows the dependencies of requirements on theoretical models, instance models, data definitions, and data constraints. Table~\ref{Table:TraceyAssumpsOthers} shows the dependencies of theoretical models, instance models, data definitions, likely changes and requirements on the assumptions.
 \begin{longtable}{l l l l l l l l l l l l l l}
 \toprule
  & T1 (\hyperref[T:t1SafetyReq]{Definition~T:t1SafetyReq}) & T2 (\hyperref[T:t2SafetyReq]{Definition~T:t2SafetyReq}) & IM1 (\hyperref[T:probOfBr]{Definition~T:probOfBr}) & IM2 (\hyperref[T:calOfCap]{Definition~T:calOfCap}) & IM3 (\hyperref[T:calOfDe]{Definition~T:calOfDe}) & DD1 (\hyperref[DD:risk.fun]{Definition~DD:risk.fun}) & DD2 (\hyperref[DD:act.thick]{Definition~DD:act.thick}) & DD3 (\hyperref[DD:stressDistFac]{Definition~DD:stressDistFac}) & DD4 (\hyperref[DD:nFL]{Definition~DD:nFL}) & DD5 (\hyperref[DD:gTF]{Definition~DD:gTF}) & DD6 (\hyperref[DD:dimlessLoad]{Definition~DD:dimlessLoad}) & DD7 (\hyperref[DD:tolLoad]{Definition~DD:tolLoad}) & DD8 (\hyperref[DD:sdf.tol]{Definition~DD:sdf.tol})
@@ -1073,7 +1033,7 @@ year={2009},
 howpublished={\url{www.astm.org}}}
 
 @misc{glThick1998,
-author={Beason, W. Lynn and Kohutek, Terry L. and Bracci, Joseph M.},
+author={Beason, W.Lynn and Kohutek, TerryL. and Bracci, JosephM.},
 title={Basis for ASTME E 1300 Annealed Glass Thickness Selection Charts},
 booktitle={ASCE Library},
 month={feb},
@@ -1094,7 +1054,7 @@ howpublished={\url{https://pdfs.semanticscholar.org/cf57/27a59801086cbd3d14e587e
 year={2012}}
 
 @inproceedings{smithLai2005,
-author={Smith, W. Spencer and Lai, Lei},
+author={Smith, W.Spencer and Lai, Lei},
 title={A new requirements template for scientific computing},
 booktitle={Proceedings of the First International Workshop on Situational Requirements Engineering Processes - Methods, Techniques and Tools to Support Situation-Specific Requirements Engineering Processes, SREP'05},
 year={2005},

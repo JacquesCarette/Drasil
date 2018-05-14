@@ -48,7 +48,9 @@ htTransCladFuel = fromEqn "htTransCladFuel" (nounPhraseSP
 htTransCladFuel_eq = (2 * (sy cladCond) * (sy gapFilmCond)) / (2 * (sy cladCond)
   + ((sy cladThick) * (sy gapFilmCond)))
 
-hghc, nuclearPhys, fp :: NamedChunk
-hghc = nc "hghc" (cn "tiny")
+hghc :: CommonConcept
+hghc = dcc' "hghc" (cn "tiny") "HGHC program" "HGHC"
+
+nuclearPhys, fp :: NamedChunk
 nuclearPhys = nc "nuclearPhys" (nounPhraseSP "nuclear physics")
 fp = nc "fp" (cn "FP")

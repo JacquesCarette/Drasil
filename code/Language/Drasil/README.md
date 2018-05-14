@@ -4,15 +4,15 @@
 
 **Chunk**
   - Contains different chunk data structures, classes, and helpers
-  
+
 **Code**
   - Code AST and necessary files for code generation. Includes GOOL
-  
+
 **Expr**
   - Contains helpers for the expression language
-  
+
 **HTML**
-  - HTML AST and necessary files for HTML output generation
+  - HTML Renderer - necessary files for HTML output generation
 
 **Make**
   - AST for makefile creation for each of the output formats
@@ -21,10 +21,10 @@
   - List of output formats
 
 **Printing**
-  - Helpers for printing
+  - AST for printing TeX and HTML, as well as helper functions for printing
 
 **TeX**
-  - TeX AST and necessary files for TeX output generation
+  - TeX Renderer - necessary files for TeX output generation
 
 **URI**
   - URI AST
@@ -32,11 +32,20 @@
 Chunk.hs
   - Base chunk
 
+ChunkDB.hs
+  - Chunk databases. Used by System Information for looking up knowledge.
+
 Code.hs
   - Re-export code generation modules
 
+CodeSpec.hs
+  - Code specification module.
+
 Config.hs
   - Global example configuration file for output generation
+
+DataDesc.hs
+  - Data description language for code generation.
 
 Document.hs
   - Drasil internal documentation representation
@@ -62,18 +71,16 @@ People.hs
 README.md
   - This file
 
-Recipe.hs
-  - Recipe data type
-
-RefHelper.hs
-  - Helper functions for references
+RefTypes.hs
+  - Types of supported inter-document references
 
 Reference.hs
-  - Reference creation function
+  - Reference creation. Used for inter-document referencing and extra-document
+  citations.
 
 Setup.hs
   - Used by cabal
-  
+
 Space.hs
   - Space data type
 
@@ -91,5 +98,7 @@ Unicode.hs
   - Contains special symbols including Unicode and Greek symbols
 
 Unit.hs
-  - Language of Units
+  - Language of Units - Combinators, etc
   
+UnitLang.hs
+  - Base Unit data types

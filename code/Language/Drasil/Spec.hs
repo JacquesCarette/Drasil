@@ -8,9 +8,6 @@ import Language.Drasil.Expr
 import Language.Drasil.RefTypes
 import Language.Drasil.UnitLang (USymb)
 
--- | For writing accented characters
-data Accent = Grave | Acute deriving Eq
-
 -- | One slight hack remaining
 type RefName = Sentence
 
@@ -27,8 +24,6 @@ data Sentence where
   S     :: String -> Sentence       -- Strings, used for Descriptions in Chunks
   Sp    :: Special -> Sentence
   P     :: Symbol -> Sentence
-  F     :: Accent -> Char -> Sentence  -- Special formatting for certain special
-                                       -- chars
   Ref   :: RefType -> RefAdd -> RefName -> Sentence  -- Needs helper func to create Ref
                                     -- See Reference.hs
   Quote :: Sentence -> Sentence     -- Adds quotation marks around a sentence

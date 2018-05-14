@@ -18,6 +18,7 @@ import Data.Drasil.Units.PhysicalProperties (densityU)
 import Data.Drasil.Utils(mkDataDef)
 import Data.Drasil.Quantities.Math (gradient)
 import Data.Drasil.Constraints (gtZeroConstr)
+import Data.Drasil.Phrase (of_)
 
 swhsSymbols :: [DefinedQuantityDict]
 swhsSymbols = (map cqs swhsUnits) ++ (map cqs swhsUnitless) ++

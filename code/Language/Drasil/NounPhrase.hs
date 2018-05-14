@@ -7,13 +7,17 @@ module Language.Drasil.NounPhrase
   , nounPhrase, nounPhrase', nounPhrase'', nounPhraseSP, nounPhraseSent
   , compoundPhrase, compoundPhrase', compoundPhrase'', compoundPhrase'''
   , at_start, at_start', titleize, titleize'
-  , CapitalizationRule(..)
-  , PluralRule(..)
-  )where
+  -- re-export these
+  , CapitalizationRule(..), PluralRule(..)
+  ) where
 
 import Data.Char (toUpper, toLower)
 import Data.List (intersperse)
+
+import Language.Drasil.NounPhrase.Core
 import Language.Drasil.Spec (Sentence(..), (+:+))
+
+
 --Linguistically, nounphrase might not be the best name (yet!), but once
 -- it is fleshed out and/or we do more with it, it will likely be a good fit
 
@@ -29,17 +33,8 @@ class NounPhrase n where
   titleCase :: n -> (NP -> Sentence) -> Capitalization
 
 type Capitalization = Sentence  --Using type synonyms for clarity.
-type PluralForm     = Sentence  -- These might change.
 type PluralString   = String
 
-data NP where
-  ProperNoun :: String -> PluralRule -> NP
-  CommonNoun :: String -> PluralRule -> CapitalizationRule -> NP
-  Phrase     :: Sentence -> PluralForm -> CapitalizationRule -> CapitalizationRule -> NP
-  --Phrase plurals can get very odd, so it seems best (for now) to encode
-  --them directly. FIXME: If the singular/plural phrase has special (replace)
-  --capitalization, one of the two cannot be capitalized right now.
-  --The two capitalization rules are for sentenceCase / titleCase respectively
 instance NounPhrase NP where
   phrase (ProperNoun n _)       = S n
   phrase (CommonNoun n _ _)     = S n
@@ -184,21 +179,6 @@ titleize, titleize' :: NounPhrase n => n -> Capitalization
 titleize  n = titleCase n phrase
 -- | Plural title case.
 titleize' n = titleCase n plural
-
--- | Capitalization rules.
-data CapitalizationRule = CapFirst -- ^ Capitalize the first letter of the first word only.
-                        | CapWords -- ^ Capitalize the first letter of each word.
-                        | Replace Sentence -- ^ Replace the noun phrase with the
-                                           -- given Sentence. Used for custom
-                                           -- capitalization.
-
--- | Pluralization rules.
-data PluralRule = AddS -- ^ Add "s" to the end of the noun phrase.
-                | AddE -- ^ Add "e" to the end of the noun phrase.
-                | AddES -- ^ Add "es" to the end of the noun phrase.
-                | SelfPlur -- ^ The noun phrase is already plural.
-                | IrregPlur (String -> String) -- ^ Apply the given function to
-                                               -- the noun phrase to get the plural.
 
 -- DO NOT EXPORT --                
 -- | Pluralization helper function.

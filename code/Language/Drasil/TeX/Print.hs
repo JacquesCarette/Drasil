@@ -11,7 +11,7 @@ import Control.Arrow (second)
 import Language.Drasil.Printing.AST
 import Language.Drasil.Printing.Citation
 import Language.Drasil.Printing.LayoutObj
-import qualified Language.Drasil.TeX.Import as I
+import qualified Language.Drasil.Printing.Import as I
 import qualified Language.Drasil.Spec as LS
 import qualified Language.Drasil.RefTypes as RT
 import Language.Drasil.UnitLang
@@ -231,6 +231,7 @@ needs (Sp _)    = Math
 needs HARDNL    = Text
 needs (Ref _ _ _) = Text
 needs (EmptyS)  = Text
+needs (Quote _) = Text
 
 -- print all Spec through here
 spec :: Spec -> D
@@ -243,17 +244,18 @@ spec (E ex)      = toMath $ pure $ text $ p_expr ex
 spec (S s)       = pure $ text (concatMap escapeChars s)
 spec (Sy s)      = p_unit s
 spec (Sp s)      = pure $ text $ unPL $ special s
-spec HARDNL      = pure $ text $ "\\newline"
-spec (Ref t@RT.Sect _ r) = sref (show t) (spec r)
-spec (Ref t@RT.Def _ r)  = hyperref (show t) (spec r)
-spec (Ref RT.Mod _ r)    = mref  (spec r)
-spec (Ref RT.Req _ r)    = rref  (spec r)
-spec (Ref RT.Assump _ r) = aref  (spec r)
-spec (Ref RT.LC _ r)     = lcref (spec r)
-spec (Ref RT.UC _ r)     = ucref (spec r)
-spec (Ref RT.Cite _ r)   = cite  (spec r)
-spec (Ref t _ r)         = ref (show t) (spec r)
-spec EmptyS      = empty
+spec HARDNL      = pure $ text "\\newline"
+spec (Ref t@RT.Sect r _) = sref (show t) (pure $ text r)
+spec (Ref t@RT.Def r _)  = hyperref (show t) (pure $ text r)
+spec (Ref RT.Mod r _)    = mref  (pure $ text r)
+spec (Ref RT.Req r _)    = rref  (pure $ text r)
+spec (Ref RT.Assump r _) = aref  (pure $ text r)
+spec (Ref RT.LC r _)     = lcref (pure $ text r)
+spec (Ref RT.UC r _)     = ucref (pure $ text r)
+spec (Ref RT.Cite r _)   = cite  (pure $ text r)
+spec (Ref t r _)         = ref (show t) (pure $ text r)
+spec EmptyS              = empty
+spec (Quote q)           = quote $ spec q
 
 escapeChars :: Char -> String
 escapeChars '_' = "\\_"
@@ -516,9 +518,9 @@ showBibTeX  _ (HowPublished (URL  u)) =
 showBibTeX  _ (HowPublished (Verb v)) = showField "howpublished" v
 
 --showBibTeX sm (Author p@(Person {_convention=Mono}:_)) = showField "author"
-  -- (I.spec sm (rendPeople p)) :+: S ",\n" :+:
-  -- showField "sortkey" (I.spec sm (rendPeople p))
--- showBibTeX sm (Author    p) = showField "author" $ I.spec sm (rendPeople p)
+  -- (LS.spec sm (rendPeople p)) :+: S ",\n" :+:
+  -- showField "sortkey" (LS.spec sm (rendPeople p))
+-- showBibTeX sm (Author    p) = showField "author" $ LS.spec sm (rendPeople p)
 
 showField :: String -> Spec -> Spec
 showField f s = S f :+: S "={" :+: s :+: S "}"
@@ -526,7 +528,7 @@ showField f s = S f :+: S "={" :+: s :+: S "}"
 rendPeople :: HasSymbolTable ctx => ctx -> People -> Spec
 rendPeople _ []  = S "N.a." -- "No authors given"
 rendPeople sm people = I.spec sm $
-  foldl1 (\x y -> x LS.+:+ LS.S "and" LS.+:+ y) $ map rendPersLFM people
+  foldl1 (\x y -> x LS.+:+ LS.S "and" LS.+:+ y) $ map (LS.S . rendPersLFM) people
 
 bibTeXMonth :: Month -> Spec
 bibTeXMonth Jan = S "jan"

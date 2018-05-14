@@ -93,7 +93,7 @@ mkSRS = RefSec (RefProg intro [TUnits, tsymb [TSPurpose, SymbOrder], TAandA]) :
   StkhldrSec
     (StkhldrProg2
       [Client gLassBR (S "a" +:+ phrase company
-        +:+ S "named Entuitive. It is developed by Dr." +:+ name mCampidelli),
+        +:+ S "named Entuitive. It is developed by Dr." +:+ (S $ name mCampidelli)),
       Cstmr gLassBR]) :
   GSDSec (GSDProg2 [UsrChars [user_characteristics_bullets endUser gLassBR secondYear
     undergradDegree civilEng structuralEng glBreakage blastRisk],
@@ -140,11 +140,13 @@ glassSystInfo = SI {
   _units       = map unitWrapper [metre, second, kilogram] ++ map unitWrapper [pascal, newton],
   _quants      = this_symbols,
   _concepts    = [] :: [DefinedQuantityDict],
-  _definitions = dataDefns ++ (map (relToQD gbSymbMap) iModels) ++ (map (relToQD gbSymbMap) tModels)
-                  ++ [wtntWithEqn, sdWithEqn],  -- wtntWithEqn is defined in Unitals but only appears
-                                                 -- in the description of the Calculation of Demand instance model;
-                                                 -- should this be included as a Data Definition?
-                                                 -- (same for sdWithEqn)
+  _definitions = dataDefns ++ 
+                 (map (relToQD gbSymbMap) iModels) ++ 
+                 (map (relToQD gbSymbMap) tModels) ++
+                  [wtntWithEqn, sdWithEqn],  -- wtntWithEqn is defined in Unitals but only appears
+                                             -- in the description of the Calculation of Demand instance model;
+                                             -- should this be included as a Data Definition?
+                                             -- (same for sdWithEqn)
   _inputs      = map qw gbInputs,
   _outputs     = map qw gbOutputs,
   _defSequence = gbQDefns,

@@ -29,9 +29,7 @@ import Language.Drasil.Chunk.Attribute.Core (Attributes)
 -- | UnitalChunks are Unitary
 data UnitalChunk = UC { _con :: ConVar
                       , _uni :: UnitDefn
-                      , _attribs :: Attributes -- FIXME: Attributes included for consistency,
-                                               -- since every chunk should eventually have the
-                                               -- capability for attributes.
+                      , _attribs :: Attributes
                       }
 makeLenses ''UnitalChunk
 
@@ -53,33 +51,37 @@ instance HasAttributes UnitalChunk where attributes = attribs
 
 -- | Used to create a UnitalChunk from a 'Concept', 'Symbol', and 'Unit'.
 -- Assumes the 'Space' is Real
-uc :: (HasAttributes c, Concept c, IsUnit u, DOM c ~ ConceptChunk, DOM u ~ ConceptChunk) =>
-  c -> Symbol -> u -> UnitalChunk
-uc a b c = ucs' a b c Real
+uc :: (Concept c, IsUnit u, DOM c ~ ConceptChunk, DOM u ~ ConceptChunk) =>
+  c -> Symbol -> u -> Attributes -> UnitalChunk
+uc a b c atts = ucs' a b c Real atts
 
-ucs' :: (HasAttributes c, Concept c, IsUnit u, DOM c ~ ConceptChunk, DOM u ~ ConceptChunk) =>
-  c -> Symbol -> u -> Space -> UnitalChunk
-ucs' a b c p = UC (cv (cw a) b p) (unitWrapper c) (a ^. attributes)
+ucs' :: (Concept c, IsUnit u, DOM c ~ ConceptChunk, DOM u ~ ConceptChunk) =>
+  c -> Symbol -> u -> Space -> Attributes -> UnitalChunk
+ucs' a b c p atts = UC (cv (cw a) b p) (unitWrapper c) atts
 
 -- | Same as 'uc', except it builds the Concept portion of the UnitalChunk
 -- from a given uid, term, and defn. Those are the first three arguments
-uc' :: (HasAttributes u, IsUnit u, DOM u ~ ConceptChunk) => String -> NP -> String -> Symbol -> u -> UnitalChunk
-uc' i t d s u = UC (cv (dcc i t d) s Real) (unitWrapper u) (u ^. attributes)
+uc' :: (IsUnit u, DOM u ~ ConceptChunk) => String -> NP -> String -> Symbol ->
+  u -> Attributes -> UnitalChunk
+uc' i t d s u atts = UC (cv (dcc i t d) s Real) (unitWrapper u) atts
 
 -- | Same as 'uc'', but does not assume the 'Space'
-ucs :: (HasAttributes u, IsUnit u, DOM u ~ ConceptChunk) => String -> NP -> String -> Symbol -> u -> Space -> UnitalChunk
-ucs nam trm desc sym un space = UC (cv (dcc nam trm desc) sym space) (unitWrapper un) (un ^. attributes)
+ucs :: (IsUnit u, DOM u ~ ConceptChunk) => String -> NP ->
+  String -> Symbol -> u -> Space -> Attributes -> UnitalChunk
+ucs nam trm desc sym un space atts = UC (cv (dcc nam trm desc) sym space) (unitWrapper un) atts
 
 -- ucs With a Sentence for desc
-ucsWS :: (HasAttributes u, IsUnit u, DOM u ~ ConceptChunk) => String -> NP -> Sentence -> Symbol -> u -> Space -> UnitalChunk
-ucsWS nam trm desc sym un space = UC (cv (dccWDS nam trm desc) sym space) (unitWrapper un) (un ^. attributes)
+ucsWS :: (IsUnit u, DOM u ~ ConceptChunk) => String -> NP -> 
+  Sentence -> Symbol -> u -> Space -> Attributes -> UnitalChunk
+ucsWS nam trm desc sym un space atts = UC (cv (dccWDS nam trm desc) sym space) (unitWrapper un) atts
 
 --Better names will come later.
 -- | Create a UnitalChunk in the same way as 'uc'', but with a 'Sentence' for
 -- the definition instead of a String
-makeUCWDS :: (HasAttributes u, IsUnit u, DOM u ~ ConceptChunk) => String -> NP -> Sentence -> Symbol -> u -> UnitalChunk
-makeUCWDS nam trm desc sym un = UC (cv (dccWDS nam trm desc) sym Real) (unitWrapper un) (un ^. attributes)
+makeUCWDS :: (IsUnit u, DOM u ~ ConceptChunk) => String -> NP -> Sentence -> Symbol ->
+  u -> Attributes -> UnitalChunk
+makeUCWDS nam trm desc sym un atts = UC (cv (dccWDS nam trm desc) sym Real) (unitWrapper un) atts
 
 -- | Create a UnitalChunk from a 'ConVar' by supplying the additional 'Unit'
-ucFromCV :: (HasAttributes u, IsUnit u, DOM u ~ ConceptChunk) => ConVar -> u -> UnitalChunk
-ucFromCV conv un = UC conv (unitWrapper un) (un ^. attributes)
+ucFromCV :: (IsUnit u, DOM u ~ ConceptChunk) => ConVar -> u -> Attributes -> UnitalChunk
+ucFromCV conv un atts = UC conv (unitWrapper un) atts

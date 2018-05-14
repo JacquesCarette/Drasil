@@ -1415,7 +1415,6 @@ Equation
 <td>
 <a id="">
 <div class="equation">
-<p class="paragraph">
 <em>E = <span class="casebr">
 {
 </span>
@@ -1436,7 +1435,6 @@ T<sub>boil</sub>&thinsp;&lt;&thinsp;T
 </span>
 </span>
 </div></em>
-</p>
 </div>
 </a>
 </td>
@@ -1446,8 +1444,54 @@ T<sub>boil</sub>&thinsp;&lt;&thinsp;T
 Description
 </th>
 <td>
+<div class="list">
+<p>
+<em>E</em> is the sensible heat (J)
+</p>
+<p>
+<em>C<sup>S</sup></em> is the specific heat capacity of a solid (J/(kg&sdot;&deg;C))
+</p>
+<p>
+<em>m</em> is the mass (kg)
+</p>
+<p>
+<em>&Delta;T</em> is the change in temperature (&deg;C)
+</p>
+<p>
+<em>C<sup>L</sup></em> is the specific heat capacity of a liquid (J/(kg&sdot;&deg;C))
+</p>
+<p>
+<em>C<sup>V</sup></em> is the specific heat capacity of a vapour (J/(kg&sdot;&deg;C))
+</p>
+<p>
+<em>T</em> is the temperature (&deg;C)
+</p>
+<p>
+<em>T<sub>melt</sub></em> is the melting point temperature (&deg;C)
+</p>
+<p>
+<em>T<sub>boil</sub></em> is the boiling point temperature (&deg;C)
+</p>
+</div>
+</td>
+</tr>
+<tr>
+<th>
+Source
+</th>
+<td>
 <p class="paragraph">
-<em>E</em> is the change in sensible heat energy (J). <em>C<sup>S</sup></em>, <em>C<sup>L</sup></em>, <em>C<sup>V</sup></em> are the specific heat capacity of a solid, specific heat capacity of a liquid, and specific heat capacity of a vapour, respectively (J/(kg&sdot;&deg;C)). <em>m</em> is the mass (kg). <em>T</em> is the temperature (&deg;C), and <em>&Delta;T</em> is the change in temperature (&deg;C). <em>T<sub>melt</sub></em> and <em>T<sub>boil</sub></em> are the melting point temperature and boiling point temperature, respectively (&deg;C). Sensible heating occurs as long as the material does not reach a temperature where a phase change occurs. A phase change occurs if <em>T</em>=<em>T<sub>boil</sub></em> or <em>T</em>=<em>T<sub>melt</sub></em>. If this is the case, refer to <a href=#T:t3LatHtE>T:t3LatHtE</a>, Latent heat energy.
+FIXME: This needs to be filled in
+</p>
+</td>
+</tr>
+<tr>
+<th>
+RefBy
+</th>
+<td>
+<p class="paragraph">
+FIXME: This needs to be filled in
 </p>
 </td>
 </tr>
@@ -1461,7 +1505,7 @@ Label
 </th>
 <td>
 <p class="paragraph">
-Latent Heat Energy
+Latent heat energy
 </p>
 </td>
 </tr>
@@ -1472,7 +1516,6 @@ Equation
 <td>
 <a id="">
 <div class="equation">
-<p class="paragraph">
 <em>Q(t) = &int;<sub>0</sub><sup>t</sup><div class="fraction">
 <span class="fup">
 d&#8239;Q(&tau;)
@@ -1481,7 +1524,6 @@ d&#8239;Q(&tau;)
 d&#8239;&tau;
 </span>
 </div>&#8239;d&tau;</em>
-</p>
 </div>
 </a>
 </td>
@@ -1491,15 +1533,36 @@ d&#8239;&tau;
 Description
 </th>
 <td>
+<div class="list">
+<p>
+<em>Q</em> is the latent heat (J)
+</p>
+<p>
+<em>t</em> is the time (s)
+</p>
+<p>
+<em>&tau;</em> is the dummy variable for integration over time (s)
+</p>
+</div>
+</td>
+</tr>
+<tr>
+<th>
+Source
+</th>
+<td>
 <p class="paragraph">
-<em>Q</em> is the change in thermal energy (J), latent heat energy. <em>Q(t) = &int;<sub>0</sub><sup>t</sup><div class="fraction">
-<span class="fup">
-d&#8239;Q(&tau;)
-</span>
-<span class="fdn">
-d&#8239;&tau;
-</span>
-</div>&#8239;d&tau;</em> is the rate of change of <em>Q</em> with respect to time <em>&tau;</em> (s). <em>t</em> is the time (s) elapsed, as long as the phase change is not complete. The status of the phase change depends on the melt fraction, <a href=#DD:htFusion>DD:htFusion</a>. <em>T<sub>melt</sub></em> and <em>T<sub>boil</sub></em> are the melting point temperature and boiling point temperature, respectively (&deg;C). Latent heating stops when all material has changed to the new phase.
+FIXME: This needs to be filled in
+</p>
+</td>
+</tr>
+<tr>
+<th>
+RefBy
+</th>
+<td>
+<p class="paragraph">
+FIXME: This needs to be filled in
 </p>
 </td>
 </tr>
@@ -1515,15 +1578,25 @@ General Definitions
 <p class="paragraph">
 This section collects the laws and equations that will be used in deriving the data definitions, which in turn are used to build the instance models.
 </p>
-<a id="T:nwtnCooling">
-<table class="tdefn">
+<a id="GD:nwtnCooling">
+<table class="gdefn">
 <tr>
 <th>
 Label
 </th>
 <td>
 <p class="paragraph">
-Newton's Law of Cooling
+Newton's law of cooling
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Units
+</th>
+<td>
+<p class="paragraph">
+W/m<sup>2</sup>
 </p>
 </td>
 </tr>
@@ -1534,9 +1607,7 @@ Equation
 <td>
 <a id="">
 <div class="equation">
-<p class="paragraph">
 <em><b>q</b>(t) = h&#8239;&Delta;T(t)</em>
-</p>
 </div>
 </a>
 </td>
@@ -1546,8 +1617,39 @@ Equation
 Description
 </th>
 <td>
+<div class="list">
+<p>
+<em><b>q</b></em> is the thermal flux vector (W/m<sup>2</sup>)
+</p>
+<p>
+<em>t</em> is the time (s)
+</p>
+<p>
+<em>h</em> is the convective heat transfer coefficient (W/(m<sup>2</sup>&sdot;&deg;C))
+</p>
+<p>
+<em>&Delta;T</em> is the change in temperature (&deg;C)
+</p>
+</div>
+</td>
+</tr>
+<tr>
+<th>
+Source
+</th>
+<td>
 <p class="paragraph">
-Newton's law of cooling describes convective cooling from a surface. The law is stated as: the rate of heat loss from a body is proportional to the difference in temperatures between the body and its surroundings. <em><b>q</b>(t)</em> is the thermal flux (W/m<sup>2</sup>). <em>h</em> is the heat transfer coefficient, assumed independant of <em>T</em> (A2) (W/(m<sup>2</sup>&sdot;&deg;C)). <em>&Delta;T(t) = T(t)&minus;T<sub>env</sub>(t)</em> is the time-dependant thermal gradient between the environment and the object (&deg;C).
+
+</p>
+</td>
+</tr>
+<tr>
+<th>
+RefBy
+</th>
+<td>
+<p class="paragraph">
+FIXME: This needs to be filled in
 </p>
 </td>
 </tr>

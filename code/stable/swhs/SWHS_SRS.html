@@ -1655,15 +1655,15 @@ FIXME: This needs to be filled in
 </tr>
 </table>
 </a>
-<a id="T:rocTempSimp">
-<table class="tdefn">
+<a id="GD:rocTempSimp">
+<table class="gdefn">
 <tr>
 <th>
 Label
 </th>
 <td>
 <p class="paragraph">
-Simplified Rate of Change of Temperature
+Simplified rate of change of temperature
 </p>
 </td>
 </tr>
@@ -1674,7 +1674,6 @@ Equation
 <td>
 <a id="">
 <div class="equation">
-<p class="paragraph">
 <em>m&#8239;C&#8239;<div class="fraction">
 <span class="fup">
 d&#8239;T
@@ -1683,7 +1682,6 @@ d&#8239;T
 d&#8239;t
 </span>
 </div> = q<sub>in</sub>&#8239;A<sub>in</sub>&minus;q<sub>out</sub>&#8239;A<sub>out</sub>&plus;g&#8239;V</em>
-</p>
 </div>
 </a>
 </td>
@@ -1693,8 +1691,57 @@ d&#8239;t
 Description
 </th>
 <td>
+<div class="list">
+<p>
+<em>m</em> is the mass (kg)
+</p>
+<p>
+<em>C</em> is the specific heat capacity (J/(kg&sdot;&deg;C))
+</p>
+<p>
+<em>t</em> is the time (s)
+</p>
+<p>
+<em>T</em> is the temperature (&deg;C)
+</p>
+<p>
+<em>q<sub>in</sub></em> is the heat flux input (W/m<sup>2</sup>)
+</p>
+<p>
+<em>A<sub>in</sub></em> is the surface area over which heat is transferred in (m<sup>2</sup>)
+</p>
+<p>
+<em>q<sub>out</sub></em> is the heat flux output (W/m<sup>2</sup>)
+</p>
+<p>
+<em>A<sub>out</sub></em> is the surface area over which heat is transferred out (m<sup>2</sup>)
+</p>
+<p>
+<em>g</em> is the volumetric heat generation per unit volume (W/m<sup>3</sup>)
+</p>
+<p>
+<em>V</em> is the volume (m<sup>3</sup>)
+</p>
+</div>
+</td>
+</tr>
+<tr>
+<th>
+Source
+</th>
+<td>
 <p class="paragraph">
-The basic equation governing the rate of change of temperature, for a given volume <em>V</em>, with time. <em>m</em> is the mass (kg). <em>C</em> is the specific heat capacity (J/(kg&sdot;&deg;C)). <em>T</em> is the temperature (&deg;C) and <em>t</em> is the time (s). <em>q<sub>in</sub></em> and <em>q<sub>out</sub></em> are the in and out heat transfer rates, respectively (W/m<sup>2</sup>). <em>A<sub>in</sub></em> and <em>A<sub>out</sub></em> are the surface areas over which the heat is being transferred in and out, respectively (m<sup>2</sup>). <em>g</em> is the volumetric heat generated (W/m<sup>3</sup>). <em>V</em> is the volume (m<sup>3</sup>).
+
+</p>
+</td>
+</tr>
+<tr>
+<th>
+RefBy
+</th>
+<td>
+<p class="paragraph">
+FIXME: This needs to be filled in
 </p>
 </td>
 </tr>
@@ -1786,7 +1833,7 @@ d&#8239;t
 Data Definitions
 </h3>
 <p class="paragraph">
-This section collects and defines all the data needed to build the instance models. The dimension of each quantity is also given.
+This section collects and defines all the data needed to build the instance models.
 </p>
 <a id="DD:ht.flux.C">
 <table class="ddefn">
@@ -1796,7 +1843,17 @@ Label
 </th>
 <td>
 <p class="paragraph">
-Heat Flux Into the Water From the Coil
+Heat flux into the water from the coil
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Symbol
+</th>
+<td>
+<p class="paragraph">
+<em>q<sub>C</sub></em>
 </p>
 </td>
 </tr>
@@ -1817,9 +1874,7 @@ Equation
 <td>
 <a id="">
 <div class="equation">
-<p class="paragraph">
-<em>q<sub>C</sub> = h<sub>C</sub>&#8239;(T<sub>C</sub>&minus;T<sub>W</sub>(t))</em>
-</p>
+<em>h<sub>C</sub>&#8239;(T<sub>C</sub>&minus;T<sub>W</sub>(t))</em>
 </div>
 </a>
 </td>
@@ -1829,8 +1884,42 @@ Equation
 Description
 </th>
 <td>
+<div class="list">
+<p>
+<em>q<sub>C</sub></em> is the heat flux into the water from the coil (W/m<sup>2</sup>)
+</p>
+<p>
+<em>h<sub>C</sub></em> is the convective heat transfer coefficient between coil and water (W/(m<sup>2</sup>&sdot;&deg;C))
+</p>
+<p>
+<em>T<sub>C</sub></em> is the temperature of the heating coil (&deg;C)
+</p>
+<p>
+<em>T<sub>W</sub></em> is the temperature of the water (&deg;C)
+</p>
+<p>
+<em>t</em> is the time (s)
+</p>
+</div>
+</td>
+</tr>
+<tr>
+<th>
+Source
+</th>
+<td>
 <p class="paragraph">
-<em>q<sub>C</sub></em> is the heat flux into the water from the coil (W/m<sup>2</sup>)<br /><em>h<sub>C</sub></em> is the convective heat transfer coefficient between coil and water (W/(m<sup>2</sup>&sdot;&deg;C))<br /><em>T<sub>C</sub></em> is the temperature of the heating coil (&deg;C)<br /><em>T<sub>W</sub></em> is the temperature of the water (&deg;C)<br /><em>t</em> is the time (s)
+
+</p>
+</td>
+</tr>
+<tr>
+<th>
+RefBy
+</th>
+<td>
+<p class="paragraph">
+FIXME: This needs to be filled in
 </p>
 </td>
 </tr>
@@ -1844,7 +1933,17 @@ Label
 </th>
 <td>
 <p class="paragraph">
-Heat Flux Into the PCM From Water
+Heat flux into the PCM from water
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Symbol
+</th>
+<td>
+<p class="paragraph">
+<em>q<sub>P</sub></em>
 </p>
 </td>
 </tr>
@@ -1865,9 +1964,7 @@ Equation
 <td>
 <a id="">
 <div class="equation">
-<p class="paragraph">
-<em>q<sub>P</sub> = h<sub>P</sub>&#8239;(T<sub>W</sub>(t)&minus;T<sub>P</sub>(t))</em>
-</p>
+<em>h<sub>P</sub>&#8239;(T<sub>W</sub>(t)&minus;T<sub>P</sub>(t))</em>
 </div>
 </a>
 </td>
@@ -1877,8 +1974,42 @@ Equation
 Description
 </th>
 <td>
+<div class="list">
+<p>
+<em>q<sub>P</sub></em> is the heat flux into the PCM from water (W/m<sup>2</sup>)
+</p>
+<p>
+<em>h<sub>P</sub></em> is the convective heat transfer coefficient between PCM and water (W/(m<sup>2</sup>&sdot;&deg;C))
+</p>
+<p>
+<em>T<sub>W</sub></em> is the temperature of the water (&deg;C)
+</p>
+<p>
+<em>t</em> is the time (s)
+</p>
+<p>
+<em>T<sub>P</sub></em> is the temperature of the phase change material (&deg;C)
+</p>
+</div>
+</td>
+</tr>
+<tr>
+<th>
+Source
+</th>
+<td>
 <p class="paragraph">
-<em>q<sub>P</sub></em> is the heat flux into the PCM from water (W/m<sup>2</sup>)<br /><em>h<sub>P</sub></em> is the convective heat transfer coefficient between PCM and water (W/(m<sup>2</sup>&sdot;&deg;C))<br /><em>T<sub>W</sub></em> is the temperature of the water (&deg;C)<br /><em>t</em> is the time (s)<br /><em>T<sub>P</sub></em> is the temperature of the phase change material (&deg;C)
+
+</p>
+</td>
+</tr>
+<tr>
+<th>
+RefBy
+</th>
+<td>
+<p class="paragraph">
+FIXME: This needs to be filled in
 </p>
 </td>
 </tr>
@@ -1892,7 +2023,17 @@ Label
 </th>
 <td>
 <p class="paragraph">
-Specific Latent Heat of Fusion
+Specific latent heat of fusion
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Symbol
+</th>
+<td>
+<p class="paragraph">
+<em>H<sub>f</sub></em>
 </p>
 </td>
 </tr>
@@ -1913,8 +2054,7 @@ Equation
 <td>
 <a id="">
 <div class="equation">
-<p class="paragraph">
-<em>H<sub>f</sub> = <div class="fraction">
+<em><div class="fraction">
 <span class="fup">
 Q
 </span>
@@ -1922,7 +2062,6 @@ Q
 m
 </span>
 </div></em>
-</p>
 </div>
 </a>
 </td>
@@ -1932,8 +2071,36 @@ m
 Description
 </th>
 <td>
+<div class="list">
+<p>
+<em>H<sub>f</sub></em> is the specific latent heat of fusion (J/kg)
+</p>
+<p>
+<em>Q</em> is the latent heat (J)
+</p>
+<p>
+<em>m</em> is the mass (kg)
+</p>
+</div>
+</td>
+</tr>
+<tr>
+<th>
+Source
+</th>
+<td>
 <p class="paragraph">
-<em>H<sub>f</sub></em> is the specific latent heat of fusion (J/kg)<br /><em>Q</em> is the latent heat (J)<br /><em>m</em> is the mass (kg)
+
+</p>
+</td>
+</tr>
+<tr>
+<th>
+RefBy
+</th>
+<td>
+<p class="paragraph">
+FIXME: This needs to be filled in
 </p>
 </td>
 </tr>
@@ -1947,7 +2114,17 @@ Label
 </th>
 <td>
 <p class="paragraph">
-Melt Fraction
+Melt fraction
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Symbol
+</th>
+<td>
+<p class="paragraph">
+<em>&phi;</em>
 </p>
 </td>
 </tr>
@@ -1968,8 +2145,7 @@ Equation
 <td>
 <a id="">
 <div class="equation">
-<p class="paragraph">
-<em>&phi; = <div class="fraction">
+<em><div class="fraction">
 <span class="fup">
 Q<sub>P</sub>
 </span>
@@ -1977,7 +2153,6 @@ Q<sub>P</sub>
 H<sub>f</sub>&#8239;m<sub>P</sub>
 </span>
 </div></em>
-</p>
 </div>
 </a>
 </td>
@@ -1987,8 +2162,39 @@ H<sub>f</sub>&#8239;m<sub>P</sub>
 Description
 </th>
 <td>
+<div class="list">
+<p>
+<em>&phi;</em> is the melt fraction (Unitless)
+</p>
+<p>
+<em>Q<sub>P</sub></em> is the latent heat energy added to PCM (J)
+</p>
+<p>
+<em>H<sub>f</sub></em> is the specific latent heat of fusion (J/kg)
+</p>
+<p>
+<em>m<sub>P</sub></em> is the mass of phase change material (kg)
+</p>
+</div>
+</td>
+</tr>
+<tr>
+<th>
+Source
+</th>
+<td>
 <p class="paragraph">
-<em>&phi;</em> is the melt fraction<br /><em>Q<sub>P</sub></em> is the latent heat energy added to PCM (J)<br /><em>H<sub>f</sub></em> is the specific latent heat of fusion (J/kg)<br /><em>m<sub>P</sub></em> is the mass of phase change material (kg)
+
+</p>
+</td>
+</tr>
+<tr>
+<th>
+RefBy
+</th>
+<td>
+<p class="paragraph">
+FIXME: This needs to be filled in
 </p>
 </td>
 </tr>
@@ -2004,19 +2210,60 @@ Instance Models
 <p class="paragraph">
 This section transforms the problem defined in <a href=#Sec:ProbDesc>Problem Description</a> into one which is expressed in mathematical terms. It uses concrete symbols defined in <a href=#Sec:DDs>Data Definitions</a> to replace the abstract symbols in the models identified in <a href=#Sec:TMs>Theoretical Models</a> and <a href=#Sec:GDs>General Definitions</a>.
 </p>
-<p class="paragraph">
-The goals GS1 to GS4 are solved by IM1 to IM4. The solutions for IM1 and IM2 are coupled since the solution for <em>T<sub>W</sub></em> and <em>T<sub>P</sub></em> depend on one another. IM3 can be solved once IM1 has been solved. The solution of IM2 and IM4 are also coupled, since the temperature of the phase change material and change in heat energy in the PCM depend on the phase change.
-</p>
-<a id="T:eBalanceOnWtr">
-<table class="tdefn">
+<a id="IM:eBalanceOnWtr">
+<table class="idefn">
 <tr>
 <th>
 Label
 </th>
 <td>
 <p class="paragraph">
-Energy Balance on Water to Find the Temperature of the Water
+Energy balance on water to find the temperature of the water
 </p>
+</td>
+</tr>
+<tr>
+<th>
+Input
+</th>
+<td>
+<p class="paragraph">
+<em>t</em>, <em>&tau;<sub>W</sub></em>, <em>T<sub>C</sub></em>, <em>&eta;</em>, <em>T<sub>P</sub></em>, <em>t<sub>final</sub></em>, <em>T<sub>init</sub></em>, <em>A<sub>C</sub></em>
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Output
+</th>
+<td>
+<p class="paragraph">
+<em>T<sub>W</sub></em>
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Input Constraints
+</th>
+<td>
+<a id="">
+<div class="equation">
+<em>T<sub>init</sub>&thinsp;&lt;&thinsp;T<sub>C</sub></em>
+</div>
+</a>
+</td>
+</tr>
+<tr>
+<th>
+Output Constraints
+</th>
+<td>
+<a id="">
+<div class="equation">
+<em>0&thinsp;&lt;&thinsp;t&thinsp;&lt;&thinsp;t<sub>final</sub></em>
+</div>
+</a>
 </td>
 </tr>
 <tr>
@@ -2026,7 +2273,6 @@ Equation
 <td>
 <a id="">
 <div class="equation">
-<p class="paragraph">
 <em><div class="fraction">
 <span class="fup">
 d&#8239;T<sub>W</sub>
@@ -2042,7 +2288,6 @@ d&#8239;t
 &tau;<sub>W</sub>
 </span>
 </div>&#8239;(T<sub>C</sub>&minus;T<sub>W</sub>(t)&plus;&eta;&#8239;(T<sub>P</sub>(t)&minus;T<sub>W</sub>(t)))</em>
-</p>
 </div>
 </a>
 </td>
@@ -2052,22 +2297,45 @@ d&#8239;t
 Description
 </th>
 <td>
+<div class="list">
+<p>
+<em>t</em> is the time (s)
+</p>
+<p>
+<em>T<sub>W</sub></em> is the temperature of the water (&deg;C)
+</p>
+<p>
+<em>&tau;<sub>W</sub></em> is the ODE parameter for water (s)
+</p>
+<p>
+<em>T<sub>C</sub></em> is the temperature of the heating coil (&deg;C)
+</p>
+<p>
+<em>&eta;</em> is the ODE parameter (Unitless)
+</p>
+<p>
+<em>T<sub>P</sub></em> is the temperature of the phase change material (&deg;C)
+</p>
+</div>
+</td>
+</tr>
+<tr>
+<th>
+Source
+</th>
+<td>
 <p class="paragraph">
-<em>T<sub>W</sub></em> is the temperature of the water (&deg;C). <em>T<sub>P</sub></em> is the temperature of the phase change material (&deg;C). <em>T<sub>C</sub></em> is the temperature of the heating coil (&deg;C). <em>&tau;<sub>W</sub> = <div class="fraction">
-<span class="fup">
-m<sub>W</sub>&#8239;C<sub>W</sub>
-</span>
-<span class="fdn">
-h<sub>C</sub>&#8239;A<sub>C</sub>
-</span>
-</div></em> is a constant (s). <em>&eta; = <div class="fraction">
-<span class="fup">
-h<sub>P</sub>&#8239;A<sub>P</sub>
-</span>
-<span class="fdn">
-h<sub>C</sub>&#8239;A<sub>C</sub>
-</span>
-</div></em> is a constant (dimensionless). The above equation applies as long as the water is in liquid form, <em>0&thinsp;&lt;&thinsp;T<sub>W</sub>&thinsp;&lt;&thinsp;100</em> (&deg;C) where <em>0</em> (&deg;C) and <em>100</em> (&deg;C) are the melting and boiling point temperatures of water, respectively (<a href=#A:assump14>assump14</a>, <a href=#A:assump19>assump19</a>).
+
+</p>
+</td>
+</tr>
+<tr>
+<th>
+RefBy
+</th>
+<td>
+<p class="paragraph">
+FIXME: This needs to be filled in
 </p>
 </td>
 </tr>
@@ -2107,7 +2375,7 @@ d&#8239;t
 </div>
 </a>
 <p class="paragraph">
-Dividing (3) by <em>m<sub>W</sub></em><em>C<sub>W</sub></em>, we obtain:
+Dividing (3) by <em>m<sub>W</sub></em> <em>C<sub>W</sub></em>, we obtain:
 </p>
 <a id="">
 <div class="equation">
@@ -2279,8 +2547,8 @@ d&#8239;t
 </div>&#8239;(T<sub>C</sub>&minus;T<sub>W</sub>&plus;&eta;&#8239;(T<sub>P</sub>&minus;T<sub>W</sub>))</em>
 </div>
 </a>
-<a id="T:eBalanceOnPCM">
-<table class="tdefn">
+<a id="IM:eBalanceOnPCM">
+<table class="idefn">
 <tr>
 <th>
 Label
@@ -2293,12 +2561,55 @@ Energy Balance on PCM to Find T_p
 </tr>
 <tr>
 <th>
+Input
+</th>
+<td>
+<p class="paragraph">
+<em>t</em>, <em>&tau;<sub>W</sub></em>, <em>T<sub>C</sub></em>, <em>&eta;</em>, <em>T<sub>P</sub></em>, <em>t<sub>final</sub></em>, <em>T<sub>init</sub></em>, <em>A<sub>C</sub></em>
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Output
+</th>
+<td>
+<p class="paragraph">
+<em>T<sub>W</sub></em>
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Input Constraints
+</th>
+<td>
+<a id="">
+<div class="equation">
+<em>T<sub>init</sub>&thinsp;&lt;&thinsp;T<sub>C</sub></em>
+</div>
+</a>
+</td>
+</tr>
+<tr>
+<th>
+Output Constraints
+</th>
+<td>
+<a id="">
+<div class="equation">
+<em>0&thinsp;&lt;&thinsp;t&thinsp;&lt;&thinsp;t<sub>final</sub></em>
+</div>
+</a>
+</td>
+</tr>
+<tr>
+<th>
 Equation
 </th>
 <td>
 <a id="">
 <div class="equation">
-<p class="paragraph">
 <em><div class="fraction">
 <span class="fup">
 d&#8239;T<sub>P</sub>
@@ -2345,7 +2656,6 @@ T<sub>P</sub> = T<sub>melt</sub><sup>P</sup>
 </span>
 </span>
 </div></em>
-</p>
 </div>
 </a>
 </td>
@@ -2355,22 +2665,48 @@ T<sub>P</sub> = T<sub>melt</sub><sup>P</sup>
 Description
 </th>
 <td>
+<div class="list">
+<p>
+<em>t</em> is the time (s)
+</p>
+<p>
+<em>T<sub>P</sub></em> is the temperature of the phase change material (&deg;C)
+</p>
+<p>
+<em>&tau;<sub>P</sub><sup>S</sup></em> is the ODE parameter for solid PCM (s)
+</p>
+<p>
+<em>T<sub>W</sub></em> is the temperature of the water (&deg;C)
+</p>
+<p>
+<em>&tau;<sub>P</sub><sup>L</sup></em> is the ODE parameter for liquid PCM (s)
+</p>
+<p>
+<em>T<sub>melt</sub><sup>P</sup></em> is the melting point temperature for PCM (&deg;C)
+</p>
+<p>
+<em>&phi;</em> is the melt fraction (Unitless)
+</p>
+</div>
+</td>
+</tr>
+<tr>
+<th>
+Source
+</th>
+<td>
 <p class="paragraph">
-<em>T<sub>W</sub></em> is the temperature of the water (&deg;C). <em>T<sub>P</sub></em> is the temperature of the phase change material (&deg;C). <em>&tau;<sub>P</sub><sup>S</sup> = <div class="fraction">
-<span class="fup">
-m<sub>P</sub>&#8239;C<sub>P</sub><sup>S</sup>
-</span>
-<span class="fdn">
-h<sub>P</sub>&#8239;A<sub>P</sub>
-</span>
-</div></em> is a constant (s). <em>&tau;<sub>P</sub><sup>L</sup> = <div class="fraction">
-<span class="fup">
-m<sub>P</sub>&#8239;C<sub>P</sub><sup>L</sup>
-</span>
-<span class="fdn">
-h<sub>P</sub>&#8239;A<sub>P</sub>
-</span>
-</div></em> is a constant (s).
+
+</p>
+</td>
+</tr>
+<tr>
+<th>
+RefBy
+</th>
+<td>
+<p class="paragraph">
+FIXME: This needs to be filled in
 </p>
 </td>
 </tr>
@@ -2462,16 +2798,55 @@ In the case where <em>T<sub>P</sub></em>=<em>T<sub>melt</sub><sup>P</sup></em> a
 <p class="paragraph">
 This derivation does not consider the boiling of the PCM, as the PCM is assumed to either be in a solid state or a liquid state (<a href=#A:assump18>assump18</a>).
 </p>
-<a id="T:heatEInWtr">
-<table class="tdefn">
+<a id="IM:heatEInWtr">
+<table class="idefn">
 <tr>
 <th>
 Label
 </th>
 <td>
 <p class="paragraph">
-Heat Energy in the Water
+Heat energy in the water
 </p>
+</td>
+</tr>
+<tr>
+<th>
+Input
+</th>
+<td>
+<p class="paragraph">
+<em>T<sub>init</sub></em>, <em>A<sub>C</sub></em>, <em>C<sub>W</sub></em>, <em>m<sub>W</sub></em>
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Output
+</th>
+<td>
+<p class="paragraph">
+<em>E<sub>W</sub></em>
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Input Constraints
+</th>
+<td>
+</td>
+</tr>
+<tr>
+<th>
+Output Constraints
+</th>
+<td>
+<a id="">
+<div class="equation">
+<em>0&thinsp;&lt;&thinsp;t&thinsp;&lt;&thinsp;t<sub>final</sub></em>
+</div>
+</a>
 </td>
 </tr>
 <tr>
@@ -2481,9 +2856,7 @@ Equation
 <td>
 <a id="">
 <div class="equation">
-<p class="paragraph">
 <em>E<sub>W</sub>(t) = C<sub>W</sub>&#8239;m<sub>W</sub>&#8239;(T<sub>W</sub>(t)&minus;T<sub>init</sub>)</em>
-</p>
 </div>
 </a>
 </td>
@@ -2493,23 +2866,104 @@ Equation
 Description
 </th>
 <td>
+<div class="list">
+<p>
+<em>E<sub>W</sub></em> is the change in heat energy in the water (J)
+</p>
+<p>
+<em>t</em> is the time (s)
+</p>
+<p>
+<em>C<sub>W</sub></em> is the specific heat capacity of water (J/(kg&sdot;&deg;C))
+</p>
+<p>
+<em>m<sub>W</sub></em> is the mass of water (kg)
+</p>
+<p>
+<em>T<sub>W</sub></em> is the temperature of the water (&deg;C)
+</p>
+<p>
+<em>T<sub>init</sub></em> is the initial temperature (&deg;C)
+</p>
+</div>
+</td>
+</tr>
+<tr>
+<th>
+Source
+</th>
+<td>
 <p class="paragraph">
-The above equation is derived using T2. <em>E<sub>W</sub></em> is the change in thermal energy of the liquid water relative to the energy at the initial temperature (<em>T<sub>init</sub></em>) (J). <em>C<sub>W</sub></em> is the specific heat capacity of liquid water (J/(kg&sdot;&deg;C)) and <em>m<sub>W</sub></em> is the mass of the water (kg). The change in temperature is the difference between the temperature at time <em>t</em> (s), <em>T<sub>W</sub></em> and the initial temperature, <em>T<sub>init</sub></em> (&deg;C). This equation applies as long as <em>0&thinsp;&lt;&thinsp;T<sub>W</sub>&thinsp;&lt;&thinsp;100</em>&deg;C (<a href=#A:assump14>assump14</a>, <a href=#A:assump19>assump19</a>).
+
+</p>
+</td>
+</tr>
+<tr>
+<th>
+RefBy
+</th>
+<td>
+<p class="paragraph">
+FIXME: This needs to be filled in
 </p>
 </td>
 </tr>
 </table>
 </a>
-<a id="T:heatEInPCM">
-<table class="tdefn">
+<a id="IM:heatEInPCM">
+<table class="idefn">
 <tr>
 <th>
 Label
 </th>
 <td>
 <p class="paragraph">
-Heat Energy in the PCM
+Heat energy in the PCM
 </p>
+</td>
+</tr>
+<tr>
+<th>
+Input
+</th>
+<td>
+<p class="paragraph">
+<em>t</em>, <em>&tau;<sub>W</sub></em>, <em>T<sub>C</sub></em>, <em>&eta;</em>, <em>T<sub>P</sub></em>, <em>t<sub>final</sub></em>, <em>T<sub>init</sub></em>, <em>A<sub>C</sub></em>
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Output
+</th>
+<td>
+<p class="paragraph">
+<em>T<sub>W</sub></em>
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Input Constraints
+</th>
+<td>
+<a id="">
+<div class="equation">
+<em>T<sub>init</sub>&thinsp;&lt;&thinsp;T<sub>C</sub></em>
+</div>
+</a>
+</td>
+</tr>
+<tr>
+<th>
+Output Constraints
+</th>
+<td>
+<a id="">
+<div class="equation">
+<em>0&thinsp;&lt;&thinsp;t&thinsp;&lt;&thinsp;t<sub>final</sub></em>
+</div>
+</a>
 </td>
 </tr>
 <tr>
@@ -2519,7 +2973,6 @@ Equation
 <td>
 <a id="">
 <div class="equation">
-<p class="paragraph">
 <em>E<sub>P</sub> = <span class="casebr">
 {
 </span>
@@ -2545,7 +2998,6 @@ E<sub>P</sub><sub>melt</sub><sup>init</sup>&plus;Q<sub>P</sub>(t) , <span class=
 </span>
 </span>
 </div></em>
-</p>
 </div>
 </a>
 </td>
@@ -2555,8 +3007,63 @@ E<sub>P</sub><sub>melt</sub><sup>init</sup>&plus;Q<sub>P</sub>(t) , <span class=
 Description
 </th>
 <td>
+<div class="list">
+<p>
+<em>E<sub>P</sub></em> is the change in heat energy in the PCM (J)
+</p>
+<p>
+<em>C<sub>P</sub><sup>S</sup></em> is the specific heat capacity of PCM as a solid (J/(kg&sdot;&deg;C))
+</p>
+<p>
+<em>m<sub>P</sub></em> is the mass of phase change material (kg)
+</p>
+<p>
+<em>T<sub>P</sub></em> is the temperature of the phase change material (&deg;C)
+</p>
+<p>
+<em>t</em> is the time (s)
+</p>
+<p>
+<em>T<sub>init</sub></em> is the initial temperature (&deg;C)
+</p>
+<p>
+<em>E<sub>P</sub><sub>melt</sub><sup>init</sup></em> is the change in heat energy in the PCM at the instant when melting begins (J)
+</p>
+<p>
+<em>H<sub>f</sub></em> is the specific latent heat of fusion (J/kg)
+</p>
+<p>
+<em>C<sub>P</sub><sup>L</sup></em> is the specific heat capacity of PCM as a liquid (J/(kg&sdot;&deg;C))
+</p>
+<p>
+<em>T<sub>melt</sub><sup>P</sup></em> is the melting point temperature for PCM (&deg;C)
+</p>
+<p>
+<em>Q<sub>P</sub></em> is the latent heat energy added to PCM (J)
+</p>
+<p>
+<em>&phi;</em> is the melt fraction (Unitless)
+</p>
+</div>
+</td>
+</tr>
+<tr>
+<th>
+Source
+</th>
+<td>
 <p class="paragraph">
-The above equation is derived using T2 and T3. <em>E<sub>P</sub></em> is the change in thermal energy of the PCM relative to the energy at the initial temperature (<em>T<sub>init</sub></em>) J. <em>E<sub>P</sub></em> for the solid PCM is found using T2 for sensible heat ing, with the specific heat capacity of the solid PCM, <em>C<sub>P</sub><sup>S</sup></em> (J/(kg&sdot;&deg;C)) and the change in the PCM temperature from the initial temperature (&deg;C). <em>E<sub>P</sub></em> for the melted PCM (<em>T<sub>P</sub>&thinsp;&gt;&thinsp;E<sub>P</sub><sub>melt</sub><sup>init</sup></em>) is found using T2 for sensible heat of the liquid. PCM plus the energy when melting starts, plus the energy required to melt all of the PCM The energy when melting starts is <em>E<sub>P</sub><sub>melt</sub><sup>init</sup></em> (J). The energy required to melt all of the PCM is <em>H<sub>f</sub>&#8239;m<sub>P</sub></em> (J) (DD3). the specific heat capacity of the liquid PCM is <em>C<sub>P</sub><sup>L</sup></em> (J/(kg&sdot;&deg;C)) and the change in temperature is <em>T<sub>P</sub>&minus;T<sub>melt</sub><sup>P</sup></em> (&deg;C). <em>E<sub>P</sub></em> during melting of the PCM is found using the energy required at the instant melting of the PCM begins, <em>E<sub>P</sub><sub>melt</sub><sup>init</sup></em> plus the latent heat energy added to the PCM, <em>Q<sub>P</sub></em> (J) since the time when melting began <em>t<sub>melt</sub><sup>init</sup></em> (s). The heat energy for boiling of the PCM is not detailed, since the PCM is assumed to either be in a solid or liquid state (<a href=#A:assump18>assump18</a>).
+
+</p>
+</td>
+</tr>
+<tr>
+<th>
+RefBy
+</th>
+<td>
+<p class="paragraph">
+FIXME: This needs to be filled in
 </p>
 </td>
 </tr>

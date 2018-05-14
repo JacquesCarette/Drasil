@@ -19,7 +19,7 @@ Software Requirements Specification for GlassBR program
 Nikitha Krithnan and W. Spencer Smith
 </h2>
 </div>
-<a id="Sec:RefMat">
+<div id="Sec:RefMat">
 <div class="section">
 <h1>
 Reference Material
@@ -27,7 +27,7 @@ Reference Material
 <p class="paragraph">
 This section records information for easy reference.
 </p>
-<a id="Sec:ToU">
+<div id="Sec:ToU">
 <div class="subsection">
 <h2>
 Table of Units
@@ -35,7 +35,7 @@ Table of Units
 <p class="paragraph">
 The unit system used throughout is SI (Système International d'Unités). In addition to the basic units, several derived units are also used. For each unit, the table lists the symbol, a description and the SI name.
 </p>
-<a id="Table:ToU">
+<div id="Table:ToU">
 <table class="table">
 <tr>
 <th>
@@ -86,10 +86,10 @@ time (second)
 </td>
 </tr>
 </table>
-</a>
 </div>
-</a>
-<a id="Sec:ToS">
+</div>
+</div>
+<div id="Sec:ToS">
 <div class="subsection">
 <h2>
 Table of Symbols
@@ -97,7 +97,7 @@ Table of Symbols
 <p class="paragraph">
 The table that follows summarizes the symbols used in this document along with their units. The symbols are listed in alphabetical order.
 </p>
-<a id="Table:ToS">
+<div id="Table:ToS">
 <table class="table">
 <tr>
 <th>
@@ -540,15 +540,15 @@ kg
 </td>
 </tr>
 </table>
-</a>
 </div>
-</a>
-<a id="Sec:TAbbAcc">
+</div>
+</div>
+<div id="Sec:TAbbAcc">
 <div class="subsection">
 <h2>
 Abbreviations and Acronyms
 </h2>
-<a id="Table:TAbbAcc">
+<div id="Table:TAbbAcc">
 <table class="table">
 <tr>
 <th>
@@ -719,12 +719,12 @@ Typical Uncertainty
 </td>
 </tr>
 </table>
-</a>
 </div>
-</a>
 </div>
-</a>
-<a id="Sec:Intro">
+</div>
+</div>
+</div>
+<div id="Sec:Intro">
 <div class="section">
 <h1>
 Introduction
@@ -735,7 +735,7 @@ Software is helpful to efficiently and correctly predict the blast risk involved
 <p class="paragraph">
 The following section provides an overview of the Software Requirements Specification (SRS) for GlassBR. This section explains the purpose of this document, the scope of the system, the organization of the document, and the characteristics of the intended reader.
 </p>
-<a id="Sec:DocPurpose">
+<div id="Sec:DocPurpose">
 <div class="subsection">
 <h2>
 Purpose of Document
@@ -747,8 +747,8 @@ The main purpose of this document is to predict whether a given glass slab is li
 This document will be used as a starting point for subsequent development phases, including writing the design specification and the software verification and validation plan. The design document will show how the requirements are to be realized, including decisions on the numerical algorithms and programming environment. The verification and validation plan will show the steps that will be used to increase confidence in the software documentation and the implementation. Although the SRS fits in a series of documents that follow the so-called waterfall model, the actual development process is not constrained in any way. Even when the waterfall model is not followed, as Parnas and Clements point out, the most logical way to present the documentation is still to &quot;fake&quot; a rational design process.
 </p>
 </div>
-</a>
-<a id="Sec:ReqsScope">
+</div>
+<div id="Sec:ReqsScope">
 <div class="subsection">
 <h2>
 Scope of Requirements
@@ -757,8 +757,8 @@ Scope of Requirements
 The scope of the requirements includes getting all input parameters related to the glass slab and also the parameters related to blast type. Given the appropriate inputs, the code for GlassBR is intended to use the data and predict whether the glass slab is safe to use or not.
 </p>
 </div>
-</a>
-<a id="Sec:ReaderChars">
+</div>
+<div id="Sec:ReaderChars">
 <div class="subsection">
 <h2>
 Characteristics of Intended Reader
@@ -767,8 +767,8 @@ Characteristics of Intended Reader
 Reviewers of this documentation should have a strong knowledge in theory behind glass breakage and blast risk. The reviewers should also have an understanding of second year calculus, structural mechanics, and computer applications in civil engineering.In addition, reviewers should be familiar with the applicable standards for constructions using glass from [4-6] in <a href=#Sec:References>References</a>. The users of GlassBR can have a lower level of expertise, as explained in <a href=#Sec:UserChars>User Characteristics</a>.
 </p>
 </div>
-</a>
-<a id="Sec:DocOrg">
+</div>
+<div id="Sec:DocOrg">
 <div class="subsection">
 <h2>
 Organization of Document
@@ -780,10 +780,10 @@ The organization of this document follows the template for an SRS for scientific
 The goal statements are refined to the theoretical models, and the theoretical models to the instance models. The data definitions are used to support the definitions of the different models.
 </p>
 </div>
-</a>
 </div>
-</a>
-<a id="Sec:Stakeholder">
+</div>
+</div>
+<div id="Sec:Stakeholder">
 <div class="section">
 <h1>
 Stakeholders
@@ -791,7 +791,7 @@ Stakeholders
 <p class="paragraph">
 This section describes the Stakeholders: the people who have an interest in the product.
 </p>
-<a id="Sec:Client">
+<div id="Sec:Client">
 <div class="subsection">
 <h2>
 The Client
@@ -800,8 +800,8 @@ The Client
 The client for GlassBR is a company named Entuitive. It is developed by Dr. Manuel Campidelli. The client has the final say on acceptance of the product.
 </p>
 </div>
-</a>
-<a id="Sec:Customer">
+</div>
+<div id="Sec:Customer">
 <div class="subsection">
 <h2>
 The Customer
@@ -810,10 +810,10 @@ The Customer
 The customers are the end user of GlassBR.
 </p>
 </div>
-</a>
 </div>
-</a>
-<a id="Sec:GenSysDesc">
+</div>
+</div>
+<div id="Sec:GenSysDesc">
 <div class="section">
 <h1>
 General System Description
@@ -821,7 +821,7 @@ General System Description
 <p class="paragraph">
 This section provides general information about the system, identifies the interfaces between the system and its environment, and describes the user characteristics and the system constraints.
 </p>
-<a id="Sec:UserChars">
+<div id="Sec:UserChars">
 <div class="subsection">
 <h2>
 User Characteristics
@@ -838,8 +838,8 @@ The end user is expected to have basic computer literacy to handle the software.
 </li>
 </ul>
 </div>
-</a>
-<a id="Sec:SysConstraints">
+</div>
+<div id="Sec:SysConstraints">
 <div class="subsection">
 <h2>
 System Constraints
@@ -848,10 +848,10 @@ System Constraints
 There are no system constraints.
 </p>
 </div>
-</a>
 </div>
-</a>
-<a id="Sec:ProjScope">
+</div>
+</div>
+<div id="Sec:ProjScope">
 <div class="section">
 <h1>
 Scope of the Project
@@ -859,12 +859,12 @@ Scope of the Project
 <p class="paragraph">
 This section presents the scope of the project. It describes the expected use of GlassBR as well as the inputs and outputs of each action. The use cases are input and output, which defines the action of getting the input and displaying the output.
 </p>
-<a id="Sec:UseCaseTable">
+<div id="Sec:UseCaseTable">
 <div class="subsection">
 <h2>
 Product Use Case Table
 </h2>
-<a id="Table:useCaseTable">
+<div id="Table:useCaseTable">
 <table class="table">
 <tr>
 <th>
@@ -894,10 +894,10 @@ Whether or not the glass slab is safe for the calculated load and supporting cal
 <p class="caption">
 Use Case Table
 </p>
-</a>
 </div>
-</a>
-<a id="Sec:IndividualProdUC">
+</div>
+</div>
+<div id="Sec:IndividualProdUC">
 <div class="subsection">
 <h2>
 Individual Product Use Cases
@@ -906,10 +906,10 @@ Individual Product Use Cases
 The user provides the inputs to GlassBR for use within the analysis. There are two main classes of inputs: glass geometry and blast type. The glass geometry based inputs include the glass type and dimensions of the glass plane. The blast type input includes parameters like weight of charge, TNT equivalent factor and stand off distance from the point of explosion. These parameters describe charge weight and stand off blast. Another input the user gives is the tolerable value of probability of breakage. GlassBR outputs if the glass slab will be safe by comparing whether capacity is greater than demand. Capacity is the the load resistance calculated and demand is the requirement which is the 3 second duration equivalent pressure. The second condition is to check whether the calculated probability (<em>P<sub>b</sub></em>) is less than the tolerable probability (<em>P<sub>btol</sub></em>) which is obtained from the user as an input. If both conditions return true then it's shown that the glass slab is safe to use, else if both return false then the glass slab is considered unsafe. All the supporting calculated values are also displayed as output.
 </p>
 </div>
-</a>
 </div>
-</a>
-<a id="Sec:SpecSystDesc">
+</div>
+</div>
+<div id="Sec:SpecSystDesc">
 <div class="section">
 <h1>
 Specific System Description
@@ -917,7 +917,7 @@ Specific System Description
 <p class="paragraph">
 This section first presents the problem description, which gives a high-level view of the problem to be solved. This is followed by the solution characteristics specification, which presents the assumptions, theories, and definitions.
 </p>
-<a id="Sec:ProbDesc">
+<div id="Sec:ProbDesc">
 <div class="subsection">
 <h2>
 Problem Description
@@ -925,7 +925,7 @@ Problem Description
 <p class="paragraph">
 A system is needed to efficiently and correctly predict the blast risk involved with the glass. GlassBR is a computer program developed to interpret the inputs to give out the outputs which predicts whether the glass slab can withstand the blast under the conditions.
 </p>
-<a id="Sec:TermDefs">
+<div id="Sec:TermDefs">
 <div class="subsubsection">
 <h3>
 Terminology and Definitions
@@ -1006,8 +1006,8 @@ Probability of breakage (<em>P<sub>b</sub></em>) - The fraction of glass lites o
 </li>
 </ol>
 </div>
-</a>
-<a id="Sec:PhysSyst">
+</div>
+<div id="Sec:PhysSyst">
 <div class="subsubsection">
 <h3>
 Physical System Description
@@ -1023,15 +1023,15 @@ PS1: Glass slab
 PS2: The point of explosion. Where the bomb, or any kind of man-made explosion, is located. The stand off distance is the distance between the point of explosion and the glass.
 </p>
 </div>
-<a id="Figure:physSystImage">
+<div id="Figure:physSystImage">
 <img class="figure" src="../../../datafiles/GlassBR/physicalsystimage.png" alt="The physical system"></img>
 <p class="caption">
 The physical system
 </p>
-</a>
 </div>
-</a>
-<a id="Sec:GoalStmt">
+</div>
+</div>
+<div id="Sec:GoalStmt">
 <div class="subsubsection">
 <h3>
 Goal Statements
@@ -1045,10 +1045,10 @@ GS1: Analyze and predict whether the glass slab under consideration will be able
 </p>
 </div>
 </div>
-</a>
 </div>
-</a>
-<a id="Sec:SolCharSpec">
+</div>
+</div>
+<div id="Sec:SolCharSpec">
 <div class="subsection">
 <h2>
 Solution Characteristics Specification
@@ -1056,7 +1056,7 @@ Solution Characteristics Specification
 <p class="paragraph">
 The instance models that govern GlassBR are presented in <a href=#Sec:IMs>Instance Models</a>. The information to understand the meaning of the instance models and their derivation is also presented, so that the instance models can be verified.
 </p>
-<a id="Sec:Assumps">
+<div id="Sec:Assumps">
 <div class="subsubsection">
 <h3>
 Assumptions
@@ -1064,42 +1064,42 @@ Assumptions
 <p class="paragraph">
 This section simplifies the original problem and helps in developing the theoretical model by filling in the missing information for the physical system. The numbers given in the square brackets refer to the Theoretical Models [<a href=#Sec:TMs>Theoretical Models</a>], General Definitions [<a href=#Sec:GDs>General Definitions</a>], Data Definitions [<a href=#Sec:DDs>Data Definitions</a>], Instance Models [<a href=#Sec:IMs>Instance Models</a>], or Likely Changes [<a href=#Sec:LCs>Likely Changes</a>], in which the respective assumption is used.
 </p>
-<a id="A:glassTyA">
+<div id="A:glassTyA">
 <ul>
 glassTy: The standard E1300-09a for calculation applies only to monolithic, laminated, or insulating glass constructions of rectangular shape with continuous lateral support along. one, two, three, or four edge This practice assumes that (1) the supported glass edge for two, three and four-sided support conditions are simply supported and free to slip in plane; (2) glass supported on two sides acts as a simply supported beam and (3) glass supported on one side acts as a cantilever.
 </ul>
-</a>
-<a id="A:glassConditionA">
+</div>
+<div id="A:glassConditionA">
 <ul>
 glassCondition: Following <a href=#astm.LR2009>astm_LR2009</a> (pg. 1), this practice does not apply to any form of wired, patterned, etched, sandblasted, drilled, notched, or grooved glass with surface and edge treatments that alter the glass strength.
 </ul>
-</a>
-<a id="A:explsnScenarioA">
+</div>
+<div id="A:explsnScenarioA">
 <ul>
 explainScenario: This system only considers the external explosion scenario for its calculations.
 </ul>
-</a>
-<a id="A:standardValuesA">
+</div>
+<div id="A:standardValuesA">
 <ul>
 StandardValues: The values provided in <a href=#Sec:AuxConstants>Values of Auxiliary Constants</a> are assumed for the duration of load (<em>t<sub>d</sub></em>), and the material properties of <em>m</em>, <em>k</em>, and <em>E</em>.
 </ul>
-</a>
-<a id="A:glassLiteA">
+</div>
+<div id="A:glassLiteA">
 <ul>
 glassLite: Glass under consideration is assumed to be a single lite. Hence the value of LSF is equal to 1 for all calculations in GlassBR.
 </ul>
-</a>
-<a id="A:bndryConditionsA">
+</div>
+<div id="A:bndryConditionsA">
 <ul>
 boundaryConditions: Boundary conditions for the glass slab is assumed to be 4-sided support for calculations.
 </ul>
-</a>
-<a id="A:responseTyA">
+</div>
+<div id="A:responseTyA">
 <ul>
 responseType: The response type considered in GlassBR is flexural.
 </ul>
-</a>
-<a id="A:ldfConstantA">
+</div>
+<div id="A:ldfConstantA">
 <ul>
 ldfConstant: With reference to <a href=#A:standardValuesA>StandardValues</a> the value of load duration factor (<em>LDF</em>) is a constant in GlassBR. It is calculated by the equation: <em>LDF = (<div class="fraction">
 <span class="fup">
@@ -1117,10 +1117,10 @@ m
 </span>
 </div></sup></em>. Using this, <em>LDF = 0.27</em>.
 </ul>
-</a>
 </div>
-</a>
-<a id="Sec:TMs">
+</div>
+</div>
+<div id="Sec:TMs">
 <div class="subsubsection">
 <h3>
 Theoretical Models
@@ -1128,7 +1128,7 @@ Theoretical Models
 <p class="paragraph">
 This section focuses on the general equations and laws that GlassBR is based on.
 </p>
-<a id="T:t1SafetyReq">
+<div id="T:t1SafetyReq">
 <table class="tdefn">
 <tr>
 <th>
@@ -1145,13 +1145,13 @@ Safety Requirement-1
 Equation
 </th>
 <td>
-<a id="">
+<div id="">
 <div class="equation">
 <p class="paragraph">
 <em>is_safe1 = P<sub>b</sub>&thinsp;&lt;&thinsp;P<sub>btol</sub></em>
 </p>
 </div>
-</a>
+</div>
 </td>
 </tr>
 <tr>
@@ -1165,8 +1165,8 @@ If <em>is_safe1</em>, the glass is considered safe. <em>is_safe1</em> and <em>is
 </td>
 </tr>
 </table>
-</a>
-<a id="T:t2SafetyReq">
+</div>
+<div id="T:t2SafetyReq">
 <table class="tdefn">
 <tr>
 <th>
@@ -1183,13 +1183,13 @@ Safety Requirement-2
 Equation
 </th>
 <td>
-<a id="">
+<div id="">
 <div class="equation">
 <p class="paragraph">
 <em>is_safe2 = LR&thinsp;&gt;&thinsp;q</em>
 </p>
 </div>
-</a>
+</div>
 </td>
 </tr>
 <tr>
@@ -1203,10 +1203,10 @@ If <em>is_safe2</em>, the glass is considered safe. <em>is_safe1</em> (from <a h
 </td>
 </tr>
 </table>
-</a>
 </div>
-</a>
-<a id="Sec:GDs">
+</div>
+</div>
+<div id="Sec:GDs">
 <div class="subsubsection">
 <h3>
 General Definitions
@@ -1215,8 +1215,8 @@ General Definitions
 There are no general definitions.
 </p>
 </div>
-</a>
-<a id="Sec:DDs">
+</div>
+<div id="Sec:DDs">
 <div class="subsubsection">
 <h3>
 Data Definitions
@@ -1224,7 +1224,7 @@ Data Definitions
 <p class="paragraph">
 This section collects and defines all the data needed to build the instance models.
 </p>
-<a id="DD:risk.fun">
+<div id="DD:risk.fun">
 <table class="ddefn">
 <tr>
 <th>
@@ -1251,7 +1251,7 @@ Unitless
 Equation
 </th>
 <td>
-<a id="">
+<div id="">
 <div class="equation">
 <p class="paragraph">
 <em>B = <div class="fraction">
@@ -1264,7 +1264,7 @@ k
 </div>&#8239;(1000&#8239;E&#8239;h<sup>2</sup>)<sup>m</sup>&#8239;LDF&#8239;e<sup>J</sup></em>
 </p>
 </div>
-</a>
+</div>
 </td>
 </tr>
 <tr>
@@ -1278,8 +1278,8 @@ Description
 </td>
 </tr>
 </table>
-</a>
-<a id="DD:act.thick">
+</div>
+<div id="DD:act.thick">
 <table class="ddefn">
 <tr>
 <th>
@@ -1306,7 +1306,7 @@ m
 Equation
 </th>
 <td>
-<a id="">
+<div id="">
 <div class="equation">
 <p class="paragraph">
 <em>h = <div class="fraction">
@@ -1383,7 +1383,7 @@ t = 22.0
 </div></em>
 </p>
 </div>
-</a>
+</div>
 </td>
 </tr>
 <tr>
@@ -1397,8 +1397,8 @@ Description
 </td>
 </tr>
 </table>
-</a>
-<a id="DD:stressDistFac">
+</div>
+<div id="DD:stressDistFac">
 <table class="ddefn">
 <tr>
 <th>
@@ -1425,7 +1425,7 @@ Unitless
 Equation
 </th>
 <td>
-<a id="">
+<div id="">
 <div class="equation">
 <p class="paragraph">
 <em>J = J(q&#770;,<div class="fraction">
@@ -1438,7 +1438,7 @@ b
 </div>)</em>
 </p>
 </div>
-</a>
+</div>
 </td>
 </tr>
 <tr>
@@ -1452,8 +1452,8 @@ Description
 </td>
 </tr>
 </table>
-</a>
-<a id="DD:nFL">
+</div>
+<div id="DD:nFL">
 <table class="ddefn">
 <tr>
 <th>
@@ -1480,7 +1480,7 @@ Unitless
 Equation
 </th>
 <td>
-<a id="">
+<div id="">
 <div class="equation">
 <p class="paragraph">
 <em>NFL = <div class="fraction">
@@ -1493,7 +1493,7 @@ q&#770;<sub>tol</sub>&#8239;E&#8239;h<sup>4</sup>
 </div></em>
 </p>
 </div>
-</a>
+</div>
 </td>
 </tr>
 <tr>
@@ -1507,8 +1507,8 @@ Description
 </td>
 </tr>
 </table>
-</a>
-<a id="DD:gTF">
+</div>
+<div id="DD:gTF">
 <table class="ddefn">
 <tr>
 <th>
@@ -1535,7 +1535,7 @@ Unitless
 Equation
 </th>
 <td>
-<a id="">
+<div id="">
 <div class="equation">
 <p class="paragraph">
 <em>GTF = <span class="casebr">
@@ -1560,7 +1560,7 @@ g = HS
 </div></em>
 </p>
 </div>
-</a>
+</div>
 </td>
 </tr>
 <tr>
@@ -1574,8 +1574,8 @@ Description
 </td>
 </tr>
 </table>
-</a>
-<a id="DD:dimlessLoad">
+</div>
+<div id="DD:dimlessLoad">
 <table class="ddefn">
 <tr>
 <th>
@@ -1602,7 +1602,7 @@ Unitless
 Equation
 </th>
 <td>
-<a id="">
+<div id="">
 <div class="equation">
 <p class="paragraph">
 <em>q&#770; = <div class="fraction">
@@ -1615,7 +1615,7 @@ E&#8239;h<sup>4</sup>&#8239;GTF
 </div></em>
 </p>
 </div>
-</a>
+</div>
 </td>
 </tr>
 <tr>
@@ -1629,8 +1629,8 @@ Description
 </td>
 </tr>
 </table>
-</a>
-<a id="DD:tolLoad">
+</div>
+<div id="DD:tolLoad">
 <table class="ddefn">
 <tr>
 <th>
@@ -1657,7 +1657,7 @@ Unitless
 Equation
 </th>
 <td>
-<a id="">
+<div id="">
 <div class="equation">
 <p class="paragraph">
 <em>q&#770;<sub>tol</sub> = q&#770;<sub>tol</sub>(J<sub>tol</sub>,<div class="fraction">
@@ -1670,7 +1670,7 @@ b
 </div>)</em>
 </p>
 </div>
-</a>
+</div>
 </td>
 </tr>
 <tr>
@@ -1684,8 +1684,8 @@ Description
 </td>
 </tr>
 </table>
-</a>
-<a id="DD:sdf.tol">
+</div>
+<div id="DD:sdf.tol">
 <table class="ddefn">
 <tr>
 <th>
@@ -1712,7 +1712,7 @@ Unitless
 Equation
 </th>
 <td>
-<a id="">
+<div id="">
 <div class="equation">
 <p class="paragraph">
 <em>J<sub>tol</sub> = log(log(<div class="fraction">
@@ -1732,7 +1732,7 @@ k&#8239;(1000&#8239;E&#8239;h<sup>2</sup>)<sup>m</sup>&#8239;LDF
 </div>)</em>
 </p>
 </div>
-</a>
+</div>
 </td>
 </tr>
 <tr>
@@ -1746,10 +1746,10 @@ Description
 </td>
 </tr>
 </table>
-</a>
 </div>
-</a>
-<a id="Sec:IMs">
+</div>
+</div>
+<div id="Sec:IMs">
 <div class="subsubsection">
 <h3>
 Instance Models
@@ -1757,7 +1757,7 @@ Instance Models
 <p class="paragraph">
 This section transforms the problem defined in <a href=#Sec:ProbDesc>Problem Description</a> into one which is expressed in mathematical terms. It uses concrete symbols defined in <a href=#Sec:DDs>Data Definitions</a> to replace the abstract symbols in the models identified in <a href=#Sec:TMs>Theoretical Models</a> and <a href=#Sec:GDs>General Definitions</a>.
 </p>
-<a id="T:probOfBr">
+<div id="T:probOfBr">
 <table class="tdefn">
 <tr>
 <th>
@@ -1774,13 +1774,13 @@ Probability of Glass Breakage
 Equation
 </th>
 <td>
-<a id="">
+<div id="">
 <div class="equation">
 <p class="paragraph">
 <em>P<sub>b</sub> = 1&minus;e<sup>&minus;B</sup></em>
 </p>
 </div>
-</a>
+</div>
 </td>
 </tr>
 <tr>
@@ -1794,8 +1794,8 @@ Description
 </td>
 </tr>
 </table>
-</a>
-<a id="T:calOfCap">
+</div>
+<div id="T:calOfCap">
 <table class="tdefn">
 <tr>
 <th>
@@ -1812,13 +1812,13 @@ Calculation of Capacity(LR)
 Equation
 </th>
 <td>
-<a id="">
+<div id="">
 <div class="equation">
 <p class="paragraph">
 <em>LR = NFL&#8239;GTF&#8239;LSF</em>
 </p>
 </div>
-</a>
+</div>
 </td>
 </tr>
 <tr>
@@ -1832,8 +1832,8 @@ Description
 </td>
 </tr>
 </table>
-</a>
-<a id="T:calOfDe">
+</div>
+<div id="T:calOfDe">
 <table class="tdefn">
 <tr>
 <th>
@@ -1850,13 +1850,13 @@ Calculation of Demand(q)
 Equation
 </th>
 <td>
-<a id="">
+<div id="">
 <div class="equation">
 <p class="paragraph">
 <em>q = q(w<sub>TNT</sub>,SD)</em>
 </p>
 </div>
-</a>
+</div>
 </td>
 </tr>
 <tr>
@@ -1870,10 +1870,10 @@ Description
 </td>
 </tr>
 </table>
-</a>
 </div>
-</a>
-<a id="Sec:DataConstraints">
+</div>
+</div>
+<div id="Sec:DataConstraints">
 <div class="subsubsection">
 <h3>
 Data Constraints
@@ -1881,7 +1881,7 @@ Data Constraints
 <p class="paragraph">
 <a href=#Table:InDataConstraints>Table:InDataConstraints</a>, and <a href=#Table:OutDataConstraints>Table:OutDataConstraints</a> shows the data constraints on the input and output variables, respectively. The column for physical constraints gives the physical limitations on the range of values that can be taken by the variable. The uncertainty column provides an estimate of the confidence with which the physical quantities can be measured. This information would be part of the input if one were performing an uncertainty quantification exercise. The constraints are conservative, to give the user of the model the flexibility to experiment with unusual situations. The column of typical values is intended to provide a feel for a common scenario. <a href=#Sec:AuxConstants>Values of Auxiliary Constants</a> gives the values of the specification parameters used in <a href=#Table:InDataConstraints>Table:InDataConstraints</a>. <a href=#Table:OutDataConstraints>Table:OutDataConstraints</a> shows the constraints that must be satisfied by the output.
 </p>
-<a id="Table:InDataConstraints">
+<div id="Table:InDataConstraints">
 <table class="table">
 <tr>
 <th>
@@ -2013,8 +2013,8 @@ None
 <p class="caption">
 Input Data Constraints
 </p>
-</a>
-<a id="Table:OutDataConstraints">
+</div>
+<div id="Table:OutDataConstraints">
 <table class="table">
 <tr>
 <th>
@@ -2036,14 +2036,14 @@ Physical Constraints
 <p class="caption">
 Output Data Constraints
 </p>
-</a>
 </div>
-</a>
 </div>
-</a>
 </div>
-</a>
-<a id="Sec:Requirements">
+</div>
+</div>
+</div>
+</div>
+<div id="Sec:Requirements">
 <div class="section">
 <h1>
 Requirements
@@ -2051,36 +2051,36 @@ Requirements
 <p class="paragraph">
 This section provides the functional requirements, the business tasks that the software is expected to complete, and the non-functional requirements, the qualities that the software is expected to exhibit.
 </p>
-<a id="Sec:FRs">
+<div id="Sec:FRs">
 <div class="subsection">
 <h2>
 Functional Requirements
 </h2>
-<a id="FR:s7.1.req1">
+<div id="FR:s7.1.req1">
 <ul>
 Input-Glass-Props: Input the quantities from <a href=#Table:R1ReqInputs>Table:R1ReqInputs</a>, which define the glass dimensions, type of glass, tolerable probability of failure and the characteristics of the blast Note: <em>a</em> and <em>b</em> will be input in terms of millimetres and will be converted to the equivalent value in metres.
 </ul>
-</a>
-<a id="FR:s7.1.req2">
+</div>
+<div id="FR:s7.1.req2">
 <ul>
 System-Set-Values-Following-Assumptions: The system shall set the known values as follows: <em>m</em>, <em>k</em>, <em>E</em>, <em>t<sub>d</sub></em> following A4, <em>LDF</em> following A8, and LSF following A5.
 </ul>
-</a>
-<a id="FR:s7.1.req3">
+</div>
+<div id="FR:s7.1.req3">
 <ul>
 Check-Input-with-Data_Constraints: The system shall check the entered input values to ensure that they do not exceed the data constraints mentioned in <a href=#Sec:DataConstraints>Data Constraints</a>. If any of the input parameters is out of bounds, an error message is displayed and the calculations stop.
 </ul>
-</a>
-<a id="FR:s7.1.req4">
+</div>
+<div id="FR:s7.1.req4">
 <ul>
 Output-Values-and-Known-Quantities: Output the input quantities from R1 and the known quantities from R2.
 </ul>
-</a>
-<a id="FR:s7.1.req5">
+</div>
+<div id="FR:s7.1.req5">
 <ul>
 Check-Glass-Safety: If <em>is_safe1</em> and <em>is_safe2</em> (from <a href=#T:t1SafetyReq>T:t1SafetyReq</a> and <a href=#T:t2SafetyReq>T:t2SafetyReq</a>) are true, output the message &quot;For the given input parameters, the glass is considered safe.&quot; If the condition is false, then output the message &quot;For the given input parameters, the glass is NOT considered safe.&quot;
 </ul>
-</a>
+</div>
 <div class="list">
 <p>
 R6: Output the following quantities:
@@ -2128,7 +2128,7 @@ b
     </ul>
 </p>
 </div>
-<a id="Table:R1ReqInputs">
+<div id="Table:R1ReqInputs">
 <table class="table">
 <tr>
 <th>
@@ -2255,10 +2255,10 @@ mm
 <p class="caption">
 Required Inputs following R1
 </p>
-</a>
 </div>
-</a>
-<a id="Sec:NFRs">
+</div>
+</div>
+<div id="Sec:NFRs">
 <div class="subsection">
 <h2>
 Non-Functional Requirements
@@ -2267,42 +2267,42 @@ Non-Functional Requirements
 This problem is small in size and relatively simple, so performance is not a priority. Any reasonable implementation will be very quick and use minimal storage. Rather than performance, the non-functional requirement priorities are correctness, verifiability, understandability, reusability, maintainability, and portability.
 </p>
 </div>
-</a>
 </div>
-</a>
-<a id="Sec:LCs">
+</div>
+</div>
+<div id="Sec:LCs">
 <div class="section">
 <h1>
 Likely Changes
 </h1>
-<a id="LC:s8.likelychg1">
+<div id="LC:s8.likelychg1">
 <ul>
 Calculate-Internal-Blask-Risk: <a href=#A:explsnScenarioA>explainScenario</a> - The system currently only calculates for external blast risk. In the future calculations can be added for the internal blast risk.
 </ul>
-</a>
-<a id="LC:s8.likelychg2">
+</div>
+<div id="LC:s8.likelychg2">
 <ul>
 Variable-Values-of-m,k,E: <a href=#A:standardValuesA>StandardValues</a>, <a href=#A:ldfConstantA>ldfConstant</a> - Currently the values for <em>m</em>, <em>k</em>, and <em>E</em> are assumed to be the same for all glass. In the future these values can be changed to variable inputs.
 </ul>
-</a>
-<a id="LC:s8.likelychg3">
+</div>
+<div id="LC:s8.likelychg3">
 <ul>
 Accomodate-More-than-Single-Lite: <a href=#A:glassLiteA>glassLite</a> - The software may be changed to accommodate more than a single lite.
 </ul>
-</a>
-<a id="LC:s8.likelychg4">
+</div>
+<div id="LC:s8.likelychg4">
 <ul>
 Accomodate-More-Boundary-Conditions: <a href=#A:bndryConditionsA>boundaryConditions</a> - The software may be changed to accommodate more boundary conditions than 4-sided support.
 </ul>
-</a>
-<a id="LC:s8.likelychg5">
+</div>
+<div id="LC:s8.likelychg5">
 <ul>
 Consider-More-than-Flexure-Glass: <a href=#A:responseTyA>responseType</a> - The software may be changed to consider more than just flexure of the glass.
 </ul>
-</a>
 </div>
-</a>
-<a id="Sec:TraceMatrices">
+</div>
+</div>
+<div id="Sec:TraceMatrices">
 <div class="section">
 <h1>
 Traceability Matrices and Graphs
@@ -2310,7 +2310,7 @@ Traceability Matrices and Graphs
 <p class="paragraph">
 The purpose of the traceability matrices is to provide easy references on what has to be additionally modified if a certain component is changed. Every time a component is changed, the items in the column of that component that are marked with an &quot;X&quot; should be modified as well. <a href=#Table:TraceyItemSecs>Table:TraceyItemSecs</a> shows the dependencies of theoretical models, instance models, and data definitions with each other. <a href=#Table:TraceyReqsItems>Table:TraceyReqsItems</a> shows the dependencies of requirements on theoretical models, instance models, data definitions, and data constraints. <a href=#Table:TraceyAssumpsOthers>Table:TraceyAssumpsOthers</a> shows the dependencies of theoretical models, instance models, data definitions, likely changes and requirements on the assumptions.
 </p>
-<a id="Table:TraceyItemSecs">
+<div id="Table:TraceyItemSecs">
 <table class="table">
 <tr>
 <th>
@@ -2932,8 +2932,8 @@ X
 <p class="caption">
 Traceability Matrix Showing the Connections Between Items of Different Sections
 </p>
-</a>
-<a id="Table:TraceyReqsItems">
+</div>
+<div id="Table:TraceyReqsItems">
 <table class="table">
 <tr>
 <th>
@@ -3394,8 +3394,8 @@ X
 <p class="caption">
 Traceability Matrix Showing the Connections Between Requirements and Other Items
 </p>
-</a>
-<a id="Table:TraceyAssumpsOthers">
+</div>
+<div id="Table:TraceyAssumpsOthers">
 <table class="table">
 <tr>
 <th>
@@ -4126,34 +4126,34 @@ R6 (<a href=#Sec:FRs>Functional Requirements</a>)
 <p class="caption">
 Traceability Matrix Showing the Connections Between Assumptions and Other Items
 </p>
-</a>
+</div>
 <p class="paragraph">
 The purpose of the traceability graphs is also to provide easy references on what has to be additionally modified if a certain component is changed. The arrows in the graphs represent dependencies. The component at the tail of an arrow is depended on by the component at the head of that arrow. Therefore, if a component is changed, the components that it points to should also be changed. <a href=#Figure:TraceyItemSecs>Figure:TraceyItemSecs</a> shows the dependencies of theoretical models, instance models, and data definitions on each other. <a href=#Figure:TraceyReqsItems>Figure:TraceyReqsItems</a> shows the dependencies of requirements on theoretical models, instance models, data definitions, and data constraints. <a href=#Figure:TraceyAssumpsOthers>Figure:TraceyAssumpsOthers</a> shows the dependencies of theoretical models, instance models, data definitions, requirements, and likely changes on assumptions.
 </p>
 <p class="paragraph">
 NOTE: Building a tool to automatically generate the graphical representation of the matrix by scanning the labels and reference can be future work.
 </p>
-<a id="Figure:TraceyItemSecs">
+<div id="Figure:TraceyItemSecs">
 <img class="figure" src="../../../datafiles/GlassBR/Trace.png" alt="Figure 2: Traceability Matrix Showing the Connections Between Items of Different Sections"></img>
 <p class="caption">
 Figure 2: Traceability Matrix Showing the Connections Between Items of Different Sections
 </p>
-</a>
-<a id="Figure:TraceyReqsItems">
+</div>
+<div id="Figure:TraceyReqsItems">
 <img class="figure" src="../../../datafiles/GlassBR/RTrace.png" alt="Figure 3: Traceability Matrix Showing the Connections Between Requirements and Other Items"></img>
 <p class="caption">
 Figure 3: Traceability Matrix Showing the Connections Between Requirements and Other Items
 </p>
-</a>
-<a id="Figure:TraceyAssumpsOthers">
+</div>
+<div id="Figure:TraceyAssumpsOthers">
 <img class="figure" src="../../../datafiles/GlassBR/ATrace.png" alt="Figure 4: Traceability Matrix Showing the Connections Between Assumptions and Other Items"></img>
 <p class="caption">
 Figure 4: Traceability Matrix Showing the Connections Between Assumptions and Other Items
 </p>
-</a>
 </div>
-</a>
-<a id="Sec:AuxConstants">
+</div>
+</div>
+<div id="Sec:AuxConstants">
 <div class="section">
 <h1>
 Values of Auxiliary Constants
@@ -4161,7 +4161,7 @@ Values of Auxiliary Constants
 <p class="paragraph">
 This section contains the standard values that are used for calculations in GlassBR.
 </p>
-<a id="Table:TAuxConsts">
+<div id="Table:TAuxConsts">
 <table class="table">
 <tr>
 <th>
@@ -4377,52 +4377,52 @@ m
 <p class="caption">
 Auxiliary Constants
 </p>
-</a>
 </div>
-</a>
-<a id="Sec:References">
+</div>
+</div>
+<div id="Sec:References">
 <div class="section">
 <h1>
 References
 </h1>
-<a id="astm_C1036">
+<div id="astm_C1036">
 <ul>
 [1]: ASTM C1036-16. <em>Standard specification for Flat Glass</em>. West Conshohocken, PA: ASTM International, 2016. www.astm.org.
 </ul>
-</a>
-<a id="astm_C1048">
+</div>
+<div id="astm_C1048">
 <ul>
 [2]: ASTM C1048-04. <em>Specification for Heat-Treated Flat Glass-Kind HS, Kind FT Coated and Uncoated Glass</em>. West Conshohocken, PA: ASTM International, 2009. www.astm.org.
 </ul>
-</a>
-<a id="astm_LR2009">
+</div>
+<div id="astm_LR2009">
 <ul>
 [3]: ASTM E1300-09. <em>Standard Practice for Determining Load Resistance of Glass in Buildings</em>. <em>Standard E1300-09a</em>. ASTM International, 2009. www.astm.org.
 </ul>
-</a>
-<a id="glThick1998">
+</div>
+<div id="glThick1998">
 <ul>
 [4]: Beason, W. Lynn, Kohutek, Terry L., and Bracci, Joseph M. <em>Basis for ASTME E 1300 Annealed Glass Thickness Selection Charts</em>. <em>ASCE Library</em>. February, 1998. doi.org/10.1061/(ASCE)0733-9445(1998)124:2(215).
 </ul>
-</a>
-<a id="koothoor2013">
+</div>
+<div id="koothoor2013">
 <ul>
 [5]: Koothoor, Nirmitha. <em>A document drive approach to certifying scientific computing software</em>. McMaster University, Hamilton, ON, Canada: 2013. Print.
 </ul>
-</a>
-<a id="rbrtsn2012">
+</div>
+<div id="rbrtsn2012">
 <ul>
 [6]: Robertson, James and Robertson, Suzanne. <em>Volere requirements specification template edition 16</em>. 2012. https://pdfs.semanticscholar.org/cf57/27a59801086cbd3d14e587e09880561dbe22.pdf.
 </ul>
-</a>
-<a id="smithLai2005">
+</div>
+<div id="smithLai2005">
 <ul>
 [7]: Smith, W. Spencer and Lai, Lei. "A new requirements template for scientific computing." <em>Proceedings of the First International Workshop on Situational Requirements Engineering Processes - Methods, Techniques and Tools to Support Situation-Specific Requirements Engineering Processes, SREP'05</em>. Edited by PJ Agerfalk, N. Kraiem, and J. Ralyte, Paris, France: 2005. pp. 107&ndash;121. In conjunction with 13th IEEE International Requirements Engineering Conference,
 </ul>
-</a>
 </div>
-</a>
-<a id="Sec:Appendix">
+</div>
+</div>
+<div id="Sec:Appendix">
 <div class="section">
 <h1>
 Appendix
@@ -4430,19 +4430,19 @@ Appendix
 <p class="paragraph">
 This appendix holds the graphs (<a href=#Figure:demandVSsod>Figure:demandVSsod</a> and <a href=#Figure:dimlessloadVSaspect>Figure:dimlessloadVSaspect</a>) used for interpolating values needed in the models.
 </p>
-<a id="Figure:demandVSsod">
+<div id="Figure:demandVSsod">
 <img class="figure" src="../../../datafiles/GlassBR/ASTM_F2248-09.png" alt="Figure 5: 3 second duration equivalent pressure (<em>q</em>) versus Stand off distance (SD) versus Charge weight (<em>m</em>)"></img>
 <p class="caption">
 Figure 5: 3 second duration equivalent pressure (<em>q</em>) versus Stand off distance (SD) versus Charge weight (<em>m</em>)
 </p>
-</a>
-<a id="Figure:dimlessloadVSaspect">
+</div>
+<div id="Figure:dimlessloadVSaspect">
 <img class="figure" src="../../../datafiles/GlassBR/ASTM_F2248-09_BeasonEtAl.png" alt="Figure 6: Non dimensional lateral load (<em>q&#770;</em>) versus Aspect Ratio (AR) versus Stress distribution factor (Function) (<em>J</em>)"></img>
 <p class="caption">
 Figure 6: Non dimensional lateral load (<em>q&#770;</em>) versus Aspect Ratio (AR) versus Stress distribution factor (Function) (<em>J</em>)
 </p>
-</a>
 </div>
-</a>
+</div>
+</div>
 </body>
 </html>

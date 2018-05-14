@@ -49,7 +49,7 @@ caption = wrap "p" ["caption"]
 
 -- | Helper for setting up references
 refwrap :: Doc -> Doc -> Doc
-refwrap r x = vcat [hcat [text "<a id=\"", r, text  "\">"], x, text "</a>"]
+refwrap r x = vcat [hcat [text "<div id=\"", r, text  "\">"], x, text "</div>"]
 
 -- | Helper for setting up links to references
 reflink :: String -> Doc -> Doc

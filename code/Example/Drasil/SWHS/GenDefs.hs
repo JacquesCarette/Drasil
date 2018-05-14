@@ -20,6 +20,7 @@ import Data.Drasil.Concepts.Documentation (assumption)
 
 import Drasil.SWHS.TMods (t1ConsThermE)
 import Drasil.SWHS.Concepts (gauss_div)
+import Drasil.SWHS.Assumptions
 
 ---------------------------
 --  General Definitions  --
@@ -96,7 +97,8 @@ roc_temp_simp_deriv_sentences = map foldlSentCol [
   s4_2_3_desc2 gauss_div surface vol thFluxVect uNormalVect unit_,
   s4_2_3_desc3 vol vol_ht_gen,
   s4_2_3_desc4 ht_flux_in ht_flux_out in_SA out_SA density QT.heat_cap_spec
-    QT.temp vol [S "A3", S "A4", S "A5"],
+    QT.temp vol [makeRef assump_new_3, makeRef assump_new_4, 
+                 makeRef assump_new_5, makeRef assump_new_6],
   s4_2_3_desc5 density mass vol]
 
 s4_2_3_desc1 :: RelationConcept -> UnitalChunk -> [Sentence]

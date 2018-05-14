@@ -30,10 +30,14 @@ instance ConceptDomain DefinedQuantityDict where
   type DOM DefinedQuantityDict = ConceptChunk
   cdom = con . cdom
 instance Concept DefinedQuantityDict       where
-instance Q.HasSpace DefinedQuantityDict    where  typ = quant . Q.typ
+instance Q.HasSpace DefinedQuantityDict    where typ = quant . Q.typ
 instance HasSymbol DefinedQuantityDict     where symbol q st = symbol (q^.quant) st
 instance Q.Quantity DefinedQuantityDict    where getUnit (DQD a _) = Q.getUnit a
-instance HasAttributes DefinedQuantityDict where attributes = quant .  attributes
+instance HasAttributes DefinedQuantityDict where attributes = quant . attributes
 
 cqs :: (HasAttributes c, Q.Quantity c, Concept c, DOM c ~ ConceptChunk) => c -> DefinedQuantityDict
-cqs c = DQD (Q.qw c) (cw c) 
+cqs c = DQD (Q.qw c) (cw c)
+
+{- | Constructor for 'ConVar' with explicit 'Space'
+cv :: ConceptChunk -> Symbol -> Space -> ConVar
+cv c s = CV c (\_ -> s)-}

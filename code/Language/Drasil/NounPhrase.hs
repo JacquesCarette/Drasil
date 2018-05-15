@@ -216,10 +216,10 @@ findNotCaps "" = ""
 findNotCaps s = concat $ intersperse " " ((head $ words s) : map isNotCaps (tail $ words s))
 
 isNotCaps :: String -> String
-isNotCaps s
-  | not ((isLetter (head s)) && (isLatin1 (head s))) = (toLower (head s)) : tail s
-  | (toLower (head s) : tail s) `elem` doNotCaps = toLower (head s) : tail s
-  | otherwise = s
+isNotCaps (c:cs)
+  	| not ((isLetter c) && (isLatin1 c)) = (toLower c) : cs
+  	| ((toLower c) : cs) `elem` doNotCaps = (toLower c) : cs
+isNotCaps s = s
 
 doNotCaps :: [String]
 doNotCaps = ["a", "an", "the", "at", "by", "for", "in", "of",

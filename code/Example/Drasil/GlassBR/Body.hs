@@ -672,7 +672,7 @@ s8_likelychg5 = mkLklyChnk "s8_likelychg5" (lc5Desc) (S "Consider-More-than-Flex
 lc1Desc :: NamedChunk -> Sentence
 lc2Desc, lc3Desc, lc4Desc, lc5Desc :: Sentence
 
-lc1Desc mainConcept = foldlSent [((short assumption) :+: S (show 3)) `sDash` S "The",
+lc1Desc mainConcept = foldlSent [(refA gbRefDB newA3) `sDash` S "The",
   phrase system, S "currently only calculates for external" +:+.
   phrase mainConcept, S "In the future", plural calculation,
   S "can be added for the internal", phrase mainConcept]

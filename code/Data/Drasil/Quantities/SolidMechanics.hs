@@ -13,5 +13,5 @@ shearRes = ucEL CSM.shearRes cP newton
 stffness = ucEL CSM.stffness cK stiffnessU
 nrmStrss = ucEL CSM.nrmStrss (Greek Sigma_L) pascal
 
-poissnsR :: ConVar
-poissnsR = cv CSM.poissnsR (Greek Nu_L) Real
+poissnsR :: DefinedQuantityDictCV
+poissnsR = dqd CSM.poissnsR (Greek Nu_L) Real

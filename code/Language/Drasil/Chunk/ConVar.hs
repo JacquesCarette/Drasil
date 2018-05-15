@@ -1,5 +1,5 @@
 {-# LANGUAGE TemplateHaskell, TypeFamilies #-}
-module Language.Drasil.Chunk.ConVar (ConVar(CV), cv) where
+module Language.Drasil.Chunk.ConVar (DefinedQuantityDictCV(DQD), dqd) where
 
 import Language.Drasil.Classes (HasUID(uid), NamedIdea(term), Idea(getA),
   Definition(defn),ConceptDomain(cdom,DOM),Concept,HasSymbol(symbol), HasSpace(typ))
@@ -12,25 +12,26 @@ import Control.Lens ((^.),makeLenses)
 
 -- | ConVar is a 'Concept' as well as a 'Quantity'. 
 -- It adds a 'Space' and 'Symbol' to an existing 'ConceptChunk'.
-data ConVar = CV { _con :: ConceptChunk
-                 , _symb :: Stage -> Symbol
-                 , _spa :: Space 
-                 }
-makeLenses ''ConVar
+-- FIXME: ConVar renamed to DefinedQuantityDictCV
+data DefinedQuantityDictCV = DQD { _con :: ConceptChunk
+                                 , _symb :: Stage -> Symbol
+                                 , _spa :: Space 
+                                 }
+makeLenses ''DefinedQuantityDictCV
                      
-instance Eq            ConVar where c1 == c2 = (c1 ^. uid) == (c2 ^. uid)
-instance HasUID        ConVar where uid = con . uid
-instance NamedIdea     ConVar where term = con . term
-instance Idea          ConVar where getA (CV c _ _) = getA c
-instance Definition    ConVar where defn = con . defn
-instance ConceptDomain ConVar where
-  type DOM ConVar = ConceptChunk
+instance Eq            DefinedQuantityDictCV where c1 == c2 = (c1 ^. uid) == (c2 ^. uid)
+instance HasUID        DefinedQuantityDictCV where uid = con . uid
+instance NamedIdea     DefinedQuantityDictCV where term = con . term
+instance Idea          DefinedQuantityDictCV where getA (DQD c _ _) = getA c
+instance Definition    DefinedQuantityDictCV where defn = con . defn
+instance ConceptDomain DefinedQuantityDictCV where
+  type DOM DefinedQuantityDictCV = ConceptChunk
   cdom = con . cdom
-instance HasSymbol     ConVar where symbol c = (c ^. symb)
-instance HasSpace      ConVar where typ = spa
-instance Concept       ConVar where
-instance Quantity      ConVar where getUnit _ = Nothing
+instance HasSymbol     DefinedQuantityDictCV where symbol c = (c ^. symb)
+instance HasSpace      DefinedQuantityDictCV where typ = spa
+instance Concept       DefinedQuantityDictCV where
+instance Quantity      DefinedQuantityDictCV where getUnit _ = Nothing
 
--- | Constructor for 'ConVar' with explicit 'Space'
-cv :: ConceptChunk -> Symbol -> Space -> ConVar
-cv c s = CV c (\_ -> s)
+-- | Constructor for 'DefinedQuantityDictCV' with explicit 'Space'
+dqd :: ConceptChunk -> Symbol -> Space -> DefinedQuantityDictCV
+dqd c s = DQD c (\_ -> s)

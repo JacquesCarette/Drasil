@@ -5,16 +5,16 @@ import Language.Drasil
 import Data.Drasil.Concepts.Math as CM
 import Data.Drasil.SI_Units
 
-diameter, gradient, normalVect, unitVect, euclidNorm, perpVect, surface, uNormalVect :: ConVar
+diameter, gradient, normalVect, unitVect, euclidNorm, perpVect, surface, uNormalVect :: DefinedQuantityDictCV
 
-diameter    = cv CM.diameter lD                                            Real
-gradient    = cv CM.gradient (Greek Nabla)                                 Real
-normalVect  = cv CM.normalV  (vec $ lN)                                    Real
-uNormalVect = cv CM.normalV  (vec $ hat lN)                                Real
-unitVect    = cv CM.unitV    (vec $ hat lI)                                Real
-perpVect    = cv CM.perpV    (vec $ lN)                                    Real
-surface     = cv CM.surface  cS                                            Real
-euclidNorm  = cv CM.euclidN  (Concat [Atomic "||", (vec lR), Atomic "||"]) Real
+diameter    = dqd CM.diameter lD                                            Real
+gradient    = dqd CM.gradient (Greek Nabla)                                 Real
+normalVect  = dqd CM.normalV  (vec $ lN)                                    Real
+uNormalVect = dqd CM.normalV  (vec $ hat lN)                                Real
+unitVect    = dqd CM.unitV    (vec $ hat lI)                                Real
+perpVect    = dqd CM.perpV    (vec $ lN)                                    Real
+surface     = dqd CM.surface  cS                                            Real
+euclidNorm  = dqd CM.euclidN  (Concat [Atomic "||", (vec lR), Atomic "||"]) Real
 
 
 surArea, orientation :: UnitalChunk

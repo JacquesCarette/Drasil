@@ -22,7 +22,7 @@ soil, material, intrslce, slip, slope, slice, morPrice, rgFnElm :: NamedChunk
 intrslce = nc "interslice" (cn' "interslice")
 material = nc "material"   (cn' "material")
 slice    = nc "slice"      (cn' "slice")
-slip     = nc "slip"       (cn  "slip") --FIXME: adjective?
+slip     = nc "slip"       (cn  "slip") --FIXME: verb (escape or get loose from (a means of restraint))/noun (an act of sliding unintentionally for a short distance)?
 slope    = nc "slope"      (cn' "slope")
 soil     = nc "soil"       (cn  "soil")
 

@@ -443,72 +443,70 @@ kiPrime = m2x2
 ------------------------------------------------------- 
 
 stfMtrx_deriv_ssp :: Derivation
-stfMtrx_deriv_ssp = weave [stfMtrxDerivation_sentence, map E stfMtrx_deriv_eqns_ssp]
+stfMtrx_deriv_ssp = [S "Using the force-displacement relationship of" +:+ 
+  (acroGD 8) +:+  S "to define stiffness matrix" +:+ getES shrStiffIntsl `sC`
+  S "as seen in" +:+. eqN 6] ++ [(E eq6)] ++ stfMtrx_deriv_sentences_ssp_s1 ++
+  stfMtrx_deriv_sentences_ssp_s2 ++ [(E eq7)] ++ stfMtrx_deriv_sentences_ssp_s3
+  ++ [(E eq8)] ++ stfMtrx_deriv_sentences_ssp_s4 ++ [(E eq9)] ++ [(E eq10)] ++ [(E eq11)]
+  ++ stfMtrx_deriv_sentences_ssp_s5
+
 
 stfMtrx_deriv_sentences_ssp_s1 :: [Sentence]
-stfMtrx_deriv_sentences_ssp_s1 = [S "Using the force-displacement relationship of", 
-  acroGD 8, S "to define stiffness matrix", getES shrStiffIntsl `sC`
-  S "as seen in", eqN 6]
-
-stfMtrx_deriv_sentences_ssp_s2 :: [Sentence]
-stfMtrx_deriv_sentences_ssp_s2 = [S "For interslice surfaces the stiffness constants" `sAnd`
+stfMtrx_deriv_sentences_ssp_s1 = [S "For interslice surfaces the stiffness constants" `sAnd`
   S "displacements refer to an unrotated coordinate system" `sC`
-  getES genDisplace, S "of" +:+. acroGD 9, S "The interslice elements",
+  getES genDisplace +:+ S "of" +:+. acroGD 9 +:+ S "The interslice elements" +:+
   S "are left in their standard coordinate system" `sC`
-  S "and therefore are described by the same", phrase equation,
-  S "from" +:+. acroGD 8, S "Seen as", getES shrStiffIntsl, S "in" +:+.
-  acroDD 12, isElMx shrStiffIntsl "shear" `sC` --FIXEME: add matrix symbols?
-  S "and", isElMx nrmStiffIntsl "normal" `sC` S "calculated as in", acroDD 14,
-  S "For basal surfaces the stiffness constants" `sAnd`
+  S "and therefore are described by the same" +:+ phrase equation +:+
+  S "from" +:+. acroGD 8 +:+ S "Seen as" +:+ getES shrStiffIntsl +:+ S "in" +:+.
+  acroDD 12 +:+ isElMx shrStiffIntsl "shear" `sC` --FIXEME: add matrix symbols?
+  S "and" +:+ (isElMx nrmStiffIntsl "normal" `sC` S "calculated as in") +:+. acroDD 14]
+  
+stfMtrx_deriv_sentences_ssp_s2 :: [Sentence]
+stfMtrx_deriv_sentences_ssp_s2 =
+ [S "For basal surfaces the stiffness constants" `sAnd`
   S "displacements refer to a system rotated for the base angle alpha" +:+.
-  sParen (acroDD 5), S "To analyze the effect of force-displacement",
+  sParen (acroDD 5) +:+ S "To analyze the effect of force-displacement" +:+
   S "relationships occurring on both basal" `sAnd`
-  S "interslice surfaces of an", phrase element, getES index,
-  S "they must reference the same coordinate",
-  S "system. The basal stiffness matrix must be rotated counter clockwise",
-  S "to align with" +:+. (phrase angle `ofThe` S "basal surface"),
-  S "The base stiffness counter clockwise rotation is applied in", eqN 7,
-  S "to the new matrix", getES nrmFNoIntsl]
+  S "interslice surfaces of an" +:+ phrase element +:+ getES index +:+
+  S "they must reference the same coordinate" +:+
+  S "system. The basal stiffness matrix must be rotated counter clockwise" +:+
+  S "to align with" +:+. (phrase angle `ofThe` S "basal surface") +:+
+  S "The base stiffness counter clockwise rotation is applied in" +:+ eqN 7 +:+
+  S "to the new matrix" +:+. getES nrmFNoIntsl]
 
 stfMtrx_deriv_sentences_ssp_s3 :: [Sentence]
-stfMtrx_deriv_sentences_ssp_s3 = [S "The Hooke's law force displacement relationship of", acroGD 8,
-  S "applied to the base also references a displacement vector",
-  getES rotatedDispl, S "of", acroGD 9, S "rotated for", S "base angle" `ofThe`
-  S "slice", getES baseAngle +:+. S "The basal displacement vector",
-  getES genDisplace,  S "is rotated clockwise to align with the",
-  phrase intrslce, S "displacement vector",
-  getES genDisplace `sC` S "applying the", phrase definition, S "of", 
-  getES rotatedDispl, S "in terms of", getES genDisplace, S "as seen in" +:+.
-  acroGD 9, S "Using this with base stiffness matrix",
+stfMtrx_deriv_sentences_ssp_s3 = [S "The Hooke's law force displacement relationship of" +:+ acroGD 8 +:+
+  S "applied to the base also references a displacement vector" +:+
+  getES rotatedDispl +:+ S "of" +:+ acroGD 9 +:+ S "rotated for" +:+ S "base angle" `ofThe`
+  S "slice" +:+ getES baseAngle +:+. S "The basal displacement vector" +:+
+  getES genDisplace +:+  S "is rotated clockwise to align with the" +:+
+  phrase intrslce +:+ S "displacement vector" +:+
+  getES genDisplace `sC` S "applying the" +:+ phrase definition +:+ S "of" +:+ 
+  getES rotatedDispl +:+ S "in terms of" +:+ getES genDisplace +:+ S "as seen in" +:+.
+  acroGD 9 +:+ S "Using this with base stiffness matrix" +:+
   getES shrStiffBase --FIXME: should be K*i"
-  `sC` S "a basal force displacement relationship in the same coordinate",
-  S "system as the interslice relationship can be derived as done in", eqN 8]
+  `sC` S "a basal force displacement relationship in the same coordinate" +:+
+  S "system as the interslice relationship can be derived as done in" +:+. eqN 8]
 
 stfMtrx_deriv_sentences_ssp_s4 :: [Sentence]
 stfMtrx_deriv_sentences_ssp_s4 = 
-  [S "The new effective base stiffness matrix", getES shrStiffBase,
+  [S "The new effective base stiffness matrix" +:+ getES shrStiffBase +:+
   --FIXME: add symbol?
-  S "as derived in", eqN 7, S "is defined in" +:+. eqN 9,
-  S "This is seen as matrix", getES shrStiffBase, S "in" +:+.
-  acroGD 12, isElMx shrStiffBase "shear" `sC` S "and",
-  isElMx nrmStiffBase "normal" `sC` S "calculated as in" +:+. acroDD 14,
-  S "The notation is simplified by", S "introduction" `ofThe` S "constants",
-  getES effStiffA `sAnd` getES effStiffB `sC` S "defined in", eqN 10 `sAnd`
-  eqN 11, S "respectively"]
+  S "as derived in" +:+ eqN 7 +:+ S "is defined in" +:+. eqN 9 +:+
+  S "This is seen as matrix" +:+ getES shrStiffBase +:+ S "in" +:+.
+  acroGD 12 +:+ isElMx shrStiffBase "shear" `sC` S "and" +:+
+  isElMx nrmStiffBase "normal" `sC` S "calculated as in" +:+. acroDD 14 +:+
+  S "The notation is simplified by" +:+ S "introduction" `ofThe` S "constants" +:+
+  getES effStiffA `sAnd` getES effStiffB `sC` S "defined in" +:+ eqN 10 `sAnd`
+  eqN 11 +:+. S "respectively"]
 
 stfMtrx_deriv_sentences_ssp_s5 :: [Sentence]
-stfMtrx_deriv_sentences_ssp_s5 = [S "A force-displacement relationship for an element", getES index,
-  S "can be written in terms of displacements occurring in the unrotated", 
-  S "coordinate system", getES genDisplace `sOf` acroGD 9, S "using the matrix",
+stfMtrx_deriv_sentences_ssp_s5 = [S "A force-displacement relationship for an element" +:+ getES index +:+
+  S "can be written in terms of displacements occurring in the unrotated" +:+
+  S "coordinate system" +:+ getES genDisplace `sOf` acroGD 9 +:+ S "using the matrix" +:+
   getES shrStiffBase `sC` --FIXME: index 
-  S "and", getES shrStiffBase, S "as seen in", acroDD 12]
+  S "and" +:+ getES shrStiffBase +:+ S "as seen in" +:+. acroDD 12]
 
-stfMtrxDerivation_sentence :: [Sentence]
-stfMtrxDerivation_sentence = map foldlSentCol [stfMtrx_deriv_sentences_ssp_s1, stfMtrx_deriv_sentences_ssp_s2,
-  stfMtrx_deriv_sentences_ssp_s3, stfMtrx_deriv_sentences_ssp_s4, [EmptyS], [EmptyS], stfMtrx_deriv_sentences_ssp_s5]
-
-stfMtrx_deriv_eqns_ssp :: [Expr]
-stfMtrx_deriv_eqns_ssp = [eq6, eq7, eq8, eq9, eq10, eq11]
 
 eq6, eq7, eq8, eq9, eq10, eq11:: Expr
 eq6 = inxi shrStiffIntsl $=

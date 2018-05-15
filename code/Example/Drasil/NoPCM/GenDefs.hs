@@ -15,7 +15,7 @@ import Data.Drasil.Utils (getES, weave)
 import Data.Drasil.SentenceStructures (sAnd, foldlList, ofThe, acroGD, foldlSentCol)
 import Data.Drasil.Concepts.Documentation (assumption)
 import Data.Drasil.Quantities.Physics (time)
-
+import Drasil.SWHS.Assumptions (assump_new_3, assump_new_4, assump_new_5)
 roc_temp_simp_deriv :: Derivation
 roc_temp_simp_deriv =
   [S "Detailed derivation of simplified" +:+ phrase rOfChng +:+ S "of" +:+ phrase temp +:+ S ":"] ++
@@ -27,7 +27,7 @@ roc_temp_simp_deriv_sentences = map foldlSentCol [
   s4_2_3_desc2 gauss_div surface vol thFluxVect uNormalVect unit_,
   s4_2_3_desc3 vol vol_ht_gen,
   s4_2_3_desc4 ht_flux_in ht_flux_out in_SA out_SA density QT.heat_cap_spec
-    QT.temp vol [S "A3", S "A4", S "A5"],
+    QT.temp vol assump_new_3 assump_new_4 assump_new_5,
   s4_2_3_desc5 density mass vol]
 
 s4_2_3_desc1 :: RelationConcept -> UnitalChunk -> [Sentence]
@@ -50,13 +50,13 @@ s4_2_3_desc3 vo vhg = [S "We consider an arbitrary" +:+. phrase vo, S "The",
 
 s4_2_3_desc4 :: UnitalChunk -> UnitalChunk -> UnitalChunk -> UnitalChunk ->
   UnitalChunk -> UnitalChunk -> UnitalChunk -> UnitalChunk ->
-  [Sentence] -> [Sentence]
-s4_2_3_desc4 hfi hfo iS oS den hcs te vo assumps = [S "Where", getES hfi `sC`
+  AssumpChunk -> AssumpChunk -> AssumpChunk -> [Sentence]
+s4_2_3_desc4 hfi hfo iS oS den hcs te vo assump3 assump4 assump5 = [S "Where", getES hfi `sC`
   getES hfo `sC` getES iS `sC` S "and", getES oS, S "are explained in" +:+.
   acroGD 2, S "Assuming", getES den `sC` getES hcs `sAnd` getES te,
   S "are constant over the", phrase vo `sC` S "which is true in our case by",
-  titleize' assumption, (foldlList $ (map (\d -> sParen (d)))
-  assumps) `sC` S "we have"]
+  titleize' assumption, (sParen (makeRef assump3)) `sC` (sParen (makeRef assump4))
+  `sC` S "and", (sParen (makeRef assump5)) `sC` S "we have"]
 
 s4_2_3_desc5 :: UnitalChunk -> UnitalChunk -> UnitalChunk -> [Sentence]
 s4_2_3_desc5 den ma vo = [S "Using the fact that", getES den :+: S "=" :+:

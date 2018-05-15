@@ -19,15 +19,15 @@ assumps_SSP_list_new = [assump_new_1, assump_new_2,assump_new_3, assump_new_4, a
   assump_new_6, assump_new_7, assump_new_8, assump_new_9, assump_new_10]
 
 assump_new_1 = assump "assump1" monotonicF (S "assump1");
-assump_new_2 = assump "assump2" slopeG (S "assump1");
-assump_new_3 = assump "assump3" homogeneousL (S "assump1");
-assump_new_4 = assump "assump4" isotropicP (S "assump1");
-assump_new_5 = assump "assump5" linearS (S "assump1");
-assump_new_6 = assump "assump6" linearF (S "assump1");
-assump_new_7 = assump "assump7" stressC (S "assump1");
-assump_new_8 = assump "assump8" planeS (S "assump1");
-assump_new_9 = assump "assump9" largeN (S "assump1");
-assump_new_10 = assump "assump10" straightS (S "assump1");
+assump_new_2 = assump "assump2" slopeG (S "assump2");
+assump_new_3 = assump "assump3" homogeneousL (S "assump3");
+assump_new_4 = assump "assump4" isotropicP (S "assump4");
+assump_new_5 = assump "assump5" linearS (S "assump5");
+assump_new_6 = assump "assump6" linearF (S "assump6");
+assump_new_7 = assump "assump7" stressC (S "assump7");
+assump_new_8 = assump "assump8" planeS (S "assump8");
+assump_new_9 = assump "assump9" largeN (S "assump9");
+assump_new_10 = assump "assump10" straightS (S "assump10");
 
 sspAssumptions :: [Sentence]
 sspAssumptions = [monotonicF, slopeG, homogeneousL, isotropicP,

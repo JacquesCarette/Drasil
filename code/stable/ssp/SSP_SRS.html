@@ -1374,38 +1374,56 @@ Assumptions
 <p class="paragraph">
 This section simplifies the original problem and helps in developing the theoretical model by filling in the missing information for the physical system. The numbers given in the square brackets refer to the Theoretical Models [<a href=#Sec:TMs>Theoretical Models</a>], General Definitions [<a href=#Sec:GDs>General Definitions</a>], Data Definitions [<a href=#Sec:DDs>Data Definitions</a>], Instance Models [<a href=#Sec:IMs>Instance Models</a>], or Likely Changes [<a href=#Sec:LCs>Likely Changes</a>], in which the respective assumption is used.
 </p>
-<div class="list">
-<p>
-A1: The slip surface is concave with respect to the slope surface. The <em>(x,y)</em> coordinates of the failure surface follow a monotonic function.
-</p>
-<p>
-A2: The geometry of the slope, and the material properties of the soil layers are given as inputs.
-</p>
-<p>
-A3: The different layers of the soil are homogeneous, with consistent soil properties throughout, and independent of dry or saturated conditions, with the exception of unit weight.
-</p>
-<p>
-A4: Soil layers are treated as if they have isotropic properties.
-</p>
-<p>
-A5: Interslice normal and shear forces have a linear relationship, proportional to a constant (<em>&lambda;</em>) and an interslice force function (<em>f</em>) depending on x position.
-</p>
-<p>
-A6: Slice to base normal and shear forces have a linear relationship, dependent on the factor of safety <em>FS</em>, and the Coulomb sliding law.
-</p>
-<p>
-A7: The stress - strain curve for interslice relationships is linear with a constant slope.
-</p>
-<p>
-A8: The slope and slip surface extends far into and out of the geometry (z coordinate). This implies plane strain conditions, making 2D analysis appropriate.
-</p>
-<p>
-A9: The effective normal stress is large enough that the resistive shear to effective normal stress relationship can be approximated as a linear relationship.
-</p>
-<p>
-A10: The surface and base of a slice between interslice nodes are approximated as straight lines.
-</p>
-</div>
+<a id="A:assump1">
+<ul>
+assump1: The slip surface is concave with respect to the slope surface. The <em>(x,y)</em> coordinates of the failure surface follow a monotonic function.
+</ul>
+</a>
+<a id="A:assump2">
+<ul>
+assump2: The geometry of the slope, and the material properties of the soil layers are given as inputs.
+</ul>
+</a>
+<a id="A:assump3">
+<ul>
+assump3: The different layers of the soil are homogeneous, with consistent soil properties throughout, and independent of dry or saturated conditions, with the exception of unit weight.
+</ul>
+</a>
+<a id="A:assump4">
+<ul>
+assump4: Soil layers are treated as if they have isotropic properties.
+</ul>
+</a>
+<a id="A:assump5">
+<ul>
+assump5: Interslice normal and shear forces have a linear relationship, proportional to a constant (<em>&lambda;</em>) and an interslice force function (<em>f</em>) depending on x position.
+</ul>
+</a>
+<a id="A:assump6">
+<ul>
+assump6: Slice to base normal and shear forces have a linear relationship, dependent on the factor of safety <em>FS</em>, and the Coulomb sliding law.
+</ul>
+</a>
+<a id="A:assump7">
+<ul>
+assump7: The stress - strain curve for interslice relationships is linear with a constant slope.
+</ul>
+</a>
+<a id="A:assump8">
+<ul>
+assump8: The slope and slip surface extends far into and out of the geometry (z coordinate). This implies plane strain conditions, making 2D analysis appropriate.
+</ul>
+</a>
+<a id="A:assump9">
+<ul>
+assump9: The effective normal stress is large enough that the resistive shear to effective normal stress relationship can be approximated as a linear relationship.
+</ul>
+</a>
+<a id="A:assump10">
+<ul>
+assump10: The surface and base of a slice between interslice nodes are approximated as straight lines.
+</ul>
+</a>
 </div>
 </a>
 <a id="Sec:TMs">
@@ -1424,7 +1442,7 @@ Label
 </th>
 <td>
 <p class="paragraph">
-Factor of Safety
+Factor of safety
 </p>
 </td>
 </tr>
@@ -1454,8 +1472,36 @@ S
 Description
 </th>
 <td>
+<div class="list">
+<p>
+<em>FS</em> is the factor of safety (Unitless)
+</p>
+<p>
+<em>P</em> is the resistive shear force (N)
+</p>
+<p>
+<em>S</em> is the mobilized shear force (N)
+</p>
+</div>
+</td>
+</tr>
+<tr>
+<th>
+Source
+</th>
+<td>
 <p class="paragraph">
-The stability metric of the slope, known as the factor of safety (<em>FS</em>), is determined by the ratio of the shear force at the base of the slope (<em>S</em>), and the resistive shear (<em>P</em>).
+FIXME: This needs to be filled in
+</p>
+</td>
+</tr>
+<tr>
+<th>
+RefBy
+</th>
+<td>
+<p class="paragraph">
+FIXME: This needs to be filled in
 </p>
 </td>
 </tr>
@@ -1492,8 +1538,36 @@ Equation
 Description
 </th>
 <td>
+<div class="list">
+<p>
+<em>F<sub>x</sub></em> is the x-component of the net force (N)
+</p>
+<p>
+<em>F<sub>y</sub></em> is the y-component of the net force (N)
+</p>
+<p>
+<em>M</em> is the moment of a body (N&sdot;m)
+</p>
+</div>
+</td>
+</tr>
+<tr>
+<th>
+Source
+</th>
+<td>
 <p class="paragraph">
-For a body in static equilibrium, the net forces and net moments acting on the body will cancel out. Assuming a 2D problem (A8) the x-component of the net force <em>F<sub>x</sub></em> and y-component of the net force <em>F<sub>y</sub></em> will be equal to <em>0</em>. All forces and their distance from the chosen point of rotation will create a net moment equal to, <em>0</em> also able to be analyzed as a scalar in a 2D problem.
+FIXME: This needs to be filled in
+</p>
+</td>
+</tr>
+<tr>
+<th>
+RefBy
+</th>
+<td>
+<p class="paragraph">
+FIXME: This needs to be filled in
 </p>
 </td>
 </tr>
@@ -1507,7 +1581,7 @@ Label
 </th>
 <td>
 <p class="paragraph">
-Mohr-Coulumb Shear Strength
+Mohr-Coulumb shear strength
 </p>
 </td>
 </tr>
@@ -1530,8 +1604,39 @@ Equation
 Description
 </th>
 <td>
+<div class="list">
+<p>
+<em>&tau;</em> is the resistive shear stress (Pa)
+</p>
+<p>
+<em>&sigma;</em> is the normal stress (Pa)
+</p>
+<p>
+<em>&phiv;&prime;</em> is the effective angle of friction (&deg;)
+</p>
+<p>
+<em>c&prime;</em> is the effective cohesion (Pa)
+</p>
+</div>
+</td>
+</tr>
+<tr>
+<th>
+Source
+</th>
+<td>
 <p class="paragraph">
-For a soil under stress it will exert a shear resistive strength based on the Coulomb sliding law. The resistive shear is the maximum amount of shear a surface can experience while remaining rigid, analogous to a maximum normal force. In this model the resistive shear stress <em>&tau;</em> is proportional to the product of the normal stress on the plane <em>&sigma;</em> with it's static friction in the angular form <em>tan(&phiv;&prime;) = U<sub>t</sub></em>. The <em>&tau;</em> versus <em>&sigma;</em> relationship is not truly linear, but assuming the effective normal force is strong enough it can be approximated with a linear fit (A9) where the cohesion <em>c&prime;</em> represents the <em>&tau;</em> intercept of the fitted line.
+FIXME: This needs to be filled in
+</p>
+</td>
+</tr>
+<tr>
+<th>
+RefBy
+</th>
+<td>
+<p class="paragraph">
+FIXME: This needs to be filled in
 </p>
 </td>
 </tr>
@@ -1545,7 +1650,7 @@ Label
 </th>
 <td>
 <p class="paragraph">
-Effective Stress
+Effective stress
 </p>
 </td>
 </tr>
@@ -1568,8 +1673,33 @@ Equation
 Description
 </th>
 <td>
+<div class="list">
+<p>
+<em>&sigma;</em> is the normal stress (Pa)
+</p>
+<p>
+<em>&mu;</em> is the pore pressure (Pa)
+</p>
+</div>
+</td>
+</tr>
+<tr>
+<th>
+Source
+</th>
+<td>
 <p class="paragraph">
-<em>&sigma;</em> is the total stress a soil mass needs to maintain itself as a rigid collection of particles. The source of the stress can be provided by the soil skeleton <em>&sigma;</em>, or by the pore pressure from water within the soil <em>&mu;</em>. The stress from the soil skeleton is known as the effective stress <em>&sigma;</em> and is the difference between the total stress <em>&sigma;</em> and the pore stress <em>&mu;</em>.
+FIXME: This needs to be filled in
+</p>
+</td>
+</tr>
+<tr>
+<th>
+RefBy
+</th>
+<td>
+<p class="paragraph">
+FIXME: This needs to be filled in
 </p>
 </td>
 </tr>
@@ -1606,8 +1736,36 @@ Equation
 Description
 </th>
 <td>
+<div class="list">
+<p>
+<em>F</em> is the force (N)
+</p>
+<p>
+<em>K</em> is the stiffness (N/m)
+</p>
+<p>
+<em>&delta;</em> is the displacement (m)
+</p>
+</div>
+</td>
+</tr>
+<tr>
+<th>
+Source
+</th>
+<td>
 <p class="paragraph">
-Description Stiffness <em>K</em> is the resistance a body others to deformation by displacement <em>&delta;</em> when subject to a force <em>F</em>, along the same direction. A body with high stiffness will experience little deformation when subject to a force.
+FIXME: This needs to be filled in
+</p>
+</td>
+</tr>
+<tr>
+<th>
+RefBy
+</th>
+<td>
+<p class="paragraph">
+FIXME: This needs to be filled in
 </p>
 </td>
 </tr>
@@ -1654,8 +1812,63 @@ Equation
 Description
 </th>
 <td>
+<div class="list">
+<p>
+<em>N</em> is the normal force (N)
+</p>
+<p>
+<em>i</em> is the index (Unitless)
+</p>
+<p>
+<em>W</em> is the weight (N)
+</p>
+<p>
+<em>X</em> is the interslice shear force (N)
+</p>
+<p>
+<em>U<sub>t</sub></em> is the surface hydrostatic force (N)
+</p>
+<p>
+<em>&beta;</em> is the angle (&deg;)
+</p>
+<p>
+<em>Q</em> is the imposed surface load (N)
+</p>
+<p>
+<em>&omega;</em> is the angle (&deg;)
+</p>
+<p>
+<em>&alpha;</em> is the angle (&deg;)
+</p>
+<p>
+<em>K<sub>c</sub></em> is the earthquake load factor (Unitless)
+</p>
+<p>
+<em>E</em> is the interslice normal force (N)
+</p>
+<p>
+<em>H</em> is the interslice water force (N)
+</p>
+</div>
+</td>
+</tr>
+<tr>
+<th>
+Source
+</th>
+<td>
 <p class="paragraph">
-For a slice of mass in the slope the force equilibrium to satisfy T2 in the direction perpendicular to the base surface of the slice. Rearranged to solve for the normal force of the surface <em>N</em>. Force equilibrium is derived from the free body diagram of <a href=#Sec:PhysSyst>Physical System Description</a> Index i refers to the values of the properties for slice/interslices following convention in <a href=#Sec:PhysSyst>Physical System Description</a>. Force variable definitions can be found in DD1 to DD9.
+
+</p>
+</td>
+</tr>
+<tr>
+<th>
+RefBy
+</th>
+<td>
+<p class="paragraph">
+FIXME: This needs to be filled in
 </p>
 </td>
 </tr>
@@ -1692,8 +1905,63 @@ Equation
 Description
 </th>
 <td>
+<div class="list">
+<p>
+<em>S</em> is the mobilized shear force (N)
+</p>
+<p>
+<em>i</em> is the index (Unitless)
+</p>
+<p>
+<em>W</em> is the weight (N)
+</p>
+<p>
+<em>X</em> is the interslice shear force (N)
+</p>
+<p>
+<em>U<sub>t</sub></em> is the surface hydrostatic force (N)
+</p>
+<p>
+<em>&beta;</em> is the angle (&deg;)
+</p>
+<p>
+<em>Q</em> is the imposed surface load (N)
+</p>
+<p>
+<em>&omega;</em> is the angle (&deg;)
+</p>
+<p>
+<em>&alpha;</em> is the angle (&deg;)
+</p>
+<p>
+<em>K<sub>c</sub></em> is the earthquake load factor (Unitless)
+</p>
+<p>
+<em>E</em> is the interslice normal force (N)
+</p>
+<p>
+<em>H</em> is the interslice water force (N)
+</p>
+</div>
+</td>
+</tr>
+<tr>
+<th>
+Source
+</th>
+<td>
 <p class="paragraph">
-For a slice of mass in the slope the force equilibrium to satisfy T2 in the direction parallel to the base surface of the slice. Rearranged to solve for the shear force on the base <em>S</em>. Force equilibrium is derived from the free body diagram of <a href=#Sec:PhysSyst>Physical System Description</a> Index <em>i</em> refers to the values of the properties for slice/interslices following convention in <a href=#Sec:PhysSyst>Physical System Description</a>. Force variable definitions can be found in DD1 to DD9.
+
+</p>
+</td>
+</tr>
+<tr>
+<th>
+RefBy
+</th>
+<td>
+<p class="paragraph">
+FIXME: This needs to be filled in
 </p>
 </td>
 </tr>
@@ -1730,8 +1998,48 @@ Equation
 Description
 </th>
 <td>
+<div class="list">
+<p>
+<em>P</em> is the resistive shear force (N)
+</p>
+<p>
+<em>i</em> is the index (Unitless)
+</p>
+<p>
+<em>N&prime;</em> is the effective normal force (N)
+</p>
+<p>
+<em>&phiv;&prime;</em> is the effective angle of friction (&deg;)
+</p>
+<p>
+<em>c&prime;</em> is the effective cohesion (Pa)
+</p>
+<p>
+<em>b</em> is the base width of a slice (m)
+</p>
+<p>
+<em>&alpha;</em> is the angle (&deg;)
+</p>
+</div>
+</td>
+</tr>
+<tr>
+<th>
+Source
+</th>
+<td>
 <p class="paragraph">
-The Mohr-Coulomb resistive shear strength of a slice <em>&tau;</em> from T3 is multiplied by the area <em>b&#8239;sec(&alpha;)&#8239;1</em> to obtain the resistive shear force <em>P</em>. Note the extra <em>1</em> is to represent a unit of width which is multiplied by the total base length of a slice <em>&#8467;<sub>b</sub></em> of the plane where the normal occurs, where <em>&#8467;<sub>b</sub> = b&#8239;sec(&alpha;)</em> and <em>b</em> is the x width of the base. This accounts for the effective normal force <em>N&prime; = N&minus;U<sub>b</sub></em> of a soil from T4 where the normal stress is multiplied by the same area to obtain the effective normal force <em>&sigma;&#8239;b&#8239;sec(&alpha;)&#8239;1 = N&prime;</em>.
+
+</p>
+</td>
+</tr>
+<tr>
+<th>
+RefBy
+</th>
+<td>
+<p class="paragraph">
+FIXME: This needs to be filled in
 </p>
 </td>
 </tr>
@@ -1782,8 +2090,54 @@ FS
 Description
 </th>
 <td>
+<div class="list">
+<p>
+<em>S</em> is the mobilized shear force (N)
+</p>
+<p>
+<em>i</em> is the index (Unitless)
+</p>
+<p>
+<em>P</em> is the resistive shear force (N)
+</p>
+<p>
+<em>FS</em> is the factor of safety (Unitless)
+</p>
+<p>
+<em>N&prime;</em> is the effective normal force (N)
+</p>
+<p>
+<em>&phiv;&prime;</em> is the effective angle of friction (&deg;)
+</p>
+<p>
+<em>c&prime;</em> is the effective cohesion (Pa)
+</p>
+<p>
+<em>b</em> is the base width of a slice (m)
+</p>
+<p>
+<em>&alpha;</em> is the angle (&deg;)
+</p>
+</div>
+</td>
+</tr>
+<tr>
+<th>
+Source
+</th>
+<td>
 <p class="paragraph">
-From the definition of the factor of safety in T1, and the new definition of <em>P</em>, a new relation for the net mobile shear force of the slice <em>T</em> is found as the resistive shear <em>P</em> (GD3) divided by the factor of safety <em>FS</em>.
+
+</p>
+</td>
+</tr>
+<tr>
+<th>
+RefBy
+</th>
+<td>
+<p class="paragraph">
+FIXME: This needs to be filled in
 </p>
 </td>
 </tr>
@@ -1820,8 +2174,39 @@ Equation
 Description
 </th>
 <td>
+<div class="list">
+<p>
+<em>X</em> is the interslice shear force (N)
+</p>
+<p>
+<em>&lambda;</em> is the interslice normal/shear force ratio (Unitless)
+</p>
+<p>
+<em>f</em> is the scaling function (Unitless)
+</p>
+<p>
+<em>E</em> is the interslice normal force (N)
+</p>
+</div>
+</td>
+</tr>
+<tr>
+<th>
+Source
+</th>
+<td>
 <p class="paragraph">
-The assumption for the Morgenstern Price method (A5) that the interslice shear force <em>x</em> is proportional to the interslice normal force <em>E</em> by a proportionality constant <em>&lambda;</em> and a predetermined scaling function <em>f</em>, that changes the proportionality as a function of the x-ordinate position of the interslice. <em>f</em> is typically either a half-sine along the slip surface, or a constant.
+
+</p>
+</td>
+</tr>
+<tr>
+<th>
+RefBy
+</th>
+<td>
+<p class="paragraph">
+FIXME: This needs to be filled in
 </p>
 </td>
 </tr>
@@ -1900,8 +2285,69 @@ K<sub>c</sub>&#8239;W<sub>i</sub>&#8239;h<sub>i</sub>
 Description
 </th>
 <td>
+<div class="list">
+<p>
+<em>E</em> is the interslice normal force (N)
+</p>
+<p>
+<em>i</em> is the index (Unitless)
+</p>
+<p>
+<em>z</em> is the center of slice height (m)
+</p>
+<p>
+<em>b</em> is the base width of a slice (m)
+</p>
+<p>
+<em>&alpha;</em> is the angle (&deg;)
+</p>
+<p>
+<em>H</em> is the interslice water force (N)
+</p>
+<p>
+<em>X</em> is the interslice shear force (N)
+</p>
+<p>
+<em>K<sub>c</sub></em> is the earthquake load factor (Unitless)
+</p>
+<p>
+<em>W</em> is the weight (N)
+</p>
+<p>
+<em>h</em> is the midpoint height (m)
+</p>
+<p>
+<em>U<sub>t</sub></em> is the surface hydrostatic force (N)
+</p>
+<p>
+<em>&beta;</em> is the angle (&deg;)
+</p>
+<p>
+<em>Q</em> is the imposed surface load (N)
+</p>
+<p>
+<em>&omega;</em> is the angle (&deg;)
+</p>
+</div>
+</td>
+</tr>
+<tr>
+<th>
+Source
+</th>
+<td>
 <p class="paragraph">
-For a slice of mass in the slope the moment equilibrium to satisfy T2 in the direction perpendicular to the base surface of the slice. Moment equilibrium is derived from the free body diagram of <a href=#Sec:PhysSyst>Physical System Description</a>. Index i refers to the values of the properties for slice/interslices following convention in <a href=#Sec:PhysSyst>Physical System Description</a>. Variable definitions can be found in DD1 to DD9.
+
+</p>
+</td>
+</tr>
+<tr>
+<th>
+RefBy
+</th>
+<td>
+<p class="paragraph">
+FIXME: This needs to be filled in
 </p>
 </td>
 </tr>
@@ -1938,8 +2384,60 @@ Equation
 Description
 </th>
 <td>
+<div class="list">
+<p>
+<em>F<sub>x</sub></em> is the x-component of the net force (N)
+</p>
+<p>
+<em>i</em> is the index (Unitless)
+</p>
+<p>
+<em>&Delta;H</em> is the difference between interslice forces (N)
+</p>
+<p>
+<em>K<sub>c</sub></em> is the earthquake load factor (Unitless)
+</p>
+<p>
+<em>W</em> is the weight (N)
+</p>
+<p>
+<em>U<sub>b</sub></em> is the base hydrostatic force (N)
+</p>
+<p>
+<em>&alpha;</em> is the angle (&deg;)
+</p>
+<p>
+<em>U<sub>t</sub></em> is the surface hydrostatic force (N)
+</p>
+<p>
+<em>&beta;</em> is the angle (&deg;)
+</p>
+<p>
+<em>Q</em> is the imposed surface load (N)
+</p>
+<p>
+<em>&omega;</em> is the angle (&deg;)
+</p>
+</div>
+</td>
+</tr>
+<tr>
+<th>
+Source
+</th>
+<td>
 <p class="paragraph">
 
+</p>
+</td>
+</tr>
+<tr>
+<th>
+RefBy
+</th>
+<td>
+<p class="paragraph">
+FIXME: This needs to be filled in
 </p>
 </td>
 </tr>
@@ -1976,8 +2474,54 @@ Equation
 Description
 </th>
 <td>
+<div class="list">
+<p>
+<em>F<sub>y</sub></em> is the y-component of the net force (N)
+</p>
+<p>
+<em>i</em> is the index (Unitless)
+</p>
+<p>
+<em>W</em> is the weight (N)
+</p>
+<p>
+<em>U<sub>b</sub></em> is the base hydrostatic force (N)
+</p>
+<p>
+<em>&alpha;</em> is the angle (&deg;)
+</p>
+<p>
+<em>U<sub>t</sub></em> is the surface hydrostatic force (N)
+</p>
+<p>
+<em>&beta;</em> is the angle (&deg;)
+</p>
+<p>
+<em>Q</em> is the imposed surface load (N)
+</p>
+<p>
+<em>&omega;</em> is the angle (&deg;)
+</p>
+</div>
+</td>
+</tr>
+<tr>
+<th>
+Source
+</th>
+<td>
 <p class="paragraph">
-These equations show the net sum of the forces acting on a slice for the RFEM model and the forces that create an applied load on the slice. <em>F<sub>x</sub></em> refers to the load in the direction perpendicular to the direction of the force of gravity for slice <em>i</em>, while <em>F<sub>y</sub></em> refers to the load in the direction parallel to the force of gravity for slice <em>i</em>. Forces are found in the free body diagram of <a href=#Sec:PhysSyst>Physical System Description</a>. In this model the elements are not exerting forces on each other, so the interslice forces <em>E</em> and <em>X</em> are not a part of the model. Index <em>i</em> refers to the values of the properties for slice/interslices following convention in <a href=#Sec:PhysSyst>Physical System Description</a>. Force variable definitions can be found in DD1 to DD8.
+
+</p>
+</td>
+</tr>
+<tr>
+<th>
+RefBy
+</th>
+<td>
+<p class="paragraph">
+FIXME: This needs to be filled in
 </p>
 </td>
 </tr>
@@ -2023,8 +2567,45 @@ Equation
 Description
 </th>
 <td>
+<div class="list">
+<p>
+<em>p</em> is the pressure (Pa)
+</p>
+<p>
+<em>i</em> is the index (Unitless)
+</p>
+<p>
+<em>K<sub>st</sub></em> is the shear stiffness (Pa/m)
+</p>
+<p>
+<em>K<sub>bn</sub></em> is the normal stiffness (Pa/m)
+</p>
+<p>
+<em>&delta;x</em> is the displacement (m)
+</p>
+<p>
+<em>&delta;y</em> is the displacement (m)
+</p>
+</div>
+</td>
+</tr>
+<tr>
+<th>
+Source
+</th>
+<td>
 <p class="paragraph">
-A 2D component implementation of Hooke's law as seen in T5. <em>&delta;n</em> is the displacement of the element normal to the surface and <em>&delta;t</em> is the displacement of the element parallel to the surface. Pn,i is the net pressure acting normal to the surface, and Pt,i is the net pressure acting parallel to the surface. Pressure is used in place of force as the surface has not been normalized for it's length. The stiffness values Kn,i and Kt,i are then the resistance to displacement in the respective directions defined as in DD14. The pressure forces would be the result of applied loads on the mass, the product of the stiffness elements with the displacement would be the mass's reactive force that creates equilibrium with the applied forces after reaching the equilibrium displacement.
+
+</p>
+</td>
+</tr>
+<tr>
+<th>
+RefBy
+</th>
+<td>
+<p class="paragraph">
+FIXME: This needs to be filled in
 </p>
 </td>
 </tr>
@@ -2073,8 +2654,51 @@ Equation
 Description
 </th>
 <td>
+<div class="list">
+<p>
+<em>&epsilon;</em> is the displacement (m)
+</p>
+<p>
+<em>i</em> is the index (Unitless)
+</p>
+<p>
+<em>&delta;u</em> is the displacement (m)
+</p>
+<p>
+<em>&delta;v</em> is the displacement (m)
+</p>
+<p>
+<em>&alpha;</em> is the angle (&deg;)
+</p>
+<p>
+<em>&delta;</em> is the displacement (m)
+</p>
+<p>
+<em>&delta;x</em> is the displacement (m)
+</p>
+<p>
+<em>&delta;y</em> is the displacement (m)
+</p>
+</div>
+</td>
+</tr>
+<tr>
+<th>
+Source
+</th>
+<td>
 <p class="paragraph">
-Vectors describing the displacement of slice <em>i</em>. <em>&delta;</em> is the displacement in the unrotated coordinate system, where <em>&delta;x</em> is the displacement of the slice perpendicular to the direction of gravity, and <em>&delta;y</em> is the displacement of the slice parallel to the force of gravity. <em>&epsilon;</em> is the displacement in the rotated coordinate system, where <em>&delta;u</em> is the displacement of the slice parallel to the slice base, and <em>&delta;y</em> is the displacement of the slice perpendicular to the slice base. <em>&epsilon;</em> can also be found by rotating <em>&delta;</em> clockwise by the base angle, <em>&alpha;</em> through a rotation matrix as shown.
+
+</p>
+</td>
+</tr>
+<tr>
+<th>
+RefBy
+</th>
+<td>
+<p class="paragraph">
+FIXME: This needs to be filled in
 </p>
 </td>
 </tr>
@@ -2104,6 +2728,16 @@ Weight
 </tr>
 <tr>
 <th>
+Symbol
+</th>
+<td>
+<p class="paragraph">
+<em>W</em>
+</p>
+</td>
+</tr>
+<tr>
+<th>
 Units
 </th>
 <td>
@@ -2119,8 +2753,7 @@ Equation
 <td>
 <a id="">
 <div class="equation">
-<p class="paragraph">
-<em>W = b<sub>i</sub>&#8239;<span class="casebr">
+<em>b<sub>i</sub>&#8239;<span class="casebr">
 {
 </span>
 <div class="cases">
@@ -2140,7 +2773,6 @@ y<sub>wt,i</sub>&thinsp;&le;&thinsp;y<sub>slip,i</sub>
 </span>
 </span>
 </div></em>
-</p>
 </div>
 </a>
 </td>
@@ -2150,8 +2782,51 @@ y<sub>wt,i</sub>&thinsp;&le;&thinsp;y<sub>slip,i</sub>
 Description
 </th>
 <td>
+<div class="list">
+<p>
+<em>W</em> is the weight (N)
+</p>
+<p>
+<em>b</em> is the base width of a slice (m)
+</p>
+<p>
+<em>i</em> is the index (Unitless)
+</p>
+<p>
+<em>y<sub>us</sub></em> is the y ordinate (m)
+</p>
+<p>
+<em>y<sub>slip</sub></em> is the y ordinate (m)
+</p>
+<p>
+<em>&gamma;<sub>Sat</sub></em> is the saturated unit weight (N/m<sup>3</sup>)
+</p>
+<p>
+<em>y<sub>wt</sub></em> is the y ordinate (m)
+</p>
+<p>
+<em>&gamma;</em> is the dry unit weight (N/m<sup>3</sup>)
+</p>
+</div>
+</td>
+</tr>
+<tr>
+<th>
+Source
+</th>
+<td>
 <p class="paragraph">
-<em>W</em> is the weight (N)<br /><em>b</em> is the base width of a slice (m)<br /><em>i</em> is the index<br /><em>y<sub>us</sub></em> is the y ordinate (m)<br /><em>y<sub>slip</sub></em> is the y ordinate (m)<br /><em>&gamma;<sub>Sat</sub></em> is the saturated unit weight (N/m<sup>3</sup>)<br /><em>y<sub>wt</sub></em> is the y ordinate (m)<br /><em>&gamma;</em> is the dry unit weight (N/m<sup>3</sup>)
+
+</p>
+</td>
+</tr>
+<tr>
+<th>
+RefBy
+</th>
+<td>
+<p class="paragraph">
+FIXME: This needs to be filled in
 </p>
 </td>
 </tr>
@@ -2171,6 +2846,16 @@ Base Hydrostatic Force
 </tr>
 <tr>
 <th>
+Symbol
+</th>
+<td>
+<p class="paragraph">
+<em>U<sub>b</sub></em>
+</p>
+</td>
+</tr>
+<tr>
+<th>
 Units
 </th>
 <td>
@@ -2186,8 +2871,7 @@ Equation
 <td>
 <a id="">
 <div class="equation">
-<p class="paragraph">
-<em>U<sub>b</sub> = &#8467;<sub>b,i</sub>&#8239;<span class="casebr">
+<em>&#8467;<sub>b,i</sub>&#8239;<span class="casebr">
 {
 </span>
 <div class="cases">
@@ -2202,7 +2886,6 @@ y<sub>wt,i</sub>&thinsp;&le;&thinsp;y<sub>slip,i</sub>
 </span>
 </span>
 </div></em>
-</p>
 </div>
 </a>
 </td>
@@ -2212,8 +2895,45 @@ y<sub>wt,i</sub>&thinsp;&le;&thinsp;y<sub>slip,i</sub>
 Description
 </th>
 <td>
+<div class="list">
+<p>
+<em>U<sub>b</sub></em> is the base hydrostatic force (N)
+</p>
+<p>
+<em>&#8467;<sub>b</sub></em> is the total base length of a slice (m)
+</p>
+<p>
+<em>i</em> is the index (Unitless)
+</p>
+<p>
+<em>y<sub>wt</sub></em> is the y ordinate (m)
+</p>
+<p>
+<em>y<sub>slip</sub></em> is the y ordinate (m)
+</p>
+<p>
+<em>&gamma;<sub>w</sub></em> is the unit weight of water (N/m<sup>3</sup>)
+</p>
+</div>
+</td>
+</tr>
+<tr>
+<th>
+Source
+</th>
+<td>
 <p class="paragraph">
-<em>U<sub>b</sub></em> is the base hydrostatic force (N)<br /><em>&#8467;<sub>b</sub></em> is the total base length of a slice (m)<br /><em>i</em> is the index<br /><em>y<sub>wt</sub></em> is the y ordinate (m)<br /><em>y<sub>slip</sub></em> is the y ordinate (m)<br /><em>&gamma;<sub>w</sub></em> is the unit weight of water (N/m<sup>3</sup>)
+
+</p>
+</td>
+</tr>
+<tr>
+<th>
+RefBy
+</th>
+<td>
+<p class="paragraph">
+FIXME: This needs to be filled in
 </p>
 </td>
 </tr>
@@ -2227,7 +2947,17 @@ Label
 </th>
 <td>
 <p class="paragraph">
-Surface Hydrostatic Force
+Surface hydrostatic force
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Symbol
+</th>
+<td>
+<p class="paragraph">
+<em>U<sub>t</sub></em>
 </p>
 </td>
 </tr>
@@ -2248,8 +2978,7 @@ Equation
 <td>
 <a id="">
 <div class="equation">
-<p class="paragraph">
-<em>U<sub>t</sub> = &#8467;<sub>s,i</sub>&#8239;<span class="casebr">
+<em>&#8467;<sub>s,i</sub>&#8239;<span class="casebr">
 {
 </span>
 <div class="cases">
@@ -2264,7 +2993,6 @@ y<sub>wt,i</sub>&thinsp;&le;&thinsp;y<sub>us,i</sub>
 </span>
 </span>
 </div></em>
-</p>
 </div>
 </a>
 </td>
@@ -2274,8 +3002,45 @@ y<sub>wt,i</sub>&thinsp;&le;&thinsp;y<sub>us,i</sub>
 Description
 </th>
 <td>
+<div class="list">
+<p>
+<em>U<sub>t</sub></em> is the surface hydrostatic force (N)
+</p>
+<p>
+<em>&#8467;<sub>s</sub></em> is the length of an interslice surface (m)
+</p>
+<p>
+<em>i</em> is the index (Unitless)
+</p>
+<p>
+<em>y<sub>wt</sub></em> is the y ordinate (m)
+</p>
+<p>
+<em>y<sub>us</sub></em> is the y ordinate (m)
+</p>
+<p>
+<em>&gamma;<sub>w</sub></em> is the unit weight of water (N/m<sup>3</sup>)
+</p>
+</div>
+</td>
+</tr>
+<tr>
+<th>
+Source
+</th>
+<td>
 <p class="paragraph">
-<em>U<sub>t</sub></em> is the surface hydrostatic force (N)<br /><em>&#8467;<sub>s</sub></em> is the length of an interslice surface (m)<br /><em>i</em> is the index<br /><em>y<sub>wt</sub></em> is the y ordinate (m)<br /><em>y<sub>us</sub></em> is the y ordinate (m)<br /><em>&gamma;<sub>w</sub></em> is the unit weight of water (N/m<sup>3</sup>)
+
+</p>
+</td>
+</tr>
+<tr>
+<th>
+RefBy
+</th>
+<td>
+<p class="paragraph">
+FIXME: This needs to be filled in
 </p>
 </td>
 </tr>
@@ -2289,7 +3054,17 @@ Label
 </th>
 <td>
 <p class="paragraph">
-Interslice Water Force
+Interslice water force
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Symbol
+</th>
+<td>
+<p class="paragraph">
+<em>H</em>
 </p>
 </td>
 </tr>
@@ -2310,8 +3085,7 @@ Equation
 <td>
 <a id="">
 <div class="equation">
-<p class="paragraph">
-<em>H = <span class="casebr">
+<em><span class="casebr">
 {
 </span>
 <div class="cases">
@@ -2345,7 +3119,6 @@ y<sub>wt,i</sub>&thinsp;&le;&thinsp;y<sub>slip,i</sub>
 </span>
 </span>
 </div></em>
-</p>
 </div>
 </a>
 </td>
@@ -2355,8 +3128,45 @@ y<sub>wt,i</sub>&thinsp;&le;&thinsp;y<sub>slip,i</sub>
 Description
 </th>
 <td>
+<div class="list">
+<p>
+<em>H</em> is the interslice water force (N)
+</p>
+<p>
+<em>y<sub>us</sub></em> is the y ordinate (m)
+</p>
+<p>
+<em>i</em> is the index (Unitless)
+</p>
+<p>
+<em>y<sub>slip</sub></em> is the y ordinate (m)
+</p>
+<p>
+<em>&gamma;<sub>Sat</sub></em> is the saturated unit weight (N/m<sup>3</sup>)
+</p>
+<p>
+<em>y<sub>wt</sub></em> is the y ordinate (m)
+</p>
+</div>
+</td>
+</tr>
+<tr>
+<th>
+Source
+</th>
+<td>
 <p class="paragraph">
-<em>H</em> is the interslice water force (N)<br /><em>y<sub>us</sub></em> is the y ordinate (m)<br /><em>i</em> is the index<br /><em>y<sub>slip</sub></em> is the y ordinate (m)<br /><em>&gamma;<sub>Sat</sub></em> is the saturated unit weight (N/m<sup>3</sup>)<br /><em>y<sub>wt</sub></em> is the y ordinate (m)
+
+</p>
+</td>
+</tr>
+<tr>
+<th>
+RefBy
+</th>
+<td>
+<p class="paragraph">
+FIXME: This needs to be filled in
 </p>
 </td>
 </tr>
@@ -2376,6 +3186,16 @@ Angle
 </tr>
 <tr>
 <th>
+Symbol
+</th>
+<td>
+<p class="paragraph">
+<em>&alpha;</em>
+</p>
+</td>
+</tr>
+<tr>
+<th>
 Units
 </th>
 <td>
@@ -2391,8 +3211,7 @@ Equation
 <td>
 <a id="">
 <div class="equation">
-<p class="paragraph">
-<em>&alpha; = <div class="fraction">
+<em><div class="fraction">
 <span class="fup">
 y<sub>slip,i</sub>&minus;y<sub>slip,i&minus;1</sub>
 </span>
@@ -2400,7 +3219,6 @@ y<sub>slip,i</sub>&minus;y<sub>slip,i&minus;1</sub>
 x<sub>slip,i</sub>&minus;x<sub>slip,i&minus;1</sub>
 </span>
 </div></em>
-</p>
 </div>
 </a>
 </td>
@@ -2410,8 +3228,39 @@ x<sub>slip,i</sub>&minus;x<sub>slip,i&minus;1</sub>
 Description
 </th>
 <td>
+<div class="list">
+<p>
+<em>&alpha;</em> is the angle (&deg;)
+</p>
+<p>
+<em>y<sub>slip</sub></em> is the y ordinate (m)
+</p>
+<p>
+<em>i</em> is the index (Unitless)
+</p>
+<p>
+<em>x<sub>slip</sub></em> is the x ordinate (m)
+</p>
+</div>
+</td>
+</tr>
+<tr>
+<th>
+Source
+</th>
+<td>
 <p class="paragraph">
-<em>&alpha;</em> is the angle (&deg;)<br /><em>y<sub>slip</sub></em> is the y ordinate (m)<br /><em>i</em> is the index<br /><em>x<sub>slip</sub></em> is the x ordinate (m)
+
+</p>
+</td>
+</tr>
+<tr>
+<th>
+RefBy
+</th>
+<td>
+<p class="paragraph">
+FIXME: This needs to be filled in
 </p>
 </td>
 </tr>
@@ -2431,6 +3280,16 @@ Angle
 </tr>
 <tr>
 <th>
+Symbol
+</th>
+<td>
+<p class="paragraph">
+<em>&beta;</em>
+</p>
+</td>
+</tr>
+<tr>
+<th>
 Units
 </th>
 <td>
@@ -2446,8 +3305,7 @@ Equation
 <td>
 <a id="">
 <div class="equation">
-<p class="paragraph">
-<em>&beta; = <div class="fraction">
+<em><div class="fraction">
 <span class="fup">
 y<sub>us,i</sub>&minus;y<sub>us,i&minus;1</sub>
 </span>
@@ -2455,7 +3313,6 @@ y<sub>us,i</sub>&minus;y<sub>us,i&minus;1</sub>
 x<sub>us,i</sub>&minus;x<sub>us,i&minus;1</sub>
 </span>
 </div></em>
-</p>
 </div>
 </a>
 </td>
@@ -2465,8 +3322,39 @@ x<sub>us,i</sub>&minus;x<sub>us,i&minus;1</sub>
 Description
 </th>
 <td>
+<div class="list">
+<p>
+<em>&beta;</em> is the angle (&deg;)
+</p>
+<p>
+<em>y<sub>us</sub></em> is the y ordinate (m)
+</p>
+<p>
+<em>i</em> is the index (Unitless)
+</p>
+<p>
+<em>x<sub>us</sub></em> is the x ordinate (m)
+</p>
+</div>
+</td>
+</tr>
+<tr>
+<th>
+Source
+</th>
+<td>
 <p class="paragraph">
-<em>&beta;</em> is the angle (&deg;)<br /><em>y<sub>us</sub></em> is the y ordinate (m)<br /><em>i</em> is the index<br /><em>x<sub>us</sub></em> is the x ordinate (m)
+
+</p>
+</td>
+</tr>
+<tr>
+<th>
+RefBy
+</th>
+<td>
+<p class="paragraph">
+FIXME: This needs to be filled in
 </p>
 </td>
 </tr>
@@ -2480,7 +3368,17 @@ Label
 </th>
 <td>
 <p class="paragraph">
-Base Width of a Slice
+Base width of a slice
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Symbol
+</th>
+<td>
+<p class="paragraph">
+<em>b</em>
 </p>
 </td>
 </tr>
@@ -2501,9 +3399,7 @@ Equation
 <td>
 <a id="">
 <div class="equation">
-<p class="paragraph">
-<em>b = x<sub>slip,i</sub>&minus;x<sub>slip,i&minus;1</sub></em>
-</p>
+<em>x<sub>slip,i</sub>&minus;x<sub>slip,i&minus;1</sub></em>
 </div>
 </a>
 </td>
@@ -2513,8 +3409,36 @@ Equation
 Description
 </th>
 <td>
+<div class="list">
+<p>
+<em>b</em> is the base width of a slice (m)
+</p>
+<p>
+<em>x<sub>slip</sub></em> is the x ordinate (m)
+</p>
+<p>
+<em>i</em> is the index (Unitless)
+</p>
+</div>
+</td>
+</tr>
+<tr>
+<th>
+Source
+</th>
+<td>
 <p class="paragraph">
-<em>b</em> is the base width of a slice (m)<br /><em>x<sub>slip</sub></em> is the x ordinate (m)<br /><em>i</em> is the index
+
+</p>
+</td>
+</tr>
+<tr>
+<th>
+RefBy
+</th>
+<td>
+<p class="paragraph">
+FIXME: This needs to be filled in
 </p>
 </td>
 </tr>
@@ -2528,7 +3452,17 @@ Label
 </th>
 <td>
 <p class="paragraph">
-Total Base Length of a Slice
+Total base length of a slice
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Symbol
+</th>
+<td>
+<p class="paragraph">
+<em>&#8467;<sub>b</sub></em>
 </p>
 </td>
 </tr>
@@ -2549,9 +3483,7 @@ Equation
 <td>
 <a id="">
 <div class="equation">
-<p class="paragraph">
-<em>&#8467;<sub>b</sub> = b<sub>i</sub>&#8239;sec(&alpha;<sub>i</sub>)</em>
-</p>
+<em>b<sub>i</sub>&#8239;sec(&alpha;<sub>i</sub>)</em>
 </div>
 </a>
 </td>
@@ -2561,8 +3493,39 @@ Equation
 Description
 </th>
 <td>
+<div class="list">
+<p>
+<em>&#8467;<sub>b</sub></em> is the total base length of a slice (m)
+</p>
+<p>
+<em>b</em> is the base width of a slice (m)
+</p>
+<p>
+<em>i</em> is the index (Unitless)
+</p>
+<p>
+<em>&alpha;</em> is the angle (&deg;)
+</p>
+</div>
+</td>
+</tr>
+<tr>
+<th>
+Source
+</th>
+<td>
 <p class="paragraph">
-<em>&#8467;<sub>b</sub></em> is the total base length of a slice (m)<br /><em>b</em> is the base width of a slice (m)<br /><em>i</em> is the index<br /><em>&alpha;</em> is the angle (&deg;)
+
+</p>
+</td>
+</tr>
+<tr>
+<th>
+RefBy
+</th>
+<td>
+<p class="paragraph">
+FIXME: This needs to be filled in
 </p>
 </td>
 </tr>
@@ -2576,7 +3539,17 @@ Label
 </th>
 <td>
 <p class="paragraph">
-Length of an Interslice Surface
+Length of an interslice surface
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Symbol
+</th>
+<td>
+<p class="paragraph">
+<em>&#8467;<sub>s</sub></em>
 </p>
 </td>
 </tr>
@@ -2597,9 +3570,7 @@ Equation
 <td>
 <a id="">
 <div class="equation">
-<p class="paragraph">
-<em>&#8467;<sub>s</sub> = b<sub>i</sub>&#8239;sec(&beta;<sub>i</sub>)</em>
-</p>
+<em>b<sub>i</sub>&#8239;sec(&beta;<sub>i</sub>)</em>
 </div>
 </a>
 </td>
@@ -2609,8 +3580,39 @@ Equation
 Description
 </th>
 <td>
+<div class="list">
+<p>
+<em>&#8467;<sub>s</sub></em> is the length of an interslice surface (m)
+</p>
+<p>
+<em>b</em> is the base width of a slice (m)
+</p>
+<p>
+<em>i</em> is the index (Unitless)
+</p>
+<p>
+<em>&beta;</em> is the angle (&deg;)
+</p>
+</div>
+</td>
+</tr>
+<tr>
+<th>
+Source
+</th>
+<td>
 <p class="paragraph">
-<em>&#8467;<sub>s</sub></em> is the length of an interslice surface (m)<br /><em>b</em> is the base width of a slice (m)<br /><em>i</em> is the index<br /><em>&beta;</em> is the angle (&deg;)
+
+</p>
+</td>
+</tr>
+<tr>
+<th>
+RefBy
+</th>
+<td>
+<p class="paragraph">
+FIXME: This needs to be filled in
 </p>
 </td>
 </tr>
@@ -2624,7 +3626,17 @@ Label
 </th>
 <td>
 <p class="paragraph">
-Earthquake Load Factor
+Earthquake load factor
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Symbol
+</th>
+<td>
+<p class="paragraph">
+<em>K<sub>c</sub></em>
 </p>
 </td>
 </tr>
@@ -2645,9 +3657,7 @@ Equation
 <td>
 <a id="">
 <div class="equation">
-<p class="paragraph">
-<em>K<sub>c</sub> = K<sub>c</sub>&#8239;W<sub>i</sub></em>
-</p>
+<em>K<sub>c</sub>&#8239;W<sub>i</sub></em>
 </div>
 </a>
 </td>
@@ -2657,8 +3667,39 @@ Equation
 Description
 </th>
 <td>
+<div class="list">
+<p>
+<em>K<sub>c</sub></em> is the earthquake load factor (Unitless)
+</p>
+<p>
+<em>K<sub>c</sub></em> is the earthquake load factor (Unitless)
+</p>
+<p>
+<em>W</em> is the weight (N)
+</p>
+<p>
+<em>i</em> is the index (Unitless)
+</p>
+</div>
+</td>
+</tr>
+<tr>
+<th>
+Source
+</th>
+<td>
 <p class="paragraph">
-<em>K<sub>c</sub></em> is the earthquake load factor<br /><em>W</em> is the weight (N)<br /><em>i</em> is the index
+
+</p>
+</td>
+</tr>
+<tr>
+<th>
+RefBy
+</th>
+<td>
+<p class="paragraph">
+FIXME: This needs to be filled in
 </p>
 </td>
 </tr>
@@ -2672,7 +3713,17 @@ Label
 </th>
 <td>
 <p class="paragraph">
-Imposed Surface Load
+Imposed surface load
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Symbol
+</th>
+<td>
+<p class="paragraph">
+<em>Q</em>
 </p>
 </td>
 </tr>
@@ -2693,9 +3744,7 @@ Equation
 <td>
 <a id="">
 <div class="equation">
-<p class="paragraph">
-<em>Q = Q<sub>i</sub>&#8239;&omega;<sub>i</sub></em>
-</p>
+<em>Q<sub>i</sub>&#8239;&omega;<sub>i</sub></em>
 </div>
 </a>
 </td>
@@ -2705,8 +3754,39 @@ Equation
 Description
 </th>
 <td>
+<div class="list">
+<p>
+<em>Q</em> is the imposed surface load (N)
+</p>
+<p>
+<em>Q</em> is the imposed surface load (N)
+</p>
+<p>
+<em>i</em> is the index (Unitless)
+</p>
+<p>
+<em>&omega;</em> is the angle (&deg;)
+</p>
+</div>
+</td>
+</tr>
+<tr>
+<th>
+Source
+</th>
+<td>
 <p class="paragraph">
-<em>Q</em> is the imposed surface load (N)<br /><em>i</em> is the index<br /><em>&omega;</em> is the angle (&deg;)
+
+</p>
+</td>
+</tr>
+<tr>
+<th>
+RefBy
+</th>
+<td>
+<p class="paragraph">
+FIXME: This needs to be filled in
 </p>
 </td>
 </tr>
@@ -2720,7 +3800,17 @@ Label
 </th>
 <td>
 <p class="paragraph">
-Interslice Shear Force
+Interslice shear force
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Symbol
+</th>
+<td>
+<p class="paragraph">
+<em>X</em>
 </p>
 </td>
 </tr>
@@ -2741,9 +3831,7 @@ Equation
 <td>
 <a id="">
 <div class="equation">
-<p class="paragraph">
-<em>X = &lambda;&#8239;f<sub>i</sub>&#8239;E<sub>i</sub></em>
-</p>
+<em>&lambda;&#8239;f<sub>i</sub>&#8239;E<sub>i</sub></em>
 </div>
 </a>
 </td>
@@ -2753,8 +3841,42 @@ Equation
 Description
 </th>
 <td>
+<div class="list">
+<p>
+<em>X</em> is the interslice shear force (N)
+</p>
+<p>
+<em>&lambda;</em> is the interslice normal/shear force ratio (Unitless)
+</p>
+<p>
+<em>f</em> is the scaling function (Unitless)
+</p>
+<p>
+<em>i</em> is the index (Unitless)
+</p>
+<p>
+<em>E</em> is the interslice normal force (N)
+</p>
+</div>
+</td>
+</tr>
+<tr>
+<th>
+Source
+</th>
+<td>
 <p class="paragraph">
-<em>X</em> is the interslice shear force (N)<br /><em>&lambda;</em> is the interslice normal/shear force ratio<br /><em>f</em> is the scaling function<br /><em>i</em> is the index<br /><em>E</em> is the interslice normal force (N)
+
+</p>
+</td>
+</tr>
+<tr>
+<th>
+RefBy
+</th>
+<td>
+<p class="paragraph">
+FIXME: This needs to be filled in
 </p>
 </td>
 </tr>
@@ -2768,7 +3890,17 @@ Label
 </th>
 <td>
 <p class="paragraph">
-Resistive Shear Force
+Resistive shear force
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Symbol
+</th>
+<td>
+<p class="paragraph">
+<em>R</em>
 </p>
 </td>
 </tr>
@@ -2789,9 +3921,7 @@ Equation
 <td>
 <a id="">
 <div class="equation">
-<p class="paragraph">
-<em>R = ((W<sub>i</sub>&plus;U<sub>t,i</sub>&#8239;cos(&beta;<sub>i</sub>)&plus;Q<sub>i</sub>&#8239;cos(&omega;<sub>i</sub>))&#8239;cos(&alpha;<sub>i</sub>)&plus;(&minus;K<sub>c</sub>&#8239;W<sub>i</sub>&minus;&Delta;H<sub>i</sub>&plus;U<sub>t,i</sub>&#8239;sin(&beta;<sub>i</sub>)&plus;Q<sub>i</sub>&#8239;sin(&omega;<sub>i</sub>))&#8239;sin(&alpha;<sub>i</sub>)&minus;U<sub>b,i</sub>)&#8239;tan(&phiv;&prime;<sub>i</sub>)&plus;c&prime;<sub>i</sub>&#8239;b<sub>i</sub>&#8239;sec(&alpha;<sub>i</sub>)</em>
-</p>
+<em>((W<sub>i</sub>&plus;U<sub>t,i</sub>&#8239;cos(&beta;<sub>i</sub>)&plus;Q<sub>i</sub>&#8239;cos(&omega;<sub>i</sub>))&#8239;cos(&alpha;<sub>i</sub>)&plus;(&minus;K<sub>c</sub>&#8239;W<sub>i</sub>&minus;&Delta;H<sub>i</sub>&plus;U<sub>t,i</sub>&#8239;sin(&beta;<sub>i</sub>)&plus;Q<sub>i</sub>&#8239;sin(&omega;<sub>i</sub>))&#8239;sin(&alpha;<sub>i</sub>)&minus;U<sub>b,i</sub>)&#8239;tan(&phiv;&prime;<sub>i</sub>)&plus;c&prime;<sub>i</sub>&#8239;b<sub>i</sub>&#8239;sec(&alpha;<sub>i</sub>)</em>
 </div>
 </a>
 </td>
@@ -2801,15 +3931,76 @@ Equation
 Description
 </th>
 <td>
+<div class="list">
+<p>
+<em>R</em> is the resistive shear force (N)
+</p>
+<p>
+<em>W</em> is the weight (N)
+</p>
+<p>
+<em>i</em> is the index (Unitless)
+</p>
+<p>
+<em>U<sub>t</sub></em> is the surface hydrostatic force (N)
+</p>
+<p>
+<em>&beta;</em> is the angle (&deg;)
+</p>
+<p>
+<em>Q</em> is the imposed surface load (N)
+</p>
+<p>
+<em>&omega;</em> is the angle (&deg;)
+</p>
+<p>
+<em>&alpha;</em> is the angle (&deg;)
+</p>
+<p>
+<em>K<sub>c</sub></em> is the earthquake load factor (Unitless)
+</p>
+<p>
+<em>&Delta;H</em> is the difference between interslice forces (N)
+</p>
+<p>
+<em>U<sub>b</sub></em> is the base hydrostatic force (N)
+</p>
+<p>
+<em>&phiv;&prime;</em> is the effective angle of friction (&deg;)
+</p>
+<p>
+<em>c&prime;</em> is the effective cohesion (Pa)
+</p>
+<p>
+<em>b</em> is the base width of a slice (m)
+</p>
+</div>
+</td>
+</tr>
+<tr>
+<th>
+Source
+</th>
+<td>
 <p class="paragraph">
-<em>R</em> is the resistive shear force (N)<br /><em>W</em> is the weight (N)<br /><em>i</em> is the index<br /><em>U<sub>t</sub></em> is the surface hydrostatic force (N)<br /><em>&beta;</em> is the angle (&deg;)<br /><em>Q</em> is the imposed surface load (N)<br /><em>&omega;</em> is the angle (&deg;)<br /><em>&alpha;</em> is the angle (&deg;)<br /><em>K<sub>c</sub></em> is the earthquake load factor<br /><em>&Delta;H</em> is the difference between interslice forces (N)<br /><em>U<sub>b</sub></em> is the base hydrostatic force (N)<br /><em>&phiv;&prime;</em> is the effective angle of friction (&deg;)<br /><em>c&prime;</em> is the effective cohesion (Pa)<br /><em>b</em> is the base width of a slice (m)
+
+</p>
+</td>
+</tr>
+<tr>
+<th>
+RefBy
+</th>
+<td>
+<p class="paragraph">
+FIXME: This needs to be filled in
 </p>
 </td>
 </tr>
 </table>
 </a>
 <p class="paragraph">
-The resistive shear force of a slice is defined as <em>P</em> in GD3. The effective normal force in the equation for <em>P</em> of the soil is defined in the perpendicular force equilibrium of a slice from GD2, using the effective normal force <em>N&prime;</em> of T4 shown in equation (1).
+The resistive shear force of a slice is defined as <em>P</em> in GD3. The effective normal force in the equation for <em>P</em> of the soil is defined in the perpendicular force equilibrium of a slice from GD2, using the effective normal force <em>N&prime;</em> of T4 shown in equation (1):
 </p>
 <a id="">
 <div class="equation">
@@ -2817,7 +4008,7 @@ The resistive shear force of a slice is defined as <em>P</em> in GD3. The effect
 </div>
 </a>
 <p class="paragraph">
-The values of the interslice forces <em>E</em> and <em>X</em> in the equation are unknown, while the other values are found from the physical force definitions of DD1 to DD9. Consider a force equilibrium without the affect of interslice forces, to obtain a solvable value as done for <em>N*</em> in equation (2).
+The values of the interslice forces <em>E</em> and <em>X</em> in the equation are unknown, while the other values are found from the physical force definitions of DD1 to DD9. Consider a force equilibrium without the affect of interslice forces, to obtain a solvable value as done for <em>N*</em> in equation (2):
 </p>
 <a id="">
 <div class="equation">
@@ -2825,7 +4016,7 @@ The values of the interslice forces <em>E</em> and <em>X</em> in the equation ar
 </div>
 </a>
 <p class="paragraph">
-Using <em>N*</em>, a resistive shear force without the influence of interslice forces for slice index i can be solved for in terms of all known values as done in equation (3).
+Using <em>N*</em>, a resistive shear force without the influence of interslice forces for slice index i can be solved for in terms of all known values as done in equation (3):
 </p>
 <a id="">
 <div class="equation">
@@ -2840,7 +4031,17 @@ Label
 </th>
 <td>
 <p class="paragraph">
-Mobilized Shear Force
+Mobilized shear force
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Symbol
+</th>
+<td>
+<p class="paragraph">
+<em>T</em>
 </p>
 </td>
 </tr>
@@ -2861,9 +4062,7 @@ Equation
 <td>
 <a id="">
 <div class="equation">
-<p class="paragraph">
-<em>T = (W<sub>i</sub>&plus;U<sub>t,i</sub>&#8239;cos(&beta;<sub>i</sub>)&plus;Q<sub>i</sub>&#8239;cos(&omega;<sub>i</sub>))&#8239;sin(&alpha;<sub>i</sub>)&minus;(&minus;K<sub>c</sub>&#8239;W<sub>i</sub>&minus;&Delta;H<sub>i</sub>&plus;U<sub>t,i</sub>&#8239;sin(&beta;<sub>i</sub>)&plus;Q<sub>i</sub>&#8239;sin(&omega;<sub>i</sub>))&#8239;cos(&alpha;<sub>i</sub>)</em>
-</p>
+<em>(W<sub>i</sub>&plus;U<sub>t,i</sub>&#8239;cos(&beta;<sub>i</sub>)&plus;Q<sub>i</sub>&#8239;cos(&omega;<sub>i</sub>))&#8239;sin(&alpha;<sub>i</sub>)&minus;(&minus;K<sub>c</sub>&#8239;W<sub>i</sub>&minus;&Delta;H<sub>i</sub>&plus;U<sub>t,i</sub>&#8239;sin(&beta;<sub>i</sub>)&plus;Q<sub>i</sub>&#8239;sin(&omega;<sub>i</sub>))&#8239;cos(&alpha;<sub>i</sub>)</em>
 </div>
 </a>
 </td>
@@ -2873,135 +4072,57 @@ Equation
 Description
 </th>
 <td>
-<p class="paragraph">
-<em>T</em> is the mobilized shear force (N)<br /><em>W</em> is the weight (N)<br /><em>i</em> is the index<br /><em>U<sub>t</sub></em> is the surface hydrostatic force (N)<br /><em>&beta;</em> is the angle (&deg;)<br /><em>Q</em> is the imposed surface load (N)<br /><em>&omega;</em> is the angle (&deg;)<br /><em>&alpha;</em> is the angle (&deg;)<br /><em>K<sub>c</sub></em> is the earthquake load factor<br /><em>&Delta;H</em> is the difference between interslice forces (N)
+<div class="list">
+<p>
+<em>T</em> is the mobilized shear force (N)
 </p>
-</td>
-</tr>
-</table>
-</a>
-<p class="paragraph">
-The mobilized shear force acting on a slice is defined as <em>S</em> from the force equilibrium in GD2, also shown in equation (4).
+<p>
+<em>W</em> is the weight (N)
 </p>
-<a id="">
-<div class="equation">
-<em>S<sub>i</sub> = (W<sub>i</sub>&minus;X<sub>i&minus;1</sub>&plus;X<sub>i</sub>&plus;U<sub>t,i</sub>&#8239;cos(&beta;<sub>i</sub>)&plus;Q<sub>i</sub>&#8239;cos(&omega;<sub>i</sub>))&#8239;sin(&alpha;<sub>i</sub>)&plus;(&minus;K<sub>c</sub>&#8239;W<sub>i</sub>&minus;E<sub>i</sub>&plus;E<sub>i&minus;1</sub>&minus;H<sub>i</sub>&plus;H<sub>i&minus;1</sub>&plus;U<sub>t,i</sub>&#8239;sin(&beta;<sub>i</sub>)&plus;Q<sub>i</sub>&#8239;sin(&omega;<sub>i</sub>))&#8239;cos(&alpha;<sub>i</sub>)</em>
-</div>
-</a>
-<p class="paragraph">
-The equation is unsolvable, containing the unknown interslice normal force <em>E</em> and interslice shear force <em>X</em>. Consider a force equilibrium without the influence of interslice forces, to obtain the mobilized shear force <em>T</em>, as done in equation (5).
+<p>
+<em>i</em> is the index (Unitless)
 </p>
-<a id="">
-<div class="equation">
-<em>T<sub>i</sub> = (W<sub>i</sub>&plus;U<sub>t,i</sub>&#8239;cos(&beta;<sub>i</sub>)&plus;Q<sub>i</sub>&#8239;cos(&omega;<sub>i</sub>))&#8239;sin(&alpha;<sub>i</sub>)&minus;(&minus;K<sub>c</sub>&#8239;W<sub>i</sub>&minus;&Delta;H<sub>i</sub>&plus;U<sub>t,i</sub>&#8239;sin(&beta;<sub>i</sub>)&plus;Q<sub>i</sub>&#8239;sin(&omega;<sub>i</sub>))&#8239;cos(&alpha;<sub>i</sub>)</em>
-</div>
-</a>
-<p class="paragraph">
-The values of <em>R</em> and <em>T</em> are now defined completely in terms of the known force property values of DD1 to DD9.
+<p>
+<em>U<sub>t</sub></em> is the surface hydrostatic force (N)
 </p>
-<a id="DD:pressure">
-<table class="ddefn">
-<tr>
-<th>
-Label
-</th>
-<td>
-<p class="paragraph">
-Pressure
+<p>
+<em>&beta;</em> is the angle (&deg;)
 </p>
-</td>
-</tr>
-<tr>
-<th>
-Units
-</th>
-<td>
-<p class="paragraph">
-Pa
+<p>
+<em>Q</em> is the imposed surface load (N)
 </p>
-</td>
-</tr>
-<tr>
-<th>
-Equation
-</th>
-<td>
-<a id="">
-<div class="equation">
-<p class="paragraph">
-<em>p = <table class="matrix">
-<tr><td>K<sub>st,i</sub></td><td>0</td></tr>
-<tr><td>0</td><td>K<sub>bn,i</sub></td></tr>
-</table>&#8239;<table class="matrix">
-<tr><td>&delta;x<sub>i</sub></td></tr>
-<tr><td>&delta;y<sub>i</sub></td></tr>
-</table></em>
+<p>
+<em>&omega;</em> is the angle (&deg;)
+</p>
+<p>
+<em>&alpha;</em> is the angle (&deg;)
+</p>
+<p>
+<em>K<sub>c</sub></em> is the earthquake load factor (Unitless)
+</p>
+<p>
+<em>&Delta;H</em> is the difference between interslice forces (N)
 </p>
 </div>
-</a>
 </td>
 </tr>
 <tr>
 <th>
-Description
+Source
 </th>
 <td>
 <p class="paragraph">
-<em>p</em> is the pressure (Pa)<br /><em>K<sub>st</sub></em> is the shear stiffness (Pa/m)<br /><em>i</em> is the index<br /><em>K<sub>bn</sub></em> is the normal stiffness (Pa/m)<br /><em>&delta;x</em> is the displacement (m)<br /><em>&delta;y</em> is the displacement (m)
-</p>
-</td>
-</tr>
-</table>
-</a>
-<a id="DD:pressure">
-<table class="ddefn">
-<tr>
-<th>
-Label
-</th>
-<td>
-<p class="paragraph">
-Pressure
+
 </p>
 </td>
 </tr>
 <tr>
 <th>
-Units
+RefBy
 </th>
 <td>
 <p class="paragraph">
-Pa
-</p>
-</td>
-</tr>
-<tr>
-<th>
-Equation
-</th>
-<td>
-<a id="">
-<div class="equation">
-<p class="paragraph">
-<em>p = <table class="matrix">
-<tr><td>K<sub>bA,i</sub></td><td>K<sub>bB,i</sub></td></tr>
-<tr><td>K<sub>bB,i</sub></td><td>K<sub>bA,i</sub></td></tr>
-</table>&#8239;<table class="matrix">
-<tr><td>&delta;x<sub>i</sub></td></tr>
-<tr><td>&delta;y<sub>i</sub></td></tr>
-</table></em>
-</p>
-</div>
-</a>
-</td>
-</tr>
-<tr>
-<th>
-Description
-</th>
-<td>
-<p class="paragraph">
-<em>p</em> is the pressure (Pa)<br /><em>K<sub>bA</sub></em> is the effective base stiffness A (Pa/m)<br /><em>i</em> is the index<br /><em>K<sub>bB</sub></em> is the effective base stiffness A (Pa/m)<br /><em>&delta;x</em> is the displacement (m)<br /><em>&delta;y</em> is the displacement (m)
+FIXME: This needs to be filled in
 </p>
 </td>
 </tr>

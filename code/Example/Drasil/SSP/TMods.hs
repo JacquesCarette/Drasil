@@ -78,8 +78,8 @@ eq_desc = foldlSent [S "For a body in static equilibrium, the net",
 --
 ------------- New Chunck -----------
 mcShrStrgth_new :: TheoryModel
-mcShrStrgth_new = tm (cw fs_rc)
-  (tc' "fmcShrStrgth_new" [qw shrStress, qw normStress, qw fricAngle, qw cohesion] 
+mcShrStrgth_new = tm (cw mcShrStrgth)
+  (tc' "mcShrStrgth_new" [qw shrStress, qw normStress, qw fricAngle, qw cohesion] 
   ([] :: [ConceptChunk])
   [] [TCon Invariant mcSS_rel] [])
 

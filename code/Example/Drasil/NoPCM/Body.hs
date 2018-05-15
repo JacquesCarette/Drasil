@@ -13,7 +13,7 @@ import Drasil.NoPCM.GenDefs (roc_temp_simp_deriv)
 -- NoPCM, check SWHS.
 import Drasil.SWHS.Assumptions (assump_new_1, assump_new_2,assump_new_6, assump_new_7, assump_new_8, assump_new_9,
   assump_new_10, assump_new_11, assump_new_14, assump_new_15, assump_new_20,
-  assump1, assump2, assump7, assump8, assump9, assump14, assump15, assump20)
+  assump1, assump2, assump9, assump15, assump20)
 import Drasil.SWHS.Body (charac_of_reader_knowledge, charac_of_reader_understanding, org_of_doc_intro,
   gen_sys_desc, physSyst1, physSyst2, data_def_intro_end, insta_model_d1startPara,
   trace_matrix_grph_trailing, data_constraint_mid)
@@ -435,18 +435,24 @@ sol_charac_spec = solChSpecF progName (prob_des, likely_chg) data_def_intro_end 
     phrase uncertainty, S "quantification exercise"]-}
 --s4_2_1_list
 assump_list :: [Contents]
-assump_list = acroNumGen [assump1, assump2, assump3, assump4, assump5, assump7,
-  assump8, assump9, assump9_npcm,  assump12, assump13, assump14, assump15,
-  assump20] 1
+assump_list = acroNumGen [assump1, assump2, assump3, assump4, assump5, assump6, assump7, assump8,
+ assump9_npcm, assump10, assump11, assump12, assump13, assump14] 1
   
-assump3, assump4, assump5, assump9_npcm, assump12, assump13 :: Contents
+assump3, assump4, assump5, assump6, assump7, assump8, assump9_npcm, assump10, assump11,
+ assump12, assump13, assump14 :: Contents
 
 assump3 = Assumption $ assump3_new_nopcm
 assump4 = Assumption $ assump4_new_nopcm
 assump5 = Assumption $ assump5_new_nopcm
+assump6 = Assumption $ assump6_new_nopcm
+assump7 = Assumption $ assump7_new_nopcm
+assump8 = Assumption $ assump8_new_nopcm
 assump9_npcm = Assumption $ assump9_npcm_new_nopcm
+assump10 = Assumption $ assump10_new_nopcm
+assump11 = Assumption $ assump11_new_nopcm
 assump12 = Assumption $ assump12_new_nopcm
 assump13 = Assumption $ assump13_new_nopcm
+assump14 = Assumption $ assump14_new_nopcm
 
   --New chunks of assumptions
 assump3_new_nopcm, assump4_new_nopcm, assump5_new_nopcm,

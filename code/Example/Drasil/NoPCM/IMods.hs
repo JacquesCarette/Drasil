@@ -4,7 +4,7 @@ import Language.Drasil
 
 import Drasil.SWHS.Concepts (water, coil, tank)
 import Drasil.SWHS.Unitals
-import Data.Drasil.Utils (unwrap, weave)
+import Data.Drasil.Utils (unwrap, weave, getES)
 import Data.Drasil.SentenceStructures (foldlSent, isThe,
   sAnd, foldlList, ofThe, acroGD, foldlSentCol, sOf)
 import Data.Drasil.Quantities.Physics (time, energy)
@@ -62,26 +62,26 @@ eBalanceOnWtr_deriv_nopcm =
 eBalanceOnWtr_deriv_sentences_nopcm :: [Sentence]
 eBalanceOnWtr_deriv_sentences_nopcm = map foldlSentCol [
   s4_2_3_desc1_nopcm rOfChng temp_W energy water vol w_vol mass w_mass heat_cap_spec
-    htCap_W heat_trans coil ht_flux_C coil_SA tank [S "A11"] [S "A12"],
+    htCap_W heat_trans ht_flux_C coil_SA tank assump_new_11 assump_new_12 vol_ht_gen, 
   s4_2_3_desc2_nopcm dd1HtFluxC,
   s4_2_3_desc3_nopcm eq1,
   s4_2_3_desc4_nopcm eq2]
 
 s4_2_3_desc1_nopcm :: ConceptChunk -> UncertQ -> UnitalChunk -> ConceptChunk -> UnitalChunk -> 
   UnitalChunk -> UnitalChunk -> UnitalChunk -> ConceptChunk -> UncertQ -> ConceptChunk -> 
-  ConceptChunk -> UnitalChunk -> UncertQ -> ConceptChunk -> [Sentence] -> [Sentence] -> [Sentence]
-s4_2_3_desc1_nopcm roc tw en wt vo wvo ms wms hcs hw ht cl hfc cs tk ass11 ass12 =
+  UnitalChunk -> UncertQ -> ConceptChunk -> AssumpChunk -> AssumpChunk -> UnitalChunk -> [Sentence]
+s4_2_3_desc1_nopcm roc tw en wt vo wvo ms wms hcs hw ht hfc cs tk ass11 ass12 vhg =
   [S "To find the", phrase roc `sOf` (E $ sy tw) `sC` S "we look at the",
    phrase en, S "balance on" +:+. phrase wt, S "The", phrase vo, S "being considered" 
    `isThe` (phrase vo `sOf` phrase wt), (E $ sy wvo) `sC` S "which has", phrase ms,
    (E $ sy wms) `sAnd` (phrase hcs `sOf` phrase wt) `sC` (E $ sy hw), 
-    phrase ht, S "occurs in the", phrase wt, S "from the", phrase cl, 
+    S ". Heat transfer occurs in the", phrase wt, S "from the coil as", 
     (E $ sy hfc) `sC` S "over area" +:+. (E $ sy cs), S "No", phrase ht,
     S "occurs to", S "outside" `ofThe` phrase tk `sC` 
-    S "since it has been assumed to be perfectly insulted", 
-    (foldlList $ (map (\d -> sParen (d))) ass11), S ". Assuming no volumetric", 
+    S "since it has been assumed to be perfectly insulated", 
+    (sParen (makeRef ass11)), S ". Assuming no volumetric", 
     S "heat generation per unit", phrase vo,
-    (foldlList $ (map (\d -> sParen (d))) ass12) `sC` S "g = 0. Therefore, the equation for",
+    (sParen (makeRef ass12)) `sC` (E $ sy vhg $= 0), S ". Therefore, the equation for",
      acroGD 2, S "can be written as"]
 
 s4_2_3_desc2_nopcm :: QDefinition -> [Sentence]
@@ -91,13 +91,15 @@ s4_2_3_desc2_nopcm dd1HtFluxC =
 s4_2_3_desc3_nopcm :: Expr-> [Sentence]
 s4_2_3_desc3_nopcm eq11 = [S "Dividing (3) by", (E eq11) `sC` S "we obtain"]
 
-s4_2_3_desc4_nopcm :: Expr-> [Sentence]
+s4_2_3_desc4_nopcm :: [Sentence]-> [Sentence]
 s4_2_3_desc4_nopcm eq22 = 
-  [S "Setting", (E eq22) `sC` S "Equation (4) can be written in its final form as"]
+  [S "Setting"] ++ eq22 ++ [S ", Equation (4) can be written in its final form as"]
 
-eq1, eq2:: Expr
+eq1:: Expr
 eq1 = (sy w_mass) * (sy htCap_W)
-eq2 = (sy tau_W) $= ((sy w_mass) * (sy htCap_W)) / ((sy ht_flux_C) * (sy coil_SA))
+
+eq2:: [Sentence]
+eq2 = [getES tau_W, S "=", getES w_mass, getES htCap_W, S "/", getES coil_HTC, getES coil_SA]
 
 s4_2_3_eq1_nopcm, s4_2_3_eq2_nopcm, s4_2_3_eq3_nopcm, s4_2_3_eq4_nopcm :: Expr
 

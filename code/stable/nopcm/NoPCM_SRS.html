@@ -1034,6 +1034,16 @@ Newton's law of cooling
 </tr>
 <tr>
 <th>
+Units
+</th>
+<td>
+<p class="paragraph">
+W/m<sup>2</sup>
+</p>
+</td>
+</tr>
+<tr>
+<th>
 Equation
 </th>
 <td>
@@ -1051,8 +1061,40 @@ Equation
 Description
 </th>
 <td>
+<div class="list">
+<p>
+<em><b>q</b></em> is the thermal flux vector (W/m<sup>2</sup>)
+</p>
+<p>
+<em>t</em> is the time (s)
+</p>
+<p>
+<em>h</em> is the convective heat transfer coefficient (W/(m<sup>2</sup>&sdot;&deg;C))
+</p>
+<p>
+<em>&Delta;T</em> is the change in temperature (&deg;C)
+</p>
+</div>
+</td>
+</tr>
+<tr>
+<th>
+Source
+</th>
+<td>
 <p class="paragraph">
-Newton's law of cooling describes convective cooling from a surface. The law is stated as: the rate of heat loss from a body is proportional to the difference in temperatures between the body and its surroundings. <em><b>q</b>(t)</em> is the thermal flux (W/m<sup>2</sup>). <em>h</em> is the heat transfer coefficient, assumed independant of <em>T</em> (A2) (W/(m<sup>2</sup>&sdot;&deg;C)). <em>&Delta;T(t) = T(t)&minus;T<sub>env</sub>(t)</em> is the time-dependant thermal gradient between the environment and the object (&deg;C).
+</p>
+</td>
+</tr>
+<tr>
+<th>
+RefBy
+</th>
+<td>
+<p class="paragraph">
+FIXME: This needs to be filled in
+</p>
+<p class="paragraph">
 </p>
 </td>
 </tr>
@@ -1096,8 +1138,56 @@ d&#8239;t
 Description
 </th>
 <td>
+<div class="list">
+<p>
+<em>m</em> is the mass (kg)
+</p>
+<p>
+<em>C</em> is the specific heat capacity (J/(kg&sdot;&deg;C))
+</p>
+<p>
+<em>t</em> is the time (s)
+</p>
+<p>
+<em>T</em> is the temperature (&deg;C)
+</p>
+<p>
+<em>q<sub>in</sub></em> is the heat flux input (W/m<sup>2</sup>)
+</p>
+<p>
+<em>A<sub>in</sub></em> is the surface area over which heat is transferred in (m<sup>2</sup>)
+</p>
+<p>
+<em>q<sub>out</sub></em> is the heat flux output (W/m<sup>2</sup>)
+</p>
+<p>
+<em>A<sub>out</sub></em> is the surface area over which heat is transferred out (m<sup>2</sup>)
+</p>
+<p>
+<em>g</em> is the volumetric heat generation per unit volume (W/m<sup>3</sup>)
+</p>
+<p>
+<em>V</em> is the volume (m<sup>3</sup>)
+</p>
+</div>
+</td>
+</tr>
+<tr>
+<th>
+Source
+</th>
+<td>
 <p class="paragraph">
-The basic equation governing the rate of change of temperature, for a given volume <em>V</em>, with time. <em>m</em> is the mass (kg). <em>C</em> is the specific heat capacity (J/(kg&sdot;&deg;C)). <em>T</em> is the temperature (&deg;C) and <em>t</em> is the time (s). <em>q<sub>in</sub></em> and <em>q<sub>out</sub></em> are the in and out heat transfer rates, respectively (W/m<sup>2</sup>). <em>A<sub>in</sub></em> and <em>A<sub>out</sub></em> are the surface areas over which the heat is being transferred in and out, respectively (m<sup>2</sup>). <em>g</em> is the volumetric heat generated (W/m<sup>3</sup>). <em>V</em> is the volume (m<sup>3</sup>).
+</p>
+</td>
+</tr>
+<tr>
+<th>
+RefBy
+</th>
+<td>
+<p class="paragraph">
+FIXME: This needs to be filled in
 </p>
 </td>
 </tr>
@@ -1205,6 +1295,16 @@ Heat flux into the water from the coil
 </tr>
 <tr>
 <th>
+Symbol
+</th>
+<td>
+<p class="paragraph">
+<em>q<sub>C</sub></em>
+</p>
+</td>
+</tr>
+<tr>
+<th>
 Units
 </th>
 <td>
@@ -1221,7 +1321,7 @@ Equation
 <a id="">
 <div class="equation">
 <p class="paragraph">
-<em>q<sub>C</sub> = h<sub>C</sub>&#8239;(T<sub>C</sub>&minus;T<sub>W</sub>(t))</em>
+<em>h<sub>C</sub>&#8239;(T<sub>C</sub>&minus;T<sub>W</sub>(t))</em>
 </p>
 </div>
 </a>
@@ -1232,8 +1332,42 @@ Equation
 Description
 </th>
 <td>
+<div class="list">
+<p>
+<em>q<sub>C</sub></em> is the heat flux into the water from the coil (W/m<sup>2</sup>)
+</p>
+<p>
+<em>h<sub>C</sub></em> is the convective heat transfer coefficient between coil and water (W/(m<sup>2</sup>&sdot;&deg;C))
+</p>
+<p>
+<em>T<sub>C</sub></em> is the temperature of the heating coil (&deg;C)
+</p>
+<p>
+<em>T<sub>W</sub></em> is the temperature of the water (&deg;C)
+</p>
+<p>
+<em>t</em> is the time (s)
+</p>
+</div>
+</td>
+</tr>
+<tr>
+<th>
+Source
+</th>
+<td>
 <p class="paragraph">
-<em>q<sub>C</sub></em> is the heat flux into the water from the coil (W/m<sup>2</sup>)<br /><em>h<sub>C</sub></em> is the convective heat transfer coefficient between coil and water (W/(m<sup>2</sup>&sdot;&deg;C))<br /><em>T<sub>C</sub></em> is the temperature of the heating coil (&deg;C)<br /><em>T<sub>W</sub></em> is the temperature of the water (&deg;C)<br /><em>t</em> is the time (s)
+
+</p>
+</td>
+</tr>
+<tr>
+<th>
+RefBy
+</th>
+<td>
+<p class="paragraph">
+FIXME: This needs to be filled in
 </p>
 </td>
 </tr>
@@ -1263,12 +1397,55 @@ Energy balance on water to find the temperature of the water
 </tr>
 <tr>
 <th>
+Input
+</th>
+<td>
+<p class="paragraph">
+<em>T<sub>C</sub></em>, <em>T<sub>init</sub></em>, <em>t<sub>final</sub></em>, <em>A<sub>C</sub></em>, <em>h<sub>C</sub></em>, <em>C<sub>W</sub></em>, <em>m<sub>W</sub></em>
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Output
+</th>
+<td>
+<p class="paragraph">
+<em>T<sub>W</sub></em>
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Input Constraints
+</th>
+<td>
+<a id="">
+<div class="equation">
+<em>T<sub>init</sub>&thinsp;&le;&thinsp;T<sub>C</sub></em>
+</div>
+</a>
+</td>
+</tr>
+<tr>
+<th>
+Output Constraints
+</th>
+<td>
+<a id="">
+<div class="equation">
+<em>0&thinsp;&lt;&thinsp;t&thinsp;&lt;&thinsp;t<sub>final</sub></em>
+</div>
+</a>
+</td>
+</tr>
+<tr>
+<th>
 Equation
 </th>
 <td>
 <a id="">
 <div class="equation">
-<p class="paragraph">
 <em><div class="fraction">
 <span class="fup">
 d&#8239;T<sub>W</sub>
@@ -1284,7 +1461,6 @@ d&#8239;t
 &tau;<sub>W</sub>
 </span>
 </div>&#8239;(T<sub>C</sub>&minus;T<sub>W</sub>(t))</em>
-</p>
 </div>
 </a>
 </td>
@@ -1294,15 +1470,39 @@ d&#8239;t
 Description
 </th>
 <td>
+<div class="list">
+<p>
+<em>t</em> is the time (s)
+</p>
+<p>
+<em>T<sub>W</sub></em> is the temperature of the water (&deg;C)
+</p>
+<p>
+<em>&tau;<sub>W</sub></em> is the ODE parameter for water (s)
+</p>
+<p>
+<em>T<sub>C</sub></em> is the temperature of the heating coil (&deg;C)
+</p>
+</div>
+</td>
+</tr>
+<tr>
+<th>
+Source
+</th>
+<td>
 <p class="paragraph">
-<em>T<sub>W</sub></em> is the temperature of the water (&deg;C). <em>T<sub>C</sub></em> is the temperature of the heating coil (&deg;C). <em>&tau;<sub>W</sub> = <div class="fraction">
-<span class="fup">
-m<sub>W</sub>&#8239;C<sub>W</sub>
-</span>
-<span class="fdn">
-h<sub>C</sub>&#8239;A<sub>C</sub>
-</span>
-</div></em> is a constant (s). The above equation applies as long as the water is in liquid form, <em>0&thinsp;&lt;&thinsp;T<sub>W</sub>&thinsp;&lt;&thinsp;100</em> (&deg;C) where <em>0</em> (&deg;C) and <em>100</em> (&deg;C) are the melting and boiling point temperatures of water, respectively (<a href=#A:assump10>assump10</a>).
+
+</p>
+</td>
+</tr>
+<tr>
+<th>
+RefBy
+</th>
+<td>
+<p class="paragraph">
+FIXME: This needs to be filled in
 </p>
 </td>
 </tr>
@@ -1312,7 +1512,7 @@ h<sub>C</sub>&#8239;A<sub>C</sub>
 Derivation of the energy balance on water:
 </p>
 <p class="paragraph">
-To find the rate of change of <em>T<sub>W</sub></em>, we look at the energy balance on water. The volume being considered is the volume of water <em>V<sub>W</sub></em>, which has mass <em>m<sub>W</sub></em> and specific heat capacity of water, <em>C<sub>W</sub></em>. Heat transfer occurs in the water from the coil as <em>q<sub>C</sub></em>, over area <em>A<sub>C</sub></em>. No heat transfer occurs to the outside of the tank, since it has been assumed to be perfectly insulated (<a href=#A:assump15>A11</a>). Assuming no volumetric heat generation per unit volume (<a href=#A:assump12>A12</a>), <em>g = 0</em>. Therefore, the equation for GD2 can be written as:
+To find the rate of change of <em>T<sub>W</sub></em>, we look at the energy balance on water. The volume being considered is the volume of water <em>V<sub>W</sub></em>, which has mass <em>m<sub>W</sub></em> and specific heat capacity of water, <em>C<sub>W</sub></em>. Heat transfer occurs in the water from the coil as <em>q<sub>C</sub></em>, over area <em>A<sub>C</sub></em>. No heat transfer occurs to the outside of the tank, since it has been assumed to be perfectly insulated (<a href=#A:assump11>assump11</a>). Assuming no volumetric heat generation per unit volume (<a href=#A:assump12>assump12</a>), <em>g = 0</em>. Therefore, the equation for GD2 can be written as:
 </p>
 <a id="">
 <div class="equation">
@@ -1342,7 +1542,7 @@ d&#8239;t
 </div>
 </a>
 <p class="paragraph">
-Dividing (3) by <em>m<sub>W</sub></em><em>C<sub>W</sub></em>, we obtain:
+Dividing (3) by <em>m<sub>W</sub>&#8239;C<sub>W</sub></em>, we obtain:
 </p>
 <a id="">
 <div class="equation">
@@ -1393,8 +1593,47 @@ Label
 </th>
 <td>
 <p class="paragraph">
-Heat Energy in the Water
+Heat energy in the water
 </p>
+</td>
+</tr>
+<tr>
+<th>
+Input
+</th>
+<td>
+<p class="paragraph">
+<em>T<sub>init</sub></em>, <em>A<sub>C</sub></em>, <em>C<sub>W</sub></em>, <em>m<sub>W</sub></em>
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Output
+</th>
+<td>
+<p class="paragraph">
+<em>E<sub>W</sub></em>
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Input Constraints
+</th>
+<td>
+</td>
+</tr>
+<tr>
+<th>
+Output Constraints
+</th>
+<td>
+<a id="">
+<div class="equation">
+<em>0&thinsp;&lt;&thinsp;t&thinsp;&lt;&thinsp;t<sub>final</sub></em>
+</div>
+</a>
 </td>
 </tr>
 <tr>
@@ -1404,9 +1643,7 @@ Equation
 <td>
 <a id="">
 <div class="equation">
-<p class="paragraph">
 <em>E<sub>W</sub>(t) = C<sub>W</sub>&#8239;m<sub>W</sub>&#8239;(T<sub>W</sub>(t)&minus;T<sub>init</sub>)</em>
-</p>
 </div>
 </a>
 </td>
@@ -1416,8 +1653,45 @@ Equation
 Description
 </th>
 <td>
+<div class="list">
+<p>
+<em>E<sub>W</sub></em> is the change in heat energy in the water (J)
+</p>
+<p>
+<em>t</em> is the time (s)
+</p>
+<p>
+<em>C<sub>W</sub></em> is the specific heat capacity of water (J/(kg&sdot;&deg;C))
+</p>
+<p>
+<em>m<sub>W</sub></em> is the mass of water (kg)
+</p>
+<p>
+<em>T<sub>W</sub></em> is the temperature of the water (&deg;C)
+</p>
+<p>
+<em>T<sub>init</sub></em> is the initial temperature (&deg;C)
+</p>
+</div>
+</td>
+</tr>
+<tr>
+<th>
+Source
+</th>
+<td>
 <p class="paragraph">
-The above equation is derived using T2. <em>E<sub>W</sub></em> is the change in thermal energy of the liquid water relative to the energy at the initial temperature (<em>T<sub>init</sub></em>) (J). <em>C<sub>W</sub></em> is the specific heat capacity of liquid water (J/(kg&sdot;&deg;C)) and <em>m<sub>W</sub></em> is the mass of the water (kg). The change in temperature is the difference between the temperature at time <em>t</em> (s), <em>T<sub>W</sub></em> and the initial temperature, <em>T<sub>init</sub></em> (&deg;C). This equation applies as long as <em>0&thinsp;&lt;&thinsp;T<sub>W</sub>&thinsp;&lt;&thinsp;100</em>&deg;C (<a href=#A:assump14>assump14</a>, <a href=#A:assump19>assump19</a>).
+
+</p>
+</td>
+</tr>
+<tr>
+<th>
+RefBy
+</th>
+<td>
+<p class="paragraph">
+FIXME: This needs to be filled in
 </p>
 </td>
 </tr>
@@ -2350,22 +2624,22 @@ A4 (<a href=#A:assump4>A4</a>)
 A5 (<a href=#A:assump5>A5</a>)
 </th>
 <th>
-A6 (<a href=#A:assump7>A6</a>)
+A6 (<a href=#A:assump6>A6</a>)
 </th>
 <th>
-A7 (<a href=#A:assump8>A7</a>)
+A7 (<a href=#A:assump7>A7</a>)
 </th>
 <th>
-A8 (<a href=#A:assump9>A8</a>)
+A8 (<a href=#A:assump8>A8</a>)
 </th>
 <th>
 A9 (<a href=#A:assump9.npnc>A9</a>)
 </th>
 <th>
-A10 (<a href=#A:assump14>A10</a>)
+A10 (<a href=#A:assump10>A10</a>)
 </th>
 <th>
-A11 (<a href=#A:assump15>A11</a>)
+A11 (<a href=#A:assump11>A11</a>)
 </th>
 <th>
 A12 (<a href=#A:assump12>A12</a>)
@@ -2374,7 +2648,7 @@ A12 (<a href=#A:assump12>A12</a>)
 A13 (<a href=#A:assump13>A13</a>)
 </th>
 <th>
-A14 (<a href=#A:assump20>A14</a>)
+A14 (<a href=#A:assump14>A14</a>)
 </th>
 </tr>
 <tr>

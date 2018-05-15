@@ -3,7 +3,6 @@ module Drasil.GamePhysics.Unitals where
 import Language.Drasil
 import Data.Drasil.SI_Units
 import qualified Data.Drasil.Concepts.Physics as CP
-import qualified Data.Drasil.Concepts.Math as CM
 import qualified Data.Drasil.Quantities.Physics as QP
 import qualified Data.Drasil.Quantities.Math as QM
 import qualified Data.Drasil.Quantities.PhysicalProperties as QPP
@@ -18,7 +17,7 @@ import Control.Lens((^.))
 cpSymbols, cpSymbolsAll, inputSymbols, outputSymbols :: [QuantityDict]
 
 -- FIXME: pi hack
-cpSymbolsAll = cpSymbols ++ inputSymbols ++ outputSymbols ++ [CM.pi_]
+cpSymbolsAll = cpSymbols ++ inputSymbols ++ outputSymbols ++ [QM.pi_]
 
 cpSymbols = (map qw cpUnits) ++ 
   (map qw cpUnitless) ++ (map qw cpInputConstraints)
@@ -275,7 +274,7 @@ mmntOfInCons   = constrained' QP.momentOfInertia    [nonNegativeConstraint] (dbl
 gravAccelCons  = constrained' QP.gravitationalConst [] (dbl 9.8)
 posCons        = constrained' QP.position           [] (dbl 0.412) --FIXME: should be (0.412, 0.502) vector
 veloCons       = constrained' QP.velocity           [] (dbl 2.51)
-orientCons     = constrained' QM.orientation        [] (sy CM.pi_ / 2) -- physical constraint not needed space is radians
+orientCons     = constrained' QM.orientation        [] (sy QM.pi_ / 2) -- physical constraint not needed space is radians
 angVeloCons    = constrained' QP.angularVelocity    [] (dbl 2.1)
 forceCons      = constrained' QP.force              [] (dbl 98.1)
 torqueCons     = constrained' QP.torque             [] (dbl 200)

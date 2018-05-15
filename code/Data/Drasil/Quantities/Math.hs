@@ -16,6 +16,8 @@ perpVect    = cv CM.perpV    (vec $ lN)                                    Real
 surface     = cv CM.surface  cS                                            Real
 euclidNorm  = cv CM.euclidN  (Concat [Atomic "||", (vec lR), Atomic "||"]) Real
 
+pi_ :: QuantityDict
+pi_         = mkQuant "pi"   (pn "π") (Greek Pi_L) Real Nothing Nothing
 
 surArea, orientation :: UnitalChunk
 

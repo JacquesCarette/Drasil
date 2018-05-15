@@ -10,8 +10,6 @@ angle, area, calculation, diameter, equation, euclidN, euclidSpace, gradient,
   perpV, probability, shape, surArea, surface, unit_, unitV, vector, rate, 
   change, rOfChng, constraint :: ConceptChunk
 
-pi_ :: QuantityDict
-
 pde, ode, de :: CI
 
 angle        = dcc "angle"        (cn' "angle")                   ("The amount of rotation needed to bring one line or plane into" ++
@@ -37,7 +35,6 @@ parameter    = dcc "parameter"    (cn' "parameter")               "A quantity wh
 --FIXME: Should "parameter" be in math?
 perp         = dcc "perp"         (cn' "perpendicular")           "At right angles"
 probability  = dcc "probability"  (cnIES "probability")           "The likelihood of an event to occur"
-pi_          = mkQuant "pi"       (pn "π")                        (Greek Pi_L) Real Nothing Nothing
 rate         = dcc "rate"         (cn' "rate")                    "Ratio that compares two quantities having different units of measure"
 shape        = dcc "shape"        (cn' "shape")                   "The outline of an area or figure"
 surface      = dcc "surface"      (cn' "surface")                 "The outer or topmost boundary of an object"

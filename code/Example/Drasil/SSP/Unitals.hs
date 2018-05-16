@@ -218,7 +218,7 @@ mobShrC = uc' "Psi" (cn $ "constant") ("converts mobile shear " ++
 
 shrResC = uc' "Phi" (cn $ "constant") ("converts resistive shear " ++ 
   wiif ++ ", to a calculation considering the interslice forces")
-  (Greek Phi) newton
+  cPhi newton
 
 shearFNoIntsl = uc' "T_i"
   (cn $ "mobilized shear force") (wiif ++ " " ++ fsi)

@@ -24,6 +24,8 @@ import Language.Drasil.Classes (HasUID(uid), NamedIdea(term), Idea(getA),
   Definition(defn), ConceptDomain(cdom, DOM), Concept, HasSymbol(symbol),
   IsUnit, Constrained(constraints), HasReasVal(reasVal), HasAttributes(attributes))
 
+import Language.Drasil.Unit (UnitDefn)
+
 -- | ConstrainedChunks are 'Symbolic Quantities'
 -- with 'Constraints' and maybe typical value
 data ConstrainedChunk = ConstrainedChunk { _qd :: QuantityDict

@@ -55,7 +55,7 @@ import Drasil.SWHS.DataDesc (swhsInputMod)
 
 import qualified Drasil.SRS as SRS (inModel, missingP, likeChg,
   funcReq, propCorSol, genDefn, dataDefn, thModel, probDesc, goalStmt,
-  sysCont, reference)
+  sysCont, reference, assumpt)
 
 import Drasil.DocumentLanguage (DocDesc, mkDoc, tsymb'',
   LFunc (TermExcept),
@@ -71,7 +71,7 @@ import Drasil.DocumentLanguage (DocDesc, mkDoc, tsymb'',
 import Drasil.Sections.ReferenceMaterial (intro)
 import Drasil.Sections.SpecificSystemDescription (inModelF, assumpF,
   inDataConstTbl, outDataConstTbl, dataConstraintUncertainty, solChSpecF,
-  termDefnF, specSysDesF, physSystDesc)
+  termDefnF, specSysDesF, physSystDesc, assumpIntro)
 import Drasil.Sections.TraceabilityMandGs (traceMGF, traceGIntro)
 import Drasil.Sections.Requirements (reqF)
 import Drasil.Sections.GeneralSystDesc (genSysF)
@@ -321,7 +321,7 @@ s4_1_3_list = enumSimple 1 (short goalStmt) $
 s4_2 :: Section
 s4_2 = solChSpecF progName (s4_1, s6) s4_2_4_intro_end
   (s4_2_6_mid, dataConstraintUncertainty, s4_2_6_T1footer quantity surArea
-  vol htTransCoeff_min phsChgMtrl) (s4_2_1_list, 
+  vol htTransCoeff_min phsChgMtrl) ((map (\x -> Paragraph x) s4_2_1_list), 
   s4_2_2_swhsTMods, s4_2_3_genDefs ++ s4_2_3_deriv,
   s4_2_4_swhsDataDefs, s4_2_5_IModsWithDerivs, s4_2_6_DataConTables) [s4_2_7]
 
@@ -329,8 +329,12 @@ s4_2 = solChSpecF progName (s4_1, s6) s4_2_4_intro_end
 -- 4.2.1 : Assumptions --
 -------------------------
 
+assumpI :: Section -> Section -> Section -> Section -> Section -> [Sentence] -> Section
+assumpI theMod genDef dataDef inMod likeChg otherSentence = 
+	SRS.assumpt ((assumpIntro theMod genDef dataDef inMod likeChg):(map (\x -> Paragraph x) otherSentence)) []
+
 s4_2_1 :: Section
-s4_2_1 = assumpF
+s4_2_1 = assumpI
   (SRS.thModel SRS.missingP [])
   (SRS.genDefn SRS.missingP [])
   (SRS.dataDefn SRS.missingP [])
@@ -366,7 +370,10 @@ s4_2_3_deriv = [s4_2_3_deriv_1 rOfChng temp,
   s4_2_3_deriv_6 vol vol_ht_gen,
   s4_2_3_deriv_7,
   s4_2_3_deriv_8 ht_flux_in ht_flux_out in_SA out_SA density heat_cap_spec
-    temp vol assumption assump3 assump4 assump5 assump6,
+    temp vol assumption (Assumption (assump "assump3" assump3 (S "assump3"))) 
+    (Assumption (assump "assump4" assump4 (S "assump4"))) 
+    (Assumption (assump "assump5" assump5 (S "assump5"))) 
+    (Assumption (assump "assump6" assump6 (S "assump6"))),
   s4_2_3_deriv_9,
   s4_2_3_deriv_10 density mass vol,
   s4_2_3_deriv_11]
@@ -404,7 +411,7 @@ s4_2_5_d1eqn_list = map eqUnR [s4_2_5_d_eqn1, s4_2_5_d_eqn2,
 s4_2_5_d1sent_list = map foldlSPCol
   [s4_2_5_d1sent_1 rOfChng temp_W energy water vol w_vol w_mass htCap_W 
     ht_flux_C ht_flux_P coil_SA pcm_SA CT.heat_trans tank perfect_insul 
-    vol_ht_gen assump15 assump16,
+    vol_ht_gen (Assumption (assump "assump15" assump15 (S "assump15"))) (Assumption (assump "assump16" assump16 (S "assump16"))),
   s4_2_5_d1sent_2 dd1HtFluxC dd2HtFluxP ht_flux_C ht_flux_P,
   s4_2_5_d1sent_3 w_mass htCap_W,
   s4_2_5_d1sent_4 rightSide coil_HTC coil_SA,
@@ -413,7 +420,7 @@ s4_2_5_d1sent_list = map foldlSPCol
 s4_2_5_deriv2 :: [Contents]
 s4_2_5_deriv2 =
   (s4_2_5_d2startPara energy phsChgMtrl sens_heat rOfChng temp_PCM vol pcm_vol
-    pcm_mass htCap_S_P ht_flux_P pcm_SA ht_flux_out vol_ht_gen assump16) ++
+    pcm_mass htCap_S_P ht_flux_P pcm_SA ht_flux_out vol_ht_gen (Assumption (assump "assump16" assump16 (S "assump16")))) ++
   (weave [s4_2_5_d2eqn_list, s4_2_5_d2sent_list]) ++ (s4_2_5_d2endPara 
   phsChgMtrl htCap_S_P htCap_L_P tau_S_P tau_L_P surface CT.melting vol 
   temp_PCM temp_melt_P CT.boiling solid liquid)
@@ -1279,7 +1286,7 @@ s4_2_5_d2endPara pcmat hcsp hclp tsp tlp sur mel vo ptem tmp boi so li = map
   S "this is not included, since",
   (phrase vo +:+ S "change" `ofThe` short pcmat),
   S "with", phrase mel,
-  S "is assumed to be negligible", sParen (makeRef assump17)],
+  S "is assumed to be negligible", sParen (makeRef (Assumption (assump "assump17" assump17 (S "assump17"))))],
 
   [S "In the case where", getES ptem :+: S "=" :+:
   getES tmp `sAnd` S "not all of the", short pcmat,
@@ -1290,7 +1297,7 @@ s4_2_5_d2endPara pcmat hcsp hclp tsp tlp sur mel vo ptem tmp boi so li = map
   [S "This derivation does not consider",
   (phrase boi `ofThe` short pcmat) `sC` S "as the", short pcmat,
   S "is assumed to either be in a", (so ^. defn),
-  S "or a", (li ^. defn), sParen (makeRef assump18)]
+  S "or a", (li ^. defn), sParen (makeRef (Assumption (assump "assump18" assump18 (S "assump18"))))]
 
   ]
 
@@ -1322,7 +1329,7 @@ s4_2_6_T1footer qua sa vo htcm pcmat = foldlSent_ $ map foldlSent [
   S "or there will be a divide by zero in the", phrase model],
 
   [sParen (S "+"), S "These", plural qua, S "cannot be zero" `sC`
-  S "or there would be freezing", sParen (makeRef assump13)],
+  S "or there would be freezing", sParen (makeRef (Assumption (assump "assump13" assump13 (S "assump13"))))],
 
   [sParen (Sp Hash), S "The", plural constraint, S "on the", phrase sa,
   S "are calculated by considering the", phrase sa, S "to", phrase vo +:+.

@@ -6,7 +6,7 @@ module Drasil.Sections.SpecificSystemDescription
   , goalStmtF
   , solChSpecF
   , solutionCharSpecIntro 
-  , assumpF
+  , assumpF, assumpIntro
   , thModF
   , genDefnF
   , dataDefnF

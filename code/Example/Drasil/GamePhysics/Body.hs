@@ -49,7 +49,6 @@ import Drasil.GamePhysics.References (cpCitations)
 import Drasil.DocumentLanguage
 import Drasil.DocumentLanguage.Definitions
 
-
 authors :: People
 authors = [alex, luthfi]
 
@@ -72,7 +71,8 @@ mkSRS = RefSec (RefProg RM.intro [TUnits, tsymb tableOfSymbols, TAandA]) :
     (SSDProg [SSDSubVerb problem_description
       , SSDSolChSpec 
         (SCSProg 
-          [ TMs ([Label] ++ stdFields) [t1NewtonSL_new, t2NewtonTL_new, 
+          [ Assumptions
+		  ,  TMs ([Label] ++ stdFields) [t1NewtonSL_new, t2NewtonTL_new, 
             t3NewtonLUG_new, t4ChaslesThm_new, t5NewtonSLR_new]
           , IMs ([Label, Input, Output, InConstraints, OutConstraints] ++ stdFields)
            [im1_new, im2_new, im3_new] ShowDerivation
@@ -109,8 +109,19 @@ chipmunkSysInfo = SI {
 }
 
 cpRefDB :: ReferenceDB
-cpRefDB = rdb [] [] [] [] [] cpCitations -- FIXME: Convert the rest to new chunk types
+cpRefDB = rdb [] [] newAssumptions [] [] cpCitations -- FIXME: Convert the rest to new chunk types
 
+newAssumptions :: [AssumpChunk]
+newAssumptions = [newA1, newA2, newA3, newA4, newA5, newA6, newA7]
+
+newA1, newA2, newA3, newA4, newA5, newA6, newA7 :: AssumpChunk
+newA1 = assump "objectTyA" (foldlSent assumptions_assum1) (S "objectTy")
+newA2 = assump "objectDimensionA" (foldlSent assumptions_assum2) (S "objectDimension")
+newA3 = assump "coordinatesystemTyA" (foldlSent assumptions_assum3) (S "coordinatesystemTy")
+newA4 = assump "axesDefinedA" (foldlSent assumptions_assum4) (S "axesDefined")
+newA5 = assump "collisionTypeA" (foldlSent assumptions_assum5) (S "collisionType")
+newA6 = assump "dampingInvolvementA" (foldlSent assumptions_assum6) (S "dampingInvolvement")
+newA7 = assump "constraints_and_jointsInvolvementA" (foldlSent assumptions_assum7) (S "constraints_and_jointsInvolvement")
 --FIXME: All named ideas, not just acronyms.
 
 chipUnits :: [UnitDefn]
@@ -357,7 +368,7 @@ solution_characteristics_specification = assembler chipmunk everything scsSect [
 
 assumSec, tModSec, genDefSec, iModSec, dataDefSec, dataConSec, scsSect :: SubSec
 scsSect = sSubSec solutionCharSpec []
-assumSec = (sSubSec assumption [(siCon [assumptions_list])])
+assumSec = (sSubSec assumption [(siCon assumptions_list)])
 tModSec = (sSubSec thModel [(siTMod cpTMods)])
 genDefSec = (sSubSec genDefn [])
 iModSec = (sSubSec inModel [(siIMod iModels)])
@@ -369,7 +380,11 @@ dataConSec = (sSubSec dataConst [(siUQI cpInputConstraints), (siUQO cpOutputCons
 -- 4.2.1 : Assumptions --
 -------------------------
 
-assumptions_list :: Contents
+assumptions_list :: [Contents]
+assumptions_list = assumpList newAssumptions
+
+assumpList :: [AssumpChunk] -> [Contents]
+assumpList = map Assumption
 
 assumptions_assum1, assumptions_assum2, assumptions_assum3, assumptions_assum4, assumptions_assum5, 
   assumptions_assum6, assumptions_assum7 :: [Sentence]
@@ -395,9 +410,9 @@ assumptions_assum5 = [S "All", (plural CP.rigidBody),
 assumptions_assum6 = thereNo [(phrase CP.damping)]
 assumptions_assum7 = thereNo [(plural CM.constraint), (plural CP.joint)]
 
-assumptions_list = enumSimple 1 (getAcc assumption) $ map (foldlSent) 
+{-assumptions_list = enumSimple 1 (getAcc assumption) $ map (foldlSent) 
   [assumptions_assum1, assumptions_assum2, assumptions_assum3, assumptions_assum4, assumptions_assum5, 
-  assumptions_assum6, assumptions_assum7]
+  assumptions_assum6, assumptions_assum7]-}
 
 assumptions_list_a :: [[Sentence]]
 assumptions_list_a = [assumptions_assum1, assumptions_assum2, assumptions_assum3, assumptions_assum4,

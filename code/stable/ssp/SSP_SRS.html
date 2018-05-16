@@ -4315,6 +4315,89 @@ FIXME: This needs to be filled in
 </p>
 </td>
 </tr>
+</table>
+</a>
+<p class="paragraph">
+Using the force-displacement relationship of GD8 to define stiffness matrix <em>K<sub>st</sub></em>, as seen in equation (6).
+</p>
+<a id="">
+<div class="equation">
+<em>K<sub>st,i</sub> = <table class="matrix">
+<tr><td>K<sub>st,i</sub></td><td>0</td></tr>
+<tr><td>0</td><td>K<sub>bn,i</sub></td></tr>
+</table></em>
+</div>
+</a>
+<p class="paragraph">
+For interslice surfaces the stiffness constants and displacements refer to an unrotated coordinate system, <em>&delta;</em> of GD9. The interslice elements are left in their standard coordinate system, and therefore are described by the same equation from GD8. Seen as <em>K<sub>st</sub></em> in DD12. <em>K<sub>st</sub></em> is the shear element in the matrix, and <em>K<sub>sn</sub></em> is the normal element in the matrix, calculated as in DD14.
+</p>
+<p class="paragraph">
+For basal surfaces the stiffness constants and displacements refer to a system rotated for the base angle alpha (DD5). To analyze the effect of force-displacement relationships occurring on both basal and interslice surfaces of an element <em>i</em> they must reference the same coordinate system. The basal stiffness matrix must be rotated counter clockwise to align with the angle of the basal surface. The base stiffness counter clockwise rotation is applied in equation (7) to the new matrix <em>N*</em>.
+</p>
+<a id="">
+<div class="equation">
+<em>K<sub>st,i</sub> = <table class="matrix">
+<tr><td>cos(&alpha;<sub>i</sub>)</td><td>&minus;sin(&alpha;<sub>i</sub>)</td></tr>
+<tr><td>sin(&alpha;<sub>i</sub>)</td><td>cos(&alpha;<sub>i</sub>)</td></tr>
+</table>&#8239;K<sub>st,i</sub> = <table class="matrix">
+<tr><td>K<sub>bt,i</sub>&#8239;cos(&alpha;<sub>i</sub>)</td><td>&minus;K<sub>bn,i</sub>&#8239;sin(&alpha;<sub>i</sub>)</td></tr>
+<tr><td>K<sub>bt,i</sub>&#8239;sin(&alpha;<sub>i</sub>)</td><td>K<sub>bn,i</sub>&#8239;cos(&alpha;<sub>i</sub>)</td></tr>
+</table></em>
+</div>
+</a>
+<p class="paragraph">
+the The Hooke's law force displacement relationship of GD8 applied to the base also references a displacement vector <em>&epsilon;</em> of GD9 rotated for base angle of the slice <em>&alpha;</em> The basal displacement vector. <em>&delta;</em> is rotated clockwise to align with the interslice displacement vector <em>&delta;</em>, applying the definition of <em>&epsilon;</em> in terms of <em>&delta;</em> as seen in GD9. Using this with base stiffness matrix <em>K<sub>bt</sub></em>, a basal force displacement relationship in the same coordinate system as the interslice relationship can be derived as done in equation (8).
+</p>
+<a id="">
+<div class="equation">
+<em><table class="matrix">
+<tr><td>p<sub>i</sub></td></tr>
+<tr><td>p<sub>i</sub></td></tr>
+</table> = K<sub>bt,i</sub>&#8239;&epsilon; = <table class="matrix">
+<tr><td>K<sub>bt,i</sub>&#8239;cos(&alpha;<sub>i</sub>)</td><td>&minus;K<sub>bn,i</sub>&#8239;sin(&alpha;<sub>i</sub>)</td></tr>
+<tr><td>K<sub>bt,i</sub>&#8239;sin(&alpha;<sub>i</sub>)</td><td>K<sub>bn,i</sub>&#8239;cos(&alpha;<sub>i</sub>)</td></tr>
+</table>&#8239;<table class="matrix">
+<tr><td>cos(&alpha;<sub>i</sub>)</td><td>sin(&alpha;<sub>i</sub>)</td></tr>
+<tr><td>&minus;sin(&alpha;<sub>i</sub>)</td><td>cos(&alpha;<sub>i</sub>)</td></tr>
+</table>&#8239;<table class="matrix">
+<tr><td>&delta;x<sub>i</sub></td></tr>
+<tr><td>&delta;y<sub>i</sub></td></tr>
+</table> = <table class="matrix">
+<tr><td>K<sub>bt,i</sub>&#8239;cos(&alpha;<sub>i</sub>)<sup>2</sup>&plus;K<sub>sn,i</sub>&#8239;sin(&alpha;<sub>i</sub>)<sup>2</sup></td><td>(K<sub>bt,i</sub>&minus;K<sub>bn,i</sub>)&#8239;sin(&alpha;<sub>i</sub>)&#8239;cos(&alpha;<sub>i</sub>)</td></tr>
+<tr><td>(K<sub>bt,i</sub>&minus;K<sub>bn,i</sub>)&#8239;sin(&alpha;<sub>i</sub>)&#8239;cos(&alpha;<sub>i</sub>)</td><td>K<sub>bt,i</sub>&#8239;cos(&alpha;<sub>i</sub>)<sup>2</sup>&plus;K<sub>sn,i</sub>&#8239;sin(&alpha;<sub>i</sub>)<sup>2</sup></td></tr>
+</table>&#8239;<table class="matrix">
+<tr><td>&delta;x<sub>i</sub></td></tr>
+<tr><td>&delta;y<sub>i</sub></td></tr>
+</table></em>
+</div>
+</a>
+<p class="paragraph">
+the The new effective base stiffness matrix <em>K<sub>bt</sub></em> as derived in equation (7) is defined in equation (9). This is seen as matrix <em>K<sub>bt</sub></em> in GD12. <em>K<sub>bt</sub></em> is the shear element in the matrix, and <em>K<sub>bn</sub></em> is the normal element in the matrix, calculated as in DD14. The notation is simplified by introduction of the constants <em>K<sub>bA</sub></em> and <em>K<sub>bB</sub></em>, defined in equation (10) and equation (11) respectively.
+</p>
+<a id="">
+<div class="equation">
+<em>K<sub>bt,i</sub> = <table class="matrix">
+<tr><td>K<sub>bt,i</sub>&#8239;cos(&alpha;<sub>i</sub>)<sup>2</sup>&plus;K<sub>sn,i</sub>&#8239;sin(&alpha;<sub>i</sub>)<sup>2</sup></td><td>(K<sub>bt,i</sub>&minus;K<sub>bn,i</sub>)&#8239;sin(&alpha;<sub>i</sub>)&#8239;cos(&alpha;<sub>i</sub>)</td></tr>
+<tr><td>(K<sub>bt,i</sub>&minus;K<sub>bn,i</sub>)&#8239;sin(&alpha;<sub>i</sub>)&#8239;cos(&alpha;<sub>i</sub>)</td><td>K<sub>bt,i</sub>&#8239;cos(&alpha;<sub>i</sub>)<sup>2</sup>&plus;K<sub>sn,i</sub>&#8239;sin(&alpha;<sub>i</sub>)<sup>2</sup></td></tr>
+</table> = <table class="matrix">
+<tr><td>K<sub>bA,i</sub></td><td>K<sub>bB,i</sub></td></tr>
+<tr><td>K<sub>bB,i</sub></td><td>K<sub>bA,i</sub></td></tr>
+</table></em>
+</div>
+</a>
+<a id="">
+<div class="equation">
+<em>K<sub>bA,i</sub> = K<sub>bt,i</sub>&#8239;cos(&alpha;<sub>i</sub>)<sup>2</sup>&plus;K<sub>bn,i</sub>&#8239;sin(&alpha;<sub>i</sub>)<sup>2</sup></em>
+</div>
+</a>
+<a id="">
+<div class="equation">
+<em>K<sub>bB,i</sub> = (K<sub>bt,i</sub>&minus;K<sub>bn,i</sub>)&#8239;sin(&alpha;<sub>i</sub>)&#8239;cos(&alpha;<sub>i</sub>)</em>
+</div>
+</a>
+<p class="paragraph">
+A force-displacement relationship for an element <em>i</em> can be written in terms of displacements occurring in the unrotated coordinate system <em>&delta;</em> of GD9 using the matrix <em>K<sub>bt</sub></em>, and <em>K<sub>bt</sub></em> as seen in DD12.
+</p>
 <a id="DD:force">
 <table class="ddefn">
 <tr>
@@ -4537,90 +4620,8 @@ FIXME: This needs to be filled in
 </tr>
 </table>
 </a>
-</table>
-</a>
-<p class="paragraph">
-Using the force-displacement relationship of GD8 to define stiffness matrix <em>K<sub>st</sub></em>, as seen in equation (6).
-</p>
-<a id="">
-<div class="equation">
-<em>K<sub>st,i</sub> = <table class="matrix">
-<tr><td>K<sub>st,i</sub></td><td>0</td></tr>
-<tr><td>0</td><td>K<sub>bn,i</sub></td></tr>
-</table></em>
-</div>
-</a>
-<p class="paragraph">
-For interslice surfaces the stiffness constants and displacements refer to an unrotated coordinate system, <em>&delta;</em> of GD9. The interslice elements are left in their standard coordinate system, and therefore are described by the same equation from GD8. Seen as <em>K<sub>st</sub></em> in DD12. <em>K<sub>st</sub></em> is the shear element in the matrix, and <em>K<sub>sn</sub></em> is the normal element in the matrix, calculated as in DD14.
-</p>
-<p class="paragraph">
-For basal surfaces the stiffness constants and displacements refer to a system rotated for the base angle alpha (DD5). To analyze the effect of force-displacement relationships occurring on both basal and interslice surfaces of an element <em>i</em> they must reference the same coordinate system. The basal stiffness matrix must be rotated counter clockwise to align with the angle of the basal surface. The base stiffness counter clockwise rotation is applied in equation (7) to the new matrix <em>N*</em>.
-</p>
-<a id="">
-<div class="equation">
-<em>K<sub>st,i</sub> = <table class="matrix">
-<tr><td>cos(&alpha;<sub>i</sub>)</td><td>&minus;sin(&alpha;<sub>i</sub>)</td></tr>
-<tr><td>sin(&alpha;<sub>i</sub>)</td><td>cos(&alpha;<sub>i</sub>)</td></tr>
-</table>&#8239;K<sub>st,i</sub> = <table class="matrix">
-<tr><td>K<sub>bt,i</sub>&#8239;cos(&alpha;<sub>i</sub>)</td><td>&minus;K<sub>bn,i</sub>&#8239;sin(&alpha;<sub>i</sub>)</td></tr>
-<tr><td>K<sub>bt,i</sub>&#8239;sin(&alpha;<sub>i</sub>)</td><td>K<sub>bn,i</sub>&#8239;cos(&alpha;<sub>i</sub>)</td></tr>
-</table></em>
-</div>
-</a>
-<p class="paragraph">
-the The Hooke's law force displacement relationship of GD8 applied to the base also references a displacement vector <em>&epsilon;</em> of GD9 rotated for base angle of the slice <em>&alpha;</em> The basal displacement vector. <em>&delta;</em> is rotated clockwise to align with the interslice displacement vector <em>&delta;</em>, applying the definition of <em>&epsilon;</em> in terms of <em>&delta;</em> as seen in GD9. Using this with base stiffness matrix <em>K<sub>bt</sub></em>, a basal force displacement relationship in the same coordinate system as the interslice relationship can be derived as done in equation (8).
-</p>
-<a id="">
-<div class="equation">
-<em><table class="matrix">
-<tr><td>p<sub>i</sub></td></tr>
-<tr><td>p<sub>i</sub></td></tr>
-</table> = K<sub>bt,i</sub>&#8239;&epsilon; = <table class="matrix">
-<tr><td>K<sub>bt,i</sub>&#8239;cos(&alpha;<sub>i</sub>)</td><td>&minus;K<sub>bn,i</sub>&#8239;sin(&alpha;<sub>i</sub>)</td></tr>
-<tr><td>K<sub>bt,i</sub>&#8239;sin(&alpha;<sub>i</sub>)</td><td>K<sub>bn,i</sub>&#8239;cos(&alpha;<sub>i</sub>)</td></tr>
-</table>&#8239;<table class="matrix">
-<tr><td>cos(&alpha;<sub>i</sub>)</td><td>sin(&alpha;<sub>i</sub>)</td></tr>
-<tr><td>&minus;sin(&alpha;<sub>i</sub>)</td><td>cos(&alpha;<sub>i</sub>)</td></tr>
-</table>&#8239;<table class="matrix">
-<tr><td>&delta;x<sub>i</sub></td></tr>
-<tr><td>&delta;y<sub>i</sub></td></tr>
-</table> = <table class="matrix">
-<tr><td>K<sub>bt,i</sub>&#8239;cos(&alpha;<sub>i</sub>)<sup>2</sup>&plus;K<sub>sn,i</sub>&#8239;sin(&alpha;<sub>i</sub>)<sup>2</sup></td><td>(K<sub>bt,i</sub>&minus;K<sub>bn,i</sub>)&#8239;sin(&alpha;<sub>i</sub>)&#8239;cos(&alpha;<sub>i</sub>)</td></tr>
-<tr><td>(K<sub>bt,i</sub>&minus;K<sub>bn,i</sub>)&#8239;sin(&alpha;<sub>i</sub>)&#8239;cos(&alpha;<sub>i</sub>)</td><td>K<sub>bt,i</sub>&#8239;cos(&alpha;<sub>i</sub>)<sup>2</sup>&plus;K<sub>sn,i</sub>&#8239;sin(&alpha;<sub>i</sub>)<sup>2</sup></td></tr>
-</table>&#8239;<table class="matrix">
-<tr><td>&delta;x<sub>i</sub></td></tr>
-<tr><td>&delta;y<sub>i</sub></td></tr>
-</table></em>
-</div>
-</a>
-<p class="paragraph">
-the The new effective base stiffness matrix <em>K<sub>bt</sub></em> as derived in equation (7) is defined in equation (9). This is seen as matrix <em>K<sub>bt</sub></em> in GD12. <em>K<sub>bt</sub></em> is the shear element in the matrix, and <em>K<sub>bn</sub></em> is the normal element in the matrix, calculated as in DD14. The notation is simplified by introduction of the constants <em>K<sub>bA</sub></em> and <em>K<sub>bB</sub></em>, defined in equation (10) and equation (11) respectively.
-</p>
-<a id="">
-<div class="equation">
-<em>K<sub>bt,i</sub> = <table class="matrix">
-<tr><td>K<sub>bt,i</sub>&#8239;cos(&alpha;<sub>i</sub>)<sup>2</sup>&plus;K<sub>sn,i</sub>&#8239;sin(&alpha;<sub>i</sub>)<sup>2</sup></td><td>(K<sub>bt,i</sub>&minus;K<sub>bn,i</sub>)&#8239;sin(&alpha;<sub>i</sub>)&#8239;cos(&alpha;<sub>i</sub>)</td></tr>
-<tr><td>(K<sub>bt,i</sub>&minus;K<sub>bn,i</sub>)&#8239;sin(&alpha;<sub>i</sub>)&#8239;cos(&alpha;<sub>i</sub>)</td><td>K<sub>bt,i</sub>&#8239;cos(&alpha;<sub>i</sub>)<sup>2</sup>&plus;K<sub>sn,i</sub>&#8239;sin(&alpha;<sub>i</sub>)<sup>2</sup></td></tr>
-</table> = <table class="matrix">
-<tr><td>K<sub>bA,i</sub></td><td>K<sub>bB,i</sub></td></tr>
-<tr><td>K<sub>bB,i</sub></td><td>K<sub>bA,i</sub></td></tr>
-</table></em>
-</div>
-</a>
-<a id="">
-<div class="equation">
-<em>K<sub>bA,i</sub> = K<sub>bt,i</sub>&#8239;cos(&alpha;<sub>i</sub>)<sup>2</sup>&plus;K<sub>bn,i</sub>&#8239;sin(&alpha;<sub>i</sub>)<sup>2</sup></em>
-</div>
-</a>
-<a id="">
-<div class="equation">
-<em>K<sub>bB,i</sub> = (K<sub>bt,i</sub>&minus;K<sub>bn,i</sub>)&#8239;sin(&alpha;<sub>i</sub>)&#8239;cos(&alpha;<sub>i</sub>)</em>
-</div>
-</a>
-<p class="paragraph">
-A force-displacement relationship for an element <em>i</em> can be written in terms of displacements occurring in the unrotated coordinate system <em>&delta;</em> of GD9 using the matrix <em>K<sub>bt</sub></em>, and <em>K<sub>bt</sub></em> as seen in DD12.
-</p>
-<a id="DD:force">
+
+<a id="DD:K.bn,i">
 <table class="ddefn">
 <tr>
 <th>
@@ -4628,7 +4629,7 @@ Label
 </th>
 <td>
 <p class="paragraph">
-Force
+Normal stiffness
 </p>
 </td>
 </tr>
@@ -4638,7 +4639,7 @@ Symbol
 </th>
 <td>
 <p class="paragraph">
-<em>F</em>
+<em>K<sub>bn</sub></em>
 </p>
 </td>
 </tr>
@@ -4648,7 +4649,7 @@ Units
 </th>
 <td>
 <p class="paragraph">
-N
+Pa/m
 </p>
 </td>
 </tr>
@@ -4659,7 +4660,42 @@ Equation
 <td>
 <a id="">
 <div class="equation">
-<em>&minus;&#8467;<sub>s,i&minus;1</sub>&#8239;K<sub>sn,i&minus;1</sub>&#8239;&delta;<sub>i&minus;1</sub>&plus;(&#8467;<sub>s,i&minus;1</sub>&#8239;K<sub>sn,i&minus;1</sub>&plus;&#8467;<sub>b,i</sub>&#8239;K<sub>bn,i</sub>&plus;&#8467;<sub>s,i</sub>&#8239;K<sub>sn,i</sub>)&#8239;&delta;<sub>i</sub>&minus;&#8467;<sub>s,i</sub>&#8239;K<sub>sn,i</sub>&#8239;&delta;<sub>i&plus;1</sub></em>
+<em><span class="casebr">
+{
+</span>
+<div class="cases">
+<span>
+<div class="fraction">
+<span class="fup">
+E&#8239;(1&minus;&nu;)
+</span>
+<span class="fdn">
+(1&plus;&nu;)&#8239;(1&minus;2&#8239;&nu;&plus;b)
+</span>
+</div> , <span class="case">
+&nu;&thinsp;&lt;&thinsp;0
+</span>
+</span>
+<span>
+0.01&#8239;<div class="fraction">
+<span class="fup">
+E&#8239;(1&minus;&nu;)
+</span>
+<span class="fdn">
+(1&plus;&nu;)&#8239;(1&minus;2&#8239;&nu;&plus;b)
+</span>
+</div>&plus;<div class="fraction">
+<span class="fup">
+&kappa;
+</span>
+<span class="fdn">
+&delta;v&plus;A
+</span>
+</div> , <span class="case">
+&nu;&thinsp;&ge;&thinsp;0
+</span>
+</span>
+</div></em>
 </div>
 </a>
 </td>
@@ -4671,25 +4707,25 @@ Description
 <td>
 <div class="list">
 <p>
-<em>F</em> is the force (N)
-</p>
-<p>
-<em>&#8467;<sub>s</sub></em> is the length of an interslice surface (m)
-</p>
-<p>
-<em>i</em> is the index (Unitless)
-</p>
-<p>
-<em>K<sub>sn</sub></em> is the normal stiffness (Pa/m)
-</p>
-<p>
-<em>&delta;</em> is the displacement (m)
-</p>
-<p>
-<em>&#8467;<sub>b</sub></em> is the total base length of a slice (m)
-</p>
-<p>
 <em>K<sub>bn</sub></em> is the normal stiffness (Pa/m)
+</p>
+<p>
+<em>E</em> is the interslice normal force (N)
+</p>
+<p>
+<em>&nu;</em> is the Poisson's ratio (Unitless)
+</p>
+<p>
+<em>b</em> is the base width of a slice (m)
+</p>
+<p>
+<em>&kappa;</em> is the constant (Pa)
+</p>
+<p>
+<em>&delta;v</em> is the displacement (m)
+</p>
+<p>
+<em>A</em> is the constant (m)
 </p>
 </div>
 </td>
@@ -4716,9 +4752,7 @@ FIXME: This needs to be filled in
 </tr>
 </table>
 </a>
-</table>
-</a>
-<a id="DD:K.bt,i">
+<a id="DD:fixme1">
 <table class="ddefn">
 <tr>
 <th>
@@ -4727,6 +4761,16 @@ Label
 <td>
 <p class="paragraph">
 Fixme
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Symbol
+</th>
+<td>
+<p class="paragraph">
+<em>SpencerFixme1Please</em>
 </p>
 </td>
 </tr>
@@ -4747,9 +4791,7 @@ Equation
 <td>
 <a id="">
 <div class="equation">
-<p class="paragraph">
-<em>SpencerFixme1Please = E<sub>i</sub>&plus;E<sub>i&minus;1</sub></em>
-</p>
+<em>E<sub>i</sub>&plus;E<sub>i&minus;1</sub></em>
 </div>
 </a>
 </td>
@@ -4759,8 +4801,36 @@ Equation
 Description
 </th>
 <td>
+<div class="list">
+<p>
+<em>SpencerFixme1Please</em> is the fixme (Unitless)
+</p>
+<p>
+<em>E</em> is the interslice normal force (N)
+</p>
+<p>
+<em>i</em> is the index (Unitless)
+</p>
+</div>
+</td>
+</tr>
+<tr>
+<th>
+Source
+</th>
+<td>
 <p class="paragraph">
-<em>SpencerFixme1Please</em> is the fixme<br /><em>E</em> is the interslice normal force (N)<br /><em>i</em> is the index
+
+</p>
+</td>
+</tr>
+<tr>
+<th>
+RefBy
+</th>
+<td>
+<p class="paragraph">
+FIXME: This needs to be filled in
 </p>
 </td>
 </tr>
@@ -4780,6 +4850,16 @@ Fixme
 </tr>
 <tr>
 <th>
+Symbol
+</th>
+<td>
+<p class="paragraph">
+<em>SpencerFixme2Please</em>
+</p>
+</td>
+</tr>
+<tr>
+<th>
 Units
 </th>
 <td>
@@ -4795,9 +4875,7 @@ Equation
 <td>
 <a id="">
 <div class="equation">
-<p class="paragraph">
-<em>SpencerFixme2Please = H<sub>i</sub>&plus;H<sub>i&minus;1</sub></em>
-</p>
+<em>H<sub>i</sub>&plus;H<sub>i&minus;1</sub></em>
 </div>
 </a>
 </td>
@@ -4807,8 +4885,36 @@ Equation
 Description
 </th>
 <td>
+<div class="list">
+<p>
+<em>SpencerFixme2Please</em> is the fixme (Unitless)
+</p>
+<p>
+<em>H</em> is the interslice water force (N)
+</p>
+<p>
+<em>i</em> is the index (Unitless)
+</p>
+</div>
+</td>
+</tr>
+<tr>
+<th>
+Source
+</th>
+<td>
 <p class="paragraph">
-<em>SpencerFixme2Please</em> is the fixme<br /><em>H</em> is the interslice water force (N)<br /><em>i</em> is the index
+
+</p>
+</td>
+</tr>
+<tr>
+<th>
+RefBy
+</th>
+<td>
+<p class="paragraph">
+FIXME: This needs to be filled in
 </p>
 </td>
 </tr>
@@ -4830,16 +4936,60 @@ The Morgenstern Price method is a vertical slice, limit equilibrium slope stabil
 <p class="paragraph">
 The values of the interslice normal force <em>E</em> the interslice normal/shear force ratio <em>&lambda;</em>, and the Factor of Safety (<em>FS</em>), are unknown. Equations for the unknowns are written in terms of only the values in DD1 to DD9, the values of <em>R</em>, and <em>T</em> in DD10 and DD11, and each other. The relationships between the unknowns are non linear, and therefore explicit equations cannot be derived and an iterative solutions method is required.
 </p>
-<a id="T:fctSfty">
-<table class="tdefn">
+<a id="IM:fctSfty">
+<table class="idefn">
 <tr>
 <th>
 Label
 </th>
 <td>
 <p class="paragraph">
-Factor of Safety
+Factor of safety
 </p>
+</td>
+</tr>
+<tr>
+<th>
+Input
+</th>
+<td>
+<p class="paragraph">
+<em>FS</em>, <em>R</em>, <em>T</em>, <em>i</em>, <em>n</em>, <em>&Psi;</em>, <em>u</em>, <em>&Phi;</em>, <em>v</em>
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Output
+</th>
+<td>
+<p class="paragraph">
+<em>FS</em>
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Input Constraints
+</th>
+<td>
+<a id="">
+<div class="equation">
+<em>FS&thinsp;&lt;&thinsp;FS</em>
+</div>
+</a>
+</td>
+</tr>
+<tr>
+<th>
+Output Constraints
+</th>
+<td>
+<a id="">
+<div class="equation">
+<em>0&thinsp;&lt;&thinsp;FS&thinsp;&lt;&thinsp;FS</em>
+</div>
+</a>
 </td>
 </tr>
 <tr>
@@ -4849,7 +4999,6 @@ Equation
 <td>
 <a id="">
 <div class="equation">
-<p class="paragraph">
 <em>FS = <div class="fraction">
 <span class="fup">
 &sum;<sub>v = 1</sub><sup>n&minus;1</sup>R<sub>v</sub>&#8239;&prod;<sub>u = i</sub><sup>n&minus;1</sup><div class="fraction">
@@ -4872,7 +5021,6 @@ Equation
 </div>&plus;T<sub>n</sub>
 </span>
 </div></em>
-</p>
 </div>
 </a>
 </td>
@@ -4882,15 +5030,58 @@ Equation
 Description
 </th>
 <td>
+<div class="list">
+<p>
+<em>FS</em> is the factor of safety (Unitless)
+</p>
+<p>
+<em>R</em> is the resistive shear force (N)
+</p>
+<p>
+<em>v</em> is the local index (Unitless)
+</p>
+<p>
+<em>&Psi;</em> is the constant (N)
+</p>
+<p>
+<em>u</em> is the local index (Unitless)
+</p>
+<p>
+<em>&Phi;</em> is the constant (N)
+</p>
+<p>
+<em>n</em> is the number of slices (Unitless)
+</p>
+<p>
+<em>T</em> is the mobilized shear force (N)
+</p>
+</div>
+</td>
+</tr>
+<tr>
+<th>
+Source
+</th>
+<td>
 <p class="paragraph">
-Equation for the Factor of Safety is the ratio between resistive and mobile shear of the slip surface. The sum of values from each slice is taken to find the total resistive and mobile shear for the slip surface. The constants <em>&Phi;</em> and <em>&Psi;</em> convert the resistive and mobile shear without the inluence of interslice forces, to a calculation considering the interslice forces.
+
+</p>
+</td>
+</tr>
+<tr>
+<th>
+RefBy
+</th>
+<td>
+<p class="paragraph">
+FIXME: This needs to be filled in
 </p>
 </td>
 </tr>
 </table>
 </a>
 <p class="paragraph">
-Using equation (21) from IM3, rearranging, and applying the boundary condition that <em>E<sub>0</sub></em> and <em>E<sub>n</sub></em> are equal to <em>0</em>, an equation for the factor of safety is found as equation (12), also seen in IM1.
+Using equation (21) from IM3, rearranging, and applying the boundary condition that <em>E<sub>0</sub></em> and <em>E<sub>n</sub></em> are equal to <em>0</em>, an equation for the factor of safety is found as equation (12), also seen in IM1:
 </p>
 <a id="">
 <div class="equation">
@@ -4921,16 +5112,60 @@ Using equation (21) from IM3, rearranging, and applying the boundary condition t
 <p class="paragraph">
 The constants <em>&Psi;</em> and <em>&Phi;</em> described in equation (20) and equation (19) are functions of the unknowns: the interslice normal/shear force ratio <em>&lambda;</em> (IM2) and the factor of safety <em>FS</em> (IM1).
 </p>
-<a id="T:nrmShrFor">
-<table class="tdefn">
+<a id="IM:nrmShrFor">
+<table class="idefn">
 <tr>
 <th>
 Label
 </th>
 <td>
 <p class="paragraph">
-Normal/shear Force Ratio
+Normal/shear force ratio
 </p>
+</td>
+</tr>
+<tr>
+<th>
+Input
+</th>
+<td>
+<p class="paragraph">
+<em>C1</em>, <em>C2</em>, <em>b</em>, <em>f</em>, <em>E</em>, <em>i</em>, <em>n</em>, <em>H</em>, <em>&alpha;</em>, <em>h</em>, <em>K<sub>c</sub></em>, <em>W</em>, <em>U<sub>t</sub></em>, <em>Q</em>, <em>&omega;</em>, <em>SpencerFixme1Please</em>, <em>SpencerFixme2Please</em>
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Output
+</th>
+<td>
+<p class="paragraph">
+<em>SpencerFixme1Please</em>
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Input Constraints
+</th>
+<td>
+<a id="">
+<div class="equation">
+<em>SpencerFixme1Please&thinsp;&lt;&thinsp;SpencerFixme1Please</em>
+</div>
+</a>
+</td>
+</tr>
+<tr>
+<th>
+Output Constraints
+</th>
+<td>
+<a id="">
+<div class="equation">
+<em>0&thinsp;&lt;&thinsp;SpencerFixme1Please&thinsp;&lt;&thinsp;SpencerFixme1Please</em>
+</div>
+</a>
 </td>
 </tr>
 <tr>
@@ -4940,7 +5175,6 @@ Equation
 <td>
 <a id="">
 <div class="equation">
-<p class="paragraph">
 <em>C1<sub>i</sub> = <span class="casebr">
 {
 </span>
@@ -4987,7 +5221,6 @@ i = 1
 &sum;<sub>i = 1</sub><sup>n</sup>C2<sub>i</sub>
 </span>
 </div></em>
-</p>
 </div>
 </a>
 </td>
@@ -4997,15 +5230,91 @@ i = 1
 Description
 </th>
 <td>
+<div class="list">
+<p>
+<em>C1</em> is the interslice normal force function (N&sdot;m)
+</p>
+<p>
+<em>i</em> is the index (Unitless)
+</p>
+<p>
+<em>b</em> is the base width of a slice (m)
+</p>
+<p>
+<em>E</em> is the interslice normal force (N)
+</p>
+<p>
+<em>H</em> is the interslice water force (N)
+</p>
+<p>
+<em>&alpha;</em> is the angle (&deg;)
+</p>
+<p>
+<em>SpencerFixme1Please</em> is the fixme (Unitless)
+</p>
+<p>
+<em>SpencerFixme2Please</em> is the fixme (Unitless)
+</p>
+<p>
+<em>h</em> is the midpoint height (m)
+</p>
+<p>
+<em>K<sub>c</sub></em> is the earthquake load factor (Unitless)
+</p>
+<p>
+<em>W</em> is the weight (N)
+</p>
+<p>
+<em>U<sub>t</sub></em> is the surface hydrostatic force (N)
+</p>
+<p>
+<em>&beta;</em> is the angle (&deg;)
+</p>
+<p>
+<em>Q</em> is the imposed surface load (N)
+</p>
+<p>
+<em>&omega;</em> is the angle (&deg;)
+</p>
+<p>
+<em>n</em> is the number of slices (Unitless)
+</p>
+<p>
+<em>C2</em> is the interslice shear force function (N&sdot;m)
+</p>
+<p>
+<em>f</em> is the scaling function (Unitless)
+</p>
+<p>
+<em>&lambda;</em> is the interslice normal/shear force ratio (Unitless)
+</p>
+</div>
+</td>
+</tr>
+<tr>
+<th>
+Source
+</th>
+<td>
 <p class="paragraph">
-<em>&lambda;</em> is the magnitude ratio between shear and normal forces at the interslice interfaces as the assumption of the Morgenstern Price method in GD5 The inclination function <em>f</em> determines the relative magnitude ratio between the different interslices, while <em>&lambda;</em> determines the magnitude. <em>&lambda;</em> uses the sum of interslice normal and shear forces taken from each interslice.
+
+</p>
+</td>
+</tr>
+<tr>
+<th>
+RefBy
+</th>
+<td>
+<p class="paragraph">
+FIXME: This needs to be filled in
 </p>
 </td>
 </tr>
 </table>
 </a>
 <p class="paragraph">
-Taking the last static equation of T2 with the moment equilibrium of GD6 about the midpoint of the base and the assumption of GD5 results in equation (13).
+Taking the last static equation of T2 with the moment equilibrium of GD6 about the midpoint of the base and the assumption of GD5 results in equation (13):
 </p>
 <a id="">
 <div class="equation">
@@ -5055,7 +5364,7 @@ K<sub>c</sub>&#8239;W<sub>i</sub>&#8239;h<sub>i</sub>
 </div>
 </a>
 <p class="paragraph">
-The equation in terms of <em>&lambda;</em> leads to equation (14).
+The equation in terms of <em>&lambda;</em> leads to equation (14):
 </p>
 <a id="">
 <div class="equation">
@@ -5112,7 +5421,7 @@ b<sub>i</sub>
 </div>
 </a>
 <p class="paragraph">
-Taking a summation of each slice, and applying the boundary condition that <em>E<sub>0</sub></em> and <em>E<sub>n</sub></em> are equal to <em>0</em>, a general equation for the constant <em>&lambda;</em> is developed in equation (15), also found in IM2.
+Taking a summation of each slice, and applying the boundary condition that <em>E<sub>0</sub></em> and <em>E<sub>n</sub></em> are equal to <em>0</em>, a general equation for the constant <em>&lambda;</em> is developed in equation (15), also found in IM2:
 </p>
 <a id="">
 <div class="equation">
@@ -5129,16 +5438,60 @@ Taking a summation of each slice, and applying the boundary condition that <em>E
 <p class="paragraph">
 equation (15) for <em>&lambda;</em>, is a function of the unknown interslice normal force <em>E</em> IM3.
 </p>
-<a id="T:intsliceFs">
-<table class="tdefn">
+<a id="IM:intsliceFs">
+<table class="idefn">
 <tr>
 <th>
 Label
 </th>
 <td>
 <p class="paragraph">
-Interslice Forces
+Interslice forces
 </p>
+</td>
+</tr>
+<tr>
+<th>
+Input
+</th>
+<td>
+<p class="paragraph">
+<em>C1</em>, <em>C2</em>, <em>E</em>, <em>i</em>, <em>n</em>, <em>T</em>, <em>FS</em>
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Output
+</th>
+<td>
+<p class="paragraph">
+<em>FS</em>
+</p>
+</td>
+</tr>
+<tr>
+<th>
+Input Constraints
+</th>
+<td>
+<a id="">
+<div class="equation">
+<em>FS&thinsp;&lt;&thinsp;FS</em>
+</div>
+</a>
+</td>
+</tr>
+<tr>
+<th>
+Output Constraints
+</th>
+<td>
+<a id="">
+<div class="equation">
+<em>0&thinsp;&lt;&thinsp;FS&thinsp;&lt;&thinsp;FS</em>
+</div>
+</a>
 </td>
 </tr>
 <tr>
@@ -5148,7 +5501,6 @@ Equation
 <td>
 <a id="">
 <div class="equation">
-<p class="paragraph">
 <em>E<sub>i</sub> = <span class="casebr">
 {
 </span>
@@ -5183,7 +5535,6 @@ i = 0 &or; i = n
 </span>
 </span>
 </div></em>
-</p>
 </div>
 </a>
 </td>
@@ -5193,15 +5544,58 @@ i = 0 &or; i = n
 Description
 </th>
 <td>
+<div class="list">
+<p>
+<em>E</em> is the interslice normal force (N)
+</p>
+<p>
+<em>i</em> is the index (Unitless)
+</p>
+<p>
+<em>FS</em> is the factor of safety (Unitless)
+</p>
+<p>
+<em>T</em> is the mobilized shear force (N)
+</p>
+<p>
+<em>R</em> is the resistive shear force (N)
+</p>
+<p>
+<em>&Phi;</em> is the constant (N)
+</p>
+<p>
+<em>&Psi;</em> is the constant (N)
+</p>
+<p>
+<em>n</em> is the number of slices (Unitless)
+</p>
+</div>
+</td>
+</tr>
+<tr>
+<th>
+Source
+</th>
+<td>
 <p class="paragraph">
-The value of the interslice normal force <em>E</em> at interface <em>i</em> The net force. is the weight of the slices adjacent to interface <em>i</em> exert horizontally on each other.
+
+</p>
+</td>
+</tr>
+<tr>
+<th>
+RefBy
+</th>
+<td>
+<p class="paragraph">
+FIXME: This needs to be filled in
 </p>
 </td>
 </tr>
 </table>
 </a>
 <p class="paragraph">
-Taking the normal force equilibrium of GD1 with the effective stress definition from T4 that <em>N<sub>i</sub> = N&prime;<sub>i</sub>&minus;U<sub>b,i</sub></em>, and the assumption of GD5 the equilibrium equation can be rewritten as equation (16).
+Taking the normal force equilibrium of GD1 with the effective stress definition from T4 that <em>N<sub>i</sub> = N&prime;<sub>i</sub>&minus;U<sub>b,i</sub></em>, and the assumption of GD5 the equilibrium equation can be rewritten as equation (16):
 </p>
 <a id="">
 <div class="equation">
@@ -5209,7 +5603,7 @@ Taking the normal force equilibrium of GD1 with the effective stress definition 
 </div>
 </a>
 <p class="paragraph">
-Taking the base shear force equilibrium of GD2 with the definition of mobilized shear force from GD4 and the assumption of GD5, the equilibrium equation can be rewritten as equation (17).
+Taking the base shear force equilibrium of GD2 with the definition of mobilized shear force from GD4 and the assumption of GD5, the equilibrium equation can be rewritten as equation (17):
 </p>
 <a id="">
 <div class="equation">
@@ -5224,7 +5618,7 @@ FS
 </div>
 </a>
 <p class="paragraph">
-Substituting the equation for <em>N&prime;</em> from equation (16) into equation (17) and rearranging results in equation (18).
+Substituting the equation for <em>N&prime;</em> from equation (16) into equation (17) and rearranging results in equation (18):
 </p>
 <a id="">
 <div class="equation">
@@ -5232,7 +5626,7 @@ Substituting the equation for <em>N&prime;</em> from equation (16) into equation
 </div>
 </a>
 <p class="paragraph">
-Where <em>R</em> and <em>T</em> are the resistive and mobile shear of the slice, without the influence of interslice forces <em>E</em> and <em>X</em>, as defined in DD10 and DD11 Making use of the constants, and with full equations found below in equation (19) and equation (20) respectively, then equation (18) can be simplified to equation (21), also seen in IM3.
+Where <em>R</em> and <em>T</em> are the resistive and mobile shear of the slice, without the influence of interslice forces <em>E</em> and <em>X</em>, as defined in DD10 and DD11 Making use of the constants, and with full equations found below in equation (19) and equation (20) respectively, then equation (18) can be simplified to equation (21), also seen in IM3:
 </p>
 <a id="">
 <div class="equation">

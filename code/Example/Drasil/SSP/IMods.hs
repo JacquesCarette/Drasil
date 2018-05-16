@@ -304,10 +304,10 @@ instModIntro2 = foldlSP [
 -- FIXEME: move derivations with the appropriate instance model
 
 fctSfty_deriv_ssp :: Derivation
-fctSfty_deriv_ssp = weave [fctSfty_deriv_sentences_ssp, map E [fcSfty_rel]]
+fctSfty_deriv_ssp = (weave [fctSfty_deriv_sentences_ssp, map E [fcSfty_rel]]) ++ fUnknowns_new
 
 fctSfty_deriv_sentences_ssp :: [Sentence]
-fctSfty_deriv_sentences_ssp = map foldlSentCol [fctSftyDerivation_new, fUnknowns_new]
+fctSfty_deriv_sentences_ssp = map foldlSentCol [fctSftyDerivation_new]
 
 fctSftyDerivation_new :: [Sentence]
 fctSftyDerivation_new = [S "Using", eqN 21, S "from", acroIM 3 `sC`
@@ -322,10 +322,10 @@ boundaryCon = foldlSent_ [S "applying the boundary condition that",
   E (indxn intNormForce), S "are equal to", E 0]
 
 fUnknowns_new :: [Sentence]
-fUnknowns_new = [S "The constants", getES mobShrC `sAnd` getES shrResC, 
-  S "described in", eqN 20 `sAnd` eqN 19,
-  S "are functions of the unknowns: the", getTandS normToShear,
-  sParen (acroIM 2) `andThe` getTandS fs, sParen (acroIM 1)]
+fUnknowns_new = [S "The constants" +:+ getES mobShrC `sAnd` getES shrResC +:+ 
+  S "described in" +:+ eqN 20 `sAnd` eqN 19 +:+
+  S "are functions of the unknowns: the" +:+ getTandS normToShear +:+
+  sParen (acroIM 2) `andThe` getTandS fs +:+. sParen (acroIM 1)]
 
 
 fUnknowns :: Contents
@@ -336,7 +336,7 @@ fUnknowns = foldlSP [S "The constants", getES mobShrC `sAnd` getES shrResC,
 
 ---------------------------------------------------------------------------
 nrmShr_deriv_ssp :: Derivation
-nrmShr_deriv_ssp = weave [nrmShrDerivation_new, map E nrmShr_deriv_eqns_ssp]
+nrmShr_deriv_ssp = (weave [nrmShrDerivation_new, map E nrmShr_deriv_eqns_ssp]) ++ nrmShr_deriv_sentences_ssp_s4
 
 nrmShr_deriv_sentences_ssp_s1 :: [Sentence]
 nrmShr_deriv_sentences_ssp_s1 = [S "Taking the last static", phrase equation,
@@ -354,13 +354,13 @@ nrmShr_deriv_sentences_ssp_s3 = [S "Taking a summation of each slice, and", boun
   S "is developed in", eqN 15 `sC` S "also found in", acroIM 2]
 
 nrmShr_deriv_sentences_ssp_s4 :: [Sentence]
-nrmShr_deriv_sentences_ssp_s4 = [eqN 15, S "for", getES normToShear `sC`
-  S "is a function of the unknown", getTandS intNormForce, acroIM 3]
+nrmShr_deriv_sentences_ssp_s4 = [eqN 15 +:+ S "for" +:+ getES normToShear `sC`
+  S "is a function of the unknown" +:+ getTandS intNormForce +:+. acroIM 3]
 
 
 nrmShrDerivation_new :: [Sentence]
 nrmShrDerivation_new = map foldlSentCol [nrmShr_deriv_sentences_ssp_s1, nrmShr_deriv_sentences_ssp_s2,
-  nrmShr_deriv_sentences_ssp_s3, nrmShr_deriv_sentences_ssp_s4]
+  nrmShr_deriv_sentences_ssp_s3]
 
 nrmShr_deriv_eqns_ssp :: [Expr]
 nrmShr_deriv_eqns_ssp = [eq1, eq2, eq3]

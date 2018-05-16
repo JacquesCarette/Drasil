@@ -5,6 +5,7 @@ import Language.Drasil hiding (organization)
 import Data.Drasil.SI_Units
 
 import Data.Drasil.People (alex, luthfi)
+import Data.Drasil.Phrase(for')
 import Data.Drasil.Concepts.Documentation
 import Data.Drasil.Concepts.Software (physLib, understandability, portability,
   reliability, maintainability, performance, correctness)

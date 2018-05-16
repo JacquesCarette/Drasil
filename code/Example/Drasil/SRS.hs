@@ -12,6 +12,7 @@ module Drasil.SRS
 import Language.Drasil
 
 import qualified Data.Drasil.Concepts.Documentation as Doc
+import Data.Drasil.Phrase (for'')
 
 -- Local function to keep things looking clean, not exported.
 forTT :: (NamedIdea c, NamedIdea d) => c -> d -> Sentence

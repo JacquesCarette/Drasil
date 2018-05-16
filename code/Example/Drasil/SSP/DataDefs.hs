@@ -458,8 +458,8 @@ stfMtrx_deriv_sentences_ssp_s1 = [S "For interslice surfaces the stiffness const
   S "are left in their standard coordinate system" `sC`
   S "and therefore are described by the same" +:+ phrase equation +:+
   S "from" +:+. acroGD 8 +:+ S "Seen as" +:+ getES shrStiffIntsl +:+ S "in" +:+.
-  acroDD 12 +:+ isElMx shrStiffIntsl "shear" `sC` --FIXEME: add matrix symbols?
-  S "and" +:+ (isElMx nrmStiffIntsl "normal" `sC` S "calculated as in") +:+. acroDD 14]
+  acroDD 12 +:+ isElemInMx shrStiffIntsl "shear" `sC` --FIXEME: add matrix symbols?
+  S "and" +:+ (isElemInMx nrmStiffIntsl "normal" `sC` S "calculated as in") +:+. acroDD 14]
   
 stfMtrx_deriv_sentences_ssp_s2 :: [Sentence]
 stfMtrx_deriv_sentences_ssp_s2 =
@@ -494,8 +494,8 @@ stfMtrx_deriv_sentences_ssp_s4 =
   --FIXME: add symbol?
   S "as derived in" +:+ eqN 7 +:+ S "is defined in" +:+. eqN 9 +:+
   S "This is seen as matrix" +:+ getES shrStiffBase +:+ S "in" +:+.
-  acroGD 12 +:+ isElMx shrStiffBase "shear" `sC` S "and" +:+
-  isElMx nrmStiffBase "normal" `sC` S "calculated as in" +:+. acroDD 14 +:+
+  acroGD 12 +:+ isElemInMx shrStiffBase "shear" `sC` S "and" +:+
+  isElemInMx nrmStiffBase "normal" `sC` S "calculated as in" +:+. acroDD 14 +:+
   S "The notation is simplified by" +:+ S "introduction" `ofThe` S "constants" +:+
   getES effStiffA `sAnd` getES effStiffB `sC` S "defined in" +:+ eqN 10 `sAnd`
   eqN 11 +:+. S "respectively"]
@@ -546,8 +546,8 @@ stfMtrxDerivation = [
   S "are left in their standard coordinate system" `sC`
   S "and therefore are described by the same", phrase equation,
   S "from" +:+. acroGD 8, S "Seen as", getES shrStiffIntsl, S "in" +:+.
-  acroDD 12, isElMx shrStiffIntsl "shear" `sC` --FIXEME: add matrix symbols?
-  S "and", isElMx nrmStiffIntsl "normal" `sC` S "calculated as in", acroDD 14],
+  acroDD 12, isElemInMx nrmStiffIntsl "shear" `sC` --FIXEME: add matrix symbols?
+  S "and", isElemInMx nrmStiffIntsl "normal" `sC` S "calculated as in", acroDD 14],
   
   foldlSP [S "For basal surfaces the stiffness constants" `sAnd`
   S "displacements refer to a system rotated for the base angle alpha" +:+.
@@ -586,8 +586,8 @@ stfMtrxDerivation = [
   --FIXME: add symbol?
   S "as derived in", eqN 7, S "is defined in" +:+. eqN 9,
   S "This is seen as matrix", getES shrStiffBase, S "in" +:+.
-  acroGD 12, isElMx shrStiffBase "shear" `sC` S "and",
-  isElMx nrmStiffBase "normal" `sC` S "calculated as in" +:+. acroDD 14,
+  acroGD 12, isElemInMx shrStiffBase "shear" `sC` S "and",
+  isElemInMx nrmStiffBase "normal" `sC` S "calculated as in" +:+. acroDD 14,
   S "The notation is simplified by", S "introduction" `ofThe` S "constants",
   getES effStiffA `sAnd` getES effStiffB `sC` S "defined in", eqN 10 `sAnd`
   eqN 11, S "respectively"],
@@ -611,5 +611,5 @@ stfMtrxDerivation = [
   
   ]
 
-isElMx :: (Quantity a) => a -> String -> Sentence
-isElMx sym kword = getES sym `isThe` S kword +:+ S "element in the matrix"
+isElemInMx :: (Quantity a) => a -> String -> Sentence
+isElemInMx sym kword = getES sym `isThe` S kword +:+ S "element in the matrix"

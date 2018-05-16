@@ -4,6 +4,7 @@ module Drasil.SSP.IMods where
 import Prelude hiding (tan, product, sin, cos)
 import Language.Drasil
 import Control.Lens ((^.))
+import Drasil.DocumentLanguage.RefHelpers
 
 import Drasil.SSP.Unitals (inxi, shrStress, baseLngth, sum1toN, mobStress,
   fs, fs_min, fsloc, shrDispl, shrStiffBase, genForce, constant_a, fricAngle,
@@ -32,6 +33,7 @@ import Data.Drasil.Concepts.Math (equation, surface)
 import Data.Drasil.Concepts.Physics (displacement, force)
 import Data.Drasil.Concepts.PhysicalProperties (mass)
 import Drasil.SSP.GenDefs (eqlExpr, momExpr)
+import Drasil.SSP.Assumptions
 
 -----------------------
 --  Instance Models  --
@@ -409,7 +411,7 @@ rigDisDerivation = [
 
   eqUnR fDisEq_rel,
   
-  foldlSP [S "Using the known input assumption of", ((short assumption) :+: S (show 2)) `sC`
+  foldlSP [S "Using the known input assumption of", (refA sspRefDB newA2) `sC`
   S "the force variable", plural definition, S "of", acroDD 1, S "to",
   acroDD 8, S "on", S "left side" `ofThe` plural equation,
   S "can be solved for. The only unknown in the variables to solve",

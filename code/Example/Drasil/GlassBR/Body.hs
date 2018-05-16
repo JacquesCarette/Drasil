@@ -67,7 +67,7 @@ import Drasil.Sections.SpecificSystemDescription (solChSpecF,
   inDataConstTbl, outDataConstTbl, dataConstraintUncertainty, goalStmtF,
   physSystDesc, termDefnF, probDescF, specSysDesF)
 import Data.Drasil.Citations (koothoor2013, smithLai2005)
-
+import Drasil.GlassBR.Assumptions
 {--}
 
 gbSymbMap :: ChunkDB
@@ -157,22 +157,6 @@ glassSystInfo = SI {
   _refdb       = gbRefDB
 }
   --FIXME: All named ideas, not just acronyms.
-
-gbRefDB :: ReferenceDB
-gbRefDB = rdb [] [] newAssumptions newReqs [] gbCitations
-
-newAssumptions :: [AssumpChunk] -- For testing
-newAssumptions = [newA1, newA2, newA3, newA4, newA5, newA6, newA7, newA8]
-
-newA1, newA2, newA3, newA4, newA5, newA6, newA7, newA8 :: AssumpChunk
-newA1 = assump "glassTyA" a1Desc (S "glassTy")
-newA2 = assump "glassConditionA" a2Desc (S "glassCondition")
-newA3 = assump "explsnScenarioA"a3Desc (S "explainScenario")
-newA4 = assump "standardValuesA" (a4Desc load_dur) (S "StandardValues")
-newA5 = assump "glassLiteA" a5Desc (S "glassLite")
-newA6 = assump "bndryConditionsA" a6Desc (S "boundaryConditions")
-newA7 = assump "responseTyA" a7Desc (S "responseType")
-newA8 = assump "ldfConstantA" (a8Desc constant_LoadDF) (S "ldfConstant")
   
 testIMFromQD :: InstanceModel
 testIMFromQD = imQD gbSymbMap risk EmptyS [] [] []
@@ -218,11 +202,6 @@ s6_1_1_bullets_loadSubSec = [Nested (((at_start load) :+: S ":"))
 --Used in "Goal Statements" Section--
 s6_1_3_list :: Contents
 s6_1_3_list = enumSimple 1 (short goalStmt) s6_1_3_list_goalStmt1
-
---Used in "Assumptions" Section--
-assumptionConstants :: [QDefinition]
-assumptionConstants = [constant_M, constant_K, constant_ModElas,
-  constant_LoadDur, constant_LoadDF, constant_LoadSF]
 
 --Used in "Traceability Matrices and Graphs" Section--
 traceyMatrices, traceyGraphs :: [Contents]
@@ -474,65 +453,6 @@ assumptions = fst (foldr (\s (ls, n) -> ((Assumption $ assump ("A" ++ show n) s 
 -- These correspond to glassTyAssumps, glassCondition, explsnScenario,
 -- standardValues, glassLiteAssmp, bndryConditions, responseTyAssump, ldfConstant
 
-assumptionDescs :: [Sentence]
-assumptionDescs = [a1Desc, a2Desc, a3Desc, a4Desc load_dur, a5Desc, a6Desc, a7Desc, a8Desc constant_LoadDF]
-
-a1Desc :: Sentence
-a1Desc = foldlSent [S "The standard E1300-09a for",
-  phrase calculation, S "applies only to", foldlOptions $ map S ["monolithic",
-  "laminated", "insulating"], S "glass constructions" `sOf` S "rectangular",
-  phrase shape, S "with continuous", phrase lateral +:+. S "support along",
-  foldlOptions $ map S ["one", "two", "three", "four"], plural edge, S "This",
-  phrase practice, S "assumes that", sParenNum 1, S "the supported glass",
-  plural edge, S "for two, three" `sAnd` S "four-sided support",
-  plural condition, S "are simply supported" `sAnd` S "free to slip in",
-  phrase plane `semiCol` (sParenNum 2), S "glass supported on two sides acts",
-  S "as a simply supported", phrase beam `sAnd` (sParenNum 3), S "glass",
-  S "supported on one side acts as a", phrase cantilever]
-
-a2Desc :: Sentence
-a2Desc = foldlSent [S "Following", cite gbRefDB astm_LR2009 +:+ sParen 
-  (S "pg. 1") `sC` S "this", phrase practice, 
-  S "does not apply to any form of", foldlOptions $ map S ["wired",
-  "patterned", "etched", "sandblasted", "drilled", "notched", "grooved glass"],
-  S "with", phrase surface `sAnd`
-  S "edge treatments that alter the glass strength"]
-
-a3Desc :: Sentence
-a3Desc = foldlSent [S "This", phrase system,
-  S "only considers the external", phrase explosion, phrase scenario,
-  S "for its", plural calculation]
-
-a4Desc :: UnitaryChunk -> Sentence
-a4Desc mainIdea = foldlSent [S "The", plural value, S "provided in",
-  makeRef (SRS.valsOfAuxCons SRS.missingP []), S "are assumed for the",
-  phrase mainIdea, sParen (getES mainIdea) `sC` S "and the",
-  plural materialProprty `sOf` foldlList (map getES
-  (take 3 assumptionConstants))]
-
-a5Desc :: Sentence
-a5Desc = foldlSent [at_start glass, S "under consideration",
-  S "is assumed to be a single" +:+. phrase lite, S "Hence the",
-  phrase value `sOf` short lShareFac, S "is equal to 1 for all",
-  plural calculation `sIn` short gLassBR]
-
-a6Desc :: Sentence
-a6Desc = foldlSent [S "Boundary", plural condition, S "for the",
-  phrase glaSlab, S "is assumed to be 4-sided support for",
-  plural calculation]
-
-a7Desc :: Sentence
-a7Desc = foldlSent [S "The", phrase responseTy, S "considered in",
-  short gLassBR, S "is flexural"]
-
-a8Desc :: QDefinition -> Sentence
-a8Desc mainConcept = foldlSent [S "With", phrase reference, S "to",
-  (refA (_refdb glassSystInfo) newA4), S "the", phrase value `sOf` 
-  phrase mainConcept, sParen (getES mainConcept), S "is a", phrase constant, 
-  S "in" +:+. short gLassBR, S "It is calculated by the" +: phrase equation +:+.
-  E (sy mainConcept $= mainConcept^.equat), S "Using this" `sC`
-  E (sy mainConcept $= dbl 0.27)]
-
 {--Theoretical Models--}
 
 {--Data Definitions--}
@@ -677,21 +597,21 @@ lc1Desc mainConcept = foldlSent [(refA gbRefDB newA3) `sDash` S "The",
   phrase mainConcept, S "In the future", plural calculation,
   S "can be added for the internal", phrase mainConcept]
 
-lc2Desc = foldlSent [((short assumption) :+: S (show 4)) `sC` (((short assumption) :+: S (show 8)) `sDash`
+lc2Desc = foldlSent [(refA gbRefDB newA4) `sC` ((refA gbRefDB newA8) `sDash`
   S "Currently the"), plural value, S "for",
   foldlList (map getES (take 3 assumptionConstants)),
   S "are assumed to be the same for all" +:+. phrase glass,
   S "In the future these", plural value, S "can be changed to",
   phrase variable, plural input_]
 
-lc3Desc = foldlSent [((short assumption) :+: S (show 5)) `sDash` S "The", phrase software,
+lc3Desc = foldlSent [(refA gbRefDB newA5) `sDash` S "The", phrase software,
   S "may be changed to accommodate more than a single", phrase lite]
 
-lc4Desc = foldlSent [((short assumption) :+: S (show 6)) `sDash` S "The", phrase software,
+lc4Desc = foldlSent [(refA gbRefDB newA6) `sDash` S "The", phrase software,
   S "may be changed to accommodate more boundary", plural condition,
   S "than 4-sided support"]
 
-lc5Desc = foldlSent [((short assumption) :+: S (show 7)) `sDash` S "The", phrase software,
+lc5Desc = foldlSent [(refA gbRefDB newA7) `sDash` S "The", phrase software,
   S "may be changed to consider more than just", phrase flexure,
   S "of the glass"]
 

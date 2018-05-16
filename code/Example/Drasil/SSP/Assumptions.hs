@@ -1,4 +1,4 @@
-module Drasil.SSP.Assumptions (sspAssumptions) where
+module Drasil.SSP.Assumptions where
 
 import Language.Drasil
 
@@ -13,6 +13,25 @@ import Data.Drasil.Concepts.Documentation (condition)
 import Data.Drasil.Concepts.Physics (force, stress, strain)
 import Data.Drasil.Concepts.Math (surface, unit_)
 import Data.Drasil.Concepts.SolidMechanics (shearForce)
+import Drasil.SSP.References (sspCitations)
+
+sspRefDB :: ReferenceDB
+sspRefDB = rdb [] [] newAssumptions [] [] sspCitations -- FIXME: Convert the rest to new chunk types
+
+newAssumptions :: [AssumpChunk]
+newAssumptions = [newA1, newA2, newA3, newA4, newA5, newA6, newA7, newA8, newA9, newA10]
+
+newA1, newA2, newA3, newA4, newA5, newA6, newA7, newA8, newA9, newA10 :: AssumpChunk
+newA1 = assump "Slip-Surface-Concave" monotonicF (S "Slip-Surface-Concave")
+newA2 = assump "Geo-Slope-Mat-Props-of-Soil-Inputs" slopeG (S "Geo-Slope-Mat-Props-of-Soil-Inputs")
+newA3 = assump "Soil-Layer-Homogeneous" homogeneousL (S "Soil-Layer-Homogeneous")
+newA4 = assump "Soil-Layers-Isotropic" isotropicP (S "Soil-Layers-Isotropic")
+newA5 = assump "Interslice-Norm-Shear-Forces-Linear" linearS (S "Interslice-Norm-Shear-Forces-Linear")
+newA6 = assump "Base-Norm-Shear-Forces-Linear-on-FS" linearF (S "Base-Norm-Shear-Forces-Linear-on-FS")
+newA7 = assump "Stress-Strain-Curve-interslice-Linear" stressC (S "Stress-Strain-Curve-interslice-Linear")
+newA8 = assump "Plane-Strain-Conditions" planeS (S "Plane-Strain-Conditions")
+newA9 = assump "Effective-Norm-Stress-Large" largeN (S "Effective-Norm-Stress-Large")
+newA10 = assump "Surface-Base-Slice-between-Interslice-Straight-Lines" straightS (S "Surface-Base-Slice-between-Interslice-Straight-Lines")
 
 sspAssumptions :: [Sentence]
 sspAssumptions = [monotonicF, slopeG, homogeneousL, isotropicP,

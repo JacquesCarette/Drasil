@@ -16,7 +16,7 @@ Software Requirements Specification for Slope Stability Analysis
 </div>
 <div class="author">
 <h2>
-HenryFrankis
+Henry Frankis
 </h2>
 </div>
 <a id="Sec:RefMat">
@@ -1253,7 +1253,7 @@ There are no system constraints.
 Specific System Description
 </h1>
 <p class="paragraph">
-This section first presents the problem description, which gives a high-level view of the problem to be solved. This is followed by the solution characteristics specification, which presents the assumptions, theories, definitions and finally the instance models that model the slope.
+This section first presents the problem description, which gives a high-level view of the problem to be solved. This is followed by the solution characteristics specification, which presents the assumptions, theories, theoretical models, general definitions, data definitions, and finally the instance models (ODEs) that model the slope stability analysis.
 </p>
 <a id="Sec:ProbDesc">
 <div class="subsection">
@@ -1453,7 +1453,6 @@ Equation
 <td>
 <a id="">
 <div class="equation">
-<p class="paragraph">
 <em>FS = <div class="fraction">
 <span class="fup">
 P
@@ -1462,7 +1461,6 @@ P
 S
 </span>
 </div></em>
-</p>
 </div>
 </a>
 </td>
@@ -2684,7 +2682,7 @@ FIXME: This needs to be filled in
 Data Definitions
 </h3>
 <p class="paragraph">
-This section collects and defines all the data needed to build the instance models. Definitions DD1 to DD8 are the force variables that can be solved by direct analysis of given inputs. The interslice forces DD9 are force variables that must be written in terms of DD1 to DD8 to solve.
+This section collects and defines all the data needed to build the instance models.
 </p>
 <a id="DD:W.i">
 <table class="ddefn">
@@ -4620,7 +4618,6 @@ FIXME: This needs to be filled in
 </tr>
 </table>
 </a>
-
 <a id="DD:K.bn,i">
 <table class="ddefn">
 <tr>
@@ -4929,12 +4926,6 @@ Instance Models
 </h3>
 <p class="paragraph">
 This section transforms the problem defined in <a href=#Sec:ProbDesc>Problem Description</a> into one which is expressed in mathematical terms. It uses concrete symbols defined in <a href=#Sec:DDs>Data Definitions</a> to replace the abstract symbols in the models identified in <a href=#Sec:TMs>Theoretical Models</a> and <a href=#Sec:GDs>General Definitions</a>.
-</p>
-<p class="paragraph">
-The Morgenstern Price method is a vertical slice, limit equilibrium slope stability analysis method. Analysis is performed by breaking the assumed failure surface into a series of vertical slices of mass. Static equilibrium analysis using two force equilibrium, and one moment equation as in T2. The problem is statically indeterminate with only these 3 equations and one constitutive equation (the Mohr Coulomb shear strength of T3) so the assumption of GD5 is used. Solving for force equilibrium allows definitions of all forces in terms of the physical properties of DD1 to DD9, as done in DD10, DD11.
-</p>
-<p class="paragraph">
-The values of the interslice normal force <em>E</em> the interslice normal/shear force ratio <em>&lambda;</em>, and the Factor of Safety (<em>FS</em>), are unknown. Equations for the unknowns are written in terms of only the values in DD1 to DD9, the values of <em>R</em>, and <em>T</em> in DD10 and DD11, and each other. The relationships between the unknowns are non linear, and therefore explicit equations cannot be derived and an iterative solutions method is required.
 </p>
 <a id="IM:fctSfty">
 <table class="idefn">
@@ -5807,7 +5798,7 @@ FIXME: This needs to be filled in
 </table>
 </a>
 <p class="paragraph">
-Using the net force-displacement equilibrium equation of a slice from DD13 with the definitions of the stiffness matrices from DD12 and the force definitions from GD7 a broken down force displacement equilibrium equation can be derived. equation (22) gives the broken down equation in the <em>x</em> direction, and equation (23) gives the broken down equation in the <em>y</em> direction.
+Using the net force-displacement equilibrium equation of a slice from DD13 with the definitions of the stiffness matrices from DD12 and the force definitions from GD7 a broken down force displacement equilibrium equation can be derived. equation (22) gives the broken down equation in the <em>x</em> direction, and equation (23) gives the broken down equation in the <em>y</em> direction:
 </p>
 <a id="">
 <div class="equation">
@@ -5815,7 +5806,7 @@ Using the net force-displacement equilibrium equation of a slice from DD13 with 
 </div>
 </a>
 <p class="paragraph">
-Using the known input assumption of A2, the force variable definitions of DD1 to DD8 on the left side of the equations can be solved for. The only unknown in the variables to solve for the stiffness values from DD14 is the displacements. Therefore taking the equation from each slice a set of <em>2&#8239;n</em> equations, with <em>2&#8239;n</em> unknown displacements in the <em>x</em> and <em>y</em> directions of each slice can be derived. Solutions for the displacements of each slice can then be found. The use of displacement in the definition of the stiffness values makes the equation implicit, which means an iterative solution method, with an initial guess for the displacements in the stiffness values is required.
+Using the known input assumption of A2, the force variable definitions of DD1 to DD8 on the left side of the equations can be solved for. The only unknown in the variables to solve for the stiffness values from DD14 is the displacements. Therefore taking the equation from each slice a set of <em>2&#8239;n</em> equations, with <em>2&#8239;n</em> unknown displacements in the <em>x</em> and <em>y</em> directions of each slice can be derived. Solutions for the displacements of each slice can then be found. The use of displacement in the definition of the stiffness values makes the equation implicit, which means an iterative solution method, with an initial guess for the displacements in the stiffness values is required:
 </p>
 <a id="IM:rfemFoS">
 <table class="idefn">
@@ -6624,7 +6615,7 @@ References
 </h1>
 <a id="chen2005">
 <ul>
-[1]: Qian, Q.H., Zhu, D.Y., Lee, C.F., and Chen, G.R."A concise algorithm for computing the factor of safety using the morgenstern price method."<em>Canadian Geotechnical Journal</em>,vol. 42,no. 1,February,2005.pp. 272&ndash;278. Print.
+[1]: Qian, Q. H., Zhu, D. Y., Lee, C. F., and Chen, G. R. "A concise algorithm for computing the factor of safety using the morgenstern price method." <em>Canadian Geotechnical Journal</em>, vol. 42, no. 1, February, 2005. pp. 272&ndash;278. Print.
 </ul>
 </a>
 <a id="fredlund1977">
@@ -6634,27 +6625,27 @@ References
 </a>
 <a id="koothoor2013">
 <ul>
-[3]: Koothoor, Nirmitha.<em>A document drive approach to certifying scientific computing software</em>.McMaster University,Hamilton, ON, Canada:2013. Print.
+[3]: Koothoor, Nirmitha. <em>A document drive approach to certifying scientific computing software</em>. McMaster University, Hamilton, ON, Canada: 2013. Print.
 </ul>
 </a>
 <a id="li2010">
 <ul>
-[4]: Yu-Chao, Li, Yun-Min, Chen, Zhan, TonyL.T., Sao-Sheng, Ling, and Cleall, PeterJohn."An efficient approach for locating the critical slip surface in slope stability analyses using a real-coded genetic algorithm."<em>Canadian Geotechnical Journal</em>,vol. 47,no. 7,June,2010.pp. 806&ndash;820. Print.
+[4]: Yu-Chao, Li, Yun-Min, Chen, Zhan, Tony L. T., Sao-Sheng, Ling, and Cleall, Peter John. "An efficient approach for locating the critical slip surface in slope stability analyses using a real-coded genetic algorithm." <em>Canadian Geotechnical Journal</em>, vol. 47, no. 7, June, 2010. pp. 806&ndash;820. Print.
 </ul>
 </a>
 <a id="parnas1986">
 <ul>
-[5]: Parnas, DavidL. and Clements, P.C."A rational design process: How and why to fake it."<em>IEEE Transactions on Software Engineering</em>,vol. 12,no. 2,Washington, USA:February,1986.pp. 251&ndash;257. Print.
+[5]: Parnas, David L. and Clements, P. C. "A rational design process: How and why to fake it." <em>IEEE Transactions on Software Engineering</em>, vol. 12, no. 2, Washington, USA: February, 1986. pp. 251&ndash;257. Print.
 </ul>
 </a>
 <a id="smithLai2005">
 <ul>
-[6]: Smith, W.Spencer and Lai, Lei."A new requirements template for scientific computing."<em>Proceedings of the First International Workshop on Situational Requirements Engineering Processes - Methods, Techniques and Tools to Support Situation-Specific Requirements Engineering Processes, SREP'05</em>.Edited by PJAgerfalk, N.Kraiem, and J.Ralyte,Paris, France:2005.pp. 107&ndash;121.In conjunction with 13th IEEE International Requirements Engineering Conference,
+[6]: Smith, W. Spencer and Lai, Lei. "A new requirements template for scientific computing." <em>Proceedings of the First International Workshop on Situational Requirements Engineering Processes - Methods, Techniques and Tools to Support Situation-Specific Requirements Engineering Processes, SREP'05</em>. Edited by PJ Agerfalk, N. Kraiem, and J. Ralyte, Paris, France: 2005. pp. 107&ndash;121. In conjunction with 13th IEEE International Requirements Engineering Conference,
 </ul>
 </a>
 <a id="stolle2008">
 <ul>
-[7]: Stolle, Dieter and Guo, Peijun."Limit equilibrum slope stability analysis using rigid finite elements."<em>Canadian Geotechnical Journal</em>,vol. 45,no. 5,May,2008.pp. 653&ndash;662. Print.
+[7]: Stolle, Dieter and Guo, Peijun. "Limit equilibrum slope stability analysis using rigid finite elements." <em>Canadian Geotechnical Journal</em>, vol. 45, no. 5, May, 2008. pp. 653&ndash;662. Print.
 </ul>
 </a>
 </div>

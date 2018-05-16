@@ -468,18 +468,18 @@ rigDis_deriv_ssp = weave [rigDisDerivation_new, map E rigDis_deriv_eqns_ssp] ++ 
 
 rigDis_deriv_sentences_ssp_s1 :: [Sentence]
 rigDis_deriv_sentences_ssp_s1 = [S "Using the net force-displacement equilibrium" +:+
-  phrase equation +:+ S "of a slice from" +:+ acroDD 13 +:+ S "with" +:+ plural definition
-  `ofThe` S "stiffness matrices" +:+ S "from" +:+ acroDD 12 +:+ S "and the force" +:+
+  phrase equation +:+ S "of a slice from" +:+ acroDD 13 +:+ S "with the" +:+ plural definition
+  +:+ S "of the stiffness matrices" +:+ S "from" +:+ acroDD 12 +:+ S "and the force" +:+
   plural definition +:+ S "from" +:+ acroGD 7 +:+ S "a broken down force displacement" +:+
   S "equilibrium" +:+ phrase equation +:+. S "can be derived" +:+ eqN 22 +:+
   S "gives the broken down" +:+ phrase equation +:+ S "in the" +:+ getES xi +:+
   S "direction" `sC` S "and" +:+ eqN 23 +:+ S "gives the broken down" +:+
-  phrase equation +:+ S "in the" +:+ getES yi +:+. S "direction"]
+  phrase equation +:+ S "in the" +:+ getES yi +:+ S "direction"]
 
 rigDis_deriv_sentences_ssp_s2 :: [Sentence]
 rigDis_deriv_sentences_ssp_s2 = [S "Using the known input assumption of" +:+ acroA 2 `sC`
   S "the force variable" +:+ plural definition +:+ S "of" +:+ acroDD 1 +:+ S "to" +:+
-  acroDD 8 +:+ S "on" +:+ S "left side" `ofThe` plural equation +:+
+  acroDD 8 +:+ S "on the" +:+ S "left side of the" +:+ plural equation +:+
   S "can be solved for. The only unknown in the variables to solve" +:+
   S "for the stiffness values from" +:+ acroDD 14 +:+. 
   S "is the displacements" +:+ S "Therefore taking the" +:+ phrase equation +:+ 
@@ -487,10 +487,10 @@ rigDis_deriv_sentences_ssp_s2 = [S "Using the known input assumption of" +:+ acr
   `sC` S "with" +:+ (E $ 2 * sy numbSlices) +:+ S "unknown displacements in the" +:+ 
   getES xi `sAnd` getES yi +:+ S "directions of each slice can be derived." +:+.
   S "Solutions for the displacements of each slice can then be found" +:+
-  S "The use of displacement in" +:+ phrase definition `ofThe`
-  S "stiffness values makes the" +:+ phrase equation +:+ S "implicit, which means" +:+
+  S "The use of displacement in the" +:+ phrase definition +:+
+  S "of the stiffness values makes the" +:+ phrase equation +:+ S "implicit, which means" +:+
   S "an iterative solution method, with an initial guess for the" +:+
-  S "displacements in the stiffness" +:+ plural value +:+. S "is required"]
+  S "displacements in the stiffness" +:+ plural value +:+ S "is required"]
 
 
 rigDisDerivation_new :: [Sentence]
@@ -510,23 +510,23 @@ rigFoS_deriv_sentences_ssp_s1 = [S "RFEM analysis can also be used to calculate 
   getES index +:+ S "the displacements" +:+ getES dx_i `sAnd` getES dy_i `sC` 
   S "are solved from the system of" +:+ plural equation +:+ S "in" +:+.
   acroIM 4 +:+ S "The" +:+ phrase definition +:+ S "of" +:+ getES rotatedDispl +:+
-  S "as" +:+ S "rotation" `ofThe` S "displacement vector" +:+ getES genDisplace +:+
-  S "is seen in" +:+. acroGD 9 +:+ S "This is used to find" +:+
-  plural displacement `ofThe` S "slice parallel to" +:+ S "base" `ofThe`
-  S "slice" +:+ getES shrDispl `sIn` eqN 24 +:+ S "and normal to" +:+ 
-  S "base" `ofThe` S "slice" +:+ getES nrmDispl +:+ S "in" +:+ eqN 25]
+  S "as the" +:+ S "rotation of the displacement vector" +:+ getES genDisplace +:+
+  S "is seen in" +:+. acroGD 9 +:+ S "This is used to find the" +:+
+  plural displacement +:+ S "of the slice parallel to" +:+ S "the base of the slice" 
+   +:+ getES shrDispl `sIn` eqN 24 +:+ S "and normal to" +:+ 
+  S "the base of the slice" +:+ getES nrmDispl +:+ S "in" +:+. eqN 25]
 
 rigFoS_deriv_sentences_ssp_s2 :: [Sentence]
 rigFoS_deriv_sentences_ssp_s2 = [S "With the", phrase definition, S "of normal stiffness from",
   acroDD 14, --FIXME: grab nrmStiffBase's term name?
-  S "to find", S "normal stiffness" `ofThe` S "base", getES nrmStiffBase,
+  S "to find", S "the normal stiffness of the base", getES nrmStiffBase,
   S "and the now known base displacement perpendicular to the surface",
   getES nrmDispl, S "from", eqN 25, S "the normal base stress",
   S "can be calculated from the force-displacement relationship of" +:+.
   acroT 5, S "Stress", getES normStress `sIs` S "used in place of",
   getTandS genForce, --FIXME: use getTandS
   S "as the stiffness hasn't been normalized for" +:+.
-  (S "length" `ofThe` S "base"), S "Results" `sIn` eqN 26]
+  S "the length of the base", S "Results" `sIn` eqN 26]
 
 rigFoS_deriv_sentences_ssp_s3 :: [Sentence]
 rigFoS_deriv_sentences_ssp_s3 = [S "The resistive shear to calculate the", getTandS fs,
@@ -566,7 +566,7 @@ rigFoS_deriv_sentences_ssp_s7 :: [Sentence]
 rigFoS_deriv_sentences_ssp_s7 = [S "The global", titleize fs, S "is then", S "ratio" `ofThe`
   S "summation of the resistive and mobile shears for each slice" `sC`
   S "with a weighting for" +:+. (S "length" `ofThe` S "slice's base"),
-  S "Shown in", eqN 31 `sAnd` acroIM 5]
+  S "Shown in" +:+ eqN 31 `sAnd` acroIM 5]
 
 
 rigFoSDerivation_new :: [Sentence]
@@ -730,7 +730,7 @@ rigDisDerivation = [
   
   foldlSP [S "Using the net force-displacement equilibrium",
   phrase equation, S "of a slice from", acroDD 13, S "with", plural definition
-  `ofThe` S "stiffness matrices", S "from", acroDD 12, S "and the force", 
+  , S "of the stiffness matrices", S "from", acroDD 12, S "and the force", 
   plural definition, S "from", acroGD 7 , S "a broken down force displacement",
   S "equilibrium", phrase equation +:+. S "can be derived", eqN 22,
   S "gives the broken down", phrase equation, S "in the", getES xi,
@@ -741,7 +741,7 @@ rigDisDerivation = [
   
   foldlSP [S "Using the known input assumption of", acroA 2 `sC`
   S "the force variable", plural definition, S "of", acroDD 1, S "to",
-  acroDD 8, S "on", S "left side" `ofThe` plural equation,
+  acroDD 8, S "on the", S "left side" `ofThe` plural equation,
   S "can be solved for. The only unknown in the variables to solve",
   S "for the stiffness values from", acroDD 14 +:+. 
   S "is the displacements", S "Therefore taking the", phrase equation, 
@@ -764,8 +764,8 @@ rigFoSDerivation = [
   acroIM 4, S "The", phrase definition, S "of", getES rotatedDispl,
   S "as", S "rotation" `ofThe` S "displacement vector", getES genDisplace,
   S "is seen in" +:+. acroGD 9, S "This is used to find",
-  plural displacement `ofThe` S "slice parallel to", S "base" `ofThe`
-  S "slice", getES shrDispl `sIn` eqN 24, S "and normal to", 
+  plural displacement `ofThe` S "slice parallel to the", S "base" `ofThe`
+  S "slice", getES shrDispl `sIn` eqN 24, S "and normal to the", 
   S "base" `ofThe` S "slice", getES nrmDispl, S "in", eqN 25],
   
   eqUnR $ inxi shrDispl $= cos(inxi baseAngle) * inxi dx_i +

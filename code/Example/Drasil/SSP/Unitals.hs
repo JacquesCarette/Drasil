@@ -84,7 +84,7 @@ poissnsRatio = uq (constrained' SM.poissnsR
 fricAngle = uqc "varphi'" (cn $ "effective angle of friction")
   ("The angle of inclination with respect to the horizontal axis of " ++
   "the Mohr-Coulomb shear resistance line") --http://www.geotechdata.info
-  (prime $ Greek Phi_V) degree Real [physc $ Bounded (Exc,0) (Exc,90)]
+  (prime $ vPhi) degree Real [physc $ Bounded (Exc,0) (Exc,90)]
   (dbl 25) defultUncrt
 
 dryWeight = uqc "gamma" (cn $ "dry unit weight")

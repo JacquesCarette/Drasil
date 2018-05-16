@@ -751,7 +751,7 @@ There are no system constraints.
 Specific System Description
 </h1>
 <p class="paragraph">
-This section first presents the problem description, which gives a high-level view of the problem to be solved. This is followed by the solution characteristics specification, which presents the assumptions, theories, definitions and finally the instance model (ODE) that models the solar water heating tank.
+This section first presents the problem description, which gives a high-level view of the problem to be solved. This is followed by the solution characteristics specification, which presents the assumptions, theories, theoretical models, general definitions, data definitions, and finally the instance models (ODEs) that model the Solar Water Heating Systems.
 </p>
 <a id="Sec:ProbDesc">
 <div class="subsection">
@@ -944,7 +944,6 @@ Equation
 <td>
 <a id="">
 <div class="equation">
-<p class="paragraph">
 <em>&minus;&nabla;&sdot;<b>q</b>&plus;g = &rho;&#8239;C&#8239;<div class="fraction">
 <span class="fup">
 &part;&#8239;T
@@ -953,7 +952,6 @@ Equation
 &part;&#8239;t
 </span>
 </div></em>
-</p>
 </div>
 </a>
 </td>
@@ -1020,8 +1018,8 @@ General Definitions
 <p class="paragraph">
 This section collects the laws and equations that will be used in deriving the data definitions, which in turn are used to build the instance models.
 </p>
-<a id="T:nwtnCooling">
-<table class="tdefn">
+<a id="GD:nwtnCooling">
+<table class="gdefn">
 <tr>
 <th>
 Label
@@ -1049,9 +1047,7 @@ Equation
 <td>
 <a id="">
 <div class="equation">
-<p class="paragraph">
 <em><b>q</b>(t) = h&#8239;&Delta;T(t)</em>
-</p>
 </div>
 </a>
 </td>
@@ -1083,6 +1079,7 @@ Source
 </th>
 <td>
 <p class="paragraph">
+
 </p>
 </td>
 </tr>
@@ -1094,14 +1091,12 @@ RefBy
 <p class="paragraph">
 FIXME: This needs to be filled in
 </p>
-<p class="paragraph">
-</p>
 </td>
 </tr>
 </table>
 </a>
-<a id="T:rocTempSimp">
-<table class="tdefn">
+<a id="GD:rocTempSimp">
+<table class="gdefn">
 <tr>
 <th>
 Label
@@ -1119,7 +1114,6 @@ Equation
 <td>
 <a id="">
 <div class="equation">
-<p class="paragraph">
 <em>m&#8239;C&#8239;<div class="fraction">
 <span class="fup">
 d&#8239;T
@@ -1128,7 +1122,6 @@ d&#8239;T
 d&#8239;t
 </span>
 </div> = q<sub>in</sub>&#8239;A<sub>in</sub>&minus;q<sub>out</sub>&#8239;A<sub>out</sub>&plus;g&#8239;V</em>
-</p>
 </div>
 </a>
 </td>
@@ -1178,6 +1171,7 @@ Source
 </th>
 <td>
 <p class="paragraph">
+
 </p>
 </td>
 </tr>
@@ -1194,7 +1188,7 @@ FIXME: This needs to be filled in
 </table>
 </a>
 <p class="paragraph">
-Detailed derivation of simplified rate of change of temperature:
+Detailed derivation of simplified rate of change of temperature :
 </p>
 <p class="paragraph">
 Integrating <a href=#T:t1ConsThermE>T:t1ConsThermE</a> over a volume (<em>V</em>), we have:
@@ -1279,7 +1273,7 @@ d&#8239;t
 Data Definitions
 </h3>
 <p class="paragraph">
-This section collects and defines all the data needed to build the instance models. The dimension of each quantity is also given.
+This section collects and defines all the data needed to build the instance models.
 </p>
 <a id="DD:ht.flux.C">
 <table class="ddefn">
@@ -1320,9 +1314,7 @@ Equation
 <td>
 <a id="">
 <div class="equation">
-<p class="paragraph">
 <em>h<sub>C</sub>&#8239;(T<sub>C</sub>&minus;T<sub>W</sub>(t))</em>
-</p>
 </div>
 </a>
 </td>
@@ -1383,8 +1375,8 @@ Instance Models
 <p class="paragraph">
 This section transforms the problem defined in <a href=#Sec:ProbDesc>Problem Description</a> into one which is expressed in mathematical terms. It uses concrete symbols defined in <a href=#Sec:DDs>Data Definitions</a> to replace the abstract symbols in the models identified in <a href=#Sec:TMs>Theoretical Models</a> and <a href=#Sec:GDs>General Definitions</a>.
 </p>
-<a id="T:eBalanceOnWtr">
-<table class="tdefn">
+<a id="IM:eBalanceOnWtr">
+<table class="idefn">
 <tr>
 <th>
 Label
@@ -1512,7 +1504,7 @@ FIXME: This needs to be filled in
 Derivation of the energy balance on water:
 </p>
 <p class="paragraph">
-To find the rate of change of <em>T<sub>W</sub></em>, we look at the energy balance on water. The volume being considered is the volume of water <em>V<sub>W</sub></em>, which has mass <em>m<sub>W</sub></em> and specific heat capacity of water, <em>C<sub>W</sub></em>. Heat transfer occurs in the water from the coil as <em>q<sub>C</sub></em>, over area <em>A<sub>C</sub></em>. No heat transfer occurs to the outside of the tank, since it has been assumed to be perfectly insulated (<a href=#A:assump11>assump11</a>). Assuming no volumetric heat generation per unit volume (<a href=#A:assump12>assump12</a>), <em>g = 0</em>. Therefore, the equation for GD2 can be written as:
+To find the rate of change of <em>T<sub>W</sub></em>, we look at the energy balance on water. The volume being considered is the volume of water <em>V<sub>W</sub></em>, which has mass <em>m<sub>W</sub></em> and specific heat capacity of water, <em>C<sub>W</sub></em> . Heat transfer occurs in the water from the coil as <em>q<sub>C</sub></em>, over area <em>A<sub>C</sub></em>. No heat transfer occurs to the outside of the tank, since it has been assumed to be perfectly insulated (<a href=#A:assump11>assump11</a>) . Assuming no volumetric heat generation per unit volume (<a href=#A:assump12>assump12</a>), <em>g = 0</em> . Therefore, the equation for GD2 can be written as:
 </p>
 <a id="">
 <div class="equation">
@@ -1527,7 +1519,7 @@ d&#8239;t
 </div>
 </a>
 <p class="paragraph">
-Using <a href=#DD:ht.flux.C>DD:ht.flux.C</a>, this can be written as:
+Using <a href=#DD:ht.flux.C>DD:ht.flux.C</a> , this can be written as:
 </p>
 <a id="">
 <div class="equation">
@@ -1564,7 +1556,7 @@ m<sub>W</sub>&#8239;C<sub>W</sub>
 </div>
 </a>
 <p class="paragraph">
-Setting <em>&tau;<sub>W</sub></em>=<em>m<sub>W</sub></em><em>C<sub>W</sub></em>/<em>h<sub>C</sub></em><em>A<sub>C</sub></em>, Equation (4) can be written in its final form as:
+Setting <em>&tau;<sub>W</sub></em> = <em>m<sub>W</sub></em> <em>C<sub>W</sub></em> / <em>h<sub>C</sub></em> <em>A<sub>C</sub></em> , Equation (4) can be written in its final form as:
 </p>
 <a id="">
 <div class="equation">
@@ -1585,8 +1577,8 @@ d&#8239;t
 </div>&#8239;(T<sub>C</sub>&minus;T<sub>W</sub>)</em>
 </div>
 </a>
-<a id="T:heatEInWtr">
-<table class="tdefn">
+<a id="IM:heatEInWtr">
+<table class="idefn">
 <tr>
 <th>
 Label

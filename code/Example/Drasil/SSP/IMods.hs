@@ -157,7 +157,7 @@ forDisEqlb_new = im forDisEqlb [qw watrForceDif, qw earthqkLoadFctr, qw slcWght,
  qw baseHydroForce, qw surfHydroForce, qw surfAngle, qw surfLoad, qw impLoadAngle,
  qw surfLngth, qw nrmStiffIntsl, qw dx_i, qw effStiffA, qw dy_i, qw baseLngth, qw effStiffB]
   [TCon AssumedCon $ sy earthqkLoadFctr $< sy earthqkLoadFctr] (qw earthqkLoadFctr)
-   [TCon AssumedCon $ 0 $< sy earthqkLoadFctr $< sy earthqkLoadFctr] []
+   [TCon AssumedCon $ 0 $< sy earthqkLoadFctr $< sy earthqkLoadFctr] [(derivationsteps rigDis_deriv_ssp)]
 
 forDisEqlb :: RelationConcept
 forDisEqlb = makeRC "forDisEqlb"
@@ -464,37 +464,37 @@ eq9 = (inxi intNormForce) $= (inxiM1 mobShrC * inxiM1 intNormForce +
 
 ---------------------------------------------------------------------------
 rigDis_deriv_ssp :: Derivation
-rigDis_deriv_ssp = weave [rigDisDerivation_new, map E rigDis_deriv_eqns_ssp]
+rigDis_deriv_ssp = weave [rigDisDerivation_new, map E rigDis_deriv_eqns_ssp] ++ [foldlSentCol rigDis_deriv_sentences_ssp_s2]
 
 rigDis_deriv_sentences_ssp_s1 :: [Sentence]
-rigDis_deriv_sentences_ssp_s1 = [S "Using the net force-displacement equilibrium",
-  phrase equation, S "of a slice from", acroDD 13, S "with", plural definition
-  `ofThe` S "stiffness matrices", S "from", acroDD 12, S "and the force", 
-  plural definition, S "from", acroGD 7 , S "a broken down force displacement",
-  S "equilibrium", phrase equation +:+. S "can be derived", eqN 22,
-  S "gives the broken down", phrase equation, S "in the", getES xi,
-  S "direction" `sC` S "and", eqN 23, S "gives the broken down",
-  phrase equation, S "in the", getES yi, S "direction"]
+rigDis_deriv_sentences_ssp_s1 = [S "Using the net force-displacement equilibrium" +:+
+  phrase equation +:+ S "of a slice from" +:+ acroDD 13 +:+ S "with" +:+ plural definition
+  `ofThe` S "stiffness matrices" +:+ S "from" +:+ acroDD 12 +:+ S "and the force" +:+
+  plural definition +:+ S "from" +:+ acroGD 7 +:+ S "a broken down force displacement" +:+
+  S "equilibrium" +:+ phrase equation +:+. S "can be derived" +:+ eqN 22 +:+
+  S "gives the broken down" +:+ phrase equation +:+ S "in the" +:+ getES xi +:+
+  S "direction" `sC` S "and" +:+ eqN 23 +:+ S "gives the broken down" +:+
+  phrase equation +:+ S "in the" +:+ getES yi +:+. S "direction"]
 
 rigDis_deriv_sentences_ssp_s2 :: [Sentence]
-rigDis_deriv_sentences_ssp_s2 = [S "Using the known input assumption of", acroA 2 `sC`
-  S "the force variable", plural definition, S "of", acroDD 1, S "to",
-  acroDD 8, S "on", S "left side" `ofThe` plural equation,
-  S "can be solved for. The only unknown in the variables to solve",
-  S "for the stiffness values from", acroDD 14 +:+. 
-  S "is the displacements", S "Therefore taking the", phrase equation, 
-  S "from each slice a set of", E $ 2 * sy numbSlices, plural equation
-  `sC` S "with", E $ 2 * sy numbSlices, S "unknown displacements in the", 
-  getES xi `sAnd` getES yi, S "directions of each slice can be derived.",
-  S "Solutions for the displacements of each slice can then be found.",
-  S "The use of displacement in", phrase definition `ofThe`
-  S "stiffness values makes the", phrase equation, S "implicit, which means",
-  S "an iterative solution method, with an initial guess for the",
-  S "displacements in the stiffness", plural value, S "is required"]
+rigDis_deriv_sentences_ssp_s2 = [S "Using the known input assumption of" +:+ acroA 2 `sC`
+  S "the force variable" +:+ plural definition +:+ S "of" +:+ acroDD 1 +:+ S "to" +:+
+  acroDD 8 +:+ S "on" +:+ S "left side" `ofThe` plural equation +:+
+  S "can be solved for. The only unknown in the variables to solve" +:+
+  S "for the stiffness values from" +:+ acroDD 14 +:+. 
+  S "is the displacements" +:+ S "Therefore taking the" +:+ phrase equation +:+ 
+  S "from each slice a set of" +:+ (E $ 2 * sy numbSlices) +:+ plural equation
+  `sC` S "with" +:+ (E $ 2 * sy numbSlices) +:+ S "unknown displacements in the" +:+ 
+  getES xi `sAnd` getES yi +:+ S "directions of each slice can be derived." +:+.
+  S "Solutions for the displacements of each slice can then be found" +:+
+  S "The use of displacement in" +:+ phrase definition `ofThe`
+  S "stiffness values makes the" +:+ phrase equation +:+ S "implicit, which means" +:+
+  S "an iterative solution method, with an initial guess for the" +:+
+  S "displacements in the stiffness" +:+ plural value +:+. S "is required"]
 
 
 rigDisDerivation_new :: [Sentence]
-rigDisDerivation_new = map foldlSentCol [intrSlc_deriv_sentences_ssp_s1, intrSlc_deriv_sentences_ssp_s2]
+rigDisDerivation_new = [foldlSentCol rigDis_deriv_sentences_ssp_s1]
 
 rigDis_deriv_eqns_ssp :: [Expr]
 rigDis_deriv_eqns_ssp = [fDisEq_rel]
@@ -502,19 +502,19 @@ rigDis_deriv_eqns_ssp = [fDisEq_rel]
 
 ---------------------------------------------------------------------------
 rigFoS_deriv_ssp :: Derivation
-rigFoS_deriv_ssp = weave [rigFoSDerivation_new, map E rigFoS_deriv_eqns_ssp]
+rigFoS_deriv_ssp = rigFoS_deriv_sentences_ssp_s1 ++ [E eq10] ++ [E eq11] ++ weave [rigFoSDerivation_new, map E rigFoS_deriv_eqns_ssp]
 
 rigFoS_deriv_sentences_ssp_s1 :: [Sentence]
-rigFoS_deriv_sentences_ssp_s1 = [S "RFEM analysis can also be used to calculate the",
-  phrase fs, S "for the" +:+. phrase slope, S "For a slice element",
-  getES index, S "the displacements", getES dx_i `sAnd` getES dy_i `sC` 
-  S "are solved from the system of", plural equation, S "in" +:+.
-  acroIM 4, S "The", phrase definition, S "of", getES rotatedDispl,
-  S "as", S "rotation" `ofThe` S "displacement vector", getES genDisplace,
-  S "is seen in" +:+. acroGD 9, S "This is used to find",
-  plural displacement `ofThe` S "slice parallel to", S "base" `ofThe`
-  S "slice", getES shrDispl `sIn` eqN 24, S "and normal to", 
-  S "base" `ofThe` S "slice", getES nrmDispl, S "in", eqN 25]
+rigFoS_deriv_sentences_ssp_s1 = [S "RFEM analysis can also be used to calculate the" +:+
+  phrase fs +:+ S "for the" +:+. phrase slope +:+ S "For a slice element" +:+
+  getES index +:+ S "the displacements" +:+ getES dx_i `sAnd` getES dy_i `sC` 
+  S "are solved from the system of" +:+ plural equation +:+ S "in" +:+.
+  acroIM 4 +:+ S "The" +:+ phrase definition +:+ S "of" +:+ getES rotatedDispl +:+
+  S "as" +:+ S "rotation" `ofThe` S "displacement vector" +:+ getES genDisplace +:+
+  S "is seen in" +:+. acroGD 9 +:+ S "This is used to find" +:+
+  plural displacement `ofThe` S "slice parallel to" +:+ S "base" `ofThe`
+  S "slice" +:+ getES shrDispl `sIn` eqN 24 +:+ S "and normal to" +:+ 
+  S "base" `ofThe` S "slice" +:+ getES nrmDispl +:+ S "in" +:+ eqN 25]
 
 rigFoS_deriv_sentences_ssp_s2 :: [Sentence]
 rigFoS_deriv_sentences_ssp_s2 = [S "With the", phrase definition, S "of normal stiffness from",
@@ -570,12 +570,12 @@ rigFoS_deriv_sentences_ssp_s7 = [S "The global", titleize fs, S "is then", S "ra
 
 
 rigFoSDerivation_new :: [Sentence]
-rigFoSDerivation_new = map foldlSentCol [rigFoS_deriv_sentences_ssp_s1, [EmptyS], rigFoS_deriv_sentences_ssp_s2,
+rigFoSDerivation_new = map foldlSentCol [rigFoS_deriv_sentences_ssp_s2,
   rigFoS_deriv_sentences_ssp_s3, rigFoS_deriv_sentences_ssp_s4, rigFoS_deriv_sentences_ssp_s5,
    rigFoS_deriv_sentences_ssp_s6, rigFoS_deriv_sentences_ssp_s7]
 
 rigFoS_deriv_eqns_ssp :: [Expr]
-rigFoS_deriv_eqns_ssp = [eq10, eq11, eq12, eq13, eq14, eq15, eq16, eq17]
+rigFoS_deriv_eqns_ssp = [eq12, eq13, eq14, eq15, eq16, eq17]
 
 eq10, eq11, eq12, eq13, eq14, eq15, eq16, eq17:: Expr
 eq10 = inxi shrDispl $= cos(inxi baseAngle) * inxi dx_i +

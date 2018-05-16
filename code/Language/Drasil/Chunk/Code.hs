@@ -62,7 +62,7 @@ greekToCodeName :: Greek -> String
 --greekToCodeName Beta_L    = "beta"
 --greekToCodeName Beta      = "Beta"
 --greekToCodeName Chi_L     = "chi"
-greekToCodeName Chi       = "Chi"
+--greekToCodeName Chi       = "Chi"
 --greekToCodeName Delta_L   = "delta"
 --greekToCodeName Delta     = "Delta"
 greekToCodeName Ell       = "ell"

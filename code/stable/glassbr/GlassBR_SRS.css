@@ -82,3 +82,5 @@ th, td {border: 1px solid black; padding: 0.5em;}
   padding: 5px;
   text-align: center;
   border: 0px;}
+ul.hide-list-style {
+  list-style-type: none;}

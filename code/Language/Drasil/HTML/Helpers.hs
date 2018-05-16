@@ -191,7 +191,10 @@ makeCSS _ = vcat [
     text ".matrix td {",
     text "  padding: 5px;",
     text "  text-align: center;",
-    text "  border: 0px;}"
+    text "  border: 0px;}"],
+  vcat [
+    text "ul.hide-list-style {",
+    text "  list-style-type: none;}"
     ]
   ]
 

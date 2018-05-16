@@ -1064,43 +1064,58 @@ Assumptions
 <p class="paragraph">
 This section simplifies the original problem and helps in developing the theoretical model by filling in the missing information for the physical system. The numbers given in the square brackets refer to the Theoretical Models [<a href=#Sec:TMs>Theoretical Models</a>], General Definitions [<a href=#Sec:GDs>General Definitions</a>], Data Definitions [<a href=#Sec:DDs>Data Definitions</a>], Instance Models [<a href=#Sec:IMs>Instance Models</a>], or Likely Changes [<a href=#Sec:LCs>Likely Changes</a>], in which the respective assumption is used.
 </p>
+<ul class="hide-list-style">
+<li>
 <div id="A:glassTyA">
-<ul>
 glassTy: The standard E1300-09a for calculation applies only to monolithic, laminated, or insulating glass constructions of rectangular shape with continuous lateral support along. one, two, three, or four edge This practice assumes that (1) the supported glass edge for two, three and four-sided support conditions are simply supported and free to slip in plane; (2) glass supported on two sides acts as a simply supported beam and (3) glass supported on one side acts as a cantilever.
-</ul>
 </div>
+</li>
+</ul>
+<ul class="hide-list-style">
+<li>
 <div id="A:glassConditionA">
-<ul>
 glassCondition: Following <a href=#astm.LR2009>astm_LR2009</a> (pg. 1), this practice does not apply to any form of wired, patterned, etched, sandblasted, drilled, notched, or grooved glass with surface and edge treatments that alter the glass strength.
-</ul>
 </div>
+</li>
+</ul>
+<ul class="hide-list-style">
+<li>
 <div id="A:explsnScenarioA">
-<ul>
 explainScenario: This system only considers the external explosion scenario for its calculations.
-</ul>
 </div>
+</li>
+</ul>
+<ul class="hide-list-style">
+<li>
 <div id="A:standardValuesA">
-<ul>
 StandardValues: The values provided in <a href=#Sec:AuxConstants>Values of Auxiliary Constants</a> are assumed for the duration of load (<em>t<sub>d</sub></em>), and the material properties of <em>m</em>, <em>k</em>, and <em>E</em>.
-</ul>
 </div>
+</li>
+</ul>
+<ul class="hide-list-style">
+<li>
 <div id="A:glassLiteA">
-<ul>
 glassLite: Glass under consideration is assumed to be a single lite. Hence the value of LSF is equal to 1 for all calculations in GlassBR.
-</ul>
 </div>
+</li>
+</ul>
+<ul class="hide-list-style">
+<li>
 <div id="A:bndryConditionsA">
-<ul>
 boundaryConditions: Boundary conditions for the glass slab is assumed to be 4-sided support for calculations.
-</ul>
 </div>
+</li>
+</ul>
+<ul class="hide-list-style">
+<li>
 <div id="A:responseTyA">
-<ul>
 responseType: The response type considered in GlassBR is flexural.
-</ul>
 </div>
+</li>
+</ul>
+<ul class="hide-list-style">
+<li>
 <div id="A:ldfConstantA">
-<ul>
 ldfConstant: With reference to <a href=#A:standardValuesA>StandardValues</a> the value of load duration factor (<em>LDF</em>) is a constant in GlassBR. It is calculated by the equation: <em>LDF = (<div class="fraction">
 <span class="fup">
 t<sub>d</sub>
@@ -1116,8 +1131,9 @@ m
 16
 </span>
 </div></sup></em>. Using this, <em>LDF = 0.27</em>.
-</ul>
 </div>
+</li>
+</ul>
 </div>
 </div>
 <div id="Sec:TMs">
@@ -2056,31 +2072,41 @@ This section provides the functional requirements, the business tasks that the s
 <h2>
 Functional Requirements
 </h2>
+<ul class="hide-list-style">
+<li>
 <div id="FR:s7.1.req1">
-<ul>
 Input-Glass-Props: Input the quantities from <a href=#Table:R1ReqInputs>Table:R1ReqInputs</a>, which define the glass dimensions, type of glass, tolerable probability of failure and the characteristics of the blast Note: <em>a</em> and <em>b</em> will be input in terms of millimetres and will be converted to the equivalent value in metres.
-</ul>
 </div>
+</li>
+</ul>
+<ul class="hide-list-style">
+<li>
 <div id="FR:s7.1.req2">
-<ul>
 System-Set-Values-Following-Assumptions: The system shall set the known values as follows: <em>m</em>, <em>k</em>, <em>E</em>, <em>t<sub>d</sub></em> following A4, <em>LDF</em> following A8, and LSF following A5.
-</ul>
 </div>
+</li>
+</ul>
+<ul class="hide-list-style">
+<li>
 <div id="FR:s7.1.req3">
-<ul>
 Check-Input-with-Data_Constraints: The system shall check the entered input values to ensure that they do not exceed the data constraints mentioned in <a href=#Sec:DataConstraints>Data Constraints</a>. If any of the input parameters is out of bounds, an error message is displayed and the calculations stop.
-</ul>
 </div>
+</li>
+</ul>
+<ul class="hide-list-style">
+<li>
 <div id="FR:s7.1.req4">
-<ul>
 Output-Values-and-Known-Quantities: Output the input quantities from R1 and the known quantities from R2.
-</ul>
 </div>
+</li>
+</ul>
+<ul class="hide-list-style">
+<li>
 <div id="FR:s7.1.req5">
-<ul>
 Check-Glass-Safety: If <em>is_safe1</em> and <em>is_safe2</em> (from <a href=#T:t1SafetyReq>T:t1SafetyReq</a> and <a href=#T:t2SafetyReq>T:t2SafetyReq</a>) are true, output the message &quot;For the given input parameters, the glass is considered safe.&quot; If the condition is false, then output the message &quot;For the given input parameters, the glass is NOT considered safe.&quot;
-</ul>
 </div>
+</li>
+</ul>
 <div class="list">
 <p>
 R6: Output the following quantities:
@@ -2275,31 +2301,41 @@ This problem is small in size and relatively simple, so performance is not a pri
 <h1>
 Likely Changes
 </h1>
+<ul class="hide-list-style">
+<li>
 <div id="LC:s8.likelychg1">
-<ul>
 Calculate-Internal-Blask-Risk: <a href=#A:explsnScenarioA>explainScenario</a> - The system currently only calculates for external blast risk. In the future calculations can be added for the internal blast risk.
-</ul>
 </div>
+</li>
+</ul>
+<ul class="hide-list-style">
+<li>
 <div id="LC:s8.likelychg2">
-<ul>
 Variable-Values-of-m,k,E: <a href=#A:standardValuesA>StandardValues</a>, <a href=#A:ldfConstantA>ldfConstant</a> - Currently the values for <em>m</em>, <em>k</em>, and <em>E</em> are assumed to be the same for all glass. In the future these values can be changed to variable inputs.
-</ul>
 </div>
+</li>
+</ul>
+<ul class="hide-list-style">
+<li>
 <div id="LC:s8.likelychg3">
-<ul>
 Accomodate-More-than-Single-Lite: <a href=#A:glassLiteA>glassLite</a> - The software may be changed to accommodate more than a single lite.
-</ul>
 </div>
+</li>
+</ul>
+<ul class="hide-list-style">
+<li>
 <div id="LC:s8.likelychg4">
-<ul>
 Accomodate-More-Boundary-Conditions: <a href=#A:bndryConditionsA>boundaryConditions</a> - The software may be changed to accommodate more boundary conditions than 4-sided support.
-</ul>
 </div>
+</li>
+</ul>
+<ul class="hide-list-style">
+<li>
 <div id="LC:s8.likelychg5">
-<ul>
 Consider-More-than-Flexure-Glass: <a href=#A:responseTyA>responseType</a> - The software may be changed to consider more than just flexure of the glass.
-</ul>
 </div>
+</li>
+</ul>
 </div>
 </div>
 <div id="Sec:TraceMatrices">
@@ -4385,41 +4421,43 @@ Auxiliary Constants
 <h1>
 References
 </h1>
+<ul class="hide-list-style">
+<li>
 <div id="astm_C1036">
-<ul>
 [1]: ASTM C1036-16. <em>Standard specification for Flat Glass</em>. West Conshohocken, PA: ASTM International, 2016. www.astm.org.
-</ul>
 </div>
+</li>
+<li>
 <div id="astm_C1048">
-<ul>
 [2]: ASTM C1048-04. <em>Specification for Heat-Treated Flat Glass-Kind HS, Kind FT Coated and Uncoated Glass</em>. West Conshohocken, PA: ASTM International, 2009. www.astm.org.
-</ul>
 </div>
+</li>
+<li>
 <div id="astm_LR2009">
-<ul>
 [3]: ASTM E1300-09. <em>Standard Practice for Determining Load Resistance of Glass in Buildings</em>. <em>Standard E1300-09a</em>. ASTM International, 2009. www.astm.org.
-</ul>
 </div>
+</li>
+<li>
 <div id="glThick1998">
-<ul>
 [4]: Beason, W. Lynn, Kohutek, Terry L., and Bracci, Joseph M. <em>Basis for ASTME E 1300 Annealed Glass Thickness Selection Charts</em>. <em>ASCE Library</em>. February, 1998. doi.org/10.1061/(ASCE)0733-9445(1998)124:2(215).
-</ul>
 </div>
+</li>
+<li>
 <div id="koothoor2013">
-<ul>
 [5]: Koothoor, Nirmitha. <em>A document drive approach to certifying scientific computing software</em>. McMaster University, Hamilton, ON, Canada: 2013. Print.
-</ul>
 </div>
+</li>
+<li>
 <div id="rbrtsn2012">
-<ul>
 [6]: Robertson, James and Robertson, Suzanne. <em>Volere requirements specification template edition 16</em>. 2012. https://pdfs.semanticscholar.org/cf57/27a59801086cbd3d14e587e09880561dbe22.pdf.
-</ul>
 </div>
+</li>
+<li>
 <div id="smithLai2005">
-<ul>
 [7]: Smith, W. Spencer and Lai, Lei. "A new requirements template for scientific computing." <em>Proceedings of the First International Workshop on Situational Requirements Engineering Processes - Methods, Techniques and Tools to Support Situation-Specific Requirements Engineering Processes, SREP'05</em>. Edited by PJ Agerfalk, N. Kraiem, and J. Ralyte, Paris, France: 2005. pp. 107&ndash;121. In conjunction with 13th IEEE International Requirements Engineering Conference,
-</ul>
 </div>
+</li>
+</ul>
 </div>
 </div>
 <div id="Sec:Appendix">

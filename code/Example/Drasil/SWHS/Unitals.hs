@@ -197,7 +197,7 @@ eta = cv (dcc "eta" (nounPhraseSP "ODE parameter")
 melt_frac = cv (dcc "melt_frac" (nounPhraseSP "melt fraction")
   "Ratio of thermal energy to amount of mass melted")
   --FIXME: Not sure if definition is exactly correct
-  (Greek Phi_L) Real
+  lPhi Real
 
 -----------------
 -- Constraints --

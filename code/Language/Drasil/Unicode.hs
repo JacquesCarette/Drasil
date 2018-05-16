@@ -3,8 +3,7 @@ module Language.Drasil.Unicode where
 
 -- | Greek alphabet. @_L@ following the name represents lower case version.
 data Greek = 
-             Phi_L
-           | Phi_V
+             Phi_V
            | Phi
            | Chi_L
            | Chi

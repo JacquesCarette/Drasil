@@ -108,8 +108,7 @@ lub _    _    = Text -- Text is top-most
 data Latex = L { unPL :: String }
 
 instance RenderGreek Latex where
-  
-  greek Chi_L     = L "\\chi{}"
+ 
   greek Chi       = L "X"
   greek Ell       = L "\\ell{}"
   greek Nabla     = L "\\nabla{}"

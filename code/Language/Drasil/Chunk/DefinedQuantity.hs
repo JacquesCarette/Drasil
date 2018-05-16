@@ -18,7 +18,6 @@ import Language.Drasil.Unit(UnitDefn)
 import Control.Lens ((^.), makeLenses, view)
 
 -- | DefinedQuantity = Concept + Quantity
--- not really the best as this duplicates |id|.  At least, it should... -> resolved
 data DefinedQuantityDict = DQD { _con :: ConceptChunk
                                , _symb :: Stage -> Symbol
                                , _spa :: Space
@@ -28,7 +27,6 @@ data DefinedQuantityDict = DQD { _con :: ConceptChunk
   
 makeLenses ''DefinedQuantityDict
 
--- but we pick it from the Quantity.
 instance HasUID        DefinedQuantityDict where uid = con . uid
 instance Eq            DefinedQuantityDict where a == b = (a ^. uid) == (b ^. uid)
 instance NamedIdea     DefinedQuantityDict where term = con . term

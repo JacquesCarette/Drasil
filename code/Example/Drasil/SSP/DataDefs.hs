@@ -199,7 +199,7 @@ displcmntRxnFEqn = dgnl2x2 (inxi shrStiffIntsl) (inxi nrmStiffBase) * displMtx
 
 --DD12.5
 displcmntBasel :: QDefinition
-displcmntBasel = ec' genPressure displcmntBaselEqn
+displcmntBasel = ec genPressure displcmntBaselEqn [derivationsteps stfMtrx_deriv_ssp]
 
 displcmntBaselEqn :: Expr
 displcmntBaselEqn = m2x2 (inxi effStiffA) (inxi effStiffB) (inxi effStiffB)
@@ -220,7 +220,7 @@ netFDsplcmntEqbmEqn = negate (inx surfLngth (-1)) * (inx nrmStiffIntsl (-1)) *
 --DD14
 
 shearStiffness :: QDefinition
-shearStiffness = ec shrStiffBase shearStiffnessEqn [derivationsteps stfMtrx_deriv_ssp] 
+shearStiffness = ec' shrStiffBase shearStiffnessEqn  
 
 shearStiffnessEqn :: Expr
 shearStiffnessEqn = sy intNormForce / (2 * (1 + sy poissnsRatio)) *
@@ -376,7 +376,7 @@ mobShr_deriv_sentences_ssp_s2 = [S "The", phrase equation, S "is unsolvable, con
 mobShr_deriv_sentences_ssp_s3 :: [Sentence]
 mobShr_deriv_sentences_ssp_s3 = [S "The", plural value, S "of", getES shearRNoIntsl `sAnd`
   getES shearFNoIntsl, S "are now defined completely in terms of the",
-  S "known force property", plural value, S "of", acroDD 1, S "to", acroDD 9]
+  S "known force property", plural value, S "of", acroDD 1, S "to", acroDD 12]
 
 
 mobShrDerivation_sentence :: [Sentence]

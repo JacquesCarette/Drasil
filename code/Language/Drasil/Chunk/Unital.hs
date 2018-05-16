@@ -20,7 +20,7 @@ import Language.Drasil.Classes (HasUID(uid), NamedIdea(term), Idea(getA),
   Definition(defn), ConceptDomain(cdom, DOM), Concept, HasSymbol(symbol),
   IsUnit, HasAttributes(attributes))
 import Language.Drasil.Chunk.Concept (ConceptChunk,dcc, dccWDS,cw)
-import Language.Drasil.Chunk.ConVar (DefinedQuantityDictCV(DQD), dqd)
+import Language.Drasil.Chunk.ConVar (DefinedQuantityDictCV, dqd)
 import Language.Drasil.Chunk.Quantity (Quantity(..),HasSpace(typ))
 import Language.Drasil.Chunk.Unitary (Unitary(..))
 import Language.Drasil.Unit (UnitDefn,unitWrapper)
@@ -30,7 +30,6 @@ import Language.Drasil.Spec (Sentence)
 
 import Language.Drasil.NounPhrase (NP)
 import Language.Drasil.Chunk.Attribute.Core (Attributes)
-import Language.Drasil.Chunk.DefinedQuantity as D
 
 -- | UnitalChunks are Unitary
 data UnitalChunk = UC { _defq' :: DefinedQuantityDictCV -- FIXME: defq' to distinguish from defq in Constrained.hs -> merge eventually

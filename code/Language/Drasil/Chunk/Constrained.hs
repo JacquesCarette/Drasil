@@ -87,13 +87,13 @@ instance HasReasVal    ConstrConcept where reasVal      = reasV'
 instance Eq            ConstrConcept where c1 == c2 = (c1 ^.defq.uid) == (c2 ^.defq.uid)
 instance HasAttributes ConstrConcept where attributes = defq . attributes
 
-constrained' :: (HasAttributes c, Quantity c, Concept c, DOM c ~ ConceptChunk) =>
-  c -> [Constraint] -> Expr -> ConstrConcept
-constrained' q cs rv = ConstrConcept (cqs q) cs (Just rv)
+constrained' :: (HasAttributes c, Quantity c, Concept c, IsUnit u, DOM c ~ ConceptChunk, DOM u ~ ConceptChunk) =>
+  c -> Symbol -> Space -> u -> Attributes -> [Constraint] -> Expr -> ConstrConcept
+constrained' q sym space un atts cs rv = ConstrConcept (cqs (cw q) sym space un atts) cs (Just rv)
 
-constrainedNRV' :: (HasAttributes c, Quantity c, Concept c, DOM c ~ ConceptChunk) => 
-  c -> [Constraint] -> ConstrConcept
-constrainedNRV' q cs = ConstrConcept (cqs q) cs Nothing
+constrainedNRV' :: (HasAttributes c, Quantity c, Concept c, IsUnit u, DOM c ~ ConceptChunk, DOM u ~ ConceptChunk) => 
+  c -> Symbol -> Space -> u -> Attributes -> [Constraint] -> ConstrConcept
+constrainedNRV' q sym space un atts cs = ConstrConcept (cqs (cw q) sym space un atts) cs Nothing
 
 cuc' :: (IsUnit u, DOM u ~ ConceptChunk) => String -> NP -> String -> Symbol -> u
                   -> Space -> [Constraint] -> Attributes -> Expr -> ConstrConcept

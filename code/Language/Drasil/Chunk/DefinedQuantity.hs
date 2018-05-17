@@ -41,5 +41,5 @@ instance HasSymbol     DefinedQuantityDict where symbol = view symb
 instance Q.Quantity    DefinedQuantityDict where getUnit = view unit
 instance HasAttributes DefinedQuantityDict where attributes = attribs
 
-cqs :: (IsUnit u, DOM u ~ ConceptChunk) => ConceptChunk -> Symbol -> Space -> u -> Attributes-> DefinedQuantityDict
+cqs :: (IsUnit u, DOM u ~ ConceptChunk) => ConceptChunk -> Symbol -> Space -> u -> Attributes -> DefinedQuantityDict
 cqs c s sp u atts = DQD c (\_ -> s) sp (Just $ unitWrapper u) atts

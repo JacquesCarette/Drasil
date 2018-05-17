@@ -11,7 +11,8 @@ import Drasil.NoPCM.GenDefs (roc_temp_simp_deriv)
 -- Since NoPCM is a simplified version of SWHS, the file is to be built off
 -- of the SWHS libraries.  If the source for something cannot be found in
 -- NoPCM, check SWHS.
-import Drasil.SWHS.Assumptions (assump1, assump2, assump7, assump8, assump9,
+import Drasil.SWHS.Assumptions (assumpS1, assumpS2, assumpS7, assumpS8, assumpS9,
+  assumpS14, assumpS15, assumpS20, assump1, assump2, assump7, assump8, assump9,
   assump14, assump15, assump20)
 import Drasil.SWHS.Body (s2_3_knowlegde, s2_3_understanding, s2_4_intro,
   s3, physSyst1, physSyst2, s4_2_4_intro_end, s4_2_5_d1startPara,
@@ -379,7 +380,7 @@ s4_1_3_list temw we = enumSimple 1 (short goalStmt) [
 ------------------------------------------------------
   
 s4_2 = solChSpecF progName (s4_1, s6) s4_2_4_intro_end (mid,
-  dataConstraintUncertainty, end) (s4_2_1_list, s4_2_2_T1,
+  dataConstraintUncertainty, end) (npcmAssumptions, s4_2_2_T1,
   s4_2_3_paragraph M.rOfChng temp, [s4_2_4_DD1],
   [reldefn eBalanceOnWtr] ++ (s4_2_5_d1startPara energy water) ++
   s4_2_5_paragraph ++ [reldefn heatEInWtr], [s4_2_6_table1, s4_2_6_table2])
@@ -459,7 +460,7 @@ s4_2_3_description = map foldlSPCol [
   s4_2_3_desc2 gauss_div surface vol thFluxVect uNormalVect M.unit_,
   s4_2_3_desc3 vol vol_ht_gen,
   s4_2_3_desc4 ht_flux_in ht_flux_out in_SA out_SA density QT.heat_cap_spec
-    QT.temp vol (map Paragraph [assump3, assump4, assump5]),
+    QT.temp vol [assump3, assump4, assump5],
   s4_2_3_desc5 density mass vol]
 
 s4_2_3_desc1 :: RelationConcept -> UnitalChunk -> [Sentence]
@@ -487,7 +488,7 @@ s4_2_3_desc4 hfi hfo iS oS den hcs te vo assumps = [S "Where", getES hfi `sC`
   getES hfo `sC` getES iS `sC` S "and", getES oS, S "are explained in" +:+.
   acroGD 2, S "Assuming", getES den `sC` getES hcs `sAnd` getES te,
   S "are constant over the", phrase vo `sC` S "which is true in our case by",
-  titleize' assumption, (foldlList $ (map (\d -> sParen (makeRef (find' d s4_2_1_list))))
+  titleize' assumption, (foldlList $ (map (\d -> sParen (makeRef (find' d npcmAssumptions))))
   assumps) `sC` S "we have"]
 
 s4_2_3_desc5 :: UnitalChunk -> UnitalChunk -> UnitalChunk -> [Sentence]
@@ -529,8 +530,8 @@ s4_2_5_paragraph = weave [s4_2_5_description, s4_2_5_equation]
 s4_2_5_description :: [Contents]
 s4_2_5_description = map foldlSPCol
   [s4_2_5_desc1 M.rOfChng temp_W energy water vol w_vol mass w_mass htCap_W
-    heat_trans ht_flux_C coil_SA tank perfect_insul (Assumption (assump "assump15" assump15 (S "assump15"))) vol_ht_gen
-    (Assumption (assump "assump12" assump12 (S "assump12"))),
+    heat_trans ht_flux_C coil_SA tank perfect_insul assump15 vol_ht_gen
+    assump12,
   s4_2_5_desc2 dd1HtFluxC,
   s4_2_5_desc3 w_mass htCap_W,
   s4_2_5_desc4 tau_W w_mass htCap_W coil_HTC coil_SA]
@@ -549,8 +550,8 @@ s4_2_5_desc1 roc temw en wa vo wv ma wm hcw ht hfc csa ta purin a11 vhg a12 =
   `sC` S "over area") +:+. getES csa, S "No",
   phrase ht, S "occurs to", (S "outside" `ofThe`
   phrase ta) `sC` S "since it has been assumed to be",
-  phrase purin +:+. sParen (makeRef (find' a11 s4_2_1_list)), S "Assuming no",
-  phrase vhg +:+. (sParen (makeRef (find' a12 s4_2_1_list)) `sC`
+  phrase purin +:+. sParen (makeRef (find' a11 npcmAssumptions)), S "Assuming no",
+  phrase vhg +:+. (sParen (makeRef (find' a12 npcmAssumptions)) `sC`
   E (sy vhg $= 0)), S "Therefore, the", phrase M.equation, S "for",
   acroGD 2, S "can be written as"]
 
@@ -737,7 +738,7 @@ s6_list = [likeChg2, likeChg3, likeChg3_npcm, likeChg6]
   -- []) EmptyS
 likeChg3_npcm :: Contents
 likeChg3_npcm = mkLklyChnk "likeChg3" (
-  (makeRef (find' assump9_npcm s4_2_1_list)) :+: S "- The" +:+ phrase model +:+
+  (makeRef (find' assump9_npcm npcmAssumptions)) :+: S "- The" +:+ phrase model +:+
   S "currently only accounts for charging of the tank. A more complete"
   +:+ phrase model +:+. S "would also account for discharging of the tank") (S "Discharging-Tank")
 -- likeChg4 = LikelyChange (LCChunk (nw $ npnc "likeChg4" $
@@ -800,7 +801,7 @@ s7_dataRef = [makeRef s4_2_6_table1] --FIXME: Reference section?
 
 s7_assump = ["A1", "A2", "A3", "A4", "A5", "A6", "A7", "A8", "A9", "A10",
   "A11", "A12", "A13", "A14"]
-s7_assumpRef = map (\x -> (makeRef (find' x s4_2_1_list))) s4_2_1_list--makeListRef s7_assump (SRS.inModel SRS.missingP [])
+s7_assumpRef = map (\x -> (makeRef (find' x npcmAssumptions))) npcmAssumptions--makeListRef s7_assump (SRS.inModel SRS.missingP [])
 
 s7_theories = ["T1"]
 s7_theoriesRef = map (refFromType Theory) [t1ConsThermE]

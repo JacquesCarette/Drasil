@@ -22,9 +22,10 @@ import Language.Drasil.Space
 import Language.Drasil.Symbol (Symbol)
 import Language.Drasil.Classes (HasUID(uid), NamedIdea(term), Idea(getA),
   Definition(defn), ConceptDomain(cdom, DOM), Concept, HasSymbol(symbol),
-  IsUnit, Constrained(constraints), HasReasVal(reasVal), HasAttributes(attributes))
+  IsUnit(ud), Constrained(constraints), HasReasVal(reasVal), HasAttributes(attributes))
 
 import Language.Drasil.Unit (UnitDefn)
+import Language.Drasil.UnitLang (UDefn)
 
 -- | ConstrainedChunks are 'Symbolic Quantities'
 -- with 'Constraints' and maybe typical value
@@ -95,9 +96,9 @@ constrainedNRV' :: (HasAttributes c, Quantity c, Concept c, DOM c ~ ConceptChunk
 constrainedNRV' q cs = ConstrConcept (cqs q) cs Nothing
 
 cuc' :: (HasAttributes u, IsUnit u, DOM u ~ ConceptChunk) => String -> NP -> String -> Symbol -> u
-                  -> Space -> [Constraint] -> Expr -> ConstrConcept
-cuc' nam trm desc sym un space cs rv =
-  ConstrConcept (cqs $ ucs nam trm desc sym un space []) cs (Just rv)
+                  -> Space -> [Constraint] -> Attributes -> Expr -> ConstrConcept
+cuc' nam trm desc sym un space cs atts rv =
+  ConstrConcept (cqs (cw (ucs nam trm desc sym un space [])) sym space (Just (un ^. ud)) atts) cs (Just rv)
 
 cnstrw :: (HasAttributes c, Quantity c, Constrained c, HasReasVal c) => c -> ConstrainedChunk
 cnstrw c = ConstrainedChunk (qw c) (c ^. constraints) (c ^. reasVal)

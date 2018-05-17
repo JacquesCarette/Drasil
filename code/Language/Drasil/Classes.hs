@@ -101,7 +101,7 @@ class HasUnitSymbol u where
 -- | Units are Ideas with a Definition which store a unit symbol.
 -- They must also be explicitly declared to be instances of IsUnit
 class (Idea u, Definition u, HasUnitSymbol u) => IsUnit u where
-    ud :: Lens' u UDefn
+   us :: Lens' u USymb
 
 -- Investigate (TODO): is this really needed?
 class UnitEq u where

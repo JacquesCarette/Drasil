@@ -13,7 +13,7 @@ import Control.Lens (Simple, Lens, (^.))
 import Control.Arrow (second)
 
 import Language.Drasil.Classes (HasUID(uid), NamedIdea(term), Idea(getA),
-  Definition(defn),ConceptDomain(cdom,DOM),HasUnitSymbol(usymb), IsUnit,
+  Definition(defn),ConceptDomain(cdom,DOM),HasUnitSymbol(usymb), IsUnit(us),
   UnitEq(uniteq))
 import Language.Drasil.Chunk.Concept (ConceptChunk, dcc, cc')
 import Language.Drasil.Symbol

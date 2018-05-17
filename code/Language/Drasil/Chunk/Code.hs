@@ -37,7 +37,7 @@ programName = toCodeName . abrv
 symbToCodeName :: Symbol -> String
 symbToCodeName (Atomic s) = toCodeName s
 symbToCodeName (Special sp) = specialToCodeName sp
-symbToCodeName (Greek g) = greekToCodeName g
+--symbToCodeName (Greek g) = greekToCodeName g
 symbToCodeName (Atop d s) = decorate (symbToCodeName s) d
 symbToCodeName (Corners ul ll ur lr b) =
   (cleft ul) ++ (cleft ll) ++ (symbToCodeName b)
@@ -56,7 +56,7 @@ decorate s Hat = s ++ "_hat"
 decorate s Vector = s ++ "_vect"
 decorate s Prime = s ++ "'"
 
-greekToCodeName :: Greek -> String
+--greekToCodeName :: Greek -> String
 --greekToCodeName Alpha_L   = "alpha"
 --greekToCodeName Alpha     = "Alpha"
 --greekToCodeName Beta_L    = "beta"
@@ -65,7 +65,7 @@ greekToCodeName :: Greek -> String
 --greekToCodeName Chi       = "Chi"
 --greekToCodeName Delta_L   = "delta"
 --greekToCodeName Delta     = "Delta"
-greekToCodeName Ell       = "ell"
+--greekToCodeName Ell       = "ell"
 --greekToCodeName Epsilon_L = "epsilon"
 --greekToCodeName Epsilon_V = "varepsilon"
 --greekToCodeName Epsilon   = "Epsilon"

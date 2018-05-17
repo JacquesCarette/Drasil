@@ -23,7 +23,7 @@ import Language.Drasil.TeX.Preamble
 import           Language.Drasil.Symbol (Symbol(..))
 import qualified Language.Drasil.Symbol as S
 import qualified Language.Drasil.Document as L
-import Language.Drasil.Unicode (RenderGreek(..), RenderSpecial(..))
+import Language.Drasil.Unicode (RenderSpecial(..))
 import Language.Drasil.People (People,rendPersLFM)
 import Language.Drasil.ChunkDB (HasSymbolTable)
 import Language.Drasil.Chunk.Citation (CitationKind(..), Month(..))
@@ -66,7 +66,7 @@ print sm l = foldr ($+$) empty $ map (flip lo sm) l
 symbol :: Symbol -> String
 symbol (Atomic s)  = s
 symbol (Special s) = unPL $ special s
-symbol (Greek g)   = unPL $ greek g
+--symbol (Greek g)   = unPL $ greek g
 symbol (Concat sl) = foldr (++) "" $ map symbol sl
 --
 -- handle the special cases first, then general case
@@ -100,7 +100,7 @@ p_expr (Row [x]) = brace $ p_expr x -- a bit of a hack...
 p_expr (Row l) = concatMap p_expr l
 p_expr (Ident s) = s
 p_expr (Spec s) = unPL $ special s
-p_expr (Gr g) = unPL $ greek g
+--p_expr (Gr g) = unPL $ greek g
 p_expr (Sub e) = "_" ++ brace (p_expr e)
 p_expr (Sup e) = "^" ++ brace (p_expr e)
 p_expr (Over Hat s)     = "\\hat{" ++ p_expr s ++ "}"
@@ -264,7 +264,7 @@ escapeChars c = c : []
 symbol_needs :: Symbol -> MathContext
 symbol_needs (Atomic _)          = Text
 symbol_needs (Special _)         = Math
-symbol_needs (Greek _)           = Math
+--symbol_needs (Greek _)           = Math
 symbol_needs (Concat [])         = Math
 symbol_needs (Concat (s:_))      = symbol_needs s
 symbol_needs (Corners _ _ _ _ _) = Math

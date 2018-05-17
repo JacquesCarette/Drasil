@@ -18,7 +18,7 @@ module Language.Drasil (
   , apply, apply1, apply2
   , cross, m2x2, vec2D, dgnl2x2
   -- all the stuff from Unicode
-  , Greek(..), Special(..)
+  ,Special(..)
   -- UnitLang
   , UDefn(..), from_udefn
   -- Unit
@@ -136,7 +136,7 @@ module Language.Drasil (
   , lAlpha, cAlpha, lBeta, cBeta, lGamma, cGamma, lDelta, cDelta, lEpsilon, vEpsilon, cEpsilon, lZeta, cZeta
   , lEta, cEta, lTheta, cTheta, lIota, cIota, lKappa, cKappa, lLambda, cLambda, lMu, cMu, lNu, cNu, lXi, cXi 
   , lOmicron, cOmicron, lPi, cPi, lRho, cRho, lSigma, cSigma, lTau, cTau, lUpsilon, cUpsilon, lPhi, vPhi, cPhi
-  , lChi, cChi, lPsi, cPsi, lOmega, cOmega, lNabla
+  , lChi, cChi, lPsi, cPsi, lOmega, cOmega, lNabla, lEll
   -- Misc
   , mkTable, unit'2Contents, unit_symb, introduceAbb, phrase, plural, phrase's, plural's
   , unitHidingUnitless

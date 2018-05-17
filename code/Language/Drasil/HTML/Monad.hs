@@ -8,9 +8,9 @@ import Language.Drasil.Unicode
 
 newtype PrintHTML = PH {unPH :: String}
 
-instance RenderGreek PrintHTML where
+
  
-  greek Ell       = PH "&#8467;"
+
   
   
 instance RenderSpecial PrintHTML where

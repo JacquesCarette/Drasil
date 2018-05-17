@@ -163,7 +163,7 @@ indx sm (C c) i = f s
           b' = symbol b in
       P.Row [P.Row [e', P.Sub (P.Row [b', P.MO P.Comma, i'])]] -- FIXME, extra Row
     f a@(Atomic _) = P.Row [symbol a, P.Sub i']
-    f a@(Greek _)  = P.Row [symbol a, P.Sub i']
+--    f a@(Greek _)  = P.Row [symbol a, P.Sub i']
     f   e          = let e' = symbol e in P.Row [P.Row [e'], P.Sub i']
 indx sm a i = P.Row [P.Row [expr a sm], P.Sub $ expr i sm]
 
@@ -189,7 +189,7 @@ eop sm Add (AllDD _ Discrete) e = P.Row [P.MO P.Summ, P.Row [expr e sm]]
 symbol :: Symbol -> P.Expr
 symbol (Atomic s)  = P.Ident s
 symbol (Special s) = P.Spec s
-symbol (Greek g)   = P.Gr g
+--symbol (Greek g)   = P.Gr g
 symbol (Concat sl) = P.Row $ map symbol sl
 --
 -- handle the special cases first, then general case

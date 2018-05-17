@@ -107,9 +107,9 @@ lub _    _    = Text -- Text is top-most
 -- Hacked up version, will get deleted
 data Latex = L { unPL :: String }
 
-instance RenderGreek Latex where
+--instance RenderGreek Latex where
 
-  greek Ell       = L "\\ell{}"
+ 
   
 
 instance RenderSpecial Latex where

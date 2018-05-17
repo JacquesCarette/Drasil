@@ -284,12 +284,12 @@ baseWthX = uc' "b_i" (cn $ "base width of a slice")
   (lB) metre
 
 baseLngth = uc' "l_b,i" (cn $ "total base length of a slice") fsi
-  (sub (Greek Ell) (Atomic "b")) metre
+  (sub lEll (Atomic "b")) metre
 
 surfLngth = uc' "l_s,i" (cn $ "length of an interslice surface")
   ("from slip base to slope surface in a vertical " ++
   "line from an interslice vertex " ++ fisi)
-  (sub (Greek Ell) (Atomic "s")) metre
+  (sub lEll (Atomic "s")) metre
 
 midpntHght = uc' "h_i" (cn $ "midpoint height")
   ("distance from the slip base to the slope surface in a vertical " ++

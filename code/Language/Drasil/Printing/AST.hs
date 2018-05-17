@@ -2,7 +2,7 @@ module Language.Drasil.Printing.AST where
 
 import Language.Drasil.UnitLang (USymb)
 import Language.Drasil.RefTypes (RefType, RefAdd)
-import Language.Drasil.Unicode (Greek, Special)
+import Language.Drasil.Unicode (Special)
 
 data Ops = IsIn | Integer | Real | Rational | Natural | Boolean | Comma | Prime | Log
   | Sin | Cos | Tan | Sec | Csc | Cot | Not | Dim | Exp | Neg | Cross
@@ -22,7 +22,7 @@ data Expr = Dbl   Double
           | Row   [Expr]
           | Ident String
           | Spec  Special
-          | Gr    Greek
+          
           | Sub   Expr
           | Sup   Expr
           | MO    Ops

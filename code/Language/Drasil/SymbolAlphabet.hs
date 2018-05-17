@@ -6,7 +6,10 @@ import Language.Drasil.Symbol (Symbol(Atomic))
 -- | c_ means capital _; l_ means lowercase _
 cA,cB,cC,cD,cE,cF,cG,cH,cI,cJ,cK,cL,cM,cN,cO,cP,cQ,cR,cS,cT,cU,cV,cW,cX,cY,cZ,
   lA,lB,lC,lD,lE,lF,lG,lH,lI,lJ,lK,lL,lM,lN,lO,lP,lQ,lR,lS,lT,lU,lV,
-  lW,lX,lY,lZ :: Symbol
+  lW,lX,lY,lZ,lAlpha,cAlpha,lBeta,cBeta,lGamma,cGamma,lDelta,cDelta,lEpsilon,vEpsilon, 
+  cEpsilon,lZeta,cZeta,lEta,cEta,lTheta,cTheta,lIota,cIota,lKappa,cKappa,lLambda,cLambda,
+  lMu,cMu,lNu,cNu,lXi,cXi,lOmicron,cOmicron,lPi,cPi,lRho,cRho,lSigma,cSigma,lTau,cTau,
+  lUpsilon,cUpsilon,lPhi,vPhi,cPhi,lChi,cChi,lPsi,cPsi,lOmega,cOmega,lNabla,lEll :: Symbol
 
 cA = Atomic "A"
 cB = Atomic "B"
@@ -111,3 +114,4 @@ cPsi = Atomic "Ψ"
 lOmega = Atomic "ω"
 cOmega = Atomic "Ω"
 lNabla = Atomic "∇"
+lEll = Atomic "ℓ"

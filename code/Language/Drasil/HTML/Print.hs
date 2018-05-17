@@ -95,7 +95,7 @@ symbol :: Symbol -> String
 symbol (Atomic s)  = s
 symbol (Special s) = unPH $ special s
 symbol (Concat sl) = foldr (++) "" $ map symbol sl
-symbol (Greek g)   = unPH $ greek g
+--symbol (Greek g)   = unPH $ greek g
 -- handle the special cases first, then general case
 symbol (Corners [] [] [x] [] s) = (symbol s) ++ sup (symbol x)
 symbol (Corners [] [] [] [x] s) = (symbol s) ++ sub (symbol x)
@@ -137,7 +137,7 @@ p_expr (Mtx a)        = "<table class=\"matrix\">\n" ++ p_matrix a ++ "</table>"
 p_expr (Row l)        = concatMap p_expr l
 p_expr (Ident s)      = s
 p_expr (Spec s)       = unPH $ special s
-p_expr (Gr g)         = unPH $ greek g
+--p_expr (Gr g)         = unPH $ greek g
 p_expr (Sub e)        = sub $ p_expr e
 p_expr (Sup e)        = sup $ p_expr e
 p_expr (Over Hat s)   = p_expr s ++ "&#770;"

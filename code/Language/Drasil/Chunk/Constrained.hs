@@ -99,18 +99,5 @@ cuc' :: (IsUnit u, DOM u ~ ConceptChunk) => String -> NP -> String -> Symbol -> 
 cuc' nam trm desc sym un space cs atts rv mub =
   ConstrConcept (cqs (cw (ucs nam trm desc sym un space [])) sym space atts) cs (Just rv) mub
 
-constrained' :: (HasAttributes c, Quantity c, Concept c, DOM c ~ ConceptChunk) =>
-  c -> Symbol -> Space -> Attributes -> [Constraint] -> Expr -> ConstrConcept
-constrained' q sym space atts cs rv = ConstrConcept (cqs (cw q) sym space atts) cs (Just rv)
-
-constrainedNRV' :: (HasAttributes c, Quantity c, Concept c, DOM c ~ ConceptChunk) => 
-  c -> Symbol -> Space -> Attributes -> [Constraint] -> ConstrConcept
-constrainedNRV' q sym space atts cs = ConstrConcept (cqs (cw q) sym space atts) cs Nothing
-
-cuc' :: (IsUnit u, DOM u ~ ConceptChunk) => String -> NP -> String -> Symbol -> u
-                  -> Space -> [Constraint] -> Attributes -> Expr -> ConstrConcept
-cuc' nam trm desc sym un space cs atts rv =
-  ConstrConcept (cqs (cw (ucs nam trm desc sym un space [])) sym space atts) cs (Just rv)
-
 cnstrw :: (HasAttributes c, Quantity c, Constrained c, HasReasVal c) => c -> ConstrainedChunk
 cnstrw c = ConstrainedChunk (qw c) (c ^. constraints) (c ^. reasVal)

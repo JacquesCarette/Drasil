@@ -2,6 +2,7 @@ module Drasil.SWHS.Assumptions where --all of this file is exported
 
 import Language.Drasil
 import Control.Lens ((^.))
+import Drasil.SWHS.References (s9_swhs_citations)
 
 import Data.Drasil.Concepts.Documentation (system, simulation, model, 
   problem)
@@ -29,6 +30,33 @@ import Data.Drasil.SentenceStructures (acroGD, acroIM, foldlSent, ofThe,
 -------------------------
 -- 4.2.1 : Assumptions --
 -------------------------
+newAssumptions :: [AssumpChunk]
+newAssumptions = [newA1, newA2, newA3, newA4, newA5, newA6, newA7, newA8, newA9, newA10,
+  newA11, newA12, newA13, newA14, newA15, newA16, newA17, newA18, newA19, newA20]
+
+newA1, newA2, newA3, newA4, newA5, newA6, newA7, newA8, newA9, newA10,
+  newA11, newA12, newA13, newA14, newA15, newA16, newA17, newA18, newA19, newA20 :: AssumpChunk
+
+newA1 = assump "Thermal-Energy-Only" assumpS1 (S "Thermal-Energy-Only")
+newA2 = assump "Heat-Transfer-Coeffs-Constant" assumpS2 (S "Heat-Transfer-Coeffs-Constant") 
+newA3 = assump "Constant-Water-Temp-Across-Tank" assumpS3 (S "Constant-Water-Temp-Across-Tank")
+newA4 = assump "Temp-PCM-Constant-Across-Volume" assumpS4 (S "Temp-PCM-Constant-Across-Volume")
+newA5 = assump "Density-Water-PCM-Constant-over-Volume" assumpS5 (S "Density-Water-PCM-Constant-over-Volume") 
+newA6 = assump "Specific-Heat-Energy-Constant-over-Volume" assumpS6 (S "Specific-Heat-Energy-Constant-over-Volume")
+newA7 = assump "Law-Convective-Cooling-Coil-Water" assumpS7 (S "Newton-Law-Convective-Cooling-Coil-Water")
+newA8 = assump "Temp-Heating-Coil-Constant-over-Time" assumpS8 (S "Temp-Heating-Coil-Constant-over-Time")
+newA9 = assump "Temp-Heating-Coil-Constant-over-Length" assumpS9 (S "Temp-Heating-Coil-Constant-over-Length")
+newA10 = assump "Law-Convective-Cooling-Water-PCM" assumpS10 (S "Law-Convective-Cooling-Water-PCM")
+newA11 = assump "Charging-Tank-No-Temp-Discharge" assumpS11 (S "Charging-Tank-No-Temp-Discharge")
+newA12 = assump "Same-Initial-Temp-Water-PCM" assumpS12 (S "Same-Initial-Temp-Water-PCM")
+newA13 = assump "PCM-Initialli-Soild" assumpS13 (S "PCM-Initialli-Soild")
+newA14 = assump "Water-Always-Liquid" assumpS14 (S "Water-Always-Liquid")
+newA15 = assump "Perfect-Insulation-Tank" assumpS15 (S "Perfect-Insulation-Tank")
+newA16 = assump "No-Internal-Heat-Generation-By-Water-PCM" assumpS16 (S "No-Internal-Heat-Generation-By-Water-PCM")
+newA17 = assump "Volume-Change-Melting-PCM-Negligible" assumpS17 (S "Volume-Change-Melting-PCM-Negligible")
+newA18 = assump "No-Gaseous-State-PCM" assumpS18 (S "No-Gaseous-State-PCM")
+newA19 = assump "Atmospheric-Pressure-Tank" assumpS19 (S "Atmospheric-Pressure-Tank")
+newA20 = assump "Volume-Coil-Negligible" assumpS20 (S "Volume-Coil-Negligible")
 
 swhsAssumptionsS:: [Sentence]
 swhsAssumptionsS = [assumpS1, assumpS2, assumpS3, assumpS4, assumpS5,

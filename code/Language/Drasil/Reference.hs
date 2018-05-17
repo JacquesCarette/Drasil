@@ -41,6 +41,7 @@ type ChangeMap = RefMap Change
 -- | Citation Database (bibliography information)
 type BibMap = RefMap Citation
 
+
 -- | Database for internal references.
 data ReferenceDB = RDB -- organized in order of appearance in SmithEtAl template
   { _physSystDescDB :: PhysSystDescMap

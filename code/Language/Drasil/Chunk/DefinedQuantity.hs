@@ -6,7 +6,7 @@ module Language.Drasil.Chunk.DefinedQuantity
 
 import Language.Drasil.Classes (HasUID(uid), NamedIdea(term), Idea(getA),
   Definition(defn), ConceptDomain(cdom,DOM), Concept, HasSymbol(symbol),
-  HasAttributes(attributes), IsUnit(ud))
+  HasAttributes(attributes), IsUnit(us))
 import Language.Drasil.Chunk.Concept (ConceptChunk)
 import qualified Language.Drasil.Chunk.Quantity as Q
 

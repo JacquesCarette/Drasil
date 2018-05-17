@@ -10,7 +10,7 @@ module Language.Drasil.Classes (
   , HasSymbol(symbol)
   , HasSpace(typ)
   , HasUnitSymbol(usymb)
-  , IsUnit(ud)
+  , IsUnit(us)
   , UnitEq(uniteq)
   , HasAttributes(attributes)
   , CommonIdea(abrv)

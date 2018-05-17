@@ -12,7 +12,7 @@ import Control.Lens (Simple, Lens, (^.))
 import Control.Arrow (second)
 
 import Language.Drasil.Classes (HasUID(uid), NamedIdea(term), Idea(getA),
-  Definition(defn),ConceptDomain(cdom,DOM),HasUnitSymbol(usymb), IsUnit,
+  Definition(defn), ConceptDomain(cdom, DOM), HasUnitSymbol(usymb), IsUnit,
   UnitEq(uniteq))
 import Language.Drasil.Chunk.Concept (ConceptChunk, dcc, cc')
 import Language.Drasil.Symbol
@@ -45,7 +45,9 @@ unitCon s = dcc s (cn' s) s
 ---------------------------------------------------------
 
 -- | for defining fundamental units
-data UnitDefn = UD { _vc :: ConceptChunk, _u :: USymb }
+data UnitDefn = UD { _vc :: ConceptChunk
+                   , _u :: USymb
+                   }
 
 -- don't export this
 vc :: Simple Lens UnitDefn ConceptChunk

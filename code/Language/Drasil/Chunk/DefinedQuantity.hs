@@ -21,7 +21,6 @@ import Control.Lens ((^.), makeLenses, view)
 data DefinedQuantityDict = DQD { _con :: ConceptChunk
                                , _symb :: Stage -> Symbol
                                , _spa :: Space
-                               , _unit :: Maybe UnitDefn
                                , _attribs :: Attributes
                                }
   
@@ -30,7 +29,7 @@ makeLenses ''DefinedQuantityDict
 instance HasUID        DefinedQuantityDict where uid = con . uid
 instance Eq            DefinedQuantityDict where a == b = (a ^. uid) == (b ^. uid)
 instance NamedIdea     DefinedQuantityDict where term = con . term
-instance Idea          DefinedQuantityDict where getA (DQD a _ _ _ _) = getA a
+instance Idea          DefinedQuantityDict where getA (DQD a _ _ _) = getA a
 instance Definition    DefinedQuantityDict where defn = con . defn
 instance ConceptDomain DefinedQuantityDict where
   type DOM DefinedQuantityDict = ConceptChunk
@@ -38,8 +37,7 @@ instance ConceptDomain DefinedQuantityDict where
 instance Concept       DefinedQuantityDict where
 instance Q.HasSpace    DefinedQuantityDict where typ = spa
 instance HasSymbol     DefinedQuantityDict where symbol = view symb
-instance Q.Quantity    DefinedQuantityDict where getUnit = view unit
 instance HasAttributes DefinedQuantityDict where attributes = attribs
 
-cqs :: (IsUnit u, DOM u ~ ConceptChunk) => ConceptChunk -> Symbol -> Space -> u -> Attributes -> DefinedQuantityDict
-cqs c s sp u atts = DQD c (\_ -> s) sp (Just $ unitWrapper u) atts
+cqs :: ConceptChunk -> Symbol -> Space -> Attributes -> DefinedQuantityDict
+cqs c s sp atts = DQD c (\_ -> s) sp atts

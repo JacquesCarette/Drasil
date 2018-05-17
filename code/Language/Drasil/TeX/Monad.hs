@@ -111,7 +111,6 @@ instance RenderGreek Latex where
 
   greek Ell       = L "\\ell{}"
   greek Nabla     = L "\\nabla{}"
-  greek Omega_L   = L "\\omega{}"
   greek Omega     = L "\\Omega{}"
   
 

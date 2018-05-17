@@ -277,7 +277,7 @@ surfAngle = uc' "beta_i" (cn $ "angle")
 
 impLoadAngle = uc' "omega_i" (cn $ "angle")
   ("of imposed surface load acting into the surface " ++
-  "relative to the vertical " ++ fsi) (Greek Omega_L) degree
+  "relative to the vertical " ++ fsi) lOmega degree
 
 baseWthX = uc' "b_i" (cn $ "base width of a slice")
   ("in the x-ordinate direction only " ++ fsi)

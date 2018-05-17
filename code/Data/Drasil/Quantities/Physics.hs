@@ -16,7 +16,7 @@ angularAccel, angularDisplacement, angularVelocity, acceleration, displacement,
 
 angularAccel        = uc CP.angAccel (lAlpha) angAccelU
 angularDisplacement = uc CP.angDisp (lTheta) radian
-angularVelocity     = uc CP.angVelo (Greek Omega_L) angVelU
+angularVelocity     = uc CP.angVelo lOmega angVelU
 acceleration        = uc CP.acceleration (vec lA) accelU
 displacement        = uc CP.displacement (vec lR) metre
 distance            = uc CP.distance lR metre

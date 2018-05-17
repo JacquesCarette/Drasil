@@ -3,8 +3,7 @@ module Language.Drasil.Unicode where
 
 -- | Greek alphabet. @_L@ following the name represents lower case version.
 data Greek = 
-             Omega_L
-           | Omega
+             Omega
            --end of standard greek alphabet
            | Ell
            | Nabla

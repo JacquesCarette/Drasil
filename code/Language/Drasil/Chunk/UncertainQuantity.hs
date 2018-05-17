@@ -75,11 +75,6 @@ uqc :: (HasAttributes u, IsUnit u, DOM u ~ ConceptChunk) => String -> NP -> Stri
                 -> [Constraint] -> Expr -> Double -> Maybe UnitDefn -> UncertQ
 uqc nam trm desc sym un space cs val uncrt mud = uq (cuc' nam trm desc sym un space cs (un ^. attributes) val mud) uncrt mud -- mud passed in twice
 
---cuc' :: (IsUnit u, DOM u ~ ConceptChunk) => String -> NP -> String -> Symbol -> u
---            -> Space -> [Constraint] -> Attributes -> Expr -> Maybe UnitDefn -> ConstrConcept
---cuc' nam trm desc sym un space cs atts rv mub =
---  ConstrConcept (cqs (cw (ucs nam trm desc sym un space [])) sym space atts) cs (Just rv) mub
-
 --uncertainty quanity constraint no uncertainty
 uqcNU :: (HasAttributes u, IsUnit u, DOM u ~ ConceptChunk) => String -> NP -> String -> Symbol -> u 
                   -> Space -> [Constraint] -> Expr -> Maybe UnitDefn -> UncertQ

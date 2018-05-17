@@ -6,7 +6,6 @@ data Greek =
             
            --end of standard greek alphabet
              Ell
-           | Nabla
   deriving (Eq, Ord)
 
 -- | Special characters including partial derivatives, degree circle, and

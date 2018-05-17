@@ -110,7 +110,6 @@ data Latex = L { unPL :: String }
 instance RenderGreek Latex where
 
   greek Ell       = L "\\ell{}"
-  greek Nabla     = L "\\nabla{}"
   
 
 instance RenderSpecial Latex where

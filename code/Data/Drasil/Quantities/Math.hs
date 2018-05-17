@@ -8,7 +8,7 @@ import Data.Drasil.SI_Units
 diameter, gradient, normalVect, unitVect, euclidNorm, perpVect, surface, uNormalVect :: ConVar
 
 diameter    = cv CM.diameter lD                                            Real
-gradient    = cv CM.gradient (Greek Nabla)                                 Real
+gradient    = cv CM.gradient lNabla                                         Real
 normalVect  = cv CM.normalV  (vec $ lN)                                    Real
 uNormalVect = cv CM.normalV  (vec $ hat lN)                                Real
 unitVect    = cv CM.unitV    (vec $ hat lI)                                Real

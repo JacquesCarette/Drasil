@@ -6,7 +6,7 @@ module Language.Drasil.Unit (
   , (^:), (/:), (*:), (*$), (/$), new_unit
   , scale, shift
   , derUC, derUC', derUC'', unitWrapper
-  , fund, comp_unitdefn
+  , fund, comp_unitdefn, unitWrapper'
   ) where
 
 import Control.Lens (Simple, Lens, (^.))
@@ -88,6 +88,9 @@ instance UnitEq DerUChunk where
 -- the definition part
 unitWrapper :: (IsUnit u) => u -> FundUnit
 unitWrapper u = UD (cc' u (u ^. defn)) (u ^. usymb)
+
+unitWrapper' :: (IsUnit u) => u -> UnitDefn
+unitWrapper' u = UD (cc' u (u ^. defn)) (u ^. usymb)
 
 --- These conveniences go here, because we need the class
 -- | Combinator for raising a unit to a power

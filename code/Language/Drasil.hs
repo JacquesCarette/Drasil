@@ -22,7 +22,7 @@ module Language.Drasil (
   -- UnitLang
   , UDefn(..), from_udefn
   -- Unit
-  , DerUChunk(..), FundUnit(..), UnitDefn, unitWrapper
+  , DerUChunk(..), FundUnit(..), UnitDefn, unitWrapper, unitWrapper'
   , makeDerU, unitCon, fund, comp_unitdefn
   , (^:), (/:), (*:), (*$), (/$), new_unit
   -- Classes

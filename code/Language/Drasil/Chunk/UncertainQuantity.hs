@@ -23,6 +23,7 @@ import Language.Drasil.Chunk.Constrained (ConstrConcept(..), ConstrainedChunk,cu
   cvc)
 import Language.Drasil.Chunk.Concept
 import Language.Drasil.Expr
+import Language.Drasil.Unit (UnitDefn)
 import Language.Drasil.NounPhrase
 import Language.Drasil.Space
 import Language.Drasil.Symbol (Symbol)
@@ -61,29 +62,34 @@ instance HasAttributes     UncertQ where attributes = coco . attributes
 
 {-- Constructors --}
 -- | The UncertainQuantity constructor. Requires a Quantity, a percentage, and a typical value
-uq :: (HasAttributes c, Quantity c, Constrained c, Concept c, HasReasVal c, IsUnit u, DOM c ~ ConceptChunk, DOM u ~ ConceptChunk) => 
-  c -> u -> Double -> UncertQ
-uq q un u = UQ (ConstrConcept (cqs (cw q) {-symb-} (q ^. typ) un (q ^. attributes)) (q ^. constraints) (q ^. reasVal)) (Just u)
+uq :: (HasAttributes c, Quantity c, Constrained c, Concept c, HasReasVal c, DOM c ~ ConceptChunk) => 
+  c -> Double -> Maybe UnitDefn -> UncertQ
+uq q u mud = UQ (ConstrConcept (cqs (cw q) {-symb-} (q ^. typ) (q ^. attributes)) (q ^. constraints) (q ^. reasVal) mud) (Just u) 
 
-uqNU :: (HasAttributes c, Quantity c, Constrained c, Concept c, HasReasVal c, IsUnit u, DOM c ~ ConceptChunk, DOM u ~ ConceptChunk) =>
-  c -> u -> UncertQ
-uqNU q un = UQ (ConstrConcept (cqs (cw q) {-symb-} (q ^. typ) un (q ^. attributes)) (q ^. constraints) (q ^. reasVal)) Nothing 
+uqNU :: (HasAttributes c, Quantity c, Constrained c, Concept c, HasReasVal c, DOM c ~ ConceptChunk) =>
+  c -> Maybe UnitDefn -> UncertQ
+uqNU q mud = UQ (ConstrConcept (cqs (cw q) {-symb-} (q ^. typ) (q ^. attributes)) (q ^. constraints) (q ^. reasVal) mud) Nothing 
 
 -- this is kind of crazy and probably shouldn't be used!
 uqc :: (HasAttributes u, IsUnit u, DOM u ~ ConceptChunk) => String -> NP -> String -> Symbol -> u -> Space
-                -> [Constraint] -> Expr -> Double -> UncertQ
-uqc nam trm desc sym un space cs val uncrt = uq (cuc' nam trm desc sym un space cs (un ^. attributes) val) un uncrt
+                -> [Constraint] -> Expr -> Double -> Maybe UnitDefn -> UncertQ
+uqc nam trm desc sym un space cs val uncrt mud = uq (cuc' nam trm desc sym un space cs (un ^. attributes) val mud) uncrt mud -- mud passed in twice
+
+--cuc' :: (IsUnit u, DOM u ~ ConceptChunk) => String -> NP -> String -> Symbol -> u
+--            -> Space -> [Constraint] -> Attributes -> Expr -> Maybe UnitDefn -> ConstrConcept
+--cuc' nam trm desc sym un space cs atts rv mub =
+--  ConstrConcept (cqs (cw (ucs nam trm desc sym un space [])) sym space atts) cs (Just rv) mub
 
 --uncertainty quanity constraint no uncertainty
 uqcNU :: (HasAttributes u, IsUnit u, DOM u ~ ConceptChunk) => String -> NP -> String -> Symbol -> u 
-                  -> Space -> [Constraint]
-                  -> Expr -> UncertQ
-uqcNU nam trm desc sym un space cs val = uqNU (cuc' nam trm desc sym un space cs (un ^. attributes) val) un
+                  -> Space -> [Constraint] -> Expr -> Maybe UnitDefn -> UncertQ
+uqcNU nam trm desc sym un space cs val mud = uqNU (cuc' nam trm desc sym un space cs (un ^. attributes) val mud) mud -- mud passed in twice
 
 --uncertainty quantity constraint no description
 uqcND :: (HasAttributes u, IsUnit u, DOM u ~ ConceptChunk) => String -> NP -> Symbol -> u -> Space -> [Constraint]
-                  -> Expr -> Double -> UncertQ
-uqcND nam trm sym un space cs val uncrt = uq (cuc' nam trm "" sym un space cs (un ^. attributes) val) un uncrt
+                  -> Expr -> Double -> Maybe UnitDefn -> UncertQ
+uqcND nam trm sym un space cs val uncrt mud = uq (cuc' nam trm "" sym un space cs (un ^. attributes) val mud) uncrt mud -- mud passed in twice
+
 
 {--}
 

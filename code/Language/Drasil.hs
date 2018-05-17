@@ -136,7 +136,7 @@ module Language.Drasil (
   , lAlpha, cAlpha, lBeta, cBeta, lGamma, cGamma, lDelta, cDelta, lEpsilon, vEpsilon, cEpsilon, lZeta, cZeta
   , lEta, cEta, lTheta, cTheta, lIota, cIota, lKappa, cKappa, lLambda, cLambda, lMu, cMu, lNu, cNu, lXi, cXi 
   , lOmicron, cOmicron, lPi, cPi, lRho, cRho, lSigma, cSigma, lTau, cTau, lUpsilon, cUpsilon, lPhi, vPhi, cPhi
-  , lChi, cChi
+  , lChi, cChi, lPsi
   -- Misc
   , mkTable, unit'2Contents, unit_symb, introduceAbb, phrase, plural, phrase's, plural's
   , unitHidingUnitless

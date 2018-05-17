@@ -7,7 +7,7 @@ import Prelude hiding (sin, cos, tan)
 
 import Data.Drasil.People (henryFrankis)
 
-import Drasil.SSP.Assumptions (sspAssumptions)
+import Drasil.SSP.Assumptions (sspRefDB, sspAssumptions)
 import Drasil.SSP.DataDefs (sspDataDefs, resShrDerivation,
   mobShrDerivation, stfMtrxDerivation)
 import Drasil.SSP.DataDesc (sspInputMod)
@@ -95,9 +95,6 @@ ssp_si = SI {
   _sysinfodb = sspSymMap,
   _refdb = sspRefDB
 }
-
-sspRefDB :: ReferenceDB
-sspRefDB = rdb [] [] newAssumptions [] [] sspCitations -- FIXME: Convert the rest to new chunk types
 
 mkSRS :: DocDesc
 mkSRS = RefSec (RefProg intro

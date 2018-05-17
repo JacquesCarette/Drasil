@@ -15,6 +15,9 @@ import Data.Drasil.Concepts.Math (surface, unit_)
 import Data.Drasil.Concepts.SolidMechanics (shearForce)
 import Drasil.SSP.References (sspCitations)
 
+sspRefDB :: ReferenceDB
+sspRefDB = rdb [] [] newAssumptions [] [] sspCitations -- FIXME: Convert the rest to new chunk types
+
 newAssumptions :: [AssumpChunk]
 newAssumptions = [newA1, newA2, newA3, newA4, newA5, newA6, newA7, newA8, newA9, newA10]
 

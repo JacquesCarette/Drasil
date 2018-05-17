@@ -45,7 +45,7 @@ import Drasil.SWHS.IMods (s4_2_5_IMods)
 import Drasil.SWHS.DataDefs (dd1HtFluxC, dd2HtFluxP, s4_2_4_swhsDataDefs, swhsDataDefs)
 import Drasil.SWHS.GenDefs (swhsGenDefs)
 import Drasil.SWHS.References (s9_swhs_citations)
-import Drasil.SWHS.Assumptions (swhsAssumptions, assump3, assump4, assump5,
+import Drasil.SWHS.Assumptions (swhsRefDB, swhsAssumptions, assump3, assump4, assump5,
   assump6, assump13, assump15, assump16, assump17, assump18)
 import Drasil.SWHS.Requirements (req1, req2, s5_1_2_Eqn1, s5_1_2_Eqn2,
   req3, req4, req5, req6, req7, req8, req9, req10, req11, s5_2)
@@ -114,9 +114,6 @@ swhs_si = SI {
   _sysinfodb = swhsSymMap,
   _refdb = swhsRefDB
 }
-
-swhsRefDB :: ReferenceDB
-swhsRefDB = rdb [] [] newAssumptions [] [] s9_swhs_citations
 
 swhsSymMap :: ChunkDB
 swhsSymMap = cdb swhsSymbolsAll (map nw swhsSymbols ++ map nw acronyms) ([] :: [ConceptChunk] ) -- FIXME: Fill in Concepts

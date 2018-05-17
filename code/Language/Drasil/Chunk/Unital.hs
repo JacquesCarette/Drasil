@@ -18,7 +18,7 @@ import Language.Drasil.Chunk.Concept (ConceptChunk,dcc, dccWDS,cw)
 import Language.Drasil.Chunk.DefinedQuantity (DefinedQuantityDict, cqs)
 import Language.Drasil.Chunk.Quantity (Quantity(..),HasSpace(typ))
 import Language.Drasil.Chunk.Unitary (Unitary(..))
-import Language.Drasil.Unit (UnitDefn,unitWrapper)
+import Language.Drasil.Unit (UnitDefn, unitWrapper)
 import Language.Drasil.Symbol
 import Language.Drasil.Space
 import Language.Drasil.Spec (Sentence)
@@ -42,7 +42,7 @@ instance ConceptDomain UnitalChunk where
 instance Concept       UnitalChunk where
 instance HasSpace      UnitalChunk where typ = defq' . typ
 instance HasSymbol     UnitalChunk where symbol c st = symbol (c^.defq') st
-instance Quantity      UnitalChunk where getUnit = Just . uni
+instance Quantity      UnitalChunk where 
 instance Unitary       UnitalChunk where unit = view uni
 instance HasAttributes UnitalChunk where attributes = defq' . attributes
 

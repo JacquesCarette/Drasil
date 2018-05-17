@@ -1,7 +1,6 @@
 {-# Language TypeFamilies #-}
 module Language.Drasil.Unit (
     UnitDefn(..), DerUChunk(..) -- data-structures
-  , UnitDefn                    -- synonym for UnitDefn
   , from_udefn, makeDerU, unitCon
   , (^:), (/:), (*:), (*$), (/$), new_unit
   , scale, shift
